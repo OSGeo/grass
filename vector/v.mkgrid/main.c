@@ -6,8 +6,10 @@
  *               Upgrade to 5.7 Radim Blazek 10/2004
  *               Hamish Bowman <hamish_b yahoo.com>,
  *               Jachym Cepicky <jachym les-ejk.cz>, Markus Neteler <neteler itc.it>
+ *               Ivan Shevlakov: points support -p                
+ *               Luca Delucchi: lines support -l
  * PURPOSE:      
- * COPYRIGHT:    (C) 1999-2009 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -47,8 +49,8 @@ int main(int argc, char *argv[])
     struct Map_info Map;
     struct Option *vectname, *grid, *coord, *box, *angle, *position_opt, *breaks;
     struct GModule *module;
-    struct Flag *points_fl;
-    int points_p;
+    struct Flag *points_fl, *line_fl;
+    int points_p, line_p, output_type;
     char *desc;
 
     struct line_pnts *Points;
@@ -132,9 +134,20 @@ int main(int argc, char *argv[])
     points_fl->description =
 	_("Create grid of points instead of areas and centroids");
 
+    line_fl = G_define_flag();
+    line_fl->key = 'l';
+    line_fl->description =
+	_("Create grid as lines, instead of areas");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+    line_p = line_fl->answer;
+    if (line_p) {
+	output_type = GV_LINE;
+    } else {
+	output_type = GV_BOUNDARY;
+    }
 
     points_p = points_fl->answer;
 
@@ -256,58 +269,63 @@ int main(int argc, char *argv[])
 
     if (!points_p) {
 	/* create areas */
-	write_grid(&grid_info, &Map, nbreaks);
+	write_grid(&grid_info, &Map, nbreaks, output_type);
     }
 
     /* Create a grid of label points at the centres of the grid cells */
     G_verbose_message(_("Creating centroids..."));
 
     /* Write out centroids and attributes */
-    db_begin_transaction(Driver);
-    attCount = 0;
-    for (i = 0; i < grid_info.num_rows; ++i) {
-	for (j = 0; j < grid_info.num_cols; ++j) {
-	    double x, y;
-	    const int point_type = points_p ? GV_POINT : GV_CENTROID;
+    /* If the output id is lines it skips to add centroids and attributes
+       TODO decide what to write in the attribute table
+     */
+    if (!line_p) {
+      db_begin_transaction(Driver);
+      attCount = 0;
+      for (i = 0; i < grid_info.num_rows; ++i) {
+	  for (j = 0; j < grid_info.num_cols; ++j) {
+	      double x, y;
+	      const int point_type = points_p ? GV_POINT : GV_CENTROID;
 
-	    x = grid_info.origin_x + (0.5 + j) * grid_info.length;
-	    y = grid_info.origin_y + (0.5 + i) * grid_info.width;
+	      x = grid_info.origin_x + (0.5 + j) * grid_info.length;
+	      y = grid_info.origin_y + (0.5 + i) * grid_info.width;
 
-	    rotate(&x, &y, grid_info.origin_x, grid_info.origin_y,
-		   grid_info.angle);
+	      rotate(&x, &y, grid_info.origin_x, grid_info.origin_y,
+		    grid_info.angle);
 
-	    Vect_reset_line(Points);
-	    Vect_reset_cats(Cats);
+	      Vect_reset_line(Points);
+	      Vect_reset_cats(Cats);
 
-	    Vect_append_point(Points, x, y, 0.0);
-	    Vect_cat_set(Cats, 1, attCount + 1);
-	    Vect_write_line(&Map, point_type, Points, Cats);
+	      Vect_append_point(Points, x, y, 0.0);
+	      Vect_cat_set(Cats, 1, attCount + 1);
+	      Vect_write_line(&Map, point_type, Points, Cats);
 
-	    sprintf(buf, "insert into %s values ", Fi->table);
-	    if (db_set_string(&sql, buf) != DB_OK)
-		G_fatal_error(_("Unable to fill attribute table"));
+	      sprintf(buf, "insert into %s values ", Fi->table);
+	      if (db_set_string(&sql, buf) != DB_OK)
+		  G_fatal_error(_("Unable to fill attribute table"));
 
-            if (grid_info.num_rows < 27 && grid_info.num_cols < 27) {
-		sprintf(buf,
-			"( %d, %d, %d, '%c', '%c' )",
-			attCount + 1, grid_info.num_rows - i,
-			j + 1, 'A' + grid_info.num_rows - i - 1, 'A' + j);
-	    }
-	    else {
-		sprintf(buf, "( %d, %d, %d )",
-			attCount + 1, i + 1, j + 1);
-	    }
-            if (db_append_string(&sql, buf) != DB_OK)
-                    G_fatal_error(_("Unable to fill attribute table"));
+	      if (grid_info.num_rows < 27 && grid_info.num_cols < 27) {
+		  sprintf(buf,
+			  "( %d, %d, %d, '%c', '%c' )",
+			  attCount + 1, grid_info.num_rows - i,
+			  j + 1, 'A' + grid_info.num_rows - i - 1, 'A' + j);
+	      }
+	      else {
+		  sprintf(buf, "( %d, %d, %d )",
+			  attCount + 1, i + 1, j + 1);
+	      }
+	      if (db_append_string(&sql, buf) != DB_OK)
+		      G_fatal_error(_("Unable to fill attribute table"));
 
-	    G_debug(3, "SQL: %s", db_get_string(&sql));
+	      G_debug(3, "SQL: %s", db_get_string(&sql));
 
-	    if (db_execute_immediate(Driver, &sql) != DB_OK) {
-		G_fatal_error(_("Unable to insert new record: %s"),
-			    db_get_string(&sql));
-	    }
-	    attCount++;
-	}
+	      if (db_execute_immediate(Driver, &sql) != DB_OK) {
+		  G_fatal_error(_("Unable to insert new record: %s"),
+			      db_get_string(&sql));
+	      }
+	      attCount++;
+	  }
+      }
     }
     db_commit_transaction(Driver);
 
