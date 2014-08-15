@@ -149,12 +149,17 @@ class GrassTestFilesInvoker(object):
 
         self.reporter.start_file_test(module)
         # TODO: we might clean the directory here before test if non-empty
-        # TODO: use some grass function to run?
-        # add also '-Qwarn'?
-        p = subprocess.Popen([sys.executable, '-tt', '-3',
-                              module.abs_file_path],
-                             cwd=cwd, env=env,
-                             stdout=stdout, stderr=stderr)
+
+        if module.file_type == 'py':
+            # add also '-Qwarn'?
+            p = subprocess.Popen([sys.executable, '-tt', '-3',
+                                  module.abs_file_path],
+                                 cwd=cwd, env=env,
+                                 stdout=stdout, stderr=stderr)
+        else:
+            p = subprocess.Popen([module.abs_file_path],
+                                 cwd=cwd, env=env,
+                                 stdout=stdout, stderr=stderr)
         returncode = p.wait()
         stdout.close()
         stderr.close()
@@ -192,7 +197,7 @@ class GrassTestFilesInvoker(object):
         # TODO: move constants out of loader class or even module
         modules = discover_modules(start_dir=self.start_dir,
                                    grass_location=location_type,
-                                   file_pattern=GrassTestLoader.files_in_testsuite,
+                                   file_regexp=r'.*\.(py|sh)$',
                                    skip_dirs=GrassTestLoader.skip_dirs,
                                    testsuite_dir=GrassTestLoader.testsuite_dir,
                                    all_locations_value=GrassTestLoader.all_tests_value,
