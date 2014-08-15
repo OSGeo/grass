@@ -209,8 +209,7 @@ class Parameter(object):
                               if isinstance(val, tuple) else str(val)
                               for val in self.rawvalue])
         else:
-            value = (repr(self.rawvalue) if self.typedesc == "string"
-                     else str(self.rawvalue))
+            value = str(self.rawvalue)
         return "%s=%s" % (self.name, value)
 
     def get_python(self):
