@@ -29,8 +29,9 @@ visible or the respective point in the elevation map is NULL.
 
 Otherwise, a value in [0, 180] representing the vertical angle with
 regard to the viewpoint, in degrees, if the point is visible.
-0 degrees: directly above the observer,
-180 degrees: directly below the observer
+A value of 0 is directly below the specified viewing position,
+90 is due horizontal. The angle to the cell containing the viewing
+position is undefined and set to 180. 
 
 <p>
 If the <b>-b</b> flag is set, the output is in boolean-mode, and each point
@@ -71,7 +72,7 @@ the terrain.  The user can change this using option
 elevation.
 
 <p>
-By default the target is assumed to have height 0 map units above the
+By default the target is assumed to have height of 0 map units above the
 terrain.  The user can change this using option
 <b>tgt_elev</b> to determine if objects of a given height would be
 visible. The value entered is in the same units as the elevation.
