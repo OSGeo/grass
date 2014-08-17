@@ -15,10 +15,13 @@ are ignored when tracing a patch.
 
 <h2>NOTES</h2>
 
-Do not use absolute path names for the <b>output</b> map/file.
+Do not use absolute path names for the <b>config</b> and <b>output</b>
+file/map parameters.
+
 If the "moving window" method was selected in <b>g.gui.rlisetup</b>, then the
 output will be a raster map, otherwise an ASCII file will be generated in
-the <tt>$HOME/.grass7/r.li/output/</tt> folder.
+the folder <tt>C:\Users\normal\AppData\Roaming\GRASS7\r.li\output\</tt>
+(MS-Windows) or <tt>$HOME/.grass7/r.li/output/</tt> (GNU/Linux).
 <p>
 If the sample area contains only NULL values then <em>r.li.padrange</em>
 returns NULL.<br>
