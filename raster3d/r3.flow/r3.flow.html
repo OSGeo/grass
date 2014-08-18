@@ -33,6 +33,8 @@ is represented by one vector line with one category. With <b>a</b> flag, an attr
 and each category (record) represents one segment of a flowline, so that attributes
 specific for segments can be written. In case of <b>vector_field</b> input, only velocity is written,
 in case of <b>input</b> option, also values of the input 3D raster are written.
+Option <b>sampled</b> allows to sample (query) given 3D raster by flow lines (computed from different 3D raster) and
+write the values of the given 3D raster as attributes of the flow line segments.
 Note that using <b>a</b> flag results in longer computation time, so consider increasing
 <b>step</b> and <b>max_error</b> parameter.
 
@@ -87,6 +89,7 @@ Again, we visualize the result in 3D view and we check 'use color for thematic r
 <h2>SEE ALSO</h2>
 <em>
 <a href="http://grass.osgeo.org/grass71/manuals/r.flow.html">r.flow</a>,
+<a href="http://grass.osgeo.org/grass71/manuals/r3.gradient.html">r3.gradient</a>,
 <a href="http://grass.osgeo.org/grass71/manuals/r3.gwflow.html">r3.gwflow</a>
 </em>
 
