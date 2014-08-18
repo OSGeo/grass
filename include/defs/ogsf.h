@@ -451,9 +451,6 @@ int get_txtxoffset(void);
 
 /* gsd_img_ppm.c */
 int GS_write_ppm(const char *);
-int gsd_init_mpeg(const char *);
-int gsd_write_mpegframe(void);
-int gsd_close_mpeg(void);
 
 /* gsd_img_tif.c */
 int GS_write_tif(const char *);
