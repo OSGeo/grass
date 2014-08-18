@@ -27,7 +27,7 @@
 
 static void create_table(struct Map_info *flowline_vec,
 			 struct field_info **f_info, dbDriver ** driver,
-			 int write_scalar)
+			 int write_scalar, int use_sampled_map)
 {
     dbString sql;
     char buf[200];
@@ -47,14 +47,14 @@ static void create_table(struct Map_info *flowline_vec,
 		      Vect_subst_var(fi->database, flowline_vec), fi->driver);
     }
     *driver = drvr;
-    if (write_scalar)
-	sprintf(buf, "create table %s (cat integer, input double precision, "
-		"velocity double precision)", fi->table);
-    else
-	sprintf(buf,
-		"create table %s (cat integer, velocity double precision)",
-		fi->table);
+    sprintf(buf, "create table %s (cat integer, velocity double precision",
+	    fi->table);
     db_set_string(&sql, buf);
+    if (write_scalar)
+	db_append_string(&sql, ", input double precision");
+    if (use_sampled_map)
+	db_append_string(&sql, ", sampled double precision");
+    db_append_string(&sql, ")");
 
     db_begin_transaction(drvr);
     /* Create table */
@@ -147,13 +147,13 @@ static void init_flowaccum(RASTER3D_Region * region, RASTER3D_Map * flowacc)
 
 int main(int argc, char *argv[])
 {
-    struct Option *vector_opt, *seed_opt, *flowlines_opt, *flowacc_opt,
+    struct Option *vector_opt, *seed_opt, *flowlines_opt, *flowacc_opt, *sampled_opt,
 	*scalar_opt, *unit_opt, *step_opt, *limit_opt, *skip_opt, *dir_opt,
 	*error_opt;
     struct Flag *table_fl;
     struct GModule *module;
     RASTER3D_Region region;
-    RASTER3D_Map *flowacc;
+    RASTER3D_Map *flowacc, *sampled;
     struct Integration integration;
     struct Seed seed;
     struct Gradient_info gradient_info;
@@ -214,6 +214,15 @@ int main(int argc, char *argv[])
     flowacc_opt->description =
 	_("Name for output flowaccumulation 3D raster");
     flowacc_opt->guisection = _("Output");
+
+    sampled_opt = G_define_standard_option(G_OPT_R3_INPUT);
+    sampled_opt->key = "sampled";
+    sampled_opt->required = NO;
+    sampled_opt->label =
+            _("Name for 3D raster sampled by flowlines");
+    sampled_opt->description =
+            _("Values of this 3D raster will be stored "
+              "as attributes of flowlines segments");
 
     unit_opt = G_define_option();
     unit_opt->key = "unit";
@@ -287,6 +296,7 @@ int main(int argc, char *argv[])
     G_option_required(flowlines_opt, flowacc_opt, NULL);
     G_option_requires(seed_opt, flowlines_opt, NULL);
     G_option_requires(table_fl, flowlines_opt);
+    G_option_requires(sampled_opt, table_fl);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -363,6 +373,19 @@ int main(int argc, char *argv[])
 	init_flowaccum(&region, flowacc);
     }
 
+    /* open 3D raster map used for sampling */
+    if (sampled_opt->answer) {
+	sampled = Rast3d_open_cell_old(sampled_opt->answer,
+				       G_find_raster3d(sampled_opt->answer, ""),
+				       &region, RASTER3D_TILE_SAME_AS_FILE,
+				       RASTER3D_USE_CACHE_DEFAULT);
+	if (!sampled)
+	    Rast3d_fatal_error(_("Unable to open 3D raster map <%s>"),
+			       sampled_opt->answer);
+    }
+    else
+	sampled = NULL;
+
     /* open new vector map of flowlines */
     if (flowlines_opt->answer) {
 	fl_cats = Vect_new_cats_struct();
@@ -375,7 +398,7 @@ int main(int argc, char *argv[])
 
 	if (if_table) {
 	    create_table(&fl_map, &finfo, &driver,
-			 gradient_info.compute_gradient);
+			 gradient_info.compute_gradient, sampled ? 1 : 0);
 	}
     }
 
@@ -429,14 +452,14 @@ int main(int argc, char *argv[])
 	    if (integration.direction_type == FLOWDIR_UP ||
 		integration.direction_type == FLOWDIR_BOTH) {
 		integration.actual_direction = FLOWDIR_UP;
-		compute_flowline(&region, &seed, &gradient_info, flowacc,
+		compute_flowline(&region, &seed, &gradient_info, flowacc, sampled,
 				 &integration, &fl_map, fl_cats, fl_points,
 				 &cat, if_table, finfo, driver);
 	    }
 	    if (integration.direction_type == FLOWDIR_DOWN ||
 		integration.direction_type == FLOWDIR_BOTH) {
 		integration.actual_direction = FLOWDIR_DOWN;
-		compute_flowline(&region, &seed, &gradient_info, flowacc,
+		compute_flowline(&region, &seed, &gradient_info, flowacc, sampled,
 				 &integration, &fl_map, fl_cats, fl_points,
 				 &cat, if_table, finfo, driver);
 	    }
@@ -474,7 +497,7 @@ int main(int argc, char *argv[])
 			    integration.direction_type == FLOWDIR_BOTH) {
 			    integration.actual_direction = FLOWDIR_UP;
 			    compute_flowline(&region, &seed, &gradient_info,
-					     flowacc, &integration, &fl_map,
+					     flowacc, sampled, &integration, &fl_map,
 					     fl_cats, fl_points, &cat,
 					     if_table, finfo, driver);
 			}
@@ -482,7 +505,7 @@ int main(int argc, char *argv[])
 			    integration.direction_type == FLOWDIR_BOTH) {
 			    integration.actual_direction = FLOWDIR_DOWN;
 			    compute_flowline(&region, &seed, &gradient_info,
-					     flowacc, &integration, &fl_map,
+					     flowacc, sampled, &integration, &fl_map,
 					     fl_cats, fl_points, &cat,
 					     if_table, finfo, driver);
 			}

@@ -37,19 +37,24 @@ static void write_segment(struct Map_info *flowline_vec,
 
 static void write_segment_db(struct field_info *finfo, dbDriver * driver,
 			     dbString * sql, const double velocity,
-			     double scalar_value, int write_scalar,
+			     double scalar_value, double sampled_map_value,
+			     int write_scalar, int use_sampled_map,
 			     const int cat)
 {
     char buf[200];
 
-    if (write_scalar)
-	sprintf(buf, "insert into %s values ( %d, %e, %e )", finfo->table,
-		cat, scalar_value, velocity);
-    else
-	sprintf(buf, "insert into %s values ( %d, %e)", finfo->table, cat,
-		velocity);
-
+    sprintf(buf, "insert into %s values (%d, %e", finfo->table, cat, velocity);
     db_set_string(sql, buf);
+    if (write_scalar) {
+	sprintf(buf, ", %e", scalar_value);
+	db_append_string(sql, buf);
+    }
+    if (use_sampled_map) {
+        sprintf(buf, ", %e", sampled_map_value);
+        db_append_string(sql, buf);
+    }
+    db_append_string(sql, ")");
+
 
     if (db_execute_immediate(driver, sql) != DB_OK) {
 	G_fatal_error(_("Unable to insert new record: '%s'"),
@@ -57,15 +62,14 @@ static void write_segment_db(struct field_info *finfo, dbDriver * driver,
     }
 }
 
-static double get_scalar_value(RASTER3D_Region * region,
-			       struct Gradient_info *gradient_info,
-			       double north, double east, double top)
+static double get_map_value(RASTER3D_Region * region, RASTER3D_Map *map,
+			    double north, double east, double top)
 {
     int col, row, depth;
     double val;
 
     Rast3d_location2coord(region, north, east, top, &col, &row, &depth);
-    Rast3d_get_value(gradient_info->scalar_map, col, row, depth, &val,
+    Rast3d_get_value(map, col, row, depth, &val,
 		     DCELL_TYPE);
 
     return val;
@@ -86,7 +90,8 @@ static double get_scalar_value(RASTER3D_Region * region,
  */
 void compute_flowline(RASTER3D_Region * region, const struct Seed *seed,
 		      struct Gradient_info *gradient_info,
-		      RASTER3D_Map * flowacc, struct Integration *integration,
+		      RASTER3D_Map * flowacc, RASTER3D_Map * sampled_map,
+		      struct Integration *integration,
 		      struct Map_info *flowline_vec, struct line_cats *cats,
 		      struct line_pnts *points, int *cat, int if_table,
 		      struct field_info *finfo, dbDriver * driver)
@@ -100,8 +105,9 @@ void compute_flowline(RASTER3D_Region * region, const struct Seed *seed,
     int col, row, depth;
     int last_col, last_row, last_depth;
     int coor_diff;
+    DCELL scalar_value;
+    DCELL sampled_map_value;
     FCELL value;
-    double scalar_value;
     int *trav_coords;
     int size, trav_count;
     dbString sql;
@@ -114,7 +120,7 @@ void compute_flowline(RASTER3D_Region * region, const struct Seed *seed,
     last_col = last_row = last_depth = -1;
 
     size = 5;
-    scalar_value = 0;
+    value = 0;
     trav_coords = G_malloc(3 * size * sizeof(int));
 
     if (seed->flowline) {
@@ -152,11 +158,14 @@ void compute_flowline(RASTER3D_Region * region, const struct Seed *seed,
 	    if (if_table) {
 		write_segment(flowline_vec, points, cats, new_point, cat);
 		if (gradient_info->compute_gradient)
-		    scalar_value = get_scalar_value(region, gradient_info,
-						    point[1], point[0],
-						    point[2]);
+		    scalar_value = get_map_value(region, gradient_info->scalar_map,
+						 point[1], point[0], point[2]);
+		if (sampled_map)
+		    sampled_map_value = get_map_value(region, sampled_map,
+						      point[1], point[0], point[2]);
 		write_segment_db(finfo, driver, &sql, velocity, scalar_value,
-				 gradient_info->compute_gradient, *cat - 1);
+				 sampled_map_value, gradient_info->compute_gradient,
+				 sampled_map ? 1 : 0, *cat - 1);
 	    }
 	    else
 		Vect_append_point(points, point[0], point[1], point[2]);

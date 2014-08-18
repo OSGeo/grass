@@ -10,7 +10,7 @@ static const double VELOCITY_EPSILON = 1e-8;
 
 void compute_flowline(RASTER3D_Region * region, const struct Seed *seed,
 		      struct Gradient_info *gradient_info,
-		      RASTER3D_Map * flowacc,
+		      RASTER3D_Map * flowacc, RASTER3D_Map *sampled_map,
 		      struct Integration *integration,
 		      struct Map_info *flowline_vec, struct line_cats *cats,
 		      struct line_pnts *points, int *cat, int if_table,
