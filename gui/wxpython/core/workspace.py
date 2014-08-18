@@ -214,21 +214,28 @@ class ProcessWorkspaceFile:
         # layer attributes (task) - 2D settings
         #
         node_task = layer.find('task')
-        cmd.append(node_task.get('name', "unknown"))
-        
-        # flags
-        for p in node_task.findall('flag'):
-            flag = p.get('name', '')
-            if len(flag) > 1:
-                cmd.append('--' + flag)
-            else:
-                cmd.append('-' + flag)
-        
-        # parameters
-        for p in node_task.findall('parameter'):
-            cmd.append('%s=%s' % (p.get('name', ''),
-                                  self.__filterValue(self.__getNodeText(p, 'value'))))
-        
+        if node_task is None and layer.get('type') == 'command':
+            # TODO: perhaps the XML format should be changed and command
+            # should be changed to contain task
+            # TODO: where the command layer gets actually processed?
+            pass
+        else:
+            cmd.append(node_task.get('name', "unknown"))
+
+            # flags
+            for p in node_task.findall('flag'):
+                flag = p.get('name', '')
+                if len(flag) > 1:
+                    cmd.append('--' + flag)
+                else:
+                    cmd.append('-' + flag)
+
+            # parameters
+            for p in node_task.findall('parameter'):
+                cmd.append('%s=%s' % (p.get('name', ''),
+                                      self.__filterValue(
+                                          self.__getNodeText(p, 'value'))))
+
         if layer.find('selected') is not None:
             selected = True
         else:
