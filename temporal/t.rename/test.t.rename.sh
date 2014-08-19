@@ -6,8 +6,9 @@
 # The region setting should work for UTM and LL test locations
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
-r.mapcalc --o expr="prec_1 = rand(0, 550)"
-r.mapcalc --o expr="prec_2 = rand(0, 450)"
+# Generate data
+r.mapcalc --o expr="prec_1 = rand(0, 550)" -s
+r.mapcalc --o expr="prec_2 = rand(0, 450)" -s
 
 # We need to create three space time dataset
 t.create --v --o type=strds temporaltype=absolute output=precip_abs1 \

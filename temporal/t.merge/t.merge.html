@@ -17,8 +17,8 @@ two unique maps in each of it. Then we merge the two space time raster
 datasets together.
 
 <div class="code"><pre>
-r.mapcalc expr="map1 = rand(0, 10)" 
-r.mapcalc expr="map2 = rand(10, 20)" 
+r.mapcalc expr="map1 = rand(0, 10)"  -s
+r.mapcalc expr="map2 = rand(10, 20)" -s
 
 t.create type=strds temporaltype=absolute \
          output=precipitation_daily_1 \
@@ -80,8 +80,8 @@ t.info precipitation_daily_1
  | 
  +----------------------------------------------------------------------------+
 
-r.mapcalc expr="map3 = rand(20, 30)" 
-r.mapcalc expr="map4 = rand(30, 40)" 
+r.mapcalc expr="map3 = rand(20, 30)" -s
+r.mapcalc expr="map4 = rand(30, 40)" -s
 
 t.create type=strds temporaltype=absolute \
          output=precipitation_daily_2 \

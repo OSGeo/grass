@@ -32,7 +32,7 @@ space time raster dataset to stdout using <em>t.info</em>.
 MAPS="map_1 map_2 map_3 map_4 map_5 map_6 map_7"
 
 for map in ${MAPS} ; do
-    r.mapcalc --o expr="${map} = rand(0, 10)" 
+    r.mapcalc --o expr="${map} = rand(0, 10)" -s
     echo ${map} >> map_list.txt 
 done
 
