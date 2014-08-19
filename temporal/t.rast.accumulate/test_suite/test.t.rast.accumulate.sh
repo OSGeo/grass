@@ -8,12 +8,12 @@ g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 -p
 export GRASS_OVERWRITE=1
 
 # Generate data
-r.mapcalc expr="prec_1 = rand(0, 25)"
-r.mapcalc expr="prec_2 = rand(0, 24)"
-r.mapcalc expr="prec_3 = rand(0, 23)"
-r.mapcalc expr="prec_4 = rand(0, 25)"
-r.mapcalc expr="prec_5 = rand(0, 23)"
-r.mapcalc expr="prec_6 = rand(0, 26)"
+r.mapcalc expr="prec_1 = rand(0, 25)" -s
+r.mapcalc expr="prec_2 = rand(0, 24)" -s
+r.mapcalc expr="prec_3 = rand(0, 23)" -s
+r.mapcalc expr="prec_4 = rand(0, 25)" -s
+r.mapcalc expr="prec_5 = rand(0, 23)" -s
+r.mapcalc expr="prec_6 = rand(0, 26)" -s
 
 t.create type=strds temporaltype=absolute output=precip_abs1 title="A test" descr="A test"
 t.register -i type=rast input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 \

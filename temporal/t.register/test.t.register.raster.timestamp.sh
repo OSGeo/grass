@@ -11,10 +11,11 @@
 # The region setting should work for UTM and LL test locations
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
-r.mapcalc --o expr="prec_1 = rand(0, 550)"
-r.mapcalc --o expr="prec_2 = rand(0, 450)"
-r.mapcalc --o expr="prec_3 = rand(0, 320)"
-r.mapcalc --o expr="prec_4 = rand(0, 510)"
+# Generate data
+r.mapcalc --o expr="prec_1 = rand(0, 550)" -s
+r.mapcalc --o expr="prec_2 = rand(0, 450)" -s
+r.mapcalc --o expr="prec_3 = rand(0, 320)" -s
+r.mapcalc --o expr="prec_4 = rand(0, 510)" -s
 
 r.timestamp map=prec_1 date="1 jan 1995 / 23 sep 1995"
 r.timestamp map=prec_2 date="14 jul 1996 / 15 jul 1996"
