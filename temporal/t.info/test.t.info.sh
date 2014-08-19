@@ -5,11 +5,11 @@
 # @preprocess step of this test. 
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
-r.mapcalc --o expr="prec_1 = rand(0, 550)"
-r.mapcalc --o expr="prec_2 = rand(0, 450)"
+r.mapcalc --o expr="prec_1 = rand(0, 550)" -s
+r.mapcalc --o expr="prec_2 = rand(0, 450)" -s
 
-r3.mapcalc --o expr="prec_1 = rand(0, 120)"
-r3.mapcalc --o expr="prec_2 = rand(0, 320)"
+r3.mapcalc --o expr="prec_1 = rand(0, 120)" -s
+r3.mapcalc --o expr="prec_2 = rand(0, 320)" -s
 
 v.random --o -z output=lidar_abs_1 n=20 zmin=0 zmax=100 column=height
 v.random --o -z output=lidar_abs_2 n=20 zmin=0 zmax=100 column=height
