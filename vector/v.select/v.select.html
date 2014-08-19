@@ -37,7 +37,7 @@ paddock holds the information with respect to ownership, area, etc.
 
 <h2>EXAMPLES</h2>
 
-Extract fire stations (points) from urban area map (polygon) - North Carolina
+Extract fire stations (points) falling into urban area (polygon) - North Carolina
 data set:
 
 <div class="code"><pre>
@@ -45,11 +45,12 @@ v.select ainput=firestations binput=urbanarea output=urban_firestations \
          operator=overlap
 </pre></div>
 
-Extract Italian rivers from VMAP0 watercourses map:
+Extract river lines from Eurasian rivers map overlapping with the Italian
+political area:
 
 <div class="code"><pre>
-v.select ainput=watrcrsl_eurnasia_wgs84 binput=italy_area \
-         output=watrcrsl_italy operator=overlap
+v.select ainput=rivers_eurasia binput=italy_area \
+         output=rivers_italy operator=overlap
 </pre></div>
 
 <h2>TODO</h2>
