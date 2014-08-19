@@ -29,7 +29,7 @@
 
 #define INCR 1024
 
-CELL clump(int in_fd, int out_fd, int diag)
+CELL clump(int in_fd, int out_fd, int diag, int print)
 {
     register int col;
     register int n;
@@ -91,7 +91,7 @@ CELL clump(int in_fd, int out_fd, int diag)
      * pass thru the input, create initial clump labels *
      ****************************************************/
 
-    G_message(_("Pass 1..."));
+    G_message(_("Pass 1 of 2..."));
     for (row = 0; row < nrows; row++) {
 	Rast_get_c_row(in_fd, cur_in + 1, row);
 
@@ -250,35 +250,41 @@ CELL clump(int in_fd, int out_fd, int diag)
     /* rewind temp file */
     lseek(cfd, 0, SEEK_SET);
 
-    /****************************************************
-     *                      PASS 2                      *
-     * apply renumbering scheme to initial clump labels *
-     ****************************************************/
-
-    /* the input raster is no longer needed, 
-     * using instead the temp file with initial clump labels */
-
-    G_message(_("Pass 2..."));
-    for (row = 0; row < nrows; row++) {
-
-	G_percent(row, nrows, 4);
-	
-	if (read(cfd, cur_clump, csize) != csize)
-	    G_fatal_error(_("Unable to read from temp file"));
-
-	temp_clump = cur_clump;
-	temp_cell = out_cell;
-
-	for (col = 0; col < ncols; col++) {
-	    *temp_cell = renumber[index[*temp_clump]];
-	    if (*temp_cell == 0)
-		Rast_set_c_null_value(temp_cell, 1);
-	    temp_clump++;
-	    temp_cell++;
-	}
-	Rast_put_row(out_fd, out_cell, CELL_TYPE);
+    if (print) {
+	fprintf(stdout, "clumps=%d\n", cat - 1);
     }
-    G_percent(1, 1, 1);
+    else {
+	/****************************************************
+	 *                      PASS 2                      *
+	 * apply renumbering scheme to initial clump labels *
+	 ****************************************************/
+
+	/* the input raster is no longer needed, 
+	 * using instead the temp file with initial clump labels */
+
+	G_message(_("Pass 2 of 2..."));
+	for (row = 0; row < nrows; row++) {
+
+	    G_percent(row, nrows, 4);
+	
+	    if (read(cfd, cur_clump, csize) != csize)
+		G_fatal_error(_("Unable to read from temp file"));
+
+	    temp_clump = cur_clump;
+	    temp_cell = out_cell;
+
+	    for (col = 0; col < ncols; col++) {
+		*temp_cell = renumber[index[*temp_clump]];
+		if (*temp_cell == 0)
+		    Rast_set_c_null_value(temp_cell, 1);
+		temp_clump++;
+		temp_cell++;
+	    }
+	    Rast_put_row(out_fd, out_cell, CELL_TYPE);
+	}
+	G_percent(1, 1, 1);
+    }
+
     close(cfd);
     unlink(cname);
 
