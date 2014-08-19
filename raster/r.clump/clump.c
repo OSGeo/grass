@@ -91,7 +91,7 @@ CELL clump(int in_fd, int out_fd, int diag, int print)
      * pass thru the input, create initial clump labels *
      ****************************************************/
 
-    G_message(_("Pass 1..."));
+    G_message(_("Pass 1 of 2..."));
     for (row = 0; row < nrows; row++) {
 	Rast_get_c_row(in_fd, cur_in + 1, row);
 
@@ -262,7 +262,7 @@ CELL clump(int in_fd, int out_fd, int diag, int print)
 	/* the input raster is no longer needed, 
 	 * using instead the temp file with initial clump labels */
 
-	G_message(_("Pass 2..."));
+	G_message(_("Pass 2 of 2..."));
 	for (row = 0; row < nrows; row++) {
 
 	    G_percent(row, nrows, 4);
