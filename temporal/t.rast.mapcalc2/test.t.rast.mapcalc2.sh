@@ -11,7 +11,7 @@ g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
 # Generate data
 r.mapcalc expr="a1 = rand(0, 550)" -s
-r.mapcalc expr="a2 = if(col() == 2, null(), rand(0, 450))"
+r.mapcalc expr="a2 = if(col() == 2, null(), rand(0, 450))" -s
 r.mapcalc expr="a3 = rand(0, 320)" -s
 r.mapcalc expr="a4 = rand(0, 510)" -s
 r.mapcalc expr="a5 = rand(0, 300)" -s
