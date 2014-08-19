@@ -97,6 +97,10 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
 	Vect_get_area_points(&map, area, points);
 	if (points->n_points < 3)
 	    continue;
+
+	/* initialize style */
+	gln->highlighted = 0;
+
 	gln->type = OGSF_POLYGON;
 	gln->npts = np = points->n_points;
 	G_debug(3, "  np = %d", np);
@@ -173,6 +177,9 @@ geoline *Gv_load_vect(const char *grassname, int *nlines)
 		gln->type = OGSF_POLYGON;
 		/* Vect_append_point ( points, points->x[0], points->y[0], points->z[0] ); */
 	    }
+
+	    /* initialize style */
+	    gln->highlighted = 0;
 
 	    gln->npts = np = points->n_points;
 	    G_debug(3, "  np = %d", np);
