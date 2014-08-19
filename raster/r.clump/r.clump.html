@@ -32,6 +32,24 @@ into separate clumps unless the <em>-d</em> flag is used.
 A random color table and other support files are generated for the
 output raster map.
 
+<h2>EXAMPLES</h2>
+
+Perform clumping on "lakes" map (North Carolina sample dataset) and
+report area sizes for each lake individually rather by waterbody type:
+
+<div class="code"><pre>
+g.region rast=lakes -p
+
+# report sizes by waterbody type
+r.report lakes units=h
+
+# clump per raster polygon
+r.clump lakes out=lakes_individual
+
+# report sizes by individual waterbody
+r.report lakes_individual units=a
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em>
