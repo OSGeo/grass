@@ -62,13 +62,19 @@ distances in meters instead of map units.
 
 <h2>EXAMPLE</h2>
 
-Distance from the streams network (North Carolina sample dataset):
+A) Distance from the streams network (North Carolina sample dataset):
 <div class="code"><pre>
 g.region rast=streams_derived -p
 r.grow.distance input=streams_derived distance=dist_from_streams
 </pre></div>
+
+<div align="center" style="margin: 10px">
+<img src="r_grow_distance.png" border=0><br>
+<i>Distance from the streams network in meters (map subset)</i>
+</div>
+
 <p>
-Distance from sea in meters in latitude-longitude location:
+B) Distance from sea in meters in latitude-longitude location:
 <div class="code"><pre>
 g.region rast=sea -p
 r.grow.distance -m input=sea distance=dist_from_sea_geodetic metric=geodesic
