@@ -120,6 +120,8 @@ geopoint *Gp_load_sites(const char *name, int *nsites, int *has_z)
 	    else {
 		Vect_reset_cats(Cats);
 	    }
+	    /* initialize style */
+	    gpt->highlighted = 0;
 	    
 	    G_debug(5, "loading vector point %d x=%f y=%f ncats=%d",
 		    np, Points->x[0], Points->y[0], Cats->n_cats);
