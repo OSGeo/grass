@@ -905,7 +905,7 @@ def check_shell():
     global sh, shellname, grass_env_file
     # cygwin has many problems with the shell setup
     # below, so i hardcoded everything here.
-    if os.getenv('CYGWIN'):
+    if sys.platform == 'cygwin':
         sh = "cygwin"
         shellname = "GNU Bash (Cygwin)"
         os.environ['SHELL'] = "/usr/bin/bash.exe"
