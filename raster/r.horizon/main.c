@@ -347,6 +347,8 @@ int main(int argc, char *argv[])
 
     degreeOutput = flag.degreeOutput->answer;
 
+    if (G_projection() == PROJECTION_LL)
+        G_important_message(_("Note: In latitude-longitude coordinate system specify buffers in degree unit"));
 
     elevin = parm.elevin->answer;
 

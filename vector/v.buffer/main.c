@@ -320,7 +320,7 @@ int main(int argc, char *argv[])
 
     /* TODO: no geodesic support yet in GEOS */
     if (G_projection() == PROJECTION_LL)
-        G_important_message(_("Note: In latitude-longitude coordinate system distances are in degree units"));
+        G_important_message(_("Note: In latitude-longitude coordinate system specify distances in degree unit"));
 
     if ((dista_opt->answer && bufcol_opt->answer) ||
 	(!(dista_opt->answer || bufcol_opt->answer)))
