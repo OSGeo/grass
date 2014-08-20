@@ -312,7 +312,7 @@ int main(int argc, char *argv[])
 
     /* TODO: threshold might be recalculated with optional geodesic support to meters */
     if (G_projection() == PROJECTION_LL)
-        G_important_message(_("Note: In latitude-longitude coordinate system threshold in degree units"));
+        G_important_message(_("Note: In latitude-longitude coordinate system specify threshold in degree unit"));
 
     OGRRegisterAll();
 
