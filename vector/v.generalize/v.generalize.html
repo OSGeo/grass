@@ -95,6 +95,7 @@ v.generalize input=boundary_county output=boundary_county_dp_red0_30 \
 </pre></div>
 is that 'out' contains approximately only 30% of points of 'in'.
 
+
 <h3>SMOOTHING</h3>
 
 The following smoothing algorithms are implemented in <em>v.generalize</em>:
@@ -213,7 +214,6 @@ between the lines are resolved. Good starting points for values of
 The lines affected by the algorithm can be specified by the <b>layer</b>,
 <b>cats</b> and <b>where</b> parameters.
 
-<!-- TODO: example(s) -->
 
 <h3>NETWORK GENERALIZATION</h3>
 
@@ -253,7 +253,53 @@ case, the algorithm selects only the lines which meet each criterion.
 <p>Also, the outputed network may not be connected if the value of 
 <b>betweeness_thresh</b> is too large.
 
-<!-- TODO: example(s) -->
+
+<h2>EXAMPLES</h2>
+
+<h3>Simplification</h3>
+Simplification of county boundaries with DP method (North Carolina sample dataset):
+
+<div class="code"><pre>
+v.generalize input=boundary_county output=boundary_county_dp20 \
+  method=douglas threshold=20 error=boundary_county_dp20_leftover
+</pre></div>
+
+<h3>Smoothing</h3>
+
+Smoothing of road network with Chaiken method (North Carolina sample dataset):
+
+<div class="code"><pre>
+v.generalize input=roads output=roads_chaiken method=chaiken \
+  threshold=1 error=roads_chaiken_leftover
+</pre></div>
+
+<!-- TODO: 
+<h3>Displacement</h3>
+
+Displacement of ... (North Carolina sample dataset):
+
+<div class="code"><pre>
+v.generalize input=xxx output=xxx_yyy method=... \
+  ... error=xxx_eeee
+</pre></div>
+
+<h3>Network generalization</h3>
+
+Network generalization of ... (North Carolina sample dataset):
+
+<div class="code"><pre>
+v.generalize input=xxx output=xxx_yyy method=... \
+  ... error=xxx_eeee
+</pre></div>
+-->
+
+<!-- TODO: 
+<h2>REFERENCES</h2>
+
+<ul>
+<li>...</li>
+</ul>
+-->
 
 <h2>SEE ALSO</h2>
 
@@ -261,14 +307,14 @@ case, the algorithm selects only the lines which meet each criterion.
   <a href="v.clean.html">v.clean</a>,
   <a href="v.dissolve.html">v.dissolve</a>
 </em>
-<br><br>
-<a href="http://grasswiki.osgeo.org/wiki/V.generalize_tutorial">v.generalize Tutorial</a> (from GRASS-Wiki)
+<p>
+<a href="http://grasswiki.osgeo.org/wiki/V.generalize_tutorial">v.generalize Tutorial</a> (GRASS-Wiki)
+
 
 <h2>AUTHORS</h2>
 
 Daniel Bundala, Google Summer of Code 2007, Student<br>
-Wolf Bergenheim, Mentor
-
-<!-- TODO: references -->
+Wolf Bergenheim, Mentor<br>
+Fixes: Markus Metz
 
 <p><i>Last changed: $Date$</i>
