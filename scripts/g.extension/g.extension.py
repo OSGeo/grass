@@ -304,7 +304,7 @@ def list_available_modules(url, mlist = None):
         try:
             tree = etree.fromstring(f.read())
         except:
-            grass.warning(_("Unable to parse '%s'. Trying to scan SVN (may take some time)...") % url)
+            grass.warning(_("Unable to parse '%s'. Trying to scan SVN repository (may take some time)...") % url)
             list_available_extensions_svn()
             return
 
@@ -330,7 +330,7 @@ def list_available_modules(url, mlist = None):
 
 # list extensions (scan SVN repo)
 def list_available_extensions_svn():
-    grass.message(_('Fetching list of extensions from GRASS-Addons SVN (be patient)...'))
+    grass.message(_('Fetching list of extensions from GRASS-Addons SVN repository (be patient)...'))
     pattern = re.compile(r'(<li><a href=".+">)(.+)(</a></li>)', re.IGNORECASE)
 
     if flags['c']:
@@ -366,7 +366,7 @@ def list_available_extensions_svn():
 # list wxGUI extensions
 def get_wxgui_extensions():
     mlist = list()
-    grass.debug('Fetching list of wxGUI extensions from GRASS-Addons SVN (be patient)...')
+    grass.debug('Fetching list of wxGUI extensions from GRASS-Addons SVN repository (be patient)...')
     pattern = re.compile(r'(<li><a href=".+">)(.+)(</a></li>)', re.IGNORECASE)
     grass.verbose(_("Checking for '%s' modules...") % 'gui/wxpython')
 
@@ -393,7 +393,7 @@ def cleanup():
     if REMOVE_TMPDIR:
         grass.try_rmdir(TMPDIR)
     else:
-        grass.message(_("Path to the source code:"))
+        grass.message("\n%s\n" % _("Path to the source code:"))
         sys.stderr.write('%s\n' % os.path.join(TMPDIR, options['extension']))
 
 # write out meta-file
@@ -728,10 +728,8 @@ def install_extension_other(name):
     classchar = name.split('.', 1)[0]
     moduleclass = expand_module_class_name(classchar)
     url = options['svnurl'] + '/' + moduleclass + '/' + name
-    if classchar == 'wx' and not flags['s']:
-        grass.fatal(_("Installation of wxGUI extension requires -%s flag.") % 's')
-
-    grass.message(_("Fetching <%s> from GRASS-Addons SVN (be patient)...") % name)
+    
+    grass.message(_("Fetching <%s> from GRASS-Addons SVN repository (be patient)...") % name)
 
     os.chdir(TMPDIR)
     if grass.verbosity() <= 2:
@@ -748,26 +746,25 @@ def install_extension_other(name):
              'html'    : os.path.join(TMPDIR, name, 'docs', 'html'),
              'rest'    : os.path.join(TMPDIR, name, 'docs', 'rest'),
              'man'     : os.path.join(TMPDIR, name, 'docs', 'man', 'man1'),
-             'scripts' : os.path.join(TMPDIR, name, 'scripts'),
+             'script'  : os.path.join(TMPDIR, name, 'scripts'),
+### TODO: handle locales also for addons
+#             'string'  : os.path.join(TMPDIR, name, 'locale'),
+             'string'  : os.path.join(TMPDIR, name),
              'etc'     : os.path.join(TMPDIR, name, 'etc'),
              }
 
-    if classchar != 'wx':
-        makeCmd = ['make',
-                   'MODULE_TOPDIR=%s' % gisbase.replace(' ', '\ '),
-                   'RUN_GISRC=%s' % os.environ['GISRC'],
-                   'BIN=%s' % dirs['bin'],
-                   'HTMLDIR=%s' % dirs['html'],
-                   'RESTDIR=%s' % dirs['rest'],
-                   'MANDIR=%s' % dirs['man'],
-                   'SCRIPTDIR=%s' % dirs['scripts'],
-                   'ETC=%s' % os.path.join(dirs['etc'], name)
-                   ]
-    else:
-        makeCmd = ['make',
-                   'MODULE_TOPDIR=%s' % gisbase.replace(' ', '\ ')
-                   ]
-
+    makeCmd = ['make',
+               'MODULE_TOPDIR=%s' % gisbase.replace(' ', '\ '),
+               'RUN_GISRC=%s' % os.environ['GISRC'],
+               'BIN=%s' % dirs['bin'],
+               'HTMLDIR=%s' % dirs['html'],
+               'RESTDIR=%s' % dirs['rest'],
+               'MANDIR=%s' % dirs['man'],
+               'SCRIPTDIR=%s' % dirs['script'],
+               'STRINGDIR=%s' % dirs['string'],
+               'ETC=%s' % os.path.join(dirs['etc'], name)
+    ]
+    
     installCmd = ['make',
                   'MODULE_TOPDIR=%s' % gisbase,
                   'ARCH_DISTDIR=%s' % os.path.join(TMPDIR, name),
@@ -776,9 +773,9 @@ def install_extension_other(name):
                   ]
 
     if flags['d']:
-        grass.message(_("To compile run:"))
+        grass.message("\n%s\n" % _("To compile run:"))
         sys.stderr.write(' '.join(makeCmd) + '\n')
-        grass.message(_("To install run:"))
+        grass.message("\n%s\n" % _("To install run:"))
         sys.stderr.write(' '.join(installCmd) + '\n')
         return 0
 
@@ -789,7 +786,7 @@ def install_extension_other(name):
                        stdout = outdev):
         grass.fatal(_('Compilation failed, sorry. Please check above error messages.'))
 
-    if flags['i'] or classchar == 'wx':
+    if flags['i']:
         return 0
 
     grass.message(_("Installing..."))
