@@ -4,28 +4,6 @@ MODULE_TOPDIR=../../..
 include $(MODULE_TOPDIR)/include/Make/Vars.make
 include $(MODULE_TOPDIR)/include/Make/Rules.make
 
-# You can set these variables from the command line.
-SPHINXOPTS    =
-APIDOC := $(shell sphinx-apidoc2 --help 2>/dev/null)
-ifdef APIDOC
-SPHINXAPIDOC = sphinx-apidoc2
-else
-    APIDOC := $(shell sphinx-apidoc --help 2>/dev/null)
-    ifdef APIDOC
-	SPHINXAPIDOC = sphinx-apidoc
-    endif
-endif
-
-BUILD := $(shell sphinx-build2 --version 2>/dev/null)
-ifdef BUILD
-    SPHINXBUILD = sphinx-build2
-else
-    BUILD := $(shell sphinx-build --version 2>/dev/null)
-    ifdef BUILD
-	SPHINXBUILD = sphinx-build
-    endif
-endif
-
 
 PAPER         =
 BUILDDIR      = _build
@@ -39,10 +17,22 @@ PAPEROPT_letter = -D latex_paper_size=letter
 ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) -c . src/
 # the i18n builder cannot share the environment and doctrees with the others
 I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
+SPHINXBUILD     = sphinx-build
+SPHINXAPIDOC    = sphinx-apidoc
 
-.PHONY: help clean html dirhtml singlehtml pickle json htmlhelp qthelp devhelp epub latex latexpdf text man changes linkcheck doctest gettext
+# some distros come with a different name
+BUILD  := $(type $(SPHINXBUILD) >/dev/null)  || (SPHINXBUILD  = sphinx-build2)
+APIDOC := $(type $(SPHINXAPIDOC) >/dev/null) || (SPHINXAPIDOC = sphinx-apidoc2)
 
-.DEFAULT_GOAL := help
+checksphinx:
+	@echo "SPHINXBUILD: Found <$(SPHINXBUILD)>"
+	@echo "SPHINXAPIDOC: Found <$(SPHINXAPIDOC)>"
+	@(type $(SPHINXBUILD) > /dev/null || (echo "ERROR: Install 'sphinx-build' software first (get from http://sphinx-doc.org)" && exit 1))
+	@(type $(SPHINXAPIDOC) > /dev/null || (echo "ERROR: Install 'sphinx-apidoc' software first (get from http://sphinx-doc.org)" && exit 1))
+
+.PHONY: help clean html dirhtml singlehtml pickle json htmlhelp qthelp devhelp checksphinx libpythonapidoc libpythonclean libpythondirhtml libpythondoctest libpythonepub libpythonhelp libpythonhtml libpythonlatex libpythonlatexpdf libpythonman libpythonsinglehtml
+
+.DEFAULT_GOAL := libpythonhelp
 
 libpythonhelp:
 	@echo "Please use \`make <target>' where <target> is one of"
@@ -68,7 +58,7 @@ libpythonclean:
 	-rm -f src/temporal.rst
 
 libpythonapidoc:
-	@echo $(SPHINXAPIDOC)
+	@echo "SPHINXBUILD: Using <$(SPHINXBUILD)>"
 	$(call run_grass,$(SPHINXAPIDOC) -T -f -o src/ ../imaging/)
 	$(call run_grass,$(SPHINXAPIDOC) -T -f -o src/ ../exceptions/)
 	$(call run_grass,$(SPHINXAPIDOC) -T -f -o src/ ../gunittest/)
@@ -76,28 +66,33 @@ libpythonapidoc:
 	$(call run_grass,$(SPHINXAPIDOC) -T -f -o src/ ../pygrass/)
 	$(call run_grass,$(SPHINXAPIDOC) -T -f -o src/ ../script/)
 	$(call run_grass,$(SPHINXAPIDOC) -T -f -o src/ ../temporal/)
-	
-libpythonhtml:
+
+libpythonhtml: checksphinx
+	@echo "SPHINXBUILD: Using <$(SPHINXBUILD)>"
 	$(call run_grass,$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR_HTML))
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR_HTML)"
 
 libpythondirhtml:
+	@echo "SPHINXBUILD: Using <$(SPHINXBUILD)>"
 	$(call run_grass,$(SPHINXBUILD) -b dirhtml $(ALLSPHINXOPTS) $(BUILDDIR_HTML))
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR_HTML)"
 
 libpythonsinglehtml:
+	@echo "SPHINXBUILD: Using <$(SPHINXBUILD)>"
 	$(call run_grass,$(SPHINXBUILD) -b singlehtml $(ALLSPHINXOPTS) $(BUILDDIR_HTML))
 	@echo
 	@echo "Build finished. The HTML page is in $(BUILDDIR_HTML)"
 
 libpythonepub:
+	@echo "SPHINXBUILD: Using <$(SPHINXBUILD)>"
 	$(call run_grass,$(SPHINXBUILD) -b epub $(ALLSPHINXOPTS) $(BUILDDIR)/epub)
 	@echo
 	@echo "Build finished. The epub file is in $(BUILDDIR)/epub/"
 
 libpythonlatex:
+	@echo "SPHINXBUILD: Using <$(SPHINXBUILD)>"
 	$(call run_grass,$(SPHINXBUILD) -b latex $(ALLSPHINXOPTS) $(BUILDDIR)/latex)
 	@echo
 	@echo "Build finished; the LaTeX files are in $(BUILDDIR)/latex."
@@ -105,17 +100,20 @@ libpythonlatex:
 	      "(use \`make latexpdf' here to do that automatically)."
 
 libpythonlatexpdf:
+	@echo "SPHINXBUILD: Using <$(SPHINXBUILD)>"
 	$(call run_grass,$(SPHINXBUILD) -b latex $(ALLSPHINXOPTS) $(BUILDDIR)/latex)
 	@echo "Running LaTeX files through pdflatex..."
 	$(MAKE) -C $(BUILDDIR)/latex all-pdf
 	@echo "pdflatex finished; the PDF files are in $(BUILDDIR)/latex/"
 
 libpythonman:
+	@echo "SPHINXBUILD: Using <$(SPHINXBUILD)>"
 	$(call run_grass,$(SPHINXBUILD) -b man $(ALLSPHINXOPTS) $(MANDIR))
 	@echo
 	@echo "Build finished. The manual pages are in $(MANDIR)/"
 
 libpythondoctest:
+	@echo "SPHINXBUILD: Using <$(SPHINXBUILD)>"
 	$(call run_grass,$(SPHINXBUILD) -b doctest $(ALLSPHINXOPTS) $(BUILDDIR)/doctest)
 	@echo "Testing of doctests in the sources finished, look at the " \
 	      "results in $(BUILDDIR)/doctest/output.txt."

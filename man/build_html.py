@@ -171,7 +171,8 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
       </td>
       <td valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Python</h3>
        <ul>
-        <li class="box"><a href="pygrass/index.html">PyGRASS documentation</a></li>
+        <li class="box"><a href="libpython/index.html">PyGRASS documentation</a></li>
+        <li class="box"><a href="libpython/index.html">GRASS GIS Testsuite</a></li>
        </ul>
       </td>
     </tr>
