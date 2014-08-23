@@ -75,7 +75,7 @@ processing and geographic information system (GIS).</p>
 #"
 
 overview_tmpl = string.Template(\
-r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
+r"""<!-- the files grass${grass_version_major}.html & helptext.html file live in lib/init/ -->
 
 <table align="center" border="0" cellspacing="8">
   <tbody>
@@ -112,7 +112,7 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
       </td>
       <td width="33%" valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;General</h3>
 	<ul>
-	<li class="box"><a href="grass7.html">GRASS GIS startup manual page</a></li>
+	<li class="box"><a href="grass${grass_version_major}.html">GRASS GIS startup manual page</a></li>
 	<li class="box"><a href="general.html">General commands manual</a></li>
 	</ul>
       </td>
@@ -171,8 +171,8 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
       </td>
       <td width="33%" valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Python</h3>
        <ul>
-        <li class="box"><a href="libpython/index.html">PyGRASS documentation</a></li>
-        <li class="box"><a href="libpython/index.html">GRASS GIS Testsuite</a></li>
+        <li class="box"><a href="http://grass.osgeo.org/grass${grass_version_major}${grass_version_minor}/manuals/libpython/pygrass_index.html">PyGRASS documentation</a></li>
+        <li class="box"><a href="http://grass.osgeo.org/grass${grass_version_major}${grass_version_minor}/manuals/libpython/gunittest_testing.html">GRASS GIS Testsuite</a></li>
        </ul>
       </td>
     </tr>
@@ -356,7 +356,9 @@ def write_html_header(f, title, ismain = False, body_width = "99%"):
 
 def write_html_cmd_overview(f):
     box_color = "#e1ecd0"
-    f.write(overview_tmpl.substitute(box_color = box_color))
+    f.write(overview_tmpl.substitute(box_color = box_color,
+                                     grass_version_major = grass_version_major,
+                                     grass_version_minor = grass_version_minor))
 
 def write_html_footer(f, index_url, year = None):
     if year is None:
@@ -396,6 +398,8 @@ arch_dist_dir = os.environ['ARCH_DISTDIR']
 html_dir = os.path.join(arch_dist_dir, "docs", "html")
 gisbase = os.environ['GISBASE']
 grass_version = os.getenv("VERSION_NUMBER", "unknown")
+grass_version_major = grass_version.split('.')[0]
+grass_version_minor = grass_version.split('.')[1]
 grass_mmver = '.'.join(grass_version.split('.')[0:2])
 macosx = "darwin" in os.environ['ARCH'].lower()
 default_year = os.getenv("VERSION_DATE")
