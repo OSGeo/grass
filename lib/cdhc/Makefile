@@ -16,7 +16,7 @@ ifeq ($(strip $(CROSS_COMPILING)),)
 endif
 
 test: $(OBJDIR)/test$(EXE)
-	cd $(OBJDIR) && $(call run_grass,./test < ../test_numbers.csv)
+	$(call run_grass,$(OBJDIR)/test$(EXE) < test_numbers.csv)
 
 #  Test functions
 $(OBJDIR)/test$(EXE): $(OBJDIR)/test.o $(GISDEP) $(CDHCDEP)
