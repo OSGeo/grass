@@ -83,8 +83,9 @@ a LANDSAT subscene (VIZ, NIR, MIR channels) in North Carolina
 (see <em><a href="i.cluster.html">i.cluster</a></em> manual page for the first part):
 
 <div class="code"><pre>
-i.maxlik group=my_lsat7_2002 subgroup=my_lsat7_2002 sigfile=sig_clust_lsat2002 \
-          class=lsat7_2002_clust_classes reject=lsat7_2002_clust_classes.rej
+i.maxlik group=my_lsat7_2002 subgroup=my_lsat7_2002 \
+  signaturefile=sig_clust_lsat2002 \
+  class=lsat7_2002_clust_classes reject=lsat7_2002_clust_classes.rej
 
 # Visually check result
 d.mon wx0
@@ -94,7 +95,7 @@ d.rast.leg lsat7_2002_clust_classes.rej
 
 <h2>SEE ALSO</h2>
 
-The GRASS 4 <em>
+The GRASS GIS 4 <em>
 <a href="http://grass.osgeo.org/gdp/imagery/grass4_image_processing.pdf">Image
 Processing manual</a></em>
 
