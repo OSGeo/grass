@@ -11,8 +11,6 @@ MODULES = core db raster raster3d vector array setup task
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)
 
-EXTRA_CLEAN_FILES = setup.py
-
 default: $(PYFILES) $(PYCFILES)
 
 $(DSTDIR):
@@ -21,10 +19,10 @@ $(DSTDIR):
 $(DSTDIR)/%: % | $(DSTDIR)
 	$(INSTALL_DATA) $< $@
 
-$(DSTDIR)/setup.py: setup.py | $(DSTDIR)
+$(DSTDIR)/setup.py: $(OBJDIR)/setup.py | $(DSTDIR)
 	$(INSTALL_DATA) $< $@
 
-setup.py: setup.py.sed
+$(OBJDIR)/setup.py: setup.py.sed | $(OBJDIR)
 	sed \
 	-e 's#@LD_LIBRARY_PATH_VAR@#$(LD_LIBRARY_PATH_VAR)#' \
 	$< > $@
