@@ -188,8 +188,9 @@ static int check_xy(int shell)
 {
     if (cellhd.proj == PROJECTION_XY) {
 	if (shell)
-	    fprintf(stdout, "name=");
-	fprintf(stdout, "XY location (unprojected)\n");
+	    fprintf(stdout, "name=xy_location_unprojected\n");
+	else
+	    fprintf(stdout, "XY location (unprojected)\n");
 	return 1;
     }
     else
