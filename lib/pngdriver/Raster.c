@@ -1,3 +1,16 @@
+/*!
+  \file pngdriver/Raster.c
+
+  \brief GRASS png display driver - draw raster
+
+  (C) 2003-2014 by Per Henrik Johansen and the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Per Henrik Johansen (original contributor)
+  \author Glynn Clements  
+*/
 
 #include <string.h>
 #include <math.h>
@@ -57,6 +70,13 @@ static void alloc_buffers(void)
     trans = G_realloc(trans, nalloc * sizeof(int));
 }
 
+/*!
+  \brief Start drawing raster
+
+  \param mask
+  \param s
+  \param d
+*/
 void PNG_begin_raster(int mask, int s[2][2], double fd[2][2])
 {
     int d[2][2];
@@ -79,6 +99,15 @@ void PNG_begin_raster(int mask, int s[2][2], double fd[2][2])
 	trans[i] = scale_rev_x(d[0][0] + i);
 }
 
+/*!
+  \brief Draw raster row
+
+  \param n number of cell
+  \param row raster row
+  \param red,grn,blu,nul red,green,blue and null value
+
+  \return next row
+*/
 int PNG_raster(int n, int row,
 	       const unsigned char *red, const unsigned char *grn,
 	       const unsigned char *blu, const unsigned char *nul)

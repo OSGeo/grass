@@ -1,13 +1,18 @@
+/*!
+  \file pngdriver/Draw_bitmap.c
 
-/*
- * draw a line between two given points in the current color.
- *
- * Called by:
- *     Cont_abs() in ../lib/Cont_abs.c
- */
+  \brief GRASS png display driver - draw bitmap
+
+  (C) 2003-2014 by Per Henrik Johansen and the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Per Henrik Johansen (original contributor)
+  \author Glynn Clements  
+*/
 
 #include <math.h>
-
 #include "pngdriver.h"
 
 #ifndef min
@@ -16,6 +21,14 @@
 #ifndef max
 #define max(a,b) ((a)>(b)?(a):(b))
 #endif
+
+/*!
+  \brief Draw bitmap
+
+  \param ncols,nrows number of columns and rows
+  \param threshold threshold value
+  \param buf data buffer
+*/
 
 void PNG_draw_bitmap(int ncols, int nrows, int threshold,
 		     const unsigned char *buf)
