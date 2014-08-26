@@ -1,24 +1,23 @@
+/*!
+  \file pngdriver/Driver.c
 
-/****************************************************************************
- *
- * MODULE:       PNG driver
- * AUTHOR(S):    Glynn Clements <glynn@gclements.plus.com>
- * COPYRIGHT:    (C) 2007 Glynn Clements
- *
- *  This program is free software; you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
- *  the Free Software Foundation; either version 2 of the License, or
- *  (at your option) any later version.
- *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
- *
- *****************************************************************************/
+  \brief GRASS png display driver - driver initialization
+
+  (C) 2007 by Glynn Clements and the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Glynn Clements  
+*/
 
 #include "pngdriver.h"
 
+/*!
+  \brief Initialize display driver
+
+  \return pointer driver structure
+*/
 const struct driver *PNG_Driver(void)
 {
     static struct driver drv;
