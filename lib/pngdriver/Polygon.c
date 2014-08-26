@@ -1,3 +1,16 @@
+/*!
+  \file pngdriver/Polygon.c
+
+  \brief GRASS png display driver - draw polygon
+
+  (C) 2003-2014 by Per Henrik Johansen and the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Per Henrik Johansen (original contributor)
+  \author Glynn Clements  
+*/
 
 #include <stdlib.h>
 #include <math.h>
@@ -119,6 +132,9 @@ static void poly(const struct vertex *p, int n)
 	line(p, n, y);
 }
 
+/*!
+  \brief Draw polygon
+*/
 void png_polygon(struct path *p)
 {
     if (p->vertices[p->count - 1].mode != P_CLOSE)
