@@ -1,7 +1,16 @@
-/*
- * Close down the graphics processing.  This gets called only at driver
- * termination time.
- */
+/*!
+  \file pngdriver/Graph_close.c
+
+  \brief GRASS png display driver - close graphics processing
+
+  (C) 2003-2014 by Glynn Clements and the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Per Henrik Johansen (original contributor)
+  \author Glynn Clements
+*/
 
 #include <unistd.h>
 #include <fcntl.h>
@@ -34,6 +43,10 @@ static void unmap_file(void)
     png.mapped = 0;
 }
 
+/*!
+  \brief Close down the graphics processing. This gets called only at driver
+         termination time.
+*/
 void PNG_Graph_close(void)
 {
     write_image();

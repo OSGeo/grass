@@ -1,14 +1,16 @@
-/*
- * Start up graphics processing.  Anything that needs to be assigned, set up,
- * started-up, or otherwise initialized happens here.  This is called only at
- * the startup of the graphics driver.
- *
- * The external variables define the pixle limits of the graphics surface.  The
- * coordinate system used by the applications programs has the (0,0) origin
- * in the upper left-hand corner.  Hence,
- *    screen_left < screen_right
- *    screen_top  < screen_bottom 
- */
+/*!
+  \file pngdriver/Graph_set.c
+
+  \brief GRASS png display driver - set graphics processing
+
+  (C) 2003-2014 by Glynn Clements and the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Per Henrik Johansen (original contributor)
+  \author Glynn Clements
+*/
 
 #include <string.h>
 #include <stdlib.h>
@@ -62,6 +64,20 @@ static void map_file(void)
 
     png.mapped = 1;
 }
+
+/*!
+  \brief Start up graphics processing
+
+   Anything that needs to be assigned, set up,
+   started-up, or otherwise initialized happens here.  This is called only at
+   the startup of the graphics driver.
+ 
+   The external variables define the pixle limits of the graphics surface.  The
+   coordinate system used by the applications programs has the (0,0) origin
+   in the upper left-hand corner.  Hence,
+     screen_left < screen_right
+     screen_top  < screen_bottom 
+*/
 
 int PNG_Graph_set(void)
 {
