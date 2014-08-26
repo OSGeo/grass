@@ -295,7 +295,7 @@ int main(int argc, char *argv[])
 
     /* Open 'from' vector */
     Vect_set_open_level(2);
-    if (Vect_open_old2(&From, opt.from->answer, G_mapset(), opt.from_field->answer) < 0)
+    if (Vect_open_old2(&From, opt.from->answer, "", opt.from_field->answer) < 0)
 	G_fatal_error(_("Unable to open vector map <%s>"), opt.from->answer);
 
     from_field = Vect_get_field_number(&From, opt.from_field->answer);
