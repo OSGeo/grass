@@ -175,9 +175,6 @@ class Messenger(object):
         self.raise_on_error = raise_on_error
         self.start_server()
 
-    def __del__(self):
-        self.stop()
-
     def start_server(self):
         """Start the messenger server and open the pipe
         """
