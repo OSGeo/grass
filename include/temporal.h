@@ -16,6 +16,8 @@ const char *tgis_get_default_driver_name(void);
 char *tgis_get_default_database_name(void);
 char *tgis_get_driver_name(void);
 char *tgis_get_database_name(void);
+char *tgis_get_mapset_driver_name(const char*);
+char *tgis_get_mapset_database_name(const char*);
 int tgis_set_default_connection(void);
 
 

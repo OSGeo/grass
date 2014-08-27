@@ -13,6 +13,7 @@
           Joel Jones (CERL/UIUC) and Radim Blazek
 */
 #include <grass/temporal.h>
+#include <grass/glocale.h>
 
 /*!
  * \brief Get TGIS driver name
@@ -82,3 +83,78 @@ int tgis_get_connection(dbConnection * connection)
 
     return DB_OK;
 }
+
+#define DRIVER_NAME 0
+#define DATABASE_NAME 1
+
+static char *get_mapset_connection_name(const char *mapset, int contype)
+{
+    const char *val = NULL;
+    char *ret_val = NULL;
+    const char *orig_mapset;
+    int ret;
+
+    orig_mapset = G__getenv("MAPSET");
+
+    ret = G__mapset_permissions2(G__getenv("GISDBASE"), G__getenv("LOCATION_NAME"), mapset);
+    switch (ret) {
+    case 0:
+        G_fatal_error(_("You don't have permission to access the mapset <%s>"),
+                      mapset);
+        break;
+    case -1:
+        G_fatal_error(_("Mapset <%s> does not exist."),
+	              mapset);
+        break;
+    default:
+        break;
+    }    
+
+    G_setenv("MAPSET", mapset);
+ 
+    if(contype == DATABASE_NAME) {
+        if ((val = G__getenv2("TGISDB_DATABASE", G_VAR_MAPSET)))
+            ret_val = G_store(val);
+    } else if(contype == DRIVER_NAME) {
+        if ((val = G__getenv2("TGISDB_DRIVER", G_VAR_MAPSET)))
+            ret_val = G_store(val);
+    }
+
+    G_setenv("MAPSET", orig_mapset);
+    
+    return ret_val;
+}
+
+
+/*!
+ * \brief Get TGIS driver name from a specific mapset
+ *
+ * This function will call G_fatal_error() in case the mapset does not exists
+ * or it is not allowed to access the mapset.
+ * 
+ * \param mapset The name of the mapset to receive the driver name from
+ *
+ * \return pointer to TGIS driver name
+ * \return NULL if not set 
+ */
+char *tgis_get_mapset_driver_name(const char *mapset)
+{
+    return get_mapset_connection_name(mapset, DRIVER_NAME);
+}
+
+/*!
+ * \brief Get TGIS database name
+ * 
+ * This function will call G_fatal_error() in case the mapset does not exists
+ * or it is not allowed to access the mapset.
+ * 
+ * \param mapset The name of the mapset to receive the driver name from
+ 
+ * \return pointer to TGIS database name
+ * \return NULL if not set
+ */
+char *tgis_get_mapset_database_name(const char *mapset)
+{
+    return get_mapset_connection_name(mapset, DATABASE_NAME);
+}
+
