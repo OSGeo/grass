@@ -5,7 +5,7 @@
 
 #include <grass/raster.h>
 
-CELL mod09A1ii(CELL pixel) 
+CELL mod09CMGii(CELL pixel) 
 {
     CELL qctemp;
 

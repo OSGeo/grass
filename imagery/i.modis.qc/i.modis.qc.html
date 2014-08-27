@@ -33,8 +33,8 @@ MCD43B2. This does include MOD09A1 QA_state_500m layer (see Notes).
  <li>[0000]= class 0: highest quality</li>
  <li>[0111]= class 1: noisy detector</li>
  <li>[1000]= class 2: dead detector; data interpolated in L1B</li>
- <li>[1001]= class 3: solar zenith ge 86 degrees</li>
- <li>[1010]= class 4: solar zenith ge 85 and lt 86 degrees</li>
+ <li>[1001]= class 3: solar zenith &ge; 86 degrees</li>
+ <li>[1010]= class 4: solar zenith &ge; 85 and &lt; 86 degrees</li>
  <li>[1011]= class 5: missing input</li>
  <li>[1100]= class 6: internal constant used in place of climatological data for at least one atmospheric constant</li>
  <li>[1101]= class 7: correction out of bounds, pixel constrained to extreme allowable value</li>
@@ -91,20 +91,20 @@ MCD43B2. This does include MOD09A1 QA_state_500m layer (see Notes).
 <em>MOD11A1: Emis Error Flag bits=[4-5]</em>
 </pre>
 <ul>
- <li>[00]= class 0: Average emissivity error le 0.01</li>
- <li>[01]= class 1: Average emissivity error le 0.02</li>
- <li>[10]= class 2: Average emissivity error le 0.04</li>
- <li>[11]= class 3: Average emissivity error gt 0.04</li>
+ <li>[00]= class 0: Average emissivity error &le; 0.01</li>
+ <li>[01]= class 1: Average emissivity error &le; 0.02</li>
+ <li>[10]= class 2: Average emissivity error &le; 0.04</li>
+ <li>[11]= class 3: Average emissivity error &gt; 0.04</li>
 </ul>
 
 <pre>
 <em>MOD11A1: LST Error Flag bits=[6-7]</em>
 </pre>
 <ul>
- <li>[00]= class 0: Average LST error le 1</li>
- <li>[01]= class 1: Average LST error le 2</li>
- <li>[10]= class 2: Average LST error le 3</li> 
- <li>[11]= class 3: Average LST error gt 3</li>
+ <li>[00]= class 0: Average LST error &le; 1</li>
+ <li>[01]= class 1: Average LST error &le; 2</li>
+ <li>[10]= class 2: Average LST error &le; 3</li> 
+ <li>[11]= class 3: Average LST error &gt; 3</li>
 </ul>
 <pre>
 
@@ -131,20 +131,20 @@ MCD43B2. This does include MOD09A1 QA_state_500m layer (see Notes).
 <em>MOD11A2: Emis Error Flag bits=[4-5]</em>
 </pre>
 <ul>
- <li>[00]= class 0: Average emissivity error le 0.01</li>
- <li>[01]= class 1: Average emissivity error le 0.02</li>
- <li>[10]= class 2: Average emissivity error le 0.04</li>
- <li>[11]= class 3: Average emissivity error gt 0.04</li>
+ <li>[00]= class 0: Average emissivity error &le; 0.01</li>
+ <li>[01]= class 1: Average emissivity error &le; 0.02</li>
+ <li>[10]= class 2: Average emissivity error &le; 0.04</li>
+ <li>[11]= class 3: Average emissivity error &gt; 0.04</li>
 </ul>
 
 <pre>
 <em>MOD11A2: LST Error Flag bits=[6-7]</em>
 </pre>
 <ul>
- <li>[00]= class 0: Average LST error le 1</li>
- <li>[01]= class 1: Average LST error le 2</li>
- <li>[10]= class 2: Average LST error le 3</li> 
- <li>[11]= class 3: Average LST error gt 3</li>
+ <li>[00]= class 0: Average LST error &le; 1</li>
+ <li>[01]= class 1: Average LST error &le; 2</li>
+ <li>[10]= class 2: Average LST error &le; 3</li> 
+ <li>[11]= class 3: Average LST error &gt; 3</li>
 </ul>
 
 <pre>
@@ -248,7 +248,7 @@ MCD43B2. This does include MOD09A1 QA_state_500m layer (see Notes).
 </ul>
 
 <pre>
-<em>MOD13A2: Mandatory QA Flags 1Km bits[0-1]</em>
+<em>MOD13A2: Mandatory QA Flags 1km bits[0-1]</em>
 </pre>
 <ul>
  <li>[00]= class 0: VI produced, good quality</li>
@@ -275,7 +275,7 @@ MCD43B2. This does include MOD09A1 QA_state_500m layer (see Notes).
 </ul>
 
 <pre>
-<em>MOD13A2: Aerosol quantity Flags 1Km bits[6-7]</em>
+<em>MOD13A2: Aerosol quantity Flags 1km bits[6-7]</em>
 </pre>
 <ul>
  <li>[00]= class 0: Climatology</li>
@@ -285,7 +285,7 @@ MCD43B2. This does include MOD09A1 QA_state_500m layer (see Notes).
 </ul>
 
 <pre>
-<em>MOD13A2: Adjacent cloud detected 1Km bit[8]</em>
+<em>MOD13A2: Adjacent cloud detected 1km bit[8]</em>
 </pre>
 <ul>
  <li>[00]= class 0: No</li>
@@ -293,7 +293,7 @@ MCD43B2. This does include MOD09A1 QA_state_500m layer (see Notes).
 </ul>
 
 <pre>
-<em>MOD13A2: Atmosphere BRDF correction performed 1Km bit[9]</em>
+<em>MOD13A2: Atmosphere BRDF correction performed 1km bit[9]</em>
 </pre>
 <ul>
  <li>[00]= class 0: No</li>
@@ -301,7 +301,7 @@ MCD43B2. This does include MOD09A1 QA_state_500m layer (see Notes).
 </ul>
 
 <pre>
-<em>MOD13A2: Mixed clouds 1Km bit[10]</em>
+<em>MOD13A2: Mixed clouds 1km bit[10]</em>
 </pre>
 <ul>
  <li>[00]= class 0: No</li>
@@ -309,7 +309,7 @@ MCD43B2. This does include MOD09A1 QA_state_500m layer (see Notes).
 </ul>
 
 <pre>
-<em>MOD13A2: Land/Water Flags 1Km bits[11-13]</em>
+<em>MOD13A2: Land/Water Flags 1km bits[11-13]</em>
 </pre>
 <ul>
  <li>[000]= class 0: Shallow Ocean</li>
@@ -323,7 +323,7 @@ MCD43B2. This does include MOD09A1 QA_state_500m layer (see Notes).
 </ul>
 
 <pre>
-<em>MOD13A2: Possible Snow/Ice 1Km bits[14]</em>
+<em>MOD13A2: Possible Snow/Ice 1km bits[14]</em>
 </pre>
 <ul>
  <li>[0]= class 0: No</li>
@@ -331,7 +331,7 @@ MCD43B2. This does include MOD09A1 QA_state_500m layer (see Notes).
 </ul>
 
 <pre>
-<em>MOD13A2: Possible Shadow 1Km bits[15]</em>
+<em>MOD13A2: Possible Shadow 1km bits[15]</em>
 </pre>
 <ul>
  <li>[0]= class 0: No</li>
@@ -340,7 +340,7 @@ MCD43B2. This does include MOD09A1 QA_state_500m layer (see Notes).
 
 
 <pre>
-<em>MCD43B2: Albedo Quality Ancillary Platform Data 1Km bits[0-3]</em>
+<em>MCD43B2: Albedo Quality Ancillary Platform Data 1km bits[0-3]</em>
 <em>SDS: BRDF_Albedo_Ancillary</em>
 </pre>
 <ul>
@@ -352,7 +352,7 @@ MCD43B2. This does include MOD09A1 QA_state_500m layer (see Notes).
 </ul>
 
 <pre>
-<em>MCD43B2: Albedo Quality Ancillary Land/Water Data 1Km bits[4-7]</em>
+<em>MCD43B2: Albedo Quality Ancillary Land/Water Data 1km bits[4-7]</em>
 <em>SDS: BRDF_Albedo_Ancillary</em>
 </pre>
 <ul>
@@ -369,7 +369,7 @@ MCD43B2. This does include MOD09A1 QA_state_500m layer (see Notes).
 </ul>
 
 <pre>
-<em>MCD43B2: Albedo Quality Ancillary Sun Zenith Angle at Local Solar Noon Data 1Km bits[8-14]</em>
+<em>MCD43B2: Albedo Quality Ancillary Sun Zenith Angle at Local Solar Noon Data 1km bits[8-14]</em>
 <em>SDS: BRDF_Albedo_Ancillary</em>
 </pre>
 <ul>
@@ -378,7 +378,7 @@ MCD43B2. This does include MOD09A1 QA_state_500m layer (see Notes).
 
 
 <pre>
-<em>MCD43B2: Band-wise Albedo Quality Data 1Km</em>
+<em>MCD43B2: Band-wise Albedo Quality Data 1km</em>
 <em>SDS: BRDF_Albedo_Band_Quality</em>
 </pre>
 bits[0-3][4-7][8-11][12-15][16-19][20-23][24-27]<br>
@@ -399,7 +399,7 @@ standard QC (MOD09A1 in this module) since version 3, State-QA 500m images
 (MOD09A1s in this module) should be used (see Vermote et al., 2008).
 
 <h2>TODO</h2>
-Add one Day products.
+Add more daily products.
 
 <h2>SEE ALSO</h2>
 
