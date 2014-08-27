@@ -67,7 +67,7 @@ void png_draw_line(double x1, double y1, double x2, double y2)
     struct path path;
     struct vertex vertices[5];
     double k = png.linewidth / 2;
-    int dx, dy;
+    double dx, dy;
 
     if (png.linewidth <= 1) {
 	draw_line(x1, y1, x2, y2);
