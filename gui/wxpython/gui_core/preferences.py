@@ -1776,7 +1776,10 @@ class CheckListMapset(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.Check
                                       mapset)
             stat_info = os.stat(mapsetPath)
             if havePwd:
-                self.SetStringItem(index, 1, "%s" % pwd.getpwuid(stat_info.st_uid)[0])
+                try:
+                    self.SetStringItem(index, 1, "%s" % pwd.getpwuid(stat_info.st_uid)[0])
+                except KeyError:
+                    self.SetStringItem(index, 1, "nobody")
                 # FIXME: get group name
                 ### self.SetStringItem(index, 2, "%-8s" % stat_info.st_gid) 
             else:
