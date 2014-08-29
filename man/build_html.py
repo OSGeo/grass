@@ -111,10 +111,14 @@ r"""<!-- the files grass${grass_version_major}.html & helptext.html file live in
        </ul>
       </td>
       <td width="33%" valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;General</h3>
-	<ul>
-	<li class="box"><a href="grass${grass_version_major}.html">GRASS GIS startup manual page</a></li>
-	<li class="box"><a href="general.html">General commands manual</a></li>
-	</ul>
+       <ul>
+        <li class="box"><a href="grass${grass_version_major}.html">GRASS GIS startup manual page</a></li>
+        <li class="box"><a href="general.html">General commands manual</a></li>
+       </ul>
+        <h3>&nbsp;Addons</h3>
+        <ul>
+        <li class="box"><a href="http://grass.osgeo.org/grass70/manuals/addons/">Addons manual pages</a></li>
+       </ul>
       </td>
     </tr>
     <tr>
