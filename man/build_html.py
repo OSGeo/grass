@@ -88,7 +88,8 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
      <p>
       <ul>
        <li class="box"><a href="projectionintro.html">Intro: projections and spatial transformations</a></li>
-      </ul></td>
+      </ul>
+      </td>
       <td width="33%" valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;Display/Graphical User Interfaces</h3>
        <ul>
         <li class="box"><span><a href="wxGUI.html">wxGUI</a> Graphical User Interface</span></li>
@@ -106,10 +107,14 @@ r"""<!-- the files grass7.html & helptext.html file live in lib/init/ -->
        </ul>
       </td>
       <td width="33%" valign="top" bgcolor="${box_color}" class="box"><h3>&nbsp;General</h3>
-	<ul>
-	<li class="box"><a href="grass7.html">GRASS GIS startup manual page</a></li>
-	<li class="box"><a href="general.html">General commands manual</a></li>
-	</ul>
+       <ul>
+        <li class="box"><a href="grass7.html">GRASS GIS startup manual page</a></li>
+        <li class="box"><a href="general.html">General commands manual</a></li>
+       </ul>
+        <h3>&nbsp;Addons</h3>
+        <ul>
+        <li class="box"><a href="http://grass.osgeo.org/grass70/manuals/addons/">Addons manual pages</a></li>
+       </ul>
       </td>
     </tr>
     <tr>
