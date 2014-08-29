@@ -754,7 +754,7 @@ int main(int argc, char *argv[])
 	    line++;
 	    counter++;
 
-	    if (counter == 10000) {	/* speed */
+	    if (counter == 100000) {	/* speed */
 		if (line < estimated_lines)
 		    G_percent(line, estimated_lines, 3);
 		counter = 0;
