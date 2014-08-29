@@ -192,7 +192,29 @@ cat points.dat | v.in.ascii in=- out=mypoints x=2 y=3 cat=1 \
 
 <p>The module is reading from standard input, using the default '|' (pipe) delimiter.
 
-<h3>Example 4 - point format mode</h3>
+<h3>Example 4 - point format mode - CSV table</h3>
+
+Import of a 3D points CSV table ('points3d.csv') with attributes:
+<div class="code"><pre>
+"num","X","Y","Z","T"
+1,2487491.643,5112118.33,120.5,18.62
+2,2481985.459,5109162.78,123.9,18.46
+3,2478284.289,5105331.04,98.3,19.61
+</pre></div>
+<p>Import into GRASS:
+<div class="code"><pre>
+# import: skipping the header line, categories generated automatically,
+# column names defined with type:
+v.in.ascii -z in=points3d.csv out=mypoints3D separator=comma \
+  columns="num integer, x double precision, y double precision, z double precision, temp double precision" \
+  x=2 y=3 z=4 skip=1
+# verify column types
+v.info -c mypoints3D
+# verify table content
+v.db.select mypoints3D
+</pre></div>
+
+<h3>Example 5 - point format mode</h3>
 
 Generating a 3D points vector map from DBMS (idcol must be an integer column):<br>
 <div class="code"><pre>
@@ -204,7 +226,7 @@ With <b>in=-</b>, the module is reading from standard input, using the default '
 The import works for 2D maps as well (no elev column and no '-z' flag).
 
 
-<h3>Example 5 - point format mode</h3>
+<h3>Example 6 - point format mode</h3>
 
 Generate a 3D points vector map 'points3d.dat' with attributes as ASCII file:
 <div class="code"><pre>
@@ -227,7 +249,7 @@ v.info mypoints3D
 </pre></div>
 
 
-<h3>Example 6 - point format mode</h3>
+<h3>Example 7 - point format mode</h3>
 
 Generate points file by clicking onto the map:
 <div class="code"><pre>
@@ -244,7 +266,7 @@ The 'point' string (or some similar entry) is required to generate a database ta
 When simply piping the coordinates (and optionally height) without additional column(s) 
 into <em>v.in.ascii</em>, only the vector map geometry will be generated.
 
-<h3>Example 7 - point format mode</h3>
+<h3>Example 8 - point format mode</h3>
 
 Convert ground control points into vector points:
 <div class="code"><pre>
