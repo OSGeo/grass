@@ -661,7 +661,7 @@ int main(int argc, char *argv[])
 	while (0 != G_getl2(buff, BUFFSIZE - 1, in_fp)) {
 	    line++;
 
-	    if (line % 10000 == 0) {	/* mod for speed */
+	    if (line % 100000 == 0) {	/* mod for speed */
 		if (!can_seek)
 		    G_clicker();
 		else if (line < estimated_lines)
@@ -749,7 +749,7 @@ int main(int argc, char *argv[])
 	    arr_row = (int)((pass_north - y) / region.ns_res);
 	    arr_col = (int)((x - region.west) / region.ew_res);
 
-	    /*          G_debug(5, "arr_row: %d   arr_col: %d", arr_row, arr_col); */
+	    /* G_debug(5, "arr_row: %d   arr_col: %d", arr_row, arr_col); */
 
 	    /* The range should be [0,cols-1]. We use (int) to round down,
 	       but if the point exactly on eastern edge arr_col will be /just/
