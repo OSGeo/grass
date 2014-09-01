@@ -11,6 +11,7 @@ differences: differences oriented colors
 elevation: maps relative ranges of raster values to elevation color ramp
 etopo2: colors for ETOPO2 worldwide bathymetry/topography
 evi: enhanced vegetative index colors
+fahrenheit: blue to red for Fahrenheit temperature
 gdd: accumulated growing degree days
 grey: grey scale
 grey1.0: grey scale for raster values between 0.0-1.0
