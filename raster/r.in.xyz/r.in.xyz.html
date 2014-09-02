@@ -188,41 +188,50 @@ and adjust bounds and/or resolution as needed before proceeding.
 <p>
 Typical commands to create a DEM using a regularized spline fit:
 <div class="code"><pre>
-  r.univar lidar_min
-  r.to.vect -z type=point in=lidar_min out=lidar_min_pt
-  v.surf.rst in=lidar_min_pt elev=lidar_min.rst
+r.univar lidar_min
+r.to.vect -z type=point in=lidar_min out=lidar_min_pt
+v.surf.rst in=lidar_min_pt elev=lidar_min.rst
 </pre></div>
 
 
 <h2>EXAMPLE</h2>
 
-Import the <a href="http://www.grassbook.org/data_menu2nd.phtml">Jockey's
-Ridge, NC, LIDAR dataset</a>, and process into a clean DEM:
+Import the <a href="http://www.grassbook.org/ncexternal/index.html">Jockey's
+Ridge, NC, LIDAR dataset</a> (compressed file "lidaratm2.txt.gz"), and process it
+into a clean DEM:
 
 <div class="code"><pre>
-    # scan and set region bounds
-  r.in.xyz -s separator="," in=lidaratm2.txt out=test
-  g.region n=35.969493 s=35.949693 e=-75.620999 w=-75.639999
-  g.region res=0:00:00.075 -a
-    # create "n" map containing count of points per cell for checking density
-  r.in.xyz in=lidaratm2.txt out=lidar_n separator="," method=n zrange=-2,50
-    # check point density [rho = n_sum / (rows*cols)]
-  r.univar lidar_n | grep sum
-    # create "min" map (elevation filtered for premature hits)
-  r.in.xyz in=lidaratm2.txt out=lidar_min separator="," method=min zrange=-2,50
-    # zoom to area of interest
-  g.region n=35:57:56.25N s=35:57:13.575N w=75:38:23.7W e=75:37:15.675W
-    # check number of non-null cells (try and keep under a few million)
-  r.univar lidar_min | grep '^n:'
-    # convert to points 
-  r.to.vect -z type=point in=lidar_min out=lidar_min_pt
-    # interpolate using a regularized spline fit
-  v.surf.rst in=lidar_min_pt elev=lidar_min.rst
-    # set color scale to something interesting
-  r.colors lidar_min.rst rule=bcyr -n -e
-    # prepare a 1:1:1 scaled version for NVIZ visualization (for lat/lon input)
-  r.mapcalc "lidar_min.rst_scaled = lidar_min.rst / (1852*60)"
-  r.colors lidar_min.rst_scaled rule=bcyr -n -e
+# scan and set region bounds
+r.in.xyz -s separator="," in=lidaratm2.txt out=test
+g.region n=35.969493 s=35.949693 e=-75.620999 w=-75.639999
+g.region res=0:00:00.075 -a
+
+# create "n" map containing count of points per cell for checking density
+r.in.xyz in=lidaratm2.txt out=lidar_n separator="," method=n zrange=-2,50
+
+# check point density [rho = n_sum / (rows*cols)]
+r.univar lidar_n | grep sum
+# create "min" map (elevation filtered for premature hits)
+r.in.xyz in=lidaratm2.txt out=lidar_min separator="," method=min zrange=-2,50
+
+# set computational region to area of interest
+g.region n=35:57:56.25N s=35:57:13.575N w=75:38:23.7W e=75:37:15.675W
+
+# check number of non-null cells (try and keep under a few million)
+r.univar lidar_min | grep '^n:'
+
+# convert to points 
+r.to.vect -z type=point in=lidar_min out=lidar_min_pt
+
+# interpolate using a regularized spline fit
+v.surf.rst in=lidar_min_pt elev=lidar_min.rst
+
+# set color scale to something interesting
+r.colors lidar_min.rst rule=bcyr -n -e
+
+# prepare a 1:1:1 scaled version for NVIZ visualization (for lat/lon input)
+r.mapcalc "lidar_min.rst_scaled = lidar_min.rst / (1852*60)"
+r.colors lidar_min.rst_scaled rule=bcyr -n -e
 </pre></div>
 
 
