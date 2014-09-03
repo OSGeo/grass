@@ -86,10 +86,19 @@
 
 import sys
 import os
-import numpy as np
+
+try:
+    import numpy as np
+    hasNumPy = True
+except ImportError:
+    hasNumPy = False
+
 import grass.script as grass
 
 def main():
+    if not hasNumPy:
+        grass.fatal(_("Required dependency NumPy not found. Exiting."))
+
     sharpen   = options['sharpen'] # sharpening algorithm
     ms1       = options['ms1'] # blue channel
     ms2       = options['ms2'] # green channel
