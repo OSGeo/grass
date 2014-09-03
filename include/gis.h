@@ -194,9 +194,12 @@ static const char *GRASS_copyright __attribute__ ((unused))
   that the map is not supposed to exist and that module will create one.
 
   Used by the G_parser() system.
-*/
 
-/**/ typedef enum
+  IMPORTANT NOTE: when adding new item to the you should also update
+  STD_OPT_STRINGS array in general/g.parser/standard_option.c.
+
+*/
+typedef enum
 {
     G_OPT_UNDEFINED,
     G_OPT_DB_SQL,		/*!< SQL statements */
