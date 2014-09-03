@@ -126,11 +126,10 @@ def main():
 
     grass.run_command('g.region', res = panres, align = pan)
     
-    grass.message('\n ')
     grass.message(_("Performing pan sharpening with hi res pan image: %f" % panres))
 
     if sharpen == "brovey":
-        grass.message(_("Using Brovey algorithm"))
+        grass.verbose(_("Using Brovey algorithm"))
 
         #pan/intensity histogram matching using linear regression
         outname = 'tmp%s_pan1' % pid
@@ -147,7 +146,6 @@ def main():
         outb = '%s_blue' % out
 
         #calculate brovey transformation
-        grass.message('\n ')
         grass.message(_("Calculating Brovey transformation..."))
         
         if sproc:
@@ -180,9 +178,8 @@ def main():
         grass.run_command('g.remove', quiet=True, rast='%s,%s,%s' % (panmatch1, panmatch2, panmatch3))
 
     elif sharpen == "ihs":
-        grass.message(_("Using IHS<->RGB algorithm"))
+        grass.verbose(_("Using IHS<->RGB algorithm"))
         #transform RGB channels into IHS color space
-        grass.message('\n ')
         grass.message(_("Transforming to IHS color space..."))
         grass.run_command('i.rgb.his', overwrite=True,
                           red_input=ms3, 
@@ -198,7 +195,6 @@ def main():
         panmatch = matchhist(pan, target, outname)
         
         #substitute pan for intensity channel and transform back to RGB color space
-        grass.message('\n ')
         grass.message(_("Transforming back to RGB color space and sharpening..."))
         grass.run_command('i.his.rgb', overwrite=True, 
                           hue_input="tmp%s_hue" % pid, 
@@ -212,8 +208,7 @@ def main():
         grass.run_command('g.remove', quiet=True, rast=panmatch)
         
     elif sharpen == "pca":
-        grass.message(_("Using PCA/inverse PCA algorithm"))
-        grass.message('\n ')
+        grass.verbose(_("Using PCA/inverse PCA algorithm"))
         grass.message(_("Creating PCA images and calculating eigenvectors..."))
 
         #initial PCA with RGB channels
@@ -246,7 +241,6 @@ def main():
         outname = 'tmp%s_pan' % pid
         panmatch = matchhist(pan, ms1, outname)
         
-        grass.message('\n ')
         grass.message(_("Performing inverse PCA ..."))
                 
         stats1 = grass.parse_command("r.univar", map=ms1, flags='g', 
@@ -309,7 +303,6 @@ def main():
         
     #Could add other sharpening algorithms here, e.g. wavelet transformation
 
-    grass.message('\n ')
     grass.message(_("Assigning grey equalized color tables to output images..."))
     #equalized grey scales give best contrast
     for ch in ['red', 'green', 'blue']:
@@ -318,7 +311,6 @@ def main():
     #Landsat too blue-ish because panchromatic band less sensitive to blue light, 
     #  so output blue channed can be modified
     if bladjust:
-        grass.message('\n ')
         grass.message(_("Adjusting blue channel color table..."))
         rules = grass.tempfile()
         colors = open(rules, 'w')
@@ -329,17 +321,14 @@ def main():
         os.remove(rules)
 
     #output notice
-    grass.message('\n ')
-    grass.message(_("The following pan-sharpened output maps have been generated:"))
+    grass.verbose(_("The following pan-sharpened output maps have been generated:"))
     for ch in ['red', 'green', 'blue']:
-        grass.message(_("%s_%s") % (out, ch))
+        grass.verbose(_("%s_%s") % (out, ch))
 
-    grass.message('\n ')
-    grass.message(_("To visualize output, run: g.region -p rast=%s_red" % out))
-    grass.message(_("d.rgb r=%s_red g=%s_green b=%s_blue" % (out, out, out)))
-    grass.message('\n ')
-    grass.message(_("If desired, combine channels into a single RGB map with 'r.composite'."))
-    grass.message(_("Channel colors can be rebalanced using i.colors.enhance."))
+    grass.verbose(_("To visualize output, run: g.region -p rast=%s_red" % out))
+    grass.verbose(_("d.rgb r=%s_red g=%s_green b=%s_blue" % (out, out, out)))
+    grass.verbose(_("If desired, combine channels into a single RGB map with 'r.composite'."))
+    grass.verbose(_("Channel colors can be rebalanced using i.colors.enhance."))
 
     # write cmd history:
     for ch in ['red', 'green', 'blue']:
@@ -351,7 +340,6 @@ def main():
         
 def matchhist(original, target, matched):
     #pan/intensity histogram matching using numpy arrays
-    grass.message('\n ')
     grass.message(_("Histogram matching..."))
 
     # input images
