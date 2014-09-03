@@ -75,11 +75,7 @@
 #% key: band7
 #% description: Name of input raster map (LANDSAT channel 7)
 #%end
-#%option
-#% key: output_prefix
-#% type: string
-#% description: Prefix for output raster maps
-#% required: yes
+#%option G_OPT_R_BASENAME_OUTPUT
 #%end
 
 import sys
@@ -107,7 +103,7 @@ def calc1(out, bands, k1, k2, k3, k4, k5, k7, k0 = 0):
     grass.run_command('r.colors', map = out, color = 'grey')
 
 def calcN(options, i, n):
-    outpre = options['output_prefix']
+    outpre = options['basename']
     grass.message(_("LANDSAT-%d...") % n)
     for j, p in enumerate(parms[i]):
 	out = "%s.%d" % (outpre, j + 1)
