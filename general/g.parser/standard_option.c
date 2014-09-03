@@ -1,155 +1,95 @@
 #include "proto.h"
 
+static char* STD_OPT_STRINGS[] = {"G_OPT_UNDEFINED",
+                                  "G_OPT_DB_SQL",
+                                  "G_OPT_DB_WHERE",
+                                  "G_OPT_DB_TABLE",
+                                  "G_OPT_DB_DRIVER",
+                                  "G_OPT_DB_DATABASE",
+                                  "G_OPT_DB_SCHEMA",
+                                  "G_OPT_DB_COLUMN",
+                                  "G_OPT_DB_COLUMNS",
+                                  "G_OPT_DB_KEYCOLUMN",
+                                  "G_OPT_I_GROUP",
+                                  "G_OPT_I_SUBGROUP",
+                                  "G_OPT_R_INPUT",
+                                  "G_OPT_R_INPUTS",
+                                  "G_OPT_R_OUTPUT",
+                                  "G_OPT_R_OUTPUTS",
+                                  "G_OPT_R_MAP",
+                                  "G_OPT_R_MAPS",
+                                  "G_OPT_R_BASE",
+                                  "G_OPT_R_COVER",
+                                  "G_OPT_R_ELEV",
+                                  "G_OPT_R_ELEVS",
+                                  "G_OPT_R_INTERP_TYPE",
+                                  "G_OPT_R_BASENAME_INPUT",
+                                  "G_OPT_R_BASENAME_OUTPUT",
+                                  "G_OPT_R3_INPUT",
+                                  "G_OPT_R3_INPUTS",
+                                  "G_OPT_R3_OUTPUT",
+                                  "G_OPT_R3_MAP",
+                                  "G_OPT_R3_MAPS",
+                                  "G_OPT_R3_TYPE",
+                                  "G_OPT_R3_PRECISION",
+                                  "G_OPT_R3_TILE_DIMENSION",
+                                  "G_OPT_R3_COMPRESSION",
+                                  "G_OPT_V_INPUT",
+                                  "G_OPT_V_INPUTS",
+                                  "G_OPT_V_OUTPUT",
+                                  "G_OPT_V_MAP",
+                                  "G_OPT_V_MAPS",
+                                  "G_OPT_V_TYPE",
+                                  "G_OPT_V3_TYPE",
+                                  "G_OPT_V_FIELD",
+                                  "G_OPT_V_FIELD_ALL",
+                                  "G_OPT_V_CAT",
+                                  "G_OPT_V_CATS",
+                                  "G_OPT_V_ID",
+                                  "G_OPT_V_IDS",
+                                  "G_OPT_F_INPUT",
+                                  "G_OPT_F_OUTPUT",
+                                  "G_OPT_F_SEP",
+                                  "G_OPT_C_FG",
+                                  "G_OPT_C_BG",
+                                  "G_OPT_M_UNITS",
+                                  "G_OPT_M_DATATYPE",
+                                  "G_OPT_M_MAPSET",
+                                  "G_OPT_M_COORDS",
+                                  "G_OPT_M_COLR",
+                                  "G_OPT_M_DIR",
+                                  "G_OPT_M_REGION",
+                                  "G_OPT_STDS_INPUT",
+                                  "G_OPT_STDS_INPUTS",
+                                  "G_OPT_STDS_OUTPUT",
+                                  "G_OPT_STRDS_INPUT",
+                                  "G_OPT_STRDS_INPUTS",
+                                  "G_OPT_STRDS_OUTPUT",
+                                  "G_OPT_STR3DS_INPUT",
+                                  "G_OPT_STR3DS_INPUTS",
+                                  "G_OPT_STR3DS_OUTPUT",
+                                  "G_OPT_STVDS_INPUT",
+                                  "G_OPT_STVDS_INPUTS",
+                                  "G_OPT_STVDS_OUTPUT",
+                                  "G_OPT_MAP_INPUT",
+                                  "G_OPT_MAP_INPUTS",
+                                  "G_OPT_STDS_TYPE",
+                                  "G_OPT_MAP_TYPE",
+                                  "G_OPT_T_TYPE",
+                                  "G_OPT_T_WHERE",
+                                  "G_OPT_T_SAMPLE"};
+
 struct Option *define_standard_option(const char *name)
 {
     int key;
+    size_t i;
     struct Option *opt;
 
     key = G_OPT_UNDEFINED;
-    if (G_strcasecmp(name, "G_OPT_DB_WHERE") == 0)
-	key = G_OPT_DB_WHERE;
-    else if (G_strcasecmp(name, "G_OPT_DB_TABLE") == 0)
-	key = G_OPT_DB_TABLE;
-    else if (G_strcasecmp(name, "G_OPT_DB_DRIVER") == 0)
-	key = G_OPT_DB_DRIVER;
-    else if (G_strcasecmp(name, "G_OPT_DB_DATABASE") == 0)
-	key = G_OPT_DB_DATABASE;
-    else if (G_strcasecmp(name, "G_OPT_DB_SCHEMA") == 0)
-	key = G_OPT_DB_SCHEMA;
-    else if (G_strcasecmp(name, "G_OPT_DB_COLUMN") == 0)
-	key = G_OPT_DB_COLUMN;
-    else if (G_strcasecmp(name, "G_OPT_DB_COLUMNS") == 0)
-	key = G_OPT_DB_COLUMNS;
-    else if (G_strcasecmp(name, "G_OPT_DB_KEYCOLUMN") == 0)
-	key = G_OPT_DB_KEYCOLUMN;
-    else if (G_strcasecmp(name, "G_OPT_I_GROUP") == 0)
-	key = G_OPT_I_GROUP;
-    else if (G_strcasecmp(name, "G_OPT_I_SUBGROUP") == 0)
-	key = G_OPT_I_SUBGROUP;
-    else if (G_strcasecmp(name, "G_OPT_R_INPUT") == 0)
-	key = G_OPT_R_INPUT;
-    else if (G_strcasecmp(name, "G_OPT_R_INPUTS") == 0)
-	key = G_OPT_R_INPUTS;
-    else if (G_strcasecmp(name, "G_OPT_R_OUTPUT") == 0)
-	key = G_OPT_R_OUTPUT;
-    else if (G_strcasecmp(name, "G_OPT_R_MAP") == 0)
-	key = G_OPT_R_MAP;
-    else if (G_strcasecmp(name, "G_OPT_R_MAPS") == 0)
-	key = G_OPT_R_MAPS;
-    else if (G_strcasecmp(name, "G_OPT_R_BASE") == 0)
-	key = G_OPT_R_BASE;
-    else if (G_strcasecmp(name, "G_OPT_R_COVER") == 0)
-	key = G_OPT_R_COVER;
-    else if (G_strcasecmp(name, "G_OPT_R_ELEV") == 0)
-	key = G_OPT_R_ELEV;
-    else if (G_strcasecmp(name, "G_OPT_R_ELEVS") == 0)
-	key = G_OPT_R_ELEVS;
-    else if (G_strcasecmp(name, "G_OPT_R3_INPUT") == 0)
-	key = G_OPT_R3_INPUT;
-    else if (G_strcasecmp(name, "G_OPT_R3_INPUTS") == 0)
-	key = G_OPT_R3_INPUTS;
-    else if (G_strcasecmp(name, "G_OPT_R3_OUTPUT") == 0)
-	key = G_OPT_R3_OUTPUT;
-    else if (G_strcasecmp(name, "G_OPT_R3_MAP") == 0)
-	key = G_OPT_R3_MAP;
-    else if (G_strcasecmp(name, "G_OPT_R3_MAPS") == 0)
-	key = G_OPT_R3_MAPS;
-    else if (G_strcasecmp(name, "G_OPT_R3_TYPE") == 0)
-	key = G_OPT_R3_TYPE;
-    else if (G_strcasecmp(name, "G_OPT_R3_PRECISION") == 0)
-	key = G_OPT_R3_PRECISION;
-    else if (G_strcasecmp(name, "G_OPT_R3_COMPRESSION") == 0)
-	key = G_OPT_R3_COMPRESSION;
-    else if (G_strcasecmp(name, "G_OPT_R3_TILE_DIMENSION") == 0)
-	key = G_OPT_R3_TILE_DIMENSION;
-    else if (G_strcasecmp(name, "G_OPT_V_INPUT") == 0)
-	key = G_OPT_V_INPUT;
-    else if (G_strcasecmp(name, "G_OPT_V_INPUTS") == 0)
-	key = G_OPT_V_INPUTS;
-    else if (G_strcasecmp(name, "G_OPT_V_OUTPUT") == 0)
-	key = G_OPT_V_OUTPUT;
-    else if (G_strcasecmp(name, "G_OPT_V_MAP") == 0)
-	key = G_OPT_V_MAP;
-    else if (G_strcasecmp(name, "G_OPT_V_MAPS") == 0)
-	key = G_OPT_V_MAPS;
-    else if (G_strcasecmp(name, "G_OPT_V_TYPE") == 0)
-	key = G_OPT_V_TYPE;
-    else if (G_strcasecmp(name, "G_OPT_V3_TYPE") == 0)
-	key = G_OPT_V3_TYPE;
-    else if (G_strcasecmp(name, "G_OPT_V_FIELD") == 0)
-	key = G_OPT_V_FIELD;
-    else if (G_strcasecmp(name, "G_OPT_V_FIELD_ALL") == 0)
-	key = G_OPT_V_FIELD_ALL;
-    else if (G_strcasecmp(name, "G_OPT_V_CAT") == 0)
-	key = G_OPT_V_CAT;
-    else if (G_strcasecmp(name, "G_OPT_V_CATS") == 0)
-	key = G_OPT_V_CATS;
-    else if (G_strcasecmp(name, "G_OPT_V_ID") == 0)
-	key = G_OPT_V_ID;
-    else if (G_strcasecmp(name, "G_OPT_V_IDS") == 0)
-	key = G_OPT_V_IDS;
-    else if (G_strcasecmp(name, "G_OPT_F_INPUT") == 0)
-	key = G_OPT_F_INPUT;
-    else if (G_strcasecmp(name, "G_OPT_F_OUTPUT") == 0)
-	key = G_OPT_F_OUTPUT;
-    else if (G_strcasecmp(name, "G_OPT_F_SEP") == 0)
-	key = G_OPT_F_SEP;
-    else if (G_strcasecmp(name, "G_OPT_C_FG") == 0)
-	key = G_OPT_C_FG;
-    else if (G_strcasecmp(name, "G_OPT_C_BG") == 0)
-	key = G_OPT_C_BG;
-    else if (G_strcasecmp(name, "G_OPT_M_DIR") == 0)
-        key = G_OPT_M_DIR;
-    else if (G_strcasecmp(name, "G_OPT_M_UNITS") == 0)
-	key = G_OPT_M_UNITS;
-    else if (G_strcasecmp(name, "G_OPT_M_DATATYPE") == 0)
-	key = G_OPT_M_DATATYPE;
-    else if (G_strcasecmp(name, "G_OPT_M_MAPSET") == 0)
-	key = G_OPT_M_MAPSET;
-    else if (G_strcasecmp(name, "G_OPT_M_COORDS") == 0)
-	key = G_OPT_M_COORDS;
-    else if (G_strcasecmp(name, "G_OPT_M_REGION") == 0)
-	key = G_OPT_M_REGION;
-    else if (G_strcasecmp(name, "G_OPT_V_MAP") == 0)
-	key = G_OPT_V_MAP;
-    else if (G_strcasecmp(name, "G_OPT_STDS_INPUT") == 0)
-	key = G_OPT_STDS_INPUT;
-    else if (G_strcasecmp(name, "G_OPT_STDS_INPUTS") == 0)
-	key = G_OPT_STDS_INPUTS;
-    else if (G_strcasecmp(name, "G_OPT_STDS_OUTPUT") == 0)
-	key = G_OPT_STDS_OUTPUT;
-    else if (G_strcasecmp(name, "G_OPT_STRDS_INPUT") == 0)
-	key = G_OPT_STRDS_INPUT;
-    else if (G_strcasecmp(name, "G_OPT_STRDS_INPUTS") == 0)
-	key = G_OPT_STRDS_INPUTS;
-    else if (G_strcasecmp(name, "G_OPT_STRDS_OUTPUT") == 0)
-	key = G_OPT_STRDS_OUTPUT;
-    else if (G_strcasecmp(name, "G_OPT_STR3DS_INPUT") == 0)
-	key = G_OPT_STR3DS_INPUT;
-    else if (G_strcasecmp(name, "G_OPT_STR3DS_INPUTS") == 0)
-	key = G_OPT_STR3DS_INPUTS;
-    else if (G_strcasecmp(name, "G_OPT_STR3DS_OUTPUT") == 0)
-	key = G_OPT_STR3DS_OUTPUT;
-    else if (G_strcasecmp(name, "G_OPT_STVDS_INPUT") == 0)
-	key = G_OPT_STVDS_INPUT;
-    else if (G_strcasecmp(name, "G_OPT_STVDS_INPUTS") == 0)
-	key = G_OPT_STVDS_INPUTS;
-    else if (G_strcasecmp(name, "G_OPT_STVDS_OUTPUT") == 0)
-	key = G_OPT_STVDS_OUTPUT;
-    else if (G_strcasecmp(name, "G_OPT_MAP_INPUT") == 0)
-	key = G_OPT_MAP_INPUT;
-    else if (G_strcasecmp(name, "G_OPT_MAP_INPUTS") == 0)
-	key = G_OPT_MAP_INPUTS;
-    else if (G_strcasecmp(name, "G_OPT_STDS_TYPE") == 0)
-	key = G_OPT_STDS_TYPE;
-    else if (G_strcasecmp(name, "G_OPT_MAP_TYPE") == 0)
-	key = G_OPT_MAP_TYPE;
-    else if (G_strcasecmp(name, "G_OPT_T_TYPE") == 0)
-	key = G_OPT_T_TYPE;
-    else if (G_strcasecmp(name, "G_OPT_T_WHERE") == 0)
-	key = G_OPT_T_WHERE;
-    else if (G_strcasecmp(name, "G_OPT_T_SAMPLE") == 0)
-	key = G_OPT_T_SAMPLE;
+    for (i = 1; key == G_OPT_UNDEFINED && i < (sizeof(STD_OPT_STRINGS) / sizeof(char *)); i++) {
+        if (G_strcasecmp(name, STD_OPT_STRINGS[i]) == 0)
+            key = i;
+    }
 
     if (key == G_OPT_UNDEFINED)
 	opt = G_define_option();
