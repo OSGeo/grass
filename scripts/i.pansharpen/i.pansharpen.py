@@ -46,34 +46,30 @@
 #%  keywords: PCA
 #%  overwrite: yes
 #%End
-#%option
-#%  key: sharpen
-#%  description: Choose pan sharpening method
-#%  options: brovey,ihs,pca
-#%  answer: ihs
-#%  required: yes
+#%option G_OPT_R_INPUT
+#%  key: red
+#%  description: Name of raster map to be used for <red>
 #%end
 #%option G_OPT_R_INPUT
-#%  key: ms3
-#%  description: Input raster map for red channel
+#%  key: green
+#%  description: Name of raster map to be used for <green>
 #%end
 #%option G_OPT_R_INPUT
-#%  key: ms2
-#%  description: Input raster map for green channel
-#%end
-#%option G_OPT_R_INPUT
-#%  key: ms1
-#%  description: Input raster map for blue channel
+#%  key: blue
+#%  description: Name of raster map to be used for <blue>
 #%end
 #%  option G_OPT_R_INPUT
 #%  key: pan
-#%  description: Input raster map for high resolution panchromatic channel
+#%  description: Name of raster map to be used for high resolution panchromatic channel
+#%end
+#%option G_OPT_R_BASENAME_OUTPUT
 #%end
 #%option
-#%  key: output_prefix
-#%  type: string
-#%  description: Prefix for output raster maps
-#%  required : yes
+#%  key: method
+#%  description: Method for pan sharpening
+#%  options: brovey,ihs,pca
+#%  answer: ihs
+#%  required: yes
 #%end
 #%flag
 #%  key: s
@@ -81,7 +77,7 @@
 #%end
 #%flag
 #%  key: l
-#%  description: Rebalance blue channel for landsat maps
+#%  description: Rebalance blue channel for LANDSAT
 #%end
 
 import sys
@@ -99,12 +95,12 @@ def main():
     if not hasNumPy:
         grass.fatal(_("Required dependency NumPy not found. Exiting."))
 
-    sharpen   = options['sharpen'] # sharpening algorithm
-    ms1       = options['ms1'] # blue channel
-    ms2       = options['ms2'] # green channel
-    ms3       = options['ms3'] # red channel
+    sharpen   = options['method'] # sharpening algorithm
+    ms1       = options['blue'] # blue channel
+    ms2       = options['green'] # green channel
+    ms3       = options['red'] # red channel
     pan       = options['pan'] # high res pan channel
-    out       = options['output_prefix'] # prefix for output RGB maps
+    out       = options['basename'] # prefix for output RGB maps
     bladjust  = flags['l'] # adjust blue channel
     sproc     = flags['s'] # serial processing
     
