@@ -123,6 +123,8 @@
 #include <unistd.h>
 #include <grass/gis.h>
 
+#include "G.h"
+
 #define G_ZLIB_COMPRESSED_NO (unsigned char)'0'
 #define G_ZLIB_COMPRESSED_YES (unsigned char)'1'
 
@@ -327,10 +329,12 @@ G_zlib_compress(const unsigned char *src, int src_sz, unsigned char *dst,
     c_stream.next_out = buf;
 
     /* Initialize */
-    /* Compression levels 0 - 9 */
-    /* zlib default: Z_DEFAULT_COMPRESSION (-1), equivalent to 6 
+    /* Valid zlib compression levels -1 - 9 */
+    /* zlib default: Z_DEFAULT_COMPRESSION = -1, equivalent to 6 
      * as used here, 1 gives the best compromise between speed and compression */
-    err = deflateInit(&c_stream, 1);
+    err = deflateInit(&c_stream,
+                      (G__.compression_level < -1 || G__.compression_level > 9) 
+		      ? 1 : G__.compression_level);
 
     /* If there was an error initializing, return -1 */
     if (err != Z_OK) {
