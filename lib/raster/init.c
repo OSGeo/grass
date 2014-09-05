@@ -77,8 +77,6 @@ void Rast__error_handler(void *p)
 
 static int init(void)
 {
-    char *zlib;
-
     Rast__init_window();
 
     /* no histograms */
@@ -92,9 +90,7 @@ static int init(void)
     R__.mask_fd = -1;
 
     R__.nbytes = sizeof(CELL);
-
-    zlib = getenv("GRASS_INT_ZLIB");
-    R__.compression_type = (!zlib || atoi(zlib)) ? 2 : 1;
+    R__.compression_type = getenv("GRASS_INT_ZLIB") ? 2 : 1;
 
     G_add_error_handler(Rast__error_handler, NULL);
 
