@@ -27,11 +27,13 @@ t.rast.accumulate -r input=temp_abs1 output=temp_accumulation base=temp_acc \
 t.rast.accdetect -r input=temp_accumulation occurrence=temp_occ base=temp_occ \
     range=20,80 start="2001-01-01" cycle="12 months" staend=1,2,3 indi=temp_indi
 
-t.rast.list temp_accumulation col=name,start_time,min,max > test_2_temp_accumulation.txt
-t.rast.list temp_occ col=name,start_time,min,max  > test_2_temp_occ.txt
-t.rast.list temp_indi col=name,start_time,min,max > test_2_temp_indi.txt
+t.rast.list temp_accumulation col=name,start_time,min,max > data/test_2_temp_accumulation.txt
+t.rast.list temp_occ col=name,start_time,min,max  > data/test_2_temp_occ.txt
+t.rast.list temp_indi col=name,start_time,min,max > data/test_2_temp_indi.txt
 
 t.remove -rf type=strds input=temp_abs1,temp_accumulation,temp_indi
+
+cd data
 
 for i in `ls test_2_*.txt` ; do
     diff $i "`basename $i .txt`.ref" >> out.diff

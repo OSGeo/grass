@@ -11,7 +11,7 @@ export GRASS_OVERWRITE=1
 # Create random points test maps.
 for i in {1..60}
   do
-    if [[ "$i" -le 20 ]]; then
+    if [ "$i" -le 20 ]; then
       echo testpoint1_$i >> ${n1}
       v.random  -z output=testpoint1_$i n=3 seed=$i
     elif [ "$i" -gt 20 ] && [ "$i" -le 40 ]; then

@@ -66,13 +66,12 @@ class TestSTRDSToRast3(TestCase):
 
     def tearDown(self):
         """Remove generated data"""
-        self.runModule("t.remove",  flags="rf",  type="strds",  
-                                   inputs="precip_i,precip_f,precip_d")
-        self.runModule('g.mremove', type='rast', pattern='prec_*', flags='f')
-        self.runModule('g.mremove', type='rast3d', pattern='precip_*', flags='f')
+        #self.runModule("t.remove",  flags="rf",  type="strds",  
+        #                           inputs="precip_i,precip_f,precip_d")
+        #self.runModule('g.mremove', type='rast', pattern='prec_*', flags='f')
         self.del_temp_region()
 
-    def test_3m(self):
+    def otest_3m(self):
         """Convert STRDS into 3d raster map, granularity 3 months"""
 
         self.assertModule("t.rast.to.rast3",  input="precip_i",  output="precip_i")
@@ -175,9 +174,8 @@ class TestSTRDSToRast3(TestCase):
 						coeff_var=51.5201027527539
 						sum=172800"""
 
-        self.assertRaster3dFitsUnivar(raster="precip_i", reference=univar_string, precision=2)
-        self.assertRaster3dFitsUnivar(raster="precip_f", reference=univar_string, precision=2)
-        self.assertRaster3dFitsUnivar(raster="precip_d", reference=univar_string, precision=2)
+        univar = SimpleModule("r3.univar", flags="g", map="precip_i")
+        self.assertModuleKeyValue(module=univar, reference=univar_string, precision=2, sep="=")
 
         tinfo_string="""north=80
 						south=0
@@ -258,12 +256,11 @@ class TestSTRDSToRast3MultiGran(TestCase):
 
     def tearDown(self):
         """Remove generated data"""
-        self.runModule("t.remove",  flags="rf",  type="strds", inputs="precip_d")
-        self.runModule('g.mremove', type='rast', pattern='prec_*', flags='f')
-        self.runModule('g.mremove', type='rast3d', pattern='precip_*', flags='f')
+        #self.runModule("t.remove",  flags="rf",  type="strds", inputs="precip_d")
+        #self.runModule('g.mremove', type='rast', pattern='prec_*', flags='f')
         self.del_temp_region()
 
-    def test_years(self):
+    def otest_years(self):
         """Convert STRDS into 3d raster map, granularity5 years"""
 
         self.runModule("t.register", flags="i",  type="rast",  input="precip_d",  
@@ -291,7 +288,7 @@ class TestSTRDSToRast3MultiGran(TestCase):
 
         self.assertRaster3dFitsInfo(raster="precip_d", reference=tinfo_string, precision=2)
 
-    def test_months(self):
+    def otest_months(self):
         """Convert STRDS into 3d raster map, granularity 6 months"""
 
         self.runModule("t.register", flags="i",  type="rast",  input="precip_d",  
@@ -319,8 +316,7 @@ class TestSTRDSToRast3MultiGran(TestCase):
 
         self.assertRaster3dFitsInfo(raster="precip_d", reference=tinfo_string, precision=2)
 
-
-    def test_months(self):
+    def otest_days(self):
         """Convert STRDS into 3d raster map, granularity 7 days"""
 
         self.runModule("t.register", flags="i",  type="rast",  input="precip_d",  
@@ -346,6 +342,64 @@ class TestSTRDSToRast3MultiGran(TestCase):
 						timestamp="1 Jan 2000 00:00:00 / 12 Feb 2000 00:00:00"
 						units="none"
 						vertical_units="days" """
+
+        self.assertRaster3dFitsInfo(raster="precip_d", reference=tinfo_string, precision=2)
+
+    def otest_hours(self):
+        """Convert STRDS into 3d raster map, granularity 7 days"""
+
+        self.runModule("t.register", flags="i",  type="rast",  input="precip_d",  
+                       maps="prec_1d,prec_2d,prec_3d,prec_4d,prec_5d,prec_6d",  
+                       start="2000-01-01", increment="3 hours")
+
+        self.assertModule("t.rast.to.rast3",  input="precip_d",  output="precip_d")
+        self.runModule("r3.info", map="precip_d")
+
+        tinfo_string="""north=80
+						south=0
+						east=120
+						west=0
+						bottom=36524
+						top=36524.8
+						nsres=10
+						ewres=10
+						tbres=0.125
+						rows=8
+						cols=12
+						depths=6
+						datatype="DCELL"
+						timestamp="1 Jan 2000 00:00:00 / 1 Jan 2000 18:00:00"
+						units="none"
+						vertical_units="hours" """
+
+        self.assertRaster3dFitsInfo(raster="precip_d", reference=tinfo_string, precision=2)
+
+    def otest_minutes(self):
+        """Convert STRDS into 3d raster map, granularity 7 days"""
+
+        self.runModule("t.register", flags="i",  type="rast",  input="precip_d",  
+                       maps="prec_1d,prec_2d,prec_3d,prec_4d,prec_5d,prec_6d",  
+                       start="2000-01-01", increment="17 minutes")
+
+        self.assertModule("t.rast.to.rast3",  input="precip_d",  output="precip_d")
+        self.runModule("r3.info", map="precip_d")
+
+        tinfo_string="""north=80
+						south=0
+						east=120
+						west=0
+						bottom=36524
+						top=36524.1
+						nsres=10
+						ewres=10
+						tbres=0.0118056
+						rows=8
+						cols=12
+						depths=6
+						datatype="DCELL"
+						timestamp="1 Jan 2000 00:00:00 / 1 Jan 2000 01:42:00"
+						units="none"
+						vertical_units="minutes" """
 
         self.assertRaster3dFitsInfo(raster="precip_d", reference=tinfo_string, precision=2)
 
