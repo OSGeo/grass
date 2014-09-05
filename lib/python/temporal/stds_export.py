@@ -36,6 +36,7 @@ import tempfile
 from space_time_datasets import *
 from factory import *
 from open_stds import *
+import grass.script as gscript
 
 proj_file_name = "proj.txt"
 init_file_name = "init.txt"
@@ -79,31 +80,31 @@ def _export_raster_maps_as_gdal(rows, tar, list_file, new_cwd, fs, format_):
                     gdal_type = "UInt32"
                 else:
                     gdal_type = "Int32"
-                ret = core.run_command("r.out.gdal", flags="c", input=name,
+                ret = gscript.run_command("r.out.gdal", flags="c", input=name,
                                     output=out_name, nodata=nodata,
                                     type=gdal_type, format="GTiff")
             else:
-                ret = core.run_command("r.out.gdal", flags="c",
+                ret = gscript.run_command("r.out.gdal", flags="c",
                                     input=name, output=out_name, format="GTiff")
         elif format_ == "AAIGrid":
             # Export the raster map with r.out.gdal as Arc/Info ASCII Grid
             out_name = name + ".asc"
-            ret = core.run_command("r.out.gdal", flags="c", input=name, output=out_name, format="AAIGrid")
+            ret = gscript.run_command("r.out.gdal", flags="c", input=name, output=out_name, format="AAIGrid")
             
         if ret != 0:
             shutil.rmtree(new_cwd)
             tar.close()
-            core.fatal(_("Unable to export raster map <%s>" % name))
+            gscript.fatal(_("Unable to export raster map <%s>" % name))
 
         tar.add(out_name)
 
         # Export the color rules
         out_name = name + ".color"
-        ret = core.run_command("r.colors.out", map=name, rules=out_name)
+        ret = gscript.run_command("r.colors.out", map=name, rules=out_name)
         if ret != 0:
             shutil.rmtree(new_cwd)
             tar.close()
-            core.fatal(_("Unable to export color rules for raster "
+            gscript.fatal(_("Unable to export color rules for raster "
                          "map <%s> r.out.gdal" % name))
 
         tar.add(out_name)
@@ -121,11 +122,11 @@ def _export_raster_maps(rows, tar, list_file, new_cwd, fs):
         # Write the filename, the start_time and the end_time
         list_file.write(string)
         # Export the raster map with r.pack
-        ret = core.run_command("r.pack", input=name, flags="c")
+        ret = gscript.run_command("r.pack", input=name, flags="c")
         if ret != 0:
             shutil.rmtree(new_cwd)
             tar.close()
-            core.fatal(_("Unable to export raster map <%s> with r.pack" %
+            gscript.fatal(_("Unable to export raster map <%s> with r.pack" %
                          name))
 
         tar.add(name + ".pack")
@@ -146,12 +147,12 @@ def _export_vector_maps_as_gml(rows, tar, list_file, new_cwd, fs):
         # Write the filename, the start_time and the end_time
         list_file.write(string)
         # Export the vector map with v.out.ogr
-        ret = core.run_command("v.out.ogr", input=name, dsn=(name + ".xml"),
+        ret = gscript.run_command("v.out.ogr", input=name, dsn=(name + ".xml"),
                                layer=layer, format="GML")
         if ret != 0:
             shutil.rmtree(new_cwd)
             tar.close()
-            core.fatal(_("Unable to export vector map <%s> as "
+            gscript.fatal(_("Unable to export vector map <%s> as "
                          "GML with v.out.ogr" % name))
 
         tar.add(name + ".xml")
@@ -178,11 +179,11 @@ def _export_vector_maps(rows, tar, list_file, new_cwd, fs):
         # Write the filename, the start_time and the end_time
         list_file.write(string)
         # Export the vector map with v.pack
-        ret = core.run_command("v.pack", input=name, flags="c")
+        ret = gscript.run_command("v.pack", input=name, flags="c")
         if ret != 0:
             shutil.rmtree(new_cwd)
             tar.close()
-            core.fatal(_("Unable to export vector map <%s> with v.pack" %
+            gscript.fatal(_("Unable to export vector map <%s> with v.pack" %
                          name))
 
         tar.add(name + ".pack")
@@ -203,11 +204,11 @@ def _export_raster3d_maps(rows, tar, list_file, new_cwd, fs):
         # Write the filename, the start_time and the end_time
         list_file.write(string)
         # Export the raster 3d map with r3.pack
-        ret = core.run_command("r3.pack", input=name, flags="c")
+        ret = gscript.run_command("r3.pack", input=name, flags="c")
         if ret != 0:
             shutil.rmtree(new_cwd)
             tar.close()
-            core.fatal(_("Unable to export raster map <%s> with r3.pack" %
+            gscript.fatal(_("Unable to export raster map <%s> with r3.pack" %
                          name))
 
         tar.add(name + ".pack")
@@ -295,7 +296,7 @@ def export_stds(input, output, compression, workdir, where, format_="pack",
     list_file.close()
 
     # Write projection and metadata
-    proj = core.read_command("g.proj", flags="j")
+    proj = gscript.read_command("g.proj", flags="j")
 
     proj_file = open(proj_file_name, "w")
     proj_file.write(proj)
@@ -324,7 +325,7 @@ def export_stds(input, output, compression, workdir, where, format_="pack",
     init_file.write(string)
     init_file.close()
 
-    metadata = core.read_command("t.info", type=type_, input=sp.get_id())
+    metadata = gscript.read_command("t.info", type=type_, input=sp.get_id())
     metadata_file = open(metadata_file_name, "w")
     metadata_file.write(metadata)
     metadata_file.close()

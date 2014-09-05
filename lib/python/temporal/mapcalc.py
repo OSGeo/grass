@@ -15,6 +15,7 @@ for details.
 from space_time_datasets import *
 from open_stds import *
 from multiprocessing import Process
+import grass.script as gscript
 
 ############################################################################
 
@@ -98,7 +99,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
         input_list.append(copy.copy(sp))
 
     new_sp = check_new_stds(output, type, dbif,
-                                         core.overwrite())
+                                         gscript.overwrite())
 
     # Sample all inputs by the first input and create a sample matrix
     if spatial:
@@ -227,7 +228,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
 
             # Check if new map is in the temporal database
             if new_map.is_in_db(dbif):
-                if core.overwrite():
+                if gscript.overwrite():
                     # Remove the existing temporal database entry
                     new_map.delete(dbif)
                     new_map = first_input.get_new_map_instance(map_id)
@@ -284,7 +285,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
         new_sp = open_new_stds(output, type,
                                          temporal_type, title, description,
                                          semantic_type, dbif,
-                                         core.overwrite())
+                                         gscript.overwrite())
         count = 0
 
         # collect empty maps to remove them
@@ -329,9 +330,9 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
                     names += ",%s" % (map.get_name())
                 count += 1
             if type == "raster":
-                core.run_command("g.remove", rast=names, quiet=True)
+                gscript.run_command("g.remove", rast=names, quiet=True)
             elif type == "raster3d":
-                core.run_command("g.remove", rast3d=names, quiet=True)
+                gscript.run_command("g.remove", rast3d=names, quiet=True)
 
     dbif.close()
 
@@ -340,16 +341,16 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
 
 def _run_mapcalc2d(expr):
     """Helper function to run r.mapcalc in parallel"""
-    exit(core.run_command("r.mapcalc", expression=expr,
-                            overwrite=core.overwrite(), quiet=True))
+    exit(gscript.run_command("r.mapcalc", expression=expr,
+                            overwrite=gscript.overwrite(), quiet=True))
 
 ###############################################################################
 
 
 def _run_mapcalc3d(expr):
     """Helper function to run r3.mapcalc in parallel"""
-    exit(core.run_command("r3.mapcalc", expression=expr,
-                            overwrite=core.overwrite(), quiet=True))
+    exit(gscript.run_command("r3.mapcalc", expression=expr,
+                            overwrite=gscript.overwrite(), quiet=True))
 
 ###############################################################################
 

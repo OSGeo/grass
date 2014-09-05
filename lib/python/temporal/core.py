@@ -39,7 +39,7 @@ import locale
 import gettext
 gettext.install('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale'))
 
-import grass.script.core as gcore
+import grass.script as gscript
 from datetime import datetime
 from c_libraries_interface import *
 # Import all supported database backends
@@ -400,6 +400,28 @@ def stop_subprocesses():
 # We register this function to be called at exit
 atexit.register(stop_subprocesses)
 
+def get_available_temporal_mapsets():
+    """Return a list of of mapset names with temporal database driver and names
+        that are accessable from the current mapset.
+        
+        :returns: A dictionary, mapset names are keys, the tuple (driver, database) are the values 
+    """
+    global c_library_interface
+    
+    mapsets = c_library_interface.available_mapsets()
+    
+    tgis_mapsets = {}
+    
+    for mapset in mapsets:
+        driver = c_library_interface.get_driver_name(mapset)
+        database = c_library_interface.get_database_name(mapset)
+        
+        if driver and database:
+            tgis_mapsets[mapset] = (driver,  database)
+            
+    return tgis_mapsets
+    
+
 ###############################################################################
 
 def init(raise_fatal_error=False):
@@ -453,8 +475,8 @@ def init(raise_fatal_error=False):
 
     # We must run t.connect at first to create the temporal database and to
     # get the environmental variables
-    gcore.run_command("t.connect", flags="c")
-    grassenv = gcore.gisenv()
+    gscript.run_command("t.connect", flags="c")
+    grassenv = gscript.gisenv()
 
     # Set the global variable for faster access
     current_mapset = grassenv["MAPSET"]
@@ -467,7 +489,7 @@ def init(raise_fatal_error=False):
 
     # Check if the script library raises on error,
     # if so we do the same
-    if gcore.get_raise_on_error() is True:
+    if gscript.get_raise_on_error() is True:
         raise_on_error = True
 
     # Start the GRASS message interface server
@@ -515,7 +537,7 @@ def init(raise_fatal_error=False):
             dbmi = sqlite3
     else:
         # Set the default sqlite3 connection in case nothing was defined
-        gcore.run_command("t.connect", flags="d")
+        gscript.run_command("t.connect", flags="d")
         driver_string = ciface.get_driver_name()
         database_string = ciface.get_database_name()
         tgis_backend = driver_string

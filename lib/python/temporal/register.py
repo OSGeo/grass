@@ -23,6 +23,7 @@ for details.
 """
 
 from open_stds import *
+import grass.script as gscript
 
 ###############################################################################
 
@@ -217,7 +218,7 @@ def register_maps_in_space_time_dataset(
         else:
             is_in_db = True
             # Check the overwrite flag
-            if not core.overwrite():
+            if not gscript.overwrite():
                 if map.get_layer():
                     msgr.warning(_("Map is already registered in temporal "
                                    "database. Unable to update %(t)s map "
@@ -444,13 +445,12 @@ def register_map_object_list(type,  map_list, output_stds,
        @param dbif The database interface to be used
        
     """
-    import grass.script as gcore
     import grass.pygrass.modules as pymod
     import copy
 
     dbif,  connected = init_dbif(dbif)
 
-    filename = gcore.tempfile(True)
+    filename = gscript.tempfile(True)
     file = open(filename, 'w')
 
     empty_maps = []

@@ -24,6 +24,7 @@ for details.
 """
 
 from open_stds import *
+import grass.script as gscript
 
 ###############################################################################
 
@@ -51,7 +52,7 @@ def print_gridded_dataset_univar_statistics(type, input, where, extended,
 
     if not rows:
         dbif.close()
-        core.fatal(_("Space time %(sp)s dataset <%(i)s> is empty") % {
+        gscript.fatal(_("Space time %(sp)s dataset <%(i)s> is empty") % {
                      'sp': sp.get_new_map_instance(None).get_type(), 'i': sp.get_id()})
 
     if no_header is False:
@@ -78,15 +79,15 @@ def print_gridded_dataset_univar_statistics(type, input, where, extended,
             flag += "e"
 
         if type == "strds":
-            stats = core.parse_command("r.univar", map=id, flags=flag)
+            stats = gscript.parse_command("r.univar", map=id, flags=flag)
         elif type == "str3ds":
-            stats = core.parse_command("r3.univar", map=id, flags=flag)
+            stats = gscript.parse_command("r3.univar", map=id, flags=flag)
 
         if not stats:
             if type == "strds":
-                core.warning(_("Unable to get statistics for raster map <%s>") % id)
+                gscript.warning(_("Unable to get statistics for raster map <%s>") % id)
             elif type == "str3ds":
-                core.warning(_("Unable to get statistics for 3d raster map <%s>") % id)
+                gscript.warning(_("Unable to get statistics for 3d raster map <%s>") % id)
             continue
         
         string += str(id) + fs + str(start) + fs + str(end)
@@ -136,7 +137,7 @@ def print_vector_dataset_univar_statistics(input, twhere, layer, type, column,
 
     if sp.is_in_db(dbif) == False:
         dbif.close()
-        core.fatal(_("Space time %(sp)s dataset <%(i)s> not found") % {
+        gscript.fatal(_("Space time %(sp)s dataset <%(i)s> not found") % {
                      'sp': sp.get_new_map_instance(None).get_type(), 'i': id})
 
     sp.select(dbif)
@@ -146,7 +147,7 @@ def print_vector_dataset_univar_statistics(input, twhere, layer, type, column,
 
     if not rows:
         dbif.close()
-        core.fatal(_("Space time %(sp)s dataset <%(i)s> is empty") % {
+        gscript.fatal(_("Space time %(sp)s dataset <%(i)s> is empty") % {
                      'sp': sp.get_new_map_instance(None).get_type(), 'i': id})
 
     string = ""
@@ -180,14 +181,14 @@ def print_vector_dataset_univar_statistics(input, twhere, layer, type, column,
         if not mylayer:
             mylayer = layer
 
-        stats = core.parse_command("v.univar", map=id, where=where,
+        stats = gscript.parse_command("v.univar", map=id, where=where,
                                    column=column, layer=mylayer,
                                    type=type, flags=flags)
 
         string = ""
 
         if not stats:
-            core.warning(_("Unable to get statistics for vector map <%s>") % id)
+            gscript.warning(_("Unable to get statistics for vector map <%s>") % id)
             continue
         
         string += str(id) + fs + str(start) + fs + str(end)

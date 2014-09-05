@@ -59,6 +59,7 @@ def _get_driver_name(lock, conn, data):
        
        :returns: Name of the driver or None if no temporal database present
     """
+    
     drstring = libtgis.tgis_get_mapset_driver_name(data[1])
     
     conn.send(drstring) 
