@@ -1434,8 +1434,7 @@ class TemporalAlgebraParser(object):
             tvardict["END_DATE"]       = end.date()
             tvardict["END_DATETIME"]   = end
             tvardict["END_TIME"]       = end.time()
-            #core.fatal(_("The temporal functions for map <%s> only supported for absolute"\
-                #          "time." % (str(map.get_id()))))
+
         return(tvardict)
 
     def eval_datetime_str(self, tfuncval, comp, value):

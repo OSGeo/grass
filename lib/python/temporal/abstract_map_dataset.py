@@ -342,9 +342,9 @@ class AbstractMapDataset(AbstractDataset):
                              'l': self.get_layer()})
                 return False
             else:
-                core.error(_("Start time must be of type datetime for "
-                             "%(type)s map <%(id)s>") % {
-                             'type': self.get_type(), 'id': self.get_map_id()})
+                self.msgr.error(_("Start time must be of type datetime for "
+                                         "%(type)s map <%(id)s>") % {
+                                         'type': self.get_type(), 'id': self.get_map_id()})
                 return False
 
         if end_time and not isinstance(end_time, datetime):

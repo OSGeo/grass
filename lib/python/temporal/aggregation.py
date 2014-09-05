@@ -24,6 +24,7 @@ for details.
 """
 
 from space_time_datasets import *
+import grass.script as gscript
 
 ###############################################################################
 
@@ -131,7 +132,7 @@ def aggregate_raster_maps(inputs, base, start, end, count, method,
 
     # Check if new map is in the temporal database
     if new_map.is_in_db(dbif):
-        if core.overwrite() == True:
+        if gscript.overwrite() == True:
             # Remove the existing temporal database entry
             new_map.delete(dbif)
             new_map = RasterDataset(map_id)
@@ -144,7 +145,7 @@ def aggregate_raster_maps(inputs, base, start, end, count, method,
                    'st': str(start), 'end': str(end)}))
 
     # Create the r.series input file
-    filename = core.tempfile(True)
+    filename = gscript.tempfile(True)
     file = open(filename, 'w')
 
     for name in inputs:
@@ -155,12 +156,12 @@ def aggregate_raster_maps(inputs, base, start, end, count, method,
     
     # Run r.series
     if len(inputs) > 1000 :
-        ret = core.run_command("r.series", flags="z", file=filename,
-                               output=output, overwrite=core.overwrite(),
+        ret = gscript.run_command("r.series", flags="z", file=filename,
+                               output=output, overwrite=gscript.overwrite(),
                                method=method)
     else:
-        ret = core.run_command("r.series", file=filename,
-                               output=output, overwrite=core.overwrite(),
+        ret = gscript.run_command("r.series", file=filename,
+                               output=output, overwrite=gscript.overwrite(),
                                method=method)
 
     if ret != 0:
@@ -173,7 +174,7 @@ def aggregate_raster_maps(inputs, base, start, end, count, method,
     # In case of a null map continue, do not register null maps
     if new_map.metadata.get_min() is None and new_map.metadata.get_max() is None:
         if not register_null:
-            core.run_command("g.remove", rast=output)
+            gscript.run_command("g.remove", rast=output)
             return None
 
     return new_map
@@ -207,7 +208,6 @@ def aggregate_by_topology(granularity_list,  granularity,  map_list,  topo_list,
        @return A list of RasterDataset objects that contain the new map names and
                the temporal extent for map registration
     """
-    import grass.script as gcore
     import grass.pygrass.modules as pymod
     import copy
 
@@ -290,7 +290,7 @@ def aggregate_by_topology(granularity_list,  granularity,  map_list,  topo_list,
 
             if len(aggregation_list) > 1:
                 # Create the r.series input file
-                filename = gcore.tempfile(True)
+                filename = gscript.tempfile(True)
                 file = open(filename, 'w')
                 for name in aggregation_list:
                     string = "%s\n" % (name)

@@ -15,6 +15,7 @@ for details.
 
 from space_time_datasets import *
 from factory import *
+import grass.script as gscript
 
 ###############################################################################
 
@@ -46,7 +47,7 @@ def tlist_grouped(type, group_type = False, dbif=None):
     for type in types:
         try:
             tlist_result = tlist(type=type, dbif=dbif)
-        except core.ScriptError as e:
+        except gscript.ScriptError as e:
             warning(e)
             continue
 
