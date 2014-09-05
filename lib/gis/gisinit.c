@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/stat.h>
@@ -105,6 +106,8 @@ void G__check_gisinit(void)
 
 static int gisinit(void)
 {
+    char *zlib;
+
 #ifdef __MINGW32__
     _fmode = O_BINARY;
 #endif
@@ -113,6 +116,9 @@ static int gisinit(void)
 
     /* byte order */
     G__.little_endian = G_is_little_endian();
+
+    zlib = getenv("GRASS_ZLIB_LEVEL");
+    G__.compression_level = (zlib && *zlib && isdigit(*zlib)) ? atoi(zlib) : -2;
 
     initialized = 1;
 
