@@ -49,10 +49,10 @@ the user the map is already (de)compressed and exits.
 Floating point (FCELL, DCELL) raster maps never use RLE compression;
 they are either compressed with ZLIB or uncompressed.
 <p>
-Integer (CELL) raster maps by default RLE compressed or may remain
+Integer (CELL) raster maps are by default ZLIB compressed or may remain
 uncompressed. If the environment variable <tt>GRASS_INT_ZLIB</tt>
-exists, newly generated compressed integer (CELL type) raster maps will
-be compressed using ZLIB instead of RLE compression. In the internal
+exists and has the value 0, newly generated compressed integer (CELL type) raster maps will
+be compressed using RLE compression instead of ZLIB. In the internal
 cellhd file, the value for "compressed" is 1 for RLE and 2 for ZLIB.
 <p>
 Obviously, decompression is controlled by the raster map's compression,
