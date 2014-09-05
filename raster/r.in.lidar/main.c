@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
     struct Option *input_opt, *output_opt, *percent_opt, *type_opt, *filter_opt;
     struct Option *method_opt, *zrange_opt, *zscale_opt;
     struct Option *trim_opt, *pth_opt, *res_opt;
-    struct Flag *print_flag, *scan_flag, *shell_style, *over_flag, *extents_flag;
+    struct Flag *print_flag, *scan_flag, *shell_style, *over_flag, *extents_flag, *intens_flag;
 
     /* LAS */
     LASReaderH LAS_reader;
@@ -276,6 +276,11 @@ int main(int argc, char *argv[])
     shell_style->key = 'g';
     shell_style->description =
 	_("In scan mode, print using shell script style");
+
+    intens_flag = G_define_flag();
+    intens_flag->key = 'i';
+    intens_flag->description =
+        _("Import intensity values rather than z values");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -761,7 +766,11 @@ int main(int argc, char *argv[])
 
 	    x = LASPoint_GetX(LAS_point);
 	    y = LASPoint_GetY(LAS_point);
-	    z = LASPoint_GetZ(LAS_point);
+	    if (intens_flag->answer)
+		/* use z variable here to allow for scaling of intensity below */
+		z = LASPoint_GetIntensity(LAS_point);
+	    else
+		z = LASPoint_GetZ(LAS_point);
 
 	if (return_filter != LAS_ALL) {
 	    int return_no = LASPoint_GetReturnNumber(LAS_point);
