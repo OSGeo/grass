@@ -28,8 +28,8 @@ t.rast.accdetect input=temp_accumulation occurrence=temp_occ base=temp_occ \
     range=20,80 start="2001-01-01" cycle="12 months"
 
 # Check the registered maps metadata
-t.rast.list temp_accumulation col=name,start_time,min,max > test_1_temp_accumulation.txt
-t.rast.list temp_occ col=name,start_time,min,max          > test_1_temp_occ_a.txt
+t.rast.list temp_accumulation col=name,start_time,min,max > data/test_1_temp_accumulation.txt
+t.rast.list temp_occ col=name,start_time,min,max          > data/test_1_temp_occ_a.txt
 
 # Leets test the minimum and maximum STRDS implementation
 
@@ -48,10 +48,12 @@ t.rast.accdetect input=temp_accumulation occurrence=temp_occ base=temp_occ \
     max=maximum staend=1,2,3 indi=temp_indi
 
 # Check the registered maps metadata
-t.rast.list temp_occ col=name,start_time,min,max          > test_1_temp_occ_b.txt
-t.rast.list temp_indi col=name,start_time,min,max         > test_1_temp_indi.txt
+t.rast.list temp_occ col=name,start_time,min,max          > data/test_1_temp_occ_b.txt
+t.rast.list temp_indi col=name,start_time,min,max         > data/test_1_temp_indi.txt
 
 t.remove -rf type=strds input=temp_abs1,temp_accumulation,temp_indi,minimum,maximum
+
+cd data
 
 for i in `ls test_1_*.txt` ; do
     diff $i "`basename $i .txt`.ref" >> out.diff
