@@ -75,7 +75,7 @@ void Rast_get_c_color_range(CELL * min, CELL * max,
 }
 
 /*!
-   \brief Get color range values (DELL)
+   \brief Get color range values (DCELL)
 
    Returns min and max category in the range or huge numbers if the
    color table is defined on floating cell values and not on

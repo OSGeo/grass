@@ -63,7 +63,7 @@ void Rast_get_cellhd(const char *name, const char *mapset,
     if (is_reclass) {
 	fp = G_fopen_old("cellhd", real_name, real_mapset);
 	if (!fp)
-	    G_fatal_error(_("Unable to read header file for raster map <%s@%s>."
+	    G_fatal_error(_("Unable to read header file for raster map <%s@%s>. "
 			    "It is a reclass of raster map <%s@%s> %s"),
 			  name, mapset, real_name, real_mapset,
 			  !G_find_raster(real_name, real_mapset)
