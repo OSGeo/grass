@@ -1,6 +1,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/vector.h>
+#include <grass/glocale.h>
 #include "local.h"
 
 
@@ -60,6 +61,8 @@ int begin_rasterization(int nrows, int f, int do_dense)
     size = max_rows * region.cols;
     switch (format) {
     case USE_CELL:
+	G_important_message(_("Using at least %.1f GB of RAM (adjust with 'rows' parameter)"), 
+	    (double)region.rows * nrows * sizeof(CELL *) /1024 /1024 /1024);
 	raster.cell =
 	    (CELL **) G_calloc(max_rows * sizeof(char), sizeof(CELL *));
 	raster.cell[0] = (CELL *) G_calloc(size * sizeof(char), sizeof(CELL));
@@ -69,6 +72,8 @@ int begin_rasterization(int nrows, int f, int do_dense)
 	break;
 
     case USE_DCELL:
+	G_important_message(_("Using at least %.1f GB of RAM (adjust with 'rows' parameter)"),
+	    (double)region.rows * nrows * sizeof(DCELL *) /1024 /1024 /1024);
 	raster.dcell =
 	    (DCELL **) G_calloc(max_rows * sizeof(char), sizeof(DCELL *));
 	raster.dcell[0] =
