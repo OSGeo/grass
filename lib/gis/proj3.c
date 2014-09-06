@@ -127,6 +127,7 @@ double G_database_units_to_meters_factor(void)
     double factor;
     int n;
 
+    /* TODO: note the definitions in ../proj/units.table */
     static const struct
     {
 	char *unit;
