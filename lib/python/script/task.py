@@ -228,7 +228,7 @@ class grassTask:
                 if p.get('default', '') !=  '':
                     cmd +=  [ '%s=%s' % (p['name'], p['default']) ]
                 elif ignoreErrors and not suppress_required and not ignoreRequired:
-                    cmd +=  [ '%s=%s' % (p['name'], _('<required>')) ]
+                    cmd += [('%s=%s' % (p['name'], _('<required>'))).decode('utf-8')]
             elif p.get('value', '') ==  '' and p.get('default', '') != '' and not ignoreDefault:
                 cmd +=  [ '%s=%s' % (p['name'], p['default']) ]
             elif p.get('value', '') !=  '' and \
