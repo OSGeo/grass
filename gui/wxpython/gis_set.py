@@ -511,6 +511,7 @@ class GRASSStartup(wx.Frame):
 
         If successfull sets default region from imported map.
         """
+        RunCommand('db.connect', flags='c')
         mapName = os.path.splitext(os.path.basename(filePath))[0]
         vectors = RunCommand('v.in.ogr', dsn = filePath, flags = 'l',
                              read = True)
