@@ -39,6 +39,21 @@ r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <= 43,1,null())"
 r.li.pielou input=forests conf=movwindow7 out=forests_pielou_mov7
 r.univar forests_pielou_mov7
 </pre></div>
+<p>
+
+Forest map (North Carolina sample dataset) example:
+<div class="code"><pre>
+g.region rast=landclass96 -p
+r.mapcalc "forests = if(landclass96 == 5, 1, null() )"
+r.li.pielou input=forests conf=movwindow7 out=forests_pielou_mov7
+
+# verify
+r.univar forests_pielou_mov7
+r.to.vect input=forests output=forests type=area
+d.mon wx0
+d.rast forests_pielou_mov7
+d.vect forests type=boundary
+</pre></div>
 
 <h2>SEE ALSO</h2>
 <em>

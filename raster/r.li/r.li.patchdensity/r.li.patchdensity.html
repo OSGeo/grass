@@ -53,6 +53,21 @@ d.rast.leg forests_p_dens7
 r.to.vect forests out=forests feature=area
 d.vect forests type=boundary
 </pre></div>
+<p>
+
+Forest map (North Carolina sample dataset) example:
+<div class="code"><pre>
+g.region rast=landclass96 -p
+r.mapcalc "forests = if(landclass96 == 5, 1, null() )"
+r.li.patchdensity input=forests conf=movwindow7 out=forests_patchdensity_mov7
+
+# verify
+r.univar forests_patchdensity_mov7
+r.to.vect input=forests output=forests type=area
+d.mon wx0
+d.rast forests_patchdensity_mov7
+d.vect forests type=boundary
+</pre></div>
 
 <h2>SEE ALSO</h2>
 <em>
