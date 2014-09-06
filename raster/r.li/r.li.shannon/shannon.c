@@ -123,7 +123,8 @@ int calculate(int fd, struct area_entry *ad, double *result)
     long area = 0;
 
     avl_tree albero = NULL;
-    AVL_table *array;
+    AVL_table array;
+    //AVL_tableRow *array;
     generic_cell uc;
 
     uc.t = CELL_TYPE;
@@ -269,7 +270,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
 	/* calculate shannon */
 	shannon = 0;
 	for (i = 0; i < m; i++) {
-	    t = array[i]->tot;
+	    t = array[i].tot;
 	    perc = t / area;
 	    logarithm = log(perc);
 	    shannon += perc * logarithm;
@@ -310,7 +311,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
     long area = 0;
 
     avl_tree albero = NULL;
-    AVL_table *array;
+    AVL_table array;
     generic_cell uc;
 
     uc.t = DCELL_TYPE;
@@ -456,7 +457,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 	/* calculate shannon */
 	shannon = 0;
 	for (i = 0; i < m; i++) {
-	    t = array[i]->tot;
+	    t = array[i].tot;
 	    perc = t / area;
 	    logarithm = log(perc);
 	    shannon += perc * logarithm;
@@ -497,7 +498,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
     long area = 0;
 
     avl_tree albero = NULL;
-    AVL_table *array;
+    AVL_table array;
     generic_cell uc;
 
     uc.t = FCELL_TYPE;
@@ -643,7 +644,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 	/* calculate shannon */
 	shannon = 0;
 	for (i = 0; i < m; i++) {
-	    t = array[i]->tot;
+	    t = array[i].tot;
 	    perc = t / area;
 	    logarithm = log(perc);
 	    shannon += perc * logarithm;
