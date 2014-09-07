@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
     int i;
     float xmin = 0., ymin = 0., xmax = 0., ymax = 0.;
     struct GModule *module;
-    struct Option *in_opt, *out_opt, *spat_opt, *filter_opt;
+    struct Option *in_opt, *out_opt, *spat_opt, *filter_opt, *class_opt;
     struct Option *outloc_opt;
     struct Flag *print_flag, *notab_flag, *region_flag, *notopo_flag;
     struct Flag *over_flag, *extend_flag, *no_import_flag;
@@ -140,12 +140,14 @@ int main(int argc, char *argv[])
     int las_point_format;
     int have_time, have_color;
     int return_filter;
+    int skipme;
+    int point_class;
     unsigned int not_valid;	
 
     struct line_pnts *Points;
     struct line_cats *Cats;
 
-    unsigned int n_features, feature_count, n_outside, n_filtered;
+    unsigned int n_features, feature_count, n_outside, n_filtered, n_class_filtered;
     int overwrite;
 
     G_gisinit(argv[0]);
@@ -181,12 +183,21 @@ int main(int argc, char *argv[])
     outloc_opt->key_desc = "name";
     
     filter_opt = G_define_option();
-    filter_opt->key = "filter";
+    filter_opt->key = "return_filter";
     filter_opt->type = TYPE_STRING;
     filter_opt->required = NO;
     filter_opt->label = _("Only import points of selected return type");
     filter_opt->description = _("If not specified, all points are imported");
     filter_opt->options = "first,last,mid";
+
+    class_opt = G_define_option();
+    class_opt->key = "class_filter";
+    class_opt->type = TYPE_INTEGER;
+    class_opt->multiple = YES;
+    class_opt->required = NO;
+    class_opt->label = _("Only import points of selected class(es)");
+    class_opt->description = _("Input is comma separated integers. "
+                               "If not specified, all points are imported.");
 
     print_flag = G_define_flag();
     print_flag->key = 'p';
@@ -624,6 +635,7 @@ int main(int argc, char *argv[])
     feature_count = 0;
     n_outside = 0;
     n_filtered = 0;
+    n_class_filtered = 0;
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
@@ -655,7 +667,7 @@ int main(int argc, char *argv[])
 	if (return_filter != LAS_ALL) {
 	    int return_no = LASPoint_GetReturnNumber(LAS_point);
 	    int n_returns = LASPoint_GetNumberOfReturns(LAS_point);
-	    int skipme = 1;
+	    skipme = 1;
 
 	    if (n_returns > 1) {
 
@@ -676,6 +688,22 @@ int main(int argc, char *argv[])
 	    }
 	    if (skipme) {
 		n_filtered++;
+		continue;
+	    }
+	}
+	if (class_opt->answer) {
+	    point_class = (int) LASPoint_GetClassification(LAS_point);
+	    i = 0;
+	    skipme = TRUE;
+	    while (class_opt->answers[i]) {
+		if (point_class == atoi(class_opt->answers[i])) {
+		    skipme = FALSE;
+		    break;
+		}
+		i++;
+	    }
+	    if (skipme) {
+		n_class_filtered++;
 		continue;
 	    }
 	}
@@ -783,13 +811,16 @@ int main(int argc, char *argv[])
 	Vect_build(&Map);
     Vect_close(&Map);
     
-    G_message(_("%d points imported"), n_features - not_valid - n_outside - n_filtered);
+    G_message(_("%d points imported"),
+              n_features - not_valid - n_outside - n_filtered - n_class_filtered);
     if (not_valid)
 	G_message(_("%d input points were not valid"), not_valid);
     if (n_outside)
 	G_message(_("%d input points were outside of the selected area"), n_outside);
     if (n_filtered)
 	G_message(_("%d input points were filtered by return number"), n_filtered);
+    if (n_class_filtered)
+        G_message(_("%d input points were filtered by class number"), n_class_filtered);
 
     /* -------------------------------------------------------------------- */
     /*      Extend current window based on dataset.                         */
