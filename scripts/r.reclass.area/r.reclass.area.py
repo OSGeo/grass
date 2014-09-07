@@ -54,6 +54,11 @@
 #% description: Input map is clumped
 #%end
 
+#%flag
+#% key: d
+#% description: Clumps including diagonal neighbors
+#%end
+
 import sys
 import os
 import atexit
@@ -68,6 +73,7 @@ def main():
     greater = options['greater']
     outfile = options['output']
     clumped = flags['c']
+    diagonal = flags['d']
 
     s = grass.read_command("g.region", flags='p')
     kv = grass.parse_key_val(s, sep=':')
@@ -88,6 +94,9 @@ def main():
     if not grass.find_file(infile)['name']:
         grass.fatal(_("Raster map <%s> not found") % infile)
 
+    if clumped and diagonal:
+        grass.fatal(_("flags c and d are mutually exclusive"))
+
     if clumped:
         clumpfile = infile
     else:
@@ -97,9 +106,12 @@ def main():
         if not grass.overwrite():
             if grass.find_file(clumpfile)['name']:
                 grass.fatal(_("Temporary raster map <%s> exists") % clumpfile)
-
-        grass.message(_("Generating a clumped raster file ..."))
-        grass.run_command('r.clump', input=infile, output=clumpfile)
+        if diagonal:
+            grass.message(_("Generating a clumped raster file including diagonal neighbors..."))
+            grass.run_command('r.clump', flags='d', input=infile, output=clumpfile)
+        else:
+            grass.message(_("Generating a clumped raster file ..."))
+            grass.run_command('r.clump', input=infile, output=clumpfile)
 
     if lesser:
         grass.message(_("Generating a reclass map with area size less than " \
