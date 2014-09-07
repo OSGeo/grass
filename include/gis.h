@@ -195,8 +195,8 @@ static const char *GRASS_copyright __attribute__ ((unused))
 
   Used by the G_parser() system.
 
-  IMPORTANT NOTE: when adding new item to the you should also update
-  STD_OPT_STRINGS array in general/g.parser/standard_option.c.
+  IMPORTANT NOTE: when adding new item to STD_OPT you should also
+  update STD_OPT_STRINGS array in general/g.parser/standard_option.c.
 
 */
 typedef enum
