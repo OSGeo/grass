@@ -937,9 +937,9 @@ Function DownloadInstallMSRuntime
 	StrCmp $0 "success" untar_ok untar_failed
 	
 	untar_ok:
-	ExecWait "$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2005_x86.exe /q"
-	ExecWait "$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2008_x86.exe /q"	
-	ExecWait "$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2010_x86.exe /q"
+	ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2005_x86.exe" /q'
+	ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2008_x86.exe" /q'	
+	ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2010_x86.exe" /q'
 	CopyFiles "$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\*.dll" "$INSTDIR\extrabin"
 	Delete "$TEMP\$ARCHIVE_NAME"
 	RMDir /r "$TEMP\$ORIGINAL_UNTAR_FOLDER"
