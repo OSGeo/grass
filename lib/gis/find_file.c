@@ -18,6 +18,40 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
+static const char *find_element(int misc, const char *dir, const char *element)
+{
+    static const char *cell_elements[] = {
+	"cellhd",
+	"cell",
+	"cats",
+	"colr",
+	"hist",
+	"cell_misc",
+	"fcell",
+	"g3dcell",
+	NULL
+    };
+    static const char *dig_elements[] = {
+	"dig",
+	"dig_att",
+	"dig_plus",
+	"dig_cats",
+	"dig_misc",
+	"reg",
+	NULL
+    };
+    const char *search = misc ? dir : element;
+    int i;
+
+    for (i = 1; cell_elements[i]; i++)
+	if (strcmp(search, cell_elements[i]) == 0)
+	    return cell_elements[0];
+    for (i = 1; dig_elements[i]; i++)
+	if (strcmp(search, dig_elements[i]) == 0)
+	    return dig_elements[0];
+    return element;
+}
+
 static const char *find_file(int misc, const char *dir,
 			     const char *element, const char *name,
 			     const char *mapset)
@@ -66,28 +100,35 @@ static const char *find_file(int misc, const char *dir,
     if (pmapset == NULL || *pmapset == 0) {
 	int cnt = 0;
 	const char *pselmapset = NULL;
+	const char *pelement = find_element(misc, dir, element);
 
 	for (n = 0; (pmapset = G_get_mapset_name(n)); n++) {
-	    if (misc)
-		G_file_name_misc(path, dir, element, pname, pmapset);
+	    if (misc && element == pelement)
+		G_file_name_misc(path, dir, pelement, pname, pmapset);
 	    else
-		G_file_name(path, element, pname, pmapset);
+		G_file_name(path, pelement, pname, pmapset);
 	    if (access(path, 0) == 0) {
 		if (!pselmapset)
 		    pselmapset = pmapset;
-		else
+		else if (element == pelement)
 		    G_warning(_("'%s/%s' was found in more mapsets (also found in <%s>)"),
 			      element, pname, pmapset);
 		cnt++;
 	    }
 	}
 	if (cnt > 0) {
-	    /* If the same name exists in more mapsets and print a warning */
-	    if (cnt > 1)
-		G_warning(_("Using <%s@%s>"),
-			  pname, pselmapset);
+	    if (misc)
+		G_file_name_misc(path, dir, element, pname, pmapset);
+	    else
+		G_file_name(path, element, name, pmapset);
+	    if (access(path, 0) == 0) {
+		/* If the same name exists in more mapsets and print a warning */
+		if (cnt > 1 && element == pelement)
+		    G_warning(_("Using <%s@%s>"),
+			      pname, pselmapset);
 	    
-	    return G_store(pselmapset);
+		return G_store(pselmapset);
+	    }
 	}
     }
     /*
