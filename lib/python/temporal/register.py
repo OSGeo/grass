@@ -174,7 +174,7 @@ def register_maps_in_space_time_dataset(
         
         if map.map_exists() is not True:
             msgr.fatal(_("Unable to update %(t)s map <%(id)s>. "
-                            "The map does not exists.") %
+                            "The map does not exist.") %
                             {'t': map.get_type(),
                             'id': map.get_map_id()})
 
@@ -388,12 +388,12 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None,
             start_time = increment_datetime_by_string(
                 start_time, increment, mult)
             if start_time is None:
-                msgr.fatal(_("Error in increment computation"))
+                msgr.fatal(_("Error occurred in increment computation"))
             if interval:
                 end_time = increment_datetime_by_string(
                     start_time, increment, 1)
                 if end_time is None:
-                    msgr.fatal(_("Error in increment computation"))
+                    msgr.fatal(_("Error occurred in increment computation"))
 
         if map.get_layer():
             msgr.debug(1, _("Set absolute valid time for map <%(id)s> with "
