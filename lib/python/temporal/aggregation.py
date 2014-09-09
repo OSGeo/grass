@@ -122,7 +122,7 @@ def aggregate_raster_maps(inputs, base, start, end, count, method,
 
     msgr = get_tgis_message_interface()
 
-    msgr.verbose(_("Aggregate %s raster maps") % (len(inputs)))
+    msgr.verbose(_("Aggregating %s raster maps") % (len(inputs)))
     output = "%s_%i" % (base, int(offset) + count)
 
     mapset = get_current_mapset()
@@ -140,7 +140,7 @@ def aggregate_raster_maps(inputs, base, start, end, count, method,
                          "use overwrite flag to overwrite"))
             return
 
-    msgr.verbose(_("Compute aggregation of maps between %(st)s - %(end)s" % {
+    msgr.verbose(_("Computing aggregation of maps between %(st)s - %(end)s" % {
                    'st': str(start), 'end': str(end)}))
 
     # Create the r.series input file
@@ -165,7 +165,7 @@ def aggregate_raster_maps(inputs, base, start, end, count, method,
 
     if ret != 0:
         dbif.close()
-        msgr.fatal(_("Error while r.series computation"))
+        msgr.fatal(_("Error occurred in r.series computation"))
 
     # Read the raster map data
     new_map.load()
