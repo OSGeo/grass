@@ -123,7 +123,7 @@ def aggregate_raster_maps(inputs, base, start, end, count, method,
 
     msgr = get_tgis_message_interface()
 
-    msgr.verbose(_("Aggregate %s raster maps") % (len(inputs)))
+    msgr.verbose(_("Aggregating %s raster maps") % (len(inputs)))
     output = "%s_%i" % (base, int(offset) + count)
 
     mapset = get_current_mapset()
@@ -141,7 +141,7 @@ def aggregate_raster_maps(inputs, base, start, end, count, method,
                          "use overwrite flag to overwrite"%({"name":new_map.get_name()})))
             return
 
-    msgr.verbose(_("Compute aggregation of maps between %(st)s - %(end)s" % {
+    msgr.verbose(_("Computing aggregation of maps between %(st)s - %(end)s" % {
                    'st': str(start), 'end': str(end)}))
 
     # Create the r.series input file
@@ -166,7 +166,7 @@ def aggregate_raster_maps(inputs, base, start, end, count, method,
 
     if ret != 0:
         dbif.close()
-        msgr.fatal(_("Error while r.series computation"))
+        msgr.fatal(_("Error occurred in r.series computation"))
 
     # Read the raster map data
     new_map.load()
@@ -266,7 +266,7 @@ def aggregate_by_topology(granularity_list,  granularity,  map_list,  topo_list,
                 aggregation_list.append(map_layer.get_name())
 
         if aggregation_list:
-            msgr.verbose(_("Aggregate %(len)i raster maps from %(start)s to %(end)s") \
+            msgr.verbose(_("Aggregating %(len)i raster maps from %(start)s to %(end)s") \
                            %({"len":len(aggregation_list),
                            "start":str(granule.temporal_extent.get_start_time()), 
                            "end":str(granule.temporal_extent.get_end_time())}))
@@ -284,7 +284,7 @@ def aggregate_by_topology(granularity_list,  granularity,  map_list,  topo_list,
 
             if map_layer.map_exists() is True and overwrite is False:
                 msgr.fatal(_("Unable to perform aggregation. Output raster map <%(name)s> "\
-                             "exists and overwrite flag is not set"%({"name":output_name})))
+                             "exists and overwrite flag was not set"%({"name":output_name})))
 
             output_list.append(map_layer)
 
