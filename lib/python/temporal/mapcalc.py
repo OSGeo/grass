@@ -103,9 +103,9 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
 
     # Sample all inputs by the first input and create a sample matrix
     if spatial:
-        msgr.message(_("Start spatio-temporal sampling"))
+        msgr.message(_("Starting spatio-temporal sampling..."))
     else:
-        msgr.message(_("Start temporal sampling"))
+        msgr.message(_("Starting temporal sampling..."))
     map_matrix = []
     id_list = []
     sample_map_list = []
@@ -167,7 +167,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
 
         if list is None:
             dbif.close()
-            msgr.message(_("No maps in input dataset"))
+            msgr.message(_("No maps registered in input dataset"))
             return 0
 
         map_name_list = []
@@ -183,7 +183,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
 
     if len(map_matrix) > 0:
 
-        msgr.message(_("Start mapcalc computation"))
+        msgr.message(_("Starting mapcalc computation..."))
 
         count = 0
         # Get the number of samples
@@ -278,7 +278,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
                 proc_list = []
 
         # Register the new maps in the output space time dataset
-        msgr.message(_("Start map registration in temporal database"))
+        msgr.message(_("Starting map registration in temporal database..."))
 
         temporal_type, semantic_type, title, description = first_input.get_initial_values()
 

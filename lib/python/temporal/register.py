@@ -163,7 +163,7 @@ def register_maps_in_space_time_dataset(
     # Store the ids of datasets that must be updated
     datatsets_to_modify = {}
 
-    msgr.message(_("Gathering map informations"))
+    msgr.message(_("Gathering map information..."))
 
     for count in range(len(maplist)):
         if count % 50 == 0:
@@ -288,7 +288,7 @@ def register_maps_in_space_time_dataset(
             #  Gather the SQL insert statement
             statement += map.insert(dbif=dbif, execute=False)
 
-        # Sqlite3 performace better for huge datasets when committing in
+        # Sqlite3 performance is better for huge datasets when committing in
         # small chunks
         if dbif.dbmi.__name__ == "sqlite3":
             if count % 100 == 0:
@@ -303,14 +303,14 @@ def register_maps_in_space_time_dataset(
     msgr.percent(num_maps, num_maps, 1)
 
     if statement is not None and statement != "":
-        msgr.message(_("Register maps in the temporal database"))
+        msgr.message(_("Registering maps in the temporal database..."))
         dbif.execute_transaction(statement)
 
     # Finally Register the maps in the space time dataset
     if name and map_object_list:
         count = 0
         num_maps = len(map_object_list)
-        msgr.message(_("Register maps in the space time raster dataset"))
+        msgr.message(_("Registering maps in the space time raster dataset..."))
         for map in map_object_list:
             if count % 50 == 0:
                 msgr.percent(count, num_maps, 1)
@@ -319,7 +319,7 @@ def register_maps_in_space_time_dataset(
 
     # Update the space time tables
     if name and map_object_list:
-        msgr.message(_("Update space time raster dataset"))
+        msgr.message(_("Updating space time raster dataset..."))
         sp.update_from_registered_maps(dbif)
         if update_cmd_list is True:
             sp.update_command_string(dbif=dbif)
