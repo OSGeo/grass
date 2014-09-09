@@ -1,6 +1,52 @@
 <h2>DESCRIPTION</h2>
 
-TBD.
+This module is designed to unregister raster, 3d raster and vector map layers from space time datasets and the temporal database.
+<p>
+Map layer that should be unregistered from the temporal database can be specified as a list of comma separated map names or 
+using a text file, that contains one map layer name per line. By default the map type that should be unregistered is set to raster. 
+The option<em>type</em> must be used to specify 3d raster or vector map layer types.
+
+<h2>INPUT FILE FORMAT</h2>
+
+Specification of map names:
+<div class="code"><pre>
+prec_1
+prec_2
+prec_3
+prec_4
+prec_5
+prec_6
+</pre></div>
+
+<h2>EXAMPLE</h2>
+
+In this example we create 2 raster map layers that will be registered in a space time
+raster dataset named <em>precip_abs</em> using a monthly temporal granularity.
+We use t.unregister to unregister a map layer from the space time dataset and from the temporal database.
+
+<div class="code"><pre>
+r.mapcalc expr="prec_1 = 100"
+r.mapcalc expr="prec_2 = 200"
+r.mapcalc expr="prec_3 = 300"
+
+t.create type=strds temporaltype=absolute \
+    output=precip_abs title="Example" \
+    descr="Example"
+
+t.register -i type=rast input=precip_abs \
+    maps=prec_1,prec_2,prec_3 \
+    start="2001-01-01" increment="1 month"
+
+# We unregister raster map prec_1 from a space time dataset,
+# the raster map is still present in the temporal database
+t.unregister type=rast input=precip_abs maps=prec_1
+
+# We unregister raster map prec_2 from the temporal database, hence
+# the time stamp is removed
+t.unregister type=rast maps=prec_2
+
+</pre></div>
+
 
 <h2>SEE ALSO</h2>
 
@@ -14,4 +60,3 @@ TBD.
 S&ouml;ren Gebbert
 
 <p><i>Last changed: $Date$</i>
-
