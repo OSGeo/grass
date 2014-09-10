@@ -309,7 +309,7 @@ class DataCatalogTree(LocationMapTree):
         """Rename levent with dialog"""
         if (self.selected_layer):
             self.old_name = self.GetItemText(self.selected_layer)
-            self._textDialog(_('New name'), _('Rename map'), self.old_name)
+            self.new_name = self._getUserEntry(_('New name'), _('Rename map'), self.old_name)
             self.rename() 
     
     def OnStartEditLabel(self, event):
@@ -336,7 +336,7 @@ class DataCatalogTree(LocationMapTree):
     
     def rename(self):
         """Rename layer"""
-        if (self.selected_layer):
+        if self.selected_layer and self.new_name:
             string = self.old_name+','+self.new_name
             self.ChangeEnvironment(self.GetItemText(self.selected_location), self.GetItemText(self.selected_mapset))
             renamed = 0
@@ -365,7 +365,10 @@ class DataCatalogTree(LocationMapTree):
                 if (self.GetItemText(self.copy_type) != self.GetItemText(self.selected_type)): # copy raster to vector or vice versa
                     GError(_("Failed to copy layer: invalid type."), parent = self)
                     return
-            self._textDialog(_('New name'), _('Copy map'), self.GetItemText(self.copy_layer)+'_copy')
+            self.new_name = self._getUserEntry(_('New name'), _('Copy map'),
+                                               self.GetItemText(self.copy_layer) + '_copy')
+            if not self.new_name:
+                return
             if (self.GetItemText(self.copy_layer) == self.new_name):
                 GMessage(_("Layer was not copied: new layer has the same name"), parent=self) 
                 return
@@ -474,14 +477,18 @@ class DataCatalogTree(LocationMapTree):
             else:
                 event.Veto()
 
-    def _textDialog(self, message, title, value):
+    def _getUserEntry(self, message, title, value):
         """Dialog for simple text entry"""
         dlg = TextEntryDialog(self, message, title)
         dlg.SetValue(value)
-        res = dlg.ShowModal()
-        self.new_name = dlg.GetValue()
+        if dlg.ShowModal() == wx.ID_OK:
+            name = dlg.GetValue()
+        else:
+            name = None
         dlg.Destroy()
-    
+
+        return name
+
     def _confirmDialog(self, question, title):
         """Confirm dialog"""
         dlg = wx.MessageDialog(self, question, title, wx.YES_NO)
