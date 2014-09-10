@@ -55,7 +55,7 @@ int G_getl(char *buf, int n, FILE * fd)
  * must be allocated for the string buffer.
  *
  * \param buf: string buffer to receive read data, at least <i>n</i> must be allocated
- * \param n: maximum number of bytes to read
+ * \param n: number of bytes allocated for buf, at most <i>n - 1</i> are read
  * \param fd: file descriptor structure
  *
  * \return 1 on success
@@ -67,7 +67,7 @@ int G_getl2(char *buf, int n, FILE * fd)
     int c;
     int ret = 1;
 
-    while (i < n - 1) {
+    while (i < n) {
 	c = fgetc(fd);
 
 	if (c == EOF) {
@@ -88,12 +88,20 @@ int G_getl2(char *buf, int n, FILE * fd)
 	    }
 	    break;
 	}
-
-	buf[i] = c;
+	
+	if (i < n - 1) {
+	    buf[i] = c;
+	}
 
 	i++;
     }
-    buf[i] = '\0';
+
+    if (i < n)
+	buf[i] = '\0';
+    else {
+	buf[n - 1] = '\0';
+	ret = -1;
+    }
 
     return ret;
 }

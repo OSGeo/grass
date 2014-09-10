@@ -117,8 +117,13 @@ static int gisinit(void)
     /* byte order */
     G__.little_endian = G_is_little_endian();
 
+    /* zlib compression level for raster maps */
     zlib = getenv("GRASS_ZLIB_LEVEL");
-    G__.compression_level = (zlib && *zlib && isdigit(*zlib)) ? atoi(zlib) : -2;
+    G__.compression_level = (zlib && *zlib) ? atoi(zlib) : 1;
+    if (zlib && G__.compression_level == 0) {
+	G_warning(_("Raster compression disabled with %s=%s"), 
+		"GRASS_ZLIB_LEVEL", zlib);
+    }
 
     initialized = 1;
 

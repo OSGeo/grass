@@ -87,7 +87,7 @@ static void format_double(double value, char *buf, int full_prec)
     if (full_prec)
 	sprintf(buf, "%.15g", value);
     else
-	sprintf(buf, "%.8f", value);
+	sprintf(buf, "%.8g", value);
 
     G_trim_decimal(buf);
 }
