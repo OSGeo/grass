@@ -48,7 +48,7 @@ int G_lat_scan(const char *buf, double *lat)
 
 int G_lon_scan(const char *buf, double *lon)
 {
-    return scan_ll(buf, "we", lon, 360);
+    return scan_ll(buf, "we", lon, 180);
 }
 
 int G_llres_scan(const char *buf, double *res)
