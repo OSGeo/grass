@@ -56,9 +56,12 @@ int line2line(struct line_pnts *FPoints, int ftype,
     double tmp_dist, tmp_x, tmp_y, tmp_z, tmp_along;
     int ret = 1;
     static struct line_pnts *iPoints = NULL;
+    static struct line_pnts *LPoints = NULL;
     
-    if (!iPoints)
+    if (!iPoints) {
 	iPoints = Vect_new_line_struct();
+	LPoints = Vect_new_line_struct();
+    }
 
     *dist = PORT_DOUBLE_MAX;
 
@@ -80,7 +83,6 @@ int line2line(struct line_pnts *FPoints, int ftype,
 	Vect_line_distance(TPoints, FPoints->x[0], FPoints->y[0],
 			   FPoints->z[0], with_z, tx, ty,tz, dist, 
 			   NULL, talong);
-
     }
 
     /* point -> line and line -> line */
@@ -173,6 +175,45 @@ int line2line(struct line_pnts *FPoints, int ftype,
 				       tangle, NULL);
 		}
 	    }
+	}
+    }
+
+    if (geodesic) {
+	if (*fx != *tx || *fy != *ty || (with_z && *fz != *tz)) {
+	    Vect_reset_line(LPoints);
+	    Vect_append_point(LPoints, *fx, *fy, *fz);
+	    Vect_append_point(LPoints, *tx, *ty, *tz);
+	    *dist = Vect_line_geodesic_length(LPoints);
+	}
+	/* falong */
+	if (FPoints->x[0] != *fx || FPoints->y[0] != *fy ||
+	    (with_z && FPoints->z[0] != *fz)) {
+	
+	    fseg = Vect_line_distance(FPoints, *tx, *ty, *tz,
+			       with_z, &tmp_x, &tmp_y, &tmp_z,
+			       &tmp_dist, NULL, &tmp_along);
+
+	    Vect_reset_line(LPoints);
+	    for (i = 0; i < fseg; i++)
+		Vect_append_point(LPoints, FPoints->x[i], FPoints->y[i],
+		                  FPoints->z[i]);
+	    Vect_append_point(LPoints, *fx, *fy, *fz);
+	    *falong = Vect_line_geodesic_length(LPoints);
+	}
+	/* talong */
+	if (TPoints->x[0] != *tx || TPoints->y[0] != *ty ||
+	    (with_z && TPoints->z[0] != *tz)) {
+	
+	    tseg = Vect_line_distance(TPoints, *fx, *fy, *fz,
+			       with_z, &tmp_x, &tmp_y, &tmp_z,
+			       &tmp_dist, NULL, &tmp_along);
+
+	    Vect_reset_line(LPoints);
+	    for (i = 0; i < tseg; i++)
+		Vect_append_point(LPoints, TPoints->x[i], TPoints->y[i],
+		                  TPoints->z[i]);
+	    Vect_append_point(LPoints, *tx, *ty, *tz);
+	    *talong = Vect_line_geodesic_length(LPoints);
 	}
     }
 
