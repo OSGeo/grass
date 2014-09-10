@@ -118,9 +118,9 @@ static const char *find_file(int misc, const char *dir,
 	}
 	if (cnt > 0) {
 	    if (misc)
-		G_file_name_misc(path, dir, element, pname, pmapset);
+		G_file_name_misc(path, dir, element, pname, pselmapset);
 	    else
-		G_file_name(path, element, name, pmapset);
+		G_file_name(path, element, name, pselmapset);
 	    if (access(path, 0) == 0) {
 		/* If the same name exists in more mapsets and print a warning */
 		if (cnt > 1 && element == pelement)
