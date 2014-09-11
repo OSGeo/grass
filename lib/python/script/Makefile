@@ -6,7 +6,7 @@ include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
 DSTDIR = $(ETC)/python/grass/script
 
-MODULES = core db raster raster3d vector array setup task 
+MODULES = core db raster raster3d vector array setup task utils
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)

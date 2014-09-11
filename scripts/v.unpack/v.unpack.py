@@ -39,12 +39,13 @@ import shutil
 import tarfile
 import atexit
 
+from grass.script.utils import diff_files, try_rmdir
 from grass.script import core as grass
 from grass.script import db as grassdb
 
 
 def cleanup():
-    grass.try_rmdir(tmp_dir)
+    try_rmdir(tmp_dir)
 
 
 def main():
@@ -102,13 +103,13 @@ def main():
     diff_result_1 = diff_result_2 = None
     if not grass.compare_key_value_text_files(filename_a=os.path.join(tmp_dir,'PROJ_INFO'),
                                               filename_b=loc_proj, proj=True):
-        diff_result_1 = grass.diff_files(os.path.join(tmp_dir, 'PROJ_INFO'),
+        diff_result_1 = diff_files(os.path.join(tmp_dir, 'PROJ_INFO'),
                                          loc_proj)
 
     if not grass.compare_key_value_text_files(filename_a=os.path.join(tmp_dir,'PROJ_UNITS'),
                                               filename_b=loc_proj_units,
                                               units=True):
-        diff_result_2 = grass.diff_files(os.path.join(tmp_dir, 'PROJ_UNITS'),
+        diff_result_2 = diff_files(os.path.join(tmp_dir, 'PROJ_UNITS'),
                                          loc_proj_units)
 
     if diff_result_1 or diff_result_2:

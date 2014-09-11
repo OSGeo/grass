@@ -37,10 +37,11 @@ import shutil
 import atexit
 import tarfile
 
+from grass.script.utils import try_rmdir, try_remove
 from grass.script import core as grass
 
 def cleanup():
-    grass.try_rmdir(tmp)
+    try_rmdir(tmp)
 
 def main():
     infile = options['input']
@@ -69,7 +70,7 @@ def main():
     if os.path.exists(outfile):
         if os.getenv('GRASS_OVERWRITE'):
             grass.warning(_("Pack file <%s> already exists and will be overwritten") % outfile)
-            grass.try_remove(outfile)
+            try_remove(outfile)
         else:
             grass.fatal(_("option <output>: <%s> exists.") % outfile)
     

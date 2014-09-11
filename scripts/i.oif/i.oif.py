@@ -42,6 +42,7 @@
 
 import sys
 import os
+from grass.script.utils import parse_key_val
 from grass.script import core as grass
 
 
@@ -86,7 +87,7 @@ def main():
         for band in bands:
             grass.verbose("band %d" % band)
             s = grass.read_command('r.univar', flags='g', map=band)
-            kv = grass.parse_key_val(s)
+            kv = parse_key_val(s)
             stddev[band] = float(kv['stddev'])
     else:
         # run all bands in parallel
@@ -117,7 +118,7 @@ def main():
 
     # parse the results
         for band in bands:
-            kv = grass.parse_key_val(pout[band])
+            kv = parse_key_val(pout[band])
             stddev[band] = float(kv['stddev'])
 
 

@@ -72,11 +72,12 @@
 
 import os
 import atexit
+from grass.script.utils import try_rmdir
 from grass.script import core as grass
 
 
 def cleanup():
-    grass.try_rmdir(tmp_dir)
+    try_rmdir(tmp_dir)
 
 
 def draw_gnuplot(what, xlabels, output, img_format, coord_legend):

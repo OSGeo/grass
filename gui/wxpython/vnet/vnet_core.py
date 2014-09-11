@@ -20,6 +20,7 @@ This program is free software under the GNU General Public License
 """
 
 import os
+from grass.script.utils import try_remove
 from grass.script     import core as grass
 
 import wx
@@ -466,7 +467,7 @@ class VNETAnalyses:
 
     def _vnetPathRunAnDone(self, cmd, returncode):
         """Called when v.net.path analysis is done"""
-        grass.try_remove(self.coordsTmpFile)
+        try_remove(self.coordsTmpFile)
 
         self._onDone(cmd, returncode)
 
@@ -582,7 +583,7 @@ class VNETAnalyses:
                                driver = driver,
                                database = database)
 
-        grass.try_remove(sqlFile)
+        try_remove(sqlFile)
 
     def _runTurnsAnDone(self, cmd, returncode):
         """Called when analysis is done"""
@@ -694,7 +695,7 @@ class VNETAnalyses:
         """Called when analysis is done"""
         self.tmp_maps.DeleteTmpMap(self.tmpInPts) #TODO remove earlier (OnDone lambda?)
         self.tmp_maps.DeleteTmpMap(self.tmpInPtsConnected)
-        grass.try_remove(self.tmpPtsAsciiFile)
+        try_remove(self.tmpPtsAsciiFile)
 
         if cmd[0] == "v.net.flow":
             self.tmp_maps.DeleteTmpMap(self.vnetFlowTmpCut)

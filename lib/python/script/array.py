@@ -130,7 +130,9 @@ for details.
 import os
 import numpy
 
+from utils import try_remove
 import core as grass
+
 
 ###############################################################################
 
@@ -161,7 +163,7 @@ class array(numpy.memmap):
     def _close(self):
         numpy.memmap._close(self)
         if isinstance(self, array):
-            grass.try_remove(self.filename)
+            try_remove(self.filename)
 
     def read(self, mapname, null=None):
         """!Read raster map into array
@@ -274,7 +276,7 @@ class array3d(numpy.memmap):
 
         numpy.memmap._close(self)
         if isinstance(self, array):
-            grass.try_remove(self.filename)
+            try_remove(self.filename)
 
     def read(self, mapname, null=None):
         """!Read 3D raster map into array

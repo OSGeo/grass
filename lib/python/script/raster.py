@@ -28,6 +28,7 @@ import types
 import time
 
 from core import *
+from utils import float_or_dms, parse_key_val
 
 # add raster history
 

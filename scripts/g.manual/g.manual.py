@@ -50,6 +50,7 @@ import sys
 import os
 import urllib
 
+from grass.script.utils import basename
 from grass.script import core as grass
 
 def start_browser(entry):
@@ -120,9 +121,9 @@ def main():
         browser_name = os.getenv('GRASS_HTML_BROWSER_MACOSX', '..').split('.')[2]
     elif sys.platform == 'cygwin':
         # hack for Cygwin
-        browser_name = grass.basename(browser, 'exe')
+        browser_name = basename(browser, 'exe')
     else:
-        browser_name = grass.basename(browser)
+        browser_name = basename(browser)
     
     # keep order!
     # first test for index...

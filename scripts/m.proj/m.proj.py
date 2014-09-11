@@ -93,6 +93,7 @@
 import sys
 import os
 import threading
+from grass.script.utils import separator, parse_key_val
 from grass.script import core as grass
 
 class TrThread(threading.Thread):
@@ -158,12 +159,12 @@ def main():
 	except ValueError:
 	    ifs = ofs = fs
 
-    ifs = grass.separator(ifs)
-    ofs = grass.separator(ofs)
+    ifs = separator(ifs)
+    ofs = separator(ofs)
 
     #### set up projection params
     s = grass.read_command("g.proj", flags='j')
-    kv = grass.parse_key_val(s)
+    kv = parse_key_val(s)
     if "XY location" in kv['+proj'] and (ll_in or ll_out):
 	grass.fatal(_("Unable to project to or from a XY location")) 
 

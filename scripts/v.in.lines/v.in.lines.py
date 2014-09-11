@@ -36,15 +36,16 @@ import sys
 import os
 import atexit
 import string
+from grass.script.utils import separator, try_remove
 from grass.script import core as grass
 
 def cleanup():
-    grass.try_remove(tmp)
+    try_remove(tmp)
 
 def main():
     global tmp
 
-    fs = grass.separator(options['separator'])
+    fs = separator(options['separator'])
     threeD = flags['z']
 
     prog = 'v.in.lines'

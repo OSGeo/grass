@@ -36,6 +36,7 @@ from core.gcmd import GError, RunCommand
 
 import grass.script.task as gtask
 import grass.script.core as gcore
+from grass.script.utils import try_remove
 from grass.script.core import ScriptError
 from core.debug import Debug
 
@@ -59,7 +60,7 @@ def toolboxesOutdated():
     to let gui regenerate it next time it starts."""
     path = os.path.join(GetSettingsPath(), 'toolboxes', 'menudata.xml')
     if os.path.exists(path):
-        gcore.try_remove(path)
+        try_remove(path)
 
 
 def getMenudataFile(userRootFile, newFile, fallback):

@@ -22,6 +22,7 @@ import copy
 import wx
 from wx.lib.newevent import NewEvent
 
+from grass.script.utils import try_remove
 from grass.script import core as grass
 
 from core          import utils
@@ -74,7 +75,7 @@ class RenderWMSMgr(wx.EvtHandler):
         self.updateProgress = Signal('RenderWMSMgr.updateProgress')
 
     def __del__(self):
-        grass.try_remove(self.tempMap)
+        try_remove(self.tempMap)
 
     def Render(self, cmd, env):
         """If it is needed, download missing WMS data.
@@ -117,8 +118,8 @@ class RenderWMSMgr(wx.EvtHandler):
             self.fetched_data_cmd = None
             self.renderedRegion = region
 
-            grass.try_remove(self.mapfile)
-            grass.try_remove(self.tempMap)
+            try_remove(self.mapfile)
+            try_remove(self.tempMap)
 
             self.currentPid = self.thread.GetId()
             self.thread.abort()

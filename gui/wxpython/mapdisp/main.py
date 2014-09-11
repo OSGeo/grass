@@ -38,10 +38,11 @@ from core.gcmd     import RunCommand
 from core.render   import Map, MapLayer
 from core.utils import _
 from mapdisp.frame import MapFrame
-from grass.script  import core as grass
 from core.debug    import Debug
 from core.settings import UserSettings
 
+from grass.script.utils import try_remove
+from grass.script import core as grass
 from grass.pydispatch.signal import Signal
 
 # for standalone app
@@ -377,7 +378,7 @@ class MapApp(wx.App):
             # self.timer.Stop()
             # terminate thread
             for f in monFile.itervalues():
-                grass.try_remove(f)
+                try_remove(f)
             
     def watcher(self):
         """Redraw, if new layer appears (check's timestamp of
