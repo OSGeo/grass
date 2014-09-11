@@ -940,7 +940,7 @@ Function DownloadInstallMSRuntime
 	ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2005_x86.exe" /q'
 	ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2008_x86.exe" /q'	
 	ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2010_x86.exe" /q'
-	CopyFiles "$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\*.dll" "$INSTDIR\extrabin"
+	CopyFiles "$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\*.dll" "$INSTALL_DIR\extrabin"
 	Delete "$TEMP\$ARCHIVE_NAME"
 	RMDir /r "$TEMP\$ORIGINAL_UNTAR_FOLDER"
 	;the following doesn't work. Maybe because the installer is still running?
