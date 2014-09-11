@@ -166,6 +166,7 @@ int main(int argc, char *argv[])
 	       "mod09A1s;%s;"
 	       "mod09CMG;%s;"
 	       "mod09CMGs;%s;"
+	       "mod09CMGi;%s;"
 	       "mod11A1;%s;"
 	       "mod11A2;%s;"
 	       "mod13A2;%s;"
@@ -176,13 +177,14 @@ int main(int argc, char *argv[])
 	       _("surf. refl. 500m 8-days, State QA"),
 	       _("surf. refl. 5000m daily"),
 	       _("surf. refl. 5000m daily, State QA"),
+	       _("surf. refl. 5000m daily, Internal Climatology"),
 	       _("LST 1km daily (Day/Night)"),
 	       _("LST 1km 8-days (Day/Night)"),
 	       _("VI 1km 16-days"),
 	       _("Brdf-Albedo Quality (Ancillary SDS) 1km 8-days"),
 	       _("Brdf-Albedo Quality (BRDF SDS) 1km 8-days"));
     productname->descriptions = desc_productname;
-    productname->options = "mod09Q1,mod09A1,mod09A1s,mod09CMG,mod09CMGs,mod11A1,mod11A2,mod13A2,mcd43B2,mcd43B2q";
+    productname->options = "mod09Q1,mod09A1,mod09A1s,mod09CMG,mod09CMGs,mod09CMGi,mod11A1,mod11A2,mod13A2,mcd43B2,mcd43B2q";
     productname->answer = "mod13A2";
     
     qcname = G_define_option();
@@ -217,6 +219,20 @@ int main(int argc, char *argv[])
 	       "land_water;%s;"
 	       "mod35_snow_ice;%s;"
 	       "pixel_adjacent_to_cloud;%s;"
+	       "icm_cloudy;%s;"
+	       "icm_clear;%s;"
+	       "icm_high_clouds;%s;"
+	       "icm_low_clouds;%s;"
+	       "icm_snow;%s;"
+	       "icm_fire;%s;"
+	       "icm_sun_glint;%s;"
+	       "icm_dust;%s;"
+	       "icm_cloud_shadow;%s;"
+	       "icm_pixel_is_adjacent_to_cloud;%s;"
+	       "icm_cirrus;%s;"
+	       "icm_pan_flag;%s;"
+	       "icm_criteria_for_aerosol_retrieval;%s;"
+	       "icm_aot_has_clim_val;%s;"
 	       "modland_qa;%s;"
 	       "vi_usefulness;%s;"
 	       "aerosol_quantity;%s;"
@@ -244,17 +260,31 @@ int main(int argc, char *argv[])
 	       _("mod11A2: Average Emissivity Error Classes"),
 	       _("mod11A2: MODIS Land General Quality Assessment"),
 	       _("mod11A2: Average LST Error Classes"),
+	       _("mod09*s: StateQA Aerosol Quantity"),
+	       _("mod09*s: StateQA BRDF Correction Performed"),
+	       _("mod09*s: StateQA Cirrus Detected"),
+	       _("mod09*s: StateQA Cloud Shadow"),
+	       _("mod09*s: StateQA Cloud State"),
+	       _("mod09*s: StateQA Internal Cloud Algorithm"),
+	       _("mod09*s: StateQA Internal Fire Algorithm"),
 	       _("mod09*s: StateQA Internal Snow Mask"),
-	       _("mod09*s: StateQA Internal Snow Mask"),
-	       _("mod09*s: StateQA Internal Snow Mask"),
-	       _("mod09*s: StateQA Internal Snow Mask"),
-	       _("mod09*s: StateQA Internal Snow Mask"),
-	       _("mod09*s: StateQA Internal Snow Mask"),
-	       _("mod09*s: StateQA Internal Snow Mask"),
-	       _("mod09*s: StateQA Internal Snow Mask"),
-	       _("mod09*s: StateQA Internal Snow Mask"),
-	       _("mod09*s: StateQA Internal Snow Mask"),
-	       _("mod09*s: StateQA Internal Snow Mask"),
+	       _("mod09*s: StateQA Land Water"),
+	       _("mod09*s: StateQA mod35 Snow Ice"),
+	       _("mod09*s: StateQA Pixel Adjacent to Cloud"),
+	       _("mod09*i: Internal CM: Cloudy"),
+	       _("mod09*i: Internal CM: Clear"),
+	       _("mod09*i: Internal CM: High Clouds"),
+	       _("mod09*i: Internal CM: Low Clouds"),
+	       _("mod09*i: Internal CM: Snow"),
+	       _("mod09*i: Internal CM: Fire"),
+	       _("mod09*i: Internal CM: Sun Glint"),
+	       _("mod09*i: Internal CM: Dust"),
+	       _("mod09*i: Internal CM: Cloud Shadow"),
+	       _("mod09*i: Internal CM: Pixel is Adjacent to Cloud"),
+	       _("mod09*i: Internal CM: Cirrus"),
+	       _("mod09*i: Internal CM: Pan Flag"),
+	       _("mod09*i: Internal CM: Criteria for Aerosol Retrieval"),
+	       _("mod09*i: Internal CM: AOT (aerosol optical depth) has clim. val."),
 	       _("mod13A2: MODIS Land General Quality Assessment"),
 	       _("mod13A2: Quality estimation of the pixel"),
 	       _("mod13A2: Quantity range of Aerosol"),
@@ -269,7 +299,7 @@ int main(int argc, char *argv[])
 	       _("mcd43B2: Quality of BRDF correction performed"),
 	       _("mcd43B2q: Quality of BRDF correction performed"));
     qcname->descriptions = desc_qcname;
-    qcname->options = "adjcorr,atcorr,cloud,data_quality,diff_orbit_from_500m,modland_qa,mandatory_qa_11A1,data_quality_flag_11A1,emis_error_11A1,lst_error_11A1,data_quality_flag_11A2,emis_error_11A2,mandatory_qa_11A2,lst_error_11A2,aerosol_quantity,brdf_correction_performed,cirrus_detected,cloud_shadow,cloud_state,internal_cloud_algorithm,internal_fire_algorithm,internal_snow_mask,land_water,mod35_snow_ice,pixel_adjacent_to_cloud,modland_qa,vi_usefulness,aerosol_quantity,pixel_adjacent_to_cloud,brdf_correction_performed,mixed_clouds,land_water,possible_snow_ice,possible_shadow,platform,land_water,sun_z_angle_at_local_noon,brdf_correction_performed";
+    qcname->options = "adjcorr,atcorr,cloud,data_quality,diff_orbit_from_500m,modland_qa,mandatory_qa_11A1,data_quality_flag_11A1,emis_error_11A1,lst_error_11A1,data_quality_flag_11A2,emis_error_11A2,mandatory_qa_11A2,lst_error_11A2,aerosol_quantity,brdf_correction_performed,cirrus_detected,cloud_shadow,cloud_state,internal_cloud_algorithm,internal_fire_algorithm,internal_snow_mask,land_water,mod35_snow_ice,pixel_adjacent_to_cloud,icm_cloudy,icm_clear,icm_high_clouds,icm_low_clouds,icm_snow,icm_fire,icm_sun_glint,icm_dust,icm_cloud_shadow,icm_pixel_is_adjacent_to_cloud,icm_cirrus,icm_pan_flag,icm_criteria_for_aerosol_retrieval,icm_aot_has_clim_val,modland_qa,vi_usefulness,aerosol_quantity,pixel_adjacent_to_cloud,brdf_correction_performed,mixed_clouds,land_water,possible_snow_ice,possible_shadow,platform,land_water,sun_z_angle_at_local_noon,brdf_correction_performed";
     qcname->answer = "modland_qa";
 
     input_band = G_define_option();
@@ -277,7 +307,7 @@ int main(int argc, char *argv[])
     input_band->type = TYPE_STRING;
     input_band->required = NO;
     input_band->description =
-      _("Band number of MODIS product (mod09Q1=[1,2],mod09A1=[1-7], mcd43B2q=[1-7])");
+      _("Band number of MODIS product (mod09Q1=[1,2],mod09A1=[1-7],m[o/y]d09CMG=[1-7], mcd43B2q=[1-7])");
     desc_input_band = NULL;
     G_asprintf(&desc_input_band,
                "1;%s;2;%s;3;%s;4;%s;5;%s;6;%s;7;%s",
@@ -315,24 +345,31 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("mod09Q1 product only has 2 bands"));
     }
     
-    /*mod09A1*/
-    if ((strcmp(qcflag, "cirrus_detected") && !(strcmp(product, "mod09A1s"))) ||
-	(strcmp(qcflag, "cloud_shadow") && !(strcmp(product, "mod09A1s"))) ||
-	(strcmp(qcflag, "cloud_state") && !(strcmp(product, "mod09A1s"))) ||
-	(strcmp(qcflag, "internal_cloud_algorithm") && !(strcmp(product, "mod09A1s"))) ||
-	(strcmp(qcflag, "internal_fire_algorithm") && !(strcmp(product, "mod09A1s"))) ||
-	(strcmp(qcflag, "internal_snow_mask") && !(strcmp(product, "mod09A1s"))) ||
-	(strcmp(qcflag, "mod35_snow_ice") && !(strcmp(product, "mod09A1s"))))
-	G_fatal_error(_("This bit flag is only available for MOD09A1s @ 500m products"));
+    /*mod09A1 stateqa or mod09CMG stateqa*/
+    if ((strcmp(qcflag, "cirrus_detected") && ( !(strcmp(product, "mod09A1s")) || !(strcmp(product, "mod09CMGs")) )) ||
+	(strcmp(qcflag, "cloud_shadow") && ( !(strcmp(product, "mod09A1s")) || !(strcmp(product, "mod09CMGs")) )) ||
+	(strcmp(qcflag, "cloud_state") && ( !(strcmp(product, "mod09A1s")) || !(strcmp(product, "mod09CMGs")) )) ||
+	(strcmp(qcflag, "internal_cloud_algorithm") && ( !(strcmp(product, "mod09A1s")) || !(strcmp(product, "mod09CMGs")) ))||
+	(strcmp(qcflag, "internal_fire_algorithm") && ( !(strcmp(product, "mod09A1s")) || !(strcmp(product, "mod09CMGs")) )) ||
+	(strcmp(qcflag, "internal_snow_mask") && ( !(strcmp(product, "mod09A1s")) || !(strcmp(product, "mod09CMGs")) )) ||
+	(strcmp(qcflag, "mod35_snow_ice") && ( !(strcmp(product, "mod09A1s")) || !(strcmp(product, "mod09CMGs")) )))
+	G_fatal_error(_("This bit flag is only available for MOD09A1s @ 500m or MOD09CMG @ 5000m products"));
 
     /*mod09CMG*/
-    if ((strcmp(qcflag, "cirrus_detected") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "cloud_shadow") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "cloud_state") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "internal_cloud_algorithm") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "internal_fire_algorithm") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "internal_snow_mask") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "mod35_snow_ice") && !(strcmp(product, "mod09CMGi"))))
+    if ((strcmp(qcflag, "icm_cloudy") && !(strcmp(product, "mod09CMGi"))) ||
+	(strcmp(qcflag, "icm_clear") && !(strcmp(product, "mod09CMGi"))) ||
+	(strcmp(qcflag, "icm_high_clouds") && !(strcmp(product, "mod09CMGi"))) ||
+	(strcmp(qcflag, "icm_low_clouds") && !(strcmp(product, "mod09CMGi"))) ||
+	(strcmp(qcflag, "icm_snow") && !(strcmp(product, "mod09CMGi"))) ||
+	(strcmp(qcflag, "icm_fire") && !(strcmp(product, "mod09CMGi"))) ||
+	(strcmp(qcflag, "icm_sun_glint") && !(strcmp(product, "mod09CMGi"))) ||
+	(strcmp(qcflag, "icm_dust") && !(strcmp(product, "mod09CMGi"))) ||
+	(strcmp(qcflag, "icm_cloud_shadow") && !(strcmp(product, "mod09CMGi"))) ||
+	(strcmp(qcflag, "icm_pixel_is_adjacent_to_cloud") && !(strcmp(product, "mod09CMGi"))) ||
+	(strcmp(qcflag, "icm_cirrus") && !(strcmp(product, "mod09CMGi"))) ||
+	(strcmp(qcflag, "icm_pan_flag") && !(strcmp(product, "mod09CMGi"))) ||
+	(strcmp(qcflag, "icm_criteria_for_aerosol_retrieval") && !(strcmp(product, "mod09CMGi"))) ||
+	(strcmp(qcflag, "icm_aot_has_clim_val") && !(strcmp(product, "mod09CMGi"))))
 	G_fatal_error(_("This bit flag is only available for mod09CMGi @ 5000m products"));
 
     /*mod13A2*/
@@ -500,6 +537,11 @@ int main(int argc, char *argv[])
             else if (!strcmp(product, "mod09CMGs"))
             {
 	        /* NOTE: we simply reuse the MOD09A1s functions - TODO: check if appropriate */
+		/* NOTE: Not sure it is appropriate=> https://lpdaac.usgs.gov/products/modis_products_table/myd09cmg*/
+	        /* NOTE: 0-1: MOD35 cloud, 2: cloud shadow, 3-5: land/water flag, 6-7: aerosol Quantity*/
+	        /* NOTE: 8-9: cirrus detected, 10: internal cloud algorithm flag, 11: internal fire algorithm flag*/
+	        /* NOTE: 12: MOD35 snow/ice, 13: Pixel is adjacent to cloud, 14: BRDF correction is performed*/
+	        /* NOTE: 15:internal snow algorithm flag*/
 	        if (!strcmp(qcflag, "cloud_state"))
 		/*calculate mod09A1s cloud state flag  */ 
                     c = mod09A1sa(c);
@@ -533,6 +575,52 @@ int main(int argc, char *argv[])
 	        if (!strcmp(qcflag, "internal_snow_mask")) 
 		/*calculate mod09A1s internal snow mask flag  */ 
                     c = mod09A1sk(c);
+            }
+            else if (!strcmp(product, "mod09CMGi"))
+            {
+	        /* Internal Climatology for MOD09CMG or MYD09CMG  */
+	        if (!strcmp(qcflag, "icm_cloudy"))
+		/*calculate mod09A1i cloudy  */ 
+                    c = mod09CMGia(c);
+	        if (!strcmp(qcflag, "icm_clear")) 
+		/*calculate mod09A1i clear flag  */ 
+                    c = mod09CMGib(c);
+	        if (!strcmp(qcflag, "icm_high_clouds")) 
+		/*calculate mod09A1i high clouds flag  */ 
+                    c = mod09CMGic(c);
+	        if (!strcmp(qcflag, "icm_low_clouds")) 
+		/*calculate mod09A1s low clouds flag  */ 
+                    c = mod09CMGid(c);
+	        if (!strcmp(qcflag, "icm_snow")) 
+		/*calculate mod09A1i snow flag  */ 
+                    c = mod09CMGie(c);
+	        if (!strcmp(qcflag, "icm_fire")) 
+		/*calculate mod09A1i fire flag  */ 
+                    c = mod09CMGif(c);
+	        if (!strcmp(qcflag, "icm_sun_glint")) 
+		/*calculate mod09A1i sun glint flag  */ 
+                    c = mod09CMGig(c);
+	        if (!strcmp(qcflag, "icm_dust")) 
+		/*calculate mod09A1i dust flag  */ 
+                    c = mod09CMGih(c);
+	        if (!strcmp(qcflag, "icm_cloud_shadow")) 
+		/*calculate mod09A1i cloud shadow flag  */ 
+                    c = mod09CMGii(c);
+	        if (!strcmp(qcflag, "icm_pixel_is_adjacent_to_cloud")) 
+		/*calculate mod09A1i pixel is adjacent to cloud flag  */ 
+                    c = mod09CMGij(c);
+	        if (!strcmp(qcflag, "icm_cirrus")) 
+		/*calculate mod09A1i cirrus flag  */ 
+                    c = mod09CMGik(c);
+	        if (!strcmp(qcflag, "icm_pan_flag")) 
+		/*calculate mod09A1i pan flag  */ 
+                    c = mod09CMGil(c);
+	        if (!strcmp(qcflag, "icm_criteria_for_aerosol_retrieval")) 
+		/*calculate mod09A1i criteria for aerosol retrieval flag  */ 
+                    c = mod09CMGim(c);
+	        if (!strcmp(qcflag, "icm_aot_has_clim_val")) 
+		/*calculate mod09A1i aot has clim val flag  */ 
+                    c = mod09CMGin(c);
             }
             else if (!strcmp(product, "mod13A2"))
             {
