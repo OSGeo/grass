@@ -363,6 +363,24 @@ int main(int argc, char *argv[])
 
 	dx = fbox.E - fbox.W;
 	dy = fbox.N - fbox.S;
+
+	if (geodesic) {
+	    double d;
+	    
+	    G_begin_distance_calculations();
+	    dx = G_distance(fbox.W, fbox.S, fbox.E, fbox.S);
+	    d = G_distance(fbox.W, fbox.N, fbox.E, fbox.N);
+	    
+	    if (dx < d)
+		dx = d;
+
+	    dy = G_distance(fbox.W, fbox.S, fbox.W, fbox.N);
+	    d = G_distance(fbox.E, fbox.S, fbox.E, fbox.N);
+	    
+	    if (dy < d)
+		dy = d;
+	}
+
 	if (Vect_is_3d(&From))
 	    dz = fbox.T - fbox.B;
 	else
