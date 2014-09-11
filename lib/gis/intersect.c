@@ -106,17 +106,23 @@ int G_intersect_line_segments(double ax1, double ay1, double ax2, double ay2,
 
     /* lines are parallel */
     if (D1 || D2) {
-	return 0;
+	return -1;
     }
 
     /* segments are colinear. check for overlap */
 
     /* Collinear vertical */
     if (ax1 == ax2) {
-	if (ay1 > by2)
-	    return 0;
-	if (ay2 < by1)
-	    return 0;
+	if (ay1 > by2) {
+	    *x = ax1;
+	    *y = ay1;
+	    return 0;		/* extensions overlap */
+	}
+	if (ay2 < by1) {
+	    *x = ax2;
+	    *y = ay2;
+	    return 0;		/* extensions overlap */
+	}
 
 	/* there is overlap */
 
@@ -140,13 +146,19 @@ int G_intersect_line_segments(double ax1, double ay1, double ax2, double ay2,
 	    *x = ax2;
 	    *y = ay2;
 	}
-	return -1;
+	return 2;
     }
     else {
-	if (ax1 > bx2)
-	    return 0;
-	if (ax2 < bx1)
-	    return 0;
+	if (ax1 > bx2) {
+	    *x = ax1;
+	    *y = ay1;
+	    return 0;		/* extensions overlap */
+	}
+	if (ax2 < bx1) {
+	    *x = ax2;
+	    *y = ay2;
+	    return 0;		/* extensions overlap */
+	}
 
 	/* there is overlap */
 
@@ -170,7 +182,7 @@ int G_intersect_line_segments(double ax1, double ay1, double ax2, double ay2,
 	    *x = ax2;
 	    *y = ay2;
 	}
-	return -1;
+	return 2;
     }
 
     return 0; /* should not be reached */
