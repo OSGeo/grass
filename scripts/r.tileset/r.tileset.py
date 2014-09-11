@@ -112,6 +112,7 @@ import subprocess
 import tempfile
 import math
 
+from grass.script.utils import separator
 from grass.script import core as grass
 
 def bboxToPoints(bbox):
@@ -266,7 +267,7 @@ def main():
     grass.debug('Getting destination region')
 
     # output field separator
-    fs = grass.separator(options['separator'])
+    fs = separator(options['separator'])
 
     # project the destination region into the source:
     grass.verbose('Projecting destination region into source...')

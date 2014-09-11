@@ -10,7 +10,7 @@ import os
 
 from core import globalvar, gcmd
 from core.utils import _
-from grass.script import core as grass
+from grass.script.utils import try_remove
 from rlisetup.functions import retRLiPath
 from rlisetup.wizard import RLIWizard
 import locale
@@ -217,7 +217,7 @@ class RLiSetupFrame(wx.Frame):
 
         if dlg.ShowModal() == wx.ID_YES:
             self.listfileBox.Delete(self.listfileBox.GetSelections()[0])
-            grass.try_remove(os.path.join(self.rlipath, confile))
+            try_remove(os.path.join(self.rlipath, confile))
             self.listfiles = self.ListFiles()
         dlg.Destroy()
         return

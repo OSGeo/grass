@@ -13,6 +13,7 @@ the end users.
 - \subpage pythonUsage
 - \subpage pythonModules
  - \subpage pythonCore
+ - \subpage pythonUtils
  - \subpage pythonDb
  - \subpage pythonRaster
  - \subpage pythonVector
@@ -180,17 +181,29 @@ Returns the name of a temporary file, created with \gmod{g.tempfile}.
 
  - python::script::core::create_location()
 
-<b>Various utilities, not specific to GRASS</b>
- 
- - python::script::core::basename()
+<b>Others</b>
 
  - python::script::core::find_program()
 
- - python::script::core::try_remove()
+\subsection pythonUtils Utils
+ 
+ - python::script::utils::float_or_dms()
+ 
+ - python::script::utils::separator()
 
- - python::script::core::try_rmdir()
+ - python::script::utils::diff_files()
 
- - python::script::core::float_or_dms()
+ - python::script::utils::try_remove()
+
+ - python::script::utils::try_rmdir()
+
+ - python::script::utils::basename()
+
+ - python::script::utils::parse_key_val()
+
+ - python::script::utils::decode()
+
+ - python::script::utils::encode()
 
 \subsection pythonDb Database
 

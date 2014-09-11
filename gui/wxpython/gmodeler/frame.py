@@ -55,6 +55,7 @@ from gmodeler.giface import GraphicalModelerGrassInterface
 from gmodeler.model       import *
 from gmodeler.dialogs     import *
 
+from grass.script.utils import try_remove
 from grass.script import core as grass
 
 class ModelFrame(wx.Frame):
@@ -1726,7 +1727,7 @@ class PythonPanel(wx.Panel):
 
     def OnDone(self, cmd, returncode):
         """Python script finished"""
-        grass.try_remove(self.filename)
+        try_remove(self.filename)
         self.filename = None
         
     def SaveAs(self, force = False):

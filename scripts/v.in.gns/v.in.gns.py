@@ -39,6 +39,7 @@
 
 import sys
 import os
+from grass.script.utils import try_remove, basename, parse_key_val
 from grass.script import core as grass
 from grass.script import vector as vgrass
 
@@ -47,11 +48,11 @@ def main():
     filevect = options['output']
     
     if not filevect:
-	filevect = grass.basename(fileorig, 'txt')
+	filevect = basename(fileorig, 'txt')
 
     #are we in LatLong location?
     s = grass.read_command("g.proj", flags='j')
-    kv = grass.parse_key_val(s)
+    kv = parse_key_val(s)
     if kv['+proj'] != 'longlat':
 	grass.fatal(_("This module only operates in LatLong/WGS84 locations"))
 
@@ -139,7 +140,7 @@ def main():
 		      input = tmpfile, output = filevect,
 		      columns = columns)
 
-    grass.try_remove(tmpfile)
+    try_remove(tmpfile)
 
     # write cmd history:
     vgrass.vector_history(filevect)

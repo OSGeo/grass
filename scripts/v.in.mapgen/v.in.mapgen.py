@@ -50,11 +50,12 @@ import atexit
 import string
 import time
 import shutil
+from grass.script.utils import try_remove
 from grass.script import core as grass
 
 def cleanup():
-    grass.try_remove(tmp)
-    grass.try_remove(tmp + '.dig')
+    try_remove(tmp)
+    try_remove(tmp + '.dig')
 
 def main():
     global tmp

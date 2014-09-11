@@ -50,12 +50,13 @@ import math
 import atexit
 import glob
 import shutil
+from grass.script.utils import try_remove, basename
 from grass.script import core as grass
 
 def cleanup():
-    grass.try_remove(tmp)
+    try_remove(tmp)
     for f in glob.glob(tmp + '_*'):
-	grass.try_remove(f)
+	try_remove(f)
 
 def plot_xgraph():
     newline = ['\n']
@@ -480,7 +481,7 @@ def main():
     # Now output:
 
     if eps:
-	psout = grass.basename(eps, 'eps') + '.eps'
+	psout = basename(eps, 'eps') + '.eps'
 	plot_eps(psout)
     elif xgraph:
 	plot_xgraph()

@@ -41,6 +41,7 @@ import sys
 import os
 import shutil
 import glob
+from grass.script.utils import try_rmdir, try_remove, basename
 from grass.script import core as grass
 
 def main():
@@ -66,7 +67,7 @@ def main():
     if type not in ['point','line','area']:
 	grass.fatal(_('Must specify one of "point", "line", or "area".'))
 
-    e00name = grass.basename(filename, 'e00')
+    e00name = basename(filename, 'e00')
     # avcimport only accepts 13 chars:
     e00shortname = e00name[:13]
 
@@ -85,7 +86,7 @@ def main():
 
     #make a temporary directory
     tmpdir = grass.tempfile()
-    grass.try_remove(tmpdir)
+    try_remove(tmpdir)
     os.mkdir(tmpdir)
 
     files = glob.glob(e00name + '.e[0-9][0-9]') + glob.glob(e00name + '.E[0-9][0-9]')
@@ -115,8 +116,8 @@ def main():
 	grass.message(_("E00 ASCII found and converted to Arc Coverage in current directory"))
     else:
 	grass.message(_("E00 Compressed ASCII found. Will uncompress first..."))
-	grass.try_remove(e00shortname)
-	grass.try_remove(info)
+	try_remove(e00shortname)
+	try_remove(info)
 	grass.call(['e00conv', filename, e00tmp + '.e00'])
 	grass.message(_("...converted to Arc Coverage in current directory"))
 	grass.call(['avcimport', e00tmp + '.e00', e00shortname], stderr = nuldev)
@@ -141,10 +142,10 @@ def main():
     for root, dirs, files in os.walk('.', False):
 	for f in files:
 	    path = os.path.join(root, f)
-	    grass.try_remove(path)
+	    try_remove(path)
 	for d in dirs:
 	    path = os.path.join(root, d)
-	    grass.try_rmdir(path)
+	    try_rmdir(path)
 
     os.chdir('..')
     os.rmdir(tmpdir)

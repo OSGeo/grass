@@ -54,6 +54,7 @@
 
 import sys
 import os
+from grass.script.utils import try_remove, basename
 from grass.script import core as grass
 
 def main():
@@ -67,7 +68,7 @@ def main():
 	format = "ESRI_Shapefile"
 
     if format.lower() == 'csv':
-	olayer = grass.basename(dsn, 'csv')
+	olayer = basename(dsn, 'csv')
     else:
 	olayer = None
 
@@ -89,13 +90,13 @@ def main():
     if format == "ESRI_Shapefile":
 	exts = ['shp', 'shx', 'prj']
 	if dsn.endswith('.dbf'):
-	    outname = grass.basename(dsn, 'dbf')
+	    outname = basename(dsn, 'dbf')
 	    for ext in exts:
-		grass.try_remove("%s.%s" % (outname, ext))
+		try_remove("%s.%s" % (outname, ext))
 	    outname += '.dbf'
 	else:
 	    for ext in exts:
-		grass.try_remove(os.path.join(dsn, "%s.%s" % (input, ext)))
+		try_remove(os.path.join(dsn, "%s.%s" % (input, ext)))
 	    outname = os.path.join(dsn, input + ".dbf")
     elif format.lower() == 'csv':
 	outname = dsn + '.csv'
