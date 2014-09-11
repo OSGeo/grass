@@ -536,12 +536,6 @@ int main(int argc, char *argv[])
             }
             else if (!strcmp(product, "mod09CMGs"))
             {
-	        /* NOTE: we simply reuse the MOD09A1s functions - TODO: check if appropriate */
-		/* NOTE: Not sure it is appropriate=> https://lpdaac.usgs.gov/products/modis_products_table/myd09cmg*/
-	        /* NOTE: 0-1: MOD35 cloud, 2: cloud shadow, 3-5: land/water flag, 6-7: aerosol Quantity*/
-	        /* NOTE: 8-9: cirrus detected, 10: internal cloud algorithm flag, 11: internal fire algorithm flag*/
-	        /* NOTE: 12: MOD35 snow/ice, 13: Pixel is adjacent to cloud, 14: BRDF correction is performed*/
-	        /* NOTE: 15:internal snow algorithm flag*/
 	        if (!strcmp(qcflag, "cloud_state"))
 		/*calculate mod09A1s cloud state flag  */ 
                     c = mod09A1sa(c);

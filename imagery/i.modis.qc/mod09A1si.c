@@ -1,6 +1,6 @@
 /* Pixel adjacent to cloud unsigned int bits[13]
- * 0 -> class 0: Yes
- * 1 -> class 1: No
+ * 0 -> class 0: No
+ * 1 -> class 1: Yes
  */  
 
 #include <grass/raster.h>
