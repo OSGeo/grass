@@ -36,10 +36,6 @@ from grass.script import raster as grast
 from functions import SamplingType, sampleAreaVector, convertFeature, obtainAreaVector
 from core.gcmd import GError, GMessage, RunCommand
 
-#@NOTE: r.li.setup writes in the settings file with
-## r.li.windows.tcl:
-#exec echo "SAMPLINGFRAME $per_x|$per_y|$per_rl|$per_cl" >> $env(TMP).set
-
 
 class RLIWizard(object):
     """
@@ -54,7 +50,7 @@ class RLIWizard(object):
         self.rlipath = retRLiPath()
 
         self.msAreaList = []
-        #pages
+        # pages
         self.startpage = FirstPage(self.wizard, self)
         self.drawsampleframepage = DrawSampleFramePage(self.wizard, self)
         self.keyboardpage = KeyboardPage(self.wizard, self)
@@ -67,7 +63,7 @@ class RLIWizard(object):
         self.moving = MovingKeyPage(self.wizard, self)
         self.regions = DrawRegionsPage(self.wizard, self)
 
-        #order of pages
+        # order of pages
         self.startpage.SetNext(self.samplingareapage)
         self.keyboardpage.SetPrev(self.startpage)
         self.keyboardpage.SetNext(self.samplingareapage)
@@ -96,7 +92,7 @@ class RLIWizard(object):
 
         self.summarypage.SetPrev(self.samplingareapage)
 
-        #layout
+        # layout
         self.startpage.DoLayout()
         self.drawsampleframepage.DoLayout()
         self.keyboardpage.DoLayout()
@@ -110,7 +106,7 @@ class RLIWizard(object):
         self.vectorareas.DoLayout()
 
         self.wizard.FitToPage(self.startpage)
-        #run_wizard
+        # run_wizard
         if self.wizard.RunWizard(self.startpage):
             dlg = wx.MessageDialog(parent=self.parent,
                                 message=_("Do you want to create r.li "
@@ -157,9 +153,9 @@ class RLIWizard(object):
             self.SF_X = 0.0
             self.SF_Y = 0.0
             self.SF_RL = abs(int(float(self.gregion['s'] - self.gregion['n'])
-                        / float(self.gregion['nsres'])))
+                                 / float(self.gregion['nsres'])))
             self.SF_CL = abs(int(float(self.gregion['e'] - self.gregion['w'])
-                        / float(self.gregion['ewres'])))
+                                 / float(self.gregion['ewres'])))
             self.SF_N = self.gregion['n']
             self.SF_S = self.gregion['s']
             self.SF_E = self.gregion['e']
@@ -570,7 +566,6 @@ class KeyboardPage(TitledPage):
         TitledPage.__init__(self, wizard, _("Insert sampling frame parameter"))
 
         self.parent = parent
-        self.sizer.AddGrowableCol(2)
         self.col_len = ''
         self.row_len = ''
         self.col_up = '0'
@@ -589,6 +584,7 @@ class KeyboardPage(TitledPage):
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(item=self.ColUpLefttxt, border=5, pos=(1, 2),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
+        self.sizer.AddGrowableCol(2)
         #row up/left
         self.RowUpLeftlabel = wx.StaticText(parent=self, id=wx.ID_ANY,
                                             label=_('Row of upper left corner'))
@@ -1172,7 +1168,6 @@ class MovingKeyPage(TitledPage):
         TitledPage.__init__(self, wizard, _("Set sample units"))
 
         self.parent = parent
-        self.sizer.AddGrowableCol(2)
         self.width = ''
         self.height = ''
         self.boxtype = 'rectangle'
@@ -1204,6 +1199,7 @@ class MovingKeyPage(TitledPage):
         self.sizer.Add(item=self.heightTxt, border=5, pos=(3, 2),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
 
+        self.sizer.AddGrowableCol(2)
         self.widthLabels = [_('Width size (in cells) ?'),
                             _('What radius size (in meters) ?')]
         self.heightLabels = [_('Height size (in cells) ?'),
@@ -1227,16 +1223,10 @@ class MovingKeyPage(TitledPage):
         self.heightLabel.SetLabel(self.heightLabels[chosen])
         self.sizer.Layout()
         if chosen == 0:
-            if self.parent.samplingareapage.samplingtype == SamplingType.MVWIN:
-                self.parent.samplingareapage.samplingtype = SamplingType.KMVWINR
-            else:
-                self.parent.samplingareapage.samplingtype = SamplingType.KMVWINC
+            self.parent.samplingareapage.samplingtype = SamplingType.KMVWINR
             self.boxtype = 'rectangle'
         elif chosen == 1:
-            if self.parent.samplingareapage.samplingtype == SamplingType.MVWIN:
-                self.parent.samplingareapage.samplingtype = SamplingType.KMVWINC
-            else:
-                self.parent.samplingareapage.samplingtype = SamplingType.MMVWINC
+            self.parent.samplingareapage.samplingtype = SamplingType.KMVWINC
             self.boxtype = 'circle'
 
     def CheckInput(self):
@@ -1549,7 +1539,6 @@ class SummaryPage(TitledPage):
         global rlisettings
 
         self.parent = parent
-        self.sizer.AddGrowableCol(2)
 
         #configuration file name
         self.conflabel = wx.StaticText(parent=self, id=wx.ID_ANY,
@@ -1560,7 +1549,6 @@ class SummaryPage(TitledPage):
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(item=self.conftxt, border=5, pos=(0, 1),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
-
         #raster name
         self.rastlabel = wx.StaticText(parent=self, id=wx.ID_ANY,
                                        label=_('Raster name:'))
@@ -1651,6 +1639,7 @@ class SummaryPage(TitledPage):
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(item=self.unitsmoretxt2, border=5, pos=(11, 1),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
+        
 
     def OnEnterPage(self, event):
         """Insert values into text controls for summary of location
