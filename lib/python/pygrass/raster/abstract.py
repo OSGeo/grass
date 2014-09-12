@@ -50,7 +50,8 @@ class Info(object):
         """Read the information for a raster map. ::
 
             >>> info = Info('elevation')
-            >>> info                                      # doctest: +ELLIPSIS
+            >>> info.read()
+            >>> info
             elevation@
             rows: 1350
             cols: 1500
@@ -58,7 +59,7 @@ class Info(object):
             east:  645000.0 west: 630000.0 ewres:10.0
             range: 56, 156
             proj: 99
-            ...
+            <BLANKLINE>
 
         """
         self.name = name
@@ -70,8 +71,7 @@ class Info(object):
         libraster.Rast_read_range(self.name, self.mapset, self.c_range)
 
     def _get_raster_region(self):
-        if self.name and self.mapset:
-            libraster.Rast_get_cellhd(self.name, self.mapset, self.c_region)
+        libraster.Rast_get_cellhd(self.name, self.mapset, self.c_region)
 
     def read(self):
         self._get_range()
@@ -175,8 +175,7 @@ class RasterAbstractBase(object):
     * Implements color, history and category handling
     * Renaming, deletion, ...
     """
-    def __init__(self, name, mapset="",
-                 mode='r', mtype='FCELL', overwrite=False):
+    def __init__(self, name, mapset="", *aopen, **kwopen):
         """The constructor need at least the name of the map
         *optional* field is the `mapset`. ::
 
@@ -206,12 +205,14 @@ class RasterAbstractBase(object):
         self.hist = History(self.name, self.mapset)
         self.cats = Category(self.name, self.mapset)
         self.info = Info(self.name, self.mapset)
-        self.mode = mode
-        self.mtype = mtype
-        self.overwrite = overwrite
+        self._aopen = aopen
+        self._kwopen = kwopen
+        self._mtype = 'CELL'
+        self._mode = 'r'
+        self._overwrite = False
 
     def __enter__(self):
-        self.open()
+        self.open(*self._aopen, **self._kwopen)
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
@@ -431,8 +432,7 @@ class RasterAbstractBase(object):
     def has_cats(self):
         """Return True if the raster map has categories"""
         if self.exist():
-            self.cats.read(self)
-            self.close()
+            self.cats.read()
             if len(self.cats) != 0:
                 return True
         return False
