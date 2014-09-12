@@ -378,10 +378,26 @@ class Point(Geo):
         return "Point(%s)" % ', '.join(['%f' % coor for coor in self.coords()])
 
     def __eq__(self, pnt):
+        """Return True if the coordinates are the same.
+
+        >>> p0 = Point()
+        >>> p1 = Point()
+        >>> p2 = Point(1, 1)
+        >>> p0 == p1
+        True
+        >>> p1 == p2
+        False
+        """
         if isinstance(pnt, Point):
             return pnt.coords() == self.coords()
 
         return Point(*pnt).coords() == self.coords()
+
+    def __ne__(self, other):
+        return not self == other
+
+    # Restore Python 2 hashing beaviour on Python 3
+    __hash__ = object.__hash__
 
     def coords(self):
         """Return a tuple with the point coordinates. ::
@@ -619,7 +635,7 @@ class Line(Geo):
     def append(self, pnt):
         """Appends one point to the end of a line, using the
         ``Vect_append_point`` C function.
-        
+
         :param pnt: the point to add to line
         :type pnt: a Point object or a tuple with the coordinates
 
@@ -739,11 +755,11 @@ class Line(Geo):
         return libvect.Vect_line_geodesic_length(self.c_points)
 
     def distance(self, pnt):
-        """Calculate the distance between line and a point. 
-        
+        """Calculate the distance between line and a point.
+
         :param pnt: the point to calculate distance
         :type pnt: a Point object or a tuple with the coordinates
-        
+
         Return a tuple with:
 
             * the closest point on the line,
@@ -847,7 +863,7 @@ class Line(Geo):
     def prune_thresh(self, threshold):
         """Remove points in threshold, using the ``Vect_line_prune_thresh``
         C funtion.
-        
+
         :param threshold: the threshold value where prune points
         :type threshold: num
 
@@ -867,7 +883,7 @@ class Line(Geo):
     def remove(self, pnt):
         """Delete point at given index and move all points above down, using
         `Vect_line_delete_point` C function.
-        
+
         :param pnt: the point to remove
         :type pnt: a Point object or a tuple with the coordinates
 
@@ -1087,7 +1103,7 @@ class Boundary(Line):
         """Return left value
 
         :param idonly: True to return only the cat of feature
-        :type idonly: bool        
+        :type idonly: bool
         """
         return self._get_centroid(self.left_id, idonly)
 
@@ -1131,7 +1147,7 @@ class Centroid(Point):
         Centoid(0.000000, 10.000000)
         >>> from grass.pygrass.vector import VectorTopo
         >>> geo = VectorTopo('geology')
-        >>> geo.open()
+        >>> geo.open(mode='r')
         >>> centroid = Centroid(v_id=1, c_mapinfo=geo.c_mapinfo)
         >>> centroid
         Centoid(893202.874416, 297339.312795)
@@ -1463,7 +1479,7 @@ class Area(Geo):
     def contain_pnt(self, pnt, bbox=None):
         """Check if point is in area.
 
-        :param pnt: the point to analyze 
+        :param pnt: the point to analyze
         :type pnt: a Point object or a tuple with the coordinates
         :param bbox: the bounding box where run the analysis
         :type bbox: a Bbox object
