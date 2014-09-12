@@ -24,8 +24,10 @@ from core.giface import Notification
 class Layer(object):
     """@implements core::giface::Layer
 
-    .. note:: Currently implemented without specifying the interface.
-    It only provides all attributes of existing layer as used in lmgr.
+    .. note::
+
+        Currently implemented without specifying the interface.
+        It only provides all attributes of existing layer as used in lmgr.
     """
     def __init__(self, pydata):
         self._pydata = pydata
@@ -150,15 +152,18 @@ class LayerManagerGrassInterface(object):
         cmdlist = ['g.manual', 'entry=%s' % entry]
         if online:
             cmdlist.append('-o')
-        self.RunCmd(cmdlist, compReg = False, notification=Notification.NO_NOTIFICATION)
+        self.RunCmd(cmdlist, compReg=False,
+                    notification=Notification.NO_NOTIFICATION)
 
-    def WriteLog(self, text, wrap = None,
+    def WriteLog(self, text, wrap=None,
                  notification=Notification.HIGHLIGHT):
-        self.lmgr._gconsole.WriteLog(text=text, wrap=wrap, 
+        self.lmgr._gconsole.WriteLog(text=text, wrap=wrap,
                                      notification=notification)
 
-    def WriteCmdLog(self, text, pid=None, notification=Notification.MAKE_VISIBLE):
-        self.lmgr._gconsole.WriteCmdLog(text=text, pid=pid, notification=notification)
+    def WriteCmdLog(self, text, pid=None,
+                    notification=Notification.MAKE_VISIBLE):
+        self.lmgr._gconsole.WriteCmdLog(text=text, pid=pid,
+                                        notification=notification)
 
     def WriteWarning(self, text):
         self.lmgr._gconsole.WriteWarning(text=text)
@@ -189,6 +194,7 @@ class LayerManagerGrassInterface(object):
 
     def UpdateCmdHistory(self, cmd):
         self.lmgr.goutput.GetPrompt().UpdateCmdHistory(cmd)
+
 
 class LayerManagerGrassInterfaceForMapDisplay(object):
     """Provides reference only to the given layer list (according to tree),

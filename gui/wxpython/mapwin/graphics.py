@@ -102,10 +102,12 @@ class GraphicsSet:
                 if label is None:
                     self.properties["text"] = None
                 else:
-                    self.properties["text"]['coords'] = [coords[0] + size, coords[1] + size, size, size]
+                    self.properties["text"]['coords'] = [coords[0] + size,
+                                                         coords[1] + size,
+                                                         size, size]
                     self.properties["text"]['color'] = self.parentMapWin.pen.GetColour()
                     self.properties["text"]['text'] = label
-                    
+
                 self.drawFunc(pdc=pdc, drawid=item.GetId(),
                               coords=coords,
                               text=self.properties["text"],
@@ -124,7 +126,7 @@ class GraphicsSet:
 
                 self.drawFunc(pdc=pdc, pen=pen,
                               coords=coords, drawid=item.GetId())
-             
+
             elif self.graphicsType == "rectangle":
                 if item.GetPropertyVal("penName"):
                     pen = self.pens[item.GetPropertyVal("penName")]
@@ -149,7 +151,7 @@ class GraphicsSet:
                 else:
                     coords = item.GetCoords()
 
-                self.drawFunc(pdc=pdc, pen=pen, 
+                self.drawFunc(pdc=pdc, pen=pen,
                               coords=coords, drawid=item.GetId())
             itemOrderNum += 1
 
@@ -159,10 +161,12 @@ class GraphicsSet:
         Added item is put to the last place in drawing order.
         Could be 'point' or 'line' according to graphicsType.
 
-        :param coords: - list of east, north coordinates (double) of item
-                        Example: point: [1023, 122]
-                                 line: [[10, 12],[20,40],[23, 2334]]
-                                 rectangle: [[10, 12], [33, 45]]
+        :param coords: list of east, north coordinates (double) of item.
+                       Example:
+
+                           * point: [1023, 122]
+                           * line: [[10, 12],[20,40],[23, 2334]]
+                           * rectangle: [[10, 12], [33, 45]]
         :param penName: the 'default' pen is used if is not defined
         :type penName: str
         :param label: label, which will be drawn with point. It is
@@ -174,7 +178,8 @@ class GraphicsSet:
         :type hide: bool
         :return: (GraphicsSetItem) - added item reference
         """
-        item = GraphicsSetItem(coords=coords, penName=penName, label=label, hide=hide)
+        item = GraphicsSetItem(coords=coords, penName=penName, label=label,
+                               hide=hide)
         self.itemsList.append(item)
 
         return item
@@ -385,9 +390,11 @@ class GraphicsSetItem:
         """Set coordinates of item
 
         :param coords: list of east, north coordinates (double) of item
-                       Example: point: [1023, 122]
-                                line: [[10, 12],[20,40],[23, 2334]]
-                                rectangle: [[10, 12], [33, 45]]
+                       Example:
+
+                           * point: [1023, 122]
+                           * line: [[10, 12],[20,40],[23, 2334]]
+                           * rectangle: [[10, 12], [33, 45]]
         """
         self.coords = coords
 

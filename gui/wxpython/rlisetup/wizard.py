@@ -530,13 +530,14 @@ class FirstPage(TitledPage):
         """
         next = wx.FindWindowById(wx.ID_FORWARD)
         next.Enable(self.CheckInput())
-        wx.CallAfter(wx.FindWindowById(wx.ID_FORWARD).Enable, self.CheckInput())
+        wx.CallAfter(wx.FindWindowById(wx.ID_FORWARD).Enable,
+                     self.CheckInput())
 
     def CheckInput(self):
         """Check input fields.
 
         :return: True if configuration file is given and raster xor vector map,
-        False otherwise
+                 False otherwise
         """
         #R#return bool(self.conf_name and (bool(self.rast) != bool(self.vect)))
         return bool(self.conf_name and bool(self.rast))
@@ -1392,7 +1393,7 @@ class DrawSampleUnitsPage(TitledPage):
 
         gtype = self.parent.drawunits.drawtype
         self.mapPanel = RLiSetupMapPanel(self,
-                                         samplingType=self.parent.samplingareapage.samplingtype, 
+                                         samplingType=self.parent.samplingareapage.samplingtype,
                                          )
         if gtype == 'circle':
             self.mapPanel.afterCircleDrawn.connect(self.SampleFrameChanged)
@@ -1639,7 +1640,7 @@ class SummaryPage(TitledPage):
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(item=self.unitsmoretxt2, border=5, pos=(11, 1),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
-        
+
 
     def OnEnterPage(self, event):
         """Insert values into text controls for summary of location

@@ -30,7 +30,6 @@ from core import globalvar
 import wx
 import wx.aui
 
-from core               import globalvar
 from core.render        import Map
 from vdigit.toolbars    import VDigitToolbar
 from mapdisp.toolbars   import MapToolbar, NvizIcons
@@ -1307,7 +1306,7 @@ class MapFrame(SingleMapFrame):
     def IsStandalone(self):
         """Check if Map display is standalone
 
-        .. deprecated::
+        .. deprecated:: 7.0
         """
         # TODO: once it is removed from 2 places in vdigit it can be deleted
         # here and also in base class and other classes in the tree (hopefully)
@@ -1317,22 +1316,22 @@ class MapFrame(SingleMapFrame):
                   " Signals or giface")
         if self._layerManager:
             return False
-        
+
         return True
-    
+
     def GetLayerManager(self):
         """Get reference to Layer Manager
 
         :return: window reference
         :return: None (if standalone)
 
-        .. deprecated::
+        .. deprecated:: 7.0
         """
         Debug.msg(1, "MapFrame.GetLayerManager(): Method GetLayerManager is"
                   "depreciated, use some general approach instead such as"
                   " Signals or giface")
         return self._layerManager
-    
+
     def GetMapToolbar(self):
         """Returns toolbar with zooming tools"""
         return self.toolbars['map']

@@ -4,23 +4,23 @@
 @brief Various dialogs used in wxGUI.
 
 List of classes:
- - dialogs::SimpleDialog
- - dialogs::LocationDialog
- - dialogs::MapsetDialog
- - dialogs::VectorDialog
- - dialogs::NewVectorDialog
- - dialogs::SavedRegion
- - dialogs::GroupDialog
- - dialogs::MapLayersDialog
- - dialogs::ImportDialog
- - dialogs::GdalImportDialog
- - dialogs::GdalOutputDialog
- - dialogs::DxfImportDialog
- - dialogs::LayersList (used by MultiImport) 
- - dialogs::SetOpacityDialog
- - dialogs::ImageSizeDialog
- - dialogs::SqlQueryFrame
- - dialogs::SymbolDialog
+ - :class:`SimpleDialog`
+ - :class:`LocationDialog`
+ - :class:`MapsetDialog`
+ - :class:`VectorDialog`
+ - :class:`NewVectorDialog`
+ - :class:`SavedRegion`
+ - :class:`GroupDialog`
+ - :class:`MapLayersDialog`
+ - :class:`ImportDialog`
+ - :class:`GdalImportDialog`
+ - :class:`GdalOutputDialog`
+ - :class:`DxfImportDialog`
+ - :class:`LayersList` (used by MultiImport)
+ - :class:`SetOpacityDialog`
+ - :class:`ImageSizeDialog`
+ - :class:`SqlQueryFrame`
+ - :class:`SymbolDialog`
 
 (C) 2008-2011 by the GRASS Development Team
 
@@ -347,25 +347,26 @@ class NewVectorDialog(VectorDialog):
         """
         if self.ftype:
             return self.ftype.GetType()
-        
+
         return None
+
 
 def CreateNewVector(parent, cmd, title = _('Create new vector map'),
                     exceptMap=None, giface=None,
                     disableAdd = False, disableTable = False):
     """Create new vector map layer
-    
-    :param cmd: (prog, **kwargs)
+
+    :param cmd: (prog, \*\*kwargs)
     :param title: window title
     :param exceptMap: list of maps to be excepted
     :param log:
     :param disableAdd: disable 'add layer' checkbox
     :param disableTable: disable 'create table' checkbox
-    
+
     :return: dialog instance
     :return: None on error
     """
-    vExternalOut = grass.parse_command('v.external.out', flags = 'g')
+    vExternalOut = grass.parse_command('v.external.out', flags='g')
     isNative = vExternalOut['format'] == 'native'
     if cmd[0] == 'v.edit' and not isNative:
         showType = True
