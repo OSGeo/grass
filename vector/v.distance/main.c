@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
     struct Map_info From, To, Out, *Outp;
     int from_type, to_type, from_field, to_field, with_z;
     double max, min;
-    double *max_step;
+    double *max_step, max_map;
     int n_max_steps, curr_step;
     struct line_pnts *FPoints, *TPoints;
     struct line_cats *FCats, *TCats;
@@ -352,9 +352,10 @@ int main(int argc, char *argv[])
     /* TODO: add maxdist = -1 to Vect_select_ !!! */
     /* Calc maxdist */
     n_max_steps = 1;
+    max_map = max;
     if (max != 0) {
 	struct bound_box fbox, tbox;
-	double dx, dy, dz, tmp_max;
+	double dx, dy, dz;
 
 	Vect_get_map_box(&From, &fbox);
 	Vect_get_map_box(&To, &tbox);
@@ -364,38 +365,28 @@ int main(int argc, char *argv[])
 	dx = fbox.E - fbox.W;
 	dy = fbox.N - fbox.S;
 
-	if (geodesic) {
-	    double d;
-	    
-	    G_begin_distance_calculations();
-	    dx = G_distance(fbox.W, fbox.S, fbox.E, fbox.S);
-	    d = G_distance(fbox.W, fbox.N, fbox.E, fbox.N);
-	    
-	    if (dx < d)
-		dx = d;
-
-	    dy = G_distance(fbox.W, fbox.S, fbox.W, fbox.N);
-	    d = G_distance(fbox.E, fbox.S, fbox.E, fbox.N);
-	    
-	    if (dy < d)
-		dy = d;
-	}
-
 	if (Vect_is_3d(&From))
 	    dz = fbox.T - fbox.B;
 	else
 	    dz = 0.0;
 
-	tmp_max = sqrt(dx * dx + dy * dy + dz * dz);
-	if (max < 0)
-	    max = tmp_max;
+	max_map = sqrt(dx * dx + dy * dy + dz * dz);
+	if (max < 0) {
+	    if (geodesic)
+		max = PORT_DOUBLE_MAX;
+	    else
+		max = max_map;
+	}
 
 	/* how to determine a reasonable number of steps to increase the search box? */
 	/* with max > 0 but max <<< tmp_max, 2 steps are sufficient, first 0 then max
 	 * a reasonable number of steps also depends on the number of features in To
 	 * e.g. only one area in To, no need to step */
 
-	n_max_steps = sqrt(nto) * max / tmp_max;
+	if (geodesic)
+	    n_max_steps = sqrt(nto);
+	else
+	    n_max_steps = sqrt(nto) * max / max_map;
 	/* max 9 steps from testing */
 	if (n_max_steps > 9)
 	    n_max_steps = 9;
@@ -404,8 +395,8 @@ int main(int argc, char *argv[])
 	if (n_max_steps > nto)
 	    n_max_steps = nto;
 
-	G_debug(2, "max = %f", max);
-	G_debug(2, "maximum reasonable search distance = %f", tmp_max);
+	G_debug(2, "max = %g", max);
+	G_debug(2, "maximum reasonable search distance = %g", max_map);
 	G_debug(2, "n 'to' features = %d", nto);
 	G_debug(2, "n_max_steps = %d", n_max_steps);
     }
@@ -417,14 +408,17 @@ int main(int argc, char *argv[])
 	/* set up steps to increase search box */
 	max_step = G_malloc(n_max_steps * sizeof(double));
 	/* first step always 0 */
-	max_step[0] = (min < 0 ? 0 : min);
+	if (geodesic)
+	    max_step[0] = 0;
+	else
+	    max_step[0] = (min < 0 ? 0 : min);
 
 	for (curr_step = 1; curr_step < n_max_steps - 1; curr_step++) {
 	    /* for 9 steps, this would be max / [128, 64, 32, 16, 8, 4, 2] */
-	    max_step[curr_step] = max / (2 << (n_max_steps - 1 - curr_step));
+	    max_step[curr_step] = max_map / (2 << (n_max_steps - 1 - curr_step));
 	}
 	/* last step always max */
-	max_step[n_max_steps - 1] = max;
+	max_step[n_max_steps - 1] = max_map;
 	j = 1;
 	for (i = 1; i < n_max_steps; i++) {
 	    if (max_step[j - 1] < max_step[i]) {
@@ -436,7 +430,7 @@ int main(int argc, char *argv[])
     }
     else {
 	max_step = G_malloc(sizeof(double));
-	max_step[0] = max;
+	max_step[0] = max_map;
     }
 
     /* Open database driver */
@@ -634,6 +628,9 @@ int main(int argc, char *argv[])
 	    double box_edge = 0;
 	    int done = FALSE;
 
+	    if (geodesic)
+		tmp_min = 0;
+
 	    curr_step = 0;
 
 	    G_debug(3, "fline = %d", fline);
@@ -691,10 +688,10 @@ int main(int argc, char *argv[])
 		    }
 		}
 		else {
-		    box.E = fbox.E + max;
-		    box.W = fbox.W - max;
-		    box.N = fbox.N + max;
-		    box.S = fbox.S - max;
+		    box.E = fbox.E + max_map;
+		    box.W = fbox.W - max_map;
+		    box.N = fbox.N + max_map;
+		    box.S = fbox.S - max_map;
 		    box.T = PORT_DOUBLE_MAX;
 		    box.B = -PORT_DOUBLE_MAX;
 
@@ -854,8 +851,17 @@ int main(int argc, char *argv[])
 		G_debug(4, "  dist = %f", dist);
 
 		if (!do_all && curr_step < n_max_steps) {
+		    double dist_map = dist;
+		    
+		    if (geodesic && tfeature > 0) {
+			double dx = fx - tx;
+			double dy = fy - ty;
+			double dz = fz - tz;
+
+			dist_map = sqrt(dx * dx + dy * dy + dz * dz);
+		    }
 		    /* enlarging the search box is possible */
-		    if (tfeature > 0 && dist > box_edge) {
+		    if (tfeature > 0 && dist_map > box_edge) {
 			/* line found but distance > search edge:
 			 * line bbox overlaps with search box, line itself is outside search box */
 			done = FALSE;
@@ -902,7 +908,10 @@ int main(int argc, char *argv[])
 	    double tmp_min = (min < 0 ? 0 : min);
 	    double box_edge = 0;
 	    int done = FALSE;
-	    
+
+	    if (geodesic)
+		tmp_min = 0;
+
 	    curr_step = 0;
 
 	    G_debug(3, "farea = %d", area);
@@ -961,10 +970,10 @@ int main(int argc, char *argv[])
 		    }
 		}
 		else {
-		    box.E = fbox.E + max;
-		    box.W = fbox.W - max;
-		    box.N = fbox.N + max;
-		    box.S = fbox.S - max;
+		    box.E = fbox.E + max_map;
+		    box.W = fbox.W - max_map;
+		    box.N = fbox.N + max_map;
+		    box.S = fbox.S - max_map;
 		    box.T = PORT_DOUBLE_MAX;
 		    box.B = -PORT_DOUBLE_MAX;
 
@@ -1193,8 +1202,17 @@ int main(int argc, char *argv[])
 		}
 
 		if (!do_all && curr_step < n_max_steps) {
+		    double dist_map = dist;
+		    
+		    if (geodesic && tfeature > 0) {
+			double dx = fx - tx;
+			double dy = fy - ty;
+			double dz = fz - tz;
+
+			dist_map = sqrt(dx * dx + dy * dy + dz * dz);
+		    }
 		    /* enlarging the search box is possible */
-		    if (tfeature > 0 && dist > box_edge) {
+		    if (tfeature > 0 && dist_map > box_edge) {
 			/* area found but distance > search edge:
 			 * area bbox overlaps with search box, area itself is outside search box */
 			done = FALSE;
