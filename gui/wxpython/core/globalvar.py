@@ -131,7 +131,7 @@ else:
 
 if sys.platform == 'win32':
     BIN_EXT = '.exe'
-    SCT_EXT = '.py'
+    SCT_EXT = '.bat'
 else:
     BIN_EXT = SCT_EXT = ''
 
@@ -148,9 +148,10 @@ def UpdateGRASSAddOnCommands(eList = None):
     addonPath = os.getenv('GRASS_ADDON_PATH', '')
     addonBase = os.getenv('GRASS_ADDON_BASE')
     if addonBase:
-        addonPath += os.pathsep + os.path.join(addonBase, 'bin') + os.pathsep + \
-            os.path.join(addonBase, 'scripts')
-
+        addonPath += os.pathsep + os.path.join(addonBase, 'bin')
+        if sys.platform != 'win32':
+            addonPath += os.pathsep + os.path.join(addonBase, 'scripts')
+    
     # remove commands first
     if eList:
         for ext in eList:
@@ -189,12 +190,12 @@ def UpdateGRASSAddOnCommands(eList = None):
                     grassCmd.add(fname)
                     Debug.msg(3, "AddOn commands: %s", fname)
                     nCmd += 1
-
-    Debug.msg(1, "Number of new AddOn commands: %d", nCmd)
+    
+    Debug.msg(1, "Number of GRASS AddOn commands: %d", nCmd)
 
 """@brief Collected GRASS-relared binaries/scripts"""
 grassCmd, grassScripts = get_commands()
-Debug.msg(1, "Number of GRASS commands: %d", len(grassCmd))
+Debug.msg(1, "Number of core GRASS commands: %d", len(grassCmd))
 UpdateGRASSAddOnCommands()
 
 """@Toolbar icon size"""
