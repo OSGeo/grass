@@ -275,7 +275,8 @@ def aggregate_by_topology(granularity_list,  granularity,  map_list,  topo_list,
                 suffix = create_suffix_from_datetime(granule.temporal_extent.get_start_time(), 
                                                      granularity)
             else:
-                suffix = str(count + int(offset))
+                suffix = gscript.get_num_suffix(count + int(offset),
+                                                len(granularity_list) + int(offset))
             output_name = "%s_%s"%(basename,  suffix)
 
             map_layer = RasterDataset("%s@%s"%(output_name,

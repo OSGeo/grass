@@ -201,7 +201,8 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
                 msgr.percent(count, num, 1)
 
             # Create the r.mapcalc statement for the current time step
-            map_name = "%s_%i" % (base, count)
+            map_name = "{base}_{suffix}".format(base=base,
+                                                suffix=gscript.get_num_suffix(count, num))
             # Remove spaces and new lines
             expr = expression.replace(" ", "")
 
