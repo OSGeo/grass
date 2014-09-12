@@ -14,7 +14,7 @@ for details.
 """
 
 
-from grass.script.core import parse_key_val
+from grass.script.utils import parse_key_val
 
 import grass.gunittest
 from grass.gunittest.checkers import (values_equal, text_to_keyvalue,
