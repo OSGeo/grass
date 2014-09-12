@@ -16,7 +16,7 @@ class AbstractFinder(object):
     def __init__(self, c_mapinfo, table=None, writable=False):
         """AbstractFinder
         -----------------
-        
+
         Find geometry feature around a point.
         """
         self.c_mapinfo = c_mapinfo
@@ -46,9 +46,9 @@ class PointFinder(AbstractFinder):
         >>> schools.open('r')
         >>> result = []
         >>> for school in schools:
-        ...         zipcode = zipcodes.find.area(school)
-        ...         result.append((school.attrs['NAMESHORT'],
-        ...                        zipcode.attrs['ZIPCODE']))
+        ...     zipcode = zipcodes.find['by_point'].area(school)
+        ...     result.append((school.attrs['NAMESHORT'],
+        ...                    zipcode.attrs['ZIPCODE']))
         ...
         >>> result[0]
         (u'SWIFT CREEK', u'RALEIGH 27606')
@@ -58,10 +58,10 @@ class PointFinder(AbstractFinder):
         (u'FARMINGTON WOODS', u'CARY 27511')
         >>> from grass.pygrass.vector.geometry import Point
         >>> pnt = Point(631213.349291, 224684.900084)
-        >>> school = schools.find.geo(pnt, maxdist=300.)
+        >>> school = schools.find['by_point'].geo(pnt, maxdist=300.)
         >>> school.attrs['NAMELONG']
         u'ADAMS ELEMENTARY'
-        >>> for school in schools.find.geos(pnt, maxdist=1000.):
+        >>> for school in schools.find['by_point'].geos(pnt, maxdist=1000.):
         ...     print school.attrs['NAMELONG']
         ...
         CARY HIGH
