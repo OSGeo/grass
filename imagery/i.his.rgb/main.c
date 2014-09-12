@@ -104,7 +104,8 @@ int main(int argc, char **argv)
 	for (band = 0; band < 3; band++)
 	    Rast_put_row(fd_output[band], rowbuffer[band], CELL_TYPE);
     }
-
+    G_percent(1, 1, 1);
+    
     closefiles(opt_red->answer, opt_green->answer, opt_blue->answer,
 	       fd_output, rowbuffer);
 
