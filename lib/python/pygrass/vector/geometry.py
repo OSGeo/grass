@@ -278,7 +278,7 @@ class Geo(object):
         if table is not None:
             self.attrs = Attrs(self.cat, table, writable)
 
-        if self.id is not None and self.c_mapinfo is not None and read:
+        if self.id and self.c_mapinfo is not None and read:
             self.read()
 
     @property
@@ -295,8 +295,9 @@ class Geo(object):
     def read(self):
         """Read and set the coordinates of the centroid from the vector map,
         using the centroid_id and calling the Vect_read_line C function"""
-        ftype, c_points, c_cats = c_read_line(self.id, self.c_mapinfo,
-                                              self.c_points, self.c_cats)
+        self.id, ftype, c_points, c_cats = c_read_line(self.id, self.c_mapinfo,
+                                                       self.c_points,
+                                                       self.c_cats)
 
 
 class Point(Geo):
@@ -1368,12 +1369,13 @@ class Area(Geo):
         :type centroid: a Centroid object
         """
         centroid_id = libvect.Vect_get_area_centroid(self.c_mapinfo, self.id)
-        if centroid:
-            centroid.id = centroid_id
-            centroid.read()
-            return centroid
-        return Centroid(v_id=centroid_id, c_mapinfo=self.c_mapinfo,
-                        area_id=self.id)
+        if centroid_id:
+            if centroid:
+                centroid.id = centroid_id
+                centroid.read()
+                return centroid
+            return Centroid(v_id=centroid_id, c_mapinfo=self.c_mapinfo,
+                            area_id=self.id)
 
     def num_isles(self):
         return libvect.Vect_get_area_num_isles(self.c_mapinfo, self.id)
@@ -1502,8 +1504,9 @@ class Area(Geo):
         self.boundary = self.get_points(line)
         self.centroid = self.get_centroid(centroid)
         #self.isles = self.get_isles(isles)
-        libvect.Vect_read_line(self.c_mapinfo, None, self.c_cats,
-                               self.centroid.id)
+        if self.centroid:
+            libvect.Vect_read_line(self.c_mapinfo, None, self.c_cats,
+                                   self.centroid.id)
 
 
 #
@@ -1563,7 +1566,7 @@ def c_read_line(feature_id, c_mapinfo, c_points, c_cats):
         raise IndexError('Index out of range')
     if feature_id > 0:
         ftype = libvect.Vect_read_line(c_mapinfo, c_points, c_cats, feature_id)
-        return ftype, c_points, c_cats
+        return feature_id, ftype, c_points, c_cats
     else:
         raise ValueError('The index must be >0, %r given.' % feature_id)
 
@@ -1574,8 +1577,8 @@ def read_line(feature_id, c_mapinfo, table=None, writable=False,
     """
     c_points = c_points if c_points else ctypes.pointer(libvect.line_pnts())
     c_cats = c_cats if c_cats else ctypes.pointer(libvect.line_cats())
-    ftype, c_points, c_cats = c_read_line(feature_id, c_mapinfo,
-                                          c_points, c_cats)
+    feature_id, ftype, c_points, c_cats = c_read_line(feature_id, c_mapinfo,
+                                                      c_points, c_cats)
     if GV_TYPE[ftype]['obj'] is not None:
         return GV_TYPE[ftype]['obj'](v_id=feature_id, c_mapinfo=c_mapinfo,
                                      c_points=c_points, c_cats=c_cats,
