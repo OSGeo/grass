@@ -72,12 +72,12 @@ class Vector(Info):
     def __iter__(self):
         """::
 
-            >>> mun = Vector('census')
-            >>> mun.open()
-            >>> features = [feature for feature in mun]
+            >>> cens = Vector('census')
+            >>> cens.open(mode='r')
+            >>> features = [feature for feature in cens]
             >>> features[:3]
             [Boundary(v_id=None), Boundary(v_id=None), Boundary(v_id=None)]
-            >>> mun.close()
+            >>> cens.close()
 
         ..
         """
@@ -88,13 +88,13 @@ class Vector(Info):
     def next(self):
         """::
 
-            >>> mun = Vector('census')
-            >>> mun.open()
-            >>> mun.next()
+            >>> cens = Vector('census')
+            >>> cens.open(mode='r')
+            >>> cens.next()
             Boundary(v_id=None)
-            >>> mun.next()
+            >>> cens.next()
             Boundary(v_id=None)
-            >>> mun.close()
+            >>> cens.close()
 
         ..
         """
@@ -152,6 +152,12 @@ class Vector(Info):
             >>> new.write(point0, ('pub', ))
             >>> new.write(point1, ('resturnat', ))
 
+        commit the db changes ::
+
+            >>> new.table.conn.commit()
+            >>> new.table.execute().fetchall()
+            [(1, u'pub'), (2, u'resturnat')]
+
         close the vector map ::
 
             >>> new.close()
@@ -160,15 +166,15 @@ class Vector(Info):
 
         then play with the map ::
 
-            >>> new.open()
+            >>> new.open(mode='r')
             >>> new.read(1)
             Point(636981.336043, 256517.602235)
             >>> new.read(2)
             Point(637209.083058, 257970.129540)
             >>> new.read(1).attrs['name']
             u'pub'
-            >>> new.read(2).attrs['cat', 'name']
-            (2, u'resturnat')
+            >>> new.read(2).attrs['name']
+            u'resturnat'
             >>> new.close()
             >>> new.remove()
 
@@ -205,7 +211,7 @@ class Vector(Info):
         Color table stored in the vector's attribute table well be not checked
 
         >>> cens = Vector('census')
-        >>> cens.open()
+        >>> cens.open(mode='r')
         >>> cens.has_color_table()
         False
 
@@ -214,9 +220,9 @@ class Vector(Info):
         >>> copy('census','mycensus','vect')
         >>> from grass.pygrass.modules.shortcuts import vector as v
         >>> v.colors(map='mycensus', color='population', column='TOTAL_POP')
-
+        Module('v.colors')
         >>> mycens = Vector('mycensus')
-        >>> mycens.open()
+        >>> mycens.open(mode='r')
         >>> mycens.has_color_table()
         True
         >>> mycens.close()
@@ -236,7 +242,7 @@ class VectorTopo(Vector):
 
     Open a vector map using the *with statement*: ::
 
-        >>> with VectorTopo('schools') as schools:
+        >>> with VectorTopo('schools', mode='r') as schools:
         ...     for school in schools[:3]:
         ...         print school.attrs['NAMESHORT']
         ...
@@ -259,11 +265,11 @@ class VectorTopo(Vector):
     def __getitem__(self, key):
         """::
 
-            >>> mun = VectorTopo('census')
-            >>> mun.open()
-            >>> mun[:3]
+            >>> cens = VectorTopo('census')
+            >>> cens.open(mode='r')
+            >>> cens[:3]
             [Boundary(v_id=1), Boundary(v_id=2), Boundary(v_id=3)]
-            >>> mun.close()
+            >>> cens.close()
 
         ..
         """
@@ -296,16 +302,16 @@ class VectorTopo(Vector):
 
         ::
 
-            >>> cens = VectorTopo('boundary_municp_sqlite')
-            >>> cens.open()
+            >>> cens = VectorTopo('census')
+            >>> cens.open(mode='r')
             >>> cens.num_primitive_of('point')
             0
             >>> cens.num_primitive_of('line')
             0
             >>> cens.num_primitive_of('centroid')
-            3579
+            2537
             >>> cens.num_primitive_of('boundary')
-            5128
+            6383
             >>> cens.close()
 
         ..
@@ -323,26 +329,23 @@ class VectorTopo(Vector):
                       *update_lines*, *update_nodes*, *volumes*
         :type vtype: str
 
-            >>> cens = VectorTopo('boundary_municp_sqlite')
-            >>> cens.open()
+            >>> cens = VectorTopo('census')
+            >>> cens.open(mode='r')
             >>> cens.number_of("areas")
-            3579
+            2547
             >>> cens.number_of("islands")
-            2629
+            49
             >>> cens.number_of("holes")
             0
             >>> cens.number_of("lines")
-            8707
+            8920
             >>> cens.number_of("nodes")
-            4178
+            3885
             >>> cens.number_of("pizza")
             ...                     # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
             Traceback (most recent call last):
                 ...
-            ValueError: vtype not supported, use one of:
-            'areas', 'dblinks', 'faces', 'holes', 'islands', 'kernels',
-            'line_points', 'lines', 'nodes', 'updated_lines', 'updated_nodes',
-            'volumes'
+            ValueError: vtype not supported, use one of: 'areas', ...
             >>> cens.close()
 
 
@@ -376,23 +379,23 @@ class VectorTopo(Vector):
                        full features
         :type idonly: bool
 
-            >>> cens = VectorTopo('census')
-            >>> cens.open()
+            >>> cens = VectorTopo('census', mode='r')
+            >>> cens.open(mode='r')
             >>> big = [area for area in cens.viter('areas')
-            ...        if area.alive() and area.area >= 10000]
+            ...        if area.alive() and area.area() >= 10000]
             >>> big[:3]
-            [Area(1), Area(2), Area(3)]
+            [Area(5), Area(6), Area(13)]
 
 
         to sort the result in a efficient way, use: ::
 
             >>> from operator import methodcaller as method
-            >>> big.sort(key = method('area'), reverse = True)  # sort the list
+            >>> big.sort(key=method('area'), reverse=True)  # sort the list
             >>> for area in big[:3]:
             ...     print area, area.area()
-            Area(3102) 697521857.848
-            Area(2682) 320224369.66
-            Area(2552) 298356117.948
+            Area(2099) 5392751.5304
+            Area(2171) 4799921.30863
+            Area(495) 4055812.49695
             >>> cens.close()
 
         """
@@ -413,18 +416,18 @@ class VectorTopo(Vector):
     def rewind(self):
         """Rewind vector map to cause reads to start at beginning. ::
 
-            >>> mun = VectorTopo('boundary_municp_sqlite')
-            >>> mun.open()
-            >>> mun.next()
+            >>> cens = VectorTopo('census')
+            >>> cens.open(mode='r')
+            >>> cens.next()
             Boundary(v_id=1)
-            >>> mun.next()
+            >>> cens.next()
             Boundary(v_id=2)
-            >>> mun.next()
+            >>> cens.next()
             Boundary(v_id=3)
-            >>> mun.rewind()
-            >>> mun.next()
+            >>> cens.rewind()
+            >>> cens.next()
             Boundary(v_id=1)
-            >>> mun.close()
+            >>> cens.close()
 
         ..
         """
@@ -472,28 +475,28 @@ class VectorTopo(Vector):
             :type feature_id: int
 
 
-            >>> mun = VectorTopo('boundary_municp_sqlite')
-            >>> mun.open()
-            >>> feature1 = mun.read(0)                     #doctest: +ELLIPSIS
+            >>> cens = VectorTopo('census')
+            >>> cens.open(mode='r')
+            >>> feature1 = cens.read(0)                     #doctest: +ELLIPSIS
             Traceback (most recent call last):
                 ...
             ValueError: The index must be >0, 0 given.
-            >>> feature1 = mun.read(1)
+            >>> feature1 = cens.read(1)
             >>> feature1
             Boundary(v_id=1)
             >>> feature1.length()
-            1415.3348048582038
-            >>> mun.read(-1)
-            Centoid(649102.382010, 15945.714502)
-            >>> len(mun)
-            8707
-            >>> mun.read(8707)
-            Centoid(649102.382010, 15945.714502)
-            >>> mun.read(8708)                             #doctest: +ELLIPSIS
+            444.54490917696944
+            >>> cens.read(-1)
+            Centoid(642963.159711, 214994.016279)
+            >>> len(cens)
+            8920
+            >>> cens.read(8920)
+            Centoid(642963.159711, 214994.016279)
+            >>> cens.read(8921)                             #doctest: +ELLIPSIS
             Traceback (most recent call last):
               ...
             IndexError: Index out of range
-            >>> mun.close()
+            >>> cens.close()
 
         """
         return read_line(feature_id, self.c_mapinfo, self.table, self.writable,
