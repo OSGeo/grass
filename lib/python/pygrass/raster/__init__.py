@@ -61,12 +61,9 @@ class RasterRow(RasterAbstractBase):
         True
         >>> elev.is_open()
         False
-        >>> elev.info.cols
         >>> elev.open()
         >>> elev.is_open()
         True
-        >>> type(elev.info.cols)
-        <type 'int'>
         >>> elev.has_cats()
         False
         >>> elev.mode
@@ -77,6 +74,15 @@ class RasterRow(RasterAbstractBase):
         0
         >>> elev.info.range
         (56, 156)
+        >>> elev.info
+        elevation@
+        rows: 1350
+        cols: 1500
+        north: 228500.0 south: 215000.0 nsres:10.0
+        east:  645000.0 west: 630000.0 ewres:10.0
+        range: 56, 156
+        proj: 99
+        <BLANKLINE>
 
     Each Raster map have an attribute call ``cats`` that allow user
     to interact with the raster categories. ::
@@ -84,9 +90,9 @@ class RasterRow(RasterAbstractBase):
         >>> land = RasterRow('geology')
         >>> land.open()
         >>> land.cats               # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
-        [('Zml', 1.0, None),
+        [('Zml', 1, None),
          ...
-         ('Tpyw', 1832.0, None)]
+         ('Tpyw', 1832, None)]
 
     Open a raster map using the *with statement*: ::
 
@@ -490,7 +496,12 @@ class RasterNumpy(np.memmap, RasterAbstractBase):
            [1, 1, 1],
            [0, 0, 0],
            [0, 0, 0]], dtype=int32)
-    >>> el._write()
+    >>> el.exist()
+    False
+    >>> el.close('elev_bool', overwrite=True)
+    >>> el.exist()
+    True
+    >>> el.remove()
     """
     def __new__(cls, name, mapset="", mtype='CELL', mode='r+',
                 overwrite=False):
@@ -590,18 +601,18 @@ class RasterNumpy(np.memmap, RasterAbstractBase):
             for i in range(len(rst)):
                 self[i] = rst.get_row(i, buff)
 
-    def _write(self):
+    def _write(self, name, overwrite):
         """Write the numpy array into map
         """
-        #r.in.bin input=/home/pietro/docdat/phd/thesis/gis/north_carolina/user1/.tmp/eraclito/14325.0 output=new title='' bytes=1,anull='' --verbose --overwrite north=228500.0 south=215000.0 east=645000.0 west=630000.0 rows=1350 cols=1500
         if not self.exist() or self.mode != 'r':
             self.flush()
             buff = Buffer(self[0].shape, mtype=self.mtype)
-            with RasterRow(self.name, self.mapset, mode='w',
-                           mtype=self.mtype) as rst:
+            with RasterRow(name, self.mapset, mode='w',
+                           mtype=self.mtype, overwrite=overwrite) as rst:
                 for i in range(len(rst)):
                     buff[:] = self[i][:]
                     rst.put_row(buff[:])
+            self.name = name
 
     def open(self, mtype='', null=None, overwrite=None):
         """Open the map, if the map already exist: determine the map type
@@ -635,18 +646,18 @@ class RasterNumpy(np.memmap, RasterAbstractBase):
         # if the map is open or not
         self._fd = 1
 
-    def close(self, name=''):
+    def close(self, name='', overwrite=False):
         """Function to close the map
 
         :param name: the name of raster
-        :type name: str        
+        :type name: str
         """
         if self.is_open():
             name = name if name else self.name
             if not name:
                 raise RuntimeError('Raster name not set neither '
                                    'given as parameter.')
-            self._write()
+            self._write(name, overwrite)
             os.remove(self.filename)
             self._fd = None
 
