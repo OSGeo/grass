@@ -36,7 +36,7 @@ def select(parms, ptype):
     ...              elevation='ele', slope='slp', aspect='asp',
     ...              run_=False)
     >>> for rast in select(slp.outputs, 'raster'):
-    ...     print rast
+    ...     print(rast)
     ...
     slp
     asp
@@ -86,8 +86,8 @@ def copy_mapset(mapset, path):
     [u'PERMANENT', u'user1']
     >>> sorted(os.listdir(os.path.join(path, 'PERMANENT')))
     [u'DEFAULT_WIND', u'PROJ_INFO', u'PROJ_UNITS', u'VAR', u'WIND']
-    >>> sorted(os.listdir(os.path.join(path, 'user1')))
-    [u'CURGROUP', u'SEARCH_PATH', u'VAR', u'WIND']
+    >>> sorted(os.listdir(os.path.join(path, 'user1'))) # doctest: +ELLIPSIS
+    [...u'SEARCH_PATH', u'VAR', u'WIND']
     >>> import shutil
     >>> shutil.rmtree(path)
 
@@ -308,7 +308,7 @@ def get_cmd(cmdd):
     ...              elevation='ele', slope='slp', aspect='asp',
     ...              overwrite=True, run_=False)
     >>> get_cmd(slp.get_dict())  # doctest: +ELLIPSIS
-    ['r.slope.aspect', 'elevation=ele', 'format=degrees', ..., '--o']
+    ['r.slope.aspect', u'elevation=ele', u'format=degrees', ..., u'--o']
     """
     cmd = [cmdd['name'], ]
     cmd.extend(("%s=%s" % (k, v) for k, v in cmdd['inputs']
@@ -391,7 +391,7 @@ class GridModule(object):
     :param run_: if False only instantiate the object
     :type run_: bool
     :param args: give all the parameters to the command
-    :param kargs: give all the parameters to the command 
+    :param kargs: give all the parameters to the command
 
     >>> grd = GridModule('r.slope.aspect',
     ...                  width=500, height=500, overlap=2,
