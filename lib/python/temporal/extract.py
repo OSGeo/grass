@@ -12,7 +12,7 @@ for details.
 @author Soeren Gebbert
 """
 
-from grass.script import core
+from grass.script.utils import get_num_suffix
 from space_time_datasets import *
 from open_stds import *
 from multiprocessing import Process
@@ -88,7 +88,8 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
                 if count % 10 == 0:
                     msgr.percent(count, num_rows, 1)
 
-                map_name = "%s_%i" % (base, count)
+                map_name = "{base}_{suffix}".format(base=base,
+                                                    suffix=get_num_suffix(count, num_rows))
 
                 # We need to modify the r(3).mapcalc expression
                 if type != "vector":

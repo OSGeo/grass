@@ -288,6 +288,13 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
         list_file = open(list_file_name, "r")
         new_list_file = open(new_list_file_name, "w")
 
+        # get number of lines to correctly form the suffix
+        max_count = -1
+        for max_count, l in enumerate(list_file):
+            pass
+        max_count += 1
+        list_file.seek(0)
+
         # Read the map list from file
         line_count = 0
         while True:
@@ -301,7 +308,7 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
             # that must be extended by the file suffix
             filename = line_list[0].strip().split(":")[0]
             if base:
-                mapname = "%s_%i"%(base, line_count)
+                mapname = "%s_%s" % (base, gscript.get_num_suffix(line_count + 1, max_count))
                 mapid= "%s@%s"%(mapname, mapset)
             else:
                 mapname = filename
