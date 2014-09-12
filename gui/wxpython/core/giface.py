@@ -113,6 +113,7 @@ class GrassInterface:
     to every GUI component.
 
     .. note::
+
         The GrassInterface process is not finished.
     """
     def RunCmd(self, *args, **kwargs):
@@ -147,6 +148,7 @@ class GrassInterface:
     def GetLayerTree(self):
         """Returns LayerManager's tree GUI object.
         .. note::
+
             Will be removed from the interface.
         """
         raise NotImplementedError()
@@ -160,6 +162,7 @@ class GrassInterface:
         """Returns current map display.
 
         .. note::
+
             For layer related tasks use GetLayerList().
 
         :return: MapFrame instance
@@ -171,6 +174,7 @@ class GrassInterface:
         """Get list of all map displays.
 
         .. note::
+
             Might be removed from the interface.
 
         :return: list of MapFrame instances
@@ -181,6 +185,7 @@ class GrassInterface:
         """Returns current map window.
 
         .. note::
+
             For layer related tasks use GetLayerList().
         """
         raise NotImplementedError()
@@ -189,6 +194,7 @@ class GrassInterface:
         """Returns object which shows the progress.
 
         .. note::
+
             Some implementations may not implement this method.
         """
         raise NotImplementedError()

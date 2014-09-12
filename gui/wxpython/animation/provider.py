@@ -82,9 +82,9 @@ class BitmapProvider:
         Applies to 2D mode.
 
         :param cmdsForComposition: list of lists of command lists
-                [[['d.rast', 'map=elev_2001'], ['d.vect', 'map=points']], # g.pnmcomp
-                 [['d.rast', 'map=elev_2002'], ['d.vect', 'map=points']],
-                 ...]
+                                   [[['d.rast', 'map=elev_2001'], ['d.vect', 'map=points']], # g.pnmcomp
+                                   [['d.rast', 'map=elev_2002'], ['d.vect', 'map=points']],
+                                   ...]
         :param opacities: list of opacity values
         :param regions: list of regions
         """
@@ -479,7 +479,7 @@ def RenderProcess2D(imageWidth, imageHeight, tempDir, cmd, region, bgcolor, file
     :param region: region as a dict or None
     :param bgcolor: background color as a tuple of 3 values 0 to 255
     :param fileQueue: the inter process communication queue
-    storing the file name of the image
+                      storing the file name of the image
     """
 
     filename = GetFileFromCmd(tempDir, cmd, region)
@@ -516,7 +516,7 @@ def RenderProcess3D(imageWidth, imageHeight, tempDir, cmd, region, bgcolor, file
     :param region: region as a dict
     :param bgcolor: background color as a tuple of 3 values 0 to 255
     :param fileQueue: the inter process communication queue
-    storing the file name of the image
+                      storing the file name of the image
     """
 
     filename = GetFileFromCmd(tempDir, cmd, None)
@@ -553,7 +553,7 @@ def CompositeProcess(imageWidth, imageHeight, tempDir, cmdList, region, opacitie
     :param opacites: list of opacities
     :param bgcolor: background color as a tuple of 3 values 0 to 255
     :param fileQueue: the inter process communication queue
-    storing the file name of the image
+                      storing the file name of the image
     """
 
     maps = []

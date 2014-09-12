@@ -46,7 +46,7 @@ class DebugMsg:
 
         :param level: debug level (0-5)
         :param message: message to be printed
-        :param *args: formatting params
+        :param args: formatting params
         """
         # self.SetLevel()
         if self.debuglevel > 0 and level > 0 and level <= self.debuglevel:

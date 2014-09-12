@@ -83,7 +83,7 @@ class NotebookController:
     and other methods can be delegated by @c __getattr__.
     """
     def __init__(self, classObject, widget):
-        """       
+        """
         :param classObject: notebook class name (object, i.e. FlatNotebook)
         :param widget: notebook instance
         """
@@ -148,7 +148,7 @@ class NotebookController:
         """Set active notebook page.
 
         :param page: name, eg. 'layers', 'output', 'search', 'pyshell', 'nviz'
-        (depends on concrete notebook instance)
+                     (depends on concrete notebook instance)
         """
         idx = self.GetPageIndexByName(page)
         if self.classObject.GetSelection(self.widget) != idx:
@@ -174,7 +174,7 @@ class NotebookController:
 
     def GetPageIndexByName(self, page):
         """Get notebook page index
-        
+
         :param page: name
         """
         if page not in self.notebookPages:
@@ -187,7 +187,7 @@ class NotebookController:
     def HighlightPageByName(self, page):
         pageIndex = self.GetPageIndexByName(page)
         self.HighlightPage(pageIndex)
-        
+
     def HighlightPage(self, index):
         if self.classObject.GetSelection(self.widget) != index:
             text = self.classObject.GetPageText(self.widget, index)
@@ -215,12 +215,12 @@ class FlatNotebookController(NotebookController):
 
     def GetPageIndexByName(self, page):
         """Get notebook page index
-        
+
         :param page: name
         """
         if page not in self.notebookPages:
             return -1
-        
+
         return self.classObject.GetPageIndex(self.widget, self.notebookPages[page])
 
 
@@ -232,11 +232,14 @@ class GNotebook(FN.FlatNotebook):
     """
     def __init__(self, parent, style, **kwargs):
         if globalvar.hasAgw:
-            FN.FlatNotebook.__init__(self, parent, id = wx.ID_ANY, agwStyle = style, **kwargs)
+            FN.FlatNotebook.__init__(self, parent, id=wx.ID_ANY,
+                                     agwStyle=style, **kwargs)
         else:
-            FN.FlatNotebook.__init__(self, parent, id = wx.ID_ANY, style = style, **kwargs)
-        
-        self.controller = FlatNotebookController(classObject = FN.FlatNotebook, widget = self)
+            FN.FlatNotebook.__init__(self, parent, id=wx.ID_ANY,
+                                     style=style, **kwargs)
+
+        self.controller = FlatNotebookController(classObject=FN.FlatNotebook,
+                                                 widget=self)
 
     def AddPage(self, **kwargs):
         """@copydoc NotebookController::AddPage()"""
@@ -261,14 +264,16 @@ class GNotebook(FN.FlatNotebook):
     def __getattr__(self, name):
         return getattr(self.controller, name)
 
+
 class FormNotebook(wx.Notebook):
     """Notebook widget.
 
     Respects native look.
     """
     def __init__(self, parent, style):
-        wx.Notebook.__init__(self, parent, id = wx.ID_ANY, style = style)
-        self.controller = NotebookController(classObject = wx.Notebook, widget = self)
+        wx.Notebook.__init__(self, parent, id=wx.ID_ANY, style=style)
+        self.controller = NotebookController(classObject=wx.Notebook,
+                                             widget=self)
 
     def AddPage(self, **kwargs):
         """@copydoc NotebookController::AddPage()"""
@@ -300,9 +305,10 @@ class FormListbook(wx.Listbook):
     Respects native look.
     """
     def __init__(self, parent, style):
-        wx.Listbook.__init__(self, parent, id = wx.ID_ANY, style = style)
-        self.controller = NotebookController(classObject = wx.Listbook, widget = self)
-            
+        wx.Listbook.__init__(self, parent, id=wx.ID_ANY, style=style)
+        self.controller = NotebookController(classObject=wx.Listbook,
+                                             widget=self)
+
     def AddPage(self, **kwargs):
         """@copydoc NotebookController::AddPage()"""
         self.controller.AddPage(**kwargs)
@@ -329,23 +335,25 @@ class FormListbook(wx.Listbook):
 
 class ScrolledPanel(SP.ScrolledPanel):
     """Custom ScrolledPanel to avoid strange behaviour concerning focus"""
-    def __init__(self, parent, style = wx.TAB_TRAVERSAL):
-        SP.ScrolledPanel.__init__(self, parent = parent, id = wx.ID_ANY, style = style)
+    def __init__(self, parent, style=wx.TAB_TRAVERSAL):
+        SP.ScrolledPanel.__init__(self, parent=parent, id=wx.ID_ANY,
+                                  style=style)
 
     def OnChildFocus(self, event):
         pass
-        
+
+
 class NumTextCtrl(wx.TextCtrl):
     """Class derived from wx.TextCtrl for numerical values only"""
     def __init__(self, parent,  **kwargs):
 ##        self.precision = kwargs.pop('prec')
-        wx.TextCtrl.__init__(self, parent = parent,
-            validator = NTCValidator(flag = 'DIGIT_ONLY'), **kwargs)
-        
-            
+        wx.TextCtrl.__init__(self, parent=parent,
+                             validator=NTCValidator(flag='DIGIT_ONLY'),
+                             **kwargs)
+
     def SetValue(self, value):
-        super(NumTextCtrl, self).SetValue( str(value))
-        
+        super(NumTextCtrl, self).SetValue(str(value))
+
     def GetValue(self):
         val = super(NumTextCtrl, self).GetValue()
         if val == '':
@@ -355,10 +363,11 @@ class NumTextCtrl(wx.TextCtrl):
         except ValueError:
             val = ''.join(''.join(val.split('-')).split('.'))
             return float(val)
-        
+
     def SetRange(self, min, max):
         pass
-   
+
+
 class FloatSlider(wx.Slider):
     """Class derived from wx.Slider for floats"""
     def __init__(self, **kwargs):
@@ -368,18 +377,19 @@ class FloatSlider(wx.Slider):
         #init range
         self.minValueOrig = 0
         self.maxValueOrig = 1
-        
+
     def SetValue(self, value):
-        value *= self.coef 
+        value *= self.coef
         if abs(value) < 1 and value != 0:
             while abs(value) < 1:
                 value *= 100
                 self.coef *= 100
-            super(FloatSlider, self).SetRange(self.minValueOrig * self.coef, self.maxValueOrig * self.coef)
+            super(FloatSlider, self).SetRange(self.minValueOrig * self.coef,
+                                              self.maxValueOrig * self.coef)
         super(FloatSlider, self).SetValue(value)
-        
+
         Debug.msg(4, "FloatSlider.SetValue(): value = %f" % value)
-        
+
     def SetRange(self, minValue, maxValue):
         self.coef = 1.
         self.minValueOrig = minValue
@@ -392,32 +402,33 @@ class FloatSlider(wx.Slider):
             super(FloatSlider, self).SetValue(super(FloatSlider, self).GetValue() * self.coef)
         super(FloatSlider, self).SetRange(minValue, maxValue)
         Debug.msg(4, "FloatSlider.SetRange(): minValue = %f, maxValue = %f" % (minValue, maxValue))
-            
+
     def GetValue(self):
         val = super(FloatSlider, self).GetValue()
         Debug.msg(4, "FloatSlider.GetValue(): value = %f" % (val/self.coef))
         return val/self.coef
-        
-        
+
+
 class SymbolButton(BitmapTextButton):
     """Button with symbol and label."""
     def __init__(self, parent, usage, label, **kwargs):
         """Constructor
-        
+
         :param parent: parent (usually wx.Panel)
         :param usage: determines usage and picture
         :param label: displayed label
         """
         size = (15, 15)
         buffer = wx.EmptyBitmap(*size)
-        BitmapTextButton.__init__(self, parent = parent, label = " " + label, bitmap = buffer, **kwargs)
-        
+        BitmapTextButton.__init__(self, parent=parent, label=" " + label,
+                                  bitmap=buffer, **kwargs)
+
         dc = wx.MemoryDC()
         dc.SelectObject(buffer)
         maskColor = wx.Colour(255, 255, 255)
         dc.SetBrush(wx.Brush(maskColor))
         dc.Clear()
-        
+
         if usage == 'record':
             self.DrawRecord(dc, size)
         elif usage == 'stop':
@@ -431,23 +442,24 @@ class SymbolButton(BitmapTextButton):
             buffer.SetMaskColour(maskColor)
         self.SetBitmapLabel(buffer)
         dc.SelectObject(wx.NullBitmap)
-        
+
     def DrawRecord(self, dc, size):
         """Draw record symbol"""
         dc.SetBrush(wx.Brush(wx.Colour(255, 0, 0)))
         dc.DrawCircle(size[0]/2, size[1] / 2, size[0] / 2)
-        
+
     def DrawStop(self, dc, size):
         """Draw stop symbol"""
         dc.SetBrush(wx.Brush(wx.Colour(50, 50, 50)))
         dc.DrawRectangle(0, 0, size[0], size[1])
-        
+
     def DrawPlay(self, dc, size):
         """Draw play symbol"""
         dc.SetBrush(wx.Brush(wx.Colour(0, 255, 0)))
-        points = (wx.Point(0, 0), wx.Point(0, size[1]), wx.Point(size[0], size[1] / 2))
+        points = (wx.Point(0, 0), wx.Point(0, size[1]), wx.Point(size[0],
+                  size[1] / 2))
         dc.DrawPolygon(points)
-        
+
     def DrawPause(self, dc, size):
         """Draw pause symbol"""
         dc.SetBrush(wx.Brush(wx.Colour(50, 50, 50)))
@@ -486,7 +498,8 @@ class StaticWrapText(GenStaticText):
         """Calculates size of wrapped label"""
         parent = self.GetParent()
         newLabel = wordwrap(text=self._initialLabel, width=parent.GetSize()[0],
-                            dc=wx.ClientDC(parent), breakLongWords=True, margin=self._margin)
+                            dc=wx.ClientDC(parent), breakLongWords=True,
+                            margin=self._margin)
         GenStaticText.SetLabel(self, newLabel)
 
     def SetLabel(self, label):
@@ -497,15 +510,15 @@ class StaticWrapText(GenStaticText):
 class BaseValidator(wx.PyValidator):
     def __init__(self):
         wx.PyValidator.__init__(self)
-        
-        self.Bind(wx.EVT_TEXT, self.OnText) 
+
+        self.Bind(wx.EVT_TEXT, self.OnText)
 
     def OnText(self, event):
         """Do validation"""
         self.Validate()
-        
+
         event.Skip()
-        
+
     def Validate(self):
         """Validate input"""
         textCtrl = self.GetWindow()
@@ -517,7 +530,7 @@ class BaseValidator(wx.PyValidator):
             except ValueError:
                 self._notvalid()
                 return False
-        
+
         self._valid()
         return True
 
@@ -533,15 +546,16 @@ class BaseValidator(wx.PyValidator):
 
         sysColor = wx.SystemSettings_GetColour(wx.SYS_COLOUR_WINDOW)
         textCtrl.SetBackgroundColour(sysColor)
-        
+
         textCtrl.Refresh()
         return True
 
     def TransferToWindow(self):
         return True # Prevent wxDialog from complaining.
-    
+
     def TransferFromWindow(self):
         return True # Prevent wxDialog from complaining.
+
 
 class CoordinatesValidator(BaseValidator):
     """Validator for coordinates input (list of floats separated by comma)"""
@@ -557,17 +571,17 @@ class CoordinatesValidator(BaseValidator):
         if text:
             try:
                 text = text.split(',')
-                
+
                 for t in text:
                     float(t)
 
-                if len(text)%2 != 0:
+                if len(text) % 2 != 0:
                     return False
 
             except ValueError:
                 self._notvalid()
                 return False
-        
+
         self._valid()
         return True
 
@@ -575,31 +589,34 @@ class CoordinatesValidator(BaseValidator):
         """Clone validator"""
         return CoordinatesValidator()
 
+
 class IntegerValidator(BaseValidator):
     """Validator for floating-point input"""
     def __init__(self):
         BaseValidator.__init__(self)
         self.type = int
-        
+
     def Clone(self):
         """Clone validator"""
         return IntegerValidator()
+
 
 class FloatValidator(BaseValidator):
     """Validator for floating-point input"""
     def __init__(self):
         BaseValidator.__init__(self)
         self.type = float
-        
+
     def Clone(self):
         """Clone validator"""
         return FloatValidator()
+
 
 class EmailValidator(BaseValidator):
     """Validator for email input"""
     def __init__(self):
         BaseValidator.__init__(self)
- 
+
     def Validate(self):
         """Validate input"""
         textCtrl = self.GetWindow()
@@ -608,19 +625,20 @@ class EmailValidator(BaseValidator):
             if re.match(r'\b[\w.-]+@[\w.-]+.\w{2,4}\b', text) is None:
                 self._notvalid()
                 return False
-        
+
         self._valid()
         return True
- 
+
     def Clone(self):
         """Clone validator"""
         return EmailValidator()
- 
+
+
 class TimeISOValidator(BaseValidator):
     """Validator for time ISO format (YYYY-MM-DD) input"""
     def __init__(self):
         BaseValidator.__init__(self)
-    
+
     def Validate(self):
         """Validate input"""
         textCtrl = self.GetWindow()
@@ -631,17 +649,18 @@ class TimeISOValidator(BaseValidator):
             except:
                 self._notvalid()
                 return False
-        
+
         self._valid()
         return True
-        
+
     def Clone(self):
         """Clone validator"""
         return TimeISOValidator()
 
+
 class NTCValidator(wx.PyValidator):
     """validates input in textctrls, taken from wxpython demo"""
-    def __init__(self, flag = None):
+    def __init__(self, flag=None):
         wx.PyValidator.__init__(self)
         self.flag = flag
         self.Bind(wx.EVT_CHAR, self.OnChar)
@@ -661,7 +680,8 @@ class NTCValidator(wx.PyValidator):
             wx.Bell()
         # Returning without calling even.Skip eats the event before it
         # gets to the text control
-        return  
+        return
+
 
 class SimpleValidator(wx.PyValidator):
     """This validator is used to ensure that the user has entered something
@@ -699,7 +719,6 @@ class SimpleValidator(wx.PyValidator):
         transfer.
         """
         return True # Prevent wxDialog from complaining.
-
 
     def TransferFromWindow(self):
         """Transfer data from window to validator.
@@ -748,7 +767,6 @@ class GenericValidator(wx.PyValidator):
         """
         return True # Prevent wxDialog from complaining.
 
-
     def TransferFromWindow(self):
         """Transfer data from window to validator.
         """
@@ -757,13 +775,13 @@ class GenericValidator(wx.PyValidator):
 
 class SingleSymbolPanel(wx.Panel):
     """Panel for displaying one symbol.
-    
+
     Changes background when selected. Assumes that parent will catch
     events emitted on mouse click. Used in gui_core::dialog::SymbolDialog.
     """
     def __init__(self, parent, symbolPath):
         """Panel constructor
-        
+
         Signal symbolSelectionChanged - symbol selected
                                       - attribute 'name' (symbol name)
                                       - attribute 'doubleClick' (underlying cause)
@@ -773,63 +791,64 @@ class SingleSymbolPanel(wx.Panel):
         """
         self.symbolSelectionChanged = Signal('SingleSymbolPanel.symbolSelectionChanged')
 
-        wx.Panel.__init__(self, parent, id = wx.ID_ANY, style = wx.BORDER_RAISED)
+        wx.Panel.__init__(self, parent, id=wx.ID_ANY, style=wx.BORDER_RAISED)
         self.SetName(os.path.splitext(os.path.basename(symbolPath))[0])
         self.sBmp = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap(symbolPath))
 
         self.selected = False
         self.selectColor = wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT)
         self.deselectColor = wx.SystemSettings.GetColour(wx.SYS_COLOUR_WINDOW)
-        
+
         sizer = wx.BoxSizer()
-        sizer.Add(item = self.sBmp, proportion = 0, flag = wx.ALL | wx.ALIGN_CENTER, border = 5)
+        sizer.Add(item = self.sBmp, proportion=0, flag=wx.ALL | wx.ALIGN_CENTER, border = 5)
         self.SetBackgroundColour(self.deselectColor)
         self.SetMinSize(self.GetBestSize())
         self.SetSizerAndFit(sizer)
-        
+
         # binding to both (staticBitmap, Panel) necessary
         self.sBmp.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
         self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
         self.Bind(wx.EVT_LEFT_DCLICK, self.OnDoubleClick)
         self.sBmp.Bind(wx.EVT_LEFT_DCLICK, self.OnDoubleClick)
-        
+
     def OnLeftDown(self, event):
         """Panel selected, background changes"""
         self.selected = True
         self.SetBackgroundColour(self.selectColor)
         self.Refresh()
         event.Skip()
-        
+
         self.symbolSelectionChanged.emit(name=self.GetName(), doubleClick=False)
-        
+
     def OnDoubleClick(self, event):
         self.symbolSelectionChanged.emit(name=self.GetName(), doubleClick=True)
-        
+
     def Deselect(self):
         """Panel deselected, background changes back to default"""
         self.selected = False
         self.SetBackgroundColour(self.deselectColor)
         self.Refresh()
-        
+
     def Select(self):
         """Select panel, no event emitted"""
         self.selected = True
         self.SetBackgroundColour(self.selectColor)
         self.Refresh()
-        
+
+
 class GListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.CheckListCtrlMixin):
     """Generic ListCtrl with popup menu to select/deselect all
     items"""
     def __init__(self, parent):
         self.parent = parent
-        
-        wx.ListCtrl.__init__(self, parent, id = wx.ID_ANY,
-                             style = wx.LC_REPORT)
+
+        wx.ListCtrl.__init__(self, parent, id=wx.ID_ANY,
+                             style=wx.LC_REPORT)
         listmix.CheckListCtrlMixin.__init__(self)
-        
+
         # setup mixins
         listmix.ListCtrlAutoWidthMixin.__init__(self)
-        
+
         self.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.OnPopupMenu) #wxMSW
         self.Bind(wx.EVT_RIGHT_UP,            self.OnPopupMenu) #wxGTK
 
@@ -841,57 +860,57 @@ class GListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.CheckListCt
         """Show popup menu"""
         if self.GetItemCount() < 1:
             return
-        
+
         if not hasattr(self, "popupDataID1"):
             self.popupDataID1 = wx.NewId()
             self.popupDataID2 = wx.NewId()
-            
-            self.Bind(wx.EVT_MENU, self.OnSelectAll,  id = self.popupDataID1)
-            self.Bind(wx.EVT_MENU, self.OnSelectNone, id = self.popupDataID2)
-        
+
+            self.Bind(wx.EVT_MENU, self.OnSelectAll,  id=self.popupDataID1)
+            self.Bind(wx.EVT_MENU, self.OnSelectNone, id=self.popupDataID2)
+
         # generate popup-menu
         menu = wx.Menu()
         menu.Append(self.popupDataID1, _("Select all"))
         menu.Append(self.popupDataID2, _("Deselect all"))
-        
+
         self.PopupMenu(menu)
         menu.Destroy()
 
     def OnSelectAll(self, event):
         """Select all items"""
         item = -1
-        
+
         while True:
             item = self.GetNextItem(item)
             if item == -1:
                 break
             self.CheckItem(item, True)
-        
+
         event.Skip()
-        
+
     def OnSelectNone(self, event):
         """Deselect items"""
         item = -1
-        
+
         while True:
             item = self.GetNextItem(item, wx.LIST_STATE_SELECTED)
             if item == -1:
                 break
             self.CheckItem(item, False)
-        
+
         event.Skip()
 
 
 class SearchModuleWidget(wx.Panel):
     """Search module widget (used e.g. in SearchModuleWindow)
-        
+
     Signals:
         moduleSelected - attribute 'name' is module name
         showSearchResult - attribute 'result' is a node (representing module)
         showNotification - attribute 'message'
     """
     def __init__(self, parent, model,
-                 showChoice = True, showTip = False, **kwargs):
+                 showChoice=True, showTip=False, **kwargs):
         self._showTip = showTip
         self._showChoice = showChoice
         self._model = model
@@ -899,12 +918,12 @@ class SearchModuleWidget(wx.Panel):
         self._resultIndex = -1
         self._searchKeys = ['description', 'keywords', 'command']
         self._oldValue = ''
-        
+
         self.moduleSelected = Signal('SearchModuleWidget.moduleSelected')
         self.showSearchResult = Signal('SearchModuleWidget.showSearchResult')
         self.showNotification = Signal('SearchModuleWidget.showNotification')
 
-        wx.Panel.__init__(self, parent = parent, id = wx.ID_ANY, **kwargs)
+        wx.Panel.__init__(self, parent=parent, id=wx.ID_ANY, **kwargs)
 
 #        self._box = wx.StaticBox(parent = self, id = wx.ID_ANY,
 #                                label = " %s " % _("Find module - (press Enter for next match)"))
@@ -926,7 +945,7 @@ class SearchModuleWidget(wx.Panel):
                                              size = (-1, 35))
 
         if self._showChoice:
-            self._searchChoice = wx.Choice(parent = self, id = wx.ID_ANY)
+            self._searchChoice = wx.Choice(parent=self, id=wx.ID_ANY)
             self._searchChoice.SetItems(self._searchModule(keys=['command'], value=''))
             self._searchChoice.Bind(wx.EVT_CHOICE, self.OnSelectModule)
 
@@ -951,7 +970,7 @@ class SearchModuleWidget(wx.Panel):
             boxSizer.Add(item=self._searchTip,
                           flag=wx.ALIGN_CENTER_VERTICAL | wx.EXPAND)
 
-        sizer.Add(item = boxSizer, proportion = 1)
+        sizer.Add(item=boxSizer, proportion=1)
 
         self.SetSizer(sizer)
         sizer.Fit(self)
@@ -1004,20 +1023,20 @@ class SearchModuleWidget(wx.Panel):
         nodes = set()
         for key in keys:
             nodes.update(self._model.SearchNodes(key=key, value=value))
-        
+
         nodes = list(nodes)
         nodes.sort(key=lambda node: self._model.GetIndexOfNode(node))
         self._results = nodes
         self._resultIndex = -1
         commands = [node.data['command'] for node in nodes if node.data['command']]
         commands.sort() # return sorted list of commands (TODO: sort in better way)
-        
+
         return commands
-        
+
     def OnSelectModule(self, event):
         """Module selected from choice, update command prompt"""
         cmd  = self._searchChoice.GetStringSelection()
-        self.moduleSelected.emit(name = cmd)
+        self.moduleSelected.emit(name=cmd)
 
         if self._showTip:
             for module in self._results:
@@ -1030,6 +1049,7 @@ class SearchModuleWidget(wx.Panel):
         self._search.SetValue('')
         if self._showTip:
             self._searchTip.SetLabel('')
+
 
 class ManageSettingsWidget(wx.Panel):
     """Widget which allows loading and saving settings into file."""
@@ -1052,17 +1072,17 @@ class ManageSettingsWidget(wx.Panel):
         self.settingsSaving = Signal('ManageSettingsWidget.settingsSaving')
         self.settingsLoaded = Signal('ManageSettingsWidget.settingsLoaded')
 
-        wx.Panel.__init__(self, parent = parent, id = wx.ID_ANY)
+        wx.Panel.__init__(self, parent=parent, id=wx.ID_ANY)
 
-        self.settingsBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
-                                        label = " %s " % _("Settings"))
-        
-        self.settingsChoice = wx.Choice(parent = self, id = wx.ID_ANY)
+        self.settingsBox = wx.StaticBox(parent=self, id=wx.ID_ANY,
+                                        label=" %s " % _("Settings"))
+
+        self.settingsChoice = wx.Choice(parent=self, id=wx.ID_ANY)
         self.settingsChoice.Bind(wx.EVT_CHOICE, self.OnSettingsChanged)
-        self.btnSettingsSave = wx.Button(parent = self, id = wx.ID_SAVE)
+        self.btnSettingsSave = wx.Button(parent=self, id=wx.ID_SAVE)
         self.btnSettingsSave.Bind(wx.EVT_BUTTON, self.OnSettingsSave)
         self.btnSettingsSave.SetToolTipString(_("Save current settings"))
-        self.btnSettingsDel = wx.Button(parent = self, id = wx.ID_REMOVE)
+        self.btnSettingsDel = wx.Button(parent=self, id=wx.ID_REMOVE)
         self.btnSettingsDel.Bind(wx.EVT_BUTTON, self.OnSettingsDelete)
         self.btnSettingsSave.SetToolTipString(_("Delete currently selected settings"))
 
@@ -1083,20 +1103,16 @@ class ManageSettingsWidget(wx.Panel):
     def _layout(self):
 
         self.settingsSizer = wx.StaticBoxSizer(self.settingsBox, wx.HORIZONTAL)
-        self.settingsSizer.Add(item = wx.StaticText(parent = self,
-                                               id = wx.ID_ANY,
-                                               label = _("Load settings:")),
-                          flag = wx.ALIGN_CENTER_VERTICAL | wx.RIGHT,
-                          border  = 5)
-        self.settingsSizer.Add(item = self.settingsChoice,
-                          proportion = 1,
-                          flag = wx.EXPAND)
-        self.settingsSizer.Add(item = self.btnSettingsSave,
-                          flag = wx.LEFT | wx.RIGHT,
-                          border = 5)
-        self.settingsSizer.Add(item = self.btnSettingsDel,
-                          flag = wx.RIGHT,
-                          border = 5)
+        self.settingsSizer.Add(item=wx.StaticText(parent=self, id=wx.ID_ANY,
+                                                  label=_("Load settings:")),
+                               flag=wx.ALIGN_CENTER_VERTICAL | wx.RIGHT,
+                               border=5)
+        self.settingsSizer.Add(item=self.settingsChoice,
+                               proportion=1, flag=wx.EXPAND)
+        self.settingsSizer.Add(item=self.btnSettingsSave,
+                               flag=wx.LEFT | wx.RIGHT, border=5)
+        self.settingsSizer.Add(item=self.btnSettingsDel,
+                               flag=wx.RIGHT,border=5)
 
     def OnSettingsChanged(self, event):
         """Load named settings"""
@@ -1112,28 +1128,29 @@ class ManageSettingsWidget(wx.Panel):
     def GetSettings(self):
         """Load named settings"""
         return self._settings.copy()
-       
+
     def OnSettingsSave(self, event):
         """Save settings"""
-        dlg = wx.TextEntryDialog(parent = self,
-                                 message = _("Name:"),
-                                 caption = _("Save settings"))
+        dlg = wx.TextEntryDialog(parent=self,
+                                 message=_("Name:"),
+                                 caption=_("Save settings"))
         if dlg.ShowModal() == wx.ID_OK:
             name = dlg.GetValue()
             if not name:
-                GMessage(parent = self,
-                         message = _("Name not given, settings is not saved."))
+                GMessage(parent=self,
+                         message=_("Name not given, settings is not saved."))
             else:
                 self.settingsSaving.emit(name=name)
-                
+
             dlg.Destroy()
-  
+
     def SaveSettings(self, name):
         # check if settings item already exists
         if name in self._settings:
-            dlgOwt = wx.MessageDialog(self, message = _("Settings <%s> already exists. "
-                                                        "Do you want to overwrite the settings?") % name,
-                                      caption = _("Save settings"), style = wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+            dlgOwt = wx.MessageDialog(self, message=_("Settings <%s> already exists. "
+                                                      "Do you want to overwrite the settings?") % name,
+                                      caption=_("Save settings"),
+                                      style=wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
             if dlgOwt.ShowModal() != wx.ID_YES:
                 dlgOwt.Destroy()
                 return
@@ -1145,7 +1162,7 @@ class ManageSettingsWidget(wx.Panel):
         self.settingsChoice.SetStringSelection(name)
 
         self.data_to_save = []
- 
+
     def _saveSettings(self):
         """Save settings and reload if successful"""
         if self._writeSettings() == 0:
@@ -1182,11 +1199,11 @@ class ManageSettingsWidget(wx.Panel):
             GMessage(parent = self,
                      message = _("No settings is defined. Operation canceled."))
             return
-        
+
         self._settings.pop(name)
         if self._writeSettings() == 0:
             self._settings = self._loadSettings()
-        
+
     def _writeSettings(self):
         """Save settings into the file
 
@@ -1217,14 +1234,14 @@ class ManageSettingsWidget(wx.Panel):
                    message = _("Unable to save settings"))
             return -1
         fd.close()
-        
+
         return 0
 
     def _loadSettings(self):
         """Load settings from the file
 
         The file is defined by self.SettingsFile.
-        
+
         :return: parsed dict
         :return: empty dict on error
         """
@@ -1260,12 +1277,12 @@ class ManageSettingsWidget(wx.Panel):
         """Load settings from the file in format version 2.0
 
         The file is defined by self.SettingsFile.
-        
+
         :return: parsed dict
         :return: empty dict on error
         """
         data = dict()
-        
+
         for line in fd_lines[1:]:
             try:
                 lineData = []
@@ -1285,7 +1302,7 @@ class ManageSettingsWidget(wx.Panel):
                         while True:
                             if line[idx - (i_esc_chars + 1)] == self.esc_chars[self.e_char_i]:
                                 i_esc_chars += 1
-                            else: 
+                            else:
                                 break
                         if i_esc_chars%2 != 0:
                             i_last = idx + 1
@@ -1311,12 +1328,12 @@ class ManageSettingsWidget(wx.Panel):
         """Load settings from the file in format version 1.0 (backward compatibility)
 
         The file is defined by self.SettingsFile.
-        
+
         :return: parsed dict
         :return: empty dict on error
         """
         data = dict()
-      
+
         for line in fd_lines:
             try:
                 lineData = line.rstrip('\n').split(';')
@@ -1327,17 +1344,17 @@ class ManageSettingsWidget(wx.Panel):
                     data[lineData[0]] = (lineData[1], lineData[2], lineData[3], '')
             except ValueError:
                 pass
-        
+
         return data
 
 class PictureComboBox(wx.combo.OwnerDrawnComboBox):
     """Abstract class of ComboBox with pictures.
-    
+
         Derived class has to specify has to specify _getPath method.
     """
     def OnDrawItem(self, dc, rect, item, flags):
         """Overridden from OwnerDrawnComboBox.
-        
+
         Called to draw each item in the list.
         """
         if item == wx.NOT_FOUND:
@@ -1367,8 +1384,8 @@ class PictureComboBox(wx.combo.OwnerDrawnComboBox):
 
     def GetPictureBitmap(self, name):
         """Returns bitmap for given picture name.
-        
-        :param str colorTable: name of color table        
+
+        :param str colorTable: name of color table
         """
         if not hasattr(self, 'bitmaps'):
             self.bitmaps = {}

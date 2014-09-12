@@ -52,6 +52,7 @@ class MapWindowProperties(object):
         self._alignExtent = UserSettings.Get(group='display',
                                              key='alignExtent',
                                              subkey='enabled')
+
     @property
     def resolution(self):
         return self._resolution
@@ -95,10 +96,10 @@ class MapWindowProperties(object):
 
 class MapWindowBase(object):
     """Abstract map display window class
-    
+
     Superclass for BufferedWindow class (2D display mode), and GLWindow
     (3D display mode).
-    
+
     Subclasses have to define
      - _bindMouseEvents method which binds MouseEvent handlers
      - Pixel2Cell
@@ -127,8 +128,8 @@ class MapWindowBase(object):
             'box'  : "point"
             }
         # last east, north coordinates, changes on mouse motion
-        self.lastEN = None 
-        
+        self.lastEN = None
+
         # stores overridden cursor
         self._overriddenCursor = None
 
@@ -177,10 +178,10 @@ class MapWindowBase(object):
         """
         for ev, handlers in self.handlersContainer.iteritems():
             self.Bind(ev, self.EventTypeHandler(handlers))
-    
+
     def EventTypeHandler(self, evHandlers):
-        return lambda event:self.HandlersCaller(event, evHandlers)  
-    
+        return lambda event : self.HandlersCaller(event, evHandlers)
+
     def HandlersCaller(self, event, handlers):
         """Hepler function which calls all handlers registered for
         event
@@ -190,53 +191,54 @@ class MapWindowBase(object):
                 handler(event)
             except:
                 handlers.remove(handler)
-                GError(parent = self,
+                GError(parent=self,
                        message=_("Error occured during calling of handler: %s \n"
                                  "Handler was unregistered.") % handler.__name__)
-        
+
         event.Skip() 
 
-    def RegisterMouseEventHandler(self, event, handler, cursor = None):
+    def RegisterMouseEventHandler(self, event, handler, cursor=None):
         """Binds event handler
 
-        @depreciated This method is depreciated. Use Signals or drawing API instead.
-        Signals do not cover all events but new Signals can be added when needed
-        consider also adding generic signal. However, more interesing and useful
-        is higher level API to create objects, graphics etc.
+        @depreciated This method is depreciated. Use Signals or drawing API
+        instead. Signals do not cover all events but new Signals can be added
+        when needed consider also adding generic signal. However, more
+        interesing and useful is higher level API to create objects, graphics etc.
 
         Call event.Skip() in handler to allow default processing in MapWindow.
 
         If any error occures inside of handler, the handler is removed.
 
-        Before handler is unregistered it is called with 
+        Before handler is unregistered it is called with
         string value "unregistered" of event parameter.
 
-        @code
-        # your class methods
-        def OnButton(self, event):
-            # current map display's map window
-            # expects LayerManager to be the parent
-            self.mapwin = self.parent.GetLayerTree().GetMapDisplay().GetWindow()
-            if self.mapwin.RegisterEventHandler(wx.EVT_LEFT_DOWN, self.OnMouseAction,
-                                                'cross'):
-                self.parent.GetLayerTree().GetMapDisplay().Raise()
-            else:
-                # handle that you cannot get coordinates
-        
-        def OnMouseAction(self, event):
-            # get real world coordinates of mouse click
-            coor = self.mapwin.Pixel2Cell(event.GetPositionTuple()[:])
-            self.text.SetLabel('Coor: ' + str(coor))
-            self.mapwin.UnregisterMouseEventHandler(wx.EVT_LEFT_DOWN, self.OnMouseAction)
-            event.Skip()
-        @endcode
+        ::
 
-        Emits mouseHandlerRegistered signal before handler is registered.        
+            # your class methods
+            def OnButton(self, event):
+                # current map display's map window
+                # expects LayerManager to be the parent
+                self.mapwin = self.parent.GetLayerTree().GetMapDisplay().GetWindow()
+                if self.mapwin.RegisterEventHandler(wx.EVT_LEFT_DOWN, self.OnMouseAction,
+                                                    'cross'):
+                    self.parent.GetLayerTree().GetMapDisplay().Raise()
+                else:
+                    # handle that you cannot get coordinates
+
+            def OnMouseAction(self, event):
+                # get real world coordinates of mouse click
+                coor = self.mapwin.Pixel2Cell(event.GetPositionTuple()[:])
+                self.text.SetLabel('Coor: ' + str(coor))
+                self.mapwin.UnregisterMouseEventHandler(wx.EVT_LEFT_DOWN, self.OnMouseAction)
+                event.Skip()
+
+
+        Emits mouseHandlerRegistered signal before handler is registered.
 
         :param event: one of mouse events
         :param handler: function to handle event
         :param cursor: cursor which temporary overrides current cursor
-        
+
         :return: True if successful
         :return: False if event cannot be bind
         """
