@@ -214,7 +214,26 @@ class Columns(object):
         return self.odict.__len__()
 
     def __eq__(self, obj):
+        """Return True if two table have the same columns.
+
+        >>> import sqlite3
+        >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
+        >>> connection = sqlite3.connect(get_path(path))
+        >>> cols0 = Columns('census', connection)
+        >>> cols1 = Columns('census', connection)
+        >>> cols2 = Columns('hospitals', connection)
+        >>> cols0 == cols1
+        True
+        >>> cols1 == cols2
+        False
+        """
         return obj.tname == self.tname and obj.odict == self.odict
+
+    def __ne__(self, other):
+        return not self == other
+
+    # Restore Python 2 hashing beaviour on Python 3
+    __hash__ = object.__hash__
 
     def is_pg(self):
         """Return True if is a psycopg connection. ::
@@ -499,7 +518,7 @@ class Columns(object):
             >>> cols_sqlite.cast('n_pizzas', 'float8')  # doctest: +ELLIPSIS
             Traceback (most recent call last):
               ...
-            DBError: u'SQLite does not support to cast columns.'
+            DBError: SQLite does not support to cast columns.
             >>> import psycopg2 as pg                         # doctest: +SKIP
             >>> cols_pg = Columns('boundary_municp_pg',
             ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
@@ -577,7 +596,7 @@ class Link(object):
 
         >>> link = Link(1, 'link0', 'census', 'cat',
         ...             '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db', 'sqlite')
-        >>> link.number                                       # doctest: +SKIP
+        >>> link.layer
         1
         >>> link.name
         'link0'
@@ -697,11 +716,30 @@ class Link(object):
         return "Link(%d, %s, %s)" % (self.layer, self.name, self.driver)
 
     def __eq__(self, link):
+        """Return True if two Link instance have the same parameters.
+
+        >>> l0 = Link(1, 'link0', 'census', 'cat',
+        ...           '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db', 'sqlite')
+        >>> l1 = Link(1, 'link0', 'census', 'cat',
+        ...           '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db', 'sqlite')
+        >>> l2 = Link(2, 'link0', 'census', 'cat',
+        ...           '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db', 'sqlite')
+        >>> l0 == l1
+        True
+        >>> l1 == l2
+        False
+        """
         attrs = ['layer', 'name', 'table_name', 'key', 'driver']
         for attr in attrs:
             if getattr(self, attr) != getattr(link, attr):
                 return False
         return True
+
+    def __ne__(self, other):
+        return not self == other
+
+    # Restore Python 2 hashing beaviour on Python 3
+    __hash__ = object.__hash__
 
     def connection(self):
         """Return a connection object. ::
@@ -794,7 +832,7 @@ class DBlinks(object):
 
         >>> from grass.pygrass.vector import VectorTopo
         >>> cens = VectorTopo('census')
-        >>> cens.open()
+        >>> cens.open(mode='r')
         >>> dblinks = DBlinks(cens.c_mapinfo)
         >>> dblinks
         DBlinks([Link(1, census, sqlite)])
@@ -802,6 +840,7 @@ class DBlinks(object):
         Link(1, census, sqlite)
         >>> dblinks['census']
         Link(1, census, sqlite)
+        >>> cens.close()
 
     ..
     """
@@ -873,7 +912,7 @@ class DBlinks(object):
 
         >>> from grass.pygrass.vector import VectorTopo
         >>> municip = VectorTopo('census')
-        >>> municip.open()
+        >>> municip.open(mode='r')
         >>> dblinks = DBlinks(municip.c_mapinfo)
         >>> dblinks
         DBlinks([Link(1, census, sqlite)])
@@ -900,7 +939,7 @@ class DBlinks(object):
 
         >>> from grass.pygrass.vector import VectorTopo
         >>> municip = VectorTopo('census')
-        >>> municip.open()
+        >>> municip.open(mode='r')
         >>> dblinks = DBlinks(municip.c_mapinfo)
         >>> dblinks
         DBlinks([Link(1, census, sqlite)])

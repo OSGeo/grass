@@ -225,12 +225,29 @@ class Region(object):
         return self.__unicode__()
 
     def __eq__(self, reg):
+        """Compare two region.
+
+        >>> r0 = Region()
+        >>> r1 = Region()
+        >>> r2 = Region()
+        >>> r2.nsres = 5
+        >>> r0 == r1
+        True
+        >>> r1 == r2
+        False
+        """
         attrs = ['north', 'south', 'west', 'east', 'top', 'bottom',
                  'nsres', 'ewres', 'tbres']
         for attr in attrs:
             if getattr(self, attr) != getattr(reg, attr):
                 return False
         return True
+
+    def __ne__(self, other):
+        return not self == other
+
+    # Restore Python 2 hashing beaviour on Python 3
+    __hash__ = object.__hash__
 
     def keys(self):
         """Return a list of valid keys. ::
@@ -299,10 +316,9 @@ class Region(object):
         ..
         """
         from grass.pygrass.vector import VectorTopo
-        vect = VectorTopo(vector_name)
-        vect.open()
-        bbox = vect.bbox()
-        self.set_bbox(bbox)
+        with VectorTopo(vector_name, mode='r') as vect:
+            bbox = vect.bbox()
+            self.set_bbox(bbox)
 
     def get_current(self):
         """Set the current GRASS region to the Region object"""
