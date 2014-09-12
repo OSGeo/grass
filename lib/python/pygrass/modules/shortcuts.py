@@ -28,8 +28,9 @@ class MetaModule(object):
        >>> g_mlist.inputs.type = 'rast'
        >>> g_mlist.stdout_ = -1
        >>> g_mlist.run()
+       Module('g.mlist')
        >>> g_mlist.outputs.stdout                         # doctest: +ELLIPSIS
-       'basins...soils...'
+       '...basins...soils...'
        >>> r = MetaModule('r')
        >>> what = r.what
        >>> what.description
