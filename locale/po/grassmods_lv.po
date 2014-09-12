@@ -3,13 +3,13 @@
 # Copyright (C) 2005, GRASS Development Team
 #
 # Peteris Bruns <peteris.bruns@gmail.com>, 2005.
-# Maris Nartiss <maris.kde@gmail.com>, 2006, 2012.
+# Maris Nartiss <maris.kde@gmail.com>, 2006, 2012, 2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_lv\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-07-31 19:08+0200\n"
-"PO-Revision-Date: 2012-01-27 14:24+0200\n"
+"PO-Revision-Date: 2014-09-10 12:05+0300\n"
 "Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
 "Language-Team: Latvian\n"
 "Language: lv\n"
@@ -17,8 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
-"2);\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);\n"
 
 #: ../raster/r.out.pov/main.c:121 ../raster/r.out.vrml/main.c:47
 #: ../raster/r.regression.multi/main.c:128 ../raster/r.clump/main.c:50
@@ -170,7 +169,81 @@ msgstr ""
 
 #: ../raster/r.out.pov/main.c:124
 #, fuzzy
-msgid "Converts a raster map layer into a height-field file for POV-Ray."
+msgid "connection settings"
+msgstr "Lūdzu izlabo iestatījumus."
+
+#: ../temporal/t.connect/main.c:38
+#, fuzzy
+msgid "Prints/sets general temporal GIS database connection for current mapset."
+msgstr "izdrukāt tekošā pieslēguma parametrus un iziet"
+
+#: ../temporal/t.connect/main.c:42 ../db/db.connect/main.c:51
+#, fuzzy
+msgid "Print current connection parameters and exit"
+msgstr "izdrukāt tekošā pieslēguma parametrus un iziet"
+
+#: ../temporal/t.connect/main.c:43 ../db/db.login/main.c:72
+#: ../db/db.connect/main.c:53 ../db/db.connect/main.c:58
+#: ../locale/scriptstrings/g.extension_to_translate.c:13
+#: ../locale/scriptstrings/g.extension_to_translate.c:15
+#: ../locale/scriptstrings/g.extension_to_translate.c:17
+#: ../locale/scriptstrings/g.extension_to_translate.c:19
+#: ../locale/scriptstrings/t.rast.colors_to_translate.c:16
+#: ../raster/r.external/main.c:94 ../raster/r.out.gdal/main.c:142
+#: ../raster/r.stream.stats/main.c:89 ../raster/r.stream.stats/main.c:94
+#: ../raster/r.colors/edit_colors.c:128 ../raster/r.what/main.c:124
+#: ../raster/r.what/main.c:132 ../raster/r.what/main.c:146
+#: ../raster/r.what/main.c:151 ../raster/r.what/main.c:156
+#: ../raster/r.what/main.c:161 ../raster/r.external.out/main.c:272
+#: ../raster/r.external.out/main.c:283 ../raster/r.in.gdal/main.c:152
+#: ../raster/r.sunmask/main.c:232 ../raster/r.sunmask/main.c:238
+#: ../raster/r.proj/main.c:210 ../raster/r.proj/main.c:220
+#: ../raster/r.proj/main.c:226 ../vector/v.db.connect/main.c:84
+#: ../vector/v.db.connect/main.c:89 ../vector/v.db.connect/main.c:96
+#: ../vector/v.db.connect/main.c:103 ../vector/v.external/args.c:41
+#: ../vector/v.external/args.c:47 ../vector/v.external/args.c:55
+#: ../vector/v.external.out/args.c:61 ../vector/v.external.out/args.c:73
+#: ../vector/v.external.out/args.c:79 ../vector/v.info/parse.c:25
+#: ../vector/v.info/parse.c:31 ../vector/v.info/parse.c:36
+#: ../vector/v.info/parse.c:41 ../vector/v.info/parse.c:46
+#: ../vector/v.in.ogr/main.c:250 ../vector/v.in.ogr/main.c:256
+#: ../vector/v.colors/main.c:134 ../vector/v.what/main.c:89
+#: ../vector/v.what/main.c:94 ../vector/v.what/main.c:99
+#: ../vector/v.to.db/parse.c:116 ../vector/v.to.db/parse.c:121
+#: ../vector/v.to.db/parse.c:127 ../vector/v.to.db/parse.c:133
+#: ../imagery/i.group/main.c:79 ../imagery/i.group/main.c:84
+#: ../imagery/i.group/main.c:89 ../display/d.mon/main.c:100
+#: ../display/d.mon/main.c:105 ../display/d.mon/main.c:110
+#: ../general/g.proj/main.c:79 ../general/g.proj/main.c:85
+#: ../general/g.proj/main.c:91 ../general/g.proj/main.c:97
+#: ../general/g.proj/main.c:103 ../general/g.proj/main.c:114
+#: ../general/g.proj/main.c:119 ../general/g.mapsets/main.c:89
+#: ../general/g.mapsets/main.c:94 ../general/g.mapsets/main.c:100
+#: ../general/g.region/main.c:84 ../general/g.region/main.c:90
+#: ../general/g.region/main.c:95 ../general/g.region/main.c:101
+#: ../general/g.region/main.c:107 ../general/g.region/main.c:113
+#: ../general/g.region/main.c:119 ../general/g.region/main.c:127
+#: ../general/g.region/main.c:132 ../general/g.region/main.c:138
+#: ../general/g.region/main.c:143 ../general/g.mlist/main.c:120
+#: ../general/g.mlist/main.c:125 ../general/g.mlist/main.c:130
+#: ../general/g.mlist/main.c:135 ../general/g.mapset/main.c:89
+#: ../general/g.mapset/main.c:95
+msgid "Print"
+msgstr "Drukāt"
+
+#: ../temporal/t.connect/main.c:48 ../db/db.connect/main.c:63
+#, fuzzy
+msgid "Check connection parameters, set if uninitialized, and exit"
+msgstr "izdrukāt tekošā pieslēguma parametrus un iziet"
+
+#: ../temporal/t.connect/main.c:49 ../temporal/t.connect/main.c:55
+#: ../temporal/t.connect/main.c:60 ../temporal/t.connect/main.c:65
+#: ../temporal/t.connect/main.c:69 ../db/db.connect/main.c:64
+#: ../db/db.connect/main.c:70 ../db/db.connect/main.c:75
+#: ../db/db.connect/main.c:79 ../db/db.connect/main.c:83
+#: ../db/db.connect/main.c:93 ../general/g.gisenv/main.c:64
+#: ../general/g.gisenv/main.c:72 ../general/g.gisenv/main.c:81
+msgid "Set"
 msgstr ""
 "Ģenerē rastra karti, kur vienlaidus apgabali ir palielināti par vienu šūnu."
 
@@ -436,7 +509,7 @@ msgstr "Rastra izejas fails"
 #: ../raster/r.sunhours/main.c:72 ../raster/r.sunmask/main.c:117
 #: ../raster/r.horizon/main.c:181 ../raster/r.sun/main.c:240
 msgid "solar"
-msgstr ""
+msgstr "Noklusētā datubāzes lietotāju grupa kurai atlases privilēģijas ir garantētas"
 
 #: ../raster/r.sunhours/main.c:73
 msgid "Calculates solar elevation, solar azimuth, and sun hours."
@@ -484,7 +557,7 @@ msgstr ""
 
 #: ../raster/r.sunhours/main.c:106
 msgid "Month"
-msgstr ""
+msgstr "Ieejas tabulas nosaukums (tikai tad, ja pieprasījums/'select' nav norādīts)"
 
 #: ../raster/r.sunhours/main.c:107
 msgid "If not given, day is interpreted as day of the year"
@@ -727,9 +800,13 @@ msgstr "Kļūda meiģinot nolasīt dbmscap failu\n"
 msgid "output"
 msgstr "Izejas rastra kartes nosaukums"
 
-#: ../raster/r.external.out/main.c:238 ../raster/r.external/main.c:57
-#: ../vector/v.external.out/main.c:46 ../vector/v.external/main.c:50
-msgid "external"
+#: ../db/drivers/sqlite/fetch.c:203
+#, fuzzy
+msgid "Unable to scan timestamp:"
+msgstr "Nav iespēju atvērt šūnu failu priekš[%s]"
+
+#: ../db/drivers/sqlite/fetch.c:218
+msgid "SQLite driver: parsing of interval values not implemented; assuming seconds"
 msgstr ""
 
 #: ../raster/r.external.out/main.c:240
@@ -1646,9 +1723,7 @@ msgstr "Lasam dig_att failu...\n"
 
 #: ../raster/r.cost/main.c:483
 #, c-format
-msgid ""
-"Negative cell value found at row %d, col %d. Setting negative value to "
-"null_cost value"
+msgid "Data exists in input file after fully importing expected data.  [%.4f ...]"
 msgstr ""
 
 #: ../raster/r.cost/main.c:500
@@ -2038,8 +2113,8 @@ msgstr "Eksistējošas rastra kartes nosaukums"
 
 #: ../raster/r.watershed/seg/close_maps.c:246
 #, fuzzy
-msgid "Closing SL map"
-msgstr "Eksistējošas rastra kartes nosaukums"
+msgid "Output 3D raster map Storing the groundwater budget for each cell [m^3/s]\n"
+msgstr "Nav ieejas karte(s) norādīta."
 
 #: ../raster/r.watershed/seg/do_cum.c:118
 #: ../raster/r.watershed/ram/do_cum.c:114
@@ -2143,18 +2218,8 @@ msgstr ""
 msgid "SECTION 4: RUSLE LS and/or S factor determination."
 msgstr ""
 
-#: ../raster/r.watershed/ram/do_cum.c:474
-#, c-format
-msgid "MFD: A * path already processed when distributing flow: %d of %d cell"
-msgid_plural ""
-"MFD: A * path already processed when distributing flow: %d of %d cells"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-
-#: ../raster/r.watershed/shed/intro.c:8
-#, c-format
-msgid "%s provides a text-based user-interface to the %s program."
+#: ../raster3d/r3.out.vtk/parameters.c:82
+msgid "Three (R,G,B) 3D raster maps to create RGB values [redmap,greenmap,bluemap]"
 msgstr ""
 
 #: ../raster/r.watershed/shed/intro.c:10
@@ -2248,9 +2313,7 @@ msgstr ""
 
 #: ../raster/r.watershed/shed/basin_maps.c:45
 #, c-format
-msgid ""
-"\n"
-"Your choice: "
+msgid "Allows creation and/or modification of raster3d map layer support files."
 msgstr ""
 "\n"
 "Jūsu izvēle: "
@@ -2580,9 +2643,7 @@ msgid "disturbed land.  %s reflects this with an optional map layer or value"
 msgstr ""
 
 #: ../raster/r.watershed/shed/com_line.c:351
-msgid ""
-"where the value indicates the percent of disturbed (barren) land in that "
-"cell."
+msgid "Retiles an existing 3D raster map with user defined x, y and z tile size."
 msgstr ""
 
 #: ../raster/r.watershed/shed/com_line.c:352
@@ -2623,9 +2684,8 @@ msgid "these swales.  %s allows for an input (warning: kludge factor)"
 msgstr ""
 
 #: ../raster/r.watershed/shed/com_line.c:384
-msgid ""
-"that prevents the surface flow distance from getting too long.  Normally,"
-msgstr ""
+msgid "Raster map %d Filename: %s already exists. Use the flag --o to overwrite."
+msgstr "Izejas karte kurā tiks ierakstīti punkti"
 
 #: ../raster/r.watershed/shed/com_line.c:385
 msgid "maximum slope length is around 600 feet (about 183 meters)."
@@ -3321,9 +3381,23 @@ msgstr ""
 msgid "ASCII file containing input data (or \"-\" to read from stdin)"
 msgstr "ASCII fails ar ievades datiem"
 
-#: ../raster/r.in.xyz/main.c:177 ../raster/r.in.lidar/main.c:184
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:11
-msgid "Statistic to use for raster values"
+#: ../locale/scriptstrings/db.univar_to_translate.c:1
+#, fuzzy
+msgid "Calculates univariate statistics on selected table column."
+msgstr "Ģenerē rastra karšu platību statistiku."
+
+#: ../locale/scriptstrings/db.univar_to_translate.c:5
+#: ../locale/scriptstrings/v.db.univar_to_translate.c:5
+#, fuzzy
+msgid "Name of attribute column on which to calculate statistics (must be numeric)"
+msgstr "Izejas rastra kartes nosaukums"
+
+#: ../locale/scriptstrings/db.univar_to_translate.c:6
+#: ../locale/scriptstrings/v.db.univar_to_translate.c:6
+#: ../locale/scriptstrings/v.rast.stats_to_translate.c:11
+#: ../raster/r.univar/r.univar_main.c:52
+#: ../raster/r.univar/r3.univar_main.c:52 ../vector/v.univar/main.c:119
+msgid "Percentile to calculate (requires extended statistics flag)"
 msgstr ""
 
 #: ../raster/r.in.xyz/main.c:181 ../raster/r.in.xyz/main.c:289
@@ -3511,10 +3585,7 @@ msgstr ""
 #: ../raster/r.in.xyz/main.c:681 ../raster/r.in.xyz/main.c:689
 #: ../raster/r.in.xyz/main.c:1198 ../raster/r.in.xyz/main.c:1206
 #, c-format
-msgid ""
-"Not enough data columns. Incorrect delimiter or column number? Found the "
-"following character(s) in row %lu:\n"
-"[%s]"
+msgid "By default only extensions built against different GIS Library are rebuilt."
 msgstr ""
 
 #: ../raster/r.in.xyz/main.c:685 ../raster/r.in.xyz/main.c:1202
@@ -3674,10 +3745,15 @@ msgstr ""
 msgid "Percent complete..."
 msgstr "Pabeigts: "
 
-#: ../raster/r.grow.distance/main.c:152 ../raster/r.grow/main.c:127
-#: ../raster/r.distance/main.c:40 ../misc/m.cogo/main.c:228
-#: ../display/d.rhumbline/main.c:44 ../display/d.geodesic/main.c:44
-#: ../vector/v.distance/main.c:90
+#: ../locale/scriptstrings/i.spectral_to_translate.c:1
+msgid "Displays spectral response at user specified locations in group or images."
+msgstr ""
+
+#: ../locale/scriptstrings/i.spectral_to_translate.c:3
+#: ../raster/r.what/main.c:99 ../raster/r.what.color/main.c:89
+#: ../vector/v.what.rast/main.c:75 ../vector/v.what.rast3/main.c:68
+#: ../vector/v.what/main.c:61 ../display/d.what.vect/main.c:59
+#: ../display/d.what.rast/main.c:52 ../display/d.where/main.c:46
 #, fuzzy
 msgid "distance"
 msgstr "nederīgs reģions: %s"
@@ -3868,10 +3944,7 @@ msgid "Raster map containing the 1-hour fuel moisture (%)"
 msgstr ""
 
 #: ../raster/r.ros/main.c:240 ../raster/r.spread/main.c:204
-msgid ""
-"Name of an existing raster map layer in the user's current mapset search "
-"path containing the 1-hour (<.25\") fuel moisture (percentage content "
-"multiplied by 100)."
+msgid "Performs Tasseled Cap (Kauth Thomas) transformation for LANDSAT-TM data."
 msgstr ""
 
 #: ../raster/r.ros/main.c:248
@@ -4282,9 +4355,7 @@ msgstr "Reiķinam saules pozīciju... (lietojam solpos (V. %s) no NREL)\n"
 msgid ""
 "Using user defined sun azimuth, altitude settings (ignoring eventual other "
 "values)"
-msgstr ""
-"Lietot lietotāja definētu saules azimutu, augstuma iestatījumi (ignorē "
-"varbūtējas citas vērtības)\n"
+msgstr "Ģenerē rastra karti, kur vienlaidus apgabali ir palielināti par vienu šūnu."
 
 #: ../raster/r.sunmask/main.c:399
 #, fuzzy
@@ -4342,9 +4413,11 @@ msgstr ""
 
 #: ../raster/r.sunmask/g_solposition.c:88
 #, c-format
-msgid ""
-"Specified point %f, %f outside of current region, is that intended? Anyway, "
-"it will be used."
+msgid "Base name for output raster map (band number will be appended to base name)"
+msgstr "Izvades rastra karte ar ezeru"
+
+#: ../locale/scriptstrings/r.mask_to_translate.c:1
+msgid "Creates a MASK for limiting raster operation."
 msgstr ""
 
 #: ../raster/r.sunmask/g_solposition.c:98 ../raster/r.latlong/main.c:101
@@ -4378,9 +4451,8 @@ msgid "projection"
 msgstr "Nevarēja atrast rastra failu %s"
 
 #: ../raster/r.latlong/main.c:60
-#, fuzzy
-msgid "Creates a latitude/longitude raster map."
-msgstr "Nevar izveidot tabulu: %s"
+msgid "Layer number or name (vector)"
+msgstr "Slāņa numurs vai nosaukums"
 
 #: ../raster/r.latlong/main.c:66
 #, fuzzy
@@ -4600,9 +4672,7 @@ msgstr ""
 
 #: ../raster/r.colors/rules.c:64
 #, c-format
-msgid ""
-"Your color rules do not cover the whole range of data!\n"
-" (rules %f to %f but data %f to %f)"
+msgid "Exports a raster map to a text file as x,y,z values based on cell centers."
 msgstr ""
 
 #: ../raster/r.colors/rules.c:104 ../raster/r.reclass/parse.c:41
@@ -4764,10 +4834,8 @@ msgstr "izveidot sarakstu ar visām pieejamajām karšu biblotēkām/mapsets"
 msgid "Invert colors"
 msgstr "Teksta krāsa"
 
-#: ../raster/r.colors/edit_colors.c:137
-#: ../locale/scriptstrings/t.rast.colors_to_translate.c:19
-#: ../vector/v.colors/main.c:143
-msgid "Logarithmic scaling"
+#: ../locale/scriptstrings/r.tileset_to_translate.c:6
+msgid "Name of region to use instead of current region for bounds and resolution"
 msgstr ""
 
 #: ../raster/r.colors/edit_colors.c:142
@@ -5245,8 +5313,8 @@ msgstr "Neiespējami atvērt šūnu failu[%s]"
 
 #: ../raster/r.out.ppm/main.c:154
 #, fuzzy
-msgid "Converting..."
-msgstr "Drukā ... "
+msgid "Drops a column from the attribute table connected to a given vector map."
+msgstr "Eksistējošas rastra kartes nosaukums"
 
 #: ../raster/r.out.ppm/main.c:234
 #, fuzzy, c-format
@@ -5301,10 +5369,10 @@ msgstr ""
 msgid "Distance must be >= 0.0"
 msgstr "2 līmeņiem jābūt norādītiem"
 
-#: ../raster/r.random.cells/init.c:89 ../raster/r.random.surface/main.c:128
-#, fuzzy, c-format
-msgid "Generating raster map <%s>..."
-msgstr "Lasam dig_att failu...\n"
+#: ../locale/scriptstrings/v.db.renamecolumn_to_translate.c:1
+#, fuzzy
+msgid "Renames a column in the attribute table connected to a given vector map."
+msgstr "Eksistējošas rastra kartes nosaukums"
 
 #: ../raster/r.grow/main.c:129 ../locale/scriptstrings/r.grow_to_translate.c:1
 msgid "Generates a raster map layer with contiguous areas grown by one cell."
@@ -5406,17 +5474,18 @@ msgstr "Izmantojamās rastra kartes nosaukums priekš <%s>"
 #: ../raster/r.stats/main.c:222 ../raster/r.report/parse.c:104
 #: ../raster/r.report/parse.c:148 ../raster/r.report/parse.c:154
 #, fuzzy
-msgid "Floating point"
-msgstr "Rakstu jaunu failu... \n"
+msgid ""
+"Dissolves boundaries between adjacent areas sharing a common category number "
+"or attribute."
+msgstr "Atribūtu tabula nav atrasta -> tiek izmantoti kategoriju numuri kā atribūti"
 
 #: ../raster/r.stats/main.c:149 ../raster/r.report/parse.c:111
 msgid "Sort output statistics by cell counts"
 msgstr ""
 
 #: ../raster/r.stats/main.c:150 ../raster/r.report/parse.c:112
-#, fuzzy
-msgid "Default: sorted by categories or intervals"
-msgstr "Izvades rastra karte ar ezeru"
+msgid "Layer number or name."
+msgstr "Slāņa numurs vai nosaukums."
 
 #: ../raster/r.stats/main.c:154 ../raster/r.report/parse.c:116
 msgid "Sort by cell counts in ascending order"
@@ -5486,9 +5555,10 @@ msgstr "Nevajag taisīt atribūtu tabulu"
 msgid "No data"
 msgstr "vektora karte <%s> nav atrasta"
 
-#: ../raster/r.stats/main.c:211 ../raster/r.report/parse.c:142
-msgid "Do not report cells where all maps have no data"
-msgstr ""
+#: ../locale/scriptstrings/v.in.sites.all_to_translate.c:1
+#, fuzzy
+msgid "Converts all old GRASS < Ver5.7 sites maps in current mapset to vector maps."
+msgstr "Konvertē OGR vektorus uz GRASS vektoriem. Pieejamie draiveri:\n"
 
 #: ../raster/r.stats/main.c:216 ../raster/r.report/parse.c:147
 msgid "Report for cats floating-point ranges (floating-point maps only)"
@@ -5519,9 +5589,7 @@ msgstr ""
 
 #: ../raster/r.stats/main.c:330
 #, c-format
-msgid ""
-"Flag '-%c' was given, using cats fp ranges of raster map <%s>, ignoring '%s' "
-"option"
+msgid "The given code must be supported by the server, consult the capabilities file"
 msgstr ""
 
 #: ../raster/r.stats/main.c:336 ../raster/r.contour/main.c:149
@@ -5613,10 +5681,8 @@ msgid "Count cell numbers along the path"
 msgstr ""
 
 #: ../raster/r.drain/main.c:163
-msgid ""
-"The input raster map is a cost surface (direction surface must also be "
-"specified)"
-msgstr ""
+msgid "Exports a vector map to a GPS receiver or file format supported by GPSBabel."
+msgstr "Eksportēt GRASS rastru uz bināro masīvu."
 
 #: ../raster/r.drain/main.c:175
 msgid "Directional drain selected... checking for direction raster map"
@@ -5926,8 +5992,8 @@ msgstr ""
 msgid "Illegal divisor matrix"
 msgstr ""
 
-#: ../raster/r.mfilter/getfilt.c:110
-msgid "Duplicate filter type specified"
+#: ../locale/scriptstrings/t.support_to_translate.c:11
+msgid "Update metadata information, temporal and spatial extent from registered maps"
 msgstr ""
 
 #: ../raster/r.mfilter/getfilt.c:117
@@ -5965,10 +6031,10 @@ msgstr "Eksistējošas rastra kartes nosaukums"
 msgid "filter"
 msgstr "No tipa"
 
-#: ../raster/r.mfilter/main.c:60
-#, fuzzy
-msgid "Performs raster map matrix filter."
-msgstr "Rastra karte no kuras tiks nolasīts profils"
+#: ../locale/scriptstrings/t.list_to_translate.c:8
+#: ../locale/scriptstrings/t.list_to_translate.c:11
+msgid "Columns number_of_maps and granularity only available for space time datasets"
+msgstr ""
 
 #: ../raster/r.mfilter/main.c:71
 #, fuzzy
@@ -6243,8 +6309,8 @@ msgstr ""
 msgid "Error closing VTK-ASCII file"
 msgstr ""
 
-#: ../raster/r.out.vtk/writeascii.c:75
-msgid "write_vtk_normal_header: Writing VTK-Header"
+#: ../locale/scriptstrings/t.register_to_translate.c:26
+msgid "Create an interval (start and end time) in case an increment is provided"
 msgstr ""
 
 #: ../raster/r.out.vtk/writeascii.c:108
@@ -6552,10 +6618,10 @@ msgstr ""
 msgid "Old integer data range is %d to %d"
 msgstr ""
 
-#: ../raster/r.quant/read_rules.c:83
-#, fuzzy, c-format
-msgid "unable to open input file <%s>"
-msgstr "neiespējami atvērt <%s>"
+#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:1
+#, fuzzy
+msgid "Performs a neighborhood analysis for each map in a space time raster dataset."
+msgstr "Eksistējošas rastra kartes nosaukums"
 
 #: ../raster/r.quant/read_rules.c:89
 #, c-format
@@ -6621,9 +6687,9 @@ msgstr ""
 msgid "%s= and %s= must be used together"
 msgstr ""
 
-#: ../raster/r.quant/main.c:131
-#, c-format
-msgid "%s is integer map, it can't be quantized"
+#: ../locale/scriptstrings/t.rast.out.vtk_to_translate.c:8
+#: ../raster/r.out.vtk/parameters.c:61
+msgid "Create VTK point data instead of VTK cell data (if no elevation map is given)"
 msgstr ""
 
 #: ../raster/r.quant/main.c:139
@@ -6688,8 +6754,8 @@ msgstr ""
 
 #: ../raster/simwe/r.sim.sediment/main.c:124
 #, fuzzy
-msgid "Name of water depth raster map [m]"
-msgstr "Ieejas rastra faila nosaukums"
+msgid "Replaces gaps in a space time raster dataset with interpolated raster maps."
+msgstr "Konvertē OGR vektorus uz GRASS vektoriem. Pieejamie draiveri:\n"
 
 #: ../raster/simwe/r.sim.sediment/main.c:128
 #: ../raster/simwe/r.sim.water/main.c:120
@@ -6697,11 +6763,9 @@ msgstr "Ieejas rastra faila nosaukums"
 msgid "Name of x-derivatives raster map [m/m]"
 msgstr "Ieejas rastra faila nosaukums"
 
-#: ../raster/simwe/r.sim.sediment/main.c:132
-#: ../raster/simwe/r.sim.water/main.c:124
-#, fuzzy
-msgid "Name of y-derivatives raster map [m/m]"
-msgstr "Ieejas rastra faila nosaukums"
+#: ../locale/scriptstrings/t.rast.gapfill_to_translate.c:7
+msgid "Assign the space time raster dataset start and end time to the output map"
+msgstr ""
 
 #: ../raster/simwe/r.sim.sediment/main.c:137
 #, fuzzy
@@ -6884,8 +6948,8 @@ msgstr ""
 
 #: ../raster/simwe/r.sim.water/main.c:130
 #, fuzzy
-msgid "Name of rainfall excess rate (rain-infilt) raster map [mm/hr]"
-msgstr "Jaunas rastra kartes nosaukums"
+msgid "Prints attributes of vector maps registered in a space time vector dataset."
+msgstr "Eksistējošas vektorkartes nosaukums"
 
 #: ../raster/simwe/r.sim.water/main.c:139
 #, fuzzy
@@ -6935,8 +6999,8 @@ msgstr "Izejas rastra kartes nosaukums"
 
 #: ../raster/simwe/r.sim.water/main.c:208
 #, fuzzy
-msgid "Name for output simulation error raster map [m]"
-msgstr "Izejas rastra kartes nosaukums"
+msgid "Imports a space time vector dataset from a GRASS GIS specific archive file."
+msgstr "Eksistējošas rastra kartes nosaukums"
 
 #: ../raster/simwe/r.sim.water/main.c:223
 msgid "Number of walkers, default is twice the no. of cells"
@@ -6950,8 +7014,8 @@ msgstr ""
 msgid "Diffusion increases after this water depth is reached"
 msgstr ""
 
-#: ../raster/simwe/r.sim.water/main.c:276
-msgid "Diffusion increase constant"
+#: ../locale/scriptstrings/t.vect.what.strds_to_translate.c:4
+msgid "Name of the vector column to be created and to store sampled raster values"
 msgstr ""
 
 #: ../raster/simwe/r.sim.water/main.c:285
@@ -7832,8 +7896,8 @@ msgstr ""
 
 #: ../raster/r.resamp.bspline/crosscorr.c:324
 #, fuzzy
-msgid "Results into a table:"
-msgstr "Rezultējošās rastra kartes nosaukums"
+msgid "Traces a flow through an elevation model or cost surface on a raster map."
+msgstr "Ieejas rastra faila nosaukums"
 
 #: ../raster/r.resamp.bspline/crosscorr.c:325
 #, fuzzy
@@ -8030,10 +8094,9 @@ msgstr ""
 msgid "Output is the interpolation error"
 msgstr ""
 
-#: ../raster/r.surf.idw/main.c:129
-#, fuzzy, c-format
-msgid "Illegal value for '%s' (%s)"
-msgstr "%s - nederīgs nosaukums"
+#: ../raster/r.los/main.c:243
+msgid "Problem to obtain current ellipsoid parameters, using sphere (6370997.0)"
+msgstr ""
 
 #: ../raster/r.surf.idw/main.c:255
 #, fuzzy, c-format
@@ -8272,9 +8335,7 @@ msgid "Name of output file to store patch data"
 msgstr "Vektorkartes nosaukums"
 
 #: ../raster/r.le/r.le.setup/main.c:59
-msgid ""
-"Interactive tool used to setup the sampling and analysis framework that will "
-"be used by the other r.le programs."
+msgid "Vect runs out of region and re-enters - this case is not yet implemented."
 msgstr ""
 
 #: ../raster/r.le/r.le.setup/main.c:63
@@ -8334,16 +8395,17 @@ msgstr ""
 msgid "Sort by distance in descending order"
 msgstr ""
 
-#: ../raster/r.distance/parse.c:55
-msgid "Include category labels in the output"
-msgstr ""
+#: ../raster/r.volume/main.c:85
+#, fuzzy
+msgid "Name of input raster map representing data that will be summed within clumps"
+msgstr "Rastra kartes nosaukums"
 
 #: ../raster/r.distance/parse.c:60
 msgid "Report zero distance if rasters are overlapping"
 msgstr ""
 
-#: ../raster/r.distance/parse.c:64
-msgid "Report null objects as *"
+#: ../raster/r.volume/main.c:92
+msgid "Preferably the output of r.clump. If no clump map is given than MASK is used."
 msgstr ""
 
 #: ../raster/r.distance/parse.c:74 ../raster/r.distance/parse.c:83
@@ -8886,8 +8948,8 @@ msgstr ""
 msgid "Report information about input raster and exit"
 msgstr ""
 
-#: ../raster/r.random/main.c:93
-msgid "Generate vector points as 3D points"
+#: ../raster/r.surf.idw2/main.c:84
+msgid "Lat/long databases not supported by r.surf.idw2. Use r.surf.idw instead!"
 msgstr ""
 
 #: ../raster/r.random/main.c:96 ../vector/v.in.ascii/main.c:165
@@ -9832,10 +9894,8 @@ msgstr "%d punkti ierakstīti izejas kartē\n"
 msgid "Mapset <%s> in target location <%s> - "
 msgstr "3d skata fails <%s> nav atrasts"
 
-#: ../raster/r.in.gdal/main.c:812 ../raster/r.proj/main.c:286
-#: ../imagery/i.ortho.photo/i.ortho.rectify/target.c:32
-#: ../imagery/i.rectify/target.c:33 ../vector/v.rectify/target.c:41
-msgid "permission denied"
+#: ../raster/r.li/r.li.patchnum/main.c:49
+msgid "Calculates patch number index on a raster map, using a 4 neighbour algorithm."
 msgstr ""
 
 #: ../raster/r.in.gdal/main.c:813 ../raster/r.proj/main.c:287
@@ -9894,8 +9954,8 @@ msgstr ""
 msgid "extend line:  p is NULL"
 msgstr ""
 
-#: ../raster/r.to.vect/lines.c:626
-msgid "extend_lines: p front pointer not NULL!"
+#: ../raster/r.li/r.li.patchdensity/main.c:50
+msgid "Calculates patch density index on a raster map, using a 4 neighbour algorithm"
 msgstr ""
 
 #: ../raster/r.to.vect/lines.c:633
@@ -9986,9 +10046,7 @@ msgid "z flag is supported only for points"
 msgstr ""
 
 #: ../raster/r.to.vect/main.c:135
-msgid ""
-"Raster is not CELL, '-v' flag ignored, raster values will be written to the "
-"table."
+msgid "Calculates edge density index on a raster map, using a 4 neighbour algorithm"
 msgstr ""
 
 #: ../raster/r.to.vect/main.c:137
@@ -10104,7 +10162,7 @@ msgstr "Izejas rastra kartes nosaukums"
 msgid ""
 "Must be clipped to the catchment boundary. Used for generating "
 "outtopidxstats."
-msgstr ""
+msgstr "Ģenerē rastra karti, kur vienlaidus apgabali ir palielināti par vienu šūnu."
 
 #: ../raster/r.topmodel/main.c:95 ../raster/r.topmodel/main.c:105
 #: ../raster/r.topmodel/main.c:114
@@ -11283,8 +11341,8 @@ msgstr "Rastra kartes nosaukums"
 msgid "Error writing temporary file <%s>"
 msgstr "Kļūda meiģinot nolasīt dbmscap failu\n"
 
-#: ../raster/r.carve/main.c:76
-msgid "Generates stream channels."
+#: ../raster/r.surf.random/main.c:40
+msgid "Produces a raster surface map of uniform random deviates with defined range."
 msgstr ""
 
 #: ../raster/r.carve/main.c:77
@@ -11388,9 +11446,8 @@ msgid ""
 "layers."
 msgstr ""
 
-#: ../raster/r.cross/main.c:81
-#, c-format
-msgid "Names of 2-%d input raster maps"
+#: ../raster/r.in.xyz/main.c:547
+msgid "If input is not from a file it is only possible to perform a single pass."
 msgstr ""
 
 #: ../raster/r.cross/main.c:90
@@ -11489,13 +11546,9 @@ msgstr "2 līmeņiem jābūt norādītiem"
 msgid "Nothing to compute. Use at least one textural measure."
 msgstr "Nav nekā ko kalkulēt. Lūdzu pārbaudi iestatījumus."
 
-#: ../raster/r.texture/main.c:331
-#, fuzzy, c-format
-msgid "Calculating %d texture measure"
-msgid_plural "Calculating %d texture measures"
-msgstr[0] "Kalkulējam ēnas no DEM..."
-msgstr[1] "Kalkulējam ēnas no DEM..."
-msgstr[2] "Kalkulējam ēnas no DEM..."
+#: ../raster/r.slope.aspect/main.c:207
+msgid "Name for output first order partial derivative dx (E-W slope) raster map"
+msgstr ""
 
 #: ../raster/r.texture/main.c:334
 #, fuzzy, c-format
@@ -11504,9 +11557,7 @@ msgstr "Kalkulējam ēnas no DEM..."
 
 #: ../raster/r.texture/h_measure.c:123
 #, c-format
-msgid ""
-"Too many categories (found: %i, max: %i). Try to rescale or reclassify the "
-"map"
+msgid "Name for output first order partial derivative dy (N-S slope) raster map"
 msgstr ""
 
 #: ../raster/r.stream.extract/load.c:33
@@ -12239,7 +12290,7 @@ msgstr ""
 
 #: ../raster/r.horizon/main.c:211 ../raster/r.sun/main.c:385
 msgid "Angle step size for multidirectional horizon [degrees]"
-msgstr ""
+msgstr "Ģenerē rastra karti, kur vienlaidus apgabali ir palielināti par vienu šūnu."
 
 #: ../raster/r.horizon/main.c:220
 msgid "Start angle for multidirectional horizon [degrees]"
@@ -12250,9 +12301,7 @@ msgid "End angle for multidirectional horizon [degrees]"
 msgstr ""
 
 #: ../raster/r.horizon/main.c:237
-msgid ""
-"For horizon rasters, read from the DEM an extra buffer around the present "
-"region"
+msgid "Three (r,g,b) raster maps to create rgb values [redmap,greenmap,bluemap]"
 msgstr ""
 
 #: ../raster/r.horizon/main.c:245
@@ -12274,9 +12323,7 @@ msgid ""
 msgstr ""
 
 #: ../raster/r.horizon/main.c:269
-msgid ""
-"For horizon rasters, read from the DEM an extra buffer southward the present "
-"region"
+msgid "Use polydata-vertices for elevation grid creation (to use with vtkDelauny2D)"
 msgstr ""
 
 #: ../raster/r.horizon/main.c:277
@@ -12352,8 +12399,8 @@ msgstr ""
 msgid "south"
 msgstr ""
 
-#: ../raster/r.horizon/main.c:457
-msgid "north"
+#: ../raster/r.out.vtk/main.c:271
+msgid "Wrong vector maps. Maps should have the same type! Vector output not added!"
 msgstr ""
 
 #: ../raster/r.horizon/main.c:462
@@ -12804,9 +12851,7 @@ msgid "A single value of the orientation (aspect), 270 is south"
 msgstr ""
 
 #: ../raster/r.sun/main.c:286
-msgid ""
-"Name of the input slope raster map (terrain slope or solar panel "
-"inclination) [decimal degrees]"
+msgid "Too many splines (%d x %d). Consider changing spline steps \"sie=\" \"sin=\"."
 msgstr ""
 
 #: ../raster/r.sun/main.c:294
@@ -12826,8 +12871,10 @@ msgstr ""
 msgid "Name of the ground albedo coefficient input raster map [-]"
 msgstr ""
 
-#: ../raster/r.sun/main.c:333
-msgid "A single value of the ground albedo coefficient [-]"
+#: ../raster/r.resamp.bspline/crosscorr.c:316
+#: ../vector/v.surf.bspline/crosscorr.c:315
+#, c-format
+msgid "The minimum value for the test (rms=%lf) was obtained with: lambda_i = %.3f"
 msgstr ""
 
 #: ../raster/r.sun/main.c:343
@@ -12862,9 +12909,7 @@ msgid "Output incidence angle raster map (mode 1 only)"
 msgstr ""
 
 #: ../raster/r.sun/main.c:403
-msgid ""
-"Output beam irradiance [W.m-2] (mode 1) or irradiation raster map [Wh.m-2."
-"day-1] (mode 2)"
+msgid "Length of each spline step in the east-west direction. Default: 1.5 * ewres."
 msgstr ""
 
 #: ../raster/r.sun/main.c:412
@@ -13186,8 +13231,17 @@ msgstr ""
 msgid "The longditudinal dispersivity length. [m]"
 msgstr ""
 
-#: ../raster/r.solute.transport/main.c:169
-msgid "The transversal dispersivity length. [m]"
+#: ../raster/r.watershed/ram/do_cum.c:474
+#, c-format
+msgid "MFD: A * path already processed when distributing flow: %d of %d cell"
+msgid_plural "MFD: A * path already processed when distributing flow: %d of %d cells"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: ../raster/r.watershed/ram/do_cum.c:480
+#: ../raster/r.watershed/seg/do_cum.c:521
+msgid "SECTION 3b: Adjusting drainage directions."
 msgstr ""
 
 #: ../raster/r.solute.transport/main.c:177
@@ -13315,19 +13369,16 @@ msgid ""
 msgstr ""
 
 #: ../raster/r.slope.aspect/main.c:214
-msgid ""
-"Name for output first order partial derivative dy (N-S slope) raster map"
+msgid "depression map indicates all the locations in the current map window where"
 msgstr ""
 
-#: ../raster/r.slope.aspect/main.c:221
-#, fuzzy
-msgid "Name for output second order partial derivative dxx raster map"
-msgstr "Ieejas rastra faila nosaukums"
+#: ../raster/r.watershed/shed/com_line.c:84
+msgid "water accumulates and does not leave by the edge of the map. Lakes without"
+msgstr ""
 
-#: ../raster/r.slope.aspect/main.c:228
-#, fuzzy
-msgid "Name for output second order partial derivative dyy raster map"
-msgstr "Ieejas rastra faila nosaukums"
+#: ../raster/r.watershed/shed/com_line.c:85
+msgid "outlet streams and sinkholes are examples of `depressions'.  If you wish to"
+msgstr ""
 
 #: ../raster/r.slope.aspect/main.c:235
 #, fuzzy
@@ -13338,8 +13389,8 @@ msgstr "Ieejas rastra faila nosaukums"
 msgid "Multiplicative factor to convert elevation units to meters"
 msgstr ""
 
-#: ../raster/r.slope.aspect/main.c:250
-msgid "Minimum slope val. (in percent) for which aspect is computed"
+#: ../raster/r.watershed/shed/com_line.c:88
+msgid "Hit <return> by itself for the next question if there is no depression map."
 msgstr ""
 
 #: ../raster/r.slope.aspect/main.c:259
@@ -13352,10 +13403,8 @@ msgstr "Drukāt tekošo reģionu pēc platuma/garuma"
 msgid "%s=%s - must be a positive number"
 msgstr ""
 
-#: ../raster/r.slope.aspect/main.c:319 ../raster/r.shaded.relief/main.c:199
-#: ../raster/r.shaded.relief/main.c:205
-#, c-format
-msgid "%s=%s - must be a non-negative number"
+#: ../raster/r.watershed/shed/com_line.c:101
+msgid "watershed basins.  The number of watershed basins is indirectly determined"
 msgstr ""
 
 #: ../raster/r.slope.aspect/main.c:334
@@ -13376,20 +13425,17 @@ msgstr "Nenosakāms tips: %c"
 msgid "Converting units to meters, factor=%.6f"
 msgstr ""
 
-#: ../raster/r.slope.aspect/main.c:965
-#, fuzzy, c-format
-msgid "Elevation products for mapset <%s> in <%s>"
-msgstr "nav iespēju atvērt [%s] iekš [%s]"
-
-#: ../raster/r.slope.aspect/main.c:984
-#, c-format
-msgid "Min computed aspect %.4f, max computed aspect %.4f"
+#: ../raster/r.watershed/shed/com_line.c:105
+msgid "`exterior drainage basins'.  An exterior drainage basin does not have any"
 msgstr ""
 
-#: ../raster/r.slope.aspect/main.c:1048
-#, fuzzy, c-format
-msgid "Aspect raster map <%s> complete"
-msgstr "3d skata fails <%s> nav atrasts"
+#: ../raster/r.watershed/shed/com_line.c:106
+msgid "drainage basins flowing into it.  Interior drainage basin size is determined"
+msgstr ""
+
+#: ../raster/r.watershed/shed/com_line.c:107
+msgid "by the surface flow going into stream segments between stream interceptions."
+msgstr ""
 
 #: ../raster/r.slope.aspect/main.c:1105
 #, c-format
@@ -13401,20 +13447,17 @@ msgstr ""
 msgid "Slope raster map <%s> complete"
 msgstr "3d skata fails <%s> nav atrasts"
 
-#: ../raster/r.slope.aspect/main.c:1230
-#, fuzzy, c-format
-msgid "Profile curve raster map <%s> complete"
-msgstr "Rastra kartes nosaukums"
+#: ../raster/r.watershed/shed/com_line.c:111
+msgid "(i.e., areas with low infiltration capacities will need smaller areas to"
+msgstr ""
 
-#: ../raster/r.slope.aspect/main.c:1257
-#, fuzzy, c-format
-msgid "Tangential curve raster map <%s> complete"
-msgstr "Nevaratvērt datubāzi %s"
+#: ../raster/r.watershed/shed/com_line.c:112
+msgid "develop stream channels than neighboring areas with high infiltration rates)."
+msgstr ""
 
-#: ../raster/r.slope.aspect/main.c:1282
-#, fuzzy, c-format
-msgid "E-W slope raster map <%s> complete"
-msgstr "3d skata fails <%s> nav atrasts"
+#: ../raster/r.watershed/shed/com_line.c:113
+msgid "The user can create a map layer with potential overland flow values, and"
+msgstr ""
 
 #: ../raster/r.slope.aspect/main.c:1307
 #, fuzzy, c-format
@@ -13539,10 +13582,9 @@ msgstr "rastrs <%s> nav atrasts"
 msgid "Range of levels: min = %f, max = %f"
 msgstr ""
 
-#: ../raster/r.contour/main.c:350
-#, fuzzy
-msgid "Displacing data..."
-msgstr "Drukā ... "
+#: ../raster/r.watershed/shed/com_line.c:296
+msgid "ability to generate several variables in the Revised Universal Soil Loss"
+msgstr ""
 
 #: ../raster/r.contour/cont.c:82
 #, fuzzy, c-format
@@ -13606,8 +13648,8 @@ msgstr ""
 "#-#-#-#-#  grassmods_lv.po (grassmods_lv)  #-#-#-#-#\n"
 "Ieejas rastra faila nosaukums"
 
-#: ../raster/r.digit/digitize.c:49
-msgid "Quit without creating a map?? "
+#: ../raster/r.watershed/shed/com_line.c:384
+msgid "that prevents the surface flow distance from getting too long.  Normally,"
 msgstr ""
 
 #: ../raster/r.digit/main.c:46
@@ -13616,17 +13658,17 @@ msgid ""
 "using a pointing device (mouse) and save to a raster map."
 msgstr ""
 
-#: ../raster/r.digit/main.c:55
-msgid "Display commands to be used for canvas backdrop (separated by ';')"
+#: ../raster/r.watershed/shed/com_line.c:401
+msgid "slope length.  You may input a raster map indicating the locations of these"
 msgstr ""
 
 #: ../raster/r.digit/main.c:78
 msgid "No graphics device selected!"
 msgstr "Nav izvēlēta grafiskā iekārta!"
 
-#: ../raster/r.digit/main.c:97
-msgid "No map created"
-msgstr "Karte nav izveidota"
+#: ../raster/r.watershed/shed/com_line.c:403
+msgid "Hit <return> by itself for the next question if there is no blocking map."
+msgstr ""
 
 #: ../raster/r.digit/get_type.c:31
 #, c-format
@@ -13752,9 +13794,7 @@ msgstr ""
 
 #: ../raster/r.in.lidar/main.c:444 ../vector/v.in.lidar/main.c:464
 #: ../vector/v.in.ogr/main.c:800
-msgid ""
-"Consider generating a new location with 'location' parameter from input data "
-"set.\n"
+msgid "For USLE. All non-NULL and non-zero cells are considered as blocking terrain."
 msgstr ""
 
 #: ../raster/r.in.lidar/main.c:586
@@ -14237,7 +14277,7 @@ msgstr ""
 
 #: ../raster/r.in.bin/main.c:308 ../raster3d/r3.in.bin/main.c:292
 msgid "Southern limit of geographic region (outer edge)"
-msgstr ""
+msgstr "Izveido GRASS vektoru karti ar kontūrlīnijām norādītajai rastra kartei."
 
 #: ../raster/r.in.bin/main.c:316 ../raster3d/r3.in.bin/main.c:300
 msgid "Eastern limit of geographic region (outer edge)"
@@ -14354,9 +14394,7 @@ msgid "classification"
 msgstr "Nevarēja atrast rastra failu %s"
 
 #: ../raster/r.kappa/main.c:72
-msgid ""
-"Calculates error matrix and kappa parameter for accuracy assessment of "
-"classification result."
+msgid "Weighting factor for each input map, default value is 1.0 for each input map"
 msgstr ""
 
 #: ../raster/r.kappa/main.c:78
@@ -14634,13 +14672,13 @@ msgstr ""
 
 #: ../raster/r.neighbors/main.c:254
 #, fuzzy
-msgid "Neighborhood size must be positive"
-msgstr "Apkārtnes izmērs šūnās"
+msgid "Name of input raster map describing the top surface of the aquifer in [m]"
+msgstr "Ieejas karte: reljefs, kas bloķē virszemes ūdens plūsmu, priekš USLE"
 
 #: ../raster/r.neighbors/main.c:256
 #, fuzzy
-msgid "Neighborhood size must be odd"
-msgstr "Apkārtnes izmērs šūnās"
+msgid "Name of input raster map describing the bottom surface of the aquifer in [m]"
+msgstr "Ieejas karte: reljefs, kas bloķē virszemes ūdens plūsmu, priekš USLE"
 
 #: ../raster/r.neighbors/main.c:291
 #, c-format
@@ -14740,8 +14778,8 @@ msgstr ""
 #: ../locale/scriptstrings/v.rast.stats_to_translate.c:5
 #: ../vector/v.vect.stats/main.c:131
 #, fuzzy
-msgid "univariate statistics"
-msgstr "Izmantojamās rastra kartes nosaukums priekš <%s>"
+msgid "Name of input raster map providing the height of the drainage bed in [m]"
+msgstr "Rastra kartes nosaukums"
 
 #: ../raster/r.univar/r3.univar_main.c:103
 #, fuzzy
@@ -14943,8 +14981,8 @@ msgstr ""
 
 #: ../raster/r.surf.fractal/process.c:54
 #, fuzzy
-msgid "Unable to allocate data buffer. Check current region with g.region."
-msgstr "Nevar noteikt laukuma centroīdu"
+msgid "Converts an ESRI ARC/INFO ascii raster file (GRID) into a GRASS raster map."
+msgstr "Importē GDAL atbalstītu rastra failu kā jaunu rastra karti."
 
 #: ../raster/r.surf.fractal/spec_syn.c:60
 msgid "Preliminary surface calculations..."
@@ -15411,7 +15449,12 @@ msgstr ""
 msgid "Name of input aspect raster map"
 msgstr "Eksistējošas rastra kartes nosaukums"
 
-#: ../raster/r.flow/main.c:440
+#: ../raster/r.stream.snap/snap.c:133
+#, c-format
+msgid "Unable to snap point with cat %d, in a given radius. Increase search radius."
+msgstr ""
+
+#: ../raster/r.stream.snap/main.c:47
 #, fuzzy
 msgid "Name of input barrier raster map"
 msgstr "Rastra kartes nosaukums"
@@ -15458,9 +15501,7 @@ msgid "You must select one or more output maps (flout, lgout, dsout)"
 msgstr ""
 
 #: ../raster/r.flow/main.c:555
-msgid ""
-"lat/long projection not supported by r.flow. Please use 'r.watershed' for "
-"calculating flow accumulation."
+msgid "Divides network into near straight-line segments and calculate its order."
 msgstr ""
 
 #: ../raster/r.flow/mem.c:40
@@ -15874,7 +15915,7 @@ msgstr "nederīgs reģions: %s"
 
 #: ../general/g.dirseps/main.c:37
 msgid "Internal GRASS utility for converting directory separator characters."
-msgstr ""
+msgstr "Izvada rastra kartes vērtības, kas atrodas uz lietotāja norādītās līnijas."
 
 #: ../general/g.rename/main.c:46
 #: ../locale/scriptstrings/t.rename_to_translate.c:4
@@ -16170,9 +16211,7 @@ msgid "create location"
 msgstr "nevar atvērt %s"
 
 #: ../general/g.proj/main.c:68
-msgid ""
-"Prints or modifies GRASS projection information files (in various co-"
-"ordinate system descriptions)."
+msgid "Calculates univariate statistics from the non-null cells of a raster map."
 msgstr ""
 
 #: ../general/g.proj/main.c:71
@@ -16224,18 +16263,8 @@ msgstr "Nevarēja atrast rastra failu %s"
 msgid "Name of georeferenced data file to read projection information from"
 msgstr ""
 
-#: ../general/g.proj/main.c:138
-#, fuzzy
-msgid "Name of ASCII file containing a WKT projection description"
-msgstr "Ieejošā karte satur līnijas"
-
-#: ../general/g.proj/main.c:148
-#, fuzzy
-msgid "PROJ.4 projection description"
-msgstr "Trūkst projekcijas failu"
-
-#: ../general/g.proj/main.c:158
-msgid "EPSG projection code"
+#: ../raster/r.sun/main.c:301
+msgid "Name of the Linke atmospheric turbidity coefficient input raster map [-]"
 msgstr ""
 
 #: ../general/g.proj/main.c:166 ../general/g.proj/main.c:179
@@ -16268,8 +16297,8 @@ msgstr ""
 
 #: ../general/g.proj/main.c:193
 #, fuzzy
-msgid "Modify current location projection files"
-msgstr "Nevar izveidot projekcijas failus: %s"
+msgid "Name of real-sky diffuse radiation coefficient (haze) input raster map [0-1]"
+msgstr "Ieejas rastra faila nosaukums"
 
 #: ../general/g.proj/main.c:200 ../general/g.mapset/main.c:83
 #: ../locale/scriptstrings/r.mask_to_translate.c:18
@@ -16454,13 +16483,8 @@ msgstr "drukā tekošās karšu biblotēkas/mapset meklēšanas ceļu"
 msgid "'.' for current mapset; '*' for all mapsets in location"
 msgstr ""
 
-#: ../general/g.mlist/main.c:118
-#, fuzzy
-msgid "Name of saved region for map search (default: not restricted)"
-msgstr "drukā tekošās karšu biblotēkas/mapset meklēšanas ceļu"
-
-#: ../general/g.mlist/main.c:120
-msgid "'.' for current region; '*' for default region"
+#: ../raster/r.sun/main.c:608
+msgid "If you use the horizon option you must also set the 'horizonstep' parameter."
 msgstr ""
 
 #: ../general/g.mlist/main.c:125 ../vector/v.out.ascii/args.c:33
@@ -16786,7 +16810,7 @@ msgstr ""
 
 #: ../general/g.cairocomp/main.c:276
 msgid "input= and opacity= must have the same number of values"
-msgstr ""
+msgstr "Sākuma punkta koordinātēm un izvades kartei lake= jābūt uz uzstādītiem!"
 
 #: ../general/g.findfile/main.c:41
 msgid "Searches for GRASS data base files and sets variables for the shell."
@@ -16821,7 +16845,7 @@ msgstr "izveidot sarakstu ar visām pieejamajām karšu biblotēkām/mapsets"
 msgid ""
 "Parameter 'file' contains reference to <%s> mapset, but mapset parameter <"
 "%s> does not correspond"
-msgstr ""
+msgstr "Uzmanību. Tilpums ir korekts tikai tad, ja dziļums (reljefa karte) ir metros"
 
 #: ../general/g.findfile/element.c:7
 #, fuzzy
@@ -16951,9 +16975,7 @@ msgstr "izveidot sarakstu ar visām pieejamajām karšu biblotēkām/mapsets"
 
 #: ../general/g.mremove/main.c:68
 #, fuzzy
-msgid ""
-"Removes data base element files from the user's current mapset using the "
-"search pattern."
+msgid "Outputs raster map layer values lying along user defined transect line(s)."
 msgstr ""
 "Noņemt datubāzes elemtu failus no lietotāja tekošās karšu biblotēkas/mapset."
 
@@ -17557,10 +17579,9 @@ msgstr "Nevaratvērt datubāzi %s"
 msgid "Table <%s> not found in database <%s> using driver <%s>"
 msgstr "Nevar atvērt datubāzi  %s pēc adreses %s"
 
-#: ../db/db.select/main.c:63 ../db/db.execute/main.c:57
-#, fuzzy, c-format
-msgid "Unable to open file <%s>: %s"
-msgstr "Neiespējami atvērt šūnu failu[%s]"
+#: ../raster/r.solute.transport/main.c:103
+msgid "Concentration sources and sinks bounded to a water source or sink in [kg/s]"
+msgstr ""
 
 #: ../db/db.select/main.c:81 ../db/db.execute/main.c:76
 #: ../db/db.describe/main.c:61 ../db/db.tables/main.c:47
@@ -17732,8 +17753,9 @@ msgstr "Kļūda izpildes laikā: \"%s\""
 msgid "Executes any SQL statement."
 msgstr ""
 
-#: ../db/db.execute/main.c:129
-msgid "For SELECT statements use 'db.select'."
+#: ../raster/r.solute.transport/main.c:385
+#, c-format
+msgid "The time step is to large: %gs. The largest time step should be of size %gs."
 msgstr ""
 
 #: ../db/db.execute/main.c:132
@@ -18072,10 +18094,9 @@ msgstr "Datubāzes konekcija nav definēta"
 msgid "Unable to fetch:"
 msgstr "Nevar ienest datus"
 
-#: ../db/drivers/sqlite/fetch.c:87
-#, fuzzy
-msgid "DB_PREVIOUS is not supported"
-msgstr "Kolonas tips nav atbalstīts"
+#: ../raster/r.in.gdal/main.c:112
+msgid "Name of location to create or to read projection from for GCPs transformation"
+msgstr ""
 
 #: ../db/drivers/sqlite/fetch.c:93
 #, fuzzy
@@ -18423,8 +18444,8 @@ msgstr "Nezināms/nepazīstms tips"
 msgid "Result of WHERE condition is not of type BOOL."
 msgstr ""
 
-#: ../db/drivers/dbf/dbfexe.c:588
-msgid "Error in evaluation of WHERE condition."
+#: ../raster/r.series.accumulate/main.c:121
+msgid "The raster map specifying the lower accumulation limit, also called baseline"
 msgstr ""
 
 #: ../db/drivers/dbf/dbfexe.c:600
@@ -18607,22 +18628,8 @@ msgstr ""
 
 #: ../db/drivers/postgres/select.c:55
 #, fuzzy
-msgid "Unable to select:"
-msgstr "neiespējami atvērt <%s>"
-
-#: ../db/drivers/postgres/describe.c:123
-#, fuzzy, c-format
-msgid "PostgreSQL driver: column '%s', type %d is not supported"
-msgstr "pg draiveris: kolona '%s', tips %d  nav atbastīts"
-
-#: ../db/drivers/postgres/describe.c:130
-#, c-format
-msgid ""
-"column '%s' : type int8 (bigint) is stored as integer (4 bytes) some data "
-"may be damaged"
-msgstr ""
-"kolona '%s' : tips int8 (bigint) ir saglabāts kā integer (4 bytes) iespējas "
-"dažu datu bojājums"
+msgid "Calculates cast shadow areas from sun position and elevation raster map."
+msgstr "Ieejas rastra faila nosaukums"
 
 #: ../db/drivers/postgres/describe.c:134
 #, c-format
@@ -19031,9 +19038,8 @@ msgstr "nevar atvērt vektorfailu <%s> iekš <%s>"
 msgid "Converting starting coordinate pair"
 msgstr "Lietojamās kartes centra koordinātes\n"
 
-#: ../misc/m.cogo/main.c:332
-#, c-format
-msgid "Input parse error on line %lu"
+#: ../raster/r.stream.distance/main.c:101
+msgid "Calculate parameters for outlets (outlet mode) instead of (default) streams"
 msgstr ""
 
 #: ../misc/m.nviz.image/cplane.c:40
@@ -19790,7 +19796,7 @@ msgstr "Ieejas fails"
 
 #: ../locale/scriptstrings/v.in.mapgen_to_translate.c:5
 msgid "Create a 3D vector points map from 3 column Matlab data"
-msgstr ""
+msgstr "Ģenerē rastra karti, kur vienlaidus apgabali ir palielināti par vienu šūnu."
 
 #: ../locale/scriptstrings/v.in.mapgen_to_translate.c:6
 #, fuzzy
@@ -20007,8 +20013,8 @@ msgstr "Drukāt statistiku komandrindas skripta stilā"
 
 #: ../locale/scriptstrings/v.db.join_to_translate.c:1
 #, fuzzy
-msgid "Joins a database table to a vector map table."
-msgstr "Vektorkartes nosaukums"
+msgid "Name for output flow direction map for depressionless elevation raster map"
+msgstr "Ieejas rastra faila nosaukums"
 
 #: ../locale/scriptstrings/v.db.join_to_translate.c:5
 #, fuzzy
@@ -20633,7 +20639,7 @@ msgstr ""
 
 #: ../locale/scriptstrings/v.krige_to_translate.c:6
 #, fuzzy
-msgid "Name of point vector map containing sample data"
+msgid "Name of an input raster map to select the cells which should be processed"
 msgstr "Ieejošā karte satur līnijas"
 
 #: ../locale/scriptstrings/v.krige_to_translate.c:7
@@ -20685,10 +20691,10 @@ msgstr "Lasam dig failu... \n"
 msgid "Automatically fixed if not set"
 msgstr ""
 
-#: ../locale/scriptstrings/v.krige_to_translate.c:17
-#, fuzzy
-msgid "Nugget value"
-msgstr "Lasam dig failu... \n"
+#: ../raster/r.neighbors/main.c:327
+#, c-format
+msgid "Method %s not compatible with weighing window, using weight mask instead"
+msgstr ""
 
 #: ../locale/scriptstrings/v.krige_to_translate.c:19
 #, fuzzy
@@ -20844,8 +20850,8 @@ msgstr ""
 msgid "Brovey"
 msgstr ""
 
-#: ../locale/scriptstrings/i.pansharpen_to_translate.c:6
-msgid "IHS"
+#: ../raster/r.to.vect/main.c:137
+msgid "Raster is not CELL, '-v' flag ignored, raster values will be z coordinate."
 msgstr ""
 
 #: ../locale/scriptstrings/i.pansharpen_to_translate.c:7
@@ -21675,13 +21681,8 @@ msgstr ""
 msgid "Sets color rules based on stddev from a raster map's mean value."
 msgstr ""
 
-#: ../locale/scriptstrings/r.colors.stddev_to_translate.c:4
-#, fuzzy
-msgid "Color using standard deviation bands"
-msgstr "Maksimālā distance starp punktiem kartes vienībās"
-
-#: ../locale/scriptstrings/r.colors.stddev_to_translate.c:5
-msgid "Force center at zero"
+#: ../raster/r.composite/main.c:76
+msgid "Combines red, green and blue raster maps into a single composite raster map."
 msgstr ""
 
 #: ../locale/scriptstrings/i.image.mosaic_to_translate.c:1
@@ -22339,8 +22340,8 @@ msgstr "Rastra karte, kuras histogramma tiks parādīta"
 #: ../locale/scriptstrings/v.what.vect_to_translate.c:7
 #: ../vector/v.what.rast3/main.c:86 ../vector/v.what.rast/main.c:97
 #, fuzzy
-msgid "Name of attribute column to be updated with the query result"
-msgstr "Izejas rastra kartes nosaukums"
+msgid "Print input map's bounds in the current projection and exit (shell style)"
+msgstr "izdrukāt tekošā pieslēguma parametrus un iziet"
 
 #: ../locale/scriptstrings/v.what.vect_to_translate.c:8
 #, fuzzy
@@ -22688,13 +22689,12 @@ msgid "(default: start with the first feature)"
 msgstr ""
 
 #: ../locale/scriptstrings/v.in.wfs_to_translate.c:13
-msgid ""
-"Download server capabilities to 'wms_capabilities.xml' in the current "
-"directory and exit"
+msgid "layer <%d/%s> table <%s> in database <%s> through driver <%s> with key <%s>\n"
 msgstr ""
 
-#: ../locale/scriptstrings/v.in.wfs_to_translate.c:14
-msgid "Restrict fetch to features which touch the current region"
+#: ../vector/v.db.connect/main.c:203
+#, c-format
+msgid "layer <%d> table <%s> in database <%s> through driver <%s> with key <%s>\n"
 msgstr ""
 
 #: ../locale/scriptstrings/r.grow_to_translate.c:3
@@ -22975,7 +22975,7 @@ msgstr "Eksistējošas rastra kartes nosaukums"
 msgid ""
 "Observes specific locations in a space time raster dataset over a period of "
 "time using vector points."
-msgstr ""
+msgstr "Izveido GRASS vektoru karti ar kontūrlīnijām norādītajai rastra kartei."
 
 #: ../locale/scriptstrings/t.vect.observe.strds_to_translate.c:4
 #, fuzzy
@@ -23463,13 +23463,21 @@ msgstr ""
 msgid "use=%s out of range [%d,%d] (extend with range= ?)"
 msgstr ""
 
-#: ../display/d.legend/main.c:521
-msgid "Nothing to draw! (no categories with labels? out of range?)"
-msgstr ""
+#: ../vector/v.edit/main.c:348
+#, c-format
+msgid "%d line broken"
+msgid_plural "%d lines broken"
+msgstr[0] "%d līnija ir bojāta"
+msgstr[1] "%d līnijas ir bojātas"
+msgstr[2] "%d līniju ir bojātas"
 
-#: ../display/d.legend/main.c:531
-msgid "Forcing a smooth legend: too many categories for current window height"
-msgstr ""
+#: ../vector/v.edit/main.c:356
+#, c-format
+msgid "%d line connected"
+msgid_plural "%d lines connected"
+msgstr[0] ""
+msgstr[1] "%d punkti ierakstīti izejas kartē\n"
+msgstr[2] "%d punkti ierakstīti izejas kartē\n"
 
 #: ../display/d.legend/main.c:562 ../display/d.legend/main.c:567
 #: ../display/d.histogram/main.c:174
@@ -24119,9 +24127,9 @@ msgstr[2] "%d punkti ierakstīti izejas kartē\n"
 msgid "Displays user-specified vector map in the active graphics frame."
 msgstr "Izvēlies fontu kurš tiks parādīts lietotāja grafiskajā vidē."
 
-#: ../display/d.vect/main.c:89
-msgid "Display"
-msgstr ""
+#: ../vector/v.distance/main.c:101
+msgid "Layer number or name (from)"
+msgstr "Slāņa numurs vai nosaukums (no)"
 
 #: ../display/d.vect/main.c:93
 #, fuzzy
@@ -24133,9 +24141,8 @@ msgid "Display category numbers of features"
 msgstr ""
 
 #: ../display/d.vect/main.c:95
-#, fuzzy
-msgid "Display topology information (nodes, edges)"
-msgstr "Parādīt nulles šūnu informāciju"
+msgid "Layer number or name (to)"
+msgstr "Slāņa numurs vai nosaukums (uz)"
 
 #: ../display/d.vect/main.c:96
 #, fuzzy
@@ -24175,8 +24182,13 @@ msgstr "atslēgas kolona"
 msgid "Color definition in R:G:B form"
 msgstr "Nav ieejas karte(s) norādīta."
 
-#: ../display/d.vect/main.c:143
-msgid "Colorize point or area features according to z-coordinate"
+#: ../vector/v.distance/main.c:168
+#, fuzzy
+msgid "y coordinate of the nearest point on the 'to' feature"
+msgstr "Vienu koordinātu pāri uz līniju, lūdzu"
+
+#: ../vector/v.distance/main.c:169
+msgid "distance to the nearest point on the 'to' feature along that linear feature"
 msgstr ""
 
 #: ../display/d.vect/main.c:151 ../display/d.vect/main.c:156
@@ -24188,10 +24200,9 @@ msgstr ""
 msgid "Line width"
 msgstr ""
 
-#: ../display/d.vect/main.c:157
-#, fuzzy
-msgid "Name of numeric column containing line width"
-msgstr "Rastra kartes nosaukums"
+#: ../vector/v.distance/main.c:187
+msgid "Column name(s) where values specified by 'upload' option will be uploaded"
+msgstr ""
 
 #: ../display/d.vect/main.c:158
 msgid "These values will be scaled by width_scale"
@@ -24521,7 +24532,7 @@ msgstr ""
 
 #: ../display/d.where/main.c:91
 msgid "Ambiguous request for lat/long ellipsoids"
-msgstr ""
+msgstr "Izveido GRASS vektoru karti ar kontūrlīnijām norādītajai rastra kartei."
 
 #: ../display/d.where/main.c:94
 msgid "Please specify a lat/long ellipsoid with -l or -w"
@@ -24672,8 +24683,7 @@ msgstr ""
 
 #: ../display/d.colortable/main.c:114
 #, c-format
-msgid ""
-"<%s> is floating-point; ignoring [lines] and drawing continuous color ramp"
+msgid "Number of columns defined (%d) does not match number of columns (%d) in input"
 msgstr ""
 
 #: ../display/d.colortable/main.c:128
@@ -24879,9 +24889,11 @@ msgid "Color for drawing null values"
 msgstr "Krāsa zīmējamajam tekstam"
 
 #: ../display/d.rast.arrow/main.c:139
-msgid ""
-"Color in GRASS format for drawing null values (X symbol) or \"none\" not "
-"drawing"
+msgid "Name for output vector map where erroneous vector features are written to"
+msgstr "Izejas karte kurā tiks ierakstīti punkti"
+
+#: ../vector/v.build/main.c:61
+msgid "Build topology or dump topology or indeces to standard output"
 msgstr ""
 
 #: ../display/d.rast.arrow/main.c:149
@@ -25114,8 +25126,8 @@ msgstr "Izvēlies fontu kurš tiks parādīts lietotāja grafiskajā vidē."
 msgid "Use feet/miles instead of meters"
 msgstr ""
 
-#: ../display/d.barscale/main.c:64
-msgid "Draw the scale bar without text"
+#: ../vector/v.db.select/main.c:94
+msgid "Print minimal region extent of selected vector features instead of attributes"
 msgstr ""
 
 #: ../display/d.barscale/main.c:69
@@ -25153,8 +25165,8 @@ msgstr "Drukāt statistiku komandrindas skripta stilā"
 msgid "Part checker style"
 msgstr "Drukāt statistiku komandrindas skripta stilā"
 
-#: ../display/d.barscale/main.c:94
-msgid "Mixed checker style"
+#: ../vector/v.univar/main.c:96
+msgid "Variance and standard deviation is calculated only for points if specified."
 msgstr ""
 
 #: ../display/d.barscale/main.c:95
@@ -25788,16 +25800,15 @@ msgstr ""
 "Šis reģions pašlaik saglabāts kā tekošais.\n"
 "\n"
 
-#: ../display/d.zoom/zoom.c:41
-#, c-format
-msgid "Note: run 'd.erase' for the new region to affect the graphics.\n"
+#: ../vector/v.extrude/main.c:72
+msgid "Extrudes flat vector features to 3D vector features with defined height."
 msgstr ""
 "Piezīme: darbini 'd.erase' jaunajam reģionam ietekmējot gafisko rezultātu.\n"
 
 #: ../display/d.rast/main.c:56
 #, fuzzy
-msgid "Displays user-specified raster map in the active graphics frame."
-msgstr "Izvēlies fontu kurš tiks parādīts lietotāja grafiskajā vidē."
+msgid "Optionally the height can be derived from sampling of elevation raster map."
+msgstr "Importē GDAL atbalstītu rastra failu kā jaunu rastra karti."
 
 #: ../display/d.rast/main.c:61 ../imagery/i.class/main.c:103
 #, fuzzy
@@ -25893,9 +25904,7 @@ msgid ""
 msgstr ""
 
 #: ../raster3d/r3.cross.rast/main.c:259
-msgid ""
-"The 2D and 3D region settings are different. Using the 3D raster map "
-"settings to adjust the 2D region."
+msgid "Unable to fetch height from DB for area %d. Using default fixed height %f."
 msgstr ""
 
 #: ../raster3d/r3.cross.rast/main.c:302
@@ -25915,7 +25924,7 @@ msgstr "Rezultējošās rastra kartes nosaukums"
 
 #: ../raster3d/r3.in.bin/main.c:154
 #, c-format
-msgid "Loading %s data with %i  bytes ...  (%dx%dx%d)"
+msgid "Unable to fetch height from DB for line %d. Using default fixed height %f."
 msgstr ""
 
 #: ../raster3d/r3.in.bin/main.c:202 ../raster3d/r3.neighbors/main.c:305
@@ -26309,9 +26318,7 @@ msgid "depths=%d"
 msgstr ""
 
 #: ../raster3d/r3.neighbors/main.c:137
-msgid ""
-"The size of the window in x, y and z direction, values must be odd integer "
-"numbers, eg: 3,3,3"
+msgid "%d boundaries were not modified because modification would damage topology"
 msgstr ""
 
 #: ../raster3d/r3.neighbors/main.c:209
@@ -27076,13 +27083,8 @@ msgstr ""
 msgid "meters"
 msgstr ""
 
-#: ../ps/ps.map/do_scalebar.c:194
-#, fuzzy
-msgid "kilometers"
-msgstr "No tipa"
-
-#: ../ps/ps.map/do_scalebar.c:196
-msgid "feet"
+#: ../vector/v.in.ogr/main.c:359
+msgid "Database not defined, please check default  connection settings by db.connect"
 msgstr ""
 
 #: ../ps/ps.map/do_scalebar.c:198
@@ -27120,10 +27122,9 @@ msgstr "Izvadīt atbalstītos formātus un tad iziet"
 msgid "illegal color request (colortable)"
 msgstr ""
 
-#: ../ps/ps.map/r_colortable.c:170
-#, fuzzy
-msgid "illegal colortable sub-request"
-msgstr "izejas līmeņa nosaukums"
+#: ../vector/v.in.ogr/main.c:622
+msgid "The 'spatial' parameters do not overlap with OGR input. Nothing to import."
+msgstr ""
 
 #: ../ps/ps.map/r_colortable.c:181
 #, fuzzy
@@ -27669,17 +27670,16 @@ msgstr "reģions <%s> nav atrasts"
 #: ../imagery/i.ortho.photo/i.ortho.elev/main.c:147
 #, c-format
 msgid "Elevation map name is missing. Please set '%s' option"
-msgstr ""
+msgstr "Izveido GRASS vektoru karti ar kontūrlīnijām norādītajai rastra kartei."
 
 #: ../imagery/i.ortho.photo/i.ortho.elev/main.c:162
 #, fuzzy, c-format
 msgid "Elevation for group <%s> is already set to <%s>"
 msgstr "neiespējami atvērt <%s>"
 
-#: ../imagery/i.ortho.photo/i.ortho.elev/main.c:175
-#, fuzzy, c-format
-msgid "Mapset [%s] in target location [%s] - %s "
-msgstr "3d skata fails <%s> nav atrasts"
+#: ../vector/v.patch/main.c:85
+msgid "Append files to existing file (overwriting existing files must be activated)"
+msgstr ""
 
 #: ../imagery/i.ortho.photo/i.ortho.elev/main.c:177
 #, fuzzy
@@ -28012,9 +28012,10 @@ msgstr ""
 msgid "Result: Scene with clouds"
 msgstr ""
 
-#: ../imagery/i.landsat.acca/algorithm.c:200
-msgid "Result: Scene cloud free"
-msgstr ""
+#: ../vector/v.vol.rst/user1.c:128
+#, fuzzy
+msgid "Column type of smooth column is not supported (must be integer or double)"
+msgstr "Kolonas tips nav atbalstīts"
 
 #: ../imagery/i.landsat.acca/algorithm.c:237
 #, fuzzy
@@ -28050,7 +28051,7 @@ msgstr ""
 #: ../imagery/i.vpoints/main.c:137 ../imagery/i.vpoints/main.c:141
 #: ../imagery/i.points/main.c:140 ../imagery/i.points/main.c:144
 #, c-format
-msgid "Group [%s] contains no maps, run i.group"
+msgid "Points are more dense than specified 'DMIN'--ignored %d points (remain %d)"
 msgstr ""
 
 #: ../imagery/i.vpoints/main.c:256 ../imagery/i.points/main.c:250
@@ -28430,8 +28431,7 @@ msgid "Sample size: %d points\n"
 msgstr ""
 
 #: ../imagery/i.cluster/main.c:297
-msgid ""
-"Not enough sample points. Please run again and choose a larger sample size."
+msgid "Performs an affine transformation (shift, scale and rotate) on vector map."
 msgstr ""
 
 #: ../imagery/i.cluster/main.c:301
@@ -28679,9 +28679,7 @@ msgid "Subgroup [%s] only has 1 file"
 msgstr ""
 
 #: ../imagery/i.class/main.c:275
-msgid ""
-"\n"
-"RESULT SIGNATURE"
+msgid "Database connection and attribute tables for concerned layers are not changed"
 msgstr ""
 
 #: ../imagery/i.class/main.c:280
@@ -28751,7 +28749,7 @@ msgstr "Ir jāievada kāminimums %d punkti."
 
 #: ../imagery/i.class/complete_reg.c:14
 msgid "Area already completed."
-msgstr ""
+msgstr "līnija"
 
 #: ../imagery/i.class/erase_reg.c:10
 #, fuzzy
@@ -29012,9 +29010,8 @@ msgid "mcd43B2q: Quality of BRDF correction performed"
 msgstr ""
 
 #: ../imagery/i.modis.qc/main.c:256
-msgid ""
-"Band number of Modis product (mod09Q1=[1,2],mod09A1=[1-7], mcd43B2q=[1-7])"
-msgstr ""
+msgid "Selected areas in input vector <%s> do not overlap with the current region"
+msgstr "vektora karte <%s> nav atrasta"
 
 #: ../imagery/i.modis.qc/main.c:260
 msgid "Band 1: Red"
@@ -29469,9 +29466,8 @@ msgstr ""
 msgid "ETa and ETa_DOY file numbers are not equal!"
 msgstr ""
 
-#: ../imagery/i.evapo.time/main.c:189
-#, c-format
-msgid "Too many ETo files. Only %d allowed."
+#: ../vector/v.net.path/main.c:66
+msgid "Name of file containing start and end points. If not given, read from stdin"
 msgstr ""
 
 #: ../imagery/i.zc/main.c:53 ../vector/v.lidar.edgedetection/main.c:74
@@ -29825,8 +29821,9 @@ msgstr ""
 msgid "evi index requires blue, red and nir maps"
 msgstr ""
 
-#: ../imagery/i.vi/main.c:267
-msgid "evi2 index requires red and nir maps"
+#: ../vector/v.clean/prune.c:216
+#, c-format
+msgid "%d vertices from input %d (vertices of given type) removed, i.e. %.2f %%"
 msgstr ""
 
 #: ../imagery/i.vi/main.c:271
@@ -30038,9 +30035,7 @@ msgid "temperaturedifference2m"
 msgstr ""
 
 #: ../imagery/i.eb.netrad/main.c:89
-msgid ""
-"Name of the difference map of temperature from surface skin to about 2 m "
-"height [K]"
+msgid "connect still unconnected points to vector network by inserting new line(s)"
 msgstr ""
 
 #: ../imagery/i.eb.netrad/main.c:90
@@ -30056,13 +30051,8 @@ msgstr "Jaunas rastra kartes nosaukums"
 msgid "transmissivitysingleway"
 msgstr ""
 
-#: ../imagery/i.eb.netrad/main.c:100
-#, fuzzy
-msgid "Name of the single-way atmospheric transmissivitymap [-]"
-msgstr "Ieejas rastra faila nosaukums"
-
-#: ../imagery/i.eb.netrad/main.c:101
-msgid "tsw"
+#: ../vector/v.net/args.c:48
+msgid "print to standard output {point_category line_category[,line_category...]}"
 msgstr ""
 
 #: ../imagery/i.eb.netrad/main.c:104
@@ -30700,14 +30690,8 @@ msgstr ""
 
 #: ../imagery/i.segment/parse_args.c:123
 #, fuzzy
-msgid "Name for output goodness of fit estimate map"
-msgstr "Izejas rastra kartes nosaukums"
-
-#: ../imagery/i.segment/parse_args.c:128
-msgid ""
-"Use 8 neighbors (3x3 neighborhood) instead of the default 4 neighbors for "
-"each pixel"
-msgstr ""
+msgid "Name for output vector map defined as a link to the PostGIS feature table"
+msgstr "Izveido GRASS vektoru karti ar kontūrlīnijām norādītajai rastra kartei."
 
 #: ../imagery/i.segment/parse_args.c:134
 msgid "Weighted input, do not perform the default scaling of input raster maps"
@@ -31535,8 +31519,8 @@ msgstr "Vektorkartes nosaukums"
 msgid "\tScore Value=%f\tsmoothing parameter (standard deviation)=%f"
 msgstr ""
 
-#: ../vector/v.kernel/main.c:110
-msgid "kernel density"
+#: ../vector/v.to.db/parse.c:89
+msgid "line sinuousity, calculated as line length / distance between end points"
 msgstr ""
 
 #: ../vector/v.kernel/main.c:112
@@ -31762,9 +31746,7 @@ msgid "Bad format in control point file <%s>"
 msgstr "Nederīgs izvades faila nosaukums"
 
 #: ../vector/v.rectify/main.c:73
-msgid ""
-"Rectifies a vector by computing a coordinate transformation for each object "
-"in the vector based on the control points."
+msgid "No coordinates to generate the output! Maybe an empty vector type chosen?"
 msgstr ""
 
 #: ../vector/v.rectify/main.c:88
@@ -31799,7 +31781,7 @@ msgstr "%d papildinājuma/atjauninājuma kļūda\n"
 
 #: ../vector/v.rectify/main.c:118
 msgid "Print RMS errors and exit without rectifying the input map"
-msgstr ""
+msgstr "Slāņa numurs"
 
 #: ../vector/v.rectify/main.c:136
 msgid "Please select a group or give an input file."
@@ -31878,15 +31860,8 @@ msgstr "Izšķirtspēja"
 msgid "Shifting value for z coordinates"
 msgstr ""
 
-#: ../vector/v.extrude/main.c:105 ../vector/v.extrude/main.c:113
-#: ../vector/v.extrude/main.c:119 ../vector/v.to.3d/args.c:33
-#: ../vector/v.to.3d/args.c:41
-#, fuzzy
-msgid "Height"
-msgstr " Labā: beigt\n"
-
-#: ../vector/v.extrude/main.c:112 ../vector/v.to.3d/args.c:40
-msgid "Fixed height for 3D vector features"
+#: ../vector/v.support/main.c:118
+msgid "Command line to store into vector map history file (used for vector scripts)"
 msgstr ""
 
 #: ../vector/v.extrude/main.c:118
@@ -32062,8 +32037,7 @@ msgid "Opaque to vector (only relevant if background color is selected)"
 msgstr ""
 
 #: ../vector/v.label/main.c:251
-msgid ""
-"size and space options vary significantly which may lead to crummy output"
+msgid "size and space options vary significantly which may lead to crummy output"
 msgstr ""
 
 #: ../vector/v.label/main.c:259
@@ -32159,9 +32133,8 @@ msgstr "atslēgas kolona"
 msgid "Set1 category values"
 msgstr "Rastra izejas fails"
 
-#: ../vector/v.net.connectivity/main.c:97
-#: ../vector/v.net.connectivity/main.c:103
-msgid "Set1"
+#: ../vector/v.select/main.c:51
+msgid "Selects features from vector map (A) by features from other vector map (B)."
 msgstr ""
 
 #: ../vector/v.net.connectivity/main.c:102
@@ -32680,8 +32653,7 @@ msgid "Minimum distance between points (to remove almost identical points)"
 msgstr ""
 
 #: ../vector/v.surf.rst/main.c:309
-msgid ""
-"Maximum distance between points on isoline (to insert additional points)"
+msgid "Maximum distance between points on isoline (to insert additional points)"
 msgstr ""
 
 #: ../vector/v.surf.rst/main.c:318
@@ -32801,14 +32773,8 @@ msgstr ""
 msgid "Unable to write raster maps - try to increase resolution"
 msgstr "Rastra kartes nosaukums"
 
-#: ../vector/v.info/print.c:130
-#, fuzzy, c-format
-msgid "Database connection for map <%s> is not defined in DB file"
-msgstr "Datubāzes konekcija nav definēta"
-
-#: ../vector/v.info/print.c:134
-#, c-format
-msgid "Displaying column types/names for database connection of layer <%s>:"
+#: ../vector/v.in.db/main.c:57
+msgid "Creates new vector (points) map from database table containing coordinates."
 msgstr ""
 
 #: ../vector/v.info/print.c:138 ../vector/v.db.select/main.c:165
@@ -32869,8 +32835,9 @@ msgstr ""
 msgid "Timestamp (first layer): "
 msgstr ""
 
-#: ../vector/v.info/print.c:343
-msgid "Timestamp (first layer): none"
+#: ../vector/v.in.db/main.c:177
+#, c-format
+msgid "Output vector map, table <%s> (driver: <%s>, database: <%s>) already exists"
 msgstr ""
 
 #: ../vector/v.info/print.c:351 ../vector/v.info/print.c:375
@@ -33046,9 +33013,7 @@ msgid "Print history instead of info and exit"
 msgstr "Eksistējošas rastra kartes nosaukums"
 
 #: ../vector/v.info/parse.c:30
-msgid ""
-"Print types/names of table columns for specified layer instead of info and "
-"exit"
+msgid "All cells touched by the line will be set, not only those on the render path"
 msgstr ""
 
 #: ../vector/v.info/parse.c:35
@@ -33442,28 +33407,23 @@ msgstr ""
 
 #: ../vector/v.out.ogr/main.c:308
 #, c-format
-msgid ""
-"%d point found, but not requested to be exported. Verify 'type' parameter."
-msgid_plural ""
-"%d points found, but not requested to be exported. Verify 'type' parameter."
+msgid "%d point found, but not requested to be exported. Verify 'type' parameter."
+msgid_plural "%d points found, but not requested to be exported. Verify 'type' parameter."
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
 #: ../vector/v.out.ogr/main.c:316
 #, c-format
-msgid ""
-"%d line found, but not requested to be exported. Verify 'type' parameter."
-msgid_plural ""
-"%d line(s) found, but not requested to be exported. Verify 'type' parameter."
+msgid "%d line found, but not requested to be exported. Verify 'type' parameter."
+msgid_plural "%d line(s) found, but not requested to be exported. Verify 'type' parameter."
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
 #: ../vector/v.out.ogr/main.c:325
 #, c-format
-msgid ""
-"%d boundary found, but not requested to be exported. Verify 'type' parameter."
+msgid "%d boundary found, but not requested to be exported. Verify 'type' parameter."
 msgid_plural ""
 "%d boundaries found, but not requested to be exported. Verify 'type' "
 "parameter."
@@ -33473,8 +33433,7 @@ msgstr[2] ""
 
 #: ../vector/v.out.ogr/main.c:334
 #, c-format
-msgid ""
-"%d centroid found, but not requested to be exported. Verify 'type' parameter."
+msgid "%d centroid found, but not requested to be exported. Verify 'type' parameter."
 msgid_plural ""
 "%d centroids found, but not requested to be exported. Verify 'type' "
 "parameter."
@@ -33484,42 +33443,34 @@ msgstr[2] ""
 
 #: ../vector/v.out.ogr/main.c:342
 #, c-format
-msgid ""
-"%d area found, but not requested to be exported. Verify 'type' parameter."
-msgid_plural ""
-"%d areas found, but not requested to be exported. Verify 'type' parameter."
+msgid "%d area found, but not requested to be exported. Verify 'type' parameter."
+msgid_plural "%d areas found, but not requested to be exported. Verify 'type' parameter."
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
 #: ../vector/v.out.ogr/main.c:350
 #, c-format
-msgid ""
-"%d face found, but not requested to be exported. Verify 'type' parameter."
-msgid_plural ""
-"%d faces found, but not requested to be exported. Verify 'type' parameter."
+msgid "%d face found, but not requested to be exported. Verify 'type' parameter."
+msgid_plural "%d faces found, but not requested to be exported. Verify 'type' parameter."
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
 #: ../vector/v.out.ogr/main.c:358
 #, c-format
-msgid ""
-"%d volume found, but not requested to be exported. Verify 'type' parameter."
-msgid_plural ""
-"%d volumes found, but not requested to be exported. Verify 'type' parameter."
+msgid "%d volume found, but not requested to be exported. Verify 'type' parameter."
+msgid_plural "%d volumes found, but not requested to be exported. Verify 'type' parameter."
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
 
 #: ../vector/v.out.ogr/main.c:368
-msgid ""
-"No points found, but requested to be exported. Will skip this feature type."
+msgid "No points found, but requested to be exported. Will skip this feature type."
 msgstr ""
 
 #: ../vector/v.out.ogr/main.c:377
-msgid ""
-"No lines found, but requested to be exported. Will skip this feature type."
+msgid "No lines found, but requested to be exported. Will skip this feature type."
 msgstr ""
 
 #: ../vector/v.out.ogr/main.c:387
@@ -33529,8 +33480,7 @@ msgid ""
 msgstr ""
 
 #: ../vector/v.out.ogr/main.c:396
-msgid ""
-"No areas found, but requested to be exported. Will skip this feature type."
+msgid "No areas found, but requested to be exported. Will skip this feature type."
 msgstr ""
 
 #: ../vector/v.out.ogr/main.c:406
@@ -33540,18 +33490,15 @@ msgid ""
 msgstr ""
 
 #: ../vector/v.out.ogr/main.c:415
-msgid ""
-"No faces found, but requested to be exported. Will skip this feature type."
+msgid "No faces found, but requested to be exported. Will skip this feature type."
 msgstr ""
 
 #: ../vector/v.out.ogr/main.c:424
-msgid ""
-"No kernels found, but requested to be exported. Will skip this feature type."
+msgid "No kernels found, but requested to be exported. Will skip this feature type."
 msgstr ""
 
 #: ../vector/v.out.ogr/main.c:433
-msgid ""
-"No volumes found, but requested to be exported. Will skip this feature type."
+msgid "No volumes found, but requested to be exported. Will skip this feature type."
 msgstr ""
 
 #: ../vector/v.out.ogr/main.c:458
@@ -33618,8 +33565,7 @@ msgstr "neiespējami atjaunot robežas"
 
 #: ../vector/v.out.ogr/main.c:598
 msgid "No attribute table found -> using only category numbers as attributes"
-msgstr ""
-"Atribūtu tabula nav atrasta -> tiek izmantoti kategoriju numuri kā atribūti"
+msgstr "Atribūtu tabula nav atrasta -> tiek izmantoti kategoriju numuri kā atribūti"
 
 #: ../vector/v.out.ogr/main.c:602
 msgid "Exporting 'cat' anyway, as it is the only attribute table field"
@@ -33711,8 +33657,8 @@ msgstr "rastra karte <%s> nav atrasta"
 
 #: ../vector/v.out.ogr/create.c:26
 #, fuzzy, c-format
-msgid "Creation of output OGR datasource <%s> failed"
-msgstr "Nevar atvērt OGR datu avotu '%s'"
+msgid "Unable to create multi-feature. Category %d not found in line %d, field %d"
+msgstr "Vektorkartes nosaukums"
 
 #: ../vector/v.out.ogr/create.c:36
 #, c-format
@@ -33877,7 +33823,87 @@ msgid ""
 "use 'layer=-1'."
 msgstr ""
 
-#: ../vector/v.out.ascii/main.c:60
+#: ../vector/v.net.steiner/main.c:371
+msgid "Node layer (used for terminals)"
+msgstr ""
+
+#: ../vector/v.net.steiner/main.c:377
+msgid "Arcs' cost column (for both directions)"
+msgstr ""
+
+#: ../vector/v.net.steiner/main.c:383
+msgid "Categories of points on terminals (layer is specified by nlayer)"
+msgstr ""
+
+#: ../vector/v.net.steiner/main.c:391
+#, fuzzy
+msgid "Number of steiner points (-1 for all possible)"
+msgstr "Vektorkartes nosaukums"
+
+#: ../vector/v.net.steiner/main.c:458
+#, fuzzy
+msgid "Not enough terminals (< 2)"
+msgstr "Atslēga (id) kolonas nosaukums"
+
+#: ../vector/v.net.steiner/main.c:464
+msgid "Requested number of Steiner points > than possible"
+msgstr ""
+
+#: ../vector/v.net.steiner/main.c:516
+#, c-format
+msgid "Terminal at node [%d] cannot be connected to terminal at node [%d]"
+msgstr ""
+
+#: ../vector/v.net.steiner/main.c:532
+#, c-format
+msgid "[%d] (not reachable) nodes removed from list of Steiner point candidates"
+msgstr ""
+
+#: ../vector/v.net.steiner/main.c:537
+#, c-format
+msgid "MST costs = %f"
+msgstr ""
+
+#: ../vector/v.net.steiner/main.c:543
+#, c-format
+msgid "Search for [%d]. Steiner point"
+msgstr ""
+
+#: ../vector/v.net.steiner/main.c:564
+#, c-format
+msgid "Steiner point at node [%d] was added to terminals (MST costs = %f)"
+msgstr ""
+
+#: ../vector/v.net.steiner/main.c:576
+msgid "No Steiner point found -> leaving cycle"
+msgstr ""
+
+#: ../vector/v.mapcalc/vector.c:245
+#, fuzzy
+msgid "Can't call bad function"
+msgstr "atubāzes atrašnās"
+
+#: ../vector/v.mapcalc/vector.c:282
+#, c-format
+msgid "Bad arguments to pointfunc %s"
+msgstr ""
+
+#: ../vector/v.mapcalc/vector.c:305 ../vector/v.mapcalc/number.c:218
+#, c-format
+msgid "No function defined to perform ``point %c point''"
+msgstr ""
+
+#: ../vector/v.mapcalc/map.c:68
+#, c-format
+msgid "Performing 1 arg map function on map %s"
+msgstr ""
+
+#: ../vector/v.mapcalc/map.c:79
+#, c-format
+msgid "Performing 2 arg map function on maps %s and %s"
+msgstr ""
+
+#: ../vector/v.mapcalc/map.c:91
 #, fuzzy, c-format
 msgid "Parameter '%s' ignored in standard mode"
 msgstr "rastrs <%s> nav atrasts"
@@ -33912,7 +33938,76 @@ msgstr[2] "Neveiksme atverot ieejas dig ieejas failu"
 msgid "dig_att file already exist"
 msgstr "dig_att fails neeksistē"
 
-#: ../vector/v.out.ascii/main.c:144
+#: ../vector/v.lrs/v.lrs.create/main.c:133
+#, fuzzy
+msgid "Output vector map where oriented lines are written"
+msgstr "Izejas karte kurā tiks ierakstīti punkti"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:138
+#, fuzzy
+msgid "Output vector map of errors"
+msgstr "Izejas rastra kartes nosaukums"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:143
+#, fuzzy
+msgid "Input vector map containing reference points"
+msgstr "Ieejošā karte satur līnijas"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:151
+#: ../vector/v.lrs/v.lrs.where/main.c:80
+#, fuzzy
+msgid "Point layer"
+msgstr "Uz slāni"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:158
+msgid "Column containing line identifiers for lines"
+msgstr ""
+
+#: ../vector/v.lrs/v.lrs.create/main.c:165
+msgid "Column containing line identifiers for points"
+msgstr ""
+
+#: ../vector/v.lrs/v.lrs.create/main.c:173
+msgid "Column containing milepost position for the beginning of next segment"
+msgstr ""
+
+#: ../vector/v.lrs/v.lrs.create/main.c:182
+msgid "Column containing offset from milepost for the beginning of next segment"
+msgstr ""
+
+#: ../vector/v.lrs/v.lrs.create/main.c:191
+msgid "Column containing milepost position for the end of previous segment"
+msgstr ""
+
+#: ../vector/v.lrs/v.lrs.create/main.c:200
+msgid "Column containing offset from milepost for the end of previous segment"
+msgstr ""
+
+#: ../vector/v.lrs/v.lrs.create/main.c:223
+msgid "Name of table where the reference system will be written"
+msgstr ""
+
+#: ../vector/v.lrs/v.lrs.create/main.c:224
+#, fuzzy
+msgid "New table is created by this module"
+msgstr "neiespējami atvērt <%s>"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:231
+#, fuzzy
+msgid "Maximum distance of point to line allowed"
+msgstr "Maksimālā distance starp punktiem"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:286
+#, fuzzy
+msgid "Cannot get layer info for lines"
+msgstr "Nevar nolasīt faila informāciju"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:289
+#, fuzzy
+msgid "Cannot get layer info for points"
+msgstr "Nevar nolasīt faila informāciju"
+
+#: ../vector/v.lrs/v.lrs.create/main.c:324
 #, fuzzy, c-format
 msgid "Unable to open dig_att file <%s>"
 msgstr "neiespējami atvērt <%s>"
@@ -34017,8 +34112,8 @@ msgstr ""
 msgid "Vector map projection zone"
 msgstr "vektora karte <%s> nav atrasta"
 
-#: ../vector/v.support/main.c:102
-msgid "Vector map digitizing threshold number (e.g., 0.5)"
+#: ../vector/v.buffer/main.c:323
+msgid "Note: In latitude-longitude coordinate system distances are in degree units"
 msgstr ""
 
 #: ../vector/v.support/main.c:110
@@ -35871,10 +35966,7 @@ msgid "Maximum distance to the network"
 msgstr "Maksimālā distance starp punktiem"
 
 #: ../vector/v.net.path/main.c:101
-msgid ""
-"If start/end are given as coordinates. If start/end point is outside this "
-"threshold, the path is not found and error message is printed. To speed up "
-"the process, keep this value as low as possible."
+msgid "Input raster maps use as extension the number of the band instead the code"
 msgstr ""
 
 #: ../vector/v.net.path/main.c:135
@@ -36164,8 +36256,18 @@ msgstr ""
 msgid "remove small angles between lines at nodes"
 msgstr ""
 
-#: ../vector/v.clean/main.c:123
-msgid "Threshold in map units, one value for each tool"
+#: ../imagery/i.segment/parse_args.c:109
+#, fuzzy
+msgid "Name for input raster map with starting seeds"
+msgstr "Rastra kartes nosaukums"
+
+#: ../imagery/i.segment/parse_args.c:115
+#, fuzzy
+msgid "Name of input bounding/constraining raster map"
+msgstr "Rastra kartes nosaukums"
+
+#: ../imagery/i.segment/parse_args.c:117
+msgid "Must be integer values, each area will be segmented independent of the others"
 msgstr ""
 
 #: ../vector/v.clean/main.c:124
@@ -36264,10 +36366,11 @@ msgstr ""
 msgid "Failed to copy attribute table to output vector map"
 msgstr "neiespējami atvērt <%s>"
 
-#: ../vector/v.clean/main.c:335 ../vector/v.clean/main.c:346
-#, fuzzy
-msgid "Rebuilding parts of topology..."
-msgstr "Veidojam telpisko indeksu ..."
+#: ../imagery/i.segment/create_isegs.c:1130
+#: ../imagery/i.segment/create_isegs.c:1555
+#, fuzzy, c-format
+msgid "Region size is larger than 2: %d"
+msgstr "Reģiona izmērs ir mazāks nekā ninimālais reģions, nekas nav parādīts.\n"
 
 #: ../vector/v.clean/main.c:355 ../vector/v.clean/main.c:400
 #: ../vector/v.clean/main.c:451
@@ -36602,9 +36705,7 @@ msgid "Column name to upload points count"
 msgstr "Atslēga (id) kolonas nosaukums"
 
 #: ../vector/v.vect.stats/main.c:191
-msgid ""
-"Column to hold points count, must be of type integer, will be created if not "
-"existing"
+msgid "Uses red and nir bands mostly, and some indices require additional bands."
 msgstr ""
 
 #: ../vector/v.vect.stats/main.c:198
@@ -36779,9 +36880,7 @@ msgid "Cannot sort the key/value array"
 msgstr "Nevar izveidot ierakstu tabulā: %s"
 
 #: ../vector/v.surf.idw/main.c:92
-msgid ""
-"Provides surface interpolation from vector point data by Inverse Distance "
-"Squared Weighting."
+msgid "msavi2 index requires red and nir maps, and 3 parameters related to soil line"
 msgstr ""
 
 #: ../vector/v.surf.idw/main.c:101
@@ -37148,13 +37247,14 @@ msgid "Unable to sort array of values"
 msgstr "Nevar atlasīt datus no tabulas"
 
 #: ../vector/v.class/main.c:172
-msgid ""
-"The discontinuities algorithm indicates that some class breaks are not "
-"statistically significant at alpha=0.05. You are advised to reduce the "
-"number of classes."
+msgid "Not enough sample points. Please run again and choose a larger sample size."
 msgstr ""
 
-#: ../vector/v.class/main.c:201
+#: ../imagery/i.cluster/main.c:301
+msgid "Not enough non-zero sample data points. Check your current region (and mask)."
+msgstr ""
+
+#: ../imagery/i.cluster/main.c:314
 #, c-format
 msgid ""
 "\n"
@@ -37519,8 +37619,7 @@ msgid "Transfer categories and attributes"
 msgstr "Drukāt tikai vektoru kartes reģionu"
 
 #: ../vector/v.buffer/main.c:323
-msgid ""
-"Note: In latitude-longitude coordinate system distances are in degree units"
+msgid "Use current region settings in target location (def.=calculate smallest area)"
 msgstr ""
 
 #: ../vector/v.buffer/main.c:327
@@ -37633,7 +37732,48 @@ msgstr "Rakstu jaunu failu... \n"
 msgid "Attaching islands..."
 msgstr "Pievieno kategorijas...\n"
 
-#: ../vector/v.buffer/main.c:760
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:129
+#, fuzzy, c-format
+msgid "Can not read camera file '%s'"
+msgstr "Nevaratvērt datubāzi %s"
+
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:132
+#, c-format
+msgid "Replacing camera name '%s' with '%s'"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:138
+#, c-format
+msgid "Replacing camera cam_id '%s' with '%s'"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:146
+#, c-format
+msgid "Replacing calibrated focal length '%g' with '%g'"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:153
+#, c-format
+msgid "Replacing coordinates of principal point '%.17g, %.17g' with '%.17g, %.17g'"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:164
+msgid "Please provide a camera name for a new camera definition"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:168
+msgid "Please provide a camera ID for a new camera definition"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:172
+msgid "Please provide calibrated focal length for a new camera definition"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:176
+msgid "Using default coordinates 0.0, 0.0 for the principal point"
+msgstr ""
+
+#: ../imagery/i.ortho.photo/i.ortho.camera/main.c:190
 #, fuzzy
 msgid "Calculating centroids for all areas..."
 msgstr "Kalkulējam ēnas no DEM..."
@@ -38584,10 +38724,8 @@ msgstr ""
 
 #: ../vector/v.qcount/main.c:71
 #, fuzzy
-msgid ""
-"Name for output quadrant centres map (number of points is written as "
-"category)"
-msgstr "Izejas rastra kartes nosaukums"
+msgid "Bypass second-pass processing, and merge warm (not ambiguous) and cold clouds"
+msgstr ""
 
 #: ../vector/v.qcount/main.c:77
 #, fuzzy
@@ -38929,8 +39067,8 @@ msgstr ""
 msgid "Interpolation spline step value in north direction"
 msgstr ""
 
-#: ../vector/v.lidar.edgedetection/main.c:111
-msgid "Regularization weight in gradient evaluation"
+#: ../imagery/i.modis.qc/main.c:256
+msgid "Band number of Modis product (mod09Q1=[1,2],mod09A1=[1-7], mcd43B2q=[1-7])"
 msgstr ""
 
 #: ../vector/v.lidar.edgedetection/main.c:120
@@ -39412,8 +39550,8 @@ msgstr "Nevarēja atrast rastra failu %s"
 
 #: ../vector/v.net.flow/main.c:217
 #, fuzzy
-msgid "No sinks"
-msgstr "rotēt/grozīt izdruku"
+msgid "Region size is lower than minreg, nothing displayed."
+msgstr "Reģiona izmērs ir mazāks nekā ninimālais reģions, nekas nav parādīts.\n"
 
 #: ../vector/v.net.flow/main.c:241
 #, fuzzy
@@ -39427,11 +39565,7 @@ msgid ""
 "Type: %s\n"
 "Left: %d\n"
 "Right: %d\n"
-msgstr ""
-"Līnija: %d  \n"
-"Tips: %s  \n"
-"Kreisais: %d  \n"
-"Labais: %d \n"
+msgstr "Reģiona izmērs ir lielāks nekā maksimālais reģions, nekas nav parādīts.\n"
 
 #: ../vector/v.what/what.c:282
 #, fuzzy, c-format
@@ -39709,8 +39843,12 @@ msgstr "izveidot sarakstu ar visām pieejamajām karšu biblotēkām/mapsets"
 msgid "Format: layer name,type,projection check"
 msgstr ""
 
-#: ../vector/v.normal/main.c:76 ../vector/v.kcv/main.c:57
-#: ../vector/v.in.db/main.c:55
+#: ../display/d.font/main.c:126
+#, c-format
+msgid "Font name <%s> is invalid. Check font name or consider running 'g.mkfontcap'"
+msgstr ""
+
+#: ../display/d.rast.num/main.c:77 ../display/d.rast.arrow/main.c:96
 #, fuzzy
 msgid "points"
 msgstr "Drukāt"
@@ -39826,8 +39964,8 @@ msgstr ""
 msgid "Shapiro-Wilk W: "
 msgstr ""
 
-#: ../vector/v.normal/main.c:299
-msgid "Weisberg-Bingham's W'' cannot be used for n < 50 or n > 99"
+#: ../display/d.title/main.c:52
+msgid "Create a TITLE for a raster map in a form suitable for display with d.text."
 msgstr ""
 
 #: ../vector/v.normal/main.c:301
@@ -40092,8 +40230,8 @@ msgstr ""
 msgid "Name of vector map to edit"
 msgstr "Vektorkartes nosaukums"
 
-#: ../vector/v.edit/args.c:36
-msgid "Tool"
+#: ../display/d.legend/main.c:136
+msgid "Size and placement as percentage of screen coordinates (0,0 is lower left)"
 msgstr ""
 
 #: ../vector/v.edit/args.c:58
@@ -40179,19 +40317,27 @@ msgstr ""
 msgid "Change feature type (point<->centroid, line<->boundary)"
 msgstr ""
 
-#: ../vector/v.edit/args.c:79
-msgid "Delete selected areas from vector map (based on selected centroids)"
+#: ../display/d.legend/main.c:860
+msgid "Histogram plotting not implemented for categorical legends. Use the '-s' flag"
 msgstr ""
 
-#: ../vector/v.edit/args.c:87
+#: ../display/d.legend/main.c:1027
+msgid "Nothing to draw! (no categories with labels?)"
+msgstr "Nav ko zīmēt! (nav kategorijas ar urakstiem/birkām?)"
+
+#: ../display/d.legend/histogram.c:108
+msgid "Histogram constrained by range not yet implemented for categorical rasters"
+msgstr ""
+
+#: ../display/d.vect.chart/main.c:65
 #, fuzzy
 msgid "Name of file containing data in GRASS ASCII vector format"
 msgstr "Ieejošā karte satur līnijas"
 
 #: ../vector/v.edit/args.c:89
 #, fuzzy
-msgid "\"-\" reads from standard input"
-msgstr "%-5d punkti nolasīti un ierakstīti izejā\n"
+msgid "Displays charts of vector data in the active frame on the graphics monitor."
+msgstr "Izvēlies fontu kurš tiks parādīts lietotāja grafiskajā vidē."
 
 #: ../vector/v.edit/args.c:99
 msgid "Difference in x,y,z direction for moving feature or vertex"
@@ -40242,9 +40388,7 @@ msgid "Name of background vector map(s)"
 msgstr "Vektorkartes nosaukums"
 
 #: ../vector/v.edit/args.c:176
-msgid ""
-"Snap added or modified features in the given threshold to the nearest "
-"existing feature"
+msgid "Program for generating and displaying simple graphics on the display monitor."
 msgstr ""
 
 #: ../vector/v.edit/args.c:182
@@ -40295,11 +40439,8 @@ msgstr "reģions <%s> nav atrasts"
 msgid "At least one option from %s must be specified"
 msgstr "2 līmeņiem jābūt norādītiem"
 
-#: ../vector/v.edit/args.c:307 ../vector/v.edit/args.c:316
-#: ../vector/v.edit/args.c:323 ../vector/v.edit/args.c:330
-#: ../vector/v.edit/args.c:334
-#, c-format
-msgid "Tool %s requires option %s"
+#: ../display/d.vect/shape.c:194
+msgid "Vector map is not 3D. Unable to colorize features based on z-coordinates."
 msgstr ""
 
 #: ../vector/v.net.alloc/main.c:64
@@ -40326,43 +40467,53 @@ msgstr ""
 #: ../vector/v.net.alloc/main.c:229
 #, fuzzy, c-format
 msgid "Number of centers: [%d] (nlayer: [%d])"
-msgstr ""
+msgstr "Attēlot"
 "\n"
 "\n"
 "  Punktu skaits: %d\n"
 
-#: ../vector/v.net.alloc/main.c:232
-msgid "Not enough centers for selected nlayer. Nothing will be allocated."
-msgstr ""
+#: ../display/d.vect/main.c:93
+msgid "Display geometry of features"
+msgstr "Objektu ģeometrija"
+
+#: ../display/d.vect/main.c:94
+msgid "Display category numbers of features"
+msgstr "Objektu kategoriju numuri"
 
 #: ../vector/v.net.alloc/main.c:253
-#, fuzzy
-msgid "Calculating costs from centers ..."
-msgstr "Kalkulējam ēnas no DEM..."
+msgid "Display topology information (nodes, edges)"
+msgstr "Topoloģijas informācija (mezgli, robežas)"
 
 #: ../vector/v.net.alloc/main.c:450 ../vector/v.net.alloc/main.c:462
 #: ../vector/v.net.iso/main.c:618
-#, fuzzy
-msgid "Cannot get line segment, segment out of line"
-msgstr "Nevar izveidot tabulu: %s"
+msgid "Display vertices of features"
+msgstr "Objektu virsotnes"
 
-#: ../vector/v.net.spanningtree/main.c:48
-msgid "spanning tree"
-msgstr ""
+#: ../display/d.vect/main.c:97
+msgid "Display direction of linear features"
+msgstr "Līnījveida objektu orientācija"
 
-#: ../vector/v.net.spanningtree/main.c:50
-msgid "Computes minimum spanning tree for the network."
+#: ../display/d.vect/main.c:98
+msgid "Display z-coordinate of features (only for 3D vector maps)"
+msgstr "Objektu Z koordinātas informācija (tikai 3D vektoriem)"
+
+#: ../display/d.vect/main.c:119
+msgid "Feature color"
+msgstr "Objekta krāsa"
+
+#: ../display/d.vect/main.c:123 ../display/d.vect/main.c:133
+#: ../display/d.vect/main.c:233 ../display/d.vect/main.c:243
+msgid "Either a standard GRASS color, R:G:B triplet, or \"none\""
 msgstr ""
 
 #: ../vector/v.net.steiner/main.c:58
 #, c-format
 msgid "Init costs from node %d"
-msgstr ""
+msgstr "Laukuma aizpildījuma krāsa"
 
 #: ../vector/v.net.steiner/main.c:347
-#, fuzzy
-msgid "steiner tree"
-msgstr "Rastra karte kura tiks pārkodēta"
+msgid "Colorize features according color definition column"
+msgstr ""
 
 #: ../vector/v.net.steiner/main.c:349
 msgid "Creates Steiner tree for the network and given terminals."
@@ -40372,7 +40523,7 @@ msgstr ""
 msgid ""
 "Note that 'Minimum Steiner Tree' problem is NP-hard and heuristic algorithm "
 "is used in this module so the result may be sub optimal."
-msgstr ""
+msgstr "Līnijas"
 
 #: ../vector/v.net.steiner/main.c:371
 msgid "Node layer (used for terminals)"
@@ -40384,9 +40535,21 @@ msgstr ""
 
 #: ../vector/v.net.steiner/main.c:383
 msgid "Categories of points on terminals (layer is specified by nlayer)"
+msgstr "Simboli"
+
+#: ../display/d.vect/main.c:177
+msgid "Point and centroid symbol"
+msgstr "Punktu un centroīdu simbols"
+
+#: ../display/d.vect/main.c:184
+msgid "Symbol size"
+msgstr "Simbola izmērs"
+
+#: ../display/d.vect/main.c:186
+msgid "When used with the size_column option this becomes the scale factor"
 msgstr ""
 
-#: ../vector/v.net.steiner/main.c:391
+#: ../display/d.vect/main.c:192
 #, fuzzy
 msgid "Number of steiner points (-1 for all possible)"
 msgstr "Vektorkartes nosaukums"
@@ -40403,7 +40566,7 @@ msgstr ""
 #: ../vector/v.net.steiner/main.c:516
 #, c-format
 msgid "Terminal at node [%d] cannot be connected to terminal at node [%d]"
-msgstr ""
+msgstr "Uzraksti"
 
 #: ../vector/v.net.steiner/main.c:532
 #, c-format
@@ -40416,26 +40579,24 @@ msgstr ""
 msgid "MST costs = %f"
 msgstr ""
 
-#: ../vector/v.net.steiner/main.c:543
-#, c-format
-msgid "Search for [%d]. Steiner point"
-msgstr ""
+#: ../display/d.vect/main.c:220
+msgid "Label color"
+msgstr "Uzraksta krāsa"
 
 #: ../vector/v.net.steiner/main.c:564
 #, c-format
 msgid "Steiner point at node [%d] was added to terminals (MST costs = %f)"
 msgstr ""
 
-#: ../vector/v.net.steiner/main.c:576
-msgid "No Steiner point found -> leaving cycle"
-msgstr ""
+#: ../display/d.vect/main.c:230
+msgid "Label background color"
+msgstr "Uzraksta fona krāsa"
 
 #: ../vector/v.net.iso/main.c:72
 msgid "Splits net by cost isolines."
 msgstr ""
 
 #: ../vector/v.net.iso/main.c:75
-#, fuzzy
 msgid "isolines"
 msgstr "vektora karte <%s> nav atrasta"
 
@@ -40447,13 +40608,11 @@ msgid ""
 msgstr ""
 
 #: ../vector/v.net.iso/main.c:89
-msgid ""
-"Categories of centres (points on nodes) to which net will be allocated. "
-"Layer for this categories is given by nlayer option."
+msgid "Minimum region size (average from height and width) when map is displayed"
 msgstr ""
 
-#: ../vector/v.net.iso/main.c:98
-msgid "Costs for isolines"
+#: ../display/d.vect/main.c:293
+msgid "Maximum region size (average from height and width) when map is displayed"
 msgstr ""
 
 #: ../vector/v.net.iso/main.c:188
@@ -40477,15 +40636,12 @@ msgstr ""
 
 #: ../vector/v.net.iso/main.c:249
 msgid "Centre at closed node (costs = -1) ignored"
-msgstr ""
+msgstr "Reģiona izmērs ir mazāks nekā ninimālais reģions, nekas nav parādīts.\n"
 
 #: ../vector/v.net.iso/main.c:267
 #, fuzzy, c-format
 msgid "Number of centres: %d (nlayer %d)"
-msgstr ""
-"\n"
-"\n"
-"  Punktu skaits: %d\n"
+msgstr "Reģiona izmērs ir lielāks nekā maksimālais reģions, nekas nav parādīts.\n"
 
 #: ../vector/v.net.iso/main.c:271
 msgid "Not enough centres for selected nlayer. Nothing will be allocated."
@@ -40501,13 +40657,13 @@ msgid "Uploads raster values at positions of vector points to the table."
 msgstr ""
 
 #: ../vector/v.what.rast/main.c:92
-#, fuzzy
-msgid "Name of existing raster map to be queried"
-msgstr "Eksistējošas rastra kartes nosaukums"
+msgid "Plotting..."
+msgstr "Zīmē..."
 
-#: ../vector/v.what.rast/main.c:104
-msgid "Interpolate values from the nearest four cells"
-msgstr ""
+#: ../display/d.vect/main.c:413
+#, fuzzy
+msgid "The bounding box of the map is outside the current region, nothing drawn"
+msgstr "Kartes robežas kvadrāts ārpus tekošā reģiona neko neuzrāda.\n"
 
 #: ../vector/v.what.rast/main.c:109
 #, fuzzy
@@ -40704,9 +40860,7 @@ msgstr "2 līmeņiem jābūt norādītiem"
 
 #: ../vector/v.in.db/main.c:199
 #, c-format
-msgid ""
-"Unable to define key column. This operation is not supported by <%s> driver. "
-"You need to define <%s> option."
+msgid "Error in line width column (%s), element %d with cat %d: line width [%d]"
 msgstr ""
 
 #: ../vector/v.in.db/main.c:243
@@ -40718,19 +40872,16 @@ msgid "x/y/z column must be integer or double"
 msgstr ""
 
 #: ../vector/v.in.db/main.c:288
-#, fuzzy
-msgid "Unable to copy table"
-msgstr "Rastra izejas fails"
+msgid "Boundaries"
+msgstr "Robežas"
 
-#: ../vector/v.in.db/main.c:312
-#, fuzzy, c-format
-msgid "Unable to add key column <%s>: SERIAL type is not supported by <%s>"
-msgstr "Neiespējami atvērt šūnu failu[%s]"
+#: ../display/d.thematic.area/main.c:145
+msgid "Boundary width"
+msgstr "Robežas platums"
 
-#: ../vector/v.in.db/main.c:323
-#, fuzzy, c-format
-msgid "Failed to update key column <%s>"
-msgstr "Neiespējami atvērt šūnu failu[%s]"
+#: ../display/d.thematic.area/main.c:151
+msgid "Boundary color"
+msgstr "Robežas krāsa"
 
 #: ../vector/v.in.db/main.c:339
 #, fuzzy, c-format
@@ -40769,7 +40920,16 @@ msgstr "Izvades lauku atdalītājs"
 msgid "%d features without category skipped"
 msgstr "%-5d mirušo/neizmantoto punktu kategorijas izlaistas\n"
 
-#: ../vector/v.select/main.c:183
+#: ../display/d.thematic.area/main.c:377
+msgid "Plotting ..."
+msgstr "Zīmē..."
+
+#: ../display/d.thematic.area/main.c:384
+#, fuzzy
+msgid "The bounding box of the map is outside the current region, nothing drawn."
+msgstr "Kartes robežas kvadrāts ārpus tekošā reģiona neko neuzrāda.\n"
+
+#: ../display/d.thematic.area/main.c:434
 #, fuzzy, c-format
 msgid "%d features written to output."
 msgstr "%d punkti ierakstīti izejas kartē\n"
@@ -41093,7 +41253,7 @@ msgstr ""
 
 #: ../vector/v.lrs/v.lrs.create/main.c:165
 msgid "Column containing line identifiers for points"
-msgstr ""
+msgstr "Piezīme: darbini 'd.erase' jaunajam reģionam ietekmējot gafisko rezultātu.\n"
 
 #: ../vector/v.lrs/v.lrs.create/main.c:173
 msgid "Column containing milepost position for the beginning of next segment"
@@ -41265,7 +41425,17 @@ msgstr[0] "reģions <%s> nav atrasts"
 msgstr[1] "reģions <%s> nav atrasts"
 msgstr[2] "reģions <%s> nav atrasts"
 
-#: ../vector/v.lrs/v.lrs.where/main.c:229
+#: ../display/d.colortable/main.c:114
+#, c-format
+msgid "<%s> is floating-point; ignoring [lines] and drawing continuous color ramp"
+msgstr ""
+
+#: ../display/d.colortable/main.c:128
+#, c-format
+msgid "<%s> is floating-point; ignoring [cols] and drawing continuous color ramp"
+msgstr ""
+
+#: ../display/d.colortable/main.c:139
 #, fuzzy, c-format
 msgid "[%d] point outside threshold"
 msgid_plural "[%d] points outside threshold"
@@ -41614,7 +41784,7 @@ msgstr ""
 #: ../vector/v.to.rast/vect2rast.c:230
 #, c-format
 msgid "Converted points/lines: %d of %d"
-msgstr ""
+msgstr "Noņemt datubāzes elemtu failus no lietotāja tekošās karšu biblotēkas/mapset."
 
 #: ../vector/v.to.rast/do_areas.c:50 ../vector/v.to.rast/do_areas.c:58
 #, fuzzy, c-format
@@ -42058,10 +42228,7 @@ msgstr ""
 
 #: ../vector/v.in.ogr/main.c:155
 #, fuzzy
-msgid ""
-"Examples:\n"
-"\t\tESRI Shapefile: shapefile name\n"
-"\t\tMapInfo File: mapinfo file name"
+msgid "Print 'flat' output with no linebreaks (applies to WKT and PROJ.4 output)"
 msgstr ""
 "OGR slāņa nosaukums.\n"
 "\t\tESRI Shapefile: faila nosaukums\n"
@@ -42156,7 +42323,7 @@ msgstr ""
 msgid ""
 "Create the location specified by the \"location\" parameter and exit. Do not "
 "import the vector data."
-msgstr ""
+msgstr "Noņemt datubāzes elemtu failus no lietotāja tekošās karšu biblotēkas/mapset."
 
 #: ../vector/v.in.ogr/main.c:359
 msgid ""
@@ -42378,9 +42545,7 @@ msgid "Unable to drop table: '%s'"
 msgstr "neiespējami atvērt <%s>"
 
 #: ../vector/v.in.ogr/main.c:1571
-msgid ""
-"Input data contains 3D features. Created vector is 2D only, disable -2 flag "
-"to import 3D vector."
+msgid "Write font configuration file to standard output instead of $GISBASE/etc"
 msgstr ""
 
 #: ../vector/v.in.ogr/geom.c:195 ../vector/v.in.ogr/geom.c:216
@@ -42395,7 +42560,7 @@ msgstr ""
 
 #: ../vector/v.in.ogr/geom.c:317
 #, c-format
-msgid "Feature (cat %d): degenerated polygon (%d vertices)"
+msgid "Fontcap file %s already exists; use -%c flag if you wish to overwrite it"
 msgstr ""
 
 #: ../vector/v.in.ogr/geom.c:361
@@ -42535,7 +42700,11 @@ msgstr "kolona 2"
 msgid "Name of closeness centrality column"
 msgstr "atslēgas kolona"
 
-#: ../vector/v.net.centrality/main.c:160
+#: ../general/g.region/main.c:286
+msgid "3D grid resolution (north-south, east-west and top-bottom)"
+msgstr "3D izšķirtspēja (abas ziemļi-dienvidi, austrumi-rietumi un augša-apakša)"
+
+#: ../general/g.region/main.c:295
 #, fuzzy
 msgid "Name of betweenness centrality column"
 msgstr "atslēgas kolona"
@@ -42591,7 +42760,17 @@ msgstr "Nevarēja atrast rastra failu %s"
 msgid "Unable to calculate the output vectors"
 msgstr "Neizdevās piešķirt atmiņu rindu norādēm"
 
-#: ../vector/v.generalize/main.c:77
+#: ../general/g.message/main.c:37
+msgid "Prints a message, warning, progress info, or fatal error in the GRASS way."
+msgstr ""
+
+#: ../general/g.message/main.c:39
+msgid "This module should be used in scripts for messages served to user."
+msgstr ""
+
+#: ../general/g.message/main.c:43 ../general/g.message/main.c:48
+#: ../general/g.message/main.c:53 ../general/g.message/main.c:58
+#: ../general/g.gui/main.c:56
 #, fuzzy
 msgid "generalization"
 msgstr "Rakstu jaunu failu... \n"
@@ -43023,9 +43202,8 @@ msgstr "vektora karte <%s> nav atrasta"
 msgid "Generating points..."
 msgstr "Rakstu jaunu failu... \n"
 
-#: ../vector/v.neighbors/main.c:54
-#, fuzzy
-msgid "Neighborhood analysis tool for vector point maps."
+#: ../general/g.mapset/main.c:52
+msgid "Optionally create new mapset or list available mapsets in given location."
 msgstr ""
 "\n"
 "Tagat tiek transformēti/pārveidoti vektori...\n"
@@ -43081,7 +43259,7 @@ msgstr "neiespējami atvērt <%s>"
 
 #: ../vector/v.outlier/main.c:346
 msgid "No subregions found! Check values for 'soe' and 'son' parameters"
-msgstr ""
+msgstr "Karte neeksistē. Pievienojiet karogu -n, lai izveidotu jaunu tukšu karti."
 
 #: ../vector/v.outlier/main.c:419
 #, fuzzy
@@ -43114,1227 +43292,3 @@ msgstr "līnijas krāsa 2"
 #~ msgid "Color for drawing text"
 #~ msgstr "Krāsa zīmējamajam tekstam"
 
-#, fuzzy
-#~ msgid "Unable to list databases"
-#~ msgstr "neiespējami atvērt <%s>"
-
-#, fuzzy
-#~ msgid "Temporally shift the maps of a space time dataset."
-#~ msgstr "Datu bāzes faila nosaukums"
-
-#, fuzzy
-#~ msgid "Select columns to be printed to stdout"
-#~ msgstr "Nav iespēju atvērt šūnu failu priekš[%s]"
-
-#, fuzzy
-#~ msgid "Separator character between the columns, default is tabular \"\t\""
-#~ msgstr "Lauku atdalītājs"
-
-#, fuzzy
-#~ msgid ""
-#~ "The mapcalc expression for temporal and spatial analysis of space time "
-#~ "vector datasets."
-#~ msgstr "Eksistējošas rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid ""
-#~ "The basename of vector maps that are stored within the result space time "
-#~ "vector dataset."
-#~ msgstr "Eksistējošas vektorkartes nosaukums"
-
-#, fuzzy
-#~ msgid "Separator character between the output columns"
-#~ msgstr "Lauku atdalītājs"
-
-#, fuzzy
-#~ msgid ""
-#~ "The basename of raster maps that are stored within the result space time "
-#~ "3D raster dataset."
-#~ msgstr "Ieejas rastra faila nosaukums"
-
-#, fuzzy
-#~ msgid ""
-#~ "The basename of raster maps that are stored within the result space time "
-#~ "raster dataset."
-#~ msgstr "Ieejas rastra faila nosaukums"
-
-#, fuzzy
-#~ msgid "Import a space time vector dataset archive file"
-#~ msgstr "Eksistējošas rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "One of options <%s> or <%s> must be given"
-#~ msgstr "2 līmeņiem jābūt norādītiem"
-
-#, fuzzy
-#~ msgid "Available GDAL Drivers:"
-#~ msgstr "izveidot sarakstu ar visām pieejamajām karšu biblotēkām/mapsets"
-
-#, fuzzy
-#~ msgid "Please specify output= or outfile="
-#~ msgstr "Datu bāzes faila nosaukums"
-
-#, fuzzy
-#~ msgid "Please specify output= and samplingpos="
-#~ msgstr "Datu bāzes faila nosaukums"
-
-#, fuzzy
-#~ msgid "Please specify input= or infile="
-#~ msgstr "Datu bāzes faila nosaukums"
-
-#, fuzzy
-#~ msgid "Unable To create table: %s"
-#~ msgstr "Nav iespēju atvērt šūnu failu priekš[%s]"
-
-#, fuzzy
-#~ msgid "Unable to open ASCII file <%s>"
-#~ msgstr "neiespējami atvērt <%s>"
-
-#, fuzzy
-#~ msgid "List of supported formats:"
-#~ msgstr "Izvadīt atbalstītos formātus un tad iziet"
-
-#~ msgid "Cannot create tree"
-#~ msgstr "Nevar izveidot koku"
-
-#~ msgid "Cannot create tree info"
-#~ msgstr "Nevar izveidot koka informāciju"
-
-#, fuzzy
-#~ msgid "col = %d"
-#~ msgid_plural "cols = %d"
-#~ msgstr[0] "Kļūda: %s\n"
-#~ msgstr[1] "Kļūda: %s\n"
-#~ msgstr[2] "Kļūda: %s\n"
-
-#, fuzzy
-#~ msgid "Raster <%s> is not of type '%s'"
-#~ msgstr "vektora karte <%s> nav atrasta"
-
-#~ msgid "Name of an existing raster map"
-#~ msgstr "Eksistējošas rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "Unable to create map of unrecognised type"
-#~ msgstr "Nevar izveidot projekcijas failus: %s"
-
-#, fuzzy
-#~ msgid "Name for output distance/accumulation raster map"
-#~ msgstr "Izejas rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "Unrecognisabe data type"
-#~ msgstr "Nevar atlasīt datus no tabulas"
-
-#, fuzzy
-#~ msgid "File %s -- %s X %s"
-#~ msgstr "%d rastrs %s, %d vektors %s\n"
-
-#, fuzzy
-#~ msgid "Cannot create %s/.grass7/r.li/ directory"
-#~ msgstr "Nevar izveidot slāni"
-
-#, fuzzy
-#~ msgid "Cannot create %s/.grass7/r.li/output/ directory"
-#~ msgstr "%d punkti ierakstīti izejas kartē\n"
-
-#, fuzzy
-#~ msgid "Uunrecognisable data type"
-#~ msgstr "Nevar atlasīt datus no tabulas"
-
-#, fuzzy
-#~ msgid "Unable re-open file '%s'"
-#~ msgstr "Neiespējami atvērt šūnu failu[%s]"
-
-#, fuzzy
-#~ msgid "Raster map <%s> generated."
-#~ msgstr "KĻŪDA: <%s> jau eksistē\n"
-
-#, fuzzy
-#~ msgid "Create new projection files (modifies current location)"
-#~ msgstr "%d punkti ierakstīti izejas kartē\n"
-
-#, fuzzy
-#~ msgid "GUI type"
-#~ msgstr "Uz tipu"
-
-#, fuzzy
-#~ msgid "Unable to create index:\n"
-#~ msgstr "neiespējami atjaunot robežas"
-
-#, fuzzy
-#~ msgid "Output raster map: res: %f\trows: %d\tcols: %d"
-#~ msgstr "Nav ieejas karte(s) norādīta."
-
-#, fuzzy
-#~ msgid "Missing column <%s> in table <%s>"
-#~ msgstr "reģions <%s> nav atrasts"
-
-#, fuzzy
-#~ msgid "add a new category"
-#~ msgstr ""
-#~ "Līmenis: %d\n"
-#~ "kategorija: %d\n"
-
-#, fuzzy
-#~ msgid "Interpolating raster map <%s> (%d rows, %d cols)... "
-#~ msgstr "Lasam dig_att failu...\n"
-
-#, fuzzy
-#~ msgid "rows = %d, cols = %d"
-#~ msgstr "%d rastrs %s, %d vektors %s\n"
-
-#, fuzzy
-#~ msgid "Loading input maps..."
-#~ msgstr "Lasa %s ..."
-
-#, fuzzy
-#~ msgid "Could not allocate memory"
-#~ msgstr "Nevar atvērt izvēlēto marķieri/kursoru"
-
-#, fuzzy
-#~ msgid "dseg_open(): could not write segment file"
-#~ msgstr "Nav iespēju atvērt šūnu failu priekš[%s]"
-
-#, fuzzy
-#~ msgid "dseg_open(): unable to re-open segment file"
-#~ msgstr "neiespējami atvērt <%s>"
-
-#, fuzzy
-#~ msgid "dseg_open(): could not read segment file"
-#~ msgstr "Nevar izveidot tabulu: %s"
-
-#, fuzzy
-#~ msgid "dseg_open(): out of memory"
-#~ msgstr "Nav vairs operatīvās atmiņas!"
-
-#, fuzzy
-#~ msgid "dseg_get(): could not read segment file"
-#~ msgstr "nevar atvērt vektorfailu <%s> iekš <%s>"
-
-#, fuzzy
-#~ msgid "cseg_open(): unable to create segment file"
-#~ msgstr "Nav iespēju atvērt šūnu failu priekš[%s]"
-
-#, fuzzy
-#~ msgid "cseg_open(): could not write segment file"
-#~ msgstr "Nav iespēju atvērt šūnu failu priekš[%s]"
-
-#, fuzzy
-#~ msgid "cseg_open(): unable to re-open segment file"
-#~ msgstr "neiespējami atvērt <%s>"
-
-#, fuzzy
-#~ msgid "cseg_open(): could not read segment file"
-#~ msgstr "Nevar izveidot tabulu: %s"
-
-#, fuzzy
-#~ msgid "cseg_open(): out of memory"
-#~ msgstr "Nav vairs operatīvās atmiņas!"
-
-#, fuzzy
-#~ msgid "cseg_get(): could not read segment file"
-#~ msgstr "nevar atvērt vektorfailu <%s> iekš <%s>"
-
-#, fuzzy
-#~ msgid "Sorry, you must choose at least one output map."
-#~ msgstr "Piedodiet, jums ir jāizvēlas izvades karte."
-
-#, fuzzy
-#~ msgid "Could not open input map %s"
-#~ msgstr "Nevar atrast ieejas karti <%s>\n"
-
-#, fuzzy
-#~ msgid "Could not load input map(s)"
-#~ msgstr "Nevar atrast ieejas karti <%s>\n"
-
-#, fuzzy
-#~ msgid "Could not sort elevation map"
-#~ msgstr "Ieejas rastra faila nosaukums"
-
-#, fuzzy
-#~ msgid "Could not thin streams"
-#~ msgstr "Ieejas rastra faila nosaukums"
-
-#, fuzzy
-#~ msgid "Could not write output maps"
-#~ msgstr "Nevar atrast ieejas karti <%s>\n"
-
-#, fuzzy
-#~ msgid "Write vector attribute table"
-#~ msgstr "Nevajag taisīt atribūtu tabulu"
-
-#~ msgid "Cannot create table: %s"
-#~ msgstr "Nevar izveidot tabulu: %s"
-
-#, fuzzy
-#~ msgid "Writing raster %s"
-#~ msgstr "Eksistējošas rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "seg_open(): unable to create segment file"
-#~ msgstr "Nav iespēju atvērt šūnu failu priekš[%s]"
-
-#, fuzzy
-#~ msgid "seg_open(): could not write segment file"
-#~ msgstr "Nav iespēju atvērt šūnu failu priekš[%s]"
-
-#, fuzzy
-#~ msgid "seg_open(): unable to re-open segment file"
-#~ msgstr "neiespējami atvērt <%s>"
-
-#, fuzzy
-#~ msgid "seg_open(): could not read segment file"
-#~ msgstr "Nevar izveidot tabulu: %s"
-
-#, fuzzy
-#~ msgid "seg_open(): out of memory"
-#~ msgstr "Nav vairs operatīvās atmiņas!"
-
-#, fuzzy
-#~ msgid "seg_get(): could not read segment file"
-#~ msgstr "nevar atvērt vektorfailu <%s> iekš <%s>"
-
-#, fuzzy
-#~ msgid "bseg_open(): unable to create segment file"
-#~ msgstr "Nav iespēju atvērt šūnu failu priekš[%s]"
-
-#, fuzzy
-#~ msgid "bseg_open(): could not write segment file"
-#~ msgstr "Nav iespēju atvērt šūnu failu priekš[%s]"
-
-#, fuzzy
-#~ msgid "bseg_open(): unable to re-open segment file"
-#~ msgstr "neiespējami atvērt <%s>"
-
-#, fuzzy
-#~ msgid "bseg_open(): could not read segment file"
-#~ msgstr "Nevar izveidot tabulu: %s"
-
-#, fuzzy
-#~ msgid "bseg_open(): out of memory"
-#~ msgstr "Nav vairs operatīvās atmiņas!"
-
-#, fuzzy
-#~ msgid "bseg_put(): could not write segment file"
-#~ msgstr "Nav iespēju atvērt šūnu failu priekš[%s]"
-
-#, fuzzy
-#~ msgid "bseg_get(): could not read segment file"
-#~ msgstr "nevar atvērt vektorfailu <%s> iekš <%s>"
-
-#, fuzzy
-#~ msgid "Name of input coordinate file ('-' to read from stdin)"
-#~ msgstr "ASCII fails ar ievades datiem"
-
-#, fuzzy
-#~ msgid "Files & format"
-#~ msgstr "OGR formāts."
-
-#, fuzzy
-#~ msgid "No attribute column specified"
-#~ msgstr "Nav ieejas karte(s) norādīta."
-
-#, fuzzy
-#~ msgid "Vertex coordinates"
-#~ msgstr "Sākuma punkta koordinātes"
-
-#, fuzzy
-#~ msgid "\"-\" to write to stdout"
-#~ msgstr "Nav iespēju atvērt šūnu failu priekš[%s]"
-
-#, fuzzy
-#~ msgid "Name of observed flow file"
-#~ msgstr "Izejas rastra kartes nosaukums"
-
-#~ msgid "Character representing no data cell value"
-#~ msgstr "Simbols, kas apzīmēs neesošus datus"
-
-#~ msgid "Raster map to change"
-#~ msgstr "Maināmā rastra karte"
-
-#, fuzzy
-#~ msgid "Illegal configuration file (sample area)"
-#~ msgstr "Nederīgs izvades faila nosaukums"
-
-#, fuzzy
-#~ msgid "Cubic interpolation"
-#~ msgstr "nevar nolasīt līniju ieejas paaugstinājumu kartē "
-
-#, fuzzy
-#~ msgid "-' for standard input"
-#~ msgstr "%-5d punkti nolasīti un ierakstīti izejā\n"
-
-#, fuzzy
-#~ msgid "Pass %d:"
-#~ msgstr "Gājiens: %d\n"
-
-#, fuzzy
-#~ msgid "Name of color table (for use with -z flag)"
-#~ msgstr "Krāsu tabulas tips"
-
-#, fuzzy
-#~ msgid "Error in color definition (%s) - feature %d with category %d"
-#~ msgstr "Nav ieejas karte(s) norādīta."
-
-#, fuzzy
-#~ msgid "OGR output datasource name"
-#~ msgstr "datbāzes vārds"
-
-#, fuzzy
-#~ msgid "For example: ESRI Shapefile: shapefile name"
-#~ msgstr ""
-#~ "OGR slāņa nosaukums.\n"
-#~ "\t\tESRI Shapefile: faila nosaukums\n"
-#~ "\t\tMapInfo fails: mapinfo faila nosaukums"
-
-#, fuzzy
-#~ msgid "Exporting %i faces..."
-#~ msgstr "Rakstu jaunu failu... \n"
-
-#, fuzzy
-#~ msgid "Exporting %i kernels..."
-#~ msgstr "Rakstu jaunu failu... \n"
-
-#, fuzzy
-#~ msgid "%d features found without category were skipped"
-#~ msgstr "%-5d mirušo/neizmantoto punktu kategorijas izlaistas\n"
-
-#, fuzzy
-#~ msgid "Copying vector features..."
-#~ msgstr "Izejas vektora punktu kartes nosaukums"
-
-#, fuzzy
-#~ msgid "Do not copy table"
-#~ msgstr "Nevar nokopēt tabulu"
-
-#, fuzzy
-#~ msgid "Name of attribute column with values to approximate"
-#~ msgstr "Izmantojamās rastra kartes nosaukums priekš <%s>"
-
-#, fuzzy
-#~ msgid "Input vector is not 3D, can not use z coordinates"
-#~ msgstr "Ieejošā karte satur līnijas"
-
-#, fuzzy
-#~ msgid "Option '%s' with z values or '-%c' flag must be given"
-#~ msgstr "2 līmeņiem jābūt norādītiem"
-
-#, fuzzy
-#~ msgid "[%d] records selected from table"
-#~ msgstr "%d ieraksti atlasīti no tabulas"
-
-#, fuzzy
-#~ msgid "Subregion %d of %d..."
-#~ msgstr "Gājiens: %d\n"
-
-#, fuzzy
-#~ msgid ""
-#~ "Base name of the new created raster maps. This name will be extended with "
-#~ "a numerical prefix"
-#~ msgstr "Izvades rastra karte ar ezeru"
-
-#, fuzzy
-#~ msgid ""
-#~ "Base name of the interpolated raster maps. This name will be extended "
-#~ "with a numerical prefix"
-#~ msgstr "Izvades rastra karte ar ezeru"
-
-#, fuzzy
-#~ msgid ""
-#~ "Base name of the new created 3d raster maps. This name will be extended "
-#~ "with a numerical prefix"
-#~ msgstr "Izvades rastra karte ar ezeru"
-
-#, fuzzy
-#~ msgid "No data map specified"
-#~ msgstr "Nav ieejas karte(s) norādīta."
-
-#, fuzzy
-#~ msgid "Unable to open centroids vector points map"
-#~ msgstr "Izejas vektora punktu kartes nosaukums"
-
-#, fuzzy
-#~ msgid "Easting grid coordinates"
-#~ msgstr "nederīgs reģions: %s"
-
-#, fuzzy
-#~ msgid "Northing grid coordinates"
-#~ msgstr "nederīgs reģions: %s"
-
-#, fuzzy
-#~ msgid "Illegal north coordinate <%s>\n"
-#~ msgstr "Tukša ziemeļu koordināte norādīta!"
-
-#, fuzzy
-#~ msgid "Name for output basin elevation raster map (o/i)"
-#~ msgstr "Izejas rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "LiDAR LAS input file"
-#~ msgstr "Ieejas fails"
-
-#, fuzzy
-#~ msgid "data base files"
-#~ msgstr "datbāzes vārds"
-
-#, fuzzy
-#~ msgid "Reverse sort the result"
-#~ msgstr "Rezultējošās rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "List files from specified (sub)group (shell script style)"
-#~ msgstr "Drukāt saules pozīcijas apraskstu komandrindas skripta stilā"
-
-#, fuzzy
-#~ msgid "No points/centroids found in <%s>"
-#~ msgstr "Nevar atrast ieejas vektoru karti <%s>"
-
-#, fuzzy
-#~ msgid "Name for output image file"
-#~ msgstr "Izejas rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "Unable to open 3d raster map <%s>"
-#~ msgstr "neiespējami atvērt <%s>"
-
-#, fuzzy
-#~ msgid "Raster3d map <%s> not found %s"
-#~ msgstr "rastra karte <%s> nav atrasta"
-
-#, fuzzy
-#~ msgid "Unable to close raster map"
-#~ msgstr "neiespējami atvērt <%s>"
-
-#, fuzzy
-#~ msgid "Raster3d map <%s> not found in current mapset"
-#~ msgstr "vektora karte <%s> nav atrasta"
-
-#, fuzzy
-#~ msgid "Error closing g3d file"
-#~ msgstr "Kļūda atverot šūnu failu"
-
-#, fuzzy
-#~ msgid "Open 3D raster map <%s>"
-#~ msgstr "Nevaratvērt datubāzi %s"
-
-#, fuzzy
-#~ msgid "Error opening 3D raster map <%s>"
-#~ msgstr "Nevarēja atrast rastra failu %s"
-
-#, fuzzy
-#~ msgid "write_vtk_structured_point_header: Writing VTKStructuredPoint-Header"
-#~ msgstr "Unix fails, kurš satur koordinātes"
-
-#, fuzzy
-#~ msgid "write_vtk_structured_grid_header: Writing VTKStructuredGrid-Header"
-#~ msgstr "Unix fails, kurš satur koordinātes"
-
-#, fuzzy
-#~ msgid ""
-#~ "write_vtk_unstructured_grid_header: Writing VTKUnstructuredGrid-Header"
-#~ msgstr "Unix fails, kurš satur koordinātes"
-
-#, fuzzy
-#~ msgid "Elevation value(s)"
-#~ msgstr "Pacēluma slīpums"
-
-#, fuzzy
-#~ msgid "Metrics allocation"
-#~ msgstr "atubāzes atrašnās"
-
-#, fuzzy
-#~ msgid "Too many start points"
-#~ msgstr "rotēt/grozīt izdruku"
-
-#, fuzzy
-#~ msgid "Subgroup <%s> not found"
-#~ msgstr "reģions <%s> nav atrasts"
-
-#, fuzzy
-#~ msgid "Unknown production date (defined by '%s')"
-#~ msgstr "Nezināms/nepazīstms tips"
-
-#, fuzzy
-#~ msgid "Creates a sunshine hours map."
-#~ msgstr "Nevar izveidot tabulu: %s"
-
-#, fuzzy
-#~ msgid "Name of the day of year input map"
-#~ msgstr "Ieejas rastra faila nosaukums"
-
-#, fuzzy
-#~ msgid "Name of the latitude input map"
-#~ msgstr "Ieejas rastra faila nosaukums"
-
-#, fuzzy
-#~ msgid "Name of the output sunshine hours map"
-#~ msgstr "Vektorkartes nosaukums"
-
-#, fuzzy
-#~ msgid "multi"
-#~ msgstr "maksimālais ierāciju skaits"
-
-#, fuzzy
-#~ msgid "supporting"
-#~ msgstr "vektora karte <%s> nav atrasta"
-
-#, fuzzy
-#~ msgid "Building topology..."
-#~ msgstr "Lasam dig_att failu...\n"
-
-#, fuzzy
-#~ msgid "Counting polygons for %d features (OGR layer <%s>)..."
-#~ msgstr "Kalkulējam ēnas no DEM..."
-
-#, fuzzy
-#~ msgid "'-' for standard output"
-#~ msgstr "%-5d punkti nolasīti un ierakstīti izejā\n"
-
-#, fuzzy
-#~ msgid "Feature table <%s> created in database <%s>."
-#~ msgstr "Izveidit dotās datubāzes tabulu sarakstu."
-
-#, fuzzy
-#~ msgid "Extracted %d areas"
-#~ msgstr "Rakstu jaunu failu... \n"
-
-#, fuzzy
-#~ msgid "Extracted %d points"
-#~ msgstr "Rakstu jaunu failu... \n"
-
-#, fuzzy
-#~ msgid "Extracted %d lines"
-#~ msgstr "Rakstu jaunu failu... \n"
-
-#, fuzzy
-#~ msgid "%s failed"
-#~ msgstr "Aizvēršana neizdevās."
-
-#, fuzzy
-#~ msgid "Name of vector map containing lines"
-#~ msgstr "Ieejošā karte satur līnijas"
-
-#, fuzzy
-#~ msgid "Name for output vector map where points will be written"
-#~ msgstr "Izejas karte kurā tiks ierakstīti punkti"
-
-#, fuzzy
-#~ msgid "Write line nodes"
-#~ msgstr "Rakstīt līniju virsotnes"
-
-#, fuzzy
-#~ msgid "Write line vertices"
-#~ msgstr "Rakstīt līniju virsotnes"
-
-#, fuzzy
-#~ msgid "Cannot select attributes for area %d"
-#~ msgstr "Nevar iatlasīt datus no tabulas"
-
-#, fuzzy
-#~ msgid "Cannot select attributes for area #%d"
-#~ msgstr "Nevar iatlasīt datus no tabulas"
-
-#, fuzzy
-#~ msgid "bilinear interpolation"
-#~ msgstr "maksimālais ierāciju skaits"
-
-#, fuzzy
-#~ msgid "cubic convolution interpolation"
-#~ msgstr "maksimālais ierāciju skaits"
-
-#, fuzzy
-#~ msgid "Scaling"
-#~ msgstr "vektora karte <%s> nav atrasta"
-
-#, fuzzy
-#~ msgid "ocolumn"
-#~ msgstr "kolona 2"
-
-#, fuzzy
-#~ msgid "Raster values to use for mask (format: 1 2 3 thru 7 *)"
-#~ msgstr "Lietot ESRI stila .prj faila formātu (tikai taisot shapefile)"
-
-#, fuzzy
-#~ msgid "Name of attribute column to query"
-#~ msgstr "Izmantojamās rastra kartes nosaukums priekš <%s>"
-
-#, fuzzy
-#~ msgid "Layers to request from WMS server"
-#~ msgstr "nevar nolasīt līniju ieejas paaugstinājumu kartē "
-
-#, fuzzy
-#~ msgid "Request properties"
-#~ msgstr "datu tipi"
-
-#, fuzzy
-#~ msgid "Layer number or name. If -1, all layers are extracted."
-#~ msgstr ""
-#~ "OGR slāņa nosaukums. Ja nav norādīts, tad tiek importēti visi slāņi. "
-#~ "Piemēri:\n"
-#~ "\t\tESRI Shapefile: faila nosaukums\n"
-#~ "\t\tMapInfo fails: faila nosaukums"
-
-#, fuzzy
-#~ msgid "Can not open vector <%s> on level %d"
-#~ msgstr "nevar atvērt vektorfailu <%s> iekš <%s>"
-
-#~ msgid "nviz - Visualization and animation tool for GRASS data."
-#~ msgstr "nviz - GRASS vizualizācijas un animācijas rīks"
-
-#~ msgid "Name of raster map(s) for Elevation"
-#~ msgstr "Rastra kartes priekš augstuma"
-
-#~ msgid "Name of raster map(s) for Color"
-#~ msgstr "Rastra kartes priekš krāsas"
-
-#~ msgid "Name of vector lines/areas overlay map(s)"
-#~ msgstr "Pārklājamās vektoru līniju/laukumu kartes"
-
-#~ msgid "Name of vector points overlay file(s)"
-#~ msgstr "Pārklājamo vektoru punktu karte"
-
-#~ msgid "Name of existing 3d raster map"
-#~ msgstr "3d rastra kartes nosaukums"
-
-#~ msgid "Quickstart - Do not load any data"
-#~ msgstr "Ātrā palaišana - neielādēt datus"
-
-#~ msgid "Number of elevation files does not match number of colors files"
-#~ msgstr "Augstuma karšu skaits neatbilst krāsu kašu skaitam"
-
-#~ msgid "Loading data failed"
-#~ msgstr "Nebija iespējams ielādēt datus"
-
-#, fuzzy
-#~ msgid "ASCII raster map to be imported"
-#~ msgstr "Importējamais rastra fails"
-
-#, fuzzy
-#~ msgid "Outputting a vector path"
-#~ msgstr "Izejas rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "Elevation raster map"
-#~ msgstr "Eksistējošas rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "Name of elevation input raster map"
-#~ msgstr "Eksistējošas rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "output map with walking costs"
-#~ msgstr "reģions <%s> nav atrasts"
-
-#, fuzzy
-#~ msgid "Starting points raster map"
-#~ msgstr "Rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "No %s map specified"
-#~ msgstr "Nav ieejas karte(s) norādīta."
-
-#, fuzzy
-#~ msgid "Name for new TIFF file"
-#~ msgstr "Ieejas TIFF faila nosaukums"
-
-#, fuzzy
-#~ msgid "Name of the output random surface"
-#~ msgstr ""
-#~ "#-#-#-#-#  grassmods_lv.po (grassmods_lv)  #-#-#-#-#\n"
-#~ "#-#-#-#-#  grassmods_lv.po (grassmods_lv)  #-#-#-#-#\n"
-#~ "Ieejas rastra faila nosaukums"
-
-#, fuzzy
-#~ msgid "Name for new VRML file"
-#~ msgstr "Ieejas TIFF faila nosaukums"
-
-#, fuzzy
-#~ msgid "Reading input files: elevation"
-#~ msgstr "nevar nolasīt līniju ieejas paaugstinājumu kartē "
-
-#, fuzzy
-#~ msgid "Reading input files: aspect"
-#~ msgstr "Lasam dig failu... \n"
-
-#, fuzzy
-#~ msgid "Writing density file"
-#~ msgstr "Rakstu jaunu failu... \n"
-
-#, fuzzy
-#~ msgid "Unable to find file %s"
-#~ msgstr "Nav iespēju atvērt šūnu failu priekš[%s]"
-
-#, fuzzy
-#~ msgid "Name of the input map"
-#~ msgstr "Ieejas rastra faila nosaukums"
-
-#, fuzzy
-#~ msgid "viname"
-#~ msgstr "Fonta nosaukums"
-
-#, fuzzy
-#~ msgid "Name of the chan7 channel surface reflectance map"
-#~ msgstr "Rezultējošās rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "Don't know the color %s"
-#~ msgstr "nosaki krāsu"
-
-#, fuzzy
-#~ msgid "Name of output file"
-#~ msgstr "Izejas rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "version"
-#~ msgstr "Nevarēja atrast rastra failu %s"
-
-#, fuzzy
-#~ msgid "Name of mask files"
-#~ msgstr "Datu bāzes faila nosaukums"
-
-#, fuzzy
-#~ msgid "unable to allocate PNG structure"
-#~ msgstr "Neizdevās piešķirt atmiņu rindu norādēm"
-
-#, fuzzy
-#~ msgid "unable to open output file %s"
-#~ msgstr "neiespējami atvērt <%s>"
-
-#, fuzzy
-#~ msgid "Name(s) of existing mapset(s)"
-#~ msgstr "Esksistējošu rastra failu nosaukumi."
-
-#, fuzzy
-#~ msgid "Attaching centroids..."
-#~ msgstr "Pievieno kategorijas...\n"
-
-#, fuzzy
-#~ msgid "Output raster/vector map"
-#~ msgstr "Izejas rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "Standard deviation in map units"
-#~ msgstr "Maksimālā distance starp punktiem kartes vienībās"
-
-#, fuzzy
-#~ msgid ""
-#~ "List available OGR layers including feature types in data source and exit"
-#~ msgstr "izveidot sarakstu ar visām pieejamajām karšu biblotēkām/mapsets"
-
-#, fuzzy
-#~ msgid "PostGIS output datasource name"
-#~ msgstr "datbāzes vārds"
-
-#, fuzzy
-#~ msgid "Database schema"
-#~ msgstr "Datubāzes nosaukums"
-
-#, fuzzy
-#~ msgid "Unable to load data from database"
-#~ msgstr "Nevar atlasīt datus no tabulas"
-
-#, fuzzy
-#~ msgid "Problem loading category values"
-#~ msgstr "Rastra izejas fails"
-
-#, fuzzy
-#~ msgid "Use all vector points (do not limit to current region)"
-#~ msgstr "Sākuma punkts ir ārpus pašreizējā reģiona."
-
-#, fuzzy
-#~ msgid "Unable to process areas from vector map <%s>"
-#~ msgstr "neiespējami atvērt <%s>"
-
-#, fuzzy
-#~ msgid "Path to resulting VTK file"
-#~ msgstr "Esošā rastra faila nosaukums"
-
-#, fuzzy
-#~ msgid "db_driver_list_databases() is not implemented"
-#~ msgstr "reģions <%s> nav atrasts"
-
-#, fuzzy
-#~ msgid "Location name"
-#~ msgstr "nevar atvērt %s"
-
-#, fuzzy
-#~ msgid "Reconnects vectors to a new database."
-#~ msgstr "Atlasīt datus no datubāzes."
-
-#, fuzzy
-#~ msgid "Old database schema"
-#~ msgstr "Datubāzes nosaukums"
-
-#, fuzzy
-#~ msgid "Table name to drop"
-#~ msgstr "neiespējami atvērt <%s>"
-
-#, fuzzy
-#~ msgid "Name of an existing space time or map dataset"
-#~ msgstr "Eksistējošas rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "dataset"
-#~ msgstr "datu bāze, SQL"
-
-#, fuzzy
-#~ msgid "spacetime"
-#~ msgstr "Fonta nosaukums"
-
-#, fuzzy
-#~ msgid "sample"
-#~ msgstr "Attēlojamā rastra karte"
-
-#, fuzzy
-#~ msgid "Lists space time datasets and maps."
-#~ msgstr "Nevaratvērt datubāzi %s"
-
-#, fuzzy
-#~ msgid "LANDSAT sensor"
-#~ msgstr "Spraigums"
-
-#, fuzzy
-#~ msgid "SPOT sensor"
-#~ msgstr "Spraigums"
-
-#, fuzzy
-#~ msgid "Name of input raster map (green: tm2 | qbird_green | spot1)"
-#~ msgstr "Rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "Name of input raster map (NIR: tm4 | qbird_nir | spot2"
-#~ msgstr "Rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "Name of input raster map (MIR; tm5 | qbird_red | spot3"
-#~ msgstr "Rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "Name of input raster map (etmpan | qbird_pan | spotpan)"
-#~ msgstr "Rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "edit"
-#~ msgstr "Rakstu jaunu failu... \n"
-
-#, fuzzy
-#~ msgid "groundwater"
-#~ msgstr "neiespējami atjaunot robežas"
-
-#, fuzzy
-#~ msgid "numeric"
-#~ msgstr "Metriskā"
-
-#, fuzzy
-#~ msgid ""
-#~ "mi;miles;me;meters;k;kilometers;a;acres;h;hectares;c;cell counts;p;"
-#~ "percent cover"
-#~ msgstr ""
-#~ "jūdzes (mi), metri (me), kilometri (k), akri (a), hektāri (h), šūnas (c), "
-#~ "procenti (p)"
-
-#~ msgid "Lake depth from %f to %f"
-#~ msgstr "Ezera dziļums no %f līdz %f"
-
-#, fuzzy
-#~ msgid "Vector map profiling tool"
-#~ msgstr "vektora karte <%s> nav atrasta"
-
-#, fuzzy
-#~ msgid "Coordinates for profiling line nodes"
-#~ msgstr "Vienu koordinātu pāri uz līniju, lūdzu"
-
-#, fuzzy
-#~ msgid "Profiling line"
-#~ msgstr "Izveidot punktus visā garumā ilīniju garumā"
-
-#, fuzzy
-#~ msgid "Buffer (tolerance) for points in map units"
-#~ msgstr "Bufera izmērs kartes vienībās"
-
-#, fuzzy
-#~ msgid "Path to output text file or - for stdout"
-#~ msgstr "Esošā rastra faila nosaukums"
-
-#, fuzzy
-#~ msgid "Output formating"
-#~ msgstr "Ieejas fails"
-
-#, fuzzy
-#~ msgid "Number of significant digits"
-#~ msgstr "Līniju skaits"
-
-#, fuzzy
-#~ msgid "Name for profile line and buffer output map"
-#~ msgstr "Izejas rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "Do not print column names"
-#~ msgstr "Atslēga (id) kolonas nosaukums"
-
-#, fuzzy
-#~ msgid "Profiling line map"
-#~ msgstr "Izveidot punktus visā garumā ilīniju garumā"
-
-#, fuzzy
-#~ msgid "Layer 0 not supported"
-#~ msgstr "Kolonas tips nav atbalstīts"
-
-#, fuzzy
-#~ msgid "<%s> is not a valid vector map name"
-#~ msgstr "izejas līmeņa nosaukums"
-
-#, fuzzy
-#~ msgid "At least profile start and end coordinates are required!"
-#~ msgstr "Vaicājuma koordinātes"
-
-#, fuzzy
-#~ msgid ""
-#~ "No database connection defined for map <%s> layer %d, but WHERE condition "
-#~ "is provided"
-#~ msgstr "Datubāzes konekcija nav definēta"
-
-#, fuzzy
-#~ msgid "Unabale to get attribute data for cat %d"
-#~ msgstr "Nevar iatlasīt datus no tabulas"
-
-#, fuzzy
-#~ msgid "Copy attributes"
-#~ msgstr "Nevajag taisīt atribūtu tabulu"
-
-#, fuzzy
-#~ msgid "Name of table containing transformation parameters"
-#~ msgstr "Izejas rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "Surface Reflectance"
-#~ msgstr "Izšķirtspēja"
-
-#, fuzzy
-#~ msgid "Modis"
-#~ msgstr "Metriskā"
-
-#, fuzzy
-#~ msgid "Name of the Surface temperature map [degree Kelvin]"
-#~ msgstr "Izejas rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "Print 3D raster map region only"
-#~ msgstr "Eksistējošas rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "Print 3D raster tile number and size information only"
-#~ msgstr "Eksistējošas rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "Print 3D raster history instead of info"
-#~ msgstr "Eksistējošas rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "Integer values are imported"
-#~ msgstr "Importējamais rastra fails"
-
-#, fuzzy
-#~ msgid "Base name for output raster maps"
-#~ msgstr "Izejas rastra kartes nosaukums"
-
-#~ msgid "rows:    %d"
-#~ msgstr "rindas:    %d"
-
-#~ msgid "columns: %d"
-#~ msgstr "kolonnas: %d"
-
-#, fuzzy
-#~ msgid "Name(s) of existing mapset(s) to add to search path"
-#~ msgstr "Eksistējošas attēlojamās rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "Name of input OGR layer"
-#~ msgstr "Datu bāzes faila nosaukums"
-
-#, fuzzy
-#~ msgid ""
-#~ "List available OGR layers including feature types in datatsource and exit"
-#~ msgstr "izveidot sarakstu ar visām pieejamajām karšu biblotēkām/mapsets"
-
-#, fuzzy
-#~ msgid "Supported OGR formats for reading:"
-#~ msgstr "Izvadīt atbalstītos formātus un tad iziet"
-
-#, fuzzy
-#~ msgid "Do not build topology for output vector"
-#~ msgstr "Lasam dig_att failu...\n"
-
-#, fuzzy
-#~ msgid "Supported Formats:"
-#~ msgstr "Izvadīt atbalstītos formātus un tad iziet"
-
-#, fuzzy
-#~ msgid "Unable to open OGR file"
-#~ msgstr "neiespējami atjaunot robežas"
-
-#, fuzzy
-#~ msgid "dsn: %s\n"
-#~ msgstr "Sala[%d]: %d\n"
-
-#, fuzzy
-#~ msgid "not set (default 'ogr')"
-#~ msgstr "Izvēlētā grafiskā monitora nosaukums"
-
-#, fuzzy
-#~ msgid "format: %s\n"
-#~ msgstr "OGR formāts."
-
-#, fuzzy
-#~ msgid "not set (default ESRI_Shapefile)"
-#~ msgstr "Izvēlētā grafiskā monitora nosaukums"
-
-#, fuzzy
-#~ msgid "<none>"
-#~ msgstr "Padarīts\n"
-
-#, fuzzy
-#~ msgid "Unable to create OGR file"
-#~ msgstr "neiespējami atjaunot robežas"
-
-#, fuzzy
-#~ msgid "Error writing OGR file"
-#~ msgstr "Kļūda meiģinot nolasīt dbmscap failu\n"
-
-#~ msgid "Error trying to read dbmscap file\n"
-#~ msgstr "Kļūda meiģinot nolasīt dbmscap failu\n"
-
-#, fuzzy
-#~ msgid ""
-#~ "PostgreSQL driver: PostGIS column '%s', type 'geometry' will not be "
-#~ "converted"
-#~ msgstr "pg draiveris: kolona '%s', tips %d  nav atbastīts"
-
-#, fuzzy
-#~ msgid "For example: 'select * from rybniky where kapri = 'hodne'"
-#~ msgstr ""
-#~ "SQL pieprasījuma formulējums, piemēram: 'select * from rybniky where "
-#~ "kapri = 'hodne'"
-
-#, fuzzy
-#~ msgid "Name of file with SQL select statement(s)"
-#~ msgstr "faila nosaukums ar sql formulējumiem"
-
-#, fuzzy
-#~ msgid ""
-#~ "Unable to open file <%s> for reading.\n"
-#~ "Details: %s"
-#~ msgstr "Neiespējami atvērt šūnu failu[%s]"
-
-#, fuzzy
-#~ msgid "Name of a space time vector dataset"
-#~ msgstr "Eksistējošas rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "Name(s) of existing raster, raster3d or vector map(s)"
-#~ msgstr "Esksistējošu rastra failu nosaukumi."
-
-#, fuzzy
-#~ msgid ""
-#~ "Type of the space time dataset, default is space time raster dataset "
-#~ "(strds)"
-#~ msgstr "Ieejas rastra faila nosaukums"
-
-#, fuzzy
-#~ msgid ""
-#~ "Name(s) of the space time or map dataset to be removed from the temporal "
-#~ "database"
-#~ msgstr "Eksistējošas attēlojamās rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "spacetime vector dataset"
-#~ msgstr "Izmantojamās rastra kartes nosaukums priekš <%s>"
-
-#, fuzzy
-#~ msgid "Name(s) of existing vector map(s) to unregister"
-#~ msgstr "Eksistējošas vektorkartes nosaukums"
-
-#, fuzzy
-#~ msgid "spacetime raster dataset"
-#~ msgstr "Izmantojamās rastra kartes nosaukums priekš <%s>"
-
-#, fuzzy
-#~ msgid "verride projection (use location's projection)"
-#~ msgstr "Neņemt vērā projekciju (izmantot pašreizējā novietojuma projekciju)"
-
-#, fuzzy
-#~ msgid "Name of the new space time dataset"
-#~ msgstr "Datu bāzes faila nosaukums"
-
-#, fuzzy
-#~ msgid "space time vector dataset"
-#~ msgstr "Izmantojamās rastra kartes nosaukums priekš <%s>"
-
-#, fuzzy
-#~ msgid "space time raster dataset"
-#~ msgstr "Izmantojamās rastra kartes nosaukums priekš <%s>"
-
-#, fuzzy
-#~ msgid "The space time raster dataset to use"
-#~ msgstr "Izmantojamās rastra kartes nosaukums priekš <%s>"
-
-#, fuzzy
-#~ msgid "Name of an existing space time vector dataset"
-#~ msgstr "Eksistējošas vektorkartes nosaukums"
-
-#, fuzzy
-#~ msgid "Name(s) of existing vector map(s)"
-#~ msgstr "Eksistējošas vektorkartes nosaukums"
-
-#, fuzzy
-#~ msgid "spacetime raster3d dataset"
-#~ msgstr "Izmantojamās rastra kartes nosaukums priekš <%s>"
-
-#, fuzzy
-#~ msgid "Name of an existing space time raster3d dataset"
-#~ msgstr "Eksistējošas rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "Name(s) of existing raster3d map(s)"
-#~ msgstr "Esksistējošu rastra failu nosaukumi."
-
-#, fuzzy
-#~ msgid "Name(s) of existing raster map(s) to unregister"
-#~ msgstr "Eksistējošas rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "Name of an existing space time raster dataset"
-#~ msgstr "Eksistējošas rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "Import"
-#~ msgstr "Rakstu jaunu failu... \n"
-
-#, fuzzy
-#~ msgid "Mapserver to request data from"
-#~ msgstr "Nevar atlasīt datus no tabulas"
-
-#, fuzzy
-#~ msgid "Requires list available layers flag"
-#~ msgstr "izveidot sarakstu ar visām pieejamajām karšu biblotēkām/mapsets"
-
-#, fuzzy
-#~ msgid "Name(s) of existing raster map(s)"
-#~ msgstr "Esksistējošu rastra failu nosaukumi."
-
-#, fuzzy
-#~ msgid "Name of a space time dataset"
-#~ msgstr "Eksistējošas rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "Name of a space time raster3d dataset"
-#~ msgstr "Eksistējošas rastra kartes nosaukums"
-
-#, fuzzy
-#~ msgid "Name of the output space time raster3d dataset"
-#~ msgstr "Ieejas rastra faila nosaukums"
-
-#, fuzzy
-#~ msgid "Name of the space time dataset"
-#~ msgstr "Datu bāzes faila nosaukums"
