@@ -27,6 +27,7 @@ import types
 import copy
 import __builtin__
 
+from utils import parse_key_val
 from core import *
 
 # run "v.db.connect -g ..." and parse output

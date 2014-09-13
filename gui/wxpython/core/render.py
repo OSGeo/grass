@@ -35,6 +35,7 @@ import types
 import wx
 
 from grass.script import core as grass
+from grass.script.utils import try_remove
 from grass.pydispatch.signal import Signal
 
 from core          import utils
@@ -167,7 +168,7 @@ class Layer(object):
             for f in [self.mapfile, self.maskfile]:
                 if not f:
                     continue
-                grass.try_remove(f)
+                try_remove(f)
                 f = None
 
         self.forceRender = False
@@ -1298,9 +1299,9 @@ class Map(object):
     def _clean(self, llist):
         for layer in llist:
             if layer.maskfile:
-                grass.try_remove(layer.maskfile)
+                try_remove(layer.maskfile)
             if layer.mapfile:
-                grass.try_remove(layer.mapfile)
+                try_remove(layer.mapfile)
             llist.remove(layer)
         
     def Clean(self):

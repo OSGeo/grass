@@ -27,7 +27,7 @@ from core.gcmd import RunCommand
 from core.giface import Notification
 
 from grass.pydispatch.signal import Signal
-import grass.script.core as gcore
+from grass.script.utils import parse_key_val
 
 
 class AnalysisControllerBase:
@@ -354,7 +354,7 @@ class MeasureAreaController(AnalysisControllerBase):
         coordinates = coords + [coords[0]]
         coordinates = ','.join([str(item) for sublist in coordinates for item in sublist])
         result = RunCommand('m.measure', flags='g', coordinates=coordinates, read=True).strip()
-        result = gcore.parse_key_val(result)
+        result = parse_key_val(result)
         if 'units' not in result:
             self._giface.WriteWarning(_("Units not recognized, measurement failed."))
             unit = ''

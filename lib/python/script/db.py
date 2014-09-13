@@ -25,6 +25,8 @@ for details.
 import tempfile as pytempfile # conflict with core.tempfile
 
 from core import *
+from utils import try_remove
+
 
 def db_describe(table, **args):
     """!Return the list of columns for a database table
