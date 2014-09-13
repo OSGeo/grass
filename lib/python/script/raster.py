@@ -1,4 +1,4 @@
-"""!@package grass.script.raster
+"""@package grass.script.raster
 
 @brief GRASS Python scripting module (raster functions)
 
@@ -6,20 +6,19 @@ Raster related functions to be used in Python scripts.
 
 Usage:
 
-@code
-from grass.script import raster as grass
+::
 
-grass.raster_history(map)
-...
-@endcode
+    from grass.script import raster as grass
+    grass.raster_history(map)
+
 
 (C) 2008-2011 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Glynn Clements
-@author Martin Landa <landa.martin gmail.com>
+.. sectionauthor:: Glynn Clements
+.. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
 
 import os
@@ -30,44 +29,38 @@ import time
 from core import *
 from utils import float_or_dms, parse_key_val
 
-# add raster history
 
 def raster_history(map):
-    """!Set the command history for a raster map to the command used to
+    """Set the command history for a raster map to the command used to
     invoke the script (interface to `r.support').
 
-    @param map map name
+    :param str map: map name
 
-    @return True on success
-    @return False on failure
+    :return: True on success
+    :return: False on failure
+
     """
     current_mapset = gisenv()['MAPSET']
-    if find_file(name = map)['mapset'] == current_mapset:
-        run_command('r.support', map = map, history = os.environ['CMDLINE'])
+    if find_file(name=map)['mapset'] == current_mapset:
+        run_command('r.support', map=map, history=os.environ['CMDLINE'])
         return True
-    
+
     warning(_("Unable to write history for <%(map)s>. "
-              "Raster map <%(map)s> not found in current mapset." % { 'map' : map, 'map' : map}))
+              "Raster map <%(map)s> not found in current mapset." % { 'map': map, 'map': map}))
     return False
 
-# run "r.info -gre ..." and parse output
 
 def raster_info(map):
-    """!Return information about a raster map (interface to
-    `r.info'). Example:
+    """Return information about a raster map (interface to
+    `r.info -gre'). Example:
 
-    \code
-    >>> grass.raster_info('elevation')
-    {'north': 228500.0, 'timestamp': '"none"', 'min': 55.578792572021499,
-    'datatype': 'FCELL', 'max': 156.32986450195301, 'ewres': 10.0,
-    'vertical_datum': '', 'west': 630000.0, 'units': '',
-    'title': 'South-West Wake county: Elevation NED 10m (elev_ned10m)',
-    'east': 645000.0, 'nsres': 10.0, 'south': 215000.0}
-    \endcode
+    >>> raster_info('elevation') # doctest: +ELLIPSIS
+    {'creator': '"helena"', 'cols': '1500' ... 'south': 215000.0}
 
-    @param map map name
-    
-    @return parsed raster info
+    :param str map: map name
+
+    :return: parsed raster info
+
     """
 
     def float_or_null(s):
@@ -76,7 +69,7 @@ def raster_info(map):
         else:
             return float(s)
 
-    s = read_command('r.info', flags = 'gre', map = map)
+    s = read_command('r.info', flags='gre', map=map)
     kv = parse_key_val(s)
     for k in ['min', 'max']:
         kv[k] = float_or_null(kv[k])
@@ -86,20 +79,19 @@ def raster_info(map):
         kv[k] = float_or_dms(kv[k])
     return kv
 
-# interface to r.mapcalc
 
-def mapcalc(exp, quiet = False, verbose = False, overwrite = False,
-            seed = None, env = None, **kwargs):
-    """!Interface to r.mapcalc.
+def mapcalc(exp, quiet=False, verbose=False, overwrite=False,
+            seed=None, env=None, **kwargs):
+    """Interface to r.mapcalc.
 
-    @param exp expression
-    @param quiet True to run quietly (<tt>--q</tt>)
-    @param verbose True to run verbosely (<tt>--v</tt>)
-    @param overwrite True to enable overwriting the output (<tt>--o</tt>)
-    @param seed an integer used to seed the random-number generator for the rand() function,
-    or 'auto' to generate a random seed
-    @param env dictionary of environment variables for child process
-    @param kwargs
+    :param str exp: expression
+    :param bool quiet: True to run quietly (<tt>--q</tt>)
+    :param bool verbose: True to run verbosely (<tt>--v</tt>)
+    :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
+    :param seed: an integer used to seed the random-number generator for the
+                 rand() function, or 'auto' to generate a random seed
+    :param dict env: dictionary of environment variables for child process
+    :param kwargs:
     """
 
     if seed == 'auto':
@@ -108,41 +100,40 @@ def mapcalc(exp, quiet = False, verbose = False, overwrite = False,
     t = string.Template(exp)
     e = t.substitute(**kwargs)
 
-    if write_command('r.mapcalc', file = '-', stdin = e,
-                     env = env,
-                     seed = seed,
-                     quiet = quiet,
-                     verbose = verbose,
-                     overwrite = overwrite) != 0:
+    if write_command('r.mapcalc', file='-', stdin=e, env=env, seed=seed,
+                     quiet=quiet, verbose=verbose, overwrite=overwrite) != 0:
         fatal(_("An error occurred while running r.mapcalc"))
 
 
-def mapcalc_start(exp, quiet = False, verbose = False, overwrite = False,
-                  seed = None, env = None, **kwargs):
-    """!Interface to r.mapcalc, doesn't wait for it to finish, returns Popen object.
+def mapcalc_start(exp, quiet=False, verbose=False, overwrite=False,
+                  seed=None, env=None, **kwargs):
+    """Interface to r.mapcalc, doesn't wait for it to finish, returns Popen object.
 
-    \code
+    >>> output = 'newele'
+    >>> input = 'elevation'
     >>> expr1 = '"%s" = "%s" * 10' % (output, input)
     >>> expr2 = '...'   # etc.
     >>> # launch the jobs:
-    >>> p1 = grass.mapcalc_start(expr1)
-    >>> p2 = grass.mapcalc_start(expr2)   # etc.
+    >>> p1 = mapcalc_start(expr1)
+    >>> p2 = mapcalc_start(expr2)
     ...
     >>> # wait for them to finish:
     >>> p1.wait()
-    >>> p2.wait()   # etc.
-    \endcode
+    0
+    >>> p2.wait()
+    1
+    >>> run_command('g.remove', rast=output)
 
-    @param exp expression
-    @param quiet True to run quietly (<tt>--q</tt>)
-    @param verbose True to run verbosely (<tt>--v</tt>)
-    @param overwrite True to enable overwriting the output (<tt>--o</tt>)
-    @param seed an integer used to seed the random-number generator for the rand() function,
-    or 'auto' to generate a random seed
-    @param env dictionary of environment variables for child process
-    @param kwargs
-    
-    @return Popen object
+    :param str exp: expression
+    :param bool quiet: True to run quietly (<tt>--q</tt>)
+    :param bool verbose: True to run verbosely (<tt>--v</tt>)
+    :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
+    :param seed: an integer used to seed the random-number generator for the
+                 rand() function, or 'auto' to generate a random seed
+    :param dict env: dictionary of environment variables for child process
+    :param kwargs:
+
+    :return: Popen object
     """
 
     if seed == 'auto':
@@ -151,19 +142,24 @@ def mapcalc_start(exp, quiet = False, verbose = False, overwrite = False,
     t = string.Template(exp)
     e = t.substitute(**kwargs)
 
-    p = feed_command('r.mapcalc', file = '-',
-                     env = env,
-                     seed = seed,
-                     quiet = quiet,
-                     verbose = verbose,
-                     overwrite = overwrite)
+    p = feed_command('r.mapcalc', file='-', env=env, seed=seed,
+                     quiet=quiet, verbose=verbose, overwrite=overwrite)
     p.stdin.write(e)
     p.stdin.close()
     return p
 
-# interface to r.what
-def raster_what(map, coord, env = None):
-    """!TODO"""
+
+def raster_what(map, coord, env=None):
+    """Interface to r.what
+
+    >>> raster_what('elevation', [[640000, 228000]])
+    [{'elevation': {'color': '255:214:000', 'label': '', 'value': '102.479'}}]
+
+    :param str map: the map name
+    :param list coord: a list of list containing all the point that you want
+                       query
+    :param env:
+    """
     if type(map) in (types.StringType, types.UnicodeType):
         map_list = [map]
     else:
@@ -175,18 +171,18 @@ def raster_what(map, coord, env = None):
     else:
         for e, n in coord:
             coord_list.append('%f,%f' % (e, n))
-    
+
     sep = '|'
     # separator '|' not included in command
     # because | is causing problems on Windows
     # change separator?
     ret = read_command('r.what',
-                       flags = 'rf',
-                       map = ','.join(map_list),
-                       coordinates = ','.join(coord_list),
-                       null = _("No data"),
-                       quiet = True,
-                       env = env)
+                       flags='rf',
+                       map=','.join(map_list),
+                       coordinates=','.join(coord_list),
+                       null=_("No data"),
+                       quiet=True,
+                       env=env)
     data = list()
     if not ret:
         return data

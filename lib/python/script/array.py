@@ -1,30 +1,25 @@
-"""!@package grass.script.array
-
-@brief GRASS Python scripting module (2D and 3D raster with numpy)
-
+"""
 Functions to use GRASS 2D and 3D rasters with NumPy.
 
 Usage:
 
-@code
-
 >>> import grass.script as grass
 >>> from grass.script import array as garray
->>> 
+>>>
 >>> # We create a temporary region that is only valid in this python session
 ... grass.use_temp_region()
 >>> grass.run_command("g.region", n=80, e=120, t=60, s=0, w=0, b=0, res=20, res3=20)
 0
->>> 
+>>>
 >>> # Lets create a raster map numpy array
 ... # based at the current region settings
 ... map2d_1 = garray.array()
->>> 
+>>>
 >>> # Write some data
 ... for y in range(map2d_1.shape[0]):
 ...     for x in range(map2d_1.shape[1]):
 ...         map2d_1[y][x] = y + x
-... 
+...
 >>> # Lets have a look at the array
 ... print map2d_1
 [[ 0.  1.  2.  3.  4.  5.]
@@ -36,7 +31,7 @@ Usage:
 ... map2d_1.write(mapname="map2d_1", overwrite=True)
  100%
 0
->>> 
+>>>
 >>> # We create a new array and read map2d_1 to modify it
 ... map2d_2 = garray.array()
 >>> # Don't do map2d_2 = map2d_1 % 3
@@ -54,30 +49,28 @@ Usage:
 ... map2d_2.write(mapname="map2d_2", overwrite=True)
  100%
 0
->>> 
+>>>
 >>> # Here we create a 3D raster map numpy array
 ... # based in the current region settings
 ... map3d_1 = garray.array3d()
->>> 
+>>>
 >>> # Write some data
 ... # Note: the 3D array has map[depth][row][column] order
 ... for z in range(map3d_1.shape[0]):
 ...     for y in range(map3d_1.shape[1]):
 ...         for x in range(map3d_1.shape[2]):
 ...             map3d_1[z][y][x] = z + y + x
-... 
+...
 >>> # Lets have a look at the 3D array
 ... print map3d_1
 [[[  0.   1.   2.   3.   4.   5.]
   [  1.   2.   3.   4.   5.   6.]
   [  2.   3.   4.   5.   6.   7.]
   [  3.   4.   5.   6.   7.   8.]]
-
  [[  1.   2.   3.   4.   5.   6.]
   [  2.   3.   4.   5.   6.   7.]
   [  3.   4.   5.   6.   7.   8.]
   [  4.   5.   6.   7.   8.   9.]]
-
  [[  2.   3.   4.   5.   6.   7.]
   [  3.   4.   5.   6.   7.   8.]
   [  4.   5.   6.   7.   8.   9.]
@@ -101,12 +94,10 @@ Loading floating point data with 8 bytes ... (6x4x3)
   [ 1.  2.  0.  1.  2.  0.]
   [ 2.  0.  1.  2.  0.  1.]
   [ 0.  1.  2.  0.  1.  2.]]
-
  [[ 1.  2.  0.  1.  2.  0.]
   [ 2.  0.  1.  2.  0.  1.]
   [ 0.  1.  2.  0.  1.  2.]
   [ 1.  2.  0.  1.  2.  0.]]
-
  [[ 2.  0.  1.  2.  0.  1.]
   [ 0.  1.  2.  0.  1.  2.]
   [ 1.  2.  0.  1.  2.  0.]
@@ -117,14 +108,12 @@ Loading floating point data with 8 bytes ... (6x4x3)
  100%
 0
 
-@endcode
-
 (C) 2010-2012 by Glynn Clements and the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Glynn Clements
+.. sectionauthor:: Glynn Clements
 """
 
 import os
@@ -138,10 +127,10 @@ import core as grass
 
 class array(numpy.memmap):
     def __new__(cls, dtype=numpy.double):
-        """!Define new numpy array
+        """Define new numpy array
 
-        @param cls
-        @param dtype data type (default: numpy.double)
+        :param cls:
+        :param dtype: data type (default: numpy.double)
         """
         reg = grass.region()
         r = reg['rows']
@@ -166,13 +155,13 @@ class array(numpy.memmap):
             try_remove(self.filename)
 
     def read(self, mapname, null=None):
-        """!Read raster map into array
+        """Read raster map into array
 
-        @param mapname name of raster map to be read
-        @param null null value
+        :param str mapname: name of raster map to be read
+        :param null: null value
 
-        @return 0 on success
-        @return non-zero code on failure
+        :return: 0 on success
+        :return: non-zero code on failure
         """
         kind = self.dtype.kind
         size = self.dtype.itemsize
@@ -198,15 +187,15 @@ class array(numpy.memmap):
             overwrite=True)
 
     def write(self, mapname, title=None, null=None, overwrite=None):
-        """!Write array into raster map
+        """Write array into raster map
 
-        @param mapname name for raster map
-        @param title title for raster map
-        @param null null value
-        @param overwrite True for overwritting existing raster maps
+        :param str mapname: name for raster map
+        :param str title: title for raster map
+        :param null: null value
+        :param bool overwrite: True for overwritting existing raster maps
 
-        @return 0 on success
-        @return non-zero code on failure
+        :return: 0 on success
+        :return: non-zero code on failure
         """
         kind = self.dtype.kind
         size = self.dtype.itemsize
@@ -246,12 +235,13 @@ class array(numpy.memmap):
 
 ###############################################################################
 
+
 class array3d(numpy.memmap):
     def __new__(cls, dtype=numpy.double):
-        """!Define new 3d numpy array
+        """Define new 3d numpy array
 
-        @param cls
-        @param dtype data type (default: numpy.double)
+        :param cls:
+        :param dtype: data type (default: numpy.double)
         """
         reg = grass.region(True)
         r = reg['rows3']
@@ -279,13 +269,13 @@ class array3d(numpy.memmap):
             try_remove(self.filename)
 
     def read(self, mapname, null=None):
-        """!Read 3D raster map into array
+        """Read 3D raster map into array
 
-        @param mapname name of 3D raster map to be read
-        @param null null value
+        :param str mapname: name of 3D raster map to be read
+        :param null: null value
 
-        @return 0 on success
-        @return non-zero code on failure
+        :return: 0 on success
+        :return: non-zero code on failure
         """
         kind = self.dtype.kind
         size = self.dtype.itemsize
@@ -311,14 +301,14 @@ class array3d(numpy.memmap):
             overwrite=True)
 
     def write(self, mapname, null=None, overwrite=None):
-        """!Write array into 3D raster map
+        """Write array into 3D raster map
 
-        @param mapname name for 3D raster map
-        @param null null value
-        @param overwrite True for overwriting existing raster maps
+        :param str mapname: name for 3D raster map
+        :param null: null value
+        :param bool overwrite: True for overwriting existing raster maps
 
-        @return 0 on success
-        @return non-zero code on failure
+        :return: 0 on success
+        :return: non-zero code on failure
         """
         kind = self.dtype.kind
         size = self.dtype.itemsize
@@ -353,4 +343,3 @@ class array3d(numpy.memmap):
             depths=reg['depths'],
             rows=reg['rows3'],
             cols=reg['cols3'])
-
