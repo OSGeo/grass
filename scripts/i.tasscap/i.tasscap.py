@@ -11,8 +11,10 @@
 #		This program is free software under the GNU General Public
 #		License (>=v2). Read the file COPYING that comes with GRASS
 #		for details.
+#
 # TODO: Check if MODIS Tasseled Cap makes sense to be added
 #       http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=1025776
+#       Add other, e.g from here: http://www.sjsu.edu/faculty/watkins/tassel.htm
 #############################################################################
 # References:
 # LANDSAT-4/LANDSAT-5:
@@ -33,49 +35,26 @@
 #############################################################################
 #
 #%Module
-#% description: Performs Tasseled Cap (Kauth Thomas) transformation for LANDSAT-TM data.
+#% description: Performs Tasseled Cap (Kauth Thomas) transformation.
 #% keywords: imagery
 #% keywords: transformation
 #% keywords: Landsat
 #% keywords: Tasseled Cap transformation
 #%end
-#%flag
-#% key: 4
-#% description: Use transformation rules for LANDSAT-4
+#%option
+#% key: satellite
+#% type: string
+#% description: Satellite sensor
+#% required: yes
+#% multiple: no
+#% options: landsat4_tm,landsat5_tm,landsat7_etm
+#% descriptions: landsat4_tm;Use transformation rules for Landsat 4 TM;landsat5_tm;Use transformation rules for Landsat 5 TM;landsat7_etm;Use transformation rules for Landsat 7 ETM
 #%end
-#%flag
-#% key: 5
-#% description: Use transformation rules for LANDSAT-5
-#%end
-#%flag
-#% key: 7
-#% description: Use transformation rules for LANDSAT-7
-#%end
-#%option G_OPT_R_INPUT
-#% key: band1
-#% description: Name of input raster map (LANDSAT channel 1)
-#%end
-#%option G_OPT_R_INPUT
-#% key: band2
-#% description: Name of input raster map (LANDSAT channel 2)
-#%end
-#%option G_OPT_R_INPUT
-#% key: band3
-#% description: Name of input raster map (LANDSAT channel 3)
-#%end
-#%option G_OPT_R_INPUT
-#% key: band4
-#% description: Name of input raster map (LANDSAT channel 4)
-#%end
-#%option G_OPT_R_INPUT
-#% key: band5
-#% description: Name of input raster map (LANDSAT channel 5)
-#%end
-#%option G_OPT_R_INPUT
-#% key: band7
-#% description: Name of input raster map (LANDSAT channel 7)
+#%option G_OPT_R_INPUTS
 #%end
 #%option G_OPT_R_BASENAME_OUTPUT
+#% label: Name of input raster map(s)
+#% description: For Landsat 4-7, the raster maps should be the bands 1, 2, 3, 4, 5, and 7.
 #%end
 
 import sys
@@ -102,8 +81,7 @@ def calc1(out, bands, k1, k2, k3, k4, k5, k7, k0 = 0):
 	out = out, k1 = k1, k2 = k2, k3 = k3, k4 = k4, k5 = k5, k7 = k7, k0 = k0, **bands)
     grass.run_command('r.colors', map = out, color = 'grey')
 
-def calcN(options, i, n):
-    outpre = options['basename']
+def calcN(outpre, bands, i, n):
     grass.message(_("LANDSAT-%d...") % n)
     for j, p in enumerate(parms[i]):
 	out = "%s.%d" % (outpre, j + 1)
@@ -113,27 +91,38 @@ def calcN(options, i, n):
 	else:
 	    name = " (%s)" % names[j]
 	grass.message(_("Calculating %s TC component %s%s ...") % (ord, out, name))
-	calc1(out, options, *p)
+	calc1(out, bands, *p)
+
 
 def main():
-    flag4 = flags['4']
-    flag5 = flags['5']
-    flag7 = flags['7']
+    options, flags = grass.parser()
+    satellite = options['satellite']
+    output_basename = options['basename']
+    inputs = options['input'].split(',')
+    num_of_bands = 6
+    if len(inputs) != num_of_bands:
+        grass.fatal(_("The number of input raster maps (bands) should be %s.") % num_of_bands)
 
-    if (flag4 and flag5) or (flag4 and flag7) or (flag5 and flag7):
-	grass.fatal(_("Select only one flag"))
+    # this is here just for the compatibility with r.mapcalc expression
+    # remove this if not really needed in new implementation
+    bands = {}
+    for i, band in enumerate(inputs):
+        band_num = i + 1
+        if band_num == 6:
+            band_num = 7
+        bands['band' + str(band_num)] = band
+    print bands
 
-    if flag4:
-	calcN(options, 0, 4)
-    elif flag5:
-	calcN(options, 1, 5)
-    elif flag7:
-	calcN(options, 2, 7)
+    if satellite == 'landsat4_tm':
+        calcN(output_basename, bands, 0, 4)
+    elif satellite == 'landsat5_tm':
+        calcN(output_basename, bands, 1, 5)
+    elif satellite == 'landsat7_etm':
+        calcN(output_basename, bands, 2, 7)
     else:
-	grass.fatal(_("Select LANDSAT satellite by flag!"))
+        raise RuntimeError("Invalid satellite: " + satellite)
 
     grass.message(_("Tasseled Cap components calculated."))
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
     main()
