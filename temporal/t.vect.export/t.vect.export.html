@@ -1,11 +1,31 @@
 <h2>DESCRIPTION</h2>
 
-<p><em>t.vect.export</em> exports a space time vector dataset (<strong>stvds</strong>) to a tar archive as either GML (using v.out.ogr) or GRASS pack files. In addition to the pack or GML files, several metadata files are also created in the archive that describe the temporal layout. All time stamps are stored in the file "list.txt", for each map one row. The name of the map, the start time and the end time are written. In case of a time instance, the start time is equal to the end time. The "init.txt" file stores the temporal type, the number of maps, the chosen export format and some other metadata. The "proj.txt" file stores the projection information as a proj4 string of the location the space time vector dataset was exported from. The file "readme.txt" describes the file format. The output of v.info for each vector map in the space time dataset is stored in "metadata.txt".</p>
+<em>t.vect.export</em> exports a space time vector dataset (stvds)
+to a tar archive as either GML (using <em><a href="v.out.ogr.html">v.out.ogr</a></em>)
+or GRASS pack files. In addition to the pack or GML files, several
+metadata files are also created in the archive that describe the
+temporal layout. All time stamps are stored in the file "list.txt",
+for each map one row. The name of the map, the start time and the
+end time are written. In case of a time instance, the start time is
+equal to the end time. The "init.txt" file stores the temporal type,
+the number of maps, the chosen export format and some other
+metadata. The "proj.txt" file stores the projection information as a
+proj4 string of the location the space time vector dataset was
+exported from. The file "readme.txt" describes the file format. The
+output of v.info for each vector map in the space time dataset is
+stored in "metadata.txt".
 
-<p>Gzip or bzip2 (default) compression can be specified with the <strong>compress</strong> option. Archives exported with <strong>t.vect.export</strong> can be imported with <strong>t.vect.import</strong>.</p>
+<p>Gzip or bzip2 (default) compression can be specified with the
+<strong>compress</strong> option. Archives exported with
+<em><a href="t.vect.export.html">t.vect.export</a></em> can be imported
+with <em><a href="t.vect.import.html">t.vect.import</a></em>.
 
 <h2>EXAMPLE</h2>
-In this example 5 vector maps are created and registered in a single space time vector dataset named <em>random_locations</em>. Each vector map represents random locations within the boundary of the state taken at 1 month intervals.
+In this example 5 vector maps are created and
+registered in a single space time vector dataset named <em>random_locations</em>.
+Each vector map represents random locations
+within the boundary of the state taken at 1 month intervals.
+
 <div class="code"><pre>
 db.connect -d
 
