@@ -935,7 +935,8 @@ Function DownloadInstallMSRuntime
 	untgz::extract "-d" "$TEMP\$ORIGINAL_UNTAR_FOLDER" "-zbz2" "$TEMP\$ARCHIVE_NAME"
 	Pop $0
 	StrCmp $0 "success" untar_ok untar_failed
-	
+
+	;move ExecWait, CopyFiles, Delete, RMDir commands out of the download function as these seems not to work if these are nested in a function
 	untar_ok:
 	ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2005_x86.exe" /q'
 	ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2008_x86.exe" /q'	
