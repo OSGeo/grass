@@ -5,7 +5,7 @@
 # AUTHOR(S):	Radim Blazek
 #               Converted to Python by Glynn Clements
 # PURPOSE:	Test database driver
-# COPYRIGHT:	(C) 2004 by the GRASS Development Team
+# COPYRIGHT:	(C) 2004-2014 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (version 2). Read the file COPYING that comes with GRASS
