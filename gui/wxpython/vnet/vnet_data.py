@@ -26,6 +26,7 @@ import os
 import types
 from copy import deepcopy
 
+from grass.script.utils import try_remove
 from grass.script     import core as grass
 
 import wx
@@ -1092,7 +1093,7 @@ class History:
         self.sep = ';'
 
     def __del__(self):
-        grass.try_remove(self.histFile)
+        try_remove(self.histFile)
 
     def GetNext(self):
         """!Go one step forward in history"""
@@ -1147,7 +1148,7 @@ class History:
 
         oldHist.close()
         newHist.close()
-        grass.try_remove(self.histFile)
+        try_remove(self.histFile)
         self.histFile = newHistFile
 
         self.newHistStepData.clear() 

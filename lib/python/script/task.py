@@ -30,6 +30,7 @@ try:
 except ImportError:
     import elementtree.ElementTree as etree # Python <= 2.4
 
+from utils import decode
 from core import *
 
 class grassTask:

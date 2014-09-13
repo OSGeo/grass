@@ -131,6 +131,7 @@ try:
 except ImportError:
     import elementtree.ElementTree as etree # Python <= 2.4
 
+from grass.script.utils import try_rmdir
 from grass.script import core as grass
 
 # temp dir
@@ -391,7 +392,7 @@ def get_wxgui_extensions():
 
 def cleanup():
     if REMOVE_TMPDIR:
-        grass.try_rmdir(TMPDIR)
+        try_rmdir(TMPDIR)
     else:
         grass.message("\n%s\n" % _("Path to the source code:"))
         sys.stderr.write('%s\n' % os.path.join(TMPDIR, options['extension']))

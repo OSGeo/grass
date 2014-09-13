@@ -59,11 +59,12 @@ import sys
 import os
 import atexit
 import math
+from grass.script.utils import try_remove
 from grass.script import core as grass
 
 def cleanup():
     for ext in ['', '.sort']:
-        grass.try_remove(tmp + ext)
+        try_remove(tmp + ext)
 
 def sortfile(infile, outfile):
     inf = file(infile, 'r')

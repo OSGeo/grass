@@ -28,6 +28,7 @@
 
 import sys
 import os
+from grass.script.utils import try_remove
 from grass.script import core as grass
 
 def main():
@@ -96,7 +97,7 @@ def main():
 		ofile.close()
 		p.wait()
 
-    grass.try_remove(tmpfile)
+    try_remove(tmpfile)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

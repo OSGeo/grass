@@ -30,14 +30,16 @@ import re
 import atexit
 import subprocess
 import shutil
-import locale
 import codecs
+
+from utils import KeyValue, parse_key_val, basename, encode
 
 # i18N
 import gettext
 gettext.install('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale'))
 
 # subprocess wrapper that uses shell on Windows
+
 
 class Popen(subprocess.Popen):
     _builtin_exts = set(['.com', '.exe', '.bat', '.cmd'])
@@ -85,20 +87,6 @@ _popen_args = ["bufsize", "executable", "stdin", "stdout", "stderr",
                "preexec_fn", "close_fds", "cwd", "env",
                "universal_newlines", "startupinfo", "creationflags"]
 
-
-def decode(string):
-    enc = locale.getdefaultlocale()[1]
-    if enc:
-        return string.decode(enc)
-
-    return string
-
-def encode(string):
-    enc = locale.getdefaultlocale()[1]
-    if enc:
-        return string.encode(enc)
-
-    return string
 
 def _make_val(val):
     if isinstance(val, types.StringType) or \
@@ -518,7 +506,7 @@ def debug(msg, debug=1):
     if debug_level() >= debug:
         if sys.platform == "win32":
             msg = msg.replace('&', '^&')
-            
+
         run_command("g.message", flags='d', message=msg, debug=debug)
 
 def verbose(msg):
@@ -673,28 +661,6 @@ def parser():
 
     return _parse_opts(lines[1:])
 
-
-def separator(sep):
-    """!Returns separator from G_OPT_F_SEP appropriately converted
-    to character.
-
-    @param separator character or separator keyword
-
-    @return separator character
-    """
-    if sep == "pipe":
-        return "|"
-    elif sep == "comma":
-        return ","
-    elif sep == "space":
-        return " "
-    elif sep == "tab" or sep == "\\t":
-        return "\t"
-    elif sep == "newline" or sep == "\\n":
-        return "\n"
-    return sep
-    
-
 # interface to g.tempfile
 
 
@@ -719,75 +685,6 @@ def tempdir():
     os.mkdir(tmp)
 
     return tmp
-
-
-class KeyValue(dict):
-    """A general-purpose key-value store.
-
-    KeyValue is a subclass of dict, but also allows entries to be read and
-    written using attribute syntax. Example:
-
-    \code
-    >>> reg = KeyValue()
-    >>> reg['north'] = 489
-    >>> reg.north
-    489
-    >>> reg.south = 205
-    >>> reg['south']
-    205
-
-    \endcode
-    """
-
-    def __getattr__(self, key):
-        return self[key]
-
-    def __setattr__(self, key, value):
-        self[key] = value
-
-# key-value parsers
-
-
-def parse_key_val(s, sep='=', dflt=None, val_type=None, vsep=None):
-    """!Parse a string into a dictionary, where entries are separated
-    by newlines and the key and value are separated by `sep' (default: `=')
-
-    @param s string to be parsed
-    @param sep key/value separator
-    @param dflt default value to be used
-    @param val_type value type (None for no cast)
-    @param vsep vertical separator (default os.linesep)
-
-    @return parsed input (dictionary of keys/values)
-    """
-    result = KeyValue()
-
-    if not s:
-        return result
-
-    if vsep:
-        lines = s.split(vsep)
-        try:
-            lines.remove('\n')
-        except ValueError:
-            pass
-    else:
-        lines = s.splitlines()
-
-    for line in lines:
-        kv = line.split(sep, 1)
-        k = kv[0].strip()
-        if len(kv) > 1:
-            v = kv[1].strip()
-        else:
-            v = dflt
-
-        if val_type:
-            result[k] = val_type(v)
-        else:
-            result[k] = v
-
-    return result
 
 
 def _compare_projection(dic):
@@ -848,7 +745,7 @@ def _text_to_key_value_dict(filename, sep=":", val_sep=",", checkproj=False,
         @param val_sep The character that separates the values of a single key, default is ","
         @param checkproj True if it has to check some information about projection system
         @param checkproj True if it has to check some information about units
-        
+
         @return The dictionary
 
         A text file with this content:
@@ -963,23 +860,6 @@ def compare_key_value_text_files(filename_a, filename_b, sep=":",
             if dict_a[key] != dict_b[key]:
                 return False
     return True
-
-def diff_files(filename_a, filename_b):
-    """!Diffs two text files and returns difference.
-
-    @param filename_a first file path    
-    @param filename_b second file path
-    
-    @return list of strings
-    """
-    import difflib
-    differ = difflib.Differ()
-    fh_a = open(filename_a, 'r')
-    fh_b = open(filename_b, 'r')
-    result = list(differ.compare(fh_a.readlines(),
-                                 fh_b.readlines()))
-    return result
-
 
 # interface to g.gisenv
 
@@ -1437,38 +1317,22 @@ def verbosity():
 
 ## various utilities, not specific to GRASS
 
-# basename inc. extension stripping
-
-
-def basename(path, ext=None):
-    """!Remove leading directory components and an optional extension
-    from the specified path
-
-    @param path path
-    @param ext extension
-    """
-    name = os.path.basename(path)
-    if not ext:
-        return name
-    fs = name.rsplit('.', 1)
-    if len(fs) > 1 and fs[1].lower() == ext:
-        name = fs[0]
-    return name
-
 def find_program(pgm, *args):
     """!Attempt to run a program, with optional arguments.
+
     You must call the program in a way that will return a successful
     exit code. For GRASS modules this means you need to pass it some
     valid CLI option, like "--help". For other programs a common
-    valid do-little option is "--version".
-    
+    valid do-little option is usually "--version".
+
     Example:
 
     @code
-    >>> grass.find_program('r.sun', 'help')
+    >>> find_program('r.sun', '--help')
     True
-    >>> grass.find_program('gdalwarp', '--version')
+    >>> find_program('ls', '--version')
     True
+
     @endcode
 
     @param pgm program name
@@ -1480,6 +1344,7 @@ def find_program(pgm, *args):
     """
     nuldev = file(os.devnull, 'w+')
     try:
+        # TODO: the doc or impl is not correct, any return code is accepted
         call([pgm] + list(args), stdin = nuldev, stdout = nuldev, stderr = nuldev)
         found = True
     except:
@@ -1487,44 +1352,6 @@ def find_program(pgm, *args):
     nuldev.close()
 
     return found
-
-# try to remove a file, without complaints
-
-
-def try_remove(path):
-    """!Attempt to remove a file; no exception is generated if the
-    attempt fails.
-
-    @param path path to file to remove
-    """
-    try:
-        os.remove(path)
-    except:
-        pass
-
-# try to remove a directory, without complaints
-
-
-def try_rmdir(path):
-    """!Attempt to remove a directory; no exception is generated if the
-    attempt fails.
-
-    @param path path to directory to remove
-    """
-    try:
-        os.rmdir(path)
-    except:
-        shutil.rmtree(path, ignore_errors=True)
-
-
-def float_or_dms(s):
-    """!Convert DMS to float.
-
-    @param s DMS value
-
-    @return float value
-    """
-    return sum(float(x) / 60 ** n for (n, x) in enumerate(s.split(':')))
 
 # interface to g.mapsets
 
@@ -1586,7 +1413,7 @@ def create_location(dbase, location, epsg=None, proj4=None, filename=None,
         else:
             warning(_("Location <%s> already exists and will be overwritten") % location)
             shutil.rmtree(os.path.join(dbase, location))
-    
+
     kwargs = dict()
     if datum:
         kwargs['datum'] = datum
