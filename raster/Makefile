@@ -43,7 +43,6 @@ SUBDIRS = \
 	r.latlong \
 	r.lake \
 	r.li \
-	r.los \
 	r.mapcalc \
 	r.mfilter \
 	r.mode \
