@@ -75,7 +75,7 @@ def main():
 
     # check if table is used somewhere (connected to vector map)
     used = grass.db.db_table_in_vector(table)
-    if len(used) > 0:
+    if used:
         grass.warning(_("Deleting table <%s> which is attached to following map(s):") % table)
         for vect in used:
             grass.warning("%s" % vect)
