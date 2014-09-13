@@ -850,7 +850,7 @@ class DbMgrNotebookBase(FN.FlatNotebook):
                 if enc:
                     sqlFile.write(sql.encode(enc) + ';')
                 else:
-                    sqlFile.write(sql + ';')
+                    sqlFile.write(sql.encode('utf-8') + ';')
                 sqlFile.write(os.linesep)
             sqlFile.close()
 
@@ -1438,14 +1438,13 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
                     try:
                         if tlist.columns[columnName[i]]['ctype'] == int:
                             # values[i] is stored as text. 
-                            value = float(values[i])
-                        else:
-                            value = values[i]
-                        values[i] = tlist.columns[columnName[i]]['ctype'] (value)
+                            values[i] = int(float(values[i]))
+                        elif tlist.columns[columnName[i]]['ctype'] == float:
+                            values[i] = float(values[i])
                     except:
-                        raise ValueError(_("Value '%(value)s' needs to be entered as %(type)s.") % 
-                                         {'value' : str(values[i]),
-                                          'type' : tlist.columns[columnName[i]]['type']})
+                        raise ValueError(_("Value '%(value)s' needs to be entered as %(type)s.") %
+                                         {'value': values[i],
+                                          'type': tlist.columns[columnName[i]]['type']})
                     columnsString += '%s,' % columnName[i]
                     
                     if tlist.columns[columnName[i]]['ctype'] == str:

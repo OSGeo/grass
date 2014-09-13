@@ -147,7 +147,6 @@ class VectorDBInfo(VectorDBInfoBase):
             sql = "SELECT %s FROM %s WHERE %s" % (cols, table, where)
         
         ret = RunCommand('db.select',
-                         parent = self,
                          read = True,
                          quiet = True,
                          flags = 'v',
