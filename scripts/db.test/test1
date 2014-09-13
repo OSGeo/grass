@@ -1,35 +1,35 @@
 X
-create table grass_test1 (i1 integer, d1 double precision, c1 varchar(20))
+CREATE TABLE grass_test1 (i1 INTEGER, d1 DOUBLE PRECISION, c1 VARCHAR(20))
 
 X
-insert into grass_test1 values ( 1, 123.456, 'abcd' )
+INSERT INTO grass_test1 VALUES ( 1, 123.456, 'abcd' )
 
 X
-insert into grass_test1 values ( 2, null, 'xxx' )
+INSERT INTO grass_test1 VALUES ( 2, null, 'xxx' )
 
 S
-select * from grass_test1
+SELECT * FROM grass_test1
 1|123.456|abcd
 2||xxx
 
 S
-select c1 from grass_test1 where d1 < 500 / 2 and i1 <> 2  and c1 like '%bc%' 
+SELECT c1 FROM grass_test1 WHERE d1 < 500 / 2 AND i1 <> 2  AND c1 LIKE '%bc%' 
 abcd
 
 X
-insert into grass_test1 values ( 3, 0.0, '_\''_' )
+INSERT INTO grass_test1 VALUES ( 3, 0.0, '_\''_' )
 
 X
-alter table grass_test1 add column i2 integer
+ALTER TABLE grass_test1 ADD COLUMN i2 INTEGER
 
 X
-update grass_test1 set d1 = 18.6, i2 = 987  where i1 = 2
+UPDATE grass_test1 SET d1 = 18.6, i2 = 987  WHERE i1 = 2
 
 S
-select * from grass_test1
+SELECT * FROM grass_test1
 1|123.456|abcd|
 2|18.6|xxx|987
 3|0|_\'_|
 
 X
-drop table grass_test1
+DROP TABLE grass_test1
