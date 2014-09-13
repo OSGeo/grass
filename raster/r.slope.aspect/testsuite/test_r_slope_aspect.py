@@ -50,7 +50,7 @@ class TestSlopeAspectAgainstReference(grass.gunittest.TestCase):
         gdaldem slope .../fractal_surf.ascii .../gdal_slope.grd -of GSAG
         gdaldem aspect .../fractal_surf.ascii .../gdal_aspect.grd -of GSAG -trigonometric
 
-    GDAL version 1.11.0 was used. GDAL implementation is originally based on
+    GDAL version 1.11.0 was used. Note: GDAL-slope/aspect implementation is originally based on
     GRASS GIS 4.1.
     """
 
@@ -71,7 +71,7 @@ class TestSlopeAspectAgainstReference(grass.gunittest.TestCase):
         cls.runModule('g.remove', rast=cls.elevation)
 
     def test_slope(self):
-        ref_slope = 'referece_slope'
+        ref_slope = 'reference_slope'
         slope = 'fractal_slope'
 
         # TODO: using gdal instead of ascii because of cannot seek error
@@ -116,13 +116,13 @@ class TestSlopeAspectAgainstItself(grass.gunittest.TestCase):
         cls.del_temp_region()
 
     def test_slope_aspect_together(self):
-        """Slope and aspect computed sepeately and together should be the same
+        """Slope and aspect computed separately and together should be the same
         """
         elevation = 'elevation'
         t_aspect = 'sa_together_aspect'
         t_slope = 'sa_together_slope'
-        s_aspect = 'sa_seperately_aspect'
-        s_slope = 'sa_seperately_slope'
+        s_aspect = 'sa_separately_aspect'
+        s_slope = 'sa_separately_slope'
         self.assertModule('r.slope.aspect', elevation=elevation,
                           aspect=s_aspect)
         self.assertModule('r.slope.aspect', elevation=elevation,
