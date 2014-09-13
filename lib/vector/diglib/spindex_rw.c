@@ -347,6 +347,7 @@ int dig_Rd_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
     /* byte 12 : n dimensions */
     if (0 >= dig__fread_port_C((char *)&(t->ndims), 1, fp))
 	return (-1);
+    ptr->Node_spidx->ndims = t->ndims;
     ptr->Line_spidx->ndims = t->ndims;
     ptr->Area_spidx->ndims = t->ndims;
     ptr->Isle_spidx->ndims = t->ndims;
@@ -354,6 +355,7 @@ int dig_Rd_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
     /* byte 13 : n sides */
     if (0 >= dig__fread_port_C((char *)&(t->nsides), 1, fp))
 	return (-1);
+    ptr->Node_spidx->nsides = t->nsides;
     ptr->Line_spidx->nsides = t->nsides;
     ptr->Area_spidx->nsides = t->nsides;
     ptr->Isle_spidx->nsides = t->nsides;
@@ -361,6 +363,7 @@ int dig_Rd_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
     /* bytes 14 - 17 : nodesize */
     if (0 >= dig__fread_port_I(&(t->nodesize), 1, fp))
 	return (-1);
+    ptr->Node_spidx->nodesize = t->nodesize;
     ptr->Line_spidx->nodesize = t->nodesize;
     ptr->Area_spidx->nodesize = t->nodesize;
     ptr->Isle_spidx->nodesize = t->nodesize;
@@ -368,6 +371,7 @@ int dig_Rd_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
     /* bytes 18 - 21 : nodecard */
     if (0 >= dig__fread_port_I(&(t->nodecard), 1, fp))
 	return (-1);
+    ptr->Node_spidx->nodecard = t->nodecard;
     ptr->Line_spidx->nodecard = t->nodecard;
     ptr->Area_spidx->nodecard = t->nodecard;
     ptr->Isle_spidx->nodecard = t->nodecard;
@@ -375,6 +379,7 @@ int dig_Rd_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
     /* bytes 22 - 25 : leafcard */
     if (0 >= dig__fread_port_I(&(t->leafcard), 1, fp))
 	return (-1);
+    ptr->Node_spidx->leafcard = t->leafcard;
     ptr->Line_spidx->leafcard = t->leafcard;
     ptr->Area_spidx->leafcard = t->leafcard;
     ptr->Isle_spidx->leafcard = t->leafcard;
@@ -382,6 +387,7 @@ int dig_Rd_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
     /* bytes 26 - 29 : min node fill */
     if (0 >= dig__fread_port_I(&(t->min_node_fill), 1, fp))
 	return (-1);
+    ptr->Node_spidx->min_node_fill = t->min_node_fill;
     ptr->Line_spidx->min_node_fill = t->min_node_fill;
     ptr->Area_spidx->min_node_fill = t->min_node_fill;
     ptr->Isle_spidx->min_node_fill = t->min_node_fill;
@@ -389,6 +395,7 @@ int dig_Rd_spidx_head(struct gvfile * fp, struct Plus_head *ptr)
     /* bytes 30 - 33 : min leaf fill */
     if (0 >= dig__fread_port_I(&(t->min_leaf_fill), 1, fp))
 	return (-1);
+    ptr->Node_spidx->min_leaf_fill = t->min_leaf_fill;
     ptr->Line_spidx->min_leaf_fill = t->min_leaf_fill;
     ptr->Area_spidx->min_leaf_fill = t->min_leaf_fill;
     ptr->Isle_spidx->min_leaf_fill = t->min_leaf_fill;
@@ -840,7 +847,7 @@ static off_t rtree_write_from_file(struct gvfile *fp, off_t startpos,
 	 * before it is written out to the sidx file */
 	if (s[top].sn.level > 0) {
 	    for (i = s[top].branch_id; i < t->nodecard; i++) {
-		s[top].pos[i] = -1;
+		s[top].pos[i] = 0;
 		if (n->branch[i].child.pos >= 0) {
 		    s[top++].branch_id = i + 1;
 		    RTreeReadNode(&s[top].sn, n->branch[i].child.pos, t);
@@ -1042,7 +1049,6 @@ static void rtree_load_to_memory(struct gvfile *fp, off_t rootpos,
 static void rtree_load_to_file(struct gvfile *fp, off_t rootpos,
 				  struct RTree *t, int off_t_size)
 {
-    struct RTree_Node newnode;
     off_t newnode_pos = -1;
     int i, j, loadnode, maxcard;
     struct spidxstack *last;
@@ -1134,16 +1140,8 @@ static void rtree_load_to_file(struct gvfile *fp, off_t rootpos,
 	if (loadnode) {
 	    /* ready to load node and write to temp file */
 
-	    /* copy from stack node */
-	    newnode.level = s[top].sn.level;
-	    newnode.count = s[top].sn.count;
-	    maxcard = s[top].sn.level ? t->nodecard : t->leafcard;
-	    for (j = 0; j < maxcard; j++) {
-		newnode.branch[j].rect = s[top].sn.branch[j].rect;
-		newnode.branch[j].child = s[top].sn.branch[j].child;
-	    }
 	    newnode_pos = RTreeGetNodePos(t);
-	    RTreeWriteNode(&newnode, t);
+	    RTreeWriteNode(&(s[top].sn), t);
 
 	    top--;
 	    /* update child of parent node
