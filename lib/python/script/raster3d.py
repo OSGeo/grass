@@ -1,52 +1,43 @@
-"""!@package grass.script.raster3d
-
-@brief GRASS Python scripting module (raster3d functions)
-
+"""
 Raster3d related functions to be used in Python scripts.
 
 Usage:
 
-@code
-from grass.script import raster3d as grass
+::
 
-grass.raster3d_info(map)
-...
-@endcode
+    from grass.script import raster3d as grass
+    grass.raster3d_info(map)
+
 
 (C) 2008-2009 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Glynn Clements
-@author Martin Landa <landa.martin gmail.com>
-@author Soeren Gebbert <soeren.gebbert gmail.com>
+.. sectionauthor:: Glynn Clements
+.. sectionauthor:: Martin Landa <landa.martin gmail.com>
+.. sectionauthor:: Soeren Gebbert <soeren.gebbert gmail.com>
 """
 
-import os
 import string
 
 from core import *
 from utils import float_or_dms, parse_key_val
 
-# add raster history
-
-# run "r3.info -rstgip ..." and parse output
 
 def raster3d_info(map):
-    """!Return information about a raster3d map (interface to
-    `r3.info'). Example:
+    """Return information about a raster3d map (interface to `r3.info`).
+    Example:
 
-    \code
-    >>> grass.raster3d_info('volume')
-    {'tiledimz': 1, 'tbres': 1.0, 'tiledimx': 27, 'tiledimy': 16, 'north': 60.490001999999997, 'tilenumy': 1, 'tilenumz': 1, 
-    'min': 1.0, 'datatype': '"DCELL"', 'max': 1.0, 'top': 0.5, 'bottom': -0.5, 'west': -3.2200000000000002, 'tilenumx': 1, 
-    'ewres': 0.98222219, 'east': 23.299999, 'nsres': 0.99937511999999995, 'Timestamp': '"none"', 'south': 44.5}
-    \endcode
+    >>> mapcalc3d('volume = row() + col() + depth()')
+    >>> raster3d_info('volume') # doctest: +ELLIPSIS
+    {'vertical_units': '"units"', 'tbres': 1.0, ... 'south': 185000.0}
+    >>> run_command('g.remove', rast3d='volume')
+    0
 
-    @param map map name
-    
-    @return parsed raster3d info
+    :param str map: map name
+
+    :return: parsed raster3d info
     """
 
     def float_or_null(s):
@@ -71,22 +62,21 @@ def raster3d_info(map):
         kv[k] = int(kv[k])
     return kv
 
-# interface to r3.mapcalc
 
-def mapcalc3d(exp, quiet = False, verbose = False, overwrite = False, **kwargs):
-    """!Interface to r3.mapcalc.
+def mapcalc3d(exp, quiet=False, verbose=False, overwrite=False, **kwargs):
+    """Interface to r3.mapcalc.
 
-    @param exp expression
-    @param quiet True to run quietly (<tt>--q</tt>)
-    @param verbose True to run verbosely (<tt>--v</tt>)
-    @param overwrite True to enable overwriting the output (<tt>--o</tt>)
-    @param kwargs
+    :param str exp: expression
+    :param bool quiet: True to run quietly (<tt>--q</tt>)
+    :param bool verbose: True to run verbosely (<tt>--v</tt>)
+    :param bool overwrite: True to enable overwriting the output (<tt>--o</tt>)
+    :param kwargs:
     """
     t = string.Template(exp)
     e = t.substitute(**kwargs)
 
-    if run_command('r3.mapcalc', expression = e,
-                   quiet = quiet,
-                   verbose = verbose,
-                   overwrite = overwrite) != 0:
+    if run_command('r3.mapcalc', expression=e,
+                   quiet=quiet,
+                   verbose=verbose,
+                   overwrite=overwrite) != 0:
         fatal(_("An error occurred while running r3.mapcalc"))

@@ -1,25 +1,20 @@
-"""!@package grass.script.vector
-
-@brief GRASS Python scripting module (vector functions)
-
+"""
 Vector related functions to be used in Python scripts.
 
 Usage:
 
-@code
-from grass.script import vector as grass
+::
 
-grass.vector_db(map)
-...
-@endcode
+    from grass.script import vector as grass
+    grass.vector_db(map)
 
 (C) 2008-2010 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Glynn Clements
-@author Martin Landa <landa.martin gmail.com>
+.. sectionauthor:: Glynn Clements
+.. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
 
 import os
@@ -30,32 +25,28 @@ import __builtin__
 from utils import parse_key_val
 from core import *
 
-# run "v.db.connect -g ..." and parse output
 
 def vector_db(map, **args):
-    """!Return the database connection details for a vector map
+    """Return the database connection details for a vector map
     (interface to `v.db.connect -g'). Example:
-    
-    \code
-    >>> grass.vector_db('lakes')
-    {1: {'layer': 1, 'name': '',
-    'database': '/home/martin/grassdata/nc_spm_08/PERMANENT/dbf/',
-    'driver': 'dbf', 'key': 'cat', 'table': 'lakes'}}
-    \endcode
-    
-    @param map vector map
-    @param args other v.db.connect's arguments
-    
-    @return dictionary
+
+    >>> vector_db('geology') # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
+    {1: {'layer': 1, ... 'table': 'geology'}}
+
+    :param str map: vector map
+    :param args: other v.db.connect's arguments
+
+    :return: dictionary
     """
-    s = read_command('v.db.connect', quiet = True, flags = 'g', map = map, sep = ';', **args)
+    s = read_command('v.db.connect', quiet=True, flags='g', map=map, sep=';',
+                     **args)
     result = {}
-    
+
     for l in s.splitlines():
         f = l.split(';')
         if len(f) != 5:
             continue
-        
+
         if '/' in f[0]:
             f1 = f[0].split('/')
             layer = f1[0]
@@ -63,7 +54,7 @@ def vector_db(map, **args):
         else:
             layer = f[0]
             name = ''
-            
+
         result[int(layer)] = {
             'layer'    : int(layer),
             'name'     : name,
@@ -71,17 +62,18 @@ def vector_db(map, **args):
             'key'      : f[2],
             'database' : f[3],
             'driver'   : f[4] }
-    
+
     return result
 
+
 def vector_layer_db(map, layer):
-    """!Return the database connection details for a vector map layer.
+    """Return the database connection details for a vector map layer.
     If db connection for given layer is not defined, fatal() is called.
-    
-    @param map map name
-    @param layer layer number
-    
-    @return parsed output
+
+    :param str map: map name
+    :param layer: layer number
+
+    :return: parsed output
     """
     try:
         f = vector_db(map)[int(layer)]
@@ -92,27 +84,40 @@ def vector_layer_db(map, layer):
 
 # run "v.info -c ..." and parse output
 
-def vector_columns(map, layer = None, getDict = True, **args):
-    """!Return a dictionary (or a list) of the columns for the
+
+def vector_columns(map, layer=None, getDict=True, **args):
+    """Return a dictionary (or a list) of the columns for the
     database table connected to a vector map (interface to `v.info
     -c').
 
-    @code
-    >>> vector_columns(urbanarea, getDict = True)
-    {'UA_TYPE': {'index': 4, 'type': 'CHARACTER'}, 'UA': {'index': 2, 'type': 'CHARACTER'}, 'NAME': {'index': 3, 'type': 'CHARACTER'}, 'OBJECTID': {'index': 1, 'type': 'INTEGER'}, 'cat': {'index': 0, 'type': 'INTEGER'}}
+    >>> vector_columns('geology', getDict=True) # doctest: +NORMALIZE_WHITESPACE
+    {'PERIMETER': {'index': 2, 'type': 'DOUBLE PRECISION'}, 'GEOL250_':
+    {'index': 3, 'type': 'INTEGER'}, 'SHAPE_area': {'index': 6, 'type':
+    'DOUBLE PRECISION'}, 'onemap_pro': {'index': 1, 'type': 'DOUBLE
+    PRECISION'}, 'SHAPE_len': {'index': 7, 'type': 'DOUBLE PRECISION'},
+    'cat': {'index': 0, 'type': 'INTEGER'}, 'GEOL250_ID': {'index': 4, 'type':
+    'INTEGER'}, 'GEO_NAME': {'index': 5, 'type': 'CHARACTER'}}
 
-    >>> vector_columns(urbanarea, getDict = False)
-    ['cat', 'OBJECTID', 'UA', 'NAME', 'UA_TYPE']
-    @endcode
-    
-    @param map map name
-    @param layer layer number or name (None for all layers)
-    @param getDict True to return dictionary of columns otherwise list of column names is returned
-    @param args (v.info's arguments)
-    
-    @return dictionary/list of columns
+    >>> vector_columns('geology', getDict=False) # doctest: +NORMALIZE_WHITESPACE
+    ['cat',
+     'onemap_pro',
+     'PERIMETER',
+     'GEOL250_',
+     'GEOL250_ID',
+     'GEO_NAME',
+     'SHAPE_area',
+     'SHAPE_len']
+
+    :param str map: map name
+    :param layer: layer number or name (None for all layers)
+    :param bool getDict: True to return dictionary of columns otherwise list
+                         of column names is returned
+    :param args: (v.info's arguments)
+
+    :return: dictionary/list of columns
     """
-    s = read_command('v.info', flags = 'c', map = map, layer = layer, quiet = True, **args)
+    s = read_command('v.info', flags='c', map=map, layer=layer, quiet=True,
+                     **args)
     if getDict:
         result = dict()
     else:
@@ -121,85 +126,67 @@ def vector_columns(map, layer = None, getDict = True, **args):
     for line in s.splitlines():
         ctype, cname = line.split('|')
         if getDict:
-            result[cname] = { 'type' : ctype,
-                              'index' : i }
+            result[cname] = {'type': ctype, 'index': i}
         else:
             result.append(cname)
-        i+=1
-    
+        i += 1
+
     return result
 
-# add vector history
 
 def vector_history(map):
-    """!Set the command history for a vector map to the command used to
+    """Set the command history for a vector map to the command used to
     invoke the script (interface to `v.support').
 
-    @param map mapname
+    :param str map: mapname
 
-    @return v.support output
+    :return: v.support output
     """
-    run_command('v.support', map = map, cmdhist = os.environ['CMDLINE'])
+    run_command('v.support', map=map, cmdhist=os.environ['CMDLINE'])
 
-# run "v.info -t" and parse output
 
 def vector_info_topo(map):
-    """!Return information about a vector map (interface to `v.info
+    """Return information about a vector map (interface to `v.info
     -t'). Example:
 
-    \code
-    >>> grass.vector_info_topo('lakes')
-    {'kernels': 0, 'lines': 0, 'centroids': 15279,
-    'boundaries': 27764, 'points': 0, 'faces': 0,
-    'primitives': 43043, 'islands': 7470, 'nodes': 35234, 'map3d': False, 'areas': 15279}
-    \endcode
-    
-    @param map map name
+    >>> vector_info_topo('geology') # doctest: +NORMALIZE_WHITESPACE
+    {'lines': 0, 'centroids': 1832, 'boundaries': 3649, 'points': 0,
+    'primitives': 5481, 'islands': 907, 'nodes': 2724, 'map3d': False,
+    'areas': 1832}
 
-    @return parsed output
+    :param str map: map name
+
+    :return: parsed output
     """
-    s = read_command('v.info', flags = 't', map = map)
-    ret = parse_key_val(s, val_type = int)
+    s = read_command('v.info', flags='t', map=map)
+    ret = parse_key_val(s, val_type=int)
     if 'map3d' in ret:
         ret['map3d'] = bool(ret['map3d'])
-    
+
     return ret
 
 
-# run "v.info -get ..." and parse output
-
 def vector_info(map):
-    """!Return information about a vector map (interface to
+    """Return information about a vector map (interface to
     `v.info'). Example:
 
-    \code
-    >>> grass.vector_info('random_points')
-    {'comment': '', 'projection': 'x,y', 'creator': 'soeren', 'holes': 0, 
-     'primitives': 20, 'kernels': 0, 'scale': '1:1', 'title': '', 
-     'west': 0.046125489999999998, 'top': 2376.133159, 'boundaries': 0, 
-     'location': 'XYLocation', 'nodes': 0, 'east': 0.97305646000000001, 
-     'source_date': 'Mon Aug 29 10:55:57 2011', 'north': 0.9589993, 
-     'format': 'native', 'faces': 0, 'centroids': 0, 
-     'digitization_threshold': '0.000000', 'islands': 0, 'level': 2, 
-     'mapset': 'test', 'areas': 0, 'name': 'random_points', 
-     'database': '/home/soeren/grassdata', 'bottom': 22.186596999999999, 
-     'lines': 0, 'points': 20, 'map3d': True, 'volumes': 0, 'num_dblinks': 0, 
-     'organization': '', 'south': 0.066047099999999997}
-    
-    \endcode
-    @param map map name
-    
-    @return parsed vector info
+    >>> vector_info('geology') # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
+    {'comment': '', 'projection': 'Lambert Conformal Conic' ... 'south': 10875.8272320917}
+
+    :param str map: map name
+
+    :return: parsed vector info
     """
 
-    s = read_command('v.info', flags = 'get', map = map)
-    
+    s = read_command('v.info', flags='get', map=map)
+
     kv = parse_key_val(s)
     for k in ['north', 'south', 'east', 'west', 'top', 'bottom']:
         kv[k] = float(kv[k])
     for k in ['level', 'num_dblinks']:
         kv[k] = int(kv[k])
-    for k in ['nodes', 'points', 'lines', 'boundaries', 'centroids', 'areas', 'islands', 'primitives']:
+    for k in ['nodes', 'points', 'lines', 'boundaries', 'centroids', 'areas',
+              'islands', 'primitives']:
         kv[k] = int(kv[k])
     if 'map3d' in kv:
         kv['map3d'] = bool(int(kv['map3d']))
@@ -210,36 +197,32 @@ def vector_info(map):
     return kv
 
 
-# interface for v.db.select
-
-def vector_db_select(map, layer = 1, **kwargs):
-    """!Get attribute data of selected vector map layer.
+def vector_db_select(map, layer=1, **kwargs):
+    """Get attribute data of selected vector map layer.
 
     Function returns list of columns and dictionary of values ordered by
     key column value. Example:
 
-    \code
-    >>> print grass.vector_db_select('lakes')['columns']
-    ['cat', 'AREA', 'PERIMETER', 'FULL_HYDRO', 'FULL_HYDR2', 'FTYPE', 'FCODE', 'NAME']
-    >>> print grass.vector_db_select('lakes')['values'][3]
-    ['3', '19512.86146', '708.44683', '4', '55652', 'LAKE/POND', '39000', '']
-    >>> print grass.vector_db_select('lakes', columns = 'FTYPE')['values'][3]
-    ['LAKE/POND']
-    \endcode
+    >>> print vector_db_select('geology')['columns']
+    ['cat', 'onemap_pro', 'PERIMETER', 'GEOL250_', 'GEOL250_ID', 'GEO_NAME', 'SHAPE_area', 'SHAPE_len']
+    >>> print vector_db_select('geology')['values'][3]
+    ['3', '579286.875', '3335.55835', '4', '3', 'Zml', '579286.829631', '3335.557182']
+    >>> print vector_db_select('geology', columns = 'GEO_NAME')['values'][3]
+    ['Zml']
 
-    @param map map name
-    @param layer layer number
-    @param kwargs v.db.select options
+    :param str map: map name
+    :param str layer: layer number
+    :param kwargs: v.db.select options
 
-    @return dictionary ('columns' and 'values')
+    :return: dictionary ('columns' and 'values')
     """
     try:
-        key = vector_db(map = map)[layer]['key']
+        key = vector_db(map=map)[layer]['key']
     except KeyError:
         error(_('Missing layer %(layer)d in vector map <%(map)s>') % \
-                  { 'layer' : layer, 'map' : map })
-        return { 'columns' : [], 'values' : {} }
-        
+              {'layer': layer, 'map': map})
+        return {'columns': [], 'values': {}}
+
     include_key = True
     if 'columns' in kwargs:
         if key not in kwargs['columns'].split(','):
@@ -247,16 +230,13 @@ def vector_db_select(map, layer = 1, **kwargs):
             include_key = False
             debug("Adding key column to the output")
             kwargs['columns'] += ',' + key
-    
-    ret = read_command('v.db.select',
-                       map = map,
-                       layer = layer,
-                       **kwargs)
-    
+
+    ret = read_command('v.db.select', map=map, layer=layer, **kwargs)
+
     if not ret:
         error(_('vector_db_select() failed'))
-        return { 'columns' : [], 'values' : {} }
-    
+        return {'columns': [], 'values': {}}
+
     columns = []
     values = {}
     for line in ret.splitlines():
@@ -265,9 +245,9 @@ def vector_db_select(map, layer = 1, **kwargs):
             key_index = columns.index(key)
             # discard key column
             if not include_key:
-                 columns = columns[:-1]
+                columns = columns[:-1]
             continue
-        
+
         value = line.split('|')
         key_value = int(value[key_index])
         if not include_key:
@@ -275,60 +255,68 @@ def vector_db_select(map, layer = 1, **kwargs):
             values[key_value] = value[:-1]
         else:
             values[key_value] = value
-    
-    return { 'columns' : columns,
-             'values' : values }
 
-# interface to v.what
-def vector_what(map, coord, distance = 0.0, ttype = None):
-    """!Query vector map at given locations
-    
+    return {'columns': columns, 'values': values}
+
+
+def vector_what(map, coord, distance=0.0, ttype=None):
+    """Query vector map at given locations
+
     To query one vector map at one location
-    @code
-    print grass.vector_what(map = 'archsites', coord = (595743, 4925281), distance = 250)
 
-    [{'Category': 8, 'Map': 'archsites', 'Layer': 1, 'Key_column': 'cat',
-      'Database': '/home/martin/grassdata/spearfish60/PERMANENT/dbf/',
-      'Mapset': 'PERMANENT', 'Driver': 'dbf',
-      'Attributes': {'str1': 'No_Name', 'cat': '8'},
-      'Table': 'archsites', 'Type': 'Point', 'Id': 8}]
-    @endcode
+    ::
 
-    To query one vector map with multiple layers (no additional parameters required)
-    @code
-    for q in grass.vector_what(map = 'some_map', coord = (596532.357143,4920486.21429), distance = 100.0):
-        print q['Map'], q['Layer'], q['Attributes']
+        print grass.vector_what(map='archsites', coord=(595743, 4925281),
+                                distance=250)
 
-    new_bug_sites 1 {'str1': 'Beetle_site', 'GRASSRGB': '', 'cat': '80'}
-    new_bug_sites 2 {'cat': '80'}
-    @endcode
+        [{'Category': 8, 'Map': 'archsites', 'Layer': 1, 'Key_column': 'cat',
+          'Database': '/home/martin/grassdata/spearfish60/PERMANENT/dbf/',
+          'Mapset': 'PERMANENT', 'Driver': 'dbf',
+          'Attributes': {'str1': 'No_Name', 'cat': '8'},
+          'Table': 'archsites', 'Type': 'Point', 'Id': 8}]
+
+    To query one vector map with multiple layers (no additional parameters
+    required)
+
+    ::
+
+        for q in grass.vector_what(map='some_map', distance=100.0,
+                                   coord=(596532.357143,4920486.21429)):
+            print q['Map'], q['Layer'], q['Attributes']
+
+        new_bug_sites 1 {'str1': 'Beetle_site', 'GRASSRGB': '', 'cat': '80'}
+        new_bug_sites 2 {'cat': '80'}
 
     To query more vector maps at one location
-    @code
-    for q in grass.vector_what(map = ('archsites', 'roads'), coord = (595743, 4925281),
-                               distance = 250):
-        print q['Map'], q['Attributes']
-                            
-    archsites {'str1': 'No_Name', 'cat': '8'}
-    roads {'label': 'interstate', 'cat': '1'}
-    @endcode
+
+    ::
+
+        for q in grass.vector_what(map=('archsites', 'roads'),
+                                   coord=(595743, 4925281), distance=250):
+            print q['Map'], q['Attributes']
+
+        archsites {'str1': 'No_Name', 'cat': '8'}
+        roads {'label': 'interstate', 'cat': '1'}
 
     To query one vector map at more locations
-    @code
-    for q in grass.vector_what(map = 'archsites', coord = [(595743, 4925281), (597950, 4918898)],
-                               distance = 250):
-        print q['Map'], q['Attributes']
 
-    archsites {'str1': 'No_Name', 'cat': '8'}
-    archsites {'str1': 'Bob_Miller', 'cat': '22'}
-    @endcode
+    ::
 
-    @param map vector map(s) to query given as string or list/tuple
-    @param coord coordinates of query given as tuple (easting, northing) or list of tuples
-    @param distance query threshold distance (in map units)
-    @param ttype list of topology types (default of v.what are point, line, area, face)
+        for q in grass.vector_what(map='archsites', distance=250,
+                                   coord=[(595743, 4925281), (597950, 4918898)]):
+            print q['Map'], q['Attributes']
 
-    @return parsed list
+        archsites {'str1': 'No_Name', 'cat': '8'}
+        archsites {'str1': 'Bob_Miller', 'cat': '22'}
+
+    :param map: vector map(s) to query given as string or list/tuple
+    :param coord: coordinates of query given as tuple (easting, northing) or
+                  list of tuples
+    :param distance: query threshold distance (in map units)
+    :param ttype: list of topology types (default of v.what are point, line,
+                  area, face)
+
+    :return: parsed list
     """
     if "LC_ALL" in os.environ:
         locale = os.environ["LC_ALL"]
@@ -338,16 +326,16 @@ def vector_what(map, coord, distance = 0.0, ttype = None):
         map_list = [map]
     else:
         map_list = map
-    
+
     layer_list = ['-1'] * len(map_list)
-    
+
     coord_list = list()
     if type(coord) is types.TupleType:
         coord_list.append('%f,%f' % (coord[0], coord[1]))
     else:
         for e, n in coord:
             coord_list.append('%f,%f' % (e, n))
-    
+
     cmdParams = dict(quiet      = True,
                      flags      = 'ag',
                      map        = ','.join(map_list),
@@ -359,14 +347,14 @@ def vector_what(map, coord, distance = 0.0, ttype = None):
 
     ret = read_command('v.what',
                        **cmdParams)
-    
+
     if "LC_ALL" in os.environ:
         os.environ["LC_ALL"] = locale
-        
+
     data = list()
     if not ret:
         return data
-    
+
     # parse `v.what -g` output is a nightmare
     # TODO: change `v.what -g` format or add parsable format (e.g. XML)
     dict_attrb = None
@@ -380,7 +368,7 @@ def vector_what(map, coord, distance = 0.0, ttype = None):
             continue
         if key in ('East', 'North'):
             continue
-        
+
         if key == 'Map':
             # attach the last one from the previous map
             if dict_map is not None:
@@ -388,7 +376,7 @@ def vector_what(map, coord, distance = 0.0, ttype = None):
                 if dict_layer is not None:
                     dict_main.update(dict_layer)
                 data.append(dict_main)
-            dict_map  = { key : value }
+            dict_map = {key : value}
             dict_layer = None
             dict_attrb = None
         elif key == 'Layer':
@@ -398,7 +386,7 @@ def vector_what(map, coord, distance = 0.0, ttype = None):
                     dict_main = copy.copy(dict_map)
                     dict_main.update(dict_layer)
                     data.append(dict_main)
-                dict_layer = { key: int(value) }
+                dict_layer = {key: int(value)}
                 dict_attrb = None
             else:
                 dict_attrb[key] = value
@@ -417,12 +405,12 @@ def vector_what(map, coord, distance = 0.0, ttype = None):
             dict_map[key] = value
             # TODO: there are some keys which has non-string values
             # examples: Sq_Meters, Hectares, Acres, Sq_Miles
-    
+
     # attach the last one
     if dict_map is not None:
         dict_main = copy.copy(dict_map)
         if dict_layer:
             dict_main.update(dict_layer)
         data.append(dict_main)
-    
+
     return data

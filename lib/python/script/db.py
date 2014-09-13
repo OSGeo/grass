@@ -18,8 +18,8 @@ This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Glynn Clements
-@author Martin Landa <landa.martin gmail.com>
+.. sectionauthor:: Glynn Clements
+.. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
 
 from core import *
@@ -30,8 +30,12 @@ def db_describe(table, **args):
     """Return the list of columns for a database table
     (interface to `db.describe -c'). Example:
 
-    >>> db_describe('firestations')  # doctest: +ELLIPSIS
+    >>> run_command('g.copy', vect='firestations,myfirestations')
+    0
+    >>> db_describe('myfirestations') # doctest: +ELLIPSIS
     {'nrows': 71, 'cols': [['cat', 'INTEGER', '20'], ... 'ncols': 22}
+    >>> run_command('g.remove', vect='myfirestations')
+    0
 
     :param str table: table name
     :param list args:
@@ -66,8 +70,12 @@ def db_table_exist(table, **args):
     If no driver or database are given, then default settings is used
     (check db_connection()).
 
-    >>> db_table_exist('firestations')
+    >>> run_command('g.copy', vect='firestations,myfirestations')
+    0
+    >>> db_table_exist('myfirestations')
     True
+    >>> run_command('g.remove', vect='myfirestations')
+    0
 
     :param str table: table name
     :param args:
@@ -104,12 +112,17 @@ def db_select(sql=None, filename=None, table=None, **args):
 
     Examples:
 
-    >>> db_select(sql = 'SELECT cat,CITY FROM firestations WHERE cat < 4')
-    (('1', 'Vet School'), ('2', 'West'), ('3', 'North'))
+    >>> run_command('g.copy', vect='firestations,myfirestations')
+    0
+    >>> db_select(sql = 'SELECT cat,CITY FROM myfirestations WHERE cat < 4')
+    (('1', 'Morrisville'), ('2', 'Morrisville'), ('3', 'Apex'))
 
-    Simplyfied usage (it performs <tt>SELECT * FROM busstopsall</tt>.)
+    Simplyfied usage (it performs <tt>SELECT * FROM myfirestations</tt>.)
 
-    >>> db_select(table = 'firestations')
+    >>> db_select(table = 'myfirestations') # doctest: +ELLIPSIS
+    (('1', '24', 'Morrisville #3', ... 'HS2A', '1.37'))
+    >>> run_command('g.remove', vect='myfirestations')
+    0
 
     :param str sql: SQL statement to perform (or None)
     :param str filename: name of file with SQL statements (or None)
@@ -149,14 +162,15 @@ def db_table_in_vector(table):
     """Return the name of vector connected to the table.
     It returns None if no vectors are connected to the table.
 
-    >>> db_table_in_vector('geology')
-    ['geology@PERMANENT']
-    >>> db_table_in_vector('geologies')
-
+    >>> run_command('g.copy', vect='firestations,myfirestations')
+    0
+    >>> db_table_in_vector('myfirestations')
+    ['myfirestations@user1']
+    >>> db_table_in_vector('mfirestations')
+    >>> run_command('g.remove', vect='myfirestations')
+    0
 
     :param str table: name of table to query
-
-
     """
     from vector import vector_db
     nuldev = file(os.devnull, 'w')

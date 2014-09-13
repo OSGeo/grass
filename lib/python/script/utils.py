@@ -1,25 +1,20 @@
-"""!@package grass.script.utils
-
-@brief GRASS Python scripting module (various useful functions)
-
+"""
 Useful functions to be used in Python scripts.
 
 Usage:
 
-@code
-from grass.script import utils as gutils
+::
 
-...
-@endcode
+    from grass.script import utils as gutils
 
 (C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Glynn Clements
-@author Martin Landa <landa.martin gmail.com>
-@author Anna Petrasova <kratochanna gmail.com>
+.. sectionauthor:: Glynn Clements
+.. sectionauthor:: Martin Landa <landa.martin gmail.com>
+.. sectionauthor:: Anna Petrasova <kratochanna gmail.com>
 """
 
 import os
@@ -28,22 +23,22 @@ import locale
 
 
 def float_or_dms(s):
-    """!Convert DMS to float.
+    """Convert DMS to float.
 
     >>> round(float_or_dms('26:45:30'), 5)
     26.75833
     >>> round(float_or_dms('26:0:0.1'), 5)
     26.00003
 
-    @param s DMS value
+    :param s: DMS value
 
-    @return float value
+    :return: float value
     """
     return sum(float(x) / 60 ** n for (n, x) in enumerate(s.split(':')))
 
 
 def separator(sep):
-    """!Returns separator from G_OPT_F_SEP appropriately converted
+    """Returns separator from G_OPT_F_SEP appropriately converted
     to character.
 
     >>> separator('pipe')
@@ -57,9 +52,9 @@ def separator(sep):
     >>> separator(', ')
     ', '
 
-    @param separator character or separator keyword
+    :param str separator: character or separator keyword
 
-    @return separator character
+    :return: separator character
     """
     if sep == "pipe":
         return "|"
@@ -75,12 +70,12 @@ def separator(sep):
 
 
 def diff_files(filename_a, filename_b):
-    """!Diffs two text files and returns difference.
+    """Diffs two text files and returns difference.
 
-    @param filename_a first file path
-    @param filename_b second file path
+    :param str filename_a: first file path
+    :param str filename_b: second file path
 
-    @return list of strings
+    :return: list of strings
     """
     import difflib
     differ = difflib.Differ()
@@ -92,10 +87,10 @@ def diff_files(filename_a, filename_b):
 
 
 def try_remove(path):
-    """!Attempt to remove a file; no exception is generated if the
+    """Attempt to remove a file; no exception is generated if the
     attempt fails.
 
-    @param path path to file to remove
+    :param str path: path to file to remove
     """
     try:
         os.remove(path)
@@ -104,10 +99,10 @@ def try_remove(path):
 
 
 def try_rmdir(path):
-    """!Attempt to remove a directory; no exception is generated if the
+    """Attempt to remove a directory; no exception is generated if the
     attempt fails.
 
-    @param path path to directory to remove
+    :param str path: path to directory to remove
     """
     try:
         os.rmdir(path)
@@ -116,11 +111,11 @@ def try_rmdir(path):
 
 
 def basename(path, ext=None):
-    """!Remove leading directory components and an optional extension
+    """Remove leading directory components and an optional extension
     from the specified path
 
-    @param path path
-    @param ext extension
+    :param str path: path
+    :param str ext: extension
     """
     name = os.path.basename(path)
     if not ext:
@@ -137,7 +132,6 @@ class KeyValue(dict):
     KeyValue is a subclass of dict, but also allows entries to be read and
     written using attribute syntax. Example:
 
-    \code
     >>> reg = KeyValue()
     >>> reg['north'] = 489
     >>> reg.north
@@ -145,8 +139,6 @@ class KeyValue(dict):
     >>> reg.south = 205
     >>> reg['south']
     205
-
-    \endcode
     """
 
     def __getattr__(self, key):
@@ -157,7 +149,7 @@ class KeyValue(dict):
 
 
 def parse_key_val(s, sep='=', dflt=None, val_type=None, vsep=None):
-    """!Parse a string into a dictionary, where entries are separated
+    """Parse a string into a dictionary, where entries are separated
     by newlines and the key and value are separated by `sep' (default: `=')
 
     >>> parse_key_val('min=20\\nmax=50') == {'min': '20', 'max': '50'}
@@ -166,13 +158,13 @@ def parse_key_val(s, sep='=', dflt=None, val_type=None, vsep=None):
     ...     val_type=float) == {'min': 20, 'max': 50}
     True
 
-    @param s string to be parsed
-    @param sep key/value separator
-    @param dflt default value to be used
-    @param val_type value type (None for no cast)
-    @param vsep vertical separator (default is Python 'universal newlines' approach)
+    :param str s: string to be parsed
+    :param str sep: key/value separator
+    :param dflt: default value to be used
+    :param val_type: value type (None for no cast)
+    :param vsep: vertical separator (default is Python 'universal newlines' approach)
 
-    @return parsed input (dictionary of keys/values)
+    :return: parsed input (dictionary of keys/values)
     """
     result = KeyValue()
 
@@ -205,6 +197,10 @@ def parse_key_val(s, sep='=', dflt=None, val_type=None, vsep=None):
 
 
 def decode(string):
+    """Decode string with defualt locale
+
+    :param str string: the string to decode
+    """
     enc = locale.getdefaultlocale()[1]
     if enc:
         return string.decode(enc)
@@ -213,6 +209,10 @@ def decode(string):
 
 
 def encode(string):
+    """Encode string with defualt locale
+
+    :param str string: the string to encode
+    """
     enc = locale.getdefaultlocale()[1]
     if enc:
         return string.encode(enc)
