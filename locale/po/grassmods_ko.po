@@ -22571,8 +22571,10 @@ msgstr ""
 
 #: ../display/d.path/select.c:125
 #, c-format
-msgid "Costs on the network = %f\n"
-msgstr ""
+msgid "%d of %d feature selected from vector map <%s>"
+msgid_plural "%d of %d features selected from vector map <%s>"
+msgstr[0] "벡터지도 <%3$s>에서 %2$d개 중 %1$d개의 피쳐를 선택했습니다"
+msgstr[1] "벡터지도 <%3$s>에서 %2$d개 중 %1$d개의 피쳐를 선택했습니다"
 
 #: ../display/d.path/select.c:126
 #, c-format
@@ -25794,9 +25796,11 @@ msgstr ""
 msgid "Unable to create 3D raster map <%s>"
 msgstr "출력할 격자지도"
 
-#: ../raster3d/r3.in.v5d/main.c:195
-msgid "Import 3-dimensional Vis5D files."
-msgstr ""
+#: ../vector/v.info/parse.c:30
+msgid ""
+"Print types/names of table columns for specified layer instead of info and "
+"exit"
+msgstr "정보 대신 지정한 레이어를 위한 표의 열형과 이름을 출력하고 멈춥니다"
 
 #: ../raster3d/r3.mask/main.c:74
 #, fuzzy
@@ -25816,7 +25820,12 @@ msgstr ""
 msgid "Unable to close 3D raster mask file"
 msgstr "출력할 격자지도"
 
-#: ../raster3d/r3.mask/main.c:118
+#: ../vector/v.info/print.c:134
+#, c-format
+msgid "Displaying column types/names for database connection of layer <%s>:"
+msgstr "레이어 <%s>의 데이타베이스 연결을 위한 열형과 이름을 출력합니다:"
+
+#: ../vector/v.info/print.c:142 ../vector/v.convert/att.c:68
 #, fuzzy, c-format
 msgid "Unable to close raster map <%s>"
 msgstr "출력할 격자지도"
