@@ -1,10 +1,55 @@
 <h2>DESCRIPTION</h2>
 
-TBD.
+<em>t.vect.import</em> imports a space time vector dataset archive that was 
+created with <a href="t.vect.export.html">t.vect.export</a>.
+Optionally a base map name can be provided to avoid overwriting vector maps  
+used in the space-time vector dataset archive.
+
+
+<h2>EXAMPLE</h2>
+In this example 5 vector maps are created and registered in a single space time 
+vector dataset named <em>random_locations</em>. Each vector map represents 
+random locations within the boundary of the state taken at 1 month intervals. 
+The space time dataset is then exported and re-imported.
+
+<div class="code"><pre>
+db.connect -d
+
+for i in `seq 1 5` ; do
+    v.random output=map_$i n=500 input=boundary_state@PERMANENT
+    echo map_$i >> map_list.txt
+done
+
+t.create type=stvds temporaltype=absolute \
+         output=random_locations \
+         title="Random locations" \
+         description="Vector test dataset with random locations"
+
+t.register -i type=vect input=random_locations \
+           file=map_list.txt start="2012-01-01" increment="1 months"
+
+t.vect.list random_locations
+
+t.vect.export input=random_locations output=random_locations.tar.gz \
+              compression=gzip
+
+t.vect.import input=random_locations.tar.gz output=new_random_locations \
+              base=new_map extrdir=/tmp
+
+t.vect.list new_random_locations
+id|name|layer|mapset|start_time|end_time
+new_map_1@user1|new_map_1|None|user1|2012-01-01 00:00:00|2012-02-01 00:00:00
+new_map_2@user1|new_map_2|None|user1|2012-02-01 00:00:00|2012-03-01 00:00:00
+new_map_3@user1|new_map_3|None|user1|2012-03-01 00:00:00|2012-04-01 00:00:00
+new_map_4@user1|new_map_4|None|user1|2012-04-01 00:00:00|2012-05-01 00:00:00
+new_map_5@user1|new_map_5|None|user1|2012-05-01 00:00:00|2012-06-01 00:00:00
+</pre>
+</div>
 
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="t.vect.export.html">t.vect.export</a>,
 <a href="t.create.html">t.create</a>,
 <a href="t.info.html">t.info</a>
 </em>

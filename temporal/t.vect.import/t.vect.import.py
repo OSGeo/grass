@@ -26,6 +26,15 @@
 #%option G_OPT_STVDS_OUTPUT
 #%end
 
+#%option
+#% key: basename
+#% type: string
+#% label: Basename of the new generated output maps
+#% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
+#% required: no
+#% multiple: no
+#%end
+
 #%option G_OPT_M_DIR
 #% key: extrdir
 #% description: Path to the extraction directory
@@ -83,14 +92,15 @@ def main():
     title = options["title"]
     descr = options["description"]
     location = options["location"]
+    base = options["basename"]
     exp = flags["e"]
     overr = flags["o"]
     create = flags["c"]
-    
+
     tgis.init()
 
     tgis.import_stds(input, output, extrdir, title, descr, location,
-                     None, exp, overr, create, "stvds")
+                     None, exp, overr, create, "stvds", base)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
