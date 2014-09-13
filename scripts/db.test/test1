@@ -13,7 +13,7 @@ select * from grass_test1
 2||xxx
 
 S
-select c1 from grass_test1 where d1 < 500 / 2 and i1 <> 2  and c1 ~ 'bc' 
+select c1 from grass_test1 where d1 < 500 / 2 and i1 <> 2  and c1 like '%bc%' 
 abcd
 
 X
@@ -33,5 +33,3 @@ select * from grass_test1
 
 X
 drop table grass_test1
-
-
