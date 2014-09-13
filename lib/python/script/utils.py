@@ -218,3 +218,20 @@ def encode(string):
         return string.encode(enc)
 
     return string
+
+
+def get_num_suffix(number, max_number):
+    """Returns formatted number with number of padding zeros
+    depending on maximum number, used for creating suffix for data series.
+    Does not include the suffix separator.
+
+    :param number: number to be formated as map suffix
+    :param max_number: maximum number of the series to get number of digits
+
+    >>> get_num_suffix(10, 1000)
+    '0010'
+    >>> get_num_suffix(10, 10)
+    '10'
+    """
+    return '{number:0{width}d}'.format(width=len(str(max_number)),
+                                       number=number)
