@@ -806,9 +806,6 @@
       <module-item name="r.viewshed">
         <label>Visibility</label>
       </module-item>
-      <module-item name="r.los">
-        <label>Visibility [DEPRECATED]</label>
-      </module-item>
       <module-item name="r.grow.distance">
         <label>Distance to features</label>
       </module-item>
