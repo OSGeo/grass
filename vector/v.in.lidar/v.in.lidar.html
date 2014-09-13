@@ -23,8 +23,13 @@ A LiDAR pulse can have multiple returns. The first return values can be
 used to obtain a digital surface model (DSM) where e.g. canopy cover is 
 represented. The last return values can be used to obtain a digital 
 terrain model (DTM) where e.g. the forest floor instead of canopy 
-cover is represented. The <b>filter</b> option allows to select one of 
+cover is represented. The <b>return_filter</b> option allows to select one of 
 first, mid, or last returns.
+<p>
+LiDAR points can be already classified into standardized classes. For example,
+class number 2 represents ground (for other classes see LAS format specification
+in references). The <b>class_filter</b> option allows to select one or more 
+classes, as numbers (integers) separated by comma.
 
 <h2>Location Creation</h2>
 
@@ -71,7 +76,7 @@ available at
 
 <h2>REFERENCES</h2>
 
-<a href="http://www.asprs.org/a/society/committees/standards/lidar_exchange_format.html">
+<a href="http://www.asprs.org/Committee-General/LASer-LAS-File-Format-Exchange-Activities.html">
 ASPRS LAS format</a><br>
 <a href="http://www.liblas.org/">LAS library</a> <br>
 <a href="http://test.liblas.org/doxygen/liblas_8h.htm">LAS library C API</a> documentation
