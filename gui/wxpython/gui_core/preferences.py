@@ -1467,9 +1467,9 @@ class PreferencesDialog(PreferencesBaseDialog):
         if size == None or size == 0: size = 11
         size = float(size)
         if type == None or type == '': type = 'Courier'
-        
-        outfont = wx.Font(size, wx.FONTFAMILY_MODERN, wx.NORMAL, 0, faceName = type)
-        
+
+        outfont = wx.Font(size, wx.FONTFAMILY_MODERN, wx.NORMAL, wx.FONTWEIGHT_NORMAL, faceName=type)
+
         fontdata = wx.FontData()
         fontdata.EnableEffects(True)
         fontdata.SetColour('black')
