@@ -1,10 +1,96 @@
 <h2>DESCRIPTION</h2>
 
-TBD.
+<p><em>t.vect.export</em> exports a space time vector dataset (<strong>stvds</strong>) to a tar archive as either GML (using v.out.ogr) or GRASS pack files. In addition to the pack or GML files, several metadata files are also created in the archive that describe the temporal layout. All time stamps are stored in the file "list.txt", for each map one row. The name of the map, the start time and the end time are written. In case of a time instance, the start time is equal to the end time. The "init.txt" file stores the temporal type, the number of maps, the chosen export format and some other metadata. The "proj.txt" file stores the projection information as a proj4 string of the location the space time vector dataset was exported from. The file "readme.txt" describes the file format. The output of v.info for each vector map in the space time dataset is stored in "metadata.txt".</p>
+
+<p>Gzip or bzip2 (default) compression can be specified with the <strong>compress</strong> option. Archives exported with <strong>t.vect.export</strong> can be imported with <strong>t.vect.import</strong>.</p>
+
+<h2>EXAMPLE</h2>
+In this example 5 vector maps are created and registered in a single space time vector dataset named <em>random_locations</em>. Each vector map represents random locations within the boundary of the state taken at 1 month intervals.
+<div class="code"><pre>
+db.connect -d
+
+for i in `seq 1 5` ; do
+    v.random output=map_$i n=500 input=boundary_state@PERMANENT
+    echo map_$i >> map_list.txt
+done
+
+t.create type=stvds temporaltype=absolute \
+         output=random_locations \
+         title="Random locations" \
+         description="Vector test dataset with random locations"
+
+t.register -i type=vect input=random_locations \
+           file=map_list.txt start="2012-01-01" increment="1 months"
+
+t.vect.export input=random_locations output=random_locations.tar
+
+tar xvf random_locations.tar
+map_1.xml
+map_1.xsd
+map_2.xml
+map_2.xsd
+map_3.xml
+map_3.xsd
+map_4.xml
+map_4.xsd
+map_5.xml
+map_5.xsd
+list.txt
+proj.txt
+init.txt
+readme.txt
+metadata.txt
+
+cat init.txt
+stds_type=stvds
+format=GML
+temporal_type=absolute
+semantic_type=mean
+number_of_maps=5
+north=258414.015442
+south=185016.401592
+east=678328.848292
+west=596711.453211
+
+cat proj.txt
++proj=lcc
++lat_1=36.16666666666666
++lat_2=34.33333333333334
++lat_0=33.75
++lon_0=-79
++x_0=609601.22
++y_0=0
++no_defs
++a=6378137
++rf=298.257222101
++towgs84=0.000,0.000,0.000
++to_meter=1
+
+cat list.txt
+map_1|2012-01-01 00:00:00|2012-02-01 00:00:00
+map_2|2012-02-01 00:00:00|2012-03-01 00:00:00
+map_3|2012-03-01 00:00:00|2012-04-01 00:00:00
+map_4|2012-04-01 00:00:00|2012-05-01 00:00:00
+map_5|2012-05-01 00:00:00|2012-06-01 00:00:00
+
+cat readme.txt
+This space time vector dataset was exported with t.vect.export of GRASS GIS 7
+
+Files:
+       *.xml  -- Vector GML files
+     proj.txt -- Projection information in PROJ.4 format
+     init.txt -- GRASS GIS space time vector dataset information
+     list.txt -- Time series file, lists all maps by name with interval
+                 time stamps in ISO-Format. Field separator is |
+ metadata.txt -- The output of t.info
+   readme.txt -- This file
+</pre></div>
+
 
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="t.vect.import.html">t.vect.import</a>,
 <a href="t.create.html">t.create</a>,
 <a href="t.info.html">t.info</a>
 </em>
