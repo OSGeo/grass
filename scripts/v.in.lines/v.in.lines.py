@@ -59,19 +59,6 @@ def main():
     tmp = grass.tempfile()
 
 
-    #### parse field separator
-    if fs in ('space', 'tab'):
-        fs = ' '
-    elif fs == 'comma':
-        fs = ','
-    else:
-        if len(fs) > 1:
-            grass.warning(_("Invalid field separator, using '%s'") % fs[0])
-        try:
-            fs = fs[0]
-        except IndexError:
-            grass.fatal(_("Invalid field separator '%s'") % fs)
-
     #### set up input file
     if options['input'] == '-':
         infile = None
