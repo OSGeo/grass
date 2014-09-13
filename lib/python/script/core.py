@@ -39,29 +39,28 @@ gettext.install('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale'))
 
 # subprocess wrapper that uses shell on Windows
 
-
 class Popen(subprocess.Popen):
+    _builtin_exts = set(['.com', '.exe', '.bat', '.cmd'])
 
-    def __init__(self, args, bufsize=0, executable=None,
-                 stdin=None, stdout=None, stderr=None,
-                 preexec_fn=None, close_fds=False, shell=None,
-                 cwd=None, env=None, universal_newlines=False,
-                 startupinfo=None, creationflags=0):
+    @staticmethod
+    def _escape_for_shell(arg):
+        # TODO: what are cmd.exe's parsing rules?
+        return arg
 
-        if shell == None:
-            shell = (sys.platform == "win32")
-        if sys.platform == "win32":
-            # get full path including file extension for scripts
-            fcmd = get_real_command(args[0]) 
-            if fcmd.endswith('.py'):
-                args[0] = fcmd
-                args.insert(0, sys.executable)
-        
-        subprocess.Popen.__init__(self, args, bufsize, executable,
-                                  stdin, stdout, stderr,
-                                  preexec_fn, close_fds, shell,
-                                  cwd, env, universal_newlines,
-                                  startupinfo, creationflags)
+    def __init__(self, args, **kwargs):
+        if ( sys.platform == 'win32'
+             and isinstance(args, list)
+             and not kwargs.get('shell', False)
+             and kwargs.get('executable') is None ):
+            cmd = shutil_which(args[0])
+            if cmd is None:
+                raise OSError
+            args = [cmd] + args[1:]
+            name, ext = os.path.splitext(cmd)
+            if ext.lower() not in self._builtin_exts:
+                kwargs['shell'] = True
+                args = [self._escape_for_shell(arg) for arg in args]
+        subprocess.Popen.__init__(self, args, **kwargs)
 
 PIPE = subprocess.PIPE
 STDOUT = subprocess.STDOUT
