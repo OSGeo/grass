@@ -30,11 +30,11 @@
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct Option *input, *output, *rows, *col, *use_opt, *val_opt,
+    struct Option *input, *output, *memory, *col, *use_opt, *val_opt,
 		  *field_opt, *type_opt, *where_opt, *cats_opt,
 	          *rgbcol_opt, *label_opt;
     struct Flag *dense_flag;
-    int nrows, use, value_type, type;
+    int cache_mb, use, value_type, type;
     double value;
     char *desc;
 
@@ -107,13 +107,14 @@ int main(int argc, char *argv[])
     val_opt->answer = "1";
     val_opt->description = _("Raster value (for use=val)");
     
-    rows = G_define_option();
-    rows->key = "rows";
-    rows->type = TYPE_INTEGER;
-    rows->required = NO;
-    rows->multiple = NO;
-    rows->answer = "4096";
-    rows->description = _("Number of rows to hold in memory");
+    memory = G_define_option();
+    memory->key = "memory";
+    memory->type = TYPE_INTEGER;
+    memory->required = NO;
+    memory->multiple = NO;
+    memory->answer = "300";
+    memory->label = _("Cache size (MiB)");
+    memory->description = _("Cache size for raster rows");
 
     dense_flag = G_define_flag();
     dense_flag->key = 'd';
@@ -125,7 +126,13 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     type = Vect_option_to_types(type_opt);
-    nrows = atoi(rows->answer);
+
+    cache_mb = atoi(memory->answer);
+    if (cache_mb < 1) {
+	G_warning(_("Cache size must be at least 1 MiB, canging %d to 1"),
+	          cache_mb);
+	cache_mb = 1;
+    }
 
     switch (use_opt->answer[0]) {
     case 'a':
@@ -160,7 +167,7 @@ int main(int argc, char *argv[])
     value_type = (strchr(val_opt->answer, '.')) ? USE_DCELL : USE_CELL;
 
     if (vect_to_rast(input->answer, output->answer, field_opt->answer,
-		     col->answer, nrows, use, value, value_type,
+		     col->answer, cache_mb, use, value, value_type,
 		     rgbcol_opt->answer, label_opt->answer, type,
 		     where_opt->answer, cats_opt->answer, dense_flag->answer)) {
 	exit(EXIT_FAILURE);

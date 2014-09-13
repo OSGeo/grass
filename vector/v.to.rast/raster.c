@@ -34,9 +34,10 @@ static int move(int, int);
 static int (*dot) (int, int);
 
 
-int begin_rasterization(int nrows, int f, int do_dense)
+int begin_rasterization(int cache_mb, int f, int do_dense)
 {
-    int i, size;
+    int i, size, nrows;
+    double row_mb;
     int pages;
 
     dense = (do_dense != 0);
@@ -46,12 +47,29 @@ int begin_rasterization(int nrows, int f, int do_dense)
 
     format = f;
 
+    G_get_set_window(&region);
+    G_get_set_window(&page);
+
+    switch (format) {
+    case USE_CELL:
+	row_mb = (double) region.cols * (sizeof(char) + sizeof(CELL)) /
+		 (1 << 20);
+	break;
+
+    case USE_DCELL:
+	row_mb = (double) region.cols * (sizeof(char) + sizeof(DCELL)) /
+	         (1 << 20);
+	dot = dcell_dot;
+	break;
+    }
+
+    nrows = cache_mb / row_mb;
+    if (nrows < 1)
+	nrows = 1;
+
     max_rows = nrows;
     if (max_rows <= 0)
 	max_rows = 512;
-
-    G_get_set_window(&region);
-    G_get_set_window(&page);
 
     pages = (region.rows + max_rows - 1) / max_rows;
 
@@ -61,8 +79,6 @@ int begin_rasterization(int nrows, int f, int do_dense)
     size = max_rows * region.cols;
     switch (format) {
     case USE_CELL:
-	G_important_message(_("Using at least %.1f GB of RAM (adjust with 'rows' parameter)"), 
-	    (double)region.rows * nrows * sizeof(CELL *) /1024 /1024 /1024);
 	raster.cell =
 	    (CELL **) G_calloc(max_rows * sizeof(char), sizeof(CELL *));
 	raster.cell[0] = (CELL *) G_calloc(size * sizeof(char), sizeof(CELL));
@@ -72,8 +88,6 @@ int begin_rasterization(int nrows, int f, int do_dense)
 	break;
 
     case USE_DCELL:
-	G_important_message(_("Using at least %.1f GB of RAM (adjust with 'rows' parameter)"),
-	    (double)region.rows * nrows * sizeof(DCELL *) /1024 /1024 /1024);
 	raster.dcell =
 	    (DCELL **) G_calloc(max_rows * sizeof(char), sizeof(DCELL *));
 	raster.dcell[0] =
