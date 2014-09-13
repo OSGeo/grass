@@ -232,6 +232,10 @@ class MapFrame(SingleMapFrame):
         self.dialogs['vnet'] = None
         self.dialogs['query'] = None
 
+        # initialize layers to query (d.what.vect/rast)
+        self._vectQueryLayers = []
+        self._rastQueryLayers = []
+
         self.measureController = None
 
     def GetMapWindow(self):
@@ -712,31 +716,35 @@ class MapFrame(SingleMapFrame):
         @param x,y coordinates
         @param layers selected tree item layers
         """
-        layers = self._giface.GetLayerList().GetSelectedLayers(checkedOnly=False)
-        rast = []
-        vect = []
-        for layer in layers:
-            name, found = GetLayerNameFromCmd(layer.cmd)
-            if not found:
-                continue
-            ltype = layer.maplayer.GetType()
-            if ltype == 'raster':
-                rast.append(name)
-            elif ltype in ('rgb', 'his'):
-                for iname in name.split('\n'):
-                    rast.append(iname)
-            elif ltype in ('vector', 'thememap', 'themechart'):
-                vect.append(name)
-        if vect:
-            # check for vector maps open to be edited
-            digitToolbar = self.GetToolbar('vdigit')
-            if digitToolbar:
-                lmap = digitToolbar.GetLayer().GetName()
-                for name in vect:
-                    if lmap == name:
-                        self._giface.WriteWarning(_("Vector map <%s> "
-                                                                  "opened for editing - skipped.") % lmap)
-                        vect.remove(name)
+        if self._vectQueryLayers or self._rastQueryLayers:
+            rast = self._rastQueryLayers
+            vect = self._vectQueryLayers
+        else:
+            layers = self._giface.GetLayerList().GetSelectedLayers(checkedOnly=False)
+            rast = []
+            vect = []
+            for layer in layers:
+                name, found = GetLayerNameFromCmd(layer.cmd)
+                if not found:
+                    continue
+                ltype = layer.maplayer.GetType()
+                if ltype == 'raster':
+                    rast.append(name)
+                elif ltype in ('rgb', 'his'):
+                    for iname in name.split('\n'):
+                        rast.append(iname)
+                elif ltype in ('vector', 'thememap', 'themechart'):
+                    vect.append(name)
+            if vect:
+                # check for vector maps open to be edited
+                digitToolbar = self.GetToolbar('vdigit')
+                if digitToolbar:
+                    lmap = digitToolbar.GetLayer().GetName()
+                    for name in vect:
+                        if lmap == name:
+                            self._giface.WriteWarning(_("Vector map <%s> "
+                                                                      "opened for editing - skipped.") % lmap)
+                            vect.remove(name)
 
         if not (rast + vect):
             GMessage(parent = self,
@@ -759,6 +767,15 @@ class MapFrame(SingleMapFrame):
                 self.MapWindow.QuerySurface(x, y)
             if vect:
                 self.QueryMap(east, north, qdist, rast = [], vect = vect)
+
+    def SetQueryLayersAndActivate(self, ltype, maps):
+        """!Activate query mode and set layers to query.
+        This method is used for querying in d.mon using d.what.rast/vect"""
+        self.toolbars['map'].SelectTool(self.toolbars['map'].query)
+        if ltype == 'vect':
+            self._vectQueryLayers = maps
+        elif ltype == 'rast':
+            self._rastQueryLayers = maps
 
     def QueryMap(self, east, north, qdist, rast, vect):
         """!Query raster or vector map layers by r/v.what
@@ -798,6 +815,8 @@ class MapFrame(SingleMapFrame):
 
     def _oncloseQueryDialog(self, event):
         self.dialogs['query'] = None
+        self._vectQueryLayers = []
+        self._rastQueryLayers = []
         event.Skip()
 
     def _onRedirectQueryOutput(self, output, style='log'):
