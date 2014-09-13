@@ -2302,7 +2302,7 @@ class GUI:
         # parse the interface decription
         try:
             global _blackList
-            self.grass_task = gtask.parse_interface(gcmd.GetRealCmd(cmd[0]),
+            self.grass_task = gtask.parse_interface(cmd[0],
                                                     blackList = _blackList)
         except (grass.ScriptError, ValueError) as e:
             raise gcmd.GException(e.value)
@@ -2463,7 +2463,7 @@ if __name__ == "__main__":
         from core.debug import Debug
         Debug.msg(1, "forms.py called using command: %s" % sys.argv[1])
         cmd = utils.split(sys.argv[1])
-        task = gtask.grassTask(gcmd.GetRealCmd(cmd[0]))
+        task = gtask.grassTask(cmd[0])
         task.set_options(cmd[1:])
         Debug.msg(1, "forms.py opening form for: %s" % task.get_cmd(ignoreErrors=True))
         app = GrassGUIApp(task)

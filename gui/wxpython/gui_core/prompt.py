@@ -32,7 +32,7 @@ from grass.pydispatch.signal import Signal
 
 from core          import globalvar
 from core          import utils
-from core.gcmd     import EncodeString, DecodeString, GetRealCmd
+from core.gcmd     import EncodeString, DecodeString
 from core.utils import _
 
 
@@ -260,7 +260,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
         
         if not self.cmdDesc or cmd != self.cmdDesc.get_name():
             try:
-                self.cmdDesc = gtask.parse_interface(GetRealCmd(cmd))
+                self.cmdDesc = gtask.parse_interface(cmd)
             except IOError:
                 self.cmdDesc = None
 
@@ -388,7 +388,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
             if cmd not in globalvar.grassCmd:
                 return
 
-            info = gtask.command_info(GetRealCmd(cmd))
+            info = gtask.command_info(cmd)
 
             self.CallTipSetBackground("#f4f4d1")
             self.CallTipSetForeground("BLACK")
@@ -575,7 +575,7 @@ class GPromptSTC(GPrompt, wx.stc.StyledTextCtrl):
                 if cmd in globalvar.grassCmd and \
                         (not self.cmdDesc or cmd != self.cmdDesc.get_name()):
                     try:
-                        self.cmdDesc = gtask.parse_interface(GetRealCmd(cmd))
+                        self.cmdDesc = gtask.parse_interface(cmd)
                     except IOError:
                         self.cmdDesc = None
             event.Skip()

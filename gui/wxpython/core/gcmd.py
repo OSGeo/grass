@@ -60,15 +60,6 @@ except IOError:
         return string
     _ = null_gettext
 
-def GetRealCmd(cmd):
-    """Return real command name - only for MS Windows
-    """
-#    if sys.platform == 'win32':
-#        for ext in globalvar.grassScripts.keys():
-#            if cmd in globalvar.grassScripts[ext]:
-#                return cmd + ext
-    
-    return cmd
 
 def DecodeString(string):
     """Decode string using system encoding
@@ -701,7 +692,7 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False,
     Debug.msg(2, "gcmd.RunCommand(): command started")
     start = time.time()
     
-    ps = grass.start_command(GetRealCmd(prog), flags, overwrite, quiet, verbose, **kwargs)
+    ps = grass.start_command(prog, flags, overwrite, quiet, verbose, **kwargs)
     
     if stdin:
         ps.stdin.write(stdin)
