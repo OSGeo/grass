@@ -59,7 +59,6 @@ SetCompressorDictSize 128
 
 !include "MUI2.nsh"
 !include "LogicLib.nsh"
-!include "FileAssociation.nsh"
 !include "Sections.nsh"
 
 ;----------------------------------------------------------------------------------------------------------------------------
@@ -633,10 +632,6 @@ Section "GRASS" SecGRASS
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "URLInfoAbout" "${WEB_SITE}"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "Publisher" "${PUBLISHER}"
         
-        ;File Association
-        ;${registerExtension} "$INSTALL_DIR\extrabin\pythonw.exe" ".py"  "Python File"
-        ;${registerExtension} "$INSTALL_DIR\extrabin\pythonw.exe" ".pyc" "Compiled Python File"
-        ;${registerExtension} "$INSTALL_DIR\extrabin\pythonw.exe" ".pyw" "Python File (no console)"
 
 	;Create the Desktop Shortcut
 	SetShellVarContext current
@@ -1104,10 +1099,6 @@ Section "Uninstall"
 	DeleteRegKey HKLM "Software\${GRASS_BASE}"
 	DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}"
 
-        ;File Association
-        ${unregisterExtension} ".py"  "Python File"
-        ${unregisterExtension} ".pyc" "Compiled Python File"
-        ${unregisterExtension} ".pyw" "Python File (no console)"
 SectionEnd
 
 ;--------------------------------------------------------------------------
