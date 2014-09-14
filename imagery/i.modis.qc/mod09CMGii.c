@@ -5,11 +5,11 @@
 
 #include <grass/raster.h>
 
-CELL mod09A1sb(CELL pixel) 
+CELL mod09CMGii(CELL pixel) 
 {
     CELL qctemp;
 
-    pixel >>= 2;
+    pixel >>= 8;
     qctemp = pixel & 0x01;
 
     return qctemp;
