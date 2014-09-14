@@ -17,7 +17,7 @@ us know your name and e-mail address so we can add your name.
 
 Active parts of the program have authors dating back to GRASS's
 inception in 1982. Please check the GRASS 1.x - 5.0 credits list at:
-http://grass.osgeo.org/devel/grasscredits.html
+ http://grass.osgeo.org/home/credits/
 
 
 GRASS 6.0 was made up of entirely new code for much of the vector and 
@@ -260,7 +260,7 @@ GRASS GIS 5.4 Author List
 -------------------------
 
 Please check additionally the GRASS 1.x-5.0 credits list at:
- http://grass.osgeo.org/devel/grasscredits.html
+ http://grass.osgeo.org/home/credits/
 
 While it is impossible for us to give credit to everyone (past 
 and present) who has contributed to GRASS, the following is the 
@@ -348,7 +348,7 @@ Former GRASS 4.2.0 development:
 Former GRASS 4 development (1984 to 1995):
    U.S. Army Construction Engineering Research Laboratories  (CERL)
    Jim Westervelt, Michael Shapiro, Chris Rewerts, Robert Lozar, David Gerdes, ...
-   See: http://grass.osgeo.org/devel/grasscredits.html
+   See: http://grass.osgeo.org/home/credits/
 
 Former Institutions
  - University of Illinois at Urbana-Champaign, USA
@@ -376,7 +376,6 @@ Contact:
  markus.neteler AT iasma.it
 
 Internet:  http://grass.osgeo.org/   (main site)
-           http://grass.ibiblio.org/ (mirror)
-           http://grass.osgeo.org/mirrors.php (list of mirrors)
+           http://grass.osgeo.org/mirrors/ (list of mirrors)
 
 with a worldwide distribution network.
