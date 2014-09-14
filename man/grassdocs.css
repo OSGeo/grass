@@ -1,4 +1,4 @@
-/* GRASS documentation site style sheet
+/* GRASS GIS documentation site style sheet
  *
  * send improvements to GRASS Developers list
  * 
@@ -14,7 +14,24 @@ body{
     background: white;
     color: black;
     font-family: arial,sans-serif;
-    width: 80%;
+}
+
+#container
+{
+    position: relative;
+    margin: 0 auto;
+    padding-left:  10px;
+    padding-right: 10px;
+    width: 700px;
+    background-color: white;
+    height:auto !important;
+    min-height: 100%;
+    border-style:solid;
+    border-bottom-width: 2px;
+    border-top-width: 2px;
+    border-left-width: 10px;
+    border-right-width: 10px;
+    border-color: #DDDDDD;
 }
 
 hr.header {
@@ -29,7 +46,8 @@ h1{
     color: rgb(25%, 60%, 25%);
     font-family: arial,sans-serif;
     font-weight: bold;
-    font-size: x-large;
+    font-size: xx-large;
+    width: 80%; /* avoid collision with toc */
 }
 
 h2{
@@ -37,7 +55,7 @@ h2{
     color: rgb(25%, 60%, 25%);
     font-family: arial,sans-serif;
     font-weight: bold;
-    font-size: large;
+    font-size: x-large;
 }
 
 h3{
@@ -54,6 +72,14 @@ h4{
     font-family: arial,sans-serif;
     font-weight: bold;
     font-size: medium;
+}
+
+a {
+    color: rgb(25%, 60%, 25%);
+}
+
+a:visited {
+    color: rgb(25%, 60%, 25%);
 }
 
 div.code{
@@ -104,7 +130,7 @@ td {
 }
 
 div.toc{
-    background-color: transparent;
+    /* background-color: transparent; */
     position: fixed;
     border: solid 1px rgb(25%, 60%, 25%);
     top: 5px;
@@ -112,19 +138,53 @@ div.toc{
     width: 17%;
     font-size: small;
     border-radius: 10px;
+    z-index: 1;
 }
 
 li.toc {
-   margin-left: -15px;
-   padding: 3px 3px; 3px; 3px;
+   margin-left: 0;
+   padding: 3px 3px 3px 3px;
+   padding-left: 0;
    color: rgb(25%, 60%, 25%);
 }
 
 ul.toc {
    margin-top: 3px;
    margin-bottom: 3px;
+   padding-left: 10%;
+   margin-left: 5%;
 }
 
 a.toc {
     text-decoration: none;
+}
+
+a.toc:hover, a.toc:active {
+    text-decoration: underline;
+}
+
+h4.toc {
+    padding-top: 3px;
+    margin-top: 3px;
+    padding-bottom: 3px;
+    margin-bottom: 3px;
+    padding-left: 6px;
+}
+
+/* show and hide toc */
+
+div.toc:hover ul {
+  display: block;
+}
+
+div.toc ul {
+  display: none;
+}
+
+div.toc:hover {
+  background-color: white;
+}
+
+div.toc {
+  background-color: rgba(255, 255, 255, 0.7);
 }

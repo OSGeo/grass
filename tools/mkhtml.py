@@ -36,6 +36,8 @@ header_base = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <link rel="stylesheet" href="grassdocs.css" type="text/css">
 </head>
 <body bgcolor="white">
+<div id="container">
+
 <a href="index.html"><img src="grass_logo.png" alt="GRASS logo"></a>
 <hr class="header">
 """
@@ -51,6 +53,7 @@ footer_index = string.Template(\
 """<hr class="header">
 <p><a href="index.html">Main index</a> | <a href="${INDEXNAME}.html">${INDEXNAMECAP} index</a> | <a href="topics.html">Topics index</a> | <a href="keywords.html">Keywords Index</a> | <a href="full_index.html">Full index</a></p>
 <p>&copy; 2003-${YEAR} <a href="http://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS ${GRASS_VERSION} Reference Manual</p>
+</div>
 </body>
 </html>
 """)
@@ -59,6 +62,7 @@ footer_noindex = string.Template(\
 """<hr class="header">
 <p><a href="index.html">Main index</a> | <a href="topics.html">Topics index</a> | <a href="keywords.html">Keywords Index</a> | <a href="full_index.html">Full index</a></p>
 <p>&copy; 2003-${YEAR} <a href="http://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS ${GRASS_VERSION} Reference Manual</p>
+</div>
 </body>
 </html>
 """)
@@ -133,6 +137,7 @@ def write_toc(data):
     
     fd = sys.stdout
     fd.write('<div class="toc">\n')
+    fd.write('<h4 class="toc">Table of contents</h4>\n')
     fd.write('<ul class="toc">\n')
     first = True
     has_h2 = False
