@@ -35,10 +35,10 @@ arrays.
 Note that since July 2004, all patents on the LZW compression patent have
 expired. Therefore the GIF format may now be used freely.
 
-Acknowledgements
-----------------
+Acknowledgements:
 
 Many thanks to Ant1 for:
+
 * noting the use of "palette=PIL.Image.ADAPTIVE", which significantly
   improves the results.
 * the modifications to save each image with its own palette, or optionally
@@ -56,8 +56,8 @@ This code is based on gifmaker (in the scripts folder of the source
 distribution of PIL)
 
 
-Usefull links
--------------
+Usefull links:
+
   * http://tronche.com/computer-graphics/gif/
   * http://en.wikipedia.org/wiki/Graphics_Interchange_Format
   * http://www.w3.org/Graphics/GIF/spec-gif89a.txt
@@ -225,8 +225,8 @@ class GifWriter:
         """Graphics Control Extension. A sort of header at the start of
         each image. Specifies duration and transparancy.
 
-        Dispose
-        -------
+        Dispose:
+
           * 0 - No disposal specified.
           * 1 - Do not dispose. The graphic is to be left in place.
           * 2 -	Restore to background color. The area used by the graphic
@@ -398,12 +398,12 @@ class GifWriter:
 
     def writeGifToFile(self, fp, images, durations, loops, xys, disposes):
         """ writeGifToFile(fp, images, durations, loops, xys, disposes)
-        
+
         Given a set of images writes the bytes to the specified stream.
         Requires different handling of palette for PIL and Pillow:
         based on https://github.com/rec/echomesh/blob/master/
         code/python/external/images2gif.py
-        
+
         """
 
         # Obtain palette for all images and count each occurance
@@ -476,44 +476,39 @@ class GifWriter:
         fp.write(";")  # end gif
         return frames
 
-## Exposed functions
+
 def writeGif(filename, images, duration=0.1, repeat=True, dither=False,
              nq=0, subRectangles=True, dispose=None):
     """Write an animated gif from the specified images.
 
-    Parameters
-    ----------
-    filename : string
-        The name of the file to write the image to.
-    images : list
-        Should be a list consisting of PIL images or numpy arrays.
-        The latter should be between 0 and 255 for integer types, and
-        between 0 and 1 for float types.
-    duration : scalar or list of scalars
-        The duration for all frames, or (if a list) for each frame.
-    repeat : bool or integer
-        The amount of loops. If True, loops infinitetely.
-    dither : bool
-        Whether to apply dithering
-    nq : integer
-        If nonzero, applies the NeuQuant quantization algorithm to create
-        the color palette. This algorithm is superior, but slower than
-        the standard PIL algorithm. The value of nq is the quality
-        parameter. 1 represents the best quality. 10 is in general a
-        good tradeoff between quality and speed. When using this option,
-        better results are usually obtained when subRectangles is False.
-    subRectangles : False, True, or a list of 2-element tuples
-        Whether to use sub-rectangles. If True, the minimal rectangle that
-        is required to update each frame is automatically detected. This
-        can give significant reductions in file size, particularly if only
-        a part of the image changes. One can also give a list of x-y
-        coordinates if you want to do the cropping yourself. The default
-        is True.
-    dispose : int
-        How to dispose each frame. 1 means that each frame is to be left
-        in place. 2 means the background color should be restored after
-        each frame. 3 means the decoder should restore the previous frame.
-        If subRectangles==False, the default is 2, otherwise it is 1.
+    :param str filename: the name of the file to write the image to.
+    :param list images: should be a list consisting of PIL images or numpy
+                        arrays. The latter should be between 0 and 255 for
+                        integer types, and between 0 and 1 for float types.
+    :param duration: scalar or list of scalars The duration for all frames, or
+                     (if a list) for each frame.
+    :param repeat: bool or integer The amount of loops. If True, loops infinitetely.
+    :param bool dither: whether to apply dithering
+    :param int nq: If nonzero, applies the NeuQuant quantization algorithm to
+                   create the color palette. This algorithm is superior, but
+                   slower than the standard PIL algorithm. The value of nq is
+                   the quality parameter. 1 represents the best quality. 10 is
+                   in general a good tradeoff between quality and speed. When
+                   using this option, better results are usually obtained when
+                   subRectangles is False.
+    :param subRectangles: False, True, or a list of 2-element tuples
+                          Whether to use sub-rectangles. If True, the minimal
+                          rectangle that is required to update each frame is
+                          automatically detected. This can give significant
+                          reductions in file size, particularly if only a part
+                          of the image changes. One can also give a list of x-y
+                          coordinates if you want to do the cropping yourself.
+                          The default is True.
+    :param int dispose: how to dispose each frame. 1 means that each frame is
+                        to be left in place. 2 means the background color
+                        should be restored after each frame. 3 means the
+                        decoder should restore the previous frame. If
+                        subRectangles==False, the default is 2, otherwise it is 1.
 
     """
 
@@ -636,8 +631,7 @@ class NeuQuant:
     See also:
     http://members.ozemail.com.au/~dekker/NEUQUANT.HTML
 
-    License of the NeuQuant Neural-Net Quantization Algorithm
-    ---------------------------------------------------------
+    **License of the NeuQuant Neural-Net Quantization Algorithm**
 
     Copyright (c) 1994 Anthony Dekker
     Ported to python by Marius van Voorden in 2010

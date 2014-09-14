@@ -48,6 +48,7 @@ def findfiles(dirpath, match=None):
 
 def findmaps(type, pattern=None, mapset='', location='', gisdbase=''):
     """Return a list of tuple contining the names of the:
+
         * map
         * mapset,
         * location,
@@ -118,17 +119,17 @@ def copy(existingmap, newmap, maptype, **kwargs):
 
 
 def getenv(env):
-    """Return the current grass environment variables ::
+    """Return the current grass environment variables
 
-        >>> getenv("MAPSET")
-        'user1'
+    >>> getenv("MAPSET")
+    'user1'
 
     """
     return libgis.G__getenv(env)
 
 
 def get_mapset_raster(mapname, mapset=''):
-    """Return the mapset of the raster map ::
+    """Return the mapset of the raster map
 
     >>> get_mapset_raster('elevation')
     'PERMANENT'
@@ -138,7 +139,7 @@ def get_mapset_raster(mapname, mapset=''):
 
 
 def get_mapset_vector(mapname, mapset=''):
-    """Return the mapset of the vector map ::
+    """Return the mapset of the vector map
 
     >>> get_mapset_vector('census')
     'PERMANENT'
@@ -148,7 +149,7 @@ def get_mapset_vector(mapname, mapset=''):
 
 
 def is_clean_name(name):
-    """Return if the name is valid ::
+    """Return if the name is valid
 
     >>> is_clean_name('census')
     True
@@ -166,13 +167,14 @@ def is_clean_name(name):
 
 
 def coor2pixel(coord, region):
-    """Convert coordinates into a pixel row and col ::
+    """Convert coordinates into a pixel row and col
 
-        >>> reg = Region()
-        >>> coor2pixel((reg.west, reg.north), reg)
-        (0.0, 0.0)
-        >>> coor2pixel((reg.east, reg.south), reg) == (reg.rows, reg.cols)
-        True
+    >>> reg = Region()
+    >>> coor2pixel((reg.west, reg.north), reg)
+    (0.0, 0.0)
+    >>> coor2pixel((reg.east, reg.south), reg) == (reg.rows, reg.cols)
+    True
+
     """
     (east, north) = coord
     return (libraster.Rast_northing_to_row(north, region.c_region),
@@ -180,13 +182,14 @@ def coor2pixel(coord, region):
 
 
 def pixel2coor(pixel, region):
-    """Convert row and col of a pixel into a coordinates ::
+    """Convert row and col of a pixel into a coordinates
 
-        >>> reg = Region()
-        >>> pixel2coor((0, 0), reg) == (reg.north, reg.west)
-        True
-        >>> pixel2coor((reg.cols, reg.rows), reg) == (reg.south, reg.east)
-        True
+    >>> reg = Region()
+    >>> pixel2coor((0, 0), reg) == (reg.north, reg.west)
+    True
+    >>> pixel2coor((reg.cols, reg.rows), reg) == (reg.south, reg.east)
+    True
+
     """
     (col, row) = pixel
     return (libraster.Rast_row_to_northing(row, region.c_region),
@@ -196,37 +199,33 @@ def pixel2coor(pixel, region):
 def get_raster_for_points(poi_vector, raster, column=None):
     """Query a raster map for each point feature of a vector
 
-    Example ::
+    Example
 
-        >>> from grass.pygrass.vector import VectorTopo
-        >>> from grass.pygrass.raster import RasterRow
-        >>> ele = RasterRow('elevation')
-        >>> copy('schools','myschools','vect')
-        >>> sch = VectorTopo('myschools')
-        >>> sch.open()
-        >>> get_raster_for_points(sch, ele)               # doctest: +ELLIPSIS
-        [(1, 633649.2856743174, 221412.94434781274, 145.06602)...
-        >>> sch.table.columns.add('elevation','double precision')
-        >>> 'elevation' in sch.table.columns
-        True
-        >>> get_raster_for_points(sch, ele, 'elevation')
-        True
-        >>> sch.table.filters.select('NAMESHORT','elevation')
-        Filters(u'SELECT NAMESHORT, elevation FROM myschools;')
-        >>> cur = sch.table.execute()
-        >>> cur.fetchall()                                # doctest: +ELLIPSIS
-        [(u'SWIFT CREEK', 145.06602), ... (u'9TH GRADE CTR', None)]
-        >>> remove('myschools','vect')
+    >>> from grass.pygrass.vector import VectorTopo
+    >>> from grass.pygrass.raster import RasterRow
+    >>> ele = RasterRow('elevation')
+    >>> copy('schools','myschools','vect')
+    >>> sch = VectorTopo('myschools')
+    >>> sch.open()
+    >>> get_raster_for_points(sch, ele)               # doctest: +ELLIPSIS
+    [(1, 633649.2856743174, 221412.94434781274, 145.06602)...
+    >>> sch.table.columns.add('elevation','double precision')
+    >>> 'elevation' in sch.table.columns
+    True
+    >>> get_raster_for_points(sch, ele, 'elevation')
+    True
+    >>> sch.table.filters.select('NAMESHORT','elevation')
+    Filters(u'SELECT NAMESHORT, elevation FROM myschools;')
+    >>> cur = sch.table.execute()
+    >>> cur.fetchall()                                # doctest: +ELLIPSIS
+    [(u'SWIFT CREEK', 145.06602), ... (u'9TH GRADE CTR', None)]
+    >>> remove('myschools','vect')
 
 
-    Parameters
-    -------------
+    :param point: point vector object
+    :param raster: raster object
+    :param str column: column name to update
 
-    point: point vector object
-
-    raster: raster object
-
-    column: column name to update
     """
     from math import isnan
     if not column:
@@ -268,9 +267,9 @@ def r_export(rast, output='', fmt='png', **kargs):
 
 
 def get_lib_path(modname, libname):
-    """Return the path of the libname contained in the module. ::
+    """Return the path of the libname contained in the module.
 
-        >>> get_lib_path(modname='r.modis', libname='libmodis')
+    >>> get_lib_path(modname='r.modis', libname='libmodis')
     """
     from os.path import isdir, join
     from os import getenv
@@ -337,9 +336,6 @@ def table_exist(cursor, table_name):
 def docstring_property(class_doc):
     """Property attribute for docstrings.
     Took from: https://gist.github.com/bfroehle/4041015
-
-    Usage
-    -----
 
     >>> class A(object):
     ...     '''Main docstring'''

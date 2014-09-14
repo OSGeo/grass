@@ -36,39 +36,39 @@ class AbstractFinder(object):
 
 class PointFinder(AbstractFinder):
     """PointFinder
-    ------------------
-    Find the geomtry features of a vector map that are close to a point. ::
 
-        >>> from grass.pygrass.vector import VectorTopo
-        >>> zipcodes = VectorTopo('zipcodes', 'PERMANENT')
-        >>> schools = VectorTopo('schools', 'PERMANENT')
-        >>> zipcodes.open('r')
-        >>> schools.open('r')
-        >>> result = []
-        >>> for school in schools:
-        ...     zipcode = zipcodes.find['by_point'].area(school)
-        ...     result.append((school.attrs['NAMESHORT'],
-        ...                    zipcode.attrs['ZIPCODE']))
-        ...
-        >>> result[0]
-        (u'SWIFT CREEK', u'RALEIGH 27606')
-        >>> result[1]
-        (u'BRIARCLIFF', u'CARY 27511')
-        >>> result[2]
-        (u'FARMINGTON WOODS', u'CARY 27511')
-        >>> from grass.pygrass.vector.geometry import Point
-        >>> pnt = Point(631213.349291, 224684.900084)
-        >>> school = schools.find['by_point'].geo(pnt, maxdist=300.)
-        >>> school.attrs['NAMELONG']
-        u'ADAMS ELEMENTARY'
-        >>> for school in schools.find['by_point'].geos(pnt, maxdist=1000.):
-        ...     print school.attrs['NAMELONG']
-        ...
-        CARY HIGH
-        EAST CARY MIDDLE SITE
-        ADAMS ELEMENTARY
-        >>> schools.close()
-        >>> zipcodes.close()
+    Find the geomtry features of a vector map that are close to a point.
+
+    >>> from grass.pygrass.vector import VectorTopo
+    >>> zipcodes = VectorTopo('zipcodes', 'PERMANENT')
+    >>> schools = VectorTopo('schools', 'PERMANENT')
+    >>> zipcodes.open('r')
+    >>> schools.open('r')
+    >>> result = []
+    >>> for school in schools:
+    ...     zipcode = zipcodes.find['by_point'].area(school)
+    ...     result.append((school.attrs['NAMESHORT'],
+    ...                    zipcode.attrs['ZIPCODE']))
+    ...
+    >>> result[0]
+    (u'SWIFT CREEK', u'RALEIGH 27606')
+    >>> result[1]
+    (u'BRIARCLIFF', u'CARY 27511')
+    >>> result[2]
+    (u'FARMINGTON WOODS', u'CARY 27511')
+    >>> from grass.pygrass.vector.geometry import Point
+    >>> pnt = Point(631213.349291, 224684.900084)
+    >>> school = schools.find['by_point'].geo(pnt, maxdist=300.)
+    >>> school.attrs['NAMELONG']
+    u'ADAMS ELEMENTARY'
+    >>> for school in schools.find['by_point'].geos(pnt, maxdist=1000.):
+    ...     print school.attrs['NAMELONG']
+    ...
+    CARY HIGH
+    EAST CARY MIDDLE SITE
+    ADAMS ELEMENTARY
+    >>> schools.close()
+    >>> zipcodes.close()
     """
     def __init__(self, c_mapinfo, table=None, writable=False):
         """Find geometry feature around a point.

@@ -40,6 +40,7 @@ from grass.pygrass.raster.rowio import RowIO
 class RasterRow(RasterAbstractBase):
     """Raster_row_access": Inherits: "Raster_abstract_base" and implements
     the default row access of the Rast library.
+
         * Implements row access using row id
         * The get_row() method must accept a Row object as argument that will
           be used for value storage, so no new buffer will be allocated
@@ -53,58 +54,57 @@ class RasterRow(RasterAbstractBase):
           object (only for rows), since r.mapcalc is more sophisticated and
           faster
 
-    Examples
-    --------
+    Examples:
 
-        >>> elev = RasterRow('elevation')
-        >>> elev.exist()
-        True
-        >>> elev.is_open()
-        False
-        >>> elev.open()
-        >>> elev.is_open()
-        True
-        >>> elev.has_cats()
-        False
-        >>> elev.mode
-        u'r'
-        >>> elev.mtype
-        'FCELL'
-        >>> elev.num_cats()
-        0
-        >>> elev.info.range
-        (56, 156)
-        >>> elev.info
-        elevation@
-        rows: 1350
-        cols: 1500
-        north: 228500.0 south: 215000.0 nsres:10.0
-        east:  645000.0 west: 630000.0 ewres:10.0
-        range: 56, 156
-        proj: 99
-        <BLANKLINE>
+    >>> elev = RasterRow('elevation')
+    >>> elev.exist()
+    True
+    >>> elev.is_open()
+    False
+    >>> elev.open()
+    >>> elev.is_open()
+    True
+    >>> elev.has_cats()
+    False
+    >>> elev.mode
+    u'r'
+    >>> elev.mtype
+    'FCELL'
+    >>> elev.num_cats()
+    0
+    >>> elev.info.range
+    (56, 156)
+    >>> elev.info
+    elevation@
+    rows: 1350
+    cols: 1500
+    north: 228500.0 south: 215000.0 nsres:10.0
+    east:  645000.0 west: 630000.0 ewres:10.0
+    range: 56, 156
+    proj: 99
+    <BLANKLINE>
 
     Each Raster map have an attribute call ``cats`` that allow user
-    to interact with the raster categories. ::
+    to interact with the raster categories.
 
-        >>> land = RasterRow('geology')
-        >>> land.open()
-        >>> land.cats               # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
-        [('Zml', 1, None),
-         ...
-         ('Tpyw', 1832, None)]
+    >>> land = RasterRow('geology')
+    >>> land.open()
+    >>> land.cats               # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+    [('Zml', 1, None),
+     ...
+     ('Tpyw', 1832, None)]
 
-    Open a raster map using the *with statement*: ::
+    Open a raster map using the *with statement*:
 
-        >>> with RasterRow('elevation') as elev:
-        ...     for row in elev[:3]:
-        ...         row[:4]
-        ...
-        Buffer([ 141.99613953,  141.27848816,  141.37904358,  142.29821777], dtype=float32)
-        Buffer([ 142.90461731,  142.39450073,  142.68611145,  143.59086609], dtype=float32)
-        Buffer([ 143.81854248,  143.54707336,  143.83972168,  144.59527588], dtype=float32)
-        >>> elev.is_open()
-        False
+    >>> with RasterRow('elevation') as elev:
+    ...     for row in elev[:3]:
+    ...         row[:4]
+    ...
+    Buffer([ 141.99613953,  141.27848816,  141.37904358,  142.29821777], dtype=float32)
+    Buffer([ 142.90461731,  142.39450073,  142.68611145,  143.59086609], dtype=float32)
+    Buffer([ 143.81854248,  143.54707336,  143.83972168,  144.59527588], dtype=float32)
+    >>> elev.is_open()
+    False
 
     """
     def __init__(self, name, mapset='', *args, **kargs):
@@ -148,24 +148,23 @@ class RasterRow(RasterAbstractBase):
     def open(self, mode=None, mtype=None, overwrite=None):
         """Open the raster if exist or created a new one.
 
-        :param mode: Specify if the map will be open with read or write mode
+        :param str mode: Specify if the map will be open with read or write mode
                      ('r', 'w')
-        :type mode: str
-        :param type: If a new map is open, specify the type of the map(`CELL`,
+        :param str type: If a new map is open, specify the type of the map(`CELL`,
                      `FCELL`, `DCELL`)
-        :type type: str
-        :param overwrite: Use this flag to set the overwrite mode of existing
+        :param bool overwrite: Use this flag to set the overwrite mode of existing
                           raster maps
-        :type overwrite: bool
-
 
         if the map already exist, automatically check the type and set:
+
             * self.mtype
 
         Set all the privite, attributes:
+
             * self._fd;
             * self._gtype
             * self._rows and self._cols
+
         """
         self.mode = mode if mode else self.mode
         self.mtype = mtype if mtype else self.mtype
@@ -262,6 +261,7 @@ class RasterRowIO(RasterRow):
 class RasterSegment(RasterAbstractBase):
     """Raster_segment_access": Inherits "Raster_abstract_base" and uses the
     segment library for cached randomly reading and writing access.
+
         * Implements the [row][col] operator for read and write access using
           segement_get() and segment_put() functions internally
         * Implements row read and write access with the [row] operator using
@@ -274,6 +274,7 @@ class RasterSegment(RasterAbstractBase):
         * No mathematical operation like __add__ and stuff for the Raster
           object (only for rows), since r.mapcalc is more sophisticated and
           faster
+
     """
     def __init__(self, name, srows=64, scols=64, maxmem=100,
                  *args, **kargs):
@@ -475,6 +476,7 @@ class RasterNumpy(np.memmap, RasterAbstractBase):
     """Raster_cached_narray": Inherits "Raster_abstract_base" and
     "numpy.memmap". Its purpose is to allow numpy narray like access to
     raster maps without loading the map into the main memory.
+
     * Behaves like a numpy array and supports all kind of mathematical
       operations: __add__, ...
     * Overrides the open and close methods
@@ -593,8 +595,8 @@ class RasterNumpy(np.memmap, RasterAbstractBase):
     def _read(self):
         """!Read raster map into array
 
-        @return 0 on success
-        @return non-zero code on failure
+        :return: 0 on success
+        :return: non-zero code on failure
         """
         with RasterRow(self.name, self.mapset, mode='r') as rst:
             buff = rst[0]

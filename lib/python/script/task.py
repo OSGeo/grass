@@ -30,16 +30,14 @@ from core import *
 
 
 class grassTask:
-    """This class holds the structures needed for filling by the
-    parser
+    """This class holds the structures needed for filling by the parser
 
     Parameter blackList is a dictionary with fixed structure, eg.
 
     ::
 
-    blackList = {'items' : {'d.legend' : { 'flags' : ['m'], 'params' : [] }},
-                 'enabled': True}
-
+        blackList = {'items' : {'d.legend' : { 'flags' : ['m'], 'params' : [] }},
+                     'enabled': True}
 
     :param str path: full path
     :param blackList: hide some options in the GUI (dictionary)

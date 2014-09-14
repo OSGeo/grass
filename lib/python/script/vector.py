@@ -28,7 +28,7 @@ from core import *
 
 def vector_db(map, **args):
     """Return the database connection details for a vector map
-    (interface to `v.db.connect -g'). Example:
+    (interface to `v.db.connect -g`). Example:
 
     >>> vector_db('geology') # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
     {1: {'layer': 1, ... 'table': 'geology'}}
@@ -87,8 +87,7 @@ def vector_layer_db(map, layer):
 
 def vector_columns(map, layer=None, getDict=True, **args):
     """Return a dictionary (or a list) of the columns for the
-    database table connected to a vector map (interface to `v.info
-    -c').
+    database table connected to a vector map (interface to `v.info -c`).
 
     >>> vector_columns('geology', getDict=True) # doctest: +NORMALIZE_WHITESPACE
     {'PERIMETER': {'index': 2, 'type': 'DOUBLE PRECISION'}, 'GEOL250_':
@@ -136,7 +135,7 @@ def vector_columns(map, layer=None, getDict=True, **args):
 
 def vector_history(map):
     """Set the command history for a vector map to the command used to
-    invoke the script (interface to `v.support').
+    invoke the script (interface to `v.support`).
 
     :param str map: mapname
 
@@ -146,8 +145,8 @@ def vector_history(map):
 
 
 def vector_info_topo(map):
-    """Return information about a vector map (interface to `v.info
-    -t'). Example:
+    """Return information about a vector map (interface to `v.info -t`).
+    Example:
 
     >>> vector_info_topo('geology') # doctest: +NORMALIZE_WHITESPACE
     {'lines': 0, 'centroids': 1832, 'boundaries': 3649, 'points': 0,
@@ -168,7 +167,7 @@ def vector_info_topo(map):
 
 def vector_info(map):
     """Return information about a vector map (interface to
-    `v.info'). Example:
+    `v.info`). Example:
 
     >>> vector_info('geology') # doctest: +ELLIPSIS, +NORMALIZE_WHITESPACE
     {'comment': '', 'projection': 'Lambert Conformal Conic' ... 'south': 10875.8272320917}

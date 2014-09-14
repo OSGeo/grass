@@ -297,11 +297,9 @@ class Category(list):
             0.5:1.0:road
             1.0:1.5:urban
 
-        :param filename: the name of file with categories rules
-        :type filename: str
-        :param sep: the separator used to divide values and category
-        :type sep: str
-        ..
+        :param str filename: the name of file with categories rules
+        :param str sep: the separator used to divide values and category
+
         """
         self.reset()
         with open(filename, 'r') as f:
@@ -329,11 +327,8 @@ class Category(list):
             0.5:1.0:road
             1.0:1.5:urban
 
-        :param filename: the name of file with categories rules
-        :type filename: str
-        :param sep: the separator used to divide values and category
-        :type sep: str
-        ..
+        :param str filename: the name of file with categories rules
+        :param str sep: the separator used to divide values and category
         """
         with open(filename, 'w') as f:
             cats = []

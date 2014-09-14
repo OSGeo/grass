@@ -55,6 +55,7 @@ require a third party library (because encoding JPEG is much harder).
 This module requires Python 2.x and numpy.
 
 sources and tools:
+
 - SWF on wikipedia
 - Adobes "SWF File Format Specification" version 10
   (http://www.adobe.com/devnet/swf/pdf/swf_file_format_spec_v10.pdf)

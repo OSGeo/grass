@@ -1,7 +1,4 @@
-"""@package grass.script.raster
-
-@brief GRASS Python scripting module (raster functions)
-
+"""
 Raster related functions to be used in Python scripts.
 
 Usage:
@@ -32,7 +29,7 @@ from utils import float_or_dms, parse_key_val
 
 def raster_history(map):
     """Set the command history for a raster map to the command used to
-    invoke the script (interface to `r.support').
+    invoke the script (interface to `r.support`).
 
     :param str map: map name
 
@@ -52,7 +49,7 @@ def raster_history(map):
 
 def raster_info(map):
     """Return information about a raster map (interface to
-    `r.info -gre'). Example:
+    `r.info -gre`). Example:
 
     >>> raster_info('elevation') # doctest: +ELLIPSIS
     {'creator': '"helena"', 'cols': '1500' ... 'south': 215000.0}
