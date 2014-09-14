@@ -60,6 +60,7 @@ SetCompressorDictSize 128
 !include "MUI2.nsh"
 !include "LogicLib.nsh"
 !include "FileAssociation.nsh"
+!include "Sections.nsh"
 
 ;----------------------------------------------------------------------------------------------------------------------------
 
@@ -942,10 +943,6 @@ Function DownloadInstallMSRuntime
 	ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2008_x86.exe" /q'	
 	ExecWait '"$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\vcredist_2010_x86.exe" /q'
 	CopyFiles "$TEMP\$ORIGINAL_UNTAR_FOLDER\bin\*.dll" "$INSTALL_DIR\extrabin"
-	Delete "$TEMP\$ARCHIVE_NAME"
-	RMDir /r "$TEMP\$ORIGINAL_UNTAR_FOLDER"
-	;the following doesn't work. Maybe because the installer is still running?
-	RMDir "$TEMP\$ORIGINAL_UNTAR_FOLDER"
 	Goto end
 	
 	download_failed:
@@ -1067,6 +1064,17 @@ Section /O "South Dakota (Spearfish County) Data Set" SecSpearfishSDB
 	Call DownloadDataSet
 
 SectionEnd
+
+;--------------------------------------------------------------------------
+;Clean downloaded MS runtime files  by .onInstSuccess
+
+Function .onInstSuccess
+	${If} ${SectionIsSelected} ${SecMSRuntime}
+		Delete "$TEMP\$ARCHIVE_NAME"
+		RMDir /r "$TEMP\$ORIGINAL_UNTAR_FOLDER"
+		RMDir "$TEMP\$ORIGINAL_UNTAR_FOLDER"	
+	${EndIf}
+FunctionEnd
 
 ;--------------------------------------------------------------------------
 
