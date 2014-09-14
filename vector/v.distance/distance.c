@@ -78,10 +78,12 @@ int line2line(struct line_pnts *FPoints, int ftype,
     *ty = TPoints->y[0];
     *tz = TPoints->z[0];
 
+    tmp_z = 0;
+
     /* point -> point */
     if ((ftype & GV_POINTS) && (ttype & GV_POINTS)) {
 	Vect_line_distance(TPoints, FPoints->x[0], FPoints->y[0],
-			   FPoints->z[0], with_z, tx, ty,tz, dist, 
+			   FPoints->z[0], with_z, tx, ty, tz, dist, 
 			   NULL, talong);
     }
 
