@@ -489,6 +489,7 @@ class TestCase(unittest.TestCase):
         Or in command line, use ``md5sum`` command if available:
 
         .. code-block:: sh
+
             md5sum some_file.txt
 
         Finaly, you can use Python ``hashlib`` to obtain MD5::
@@ -955,7 +956,7 @@ class TestCase(unittest.TestCase):
                                     errors=errors)
         # TODO: use this also in assert and apply when appropriate
         if expecting_stdout and not module.outputs.stdout.strip():
-            
+
             if module.outputs.stderr:
                 errors = " The errors are:\n" + module.outputs.stderr
             else:

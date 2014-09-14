@@ -1,7 +1,4 @@
-"""@package grass.script.db
-
-@brief GRASS Python scripting module (database functions)
-
+"""
 Database related functions to be used in Python scripts.
 
 Usage:
@@ -28,7 +25,7 @@ from utils import try_remove
 
 def db_describe(table, **args):
     """Return the list of columns for a database table
-    (interface to `db.describe -c'). Example:
+    (interface to `db.describe -c`). Example:
 
     >>> run_command('g.copy', vect='firestations,myfirestations')
     0
@@ -94,7 +91,7 @@ def db_table_exist(table, **args):
 
 def db_connection():
     """Return the current database connection parameters
-    (interface to `db.connect -g'). Example:
+    (interface to `db.connect -g`). Example:
 
     >>> db_connection()
     {'group': '', 'schema': '', 'driver': 'sqlite', 'database': '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'}

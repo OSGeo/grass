@@ -150,7 +150,7 @@ class KeyValue(dict):
 
 def parse_key_val(s, sep='=', dflt=None, val_type=None, vsep=None):
     """Parse a string into a dictionary, where entries are separated
-    by newlines and the key and value are separated by `sep' (default: `=')
+    by newlines and the key and value are separated by `sep` (default: `=`)
 
     >>> parse_key_val('min=20\\nmax=50') == {'min': '20', 'max': '50'}
     True

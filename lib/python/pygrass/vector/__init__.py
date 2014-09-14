@@ -471,32 +471,30 @@ class VectorTopo(Vector):
     def read(self, feature_id):
         """Return a geometry object given the feature id.
 
-            :param feature_id: the id of feature to obtain
-            :type feature_id: int
+        :param int feature_id: the id of feature to obtain
 
-
-            >>> cens = VectorTopo('census')
-            >>> cens.open(mode='r')
-            >>> feature1 = cens.read(0)                     #doctest: +ELLIPSIS
-            Traceback (most recent call last):
-                ...
-            ValueError: The index must be >0, 0 given.
-            >>> feature1 = cens.read(1)
-            >>> feature1
-            Boundary(v_id=1)
-            >>> feature1.length()
-            444.54490917696944
-            >>> cens.read(-1)
-            Centoid(642963.159711, 214994.016279)
-            >>> len(cens)
-            8920
-            >>> cens.read(8920)
-            Centoid(642963.159711, 214994.016279)
-            >>> cens.read(8921)                             #doctest: +ELLIPSIS
-            Traceback (most recent call last):
-              ...
-            IndexError: Index out of range
-            >>> cens.close()
+        >>> cens = VectorTopo('census')
+        >>> cens.open(mode='r')
+        >>> feature1 = cens.read(0)                     #doctest: +ELLIPSIS
+        Traceback (most recent call last):
+            ...
+        ValueError: The index must be >0, 0 given.
+        >>> feature1 = cens.read(1)
+        >>> feature1
+        Boundary(v_id=1)
+        >>> feature1.length()
+        444.54490917696944
+        >>> cens.read(-1)
+        Centoid(642963.159711, 214994.016279)
+        >>> len(cens)
+        8920
+        >>> cens.read(8920)
+        Centoid(642963.159711, 214994.016279)
+        >>> cens.read(8921)                             #doctest: +ELLIPSIS
+        Traceback (most recent call last):
+          ...
+        IndexError: Index out of range
+        >>> cens.close()
 
         """
         return read_line(feature_id, self.c_mapinfo, self.table, self.writable,

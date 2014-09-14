@@ -167,6 +167,7 @@ class Info(object):
 class RasterAbstractBase(object):
     """Raster_abstract_base: The base class from which all sub-classes
     inherit. It does not implement any row or map access methods:
+
     * Implements raster metadata information access (Type, ...)
     * Implements an open method that will be overwritten by the sub-classes
     * Implements the close method that might be overwritten by sub-classes
@@ -174,18 +175,19 @@ class RasterAbstractBase(object):
     * Implements get and set region methods
     * Implements color, history and category handling
     * Renaming, deletion, ...
+
     """
     def __init__(self, name, mapset="", *aopen, **kwopen):
         """The constructor need at least the name of the map
-        *optional* field is the `mapset`. ::
+        *optional* field is the `mapset`.
 
-            >>> ele = RasterAbstractBase('elevation')
-            >>> ele.name
-            u'elevation'
-            >>> ele.exist()
-            True
-            >>> ele.mapset
-            'PERMANENT'
+        >>> ele = RasterAbstractBase('elevation')
+        >>> ele.name
+        u'elevation'
+        >>> ele.exist()
+        True
+        >>> ele.mapset
+        'PERMANENT'
 
         ..
         """
@@ -320,11 +322,11 @@ class RasterAbstractBase(object):
         """Return True if the map already exist, and
         set the mapset if were not set.
 
-        call the C function `G_find_raster`. ::
+        call the C function `G_find_raster`.
 
-            >>> ele = RasterAbstractBase('elevation')
-            >>> ele.exist()
-            True
+        >>> ele = RasterAbstractBase('elevation')
+        >>> ele.exist()
+        True
         """
         if self.name:
             if self.mapset == '':
@@ -336,11 +338,11 @@ class RasterAbstractBase(object):
             return False
 
     def is_open(self):
-        """Return True if the map is open False otherwise. ::
+        """Return True if the map is open False otherwise.
 
-            >>> ele = RasterAbstractBase('elevation')
-            >>> ele.is_open()
-            False
+        >>> ele = RasterAbstractBase('elevation')
+        >>> ele.is_open()
+        False
 
         """
         return True if self._fd is not None and self._fd >= 0 else False
@@ -365,11 +367,11 @@ class RasterAbstractBase(object):
         return "{name}@{mapset}".format(name=self.name, mapset=self.mapset)
 
     def name_mapset(self, name=None, mapset=None):
-        """Return the full name of the Raster. ::
+        """Return the full name of the Raster.
 
-            >>> ele = RasterAbstractBase('elevation')
-            >>> ele.name_mapset()
-            u'elevation@PERMANENT'
+        >>> ele = RasterAbstractBase('elevation')
+        >>> ele.name_mapset()
+        u'elevation@PERMANENT'
 
         """
         if name is None:
@@ -415,10 +417,7 @@ class RasterAbstractBase(object):
     def get_value(self, point, region=None):
         """This method returns the pixel value of a given pair of coordinates:
 
-        Parameters
-        ------------
-
-        point = pair of coordinates in tuple object
+        :param point: pair of coordinates in tuple object
         """
         if not region:
             region = Region()

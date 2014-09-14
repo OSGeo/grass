@@ -8,21 +8,21 @@ from grass.pygrass.modules.interface import read
 class Flag(object):
     """The Flag object store all information about a flag of module.
 
-    It is possible to set flags of command using this object. ::
+    It is possible to set flags of command using this object.
 
-            >>> flag = Flag(diz=dict(name='a', description='Flag description',
-            ...                      default=True))
-            >>> flag.name
-            u'a'
-            >>> flag.special
-            False
-            >>> flag.description
-            u'Flag description'
-            >>> flag = Flag(diz=dict(name='overwrite'))
-            >>> flag.name
-            u'overwrite'
-            >>> flag.special
-            True
+    >>> flag = Flag(diz=dict(name='a', description='Flag description',
+    ...                      default=True))
+    >>> flag.name
+    u'a'
+    >>> flag.special
+    False
+    >>> flag.description
+    u'Flag description'
+    >>> flag = Flag(diz=dict(name='overwrite'))
+    >>> flag.name
+    u'overwrite'
+    >>> flag.special
+    True
     """
     def __init__(self, xflag=None, diz=None):
         self.value = False
@@ -35,21 +35,21 @@ class Flag(object):
         self.guisection = diz.get('guisection', None)
 
     def get_bash(self):
-        """Return the BASH representation of a flag. ::
+        """Return the BASH representation of a flag.
 
-            >>> flag = Flag(diz=dict(name='a', description='Flag description',
-            ...                      default=True))
-            >>> flag.get_bash()
-            u''
-            >>> flag.value = True
-            >>> flag.get_bash()
-            u'-a'
-            >>> flag = Flag(diz=dict(name='overwrite'))
-            >>> flag.get_bash()
-            u''
-            >>> flag.value = True
-            >>> flag.get_bash()
-            u'--o'
+        >>> flag = Flag(diz=dict(name='a', description='Flag description',
+        ...                      default=True))
+        >>> flag.get_bash()
+        u''
+        >>> flag.value = True
+        >>> flag.get_bash()
+        u'-a'
+        >>> flag = Flag(diz=dict(name='overwrite'))
+        >>> flag.get_bash()
+        u''
+        >>> flag.value = True
+        >>> flag.get_bash()
+        u'--o'
         """
         if self.value:
             if self.special:
@@ -60,21 +60,21 @@ class Flag(object):
             return ''
 
     def get_python(self):
-        """Return the python representation of a flag. ::
+        """Return the python representation of a flag.
 
-            >>> flag = Flag(diz=dict(name='a', description='Flag description',
-            ...                      default=True))
-            >>> flag.get_python()
-            u''
-            >>> flag.value = True
-            >>> flag.get_python()
-            u'a'
-            >>> flag = Flag(diz=dict(name='overwrite'))
-            >>> flag.get_python()
-            u''
-            >>> flag.value = True
-            >>> flag.get_python()
-            u'overwrite=True'
+        >>> flag = Flag(diz=dict(name='a', description='Flag description',
+        ...                      default=True))
+        >>> flag.get_python()
+        u''
+        >>> flag.value = True
+        >>> flag.get_python()
+        u'a'
+        >>> flag = Flag(diz=dict(name='overwrite'))
+        >>> flag.get_python()
+        u''
+        >>> flag.value = True
+        >>> flag.get_python()
+        u'overwrite=True'
         """
         if self.value:
             return '%s=True' % self.name if self.special else self.name
@@ -95,20 +95,17 @@ class Flag(object):
         {name}: {default}
             {description}
 
-        ::
+        >>>  flag = Flag(diz=dict(name='a', description='Flag description',
+        ...                      default=True))
+        >>> print(flag.__doc__)
+        a: True
+            Flag description
 
-            >>>  flag = Flag(diz=dict(name='a', description='Flag description',
-            ...                      default=True))
-            >>> print(flag.__doc__)
-            a: True
-                Flag description
+        >>> flag = Flag(diz=dict(name='overwrite'))
+        >>> print(flag.__doc__)
+        overwrite: None
+            None
 
-            >>> flag = Flag(diz=dict(name='overwrite'))
-            >>> print(flag.__doc__)
-            overwrite: None
-                None
-
-        ..
         """
         return read.DOC['flag'].format(name=self.name,
                                        default=repr(self.default),

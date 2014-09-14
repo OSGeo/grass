@@ -26,38 +26,42 @@ WKT = {'POINT\((.*)\)': 'point',  # 'POINT\(\s*([+-]*\d+\.*\d*)+\s*\)'
 def read_WKT(string):
     """Read the string and return a geometry object
 
-    WKT:
-    POINT(0 0)
-    LINESTRING(0 0,1 1,1 2)
-    POLYGON((0 0,4 0,4 4,0 4,0 0),(1 1, 2 1, 2 2, 1 2,1 1))
-    MULTIPOINT(0 0,1 2)
-    MULTILINESTRING((0 0,1 1,1 2),(2 3,3 2,5 4))
-    MULTIPOLYGON(((0 0,4 0,4 4,0 4,0 0),(1 1,2 1,2 2,1 2,1 1)),
-                 ((-1 -1,-1 -2,-2 -2,-2 -1,-1 -1)))
-    GEOMETRYCOLLECTION(POINT(2 3),LINESTRING(2 3,3 4))
+    **WKT**:
+    ::
 
+        POINT(0 0)
+        LINESTRING(0 0,1 1,1 2)
+        POLYGON((0 0,4 0,4 4,0 4,0 0),(1 1, 2 1, 2 2, 1 2,1 1))
+        MULTIPOINT(0 0,1 2)
+        MULTILINESTRING((0 0,1 1,1 2),(2 3,3 2,5 4))
+        MULTIPOLYGON(((0 0,4 0,4 4,0 4,0 0),(1 1,2 1,2 2,1 2,1 1)),
+                     ((-1 -1,-1 -2,-2 -2,-2 -1,-1 -1)))
+        GEOMETRYCOLLECTION(POINT(2 3),LINESTRING(2 3,3 4))
 
-    EWKT:
-    POINT(0 0 0) -- XYZ
-    SRID=32632;POINT(0 0) -- XY with SRID
-    POINTM(0 0 0) -- XYM
-    POINT(0 0 0 0) -- XYZM
-    SRID=4326;MULTIPOINTM(0 0 0,1 2 1) -- XYM with SRID
-    MULTILINESTRING((0 0 0,1 1 0,1 2 1),(2 3 1,3 2 1,5 4 1))
-    POLYGON((0 0 0,4 0 0,4 4 0,0 4 0,0 0 0),(1 1 0,2 1 0,2 2 0,1 2 0,1 1 0))
-    MULTIPOLYGON(((0 0 0,4 0 0,4 4 0,0 4 0,0 0 0),
-                  (1 1 0,2 1 0,2 2 0,1 2 0,1 1 0)),
-                 ((-1 -1 0,-1 -2 0,-2 -2 0,-2 -1 0,-1 -1 0)))
-    GEOMETRYCOLLECTIONM( POINTM(2 3 9), LINESTRINGM(2 3 4, 3 4 5) )
-    MULTICURVE( (0 0, 5 5), CIRCULARSTRING(4 0, 4 4, 8 4) )
-    POLYHEDRALSURFACE( ((0 0 0, 0 0 1, 0 1 1, 0 1 0, 0 0 0)),
-                       ((0 0 0, 0 1 0, 1 1 0, 1 0 0, 0 0 0)),
-                       ((0 0 0, 1 0 0, 1 0 1, 0 0 1, 0 0 0)),
-                       ((1 1 0, 1 1 1, 1 0 1, 1 0 0, 1 1 0)),
-                       ((0 1 0, 0 1 1, 1 1 1, 1 1 0, 0 1 0)),
-                       ((0 0 1, 1 0 1, 1 1 1, 0 1 1, 0 0 1)) )
-    TRIANGLE ((0 0, 0 9, 9 0, 0 0))
-    TIN( ((0 0 0, 0 0 1, 0 1 0, 0 0 0)), ((0 0 0, 0 1 0, 1 1 0, 0 0 0)) )
+    **EWKT**:
+
+    ::
+
+        POINT(0 0 0) -- XYZ
+        SRID=32632;POINT(0 0) -- XY with SRID
+        POINTM(0 0 0) -- XYM
+        POINT(0 0 0 0) -- XYZM
+        SRID=4326;MULTIPOINTM(0 0 0,1 2 1) -- XYM with SRID
+        MULTILINESTRING((0 0 0,1 1 0,1 2 1),(2 3 1,3 2 1,5 4 1))
+        POLYGON((0 0 0,4 0 0,4 4 0,0 4 0,0 0 0),(1 1 0,2 1 0,2 2 0,1 2 0,1 1 0))
+        MULTIPOLYGON(((0 0 0,4 0 0,4 4 0,0 4 0,0 0 0),
+                      (1 1 0,2 1 0,2 2 0,1 2 0,1 1 0)),
+                     ((-1 -1 0,-1 -2 0,-2 -2 0,-2 -1 0,-1 -1 0)))
+        GEOMETRYCOLLECTIONM( POINTM(2 3 9), LINESTRINGM(2 3 4, 3 4 5) )
+        MULTICURVE( (0 0, 5 5), CIRCULARSTRING(4 0, 4 4, 8 4) )
+        POLYHEDRALSURFACE( ((0 0 0, 0 0 1, 0 1 1, 0 1 0, 0 0 0)),
+                           ((0 0 0, 0 1 0, 1 1 0, 1 0 0, 0 0 0)),
+                           ((0 0 0, 1 0 0, 1 0 1, 0 0 1, 0 0 0)),
+                           ((1 1 0, 1 1 1, 1 0 1, 1 0 0, 1 1 0)),
+                           ((0 1 0, 0 1 1, 1 1 1, 1 1 0, 0 1 0)),
+                           ((0 0 1, 1 0 1, 1 1 1, 0 1 1, 0 0 1)) )
+        TRIANGLE ((0 0, 0 9, 9 0, 0 0))
+        TIN( ((0 0 0, 0 0 1, 0 1 0, 0 0 0)), ((0 0 0, 0 1 0, 1 1 0, 0 0 0)) )
 
     """
     for regexp, obj in WKT.items():
@@ -72,12 +76,12 @@ def read_WKB(buff):
 
 
 def intersects(lineA, lineB, with_z=False):
-    """Return a list of points ::
+    """Return a list of points
 
-        >>> lineA = Line([(0, 0), (4, 0)])
-        >>> lineB = Line([(2, 2), (2, -2)])
-        >>> intersects(lineA, lineB)
-        Line([Point(2.000000, 0.000000)])
+    >>> lineA = Line([(0, 0), (4, 0)])
+    >>> lineB = Line([(2, 2), (2, -2)])
+    >>> intersects(lineA, lineB)
+    Line([Point(2.000000, 0.000000)])
     """
     line = Line()
     if libvect.Vect_line_get_intersections(lineA.c_points, lineB.c_points,
@@ -92,21 +96,20 @@ def intersects(lineA, lineB, with_z=False):
 
 
 def get_xyz(pnt):
-    """Return a tuple with: x, y, z. ::
+    """Return a tuple with: x, y, z.
 
-        >>> pnt = Point(0, 0)
-        >>> get_xyz(pnt)
-        (0.0, 0.0, 0.0)
-        >>> get_xyz((1, 1))
-        (1, 1, 0.0)
-        >>> get_xyz((1, 1, 2))
-        (1, 1, 2)
-        >>> get_xyz((1, 1, 2, 2))                          #doctest: +ELLIPSIS
-        Traceback (most recent call last):
-            ...
-        ValueError: The the format of the point is not supported: (1, 1, 2, 2)
+    >>> pnt = Point(0, 0)
+    >>> get_xyz(pnt)
+    (0.0, 0.0, 0.0)
+    >>> get_xyz((1, 1))
+    (1, 1, 0.0)
+    >>> get_xyz((1, 1, 2))
+    (1, 1, 2)
+    >>> get_xyz((1, 1, 2, 2))                          #doctest: +ELLIPSIS
+    Traceback (most recent call last):
+        ...
+    ValueError: The the format of the point is not supported: (1, 1, 2, 2)
 
-    ..
     """
     if isinstance(pnt, Point):
         if pnt.is2D:
@@ -147,16 +150,15 @@ class Attrs(object):
                    doc="Set and obtain cat value")
 
     def __getitem__(self, key):
-        """Return the value stored in the attribute table. ::
+        """Return the value stored in the attribute table.
 
-            >>> from grass.pygrass.vector import VectorTopo
-            >>> schools = VectorTopo('schools')
-            >>> schools.open('r')
-            >>> school = schools[1]
-            >>> attrs = Attrs(school.cat, schools.table)
-            >>> attrs['TAG']
-            u'568'
-
+        >>> from grass.pygrass.vector import VectorTopo
+        >>> schools = VectorTopo('schools')
+        >>> schools.open('r')
+        >>> school = schools[1]
+        >>> attrs = Attrs(school.cat, schools.table)
+        >>> attrs['TAG']
+        u'568'
 
         """
         #SELECT {cols} FROM {tname} WHERE {condition};
@@ -171,20 +173,20 @@ class Attrs(object):
             return results[0] if len(results) == 1 else results
 
     def __setitem__(self, key, value):
-        """Set value of a given column of a table attribute. ::
+        """Set value of a given column of a table attribute.
 
-            >>> from grass.pygrass.vector import VectorTopo
-            >>> from grass.pygrass.functions import copy, remove
-            >>> copy('schools', 'myschools', 'vect')
-            >>> schools = VectorTopo('myschools')
-            >>> schools.open('r')
-            >>> school = schools[1]
-            >>> attrs = Attrs(school.cat, schools.table, True)
-            >>> attrs['TAG'] = 'New Label'
-            >>> attrs['TAG']
-            u'New Label'
-            >>> attrs.table.conn.close()
-            >>> remove('myschools','vect')
+        >>> from grass.pygrass.vector import VectorTopo
+        >>> from grass.pygrass.functions import copy, remove
+        >>> copy('schools', 'myschools', 'vect')
+        >>> schools = VectorTopo('myschools')
+        >>> schools.open('r')
+        >>> school = schools[1]
+        >>> attrs = Attrs(school.cat, schools.table, True)
+        >>> attrs['TAG'] = 'New Label'
+        >>> attrs['TAG']
+        u'New Label'
+        >>> attrs.table.conn.close()
+        >>> remove('myschools','vect')
         """
         if self.writable:
             #UPDATE {tname} SET {new_col} = {old_col} WHERE {condition}
@@ -194,8 +196,7 @@ class Attrs(object):
                                                        condition=self.cond))
             #self.table.conn.commit()
         else:
-            str_err = "You can only read the attributes if the map is \
-in another mapset"
+            str_err = "You can only read the attributes if the map is in another mapset"
             raise GrassError(str_err)
 
     def __dict__(self):
@@ -1252,9 +1253,6 @@ class Isle(Geo):
 
     def perimeter(self):
         """Return the perimeter value of an Isle.
-        ::
-            double Vect_area_perimeter()
-
         """
         border = self.points()
         return libvect.Vect_area_perimeter(border.c_points)
@@ -1297,30 +1295,31 @@ class Isles(object):
         .. warning::
 
             Not implemented yet.
+
         """
         pass
 
 
 class Area(Geo):
     """
-     'Vect_build_line_area',
-     'Vect_find_area',
-     'Vect_get_area_box',
-     'Vect_get_area_points_geos',
-     'Vect_get_centroid_area',
+    Vect_build_line_area,
+    Vect_find_area,
+    Vect_get_area_box,
+    Vect_get_area_points_geos,
+    Vect_get_centroid_area,
 
-     'Vect_get_isle_area',
-     'Vect_get_line_areas',
-     'Vect_get_num_areas',
-     'Vect_get_point_in_area',
-     'Vect_isle_find_area',
-     'Vect_point_in_area',
-     'Vect_point_in_area_outer_ring',
+    Vect_get_isle_area,
+    Vect_get_line_areas,
+    Vect_get_num_areas,
+    Vect_get_point_in_area,
+    Vect_isle_find_area,
+    Vect_point_in_area,
+    Vect_point_in_area_outer_ring,
 
-     'Vect_read_area_geos',
-     'Vect_remove_small_areas',
-     'Vect_select_areas_by_box',
-     'Vect_select_areas_by_polygon']
+    Vect_read_area_geos,
+    Vect_remove_small_areas,
+    Vect_select_areas_by_box,
+    Vect_select_areas_by_polygon
     """
     # geometry type
     gtype = libvect.GV_AREA
@@ -1389,8 +1388,7 @@ class Area(Geo):
 
     def area(self):
         """Returns area of area without areas of isles.
-        double Vect_get_area_area (const struct Map_info *Map, int area)
-
+        double Vect_get_area_area (const struct Map_info \*Map, int area)
         """
         return libvect.Vect_get_area_area(self.c_mapinfo, self.id)
 
@@ -1451,8 +1449,8 @@ class Area(Geo):
     def boundaries(self, ilist=False):
         """Creates list of boundaries for given area.
 
-        int Vect_get_area_boundaries(const struct Map_info *Map,
-                                     int area, struct ilist *List)
+        int Vect_get_area_boundaries(const struct Map_info \*Map,
+                                     int area, struct ilist \*List)
         """
         ilst = Ilist()
         libvect.Vect_get_area_boundaries(self.c_mapinfo, self.id,
@@ -1474,7 +1472,7 @@ class Area(Geo):
     def get_first_cat(self):
         """Find FIRST category of given field and area.
 
-        int Vect_get_area_cat(const struct Map_info *Map, int area, int field)
+        int Vect_get_area_cat(const struct Map_info \*Map, int area, int field)
         """
         pass
 
@@ -1494,7 +1492,7 @@ class Area(Geo):
     def perimeter(self):
         """Calculate area perimeter.
 
-        double Vect_area_perimeter (const struct line_pnts *Points)
+        :return: double Vect_area_perimeter (const struct line_pnts \*Points)
 
         """
         border = self.get_points()

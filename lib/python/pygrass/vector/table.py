@@ -4,8 +4,6 @@ Created on Wed Aug  8 15:29:21 2012
 
 @author: pietro
 
-
-
 """
 from __future__ import (nested_scopes, generators, division, absolute_import,
                         with_statement, print_function, unicode_literals)
@@ -38,7 +36,7 @@ DRIVERS = ('sqlite', 'pg')
 
 def get_path(path):
     """Return the full path to the database; replacing environment variable
-    with real values ::
+    with real values
 
     >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
     >>> new_path = get_path(path)
@@ -60,19 +58,18 @@ def get_path(path):
 
 
 class Filters(object):
-    """Help user to build a simple sql query. ::
+    """Help user to build a simple sql query.
 
-        >>> filter = Filters('table')
-        >>> filter.get_sql()
-        u'SELECT * FROM table;'
-        >>> filter.where("area<10000").get_sql()
-        u'SELECT * FROM table WHERE area<10000;'
-        >>> filter.select("cat", "area").get_sql()
-        u'SELECT cat, area FROM table WHERE area<10000;'
-        >>> filter.order_by("area").limit(10).get_sql()
-        u'SELECT cat, area FROM table WHERE area<10000 ORDER BY area LIMIT 10;'
+    >>> filter = Filters('table')
+    >>> filter.get_sql()
+    u'SELECT * FROM table;'
+    >>> filter.where("area<10000").get_sql()
+    u'SELECT * FROM table WHERE area<10000;'
+    >>> filter.select("cat", "area").get_sql()
+    u'SELECT cat, area FROM table WHERE area<10000;'
+    >>> filter.order_by("area").limit(10).get_sql()
+    u'SELECT cat, area FROM table WHERE area<10000 ORDER BY area LIMIT 10;'
 
-    ..
     """
     def __init__(self, tname):
         self.tname = tname
@@ -168,24 +165,23 @@ class Columns(object):
     It is possible to instantiate a Columns object given the table name and
     the database connection.
 
-    For a sqlite table: ::
+    For a sqlite table:
 
-        >>> import sqlite3
-        >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
-        >>> cols_sqlite = Columns('census',
-        ...                       sqlite3.connect(get_path(path)))
-        >>> cols_sqlite.tname
-        u'census'
+    >>> import sqlite3
+    >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
+    >>> cols_sqlite = Columns('census',
+    ...                       sqlite3.connect(get_path(path)))
+    >>> cols_sqlite.tname
+    u'census'
 
-    For a postgreSQL table: ::
+    For a postgreSQL table:
 
-        >>> import psycopg2 as pg                              #doctest: +SKIP
-        >>> cols_pg = Columns('boundary_municp_pg',
-        ...                   pg.connect('host=localhost dbname=grassdb')) #doctest: +SKIP
-        >>> cols_pg.tname #doctest: +SKIP
-        'boundary_municp_pg'                                   #doctest: +SKIP
+    >>> import psycopg2 as pg                              #doctest: +SKIP
+    >>> cols_pg = Columns('boundary_municp_pg',
+    ...                   pg.connect('host=localhost dbname=grassdb')) #doctest: +SKIP
+    >>> cols_pg.tname #doctest: +SKIP
+    'boundary_municp_pg'                                   #doctest: +SKIP
 
-    ..
     """
     def __init__(self, tname, connection, key='cat'):
         self.tname = tname
@@ -236,21 +232,20 @@ class Columns(object):
     __hash__ = object.__hash__
 
     def is_pg(self):
-        """Return True if is a psycopg connection. ::
+        """Return True if is a psycopg connection.
 
-            >>> import sqlite3
-            >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
-            >>> cols_sqlite = Columns('census',
-            ...                       sqlite3.connect(get_path(path)))
-            >>> cols_sqlite.is_pg()
-            False
-            >>> import psycopg2 as pg #doctest: +SKIP
-            >>> cols_pg = Columns('boundary_municp_pg',
-            ...                   pg.connect('host=localhost dbname=grassdb')) #doctest: +SKIP
-            >>> cols_pg.is_pg() #doctest: +SKIP
-            True
+        >>> import sqlite3
+        >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
+        >>> cols_sqlite = Columns('census',
+        ...                       sqlite3.connect(get_path(path)))
+        >>> cols_sqlite.is_pg()
+        False
+        >>> import psycopg2 as pg #doctest: +SKIP
+        >>> cols_pg = Columns('boundary_municp_pg',
+        ...                   pg.connect('host=localhost dbname=grassdb')) #doctest: +SKIP
+        >>> cols_pg.is_pg() #doctest: +SKIP
+        True
 
-        ..
         """
         return hasattr(self.conn, 'xid')
 
@@ -293,19 +288,19 @@ class Columns(object):
 
     def sql_descr(self, remove=None):
         """Return a string with description of columns.
-           Remove it is used to remove a columns.::
+        Remove it is used to remove a columns.
 
-            >>> import sqlite3
-            >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
-            >>> cols_sqlite = Columns('census',
-            ...                       sqlite3.connect(get_path(path)))
-            >>> cols_sqlite.sql_descr()                   # doctest: +ELLIPSIS
-            u'cat integer, OBJECTID integer, AREA double precision, ...'
-            >>> import psycopg2 as pg                         # doctest: +SKIP
-            >>> cols_pg = Columns('boundary_municp_pg',
-            ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
-            >>> cols_pg.sql_descr()                 # doctest: +ELLIPSIS +SKIP
-            'cat int4, objectid int4, area float8, perimeter float8, ...'
+        >>> import sqlite3
+        >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
+        >>> cols_sqlite = Columns('census',
+        ...                       sqlite3.connect(get_path(path)))
+        >>> cols_sqlite.sql_descr()                   # doctest: +ELLIPSIS
+        u'cat integer, OBJECTID integer, AREA double precision, ...'
+        >>> import psycopg2 as pg                         # doctest: +SKIP
+        >>> cols_pg = Columns('boundary_municp_pg',
+        ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
+        >>> cols_pg.sql_descr()                 # doctest: +ELLIPSIS +SKIP
+        'cat int4, objectid int4, area float8, perimeter float8, ...'
         """
         if remove:
             return ', '.join(['%s %s' % (key, val) for key, val in self.items()
@@ -315,43 +310,39 @@ class Columns(object):
                               for key, val in self.items()])
 
     def types(self):
-        """Return a list with the column types. ::
+        """Return a list with the column types.
 
-            >>> import sqlite3
-            >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
-            >>> cols_sqlite = Columns('census',
-            ...                       sqlite3.connect(get_path(path)))
-            >>> cols_sqlite.types()                       # doctest: +ELLIPSIS
-            [u'integer', u'integer', ...]
-            >>> import psycopg2 as pg                         # doctest: +SKIP
-            >>> cols_pg = Columns('boundary_municp_pg',
-            ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
-            >>> cols_pg.types()                     # doctest: +ELLIPSIS +SKIP
-            ['int4', 'int4', 'float8', 'float8', 'float8', ...]
+        >>> import sqlite3
+        >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
+        >>> cols_sqlite = Columns('census',
+        ...                       sqlite3.connect(get_path(path)))
+        >>> cols_sqlite.types()                       # doctest: +ELLIPSIS
+        [u'integer', u'integer', ...]
+        >>> import psycopg2 as pg                         # doctest: +SKIP
+        >>> cols_pg = Columns('boundary_municp_pg',
+        ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
+        >>> cols_pg.types()                     # doctest: +ELLIPSIS +SKIP
+        ['int4', 'int4', 'float8', 'float8', 'float8', ...]
 
-
-        ..
         """
         return self.odict.values()
 
     def names(self, remove=None, unicod=True):
         """Return a list with the column names.
-           Remove it is used to remove a columns.::
+        Remove it is used to remove a columns.
 
-            >>> import sqlite3
-            >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
-            >>> cols_sqlite = Columns('census',
-            ...                       sqlite3.connect(get_path(path)))
-            >>> cols_sqlite.names()                      # doctest: +ELLIPSIS
-            [u'cat', u'OBJECTID', u'AREA', u'PERIMETER', ...]
-            >>> import psycopg2 as pg                         # doctest: +SKIP
-            >>> cols_pg = Columns('boundary_municp_pg',       # doctest: +SKIP
-            ...                   pg.connect('host=localhost dbname=grassdb'))
-            >>> cols_pg.names()                     # doctest: +ELLIPSIS +SKIP
-            ['cat', 'objectid', 'area', 'perimeter', ...]
+        >>> import sqlite3
+        >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
+        >>> cols_sqlite = Columns('census',
+        ...                       sqlite3.connect(get_path(path)))
+        >>> cols_sqlite.names()                      # doctest: +ELLIPSIS
+        [u'cat', u'OBJECTID', u'AREA', u'PERIMETER', ...]
+        >>> import psycopg2 as pg                         # doctest: +SKIP
+        >>> cols_pg = Columns('boundary_municp_pg',       # doctest: +SKIP
+        ...                   pg.connect('host=localhost dbname=grassdb'))
+        >>> cols_pg.names()                     # doctest: +ELLIPSIS +SKIP
+        ['cat', 'objectid', 'area', 'perimeter', ...]
 
-
-        ..
         """
         if remove:
             nams = self.odict.keys()
@@ -364,21 +355,20 @@ class Columns(object):
             return [str(name) for name in nams]
 
     def items(self):
-        """Return a list of tuple with column name and column type.  ::
+        """Return a list of tuple with column name and column type.
 
-            >>> import sqlite3
-            >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
-            >>> cols_sqlite = Columns('census',
-            ...                       sqlite3.connect(get_path(path)))
-            >>> cols_sqlite.items()                       # doctest: +ELLIPSIS
-            [(u'cat', u'integer'), ...]
-            >>> import psycopg2 as pg                         # doctest: +SKIP
-            >>> cols_pg = Columns('boundary_municp_pg',
-            ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
-            >>> cols_pg.items()                     # doctest: +ELLIPSIS +SKIP
-            [('cat', 'int4'), ('objectid', 'int4'), ('area', 'float8'), ...]
+        >>> import sqlite3
+        >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
+        >>> cols_sqlite = Columns('census',
+        ...                       sqlite3.connect(get_path(path)))
+        >>> cols_sqlite.items()                       # doctest: +ELLIPSIS
+        [(u'cat', u'integer'), ...]
+        >>> import psycopg2 as pg                         # doctest: +SKIP
+        >>> cols_pg = Columns('boundary_municp_pg',
+        ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
+        >>> cols_pg.items()                     # doctest: +ELLIPSIS +SKIP
+        [('cat', 'int4'), ('objectid', 'int4'), ('area', 'float8'), ...]
 
-        ..
         """
         return self.odict.items()
 
@@ -389,26 +379,24 @@ class Columns(object):
         :type col_name: str
         :param col_type: the tipe of column to add
         :type col_type: str
-        ::
 
-            >>> import sqlite3
-            >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
-            >>> from grass.pygrass.functions import copy, remove
-            >>> copy('census','mycensus','vect')
-            >>> cols_sqlite = Columns('mycensus',
-            ...                       sqlite3.connect(get_path(path)))
-            >>> cols_sqlite.add(['n_pizza'], ['INT'])
-            >>> 'n_pizza' in cols_sqlite
-            True
-            >>> import psycopg2 as pg                         # doctest: +SKIP
-            >>> cols_pg = Columns('boundary_municp_pg',
-            ...                   pg.connect('host=localhost dbname=grassdb'))  #doctest: +SKIP
-            >>> cols_pg.add('n_pizza', 'INT')                 # doctest: +SKIP
-            >>> 'n_pizza' in cols_pg                          # doctest: +SKIP
-            True
-            >>> remove('mycensus', 'vect')
+        >>> import sqlite3
+        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+        >>> from grass.pygrass.functions import copy, remove
+        >>> copy('census','mycensus','vect')
+        >>> cols_sqlite = Columns('mycensus',
+        ...                       sqlite3.connect(get_path(path)))
+        >>> cols_sqlite.add(['n_pizza'], ['INT'])
+        >>> 'n_pizza' in cols_sqlite
+        True
+        >>> import psycopg2 as pg                         # doctest: +SKIP
+        >>> cols_pg = Columns('boundary_municp_pg',
+        ...                   pg.connect('host=localhost dbname=grassdb'))  #doctest: +SKIP
+        >>> cols_pg.add('n_pizza', 'INT')                 # doctest: +SKIP
+        >>> 'n_pizza' in cols_pg                          # doctest: +SKIP
+        True
+        >>> remove('mycensus', 'vect')
 
-        ..
         """
         def check_col(col_type):
             """Check the column type if it is supported by GRASS
@@ -450,34 +438,32 @@ class Columns(object):
         :type old_name: str
         :param new_name: the name of new column
         :type new_name: str
-        ::
 
-            >>> import sqlite3
-            >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
-            >>> from grass.pygrass.functions import copy, remove
-            >>> copy('census','mycensus','vect')
-            >>> cols_sqlite = Columns('mycensus',
-            ...                       sqlite3.connect(get_path(path)))
-            >>> cols_sqlite.add(['n_pizza'], ['INT'])
-            >>> 'n_pizza' in cols_sqlite
-            True
-            >>> cols_sqlite.rename('n_pizza', 'n_pizzas')  # doctest: +ELLIPSIS
-            >>> 'n_pizza' in cols_sqlite
-            False
-            >>> 'n_pizzas' in cols_sqlite
-            True
+        >>> import sqlite3
+        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+        >>> from grass.pygrass.functions import copy, remove
+        >>> copy('census','mycensus','vect')
+        >>> cols_sqlite = Columns('mycensus',
+        ...                       sqlite3.connect(get_path(path)))
+        >>> cols_sqlite.add(['n_pizza'], ['INT'])
+        >>> 'n_pizza' in cols_sqlite
+        True
+        >>> cols_sqlite.rename('n_pizza', 'n_pizzas')  # doctest: +ELLIPSIS
+        >>> 'n_pizza' in cols_sqlite
+        False
+        >>> 'n_pizzas' in cols_sqlite
+        True
 
-            >>> import psycopg2 as pg                         # doctest: +SKIP
-            >>> cols_pg = Columns('boundary_municp_pg',
-            ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
-            >>> cols_pg.rename('n_pizza', 'n_pizzas')         # doctest: +SKIP
-            >>> 'n_pizza' in cols_pg                          # doctest: +SKIP
-            False
-            >>> 'n_pizzas' in cols_pg                         # doctest: +SKIP
-            True
-            >>> remove('mycensus', 'vect')
+        >>> import psycopg2 as pg                         # doctest: +SKIP
+        >>> cols_pg = Columns('boundary_municp_pg',
+        ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
+        >>> cols_pg.rename('n_pizza', 'n_pizzas')         # doctest: +SKIP
+        >>> 'n_pizza' in cols_pg                          # doctest: +SKIP
+        False
+        >>> 'n_pizzas' in cols_pg                         # doctest: +SKIP
+        True
+        >>> remove('mycensus', 'vect')
 
-        ..
         """
         cur = self.conn.cursor()
         if self.is_pg():
@@ -506,31 +492,30 @@ class Columns(object):
         :type col_name: str
         :param new_type: the new type of column
         :type new_type: str
-        ::
 
-            >>> import sqlite3
-            >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
-            >>> from grass.pygrass.functions import copy, remove
-            >>> copy('census','mycensus','vect')
-            >>> cols_sqlite = Columns('mycensus',
-            ...                       sqlite3.connect(get_path(path)))
-            >>> cols_sqlite.add(['n_pizzas'], ['INT'])
-            >>> cols_sqlite.cast('n_pizzas', 'float8')  # doctest: +ELLIPSIS
-            Traceback (most recent call last):
-              ...
-            DBError: SQLite does not support to cast columns.
-            >>> import psycopg2 as pg                         # doctest: +SKIP
-            >>> cols_pg = Columns('boundary_municp_pg',
-            ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
-            >>> cols_pg.cast('n_pizzas', 'float8')            # doctest: +SKIP
-            >>> cols_pg['n_pizzas']                           # doctest: +SKIP
-            'float8'
-            >>> remove('mycensus', 'vect')
+        >>> import sqlite3
+        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+        >>> from grass.pygrass.functions import copy, remove
+        >>> copy('census','mycensus','vect')
+        >>> cols_sqlite = Columns('mycensus',
+        ...                       sqlite3.connect(get_path(path)))
+        >>> cols_sqlite.add(['n_pizzas'], ['INT'])
+        >>> cols_sqlite.cast('n_pizzas', 'float8')  # doctest: +ELLIPSIS
+        Traceback (most recent call last):
+          ...
+        DBError: SQLite does not support to cast columns.
+        >>> import psycopg2 as pg                         # doctest: +SKIP
+        >>> cols_pg = Columns('boundary_municp_pg',
+        ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
+        >>> cols_pg.cast('n_pizzas', 'float8')            # doctest: +SKIP
+        >>> cols_pg['n_pizzas']                           # doctest: +SKIP
+        'float8'
+        >>> remove('mycensus', 'vect')
 
-            .. warning ::
+        .. warning ::
 
-               It is not possible to cast a column with sqlite
-            ..
+           It is not possible to cast a column with sqlite
+
         """
         if self.is_pg():
             cur = self.conn.cursor()
@@ -548,27 +533,25 @@ class Columns(object):
 
         :param col_name: the name of column to remove
         :type col_name: str
-        ::
 
-            >>> import sqlite3
-            >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
-            >>> from grass.pygrass.functions import copy, remove
-            >>> copy('census','mycensus','vect')
-            >>> cols_sqlite = Columns('mycensus',
-            ...                       sqlite3.connect(get_path(path)))
-            >>> cols_sqlite.drop('CHILD')                 # doctest: +ELLIPSIS
-            >>> 'CHILD' in cols_sqlite
-            False
+        >>> import sqlite3
+        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+        >>> from grass.pygrass.functions import copy, remove
+        >>> copy('census','mycensus','vect')
+        >>> cols_sqlite = Columns('mycensus',
+        ...                       sqlite3.connect(get_path(path)))
+        >>> cols_sqlite.drop('CHILD')                 # doctest: +ELLIPSIS
+        >>> 'CHILD' in cols_sqlite
+        False
 
-            >>> import psycopg2 as pg                         # doctest: +SKIP
-            >>> cols_pg = Columns('boundary_municp_pg',
-            ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
-            >>> cols_pg.drop('CHILD') # doctest: +SKIP
-            >>> 'CHILD' in cols_pg # doctest: +SKIP
-            False
-            >>> remove('mycensus','vect')
+        >>> import psycopg2 as pg                         # doctest: +SKIP
+        >>> cols_pg = Columns('boundary_municp_pg',
+        ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
+        >>> cols_pg.drop('CHILD') # doctest: +SKIP
+        >>> 'CHILD' in cols_pg # doctest: +SKIP
+        False
+        >>> remove('mycensus','vect')
 
-            ..
         """
         cur = self.conn.cursor()
         if self.is_pg():
@@ -592,50 +575,48 @@ class Link(object):
     """Define a Link between vector map and the attributes table.
 
     It is possible to define a Link object or given all the information
-    (layer, name, table name, key, database, driver): ::
+    (layer, name, table name, key, database, driver):
 
-        >>> link = Link(1, 'link0', 'census', 'cat',
-        ...             '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db', 'sqlite')
-        >>> link.layer
-        1
-        >>> link.name
-        'link0'
-        >>> link.table_name
-        'census'
-        >>> link.key
-        'cat'
-        >>> link.database
-        '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
-        >>> link.driver
-        'sqlite'
-        >>> link
-        Link(1, link0, sqlite)
+    >>> link = Link(1, 'link0', 'census', 'cat',
+    ...             '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db', 'sqlite')
+    >>> link.layer
+    1
+    >>> link.name
+    'link0'
+    >>> link.table_name
+    'census'
+    >>> link.key
+    'cat'
+    >>> link.database
+    '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
+    >>> link.driver
+    'sqlite'
+    >>> link
+    Link(1, link0, sqlite)
 
 
-    It is possible to change parameters with: ::
+    It is possible to change parameters with:
 
-        >>> link.driver = 'pg'                                # doctest: +SKIP
-        >>> link.driver                                       # doctest: +SKIP
-        'pg'
-        >>> link.driver = 'postgres'                # doctest: +ELLIPSIS +SKIP
-        Traceback (most recent call last):
-          ...
-        TypeError: Driver not supported, use: sqlite, pg.
-        >>> link.driver                                       # doctest: +SKIP
-        'pg'
-        >>> link.number = 0                         # doctest: +ELLIPSIS +SKIP
-        Traceback (most recent call last):
-          ...
-        TypeError: Number must be positive and greater than 0.
+    >>> link.driver = 'pg'                                # doctest: +SKIP
+    >>> link.driver                                       # doctest: +SKIP
+    'pg'
+    >>> link.driver = 'postgres'                # doctest: +ELLIPSIS +SKIP
+    Traceback (most recent call last):
+      ...
+    TypeError: Driver not supported, use: sqlite, pg.
+    >>> link.driver                                       # doctest: +SKIP
+    'pg'
+    >>> link.number = 0                         # doctest: +ELLIPSIS +SKIP
+    Traceback (most recent call last):
+      ...
+    TypeError: Number must be positive and greater than 0.
 
 
     Or given a c_fieldinfo object that is a ctypes pointer to the field_info C
     struct. ::
 
-        >>> link = Link(c_fieldinfo = ctypes.pointer(libvect.field_info()))
+    >>> link = Link(c_fieldinfo = ctypes.pointer(libvect.field_info()))
 
-
-    ..
     """
     def _get_layer(self):
         return self.c_fieldinfo.contents.number
@@ -742,22 +723,21 @@ class Link(object):
     __hash__ = object.__hash__
 
     def connection(self):
-        """Return a connection object. ::
+        """Return a connection object.
 
-            >>> link = Link(1, 'link0', 'census', 'cat',
-            ...             '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db',
-            ...             'sqlite')
-            >>> conn = link.connection()
-            >>> cur = conn.cursor()
-            >>> cur.execute("SELECT cat,TOTAL_POP,PERIMETER FROM %s" %
-            ...             link.table_name)              # doctest: +ELLIPSIS
-            <sqlite3.Cursor object at ...>
-            >>> cur.fetchone()
-            (1, 44, 757.669)
-            >>> cur.close()
-            >>> conn.close()
+        >>> link = Link(1, 'link0', 'census', 'cat',
+        ...             '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db',
+        ...             'sqlite')
+        >>> conn = link.connection()
+        >>> cur = conn.cursor()
+        >>> cur.execute("SELECT cat,TOTAL_POP,PERIMETER FROM %s" %
+        ...             link.table_name)              # doctest: +ELLIPSIS
+        <sqlite3.Cursor object at ...>
+        >>> cur.fetchone()
+        (1, 44, 757.669)
+        >>> cur.close()
+        >>> conn.close()
 
-        ...
         """
         if self.driver == 'sqlite':
             import sqlite3
@@ -786,38 +766,36 @@ class Link(object):
             raise TypeError(str_err)
 
     def table(self):
-        """Return a Table object. ::
+        """Return a Table object.
 
-            >>> link = Link(1, 'link0', 'census', 'cat',
-            ...             '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db',
-            ...             'sqlite')
-            >>> table = link.table()
-            >>> table.filters.select('cat', 'TOTAL_POP', 'PERIMETER')
-            Filters(u'SELECT cat, TOTAL_POP, PERIMETER FROM census;')
-            >>> cur = table.execute()
-            >>> cur.fetchone()
-            (1, 44, 757.669)
-            >>> cur.close()
+        >>> link = Link(1, 'link0', 'census', 'cat',
+        ...             '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db',
+        ...             'sqlite')
+        >>> table = link.table()
+        >>> table.filters.select('cat', 'TOTAL_POP', 'PERIMETER')
+        Filters(u'SELECT cat, TOTAL_POP, PERIMETER FROM census;')
+        >>> cur = table.execute()
+        >>> cur.fetchone()
+        (1, 44, 757.669)
+        >>> cur.close()
 
-        ..
         """
         return Table(self.table_name, self.connection(), self.key)
 
     def info(self):
-        """Print information of the link. ::
+        """Print information of the link.
 
-            >>> link = Link(1, 'link0', 'census', 'cat',
-            ...             '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db',
-            ...             'sqlite')
-            >>> link.info()
-            layer:     1
-            name:      link0
-            table:     census
-            key:       cat
-            database:  $GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db
-            driver:    sqlite
+        >>> link = Link(1, 'link0', 'census', 'cat',
+        ...             '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db',
+        ...             'sqlite')
+        >>> link.info()
+        layer:     1
+        name:      link0
+        table:     census
+        key:       cat
+        database:  $GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db
+        driver:    sqlite
 
-        ..
         """
         print("layer:    ", self.layer)
         print("name:     ", self.name)
@@ -828,21 +806,20 @@ class Link(object):
 
 
 class DBlinks(object):
-    """Interface containing link to the table DB. ::
+    """Interface containing link to the table DB.
 
-        >>> from grass.pygrass.vector import VectorTopo
-        >>> cens = VectorTopo('census')
-        >>> cens.open(mode='r')
-        >>> dblinks = DBlinks(cens.c_mapinfo)
-        >>> dblinks
-        DBlinks([Link(1, census, sqlite)])
-        >>> dblinks[0]
-        Link(1, census, sqlite)
-        >>> dblinks['census']
-        Link(1, census, sqlite)
-        >>> cens.close()
+    >>> from grass.pygrass.vector import VectorTopo
+    >>> cens = VectorTopo('census')
+    >>> cens.open(mode='r')
+    >>> dblinks = DBlinks(cens.c_mapinfo)
+    >>> dblinks
+    DBlinks([Link(1, census, sqlite)])
+    >>> dblinks[0]
+    Link(1, census, sqlite)
+    >>> dblinks['census']
+    Link(1, census, sqlite)
+    >>> cens.close()
 
-    ..
     """
     def __init__(self, c_mapinfo):
         self.c_mapinfo = c_mapinfo
@@ -965,22 +942,21 @@ class DBlinks(object):
 
 
 class Table(object):
-    """::
+    """
 
-        >>> import sqlite3
-        >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
-        >>> tab_sqlite = Table(name='census',
-        ...                    connection=sqlite3.connect(get_path(path)))
-        >>> tab_sqlite.name
-        u'census'
-        >>> import psycopg2                                   # doctest: +SKIP
-        >>> tab_pg = Table('boundary_municp_pg',
-        ...                psycopg2.connect('host=localhost dbname=grassdb',
-        ...                                 'pg'))            # doctest: +SKIP
-        >>> tab_pg.columns                          # doctest: +ELLIPSIS +SKIP
-        Columns([('cat', 'int4'), ...])
+    >>> import sqlite3
+    >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
+    >>> tab_sqlite = Table(name='census',
+    ...                    connection=sqlite3.connect(get_path(path)))
+    >>> tab_sqlite.name
+    u'census'
+    >>> import psycopg2                                   # doctest: +SKIP
+    >>> tab_pg = Table('boundary_municp_pg',
+    ...                psycopg2.connect('host=localhost dbname=grassdb',
+    ...                                 'pg'))            # doctest: +SKIP
+    >>> tab_pg.columns                          # doctest: +ELLIPSIS +SKIP
+    Columns([('cat', 'int4'), ...])
 
-    ..
     """
     def _get_name(self):
         """Private method to return the name of table"""
@@ -1012,16 +988,15 @@ class Table(object):
         self.filters = Filters(self.name)
 
     def __repr__(self):
-        """::
+        """
 
-            >>> import sqlite3
-            >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
-            >>> tab_sqlite = Table(name='census',
-            ...                    connection=sqlite3.connect(get_path(path)))
-            >>> tab_sqlite
-            Table(u'census')
+        >>> import sqlite3
+        >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
+        >>> tab_sqlite = Table(name='census',
+        ...                    connection=sqlite3.connect(get_path(path)))
+        >>> tab_sqlite
+        Table(u'census')
 
-        ..
         """
         return "Table(%r)" % (self.name)
 
@@ -1111,9 +1086,9 @@ class Table(object):
 
     def exist(self, cursor=None):
         """Return True if the table already exist in the DB, False otherwise
+
         :param cursor: the cursor to connect, if None it use the cursor
-                     of connection table object
-        :type cursor: Cursor object
+                       of connection table object
         """
         cur = cursor if cursor else self.conn.cursor()
         return table_exist(cur, self.name)
@@ -1125,7 +1100,7 @@ class Table(object):
                        more rows using a list of tuple and paramater `many`
         :type values: tuple
         :param cursor: the cursor to connect, if None it use the cursor
-                     of connection table object
+                       of connection table object
         :type cursor: Cursor object
         :param many: True to run executemany function
         :type many: bool

@@ -23,51 +23,51 @@ from grass.pygrass.modules.interface.read import GETFROMTAG, DOC
 
 class ParallelModuleQueue(object):
     """This class is designed to run an arbitrary number of pygrass Module
-       processes in parallel.
+    processes in parallel.
 
-       Objects of type grass.pygrass.modules.Module can be put into the
-       queue using put() method. When the queue is full with the maximum
-       number of parallel processes it will wait for all processes to finish,
-       sets the stdout and stderr of the Module object and removes it
-       from the queue when its finished.
+    Objects of type grass.pygrass.modules.Module can be put into the
+    queue using put() method. When the queue is full with the maximum
+    number of parallel processes it will wait for all processes to finish,
+    sets the stdout and stderr of the Module object and removes it
+    from the queue when its finished.
 
-       This class will raise a GrassError in case a Module process exits
-       with a return code other than 0.
+    This class will raise a GrassError in case a Module process exits
+    with a return code other than 0.
 
-       Usage:
+    Usage:
 
-       >>> import copy
-       >>> from grass.pygrass.modules import Module, ParallelModuleQueue
-       >>> mapcalc_list = []
-       >>> mapcalc = Module("r.mapcalc", overwrite=True, run_=False)
-       >>> queue = ParallelModuleQueue(nprocs=3)
-       >>> for i in xrange(5):
-       ...     new_mapcalc = copy.deepcopy(mapcalc)
-       ...     mapcalc_list.append(new_mapcalc)
-       ...     new_mapcalc(expression="test_pygrass_%i = %i"%(i, i))
-       ...     queue.put(new_mapcalc)
-       Module('r.mapcalc')
-       Module('r.mapcalc')
-       Module('r.mapcalc')
-       Module('r.mapcalc')
-       Module('r.mapcalc')
+    >>> import copy
+    >>> from grass.pygrass.modules import Module, ParallelModuleQueue
+    >>> mapcalc_list = []
+    >>> mapcalc = Module("r.mapcalc", overwrite=True, run_=False)
+    >>> queue = ParallelModuleQueue(nprocs=3)
+    >>> for i in xrange(5):
+    ...     new_mapcalc = copy.deepcopy(mapcalc)
+    ...     mapcalc_list.append(new_mapcalc)
+    ...     new_mapcalc(expression="test_pygrass_%i = %i"%(i, i))
+    ...     queue.put(new_mapcalc)
+    Module('r.mapcalc')
+    Module('r.mapcalc')
+    Module('r.mapcalc')
+    Module('r.mapcalc')
+    Module('r.mapcalc')
 
-       >>> queue.wait()
-       >>> for mapcalc in mapcalc_list:
-       ...     print(mapcalc.popen.returncode)
-       0
-       0
-       0
-       0
-       0
+    >>> queue.wait()
+    >>> for mapcalc in mapcalc_list:
+    ...     print(mapcalc.popen.returncode)
+    0
+    0
+    0
+    0
+    0
 
     """
     def __init__(self, nprocs=1):
         """Constructor
 
         :param nprocs: The maximum number of Module processes that
-                          can be run in parallel, defualt is 1, if None
-                          then use all the available CPUs.
+                       can be run in parallel, defualt is 1, if None
+                       then use all the available CPUs.
         :type nprocs: int
         """
         nprocs = int(nprocs) if nprocs else cpu_count()
@@ -78,12 +78,12 @@ class ParallelModuleQueue(object):
     def put(self, module):
         """Put the next Module object in the queue
 
-           To run the Module objects in parallel the run_ and finish_ options
-           of the Module must be set to False.
+        To run the Module objects in parallel the run\_ and finish\_ options
+        of the Module must be set to False.
 
-           :param module: a preconfigured Module object with run_ and finish_
-                          set to False
-           :type module: Module object
+        :param module: a preconfigured Module object with run\_ and finish\_
+                       set to False
+        :type module: Module object
         """
         self._list[self._proc_count] = module
         # Force that finish is False, otherwise the execution
@@ -98,9 +98,9 @@ class ParallelModuleQueue(object):
     def get(self, num):
         """Get a Module object from the queue
 
-           :param num: the number of the object in queue
-           :type num: int
-           :returns: the Module object or None if num is not in the queue
+        :param num: the number of the object in queue
+        :type num: int
+        :returns: the Module object or None if num is not in the queue
         """
         if num < self._num_procs:
             return self._list[num]
@@ -108,10 +108,10 @@ class ParallelModuleQueue(object):
 
     def get_num_run_procs(self):
         """Get the number of Module processes that are in the queue running
-           or finished
+        or finished
 
-           :returns: the maximum number fo Module processes running/finished in
-                     the queue
+        :returns: the maximum number fo Module processes running/finished in
+                  the queue
         """
         return len(self._list)
 
@@ -124,8 +124,8 @@ class ParallelModuleQueue(object):
         """Set the maximum number of Module processes that should run
         in parallel
 
-        :param nprocs: The maximum number of Module processes that
-                              can be run in parallel
+        :param nprocs: The maximum number of Module processes that can be
+                       run in parallel
         :type nprocs: int
         """
         self._num_procs = int(nprocs)
@@ -133,7 +133,7 @@ class ParallelModuleQueue(object):
 
     def wait(self):
         """Wait for all Module processes that are in the list to finish
-           and set the modules stdout and stderr output options
+        and set the modules stdout and stderr output options
         """
         for proc in self._list:
             if proc:
@@ -155,130 +155,130 @@ class Module(object):
     the ``--interface-description`` in order to understand which parameters
     are required which optionals. ::
 
-        >>> from grass.pygrass.modules import Module
-        >>> from subprocess import PIPE
-        >>> import copy
+    >>> from grass.pygrass.modules import Module
+    >>> from subprocess import PIPE
+    >>> import copy
 
-        >>> region = Module("g.region")
-        >>> region.flags.p = True  # set flags
-        >>> region.flags.u = True
-        >>> region.flags["3"].value = True  # set numeric flags
-        >>> region.get_bash()
-        u'g.region -p -3 -u'
-        >>> new_region = copy.deepcopy(region)
-        >>> new_region.inputs.res = "10"
-        >>> new_region.get_bash()
-        u'g.region res=10 -p -3 -u'
+    >>> region = Module("g.region")
+    >>> region.flags.p = True  # set flags
+    >>> region.flags.u = True
+    >>> region.flags["3"].value = True  # set numeric flags
+    >>> region.get_bash()
+    u'g.region -p -3 -u'
+    >>> new_region = copy.deepcopy(region)
+    >>> new_region.inputs.res = "10"
+    >>> new_region.get_bash()
+    u'g.region res=10 -p -3 -u'
 
-        >>> neighbors = Module("r.neighbors")
-        >>> neighbors.inputs.input = "mapA"
-        >>> neighbors.outputs.output = "mapB"
-        >>> neighbors.inputs.size = 5
-        >>> neighbors.inputs.quantile = 0.5
-        >>> neighbors.get_bash()
-        u'r.neighbors input=mapA method=average size=5 quantile=0.5 output=mapB'
+    >>> neighbors = Module("r.neighbors")
+    >>> neighbors.inputs.input = "mapA"
+    >>> neighbors.outputs.output = "mapB"
+    >>> neighbors.inputs.size = 5
+    >>> neighbors.inputs.quantile = 0.5
+    >>> neighbors.get_bash()
+    u'r.neighbors input=mapA method=average size=5 quantile=0.5 output=mapB'
 
-        >>> new_neighbors1 = copy.deepcopy(neighbors)
-        >>> new_neighbors1.inputs.input = "mapD"
-        >>> new_neighbors1.inputs.size = 3
-        >>> new_neighbors1.inputs.quantile = 0.5
-        >>> new_neighbors1.get_bash()
-        u'r.neighbors input=mapD method=average size=3 quantile=0.5 output=mapB'
+    >>> new_neighbors1 = copy.deepcopy(neighbors)
+    >>> new_neighbors1.inputs.input = "mapD"
+    >>> new_neighbors1.inputs.size = 3
+    >>> new_neighbors1.inputs.quantile = 0.5
+    >>> new_neighbors1.get_bash()
+    u'r.neighbors input=mapD method=average size=3 quantile=0.5 output=mapB'
 
-        >>> new_neighbors2 = copy.deepcopy(neighbors)
-        >>> new_neighbors2(input="mapD", size=3, run_=False)
-        Module('r.neighbors')
-        >>> new_neighbors2.get_bash()
-        u'r.neighbors input=mapD method=average size=3 quantile=0.5 output=mapB'
+    >>> new_neighbors2 = copy.deepcopy(neighbors)
+    >>> new_neighbors2(input="mapD", size=3, run_=False)
+    Module('r.neighbors')
+    >>> new_neighbors2.get_bash()
+    u'r.neighbors input=mapD method=average size=3 quantile=0.5 output=mapB'
 
-        >>> neighbors = Module("r.neighbors")
-        >>> neighbors.get_bash()
-        u'r.neighbors method=average size=3'
+    >>> neighbors = Module("r.neighbors")
+    >>> neighbors.get_bash()
+    u'r.neighbors method=average size=3'
 
-        >>> new_neighbors3 = copy.deepcopy(neighbors)
-        >>> new_neighbors3(input="mapA", size=3, output="mapB", run_=False)
-        Module('r.neighbors')
-        >>> new_neighbors3.get_bash()
-        u'r.neighbors input=mapA method=average size=3 output=mapB'
+    >>> new_neighbors3 = copy.deepcopy(neighbors)
+    >>> new_neighbors3(input="mapA", size=3, output="mapB", run_=False)
+    Module('r.neighbors')
+    >>> new_neighbors3.get_bash()
+    u'r.neighbors input=mapA method=average size=3 output=mapB'
 
-        >>> mapcalc = Module("r.mapcalc", expression="test_a = 1",
-        ...                  overwrite=True, run_=False)
-        >>> mapcalc.run()
-        Module('r.mapcalc')
-        >>> mapcalc.popen.returncode
-        0
+    >>> mapcalc = Module("r.mapcalc", expression="test_a = 1",
+    ...                  overwrite=True, run_=False)
+    >>> mapcalc.run()
+    Module('r.mapcalc')
+    >>> mapcalc.popen.returncode
+    0
 
-        >>> colors = Module("r.colors", map="test_a", rules="-",
-        ...                 run_=False, stdout_=PIPE,
-        ...                 stderr_=PIPE, stdin_="1 red")
-        >>> colors.run()
-        Module('r.colors')
-        >>> colors.popen.returncode
-        0
-        >>> colors.inputs["stdin"].value
-        u'1 red'
-        >>> colors.outputs["stdout"].value
-        u''
-        >>> colors.outputs["stderr"].value.strip()
-        "Color table for raster map <test_a> set to 'rules'"
+    >>> colors = Module("r.colors", map="test_a", rules="-",
+    ...                 run_=False, stdout_=PIPE,
+    ...                 stderr_=PIPE, stdin_="1 red")
+    >>> colors.run()
+    Module('r.colors')
+    >>> colors.popen.returncode
+    0
+    >>> colors.inputs["stdin"].value
+    u'1 red'
+    >>> colors.outputs["stdout"].value
+    u''
+    >>> colors.outputs["stderr"].value.strip()
+    "Color table for raster map <test_a> set to 'rules'"
 
-        >>> colors = Module("r.colors", map="test_a", rules="-",
-        ...                 run_=False, finish_=False, stdin_=PIPE)
-        >>> colors.run()
-        Module('r.colors')
-        >>> stdout, stderr = colors.popen.communicate(input="1 red")
-        >>> colors.popen.returncode
-        0
-        >>> stdout
-        >>> stderr
+    >>> colors = Module("r.colors", map="test_a", rules="-",
+    ...                 run_=False, finish_=False, stdin_=PIPE)
+    >>> colors.run()
+    Module('r.colors')
+    >>> stdout, stderr = colors.popen.communicate(input="1 red")
+    >>> colors.popen.returncode
+    0
+    >>> stdout
+    >>> stderr
 
-        >>> colors = Module("r.colors", map="test_a", rules="-",
-        ...                 run_=False, finish_=False,
-        ...                 stdin_=PIPE, stderr_=PIPE)
-        >>> colors.run()
-        Module('r.colors')
-        >>> stdout, stderr = colors.popen.communicate(input="1 red")
-        >>> colors.popen.returncode
-        0
-        >>> stdout
-        >>> stderr.strip()
-        "Color table for raster map <test_a> set to 'rules'"
+    >>> colors = Module("r.colors", map="test_a", rules="-",
+    ...                 run_=False, finish_=False,
+    ...                 stdin_=PIPE, stderr_=PIPE)
+    >>> colors.run()
+    Module('r.colors')
+    >>> stdout, stderr = colors.popen.communicate(input="1 red")
+    >>> colors.popen.returncode
+    0
+    >>> stdout
+    >>> stderr.strip()
+    "Color table for raster map <test_a> set to 'rules'"
 
-        Run a second time
-        >>> colors.run()
-        Module('r.colors')
-        >>> stdout, stderr = colors.popen.communicate(input="1 blue")
-        >>> colors.popen.returncode
-        0
-        >>> stdout
-        >>> stderr.strip()
-        "Color table for raster map <test_a> set to 'rules'"
+    Run a second time
+    >>> colors.run()
+    Module('r.colors')
+    >>> stdout, stderr = colors.popen.communicate(input="1 blue")
+    >>> colors.popen.returncode
+    0
+    >>> stdout
+    >>> stderr.strip()
+    "Color table for raster map <test_a> set to 'rules'"
 
-        Multiple run test
-        >>> colors = Module("r.colors", map="test_a",
-        ...                                            color="ryb", run_=False)
-        >>> colors.run()
-        Module('r.colors')
-        >>> colors(color="gyr")
-        Module('r.colors')
-        >>> colors.run()
-        Module('r.colors')
-        >>> colors(color="ryg")
-        Module('r.colors')
-        >>> colors(stderr_=PIPE)
-        Module('r.colors')
-        >>> colors.run()
-        Module('r.colors')
-        >>> print(colors.outputs["stderr"].value.strip())
-        Color table for raster map <test_a> set to 'ryg'
-        >>> colors(color="byg")
-        Module('r.colors')
-        >>> colors(stdout_=PIPE)
-        Module('r.colors')
-        >>> colors.run()
-        Module('r.colors')
-        >>> print(colors.outputs["stderr"].value.strip())
-        Color table for raster map <test_a> set to 'byg'
+    Multiple run test
+    >>> colors = Module("r.colors", map="test_a",
+    ...                                            color="ryb", run_=False)
+    >>> colors.run()
+    Module('r.colors')
+    >>> colors(color="gyr")
+    Module('r.colors')
+    >>> colors.run()
+    Module('r.colors')
+    >>> colors(color="ryg")
+    Module('r.colors')
+    >>> colors(stderr_=PIPE)
+    Module('r.colors')
+    >>> colors.run()
+    Module('r.colors')
+    >>> print(colors.outputs["stderr"].value.strip())
+    Color table for raster map <test_a> set to 'ryg'
+    >>> colors(color="byg")
+    Module('r.colors')
+    >>> colors(stdout_=PIPE)
+    Module('r.colors')
+    >>> colors.run()
+    Module('r.colors')
+    >>> print(colors.outputs["stderr"].value.strip())
+    Color table for raster map <test_a> set to 'byg'
 
     Often in the Module class you can find ``*args`` and ``kwargs`` annotation
     in methods, like in the __call__ method.
@@ -289,20 +289,20 @@ class Module(object):
             for arg in args:
                 print arg
 
-    therefore if we call the function like: ::
+    therefore if we call the function like:
 
-        >>> f('grass', 'gis', 'modules')                     # doctest: +SKIP
-        grass
-        gis
-        modules
+    >>> f('grass', 'gis', 'modules')                     # doctest: +SKIP
+    grass
+    gis
+    modules
 
-    or we can define a new list: ::
+    or we can define a new list:
 
-        >>> words = ['grass', 'gis', 'modules']              # doctest: +SKIP
-        >>> f(*words)                                        # doctest: +SKIP
-        grass
-        gis
-        modules
+    >>> words = ['grass', 'gis', 'modules']              # doctest: +SKIP
+    >>> f(*words)                                        # doctest: +SKIP
+    grass
+    gis
+    modules
 
     we can do the same with keyword arguments, rewrite the above function: ::
 
@@ -312,27 +312,26 @@ class Module(object):
             for key, value in kargs.items():
                 print "%s = %r" % (key, value)
 
-    now we can use the new function, with: ::
+    now we can use the new function, with:
 
-        >>> f('grass', 'gis', 'modules', os = 'linux', language = 'python')
-        ...                                                  # doctest: +SKIP
-        grass
-        gis
-        modules
-        os = 'linux'
-        language = 'python'
+    >>> f('grass', 'gis', 'modules', os = 'linux', language = 'python')
+    ...                                                  # doctest: +SKIP
+    grass
+    gis
+    modules
+    os = 'linux'
+    language = 'python'
 
     or, as before we can, define a dictionary and give the dictionary to
-    the function, like: ::
+    the function, like:
 
-        >>> keywords = {'os' : 'linux', 'language' : 'python'}
-        ...                                                  # doctest: +SKIP
-        >>> f(*words, **keywords)                            # doctest: +SKIP
-        grass
-        gis
-        modules
-        os = 'linux'
-        language = 'python'
+    >>> keywords = {'os' : 'linux', 'language' : 'python'}  # doctest: +SKIP
+    >>> f(*words, **keywords)                            # doctest: +SKIP
+    grass
+    gis
+    modules
+    os = 'linux'
+    language = 'python'
 
     In the Module class we heavily use this language feature to pass arguments
     and keyword arguments to the grass module.
