@@ -49,7 +49,8 @@ void G__usage_html(void)
     fprintf(stdout,
 	    "<link rel=\"stylesheet\" href=\"grassdocs.css\" type=\"text/css\">\n");
     fprintf(stdout, "</head>\n");
-    fprintf(stdout, "<body bgcolor=\"white\">\n\n");
+    fprintf(stdout, "<body bgcolor=\"white\">\n");
+    fprintf(stdout, "<div id=\"container\">\n\n");
     fprintf(stdout,
 	    "<a href=\"index.html\"><img src=\"grass_logo.png\" alt=\"GRASS logo\"></a>\n");
     fprintf(stdout, "<hr class=\"header\">\n\n");
