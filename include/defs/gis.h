@@ -221,6 +221,8 @@ void G_set_gisrc_mode(int);
 int G_get_gisrc_mode(void);
 void G_create_alt_env(void);
 void G_switch_env(void);
+void G__read_mapset_env(void);
+void G__read_gisrc_env(void);
 
 /* error.c */
 jmp_buf *G_fatal_longjmp(int);

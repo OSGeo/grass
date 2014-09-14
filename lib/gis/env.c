@@ -47,6 +47,8 @@ static int set_env(const char *, const char *, int);
 static int unset_env(const char *, int);
 static const char *get_env(const char *, int);
 static void write_env(int);
+static void parse_env(FILE *, int);
+static void force_read_env(int);
 static FILE *open_env(const char *, int);
 
 /*!
@@ -84,21 +86,41 @@ void G_init_env(void)
     read_env(G_VAR_MAPSET);
 }
 
-static int read_env(int loc)
+/*!
+ * \brief Force to read the mapset environment file VAR
+ * 
+ * The mapset specific VAR file of the mapset set with G_setenv()
+ * will be read into memory, ignoring if it was readed before. 
+ * Existing values will be overwritten, new values appended.
+ * 
+ * \return
+ */ 
+void G__read_mapset_env(void)
 {
+    force_read_env(G_VAR_MAPSET);
+}
+
+/*!
+ * \brief Force to read the GISRC environment file
+ * 
+ * The GISRC file 
+ * will be read into memory, ignoring if it was readed before. 
+ * Existing values will be overwritten, new values appended.
+ * 
+ * \return
+ */ 
+void G__read_gisrc_env(void)
+{
+    force_read_env(G_VAR_GISRC);
+}
+
+static void parse_env(FILE *fd, int loc)
+{    
     char buf[200];
     char *name;
     char *value;
-    FILE *fd;
 
-    if (loc == G_VAR_GISRC && st->varmode == G_GISRC_MODE_MEMORY)
-	return 0;		/* don't use file for GISRC */
-
-    if (G_is_initialized(&st->init[loc]))
-	return 1;
-
-    if ((fd = open_env("r", loc))) {
-	while (G_getl2(buf, sizeof buf, fd)) {
+    while (G_getl2(buf, sizeof buf, fd)) {
 	    for (name = value = buf; *value; value++)
 		if (*value == ':')
 		    break;
@@ -111,13 +133,42 @@ static int read_env(int loc)
 	    if (*name && *value)
 		set_env(name, value, loc);
 	}
+}
 
-	fclose(fd);
+static int read_env(int loc)
+{
+
+    FILE *fd;
+
+    if (loc == G_VAR_GISRC && st->varmode == G_GISRC_MODE_MEMORY)
+	return 0;		/* don't use file for GISRC */
+
+    if (G_is_initialized(&st->init[loc]))
+	return 1;
+
+    if ((fd = open_env("r", loc))) {
+        parse_env(fd, loc);
+        fclose(fd);
     }
 
     G_initialize_done(&st->init[loc]);
     return 0;
 }
+
+/*!
+ * \brief Force the reading or the GISRC or MAPSET/VAR files
+ * and overwrite/append the specified variables
+ * 
+ */ 
+static void force_read_env(int loc)
+{
+    FILE *fd;
+    if ((fd = open_env("r", loc))) {
+        parse_env(fd, loc);
+        fclose(fd);
+    }
+}
+
 
 static int set_env(const char *name, const char *value, int loc)
 {
