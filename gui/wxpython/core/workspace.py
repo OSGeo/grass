@@ -655,7 +655,12 @@ class ProcessWorkspaceFile:
             iview['dir']['y'] = -1
             iview['dir']['z'] = -1
             iview['dir']['use'] = False
-        
+        node_rot = node_view.find('rotation')
+        if node_rot is not None:
+            rotation = node_rot.text
+            if rotation:
+                iview['rotation'] = [float(item) for item in rotation.split(',')]
+
         view['background'] = {}
         color = self.__processLayerNvizNode(node_view, 'background_color', str)
         view['background']['color'] = tuple(map(int, color.split(':')))
@@ -1226,6 +1231,10 @@ class WriteWorkspaceFile(object):
         self.file.write('%s<z>%d</z>\n' % (' ' * self.indent, iview['focus']['z']))
         self.indent -= 4
         self.file.write('%s</focus>\n' % (' ' * self.indent))
+        # rotation
+        rotation = ','.join([str(i) for i in iview['rotation']]) if iview['rotation'] else ''
+        self.file.write('%s<rotation>%s</rotation>\n' % (' ' * self.indent, rotation))
+
         # background
         self.__writeTagWithValue('background_color', view['background']['color'][:3], format = 'd:%d:%d')
         
