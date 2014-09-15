@@ -7,7 +7,8 @@
 
 
 #define TGISDB_DEFAULT_DRIVER "sqlite"
-#define TGISDB_DEFAULT_SQLITE_PATH "PERMANENT/tgis/sqlite.db"
+/* Default path in the current location */
+#define TGISDB_DEFAULT_SQLITE_PATH "tgis/sqlite.db"
 
 
 int tgis_set_connection(dbConnection * connection);

@@ -91,26 +91,28 @@ static char *get_mapset_connection_name(const char *mapset, int contype)
 {
     const char *val = NULL;
     char *ret_val = NULL;
-    const char *orig_mapset;
     int ret;
 
-    orig_mapset = G__getenv("MAPSET");
-
-    ret = G__mapset_permissions2(G__getenv("GISDBASE"), G__getenv("LOCATION_NAME"), mapset);
+    ret = G__mapset_permissions2(G__getenv("GISDBASE"), 
+                                 G__getenv("LOCATION_NAME"), mapset);
     switch (ret) {
     case 0:
-        G_fatal_error(_("You don't have permission to access the mapset <%s>"),
+        G_warning(_("You don't have permission to access the mapset <%s>"),
                       mapset);
         break;
     case -1:
-        G_fatal_error(_("Mapset <%s> does not exist."),
+        G_warning(_("Mapset <%s> does not exist."),
 	              mapset);
         break;
     default:
         break;
     }    
 
-    G_setenv("MAPSET", mapset);
+    G_create_alt_env();
+    G__setenv("GISDBASE", G_gisdbase());
+    G__setenv("LOCATION_NAME", G_location());
+    G__setenv("MAPSET", mapset);
+    G__read_mapset_env();
  
     if(contype == DATABASE_NAME) {
         if ((val = G__getenv2("TGISDB_DATABASE", G_VAR_MAPSET)))
@@ -120,7 +122,7 @@ static char *get_mapset_connection_name(const char *mapset, int contype)
             ret_val = G_store(val);
     }
 
-    G_setenv("MAPSET", orig_mapset);
+    G_switch_env();
     
     return ret_val;
 }
@@ -129,8 +131,8 @@ static char *get_mapset_connection_name(const char *mapset, int contype)
 /*!
  * \brief Get TGIS driver name from a specific mapset
  *
- * This function will call G_fatal_error() in case the mapset does not exists
- * or it is not allowed to access the mapset.
+ * This function give a warning in case the mapset does not exists
+ * or it is not allowed to access the mapset. NULL is returned in this case.
  * 
  * \param mapset The name of the mapset to receive the driver name from
  *
@@ -145,8 +147,8 @@ char *tgis_get_mapset_driver_name(const char *mapset)
 /*!
  * \brief Get TGIS database name
  * 
- * This function will call G_fatal_error() in case the mapset does not exists
- * or it is not allowed to access the mapset.
+ * This function give a warning in case the mapset does not exists
+ * or it is not allowed to access the mapset. NULL is returned in this case..
  * 
  * \param mapset The name of the mapset to receive the driver name from
  

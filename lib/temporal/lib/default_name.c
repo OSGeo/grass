@@ -39,26 +39,9 @@ const char *tgis_get_default_driver_name(void)
 char *tgis_get_default_database_name(void)
 {
     char default_connection[2048];
-    char use_current_mapset = 0;
 
-    /* Check GRASS environmental variable if mapset specific
-     * temporal databases should be created 
-     * */
-
-    if(G__getenv2("TGIS_USE_CURRENT_MAPSET", G_VAR_MAPSET)) {
-        use_current_mapset = 1;
-    } else {
-        if(G__getenv2("TGIS_USE_CURRENT_MAPSET", G_VAR_GISRC))
-            use_current_mapset = 1;
-    }
-
-    if(!use_current_mapset) {
-        G_snprintf(default_connection, 2048, "%s/%s/%s", G_gisdbase(), G_location(),
-                   TGISDB_DEFAULT_SQLITE_PATH);
-    } else {
-        G_snprintf(default_connection, 2048, "%s/%s/%s/tgis/sqlite.db", G_gisdbase(), G_location(),
-                   G_mapset());
-    }
+    G_snprintf(default_connection, 2048, "%s/%s/%s/%s", G_gisdbase(), G_location(),
+               G_mapset(), TGISDB_DEFAULT_SQLITE_PATH);
 
     return G_store(default_connection);
 }
