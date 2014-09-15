@@ -1,9 +1,10 @@
+#include <math.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/vector.h>
 #include "local_proto.h"
 
-/* TODO: geodesic distance for latlong */
+dist_func *line_distance;
 
 int get_line_box(const struct line_pnts *Points, 
                  struct bound_box *box)
@@ -37,6 +38,23 @@ int get_line_box(const struct line_pnts *Points,
     return 1;
 }
 
+/* segment angle */
+double sangle(struct line_pnts *Points, int segment)
+{
+    double dx, dy;
+
+    if (Points->n_points < 2 || segment < 1)
+	return -9;
+    if (segment >= Points->n_points)
+	G_fatal_error(_("Invalid segment number %d for %d points"),
+	              segment, Points->n_points);
+
+    dx = Points->x[segment] - Points->x[segment - 1];
+    dy = Points->y[segment] - Points->y[segment - 1];
+    
+    return atan2(dy, dx);
+}
+
 /* calculate distance parameters between two primitives
  * return 1 point to point
  * return 2 point to line
@@ -49,18 +67,15 @@ int line2line(struct line_pnts *FPoints, int ftype,
 	      double *tx, double *ty, double *tz,
 	      double *talong, double *tangle,
 	      double *dist,
-	      int with_z,
-	      int geodesic)
+	      int with_z)
 {
     int i, fseg, tseg, tmp_seg;
     double tmp_dist, tmp_x, tmp_y, tmp_z, tmp_along;
     int ret = 1;
     static struct line_pnts *iPoints = NULL;
-    static struct line_pnts *LPoints = NULL;
     
     if (!iPoints) {
 	iPoints = Vect_new_line_struct();
-	LPoints = Vect_new_line_struct();
     }
 
     *dist = PORT_DOUBLE_MAX;
@@ -82,7 +97,7 @@ int line2line(struct line_pnts *FPoints, int ftype,
 
     /* point -> point */
     if ((ftype & GV_POINTS) && (ttype & GV_POINTS)) {
-	Vect_line_distance(TPoints, FPoints->x[0], FPoints->y[0],
+	line_distance(TPoints, FPoints->x[0], FPoints->y[0],
 			   FPoints->z[0], with_z, tx, ty, tz, dist, 
 			   NULL, talong);
     }
@@ -90,11 +105,11 @@ int line2line(struct line_pnts *FPoints, int ftype,
     /* point -> line and line -> line */
     if ((ttype & GV_LINES)) {
 
-	tseg = 1;
+	fseg = tseg = 0;
 	/* calculate the min distance between each point in fline with tline */
 	for (i = 0; i < FPoints->n_points; i++) {
 
-	    tmp_seg = Vect_line_distance(TPoints, FPoints->x[i],
+	    tmp_seg = line_distance(TPoints, FPoints->x[i],
 	                                 FPoints->y[i], FPoints->z[i],
 					 with_z, &tmp_x, &tmp_y, &tmp_z,
 					 &tmp_dist, NULL, &tmp_along);
@@ -108,22 +123,39 @@ int line2line(struct line_pnts *FPoints, int ftype,
 		*tz = tmp_z;
 		*talong = tmp_along;
 		tseg = tmp_seg;
+		fseg = i + 1;
 	    }
 	}
-	Vect_point_on_line(TPoints, *talong, NULL, NULL, NULL,
-			   tangle, NULL);
+	*tangle = sangle(TPoints, tseg);
+
+	if (FPoints->n_points > 1 && fseg > 0) {
+	    int np = FPoints->n_points;
+	    
+	    fseg--;
+	    
+	    if (fseg > 0) {
+		FPoints->n_points = fseg + 1;
+		*falong = Vect_line_length(FPoints);
+		FPoints->n_points = np;
+	    }
+	    np = fseg;
+	    if (fseg == 0)
+		fseg = 1;
+	    *fangle = sangle(FPoints, fseg);
+	}
+
 	ret++;
     }
 
     /* line -> point and line -> line */
     if (ftype & GV_LINES) {
-	
-	fseg = 1;
+
+	fseg = tseg = 0;
 
 	/* calculate the min distance between each point in tline with fline */
 	for (i = 0; i < TPoints->n_points; i++) {
 
-	    tmp_seg = Vect_line_distance(FPoints, TPoints->x[i],
+	    tmp_seg = line_distance(FPoints, TPoints->x[i],
 			       TPoints->y[i], TPoints->z[i],
 			       with_z, &tmp_x, &tmp_y, &tmp_z,
 			       &tmp_dist, NULL, &tmp_along);
@@ -136,13 +168,28 @@ int line2line(struct line_pnts *FPoints, int ftype,
 		*tx = TPoints->x[i];
 		*ty = TPoints->y[i];
 		*tz = TPoints->z[i];
-		*talong = 0.;
-		*tangle = -9.;
 		fseg = tmp_seg;
+		tseg = i + 1;
 	    }
 	}
-	Vect_point_on_line(FPoints, *falong, NULL, NULL, NULL,
-			   fangle, NULL);
+	*fangle = sangle(FPoints, fseg);
+
+	if (TPoints->n_points > 1 && tseg > 0) {
+	    int np = TPoints->n_points;
+	    
+	    tseg--;
+
+	    if (tseg > 0) {
+		TPoints->n_points = tseg + 1;
+		*talong = Vect_line_length(TPoints);
+		TPoints->n_points = np;
+	    }
+	    np = tseg;
+	    if (tseg == 0)
+		tseg = 1;
+	    *tangle = sangle(TPoints, tseg);
+	}
+
 	ret++;
 	
 	if ((ttype & GV_LINES) && *dist > 0) {
@@ -162,60 +209,19 @@ int line2line(struct line_pnts *FPoints, int ftype,
 		    *fz = *tz = iPoints->z[0];
 		    
 		    /* falong, talong */
-		    Vect_line_distance(FPoints, iPoints->x[0],
+		    fseg = line_distance(FPoints, iPoints->x[0],
 				       iPoints->y[0], iPoints->z[0],
 				       with_z, NULL, NULL, NULL,
 				       NULL, NULL, falong);
-		    Vect_line_distance(TPoints, iPoints->x[0],
+		    tseg = line_distance(TPoints, iPoints->x[0],
 				       iPoints->y[0], iPoints->z[0],
 				       with_z, NULL, NULL, NULL,
 				       NULL, NULL, talong);
 		    /* fangle, tangle */
-		    Vect_point_on_line(FPoints, *falong, NULL, NULL, NULL,
-				       fangle, NULL);
-		    Vect_point_on_line(TPoints, *talong, NULL, NULL, NULL,
-				       tangle, NULL);
+		    *fangle = sangle(FPoints, fseg);
+		    *tangle = sangle(TPoints, tseg);
 		}
 	    }
-	}
-    }
-
-    if (geodesic) {
-	if (*fx != *tx || *fy != *ty || (with_z && *fz != *tz)) {
-	    Vect_reset_line(LPoints);
-	    Vect_append_point(LPoints, *fx, *fy, *fz);
-	    Vect_append_point(LPoints, *tx, *ty, *tz);
-	    *dist = Vect_line_geodesic_length(LPoints);
-	}
-	/* falong */
-	if (FPoints->x[0] != *fx || FPoints->y[0] != *fy ||
-	    (with_z && FPoints->z[0] != *fz)) {
-	
-	    fseg = Vect_line_distance(FPoints, *tx, *ty, *tz,
-			       with_z, &tmp_x, &tmp_y, &tmp_z,
-			       &tmp_dist, NULL, &tmp_along);
-
-	    Vect_reset_line(LPoints);
-	    for (i = 0; i < fseg; i++)
-		Vect_append_point(LPoints, FPoints->x[i], FPoints->y[i],
-		                  FPoints->z[i]);
-	    Vect_append_point(LPoints, *fx, *fy, *fz);
-	    *falong = Vect_line_geodesic_length(LPoints);
-	}
-	/* talong */
-	if (TPoints->x[0] != *tx || TPoints->y[0] != *ty ||
-	    (with_z && TPoints->z[0] != *tz)) {
-	
-	    tseg = Vect_line_distance(TPoints, *fx, *fy, *fz,
-			       with_z, &tmp_x, &tmp_y, &tmp_z,
-			       &tmp_dist, NULL, &tmp_along);
-
-	    Vect_reset_line(LPoints);
-	    for (i = 0; i < tseg; i++)
-		Vect_append_point(LPoints, TPoints->x[i], TPoints->y[i],
-		                  TPoints->z[i]);
-	    Vect_append_point(LPoints, *tx, *ty, *tz);
-	    *talong = Vect_line_geodesic_length(LPoints);
 	}
     }
 
@@ -234,8 +240,7 @@ int line2area(const struct Map_info *To,
 	      double *tx, double *ty, double *tz,
 	      double *talong, double *tangle,
 	      double *dist,
-	      int with_z,
-	      int geodesic)
+	      int with_z)
 {
     int i, j;
     double tmp_dist;
@@ -306,7 +311,10 @@ int line2area(const struct Map_info *To,
 		line2line(Points, type, aPoints, GV_BOUNDARY,
 		          fx, fy, fz, falong, fangle,
 		          tx, ty, tz, talong, tangle,
-			  dist, with_z, geodesic);
+			  dist, with_z);
+
+		*talong = 0;
+		*tangle = -9;
 		
 		return 1;
 	    }
@@ -330,7 +338,7 @@ int line2area(const struct Map_info *To,
 			    line2line(Points, type, iPoints[j], GV_BOUNDARY,
 				      &tmp_fx, &tmp_fy, &tmp_fz, &tmp_falong, &tmp_fangle,
 				      &tmp_tx, &tmp_ty, &tmp_tz, &tmp_talong, &tmp_tangle,
-				      &tmp_dist, with_z, geodesic);
+				      &tmp_dist, with_z);
 
 			    if (*dist > tmp_dist) {
 				*dist = tmp_dist;
@@ -344,7 +352,7 @@ int line2area(const struct Map_info *To,
 				*tx = tmp_tx;
 				*ty = tmp_ty;
 				*tz = tmp_tz;
-				*talong = tmp_talong;
+				*talong = 0;
 				*tangle = tmp_tangle;
 			    }
 
@@ -366,6 +374,9 @@ int line2area(const struct Map_info *To,
 		    *tx = Points->x[i];
 		    *ty = Points->y[i];
 		    *tz = Points->z[i];
+
+		    *fangle = *tangle = -9.;
+		    *falong = *talong = 0.;
 		    
 		    *dist = 0;
 
@@ -377,6 +388,10 @@ int line2area(const struct Map_info *To,
 		    if (*dist == 0) {
 			/* the line intersected with the isle boundary
 			 * -> line is partially inside the area */
+
+			*fangle = *tangle = -9.;
+			*falong = *talong = 0.;
+
 			return 1;
 		    }
 		    /* else continue with next point */
@@ -417,7 +432,9 @@ int line2area(const struct Map_info *To,
     line2line(Points, type, aPoints, GV_BOUNDARY,
 	      fx, fy, fz, falong, fangle,
 	      tx, ty, tz, talong, tangle,
-	      dist, with_z, geodesic);
+	      dist, with_z);
+
+    *talong = 0;
 
     if (*dist == 0)
 	return 1;

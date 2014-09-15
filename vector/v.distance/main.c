@@ -238,6 +238,10 @@ int main(int argc, char *argv[])
 	do_all = TRUE;
 
     geodesic = G_projection() == PROJECTION_LL;
+    if (geodesic)
+	line_distance = Vect_line_geodesic_distance;
+    else
+	line_distance = Vect_line_distance;
 
     /* Read upload and column options */
     /* count */
@@ -707,7 +711,7 @@ int main(int argc, char *argv[])
 		    line2line(FPoints, ftype, TPoints, ttype,
 		              &tmp_fx, &tmp_fy, &tmp_fz, &tmp_falong, &tmp_fangle,
 		              &tmp_tx, &tmp_ty, &tmp_tz, &tmp_talong, &tmp_tangle,
-			      &tmp_dist, with_z, geodesic);
+			      &tmp_dist, with_z);
 
 		    if (tmp_dist > max || tmp_dist < min)
 			continue;	/* not in threshold */
@@ -781,7 +785,7 @@ int main(int argc, char *argv[])
 		    line2area(&To, FPoints, ftype, aList->id[i], &aList->box[i],
 		              &tmp_fx, &tmp_fy, &tmp_fz, &tmp_falong, &tmp_fangle,
 		              &tmp_tx, &tmp_ty, &tmp_tz, &tmp_talong, &tmp_tangle,
-			      &tmp_dist, with_z, geodesic);
+			      &tmp_dist, with_z);
 
 		    if (tmp_dist > max || tmp_dist < min)
 			continue;	/* not in threshold */
@@ -992,7 +996,7 @@ int main(int argc, char *argv[])
 		    line2area(&From, TPoints, ttype, area, &fbox,
 		              &tmp_tx, &tmp_ty, &tmp_tz, &tmp_talong, &tmp_tangle,
 		              &tmp_fx, &tmp_fy, &tmp_fz, &tmp_falong, &tmp_fangle,
-			      &tmp_dist, with_z, geodesic);
+			      &tmp_dist, with_z);
 
 		    if (tmp_dist > max || tmp_dist < min)
 			continue;	/* not in threshold */
@@ -1078,7 +1082,7 @@ int main(int argc, char *argv[])
 		    poly = line2area(&From, TPoints, ttype, area, &fbox,
 		              &tmp_tx, &tmp_ty, &tmp_tz, &tmp_talong, &tmp_tangle,
 		              &tmp_fx, &tmp_fy, &tmp_fz, &tmp_falong, &tmp_fangle,
-			      &tmp_dist, with_z, geodesic);
+			      &tmp_dist, with_z);
 
 		    if (poly == 3) {
 			/* 'to' outer ring is outside 'from' area,
@@ -1102,7 +1106,7 @@ int main(int argc, char *argv[])
 			    poly = line2area(&To, FPoints, ttype, tarea, &aList->box[i],
 				      &tmp_fx, &tmp_fy, &tmp_fz, &tmp_falong, &tmp_fangle,
 				      &tmp_tx, &tmp_ty, &tmp_tz, &tmp_talong, &tmp_tangle,
-				      &tmp_dist, with_z, geodesic);
+				      &tmp_dist, with_z);
 
 			    /* inside isle ? */
 			    poly = poly == 2;
@@ -1122,7 +1126,7 @@ int main(int argc, char *argv[])
 				line2area(&From, TPoints, ttype, area, &fbox,
 					  &tmp2_tx, &tmp2_ty, &tmp2_tz, &tmp2_talong, &tmp2_tangle,
 					  &tmp2_fx, &tmp2_fy, &tmp2_fz, &tmp2_falong, &tmp2_fangle,
-					  &tmp2_dist, with_z, geodesic);
+					  &tmp2_dist, with_z);
 
 				if (tmp2_dist < tmp_dist) {
 				    tmp_dist = tmp2_dist;
@@ -1306,7 +1310,10 @@ int main(int argc, char *argv[])
     else if (do_all && opt.table->answer) {	/* create new table */
 	db_set_string(&stmt, "create table ");
 	db_append_string(&stmt, opt.table->answer);
-	db_append_string(&stmt, " (from_cat integer");
+	if (Outp)
+	    db_append_string(&stmt, " (cat integer,from_cat integer");
+	else
+	    db_append_string(&stmt, " (from_cat integer");
 
 	j = 0;
 	while (Upload[j].upload != END) {
@@ -1375,6 +1382,8 @@ int main(int argc, char *argv[])
 	    Vect_reset_line(FPoints);
 	    Vect_reset_cats(FCats);
 
+	    Vect_cat_set(FCats, 1, i);
+
 	    Vect_append_point(FPoints, Near[i].from_x, Near[i].from_y, 0);
 
 	    if (Near[i].dist == 0) {
@@ -1429,8 +1438,13 @@ int main(int argc, char *argv[])
 	    }
 	}
 	else if (do_all) {		/* insert new record */
-	    sprintf(buf1, "insert into %s values ( %d ", opt.table->answer,
-		    Near[i].from_cat);
+	    if (!Outp)
+		sprintf(buf1, "insert into %s values ( %d ", opt.table->answer,
+			Near[i].from_cat);
+	    else
+		sprintf(buf1, "insert into %s values ( %d, %d ", opt.table->answer,
+			i, Near[i].from_cat);
+
 	    db_set_string(&stmt, buf1);
 
 	    j = 0;
@@ -1655,6 +1669,15 @@ int main(int argc, char *argv[])
 
     Vect_close(&From);
     if (Outp != NULL) {
+	if (do_all && opt.table->answer) {
+	    dbConnection connection;
+
+	    db_set_default_connection();
+	    db_get_connection(&connection);
+	    Vect_map_add_dblink(Outp, 1, NULL, opt.table->answer, "cat", 
+				connection.databaseName,
+				connection.driverName);
+	}
 	Vect_build(Outp);
 	Vect_close(Outp);
     }
