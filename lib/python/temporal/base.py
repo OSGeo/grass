@@ -215,6 +215,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
 
         >>> init()
         >>> t = SQLDatabaseInterface("raster", "soil@PERMANENT")
+        >>> t.mapset = get_current_mapset()
         >>> t.D["name"] = "soil"
         >>> t.D["mapset"] = "PERMANENT"
         >>> t.D["creator"] = "soeren"
@@ -255,6 +256,11 @@ class SQLDatabaseInterface(DictSQLSerializer):
         self.ident = ident
         self.msgr = get_tgis_message_interface()
 
+        if self.ident and self.ident.find("@") >= 0:
+            self.mapset = self.ident.split("@""")[1]
+        else:
+            self.mapset = None
+
     def get_table_name(self):
         """!Return the name of the table in which the internal
            data are inserted, updated or selected
@@ -279,11 +285,11 @@ class SQLDatabaseInterface(DictSQLSerializer):
         #print sql
 
         if dbif:
-            dbif.cursor.execute(sql)
+            dbif.execute(sql,   mapset=self.mapset)
         else:
             dbif = SQLDatabaseInterfaceConnection()
             dbif.connect()
-            dbif.cursor.execute(sql)
+            dbif.execute(sql,   mapset=self.mapset)
             dbif.close()
 
     def get_is_in_db_statement(self):
@@ -303,16 +309,15 @@ class SQLDatabaseInterface(DictSQLSerializer):
         """
 
         sql = self.get_is_in_db_statement()
-        #print sql
 
         if dbif:
-            dbif.cursor.execute(sql)
-            row = dbif.cursor.fetchone()
+            dbif.execute(sql, mapset=self.mapset)
+            row = dbif.fetchone(mapset=self.mapset)
         else:
             dbif = SQLDatabaseInterfaceConnection()
             dbif.connect()
-            dbif.cursor.execute(sql)
-            row = dbif.cursor.fetchone()
+            dbif.execute(sql, mapset=self.mapset)
+            row = dbif.fetchone(mapset=self.mapset)
             dbif.close()
 
         # Nothing found
@@ -339,7 +344,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
         if not dbif:
             dbif = SQLDatabaseInterfaceConnection()
 
-        return dbif.mogrify_sql_statement(self.get_select_statement())
+        return dbif.mogrify_sql_statement(self.get_select_statement(), mapset=self.mapset)
 
     def select(self, dbif=None):
         """!Select the content from the temporal database and store it
@@ -354,18 +359,18 @@ class SQLDatabaseInterface(DictSQLSerializer):
 
         if dbif:
             if len(args) == 0:
-                dbif.cursor.execute(sql)
+                dbif.execute(sql,  mapset=self.mapset)
             else:
-                dbif.cursor.execute(sql, args)
-            row = dbif.cursor.fetchone()
+                dbif.execute(sql, args,  mapset=self.mapset)
+            row = dbif.fetchone(mapset=self.mapset)
         else:
             dbif = SQLDatabaseInterfaceConnection()
             dbif.connect()
             if len(args) == 0:
-                dbif.cursor.execute(sql)
+                dbif.execute(sql, mapset=self.mapset)
             else:
-                dbif.cursor.execute(sql, args)
-            row = dbif.cursor.fetchone()
+                dbif.execute(sql, args, mapset=self.mapset)
+            row = dbif.fetchone(mapset=self.mapset)
             dbif.close()
 
         # Nothing found
@@ -396,7 +401,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
         if not dbif:
             dbif = SQLDatabaseInterfaceConnection()
 
-        return dbif.mogrify_sql_statement(self.get_insert_statement())
+        return dbif.mogrify_sql_statement(self.get_insert_statement(), mapset=self.mapset)
 
     def insert(self, dbif=None):
         """!Serialize the content of this object and store it in the temporal
@@ -410,11 +415,11 @@ class SQLDatabaseInterface(DictSQLSerializer):
         #print args
 
         if dbif:
-            dbif.cursor.execute(sql, args)
+            dbif.execute(sql, args, mapset=self.mapset)
         else:
             dbif = SQLDatabaseInterfaceConnection()
             dbif.connect()
-            dbif.cursor.execute(sql, args)
+            dbif.execute(sql, args, mapset=self.mapset)
             dbif.close()
 
     def get_update_statement(self, ident=None):
@@ -443,7 +448,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
         if not dbif:
             dbif = SQLDatabaseInterfaceConnection()
 
-        return dbif.mogrify_sql_statement(self.get_update_statement(ident))
+        return dbif.mogrify_sql_statement(self.get_update_statement(ident), mapset=self.mapset)
 
     def update(self, dbif=None, ident=None):
         """!Serialize the content of this object and update it in the temporal
@@ -463,11 +468,11 @@ class SQLDatabaseInterface(DictSQLSerializer):
         #print args
 
         if dbif:
-            dbif.cursor.execute(sql, args)
+            dbif.execute(sql, args, mapset=self.mapset)
         else:
             dbif = SQLDatabaseInterfaceConnection()
             dbif.connect()
-            dbif.cursor.execute(sql, args)
+            dbif.execute(sql, args, mapset=self.mapset)
             dbif.close()
 
     def get_update_all_statement(self, ident=None):
@@ -495,7 +500,7 @@ class SQLDatabaseInterface(DictSQLSerializer):
         if not dbif:
             dbif = SQLDatabaseInterfaceConnection()
 
-        return dbif.mogrify_sql_statement(self.get_update_all_statement(ident))
+        return dbif.mogrify_sql_statement(self.get_update_all_statement(ident), mapset=self.mapset)
 
     def update_all(self, dbif=None, ident=None):
         """!Serialize the content of this object, including None objects,
@@ -513,11 +518,11 @@ class SQLDatabaseInterface(DictSQLSerializer):
         #print args
 
         if dbif:
-            dbif.cursor.execute(sql, args)
+            dbif.execute(sql, args, mapset=self.mapset)
         else:
             dbif = SQLDatabaseInterfaceConnection()
             dbif.connect()
-            dbif.cursor.execute(sql, args)
+            dbif.execute(sql, args, mapset=self.mapset)
             dbif.close()
 
 ###############################################################################

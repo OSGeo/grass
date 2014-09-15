@@ -16,7 +16,7 @@ for details.
 """
 
 import sys
-from multiprocessing import Process, Lock, Pipe
+from multiprocessing import Process, Lock, Pipe,  Queue
 import logging
 from ctypes import *
 from core import *
@@ -27,6 +27,7 @@ import grass.lib.vector as libvector
 import grass.lib.date as libdate
 import grass.lib.raster3d as libraster3d
 import grass.lib.temporal as libtgis
+import signal, os
 
 ###############################################################################
 
@@ -43,12 +44,56 @@ class RPCDefs(object):
     AVAILABLE_MAPSETS = 8
     GET_DRIVER_NAME = 9
     GET_DATABASE_NAME = 10
+    G_MAPSET = 11
+    G_LOCATION = 12
+    G_GISDBASE = 13
+    G_FATAL_ERROR = 14
 
     TYPE_RASTER=0
     TYPE_RASTER3D=1
     TYPE_VECTOR=2
 
 ###############################################################################
+
+def _fatal_error(lock, conn, data):
+    """Calls G_fatal_error()"""
+    libgis.G_fatal_error("Fatal Error in C library server")
+
+def _get_mapset(lock, conn, data):
+    """Return the current mapset
+    
+       :param lock: A multiprocessing.Lock instance
+       :param conn: A multiprocessing.Pipe instance used to send True or False
+       :param data: The mapset as list entry 1 [function_id]
+       
+       :returns: Name of the current mapset
+    """    
+    mapset = libgis.G_mapset()
+    conn.send(mapset) 
+    
+def _get_location(lock, conn, data):
+    """Return the current location
+    
+       :param lock: A multiprocessing.Lock instance
+       :param conn: A multiprocessing.Pipe instance used to send True or False
+       :param data: The mapset as list entry 1 [function_id]
+       
+       :returns: Name of the location
+    """    
+    location = libgis.G_location()
+    conn.send(location) 
+   
+def _get_gisdbase(lock, conn, data):
+    """Return the current gisdatabase
+    
+       :param lock: A multiprocessing.Lock instance
+       :param conn: A multiprocessing.Pipe instance used to send True or False
+       :param data: The mapset as list entry 1 [function_id]
+       
+       :returns: Name of the gisdatabase
+    """    
+    gisdbase = libgis.G_gisdbase()
+    conn.send(gisdbase) 
 
 def _get_driver_name(lock, conn, data):
     """Return the temporal database driver of a specific mapset
@@ -59,9 +104,11 @@ def _get_driver_name(lock, conn, data):
        
        :returns: Name of the driver or None if no temporal database present
     """
+    mapset = data[1]
+    if not mapset:
+        mapset = libgis.G_mapset()
     
-    drstring = libtgis.tgis_get_mapset_driver_name(data[1])
-    
+    drstring = libtgis.tgis_get_mapset_driver_name(mapset)
     conn.send(drstring) 
 
 ###############################################################################
@@ -75,13 +122,17 @@ def _get_database_name(lock, conn, data):
        
        :returns: Name of the database or None if no temporal database present
     """
-    dbstring = libtgis.tgis_get_mapset_database_name(data[1])
+    mapset = data[1]
+    if not mapset:
+        mapset = libgis.G_mapset()
+    dbstring = libtgis.tgis_get_mapset_database_name(mapset)
+
     if dbstring:
         # We substitute GRASS variables if they are located in the database string
         # This behavior is in conjunction with db.connect
-        dbstring = dbstring.replace("$GISDBASE", corefunc.current_gisdbase)
-        dbstring = dbstring.replace("$LOCATION_NAME", corefunc.current_location)
-        dbstring = dbstring.replace("$MAPSET", corefunc.current_mapset)
+        dbstring = dbstring.replace("$GISDBASE", libgis.G_gisdbase())
+        dbstring = dbstring.replace("$LOCATION_NAME", libgis.G_location())
+        dbstring = dbstring.replace("$MAPSET", libgis.G_mapset())
     conn.send(dbstring) 
 
 ###############################################################################
@@ -649,12 +700,15 @@ def _convert_timestamp_from_grass(ts):
 ###############################################################################
 
 def _stop(lock, conn, data):
+    libgis.G_debug(1, "Stop C-interface server")
     conn.close()
     lock.release()
-    libgis.G_debug(1, "Stop C-interface server")
     sys.exit()
 
 ###############################################################################
+# Global server connection
+server_connection = None
+server_lock = None
 
 def c_library_server(lock, conn):
     """The GRASS C-libraries server function designed to be a target for
@@ -662,9 +716,9 @@ def c_library_server(lock, conn):
 
        :param lock: A multiprocessing.Lock
        :param conn: A multiprocessing.Pipe
-    """
+    """   
     # Crerate the function array
-    functions = [0]*11
+    functions = [0]*15
     functions[RPCDefs.STOP] = _stop
     functions[RPCDefs.HAS_TIMESTAMP] = _has_timestamp
     functions[RPCDefs.WRITE_TIMESTAMP] = _write_timestamp
@@ -675,6 +729,10 @@ def c_library_server(lock, conn):
     functions[RPCDefs.AVAILABLE_MAPSETS] = _available_mapsets
     functions[RPCDefs.GET_DRIVER_NAME] = _get_driver_name
     functions[RPCDefs.GET_DATABASE_NAME] = _get_database_name
+    functions[RPCDefs.G_MAPSET] = _get_mapset
+    functions[RPCDefs.G_LOCATION] = _get_location
+    functions[RPCDefs.G_GISDBASE] = _get_gisdbase
+    functions[RPCDefs.G_FATAL_ERROR] = _fatal_error
 
     libgis.G_gisinit("c_library_server")
     libgis.G_debug(1, "Start C-interface server")
@@ -807,6 +865,10 @@ class CLibrariesInterface(object):
        'sqlite'
        >>> ciface.get_database_name().split("/")[-1]
        'sqlite.db'
+       
+       >>> mapset = ciface.get_mapset()
+       >>> location = ciface.get_location()
+       >>> gisdbase = ciface.get_gisdbase()
 
        >>> gscript.del_temp_region()
 
@@ -815,11 +877,12 @@ class CLibrariesInterface(object):
     def __init__(self):
         self.client_conn = None
         self.server_conn = None
+        self.queue = None
         self.server = None
         self.start_server()
 
     def start_server(self):
-        self.client_conn, self.server_conn = Pipe()
+        self.client_conn, self.server_conn = Pipe(True)
         self.lock = Lock()
         self.server = Process(target=c_library_server, args=(self.lock,
                                                           self.server_conn))
@@ -1135,9 +1198,6 @@ class CLibrariesInterface(object):
            
            :returns: Name of the driver or None if no temporal database present
         """
-        if mapset is None or mapset is "":
-            mapset = corefunc.get_current_mapset()
-
         self._check_restart_server()
         self.client_conn.send([RPCDefs.GET_DRIVER_NAME, mapset])
         return self.client_conn.recv()
@@ -1149,14 +1209,47 @@ class CLibrariesInterface(object):
            
            :returns: Name of the database or None if no temporal database present
         """
-        
-        if mapset is None or mapset is "":
-            mapset = corefunc.get_current_mapset()
-        
         self._check_restart_server()
         self.client_conn.send([RPCDefs.GET_DATABASE_NAME, mapset])
         return self.client_conn.recv()
     
+    def get_mapset(self):
+        """Return the current mapset
+                   
+           :returns: Name of the current mapset
+        """
+        self._check_restart_server()
+        self.client_conn.send([RPCDefs.G_MAPSET,])
+        return self.client_conn.recv()
+        
+    def get_location(self):
+        """Return the location
+                   
+           :returns: Name of the location
+        """
+        self._check_restart_server()
+        self.client_conn.send([RPCDefs.G_LOCATION,])
+        return self.client_conn.recv()
+        
+    def get_gisdbase(self):
+        """Return the gisdatabase
+                   
+           :returns: Name of the gisdatabase
+        """
+        self._check_restart_server()
+        self.client_conn.send([RPCDefs.G_GISDBASE,])
+        return self.client_conn.recv()
+        
+    def fatal_error(self, mapset=None):
+        """Return the temporal database name of a specific mapset
+        
+           :param mapset: Name of the mapset
+           
+           :returns: Name of the database or None if no temporal database present
+        """
+        self._check_restart_server()
+        self.client_conn.send([RPCDefs.G_FATAL_ERROR])
+
     def stop(self):
         """Stop the messenger server and close the pipe
         

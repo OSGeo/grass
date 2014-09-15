@@ -350,7 +350,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
             sql = sql.replace("SPACETIME_REGISTER_TABLE", stds_register_table)
             statement += sql
 
-            if dbif.dbmi.__name__ == "sqlite3":
+            if dbif.get_dbmi().__name__ == "sqlite3":
                 statement += "CREATE INDEX %s_index ON %s (id);"%(stds_register_table, stds_register_table)
 
             # Set the map register table name
@@ -1454,10 +1454,9 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 sql += " AND (%s)" % (where.split(";")[0])
             if order is not None and order != "":
                 sql += " ORDER BY %s" % (order.split(";")[0])
-
             try:
-                dbif.cursor.execute(sql)
-                rows = dbif.cursor.fetchall()
+                dbif.execute(sql,  mapset=self.base.mapset)
+                rows = dbif.fetchall(mapset=self.base.mapset)
             except:
                 if connected:
                     dbif.close()
@@ -1844,7 +1843,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         dbif, connected = init_dbif(dbif)
 
-        if dbif.dbmi.__name__ != "sqlite3":
+        if dbif.get_dbmi().__name__ != "sqlite3":
             self.msgr.fatal(_("Renaming of space time datasets is not supported for PostgreSQL."))
 
         # SELECT all needed information from the database
@@ -1874,7 +1873,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                                                              new_map_register_table)
 
         # We need to take care of the stds index in the sqlite3 database
-        if dbif.dbmi.__name__ == "sqlite3":
+        if dbif.get_dbmi().__name__ == "sqlite3":
             statement += "DROP INDEX %s_index;\n" % (old_map_register_table)
             statement += "CREATE INDEX %s_index ON %s (id);"%(new_map_register_table,
                                                               new_map_register_table)
@@ -1970,15 +1969,15 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         # Check if map is already registered
         if stds_register_table is not None:
-            if dbif.dbmi.paramstyle == "qmark":
+            if dbif.get_dbmi().paramstyle == "qmark":
                 sql = "SELECT id FROM " + \
                     stds_register_table + " WHERE id = (?)"
             else:
                 sql = "SELECT id FROM " + \
                     stds_register_table + " WHERE id = (%s)"
             try:
-                dbif.cursor.execute(sql, (map_id,))
-                row = dbif.cursor.fetchone()
+                dbif.execute(sql, (map_id,),  mapset=self.base.mapset)
+                row = dbif.fetchone(mapset=self.base.mapset)
             except:
                 self.msgr.warning(_("Error in register table request"))
                 raise
@@ -2115,7 +2114,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                                                  dbif=dbif, execute=False)
 
         # Now put the raster name in the stds map register table
-        if dbif.dbmi.paramstyle == "qmark":
+        if dbif.get_dbmi().paramstyle == "qmark":
             sql = "INSERT INTO " + stds_register_table + \
                 " (id) " + "VALUES (?);\n"
         else:
@@ -2185,7 +2184,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
         # Remove the map from the space time dataset register
         stds_register_table = self.get_map_register()
         if stds_register_table is not None:
-            if dbif.dbmi.paramstyle == "qmark":
+            if dbif.get_dbmi().paramstyle == "qmark":
                 sql = "DELETE FROM " + stds_register_table + " WHERE id = ?;\n"
             else:
                 sql = "DELETE FROM " + \
@@ -2301,12 +2300,12 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                     None).get_type())
                 sql = sql.replace("SPACETIME_REGISTER_TABLE", stds_register_table)
 
-            dbif.cursor.execute(sql)
-            row = dbif.cursor.fetchone()
+            dbif.execute(sql,  mapset=self.base.mapset)
+            row = dbif.fetchone(mapset=self.base.mapset)
 
             if row is not None:
                 # This seems to be a bug in sqlite3 Python driver
-                if dbif.dbmi.__name__ == "sqlite3":
+                if dbif.get_dbmi().__name__== "sqlite3":
                     tstring = row[0]
                     # Convert the unicode string into the datetime format
                     if self.is_time_absolute():
