@@ -1,6 +1,9 @@
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 
+#ifndef _LOCAL_PROTO_
+#define _LOCAL_PROTO_
+
 /* define codes for characteristics of relation between two nearest features */
 #define CAT        1		/* category of nearest feature */
 #define FROM_X     2		/* x coordinate of nearest point on 'from' feature */
@@ -35,6 +38,12 @@ typedef struct
     char *column;		/* column name */
 } UPLOAD;
 
+
+typedef int dist_func(const struct line_pnts *, double, double, double, int,
+                       double *, double *, double *, double *, double *,
+                       double *);
+extern dist_func *line_distance;
+
 /* cmp.c */
 int cmp_near(const void *, const void *);
 int cmp_near_to(const void *, const void *);
@@ -50,8 +59,7 @@ int line2line(struct line_pnts *FPoints, int ftype,
 	      double *tx, double *ty, double *tz,
 	      double *talong, double *tangle,
 	      double *dist,
-	      int with_z,
-	      int geodesic);
+	      int with_z);
 int line2area(const struct Map_info *To,
 	      struct line_pnts *Points, int type,
 	      int area, const struct bound_box *abox,
@@ -60,8 +68,9 @@ int line2area(const struct Map_info *To,
 	      double *tx, double *ty, double *tz,
 	      double *talong, double *tangle,
 	      double *dist,
-	      int with_z,
-	      int geodesic);
+	      int with_z);
 
 /* print.c */
 int print_upload(NEAR *, UPLOAD *, int, dbCatValArray *, dbCatVal *, char *);
+
+#endif
