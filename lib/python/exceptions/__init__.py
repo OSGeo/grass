@@ -32,7 +32,19 @@ class ParameterError(Exception):
 
 
 class ScriptError(Exception):
-    pass
+    """Raised during script execution. ::
+
+        >>> error = ScriptError('My error message!')
+        >>> error.value
+        'My error message!'
+        >>> print(error)
+        My error message!
+    """
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return str(self.value)
 
 
 class Usage(Exception):
