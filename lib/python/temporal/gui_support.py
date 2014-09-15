@@ -89,27 +89,31 @@ def tlist(type, dbif=None):
     id = None
     sp = dataset_factory(type, id)
     dbif, connected = init_dbif(dbif)
+    
+    mapsets = get_available_temporal_mapsets()
 
     output = []
     temporal_type = ["absolute", 'relative']
     for type in temporal_type:
-        # Table name
-        if type == "absolute":
-            table = sp.get_type() + "_view_abs_time"
-        else:
-            table = sp.get_type() + "_view_rel_time"
+        # For each available mapset
+        for mapset in mapsets.keys():
+            # Table name
+            if type == "absolute":
+                table = sp.get_type() + "_view_abs_time"
+            else:
+                table = sp.get_type() + "_view_rel_time"
 
-        # Create the sql selection statement
-        sql = "SELECT id FROM " + table
-        sql += " ORDER BY id"
+            # Create the sql selection statement
+            sql = "SELECT id FROM " + table
+            sql += " ORDER BY id"
 
-        dbif.cursor.execute(sql)
-        rows = dbif.cursor.fetchall()
+            dbif.execute(sql,  mapset=mapset)
+            rows = dbif.fetchall(mapset=mapset)
 
-        # Append the ids of the space time datasets
-        for row in rows:
-            for col in row:
-                output.append(str(col))
+            # Append the ids of the space time datasets
+            for row in rows:
+                for col in row:
+                    output.append(str(col))
 
     if connected is True:
         dbif.close()

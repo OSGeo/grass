@@ -290,7 +290,7 @@ def register_maps_in_space_time_dataset(
 
         # Sqlite3 performance is better for huge datasets when committing in
         # small chunks
-        if dbif.dbmi.__name__ == "sqlite3":
+        if dbif.get_dbmi().__name__ == "sqlite3":
             if count % 100 == 0:
                 if statement is not None and statement != "":
                     dbif.execute_transaction(statement)

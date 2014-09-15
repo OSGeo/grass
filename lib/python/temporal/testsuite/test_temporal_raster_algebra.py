@@ -13,6 +13,7 @@ import grass.script
 import grass.temporal as tgis
 import grass.gunittest as gunittest
 import datetime
+import os
 
 
 class TestRegisterFunctions(gunittest.TestCase):
@@ -21,6 +22,7 @@ class TestRegisterFunctions(gunittest.TestCase):
     def setUpClass(cls):
         """!Initiate the temporal GIS and set the region
         """
+        os.putenv("GRASS_OVERWRITE", "1")
         tgis.init(True) # Raise on error instead of exit(1)
         grass.script.use_temp_region()
         ret = grass.script.run_command("g.region", n=80.0, s=0.0, e=120.0,

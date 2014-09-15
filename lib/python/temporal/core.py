@@ -351,8 +351,8 @@ def get_tgis_metadata(dbif=None):
     # Select metadata if the table is present
     try:
         statement = "SELECT * FROM tgis_metadata;\n"
-        dbif.cursor.execute(statement)
-        rows = dbif.cursor.fetchall()
+        dbif.execute(statement)
+        rows = dbif.fetchall()
     except:
         rows = None
 
@@ -556,8 +556,8 @@ def init(raise_fatal_error=False):
         if os.path.exists(tgis_database_string):
             dbif.connect()
             # Check for raster_base table
-            dbif.cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='raster_base';")
-            name = dbif.cursor.fetchone()
+            dbif.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='raster_base';")
+            name = dbif.fetchone()
             if name and name[0] == "raster_base":
                 db_exists = True
             dbif.close()
@@ -565,9 +565,9 @@ def init(raise_fatal_error=False):
         # Connect to database
         dbif.connect()
         # Check for raster_base table
-        dbif.cursor.execute("SELECT EXISTS(SELECT * FROM information_schema.tables "
+        dbif.execute("SELECT EXISTS(SELECT * FROM information_schema.tables "
                    "WHERE table_name=%s)", ('raster_base',))
-        if dbif.cursor.fetchone()[0]:
+        if dbif.fetchone()[0]:
             db_exists = True
 
     backup_howto = "The format of your actual temporal database is not supported any more.\n"\
@@ -611,7 +611,7 @@ def init(raise_fatal_error=False):
 def get_database_info_string():
     dbif = SQLDatabaseInterfaceConnection()
 
-    info  = "\nDBMI interface:..... " + str(dbif.dbmi.__name__)
+    info  = "\nDBMI interface:..... " + str(dbif.get_dbmi().__name__)
     info += "\nTemporal database:.. " + str( get_tgis_database_string())
     return info
 
@@ -775,7 +775,138 @@ def _create_tgis_metadata_table(content, dbif=None):
 
 ###############################################################################
 
-class SQLDatabaseInterfaceConnection():
+class SQLDatabaseInterfaceConnection(object):
+    def __init__(self):
+        self.tgis_mapsets = get_available_temporal_mapsets()
+        self.current_mapset = get_current_mapset()
+        self.connections = {}
+        self.connected = False
+        
+        self.unique_connections = {}
+        
+        for mapset in self.tgis_mapsets.keys():
+            driver,  dbstring = self.tgis_mapsets[mapset]
+            
+            if dbstring not in self.unique_connections.keys():
+                self.unique_connections[dbstring] = DBConnection(driver)
+            
+            self.connections[mapset] = self.unique_connections[dbstring]
+
+    def get_dbmi(self,  mapset=None):
+        if mapset is None:
+            mapset = self.current_mapset
+        return self.connections[mapset].dbmi
+
+    def rollback(self,  mapset=None):
+        """
+            Roll back the last transaction. This must be called
+            in case a new query should be performed after a db error.
+
+            This is only relevant for postgresql database.
+        """
+        if mapset is None:
+            mapset = self.current_mapset
+
+    def connect(self):
+        """Connect to the DBMI to execute SQL statements
+
+           Supported backends are sqlite3 and postgresql
+        """
+        for mapset in self.tgis_mapsets.keys():
+            driver,  dbstring = self.tgis_mapsets[mapset]
+            conn = self.connections[mapset]
+            if conn.is_connected() is False:
+                conn .connect(dbstring)
+                
+        self.connected = True
+        
+    def is_connected(self):
+        return self.connected
+
+    def close(self):
+        """Close the DBMI connection
+
+           There may be several temporal databases in a location, hence 
+           close all temporal databases that have been opened. 
+        """
+        for key in self.unique_connections.keys():
+            self.unique_connections[key] .close()
+        
+        self.connected = False
+
+    def mogrify_sql_statement(self, content, mapset=None):
+        """Return the SQL statement and arguments as executable SQL string
+
+           :param content: The content as tuple with two entries, the first
+                           entry is the SQL statement with DBMI specific
+                           place holder (?), the second entry is the argument
+                           list that should substitute the place holder.
+           :param mapset: The mapset of the abstract dataset or temporal
+                          database location, if None the current mapset 
+                          will be used
+        """
+        if mapset is None:
+            mapset = self.current_mapset
+
+        return self.connections[mapset].mogrify_sql_statement(content)
+
+    def check_table(self, table_name, mapset=None):
+        """Check if a table exists in the temporal database
+
+           :param table_name: The name of the table to be checked for existence
+           :param mapset: The mapset of the abstract dataset or temporal
+                          database location, if None the current mapset 
+                          will be used
+           :returns: True if the table exists, False otherwise
+           
+           TODO:
+           There may be several temporal databases in a location, hence 
+           the mapset is used to query the correct temporal database.
+        """
+        if mapset is None:
+            mapset = self.current_mapset
+
+        return self.connections[mapset].check_table(table_name)
+
+    def execute(self,  statement,  args=None,  mapset=None):
+        """""
+           :param mapset: The mapset of the abstract dataset or temporal
+                          database location, if None the current mapset 
+                          will be used
+        """
+        if mapset is None:
+            mapset = self.current_mapset
+
+        return self.connections[mapset].execute(statement,  args)
+
+    def fetchone(self,  mapset=None):
+        if mapset is None:
+            mapset = self.current_mapset
+
+        return self.connections[mapset].fetchone()
+
+    def fetchall(self,  mapset=None):
+        if mapset is None:
+            mapset = self.current_mapset
+
+        return self.connections[mapset].fetchall()
+
+    def execute_transaction(self, statement, mapset=None):
+        """Execute a transactional SQL statement
+
+           The BEGIN and END TRANSACTION statements will be added automatically
+           to the sql statement
+
+           :param statement: The executable SQL statement or SQL script
+        """
+        if mapset is None:
+            mapset = self.current_mapset
+
+        return self.connections[mapset].execute_transaction(statement)
+ 
+###############################################################################
+
+class DBConnection(object):
     """This class represents the database interface connection
        and provides access to the chisen backend modules.
 
@@ -784,31 +915,29 @@ class SQLDatabaseInterfaceConnection():
          - postgresql via psycopg2
 
     """
-    def __init__(self):
-        """TODO:
-           Create a list of all accessible mapsets that have temporal database definitions
-           Create a database connection for each mapset, reuse existing database connections
-           in case the connection specifications are identical (a single temporal database).
-           
-           Database string and river are mapset specific, hence the driver may change with the mapset.
-        """
+    def __init__(self ,  backend=None):
         self.connected = False
-        global tgis_backend
-        if tgis_backend == "sqlite":
-            self.dbmi = sqlite3
+        if backend is None:
+            global tgis_backend
+            if tgis_backend == "sqlite":
+                self.dbmi = sqlite3
+            else:
+                self.dbmi = psycopg2
         else:
-            self.dbmi = psycopg2
+            if backend == "sqlite":
+                self.dbmi = sqlite3
+            else:
+                self.dbmi = psycopg2
 
         self.msgr = get_tgis_message_interface()
         self.msgr.debug(1, "SQLDatabaseInterfaceConnection constructor")
 
     def __del__(self):
-        """TODO:
-           Close all mapset specific connections, be aware that different 
-           mapsets may have identical connections.
-        """
         if self.connected is True:
             self.close()
+            
+    def is_connected(self):
+        return self.connected
 
     def rollback(self):
         """
@@ -821,22 +950,19 @@ class SQLDatabaseInterfaceConnection():
             if self.connected:
                 self.connection.rollback()
 
-    def connect(self):
+    def connect(self,  dbstring=None):
         """Connect to the DBMI to execute SQL statements
 
            Supported backends are sqlite3 and postgresql
-           
-           TODO:
-           Create connections for each mapset that has a temporal database.
-           Open existing connections only once.
-           The dbmi, connection and cursor are mapset specific 
-           and must be managed in a dict.
         """
-        global tgis_database_string
+        # Connection in the current mapset
+        if dbstring is None:
+            global tgis_database_string
+            dbstring = tgis_database_string
 
         try:
             if self.dbmi.__name__ == "sqlite3":
-                self.connection = self.dbmi.connect(tgis_database_string,
+                self.connection = self.dbmi.connect(dbstring,
                         detect_types = self.dbmi.PARSE_DECLTYPES | self.dbmi.PARSE_COLNAMES)
                 self.connection.row_factory = self.dbmi.Row
                 self.connection.isolation_level = None
@@ -844,7 +970,7 @@ class SQLDatabaseInterfaceConnection():
                 self.cursor.execute("PRAGMA synchronous = OFF")
                 self.cursor.execute("PRAGMA journal_mode = MEMORY")
             elif self.dbmi.__name__ == "psycopg2":
-                self.connection = self.dbmi.connect(tgis_database_string)
+                self.connection = self.dbmi.connect(dbstring)
                 #self.connection.set_isolation_level(dbmi.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
                 self.cursor = self.connection.cursor(
                     cursor_factory = self.dbmi.extras.DictCursor)
@@ -868,7 +994,7 @@ class SQLDatabaseInterfaceConnection():
         self.cursor.close()
         self.connected = False
 
-    def mogrify_sql_statement(self, content, mapset=None):
+    def mogrify_sql_statement(self, content):
         """Return the SQL statement and arguments as executable SQL string
         
            TODO:
@@ -949,7 +1075,7 @@ class SQLDatabaseInterfaceConnection():
 
                 return statement
 
-    def check_table(self, table_name, mapset=None):
+    def check_table(self, table_name):
         """Check if a table exists in the temporal database
 
            :param table_name: The name of the table to be checked for existence
@@ -987,20 +1113,38 @@ class SQLDatabaseInterfaceConnection():
 
         return table_exists
     
-    def execute(self, statement, mapset=None):
+    def execute(self, statement,  args=None):
         """Execute a SQL statement
 
            :param statement: The executable SQL statement or SQL script
-           :param mapset: The mapset of the abstract dataset or temporal
-                          database location, if None the current mapset 
-                          will be used
-           
-           NOTE: not implemented, the purpose of this function is to
-                 replace all dbif.cursor.execute() calls in the temporal
-                 framework to allow SQL statement execution with distributed
-                 temporal databases identified by their mapset name
         """
-        pass
+        connected = False
+        if not self.connected:
+            self.connect()
+            connected = True
+        try:
+            if args:
+                self.cursor.execute(statement,  args)
+            else:
+                self.cursor.execute(statement)
+        except:
+            if connected:
+                self.close()
+            self.msgr.error(_("Unable to execute :\n %(sql)s" % {"sql":statement}))
+            raise
+
+        if connected:
+            self.close()
+        
+    def fetchone(self):
+        if self.connected:
+            return self.cursor.fetchone()
+        return None
+
+    def fetchall(self):
+        if self.connected:
+            return self.cursor.fetchall()
+        return None
 
     def execute_transaction(self, statement, mapset=None):
         """Execute a transactional SQL statement
@@ -1009,9 +1153,6 @@ class SQLDatabaseInterfaceConnection():
            to the sql statement
 
            :param statement: The executable SQL statement or SQL script
-           :param mapset: The mapset of the abstract dataset or temporal
-                          database location, if None the current mapset 
-                          will be used
         """
         connected = False
         if not self.connected:
@@ -1064,7 +1205,7 @@ def init_dbif(dbif):
         dbif = SQLDatabaseInterfaceConnection()
         dbif.connect()
         return dbif, True
-    elif dbif.connected is False:
+    elif dbif.is_connected() is False:
         dbif.connect()
         return dbif, True
 

@@ -70,11 +70,11 @@ def get_dataset_list(type,  temporal_type,  columns=None,  where=None,  order=No
     dbif = SQLDatabaseInterfaceConnection()
     dbif.connect()
     
-    mapsets = get_tgis_c_library_interface().available_mapsets()
+    mapsets = get_available_temporal_mapsets()
     
     result = {}
     
-    for mapset in mapsets:
+    for mapset in mapsets.keys():
         
         if temporal_type == "absolute":
             table = sp.get_type() + "_view_abs_time"
@@ -95,8 +95,8 @@ def get_dataset_list(type,  temporal_type,  columns=None,  where=None,  order=No
         if order:
             sql += " ORDER BY " + order
 
-        dbif.cursor.execute(sql)
-        rows = dbif.cursor.fetchall()
+        dbif.execute(sql,  mapset=mapset)
+        rows = dbif.fetchall(mapset=mapset)
         
         if rows:
             result[mapset] = rows
