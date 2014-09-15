@@ -162,25 +162,36 @@ overviews.
 
 <h2>EXAMPLES</h2>
 
-<h3>Export the integer raster roads map to GeoTIFF format:</h3>
+<h3>Export the integer raster basin_50K map to GeoTIFF format:</h3>
 <div class="code"><pre>
-r.out.gdal input=roads output=roads.tif type=UInt16
+g.region rast=basin_50K -p
+r.out.gdal input=basin_50K output=basin_50K.tif
 </pre></div>
 <p>
 <h3>Export a DCELL raster map in GeoTIFF format suitable for ESRI software:</h3>
 <div class="code"><pre>
-r.out.gdal in=elevation.10m out=ned_elev10m.tif type=Float64 createopt="PROFILE=GeoTIFF,TFW=YES"
+g.region rast=elevation -p
+r.out.gdal in=elevation output=elevation.tif createopt="PROFILE=GeoTIFF,TFW=YES"
+</pre></div>
+<p>
+<h3>Export a raster map in "Deflate" compressed GeoTIFF format:</h3>
+<div class="code"><pre>
+g.region rast=elevation -p
+r.out.gdal in=elevation output=elevation.tif createopt="COMPRESS=DEFLATE"
 </pre></div>
 <p>
 <h3>Export R,G,B imagery bands in GeoTIFF format suitable for ESRI software:</h3>
 <div class="code"><pre>
 i.group group=nc_landsat_rgb input=lsat7_2002_30,lsat7_2002_20,lsat7_2002_10
-r.out.gdal in=nc_landsat_rgb out=nc_landsat_rgb.tif type=Byte createopt="PROFILE=GeoTIFF,INTERLEAVE=PIXEL,TFW=YES"
+g.region rast=lsat7_2002_30 -p
+r.out.gdal in=nc_landsat_rgb output=nc_landsat_rgb.tif type=Byte \
+  createopt="PROFILE=GeoTIFF,INTERLEAVE=PIXEL,TFW=YES"
 </pre></div>
 <p>
 <h3>Export the floating point raster elevation map to ERDAS/IMG format:</h3>
 <div class="code"><pre>
-r.out.gdal input=elevation.10m output=elev_dem10.img format=HFA type=Float32
+g.region rast=elevation -p
+r.out.gdal input=elevation output=elelevation.img format=HFA type=Float32
 </pre></div>
 
 <h3>Export group of image maps as multi-band file</h3>
@@ -188,7 +199,8 @@ r.out.gdal input=elevation.10m output=elev_dem10.img format=HFA type=Float32
 g.list group
 i.group group=tm7 subgroup=tm7 input=tm7_10,tm7_20,tm7_30,tm7_40,tm7_50,tm7_60,tm7_70
 i.group -l tm7
-r.out.gdal tm7 type=UInt16 out=lsat_multiband.tif
+g.region rast=tm7_10 -p
+r.out.gdal tm7 output=lsat_multiband.tif
 gdalinfo lsat_multiband.tif
 </pre></div>
 
