@@ -23,7 +23,7 @@
  *			binary: 0000 -> integer: 0 -> patval=0
  *                 if value can be arbitray (0/1), then assume 0 value
  *
- * COPYRIGHT:    (C) 2002 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *   	    	 License (>=v2). Read the file COPYING that comes with GRASS
@@ -50,12 +50,10 @@ int main(int argc, char *argv[])
     int nrows, ncols;
     int row, col;
     int infd, outfd;
-    int verbose;
     RASTER_MAP_TYPE data_type;
     int pat, patv;
     struct GModule *module;
     struct Option *input, *output, *pattern, *patval;
-    struct Flag *flag1;
 
     G_gisinit(argv[0]);
 
@@ -82,18 +80,11 @@ int main(int argc, char *argv[])
     patval->required = YES;
     patval->description = _("Bit pattern value");
 
-    /* Define the different flags */
-
-    flag1 = G_define_flag();
-    flag1->key = 'q';
-    flag1->description = _("Quiet");
-
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     name = input->answer;
     result = output->answer;
-    verbose = (!flag1->answer);
     pat = atoi(pattern->answer);
     patv = atoi(patval->answer);
 
@@ -117,8 +108,7 @@ int main(int argc, char *argv[])
     for (row = 0; row < nrows; row++) {
 	CELL c;
 
-	if (verbose)
-	    G_percent(row, nrows, 2);
+        G_percent(row, nrows, 2);
 
 	/* read input map */
 	Rast_get_row(infd, inrast, row, data_type);
@@ -137,11 +127,12 @@ int main(int argc, char *argv[])
 
 	Rast_put_row(outfd, outrast, data_type);
     }
-
+    G_percent(1, 1, 1);
+    
     G_free(inrast);
     G_free(outrast);
     Rast_close(infd);
     Rast_close(outfd);
 
-    return (EXIT_SUCCESS);
+    exit(EXIT_SUCCESS);
 }
