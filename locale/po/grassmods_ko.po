@@ -30600,7 +30600,7 @@ msgstr "지도 <%s>를 위한 데이타베이스 연결이 DB 파일 안에 정�
 #: ../vector/v.info/print.c:134
 #, c-format
 msgid "Displaying column types/names for database connection of layer <%s>:"
-msgstr "레이어 <%s>의 데이타베이스 연결을 위한 열 형과 이름을 출력합니다:"
+msgstr "레이어 <%s>의 데이타베이스 연결을 위한 열형과 이름을 출력합니다:"
 
 #: ../vector/v.info/print.c:138 ../vector/v.db.select/main.c:165
 #: ../vector/v.colors.out/make_colors.c:30 ../vector/v.extract/main.c:250
@@ -30804,7 +30804,7 @@ msgstr "정보 대신에 이력을 출력하고 멈춥니다"
 
 #: ../vector/v.info/parse.c:30
 msgid "Print types/names of table columns for specified layer instead of info and exit"
-msgstr "정보 대신 지정한 레이어를 위한 표의 열 형과 이름을 출력하고 멈춥니다"
+msgstr "정보 대신 지정한 레이어를 위한 표의 열형과 이름을 출력하고 멈춥니다"
 
 #: ../vector/v.info/parse.c:35
 msgid "Print region info in shell script style"
@@ -37041,8 +37041,8 @@ msgstr "질의를 위한 임계값은 %.2f입니다"
 #, c-format
 msgid "%d of %d feature selected from vector map <%s>"
 msgid_plural "%d of %d features selected from vector map <%s>"
-msgstr[0] "벡터지도 <%3$s>에서 %2$d 중 %1$d개의 피쳐를 선택했습니다"
-msgstr[1] "벡터지도 <%3$s>에서 %2$d 중 %1$d개의 피쳐를 선택했습니다"
+msgstr[0] "벡터지도 <%3$s>에서 %2$d개 중 %1$d개의 피쳐를 선택했습니다"
+msgstr[1] "벡터지도 <%3$s>에서 %2$d개 중 %1$d개의 피쳐를 선택했습니다"
 
 #: ../vector/v.edit/select.c:496
 msgid "Layer must be > 0 for 'where'"
