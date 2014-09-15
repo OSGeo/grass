@@ -361,7 +361,7 @@ class ManageExtensionWindow(wx.Frame):
         self.extList = CheckListExtension(parent = self.panel)
 
         # buttons
-        self.btnUninstall = wx.Button(parent = self.panel, id = wx.ID_REMOVE, label="Uninstall")
+        self.btnUninstall = wx.Button(parent = self.panel, id = wx.ID_REMOVE, label=_("Uninstall"))
         self.btnUninstall.SetToolTipString(_("Uninstall selected Addons extensions"))
         self.btnUpdate = wx.Button(parent = self.panel, id = wx.ID_REFRESH, label=_("Reinstall"))
         self.btnUpdate.SetToolTipString(_("Reinstall selected Addons extensions"))
