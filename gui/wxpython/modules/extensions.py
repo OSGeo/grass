@@ -28,6 +28,7 @@ from grass.script import task as gtask
 from core             import globalvar
 from core.gcmd        import GError, RunCommand, GException, GMessage
 from core.utils       import SetAddOnPath, _
+from core.gthread import gThread
 from core.menutree    import TreeModel, ModuleNode
 from gui_core.widgets import GListCtrl, SearchModuleWidget
 from gui_core.treeview import CTreeView
@@ -63,6 +64,8 @@ class InstallExtensionWindow(wx.Frame):
         self.search.showSearchResult.connect(lambda result: self.tree.Select(result))
         # show text in statusbar when notification appears
         self.search.showNotification.connect(lambda message: self.SetStatusText(message))
+        # load data in different thread
+        self.thread = gThread()
 
         self.optionBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
                                       label = " %s " % _("Options"))
@@ -187,14 +190,17 @@ class InstallExtensionWindow(wx.Frame):
         wx.BeginBusyCursor()
         self.SetStatusText(_("Fetching list of modules from GRASS-Addons SVN (be patient)..."), 0)
         try:
-            self.modelBuilder.Load(url = self.repo.GetValue().strip())
+            self.thread.Run(callable=self.modelBuilder.Load, url=self.repo.GetValue().strip(),
+                            ondone=lambda event: self._fetchDone())
         except GException as e:
+            self._fetchDone()
             GError(unicode(e), parent = self, showTraceback = False)
-        
+            
+    def _fetchDone(self):
         self.tree.RefreshItems()
         self.SetStatusText("", 0)
         wx.EndBusyCursor()
-
+        
     def OnContextMenu(self, node):
         if not hasattr (self, "popupID"):
             self.popupID = dict()
