@@ -20,15 +20,6 @@
 
 #include "parser_local_proto.h"
 
-enum rule_type {
-    RULE_EXCLUSIVE,
-    RULE_REQUIRED,
-    RULE_REQUIRES,
-    RULE_REQUIRES_ALL,
-    RULE_EXCLUDES,
-    RULE_COLLECTIVE
-};
-
 struct vector {
     size_t elsize;
     size_t increment;
@@ -68,11 +59,21 @@ struct rule {
 
 static struct vector rules = {sizeof(struct rule), 50};
 
+void G__option_rule(int type, int nopts, void **opts)
+{
+    struct rule rule;
+
+    rule.type = type;
+    rule.count = nopts;
+    rule.opts = opts;
+
+    vector_append(&rules, &rule);
+}
+
 static void make_rule(int type, void *first, va_list ap)
 {
     struct vector opts;
     void *opt;
-    struct rule rule;
 
     vector_new(&opts, sizeof(void *), 10);
 
@@ -85,11 +86,7 @@ static void make_rule(int type, void *first, va_list ap)
 	vector_append(&opts, &opt);
     }
 
-    rule.type = type;
-    rule.count = opts.count;
-    rule.opts = (void**) opts.data;
-
-    vector_append(&rules, &rule);
+    G__option_rule(type, opts.count, (void**) opts.data);
 }
 
 static int is_flag(const void *p)

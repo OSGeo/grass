@@ -516,11 +516,12 @@ FILE *G_open_option_file(const struct Option *);
 void G_close_option_file(FILE *);
 
 /* parser_dependencies.c */
-void G_option_exclusive(void *first, ...);
-void G_option_required(void *first, ...);
-void G_option_requires(void *first, ...);
-void G_option_requires_all(void *first, ...);
-void G_option_collective(void *first, ...);
+void G__option_rule(int, int, void **);
+void G_option_exclusive(void *, ...);
+void G_option_required(void *, ...);
+void G_option_requires(void *, ...);
+void G_option_requires_all(void *, ...);
+void G_option_collective(void *, ...);
 
 /* paths.c */
 int G_mkdir(const char *);

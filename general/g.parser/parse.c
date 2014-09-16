@@ -62,6 +62,11 @@ void parse_toplevel(struct context *ctx, const char *cmd)
 	return;
     }
 
+    if (G_strcasecmp(cmd, "rules") == 0) {
+	ctx->state = S_RULES;
+	return;
+    }
+
     fprintf(stderr, _("Unknown command \"%s\" at line %d\n"), cmd, ctx->line);
 }
 
