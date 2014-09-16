@@ -1611,7 +1611,7 @@
       <module-item name="i.eb.soilheatflux">
         <label>Soil heat flux</label>
       </module-item>
-      <module-item name="i.eb.h_sebal01">
+      <module-item name="i.eb.hsebal01">
         <label>Sensible heat flux</label>
       </module-item>
       <separator/>
