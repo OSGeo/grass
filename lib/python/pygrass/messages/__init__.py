@@ -130,12 +130,6 @@ class Messenger(object):
        >>> msgr.percent(1, 1, 1)
        >>> msgr.warning("Ohh")
        >>> msgr.error("Ohh no")
-       D0/0: debug 0
-       message
-       important message
-        100%
-       WARNING: Ohh
-       ERROR: Ohh no
 
        >>> msgr = Messenger()
        >>> msgr.fatal("Ohh no no no!")
