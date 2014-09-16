@@ -52,7 +52,7 @@ class TestRegisterFunctions(grass.gunittest.TestCase):
         """!Remove maps from temporal database
         """
         self.runModule("t.unregister", maps="register_map_1,register_map_2", quiet=True)
-        self.runModule("g.remove", rast="register_map_1,register_map_2", quiet=True)
+        self.runModule("g.mremove", type="rast",  pattern="register_map_1,register_map_2", quiet=True)
         self.strds_abs.delete()
         self.strds_rel.delete()
 
