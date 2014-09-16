@@ -1361,7 +1361,9 @@ class GdalSelect(wx.Panel):
         # file
         if not ogr:
             extList = rasterFormatExtension
-            fileMask = '%(name)s (*.%(low)s;*.%(up)s)|*.%(low)s;*.%(up)s|' % {'name': 'GeoTIFF', 'low': 'tif', 'up': 'TIF'}
+            fileMask = ('%(name)s (*.%(low1)s;*.%(low2)s;*.%(up1)s;*.%(up2)s)|'
+                        '*.%(low1)s;*.%(low2)s;*.%(up1)s;*.%(up2)s|' %
+                        {'name': 'GeoTIFF', 'low1': 'tif', 'low2': 'tiff', 'up1': 'TIF', 'up2': 'TIFF'})
         else:
             extList = vectorFormatExtension
             fileMask = '%(name)s (*.%(low)s;*.%(up)s)|*.%(low)s;*.%(up)s|' % {'name': 'ESRI Shapefile', 'low': 'shp', 'up': 'SHP'}
