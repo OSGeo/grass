@@ -241,18 +241,6 @@ struct FP_stats {
 
 struct GDAL_link;
 
-typedef struct
-{
-    unsigned char r, g, b, a;	/* red, green, blue, and alpha */
-} RGBA_Color;
-
-typedef RGBA_Color RGB_Color;
-
-/* RGBA_Color alpha presets */
-#define RGBA_COLOR_OPAQUE     255
-#define RGBA_COLOR_TRANSPARENT  0
-#define RGBA_COLOR_NONE         0
-
 /*** prototypes ***/
 #include <grass/defs/raster.h>
 
