@@ -48,5 +48,4 @@ t.rast.aggregate --v input=precip_abs1 output=precip_abs4 offset=100 \
 t.info type=strds input=precip_abs4
 t.rast.list input=precip_abs4
 
-#t.remove -rf type=strds input=precip_abs1,precip_abs2,precip_abs3,precip_abs4
-t.remove -rf type=strds input=precip_abs1,precip_abs2
+t.remove -rf type=strds input=precip_abs1,precip_abs2,precip_abs3,precip_abs4

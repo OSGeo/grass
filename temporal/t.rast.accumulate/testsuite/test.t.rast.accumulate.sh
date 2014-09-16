@@ -27,25 +27,25 @@ t.rast.accumulate input=precip_abs1 output=precip_abs2 base=prec_acc \
 
 # We need to filter the identifier that may be different on different systems
 # like creation time and mapset 
-t.info input=precip_abs2 | grep -v \# | grep -v Creation | grep -v register | grep -v Id | grep -v Mapset > acc_1.txt
+t.info input=precip_abs2 | grep -v \# | grep -v Creation | grep -v register | grep -v Id | grep -v Mapset > data/acc_1.txt
 
 t.rast.accumulate input=precip_abs1 output=precip_abs2 base=prec_acc \
     limits=10,30 start="2001-01-01" stop="2002-01-01" gran="4 months" \
     cycle="7 months"
 
-t.info input=precip_abs2 | grep -v \# | grep -v Creation | grep -v register | grep -v Id | grep -v Mapset > acc_2.txt
+t.info input=precip_abs2 | grep -v \# | grep -v Creation | grep -v register | grep -v Id | grep -v Mapset > data/acc_2.txt
 
 t.rast.accumulate input=precip_abs1 output=precip_abs2 base=prec_acc \
     limits=10,30 start="2001-01-01" gran="2 months" \
     cycle="12 months"
 
-t.info input=precip_abs2 | grep -v \# | grep -v Creation | grep -v register | grep -v Id | grep -v Mapset > acc_3.txt
+t.info input=precip_abs2 | grep -v \# | grep -v Creation | grep -v register | grep -v Id | grep -v Mapset > data/acc_3.txt
 
 t.rast.accumulate input=precip_abs1 output=precip_abs2 base=prec_acc \
     limits=10,30 start="2001-01-01" stop="2002-01-01" gran="1 months" \
     cycle="12 months"
 
-t.info input=precip_abs2 | grep -v \# | grep -v Creation | grep -v register | grep -v Id | grep -v Mapset > acc_4.txt
+t.info input=precip_abs2 | grep -v \# | grep -v Creation | grep -v register | grep -v Id | grep -v Mapset > data/acc_4.txt
 
 # Second test
 
@@ -62,9 +62,11 @@ t.rast.accumulate input=precip_abs1 output=precip_abs2 base=prec_acc \
     limits=8,33 lower=lower upper=upper start="2001-01-01" stop="2002-01-01" gran="1 months" \
     cycle="12 months"
 
-t.info input=precip_abs2 | grep -v \# | grep -v Creation | grep -v register | grep -v Id | grep -v Mapset > acc_5.txt
+t.info input=precip_abs2 | grep -v \# | grep -v Creation | grep -v register | grep -v Id | grep -v Mapset > data/acc_5.txt
 
 t.remove -rf type=strds input=precip_abs1,precip_abs2,lower,upper
+
+cd data
 
 for i in `ls acc_*.txt` ; do
     diff $i "`basename $i .txt`.ref" >> out.diff

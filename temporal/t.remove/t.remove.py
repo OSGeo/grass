@@ -2,15 +2,15 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:	t.remove
-# AUTHOR(S):	Soeren Gebbert
+# MODULE:   t.remove
+# AUTHOR(S):    Soeren Gebbert
 #
-# PURPOSE:	Remove space time datasets from the temporal database
-# COPYRIGHT:	(C) 2011 by the GRASS Development Team
+# PURPOSE:  Remove space time datasets from the temporal database
+# COPYRIGHT:    (C) 2011 by the GRASS Development Team
 #
-#		This program is free software under the GNU General Public
-#		License (version 2). Read the file COPYING that comes with GRASS
-#		for details.
+#       This program is free software under the GNU General Public
+#       License (version 2). Read the file COPYING that comes with GRASS
+#       for details.
 #
 #############################################################################
 
@@ -106,8 +106,8 @@ def main():
 
     statement = ""
 
-    # Create the pygrass Module object for g.remove
-    remove = pyg.Module("g.remove", quiet=True, run_=False)
+    # Create the pygrass Module object for g.mremove
+    remove = pyg.Module("g.mremove", quiet=True, run_=False)
 
     for name in dataset_list:
         name = name.strip()
@@ -132,7 +132,7 @@ def main():
                 # Delete every 100 maps
                 if count%100 == 0:
                     dbif.execute_transaction(map_statement)
-                    remove(rast=name_list, run_=True)
+                    remove(type="rast",  pattern=name_list, run_=True)
                     map_statement = ""
                     name_list = []
 
@@ -140,11 +140,11 @@ def main():
                 dbif.execute_transaction(map_statement)
             if name_list:
                 if type == "strds":
-                    remove(rast=",".join(name_list), run_=True)
+                    remove(type="rast",  pattern=",".join(name_list), run_=True)
                 if type == "stvds":
-                    remove(vect=",".join(name_list), run_=True)
+                    remove(type="vect",  pattern=",".join(name_list), run_=True)
                 if type == "str3ds":
-                    remove(rast3d=",".join(name_list), run_=True)
+                    remove(type="rast3d",  pattern=",".join(name_list), run_=True)
 
         statement += sp.delete(dbif=dbif, execute=False)
 

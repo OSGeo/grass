@@ -79,76 +79,76 @@ class TestSTRDSToRast3(TestCase):
         self.assertModule("t.rast.to.rast3",  input="precip_d",  output="precip_d")
 
         univar_string="""n=576
-						null_cells=0
-						cells=576
-						min=100
-						max=600
-						range=500
-						mean=350
-						mean_of_abs=350
-						stddev=170.782512765993
-						variance=29166.6666666667
-						coeff_var=48.7950036474267
-						sum=201600"""
+                        null_cells=0
+                        cells=576
+                        min=100
+                        max=600
+                        range=500
+                        mean=350
+                        mean_of_abs=350
+                        stddev=170.782512765993
+                        variance=29166.6666666667
+                        coeff_var=48.7950036474267
+                        sum=201600"""
 
         self.assertRaster3dFitsUnivar(raster="precip_i", reference=univar_string, precision=2)
         self.assertRaster3dFitsUnivar(raster="precip_f", reference=univar_string, precision=2)
         self.assertRaster3dFitsUnivar(raster="precip_d", reference=univar_string, precision=2)
 
         tinfo_string="""north=80
-						south=0
-						east=120
-						west=0
-						bottom=1213
-						top=1231
-						nsres=10
-						ewres=10
-						tbres=3
-						rows=8
-						cols=12
-						depths=6
-						datatype="DCELL"
-						timestamp="1 Jan 2001 00:00:00 / 1 Jul 2002 00:00:00"
-						units="none"
-						vertical_units="months" """
+                        south=0
+                        east=120
+                        west=0
+                        bottom=1213
+                        top=1231
+                        nsres=10
+                        ewres=10
+                        tbres=3
+                        rows=8
+                        cols=12
+                        depths=6
+                        datatype="DCELL"
+                        timestamp="1 Jan 2001 00:00:00 / 1 Jul 2002 00:00:00"
+                        units="none"
+                        vertical_units="months" """
 
         self.assertRaster3dFitsInfo(raster="precip_i", reference=tinfo_string, precision=2)
 
         tinfo_string="""north=80
-						south=0
-						east=120
-						west=0
-						bottom=1213
-						top=1231
-						nsres=10
-						ewres=10
-						tbres=3
-						rows=8
-						cols=12
-						depths=6
-						datatype="FCELL"
-						timestamp="1 Jan 2001 00:00:00 / 1 Jul 2002 00:00:00"
-						units="none"
-						vertical_units="months" """
+                        south=0
+                        east=120
+                        west=0
+                        bottom=1213
+                        top=1231
+                        nsres=10
+                        ewres=10
+                        tbres=3
+                        rows=8
+                        cols=12
+                        depths=6
+                        datatype="FCELL"
+                        timestamp="1 Jan 2001 00:00:00 / 1 Jul 2002 00:00:00"
+                        units="none"
+                        vertical_units="months" """
 
         self.assertRaster3dFitsInfo(raster="precip_f", reference=tinfo_string, precision=2)
 
         tinfo_string="""north=80
-						south=0
-						east=120
-						west=0
-						bottom=1213
-						top=1231
-						nsres=10
-						ewres=10
-						tbres=3
-						rows=8
-						cols=12
-						depths=6
-						datatype="DCELL"
-						timestamp="1 Jan 2001 00:00:00 / 1 Jul 2002 00:00:00"
-						units="none"
-						vertical_units="months" """
+                        south=0
+                        east=120
+                        west=0
+                        bottom=1213
+                        top=1231
+                        nsres=10
+                        ewres=10
+                        tbres=3
+                        rows=8
+                        cols=12
+                        depths=6
+                        datatype="DCELL"
+                        timestamp="1 Jan 2001 00:00:00 / 1 Jul 2002 00:00:00"
+                        units="none"
+                        vertical_units="months" """
 
         self.assertRaster3dFitsInfo(raster="precip_d", reference=tinfo_string, precision=2)
 
@@ -162,75 +162,75 @@ class TestSTRDSToRast3(TestCase):
         self.assertModule("t.rast.to.rast3",  input="precip_d",  output="precip_d")
 
         univar_string="""n=480
-						null_cells=96
-						cells=576
-						min=100
-						max=600
-						range=500
-						mean=360
-						mean_of_abs=360
-						stddev=185.472369909914
-						variance=34400
-						coeff_var=51.5201027527539
-						sum=172800"""
+                        null_cells=96
+                        cells=576
+                        min=100
+                        max=600
+                        range=500
+                        mean=360
+                        mean_of_abs=360
+                        stddev=185.472369909914
+                        variance=34400
+                        coeff_var=51.5201027527539
+                        sum=172800"""
 
         univar = SimpleModule("r3.univar", flags="g", map="precip_i")
         self.assertModuleKeyValue(module=univar, reference=univar_string, precision=2, sep="=")
 
         tinfo_string="""north=80
-						south=0
-						east=120
-						west=0
-						bottom=1213
-						top=1231
-						nsres=10
-						ewres=10
-						tbres=3
-						rows=8
-						cols=12
-						depths=6
-						datatype="DCELL"
-						timestamp="1 Jan 2001 00:00:00 / 1 Jul 2002 00:00:00"
-						units="none"
-						vertical_units="months" """
+                        south=0
+                        east=120
+                        west=0
+                        bottom=1213
+                        top=1231
+                        nsres=10
+                        ewres=10
+                        tbres=3
+                        rows=8
+                        cols=12
+                        depths=6
+                        datatype="DCELL"
+                        timestamp="1 Jan 2001 00:00:00 / 1 Jul 2002 00:00:00"
+                        units="none"
+                        vertical_units="months" """
 
         self.assertRaster3dFitsInfo(raster="precip_i", reference=tinfo_string, precision=2)
 
         tinfo_string="""north=80
-						south=0
-						east=120
-						west=0
-						bottom=1213
-						top=1231
-						nsres=10
-						ewres=10
-						tbres=3
-						rows=8
-						cols=12
-						depths=6
-						datatype="FCELL"
-						timestamp="1 Jan 2001 00:00:00 / 1 Jul 2002 00:00:00"
-						units="none"
-						vertical_units="months" """
+                        south=0
+                        east=120
+                        west=0
+                        bottom=1213
+                        top=1231
+                        nsres=10
+                        ewres=10
+                        tbres=3
+                        rows=8
+                        cols=12
+                        depths=6
+                        datatype="FCELL"
+                        timestamp="1 Jan 2001 00:00:00 / 1 Jul 2002 00:00:00"
+                        units="none"
+                        vertical_units="months" """
 
         self.assertRaster3dFitsInfo(raster="precip_f", reference=tinfo_string, precision=2)
 
         tinfo_string="""north=80
-						south=0
-						east=120
-						west=0
-						bottom=1213
-						top=1231
-						nsres=10
-						ewres=10
-						tbres=3
-						rows=8
-						cols=12
-						depths=6
-						datatype="DCELL"
-						timestamp="1 Jan 2001 00:00:00 / 1 Jul 2002 00:00:00"
-						units="none"
-						vertical_units="months" """
+                        south=0
+                        east=120
+                        west=0
+                        bottom=1213
+                        top=1231
+                        nsres=10
+                        ewres=10
+                        tbres=3
+                        rows=8
+                        cols=12
+                        depths=6
+                        datatype="DCELL"
+                        timestamp="1 Jan 2001 00:00:00 / 1 Jul 2002 00:00:00"
+                        units="none"
+                        vertical_units="months" """
 
         self.assertRaster3dFitsInfo(raster="precip_d", reference=tinfo_string, precision=2)
 
@@ -270,21 +270,21 @@ class TestSTRDSToRast3MultiGran(TestCase):
         self.assertModule("t.rast.to.rast3",  input="precip_d",  output="precip_d")
 
         tinfo_string="""north=80
-						south=0
-						east=120
-						west=0
-						bottom=100
-						top=130
-						nsres=10
-						ewres=10
-						tbres=3
-						rows=8
-						cols=12
-						depths=6
-						datatype="DCELL"
-						timestamp="1 Jan 2000 00:00:00 / 1 Jan 2030 00:00:00"
-						units="none"
-						vertical_units="years" """
+                        south=0
+                        east=120
+                        west=0
+                        bottom=100
+                        top=130
+                        nsres=10
+                        ewres=10
+                        tbres=3
+                        rows=8
+                        cols=12
+                        depths=6
+                        datatype="DCELL"
+                        timestamp="1 Jan 2000 00:00:00 / 1 Jan 2030 00:00:00"
+                        units="none"
+                        vertical_units="years" """
 
         self.assertRaster3dFitsInfo(raster="precip_d", reference=tinfo_string, precision=2)
 
@@ -298,21 +298,21 @@ class TestSTRDSToRast3MultiGran(TestCase):
         self.assertModule("t.rast.to.rast3",  input="precip_d",  output="precip_d")
 
         tinfo_string="""north=80
-						south=0
-						east=120
-						west=0
-						bottom=1201
-						top=1237
-						nsres=10
-						ewres=10
-						tbres=6
-						rows=8
-						cols=12
-						depths=6
-						datatype="DCELL"
-						timestamp="1 Jan 2000 00:00:00 / 1 Jan 2003 00:00:00"
-						units="none"
-						vertical_units="months" """
+                        south=0
+                        east=120
+                        west=0
+                        bottom=1201
+                        top=1237
+                        nsres=10
+                        ewres=10
+                        tbres=6
+                        rows=8
+                        cols=12
+                        depths=6
+                        datatype="DCELL"
+                        timestamp="1 Jan 2000 00:00:00 / 1 Jan 2003 00:00:00"
+                        units="none"
+                        vertical_units="months" """
 
         self.assertRaster3dFitsInfo(raster="precip_d", reference=tinfo_string, precision=2)
 
@@ -327,21 +327,21 @@ class TestSTRDSToRast3MultiGran(TestCase):
         self.runModule("r3.info", map="precip_d")
 
         tinfo_string="""north=80
-						south=0
-						east=120
-						west=0
-						bottom=36524
-						top=36566
-						nsres=10
-						ewres=10
-						tbres=7
-						rows=8
-						cols=12
-						depths=6
-						datatype="DCELL"
-						timestamp="1 Jan 2000 00:00:00 / 12 Feb 2000 00:00:00"
-						units="none"
-						vertical_units="days" """
+                        south=0
+                        east=120
+                        west=0
+                        bottom=36524
+                        top=36566
+                        nsres=10
+                        ewres=10
+                        tbres=7
+                        rows=8
+                        cols=12
+                        depths=6
+                        datatype="DCELL"
+                        timestamp="1 Jan 2000 00:00:00 / 12 Feb 2000 00:00:00"
+                        units="none"
+                        vertical_units="days" """
 
         self.assertRaster3dFitsInfo(raster="precip_d", reference=tinfo_string, precision=2)
 
@@ -356,21 +356,21 @@ class TestSTRDSToRast3MultiGran(TestCase):
         self.runModule("r3.info", map="precip_d")
 
         tinfo_string="""north=80
-						south=0
-						east=120
-						west=0
-						bottom=36524
-						top=36524.8
-						nsres=10
-						ewres=10
-						tbres=0.125
-						rows=8
-						cols=12
-						depths=6
-						datatype="DCELL"
-						timestamp="1 Jan 2000 00:00:00 / 1 Jan 2000 18:00:00"
-						units="none"
-						vertical_units="hours" """
+                        south=0
+                        east=120
+                        west=0
+                        bottom=36524
+                        top=36524.8
+                        nsres=10
+                        ewres=10
+                        tbres=0.125
+                        rows=8
+                        cols=12
+                        depths=6
+                        datatype="DCELL"
+                        timestamp="1 Jan 2000 00:00:00 / 1 Jan 2000 18:00:00"
+                        units="none"
+                        vertical_units="hours" """
 
         self.assertRaster3dFitsInfo(raster="precip_d", reference=tinfo_string, precision=2)
 
@@ -385,21 +385,21 @@ class TestSTRDSToRast3MultiGran(TestCase):
         self.runModule("r3.info", map="precip_d")
 
         tinfo_string="""north=80
-						south=0
-						east=120
-						west=0
-						bottom=36524
-						top=36524.1
-						nsres=10
-						ewres=10
-						tbres=0.0118056
-						rows=8
-						cols=12
-						depths=6
-						datatype="DCELL"
-						timestamp="1 Jan 2000 00:00:00 / 1 Jan 2000 01:42:00"
-						units="none"
-						vertical_units="minutes" """
+                        south=0
+                        east=120
+                        west=0
+                        bottom=36524
+                        top=36524.1
+                        nsres=10
+                        ewres=10
+                        tbres=0.0118056
+                        rows=8
+                        cols=12
+                        depths=6
+                        datatype="DCELL"
+                        timestamp="1 Jan 2000 00:00:00 / 1 Jan 2000 01:42:00"
+                        units="none"
+                        vertical_units="minutes" """
 
         self.assertRaster3dFitsInfo(raster="precip_d", reference=tinfo_string, precision=2)
 

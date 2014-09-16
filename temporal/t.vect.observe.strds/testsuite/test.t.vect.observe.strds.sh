@@ -45,5 +45,5 @@ t.vect.list input=test_1_observer
 t.vect.db.select input=test_1_observer columns=cat,test1,test2,test3
 
 # @postprocess
-t.remove -rf type=strds input=precip_abs1,precip_abs2
-t.remove -rf type=stvds input=prec_observer,test_1_observer
+#t.remove -rf type=strds input=precip_abs1,precip_abs2
+#t.remove -rf type=stvds input=prec_observer,test_1_observer

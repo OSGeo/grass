@@ -2,15 +2,15 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:	t.rast3d.list
-# AUTHOR(S):	Soeren Gebbert
+# MODULE:   t.rast3d.list
+# AUTHOR(S):    Soeren Gebbert
 #
-# PURPOSE:	List registered maps of a space time raster3d dataset
-# COPYRIGHT:	(C) 2011-2014, Soeren Gebbert and the GRASS Development Team
+# PURPOSE:  List registered maps of a space time raster3d dataset
+# COPYRIGHT:    (C) 2011-2014, Soeren Gebbert and the GRASS Development Team
 #
-#		This program is free software under the GNU General Public
-#		License (version 2). Read the file COPYING that comes with GRASS
-#		for details.
+#       This program is free software under the GNU General Public
+#       License (version 2). Read the file COPYING that comes with GRASS
+#       for details.
 #
 #############################################################################
 

@@ -33,18 +33,18 @@ class TestRasterExtraction(TestCase):
         """Create input data for transient groundwater flow computation
         """
         # Use always the current mapset as temporal database
-        self.runModule("r.mapcalc", expression="prec_1 = 100")
-        self.runModule("r.mapcalc", expression="prec_2 = 200")
-        self.runModule("r.mapcalc", expression="prec_3 = 300")
-        self.runModule("r.mapcalc", expression="prec_4 = 400")
-        self.runModule("r.mapcalc", expression="prec_5 = 500")
-        self.runModule("r.mapcalc", expression="prec_6 = 600")
-        
+        self.runModule("r.mapcalc", expression="prec_1 = 100",  overwrite=True)
+        self.runModule("r.mapcalc", expression="prec_2 = 200",  overwrite=True)
+        self.runModule("r.mapcalc", expression="prec_3 = 300",  overwrite=True)
+        self.runModule("r.mapcalc", expression="prec_4 = 400",  overwrite=True)
+        self.runModule("r.mapcalc", expression="prec_5 = 500",  overwrite=True)
+        self.runModule("r.mapcalc", expression="prec_6 = 600",  overwrite=True)
+
         self.runModule("t.create",  type="strds",  temporaltype="absolute",  
-                                     output="precip_abs1",  title="A test",  description="A test")
+                                     output="precip_abs1",  title="A test",  description="A test",  overwrite=True)
         self.runModule("t.register",  flags="i",  type="rast",  input="precip_abs1",  
                                      maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6",  
-                                     start="2001-01-01", increment="3 months")
+                                     start="2001-01-01", increment="3 months",  overwrite=True)
 
     def tearDown(self):
         """Remove generated data"""
@@ -87,7 +87,7 @@ class TestRasterExtraction(TestCase):
         self.assertModule("t.rast.extract",  input="precip_abs1",  output="precip_abs2", 
                                       where="start_time > '2001-06-01'",  
                                       expression=" if(precip_abs1 > 400, precip_abs1, null())", 
-                                      basename="new_prec",  nprocs=2)
+                                      basename="new_prec",  nprocs=2,  overwrite=True)
 
         #self.assertModule("t.info",  flags="g",  input="precip_abs2")
 
@@ -119,7 +119,7 @@ class TestRasterExtraction(TestCase):
         """Perform r.mapcalc expression and register empty maps"""
         self.assertModule("t.rast.extract",  flags="n",  input="precip_abs1",  output="precip_abs2",
                                       expression=" if(precip_abs1 > 400, precip_abs1, null())", 
-                                      basename="new_prec",  nprocs=2)
+                                      basename="new_prec",  nprocs=2,  overwrite=True)
 
         #self.assertModule("t.info",  flags="g",  input="precip_abs2")
 
