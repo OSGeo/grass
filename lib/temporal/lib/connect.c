@@ -90,11 +90,12 @@ int tgis_get_connection(dbConnection * connection)
 static char *get_mapset_connection_name(const char *mapset, int contype)
 {
     const char *val = NULL;
-    char *ret_val = NULL;
+    char *ret_val = NULL;;
+    const char *gisdbase = G__getenv("GISDBASE");
+    const char *location = G__getenv("LOCATION_NAME");
     int ret;
 
-    ret = G__mapset_permissions2(G__getenv("GISDBASE"), 
-                                 G__getenv("LOCATION_NAME"), mapset);
+    ret = G__mapset_permissions2(gisdbase, location, mapset);
     switch (ret) {
     case 0:
         G_warning(_("You don't have permission to access the mapset <%s>"),
@@ -109,8 +110,8 @@ static char *get_mapset_connection_name(const char *mapset, int contype)
     }    
 
     G_create_alt_env();
-    G__setenv("GISDBASE", G_gisdbase());
-    G__setenv("LOCATION_NAME", G_location());
+    G__setenv("GISDBASE", gisdbase);
+    G__setenv("LOCATION_NAME", location);
     G__setenv("MAPSET", mapset);
     G__read_mapset_env();
  
