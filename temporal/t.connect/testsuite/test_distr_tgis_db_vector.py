@@ -169,7 +169,6 @@ class TestRasterExtraction(TestCase):
         tinfo_string="""id=a1@testvect1
                                 name=a1
                                 mapset=testvect1
-                                creator=soeren
                                 temporal_type=absolute
                                 start_time=2001-01-01 00:00:00
                                 end_time=2001-02-01 00:00:00 """
@@ -180,7 +179,6 @@ class TestRasterExtraction(TestCase):
         tinfo_string="""id=a1@testvect2
                                 name=a1
                                 mapset=testvect2
-                                creator=soeren
                                 temporal_type=absolute
                                 start_time=2001-01-01 00:00:00
                                 end_time=2001-03-01 00:00:00 """
@@ -191,7 +189,6 @@ class TestRasterExtraction(TestCase):
         tinfo_string="""id=a1@testvect3
                                 name=a1
                                 mapset=testvect3
-                                creator=soeren
                                 temporal_type=absolute
                                 start_time=2001-01-01 00:00:00
                                 end_time=2001-04-01 00:00:00 """
@@ -202,7 +199,6 @@ class TestRasterExtraction(TestCase):
         tinfo_string="""id=a1@testvect4
                                 name=a1
                                 mapset=testvect4
-                                creator=soeren
                                 temporal_type=absolute
                                 start_time=2001-01-01 00:00:00
                                 end_time=2001-05-01 00:00:00 """
