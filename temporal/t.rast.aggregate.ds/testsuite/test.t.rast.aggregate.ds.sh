@@ -48,5 +48,5 @@ t.info type=strds input=precip_abs2
 t.rast.list input=precip_abs2 method=deltagap
 
 # @postprocess
-t.remove -rf type=stvds input=soil_abs1
-t.remove -rf type=strds input=precip_abs1,precip_abs2
+#t.remove -rf type=stvds input=soil_abs1
+#t.remove -rf type=strds input=precip_abs1,precip_abs2

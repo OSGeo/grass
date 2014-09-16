@@ -31,7 +31,7 @@ t.rast.list temp_accumulation col=name,start_time,min,max > data/test_2_temp_acc
 t.rast.list temp_occ col=name,start_time,min,max  > data/test_2_temp_occ.txt
 t.rast.list temp_indi col=name,start_time,min,max > data/test_2_temp_indi.txt
 
-t.remove -rf type=strds input=temp_abs1,temp_accumulation,temp_indi
+#t.remove -rf type=strds input=temp_abs1,temp_accumulation,temp_indi
 
 cd data
 

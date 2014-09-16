@@ -51,7 +51,7 @@ t.rast.accdetect input=temp_accumulation occurrence=temp_occ base=temp_occ \
 t.rast.list temp_occ col=name,start_time,min,max          > data/test_1_temp_occ_b.txt
 t.rast.list temp_indi col=name,start_time,min,max         > data/test_1_temp_indi.txt
 
-t.remove -rf type=strds input=temp_abs1,temp_accumulation,temp_indi,minimum,maximum
+#t.remove -rf type=strds input=temp_abs1,temp_accumulation,temp_indi,minimum,maximum
 
 cd data
 

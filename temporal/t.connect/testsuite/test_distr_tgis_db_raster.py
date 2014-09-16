@@ -45,7 +45,9 @@ class TestRasterExtraction(TestCase):
                                 
         entries = list_string.split("\n")
         
-        t_list = SimpleModule("t.list", quiet=True, columns=["name","mapset,start_time","end_time","number_of_maps"],  type="strds")
+        t_list = SimpleModule("t.list", quiet=True, 
+                                            columns=["name","mapset,start_time","end_time","number_of_maps"],  
+                                            type="strds",  where='name = "A"')
         self.assertModule(t_list)
         
         out = t_list.outputs["stdout"].value
