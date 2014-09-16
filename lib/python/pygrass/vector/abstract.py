@@ -31,7 +31,7 @@ class Info(object):
     To get access to the vector info the map must be opened. ::
 
         >>> cens = Info('census')
-        >>> cens.open()
+        >>> cens.open(mode='r')
 
     Then it is possible to read and write the following map attributes: ::
 

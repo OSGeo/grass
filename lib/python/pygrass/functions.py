@@ -206,7 +206,7 @@ def get_raster_for_points(poi_vector, raster, column=None):
     >>> ele = RasterRow('elevation')
     >>> copy('schools','myschools','vect')
     >>> sch = VectorTopo('myschools')
-    >>> sch.open()
+    >>> sch.open(mode='r')
     >>> get_raster_for_points(sch, ele)               # doctest: +ELLIPSIS
     [(1, 633649.2856743174, 221412.94434781274, 145.06602)...
     >>> sch.table.columns.add('elevation','double precision')
