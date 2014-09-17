@@ -1,4 +1,4 @@
-"""Test of g.mremove module"""
+"""Test of g.remove module"""
 
 # TODO: rmapcalc probably fatals, replace or add raise on error?
 from grass.script.raster import mapcalc as rmapcalc
@@ -36,7 +36,7 @@ Removing raster <test_two>
 
 
 class GMRemoveTest(grass.gunittest.TestCase):
-    """Test removing with g.mremove"""
+    """Test removing with g.remove"""
 
     @classmethod
     def setUpClass(cls):
@@ -55,14 +55,14 @@ class GMRemoveTest(grass.gunittest.TestCase):
             rmapcalc("test_map_%i = 100" % i)
         rmapcalc("test_two = 2")
 
-        module = SimpleModule('g.mremove',
+        module = SimpleModule('g.remove',
                               type='rast', pattern='test_map_*,*two')
         self.assertModule(module)
         self.assertMultiLineEqual(module.outputs.stdout,
                                   REMOVE_RASTERS.replace('user1',
                                                          get_current_mapset()))
 
-        module = SimpleModule('g.mremove', type='rast',
+        module = SimpleModule('g.remove', type='rast',
                               pattern='test_map_*,*two', flags='f')
         self.assertModule(module)
         self.assertMultiLineEqual(module.outputs.stdout, '')
@@ -74,7 +74,7 @@ class GMRemoveTest(grass.gunittest.TestCase):
         rmapcalc("test_oranges = 200")
         rmapcalc("test_apples_big = 300")
         rmapcalc("test_apples_small = 300")
-        module = SimpleModule('g.mremove', type='rast',
+        module = SimpleModule('g.remove', type='rast',
                               pattern='test_{apples,oranges}*',
                               exclude="*_small")
         self.assertModule(module)
@@ -83,7 +83,7 @@ class GMRemoveTest(grass.gunittest.TestCase):
                                   'rast/test_apples_big@user1\n'
                                   'rast/test_oranges@user1\n'.replace(
                                       'user1', get_current_mapset()))
-        module = SimpleModule('g.mremove', type='rast',
+        module = SimpleModule('g.remove', type='rast',
                               pattern='test_{apples,oranges}{_small,_big,*}',
                               flags='f')
         self.assertModule(module)
@@ -93,11 +93,11 @@ class GMRemoveTest(grass.gunittest.TestCase):
 
 
 class GMRemoveWrongInputTest(grass.gunittest.TestCase):
-    """Test wrong input of parameters for g.mlist module"""
+    """Test wrong input of parameters for g.remove module"""
 
     def test_re_flags(self):
         """Test that -r and -e flags are exclusive"""
-        module = SimpleModule('g.mremove', flags='re',
+        module = SimpleModule('g.remove', flags='re',
                               type='rast', pattern='xxxyyyzzz')
         self.assertModuleFail(module)
         stderr = module.outputs.stderr

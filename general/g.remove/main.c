@@ -1,7 +1,7 @@
 
 /****************************************************************************
  *
- * MODULE:       g.mremove
+ * MODULE:       g.remove
  *
  * AUTHOR(S):    Huidae Cho <grass4u gmail.com>
  *
@@ -9,13 +9,12 @@
  *               CERL (original contributor),
  *               Radim Blazek <radim.blazek gmail.com>,
  *               Cedric Shock <cedricgrass shockfamily.net>,
- *               Huidae Cho <grass4u gmail.com>,
  *               Glynn Clements <glynn gclements.plus.com>,
  *               Jachym Cepicky <jachym les-ejk.cz>,
  *               Markus Neteler <neteler itc.it>,
  *               Martin Landa <landa.martin gmail.com>
  *
- * PURPOSE:      lets users remove GRASS database files
+ * PURPOSE:      Lets users remove GRASS database files
  *
  * COPYRIGHT:    (C) 1999-2014 by the GRASS Development Team
  *

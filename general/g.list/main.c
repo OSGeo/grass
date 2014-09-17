@@ -1,7 +1,7 @@
 
 /****************************************************************************
  *
- * MODULE:       g.mlist
+ * MODULE:       g.list
  *
  * AUTHOR(S):    Huidae Cho
  * 		 Based on general/manage/cmd/list.c by Michael Shapiro.

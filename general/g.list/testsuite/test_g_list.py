@@ -1,11 +1,11 @@
-"""g.mlist tests"""
+"""g.list tests"""
 
 import grass.gunittest
 from grass.gunittest.gmodules import SimpleModule
 
 
 class GMlistWrongParamertersTest(grass.gunittest.TestCase):
-    """Test wrong input of parameters for g.mlist module"""
+    """Test wrong input of parameters for g.list module"""
 
     @classmethod
     def setUpClass(cls):
@@ -20,7 +20,7 @@ class GMlistWrongParamertersTest(grass.gunittest.TestCase):
 
     def test_pt_flags(self):
         """Test that -p and -t flags are exclusive"""
-        module = SimpleModule('g.mlist', flags='pt', type='rast')
+        module = SimpleModule('g.list', flags='pt', type='rast')
         self.assertModuleFail(module)
         stderr = module.outputs.stderr
         self.assertIn('-p', stderr)
@@ -28,7 +28,7 @@ class GMlistWrongParamertersTest(grass.gunittest.TestCase):
 
     def test_ft_flags(self):
         """Test that -f and -t flags are exclusive"""
-        module = SimpleModule('g.mlist', flags='ft', type='rast')
+        module = SimpleModule('g.list', flags='ft', type='rast')
         self.assertModuleFail(module)
         stderr = module.outputs.stderr
         self.assertIn('-f', stderr)
@@ -36,7 +36,7 @@ class GMlistWrongParamertersTest(grass.gunittest.TestCase):
 
     def test_pf_flags(self):
         """Test that -p and -f flags are exclusive"""
-        module = SimpleModule('g.mlist', flags='pf', type='rast')
+        module = SimpleModule('g.list', flags='pf', type='rast')
         self.assertModuleFail(module)
         stderr = module.outputs.stderr
         self.assertIn('-p', stderr)
@@ -44,7 +44,7 @@ class GMlistWrongParamertersTest(grass.gunittest.TestCase):
 
     def test_re_flags(self):
         """Test that -r and -e flags are exclusive"""
-        module = SimpleModule('g.mlist', flags='re', type='rast')
+        module = SimpleModule('g.list', flags='re', type='rast')
         self.assertModuleFail(module)
         stderr = module.outputs.stderr
         self.assertIn('-r', stderr)

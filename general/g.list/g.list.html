@@ -1,16 +1,11 @@
 <h2>DESCRIPTION</h2>
 
-<em>g.mlist</em> searches for data files matching a pattern given by
-wildcards or POSIX Extended Regular Expressions. It is an extended
-version of <em><a href="g.list.html">g.list</a></em>.
-
-<p>
-See also the <em><a href="g.list.html">g.list</a></em> help page for
-discussion of some module options.
+<em>g.list</em> searches for data files matching a pattern given by
+wildcards or POSIX Extended Regular Expressions.
 
 <h2>NOTES</h2>
 
-The output of <em>g.mlist</em> may be useful for other programs' parameter
+The output of <em>g.list</em> may be useful for other programs' parameter
 input (e.g. time series for <em><a href="r.series.html">r.series</a></em>)
 when used with <em>separator=comma</em>.
 
@@ -18,23 +13,23 @@ when used with <em>separator=comma</em>.
 
 List all available GRASS data base files:
 <div class="code"><pre>
-g.mlist type=all
+g.list type=all
 </pre></div>
 
 List all raster and vector maps:
 <div class="code"><pre>
-g.mlist type=rast,vect
+g.list type=rast,vect
 </pre></div>
 
 <h3>Mapset search path</h3>
 
-If <b>mapset</b> is not specified than <em>g.mlist</em> searches for
+If <b>mapset</b> is not specified than <em>g.list</em> searches for
 data files in the mapsets which are included in the search path
 (defined by <em><a href="g.mapsets.html">g.mapsets</a></em>),
 see <tt>g.mapsets -p</tt>.
 
 <div class="code"><pre>
-g.mlist rast
+g.list rast
 
 raster map(s) available in mapset &lt;user1&gt;:
 dmt
@@ -48,7 +43,7 @@ By option <b>mapset</b>=. (one dot) can be listed only data files from
 the current mapset:
 
 <div class="code"><pre>
-g.mlist rast mapset=.
+g.list rast mapset=.
 raster map(s) available in mapset &lt;user1&gt;:
 dmt
 </pre></div>
@@ -58,7 +53,7 @@ available mapsets also including those which are not listed in the
 current search path (see <tt>g.mapsets -l</tt>).
 
 <div class="code"><pre>
-g.mlist rast mapset=*
+g.list rast mapset=*
 
 raster map(s) available in mapset &lt;landsat&gt;:
 lsat5_1987_10
@@ -75,41 +70,41 @@ aspect
 
 List all vector maps starting with letter "r":
 <div class="code"><pre>
-g.mlist type=vect pattern="r*"
+g.list type=vect pattern="r*"
 </pre></div>
 
 List all vector maps starting with letter "r" or "a":
 <div class="code"><pre>
-g.mlist type=vect pattern="[ra]*"
+g.list type=vect pattern="[ra]*"
 </pre></div>
 
 List all raster maps starting with "soil_" or "landuse_":
 <div class="code"><pre>
-g.mlist type=rast pattern="{soil,landuse}_*"
+g.list type=rast pattern="{soil,landuse}_*"
 </pre></div>
 
 List certain raster maps with one variable character/number:
 <div class="code"><pre>
-g.mlist type=rast pattern="N45E00?.meters"
+g.list type=rast pattern="N45E00?.meters"
 </pre></div>
 
 Use of <b>exclude</b> parameter:
 <div class="code"><pre>
 # without exclude:
-  g.mlist rast pat="r*" mapset=PERMANENT
+  g.list rast pat="r*" mapset=PERMANENT
   railroads
   roads
   rstrct.areas
   rushmore
 
 # exclude only complete word(s):
-  g.mlist rast pat="r*" exclude=roads mapset=PERMANENT
+  g.list rast pat="r*" exclude=roads mapset=PERMANENT
   railroads
   rstrct.areas
   rushmore
 
 # exclude with wildcard:
-  g.mlist rast pat="r*" exclude="*roads*" mapset=PERMANENT
+  g.list rast pat="r*" exclude="*roads*" mapset=PERMANENT
   rstrct.areas
   rushmore
 </pre></div>
@@ -118,31 +113,31 @@ Use of <b>exclude</b> parameter:
 
 List all soil maps starting with &quot;soils&quot; in their name:
 <div class="code"><pre>
-g.mlist -r type=rast pattern='^soils'
+g.list -r type=rast pattern='^soils'
 </pre></div>
 
 List &quot;tmp&quot; if &quot;tmp&quot; raster map exists:
 <div class="code"><pre>
-g.mlist -r type=rast pattern='^tmp$'
+g.list -r type=rast pattern='^tmp$'
 </pre></div>
 
 List &quot;tmp0&quot; ...&quot;tmp9&quot; if corresponding vector map exists
 (each map name linewise):
 <div class="code"><pre>
-g.mlist -r type=vect pattern='^tmp[0-9]$'
+g.list -r type=vect pattern='^tmp[0-9]$'
 </pre></div>
 
 List &quot;tmp0&quot;...&quot;tmp9&quot; if corresponding vector map exists
 (each map name comma separated):
 <div class="code"><pre>
-g.mlist -r type=vect separator=comma pattern='^tmp[0-9]$'
+g.list -r type=vect separator=comma pattern='^tmp[0-9]$'
 </pre></div>
 
 <h3>Extended regular expressions</h3>
 
 List all precipitation maps for the years 1997-2012, comma separated:
 <div class="code"><pre>
-g.mlist -e type=rast separator=comma pattern="precip_total.(199[7-9]|200[0-9]|201[0-2]).sum"
+g.list -e type=rast separator=comma pattern="precip_total.(199[7-9]|200[0-9]|201[0-2]).sum"
 </pre></div>
 
 <h3>Maps whose region overlaps with a saved region</h3>
@@ -151,29 +146,28 @@ List all raster maps starting with &quot;tmp_&quot; whose region overlaps with
 the region of &quot;test&quot; raster map:
 <div class="code"><pre>
 g.region rast=test save=test_region
-g.mlist type=rast pattern='tmp_*' region=test_region
+g.list type=rast pattern='tmp_*' region=test_region
 </pre></div>
 
 List &quot;tmp0&quot;...&quot;tmp9&quot; vector maps whose region overlaps with
 the current region:
 <div class="code"><pre>
-g.mlist -r type=vect pattern='^tmp[0-9]$' region=.
+g.list -r type=vect pattern='^tmp[0-9]$' region=.
 </pre></div>
 
 List all raster and vector maps whose region overlaps with the default region
 of the PERMANENT mapset in the current location (DEFAULT_WIND):
 <div class="code"><pre>
-g.mlist type=rast,vect region=*
+g.list type=rast,vect region=*
 </pre></div>
 
-Note that, without <tt>region=*</tt>, <tt>g.mlist type=rast,vect</tt> simply
+Note that, without <tt>region=*</tt>, <tt>g.list type=rast,vect</tt> simply
 lists all available raster and vector maps from the current search path
 regardless of their region.
 
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="g.list.html">g.list</a>,
 <a href="r.series.html">r.series</a>,
 <a href="t.list.html">t.list</a>,
 <a href="t.rast.list.html">t.rast.list</a>,
