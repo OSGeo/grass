@@ -72,7 +72,8 @@ class TestRandFunction(grass.gunittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()
-        cls.runModule('g.remove', rast=','.join(cls.to_remove))
+        cls.runModule('g.remove', flags='f', type='rast',
+                      pattern=','.join(cls.to_remove))
 
     def rinfo_contains_number(self, raster, number):
         """Test that r.info stdandard output for raster contains a given number

@@ -422,7 +422,7 @@ cut-off value. This only works with SFD, not with MFD.
        abs(rwater.accum), \
        null() )"
   r.colors -g rwater.course col=bcyr
-  g.remove MASK
+  g.remove -f type=rast pattern=MASK
 
   # <i>Thinning is required before converting raster lines to vector</i>
   r.thin in=rwater.course out=rwater.course.Thin

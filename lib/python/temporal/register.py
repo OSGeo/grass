@@ -481,7 +481,7 @@ def register_map_object_list(type,  map_list, output_stds,
     register_maps_in_space_time_dataset(type, output_stds_id, unit=unit,
                                         file=filename, dbif=dbif)
 
-    g_remove = pymod.Module("g.remove", quiet=True,
+    g_remove = pymod.Module("g.remove", flags='f', quiet=True,
                             run_=False, finish_=True)
 
     # Remove empty maps
@@ -490,7 +490,7 @@ def register_map_object_list(type,  map_list, output_stds,
             if  map.is_in_db(dbif):
                 map.delete(dbif)
             mod = copy.deepcopy(g_remove)
-            mod(rast=map.get_name())
+            mod(type='rast', pattern=map.get_name())
             mod.run()
 
     if connected:

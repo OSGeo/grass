@@ -121,4 +121,4 @@ t.vect.list separator=" | " method=deltagaps input=soils_abs5
 t.unregister type=vect maps=soils:1,soils:2,soils:3,soils:4,soils:5,soils:6
 t.remove type=stvds input=soils_abs1,soils_abs2,soils_abs3,soils_abs4,soils_abs5
 
-g.remove vect=soil_orig,soils
+g.remove -f type=vect pattern=soil_orig,soils

@@ -54,7 +54,7 @@ t.support --v -m type=strds input=precip_abs2
 t.info type=strds input=precip_abs2
 
 # Remove three maps
-g.remove rast=prec_1,prec_2,prec_3
+g.remove -f type=rast pattern=prec_1,prec_2,prec_3
 
 # Booth space time datasets should be updated and 3 maps must have been unregistered
 t.support --v -m type=strds input=precip_abs1
@@ -63,4 +63,4 @@ t.info type=strds input=precip_abs2
 
 t.remove --v type=strds input=precip_abs1,precip_rel1
 t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
-g.remove rast=prec_4,prec_5,prec_6
+g.remove -f type=rast pattern=prec_4,prec_5,prec_6

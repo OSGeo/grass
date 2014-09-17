@@ -518,9 +518,6 @@
       <module-item name="g.list">
         <label>List</label>
       </module-item>
-      <module-item name="g.mlist">
-        <label>List filtered</label>
-      </module-item>
       <separator/>
       <module-item name="g.rename">
         <label>Rename</label>
@@ -528,9 +525,6 @@
       <separator/>
       <module-item name="g.remove">
         <label>Delete</label>
-      </module-item>
-      <module-item name="g.mremove">
-        <label>Delete filtered</label>
       </module-item>
     </items>
   </toolbox>

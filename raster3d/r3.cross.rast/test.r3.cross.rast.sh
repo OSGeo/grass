@@ -34,7 +34,7 @@ r3.cross.rast --o input=volume_null elevation=elev_NAN output=test_cross_section
 r3.cross.rast --o input=volume_null elevation=elev_cross output=test_cross_section_result
 
 # Export of the text files
-for i in `g.mlist type=rast pattern=test_cross_section_*` ; do 
+for i in `g.list type=rast pattern=test_cross_section_*` ; do 
     r.out.ascii input=$i output=${i}.txt; 
 done
 

@@ -31,4 +31,4 @@ r3.out.netcdf --o -p null=-1000 input=volume_time_float output=test_time_float.n
 r3.info volume_time_float
 ncdump -h test_time_float.nc
 
-g.remove rast3=volume_float,volume_double,volume_time_double,volume_time_float
+g.remove -f type=rast3 pattern=volume_float,volume_double,volume_time_double,volume_time_float

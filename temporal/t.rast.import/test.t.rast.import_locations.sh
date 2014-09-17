@@ -59,7 +59,7 @@ ls -la $GISDBASE/new_test_4/PERMANENT
 
 t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_abs1
-g.remove rast=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+g.remove -f type=rast pattern=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 rm -rf test
 rm strds_export.tar.bz2
 rm strds_export_pack.tar.gz

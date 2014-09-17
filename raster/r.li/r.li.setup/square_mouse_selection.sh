@@ -90,7 +90,7 @@ cleanup()
    eval `g.findfile elem=windows file="tmp_rli_sq.$$" | grep '^name='`
    if [ -n "$name" ] ; then
       g.region region="tmp_rli_sq.$$"
-      g.remove region="tmp_rli_sq.$$" --quiet
+      g.remove -f type=region pattern="tmp_rli_sq.$$" --quiet
    fi
 
    rm -f "$TMP" "$TMP.var"

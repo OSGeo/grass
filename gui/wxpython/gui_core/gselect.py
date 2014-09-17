@@ -407,7 +407,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         # get current mapset
         curr_mapset = grass.gisenv()['MAPSET']
 
-        # map element types to g.mlist types
+        # map element types to g.list types
         elementdict = {'cell':'rast',
                        'raster':'rast',
                        'rast':'rast',

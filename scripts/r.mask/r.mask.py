@@ -73,9 +73,11 @@ import atexit
 
 def cleanup():
     if tmp:
-        grass.run_command('g.remove', rast = tmp, quiet = True)
+        grass.run_command('g.remove', flags = 'f', type = 'rast',
+                          pattern = tmp, quiet = True)
     if tmp_hull:
-        grass.run_command('g.remove', vect = tmp_hull, quiet = True)
+        grass.run_command('g.remove', flags = 'f', type = 'vect',
+                          pattern = tmp_hull, quiet = True)
 
 def main():
     raster = options['raster']
@@ -96,7 +98,8 @@ def main():
     if remove:
         # -> remove
         if exists:
-            grass.run_command('g.remove', quiet = True, rast = 'MASK')
+            grass.run_command('g.remove', flags = 'f', quiet = True,
+                              type = 'rast', pattern = 'MASK')
             grass.message(_("Raster MASK removed"))
         else:
             grass.fatal(_("No existing MASK to remove"))
@@ -107,7 +110,8 @@ def main():
                 grass.fatal(_("MASK already found in current mapset. Delete first or overwrite."))
             else:
                 grass.warning(_("MASK already exists and will be overwritten"))
-                grass.run_command('g.remove', quiet = True, rast = 'MASK')
+                grass.run_command('g.remove', flags = 'f', quiet = True,
+                                  type = 'rast', pattern = 'MASK')
         
         if raster:
             # check if input raster exists

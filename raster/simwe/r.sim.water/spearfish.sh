@@ -41,14 +41,14 @@ echo "Export of manning, soil and gradients"
 r.out.vtk elevation=${dem} input=${output}_manin,soils vectormaps=${output}_dx,${output}_dy,${output}_null output=manning_soils_gradient.vtk null=0.0
 
 echo "Build topology and exporting walker vector points for each time step"
-for i in `g.mlist vect | grep ${output}` ; do
+for i in `g.list vect | grep ${output}` ; do
 	v.build $i
 	echo "v.out.vtk input=$i output=$i.vtk"
 	v.out.vtk input=$i output=$i.vtk
 done
 
 echo "Exporting the raster maps for each time step"
-for i in `g.mlist rast | grep ${output}` ; do
+for i in `g.list rast | grep ${output}` ; do
 	echo "r.out.vtk elevation=${dem} input=$i output=$i.vtk null=0.0"
 	r.out.vtk elevation=${dem} input=$i output=$i.vtk null=0.0
 done
@@ -57,5 +57,5 @@ echo "Now open paraview from this command line and load the vtk files as time se
 echo "Step throu the time steps and adjust the color tables"
 
 # cleanup
-g.remove --q rast=${output}_dx,${output}_dy,${output}_rain,${output}_manin,${output}_infil,${output}_null
-g.remove --q vect=observation_points
+g.remove --q -f type=rast pattern=${output}_dx,${output}_dy,${output}_rain,${output}_manin,${output}_infil,${output}_null
+g.remove --q -f type=vect pattern=observation_points

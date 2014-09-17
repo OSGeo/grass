@@ -54,8 +54,8 @@ class FlowlineTest(TestCase):
     def tearDownClass(cls):
         """!Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule('g.remove', rast3d=['map_1', 'map_2', 'map_3', 'map_4', 'map_5', 'test_flowaccum'])
-        cls.runModule('g.remove', vect=['test_flowline', 'test_seeds'])
+        cls.runModule('g.remove', flags='f', type='rast3d', pattern=['map_1', 'map_2', 'map_3', 'map_4', 'map_5', 'test_flowaccum'])
+        cls.runModule('g.remove', flags='f', type='vect', pattern=['test_flowline', 'test_seeds'])
         os.remove('./data/flowline_tmp.ascii')
 
     def test_interpolation(self):

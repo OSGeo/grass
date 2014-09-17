@@ -33,7 +33,7 @@ cleanup()
    eval `g.findfile elem=windows file="tmp_rlisetup.$$" | grep '^name='`
    if [ -n "$name" ] ; then
       unset WIND_OVERRIDE
-      g.remove region="tmp_rlisetup.$$" --quiet
+      g.remove -f type=region pattern="tmp_rlisetup.$$" --quiet
    fi
 }
 trap "cleanup" 2 3 15

@@ -106,8 +106,8 @@ def main():
 
     statement = ""
 
-    # Create the pygrass Module object for g.mremove
-    remove = pyg.Module("g.mremove", quiet=True, run_=False)
+    # Create the pygrass Module object for g.remove
+    remove = pyg.Module("g.remove", quiet=True, run_=False)
 
     for name in dataset_list:
         name = name.strip()

@@ -493,7 +493,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         self.m_overlay = pygrass.Module('v.overlay', quiet=True, run_=False)
         self.m_rename = pygrass.Module('g.rename', quiet=True, run_=False)
         self.m_patch = pygrass.Module('v.patch', quiet=True, run_=False)
-        self.m_mremove = pygrass.Module('g.mremove', quiet=True, run_=False)
+        self.m_remove = pygrass.Module('g.remove', quiet=True, run_=False)
         self.m_buffer = pygrass.Module('v.buffer', quiet=True, run_=False)
 
     def parse(self, expression, basename = None, overwrite = False):
@@ -520,10 +520,10 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
             for chunk in chunklist:
                 stringlist = ",".join(chunk)
                 if self.debug:
-                    print "g.mremove type=vect pattern=%s"%(stringlist)
+                    print "g.remove type=vect pattern=%s"%(stringlist)
 
                 if self.run:
-                    m = copy.deepcopy(self.m_mremove)
+                    m = copy.deepcopy(self.m_remove)
                     m.inputs["type"].value = "vect"
                     m.inputs["pattern"].value = stringlist
                     m.flags["f"].value = True

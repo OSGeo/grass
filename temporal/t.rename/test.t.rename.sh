@@ -49,4 +49,4 @@ t.rename type=strds input=precip_abs4 output=precip_abs3
 
 t.remove --v type=strds input=precip_abs3,precip_abs4
 t.unregister type=rast maps=prec_1,prec_2
-g.remove rast=prec_1,prec_2
+g.remove -f type=rast pattern=prec_1,prec_2

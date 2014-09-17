@@ -148,7 +148,7 @@ def main():
         if ret != 0:
             grass.fatal(_("Unable to create 3D raster map <%s>" % output))
 
-    grass.run_command("g.remove", rast=null_map)
+    grass.run_command("g.remove", flags='f', type='rast', pattern=null_map)
 
     title = _("Space time voxel cube")
     descr = _("This space time voxel cube was created with t.rast.to.rast3")

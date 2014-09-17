@@ -71,7 +71,7 @@ cleanup()
    eval `g.findfile elem=windows file="tmp_rli_sampvect.$$" | grep '^name='`
    if [ -n "$name" ] ; then
       g.region region="tmp_rli_sampvect.$$"
-      g.remove region="tmp_rli_sampvect.$$" --quiet
+      g.remove -f type=region pattern="tmp_rli_sampvect.$$" --quiet
    fi
 
    rm -f "$TMP"*
@@ -184,12 +184,12 @@ while read CAT ; do
 	echo "MASKEDOVERLAYAREA $mask_name|$n|$s|$e|$w" >> "$GIS_OPT_conf"
 
     elif [ "$ok" -eq -1 ] ; then
-	g.remove vect="$EXTRACT" --quiet
+	g.remove -f type=vect pattern="$EXTRACT" --quiet
 	break
     fi
 
     #remove temporary vector map created from v.extract
-    g.remove vect="$EXTRACT" --quiet
+    g.remove -f type=vect pattern="$EXTRACT" --quiet
 
 done < "$TMP.cat"
 

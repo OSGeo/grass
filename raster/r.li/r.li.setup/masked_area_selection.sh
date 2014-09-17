@@ -104,7 +104,7 @@ cleanup()
    eval `g.findfile elem=windows file="tmp_rli_selmsk.$$" | grep '^name='`
    if [ -n "$name" ] ; then
       g.region region="tmp_rli_selmsk.$$"
-      g.remove region="tmp_rli_selmsk.$$" --quiet
+      g.remove -f type=region pattern="tmp_rli_selmsk.$$" --quiet
    fi
 
    rm -f "$TMP" "$TMP".val
@@ -190,8 +190,8 @@ if [ "$ok" -eq 1 ] ; then
 	    "$GIS_OPT_conf"
 
     # remove tmp raster and vector
-    g.remove rast="tmp_rli_mask.$$" --quiet
-    g.remove vect="tmp_rli_mask_v$$" --quiet
+    g.remove -f type=rast pattern="tmp_rli_mask.$$" --quiet
+    g.remove -f type=vect pattern="tmp_rli_mask_v$$" --quiet
 
     if [ "$GIS_FLAG_f" -eq 1 ] ; then
     	g.region n="$GIS_OPT_north" s="$GIS_OPT_south" \

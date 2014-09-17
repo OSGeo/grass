@@ -119,7 +119,7 @@ def mapcalc_start(exp, quiet=False, verbose=False, overwrite=False,
     0
     >>> p2.wait()
     1
-    >>> run_command('g.remove', rast=output)
+    >>> run_command('g.remove', flags='f', type='rast', pattern=output)
 
     :param str exp: expression
     :param bool quiet: True to run quietly (<tt>--q</tt>)

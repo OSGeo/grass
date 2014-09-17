@@ -27,5 +27,5 @@ t.vect.univar type=line input=random_data column=height where='height > 20' twhe
 # @postprocess
 t.unregister type=vect maps=rpoints1,rpoints2,rvoronoi1,rvoronoi2
 t.remove type=stvds input=random_data
-g.remove vect=rpoints1,rpoints2,rvoronoi1,rvoronoi2
+g.remove -f type=vect pattern=rpoints1,rpoints2,rvoronoi1,rvoronoi2
 

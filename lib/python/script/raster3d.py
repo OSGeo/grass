@@ -32,7 +32,7 @@ def raster3d_info(map):
     >>> mapcalc3d('volume = row() + col() + depth()')
     >>> raster3d_info('volume') # doctest: +ELLIPSIS
     {'vertical_units': '"units"', 'tbres': 1.0, ... 'south': 185000.0}
-    >>> run_command('g.remove', rast3d='volume')
+    >>> run_command('g.remove', flags='f', type='rast3d', pattern='volume')
     0
 
     :param str map: map name

@@ -63,6 +63,6 @@ t.unregister --v type=vect maps=lidar_abs_1,lidar_abs_2,lidar_abs_3
 t.unregister --v type=vect maps=lidar_abs_1,lidar_abs_2,lidar_abs_3
 t.remove --v type=stvds input=lidar_abs_ds1,lidar_abs_ds2,lidar_abs_ds3,lidar_abs_ds4,lidar_abs_ds5,lidar_abs_ds6,lidar_abs_ds7
 t.unregister --v type=vect maps=lidar_abs_4,lidar_abs_5,lidar_abs_6
-g.remove vect=lidar_abs_1,lidar_abs_2,lidar_abs_3,lidar_abs_4,lidar_abs_5,lidar_abs_6
+g.remove -f type=vect pattern=lidar_abs_1,lidar_abs_2,lidar_abs_3,lidar_abs_4,lidar_abs_5,lidar_abs_6
 
 

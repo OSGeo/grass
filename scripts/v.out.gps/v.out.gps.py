@@ -99,10 +99,12 @@ def cleanup():
     # only try to remove map if it exists to avoid ugly warnings
     if tmp_vogb:
 	if grass.find_file(tmp_vogb, element = 'vector')['name']:
-	    grass.run_command('g.remove', vect = tmp_vogb, quiet = True)
+	    grass.run_command('g.remove', flags = 'f', type = 'vect'
+                          pattern = tmp_vogb, quiet = True)
     if tmp_extr:
 	if grass.find_file(tmp_extr, element = 'vector')['name']:
-	    grass.run_command('g.remove', vect = tmp_vogb, quiet = True)
+	    grass.run_command('g.remove', flags = 'f', type = 'vect',
+                          pattern = tmp_vogb, quiet = True)
 
 tmp = None
 tmp_proj = None

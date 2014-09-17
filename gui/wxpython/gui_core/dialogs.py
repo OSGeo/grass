@@ -1513,7 +1513,7 @@ class MapLayersDialogBase(wx.Dialog):
     def GetLayerType(self, cmd = False):
         """Get selected layer type
 
-        :param bool cmd: True for g.mlist
+        :param bool cmd: True for g.list
         """
         if not cmd:
             return self.layerType.GetStringSelection()
@@ -1575,7 +1575,7 @@ class MapLayersDialogForModeler(MapLayersDialogBase):
 
     def _modelerDSeries(self):
         self.dseries = wx.CheckBox(parent = self, id = wx.ID_ANY,
-                                   label = _("Dynamic series (%s)") % 'g.mlist')
+                                   label = _("Dynamic series (%s)") % 'g.list')
         self.dseries.SetValue(False)
         self.mainSizer.Add(item = self.dseries, proportion = 0,
                            flag = wx.EXPAND | wx.LEFT | wx.RIGHT, border = 5)
@@ -1583,12 +1583,12 @@ class MapLayersDialogForModeler(MapLayersDialogBase):
     def GetDSeries(self):
         """Used by modeler only
 
-        :return: g.mlist command
+        :return: g.list command
         """
         if not self.dseries or not self.dseries.IsChecked():
             return ''
         
-        cond = 'map in `g.mlist type=%s ' % self.GetLayerType(cmd = True)
+        cond = 'map in `g.list type=%s ' % self.GetLayerType(cmd = True)
         patt = self.filter.GetValue()
         if patt:
             cond += 'pattern=%s ' % patt

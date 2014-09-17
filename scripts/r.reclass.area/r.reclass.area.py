@@ -164,7 +164,7 @@ def cleanup():
     """!Delete temporary maps"""
     TMPRAST.reverse()  # reclassed map first
     for rast in TMPRAST:
-        grass.run_command("g.remove", rast=rast, quiet=True)
+        grass.run_command("g.remove", flags='f', type='rast', pattern=rast, quiet=True)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

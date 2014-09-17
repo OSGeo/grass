@@ -157,8 +157,6 @@ Returns the name of a temporary file, created with \gmod{g.tempfile}.
 
  - python::script::core::list_strings()
 
- - python::script::core::mlist_grouped()
-
 <b>Interface to \gmod{g.mapsets}</b>
 
  - python::script::core::mapsets()

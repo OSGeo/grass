@@ -25,9 +25,9 @@ t.create output=precip_months_sum semantictype=mean \
   description="Monthly sum of precipitation for the \
   North Carolina sample data location"
 
-#Register maps from sample dataset (selecting a subset with g.mlist)
+#Register maps from sample dataset (selecting a subset with g.list)
 t.register -i type=rast input=precip_months_sum \
-  maps=$(g.mlist type=rast pattern=201*_precip separator=comma) \
+  maps=$(g.list type=rast pattern=201*_precip separator=comma) \
   start="2010-01-01" increment="1 months"
 
 #Create some new data by aggregating with 1 years granularity

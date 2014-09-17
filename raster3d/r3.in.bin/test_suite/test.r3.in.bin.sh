@@ -124,7 +124,7 @@ r3.in.bin --o output=test_in_bin_float_13 byte=4 null=-9999 \
     bottom=0 top=100 west=0 east=180 south=0 north=90 \
     cols=18 rows=9 depths=10
 
-for map in `g.mlist type=rast3d pattern=test_in_bin_float*` ; do
+for map in `g.list type=rast3d pattern=test_in_bin_float*` ; do
   r3.out.ascii input=${map} output=${map}.txt dp=0
 done
 
@@ -132,7 +132,7 @@ for i in `ls test_in_bin_float_*.txt` ; do
     diff $i test_out_bin_float.ref
 done
 
-g.mremove -f rast3d=test_in*
-g.mremove -f rast3d=test_out*
+g.remove -f type=rast3d pattern=test_in*
+g.remove -f type=rast3d pattern=test_out*
 rm test_in_*.txt
 rm test_out_*.bin
