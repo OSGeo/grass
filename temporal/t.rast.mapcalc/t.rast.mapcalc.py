@@ -6,7 +6,7 @@
 # AUTHOR(S):	Soeren Gebbert
 #
 # PURPOSE:	Perform spatio-temporal mapcalc expressions on temporal sampled maps of space time raster datasets
-# COPYRIGHT:	(C) 2012 by the GRASS Development Team
+# COPYRIGHT:	(C) 2012-2014 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (version 2). Read the file COPYING that comes with GRASS

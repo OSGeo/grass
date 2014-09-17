@@ -1,20 +1,20 @@
 
 /****************************************************************
  * 
- *  MODULE:       v.net.alloc
- *  
- *  AUTHOR(S):    Radim Blazek
- *                
- *  PURPOSE:      Allocate subnets for nearest centers.
- *                
- *  COPYRIGHT:    (C) 2001 by the GRASS Development Team
- * 
- *                This program is free software under the 
- *                GNU General Public License (>=v2). 
- *                Read the file COPYING that comes with GRASS
- *                for details.
- * 
- **************************************************************/
+ * MODULE:       v.net.alloc
+ *
+ * AUTHOR(S):    Radim Blazek
+ *
+ * PURPOSE:      Allocate subnets for nearest centers
+ *               
+ * COPYRIGHT:    (C) 2001, 2014 by the GRASS Development Team
+ *
+ *               This program is free software under the 
+ *               GNU General Public License (>=v2). 
+ *               Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ ****************************************************************/
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -54,14 +54,16 @@ int main(int argc, char **argv)
     struct line_cats *Cats;
     struct line_pnts *Points, *SPoints;
 
-    G_gisinit(argv[0]);
+    /* initialize GIS environment */
+    G_gisinit(argv[0]);		/* reads grass env, stores program name to G_program_name() */
 
+    /* initialize module */
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("network"));
     G_add_keyword(_("allocation"));
     module->label =
-	_("Allocate subnets for nearest centers (direction from center).");
+	_("Allocates subnets for nearest centers (direction from center).");
     module->description =
 	_("center node must be opened (costs >= 0). "
 	  "Costs of center node are used in calculation");
@@ -89,20 +91,22 @@ int main(int argc, char **argv)
     afcol->key = "afcolumn";
     afcol->type = TYPE_STRING;
     afcol->required = NO;
-    afcol->description =
-	_("Arc forward/both direction(s) cost column (number)");
+    afcol->description = _("Arc forward/both direction(s) cost column (number)");
+    afcol->guisection = _("Cost");
 
     abcol = G_define_option();
     abcol->key = "abcolumn";
     abcol->type = TYPE_STRING;
     abcol->required = NO;
     abcol->description = _("Arc backward direction cost column (number)");
+    abcol->guisection = _("Cost");
 
     ncol = G_define_option();
     ncol->key = "ncolumn";
     ncol->type = TYPE_STRING;
     ncol->required = NO;
     ncol->description = _("Node cost column (number)");
+    ncol->guisection = _("Cost");
 
     term_opt = G_define_standard_option(G_OPT_V_CATS);
     term_opt->key = "ccats";

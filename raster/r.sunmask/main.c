@@ -132,7 +132,7 @@ int main(int argc, char *argv[])
     parm.opt3->required = NO;
     parm.opt3->options = "0-89.999";
     parm.opt3->description =
-	_("Altitude of the sun above horizon, degrees (A)");
+	_("Altitude of the sun in degrees above the horizon (A)");
     parm.opt3->guisection = _("Position");
 
     parm.opt4 = G_define_option();
@@ -141,7 +141,7 @@ int main(int argc, char *argv[])
     parm.opt4->required = NO;
     parm.opt4->options = "0-360";
     parm.opt4->description =
-	_("Azimuth of the sun from the north, degrees (A)");
+	_("Azimuth of the sun in degrees from north (A)");
     parm.opt4->guisection = _("Position");
 
     parm.year = G_define_option();
@@ -224,7 +224,7 @@ int main(int argc, char *argv[])
 
     flag1 = G_define_flag();
     flag1->key = 'z';
-    flag1->description = _("Don't ignore zero elevation");
+    flag1->description = _("Do not ignore zero elevation");
 
     flag3 = G_define_flag();
     flag3->key = 's';

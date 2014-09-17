@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
 
     flag.i = G_define_flag();
     flag.i->key = 'i';
-    flag.i->description = _("Read fp map as integer");
+    flag.i->description = _("Read floating-point map as integer");
 
     if (0 > G_parser(argc, argv))
 	exit(EXIT_FAILURE);

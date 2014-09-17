@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
     parm.band->key = "band";
     parm.band->type = TYPE_INTEGER;
     parm.band->required = NO;
-    parm.band->description = _("Band to select (default: all)");
+    parm.band->description = _("Band to select (default is all bands)");
     parm.band->guisection = _("Input");
 
     parm.title = G_define_option();

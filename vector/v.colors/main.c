@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
     flag.w = G_define_flag();
     flag.w->key = 'w';
     flag.w->description =
-        _("Only write new color table if one doesn't already exist");
+        _("Only write new color table if it does not already exist");
 
     flag.l = G_define_flag();
     flag.l->key = 'l';

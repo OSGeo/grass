@@ -7,7 +7,7 @@
  *               
  * PURPOSE:      Shortest path on vector network
  *               
- * COPYRIGHT:    (C) 2002 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002, 2014 by the GRASS Development Team
  *
  *               This program is free software under the 
  *               GNU General Public License (>=v2). 
@@ -66,24 +66,26 @@ int main(int argc, char **argv)
     file_opt->description = _("Name of file containing start and end points. "
 			      "If not given, read from stdin");
 
-
     afcol = G_define_option();
     afcol->key = "afcolumn";
     afcol->type = TYPE_STRING;
     afcol->required = NO;
-    afcol->description = _("Arc forward/both direction(s) cost column");
+    afcol->description = _("Arc forward/both direction(s) cost column (number)");
+    afcol->guisection = _("Cost");
 
     abcol = G_define_option();
     abcol->key = "abcolumn";
     abcol->type = TYPE_STRING;
     abcol->required = NO;
-    abcol->description = _("Arc backward direction cost column");
+    abcol->description = _("Arc backward direction cost column (number)");
+    abcol->guisection = _("Cost");
 
     ncol = G_define_option();
     ncol->key = "ncolumn";
     ncol->type = TYPE_STRING;
     ncol->required = NO;
-    ncol->description = _("Node cost column");
+    ncol->description = _("Node cost column (number)");
+    ncol->guisection = _("Cost");
 
     max_dist = G_define_option();
     max_dist->key = "dmax";

@@ -227,7 +227,7 @@ int main(int argc, char *argv[])
     no_import_flag->key = 'i';
     no_import_flag->description =
 	_("Create the location specified by the \"location\" parameter and exit."
-          " Do not import the vector file.");
+          " Do not import the vector data.");
     no_import_flag->suppress_required = YES;
 
     notopo_flag = G_define_standard_flag(G_FLG_V_TOPO);

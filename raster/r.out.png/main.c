@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
 
     png_file = G_define_standard_option(G_OPT_F_OUTPUT);
     png_file->required = YES;
-    png_file->description = _("Name for new PNG file (use out=- for stdout)");
+    png_file->description = _("Name for new PNG file (use '-' for stdout)");
 
     compr = G_define_option();
     compr->key = "compression";

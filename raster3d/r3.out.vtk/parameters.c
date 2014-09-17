@@ -27,7 +27,7 @@ void set_params()
     param.input = G_define_standard_option(G_OPT_R3_INPUTS);
     param.input->required = NO;
     param.input->description =
-	_("RASTER3D map(s) to be converted to VTK-ASCII data format");
+	_("3D raster map(s) to be converted to VTK-ASCII data format");
 
     param.output = G_define_standard_option(G_OPT_F_OUTPUT);
     param.output->required = NO;
@@ -53,7 +53,7 @@ void set_params()
     param.top->gisprompt = "old,cell,raster";
     param.top->multiple = NO;
     param.top->guisection = "Surface options";
-    param.top->description = _("top surface 2D raster map");
+    param.top->description = _("Top surface 2D raster map");
 
     param.bottom = G_define_option();
     param.bottom->key = "bottom";
@@ -62,13 +62,13 @@ void set_params()
     param.bottom->gisprompt = "old,cell,raster";
     param.bottom->multiple = NO;
     param.bottom->guisection = "Surface options";
-    param.bottom->description = _("bottom surface 2D raster map");
+    param.bottom->description = _("Bottom surface 2D raster map");
 
     param.structgrid = G_define_flag();
     param.structgrid->key = 's';
     param.structgrid->guisection = "Surface options";
     param.structgrid->description =
-	_("Create 3d elevation output with a top and a bottom surface, both raster maps are required.");
+	_("Create 3D elevation output with a top and a bottom surface, both raster maps are required.");
 
 
     param.rgbmaps = G_define_option();
@@ -118,13 +118,13 @@ void set_params()
     param.origin = G_define_flag();
     param.origin->key = 'o';
     param.origin->guisection = "Advanced options";
-    param.origin->description = _("Scale factor effects the origin");
+    param.origin->description = _("Scale factor affects the origin");
 
     param.coorcorr = G_define_flag();
     param.coorcorr->key = 'c';
     param.coorcorr->guisection = "Advanced options";
     param.coorcorr->description =
-	_("Correct the coordinates to fit the VTK-OpenGL precision");
+	_("Correct the coordinates to match the VTK-OpenGL precision");
 
     param.scalell = G_define_flag();
     param.scalell->key = 'l';

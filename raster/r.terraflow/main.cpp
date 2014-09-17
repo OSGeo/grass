@@ -102,7 +102,9 @@ parse_args(int argc, char *argv[]) {
   struct Flag *sfd_flag;
   sfd_flag = G_define_flag() ;
   sfd_flag->key        = 's';
-  sfd_flag->description= _("SFD (D8) flow (default is MFD)");
+  sfd_flag->label= _("SFD (D8) flow (default is MFD)");
+  sfd_flag->description =
+	_("SFD: single flow direction, MFD: multiple flow direction");
 
   /* D8CUT value*/
   struct Option *d8cut;
@@ -122,8 +124,8 @@ parse_args(int argc, char *argv[]) {
   mem->key         = "memory";
   mem->type        = TYPE_INTEGER;
   mem->required    = NO;
-  mem->answer      = "300"; /* 300MB default value */
-  mem->description = _("Maximum runtime memory size (in MB)");
+  mem->answer      = "300";
+  mem->description = _("Maximum memory to be used (in MB)");
 
   /* temporary STREAM path */
   struct Option *streamdir;

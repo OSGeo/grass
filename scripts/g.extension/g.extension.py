@@ -101,7 +101,7 @@
 #%end
 #%flag
 #% key: i
-#% description: Don't install new extension, just compile it
+#% description: Do not install new extension, just compile it
 #% guisection: Install
 #%end
 #%flag

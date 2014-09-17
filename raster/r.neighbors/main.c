@@ -216,7 +216,7 @@ int main(int argc, char *argv[])
     parm.title->key_desc = "phrase";
     parm.title->type = TYPE_STRING;
     parm.title->required = NO;
-    parm.title->description = _("Title of the output raster map");
+    parm.title->description = _("Title for output raster map");
 
     parm.weight = G_define_standard_option(G_OPT_F_INPUT);
     parm.weight->key = "weight";

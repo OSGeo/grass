@@ -79,15 +79,15 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster3d"));
     G_add_keyword(_("voxel"));
     module->description =
-	_("Creates a display file from an existing grid3 file according to specified threshold levels.");
+	_("Creates a display file from an existing 3D raster map according to specified threshold levels.");
 
     name = G_define_option();
     name->key = "input";
     name->type = TYPE_STRING;
     name->required = YES;
-    name->gisprompt = "old,grid3,3dcell";
+    name->gisprompt = "old,grid3,3d-raster";
     /* should still find the DIRECTORY */
-    name->description = _("Name of an existing 3d raster map");
+    name->description = _("Name of an existing 3D raster map");
 
     out = G_define_standard_option(G_OPT_F_OUTPUT);
     out->key = "dspf";

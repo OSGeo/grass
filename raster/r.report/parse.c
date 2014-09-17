@@ -64,7 +64,7 @@ int parse_command_line(int argc, char *argv[])
     parms.outfile->label =
 	_("Name for output file to hold the report");
     parms.outfile->description =
-	_("If no output given report is printed to standard output");
+	_("If no output file given report is printed to standard output");
 
     parms.nv = G_define_option();
     parms.nv->key = "null";
@@ -93,7 +93,7 @@ int parse_command_line(int argc, char *argv[])
     parms.pw->description = pw_desc;
     parms.pw->guisection = _("Formatting");
 
-    parms.nsteps = G_define_option();
+		    parms.nsteps = G_define_option();
     parms.nsteps->key = "nsteps";
     parms.nsteps->type = TYPE_INTEGER;
     parms.nsteps->required = NO;

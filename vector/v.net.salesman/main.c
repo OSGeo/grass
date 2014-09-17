@@ -6,15 +6,15 @@
  *  AUTHOR(S):    Radim Blazek, Markus Metz
  *                
  *  PURPOSE:      Create a cycle connecting given nodes.
- *                
- *  COPYRIGHT:    (C) 2001-2011 by the GRASS Development Team
+ *
+ *  COPYRIGHT:    (C) 2001-2011,2014 by the GRASS Development Team
  * 
  *                This program is free software under the 
  *                GNU General Public License (>=v2). 
  *                Read the file COPYING that comes with GRASS
  *                for details.
- * 
- **************************************************************/
+ *
+ ****************************************************************/
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -153,8 +153,7 @@ int main(int argc, char **argv)
     afcol->key = "afcolumn";
     afcol->type = TYPE_STRING;
     afcol->required = NO;
-    afcol->description =
-	_("Arc forward/both direction(s) cost column (number)");
+    afcol->description = _("Arc forward/both direction(s) cost column (number)");
 
     abcol = G_define_option();
     abcol->key = "abcolumn";
@@ -196,7 +195,7 @@ int main(int argc, char **argv)
     Clist = Vect_new_cat_list();
     tfield = atoi(tfield_opt->answer);
     Vect_str_to_cat_list(term_opt->answer, Clist);
-    
+
     dstr = G__getenv("DEBUG");
 
     if (dstr != NULL)
@@ -225,7 +224,7 @@ int main(int argc, char **argv)
 
     /* Create list of terminals based on list of categories */
     for (i = 1; i <= nlines; i++) {
-	
+
 	ltype = Vect_get_line_type(&Map, i);
 	if (!(ltype & GV_POINT))
 	    continue;

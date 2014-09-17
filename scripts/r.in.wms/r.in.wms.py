@@ -165,7 +165,7 @@ This program is free software under the GNU General Public License
 
 #%flag
 #% key: o
-#% description: Don't request transparent data
+#% description: Do not request transparent data
 #% guisection: Map style
 #%end
 

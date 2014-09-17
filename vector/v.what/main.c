@@ -73,7 +73,7 @@ int main(int argc, char **argv)
     opt.coords = G_define_standard_option(G_OPT_M_COORDS);
     opt.coords->required = YES;
     opt.coords->label = _("Coordinates for query");
-    opt.coords->description = _("\"-\" to read from standard input");
+    opt.coords->description = _("'-' for standard input");
 
     opt.maxdist = G_define_option();
     opt.maxdist->type = TYPE_DOUBLE;

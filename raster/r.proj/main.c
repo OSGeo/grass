@@ -162,7 +162,7 @@ int main(int argc, char **argv)
 
     imapset = G_define_standard_option(G_OPT_M_MAPSET);
     imapset->label = _("Mapset containing input raster map");
-    imapset->description = _("default: name of current mapset");
+    imapset->description = _("Default: name of current mapset");
     imapset->guisection = _("Source");
 
     indbase = G_define_option();
@@ -195,7 +195,9 @@ int main(int argc, char **argv)
     memory->key = "memory";
     memory->type = TYPE_INTEGER;
     memory->required = NO;
-    memory->description = _("Cache size (MiB)");
+    memory->answer = "300";
+    memory->label = _("Maximum memory to be used (in MB)");
+    memory->description = _("Cache size for raster rows");
 
     res = G_define_option();
     res->key = "resolution";

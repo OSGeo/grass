@@ -59,7 +59,7 @@ int main(int argc, char **argv)
     type_opt->description = _("Arc type");
 
     coor_opt = G_define_option();
-    coor_opt->key = "coor";
+    coor_opt->key = "coordinates";
     coor_opt->key_desc = "x1,y1,x2,y2";
     coor_opt->type = TYPE_STRING;
     coor_opt->required = YES;
@@ -68,27 +68,27 @@ int main(int argc, char **argv)
     afield_opt = G_define_standard_option(G_OPT_V_FIELD);
     afield_opt->key = "alayer";
     afield_opt->answer = "1";
-    afield_opt->description = _("Arc layer");
+    afield_opt->label = _("Arc layer");
 
     nfield_opt = G_define_standard_option(G_OPT_V_FIELD);
     nfield_opt->key = "nlayer";
     nfield_opt->answer = "2";
-    nfield_opt->description = _("Node layer");
+    nfield_opt->label = _("Node layer");
 
     afcol = G_define_option();
-    afcol->key = "afcol";
+    afcol->key = "afcolumn";
     afcol->type = TYPE_STRING;
     afcol->required = NO;
-    afcol->description = _("Arc forward/both direction(s) cost column");
+    afcol->description = _("Arc forward/both direction(s) cost column (number)");
 
     abcol = G_define_option();
-    abcol->key = "abcol";
+    abcol->key = "abcolumn";
     abcol->type = TYPE_STRING;
     abcol->required = NO;
-    abcol->description = _("Arc backward direction cost column");
+    abcol->description = _("Arc backward direction cost column (number)");
 
     ncol = G_define_option();
-    ncol->key = "ncol";
+    ncol->key = "ncolumn";
     ncol->type = TYPE_STRING;
     ncol->required = NO;
     ncol->description = _("Node cost column");

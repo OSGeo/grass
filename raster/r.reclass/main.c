@@ -63,13 +63,13 @@ int main(int argc, char *argv[])
     parm.rules = G_define_standard_option(G_OPT_F_INPUT);
     parm.rules->key = "rules";
     parm.rules->label = _("File containing reclass rules");
-    parm.rules->description = _("\"-\" to read from stdin");
+    parm.rules->description = _("'-' for standard input");
     
     parm.title = G_define_option();
     parm.title->key = "title";
     parm.title->required = NO;
     parm.title->type = TYPE_STRING;
-    parm.title->description = _("Title for the resulting raster map");
+    parm.title->description = _("Title for output raster map");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

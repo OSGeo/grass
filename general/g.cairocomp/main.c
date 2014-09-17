@@ -241,7 +241,7 @@ int main(int argc, char *argv[])
 
     flag_d = G_define_flag();
     flag_d->key = 'd';
-    flag_d->description = _("Don't composite; just delete input Pixmaps");
+    flag_d->description = _("Do not composite; just delete input Pixmaps");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

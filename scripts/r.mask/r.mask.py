@@ -32,7 +32,7 @@
 #% key: maskcats
 #% type: string
 #% label: Raster values to use for mask
-#% description: format: 1 2 3 thru 7 *
+#% description: Format: 1 2 3 thru 7 *
 #% answer: *
 #% guisection: Raster
 #%end

@@ -37,7 +37,7 @@
 
 #%flag
 #% key: g
-#% description: Print information in shell style
+#% description: Print in shell script style
 #%end
 
 #%flag

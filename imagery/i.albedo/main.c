@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
 
     flag1 = G_define_flag();
     flag1->key = 'm';
-    flag1->description = _("Modis (7 input bands:1,2,3,4,5,6,7)");
+    flag1->description = _("MODIS (7 input bands:1,2,3,4,5,6,7)");
 
     flag2 = G_define_flag();
     flag2->key = 'n';
@@ -113,18 +113,18 @@ int main(int argc, char *argv[])
 
     flag4 = G_define_flag();
     flag4->key = 'a';
-    flag4->description = _("Aster (6 input bands:1,3,5,6,8,9)");
+    flag4->description = _("ASTER (6 input bands:1,3,5,6,8,9)");
 
     flag5 = G_define_flag();
     flag5->key = 'c';
-    flag5->label = _("Agressive mode (Landsat)");
+    flag5->label = _("Aggressive mode (Landsat)");
     flag5->description =
 	_("Albedo dry run to calculate some water to beach/sand/desert stretching, "
 	  "a kind of simple atmospheric correction");
 
     flag6 = G_define_flag();
     flag6->key = 'd';
-    flag6->label = _("Soft mode (Modis)");
+    flag6->label = _("Soft mode (MODIS)");
     flag6->description =
 	_("Albedo dry run to calculate some water to beach/sand/desert stretching, "
 	  "a kind of simple atmospheric correction");

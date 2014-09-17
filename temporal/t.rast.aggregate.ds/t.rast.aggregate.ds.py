@@ -48,7 +48,7 @@
 #%option
 #% key: method
 #% type: string
-#% description: Aggregate operation to be peformed on the raster maps
+#% description: Aggregate operation to be performed on the raster maps
 #% required: yes
 #% multiple: no
 #% options: average,count,median,mode,minimum,min_raster,maximum,max_raster,stddev,range,sum,variance,diversity,slope,offset,detcoeff,quart1,quart3,perc90,quantile,skewness,kurtosis

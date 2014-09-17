@@ -35,7 +35,7 @@
 #%end
 #%option G_OPT_F_INPUT
 #% label: Name of input coordinate file
-#% description: '-' to read from standard input
+#% description: '-' for standard input
 #% required: no
 #% guisection: Input coordinates
 #%end
