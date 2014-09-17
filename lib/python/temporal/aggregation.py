@@ -174,7 +174,7 @@ def aggregate_raster_maps(inputs, base, start, end, count, method,
     # In case of a null map continue, do not register null maps
     if new_map.metadata.get_min() is None and new_map.metadata.get_max() is None:
         if not register_null:
-            gscript.run_command("g.remove", rast=output)
+            gscript.run_command("g.remove", flags='f', type='rast', pattern=output)
             return None
 
     return new_map

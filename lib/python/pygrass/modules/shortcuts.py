@@ -20,16 +20,16 @@ class MetaModule(object):
     """Example how to use MetaModule
 
        >>> g = MetaModule('g')
-       >>> g_mlist = g.mlist
-       >>> g_mlist.name
-       'g.mlist'
-       >>> g_mlist.required
+       >>> g_list = g.list
+       >>> g_list.name
+       'g.list'
+       >>> g_list.required
        ['type']
-       >>> g_mlist.inputs.type = 'rast'
-       >>> g_mlist.stdout_ = -1
-       >>> g_mlist.run()
-       Module('g.mlist')
-       >>> g_mlist.outputs.stdout                         # doctest: +ELLIPSIS
+       >>> g_list.inputs.type = 'rast'
+       >>> g_list.stdout_ = -1
+       >>> g_list.run()
+       Module('g.list')
+       >>> g_list.outputs.stdout                         # doctest: +ELLIPSIS
        '...basins...soils...'
        >>> r = MetaModule('r')
        >>> what = r.what

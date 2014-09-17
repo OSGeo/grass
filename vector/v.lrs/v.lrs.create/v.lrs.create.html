@@ -43,7 +43,7 @@ v.edit -r busroute_tmp2 tool=delete coords=590273,4927304,\
 # vector line needs to be polyline
 v.build.polylines busroute_tmp2 out=busroute_tmp3
 v.category busroute_tmp3 out=busroute op=add
-g.remove vect=busroute_tmp,busroute_tmp2,busroute_tmp3
+g.remove -f type=vect pattern=busroute_tmp,busroute_tmp2,busroute_tmp3
 </pre></div>
 
 The result can be visualized:

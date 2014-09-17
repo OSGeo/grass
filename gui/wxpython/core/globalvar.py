@@ -201,11 +201,11 @@ UpdateGRASSAddOnCommands()
 """@Toolbar icon size"""
 toolbarSize = (24, 24)
 
-"""@Is g.mlist available?"""
-if 'g.mlist' in grassCmd:
-    have_mlist = True
+"""@Is g.list available?"""
+if 'g.list' in grassCmd:
+    have_list = True
 else:
-    have_mlist = False
+    have_list = False
 
 """@Check version of wxPython, use agwStyle for 2.8.11+"""
 hasAgw = CheckWxVersion()

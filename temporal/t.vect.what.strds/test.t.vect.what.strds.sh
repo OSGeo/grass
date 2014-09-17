@@ -54,5 +54,5 @@ t.remove type=stvds input=soil_abs1
 t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_abs1
 
-g.remove rast=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
-g.remove vect=soil_1,soil_2,soil_3
+g.remove -f type=rast pattern=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+g.remove -f type=vect pattern=soil_1,soil_2,soil_3

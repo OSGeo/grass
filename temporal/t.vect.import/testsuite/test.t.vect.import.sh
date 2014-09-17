@@ -59,7 +59,7 @@ v.info soil_1
 
 # Cleaning up
 rm -rf test
-g.remove vect=soil_1,soil_2,soil_3
+g.remove -f type=vect pattern=soil_1,soil_2,soil_3
 t.unregister type=vect file="${n1}"
 t.remove type=stvds input=soil_abs1,soil_abs2
 rm stvds_export_gml.tar.bz2

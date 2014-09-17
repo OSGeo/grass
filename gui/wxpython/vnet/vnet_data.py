@@ -938,8 +938,8 @@ class VNETTmpVectMaps:
         """
         if vectMap:
             vectMap.DeleteRenderLayer()
-            RunCommand('g.remove', 
-                        vect = vectMap.GetVectMapName())
+            RunCommand('g.remove', flags = 'f', type = 'vect',
+                        pattern = vectMap.GetVectMapName())
             self.RemoveFromTmpMaps(vectMap)
             return True
         return False
@@ -948,8 +948,8 @@ class VNETTmpVectMaps:
         """Delete all temporary maps in the class"""
         update = False
         for tmpMap in self.tmpMaps:
-            RunCommand('g.remove', 
-                        vect = tmpMap.GetVectMapName())
+            RunCommand('g.remove', flags = 'f', type = 'vect',
+                        pattern = tmpMap.GetVectMapName())
             if tmpMap.DeleteRenderLayer():
                 update = True
         return update

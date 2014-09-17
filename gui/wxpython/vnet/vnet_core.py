@@ -121,8 +121,8 @@ class VNETManager:
 
         # for case there is some map with same name 
         # (when analysis does not produce any map, this map would have been shown as result) 
-        RunCommand('g.remove', 
-                    vect = self.results["vect_map"].GetVectMapName())
+        RunCommand('g.remove', flags = 'f', type = 'vect',
+                    pattern = self.results["vect_map"].GetVectMapName())
 
         # save data from 
         self.history._saveAnInputToHist(analysis, params, flags)

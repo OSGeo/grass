@@ -100,9 +100,9 @@ mapset = None
 def cleanup():
     #delete internal mask and any TMP files:
     if len(tmp_vmaps) > 0:
-        grass.run_command('g.remove', quiet = True, flags = 'f', vect = tmp_vmaps)
+        grass.run_command('g.remove', quiet = True, flags = 'fb', type = 'vect', pattern = tmp_vmaps)
     if len(tmp_rmaps) > 0:
-        grass.run_command('g.remove', quiet = True, flags = 'f', rast = tmp_rmaps)
+        grass.run_command('g.remove', quiet = True, flags = 'fb', type = 'rast', pattern = tmp_rmaps)
     if usermask and mapset:
         if grass.find_file(usermask, mapset = mapset)['file']:
             grass.run_command('g.rename', quiet = True, rast = (usermask, 'MASK'), overwrite = True)
@@ -233,7 +233,7 @@ def main():
                 grass.fatal(_("abandoned. Removing temporary maps, restoring user mask if needed:"))
             
             # remove temporary map to not overfill disk
-            if grass.run_command('g.remove', flags = 'f', vect = holename + '_pol', quiet = quiet) != 0:
+            if grass.run_command('g.remove', flags = 'fb', type = 'vect', pattern = holename + '_pol', quiet = quiet) != 0:
                 grass.fatal(_("abandoned. Removing temporary maps, restoring user mask if needed:"))
             tmp_vmaps.remove(holename + '_pol')
             
@@ -325,14 +325,14 @@ def main():
                 tmp_rmaps.remove(holename + '_dem')
             except:
                 pass
-            if grass.run_command('g.remove', quiet = quiet, flags = 'f', rast = 
+            if grass.run_command('g.remove', quiet = quiet, flags = 'fb', type = 'rast', pattern = 
                 (holename, holename + '_grown', holename + '_edges', holename + '_dem')) != 0:
                 grass.fatal(_("abandoned. Removing temporary maps, restoring user mask if needed:"))
             try:
                 tmp_vmaps.remove(holename)
             except:
                 pass
-            if grass.run_command('g.remove', quiet = quiet, flags = 'f', vect = holename) != 0:
+            if grass.run_command('g.remove', quiet = quiet, flags = 'fb', type = 'vect', pattern = holename) != 0:
                 grass.fatal(_("abandoned. Removing temporary maps, restoring user mask if needed:"))
     
     #check if method is different from rst to use r.resamp.bspline

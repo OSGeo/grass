@@ -60,8 +60,8 @@ def main():
                           r_map = tmp_r, g_map = tmp_g, b_map = tmp_b)
         grass.run_command('r.composite', red = tmp_r, green = tmp_g,
                           blue = tmp_b, output = output_map)
-        grass.run_command('g.remove', quiet = True,
-                          rast = '%s,%s,%s' % (tmp_r, tmp_g, tmp_b))
+        grass.run_command('g.remove', flags = 'f', quiet = True, type='rast',
+                          pattern = '%s,%s,%s' % (tmp_r, tmp_g, tmp_b))
 
 
     ret = grass.run_command("d.his", h_map = drape_map, i_map = relief_map,

@@ -31,5 +31,5 @@ t.remove type=strds input=precip_abs1
 t.remove type=stvds input=prec_observer
 t.unregister type=vect maps=prec_observer:1,prec_observer:2,prec_observer:3,prec_observer:4,prec_observer:5,prec_observer:6
 
-#g.remove vect=prec_observer,test_extract
-#g.remove rast=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+#g.remove -f type=vect pattern=prec_observer,test_extract
+#g.remove -f type=rast pattern=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6

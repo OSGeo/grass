@@ -114,7 +114,8 @@ class GradientTest(TestCase):
     def tearDownClass(cls):
         """!Remove the temporary region"""
         cls.del_temp_region()
-        cls.runModule('g.remove', rast3d=['test_map_1_ref', 'test_map_2_ref', 'test_grad_x',
+        cls.runModule('g.remove', flags='f', type='rast3d',
+                      pattern=['test_map_1_ref', 'test_map_2_ref', 'test_grad_x',
                                           'test_grad_y', 'test_grad_z', 'test_null_grad_x',
                                           'test_null_grad_y', 'test_null_grad_z'])
 

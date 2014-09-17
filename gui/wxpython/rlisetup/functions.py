@@ -85,7 +85,8 @@ def convertFeature(vect, outrast, cat, origrast):
     grass.run_command('g.region', vect=tmp_vect, align=origrast)
     grass.run_command('v.to.rast', input=vect, output=outrast, use='cat',
                       cats=cat, overwrite=True, quiet=True)
-    grass.run_command('g.remove', vect=tmp_vect, quiet=True)
+    grass.run_command('g.remove', flags='f', type='vect',
+                      pattern=tmp_vect, quiet=True)
 
 
 def obtainAreaVector(outrast):

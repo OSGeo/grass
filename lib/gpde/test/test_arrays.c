@@ -294,7 +294,7 @@ int io_bench_2d(void)
 
 
     sprintf(buff,
-	    "g.remove rast=gpde_lib_test_raster_1,gpde_lib_test_raster_2,gpde_lib_test_raster_3");
+	    "g.remove -f type=rast pattern=gpde_lib_test_raster_1,gpde_lib_test_raster_2,gpde_lib_test_raster_3");
     system(buff);
 
     N_free_array_2d(data1);
@@ -588,7 +588,7 @@ int test_array_2d(void)
 
 
     sprintf(buff,
-	    "g.remove rast=gpde_lib_test_raster_1,gpde_lib_test_raster_2,gpde_lib_test_raster_3");
+	    "g.remove -f type=rast pattern=gpde_lib_test_raster_1,gpde_lib_test_raster_2,gpde_lib_test_raster_3");
     system(buff);
 
 
@@ -857,7 +857,7 @@ int test_array_3d(void)
     N_free_array_3d(tmp);
 
     sprintf(buff,
-	    "g.remove rast3d=gpde_lib_test_volume_1,gpde_lib_test_volume_2");
+	    "g.remove -f type=rast3d pattern=gpde_lib_test_volume_1,gpde_lib_test_volume_2");
     system(buff);
 
     N_free_array_3d(data1);

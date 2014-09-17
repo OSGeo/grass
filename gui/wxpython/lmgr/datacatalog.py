@@ -116,7 +116,7 @@ class LocationMapTree(wx.TreeCtrl):
                 self.ChangeEnvironment(location)
             varloc = self.AppendItem(self.root, loc)
             #get list of all maps in location
-            maplist = RunCommand('g.mlist', flags='mt', type='rast,rast3d,vect', mapset=','.join(mapsets),
+            maplist = RunCommand('g.list', flags='mt', type='rast,rast3d,vect', mapset=','.join(mapsets),
                                  quiet=True, read=True)
             maplist = maplist.splitlines()
             for ml in maplist:
@@ -414,15 +414,18 @@ class DataCatalogTree(LocationMapTree):
                 label = _("Deleting") + " " + string + " ..."
                 self.showNotification.emit(message=label)
                 if (self.GetItemText(self.selected_type)=='vect'):
-                    removed = RunCommand('g.remove', vect=string)
+                    removed = RunCommand('g.remove', flags='f', type='vect',
+                                         pattern=string)
                 elif (self.GetItemText(self.selected_type)=='rast'):
-                    removed = RunCommand('g.remove', rast=string)
+                    removed = RunCommand('g.remove', flags='f', type='rast',
+                                         pattern=string)
                 else:
-                    removed = RunCommand('g.remove', rast3d=string)
+                    removed = RunCommand('g.remove', flags='f', type='rast3d',
+                                         pattern=string)
                 if (removed==0):
                     self.Delete(self.selected_layer)
                     Debug.msg(1,"LAYER "+string+" DELETED")
-                    label = "g.remove "+self.GetItemText(self.selected_type)+"="+string+"    -- completed" # generate this message (command) automatically?
+                    label = "g.remove -f type="+self.GetItemText(self.selected_type)+" pattern="+string+"    -- completed" # generate this message (command) automatically?
                     self.showNotification.emit(message=label)
             self.RestoreBackup()
             

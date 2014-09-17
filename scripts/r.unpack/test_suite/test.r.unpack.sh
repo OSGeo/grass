@@ -21,7 +21,7 @@ r.pack --o --v -c input=test_float  output=test_float_uncompressed.pack
 r.pack --o --v -c input=test_double output=test_double_uncompressed.pack
 
 # Remove generated maps and re-import
-g.remove rast=test_int,test_float,test_double
+g.remove -f type=rast pattern=test_int,test_float,test_double
 # Second we check the import with r.unpack
 
 r.unpack --o --v input=test_int.pack
@@ -42,5 +42,5 @@ r.unpack -o --v -o input=test_double_uncompressed.pack output=test_double_uncomp
 #r.out.ascii --o input=test_float_uncompressed output=test_float_uncompressed.ref dp=1
 #r.out.ascii --o input=test_double_uncompressed output=test_double_uncompressed.ref dp=1
 
-g.remove rast=test_int,test_float,test_double,test_int_uncompressed,test_float_uncompressed,test_double_uncompressed
+g.remove -f type=rast pattern=test_int,test_float,test_double,test_int_uncompressed,test_float_uncompressed,test_double_uncompressed
 rm *.pack

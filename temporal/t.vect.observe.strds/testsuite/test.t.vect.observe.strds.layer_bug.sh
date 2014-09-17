@@ -36,5 +36,5 @@ t.unregister type=rast file=${MAP_LIST}
 t.remove type=strds input=precip_abs1
 t.remove type=stvds input=prec_observer
 
-#g.remove vect=prec_observer
-#g.mremove -f type=rast pattern=test_prec_*
+#g.remove -f type=vect pattern=prec_observer
+#g.remove -f type=rast pattern=test_prec_*

@@ -61,7 +61,7 @@ class VectorTopo3DTestCase(TestCase):
         """Remove the generated vector map, if exist"""
         mset = get_mapset_vector(cls.tmpname, mapset='')
         if mset:
-            run_command("g.remove", vect="%s@%s" % (cls.tmpname, mset))
+            run_command("g.remove", flags='f', type='vect', pattern=cls.tmpname)
 
 
 if __name__ == '__main__':

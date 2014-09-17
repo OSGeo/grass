@@ -1006,7 +1006,7 @@ def del_temp_region():
     """Unsets WIND_OVERRIDE and removes any region named by it."""
     try:
         name = os.environ.pop('WIND_OVERRIDE')
-        run_command("g.remove", quiet=True, region=name)
+        run_command("g.remove", flags='f', quiet=True, type='region', pattern=name)
     except:
         pass
 
@@ -1040,97 +1040,10 @@ def find_file(name, element='cell', mapset=None):
 # interface to g.list
 
 
-def list_grouped(type, check_search_path=True):
-    """List elements grouped by mapsets.
-
-    Returns the output from running g.list, as a dictionary where the
-    keys are mapset names and the values are lists of maps in that
-    mapset. Example:
-
-    >>> list_grouped('rast')['PERMANENT'] # doctest: +ELLIPSIS
-    ['basins' ... 'landuse']
-
-
-    :param str type: element type (rast, vect, rast3d, region, ...)
-    :param bool check_search_path: True to add mapsets for the search path
-                                   with no found elements
-
-    :return: directory of mapsets/elements
-    """
-    if type == 'raster' or type == 'cell':
-        verbose(_('Element type should be "rast" and not "%s"') % type)
-        type = 'rast'
-    dashes_re = re.compile("^----+$")
-    mapset_re = re.compile("<(.*)>")
-    result = {}
-    if check_search_path:
-        for mapset in mapsets(search_path=True):
-            result[mapset] = []
-
-    mapset = None
-    for line in read_command("g.list", type=type).splitlines():
-        if line == "":
-            continue
-        if dashes_re.match(line):
-            continue
-        m = mapset_re.search(line)
-        if m:
-            mapset = m.group(1)
-            if mapset not in result.keys():
-                result[mapset] = []
-            continue
-        if mapset:
-            result[mapset].extend(line.split())
-
-    return result
-
-
-def _concat(xs):
-    result = []
-    for x in xs:
-        result.extend(x)
-    return result
-
-
-def list_pairs(type):
-    """List of elements as tuples.
-
-    Returns the output from running g.list, as a list of (map, mapset)
-    pairs. Example:
-
-    >>> list_pairs('rast') # doctest: +ELLIPSIS
-    [('basins', 'PERMANENT'),  ... ('landuse', 'PERMANENT')]
-
-    :param str type: element type (rast, vect, rast3d, region, ...)
-
-    :return: list of tuples (map, mapset)
-    """
-    return _concat([[(map, mapset) for map in maps]
-                    for mapset, maps in list_grouped(type).iteritems()])
-
-
-def list_strings(type):
+def list_strings(type, pattern=None, mapset=None, exclude=None, flag=''):
     """List of elements as strings.
 
     Returns the output from running g.list, as a list of qualified
-    names. Example:
-
-    >>> list_strings('rast')  # doctest: +ELLIPSIS
-    [..., 'lakes@PERMANENT', ..., 'slope@PERMANENT', ...
-
-    :param str type: element type
-
-    :return: list of strings ('map@@mapset')
-    """
-    return ["%s@%s" % pair for pair in list_pairs(type)]
-
-# interface to g.mlist
-
-
-def mlist_strings(type, pattern=None, mapset=None, exclude=None, flag=''):
-    """List of elements as strings.
-
-    Returns the output from running g.mlist, as a list of qualified
     names.
 
     :param str type: element type (rast, vect, rast3d, region, ...)
@@ -1146,7 +1059,7 @@ def mlist_strings(type, pattern=None, mapset=None, exclude=None, flag=''):
         verbose(_('Element type should be "rast" and not "%s"') % type)
         type = 'rast'
     result = list()
-    for line in read_command("g.mlist",
+    for line in read_command("g.list",
                              quiet=True,
                              flags='m' + flag,
                              type=type,
@@ -1158,10 +1071,10 @@ def mlist_strings(type, pattern=None, mapset=None, exclude=None, flag=''):
     return result
 
 
-def mlist_pairs(type, pattern=None, mapset=None, exclude=None, flag=''):
+def list_pairs(type, pattern=None, mapset=None, exclude=None, flag=''):
     """List of elements as pairs
 
-    Returns the output from running g.mlist, as a list of
+    Returns the output from running g.list, as a list of
     (name, mapset) pairs
 
     :param str type: element type (rast, vect, rast3d, region, ...)
@@ -1173,20 +1086,20 @@ def mlist_pairs(type, pattern=None, mapset=None, exclude=None, flag=''):
 
     :return: list of elements
     """
-    return [tuple(map.split('@', 1)) for map in mlist_strings(type, pattern,
+    return [tuple(map.split('@', 1)) for map in list_strings(type, pattern,
                                                               mapset, exclude,
                                                               flag)]
 
 
-def mlist_grouped(type, pattern=None, check_search_path=True, exclude=None,
+def list_grouped(type, pattern=None, check_search_path=True, exclude=None,
                   flag=''):
     """List of elements grouped by mapsets.
 
-    Returns the output from running g.mlist, as a dictionary where the
+    Returns the output from running g.list, as a dictionary where the
     keys are mapset names and the values are lists of maps in that
     mapset. Example:
 
-    >>> mlist_grouped('vect', pattern='*roads*')['PERMANENT']
+    >>> list_grouped('vect', pattern='*roads*')['PERMANENT']
     ['railroads', 'roadsmajor']
 
     :param str type: element type (rast, vect, rast3d, region, ...)
@@ -1208,7 +1121,7 @@ def mlist_grouped(type, pattern=None, check_search_path=True, exclude=None,
             result[mapset] = []
 
     mapset = None
-    for line in read_command("g.mlist", quiet=True, flags="m" + flag,
+    for line in read_command("g.list", quiet=True, flags="m" + flag,
                              type=type, pattern=pattern, exclude=exclude).splitlines():
         try:
             name, mapset = line.split('@')

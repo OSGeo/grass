@@ -106,4 +106,4 @@ t.vect.list separator=" | " method=deltagaps input=lidar_abs5
 
 #t.unregister type=vect maps=lidar_1,lidar_2,lidar_3,lidar_4,lidar_5,lidar_6
 #t.remove type=stvds input=lidar_abs1,lidar_abs2,lidar_abs3,lidar_abs4,lidar_abs5
-#g.remove vect=lidar_1,lidar_2,lidar_3,lidar_4,lidar_5,lidar_6
+#g.remove -f type=vect pattern=lidar_1,lidar_2,lidar_3,lidar_4,lidar_5,lidar_6

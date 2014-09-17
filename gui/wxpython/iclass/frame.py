@@ -254,7 +254,9 @@ class IClassMapFrame(DoubleMapFrame):
         """Removes temporary vector map with training areas"""
         ret = RunCommand(prog = 'g.remove',
                          parent = self,
-                         vect = self.trainingAreaVector)
+                         flags = 'f',
+                         type = 'vect',
+                         pattern = self.trainingAreaVector)
         if ret != 0:
             return False
         return True
@@ -265,7 +267,9 @@ class IClassMapFrame(DoubleMapFrame):
         self.GetSecondMap().Clean()
         ret = RunCommand(prog = 'g.remove',
                          parent = self,
-                         rast = raster)
+                         flags = 'f',
+                         type = 'rast',
+                         pattern = raster)
         if ret != 0:
             return False
         return True

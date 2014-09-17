@@ -77,5 +77,5 @@ t.remove type=stvds input=soil_abs
 t.unregister type=rast maps=sand_frac,sand_frac_1,sand_frac_2,sand_frac_3,sand_frac_4,sand_frac_5,sand_frac_6
 t.remove type=strds input=sand_frac_abs_1,sand_frac_abs_2
 
-g.remove rast=sand_frac,sand_frac_1,sand_frac_2,sand_frac_3,sand_frac_4,sand_frac_5,sand_frac_6
-g.remove vect=soils,soil_orig
+g.remove -f type=rast pattern=sand_frac,sand_frac_1,sand_frac_2,sand_frac_3,sand_frac_4,sand_frac_5,sand_frac_6
+g.remove -f type=vect pattern=soils,soil_orig

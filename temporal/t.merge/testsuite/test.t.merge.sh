@@ -49,4 +49,4 @@ t.rast.list precip_abs4
 
 t.remove type=strds input=precip_abs1,precip_abs2,precip_abs3,precip_abs4
 t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
-g.remove rast=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+g.remove -f type=rast pattern=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6

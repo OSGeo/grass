@@ -255,7 +255,7 @@ def copy_rasters(rasters, gisrc_src, gisrc_dst, region=None):
         mpclc(expression="%s=%s" % (name, rast), overwrite=True, env_=env)
         file_dst = "%s.pack" % os.path.join(path_dst, name)
         rpck(input=name, output=file_dst, overwrite=True, env_=env)
-        remove(rast=name, env_=env)
+        remove(flags='f', type='rast', pattern=name, env_=env)
         # change gisdbase to dst
         env['GISRC'] = gisrc_dst
         rupck(input=file_dst, output=rast_clean, overwrite=True, env_=env)
@@ -289,7 +289,7 @@ def copy_vectors(vectors, gisrc_src, gisrc_dst):
         name = nam % vect
         file_dst = "%s.pack" % os.path.join(path_dst, name)
         vpck(input=name, output=file_dst, overwrite=True, env_=env)
-        remove(vect=name, env_=env)
+        remove(flags='f', type='vect', pattern=name, env_=env)
         # change gisdbase to dst
         env['GISRC'] = gisrc_dst
         vupck(input=file_dst, output=vect, overwrite=True, env_=env)
@@ -603,4 +603,4 @@ class GridModule(object):
         if self.inlist:
             grm = Module('g.remove')
             for key in self.inlist:
-                grm(rast=self.inlist[key])
+                grm(flags='f', type='rast', pattern=self.inlist[key])

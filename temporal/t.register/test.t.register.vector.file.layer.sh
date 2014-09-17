@@ -71,4 +71,4 @@ t.list type=vect columns=id,name,start_time,end_time where="name='lidar_abs_1'"
 
 t.unregister --v type=vect maps=lidar_abs_1:1,lidar_abs_1:2,lidar_abs_1:3,lidar_abs_1:4,lidar_abs_1:5,lidar_abs_1:6
 t.remove type=stvds input=lidar_abs_ds1
-g.remove vect=lidar_abs_1,lidar_abs_orig
+g.remove -f type=vect pattern=lidar_abs_1,lidar_abs_orig

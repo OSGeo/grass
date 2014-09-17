@@ -47,7 +47,7 @@ t.rast.mapcalc -sn inputs=precip_abs1,precip_abs2 output=precip_abs4 \
 t.info type=strds input=precip_abs4
 
 # Let the test fail
-g.remove rast=prec_1
+g.remove -f type=rast pattern=prec_1
 t.rast.mapcalc -sn inputs=precip_abs1,precip_abs2 output=precip_abs4 \
            expression=" (precip_abs1 + precip_abs2) * null()" base=new_prec \
            method=equal nprocs=5
