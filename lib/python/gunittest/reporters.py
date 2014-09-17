@@ -373,8 +373,14 @@ class GrassTestFilesCountingReporter(object):
         self.main_time = self.main_end_time - self.main_start_time
 
         assert self.test_files == self.files_fail + self.files_pass
-        self.file_pass_per = 100 * float(self.files_pass) / self.test_files
-        self.file_fail_per = 100 * float(self.files_fail) / self.test_files
+        if self.test_files:
+            self.file_pass_per = 100 * float(self.files_pass) / self.test_files
+            self.file_fail_per = 100 * float(self.files_fail) / self.test_files
+        else:
+            # if no tests were executed, probably something bad happend
+            # try to report at least something
+            self.file_pass_per = None
+            self.file_fail_per = None
 
     def start_file_test(self, module):
         self.file_start_time = datetime.datetime.now()
@@ -393,7 +399,9 @@ class GrassTestFilesCountingReporter(object):
 
 
 def percent_to_html(percent):
-    if percent > 100 or percent < 0:
+    if percent is None:
+        return '<span style="color: {color}">unknown percentage</span>'
+    elif percent > 100 or percent < 0:
         return "? {:.2f}% ?".format(percent)
     elif percent < 40:
         color = 'red'
@@ -564,18 +572,26 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
                      st=self.successes, ft=self.failures + self.errors,
                      total=self.total, pt=pass_per
                      ))
+        
+        # this is the second place with this function
+        # TODO: provide one implementation
+        def format_percentage(percentage):
+            if percentage is not None:
+                return "{nsper:.0f}%".format(nsper=percentage)
+            else:
+                return "unknown percentage"
 
-        summary_sentence = ('Executed {nfiles} test files in {time:}.'
-                            ' From them'
-                            ' {nsfiles} files ({nsper:.0f}%) were successful'
-                            ' and {nffiles} files ({nfper:.0f}%) failed.'
+        summary_sentence = ('\nExecuted {nfiles} test files in {time:}.'
+                            '\nFrom them'
+                            ' {nsfiles} files ({nsper}) were successful'
+                            ' and {nffiles} files ({nfper}) failed.\n'
                             .format(
                                 nfiles=self.test_files,
                                 time=self.main_time,
                                 nsfiles=self.files_pass,
                                 nffiles=self.files_fail,
-                                nsper=self.file_pass_per,
-                                nfper=self.file_fail_per))
+                                nsper=format_percentage(self.file_pass_per),
+                                nfper=format_percentage(self.file_fail_per)))
 
         self.main_index.write('<tbody>{tfoot}</table>'
                               '<p>{summary}</p>'
@@ -881,17 +897,23 @@ class GrassTestFilesTextReporter(GrassTestFilesCountingReporter):
     def finish(self):
         super(GrassTestFilesTextReporter, self).finish()
 
+        def format_percentage(percentage):
+            if percentage is not None:
+                return "{nsper:.0f}%".format(nsper=percentage)
+            else:
+                return "unknown percentage"
+
         summary_sentence = ('\nExecuted {nfiles} test files in {time:}.'
                             '\nFrom them'
-                            ' {nsfiles} files ({nsper:.0f}%) were successful'
-                            ' and {nffiles} files ({nfper:.0f}%) failed.\n'
+                            ' {nsfiles} files ({nsper}) were successful'
+                            ' and {nffiles} files ({nfper}) failed.\n'
                             .format(
                                 nfiles=self.test_files,
                                 time=self.main_time,
                                 nsfiles=self.files_pass,
                                 nffiles=self.files_fail,
-                                nsper=self.file_pass_per,
-                                nfper=self.file_fail_per))
+                                nsper=format_percentage(self.file_pass_per),
+                                nfper=format_percentage(self.file_fail_per)))
         self._stream.write(summary_sentence)
 
     def start_file_test(self, module):
