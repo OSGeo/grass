@@ -46,15 +46,19 @@ void D_setup(int clear)
     struct Cell_head region;
     double dt, db, dl, dr;
 
-    D_get_window(&dt, &db, &dl, &dr);
+    D_get_frame(&dt, &db, &dl, &dr);
 
     G_get_set_window(&region);
     Rast_set_window(&region);
 
     D_do_conversions(&region, dt, db, dl, dr);
 
+    D_set_clip_window_to_screen_window();
+
     if (clear)
 	D_erase(DEFAULT_BG_COLOR);
+
+    D_set_clip_window_to_map_window();
 }
 
 /*!
@@ -73,15 +77,19 @@ void D_setup_unity(int clear)
 {
     double dt, db, dl, dr;
 
-    D_get_window(&dt, &db, &dl, &dr);
+    D_get_frame(&dt, &db, &dl, &dr);
 
     D_set_src(dt, db, dl, dr);
     D_set_dst(dt, db, dl, dr);
 
     D_update_conversions();
 
+    D_set_clip_window_to_screen_window();
+
     if (clear)
 	D_erase(DEFAULT_BG_COLOR);
+
+    D_set_clip_window_to_map_window();
 }
 
 /*!
@@ -105,7 +113,7 @@ void D_setup2(int clear, int fit, double st, double sb, double sl, double sr)
 {
     double dt, db, dl, dr;
 
-    D_get_window(&dt, &db, &dl, &dr);
+    D_get_frame(&dt, &db, &dl, &dr);
 
     D_set_src(st, sb, sl, sr);
     D_set_dst(dt, db, dl, dr);
@@ -115,6 +123,10 @@ void D_setup2(int clear, int fit, double st, double sb, double sl, double sr)
 
     D_update_conversions();
 
+    D_set_clip_window_to_screen_window();
+
     if (clear)
 	D_erase(DEFAULT_BG_COLOR);
+
+    D_set_clip_window_to_map_window();
 }

@@ -149,8 +149,6 @@ int D_open_driver(void);
 void D_close_driver(void);
 int D_save_command(const char *);
 
-void D_get_window(double *, double *, double *, double *);
-
 void D__erase(void);
 
 void D_text_size(double, double);
@@ -161,5 +159,11 @@ void D_font(const char *);
 void D_encoding(const char *);
 void D_font_list(char ***, int *);
 void D_font_info(char ***, int *);
+
+void D_get_clip_window(double *, double *, double *, double *);
+void D_set_clip_window(double, double, double, double);
+void D_get_frame(double *, double *, double *, double *);
+void D_set_clip_window_to_map_window(void);
+void D_set_clip_window_to_screen_window(void);
 
 #endif /* GRASS_DISPLAYDEFS_H */
