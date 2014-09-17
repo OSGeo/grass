@@ -115,9 +115,10 @@ class GradientTest(TestCase):
         """!Remove the temporary region"""
         cls.del_temp_region()
         cls.runModule('g.remove', flags='f', type='rast3d',
-                      pattern=['test_map_1_ref', 'test_map_2_ref', 'test_grad_x',
-                                          'test_grad_y', 'test_grad_z', 'test_null_grad_x',
-                                          'test_null_grad_y', 'test_null_grad_z'])
+                      pattern=','.join(['test_map_1_ref', 'test_map_2_ref',
+                                        'test_grad_x', 'test_grad_y',
+                                        'test_grad_z', 'test_null_grad_x',
+                                        'test_null_grad_y', 'test_null_grad_z']))
 
     def test_gradient_runs(self):
         self.runModule('g.region', res3=10, n=100, s=0, w=0, e=120, b=0, t=50)
