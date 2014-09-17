@@ -113,7 +113,7 @@ def discover_modules(start_dir, skip_dirs, testsuite_dir,
                         add = True
                     else:
                         try:
-                            locations = ['nc']
+                            locations = ['nc', 'stdmaps', 'all']
                         except AttributeError:
                             add = True  # test is universal
                         else:
