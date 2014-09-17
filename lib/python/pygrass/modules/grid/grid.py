@@ -540,7 +540,7 @@ class GridModule(object):
             result = pool.map_async(cmd_exe, self.get_works())
             result.wait()
             if not result.successful():
-                raise RuntimeError
+                raise RuntimeError(_("Execution of subprocesses was not successful"))
 
         if patch:
             if self.move:
