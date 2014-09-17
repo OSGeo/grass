@@ -5,7 +5,7 @@
 # MODULE:	t.rast3d.extract
 # AUTHOR(S):	Soeren Gebbert
 #
-# PURPOSE:	Extract a subset of a space time raster3d dataset
+# PURPOSE:	Extract a subset of a space time 3D raster dataset
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Extracts a subset of a space time raster3d dataset.
+#% description: Extracts a subset of a space time 3D raster dataset.
 #% keywords: temporal
 #% keywords: extract
 #%end
@@ -29,7 +29,7 @@
 #%option
 #% key: expression
 #% type: string
-#% description: The r3.mapcalc expression assigned to all extracted raster3d maps
+#% description: The r3.mapcalc expression assigned to all extracted 3D raster maps
 #% required: no
 #% multiple: no
 #%end
@@ -40,7 +40,7 @@
 #%option
 #% key: base
 #% type: string
-#% description: Base name of the new created raster3d maps
+#% description: Base name of the new created 3D raster maps
 #% required: no
 #% multiple: no
 #%end

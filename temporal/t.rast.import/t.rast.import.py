@@ -6,7 +6,7 @@
 # AUTHOR(S):     Soeren Gebbert
 #
 # PURPOSE:        Import a space time raster dataset
-# COPYRIGHT:        (C) 2011 by the GRASS Development Team
+# COPYRIGHT:        (C) 2011-2014 by the GRASS Development Team
 #
 #                This program is free software under the GNU General Public
 #                License (version 2). Read the file COPYING that comes with GRASS
@@ -60,7 +60,7 @@
 #%option
 #% key: location
 #% type: string
-#% description: Create a new location and import the data into it. Please do not run this module in parallel or interrupt it when a new location should be created.
+#% description: Create a new location and import the data into it. Do not run this module in parallel or interrupt it when a new location should be created
 #% required: no
 #% multiple: no
 #%end
@@ -84,7 +84,6 @@
 #% key: o
 #% description: Override projection (use location's projection)
 #%end
-
 
 #%flag
 #% key: c

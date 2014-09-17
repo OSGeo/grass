@@ -120,7 +120,7 @@ int main(int argc, char **argv)
     g3->key = "grid3";
     g3->type = TYPE_STRING;
     g3->required = YES;
-    g3->gisprompt = "old,grid3,3dcell";
+    g3->gisprompt = "old,grid3,3d-raster";
     g3->description = "Name of an existing 3D raster map";
 
     dspf = G_define_option();

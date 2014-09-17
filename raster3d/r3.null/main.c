@@ -51,7 +51,7 @@ static void setParams(void)
     params.map->multiple = NO;
     params.map->gisprompt = "old,grid3,3d-raster";
     params.map->description =
-	_("3d raster map for which to modify null values");
+	_("3D raster map for which to modify null values");
 
     params.setNull = G_define_option();
     params.setNull->key = "setnull";

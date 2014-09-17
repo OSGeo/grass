@@ -7,7 +7,7 @@
  *
  * PURPOSE:    Computes strongly and weakly connected components
  *
- * COPYRIGHT:  (C) 2002-2005 by the GRASS Development Team
+ * COPYRIGHT:  (C) 2002-2014 by the GRASS Development Team
  *
  *             This program is free software under the
  *             GNU General Public License (>=v2).

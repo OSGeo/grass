@@ -145,18 +145,18 @@ int main(int argc, char *argv[])
     flag_c = G_define_flag();
     flag_c->key = 'c';
     flag_c->label = _("Do not write GDAL standard colortable");
-    flag_c->description = _("Only applicable to Byte or UInt16 data types.");
+    flag_c->description = _("Only applicable to Byte or UInt16 data types");
     flag_c->guisection = _("Creation");
 
     flag_t = G_define_flag();
     flag_t->key = 't';
     flag_t->label = _("Write raster attribute table");
-    flag_t->description = _("Some export formats may not be supported.");
+    flag_t->description = _("Some export formats may not be supported");
 
     flag_f = G_define_flag();
     flag_f->key = 'f';
     flag_f->label = _("Force raster export despite any warnings of data loss");
-    flag_f->description = _("Overrides nodata safety check.");
+    flag_f->description = _("Overrides nodata safety check");
 
     input = G_define_standard_option(G_OPT_R_INPUT);
     input->description = _("Name of raster map (or group) to export");
@@ -201,7 +201,7 @@ int main(int argc, char *argv[])
     createopt->label =
 	_("Creation option(s) to pass to the output format driver");
     createopt->description =
-	_("In the form of \"NAME=VALUE\", separate multiple entries with a comma.");
+	_("In the form of \"NAME=VALUE\", separate multiple entries with a comma");
     createopt->multiple = YES;
     createopt->required = NO;
     createopt->guisection = _("Creation");

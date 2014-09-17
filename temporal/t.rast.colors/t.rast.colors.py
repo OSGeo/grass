@@ -55,7 +55,7 @@
 
 #%flag
 #% key: r
-#% description: Remove existing color tables
+#% description: Remove existing color table
 #% guisection: Remove
 #%end
 

@@ -72,7 +72,7 @@ static void setParams()
     param.output->type = TYPE_STRING;
     param.output->required = YES;
     param.output->multiple = NO;
-    param.output->gisprompt = "any,grid3,3d raster";
+    param.output->gisprompt = "any,grid3,3d-raster";
     param.output->description = "Name for 3D raster map";
 
     param.nv = G_define_option();

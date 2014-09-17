@@ -282,7 +282,7 @@ int main(int argc, char *argv[])
 
     flag.r = G_define_flag();
     flag.r->key = 'r';
-    flag.r->description = _("Generate recode rules based on quantile-defined intervals.");
+    flag.r->description = _("Generate recode rules based on quantile-defined intervals");
  
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

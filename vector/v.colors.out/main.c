@@ -64,7 +64,7 @@ int main(int argc, char **argv)
 
     opt.col = G_define_standard_option(G_OPT_DB_COLUMN);
     opt.col->label = _("Name of attribute (numeric) column to which refer color rules");
-    opt.col->description = _("If not given color rules are refered to categories");
+    opt.col->description = _("If not given, color rules refer to categories");
     opt.col->guisection = _("Settings");
 
     flag.p = G_define_flag();

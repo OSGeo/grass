@@ -6,7 +6,7 @@
 # AUTHOR(S):	Soeren Gebbert
 #
 # PURPOSE:	Perform r3.mapcalc expressions on maps of sampled space time raster3d datasets
-# COPYRIGHT:	(C) 2012 by the GRASS Development Team
+# COPYRIGHT:	(C) 2012-2014 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (version 2). Read the file COPYING that comes with GRASS
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Performs r3.mapcalc expressions on maps of sampled space time raster3d datasets.
+#% description: Performs r3.mapcalc expressions on maps of sampled space time 3D raster datasets.
 #% keywords: temporal
 #% keywords: algebra
 #%end

@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
     flag_filt = G_define_flag();
     flag_filt->key = 'f';
     flag_filt->label = (_("Output will be filtered input bands"));
-    flag_filt->description = (_("Applies inverse PCA after PCA"));
+    flag_filt->description = (_("Apply inverse PCA after PCA"));
     flag_filt->guisection = _("Filter");
 
     if (G_parser(argc, argv))

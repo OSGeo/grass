@@ -6,14 +6,14 @@
  *  AUTHOR(S):    Radim Blazek
  *                
  *  PURPOSE:      Split net to bands between isolines.
- *                
- *  COPYRIGHT:    (C) 2001-2008 by the GRASS Development Team
- * 
+ *
+ *  COPYRIGHT:    (C) 2001-2008,2014 by the GRASS Development Team
+ *
  *                This program is free software under the 
  *                GNU General Public License (>=v2). 
  *                Read the file COPYING that comes with GRASS
  *                for details.
- * 
+ *
  **************************************************************/
 #include <stdlib.h>
 #include <string.h>
@@ -68,14 +68,15 @@ int main(int argc, char **argv)
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->label = _("Splits net by cost isolines.");
     G_add_keyword(_("vector"));
     G_add_keyword(_("network"));
     G_add_keyword(_("isolines"));
+    module->label = _("Splits net by cost isolines.");
     module->description =
-	_("Splits net to bands between cost isolines (direction from centre). "
-	 "Centre node must be opened (costs >= 0). "
-	 "Costs of centre node are used in calculation.");
+	_
+	("Splits net to bands between cost isolines (direction from center). "
+	 "Center node must be opened (costs >= 0). "
+	 "Costs of center node are used in calculation.");
 
     map = G_define_standard_option(G_OPT_V_INPUT);
     output = G_define_standard_option(G_OPT_V_OUTPUT);
@@ -98,22 +99,25 @@ int main(int argc, char **argv)
     afcol->key = "afcolumn";
     afcol->description =
 	_("Arc forward/both direction(s) cost column (number)");
+    afcol->guisection = _("Cost");
 
     abcol = G_define_standard_option(G_OPT_DB_COLUMN);
     abcol->key = "abcolumn";
     abcol->description = _("Arc backward direction cost column (number)");
+    abcol->guisection = _("Cost");
 
     ncol = G_define_standard_option(G_OPT_DB_COLUMN);
     ncol->key = "ncolumn";
     ncol->description = _("Node cost column (number)");
+    ncol->guisection = _("Cost");
 
     term_opt = G_define_standard_option(G_OPT_V_CATS);
     term_opt->key = "ccats";
     term_opt->required = YES;
     term_opt->description =
-	_("Categories of centres (points on nodes) to which net "
-	  "will be allocated. "
-	  "Layer for this categories is given by nlayer option.");
+	_("Categories of centers (points on nodes) to which net "
+	  "will be allocated, "
+	  "layer for this categories is given by nlayer option");
 
     cost_opt = G_define_option();
     cost_opt->key = "costs";
@@ -130,6 +134,8 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+    Vect_check_input_output_name(map->answer, output->answer, G_FATAL_EXIT);
+
     Cats = Vect_new_cats_struct();
     Points = Vect_new_line_struct();
     SPoints = Vect_new_line_struct();
@@ -140,8 +146,6 @@ int main(int argc, char **argv)
 
     catlist = Vect_new_cat_list();
     Vect_str_to_cat_list(term_opt->answer, catlist);
-
-    Vect_check_input_output_name(map->answer, output->answer, G_FATAL_EXIT);
 
     /* Iso costs */
     aiso = 1;

@@ -254,7 +254,7 @@ int main(int argc, char *argv[])
 
     flag.swap = G_define_flag();
     flag.swap->key = 'b';
-    flag.swap->description = _("Byte Swap the Data During Import");
+    flag.swap->description = _("Byte swap the data during import");
     flag.swap->guisection = _("Settings");
 
     flag.gmt_hd = G_define_flag();

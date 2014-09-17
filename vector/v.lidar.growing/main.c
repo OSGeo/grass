@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
     in_opt->description =
-	_("Input vector (v.lidar.edgedetection output");
+	_("Input vector (v.lidar.edgedetection output)");
 
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
 

@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
     val->options = "1-3";
     val->answer = "1";
     val->required = YES;
-    val->description = _("Rectification polynom order (1-3)");
+    val->description = _("Rectification polynomial order (1-3)");
 
     tres = G_define_option();
     tres->key = "res";

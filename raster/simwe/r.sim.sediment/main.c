@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
     parm.manin = G_define_standard_option(G_OPT_R_INPUT);
     parm.manin->key = "man";
     parm.manin->required = NO;
-    parm.manin->description = _("Name of mannings n raster map");
+    parm.manin->description = _("Name of Manning's n raster map");
     parm.manin->guisection = _("Input");
 
     parm.maninval = G_define_option();
@@ -157,7 +157,7 @@ int main(int argc, char *argv[])
     parm.maninval->type = TYPE_DOUBLE;
     parm.maninval->answer = MANINVAL;
     parm.maninval->required = NO;
-    parm.maninval->description = _("Name of mannings n value");
+    parm.maninval->description = _("Name of Manning's n value");
     parm.maninval->guisection = _("Input");
 
     parm.outwalk = G_define_standard_option(G_OPT_V_OUTPUT);
@@ -191,7 +191,7 @@ int main(int argc, char *argv[])
     parm.et->key = "et";
     parm.et->required = NO;
     parm.et->description =
-	_("Name for output transp.limited erosion-deposition raster map [kg/m2s]");
+	_("Name for output transport limited erosion-deposition raster map [kg/m2s]");
     parm.et->guisection = _("Output");
 
     parm.conc = G_define_standard_option(G_OPT_R_OUTPUT);

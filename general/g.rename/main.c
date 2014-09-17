@@ -1,7 +1,7 @@
 
 /****************************************************************************
  *
- * MODULE:       g.rename cmd
+ * MODULE:       g.rename
  * AUTHOR(S):    CERL (original contributor)
  *               Radim Blazek <radim.blazek gmail.com>, 
  *               Cedric Shock <cedricgrass shockfamily.net>, 
