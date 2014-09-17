@@ -54,7 +54,7 @@ int Vect_legal_filename(const char *s)
 
     for (s++; *s; s++)
 	if (!((*s >= 'A' && *s <= 'Z') || (*s >= 'a' && *s <= 'z') ||
-	      (*s >= '0' && *s <= '9') || *s == '_' || *s == '@')) {
+	      (*s >= '0' && *s <= '9') || *s == '_') || *s == '@') {
 	    G_warning(_("Illegal vector map name <%s>. Character '%c' not allowed."),
 		      buf, *s);
 	    return -1;
