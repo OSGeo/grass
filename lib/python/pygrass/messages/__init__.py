@@ -87,38 +87,38 @@ def message_server(lock, conn):
             message = data[2]
             # libgis limitation
             if len(message) >= 2000:
-                messgae = message[:1999]
+                message = message[:1999]
             libgis.G_debug(level, message)
         elif message_type == "VERBOSE":
             # libgis limitation
             if len(message) >= 2000:
-                messgae = message[:1999]
+                message = message[:1999]
             libgis.G_verbose_message(message)
         elif message_type == "INFO":
             # libgis limitation
             if len(message) >= 2000:
-                messgae = message[:1999]
+                message = message[:1999]
             libgis.G_message(message)
         elif message_type == "IMPORTANT":
             # libgis limitation
             if len(message) >= 2000:
-                messgae = message[:1999]
+                message = message[:1999]
             libgis.G_important_message(message)
         elif message_type == "WARNING":
             # libgis limitation
             if len(message) >= 2000:
-                messgae = message[:1999]
+                message = message[:1999]
             libgis.G_warning(message)
         elif message_type == "ERROR":
             # libgis limitation
             if len(message) >= 2000:
-                messgae = message[:1999]
+                message = message[:1999]
             libgis.G_important_message("ERROR: %s"%message)
         # This is for testing only
         elif message_type == "FATAL":
             # libgis limitation
             if len(message) >= 2000:
-                messgae = message[:1999]
+                message = message[:1999]
             libgis.G_fatal_error(message)
 
         lock.release()
