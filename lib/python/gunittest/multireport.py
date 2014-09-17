@@ -208,7 +208,7 @@ def main():
             summary_file = os.path.join(report, 'test_keyvalue_result.txt')
             if not os.path.exists(summary_file):
                 sys.stderr.write('WARNING: Key-value summary not available in'
-                                 ' report <%s>, skipping.\n')
+                                 ' report <%s>, skipping.\n' % summary_file)
                 # skipping incomplete reports
                 # use only results list for further processing
                 continue
