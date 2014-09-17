@@ -89,7 +89,7 @@ int main(int argc, char **argv)
     skip_null = G_define_flag();
     skip_null->key = 'n';
     skip_null->description =
-	_("Don't draw a collar showing the NULL color in FP maps");
+	_("Do not draw a collar showing the NULL color in FP maps");
 
     /* Check command line */
     if (G_parser(argc, argv))

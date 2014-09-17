@@ -43,7 +43,7 @@ int main(int argc, char **argv)
     sep->key = "fs";
     sep->type = TYPE_STRING;
     sep->required = NO;
-    sep->description = "character for separation of list items";
+    sep->description = "Character for separation of list items";
     sep->answer = ",";
 
     if (G_parser(argc, argv))

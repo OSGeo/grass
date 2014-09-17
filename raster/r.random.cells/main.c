@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
     Distance->required = YES;
     Distance->multiple = NO;
     Distance->description =
-	_("Maximum distance of spatial correlation (value(s) >= 0.0)");
+	_("Maximum distance of spatial correlation (value >= 0.0)");
 
     SeedStuff = G_define_option();
     SeedStuff->key = "seed";

@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
     
     flag.lazy = G_define_flag();
     flag.lazy->key = 'z';
-    flag.lazy->description = _("Don't keep files open");
+    flag.lazy->description = _("Do not keep files open");
     
     flag.float_output = G_define_flag();
     flag.float_output->key = 'f';

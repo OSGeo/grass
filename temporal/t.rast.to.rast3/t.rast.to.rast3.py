@@ -146,7 +146,7 @@ def main():
                                 output=output, overwrite=grass.overwrite())
 
         if ret != 0:
-            grass.fatal(_("Unable to create raster3d map <%s>" % output))
+            grass.fatal(_("Unable to create 3D raster map <%s>" % output))
 
     grass.run_command("g.remove", rast=null_map)
 

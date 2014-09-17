@@ -5,6 +5,7 @@
  * AUTHOR(S):    Markus Metz
  * PURPOSE:      Calculates solar azimuth and angle, and 
  *               sunshine hours (also called daytime period)
+ *               Uses NREL SOLPOS
  * COPYRIGHT:    (C) 2010-2013 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -88,7 +89,7 @@ int main(int argc, char *argv[])
     parm.sunhours = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.sunhours->key = "sunhour";
     parm.sunhours->label = _("Output raster map with sunshine hours");
-    parm.sunhours->description = _("Sunshine hours require solpos and Greenwich standard time");
+    parm.sunhours->description = _("Sunshine hours require SOLPOS use and Greenwich standard time");
     parm.sunhours->required = NO;
 
     parm.year = G_define_option();
@@ -149,7 +150,7 @@ int main(int argc, char *argv[])
 
     parm.no_solpos = G_define_flag();
     parm.no_solpos->key = 's';
-    parm.no_solpos->description = _("Do not use solpos algorithm of NREL");
+    parm.no_solpos->description = _("Do not use SOLPOS algorithm of NREL");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -187,7 +188,7 @@ int main(int argc, char *argv[])
     se_sin = 0;
 
     if (use_solpos && lst_time) {
-	G_warning(_("NREL solpos algorithm uses Greenwich standard time."));
+	G_warning(_("NREL SOLPOS algorithm uses Greenwich standard time."));
 	G_warning(_("Time will be interpreted as Greenwich standard time."));
 
 	lst_time = 0;
@@ -199,7 +200,7 @@ int main(int argc, char *argv[])
 	    G_message(_("Time will be interpreted as Greenwich standard time."));
 	
 	if (sunhour_name)
-	    G_fatal_error(_("Sunshine hours require NREL solpos."));
+	    G_fatal_error(_("Sunshine hours require NREL SOLPOS."));
     }
 
     if ((G_projection() != PROJECTION_LL)) {

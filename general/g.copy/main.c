@@ -1,7 +1,7 @@
 
 /****************************************************************************
  *
- * MODULE:       cmd
+ * MODULE:       g.copy
  * AUTHOR(S):    CERL (original contributor)
  *               Radim Blazek <radim.blazek gmail.com>, 
  *               Cedric Shock <cedricgrass shockfamily.net>, 

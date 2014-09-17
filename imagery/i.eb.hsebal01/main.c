@@ -91,7 +91,7 @@ int main(int argc, char *argv[])
     input_Rn = G_define_standard_option(G_OPT_R_INPUT);
     input_Rn->key = "netradiation";
     input_Rn->description =
-	_("Name of instantaneous Net Radiation raster map [W/m2]");
+	_("Name of instantaneous net radiation raster map [W/m2]");
 
     input_g0 = G_define_standard_option(G_OPT_R_INPUT);
     input_g0->key = "soilheatflux";

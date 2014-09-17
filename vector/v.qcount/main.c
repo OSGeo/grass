@@ -68,7 +68,7 @@ int main(int argc, char **argv)
     parm.output = G_define_standard_option(G_OPT_V_OUTPUT);
     parm.output->required = NO;
     parm.output->description =
-	_("Name for output quadrant centres map (number of points is written as category)");
+	_("Name for output quadrant centers map (number of points is written as category)");
 
     parm.n = G_define_option();
     parm.n->key = "n";

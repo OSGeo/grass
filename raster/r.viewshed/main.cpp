@@ -563,7 +563,7 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     memAmountOpt->required = NO;
     memAmountOpt->key_desc = "value";
     memAmountOpt->description =
-	_("Amount of memory to be used in MB");
+	_("Amount of memory to use in MB");
     memAmountOpt->answer = "500";
 
     /* temporary STREAM path */

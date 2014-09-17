@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
     
     no_topo = G_define_flag();
     no_topo->key = 'b';
-    no_topo->description = _("Do not build topology for output");
+    no_topo->description = _("Do not build topology");
 
     vold = G_define_standard_option(G_OPT_V_INPUT);
 
@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
     zrot->required = NO;
     zrot->multiple = NO;
     zrot->description =
-	_("Rotation around z axis in degrees counterclockwise");
+	_("Rotation around z axis in degrees (counter-clockwise)");
     zrot->answer = "0.0";
     zrot->guisection = _("Custom");
 

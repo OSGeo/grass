@@ -288,13 +288,13 @@ int main(int argc, char *argv[])
     parm.devi = G_define_standard_option(G_OPT_V_OUTPUT);
     parm.devi->key = "devi";
     parm.devi->required = NO;
-    parm.devi->description = _("Name for output deviations vector map");
+    parm.devi->description = _("Name for output deviations vector point map");
     parm.devi->guisection = _("Outputs");
 
     parm.cvdev = G_define_standard_option(G_OPT_V_OUTPUT);
     parm.cvdev->key = "cvdev";
     parm.cvdev->required = NO;
-    parm.cvdev->description = _("Name for output cross-validation vector map");
+    parm.cvdev->description = _("Name for output cross-validation errors vector point map");
     parm.cvdev->guisection = _("Outputs");
 
     parm.maskmap = G_define_standard_option(G_OPT_R_INPUT);
@@ -394,7 +394,7 @@ int main(int argc, char *argv[])
     parm.gcurv = G_define_standard_option(G_OPT_R3_OUTPUT);
     parm.gcurv->key = "gcurv";
     parm.gcurv->required = NO;
-    parm.gcurv->description = _("Name for output gaussian curvature 3D raster map");
+    parm.gcurv->description = _("Name for output Gaussian curvature 3D raster map");
     parm.gcurv->guisection = _("Outputs");
 
     parm.mcurv = G_define_standard_option(G_OPT_R3_OUTPUT);

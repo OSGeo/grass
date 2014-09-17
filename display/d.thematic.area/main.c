@@ -166,7 +166,7 @@ int main(int argc, char **argv)
     algoinfo_flag = G_define_flag();
     algoinfo_flag->key = 'e';
     algoinfo_flag->description =
-	_("When printing legend info , include extended statistical info from classification algorithm");
+	_("When printing legend info, include extended statistical info from classification algorithm");
 
     nodraw_flag = G_define_flag();
     nodraw_flag->key = 'n';

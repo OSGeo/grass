@@ -12,8 +12,7 @@
  *   	    	 for details.
  *
  *****************************************************************************/
-     
-    
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -50,7 +49,7 @@ int main(int argc, char *argv[])
     /* Define the different options */ 
     input1 = G_define_standard_option(G_OPT_R_INPUT);
     input1->key = "netradiationdiurnal";
-    input1->description = _("Name of the diurnal Net Radiation map [W/m2]");
+    input1->description = _("Name of the diurnal net radiation map [W/m2]");
     input1->answer = "rnetday";
 
     input2 = G_define_standard_option(G_OPT_R_INPUT);

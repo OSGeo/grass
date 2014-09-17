@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
 
     flag_n = G_define_flag();
     flag_n->key = 'n';
-    flag_n->description = _("Don't use shell syntax");
+    flag_n->description = _("Do not use shell syntax");
     flag_n->guisection = _("Format");
 
     if (G_parser(argc, argv))

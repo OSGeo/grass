@@ -132,7 +132,7 @@ int main(int argc, char *argv[])
 
     geometry = G_define_flag();
     geometry->key = 'd';
-    geometry->description = _("Calculate geometry distances instead of table data.");
+    geometry->description = _("Calculate geometry distances instead of table data");
 
     G_gisinit(argv[0]);
 

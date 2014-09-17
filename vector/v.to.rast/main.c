@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
     memory->required = NO;
     memory->multiple = NO;
     memory->answer = "300";
-    memory->label = _("Cache size (MiB)");
+    memory->label = _("Maximum memory to be used (in MB)");
     memory->description = _("Cache size for raster rows");
 
     dense_flag = G_define_flag();

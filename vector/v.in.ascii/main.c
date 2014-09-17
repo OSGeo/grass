@@ -153,7 +153,7 @@ int main(int argc, char *argv[])
     noheader_flag = G_define_flag();
     noheader_flag->key = 'n';
     noheader_flag->description =
-	_("Don't expect a header when reading in standard format");
+	_("Do not expect a header when reading in standard format");
     noheader_flag->guisection = _("Input format");
 
     t_flag = G_define_flag();

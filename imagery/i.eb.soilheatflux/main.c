@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     /* Define the different options */ 
     input1 = G_define_standard_option(G_OPT_R_INPUT);
     input1->key = "albedo";
-    input1->description = _("Name of Albedo raster map [0.0;1.0]");
+    input1->description = _("Name of albedo raster map [0.0;1.0]");
 
     input2 = G_define_standard_option(G_OPT_R_INPUT);
     input2->key = "ndvi";

@@ -296,7 +296,7 @@ int main(int argc, char *argv[])
 
     nocaps_flag = G_define_flag();
     nocaps_flag->key = 'c';
-    nocaps_flag->description = _("Don't make caps at the ends of polylines");
+    nocaps_flag->description = _("Do not make caps at the ends of polylines");
 
     cats_flag = G_define_flag();
     cats_flag->key = 't';

@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
     rast_co->type = TYPE_STRING;
     rast_co->required = NO;
     rast_co->gisprompt = "old,cell,raster";
-    rast_co->description = _("Name of color file");
+    rast_co->description = _("Name of color map");
 
     exag_opt = G_define_option();
     exag_opt->key = "exag";

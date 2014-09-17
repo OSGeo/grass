@@ -180,7 +180,7 @@ int main(int argc, char *argv[])
     error_opt->type = TYPE_DOUBLE;
     error_opt->required = NO;
     error_opt->description =
-	_("Cummulative error tolerance for eigenvector centrality");
+	_("Cumulative error tolerance for eigenvector centrality");
 
     geo_f = G_define_flag();
     geo_f->key = 'g';
