@@ -220,7 +220,7 @@ int main(int argc, char *argv[])
     parm.nwalk->type = TYPE_INTEGER;
     parm.nwalk->required = NO;
     parm.nwalk->description =
-	_("Number of walkers, default is twice the no. of cells");
+	_("Number of walkers, default is twice the number of cells");
     parm.nwalk->guisection = _("Parameters");
 
     parm.niter = G_define_option();

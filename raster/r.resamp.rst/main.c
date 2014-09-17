@@ -259,7 +259,7 @@ int main(int argc, char *argv[])
     parm.theta->key = "theta";
     parm.theta->type = TYPE_DOUBLE;
     parm.theta->required = NO;
-    parm.theta->description = _("Anisotropy angle (in degrees)");
+    parm.theta->description = _("Anisotropy angle (in degrees counterclockwise from East)");
     parm.theta->guisection = _("Anisotropy");
 
     parm.scalex = G_define_option();

@@ -56,7 +56,7 @@
 
 #%flag
 #% key: s
-#% description: Check spatial overlap to perform spatio-temporal sampling
+#% description: Check spatial overlap
 #%end
 
 import grass.script as grass

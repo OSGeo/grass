@@ -82,6 +82,7 @@ int main(int argc, char *argv[])
     flag1->description =
 	_("Root zone soil moisture output (Makin, Molden and Bastiaanssen, 2001)");
     
+    /********************/
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
     

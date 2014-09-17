@@ -114,7 +114,7 @@ void set_params(void)
     param.budget->key = "budget";
     param.budget->required = NO;
     param.budget->description =
-	_("Output 3D raster map Storing the groundwater budget for each cell [m^3/s]\n");
+	_("Output 3D raster map storing the groundwater budget for each cell [m^3/s]");
 
     param.dt = N_define_standard_option(N_OPT_CALC_TIME);
     param.maxit = N_define_standard_option(N_OPT_MAX_ITERATIONS);
@@ -124,7 +124,7 @@ void set_params(void)
 
     param.mask = G_define_flag();
     param.mask->key = 'm';
-    param.mask->description = _("Use RASTER3D mask (if exists)");
+    param.mask->description = _("Use 3D raster mask (if exists)");
 
     param.full_les = G_define_flag();
     param.full_les->key = 'f';

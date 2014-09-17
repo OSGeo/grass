@@ -126,7 +126,7 @@ int main(int argc, char *argv[])
     flag.no_build = G_define_flag();
     flag.no_build->key = 'b';
     flag.no_build->description =
-	_("Don't build topology for the output vector");
+	_("Do not build topology for the output vector");
 
     flag.combine = G_define_flag();
     flag.combine->key = 'c';

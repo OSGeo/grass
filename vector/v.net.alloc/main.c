@@ -1,21 +1,21 @@
 
 /****************************************************************
  * 
- *  MODULE:       v.net.alloc
- *  
- *  AUTHOR(S):    Radim Blazek
- *                Stepan Turek <stepan.turek seznam.cz> (turns support)
- *                
- *  PURPOSE:      Allocate subnets for nearest centers.
- *                
- *  COPYRIGHT:    (C) 2001,2014 by the GRASS Development Team
- * 
- *                This program is free software under the 
- *                GNU General Public License (>=v2). 
- *                Read the file COPYING that comes with GRASS
- *                for details.
- * 
- **************************************************************/
+ * MODULE:       v.net.alloc
+ *
+ * AUTHOR(S):    Radim Blazek
+ *               Stepan Turek <stepan.turek seznam.cz> (turns support)
+ *
+ * PURPOSE:      Allocate subnets for nearest centers
+ *               
+ * COPYRIGHT:    (C) 2001, 2014 by the GRASS Development Team
+ *
+ *               This program is free software under the 
+ *               GNU General Public License (>=v2). 
+ *               Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ ****************************************************************/
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
@@ -56,14 +56,16 @@ int main(int argc, char **argv)
     struct line_cats *Cats;
     struct line_pnts *Points, *SPoints;
 
-    G_gisinit(argv[0]);
+    /* initialize GIS environment */
+    G_gisinit(argv[0]);		/* reads grass env, stores program name to G_program_name() */
 
+    /* initialize module */
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("network"));
     G_add_keyword(_("allocation"));
     module->label =
-	_("Allocate subnets for nearest centers (direction from center).");
+	_("Allocates subnets for nearest centers (direction from center).");
     module->description =
 	_("center node must be opened (costs >= 0). "
 	  "Costs of center node are used in calculation");
@@ -90,7 +92,7 @@ int main(int argc, char **argv)
     type_opt->options = "line,boundary";
     type_opt->answer = "line,boundary";
     type_opt->required = YES;
-    type_opt->description = _("Arc type");
+    type_opt->label = _("Arc type");
 
     nfield_opt = G_define_standard_option(G_OPT_V_FIELD);
     nfield_opt->key = "nlayer";
@@ -102,23 +104,22 @@ int main(int argc, char **argv)
     afcol->key = "afcolumn";
     afcol->type = TYPE_STRING;
     afcol->required = NO;
-    afcol->description =
-	_("Arc forward/both direction(s) cost column (number)");
-    afcol->guisection = _("Costs");
+    afcol->description = _("Arc forward/both direction(s) cost column (number)");
+    afcol->guisection = _("Cost");
 
     abcol = G_define_option();
     abcol->key = "abcolumn";
     abcol->type = TYPE_STRING;
     abcol->required = NO;
     abcol->description = _("Arc backward direction cost column (number)");
-    abcol->guisection = _("Costs");
+    abcol->guisection = _("Cost");
 
     ncol = G_define_option();
     ncol->key = "ncolumn";
     ncol->type = TYPE_STRING;
     ncol->required = NO;
     ncol->description = _("Node cost column (number)");
-    ncol->guisection = _("Costs");
+    ncol->guisection = _("Cost");
 
     turntable_f = G_define_flag();
     turntable_f->key = 't';
@@ -130,7 +131,7 @@ int main(int argc, char **argv)
     tfield_opt->answer = "3";
     tfield_opt->label = _("Layer with turntable");
     tfield_opt->description =
-	_("Relevant only with -t flag.");
+	_("Relevant only with -t flag");
     tfield_opt->guisection = _("Turntable");
 
     tucfield_opt = G_define_standard_option(G_OPT_V_FIELD);
@@ -138,7 +139,7 @@ int main(int argc, char **argv)
     tucfield_opt->answer = "4";
     tucfield_opt->label = _("Layer with unique categories used in turntable");
     tucfield_opt->description =
-	_("Relevant only with -t flag.");
+	_("Relevant only with -t flag");
     tucfield_opt->guisection = _("Turntable");
 
     geo_f = G_define_flag();
@@ -182,7 +183,6 @@ int main(int argc, char **argv)
     else
 	Vect_net_build_graph(&Map, type, afield, nfield, afcol->answer,
 			     abcol->answer, ncol->answer, geo, 0);
-
 
     nnodes = Vect_get_num_nodes(&Map);
     nlines = Vect_get_num_lines(&Map);

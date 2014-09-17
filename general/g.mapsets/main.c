@@ -79,7 +79,7 @@ int main(int argc, char *argv[])
     opt.op->required = YES;
     opt.op->multiple = NO;
     opt.op->options = "set,add,remove";
-    opt.op->description = _("Operation to perform");
+    opt.op->description = _("Operation to be performed");
     opt.op->guisection = _("Search path");
     opt.op->answer = "add";
     

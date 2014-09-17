@@ -59,7 +59,7 @@ void set_params(void)
     param.status = G_define_standard_option(G_OPT_R_INPUT);
     param.status->key = "status";
     param.status->description =
-	_("Name of input raster map providing Boundary condition status: 0-inactive, 1-active, 2-dirichlet");
+	_("Name of input raster map providing boundary condition status: 0-inactive, 1-active, 2-dirichlet");
 
     param.hc_x =G_define_standard_option(G_OPT_R_INPUT);
     param.hc_x->key = "hc_x";

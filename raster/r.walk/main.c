@@ -301,7 +301,7 @@ int main(int argc, char *argv[])
 
     flag3 = G_define_flag();
     flag3->key = 'n';
-    flag3->description = _("Keep null values in output map");
+    flag3->description = _("Keep null values in output raster map");
     flag3->guisection = _("NULL cells");
 
     flag4 = G_define_flag();

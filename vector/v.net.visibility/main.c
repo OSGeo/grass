@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
     ovis->key = "vis";
     ovis->type = TYPE_STRING;
     ovis->required = NO;
-    ovis->description = _("Add points after computing the vis graph");
+    ovis->description = _("Add points after computing the visibility graph");
 
     /* options and flags parser */
     if (G_parser(argc, argv))

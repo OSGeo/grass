@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
     parm.rules = G_define_standard_option(G_OPT_F_INPUT);
     parm.rules->key = "rules";
     parm.rules->label = _("File containing recode rules");
-    parm.rules->description = _("\"-\" to read from stdin");
+    parm.rules->description = _("'-' for standard input");
     
     parm.title = G_define_option();
     parm.title->key = "title";

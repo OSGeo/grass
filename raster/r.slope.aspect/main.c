@@ -247,7 +247,7 @@ int main(int argc, char *argv[])
     parm.min_slp_allowed = G_define_option();
     parm.min_slp_allowed->key = "min_slp_allowed";
     parm.min_slp_allowed->description =
-	_("Minimum slope val. (in percent) for which aspect is computed");
+	_("Minimum slope value (in percent) for which aspect is computed");
     parm.min_slp_allowed->type = TYPE_DOUBLE;
     parm.min_slp_allowed->required = NO;
     parm.min_slp_allowed->answer = "0.0";

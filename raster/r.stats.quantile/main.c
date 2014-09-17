@@ -427,7 +427,7 @@ int main(int argc, char *argv[])
     flag.p = G_define_flag();
     flag.p->key = 'p';
     flag.p->description =
-	_("Don't create output maps; just print statistics");
+	_("Do not create output maps; just print statistics");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

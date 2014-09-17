@@ -86,7 +86,7 @@ int main(int argc, char **argv)
     parms.output->required = NO;
     parms.output->label =
 	_("Name for output file containing error matrix and kappa");
-    parms.output->description = _("If not given, print to startdard output");
+    parms.output->description = _("If not given write to standard output");
     parms.output->guisection = _("Output settings");
 
     parms.titles = G_define_option();

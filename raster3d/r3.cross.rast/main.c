@@ -87,7 +87,7 @@ void set_params()
     param.input->type = TYPE_STRING;
     param.input->required = YES;
     param.input->gisprompt = "old,grid3,3d-raster";
-    param.input->description = _("Input 3D raster map for cross section.");
+    param.input->description = _("Input 3D raster map for cross section");
 
     param.elevation = G_define_option();
     param.elevation->key = "elevation";

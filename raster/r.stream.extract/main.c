@@ -138,7 +138,8 @@ int main(int argc, char *argv[])
     input.memory->type = TYPE_INTEGER;
     input.memory->required = NO;
     input.memory->answer = "300";
-    input.memory->description = _("Maximum memory to be used in MB");
+    input.memory->label = _("Maximum memory to be used (in MB)");
+    input.memory->description = _("Cache size for raster rows");
 
     output.stream_rast = G_define_standard_option(G_OPT_R_OUTPUT);
     output.stream_rast->key = "stream_rast";

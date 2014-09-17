@@ -110,7 +110,7 @@
 
 #%flag
 #% key: n
-#% description: Register empty maps in the output space time raster datasets, otherwise they will be deleted
+#% description: Register empty maps in the output space time raster dataset, otherwise they will be deleted
 #%end
 
 #%flag

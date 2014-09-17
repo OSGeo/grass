@@ -103,7 +103,8 @@ int main(int argc, char *argv[])
     parm.memory->required = NO;
     parm.memory->options = "0-2047";
     parm.memory->answer = "300";
-    parm.memory->description = _("Cache size (MiB)");
+    parm.memory->label = _("Maximum memory to be used (in MB)");
+    parm.memory->description = _("Cache size for raster rows");
 
     parm.target = G_define_option();
     parm.target->key = "target";

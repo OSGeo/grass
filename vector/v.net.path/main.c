@@ -75,22 +75,22 @@ int main(int argc, char **argv)
     afcol->key = "afcolumn";
     afcol->type = TYPE_STRING;
     afcol->required = NO;
-    afcol->description = _("Arc forward/both direction(s) cost column");
-    afcol->guisection = _("Costs");
+    afcol->description = _("Arc forward/both direction(s) cost column (number)");
+    afcol->guisection = _("Cost");
 
     abcol = G_define_option();
     abcol->key = "abcolumn";
     abcol->type = TYPE_STRING;
     abcol->required = NO;
-    abcol->description = _("Arc backward direction cost column");
-    abcol->guisection = _("Costs");
+    abcol->description = _("Arc backward direction cost column (number)");
+    abcol->guisection = _("Cost");
 
     ncol = G_define_option();
     ncol->key = "ncolumn";
     ncol->type = TYPE_STRING;
     ncol->required = NO;
-    ncol->description = _("Node cost column");
-    ncol->guisection = _("Costs");
+    ncol->description = _("Node cost column (number)");
+    ncol->guisection = _("Cost");
 
     max_dist = G_define_option();
     max_dist->key = "dmax";
@@ -112,9 +112,9 @@ int main(int argc, char **argv)
     tfield_opt = G_define_standard_option(G_OPT_V_FIELD);
     tfield_opt->key = "tlayer";
     tfield_opt->answer = "3";
-    tfield_opt->label = _("Turntable layer");
+    tfield_opt->label = _("Layer with turntable");
     tfield_opt->description =
-	_("Relevant only with -t flag.");
+	_("Relevant only with -t flag");
     tfield_opt->guisection = _("Turntable");
 
     tucfield_opt = G_define_standard_option(G_OPT_V_FIELD);
@@ -122,7 +122,7 @@ int main(int argc, char **argv)
     tucfield_opt->answer = "4";
     tucfield_opt->label = _("Layer with unique categories used in turntable");
     tucfield_opt->description =
-	_("Relevant only with -t flag.");
+	_("Relevant only with -t flag");
     tucfield_opt->guisection = _("Turntable");
 
     geo_f = G_define_flag();

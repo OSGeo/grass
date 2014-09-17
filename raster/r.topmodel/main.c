@@ -73,7 +73,7 @@ int main(int argc, char **argv)
     params.timestep = G_define_option();
     params.timestep->key = "timestep";
     params.timestep->label = _("Time step");
-    params.timestep->description = _("Generate output for this time step.");
+    params.timestep->description = _("Generate output for this time step");
     params.timestep->type = TYPE_INTEGER;
     params.timestep->required = NO;
 
@@ -81,7 +81,7 @@ int main(int argc, char **argv)
     params.topidxclass->key = "topidxclass";
     params.topidxclass->label = _("Topographic index class");
     params.topidxclass->description =
-	_("Generate output for this topographic index class.");
+	_("Generate output for this topographic index class");
     params.topidxclass->type = TYPE_INTEGER;
     params.topidxclass->required = NO;
 
@@ -90,7 +90,7 @@ int main(int argc, char **argv)
     params.topidx->label =
 	_("Name of input topographic index raster map");
     params.topidx->description =
-	_("Must be clipped to the catchment boundary. Used for generating outtopidxstats.");
+	_("Must be clipped to the catchment boundary. Used for generating outtopidxstats");
     params.topidx->required = NO;
     params.topidx->guisection = _("Preprocess");
 
@@ -98,7 +98,7 @@ int main(int argc, char **argv)
     params.ntopidxclasses->key = "ntopidxclasses";
     params.ntopidxclasses->label = _("Number of topographic index classes");
     params.ntopidxclasses->description =
-	_("Used for generating outtopidxstats.");
+	_("Used for generating outtopidxstats");
     params.ntopidxclasses->type = TYPE_INTEGER;
     params.ntopidxclasses->required = NO;
     params.ntopidxclasses->answer = "30";
@@ -109,7 +109,7 @@ int main(int argc, char **argv)
     params.outtopidxstats->label =
 	_("Name for output topographic index statistics file");
     params.outtopidxstats->description =
-	_("Requires topidx and ntopidxclasses.");
+	_("Requires topidx and ntopidxclasses");
     params.outtopidxstats->required = NO;
     params.outtopidxstats->guisection = _("Preprocess");
 

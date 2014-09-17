@@ -63,7 +63,7 @@ void define_options(struct params *params, struct flags *flags)
     flags->table = G_define_flag();
     flags->table->key = 't';
     flags->table->description =
-        _("Don't export attribute table");
+        _("Do not export attribute table");
     flags->table->guisection = _("Creation");
 
     flags->topo = G_define_flag();

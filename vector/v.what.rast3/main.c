@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("querying"));
     G_add_keyword(_("attribute table"));
     module->description =
-	_("Uploads 3d raster values at positions of vector points to the table.");
+	_("Uploads 3D raster values at positions of vector points to the table.");
 
     opt.vect = G_define_standard_option(G_OPT_V_MAP);
     opt.vect->label =
@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
 
     opt.rast3d = G_define_standard_option(G_OPT_R3_MAP);
     opt.rast3d->key = "raster3d";
-    opt.rast3d->description = _("Name of existing 3d raster map to be queried");
+    opt.rast3d->description = _("Name of existing 3D raster map to be queried");
 
     opt.col = G_define_standard_option(G_OPT_DB_COLUMN);
     opt.col->required = YES;
@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
                           RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 
     if (map == NULL)
-        G_fatal_error(_("Error opening 3d raster map <%s>"), opt.rast3d->answer);
+        G_fatal_error(_("Error opening 3D raster map <%s>"), opt.rast3d->answer);
 
     /* Check column type */
     col_type = db_column_Ctype(driver, Fi->table, opt.col->answer);

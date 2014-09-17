@@ -86,7 +86,7 @@ int parser(int argc, char *argv[], struct GParams *params,
     params->in->required = NO;
     params->in->label = _("Name of file containing data in GRASS ASCII vector format");
     params->in->description =
-	_("\"-\" reads from standard input");
+	_("'-' for standard input");
     params->in->guisection = _("Input");
 
     params->move = G_define_option();

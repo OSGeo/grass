@@ -388,7 +388,7 @@ int main(int argc, char **argv)
     nsp_opt->required = NO;
     nsp_opt->multiple = NO;
     nsp_opt->answer = "-1";
-    nsp_opt->description = _("Number of steiner points (-1 for all possible)");
+    nsp_opt->description = _("Number of Steiner points (-1 for all possible)");
 
     geo_f = G_define_flag();
     geo_f->key = 'g';

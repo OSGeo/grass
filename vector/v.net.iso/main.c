@@ -7,14 +7,14 @@
  *                Stepan Turek <stepan.turek seznam.cz> (turns support)
  *                
  *  PURPOSE:      Split net to bands between isolines.
- *                
+ *
  *  COPYRIGHT:    (C) 2001-2008,2014 by the GRASS Development Team
- * 
+ *
  *                This program is free software under the 
  *                GNU General Public License (>=v2). 
  *                Read the file COPYING that comes with GRASS
  *                for details.
- * 
+ *
  **************************************************************/
 #include <stdlib.h>
 #include <string.h>
@@ -69,15 +69,15 @@ int main(int argc, char **argv)
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    module->label = _("Splits net by cost isolines.");
     G_add_keyword(_("vector"));
     G_add_keyword(_("network"));
     G_add_keyword(_("isolines"));
+    module->label = _("Splits net by cost isolines.");
     module->description =
 	_
-	("Splits net to bands between cost isolines (direction from centre). "
-	 "Centre node must be opened (costs >= 0). "
-	 "Costs of centre node are used in calculation.");
+	("Splits net to bands between cost isolines (direction from center). "
+	 "Center node must be opened (costs >= 0). "
+	 "Costs of center node are used in calculation.");
 
     map = G_define_standard_option(G_OPT_V_INPUT);
     output = G_define_standard_option(G_OPT_V_OUTPUT);
@@ -86,9 +86,9 @@ int main(int argc, char **argv)
     term_opt->key = "ccats";
     term_opt->required = YES;
     term_opt->description =
-	_("Categories of centres (points on nodes) to which net "
-	  "will be allocated. "
-	  "Layer for this categories is given by nlayer option.");
+	_("Categories of centers (points on nodes) to which net "
+	  "will be allocated, "
+	  "layer for this categories is given by nlayer option");
 
     cost_opt = G_define_option();
     cost_opt->key = "costs";
@@ -119,17 +119,17 @@ int main(int argc, char **argv)
     afcol->key = "afcolumn";
     afcol->description =
 	_("Arc forward/both direction(s) cost column (number)");
-    afcol->guisection = _("Costs");
+    afcol->guisection = _("Cost");
 
     abcol = G_define_standard_option(G_OPT_DB_COLUMN);
     abcol->key = "abcolumn";
     abcol->description = _("Arc backward direction cost column (number)");
-    abcol->guisection = _("Costs");
+    abcol->guisection = _("Cost");
 
     ncol = G_define_standard_option(G_OPT_DB_COLUMN);
     ncol->key = "ncolumn";
     ncol->description = _("Node cost column (number)");
-    ncol->guisection = _("Costs");
+    ncol->guisection = _("Cost");
 
     turntable_f = G_define_flag();
     turntable_f->key = 't';
@@ -141,7 +141,7 @@ int main(int argc, char **argv)
     tfield_opt->answer = "3";
     tfield_opt->label = _("Layer with turntable");
     tfield_opt->description =
-	_("Relevant only with -t flag.");
+	_("Relevant only with -t flag");
     tfield_opt->guisection = _("Turntable");
 
     tucfield_opt = G_define_standard_option(G_OPT_V_FIELD);
@@ -149,7 +149,7 @@ int main(int argc, char **argv)
     tucfield_opt->answer = "4";
     tucfield_opt->label = _("Layer with unique categories used in turntable");
     tucfield_opt->description =
-	_("Relevant only with -t flag.");
+	_("Relevant only with -t flag");
     tucfield_opt->guisection = _("Turntable");
 
     geo_f = G_define_flag();
@@ -160,6 +160,8 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+    Vect_check_input_output_name(map->answer, output->answer, G_FATAL_EXIT);
+
     Cats = Vect_new_cats_struct();
     Points = Vect_new_line_struct();
     SPoints = Vect_new_line_struct();
@@ -168,8 +170,6 @@ int main(int argc, char **argv)
 
     catlist = Vect_new_cat_list();
     Vect_str_to_cat_list(term_opt->answer, catlist);
-
-    Vect_check_input_output_name(map->answer, output->answer, G_FATAL_EXIT);
 
     /* Iso costs */
     aiso = 1;
@@ -206,7 +206,6 @@ int main(int argc, char **argv)
 	geo = 0;
 
     Vect_set_open_level(2);
-
     if (Vect_open_old(&Map, map->answer, "") < 0)
 	G_fatal_error(_("Unable to open vector map <%s>"), map->answer);
 

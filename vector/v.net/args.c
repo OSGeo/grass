@@ -76,7 +76,7 @@ void define_options(struct opt *opt)
     opt->file->key = "file";
     opt->file->label = _("Name of input file");
     opt->file->description =
-	_("Required for operation 'arcs'. '-' for standard input.");
+	_("Required for operation 'arcs' ('-' for standard input)");
     opt->file->required = NO;
 
     opt->cats_flag = G_define_flag();

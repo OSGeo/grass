@@ -36,7 +36,7 @@
 #%option
 #% key: method
 #% type: string
-#% description: Interpolation method
+#% description: Interpolation method to use
 #% required: yes
 #% options: bilinear,bicubic,rst
 #% answer: rst
