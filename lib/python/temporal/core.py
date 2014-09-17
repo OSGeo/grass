@@ -534,13 +534,13 @@ def init(raise_fatal_error=False):
         else:
             msgr.fatal(_("Unable to initialize the temporal DBMI interface. Please use "
                          "t.connect to specify the driver and the database string"))
-            dbmi = sqlite3
     else:
         # Set the default sqlite3 connection in case nothing was defined
         gscript.run_command("t.connect", flags="d")
         driver_string = ciface.get_driver_name()
         database_string = ciface.get_database_name()
         tgis_backend = driver_string
+        dbmi = sqlite3
 
     tgis_database_string = database_string
     # Set the parameter style
@@ -792,6 +792,8 @@ class SQLDatabaseInterfaceConnection(object):
             
             self.connections[mapset] = self.unique_connections[dbstring]
 
+        self.msgr = get_tgis_message_interface()
+
     def get_dbmi(self,  mapset=None):
         if mapset is None:
             mapset = self.current_mapset
@@ -847,6 +849,10 @@ class SQLDatabaseInterfaceConnection(object):
         """
         if mapset is None:
             mapset = self.current_mapset
+            
+        if mapset not in self.tgis_mapsets.keys():
+            self.msgr.fatal(_("Unable to mogrify sql statement. There is no temporal database "
+                                       "connection defined for mapset <%(mapset)s>" % {"mapset":mapset}))
 
         return self.connections[mapset].mogrify_sql_statement(content)
 
@@ -866,6 +872,10 @@ class SQLDatabaseInterfaceConnection(object):
         if mapset is None:
             mapset = self.current_mapset
 
+        if mapset not in self.tgis_mapsets.keys():
+            self.msgr.fatal(_("Unable to check table. There is no temporal database "
+                                       "connection defined for mapset <%(mapset)s>" % {"mapset":mapset}))
+
         return self.connections[mapset].check_table(table_name)
 
     def execute(self,  statement,  args=None,  mapset=None):
@@ -876,6 +886,10 @@ class SQLDatabaseInterfaceConnection(object):
         """
         if mapset is None:
             mapset = self.current_mapset
+            
+        if mapset not in self.tgis_mapsets.keys():
+            self.msgr.fatal(_("Unable to execute sql statement. There is no temporal database "
+                                       "connection defined for mapset <%(mapset)s>" % {"mapset":mapset}))
 
         return self.connections[mapset].execute(statement,  args)
 
@@ -883,11 +897,19 @@ class SQLDatabaseInterfaceConnection(object):
         if mapset is None:
             mapset = self.current_mapset
 
+        if mapset not in self.tgis_mapsets.keys():
+            self.msgr.fatal(_("Unable to fetch one. There is no temporal database "
+                                       "connection defined for mapset <%(mapset)s>" % {"mapset":mapset}))
+
         return self.connections[mapset].fetchone()
 
     def fetchall(self,  mapset=None):
         if mapset is None:
             mapset = self.current_mapset
+
+        if mapset not in self.tgis_mapsets.keys():
+            self.msgr.fatal(_("Unable to fetch all. There is no temporal database "
+                                       "connection defined for mapset <%(mapset)s>" % {"mapset":mapset}))
 
         return self.connections[mapset].fetchall()
 
@@ -901,6 +923,10 @@ class SQLDatabaseInterfaceConnection(object):
         """
         if mapset is None:
             mapset = self.current_mapset
+
+        if mapset not in self.tgis_mapsets.keys():
+            self.msgr.fatal(_("Unable to execute transaction. There is no temporal database "
+                                       "connection defined for mapset <%(mapset)s>" % {"mapset":mapset}))
 
         return self.connections[mapset].execute_transaction(statement)
  
