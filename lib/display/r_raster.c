@@ -36,6 +36,10 @@ extern const struct driver *Cairo_Driver(void);
 
 static int read_env_file(const char *);
 
+static struct {
+    double t, b, l, r;
+} screen;
+
 static void init(void)
 {
     const char *fenc = getenv("GRASS_ENCODING");
@@ -60,10 +64,11 @@ static void init(void)
     D_text_rotation(0);
 
     if (frame) {
-	double t, b, l, r;
-	sscanf(frame, "%lf,%lf,%lf,%lf", &t, &b, &l, &r);
-	COM_Set_window(t, b, l, r);
+	sscanf(frame, "%lf,%lf,%lf,%lf", &screen.t, &screen.b, &screen.l, &screen.r);
+	COM_Set_window(screen.t, screen.b, screen.l, screen.r);
     }
+    else
+	COM_Get_window(&screen.t, &screen.b, &screen.l, &screen.r);
 }
 
 int read_env_file(const char *path)
@@ -266,19 +271,6 @@ void D_text_rotation(double rotation)
 }
 
 /*!
-  \brief Get clipping frame
-  
-  \param[out] t top
-  \param[out] b bottom
-  \param[out] l left
-  \param[out] r right
-*/
-void D_get_window(double *t, double *b, double *l, double *r)
-{
-    return COM_Get_window(t, b, l, r);
-}
-
-/*!
   \brief Draw text
   
   Writes <em>text</em> in the current color and font, at the current text
@@ -334,3 +326,96 @@ void D_font_info(char ***list, int *count)
 {
     COM_Font_info(list, count);
 }
+
+/*!
+ * \brief get graphical clipping window
+ *
+ * Queries the graphical clipping window (origin is top right)
+ *
+ *  \param[out] t top edge of clip window
+ *  \param[out] b bottom edge of clip window
+ *  \param[out] l left edge of clip window
+ *  \param[out] r right edge of clip window
+ *  \return ~
+ */
+
+void D_get_clip_window(double *t, double *b, double *l, double *r)
+{
+    COM_Get_window(t, b, l, r);
+}
+
+/*!
+ * \brief set graphical clipping window
+ *
+ * Sets the graphical clipping window to the specified rectangle
+ *  (origin is top right)
+ *
+ *  \param t top edge of clip window
+ *  \param b bottom edge of clip window
+ *  \param l left edge of clip window
+ *  \param r right edge of clip window
+ *  \return ~
+ */
+
+void D_set_clip_window(double t, double b, double l, double r)
+{
+    if (t < screen.t) t = screen.t;
+    if (b > screen.b) b = screen.b;
+    if (l < screen.l) l = screen.l;
+    if (r > screen.r) r = screen.r;
+
+    COM_Set_window(t, b, l, r);
+}
+
+/*!
+ * \brief get graphical window (frame)
+ *
+ * Queries the graphical frame (origin is top right)
+ *
+ *  \param[out] t top edge of frame
+ *  \param[out] b bottom edge of frame
+ *  \param[out] l left edge of frame
+ *  \param[out] r right edge of frame
+ *  \return ~
+ */
+
+void D_get_frame(double *t, double *b, double *l, double *r)
+{
+    *t = screen.t;
+    *b = screen.b;
+    *l = screen.l;
+    *r = screen.r;
+}
+
+/*!
+ * \brief set graphical clipping window to map window
+ *
+ * Sets the graphical clipping window to the pixel window that corresponds
+ * to the current database region.
+ *
+ *  \param ~
+ *  \return ~
+ */
+
+void D_set_clip_window_to_map_window(void)
+{
+    D_set_clip_window(
+	D_get_d_north(), D_get_d_south(),
+	D_get_d_west(), D_get_d_east());
+}
+
+/*!
+ * \brief set clipping window to screen window
+ *
+ * Sets the clipping window to the pixel window that corresponds to the
+ * full screen window. Off screen rendering is still clipped.
+ *
+ *  \param ~
+ *  \return ~
+ */
+
+void D_set_clip_window_to_screen_window(void)
+{
+    COM_Set_window(screen.t, screen.b, screen.l, screen.r);
+}
+
