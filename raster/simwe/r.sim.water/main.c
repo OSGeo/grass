@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
     parm.manin = G_define_standard_option(G_OPT_R_INPUT);
     parm.manin->key = "man";
     parm.manin->required = NO;
-    parm.manin->description = _("Name of the Manning's n raster map");
+    parm.manin->description = _("Name of Manning's n raster map");
     parm.manin->guisection = _("Input");
 
     parm.maninval = G_define_option();
@@ -180,14 +180,14 @@ int main(int argc, char *argv[])
     parm.observation->key = "observation";
     parm.observation->required = NO;
     parm.observation->description =
-	_("Name of the sampling locations vector points map");
+	_("Name of sampling locations vector points map");
     parm.observation->guisection = _("Input options");
 
     parm.logfile = G_define_standard_option(G_OPT_F_OUTPUT);
     parm.logfile->key = "logfile";
     parm.logfile->required = NO;
     parm.logfile->description =
-	_("Name of the sampling points output text file. For each observation vector point the time series of water depth is stored.");
+	_("Name for sampling points output text file. For each observation vector point the time series of sediment transport is stored.");
     parm.logfile->guisection = _("Output");
 
     parm.depth = G_define_standard_option(G_OPT_R_OUTPUT);
