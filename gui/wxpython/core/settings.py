@@ -657,7 +657,7 @@ class Settings:
                     'lines' : {
                         'show' : False,
                         'width' : 2,
-                        'color' : (0, 0, 255, 255), # blue
+                        'color' : (0, 0, 0, 255),
                         'flat' : False,
                         'height' : 0,
                         'rgbcolumn': None,
@@ -668,7 +668,7 @@ class Settings:
                         'size' : 100,
                         'width' : 2,
                         'marker' : 2,
-                        'color' : (0, 0, 255, 255), # blue
+                        'color' : (0, 0, 0, 255),
                         'height' : 0,
                         'rgbcolumn': None,
                         'sizecolumn': None,
