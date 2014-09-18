@@ -2,8 +2,8 @@
 
 This program outputs two or four column (with <b>-g</b>) data to stdout or 
 an ASCII file. The default two column output consists of cumulative profile 
-length (in meters) and raster value. The optional four column output consists 
-of easting, northing, cumlative profile length (m), and raster value. Profile
+length and raster value. The optional four column output consists 
+of easting, northing, cumulative profile length, and raster value. Profile
 end or "turning" points can be set manually with the <b>coordinates</b>
 argument. The profile resolution, or distance between profile
 points, is obtained from the current region resolution, or can be manually
@@ -45,6 +45,9 @@ The 2 column output is compatible with most plotting programs.
 The optional RGB output provides the associated GRASS colour value for
 each profile point.
 
+<p>Profile distance units correspond to the location units.
+Flag <b>-m</b> can be used to force output values in meters.
+In case of latlon locations and locations using meters, this flag does nothing.
 
 <h2>EXAMPLES</h2>
 
