@@ -9,7 +9,7 @@ import grass.lib.vector as libvect
 from grass.pygrass.errors import must_be_open
 
 from grass.pygrass.vector.basic import Ilist, BoxList
-from grass.pygrass.vector.geometry import read_line, Isle, Area, Point
+from grass.pygrass.vector.geometry import read_line, Isle, Area, Point, Node
 
 
 class AbstractFinder(object):
@@ -160,8 +160,8 @@ class BboxFinder(AbstractFinder):
         if libvect.Vect_select_nodes_by_box(self.c_mapinfo, bbox.c_bbox,
                                             found.c_ilist):
             for n_id in found:
-                yield Point(v_id=n_id, c_mapinfo=self.c_mapinfo,
-                            table=self.table, writable=self.writable)
+                yield Node(v_id=n_id, c_mapinfo=self.c_mapinfo,
+                           table=self.table, writable=self.writable)
 
     @must_be_open
     def areas(self, bbox, boxlist=None, bboxlist_only=False):

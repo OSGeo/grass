@@ -253,11 +253,12 @@ class Geo(object):
     """
     gtype = None
 
-    def __init__(self, v_id=None, c_mapinfo=None, c_points=None, c_cats=None,
+    def __init__(self, v_id=0, c_mapinfo=None, c_points=None, c_cats=None,
                  table=None, writable=False, is2D=True):
         self.id = v_id  # vector id
         self.c_mapinfo = c_mapinfo
-        self.is2D = is2D
+        self.is2D = (is2D if is2D is not None else
+                     bool(libvect.Vect_is_3d(self.c_mapinfo) != 1))
 
         read = False
         # set c_points
@@ -332,7 +333,7 @@ class Point(Geo):
 
     def __init__(self, x=0, y=0, z=None, **kargs):
         super(Point, self).__init__(**kargs)
-        if self.id is not None:
+        if self.id and self.c_mapinfo:
             self.read()
         else:
             self.is2D = True if z is None else False
@@ -1060,9 +1061,74 @@ class Line(Geo):
         """
         libvect.Vect_reset_line(self.c_points)
 
+    def nodes(self):
+        """Return the nodes in the line"""
+        if self.is_with_topology():
+            n1 = ctypes.c_int()
+            n2 = ctypes.c_int()
+            libvect.Vect_get_line_nodes(self.c_mapinfo, self.id,
+                                        ctypes.byref(n1),
+                                        ctypes.byref(n2))
+            return (Node(n1.value, self.c_mapinfo),
+                    Node(n2.value, self.c_mapinfo))
+
 
 class Node(object):
-    pass
+    def __init__(self, v_id, c_mapinfo):
+        self.id = v_id  # vector id
+        self.c_mapinfo = c_mapinfo
+        self.is2D = bool(libvect.Vect_is_3d(self.c_mapinfo) != 1)
+        self.nlines = libvect.Vect_get_node_n_lines(self.c_mapinfo, self.id)
+
+    def __len__(self):
+        return self.nlines
+
+    def __iter__(self):
+        return self.ilines()
+
+    def __repr__(self):
+        return "Node(%d)" % self.id
+
+    def coords(self):
+        """Return a tuple with the node coordinates."""
+        x = ctypes.c_double()
+        y = ctypes.c_double()
+        z = ctypes.c_double()
+        libvect.Vect_get_node_coor(self.c_mapinfo, self.id, ctypes.byref(x),
+                                   ctypes.byref(y), ctypes.byref(z))
+        return (x.value, y.value) if self.is2D else (x.value, y.value, z.value)
+
+    def ilines(self, only_in=False, only_out=False):
+        """Return a generator with all lines id connected to a node.
+        The line id is negative if line is ending on the node and positive if
+        starting from the node.
+
+        :param only_in: Return only the lines that are ending in the node
+        :type only_in: bool
+        :param only_out: Return only the lines that are starting in the node
+        :type only_out: bool
+        """
+        for iline in range(self.nlines):
+            lid = libvect.Vect_get_node_line(self.c_mapinfo, self.id, iline)
+            if (not only_in and lid > 0) or (not only_out and lid < 0):
+                yield lid
+
+    def lines(self, only_in=False, only_out=False):
+        """Return a generator with all lines connected to a node.
+
+        :param only_in: Return only the lines that are ending in the node
+        :type only_in: bool
+        :param only_out: Return only the lines that are starting in the node
+        :type only_out: bool
+        """
+        for iline in self.ilines(only_in, only_out):
+            yield Line(id=abs(iline), c_mapinfo=self.c_mapinfo)
+
+    def angles(self):
+        """Return a generator with all lines angles in a node."""
+        for iline in range(self.nlines):
+            yield libvect.Vect_get_node_line_angle(self.c_mapinfo,
+                                                   self.id, iline)
 
 
 class Boundary(Line):
