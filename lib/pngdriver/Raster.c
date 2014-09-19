@@ -122,7 +122,7 @@ int PNG_raster(int n, int row,
     int x, y;
 
     if (y1 <= y0)
-	return next_row(row, d_y0);
+	return next_row(row, d_y1);
 
     for (x = x0; x < x1; x++) {
 	int xx = dst[0][0] + x;
