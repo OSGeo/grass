@@ -230,6 +230,7 @@ class WMSBase:
                 
                 grass.fatal(msg)
         
+        grass.debug('Fetching capabilities OK')
         return cap
 
     def _fetchDataFromServer(self, url, username = None, password = None):
