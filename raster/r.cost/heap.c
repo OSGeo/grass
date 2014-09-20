@@ -39,8 +39,8 @@
  */
 
 
-#include <grass/gis.h>
 #include <stdlib.h>
+#include <grass/gis.h>
 #include <grass/glocale.h>
 #include "cost.h"
 
@@ -92,11 +92,7 @@ int cmp_costs(struct cost *a, struct cost *b)
 long sift_up(long start, struct cost * child_pnt)
 {
     register long parent, child;
-    int r, c;
 
-    r = child_pnt->row;
-    c = child_pnt->col;
-    
     child = start;
 
     while (child > 1) {
