@@ -37,7 +37,7 @@
 struct cost
 {
     double min_cost;
-    unsigned int age;
+    long age;
     int row;
     int col;
 };
