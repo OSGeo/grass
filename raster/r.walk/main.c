@@ -123,7 +123,6 @@ int main(int argc, char *argv[])
     const char *dtm_mapset, *cost_mapset, *search_mapset;
     void *dtm_cell, *cost_cell, *cum_cell, *dir_cell, *cell2 = NULL;
     SEGMENT cost_seg, dir_seg;
-    const char *in_file, *dir_out_file = NULL;
     double *value;
     char buf[400];
     extern struct Cell_head window;
@@ -139,7 +138,6 @@ int main(int argc, char *argv[])
     int segments_in_memory;
     int cost_fd, cum_fd, dtm_fd, dir_fd;
     int have_stop_points = 0, dir = 0;
-    int in_fd, dir_out_fd = 0;
     double my_dtm, my_cost, check_dtm;
     double null_cost, dnullval;
     double a, b, c, d, lambda, slope_factor;
@@ -169,6 +167,7 @@ int main(int argc, char *argv[])
     struct History history;
     double peak = 0.0;
     int dtm_dsize, cost_dsize;
+    double disk_mb, mem_mb;
 
     /* Definition for dimension and region check */
     struct Cell_head dtm_cellhd, cost_cellhd;
@@ -240,6 +239,7 @@ int main(int argc, char *argv[])
     opt5 = G_define_option();
     opt5->key = "max_cost";
     opt5->type = TYPE_INTEGER;
+    opt5->key_desc = "value";
     opt5->required = NO;
     opt5->multiple = NO;
     opt5->answer = "0";
@@ -248,18 +248,20 @@ int main(int argc, char *argv[])
     opt6 = G_define_option();
     opt6->key = "null_cost";
     opt6->type = TYPE_DOUBLE;
+    opt6->key_desc = "value";
     opt6->required = NO;
     opt6->multiple = NO;
     opt6->description =
 	_("Cost assigned to null cells. By default, null cells are excluded");
     opt6->guisection = _("NULL cells");
-    
+
     opt10 = G_define_option();
     opt10->key = "percent_memory";
     opt10->type = TYPE_INTEGER;
+    opt10->key_desc = "value";
     opt10->required = NO;
     opt10->multiple = NO;
-    opt10->answer = "100";
+    opt10->answer = "40";
     opt10->options = "0-100";
     opt10->description = _("Percent of map to keep in memory");
 
@@ -308,10 +310,10 @@ int main(int argc, char *argv[])
     flag4->key = 'r';
     flag4->description = _("Start with values in raster map");
     flag4->guisection = _("Start");
- 
+
     flag5 = G_define_flag();
     flag5->key = 'i';
-    flag5->description = _("Only print info about disk space and memory requirements");
+    flag5->description = _("Print info about disk space and memory requirements and exit");
 
     /* Parse options */
     if (G_parser(argc, argv))
@@ -320,11 +322,6 @@ int main(int argc, char *argv[])
     /* If no outdir is specified, set flag to skip all dir */
     if (opt11->answer != NULL)
 	dir = 1;
-
-    /* Initalize access to database and create temporary files */
-    in_file = G_tempfile();
-    if (dir == 1)
-	dir_out_file = G_tempfile();
 
     /* Get database window parameters */
     Rast_get_window(&window);
@@ -419,7 +416,7 @@ int main(int argc, char *argv[])
 
     if (!Rast_is_d_null_value(&null_cost)) {
 	if (null_cost < 0.0) {
-	    G_warning(_("Warning: assigning negative cost to null cell. Null cells excluded."));
+	    G_warning(_("Assigning negative cost to null cell. Null cells excluded."));
 	    Rast_set_d_null_value(&null_cost, 1);
 	}
     }
@@ -513,60 +510,43 @@ int main(int argc, char *argv[])
 	segments_in_memory = 1;
 
     /* report disk space and memory requirements */
-    G_message("--------------------------------------------");
     if (dir == 1) {
-	double disk_mb, mem_mb;
-
 	disk_mb = (double) nrows * ncols * 28. / 1048576.;
 	mem_mb  = (double) srows * scols * 28. / 1048576. * segments_in_memory;
 	mem_mb += nrows * ncols * 0.05 * 20. / 1048576.;    /* for Dijkstra search */
-	G_message(_("Will need at least %.2f MB of disk space"), disk_mb);
-	G_message(_("Will need at least %.2f MB of memory"), mem_mb);
-	
     }
     else {
-	double disk_mb, mem_mb;
-
 	disk_mb = (double) nrows * ncols * 24. / 1048576.;
 	mem_mb  = (double) srows * scols * 24. / 1048576. * segments_in_memory;
 	mem_mb += nrows * ncols * 0.05 * 20. / 1048576.;    /* for Dijkstra search */
-	G_message(_("Will need at least %.2f MB of disk space"), disk_mb);
-	G_message(_("Will need at least %.2f MB of memory"), mem_mb);
     }
-    G_message("--------------------------------------------");
 
     if (flag5->answer) {
+	fprintf(stdout, _("Will need at least %.2f MB of disk space"), disk_mb);
+        fprintf(stdout, "\n");
+	fprintf(stdout, _("Will need at least %.2f MB of memory"), mem_mb);
+        fprintf(stdout, "\n");
 	Rast_close(cost_fd);
 	Rast_close(dtm_fd);
 	exit(EXIT_SUCCESS);
     }
 
-    /* Create segmented format file for cost layer and output layer */
+    G_verbose_message("--------------------------------------------");
+    G_verbose_message(_("Will need at least %.2f MB of disk space"), disk_mb);
+    G_verbose_message(_("Will need at least %.2f MB of memory"), mem_mb);
+    G_verbose_message("--------------------------------------------");
+
+    /* Create segmented format files for cost layer and output layer */
     G_verbose_message(_("Creating some temporary files..."));
 
-    in_fd = creat(in_file, 0600);
-    if (segment_format(in_fd, nrows, ncols, srows, scols, sizeof(struct cc)) != 1)
-    	G_fatal_error("can not create temporary file");
-
-    close(in_fd);
+    if (segment_open(&cost_seg, G_tempfile(), nrows, ncols, srows, scols,
+		     sizeof(struct cc), segments_in_memory) != 1)
+	G_fatal_error(_("Can not create temporary file"));
 
     if (dir == 1) {
-	dir_out_fd = creat(dir_out_file, 0600);
-	if (segment_format(dir_out_fd, nrows, ncols, srows, scols,
-		       sizeof(FCELL)) != 1)
-	    G_fatal_error("can not create temporary file");
-	close(dir_out_fd);
-    }
-    
-    /* Open and initialize all segment files */
-    in_fd = open(in_file, 2);
-    if (segment_init(&cost_seg, in_fd, segments_in_memory) != 1)
-    	G_fatal_error("can not initialize temporary file");
-
-    if (dir == 1) {
-	dir_out_fd = open(dir_out_file, 2);
-	if (segment_init(&dir_seg, dir_out_fd, segments_in_memory) != 1)
-	    G_fatal_error("can not initialize temporary file");
+	if (segment_open(&dir_seg, G_tempfile(), nrows, ncols, srows, scols,
+		         sizeof(FCELL), segments_in_memory) != 1)
+	    G_fatal_error(_("Can not create temporary file"));
     }
 
     /* Write the dtm and cost layers in the segmented file */
@@ -655,7 +635,7 @@ int main(int argc, char *argv[])
     }
 
     if (dir == 1) {
-	G_message(_("Initializing directional output "));
+	G_message(_("Initializing directional output..."));
 	for (row = 0; row < nrows; row++) {
 	    G_percent(row, nrows, 2);
 	    for (col = 0; col < ncols; col++) {
@@ -679,8 +659,6 @@ int main(int argc, char *argv[])
 	struct start_pt *new_start_pt;
 	int type, got_one = 0;
 
-	G_message(_("Reading vector map <%s> with start points..."), opt7->answer);
-
 	Points = Vect_new_line_struct();
 	Cats = Vect_new_cats_struct();
 
@@ -689,6 +667,9 @@ int main(int argc, char *argv[])
 	if (1 > Vect_open_old(&In, opt7->answer, ""))
 	    G_fatal_error(_("Unable to open vector map <%s>"), opt7->answer);
 
+	G_message(_("Reading vector map <%s> with start points..."),
+                  Vect_get_full_name(&In));
+        
 	Vect_rewind(&In);
 
 	Vect_region_box(&window, &box);
@@ -821,9 +802,8 @@ int main(int argc, char *argv[])
 	if (!cell2)
 	    G_fatal_error(_("Unable to allocate memory"));
 
-	G_message(_("Reading %s... "), opt9->answer);
+	G_message(_("Reading raster map <%s> with start points..."), opt9->answer);
 	for (row = 0; row < nrows; row++) {
-
 	    G_percent(row, nrows, 2);
 	    Rast_get_row(fd, cell2, row, data_type2);
 	    ptr2 = cell2;
@@ -851,14 +831,13 @@ int main(int argc, char *argv[])
 		ptr2 = G_incr_void_ptr(ptr2, dsize2);
 	    }
 	}
-
 	G_percent(1, 1, 1);
 
 	Rast_close(fd);
 	G_free(cell2);
 
 	if (!got_one)
-	    G_fatal_error(_("No start points found in raster <%s>"), opt9->answer);
+	    G_fatal_error(_("No start points"));
     }
 
     /*  If the starting points are given on the command line start a linked
@@ -892,7 +871,7 @@ int main(int argc, char *argv[])
 
     G_debug(1, "total cells: %ld", total_cells);
     G_debug(1, "nrows x ncols: %d", nrows * ncols);
-    G_message(_("Finding cost path"));
+    G_message(_("Finding cost path..."));
     n_processed = 0;
 
     pres_cell = get_lowest();
@@ -1052,6 +1031,7 @@ int main(int argc, char *argv[])
 
 	    min_cost = dnullval;
 	    segment_get(&cost_seg, &costs, row, col);
+
 	    switch (neighbor) {
 	    case 1:
 		W_dtm = costs.dtm;
@@ -1341,19 +1321,23 @@ int main(int argc, char *argv[])
 	    segment_get(&cost_seg, &costs, row, col);
 	    old_min_cost = costs.cost_out;
 
+	    /* add to list */
 	    if (Rast_is_d_null_value(&old_min_cost)) {
 		costs.cost_out = min_cost;
 		segment_put(&cost_seg, &costs, row, col);
 		insert(min_cost, row, col);
-		if (dir == 1)
+		if (dir == 1) {
 		    segment_put(&dir_seg, &cur_dir, row, col);
+		}
 	    }
+	    /* update with lower costs */
 	    else if (old_min_cost > min_cost) {
 		costs.cost_out = min_cost;
 		segment_put(&cost_seg, &costs, row, col);
 		insert(min_cost, row, col);
-		if (dir == 1)
+		if (dir == 1) {
 		    segment_put(&dir_seg, &cur_dir, row, col);
+		}
 	    }
 	}
 
@@ -1376,7 +1360,7 @@ int main(int argc, char *argv[])
     cum_cell = Rast_allocate_buf(cum_data_type);
 
     /* Copy segmented map to output map */
-    G_message(_("Writing output raster map %s... "), cum_cost_layer);
+    G_message(_("Writing output raster map <%s>... "), cum_cost_layer);
 
     cell2 = Rast_allocate_buf(dtm_data_type);
     {
@@ -1440,7 +1424,7 @@ int main(int argc, char *argv[])
 	dir_fd = Rast_open_new(move_dir_layer, dir_data_type);
 	dir_cell = Rast_allocate_buf(dir_data_type);
 
-	G_message(_("Writing movement direction file %s..."), move_dir_layer);
+	G_message(_("Writing output movement direction raster map <%s>..."), move_dir_layer);
 	for (row = 0; row < nrows; row++) {
 	    p = dir_cell;
 	    for (col = 0; col < ncols; col++) {
@@ -1449,25 +1433,21 @@ int main(int argc, char *argv[])
 		p = G_incr_void_ptr(p, dir_size);
 	    }
 	    Rast_put_row(dir_fd, dir_cell, dir_data_type);
+	    G_percent(row, nrows, 2);
 	}
 	G_percent(1, 1, 1);
 	G_free(dir_cell);
     }
 
-    segment_release(&cost_seg);	/* release memory  */
+    segment_close(&cost_seg);	/* release memory  */
     if (dir == 1)
-	segment_release(&dir_seg);
+	segment_close(&dir_seg);
+
     Rast_close(dtm_fd);
     Rast_close(cost_fd);
     Rast_close(cum_fd);
     if (dir == 1)
 	Rast_close(dir_fd);
-    close(in_fd);		/* close all files */
-    if (dir == 1)
-	close(dir_out_fd);
-    unlink(in_file);	/* remove submatrix files  */
-    if (dir == 1)
-	unlink(dir_out_file);
 
     /* writing history file */
     Rast_short_history(cum_cost_layer, "raster", &history);
@@ -1489,21 +1469,17 @@ int main(int argc, char *argv[])
      * Rast_write_colors (cum_cost_layer,"",&colors);
      */
 
-    G_done_msg(_("Peak cost value: %g."), peak);
+    G_done_msg(_("Peak cost value: %g"), peak);
 
     exit(EXIT_SUCCESS);
 }
 
-/* *************************************************************** */
-/* *************************************************************** */
-/* *************************************************************** */
 int
 process_answers(char **answers, struct start_pt **points,
 		struct start_pt **top_start_pt)
 {
     int col, row;
     double east, north;
-
     struct start_pt *new_start_pt;
     int got_one = 0;
 
@@ -1549,9 +1525,6 @@ process_answers(char **answers, struct start_pt **points,
     return (got_one);
 }
 
-/* *************************************************************** */
-/* *************************************************************** */
-/* *************************************************************** */
 int time_to_stop(int row, int col)
 {
     static int total = 0;
