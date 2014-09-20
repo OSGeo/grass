@@ -384,7 +384,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Missing required value: got %d instead of 4"),
 		      par_number);
     else {
-	G_message(_("Walking costs are a=%lf b=%lf c=%lf d=%lf"), a, b, c, d);
+	G_message(_("Walking costs are a=%g b=%g c=%g d=%g"), a, b, c, d);
     }
 
     /* Getting lambda */
@@ -392,7 +392,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Missing required value: %d"), par_number);
     else {
 
-	G_message(_("Lambda is %lf"), lambda);
+	G_message(_("Lambda is %g"), lambda);
     }
 
     /* Getting slope_factor */
@@ -400,7 +400,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Missing required value: %d"), par_number);
     else {
 
-	G_message(_("Slope_factor is %lf"), slope_factor);
+	G_message(_("Slope_factor is %g"), slope_factor);
     }
 
     if ((opt6->answer == NULL) ||
@@ -482,9 +482,9 @@ int main(int argc, char *argv[])
 
     G_debug(1, " %d rows, %d cols", nrows, ncols);
     G_format_resolution(window.ew_res, buf, window.proj);
-    G_debug(1, " EW resolution %s (%lf)", buf, window.ew_res);
+    G_debug(1, " EW resolution %s (%g)", buf, window.ew_res);
     G_format_resolution(window.ns_res, buf, window.proj);
-    G_debug(1, " NS resolution %s (%lf)", buf, window.ns_res);
+    G_debug(1, " NS resolution %s (%g)", buf, window.ns_res);
 
     /* this is most probably the limitation of r.walk for large datasets
      * segment size needs to be reduced to avoid unecessary disk IO
@@ -1489,7 +1489,7 @@ int main(int argc, char *argv[])
      * Rast_write_colors (cum_cost_layer,"",&colors);
      */
 
-    G_done_msg(_("Peak cost value: %f."), peak);
+    G_done_msg(_("Peak cost value: %g."), peak);
 
     exit(EXIT_SUCCESS);
 }
@@ -1520,7 +1520,7 @@ process_answers(char **answers, struct start_pt **points,
 
 	if (east < window.west || east > window.east ||
 	    north < window.south || north > window.north) {
-	    G_warning(_("Warning, ignoring point outside window: %.4f,%.4f"),
+	    G_warning(_("Warning, ignoring point outside window: %g, %g"),
 		      east, north);
 	    continue;
 	}
