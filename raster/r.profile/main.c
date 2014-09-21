@@ -24,6 +24,7 @@ int main(int argc, char *argv[])
 {
     char *name, *outfile;
     const char *unit;
+    int unit_id;
     double factor;
     int fd, projection;
     FILE *fp, *coor_fp;
@@ -39,7 +40,7 @@ int main(int argc, char *argv[])
     struct Cell_head window;
     struct
     {
-	struct Option *opt1, *profile, *res, *output, *null_str, *coord_file;
+	struct Option *opt1, *profile, *res, *output, *null_str, *coord_file, *units;
 	struct Flag *g, *c, *m;
     }
     parm;
@@ -100,15 +101,14 @@ int main(int argc, char *argv[])
     parm.c->description =
 	_("Output RRR:GGG:BBB color values for each profile point");
 
-    parm.m = G_define_flag();
-    parm.m->key = 'm';
-    parm.m->label = _("Use meters instead of current location units");
-    parm.m->description =
-            _("Meters are used always in latlon locations");
+    parm.units = G_define_standard_option(G_OPT_M_UNITS);
+    parm.units->options = "meters,kilometers,feet,miles";
+    parm.units->label = parm.units->description;
+    parm.units->description = _("If units are not specified, current location units are used. "
+                                "Meters are used by default in geographic (latlon) locations.");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-
 
     clr = 0;
     if (parm.c->answer)
@@ -124,14 +124,21 @@ int main(int argc, char *argv[])
     G_get_window(&window);
     projection = G_projection();
 
-    /* get conversion factor to current units */
-    unit = G_database_unit_name(1);
-    factor = G_database_units_to_meters_factor();
+    /* get conversion factor and units name */
+    if (parm.units->answer) {
+        unit_id = G_units(parm.units->answer);
+        factor = 1. / G_meters_to_units_factor(unit_id);
+        unit = G_get_units_name(unit_id, 1, 0);
+    }
     /* keep meters in case of latlon */
-    if (parm.m->answer || projection == 3)
-    {
+    else if (projection == PROJECTION_LL) {
         factor = 1;
         unit = "meters";
+    } 
+    else {
+        /* get conversion factor to current units */
+        unit = G_database_unit_name(1);
+        factor = G_database_units_to_meters_factor();
     }
 
     if (parm.res->answer) {
