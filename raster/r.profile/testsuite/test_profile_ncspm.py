@@ -93,7 +93,7 @@ class TestProfileNCSPM(TestCase):
         self.assertIn('10 [meters]', rprofile.outputs.stderr)  # resolution
 
     def test_profile_m(self):
-        rprofile = SimpleModule('r.profile', input='elevation', flags='m',
+        rprofile = SimpleModule('r.profile', input='elevation', units='meters',
                                 coordinates=[637656, 224222, 637766, 224289])
         self.assertModule(rprofile)
         self.assertIn('128.798294 [meters]', rprofile.outputs.stderr)  # distance
