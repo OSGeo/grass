@@ -1353,13 +1353,11 @@ class PreferencesDialog(PreferencesBaseDialog):
                 pos  = mapdisp.GetPosition()
                 size = mapdisp.GetSize()
 
-                # window size must be larger than zero
-                if size[0] > 0 and size[1] > 0:
+                # window size must be larger than zero, not minimized
+                if not mapdisp.IsIconized() and (size[0] > 0 and size[1] > 0):
                     dim += ',%d,%d,%d,%d' % (pos[0], pos[1], size[0], size[1])
 
             self.settings.Set(group = 'general', key = 'defWindowPos', subkey = 'dim', value = dim)
-        else:
-            self.settings.Set(group = 'general', key = 'defWindowPos', subkey = 'dim', value = '')
 
         return True
 
