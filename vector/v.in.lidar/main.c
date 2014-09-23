@@ -669,23 +669,21 @@ int main(int argc, char *argv[])
 	    int n_returns = LASPoint_GetNumberOfReturns(LAS_point);
 	    skipme = 1;
 
-	    if (n_returns > 1) {
-
-		switch (return_filter) {
-		case LAS_FIRST:
-		    if (return_no == 1)
-			skipme = 0;
-		    break;
-		case LAS_LAST:
-		    if (return_no == n_returns)
-			skipme = 0;
-		    break;
-		case LAS_MID:
-		    if (return_no > 1 && return_no < n_returns)
-			skipme = 0;
-		    break;
-		}
+	    switch (return_filter) {
+	    case LAS_FIRST:
+		if (return_no == 1)
+		    skipme = 0;
+		break;
+	    case LAS_MID:
+		if (return_no > 1 && return_no < n_returns)
+		    skipme = 0;
+		break;
+	    case LAS_LAST:
+		if (n_returns > 1 && return_no == n_returns)
+		    skipme = 0;
+		break;
 	    }
+	    
 	    if (skipme) {
 		n_filtered++;
 		continue;
