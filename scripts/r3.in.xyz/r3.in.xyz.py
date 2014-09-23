@@ -311,7 +311,7 @@ def main():
 
     #input order: lower most strata first
     slices = grass.read_command('g.list', type = 'rast', sep = ',',
-				pattern = 'tmp.r3xyz.%d.*' % os.getpid()).rstrip('\n')
+				pattern = 'tmp.r3xyz.%d.*' % os.getpid()).rstrip(os.linesep)
     grass.debug(slices)
 
     if grass.run_command('r.to.rast3', input = slices, output = output) is 0:
