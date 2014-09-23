@@ -178,9 +178,9 @@ from grass.script import core as grass
 
 
 def cleanup():
-    grass.run_command('g.remove', flags = 'f',
-		      type = "rast", pattern = 'tmp.r3xyz.%d.*' % os.getpid(),
-		      quiet = True)
+    grass.run_command('g.remove', flags='f',
+                      type="rast", pattern='tmp.r3xyz.%d.*' % os.getpid(),
+                      quiet=True)
 
 
 def main():
@@ -204,11 +204,10 @@ def main():
     ignore_broken = flags['i']
 
     if workers is 1 and "WORKERS" in os.environ:
-	workers = int(os.environ["WORKERS"])
+        workers = int(os.environ["WORKERS"])
 
     if not os.path.exists(infile):
-	grass.fatal(_("Unable to read input file <%s>") % infile)
-
+        grass.fatal(_("Unable to read input file <%s>") % infile)
 
     addl_opts = {}
     if pth:
@@ -224,31 +223,29 @@ def main():
     if ignore_broken:
         addl_opts['flags'] = 'i'
 
-
     if scan_only or shell_style:
         if shell_style:
-	    doShell = 'g'
-	else:
-	    doShell = ''
-        grass.run_command('r.in.xyz', flags = 's' + doShell, input = infile,
-			  output = 'dummy', sep = fs, x = x, y = y, z = z,
-			  **addl_opts)
-	sys.exit()
+            doShell = 'g'
+        else:
+            doShell = ''
+        grass.run_command('r.in.xyz', flags='s' + doShell, input=infile,
+                          output='dummy', sep=fs, x=x, y=y, z=z,
+                          **addl_opts)
+        sys.exit()
 
-
-    if dtype is 'float':
-       data_type = 'FCELL'
+    if dtype == 'float':
+        data_type = 'FCELL'
     else:
-       data_type = 'DCELL'
+        data_type = 'DCELL'
 
-    region = grass.region(region3d = True)
+    region = grass.region(region3d=True)
 
     if region['nsres'] != region['nsres3'] or region['ewres'] != region['ewres3']:
-        grass.run_command('g.region', flags = '3p')
+        grass.run_command('g.region', flags='3p')
         grass.fatal(_("The 2D and 3D region settings are different. Can not continue."))
 
     grass.verbose(_("Region bottom=%.15g  top=%.15g  vertical_cell_res=%.15g  (%d depths)")
-       % (region['b'], region['t'], region['tbres'], region['depths']))
+                  % (region['b'], region['t'], region['tbres'], region['depths']))
 
     grass.verbose(_("Creating slices ..."))
 
@@ -268,59 +265,56 @@ def main():
     depths = range(1, 1 + region['depths'])
 
     for i in depths:
-	tmp_layer_name = 'tmp.r3xyz.%d.%s' % (os.getpid(), '%05d' % i)
+        tmp_layer_name = 'tmp.r3xyz.%d.%s' % (os.getpid(), '%05d' % i)
 
-        zrange_min = region['b'] + (region['tbres'] * (i-1))
+        zrange_min = region['b'] + (region['tbres'] * (i - 1))
 
         if i < region['depths']:
             zrange_max = region['b'] + (region['tbres'] * i) - eps
         else:
-	    zrange_max = region['b'] + (region['tbres'] * i)
+            zrange_max = region['b'] + (region['tbres'] * i)
 
         # spawn depth layer import job in the background
         #grass.debug("slice %d, <%s>  %% %d" % (band, image[band], band % workers))
         grass.message(_("Processing horizontal slice %d of %d [%.15g,%.15g) ...")
-		        % (i, region['depths'], zrange_min, zrange_max))
+                      % (i, region['depths'], zrange_min, zrange_max))
 
-	proc[i] = grass.start_command('r.in.xyz', input = infile, output = tmp_layer_name,
-				      sep = fs, method = method, x = x, y = y, z = z,
-				      percent = percent, type = data_type,
-				      zrange = '%.15g,%.15g' % (zrange_min, zrange_max),
-				      **addl_opts)
+        proc[i] = grass.start_command('r.in.xyz', input=infile, output=tmp_layer_name,
+                                      sep=fs, method=method, x=x, y=y, z=z,
+                                      percent=percent, type=data_type,
+                                      zrange='%.15g,%.15g' % (zrange_min, zrange_max),
+                                      **addl_opts)
 
-	grass.debug("i=%d, %%=%d  (workers=%d)" % (i, i % workers, workers))
-	#print sys.getsizeof(proc)  # sizeof(proc array)  [not so big]
+        grass.debug("i=%d, %%=%d  (workers=%d)" % (i, i % workers, workers))
+        #print sys.getsizeof(proc)  # sizeof(proc array)  [not so big]
 
-	if i % workers is 0:
-	    # wait for the ones launched so far to finish
-	    for p_i in depths[:i]:
-		pout[p_i] = proc[p_i].communicate()[0]
-		if proc[p_i].wait() is not 0:
-		    grass.fatal(_("Trouble importing data. Aborting."))
-
+        if i % workers is 0:
+            # wait for the ones launched so far to finish
+            for p_i in depths[:i]:
+                pout[p_i] = proc[p_i].communicate()[0]
+                if proc[p_i].wait() is not 0:
+                    grass.fatal(_("Trouble importing data. Aborting."))
 
     # wait for jSobs to finish, collect any stray output
     for i in depths:
-	pout[i] = proc[i].communicate()[0]
-	if proc[i].wait() is not 0:
-	    grass.fatal(_("Trouble importing data. Aborting."))
+        pout[i] = proc[i].communicate()[0]
+        if proc[i].wait() is not 0:
+            grass.fatal(_("Trouble importing data. Aborting."))
 
     del proc
 
     grass.verbose(_("Assembling 3D cube ..."))
 
     #input order: lower most strata first
-    slices = grass.read_command('g.list', type = 'rast', sep = ',',
-				pattern = 'tmp.r3xyz.%d.*' % os.getpid()).rstrip(os.linesep)
+    slices = grass.read_command('g.list', type='rast', sep=',',
+                                pattern='tmp.r3xyz.%d.*' % os.getpid()).rstrip(os.linesep)
     grass.debug(slices)
 
-    if grass.run_command('r.to.rast3', input = slices, output = output) is 0:
-	grass.message(_("Done. 3D raster map <%s> created.") % output)
+    if grass.run_command('r.to.rast3', input=slices, output=output) is 0:
+        grass.message(_("Done. 3D raster map <%s> created.") % output)
 
 
 if __name__ == "__main__":
     options, flags = grass.parser()
     atexit.register(cleanup)
     main()
-
-
