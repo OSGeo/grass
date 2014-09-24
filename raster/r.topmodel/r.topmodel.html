@@ -122,13 +122,9 @@ no timestep is given, output will be generated for all the time steps.
 The <b>topidx</b> map can optionally be used for creating a new topographic
 index statistics file. This map has to be already clipped to the catchment
 boundary. The entire range of topographic index values will be divided into
-<b>ntopidxclasses</b> and the number of cells in each class will be reported in
-the <b>outtopidxstats</b> file using the following command:
-<div class="code"><pre>
-r.stats -Anc input=[topidx] output=[outtopidxstats] nsteps=[ntopidxclasses]
-</pre></div>
-These three parameters can be omitted unless a new topidxstats file needs to be
-created.
+<b>ntopidxclasses</b> and the area ratio of each class will be reported in the
+<b>outtopidxstats</b> file. These three parameters can be omitted unless a new
+topidxstats file needs to be created.
 </dd>
 </dl>
 
