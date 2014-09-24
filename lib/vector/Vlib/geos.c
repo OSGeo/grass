@@ -81,7 +81,7 @@ GEOSGeometry *Vect_read_line_geos(struct Map_info *Map, int line, int *type)
 GEOSGeometry *Vect_read_area_geos(struct Map_info * Map, int area)
 {
     int i, nholes, isle;
-    GEOSGeometry *boundary, **holes;
+    GEOSGeometry *boundary, *poly, **holes;
     
     G_debug(3, "Vect_read_area_geos(): area = %d", area);
 
@@ -105,7 +105,10 @@ GEOSGeometry *Vect_read_area_geos(struct Map_info * Map, int area)
 			  isle, area);
     }
     
-    return GEOSGeom_createPolygon(boundary, holes, nholes);
+    poly = GEOSGeom_createPolygon(boundary, holes, nholes);
+    G_free(holes);
+
+    return poly;
 }
 
 /*!
@@ -508,6 +511,7 @@ GEOSCoordSequence *read_polygon_points(struct Map_info *Map, int n_lines, int *l
 		}
 	    }
 	}
+	GEOSCoordSeq_destroy(pseq[i]);
     }
     
     G_free((void *) pseq);
