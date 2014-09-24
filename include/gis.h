@@ -74,6 +74,7 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #define U_FEET		6
 #define U_RADIANS	7
 #define U_DEGREES	8
+#define U_USFEET	9
 /* Temporal units from the datetime library */
 #define U_YEARS         DATETIME_YEAR   
 #define U_MONTHS        DATETIME_MONTH  

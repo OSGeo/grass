@@ -23,6 +23,7 @@
    - U_UNKNOWN (XY)
    - U_METERS  (UTM)
    - U_FEET    (SP)
+   - U_USFEET (a few SP)
    - U_DEGREES (LL)
    
   \return units code (see gis.h)
@@ -36,7 +37,7 @@ int G__projection_units(int n)
     case PROJECTION_UTM:
 	return U_METERS;
     case PROJECTION_SP:
-	return U_FEET;
+	return U_FEET; /* TODO: what if U_USFEET as in CA and NC ? */
     case PROJECTION_LL:
 	return U_DEGREES;
     default:
