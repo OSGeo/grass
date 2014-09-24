@@ -99,8 +99,8 @@ your_username  hard    nofile          1500
 </pre></div>
 
 This would raise the hard limit to 1500 file. Be warned that more
-files open need more RAM.
-
+files open need more RAM. See also the Wiki page
+<a href="http://grasswiki.osgeo.org/wiki/Large_raster_data_processing">Hints for large raster data processing</a>.
 <p>
 Use the <em>file</em> option to analyze large amount of raster maps 
 without hitting open files limit and the size limit of command line 
@@ -110,7 +110,7 @@ opened and closed. The amount of RAM will rise linear with the
 number of specified input maps. The input and file options are 
 mutually exclusive. Input is a text file with a new line separated 
 list of raster map names and optional weights. As separator between 
-the map name and the weight the character | must be used.
+the map name and the weight the character "|" must be used.
 
 <h2>EXAMPLES</h2>
 
@@ -124,16 +124,18 @@ r.series.accumulate in=MOD11A1.Day,MOD11A1.Night,MYD11A1.Day,MYD11A1.Night out=M
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="r.series.html">r.series</a>,
 <a href="g.list.html">g.list</a>,
-<a href="g.region.html">g.region</a>
+<a href="g.region.html">g.region</a>,
+<a href="r.series.html">r.series</a>
 </em>
+<p>
+<a href="http://grasswiki.osgeo.org/wiki/Large_raster_data_processing">Hints for large raster data processing</a>
 
 <h2>REFERENCES</h2>
 
 <ul>
 <li> Jones, G.V., Duff, A.A., Hall, A., Myers, J.W., 2010.
-     Spatial Analysis of Climate in Winegrape Growing Regions in the 
+     Spatial analysis of climate in winegrape growing regions in the 
      Western United States. Am. J. Enol. Vitic. 61, 313-326.</li>
 </ul>
 
