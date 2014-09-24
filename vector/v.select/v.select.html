@@ -38,25 +38,37 @@ paddock holds the information with respect to ownership, area, etc.
 <h2>EXAMPLES</h2>
 
 Extract fire stations (points) falling into urban area (polygon) - North Carolina
-data set:
+data set (point in polygon test):
 
 <div class="code"><pre>
 v.select ainput=firestations binput=urbanarea output=urban_firestations \
          operator=overlap
 </pre></div>
 
-Extract river lines from Eurasian rivers map overlapping with the Italian
-political area:
+Extract railroad lines from zip code map overlapping with the urban area
+(line in polygon test):
 
 <div class="code"><pre>
-v.select ainput=rivers_eurasia binput=italy_area \
-         output=rivers_italy operator=overlap
+v.select ainput=railroads binput=urbanarea \
+         output=railroads_in_urbanarea operator=overlap
+</pre></div>
+
+Extract those areas from zip code map which overlap with railroads
+(polygon on line test):
+
+<div class="code"><pre>
+# first add a tiny buffer around railroad lines:
+v.buffer input=railroads output=railroads_buf20m \
+  distance=20
+
+v.select ainput=zipcodes_wake binput=railroads_buf20m \
+  output=zipcodes_wake_railroads operator=overlap
 </pre></div>
 
 <h2>TODO</h2>
  
 Processing areas with GEOS is currently incredibly slow. Significant
-speed-up is required.
+speed-up is desired.
 
 <h2>SEE ALSO</h2>
 
