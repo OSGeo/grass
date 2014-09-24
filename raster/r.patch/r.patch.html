@@ -75,7 +75,25 @@ layers, while <em>g.rename</em> is used to then assign to the newly-created
 composite (patched) raster map layer the name of the original raster map
 layer.
 
-<p><em>r.patch</em> creates support files for the patched, composite output map. 
+<p>
+<em>r.patch</em> creates support files for the patched, composite output map. 
+
+<p>
+Number of raster maps to be processed is given by the limit of the
+operating system. For example, both the hard and soft limits are
+typically 1024. The soft limit can be changed with e.g. <tt>ulimit -n
+1500</tt> (UNIX-based operating systems) but not higher than the hard
+limit. If it is too low, you can as superuser add an entry in
+
+<div class="code"><pre>
+/etc/security/limits.conf
+# &lt;domain&gt;      &lt;type&gt;  &lt;item&gt;         &lt;value&gt;
+your_username  hard    nofile          1500
+</pre></div>
+
+This would raise the hard limit to 1500 file. Be warned that more
+files open need more RAM. See also the Wiki page
+<a href="http://grasswiki.osgeo.org/wiki/Large_raster_data_processing">Hints for large raster data processing</a>.
 
 
 <h2>EXAMPLE</h2>
@@ -94,12 +112,16 @@ r.patch in=$MAPS out=mosaic
 
 <h2>SEE ALSO</h2>
 
-<em><a href="g.region.html">g.region</a></em>,
-<em><a href="g.remove.html">g.remove</a></em>,
-<em><a href="g.rename.html">g.rename</a></em>,
-<em><a href="r.mapcalc.html">r.mapcalc</a></em>,
-<em><a href="r.support.html">r.support</a></em>,
-<em><a href="v.mkgrid.html">v.mkgrid</a></em>
+<em>
+<a href="g.region.html">g.region</a>,
+<a href="g.remove.html">g.remove</a>,
+<a href="g.rename.html">g.rename</a>,
+<a href="r.mapcalc.html">r.mapcalc</a>,
+<a href="r.support.html">r.support</a>,
+<a href="v.mkgrid.html">v.mkgrid</a>
+</em>
+<p>
+<a href="http://grasswiki.osgeo.org/wiki/Large_raster_data_processing">Hints for large raster data processing</a>
 
 <h2>AUTHOR</h2>
 
