@@ -25,7 +25,6 @@ static int scan_double(const char *, double *);
   Supported projection codes (see gis.h):
    - PROJECTION_XY
    - PROJECTION_UTM
-   - PROJECTION_SP
    - PROJECTION_LL
    - PROJECTION_OTHER
 
@@ -59,7 +58,6 @@ int G_scan_northing(const char *buf, double *northing, int projection)
   Supported projection codes (see gis.h):
    - PROJECTION_XY
    - PROJECTION_UTM
-   - PROJECTION_SP
    - PROJECTION_LL
    - PROJECTION_OTHER
   
@@ -97,7 +95,6 @@ int G_scan_easting(const char *buf, double *easting, int projection)
   Supported projection codes (see gis.h):
    - PROJECTION_XY
    - PROJECTION_UTM
-   - PROJECTION_SP
    - PROJECTION_LL
    - PROJECTION_OTHER
   

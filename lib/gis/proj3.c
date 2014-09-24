@@ -102,7 +102,6 @@ const char *G_database_projection_name(void)
     case PROJECTION_XY:
     case PROJECTION_UTM:
     case PROJECTION_LL:
-    case PROJECTION_SP:
 	return G__projection_name(n);
     }
 
