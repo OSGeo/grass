@@ -34,6 +34,10 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
     LList = Vect_new_list();
 
     nalines = Vect_get_num_lines(aIn);
+    if (operator == OP_OVERLAP)
+	G_message("Using GRASS GIS operator...");
+    else
+	G_message("Using GEOS operator...");
     
     /* Lines in A. Go through all lines and mark those that meets condition */
     if (atype & (GV_POINTS | GV_LINES)) {
