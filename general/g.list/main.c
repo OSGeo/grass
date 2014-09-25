@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
     struct Popen pager;
     FILE *fp;
     char *separator;
-    int use_region;
+    int use_region, use_pager;
     struct Cell_head window;
 
     G_gisinit(argv[0]);
@@ -157,10 +157,6 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-
-    if ((flag.pretty->answer || flag.full->answer) && opt.output->answer)
-        G_fatal_error(_("-%c/-%c and %s= are mutually exclusive"),
-		      flag.pretty->key, flag.full->key, opt.output->key);
 
     if ((flag.pretty->answer || flag.full->answer) && opt.region->answer)
         G_fatal_error(_("-%c/-%c and %s= are mutually exclusive"),
@@ -284,12 +280,16 @@ int main(int argc, char *argv[])
 	}
     }
 
-    if (flag.pretty->answer || flag.full->answer) {
+    use_pager = !opt.output->answer || !opt.output->answer[0] ||
+		strcmp(opt.output->answer, "-") == 0;
+
+    if (use_pager)
 	fp = G_open_pager(&pager);
-	dup2(fileno(fp), STDOUT_FILENO);
-    }
     else
 	fp = G_open_option_file(opt.output);
+
+    if (flag.pretty->answer || flag.full->answer)
+	dup2(fileno(fp), STDOUT_FILENO);
 
     for (i = 0; i < num_types; i++) {
 	const struct list *elem;
@@ -331,15 +331,15 @@ int main(int argc, char *argv[])
 	}
     }
 
-    if (flag.pretty->answer || flag.full->answer) {
+    if (flag.pretty->answer || flag.full->answer)
 	fclose(stdout);
+    else if (any)
+	fprintf(fp, "\n");
+
+    if (use_pager)
 	G_close_pager(&pager);
-    }
-    else {
-	if (any)
-	    fprintf(fp, "\n");
+    else
 	G_close_option_file(fp);
-    }
 
     if (filter)
 	G_free_ls_filter(filter);
