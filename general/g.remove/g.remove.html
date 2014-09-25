@@ -1,32 +1,33 @@
 <h2>DESCRIPTION</h2>
 
 <em>g.remove</em> removes data files matching a pattern given by wildcards or
-POSIX Extended Regular Expressions. If the <b>-f</b> force flag is not given
-then nothing is removed, instead the list of selected file names is printed to
-<tt>stdout</tt> as a preview of the files to be deleted.
+POSIX Extended Regular Expressions. The <b>pattern</b> option can also take a
+list of map names separated by a comma. If the <b>-f</b> force flag is not
+given then nothing is removed, instead the list of selected file names is
+printed to <tt>stdout</tt> as a preview of the files to be deleted.
 
 <h2>EXAMPLES</h2>
 
-Delete all raster maps starting with "<tt>tmp_</tt>" in the current mapset:
-
+Delete <tt>map1</tt> and <tt>map2</tt> raster maps in the current mapset:
 <div class="code"><pre>
-# show matching raster maps but do not delete yet (as verification)
-g.remove type=rast pattern="tmp_*"
-
-# actually delete the matching raster maps
-g.remove -f type=rast pattern="tmp_*"
+g.remove -f type=rast pattern=tmp1,tmp2
 </pre></div>
 
-Delete all raster maps starting with "<tt>stream_</tt>" in the current mapset,
+Delete all raster and vector maps starting with "<tt>tmp_</tt>" in the current
+mapset:
+<div class="code"><pre>
+# show matching raster and vector maps but do not delete yet (as verification)
+g.remove type=rast,vect pattern="tmp_*"
+
+# actually delete the matching raster and vector maps
+g.remove -f type=rast,vect pattern="tmp_*"
+</pre></div>
+
+Delete all vector maps starting with "<tt>stream_</tt>" in the current mapset,
 but exclude those ending with "<tt>_final</tt>":
 <div class="code"><pre>
-g.remove -f type=rast pattern="stream_*" exclude="*_final"
+g.remove -f type=vect pattern="stream_*" exclude="*_final"
 </pre></div>
-
-<h2>SEE ALSO</h2>
-
-<em>
-</em>
 
 <h2>AUTHOR</h2>
 

@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
     opt.pattern->key = "pattern";
     opt.pattern->type = TYPE_STRING;
     opt.pattern->required = YES;
-    opt.pattern->description = _("Map name search pattern");
+    opt.pattern->description = _("Map name search pattern or map names separated by a comma");
     opt.pattern->guisection = _("Pattern");
 
     opt.exclude = G_define_option();
