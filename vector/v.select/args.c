@@ -9,7 +9,7 @@ void parse_options(struct GParm *parm, struct GFlag *flag)
     char *desc;
 
     parm->input[0] = G_define_standard_option(G_OPT_V_INPUT);
-    parm->input[0]->description = _("Name of input vector map (A)");
+    parm->input[0]->description = _("Input vector map from which to select features (A)");
     parm->input[0]->key = "ainput";
 
     parm->field[0] = G_define_standard_option(G_OPT_V_FIELD);
@@ -23,7 +23,7 @@ void parse_options(struct GParm *parm, struct GFlag *flag)
     parm->type[0]->guisection = _("Selection");
 
     parm->input[1] = G_define_standard_option(G_OPT_V_INPUT);
-    parm->input[1]->description = _("Name of input vector map (B)");
+    parm->input[1]->description = _("Query vector map (B)");
     parm->input[1]->key = "binput";
 
     parm->field[1] = G_define_standard_option(G_OPT_V_FIELD);
