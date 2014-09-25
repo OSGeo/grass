@@ -67,7 +67,6 @@ int main(int argc, char *argv[])
     void *filter, *exclude;
     struct Popen pager;
     FILE *fp;
-    const char *mapset;
     char *separator;
     int use_region;
     struct Cell_head window;
@@ -264,6 +263,8 @@ int main(int argc, char *argv[])
     }
 
     if (opt.mapset->answers && opt.mapset->answers[0]) {
+	const char *mapset;
+
 	G_create_alt_search_path();
 	for (i = 0; (mapset = opt.mapset->answers[i]); i++) {
 	    if (strcmp(mapset, "*") == 0) {
@@ -303,14 +304,27 @@ int main(int argc, char *argv[])
 
 	    G_debug(3, "lister CMD: %s", lister);
 
-	    if (access(lister, X_OK) == 0)	/* execute permission? */
-		G_spawn(lister, lister, mapset, NULL);
-	    else
+	    if (access(lister, X_OK) == 0) {	/* execute permission? */
+		const char **args;
+		const char *mapset;
+
+		for (j = 0; (mapset = G_get_mapset_name(j)); j++);
+		args = (const char **)G_calloc(j + 2, sizeof(char *));
+
+		args[0] = lister;
+		for (j = 0; (mapset = G_get_mapset_name(j)); j++)
+		    args[j + 1] = mapset;
+		args[j + 1] = NULL;
+
+		G_vspawn_ex(lister, args);
+	    } else
 		M_do_list(n, "");
 	}
 	else if (flag.pretty->answer)
 	    M_do_list(n, "");
 	else {
+	    const char *mapset;
+
 	    for (j = 0; (mapset = G_get_mapset_name(j)); j++)
 		make_list(fp, elem, mapset, separator, flag.type->answer,
 			  flag.mapset->answer, use_region ? &window : NULL);
