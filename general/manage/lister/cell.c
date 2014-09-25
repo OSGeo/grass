@@ -9,7 +9,15 @@ int main(int argc, char *argv[])
 
     G_gisinit(argv[0]);
 
-    G_list_element("cell", "raster", argc > 1 ? argv[1] : "", lister);
+    if (argc == 1)
+	G_list_element("cell", "raster", "", lister);
+    else {
+	int i;
+
+	for (i = 1; i < argc; ++i)
+	    G_list_element("cell", "raster", argv[i], lister);
+    }
+
     exit(0);
 }
 
