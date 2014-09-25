@@ -204,6 +204,7 @@ int main(int argc, char *argv[])
 	struct Flag *gmt_hd;
 	struct Flag *sign;
 	struct Flag *swap;
+	struct Flag *flip;
     } flag;
     const char *input;
     const char *output;
@@ -214,6 +215,7 @@ int main(int argc, char *argv[])
     int bytes;
     int order;
     int swap_flag;
+    int flipns;
     struct Cell_head cellhd;
     int nrows, ncols;
     int grass_nrows, grass_ncols;
@@ -256,6 +258,11 @@ int main(int argc, char *argv[])
     flag.swap->key = 'b';
     flag.swap->description = _("Byte swap the data during import");
     flag.swap->guisection = _("Settings");
+
+    flag.flip = G_define_flag();
+    flag.flip->key = 'n';
+    flag.flip->description = _("Flip North and South");
+    flag.flip->guisection = _("Settings");
 
     flag.gmt_hd = G_define_flag();
     flag.gmt_hd->key = 'h';
@@ -371,6 +378,7 @@ int main(int argc, char *argv[])
     swap_flag = order == (G_is_little_endian() ? 0 : 1);
 
     is_signed = !!flag.sign->answer;
+    flipns = !!flag.flip->answer;
 
     is_fp = 0;
     bytes = 0;
@@ -513,6 +521,10 @@ int main(int argc, char *argv[])
 
     for (row = 0; row < grass_nrows; row++) {
 	G_percent(row, nrows, 2);
+
+	if (flipns) {
+	    G_fseek(fp, (off_t) (grass_nrows - row - 1) * ncols * bytes, SEEK_SET);
+	}
 
 	if (fread(in_buf, bytes, ncols, fp) != ncols)
 	    G_fatal_error(_("Error reading data"));
