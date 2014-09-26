@@ -375,6 +375,10 @@ int main(int argc, char *argv[])
 	order = G_is_little_endian() ? 0 : 1;
     }
 
+    if (flag.gmt_hd->answer && flag.flip->answer)
+	G_fatal_error(_("-%c and -%c are mutually exclusive"),
+		      flag.gmt_hd->key, flag.flip->key);
+
     swap_flag = order == (G_is_little_endian() ? 0 : 1);
 
     is_signed = !!flag.sign->answer;
