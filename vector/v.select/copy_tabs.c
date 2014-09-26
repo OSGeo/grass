@@ -11,6 +11,7 @@ void copy_tabs(struct Map_info *In, struct Map_info *Out,
     int i, ttype, ntabs;
 
     struct field_info *IFi, *OFi;
+    dbDriver *Driver;
     
     ntabs = 0;
     
@@ -18,7 +19,7 @@ void copy_tabs(struct Map_info *In, struct Map_info *Out,
     
     /* Number of output tabs */
     for (i = 0; i < Vect_get_num_dblinks(In); i++) {
-	int f, j;
+	int j, f=0;
 	
 	IFi = Vect_get_dblink(In, i);
 	
@@ -67,5 +68,18 @@ void copy_tabs(struct Map_info *In, struct Map_info *Out,
 	    Vect_map_add_dblink(Out, OFi->number, OFi->name, OFi->table,
 				IFi->key, OFi->database, OFi->driver);
 	}
+    Driver = db_start_driver_open_database(OFi->driver,
+                                  Vect_subst_var(OFi->database, Out));
+    if (Driver == NULL)
+	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+                      OFi->database, OFi->driver);
+    
+    if (db_create_index2(Driver, OFi->table, OFi->key) != DB_OK)
+	    G_warning(_("Unable to create index"));
+    if (db_grant_on_table
+	    (Driver, OFi->table, DB_PRIV_SELECT, DB_GROUP | DB_PUBLIC) != DB_OK)
+	    G_fatal_error(_("Unable to grant privileges on table <%s>"),
+	    	    OFi->table);
+	db_close_database_shutdown_driver(Driver);
     }
 }
