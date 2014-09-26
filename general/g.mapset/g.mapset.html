@@ -8,23 +8,21 @@ the GUI at the same time.
 <h2>NOTES</h2>
 
 The shell continues to use the history for the old mapset. To change this 
-you can switch the history to the new settings by commands:<br>
-<br>
+you can switch the history to the new settings by commands. For Bash:
+
 <div class="code"><pre>
-   history -w
-   history -r /"$GISDBASE/$LOCATION/$MAPSET"/.bash_history
-   HISTFILE=/"$GISDBASE/$LOCATION/$MAPSET"/.bash_history
-</pre></div><br>
+history -w
+history -r /"$GISDBASE/$LOCATION/$MAPSET"/.bash_history
+HISTFILE=/"$GISDBASE/$LOCATION/$MAPSET"/.bash_history
+</pre></div>
 
 
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="g.gisenv.html">g.gisenv</a><br>
+<a href="g.gisenv.html">g.gisenv</a>,
 <a href="g.mapsets.html">g.mapsets</a>
 </em>
-<br>
-
 
 <h2>AUTHOR</h2>
 
