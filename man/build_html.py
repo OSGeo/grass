@@ -94,7 +94,7 @@ r"""<!-- the files grass${grass_version_major}.html & helptext.html file live in
        <li class="box"><span><a href="http://grasswiki.osgeo.org/wiki/Faq">FAQ - Frequently Asked Questions</a> (Wiki)</span></li>
       </ul>
       </td>
-      <td width="33%" valign="top" class="box"><h3>&nbsp;Display/Graphical User Interfaces</h3>
+      <td width="33%" valign="top" class="box"><h3>&nbsp;Graphical User Interface</h3>
        <ul>
         <li class="box"><span><a href="wxGUI.html">wxGUI</a> Graphical User Interface</span></li>
         <li class="box"><a href="wxGUI.components.html">wxGUI components</a></li>
@@ -104,7 +104,7 @@ r"""<!-- the files grass${grass_version_major}.html & helptext.html file live in
        <ul>
         <li class="box"><a href="topic_gui.html">GUI commands</a></li>
        </ul>
-
+       <h3>&nbsp;Display</h3>
        <ul>
         <li class="box"><a href="display.html">Display commands manual</a></li>
         <li class="box"><a href="displaydrivers.html">Display drivers</a></li>
