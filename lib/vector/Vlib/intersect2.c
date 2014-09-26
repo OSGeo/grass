@@ -294,7 +294,7 @@ static int cmp_q_x(struct qitem *a, struct qitem *b)
 }
 
 /* sift up routine for min heap */
-int sift_up(struct boq *q, int start)
+static int sift_up(struct boq *q, int start)
 {
     register int parent, child;
     struct qitem a, *b;
@@ -325,7 +325,7 @@ int sift_up(struct boq *q, int start)
     return child;
 }
 
-int boq_add(struct boq *q, struct qitem *i)
+static int boq_add(struct boq *q, struct qitem *i)
 {
     if (q->count + 2 >= q->alloc) {
 	q->alloc = q->count + 100;
@@ -340,7 +340,7 @@ int boq_add(struct boq *q, struct qitem *i)
 }
 
 /* drop point routine for min heap */
-int boq_drop(struct boq *q, struct qitem *qi)
+static int boq_drop(struct boq *q, struct qitem *qi)
 {
     register int child, childr, parent;
     register int i;
@@ -430,7 +430,7 @@ static int cmp_t_y(const void *aa, const void *bb)
     return 0;
 }
 
-int boq_load(struct boq *q, struct line_pnts *Pnts,
+static int boq_load(struct boq *q, struct line_pnts *Pnts,
              struct bound_box *abbox, int l, int with_z)
 {
     int i, loaded;
@@ -1219,6 +1219,9 @@ Vect_line_check_intersection2(struct line_pnts *APoints,
     APnts = APoints;
     BPnts = BPoints;
 
+    ABPnts[0] = APnts;
+    ABPnts[1] = BPnts;
+
     /* TODO: 3D, RE (representation error) threshold, GV_POINTS (line x point) */
 
     if (!IPnts)
@@ -1322,10 +1325,16 @@ Vect_line_check_intersection2(struct line_pnts *APoints,
     bo_queue.i = G_malloc(bo_queue.alloc * sizeof(struct qitem));
 
     /* load APnts to queue */
-    boq_load(&bo_queue, APnts, &abbox, 0, with_z);
+    if (!boq_load(&bo_queue, APnts, &abbox, 0, with_z)) {
+	G_free(bo_queue.i);
+	return 0;
+    }
 
     /* load BPnts to queue */
-    boq_load(&bo_queue, BPnts, &abbox, 1, with_z);
+    if (!boq_load(&bo_queue, BPnts, &abbox, 1, with_z)) {
+	G_free(bo_queue.i);
+	return 0;
+    }
 
     /* initialize search tree */
     bo_ta = rbtree_create(cmp_t_y, sizeof(struct qitem));
