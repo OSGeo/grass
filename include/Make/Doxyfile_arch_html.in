@@ -683,11 +683,7 @@ EXCLUDE                = bin.@ARCH@ \
                          dist.@ARCH@ \
                          doc \
                          general \
-                         gui/scripts \
-                         gui/wxpython/compat \
-                         gui/wxpython/icons \
-                         gui/wxpython/scripts \
-                         gui/wxpython/tools \
+                         gui \
                          imagery \
                          include/defs \
                          lib/btree/test \
@@ -697,7 +693,7 @@ EXCLUDE                = bin.@ARCH@ \
                          lib/gpde/test \
                          lib/linkm/test \
                          lib/raster3d/test \
-                         lib/python/ctypes \
+                         lib/python \
                          lib/vector/dglib/examples \
                          lib/vector/rtree/docs \
                          locale \
@@ -739,8 +735,7 @@ EXCLUDE_PATTERNS       = */test/* \
                          */testsuite/* \
                          */test_* \
                          */test.* \
-                         */*local_proto.h \
-                         */g.gui.*.py
+                         */*local_proto.h
 
 # The EXCLUDE_SYMBOLS tag can be used to specify one or more symbol names
 # (namespaces, classes, functions, etc.) that should be excluded from the

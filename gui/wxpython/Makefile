@@ -4,7 +4,6 @@ SUBDIRS = docs animation mapswipe gmodeler rlisetup psmap dbmgr vdigit iclass gc
 EXTRA_CLEAN_FILES = menustrings.py build_ext.pyc xml/menudata.xml xml/module_tree_menudata.xml
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
-include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 include $(MODULE_TOPDIR)/include/Make/Python.make
 
 DSTDIR = $(GUIDIR)/wxpython
@@ -62,6 +61,3 @@ $(DSTDIRS): %: | $(DSTDIR)
 
 $(DSTDIR):
 	$(MKDIR) $@
-
-#doxygen:
-DOXNAME = wxpython

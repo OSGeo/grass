@@ -3,11 +3,6 @@ MODULE_TOPDIR = ../../..
 PACKAGE = "grasslibs"
 
 include $(MODULE_TOPDIR)/include/Make/Other.make
-include $(MODULE_TOPDIR)/include/Make/Doxygen.make
-
-# doxygen:
-DOXNAME=
-DOXINPUT=grasspython.dox
 
 MODULES = date gis raster gmath proj imagery vector rtree display stats \
 	dbmi raster3d arraystats cluster vedit ogsf nviz segment rowio temporal

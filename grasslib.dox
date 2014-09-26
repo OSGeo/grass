@@ -53,11 +53,6 @@ href="http://grass.osgeo.org">http://grass.osgeo.org</a>
  - vector: \ref vectorlib
  - Temporal GIS API: \ref pythontemporallib
 
-\section interfaces Interfaces
-
- - Python script interface: \ref pythonlib
- - %PyGRASS: A Python based object oriented raster, vector library interface
-
 \section libs Further libraries
 
 (the name refers to the directory name in <tt>lib/</tt> in the source code)
@@ -125,10 +120,6 @@ href="http://grass.osgeo.org">http://grass.osgeo.org</a>
  - linkm:	Linked list memory manager - \ref linkm (obsolete?)
  - manage:      \ref managelib
  - symbol:	\ref symbol (Drawing symbols for %point %vector data library)
-
-\section gui GUI
-
- - \ref wxpythonlib
 
 \section location File structure of GRASS Location
 
