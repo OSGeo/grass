@@ -114,6 +114,7 @@ td.box {
 }
 
 li.box {
+    margin-left: -20px;
     color: rgb(25%, 60%, 25%);
 }
 
