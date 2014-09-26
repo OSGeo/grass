@@ -11,7 +11,6 @@ void copy_tabs(struct Map_info *In, struct Map_info *Out,
     int i, ttype, ntabs;
 
     struct field_info *IFi, *OFi;
-    dbDriver *Driver;
     
     ntabs = 0;
     
@@ -40,6 +39,8 @@ void copy_tabs(struct Map_info *In, struct Map_info *Out,
     
     for (i = 0; i < nfields; i++) {
 	int ret;
+        
+        dbDriver *Driver;
 
 	if (fields[i] == 0)
 	    continue;
@@ -68,18 +69,21 @@ void copy_tabs(struct Map_info *In, struct Map_info *Out,
 	    Vect_map_add_dblink(Out, OFi->number, OFi->name, OFi->table,
 				IFi->key, OFi->database, OFi->driver);
 	}
-    Driver = db_start_driver_open_database(OFi->driver,
-                                  Vect_subst_var(OFi->database, Out));
-    if (Driver == NULL)
-	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-                      OFi->database, OFi->driver);
-    
-    if (db_create_index2(Driver, OFi->table, OFi->key) != DB_OK)
-	    G_warning(_("Unable to create index"));
-    if (db_grant_on_table
+
+        /* create index on key column */
+        Driver = db_start_driver_open_database(OFi->driver,
+                                               Vect_subst_var(OFi->database, Out));
+        if (Driver == NULL)
+            G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+                          OFi->database, OFi->driver);
+        db_set_error_handler_driver(Driver);
+        
+        if (db_create_index2(Driver, OFi->table, OFi->key) != DB_OK)
+            G_warning(_("Unable to create index"));
+        if (db_grant_on_table
 	    (Driver, OFi->table, DB_PRIV_SELECT, DB_GROUP | DB_PUBLIC) != DB_OK)
-	    G_fatal_error(_("Unable to grant privileges on table <%s>"),
-	    	    OFi->table);
+            G_fatal_error(_("Unable to grant privileges on table <%s>"),
+                          OFi->table);
 	db_close_database_shutdown_driver(Driver);
     }
 }
