@@ -404,7 +404,7 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
             if (!ogr_mapset) {
                 /* for direct OGR read access is built pseudo-topology on the fly */
                 G_warning(_("Unable to open vector map <%s> on level %d. "
-                            "Try to rebuild vector topology by v.build."),
+                            "Try to rebuild vector topology with v.build."),
                           Vect_get_full_name(Map), level_request);
                 return -1;
             }
@@ -421,13 +421,8 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
             if (level >= 2) {   /* support files opened */
                 dig_free_plus(&(Map->plus));
             }
-            if (level_request == 0)
-                G_fatal_error(_("Unable to open vector map <%s>"),
-                              Vect_get_full_name(Map));
-            else
-                G_fatal_error(_("Unable to open vector map <%s> on level %d. "
-                                "Try to rebuild vector topology by v.build."),
-                              Vect_get_full_name(Map), level_request);
+	    G_fatal_error(_("Unable to open vector map <%s>"),
+			  Vect_get_full_name(Map));
             return -1;
         }
         if (ogr_mapset && !head_only && level_request != 1) {
