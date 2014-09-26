@@ -2,14 +2,12 @@ MODULE_TOPDIR = ../../..
 
 include $(MODULE_TOPDIR)/include/Make/Other.make
 include $(MODULE_TOPDIR)/include/Make/Python.make
-include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
 PYDIR = $(ETC)/python
 GDIR = $(PYDIR)/grass
 DSTDIR = $(GDIR)/imaging
 
 MODULES = images2avi images2gif images2ims images2swf
-
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)
@@ -27,6 +25,3 @@ $(DSTDIR): | $(GDIR)
 
 $(DSTDIR)/%: % | $(DSTDIR)
 	$(INSTALL_DATA) $< $@
-
-#doxygen:
-DOXNAME = imaginglib
