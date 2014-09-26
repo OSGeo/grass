@@ -404,7 +404,7 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
             if (!ogr_mapset) {
                 /* for direct OGR read access is built pseudo-topology on the fly */
                 G_warning(_("Unable to open vector map <%s> on level %d. "
-                            "Try to rebuild vector topology by v.build."),
+                            "Try to rebuild vector topology with v.build."),
                           Vect_get_full_name(Map), level_request);
                 return -1;
             }
@@ -421,13 +421,8 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
             if (level >= 2) {   /* support files opened */
                 dig_free_plus(&(Map->plus));
             }
-            if (level_request == 0)
-                G_fatal_error(_("Unable to open vector map <%s>"),
-                              Vect_get_full_name(Map));
-            else
-                G_fatal_error(_("Unable to open vector map <%s> on level %d. "
-                                "Try to rebuild vector topology by v.build."),
-                              Vect_get_full_name(Map), level_request);
+	    G_fatal_error(_("Unable to open vector map <%s>"),
+			  Vect_get_full_name(Map));
             return -1;
         }
         if (ogr_mapset && !head_only && level_request != 1) {
@@ -859,7 +854,9 @@ int open_new(struct Map_info *Map, const char *name, int with_z, int is_tmp)
     dig_init_plus(&(Map->plus));
 
     /* open new spatial index */
-    Vect_open_sidx(Map, 2);
+    if (Vect_open_sidx(Map, 2) < 0)
+	G_fatal_error(_("Unable to open spatial index file for vector map <%s>"),
+			Vect_get_full_name(Map));
 
     Map->open = VECT_OPEN_CODE;
     Map->head_only = FALSE;
@@ -1164,6 +1161,7 @@ int Vect_open_topo(struct Map_info *Map, int head_only)
   \param[in,out] Map pointer to Map_info
   \param mode 0 old, 1 update, 2 new
   
+  \return 1 if sidx file is not available
   \return 0 on success
   \return -1 on error
 */
