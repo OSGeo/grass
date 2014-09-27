@@ -1086,11 +1086,15 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.SetItemImage(layer, self.folder_open, CT.TreeItemIcon_Expanded)
             self.SetItemText(layer, grouptext)
         else:
-            self.SetItemImage(layer, self._icon[ltype])
-            # do not use title() - will not work with ltype == '3d-raster'
-            self.SetItemText(layer, '%s %s' % (LMIcons["layer"+ltype[0].upper()+ltype[1:]].GetLabel(),
-                                               _('(double click to set properties)') + ' ' * 15))
-            
+            if ltype in self._icon:
+                self.SetItemImage(layer, self._icon[ltype])
+                # do not use title() - will not work with ltype == '3d-raster'
+                self.SetItemText(layer, '%s %s' % (LMIcons["layer"+ltype[0].upper()+ltype[1:]].GetLabel(),
+                                                   _('(double click to set properties)') + ' ' * 15))
+            else:
+                self.SetItemImage(layer, self._icon['cmd'])
+                self.SetItemText(layer, ltype)
+
         if ltype != 'group':
             if lcmd and len(lcmd) > 1:
                 cmd = lcmd
