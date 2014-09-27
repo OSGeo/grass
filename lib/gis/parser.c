@@ -101,6 +101,7 @@ struct state *st = &state;
 /* local prototypes */
 static void set_flag(int);
 static int contains(const char *, int);
+static int valid_option_name(const char *);
 static int is_option(const char *);
 static void set_option(const char *);
 static void check_opts(void);
@@ -337,9 +338,12 @@ int G_parser(int argc, char **argv)
     /* Stash default answers */
 
     opt = &st->first_option;
-    while (opt) {
+    while (st->n_opts && opt) {
 	if (opt->required)
 	    st->has_required = 1;
+
+	if (!valid_option_name(opt->key))
+	    G_warning(_("BUG in option name, '%s' is not valid"), opt->key);
 
 	/* Parse options */
 	if (opt->options) {
@@ -655,7 +659,7 @@ char *G_recreate_command(void)
     }
 
     opt = &st->first_option;
-    while (opt) {
+    while (st->n_opts && opt) {
 	if (opt->answer && opt->answers && opt->answers[0]) {
 	    slen = strlen(opt->key) + strlen(opt->answers[0]) + 4;	/* +4 for: ' ' = " " */
 	    if (len + slen >= nalloced) {
@@ -869,6 +873,23 @@ static int contains(const char *s, int c)
 	s++;
     }
     return FALSE;
+}
+
+static int valid_option_name(const char *string)
+{
+    int m = strlen(string);
+    int n = strspn(string, "abcdefghijklmnopqrstuvwxyz0123456789_");
+
+    if (!m)
+	return 0;
+
+    if (m != n)
+	return 0;
+
+    if (string[m-1] == '_')
+	return 0;
+
+    return 1;
 }
 
 static int is_option(const char *string)
