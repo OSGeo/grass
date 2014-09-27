@@ -96,7 +96,7 @@ r"""<!-- the files grass${grass_version_major}.html & helptext.html file live in
       </td>
       <td width="33%" valign="top" class="box"><h3>&nbsp;Graphical User Interface</h3>
        <ul>
-        <li class="box"><span><a href="wxGUI.html">wxGUI</a> Graphical User Interface</span></li>
+        <li class="box"><span><a href="wxGUI.html">wxGUI</a></span></li>
         <li class="box"><a href="wxGUI.components.html">wxGUI components</a></li>
         <li class="box"><a href="wxGUI.toolboxes.html">wxGUI toolboxes</a></li>
        </ul>
@@ -112,7 +112,7 @@ r"""<!-- the files grass${grass_version_major}.html & helptext.html file live in
       </td>
       <td width="33%" valign="top" class="box"><h3>&nbsp;General</h3>
        <ul>
-        <li class="box"><a href="grass${grass_version_major}.html">GRASS GIS startup manual page</a></li>
+        <li class="box"><a href="grass${grass_version_major}.html">GRASS GIS startup manual</a></li>
         <li class="box"><a href="general.html">General commands manual</a></li>
        </ul>
         <h3>&nbsp;Addons</h3>
