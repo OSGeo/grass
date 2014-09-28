@@ -2,7 +2,7 @@
 #include <math.h>
 
 
-double *kotz_families(double *x, int n)
+double *Cdhc_kotz_families(double *x, int n)
 {
     static double y[2];
     int i;

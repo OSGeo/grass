@@ -8,7 +8,7 @@
  *               Radim Blazek <radim.blazek gmail.com>
  *               Glynn Clements <glynn gclements.plus.com>, 
  * PURPOSE:      library for testing normality & exponentiality
- * COPYRIGHT:    (C) 2002-2007 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -28,4 +28,4 @@ Comments    : Draft docs at ftp://pasture.ecn.purdue.edu/pub/mccauley/grass/tuto
               Includes D'Agostino's D, Anderson-Darling, Cramer-Von Mises W^2,
               Kolmogorov-Smirnov, Chi-Square, Shapiro-Wilk, many others.
               Expands and fixes bugs in general/cdh in statlib.
-
+              Other document: http://svn.osgeo.org/grass/grass/branches/releasebranch_5_0/src/sites/cdhc/doc/goodness.ps

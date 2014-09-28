@@ -1,4 +1,4 @@
-int dcmp(const void *i, const void *j)
+int Cdhc_dcmp(const void *i, const void *j)
 {
     double x = *(double *)i;
     double y = *(double *)j;

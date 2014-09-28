@@ -2,7 +2,7 @@
 #include <math.h>
 
 
-double *shapiro_wilk_exp(double *x, int n)
+double *Cdhc_shapiro_wilk_exp(double *x, int n)
 {
     static double y[2];
     double mean, b, s1, xs, sum1 = 0.0, sum2 = 0.0;

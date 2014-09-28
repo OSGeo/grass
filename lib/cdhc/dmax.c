@@ -4,7 +4,7 @@
 #include "local_proto.h"
 
 
-double *dmax(double *x, int n)
+double *Cdhc_dmax(double *x, int n)
 {
     static double y[2];
     double *xcopy, sqrt2, sqrtn, mean = 0.0, sdx = 0.0, fx;
@@ -12,7 +12,7 @@ double *dmax(double *x, int n)
     int i;
 
     if ((xcopy = (double *)malloc(n * sizeof(double))) == NULL) {
-	fprintf(stderr, "Memory error in dmax\n");
+	fprintf(stderr, "Memory error in Cdhc_dmax\n");
 	exit(EXIT_FAILURE);
     }
 
@@ -27,11 +27,11 @@ double *dmax(double *x, int n)
     sdx = sqrt((n * sdx - mean * mean) / (n * (n - 1.0)));
     mean /= n;
 
-    qsort(xcopy, n, sizeof(double), dcmp);
+    qsort(xcopy, n, sizeof(double), Cdhc_dcmp);
 
     for (i = 0; i < n; ++i) {
 	xcopy[i] = (xcopy[i] - mean) / sdx;
-	fx = 0.5 + normp(xcopy[i] / sqrt2) / 2.0;
+	fx = 0.5 + Cdhc_normp(xcopy[i] / sqrt2) / 2.0;
 	if (fx <= 1e-5)
 	    fx = 1e-5;
 

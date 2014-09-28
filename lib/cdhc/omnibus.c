@@ -2,7 +2,7 @@
 #include <math.h>
 
 
-double *omnibus_moments(double *x, int n)
+double *Cdhc_omnibus_moments(double *x, int n)
 {
     double diff, mean = 0., fssm, tssm, sum_cube = 0., sum_four = 0.,
 	sum_sq = 0.;

@@ -2,7 +2,7 @@
 #include <math.h>
 
 
-double *geary_test(double *x, int n)
+double *Cdhc_geary_test(double *x, int n)
 {
     int i;
     static double y[2];

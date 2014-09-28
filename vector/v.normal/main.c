@@ -1,5 +1,3 @@
-
-
 /***************************************************************
  *
  * MODULE:       v.normal
@@ -9,7 +7,7 @@
  *               
  * PURPOSE:      GRASS program for distributional testing (based on s.normal)
  *               
- * COPYRIGHT:    (C) 2001-2009 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2001-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2).  Read the file COPYING that
@@ -222,64 +220,64 @@ int main(int argc, char **argv)
 	    switch (x++) {
 	    case 1:		/* moments */
 		fprintf(stdout, _("Moments \\sqrt{b_1} and b_2: "));
-		w = omnibus_moments(z, nsites);
+		w = Cdhc_omnibus_moments(z, nsites);
 		fprintf(stdout, "%g %g\n", w[0], w[1]);
 		break;
 	    case 2:		/* geary */
 		fprintf(stdout, _("Geary's a-statistic & an approx. normal: "));
-		w = geary_test(z, nsites);
+		w = Cdhc_geary_test(z, nsites);
 		fprintf(stdout, "%g %g\n", w[0], w[1]);
 		break;
 	    case 3:		/* extreme deviates */
 		fprintf(stdout, _("Extreme normal deviates: "));
-		w = extreme(z, nsites);
+		w = Cdhc_extreme(z, nsites);
 		fprintf(stdout, "%g %g\n", w[0], w[1]);
 		break;
 	    case 4:		/* D'Agostino */
 		fprintf(stdout, _("D'Agostino's D & an approx. normal: "));
-		w = dagostino_d(z, nsites);
+		w = Cdhc_dagostino_d(z, nsites);
 		fprintf(stdout, "%g %g\n", w[0], w[1]);
 		break;
 	    case 5:		/* Kuiper */
 		fprintf(stdout,
 			_("Kuiper's V (regular & modified for normality): "));
-		w = kuipers_v(z, nsites);
+		w = Cdhc_kuipers_v(z, nsites);
 		fprintf(stdout, "%g %g\n", w[1], w[0]);
 		break;
 	    case 6:		/* Watson */
 		fprintf(stdout,
 			_("Watson's U^2 (regular & modified for normality): "));
-		w = watson_u2(z, nsites);
+		w = Cdhc_watson_u2(z, nsites);
 		fprintf(stdout, "%g %g\n", w[1], w[0]);
 		break;
 	    case 7:		/* Durbin */
 		fprintf(stdout,
 			_("Durbin's Exact Test (modified Kolmogorov): "));
-		w = durbins_exact(z, nsites);
+		w = Cdhc_durbins_exact(z, nsites);
 		fprintf(stdout, "%g\n", w[0]);
 		break;
 	    case 8:		/* Anderson-Darling */
 		fprintf(stdout,
 			_("Anderson-Darling's A^2 (regular & modified for normality): "));
-		w = anderson_darling(z, nsites);
+		w = Cdhc_anderson_darling(z, nsites);
 		fprintf(stdout, "%g %g\n", w[1], w[0]);
 		break;
 	    case 9:		/* Cramer-Von Mises */
 		fprintf(stdout,
 			_("Cramer-Von Mises W^2(regular & modified for normality): "));
-		w = cramer_von_mises(z, nsites);
+		w = Cdhc_cramer_von_mises(z, nsites);
 		fprintf(stdout, "%g %g\n", w[1], w[0]);
 		break;
 	    case 10:		/* Kolmogorov-Smirnov */
 		fprintf(stdout,
 			_("Kolmogorov-Smirnov's D (regular & modified for normality): "));
-		w = kolmogorov_smirnov(z, nsites);
+		w = Cdhc_kolmogorov_smirnov(z, nsites);
 		fprintf(stdout, "%g %g\n", w[1], w[0]);
 		break;
 	    case 11:		/* chi-square */
 		fprintf(stdout,
 			_("Chi-Square stat (equal probability classes) and d.f.: "));
-		w = chi_square(z, nsites);
+		w = Cdhc_chi_square(z, nsites);
 		fprintf(stdout, "%g %d\n", w[0], (int)w[1]);
 		break;
 	    case 12:		/* Shapiro-Wilk */
@@ -290,7 +288,7 @@ int main(int argc, char **argv)
 		}
 		else {
 		    fprintf(stdout, _("Shapiro-Wilk W: "));
-		    w = shapiro_wilk(z, nsites);
+		    w = Cdhc_shapiro_wilk(z, nsites);
 		    fprintf(stdout, "%g\n", w[0]);
 		}
 		break;
@@ -299,7 +297,7 @@ int main(int argc, char **argv)
 		    G_warning(_("Weisberg-Bingham's W'' cannot be used for n < 50 or n > 99"));
 		else {
 		    fprintf(stdout, _("Weisberg-Bingham's W'': "));
-		    w = weisberg_bingham(z, nsites);
+		    w = Cdhc_weisberg_bingham(z, nsites);
 		    fprintf(stdout, "%g\n", w[0]);
 		}
 		break;
@@ -308,13 +306,13 @@ int main(int argc, char **argv)
 		    G_warning(_("Royston only extended Shapiro-Wilk's W up to n = 2000"));
 		else {
 		    fprintf(stdout, _("Shapiro-Wilk W'': "));
-		    w = royston(z, nsites);
+		    w = Cdhc_royston(z, nsites);
 		    fprintf(stdout, "%g\n", w[0]);
 		}
 		break;
 	    case 15:		/* Kotz */
 		fprintf(stdout, _("Kotz' T'_f (Lognormality vs. Normality): "));
-		w = kotz_families(z, nsites);
+		w = Cdhc_kotz_families(z, nsites);
 		fprintf(stdout, "%g\n", w[0]);
 		break;
 	    default:

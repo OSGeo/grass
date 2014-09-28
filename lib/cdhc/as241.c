@@ -9,7 +9,7 @@
  * the hash sums below are the sums of the mantissas of the coefficients.
  * they are included for use in checking transcription.
  */
-double ppnd7(double p)
+double Cdhc_ppnd7(double p)
 {
     static double zero = 0.0, one = 1.0, half = 0.5;
     static double split1 = 0.425, split2 = 5.0;
