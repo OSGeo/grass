@@ -73,6 +73,7 @@ class VDigitToolbar(BaseToolbar):
         self.action = { 'desc' : '',
                         'type' : '',
                         'id'   : -1 }
+        self._currentAreaActionType = None
         
         # list of available vector maps
         self.UpdateListOfLayers(updateTool = True)
@@ -306,6 +307,9 @@ class VDigitToolbar(BaseToolbar):
     def OnAddBoundary(self, event):
         """Add boundary to the vector map layer"""
         Debug.msg (2, "VDigitToolbar.OnAddBoundary()")
+
+        self._toggleAreaIfNeeded()
+
          # reset temp line
         if self.action['desc'] != 'addLine' or \
                 self.action['type'] != 'boundary':
@@ -320,10 +324,13 @@ class VDigitToolbar(BaseToolbar):
                         'type' : "boundary",
                         'id'   : self.addArea }
         self.MapWindow.mouse['box'] = 'line'
+        self._currentAreaActionType = 'boundary'
         
     def OnAddCentroid(self, event):
         """Add centroid to the vector map layer"""
         Debug.msg (2, "VDigitToolbar.OnAddCentroid()")
+
+        self._toggleAreaIfNeeded()
 
         # update icon and tooltip
         self.SetToolNormalBitmap(self.addArea, self.icons['addCentroid'].GetBitmap())
@@ -334,10 +341,15 @@ class VDigitToolbar(BaseToolbar):
                         'type' : "centroid",
                         'id'   : self.addArea }
         self.MapWindow.mouse['box'] = 'point'
+        self._currentAreaActionType = 'centroid'
 
     def OnAddArea(self, event):
         """Add area to the vector map layer"""
+
         Debug.msg (2, "VDigitToolbar.OnAddArea()")
+
+        self._toggleAreaIfNeeded()
+
         # update icon and tooltip
         self.SetToolNormalBitmap(self.addArea, self.icons['addArea'].GetBitmap())
         self.SetToolShortHelp(self.addArea, self.icons['addArea'].GetLabel())
@@ -347,18 +359,24 @@ class VDigitToolbar(BaseToolbar):
                         'type' : "area",
                         'id'   : self.addArea }
         self.MapWindow.mouse['box'] = 'line'
+        self._currentAreaActionType = 'area'
+
+    def _toggleAreaIfNeeded(self):
+        """In some cases, the area tool is not toggled, we have to do it manually."""
+        if not self.GetToolState(self.addArea):
+            self.ToggleTool(self.addArea, True)
+            self.toolSwitcher.ToolChanged(self.addArea)
 
     def OnAddAreaTool(self, event):
         """Area tool activated."""
         Debug.msg (2, "VDigitToolbar.OnAddAreaTool()")
-        
+
         # we need the previous id
-        if 'type' not in self.action or \
-                self.action['type'] in ('area', ''): # default action
+        if not self._currentAreaActionType or self._currentAreaActionType == 'area': # default action
             self.OnAddArea(event)
-        elif self.action['type'] == 'boundary':
+        elif self._currentAreaActionType == 'boundary':
             self.OnAddBoundary(event)
-        elif self.action['type'] == 'centroid':
+        elif self._currentAreaActionType == 'centroid':
             self.OnAddCentroid(event)
 
     def OnAddAreaMenu(self, event):
