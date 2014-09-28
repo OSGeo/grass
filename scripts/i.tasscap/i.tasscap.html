@@ -28,10 +28,9 @@ Calculation of TC maps from North Carolina Landsat scene:
 
 <div class="code"><pre>
 g.region rast=lsat7_2002_10 -p
-i.tasscap -7 band1=lsat7_2002_10 band2=lsat7_2002_20 \
-             band3=lsat7_2002_30 band4=lsat7_2002_40 \
-             band5=lsat7_2002_50 band7=lsat7_2002_70 \
-	     outprefix=tasscap
+i.tasscap satellite=landsat7_etm \
+  input=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70 \
+  basename=tasscap
 </pre></div>
 
 Results:
