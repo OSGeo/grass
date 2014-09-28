@@ -1,0 +1,661 @@
+%%% ====================================================================
+%%%  @LaTeX-style-file{
+%%%     author          = "David M. Jones",
+%%%     version         = "2.00",
+%%%     date            = "24 March 1993",
+%%%     time            = "18:45:00 EST",
+%%%     filename        = "index.sty",
+%%%     address         = "MIT Laboratory for Computer Science
+%%%                        Room NE43-316
+%%%                        545 Technology Square
+%%%                        Cambridge, MA 02139
+%%%                        USA",
+%%%     telephone       = "(617) 253-5936",
+%%%     FAX             = "(617) 253-3480",
+%%%     checksum        = "28116 661 2603 23730",
+%%%     email           = "dmjones@theory.lcs.mit.edu",
+%%%     codetable       = "ISO/ASCII",
+%%%     keywords        = "LaTeX, index",
+%%%     supported       = "yes",
+%%%     docstring       = "This is a reimplementation of LaTeX's
+%%%                        indexing macros to provide better support
+%%%                        for indexing in LaTeX.  In particular, it
+%%%                        provides:
+%%%
+%%%                        (a) Support for multiple indexes, which
+%%%                        are declared using the \newindex and
+%%%                        \renewindex commands.
+%%%
+%%%                        (b) A two-stage process for creating the
+%%%                        raw index files (such as the default .idx
+%%%                        file), similar to that used to create the
+%%%                        .toc file.  That is, the index entries are
+%%%                        first written to the .aux file, and then
+%%%                        copied to the .idx file at the end of the
+%%%                        run.  This means that if you have a large
+%%%                        document consisting of several \include'd
+%%%                        files, you no longer lose the index if you
+%%%                        format only part of the document with
+%%%                        \includeonly.
+%%%
+%%%                        (c) A *-variant of the \index command
+%%%                        that, in addition to putting it's argument
+%%%                        in the Index, also typesets it in the
+%%%                        running text.
+%%%
+%%%                        (d) A \shortindexingon command that causes
+%%%                        ^{foo} to be shorthand for \index{foo} and
+%%%                        _{foo} to be shorthand for \index*{foo}
+%%%                        (only outside of math mode, of course).
+%%%                        These shorthands can be turned off with
+%%%                        \shortindexingoff command.
+%%%
+%%%                        (e) The functionality of the showidx style
+%%%                        option has been merged into this file.
+%%%                        The command \proofmodetrue can be used to
+%%%                        enable the printing of index entries in
+%%%                        the margin of pages.  The size and style
+%%%                        of font can be controlled with the the
+%%%                        \indexproofstyle command.
+%%%
+%%%                        (f) The \index command has been rewritten
+%%%                        to be more robust.  In particular, it no
+%%%                        longer depends on \catcode changes to work
+%%%                        properly, so the new \index command can be
+%%%                        used in places that the original couldn't,
+%%%                        such as inside the arguments of other
+%%%                        macros.
+%%%
+%%%                        There is a sample file after the \endinput
+%%%                        command.
+%%%
+%%%                        The definitive version of this file is
+%%%                        theory.lcs.mit.edu:pub/tex/index.sty.
+%%%
+%%%                        CAVEATS: In order to implement these
+%%%                        improvements, it's been necessary to
+%%%                        modify a number of LaTeX commands
+%%%                        seemingly unrelated to indexing, including
+%%%                        the following: \@starttoc, \raggedbottom,
+%%%                        \flushbottom, \addcontentsline, \markboth,
+%%%                        \markright.  Naturally, this could cause
+%%%                        incompatibilities between index.sty and
+%%%                        any style files that either redefine these
+%%%                        same commands or make specific assumptions
+%%%                        about how they operate.  See below for
+%%%                        explanations of why these various commands
+%%%                        needed modification.
+%%%
+%%%                        It's also been necessary to modify the
+%%%                        \theindex environment, but I've tried to
+%%%                        do so very conservatively.  If your style
+%%%                        file uses \indexname, you should be ok.
+%%%                        Otherwise, you'll have to redefine the
+%%%                        \theindex environment yourself if you
+%%%                        don't want the LaTeX book.sty default.
+%%%
+%%%                        TO DO: I really should rewrite this using
+%%%                        doc.sty.  Also, it might be nice if the
+%%%                        \index* command parsed it's argument so
+%%%                        that, for example, you could say
+%%%                        `\index*{sin@$\sin$}' as a synonym for
+%%%                        `\index{sin@$\sin$}$\sin$'.  However, this
+%%%                        fraught with numerous dangers and I'm both
+%%%                        too lazy and too cowardly to undertake it
+%%%                        now.
+%%%
+%%%                        Maybe it would be nice if this package were
+%%%                        plain TeX compatible.",
+%%%
+%%%     edit-history    = "v2.00 (24 Mar 1993): added support for
+%%%                        \index*, proofmode, \shortindexingon and
+%%%                        \shortindexingoff.
+%%%
+%%%                        v1.01 (4 Mar 1993): added \renewindex
+%%%                        command and checking to make sure index is
+%%%                        (or is not) defined in \newindex, \index
+%%%                        and \printindex.  Also tightened up the
+%%%                        code in various places and added check to
+%%%                        make sure file is only loaded once.
+%%%
+%%%                        v1.00 (4 Mar 1993): initial version,
+%%%                        posted to comp.text.tex
+%%%
+%%%                        The checksum field above contains a CRC-16
+%%%                        checksum as the first value, followed by
+%%%                        the equivalent of the standard UNIX wc
+%%%                        (word count) utility output of lines,
+%%%                        words, and characters.  This is produced
+%%%                        by Robert Solovay's checksum utility.",
+%%%  }
+%%% ====================================================================
+
+\@ifundefined{newindex}{}{\endinput}
+
+\typeout{Style-Option: `index' v2.00 <24 Mar 1993> (dmj)}
+
+%% The following redefinitions of internal LaTeX commands are
+%% borrowed from amsart.sty, v1.1b <31 Jul 1991>.  I don't
+%% particularly need \@leftmark and \@rightmark to be \long in this
+%% style file, but it seems like a reasonable idea.  I do rely
+%% heavily upon this more robust definition of \@ifundefined.
+
+\long\def\@leftmark#1#2{#1}
+
+\long\def\@rightmark#1#2{#2}
+
+\def\@ifundefined#1{%
+    \expandafter\ifx\csname#1\endcsname\relax
+        \expandafter\@leftmark
+    \else
+        \expandafter\@rightmark
+    \fi
+}
+
+%% The \newindex command is used to declare new indexes; the
+%% \renewindex command is used to redefine existing indexes.  The
+%% first argument is a short tag to be used to refer to the index.
+%% The commands \index and \printindex are redefined to take an
+%% optional argument, the tag of the index referred to.  Thus, if you
+%% have defined an author index with the tag ``aut'', the command
+%% \index[aut]{foo} will add an entry to the author index, and the
+%% command \printindex[aut] will print the author index.  If the
+%% optional argument is absent, the index with the tag ``default'' is
+%% used.  (This normally corresponds to the usual index declared by
+%% \makeindex.)  The second argument is the extension of the raw
+%% index file where LaTeX should dump the unprocessed entries for
+%% this index.  The third argument is the extension of the index file
+%% where LaTeX will expect to find the processed index.  The fourth
+%% argument is the name of the index.
+
+%% Examples:
+%%   \newindex{default}{idx}{ind}{\indexname} %equivalent to \makeindex
+%%   \newindex{aut}{adx}{and}{Name Index}
+%%   \newindex{not}{ndx}{nnd}{Index of Notation}
+
+%% #1 = tag (default, author, notation, etc.)
+%% #2 = extension (idx, adx, ndx, etc.) of the raw index file
+%% #3 = extension of processed file (ind, and, nnd, etc.)
+%% #4 = title (Subject Index, Name Index, Index of Notation, etc.)
+
+\def\newindex#1{%
+    \@ifundefined{idx@#1}%
+        {\@newindex{#1}}%
+        {%
+            \@latexerr{Index type `\string#1' already defined}\@ehc
+            \expandafter\@gobble\@gobbletwo
+        }%
+}
+
+\def\renewindex#1{%
+    \@ifundefined{idx@#1}%
+        {\@latexerr{Index type `\string#1' not defined}\@ehc}%
+        {}%
+    \@newindex{#1}%
+}
+
+\def\@newindex#1#2#3#4{%
+    \@namedef{idx@#1}{#2:#3:#4}%
+    \if@filesw
+        \expandafter\newwrite\csname tf@#1\endcsname
+        \immediate\openout\@nameuse{tf@#1}=\jobname.#2
+        \typeout{Writing index file \jobname.#2 }%
+    \fi
+}
+
+%% These are useful macros for getting to specific fields of an Index
+%% specification.
+
+%%  \def\@first#1:#2\@nil{#1}
+
+\def\@second#1:#2:#3\@nil{#2}
+
+\def\@third#1:#2:#3\@nil{#3}
+
+%% \@nearverbatim\foo is much like \meaning\foo, except that it
+%% suppresses the ``macro ->'' string produced when \meaning expands
+%% a macro.  It is used by \@wrindex and \@vwritefile to produce an
+%% ``almost verbatim'' copy of their arguments.  This method replaces
+%% the use of \@sanitize from latex.tex and allows indexing macros to
+%% be used in places (such as inside \mbox's) where the original
+%% \index command could not.  Thanks to Donald Arseneau
+%% <asnd@erich.triumf.ca> for pointing out this trick to me.  (For
+%% more information on this trick, see Dirty Trick #3 of the TeXbook,
+%% page 382).
+
+\def\@nearverbatim#1{\expandafter\@meaning\meaning#1}
+
+\def\@meaning#1>{}
+
+%% The following are adapted from latex.tex v2.09 <25 March 1992>.
+
+\def\makeindex{\newindex{default}{idx}{ind}{\indexname}}
+
+%% We need three new flags.  The first indicates whether the entry
+%% should be typeset in running text, as well as written out to the
+%% index; this is used to implement the \index* command.  The second
+%% indicates whether entries should be written to the index; this is
+%% used to disable the \index command inside of page headings and
+%% tables of contents.  The third indicates whether index entries
+%% should be put in the margin of the page for proofing purposes.
+
+\newif\if@silentindex\@silentindextrue
+
+\newif\if@addtoindex\@addtoindextrue
+
+\newif\ifproofmode\proofmodefalse
+
+%% \index will be made self-protecting (a la \em, etc.) so it can be
+%% used inside, for example, sectioning commands.  Unfortunately, to
+%% really make \index robust, we have to redefine some of LaTeX's
+%% commands for dealing with tables of contents and page headings.
+%% (See below.) *sigh*
+
+\def\index{\protect\p@index}
+
+\def\p@index{\if@silentindex\@bsphack\fi
+    \@ifstar{\@silentindexfalse\@xindex}{\@silentindextrue\@xindex}%
+}
+
+\def\@xindex{\@ifnextchar[{\@index}{\@index[default]}}
+
+%% This is much more complicated than it should have to be.  First,
+%% note the check to see if \index is equal to \@gobble.  This is so
+%% I don't have to redefine \@outputpage, which temporarily disables
+%% \label, \index, and \glossary by \let'ing them equal to \@gobble.
+%% (For this reason, we have to be very careful to make sure that
+%% \index has expanded to \p@index before it gets to \@outputpage.)
+%% Second, note that if \if@addtoindex is false, we don't complain
+%% about undefined index types.  This is because if your page
+%% headings, for example, are being typeset in all uppercase, you
+%% might end up with something like \index[AUT]{...} instead of
+%% \index[aut]{...}.
+
+\def\@index[#1]{%
+    \ifx\index\@gobble
+        \@addtoindexfalse
+    \fi
+    \def\@tempf{\@@index{#1}}%
+    \if@addtoindex
+        \@ifundefined{idx@#1}%
+            {%
+              \def\@tempf{\@latexerr{Index type `\string#1' undefined}%
+              \@ehc\@silentindextrue}%
+            }%
+            {}%
+    \fi
+    \@tempf
+}
+
+\def\@@index#1#2{%
+    \if@addtoindex
+        \if@filesw\@wrindex{#1}{#2}\fi
+        \ifproofmode\@showidx{#2}\fi
+    \fi
+    \if@silentindex\expandafter\@esphack\else\@silentindextrue#2\fi
+}
+
+\def\@wrindex#1#2{%
+    \begingroup
+        \let\thepage\relax
+        \def\@tempa{#2}%
+        \edef\@tempa{%
+           \write\@auxout{%
+              \string\@vwritefile{#1}%
+                  {\string\indexentry{\@nearverbatim\@tempa}{\thepage}}%
+           }%
+        }%
+    \expandafter\endgroup\@tempa
+    \if@nobreak\ifvmode\nobreak\fi\fi
+}
+
+%% The following are adapted from makeidx.sty, v2.09 <21 Oct 91>.
+
+\@ifundefined{seename}{\def\seename{see}}{}
+
+\def\see#1#2{{\em \seename\/} #1}
+
+\def\printindex{\@ifnextchar [{\@printindex}{\@printindex[default]}}
+
+\def\@printindex[#1]{%
+    \def\@indextype{#1}%
+    \@ifundefined{idx@#1}%
+        {\@latexerr{Index type `\string#1' undefined}\@ehc}%
+        {%
+            \edef\@tempa{\@nameuse{idx@#1}}%
+            \@input{\jobname.\expandafter\@second\@tempa\@nil}%
+        }%
+}
+
+%% Now we set things up for \shortindexing.  First we carefully
+%% define the values that ^ and _ should have when active:
+
+\def\@indexstar@{\index*}
+
+\begingroup
+  \catcode`\^=\active \catcode`\_=\active
+
+  \gdef^{\relax\ifmmode\expandafter\sp\else\expandafter\@indexstar@\fi}
+
+  \gdef_{\relax\ifmmode\expandafter\sb\else\expandafter\index\fi}
+\endgroup
+
+%% Then we define \shortindexingon to first save the current
+%% \catcodes of ^ and _ so that \shortindexingoff can restore the
+%% meanings in place before \shortindexingon was called.  Havoc will
+%% be wrought if the \catcode's are changed to some other value
+%% between the time that \shortindexingon is called and the time that
+%% \shortindexingoff is called.
+
+\def\shortindexingon{%
+    \edef\shortindexingoff{%
+        \catcode`\noexpand\^=\the\catcode`\^\relax
+        \catcode`\noexpand\_=\the\catcode`\_\relax
+    }%
+    \catcode`\^=\active \catcode`\_=\active\relax
+}
+
+%% Now we make sure \shortindexingoff has the right default value.
+
+\shortindexingon\shortindexingoff
+
+%% Thanks to Alan Jeffrey <alanje@cogs.sussex.ac.uk> for pointing out
+%% how the package should behave when \indexname is already defined
+%% and for the code to implement that case.
+
+\expandafter\ifx\csname indexname\endcsname\relax
+
+    \message{index.sty> Uh oh!  It looks like your document style
+        doesn't use \string\indexname.}
+    \message{index.sty> I'll have to redefine the
+        \string\theindex\space environment, using}
+    \message{index.sty> the `book' style default.}
+
+    \def\indexname{Index}
+
+%% The following is adapted from book.sty v2.09 <14 Jan 92>.
+
+    \def\theindex{%
+        \@restonecoltrue
+        \if@twocolumn\@restonecolfalse\fi
+        \columnseprule\z@ \columnsep 35\p@
+        \edef\@indexname{\@nameuse{idx@\@indextype}}%
+        \edef\@indexname{\expandafter\@third\@indexname\@nil}%
+        \twocolumn[\@makeschapterhead{\@indexname}]%
+        \@mkboth{\uppercase{\@indexname}}{\uppercase{\@indexname}}%
+        \thispagestyle{plain}%
+        \parindent\z@
+        \parskip\z@ plus .3\p@\relax\let\item\@idxitem
+    }
+
+\else
+
+    \@temptokena={%
+       \edef\indexname{\@nameuse{idx@\@indextype}}%
+       \edef\indexname{\expandafter\@third\indexname\@nil}%
+    }
+    \toks0=\expandafter{\theindex}
+    \edef\theindex{\the\@temptokena\the\toks0}
+
+\fi
+
+%% \@vwritefile performs essentially the same function as
+%% \@writefile, except that it does not expand it second argument
+%% (i.e., it writes it out verbatim (well, almost verbatim)).
+
+%% NOTE: There doesn't seem to be any reason why \@writefile *should*
+%% expand it's second argument and in fact, we later redefine
+%% \addcontentsline to use \@vwritefile instead of \@writefile.  A
+%% slight extension of this idea could be used to solve the problem
+%% of fragility in sectioning commands.
+
+%% \@vwritefile, like \@writefile, should be disabled when the .aux
+%% file is being read in by \begin{document}.  To avoid modifying
+%% \document, we make the behaviour of \@vwritefile conditional on
+%% the current meaning of \@writefile.
+
+\def\@vwritefile{%
+    \ifx\@writefile\@gobbletwo
+        \expandafter\@gobbletwo
+    \else
+        \expandafter\x@vwritefile
+    \fi
+}
+
+\def\x@vwritefile#1{%
+    \@ifundefined{tf@#1}{\@gobbletwo}{\y@vwritefile}{#1}%
+}
+
+\long\def\y@vwritefile#1#2{%
+    \def\@tempa{#2}%
+    \immediate\write\csname tf@#1\endcsname{\@nearverbatim\@tempa}%
+}
+
+%% Now let's take some code from showidx.sty and merge it into our
+%% new system.  There are three reasons for redefining the commands
+%% here rather than just inputting showidx.sty (or requiring the user
+%% to do so).  First, showidx.sty ends with a call to \flushbottom,
+%% which I want to avoid.  Second, the instructions for successfully
+%% using showidx.sty along with index.sty would be somewhat tricky.
+%% This way, I can just tell users not to use showidx.sty at all.
+%% (If I were feeling really paranoid, I could implement something
+%% that would disable the showidx style option, but I won't.)  Third,
+%% I need to make some alterations to \@showidx anyway.  In
+%% particular, (a) I need to add the \@sanitizeat command so this
+%% works correctly with AMS-LaTeX and (b) I want to add the
+%% \indexproofstyle command so the user can customize the size and
+%% font used for the index proofs.
+
+%% These are adapted from showidx.sty, v2.09 <16 Jun 1991>.
+
+\newinsert\indexbox
+
+\dimen\indexbox=\maxdimen
+
+%% Partly I'm just being silly here, but partly there's a good reason
+%% for doing things this way.  I can't define \@sanitizeat directly,
+%% since its definition requires @ to be active, and thus ineligible
+%% to be part of a command name.  On the other hand, I don't want to
+%% define something like \sanitizeat, since that's in the user's
+%% namespace.  So, I use a temporary control sequence that is
+%% unlikely to conflict with anything.
+
+\begingroup
+    \catcode`\?=11
+    \catcode`\!=11
+    \begingroup
+        \catcode`\@=\active
+        \gdef\?!?{\def @{\char`\@}}
+    \endgroup
+    \global\let\@sanitizeat\?!?
+\endgroup
+
+\newtoks\indexproofstyle
+
+%% Note the cautious way of calling \reset@font, which is necessary
+%% for this to work correctly under the NFSS.
+
+\indexproofstyle{\footnotesize\csname reset@font\endcsname\tt}
+
+\def\@showidx#1{%
+    \insert\indexbox{%
+        \@sanitizeat
+        \the\indexproofstyle
+        \hsize\marginparwidth
+        \hangindent\marginparsep \parindent\z@
+        \everypar{}\let\par\@@par \parfillskip\@flushglue
+        \lineskip\normallineskip
+        \baselineskip .8\normalbaselineskip\sloppy
+        \raggedright \leavevmode
+        \vrule \@height .7\normalbaselineskip \@width \z@\relax#1\relax
+        \vrule \@height\z@ \@depth.3\normalbaselineskip \@width\z@\relax
+    }%
+}
+
+\def\@leftidx{\hskip-\marginparsep \hskip-\marginparwidth}
+
+\def\@rightidx{\hskip\columnwidth \hskip\marginparsep}
+
+\def\@mkidx{%
+    \vbox to \z@{%
+        \hbox{%
+            \if@twocolumn
+                \if@firstcolumn \@leftidx \else \@rightidx \fi
+            \else
+                \if@twoside
+                    \ifodd\c@page \@rightidx \else \@leftidx \fi
+                \else
+                    \@rightidx
+                \fi
+            \fi
+            \box\indexbox
+        }%
+        \vss
+    }%
+}
+
+\def\raggedbottom{%
+    \def\@textbottom{\vskip\z@ plus.0001fil}%
+    \let\@texttop\@mkidx
+}
+
+\def\flushbottom{\let\@textbottom\relax \let\@texttop\@mkidx}
+
+\let\@texttop\@mkidx
+
+%% Now, this really gets up my nose.  The only way to make sure that
+%% the \index command gets handled correctly when used inside of
+%% sectioning commands is to redefine a bunch of LaTeX's table of
+%% contents and running-heads macros. *blech* Fragility rears its ugly
+%% head again.  (Incidentally, it should be possible to use the
+%% \@nearverbatim trick to make arguments of sectioning commands
+%% robust.  I'll have to explore this.)
+
+%% These are based on latex.tex 2.09 <25 March 1992>.
+
+%% We need to redefine \addcontentsline to keep it from expanding
+%% \index commands too far.
+
+\def\addcontentsline#1#2#3{%
+    \if@filesw
+        \begingroup
+            \let\label\@gobble
+            \let\glossary\@gobble
+            \def\protect##1{\string##1\space}%
+            \@temptokena{\thepage}%
+            \edef\@tempa{%
+               \write\@auxout
+                  {\string\@vwritefile{#1}{\string\contentsline{#2}{#3}%
+                  {\the\@temptokena}}%
+               }%
+            }%
+            \@tempa
+        \endgroup
+        \if@nobreak\ifvmode\nobreak\fi\fi
+    \fi
+}
+
+%% We need to redefine \@starttoc to \@addtoindexfalse so that items
+%% don't get written to the index from within tables of contents.
+
+\def\@starttoc#1{%
+    \begingroup
+        \@addtoindexfalse
+        \makeatletter
+        \@input{\jobname.#1}%
+        \if@filesw
+            \expandafter\newwrite\csname tf@#1\endcsname
+            \immediate\openout \csname tf@#1\endcsname \jobname.#1\relax
+        \fi
+        \global\@nobreakfalse
+    \endgroup
+}
+
+%% We have to redefine \markboth and \markright to keep them from
+%% disabling the expansion of \index while putting section heads into
+%% the \mark.  Otherwise, we'd end up with ``\index'' in the mark,
+%% which would cause problems when \@outputpage redefines \index to be
+%% equal to \@gobble.  Instead, we want \index to expand to \p@index
+%% in the \mark, so we retain control over what happens in
+%% \@outputpage.
+
+\def\markboth#1#2{%
+    \gdef\@themark{{#1}{#2}}%
+    \begingroup
+        \let\protect\noexpand
+        \let\label\relax
+        \let\glossary\relax
+        \mark{\@themark}%
+    \endgroup
+    \if@nobreak\ifvmode\nobreak\fi\fi
+}
+
+\def\markright#1{%
+    \begingroup
+        \let\protect\noexpand
+        \let\label\relax
+        \let\glossary\relax
+        \expandafter\@markright\@themark{#1}%
+        \mark{\@themark}%
+    \endgroup
+    \if@nobreak\ifvmode\nobreak\fi\fi
+}
+
+\endinput
+
+%% This is a sample file for index.sty.  To run the sample, save the
+%% following in a file testidx.tex.  Then execute the following
+%% commands:
+%%
+%% latex testidx.tex
+%% makeindex testidx
+%% makeindex -o testidx.and testidx.adx
+%% makeindex -o testidx.nnd testidx.ndx
+%% latex testidx.tex
+
+\documentstyle[index]{book}
+
+\makeindex
+\newindex{aut}{adx}{and}{Name Index}
+\newindex{not}{ndx}{nnd}{List of Notation}
+
+\shortindexingon
+
+\proofmodetrue
+
+\def\aindex{\index*[aut]}
+
+\begin{document}
+
+\tableofcontents
+
+\newpage
+
+\chapter{Here is a ^[aut]{chapter} title}
+
+\section{Section header\index[aut]{section}}
+
+Here is some text.\index{subject}
+
+Here is \index[not]{notation}some more \index[not]{sin@$\sin$} text.
+
+Here is some ^{more} _[not]{notation} text.
+
+Here is yet more \aindex{text}.
+
+\section{Another Section header _[aut]{section2}}
+
+And here is some math: $x^1_b$.
+
+Here is an ^[aut]{index} entry \fbox{inside an
+\index[not]{min@$\min$}fbox}
+
+\fbox{Here is an ^[aut]{entry} in a box.}
+
+\printindex[not]
+
+\printindex[aut]
+
+\printindex
+
+\end{document}
