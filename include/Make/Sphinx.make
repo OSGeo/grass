@@ -40,3 +40,14 @@ sphinxman:checksphinx cleansphinx
 	$(MAKE) -C $(MODULE_TOPDIR)/lib/python/docs/ libpythonapidoc
 	$(MAKE) -C $(MODULE_TOPDIR)/lib/python/docs/ libpythonman
 
+cleansphinxlib:
+	$(MAKE) -C $(MODULE_TOPDIR)/lib/python/docs libpythonclean
+
+sphinxdoclib: checksphinx cleansphinxlib
+	$(MAKE) -C $(MODULE_TOPDIR)/lib/python/docs/ libpythonapidoc
+	$(MAKE) -C $(MODULE_TOPDIR)/lib/python/docs/ libpythonhtml
+
+sphinxmanlib:checksphinx cleansphinxlib
+	$(MAKE) -C $(MODULE_TOPDIR)/lib/python/docs/ libpythonapidoc
+	$(MAKE) -C $(MODULE_TOPDIR)/lib/python/docs/ libpythonman
+
