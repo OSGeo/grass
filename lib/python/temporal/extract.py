@@ -1,15 +1,12 @@
-"""!@package grass.temporal
-
-@brief GRASS Python scripting module (temporal GIS functions)
-
-Temporal GIS related functions to be used in Python scripts.
+"""
+Extract functions for space time raster, 3d raster and vector datasets
 
 (C) 2012-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Soeren Gebbert
+:authors: Soeren Gebbert
 """
 
 from grass.script.utils import get_num_suffix
@@ -24,28 +21,28 @@ import grass.script as gscript
 def extract_dataset(input, output, type, where, expression, base, nprocs=1,
                     register_null=False, layer=1,
                     vtype="point,line,boundary,centroid,area,face"):
-    """!Extract a subset of a space time raster, raster3d or vector dataset
+    """Extract a subset of a space time raster, raster3d or vector dataset
 
        A mapcalc expression can be provided to process the temporal extracted
        maps.
        Mapcalc expressions are supported for raster and raster3d maps.
 
-       @param input The name of the input space time raster/raster3d dataset
-       @param output The name of the extracted new space time raster/raster3d
+       :param input: The name of the input space time raster/raster3d dataset
+       :param output: The name of the extracted new space time raster/raster3d
                      dataset
-       @param type The type of the dataset: "raster", "raster3d" or vector
-       @param where The temporal SQL WHERE statement for subset extraction
-       @param expression The r(3).mapcalc expression or the v.extract where
+       :param type: The type of the dataset: "raster", "raster3d" or vector
+       :param where: The temporal SQL WHERE statement for subset extraction
+       :param expression: The r(3).mapcalc expression or the v.extract where
                          statement
-       @param base The base name of the new created maps in case a mapclac
+       :param base: The base name of the new created maps in case a mapclac
                    expression is provided
-       @param nprocs The number of parallel processes to be used for mapcalc
+       :param nprocs: The number of parallel processes to be used for mapcalc
                      processing
-       @param register_null Set this number True to register empty maps
+       :param register_null: Set this number True to register empty maps
                             (only raster and raster3d maps)
-       @param layer The vector layer number to be used when no timestamped
+       :param layer: The vector layer number to be used when no timestamped
               layer is present, default is 1
-       @param vtype The feature type to be extracted for vector maps, default
+       :param vtype: The feature type to be extracted for vector maps, default
               is point,line,boundary,centroid,area and face
     """
 

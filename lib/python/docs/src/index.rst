@@ -8,7 +8,7 @@ Contents:
 
    script
    pygrass_index
-   temporal
+   temporal_framework
    exceptions
    imaging
    gunittest_testing

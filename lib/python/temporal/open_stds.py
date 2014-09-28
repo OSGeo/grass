@@ -1,25 +1,21 @@
-"""!@package grass.temporal
-
-@brief GRASS Python scripting module (temporal GIS functions)
-
-Temporal GIS related functions to be used in Python scripts.
+"""
+Functions to open or create space time datasets
 
 Usage:
 
-@code
-import grass.temporal as tgis
+.. code-block:: python
 
-tgis.register_maps_in_space_time_dataset(type, name, maps)
+    import grass.temporal as tgis
 
-...
-@endcode
+    tgis.register_maps_in_space_time_dataset(type, name, maps)
+
 
 (C) 2012-2014 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Soeren Gebbert
+:authors: Soeren Gebbert
 """
 
 from factory import *
@@ -27,18 +23,18 @@ from factory import *
 ###############################################################################
 
 def open_old_stds(name, type, dbif=None):
-    """!This function opens an existing space time dataset and return the
+    """This function opens an existing space time dataset and return the
        created and intialized object of the specified type.
 
        This function will call exit() or raise a grass.pygrass.messages.FatalError in case the type is wrong,
        or the space time dataset was not found.
 
-       @param name The name of the space time dataset, if the name does not
+       :param name: The name of the space time dataset, if the name does not
                     contain the mapset (name@mapset) then the current mapset
                     will be used to identifiy the space time dataset
-       @param type The type of the space time dataset (strd, str3ds, stvds,
+       :param type: The type of the space time dataset (strd, str3ds, stvds,
                                                        raster, vector, raster3d)
-       @param dbif The optional database interface to be used
+       :param dbif: The optional database interface to be used
 
     """
     mapset = get_current_mapset()
@@ -77,18 +73,18 @@ def open_old_stds(name, type, dbif=None):
 ###############################################################################
 
 def check_new_stds(name, type, dbif=None, overwrite=False):
-    """!Check if a new space time dataset of a specific type can be created
+    """Check if a new space time dataset of a specific type can be created
 
-       @param name The name of the new space time dataset
-       @param type The type of the new space time dataset (strd, str3ds, stvds,
+       :param name: The name of the new space time dataset
+       :param type: The type of the new space time dataset (strd, str3ds, stvds,
                                                       raster, vector, raster3d)
-       @param dbif The temporal database interface to be used
-       @param overwrite Flag to allow overwriting
+       :param dbif: The temporal database interface to be used
+       :param overwrite: Flag to allow overwriting
 
-       @return A space time dataset object that must be filled with
+       :return: A space time dataset object that must be filled with
                content before insertion in the temporal database
 
-       This function will raise a ScriptError in case of an error.
+       This function will raise a FatalError in case of an error.
     """
 
     #Get the current mapset to create the id of the space time dataset
@@ -131,19 +127,19 @@ def check_new_stds(name, type, dbif=None, overwrite=False):
 
 def open_new_stds(name, type, temporaltype, title, descr, semantic,
                               dbif=None, overwrite=False):
-    """!Create a new space time dataset of a specific type
+    """Create a new space time dataset of a specific type
 
-       @param name The name of the new space time dataset
-       @param type The type of the new space time dataset (strd, str3ds, stvds,
+       :param name: The name of the new space time dataset
+       :param type: The type of the new space time dataset (strd, str3ds, stvds,
                                                       raster, vector, raster3d)
-       @param temporaltype The temporal type (relative or absolute)
-       @param title The title
-       @param descr The dataset description
-       @param semantic Semantical information
-       @param dbif The temporal database interface to be used
-       @param overwrite Flag to allow overwriting
+       :param temporaltype: The temporal type (relative or absolute)
+       :param title: The title
+       :param descr: The dataset description
+       :param semantic: Semantical information
+       :param dbif: The temporal database interface to be used
+       :param overwrite: Flag to allow overwriting
 
-       @return The new created space time dataset
+       :return: The new created space time dataset
 
        This function will raise a FatalError in case of an error.
     """
@@ -177,18 +173,18 @@ def open_new_stds(name, type, temporaltype, title, descr, semantic,
 
 def check_new_map_dataset(name, layer=None, type="raster",
                           overwrite=False, dbif=None):
-    """!Check if a new map dataset of a specific type can be created in
+    """Check if a new map dataset of a specific type can be created in
         the temporal database
 
-       @param name The name of the new map dataset
-       @param layer The layer of the new map dataset
-       @param type The type of the new map dataset (raster, vector, raster3d)
-       @param dbif The temporal database interface to be used
-       @param overwrite Flag to allow overwriting
+       :param name: The name of the new map dataset
+       :param layer: The layer of the new map dataset
+       :param type: The type of the new map dataset (raster, vector, raster3d)
+       :param dbif: The temporal database interface to be used
+       :param overwrite: Flag to allow overwriting
 
-       @return A map dataset object
+       :return: A map dataset object
 
-       This function will raise a ScriptError in case of an error.
+       This function will raise a FatalError in case of an error.
     """
     mapset = get_current_mapset()
     msgr = get_tgis_message_interface()
@@ -215,18 +211,17 @@ def check_new_map_dataset(name, layer=None, type="raster",
 def open_new_map_dataset(name, layer=None, type="raster",
                          temporal_extent=None, overwrite=False,
                          dbif=None):
-    """!Create a new map dataset object of a specific type that can be
+    """Create a new map dataset object of a specific type that can be
         registered in the temporal database
 
-       @param name The name of the new map dataset
-       @param layer The layer of the new map dataset
-       @param type The type of the new map dataset (raster, vector, raster3d)
-       @param dbif The temporal database interface to be used
-       @param overwrite Flag to allow overwriting
+       :param name: The name of the new map dataset
+       :param layer: The layer of the new map dataset
+       :param type: The type of the new map dataset (raster, vector, raster3d)
+       :param dbif: The temporal database interface to be used
+       :param overwrite: Flag to allow overwriting
 
-       @return A map dataset object
+       :return: A map dataset object
 
-       This function will raise a ScriptError in case of an error.
     """
 
     mapset = get_current_mapset()

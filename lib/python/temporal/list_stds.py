@@ -1,25 +1,21 @@
-"""!@package grass.temporal
-
-@brief GRASS Python scripting module (temporal GIS functions)
-
-Temporal GIS related functions to be used in Python scripts.
+"""
+Functions to create space time dataset lists
 
 Usage:
 
-@code
-import grass.temporal as tgis
+.. code-block:: python
 
-tgis.register_maps_in_space_time_dataset(type, name, maps)
+    import grass.temporal as tgis
 
-...
-@endcode
+    tgis.register_maps_in_space_time_dataset(type, name, maps)
+
 
 (C) 2012-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Soeren Gebbert
+:authors: Soeren Gebbert
 """
 
 from space_time_datasets import *
@@ -29,40 +25,43 @@ from open_stds import *
 ###############################################################################
 
 def get_dataset_list(type,  temporal_type,  columns=None,  where=None,  order=None):
-    """! Return a list of time stamped maps or space time datasets of a specific temporal type
+    """ Return a list of time stamped maps or space time datasets of a specific temporal type
          that are registred in the temporal database
     
          This method returns a dictionary, the keys are the available mapsets, 
          the values are the rows from the SQL database query.
 
-        @param type The type of the datasets (strds, str3ds, stvds, rast, rast3d, vect)
-        @param temporal_type The temporal type of the datasets (absolute, relative)
-        @param columns A comma separated list of columns that will be selected
-        @param where A where statement for selected listing without "WHERE"
-        @param order A comma separated list of columns to order the
+        :param type: The type of the datasets (strds, str3ds, stvds, rast, rast3d, vect)
+        :param temporal_type: The temporal type of the datasets (absolute, relative)
+        :param columns: A comma separated list of columns that will be selected
+        :param where: A where statement for selected listing without "WHERE"
+        :param order: A comma separated list of columns to order the
                                datasets by category
                       
-        @return A dictionary with the rows of the SQL query for each available mapset
+        :return: A dictionary with the rows of the SQL query for each available mapset
         
-        >>> import grass.temporal as tgis
-        >>> tgis.init()
-        >>> name = "list_stds_test"
-        >>> sp = tgis.open_new_stds(name=name, type="strds", 
-        ... temporaltype="absolute", title="title", descr="descr", semantic="mean", dbif=None, overwrite=True)
-        >>> mapset = tgis.get_current_mapset()
-        >>> stds_list = tgis.get_dataset_list("strds", "absolute", columns="name")
-        >>> rows =  stds_list[mapset]
-        >>> for row in rows:
-        ...     if row["name"] == name:
-        ...         print True
-        True
-        >>> stds_list = tgis.get_dataset_list("strds", "absolute", columns="name,mapset", where="mapset = '%s'"%(mapset))
-        >>> rows =  stds_list[mapset]
-        >>> for row in rows:
-        ...     if row["name"] == name and row["mapset"] == mapset:
-        ...         print True
-        True
-        >>> check = sp.delete()
+        .. code-block:: python
+        
+            >>> import grass.temporal as tgis
+            >>> tgis.init()
+            >>> name = "list_stds_test"
+            >>> sp = tgis.open_new_stds(name=name, type="strds", 
+            ... temporaltype="absolute", title="title", descr="descr", semantic="mean", dbif=None, overwrite=True)
+            >>> mapset = tgis.get_current_mapset()
+            >>> stds_list = tgis.get_dataset_list("strds", "absolute", columns="name")
+            >>> rows =  stds_list[mapset]
+            >>> for row in rows:
+            ...     if row["name"] == name:
+            ...         print True
+            True
+            >>> stds_list = tgis.get_dataset_list("strds", "absolute", columns="name,mapset", where="mapset = '%s'"%(mapset))
+            >>> rows =  stds_list[mapset]
+            >>> for row in rows:
+            ...     if row["name"] == name and row["mapset"] == mapset:
+            ...         print True
+            True
+            >>> check = sp.delete()
+
     """
     id = None
     sp = dataset_factory(type, id)
@@ -106,29 +105,31 @@ def get_dataset_list(type,  temporal_type,  columns=None,  where=None,  order=No
 ###############################################################################
 
 def list_maps_of_stds(type, input, columns, order, where, separator, method, no_header=False, gran=None):
-    """! List the maps of a space time dataset using diffetent methods
+    """ List the maps of a space time dataset using diffetent methods
 
-        @param type The type of the maps raster, raster3d or vector
-        @param input Name of a space time raster dataset
-        @param columns A comma separated list of columns to be printed to stdout
-        @param order A comma separated list of columns to order the
+        :param type: The type of the maps raster, raster3d or vector
+        :param input: Name of a space time raster dataset
+        :param columns: A comma separated list of columns to be printed to stdout
+        :param order: A comma separated list of columns to order the
                       maps by category
-        @param where A where statement for selected listing without "WHERE"
+        :param where: A where statement for selected listing without "WHERE"
                       e.g: start_time < "2001-01-01" and end_time > "2001-01-01"
-        @param separator The field separator character between the columns
-        @param method String identifier to select a method out of cols,
+        :param separator: The field separator character between the columns
+        :param method: String identifier to select a method out of cols,
                        comma,delta or deltagaps
+                       
             - "cols" Print preselected columns specified by columns
             - "comma" Print the map ids ("name@mapset") as comma separated string
             - "delta" Print the map ids ("name@mapset") with start time,
-                       end time, relative length of intervals and the relative
-                       distance to the begin
+               end time, relative length of intervals and the relative
+               distance to the begin
             - "deltagaps" Same as "delta" with additional listing of gaps.
-                           Gaps can be simply identified as the id is "None"
+              Gaps can be simply identified as the id is "None"
             - "gran" List map using the granularity of the space time dataset,
-                      columns are identical to deltagaps
-       @param no_header Supress the printing of column names
-        @param gran The user defined granule to be used if method=gran is set, in case gran=None the
+              columns are identical to deltagaps
+                      
+        :param no_header: Supress the printing of column names
+        :param gran: The user defined granule to be used if method=gran is set, in case gran=None the
             granule of the space time dataset is used
     """
 

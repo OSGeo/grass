@@ -1,26 +1,22 @@
-"""!@package grass.temporal
-
-@brief GRASS Python scripting module (temporal GIS functions)
-
-Temporal GIS related functions to be used in Python scripts.
+"""
+Univariate statistic function for space time datasets
 
 Usage:
 
-@code
+.. code-block:: python
+
 import grass.temporal as tgis
 
-tgis.print_gridded_dataset_univar_statistics(
-    type, input, where, extended, no_header, fs)
+    tgis.print_gridded_dataset_univar_statistics(
+        type, input, where, extended, no_header, fs)
 
-...
-@endcode
 
 (C) 2012-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Soeren Gebbert
+:authors: Soeren Gebbert
 """
 
 from open_stds import *
@@ -31,14 +27,14 @@ import grass.script as gscript
 
 def print_gridded_dataset_univar_statistics(type, input, where, extended,
                                             no_header=False, fs="|"):
-    """!Print univariate statistics for a space time raster or raster3d dataset
+    """Print univariate statistics for a space time raster or raster3d dataset
 
-       @param type Must be "strds" or "str3ds"
-       @param input The name of the space time dataset
-       @param where A temporal database where statement
-       @param extended If True compute extended statistics
-       @param no_header Supress the printing of column names
-       @param fs Field separator
+       :param type: Must be "strds" or "str3ds"
+       :param input: The name of the space time dataset
+       :param where: A temporal database where statement
+       :param extended: If True compute extended statistics
+       :param no_header: Supress the printing of column names
+       :param fs: Field separator
     """
 
     # We need a database interface
@@ -108,18 +104,18 @@ def print_gridded_dataset_univar_statistics(type, input, where, extended,
 
 def print_vector_dataset_univar_statistics(input, twhere, layer, type, column,
                                            where, extended, no_header=False, fs="|"):
-    """!Print univariate statistics for a space time vector dataset
+    """Print univariate statistics for a space time vector dataset
 
-       @param input The name of the space time dataset
-       @param twhere A temporal database where statement
-       @param layer The layer number used in case no layer is present
+       :param input: The name of the space time dataset
+       :param twhere: A temporal database where statement
+       :param layer: The layer number used in case no layer is present
               in the temporal dataset
-       @param type options: point,line,boundary,centroid,area
-       @param column The name of the attribute column
-       @param where A temporal database where statement
-       @param extended If True compute extended statistics
-       @param no_header Supress the printing of column names
-       @param fs Field separator
+       :param type: options: point,line,boundary,centroid,area
+       :param column: The name of the attribute column
+       :param where: A temporal database where statement
+       :param extended: If True compute extended statistics
+       :param no_header: Supress the printing of column names
+       :param fs: Field separator
     """
 
     # We need a database interface

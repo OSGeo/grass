@@ -1,5 +1,4 @@
-"""!@package grass.temporal
-
+"""
 Temporal raster algebra
 
 (C) 2013 by the GRASS Development Team
@@ -7,9 +6,9 @@ This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Thomas Leppelt and Soeren Gebbert
+:authors: Thomas Leppelt and Soeren Gebbert
 
-@code
+.. code-block:: python
 
     >>> p = TemporalRasterAlgebraLexer()
     >>> p.build()
@@ -50,7 +49,6 @@ for details.
     LexToken(SUB,'-',1,40)
     LexToken(FLOAT,2.45,1,42)
 
-@endcode
 """
 
 from temporal_raster_base_algebra import *

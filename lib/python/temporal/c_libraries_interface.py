@@ -1,18 +1,14 @@
 # -*- coding: utf-8 -*-
-"""@package grass.pygrass.massages
-
-@brief Temporal Framework GRASS C-library interface
-
+"""
 Fast and exit-safe interface to GRASS C-library functions
 using ctypes and multiprocessing
-
 
 (C) 2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Soeren Gebbert
+:authors: Soeren Gebbert
 """
 
 import sys
@@ -761,118 +757,118 @@ class CLibrariesInterface(object):
 
        Usage:
 
-       @code
-       >>> import grass.script as gscript
-       >>> import grass.temporal as tgis
-       >>> gscript.use_temp_region()
-       >>> gscript.run_command("g.region", n=80.0, s=0.0, e=120.0, w=0.0,
-       ... t=1.0, b=0.0, res=10.0, res3=10.0)
-       0
-       >>> tgis.init()
-       >>> gscript.run_command("r.mapcalc", expression="test = 1", overwrite=True, quiet=True)
-       0
-       >>> gscript.run_command("r3.mapcalc", expression="test = 1", overwrite=True, quiet=True)
-       0
-       >>> gscript.run_command("v.random", output="test", n=10, overwrite=True, quiet=True)
-       0
-       >>> gscript.run_command("r.timestamp", map="test", date='12 Mar 1995 10:34:40', overwrite=True, quiet=True)
-       0
-       >>> gscript.run_command("r3.timestamp", map="test", date='12 Mar 1995 10:34:40', overwrite=True, quiet=True)
-       0
-       >>> gscript.run_command("v.timestamp", map="test", date='12 Mar 1995 10:34:40', overwrite=True, quiet=True)
-       0
+       .. code-block:: python
+           
+           >>> import grass.script as gscript
+           >>> import grass.temporal as tgis
+           >>> gscript.use_temp_region()
+           >>> gscript.run_command("g.region", n=80.0, s=0.0, e=120.0, w=0.0,
+           ... t=1.0, b=0.0, res=10.0, res3=10.0)
+           0
+           >>> tgis.init()
+           >>> gscript.run_command("r.mapcalc", expression="test = 1", overwrite=True, quiet=True)
+           0
+           >>> gscript.run_command("r3.mapcalc", expression="test = 1", overwrite=True, quiet=True)
+           0
+           >>> gscript.run_command("v.random", output="test", n=10, overwrite=True, quiet=True)
+           0
+           >>> gscript.run_command("r.timestamp", map="test", date='12 Mar 1995 10:34:40', overwrite=True, quiet=True)
+           0
+           >>> gscript.run_command("r3.timestamp", map="test", date='12 Mar 1995 10:34:40', overwrite=True, quiet=True)
+           0
+           >>> gscript.run_command("v.timestamp", map="test", date='12 Mar 1995 10:34:40', overwrite=True, quiet=True)
+           0
 
-       # Check mapsets
-       >>> ciface = tgis.CLibrariesInterface()
-       >>> mapsets = ciface.available_mapsets()
-       >>> mapsets[0] == tgis.get_current_mapset()
-       True
-       
-       # Raster map
-       >>> ciface = tgis.CLibrariesInterface()
-       >>> check = ciface.raster_map_exists("test", tgis.get_current_mapset())
-       >>> print check
-       True
-       >>> ciface.read_raster_info("test", tgis.get_current_mapset())
-       {'rows': 12, 'north': 80.0, 'min': 1, 'datatype': 'CELL', 'max': 1, 'ewres': 10.0, 'cols': 8, 'west': 0.0, 'east': 120.0, 'nsres': 10.0, 'south': 0.0}
-       >>> check = ciface.has_raster_timestamp("test", tgis.get_current_mapset())
-       >>> print check
-       True
-       >>> if check:
-       ...     res = ciface.read_raster_timestamp("test", tgis.get_current_mapset())
-       ...     if res[0]:
-       ...         print str(res[1][0]), str(res[1][0])
-       ...         ciface.remove_raster_timestamp("test", tgis.get_current_mapset())
-       1995-03-12 10:34:40 1995-03-12 10:34:40
-       1
-       >>> ciface.has_raster_timestamp("test", tgis.get_current_mapset())
-       False
-       >>> ciface.write_raster_timestamp("test", tgis.get_current_mapset(), "13 Jan 1999 14:30:05")
-       1
-       >>> ciface.has_raster_timestamp("test", tgis.get_current_mapset())
-       True
-
-
-       # 3D raster map
-       >>> check = ciface.raster3d_map_exists("test", tgis.get_current_mapset())
-       >>> print check
-       True
-       >>> ciface.read_raster3d_info("test", tgis.get_current_mapset())
-       {'tbres': 1.0, 'rows': 12, 'north': 80.0, 'bottom': 0.0, 'datatype': 'DCELL', 'max': 1.0, 'top': 1.0, 'min': 1.0, 'cols': 8, 'depths': 1, 'west': 0.0, 'ewres': 10.0, 'east': 120.0, 'nsres': 10.0, 'south': 0.0}
-       >>> check = ciface.has_raster3d_timestamp("test", tgis.get_current_mapset())
-       >>> print check
-       True
-       >>> if check:
-       ...     res = ciface.read_raster3d_timestamp("test", tgis.get_current_mapset())
-       ...     if res[0]:
-       ...         print str(res[1][0]), str(res[1][0])
-       ...         ciface.remove_raster3d_timestamp("test", tgis.get_current_mapset())
-       1995-03-12 10:34:40 1995-03-12 10:34:40
-       1
-       >>> ciface.has_raster3d_timestamp("test", tgis.get_current_mapset())
-       False
-       >>> ciface.write_raster3d_timestamp("test", tgis.get_current_mapset(), "13 Jan 1999 14:30:05")
-       1
-       >>> ciface.has_raster3d_timestamp("test", tgis.get_current_mapset())
-       True
+           # Check mapsets
+           >>> ciface = tgis.CLibrariesInterface()
+           >>> mapsets = ciface.available_mapsets()
+           >>> mapsets[0] == tgis.get_current_mapset()
+           True
+           
+           # Raster map
+           >>> ciface = tgis.CLibrariesInterface()
+           >>> check = ciface.raster_map_exists("test", tgis.get_current_mapset())
+           >>> print check
+           True
+           >>> ciface.read_raster_info("test", tgis.get_current_mapset())
+           {'rows': 12, 'north': 80.0, 'min': 1, 'datatype': 'CELL', 'max': 1, 'ewres': 10.0, 'cols': 8, 'west': 0.0, 'east': 120.0, 'nsres': 10.0, 'south': 0.0}
+           >>> check = ciface.has_raster_timestamp("test", tgis.get_current_mapset())
+           >>> print check
+           True
+           >>> if check:
+           ...     res = ciface.read_raster_timestamp("test", tgis.get_current_mapset())
+           ...     if res[0]:
+           ...         print str(res[1][0]), str(res[1][0])
+           ...         ciface.remove_raster_timestamp("test", tgis.get_current_mapset())
+           1995-03-12 10:34:40 1995-03-12 10:34:40
+           1
+           >>> ciface.has_raster_timestamp("test", tgis.get_current_mapset())
+           False
+           >>> ciface.write_raster_timestamp("test", tgis.get_current_mapset(), "13 Jan 1999 14:30:05")
+           1
+           >>> ciface.has_raster_timestamp("test", tgis.get_current_mapset())
+           True
 
 
-       # Vector map
-       >>> check = ciface.vector_map_exists("test", tgis.get_current_mapset())
-       >>> print check
-       True
-       >>> kvp = ciface.read_vector_info("test", tgis.get_current_mapset())
-       >>> print kvp['points']
-       10
-       >>> check = ciface.has_vector_timestamp("test", tgis.get_current_mapset(), None)
-       >>> print check
-       True
-       >>> if check:
-       ...     res = ciface.read_vector_timestamp("test", tgis.get_current_mapset())
-       ...     if res[0]:
-       ...         print str(res[1][0]), str(res[1][0])
-       ...         ciface.remove_vector_timestamp("test", tgis.get_current_mapset())
-       1995-03-12 10:34:40 1995-03-12 10:34:40
-       1
-       >>> ciface.has_vector_timestamp("test", tgis.get_current_mapset())
-       False
-       >>> ciface.write_vector_timestamp("test", tgis.get_current_mapset(), "13 Jan 1999 14:30:05")
-       1
-       >>> ciface.has_vector_timestamp("test", tgis.get_current_mapset())
-       True
-       
-       >>> ciface.get_driver_name()
-       'sqlite'
-       >>> ciface.get_database_name().split("/")[-1]
-       'sqlite.db'
-       
-       >>> mapset = ciface.get_mapset()
-       >>> location = ciface.get_location()
-       >>> gisdbase = ciface.get_gisdbase()
+           # 3D raster map
+           >>> check = ciface.raster3d_map_exists("test", tgis.get_current_mapset())
+           >>> print check
+           True
+           >>> ciface.read_raster3d_info("test", tgis.get_current_mapset())
+           {'tbres': 1.0, 'rows': 12, 'north': 80.0, 'bottom': 0.0, 'datatype': 'DCELL', 'max': 1.0, 'top': 1.0, 'min': 1.0, 'cols': 8, 'depths': 1, 'west': 0.0, 'ewres': 10.0, 'east': 120.0, 'nsres': 10.0, 'south': 0.0}
+           >>> check = ciface.has_raster3d_timestamp("test", tgis.get_current_mapset())
+           >>> print check
+           True
+           >>> if check:
+           ...     res = ciface.read_raster3d_timestamp("test", tgis.get_current_mapset())
+           ...     if res[0]:
+           ...         print str(res[1][0]), str(res[1][0])
+           ...         ciface.remove_raster3d_timestamp("test", tgis.get_current_mapset())
+           1995-03-12 10:34:40 1995-03-12 10:34:40
+           1
+           >>> ciface.has_raster3d_timestamp("test", tgis.get_current_mapset())
+           False
+           >>> ciface.write_raster3d_timestamp("test", tgis.get_current_mapset(), "13 Jan 1999 14:30:05")
+           1
+           >>> ciface.has_raster3d_timestamp("test", tgis.get_current_mapset())
+           True
 
-       >>> gscript.del_temp_region()
 
-       @endcode
+           # Vector map
+           >>> check = ciface.vector_map_exists("test", tgis.get_current_mapset())
+           >>> print check
+           True
+           >>> kvp = ciface.read_vector_info("test", tgis.get_current_mapset())
+           >>> print kvp['points']
+           10
+           >>> check = ciface.has_vector_timestamp("test", tgis.get_current_mapset(), None)
+           >>> print check
+           True
+           >>> if check:
+           ...     res = ciface.read_vector_timestamp("test", tgis.get_current_mapset())
+           ...     if res[0]:
+           ...         print str(res[1][0]), str(res[1][0])
+           ...         ciface.remove_vector_timestamp("test", tgis.get_current_mapset())
+           1995-03-12 10:34:40 1995-03-12 10:34:40
+           1
+           >>> ciface.has_vector_timestamp("test", tgis.get_current_mapset())
+           False
+           >>> ciface.write_vector_timestamp("test", tgis.get_current_mapset(), "13 Jan 1999 14:30:05")
+           1
+           >>> ciface.has_vector_timestamp("test", tgis.get_current_mapset())
+           True
+           
+           >>> ciface.get_driver_name()
+           'sqlite'
+           >>> ciface.get_database_name().split("/")[-1]
+           'sqlite.db'
+           
+           >>> mapset = ciface.get_mapset()
+           >>> location = ciface.get_location()
+           >>> gisdbase = ciface.get_gisdbase()
+
+           >>> gscript.del_temp_region()
+
     """
     def __init__(self):
         self.client_conn = None
@@ -1131,7 +1127,7 @@ class CLibrariesInterface(object):
 
            :param name: The name of the map
            :param mapset: The mapset of the map
-           :param layer The layer of the vector map
+           :param layer: The layer of the vector map
            :returns: The return value of G_remove_vector_timestamp
        """
         self._check_restart_server()

@@ -1,15 +1,14 @@
-"""!@package grass.temporal
-
-Temporal raster algebra
+"""
+Temporal raster algebra base class
 
 (C) 2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Thomas Leppelt and Soeren Gebbert
+:authors: Thomas Leppelt and Soeren Gebbert
 
-@code
+.. code-block:: python
 
     >>> p = TemporalRasterAlgebraLexer()
     >>> p.build()
@@ -93,7 +92,6 @@ for details.
     LexToken(NAME,'D',1,45)
     LexToken(RPAREN,')',1,46)
 
-@endcode
 """
 
 import grass.pygrass.modules as pymod
@@ -103,7 +101,7 @@ from temporal_algebra import *
 ##############################################################################
 
 class TemporalRasterAlgebraLexer(TemporalAlgebraLexer):
-    """!Lexical analyzer for the GRASS GIS temporal algebra"""
+    """Lexical analyzer for the GRASS GIS temporal algebra"""
 
     def __init__(self):
         TemporalAlgebraLexer.__init__(self)
@@ -204,56 +202,56 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
     ######################### Temporal functions ##############################
 
     def eval_toperator(self, operator, comparison = False):
-        """!This function evaluates a string containing temporal operations.
+        """This function evaluates a string containing temporal operations.
 
-         @param operator String of temporal operations, e.g. {equal|during,=!:}.
+         :param operator: String of temporal operations, e.g. {equal|during,=!:}.
 
-         @return List of temporal relations (equal, during), the given function
+         :return: List of temporal relations (equal, during), the given function
           (!:) and the interval/instances (=).
-        @code
-         >>> init(True)
-         >>> p = TemporalRasterBaseAlgebraParser()
-         >>> operator = "{equal,:}"
-         >>> p.eval_toperator(operator)
-         (['EQUAL'], '=', ':')
-         >>> operator = "{equal|during,:}"
-         >>> p.eval_toperator(operator)
-         (['EQUAL', 'DURING'], '=', ':')
-         >>> operator = "{equal,!:}"
-         >>> p.eval_toperator(operator)
-         (['EQUAL'], '=', '!:')
-         >>> operator = "{equal|during,!:}"
-         >>> p.eval_toperator(operator)
-         (['EQUAL', 'DURING'], '=', '!:')
-         >>> operator = "{equal|during,=!:}"
-         >>> p.eval_toperator(operator)
-         (['EQUAL', 'DURING'], '=', '!:')
-         >>> operator = "{equal|during|starts,#}"
-         >>> p.eval_toperator(operator)
-         (['EQUAL', 'DURING', 'STARTS'], '=', '#')
-         >>> operator = "{!:}"
-         >>> p.eval_toperator(operator)
-         (['EQUAL'], '=', '!:')
-         >>> operator = "{=:}"
-         >>> p.eval_toperator(operator)
-         (['EQUAL'], '=', ':')
-         >>> operator = "{#}"
-         >>> p.eval_toperator(operator)
-         (['EQUAL'], '=', '#')
-         >>> operator = "{equal|during}"
-         >>> p.eval_toperator(operator)
-         (['EQUAL', 'DURING'], None, None)
-         >>> operator = "{equal}"
-         >>> p.eval_toperator(operator)
-         (['EQUAL'], None, None)
-         >>> operator = "{equal,||}"
-         >>> p.eval_toperator(operator, True)
-         (['EQUAL'], '=', '||')
-         >>> operator = "{equal|during,&&}"
-         >>> p.eval_toperator(operator, True)
-         (['EQUAL', 'DURING'], '=', '&&')
-
-        @endcode
+          
+        .. code-block:: python
+        
+             >>> init(True)
+             >>> p = TemporalRasterBaseAlgebraParser()
+             >>> operator = "{equal,:}"
+             >>> p.eval_toperator(operator)
+             (['EQUAL'], '=', ':')
+             >>> operator = "{equal|during,:}"
+             >>> p.eval_toperator(operator)
+             (['EQUAL', 'DURING'], '=', ':')
+             >>> operator = "{equal,!:}"
+             >>> p.eval_toperator(operator)
+             (['EQUAL'], '=', '!:')
+             >>> operator = "{equal|during,!:}"
+             >>> p.eval_toperator(operator)
+             (['EQUAL', 'DURING'], '=', '!:')
+             >>> operator = "{equal|during,=!:}"
+             >>> p.eval_toperator(operator)
+             (['EQUAL', 'DURING'], '=', '!:')
+             >>> operator = "{equal|during|starts,#}"
+             >>> p.eval_toperator(operator)
+             (['EQUAL', 'DURING', 'STARTS'], '=', '#')
+             >>> operator = "{!:}"
+             >>> p.eval_toperator(operator)
+             (['EQUAL'], '=', '!:')
+             >>> operator = "{=:}"
+             >>> p.eval_toperator(operator)
+             (['EQUAL'], '=', ':')
+             >>> operator = "{#}"
+             >>> p.eval_toperator(operator)
+             (['EQUAL'], '=', '#')
+             >>> operator = "{equal|during}"
+             >>> p.eval_toperator(operator)
+             (['EQUAL', 'DURING'], None, None)
+             >>> operator = "{equal}"
+             >>> p.eval_toperator(operator)
+             (['EQUAL'], None, None)
+             >>> operator = "{equal,||}"
+             >>> p.eval_toperator(operator, True)
+             (['EQUAL'], '=', '||')
+             >>> operator = "{equal|during,&&}"
+             >>> p.eval_toperator(operator, True)
+             (['EQUAL', 'DURING'], '=', '&&')
 
         """
         p = TemporalRasterOperatorParser()

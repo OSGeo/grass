@@ -1,26 +1,25 @@
 # -*- coding: utf-8 -*-
-"""!@package grass.temporal
-
-@brief GRASS Python scripting module (temporal GIS functions)
-
-Temporal GIS related functions to be used in temporal GIS Python library package.
+"""
+Temporal topology dataset connector class
 
 Usage:
 
->>> import grass.temporal as tgis
->>> tmr = tgis.TemporalTopologyDatasetConnector()
+.. code-block:: python:
+
+    >>> import grass.temporal as tgis
+    >>> tmr = tgis.TemporalTopologyDatasetConnector()
 
 (C) 2012-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Soeren Gebbert
+:authors: Soeren Gebbert
 """
 import copy
 
 class TemporalTopologyDatasetConnector(object):
-    """!This class implements a temporal topology access structure to connect temporal related datasets
+    """This class implements a temporal topology access structure to connect temporal related datasets
 
        This object will be set up by temporal topology creation method provided by the 
        SpatioTemporalTopologyBuilder.
@@ -29,6 +28,7 @@ class TemporalTopologyDatasetConnector(object):
        let the user walk temporally forward and backward in time.
 
        The following temporal relations with access methods are supported:
+       
        - equal
        - follows
        - precedes
@@ -42,100 +42,96 @@ class TemporalTopologyDatasetConnector(object):
        - finished
 
 
-       @code:
-       # We have build the temporal topology and we know the first map
-       start = first
-       while start:
+       .. code-block:: python:
+       
+           # We have build the temporal topology and we know the first map
+           start = first
+           while start:
 
-           # Print all maps this map temporally contains
-           dlist = start.get_contains()
-           for map in dlist:
-               map.print_info()
+               # Print all maps this map temporally contains
+               dlist = start.get_contains()
+               for map in dlist:
+                   map.print_info()
 
-           start = start.next()
-         @endcode  
+               start = start.next()
         
-        Usage:
-        
-        @code
-        
-        >>> import grass.temporal as tgis
-        >>> tgis.init()
-        >>> map = tgis.RasterDataset("a@P")
-        >>> tmr = tgis.TemporalTopologyDatasetConnector()
-        >>> tmr.set_next(map)
-        >>> tmr.set_prev(map)
-        >>> tmr.append_equal(map)
-        >>> tmr.append_follows(map)
-        >>> tmr.append_precedes(map)
-        >>> tmr.append_overlapped(map)
-        >>> tmr.append_overlaps(map)
-        >>> tmr.append_during(map)
-        >>> tmr.append_contains(map)
-        >>> tmr.append_starts(map)
-        >>> tmr.append_started(map)
-        >>> tmr.append_finishes(map)
-        >>> tmr.append_finished(map)
-        >>> tmr.print_temporal_topology_info()
-         +-------------------- Temporal Topology -------------------------------------+
-         | Next: ...................... a@P
-         | Previous: .................. a@P
-         | Equal:...................... a@P
-         | Follows: ................... a@P
-         | Precedes: .................. a@P
-         | Overlaps: .................. a@P
-         | Overlapped: ................ a@P
-         | During: .................... a@P
-         | Contains: .................. a@P
-         | Starts:.. .................. a@P
-         | Started:. .................. a@P
-         | Finishes:................... a@P
-         | Finished:................... a@P
-        >>> tmr.print_temporal_topology_shell_info()
-        next=a@P
-        prev=a@P
-        equal=a@P
-        follows=a@P
-        precedes=a@P
-        overlaps=a@P
-        overlapped=a@P
-        during=a@P
-        contains=a@P
-        starts=a@P
-        started=a@P
-        finishes=a@P
-        finished=a@P
-        >>> rlist = tmr.get_temporal_relations()
-        >>> if "FINISHED" in rlist.keys():
-        ...    print rlist["FINISHED"][0].get_id()
-        a@P
+            >>> import grass.temporal as tgis
+            >>> tgis.init()
+            >>> map = tgis.RasterDataset("a@P")
+            >>> tmr = tgis.TemporalTopologyDatasetConnector()
+            >>> tmr.set_next(map)
+            >>> tmr.set_prev(map)
+            >>> tmr.append_equal(map)
+            >>> tmr.append_follows(map)
+            >>> tmr.append_precedes(map)
+            >>> tmr.append_overlapped(map)
+            >>> tmr.append_overlaps(map)
+            >>> tmr.append_during(map)
+            >>> tmr.append_contains(map)
+            >>> tmr.append_starts(map)
+            >>> tmr.append_started(map)
+            >>> tmr.append_finishes(map)
+            >>> tmr.append_finished(map)
+            >>> tmr.print_temporal_topology_info()
+             +-------------------- Temporal Topology -------------------------------------+
+             | Next: ...................... a@P
+             | Previous: .................. a@P
+             | Equal:...................... a@P
+             | Follows: ................... a@P
+             | Precedes: .................. a@P
+             | Overlaps: .................. a@P
+             | Overlapped: ................ a@P
+             | During: .................... a@P
+             | Contains: .................. a@P
+             | Starts:.. .................. a@P
+             | Started:. .................. a@P
+             | Finishes:................... a@P
+             | Finished:................... a@P
+            >>> tmr.print_temporal_topology_shell_info()
+            next=a@P
+            prev=a@P
+            equal=a@P
+            follows=a@P
+            precedes=a@P
+            overlaps=a@P
+            overlapped=a@P
+            during=a@P
+            contains=a@P
+            starts=a@P
+            started=a@P
+            finishes=a@P
+            finished=a@P
+            >>> rlist = tmr.get_temporal_relations()
+            >>> if "FINISHED" in rlist.keys():
+            ...    print rlist["FINISHED"][0].get_id()
+            a@P
 
-        @endcode
     """
 
     def __init__(self):
         self.reset_temporal_topology()
 
     def reset_temporal_topology(self):
-        """!Reset any information about temporal topology"""
+        """Reset any information about temporal topology"""
         self._temporal_topology = {}
         self._has_temporal_topology = False
         
     def get_temporal_relations(self):
-        """!Return the dictionary of temporal relationships
+        """Return the dictionary of temporal relationships
         
             Keys are the temporal relationships in upper case,
             values are abstract map objects.
             
-            @return The temporal relations dictionary
+            :return: The temporal relations dictionary
         """
         return copy.copy(self._temporal_topology)
         
     def get_number_of_temporal_relations(self):
-        """! Return a dictionary in which the keys are the relation names and the value
+        """ Return a dictionary in which the keys are the relation names and the value
         are the number of relations.
         
         The following relations are available:
+        
         - equal
         - follows
         - precedes
@@ -151,7 +147,7 @@ class TemporalTopologyDatasetConnector(object):
         To access topological information the temporal topology must be build first
         using the SpatioTemporalTopologyBuilder.
         
-        @return the dictionary with relations as keys and number as values or None in case the topology wasn't build
+        :return: the dictionary with relations as keys and number as values or None in case the topology wasn't build
         """
         if self._has_temporal_topology == False:
             return None
@@ -205,65 +201,65 @@ class TemporalTopologyDatasetConnector(object):
         return relations
 
     def set_temporal_topology_build_true(self):
-        """!Same as name"""
+        """Same as name"""
         self._has_temporal_topology = True
 
     def set_temporal_topology_build_false(self):
-        """!Same as name"""
+        """Same as name"""
         self._has_temporal_topology = False
 
     def is_temporal_topology_build(self):
-        """!Check if the temporal topology was build"""
+        """Check if the temporal topology was build"""
         return self._has_temporal_topology
 
     def set_next(self, map):
-        """!Set the map that is temporally as closest located after this map.
+        """Set the map that is temporally as closest located after this map.
 
            Temporally located means that the start time of the "next" map is
            temporally located AFTER the start time of this map, but temporally
            near than other maps of the same dataset.
 
-           @param map This object should be of type AbstractMapDataset 
+           :param map: This object should be of type AbstractMapDataset 
                         or derived classes
         """
         self._temporal_topology["NEXT"] = map
 
     def set_prev(self, map):
-        """!Set the map that is temporally as closest located before this map.
+        """Set the map that is temporally as closest located before this map.
 
            Temporally located means that the start time of the "previous" map is
            temporally located BEFORE the start time of this map, but temporally
            near than other maps of the same dataset.
 
-           @param map This object should be of type AbstractMapDataset 
+           :param map: This object should be of type AbstractMapDataset 
                         or derived classes
         """
         self._temporal_topology["PREV"] = map
 
     def next(self):
-        """!Return the map with a start time temporally located after
+        """Return the map with a start time temporally located after
            the start time of this map, but temporal closer than other maps
 
-           @return A map object or None
+           :return: A map object or None
         """
         if "NEXT" not in self._temporal_topology:
             return None
         return self._temporal_topology["NEXT"]
 
     def prev(self):
-        """!Return the map with a start time temporally located before
+        """Return the map with a start time temporally located before
            the start time of this map, but temporal closer than other maps
 
-           @return A map object or None
+           :return: A map object or None
         """
         if "PREV" not in self._temporal_topology:
             return None
         return self._temporal_topology["PREV"]
 
     def append_equal(self, map):
-        """!Append a map with equivalent temporal extent as this map
+        """Append a map with equivalent temporal extent as this map
 
-           @param map This object should be of type AbstractMapDataset 
+           :param map: This object should be of type AbstractMapDataset 
                         or derived classes
         """
         if "EQUAL" not in self._temporal_topology:
@@ -271,18 +267,18 @@ class TemporalTopologyDatasetConnector(object):
         self._temporal_topology["EQUAL"].append(map)
 
     def get_equal(self):
-        """!Return a list of map objects with equivalent temporal extent as this map
+        """Return a list of map objects with equivalent temporal extent as this map
 
-           @return A list of map objects or None
+           :return: A list of map objects or None
         """
         if "EQUAL" not in self._temporal_topology:
             return None
         return self._temporal_topology["EQUAL"]
 
     def append_starts(self, map):
-        """!Append a map that this map temporally starts with
+        """Append a map that this map temporally starts with
 
-           @param map This object should be of type AbstractMapDataset 
+           :param map: This object should be of type AbstractMapDataset 
                         or derived classes
         """
         if "STARTS" not in self._temporal_topology:
@@ -290,18 +286,18 @@ class TemporalTopologyDatasetConnector(object):
         self._temporal_topology["STARTS"].append(map)
 
     def get_starts(self):
-        """!Return a list of map objects that this map temporally starts with
+        """Return a list of map objects that this map temporally starts with
 
-           @return A list of map objects or None
+           :return: A list of map objects or None
         """
         if "STARTS" not in self._temporal_topology:
             return None
         return self._temporal_topology["STARTS"]
 
     def append_started(self, map):
-        """!Append a map that this map temporally started with
+        """Append a map that this map temporally started with
 
-           @param map This object should be of type AbstractMapDataset 
+           :param map: This object should be of type AbstractMapDataset 
                         or derived classes
         """
         if "STARTED" not in self._temporal_topology:
@@ -309,18 +305,18 @@ class TemporalTopologyDatasetConnector(object):
         self._temporal_topology["STARTED"].append(map)
 
     def get_started(self):
-        """!Return a list of map objects that this map temporally started with
+        """Return a list of map objects that this map temporally started with
 
-           @return A list of map objects or None
+           :return: A list of map objects or None
         """
         if "STARTED" not in self._temporal_topology:
             return None
         return self._temporal_topology["STARTED"]
 
     def append_finishes(self, map):
-        """!Append a map that this map temporally finishes with
+        """Append a map that this map temporally finishes with
 
-           @param map This object should be of type AbstractMapDataset 
+           :param map: This object should be of type AbstractMapDataset 
                         or derived classes
         """
         if "FINISHES" not in self._temporal_topology:
@@ -328,18 +324,18 @@ class TemporalTopologyDatasetConnector(object):
         self._temporal_topology["FINISHES"].append(map)
 
     def get_finishes(self):
-        """!Return a list of map objects that this map temporally finishes with
+        """Return a list of map objects that this map temporally finishes with
 
-           @return A list of map objects or None
+           :return: A list of map objects or None
         """
         if "FINISHES" not in self._temporal_topology:
             return None
         return self._temporal_topology["FINISHES"]
 
     def append_finished(self, map):
-        """!Append a map that this map temporally finished with
+        """Append a map that this map temporally finished with
 
-           @param map This object should be of type AbstractMapDataset 
+           :param map: This object should be of type AbstractMapDataset 
                         or derived classes
         """
         if "FINISHED" not in self._temporal_topology:
@@ -347,18 +343,18 @@ class TemporalTopologyDatasetConnector(object):
         self._temporal_topology["FINISHED"].append(map)
 
     def get_finished(self):
-        """!Return a list of map objects that this map temporally finished with
+        """Return a list of map objects that this map temporally finished with
 
-           @return A list of map objects or None
+           :return: A list of map objects or None
         """
         if "FINISHED" not in self._temporal_topology:
             return None
         return self._temporal_topology["FINISHED"]
 
     def append_overlaps(self, map):
-        """!Append a map that this map temporally overlaps
+        """Append a map that this map temporally overlaps
 
-           @param map This object should be of type AbstractMapDataset 
+           :param map: This object should be of type AbstractMapDataset 
                         or derived classes
         """
         if "OVERLAPS" not in self._temporal_topology:
@@ -366,18 +362,18 @@ class TemporalTopologyDatasetConnector(object):
         self._temporal_topology["OVERLAPS"].append(map)
 
     def get_overlaps(self):
-        """!Return a list of map objects that this map temporally overlaps
+        """Return a list of map objects that this map temporally overlaps
 
-           @return A list of map objects or None
+           :return: A list of map objects or None
         """
         if "OVERLAPS" not in self._temporal_topology:
             return None
         return self._temporal_topology["OVERLAPS"]
 
     def append_overlapped(self, map):
-        """!Append a map that this map temporally overlapped
+        """Append a map that this map temporally overlapped
 
-           @param map This object should be of type AbstractMapDataset 
+           :param map: This object should be of type AbstractMapDataset 
                         or derived classes
         """
         if "OVERLAPPED" not in self._temporal_topology:
@@ -385,18 +381,18 @@ class TemporalTopologyDatasetConnector(object):
         self._temporal_topology["OVERLAPPED"].append(map)
 
     def get_overlapped(self):
-        """!Return a list of map objects that this map temporally overlapped
+        """Return a list of map objects that this map temporally overlapped
 
-           @return A list of map objects or None
+           :return: A list of map objects or None
         """
         if "OVERLAPPED" not in self._temporal_topology:
             return None
         return self._temporal_topology["OVERLAPPED"]
 
     def append_follows(self, map):
-        """!Append a map that this map temporally follows
+        """Append a map that this map temporally follows
 
-           @param map This object should be of type AbstractMapDataset 
+           :param map: This object should be of type AbstractMapDataset 
                         or derived classes
         """
         if "FOLLOWS" not in self._temporal_topology:
@@ -404,18 +400,18 @@ class TemporalTopologyDatasetConnector(object):
         self._temporal_topology["FOLLOWS"].append(map)
 
     def get_follows(self):
-        """!Return a list of map objects that this map temporally follows
+        """Return a list of map objects that this map temporally follows
 
-           @return A list of map objects or None
+           :return: A list of map objects or None
         """
         if "FOLLOWS" not in self._temporal_topology:
             return None
         return self._temporal_topology["FOLLOWS"]
 
     def append_precedes(self, map):
-        """!Append a map that this map temporally precedes
+        """Append a map that this map temporally precedes
 
-           @param map This object should be of type AbstractMapDataset 
+           :param map: This object should be of type AbstractMapDataset 
                         or derived classes
         """
         if "PRECEDES" not in self._temporal_topology:
@@ -423,19 +419,19 @@ class TemporalTopologyDatasetConnector(object):
         self._temporal_topology["PRECEDES"].append(map)
 
     def get_precedes(self):
-        """!Return a list of map objects that this map temporally precedes
+        """Return a list of map objects that this map temporally precedes
 
-           @return A list of map objects or None
+           :return: A list of map objects or None
         """
         if "PRECEDES" not in self._temporal_topology:
             return None
         return self._temporal_topology["PRECEDES"]
 
     def append_during(self, map):
-        """!Append a map that this map is temporally located during
+        """Append a map that this map is temporally located during
            This includes temporal relationships starts and finishes
 
-           @param map This object should be of type 
+           :param map: This object should be of type 
                         AbstractMapDataset or derived classes
         """
         if "DURING" not in self._temporal_topology:
@@ -443,20 +439,20 @@ class TemporalTopologyDatasetConnector(object):
         self._temporal_topology["DURING"].append(map)
 
     def get_during(self):
-        """!Return a list of map objects that this map is temporally located during
+        """Return a list of map objects that this map is temporally located during
            This includes temporally relationships starts and finishes
 
-           @return A list of map objects or None
+           :return: A list of map objects or None
         """
         if "DURING" not in self._temporal_topology:
             return None
         return self._temporal_topology["DURING"]
 
     def append_contains(self, map):
-        """!Append a map that this map temporally contains
+        """Append a map that this map temporally contains
            This includes temporal relationships started and finished
 
-           @param map This object should be of type AbstractMapDataset 
+           :param map: This object should be of type AbstractMapDataset 
                         or derived classes
         """
         if "CONTAINS" not in self._temporal_topology:
@@ -464,10 +460,10 @@ class TemporalTopologyDatasetConnector(object):
         self._temporal_topology["CONTAINS"].append(map)
 
     def get_contains(self):
-        """!Return a list of map objects that this map temporally contains
+        """Return a list of map objects that this map temporally contains
            This includes temporal relationships started and finished
 
-           @return A list of map objects or None
+           :return: A list of map objects or None
         """
         if "CONTAINS" not in self._temporal_topology:
             return None
@@ -513,7 +509,7 @@ class TemporalTopologyDatasetConnector(object):
                                      fset=append_finished)
 
     def print_temporal_topology_info(self):
-        """!Print information about this class in human readable style"""
+        """Print information about this class in human readable style"""
         
         print " +-------------------- Temporal Topology -------------------------------------+"
         #          0123456789012345678901234567890
@@ -556,7 +552,7 @@ class TemporalTopologyDatasetConnector(object):
                 self._generate_map_list_string(self.finished)
 
     def print_temporal_topology_shell_info(self):
-        """!Print information about this class in shell style"""
+        """Print information about this class in shell style"""
         
         if self.next() is not None:
             print "next=" + self.next().get_id()

@@ -1,24 +1,12 @@
-"""!@package grass.temporal
-
-@brief GRASS Python scripting module (temporal GIS functions)
-
-Temporal GIS unit tests
-
-Usage:
-
-@code
-import grass.temporal as tgis
-
-tgis.test_increment_datetime_by_string()
-...
-@endcode
+"""
+Depricazed unittests
 
 (C) 2008-2011 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Soeren Gebbert
+:authors: Soeren Gebbert
 """
 import copy
 from datetime import datetime, date, time, timedelta
