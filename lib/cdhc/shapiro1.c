@@ -4,7 +4,7 @@
 #include "local_proto.h"
 
 
-double *shapiro_wilk(double *x, int n)
+double *Cdhc_shapiro_wilk(double *x, int n)
 {
     static double y[2];
     double a[25], s2, *xcopy;
@@ -12,7 +12,7 @@ double *shapiro_wilk(double *x, int n)
     int i, k;
 
     if ((xcopy = (double *)malloc(n * sizeof(double))) == NULL) {
-	fprintf(stderr, "Memory error in shapiro_wilk\n");
+	fprintf(stderr, "Memory error in Cdhc_shapiro_wilk\n");
 	exit(EXIT_FAILURE);
     }
 
@@ -24,7 +24,7 @@ double *shapiro_wilk(double *x, int n)
     }
     s2 = sumx2 - sumx * sumx / n;
 
-    qsort(xcopy, n, sizeof(double), dcmp);
+    qsort(xcopy, n, sizeof(double), Cdhc_dcmp);
 
     if (n == 3) {
 	a[0] = (double).7071;

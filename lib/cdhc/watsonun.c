@@ -4,7 +4,7 @@
 #include "local_proto.h"
 
 
-double *watson_u2(double *x, int n)
+double *Cdhc_watson_u2(double *x, int n)
 {
     double *xcopy, mean = 0.0, sdx = 0.0, sqrt2, zbar = 0.0;
     double fn2, fx, sum4 = 0.0;
@@ -14,7 +14,7 @@ double *watson_u2(double *x, int n)
     sqrt2 = sqrt((double)2.0);
 
     if ((xcopy = (double *)malloc(n * sizeof(double))) == NULL) {
-	fprintf(stderr, "Memory error in anderson_darling\n");
+	fprintf(stderr, "Memory error in Cdhc_anderson_darling\n");
 	exit(EXIT_FAILURE);
     }
 
@@ -26,12 +26,12 @@ double *watson_u2(double *x, int n)
     sdx = sqrt((n * sdx - mean * mean) / (n * (n - 1)));
     mean /= n;
 
-    qsort(xcopy, n, sizeof(double), dcmp);
+    qsort(xcopy, n, sizeof(double), Cdhc_dcmp);
 
     for (i = 0; i < n; ++i) {
 	xcopy[i] = (xcopy[i] - mean) / sdx;
 	fn2 = (2.0 * (i + 1) - 1.0) / (2.0 * n);
-	fx = 0.5 + normp(xcopy[i] / sqrt2) / 2.0;
+	fx = 0.5 + Cdhc_normp(xcopy[i] / sqrt2) / 2.0;
 
 	if (fx <= 0.0)
 	    fx = 1e-5;

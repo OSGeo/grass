@@ -4,12 +4,12 @@
 #include "local_proto.h"
 
 
-double *kuipers_v_exp(double *x, int n)
+double *Cdhc_kuipers_v_exp(double *x, int n)
 {
     static double y[2];
     double *d, r;
 
-    d = dmax_exp(x, n);
+    d = Cdhc_dmax_exp(x, n);
     r = sqrt((double)n);
 
     y[1] = d[0] + d[1];

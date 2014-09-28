@@ -17,7 +17,7 @@ static double poly(double c[], int nord, double x);
  * Calculates Shapiro and Wilk's W statistic and its sig. level
  *
  * Originally used:
- * Auxiliary routines required: ALNORM = algorithm AS 66 and NSCOR2
+ * Auxiliary routines required: Cdhc_alnorm = algorithm AS 66 and Cdhc_nscor2
  * from AS 177.
 
  * Note: ppnd() from as66 was replaced with ppnd16() from as241.
@@ -112,7 +112,7 @@ void wext(double x[], int n, double ssq, double a[], int n2, double eps,
 
 	y = pow(one - *w, lamda);
 	z = (y - ybar) / sdy;
-	*pw = alnorm(z, upper);
+	*pw = Cdhc_alnorm(z, upper);
 
 	return;
     }
@@ -195,8 +195,8 @@ void wcoef(double a[], int n, int n2, double *eps, int *ifault)
 
     *ifault = 0;
     if (n > 6) {
-	/* Calculate rankits using approximate function nscor2().  (AS177) */
-	nscor2(a, n, n2, ifault);
+	/* Calculate rankits using approximate function Cdhc_nscor2().  (AS177) */
+	Cdhc_nscor2(a, n, n2, ifault);
 
 	for (sastar = 0.0, j = 1; j < n2; ++j)
 	    sastar += a[j] * a[j];
@@ -285,12 +285,12 @@ static double poly(double c[], int nord, double x)
  * 
  * A remark on AS 181
  * 
- * Calculates Sheppard corrected version of W test.
+ * Calculates Sheppard Cdhc_corrected version of W test.
  * 
- * Auxiliary functions required: ALNORM = algorithm AS 66, and PPND =
- * algorithm AS 111 (or PPND7 from AS 241).
+ * Auxiliary functions required: Cdhc_alnorm = algorithm AS 66, and PPND =
+ * algorithm AS 111 (or Cdhc_ppnd7 from AS 241).
  */
-void wgp(double x[], int n, double ssq, double gp, double h, double a[],
+void Cdhc_wgp(double x[], int n, double ssq, double gp, double h, double a[],
 	 int n2, double eps, double w, double u, double p, int *ifault)
 {
     double zbar, zsd, an1, hh;
@@ -302,9 +302,9 @@ void wgp(double x[], int n, double ssq, double gp, double h, double a[],
     if (n < 7)
 	return;
 
-    if (gp > 0.0) {		/* No correction applied if gp=0. */
+    if (gp > 0.0) {		/* No Cdhc_correction applied if gp=0. */
 	an1 = (double)(n - 1);
-	/* correct ssq and find standardized grouping interval (h) */
+	/* Cdhc_correct ssq and find standardized grouping interval (h) */
 	ssq = ssq - an1 * gp * gp / 12.0;
 	h = gp / sqrt(ssq / an1);
 	*ifault = 4;
@@ -324,7 +324,7 @@ void wgp(double x[], int n, double ssq, double gp, double h, double a[],
     }
 
     if (gp > 0.0) {
-	/* correct u for grouping interval (n<=100 and n>100 separately) */
+	/* Cdhc_correct u for grouping interval (n<=100 and n>100 separately) */
 	hh = sqrt(h);
 	if (n <= 100) {
 	    zbar = -h * (1.07457 + hh * (-2.8185 + hh * 1.8898));
@@ -339,8 +339,8 @@ void wgp(double x[], int n, double ssq, double gp, double h, double a[],
     /* ppnd is AS 111 (Beasley and Springer, 1977) */
     u = (-ppnd16(p) - zbar) / zsd;
 
-    /* alnorm is AS 66 (Hill, 1973) */
-    p = alnorm(u, 1);
+    /* Cdhc_alnorm is AS 66 (Hill, 1973) */
+    p = Cdhc_alnorm(u, 1);
 
     return;
 }

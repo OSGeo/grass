@@ -4,14 +4,14 @@
 #include "local_proto.h"
 
 
-double *cramer_von_mises_exp(double *x, int n)
+double *Cdhc_cramer_von_mises_exp(double *x, int n)
 {
     static double y[2];
     double *xcopy, mean = 0.0, fx, fn2, sum4 = 0.0;
     int i;
 
     if ((xcopy = (double *)malloc(n * sizeof(double))) == NULL) {
-	fprintf(stderr, "Memory error in cramer_von_mises_exp\n");
+	fprintf(stderr, "Memory error in Cdhc_cramer_von_mises_exp\n");
 	exit(EXIT_FAILURE);
     }
 
@@ -21,7 +21,7 @@ double *cramer_von_mises_exp(double *x, int n)
     }
     mean /= n;
 
-    qsort(xcopy, n, sizeof(double), dcmp);
+    qsort(xcopy, n, sizeof(double), Cdhc_dcmp);
 
     for (i = 0; i < n; ++i) {
 

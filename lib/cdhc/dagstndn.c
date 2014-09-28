@@ -4,7 +4,7 @@
 #include "local_proto.h"
 
 
-double *dagostino_d(double *x, int n)
+double *Cdhc_dagostino_d(double *x, int n)
 {
     int i;
     static double y[2];
@@ -18,7 +18,7 @@ double *dagostino_d(double *x, int n)
     for (i = 0; i < n; ++i)
 	xcopy[i] = x[i];
 
-    qsort(xcopy, n, sizeof(double), dcmp);
+    qsort(xcopy, n, sizeof(double), Cdhc_dcmp);
 
     for (i = 0; i < n; ++i) {
 	t += xcopy[i] * ((i + 1) - 0.5 * (n + 1));
