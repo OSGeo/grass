@@ -1,0 +1,2302 @@
+\documentclass[draft]{article}
+\usepackage{makeidx}
+
+%\title{\(\rightarrow\)DRAFT\(\leftarrow\)\\
+%Goodness of Fit Techniques}
+
+\title{Goodness of Fit Tests\\ 
+{\large Documentation on {\tt libcdhc.a}}\\
+{\large and}\\
+{\large A GRASS Tutorial on {\tt s.normal}}}
+
+\author{James Darrell McCauley\thanks{USDA National Needs Fellow,
+Department of Agricultural Enginering, Purdue University. Email:
+{\tt mccauley@ecn.purdue.edu}}}
+
+\makeindex
+
+\addtolength{\oddsidemargin}{-.55in}
+\addtolength{\evensidemargin}{-.55in}
+\addtolength{\textwidth}{.1in}
+\addtolength{\marginparwidth}{.45in}
+
+\addtolength{\topmargin}{-.25in}
+\addtolength{\textheight}{.5in}
+
+\def\libname{{\tt cdhc}}
+
+\def\returns#1{\sffamily\slshape Returns \(\mathsf{#1}\).}
+
+\def\function#1#2{\centerline{%
+   \protect\index{#1}
+   \framebox[.9\marginparwidth][l]{\vbox{\noindent\textsf{#2}}}}
+   \vspace{.5\baselineskip}}
+%\def\function#1#2{\marginpar{%
+%   \protect\index{#1}
+%   \framebox[.9\marginparwidth][l]{\vbox{\textsf{#2}}}\hfill}}
+
+\newenvironment{example}{%
+   \vspace{\baselineskip}
+   \par\noindent\hrulefill\par
+   \noindent{\em Example:}}{%
+   \par\noindent\hrulefill\par
+   \vspace{\baselineskip}}
+
+\begin{document}
+\bibliographystyle{plain}
+\maketitle
+
+\begin{abstract}
+The methods used by the GRASS program {\tt s.normal}
+are presented. These are various goodness of fit statistics for testing
+the null hypothesis of normality. Other additional tests found in
+\libname\, a C programming library, 
+are also documented (this document serves two puposes:
+a tutorial for the GRASS geographic information system
+and documentation for the library).
+\end{abstract}
+
+\section{Introduction}
+
+This document is a programmer's 
+manual for \libname, a C programming library useful
+for testing whether a sample is normally, lognormally,
+or exponentially distributed.
+Prototypes for library functions\footnote{%
+Each function in the library returns a pointer to static double.
+The \libname\ library was inspired by Johnson's
+STATLIB collection of FORTRAN routines for testing 
+distribution assumptions~\protect\cite{johnson94}.  
+Some functions in \libname\
+are loosely based on Johnson's work (they have been completely
+rewritten, reducing memory requirements and number
+of computations and fixing a few bugs). Others are based on
+algorithms found in \emph{Applied Statistics}, \emph{Technometrics},
+and other related journals.} 
+are given in the margins near
+corresponding mathematical explanations. Hence, it is also
+a user's guide for programs using \libname.
+Readers should be equipped with at least one graduate course
+in probability and statistics. Much of the background
+and derivation/justification of each test has been
+omitted. A good text for more background information
+is {\em Goodness-of-Fit Techniques\/} by
+D'Agostino and Stephens~\cite{dagostino86b} (see also references in text). 
+
+\subsection{Hypothesis Testing}
+
+Before beginning the description of the tests, a few definitions
+should be given. The general framework for mosts tests is that
+the {\em null\/} hypothesis \(H_0\) is that a random variable \(x\)
+follows a particular distribution \(F\left(x\right)\). 
+Generally, the {\em alternative\/} hypothesis is that
+\(x\) does not follow \(F\left(x\right)\) (with no additional
+usuable information; the Kotz Separate Families test in \S\ref{sec:kotz}
+is one exception). 
+This may differ from the way that some have learned hypothesis testing
+in that some tests are set up to reject the null hypothesis in
+favor of the alternative.
+
+A {\em simple\/} hypothesis implies that \(F\left(x\right)\)
+is completely specified, e.g., \(x\sim N\left(0,1\right)\).
+A {\em composite\/} hypothesis means that 
+one (or more) of the parameters of \(F\left(x\right)\)
+is not completely specified, e.g.,  \(x\sim N\left(\mu,\sigma\right)\).
+That is, the composite hypothesis may be:
+\begin{displaymath}
+H_0 : F\left(x\right) = F_0\left(x; \theta\right)
+\end{displaymath}
+where \(\theta=\left[\theta_1, \ldots,\theta_p\right]'\)
+is a \(p\) vector of \emph{nuisance} parameters whose values
+are unknown and must be estimated from data. 
+
+% Less is known
+% about the theory of this later
+% case, which is the most commonly encountered in practice.
+
+\subsection{Probability Plots}
+
+In addition to these analytical techniques, graphical
+methods are valuable supplements. The most important
+graphical technique is probability plotting. A \emph{probability plot}
+\label{pplot}
+is a plot of the cumulative distribution function \(F\left(x\right)\)
+on the vertical axis versus \(x\) on the horizontal axis.
+The vertical axis is scaled such that, if the data fit
+the assumed distribution, the resulting plot will lie on
+a straight line. Special plotting paper may be purchased
+to do these plots; however, most modern scientific
+plotting programs have this capability (e.g., {\tt gnuplot}).
+Each test presented below
+should be used in conjunction with a probability plot.
+ 
+\subsection{Shape of Distributions}
+
+Through much of the literature are references to Johnson
+curves: \(S_U\) or \(S_B\) (see \S\ref{sec:johnson-su}, 
+page~\pageref{sec:johnson-su}).
+These refer to a system of distributions introduced by 
+Johnson~\cite{johnson49} where a standard normal random
+variable \(Z\) is translated to \(\left(Z-\gamma\right)/\delta\)
+and transformed using \(T\):
+\begin{equation}
+Y=T\left(\frac{Z-\gamma}{\delta}\right).
+\end{equation}
+Three families in Johnson's~\cite{johnson49} system are:
+\begin{enumerate}
+\item a family of bounded distributions, denoted by \(S_B\), where:
+\begin{equation}
+Y=T\left( \frac{e^x}{1+e^x} \right);
+\end{equation}
+\item a family lognormal distributions where:
+\begin{equation}
+Y=T\left( e^x \right);
+\end{equation}
+\item and a family of unbounded distributions, denoted by \(S_U\), where:
+\begin{equation}
+Y=\sinh\left(x\right) = T\left( e^x-e^{-x} \right).
+\end{equation}
+\end{enumerate}
+In the \(S_B\) and \(S_U\) families, \(\gamma\) and \(\delta\)
+govern the shape of the distribution. In the lognormal families,
+\(\delta\) governs the shape while \(\gamma\) is only a scaling
+factor~\cite{hoaglin85c}. Other approaches to exploring the 
+shape of a distribution include \(g\)- and 
+\(h\)-distributions~\cite{hoaglin85c} and 
+Pearson curves (see Bowman~\cite{bowman86}).
+
+\subsection{Miscellaneous}
+
+Many tests are presented here without mention of their relative
+merits. Users are advised to consult the cited literature to
+determine which test is appropriate for their situation. Sometimes
+a certain test will have more \emph{power} than another; that is,
+a test may have a better ability to reject a model when
+the model is incorrect. 
+
+\section{Moments: \(b_2\) and \(\protect\sqrt{b_1}\)}
+
+\function{omnibus\_moments(x,n)}
+         {double* \\ 
+          \hbox{omnibus\_moments(x,n)}\\ 
+          double *x;\\ 
+          int n;\\ 
+          \returns{\left[\sqrt{b_1},b_2\right]'}}%
+
+Let \(x_1,  x_2, \ldots,  x_n\) be the \(n\)
+observations with mean:
+\begin{equation}
+m_1 = \frac{1}{n}\sum_{j=1}{n} x_j.
+\end{equation}
+The central moments are defined as:
+\begin{equation}
+\label{eqn:moments}
+m_i = \frac{1}{n}\sum_{j=1}{n}\left( x_j - m_i\right)^i,\: i=2,3,4.
+\end{equation}
+The sample skewness \(\left(\sqrt{b_1}\right)\)
+and kurtosis \(\left(b_2\right)\) are defined as:
+\begin{equation}
+\sqrt{b_1}  =  m_3/m_2^{3/2} = \sqrt{n}
+\left(\sum_{j=1}^n\left(x_i-\bar{x}\right)^3\right)/
+\left( \sum_{j=1}^n\left(x_i-\bar{x}\right)^2 \right)^{3/2}
+\end{equation}
+and
+\begin{equation}
+\label{eqn:4th-sample-moment}
+b_2  =  m_4/m_2^2.
+\end{equation}
+These are invariant under both origin and scale changes~\cite{bowman86}.
+When a distribution is specified, these are denoted as 
+\(\sqrt{\beta_1}\) and \(\beta_2\).
+
+For a standard normal, \(\sqrt{\beta_1}=0\) and \(\beta_2=3\).
+To use either or both of these statistics to test for
+departure from normality, these are sometimes transformed
+to their standardized to their normal equivalent
+deviates, \(X\left(\sqrt{b_1}\right)\) and \(X\left(b_1\right)\).
+
+For \(X\left(\sqrt{b_1}\right)\), D'Agostino and 
+Pearson~\cite{dagostino73} gave coefficients \(\delta\)
+and \(\lambda\) (\(n=8\) to 1000) for:
+\begin{equation}
+X\left(\sqrt{b_1}\right) = \delta \sinh^{-1}
+\left(\sqrt{b_1}/\lambda\right)
+\end{equation}
+that transforms \(\sqrt{b_1}\) to a standard normal
+using a Johnson \(S_U\) approximation (Table~\ref{tbl:johnson}).
+\label{sec:johnson-su}
+An equivalent approximation~\cite{dagostino86} 
+that avoids the use of tables is given by:
+\begin{enumerate}
+\item Compute \(\sqrt{b_1}\) from the sample data.
+\item Compute:
+\begin{eqnarray}
+Y &=& \sqrt{b_1} \left[\frac{\left(n+1\right)\left(n+3\right)}
+                         {6\left(n-2\right)}\right]^{\frac{1}{2}}, \\
+\beta_2 &=& \frac{3\left(n^2+27n-70\right)\left(n+1\right)\left(n+3\right)}
+        {\left(n-2\right)\left(n+5\right)\left(n+7\right)\left(n+9\right)},\\
+W^2 &=& \sqrt{2\left(\beta_2-1\right)}-1, \\
+\delta &=& 1/\sqrt{\log W}, \\
+\mbox{and}\\
+\alpha &=& \sqrt{2/\left(W^2-1\right)}.
+\end{eqnarray}
+\item Compute the standard normal variable:
+\begin{equation}
+Z = \delta \log\left[Y/\alpha + \sqrt{\left(Y/\alpha\right)^2+1}\,\right].
+\end{equation}
+\end{enumerate}
+This procedure is applicable for \(n\ge8\).
+
+%D'Agostino~\cite{dagostino86} also notes 
+%that the normal approximation given by
+%\begin{equation}
+%\sqrt{\beta_1}\left[\frac{\left(n+1\right)\left(n+3\right)}
+                         %{6\left(n-2\right)}\right]^{\frac{1}{2}}
+%\end{equation}
+%is valid for \(n\ge150\)~\cite{dagostino86}.
+
+\begin{example}
+For the sample data given in Table~\ref{tbl:pine} (\(n=584\)), 
+\(\sqrt{b_1} = 0.2373\).  Suppose that we wish to test the
+hypothesis of normality:
+
+\(H_0\): \(\sqrt{\beta_1}=0\) (normality)
+
+\noindent versus the two-sided alternative
+
+\(H_1\): \(\sqrt{\beta_1}\ne0\) (non-normality)
+
+\noindent at a level of significance of 0.05.
+Following the procedure given above,
+\(Y =2.3454\), 
+\(\beta_2 = 3.0592\),
+\(W^2 = 1.0294\),
+\(\delta=12.6132\),
+\(\alpha=8.2522\), and
+\(Z=1.5367\).
+At a 0.05 significance level for a two-sided test, we reject
+the null hypothesis of normality if \(\left|Z\right|\ge1.96\). In
+this instance, we cannot reject \(H_0\).
+\end{example}
+
+The fourth standardized moment \(b_2\) may be used to
+test the normality hypothesis by the following 
+procedure~\cite{anscombe63}:
+\begin{enumerate}
+\item Compute \(b_2\) from the sample data.
+\item Compute the mean and variance of \(b_2\):
+\begin{equation}
+E\left(b_2\right) = \frac{3\left(n-1\right)}{n+1}
+\end{equation}
+and
+\begin{equation}
+Var\left(b_2\right) = \frac{24n\left(n-2\right)\left(n-3\right)}
+{\left(n+1\right)^2\left(n+3\right)\left(n+5\right)}.
+\end{equation}
+\item Compute the standardized value of \(b_2\):
+\begin{equation}
+y = \frac{b_2-E\left(b_2\right)}{Var\left(b_2\right)}.
+\end{equation}
+\item Compute the third standardized moment of \(b_2\):
+\begin{equation}
+\sqrt{\beta_1\left(b_2\right)} = 
+\frac{6\left(n^2-5n+2\right)}{\left(n+7\right)\left(n+9\right)}
+\sqrt{\frac{6\left(n+3\right)\left(n+5\right)}
+           {n\left(n-2\right)\left(n-3\right)}}.
+\end{equation}
+\item Compute:
+\begin{equation}
+A=6+\frac{8}{\sqrt{\beta_1\left(b_2\right)}}\left[
+\frac{2}{\sqrt{\beta_1\left(b_2\right)}} +
+\sqrt{1+\frac{4}{\sqrt{\beta_1\left(b_2\right)}}}\,\right].
+\end{equation}
+\item Compute:
+\begin{equation}
+\label{eqn:z-b2}
+Z = \left(\left(1-\frac{2}{9A}\right)-
+\left[\frac{1-2/A}{1+y\sqrt{2/\left(A-4\right)}}\right]^{\frac{1}{3}}\right)/
+\sqrt{2/\left(9A\right)}
+\end{equation}
+where \(Z\) is a standard normal variable with
+zero mean and variance of one.
+\end{enumerate}
+
+\begin{example}
+For the sample data given in Table~\ref{tbl:pine} (\(n=584\)), 
+\(b_2 =1.9148\).  Suppose that we wish to test the
+hypothesis of normality:
+
+\(H_0\): \(\beta_2=3\) (normality)
+
+\noindent versus the one-sided alternative
+
+\(H_1\): \(\beta_2>3\) (non-normality)
+
+\noindent at a level of significance of 0.05. We would
+reject \(H_0\) if \(Z\) (eqn.~\ref{eqn:z-b2}) is larger
+than 1.645 (Table~\ref{tbl:normal}).  Following the procedure given above,
+\(E\left(b_2\right)=2.9897\), 
+\(Var\left(b_2\right)=0.0401\),
+\(y=-26.8366\), 
+\(\sqrt{\beta_1\left(b_2\right)}=0.0989\),
+\(A=2163\), and
+\(Z=-131.7\).
+Therefore, we cannot reject \(H_0\).
+\end{example}
+
+\subsection{Omnibus Tests for Normality}
+
+\section{Geary's Test of Normality}
+\label{sec:geary}
+
+\function{geary\_test(x,n)}
+         {double*\\
+          \hbox{geary\_test(x,n)}\\ 
+          double *x;\\
+          int n;\\ 
+          \returns{\left[\sqrt{a},y\right]'}}
+
+Let \(x_1,  x_2, \ldots,  x_n\) be the \(n\)
+observations. The ratio of the mean deviation
+to the standard deviation is given as:
+\begin{equation}\label{eqn:geary}
+a = \frac{1}{n\sqrt{m_2}}\sum_{j=1}^n \left|x_i-\bar{x}\right|
+\end{equation}
+where \(\bar{x}=\sum_{i=1}^n x_i\) and \(m_2\) is defined
+by eqn.~\ref{eqn:moments}.
+This ratio can be transformed
+a standard normal~\cite{dagostino86} via
+\begin{equation}\label{eqn:geary-normal}
+y = \frac{\sqrt{n}\left(a-0.7979\right)}{0.2123}.
+\end{equation}
+This test is valid for \(n\ge41\). 
+
+More generally, Geary~\cite{geary47} considered tests of the
+form
+\begin{equation}
+a\left(c\right) = 
+\frac{1}{nm_2^{c/2}}
+\sum_{j=1}^n \left|x_i-\bar{x} \right|^c \: \mbox{for}\: c\ge1
+\end{equation}
+where \(a\left(1\right)=a\) of eqn.~\ref{eqn:geary}, and
+\(a\left(4\right)=b_2\) of eqn.~\ref{eqn:4th-sample-moment}.
+
+D'Agostino and Rosman~\cite{dagostino74} conclude that
+Geary's \(a\) test has good power for symmetric alternatives
+and skewed alternatives with \(\beta_2 < 3\) when compared to
+other tests, though for symmetric alternatives, \(b_2\)
+(eqn.~\ref{eqn:4th-sample-moment}) can sometimes be more powerful and
+for skewed alternatives, \(W\) (eqn~\ref{eqn:w-test})
+or \(W'\) (eqn~\ref{eqn:w-prime-test})
+usually dominate \(a\).
+The Geary test (eqns.~\ref{eqn:geary}-\ref{eqn:geary-normal})
+is seldom used today---D'Agostino~\cite{dagostino86} include it 
+in his summary work because it is of ``historical interest.''
+
+\begin{example}
+For the sample data given in Table~\ref{tbl:pine} (\(n=584\)), 
+\(a = 0.8823\).  Suppose that we wish to test the
+hypothesis of normality:
+
+\(H_0\): normality
+
+\noindent versus the two-sided alternative
+
+\(H_1\): non-normality
+
+\noindent at a level of significance of 0.05.
+From eqn.~\ref{eqn:geary-normal}, \(y=9.9607\).
+\end{example}
+
+\section{Extreme Normal Deviates}
+\label{sec:extreme}
+
+\function{extremes(x,n)}
+         {double* \\
+          \hbox{extremes(x,n)}\\ 
+          double *x;\\
+          int n;\\ 
+          \returns{\left[x_n-\bar{x}, x_1-\bar{x}\right]'}}
+
+Let \(x_1 \le x_2 \le \cdots \le x_n\) be the \(n\)
+observations. Given a known normal deviation \(\sigma\),
+the largest and smallest deviation from a normal population
+may be computed:
+\begin{equation}
+u_n = \frac{x_n-\bar{x}}{\sigma}
+\end{equation}
+and
+\begin{equation}
+u_1 = -\frac{x_1-\bar{x}}{\sigma},
+\end{equation}
+respectively. These statistics are potentially
+useful for detecting outliers for populations
+with a known \(\sigma\) but an unknown mean.
+Table 25 in Pearson and Hartley~\cite{pearson76}
+gives percentage points for this statistic.
+Pearson and Hartley~\cite{pearson76} also give examples
+of the use of extreme deviates when an estimator of
+\(\sigma\) (independent of the sample) is
+known and when a combined ``internal''
+and ``external'' estimate is used.
+
+\section{EDF Statistics for Testing Normality}
+
+[Note: This section follows closely the presentation of 
+Stephens~\cite{stephens86}.]
+
+Let \(x_1 \le x_2 \le \cdots \le x_n\) be the \(n\)
+observations. Suppose that the continuous distribution of \(x\)
+is \(F\left(x\right)\). The empirical distribution function (EDF)
+is \(F_n\left(x\right)\) defined by:
+\begin{equation}
+F_n\left(x\right) = \frac{1}{n}\left(\mbox{number of observations} 
+\le x\right); \: -\infty < x < \infty
+\end{equation}
+or
+\begin{displaymath}
+\begin{array}{rclll}
+F_n\left(x\right)& = &0, & x<x_1\\
+F_n\left(x\right)& = &\frac{1}{n}, & x_i\le x<x_{i+1}, & i=1,\ldots,n-1\\
+F_n\left(x\right)& = &1, & x_n\le x.
+\end{array}
+\end{displaymath}
+Thus \(F_n\left(x\right)\) is a step function calculated from
+the data. As \(n\rightarrow\infty\), \\
+\(\left|F_n\left(x\right)- F\left(x\right)\right|\) 
+decreases to zero with probability one~\cite{stephens86}.
+
+EDF statistics that measure the difference between
+\(F_n\left(x\right)\) and \(F\left(x\right)\) are divided
+into two classes: supremum and quadratic.
+On a graph of 
+\(F_n\left(x\right)\) and \(F\left(x\right)\) versus \(x_i\),
+denote the largest vertical distance when
+\(F_n\left(x\right)>F\left(x\right)\) as \(D^+\).
+Also, let \(D^-\) denote the largest vertical distance when
+\(F_n\left(x\right)<F\left(x\right)\). These two
+measures are supremum statistics.
+Quadratic statistics are given by the Cram\'er--von Mises family
+\begin{equation}
+\label{eqn:cramer-family}
+Q = n\int_{-\infty}^{\infty} 
+\left(F_n\left(x\right) - F\left(x\right)\right)^2
+\psi\left(x\right) d F\left(x\right)
+\end{equation}
+where \(\psi\left(x\right)\) is a weighting function~\cite{stephens86}.
+
+To compute these statistics, the Probability Integral Transformation
+is used: \(z=F\left(x\right)\) where \(F\left(x\right)\) is
+the Gaussian distribution. The new variable, \(z\), is uniformly
+distributed between 0 and 1. Then \(z\) has distribution 
+function \(F^*\left(z\right)=z\), \(0\le z\le1\).
+A sample \(x_1, x_2, \ldots, x_n\) gives values \(z_i=F\left(x_i\right)\),
+\(i=1, \ldots, n\), and \(F^*_n\left(z\right)\) is the EDF of
+values \(z_i\). For testing normality,
+\begin{equation}
+z_{\left(i\right)} = \Phi\left(
+\left(x_{\left(i\right)}-\hat{\mu}\right)/\hat{\sigma}
+\right)
+\end{equation}
+where \(\hat{\mu}\) and \(\hat{\sigma}\) are estimated from
+the data and \(\Phi\left(\cdot\right)\) denotes the cumulative
+probability of a standard normal. For testing if the data
+follows an exponential distribution \(\mbox{Exp}\left(\alpha,\beta\right)\),
+where \(\alpha\) is known to be zero, \(\hat{\beta}\)
+is estimated by \(\bar{x}\) (the sample mean) and
+\begin{equation}
+z_{\left(i\right)} = 1-\exp\left(-x_{\left(i\right)}/\bar{x}\right).
+\end{equation}
+
+Now, EDF statistics can be computed by comparing \(F^*_n\left(z\right)\)
+and a uniform distribution for \(z\). These take the same values
+as comparisons between \(F_n\left(x\right)\) and \(F\left(x\right)\):
+\begin{equation}
+F_n\left(x\right) - F\left(x\right) = 
+F^*_n\left(z\right) - F^*\left(z\right) =
+F^*_n\left(z\right) - z.
+\end{equation}
+After ordering \(z\)-values,
+\(z_{\left(1\right)}\le 
+z_{\left(2\right)} \le \cdots 
+\le z_{\left(n\right)}\) and computing \(\bar{z}=\sum_{i=1}^n z_i/n\),
+the supremum statistics are
+\begin{equation}
+\label{eqn:dplus}
+D^+=\max_{i=1,\ldots,n}\left(i/n-z_{\left(i\right)}\right)
+\end{equation}
+and
+\begin{equation}
+\label{eqn:dminus}
+D^-=\max_{i=1,\ldots,n}\left(z_{\left(i\right)}-\left(i-1\right)/n\right).
+\end{equation}
+
+\subsection{Kolmogorov \(D\)}
+
+\function{kolmogorov\_smirnov(x,n)}
+         {double* \\ 
+          \hbox{kolmogorov\_smirnov(x,n)}\\ 
+          double *x;\\ 
+          int n;\\ 
+          \returns{\left[D^n,D\right]'}}
+
+\function{kolmogorov\_smirnov\_exp(x,n)}
+         {double* \\ 
+          \hbox{kolmogorov\_smirnov\_exp(x,n)}\\ 
+          double *x;\\ 
+          int n;\\ 
+          \returns{\left[D^e,D\right]'}}
+
+The most well-known EDF statistic is Kolmogorov's \(D\), computed
+from supremum statistics:
+\begin{equation}
+D = \sup_x\left|F_n\left(x\right) - F\left(x\right)\right| =
+\max\left(D^+,D^-\right).
+\end{equation}
+The modified form for testing a completely specified
+distribution~\cite{stephens86}:
+\begin{equation}
+D^*=D\left(\sqrt{n}+0.12+0.11/\sqrt{n}\right).
+\end{equation}
+For testing a normal distribution with \(\mu\) and \(\sigma\)
+unknown, the modified equation is~\cite{stephens86}:
+\begin{equation}
+D^n=D\left(\sqrt{n}-0.01+0.85/\sqrt{n}\right).
+\end{equation}
+For testing an exponential distribution with \(\alpha\) and \(\beta\)
+% origin and scale
+unknown, \(D\) does not need modified~\cite{stephens86}.
+
+\begin{example}
+For the sample data given in Table~\ref{tbl:pine} (\(n=584\)), 
+\(D^n = 4.0314\) and \(y=\).  Suppose that we wish to test the
+hypothesis of normality:
+
+\(H_0\): normality
+
+\noindent versus the two-sided alternative
+
+\(H_1\): non-normality
+
+\noindent at a level of significance of 0.05.
+\end{example}
+
+\subsection{Kuiper's \(V\)}
+\label{sec:kuiper}
+
+\function{kuipers\_v(x,n)}
+         {double* \\ 
+          \hbox{kuipers\_v(x,n)}\\ 
+          double *x;\\ 
+          int n;\\ 
+          \returns{\left[V^n,V\right]'}}
+
+\function{kuipers\_v\_exp(x,n)}
+         {double* \\ 
+          \hbox{kuipers\_v\_exp(x,n)}\\ 
+          double *x;\\ 
+          int n;\\ 
+          \returns{\left[V^e,V\right]'}}
+
+Kuiper's~\cite{kuiper60} \(V\) is another statistic computed
+from supremum statistics:
+\begin{equation}
+\label{eqn:kuipers-v}
+V = D^+ + D^-.
+\end{equation}
+The modified form for testing a completely specified
+distribution~\cite{stephens86}:
+\begin{equation}
+V^*=V\left(\sqrt{n}+0.155 +0.24\sqrt{n}\right).
+\end{equation}
+For testing a normal distribution with \(\mu\) and \(\sigma\)
+unknown, the modified equation is~\cite{stephens86}:
+\begin{equation}
+V^n=V\left(\sqrt{n}+0.05+0.82/\sqrt{n}\right).
+\end{equation}
+For testing an exponential distribution with \(\alpha\) and \(\beta\)
+unknown, \(V\) the modified equation is~\cite{stephens86}:
+\begin{equation}
+V^e=\left(V-0.2/\sqrt{n}\right)
+    \left(\sqrt{n}+0.24+0.35/\sqrt{n}\right).
+\end{equation}
+
+\subsection{Pyke's Statistics}
+\label{sec:pyke}
+
+For some purposes, eqns.~\ref{eqn:dplus} and~\ref{eqn:dminus}
+may be modified to~\cite{pyke59}:
+\begin{equation}
+\label{eqn:cplus}
+C^+=\max_{0\le i\le n}\left(\frac{i}{n+1}-z_{\left(i\right)}\right),\:
+z_{\left(0\right)}=0,
+\end{equation}
+and
+\begin{equation}
+\label{eqn:cminus}
+C^-=\max_{0\le i\le n}\left(z_{\left(i\right)}-\frac{i}{n+1}\right)
+\end{equation}
+(following the modification of notation by Durbin~\cite{durbin73}).  Then,
+\begin{equation}
+C = \max\left(C^+,C^-\right).
+\end{equation}
+Durbin~\cite{durbin73} notes that these modifications to 
+eqns.~\ref{eqn:dplus} and~\ref{eqn:dminus} are related to
+the fact that \(E\left(z_{\left(i\right)}\right)=i/\left(n+1\right)\).
+Percentage points were given by Durbin~\cite{durbin69}.
+
+\subsection{Brunk's \(B\)}
+\label{sec:brunk}
+
+As an alternative to Kuiper's \(V\) (eqn.~\ref{eqn:kuipers-v}), 
+Brunk~\cite{brunk62} suggests:
+\begin{equation}
+\label{eqn:brunks-b}
+B = C^+ + C^-
+\end{equation}
+where \(C^+\) and \(C^-\) are given by eqns.~\ref{eqn:cplus}
+and \ref{eqn:cminus}.
+
+\subsection{Cram\'er--von Mises \(W^2\)}
+\label{sec:cramer-von-mises}
+
+\function{cramer\_von\_mises(x,n)}
+         {double* \\ 
+          \hbox{cramer\_von\_mises(x,n)}\\ 
+          double *x;\\ 
+          int n;\\ 
+          \returns{\left[W^{2,n},W^2\right]'}}
+
+\function{cramer\_von\_mises(x,n)}
+         {double* \\ 
+          \hbox{cramer\_von\_mises\_exp(x,n)}\\ 
+          double *x;\\ 
+          int n;\\ 
+          \returns{\left[W^{2,e},W^2\right]'}}
+
+Quadratic statistics are computed from
+the Cram\'er--von Mises family given in eqn~\ref{eqn:cramer-family}.
+When \(\psi\left(x\right)=1\) in eqn~\ref{eqn:cramer-family}, the statistic is
+the Cram\'er--von Mises statistic \(W^2\):
+\begin{equation}
+W^2=\sum_{j=1}^n\left(Z_i - \left(2j-1\right)/\left(2n\right)\right)^2
++\frac{1}{12n}
+\end{equation}
+(When \(\psi\left(x\right)= 
+\left(F\left(x\right)\left(1 - F\left(x\right)\right)\right)^{-1}\),
+this yields the Anderson--Darling statistic given below
+in \S\ref{sec:anderson-darling}~\cite{stephens86}.)
+The modified form for testing a completely specified
+distribution~\cite{stephens86}:
+\begin{equation}
+W^{2,*} = \left(W^2-0.4/n +0.6/n^2\right)/\left(1 + 1/n\right).
+\end{equation}
+For testing a normal distribution with \(\mu\) and \(\sigma\)
+unknown, the modified equation is~\cite{stephens86}:
+\begin{equation}
+W^{2,n}=W^2\left(1.0 + 0.5/n\right).
+\end{equation}
+For testing an exponential distribution with \(\alpha\) and \(\beta\)
+unknown, the modified equation is~\cite{stephens86}:
+\begin{equation}
+W^{2,e}=W^2\left(1.0 + 2.8/n -3/n^2\right).
+\end{equation}
+
+\subsection{Watson \(U^2\)}
+\label{sec:watson}
+
+\function{watson\_u2(x,n)}
+         {double* \\ 
+          \hbox{watson\_u2(x,n)}\\ 
+          double *x;\\ 
+          int n;\\ 
+          \returns{\left[U^{2,n}, U^{2}\right]'}}
+
+\function{watson\_u2\_exp(x,n)}
+         {double* \\ 
+          \hbox{watson\_u2\_exp(x,n)}\\ 
+          double *x;\\ 
+          int n;\\ 
+          \returns{\left[U^{2,e}, U^{2}\right]'}}
+
+\begin{equation}
+U^2=W^2-n\left(\bar{Z}-0.5\right)^2
+\end{equation}
+where \(W^2\) is the Cram\'er--von Mises statistic 
+(\S\ref{sec:cramer-von-mises}).
+The modified form for testing a completely specified
+distribution~\cite{stephens86}:
+\begin{equation}
+U^{2,*} = \left(U^2-0.1/n +0.1/n^2\right)/\left(1 + 0.8/n\right).
+\end{equation}
+For testing a normal distribution with \(\mu\) and \(\sigma\)
+unknown, the modified equation is~\cite{stephens86}:
+\begin{equation}
+U^{2,n}=U^2\left(1.0 + 0.5/n\right).
+\end{equation}
+For testing an exponential distribution with \(\alpha\) and \(\beta\)
+unknown, the modified equation is~\cite{stephens86}:
+\begin{equation}
+U^{2,e}=U^2\left(1.0 + 2.3/n -3/n^2\right).
+\end{equation}
+
+\subsection{Anderson--Darling \(A^2\)}
+\label{sec:anderson-darling}
+
+\function{anderson\_darling(x,n)}
+         {double* \\ 
+          \hbox{anderson\_darling(x,n)}\\ 
+          double *x;\\ 
+          int n;\\ 
+          \returns{\left[A^{2,n}, A^{2}\right]'}}
+
+\function{anderson\_darling\_exp(x,n)}
+         {double* \\ 
+          \hbox{anderson\_darling\_exp(x,n)}\\ 
+          double *x;\\ 
+          int n;\\
+          \returns{\left[A^{2,e}, A^{2}\right]'}}
+Anderson and Darling~\cite{anderson54} present
+another EDF test statistic which is sensitive at the
+tails of the distribution (rather than near
+the median). 
+When \(\psi\left(x\right)= 
+\left(F\left(x\right)\left(1 - F\left(x\right)\right)\right)^{-1}\)
+in eqn.(\ref{eqn:cramer-family}),
+this yields the Anderson--Darling statistic~\cite{anderson54,stephens86}:
+\begin{equation}
+A^2 = -n - \frac{1}{n} \sum_{j=1}^n \left(2j-1\right)
+\left[ \ln z_j + \ln\left(1-z_{n-j+1}\right)\right].
+\end{equation}
+Equivalently~\cite{stephens86},
+\begin{equation}
+A^2 = -n - \frac{1}{n} \sum_{j=1}^n\left[ \left(2j-1\right)
+\ln z_j + \left(2n+1-2j\right) \ln\left(1-z_{j}\right)\right].
+\end{equation}
+Anderson and Darling~\cite{anderson54} give
+the following asymptotic significance values of \(A^2\):
+
+\begin{center}
+\begin{tabular}{cc}\hline
+Significance 	& Significance \\
+Level 		& Point \\ \hline \hline
+0.10		& 1.933\\
+0.05		& 2.492\\
+0.01		& 3.857\\ \hline
+\end{tabular}
+\end{center}
+Anderson and Darling~\cite{anderson54} state that
+sample size should be at least 40; however, Stephens~\cite{stephens86}
+give the same asymptotic values (for more significance levels)
+for a sample size \(\ge5\).
+
+For testing a completely specified distribution, \(A^2\)
+is used unmodified.
+For testing a normal distribution with \(\mu\) and \(\sigma\)
+unknown, the modified equation is~\cite{stephens86}:
+\begin{equation}
+A^{2,n}=A^2\left(1.0 + 0.75/n+2.25/n^2\right).
+\end{equation}
+For testing an exponential distribution with \(\alpha\) and \(\beta\)
+unknown, the modified equation is~\cite{stephens86}:
+\begin{equation}
+A^{2,e}=A^2\left(1.0 + 5.4/n -11/n^2\right).
+\end{equation}
+
+
+\subsection{Durbin's Exact Test}
+\label{sec:durbin}
+
+\function{durbins\_exact(x,n)}
+         {double* \\ 
+          \hbox{durbins\_exact(x,n)}\\ 
+          double *x;\\ 
+          int n;\\
+          \returns{\left[K_m,\sqrt{n}K_m\right]'}}
+
+Durbin~\cite{durbin61} presented a modified
+Kolmogorov test. The discussion that follows
+has been adapted from Durbin's work~\cite{durbin61}.
+
+Let \(x_1, x_2, \ldots, x_n\) be the \(n\)
+i.i.d.\ observations and suppose that 
+it is desired to test the hypothesis that
+they come from the continuous distribution \(F\left(x\right)\).
+If the null hypothesis is true, then \(u_j=F\left(x_j\right)\)
+(\(j=1,\ldots,n)\) are independent \(U\left(0,1\right)\)
+variables and are randomly scattered on the (0,1) interval.
+Clustering may indicated a departure from the null hypothesis.
+Denoting the ordered \(u\)'s by 
+\(0 \le u_{\left(1\right)} \le \cdots \le u_{\left(n\right)} \le 1\), 
+let \(c_1=u_{\left(1\right)}\), 
+\(c_2=u_{\left(j\right)}-u_{\left(j-1\right)}\)
+(\(j=2,\ldots,n\)), and \(c_{n+1}=1-u_{\left(n\right)}\).
+
+Since the interest is in relative magnitudes of \(c\)'s, these
+are ordered:
+\(c_{\left(1\right)} \le c_{\left(2\right)} \cdots 
+\le c_{\left(n\right)}\). Then, the following transformation
+is applied:
+\begin{equation}
+\label{eqn:durbin:g}
+g_j=\left(n+2-j\right)\left(c_{\left(j\right)}
+-c_{\left(j-1\right)}\right)\:
+\left(c_{\left(0\right)}=0;\: j=1,\ldots,n+1\right).
+\end{equation}
+Durbin~\cite{durbin61} shows that the \(g\)'s, which depend
+on the {\em ordered\/} intervals, have the same
+distribution as the {\em unordered\/} \(c\)'s.
+
+Letting
+\begin{equation}
+\label{eqn:durbin:w}
+w_r = \sum_{j=1}^r g_j
+\end{equation}
+it follows that \(w_1, \ldots, w_n\) have the same distribution
+as the ordered \(U\left(0,1\right)\) variables
+\(u_{\left(1\right)}, \ldots, u_{\left(n\right)}\). 
+
+From eqns.~\ref{eqn:durbin:g} and \ref{eqn:durbin:w}, \(w_j\)
+can be expressed as:
+\begin{equation}
+w_j=c_{\left(1\right)} + \cdots
++ c_{\left(j-1\right)} + \left(n+2-j\right)c_{\left(j\right)},\:
+\left(j=1,\ldots,n\right),
+\end{equation}
+where
+\(c_{\left(1\right)} \le \cdots \le c_{\left(n\right)}\) is
+the ordered set of intervals.
+
+In addition to two other test, Durbin~\cite{durbin61} introduces
+the {\em modified Kolmogorov test}. The test statistic is:
+\begin{equation}
+K_m = \max_{r=1,\ldots,n}\left(\frac{r}{n}-w_r\right).
+\end{equation}
+The test procedure is to reject when \(K_m\) is greater
+than the value tabulated for a one-sided Kolmogorov test.
+
+\begin{example}
+For the sample data given in Table~\ref{tbl:pine} (\(n=584\)), 
+\(K_m = 0.4127\). To test the
+hypothesis of normality:
+
+\(H_0\): normality
+
+\noindent versus the one-sided alternative
+
+\(H_1\): non-normality
+
+\noindent at a level of significance of 0.05, we would
+reject \(H_0\) if \(K_m\) is larger
+than 0.895 (critical value of \(D\) for \(\alpha=0.05\).  
+Therefore, we cannot reject \(H_0\).
+\end{example}
+
+\section{Chi-Square Test}
+
+\function{chi\_square(x,n)}
+         {double* \\ 
+          \hbox{chi\_square(x,n)}\\ 
+          double *x;\\ 
+          int n;\\
+          \returns{\left[x^2,k-3\right]'}}
+
+\function{chi\_square\_exp(x,n)}
+         {double* \\ 
+          \hbox{chi\_square\_exp(x,n)}\\ 
+          double *x;\\ 
+          int n;\\
+          \returns{\left[x^2,k-2\right]'}}
+
+According to Shapiro~\cite{shapiro90},
+the chi-square goodness of fit test is the oldest
+procedure for testing distributional assumptions.
+It is useful for testing normality and exponentiality
+when the number of observations is large (because its power
+is poor for small samples when compared to other tests).
+It is also useful when data are discrete~\cite{shapiro90}.
+
+The basic idea is to divide the \(n\) data into \(k\) cells
+and compare the observed number in each cell with the 
+expected number in each cell. The resulting statistic
+is distributed as a chi-square random variable with
+\(k-1-t\) degrees of freedom, where \(t\) is the number
+of parameters estimated. The number of cells is taken
+as 
+\begin{equation}
+k=\mbox{(int)} 4\left[0.75\left(n-1\right)^2\right]^{1/5}.
+\end{equation}
+\marginpar{what should the notation be for rounding? For ceil, 
+we use \(\lceil x\rceil\). For floor, we use \(\lfloor x\rfloor\).}
+The ratio \(n/k\) should be at least 5; otherwise another
+test should be used~\cite{shapiro90}. In this implementation,
+\(k\) is decremented by one until \(n/k\ge5\).
+
+Let \(x_{\left(1\right)}, 
+x_{\left(2\right)},\ldots, x_{\left(k\right)}\) 
+be the upper boundaries of cells. Choose \(x_{\left(i\right)}\)
+so that the probability of being in any cell
+is the same: 
+\begin{equation}
+P\left(x\le x_{\left(i\right)}\right) = \frac{i}{k},\:
+i=1,2,\ldots,k
+\end{equation}
+In thse implmentation, only the case of raw data, as opposed
+to pre-tabulated data, is considered (i.e., equal probability cells).
+
+For testing the normality hypothesis,
+let \(x_{\left(0\right)}=-\infty\) and
+\(x_{\left(k\right)}=\infty\).
+The values of \(x_{\left(i\right)}\) are:
+\begin{equation}
+x_{\left(i\right)} = \bar{x} + s\,Z_{i/k} 
+\end{equation}
+where \(\bar{x}\) and \(s\) are estimated
+mean and variance parameters and \(Z_{i/k}\)
+are percentiles of the standard normal distribution.
+The test statistic is
+\begin{equation}
+\label{eqn:chi-square}
+x^2 = \frac{k}{n}\sum_{i=1}^k f_i^2-n
+\end{equation}
+where \(f_i\) is the number of observations in cell \(i\).
+The hypothesis of normality is rejected at an \(\alpha\)
+level if \(x^2\) is greater \(x^2_{\alpha}\), a 
+\(\chi^2\) random variable with \(k-3\) degrees of freedom.
+
+\begin{example}
+For the sample data given in Table~\ref{tbl:pine} (\(n=584\)), 
+\(x^2 = 952.7\) with \(\nu=45\) degrees of freedom. 
+Since \(\chi^2_{45,0.05}\approx30.33\) (Table~\ref{tbl:chisq}),
+we reject \(H_0\) at an \(\alpha=0.05\) level.
+\end{example}
+
+For testing the exponentiality hypothesis,
+let \(x_{\left(0\right)}=0\) and
+\(x_{\left(k\right)}=\infty\).
+The values of \(x_{\left(i\right)}\) are:
+\begin{equation}
+x_{\left(i\right)} = -\frac{1}{\lambda}\ln\left(1-\frac{i}{k}\right),
+i=1,2,\ldots,k-1.
+\end{equation}
+The parameter \(\lambda\) is estimated from
+\begin{equation}
+\hat{\lambda} = n \left(\sum_{i=1}^n x_i\right)^{-1}
+\end{equation}
+where \(x_i\) is the \(i\)th observation in 
+the sample.  Equation~(\ref{eqn:chi-square})
+is the statistic used for testing exponentiality. The hypothesis
+of exponentiality is rejected at an \(\alpha\) level if
+\(x^2\), a \(\chi^2\) random variable with \(k-2\)
+degrees of freedom.
+
+\begin{example}
+For the sample data given in Table~\ref{tbl:pine} (\(n=584\)), 
+\(x^2 = 308.11\) with \(\nu=46\) degrees of freedom. 
+Since \(\chi^2_{46,0.05}\approx31.16\) (Table~\ref{tbl:chisq}),
+we reject \(H_0:\) exponentiality, at an \(\alpha=0.05\) level.
+\end{example}
+
+\section{Analysis of Variance Tests}
+
+\subsection{Shapiro-Wilk \(W\)}
+\label{sec:shapiro-wilk}
+
+\function{shapiro\_wilk(x,n)}
+         {double* \\ 
+          \hbox{shapiro\_wilk(x,n)}\\ 
+          double *x;\\ 
+          int n;\\
+          \returns{\left[W,S^2\right]'}}
+
+\function{shapiro\_wilk\_exp(x,n)}
+         {double* \\ 
+          \hbox{shapiro\_wilk\_exp(x,n)}\\ 
+          double *x;\\ 
+          int n;\\ 
+          \returns{\left[W,S^2\right]'}}
+
+%\marginpar{3, 4, 206, 208, 211, 252, 393, 403--406}
+
+Recall the description of a probability plot given on page~\pageref{pplot}.
+Ordered observations are plotted against expected values of
+order statistics from the distribution being tested. The plot tends
+to be linear if the distributional assumption is correct. If
+a genearlized least squares is performed, an \(F\)-type ratio could
+be used to test the fit of a linear model. This was the basis of
+test introduced by Shapiro and Wilk~\cite{shapiro65}. Foregoing
+many of the details in the derivation, the test procedures
+for normality and exponentiality are given
+below.
+
+Let \(x_1 \le x_2 \le \cdots \le x_n\) be the \(n\)
+ordered observations and let
+\begin{equation}
+S^2 = \sum_{i=1}^n x_i^2 - \frac{1}{n} \left(\sum_{i=1}^n x_i\right)^2.
+\end{equation}
+Calculate
+\begin{equation}
+b = \sum_{i=1}^k a_{n-i+1}\left(x_{n-i+1}- x_i\right)
+\end{equation}
+where \(k=n/2\) if \(n\) is even,
+\(k=\left(n-1\right)/2\) if \(n\) is odd, and
+\(a_{n-i+1}\) are found in Table~\ref{tbl:shapiro-wilk-a}.
+Then a test of normality
+for small samples (\(3\le n\le 50\)) is defined as
+\begin{equation}
+\label{eqn:w-test}
+W = \frac{b^2}{S^2}
+\end{equation}
+Small values of \(W\) indicate non-normality (``lower-tail''). Hence
+if the computed value of \(W\) is less than the
+\(W_{\alpha}\) shown in Table~\ref{tbl:w-test}, the hypothesis
+of normality is rejected.
+
+\begin{example}
+Using the first 40 observations from the sample data given in 
+Table~\ref{tbl:pine},
+\(W=0.0000245\). Using \(\alpha=0.05\) and Table~\ref{tbl:w-test},
+\(W_{0.05}=0.940\). Since \(W<W_{0.05}\), we reject \(H_0\).
+\end{example}
+
+For testing exponentiality, no tabulated constants are needed
+for calculation of \(b\):
+\begin{equation}
+b = \sqrt{\frac{n}{n-1}}\left(\bar{x}-x_1\right)
+\end{equation}
+where 
+\begin{equation}
+\bar{x} = \frac{1}{n} \sum_{i=1}^n x_i.
+\end{equation}
+This assumes that the origin parameter is unknown. It also
+differs from the test of normality in that it is a two-tailed
+procedure. That is, too small or too large a value of the
+test statistic indicates non-exponentiality~\cite{shapiro90}.
+
+\begin{example}
+Using the first 40 observations from the sample data given in 
+Table~\ref{tbl:pine},
+\(W=0.0909\). Using \(\alpha=0.05\) and Table~\ref{tbl:w-test-e},
+\(W_{0.025}=0.0148\) and \(W_{0.975}=0.0447\). 
+Since \(W\) is not contained in the
+interval \(\left[W_{0.025},W_{0.975}\right]\), 
+we reject \(H_0\): exponentiality.
+\end{example}
+
+\subsection{Modified Shapiro--Francia \(W'\)}
+\label{sec:shapiro-francia}
+ 
+\function{shapiro\_francia(x,n)}
+         {double* \\ 
+          \hbox{shapiro\_francia(x,n)}\\ 
+          double *x;\\ 
+          int n;\\ 
+          \returns{\left[W',S^2\right]'}}
+
+%\marginpar{213, 223, 399, 403--406}
+
+The \(W\) test of normality in the previous
+section for sample sizes of 50 or less.
+Shapiro and Francia~\cite{shapiro72b} extended
+the \(W\) test for \(n\) up to 99 by replacing
+the values \(a_{n-i+1}\) in Table~\ref{tbl:shapiro-wilk-a}
+\(b_{n-i+1}\) in Table~\ref{tbl:shapiro-francia-b}.
+The test procedure follows.
+
+Let \(x_1 \le x_2 \le \cdots \le x_n\) be the \(n\)
+ordered observations. Then a test of normality
+for large samples is defined as:
+\begin{equation}
+\label{eqn:w-prime-test}
+W' = \frac{b'}{S^2}
+\end{equation}
+The numerator \(b'\) is defined as:
+\begin{equation}
+b' = \sum_{i=1}^k b_{n-i+1} \left(x_{n-i+1} - x_i\right)
+\end{equation}
+where \(k=n/2\) if \(n\) is even and \(k=\left(n-1\right)/2\)
+is \(n\) is odd.
+Significant values,
+determined empirically by Shapiro and Francia~\cite{shapiro72b}
+are given in Table~\ref{tbl:w-prime-test}.
+D'Agostino~\cite{dagostino86} notes that the values given
+by Shapiro and Francia~\cite{shapiro72b} in the lower
+tail were ``higher than what they should be'' since too few
+samples were used in determining these significance levels.
+
+\begin{example}
+Using the first 99 observations from the sample data given in 
+Table~\ref{tbl:pine},
+\(W'=1.0139\). Using \(\alpha=0.05\) and Table~\ref{tbl:w-prime-test},
+\(W'_{0.05}=0.976\). Since \(W'>W'_{0.05}\), we cannot reject \(H_0\).
+\end{example}
+
+\subsection{Weisberg-Bingham \(\tilde{W'}\)}
+
+\function{weisberg\_bingham(x,n)}
+         {double* \\ 
+          \hbox{weisberg\_bingham(x,n)}\\ 
+          double *x;\\ 
+          int n;\\ 
+          \returns{\left[\tilde{W'},S^2\right]'}}
+
+An alternative way of computing \(b'\) is to note that
+the vector \(\left[b_1, b_2,\ldots,b_n\right]'\)
+is equivalent to \(m'/\left(m'm\right)^{1/2}\)
+where \( m' = \left(m_1, m_2, \ldots, m_n\right)\) denotes
+a vector of expected normal order statistics.
+One approximation for normal order statistics
+attributed to Blom~\cite{blom58} is:
+\begin{equation}
+E\left(r,n\right) = -\Phi^{-1}\left(\frac{r-\alpha}{n-2\alpha+1}\right)
+\end{equation}
+with a recommended ``compromise value \(\alpha=0.375\)~\cite{royston82c}.'' 
+Define this new statistic as \(\tilde{W'}\).
+So, instead of hardcoding constants (as done in 
+\S\ref{sec:shapiro-wilk}-\ref{sec:shapiro-francia}), 
+this approximation is used.  Since \(\tilde{W'}\)
+is essentially the same as \(W'\), the table of 
+critical values for \(W'\) (Table~\ref{tbl:w-prime-test}) may be used.
+
+\subsection{D'Agostino's \(D\) Test of Normality}
+\label{sec:dagostino-d}
+
+\function{dagostino\_d(x,n)}
+         {double* \\
+          \hbox{dagostino\_d(x,n)}\\ 
+          double *x;\\
+          int n;\\ 
+          \returns{\left[D,y\right]'}}
+
+D'Agostino~\cite{dagostino86} presents a modified
+Shapiro-Wilk \(W\) test that eliminates the need for
+a table of weights. The test statistic is given as
+\begin{eqnarray}
+D &=& T/\left(n^2\sqrt{m_2}\right) \\ \nonumber
+  &=& T/\left(n^{3/2}\sqrt{\sum_{j=1}^n\left(x_j-\bar{x}\right)^2}\right) 
+\end{eqnarray}
+where
+\begin{equation}
+T = \sum_{i=1}^n \left(i-\frac{1}{2}\left(n+1\right)\right)x_i.
+\end{equation}
+An approximate standard variable is
+\begin{equation}
+\label{eqn:xform-d}
+y=\frac{\sqrt{n}\left(D-0.28209479\right)}{0.02998598}.
+\end{equation}
+Significant values are given in Table~\ref{tbl:d-test}.
+
+\begin{example}
+For the sample data given in Table~\ref{tbl:pine} (\(n=584\)), 
+\(D = 0.2859\) and \(y=3.0667\).  Suppose that we wish to test the
+hypothesis of normality:
+
+\(H_0\): normality
+
+\noindent versus the two-sided alternative
+
+\(H_1\): non-normality
+
+\noindent at a level of significance of 0.005. From Table~\ref{tbl:d-test}
+(linearly interpolating),
+we reject \(H_0\) if \(y<-3.006\) or \(y>2.148\). Therefore, we
+cannot reject \(H_0\).
+\end{example}
+
+\subsection{Royston's Modification}
+
+\function{royston(x,n)}
+         {double* \\ 
+          \hbox{royston(x,n)}\\ 
+          double *x;\\ 
+          int n;\\ 
+          \returns{\left[W, P\right]'}}
+
+Royston~\cite{royston82a} also presented a modified \(W\) statistic for
+\(n\) up to 2000 that did not require extensive use of tabulated
+constants. 
+If \( m' = \left(m_1, m_2, \ldots, m_n\right)\) denotes
+a vector of expected values of standard normal order
+statistics and \(V=\left(v_{ij}\right)\) denote the corresponding
+\(n\times n\) covariance matrix, then \(W\) may be written as:
+\begin{equation}
+W=\left[\sum_{i=1}^n a_i x_{\left(i\right)}\right]^2/
+\sum_{i=1}^n \left( x_{\left(i\right)} - \bar{x}\right)^2
+\end{equation}
+where
+\begin{equation}
+a'=m'V^{-1}\left[\left(m'V^{-1}\right)\left(V^{-1} m' \right)\right]^{1/2}.
+\end{equation}
+Let \(a^* = m'V^{-1}\); The following 
+approximation for \(a^*\) is used:
+\begin{equation}
+\label{eqn:astar}
+\hat{a}^* = \cases{
+2m_i, & i=2,3,\ldots,n-1\cr\cr
+\left(\frac{\hat{a}_1^2}{1-2\hat{a}_1^2}
+  \sum_{i=2}^{n-1} \hat{a}_i^{*2}\right)^{1/2}, & i=1, i=n}
+\end{equation}
+where
+\begin{equation}
+\hat{a}_1^2=\hat{a}_n^2 = \cases{
+g\left(n-1\right), n\le20\cr\cr
+g\left(n\right), n>20}
+\end{equation}
+and
+\begin{equation}
+g\left(n\right)=\frac{\Gamma\left(\frac{1}{2}\left[n+1\right]\right)}
+                     {\sqrt{2\Gamma\left(\frac{1}{2}n+1\right)}}.
+\end{equation}
+The function \(g\left(n\right)\) is approximated using:
+\begin{equation}
+\label{eqn:stirling}
+g\left(n\right)=\left[\frac{6n+7}{6n+13}\right]
+\left(\frac{\exp\left(1\right)}{n+2}
+\left[\frac{n+1}{n_2}\right]^{n-2}\right)^{1/2}
+\end{equation}
+Royston~\cite{royston82a} used eqns.~\ref{eqn:astar}--\ref{eqn:stirling}
+for the range \(7\le n\le2000\), but exact values of \(a_i\)
+for \(n<7\). 
+
+Royston~\cite{royston82a} used the following normalizing transformation:
+\begin{equation}
+y=\left(1-W\right)^\lambda
+\end{equation}
+so that
+\begin{equation}
+z=\left[\left(1-W\right)^\lambda-\mu_y\right]/\sigma_y
+\end{equation}
+can be compared with the upper tail of a standard normal. Large
+values of \(z\) indicate non-normality of the original sample.
+
+This implementation in \libname\
+closely follows Royston's published FORTRAN code~\cite{royston82b,royston82c}.
+It returns \(W\) and a corresponding \(P\) value (smallest level
+at which we could have preset \(\alpha\) and still have been able
+to reject \(H_0\)).
+It also utilizes algorithms by Hill~\cite{hill73} and 
+Wichura~\cite{wichura88}.
+
+%\section{Modified Maximum Likelihood Ratio Test}
+%
+%If the third moment is less than zero:
+%\begin{equation}
+%\sum_i\left(x_i-\bar{x}\right) \le 0
+%\end{equation}
+%then the distribution is normal. Otherwise, the test
+%statistic is:
+%\begin{equation}
+%\frac{\sqrt{\frac{1}{n}\sum_i\left(x_i-\sigma/n\right)^2}}
+%    {\exp\left(\sigma/n\right) \sqrt{\frac{1}{n}\left(x_i-\bar{x}\right)^2}}
+%\end{equation}
+%
+%\function{mod\_maxlik\_ratio(x,n)}
+%         {double* \\ 
+%         \hbox{mod\_maxlik\_ratio(x,n)}\\ 
+%         double *x;\\ 
+%         int n;\\ 
+%         \returns{?}}
+%\section{Coefficient of Variation Test}
+%
+%pages 424, 428, 435, 457
+%
+%\begin{equation}
+%\sqrt{\exp\left(\frac{1}{n-1}\sqrt{\exp\left(\frac{1}{n-1}\sum_i
+%\left(\log x_i - \frac{1}{n}\sum_j x_j\right)^2\right)-1}\right)-1}
+%\end{equation}
+%
+%\function{coeff\_variation(x,n)}
+%         {double* \\ 
+%          \hbox{coeff\_variation(x,n)}\\ 
+%          double *x;\\ 
+%          int n;\\ 
+%          \returns{?}}
+%
+
+\section{Kotz Separate Families \(T'_f\)}
+\label{sec:kotz}
+% move as subsection to EDF Stats?
+
+\function{kotz\_families(x,n)}
+         {double* \\ 
+          \hbox{kotz\_families(x,n)}\\ 
+          double *x;\\ 
+          int n;\\ 
+          \returns{\left[T_f', T_f\right]'}}
+
+Kotz~\cite{kotz73} developed a test where the null hypothesis
+\(H_0\) is that the sample \(x_1, x_2, \ldots, x_n\) came
+from a lognormal distribution, and the alternate hypothesis
+is that the parent population was normal. The test statistic,
+given as:
+\begin{equation}
+T'_f = \frac{\log\frac{\hat{\beta}_2}{\beta_{2,\hat{\alpha}}}}
+{2\sqrt{n}\{\frac{1}{4}\left(e^{4\hat{\alpha}_2}+
+2e^{3\hat{\alpha}_2} -4\right) -\hat{\alpha}_2 -
+\frac{\hat{\alpha}_2\left(2e^{\hat{\alpha}_2}-1\right)^2}
+     {2\left(2e^{\hat{\alpha}_2}-1\right)^2}
++\frac{3}{4}e^{\hat{\alpha}_2}\}^{1/2}}
+\end{equation}
+is asymptotically normal~\cite{cox62}.
+
+\begin{example}
+For the sample data given in Table~\ref{tbl:pine} (\(n=584\)), 
+\(T'_f = -0.6021\).  Suppose that we wish to test the hypothesis
+
+\(H_0:\) lognormal
+
+\noindent versus
+
+\(H_1:\) normal
+
+\noindent at a level of significance of 0.05. We would
+reject \(H_0\) if \(T'_f\) is larger
+than 1.645.  Therefore, we reject \(H_0\).
+\end{example}
+
+The discussion that follows explains in more detail how this 
+statistic is calculated and how it was derived. The remainder
+of this section
+was taken directly from the work of Kotz~\cite{kotz73}
+(pages 123,124--126).
+
+\ldots\ A test for this special situation was considered 
+by Roy~\cite{roy50}, where he bases his decision on the
+statistic
+\begin{equation}
+R=\frac{L_l}{L_n}
+\end{equation}
+where \(L_l\) denotes the likelihood of the sample under the
+lognormal hypothesis and \(L_n\) that under the normal
+hypothesis. If \(R>1\) one accepts lognormality,
+and if \(R<1\) normality is accepted. More recently Cox~\cite{cox61,cox62}
+has elaborated on Roy's heuristic approach, and has derived a general
+class of tests to discriminate between hypotheses that are {\em separate\/}
+(in the sense that an arbitrary simple hypothesis in \(H_0\) cannot
+be obtained as a limit---in the parameter space---of a simple hypothesis
+in \(H_1\). We will now apply Cox's general theory to testing
+lognormality against normality\ldots
+
+Suppose \(x_1, x_2, \ldots, x_n\) is a random sample from a certain
+population. The null hypothesis, \(H_f\), is that the p.d.f.\ of the
+\(x\)'s is log-normal and the alternate hypothesis, \(H_g\), is
+that the p.d.f.\ is normal, that is, for \(H_f\)
+\begin{equation}
+f\left(y,\beta\right) = \frac{1}{\sqrt{2\pi\beta}}
+\exp-\left(\frac{\left(\log y-\beta\right)^2}{2\beta}\right),
+\: -\infty < y< \infty.
+\end{equation}
+and for \(H_g\):
+\begin{equation}
+g\left(y,\alpha\right) = \frac{1}{y\sqrt{2\pi\alpha_2}}
+\exp-\left(\frac{\left(y-\alpha_1\right)^2}{2\alpha_2}\right),
+\: y>0.
+\end{equation}
+From the maximum likelihood equations we find that
+\begin{equation}
+\hat{\alpha}_1=\frac{1}{n}\sum\log x_i; \:
+\hat{\alpha}_2=\frac{1}{n}\sum\left(\log x_i-\hat{\alpha}_1\right),
+\end{equation}
+and analogous equations for \(\hat{\beta}_1\) 
+and \(\hat{\beta}_2\).
+
+Under \(H_f\), the log-normal null hypothesis, as the sample
+size \(n\) increases to infinity,
+\(\hat{\alpha}_1\rightarrow\alpha_1\),
+\(\hat{\alpha}_2\rightarrow\alpha_2\),
+\(\hat{\beta}_{1,\alpha}\rightarrow\beta_{1,\alpha}\),
+and
+\(\hat{\beta}_{2,\alpha}\rightarrow\beta_{2,\alpha}\)
+where 
+\begin{equation}
+\hat{\beta}_{1,\alpha}=\exp\left(\alpha_1+\frac{\alpha_2}{2}\right)
+\end{equation}
+and
+\begin{equation}
+\hat{\beta}_{2,\alpha}=\exp
+\left(2\alpha_1+\alpha_2\right)
+\left[\exp\left(\alpha_2\right) -1\right].
+\end{equation}
+Cox's test is based on the log likelihood ratio
+\begin{equation}
+L_{fg}=\sum_{i=1}^n\log
+\frac{f\left(x_i,\hat{\alpha}\right)}
+     {g\left(x_i,\hat{\beta}\right)}
+\end{equation}
+and his test statistic is given by
+\begin{equation}
+T_f=L_{fg}-E_{\hat{\alpha}}\left(L_{fg}\right)
+\end{equation}
+where \(E_{\hat{\alpha}}\left(L_{fg}\right)\) is the expected
+value under \(H_f\) when \(\alpha\) takes the value
+\(\hat\alpha\). Writing
+\begin{equation}
+F=\log f\left(x,\alpha\right), \: 
+F_{\alpha_i} = \frac{\partial\log f\left(x,\alpha\right)}{\partial\alpha_i},\:
+i=1,2
+\end{equation}
+\null\begin{equation}
+F_{\alpha_i\alpha_j} = \frac{\partial^2\log f\left(x,\alpha\right)}
+{\partial\alpha_i\partial\alpha_j}, \:
+G = \log g\left(x,\beta\right)
+\end{equation}
+\null\begin{equation}
+G_{\beta_i}=\frac{\partial\log g\left(x,\beta\right)}{\partial\beta_i}, \:
+\mbox{etc.,}
+\end{equation}
+Cox shows that \(T_f\) is asymptotically normal with zero mean and
+variance
+\begin{equation}
+V_\alpha\left(T_f\right)=
+nV_\alpha\left(F-G\right) -
+\sum\frac{C_\alpha^2\left(F-G, F_{\alpha_i}\right)}
+         {V_\alpha\left(F_{\alpha_i}\right)}
+\end{equation}
+where \(V_\alpha\left(\cdot\right)\),
+\(C_\alpha\left(\cdot\right)\), denote variance and covariance under \(H_f\).
+
+In our case it can be shown that 
+\begin{equation}
+T_f=\frac{n}{2}\log\frac{\hat{\beta}_2}{\hat{\beta}_{2,\hat{\alpha}}}
+\end{equation}
+Results of the following type are used in the derivation of 
+\(V_\alpha\left(T_f\right)\):
+\begin{equation}
+E_\alpha\left[x^2\log x\right] = 
+\left(\alpha_1+2\alpha_2\right)\exp\left(2\alpha_1+2\alpha_2\right)
+\end{equation}
+\null\begin{equation}
+E_\alpha\left[x^2\log^2x\right] = 
+\left(\alpha_2+\alpha_1^2+4\alpha_1\alpha_2+4\alpha_2^2\right)
+\exp\left(2\alpha_1+2\alpha_2\right)
+\end{equation}
+\null\begin{equation}
+E_\alpha\left[\left(\log x\right)\left(\log x-\alpha\right)\right] = 
+\alpha_2
+\end{equation}
+\null\begin{equation}
+E_\alpha\left[\left(\log x\right)\left(\log x-\beta_1\right)^2\right] =
+\beta_2\left(\alpha_1+2\alpha_2\right)
+\end{equation}
+\null\begin{equation}
+E_\alpha\left[\left(\log x -\alpha_1\right)
+\left(\log x-\beta_1\right)^2\right] =
+2\alpha_2\beta_2.
+\end{equation}
+Using these results, after a considerable amount of simplification,
+we get
+\begin{equation}
+V_\alpha\left(T_f\right)=n\left[
+\frac{1}{4}\left(e^{4\alpha_2}+
+2e^{3\alpha_2}+
+3e^{\alpha_2}-4\right)
+\alpha_2-
+\frac{\alpha_2\left(2e^{\alpha_2}-1\right)^2}
+     {2\left(2e^{\alpha_2}-1\right)^2}\right]
+\end{equation}
+Cox~\cite{cox62} has shown that
+\begin{equation}
+T'_f=\frac{T_f}{\sqrt{V_\alpha\left(T_f\right)}}
+\end{equation}
+is asymptotically standardized normal. In our case we get,
+after substituting the estimators for the parameters,
+\begin{equation}
+T'_f = \frac{\log\frac{\hat{\beta}_2}{\beta_{2,\hat{\alpha}}}}
+{2\sqrt{n}\{\frac{1}{4}\left(e^{4\hat{\alpha}_2}+
+2e^{3\hat{\alpha}_2} -4\right) -\hat{\alpha}_2 -
+\frac{\hat{\alpha}_2\left(2e^{\hat{\alpha}_2}-1\right)^2}
+     {2\left(2e^{\hat{\alpha}_2}-1\right)^2}
++\frac{3}{4}e^{\hat{\alpha}_2}\}^{1/2}}
+\end{equation}
+%\begin{equation}
+%T'_f = \frac{\log\frac{\hat{\beta}_2}{\beta_{2,\hat{\alpha}}}}
+%{2\sqrt{n}\{\frac{1}{4}\left(\exp\left({4\hat{\alpha}_2}\right)+
+%2\exp\left({3\hat{\alpha}_2}\right) -4\right) -\hat{\alpha}_2 -
+%\frac{\hat{\alpha}_2\left(2\exp\left({\hat{\alpha}_2}\right)-1\right)^2}
+%     {2\left(2\exp\left({\hat{\alpha}_2}\right)-1\right)^2}
+%+\frac{3}{4}\exp\left({\hat{\alpha}_2}\right)\}^{1/2}}
+%\end{equation}
+
+\section{Utility Functions}
+
+This section describes some useful functions included in
+\libname\ but not necessarily described in the previous
+sections, e.g., normal order statistics, normal probabilities,
+inverse normals.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliography{goodness}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\clearpage
+\appendix
+
+\begin{table}
+\caption{Cumulative Standard Normal Distribution.}
+\label{tbl:normal}
+\centerline{Area Under the Normal Curve from}
+\begin{displaymath}
+-\infty\:\:\mbox{to}\:\:z=\frac{X_i-\mu}{\sigma}.
+\end{displaymath}
+\centerline{Computed by the author using 
+algorithm 5666 for the error function, from
+Hart \emph{et al.}~\cite{hart68}.}
+\footnotesize
+\begin{center}
+\begin{tabular}{c%
+                 @{\extracolsep{4pt}}c%
+                 @{\extracolsep{4pt}}c%
+                 @{\extracolsep{4pt}}c%
+                 @{\extracolsep{4pt}}c%
+                 @{\extracolsep{4pt}}c%
+                 @{\extracolsep{4pt}}c%
+                 @{\extracolsep{4pt}}c%
+                 @{\extracolsep{4pt}}c%
+                 @{\extracolsep{4pt}}c%
+                 @{\extracolsep{4pt}}c%
+}\hline
+\(z\)& 0.00& 0.01  & 0.02  & 0.03  & 0.04  & 0.05  & 0.06  & 0.07  & 0.08  & 0.09\\ \hline
+0.0&0.50000&0.50399&0.50798&0.51197&0.51595&0.51994&0.52392&0.52790&0.53188&0.53586\\
+0.1&0.53983&0.54380&0.54776&0.55172&0.55567&0.55962&0.56356&0.56749&0.57142&0.57535\\
+0.2&0.57926&0.58317&0.58706&0.59095&0.59483&0.59871&0.60257&0.60642&0.61026&0.61409\\
+0.3&0.61791&0.62172&0.62552&0.62930&0.63307&0.63683&0.64058&0.64431&0.64803&0.65173\\
+0.4&0.65542&0.65910&0.66276&0.66640&0.67003&0.67364&0.67724&0.68082&0.68439&0.68793\\
+0.5&0.69146&0.69497&0.69847&0.70194&0.70540&0.70884&0.71226&0.71566&0.71904&0.72240\\
+0.6&0.72575&0.72907&0.73237&0.73565&0.73891&0.74215&0.74537&0.74857&0.75175&0.75490\\
+0.7&0.75804&0.76115&0.76424&0.76730&0.77035&0.77337&0.77637&0.77935&0.78230&0.78524\\
+0.8&0.78814&0.79103&0.79389&0.79673&0.79955&0.80234&0.80511&0.80785&0.81057&0.81327\\
+0.9&0.81594&0.81859&0.82121&0.82381&0.82639&0.82894&0.83147&0.83398&0.83646&0.83891\\
+1.0&0.84134&0.84375&0.84614&0.84849&0.85083&0.85314&0.85543&0.85769&0.85993&0.86214\\
+1.1&0.86433&0.86650&0.86864&0.87076&0.87286&0.87493&0.87698&0.87900&0.88100&0.88298\\
+1.2&0.88493&0.88686&0.88877&0.89065&0.89251&0.89435&0.89617&0.89796&0.89973&0.90147\\
+1.3&0.90320&0.90490&0.90658&0.90824&0.90988&0.91149&0.91309&0.91466&0.91621&0.91774\\
+1.4&0.91924&0.92073&0.92220&0.92364&0.92507&0.92647&0.92785&0.92922&0.93056&0.93189\\
+1.5&0.93319&0.93448&0.93574&0.93699&0.93822&0.93943&0.94062&0.94179&0.94295&0.94408\\
+1.6&0.94520&0.94630&0.94738&0.94845&0.94950&0.95053&0.95154&0.95254&0.95352&0.95449\\
+1.7&0.95543&0.95637&0.95728&0.95818&0.95907&0.95994&0.96080&0.96164&0.96246&0.96327\\
+1.8&0.96407&0.96485&0.96562&0.96638&0.96712&0.96784&0.96856&0.96926&0.96995&0.97062\\
+1.9&0.97128&0.97193&0.97257&0.97320&0.97381&0.97441&0.97500&0.97558&0.97615&0.97670\\
+2.0&0.97725&0.97778&0.97831&0.97882&0.97932&0.97982&0.98030&0.98077&0.98124&0.98169\\
+2.1&0.98214&0.98257&0.98300&0.98341&0.98382&0.98422&0.98461&0.98500&0.98537&0.98574\\
+2.2&0.98610&0.98645&0.98679&0.98713&0.98745&0.98778&0.98809&0.98840&0.98870&0.98899\\
+2.3&0.98928&0.98956&0.98983&0.99010&0.99036&0.99061&0.99086&0.99111&0.99134&0.99158\\
+2.4&0.99180&0.99202&0.99224&0.99245&0.99266&0.99286&0.99305&0.99324&0.99343&0.99361\\
+2.5&0.99379&0.99396&0.99413&0.99430&0.99446&0.99461&0.99477&0.99492&0.99506&0.99520\\
+2.6&0.99534&0.99547&0.99560&0.99573&0.99585&0.99598&0.99609&0.99621&0.99632&0.99643\\
+2.7&0.99653&0.99664&0.99674&0.99683&0.99693&0.99702&0.99711&0.99720&0.99728&0.99736\\
+2.8&0.99744&0.99752&0.99760&0.99767&0.99774&0.99781&0.99788&0.99795&0.99801&0.99807\\
+2.9&0.99813&0.99819&0.99825&0.99831&0.99836&0.99841&0.99846&0.99851&0.99856&0.99861\\
+3.0&0.99865&0.99869&0.99874&0.99878&0.99882&0.99886&0.99889&0.99893&0.99896&0.99900\\
+3.1&0.99903&0.99906&0.99910&0.99913&0.99916&0.99918&0.99921&0.99924&0.99926&0.99929\\
+3.2&0.99931&0.99934&0.99936&0.99938&0.99940&0.99942&0.99944&0.99946&0.99948&0.99950\\
+3.3&0.99952&0.99953&0.99955&0.99957&0.99958&0.99960&0.99961&0.99962&0.99964&0.99965\\
+3.4&0.99966&0.99968&0.99969&0.99970&0.99971&0.99972&0.99973&0.99974&0.99975&0.99976\\
+3.5&0.99977&0.99978&0.99978&0.99979&0.99980&0.99981&0.99981&0.99982&0.99983&0.99983\\\hline
+\end{tabular}
+\end{center}
+\normalsize
+\end{table}
+\clearpage
+
+\begin{table}
+\caption{Cumulative Chi-Square Distribution.}
+\label{tbl:chisq}
+Computed by the author using CDFLIB~\cite{brown93},
+with the exception of items marked with a dagger (\dag), which
+were found in {\em Biometrika Tables for Statisticians} (1966),
+3rd.~Ed., University College, London, as cited by Shapiro~\cite{shapiro90}.
+ 
+\scriptsize
+\begin{center}
+\begin{tabular}{r%
+                                       r@{.}l%
+                 @{\extracolsep{1.0pt}}r@{.}l%
+                 @{\extracolsep{1.0pt}}r@{.}l%
+                 @{\extracolsep{1.0pt}}r@{.}l%
+                 @{\extracolsep{1.0pt}}r@{.}l%
+                 @{\extracolsep{1.0pt}}r@{.}l%
+                 @{\extracolsep{1.0pt}}r@{.}l%
+                 @{\extracolsep{1.0pt}}r@{.}l%
+                 @{\extracolsep{1.0pt}}r@{.}l%
+                 @{\extracolsep{1.0pt}}r@{.}l%
+                 @{\extracolsep{1.0pt}}
+}
+\hline
+& \multicolumn{20}{c}{\(\alpha\)} \\ \cline{2-21}
+\(\nu\) &
+0&995 & 0&990 & 0&975 & 0&950 & 0&900 & 0&100 & 0&050 & 0&025 & 0&010 & 0&005\\
+\hline
+ 1 & 0&\(0000393^{\dag}\) & 0&\(000157^{\dag}\) & 0&\(000982^{\dag}\) 
+& 0&\(0158^{\dag}\) & 0&\(102^{\dag}\) &  2&71 &  3&84 &  5&02 &  6&63 &  7&88 \\
+ 2 & 0&0100 & 0&0201& 0&0506& 0&103 & 0&211 &4&61 & 5&99 & 7&38 & 9&21 & 10&6 \\
+ 3 & 0&0717 & 0&115 & 0&216 & 0&352 & 0&584 &6&25 & 7&81 & 9&35 &11&3  & 12&8 \\
+ 4 & 0&207  & 0&297 & 0&484 & 0&711 & 1&06  &7&78 & 9&49 &11&1  &13&3  & 14&9 \\
+ 5 & 0&412  & 0&554 & 0&831 & 1&15  & 1&61  &9&24 &11&1  &12&8  &15&1  & 16&8 \\
+\\
+ 6 & 0&676 &0&872 & 1&24 & 1&64 & 2&20 & 10&6  & 12&6 & 14&5& 16&8& 18&5 \\
+ 7 & 0&989 & 1&24 & 1&69 & 2&17 & 2&83 & 12&0  & 14&1 & 16&0& 18&5& 20&3 \\
+ 8 & 1&34 &  1&65 &  2&18 &  2&73 &  3&49 & 13&4  & 15&5 & 17&5 & 20&1 & 22&0 \\
+ 9 & 1&73 &  2&09 &  2&70 &  3&33 &  4&17 & 14&7  & 16&9 & 19&0 & 21&7 & 23&6 \\
+10 & 2&16 &  2&56 &  3&25 &  3&94 &  4&87 & 16&0  & 18&3 & 20&5 & 23&2 & 25&2 \\
+\\
+11 & 2&60 & 3&05 & 3&82 & 4&57 & 5&58 & 17&3 & 19&7 & 21&9 & 24&7 & 26&8 \\
+12 & 3&07 & 3&57 & 4&40 & 5&23 & 6&30 & 18&6 & 21&0 & 23&3 & 26&2 & 28&3 \\
+13 & 3&57 & 4&11 & 5&01 & 5&89 & 7&04 & 19&8 & 22&4 & 24&7 & 27&7 & 29&8 \\
+14 & 4&07 & 4&66 & 5&63 & 6&57 & 7&79 & 21&1 & 23&7 & 26&1 & 29&1 & 31&3 \\
+15 & 4&60 & 5&23 & 6&26 & 7&26 & 8&55 & 22&3 & 25&0 & 27&5 & 30&6 & 32&8 \\
+\\
+16 & 5&14 & 5&81 & 6&91 & 7&96 &  9&31 & 23&5 & 26&3 & 28&9 & 32&0 & 34&3 \\
+17 & 5&70 & 6&41 & 7&56 & 8&67 & 10&1  & 24&8 & 27&6 & 30&2 & 33&4 & 35&7 \\
+18 & 6&26 & 7&01 & 8&23 & 9&39 & 10&9  & 26&0 & 28&9 & 31&5 & 34&8 & 37&2 \\
+19 & 6&84 & 7&63 & 8&91 & 10&1 & 11&7  & 27&2 & 30&1 & 32&9 & 36&2 & 38&6 \\
+20 & 7&43 & 8&26 & 9&59 & 10&9 & 12&4  & 28&4 & 31&4 & 34&2 & 37&6 & 40&0 \\
+\\
+21 & 8&03 & 8&90 & 10&3 & 11&6 & 13&2 & 29&6 & 32&7 & 35&5 & 38&9 & 41&4 \\
+22 & 8&64 & 9&54 & 11&0 & 12&3 & 14&0 & 30&8 & 33&9 & 36&8 & 40&3 & 42&8 \\
+23 & 9&26 & 10&2 & 11&7 & 13&1 & 14&9 & 32&0 & 35&1 & 38&0 & 41&6 & 44&2 \\
+24 & 9&89 & 10&9 & 12&4 & 13&9 & 15&7 & 33&2 & 36&4 & 39&4 & 43&0 & 45&6 \\
+25 & 10&5 & 11&5 & 13&1 & 14&6 & 16&5 & 34&4 & 37&7 & 40&6 & 44&3 & 46&9 \\
+\\
+26 & 11&2 & 12&2 & 13&8 & 15&4 & 17&3 & 35&6 & 38&9 & 41&9 & 45&6 & 48&3 \\
+27 & 11&8 & 12&9 & 14&6 & 16&2 & 18&1 & 36&7 & 40&1 & 43&2 & 47&0 & 49&6 \\
+28 & 12&5 & 13&6 & 15&3 & 16&9 & 18&9 & 37&9 & 41&3 & 44&5 & 48&3 & 51&0 \\
+29 & 13&1 & 14&3 & 16&0 & 17&7 & 19&8 & 39&1 & 42&6 & 45&7 & 49&6 & 52&3 \\
+30 & 13&8 & 15&0 & 16&8 & 18&5 & 20&6 & 40&3 & 43&8 & 47&0 & 50&9 & 53&7 \\
+\hline
+\end{tabular}
+\end{center}
+\normalsize
+According to Shapiro~\cite{shapiro90}, for situations with
+larger than 30 degrees of freedom, \(\chi^2_{\nu,\alpha} =
+0.5 \left(z_{\alpha}+\sqrt{2\nu-1}\right)^2\), where
+\(z_{\alpha}\) is the 100\(\alpha\)\% point of the standard normal
+distribution, e.g., \(z_{0.05}=-1.645\) from Table~\ref{tbl:normal}.
+\end{table}
+\clearpage
+
+\begin{table}
+\caption{Signficant Values of D'Agostino's D Test (\(y\) statistic
+of eqn.~\protect\ref{eqn:xform-d}).}
+\centerline{Reproduced from D'Agostino~\protect\cite{dagostino86}.}
+\label{tbl:d-test}
+\scriptsize
+\begin{center}
+\begin{tabular}{rllllllllll}\hline
+& \multicolumn{10}{c}{Percentiles} \\ \cline{2-11}
+n & 0.5 & 1.0 & 2.5 & 5 & 10 & 90 & 95 & 97.5 & 99 & 99.5 \\ \hline
+10&-4.66&-4.06&-3.25&-2.62&-1.99&0.149&0.235&0.299&0.356&0.385\\
+12&-4.63&-4.02&-3.20&-2.58&-1.94&0.237&0.329&0.381&0.440&0.479\\
+14&-4.57&-3.97&-3.16&-2.53&-1.90&0.308&0.399&0.460&0.515&0.555\\
+16&-4.52&-3.92&-3.12&-2.50&-1.87&0.367&0.459&0.526&0.587&0.613\\
+18&-4.47&-3.87&-3.08&-2.47&-1.85&0.417&0.515&0.574&0.636&0.667\\
+20&-4.41&-3.83&-3.04&-2.44&-1.82&0.460&0.565&0.628&0.690&0.720\\
+\\
+22&-4.36&-3.78&-3.01&-2.41&-1.81&0.497&0.609&0.677&0.744&0.775\\
+24&-4.32&-3.75&-2.98&-2.39&-1.79&0.530&0.648&0.720&0.783&0.822\\
+26&-4.27&-3.71&-2.96&-2.37&-1.77&0.559&0.682&0.760&0.827&0.867\\
+28&-4.23&-3.68&-2.93&-2.35&-1.76&0.586&0.714&0.797&0.868&0.910\\
+30&-4.19&-3.64&-.291&-2.33&-1.75&0.610&0.743&0.830&0.906&0.941\\
+\\
+32&-4.16&-3.61&-2.88&-2.32&-1.73&0.631&0.770&0.862&0.942&0.983\\
+34&-4.12&-3.59&-2.86&-2.30&-1.72&0.651&0.794&0.891&0.975&1.02\\
+36&-4.09&-3.56&-2.85&-2.29&-1.71&0.669&0.816&0.917&1.00&1.05\\
+38&-4.06&-3.54&-2.83&-2.28&-1.70&0.686&0.837&0.941&1.03&1.08\\
+40&-4.03&-3.51&-2.81&-2.26&-1.70&0.702&0.857&0.964&1.06&1.11\\
+\\
+42&-4.00&-3.49&-2.80&-2.25&-1.69&0.716&0.875&0.986&1.09&1.14\\
+44&-3.98&-3.47&-2.78&-2.24&-1.68&0.730&0.892&1.01&1.11&1.17\\
+46&-3.95&-3.45&-2.77&-2.23&-1.67&0.742&0.908&1.02&1.13&1.19\\
+48&-3.93&-3.43&-2.75&-2.22&-1.67&0.754&0.923&1.04&1.15&1.22\\
+50&-3.91&-3.41&-2.74&-2.21&-1.66&0.765&0.937&1.06&1.18&1.24\\
+\\
+60&-3.81&-3.34&-2.68&-2.17&-1.64&0.812&0.997&1.13&1.26&1.34\\
+70&-3.73&-3.27&-2.64&-2.14&-1.61&0.849&1.05&1.19&1.33&1.42\\
+80&-3.67&-3.22&-2.60&-2.11&-1.59&0.878&1.08&1.24&1.39&1.48\\
+90&-3.61&-3.17&-2.57&-2.09&-1.58&0.902&1.12&1.28&1.44&1.54\\
+100&-3.57&-3.14&-2.54&-2.07&-1.57&0.923&1.14&1.31&1.48&1.59\\
+\\
+150&-3.409&-3.009&-2.452&-2.004&-1.520&0.990&1.233&1.423&1.623&1.746\\
+200&-3.302&-2.922&-2.391&-1.960&-1.491&1.032&1.290&1.496&1.715&1.853\\
+250&-3.227&-2.861&-2.348&-1.926&-1.471&1.060&1.328&1.545&1.779&1.927\\
+300&-3.172&-2.816&-2.316&01.906&-1.456&1.080&1.357&1.528&1.826&1.983\\
+350&-3.129&-2.781&-2.291&-1.888&-1.444&1.096&1.379&1.610&1.863&2.026\\
+\\
+400&-3.094&-2.753&-2.270&-1.873&-1.434&1.108&1.396&1.633&1.893&2.061\\
+450&-3.064&-2.729&-2.253&-1.861&-1.426&1.119&1.411&1.652&1.918&2.090\\
+500&-3.040&-2.709&-2.239&-1.850&-1.419&1.127&1.423&1.668&1.938&2.114\\
+550&-3.019&-2.691&-2.226&-1.841&-1.413&1.135&1.434&1.682&1.957&2.136\\
+600&-3.000&-2.676&-2.215&-1.833&-1.408&1.141&1.443&1.694&1.972&2.154\\
+\\
+650&-2.984&-2.663&-2.206&-1.826&-1.403&1.147&1.451&1.704&1.986&2.171\\
+700&-2.969&-2.651&-2.197&-1.820&-1.399&1.152&1.458&1.714&1.999&2.185\\
+750&-2.956&-2.640&-2.189&-1.814&-1.395&1.157&1.465&1.722&2.010&2.199\\
+800&-2.944&-2.630&-2.182&-1.809&-1.392&1.161&1.471&1.730&2.020&2.221\\
+850&-2.933&-2.621&-2.176&-1.804&-1.389&1.165&1.476&1.737&2.029&2.221\\
+\\
+900&-2.923&-2.613&-2.710&-1.800&-1.386&1.168&1.481&1.743&2.037&2.231\\
+950&-2.914&-2.605&-2.164&-1.796&-1.383&1.171&1.485&1.749&2.045&2.241\\
+1000&-2.906&-2.599&-2.159&-1.792&-1.381&1.174&1.489&1.754&2.052&2.249\\
+1500&-2.845&-2.549&-2.123&-1.765&-1.363&1.194&1.519&1.793&2.103&2.309\\
+2000&-2.807&-2.515&-2.101&-1.750&-1.353&1.207&1.536&1.815&2.132&2.342\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+\clearpage
+
+\begin{table}
+\caption{Sample Data. Diameters at Breast Height (cm)
+of 584 Longleaf Pine Trees.}
+\label{tbl:pine}
+Locations and Diameters at Breast Height (dbh, in centimeters)
+of all 584 Longleaf Pine Trees in the 4 hectare Study Region.
+The \(x\) coordinates are distances (in meters) from the tree to the 
+southern boundary. The \(y\) coordinates are distances (in meters) from
+the tree to the eastern boundary.
+Reproduced from Table~8.1 of Cressie~\protect\cite{cressie91}.
+\scriptsize
+\begin{center}
+\begin{tabular}{rrrrrrrrrrrr}
+\hline
+\(x\)&\(y\)& dbh &\(x\)&\(y\)& dbh &\(x\)&\(y\)& dbh &\(x\)&\(y\)& dbh \\
+\hline
+200.0&  8.8& 32.9&199.3& 10.0& 53.5&193.6& 22.4& 68.0&167.7& 35.6& 17.7\\
+183.9& 45.4& 36.9&182.5& 47.2& 51.6&166.1& 48.8& 66.4&160.7& 42.4& 17.7\\
+162.9& 29.0& 21.9&166.4& 33.6& 25.7&163.0& 35.8& 25.5&156.1& 38.7& 28.3\\
+157.6& 42.8& 11.2&154.4& 36.2& 33.8&150.8& 45.8&  2.5&144.6& 25.4&  4.2\\
+142.7& 25.4&  2.5&144.0& 28.3& 31.2&143.5& 36.9& 16.4&123.1& 14.3& 53.2\\
+113.9& 13.1& 67.3&114.9&  8.1& 37.8&101.4&  9.3& 49.9&105.7&  9.1& 46.3\\
+106.9& 14.7& 40.5&127.0& 29.7& 57.7&129.8& 45.8& 58.0&136.3& 44.2& 54.9\\
+106.7& 49.4& 25.3&103.4& 49.6& 18.4& 89.7&  4.9& 72.0& 10.8&  0.0& 31.4\\
+ 26.4&  5.4& 55.1& 11.0&  5.5& 36.0&  5.1&  3.9& 28.4& 10.1&  8.5& 24.8\\
+ 18.9& 11.3& 44.1& 28.4& 11.0& 50.9& 41.1&  9.2& 47.5& 41.2& 12.6& 58.0\\
+\\
+ 33.9& 21.4& 36.9& 40.8& 39.8& 65.6& 49.7& 18.2& 52.9&  6.7& 46.9& 39.5\\
+ 11.6& 46.9& 42.7& 17.2& 47.9& 44.4& 19.4& 50.0& 40.3& 26.9& 47.2& 53.5\\
+ 39.6& 47.9& 44.2& 38.0& 50.7& 53.8& 19.1& 45.2& 38.0& 32.1& 35.0& 48.3\\
+ 28.4& 35.5& 42.9&  3.8& 44.8& 40.6&  8.5& 43.4& 34.5& 11.2& 40.2& 45.7\\
+ 22.4& 34.3& 51.8& 23.8& 33.3& 52.0& 24.9& 29.8& 44.5&  9.0& 38.9& 35.6\\
+ 10.4& 61.2& 19.2& 30.9& 52.2& 43.5& 48.9& 67.8& 33.7& 49.5& 73.8& 43.3\\
+ 46.3& 80.9& 36.6& 44.1& 78.0& 46.3& 48.5& 94.8& 48.3& 45.9& 90.4& 20.4\\
+ 44.2& 84.0& 40.5& 37.0& 64.3& 44.0& 36.3& 67.7& 40.9& 36.7& 71.5& 51.0\\
+ 35.3& 78.3& 36.5& 33.5& 81.6& 42.1& 29.3& 83.8& 15.6& 22.4& 84.1& 18.5\\
+ 17.1& 84.7& 43.0& 27.3& 89.4& 28.9& 27.9& 90.6& 21.3& 48.4& 99.5& 30.9\\
+
+ 43.6& 98.4& 42.7& 39.0& 97.3& 37.6& 14.9& 91.2& 47.1&  6.1& 96.2& 44.6\\
+ 10.7& 98.6& 44.3& 22.2&100.0& 26.1\\
+     &     &     &     &     &     & 32.7& 99.1& 25.9&  0.9&100.0& 41.4\\
+ 93.5& 96.2& 59.5& 85.1& 90.6& 26.1& 92.8& 61.5& 11.4& 91.3& 69.5& 33.4\\
+ 95.9& 59.7& 35.8& 93.4& 71.5& 54.4& 89.6& 86.3& 33.6& 99.5& 78.9& 35.5\\
+100.6& 53.1&  7.4&103.5& 72.1& 36.6&104.7& 74.0& 19.1&104.0& 67.1& 34.9\\
+104.2& 64.7& 37.3&105.0& 59.8& 16.3&111.8& 73.2& 39.1&112.4& 69.8& 36.5\\
+110.0& 65.9& 25.0&120.4& 79.2& 46.8&109.4& 62.5& 18.7&109.7& 62.9& 23.2\\
+113.3& 60.4& 20.4&118.0& 69.3& 42.3&126.5& 69.2& 38.1&125.1& 68.2& 17.9\\
+114.2& 54.6& 39.7&110.6& 51.5& 14.5&147.3& 73.8& 33.5&146.7& 73.0& 56.0\\
+148.1& 86.2& 66.1&138.2& 73.4& 26.3&135.7& 70.7& 44.8&134.9& 72.7& 24.2\\
+ 98.0& 27.7& 39.0& 93.5& 28.7& 15.1& 82.3& 16.8& 35.6& 79.2& 25.3& 21.6\\
+ 84.2& 29.0& 17.2& 88.8& 35.1& 22.3& 82.5& 36.3& 18.2& 75.6& 28.1& 55.6\\
+ 72.9& 36.2& 23.2& 79.1& 43.6& 27.0& 50.0& 48.8& 50.1& 59.9& 34.4& 45.5\\
+ 60.5& 13.0& 47.2& 60.2& 11.4& 37.8& 66.5& 15.9& 31.9& 70.4&  6.6& 38.5\\
+ 70.7&  2.2& 23.8& 71.7&  1.9& 46.3&179.5& 92.6&  2.8&186.1& 91.0&  3.2\\
+178.3& 92.4&  5.8&178.6& 91.8&  3.5&186.2& 90.3&  2.3&185.2& 89.9&  3.8\\
+185.5& 89.8&  3.2&185.8& 89.1&  4.4&186.5& 88.8&  3.9&176.7& 92.3&  7.8\\
+177.7& 91.5&  4.7&184.0& 89.0&  4.8& 11.0& 34.4& 44.1& 17.5& 21.9& 51.5\\
+  4.3& 31.3& 51.6&  5.9&  8.1& 33.3&  1.9& 68.5& 13.3&  1.8& 71.0&  5.7\\
+  1.1& 82.5&  3.3&  2.4& 95.3& 45.9&  4.6& 94.0& 32.6&  3.1& 79.5& 11.4\\
+  3.9& 72.1&  9.1&  4.1& 70.9&  5.2&  7.9& 68.7&  4.9& 14.8& 81.8& 42.0\\
+  9.4& 67.7& 32.0& 15.9& 78.7& 32.8& 16.6& 78.8& 22.0& 18.2& 80.3& 20.8\\
+174.1&135.6&  7.3&173.0&127.4&  3.0&174.0&125.7&  2.2&177.3&121.0&  2.2\\
+177.6&120.3&  2.2&195.7&144.1& 59.4&197.0&142.5& 48.1&178.2&112.6& 51.5\\
+173.8&112.7& 50.3&172.8&124.4&  2.9&162.7&114.6& 19.1&164.6&120.9& 15.1\\
+ 80.4& 90.7& 21.7& 71.0& 88.8& 42.4& 73.0& 85.6& 40.2& 56.7& 95.3& 37.4\\
+ 66.5& 86.2& 40.1& 67.0& 84.7& 39.5& 62.9& 87.9& 32.5& 61.8& 89.0& 39.5\\
+ 51.9& 94.5& 35.6& 60.9& 71.6& 44.1& 61.0& 69.8& 42.2& 61.7& 66.2& 39.4\\
+ 57.3& 68.4& 35.5& 54.2& 76.4& 39.1& 76.1& 52.9&  9.5& 67.2& 57.6& 48.4\\
+ 81.9& 58.5& 31.9& 90.1& 59.6& 30.7&135.3&126.6& 15.0&135.0&124.0& 24.5\\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+\clearpage
+
+\scriptsize
+\begin{center}
+{\normalsize Table~\thetable (continued).}
+\par\vspace{\baselineskip}\par
+\begin{tabular}{rrrrrrrrrrrr}
+\hline
+\(x\)&\(y\)& dbh &\(x\)&\(y\)& dbh &\(x\)&\(y\)& dbh &\(x\)&\(y\)& dbh \\
+\hline
+136.2&122.1& 15.0&129.7&127.0& 22.2&134.8&120.2& 27.5&136.9&116.8& 10.8\\
+137.0&116.0& 26.2&128.9&124.2& 10.2&127.5&125.0& 18.9&127.6&121.7& 44.2\\
+129.7&119.0& 13.8&126.6&121.1& 16.7&133.4& 77.1& 35.7&129.9& 76.1& 12.1\\
+126.5& 77.3& 35.4&129.1& 83.1& 32.7&134.4& 87.0& 30.1&130.7& 90.1& 28.4\\
+130.9& 90.7& 16.5&132.0& 94.5& 12.7&136.8& 96.7&  5.5&137.7& 98.0&  2.5\\
+157.8& 99.9&  3.0&187.1& 98.1&  3.2&190.6& 92.1&  3.2&185.4& 93.1&  4.0\\
+186.6& 92.2&  3.6&185.9& 91.7&  3.8&184.3& 92.1&  4.3&188.2& 91.2&  3.3\\
+104.4&145.1&  6.3&104.9&145.0& 18.4&101.5&148.4&  5.4&102.4&148.7&  5.4\\
+123.4&128.9& 26.0&123.8&135.1& 22.3&127.0&133.8& 35.2&109.6&145.9& 24.1\\
+112.4&145.0&  6.9&133.1&144.8& 61.0&139.4&143.1& 20.6&140.4&143.6&  6.5\\
+184.1& 88.2&  2.8&183.5& 88.5&  4.8&183.0& 88.0&  5.4&176.1& 91.0&  4.3\\
+175.6& 90.2&  4.0&173.8& 89.9&  3.2&164.9& 93.7&  2.8&163.0& 95.3&  4.9\\
+163.2& 94.1&  3.5&162.4& 94.5&  2.9&161.5& 94.9&  2.4&162.2& 94.3&  3.3\\
+161.0& 94.7&  2.1&157.7& 95.7&  2.0&154.9& 96.2&  3.9&154.6& 92.7&  5.0\\
+152.9& 93.7&  2.3&153.2& 93.2&  2.2&168.2& 73.0& 67.7&151.6& 93.0&  2.9\\
+151.4& 93.4&  2.4&157.6& 67.2& 56.3&149.4& 63.0& 39.4&149.4& 64.3& 59.5\\
+167.3& 54.6& 42.4&157.4& 51.5& 63.7&181.5& 66.1& 66.6&196.5& 55.2& 69.3\\
+189.9& 85.2& 56.9&155.1&149.2& 23.5&154.5&148.4&  9.1&162.9&119.9& 29.9\\
+158.4&113.4& 14.9&153.9&108.3& 38.7&156.1&116.0& 31.5&156.5&118.9& 27.8\\
+156.8&122.3& 28.5&159.0&126.1& 21.6&161.0&131.9&  2.0&161.3&132.8&  2.6\\
+160.6&132.6&  2.3&161.3&134.9&  3.5&159.7&129.8&  3.6&161.7&136.1&  2.6\\
+161.1&136.4&  2.0&160.1&133.0&  2.0&159.0&133.6&  2.7&160.0&134.8&  2.6\\
+160.2&135.5&  2.2&159.1&136.5&  2.7&154.7&126.8& 30.1&151.9&127.5& 16.6\\
+151.3&124.7& 10.4&151.0&127.3& 11.8&150.4&123.0& 32.3&149.6&124.6& 33.5\\
+146.2&127.1& 30.5&146.1&127.4& 10.5&144.4&131.8& 13.8&143.3&131.5& 22.8\\
+140.6&137.7& 31.7&143.2&125.4& 10.1&127.1&119.9& 14.5&120.7&115.6& 12.0\\
+115.3&112.6&  2.2&134.1&105.2&  2.3&134.6&104.1&  3.2&135.6&103.3&  3.0\\
+128.9&102.6& 50.6&116.3&106.5&  2.6&104.3&104.0& 50.0&111.5&100.0& 52.2\\
+100.5&149.7&  5.2&100.0&145.5&  5.2&100.8&145.0&  6.7&100.9&143.5& 14.0\\
+100.3&140.8& 12.7&101.5&120.8& 59.5& 99.3&110.6& 52.0& 99.2&106.0& 45.9\\
+102.0&137.1& 18.0&105.4&115.7& 43.5&103.6&134.2&  3.3&103.9&139.4&  4.3\\
+102.6&141.6&  7.4&102.0&143.3& 10.1&102.1&144.4& 23.1&103.5&141.3&  8.1\\
+102.9&143.8&  5.7&105.7&138.2& 13.3&106.6&135.1& 12.8&108.5&133.2& 11.6\\
+105.2&142.3&  6.3&139.7&145.8& 20.0&145.5&148.4&  8.9&146.4&148.4& 27.6\\
+105.8&149.8&  4.5& 96.7&149.1&  9.2& 66.5&150.0&  2.3& 55.7&148.5&  5.0\\
+ 54.7&146.8&  4.0& 57.1&144.0& 21.8& 61.7&145.3& 10.9& 60.1&143.7& 14.9\\
+ 77.7&144.8& 45.0& 67.2&139.3& 16.4& 80.7&133.2& 43.3& 85.1&133.5& 55.6\\
+ 94.7&143.7& 10.6& 81.2&125.0& 45.9& 81.9&123.2& 45.2& 83.8&123.1& 35.5\\
+ 84.8&121.4& 43.6& 82.9&119.2& 44.6& 82.1&116.4& 38.8& 84.3&114.8& 34.9\\
+ 96.7&142.6& 17.0& 92.0&109.0& 50.4& 96.1&146.6&  2.0& 78.5&102.5& 33.8\\
+ 78.7&103.0& 51.1& 59.5&107.4& 21.8& 56.5&105.5& 46.5& 64.3&132.1&  5.6\\
+152.7&146.7& 19.6&155.8&145.4& 32.3&161.2&138.1&  3.7&161.0&138.1&  2.7\\
+162.1&136.9&  2.5&166.2&132.0&  2.5&168.7&133.4&  2.4&169.3&133.7&  7.2\\
+ 57.9&140.7&  7.0& 57.5&142.3& 11.8& 57.3&141.7&  8.5& 56.0&137.7&  9.5\\
+ 53.4&139.3&  7.0& 53.1&136.0& 10.5& 54.0&137.7&  6.6& 54.5&136.7&  6.6\\
+ 53.3&137.8&  8.8& 52.1&139.3& 11.6& 48.0&114.4& 48.2& 44.2&129.6& 36.2\\
+ 39.4&136.8& 44.9& 42.7&124.0& 43.0& 38.1&134.4& 37.5& 37.1&131.9& 31.5\\
+ 37.6&125.4& 39.9& 31.2&127.9& 35.5& 40.1&112.2& 51.7& 29.3&118.6& 36.5\\
+ 23.8&114.5& 40.2&141.0&127.8&  7.8&140.1&127.3& 17.0&140.9&121.4& 36.4\\
+135.0&132.3& 19.6&139.3&122.9& 15.0&142.0&117.2& 28.8&140.4&117.2& 20.1\\
+\hline
+\end{tabular}
+\end{center}
+\clearpage
+
+\scriptsize
+\begin{center}
+{\normalsize Table~\thetable (continued).}
+\par\vspace{\baselineskip}\par
+\begin{tabular}{rrrrrrrrrrrr}
+\hline
+\(x\)&\(y\)& dbh &\(x\)&\(y\)& dbh &\(x\)&\(y\)& dbh &\(x\)&\(y\)& dbh \\
+\hline
+138.5&121.5& 39.3& 28.7&158.8& 37.9& 33.7&162.3& 40.6& 23.1&160.8& 33.0\\
+ 11.3&158.9& 35.7& 18.2&168.2& 20.6& 21.5&172.3& 22.0& 15.9&168.3& 16.3\\
+ 15.4&172.8&  5.6& 14.0&174.2&  7.4&  6.8&179.6& 42.3&  6.0&184.1& 43.8\\
+  1.6&194.9& 53.0& 43.6&197.3& 48.1& 39.4&195.5& 41.9& 37.1&196.1& 48.0\\
+ 23.7&193.9& 75.9& 21.5&187.9& 40.4& 27.7&188.7& 40.9& 32.3&178.9& 39.4\\
+ 32.6&168.6& 40.9& 37.7&176.9& 17.6&107.5&138.5& 17.8&107.9&139.5&  3.7\\
+116.5&122.6& 19.0&114.5&127.7& 11.2&115.3&127.4& 27.6&115.3&128.1& 14.5\\
+119.0&127.4& 34.4&119.4&127.7& 20.0& 94.7&179.8&  2.9& 89.3&185.0&  7.3\\
+ 90.8&174.0& 52.7& 95.3&158.4&  8.7& 90.9&162.1&  3.6& 90.2&162.1&  4.6\\
+ 90.2&161.7& 11.4& 90.6&160.8& 11.0& 93.0&158.0& 18.7& 78.4&172.4&  5.6\\
+ 76.2&171.4&  2.1& 75.8&171.0&  3.3& 75.7&169.7& 11.5& 82.7&163.5&  2.6\\
+ 76.7&166.3&  4.4& 74.7&167.1& 18.3&119.4&170.8&  7.5& 74.2&164.3& 17.2\\
+ 73.9&162.7&  4.6& 81.7&156.7& 32.0& 79.5&156.3& 56.7& 56.8&116.0& 46.0\\
+ 62.2&137.7&  7.8& 58.2&125.1& 54.9& 54.1&115.5& 45.5& 59.5&138.1&  9.2\\
+ 58.6&140.3& 13.2& 58.8&141.5& 15.3& 57.9&137.3&  8.5&153.5&159.9&  2.2\\
+155.9&183.7& 58.8&160.4&176.6& 47.5&171.3&185.1& 52.2&182.8&187.4& 56.3\\
+182.5&196.0& 39.8&176.3&197.7& 38.1&161.9&199.4& 38.9&199.5&179.4&  9.7\\
+197.6&176.9&  7.4&196.3&192.4& 22.1&195.7&180.5& 16.9&196.2&177.1&  5.9\\
+196.3&176.0& 10.5&193.7&185.8&  9.5&191.7&189.2& 45.9&194.5&173.8& 11.4\\
+192.7&177.3&  7.8&188.9&182.1& 14.4&190.1&174.4&  8.3&186.9&179.4& 30.6\\
+ 26.9&111.3& 44.4& 17.9&111.0& 38.7& 34.4&104.2& 41.5& 31.9&103.2& 34.5\\
+ 20.6&101.5& 31.8& 14.1&103.1& 39.7&  2.9&122.8& 23.3&  6.4&125.9& 37.7\\
+  2.2&142.2& 43.0& 11.7&116.2& 39.2& 14.2&116.5& 40.4& 15.6&118.1& 36.7\\
+ 13.6&127.4& 48.4& 11.1&134.8& 27.9&  7.2&141.7& 46.4& 12.2&140.1& 38.5\\
+ 23.0&132.7& 39.4& 30.2&133.9& 50.0& 27.7&136.5& 51.6&  3.4&148.8& 38.7\\
+ 15.4&145.6& 39.6& 16.7&146.4& 29.1& 24.3&145.7& 44.0&  0.4&175.2& 50.9\\
+  0.0&177.5& 50.8&  7.9&151.0& 43.0& 33.2&151.2& 44.5& 36.6&150.6& 29.8\\
+ 42.2&153.7& 44.3& 24.5&153.4& 51.2& 40.4&179.3& 37.7& 41.0&176.6& 36.8\\
+ 43.9&182.2& 33.6& 44.7&184.6& 47.9& 45.6&175.2& 32.0& 47.5&175.9& 40.3\\
+ 51.2&177.9& 42.5& 55.0&159.3& 59.7& 58.0&180.3& 44.2& 54.6&188.7& 30.9\\
+ 58.9&180.0& 39.5& 63.9&178.6& 48.7& 64.3&178.9& 32.8& 65.6&179.3& 47.2\\
+ 61.0&184.9& 42.1& 63.1&183.3& 43.8& 86.1&186.9& 30.5& 65.8&194.9& 28.3\\
+ 90.0&195.1& 10.4& 94.3&196.1& 15.0& 91.9&197.1&  7.4& 86.5&197.4& 15.3\\
+ 87.5&199.3& 17.5& 93.9&199.2&  5.0& 92.4&199.3& 12.2& 81.8&198.9&  9.0\\
+ 99.0&158.1&  2.4& 94.1&187.2& 13.7& 95.4&182.9& 13.1& 97.1&168.4& 12.8\\
+ 79.2&155.6& 27.0& 61.6&158.2&  2.6& 70.3&153.1&  4.9& 79.8&151.8& 35.0\\
+110.1&150.4& 23.7&116.1&156.8& 42.9&114.0&165.1& 14.2&103.2&154.4&  3.3\\
+112.3&167.0& 28.4&110.4&167.3& 10.0&110.6&166.4&  6.4&107.0&165.0& 22.0\\
+105.6&160.6&  4.3&104.0&162.4& 10.0&104.0&166.1&  9.2&103.7&167.2&  3.7\\
+108.6&182.1& 66.7&105.7&182.6& 68.0&102.8&169.7& 23.1&101.5&171.8&  5.7\\
+100.4&170.5& 11.7&144.1&199.0& 40.4&138.3&197.9& 43.3&142.7&197.2& 60.2\\
+118.8&188.0& 55.5&142.3&173.3& 54.1&143.8&156.0& 22.3&145.3&155.6& 21.4\\
+151.2&192.2& 55.7&153.7&176.5& 51.4&186.9&174.7& 23.9&181.2&176.9&  5.2\\
+181.1&176.1&  7.6&177.2&174.5& 27.8&182.8&162.9& 49.6&180.0&160.2& 51.0\\
+189.1&156.3& 50.7&196.9&151.4& 43.4&171.4&161.6& 55.6&169.1&160.0&  4.3\\
+162.5&157.3&  2.5&156.7&155.3& 23.5&154.1&150.8&  8.0& 87.7&200.0& 11.7\\
+\hline
+\end{tabular}
+\end{center}
+\normalsize
+\clearpage
+
+\begin{table}
+\caption{
+Coefficients for transforming \(\protect\sqrt{b_1}\) to a standard normal
+using a Johnson \(S_U\) approximation.}
+\centerline{Reproduced from Table~4 of D'Agostino and 
+Pearson~\protect\cite{dagostino73}.}
+\label{tbl:johnson}
+\scriptsize
+\begin{center}
+\begin{tabular}{rllrllrll}\hline
+\multicolumn{1}{c}{\(n\)} & \multicolumn{1}{c}{\(\delta\)} 
+& \multicolumn{1}{c}{\(1/\lambda\)} &
+\multicolumn{1}{c}{\(n\)} & \multicolumn{1}{c}{\(\delta\)} 
+& \multicolumn{1}{c}{\(1/\lambda\)} &
+\multicolumn{1}{c}{\(n\)} & \multicolumn{1}{c}{\(\delta\)} 
+& \multicolumn{1}{c}{\(1/\lambda\)} \\ \hline
+ 8 & 5.563 & 0.3030 & 62 & 3.389 & 1.0400 & 260 & 5.757 & 1.1744 \\
+ 9 & 4.260 & 0.4080 & 64 & 3.420 & 1.0449 & 270 & 5.835 & 1.1761 \\
+10 & 3.734 & 0.4794 & 66 & 3.450 & 1.0495 & 280 & 5.946 & 1.1779 \\
+   &       &        & 68 & 3.480 & 1.0540 & 290 & 6.039 & 1.1793 \\
+11 & 3.447 & 0.5339 & 70 & 3.510 & 1.0581 & 300 & 6.130 & 1.1808 \\
+12 & 3.270 & 0.5781 \\
+13 & 3.151 & 0.6153 & 72 & 3.540 & 1.0621 & 310 & 6.220 & 1.1821 \\
+14 & 3.069 & 0.6473 & 74 & 3.569 & 1.0659 & 320 & 6.308 & 1.1834 \\
+15 & 3.010 & 0.6753 & 76 & 3.599 & 1.0695 & 330 & 6.396 & 1.1846 \\
+   &       &        & 78 & 3.628 & 1.0730 & 340 & 6.482 & 1.1858 \\
+16 & 2.968 & 0.7001 & 80 & 3.657 & 1.0763 & 350 & 6.567 & 1.1868 \\
+17 & 2.937 & 0.7224 \\
+18 & 2.915 & 0.7426 & 82 & 3.686 & 1.0795 & 360 & 6.651 & 1.1879 \\
+19 & 2.900 & 0.7610 & 84 & 3.715 & 1.0825 & 370 & 6.733 & 1.1888 \\
+20 & 2.890 & 0.7779 & 86 & 3.744 & 1.0854 & 380 & 6.815 & 1.1897 \\
+   &       &        & 88 & 3.772 & 1.0882 & 390 & 6.896 & 1.1906 \\
+21 & 2.884 & 0.7934 & 90 & 3.801 & 1.0909 & 400 & 6.976 & 1.1914 \\
+22 & 2.882 & 0.8078 \\
+23 & 2.882 & 0.8211 & 92 & 3.829 & 1.0934 & 410 & 7.056 & 1.1922 \\
+24 & 2.884 & 0.8336 & 94 & 3.857 & 1.0959 & 420 & 7.134 & 1.1929 \\
+25 & 2.889 & 0.8452 & 96 & 3.885 & 1.0983 & 430 & 7.211 & 1.1937 \\
+   &       &        & 98 & 3.913 & 1.1006 & 440 & 7.288 & 1.1943 \\
+26 & 2.895 & 0.8561 & 100 & 3.940 & 1.1028 & 450 & 7.363 & 1.1950 \\
+27 & 2.902 & 0.8664 \\
+28 & 2.910 & 0.8760 & 105 & 4.009 & 1.1080 & 460 & 7.438 & 1.1956 \\
+29 & 2.920 & 0.8851 & 110 & 4.076 & 1.1128 & 470 & 7.513 & 1.1962 \\
+30 & 2.930 & 0.8938 & 115 & 4.142 & 1.1172 & 480 & 7.586 & 1.1968 \\
+   &       &        & 120 & 4.207 & 1.1212 & 490 & 7.659 & 1.1974 \\
+31 & 2.941 & 0.9020 & 125 & 4.272 & 1.1250 & 500 & 7.731 & 1.1959 \\
+32 & 2.952 & 0.9097 \\
+33 & 2.964 & 0.9171 & 130 & 4.336 & 1.1285 & 520 & 7.873 & 1.1989 \\
+34 & 2.977 & 0.9241 & 135 & 4.398 & 1.1318 & 540 & 8.013 & 1.1998 \\
+35 & 2.990 & 0.9308 & 140 & 4.460 & 1.1348 & 560 & 8.151 & 1.2007 \\
+   &       &        & 145 & 4.521 & 1.1377 & 580 & 8.286 & 1.2015 \\
+36 & 3.003 & 0.9372 & 150 & 4.582 & 1.1403 & 600 & 8.419 & 1.2023 \\
+37 & 3.016 & 0.9433 \\
+38 & 3.030 & 0.9492 & 155 & 4.641 & 1.1428 & 620 & 8.550 & 1.2030 \\
+39 & 3.044 & 0.9548 & 160 & 4.700 & 1.1452 & 640 & 8.679 & 1.2036 \\
+40 & 3.058 & 0.9601 & 165 & 4.758 & 1.1474 & 660 & 8.806 & 1.2043 \\
+   &       &        & 170 & 4.816 & 1.1496 & 680 & 8.931 & 1.2049 \\
+41 & 3.073 & 0.9653 & 175 & 4.873 & 1.1516 & 700 & 9.054 & 1.2054 \\
+42 & 3.087 & 0.9702 \\
+43 & 3.102 & 0.9750 & 180 & 4.929 & 1.1535 & 720 & 9.176 & 1.2060 \\
+44 & 3.117 & 0.9795 & 185 & 4.985 & 1.1553 & 740 & 9.297 & 1.2065 \\
+45 & 3.131 & 0.9840 & 190 & 5.040 & 1.1570 & 760 & 9.415 & 1.2069 \\
+   &       &        & 195 & 5.094 & 1.1586 & 780 & 9.533 & 1.2073 \\
+46 & 3.146 & 0.9882 & 200 & 5.148 & 1.1602 & 800 & 9.649 & 1.2078 \\
+47 & 3.161 & 0.9923 \\
+48 & 3.176 & 0.9963 & 205 & 5.202 & 1.1616 & 820 & 9.763 & 1.2082 \\
+49 & 3.192 & 1.0001 & 210 & 5.255 & 1.1631 & 840 & 9.876 & 1.2086 \\
+50 & 3.207 & 1.0038 & 215 & 5.307 & 1.1644 & 860 & 9.988 & 1.2089 \\
+   &       &        & 220 & 5.359 & 1.1657 & 880 & 10.098 & 1.2093 \\
+52 & 3.237 & 1.0108 & 225 & 5.410 & 1.1669 & 900 & 10.208 & 1.2096 \\
+54 & 3.268 & 1.0174 \\
+56 & 3.298 & 1.0235 & 230 & 5.461 & 1.1681 & 920 & 10.316 & 1.2100 \\
+58 & 3.329 & 1.0293 & 235 & 5.511 & 1.1693 & 940 & 10.423 & 1.2103 \\
+60 & 3.359 & 1.0348 & 240 & 5.561 & 1.1704 & 960 & 10.529 & 1.2106 \\
+   &       &        & 245 & 5.611 & 1.1714 & 980 & 10.634 & 1.2109 \\
+   &       &        & 250 & 5.660 & 1.1724 & 1000 & 10.738 & 1.2111 \\
+\hline
+\end{tabular}
+\end{center}
+\normalsize
+\end{table}
+\clearpage
+
+\begin{table}
+\caption{Coefficients \(\{a_{n-i+1}\}\) for the Shapiro-Wilk
+\(W\) Test for Normality.}
+\centerline{Reproduced from Table~5 of Shapiro and Wilk~\cite{shapiro65}.}
+\label{tbl:shapiro-wilk-a}
+\tiny
+\begin{center}
+\begin{tabular}{rcccccccccc}\hline
+\multicolumn{1}{c}{\(i\)}  & \multicolumn{10}{c}{\(n\)} \\ \hline
+  & \multicolumn{1}{c}{2} 
+  & \multicolumn{1}{c}{3} 
+  & \multicolumn{1}{c}{4} 
+  & \multicolumn{1}{c}{5} 
+  & \multicolumn{1}{c}{6} 
+  & \multicolumn{1}{c}{7} 
+  & \multicolumn{1}{c}{8} 
+  & \multicolumn{1}{c}{9} 
+  & \multicolumn{1}{c}{10} \\ \cline{2-10}
+ 1&0.7071&0.7071&0.6872&0.6646&0.6431&0.6233&0.6052&0.5888&0.5739\\
+ 2&    --&0.0000&0.1677&0.2413&0.2806&0.3031&0.3164&0.3244&0.3291\\
+ 3&    --&    --&   -- &0.0000&0.0875&0.1401&0.1743&0.1976&0.2141\\
+ 4&    --&    --&   -- &   -- &   -- &0.0000&0.0561&0.0947&0.1224\\
+ 5&    --&    --&   -- &   -- &   -- &   -- &   -- &0.0000&0.0399\\
+\\
+  & \multicolumn{1}{c}{11} 
+  & \multicolumn{1}{c}{12} 
+  & \multicolumn{1}{c}{13} 
+  & \multicolumn{1}{c}{14} 
+  & \multicolumn{1}{c}{15} 
+  & \multicolumn{1}{c}{16} 
+  & \multicolumn{1}{c}{17} 
+  & \multicolumn{1}{c}{18} 
+  & \multicolumn{1}{c}{19} 
+  & \multicolumn{1}{c}{20} \\ \cline{2-11}
+ 1&0.5601&0.5475&0.5359&0.5251&0.5150&0.5056&0.4968&0.4886&0.4808&0.4734\\
+ 2&0.3315&0.3325&0.3325&0.3318&0.3306&0.3290&0.3273&0.3253&0.3232&0.3211\\
+ 3&0.2260&0.2347&0.2412&0.2460&0.2495&0.2521&0.2540&0.2553&0.2561&0.2565\\
+ 4&0.1429&0.1586&0.1707&0.1802&0.1878&0.1939&0.1988&0.2027&0.2059&0.2085\\
+ 5&0.0695&0.0922&0.1099&0.1240&0.1353&0.1447&0.1524&0.1587&0.1641&0.1686\\
+ 6&0.0000&0.0303&0.0539&0.0727&0.0880&0.1005&0.1109&0.1197&0.1271&0.1334\\
+ 7&   -- &   -- &0.0000&0.0240&0.0433&0.0593&0.0725&0.0837&0.0932&0.1013\\
+ 8&   -- &   -- &   -- &   -- &0.0000&0.0196&0.0359&0.0496&0.0612&0.0711\\
+ 9&   -- &   -- &   -- &   -- &   -- &   -- &0.0000&0.0163&0.0303&0.0422\\
+10&   -- &   -- &   -- &   -- &   -- &   -- &   -- &   -- &0.0000&0.0140\\
+\\
+  & \multicolumn{1}{c}{21} 
+  & \multicolumn{1}{c}{22} 
+  & \multicolumn{1}{c}{23} 
+  & \multicolumn{1}{c}{24} 
+  & \multicolumn{1}{c}{25} 
+  & \multicolumn{1}{c}{26} 
+  & \multicolumn{1}{c}{27} 
+  & \multicolumn{1}{c}{28} 
+  & \multicolumn{1}{c}{29} 
+  & \multicolumn{1}{c}{30} \\ \cline{2-11}
+ 1&0.4643&0.4590&0.4542&0.4493&0.4450&0.4407&0.4366&0.4328&0.4291&0.4254\\
+ 2&0.3185&0.3156&0.3126&0.3098&0.3069&0.3043&0.3018&0.2992&0.2968&0.2944\\
+ 3&0.2578&0.2571&0.2563&0.2554&0.2543&0.2533&0.2522&0.2510&0.2499&0.2487\\
+ 4&0.2119&0.2131&0.2139&0.2145&0.2148&0.2151&0.2152&0.2151&0.2150&0.2148\\
+ 5&0.1736&0.1764&0.1787&0.1807&0.1822&0.1836&0.1848&0.1857&0.1864&0.1870\\
+ 6&0.1399&0.1443&0.1480&0.1512&0.1539&0.1563&0.1584&0.1601&0.1616&0.1630\\
+ 7&0.1092&0.1150&0.1201&0.1245&0.1283&0.1316&0.1346&0.1372&0.1395&0.1415\\
+ 8&0.0804&0.0878&0.0941&0.0997&0.1046&0.1089&0.1128&0.1162&0.1192&0.1219\\
+ 9&0.0530&0.0618&0.0696&0.0764&0.0823&0.0876&0.0923&0.0965&0.1002&0.1036\\
+10&0.0263&0.0368&0.0459&0.0539&0.0610&0.0672&0.0728&0.0778&0.0822&0.0862\\
+11&0.0000&0.0122&0.0228&0.0321&0.0403&0.0476&0.0540&0.0598&0.0650&0.0697\\
+12&  --  &  --  &0.0000&0.0107&0.0200&0.0284&0.0358&0.0424&0.0483&0.0537\\
+13&  --  &  --  &  --  &  --  &0.0000&0.0094&0.0178&0.0253&0.0320&0.0381\\
+14&  --  &  --  &  --  &  --  &  --  &  --  &0.0000&0.0084&0.0159&0.0227\\
+15&  --  &  --  &  --  &  --  &  --  &  --  &  --  &  --  &0.0000&0.0076\\
+\\
+  & \multicolumn{1}{c}{31} 
+  & \multicolumn{1}{c}{32} 
+  & \multicolumn{1}{c}{33} 
+  & \multicolumn{1}{c}{34} 
+  & \multicolumn{1}{c}{35} 
+  & \multicolumn{1}{c}{36} 
+  & \multicolumn{1}{c}{37} 
+  & \multicolumn{1}{c}{38} 
+  & \multicolumn{1}{c}{39} 
+  & \multicolumn{1}{c}{40} \\ \cline{2-11}
+ 1&0.4220&0.4188&0.4156&0.4127&0.4096&0.4068&0.4040&0.4015&0.3989&0.3964\\
+ 2&0.2921&0.2898&0.2876&0.2854&0.2834&0.2813&0.2794&0.2774&0.2755&0.2737\\
+ 3&0.2475&0.2463&0.2451&0.2439&0.2427&0.2415&0.2403&0.2391&0.2380&0.2368\\
+ 4&0.2145&0.2141&0.2137&0.2132&0.2127&0.2121&0.2116&0.2110&0.2104&0.2098\\
+ 5&0.1874&0.1878&0.1880&0.1882&0.1883&0.1883&0.1883&0.1881&0.1880&0.1878\\
+ 6&0.1641&0.1651&0.1660&0.1667&0.1673&0.1678&0.1683&0.1686&0.1689&0.1691\\
+ 7&0.1433&0.1449&0.1463&0.1475&0.1487&0.1496&0.1505&0.1513&0.1520&0.1526\\
+ 8&0.1243&0.1265&0.1284&0.1301&0.1317&0.1331&0.1344&0.1356&0.1366&0.1376\\
+ 9&0.1066&0.1093&0.1118&0.1140&0.1160&0.1179&0.1196&0.1211&0.1225&0.1237\\
+10&0.0899&0.0931&0.0961&0.0988&0.1013&0.1036&0.1056&0.1075&0.1092&0.1108\\
+11&0.0739&0.0777&0.0812&0.0844&0.0873&0.0900&0.0924&0.0947&0.0967&0.0986\\
+12&0.0585&0.0629&0.0669&0.0706&0.0739&0.0770&0.0798&0.0824&0.0848&0.0870\\
+13&0.0435&0.0485&0.0530&0.0572&0.0610&0.0645&0.0677&0.0706&0.0733&0.0759\\
+14&0.0289&0.0344&0.0395&0.0441&0.0484&0.0523&0.0559&0.0592&0.0622&0.0651\\
+15&0.0144&0.0206&0.0262&0.0314&0.0361&0.0404&0.0444&0.0481&0.0515&0.0546\\
+16&0.0000&0.0068&0.0131&0.0187&0.0239&0.0287&0.0331&0.0372&0.0409&0.0444\\
+17&  --  &  --  &0.0000&0.0062&0.0119&0.0172&0.0220&0.0264&0.0305&0.0343\\
+18&  --  &  --  &  --  &  --  &0.0000&0.0057&0.0110&0.0158&0.0203&0.0244\\
+19&  --  &  --  &  --  &  --  &  --  &  --  &0.0000&0.0053&0.0101&0.0146\\
+20&  --  &  --  &  --  &  --  &  --  &  --  &  --  &  --  &0.0000&0.0049\\
+\\
+  & \multicolumn{1}{c}{41} 
+  & \multicolumn{1}{c}{42} 
+  & \multicolumn{1}{c}{43} 
+  & \multicolumn{1}{c}{44} 
+  & \multicolumn{1}{c}{45} 
+  & \multicolumn{1}{c}{46} 
+  & \multicolumn{1}{c}{47} 
+  & \multicolumn{1}{c}{48} 
+  & \multicolumn{1}{c}{49} 
+  & \multicolumn{1}{c}{50} \\ \cline{2-11}
+ 1&0.3940&0.3917&0.3894&0.3872&0.3850&0.3830&0.3808&0.3789&0.3770&0.3964\\
+ 2&0.2719&0.2701&0.2684&0.2667&0.2651&0.2635&0.2620&0.2604&0.2589&0.2737\\
+ 3&0.2357&0.2345&0.2334&0.2323&0.2313&0.2302&0.2291&0.2281&0.2271&0.2368\\
+ 4&0.2091&0.2085&0.2078&0.2072&0.2065&0.2058&0.2052&0.2045&0.2038&0.2098\\
+ 5&0.1876&0.1874&0.1871&0.1868&0.1865&0.1862&0.1859&0.1855&0.1851&0.1878\\
+ 6&0.1693&0.1694&0.1695&0.1695&0.1695&0.1695&0.1695&0.1693&0.1692&0.1691\\
+ 7&0.1531&0.1535&0.1539&0.1542&0.1545&0.1548&0.1550&0.1551&0.1553&0.1554\\%1526\\
+ 8&0.1384&0.1392&0.1398&0.1405&0.1410&0.1415&0.1420&0.1423&0.1427&0.1430\\%1376\\
+ 9&0.1249&0.1259&0.1269&0.1278&0.1286&0.1293&0.1300&0.1306&0.1312&0.1317\\%1237\\
+10&0.1123&0.1136&0.1149&0.1160&0.1170&0.1180&0.1189&0.1197&0.1205&0.1212\\%1108\\
+11&0.1004&0.1020&0.1035&0.1049&0.1062&0.1073&0.1085&0.1095&0.1105&0.1113\\
+12&0.0891&0.0909&0.0927&0.0943&0.0959&0.0972&0.0986&0.0998&0.1010&0.1020\\
+13&0.0782&0.0804&0.0824&0.0842&0.0860&0.0876&0.0892&0.0906&0.0919&0.0932\\
+14&0.0677&0.0701&0.0724&0.0745&0.0765&0.0783&0.0801&0.0817&0.0832&0.0846\\
+15&0.0575&0.0602&0.0628&0.0651&0.0673&0.0694&0.0713&0.0731&0.0748&0.0764\\
+16&0.0476&0.0506&0.0534&0.0560&0.0584&0.0607&0.0628&0.0648&0.0667&0.0685\\
+17&0.0379&0.0411&0.0442&0.0471&0.0497&0.0522&0.0546&0.0568&0.0588&0.0608\\
+18&0.0283&0.0318&0.0352&0.0383&0.0412&0.0439&0.0465&0.0489&0.0511&0.0532\\
+19&0.0188&0.0227&0.0263&0.0296&0.0328&0.0357&0.0385&0.0411&0.0436&0.0459\\
+20&0.0094&0.0136&0.0175&0.0211&0.0245&0.0277&0.0307&0.0335&0.0361&0.0386\\
+21&  --  &0.0045&0.0087&0.0126&0.0163&0.0197&0.0229&0.0259&0.0288&0.0314\\
+22&  --  &  --  &0.0000&0.0042&0.0081&0.0118&0.0153&0.0185&0.0215&0.0244\\
+23&  --  &  --  &  --  &  --  &0.0000&0.0039&0.0076&0.0111&0.0143&0.0174\\
+24&  --  &  --  &  --  &  --  &  --  &  --  &0.0000&0.0037&0.0071&0.0104\\
+25&  --  &  --  &  --  &  --  &  --  &  --  &  --  &  --  &0.0000&0.0035\\
+\hline
+\end{tabular}
+\end{center}
+\normalsize
+\end{table}
+\clearpage
+
+\begin{table}
+\caption{Critical Values of the Shapiro-Wilk \(W\) for Testing Normality.}
+\centerline{Reproduced from Table~6 of Shapiro and Wilk~\cite{shapiro65}.}
+\label{tbl:w-test}
+\begin{center}
+\begin{tabular}{rlllll}\hline
+\(n\) & \multicolumn{5}{c}{\(\alpha\)} \\ \cline{2-6}
+& 0.01 & 0.02 & 0.05 & 0.10 & 0.50 \\ \hline
+3 & 0.753 & 0.756 & 0.767 & 0.789 & 0.959 \\ \hline
+\end{tabular}
+\end{center}
+\normalsize
+\end{table}
+\clearpage
+
+\begin{table}
+\caption{Critcal Values of the Shapiro-Wilk \(W\) for Testing Exponentiality.}
+\centerline{Reproduced from Table~1 of Shapiro and Wilk~\cite{shapiro72}.}
+\label{tbl:w-test-e}
+\scriptsize
+\begin{center}
+\begin{tabular}{r%
+                 @{\extracolsep{3pt}}l%
+                 @{\extracolsep{2pt}}l%
+                 @{\extracolsep{2pt}}l%
+                 @{\extracolsep{2pt}}l%
+                 @{\extracolsep{2pt}}l%
+                 @{\extracolsep{2pt}}l%
+                 @{\extracolsep{2pt}}l%
+                 @{\extracolsep{2pt}}l%
+                 @{\extracolsep{2pt}}l%
+                 @{\extracolsep{2pt}}l%
+                 @{\extracolsep{2pt}}l%
+}\hline
+\(n\) & \multicolumn{11}{c}{\(\alpha\)} \\ \cline{2-12}
+  &\multicolumn{1}{c}{0.005}
+  &\multicolumn{1}{c}{0.01}
+  &\multicolumn{1}{c}{0.025}
+  &\multicolumn{1}{c}{0.05 }
+  &\multicolumn{1}{c}{0.10 }
+  &\multicolumn{1}{c}{0.50 }
+  &\multicolumn{1}{c}{0.90 }
+  &\multicolumn{1}{c}{0.95 }
+  &\multicolumn{1}{c}{0.975}
+  &\multicolumn{1}{c}{0.99 }
+  &\multicolumn{1}{c}{0.995}\\ \hline
+ 3&.2519&.2538&.2596&.2697&.2915&.5714&.9709&.9926&.9981&.9997&.99993\\
+ 4&.1241&.1302&.1434&.1604&.1891&.3768&.7514&.8581&.9236&.9680&.9837\\
+\hline
+\end{tabular}
+\end{center}
+\normalsize
+\end{table}
+\clearpage
+
+\begin{table}
+\caption{Coefficients \(\{b_{n-i+1}\}\) for the Shapiro-Francia
+\(W'\) Test for Normality.}
+\centerline{Reproduced from Table~1 of Shapiro and Wilk~\cite{shapiro72b}.}
+\label{tbl:shapiro-francia-b}
+%\begin{center}
+%\begin{tabular}
+%\hline
+%\end{tabular}
+%\end{center}
+\normalsize
+\end{table}
+\clearpage
+
+\begin{table}
+\caption{Percentage Points for \(W'\) Test Statistic}
+\centerline{Reproduced from Table~1 of Shapirio and Francia~\cite{shapiro72b}.}
+\label{tbl:w-prime-test}
+\scriptsize
+\begin{center}
+\begin{tabular}{l@{\extracolsep{1pt}}r%
+                 @{\extracolsep{1pt}}r%
+                 @{\extracolsep{1pt}}r%
+                 @{\extracolsep{1pt}}rrrrrrrr}\hline
+\(n\) & \multicolumn{11}{c}{\(P\)} \\ \cline{2-12}
+&
+\multicolumn{1}{l}{0.01} & 
+\multicolumn{1}{l}{0.05} & 
+\multicolumn{1}{l}{0.10} & 
+\multicolumn{1}{l}{0.15} & 
+\multicolumn{1}{l}{0.20} & 
+\multicolumn{1}{l}{0.50} & 
+\multicolumn{1}{l}{0.80} & 
+\multicolumn{1}{l}{0.85} & 
+\multicolumn{1}{l}{0.90} & 
+\multicolumn{1}{l}{0.95} & 
+\multicolumn{1}{l}{0.99}\\
+\hline
+35&0.919&0.943&0.952&0.956&0.964&0.976&0.982&0.985&0.987&0.989&0.992\\
+50& .935& .953& .963& .968& .971& .981& .987& .988& .990& .991& .994\\
+\\
+51&0.935&0.954&0.964&0.968&0.971&0.981&0.988&0.989&0.990&0.992&0.994\\
+53& .938& .957& .964& .969& .972& .982& .988& .989& .990& .992& .994\\
+55& .940& .958& .965& .971& .973& .983& .988& .990& .991& .992& .994\\
+57& .944& .961& .966& .971& .974& .983& .989& .990& .991& .992& .994\\
+59& .945& .962& .967& .972& .975& .983& .989& .990& .991& .992& .994\\
+\\
+61&0.947&0.963&0.968&0.973&0.975&0.984&0.990&0.990&0.991&0.992&0.994\\
+63& .947& .964& .970& .973& .976& .984& .990& .991& .992& .993& .994\\
+65& .948& .965& .971& .974& .976& .985& .990& .991& .992& .993& .995\\
+67& .950& .966& .971& .974& .977& .985& .990& .991& .992& .993& .995\\
+69& .951& .966& .972& .976& .978& .986& .990& .991& .992& .993& .995\\
+\\
+71&0.953&0.967&0.972&0.976&0.978&0.986&0.990&0.991&0.992&0.994&0.995\\
+73& .956& .968& .973& .976& .979& .986& .991& .992& .993& .994& .995\\
+75& .956& .969& .973& .976& .979& .986& .991& .992& .993& .994& .995\\
+77& .957& .969& .974& .977& .980& .987& .991& .992& .993& .994& .996\\
+79& .957& .970& .975& .978& .980& .987& .991& .992& .993& .994& .996\\
+\\
+81&0.958&0.970&0.975&0.979&0.981&0.987&0.992&0.992&0.993&0.994&0.996\\
+83& .960& .971& .976& .979& .981& .988& .992& .992& .993& .994& .996\\
+85& .961& .972& .977& .980& .981& .988& .992& .992& .993& .994& .996\\
+87& .961& .972& .977& .980& .982& .988& .992& .993& .994& .994& .996\\
+89& .961& .972& .977& .981& .982& .988& .992& .993& .994& .995& .996\\
+\\
+91&0.962&0.973&0.978&0.981&0.983&0.989&0.992&0.993&0.994&0.995&0.996\\
+93& .963& .973& .979& .981& .983& .989& .992& .993& .994& .995& .996\\
+95& .965& .974& .979& .981& .983& .989& .993& .993& .994& .995& .996\\
+97& .965& .975& .979& .982& .984& .989& .993& .993& .994& .995& .996\\
+99& .967& .976& .980& .982& .984& .989& .993& .994& .994& .995& .996\\
+\hline
+\end{tabular}
+\end{center}
+\normalsize
+\end{table}
+\clearpage
+
+\end{document}
