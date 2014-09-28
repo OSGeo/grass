@@ -1,15 +1,12 @@
-"""!@package grass.temporal
-
-@brief GRASS Python scripting module (temporal GIS functions)
-
-Temporal GIS related functions to be used in Python scripts.
+"""
+Raster and 3d raster mapcalculation functions
 
 (C) 2012-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Soeren Gebbert
+:authors: Soeren Gebbert
 """
 
 from space_time_datasets import *
@@ -22,7 +19,7 @@ import grass.script as gscript
 
 def dataset_mapcalculator(inputs, output, type, expression, base, method,
                           nprocs=1, register_null=False, spatial=False):
-    """!Perform map-calculations of maps from different space time
+    """Perform map-calculations of maps from different space time
        raster/raster3d datasets, using a specific sampling method
        to select temporal related maps.
 
@@ -31,6 +28,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
        the r.mapcalc operators:
 
        Supported operators for relative and absolute time are:
+       
        - td() - the time delta of the current interval in days
                 and fractions of days or the unit in case of relative time
        - start_time() - The start time of the interval from the begin of
@@ -41,6 +39,7 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
                       unit in case of relative time
 
        Supported operators for absolute time:
+       
        - start_doy() - Day of year (doy) from the start time [1 - 366]
        - start_dow() - Day of week (dow) from the start time [1 - 7],
                        the start of the week is monday == 1
@@ -63,17 +62,17 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
        - end_minute() - The minute of the end time [0 - 59]
        - end_second() - The minute of the end time [0 - 59]
 
-       @param inputs The names of the input space time raster/raster3d datasets
-       @param output The name of the extracted new space time raster(3d) dataset
-       @param type The type of the dataset: "raster" or "raster3d"
-       @param expression The r(3).mapcalc expression
-       @param base The base name of the new created maps in case a
+       :param inputs: The names of the input space time raster/raster3d datasets
+       :param output: The name of the extracted new space time raster(3d) dataset
+       :param type: The type of the dataset: "raster" or "raster3d"
+       :param expression: The r(3).mapcalc expression
+       :param base: The base name of the new created maps in case a
               mapclac expression is provided
-       @param method The method to be used for temporal sampling
-       @param nprocs The number of parallel processes to be used for
+       :param method: The method to be used for temporal sampling
+       :param nprocs: The number of parallel processes to be used for
               mapcalc processing
-       @param register_null Set this number True to register empty maps
-       @param spatial Check spatial overlap
+       :param register_null: Set this number True to register empty maps
+       :param spatial: Check spatial overlap
     """
 
     # We need a database interface for fast computation
@@ -363,37 +362,38 @@ def _operator_parser(expr, first, current):
        the temporal operators with numerical values.
 
        Supported operators for relative and absolute time are:
-       * td() - the time delta of the current interval in days
+       
+       - td() - the time delta of the current interval in days
          and fractions of days or the unit in case of relative time
-       * start_time() - The start time of the interval from the begin of the
+       - start_time() - The start time of the interval from the begin of the
                         time series in days and fractions of days or the unit
                         in case of relative time
-       * end_time() - The end time of the current interval from the begin of
+       - end_time() - The end time of the current interval from the begin of
                       the time series in days and fractions of days or the
                       unit in case of relative time
 
        Supported operators for absolute time:
-       * start_doy() - Day of year (doy) from the start time [1 - 366]
-       * start_dow() - Day of week (dow) from the start time [1 - 7],
+       
+       - start_doy() - Day of year (doy) from the start time [1 - 366]
+       - start_dow() - Day of week (dow) from the start time [1 - 7],
                        the start of the week is monday == 1
-       * start_year() - The year of the start time [0 - 9999]
-       * start_month() - The month of the start time [1 - 12]
-       * start_week() - Week of year of the start time [1 - 54]
-       * start_day() - Day of month from the start time [1 - 31]
-       * start_hour() - The hour of the start time [0 - 23]
-       * start_minute() - The minute of the start time [0 - 59]
-       * start_second() - The second of the start time [0 - 59]
-
-       * end_doy() - Day of year (doy) from the end time [1 - 366]
-       * end_dow() - Day of week (dow) from the end time [1 - 7],
+       - start_year() - The year of the start time [0 - 9999]
+       - start_month() - The month of the start time [1 - 12]
+       - start_week() - Week of year of the start time [1 - 54]
+       - start_day() - Day of month from the start time [1 - 31]
+       - start_hour() - The hour of the start time [0 - 23]
+       - start_minute() - The minute of the start time [0 - 59]
+       - start_second() - The second of the start time [0 - 59]
+       - end_doy() - Day of year (doy) from the end time [1 - 366]
+       - end_dow() - Day of week (dow) from the end time [1 - 7],
                      the start of the week is monday == 1
-       * end_year() - The year of the end time [0 - 9999]
-       * end_month() - The month of the end time [1 - 12]
-       * end_week() - Week of year of the end time [1 - 54]
-       * end_day() - Day of month from the end time [1 - 31]
-       * end_hour() - The hour of the end time [0 - 23]
-       * end_minute() - The minute of the end time [0 - 59]
-       * end_second() - The minute of the end time [0 - 59]
+       - end_year() - The year of the end time [0 - 9999]
+       - end_month() - The month of the end time [1 - 12]
+       - end_week() - Week of year of the end time [1 - 54]
+       - end_day() - Day of month from the end time [1 - 31]
+       - end_hour() - The hour of the end time [0 - 23]
+       - end_minute() - The minute of the end time [0 - 59]
+       - end_second() - The minute of the end time [0 - 59]
 
        The modified expression is returned.
 
@@ -414,16 +414,16 @@ def _operator_parser(expr, first, current):
 def _parse_start_operators(expr, is_time_absolute, current):
     """
        Supported operators for absolute time:
-       * start_doy() - Day of year (doy) from the start time [1 - 366]
-       * start_dow() - Day of week (dow) from the start time [1 - 7],
+       - start_doy() - Day of year (doy) from the start time [1 - 366]
+       - start_dow() - Day of week (dow) from the start time [1 - 7],
                        the start of the week is monday == 1
-       * start_year() - The year of the start time [0 - 9999]
-       * start_month() - The month of the start time [1 - 12]
-       * start_week() - Week of year of the start time [1 - 54]
-       * start_day() - Day of month from the start time [1 - 31]
-       * start_hour() - The hour of the start time [0 - 23]
-       * start_minute() - The minute of the start time [0 - 59]
-       * start_second() - The second of the start time [0 - 59]
+       - start_year() - The year of the start time [0 - 9999]
+       - start_month() - The month of the start time [1 - 12]
+       - start_week() - Week of year of the start time [1 - 54]
+       - start_day() - Day of month from the start time [1 - 31]
+       - start_hour() - The hour of the start time [0 - 23]
+       - start_minute() - The minute of the start time [0 - 59]
+       - start_second() - The second of the start time [0 - 59]
     """
 
     start, end = current.get_absolute_time()
@@ -505,7 +505,7 @@ def _parse_end_operators(expr, is_time_absolute, current):
        - end_minute() - The minute of the end time [0 - 59]
        - end_second() - The minute of the end time [0 - 59]
 
-       In case of time instances the end_* expression will be replaced by
+       In case of time instances the end* expression will be replaced by
        null()
     """
 

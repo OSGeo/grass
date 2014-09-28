@@ -1,5 +1,4 @@
-"""!@package grass.temporal
-
+"""
 Temporal algebra parser class
 
 (C) 2014 by the GRASS Development Team
@@ -7,9 +6,9 @@ This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@authors Thomas Leppelt and Soeren Gebbert
+:authors: Thomas Leppelt and Soeren Gebbert
 
-@code
+.. code-block:: python
 
     >>> import grass.temporal as tgis
     >>> tgis.init(True)
@@ -381,7 +380,6 @@ for details.
     A* =  if condition True  then  A  else  B
     C = A*
 
-@endcode
 """
 
 try:
@@ -401,7 +399,7 @@ from grass.exceptions import FatalError
 ##############################################################################
 
 class TemporalAlgebraLexer(object):
-    """!Lexical analyzer for the GRASS GIS temporal algebra"""
+    """Lexical analyzer for the GRASS GIS temporal algebra"""
 
     # Functions that defines an if condition, temporal buffering and snapping
     conditional_functions = {
@@ -700,7 +698,7 @@ class TemporalAlgebraParser(object):
         self.parser.parse(expression)
 
     def generate_map_name(self):
-        """!Generate an unique intermediate vector map name
+        """Generate an unique intermediate vector map name
             and register it in the objects map list for later removement.
 
             The vector map names are unique between processes. Do not use the
@@ -716,9 +714,9 @@ class TemporalAlgebraParser(object):
         return name
 
     def generate_new_map(self, base_map, bool_op = 'and', copy = True):
-        """!Generate a new map using the spatio-temporal extent of the base map
+        """Generate a new map using the spatio-temporal extent of the base map
 
-           @param base_map This map is used to create the new map
+           :param base_map This map is used to create the new map
         """
         # Generate an intermediate name for the result map list.
         name = self.generate_map_name()
@@ -733,17 +731,17 @@ class TemporalAlgebraParser(object):
 
     def overlay_map_extent(self, mapA, mapB, bool_op = None, temp_op = '=',
                             copy = False):
-        """!Compute the spatio-temporal extent of two topological related maps
+        """Compute the spatio-temporal extent of two topological related maps
 
-           @param mapA The first map
-           @param mapB The second maps
-           @param bool_op The boolean operator specifying the spatial extent
+           :param mapA: The first map
+           :param mapB: The second maps
+           :param bool_op: The boolean operator specifying the spatial extent
                   operation (intersection, union, disjoint union)
-           @param temp_op The temporal operator specifying the temporal
+           :param temp_op: The temporal operator specifying the temporal
                   extent operation (intersection, union, disjoint union)
-           @param copy Specifies if the temporal extent of mapB should be
+           :param copy: Specifies if the temporal extent of mapB should be
                   copied to mapA
-           @return 0 if there is no overlay
+           :return: 0 if there is no overlay
         """
         returncode = 1
         if copy:
@@ -800,12 +798,12 @@ class TemporalAlgebraParser(object):
     ######################### Temporal functions ##############################
 
     def check_stds(self, input, clear = False):
-        """! Check if input space time dataset exist in database and return its map list.
+        """ Check if input space time dataset exist in database and return its map list.
 
-            @param input Name of space time data set as string or list of maps.
-            @param clear Reset the stored conditional values to empty list.
+            :param input: Name of space time data set as string or list of maps.
+            :param clear: Reset the stored conditional values to empty list.
 
-            @return List of maps.
+            :return: List of maps.
 
         """
         if not isinstance(input, list):
@@ -861,142 +859,140 @@ class TemporalAlgebraParser(object):
 
     def get_temporal_topo_list(self, maplistA, maplistB = None, topolist = ["EQUAL"],
                                assign_val = False, count_map = False):
-        """!Build temporal topology for two space time data sets, copy map objects
+        """Build temporal topology for two space time data sets, copy map objects
           for given relation into map list.
-          @param maplistA List of maps.
-          @param maplistB List of maps.
-          @param topolist List of strings of temporal relations.
-          @param assign_val Boolean for assigning a boolean map value based on
+          :param maplistA: List of maps.
+          :param maplistB: List of maps.
+          :param topolist: List of strings of temporal relations.
+          :param assign_val: Boolean for assigning a boolean map value based on
                             the map_values from the compared map list by
                             topological relationships.
-          @param count_map Boolean if the number of topological related maps
+          :param count_map: Boolean if the number of topological related maps
                            should be returned.
-          @return List of maps from maplistA that fulfil the topological relationships
+          :return: List of maps from maplistA that fulfil the topological relationships
                   to maplistB specified in topolist.
 
-          @code
+          .. code-block:: python
 
+              # Example with two lists of maps
+              >>> import grass.temporal as tgis
+              >>> tgis.init(True)
+              >>> l = tgis.TemporalAlgebraParser()
+              >>> # Create two list of maps with equal time stamps
+              >>> mapsA = []
+              >>> mapsB = []
+              >>> for i in range(10):
+              ...     idA = "a%i@B"%(i)
+              ...     mapA = tgis.RasterDataset(idA)
+              ...     idB = "b%i@B"%(i)
+              ...     mapB = tgis.RasterDataset(idB)
+              ...     check = mapA.set_relative_time(i, i + 1, "months")
+              ...     check = mapB.set_relative_time(i, i + 1, "months")
+              ...     mapsA.append(mapA)
+              ...     mapsB.append(mapB)
+              >>> resultlist = l.get_temporal_topo_list(mapsA, mapsB, ['EQUAL'])
+              >>> for map in resultlist:
+              ...     if map.get_equal():
+              ...         relations = map.get_equal()
+              ...         print "Map %s has equal relation to map %s"%(map.get_name(),
+              ...               relations[0].get_name())
+              Map a0 has equal relation to map b0
+              Map a1 has equal relation to map b1
+              Map a2 has equal relation to map b2
+              Map a3 has equal relation to map b3
+              Map a4 has equal relation to map b4
+              Map a5 has equal relation to map b5
+              Map a6 has equal relation to map b6
+              Map a7 has equal relation to map b7
+              Map a8 has equal relation to map b8
+              Map a9 has equal relation to map b9
+              >>> resultlist = l.get_temporal_topo_list(mapsA, mapsB, ['DURING'])
+              >>> print(resultlist)
+              []
+              >>> # Create two list of maps with equal time stamps
+              >>> mapsA = []
+              >>> mapsB = []
+              >>> for i in range(10):
+              ...     idA = "a%i@B"%(i)
+              ...     mapA = tgis.RasterDataset(idA)
+              ...     idB = "b%i@B"%(i)
+              ...     mapB = tgis.RasterDataset(idB)
+              ...     check = mapA.set_relative_time(i, i + 1, "months")
+              ...     check = mapB.set_relative_time(i, i + 2, "months")
+              ...     mapsA.append(mapA)
+              ...     mapsB.append(mapB)
+              >>> resultlist = l.get_temporal_topo_list(mapsA, mapsB, ['starts','during'])
+              >>> for map in resultlist:
+              ...     if map.get_starts():
+              ...         relations = map.get_starts()
+              ...         print "Map %s has start relation to map %s"%(map.get_name(),
+              ...               relations[0].get_name())
+              Map a0 has start relation to map b0
+              Map a1 has start relation to map b1
+              Map a2 has start relation to map b2
+              Map a3 has start relation to map b3
+              Map a4 has start relation to map b4
+              Map a5 has start relation to map b5
+              Map a6 has start relation to map b6
+              Map a7 has start relation to map b7
+              Map a8 has start relation to map b8
+              Map a9 has start relation to map b9
+              >>> for map in resultlist:
+              ...     if map.get_during():
+              ...         relations = map.get_during()
+              ...         print "Map %s has during relation to map %s"%(map.get_name(),
+              ...               relations[0].get_name())
+              Map a0 has during relation to map b0
+              Map a1 has during relation to map b0
+              Map a2 has during relation to map b1
+              Map a3 has during relation to map b2
+              Map a4 has during relation to map b3
+              Map a5 has during relation to map b4
+              Map a6 has during relation to map b5
+              Map a7 has during relation to map b6
+              Map a8 has during relation to map b7
+              Map a9 has during relation to map b8
+              >>> # Create two list of maps with equal time stamps and map_value method.
+              >>> mapsA = []
+              >>> mapsB = []
+              >>> for i in range(10):
+              ...     idA = "a%i@B"%(i)
+              ...     mapA = tgis.RasterDataset(idA)
+              ...     idB = "b%i@B"%(i)
+              ...     mapB = tgis.RasterDataset(idB)
+              ...     check = mapA.set_relative_time(i, i + 1, "months")
+              ...     check = mapB.set_relative_time(i, i + 1, "months")
+              ...     mapB.map_value = True
+              ...     mapsA.append(mapA)
+              ...     mapsB.append(mapB)
+              >>> # Create two list of maps with equal time stamps
+              >>> mapsA = []
+              >>> mapsB = []
+              >>> for i in range(10):
+              ...     idA = "a%i@B"%(i)
+              ...     mapA = tgis.RasterDataset(idA)
+              ...     mapA.map_value = True
+              ...     idB = "b%i@B"%(i)
+              ...     mapB = tgis.RasterDataset(idB)
+              ...     mapB.map_value = False
+              ...     check = mapA.set_absolute_time(datetime(2000,1,i+1),
+              ...             datetime(2000,1,i + 2))
+              ...     check = mapB.set_absolute_time(datetime(2000,1,i+6),
+              ...             datetime(2000,1,i + 7))
+              ...     mapsA.append(mapA)
+              ...     mapsB.append(mapB)
+              >>> resultlist = l.get_temporal_topo_list(mapsA, mapsB)
+              >>> for map in resultlist:
+              ...     print(map.get_id())
+              a5@B
+              a6@B
+              a7@B
+              a8@B
+              a9@B
+              >>> resultlist = l.get_temporal_topo_list(mapsA, mapsB, ['during'])
+              >>> for map in resultlist:
+              ...     print(map.get_id())
 
-          # Example with two lists of maps
-          >>> import grass.temporal as tgis
-          >>> tgis.init(True)
-          >>> l = tgis.TemporalAlgebraParser()
-          >>> # Create two list of maps with equal time stamps
-          >>> mapsA = []
-          >>> mapsB = []
-          >>> for i in range(10):
-          ...     idA = "a%i@B"%(i)
-          ...     mapA = tgis.RasterDataset(idA)
-          ...     idB = "b%i@B"%(i)
-          ...     mapB = tgis.RasterDataset(idB)
-          ...     check = mapA.set_relative_time(i, i + 1, "months")
-          ...     check = mapB.set_relative_time(i, i + 1, "months")
-          ...     mapsA.append(mapA)
-          ...     mapsB.append(mapB)
-          >>> resultlist = l.get_temporal_topo_list(mapsA, mapsB, ['EQUAL'])
-          >>> for map in resultlist:
-          ...     if map.get_equal():
-          ...         relations = map.get_equal()
-          ...         print "Map %s has equal relation to map %s"%(map.get_name(),
-          ...               relations[0].get_name())
-          Map a0 has equal relation to map b0
-          Map a1 has equal relation to map b1
-          Map a2 has equal relation to map b2
-          Map a3 has equal relation to map b3
-          Map a4 has equal relation to map b4
-          Map a5 has equal relation to map b5
-          Map a6 has equal relation to map b6
-          Map a7 has equal relation to map b7
-          Map a8 has equal relation to map b8
-          Map a9 has equal relation to map b9
-          >>> resultlist = l.get_temporal_topo_list(mapsA, mapsB, ['DURING'])
-          >>> print(resultlist)
-          []
-          >>> # Create two list of maps with equal time stamps
-          >>> mapsA = []
-          >>> mapsB = []
-          >>> for i in range(10):
-          ...     idA = "a%i@B"%(i)
-          ...     mapA = tgis.RasterDataset(idA)
-          ...     idB = "b%i@B"%(i)
-          ...     mapB = tgis.RasterDataset(idB)
-          ...     check = mapA.set_relative_time(i, i + 1, "months")
-          ...     check = mapB.set_relative_time(i, i + 2, "months")
-          ...     mapsA.append(mapA)
-          ...     mapsB.append(mapB)
-          >>> resultlist = l.get_temporal_topo_list(mapsA, mapsB, ['starts','during'])
-          >>> for map in resultlist:
-          ...     if map.get_starts():
-          ...         relations = map.get_starts()
-          ...         print "Map %s has start relation to map %s"%(map.get_name(),
-          ...               relations[0].get_name())
-          Map a0 has start relation to map b0
-          Map a1 has start relation to map b1
-          Map a2 has start relation to map b2
-          Map a3 has start relation to map b3
-          Map a4 has start relation to map b4
-          Map a5 has start relation to map b5
-          Map a6 has start relation to map b6
-          Map a7 has start relation to map b7
-          Map a8 has start relation to map b8
-          Map a9 has start relation to map b9
-          >>> for map in resultlist:
-          ...     if map.get_during():
-          ...         relations = map.get_during()
-          ...         print "Map %s has during relation to map %s"%(map.get_name(),
-          ...               relations[0].get_name())
-          Map a0 has during relation to map b0
-          Map a1 has during relation to map b0
-          Map a2 has during relation to map b1
-          Map a3 has during relation to map b2
-          Map a4 has during relation to map b3
-          Map a5 has during relation to map b4
-          Map a6 has during relation to map b5
-          Map a7 has during relation to map b6
-          Map a8 has during relation to map b7
-          Map a9 has during relation to map b8
-          >>> # Create two list of maps with equal time stamps and map_value method.
-          >>> mapsA = []
-          >>> mapsB = []
-          >>> for i in range(10):
-          ...     idA = "a%i@B"%(i)
-          ...     mapA = tgis.RasterDataset(idA)
-          ...     idB = "b%i@B"%(i)
-          ...     mapB = tgis.RasterDataset(idB)
-          ...     check = mapA.set_relative_time(i, i + 1, "months")
-          ...     check = mapB.set_relative_time(i, i + 1, "months")
-          ...     mapB.map_value = True
-          ...     mapsA.append(mapA)
-          ...     mapsB.append(mapB)
-          >>> # Create two list of maps with equal time stamps
-          >>> mapsA = []
-          >>> mapsB = []
-          >>> for i in range(10):
-          ...     idA = "a%i@B"%(i)
-          ...     mapA = tgis.RasterDataset(idA)
-          ...     mapA.map_value = True
-          ...     idB = "b%i@B"%(i)
-          ...     mapB = tgis.RasterDataset(idB)
-          ...     mapB.map_value = False
-          ...     check = mapA.set_absolute_time(datetime(2000,1,i+1),
-          ...             datetime(2000,1,i + 2))
-          ...     check = mapB.set_absolute_time(datetime(2000,1,i+6),
-          ...             datetime(2000,1,i + 7))
-          ...     mapsA.append(mapA)
-          ...     mapsB.append(mapB)
-          >>> resultlist = l.get_temporal_topo_list(mapsA, mapsB)
-          >>> for map in resultlist:
-          ...     print(map.get_id())
-          a5@B
-          a6@B
-          a7@B
-          a8@B
-          a9@B
-          >>> resultlist = l.get_temporal_topo_list(mapsA, mapsB, ['during'])
-          >>> for map in resultlist:
-          ...     print(map.get_id())
-
-          @endcode
         """
         topologylist = ["EQUAL", "FOLLOWS", "PRECEDES", "OVERLAPS", "OVERLAPPED", \
                         "DURING", "STARTS", "FINISHES", "CONTAINS", "STARTED", \
@@ -1063,58 +1059,57 @@ class TemporalAlgebraParser(object):
         return(resultlist)
 
     def eval_toperator(self, operator):
-        """!This function evaluates a string containing temporal operations.
+        """This function evaluates a string containing temporal operations.
 
-          @param operator String of temporal operations, e.g. {equal|during,=!:}.
+          :param operator: String of temporal operations, e.g. {equal|during,=!:}.
 
-          @return List of temporal relations (equal, during), the given function
+          :return: List of temporal relations (equal, during), the given function
            (!:) and the interval/instances (=).
 
-          @code
-          >>> import grass.temporal as tgis
-          >>> tgis.init()
-          >>> p = tgis.TemporalAlgebraParser()
-          >>> operator = "{equal,:}"
-          >>> p.eval_toperator(operator)
-          (['equal'], '=', ':')
-          >>> operator = "{equal|during,:}"
-          >>> p.eval_toperator(operator)
-          (['equal', 'during'], '=', ':')
-          >>> operator = "{equal,!:}"
-          >>> p.eval_toperator(operator)
-          (['equal'], '=', '!:')
-          >>> operator = "{equal|during,!:}"
-          >>> p.eval_toperator(operator)
-          (['equal', 'during'], '=', '!:')
-          >>> operator = "{equal|during,=!:}"
-          >>> p.eval_toperator(operator)
-          (['equal', 'during'], '=', '!:')
-          >>> operator = "{equal|during|starts,#}"
-          >>> p.eval_toperator(operator)
-          (['equal', 'during', 'starts'], '=', '#')
-          >>> operator = "{!:}"
-          >>> p.eval_toperator(operator)
-          (['equal'], '=', '!:')
-          >>> operator = "{=:}"
-          >>> p.eval_toperator(operator)
-          (['equal'], '=', ':')
-          >>> operator = "{#}"
-          >>> p.eval_toperator(operator)
-          (['equal'], '=', '#')
-          >>> operator = "{equal|during}"
-          >>> p.eval_toperator(operator)
-          (['equal', 'during'], '=', '')
-          >>> operator = "{equal}"
-          >>> p.eval_toperator(operator)
-          (['equal'], '=', '')
-          >>> operator = "{equal,||}"
-          >>> p.eval_toperator(operator)
-          (['equal'], '=', '||')
-          >>> operator = "{equal|during,&&}"
-          >>> p.eval_toperator(operator)
-          (['equal', 'during'], '=', '&&')
-
-          @endcode
+          .. code-block:: python
+          
+              >>> import grass.temporal as tgis
+              >>> tgis.init()
+              >>> p = tgis.TemporalAlgebraParser()
+              >>> operator = "{equal,:}"
+              >>> p.eval_toperator(operator)
+              (['equal'], '=', ':')
+              >>> operator = "{equal|during,:}"
+              >>> p.eval_toperator(operator)
+              (['equal', 'during'], '=', ':')
+              >>> operator = "{equal,!:}"
+              >>> p.eval_toperator(operator)
+              (['equal'], '=', '!:')
+              >>> operator = "{equal|during,!:}"
+              >>> p.eval_toperator(operator)
+              (['equal', 'during'], '=', '!:')
+              >>> operator = "{equal|during,=!:}"
+              >>> p.eval_toperator(operator)
+              (['equal', 'during'], '=', '!:')
+              >>> operator = "{equal|during|starts,#}"
+              >>> p.eval_toperator(operator)
+              (['equal', 'during', 'starts'], '=', '#')
+              >>> operator = "{!:}"
+              >>> p.eval_toperator(operator)
+              (['equal'], '=', '!:')
+              >>> operator = "{=:}"
+              >>> p.eval_toperator(operator)
+              (['equal'], '=', ':')
+              >>> operator = "{#}"
+              >>> p.eval_toperator(operator)
+              (['equal'], '=', '#')
+              >>> operator = "{equal|during}"
+              >>> p.eval_toperator(operator)
+              (['equal', 'during'], '=', '')
+              >>> operator = "{equal}"
+              >>> p.eval_toperator(operator)
+              (['equal'], '=', '')
+              >>> operator = "{equal,||}"
+              >>> p.eval_toperator(operator)
+              (['equal'], '=', '||')
+              >>> operator = "{equal|during,&&}"
+              >>> p.eval_toperator(operator)
+              (['equal', 'during'], '=', '&&')
 
         """
         topologylist = ["EQUAL", "FOLLOWS", "PRECEDES", "OVERLAPS", "OVERLAPPED", \
@@ -1168,63 +1163,62 @@ class TemporalAlgebraParser(object):
 
     def perform_temporal_selection(self, maplistA, maplistB, topolist = ["EQUAL"],
                                    inverse = False, assign_val = False):
-        """!This function performs temporal selection operation.
+        """This function performs temporal selection operation.
 
-          @param maplistA   List of maps representing the left side of a temporal
+          :param maplistA:   List of maps representing the left side of a temporal
                              expression.
-          @param maplistB   List of maps representing the right side of a temporal
+          :param maplistB:  List of maps representing the right side of a temporal
                              expression.
-          @param topolist   List of strings of temporal relations.
-          @param inverse    Boolean value that specifies if the selection should be
+          :param topolist:   List of strings of temporal relations.
+          :param inverse:    Boolean value that specifies if the selection should be
                              inverted.
-          @param assign_val Boolean for assigning a boolean map value based on
+          :param assign_val: Boolean for assigning a boolean map value based on
                             the map_values from the compared map list by
                             topological relationships.
 
-          @return List of selected maps from maplistA.
+          :return: List of selected maps from maplistA.
 
-          @code
+          .. code-block:: python
 
           >>> import grass.temporal as tgis
-          >>> tgis.init()
-          >>> l = tgis.TemporalAlgebraParser()
-          >>> # Example with two lists of maps
-          >>> # Create two list of maps with equal time stamps
-          >>> mapsA = []
-          >>> mapsB = []
-          >>> for i in range(10):
-          ...     idA = "a%i@B"%(i)
-          ...     mapA = tgis.RasterDataset(idA)
-          ...     idB = "b%i@B"%(i)
-          ...     mapB = tgis.RasterDataset(idB)
-          ...     check = mapA.set_relative_time(i, i + 1, "months")
-          ...     check = mapB.set_relative_time(i + 5, i + 6, "months")
-          ...     mapsA.append(mapA)
-          ...     mapsB.append(mapB)
-          >>> resultlist = l.perform_temporal_selection(mapsA, mapsB, ['EQUAL'],
-          ...                                           False)
-          >>> for map in resultlist:
-          ...     if map.get_equal():
-          ...         relations = map.get_equal()
-          ...         print "Map %s has equal relation to map %s"%(map.get_name(),
-          ...               relations[0].get_name())
-          Map a5 has equal relation to map b0
-          Map a6 has equal relation to map b1
-          Map a7 has equal relation to map b2
-          Map a8 has equal relation to map b3
-          Map a9 has equal relation to map b4
-          >>> resultlist = l.perform_temporal_selection(mapsA, mapsB, ['EQUAL'],
-          ...                                           True)
-          >>> for map in resultlist:
-          ...     if not map.get_equal():
-          ...         print "Map %s has no equal relation to mapset mapsB"%(map.get_name())
-          Map a0 has no equal relation to mapset mapsB
-          Map a1 has no equal relation to mapset mapsB
-          Map a2 has no equal relation to mapset mapsB
-          Map a3 has no equal relation to mapset mapsB
-          Map a4 has no equal relation to mapset mapsB
+              >>> tgis.init()
+              >>> l = tgis.TemporalAlgebraParser()
+              >>> # Example with two lists of maps
+              >>> # Create two list of maps with equal time stamps
+              >>> mapsA = []
+              >>> mapsB = []
+              >>> for i in range(10):
+              ...     idA = "a%i@B"%(i)
+              ...     mapA = tgis.RasterDataset(idA)
+              ...     idB = "b%i@B"%(i)
+              ...     mapB = tgis.RasterDataset(idB)
+              ...     check = mapA.set_relative_time(i, i + 1, "months")
+              ...     check = mapB.set_relative_time(i + 5, i + 6, "months")
+              ...     mapsA.append(mapA)
+              ...     mapsB.append(mapB)
+              >>> resultlist = l.perform_temporal_selection(mapsA, mapsB, ['EQUAL'],
+              ...                                           False)
+              >>> for map in resultlist:
+              ...     if map.get_equal():
+              ...         relations = map.get_equal()
+              ...         print "Map %s has equal relation to map %s"%(map.get_name(),
+              ...               relations[0].get_name())
+              Map a5 has equal relation to map b0
+              Map a6 has equal relation to map b1
+              Map a7 has equal relation to map b2
+              Map a8 has equal relation to map b3
+              Map a9 has equal relation to map b4
+              >>> resultlist = l.perform_temporal_selection(mapsA, mapsB, ['EQUAL'],
+              ...                                           True)
+              >>> for map in resultlist:
+              ...     if not map.get_equal():
+              ...         print "Map %s has no equal relation to mapset mapsB"%(map.get_name())
+              Map a0 has no equal relation to mapset mapsB
+              Map a1 has no equal relation to mapset mapsB
+              Map a2 has no equal relation to mapset mapsB
+              Map a3 has no equal relation to mapset mapsB
+              Map a4 has no equal relation to mapset mapsB
 
-          @endcode
         """
         if not inverse:
             topolist = self.get_temporal_topo_list(maplistA, maplistB, topolist,
@@ -1249,48 +1243,48 @@ class TemporalAlgebraParser(object):
         return(resultlist)
 
     def set_granularity(self, maplistA, maplistB, toperator = '=', topolist = ["EQUAL"]):
-        """!This function sets the temporal extends of a list of maps based on
-             another map list.
+        """This function sets the temporal extends of a list of maps based on
+          another map list.
 
-          @param maplistB List of maps.
-          @param maplistB List of maps.
-          @param toperator String containing the temporal operator: =, +, &, |.
-          @param topolist List of topological relations.
+          :param maplistB: List of maps.
+          :param maplistB: List of maps.
+          :param toperator: String containing the temporal operator: =, +, &, |.
+          :param topolist: List of topological relations.
 
-          @return List of maps with the new temporal extends.
+          :return: List of maps with the new temporal extends.
 
-          @code
-          >>> import grass.temporal as tgis
-          >>> tgis.init()
-          >>> p = tgis.TemporalAlgebraParser()
-          >>> # Create two list of maps with equal time stamps
-          >>> mapsA = []
-          >>> mapsB = []
-          >>> for i in range(10):
-          ...     idA = "a%i@B"%(i)
-          ...     mapA = tgis.RasterDataset(idA)
-          ...     idB = "b%i@B"%(i)
-          ...     mapB = tgis.RasterDataset(idB)
-          ...     check = mapA.set_relative_time(i, i + 1, "months")
-          ...     check = mapB.set_relative_time(i*2, i*2 + 2, "months")
-          ...     mapsA.append(mapA)
-          ...     mapsB.append(mapB)
-          >>> resultlist = p.set_granularity(mapsA, mapsB, toperator = "|", topolist = ["during"])
-          >>> for map in resultlist:
-          ...     start,end,unit = map.get_relative_time()
-          ...     print(map.get_id() + ' - start: ' + str(start) + ' end: ' + str(end))
-          a1@B - start: 0 end: 2
-          a0@B - start: 0 end: 2
-          a3@B - start: 2 end: 4
-          a2@B - start: 2 end: 4
-          a5@B - start: 4 end: 6
-          a4@B - start: 4 end: 6
-          a7@B - start: 6 end: 8
-          a6@B - start: 6 end: 8
-          a9@B - start: 8 end: 10
-          a8@B - start: 8 end: 10
+          .. code-block:: python
+          
+              >>> import grass.temporal as tgis
+              >>> tgis.init()
+              >>> p = tgis.TemporalAlgebraParser()
+              >>> # Create two list of maps with equal time stamps
+              >>> mapsA = []
+              >>> mapsB = []
+              >>> for i in range(10):
+              ...     idA = "a%i@B"%(i)
+              ...     mapA = tgis.RasterDataset(idA)
+              ...     idB = "b%i@B"%(i)
+              ...     mapB = tgis.RasterDataset(idB)
+              ...     check = mapA.set_relative_time(i, i + 1, "months")
+              ...     check = mapB.set_relative_time(i*2, i*2 + 2, "months")
+              ...     mapsA.append(mapA)
+              ...     mapsB.append(mapB)
+              >>> resultlist = p.set_granularity(mapsA, mapsB, toperator = "|", topolist = ["during"])
+              >>> for map in resultlist:
+              ...     start,end,unit = map.get_relative_time()
+              ...     print(map.get_id() + ' - start: ' + str(start) + ' end: ' + str(end))
+              a1@B - start: 0 end: 2
+              a0@B - start: 0 end: 2
+              a3@B - start: 2 end: 4
+              a2@B - start: 2 end: 4
+              a5@B - start: 4 end: 6
+              a4@B - start: 4 end: 6
+              a7@B - start: 6 end: 8
+              a6@B - start: 6 end: 8
+              a9@B - start: 8 end: 10
+              a8@B - start: 8 end: 10
 
-          @endcode
         """
         topologylist = ["EQUAL", "FOLLOWS", "PRECEDES", "OVERLAPS", "OVERLAPPED", \
                         "DURING", "STARTS", "FINISHES", "CONTAINS", "STARTED", \
@@ -1350,36 +1344,36 @@ class TemporalAlgebraParser(object):
         return(resultlist)
 
     def get_temporal_func_dict(self, map):
-        """! This function creates a dictionary containing temporal functions for a
-             map dataset with time stamp.
+        """ This function creates a dictionary containing temporal functions for a
+          map dataset with time stamp.
 
-          @param map Map object with time stamps.
+          :param map: Map object with time stamps.
 
-          @return Dictionary with temporal functions for given input map.
+          :return: Dictionary with temporal functions for given input map.
 
-          @code
-          >>> import grass.temporal as tgis
-          >>> import datetime
-          >>> tgis.init()
-          >>> l = tgis.TemporalAlgebraParser()
-          >>> # Example with one list of maps
-          >>> # Create one list of maps with equal time stamps
-          >>> for i in range(1):
-          ...     idA = "a%i@B"%(i)
-          ...     mapA = tgis.RasterDataset(idA)
-          ...     check = mapA.set_absolute_time(datetime.datetime(2000,1,1),
-          ...             datetime.datetime(2000,10,1))
-          ...     tfuncdict = l.get_temporal_func_dict(mapA)
-          >>> print(tfuncdict["START_YEAR"])
-          2000
-          >>> print(tfuncdict["START_TIME"])
-          00:00:00
-          >>> print(tfuncdict["START_DATE"])
-          2000-01-01
-          >>> print(tfuncdict["START_DATETIME"])
-          2000-01-01 00:00:00
+          .. code-block:: python
+          
+              >>> import grass.temporal as tgis
+              >>> import datetime
+              >>> tgis.init()
+              >>> l = tgis.TemporalAlgebraParser()
+              >>> # Example with one list of maps
+              >>> # Create one list of maps with equal time stamps
+              >>> for i in range(1):
+              ...     idA = "a%i@B"%(i)
+              ...     mapA = tgis.RasterDataset(idA)
+              ...     check = mapA.set_absolute_time(datetime.datetime(2000,1,1),
+              ...             datetime.datetime(2000,10,1))
+              ...     tfuncdict = l.get_temporal_func_dict(mapA)
+              >>> print(tfuncdict["START_YEAR"])
+              2000
+              >>> print(tfuncdict["START_TIME"])
+              00:00:00
+              >>> print(tfuncdict["START_DATE"])
+              2000-01-01
+              >>> print(tfuncdict["START_DATETIME"])
+              2000-01-01 00:00:00
 
-          @endcode
 
         """
         tvardict = {"START_DOY" : None, "START_DOW" : None, "START_YEAR" : None,
@@ -1455,13 +1449,13 @@ class TemporalAlgebraParser(object):
         return(boolname)
 
     def eval_global_var(self, gvar, maplist):
-        """! This function evaluates a global variable expression for a map list.
+        """ This function evaluates a global variable expression for a map list.
              For example: start_day() > 5 , end_month() == 2.
 
-          @param gvar    Object of type GlobalTemporalVar containing temporal.
-          @param maplist List of map objects.
+          :param gvar:    Object of type GlobalTemporalVar containing temporal.
+          :param maplist: List of map objects.
 
-          @return List of maps from maplist with added conditional boolean values.
+          :return: List of maps from maplist with added conditional boolean values.
         """
         boollist = []
         # Loop over maps of input map list.
@@ -1500,15 +1494,15 @@ class TemporalAlgebraParser(object):
         return(maplist)
 
     def eval_map_list(self, maplist ,thenlist, topolist = ["EQUAL"]):
-        """! This function transfers boolean values from temporal expression
-             from one map list to another by their topology. These boolean
-             values are added to the maps as condition_value.
+        """ This function transfers boolean values from temporal expression
+            from one map list to another by their topology. These boolean
+            values are added to the maps as condition_value.
 
-          @param maplist  List of map objects containing boolean map values.
-          @param thenlist List of map objects where the boolean values
-                          should be added.
+            :param maplist:  List of map objects containing boolean map values.
+            :param thenlist: List of map objects where the boolean values
+                      should be added.
 
-          @return List of maps from thenlist with added conditional boolean values.
+            :return: List of maps from thenlist with added conditional boolean values.
         """
         # Get topology of then statement map list in relation to the other maplist
         # and assign boolean values of the maplist to the thenlist.
@@ -1526,7 +1520,7 @@ class TemporalAlgebraParser(object):
         return(resultlist)
 
     def build_condition_list(self, tvarexpr, thenlist, topolist = ["EQUAL"]):
-        """! This function evaluates temporal variable expressions of a conditional
+        """ This function evaluates temporal variable expressions of a conditional
              expression related to the map list of the then statement.
              Global variables or map lists with booleans are compared to the topology
              of the conclusion map list and a conditional list will be appended to
@@ -1537,78 +1531,78 @@ class TemporalAlgebraParser(object):
              For example: td(A) == 1 && start_day() > 5 --> [True || False]
                           (for one map.condition_value in a then map list)
 
-          @param tvarexpr List of GlobalTemporalVar objects and map lists.
+             :param tvarexpr: List of GlobalTemporalVar objects and map lists.
                           The list is constructed by the TemporalAlgebraParser
                           in order of expression evaluation in the parser.
 
-          @param thenlist Map list object of the conclusion statement.
+             :param thenlist: Map list object of the conclusion statement.
                           It will be compared and evaluated by the conditions.
 
-          @return Map list with conditional values for all temporal expressions.
+            :return: Map list with conditional values for all temporal expressions.
 
-          @code
-          >>> import grass.temporal as tgis
-          >>> tgis.init()
-          >>> p = tgis.TemporalAlgebraParser()
-          >>> # Example with two lists of maps
-          >>> # Create two list of maps with equal time stamps
-          >>> mapsA = []
-          >>> mapsB = []
-          >>> for i in range(10):
-          ...     idA = "a%i@B"%(i)
-          ...     mapA = tgis.RasterDataset(idA)
-          ...     idB = "b%i@B"%(i)
-          ...     mapB = tgis.RasterDataset(idB)
-          ...     check = mapA.set_absolute_time(datetime(2000,1,i + 1),
-          ...             datetime(2000,1,i + 2))
-          ...     check = mapB.set_absolute_time(datetime(2000,1,i + 6),
-          ...             datetime(2000,1,i + 7))
-          ...     mapsA.append(mapA)
-          ...     mapsB.append(mapB)
-          >>> mapsA = p.check_stds(mapsA)
-          >>> mapsB = p.check_stds(mapsB)
-          >>> # Create global expression object.
-          >>> gvarA = tgis.GlobalTemporalVar()
-          >>> gvarA.tfunc = "start_day"
-          >>> gvarA.compop = ">"
-          >>> gvarA.value = 5
-          >>> gvarB = tgis.GlobalTemporalVar()
-          >>> gvarB.tfunc = "start_day"
-          >>> gvarB.compop = "<="
-          >>> gvarB.value = 8
-          >>> gvarOP = tgis.GlobalTemporalVar()
-          >>> gvarOP.relationop = "&&"
-          >>> gvarOP.topology.append("EQUAL")
-          >>> tvarexpr = gvarA
-          >>> result = p.build_condition_list(tvarexpr, mapsA)
-          >>> for map_i in result:
-          ...     print(map_i.get_map_id() + ' ' + str(map_i.condition_value))
-          a0@B [False]
-          a1@B [False]
-          a2@B [False]
-          a3@B [False]
-          a4@B [False]
-          a5@B [True]
-          a6@B [True]
-          a7@B [True]
-          a8@B [True]
-          a9@B [True]
-          >>> tvarexpr = [gvarA, gvarOP, gvarB]
-          >>> result = p.build_condition_list(tvarexpr, mapsB)
-          >>> for map_i in result:
-          ...     print(map_i.get_map_id() + ' ' + str(map_i.condition_value))
-          b0@B [True, ['EQUAL'], '&&', True]
-          b1@B [True, ['EQUAL'], '&&', True]
-          b2@B [True, ['EQUAL'], '&&', True]
-          b3@B [True, ['EQUAL'], '&&', False]
-          b4@B [True, ['EQUAL'], '&&', False]
-          b5@B [True, ['EQUAL'], '&&', False]
-          b6@B [True, ['EQUAL'], '&&', False]
-          b7@B [True, ['EQUAL'], '&&', False]
-          b8@B [True, ['EQUAL'], '&&', False]
-          b9@B [True, ['EQUAL'], '&&', False]
+            .. code-block:: python
 
-          @endcode
+                  >>> import grass.temporal as tgis
+                  >>> tgis.init()
+                  >>> p = tgis.TemporalAlgebraParser()
+                  >>> # Example with two lists of maps
+                  >>> # Create two list of maps with equal time stamps
+                  >>> mapsA = []
+                  >>> mapsB = []
+                  >>> for i in range(10):
+                  ...     idA = "a%i@B"%(i)
+                  ...     mapA = tgis.RasterDataset(idA)
+                  ...     idB = "b%i@B"%(i)
+                  ...     mapB = tgis.RasterDataset(idB)
+                  ...     check = mapA.set_absolute_time(datetime(2000,1,i + 1),
+                  ...             datetime(2000,1,i + 2))
+                  ...     check = mapB.set_absolute_time(datetime(2000,1,i + 6),
+                  ...             datetime(2000,1,i + 7))
+                  ...     mapsA.append(mapA)
+                  ...     mapsB.append(mapB)
+                  >>> mapsA = p.check_stds(mapsA)
+                  >>> mapsB = p.check_stds(mapsB)
+                  >>> # Create global expression object.
+                  >>> gvarA = tgis.GlobalTemporalVar()
+                  >>> gvarA.tfunc = "start_day"
+                  >>> gvarA.compop = ">"
+                  >>> gvarA.value = 5
+                  >>> gvarB = tgis.GlobalTemporalVar()
+                  >>> gvarB.tfunc = "start_day"
+                  >>> gvarB.compop = "<="
+                  >>> gvarB.value = 8
+                  >>> gvarOP = tgis.GlobalTemporalVar()
+                  >>> gvarOP.relationop = "&&"
+                  >>> gvarOP.topology.append("EQUAL")
+                  >>> tvarexpr = gvarA
+                  >>> result = p.build_condition_list(tvarexpr, mapsA)
+                  >>> for map_i in result:
+                  ...     print(map_i.get_map_id() + ' ' + str(map_i.condition_value))
+                  a0@B [False]
+                  a1@B [False]
+                  a2@B [False]
+                  a3@B [False]
+                  a4@B [False]
+                  a5@B [True]
+                  a6@B [True]
+                  a7@B [True]
+                  a8@B [True]
+                  a9@B [True]
+                  >>> tvarexpr = [gvarA, gvarOP, gvarB]
+                  >>> result = p.build_condition_list(tvarexpr, mapsB)
+                  >>> for map_i in result:
+                  ...     print(map_i.get_map_id() + ' ' + str(map_i.condition_value))
+                  b0@B [True, ['EQUAL'], '&&', True]
+                  b1@B [True, ['EQUAL'], '&&', True]
+                  b2@B [True, ['EQUAL'], '&&', True]
+                  b3@B [True, ['EQUAL'], '&&', False]
+                  b4@B [True, ['EQUAL'], '&&', False]
+                  b5@B [True, ['EQUAL'], '&&', False]
+                  b6@B [True, ['EQUAL'], '&&', False]
+                  b7@B [True, ['EQUAL'], '&&', False]
+                  b8@B [True, ['EQUAL'], '&&', False]
+                  b9@B [True, ['EQUAL'], '&&', False]
+
         """
 
         # Check if the input expression is a valid single global variable.
@@ -1649,9 +1643,9 @@ class TemporalAlgebraParser(object):
         return(resultlist)
 
     def eval_condition_list(self, maplist, inverse = False):
-        """! This function evaluates conditional values of a map list.
-             A recursive function is used to evaluate comparison statements
-             from left to right in the given conditional list.
+        """ This function evaluates conditional values of a map list.
+            A recursive function is used to evaluate comparison statements
+            from left to right in the given conditional list.
 
             For example: [True,  '||', False, '&&', True]  -> True
                           [True,  '||', False, '&&', False] -> False
@@ -1663,48 +1657,48 @@ class TemporalAlgebraParser(object):
                           [True,  '&&', False]              -> False
                           [False, '||', True]               -> True
 
-          @param tvarexpr List of GlobalTemporalVar objects and map lists.
+            :param tvarexpr: List of GlobalTemporalVar objects and map lists.
                           The list is constructed by the TemporalAlgebraParser
                           in order of expression evaluation in the parser.
 
-          @return Map list with conditional values for all temporal expressions.
+            :return: Map list with conditional values for all temporal expressions.
 
-        @code
-            >>> import grass.temporal as tgis
-            >>> tgis.init()
-            >>> p = tgis.TemporalAlgebraParser()
-            >>> # Example with two lists of maps
-            >>> # Create two list of maps with equal time stamps
-            >>> mapsA = []
-            >>> mapsB = []
-            >>> for i in range(10):
-            ...     idA = "a%i@B"%(i)
-            ...     mapA = tgis.RasterDataset(idA)
-            ...     idB = "b%i@B"%(i)
-            ...     mapB = tgis.RasterDataset(idB)
-            ...     check = mapA.set_absolute_time(datetime(2000,1,i + 1),
-            ...             datetime(2000,1,i + 2))
-            ...     check = mapB.set_absolute_time(datetime(2000,1,i + 6),
-            ...             datetime(2000,1,i + 7))
-            ...     mapsA.append(mapA)
-            ...     mapsB.append(mapB)
-            >>> mapsA = p.check_stds(mapsA)
-            >>> mapsB = p.check_stds(mapsB)
-            >>> # Create global expression object.
-            >>> gvarA = tgis.GlobalTemporalVar()
-            >>> gvarA.tfunc = "start_day"
-            >>> gvarA.compop = ">"
-            >>> gvarA.value = 5
-            >>> gvarB = tgis.GlobalTemporalVar()
-            >>> gvarB.tfunc = "start_day"
-            >>> gvarB.compop = "<="
-            >>> gvarB.value = 8
-            >>> gvarOP = tgis.GlobalTemporalVar()
-            >>> gvarOP.relationop = "&&"
-            >>> gvarOP.topology.append("EQUAL")
-            >>> tvarexpr = [mapsA, gvarOP,gvarA]
+            .. code-block:: python
+            
+                >>> import grass.temporal as tgis
+                >>> tgis.init()
+                >>> p = tgis.TemporalAlgebraParser()
+                >>> # Example with two lists of maps
+                >>> # Create two list of maps with equal time stamps
+                >>> mapsA = []
+                >>> mapsB = []
+                >>> for i in range(10):
+                ...     idA = "a%i@B"%(i)
+                ...     mapA = tgis.RasterDataset(idA)
+                ...     idB = "b%i@B"%(i)
+                ...     mapB = tgis.RasterDataset(idB)
+                ...     check = mapA.set_absolute_time(datetime(2000,1,i + 1),
+                ...             datetime(2000,1,i + 2))
+                ...     check = mapB.set_absolute_time(datetime(2000,1,i + 6),
+                ...             datetime(2000,1,i + 7))
+                ...     mapsA.append(mapA)
+                ...     mapsB.append(mapB)
+                >>> mapsA = p.check_stds(mapsA)
+                >>> mapsB = p.check_stds(mapsB)
+                >>> # Create global expression object.
+                >>> gvarA = tgis.GlobalTemporalVar()
+                >>> gvarA.tfunc = "start_day"
+                >>> gvarA.compop = ">"
+                >>> gvarA.value = 5
+                >>> gvarB = tgis.GlobalTemporalVar()
+                >>> gvarB.tfunc = "start_day"
+                >>> gvarB.compop = "<="
+                >>> gvarB.value = 8
+                >>> gvarOP = tgis.GlobalTemporalVar()
+                >>> gvarOP.relationop = "&&"
+                >>> gvarOP.topology.append("EQUAL")
+                >>> tvarexpr = [mapsA, gvarOP,gvarA]
 
-          @endcode
         """
         def recurse_compare(conditionlist):
             for ele in conditionlist:

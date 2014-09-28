@@ -1,13 +1,12 @@
-"""!@package grass.temporal
-
-Temporal raster algebra
+"""
+Temporal 3d raster algebra
 
 (C) 2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Thomas Leppelt and Soeren Gebbert
+:authors: Thomas Leppelt and Soeren Gebbert
 
 """
 

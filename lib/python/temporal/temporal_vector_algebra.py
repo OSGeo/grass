@@ -1,5 +1,4 @@
-"""!@package grass.temporal
-
+"""
 Temporal vector algebra
 
 (C) 2014 by the GRASS Development Team
@@ -7,9 +6,9 @@ This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@authors Thomas Leppelt and Soeren Gebbert
+:authors: Thomas Leppelt and Soeren Gebbert
 
-@code
+.. code-block:: python
 
     >>> import grass.temporal as tgis
     >>> tgis.init(True)
@@ -416,7 +415,6 @@ for details.
     A* =  if condition True  then  A  else  B
     C = A*
 
-@endcode
 """
 
 import grass.pygrass.modules as pygrass
@@ -426,7 +424,7 @@ from temporal_algebra import *
 ##############################################################################
 
 class TemporalVectorAlgebraLexer(TemporalAlgebraLexer):
-    """!Lexical analyzer for the GRASS GIS temporal vector algebra"""
+    """Lexical analyzer for the GRASS GIS temporal vector algebra"""
 
     def __init__(self):
         TemporalAlgebraLexer.__init__(self)
@@ -511,7 +509,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
     ######################### Temporal functions ##############################
 
     def remove_intermediate_vector_maps(self):
-        """! Removes the intermediate vector maps.
+        """ Removes the intermediate vector maps.
         """
         if self.names != {}:
             namelist = self.names.values()
@@ -530,61 +528,60 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                     m.run()
 
     def eval_toperator(self, operator, comparison = False):
-        """!This function evaluates a string containing temporal operations.
+        """This function evaluates a string containing temporal operations.
 
-          @param operator String of temporal operations, e.g. {equal|during,=!:}.
+          :param operator: String of temporal operations, e.g. {equal|during,=!:}.
 
-          @return List of temporal relations (equal, during), the given function
+          :return: List of temporal relations (equal, during), the given function
            (!:) and the interval/instances (=).
 
-          @code
-          >>> import grass.temporal as tgis
-          >>> tgis.init(True)
-          >>> p = tgis.TemporalVectorAlgebraParser()
-          >>> operator = "{equal,:}"
-          >>> p.eval_toperator(operator)
-          (['EQUAL'], '=', ':')
-          >>> operator = "{equal|during,:}"
-          >>> p.eval_toperator(operator)
-          (['EQUAL', 'DURING'], '=', ':')
-          >>> operator = "{equal,!:}"
-          >>> p.eval_toperator(operator)
-          (['EQUAL'], '=', '!:')
-          >>> operator = "{equal|during,!:}"
-          >>> p.eval_toperator(operator)
-          (['EQUAL', 'DURING'], '=', '!:')
-          >>> operator = "{equal|during,=!:}"
-          >>> p.eval_toperator(operator)
-          (['EQUAL', 'DURING'], '=', '!:')
-          >>> operator = "{equal|during|starts,#}"
-          >>> p.eval_toperator(operator)
-          (['EQUAL', 'DURING', 'STARTS'], '=', '#')
-          >>> operator = "{!:}"
-          >>> p.eval_toperator(operator)
-          (['EQUAL'], '=', '!:')
-          >>> operator = "{=:}"
-          >>> p.eval_toperator(operator)
-          (['EQUAL'], '=', ':')
-          >>> operator = "{#}"
-          >>> p.eval_toperator(operator)
-          (['EQUAL'], '=', '#')
-          >>> operator = "{equal|during}"
-          >>> p.eval_toperator(operator)
-          (['EQUAL', 'DURING'], None, None)
-          >>> operator = "{equal}"
-          >>> p.eval_toperator(operator)
-          (['EQUAL'], None, None)
-          >>> operator = "{equal,||}"
-          >>> p.eval_toperator(operator, True)
-          (['EQUAL'], '=', '||')
-          >>> operator = "{equal|during,&&}"
-          >>> p.eval_toperator(operator, True)
-          (['EQUAL', 'DURING'], '=', '&&')
-          >>> operator = "{&}"
-          >>> p.eval_toperator(operator)
-          (['EQUAL'], '=', '&')
-
-          @endcode
+          .. code-block:: python
+          
+              >>> import grass.temporal as tgis
+              >>> tgis.init(True)
+              >>> p = tgis.TemporalVectorAlgebraParser()
+              >>> operator = "{equal,:}"
+              >>> p.eval_toperator(operator)
+              (['EQUAL'], '=', ':')
+              >>> operator = "{equal|during,:}"
+              >>> p.eval_toperator(operator)
+              (['EQUAL', 'DURING'], '=', ':')
+              >>> operator = "{equal,!:}"
+              >>> p.eval_toperator(operator)
+              (['EQUAL'], '=', '!:')
+              >>> operator = "{equal|during,!:}"
+              >>> p.eval_toperator(operator)
+              (['EQUAL', 'DURING'], '=', '!:')
+              >>> operator = "{equal|during,=!:}"
+              >>> p.eval_toperator(operator)
+              (['EQUAL', 'DURING'], '=', '!:')
+              >>> operator = "{equal|during|starts,#}"
+              >>> p.eval_toperator(operator)
+              (['EQUAL', 'DURING', 'STARTS'], '=', '#')
+              >>> operator = "{!:}"
+              >>> p.eval_toperator(operator)
+              (['EQUAL'], '=', '!:')
+              >>> operator = "{=:}"
+              >>> p.eval_toperator(operator)
+              (['EQUAL'], '=', ':')
+              >>> operator = "{#}"
+              >>> p.eval_toperator(operator)
+              (['EQUAL'], '=', '#')
+              >>> operator = "{equal|during}"
+              >>> p.eval_toperator(operator)
+              (['EQUAL', 'DURING'], None, None)
+              >>> operator = "{equal}"
+              >>> p.eval_toperator(operator)
+              (['EQUAL'], None, None)
+              >>> operator = "{equal,||}"
+              >>> p.eval_toperator(operator, True)
+              (['EQUAL'], '=', '||')
+              >>> operator = "{equal|during,&&}"
+              >>> p.eval_toperator(operator, True)
+              (['EQUAL', 'DURING'], '=', '&&')
+              >>> operator = "{&}"
+              >>> p.eval_toperator(operator)
+              (['EQUAL'], '=', '&')
 
         """
 
@@ -596,15 +593,15 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
     def overlay_map_extent(self, mapA, mapB, bool_op = None, temp_op = '=',
                             copy = False):
-        """!Compute the spatio-temporal extent of two topological related maps
+        """Compute the spatio-temporal extent of two topological related maps
 
-           @param mapA The first map
-           @param mapB The second maps
-           @param bool_op The boolean operator specifying the spatial extent
+           :param mapA: The first map
+           :param mapB: The second maps
+           :param bool_op: The boolean operator specifying the spatial extent
                   operation (intersection, union, disjoint union)
-           @param temp_op The temporal operator specifying the temporal
+           :param temp_op: The temporal operator specifying the temporal
                   exntent operation (intersection, union, disjoint union)
-           @param copy Specifies if the temporal extent of mapB should be
+           :param copy: Specifies if the temporal extent of mapB should be
                   copied to mapA
         """
         returncode = TemporalAlgebraParser.overlay_map_extent(self, mapA, mapB,
@@ -789,15 +786,15 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
             t[0] = t[1]
 
     def create_overlay_operations(self, maplistA, maplistB, relations, temporal, function):
-        """!Create the spatial overlay operation commad list
+        """Create the spatial overlay operation commad list
 
-           @param maplistA A list of map objects
-           @param maplistB A list of map objects
-           @param relations The temporal relationships that must be fullfilled as list of strings
+           :param maplistA: A list of map objects
+           :param maplistB: A list of map objects
+           :param relations: The temporal relationships that must be fullfilled as list of strings
                             ("EQUAL", "DURING", ...)
-           @param temporal The temporal operator as string "=" or "&", ...
-           @param function The spatial overlay operations as string "&", "|", ...
-           @return Return the list of maps with overlay commands
+           :param temporal: The temporal operator as string "=" or "&", ...
+           :param function: The spatial overlay operations as string "&", "|", ...
+           :return: Return the list of maps with overlay commands
         """
         topolist = self.get_temporal_topo_list(maplistA, maplistB, topolist = relations)
 

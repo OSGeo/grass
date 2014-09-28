@@ -1,28 +1,24 @@
-"""package grass.temporal
-
-GRASS Python scripting module (temporal GIS functions)
-
-Temporal GIS core functions to be used in library modules and scripts.
-
+"""
 This module provides the functionality to create the temporal
 SQL database and to establish a connection to the database.
 
 Usage:
 
+.. code-block:: python
 
->>> import grass.temporal as tgis
->>> # Create the temporal database
->>> tgis.init()
->>> # Establish a database connection
->>> dbif, connected = tgis.init_dbif(None)
->>> dbif.connect()
->>> # Execute a SQL statement
->>> dbif.execute_transaction("SELECT datetime(0, 'unixepoch', 'localtime');")
->>> # Mogrify an SQL statement
->>> dbif.mogrify_sql_statement(["SELECT name from raster_base where name = ?",
-... ("precipitation",)])
-"SELECT name from raster_base where name = 'precipitation'"
->>> dbif.close()
+    >>> import grass.temporal as tgis
+    >>> # Create the temporal database
+    >>> tgis.init()
+    >>> # Establish a database connection
+    >>> dbif, connected = tgis.init_dbif(None)
+    >>> dbif.connect()
+    >>> # Execute a SQL statement
+    >>> dbif.execute_transaction("SELECT datetime(0, 'unixepoch', 'localtime');")
+    >>> # Mogrify an SQL statement
+    >>> dbif.mogrify_sql_statement(["SELECT name from raster_base where name = ?",
+    ... ("precipitation",)])
+    "SELECT name from raster_base where name = 'precipitation'"
+    >>> dbif.close()
 
 
 (C) 2011-2014 by the GRASS Development Team
@@ -273,27 +269,27 @@ def set_raise_on_error(raise_exp=True):
     :param raise_exp: True to raise a FatalError exception instead of calling
                       sys.exit(1) when using the tgis messenger interface
 
+    .. code-block:: python
+    
+        >>> import grass.temporal as tgis
+        >>> tgis.init()
+        >>> ignore = tgis.set_raise_on_error(False)
+        >>> msgr = tgis.get_tgis_message_interface()
+        >>> tgis.get_raise_on_error()
+        False
+        >>> msgr.fatal("Ohh no no no!")
+        Traceback (most recent call last):
+          File "__init__.py", line 239, in fatal
+            sys.exit(1)
+        SystemExit: 1
 
-    >>> import grass.temporal as tgis
-    >>> tgis.init()
-    >>> ignore = tgis.set_raise_on_error(False)
-    >>> msgr = tgis.get_tgis_message_interface()
-    >>> tgis.get_raise_on_error()
-    False
-    >>> msgr.fatal("Ohh no no no!")
-    Traceback (most recent call last):
-      File "__init__.py", line 239, in fatal
-        sys.exit(1)
-    SystemExit: 1
-
-    >>> tgis.set_raise_on_error(True)
-    False
-    >>> msgr.fatal("Ohh no no no!")
-    Traceback (most recent call last):
-      File "__init__.py", line 241, in fatal
-        raise FatalError(message)
-    FatalError: Ohh no no no!
-
+        >>> tgis.set_raise_on_error(True)
+        False
+        >>> msgr.fatal("Ohh no no no!")
+        Traceback (most recent call last):
+          File "__init__.py", line 241, in fatal
+            raise FatalError(message)
+        FatalError: Ohh no no no!
 
     :returns: current status
     """
@@ -434,6 +430,7 @@ def init(raise_fatal_error=False):
        subprocesses are spawned.
 
        Re-run this function in case the following GRASS variables change while the process runs:
+       
        - MAPSET
        - LOCATION_NAME
        - GISDBASE
@@ -441,10 +438,12 @@ def init(raise_fatal_error=False):
        - TGIS_DISABLE_TIMESTAMP_WRITE
 
        Re-run this function if the following t.connect variables change while the process runs:
+       
        - temporal GIS driver (set by t.connect driver=)
        - temporal GIS database (set by t.connect database=)
 
        The following environmental variables are checked:
+       
         - GRASS_TGIS_PROFILE (True, False, 1, 0)
         - GRASS_TGIS_RAISE_ON_ERROR (True, False, 1, 0)
 
@@ -453,7 +452,6 @@ def init(raise_fatal_error=False):
 
         :param raise_fatal_error: Set this True to assure that the init() function
                                  does not kill a persistent process like the GUI.
-
                                  If set True a grass.pygrass.messages.FatalError
                                  exception will be raised in case a fatal error occurs
                                  in the init process, otherwise sys.exit(1) will be called.
@@ -757,9 +755,9 @@ def _create_tgis_metadata_table(content, dbif=None):
     """!Create the temporal gis metadata table which stores all metadata
        information about the temporal database.
 
-       @param content The dictionary that stores the key:value metadata
+       :param content: The dictionary that stores the key:value metadata
                       that should be stored in the metadata table
-       @param dbif The database interface to be used
+       :param dbif: The database interface to be used
     """
     dbif, connected = init_dbif(dbif)
     statement = "CREATE TABLE tgis_metadata (key VARCHAR NOT NULL, value VARCHAR);\n";
@@ -937,6 +935,7 @@ class DBConnection(object):
        and provides access to the chisen backend modules.
 
        The following DBMS are supported:
+       
          - sqlite via the sqlite3 standard library
          - postgresql via psycopg2
 
@@ -1014,7 +1013,6 @@ class DBConnection(object):
            There may be several temporal databases in a location, hence 
            close all temporal databases that have been opened. Use a dictionary
            to manage different connections.
-           
         """
         self.connection.commit()
         self.cursor.close()
@@ -1036,12 +1034,14 @@ class DBConnection(object):
 
            Usage:
 
-
-           >>> init()
-           >>> dbif = SQLDatabaseInterfaceConnection()
-           >>> dbif.mogrify_sql_statement(["SELECT ctime FROM raster_base WHERE id = ?",
-           ... ["soil@PERMANENT",]])
-           "SELECT ctime FROM raster_base WHERE id = 'soil@PERMANENT'"
+           .. code-block:: python
+           
+               >>> init()
+               >>> dbif = SQLDatabaseInterfaceConnection()
+               >>> dbif.mogrify_sql_statement(["SELECT ctime FROM raster_base WHERE id = ?",
+               ... ["soil@PERMANENT",]])
+               "SELECT ctime FROM raster_base WHERE id = 'soil@PERMANENT'"
+           
         """
         sql = content[0]
         args = content[1]
@@ -1216,15 +1216,16 @@ def init_dbif(dbif):
 
         Usage code sample:
   
+        .. code-block:: python
+        
+            dbif, connect = tgis.init_dbif(None)
 
-        dbif, connect = tgis.init_dbif(None)
+            sql = dbif.mogrify_sql_statement(["SELECT * FROM raster_base WHERE ? = ?"],
+                                                   ["id", "soil@PERMANENT"])
+            dbif.execute_transaction(sql)
 
-        sql = dbif.mogrify_sql_statement(["SELECT * FROM raster_base WHERE ? = ?"],
-                                               ["id", "soil@PERMANENT"])
-        dbif.execute_transaction(sql)
-
-        if connect:
-            dbif.close()
+            if connect:
+                dbif.close()
 
     """
     if dbif is None:

@@ -1,26 +1,20 @@
-"""!@package grass.temporal
-
-@brief GRASS Python scripting module (temporal GIS functions)
-
-Temporal GIS related functions to be used in Python scripts.
+"""
+Aggregation methods for space time raster datasets
 
 Usage:
 
-@code
-import grass.temporal as tgis
+.. code-block:: python
 
-tgis.aggregate_raster_maps(dataset, mapset, inputs, base, start, end,
-    count, method, register_null, dbif)
+    import grass.temporal as tgis
 
-...
-@endcode
+    tgis.aggregate_raster_maps(dataset, mapset, inputs, base, start, end, count, method, register_null, dbif)
 
 (C) 2012-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Soeren Gebbert
+:author: Soeren Gebbert
 """
 
 from space_time_datasets import *
@@ -30,15 +24,15 @@ import grass.script as gscript
 
 
 def collect_map_names(sp, dbif, start, end, sampling):
-    """!Gather all maps from dataset using a specific sample method
+    """Gather all maps from dataset using a specific sample method
 
-       @param sp The space time raster dataset to select aps from
-       @param dbif The temporal database interface to use
-       @param start The start time of the sample interval, may be relative or
+       :param sp: The space time raster dataset to select aps from
+       :param dbif: The temporal database interface to use
+       :param start: The start time of the sample interval, may be relative or
               absolute
-       @param end The end time of the sample interval, may be relative or
+       :param end: The end time of the sample interval, may be relative or
               absolute
-       @param sampling The sampling methods to use
+       :param sampling: The sampling methods to use
     """
 
     use_start = False
@@ -104,21 +98,21 @@ def collect_map_names(sp, dbif, start, end, sampling):
 
 def aggregate_raster_maps(inputs, base, start, end, count, method,
                           register_null, dbif,  offset=0):
-    """!Aggregate a list of raster input maps with r.series
+    """Aggregate a list of raster input maps with r.series
 
-       @param inputs The names of the raster maps to be aggregated
-       @param base The basename of the new created raster maps
-       @param start The start time of the sample interval, may be relative or
+       :param inputs: The names of the raster maps to be aggregated
+       :param base: The basename of the new created raster maps
+       :param start: The start time of the sample interval, may be relative or
                     absolute
-       @param end The end time of the sample interval, may be relative or
+       :param end: The end time of the sample interval, may be relative or
                   absolute
-       @param count The number to be attached to the basename of the new
+       :param count: The number to be attached to the basename of the new
                     created raster map
-       @param method The aggreation method to be used by r.series
-       @param register_null If true null maps will be registered in the space
+       :param method: The aggreation method to be used by r.series
+       :param register_null: If true null maps will be registered in the space
                             time raster dataset, if false not
-       @param dbif The temporal database interface to use
-       @param offset Offset to be added to the map counter to create the map ids
+       :param dbif: The temporal database interface to use
+       :param offset: Offset to be added to the map counter to create the map ids
     """
 
     msgr = get_tgis_message_interface()
@@ -184,28 +178,28 @@ def aggregate_raster_maps(inputs, base, start, end, count, method,
 def aggregate_by_topology(granularity_list,  granularity,  map_list,  topo_list,  basename,  time_suffix,
                           offset=0,  method="average",  nprocs=1,  spatial=None,  dbif=None, 
                           overwrite=False):
-    """!Aggregate a list of raster input maps with r.series
+    """Aggregate a list of raster input maps with r.series
 
-       @param granularity_list A list of AbstractMapDataset objects. 
+       :param granularity_list: A list of AbstractMapDataset objects. 
                                The temporal extents of the objects are used
                                to build the spatio-temporal topology with the map list objects
-       @param granularity The granularity of the granularity list
-       @param map_list A list of RasterDataset objects that contain the raster 
+       :param granularity: The granularity of the granularity list
+       :param map_list: A list of RasterDataset objects that contain the raster 
                        maps that should be aggregated
-       @param topo_list A list of strings of topological relations that are 
+       :param topo_list: A list of strings of topological relations that are 
                         used to select the raster maps for aggregation
-       @param basename The basename of the new generated raster maps
-       @param time_suffix Use the granularity truncated start time of the 
+       :param basename: The basename of the new generated raster maps
+       :param time_suffix: Use the granularity truncated start time of the 
                           actual granule to create the suffix for the basename
-       @param offset Use a numerical offset for suffix generation (overwritten by time_suffix)
-       @param method The aggregation method of r.series (average,min,max, ...)
-       @param nprocs The number of processes used for parallel computation
-       @param spatial This indicates if the spatial topology is created as well:
+       :param offset: Use a numerical offset for suffix generation (overwritten by time_suffix)
+       :param method: The aggregation method of r.series (average,min,max, ...)
+       :param nprocs: The number of processes used for parallel computation
+       :param spatial: This indicates if the spatial topology is created as well:
                       spatial can be None (no spatial topology), "2D" using west, east,
                       south, north or "3D" using west, east, south, north, bottom, top
-       @param dbif The database interface to be used
-       @param overwrite Overwrite existing raster maps
-       @return A list of RasterDataset objects that contain the new map names and
+       :param dbif: The database interface to be used
+       :param overwrite: Overwrite existing raster maps
+       :return: A list of RasterDataset objects that contain the new map names and
                the temporal extent for map registration
     """
     import grass.pygrass.modules as pymod

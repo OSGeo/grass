@@ -28,183 +28,217 @@ The temporal framework API consists of several dedicated modules. Each module co
 as well as function definition. The API can be roughly divided in a low level and high level part. However, several
 functions from the low level module are used in module implementation as well.
 
-
 Low level API
-*************
+^^^^^^^^^^^^^
 
-The low level API implements the core functionality on which the high level API is based on.
+The low level API implements the core functionality of the temporal framework. Core functionality is
+for example the database interface, the temporal database creation and initialization,
+the SQL object serialization, all classes that represent table entries, datetime mathematics and many more.
 
-**python::temporal::core**
+
+:mod:`~temporal.core`
+"""""""""""""""""""""
 
     The core functionality of the temporal framework:
 
-    - Initialization function :func:`init()`
+    - Initialization function :func:`~temporal.core.init()`
     - Definition of global variables
     - Several global functions to access TGIS specific variables
     - Interfaces to the TGIS C-library and PyGRASS messenger objects
-    - Database interface connection class :class:`~temporal.core.SQLDatabaseInterfaceConnection` to sqlite3 and postgresql
-      database backends
+    - Database interface connection class :class:`~temporal.core.SQLDatabaseInterfaceConnection` 
+      to sqlite3 and postgresql database backends
     - Functions to create the temporal database
 
-**python::temporal::base**
+:mod:`~temporal.base`
+"""""""""""""""""""""
 
     Implements of basic dataset informations and SQL conversion of such information:
 
-    - Definition of the SQL serialize class :class:`~temporal.base.DictSQLSerializer` that converts the content of temporal
+    - Definition of the SQL serialize class :class:`~temporal.base.DictSQLSerializer` 
+      that converts the content of temporal
       classes into SQL SELECT, INSERT or UPDATE statements
-    - Definition of :class:`~temporal.base.SQLDatabaseInterface` that is the base class for all temporal datatype subclasses
+    - Definition of :class:`~temporal.base.SQLDatabaseInterface` 
+      that is the base class for all temporal datatype subclasses
     - Contains classes for all datasets [#allds]_ that contain
       basic informations (id, name, mapset, creator, ...)
 
-**python::temporal::spatial_extent**
+:mod:`~temporal.spatial_extent`
+"""""""""""""""""""""""""""""""
 
     Implements of 2d and 3d spatial extents of all datasets:
 
-    - Implements class :class:`~temporal.spatial_extent.SpatialExtent` that is the base class for all dataset specific spatial extent classes
+    - Implements class :class:`~temporal.spatial_extent.SpatialExtent` 
+      that is the base class for all dataset specific spatial extent classes
       It provides spatial topological logic and operations for 2D and 3D extents
     - Implements spatial extent classes for all datasets [#allds]_
 
-**python::temporal::temporal_extent**
+:mod:`~temporal.temporal_extent`
+""""""""""""""""""""""""""""""""
 
     Implements of the temporal extent of all datasets for relative and absolute time:
 
-    - Implements class :class:`~temporal.temporal_extent.TemporalExtent` that is the base class for all dataset specific temporal extent classes
+    - Implements class :class:`~temporal.temporal_extent.TemporalExtent` 
+      that is the base class for all dataset specific temporal extent classes
       It provides temporal topological logic and operations
     - Implements temporal extent classes for relative time and absolute time for
       all datasets [#allds]_
 
-**python::temporal::metadata**
+:mod:`~temporal.metadata`
+"""""""""""""""""""""""""
 
     Implements the metadata base classes and datatype specific derivatives fpr all datasets [#allds]_.
 
-**python::temporal::spatial_topology_dataset_connector**
+:mod:`~temporal.spatial_topology_dataset_connector`
+"""""""""""""""""""""""""""""""""""""""""""""""""""
 
     Implements the interface to link datasets by spatial topological relations
 
-**python::temporal::temporal_topology_dataset_connector**
+:mod:`~temporal.temporal_topology_dataset_connector`
+""""""""""""""""""""""""""""""""""""""""""""""""""""
 
     Implements the interface to link datasets by temporal topological relations
 
-**python::temporal::c_libraries_interface**
+:mod:`~temporal.c_libraries_interface`
+""""""""""""""""""""""""""""""""""""""
 
     The RPC C-library interface for exit safe and fast access to raster, vector and 3D raster informations.
 
-**python::temporal::temporal_granularity**
+:mod:`~temporal.temporal_granularity`
+"""""""""""""""""""""""""""""""""""""
 
     The computation of the temporal granularity for a list
-    of :class:`~temporal.abstract_dataset.AbstractDataset` objects for absolute and relative is implemented here.
+    of :class:`~temporal.abstract_dataset.AbstractDataset` 
+    objects for absolute and relative is implemented here.
 
-**python::temporal::datetime_math**
+:mod:`~temporal.datetime_math`
+""""""""""""""""""""""""""""""
 
     This module contains function to parse, convert and process datetime objects
     in the temporal framework.
 
 Spatio-temporal algebra classes for space time raster and vector datasets are defined in:
 
-- **python::temporal::temporal_algebra**
-- **python::temporal::temporal_vector_algebra**
-- **python::temporal::temporal_vector_operator**
+- :mod:`~temporal.temporal_algebra`
+- :mod:`~temporal.temporal_vector_algebra`
+- :mod:`~temporal.temporal_vector_operator`
 
 High level API
-**************
+^^^^^^^^^^^^^^
 
-The high level API utilizes the low level API
+The high level API utilizes the low level API. Its classes and functions are usually used to implement
+temporal processing algorithms and temporal GRASS modules.
 
-**python::temporal::abstract_dataset**
+:mod:`~temporal.abstract_dataset`
+"""""""""""""""""""""""""""""""""
 
     - Implements the base class for all datasets [#allds]_ :class:`~temporal.abstract_dataset.AbstractDataset`.
     - Implements the the select, insert and update functionality as well as
       convenient functions to access the base, extent and metadata informations
 
-**python::temporal::abstract_map_dataset**
+:mod:`~temporal.abstract_map_dataset`
+"""""""""""""""""""""""""""""""""""""
 
-    - Implements the base class :class:`~temporal.abstract_map_dataset.AbstractMapDataset` for all map layer specific classes
+    - Implements the base class :class:`~temporal.abstract_map_dataset.AbstractMapDataset` 
+      for all map layer specific classes
     - Provides the interface to all map layer specific informations in the temporal database
 
-**python::temporal::abstract_space_time_dataset**
+:mod:`~temporal.abstract_space_time_dataset`
+""""""""""""""""""""""""""""""""""""""""""""
 
-    - Implements the base class :class:`~temporal.abstract_space_time_dataset.AbstractSpaceTimeDataset` for all Space Time Datasets classes
+    - Implements the base class :class:`~temporal.abstract_space_time_dataset.AbstractSpaceTimeDataset` 
+      for all Space Time Datasets classes
     - Contains the creation and deletion functionality, the map registration and un-registration,
       access methods to map layer objects and so on
     - Provides the interface to all Space Time Dataset specific informations in the temporal database
 
-**python::temporal::space_time_datasets**
+:mod:`~temporal.space_time_datasets`
+""""""""""""""""""""""""""""""""""""
 
-    This module contains all classes that represent specific datasets [#allds]_. A module developer uses these
-    map layer and Space Time Dataset object representations to perform spatio-temporal tasks.
+    This module contains all classes that represent specific datasets [#allds]_. 
+    A module developer uses these map layer and Space Time Dataset object 
+    representations to perform spatio-temporal tasks.
 
-
-**python::temporal::spatio_temporal_relationships**
+:mod:`~temporal.spatio_temporal_relationships`
+""""""""""""""""""""""""""""""""""""""""""""""
 
     The logic to compute spatio-temporal topology for a single list or two lists of :class:`~temporal.abstract_dataset.AbstractDataset` objects
     is implemented in this module.
-    The class :class:`~temporal.spatio_temporal_relationships.SpatioTemporalTopologyBuilder` provides a convenient
-    interface for topology computation.
+    The class :class:`~temporal.spatio_temporal_relationships.SpatioTemporalTopologyBuilder` 
+    provides a convenient interface for topology computation.
 
-**python::temporal::gui_support**
+:mod:`~temporal.gui_support`
+""""""""""""""""""""""""""""
 
     Helper functions to support the listing of space time datasets in the automatically generated GUI.
 
-Temporal Framework Testsuite
-****************************
-
-All temporal framework specific unittests and doctests are located here:
-
-- **python::temporal::testsuite**
-
 
 Shared Module functionality
-***************************
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 Functionality that is shared between different temporal GRASS modules, such as
-map listing, space time dataset creation, map registration and unregistration, 
+map listing, space time dataset creation, map registration and un-registration, 
 aggregation, extraction, map calculation, statistics as well as import and export of 
-space time datasets are defined here:
+space time datasets.
 
-**python::temporal::aggregation**
+:mod:`~temporal.aggregation`
+""""""""""""""""""""""""""""
 
     Aggregation of Space Time Raster Datasets based on topological relations. 
     Used in *t.rast.aggregate* and *t.rast.aggregate.ds*
 
-**python::temporal::extract**
+:mod:`~temporal.extract`
+""""""""""""""""""""""""
 
-    Extraction of subsets from Space Time Datasets including map algebra and vector selection statements. 
+    Extraction of subsets from Space Time Datasets including 
+    map algebra and vector selection statements. 
     Used in *t.rast.extract*, *t.rast3d.extract* and *t.vect.extract*.
 
-**python::temporal::factory**
+:mod:`~temporal.factory`
+""""""""""""""""""""""""
 
     Factory functions to create datasets of all types [#allds]_.
 
-**python::temporal::open_stds**
+:mod:`~temporal.open_stds`
+""""""""""""""""""""""""""
 
-    Convenient functions to open existing Space Time Datasets or to create new ones. Used in almost all temporal modules.
+    Convenient functions to open existing Space Time Datasets or 
+    to create new ones. Used in almost all temporal modules.
 
-**python::temporal::list_stds**
+:mod:`~temporal.list_stds`
+""""""""""""""""""""""""""
 
-    Convenient functions to list datasets of all types [#allds]_ registered in the temporal database.
+    Convenient functions to list datasets of all types [#allds]_ 
+    registered in the temporal database.
 
-**python::temporal::mapcalc**
+:mod:`~temporal.mapcalc`
+""""""""""""""""""""""""
 
-    Simple temporal algebra for Scpae Time Raster and 3d Raster datasets. Used in *t.rast.mapcalc* and *t.rast3d.mapcalc*
+    Simple temporal algebra for Space Time Raster and 3d Raster 
+    datasets. Used in *t.rast.mapcalc* and *t.rast3d.mapcalc*
 
-**python::temporal::register**
+:mod:`~temporal.register`
+"""""""""""""""""""""""""
 
     Convenient functions to register a single or multiple map layer in the temporal database and
     SpaceTime Datasets. Used in several modules, most important *t.register*.
 
-**python::temporal::sampling**
+:mod:`~temporal.sampling`
+"""""""""""""""""""""""""
 
     Sampling functions used in several modules.
 
-**python::temporal::stds_export**
+:mod:`~temporal.stds_export`
+""""""""""""""""""""""""""""
 
     Functions to export of Space Time Datasets, used in *t.rast.export*, *t.rast3d.export* and *t.vect.export*.
 
-**python::temporal::stds_import**
+:mod:`~temporal.stds_import`
+""""""""""""""""""""""""""""
 
     Functions to import Space Time Datasets, used in *t.rast.import*, *t.rast3d.import* and *t.vect.import*.
 
-**python::temporal::univar_statistics**
+:mod:`~temporal.univar_statistics`
+""""""""""""""""""""""""""""""""""
 
     Simple statistical analysis functions for Space Time Datasets, used in *t.rast.univar*, *t.rast3d.univar*
     and *t.vect.univar*.
@@ -213,11 +247,20 @@ space time datasets are defined here:
 .. [#allds] : Raster Map Layer, 3d Raster Map Layer, Vector Map Layer, Space time Raster Datasets (STRDS),
               Space Time 3d Raster Datasets (STR3DS) and Space Time Vector Datasets (STVDS)
 
+
+Here the full list of all temporal modules:
+
+.. toctree::
+   :maxdepth: 2
+
+   temporal
+
+
 Examples
 --------
 
 Howto start example
-*******************
+^^^^^^^^^^^^^^^^^^^
 
 This simple example shows how to open a space time raster dataset
 to access its registered maps.
@@ -274,7 +317,7 @@ to access its registered maps.
 
 
 Creation of a space time dataset
-********************************
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This example shows howto create a space time dataset. The code is generic and works
 for different space time datasets (raster, 3D raster and vector): 
@@ -335,7 +378,7 @@ for different space time datasets (raster, 3D raster and vector):
 
 
 Temporal shifting
-*****************
+^^^^^^^^^^^^^^^^^
 
 .. code-block:: python
 

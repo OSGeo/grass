@@ -1,31 +1,28 @@
-"""!@package grass.temporal
-
-@brief GRASS Python scripting module (temporal GIS functions)
-
-Temporal GIS export functions to be used in temporal modules
+"""
+Export functions for space time datasets
 
 Usage:
 
-@code
-import grass.temporal as tgis
+.. code-block:: python
 
-input="temp_1950_2012@PERMANENT"
-output="/tmp/temp_1950_2012.tar.gz"
-compression="gzip"
-workdir="/tmp"
-where=None
-format_="GTiff"
-type_="strds"
-tgis.export_stds(input, output, compression, workdir, where, format_, type_)
-...
-@endcode
+    import grass.temporal as tgis
+
+    input="temp_1950_2012@PERMANENT"
+    output="/tmp/temp_1950_2012.tar.gz"
+    compression="gzip"
+    workdir="/tmp"
+    where=None
+    format_="GTiff"
+    type_="strds"
+    tgis.export_stds(input, output, compression, workdir, where, format_, type_)
+
 
 (C) 2012-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Soeren Gebbert
+:authors: Soeren Gebbert
 """
 
 import shutil
@@ -218,30 +215,34 @@ def _export_raster3d_maps(rows, tar, list_file, new_cwd, fs):
 
 def export_stds(input, output, compression, workdir, where, format_="pack",
                 type_="strds"):
-    """
-            !Export space time datasets as tar archive with optional compression
+    """Export space time datasets as tar archive with optional compression
 
-            This method should be used to export space time datasets
-            of type raster and vector as tar archive that can be reimported
-            with the method import_stds().
+        This method should be used to export space time datasets
+        of type raster and vector as tar archive that can be reimported
+        with the method import_stds().
 
-            @param input The name of the space time dataset to export
-            @param output The name of the archive file
-            @param compression The compression of the archive file:
+        :param input: The name of the space time dataset to export
+        :param output: The name of the archive file
+        :param compression: The compression of the archive file:
+
               - "no"  no compression
               - "gzip" GNU zip compression
               - "bzip2" Bzip compression
-            @param workdir The working directory used for extraction and packing
-            @param where The temporal WHERE SQL statement to select a subset
-                          of maps from the space time dataset
-            @param format_ The export format:
+          
+        :param workdir: The working directory used for extraction and packing
+        :param where: The temporal WHERE SQL statement to select a subset
+                      of maps from the space time dataset
+        :param format_: The export format:
+        
               - "GTiff" Geotiff format, only for raster maps
               - "AAIGrid" Arc/Info ASCII Grid format, only for raster maps
               - "pack" The GRASS raster, 3D raster or vector Pack format,
                        this is the default setting
               - "GML" GML file export format, only for vector maps,
                       v.out.ogr export option
-            @param type_ The space time dataset type
+                  
+        :param type_: The space time dataset type
+        
               - "strds" Space time raster dataset
               - "str3ds" Space time 3D raster dataset
               - "stvds" Space time vector dataset

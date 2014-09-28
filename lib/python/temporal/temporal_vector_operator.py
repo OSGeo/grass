@@ -1,5 +1,4 @@
-"""!@package grass.temporal
-
+"""
 Temporal vector operator evaluation with PLY
 
 (C) 2014 by the GRASS Development Team
@@ -7,9 +6,10 @@ This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@authors Thomas Leppelt and Soeren Gebbert
+:authors: Thomas Leppelt and Soeren Gebbert
 
-@code
+.. code-block:: python
+
     >>> import grass.temporal as tgis
     >>> tgis.init(True)
     >>> p = tgis.TemporalVectorOperatorParser()
@@ -62,7 +62,6 @@ for details.
     >>> print(p.relations, p.temporal, p.function)
     ([['overlaps', 'overlapped'], 'equal'], '|', '|')
     
-@endcode
 """
 try:
     import ply.lex as lex
@@ -71,7 +70,7 @@ except:
     pass
 
 class TemporalVectorOperatorLexer(object):
-    """!Lexical analyzer for the GRASS GIS temporal vector operators"""
+    """Lexical analyzer for the GRASS GIS temporal vector operators"""
     
     # Functions that defines topological relations.
     relations = {
@@ -164,7 +163,7 @@ class TemporalVectorOperatorLexer(object):
              print tok
              
 class TemporalVectorOperatorParser(object):
-    """!The parser for the GRASS GIS temporal vector operators"""
+    """The parser for the GRASS GIS temporal vector operators"""
     
     def __init__(self):
         self.lexer = TemporalVectorOperatorLexer()

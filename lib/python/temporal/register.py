@@ -1,25 +1,20 @@
-"""!@package grass.temporal
-
-@brief GRASS Python scripting module (temporal GIS functions)
-
-Temporal GIS related functions to be used in Python scripts.
+"""
+Functions to register map layer in space time datasets and the temporal database
 
 Usage:
 
-@code
-import grass.temporal as tgis
+.. code-block:: python
 
-tgis.register_maps_in_space_time_dataset(type, name, maps)
+    import grass.temporal as tgis
 
-...
-@endcode
+    tgis.register_maps_in_space_time_dataset(type, name, maps)
 
 (C) 2012-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Soeren Gebbert
+:authors: Soeren Gebbert
 """
 
 from open_stds import *
@@ -32,7 +27,7 @@ def register_maps_in_space_time_dataset(
     type, name, maps=None, file=None, start=None,
     end=None, unit=None, increment=None, dbif=None,
         interval=False, fs="|", update_cmd_list=True):
-    """!Use this method to register maps in space time datasets.
+    """Use this method to register maps in space time datasets.
 
        Additionally a start time string and an increment string can be
        specified to assign a time interval automatically to the maps.
@@ -40,28 +35,28 @@ def register_maps_in_space_time_dataset(
        It takes care of the correct update of the space time datasets from all
        registered maps.
 
-       @param type The type of the maps rast, rast3d or vect
-       @param name The name of the space time dataset. Maps will be registered in the
+       :param type: The type of the maps rast, rast3d or vect
+       :param name: The name of the space time dataset. Maps will be registered in the
                    temporal database if the name was set to None
-       @param maps A comma separated list of map names
-       @param file Input file, one map per line map with start and optional
+       :param maps: A comma separated list of map names
+       :param file: Input file, one map per line map with start and optional
                    end time
-       @param start The start date and time of the first raster map
+       :param start: The start date and time of the first raster map
                     (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd",
                     format relative is integer 5)
-       @param end The end date and time of the first raster map
+       :param end: The end date and time of the first raster map
                   (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd",
                   format relative is integer 5)
-       @param unit The unit of the relative time: years, months, days,
+       :param unit: The unit of the relative time: years, months, days,
                    hours, minutes, seconds
-       @param increment Time increment between maps for time stamp creation
+       :param increment: Time increment between maps for time stamp creation
                         (format absolute: NNN seconds, minutes, hours, days,
                         weeks, months, years; format relative: 1.0)
-       @param dbif The database interface to be used
-       @param interval If True, time intervals are created in case the start
+       :param dbif: The database interface to be used
+       :param interval: If True, time intervals are created in case the start
                        time and an increment is provided
-       @param fs Field separator used in input file
-       @param update_cmd_list If is True, the command that was invoking this process
+       :param fs: Field separator used in input file
+       :param update_cmd:_list If is True, the command that was invoking this process
                               will be written to the process history
     """
     start_time_in_file = False
@@ -346,24 +341,24 @@ def register_maps_in_space_time_dataset(
 
 def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None,
                              mult=1, interval=False):
-    """!Assign the valid time to a map dataset
+    """Assign the valid time to a map dataset
 
-       @param ttype The temporal type which should be assigned
+       :param ttype: The temporal type which should be assigned
                      and which the time format is of
-       @param map A map dataset object derived from abstract_map_dataset
-       @param start The start date and time of the first raster map
+       :param map: A map dataset object derived from abstract_map_dataset
+       :param start: The start date and time of the first raster map
                      (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd",
                      format relative is integer 5)
-       @param end The end date and time of the first raster map
+       :param end: The end date and time of the first raster map
                    (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd",
                    format relative is integer 5)
-       @param unit The unit of the relative time: years, months,
+       :param unit: The unit of the relative time: years, months,
                     days, hours, minutes, seconds
-       @param increment Time increment between maps for time stamp creation
+       :param increment: Time increment between maps for time stamp creation
                         (format absolute: NNN seconds, minutes, hours, days,
                         weeks, months, years; format relative is integer 1)
-       @param mult A multiplier for the increment
-       @param interval If True, time intervals are created in case the start
+       :param mult: A multiplier for the increment
+       :param interval: If True, time intervals are created in case the start
                         time and an increment is provided
     """
 
@@ -437,12 +432,12 @@ def register_map_object_list(type,  map_list, output_stds,
     """Register a list of AbstractMapDataset objects in the temporal database
        and optional in a space time dataset.
        
-       @param type The type of the map layer (rast, rast3d, vect)
-       @param map_list List of AbstractMapDataset objects
-       @param output_stds The output stds
-       @param delete_empty Set True to delete empty map layer found in the map_list
-       @param unit The temporal unit of the space time dataset
-       @param dbif The database interface to be used
+       :param type: The type of the map layer (rast, rast3d, vect)
+       :param map_list: List of AbstractMapDataset objects
+       :param output_stds: The output stds
+       :param delete_empty: Set True to delete empty map layer found in the map_list
+       :param unit: The temporal unit of the space time dataset
+       :param dbif: The database interface to be used
        
     """
     import grass.pygrass.modules as pymod

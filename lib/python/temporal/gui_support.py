@@ -1,8 +1,5 @@
-"""!@package grass.temporal
-
-@brief GRASS Python scripting module (temporal GIS functions)
-
-Temporal GIS related functions to be used in Python scripts.
+"""
+GUI support functions
 
 
 (C) 2008-2011 by the GRASS Development Team
@@ -10,7 +7,7 @@ This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Soeren Gebbert
+:authors: Soeren Gebbert
 """
 
 from space_time_datasets import *
@@ -20,21 +17,22 @@ import grass.script as gscript
 ###############################################################################
 
 def tlist_grouped(type, group_type = False, dbif=None):
-    """!List of temporal elements grouped by mapsets.
+    """List of temporal elements grouped by mapsets.
 
     Returns a dictionary where the keys are mapset 
     names and the values are lists of space time datasets in that
     mapset. Example:
 
-    @code
-    >>> tgis.tlist_grouped('strds')['PERMANENT']
-    ['precipitation', 'temperature']
-    @endcode
+    .. code-block:: python
     
-    @param type element type (strds, str3ds, stvds)
-    @param group_type TBD
+        >>> tgis.tlist_grouped('strds')['PERMANENT']
+        ['precipitation', 'temperature']
 
-    @return directory of mapsets/elements
+    
+    :param type: element type (strds, str3ds, stvds)
+    :param group_type: TBD
+
+    :return: directory of mapsets/elements
     """
     result = {}
     dbif, connected = init_dbif(dbif)
@@ -80,11 +78,11 @@ def tlist_grouped(type, group_type = False, dbif=None):
 ###############################################################################
 
 def tlist(type, dbif=None):
-    """!Return a list of space time datasets of absolute and relative time
+    """Return a list of space time datasets of absolute and relative time
      
-    @param type element type (strds, str3ds, stvds)
+    :param type: element type (strds, str3ds, stvds)
 
-    @return a list of space time dataset ids
+    :return: a list of space time dataset ids
     """
     id = None
     sp = dataset_factory(type, id)
