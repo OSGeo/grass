@@ -61,7 +61,8 @@ struct BM *IL_create_bitmask(struct interp_params *params)
 	    if (MASK)
 		Rast_get_c_row(MASKfd, MASK, i);
 	    for (j = 0; j < params->nsizc; j++) {
-		if ((cellmask && cellmask[j] == 0) || (MASK && MASK[j] == 0))
+		if ((cellmask && (cellmask[j] == 0 || Rast_is_c_null_value(&cellmask[j]))) || 
+		    (MASK && (MASK[j] == 0 || Rast_is_c_null_value(&MASK[j]))))
 		    BM_set(bitmask, j, irev, 0);
 		else
 		    BM_set(bitmask, j, irev, 1);
@@ -71,9 +72,7 @@ struct BM *IL_create_bitmask(struct interp_params *params)
     }
     else
 	bitmask = NULL;
-    
-    if (MASKfd >= 0)
-	Rast_close(MASKfd);
+
     if (cfmask >= 0)
 	Rast_close(cfmask);
 

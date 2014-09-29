@@ -22,7 +22,8 @@ tangential and mean curvatures respectively. If the input vector map
 have time stamp, the program creates time stamp for all output maps.
 
 <p>
-User can define a raster map named <b>mask</b>, which will be used
+User can either use <em><a href="r.mask.html">r.mask</a></em>to set a mask
+or specify a raster map in <b>mask</b> option, which will be used
 as a mask. The approximation is skipped for cells which have zero or
 NULL value in mask. NULL values will be assigned to these cells in all
 output raster maps. Data points are checked for identical points and
