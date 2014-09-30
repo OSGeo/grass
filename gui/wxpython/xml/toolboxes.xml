@@ -64,15 +64,7 @@
       <subtoolbox name="QueryRasterMaps"/>
       <subtoolbox name="RasterMapTypeConversions"/>
       <separator/>
-      <module-item name="r.buffer">
-        <label>Buffer rasters</label>
-      </module-item>
-      <module-item name="r.circle">
-        <label>Concentric circles</label>
-      </module-item>
-      <module-item name="r.distance">
-        <label>Closest points</label>
-      </module-item>
+      <subtoolbox name="RasterBufferDistance"/>
       <module-item name="r.mask">
         <label>Mask</label>
       </module-item>
@@ -568,6 +560,26 @@
       </module-item>
     </items>
   </toolbox>
+  <toolbox name="RasterBufferDistance">
+    <label>Raster buffers and distance</label>
+    <items>
+      <module-item name="r.buffer">
+        <label>Buffer rasters</label>
+      </module-item>
+      <module-item name="r.circle">
+        <label>Concentric circles</label>
+      </module-item>
+      <module-item name="r.distance">
+        <label>Closest points</label>
+      </module-item>
+      <module-item name="r.grow">
+        <label>Grow by one cell</label>
+      </module-item>
+      <module-item name="r.grow.distance">
+        <label>Distance to features</label>
+      </module-item>
+    </items>
+  </toolbox>
   <toolbox name="GRASSWorkingEnvironment">
     <label>GRASS working environment</label>
     <items>
@@ -735,12 +747,15 @@
       <module-item name="r.cross">
         <label>Cross product</label>
       </module-item>
-      <module-item name="r.series">
-        <label>Raster series</label>
-      </module-item>
       <module-item name="r.patch">
         <label>Patch raster maps</label>
       </module-item>
+      <module-item name="r.series">
+        <label>Raster series aggregation</label>
+      </module-item>
+      <module-item name="r.series.accumulate">
+        <label>Raster series accumulation</label> 
+      </module-item> 
       <separator/>
       <module-item name="r.stats.zonal">
         <label>Statistical overlay</label>
@@ -1070,6 +1085,10 @@
       <module-item name="v.surf.rst">
         <label>Regularized spline tension</label>
       </module-item>
+      <separator/>
+      <module-item name="r.series.interp"> 
+        <label>Raster series interpolation</label> 
+      </module-item> 
       <separator/>
       <wxgui-item name="OrdinaryOrBlockKriging"/>
       <separator/>
