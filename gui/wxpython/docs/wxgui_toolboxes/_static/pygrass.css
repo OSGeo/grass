@@ -1,0 +1,74 @@
+/* GRASS documentation site style sheet
+ *
+ * send improvements to GRASS Developers list
+ * 
+ *  (eg how to reach the same result on netscape, mozilla konqueror?)
+ *
+ * Fonts:
+ *	http://www.w3.org/TR/REC-CSS2/fonts.html
+ * Tables:
+ *	http://www.w3.org/TR/REC-CSS2/tables.html
+ */
+
+body{
+    background: white;
+    color: black;
+    font-family: arial,sans-serif;
+    width: 99%;
+    margin: 8px;
+}
+
+hr.header {
+    height: 3px;
+    color: gray;
+    background-color: gray;
+    width: 100%;
+}
+
+h1{
+    background-color: transparent;
+    color: rgb(25%, 60%, 25%);
+    font-family: arial,sans-serif;
+    font-weight: bold;
+    font-size: x-large;
+}
+
+h2{
+    background-color: transparent;
+    color: rgb(25%, 60%, 25%);
+    font-family: arial,sans-serif;
+    font-weight: bold;
+    font-size: large;
+}
+
+h3{
+    background-color: transparent;
+    color: rgb(25%, 60%, 25%);
+    font-family: arial,sans-serif;
+    font-weight: bold;
+    font-size: large;
+}
+
+h4{
+    background-color: transparent;
+    color: rgb(25%, 60%, 25%);
+    font-family: arial,sans-serif;
+    font-weight: bold;
+    font-size: medium;
+}
+
+table.border {
+    border-collapse:collapse;
+}
+
+table.border td {
+    border: 1px solid rgb(25%, 60%, 25%);
+}
+
+td {
+    padding: 5px;
+}
+
+div.related {
+    background-color: transparent;
+}
