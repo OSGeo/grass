@@ -132,7 +132,7 @@ class Info(object):
 
     def _set_organization(self, org):
         """Private method to change the Vector organization"""
-        libvect.Vect_get_organization(self.c_mapinfo, ctypes.c_char_p(org))
+        libvect.Vect_set_organization(self.c_mapinfo, ctypes.c_char_p(org))
 
     organization = property(fget=_get_organization, fset=_set_organization,
                             doc="Set or obtain the Vector organization")
@@ -256,7 +256,8 @@ class Info(object):
         """Return the project name of Vector"""
         return libvect.Vect_get_proj_name(self.c_mapinfo)
 
-    def _write_header(self):
+    def write_header(self):
+        """Save the change in the C struct permanently to disk."""
         libvect.Vect_write_header(self.c_mapinfo)
 
     def rename(self, newname):
