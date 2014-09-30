@@ -273,10 +273,10 @@ class VectorTopo(Vector):
         ..
         """
         if isinstance(key, slice):
-            #import pdb; pdb.set_trace()
-            #Get the start, stop, and step from the slice
-            return [self.read(indx + 1)
-                    for indx in range(*key.indices(len(self)))]
+            return [self.read(indx)
+                    for indx in range(key.start if key.start else 1,
+                                      key.stop if key.stop else len(self),
+                                      key.step if key.step else 1)]
         elif isinstance(key, int):
             return self.read(key)
         else:
