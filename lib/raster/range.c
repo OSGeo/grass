@@ -105,9 +105,9 @@ int Rast_read_fp_range(const char *name, const char *mapset,
 	}
 
 	if (read(fd, xdr_buf, sizeof(xdr_buf)) != sizeof(xdr_buf)) {
-	    /* if the f_range file exists, but empty */
+	    /* if the f_range file exists, but empty file, meaning Nulls */
 	    close(fd);
-	    G_warning(_("Unable to read fp range file for <%s>"),
+	    G_debug(1, "Empty fp range file meaning Nulls for <%s>",
 		      G_fully_qualified_name(name, mapset));
 	    return 2;
 	}
