@@ -72,11 +72,14 @@ class TestRandFunction(grass.gunittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()
-        cls.runModule('g.remove', flags='f', type='rast',
-                      pattern=','.join(cls.to_remove))
+        if cls.to_remove:
+            cls.runModule('g.remove', flags='f', type='rast',
+                pattern=','.join(cls.to_remove))
 
     def rinfo_contains_number(self, raster, number):
-        """Test that r.info stdandard output for raster contains a given number
+        """Test that r.info standard output for raster contains a given number
+
+        To be used in test methods for testing presence of a given number.
         """
         rinfo = SimpleModule('r.info', map=raster)
         self.runModule(rinfo)
@@ -88,9 +91,13 @@ class TestRandFunction(grass.gunittest.TestCase):
         self.to_remove.append('nonrand_cell')
 
     def test_seed_required(self):
-        """Test that seed is required when rand() is used"""
+        """Test that seed is required when rand() is used
+        
+        This test can, and probably should, generate an error message.
+        """
         self.assertModuleFail('r.mapcalc', expression='rand_x = rand(1, 200)')
         # TODO: assert map not exists but it would be handy here
+        # TODO: test that error message was generated
 
     def test_seed_cell(self):
         """Test given seed with CELL against reference map"""
@@ -152,6 +159,65 @@ class TestRandFunction(grass.gunittest.TestCase):
             'rand_auto_1', 'rand_auto_2',
             statistics=dict(min=-1, max=1, mean=0),
             precision=0.5)  # low precision, we have few cells
+
+
+# TODO: add more expressions
+# TODO: add tests with prepared data
+
+class TestBasicOperations(grass.gunittest.TestCase):
+
+    # TODO: replace by unified handing of maps
+    to_remove = []
+
+    @classmethod
+    def setUpClass(cls):
+        cls.use_temp_region()
+        cls.runModule('g.region', n=20, s=10, e=25, w=15, res=1)
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.del_temp_region()
+        if cls.to_remove:
+            cls.runModule('g.remove', flags='f', type='rast',
+                pattern=','.join(cls.to_remove), verbose=True)
+
+    def test_difference_of_the_same_map_double(self):
+        """Test zero difference of map with itself"""
+        self.runModule('r.mapcalc', flags='s',
+                       expression='a = rand(1.0, 200)')
+        self.to_remove.append('a')
+        self.assertModule('r.mapcalc',
+            expression='diff_a_a = a - a')
+        self.to_remove.append('diff_a_a')
+        self.assertRasterMinMax('diff_a_a', refmin=0, refmax=0)
+
+    def test_difference_of_the_same_map_float(self):
+        """Test zero difference of map with itself"""
+        self.runModule('r.mapcalc', flags='s',
+                       expression='af = rand(float(1), 200)')
+        self.to_remove.append('af')
+        self.assertModule('r.mapcalc',
+            expression='diff_af_af = af - af')
+        self.to_remove.append('diff_af_af')
+        self.assertRasterMinMax('diff_af_af', refmin=0, refmax=0)
+
+    def test_difference_of_the_same_map_int(self):
+        """Test zero difference of map with itself"""
+        self.runModule('r.mapcalc', flags='s',
+                       expression='ai = rand(1, 200)')
+        self.to_remove.append('ai')
+        self.assertModule('r.mapcalc',
+            expression='diff_ai_ai = ai - ai')
+        self.to_remove.append('diff_ai_ai')
+        self.assertRasterMinMax('diff_ai_ai', refmin=0, refmax=0)
+
+    def test_difference_of_the_same_expression(self):
+        """Test zero difference of two same expressions"""
+        self.assertModule('r.mapcalc',
+            expression='diff_e_e = 3 * x() * y() - 3 * x() * y()')
+        self.to_remove.append('diff_e_e')
+        self.assertRasterMinMax('diff_e_e', refmin=0, refmax=0)
+
 
 if __name__ == '__main__':
     grass.gunittest.test()
