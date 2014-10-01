@@ -525,7 +525,7 @@ void setup_maps(void)
      * avoid that several threads access a single map for reading
      * at the same time. The raster3d library is not thread safe.
      * */
-    putenv("WORKERS=1");
+    putenv("WORKERS=0");
 
     for (i = 0; i < num_maps; i++)
 	setup_map(&maps[i]);
