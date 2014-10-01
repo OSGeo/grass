@@ -72,7 +72,8 @@ int execute_random(struct rr_state *theState)
 	if (!driver)
 	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			  Vect_subst_var(fi->database, &Out), fi->driver);
-
+        db_set_error_handler_driver(driver);
+        
 	Vect_map_add_dblink(&Out, 1, NULL, fi->table, GV_KEY_COLUMN, fi->database,
 			    fi->driver);
 
