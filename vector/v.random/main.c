@@ -144,7 +144,7 @@ int main(int argc, char *argv[])
     parm.seed->type = TYPE_INTEGER;
     parm.seed->required = NO;
     parm.seed->description =
-	_("The seed to initialize the random generator. If not set the process id is used.");
+	_("The seed to initialize the random generator. If not set the process ID is used");
 
     parm.zcol = G_define_standard_option(G_OPT_DB_COLUMN);
     parm.zcol->label = _("Name of column for z values");
@@ -251,6 +251,10 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Unable to create table: %s"),
 			  db_get_string(&sql));
 	}
+
+	/* Create index */
+	if (db_create_index2(driver, Fi->table, Fi->key) != DB_OK)
+	    G_warning(_("Unable to create index"));
 
 	/* Grant */
 	if (db_grant_on_table

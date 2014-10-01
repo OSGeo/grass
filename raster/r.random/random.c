@@ -248,6 +248,14 @@ int execute_random(struct rr_state *theState)
 	Rast_close(cinfd);
     if (theState->outvector) {
 	db_commit_transaction(driver);
+	if (db_create_index2(driver, fi->table, GV_KEY_COLUMN) != DB_OK)
+	    G_warning(_("Unable to create index"));
+	if (db_grant_on_table
+	    (driver, fi->table, DB_PRIV_SELECT,
+	     DB_GROUP | DB_PUBLIC) != DB_OK) {
+	    G_fatal_error(_("Unable to grant privileges on table <%s>"),
+			  fi->table);
+	}
 	db_close_database_shutdown_driver(driver);
 	if (theState->notopol != 1)
 	    Vect_build(&Out);
