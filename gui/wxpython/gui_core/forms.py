@@ -1517,12 +1517,20 @@ class CmdPanel(wx.Panel):
                         ifbb.Bind(wx.EVT_TEXT, self.OnFileText)
                         
                         btnLoad = wx.Button(parent = which_panel, id = wx.ID_ANY, label = _("&Load"))
+                        btnLoad.SetToolTipString(_("Load and edit content of a file"))
                         btnLoad.Bind(wx.EVT_BUTTON, self.OnFileLoad)
                         btnSave = wx.Button(parent = which_panel, id = wx.ID_ANY, label = _("&Save as"))
+                        btnSave.SetToolTipString(_("Save content to a file for further use"))
                         btnSave.Bind(wx.EVT_BUTTON, self.OnFileSave)
                         
-                        which_sizer.Add(item = wx.StaticText(parent = which_panel, id = wx.ID_ANY,
-                                                             label = _('or enter values interactively')),
+                        fileContentLabel = wx.StaticText(parent=which_panel,
+                            id=wx.ID_ANY,
+                            label=_('or enter values directly:'))
+                        fileContentLabel.SetToolTipString(
+                            _("Enter file content directly instead of specifying"
+                              " a file."
+                              " Temporary file will be automatically created."))
+                        which_sizer.Add(item=fileContentLabel,
                                         proportion = 0,
                                         flag = wx.EXPAND | wx.RIGHT | wx.LEFT | wx.BOTTOM, border = 5)
                         which_sizer.Add(item = ifbb, proportion = 1,
