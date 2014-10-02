@@ -19,6 +19,11 @@
 
 #include "gmt_grd.h"
 
+enum fliphv {
+    FLIP_H = 1,
+    FLIP_V = 2,
+};
+
 static void swap_2(void *p)
 {
     unsigned char *q = p;
@@ -163,18 +168,22 @@ static void convert_cell(
 static void convert_row(
     DCELL *raster, unsigned char *in_buf, int ncols,
     int is_fp, int is_signed, int bytes, int swap_flag,
-    double null_val)
+    double null_val, int flip)
 {
     unsigned char *ptr = in_buf;
-    int i;
+    int i, i2;
 
     for (i = 0; i < ncols; i++) {
 	DCELL x;
+
 	convert_cell(&x, ptr, is_fp, is_signed, bytes, swap_flag);
+	i2 = i;
+	if (flip & FLIP_H)
+	    i2 = ncols - i - 1;
 	if (x == null_val)
-	    Rast_set_d_null_value(&raster[i], 1);
+	    Rast_set_d_null_value(&raster[i2], 1);
 	else
-	    raster[i] = x;
+	    raster[i2] = x;
 	ptr += bytes;
     }
 }
@@ -196,6 +205,7 @@ int main(int argc, char *argv[])
 	struct Option *west;
 	struct Option *rows;
 	struct Option *cols;
+	struct Option *flip;
     } parm;
     struct
     {
@@ -204,8 +214,8 @@ int main(int argc, char *argv[])
 	struct Flag *gmt_hd;
 	struct Flag *sign;
 	struct Flag *swap;
-	struct Flag *flip;
     } flag;
+    char *desc = NULL;
     const char *input;
     const char *output;
     const char *title;
@@ -215,7 +225,7 @@ int main(int argc, char *argv[])
     int bytes;
     int order;
     int swap_flag;
-    int flipns;
+    int i, flip;
     struct Cell_head cellhd;
     int nrows, ncols;
     int grass_nrows, grass_ncols;
@@ -258,11 +268,6 @@ int main(int argc, char *argv[])
     flag.swap->key = 'b';
     flag.swap->description = _("Byte swap the data during import");
     flag.swap->guisection = _("Settings");
-
-    flag.flip = G_define_flag();
-    flag.flip->key = 'n';
-    flag.flip->description = _("Flip North and South");
-    flag.flip->guisection = _("Settings");
 
     flag.gmt_hd = G_define_flag();
     flag.gmt_hd->key = 'h';
@@ -352,6 +357,21 @@ int main(int argc, char *argv[])
     parm.null->description = _("Set Value to NULL");
     parm.null->guisection = _("Settings");
 
+    parm.flip = G_define_option();
+    parm.flip->key = "flip";
+    parm.flip->type = TYPE_STRING;
+    parm.flip->required = NO;
+    parm.flip->options = "h,v";
+    parm.flip->multiple = YES;
+    parm.flip->label = _("Flip input horizontal and/or vertical");
+    G_asprintf(&desc,
+	       "h;%s;v;%s",
+	       _("Flip input horizontal (East - West)"),
+	       _("Flip input vertical (North - South)"));
+    parm.flip->descriptions = desc;
+    parm.flip->guisection = _("Settings");
+
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -375,14 +395,23 @@ int main(int argc, char *argv[])
 	order = G_is_little_endian() ? 0 : 1;
     }
 
-    if (flag.gmt_hd->answer && flag.flip->answer)
-	G_fatal_error(_("-%c and -%c are mutually exclusive"),
-		      flag.gmt_hd->key, flag.flip->key);
+    if (flag.gmt_hd->answer && parm.flip->answer)
+	G_fatal_error(_("-%c and %s= are mutually exclusive"),
+		      flag.gmt_hd->key, parm.flip->key);
 
     swap_flag = order == (G_is_little_endian() ? 0 : 1);
 
     is_signed = !!flag.sign->answer;
-    flipns = !!flag.flip->answer;
+
+    flip = 0;
+    if (parm.flip->answers) {
+	for (i = 0; parm.flip->answers[i]; i++) {
+	    if (parm.flip->answers[i][0] == 'h')
+		flip |= FLIP_H;
+	    if (parm.flip->answers[i][0] == 'v')
+		flip |= FLIP_V;
+	}
+    }
 
     is_fp = 0;
     bytes = 0;
@@ -512,11 +541,7 @@ int main(int argc, char *argv[])
     in_buf = G_malloc(ncols * bytes);
     out_buf = Rast_allocate_d_buf();
 
-    map_type = is_fp
-	? (bytes > 4
-	   ? DCELL_TYPE
-	   : FCELL_TYPE)
-	: CELL_TYPE;
+    map_type = is_fp ? (bytes > 4 ? DCELL_TYPE : FCELL_TYPE) : CELL_TYPE;
 
     in_buf = G_malloc(ncols * bytes);
     out_buf = Rast_allocate_d_buf();
@@ -526,15 +551,16 @@ int main(int argc, char *argv[])
     for (row = 0; row < grass_nrows; row++) {
 	G_percent(row, nrows, 2);
 
-	if (flipns) {
-	    G_fseek(fp, (off_t) (grass_nrows - row - 1) * ncols * bytes, SEEK_SET);
+	if (flip & FLIP_V) {
+	    G_fseek(fp, (off_t) (grass_nrows - row - 1) * ncols * bytes,
+	            SEEK_SET);
 	}
 
 	if (fread(in_buf, bytes, ncols, fp) != ncols)
 	    G_fatal_error(_("Error reading data"));
 
 	convert_row(out_buf, in_buf, ncols, is_fp, is_signed,
-		    bytes, swap_flag, null_val);
+		    bytes, swap_flag, null_val, flip);
 
 	Rast_put_d_row(fd, out_buf);
     }
