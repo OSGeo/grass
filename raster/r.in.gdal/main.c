@@ -18,6 +18,8 @@
  *****************************************************************************/
 
 #include <stdlib.h>
+#include <stdio.h>
+#include <errno.h>
 #include <unistd.h>
 #include <math.h>
 #include <string.h>
@@ -39,7 +41,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 		       struct Ref *group_ref);
 static void SetupReprojector(const char *pszSrcWKT, const char *pszDstLoc,
 			     struct pj_info *iproj, struct pj_info *oproj);
-
+static int dump_rat(GDALRasterBandH hBand, char *outrat, int nBand);
 static int l1bdriver;
 
 /************************************************************************/
@@ -68,7 +70,8 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct
     {
-	struct Option *input, *output, *target, *title, *outloc, *band, *memory, *offset;
+	struct Option *input, *output, *target, *title, *outloc, *band,
+	              *memory, *offset, *rat;
     } parm;
     struct Flag *flag_o, *flag_e, *flag_k, *flag_f, *flag_l, *flag_c;
 
@@ -137,6 +140,14 @@ int main(int argc, char *argv[])
     parm.outloc->required = NO;
     parm.outloc->description = _("Name for new location to create");
     parm.outloc->key_desc = "name";
+
+    parm.rat = G_define_option();
+    parm.rat->key = "rat";
+    parm.rat->type = TYPE_STRING;
+    parm.rat->required = NO;
+    parm.rat->label = _("File prefix for raster attribute tables");
+    parm.rat->description = _("The band number and \".csv\" will be appended to the file prefix");
+    parm.rat->key_desc = "file";
 
     flag_o = G_define_flag();
     flag_o->key = 'o';
@@ -514,6 +525,8 @@ int main(int argc, char *argv[])
 	}
 
 	ImportBand(hBand, output, NULL);
+	if (parm.rat->answer)
+	    dump_rat(hBand, parm.rat->answer, nBand);
 
 	if (title)
 	    Rast_put_cell_title(output, title);
@@ -1338,4 +1351,108 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
     G_message(_("Raster map <%s> created."), output);
 
     return;
+}
+
+static int dump_rat(GDALRasterBandH hBand, char *outrat, int nBand)
+{
+    int row, col, nrows, ncols;
+    const char *field_name;
+    GDALRATFieldUsage field_use;
+    GDALRATFieldType *field_type;
+    GDALRasterAttributeTableH gdal_rat;
+    FILE *fp;
+    char fname[GNAME_MAX];
+    
+    if ((gdal_rat = GDALGetDefaultRAT(hBand)) == NULL)
+	return 0;
+
+    nrows = GDALRATGetRowCount(gdal_rat);
+    ncols = GDALRATGetColumnCount(gdal_rat);
+
+    if (nrows == 0 || ncols == 0)
+	return 0;
+
+    field_type = G_malloc(ncols * sizeof(GDALRATFieldType));
+    
+    snprintf(fname, GNAME_MAX, "%s_%d.csv", outrat, nBand);
+    if (!(fp = fopen(fname, "w"))) {
+	int err = errno;
+	
+	G_fatal_error(_("Unable to open file <%s>: %s."),
+	              fname, strerror(err));
+    }
+
+    /* dump column names and usage */
+    for (col = 0; col < ncols; col++) {
+	
+	if (col)
+	    fprintf(fp, "|");
+	
+	field_name = GDALRATGetNameOfCol(gdal_rat, col);
+	fprintf(fp, "%s", field_name);
+	field_use = GDALRATGetUsageOfCol(gdal_rat, col);
+	
+	if (field_use == GFU_Generic)
+	    fprintf(fp, " (General purpose field)");
+	else if (field_use == GFU_PixelCount)
+	    fprintf(fp, " (Histogram pixel count)");
+	else if (field_use == GFU_Name)
+	    fprintf(fp, " (Class name)");
+	else if (field_use == GFU_Min)
+	    fprintf(fp, " (Class range minimum)");
+	else if (field_use == GFU_Max)
+	    fprintf(fp, " (Class range maximum)");
+	else if (field_use == GFU_MinMax)
+	    fprintf(fp, " (Class value (min=max))");
+	else if (field_use == GFU_Red)
+	    fprintf(fp, " (Red class color (0-255))");
+	else if (field_use == GFU_Green)
+	    fprintf(fp, " (Green class color (0-255))");
+	else if (field_use == GFU_Blue)
+	    fprintf(fp, " (Blue class color (0-255))");
+	else if (field_use == GFU_Alpha)
+	    fprintf(fp, " (Alpha (0=transparent,255=opaque))");
+	else if (field_use == GFU_RedMin)
+	    fprintf(fp, " (Color Range Red Minimum)");
+	else if (field_use == GFU_GreenMin)
+	    fprintf(fp, " (Color Range Green Minimum)");
+	else if (field_use == GFU_BlueMin)
+	    fprintf(fp, " (Color Range Blue Minimum)");
+	else if (field_use == GFU_AlphaMin)
+	    fprintf(fp, " (Color Range Alpha Minimum)");
+	else if (field_use == GFU_RedMax)
+	    fprintf(fp, " (Color Range Red Maximum)");
+	else if (field_use == GFU_GreenMax)
+	    fprintf(fp, " (Color Range Green Maximum)");
+	else if (field_use == GFU_BlueMax)
+	    fprintf(fp, " (Color Range Blue Maximum)");
+	else if (field_use == GFU_AlphaMax)
+	    fprintf(fp, " (Color Range Alpha Maximum)");
+	else if (field_use == GFU_MaxCount)
+	    fprintf(fp, " (Maximum GFU value)");
+	else
+	    fprintf(fp, " (Unknown)");
+
+	/* remember column type */
+	field_type[col] = GDALRATGetTypeOfCol(gdal_rat, col);
+    }
+    fprintf(fp, "\n");
+    
+    /* dump entries */
+    for (row = 0; row < nrows; row++) {
+
+	for (col = 0; col < ncols; col++) {
+	    if (col)
+		fprintf(fp, "|");
+	    if (field_type[col] == GFT_Integer)
+		fprintf(fp, "%d", GDALRATGetValueAsInt(gdal_rat, row, col));
+	    else if (field_type[col] == GFT_Real)
+		fprintf(fp, "%.15g", GDALRATGetValueAsDouble(gdal_rat, row, col));
+	    else
+		fprintf(fp, "%s", GDALRATGetValueAsString(gdal_rat, row, col));
+	}
+	fprintf(fp, "\n");
+    }
+
+    return 1;
 }
