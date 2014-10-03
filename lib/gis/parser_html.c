@@ -74,7 +74,7 @@ void G__usage_html(void)
     }
     fprintf(stdout, "<h2>%s</h2>\n", _("SYNOPSIS"));
     fprintf(stdout, "<div id=\"name\"><b>%s</b><br></div>\n", st->pgm_name);
-    fprintf(stdout, "<b>%s help</b><br>\n", st->pgm_name);
+    fprintf(stdout, "<b>%s --help</b><br>\n", st->pgm_name);
 
     fprintf(stdout, "<div id=\"synopsis\"><b>%s</b>", st->pgm_name);
 
