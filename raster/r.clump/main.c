@@ -30,6 +30,7 @@ int main(int argc, char *argv[])
     struct Range range;
     struct History hist;
     CELL min, max;
+    int range_return, n_clumps;
     int in_fd, out_fd;
     char title[512];
     char name[GNAME_MAX];
@@ -108,7 +109,7 @@ int main(int argc, char *argv[])
 	Rast_put_cell_title(OUTPUT, title);
 
 	/* colors */
-	Rast_read_range(OUTPUT, G_mapset(), &range);
+	range_return = Rast_read_range(OUTPUT, G_mapset(), &range);
 	Rast_get_range_min_max(&range, &min, &max);
 	Rast_make_random_colors(&colr, min, max);
 	Rast_write_colors(OUTPUT, G_mapset(), &colr);
@@ -119,7 +120,8 @@ int main(int argc, char *argv[])
 	Rast_command_history(&hist);
 	Rast_write_history(OUTPUT, &hist);
 
-	G_done_msg(_n("%d clump.", "%d clumps.", range.max), range.max);
+	n_clumps = range_return == 2 ? 0 : range.max;
+	G_done_msg(_n("%d clump.", "%d clumps.", n_clumps), n_clumps);
     }
 
     exit(EXIT_SUCCESS);
