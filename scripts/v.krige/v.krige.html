@@ -86,10 +86,11 @@ elevation map. Each point will receive the elevation value from the
 elevation raster, as if it came from a point survey.
 
 <div class="code"><pre>
- g.region rast=elevation.10m res=150 -p
- v.random output=rand2k_elev n=2000
- v.db.addtable map=rand2k_elev column="elevation double precision"
- v.what.rast vect=rand2k_elev rast=elevation.10m column=elevation
+# reduce resolution for this example
+g.region rast=elevation -p res=100
+v.random output=rand2k_elev n=2000
+v.db.addtable map=rand2k_elev column="elevation double precision"
+v.what.rast map=rand2k_elev rast=elevation column=elevation
 </pre></div>
 
 <b>Part 2: remove points lacking elevation attributes</b>. Points
@@ -101,18 +102,18 @@ mean...). In the following line of code, points with no data are
 removed from the map.
 
 <div class="code"><pre>
- v.extract rand2k_elev output=rand2k_elev_filt where="elevation not NULL"
+v.extract rand2k_elev output=rand2k_elev_filt where="elevation not NULL"
 </pre></div>
 
 Check the result of previous line ("number of NULL attributes" must be
 0):
 
 <div class="code"><pre>
- v.univar rand2k_elev_filt type=point column=elevation
+v.univar rand2k_elev_filt type=point column=elevation
 </pre></div>
 
 <b>Part 3: reconstruct DEM through kriging</b>. Using automatic
-variogram fit is the simplest way to run v.krige from CLI (note:
+variogram fit is the simplest way to run <em>v.krige</em> from CLI (note:
 requires R's automap package). Output map name is optional, the
 modules creates it automatically appending "_kriging" the the input
 map name and also checks for overwrite. If output_var is specified,
@@ -123,29 +124,32 @@ parametrisation. A wider range of models is available from gstat
 package and can be tested on the GUI via the variogram plotting. If
 model is specified in the CLI, also sill, nugget and range values are
 to be provided, otherwise an error is raised (see second example of
-v.krige command).
+<em>v.krige</em> command).
 
 <div class="code"><pre>
- v.krige input=rand2k_elev_filt column=elevation output=rand2k_elev_kriging \
-         output_var=rand2k_elev_kriging_var
- v.krige input=rand2k_elev_filt column=elevation \
-         output=rand2k_elev_filt_kriging output_var=rand2k_elev_filt_kriging_var\
-         model=Mat sill=2500 nugget=0 range=1000 
+# automatic variogram fit
+v.krige input=rand2k_elev_filt column=elevation \
+        output=rand2k_elev_kriging output_var=rand2k_elev_kriging_var
+
+# define variogram model, create variance map as well
+v.krige input=rand2k_elev_filt column=elevation \
+        output=rand2k_elev_filt_kriging output_var=rand2k_elev_filt_kriging_var \
+        model=Mat sill=2500 nugget=0 range=1000 
 </pre></div>
 
 Or run wxGUI, to interactively fit the variogram and explore options:
 
 <div class="code"><pre>
-  v.krige
+v.krige
 </pre></div>
 
 <b>Calculate prediction error</b>:
 
 <div class="code"><pre>
- r.mapcalc "rand2k_elev_kriging_pe = sqrt(rand2k_elev_kriging_var)"
- r.univar elevation.10m
- r.univar rand2k_elev_kriging
- r.univar rand2k_elev_kriging_pe
+r.mapcalc "rand2k_elev_kriging_pe = sqrt(rand2k_elev_kriging_var)"
+r.univar elevation
+r.univar rand2k_elev_kriging
+r.univar rand2k_elev_kriging_pe
 </pre></div>
 
 The results show high errors, as the kriging techniques (ordinary and
@@ -167,10 +171,10 @@ package <a href="http://cran.r-project.org/web/packages/spgrass6/index.html">spg
 mantained by Roger Bivand
 <br>
 
-The <a href="http://grass.osgeo.org/statsgrass/grass6_r_install.html">Short
-Introduction to Geostatistical and Spatial Data Analysis with GRASS 6
-and R statistical data language</a> at the GRASS website. (includes
-installation tips)
+The <a href="http://grasswiki.osgeo.org/wiki/R_statistics">Short
+Introduction to Geostatistical and Spatial Data Analysis with GRASS GIS
+and R statistical data language</a> at the GRASS Wiki (includes
+installation tips).
 
 <br><br>
 
