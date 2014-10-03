@@ -1453,6 +1453,7 @@ static int dump_rat(GDALRasterBandH hBand, char *outrat, int nBand)
 	}
 	fprintf(fp, "\n");
     }
+    fclose(fp);
 
     return 1;
 }
