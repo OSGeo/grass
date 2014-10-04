@@ -179,7 +179,7 @@ int main(int argc, char *argv[])
 	G_warning(_("Region extent: north=%d, south=%d, east=%d, west=%d"),
 	    hd->window.north, hd->window.south, hd->window.east, hd->window.west);
 	G_warning(_("Region extent: rows=%d, cols=%d"), hd->nrows, hd->ncols);
-	G_warning(_("Viewpont: row=%d, col=%d"), vp.row, vp.col);
+	G_warning(_("Viewpoint: row=%d, col=%d"), vp.row, vp.col);
 	G_fatal_error(_("Viewpoint outside of computational region"));
     }
 
