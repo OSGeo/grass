@@ -490,7 +490,6 @@ int Vect_get_zone(const struct Map_info *Map)
    Supported projections:
     - PROJECTION_XY  0 - x,y (Raw imagery),
     - PROJECTION_UTM 1 - UTM   Universal Transverse Mercator,
-    - PROJECTION_SP  2 - State Plane (in feet),
     - PROJECTION_LL  3 - Latitude-Longitude
 
    \param Map pointer to Map_info structure
@@ -512,7 +511,6 @@ int Vect_set_proj(struct Map_info *Map, int proj)
 
    \return PROJECTION_XY  0 - x,y (Raw imagery),
    \return PROJECTION_UTM 1 - UTM   Universal Transverse Mercator,
-   \return PROJECTION_SP  2 - State Plane (in feet),
    \return PROJECTION_LL  3 - Latitude-Longitude
 */
 int Vect_get_proj(const struct Map_info *Map)
@@ -541,7 +539,6 @@ const char *Vect_get_proj_name(const struct Map_info *Map)
     case PROJECTION_XY:
     case PROJECTION_UTM:
     case PROJECTION_LL:
-    case PROJECTION_SP:
 	return G__projection_name(n);
     case PROJECTION_OTHER:
 	/* this won't protect against differing "other" projections, so

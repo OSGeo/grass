@@ -465,10 +465,6 @@ int main(int argc, char *argv[])
 			sprintf(error_msg + strlen(error_msg),
 				"cellhd.proj = %d (UTM), zone = %d\n",
 				cellhd.proj, cellhd.zone);
-		    else if (cellhd.proj == PROJECTION_SP)
-			sprintf(error_msg + strlen(error_msg),
-				"cellhd.proj = %d (State Plane), zone = %d\n",
-				cellhd.proj, cellhd.zone);
 		    else
 			sprintf(error_msg + strlen(error_msg),
 				"cellhd.proj = %d (unknown), zone = %d\n",

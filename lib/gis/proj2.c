@@ -36,8 +36,6 @@ int G__projection_units(int n)
 	return U_UNKNOWN;
     case PROJECTION_UTM:
 	return U_METERS;
-    case PROJECTION_SP:
-	return U_FEET; /* TODO: what if U_USFEET as in CA and NC ? */
     case PROJECTION_LL:
 	return U_DEGREES;
     default:
@@ -61,8 +59,6 @@ const char *G__projection_name(int n)
 	return "x,y";
     case PROJECTION_UTM:
 	return "UTM";
-    case PROJECTION_SP:
-	return _("State Plane");
     case PROJECTION_LL:
 	return _("Latitude-Longitude");
     case PROJECTION_OTHER:
