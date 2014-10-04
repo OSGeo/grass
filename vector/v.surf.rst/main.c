@@ -671,7 +671,7 @@ int main(int argc, char *argv[])
 
     if (dtens) {
 	params.fi = params.fi * dnorm / 1000.;
-	G_debug(1, "dnorm = %f, rescaled tension = %f", dnorm, params.fi);
+	G_verbose_message("dnorm = %f, rescaled tension = %f", dnorm, params.fi);
     }
     
     bitmask = IL_create_bitmask(&params);
