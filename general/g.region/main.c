@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
 	struct Option
 	    *north, *south, *east, *west, *top, *bottom,
 	    *res, *nsres, *ewres, *res3, *tbres, *rows, *cols,
-	    *save, *region, *view, *raster, *raster3d, *align,
+	    *save, *region, *raster, *raster3d, *align,
 	    *zoom, *vect;
     } parm;
 
@@ -183,16 +183,6 @@ int main(int argc, char *argv[])
     parm.vect->label = _("Set region to match vector map(s)");
     parm.vect->description = NULL;
     parm.vect->guisection = _("Existing");
-
-    parm.view = G_define_option();
-    parm.view->key = "3dview";
-    parm.view->key_desc = "name";
-    parm.view->required = NO;
-    parm.view->multiple = NO;
-    parm.view->type = TYPE_STRING;
-    parm.view->description = _("Set region to match this 3dview file");
-    parm.view->gisprompt = "old,3d.view,3d view";
-    parm.view->guisection = _("Existing");
 
     parm.north = G_define_option();
     parm.north->key = "n";
@@ -403,46 +393,6 @@ int main(int argc, char *argv[])
 	if (!mapset)
 	    G_fatal_error(_("Region <%s> not found"), name);
 	G__get_window(&window, "windows", name, mapset);
-    }
-
-    /* 3dview= */
-    if ((name = parm.view->answer)) {
-	struct G_3dview v;
-	FILE *fp;
-	int ret;
-
-	mapset = G_find_file2("3d.view", name, "");
-	if (!mapset)
-	    G_fatal_error(_("3dview file <%s> not found"), name);
-
-	G_3dview_warning(0);	/* suppress boundary mismatch warning */
-
-	if (NULL == (fp = G_fopen_old("3d.view", name, mapset)))
-	    G_fatal_error(_("Unable to open 3dview file <%s> in <%s>"), name,
-			  mapset);
-
-	temp_window = window;
-
-	if (0 > (ret = G_get_3dview(name, mapset, &v)))
-	    G_fatal_error(_("Unable to read 3dview file <%s> in <%s>"), name,
-			  mapset);
-	if (ret == 0)
-	    G_fatal_error(_("Old 3dview file. Region <%s> not found in <%s>"),
-			  name, mapset);
-
-
-	window.north = v.vwin.north;
-	window.south = v.vwin.south;
-	window.west = v.vwin.west;
-	window.east = v.vwin.east;
-
-	window.rows = v.vwin.rows;
-	window.cols = v.vwin.cols;
-	window.ns_res = v.vwin.ns_res;
-	window.ew_res = v.vwin.ew_res;
-
-	fclose(fp);
-
     }
 
     /* raster= */
