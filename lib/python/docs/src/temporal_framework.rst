@@ -408,6 +408,12 @@ Temporal shifting
     dbif.close()
 
 
+References
+----------
+
+* Gebbert, S., Pebesma, E., 2014. *TGRASS: A temporal GIS for field based environmental modeling*. Environmental Modelling & Software. 2(1):201-219. `doi:10.1016/j.envsoft.2013.11.001 <http://dx.doi.org/10.1016/j.envsoft.2013.11.001>`_
+* `TGRASS related articles in the GRASS GIS Wiki <http://grasswiki.osgeo.org/wiki/Temporal_data_processing>`_
+
 :Authors: Soeren Gebbert
 
 :TODO: add more documentation
