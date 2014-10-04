@@ -21,7 +21,7 @@
 
    - PROJECTION_XY      0 - x,y (Raw imagery)
    - PROJECTION_UTM     1 - UTM   Universal Transverse Mercator
-   - PROJECTION_SP      2 - State Plane (in feet)
+   - PROJECTION_SP      2 - State Plane (in feet) - not used, removed
    - PROJECTION_LL      3 - Latitude-Longitude
    - PROJECTION_OTHER  99 - others
 
