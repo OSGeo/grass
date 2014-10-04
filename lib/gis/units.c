@@ -26,6 +26,7 @@
    - U_KILOMETERS
    - U_MILES
    - U_FEET
+   - U_USFEET
 
   Returns a factor which converts meters to units (by multiplication).
  
@@ -52,6 +53,10 @@ double G_meters_to_units_factor(int units)
 	return 3.28083989501312;	        /*  1 / (0.0254 * 12)    */
 	break;
 	
+    case U_USFEET:
+	return 3.28083333333333;       	        /*  1 / (1200/3937)    */
+	break;
+	
     default:
 	return 1.0;
 	break;
@@ -70,6 +75,7 @@ double G_meters_to_units_factor(int units)
    - U_HECTARES
    - U_MILES
    - U_FEET
+   - U_USFEET
 
   Returns a factor which converts square meters to square units (by
   multiplication).
@@ -102,7 +108,11 @@ double G_meters_to_units_factor_sq(int units)
 	break;
 	
     case U_FEET:
-	return 10.7639104167097;	        /*  1 / (0.0254 * 12)^2  */
+	return 10.7639104167097;	/*  1 / (0.0254 * 12)^2  */
+	break;
+	
+    case U_USFEET:
+	return 10.7638673611111;       	/*  1 / (1200/3937)^2    */
 	break;
 	
     default:
@@ -134,6 +144,8 @@ int G_is_units_type_spatial(int units)
     case U_MILES:
         return 1;
     case U_FEET:
+        return 1;
+    case U_USFEET:
         return 1;
     case U_RADIANS:
         return 1;
@@ -179,6 +191,7 @@ int G_is_units_type_temporal(int units)
    - U_HECTARES
    - U_MILES
    - U_FEET
+   - U_USFEET
 
   \param units units code
   \param plural plural form if true
@@ -241,6 +254,13 @@ const char *G_get_units_name(int units, int plural, int square)
 	    return plural ? _("feet") : _("foot");
 	break;
 
+    case U_USFEET:
+	if (square)
+	    return plural ? _("square US feet") : _("square US foot");
+	else
+	    return plural ? _("US feet") : _("US foot");
+	break;
+
     case U_DEGREES:
 	if (square)
 	    return plural ? _("square degrees") : _("square degree");
@@ -286,6 +306,7 @@ const char *G_get_units_name(int units, int plural, int square)
    - U_HECTARES
    - U_MILES
    - U_FEET
+   - U_USFEET
    - ...
    - U_YEARS
    - ...
@@ -319,11 +340,14 @@ int G_units(const char *units_name)
     else if (strcasecmp(units_name, "foot") == 0 ||
 	     strcasecmp(units_name, "feet") == 0)
 	return U_FEET;
+    else if (strcasecmp(units_name, "foot_us") == 0 ||
+	     strcasecmp(units_name, "foot_uss") == 0)
+	return U_USFEET;
     else if (strcasecmp(units_name, "degree") == 0 ||
 	     strcasecmp(units_name, "degrees") == 0)
 	return U_DEGREES;
     else if (strcasecmp(units_name, "year") == 0 ||
-	strcasecmp(units_name, "years") == 0)
+	     strcasecmp(units_name, "years") == 0)
 	return U_YEARS;
     else if (strcasecmp(units_name, "month") == 0 ||
 	     strcasecmp(units_name, "months") == 0)
