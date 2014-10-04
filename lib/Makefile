@@ -27,7 +27,6 @@ SUBDIRS = \
 	cluster \
 	rowio \
 	segment \
-	sites \
 	rst \
 	lidar \
 	raster3d \
