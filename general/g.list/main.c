@@ -31,7 +31,6 @@ enum {
     TYPE_RAST,
     TYPE_RAST3D,
     TYPE_VECT,
-    TYPE_3DVIEW,
     TYPE_OTHERS
 };
 
@@ -377,8 +376,6 @@ static void make_list(FILE *fp, const struct list *elem, const char *mapset,
 	type = TYPE_RAST3D;
     else if (strcmp(alias, "vect") == 0)
 	type = TYPE_VECT;
-    else if (strcmp(alias, "3dview") == 0)
-	type = TYPE_3DVIEW;
     else
 	type = TYPE_OTHERS;
 
@@ -445,8 +442,6 @@ static int region_overlaps(struct Cell_head *window, const char *name,
     RASTER3D_Region region3d;
     struct Map_info Map;
     struct bound_box box;
-    int ret;
-    struct G_3dview view3d;
 
     switch (type) {
     case TYPE_RAST:
@@ -473,23 +468,6 @@ static int region_overlaps(struct Cell_head *window, const char *name,
 	map_window.west = box.W;
 	map_window.east = box.E;
 	has_region = 1;
-	break;
-    case TYPE_3DVIEW:
-	if ((ret = G_get_3dview(name, mapset, &view3d)) < 0)
-	    G_fatal_error(_("Unable to read 3dview file <%s@%s>"),
-			  name, mapset);
-	if (ret == 0) {
-	    G_warning(_("No region support in an old 3dview file <%s@%s>. Listing anyway"),
-		      name, mapset);
-	    has_region = 0;
-	}
-	else {
-	    map_window.north = view3d.vwin.north;
-	    map_window.south = view3d.vwin.south;
-	    map_window.west = view3d.vwin.west;
-	    map_window.east = view3d.vwin.east;
-	    has_region = 1;
-	}
 	break;
     default:
 	has_region = 0;
