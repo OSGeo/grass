@@ -2,20 +2,20 @@ APIDOC := $(shell sphinx-apidoc2 --help 2>/dev/null)
 ifdef APIDOC
 SPHINXAPIDOC = sphinx-apidoc2
 else
-    APIDOC := $(shell sphinx-apidoc --help 2>/dev/null)
-    ifdef APIDOC
-	SPHINXAPIDOC = sphinx-apidoc
-    endif
+	APIDOC := $(shell sphinx-apidoc --help 2>/dev/null)
+	ifdef APIDOC
+		SPHINXAPIDOC = sphinx-apidoc
+	endif
 endif
 
 BUILD := $(shell sphinx-build2 --version 2>/dev/null)
 ifdef BUILD
-    SPHINXBUILD = sphinx-build2
+	SPHINXBUILD = sphinx-build2
 else
-    BUILD := $(shell sphinx-build --version 2>/dev/null)
-    ifdef BUILD
-	SPHINXBUILD = sphinx-build
-    endif
+	BUILD := $(shell sphinx-build --version 2>/dev/null)
+	ifdef BUILD
+		SPHINXBUILD = sphinx-build
+	endif
 endif
 
 checksphinx:
