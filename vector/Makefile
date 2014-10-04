@@ -28,7 +28,6 @@ SUBDIRS = \
 	v.in.db \
 	v.in.dxf \
 	v.in.region \
-	v.in.sites \
 	v.kcv \
 	v.kernel \
 	v.label \

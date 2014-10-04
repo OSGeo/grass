@@ -62,7 +62,6 @@ SUBDIRS = \
 	v.in.gns \
 	v.in.lines \
 	v.in.mapgen \
-	v.in.sites.all \
 	v.in.wfs \
 	v.rast.stats \
 	v.report \
