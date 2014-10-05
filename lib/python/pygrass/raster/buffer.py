@@ -9,10 +9,26 @@ import ctypes
 import numpy as np
 
 
+CELL = (np.int, np.int0, np.int8, np.int16, np.int32, np.int64)
+FCELL = (np.float, np.float16, np.float32)
+DCELL = (np.float64, np.float128)
+
+
 class Buffer(np.ndarray):
     """shape, mtype='FCELL', buffer=None, offset=0,
     strides=None, order=None
     """
+    @property
+    def mtype(self):
+        if self.dtype in CELL:
+            return 'CELL'
+        elif self.dtype in FCELL:
+            return 'FCELL'
+        elif self.dtype in DCELL:
+            return DCELL
+        else:
+            err = "Raster type: %r not supported by GRASS."
+            raise TypeError(err % self.dtype)
 
     def __new__(cls, shape, mtype='FCELL', buffer=None, offset=0,
                 strides=None, order=None):
@@ -21,13 +37,11 @@ class Buffer(np.ndarray):
                                  buffer, offset, strides, order)
         obj.pointer_type = ctypes.POINTER(RTYPE[mtype]['ctypes'])
         obj.p = obj.ctypes.data_as(obj.pointer_type)
-        obj.mtype = mtype
         return obj
 
     def __array_finalize__(self, obj):
         if obj is None:
             return
-        self.mtype = getattr(obj, 'mtype', None)
         self.pointer_type = getattr(obj, 'pointer_type', None)
         self.p = getattr(obj, 'p', None)
 
