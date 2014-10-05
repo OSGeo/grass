@@ -118,8 +118,8 @@ class RasterRow(RasterAbstractBase):
 
         :param row: the number of row to obtain
         :type row: int
-        :param row_buffer: specify the Buffer object that will be instantiate
-        :type row_buffer: bool
+        :param row_buffer: Buffer object instance with the right dim and type
+        :type row_buffer: Buffer
 
         >>> elev = RasterRow('elevation')
         >>> elev.open()
