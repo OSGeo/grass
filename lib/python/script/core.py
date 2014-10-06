@@ -278,8 +278,15 @@ def make_command(prog, flags="", overwrite=False, quiet=False, verbose=False,
         args.append("-%s" % flags)
     for opt, val in options.iteritems():
         if val != None:
-            if opt[0] == '_':
+            if opt.startswith('_'):
                 opt = opt[1:]
+                warning(_("To run the module add underscore at the end"
+                    " of the option <%s> to avoid conflict with Python"
+                    " keywords. Underscore at the beginning is"
+                    " depreciated in GRASS GIS 7.0 and will be removed"
+                    " in version 7.1.") % opt)
+            elif opt.endswith('_'):
+                opt = opt[:-1]
             args.append("%s=%s" % (opt, _make_val(val)))
     return args
 
@@ -301,6 +308,9 @@ def start_command(prog, flags="", overwrite=False, quiet=False,
     GUI='text';
     MONITOR='x0';
 
+    If the module parameter is the same as Python keyword, add
+    underscore at the end of the parameter. For example, use
+    ``lambda_=1.6`` instead of ``lambda=1.6``.
 
     :param str prog: GRASS module
     :param str flags: flags to be used (given as a string)
