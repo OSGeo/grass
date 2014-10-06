@@ -73,11 +73,13 @@ int main(int argc, char *argv[])
     opt.type->multiple = YES;
     opt.type->options = M_get_options(TRUE);
     opt.type->descriptions = M_get_option_desc(TRUE);
+    opt.type->guidependency = "pattern,exclude";
 
     opt.pattern = G_define_option();
     opt.pattern->key = "pattern";
     opt.pattern->type = TYPE_STRING;
     opt.pattern->required = YES;
+    opt.pattern->gisprompt = "old,element,element";
     opt.pattern->description = _("Map name search pattern or map names separated by a comma");
     opt.pattern->guisection = _("Pattern");
 
@@ -85,6 +87,7 @@ int main(int argc, char *argv[])
     opt.exclude->key = "exclude";
     opt.exclude->type = TYPE_STRING;
     opt.exclude->required = NO;
+    opt.exclude->gisprompt = "old,element,element";
     opt.exclude->description = _("Map name exclusion pattern (default: none)");
     opt.exclude->guisection = _("Pattern");
 

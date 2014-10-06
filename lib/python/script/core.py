@@ -26,6 +26,7 @@ import atexit
 import subprocess
 import shutil
 import codecs
+import types as python_types
 
 from utils import KeyValue, parse_key_val, basename, encode
 from grass.exceptions import ScriptError
@@ -1092,7 +1093,7 @@ def list_pairs(type, pattern=None, mapset=None, exclude=None, flag=''):
 
 
 def list_grouped(type, pattern=None, check_search_path=True, exclude=None,
-                  flag=''):
+                 flag=''):
     """List of elements grouped by mapsets.
 
     Returns the output from running g.list, as a dictionary where the
@@ -1102,7 +1103,7 @@ def list_grouped(type, pattern=None, check_search_path=True, exclude=None,
     >>> list_grouped('vect', pattern='*roads*')['PERMANENT']
     ['railroads', 'roadsmajor']
 
-    :param str type: element type (rast, vect, rast3d, region, ...)
+    :param str type: element type (rast, vect, rast3d, region, ...) or list of elements
     :param str pattern: pattern string
     :param str check_search_path: True to add mapsets for the search path
                                   with no found elements
@@ -1112,27 +1113,48 @@ def list_grouped(type, pattern=None, check_search_path=True, exclude=None,
 
     :return: directory of mapsets/elements
     """
-    if type == 'raster' or type == 'cell':
-        verbose(_('Element type should be "rast" and not "%s"') % type)
-        type = 'rast'
+    if isinstance(type, python_types.StringTypes) or len(type) == 1:
+        types = [type]
+        store_types = False
+    else:
+        types = type
+        store_types = True
+        flag += 't'
+    for i in range(len(types)):
+        if types[i] == 'raster' or types[i] == 'cell':
+            verbose(_('Element type should be "rast" and not "%s"') % types[i])
+            types[i] = 'rast'
     result = {}
     if check_search_path:
         for mapset in mapsets(search_path=True):
-            result[mapset] = []
+            if store_types:
+                result[mapset] = {}
+            else:
+                result[mapset] = []
 
     mapset = None
     for line in read_command("g.list", quiet=True, flags="m" + flag,
-                             type=type, pattern=pattern, exclude=exclude).splitlines():
+                             type=types, pattern=pattern, exclude=exclude).splitlines():
         try:
             name, mapset = line.split('@')
         except ValueError:
             warning(_("Invalid element '%s'") % line)
             continue
 
-        if mapset in result:
-            result[mapset].append(name)
+        if store_types:
+            type_, name = name.split('/')
+            if mapset in result:
+                if type_ in result[mapset]:
+                    result[mapset][type_].append(name)
+                else:
+                    result[mapset][type_] = [name, ]
+            else:
+                result[mapset] = {type_: [name, ]}
         else:
-            result[mapset] = [name, ]
+            if mapset in result:
+                result[mapset].append(name)
+            else:
+                result[mapset] = [name, ]
 
     return result
 
