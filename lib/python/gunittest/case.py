@@ -17,7 +17,6 @@ import subprocess
 import StringIO
 
 import unittest
-from unittest.util import safe_repr
 
 from grass.pygrass.modules import Module
 from grass.exceptions import CalledModuleError
@@ -26,6 +25,7 @@ from .gmodules import call_module, SimpleModule
 from .checkers import (check_text_ellipsis,
                        text_to_keyvalue, keyvalue_equals, diff_keyvalue,
                        file_md5, files_equal_md5)
+from .utils import safe_repr
 
 
 class TestCase(unittest.TestCase):

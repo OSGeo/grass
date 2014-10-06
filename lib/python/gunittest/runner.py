@@ -18,8 +18,7 @@ a template. It is not expected that something will left.
 import sys
 import time
 
-import unittest.result
-from unittest.signals import registerResult
+import unittest
 
 __unittest = True
 
@@ -40,7 +39,7 @@ class _WritelnDecorator(object):
         self.write('\n') # text-mode streams translate to \r\n if needed
 
 
-class TestResult(unittest.result.TestResult):
+class TestResult(unittest.TestResult):
     # descriptions and verbosity unused
     # included for compatibility with unittest's TestResult
     # where are also unused, so perhaps we can remove them
@@ -473,7 +472,7 @@ class GrassTestRunner(object):
     def run(self, test):
         "Run the given test case or test suite."
         result = self._result
-        registerResult(result)
+        unittest.registerResult(result)
         result.failfast = self.failfast
         result.buffer = self.buffer
         startTime = time.time()

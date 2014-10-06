@@ -15,8 +15,7 @@ import os
 import sys
 import argparse
 
-from unittest.main import TestProgram, USAGE_AS_MAIN
-TestProgram.USAGE = USAGE_AS_MAIN
+from unittest.main import TestProgram
 
 from .loader import GrassTestLoader
 from .runner import (GrassTestRunner, MultiTestResult,

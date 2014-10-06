@@ -17,9 +17,6 @@ import shutil
 import string
 import subprocess
 
-from unittest.main import TestProgram, USAGE_AS_MAIN
-TestProgram.USAGE = USAGE_AS_MAIN
-
 from .checkers import text_to_keyvalue
 
 from .loader import GrassTestLoader, discover_modules
