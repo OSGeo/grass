@@ -452,7 +452,6 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
 
         # to support multiple elements
         element_list = element.split(',')
-        print element
         renamed_elements = []
         for elem in element_list:
             if elem not in elementdict:
