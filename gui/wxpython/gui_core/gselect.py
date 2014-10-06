@@ -450,9 +450,16 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                        'str3ds':'str3ds',
                        'stvds':'stvds'}
 
-        if element not in elementdict:
-            self.AddItem(_('Not selectable element'), node = False)
-            return
+        # to support multiple elements
+        element_list = element.split(',')
+        print element
+        renamed_elements = []
+        for elem in element_list:
+            if elem not in elementdict:
+                self.AddItem(_('Not selectable element'), node = False)
+                return
+            else:
+                renamed_elements.append(elementdict[elem])
 
         if element in ('stds', 'strds', 'str3ds', 'stvds'):
             if self.tgis_error is False:
@@ -461,7 +468,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             else:
                 filesdict = None
         else:
-            filesdict = grass.list_grouped(elementdict[element],
+            filesdict = grass.list_grouped(renamed_elements,
                                            check_search_path=False)
 
         # add extra items first

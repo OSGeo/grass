@@ -188,13 +188,23 @@ class UpdateThread(Thread):
             if pBind:
                 pBind['value'] = ''
             
-            # set appropriate types in t.* modules element selections
+            # set appropriate types in t.* modules and g.list/remove element selections
             if name == 'Select':
-                type_param = self.task.get_param('type', element = 'name', raiseError = False)
-                maps_param = self.task.get_param('maps', element = 'name', raiseError = False)
-                self.data[win.GetParent().SetType] = {'etype': type_param.get('value')}
+                type_param = self.task.get_param('type', element='name', raiseError=False)
+
+                if 'all' in type_param.get('value'):
+                    etype = type_param.get('values')
+                    if 'all' in etype:
+                        etype.remove('all')
+                    etype = ','.join(etype)
+                else:
+                    etype = type_param.get('value')
+
+                self.data[win.GetParent().SetType] = {'etype': etype}
+
                 # t.(un)register has one type for 'input', 'maps'
-                if maps_param is not None:
+                maps_param = self.task.get_param('maps', element='name', raiseError=False)
+                if self.task.get_name().startswith('t') and maps_param is not None:
                     if maps_param['wxId'][0] != uid:
                         element_dict = {'rast': 'strds', 'vect': 'stvds', 'rast3d': 'str3ds'}
                         self.data[win.GetParent().SetType] = {'etype': element_dict[type_param.get('value')]}
@@ -1003,6 +1013,7 @@ class CmdPanel(wx.Panel):
                         if val in isEnabled:
                             chkbox.SetValue(True)
                         hSizer.Add(item = chkbox, proportion = 0)
+                        chkbox.Bind(wx.EVT_CHECKBOX, self.OnUpdateSelection)
                         chkbox.Bind(wx.EVT_CHECKBOX, self.OnCheckBoxMulti)
                         idx +=  1
                         
@@ -2118,6 +2129,7 @@ class CmdPanel(wx.Panel):
         theParam['value'] = ','.join(currentValueList)
 
         self.OnUpdateValues()
+        event.Skip()
 
     def OnSetValue(self, event):
         """Retrieve the widget value and set the task value field
