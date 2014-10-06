@@ -58,3 +58,17 @@ def do_doctest_gettext_workaround():
 
     import __builtin__
     __builtin__._ = new_translator
+
+
+_MAX_LENGTH = 80
+
+# taken from unittest.util (Python 2.7) since it is not part of API
+# but we need it for the same reason as it is used un unittest's TestCase
+def safe_repr(obj, short=False):
+    try:
+        result = repr(obj)
+    except Exception:
+        result = object.__repr__(obj)
+    if not short or len(result) < _MAX_LENGTH:
+        return result
+    return result[:_MAX_LENGTH] + ' [truncated]...'
