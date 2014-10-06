@@ -27,7 +27,7 @@ from grass.pygrass.shell.show import raw_figure
 #
 # import raster classes
 #
-from grass.pygrass.raster.raster_type import TYPE as RTYPE
+from grass.pygrass.raster.raster_type import TYPE as RTYPE, RTYPE_STR
 from grass.pygrass.raster.category import Category
 from grass.pygrass.raster.history import History
 
@@ -65,10 +65,15 @@ class Info(object):
         self.name = name
         self.mapset = mapset
         self.c_region = ctypes.pointer(libgis.Cell_head())
-        self.c_range = ctypes.pointer(libraster.Range())
+        self.c_range = None
 
     def _get_range(self):
-        libraster.Rast_read_range(self.name, self.mapset, self.c_range)
+        if self.mtype == 'CELL':
+            self.c_range = ctypes.pointer(libraster.Range())
+            libraster.Rast_read_range(self.name, self.mapset, self.c_range)
+        else:
+            self.c_range = ctypes.pointer(libraster.FPRange())
+            libraster.Rast_read_fp_range(self.name, self.mapset, self.c_range)
 
     def _get_raster_region(self):
         libraster.Rast_get_cellhd(self.name, self.mapset, self.c_region)
@@ -131,15 +136,41 @@ class Info(object):
 
     @property
     def min(self):
+        if self.c_range is None:
+            return None
         return self.c_range.contents.min
 
     @property
     def max(self):
+        if self.c_range is None:
+            return None
         return self.c_range.contents.max
 
     @property
     def range(self):
+        if self.c_range is None:
+            return None, None
         return self.c_range.contents.min, self.c_range.contents.max
+
+    @property
+    def mtype(self):
+        return RTYPE_STR[libraster.Rast_map_type(self.name, self.mapset)]
+
+    def _get_units(self):
+        return libraster.Rast_read_units(self.name, self.mapset)
+
+    def _set_units(self, units):
+        libraster.Rast_write_units(self.name, units)
+
+    units = property(_get_units, _set_units)
+
+    def _get_vdatum(self):
+        return libraster.Rast_read_vdatum(self.name, self.mapset)
+
+    def _set_vdatum(self, vdatum):
+        libraster.Rast_write_vdatum(self.name, vdatum)
+
+    vdatum = property(_get_vdatum, _set_vdatum)
 
     def __repr__(self):
         return INFO.format(name=self.name, mapset=self.mapset,
