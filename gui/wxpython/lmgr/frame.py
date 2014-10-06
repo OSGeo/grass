@@ -205,6 +205,7 @@ class GMFrame(wx.Frame):
             except:
                 pass
         else:
+            # does center (of screen) make sense for lmgr?
             self.Centre()
         
         self.Layout()
@@ -963,8 +964,12 @@ class GMFrame(wx.Frame):
         :param cmd: command as a list (must start with 'cd')
         """
         # local functions
-        def write_beginning(directory):
-            self._giface.WriteCmdLog('cd "' + directory + '"')
+        def write_beginning(parameter=None, command=None):
+            if parameter:
+                self._giface.WriteCmdLog('cd "' + parameter + '"')
+            else:
+                # naive concat but will be enough most of the time
+                self._giface.WriteCmdLog(' '.join(command))
 
         def write_changed():
             self._giface.WriteLog(_("Working directory changed to:\n\"%s\"")
@@ -973,21 +978,42 @@ class GMFrame(wx.Frame):
         def write_end():
             self._giface.WriteCmdLog(' ')
 
+        def write_help():
+            self._giface.WriteLog(_("Changes current working directory"
+                                    " for this GUI."))
+            self._giface.WriteLog(_("Usage: cd [directory]"))
+            self._giface.WriteLog(_("Without parameters it opens a dialog."))
+            # TODO: the following is longer then 80 chars
+            # but this should be solved by the function not caller
+            # also because of translations
+            self._giface.WriteLog(_("If ~ (tilde) is present as the first"
+                " directory on the path, it is replaced"
+                " by user's home directory."))
+
         # check correctness of cmd
-        if cmd and (cmd[0] != 'cd' or len(cmd) > 2):
-            raise ValueError("OnChangeCWD cmd parameter must be list with"
+        if cmd and cmd[0] != 'cd':
+            # this is programmer's error
+            # can be relaxed in future
+            # but keep it strict unless needed otherwise
+            raise ValueError("OnChangeCWD cmd parameter must be list of"
                              " lenght 1 or 2 and 'cd' as a first item")
+        if cmd and len(cmd) > 2:
+            # this might be a user error
+            write_beginning(command=cmd)
+            self._giface.WriteError(_("More than one parameter provided."))
+            write_help()
+            write_end()
+            return
         # use chdir or dialog
         if cmd and len(cmd) == 2:
-            write_beginning(cmd[1])
-            if cmd[1] in ['-h', '--h', '--help']:
-                self._giface.WriteLog(_("Changes current working directory"
-                                        " for this GUI."))
-                self._giface.WriteLog(_("Usage: cd [directory]"))
+            write_beginning(parameter=cmd[1])
+            if cmd[1] in ['-h', '--h', '--help', 'help']:
+                write_help()
                 write_end()
                 return
             try:
-                os.chdir(cmd[1])
+                path = os.path.expanduser(cmd[1])
+                os.chdir(path)
                 write_changed()
             except OSError as error:
                 self._giface.WriteError(str(error))
@@ -1000,7 +1026,7 @@ class GMFrame(wx.Frame):
 
             if dlg.ShowModal() == wx.ID_OK:
                 self.cwdPath = dlg.GetPath()  # is saved in the workspace
-                write_beginning(self.cwdPath)
+                write_beginning(parameter=self.cwdPath)
                 write_changed()
                 write_end()
 
