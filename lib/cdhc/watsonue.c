@@ -4,14 +4,14 @@
 #include "local_proto.h"
 
 
-double *watson_u2_exp(double *x, int n)
+double *Cdhc_watson_u2_exp(double *x, int n)
 {
     double *xcopy, mean = 0.0, zbar = 0.0, fn2, fx, sum4 = 0.0;
     static double y[2];
     int i;
 
     if ((xcopy = (double *)malloc(n * sizeof(double))) == NULL) {
-	fprintf(stderr, "Memory error in watson_u2_exp\n");
+	fprintf(stderr, "Memory error in Cdhc_watson_u2_exp\n");
 	exit(EXIT_FAILURE);
     }
 
@@ -21,7 +21,7 @@ double *watson_u2_exp(double *x, int n)
     }
     mean /= n;
 
-    qsort(xcopy, n, sizeof(double), dcmp);
+    qsort(xcopy, n, sizeof(double), Cdhc_dcmp);
 
     for (i = 0; i < n; ++i) {
 	fx = 1 - exp(-xcopy[i] / mean);

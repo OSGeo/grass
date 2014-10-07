@@ -7,10 +7,10 @@
 /*-
  * driver program for AS 181: Royston's extension of the Shapiro-Wilk
  * W statistic to n=2000
- * needs as181.c as177.c as241.c dcmp.c as66.c 
+ * needs as181.c as177.c as241.c Cdhc_dcmp.c as66.c 
  */
 
-double *royston(double *x, int n)
+double *Cdhc_royston(double *x, int n)
 {
     static double y[2];
     double *a, eps, w, pw, mean = 0, ssq = 0, *xcopy;
@@ -35,7 +35,7 @@ double *royston(double *x, int n)
     }
     mean /= n;
 
-    qsort(xcopy, n, sizeof(double), dcmp);
+    qsort(xcopy, n, sizeof(double), Cdhc_dcmp);
 
     for (i = 0; i < n; ++i)
 	ssq += (mean - x[i]) * (mean - x[i]);

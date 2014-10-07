@@ -4,14 +4,14 @@
 #include "local_proto.h"
 
 
-double *anderson_darling(double *x, int n)
+double *Cdhc_anderson_darling(double *x, int n)
 {
     int i;
     static double y[2];
     double sqrt2, mean = 0.0, sdx = 0.0, *xcopy, fx;
 
     if ((xcopy = (double *)malloc(n * sizeof(double))) == NULL) {
-	fprintf(stderr, "Memory error in anderson_darling\n");
+	fprintf(stderr, "Memory error in Cdhc_anderson_darling\n");
 	exit(EXIT_FAILURE);
     }
 
@@ -26,13 +26,13 @@ double *anderson_darling(double *x, int n)
     sdx = sqrt((n * sdx - mean * mean) / (n * (n - 1.0)));
     mean /= n;
 
-    qsort(xcopy, n, sizeof(double), dcmp);
+    qsort(xcopy, n, sizeof(double), Cdhc_dcmp);
 
     for (i = 0; i < n; ++i)
 	xcopy[i] = (xcopy[i] - mean) / sdx;
 
     for (i = 0; i < n; ++i) {
-	fx = 0.5 + normp(xcopy[i] / sqrt2) / 2.0;
+	fx = 0.5 + Cdhc_normp(xcopy[i] / sqrt2) / 2.0;
 	if (fx <= 1e-5)
 	    fx = 1e-5;
 

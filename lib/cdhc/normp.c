@@ -2,7 +2,7 @@
 
 
 /*-
- *     SUBROUTINE NORMP(Z, P, Q, PDF)
+ *     SUBROUTINE Cdhc_normp(Z, P, Q, PDF)
  *
  *     Normal distribution probabilities accurate to 1.e-15.
  *     Z = no. of standard deviations from the mean.
@@ -20,7 +20,7 @@
 
 /* Conversion to C by James Darrell McCauley, 24 September 1994 */
 
-double normp(double z)
+double Cdhc_normp(double z)
 {
     static double p[7] = { 220.2068679123761, 221.2135961699311,
 	112.079291497870, 33.91286607838300, 6.37396220353165,
