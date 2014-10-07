@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Jul 17 08:51:53 2012
-
-@author: pietro
-"""
-import grass.lib.vector as libvect
-from grass.pygrass.vector.vector_type import VTYPE
 from os.path import join, exists
+import grass.lib.gis as libgis
+libgis.G_gisinit('')
+import grass.lib.vector as libvect
 
 #
 # import pygrass modules
 #
+from grass.pygrass.vector.vector_type import VTYPE
 from grass.pygrass.errors import GrassError, must_be_open
 from grass.pygrass.gis import Location
 

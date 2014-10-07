@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Fri May 25 12:56:33 2012
-
-@author: pietro
-"""
 from __future__ import (nested_scopes, generators, division, absolute_import,
                         with_statement, print_function, unicode_literals)
 import os
@@ -19,6 +14,8 @@ from grass.script import core as grasscore
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
 import grass.lib.rowio as librowio
+
+libgis.G_gisinit('')
 
 #
 # import pygrass modules
