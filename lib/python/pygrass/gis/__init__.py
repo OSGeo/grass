@@ -11,7 +11,7 @@ import fnmatch
 
 
 import grass.lib.gis as libgis
-from grass.pygrass.functions import getenv
+libgis.G_gisinit('')
 from grass.pygrass.errors import GrassError
 
 
@@ -55,6 +55,7 @@ def _check(value, path, type):
     if value and CHECK_IS[type](join(path, value)):
         return value
     elif value is '':
+        from grass.pygrass.functions import getenv
         return getenv(type)
     else:
         raise GrassError("%s <%s> not found" % (type.title(),
