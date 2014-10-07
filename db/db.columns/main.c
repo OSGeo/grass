@@ -13,9 +13,10 @@
  *
  *****************************************************************************/
 
+#include <stdlib.h>
+
 #include <grass/gis.h>
 #include <grass/dbmi.h>
-#include <stdlib.h>
 #include <grass/glocale.h>
 
 
@@ -52,12 +53,13 @@ int main(int argc, char **argv)
     db_init_handle(&handle);
     db_set_handle(&handle, parms.database, NULL);
     if (db_open_database(driver, &handle) != DB_OK)
-	exit(EXIT_FAILURE);
+        G_fatal_error(_("Unable to open database <%s>"), parms.database);
+    db_set_error_handler_driver(driver);
 
     db_init_string(&table_name);
     db_set_string(&table_name, parms.table);
     if (db_describe_table(driver, &table_name, &table) != DB_OK)
-	exit(EXIT_FAILURE);
+	G_fatal_error(_("Unable to describe table <%s>"), parms.table);
 
     db_close_database(driver);
     db_shutdown_driver(driver);

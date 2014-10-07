@@ -34,7 +34,8 @@ struct Colors *make_colors(const char *name, const char *layer,
     if (!driver)
 	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 		      fi->database, fi->driver);
-    
+    db_set_error_handler_driver(driver);
+
     ctype = db_column_Ctype(driver, fi->table, column);
     if (ctype == -1)
 	G_fatal_error(_("Column <%s> not found in table <%s>"),

@@ -50,6 +50,7 @@ static void F_generate(const char *drvname, const char *dbname,
     G_debug(2, "Open database");
     if (db_open_database(driver, &handle) != DB_OK)
 	G_fatal_error("Cannot open database");
+    db_set_error_handler_driver(driver);
 
     G_debug(2, "Database opened");
 

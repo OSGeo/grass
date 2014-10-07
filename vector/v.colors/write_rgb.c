@@ -24,6 +24,7 @@ void write_rgb_values(const struct Map_info *Map, int layer, const char *column_
     if (!driver)
 	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 		      fi->database, fi->driver);
+    db_set_error_handler_driver(driver);
 
     db_init_string(&stmt);
     

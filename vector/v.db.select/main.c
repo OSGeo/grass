@@ -170,6 +170,7 @@ int main(int argc, char **argv)
     if (!driver)
 	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 		      Fi->database, Fi->driver);
+    db_set_error_handler_driver(driver);
 
     if (col_opt->answer)
 	sprintf(query, "SELECT %s FROM ", col_opt->answer);

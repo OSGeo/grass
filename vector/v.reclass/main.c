@@ -129,6 +129,7 @@ int main(int argc, char *argv[])
     if (Driver == NULL)
 	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 		      Fi->database, Fi->driver);
+    db_set_error_handler_driver(Driver);
 
     if (col_opt->answer) {
 	int ctype;
@@ -171,6 +172,7 @@ int main(int argc, char *argv[])
 						    Vect_subst_var(NewFi->
 								   database,
 								   &Out));
+            db_set_error_handler_driver(Driver2);
 
 	    /* get string column length */
 	    db_set_string(&stmt, Fi->table);
@@ -202,8 +204,6 @@ int main(int argc, char *argv[])
 
 	    if (db_execute_immediate(Driver2, &stmt2) != DB_OK) {
 		Vect_close(&Out);
-		db_close_database_shutdown_driver(Driver);
-		db_close_database_shutdown_driver(Driver2);
 		G_fatal_error("Unable to create table: '%s'",
 			      db_get_string(&stmt2));
 	    }
@@ -282,8 +282,6 @@ int main(int argc, char *argv[])
 
 		    if (db_execute_immediate(Driver2, &stmt2) != DB_OK) {
 			Vect_close(&Out);
-			db_close_database_shutdown_driver(Driver);
-			db_close_database_shutdown_driver(Driver2);
 			G_fatal_error(_("Cannot insert data: [%s]"),
 				      db_get_string(&stmt2));
 		    }

@@ -267,6 +267,7 @@ int main(int argc, char *argv[])
                 G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
                               fi->database, fi->driver);
             }
+            db_set_error_handler_driver(driver);
 
             /* add key column */
             sprintf(buf, "ALTER TABLE %s ADD COLUMN %s INTEGER",

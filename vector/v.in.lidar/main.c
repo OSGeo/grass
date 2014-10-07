@@ -603,10 +603,9 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Unable open database <%s> by driver <%s>"),
 			  Vect_subst_var(Fi->database, &Map), Fi->driver);
 	}
+        db_set_error_handler_driver(driver);
 
 	if (db_execute_immediate(driver, &sql) != DB_OK) {
-	    db_close_database(driver);
-	    db_shutdown_driver(driver);
 	    G_fatal_error(_("Unable to create table: '%s'"),
 			  db_get_string(&sql));
 	}
@@ -779,8 +778,6 @@ int main(int argc, char *argv[])
 	    G_debug(3, db_get_string(&sql));
 
 	    if (db_execute_immediate(driver, &sql) != DB_OK) {
-		db_close_database(driver);
-		db_shutdown_driver(driver);
 		G_fatal_error(_("Cannot insert new row: %s"),
 			      db_get_string(&sql));
 	    }

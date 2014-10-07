@@ -648,6 +648,7 @@ int write_vtk_db_data(FILE * ascii, struct Map_info *Map, VTKInfo * info,
     if (db_open_database(Driver, &handle) != DB_OK)
 	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 		      Fi->database, Fi->driver);
+    db_set_error_handler_driver(Driver);
 
     db_set_string(&dbstring, Fi->table);
     if (db_describe_table(Driver, &dbstring, &Table) != DB_OK)
@@ -728,8 +729,6 @@ int write_vtk_db_data(FILE * ascii, struct Map_info *Map, VTKInfo * info,
 					    db_get_column_name(Column), cat,
 					    Fi, Driver, ncol);
 				if (valbuf == NULL) {
-				    db_close_database(Driver);
-				    db_shutdown_driver(Driver);
 				    G_fatal_error(_("Error reading value of attribute '%s'"),
 						  db_get_column_name(Column));
 				}
@@ -761,8 +760,6 @@ int write_vtk_db_data(FILE * ascii, struct Map_info *Map, VTKInfo * info,
 					    db_get_column_name(Column), cat,
 					    Fi, Driver, ncol);
 				if (valbuf == NULL) {
-				    db_close_database(Driver);
-				    db_shutdown_driver(Driver);
 				    G_fatal_error(_("Error reading value of attribute '%s'"),
 						  db_get_column_name(Column));
 				}
@@ -794,8 +791,6 @@ int write_vtk_db_data(FILE * ascii, struct Map_info *Map, VTKInfo * info,
 					    db_get_column_name(Column), cat,
 					    Fi, Driver, ncol);
 				if (valbuf == NULL) {
-				    db_close_database(Driver);
-				    db_shutdown_driver(Driver);
 				    G_fatal_error(_("Error reading value of attribute '%s'"),
 						  db_get_column_name(Column));
 				}
@@ -825,8 +820,6 @@ int write_vtk_db_data(FILE * ascii, struct Map_info *Map, VTKInfo * info,
 				get_att((char *)db_get_column_name(Column),
 					cat, Fi, Driver, ncol);
 			    if (valbuf == NULL) {
-				db_close_database(Driver);
-				db_shutdown_driver(Driver);
 				G_fatal_error(_("Error reading value of attribute '%s'"),
 					      db_get_column_name(Column));
 			    }
