@@ -24,8 +24,6 @@
 static int load_vectors(const struct Option *, const struct Option *,
 			const struct Option *, const struct Option *, int,
 			nv_data *);
-static void error_handler_vector(void *);
-static void error_handler_db(void *);
 
 /*!
    \brief Load vector maps (lines)
@@ -280,7 +278,7 @@ int check_map(const struct GParams *params, int index, int vlines,
 
     if (1 > Vect_open_old(&Map, map, ""))
 	G_fatal_error(_("Unable to open vector map <%s>"), map);
-    G_add_error_handler(error_handler_vector, &Map);
+    Vect_set_error_handler_io(&Map, NULL);
 
     if (with_z)
 	*with_z = Vect_is_3d(&Map);
@@ -294,7 +292,7 @@ int check_map(const struct GParams *params, int index, int vlines,
 	if (!driver)
 	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			  Fi->database, Fi->driver);
-	G_add_error_handler(error_handler_db, driver);
+        db_set_error_handler_driver(driver);
 
 	if (color) {
 	    db_get_column(driver, Fi->table, color, &column);
@@ -337,30 +335,10 @@ int check_map(const struct GParams *params, int index, int vlines,
 		G_fatal_error(_("Data type of marker column must be character"));
 	}
 
-	G_remove_error_handler(error_handler_db, driver);
 	db_close_database_shutdown_driver(driver);
     }
 
-    G_remove_error_handler(error_handler_vector, &Map);
     Vect_close(&Map);
 
     return 0;
-}
-
-void error_handler_vector(void *p)
-{
-    struct Map_info *Map;
-
-    Map = (struct Map_info *)p;
-
-    Vect_close(Map);
-}
-
-void error_handler_db(void *p)
-{
-    dbDriver *driver;
-
-    driver = (dbDriver *) p;
-    if (driver)
-	db_close_database_shutdown_driver(driver);
 }

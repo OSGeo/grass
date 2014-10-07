@@ -28,7 +28,8 @@ int scan_attr(const struct Map_info *Map, int layer, const char *column_name,
     if (!driver)
 	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 		      fi->database, fi->driver);
-    
+    db_set_error_handler_driver(driver);
+
     ctype = db_column_Ctype(driver, fi->table, column_name);
     if (ctype == -1)
 	G_fatal_error(_("Column <%s> not found in table <%s>"),

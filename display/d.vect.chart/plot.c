@@ -45,6 +45,7 @@ plot(int ctype, struct Map_info *Map, int type, int field,
 		  Fi->driver);
 	return 1;
     }
+    db_set_error_handler_driver(driver);
 
     val = (double *)G_malloc((ncols + 1) * sizeof(double));	/* + 1 for sizecol */
 

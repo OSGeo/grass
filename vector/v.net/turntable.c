@@ -7,13 +7,6 @@
 #include <grass/glocale.h>
 #include "proto.h"
 
-void close_db(void *p)
-{
-    dbDriver *driver = (dbDriver *) p;
-
-    db_close_database_shutdown_driver(driver);
-}
-
 static double compute_line_nodes_angle(struct line_pnts *points)
 {
     double x_start, y_start, z;
@@ -726,7 +719,7 @@ void turntable(struct opt *opt)
     if (driver == NULL)
 	G_fatal_error(_("Unable to open database <%s> using driver <%s>"),
 		      database_name, driver_name);
-    G_add_error_handler(close_db, driver);
+    db_set_error_handler_driver(driver);
 
     key_col = "cat";
     sprintf(buf,
@@ -760,7 +753,7 @@ void turntable(struct opt *opt)
 		       tucfield, afield, type);
     Vect_close(&InMap);
 
-    close_db(driver);
+    db_close_database_shutdown_driver(driver);
 
     Vect_build_partial(&OutMap, GV_BUILD_NONE);	/*must be there in order to be topology build */
     Vect_build(&OutMap);

@@ -164,6 +164,8 @@ int main(int argc, char *argv[])
 	if (driver == NULL)
 	    G_fatal_error(_("No database connection for driver <%s> is defined. Run db.connect."),
 			  dvr);
+        db_set_error_handler_driver(driver);
+        
 	if (P_Drop_Aux_Table(driver, table_name) != DB_OK)
 	    G_fatal_error(_("Old auxiliar table could not be dropped"));
 	db_close_database_shutdown_driver(driver);
@@ -224,6 +226,7 @@ int main(int argc, char *argv[])
     if (driver == NULL)
 	G_fatal_error(_("No database connection for driver <%s> is defined. Run db.connect."),
 		      dvr);
+    db_set_error_handler_driver(driver);
 
     /* Create auxiliar table */
     if ((flag_auxiliar =
@@ -235,7 +238,7 @@ int main(int argc, char *argv[])
     }
 
     db_create_index2(driver, table_name, "ID");
-    /* sqlite likes that */
+    /* sqlite likes that ??? */
     db_close_database_shutdown_driver(driver);
     driver = db_start_driver_open_database(dvr, db);
 

@@ -153,6 +153,7 @@ int main(int argc, char **argv)
     db_set_handle(&rshandle, database_opt->answer, NULL);
     if (db_open_database(rsdriver, &rshandle) != DB_OK)
 	G_fatal_error(_("Unable to open database for reference table"));
+    db_set_error_handler_driver(rsdriver);
 
     points_read = 0;
     lines_read = 0;

@@ -589,10 +589,9 @@ int main(int argc, char *argv[])
 	if (driver2 == NULL)
 	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			  ff->database, ff->driver);
+        db_set_error_handler_driver(driver2);
 
 	if (db_execute_immediate(driver2, &sql2) != DB_OK) {
-	    db_close_database(driver2);
-	    db_shutdown_driver(driver2);
 	    G_fatal_error(_("Unable to create table '%s'"),
 			  db_get_string(&sql2));
 	}

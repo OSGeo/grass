@@ -46,6 +46,8 @@ static void create_table(struct Map_info *flowline_vec,
 	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 		      Vect_subst_var(fi->database, flowline_vec), fi->driver);
     }
+    db_set_error_handler_driver(drvr);
+
     *driver = drvr;
     sprintf(buf, "create table %s (cat integer, velocity double precision",
 	    fi->table);

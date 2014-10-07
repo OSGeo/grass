@@ -178,6 +178,7 @@ int main(int argc, char *argv[])
 	if (driver == NULL)
 	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			  Fi->database, Fi->driver);
+        db_set_error_handler_driver(driver);
 
 	/* Create new table */
 	db_zero_string(&sql);
