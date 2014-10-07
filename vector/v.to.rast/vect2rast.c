@@ -59,6 +59,7 @@ int vect_to_rast(const char *vector_map, const char *raster_map, const char *fie
 	     db_start_driver_open_database(Fi->driver, Fi->database)) == NULL)
 	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			  Fi->database, Fi->driver);
+        db_set_error_handler_driver(Driver);
 
 	/* Note do not check if the column exists in the table because it may be expression */
 

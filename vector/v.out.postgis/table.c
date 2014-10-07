@@ -33,11 +33,11 @@ void check_columns(const struct Map_info *Map, const char *layer,
     if (!driver)
 	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 		      fi->database, fi->driver);
-    
+    db_set_error_handler_driver(driver);
+     
     db_init_string(&stmt);
     db_set_string(&stmt, fi->table);
     if (db_describe_table(driver, &stmt, &table) != DB_OK) {
-	db_close_database_shutdown_driver(driver);
 	G_fatal_error(_("Unable to describe table <%s>"), fi->table);
     }
     

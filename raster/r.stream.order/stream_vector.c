@@ -227,6 +227,7 @@ int stream_add_table(int number_of_streams)
     driver = db_start_driver_open_database(Fi->driver,
 					   Vect_subst_var(Fi->database,
 							         &Out));
+    db_set_error_handler_driver(driver);
 
     /* create table */
     for (i = 0; i < number_of_streams; ++i)
@@ -267,10 +268,7 @@ int stream_add_table(int number_of_streams)
     db_set_string(&db_sql, buf);
 
     if (db_execute_immediate(driver, &db_sql) != DB_OK) {
-	db_close_database(driver);
-	db_shutdown_driver(driver);
-	G_warning("Unable to create table: '%s'", db_get_string(&db_sql));
-	return -1;
+	G_fatal_error("Unable to create table: '%s'", db_get_string(&db_sql));
     }
 
     if (db_create_index2(driver, Fi->table, cat_col_name) != DB_OK)
@@ -351,10 +349,7 @@ int stream_add_table(int number_of_streams)
 	db_set_string(&db_sql, buf);
 
 	if (db_execute_immediate(driver, &db_sql) != DB_OK) {
-	    db_close_database(driver);
-	    db_shutdown_driver(driver);
-	    G_warning(_("Unable to inset new row: '%s'"), db_get_string(&db_sql));
-	    return -1;
+            G_fatal_error(_("Unable to inset new row: '%s'"), db_get_string(&db_sql));
 	}
     }				/* end for */
 

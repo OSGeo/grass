@@ -125,7 +125,8 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 		      Fi->database, Fi->driver);
     }
-    
+    db_set_error_handler_driver(driver);
+
     map = Rast3d_open_cell_old(opt.rast3d->answer, G_find_raster3d(opt.rast3d->answer, ""), &region,
                           RASTER3D_TILE_SAME_AS_FILE, RASTER3D_USE_CACHE_DEFAULT);
 

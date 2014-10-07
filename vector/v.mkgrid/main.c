@@ -240,6 +240,7 @@ int main(int argc, char *argv[])
     if (Driver == NULL)
 	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 		      Fi->database, Fi->driver);
+    db_set_error_handler_driver(Driver);
 
     if (grid_info.num_rows < 27 && grid_info.num_cols < 27) {
 	sprintf(buf,

@@ -250,6 +250,7 @@ int main(int argc, char *argv[])
     if (driver == NULL)
 	G_fatal_error(_("No database connection for driver <%s> is defined. Run db.connect."),
 		      dvr);
+    db_set_error_handler_driver(driver);
 
     /* Create auxiliar and interpolation table */
     if ((flag_auxiliar = P_Create_Aux4_Table(driver, table_name)) == FALSE)
@@ -261,7 +262,7 @@ int main(int argc, char *argv[])
 
     db_create_index2(driver, table_name, "ID");
     db_create_index2(driver, table_interpolation, "ID");
-    /* sqlite likes that */
+    /* sqlite likes that ??? */
     db_close_database_shutdown_driver(driver);
     driver = db_start_driver_open_database(dvr, db);
 

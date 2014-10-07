@@ -137,6 +137,7 @@ int main(int argc, char **argv)
     if (Driver == NULL)
 	G_fatal_error("Unable to open database <%s> by driver <%s>",
 		      Fi->database, Fi->driver);
+    db_set_error_handler_driver(Driver);
 
     nrecords = db_select_CatValArray(Driver, Fi->table, Fi->key,
 				     parm.column->answer, NULL, &cvarr);
@@ -177,6 +178,7 @@ int main(int argc, char **argv)
     if (Driver == NULL)
 	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 		      Fi->database, Fi->driver);
+    db_set_error_handler_driver(Driver);
 
     db_begin_transaction(Driver);
     sprintf(buf,

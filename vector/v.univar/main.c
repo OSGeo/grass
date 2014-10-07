@@ -231,6 +231,8 @@ static void select_from_geometry(void)
 	if (Driver == NULL)
 	    G_fatal_error("Unable to open database <%s> by driver <%s>",
 			  Fi->database, Fi->driver);
+        db_set_error_handler_driver(Driver);
+
 	ncats = db_select_int(Driver, Fi->table, Fi->key, where_opt->answer,
 			      &cats);
 	if (ncats == -1)
@@ -340,6 +342,7 @@ static void select_from_database(void)
     if (Driver == NULL)
 	G_fatal_error("Unable to open database <%s> by driver <%s>",
 		      Fi->database, Fi->driver);
+    db_set_error_handler_driver(Driver);
 
     /* Note do not check if the column exists in the table because it may be an expression */
     db_CatValArray_init(&Cvarr);

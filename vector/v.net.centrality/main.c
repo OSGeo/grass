@@ -245,6 +245,7 @@ int main(int argc, char *argv[])
     if (driver == NULL)
 	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 		      Fi->database, Fi->driver);
+    db_set_error_handler_driver(driver);
 
     db_init_string(&tmp);
     if (deg_opt->answer)
@@ -262,7 +263,6 @@ int main(int argc, char *argv[])
     G_debug(2, db_get_string(&sql));
 
     if (db_execute_immediate(driver, &sql) != DB_OK) {
-	db_close_database_shutdown_driver(driver);
 	G_fatal_error(_("Unable to create table: '%s'"), db_get_string(&sql));
     }
 
