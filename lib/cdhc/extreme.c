@@ -2,7 +2,7 @@
 #include <math.h>
 
 
-double *extreme(double *x, int n)
+double *Cdhc_extreme(double *x, int n)
 {
     int i;
     static double y[2];

@@ -2,7 +2,7 @@
 #include <math.h>
 
 
-double xinormal(double pee)
+double Cdhc_xinormal(double pee)
 {
     double f0, pind, pw, px;
     static double p[5] = { -0.322232431088, -1., -0.342242088547,

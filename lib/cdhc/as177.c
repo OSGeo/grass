@@ -6,7 +6,7 @@
  *
  * Translation to C by James Darrell McCauley, mccauley@ecn.purdue.edu.
  *
- * The functions nscor1() and nscor2() calculate the expected values of
+ * The functions Cdhc_nscor1() and Cdhc_nscor2() calculate the expected values of
  * normal order statistics in exact or approximate form, respectively.
  *
  */
@@ -20,12 +20,12 @@
 
 
 /* Local function prototypes */
-static double alnfac(int j);
-static double correc(int i, int n);
+static double Cdhc_alnfac(int j);
+static double Cdhc_correc(int i, int n);
 
 
 /* exact calculation of normal scores */
-void nscor1(double s[], int n, int n2, double work[], int *ifault)
+void Cdhc_nscor1(double s[], int n, int n2, double work[], int *ifault)
 {
     double ani, c, c1, d, scor;
     int i, j;
@@ -43,7 +43,7 @@ void nscor1(double s[], int n, int n2, double work[], int *ifault)
 	*ifault = 2;
 
     /* calculate the natural log of factorial(n) */
-    c1 = alnfac(n);
+    c1 = Cdhc_alnfac(n);
     d = c1 - log((double)n);
 
     /* accumulate ordinates for calculation of integral for rankits */
@@ -73,8 +73,8 @@ void init(double work[])
     for (i = 0; i < NSTEP; ++i) {
 	work[0 * NSTEP + i] = xx;
 	work[1 * NSTEP + i] = pi2 - xx * xx * 0.5;
-	work[2 * NSTEP + i] = log(alnorm(xx, 1));
-	work[3 * NSTEP + i] = log(alnorm(xx, 0));
+	work[2 * NSTEP + i] = log(Cdhc_alnorm(xx, 1));
+	work[3 * NSTEP + i] = log(Cdhc_alnorm(xx, 0));
 	xx = xstart + H * (i + 1.0);
     }
 
@@ -85,7 +85,7 @@ void init(double work[])
 /*-Algorithm AS 177.2 Appl. Statist. (1982) Vol.31, No.2
  * Natural logarithm of factorial for non-negative argument
  */
-static double alnfac(int j)
+static double Cdhc_alnfac(int j)
 {
     static double r[7] = { 0.0, 0.0, 0.69314718056, 1.79175946923,
 	3.17805383035, 4.78749174278, 6.57925121101
@@ -108,7 +108,7 @@ static double alnfac(int j)
 /*-Algorithm AS 177.3 Appl. Statist. (1982) Vol.31, No.2
  * Approximation for Rankits
  */
-void nscor2(double s[], int n, int n2, int *ifault)
+void Cdhc_nscor2(double s[], int n, int n2, int *ifault)
 {
     static double eps[4] = { 0.419885, 0.450536, 0.456936, 0.468488 };
     static double dl1[4] = { 0.112063, 0.121770, 0.239299, 0.215159 };
@@ -140,7 +140,7 @@ void nscor2(double s[], int n, int n2, int *ifault)
     for (i = 0; i < k; ++i) {
 	e1 = (1.0 + i - eps[i]) / (n + gam[i]);
 	e2 = pow(e1, lam[i]);
-	s[i] = e1 + e2 * (dl1[i] + e2 * dl2[i]) / n - correc(1 + i, n);
+	s[i] = e1 + e2 * (dl1[i] + e2 * dl2[i]) / n - Cdhc_correc(1 + i, n);
     }
 
     if (n2 != k) {
@@ -149,7 +149,7 @@ void nscor2(double s[], int n, int n2, int *ifault)
 	    l1 = lam[3] + bb / (1.0 + i + d);
 	    e1 = (1.0 + i - eps[3]) / (n + gam[3]);
 	    e2 = pow(e1, l1);
-	    s[i] = e1 + e2 * (dl1[3] + e2 * dl2[3]) / n - correc(1 + i, n);
+	    s[i] = e1 + e2 * (dl1[3] + e2 * dl2[3]) / n - Cdhc_correc(1 + i, n);
 	}
     }
 
@@ -162,10 +162,10 @@ void nscor2(double s[], int n, int n2, int *ifault)
 
 
 /*-Algorithm AS 177.4 Appl. Statist. (1982) Vol.31, No.2
- * Calculates correction for tail area of noraml distribution
+ * Calculates Cdhc_correction for tail area of noraml distribution
  * corresponding to ith largest rankit in sample size n.
  */
-static double correc(int i, int n)
+static double Cdhc_correc(int i, int n)
 {
     static double c1[7] = { 9.5, 28.7, 1.9, 0.0, -7.0, -6.2, -1.6 };
     static double c2[7] = { -6.195e3, -9.569e3, -6.728e3, -17.614e3,

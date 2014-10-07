@@ -32,7 +32,7 @@
 #define UTZERO 18.66
 
 
-double alnorm(double x, int upper)
+double Cdhc_alnorm(double x, int upper)
 {
     double ret, z, y;
     int up;

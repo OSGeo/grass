@@ -3,7 +3,7 @@
 #include <math.h>
 
 
-double *chi_square_exp(double *x, int n)
+double *Cdhc_chi_square_exp(double *x, int n)
 {
     static double y[2];
     double mean = 0.0, sum3 = 0.0, *v;
@@ -15,11 +15,11 @@ double *chi_square_exp(double *x, int n)
 	--k;
 
     if ((f = (int *)calloc(k, sizeof(int))) == NULL) {
-	fprintf(stderr, "Memory error in chi_square\n");
+	fprintf(stderr, "Memory error in Cdhc_chi_square\n");
 	exit(EXIT_FAILURE);
     }
     if ((v = (double *)malloc((k + 1) * sizeof(double))) == NULL) {
-	fprintf(stderr, "Memory error in chi_square\n");
+	fprintf(stderr, "Memory error in Cdhc_chi_square\n");
 	exit(EXIT_FAILURE);
     }
 
