@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Aug 15 17:33:27 2012
-
-@author: pietro
-"""
 from functools import wraps
 
 from grass.exceptions import (FlagError, ParameterError, DBError,
