@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Fri Jun  8 18:46:34 2012
-
-@author: pietro
-"""
 from grass.pygrass.raster.raster_type import TYPE as RTYPE
 import ctypes
 import numpy as np
@@ -11,7 +6,8 @@ import numpy as np
 
 CELL = (np.int, np.int0, np.int8, np.int16, np.int32, np.int64)
 FCELL = (np.float, np.float16, np.float32)
-DCELL = (np.float64, np.float128)
+_DCELL = 'float64', 'float128'
+DCELL = tuple([getattr(np, attr) for attr in _DCELL if hasattr(np, attr)])
 
 
 class Buffer(np.ndarray):
