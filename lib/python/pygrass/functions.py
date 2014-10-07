@@ -1,20 +1,15 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Jun 26 12:38:48 2012
-
-@author: pietro
-"""
 import itertools
 import fnmatch
 import os
 from sqlite3 import OperationalError
 
 import grass.lib.gis as libgis
+libgis.G_gisinit('')
 import grass.lib.raster as libraster
 from grass.script import core as grasscore
 
 from grass.pygrass.errors import GrassError
-from grass.pygrass.gis.region import Region
 
 
 def looking(obj, filter_string):
@@ -196,7 +191,7 @@ def pixel2coor(pixel, region):
             libraster.Rast_col_to_easting(col, region.c_region))
 
 
-def get_raster_for_points(poi_vector, raster, column=None):
+def get_raster_for_points(poi_vector, raster, column=None, region=None):
     """Query a raster map for each point feature of a vector
 
     Example
@@ -230,7 +225,9 @@ def get_raster_for_points(poi_vector, raster, column=None):
     from math import isnan
     if not column:
         result = []
-    reg = Region()
+    if region is None:
+        from grass.pygrass.gis.region import Region
+        region = Region()
     if not poi_vector.is_open():
         poi_vector.open()
     if not raster.is_open():
@@ -238,7 +235,7 @@ def get_raster_for_points(poi_vector, raster, column=None):
     if poi_vector.num_primitive_of('point') == 0:
         raise GrassError(_("Vector doesn't contain points"))
     for poi in poi_vector.viter('points'):
-        val = raster.get_value(poi, reg)
+        val = raster.get_value(poi, region)
         if column:
             if val is not None and not isnan(val):
                 poi.attrs[column] = val
