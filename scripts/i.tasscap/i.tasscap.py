@@ -6,15 +6,12 @@
 # AUTHOR(S):	Markus Neteler. neteler itc.it
 #               Converted to Python by Glynn Clements
 # PURPOSE:	At-satellite reflectance based tasseled cap transformation.
-# COPYRIGHT:	(C) 1997-2004,2008 by the GRASS Development Team
+# COPYRIGHT:	(C) 1997-2004,2008, 2014 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (>=v2). Read the file COPYING that comes with GRASS
 #		for details.
 #
-# TODO: Check if MODIS Tasseled Cap makes sense to be added
-#       http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=1025776
-#       Add other, e.g from here: http://www.sjsu.edu/faculty/watkins/tassel.htm
 #############################################################################
 # References:
 # LANDSAT-4/LANDSAT-5:
@@ -32,6 +29,15 @@
 #  This is published as well in INT. J. OF RS, 2002, VOL 23, NO. 8, 1741-1748.
 #  Compare discussion:
 #  http://adis.cesnet.cz/cgi-bin/lwgate/IMAGRS-L/archives/imagrs-l.log0211/date/article-14.html
+#
+#  MODIS Tasselled Cap coefficients
+#  https://gis.stackexchange.com/questions/116107/tasseled-cap-transformation-on-modis-in-grass/116110
+#  Ref: Lobser & Cohen (2007). MODIS tasselled cap: land cover characteristics 
+#                              expressed through transformed MODIS data.
+#       International Journal of Remote Sensing, Volume 28(22), Table 3
+#
+# TODO: Check if these MODIS Tasseled Cap coefficients are different:
+#       http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=1025776
 #############################################################################
 #
 #%Module
@@ -39,6 +45,7 @@
 #% keywords: imagery
 #% keywords: transformation
 #% keywords: Landsat
+#% keywords: MODIS
 #% keywords: Tasseled Cap transformation
 #%end
 #%option
@@ -47,8 +54,8 @@
 #% description: Satellite sensor
 #% required: yes
 #% multiple: no
-#% options: landsat4_tm,landsat5_tm,landsat7_etm
-#% descriptions: landsat4_tm;Use transformation rules for Landsat 4 TM;landsat5_tm;Use transformation rules for Landsat 5 TM;landsat7_etm;Use transformation rules for Landsat 7 ETM
+#% options: landsat4_tm,landsat5_tm,landsat7_etm,modis
+#% descriptions: landsat4_tm;Use transformation rules for Landsat 4 TM;landsat5_tm;Use transformation rules for Landsat 5 TM;landsat7_etm;Use transformation rules for Landsat 7 ETM;modis;Use transformation rules for MODIS
 #%end
 #%option G_OPT_R_INPUTS
 #%end
@@ -61,17 +68,22 @@ import sys
 import os
 import grass.script as grass
 
-parms = [[( 0.3037, 0.2793, 0.4743, 0.5585, 0.5082, 0.1863),
+# weights for 6 Landsat bands: TM4, TM5, TM7
+# MODIS: Red, NIR1, Blue, Green, NIR2, SWIR1, SWIR2
+parms = [[( 0.3037, 0.2793, 0.4743, 0.5585, 0.5082, 0.1863), # Landsat TM4
 	  (-0.2848,-0.2435,-0.5435, 0.7243, 0.0840,-0.1800),
 	  ( 0.1509, 0.1973, 0.3279, 0.3406,-0.7112,-0.4572)],
-	 [( 0.2909, 0.2493, 0.4806, 0.5568, 0.4438, 0.1706, 10.3695),
+	 [( 0.2909, 0.2493, 0.4806, 0.5568, 0.4438, 0.1706, 10.3695), # Landsat TM5
 	  (-0.2728,-0.2174,-0.5508, 0.7221, 0.0733,-0.1648, -0.7310),
 	  ( 0.1446, 0.1761, 0.3322, 0.3396,-0.6210,-0.4186, -3.3828),
 	  ( 0.8461,-0.0731,-0.4640,-0.0032,-0.0492,-0.0119,  0.7879)],
-	 [( 0.3561, 0.3972, 0.3904, 0.6966, 0.2286, 0.1596),
+	 [( 0.3561, 0.3972, 0.3904, 0.6966, 0.2286, 0.1596), # Landsat TM7
 	  (-0.3344,-0.3544,-0.4556, 0.6966,-0.0242,-0.2630),
 	  ( 0.2626, 0.2141, 0.0926, 0.0656,-0.7629,-0.5388),
-	  ( 0.0805,-0.0498, 0.1950,-0.1327, 0.5752,-0.7775)]]
+	  ( 0.0805,-0.0498, 0.1950,-0.1327, 0.5752,-0.7775)],
+	 [( 0.4395, 0.5945, 0.2460, 0.3918, 0.3506, 0.2136, 0.2678), # MODIS
+	  (-0.4064, 0.5129,-0.2744,-0.2893, 0.4882,-0.0036,-0.4169),
+	  ( 0.1147, 0.2489, 0.2408, 0.3132,-0.3122,-0.6416,-0.5087)]]
 ordinals = ["first", "second", "third", "fourth"]
 names = ["Brightness", "Greenness", "Wetness", "Haze"]
 
@@ -82,7 +94,7 @@ def calc1(out, bands, k1, k2, k3, k4, k5, k7, k0 = 0):
     grass.run_command('r.colors', map = out, color = 'grey')
 
 def calcN(outpre, bands, i, n):
-    grass.message(_("LANDSAT-%d...") % n)
+    grass.message(_("Satellite band-%d...") % n)
     for j, p in enumerate(parms[i]):
 	out = "%s.%d" % (outpre, j + 1)
 	ord = ordinals[j]
@@ -101,7 +113,7 @@ def main():
     inputs = options['input'].split(',')
     num_of_bands = 6
     if len(inputs) != num_of_bands:
-        grass.fatal(_("The number of input raster maps (bands) should be %s.") % num_of_bands)
+        grass.fatal(_("The number of input raster maps (bands) should be %s") % num_of_bands)
 
     # this is here just for the compatibility with r.mapcalc expression
     # remove this if not really needed in new implementation
@@ -119,10 +131,12 @@ def main():
         calcN(output_basename, bands, 1, 5)
     elif satellite == 'landsat7_etm':
         calcN(output_basename, bands, 2, 7)
+    elif satellite == 'modis':
+        calcN(output_basename, bands, 3, 7)
     else:
         raise RuntimeError("Invalid satellite: " + satellite)
 
-    grass.message(_("Tasseled Cap components calculated."))
+    grass.message(_("Tasseled Cap components calculated"))
 
 if __name__ == "__main__":
     main()
