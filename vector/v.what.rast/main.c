@@ -142,6 +142,7 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			  Fi->database, Fi->driver);
 	}
+        db_set_error_handler_driver(driver);
     }
 
     /* Open raster */

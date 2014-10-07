@@ -48,10 +48,11 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Unable to start driver <%s>"), parms.driver);
 
     if (db_list_databases(driver, &locations,
-                          nlocs, &handles, &count) != DB_OK)
+                          nlocs, &handles, &count) != DB_OK) {
+        db_shutdown_driver(driver);
         G_fatal_error(_("Unable to list databases. "
                         "Try to define correct connection settings by db.login."));
-    
+    }
     db_shutdown_driver(driver);
 
     for (i = 0; i < count; i++) {

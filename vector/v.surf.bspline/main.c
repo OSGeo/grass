@@ -240,6 +240,8 @@ int main(int argc, char *argv[])
 	if (driver == NULL)
 	    G_fatal_error(_("No database connection for driver <%s> is defined. Run db.connect."),
 			  drv);
+        db_set_error_handler_driver(driver);
+
 	if (P_Drop_Aux_Table(driver, table_name) != DB_OK)
 	    G_fatal_error(_("Old auxiliary table could not be dropped"));
 	db_close_database_shutdown_driver(driver);
@@ -379,6 +381,7 @@ int main(int argc, char *argv[])
 	if (driver_cats == NULL)
 	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			  Fi->database, Fi->driver);
+        db_set_error_handler_driver(driver_cats);
 
 	nrec =
 	    db_select_CatValArray(driver_cats, Fi->table, Fi->key,
@@ -406,6 +409,7 @@ int main(int argc, char *argv[])
     if (driver == NULL)
 	G_fatal_error(_("No database connection for driver <%s> is defined. "
 			"Run db.connect."), drv);
+    db_set_error_handler_driver(driver);
 
     /* Create auxiliary table */
     if (vector) {
@@ -416,7 +420,7 @@ int main(int argc, char *argv[])
 			  table_name);
 	}
 	/* db_create_index2(driver, table_name, "ID"); */
-	/* sqlite likes that */
+	/* sqlite likes that ??? */
 	db_close_database_shutdown_driver(driver);
 	driver = db_start_driver_open_database(drv, db);
     }

@@ -74,10 +74,9 @@ int attributes(char *in, struct Map_info *Out)
 	G_fatal_error(_("Unable to open database <%s>"),
 		      fi->database);
     }
+    db_set_error_handler_driver(driver);
 
     if (db_execute_immediate(driver, &sql) != DB_OK) {
-	db_close_database(driver);
-	db_shutdown_driver(driver);
 	G_fatal_error(_("Unable to create table: '%s'"),
 		      db_get_string(&sql));
     }
@@ -106,8 +105,6 @@ int attributes(char *in, struct Map_info *Out)
 	G_debug(3, db_get_string(&sql));
 
 	if (db_execute_immediate(driver, &sql) != DB_OK) {
-	    db_close_database(driver);
-	    db_shutdown_driver(driver);
 	    G_fatal_error(_("Unable to insert new record: '%s'"),
 			  db_get_string(&sql));
 	}

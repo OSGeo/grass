@@ -46,6 +46,7 @@ int update(struct Map_info *Map)
 	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 		      Fi->database, Fi->driver);
     }
+    db_set_error_handler_driver(driver);
 
     db_begin_transaction(driver);
 

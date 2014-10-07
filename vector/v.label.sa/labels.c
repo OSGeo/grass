@@ -76,6 +76,7 @@ label_t *labels_init(struct params *p, int *n_labels)
     if (driver == NULL)
 	G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 		      fi->database, fi->driver);
+    db_set_error_handler_driver(driver);
 
     sql_len = strlen(p->column->answer) + strlen(fi->table) +
 	strlen(fi->key) + 30;

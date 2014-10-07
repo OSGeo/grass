@@ -170,6 +170,7 @@ int close_streamvect(char *stream_vect)
     if (driver == NULL) {
 	G_fatal_error(_("Unable to start driver <%s>"), Fi->driver);
     }
+    db_set_error_handler_driver(driver);
 
     G_debug(1, "table: %s", Fi->table);
     G_debug(1, "driver: %s", Fi->driver);

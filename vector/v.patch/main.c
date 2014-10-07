@@ -135,6 +135,7 @@ int main(int argc, char *argv[])
 		    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 				  fi_out->database, fi_out->driver);
 		}
+                db_set_error_handler_driver(driver_out);
 
 		db_set_string(&table_name_out, fi_out->table);
 		if (db_describe_table(driver_out, &table_name_out, &table_out)
@@ -165,6 +166,7 @@ int main(int argc, char *argv[])
 		    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 				  fi_in->database, fi_in->driver);
 		}
+                db_set_error_handler_driver(driver_in);
 
 		if (!append->answer && i == 0) {
 		    table = &table_out;
@@ -279,6 +281,8 @@ int main(int argc, char *argv[])
 		G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			      fi_out->database, fi_out->driver);
 	    }
+            db_set_error_handler_driver(driver_out);
+
 	    db_begin_transaction(driver_out);
 	}
 
@@ -347,6 +351,7 @@ int main(int argc, char *argv[])
 		    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 				  fi_in->database, fi_in->driver);
 		}
+                db_set_error_handler_driver(driver_in);
 
 		db_set_string(&table_name_in, fi_in->table);
 		copy_records(driver_in, &table_name_in,
@@ -421,8 +426,8 @@ int copy_records(dbDriver * driver_in, dbString * table_name_in,
 	char buf[2000];
 
 	if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK) {
-	    G_fatal_error(_("Cannot fetch row"));
 	    db_close_cursor(&cursor);
+	    G_fatal_error(_("Cannot fetch row"));
 	}
 	if (!more)
 	    break;

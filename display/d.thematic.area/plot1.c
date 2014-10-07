@@ -110,6 +110,7 @@ int plot1(struct Map_info *Map, int type, int area, struct cat_list *Clist,
 	if (driver == NULL)
 	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			  fi->database, fi->driver);
+         db_set_error_handler_driver(driver);
     }
 
     if (table_colors_flag) {
