@@ -176,7 +176,11 @@ static void append_error(const char *msg)
     st->error[st->n_errors++] = G_store(msg);
 }
 
-/* at most one option from a set */
+/*! \brief Sets the options to be mutually exclusive.
+
+    When running the module, at most one option from a set can be
+    provided.
+*/
 void G_option_exclusive(void *first, ...)
 {
     va_list ap;
@@ -214,8 +218,17 @@ static void check_required(const struct rule *rule)
     }
 }
 
-/* if the first option is present, at least one of the other
-   options must also be present */
+/*! \brief Define a list of options from which at least one option
+    is required if first option is present.
+
+    If the first option is present, at least one of the other
+    options must also be present.
+
+    If you want all options to be provided use G_option_requires_all()
+    function.
+    If you want more than one option to be present but not all,
+    call this function multiple times.
+*/
 void G_option_requires(void *first, ...)
 {
     va_list ap;
@@ -236,8 +249,16 @@ static void check_requires(const struct rule *rule)
     }
 }
 
-/* if the first option is present, all the other options must also
-   be present. */
+/*! \brief Define additionally required options for an option.
+
+    If the first option is present, all the other options must also
+    be present.
+
+    If it is enough if only one option from a set is present,
+    use G_option_requires() function.
+
+    \see G_option_collective()
+*/
 void G_option_requires_all(void *first, ...)
 {
     va_list ap;
@@ -258,7 +279,7 @@ static void check_requires_all(const struct rule *rule)
     }
 }
 
-/* if the first option is present, none of the other options may also
+/* if the first option is present, none of the other options may also (should?)
    be present. */
 void G_option_excludes(void *first, ...)
 {
