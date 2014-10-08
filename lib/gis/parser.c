@@ -290,19 +290,19 @@ struct GModule *G_define_module(void)
  *
  * The usual order a module calls functions is:
  *
- *  # G_gisinit()
- *  # G_define_module()
- *  # G_define_standard_flag()
- *  # G_define_standard_option()
- *  # G_define_flag()
- *  # G_define_option()
- *  # G_option_exclusive()
- *  # G_option_required()
- *  # G_option_requires()
- *  # G_option_requires_all()
- *  # G_option_excludes()
- *  # G_option_collective()
- *  # G_parser()
+ *  1. G_gisinit()
+ *  2. G_define_module()
+ *  3. G_define_standard_flag()
+ *  4. G_define_standard_option()
+ *  5. G_define_flag()
+ *  6. G_define_option()
+ *  7. G_option_exclusive()
+ *  8. G_option_required()
+ *  9. G_option_requires()
+ *  10. G_option_requires_all()
+ *  11. G_option_excludes()
+ *  12. G_option_collective()
+ *  13. G_parser()
  *
  * \param argc number of arguments
  * \param argv argument list
