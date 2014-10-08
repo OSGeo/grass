@@ -1,7 +1,9 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.series.accumulate</em> calculates (accumulated) raster value using growing degree days (GDDs)/Winkler indices's,
-Biologically Effective Degree Days (BEDD), Huglin heliothermal indices or an average approach from several input maps.
+<em>r.series.accumulate</em> calculates (accumulated) raster value 
+using growing degree days (GDDs)/Winkler indices's, Biologically 
+Effective Degree Days (BEDD), Huglin heliothermal indices or an average 
+approach from several input maps.
 <p>
 The flag <b>-a</b> determines the average computation of the input raster maps. 
 In case the flag is not set, the average calculation is:
@@ -18,8 +20,8 @@ In case the flag was set, the calculation changes to arithmetic mean
     gdd = average - lower
 </pre></div>
 <p>
-In case the <b>-a</b> is set, the Winkler indices are calculated instead of GDD,
-usually accumulated for the period April 1<sup>st</sup> to October 
+In case the <b>-a</b> is set, the Winkler indices are calculated instead
+of GDD, usually accumulated for the period April 1<sup>st</sup> to October 
 31<sup>st</sup> (northern hemisphere) or the period October 
 1<sup>st</sup> to April 30<sup>th</sup> 
 (southern hemisphere).
@@ -49,12 +51,13 @@ the maximum value and <em>average</em> the average value.
 The <em>min</em>, <em>max</em> and <em>average</em> values
 are automatically calculated from the input maps.
 <p>
-The <em>shift</em> and <em>scale</em> values are applied directly to the 
-input values. The <em>lower</em> and <em>upper</em> maps, as well as the <em>range</em>
-options are applied to constrain the accumulation. In case the <em>lower</em> and <em>upper</em>
-maps are not provided the <em>limits</em> option with default values will be applied.
+The <em>shift</em> and <em>scale</em> values are applied directly to 
+the input values. The <em>lower</em> and <em>upper</em> maps, as well 
+as the <em>range</em> options are applied to constrain the 
+accumulation. In case the <em>lower</em> and <em>upper</em> maps are 
+not provided the <em>limits</em> option with default values will be 
+applied.
 <p>
-
 If an existing map is provided with the <em>basemap</em> option, the
 values of this map are added to the output.
 
@@ -126,7 +129,8 @@ r.series.accumulate in=MOD11A1.Day,MOD11A1.Night,MYD11A1.Day,MYD11A1.Night out=M
 <em>
 <a href="g.list.html">g.list</a>,
 <a href="g.region.html">g.region</a>,
-<a href="r.series.html">r.series</a>
+<a href="r.series.html">r.series</a>,
+<a href="r.series.interp.html">r.series.interp</a>
 </em>
 <p>
 <a href="http://grasswiki.osgeo.org/wiki/Large_raster_data_processing">Hints for large raster data processing</a>
