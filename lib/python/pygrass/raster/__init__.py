@@ -167,36 +167,30 @@ class RasterRow(RasterAbstractBase):
         self.mtype = mtype if mtype else self.mtype
         self.overwrite = overwrite if overwrite is not None else self.overwrite
 
-        # check if exist and instantiate all the private attributes
-        if self.exist():
-            self.info.read()
-            self.cats.mtype = self.mtype
-            self.cats.read()
-            self.hist.read()
-            if self.mode == 'r':
-                # the map exist, read mode
+        if self.mode == 'r':
+            if self.exist():
+                self.info.read()
+                self.cats.mtype = self.mtype
+                self.cats.read()
+                self.hist.read()
                 self._fd = libraster.Rast_open_old(self.name, self.mapset)
                 self._gtype = libraster.Rast_get_map_type(self._fd)
                 self.mtype = RTYPE_STR[self._gtype]
-#                try:
-#                    self.cats.read(self)
-#                    self.hist.read(self.name)
-#                except:
-#                    import ipdb; ipdb.set_trace()
-            elif self.overwrite:
-                if self._gtype is None:
-                    raise OpenError(_("Raster type not defined"))
-                self._fd = libraster.Rast_open_new(self.name, self._gtype)
             else:
-                str_err = _("Raster map <{0}> already exists")
-                raise OpenError(str_err.format(self))
-        else:
-            # Create a new map
-            if self.mode == 'r':
-                # check if we are in read mode
                 str_err = _("The map does not exist, I can't open in 'r' mode")
                 raise OpenError(str_err)
+        elif self.mode == 'w':
+            if self.exist():
+                if not self.overwrite:
+                    str_err = _("Raster map <{0}> already exists"
+                                " and will be not overwritten")
+                    raise OpenError(str_err.format(self))
+            if self._gtype is None:
+                raise OpenError(_("Raster type not defined"))
             self._fd = libraster.Rast_open_new(self.name, self._gtype)
+        else:
+            raise OpenError("Open mode: %r not supported,"
+                            " valid mode are: r, w")
         # read rows and cols from the active region
         self._rows = libraster.Rast_window_rows()
         self._cols = libraster.Rast_window_cols()
