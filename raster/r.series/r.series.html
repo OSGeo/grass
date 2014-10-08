@@ -2,6 +2,7 @@
 
 <em>r.series</em> makes each output cell value a function of the values
 assigned to the corresponding cells in the input raster map layers.
+<p>
 Following methods are available:
 
 <ul> 
@@ -22,38 +23,80 @@ Following methods are available:
  <li>tvalue: linear regression t-value
  <li>min_raster: raster map number with the minimum time-series value
  <li>max_raster: raster map number with the maximum time-series value
- </ul> 
+</ul> 
+
+Note that most parameters accept multiple answers, allowing multiple
+aggregates to be computed in a single run, e.g.:
+<p>
+<div class="code"><pre>
+r.series input=map1,...,mapN \
+         output=map.mean,map.stddev \
+	 method=average,stddev
+</pre></div>
+	
+or:
+<p>
+<div class="code"><pre>
+r.series input=map1,...,mapN \
+         output=map.p10,map.p50,map.p90 \
+         method=quantile,quantile,quantile \
+         quantile=0.1,0.5,0.9
+</pre></div>
+
+The same number of values must be provided for all options.
 
 <h2>NOTES</h2>
 
-With <em>-n</em> flag, any cell for which any of the corresponding input cells are
-NULL is automatically set to NULL (NULL propagation). The aggregate function is not
-called, so all methods behave this way with respect to the <em>-n</em> flag.
-<p>Without <em>-n</em> flag, the complete list of inputs for each cell (including
-NULLs) is passed to the aggregate function. Individual aggregates can
-handle data as they choose. Mostly, they just compute the aggregate
-over the non-NULL values, producing a NULL result only if all inputs
-are NULL.
-<p>The <em>min_raster</em> and <em>max_raster</em> methods generate a map with the
-number of the raster map that holds the minimum/maximum value of the
-time-series. The numbering starts at <em>0</em> up to <em>n</em> for the
-first and the last raster listed in <em>input=</em>, respectively. 
-<p>If the <em>range=</em> option is given, any values which fall outside
-that range will be treated as if they were NULL.
-The <em>range</em> parameter can be set to <em>low,high</em> thresholds:
-values outside of this range are treated as NULL (i.e., they will be
-ignored by most aggregates, or will cause the result to be NULL if -n is given).
-The <em>low,high</em> thresholds are floating point, so use <em>-inf</em> or
-<em>inf</em> for a single threshold (e.g., <em>range=0,inf</em> to ignore
-negative values, or <em>range=-inf,-200.4</em> to ignore values above -200.4).
-<p>Linear regression (slope, offset, coefficient of determination, t-value) assumes equal time intervals.
-If the data have irregular time intervals, NULL raster maps can be inserted into time series
-to make time intervals equal (see example).
+<h3>No-data (NULL) handling</h3>
+With <em>-n</em> flag, any cell for which any of the corresponding 
+input cells are NULL is automatically set to NULL (NULL propagation). 
+The aggregate function is not called, so all methods behave this way 
+with respect to the <em>-n</em> flag.
+
 <p>
+Without <em>-n</em> flag, the complete list of inputs for each cell 
+(including NULLs) is passed to the aggregate function. Individual 
+aggregates can handle data as they choose. Mostly, they just compute 
+the aggregate over the non-NULL values, producing a NULL result only if 
+all inputs are NULL.
+
+<h3>Minimum and maximum analysis</h3>
+The <em>min_raster</em> and <em>max_raster</em> methods generate a map 
+with the number of the raster map that holds the minimum/maximum value 
+of the time-series. The numbering starts at <em>0</em> up to <em>n</em> 
+for the first and the last raster listed in <em>input=</em>, 
+respectively. 
+
+<h3>Range analysis</h3>
+If the <em>range=</em> option is given, any values which fall outside 
+that range will be treated as if they were NULL. The <em>range</em> 
+parameter can be set to <em>low,high</em> thresholds: values outside of 
+this range are treated as NULL (i.e., they will be ignored by most 
+aggregates, or will cause the result to be NULL if -n is given). The 
+<em>low,high</em> thresholds are floating point, so use <em>-inf</em> 
+or <em>inf</em> for a single threshold (e.g., <em>range=0,inf</em> to 
+ignore negative values, or <em>range=-inf,-200.4</em> to ignore values 
+above -200.4).
+
+<h3>Linear regression</h3>
+Linear regression (slope, offset, coefficient of determination, 
+t-value) assumes equal time intervals. If the data have irregular time 
+intervals, NULL raster maps can be inserted into time series to make 
+time intervals equal (see example).
+
+<h3>Quantiles</h3>
+<em>r.series</em> can calculate arbitrary quantiles.
+
+<h3>Memory consumption</h3>
+
+Memory usage is not an issue, as <em>r.series</em> only needs to hold
+one row from each map at a time.
+
+<h3>Management of open file limits</h3>
 Number of raster maps to be processed is given by the limit of the
 operating system. For example, both the hard and soft limits are
-typically 1024. The soft limit can be changed with e.g. <tt>ulimit -n
-1500</tt> (UNIX-based operating systems) but not higher than the hard
+typically 1024. The soft limit can be changed with e.g. <tt>ulimit -n 1500</tt>
+(UNIX-based operating systems) but not higher than the hard
 limit. If it is too low, you can as superuser add an entry in
 
 <div class="code"><pre>
@@ -66,21 +109,23 @@ This would raise the hard limit to 1500 file. Be warned that more
 files open need more RAM. See also the Wiki page
 <a href="http://grasswiki.osgeo.org/wiki/Large_raster_data_processing">Hints for large raster data processing</a>.
 <p>
-For each map a weighting factor can be specified using the <em>weights</em> option.
-Using weights can be meaningful when computing sum or average of maps with different 
-temporal extent. The default weight is 1.0. The number of weights must be identical 
-with the number of input maps and must have the same order. Weights can also be specified in the
-input file.
+For each map a weighting factor can be specified using the 
+<em>weights</em> option. Using weights can be meaningful when computing 
+sum or average of maps with different temporal extent. The default 
+weight is 1.0. The number of weights must be identical with the number 
+of input maps and must have the same order. Weights can also be 
+specified in the input file.
 
 <p>
-Use the <em>file</em> option to analyze large amount of raster maps
-without hitting open files limit and the size limit of command line arguments. 
-The computation is slower than the <em>input</em> option method. 
-For every sinlge row in the output map(s) 
-all input maps are opened and closed. The amount of RAM will rise linear
-with the number of specified input maps. The input and file options are mutually exclusive.
-Input is a text file with a new line separated list of raster map names and optional weights.
-As separator between the map name and the weight the character "|" must be used.
+Use the <em>file</em> option to analyze large amount of raster maps 
+without hitting open files limit and the size limit of command line 
+arguments. The computation is slower than the <em>input</em> option 
+method. For every sinlge row in the output map(s) all input maps are 
+opened and closed. The amount of RAM will rise linear with the number 
+of specified input maps. The input and file options are mutually 
+exclusive. Input is a text file with a new line separated list of 
+raster map names and optional weights. As separator between the map 
+name and the weight the character "|" must be used.
 
 <h2>EXAMPLES</h2>
 
@@ -90,9 +135,13 @@ Using <em>r.series</em> with wildcards:
 r.series input="`g.list pattern='insitu_data.*' sep=,`" \
          output=insitu_data.stddev method=stddev
 </pre></div>
-<p>Note the <em>g.list</em> script also supports regular expressions for
+<p>
+Note the <em>g.list</em> script also supports regular expressions for
 selecting map names.
-<p>Using <em>r.series</em> with NULL raster maps:
+
+<p>
+Using <em>r.series</em> with NULL raster maps (in order to consider a
+"complete" time series):
 <br>
 <div class="code"><pre>
 r.mapcalc "dummy = null()"
@@ -117,8 +166,11 @@ EOF
 r.series file=input.txt out=result_sum meth=sum
 </pre></div>
 
-<p>Example to use the file option of r.series including weights. The weight 0.75
-should be assigned to map2. As the other maps do not have weights we can leave it out:
+<p>
+Example to use the file option of r.series including weights. The 
+weight 0.75 should be assigned to map2. As the other maps do not have 
+weights we can leave it out:
+
 <div class="code"><pre>
 cat > input.txt &lt;&lt; EOF
 map1
