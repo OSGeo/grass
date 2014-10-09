@@ -1,23 +1,34 @@
-/*
- *   r.in.bin
+
+/****************************************************************************
  *
- *   Copyright (C) 2000 by the GRASS Development Team
- *   Author: Bob Covill <bcovill tekmap.ns.ca>
+ * MODULE:       r.in.bin
+ * AUTHOR(S):    Jacques Bouchard, France (bouchard@onera.fr)
+ *               Bob Covill <bcovill tekmap.ns.ca>
+ *               Markus Metz
+ * PURPOSE:      Import binary files
+ * COPYRIGHT:    (C) 2000 - 2014 by the GRASS Development Team
  *
- *   This program is free software under the GPL (>=v2)
- *   Read the file COPYING coming with GRASS for details.
+ *               This program is free software under the GNU General Public
+ *               License (>=v2). Read the file COPYING that comes with GRASS
+ *               for details.
  *
- */
+ *****************************************************************************/
 
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <math.h>
 #include <sys/stat.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
 
 #include "gmt_grd.h"
+
+enum fliphv {
+    FLIP_H = 1,
+    FLIP_V = 2,
+};
 
 static void swap_2(void *p)
 {
@@ -163,18 +174,22 @@ static void convert_cell(
 static void convert_row(
     DCELL *raster, unsigned char *in_buf, int ncols,
     int is_fp, int is_signed, int bytes, int swap_flag,
-    double null_val)
+    double null_val, int flip)
 {
     unsigned char *ptr = in_buf;
-    int i;
+    int i, i2;
 
     for (i = 0; i < ncols; i++) {
 	DCELL x;
+
 	convert_cell(&x, ptr, is_fp, is_signed, bytes, swap_flag);
+	i2 = i;
+	if (flip & FLIP_H)
+	    i2 = ncols - i - 1;
 	if (x == null_val)
-	    Rast_set_d_null_value(&raster[i], 1);
+	    Rast_set_d_null_value(&raster[i2], 1);
 	else
-	    raster[i] = x;
+	    raster[i2] = x;
 	ptr += bytes;
     }
 }
@@ -188,6 +203,8 @@ int main(int argc, char *argv[])
 	struct Option *output;
 	struct Option *null;
 	struct Option *bytes;
+	struct Option *hbytes;
+	struct Option *bands;
 	struct Option *order;
 	struct Option *title;
 	struct Option *north;
@@ -196,6 +213,7 @@ int main(int argc, char *argv[])
 	struct Option *west;
 	struct Option *rows;
 	struct Option *cols;
+	struct Option *flip;
     } parm;
     struct
     {
@@ -204,18 +222,20 @@ int main(int argc, char *argv[])
 	struct Flag *gmt_hd;
 	struct Flag *sign;
 	struct Flag *swap;
-	struct Flag *flip;
     } flag;
+    char *desc = NULL;
     const char *input;
-    const char *output;
+    const char *outpre;
+    char output[GNAME_MAX];
     const char *title;
     double null_val = 0;
     int is_fp;
     int is_signed;
-    int bytes;
+    int bytes, hbytes;
+    int band, nbands, bsize;
     int order;
     int swap_flag;
-    int flipns;
+    int i, flip;
     struct Cell_head cellhd;
     int nrows, ncols;
     int grass_nrows, grass_ncols;
@@ -224,7 +244,7 @@ int main(int argc, char *argv[])
     RASTER_MAP_TYPE map_type;
     int fd;
     FILE *fp;
-    off_t file_size;
+    off_t file_size, band_off;
     struct GRD_HEADER header;
     int row;
     struct History history;
@@ -259,11 +279,6 @@ int main(int argc, char *argv[])
     flag.swap->description = _("Byte swap the data during import");
     flag.swap->guisection = _("Settings");
 
-    flag.flip = G_define_flag();
-    flag.flip->key = 'n';
-    flag.flip->description = _("Flip North and South");
-    flag.flip->guisection = _("Settings");
-
     flag.gmt_hd = G_define_flag();
     flag.gmt_hd->key = 'h';
     flag.gmt_hd->description = _("Get region info from GMT style header");
@@ -275,6 +290,7 @@ int main(int argc, char *argv[])
     parm.input->gisprompt = "old,bin,file";
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
+    parm.output->description = _("Output name or prefix if several bands are imported");
 
     parm.title = G_define_option();
     parm.title->key = "title";
@@ -290,6 +306,23 @@ int main(int argc, char *argv[])
     parm.bytes->options = "1,2,4,8";
     parm.bytes->description = _("Number of bytes per cell");
     parm.bytes->guisection = _("Settings");
+
+    parm.hbytes = G_define_option();
+    parm.hbytes->key = "header";
+    parm.hbytes->type = TYPE_INTEGER;
+    parm.hbytes->required = NO;
+    parm.hbytes->answer = "0";
+    parm.hbytes->description = _("Header size in bytes");
+    parm.hbytes->guisection = _("Settings");
+
+    parm.bands = G_define_option();
+    parm.bands->key = "bands";
+    parm.bands->type = TYPE_INTEGER;
+    parm.bands->required = NO;
+    parm.bands->answer = "1";
+    parm.bands->label = _("Number of bands in input file");
+    parm.bands->description = _("Bands must be in band-sequential order");
+    parm.bands->guisection = _("Settings");
 
     parm.order = G_define_option();
     parm.order->key = "order";
@@ -352,12 +385,34 @@ int main(int argc, char *argv[])
     parm.null->description = _("Set Value to NULL");
     parm.null->guisection = _("Settings");
 
+    parm.flip = G_define_option();
+    parm.flip->key = "flip";
+    parm.flip->type = TYPE_STRING;
+    parm.flip->required = NO;
+    parm.flip->options = "h,v";
+    parm.flip->multiple = YES;
+    parm.flip->label = _("Flip input horizontal and/or vertical");
+    G_asprintf(&desc,
+	       "h;%s;v;%s",
+	       _("Flip input horizontal (East - West)"),
+	       _("Flip input vertical (North - South)"));
+    parm.flip->descriptions = desc;
+    parm.flip->guisection = _("Settings");
+
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     input = parm.input->answer;
-    output = parm.output->answer;
+    outpre = parm.output->answer;
     title = parm.title->answer;
+
+    nbands = atoi(parm.bands->answer);
+    if (nbands < 1)
+	G_fatal_error(_("Option %s must be > 0"), parm.bands->key);
+    hbytes = atoi(parm.hbytes->answer);
+    if (hbytes < 0)
+	G_fatal_error(_("Option %s must be >= 0"), parm.hbytes->key);
 
     if (G_strcasecmp(parm.order->answer, "big") == 0)
 	order = 0;
@@ -374,10 +429,29 @@ int main(int argc, char *argv[])
 	order = G_is_little_endian() ? 0 : 1;
     }
 
+    if (flag.gmt_hd->answer && parm.flip->answer)
+	G_fatal_error(_("-%c and %s= are mutually exclusive"),
+		      flag.gmt_hd->key, parm.flip->key);
+    if (flag.gmt_hd->answer && hbytes > 0)
+	G_warning(_("Option %s= is ignored if -%c is set"),
+		    parm.hbytes->key, flag.gmt_hd->key);
+    if (flag.gmt_hd->answer && nbands > 1)
+	G_warning(_("Option %s= is ignored if -%c is set"),
+		    parm.bands->key, flag.gmt_hd->key);
+
     swap_flag = order == (G_is_little_endian() ? 0 : 1);
 
     is_signed = !!flag.sign->answer;
-    flipns = !!flag.flip->answer;
+
+    flip = 0;
+    if (parm.flip->answers) {
+	for (i = 0; parm.flip->answers[i]; i++) {
+	    if (parm.flip->answers[i][0] == 'h')
+		flip |= FLIP_H;
+	    if (parm.flip->answers[i][0] == 'v')
+		flip |= FLIP_V;
+	}
+    }
 
     is_fp = 0;
     bytes = 0;
@@ -461,6 +535,8 @@ int main(int argc, char *argv[])
     if (flag.gmt_hd->answer) {
 	read_gmt_header(&header, swap_flag, fp);
 	get_gmt_header(&header, &cellhd);
+	hbytes = 892;
+	nbands = 1;
     }
 
     /* Adjust Cell Header to New Values */
@@ -487,9 +563,7 @@ int main(int argc, char *argv[])
 	G_fatal_error("cols changed from %d to %d",
 		      grass_ncols, Rast_window_cols());
 
-    expected = (off_t) ncols * nrows * bytes;
-    if (flag.gmt_hd->answer)
-	expected += 892;
+    expected = (off_t) ncols * nrows * bytes * nbands + hbytes;
 
     if (file_size != expected) {
 	G_warning(_("File Size %"PRI_OFF_T" ... Total Bytes %"PRI_OFF_T),
@@ -500,46 +574,60 @@ int main(int argc, char *argv[])
     in_buf = G_malloc(ncols * bytes);
     out_buf = Rast_allocate_d_buf();
 
-    map_type = is_fp
-	? (bytes > 4
-	   ? DCELL_TYPE
-	   : FCELL_TYPE)
-	: CELL_TYPE;
+    map_type = is_fp ? (bytes > 4 ? DCELL_TYPE : FCELL_TYPE) : CELL_TYPE;
 
     in_buf = G_malloc(ncols * bytes);
     out_buf = Rast_allocate_d_buf();
 
-    fd = Rast_open_new(output, map_type);
+    bsize = log10(nbands) + 1;
+    if (!flag.gmt_hd->answer && hbytes > 0)
+	G_fseek(fp, hbytes, SEEK_SET);
 
-    for (row = 0; row < grass_nrows; row++) {
-	G_percent(row, nrows, 2);
+    for (band = 1; band <= nbands; band++) {
+	
+	if (nbands > 1) {
+	    G_message(_("Importing band %d..."), band);
+	    sprintf(output, "%s%0*d", outpre, bsize, band);
+	}
+	else
+	    sprintf(output, "%s", outpre);
 
-	if (flipns) {
-	    G_fseek(fp, (off_t) (grass_nrows - row - 1) * ncols * bytes, SEEK_SET);
+	fd = Rast_open_new(output, map_type);
+	
+	band_off = (off_t)nrows * ncols * bytes * (band - 1) + hbytes;
+
+	for (row = 0; row < grass_nrows; row++) {
+	    G_percent(row, nrows, 2);
+
+	    if (flip & FLIP_V) {
+		G_fseek(fp, (off_t) (grass_nrows - row - 1) * ncols * bytes + band_off,
+			SEEK_SET);
+	    }
+
+	    if (fread(in_buf, bytes, ncols, fp) != ncols)
+		G_fatal_error(_("Error reading data"));
+
+	    convert_row(out_buf, in_buf, ncols, is_fp, is_signed,
+			bytes, swap_flag, null_val, flip);
+
+	    Rast_put_d_row(fd, out_buf);
 	}
 
-	if (fread(in_buf, bytes, ncols, fp) != ncols)
-	    G_fatal_error(_("Error reading data"));
+	G_percent(row, nrows, 2);	/* finish it off */
 
-	convert_row(out_buf, in_buf, ncols, is_fp, is_signed,
-		    bytes, swap_flag, null_val);
+	Rast_close(fd);
 
-	Rast_put_d_row(fd, out_buf);
+	G_debug(1, "Creating support files for %s", output);
+
+	if (title)
+	    Rast_put_cell_title(output, title);
+
+	Rast_short_history(output, "raster", &history);
+	Rast_command_history(&history);
+	Rast_write_history(output, &history);
     }
 
-    G_percent(row, nrows, 2);	/* finish it off */
-
-    Rast_close(fd);
     fclose(fp);
-
-    G_debug(1, "Creating support files for %s", output);
-
-    if (title)
-	Rast_put_cell_title(output, title);
-
-    Rast_short_history(output, "raster", &history);
-    Rast_command_history(&history);
-    Rast_write_history(output, &history);
 
     return EXIT_SUCCESS;
 }

@@ -95,6 +95,27 @@ r.in.bin -sb input=e020n40.Bathmetry.srtm output=e020n40_topex \
 r.colors e020n40_topex rules=etopo2
 </pre></div>
 
+<h3>GPCP</h3>
+The following is a sample call of <em>r.in.bin</em> to import GPCP 1DD v1.2 data:
+<p> 
+<div class="code"><pre>
+YEAR="2000"
+MONTH="01"
+# number of days of this month
+MDAYS=`date -d"${YEAR}-${MONTH}-01 + 1 month - 1 day" +%d`
+r.in.bin in=gpcp_1dd_v1.2_p1d.${YEAR}${MONTH} out=gpcp_${YEAR}.${MONTH}. \
+         order=big bytes=4 -f header=1440 anull=-99999 \
+         n=90 s=-90 w=0 e=360 rows=180 cols=360 bands=$MDAYS
+</pre></div>
+<p>
+The following is a sample call of <em>r.in.bin</em> to import GPCP v2.2 data:
+<p> 
+<div class="code"><pre>
+r.in.bin in=gpcp_v2.2_psg.1979 out=gpcp_1979. \
+         order=big bytes=4 -f header=576 anull=-99999 \
+         n=90 s=-90 w=0 e=360 rows=72 cols=144 bands=12
+</pre></div>
+
 
 <h2>SEE ALSO</h2>
 
@@ -113,5 +134,6 @@ r.colors e020n40_topex rules=etopo2
 
 Jacques Bouchard, France (bouchard@onera.fr)<br>
 Bob Covill, Canada (bcovill@tekmap.ns.ca)<br>
+Markus Metz<br>
 Man page: Zsolt Felker (felker@c160.pki.matav.hu)
 <p><i>Last changed: $Date$</i>
