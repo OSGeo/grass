@@ -129,7 +129,7 @@ int main(int argc, char *argv[])
 
     cache_mb = atoi(memory->answer);
     if (cache_mb < 1) {
-	G_warning(_("Cache size must be at least 1 MiB, canging %d to 1"),
+	G_warning(_("Cache size must be at least 1 MiB, changing %d to 1"),
 	          cache_mb);
 	cache_mb = 1;
     }
