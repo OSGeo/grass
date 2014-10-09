@@ -26,6 +26,7 @@ ndwi: Normalized Difference Water Index colors
 population: color table covering human population classification breaks
 population_dens: color table covering human population density classification breaks
 precipitation: precipitation color table (0..2000mm)
+precipitation_daily: precipitation color table (0..1000mm)
 precipitation_monthly: precipitation color table (0..1000mm)
 rainbow: rainbow color table
 ramp: color ramp
