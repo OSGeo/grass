@@ -33,9 +33,10 @@ static int move(int, int);
 static int (*dot) (int, int);
 
 
-int begin_rasterization(int nrows, int f, int do_dense)
+int begin_rasterization(int cache_mb, int f, int do_dense)
 {
-    int i, size;
+    int i, size, nrows;
+    double row_mb;
     int pages;
 
     dense = (do_dense != 0);
@@ -45,12 +46,29 @@ int begin_rasterization(int nrows, int f, int do_dense)
 
     format = f;
 
+    G_get_set_window(&region);
+    G_get_set_window(&page);
+
+    switch (format) {
+    case USE_CELL:
+	row_mb = (double) region.cols * (sizeof(char) + sizeof(CELL)) /
+		 (1 << 20);
+	break;
+
+    case USE_DCELL:
+	row_mb = (double) region.cols * (sizeof(char) + sizeof(DCELL)) /
+	         (1 << 20);
+	dot = dcell_dot;
+	break;
+    }
+
+    nrows = cache_mb / row_mb;
+    if (nrows < 1)
+	nrows = 1;
+
     max_rows = nrows;
     if (max_rows <= 0)
 	max_rows = 512;
-
-    G_get_set_window(&region);
-    G_get_set_window(&page);
 
     pages = (region.rows + max_rows - 1) / max_rows;
 
