@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
     opt.pattern->type = TYPE_STRING;
     opt.pattern->required = NO;
     opt.pattern->multiple = NO;
-    opt.pattern->gisprompt = "old,element,element";
+    opt.pattern->gisprompt = "new,element,element";
     opt.pattern->description = _("Map name search pattern (default: all)");
     opt.pattern->guisection = _("Pattern");
 
@@ -102,7 +102,7 @@ int main(int argc, char *argv[])
     opt.exclude->type = TYPE_STRING;
     opt.exclude->required = NO;
     opt.exclude->multiple = NO;
-    opt.exclude->gisprompt = "old,element,element";
+    opt.exclude->gisprompt = "new,element,element";
     opt.exclude->description = _("Map name exclusion pattern (default: none)");
     opt.exclude->guisection = _("Pattern");
 
