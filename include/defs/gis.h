@@ -521,6 +521,7 @@ void G_option_exclusive(void *, ...);
 void G_option_required(void *, ...);
 void G_option_requires(void *, ...);
 void G_option_requires_all(void *, ...);
+void G_option_excludes(void *, ...);
 void G_option_collective(void *, ...);
 
 /* paths.c */
