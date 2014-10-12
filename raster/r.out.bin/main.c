@@ -341,7 +341,9 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (sscanf(parm.null->answer, "%lf", &null_val) != 1)
+    if (G_strcasecmp(parm.null->answer, "nan") == 0)
+	Rast_set_d_null_value(&null_val, 1);
+    else if (sscanf(parm.null->answer, "%lf", &null_val) != 1)
 	G_fatal_error(_("Invalid value for null (integers only)"));
 
     name = parm.input->answer;

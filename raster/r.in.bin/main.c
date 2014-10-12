@@ -228,7 +228,7 @@ int main(int argc, char *argv[])
     const char *outpre;
     char output[GNAME_MAX];
     const char *title;
-    double null_val = 0;
+    double null_val = 0.0/0.0;
     int is_fp;
     int is_signed;
     int bytes, hbytes;
@@ -494,7 +494,7 @@ int main(int argc, char *argv[])
     if (bytes != 1 && bytes != 2 && bytes != 4 && bytes != 8)
 	G_fatal_error(_("%s= must be 1, 2, 4 or 8"), parm.bytes->key);
 
-    if (parm.null->answer)
+    if (parm.null->answer && G_strcasecmp(parm.null->answer, "nan") != 0)
 	null_val = atof(parm.null->answer);
 
     cellhd.zone = G_zone();
