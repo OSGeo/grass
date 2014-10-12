@@ -19,6 +19,8 @@
 #
 #########################################################################
 
+RELDIR		:= $(subst $(GRASS_HOME)/,,$(CURDIR))
+
 # GRASS global directories and constants
 # platform specific dirs
 ARCH_DISTDIR	= $(GRASS_HOME)/dist.$(ARCH)
