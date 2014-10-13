@@ -1496,8 +1496,7 @@ class VectorAreasPage(TitledPage):
         """Function during entering: draw the raster map and the first vector
         feature"""
         if self.mapPanel is None:
-            self.mapPanel = RLiSetupMapPanel(self, samplingType=self.parent.samplingareapage.samplingtype,
-                                             graphicsType="line")
+            self.mapPanel = RLiSetupMapPanel(self, samplingType=self.parent.samplingareapage.samplingtype)
             self.sizer.Add(item=self.mapPanel, flag=wx.EXPAND, pos=(1, 0))
             self.sizer.AddGrowableCol(0)
             self.sizer.AddGrowableRow(1)
