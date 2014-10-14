@@ -12,7 +12,7 @@
 #
 #               Feature Codes: http://www.geonames.org/export/codes.html
 #
-# COPYRIGHT:    (c) 2008 Markus Neteler, GRASS Development Team
+# COPYRIGHT:    (c) 2008-2014 Markus Neteler, GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
@@ -34,7 +34,6 @@
 #%option G_OPT_V_OUTPUT
 #%end
 
-import sys
 import os
 import grass.script as grass
 
@@ -50,17 +49,17 @@ def main():
     s = grass.read_command("g.proj", flags='j')
     kv = grass.parse_key_val(s)
     if kv['+proj'] != 'longlat':
-	grass.fatal(_("This module only operates in LatLong/WGS84 locations"))
+        grass.fatal(_("This module only operates in LatLong/WGS84 locations"))
 
     # input test
     if not os.access(infile, os.R_OK):
-	grass.fatal(_("File <%s> not found") % infile)
+        grass.fatal(_("File <%s> not found") % infile)
 
     # DBF doesn't support lengthy text fields
     kv = grass.db_connection()
     dbfdriver = kv['driver'] == 'dbf'
     if dbfdriver:
-	grass.warning(_("Since DBF driver is used, the content of the 'alternatenames' column might be cut with respect to the original Geonames.org column content"))
+        grass.warning(_("Since DBF driver is used, the content of the 'alternatenames' column might be cut with respect to the original Geonames.org column content"))
 
     # let's go
     # change TAB to vertical bar
@@ -68,10 +67,10 @@ def main():
     inf = file(infile)
     outf = file(tmpfile, 'wb')
     for line in inf:
-	fields = line.rstrip('\r\n').split('\t')
-	line2 = '|'.join(fields) + '\n'
-	outf.write(line2)
-	num_places += 1
+        fields = line.rstrip('\r\n').split('\t')
+        line2 = '|'.join(fields) + '\n'
+        outf.write(line2)
+        num_places += 1
     outf.close()
     inf.close()
 
@@ -103,56 +102,55 @@ def main():
 
     # geonameid|name|asciiname|alternatenames|latitude|longitude|featureclass|featurecode|countrycode|cc2|admin1code|admin2code|admin3code|admin4code|population|elevation|gtopo30|timezone|modificationdate
 
-    # TODO: elevation seems to contain spurious char stuff :(
 
     # debug:
     # head -n 3 ${TMPFILE}.csv
 
     # use different column names limited to 10 chars for dbf
     if dbfdriver:
-	columns = ['geonameid integer',
-		   'name varchar(200)',
-		   'asciiname varchar(200)',
-		   'altname varchar(4000)',
-		   'latitude double precision',
-		   'longitude double precision',
-		   'featrclass varchar(1)',
-		   'featrcode varchar(10)',
-		   'cntrycode varchar(2)',
-		   'cc2 varchar(60)',
-		   'admin1code varchar(20)',
-		   'admin2code varchar(20)',
-		   'admin3code varchar(20)',
-		   'admin4code varchar(20)',
-		   'population integer',
-		   'elevation varchar(5)',
-		   'gtopo30 integer',
-		   'timezone varchar(50)',
-		   'mod_date date']
+        columns = ['geonameid integer',
+           'name varchar(200)',
+           'asciiname varchar(200)',
+           'altname varchar(4000)',
+           'latitude double precision',
+           'longitude double precision',
+           'featrclass varchar(1)',
+           'featrcode varchar(10)',
+           'cntrycode varchar(2)',
+           'cc2 varchar(60)',
+           'admin1code varchar(20)',
+           'admin2code varchar(20)',
+           'admin3code varchar(20)',
+           'admin4code varchar(20)',
+           'population integer',
+           'elevation integer',
+           'gtopo30 integer',
+           'timezone varchar(50)',
+           'mod_date date']
     else:
-	columns = ['geonameid integer',
-		   'name varchar(200)',
-		   'asciiname varchar(200)',
-		   'alternatename varchar(4000)',
-		   'latitude double precision',
-		   'longitude double precision',
-		   'featureclass varchar(1)',
-		   'featurecode varchar(10)',
-		   'countrycode varchar(2)',
-		   'cc2 varchar(60)',
-		   'admin1code varchar(20)',
-		   'admin2code varchar(20)',
-		   'admin3code varchar(20)',
-		   'admin4code varchar(20)',
-		   'population integer',
-		   'elevation varchar(5)',
-		   'gtopo30 integer',
-		   'timezone varchar(50)',
-		   'modification date']
+        columns = ['geonameid integer',
+           'name varchar(200)',
+           'asciiname varchar(200)',
+           'alternatename varchar(4000)',
+           'latitude double precision',
+           'longitude double precision',
+           'featureclass varchar(1)',
+           'featurecode varchar(10)',
+           'countrycode varchar(2)',
+           'cc2 varchar(60)',
+           'admin1code varchar(20)',
+           'admin2code varchar(20)',
+           'admin3code varchar(20)',
+           'admin4code varchar(20)',
+           'population integer',
+           'elevation integer',
+           'gtopo30 integer',
+           'timezone varchar(50)',
+           'modification date']
 
     grass.run_command('v.in.ascii', cat = 0, x = 6, y = 5, sep = '|',
-		      input = tmpfile, output = outfile,
-		      columns = columns)
+              input = tmpfile, output = outfile,
+              columns = columns)
 
     grass.try_remove(tmpfile)
 
@@ -162,4 +160,3 @@ def main():
 if __name__ == "__main__":
     options, flags = grass.parser()
     main()
-
