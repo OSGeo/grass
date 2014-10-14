@@ -68,6 +68,7 @@ SUBDIRS = \
 	v.report \
 	v.out.gps \
 	v.pack \
+        v.to.lines \
 	v.unpack \
 	v.what.vect \
 	wxpyimgview \
