@@ -114,6 +114,7 @@ int main(int argc, char *argv[])
 	_("'.' for current mapset; '*' for all mapsets in location");
     opt.separator = G_define_standard_option(G_OPT_F_SEP);
     opt.separator->answer = "newline";
+    opt.separator->guisection = _("Print");
 
     opt.region = G_define_standard_option(G_OPT_M_REGION);
     opt.region->label = _("Name of saved region for map search (default: not restricted)");
@@ -124,6 +125,7 @@ int main(int argc, char *argv[])
     opt.output->required = NO;
     opt.output->label = _("Name for output file");
     opt.output->description = _("If not given or '-' then standard output");
+    opt.output->guisection = _("Print");
 
     flag.regex = G_define_flag();
     flag.regex->key = 'r';

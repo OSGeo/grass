@@ -80,18 +80,6 @@ int main(int argc, char *argv[])
     opt.type->descriptions = M_get_option_desc(TRUE);
     opt.type->guidependency = "pattern,exclude,names,ignore";
 
-    opt.pattern = G_define_option();
-    opt.pattern->key = "pattern";
-    opt.pattern->type = TYPE_STRING;
-    opt.pattern->description = _("File name search pattern");
-    opt.pattern->guisection = _("Pattern");
-
-    opt.exclude = G_define_option();
-    opt.exclude->key = "exclude";
-    opt.exclude->type = TYPE_STRING;
-    opt.exclude->description = _("File name exclusion pattern (default: none)");
-    opt.exclude->guisection = _("Pattern");
-
     opt.names = G_define_option();
     opt.names->key = "names";
     opt.names->type = TYPE_STRING;
@@ -109,15 +97,29 @@ int main(int argc, char *argv[])
 	_("File names to ignore separated by a comma (default: none)");
     opt.ignore->guisection = _("Names");
 
+    opt.pattern = G_define_option();
+    opt.pattern->key = "pattern";
+    opt.pattern->type = TYPE_STRING;
+    opt.pattern->description = _("File name search pattern");
+    opt.pattern->guisection = _("Pattern");
+
+    opt.exclude = G_define_option();
+    opt.exclude->key = "exclude";
+    opt.exclude->type = TYPE_STRING;
+    opt.exclude->description = _("File name exclusion pattern (default: none)");
+    opt.exclude->guisection = _("Pattern");
+
     flag.regex = G_define_flag();
     flag.regex->key = 'r';
     flag.regex->description =
 	_("Use basic regular expressions instead of wildcards");
+    flag.regex->guisection = _("Pattern");
 
     flag.extended = G_define_flag();
     flag.extended->key = 'e';
     flag.extended->description =
 	_("Use extended regular expressions instead of wildcards");
+    flag.extended->guisection = _("Pattern");
 
     flag.force = G_define_flag();
     flag.force->key = 'f';
@@ -127,8 +129,7 @@ int main(int argc, char *argv[])
     flag.basemap = G_define_flag();
     flag.basemap->key = 'b';
     flag.basemap->description = _("Remove base raster maps");
-    flag.basemap->guisection = _("Raster");
-    
+
     G_option_exclusive(flag.regex, flag.extended, NULL);
     G_option_exclusive(opt.pattern, opt.names, NULL);
     G_option_exclusive(opt.exclude, opt.ignore, NULL);
