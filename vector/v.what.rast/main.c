@@ -220,6 +220,8 @@ int main(int argc, char *argv[])
 	/* Add point to cache */
 	row = Rast_northing_to_row(Points->y[0], &window);
 	col = Rast_easting_to_col(Points->x[0], &window);
+	if (col < 0 || col >= window.cols || row < 0 || row >= window.rows)
+	   continue;
 
 	cache[point_cnt].row = row;
 	cache[point_cnt].col = col;
