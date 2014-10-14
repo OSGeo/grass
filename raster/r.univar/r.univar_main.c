@@ -101,8 +101,13 @@ int main(int argc, char *argv[])
     G_add_keyword(_("statistics"));
     G_add_keyword(_("univariate statistics"));
     G_add_keyword(_("zonal statistics"));
-    module->description =
+
+    module->label =
 	_("Calculates univariate statistics from the non-null cells of a raster map.");
+    module->description =
+	_("Statistics include number of cells counted, minimum and maximum cell"
+	    " values, range, arithmetic mean, population variance, standard deviation,"
+	    " coefficient of variation, and sum.");
 
     /* Define the different options */
     set_params();
