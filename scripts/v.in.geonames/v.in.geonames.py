@@ -103,7 +103,6 @@ def main():
 
     # geonameid|name|asciiname|alternatenames|latitude|longitude|featureclass|featurecode|countrycode|cc2|admin1code|admin2code|admin3code|admin4code|population|elevation|gtopo30|timezone|modificationdate
 
-    # TODO: elevation seems to contain spurious char stuff :(
 
     # debug:
     # head -n 3 ${TMPFILE}.csv
