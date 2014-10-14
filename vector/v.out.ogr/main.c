@@ -190,6 +190,10 @@ int main(int argc, char *argv[])
     if (!options.layer->answer) {
 	char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
+	if (flags.append->answer)
+	    G_fatal_error(_("Appending to OGR layer requires option '%s'"),
+	                  options.layer->key);
+
 	if (G_name_is_fully_qualified(options.input->answer, xname, xmapset))
 	    options.layer->answer = G_store(xname);
 	else
@@ -456,22 +460,27 @@ int main(int argc, char *argv[])
     Ogr_driver = OGRGetDriver(drn);
     
     if (flags.append->answer) {
-	G_verbose_message(_("Append existing layer requires "
-			    "opening data source in update mode, forcing '-%c' flag"),
-			  flags.update->key);
-	flags.update->answer = TRUE;
-    }
-    
-    if (flags.update->answer) {
-	G_debug(1, "Update OGR data source");
+	G_debug(1, "Append to OGR layer");
 	Ogr_ds = OGR_Dr_Open(Ogr_driver, options.dsn->answer, TRUE);
+	
+	if (Ogr_ds == NULL) {
+	    G_debug(1, "Create OGR data source");
+	    Ogr_ds = OGR_Dr_CreateDataSource(Ogr_driver, options.dsn->answer,
+					     papszDSCO);
+	}
     }
     else {
-	G_debug(1, "Create OGR data source");
-	Ogr_ds = OGR_Dr_CreateDataSource(Ogr_driver, options.dsn->answer,
-					 papszDSCO);
+	if (flags.update->answer) {
+	    G_debug(1, "Update OGR data source");
+	    Ogr_ds = OGR_Dr_Open(Ogr_driver, options.dsn->answer, TRUE);
+	}
+	else {
+	    G_debug(1, "Create OGR data source");
+	    Ogr_ds = OGR_Dr_CreateDataSource(Ogr_driver, options.dsn->answer,
+					     papszDSCO);
+	}
     }
-    
+	
     CSLDestroy(papszDSCO);
     if (Ogr_ds == NULL)
 	G_fatal_error(_("Unable to open OGR data source '%s'"),
