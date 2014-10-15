@@ -4,7 +4,7 @@
 #include "voxel_traversal.h"
 
 void traverse(RASTER3D_Region * region, double *start, double *end,
-	      int *coordinates, int *size, int *coor_count)
+	      int **coordinates, int *size, int *coor_count)
 {
     double dx, dy, dz;
     int step_x, step_y, step_z;
@@ -81,15 +81,15 @@ void traverse(RASTER3D_Region * region, double *start, double *end,
 
 	    break;
 
-	coordinates[count * 3 + 0] = x;
-	coordinates[count * 3 + 1] = region->rows - y - 1;
-	coordinates[count * 3 + 2] = z;
+	(*coordinates)[count * 3 + 0] = x;
+	(*coordinates)[count * 3 + 1] = region->rows - y - 1;
+	(*coordinates)[count * 3 + 2] = z;
 	count++;
 
 	/* reallocation for cases when the steps would be too big */
 	if (*size <= count) {
 	    *size = 2 * (*size);
-	    coordinates = G_realloc(coordinates, (*size) * 3 * sizeof(int));
+	    *coordinates = G_realloc(*coordinates, (*size) * 3 * sizeof(int));
 	}
     }
     *coor_count = count;
