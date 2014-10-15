@@ -182,7 +182,7 @@ void compute_flowline(RASTER3D_Region * region, const struct Seed *seed,
 		    /* if not run for the 1. time and previous and next point coordinates
 		       differ by more than 1 voxel coordinate */
 		    if (coor_diff > 1) {
-			traverse(region, point, new_point, trav_coords, &size,
+			traverse(region, point, new_point, &trav_coords, &size,
 				 &trav_count);
 			for (j = 0; j < trav_count; j++) {
 			    value =
