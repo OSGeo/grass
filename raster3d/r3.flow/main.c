@@ -297,8 +297,8 @@ int main(int argc, char *argv[])
     G_option_exclusive(scalar_opt, vector_opt, NULL);
     G_option_required(flowlines_opt, flowacc_opt, NULL);
     G_option_requires(seed_opt, flowlines_opt, NULL);
-    G_option_requires(table_fl, flowlines_opt);
-    G_option_requires(sampled_opt, table_fl);
+    G_option_requires(table_fl, flowlines_opt, NULL);
+    G_option_requires(sampled_opt, table_fl, NULL);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
