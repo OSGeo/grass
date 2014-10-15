@@ -107,9 +107,9 @@ g.region rast=ortho_2001_t792_1m -p
 # set grey level color table 0% black 100% white
 r.colors ortho_2001_t792_1m color=grey
 # extract grey levels
-r.mapcalc "ortho_2001_t792_1m.greylevel = #ortho_2001_t792_1m"
+r.mapcalc "ortho_2001_t792_1m.greylevel = ortho_2001_t792_1m"
 # texture analysis
-r.texture ortho_2001_t792_1m.greylevel prefix=ortho_texture measure=asm -s 
+r.texture ortho_2001_t792_1m.greylevel prefix=ortho_texture method=asm -s 
 # display
 g.region n=221461 s=221094 w=638279 e=638694
 d.shadedmap drape=ortho_texture_ASM_0 rel=ortho_2001_t792_1m
