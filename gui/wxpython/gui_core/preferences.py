@@ -45,7 +45,7 @@ from grass.pydispatch.signal import Signal
 from grass.script import core as grass
 
 from core          import globalvar
-from core.gcmd     import RunCommand
+from core.gcmd     import RunCommand, GError
 from core.utils    import ListOfMapsets, GetColorTables, ReadEpsgCodes, _
 from core.settings import UserSettings
 from gui_core.dialogs import SymbolDialog
@@ -1441,9 +1441,16 @@ class PreferencesDialog(PreferencesBaseDialog):
         if dlg.ShowModal() == wx.ID_OK:
             # set default font and encoding environmental variables
             if dlg.font:
-                os.environ["GRASS_FONT"] = dlg.font
-                self.settings.Set(group = 'display', value = dlg.font,
-                                  key = 'font', subkey = 'type')
+                try:
+                    os.environ["GRASS_FONT"] = str(dlg.font)
+                    self.settings.Set(group='display', value=dlg.font,
+                                      key='font', subkey='type')
+                except UnicodeEncodeError:
+                    GError(parent=self, message=_("Failed to set default display font. "
+                                                  "Try different font."),
+                           showTraceback=True)
+                    dlg.Destroy()
+                    return
 
             if dlg.encoding and \
                     dlg.encoding != "ISO-8859-1":
