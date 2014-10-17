@@ -193,7 +193,7 @@ int avl_add(avl_tree * root, const generic_cell k, const long n)
 
 
 
-long avl_to_array(avl_node * root, long i, AVL_table * a)
+long avl_to_array(avl_node * root, long i, AVL_table a)
 {
 
     if (root != NULL) {
@@ -201,9 +201,8 @@ long avl_to_array(avl_node * root, long i, AVL_table * a)
 	if (a == NULL)
 	    G_fatal_error("avl, avl_to_array: null value");
 	else {
-	    a[i] = G_malloc(sizeof(AVL_tableRow));
-	    a[i]->k = root->key;
-	    a[i]->tot = root->counter;
+	    a[i].k = root->key;
+	    a[i].tot = root->counter;
 	    i++;
 	    i = avl_to_array(root->right_child, i, a);
 	}
