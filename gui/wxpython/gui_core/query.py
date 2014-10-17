@@ -173,10 +173,10 @@ class QueryDialog(wx.Dialog):
 
 def QueryTreeBuilder(data, column):
     """!Builds tree model from query results.
-    
+
     @param data query results as a dictionary
     @param column column name
-    
+
     @returns tree model
     """
     def addNode(parent, data, model):
@@ -185,8 +185,10 @@ def QueryTreeBuilder(data, column):
                 node = model.AppendNode(parent=parent, label=k)
                 addNode(parent=node, data=v, model=model)
             else:
+                if not isinstance(v, basestring):
+                    v = str(v)
                 node = model.AppendNode(parent=parent, label=k,
-                                        data={column: str(v)})
+                                        data={column: v})
 
     model = TreeModel(DictNode)
     for part in data:
