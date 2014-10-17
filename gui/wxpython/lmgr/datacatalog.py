@@ -243,9 +243,10 @@ class LocationMapTree(wx.TreeCtrl):
 
     def MakeBackup(self):
         """Make backup for case of change"""
-        self.glocation =  grass.gisenv()['LOCATION_NAME']
-        self.gmapset =  grass.gisenv()['MAPSET']
-    
+        gisenv = grass.gisenv()
+        self.glocation = gisenv['LOCATION_NAME']
+        self.gmapset = gisenv['MAPSET']
+
     def RestoreBackup(self):
         """Restore backup"""
         stringl = 'LOCATION_NAME='+self.glocation
