@@ -41,10 +41,6 @@ def main():
     infile  = options['input']
     outfile = options['output']
     
-
-    #### setup temporary file
-    tmpfile = grass.tempfile()
-
     #are we in LatLong location?
     s = grass.read_command("g.proj", flags='j')
     kv = grass.parse_key_val(s)
@@ -61,19 +57,8 @@ def main():
     if dbfdriver:
         grass.warning(_("Since DBF driver is used, the content of the 'alternatenames' column might be cut with respect to the original Geonames.org column content"))
 
-    # let's go
-    # change TAB to vertical bar
-    num_places = 0
-    inf = file(infile)
-    outf = file(tmpfile, 'wb')
-    for line in inf:
-        fields = line.rstrip('\r\n').split('\t')
-        line2 = '|'.join(fields) + '\n'
-        outf.write(line2)
-        num_places += 1
-    outf.close()
-    inf.close()
-
+    with open(infile) as f:
+        num_places = sum(1 for _ in f)
     grass.message(_("Converting %d place names...") % num_places)
 
     # pump data into GRASS:
@@ -148,11 +133,9 @@ def main():
            'timezone varchar(50)',
            'modification date']
 
-    grass.run_command('v.in.ascii', cat = 0, x = 6, y = 5, sep = '|',
-              input = tmpfile, output = outfile,
+    grass.run_command('v.in.ascii', cat = 0, x = 6, y = 5, sep = 'tab',
+              input = infile, output = outfile,
               columns = columns)
-
-    grass.try_remove(tmpfile)
 
     # write cmd history:
     grass.vector_history(outfile)
@@ -160,3 +143,4 @@ def main():
 if __name__ == "__main__":
     options, flags = grass.parser()
     main()
+
