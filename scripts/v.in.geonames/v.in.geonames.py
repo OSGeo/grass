@@ -41,10 +41,6 @@ def main():
     infile  = options['input']
     outfile = options['output']
     
-
-    #### setup temporary file
-    tmpfile = grass.tempfile()
-
     #are we in LatLong location?
     s = grass.read_command("g.proj", flags='j')
     kv = grass.parse_key_val(s)
@@ -140,8 +136,6 @@ def main():
     grass.run_command('v.in.ascii', cat = 0, x = 6, y = 5, sep = 'tab',
               input = infile, output = outfile,
               columns = columns)
-
-    grass.try_remove(tmpfile)
 
     # write cmd history:
     grass.vector_history(outfile)
