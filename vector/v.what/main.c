@@ -33,7 +33,7 @@
 int main(int argc, char **argv)
 {
     struct {
-	struct Flag *print, *topo, *shell, *json;
+	struct Flag *print, *topo, *shell;
     } flag;
     struct {
 	struct Option *map, *field, *coords, *maxdist, *type;
@@ -97,11 +97,6 @@ int main(int argc, char **argv)
     flag.shell->key = 'g';
     flag.shell->description = _("Print the stats in shell script style");
     flag.shell->guisection = _("Print");
-    
-    flag.json = G_define_flag();
-    flag.json->key = 'j';
-    flag.json->description = _("Print the stats in JSON");
-    flag.json->guisection = _("Print");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -116,9 +111,6 @@ int main(int argc, char **argv)
 	vect = opt.map->answers;
     else
 	G_fatal_error(_("No input vector maps!"));
-
-    if (flag.shell->answer && flag.json->answer)
-        G_fatal_error(_("Flags g and j are mutually exclusive"));
 
     maxd = atof(opt.maxdist->answer);
     type = Vect_option_to_types(opt.type);
@@ -186,7 +178,7 @@ int main(int argc, char **argv)
 	    ret = sscanf(buf, "%lf%c%lf", &xval, &ch, &yval);
 	    if (ret == 3 && (ch == ',' || ch == ' ' || ch == '\t')) {
 		what(Map, nvects, vect, xval, yval, maxd, type, flag.topo->answer,
-		     flag.print->answer, flag.shell->answer, flag.json->answer, field);
+		     flag.print->answer, flag.shell->answer, field);
 	    }
 	    else {
 		G_warning(_("Unknown input format, skipping: '%s'"), buf);
@@ -200,7 +192,7 @@ int main(int argc, char **argv)
 	    xval = atof(opt.coords->answers[i]);
 	    yval = atof(opt.coords->answers[i + 1]);
 	    what(Map, nvects, vect, xval, yval, maxd, type, flag.topo->answer,
-		 flag.print->answer, flag.shell->answer, flag.json->answer, field);
+		 flag.print->answer, flag.shell->answer, field);
 	}
     }
 
