@@ -247,13 +247,14 @@ class MapFrame(SingleMapFrame):
         except KeyError:
             sys.stderr.write(_("Unable to get GRASS version\n"))
             grassVersion = "?"
-        
+
+        gisenv = grass.gisenv()
         title = _("GRASS GIS %(version)s Map Display: %(id)s  - Location: %(loc)s@%(mapset)s") % \
-            { 'version' : grassVersion,
-              'id' : str(displayId),
-              'loc' : grass.gisenv()["LOCATION_NAME"],
-              'mapset' : grass.gisenv()["MAPSET"] }
-            
+            {'version': grassVersion,
+             'id': str(displayId),
+             'loc': gisenv["LOCATION_NAME"],
+             'mapset': gisenv["MAPSET"]}
+
         super(MapFrame, self).SetTitle(title)
 
     def _addToolbarVDigit(self):
