@@ -124,7 +124,6 @@ int calculate(int fd, struct area_entry *ad, double *result)
 
     avl_tree albero = NULL;
     AVL_table array;
-    //AVL_tableRow *array;
     generic_cell uc;
 
     uc.t = CELL_TYPE;
