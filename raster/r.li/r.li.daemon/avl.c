@@ -201,7 +201,6 @@ long avl_to_array(avl_node * root, long i, AVL_table a)
 	if (a == NULL)
 	    G_fatal_error("avl, avl_to_array: null value");
 	else {
-	    //a[i] = G_malloc(sizeof(AVL_tableRow));
 	    a[i].k = root->key;
 	    a[i].tot = root->counter;
 	    i++;
