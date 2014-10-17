@@ -258,11 +258,7 @@ def vector_db_select(map, layer=1, **kwargs):
     return {'columns': columns, 'values': values}
 
 
-json = None
-orderedDict = None
-
-
-def vector_what(map, coord, distance=0.0, ttype=None, encoding=None):
+def vector_what(map, coord, distance=0.0, ttype=None):
     """Query vector map at given locations
 
     To query one vector map at one location
@@ -340,7 +336,7 @@ def vector_what(map, coord, distance=0.0, ttype=None, encoding=None):
             coord_list.append('%f,%f' % (e, n))
 
     cmdParams = dict(quiet      = True,
-                     flags      = 'aj',
+                     flags      = 'ag',
                      map        = ','.join(map_list),
                      layer      = ','.join(layer_list),
                      coordinates = ','.join(coord_list),
@@ -349,7 +345,7 @@ def vector_what(map, coord, distance=0.0, ttype=None, encoding=None):
         cmdParams['type'] = ','.join(ttype)
 
     ret = read_command('v.what',
-                       **cmdParams).strip()
+                       **cmdParams)
 
     if "LC_ALL" in os.environ:
         os.environ["LC_ALL"] = locale
@@ -358,31 +354,62 @@ def vector_what(map, coord, distance=0.0, ttype=None, encoding=None):
     if not ret:
         return data
 
-    # lazy import
-    global json
-    global orderedDict
-    if json is None:
-        import json
-    if orderedDict is None:
+    # parse `v.what -g` output is a nightmare
+    # TODO: change `v.what -g` format or add parsable format (e.g. XML)
+    dict_attrb = None
+    dict_map = None
+    dict_layer = None
+    attr_pseudo_key = 'Attributes'
+    for item in ret.splitlines():
         try:
-            from collections import OrderedDict
-            orderedDict = OrderedDict
-        except ImportError:
-            orderedDict = dict
+            key, value = __builtin__.map(lambda x: x.strip(), item.split('=', 1))
+        except ValueError:
+            continue
+        if key in ('East', 'North'):
+            continue
 
-    if encoding:
-        result = json.loads(ret, object_pairs_hook=orderedDict, encoding=encoding)
-    else:
-        result = json.loads(ret, object_pairs_hook=orderedDict)
-    del result['Coordinates']
-    for vmap in result['Maps']:
-        cats = vmap.pop('Categories', None)
-        if cats:
-            for cat in cats:
-                tmp = vmap.copy()
-                tmp.update(cat)
-                data.append(tmp)
+        if key == 'Map':
+            # attach the last one from the previous map
+            if dict_map is not None:
+                dict_main = copy.copy(dict_map)
+                if dict_layer is not None:
+                    dict_main.update(dict_layer)
+                data.append(dict_main)
+            dict_map = {key : value}
+            dict_layer = None
+            dict_attrb = None
+        elif key == 'Layer':
+            if not dict_attrb:
+                # attach the last the previous Layer
+                if dict_layer is not None:
+                    dict_main = copy.copy(dict_map)
+                    dict_main.update(dict_layer)
+                    data.append(dict_main)
+                dict_layer = {key: int(value)}
+                dict_attrb = None
+            else:
+                dict_attrb[key] = value
+        elif key == 'Key_column':
+            dict_layer[key] = value
+            dict_attrb = dict()
+            dict_layer[attr_pseudo_key] = dict_attrb
+        elif dict_attrb is not None:
+            dict_attrb[key] = value
+        elif dict_layer is not None:
+            if key == 'Category':
+                dict_layer[key] = int(value)
+            else:
+                dict_layer[key] = value
         else:
-            data.append(vmap)
+            dict_map[key] = value
+            # TODO: there are some keys which has non-string values
+            # examples: Sq_Meters, Hectares, Acres, Sq_Miles
+
+    # attach the last one
+    if dict_map is not None:
+        dict_main = copy.copy(dict_map)
+        if dict_layer:
+            dict_main.update(dict_layer)
+        data.append(dict_main)
 
     return data
