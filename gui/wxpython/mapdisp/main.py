@@ -80,8 +80,9 @@ class DMonMap(Map):
 
         # generated file for g.pnmcomp output for rendering the map
         self.mapfile = monFile['map'] + '.ppm'
-        # signal sent when d.out.file appears in cmd file, attribute is cmd
+        # signal sent when d.out.file/d.to.rast appears in cmd file, attribute is cmd
         self.saveToFile = Signal('DMonMap.saveToFile')
+        self.dToRast = Signal('DMonMap.dToRast')
         # signal sent when d.what.rast/vect appears in cmd file, attribute is cmd
         self.query = Signal('DMonMap.query')
 
@@ -99,12 +100,15 @@ class DMonMap(Map):
             fd.close()
             # detect d.out.file, delete the line from the cmd file and export graphics
             if len(lines) > 0:
-                if lines[-1].startswith('d.out.file'):
-                    dOutFileCmd = lines[-1].strip()
+                if lines[-1].startswith('d.out.file') or lines[-1].startswith('d.to.rast'):
+                    dCmd = lines[-1].strip()
                     fd = open(self.cmdfile, 'w')
                     fd.writelines(lines[:-1])
                     fd.close()
-                    self.saveToFile.emit(cmd=utils.split(dOutFileCmd))
+                    if lines[-1].startswith('d.out.file'):
+                        self.saveToFile.emit(cmd=utils.split(dCmd))
+                    else:
+                        self.dToRast.emit(cmd=utils.split(dCmd))
                     return
                 if lines[-1].startswith('d.what'):
                     dWhatCmd = lines[-1].strip()
@@ -360,6 +364,7 @@ class MapApp(wx.App):
         # self.SetTopWindow(Map)
         self.mapFrm.GetMapWindow().SetAlwaysRenderEnabled(True)
         self.Map.saveToFile.connect(lambda cmd: self.mapFrm.DOutFile(cmd))
+        self.Map.dToRast.connect(lambda cmd: self.mapFrm.DToRast(cmd))
         self.Map.query.connect(lambda ltype, maps: self.mapFrm.SetQueryLayersAndActivate(ltype=ltype, maps=maps))
         self.mapFrm.Show()
         

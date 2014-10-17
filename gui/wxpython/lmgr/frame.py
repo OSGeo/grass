@@ -670,6 +670,16 @@ class GMFrame(wx.Frame):
             GUI(parent=self, show=False).ParseCommand(command,
                                                       completed=(self.GetMapDisplay().DOutFileOptData,
                                                                  '', ''))
+        elif layertype == 'torast':
+            if len(command) <= 1:
+                task = GUI(parent=self, show=True).ParseCommand(command,
+                                                                completed=(self.GetMapDisplay().DToRastOptData,
+                                                                '', ''))
+            else:
+                task = GUI(parent=self, show=None).ParseCommand(command,
+                                                                completed=(self.GetMapDisplay().DToRastOptData,
+                                                                '', ''))
+                self.GetMapDisplay().DToRast(command=task.get_cmd())
         else:
             # add layer into layer tree
             lname, found = GetLayerNameFromCmd(command, fullyQualified = True,
