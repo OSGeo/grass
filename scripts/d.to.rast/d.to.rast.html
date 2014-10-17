@@ -1,0 +1,51 @@
+<h2>DESCRIPTION</h2>
+
+<em>d.to.rast</em> saves the content of the currently selected
+monitor into a raster map. The active monitor can be selected
+with <em>d.mon</em>. <em>d.to.rast</em> can be run from GUI
+command console, too. This module is not sensitive to computational region settings.
+
+<h2>EXAMPLE</h2>
+We combine different raster and vector map layers to create a composite layer
+which can be draped over elevation in 3D view.
+First, we add a couple of maps to layer manager:
+
+<div class="code"><pre>
+g.region rast=elevation
+d.rast map=elevation
+d.rast map=lakes
+d.vect map=roadsmajor width=4
+d.vect map=roadsmajor width=2 color=yellow
+
+# create a raster map from the display
+d.to.rast output=composite
+</pre></div>
+
+<p>
+Then uncheck all layers except for elevation and switch to 3D view.
+In Data tab, set color map to the newly created composite map.
+
+<p>
+<center>
+<img src="d_to_rast_3D_example.jpg">
+<p>
+Figure: Raster map created by <em>d.to.rast</em> draped over digital elevation model.
+</center>
+
+
+
+<h2>SEE ALSO</h2>
+ 
+<em>
+  <a href="d.out.file.html">d.out.file</a>,
+  <a href="d.erase.html">d.erase</a>,
+  <a href="d.rast.html">d.rast</a>,
+  <a href="d.vect.html">d.vect</a>,
+  <a href="d.mon.html">d.mon</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+Anna Petrasova, <a href="http://gis.ncsu.edu/osgeorel/">NCSU OSGeoREL</a>
+
+<p><i>Last changed: $Date$</i>

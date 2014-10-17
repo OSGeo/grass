@@ -17,7 +17,7 @@ static int nlines = 50;
 
 static void F_generate(const char *drvname, const char *dbname,
 		       const char *tblname, const char *key, int keyval,
-		       char **form)
+		       int script, int json, char **form)
 {
     int col, ncols, sqltype, more;
     char buf[5000];
@@ -87,8 +87,14 @@ static void F_generate(const char *drvname, const char *dbname,
 	    colname = db_get_column_name(column);
 
 	    G_debug(2, "%s: %s", colname, db_get_string(&str));
-
-	    sprintf(buf, "%s : %s\n", colname, db_get_string(&str));
+	    if (json) {
+		sprintf(buf, "%s\"%s\": \"%s\"", col == 0 ? "" : ",\n",
+			colname, db_get_string(&str));
+	    }
+	    else if (script)
+		sprintf(buf, "%s=%s\n", colname, db_get_string(&str));
+	    else
+		sprintf(buf, "%s : %s\n", colname, db_get_string(&str));
 	    db_append_string(&html, buf);
 	}
     }
@@ -106,7 +112,7 @@ static void F_generate(const char *drvname, const char *dbname,
 }
 
 void what(struct Map_info *Map, int nvects, char **vect, double east, double north,
-          double maxdist, int qtype, int topo, int showextra, int script, int *field)
+          double maxdist, int qtype, int topo, int showextra, int script, int json, int *field)
 {
     int type;
     char east_buf[40], north_buf[40];
@@ -173,6 +179,9 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 		    fprintf(stdout, "East=%s\nNorth=%s\n", east_buf,
 			    north_buf);
 		}
+		else if (json){
+		    fprintf(stdout, "{\"Coordinates\": {\"East\": %s, \"North\": %s}", east_buf,
+			    north_buf);}
 		else {
 		    fprintf(stdout, "East: %s\nNorth: %s\n", east_buf,
 			    north_buf);
@@ -188,6 +197,14 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 	if (script) {
 	    fprintf(stdout, "\nMap=%s\nMapset=%s\n", Map[i].name,
 		    Map[i].mapset);
+	}
+	else if (json) {
+	    if (!i)
+		fprintf(stdout, ",\n\"Maps\":\n[{\"Map\": \"%s\",\n\"Mapset\": \"%s\"",
+			Map[i].name, Map[i].mapset);
+	    else
+		fprintf(stdout, ",\n{\"Map\": \"%s\",\n\"Mapset\": \"%s\"",
+			Map[i].name, Map[i].mapset);
 	}
 	else {
 	    fprintf(stdout, "%s", SEP);
@@ -252,6 +269,12 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 			    "Id=%d\nType=%s\nLeft=%d\nRight=%d\n",
 			    line, buf, left, right);
 		}
+		else if (json) {
+		    fprintf(stdout, ",\n\"Feature_max_distance\": %f", maxdist);
+		    fprintf(stdout,
+			    ",\n\"Id\": %d,\n\"Type\": \"%s\",\n\"Left\": %d,\n\"Right\": %d",
+			    line, buf, left, right);
+		}
 		else {
 		    fprintf(stdout, "Looking for features within: %f\n",
 			    maxdist);
@@ -283,6 +306,11 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 				_("Node[%d]=%d\nNumber_lines=%d\nCoordinates=%.6f,%.6f,%.6f\n"),
 				n, node[n], nnlines, nx, ny, nz);
 		    }
+		    else if (json) {
+			fprintf(stdout,
+				_(",\n\"Node[%d]\": %d,\n\"Number_lines\": %d,\n\"Coordinates\": %.6f,%.6f,%.6f"),
+				n, node[n], nnlines, nx, ny, nz);
+		    }
 		    else {
 			fprintf(stdout,
 				_("Node[%d]: %d\nNumber of lines: %d\nCoordinates: %.6f, %.6f, %.6f\n"),
@@ -296,6 +324,10 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 			    Vect_get_node_line_angle(&(Map[i]), node[n], nli);
 			if (script) {
 			    fprintf(stdout, "Id=%5d\nAngle=%.8f\n",
+				    nodeline, angle);
+			}
+			else if (json) {
+			    fprintf(stdout, ",\n\"Id\": %5d,\n\"Angle\": %.8f",
 				    nodeline, angle);
 			}
 			else {
@@ -312,6 +344,12 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 		    fprintf(stdout, "Id=%d\n", line);
 		    if (type & GV_LINES)
 			fprintf(stdout, "Length=%f\n", l);
+		}
+		else if (json) {
+		    fprintf(stdout, ",\n\"Type\": \"%s\"", buf);
+		    fprintf(stdout, ",\n\"Id\": %d", line);
+		    if (type & GV_LINES)
+			fprintf(stdout, ",\n\"Length\": %f", l);
 		}
 		else {
 		    fprintf(stdout, _("Type: %s\n"), buf);
@@ -330,6 +368,9 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 		    if (script) {
 			fprintf(stdout, "Point_height=%f\n", Points->z[0]);
 		    }
+		    else if (json) {
+			fprintf(stdout, ",\n\"Point_height\": %f", Points->z[0]);
+		    }
 		    else {
 			fprintf(stdout, _("Point height: %f\n"),
 				Points->z[0]);
@@ -347,6 +388,9 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 			if (script) {
 			    fprintf(stdout, "Line_height=%f\n", min);
 			}
+			else if (json) {
+			    fprintf(stdout, ",\n\"Line_height\": %f", min);
+			}
 			else {
 			    fprintf(stdout, _("Line height: %f\n"), min);
 			}
@@ -355,6 +399,11 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 			if (script) {
 			    fprintf(stdout,
 				    "Line_height_min=%f\nLine_height_max=%f\n",
+				    min, max);
+			}
+			else if (json) {
+			    fprintf(stdout,
+				    ",\n\"Line_height_min\": %f,\n\"Line_height_max\": %f",
 				    min, max);
 			}
 			else {
@@ -372,6 +421,9 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 		if (script) {
 		    fprintf(stdout, "Type=Area\nArea_height=%f\n", z);
 		}
+		else if (json) {
+		    fprintf(stdout, ",\n\"Type\": \"Area\",\n\"Area_height\": %f", z);
+		}
 		else {
 		fprintf(stdout, _("Type: Area\nArea height: %f\n"), z);
 		}
@@ -379,6 +431,9 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 	    else {
 		if (script) {
 		    fprintf(stdout, "Type=Area\n");
+		}
+		else if (json) {
+		    fprintf(stdout, ",\n\"Type\": \"Area\"");
 		}
 		else {
 		    fprintf(stdout, _("Type: Area\n"));
@@ -402,6 +457,10 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 		    fprintf(stdout, "Area=%d\nNumber_isles=%d\n", area,
 			    nisles);
 		}
+		else if (json) {
+		    fprintf(stdout, ",\n\"Area\": %d,\n\"Number_isles\": %d", area,
+			    nisles);
+		}
 		else {
 		    fprintf(stdout, _("Area: %d\nNumber of isles: %d\n"),
 			    area, nisles);
@@ -411,6 +470,9 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 		    isle = Vect_get_area_isle(&Map[i], area, isleidx);
 		    if (script) {
 			fprintf(stdout, "Isle[%d]=%d\n", isleidx, isle);
+		    }
+		    else if (json) {
+			fprintf(stdout, ",\n\"Isle[%d]\": %d", isleidx, isle);
 		    }
 		    else {
 			fprintf(stdout, _("Isle[%d]: %d\n"), isleidx, isle);
@@ -425,6 +487,10 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 			fprintf(stdout, "Island=%d\nIsland_area=%d\n", isle,
 				isle_area);
 		    }
+		    else if (json) {
+			fprintf(stdout, ",\n\"Island\": %d,\n\"Island_area\": %d", isle,
+				isle_area);
+		    }
 		    else {
 			fprintf(stdout, _("Island: %d In area: %d\n"), isle,
 				isle_area);
@@ -436,6 +502,12 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 		    fprintf(stdout, "Sq_Meters=%.3f\nHectares=%.3f\n",
 			    sq_meters, hectares);
 		    fprintf(stdout, "Acres=%.3f\nSq_Miles=%.4f\n",
+			    acres, sq_miles);
+		}
+		else if (json) {
+		    fprintf(stdout, ",\n\"Sq_Meters\": %.3f,\n\"Hectares\": %.3f",
+			    sq_meters, hectares);
+		    fprintf(stdout, ",\n\"Acres\": %.3f,\n\"Sq_Miles\": %.4f",
 			    acres, sq_miles);
 		}
 		else {
@@ -454,14 +526,20 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 
 	if (Cats->n_cats > 0) {
 	    int j;
-	    char *formbuf1, *formbuf2;
-
+	    char *formbuf1;
+	    if (json) {
+		fprintf(stdout, ",\n\"Categories\": [");
+	    }
 	    for (j = 0; j < Cats->n_cats; j++) {
 		G_debug(2, "field = %d  category = %d\n", Cats->field[j],
 			Cats->cat[j]);
 		if (script) {
 		    fprintf(stdout, "Layer=%d\nCategory=%d\n", Cats->field[j],
 			    Cats->cat[j]);
+		}
+		else if (json) {
+		    fprintf(stdout, "%s\n{\"Layer\": %d, \"Category\": %d", j == 0 ? "": ",", 
+			    Cats->field[j], Cats->cat[j]);
 		}
 		else {
 		    fprintf(stdout, _("Layer: %d\nCategory: %d\n"),
@@ -474,29 +552,46 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 				"Driver=%s\nDatabase=%s\nTable=%s\nKey_column=%s\n",
 				Fi->driver, Fi->database, Fi->table, Fi->key);
 		    }
+		    else if (json) {
+			fprintf(stdout,
+				",\n\"Driver\": \"%s\",\n\"Database\": \"%s\",\n\"Table\": \"%s\",\n\"Key_column\": \"%s\"",
+				Fi->driver, Fi->database, Fi->table, Fi->key);
+		    }
 		    else {
 			fprintf(stdout,
 				_("\nDriver: %s\nDatabase: %s\nTable: %s\nKey column: %s\n"),
 				Fi->driver, Fi->database, Fi->table, Fi->key);
 		    }
 		    F_generate(Fi->driver, Fi->database, Fi->table,
-			       Fi->key, Cats->cat[j], &form);
+			       Fi->key, Cats->cat[j], script, json, &form);
 
 		    if (script) {
-			formbuf1 = G_str_replace(form, " : ", "=");
-			formbuf2 = G_str_replace(formbuf1, " ", "_");
-			fprintf(stdout, "%s", formbuf2);
+			formbuf1 = G_str_replace(form, " ", "_");
+			fprintf(stdout, "%s", formbuf1);
 			G_free(formbuf1);
-			G_free(formbuf2);
 		    }
+		    else if (json)
+			fprintf(stdout, ",\n\"Attributes\": {%s}", form);
 		    else
 			fprintf(stdout, "%s", form);
 		    G_free(form);
 		    G_free(Fi);
 		}
+		if (json) {
+		    fprintf(stdout, "}");
+		}
+	    }
+	    if (json) {
+		fprintf(stdout, "]");
 	    }
 	}
+	if (json) {
+	    fprintf(stdout, "}");
+	}
     }				/* for nvects */
+    if (json) {
+        fprintf(stdout, "]}\n");
+    }
 
     fflush(stdout);
 }
