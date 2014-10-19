@@ -16,6 +16,13 @@
  *               License (>=v2). Read the file COPYING that comes with GRASS
  *               for details.
  *
+ * Implementation:
+ *  d.fontlist gets the list via D_font_list(), which calls COM_Font_list(),
+ *  which first reads the fonts from the file specified by $GRASS_FONT_CAP
+ *  (falling back to $GISBASE/etc/fontcap), then adds any fonts obtained by
+ *  the driver's Font_list method if provided (currently, only the cairo
+ *  driver implements this method).
+ * 
  *****************************************************************************/
 #include <stdio.h>
 #include <stdlib.h>
