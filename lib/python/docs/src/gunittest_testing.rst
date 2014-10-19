@@ -383,7 +383,7 @@ test things such as creation and removal of maps in error states).
 
 ::
 
-    from grass.gunittest import SimpleModule
+    from grass.gunittest.gmodules import SimpleModule
 
     class TestRInfoParameterHandling(TestCase):
         """Test r.info handling of wrong input of parameters."""
