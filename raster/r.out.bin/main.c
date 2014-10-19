@@ -341,7 +341,9 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (sscanf(parm.null->answer, "%lf", &null_val) != 1)
+    if (G_strcasecmp(parm.null->answer, "nan") == 0)
+	Rast_set_d_null_value(&null_val, 1);
+    else if (sscanf(parm.null->answer, "%lf", &null_val) != 1)
 	G_fatal_error(_("Invalid value for null (integers only)"));
 
     name = parm.input->answer;
@@ -364,7 +366,8 @@ int main(int argc, char *argv[])
 
     if (flag.swap->answer) {
 	if (strcmp(parm.order->answer, "native") != 0)
-	    G_fatal_error(_("order= and -s are mutually exclusive"));
+	    G_fatal_error(_("-%c and %s= are mutually exclusive"),
+			    flag.swap->key, parm.order->key);
 	order = G_is_little_endian() ? 0 : 1;
     }
 
@@ -373,7 +376,8 @@ int main(int argc, char *argv[])
     do_stdout = strcmp("-", outfile) == 0;
 
     if (flag.int_out->answer && flag.float_out->answer)
-	G_fatal_error(_("-i and -f are mutually exclusive"));
+	G_fatal_error(_("-%c and -%c are mutually exclusive"),
+			flag.int_out->key, flag.float_out->key);
 
     fd = Rast_open_old(name, "");
 
@@ -392,11 +396,13 @@ int main(int argc, char *argv[])
 	bytes = 2;
 
     if (is_fp && bytes < 4)
-	G_fatal_error(_("Floating-point output requires bytes=4 or bytes=8"));
+	G_fatal_error(_("Floating-point output requires %s=4 or %s=8"),
+			parm.bytes->key, parm.bytes->key);
 
 #ifndef HAVE_LONG_LONG_INT
     if (!is_fp && bytes > 4)
-	G_fatal_error(_("Integer output doesn't support bytes=8 in this build"));
+	G_fatal_error(_("Integer output doesn't support %s=8 in this build"),
+			parm.bytes->key);
 #endif
 
     G_get_window(&region);
@@ -433,12 +439,14 @@ int main(int argc, char *argv[])
     out_buf = G_malloc(ncols * bytes);
 
     if (is_fp) {
-	G_message(_("Exporting raster as floating values (bytes=%d)"), bytes);
+	G_message(_("Exporting raster as floating values (%s=%d)"),
+			parm.bytes->key, bytes);
 	if (flag.gmt_hd->answer)
 	    G_message(_("Writing GMT float format ID=1"));
     }
     else {
-	G_message(_("Exporting raster as integer values (bytes=%d)"), bytes);
+	G_message(_("Exporting raster as integer values (%s=%d)"),
+			parm.bytes->key, bytes);
 	if (flag.gmt_hd->answer)
 	    G_message(_("Writing GMT integer format ID=2"));
     }
