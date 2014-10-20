@@ -31,8 +31,8 @@
 #include <grass/manage.h>
 #include <grass/glocale.h>
 
-static int find_illegal_filenames(char **);
-
+/* construct_pattern.c */
+char *construct_pattern(char **);
 /* check_reclass.c */
 int check_reclass(const char *, const char *, int);
 
@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     result = EXIT_SUCCESS;
-    
+
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("map management"));
@@ -140,22 +140,15 @@ int main(int argc, char *argv[])
 
     if (opt.pattern->answer)
 	pattern = opt.pattern->answer;
-    else {
-	if (find_illegal_filenames(opt.names->answers))
-	    G_fatal_error(_("Illegal filenames not allowed "
-			    "in the names option."));
-	pattern = opt.names->answer;
-    }
+    else
+	pattern = construct_pattern(opt.names->answers);
 
-    exclude = opt.exclude->answer ? opt.exclude->answer : opt.ignore->answer;
     if (opt.exclude->answer)
 	exclude = opt.exclude->answer;
-    else {
-	if (opt.ignore->answer && find_illegal_filenames(opt.ignore->answers))
-	    G_fatal_error(_("Illegal filenames not allowed "
-			    "in the ignore option."));
-	exclude = opt.ignore->answer;
-    }
+    else if (opt.ignore->answer)
+	exclude = construct_pattern(opt.ignore->answers);
+    else
+	exclude = NULL;
 
     if ((flag.regex->answer || flag.extended->answer) && opt.pattern->answer)
 	filter = G_ls_regex_filter(pattern, 0, (int)flag.extended->answer);
@@ -232,16 +225,16 @@ int main(int argc, char *argv[])
 
 	rast = !G_strcasecmp(elem->alias, "rast");
 	files = G__ls(path, &num_files);
-	
+
 	for (j = 0; j < num_files; j++) {
 	    if (!flag.force->answer) {
 		fprintf(stdout, "%s/%s@%s\n", elem->alias, files[j], mapset);
 		continue;
 	    }
-	    
+
 	    if (rast && check_reclass(files[j], mapset, flag.basemap->answer))
 		continue;
-	    
+
 	    if (M_do_remove(n, (char *)files[j]) == 1)
 		result = EXIT_FAILURE;
 	}
@@ -257,17 +250,4 @@ int main(int argc, char *argv[])
 			      "remove them. Exiting."), flag.force->key);
 
     exit(result);
-}
-
-static int find_illegal_filenames(char **names)
-{
-    int i, found;
-
-    found = 0;
-    for (i = 0; names[i]; i++) {
-	if (G_legal_filename(names[i]) == -1)
-	    found = 1;
-    }
-
-    return found;
 }
