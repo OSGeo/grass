@@ -37,10 +37,9 @@ char *construct_pattern(char **names)
 	if (G_legal_filename(name) == -1)
 	    found_illegal_names = 1;
 
-	if (!i)
-	    strcpy(p, name);
-	else
-	    sprintf(p++, ",%s", name);
+	if (i)
+	    *p++ = ',';
+	strcpy(p, name);
 	p += strlen(name);
     }
 
