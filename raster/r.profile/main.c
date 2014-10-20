@@ -272,7 +272,7 @@ int do_profile(double e1, double e2, double n1, double n2,
 	       int coords, double res, int fd, int data_type, FILE * fp,
 	       char *null_string, const char *unit, double factor)
 {
-    float rows, cols, LEN;
+    double rows, cols, LEN;
     double Y, X, AZI;
 
     cols = e1 - e2;
