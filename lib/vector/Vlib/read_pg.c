@@ -1041,6 +1041,7 @@ int polygon_from_wkb(const unsigned char *wkb_data, int nbytes,
                      struct Format_info_cache *cache, int *nrings)
 {
     int data_offset, i, nsize, isize;
+    int num_of_rings;
     struct line_pnts *line_i;
 
     if (nbytes < 9 && nbytes != -1)
@@ -1054,13 +1055,14 @@ int polygon_from_wkb(const unsigned char *wkb_data, int nbytes,
     if (*nrings < 0) {
         return -1;
     }
-
+    num_of_rings = *nrings;
+    
     /* reallocate space for islands if needed */
-    Vect__reallocate_cache(cache, *nrings, FALSE);
-    cache->lines_num += *nrings;
+    Vect__reallocate_cache(cache, num_of_rings, FALSE);
+    cache->lines_num += num_of_rings;
 
     /* each ring has a minimum of 4 bytes (point count) */
-    if (nbytes != -1 && nbytes - 9 < (*nrings) * 4) {
+    if (nbytes != -1 && nbytes - 9 < num_of_rings * 4) {
         return error_corrupted_data(_("Length of input WKB is too small"));
     }
 
@@ -1070,7 +1072,7 @@ int polygon_from_wkb(const unsigned char *wkb_data, int nbytes,
 
     /* get the rings */
     nsize = 9;
-    for (i = 0; i < (*nrings); i++) {
+    for (i = 0; i < num_of_rings; i++) {
         if (cache->lines_next >= cache->lines_num)
             G_fatal_error(_("Invalid cache index %d (max: %d)"),
                           cache->lines_next, cache->lines_num);
