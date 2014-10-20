@@ -122,10 +122,10 @@ char *G_fully_qualified_name(const char *name, const char *mapset)
    - <i>name, xname</i> are char array of size GNAME_MAX
    - <i>mapset, xmapset</i> are char array of size GMAPSET_MAX
 
-  \param fullname map name
-  \param map mapset to check or NULL
-  \param[out] name map name
-  \param[out] mapset mapset name
+  \param name map name
+  \param mapset mapset to check or NULL
+  \param[out] xname map name
+  \param[out] xmapset mapset name
 
   \return  1 if input map name is fully qualified
   \return  0 if name is not fully qualified
