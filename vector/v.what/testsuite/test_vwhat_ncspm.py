@@ -44,8 +44,8 @@ Length: 2321.407296
 Layer: 1
 Category: 231
 
-Driver: sqlite
-Database: /home/anna/grassdata/nc_spm_08_grass7_test/PERMANENT/sqlite/sqlite.db
+Driver: ...
+Database: ...
 Table: roadsmajor
 Key column: cat
 cat : 231
@@ -64,8 +64,8 @@ Point height: 121.920000
 Layer: 1
 Category: 96
 
-Driver: sqlite
-Database: /home/anna/grassdata/nc_spm_08_grass7_test/PERMANENT/sqlite/sqlite.db
+Driver: ...
+Database: ...
 Table: precip_30ynormals_3d
 Key column: cat
 cat : 96
@@ -97,8 +97,8 @@ Sq Miles: 0.0036
 Layer: 1
 Category: 7168
 
-Driver: sqlite
-Database: /home/anna/grassdata/nc_spm_08_grass7_test/PERMANENT/sqlite/sqlite.db
+Driver: ...
+Database: ...
 Table: lakes
 Key column: cat
 cat : 7168
@@ -121,8 +121,8 @@ Id=231
 Length=2321.407296
 Layer=1
 Category=231
-Driver=sqlite
-Database=/home/anna/grassdata/nc_spm_08_grass7_test/PERMANENT/sqlite/sqlite.db
+Driver=...
+Database=...
 Table=roadsmajor
 Key_column=cat
 cat=231
@@ -140,8 +140,8 @@ Id=96
 Point_height=121.920000
 Layer=1
 Category=96
-Driver=sqlite
-Database=/home/anna/grassdata/nc_spm_08_grass7_test/PERMANENT/sqlite/sqlite.db
+Driver=...
+Database=...
 Table=precip_30ynormals_3d
 Key_column=cat
 cat=96
@@ -172,8 +172,8 @@ Acres=2.322
 Sq_Miles=0.0036
 Layer=1
 Category=7168
-Driver=sqlite
-Database=/home/anna/grassdata/nc_spm_08_grass7_test/PERMANENT/sqlite/sqlite.db
+Driver=...
+Database=...
 Table=lakes
 Key_column=cat
 cat=7168
@@ -223,16 +223,16 @@ class TestNCMaps(TestCase):
     def test_print_options(self):
         self.vwhat.flags['a'].value = True
         self.assertModule(self.vwhat)
-        self.assertMultiLineEqual(first=out2, second=self.vwhat.outputs.stdout)
+        self.assertLooksLike(reference=out2, actual=self.vwhat.outputs.stdout)
 
         self.vwhat.flags['g'].value = True
         self.assertModule(self.vwhat)
-        self.assertMultiLineEqual(first=out3, second=self.vwhat.outputs.stdout)
+        self.assertLooksLike(reference=out3, actual=self.vwhat.outputs.stdout)
 
     def test_threshold(self):
         self.vwhat.inputs['distance'].value = 100
         self.assertModule(self.vwhat)
-        self.assertMultiLineEqual(first=out4, second=self.vwhat.outputs.stdout)
+        self.assertLooksLike(reference=out4, actual=self.vwhat.outputs.stdout)
 
 
 if __name__ == '__main__':

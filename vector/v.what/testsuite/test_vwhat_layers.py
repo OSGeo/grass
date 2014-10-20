@@ -6,7 +6,7 @@ out1 = """East: 634243
 North: 226193
 ------------------------------------------------------------------
 Map: test_vector 
-Mapset: vector_what
+Mapset: ...
 Type: Area
 Sq Meters: 633834.281
 Hectares: 63.383
@@ -27,7 +27,7 @@ out2 = """East: 634243
 North: 226193
 ------------------------------------------------------------------
 Map: test_vector 
-Mapset: vector_what
+Mapset: ...
 Type: Area
 Sq Meters: 633834.281
 Hectares: 63.383
@@ -36,15 +36,15 @@ Sq Miles: 0.2447
 Layer: 1
 Category: 2
 
-Driver: sqlite
-Database: /home/anna/grassdata/nc_spm_08_grass7_test/vector_what/sqlite/sqlite.db
+Driver: ...
+Database: ...
 Table: t1
 Key column: cat_
 Layer: 1
 Category: 1
 
-Driver: sqlite
-Database: /home/anna/grassdata/nc_spm_08_grass7_test/vector_what/sqlite/sqlite.db
+Driver: ...
+Database: ...
 Table: t1
 Key column: cat_
 cat_ : 1
@@ -53,15 +53,15 @@ number : 6
 Layer: 2
 Category: 3
 
-Driver: sqlite
-Database: /home/anna/grassdata/nc_spm_08_grass7_test/vector_what/sqlite/sqlite.db
+Driver: ...
+Database: ...
 Table: t2
 Key column: cat_
 Layer: 2
 Category: 4
 
-Driver: sqlite
-Database: /home/anna/grassdata/nc_spm_08_grass7_test/vector_what/sqlite/sqlite.db
+Driver: ...
+Database: ...
 Table: t2
 Key column: cat_
 cat_ : 4
@@ -73,7 +73,7 @@ out3 = """East=634243
 North=226193
 
 Map=test_vector
-Mapset=vector_what
+Mapset=...
 Type=Area
 Sq_Meters=633834.281
 Hectares=63.383
@@ -81,14 +81,14 @@ Acres=156.624
 Sq_Miles=0.2447
 Layer=1
 Category=2
-Driver=sqlite
-Database=/home/anna/grassdata/nc_spm_08_grass7_test/vector_what/sqlite/sqlite.db
+Driver=...
+Database=...
 Table=t1
 Key_column=cat_
 Layer=1
 Category=1
-Driver=sqlite
-Database=/home/anna/grassdata/nc_spm_08_grass7_test/vector_what/sqlite/sqlite.db
+Driver=...
+Database=...
 Table=t1
 Key_column=cat_
 cat_=1
@@ -96,14 +96,14 @@ text=xxx
 number=6
 Layer=2
 Category=3
-Driver=sqlite
-Database=/home/anna/grassdata/nc_spm_08_grass7_test/vector_what/sqlite/sqlite.db
+Driver=...
+Database=...
 Table=t2
 Key_column=cat_
 Layer=2
 Category=4
-Driver=sqlite
-Database=/home/anna/grassdata/nc_spm_08_grass7_test/vector_what/sqlite/sqlite.db
+Driver=...
+Database=...
 Table=t2
 Key_column=cat_
 cat_=4
@@ -133,16 +133,16 @@ class TestMultiLayerMap(TestCase):
 
     def test_run(self):
         self.assertModule(self.vwhat)
-        self.assertMultiLineEqual(first=out1, second=self.vwhat.outputs.stdout)
+        self.assertLooksLike(reference=out1, actual=self.vwhat.outputs.stdout)
 
     def test_print_options(self):
         self.vwhat.flags['a'].value = True
         self.assertModule(self.vwhat)
-        self.assertMultiLineEqual(first=out2, second=self.vwhat.outputs.stdout)
+        self.assertLooksLike(reference=out2, actual=self.vwhat.outputs.stdout)
 
         self.vwhat.flags['g'].value = True
         self.assertModule(self.vwhat)
-        self.assertMultiLineEqual(first=out3, second=self.vwhat.outputs.stdout)
+        self.assertLooksLike(reference=out3, actual=self.vwhat.outputs.stdout)
 
 
 if __name__ == '__main__':
