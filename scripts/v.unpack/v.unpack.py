@@ -4,7 +4,7 @@
 #
 # MODULE:       v.unpack
 # AUTHOR(S):    Luca Delucchi
-#               
+#
 # PURPOSE:      Unpack up a vector map packed with v.pack
 # COPYRIGHT:    (C) 2010-2013 by the GRASS Development Team
 #
@@ -95,18 +95,25 @@ def main():
 
     # extract data
     tar.extractall()
+    if os.path.exists(os.path.join(map_name, 'coor')):
+        pass
+    elif os.path.exists(os.path.join(map_name, 'cell')):
+        grass.fatal(_("This GRASS GIS pack file contains raster data. Use "
+                      "r.unpack to unpack <%s>" % map_name))
+    else:
+        grass.fatal(_("Pack file unreadable"))
 
     # check projection compatibility in a rather crappy way
     loc_proj = os.path.join(mset_dir, '..', 'PERMANENT', 'PROJ_INFO')
     loc_proj_units = os.path.join(mset_dir, '..', 'PERMANENT', 'PROJ_UNITS')
 
     diff_result_1 = diff_result_2 = None
-    if not grass.compare_key_value_text_files(filename_a=os.path.join(tmp_dir,'PROJ_INFO'),
+    if not grass.compare_key_value_text_files(filename_a=os.path.join(tmp_dir, 'PROJ_INFO'),
                                               filename_b=loc_proj, proj=True):
         diff_result_1 = diff_files(os.path.join(tmp_dir, 'PROJ_INFO'),
                                          loc_proj)
 
-    if not grass.compare_key_value_text_files(filename_a=os.path.join(tmp_dir,'PROJ_UNITS'),
+    if not grass.compare_key_value_text_files(filename_a=os.path.join(tmp_dir, 'PROJ_UNITS'),
                                               filename_b=loc_proj_units,
                                               units=True):
         diff_result_2 = diff_files(os.path.join(tmp_dir, 'PROJ_UNITS'),
@@ -176,16 +183,16 @@ def main():
                                       from_table=from_table):
                 grass.fatal(_("Unable to copy table <%s> as table <%s>") % (from_table, to_table))
 
-            grass.verbose(_("Connect table <%s> to vector map <%s> at layer <%s>") % \
-                              (to_table, map_name, layer))
+            grass.verbose(_("Connect table <%s> to vector map <%s> at layer <%s>") %
+                           (to_table, map_name, layer))
 
             # and connect the new tables with the right layer
             if 0 != grass.run_command('v.db.connect', flags='o', quiet=True,
                                       driver=dbconn['driver'], database=todb,
                                       map=map_name, key=values[2],
                                       layer=layer, table=to_table):
-                grass.fatal(_("Unable to connect table <%s> to vector map <%s>") % \
-                                (to_table, map_name))
+                grass.fatal(_("Unable to connect table <%s> to vector map <%s>") %
+                             (to_table, map_name))
 
     grass.message(_("Vector map <%s> succesfully unpacked") % map_name)
 
