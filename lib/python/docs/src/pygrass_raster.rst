@@ -3,7 +3,8 @@
 Introduction to Raster classes
 ==============================
 
-Details about the architecture can be found in the `GRASS GIS 7 Programmer's Manual: GRASS Raster Library <http://grass.osgeo.org/programming7/rasterlib.html>`_
+Details about the GRASS GIS raster architecture can be found in the
+`GRASS GIS 7 Programmer's Manual: GRASS Raster Library <http://grass.osgeo.org/programming7/rasterlib.html>`_
 
 PyGRASS uses 4 different Raster classes, that respect the 4 different approaches
 of GRASS-C API. The classes use a standardized interface to keep methods
