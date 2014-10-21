@@ -55,6 +55,8 @@ class SQLBuilder(wx.Frame):
         self.vectmap = vectmap # fullname
         if not "@" in self.vectmap:
             self.vectmap = grass.find_file(self.vectmap, element = 'vector')['fullname']
+            if not self.vectmap:
+                grass.fatal(_("Vector map <%s> not found") % vectmap)
         self.mapname, self.mapset = self.vectmap.split("@", 1)
         
         # db info
