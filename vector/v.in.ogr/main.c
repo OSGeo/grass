@@ -344,16 +344,16 @@ int main(int argc, char *argv[])
 
     driver_name = db_get_default_driver_name();
 
-    if (strcmp(driver_name, "pg") == 0)
+    if (driver_name && strcmp(driver_name, "pg") == 0)
 	datetime_type = "timestamp";
-    else if (strcmp(driver_name, "dbf") == 0)
+    else if (driver_name && strcmp(driver_name, "dbf") == 0)
 	datetime_type = "varchar(22)";
     else
 	datetime_type = "datetime";
 
     /* dsn is 'PG:', check default connection settings */
     dsn = NULL;
-    if (strcmp(driver_name, "pg") == 0 &&
+    if (driver_name && strcmp(driver_name, "pg") == 0 &&
         G_strcasecmp(param.dsn->answer, "PG:") == 0) {
         const char *dbname;
         dbConnection conn;
@@ -433,12 +433,12 @@ int main(int argc, char *argv[])
 
     /* check encoding for given driver */
     if (param.encoding->answer) {
-        const char *driver_name;
+        const char *ogr_driver;
 
-        driver_name = OGR_Dr_GetName(OGR_DS_GetDriver(Ogr_ds));
-        if (strcmp(driver_name, "ESRI Shapefile") != 0 &&
-            strcmp(driver_name, "DXF") != 0)
-            G_warning(_("Encoding value not supported by OGR driver <%s>"), driver_name);
+        ogr_driver = OGR_Dr_GetName(OGR_DS_GetDriver(Ogr_ds));
+        if (strcmp(ogr_driver, "ESRI Shapefile") != 0 &&
+            strcmp(ogr_driver, "DXF") != 0)
+            G_warning(_("Encoding value not supported by OGR driver <%s>"), ogr_driver);
     }
 
     /* make a list of available layers */
