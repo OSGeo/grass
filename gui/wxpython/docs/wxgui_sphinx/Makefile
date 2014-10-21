@@ -6,26 +6,26 @@ include $(MODULE_TOPDIR)/include/Make/Rules.make
 
 # You can set these variables from the command line.
 SPHINXOPTS    =
-APIDOC := $(shell sphinx-apidoc2 --help 2>/dev/null)
+
+APIDOC := $(shell which sphinx-apidoc2)
 ifdef APIDOC
 SPHINXAPIDOC = sphinx-apidoc2
 else
-    APIDOC := $(shell sphinx-apidoc --help 2>/dev/null)
-    ifdef APIDOC
-	SPHINXAPIDOC = sphinx-apidoc
-    endif
+APIDOC := $(shell which sphinx-apidoc)
+ifdef APIDOC
+SPHINXAPIDOC = sphinx-apidoc
+endif
 endif
 
-BUILD := $(shell sphinx-build2 --version 2>/dev/null)
+BUILD := $(shell which sphinx-build2)
 ifdef BUILD
-    SPHINXBUILD = sphinx-build2
+SPHINXBUILD = sphinx-build2
 else
-    BUILD := $(shell sphinx-build --version 2>/dev/null)
-    ifdef BUILD
-	SPHINXBUILD = sphinx-build
-    endif
+BUILD := $(shell which sphinx-build)
+ifdef BUILD
+SPHINXBUILD = sphinx-build
 endif
-
+endif
 
 PAPER         =
 BUILDDIR      = _build
