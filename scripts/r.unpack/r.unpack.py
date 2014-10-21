@@ -88,6 +88,14 @@ def main():
     tar.extractall()
     os.chdir(data_name)
 
+    if os.path.exists('cell'):
+        pass
+    elif os.path.exists('coor'):
+        grass.fatal(_("This GRASS GIS pack file contains vector data. Use "
+                      "v.unpack to unpack <%s>" % map_name))
+    else:
+        grass.fatal(_("Pack file unreadable"))
+
     # check projection compatibility in a rather crappy way
     diff_result_1 = diff_result_2 = None
     proj_info_file_1 = 'PROJ_INFO'
