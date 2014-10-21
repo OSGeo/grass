@@ -218,7 +218,7 @@ class SQLBuilder(wx.Frame):
 
         # go to
         gotosizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.goto = wx.TextCtrl(parent = self.valuespanel, id = wx.ID_ANY)
+        self.goto = wx.TextCtrl(parent = self.valuespanel, id = wx.ID_ANY, style = wx.TE_PROCESS_ENTER)
         gotosizer.Add(item = wx.StaticText(parent = self.valuespanel, id = wx.ID_ANY,
                                               label = _("Go to:")), proportion = 0,
                       flag = wx.ALIGN_CENTER_VERTICAL | wx.RIGHT, border = 5)
@@ -272,13 +272,14 @@ class SQLBuilder(wx.Frame):
         self.list_columns.Bind(wx.EVT_LISTBOX,   self.OnAddColumn)
         self.list_values.Bind(wx.EVT_LISTBOX,    self.OnAddValue)
         self.goto.Bind(wx.EVT_TEXT,              self.OnGoTo)
+        self.goto.Bind(wx.EVT_TEXT_ENTER,        self.OnAddValue)
 
         self.panel.SetAutoLayout(True)
         self.panel.SetSizer(self.pagesizer)
         self.pagesizer.Fit(self.panel)
         
         self.Layout()
-        self.SetMinSize((400, 550))
+        self.SetMinSize((400, 600))
         self.SetClientSize(self.panel.GetSize())
         self.CenterOnParent()
    
