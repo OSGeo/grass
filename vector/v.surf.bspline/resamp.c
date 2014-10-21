@@ -80,7 +80,7 @@ struct Point *P_Read_Raster_Region_masked(SEGMENT *mask_seg,
     for (row = startrow; row < endrow; row++) {
 	for (col = startcol; col < endcol; col++) {
 
-	    segment_get(mask_seg, &mask_val, row, col);
+	    Segment_get(mask_seg, &mask_val, row, col);
 	    if (!mask_val)
 		continue;
 
@@ -162,7 +162,7 @@ int P_Sparse_Raster_Points(SEGMENT *out_seg, struct Cell_head *Elaboration,
 	    dval = interpolation;
 	}
 	else {
-	    segment_get(out_seg, &dval, row, col);
+	    Segment_get(out_seg, &dval, row, col);
 	    if ((X > Overlap.E) && (X < General.E)) {
 		if ((Y > Overlap.N) && (Y < General.N)) {	/* (3) */
 		    csi = (General.E - X) / overlap;
@@ -218,7 +218,7 @@ int P_Sparse_Raster_Points(SEGMENT *out_seg, struct Cell_head *Elaboration,
 		}
 	    }
 	} /* end not in overlap */
-	segment_put(out_seg, &dval, row, col);
+	Segment_put(out_seg, &dval, row, col);
     }  /* for num_points */
 
     return 1;

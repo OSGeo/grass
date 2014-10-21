@@ -110,7 +110,7 @@ int seg_init_streams(SEGMENT *streams, SEGMENT *dirs, SEGMENT *elevation)
 
     for (r = 0; r < nrows; ++r)
 	for (c = 0; c < ncols; ++c) {
-	    segment_get(streams, &streams_cell, r, c);
+	    Segment_get(streams, &streams_cell, r, c);
 	    if (streams_cell > 0) {
 		if (outlets_num > (out_max - 1)) {
 		    out_max *= 2;
@@ -118,12 +118,12 @@ int seg_init_streams(SEGMENT *streams, SEGMENT *dirs, SEGMENT *elevation)
 			(POINT *) G_realloc(outlets, out_max * sizeof(POINT));
 		}
 
-		segment_get(dirs, &dirs_cell, r, c);
+		Segment_get(dirs, &dirs_cell, r, c);
 		d = abs(dirs_cell);
 		if (NOT_IN_REGION(d))
 		    next_stream = -1;	/* border */
 		else {
-		    segment_get(streams, &next_stream, NR(d), NC(d));
+		    Segment_get(streams, &next_stream, NR(d), NC(d));
 		    if (next_stream < 1)
 			next_stream = -1;
 		}
@@ -160,9 +160,9 @@ int seg_init_streams(SEGMENT *streams, SEGMENT *dirs, SEGMENT *elevation)
 	stat_streams[i].length = 0.;
 	stat_streams[i].elev_diff = 0.;
 	stat_streams[i].elev_spring = 0.;
-	segment_get(elevation, &(stat_streams[i].elev_outlet), outlets[i].r,
+	Segment_get(elevation, &(stat_streams[i].elev_outlet), outlets[i].r,
 		    outlets[i].c);
-	segment_get(streams, &(stat_streams[i].order), outlets[i].r,
+	Segment_get(streams, &(stat_streams[i].order), outlets[i].r,
 		    outlets[i].c);
 	stat_streams[i].basin_area = 0.;
 	stat_streams[i].cell_num = 0;
@@ -279,7 +279,7 @@ int seg_calculate_streams(SEGMENT *streams, SEGMENT *dirs,
 	cur_northing = window.north - (r + .5) * window.ns_res;
 	cur_easting = window.west + (c + .5) * window.ew_res;
 
-	segment_get(dirs, &dirs_cell, r, c);
+	Segment_get(dirs, &dirs_cell, r, c);
 	d = (dirs_cell == 0) ? 2 : abs(dirs_cell);
 
 	next_northing = window.north - (NR(d) + .5) * window.ns_res;
@@ -297,7 +297,7 @@ int seg_calculate_streams(SEGMENT *streams, SEGMENT *dirs,
 	    cur_easting = window.west + (c + .5) * window.ew_res;
 
 	    stat_streams[s].cell_num++;
-	    segment_get(elevation, &(stat_streams[s].elev_spring), r, c);
+	    Segment_get(elevation, &(stat_streams[s].elev_spring), r, c);
 
 	    for (i = 1; i < 9; ++i) {
 		if (NOT_IN_REGION(i))
@@ -307,8 +307,8 @@ int seg_calculate_streams(SEGMENT *streams, SEGMENT *dirs,
 		next_r = NR(i);
 		next_c = NC(i);
 
-		segment_get(streams, &streams_cell, next_r, next_c);
-		segment_get(dirs, &dirs_cell, next_r, next_c);
+		Segment_get(streams, &streams_cell, next_r, next_c);
+		Segment_get(dirs, &dirs_cell, next_r, next_c);
 
 		if (streams_cell == stat_streams[s].order && dirs_cell == j) {
 
@@ -320,9 +320,9 @@ int seg_calculate_streams(SEGMENT *streams, SEGMENT *dirs,
 			G_distance(next_easting, next_northing, cur_easting,
 				   cur_northing);
 
-		    segment_get(elevation, &elevation_next_cell, next_r,
+		    Segment_get(elevation, &elevation_next_cell, next_r,
 				next_c);
-		    segment_get(elevation, &elevation_cell, r, c);
+		    Segment_get(elevation, &elevation_cell, r, c);
 		    diff_elev = elevation_next_cell - elevation_cell;
 		    diff_elev = (diff_elev < 0) ? 0. : diff_elev;	/* water cannot flow up */
 
@@ -424,7 +424,7 @@ double seg_calculate_basins_area(SEGMENT *dirs, int r, int c)
 	    next_r = NR(i);
 	    next_c = NC(i);
 
-	    segment_get(dirs, &dirs_cell, next_r, next_c);
+	    Segment_get(dirs, &dirs_cell, next_r, next_c);
 
 	    if (dirs_cell == j) {	/* countributing cell */
 		area += G_area_of_cell_at_row(r);

@@ -88,10 +88,10 @@ int seg_close_raster_order(SEGMENT *streams, int number_of_streams,
     data_size = Rast_cell_size(CELL_TYPE);
     output_buffer = Rast_allocate_c_buf();
     streams_buffer = Rast_allocate_c_buf();
-    segment_flush(streams);
+    Segment_flush(streams);
 
     for (r = 0; r < nrows; ++r) {
-	if (0 > segment_get_row(streams, streams_buffer, r))
+	if (0 > Segment_get_row(streams, streams_buffer, r))
 	    G_warning(_("Unable to segment read row %d for raster map <%s>"),
 		      r, output_map_names[i]);
 

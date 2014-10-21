@@ -22,7 +22,7 @@
  * \brief Initialize segment structure and open segment file.
  *
  * Initializes the <b>seg</b> structure and prepares a temporary file. 
- * This fn is a wrapper for segment_format() and segment_init()
+ * This fn is a wrapper for Segment_format() and Segment_init()
  *
  * <b>Note:</b> The file with name fname will be created anew.
  *
@@ -44,7 +44,7 @@
  */
 
 int
-segment_open(SEGMENT *SEG, char *fname, off_t nrows, off_t ncols,
+Segment_open(SEGMENT *SEG, char *fname, off_t nrows, off_t ncols,
              int srows, int scols, int len, int nseg)
 {
     int ret;
@@ -66,7 +66,7 @@ segment_open(SEGMENT *SEG, char *fname, off_t nrows, off_t ncols,
 	G_warning(_("Unable to create segment file"));
 	return -1;
     }
-    if (0 > (ret = segment_format(SEG->fd, nrows, ncols, srows,
+    if (0 > (ret = Segment_format(SEG->fd, nrows, ncols, srows,
 							scols, len))) {
 	close(SEG->fd);
 	unlink(SEG->fname);
@@ -86,7 +86,7 @@ segment_open(SEGMENT *SEG, char *fname, off_t nrows, off_t ncols,
 	G_warning(_("Unable to re-open segment file"));
 	return -4;
     }
-    if (0 > (ret = segment_init(SEG, SEG->fd, nseg))) {
+    if (0 > (ret = Segment_init(SEG, SEG->fd, nseg))) {
 	close(SEG->fd);
 	unlink(SEG->fname);
 	if (ret == -1) {

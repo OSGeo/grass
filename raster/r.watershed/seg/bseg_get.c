@@ -4,7 +4,7 @@
 
 int bseg_get(BSEG * bseg, char *value, GW_LARGE_INT row, GW_LARGE_INT col)
 {
-    if (segment_get(&(bseg->seg), value, row, col) < 0) {
+    if (Segment_get(&(bseg->seg), value, row, col) < 0) {
 	G_warning("cseg_get(): could not read segment file");
 	return -1;
     }
@@ -15,7 +15,7 @@ int bseg_get_old(BSEG * bseg, CELL *value, int row, int col)
 {
     CELL x;
 
-    if (segment_get(&(bseg->seg), &x, row, col >> 3) < 0) {
+    if (Segment_get(&(bseg->seg), &x, row, col >> 3) < 0) {
 	G_warning("bseg_get(): could not read segment file");
 	return -1;
     }

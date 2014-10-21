@@ -214,8 +214,8 @@ int seg_number_of_tribs(int r, int c, SEGMENT *streams, SEGMENT *dirs)
 
 	j = DIAG(i);
 
-	segment_get(streams, &streams_cell, NR(i), NC(i));
-	segment_get(dirs, &dirs_cell, NR(i), NC(i));
+	Segment_get(streams, &streams_cell, NR(i), NC(i));
+	Segment_get(dirs, &dirs_cell, NR(i), NC(i));
 
 	if (streams_cell && dirs_cell == j)
 	    trib++;
@@ -258,8 +258,8 @@ int seg_stream_topology(SEGMENT *streams, SEGMENT *dirs,
     for (r = 0; r < nrows; ++r) {
 	G_percent(r, nrows, 2);
 	for (c = 0; c < ncols; ++c) {
-	    segment_get(streams, &streams_cell, r, c);
-	    segment_get(dirs, &dirs_cell, r, c);
+	    Segment_get(streams, &streams_cell, r, c);
+	    Segment_get(dirs, &dirs_cell, r, c);
 
 	    if (streams_cell) {
 		trib_num = seg_number_of_tribs(r, c, streams, dirs);
@@ -269,12 +269,12 @@ int seg_stream_topology(SEGMENT *streams, SEGMENT *dirs,
 		if (NOT_IN_REGION(d))
 		    next_stream = -1;
 		else
-		    segment_get(streams, &next_streams_cell, NR(d), NC(d));
+		    Segment_get(streams, &next_streams_cell, NR(d), NC(d));
 
 		if (d < 1 || NOT_IN_REGION(d) || !next_streams_cell)
 		    next_stream = -1;
 		else
-		    segment_get(streams, &next_stream, NR(d), NC(d));
+		    Segment_get(streams, &next_stream, NR(d), NC(d));
 
 		cur_stream = streams_cell;
 
@@ -313,9 +313,9 @@ int seg_stream_topology(SEGMENT *streams, SEGMENT *dirs,
 			j = DIAG(i);
 			next_r = NR(i);
 			next_c = NC(i);
-			segment_get(streams, &trib_stream_cell, next_r,
+			Segment_get(streams, &trib_stream_cell, next_r,
 				    next_c);
-			segment_get(dirs, &trib_dirs_cell, next_r, next_c);
+			Segment_get(dirs, &trib_dirs_cell, next_r, next_c);
 
 			if (trib_stream_cell && trib_dirs_cell == j)
 			    SA[cur_stream].trib[trib++] = trib_stream_cell;
@@ -354,7 +354,7 @@ int seg_stream_geometry(SEGMENT *streams, SEGMENT *dirs)
 	G_percent(s, init_num, 2);
 	r = (int)init_cells[s] / ncols;
 	c = (int)init_cells[s] % ncols;
-	segment_get(streams, &cur_stream, r, c);
+	Segment_get(streams, &cur_stream, r, c);
 	cur_length = 0;
 	done = 1;
 
@@ -367,14 +367,14 @@ int seg_stream_geometry(SEGMENT *streams, SEGMENT *dirs)
 	    cur_northing = window.north - (r + .5) * window.ns_res;
 	    cur_easting = window.west + (c + .5) * window.ew_res;
 
-	    segment_get(dirs, &dirs_cell, r, c);
+	    Segment_get(dirs, &dirs_cell, r, c);
 	    d = abs(dirs_cell);
 	    next_r = NR(d);
 	    next_c = NC(d);
 	    if (NOT_IN_REGION(d))
 		Rast_set_c_null_value(&next_stream, 1);
 	    else
-		segment_get(streams, &next_stream, next_r, next_c);
+		Segment_get(streams, &next_stream, next_r, next_c);
 
 	    if (d < 1 || NOT_IN_REGION(d) || !next_stream) {
 		cur_length = (window.ns_res + window.ew_res) / 2;

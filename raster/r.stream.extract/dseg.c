@@ -21,7 +21,7 @@ int dseg_open(DSEG *dseg, int srows, int scols, int nsegs_in_memory)
     }
     if (0 >
 	(errflag =
-	 segment_format(fd, Rast_window_rows(), Rast_window_cols(), srows, scols,
+	 Segment_format(fd, Rast_window_rows(), Rast_window_cols(), srows, scols,
 			sizeof(DCELL)))) {
 	close(fd);
 	unlink(filename);
@@ -40,7 +40,7 @@ int dseg_open(DSEG *dseg, int srows, int scols, int nsegs_in_memory)
 	G_warning(_("Unable to re-open segment file"));
 	return -4;
     }
-    if (0 > (errflag = segment_init(&(dseg->seg), fd, nsegs_in_memory))) {
+    if (0 > (errflag = Segment_init(&(dseg->seg), fd, nsegs_in_memory))) {
 	close(fd);
 	unlink(filename);
 	if (errflag == -1) {
@@ -59,7 +59,7 @@ int dseg_open(DSEG *dseg, int srows, int scols, int nsegs_in_memory)
 
 int dseg_close(DSEG *dseg)
 {
-    segment_release(&(dseg->seg));
+    Segment_release(&(dseg->seg));
     close(dseg->fd);
     unlink(dseg->filename);
     if (dseg->name) {
@@ -75,7 +75,7 @@ int dseg_close(DSEG *dseg)
 
 int dseg_put(DSEG *dseg, DCELL *value, int row, int col)
 {
-    if (segment_put(&(dseg->seg), (DCELL *) value, row, col) < 0) {
+    if (Segment_put(&(dseg->seg), (DCELL *) value, row, col) < 0) {
 	G_warning(_("Unable to write segment file"));
 	return -1;
     }
@@ -84,7 +84,7 @@ int dseg_put(DSEG *dseg, DCELL *value, int row, int col)
 
 int dseg_put_row(DSEG *dseg, DCELL *value, int row)
 {
-    if (segment_put_row(&(dseg->seg), (DCELL *) value, row) < 0) {
+    if (Segment_put_row(&(dseg->seg), (DCELL *) value, row) < 0) {
 	G_warning(_("Unable to write segment file"));
 	return -1;
     }
@@ -93,7 +93,7 @@ int dseg_put_row(DSEG *dseg, DCELL *value, int row)
 
 int dseg_get(DSEG *dseg, DCELL *value, int row, int col)
 {
-    if (segment_get(&(dseg->seg), (DCELL *) value, row, col) < 0) {
+    if (Segment_get(&(dseg->seg), (DCELL *) value, row, col) < 0) {
 	G_warning(_("Unable to read segment file"));
 	return -1;
     }
@@ -114,7 +114,7 @@ int dseg_read_raster(DSEG *dseg, char *map_name, char *mapset)
     dbuffer = Rast_allocate_d_buf();
     for (row = 0; row < nrows; row++) {
 	Rast_get_d_row(map_fd, dbuffer, row);
-	if (segment_put_row(&(dseg->seg), (DCELL *) dbuffer, row) < 0) {
+	if (Segment_put_row(&(dseg->seg), (DCELL *) dbuffer, row) < 0) {
 	    G_free(dbuffer);
 	    Rast_close(map_fd);
 	    G_warning(_("Inable to segment put row %d for raster <%s>"),
@@ -141,10 +141,10 @@ int dseg_write_cellfile(DSEG *dseg, char *map_name)
     map_fd = Rast_open_new(map_name, DCELL_TYPE);
     nrows = Rast_window_rows();
     dbuffer = Rast_allocate_d_buf();
-    segment_flush(&(dseg->seg));
+    Segment_flush(&(dseg->seg));
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 1);
-	segment_get_row(&(dseg->seg), (DCELL *) dbuffer, row);
+	Segment_get_row(&(dseg->seg), (DCELL *) dbuffer, row);
 	Rast_put_row(map_fd, dbuffer, DCELL_TYPE);
     }
     G_percent(row, nrows, 1);    /* finish it */

@@ -65,7 +65,7 @@ int seg_trib_nums(int r, int c, SEGMENT *streams, SEGMENT *dirs)
     int next_r, next_c;
     int streams_cell, streams_next_cell, dirs_next_cell;
 
-    segment_get(streams, &streams_cell, r, c);
+    Segment_get(streams, &streams_cell, r, c);
     for (i = 1; i < 9; ++i) {
 	if (NOT_IN_REGION(i))
 	    continue;
@@ -74,8 +74,8 @@ int seg_trib_nums(int r, int c, SEGMENT *streams, SEGMENT *dirs)
 	next_r = NR(i);
 	next_c = NC(i);
 
-	segment_get(streams, &streams_next_cell, next_r, next_c);
-	segment_get(dirs, &dirs_next_cell, next_r, next_c);
+	Segment_get(streams, &streams_next_cell, next_r, next_c);
+	Segment_get(dirs, &dirs_next_cell, next_r, next_c);
 
 	if (streams_next_cell > 0 && dirs_next_cell == j)
 	    trib_num++;
@@ -90,8 +90,8 @@ int seg_trib_nums(int r, int c, SEGMENT *streams, SEGMENT *dirs)
 	    next_r = NR(i);
 	    next_c = NC(i);
 
-	    segment_get(streams, &streams_next_cell, next_r, next_c);
-	    segment_get(dirs, &dirs_next_cell, next_r, next_c);
+	    Segment_get(streams, &streams_next_cell, next_r, next_c);
+	    Segment_get(dirs, &dirs_next_cell, next_r, next_c);
 
 	    if (streams_next_cell == streams_cell && dirs_next_cell == j)
 		trib_num--;
@@ -137,7 +137,7 @@ int seg_number_of_streams(SEGMENT *streams, SEGMENT *dirs, int *ordered)
 
     for (r = 0; r < nrows; ++r)
 	for (c = 0; c < ncols; ++c) {
-	    segment_get(streams, &streams_cell, r, c);
+	    Segment_get(streams, &streams_cell, r, c);
 	    if (streams_cell > 0)
 		if (seg_trib_nums(r, c, streams, dirs) != 1) {
 		    stream_num++;
@@ -286,7 +286,7 @@ int seg_build_streamlines(SEGMENT *streams, SEGMENT *dirs,
     /* finding inits */
     for (r = 0; r < nrows; ++r)
 	for (c = 0; c < ncols; ++c) {
-	    segment_get(streams, &streams_cell, r, c);
+	    Segment_get(streams, &streams_cell, r, c);
 
 	    if (streams_cell)
 		if (seg_trib_nums(r, c, streams, dirs) != 1) {	/* adding inits */
@@ -304,20 +304,20 @@ int seg_build_streamlines(SEGMENT *streams, SEGMENT *dirs,
 
 	r = (int)SA[i].init / ncols;
 	c = (int)SA[i].init % ncols;
-	segment_get(streams, &streams_cell, r, c);
+	Segment_get(streams, &streams_cell, r, c);
 	SA[i].order = streams_cell;
 	SA[i].number_of_cells = 0;
 
 	do {
 	    SA[i].number_of_cells++;
-	    segment_get(dirs, &dirs_cell, r, c);
+	    Segment_get(dirs, &dirs_cell, r, c);
 
 	    d = abs(dirs_cell);
 	    if (NOT_IN_REGION(d) || d == 0)
 		break;
 	    r = NR(d);
 	    c = NC(d);
-	    segment_get(streams, &streams_cell, r, c);
+	    Segment_get(streams, &streams_cell, r, c);
 	} while (streams_cell == SA[i].order);
 
 	SA[i].number_of_cells += 2;	/* add two extra points for point before init and after outlet */
@@ -341,10 +341,10 @@ int seg_build_streamlines(SEGMENT *streams, SEGMENT *dirs,
 	/* add one point contributing to init to calculate parameters */
 	/* what to do if there is no contributing points? */
 
-	segment_get(dirs, &dirs_cell, r, c);
-	segment_get(dirs, &dirs_prev_cell, prev_r, prev_c);
-	segment_get(elevation, &elevation_prev_cell, prev_r, prev_c);
-	segment_get(elevation, &elevation_cell, r, c);
+	Segment_get(dirs, &dirs_cell, r, c);
+	Segment_get(dirs, &dirs_prev_cell, prev_r, prev_c);
+	Segment_get(elevation, &elevation_prev_cell, prev_r, prev_c);
+	Segment_get(elevation, &elevation_cell, r, c);
 
 	SA[i].points[0] = (contrib_cell == 0) ? -1 : INDEX(prev_r, prev_c);
 	SA[i].elevation[0] = (contrib_cell == 0) ? -99999 :
@@ -360,7 +360,7 @@ int seg_build_streamlines(SEGMENT *streams, SEGMENT *dirs,
 
 	cell_num = 2;
 	do {
-	    segment_get(dirs, &dirs_cell, r, c);
+	    Segment_get(dirs, &dirs_cell, r, c);
 	    d = abs(dirs_cell);
 
 	    if (NOT_IN_REGION(d) || d == 0) {
@@ -375,16 +375,16 @@ int seg_build_streamlines(SEGMENT *streams, SEGMENT *dirs,
 	    }
 	    r = NR(d);
 	    c = NC(d);
-	    segment_get(dirs, &dirs_cell, r, c);
+	    Segment_get(dirs, &dirs_cell, r, c);
 	    SA[i].last_cell_dir = dirs_cell;
 	    SA[i].points[cell_num] = INDEX(r, c);
-	    segment_get(elevation, &SA[i].elevation[cell_num], r, c);
+	    Segment_get(elevation, &SA[i].elevation[cell_num], r, c);
 	    next_d = (abs(dirs_cell) == 0) ? d : abs(dirs_cell);
 	    SA[i].distance[cell_num] = get_distance(r, c, next_d);
 	    cell_num++;
 	    if (cell_num > SA[i].number_of_cells)
 		G_fatal_error(_("To much points in stream line"));
-	    segment_get(streams, &streams_cell, r, c);
+	    Segment_get(streams, &streams_cell, r, c);
 	} while (streams_cell == SA[i].order);
 
 	if (SA[i].elevation[0] == -99999)
@@ -429,8 +429,8 @@ int seg_find_contributing_cell(int r, int c, SEGMENT *dirs,
 	    continue;
 	next_r = NR(i);
 	next_c = NC(i);
-	segment_get(elevation, &elevation_next_cell, next_r, next_c);
-	segment_get(dirs, &dirs_next_cell, next_r, next_c);
+	Segment_get(elevation, &elevation_next_cell, next_r, next_c);
+	Segment_get(dirs, &dirs_next_cell, next_r, next_c);
 
 	if (dirs_next_cell == DIAG(i) && elevation_next_cell < elev_min) {
 	    elev_min = elevation_next_cell;
@@ -470,7 +470,7 @@ int seg_fill_streams(SEGMENT *unique_streams, int number_of_streams)
 	for (j = 1; j < SA[i].number_of_cells - 1; ++j) {
 	    r = (int)SA[i].points[j] / ncols;
 	    c = (int)SA[i].points[j] % ncols;
-	    segment_put(unique_streams, &SA[i].stream, r, c);
+	    Segment_put(unique_streams, &SA[i].stream, r, c);
 	}
     }
     return 0;
@@ -515,7 +515,7 @@ int seg_identify_next_stream(SEGMENT *streams, int number_of_streams)
 	else {
 	    r = (int)SA[i].points[SA[i].number_of_cells - 1] / ncols;
 	    c = (int)SA[i].points[SA[i].number_of_cells - 1] % ncols;
-	    segment_get(streams, &SA[i].next_stream, r, c);
+	    Segment_get(streams, &SA[i].next_stream, r, c);
 	    SA[i].outlet = SA[i].points[SA[i].number_of_cells - 1];
 	}
     }

@@ -37,7 +37,7 @@
 #define SEG_SEEK_SLOW(SEG, n, index) \
     ((off_t) (n) * (SEG)->size + (index) + (SEG)->offset)
 
-int segment_seek_fast(const SEGMENT * SEG, int n, int index)
+int Segment_seek_fast(const SEGMENT * SEG, int n, int index)
 {
     if (lseek((SEG)->fd, SEG_SEEK_FAST(SEG, n, index), 
         SEEK_SET) == (off_t) -1) {
@@ -47,7 +47,7 @@ int segment_seek_fast(const SEGMENT * SEG, int n, int index)
     return 0;
 }
 
-int segment_seek_slow(const SEGMENT * SEG, int n, int index)
+int Segment_seek_slow(const SEGMENT * SEG, int n, int index)
 {
     if (lseek((SEG)->fd, SEG_SEEK_SLOW(SEG, n, index), 
         SEEK_SET) == (off_t) -1) {
@@ -57,7 +57,7 @@ int segment_seek_slow(const SEGMENT * SEG, int n, int index)
     return 0;
 }
 
-int segment_seek(const SEGMENT * SEG, int n, int index)
+int Segment_seek(const SEGMENT * SEG, int n, int index)
 {
-    return SEG->segment_seek(SEG, n, index);
+    return SEG->Segment_seek(SEG, n, index);
 }

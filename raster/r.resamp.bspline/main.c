@@ -304,12 +304,12 @@ int main(int argc, char *argv[])
 
     in_file = G_tempfile();
     in_fd = creat(in_file, 0666);
-    if (segment_format(in_fd, nrows, ncols, SEGSIZE, SEGSIZE, sizeof(double)) != 1)
+    if (Segment_format(in_fd, nrows, ncols, SEGSIZE, SEGSIZE, sizeof(double)) != 1)
 	G_fatal_error(_("Can not create temporary file"));
     close(in_fd);
 
     in_fd = open(in_file, 2);
-    if (segment_init(&in_seg, in_fd, segments_in_memory) != 1)
+    if (Segment_init(&in_seg, in_fd, segments_in_memory) != 1)
     	G_fatal_error(_("Can not initialize temporary file"));
 
     /* read raster input */
@@ -332,7 +332,7 @@ int main(int argc, char *argv[])
 		    got_one++;
 		}
 	    }
-	    segment_put_row(&in_seg, drastbuf, row);
+	    Segment_put_row(&in_seg, drastbuf, row);
 	    
 	}
 	if (!got_one)
@@ -366,7 +366,7 @@ int main(int argc, char *argv[])
 
 	    G_done_msg(_("Cross validation finished for ew_step = %f and ns_step = %f"), stepE, stepN);
 
-	    segment_release(&in_seg);	/* release memory  */
+	    Segment_release(&in_seg);	/* release memory  */
 	    close(in_fd);
 	    unlink(in_file);
 
@@ -390,12 +390,12 @@ int main(int argc, char *argv[])
 
 	mask_file = G_tempfile();
 	mask_fd = creat(mask_file, 0666);
-	if (segment_format(mask_fd, nrows, ncols, SEGSIZE, SEGSIZE, sizeof(char)) != 1)
+	if (Segment_format(mask_fd, nrows, ncols, SEGSIZE, SEGSIZE, sizeof(char)) != 1)
 	    G_fatal_error(_("Can not create temporary file"));
 	close(mask_fd);
 
 	mask_fd = open(mask_file, 2);
-	if (segment_init(&mask_seg, mask_fd, segments_in_memory) != 1)
+	if (Segment_init(&mask_seg, mask_fd, segments_in_memory) != 1)
 	    G_fatal_error(_("Can not initialize temporary file"));
 
 	if (mask_opt->answer) {
@@ -441,7 +441,7 @@ int main(int argc, char *argv[])
 		    else
 			null_count++;
 		}
-		segment_put(&mask_seg, &mask_val, row, col);
+		Segment_put(&mask_seg, &mask_val, row, col);
 	    }
 	}
 
@@ -461,12 +461,12 @@ int main(int argc, char *argv[])
 
     out_file = G_tempfile();
     out_fd = creat(out_file, 0666);
-    if (segment_format(out_fd, nrows, ncols, SEGSIZE, SEGSIZE, sizeof(double)) != 1)
+    if (Segment_format(out_fd, nrows, ncols, SEGSIZE, SEGSIZE, sizeof(double)) != 1)
 	G_fatal_error(_("Can not create temporary file"));
     close(out_fd);
 
     out_fd = open(out_file, 2);
-    if (segment_init(&out_seg, out_fd, segments_in_memory) != 1)
+    if (Segment_init(&out_seg, out_fd, segments_in_memory) != 1)
     	G_fatal_error(_("Can not initialize temporary file"));
 
     /* initialize output */
@@ -476,7 +476,7 @@ int main(int argc, char *argv[])
     Rast_set_d_null_value(drastbuf, ncols);
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 9);
-	segment_put_row(&out_seg, drastbuf, row);
+	Segment_put_row(&out_seg, drastbuf, row);
     }
     G_percent(row, nrows, 2);
 
@@ -723,12 +723,12 @@ int main(int argc, char *argv[])
 	}			/*! END WHILE; last_column = TRUE */
     }				/*! END WHILE; last_row = TRUE */
 
-    segment_release(&in_seg);	/* release memory  */
+    Segment_release(&in_seg);	/* release memory  */
     close(in_fd);
     unlink(in_file);
     
     if (have_mask) {
-	segment_release(&mask_seg);	/* release memory  */
+	Segment_release(&mask_seg);	/* release memory  */
 	close(mask_fd);
 	unlink(mask_file);
     }
@@ -742,12 +742,12 @@ int main(int argc, char *argv[])
     {
 	int nonulls = 0;
 
-	segment_flush(&out_seg);
+	Segment_flush(&out_seg);
 	drastbuf = Rast_allocate_d_buf();
 
 	for (row = 0; row < dest_reg.rows; row++) {
 	    G_percent(row, dest_reg.rows, 9);
-	    segment_get_row(&out_seg, drastbuf, row);
+	    Segment_get_row(&out_seg, drastbuf, row);
 	    for (col = 0; col < dest_reg.cols; col++) {
 		dval = drastbuf[col];
 		if (!Rast_is_d_null_value(&dval))
@@ -760,7 +760,7 @@ int main(int argc, char *argv[])
 	    G_warning("only NULL cells in output raster");
     }
 
-    segment_release(&out_seg);	/* release memory  */
+    Segment_release(&out_seg);	/* release memory  */
     close(out_fd);
     unlink(out_file);
 

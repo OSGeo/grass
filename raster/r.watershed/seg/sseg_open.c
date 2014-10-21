@@ -20,7 +20,7 @@ seg_open(SSEG * sseg, GW_LARGE_INT nrows, GW_LARGE_INT ncols, int row_in_seg, in
 	G_warning("seg_open(): unable to create segment file");
 	return -2;
     }
-    if (0 > (errflag = segment_format(fd, nrows, ncols,
+    if (0 > (errflag = Segment_format(fd, nrows, ncols,
 				      row_in_seg, col_in_seg, size_struct))) {
 	close(fd);
 	unlink(filename);
@@ -39,7 +39,7 @@ seg_open(SSEG * sseg, GW_LARGE_INT nrows, GW_LARGE_INT ncols, int row_in_seg, in
 	G_warning("seg_open(): unable to re-open segment file");
 	return -4;
     }
-    if (0 > (errflag = segment_init(&(sseg->seg), fd, nsegs_in_memory))) {
+    if (0 > (errflag = Segment_init(&(sseg->seg), fd, nsegs_in_memory))) {
 	close(fd);
 	unlink(filename);
 	if (errflag == -1) {
