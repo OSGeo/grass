@@ -592,6 +592,7 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Unable to create table: '%s'"),
 			  db_get_string(&sql2));
 	}
+	db_begin_transaction(driver2);
 	count = 1;
 
     }
@@ -751,8 +752,8 @@ int main(int argc, char *argv[])
 	unlink(Tmp_file_xy);
 
     if (cvdev != NULL || devi != NULL) {
-	/*  db_close_database_shutdown_driver ( driver2 ); */
-	db_close_database(driver2);
+	db_commit_transaction(driver2);
+	db_close_database_shutdown_driver(driver2);
 	Vect_build(&Map2);
 	Vect_close(&Map2);
     }
