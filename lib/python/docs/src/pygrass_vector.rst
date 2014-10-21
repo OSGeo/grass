@@ -3,13 +3,13 @@
 Introduction to Vector classes
 ==============================
 
-Details about the GRASS vector architecture can be found in the
+Details about the GRASS GIS vector architecture can be found in the
 `GRASS GIS 7 Programmer's Manual: GRASS Vector Library <http://grass.osgeo.org/programming7/vectorlib.html>`_
 
 PyGrass has two classes for vector maps: :ref:`Vector-label` and :ref:`VectorTopo-label`.
 As the names suggest, the Vector class is for vector maps, while VectorTopo
-opens vector maps with GRASS topologies. VectorTopo is an extension
-of the Vector class, so supports all the Vector class methods, with additions.
+opens vector maps with `GRASS GIS topology <http://grass.osgeo.org/programming7/vlibTopology.html>`_.
+VectorTopo is an extension of the Vector class, so supports all the Vector class methods, with additions.
 
 .. _Vector-label:
 
@@ -165,7 +165,6 @@ Get the number of primitives:
     5128
 
 
-
 Get the number of different feature types in the vector map: ::
 
     >>> municip.number_of("areas")
@@ -310,7 +309,6 @@ Or can list only the areas containing isles: ::
     [Area(...), ..., Area(...)]
 
 
-
 Of course is still possible work only with a specific area, with: ::
 
     >>> from pygrass.vector.geometry import Area
@@ -331,3 +329,5 @@ Now, find an area with an island inside... ::
     >>> isle = area.isles[0]
     >>> isle.bbox()
     Bbox(199947.296494, 199280.969494, 754920.623987, 754351.812986)
+
+.. _Vector library: http://grass.osgeo.org/programming7/vectorlib.html

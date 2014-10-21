@@ -4,7 +4,7 @@ GRASS GIS Python library documentation
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    script
    pygrass_index
