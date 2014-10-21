@@ -82,7 +82,7 @@ int seg_find_outlets(SEGMENT * streams, int number_of_streams, SEGMENT * dirs,
 
     for (r = 0; r < nrows; ++r)
 	for (c = 0; c < ncols; ++c) {
-	    segment_get(streams, &streams_cell, r, c);
+	    Segment_get(streams, &streams_cell, r, c);
 
 	    if (streams_cell > 0) {
 		if (outlets_num > (out_max - 1)) {
@@ -94,14 +94,14 @@ int seg_find_outlets(SEGMENT * streams, int number_of_streams, SEGMENT * dirs,
 					     (out_max) * sizeof(OUTLET));
 		}
 
-		segment_get(dirs, &dirs_cell, r, c);
+		Segment_get(dirs, &dirs_cell, r, c);
 		d = abs(dirs_cell);	/* r.watershed */
 
 		if (NOT_IN_REGION(d)) {
 		    next_stream = -1;
 		}
 		else {
-		    segment_get(streams, &next_stream, NR(d), NC(d));
+		    Segment_get(streams, &next_stream, NR(d), NC(d));
 		    if (next_stream < 1)
 			next_stream = -1;
 		}
@@ -164,18 +164,18 @@ int seg_init_distance(SEGMENT * streams, SEGMENT * distance, int outlets_num,
     if (!outs) {		/* stream mode */
 	for (r = 0; r < nrows; ++r)
 	    for (c = 0; c < ncols; ++c) {
-		segment_get(streams, &streams_cell, r, c);
+		Segment_get(streams, &streams_cell, r, c);
 		distance_cell = (streams_cell) ? 0 : -1;
-		segment_put(distance, &distance_cell, r, c);
+		Segment_put(distance, &distance_cell, r, c);
 	    }
     }
     else {			/* outlets mode */
 	for (r = 0; r < nrows; ++r)
 	    for (c = 0; c < ncols; ++c)
-		segment_put(distance, &minus_one_cell, r, c);
+		Segment_put(distance, &minus_one_cell, r, c);
 
 	for (i = 0; i < outlets_num; ++i)
-	    segment_put(distance, &zero_cell, outlets[i].r, outlets[i].c);
+	    Segment_put(distance, &zero_cell, outlets[i].r, outlets[i].c);
     }
     return 0;
 }
@@ -202,9 +202,9 @@ int seg_prep_null_elevation(SEGMENT * distance, SEGMENT * elevation)
 
     for (r = 0; r < nrows; ++r)
 	for (c = 0; c < ncols; ++c) {
-	    segment_get(distance, &distance_cell, r, c);
+	    Segment_get(distance, &distance_cell, r, c);
 	    if (distance_cell == -1)
-		segment_put(elevation, &distance_cell, r, c);
+		Segment_put(elevation, &distance_cell, r, c);
 	}
 
     return 0;

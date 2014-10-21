@@ -420,7 +420,7 @@ struct Point *P_Read_Raster_Region_Map(SEGMENT *in_seg,
     for (row = startrow; row < endrow; row++) {
 	for (col = startcol; col < endcol; col++) {
 
-	    segment_get(in_seg, &z, row, col);
+	    Segment_get(in_seg, &z, row, col);
 
 	    if (!Rast_is_d_null_value(&z)) {
 

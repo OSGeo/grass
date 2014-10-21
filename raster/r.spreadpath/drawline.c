@@ -41,7 +41,7 @@ void drawline(int x1, int y1, int x2, int y2)
     value = (char *)&data;
 
     if (dx > dy) {
-	segment_put(&out_seg, value, x, y);
+	Segment_put(&out_seg, value, x, y);
 	/*debug: printf("put1-(%d,%d) ",x,y); */
 	e = 2 * dy - dx;
 	inc1 = 2 * (dy - dx);
@@ -54,12 +54,12 @@ void drawline(int x1, int y1, int x2, int y2)
 	    else
 		e += inc2;
 	    x += incx;
-	    segment_put(&out_seg, value, x, y);
+	    Segment_put(&out_seg, value, x, y);
 	    /*debug:printf("put2-(%d,%d) ",x,y); */
 	}
     }
     else {
-	segment_put(&out_seg, value, x, y);
+	Segment_put(&out_seg, value, x, y);
 	/*debug:printf("put3-(%d,%d) ",x,y); */
 	e = 2 * dx - dy;
 	inc1 = 2 * (dx - dy);
@@ -72,7 +72,7 @@ void drawline(int x1, int y1, int x2, int y2)
 	    else
 		e += inc2;
 	    y += incy;
-	    segment_put(&out_seg, value, x, y);
+	    Segment_put(&out_seg, value, x, y);
 	    /*debug:rintf("put4-(%d,%d) ",x,y); */
 	}
     }

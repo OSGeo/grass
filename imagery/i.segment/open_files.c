@@ -125,12 +125,12 @@ int open_files(struct globals *globals)
     nseg = manage_memory(srows, scols, globals);
 
     /* create segment structures */
-    if (segment_open
+    if (Segment_open
 	(&globals->bands_seg, G_tempfile(), globals->nrows, globals->ncols, srows,
 	 scols, inlen, nseg) != 1)
 	G_fatal_error("Unable to create input temporary files");
 
-    if (segment_open
+    if (Segment_open
 	(&globals->rid_seg, G_tempfile(), globals->nrows, globals->ncols, srows,
 	 scols, outlen, nseg * 2) != 1)
 	G_fatal_error("Unable to create input temporary files");
@@ -169,7 +169,7 @@ int open_files(struct globals *globals)
 			globals->bands_val[n] = (inbuf[n][col] - min[n]) / (max[n] - min[n]);
 		}
 	    }
-	    if (segment_put(&globals->bands_seg,
+	    if (Segment_put(&globals->bands_seg,
 	                    (void *)globals->bands_val, row, col) != 1)
 		G_fatal_error(_("Unable to write to temporary file"));
 
@@ -196,7 +196,7 @@ int open_files(struct globals *globals)
 		FLAG_SET(globals->null_flag, row, col);
 	    }
 	    if (!globals->seeds || is_null) {
-		if (segment_put(&globals->rid_seg,
+		if (Segment_put(&globals->rid_seg,
 		                (void *)&id, row, col) != 1)
 		    G_fatal_error(_("Unable to write to temporary file"));
 	    }
@@ -219,7 +219,7 @@ int open_files(struct globals *globals)
     Rast_set_c_null_value(&globals->lower_bound, 1);
 
     if (globals->bounds_map != NULL) {
-	if (segment_open
+	if (Segment_open
 	    (&globals->bounds_seg, G_tempfile(), globals->nrows, globals->ncols,
 	     srows, scols, sizeof(CELL), nseg) != TRUE)
 	    G_fatal_error("Unable to create bounds temporary files");
@@ -256,7 +256,7 @@ int open_files(struct globals *globals)
 			    globals->upper_bound = bounds_val;
 		    }
 		}
-		if (segment_put(&globals->bounds_seg, &bounds_val, row, col) != 1)
+		if (Segment_put(&globals->bounds_seg, &bounds_val, row, col) != 1)
 		    G_fatal_error(_("Unable to write to temporary file"));
 	    }
 	}
@@ -267,7 +267,7 @@ int open_files(struct globals *globals)
 	    G_warning(_("There are no boundary constraints in '%s'"), globals->bounds_map);
 	    Rast_set_c_null_value(&globals->upper_bound, 1);
 	    Rast_set_c_null_value(&globals->lower_bound, 1);
-	    segment_close(&globals->bounds_seg);
+	    Segment_close(&globals->bounds_seg);
 	    globals->bounds_map = NULL;
 	    globals->bounds_mapset = NULL;
 	}
@@ -321,7 +321,7 @@ static int load_seeds(struct globals *globals, int srows, int scols, int nseg)
     
     G_message(_("Loading seeds from '%s'"), globals->seeds);
 
-    if (segment_open
+    if (Segment_open
 	(&seeds_seg, G_tempfile(), globals->nrows, globals->ncols,
 	 srows, scols, sizeof(CELL), nseg) != TRUE)
 	G_fatal_error("Unable to create bounds temporary files");
@@ -343,7 +343,7 @@ static int load_seeds(struct globals *globals, int srows, int scols, int nseg)
 		if (!Rast_is_c_null_value(&seeds_val))
 		    have_seeds = 1;
 	    }
-	    if (segment_put(&seeds_seg, &seeds_val, row, col) != 1)
+	    if (Segment_put(&seeds_seg, &seeds_val, row, col) != 1)
 		G_fatal_error(_("Unable to write to temporary file"));
 	}
     }
@@ -352,7 +352,7 @@ static int load_seeds(struct globals *globals, int srows, int scols, int nseg)
 	G_warning(_("No seeds found in '%s'!"), globals->seeds);
 	G_free(seeds_buf);
 	Rast_close(seeds_fd);
-	segment_close(&seeds_seg);
+	Segment_close(&seeds_seg);
 	return 0;
     }
 
@@ -369,7 +369,7 @@ static int load_seeds(struct globals *globals, int srows, int scols, int nseg)
 	        !(FLAG_GET(globals->candidate_flag, row, col))) {
 
 		if (Rast_is_c_null_value(&(seeds_buf[col]))) {
-		    if (segment_put(&globals->rid_seg, &sneg, row, col) != 1)
+		    if (Segment_put(&globals->rid_seg, &sneg, row, col) != 1)
 			G_fatal_error(_("Unable to write to temporary file"));
 		    sneg--;
 		    globals->n_regions--;
@@ -386,7 +386,7 @@ static int load_seeds(struct globals *globals, int srows, int scols, int nseg)
 
     G_free(seeds_buf);
     Rast_close(seeds_fd);
-    segment_close(&seeds_seg);
+    Segment_close(&seeds_seg);
 
     globals->n_regions = spos - 1;
     
@@ -406,10 +406,10 @@ static int read_seed(struct globals *globals, SEGMENT *seeds_seg, struct rc *Ri,
     G_debug(4, "read_seed()");
 
     /* get Ri's segment ID from input seeds */
-    segment_get(seeds_seg, &Ri_id, Ri->row, Ri->col);
+    Segment_get(seeds_seg, &Ri_id, Ri->row, Ri->col);
     
     /* set new segment id */
-    if (segment_put(&globals->rid_seg, &new_id, Ri->row, Ri->col) != 1)
+    if (Segment_put(&globals->rid_seg, &new_id, Ri->row, Ri->col) != 1)
 	G_fatal_error(_("Unable to write to temporary file"));
     /* set candidate flag */
     FLAG_SET(globals->candidate_flag, Ri->row, Ri->col);
@@ -418,7 +418,7 @@ static int read_seed(struct globals *globals, SEGMENT *seeds_seg, struct rc *Ri,
     globals->rs.count = 1;
 
     globals->rs.id = new_id;
-    segment_get(&globals->bands_seg, (void *)globals->bands_val,
+    Segment_get(&globals->bands_seg, (void *)globals->bands_val,
 		Ri->row, Ri->col);
 
     for (i = 0; i < globals->nbands; i++) {
@@ -455,7 +455,7 @@ static int read_seed(struct globals *globals, SEGMENT *seeds_seg, struct rc *Ri,
 		continue;
 	    }
 
-	    segment_get(seeds_seg, (void *) &Rk_id, ngbr_rc.row, ngbr_rc.col);
+	    Segment_get(seeds_seg, (void *) &Rk_id, ngbr_rc.row, ngbr_rc.col);
 		
 	    G_debug(5, "Rk ID = %d Ri ID = %d", Rk_id, Ri_id);
 
@@ -464,7 +464,7 @@ static int read_seed(struct globals *globals, SEGMENT *seeds_seg, struct rc *Ri,
 	    }
 
 	    /* set segment id */
-	    if (segment_put(&globals->rid_seg,
+	    if (Segment_put(&globals->rid_seg,
 	                    &new_id, ngbr_rc.row, ngbr_rc.col) != 1)
 		G_fatal_error(_("Unable to write to temporary file"));
 	    
@@ -475,7 +475,7 @@ static int read_seed(struct globals *globals, SEGMENT *seeds_seg, struct rc *Ri,
 	    rclist_add(&rilist, ngbr_rc.row, ngbr_rc.col);
 	    
 	    /* update region stats */
-	    segment_get(&globals->bands_seg, (void *)globals->bands_val,
+	    Segment_get(&globals->bands_seg, (void *)globals->bands_val,
 			ngbr_rc.row, ngbr_rc.col);
 
 	    for (i = 0; i < globals->nbands; i++) {

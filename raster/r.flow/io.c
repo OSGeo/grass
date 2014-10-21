@@ -95,7 +95,7 @@ void read_input_files(void)
     }
     G_percent(1, 1, 1);
     if (parm.seg)
-	segment_flush(el.seg);
+	Segment_flush(el.seg);
     Rast_close(fd);
 
     if (parm.aspin) {
@@ -113,7 +113,7 @@ void read_input_files(void)
 	}
         G_percent(1, 1, 1);
 	if (parm.seg)
-	    segment_flush(as.seg);
+	    Segment_flush(as.seg);
 	Rast_close(fd);
     }
 
@@ -148,7 +148,7 @@ static int open_segment_file(const char *name, layer l, int new)
 	if ((fd = G_open_new(string, name)) < 0)
 	    G_fatal_error(_("Cannot create segment file %s"), name);
 
-	if (segment_format(fd, region.rows + l.row_offset * 2,
+	if (Segment_format(fd, region.rows + l.row_offset * 2,
 			   region.cols + l.col_offset * 2, SEGROWS, SEGCOLS,
 			   sizeof(DCELL)) < 1)
 	    G_fatal_error(_("Cannot format segment file %s"), name);

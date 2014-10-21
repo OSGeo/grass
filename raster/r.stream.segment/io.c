@@ -301,7 +301,7 @@ int seg_create_map(SEG * seg, int srows, int scols, int number_of_segs,
     fd = creat(filename, 0666);
 
     if (0 >
-	segment_format(fd, seg->nrows, seg->ncols, srows, scols,
+	Segment_format(fd, seg->nrows, seg->ncols, srows, scols,
 		       seg->data_size)) {
 	close(fd);
 	unlink(filename);
@@ -314,7 +314,7 @@ int seg_create_map(SEG * seg, int srows, int scols, int number_of_segs,
 	G_fatal_error(_("Unable to re-open file '%s'"), filename);
     }
 
-    if (0 > (fd = segment_init(&(seg->seg), fd, number_of_segs))) {
+    if (0 > (fd = Segment_init(&(seg->seg), fd, number_of_segs))) {
 	unlink(filename);
 	G_fatal_error(_("Unable to init segment file or out of memory"));
     }
@@ -437,7 +437,7 @@ int seg_read_map(SEG * seg, char *input_map_name, int check_res,
 		}
 	    }
 
-	if (0 > segment_put_row(&(seg->seg), target_buffer, r)) {
+	if (0 > Segment_put_row(&(seg->seg), target_buffer, r)) {
 	    G_free(input_buffer);
 	    G_free(target_buffer);
 	    Rast_close(input_fd);
@@ -466,7 +466,7 @@ int seg_reset_map(SEG * seg, int value)
 
     for (r = 0; r < seg->nrows; ++r)
 	for (c = 0; c < seg->ncols; ++c)
-	    segment_put(&(seg->seg), &value, r, c);
+	    Segment_put(&(seg->seg), &value, r, c);
 
     return 0;
 }
@@ -498,13 +498,13 @@ int seg_write_map(SEG * seg, char *output_map_name,
     G_message(_("Writing raster map <%s>..."), output_map_name);
     output_fd = Rast_open_new(output_map_name, output_data_type);
     output_buffer = Rast_allocate_buf(output_data_type);
-    segment_flush(&(seg->seg));
+    Segment_flush(&(seg->seg));
 
     /* writing */
     for (r = 0; r < seg->nrows; ++r) {
 
 	G_percent(r, seg->nrows, 2);
-	if (0 > segment_get_row(&(seg->seg), output_buffer, r))
+	if (0 > Segment_get_row(&(seg->seg), output_buffer, r))
 	    G_warning(_("Unable to segment read row %d for raster map <%s>"),
 		      r, output_map_name);
 
@@ -550,7 +550,7 @@ int seg_release_map(SEG * seg)
     /* 
      * release segment close files, set pointers to null;
      */
-    segment_release(&(seg->seg));
+    Segment_release(&(seg->seg));
     close(seg->fd);
     unlink(seg->filename);
 

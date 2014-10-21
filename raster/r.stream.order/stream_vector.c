@@ -128,10 +128,10 @@ int seg_create_vector(SEGMENT * streams, SEGMENT * dirs, char *out_vector,
 	Vect_reset_line(Segments);
 	Vect_append_point(Segments, easting, northing, 0);
 
-	segment_get(streams, &streams_cell, r, c);
+	Segment_get(streams, &streams_cell, r, c);
 	while (streams_cell == cur_stream) {
 
-	    segment_get(dirs, &dirs_cell, r, c);
+	    Segment_get(dirs, &dirs_cell, r, c);
 	    d = abs(dirs_cell);
 	    next_r = NR(d);
 	    next_c = NC(d);
@@ -143,7 +143,7 @@ int seg_create_vector(SEGMENT * streams, SEGMENT * dirs, char *out_vector,
 	    if (NOT_IN_REGION(d))
 		Rast_set_c_null_value(&next_stream, 1);
 	    else
-		segment_get(streams, &next_stream, next_r, next_c);
+		Segment_get(streams, &next_stream, next_r, next_c);
 
 	    if (d < 1 || NOT_IN_REGION(d) || !next_stream) {
 		add_outlet = 1;
@@ -151,7 +151,7 @@ int seg_create_vector(SEGMENT * streams, SEGMENT * dirs, char *out_vector,
 	    }
 	    r = next_r;
 	    c = next_c;
-	    segment_get(streams, &streams_cell, r, c);
+	    Segment_get(streams, &streams_cell, r, c);
 	}			/* end while */
 
 	Vect_cat_set(Cats, 1, cur_stream);

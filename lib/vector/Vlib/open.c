@@ -240,7 +240,9 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
         }
         else {
             char file_path[GPATH_MAX];
-            
+            /* reduce to current mapset if search path was set */
+            if(strcmp(Map->mapset, "") == 0)
+                Map->mapset = G_store(G_mapset());
             /* temporary map: reduce to current mapset if search path
              * was set */
             if (strcmp(Map->mapset, "") == 0)

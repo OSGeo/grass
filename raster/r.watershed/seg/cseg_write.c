@@ -12,10 +12,10 @@ int cseg_write_cellfile(CSEG * cseg, char *map_name)
     map_fd = Rast_open_c_new(map_name);
     nrows = Rast_window_rows();
     buffer = Rast_allocate_c_buf();
-    segment_flush(&(cseg->seg));
+    Segment_flush(&(cseg->seg));
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 1);
-	segment_get_row(&(cseg->seg), buffer, row);
+	Segment_get_row(&(cseg->seg), buffer, row);
 	Rast_put_row(map_fd, buffer, CELL_TYPE);
     }
     G_percent(row, nrows, 1);    /* finish it */

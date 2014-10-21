@@ -247,7 +247,7 @@ int P_Regular_Points(struct Cell_head *Elaboration, struct Cell_head *Original,
 		    dval = interpolation;
 		}
 		else {
-		    segment_get(out_seg, &dval, row, col);
+		    Segment_get(out_seg, &dval, row, col);
 		    if ((X > Overlap.E) && (X < General.E)) {
 			if ((Y > Overlap.N) && (Y < General.N)) {	/* (3) */
 			    csi = (General.E - X) / overlap;
@@ -303,7 +303,7 @@ int P_Regular_Points(struct Cell_head *Elaboration, struct Cell_head *Original,
 			}
 		    }
 		}
-		segment_put(out_seg, &dval, row, col);
+		Segment_put(out_seg, &dval, row, col);
 	    }
 	}			/* END COL */
     }				/* END ROW */

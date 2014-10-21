@@ -13,10 +13,10 @@ int dseg_write_cellfile(DSEG * dseg, char *map_name)
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
     dbuffer = Rast_allocate_d_buf();
-    segment_flush(&(dseg->seg));
+    Segment_flush(&(dseg->seg));
     for (row = 0; row < nrows; row++) {
 	G_percent(row, nrows, 1);
-	segment_get_row(&(dseg->seg), (DCELL *) dbuffer, row);
+	Segment_get_row(&(dseg->seg), (DCELL *) dbuffer, row);
 	Rast_put_row(map_fd, dbuffer, DCELL_TYPE);
     }
     G_percent(row, nrows, 1);    /* finish it */

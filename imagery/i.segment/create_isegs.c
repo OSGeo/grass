@@ -143,13 +143,13 @@ int create_isegs(struct globals *globals)
 	    for (row = 0; row < globals->nrows; row++) {
 		for (col = 0; col < globals->ncols; col++) {
 		    FLAG_SET(globals->null_flag, row, col);
-		    segment_get(&globals->bounds_seg, &bounds_val,
+		    Segment_get(&globals->bounds_seg, &bounds_val,
 				row, col);
 
 		    if (!Rast_is_c_null_value(&bounds_val)
 		        && bounds_val == current_bound) {
 
-			segment_get(&globals->rid_seg, &rid, row, col);
+			Segment_get(&globals->rid_seg, &rid, row, col);
 			if (!Rast_is_c_null_value(&rid)) {
 			    have_bound = 1;
 
@@ -178,7 +178,7 @@ int create_isegs(struct globals *globals)
 	flag_clear_all(globals->null_flag);
 	for (row = 0; row < globals->nrows; row++) {
 	    for (col = 0; col < globals->ncols; col++) {
-		segment_get(&globals->rid_seg, &rid, row, col);
+		Segment_get(&globals->rid_seg, &rid, row, col);
 		if (Rast_is_c_null_value(&rid))
 		    FLAG_SET(globals->null_flag, row, col);
 	    }
@@ -284,7 +284,7 @@ int region_growing(struct globals *globals)
 		Ri.col = col;
 
 		/* get Ri's segment ID */
-		segment_get(&globals->rid_seg, (void *)&Ri.id, Ri.row, Ri.col);
+		Segment_get(&globals->rid_seg, (void *)&Ri.id, Ri.row, Ri.col);
 		
 		if (Ri.id < 0)
 		    continue;
@@ -567,7 +567,7 @@ int region_growing(struct globals *globals)
 		Ri.col = col;
 
 		/* get segment id */
-		segment_get(&globals->rid_seg, (void *) &Ri.id, row, col);
+		Segment_get(&globals->rid_seg, (void *) &Ri.id, row, col);
 		
 		if (Ri.id < 0)
 		    continue;
@@ -731,7 +731,7 @@ static int find_best_neighbor(struct ngbr_stats *Ri,
 			rbtree_insert(no_check_tree, &ngbr_rc);
 
 			/* get neighbor ID */
-			segment_get(&globals->rid_seg,
+			Segment_get(&globals->rid_seg,
 				    (void *) &(globals->ns.id),
 				    ngbr_rc.row, ngbr_rc.col);
 
@@ -867,8 +867,8 @@ void find_eight_neighbors(int p_row, int p_col,
 }
 
 /* similarity / distance between two points based on their input raster values */
-/* assumes first point values already saved in files->bands_seg - only run segment_get once for that value... */
-/* TODO: segment_get already happened for a[] values in the main function.  Could remove a[] from these parameters */
+/* assumes first point values already saved in files->bands_seg - only run Segment_get once for that value... */
+/* TODO: Segment_get already happened for a[] values in the main function.  Could remove a[] from these parameters */
 double calculate_euclidean_similarity(struct ngbr_stats *Ri,
                                       struct ngbr_stats *Rk,
 				      struct globals *globals)
@@ -1076,7 +1076,7 @@ int update_band_vals(int row, int col, struct reg_stats *rs,
 	              rs->count, globals->min_reg_size);
     }
 
-    segment_get(&globals->rid_seg, (void *) &rid, row, col);
+    Segment_get(&globals->rid_seg, (void *) &rid, row, col);
     
     if (rid != rs->id) {
 	G_fatal_error(_("Region ids are different"));
@@ -1088,7 +1088,7 @@ int update_band_vals(int row, int col, struct reg_stats *rs,
     }
 
     /* update region stats */
-    segment_put(&globals->bands_seg, (void *)rs->sum, row, col);
+    Segment_put(&globals->bands_seg, (void *)rs->sum, row, col);
     count = 1;
 
     /* fast version for rs->count == 2 */
@@ -1108,13 +1108,13 @@ int update_band_vals(int row, int col, struct reg_stats *rs,
 
 	    if ((FLAG_GET(globals->null_flag, ngbr_rc.row, ngbr_rc.col)) == 0) {
 
-		segment_get(&globals->rid_seg, (void *) &rid,
+		Segment_get(&globals->rid_seg, (void *) &rid,
 			    ngbr_rc.row, ngbr_rc.col);
 		
 		if (rid == rs->id) {
 
 		    /* update region stats */
-		    segment_put(&globals->bands_seg,
+		    Segment_put(&globals->bands_seg,
 				(void *)rs->sum,
 				ngbr_rc.row, ngbr_rc.col);
 
@@ -1168,7 +1168,7 @@ int update_band_vals(int row, int col, struct reg_stats *rs,
 			    /* not yet checked, don't check it again */
 			    rbtree_insert(rc_check_tree, &ngbr_rc);
 
-			    segment_get(&globals->rid_seg, (void *) &rid,
+			    Segment_get(&globals->rid_seg, (void *) &rid,
 					ngbr_rc.row, ngbr_rc.col);
 			    
 			    if (rid == rs->id) {
@@ -1177,7 +1177,7 @@ int update_band_vals(int row, int col, struct reg_stats *rs,
 				rclist_add(&rlist, ngbr_rc.row, ngbr_rc.col);
 
 				/* update region stats */
-				segment_put(&globals->bands_seg,
+				Segment_put(&globals->bands_seg,
 					    (void *)rs->sum,
 					    ngbr_rc.row, ngbr_rc.col);
 				count++;
@@ -1282,7 +1282,7 @@ static int merge_regions(struct ngbr_stats *Ri, struct reg_stats *Ri_rs,
 	 * need to clear candidate flag for Rk and set new id */
 	 
 	/* the actual merge: change region id */
-	segment_put(&globals->rid_seg, (void *) &Ri->id, Rk->row, Rk->col);
+	Segment_put(&globals->rid_seg, (void *) &Ri->id, Rk->row, Rk->col);
 
 	if (do_cand) {
 	    do_cand = 0;
@@ -1320,12 +1320,12 @@ static int merge_regions(struct ngbr_stats *Ri, struct reg_stats *Ri_rs,
 
 		    if (!(FLAG_GET(globals->null_flag, ngbr_rc.row, ngbr_rc.col))) {
 
-			segment_get(&globals->rid_seg, (void *) &R_id,
+			Segment_get(&globals->rid_seg, (void *) &R_id,
 			            ngbr_rc.row, ngbr_rc.col);
 
 			if (R_id == Rk->id) {
 			    /* the actual merge: change region id */
-			    segment_put(&globals->rid_seg, (void *) &Ri->id, ngbr_rc.row, ngbr_rc.col);
+			    Segment_put(&globals->rid_seg, (void *) &Ri->id, ngbr_rc.row, ngbr_rc.col);
 
 			    /* want to check this neighbor's neighbors */
 			    rclist_add(&rlist, ngbr_rc.row, ngbr_rc.col);
@@ -1347,7 +1347,7 @@ static int merge_regions(struct ngbr_stats *Ri, struct reg_stats *Ri_rs,
 	/* update region id for Ri */
 
 	/* the actual merge: change region id */
-	segment_put(&globals->rid_seg, (void *) &Rk->id, Ri->row, Ri->col);
+	Segment_put(&globals->rid_seg, (void *) &Rk->id, Ri->row, Ri->col);
 
 	rclist_init(&rlist);
 	rclist_add(&rlist, Ri->row, Ri->col);
@@ -1370,11 +1370,11 @@ static int merge_regions(struct ngbr_stats *Ri, struct reg_stats *Ri_rs,
 
 		    if (!(FLAG_GET(globals->null_flag, ngbr_rc.row, ngbr_rc.col))) {
 
-			segment_get(&globals->rid_seg, (void *) &R_id, ngbr_rc.row, ngbr_rc.col);
+			Segment_get(&globals->rid_seg, (void *) &R_id, ngbr_rc.row, ngbr_rc.col);
 
 			if (R_id == Ri->id) {
 			    /* the actual merge: change region id */
-			    segment_put(&globals->rid_seg, (void *) &Rk->id, ngbr_rc.row, ngbr_rc.col);
+			    Segment_put(&globals->rid_seg, (void *) &Rk->id, ngbr_rc.row, ngbr_rc.col);
 
 			    /* want to check this neighbor's neighbors */
 			    rclist_add(&rlist, ngbr_rc.row, ngbr_rc.col);
@@ -1453,7 +1453,7 @@ static int set_candidate_flag(struct ngbr_stats *head, int value, struct globals
 
 		    if (!(FLAG_GET(globals->candidate_flag, ngbr_rc.row, ngbr_rc.col)) == value) {
 
-			segment_get(&globals->rid_seg, (void *) &R_id, ngbr_rc.row, ngbr_rc.col);
+			Segment_get(&globals->rid_seg, (void *) &R_id, ngbr_rc.row, ngbr_rc.col);
 
 			if (R_id == head->id) {
 			    /* want to check this neighbor's neighbors */
@@ -1510,7 +1510,7 @@ static int calculate_reg_stats(int row, int col, struct reg_stats *rs,
     if (rs->id <= 0)
 	G_fatal_error("Invalid region id %d", rs->id);
 
-    segment_get(&globals->bands_seg, (void *)globals->bands_val,
+    Segment_get(&globals->bands_seg, (void *)globals->bands_val,
 		row, col);
     rs->count = 1;
     memcpy(rs->sum, globals->bands_val, globals->datasize);
@@ -1537,7 +1537,7 @@ static int calculate_reg_stats(int row, int col, struct reg_stats *rs,
 
 	    if ((FLAG_GET(globals->null_flag, ngbr_rc.row, ngbr_rc.col)) == 0) {
 
-		segment_get(&globals->rid_seg, (void *) &rid,
+		Segment_get(&globals->rid_seg, (void *) &rid,
 			    ngbr_rc.row, ngbr_rc.col);
 		
 		if (rid == rs->id) {
@@ -1601,7 +1601,7 @@ static int calculate_reg_stats(int row, int col, struct reg_stats *rs,
 			    /* not yet checked, don't check it again */
 			    rbtree_insert(rc_check_tree, &ngbr_rc);
 
-			    segment_get(&globals->rid_seg, (void *) &rid,
+			    Segment_get(&globals->rid_seg, (void *) &rid,
 					ngbr_rc.row, ngbr_rc.col);
 			    
 			    if (rid == rs->id) {

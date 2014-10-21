@@ -20,7 +20,7 @@ int dseg_read_cell(DSEG * dseg, char *map_name, char *mapset)
     dbuffer = Rast_allocate_d_buf();
     for (row = 0; row < nrows; row++) {
 	Rast_get_d_row(map_fd, dbuffer, row);
-	if (segment_put_row(&(dseg->seg), (DCELL *) dbuffer, row) < 0) {
+	if (Segment_put_row(&(dseg->seg), (DCELL *) dbuffer, row) < 0) {
 	    G_free(dbuffer);
 	    Rast_close(map_fd);
 	    G_warning("%s(): unable to segment put row for [%s] in [%s]",

@@ -32,15 +32,15 @@ static int read_off_t(int, off_t *);
 
 
 /**
- * \fn int segment_init (SEGMENT *SEG, int fd, int nseg)
+ * \fn int Segment_init (SEGMENT *SEG, int fd, int nseg)
  *
  * \brief Initialize segment structure.
  *
  * Initializes the <b>seg</b> structure. The file on <b>fd</b> is
- * a segment file created by <i>segment_format()</i> and must be open 
+ * a segment file created by <i>Segment_format()</i> and must be open 
  * for reading and writing. The segment file configuration parameters 
  * <i>nrows, ncols, srows, scols</i>, and <i>len</i>, as written to the 
- * file by <i>segment_format()</i>, are read from the file and stored in 
+ * file by <i>Segment_format()</i>, are read from the file and stored in 
  * the <b>seg</b> structure. <b>nsegs</b> specifies the number of 
  * segments that will be retained in memory. The minimum value allowed 
  * is 1.
@@ -56,14 +56,14 @@ static int read_off_t(int, off_t *);
  * \return -2 if out of memory
  */
 
-int segment_init(SEGMENT *SEG, int fd, int nseg)
+int Segment_init(SEGMENT *SEG, int fd, int nseg)
 {
     SEG->open = 0;
     SEG->fd = fd;
     SEG->nseg = nseg;
 
     if (lseek(fd, 0L, SEEK_SET) < 0) {
-	G_warning("segment_init: %s", strerror(errno));
+	G_warning("Segment_init: %s", strerror(errno));
 	return -1;
     }
 
@@ -75,7 +75,7 @@ int segment_init(SEGMENT *SEG, int fd, int nseg)
 	|| !read_int(fd, &SEG->len))
 	return -1;
 
-    return segment_setup(SEG);
+    return Segment_setup(SEG);
 }
 
 

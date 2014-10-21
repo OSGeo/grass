@@ -17,7 +17,7 @@
 
 
 /*bugfix: buf: char* vs int* -> wrong pointer arithmetics!!!. Pierre de Mouveaux - 09 april 2000 */
-/* int segment_get (SEGMENT *SEG, register int *buf,int row,int col) */
+/* int Segment_get (SEGMENT *SEG, register int *buf,int row,int col) */
 
 
 /**
@@ -36,12 +36,12 @@
  * \return -1 if unable to seek or read segment file
  */
 
-int segment_get(SEGMENT * SEG, void *buf, off_t row, off_t col)
+int Segment_get(SEGMENT * SEG, void *buf, off_t row, off_t col)
 {
     int index, n, i;
 
-    SEG->segment_address(SEG, row, col, &n, &index);
-    if ((i = segment_pagein(SEG, n)) < 0)
+    SEG->Segment_address(SEG, row, col, &n, &index);
+    if ((i = Segment_pagein(SEG, n)) < 0)
 	return -1;
 
     memcpy(buf, &SEG->scb[i].buf[index], SEG->len);

@@ -21,7 +21,7 @@
 
 
 /*      buf is CELL *   WRAT code       */
-/* int segment_put_row (SEGMENT *SEG, CELL *buf,int row) */
+/* int Segment_put_row (SEGMENT *SEG, CELL *buf,int row) */
 
 
 /**
@@ -29,7 +29,7 @@
  *
  * Transfers non-segmented matrix data, row by row, into a segment
  * file.  <b>seg</b> is the segment structure that was configured from a 
- * call to <i>segment_init()</i>. <b>buf</b> should contain 
+ * call to <i>Segment_init()</i>. <b>buf</b> should contain 
  * <em>ncols*len</em> bytes of data to be transferred to the segment 
  * file. <b>row</b> specifies the row from the data matrix being 
  * transferred.
@@ -41,7 +41,7 @@
  * \return -1 if unable to seek or write segment file
  */
 
-int segment_put_row(const SEGMENT * SEG, const void *buf, off_t row)
+int Segment_put_row(const SEGMENT * SEG, const void *buf, off_t row)
 {
     int size;
     off_t ncols;
@@ -53,15 +53,15 @@ int segment_put_row(const SEGMENT * SEG, const void *buf, off_t row)
     ncols = SEG->ncols - SEG->spill;
     scols = SEG->scols;
     size = scols * SEG->len;
-    /*      printf("segment_put_row ncols: %d, scols %d, size: %d, col %d, row: %d,  SEG->fd: %d\n",ncols,scols,size,col,row, SEG->fd); */
+    /*      printf("Segment_put_row ncols: %d, scols %d, size: %d, col %d, row: %d,  SEG->fd: %d\n",ncols,scols,size,col,row, SEG->fd); */
 
     for (col = 0; col < ncols; col += scols) {
-	SEG->segment_address(SEG, row, col, &n, &index);
-	SEG->segment_seek(SEG, n, index);
+	SEG->Segment_address(SEG, row, col, &n, &index);
+	SEG->Segment_seek(SEG, n, index);
 
 	if ((result = write(SEG->fd, buf, size)) != size) {
-	    G_warning("segment_put_row write error %s", strerror(errno));
-	    /*      printf("segment_put_row result = %d. ncols: %d, scols %d, size: %d, col %d, row: %d,  SEG->fd: %d\n",result,ncols,scols,size,col,row, SEG->fd); */
+	    G_warning("Segment_put_row write error %s", strerror(errno));
+	    /*      printf("Segment_put_row result = %d. ncols: %d, scols %d, size: %d, col %d, row: %d,  SEG->fd: %d\n",result,ncols,scols,size,col,row, SEG->fd); */
 	    return -1;
 	}
 
@@ -74,11 +74,11 @@ int segment_put_row(const SEGMENT * SEG, const void *buf, off_t row)
     }
 
     if ((size = SEG->spill * SEG->len)) {
-	SEG->segment_address(SEG, row, col, &n, &index);
-	SEG->segment_seek(SEG, n, index);
+	SEG->Segment_address(SEG, row, col, &n, &index);
+	SEG->Segment_seek(SEG, n, index);
 
 	if (write(SEG->fd, buf, size) != size) {
-	    G_warning("segment_put_row final write error: %s",
+	    G_warning("Segment_put_row final write error: %s",
 		      strerror(errno));
 	    return -1;
 	}
