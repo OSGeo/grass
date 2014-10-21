@@ -253,13 +253,21 @@ class VirtualAttributeList(wx.ListCtrl,
                 return
 
             self.AddDataRow(i, record, columns, keyId)
-
+            
             i += 1
             if i >= 100000:
                 self.log.write(_("Viewing limit: 100000 records."))
                 break
         
         self.SetItemCount(i)
+        
+        if where:
+            item = -1
+            while True:
+                item = self.GetNextItem(item)
+                if item == -1:
+                    break
+                self.SetItemState(item, wx.LIST_STATE_SELECTED, wx.LIST_STATE_SELECTED)
         
         i = 0
         for col in columns:
