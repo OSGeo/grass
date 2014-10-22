@@ -229,7 +229,7 @@ def _init_tgis_message_interface(raise_on_error=False):
 
 def get_tgis_message_interface():
     """!Return the temporal GIS message interface which is of type
-       grass.pyhrass.message.Messenger()
+       grass.pygrass.message.Messenger()
 
        Use this message interface to print messages to stdout using the
        GRASS C-library messaging system.
