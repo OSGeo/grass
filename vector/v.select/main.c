@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
 {
     int iopt;
     int operator;
-    int nskipped, native;
+    int nskipped[2], native;
     int itype[2], ifield[2];
 
     int *ALines; /* List of lines: 0 do not output, 1 - write to output */
@@ -129,21 +129,19 @@ int main(int argc, char *argv[])
     
     /* Select features */
 #ifdef HAVE_GEOS
-    nskipped = select_lines(&(In[0]), itype[0], ifield[0],
-			    &(In[1]), itype[1], ifield[1],
-			    flag.cat->answer ? 1 : 0, operator,
-			    parm.relate->answer,
-			    ALines);
+    select_lines(&(In[0]), itype[0], ifield[0],
+                 &(In[1]), itype[1], ifield[1],
+                 flag.cat->answer ? 1 : 0, operator,
+                 parm.relate->answer,
+                 ALines, nskipped);
 #else
-    nskipped = select_lines(&(In[0]), itype[0], ifield[0],
-			    &(In[1]), itype[1], ifield[1],
-			    flag.cat->answer ? 1 : 0, operator,
-			    NULL,
-			    ALines);
+    select_lines(&(In[0]), itype[0], ifield[0],
+                 &(In[1]), itype[1], ifield[1],
+                 flag.cat->answer ? 1 : 0, operator,
+                 NULL,
+                 ALines, nskipped);
 #endif
     
-    Vect_close(&(In[1]));
-
 #ifdef HAVE_GEOS
     finishGEOS();
 #endif
@@ -170,16 +168,19 @@ int main(int argc, char *argv[])
 	copy_tabs(&(In[0]), &Out,
 		  nfields, fields, ncats, cats);
     }
-    
-    Vect_close(&(In[0]));
+
+    /* print info about skipped features & close input maps */
+    for (iopt = 0; iopt < 2; iopt++) {
+        if (nskipped[iopt] > 0) {
+            G_warning(_("%d features from <%s> without category skipped"),
+                      nskipped[iopt], Vect_get_full_name(&(In[iopt])));
+        }
+        Vect_close(&(In[iopt]));
+    }
 
     Vect_build(&Out);
     Vect_close(&Out);
 
-    if (nskipped > 0) {
-	G_warning(_("%d features without category skipped"), nskipped);
-    }
-    
     G_done_msg(_("%d features written to output."), Vect_get_num_lines(&Out));
 
     exit(EXIT_SUCCESS);
