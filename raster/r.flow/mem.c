@@ -35,7 +35,7 @@
 
 void put_row_seg(layer l, int row)
 {
-    if (segment_put_row(l.seg, l.buf[row] - l.col_offset,
+    if (Segment_put_row(l.seg, l.buf[row] - l.col_offset,
 			row + l.row_offset) < 1)
 	G_fatal_error(_("Unable to write segment file for %s"), l.name);
 }
@@ -64,12 +64,12 @@ void allocate_heap(void)
     if (parm.seg) {
 	G_debug(1, "Allocating memory: segment");
 	el.seg = (SEGMENT *) G_malloc(sizeof(SEGMENT));
-	segment_init(el.seg, el.sfd, SEGSINMEM);
+	Segment_init(el.seg, el.sfd, SEGSINMEM);
 	as.seg = (SEGMENT *) G_malloc(sizeof(SEGMENT));
-	segment_init(as.seg, as.sfd, SEGSINMEM);
+	Segment_init(as.seg, as.sfd, SEGSINMEM);
 	if (parm.dsout) {
 	    ds.seg = (SEGMENT *) G_malloc(sizeof(SEGMENT));
-	    segment_init(ds.seg, ds.sfd, SEGSINMEM);
+	    Segment_init(ds.seg, ds.sfd, SEGSINMEM);
 	}
     }
 
@@ -122,11 +122,11 @@ void deallocate_heap(void)
     G_free(el.buf[-1] - 1);
 
     if (parm.seg) {
-	segment_release(el.seg);
+	Segment_release(el.seg);
 	if (!parm.mem)
-	    segment_release(as.seg);
+	    Segment_release(as.seg);
 	if (parm.dsout)
-	    segment_release(ds.seg);
+	    Segment_release(ds.seg);
     }
     else {
 	G_free(el.buf[region.rows] - 1);

@@ -186,24 +186,24 @@ int main(int argc, char **argv)
 
     /* Create segmented files for back cell and output layers  */
     in_row_fd = creat(in_row_file, 0666);
-    segment_format(in_row_fd, nrows, ncols, srows, scols, len);
+    Segment_format(in_row_fd, nrows, ncols, srows, scols, len);
     close(in_row_fd);
     in_col_fd = creat(in_col_file, 0666);
-    segment_format(in_col_fd, nrows, ncols, srows, scols, len);
+    Segment_format(in_col_fd, nrows, ncols, srows, scols, len);
     close(in_col_fd);
 
     out_fd = creat(out_file, 0666);
-    segment_format(out_fd, nrows, ncols, srows, scols, len);
+    Segment_format(out_fd, nrows, ncols, srows, scols, len);
     close(out_fd);
 
     /*   Open initialize and segment all files  */
     in_row_fd = open(in_row_file, 2);
-    segment_init(&in_row_seg, in_row_fd, 4);
+    Segment_init(&in_row_seg, in_row_fd, 4);
     in_col_fd = open(in_col_file, 2);
-    segment_init(&in_col_seg, in_col_fd, 4);
+    Segment_init(&in_col_seg, in_col_fd, 4);
 
     out_fd = open(out_file, 2);
-    segment_init(&out_seg, out_fd, 4);
+    Segment_init(&out_seg, out_fd, 4);
 
     /*   Write the back cell layers in the segmented files, and  
      *   Change UTM coordinates to ROWs and COLUMNs */
@@ -216,14 +216,14 @@ int main(int argc, char **argv)
 		    (window.north - cell[col]) / window.ns_res /* - 0.5 */ ;
 	    else
 		cell[col] = -1;
-	segment_put_row(&in_row_seg, cell, row);
+	Segment_put_row(&in_row_seg, cell, row);
 	Rast_get_c_row(backcol_fd, cell, row);
 
 	for (col = 0; col < ncols; col++)
 	    if (cell[col] > 0)
 		cell[col] =
 		    (cell[col] - window.west) / window.ew_res /* - 0.5 */ ;
-	segment_put_row(&in_col_seg, cell, row);
+	Segment_put_row(&in_col_seg, cell, row);
     }
 
     /* Convert easting and northing from the command line to row and col */
@@ -242,7 +242,7 @@ int main(int argc, char **argv)
 	    }
 
 	    value = (char *)&backrow;
-	    segment_get(&in_row_seg, value, row, col);
+	    Segment_get(&in_row_seg, value, row, col);
 	    /* ignore pt in no-data area */
 	    if (backrow < 0) {
 		G_warning("Ignoring point in NO-DATA area :");
@@ -250,7 +250,7 @@ int main(int argc, char **argv)
 		continue;
 	    }
 	    value = (char *)&backcol;
-	    segment_get(&in_col_seg, value, row, col);
+	    Segment_get(&in_col_seg, value, row, col);
 
 	    insert(&PRESENT_PT, row, col, backrow, backcol);
 	}
@@ -281,7 +281,7 @@ int main(int argc, char **argv)
 	    for (col = 0; col < ncols; col++) {
 		if (cell[col] > 0) {
 		    value = (char *)&backrow;
-		    segment_get(&in_row_seg, value, row, col);
+		    Segment_get(&in_row_seg, value, row, col);
 		    /* ignore pt in no-data area */
 		    if (backrow < 0) {
 			G_warning("Ignoring point in NO-DATA area:");
@@ -291,7 +291,7 @@ int main(int argc, char **argv)
 			continue;
 		    }
 		    value = (char *)&backcol;
-		    segment_get(&in_col_seg, value, row, col);
+		    Segment_get(&in_col_seg, value, row, col);
 		    insert(&PRESENT_PT, row, col, backrow, backcol);
 		}
 	    }			/* loop over cols */
@@ -314,24 +314,24 @@ int main(int argc, char **argv)
 	G_free(OLD_PT);
     }
 
-    /* Write pending updates by segment_put() to outputmap */
-    segment_flush(&out_seg);
+    /* Write pending updates by Segment_put() to outputmap */
+    Segment_flush(&out_seg);
 
     if (verbose)
 	G_message("\nWriting the output map  -%s-...", path_layer);
 
     path_fd = Rast_open_c_new(path_layer);
     for (row = 0; row < nrows; row++) {
-	segment_get_row(&out_seg, cell, row);
+	Segment_get_row(&out_seg, cell, row);
 	Rast_put_row(path_fd, cell, CELL_TYPE);
     }
 
     if (verbose)
 	G_message("finished.");
 
-    segment_release(&in_row_seg);	/* release memory  */
-    segment_release(&in_col_seg);
-    segment_release(&out_seg);
+    Segment_release(&in_row_seg);	/* release memory  */
+    Segment_release(&in_col_seg);
+    Segment_release(&out_seg);
 
     close(in_row_fd);		/* close all files */
     close(in_col_fd);

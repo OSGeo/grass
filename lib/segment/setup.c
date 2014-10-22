@@ -20,7 +20,7 @@
 
 
 /**
- * \fn int segment_setup (SEGMENT *SEG)
+ * \fn int Segment_setup (SEGMENT *SEG)
  *
  * \brief Setup segment.
  *
@@ -33,7 +33,7 @@
  * \return -2 if unable to allocate memory
  */
 
-int segment_setup(SEGMENT * SEG)
+int Segment_setup(SEGMENT * SEG)
 {
     int i;
     int seg_exp, n_total_segs;
@@ -43,7 +43,7 @@ int segment_setup(SEGMENT * SEG)
     if (SEG->nrows <= 0 || SEG->ncols <= 0
 	|| SEG->srows <= 0 || SEG->scols <= 0
 	|| SEG->len <= 0 || SEG->nseg <= 0) {
-	G_warning("segment_setup: illegal segment file parameters");
+	G_warning("Segment_setup: illegal segment file parameters");
 	return -1;
     }
 
@@ -71,13 +71,13 @@ int segment_setup(SEGMENT * SEG)
 	    SEG->srowbits = seg_exp;
 	    SEG->segbits = SEG->srowbits + SEG->scolbits;
 	    SEG->fast_adrs = 1;
-	    G_debug(1, "segment_setup: fast address activated");
+	    G_debug(1, "Segment_setup: fast address activated");
 	}
     }
     if (SEG->fast_adrs)
-	SEG->segment_address = segment_address_fast;
+	SEG->Segment_address = Segment_address_fast;
     else
-	SEG->segment_address = segment_address_slow;
+	SEG->Segment_address = Segment_address_slow;
     
     /* fast seek */
     SEG->fast_seek = 0;
@@ -89,25 +89,25 @@ int segment_setup(SEGMENT * SEG)
 	    SEG->lenbits = seg_exp;
 	    SEG->sizebits = SEG->segbits + SEG->lenbits;
 	    SEG->fast_seek = 1;
-	    G_debug(1, "segment_setup: fast seek activated");
+	    G_debug(1, "Segment_setup: fast seek activated");
 	}
     }
     if (SEG->fast_seek)
-	SEG->segment_seek = segment_seek_fast;
+	SEG->Segment_seek = Segment_seek_fast;
     else
-	SEG->segment_seek = segment_seek_slow;
+	SEG->Segment_seek = Segment_seek_slow;
 
     /* adjust number of open segments if larger than number of total segments */
     n_total_segs = SEG->spr * ((SEG->nrows + SEG->srows - 1) / SEG->srows);
     if (SEG->nseg > n_total_segs) {
-	G_debug(1, "segment_setup: reducing number of open segments from %d to %d",
+	G_debug(1, "Segment_setup: reducing number of open segments from %d to %d",
 		  SEG->nseg, n_total_segs);
 	SEG->nseg = n_total_segs;
     }
 
     if ((SEG->scb =
-	 (struct SEGMENT_SCB *)G_malloc(SEG->nseg *
-					sizeof(struct SEGMENT_SCB))) == NULL)
+	 (struct Segment_SCB *)G_malloc(SEG->nseg *
+					sizeof(struct Segment_SCB))) == NULL)
 	return -2;
 
     if ((SEG->freeslot = (int *)G_malloc(SEG->nseg * sizeof(int))) == NULL)
@@ -148,7 +148,7 @@ int segment_setup(SEGMENT * SEG)
     SEG->cur = 0;
     SEG->open = 1;
 
-    /* SEG->loaded = rbtree_create(segment_compare, sizeof(SEGID)); */
+    /* SEG->loaded = rbtree_create(Segment_compare, sizeof(SEGID)); */
     /* SEG->loaded = NULL; */
     
     /* index for each segment, same like cache of r.proj  */

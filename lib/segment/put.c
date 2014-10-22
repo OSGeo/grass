@@ -18,11 +18,11 @@
 
 
 /*bugfix: buf: char* vs int* -> wrong pointer arithmetics!!!. Pierre de Mouveaux - 09 april 2000 */
-/* int segment_put (SEGMENT *SEG,int *buf,int row,int col) */
+/* int Segment_put (SEGMENT *SEG,int *buf,int row,int col) */
 
 
 /**
- * \fn int segment_put (SEGMENT *SEG, void *buf, int row, int col)
+ * \fn int Segment_put (SEGMENT *SEG, void *buf, int row, int col)
  *
  * \brief Write value to segment file.
  *
@@ -42,12 +42,12 @@
  * \return -1 if unable to seek or write segment file
  */
 
-int segment_put(SEGMENT * SEG, const void *buf, off_t row, off_t col)
+int Segment_put(SEGMENT * SEG, const void *buf, off_t row, off_t col)
 {
     int index, n, i;
 
-    SEG->segment_address(SEG, row, col, &n, &index);
-    if ((i = segment_pagein(SEG, n)) < 0) {
+    SEG->Segment_address(SEG, row, col, &n, &index);
+    if ((i = Segment_pagein(SEG, n)) < 0) {
 	G_warning("segment lib: put: pagein failed");
 	return -1;
     }

@@ -18,7 +18,7 @@
 
 
 /**
- * \fn int segment_release (SEGMENT *SEG)
+ * \fn int Segment_release (SEGMENT *SEG)
  *
  * \brief Free memory allocated to segment.
  *
@@ -26,14 +26,14 @@
  * <b>seg</b>.
  *
  * <b>Note:</b> Does not close the file. Does not flush the data which 
- * may be pending from previous <i>segment_put()</i> calls.
+ * may be pending from previous <i>Segment_put()</i> calls.
  *
  * \param[in,out] SEG segment
  * \return 1 if successful
  * \return -1 if SEGMENT is not available (not open)
  */
 
-int segment_release(SEGMENT * SEG)
+int Segment_release(SEGMENT * SEG)
 {
     int i;
 

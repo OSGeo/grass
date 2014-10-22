@@ -38,7 +38,7 @@ int write_output(struct globals *globals)
 	for (col = 0; col < globals->ncols; col++) {
 
 	    if (!(FLAG_GET(globals->null_flag, row, col))) {
-		segment_get(&globals->rid_seg, (void *) &rid, row, col);
+		Segment_get(&globals->rid_seg, (void *) &rid, row, col);
 
 		if (rid > 0) {
 		    outbuf[col] = rid;
@@ -122,7 +122,7 @@ int write_output(struct globals *globals)
 
 		if (!(FLAG_GET(globals->null_flag, row, col))) {
 		    
-		    segment_get(&globals->rid_seg, (void *) &rid, row, col);
+		    Segment_get(&globals->rid_seg, (void *) &rid, row, col);
 
 		    if (rid > 0) {
 			
@@ -203,14 +203,14 @@ int close_files(struct globals *globals)
 {
     /* close segmentation files and output raster */
     G_debug(1, "closing files");
-    segment_close(&globals->bands_seg);
+    Segment_close(&globals->bands_seg);
     if (globals->bounds_map)
-	segment_close(&globals->bounds_seg);
+	Segment_close(&globals->bounds_seg);
 
     G_free(globals->bands_val);
     G_free(globals->second_val);
 
-    segment_close(&globals->rid_seg);
+    Segment_close(&globals->rid_seg);
 
     flag_destroy(globals->null_flag);
     flag_destroy(globals->candidate_flag);

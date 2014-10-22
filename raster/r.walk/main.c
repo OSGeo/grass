@@ -539,12 +539,12 @@ int main(int argc, char *argv[])
     /* Create segmented format files for cost layer and output layer */
     G_verbose_message(_("Creating some temporary files..."));
 
-    if (segment_open(&cost_seg, G_tempfile(), nrows, ncols, srows, scols,
+    if (Segment_open(&cost_seg, G_tempfile(), nrows, ncols, srows, scols,
 		     sizeof(struct cc), segments_in_memory) != 1)
 	G_fatal_error(_("Can not create temporary file"));
 
     if (dir == 1) {
-	if (segment_open(&dir_seg, G_tempfile(), nrows, ncols, srows, scols,
+	if (Segment_open(&dir_seg, G_tempfile(), nrows, ncols, srows, scols,
 		         sizeof(FCELL), segments_in_memory) != 1)
 	    G_fatal_error(_("Can not create temporary file"));
     }
@@ -624,7 +624,7 @@ int main(int argc, char *argv[])
 		}
 
 		costs.dtm = p_dtm;
-		segment_put(&cost_seg, &costs, row, col);
+		Segment_put(&cost_seg, &costs, row, col);
 		ptr1 = G_incr_void_ptr(ptr1, cost_dsize);
 		ptr2 = G_incr_void_ptr(ptr2, dtm_dsize);
 	    }
@@ -639,7 +639,7 @@ int main(int argc, char *argv[])
 	for (row = 0; row < nrows; row++) {
 	    G_percent(row, nrows, 2);
 	    for (col = 0; col < ncols; col++) {
-		segment_put(&dir_seg, &dnullval, row, col);
+		Segment_put(&dir_seg, &dnullval, row, col);
 	    }
 	}
 	G_percent(1, 1, 1);
@@ -812,19 +812,19 @@ int main(int argc, char *argv[])
 		if (!Rast_is_null_value(ptr2, data_type2)) {
 		    double cellval;
 
-		    segment_get(&cost_seg, &costs, row, col);
+		    Segment_get(&cost_seg, &costs, row, col);
 
 		    if (start_with_raster_vals == 1) {
 			cellval = Rast_get_d_value(ptr2, data_type2);
 			insert(cellval, row, col);
 			costs.cost_out = cellval;
-			segment_put(&cost_seg, &costs, row, col);
+			Segment_put(&cost_seg, &costs, row, col);
 		    }
 		    else {
 			value = &zero;
 			insert(zero, row, col);
 			costs.cost_out = *value;
-			segment_put(&cost_seg, &costs, row, col);
+			Segment_put(&cost_seg, &costs, row, col);
 		    }
 		    got_one = 1;
 		}
@@ -853,10 +853,10 @@ int main(int argc, char *argv[])
 		|| top_start_pt->col < 0 || top_start_pt->col >= ncols)
 		G_fatal_error(_("Specified starting location outside database window"));
 	    insert(zero, top_start_pt->row, top_start_pt->col);
-	    segment_get(&cost_seg, &costs, top_start_pt->row,
+	    Segment_get(&cost_seg, &costs, top_start_pt->row,
 			top_start_pt->col);
 	    costs.cost_out = *value;
-	    segment_put(&cost_seg, &costs, top_start_pt->row,
+	    Segment_put(&cost_seg, &costs, top_start_pt->row,
 			top_start_pt->col);
 	    top_start_pt = top_start_pt->next;
 	}
@@ -896,7 +896,7 @@ int main(int argc, char *argv[])
 	    break;
 
 	/* If I've already been updated, delete me */
-	segment_get(&cost_seg, &costs, pres_cell->row, pres_cell->col);
+	Segment_get(&cost_seg, &costs, pres_cell->row, pres_cell->col);
 	old_min_cost = costs.cost_out;
 	if (!Rast_is_d_null_value(&old_min_cost)) {
 	    if (pres_cell->min_cost > old_min_cost) {
@@ -1030,7 +1030,7 @@ int main(int argc, char *argv[])
 		continue;
 
 	    min_cost = dnullval;
-	    segment_get(&cost_seg, &costs, row, col);
+	    Segment_get(&cost_seg, &costs, row, col);
 
 	    switch (neighbor) {
 	    case 1:
@@ -1318,25 +1318,25 @@ int main(int argc, char *argv[])
 	    if (Rast_is_d_null_value(&min_cost))
 		continue;
 
-	    segment_get(&cost_seg, &costs, row, col);
+	    Segment_get(&cost_seg, &costs, row, col);
 	    old_min_cost = costs.cost_out;
 
 	    /* add to list */
 	    if (Rast_is_d_null_value(&old_min_cost)) {
 		costs.cost_out = min_cost;
-		segment_put(&cost_seg, &costs, row, col);
+		Segment_put(&cost_seg, &costs, row, col);
 		insert(min_cost, row, col);
 		if (dir == 1) {
-		    segment_put(&dir_seg, &cur_dir, row, col);
+		    Segment_put(&dir_seg, &cur_dir, row, col);
 		}
 	    }
 	    /* update with lower costs */
 	    else if (old_min_cost > min_cost) {
 		costs.cost_out = min_cost;
-		segment_put(&cost_seg, &costs, row, col);
+		Segment_put(&cost_seg, &costs, row, col);
 		insert(min_cost, row, col);
 		if (dir == 1) {
-		    segment_put(&dir_seg, &cur_dir, row, col);
+		    Segment_put(&dir_seg, &cur_dir, row, col);
 		}
 	    }
 	}
@@ -1386,7 +1386,7 @@ int main(int argc, char *argv[])
 			continue;
 		    }
 		}
-		segment_get(&cost_seg, &costs, row, col);
+		Segment_get(&cost_seg, &costs, row, col);
 		min_cost = costs.cost_out;
 		if (Rast_is_d_null_value(&min_cost)) {
 		    Rast_set_null_value((p), 1, cum_data_type);
@@ -1428,7 +1428,7 @@ int main(int argc, char *argv[])
 	for (row = 0; row < nrows; row++) {
 	    p = dir_cell;
 	    for (col = 0; col < ncols; col++) {
-		segment_get(&dir_seg, &cur_dir, row, col);
+		Segment_get(&dir_seg, &cur_dir, row, col);
 		*((FCELL *) p) = cur_dir;
 		p = G_incr_void_ptr(p, dir_size);
 	    }
@@ -1439,9 +1439,9 @@ int main(int argc, char *argv[])
 	G_free(dir_cell);
     }
 
-    segment_close(&cost_seg);	/* release memory  */
+    Segment_close(&cost_seg);	/* release memory  */
     if (dir == 1)
-	segment_close(&dir_seg);
+	Segment_close(&dir_seg);
 
     Rast_close(dtm_fd);
     Rast_close(cost_fd);

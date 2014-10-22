@@ -17,7 +17,7 @@ int seg_set_null_output(SEGMENT *output)
     for (r = 0; r < nrows; ++r) {
 	for (c = 0; c < ncols; ++c) {
 	    Rast_set_d_null_value(&output_cell, 1);
-	    segment_put(output, &output_cell, r, c);
+	    Segment_put(output, &output_cell, r, c);
 	}
     }
 
@@ -59,7 +59,7 @@ int seg_calculate_identifiers(SEGMENT *identifier, int number_of_streams,
 	for (j = 1; j < SA[i].number_of_cells - 1; ++j) {
 	    r = (int)SA[i].points[j] / ncols;
 	    c = (int)SA[i].points[j] % ncols;
-	    segment_put(identifier, &(SA[i].stream_num), r, c);
+	    Segment_put(identifier, &(SA[i].stream_num), r, c);
 	}
     }
 
@@ -115,14 +115,14 @@ int seg_calculate_distance(SEGMENT *output, int number_of_streams,
 		cum_length += SA[i].distance[j];
 		r = (int)SA[i].points[j] / ncols;
 		c = (int)SA[i].points[j] % ncols;
-		segment_put(output, &cum_length, r, c);
+		Segment_put(output, &cum_length, r, c);
 	    }
 	else
 	    for (j = SA[i].number_of_cells - 2; j > 0; --j) {
 		cum_length += SA[i].distance[j];
 		r = (int)SA[i].points[j] / ncols;
 		c = (int)SA[i].points[j] % ncols;
-		segment_put(output, &cum_length, r, c);
+		Segment_put(output, &cum_length, r, c);
 	    }
     }
 
@@ -167,7 +167,7 @@ int seg_calculate_cell(SEGMENT *output, int number_of_streams,
 	    r = (int)SA[i].points[j] / ncols;
 	    c = (int)SA[i].points[j] % ncols;
 	    output_cell = downstream ? k : j;
-	    segment_put(output, &output_cell, r, c);
+	    Segment_put(output, &output_cell, r, c);
 	}
     }
 
@@ -217,7 +217,7 @@ int seg_calculate_difference(SEGMENT *output, int number_of_streams,
 		SA[i].elevation[j] - SA[i].elevation[j + 1];
 	    r = (int)SA[i].points[j] / ncols;
 	    c = (int)SA[i].points[j] % ncols;
-	    segment_put(output, &output_cell, r, c);
+	    Segment_put(output, &output_cell, r, c);
 	}
     }
 
@@ -273,7 +273,7 @@ int seg_calculate_drop(SEGMENT *output, int number_of_streams,
 		r = (int)SA[i].points[j] / ncols;
 		c = (int)SA[i].points[j] % ncols;
 		output_cell = init - SA[i].elevation[j];
-		segment_put(output, &output_cell, r, c);
+		Segment_put(output, &output_cell, r, c);
 	    }
 	}
 	else {
@@ -282,7 +282,7 @@ int seg_calculate_drop(SEGMENT *output, int number_of_streams,
 		r = (int)SA[i].points[j] / ncols;
 		c = (int)SA[i].points[j] % ncols;
 		output_cell = SA[i].elevation[j] - init;
-		segment_put(output, &output_cell, r, c);
+		Segment_put(output, &output_cell, r, c);
 	    }
 	}
     }
@@ -347,7 +347,7 @@ int seg_calculate_gradient(SEGMENT *output, int number_of_streams,
 		r = (int)SA[i].points[j] / ncols;
 		c = (int)SA[i].points[j] % ncols;
 		output_cell = (init - SA[i].elevation[j]) / cum_length;
-		segment_put(output, &output_cell, r, c);
+		Segment_put(output, &output_cell, r, c);
 
 	    }
 	}
@@ -358,7 +358,7 @@ int seg_calculate_gradient(SEGMENT *output, int number_of_streams,
 		r = (int)SA[i].points[j] / ncols;
 		c = (int)SA[i].points[j] % ncols;
 		output_cell = (SA[i].elevation[j] - init) / cum_length;
-		segment_put(output, &output_cell, r, c);
+		Segment_put(output, &output_cell, r, c);
 	    }
 	}
     }
@@ -411,7 +411,7 @@ int seg_calculate_local_gradient(SEGMENT *output, int number_of_streams,
 		(SA[i].elevation[j] - SA[i].elevation[j + 1]) <
 		0 ? 0 : (SA[i].elevation[j] - SA[i].elevation[j + 1]);
 	    output_cell = elev_diff / SA[i].distance[j];
-	    segment_put(output, &output_cell, r, c);
+	    Segment_put(output, &output_cell, r, c);
 	}
     }
 
@@ -456,7 +456,7 @@ int seg_calculate_local_distance(SEGMENT *output, int number_of_streams,
 	    r = (int)SA[i].points[j] / ncols;
 	    c = (int)SA[i].points[j] % ncols;
 	    output_cell = SA[i].distance[j];
-	    segment_put(output, &output_cell, r, c);
+	    Segment_put(output, &output_cell, r, c);
 	}
     }
 
@@ -524,7 +524,7 @@ int seg_calculate_curvature(SEGMENT *output, int number_of_streams,
 	    output_cell =
 		first_derivative /
 		pow((1 + second_derivative * second_derivative), 1.5);
-	    segment_put(output, &output_cell, r, c);
+	    Segment_put(output, &output_cell, r, c);
 	}
     }
 

@@ -49,11 +49,11 @@ int read_points(char *in_point, SEGMENT * streams, SEGMENT * accum)
 	points[i].dj = 0;
 	points[i].cat = cat;
 	if (streams)
-	    segment_get(streams, &points[i].stream, points[i].r, points[i].c);
+	    Segment_get(streams, &points[i].stream, points[i].r, points[i].c);
 	else
 	    points[i].stream = 0;
 	if (accum) {
-	    segment_get(accum, &absaccum, points[i].r, points[i].c);
+	    Segment_get(accum, &absaccum, points[i].r, points[i].c);
 	    points[i].accum = fabs(absaccum);
 	}
 	else {

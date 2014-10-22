@@ -54,13 +54,13 @@ int snap_point(OUTLET *point, int radius, SEGMENT *streams, SEGMENT *accum,
 		if (!distance_mask[i + radius][j + radius])
 		    continue;
 
-		segment_get(streams, &teststream, point->r + i, point->c + j);
+		Segment_get(streams, &teststream, point->r + i, point->c + j);
 		distance = distance_mask[i + radius][j + radius];
 
 		if (teststream) {	/* is stream line */
 
 		    if (accum) {
-			segment_get(accum, &absaccum, point->r + i,
+			Segment_get(accum, &absaccum, point->r + i,
 				    point->c + j);
 			absaccum = fabs(absaccum);
 		    }
@@ -91,7 +91,7 @@ int snap_point(OUTLET *point, int radius, SEGMENT *streams, SEGMENT *accum,
 		if (!distance_mask[i + radius][j + radius])
 		    continue;
 
-		segment_get(accum, &absaccum, point->r + i, point->c + j);
+		Segment_get(accum, &absaccum, point->r + i, point->c + j);
 		absaccum = fabs(absaccum);
 
 		if (absaccum > maxaccum)
@@ -118,7 +118,7 @@ int snap_point(OUTLET *point, int radius, SEGMENT *streams, SEGMENT *accum,
 		if (!distance_mask[i + radius][j + radius])
 		    continue;
 
-		segment_get(accum, &absaccum, point->r + i, point->c + j);
+		Segment_get(accum, &absaccum, point->r + i, point->c + j);
 		absaccum = fabs(absaccum);
 
 		if (accum_treshold > 0 && absaccum > accum_treshold)

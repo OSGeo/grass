@@ -22,7 +22,7 @@ int cseg_open(CSEG * cseg, int srows, int scols, int nsegs_in_memory)
     }
     if (0 >
 	(errflag =
-	 segment_format(fd, Rast_window_rows(), Rast_window_cols(), srows, scols,
+	 Segment_format(fd, Rast_window_rows(), Rast_window_cols(), srows, scols,
 			sizeof(CELL)))) {
 	close(fd);
 	unlink(filename);
@@ -41,7 +41,7 @@ int cseg_open(CSEG * cseg, int srows, int scols, int nsegs_in_memory)
 	G_warning("cseg_open(): unable to re-open segment file");
 	return -4;
     }
-    if (0 > (errflag = segment_init(&(cseg->seg), fd, nsegs_in_memory))) {
+    if (0 > (errflag = Segment_init(&(cseg->seg), fd, nsegs_in_memory))) {
 	close(fd);
 	unlink(filename);
 	if (errflag == -1) {
