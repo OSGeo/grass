@@ -1,3 +1,6 @@
+"""Python interface to launch GRASS GIS modules in scripts
+"""
+
 from core   import *
 from db     import *
 from raster import *

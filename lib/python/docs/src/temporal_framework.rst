@@ -1,4 +1,4 @@
-The GRASS GIS Temporal Framework
+GRASS GIS Temporal Framework
 ================================
 
 Introduction

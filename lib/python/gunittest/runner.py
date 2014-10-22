@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
-"""!@package grass.gunittest.runner
-
-@brief Testing framework module for running tests in Python unittest fashion
+"""Testing framework module for running tests in Python unittest fashion
 
 Copyright (C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS GIS
 for details.
 
-@author Vaclav Petras
+:authors: Vaclav Petras
 
 File content taken from Python's  ``unittest.runner``, it will be used as
 a template. It is not expected that something will left.
