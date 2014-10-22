@@ -483,6 +483,248 @@ def compute_absolute_time_granularity(maps):
     return None
 
 ###############################################################################
+
+def compute_common_absolute_time_granularity(gran_list):
+    """Compute the greatest common granule from a list of absolute time granules
+    
+        .. code-block:: python
+
+            >>> import grass.temporal as tgis
+            >>> tgis.init()
+            >>> grans = ["1 second", "2 seconds", "30 seconds"]
+            >>> tgis.compute_common_absolute_time_granularity(grans)
+            '1 seconds'
+            
+            >>> grans = ["3 second", "6 seconds", "30 seconds"]
+            >>> tgis.compute_common_absolute_time_granularity(grans)
+            '3 seconds'
+            
+            >>> grans = ["12 second", "18 seconds", "30 seconds", "10 minutes"]
+            >>> tgis.compute_common_absolute_time_granularity(grans)
+            '6 seconds'
+            
+            >>> grans = ["20 second", "10 minutes", "2 hours"]
+            >>> tgis.compute_common_absolute_time_granularity(grans)
+            '20 seconds'
+            
+            >>> grans = ["7200 second", "240 minutes", "1 year"]
+            >>> tgis.compute_common_absolute_time_granularity(grans)
+            '7200 seconds'
+            
+            >>> grans = ["7200 second", "89 minutes", "1 year"]
+            >>> tgis.compute_common_absolute_time_granularity(grans)
+            '60 seconds'
+
+            >>> grans = ["10 minutes", "20 minutes", "30 minutes", "40 minutes", "2 hours"]
+            >>> tgis.compute_common_absolute_time_granularity(grans)
+            '10 minutes'
+
+            >>> grans = ["120 minutes", "2 hours"]
+            >>> tgis.compute_common_absolute_time_granularity(grans)
+            '120 minutes'
+
+            >>> grans = ["360 minutes", "3 hours"]
+            >>> tgis.compute_common_absolute_time_granularity(grans)
+            '180 minutes'
+
+            >>> grans = ["2 hours", "4 hours", "8 hours"]
+            >>> tgis.compute_common_absolute_time_granularity(grans)
+            '2 hours'
+
+            >>> grans = ["8 hours", "2 days"]
+            >>> tgis.compute_common_absolute_time_granularity(grans)
+            '8 hours'
+
+            >>> grans = ["48 hours", "1 month"]
+            >>> tgis.compute_common_absolute_time_granularity(grans)
+            '24 hours'
+
+            >>> grans = ["48 hours", "1 year"]
+            >>> tgis.compute_common_absolute_time_granularity(grans)
+            '24 hours'
+
+            >>> grans = ["2 months", "4 months", "1 year"]
+            >>> tgis.compute_common_absolute_time_granularity(grans)
+            '2 months'
+
+            >>> grans = ["120 months", "360 months", "4 years"]
+            >>> tgis.compute_common_absolute_time_granularity(grans)
+            '24 months'
+
+            >>> grans = ["120 months", "361 months", "4 years"]
+            >>> tgis.compute_common_absolute_time_granularity(grans)
+            '1 months'
+
+            >>> grans = ["2 years", "3 years", "4 years"]
+            >>> tgis.compute_common_absolute_time_granularity(grans)
+            '1 years'
+    """
+    
+    has_seconds = False # 0
+    has_minutes = False # 1
+    has_hours = False     # 2
+    has_days = False      # 3
+    has_months = False  # 4
+    has_years = False     # 5
+    
+    seconds = []
+    minutes = []
+    hours = []
+    days = []
+    months = []
+    years = []
+    
+    min_gran = 6
+    max_gran = -1
+    
+    for entry in gran_list:
+        if not check_granularity_string(entry, "absolute"):
+            return False
+
+        num,  gran = entry.split()
+        
+        if gran in ["seconds",  "second"]:
+            has_seconds = True
+            if min_gran > 0:
+                min_gran = 0
+            if max_gran < 0:
+                max_gran = 0
+                
+            seconds.append(int(num))
+
+        if gran in ["minutes",  "minute"]:
+            has_minutes = True
+            if min_gran > 1:
+                min_gran = 1
+            if max_gran < 1:
+                max_gran = 1
+                
+            minutes.append(int(num))
+
+        if gran in ["hours",  "hour"]:
+            has_hours = True
+            if min_gran > 2:
+                min_gran = 2
+            if max_gran < 2:
+                max_gran = 2
+                
+            hours.append(int(num))
+
+        if gran in ["days",  "day"]:
+            has_days = True
+            if min_gran > 3:
+                min_gran = 3
+            if max_gran < 3:
+                max_gran = 3
+                
+            days.append(int(num))
+
+        if gran in ["months",  "month"]:
+            has_months = True
+            if min_gran > 4:
+                min_gran = 4
+            if max_gran < 4:
+                max_gran = 4
+                
+            months.append(int(num))
+
+        if gran in ["years",  "year"]:
+            has_years = True
+            if min_gran > 5:
+                min_gran = 5
+            if max_gran < 5:
+                max_gran = 5
+                
+            years.append(int(num))
+            
+    if has_seconds:
+        if has_minutes:
+            minutes.sort()
+            seconds.append(minutes[0]*60)
+        if has_hours:
+            hours.sort()
+            seconds.append(hours[0]*60*60)
+        if has_days:
+            days.sort()
+            seconds.append(days[0]*60*60*24)
+        if has_months:
+            months.sort()
+            seconds.append(months[0]*60*60*24*28)
+            seconds.append(months[0]*60*60*24*29)
+            seconds.append(months[0]*60*60*24*30)
+            seconds.append(months[0]*60*60*24*31)
+        if has_years:
+            years.sort()
+            seconds.append(years[0]*60*60*24*365)
+            seconds.append(years[0]*60*60*24*366)
+
+        num = gcd_list(seconds)
+        return "%i %s"%(num,  "seconds")
+        
+    elif has_minutes:
+        if has_hours:
+            hours.sort()
+            minutes.append(hours[0]*60)
+        if has_days:
+            days.sort()
+            minutes.append(days[0]*60*24)
+        if has_months:
+            months.sort()
+            minutes.append(months[0]*60*24*28)
+            minutes.append(months[0]*60*24*29)
+            minutes.append(months[0]*60*24*30)
+            minutes.append(months[0]*60*24*31)
+        if has_years:
+            years.sort()
+            minutes.append(years[0]*60*24*365)
+            minutes.append(years[0]*60*24*366)
+        num = gcd_list(minutes)
+        return "%i %s"%(num,  "minutes")
+        
+    elif has_hours:
+        if has_days:
+            days.sort()
+            hours.append(days[0]*24)
+        if has_months:
+            months.sort()
+            hours.append(months[0]*24*28)
+            hours.append(months[0]*24*29)
+            hours.append(months[0]*24*30)
+            hours.append(months[0]*24*31)
+        if has_years:
+            years.sort()
+            hours.append(years[0]*24*365)
+            hours.append(years[0]*24*366)
+        num = gcd_list(hours)
+        return "%i %s"%(num,  "hours")
+
+    elif has_days:
+        if has_months:
+            months.sort()
+            days.append(months[0]*28)
+            days.append(months[0]*29)
+            days.append(months[0]*30)
+            days.append(months[0]*31)
+        if has_years:
+            years.sort()
+            days.append(years[0]*365)
+            days.append(years[0]*366)
+        num = gcd_list(days)
+        return "%i %s"%(num,  "days")
+
+    elif has_months:
+        if has_years:
+            years.sort()
+            months.append(years[0]*12)
+        num = gcd_list(months)
+        return "%i %s"%(num,  "months")
+        
+    elif has_years:
+        num = gcd_list(years)
+        return "%i %s"%(num,  "years")
+        
+
+###############################################################################
 # http://akiscode.com/articles/gcd_of_a_list.shtml
 # Copyright (c) 2010 Stephen Akiki
 # MIT License (Means you can do whatever you want with this)
