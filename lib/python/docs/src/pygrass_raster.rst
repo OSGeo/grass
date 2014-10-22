@@ -175,7 +175,7 @@ opening maps in a read-write mode. ::
 Due to the unique behavior of this class, the RasterSegment class defines two
 methods to read a map:
 
-    * ``get_row`` calls the C function ``segment_get_row`` and returns a buffer
+    * ``get_row`` calls the C function ``Segment_get_row`` and returns a buffer
       object with the row. ::
 
         >>> # call explicity the method
@@ -183,7 +183,7 @@ methods to read a map:
         >>> # call implicity the method
         >>> elev_row0 = elev[0]
 
-    * ``get`` calls the C function ``segment_get`` and returns the value of the
+    * ``get`` calls the C function ``Segment_get`` and returns the value of the
       map cell. ::
 
         >>> # call explicity the method

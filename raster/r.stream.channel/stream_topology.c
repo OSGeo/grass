@@ -284,7 +284,7 @@ int seg_build_streamlines(SEGMENT *streams, SEGMENT *dirs,
 	r = SA[i].init_r;
 	c = SA[i].init_c;
 	Segment_get(streams, &(SA[i].order), r, c);
-	//segment_get(streams,&streams_cell,r,c);
+	/* Segment_get(streams,&streams_cell,r,c); */
 	SA[i].number_of_cells = 0;
 
 	do {

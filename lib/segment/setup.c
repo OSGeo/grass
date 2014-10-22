@@ -43,7 +43,7 @@ int Segment_setup(SEGMENT * SEG)
     if (SEG->nrows <= 0 || SEG->ncols <= 0
 	|| SEG->srows <= 0 || SEG->scols <= 0
 	|| SEG->len <= 0 || SEG->nseg <= 0) {
-	G_warning("segment_setup: illegal segment file parameters");
+	G_warning("Segment_setup: illegal segment file parameters");
 	return -1;
     }
 
@@ -71,7 +71,7 @@ int Segment_setup(SEGMENT * SEG)
 	    SEG->srowbits = seg_exp;
 	    SEG->segbits = SEG->srowbits + SEG->scolbits;
 	    SEG->fast_adrs = 1;
-	    G_debug(1, "segment_setup: fast address activated");
+	    G_debug(1, "Segment_setup: fast address activated");
 	}
     }
     if (SEG->fast_adrs)
@@ -89,7 +89,7 @@ int Segment_setup(SEGMENT * SEG)
 	    SEG->lenbits = seg_exp;
 	    SEG->sizebits = SEG->segbits + SEG->lenbits;
 	    SEG->fast_seek = 1;
-	    G_debug(1, "segment_setup: fast seek activated");
+	    G_debug(1, "Segment_setup: fast seek activated");
 	}
     }
     if (SEG->fast_seek)
@@ -100,7 +100,7 @@ int Segment_setup(SEGMENT * SEG)
     /* adjust number of open segments if larger than number of total segments */
     n_total_segs = SEG->spr * ((SEG->nrows + SEG->srows - 1) / SEG->srows);
     if (SEG->nseg > n_total_segs) {
-	G_debug(1, "segment_setup: reducing number of open segments from %d to %d",
+	G_debug(1, "Segment_setup: reducing number of open segments from %d to %d",
 		  SEG->nseg, n_total_segs);
 	SEG->nseg = n_total_segs;
     }
