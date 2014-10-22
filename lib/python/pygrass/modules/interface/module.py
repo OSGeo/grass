@@ -418,8 +418,6 @@ class Module(object):
         plus some extra parameters that are: run_, stdin_, stdout_, stderr_,
         env_ and finish_.
         """
-        self._msgr.debug(1, "Module.__call__(): %s" % (self.get_bash()))
-        
         if not args and not kargs:
             self.run()
             return self
@@ -458,6 +456,11 @@ class Module(object):
                 self.flags[key].value = val
             else:
                 raise ParameterError('%s is not a valid parameter.' % key)
+
+        #
+        # print debug message
+        #
+        self._msgr.debug(0, "Module.__call__(): %s" % (self.get_bash()))
 
         #
         # check if execute
