@@ -7,6 +7,7 @@ PYDIR = $(ETC)/python
 GDIR = $(PYDIR)/grass
 DSTDIR = $(GDIR)/gunittest
 
+# TODO: add multireport multirunner
 MODULES = case gmodules loader runner checkers gutils invoker main reporters utils
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)

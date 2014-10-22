@@ -1,5 +1,3 @@
-.. _vector-label:
-
 Introduction to Vector classes
 ==============================
 

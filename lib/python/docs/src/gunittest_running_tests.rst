@@ -1,5 +1,5 @@
-Running the tests of GRASS GIS
-==============================
+Running the test framework of GRASS GIS
+=======================================
 
 This is an advanced guide to running tests of GRASS GIS using GRASS
 testing framework (`gunittest`).
@@ -76,4 +76,4 @@ using ``crontab -e`` and adding the following line::
 
     0 4 * * 1 /home/vpetras/grasstests/test_grass_gis.sh
 
-Which will perform the tests every Monday at 4 in the morning.
+Which will perform the tests every Monday at 4am in the (North Carolina) morning.

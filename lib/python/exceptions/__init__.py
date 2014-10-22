@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+"""GRASS GIS interface to Python exceptions
+"""
 
 import subprocess
 

@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
-"""!@package grass.gunittest.utils
-
-@brief GRASS Python testing framework utilities (general and test-specific)
+"""GRASS Python testing framework utilities (general and test-specific)
 
 Copyright (C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS GIS
 for details.
 
-@author Vaclav Petras
+:authors: Vaclav Petras
 """
 
 import os
