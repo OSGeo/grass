@@ -6,13 +6,13 @@
 
 #include "proto.h"
 
-int select_lines(struct Map_info *aIn, int atype, int afield,
-		 struct Map_info *bIn, int btype, int bfield,
-		 int cat_flag, int operator, const char *relate,
-		 int *ALines)
+void select_lines(struct Map_info *aIn, int atype, int afield,
+                  struct Map_info *bIn, int btype, int bfield,
+                  int cat_flag, int operator, const char *relate,
+                  int *ALines, int* nskipped)
 {
     int i;
-    int nalines, aline, nskipped, ltype;
+    int nalines, aline, ltype;
     
     struct line_pnts *APoints, *BPoints;
     struct ilist *BoundList, *LList;
@@ -25,7 +25,7 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
     void *AGeom = NULL;
 #endif
 
-    nskipped = 0;
+    nskipped[0] = nskipped[1] = 0;
     APoints = Vect_new_line_struct();
     BPoints = Vect_new_line_struct();
     List = Vect_new_boxlist(1);
@@ -51,7 +51,7 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 
 	    /* Check category */
 	    if (!cat_flag && Vect_get_line_cat(aIn, aline, afield) < 0) {
-		nskipped++;
+		nskipped[0]++;
 		continue;
 	    }
 
@@ -92,7 +92,7 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 		    /* Check category */
 		    if (!cat_flag &&
 			Vect_get_line_cat(bIn, bline, bfield) < 0) {
-			nskipped++;
+			nskipped[1]++;
 			continue;
 		    }
 		    
@@ -133,7 +133,7 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 		    G_debug(3, "  barea = %d", barea);
 		    
 		    if (Vect_get_area_cat(bIn, barea, bfield) < 0) {
-			nskipped++;
+			nskipped[1]++;
 			continue;
 		    }
 
@@ -177,7 +177,7 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 	    G_percent(aarea, naareas, 2);	/* must be before any continue */
 
 	    if (Vect_get_area_cat(aIn, aarea, afield) < 0) {
-		nskipped++;
+		nskipped[0]++;
 		continue;
 	    }
 	
@@ -205,7 +205,7 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 
 		    if (!cat_flag &&
 			Vect_get_line_cat(bIn, bline, bfield) < 0) {
-			nskipped++;
+			nskipped[1]++;
 			continue;
 		    }
 		    
@@ -269,7 +269,7 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
 			G_debug(3, "  barea = %d", barea);
 
 			if (Vect_get_area_cat(bIn, barea, bfield) < 0) {
-			    nskipped++;
+			    nskipped[1]++;
 			    continue;
 			}
 
@@ -331,5 +331,5 @@ int select_lines(struct Map_info *aIn, int atype, int afield,
     Vect_destroy_boxlist(List);
     Vect_destroy_boxlist(TmpList);
 
-    return nskipped;
+    return;
 }
