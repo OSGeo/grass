@@ -400,7 +400,7 @@ class Module(object):
         #
         # print debug message
         #
-        self._msgr.debug(0, "Module.__call__(): %s" % (self.get_bash()))
+        self._msgr.debug(1, "Module.__call__(): %s" % (self.get_bash()))
 
         #
         # check if execute
