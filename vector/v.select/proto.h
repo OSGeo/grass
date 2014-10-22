@@ -36,9 +36,9 @@ int area_relate_geos(struct Map_info *, const GEOSGeometry *,
 #endif
 
 /* select.c */
-int select_lines(struct Map_info *, int, int,
-		 struct Map_info *, int, int,
-		 int, int, const char *, int *);
+void select_lines(struct Map_info *, int, int,
+                  struct Map_info *, int, int,
+                  int, int, const char *, int *, int*);
 
 /* overlap.c */
 void add_aarea(struct Map_info *, int, int *);
