@@ -153,6 +153,7 @@ int exact_checks(GDALDataType export_datatype,
 	G_warning("Raster export results in data loss.");
 	ret = -2;
     }
+    G_message(_("Using GDAL data type <%s>"), GDALGetDataTypeName(export_datatype));
 
     /* a default nodata value was used and NULL cells were present */
     if (n_nulls && default_nodataval) {
