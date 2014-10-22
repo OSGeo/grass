@@ -350,8 +350,6 @@ class Module(object):
         self.__call__.__func__.__doc__ = self.__doc__
 
     def __call__(self, *args, **kargs):
-        self._msgr.debug(1, "Module.__call__(): %s" % (self.get_bash()))
-        
         if not args and not kargs:
             self.run()
             return
@@ -398,6 +396,11 @@ class Module(object):
                 self.flags[key].value = val
             else:
                 raise ParameterError('%s is not a valid parameter.' % key)
+
+        #
+        # print debug message
+        #
+        self._msgr.debug(0, "Module.__call__(): %s" % (self.get_bash()))
 
         #
         # check if execute
