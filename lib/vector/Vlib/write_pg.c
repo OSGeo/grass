@@ -1081,6 +1081,7 @@ int create_pg_layer(struct Map_info *Map, int type)
         pg_info->feature_type = SF_LINESTRING;
         break;
     case GV_BOUNDARY:
+    case GV_AREA:
         pg_info->feature_type = SF_POLYGON;
         break;
     case GV_FACE:
@@ -1215,7 +1216,12 @@ off_t write_line_sf(struct Map_info *Map, int type,
     /* get category & check for attributes */
     cat = -1;
     if (cats->n_cats > 0) {
-        int field = pg_info->fi->number;
+        int field;
+        
+        if (pg_info->fi)
+            field = pg_info->fi->number;
+        else
+            field = 1;
         
         if (!Vect_cat_get(cats, field, &cat))
             G_warning(_("No category defined for layer %d"), field);
