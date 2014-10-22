@@ -10,21 +10,24 @@ for details.
 
 """
 
-import grass.pygrass.modules as pygrass
 from temporal_raster_base_algebra import *
 
 ###############################################################################
 
+
 class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
     """The temporal raster algebra class"""
 
-    def __init__(self, pid=None, run=False, debug=True, spatial = False, nprocs = 1, register_null = False):
-        TemporalRasterBaseAlgebraParser.__init__(self, pid, run, debug, spatial, nprocs, register_null)
+    def __init__(self, pid=None, run=False, debug=True, spatial=False,
+                 nprocs=1, register_null=False):
+        TemporalRasterBaseAlgebraParser.__init__(self, pid, run, debug,
+                                                 spatial, nprocs,
+                                                 register_null)
 
         self.m_mapcalc = pymod.Module('r3.mapcalc')
         self.m_remove = pymod.Module('g.remove')
 
-    def parse(self, expression, basename = None, overwrite=False):
+    def parse(self, expression, basename=None, overwrite=False):
         self.lexer = TemporalRasterAlgebraLexer()
         self.lexer.build()
         self.parser = yacc.yacc(module=self, debug=self.debug)
@@ -102,17 +105,24 @@ class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
                     # Get neighboring map and set temporal extent.
                     map_n = maplist[new_index]
                     # Generate an intermediate map for the result map list.
-                    map_new = self.generate_new_map(map_n, bool_op = 'and', copy = True)
+                    map_new = self.generate_new_map(map_n, bool_op='and',
+                                                    copy=True)
                     map_new.set_temporal_extent(map_i_t_extent)
                     # Create r.mapcalc expression string for the operation.
                     if "cmd_list" in dir(map_new) and len(t) == 5:
-                        cmdstring = "%s" %(map_new.cmd_list)
+                        cmdstring = "%s" % (map_new.cmd_list)
                     elif "cmd_list" not in dir(map_new) and len(t) == 5:
-                        cmdstring = "%s" %(map_n.get_id())
-                    elif "cmd_list" in dir(map_new) and len(t) in (9,11):
-                        cmdstring = "%s[%s,%s,%s]" %(map_new.cmd_list, row_neighbor, col_neighbor, depth_neighbor)
-                    elif "cmd_list" not in dir(map_new) and len(t) in (9,11):
-                        cmdstring = "%s[%s,%s,%s]" %(map_n.get_id(), row_neighbor, col_neighbor, depth_neighbor)
+                        cmdstring = "%s" % (map_n.get_id())
+                    elif "cmd_list" in dir(map_new) and len(t) in (9, 11):
+                        cmdstring = "%s[%s,%s,%s]" % (map_new.cmd_list,
+                                                      row_neighbor,
+                                                      col_neighbor,
+                                                      depth_neighbor)
+                    elif "cmd_list" not in dir(map_new) and len(t) in (9, 11):
+                        cmdstring = "%s[%s,%s,%s]" % (map_n.get_id(),
+                                                      row_neighbor,
+                                                      col_neighbor,
+                                                      depth_neighbor)
                     # Set new command list for map.
                     map_new.cmd_list = cmdstring
                     # Append map with updated command list to result list.
@@ -125,5 +135,3 @@ class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-
-

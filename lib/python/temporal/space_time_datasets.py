@@ -9,11 +9,11 @@ for details.
 :authors: Soeren Gebbert
 """
 import getpass
-import logging
 from abstract_map_dataset import *
 from abstract_space_time_dataset import *
 
 ###############################################################################
+
 
 class RasterDataset(AbstractMapDataset):
     """Raster dataset class
@@ -115,7 +115,7 @@ class RasterDataset(AbstractMapDataset):
            :return: True if this class is a space time dataset, False otherwise
         """
         return False
-        
+
     def get_type(self):
         return 'raster'
 
@@ -214,11 +214,11 @@ class RasterDataset(AbstractMapDataset):
             return False
 
         check, dates = self.ciface.read_raster_timestamp(self.get_name(),
-                                                      self.get_mapset(),)
+                                                         self.get_mapset(),)
 
         if check < 1:
             self.msgr.error(_("Unable to read timestamp file "
-                         "for raster map <%s>" % (self.get_map_id())))
+                              "for raster map <%s>" % (self.get_map_id())))
             return False
 
         if len(dates) == 2:
@@ -242,12 +242,12 @@ class RasterDataset(AbstractMapDataset):
 
         if check == -1:
             self.msgr.error(_("Unable to create timestamp file "
-                         "for raster map <%s>" % (self.get_map_id())))
+                              "for raster map <%s>" % (self.get_map_id())))
             return False
 
         if check == -2:
-            self.msgr.error(_("Invalid datetime in timestamp for raster map <%s>" %
-                         (self.get_map_id())))
+            self.msgr.error(_("Invalid datetime in timestamp for raster map "
+                              "<%s>" % (self.get_map_id())))
             return False
 
         if check == -3:
@@ -268,8 +268,8 @@ class RasterDataset(AbstractMapDataset):
                                                     self.get_mapset())
 
         if check == -1:
-            self.msgr.error(_("Unable to remove timestamp for raster map <%s>" %
-                         (self.get_name())))
+            self.msgr.error(_("Unable to remove timestamp for raster map <%s>"
+                            % (self.get_name())))
             return False
 
         return True
@@ -284,12 +284,13 @@ class RasterDataset(AbstractMapDataset):
 
     def load(self):
         """Load all info from an existing raster map into the internal structure
-            
-            This method checks first if the map exists, in case it exists
-            the metadata of the map is put into this object and True is returned.
-            
-            :return: True is the map exists and the metadata was filled successfully
-                          and getting the data was successfull, False otherwise
+
+           This method checks first if the map exists, in case it exists
+           the metadata of the map is put into this object and True is returned
+
+           :return: True is the map exists and the metadata was filled
+                    successfully and getting the data was successfull,
+                    False otherwise
         """
 
         if self.map_exists() is not True:
@@ -323,12 +324,13 @@ class RasterDataset(AbstractMapDataset):
             self.metadata.set_cols(cols)
             self.metadata.set_rows(rows)
             self.metadata.set_number_of_cells(ncells)
-            
+
             return True
 
         return False
 
 ###############################################################################
+
 
 class Raster3DDataset(AbstractMapDataset):
     """Raster3d dataset class
@@ -431,7 +433,7 @@ class Raster3DDataset(AbstractMapDataset):
            :return: True if this class is a space time dataset, False otherwise
         """
         return False
-        
+
     def get_type(self):
         return "raster3d"
 
@@ -494,8 +496,9 @@ class Raster3DDataset(AbstractMapDataset):
             return self.spatial_extent.disjoint_union_2d(dataset.spatial_extent)
 
     def get_np_array(self):
-        """Return this 3D raster map as memmap numpy style array to access the 3D raster
-           values in numpy style without loading the whole map in the RAM.
+        """Return this 3D raster map as memmap numpy style array to access the
+           3D raster values in numpy style without loading the whole map in
+           the RAM.
 
            In case this 3D raster map does exists in the grass spatial database,
            the map will be exported using r3.out.bin to a temporary location
@@ -530,7 +533,7 @@ class Raster3DDataset(AbstractMapDataset):
            :return: True if success, False on error
         """
         return self.ciface.has_raster3d_timestamp(self.get_name(),
-                                                self.get_mapset())
+                                                  self.get_mapset())
 
     def read_timestamp_from_grass(self):
         """Read the timestamp of this map from the map metadata
@@ -545,11 +548,11 @@ class Raster3DDataset(AbstractMapDataset):
             return False
 
         check, dates = self.ciface.read_raster3d_timestamp(self.get_name(),
-                                                      self.get_mapset(),)
+                                                           self.get_mapset(),)
 
         if check < 1:
             self.msgr.error(_("Unable to read timestamp file "
-                         "for 3D raster map <%s>" % (self.get_map_id())))
+                              "for 3D raster map <%s>" % (self.get_map_id())))
             return False
 
         if len(dates) == 2:
@@ -573,12 +576,12 @@ class Raster3DDataset(AbstractMapDataset):
 
         if check == -1:
             self.msgr.error(_("Unable to create timestamp file "
-                         "for 3D raster map <%s>" % (self.get_map_id())))
+                              "for 3D raster map <%s>" % (self.get_map_id())))
             return False
 
         if check == -2:
-            self.msgr.error(_("Invalid datetime in timestamp for 3D raster map <%s>" %
-                         (self.get_map_id())))
+            self.msgr.error(_("Invalid datetime in timestamp for 3D raster "
+                              "map <%s>" % (self.get_map_id())))
             return False
 
         if check == -3:
@@ -596,8 +599,8 @@ class Raster3DDataset(AbstractMapDataset):
                                                       self.get_mapset())
 
         if check == -1:
-            self.msgr.error(_("Unable to remove timestamp for raster map <%s>" %
-                         (self.get_name())))
+            self.msgr.error(_("Unable to remove timestamp for raster map "
+                              "<%s>" % (self.get_name())))
             return False
 
         return True
@@ -612,12 +615,13 @@ class Raster3DDataset(AbstractMapDataset):
 
     def load(self):
         """Load all info from an existing 3d raster map into the internal structure
-            
-            This method checks first if the map exists, in case it exists
-            the metadata of the map is put into this object and True is returned.
-            
-            :return: True is the map exists and the metadata was filled successfully
-                         and getting the data was successfull, False otherwise
+
+           This method checks first if the map exists, in case it exists
+           the metadata of the map is put into this object and True is returned
+
+           :return: True is the map exists and the metadata was filled
+                    successfully and getting the data was successfull,
+                    False otherwise
         """
 
         if self.map_exists() is not True:
@@ -628,12 +632,15 @@ class Raster3DDataset(AbstractMapDataset):
 
         # Fill spatial extent
         kvp = self.ciface.read_raster3d_info(self.get_name(),
-                                           self.get_mapset())
+                                             self.get_mapset())
 
         if kvp:
-            self.set_spatial_extent_from_values(north=kvp["north"], south=kvp["south"],
-                                    east=kvp["east"], west=kvp["west"],
-                                    top=kvp["top"], bottom=kvp["bottom"])
+            self.set_spatial_extent_from_values(north=kvp["north"],
+                                                south=kvp["south"],
+                                                east=kvp["east"],
+                                                west=kvp["west"],
+                                                top=kvp["top"],
+                                                bottom=kvp["bottom"])
 
             # Fill metadata
             self.metadata.set_nsres(kvp["nsres"])
@@ -653,12 +660,13 @@ class Raster3DDataset(AbstractMapDataset):
             self.metadata.set_rows(rows)
             self.metadata.set_depths(depths)
             self.metadata.set_number_of_cells(ncells)
-            
+
             return True
 
         return False
 
 ###############################################################################
+
 
 class VectorDataset(AbstractMapDataset):
     """Vector dataset class
@@ -753,7 +761,7 @@ class VectorDataset(AbstractMapDataset):
            :return: True if this class is a space time dataset, False otherwise
         """
         return False
-        
+
     def get_type(self):
         return "vector"
 
@@ -822,7 +830,6 @@ class VectorDataset(AbstractMapDataset):
                                                 self.get_mapset(),
                                                 self.get_layer())
 
-
     def read_timestamp_from_grass(self):
         """Read the timestamp of this map from the map metadata
            in the grass file system based spatial database and
@@ -834,11 +841,11 @@ class VectorDataset(AbstractMapDataset):
             return False
 
         check, dates = self.ciface.read_vector_timestamp(self.get_name(),
-                                                      self.get_mapset(),)
+                                                         self.get_mapset(),)
 
         if check < 1:
             self.msgr.error(_("Unable to read timestamp file "
-                         "for vector map <%s>" % (self.get_map_id())))
+                              "for vector map <%s>" % (self.get_map_id())))
             return False
 
         if len(dates) == 2:
@@ -861,12 +868,12 @@ class VectorDataset(AbstractMapDataset):
 
         if check == -1:
             self.msgr.error(_("Unable to create timestamp file "
-                         "for vector map <%s>" % (self.get_map_id())))
+                              "for vector map <%s>" % (self.get_map_id())))
             return False
 
         if check == -2:
-            self.msgr.error(_("Invalid datetime in timestamp for vector map <%s>" %
-                         (self.get_map_id())))
+            self.msgr.error(_("Invalid datetime in timestamp for vector "
+                              "map <%s>" % (self.get_map_id())))
             return False
 
         return True
@@ -881,8 +888,8 @@ class VectorDataset(AbstractMapDataset):
                                                     self.get_mapset())
 
         if check == -1:
-            self.msgr.error(_("Unable to remove timestamp for vector map <%s>" %
-                         (self.get_name())))
+            self.msgr.error(_("Unable to remove timestamp for vector "
+                              "map <%s>" % (self.get_name())))
             return False
 
         return True
@@ -895,21 +902,20 @@ class VectorDataset(AbstractMapDataset):
         return self.ciface.vector_map_exists(self.get_name(),
                                              self.get_mapset())
 
-
     def load(self):
 
         """Load all info from an existing vector map into the internal structure
-            
-            This method checks first if the map exists, in case it exists
-            the metadata of the map is put into this object and True is returned.
-            
-            :return: True is the map exists and the metadata was filled successfully
-                          and getting the data was successfull, False otherwise
+
+           This method checks first if the map exists, in case it exists
+           the metadata of the map is put into this object and True is returned
+
+           :return: True is the map exists and the metadata was filled
+                    successfully and getting the data was successfull,
+                    False otherwise
         """
 
         if self.map_exists() is not True:
             return False
-
 
         # Fill base information
         self.base.set_creator(str(getpass.getuser()))
@@ -921,9 +927,12 @@ class VectorDataset(AbstractMapDataset):
 
         if kvp:
             # Fill spatial extent
-            self.set_spatial_extent_from_values(north=kvp["north"], south=kvp["south"],
-                                    east=kvp["east"], west=kvp["west"],
-                                    top=kvp["top"], bottom=kvp["bottom"])
+            self.set_spatial_extent_from_values(north=kvp["north"],
+                                                south=kvp["south"],
+                                                east=kvp["east"],
+                                                west=kvp["west"],
+                                                top=kvp["top"],
+                                                bottom=kvp["bottom"])
 
             # Fill metadata
             self.metadata.set_3d_info(kvp["map3d"])
@@ -939,12 +948,13 @@ class VectorDataset(AbstractMapDataset):
             self.metadata.set_number_of_islands(kvp["islands"])
             self.metadata.set_number_of_holes(kvp["holes"])
             self.metadata.set_number_of_volumes(kvp["volumes"])
-            
+
             return True
 
         return False
 
 ###############################################################################
+
 
 class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
     """Space time raster dataset class
@@ -958,7 +968,7 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
            :return: True if this class is a space time dataset, False otherwise
         """
         return True
-        
+
     def get_type(self):
         return "strds"
 
@@ -1025,6 +1035,7 @@ class SpaceTimeRasterDataset(AbstractSpaceTimeDataset):
 
 ###############################################################################
 
+
 class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
     """Space time raster3d dataset class
     """
@@ -1038,7 +1049,7 @@ class SpaceTimeRaster3DDataset(AbstractSpaceTimeDataset):
            :return: True if this class is a space time dataset, False otherwise
         """
         return True
-        
+
     def get_type(self):
         return "str3ds"
 
@@ -1137,7 +1148,7 @@ class SpaceTimeVectorDataset(AbstractSpaceTimeDataset):
            :return: True if this class is a space time dataset, False otherwise
         """
         return True
-        
+
     def get_type(self):
         return "stvds"
 

@@ -48,4 +48,3 @@ def dataset_factory(type, id):
         return None
 
     return sp
-

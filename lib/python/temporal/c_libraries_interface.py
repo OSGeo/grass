@@ -12,31 +12,30 @@ for details.
 """
 
 import sys
-from multiprocessing import Process, Lock, Pipe,  Queue
+from multiprocessing import Process, Lock, Pipe
 import logging
 from ctypes import *
 from core import *
-import core as corefunc
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
 import grass.lib.vector as libvector
 import grass.lib.date as libdate
 import grass.lib.raster3d as libraster3d
 import grass.lib.temporal as libtgis
-import signal, os
 
 ###############################################################################
 
+
 class RPCDefs(object):
     # Function identifier and index
-    STOP=0
-    HAS_TIMESTAMP=1
-    WRITE_TIMESTAMP=2
-    READ_TIMESTAMP=3
-    REMOVE_TIMESTAMP=4
-    READ_MAP_INFO=5
-    MAP_EXISTS=6
-    READ_MAP_INFO=7
+    STOP = 0
+    HAS_TIMESTAMP = 1
+    WRITE_TIMESTAMP = 2
+    READ_TIMESTAMP = 3
+    REMOVE_TIMESTAMP = 4
+    READ_MAP_INFO = 5
+    MAP_EXISTS = 6
+    READ_MAP_INFO = 7
     AVAILABLE_MAPSETS = 8
     GET_DRIVER_NAME = 9
     GET_DATABASE_NAME = 10
@@ -45,77 +44,83 @@ class RPCDefs(object):
     G_GISDBASE = 13
     G_FATAL_ERROR = 14
 
-    TYPE_RASTER=0
-    TYPE_RASTER3D=1
-    TYPE_VECTOR=2
+    TYPE_RASTER = 0
+    TYPE_RASTER3D = 1
+    TYPE_VECTOR = 2
 
 ###############################################################################
+
 
 def _fatal_error(lock, conn, data):
     """Calls G_fatal_error()"""
     libgis.G_fatal_error("Fatal Error in C library server")
 
+
 def _get_mapset(lock, conn, data):
     """Return the current mapset
-    
+
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
        :param data: The mapset as list entry 1 [function_id]
-       
+
        :returns: Name of the current mapset
-    """    
+    """
     mapset = libgis.G_mapset()
-    conn.send(mapset) 
-    
+    conn.send(mapset)
+
+
 def _get_location(lock, conn, data):
     """Return the current location
-    
+
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
        :param data: The mapset as list entry 1 [function_id]
-       
+
        :returns: Name of the location
-    """    
+    """
     location = libgis.G_location()
-    conn.send(location) 
-   
+    conn.send(location)
+
+
 def _get_gisdbase(lock, conn, data):
     """Return the current gisdatabase
-    
+
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
        :param data: The mapset as list entry 1 [function_id]
-       
+
        :returns: Name of the gisdatabase
-    """    
+    """
     gisdbase = libgis.G_gisdbase()
-    conn.send(gisdbase) 
+    conn.send(gisdbase)
+
 
 def _get_driver_name(lock, conn, data):
     """Return the temporal database driver of a specific mapset
-    
+
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
        :param data: The mapset as list entry 1 [function_id, mapset]
-       
+
        :returns: Name of the driver or None if no temporal database present
     """
     mapset = data[1]
     if not mapset:
         mapset = libgis.G_mapset()
-    
+
     drstring = libtgis.tgis_get_mapset_driver_name(mapset)
-    conn.send(drstring) 
+    conn.send(drstring)
 
 ###############################################################################
 
+
 def _get_database_name(lock, conn, data):
     """Return the temporal database name of a specific mapset
-    
+
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
        :param data: The mapset as list entry 1 [function_id, mapset]
-       
+
        :returns: Name of the database or None if no temporal database present
     """
     mapset = data[1]
@@ -129,20 +134,21 @@ def _get_database_name(lock, conn, data):
         dbstring = dbstring.replace("$GISDBASE", libgis.G_gisdbase())
         dbstring = dbstring.replace("$LOCATION_NAME", libgis.G_location())
         dbstring = dbstring.replace("$MAPSET", libgis.G_mapset())
-    conn.send(dbstring) 
+    conn.send(dbstring)
 
 ###############################################################################
 
+
 def _available_mapsets(lock, conn, data):
     """Return all available mapsets the user can access as a list of strings
-    
+
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
        :param data: The list of data entries [function_id]
-       
+
        :returns: Names of available mapsets as list of strings
     """
-    
+
     mapsets = libgis.G_get_available_mapsets()
 
     count = 0
@@ -156,10 +162,10 @@ def _available_mapsets(lock, conn, data):
             while mapset[c] != "\x00":
                 char_list += mapset[c]
                 c += 1
-                
-        mapset_list.append(char_list) 
-        
-    # We need to sort the mapset list, but the first one should be 
+
+        mapset_list.append(char_list)
+
+    # We need to sort the mapset list, but the first one should be
     # the current mapset
     current_mapset = libgis.G_mapset()
     mapset_list.remove(current_mapset)
@@ -168,7 +174,8 @@ def _available_mapsets(lock, conn, data):
     mapset_list.append(current_mapset)
     mapset_list.reverse()
 
-    conn.send(mapset_list) 
+    conn.send(mapset_list)
+
 
 def _has_timestamp(lock, conn, data):
     """Check if the file based GRASS timestamp is present and send
@@ -176,13 +183,14 @@ def _has_timestamp(lock, conn, data):
 
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
-       :param data: The list of data entries [function_id, maptype, name, mapset, layer]
+       :param data: The list of data entries [function_id, maptype, name,
+                    mapset, layer]
 
     """
     maptype = data[1]
     name = data[2]
     mapset = data[3]
-    layer= data[4]
+    layer = data[4]
     check = False
     if maptype == RPCDefs.TYPE_RASTER:
         if libgis.G_has_raster_timestamp(name, mapset) == 1:
@@ -197,17 +205,20 @@ def _has_timestamp(lock, conn, data):
 
 ###############################################################################
 
+
 def _read_timestamp(lock, conn, data):
     """Read the file based GRASS timestamp and send
        the result using the provided pipe.
 
-       The tuple to be send via pipe: (return value of G_read_*_timestamp, timestamps).
+       The tuple to be send via pipe: (return value of G_read_*_timestamp,
+       timestamps).
 
        Please have a look at the documentation of G_read_raster_timestamp,
        G_read_vector_timestamp and G_read_raster3d_timestamp for the return
        values description.
 
        The timestamps to be send are tuples of values:
+
            - relative time (start, end, unit), start and end are of type
              integer, unit is of type string.
            - absolute time (start, end), start and end are of type datetime
@@ -216,13 +227,14 @@ def _read_timestamp(lock, conn, data):
 
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send the result
-       :param data: The list of data entries [function_id, maptype, name, mapset, layer]
+       :param data: The list of data entries [function_id, maptype, name,
+                    mapset, layer]
 
     """
     maptype = data[1]
     name = data[2]
     mapset = data[3]
-    layer= data[4]
+    layer = data[4]
     check = False
     ts = libgis.TimeStamp()
     if maptype == RPCDefs.TYPE_RASTER:
@@ -237,6 +249,7 @@ def _read_timestamp(lock, conn, data):
 
 ###############################################################################
 
+
 def _write_timestamp(lock, conn, data):
     """Write the file based GRASS timestamp
        the return values of the called C-functions using the provided pipe.
@@ -249,19 +262,20 @@ def _write_timestamp(lock, conn, data):
 
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
-       :param data: The list of data entries [function_id, maptype, name, mapset, layer, timestring]
+       :param data: The list of data entries [function_id, maptype, name,
+                    mapset, layer, timestring]
     """
     maptype = data[1]
     name = data[2]
     mapset = data[3]
-    layer= data[4]
+    layer = data[4]
     timestring = data[5]
     check = -3
     ts = libgis.TimeStamp()
     check = libgis.G_scan_timestamp(byref(ts), timestring)
 
     if check != 1:
-        logging.error("Unable to convert the timestamp: "+ timestring)
+        logging.error("Unable to convert the timestamp: " + timestring)
         return -2
 
     if maptype == RPCDefs.TYPE_RASTER:
@@ -275,6 +289,7 @@ def _write_timestamp(lock, conn, data):
 
 ###############################################################################
 
+
 def _remove_timestamp(lock, conn, data):
     """Remove the file based GRASS timestamp
        the return values of the called C-functions using the provided pipe.
@@ -287,13 +302,14 @@ def _remove_timestamp(lock, conn, data):
 
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
-       :param data: The list of data entries [function_id, maptype, name, mapset, layer]
+       :param data: The list of data entries [function_id, maptype, name,
+                    mapset, layer]
 
     """
     maptype = data[1]
     name = data[2]
     mapset = data[3]
-    layer= data[4]
+    layer = data[4]
     check = False
     if maptype == RPCDefs.TYPE_RASTER:
         check = libgis.G_remove_raster_timestamp(name, mapset)
@@ -305,6 +321,7 @@ def _remove_timestamp(lock, conn, data):
     conn.send(check)
 
 ###############################################################################
+
 
 def _map_exists(lock, conn, data):
     """Check if a map exists in the spatial database
@@ -322,11 +339,11 @@ def _map_exists(lock, conn, data):
     mapset = data[3]
     check = False
     if maptype == RPCDefs.TYPE_RASTER:
-         mapset = libgis.G_find_raster(name, mapset)
+        mapset = libgis.G_find_raster(name, mapset)
     elif maptype == RPCDefs.TYPE_VECTOR:
-         mapset = libgis.G_find_vector(name, mapset)
+        mapset = libgis.G_find_vector(name, mapset)
     elif maptype == RPCDefs.TYPE_RASTER3D:
-         mapset = libgis.G_find_raster3d(name, mapset)
+        mapset = libgis.G_find_raster3d(name, mapset)
 
     if mapset:
         check = True
@@ -334,6 +351,7 @@ def _map_exists(lock, conn, data):
     conn.send(check)
 
 ###############################################################################
+
 
 def _read_map_info(lock, conn, data):
     """Read map specific metadata from the spatial database using C-library
@@ -347,15 +365,16 @@ def _read_map_info(lock, conn, data):
     name = data[2]
     mapset = data[3]
     if maptype == RPCDefs.TYPE_RASTER:
-         kvp = _read_raster_info(name, mapset)
+        kvp = _read_raster_info(name, mapset)
     elif maptype == RPCDefs.TYPE_VECTOR:
-         kvp = _read_vector_info(name, mapset)
+        kvp = _read_vector_info(name, mapset)
     elif maptype == RPCDefs.TYPE_RASTER3D:
-         kvp = _read_raster3d_info(name, mapset)
+        kvp = _read_raster3d_info(name, mapset)
 
     conn.send(kvp)
 
 ###############################################################################
+
 
 def _read_raster_info(name, mapset):
     """Read the raster map info from the file system and store the content
@@ -366,7 +385,8 @@ def _read_raster_info(name, mapset):
 
        :param name: The name of the map
        :param mapset: The mapset of the map
-       :returns: The key value pairs of the map specific metadata, or None in case of an error
+       :returns: The key value pairs of the map specific metadata, or None in
+                 case of an error
     """
 
     kvp = {}
@@ -436,6 +456,7 @@ def _read_raster_info(name, mapset):
 
 ###############################################################################
 
+
 def _read_raster3d_info(name, mapset):
     """Read the 3D raster map info from the file system and store the content
        into a dictionary
@@ -445,7 +466,8 @@ def _read_raster3d_info(name, mapset):
 
        :param name: The name of the map
        :param mapset: The mapset of the map
-       :returns: The key value pairs of the map specific metadata, or None in case of an error
+       :returns: The key value pairs of the map specific metadata, or None in
+                 case of an error
     """
 
     kvp = {}
@@ -496,7 +518,7 @@ def _read_raster3d_info(name, mapset):
     ret = libraster3d.Rast3d_range_load(g3map)
     if not ret:
         logging.error(_("Unable to load range of 3D raster map <%s>" %
-                     (name)))
+                      (name)))
         return None
     libraster3d.Rast3d_range_min_max(g3map, byref(min), byref(max))
 
@@ -517,6 +539,7 @@ def _read_raster3d_info(name, mapset):
 
 ###############################################################################
 
+
 def _read_vector_info(name, mapset):
     """Read the vector map info from the file system and store the content
        into a dictionary
@@ -526,7 +549,8 @@ def _read_vector_info(name, mapset):
 
        :param name: The name of the map
        :param mapset: The mapset of the map
-       :returns: The key value pairs of the map specific metadata, or None in case of an error
+       :returns: The key value pairs of the map specific metadata, or None in
+                 case of an error
     """
 
     kvp = {}
@@ -550,7 +574,7 @@ def _read_vector_info(name, mapset):
         with_topo = False
         if libvector.Vect_open_old2(byref(Map), name, mapset, "1") < 1:
             logging.error(_("Unable to open vector map <%s>" %
-                         (libvector.Vect_get_full_name(byref(Map)))))
+                          (libvector.Vect_get_full_name(byref(Map)))))
             return None
 
     # Release the vector spatial index memory when closed
@@ -617,11 +641,13 @@ def _read_vector_info(name, mapset):
 
 ###############################################################################
 
+
 def _convert_timestamp_from_grass(ts):
     """Convert a GRASS file based timestamp into the temporal framework
        format datetime or integer.
 
-       A tuple of two datetime objects (start, end) is returned in case of absolute time.
+       A tuple of two datetime objects (start, end) is returned in case of
+       absolute time.
        In case of relative time a tuple with start time, end time and the
        relative unit (start, end, unit) will be returned.
 
@@ -639,7 +665,7 @@ def _convert_timestamp_from_grass(ts):
                             byref(dt1),
                             byref(dt2),
                             byref(count))
-    
+
     if dt1.mode == libdate.DATETIME_ABSOLUTE:
         pdt1 = None
         pdt2 = None
@@ -695,6 +721,7 @@ def _convert_timestamp_from_grass(ts):
 
 ###############################################################################
 
+
 def _stop(lock, conn, data):
     libgis.G_debug(1, "Stop C-interface server")
     conn.close()
@@ -706,13 +733,14 @@ def _stop(lock, conn, data):
 server_connection = None
 server_lock = None
 
+
 def c_library_server(lock, conn):
     """The GRASS C-libraries server function designed to be a target for
        multiprocessing.Process
 
        :param lock: A multiprocessing.Lock
        :param conn: A multiprocessing.Pipe
-    """   
+    """
     # Crerate the function array
     functions = [0]*15
     functions[RPCDefs.STOP] = _stop
@@ -741,6 +769,7 @@ def c_library_server(lock, conn):
         functions[data[0]](lock, conn, data)
         lock.release()
 
+
 class CLibrariesInterface(object):
     """Fast and exit-safe interface to GRASS C-libraries functions
 
@@ -758,7 +787,7 @@ class CLibrariesInterface(object):
        Usage:
 
        .. code-block:: python
-           
+
            >>> import grass.script as gscript
            >>> import grass.temporal as tgis
            >>> gscript.use_temp_region()
@@ -784,7 +813,7 @@ class CLibrariesInterface(object):
            >>> mapsets = ciface.available_mapsets()
            >>> mapsets[0] == tgis.get_current_mapset()
            True
-           
+
            # Raster map
            >>> ciface = tgis.CLibrariesInterface()
            >>> check = ciface.raster_map_exists("test", tgis.get_current_mapset())
@@ -857,12 +886,12 @@ class CLibrariesInterface(object):
            1
            >>> ciface.has_vector_timestamp("test", tgis.get_current_mapset())
            True
-           
+
            >>> ciface.get_driver_name()
            'sqlite'
            >>> ciface.get_database_name().split("/")[-1]
            'sqlite.db'
-           
+
            >>> mapset = ciface.get_mapset()
            >>> location = ciface.get_location()
            >>> gisdbase = ciface.get_gisdbase()
@@ -881,7 +910,7 @@ class CLibrariesInterface(object):
         self.client_conn, self.server_conn = Pipe(True)
         self.lock = Lock()
         self.server = Process(target=c_library_server, args=(self.lock,
-                                                          self.server_conn))
+                                                             self.server_conn))
         self.server.daemon = True
         self.server.start()
 
@@ -913,7 +942,8 @@ class CLibrariesInterface(object):
 
            :param name: The name of the map
            :param mapset: The mapset of the map
-           :returns: The key value pairs of the map specific metadata, or None in case of an error
+           :returns: The key value pairs of the map specific metadata,
+                     or None in case of an error
         """
         self._check_restart_server()
         self.client_conn.send([RPCDefs.READ_MAP_INFO, RPCDefs.TYPE_RASTER,
@@ -1006,7 +1036,8 @@ class CLibrariesInterface(object):
 
            :param name: The name of the map
            :param mapset: The mapset of the map
-           :returns: The key value pairs of the map specific metadata, or None in case of an error
+           :returns: The key value pairs of the map specific metadata,
+                     or None in case of an error
         """
         self._check_restart_server()
         self.client_conn.send([RPCDefs.READ_MAP_INFO, RPCDefs.TYPE_RASTER3D,
@@ -1099,7 +1130,8 @@ class CLibrariesInterface(object):
 
            :param name: The name of the map
            :param mapset: The mapset of the map
-           :returns: The key value pairs of the map specific metadata, or None in case of an error
+           :returns: The key value pairs of the map specific metadata,
+                     or None in case of an error
         """
         self._check_restart_server()
         self.client_conn.send([RPCDefs.READ_MAP_INFO, RPCDefs.TYPE_VECTOR,
@@ -1180,18 +1212,18 @@ class CLibrariesInterface(object):
 
     def available_mapsets(self):
         """Return all available mapsets the user can access as a list of strings
-           
+
            :returns: Names of available mapsets as list of strings
         """
         self._check_restart_server()
         self.client_conn.send([RPCDefs.AVAILABLE_MAPSETS, ])
         return self.client_conn.recv()
-        
+
     def get_driver_name(self, mapset=None):
         """Return the temporal database driver of a specific mapset
-        
+
            :param mapset: Name of the mapset
-           
+
            :returns: Name of the driver or None if no temporal database present
         """
         self._check_restart_server()
@@ -1200,47 +1232,47 @@ class CLibrariesInterface(object):
 
     def get_database_name(self, mapset=None):
         """Return the temporal database name of a specific mapset
-        
+
            :param mapset: Name of the mapset
-           
+
            :returns: Name of the database or None if no temporal database present
         """
         self._check_restart_server()
         self.client_conn.send([RPCDefs.GET_DATABASE_NAME, mapset])
         return self.client_conn.recv()
-    
+
     def get_mapset(self):
         """Return the current mapset
-                   
+
            :returns: Name of the current mapset
         """
         self._check_restart_server()
-        self.client_conn.send([RPCDefs.G_MAPSET,])
+        self.client_conn.send([RPCDefs.G_MAPSET, ])
         return self.client_conn.recv()
-        
+
     def get_location(self):
         """Return the location
-                   
+
            :returns: Name of the location
         """
         self._check_restart_server()
-        self.client_conn.send([RPCDefs.G_LOCATION,])
+        self.client_conn.send([RPCDefs.G_LOCATION, ])
         return self.client_conn.recv()
-        
+
     def get_gisdbase(self):
         """Return the gisdatabase
-                   
+
            :returns: Name of the gisdatabase
         """
         self._check_restart_server()
-        self.client_conn.send([RPCDefs.G_GISDBASE,])
+        self.client_conn.send([RPCDefs.G_GISDBASE, ])
         return self.client_conn.recv()
-        
+
     def fatal_error(self, mapset=None):
         """Return the temporal database name of a specific mapset
-        
+
            :param mapset: Name of the mapset
-           
+
            :returns: Name of the database or None if no temporal database present
         """
         self._check_restart_server()
@@ -1248,11 +1280,11 @@ class CLibrariesInterface(object):
 
     def stop(self):
         """Stop the messenger server and close the pipe
-        
+
            This method should be called at exit using the package atexit
         """
         if self.server is not None and self.server.is_alive():
-            self.client_conn.send([0,])
+            self.client_conn.send([0, ])
             self.server.join(5)
             self.server.terminate()
         if self.client_conn is not None:

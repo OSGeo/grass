@@ -8,7 +8,7 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from datetime import datetime, date, time, timedelta
+from datetime import datetime, timedelta
 from core import *
 import copy
 
@@ -22,6 +22,7 @@ DAY_IN_SECONDS = 86400
 SECOND_AS_DAY = 1.1574074074074073e-05
 
 ###############################################################################
+
 
 def relative_time_to_time_delta(value):
     """Convert the double value representing days
@@ -68,6 +69,7 @@ def time_delta_to_relative_time_seconds(delta):
     return float(delta.days * DAY_IN_SECONDS) + float(delta.seconds)
 
 ###############################################################################
+
 
 def decrement_datetime_by_string(mydate, increment, mult=1):
 
@@ -123,17 +125,19 @@ def decrement_datetime_by_string(mydate, increment, mult=1):
 
        :param mydate: A datetime object to incremented
        :param increment: A string providing increment information:
-                  The string may include comma separated values of type seconds,
-                  minutes, hours, days, weeks, months and years
-                  Example: Increment the datetime 2001-01-01 00:00:00
-                  with "60 seconds, 4 minutes, 12 hours, 10 days, 1 weeks, 5 months, 1 years"
-                  will result in the datetime 2003-02-18 12:05:00
+                         The string may include comma separated values of type
+                         seconds, minutes, hours, days, weeks, months and years
+                         Example: Increment the datetime 2001-01-01 00:00:00
+                         with "60 seconds, 4 minutes, 12 hours, 10 days,
+                         1 weeks, 5 months, 1 years" will result in the
+                         datetime 2003-02-18 12:05:00
        :param mult: A multiplier, default is 1
        :return: The new datetime object or none in case of an error
     """
     return modify_datetime_by_string(mydate, increment, mult, sign=int(-1))
 
 ###############################################################################
+
 
 def increment_datetime_by_string(mydate, increment, mult=1):
     """Return a new datetime object incremented with the provided
@@ -193,17 +197,19 @@ def increment_datetime_by_string(mydate, increment, mult=1):
 
        :param mydate: A datetime object to incremented
        :param increment: A string providing increment information:
-                  The string may include comma separated values of type seconds,
-                  minutes, hours, days, weeks, months and years
-                  Example: Increment the datetime 2001-01-01 00:00:00
-                  with "60 seconds, 4 minutes, 12 hours, 10 days, 1 weeks, 5 months, 1 years"
-                  will result in the datetime 2003-02-18 12:05:00
+                         The string may include comma separated values of type
+                         seconds, minutes, hours, days, weeks, months and years
+                         Example: Increment the datetime 2001-01-01 00:00:00
+                         with "60 seconds, 4 minutes, 12 hours, 10 days,
+                         1 weeks, 5 months, 1 years" will result in the
+                         datetime 2003-02-18 12:05:00
        :param mult: A multiplier, default is 1
        :return: The new datetime object or none in case of an error
     """
     return modify_datetime_by_string(mydate, increment, mult, sign=int(1))
 
 ###############################################################################
+
 
 def modify_datetime_by_string(mydate, increment, mult=1, sign=1):
     """Return a new datetime object incremented with the provided
@@ -213,17 +219,18 @@ def modify_datetime_by_string(mydate, increment, mult=1, sign=1):
 
        :param mydate: A datetime object to incremented
        :param increment: A string providing increment information:
-                  The string may include comma separated values of type seconds,
-                  minutes, hours, days, weeks, months and years
-                  Example: Increment the datetime 2001-01-01 00:00:00
-                  with "60 seconds, 4 minutes, 12 hours, 10 days, 1 weeks, 5 months, 1 years"
-                  will result in the datetime 2003-02-18 12:05:00
+                         The string may include comma separated values of type
+                         seconds, minutes, hours, days, weeks, months and years
+                         Example: Increment the datetime 2001-01-01 00:00:00
+                         with "60 seconds, 4 minutes, 12 hours, 10 days,
+                         1 weeks, 5 months, 1 years" will result in the
+                         datetime 2003-02-18 12:05:00
        :param mult: A multiplier, default is 1
-       :param sign: Choose 1 for positive sign (incrementing) or -1 for negative
-                   sign (decrementing).
+       :param sign: Choose 1 for positive sign (incrementing) or -1 for
+                    negative sign (decrementing).
        :return: The new datetime object or none in case of an error
     """
-    sign  = int(sign)
+    sign = int(sign)
     if sign != 1 and sign != -1:
         return None
 
@@ -266,14 +273,16 @@ def modify_datetime_by_string(mydate, increment, mult=1, sign=1):
                 msgr.error(_("Wrong increment format: %s") % (increment))
                 return None
 
-        return modify_datetime(mydate, years, months, weeks, days, hours, minutes, seconds)
+        return modify_datetime(mydate, years, months, weeks, days, hours,
+                               minutes, seconds)
 
     return mydate
 
 ###############################################################################
 
+
 def modify_datetime(mydate, years=0, months=0, weeks=0, days=0, hours=0,
-                       minutes=0, seconds=0):
+                    minutes=0, seconds=0):
     """Return a new datetime object incremented with the provided
        relative dates and times"""
 
@@ -329,7 +338,8 @@ def modify_datetime(mydate, years=0, months=0, weeks=0, days=0, hours=0,
             residual_months += 12
 
         try:
-            dt1 = dt1.replace(year=year - years_to_remove, month=residual_months)
+            dt1 = dt1.replace(year=year - years_to_remove,
+                              month=residual_months)
         except:
             raise
 
@@ -474,7 +484,7 @@ def adjust_datetime_to_granularity(mydate, granularity):
 
         dt = copy.copy(mydate)
         return dt.replace(year=years, month=months, day=days,
-                            hour=hours, minute=minutes, second=seconds)
+                          hour=hours, minute=minutes, second=seconds)
 
 ###############################################################################
 
@@ -607,8 +617,8 @@ def compute_datetime_delta(start, end):
             >>> compute_datetime_delta(start, end)
             {'hour': 0, 'month': 12, 'second': 31622405, 'max_days': 366, 'year': 1, 'day': 0, 'minute': 0}
 
-
-       :return: A dictionary with year, month, day, hour, minute and second as keys()
+       :return: A dictionary with year, month, day, hour, minute and second as
+                keys()
     """
     comp = {}
 
@@ -624,7 +634,7 @@ def compute_datetime_delta(start, end):
     # Count full months
     if start.month == 1 and end.month == 1:
         comp["month"] = 0
-    elif   start.day == 1 and end.day == 1:
+    elif start.day == 1 and end.day == 1:
         d = end.month - start.month
         if d < 0:
             d = d + 12 * comp["year"]
@@ -633,7 +643,7 @@ def compute_datetime_delta(start, end):
         comp["month"] = d
 
     # Count full days
-    if  start.day == 1 and end.day == 1:
+    if start.day == 1 and end.day == 1:
         comp["day"] = 0
     else:
         comp["day"] = day_diff
@@ -698,7 +708,7 @@ def check_datetime_string(time_string):
     """Check if  a string can be converted into a datetime object
 
         Supported ISO string formats are:
-        
+
         - YYYY-mm-dd
         - YYYY-mm-dd HH:MM:SS
 
@@ -709,23 +719,23 @@ def check_datetime_string(time_string):
     """
 
     global has_dateutil
-        
+
     if has_dateutil:
-        # First check if there is only a single number, which specifies relative time.
-        # dateutil will interprete a single number as a valid time string, so we have
-        # to catch this case beforehand
+        # First check if there is only a single number, which specifies
+        # relative time. dateutil will interprete a single number as a valid
+        # time string, so we have to catch this case beforehand
         try:
             value = int(time_string)
             return _("Time string seems to specify relative time")
         except ValueError:
             pass
-        
+
         try:
             time_object = parser.parse(time_string)
         except Exception as inst:
             time_object = str(inst)
         return time_object
-        
+
     # BC is not supported
     if time_string.find("bc") > 0:
         return _("Dates Before Christ (BC) are not supported")
@@ -740,9 +750,9 @@ def check_datetime_string(time_string):
         time_format = "%Y-%m-%d"
 
     try:
-        return  datetime.strptime(time_string, time_format)
+        return datetime.strptime(time_string, time_format)
     except:
-        return _("Unable to parse time string: %s"%time_string)
+        return _("Unable to parse time string: %s" % time_string)
 
 ###############################################################################
 
@@ -751,17 +761,17 @@ def string_to_datetime(time_string):
     """Convert a string into a datetime object
 
         In case datutil is not installed the supported ISO string formats are:
-        
+
         - YYYY-mm-dd
         - YYYY-mm-dd HH:MM:SS
         - Time zones are not supported
-        
+
         If dateutil is installed, all string formats of the dateutil module
         are supported, as well as time zones
 
         :param time_string: The time string to convert
-        :return: datetime: object or None in case the string 
-                         could not be converted
+        :return: datetime object or None in case the string
+                 could not be converted
     """
 
     if not isinstance(time_string, str):
@@ -780,9 +790,9 @@ def string_to_datetime(time_string):
 
 def datetime_to_grass_datetime_string(dt):
     """Convert a python datetime object into a GRASS datetime string
-    
+
     .. code-block:: python
-    
+
         >>> import grass.temporal as tgis
         >>> import dateutil.parser as parser
         >>> dt = parser.parse("2011-01-01 10:00:00 +01:30")
@@ -797,7 +807,7 @@ def datetime_to_grass_datetime_string(dt):
         >>> dt = parser.parse("2011-01-01 10:00:00 -01:30")
         >>> tgis.datetime_to_grass_datetime_string(dt)
         '01 jan 2011 10:00:00 -0090'
-    
+
     """
     # GRASS datetime month names
     month_names = ["", "jan", "feb", "mar", "apr", "may", "jun",
@@ -805,16 +815,18 @@ def datetime_to_grass_datetime_string(dt):
 
     # Check for time zone info in the datetime object
     if dt.tzinfo is not None:
-        
+
         tz = dt.tzinfo.utcoffset(0)
         if tz.seconds > 86400 / 2:
             tz = (tz.seconds - 86400) / 60
         else:
             tz = tz.seconds/60
-            
+
         string = "%.2i %s %.2i %.2i:%.2i:%.2i %+.4i" % (dt.day,
-                 month_names[dt.month], dt.year,
-                 dt.hour, dt.minute, dt.second, tz)
+                                                        month_names[dt.month],
+                                                        dt.year, dt.hour,
+                                                        dt.minute, dt.second,
+                                                        tz)
     else:
         string = "%.2i %s %.4i %.2i:%.2i:%.2i" % (dt.day, month_names[
             dt.month], dt.year, dt.hour, dt.minute, dt.second)
@@ -822,32 +834,32 @@ def datetime_to_grass_datetime_string(dt):
     return string
 
 ###############################################################################
-suffix_units = {"years" : "%Y", 
-                         "year" : "%Y",  
-                         "months" : "%Y_%m", 
-                         "month" : "%Y_%m", 
-                         "weeks" : "%Y_%m_%d",  
-                         "week" : "%Y_%m_%d",  
-                         "days" : "%Y_%m_%d",  
-                         "day" : "%Y_%m_%d",  
-                         "hours" : "%Y_%m_%d_%H",  
-                         "hour" : "%Y_%m_%d_%H",  
-                         "minutes" : "%Y_%m_%d_%H_%M",
-                         "minute" : "%Y_%m_%d_%H_%M",} 
+suffix_units = {"years": "%Y",
+                "year": "%Y",
+                "months": "%Y_%m",
+                "month": "%Y_%m",
+                "weeks": "%Y_%m_%d",
+                "week": "%Y_%m_%d",
+                "days": "%Y_%m_%d",
+                "day": "%Y_%m_%d",
+                "hours": "%Y_%m_%d_%H",
+                "hour": "%Y_%m_%d_%H",
+                "minutes": "%Y_%m_%d_%H_%M",
+                "minute": "%Y_%m_%d_%H_%M"}
 
 
 def create_suffix_from_datetime(start_time,  granularity):
     """Create a datetime string based on a datetime object and a provided
        granularity that can be used as suffix for map names.
-       
+
        dateteime=2001-01-01 00:00:00, granularity="1 month" returns "2001_01"
-       
+
        :param start_time: The datetime object
        :param granularity: The granularity for example "1 month" or "100 seconds"
        :return: A string
     """
     global suffix_units
-    return start_time.strftime(suffix_units[granularity.split(' ')[1]]) 
+    return start_time.strftime(suffix_units[granularity.split(' ')[1]])
 
 if __name__ == "__main__":
     import doctest

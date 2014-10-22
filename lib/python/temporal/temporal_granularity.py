@@ -22,11 +22,13 @@ from datetime_math import *
 
 ###############################################################################
 
+
 def check_granularity_string(granularity, temporal_type):
     """Check if the granularity string is valid
 
         :param granularity: The granularity string
-        :param temporal_type: The temporal type of the granularity relative or absolute
+        :param temporal_type: The temporal type of the granularity relative or
+                              absolute
         :return: True if valid, False if invalid
 
         .. code-block:: python
@@ -97,6 +99,7 @@ def check_granularity_string(granularity, temporal_type):
     return True
 
 ###############################################################################
+
 
 def compute_relative_time_granularity(maps):
     """Compute the relative time granularity
@@ -245,8 +248,8 @@ def compute_absolute_time_granularity(maps):
         is only correct in case of not overlapping intervals.
         Hence a correct temporal topology is required for computation.
 
-        The computed granularity is returned as number of seconds or minutes or hours
-        or days or months or years.
+        The computed granularity is returned as number of seconds or minutes
+        or hours or days or months or years.
 
         :param maps: a ordered by start_time list of map objects
         :return: The temporal topology as string "integer unit"
@@ -501,9 +504,11 @@ def gcd(a, b):
 
 def gcd_list(list):
     """Finds the GCD of numbers in a list.
-    Input: List of numbers you want to find the GCD of
-            E.g. [8, 24, 12]
-    Returns: GCD of all numbers
+
+    :param list: List of numbers you want to find the GCD of
+                 E.g. [8, 24, 12]
+    :return: GCD of all numbers
+
     """
     return reduce(gcd, list)
 

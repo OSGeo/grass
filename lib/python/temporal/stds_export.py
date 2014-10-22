@@ -78,16 +78,18 @@ def _export_raster_maps_as_gdal(rows, tar, list_file, new_cwd, fs, format_):
                 else:
                     gdal_type = "Int32"
                 ret = gscript.run_command("r.out.gdal", flags="c", input=name,
-                                    output=out_name, nodata=nodata,
-                                    type=gdal_type, format="GTiff")
+                                          output=out_name, nodata=nodata,
+                                          type=gdal_type, format="GTiff")
             else:
                 ret = gscript.run_command("r.out.gdal", flags="c",
-                                    input=name, output=out_name, format="GTiff")
+                                          input=name, output=out_name,
+                                          format="GTiff")
         elif format_ == "AAIGrid":
             # Export the raster map with r.out.gdal as Arc/Info ASCII Grid
             out_name = name + ".asc"
-            ret = gscript.run_command("r.out.gdal", flags="c", input=name, output=out_name, format="AAIGrid")
-            
+            ret = gscript.run_command("r.out.gdal", flags="c", input=name,
+                                      output=out_name, format="AAIGrid")
+
         if ret != 0:
             shutil.rmtree(new_cwd)
             tar.close()
@@ -102,11 +104,12 @@ def _export_raster_maps_as_gdal(rows, tar, list_file, new_cwd, fs, format_):
             shutil.rmtree(new_cwd)
             tar.close()
             gscript.fatal(_("Unable to export color rules for raster "
-                         "map <%s> r.out.gdal" % name))
+                            "map <%s> r.out.gdal" % name))
 
         tar.add(out_name)
 
 ############################################################################
+
 
 def _export_raster_maps(rows, tar, list_file, new_cwd, fs):
     for row in rows:
@@ -124,11 +127,12 @@ def _export_raster_maps(rows, tar, list_file, new_cwd, fs):
             shutil.rmtree(new_cwd)
             tar.close()
             gscript.fatal(_("Unable to export raster map <%s> with r.pack" %
-                         name))
+                          name))
 
         tar.add(name + ".pack")
 
 ############################################################################
+
 
 def _export_vector_maps_as_gml(rows, tar, list_file, new_cwd, fs):
     for row in rows:
@@ -145,17 +149,18 @@ def _export_vector_maps_as_gml(rows, tar, list_file, new_cwd, fs):
         list_file.write(string)
         # Export the vector map with v.out.ogr
         ret = gscript.run_command("v.out.ogr", input=name, dsn=(name + ".xml"),
-                               layer=layer, format="GML")
+                                  layer=layer, format="GML")
         if ret != 0:
             shutil.rmtree(new_cwd)
             tar.close()
             gscript.fatal(_("Unable to export vector map <%s> as "
-                         "GML with v.out.ogr" % name))
+                            "GML with v.out.ogr" % name))
 
         tar.add(name + ".xml")
         tar.add(name + ".xsd")
 
 ############################################################################
+
 
 def _export_vector_maps(rows, tar, list_file, new_cwd, fs):
     for row in rows:
@@ -181,7 +186,7 @@ def _export_vector_maps(rows, tar, list_file, new_cwd, fs):
             shutil.rmtree(new_cwd)
             tar.close()
             gscript.fatal(_("Unable to export vector map <%s> with v.pack" %
-                         name))
+                          name))
 
         tar.add(name + ".pack")
 
@@ -206,7 +211,7 @@ def _export_raster3d_maps(rows, tar, list_file, new_cwd, fs):
             shutil.rmtree(new_cwd)
             tar.close()
             gscript.fatal(_("Unable to export raster map <%s> with r3.pack" %
-                         name))
+                          name))
 
         tar.add(name + ".pack")
 
@@ -228,26 +233,25 @@ def export_stds(input, output, compression, workdir, where, format_="pack",
               - "no"  no compression
               - "gzip" GNU zip compression
               - "bzip2" Bzip compression
-          
+
         :param workdir: The working directory used for extraction and packing
         :param where: The temporal WHERE SQL statement to select a subset
                       of maps from the space time dataset
         :param format_: The export format:
-        
+
               - "GTiff" Geotiff format, only for raster maps
               - "AAIGrid" Arc/Info ASCII Grid format, only for raster maps
               - "pack" The GRASS raster, 3D raster or vector Pack format,
                        this is the default setting
               - "GML" GML file export format, only for vector maps,
                       v.out.ogr export option
-                  
+
         :param type_: The space time dataset type
-        
+
               - "strds" Space time raster dataset
               - "str3ds" Space time 3D raster dataset
               - "stvds" Space time vector dataset
     """
-
 
     # Save current working directory path
     old_cwd = os.getcwd()
@@ -306,11 +310,11 @@ def export_stds(input, output, compression, workdir, where, format_="pack",
     init_file = open(init_file_name, "w")
     # Create the init string
     string = ""
-     # This is optional, if not present strds will be assumed for backward
-     # compatibility
+    # This is optional, if not present strds will be assumed for backward
+    # compatibility
     string += "%s=%s\n" % ("stds_type", sp.get_type())
-     # This is optional, if not present gtiff will be assumed for
-     # backward compatibility
+    # This is optional, if not present gtiff will be assumed for
+    # backward compatibility
     string += "%s=%s\n" % ("format", format_)
     string += "%s=%s\n" % ("temporal_type", sp.get_temporal_type())
     string += "%s=%s\n" % ("semantic_type", sp.get_semantic_type())
@@ -345,13 +349,13 @@ def export_stds(input, output, compression, workdir, where, format_="pack",
     read_file.write("Files:\n")
     if type_ == "strds":
         if format_ == "GTiff":
-                                #123456789012345678901234567890
+                                # 123456789012345678901234567890
             read_file.write("       *.tif  -- GeoTIFF raster files\n")
             read_file.write("     *.color  -- GRASS GIS raster color rules\n")
         elif format_ == "pack":
             read_file.write("      *.pack  -- GRASS raster files packed with r.pack\n")
     elif type_ == "stvds":
-                                #123456789012345678901234567890
+                                # 123456789012345678901234567890
         if format_ == "GML":
             read_file.write("       *.xml  -- Vector GML files\n")
         else:

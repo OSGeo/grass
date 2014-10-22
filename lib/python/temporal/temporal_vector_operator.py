@@ -61,7 +61,7 @@ for details.
     >>> p.parse(expression)
     >>> print(p.relations, p.temporal, p.function)
     ([['overlaps', 'overlapped'], 'equal'], '|', '|')
-    
+
 """
 try:
     import ply.lex as lex
@@ -69,25 +69,26 @@ try:
 except:
     pass
 
+
 class TemporalVectorOperatorLexer(object):
     """Lexical analyzer for the GRASS GIS temporal vector operators"""
-    
+
     # Functions that defines topological relations.
     relations = {
-        'equal'      : "EQUAL",
-        'follows'    : "FOLLOWS",
-        'precedes'   : "PRECEDES",
-        'overlaps'   : "OVERLAPS",
-        'overlapped' : "OVERLAPPED",
-        'during'     : "DURING",
-        'starts'     : "STARTS",
-        'finishes'   : "FINISHES",
-        'contains'   : "CONTAINS",
-        'started'    : "STARTED",
-        'finished'   : "FINISHED",
-        'over'       : "OVER"
+        'equal': "EQUAL",
+        'follows': "FOLLOWS",
+        'precedes': "PRECEDES",
+        'overlaps': "OVERLAPS",
+        'overlapped': "OVERLAPPED",
+        'during': "DURING",
+        'starts': "STARTS",
+        'finishes': "FINISHES",
+        'contains': "CONTAINS",
+        'started': "STARTED",
+        'finished': "FINISHED",
+        'over': "OVER"
         }
-        
+
     # This is the list of token names.
     tokens = (
         'COMMA',
@@ -103,24 +104,24 @@ class TemporalVectorOperatorLexer(object):
         'CLPAREN',
         'CRPAREN',
     )
-    
+
     # Build the token list
     tokens = tokens + tuple(relations.values())
 
     # Regular expression rules for simple tokens
-    t_T_SELECT           = r':'
-    t_T_NOT_SELECT       = r'!:'
-    t_COMMA              = r','
-    t_LEFTREF             = r'='
-    t_HASH               = r'\#'
-    t_OR                 = r'[\|]'
-    t_AND                = r'[&]'
-    t_DISOR              = r'\+'
-    t_XOR                = r'\^'
-    t_NOT                = r'\~'
-    t_CLPAREN             = r'\{'
-    t_CRPAREN             = r'\}'
-    
+    t_T_SELECT = r':'
+    t_T_NOT_SELECT = r'!:'
+    t_COMMA = r','
+    t_LEFTREF = r'='
+    t_HASH = r'\#'
+    t_OR = r'[\|]'
+    t_AND = r'[&]'
+    t_DISOR = r'\+'
+    t_XOR = r'\^'
+    t_NOT = r'\~'
+    t_CLPAREN = r'\{'
+    t_CRPAREN = r'\}'
+
     # These are the things that should be ignored.
     t_ignore = ' \t'
 
@@ -128,12 +129,12 @@ class TemporalVectorOperatorLexer(object):
     def t_newline(self, t):
         r'\n+'
         t.lineno += len(t.value)
-        
+
     def t_NAME(self, t):
         r'[a-zA-Z_][a-zA-Z_0-9]*'
         self.temporal_symbol(t)
         return t
-        
+
     # Parse symbols
     def temporal_symbol(self, t):
         # Check for reserved words
@@ -145,35 +146,36 @@ class TemporalVectorOperatorLexer(object):
 
     # Handle errors.
     def t_error(self, t):
-        raise SyntaxError("syntax error on line %d near '%s'" % 
-            (t.lineno, t.value))
+        raise SyntaxError("syntax error on line %d near '%s'" %
+                          (t.lineno, t.value))
 
     # Build the lexer
-    def build(self,**kwargs):
+    def build(self, **kwargs):
         self.lexer = lex.lex(module=self, **kwargs)
-        
+
     # Just for testing
-    def test(self,data):
+    def test(self, data):
         self.name_list = {}
         print(data)
         self.lexer.input(data)
         while True:
-             tok = self.lexer.token()
-             if not tok: break
-             print tok
-             
+            tok = self.lexer.token()
+            if not tok: break
+            print tok
+
+
 class TemporalVectorOperatorParser(object):
     """The parser for the GRASS GIS temporal vector operators"""
-    
+
     def __init__(self):
         self.lexer = TemporalVectorOperatorLexer()
         self.lexer.build()
         self.parser = yacc.yacc(module=self)
 
-    def parse(self, expression, comparison = False):
+    def parse(self, expression, comparison=False):
         self.comparison = comparison
         self.parser.parse(expression)
-        
+
     # Error rule for syntax errors.
     def p_error(self, t):
         raise SyntaxError("invalid syntax")
@@ -192,11 +194,10 @@ class TemporalVectorOperatorParser(object):
             self.relations = t[2]
         else:
             self.relations = [t[2]]
-        self.temporal  = None 
-        self.function  = None
-        
-        t[0] = t[2]
+        self.temporal = None
+        self.function = None
 
+        t[0] = t[2]
 
     def p_operator(self, t):
         # The expression should always return a list of maps.
@@ -207,11 +208,11 @@ class TemporalVectorOperatorParser(object):
         """
         # Set three operator components.
         self.relations = ['equal']
-        self.temporal  = "=" 
-        self.function  = t[2]
-        
+        self.temporal = "="
+        self.function = t[2]
+
         t[0] = t[2]
-        
+
     def p_operator_temporal(self, t):
         # The expression should always return a list of maps.
         """
@@ -227,7 +228,7 @@ class TemporalVectorOperatorParser(object):
         else:
             self.temporal = t[2]
             self.function = t[3]
-        
+
         t[0] = t[3]
 
     def p_operator_relation(self, t):
@@ -245,9 +246,9 @@ class TemporalVectorOperatorParser(object):
             self.relations = t[2]
         else:
             self.relations = [t[2]]
-        self.temporal  = "=" 
-        self.function  = t[4]
-        
+        self.temporal = "="
+        self.function = t[4]
+
         t[0] = t[4]
 
     def p_operator_relation_temporal(self, t):
@@ -272,7 +273,7 @@ class TemporalVectorOperatorParser(object):
             self.temporal = t[4]
             self.function = t[5]
         t[0] = t[5]
-        
+
     def p_relation(self, t):
         # The list of relations.
         """
@@ -289,7 +290,7 @@ class TemporalVectorOperatorParser(object):
                  | FINISHED
         """
         t[0] = t[1]
-        
+
     def p_over(self, t):
         # The list of relations.
         """
@@ -310,7 +311,7 @@ class TemporalVectorOperatorParser(object):
             rel_list = rel_list + t[3]
         else:
             rel_list.append(t[3])
-        t[0] =  rel_list
+        t[0] = rel_list
 
     def p_temporal_operator(self, t):
         # The list of relations.
@@ -340,9 +341,8 @@ class TemporalVectorOperatorParser(object):
                 | NOT
         """
         t[0] = t[1]
-###############################################################################             
-        
+###############################################################################
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-    

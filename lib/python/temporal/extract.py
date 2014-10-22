@@ -59,8 +59,7 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
 
     sp = open_old_stds(input, type, dbif)
     # Check the new stds
-    new_sp = check_new_stds(output, type, dbif,
-                                          gscript.overwrite())
+    new_sp = check_new_stds(output, type, dbif, gscript.overwrite())
     if type == "vector":
         rows = sp.get_registered_maps(
             "id,name,mapset,layer", where, "start_time", dbif)
@@ -86,7 +85,8 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
                     msgr.percent(count, num_rows, 1)
 
                 map_name = "{base}_{suffix}".format(base=base,
-                                                    suffix=get_num_suffix(count, num_rows))
+                                                    suffix=get_num_suffix(count,
+                                                                          num_rows))
 
                 # We need to modify the r(3).mapcalc expression
                 if type != "vector":
@@ -98,7 +98,8 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
                     # We need to build the id
                     map_id = AbstractMapDataset.build_id(map_name, mapset)
                 else:
-                    map_id = AbstractMapDataset.build_id(map_name, mapset, row["layer"])
+                    map_id = AbstractMapDataset.build_id(map_name, mapset,
+                                                         row["layer"])
 
                 new_map = sp.get_new_map_instance(map_id)
 
@@ -130,16 +131,16 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
                                  % expression)
                     if row["layer"]:
                         proc_list.append(Process(target=run_vector_extraction,
-                                                 args=(row["name"] + "@" + \
-                                                       row["mapset"],
-                                                 map_name, row["layer"],
-                                                 vtype, expression)))
+                                                 args=(row["name"] + "@" +
+                                                       row["mapset"], map_name,
+                                                       row["layer"], vtype,
+                                                       expression)))
                     else:
                         proc_list.append(Process(target=run_vector_extraction,
-                                                 args=(row["name"] + "@" + \
-                                                       row["mapset"],
-                                                 map_name, layer, vtype,
-                                                 expression)))
+                                                 args=(row["name"] + "@" +
+                                                       row["mapset"], map_name,
+                                                       layer, vtype,
+                                                       expression)))
 
                 proc_list[proc_count].start()
                 proc_count += 1
@@ -165,11 +166,9 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
         msgr.percent(0, num_rows, 1)
 
         temporal_type, semantic_type, title, description = sp.get_initial_values()
-        new_sp = open_new_stds(output, type,
-                                             sp.get_temporal_type(),
-                                             title, description,
-                                             semantic_type, dbif,
-                                             gscript.overwrite())
+        new_sp = open_new_stds(output, type, sp.get_temporal_type(), title.
+                               description, semantic_type, dbif,
+                               gscript.overwrite())
 
         # collect empty maps to remove them
         empty_maps = []
@@ -251,17 +250,17 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
 def run_mapcalc2d(expr):
     """Helper function to run r.mapcalc in parallel"""
     exit(gscript.run_command("r.mapcalc", expression=expr,
-                            overwrite=gscript.overwrite(), quiet=True))
+                             overwrite=gscript.overwrite(), quiet=True))
 
 
 def run_mapcalc3d(expr):
     """Helper function to run r3.mapcalc in parallel"""
     exit(gscript.run_command("r3.mapcalc", expression=expr,
-                            overwrite=gscript.overwrite(), quiet=True))
+                             overwrite=gscript.overwrite(), quiet=True))
 
 
 def run_vector_extraction(input, output, layer, type, where):
     """Helper function to run r.mapcalc in parallel"""
     exit(gscript.run_command("v.extract", input=input, output=output,
-                            layer=layer, type=type, where=where,
-                            overwrite=gscript.overwrite(), quiet=True))
+                             layer=layer, type=type, where=where,
+                             overwrite=gscript.overwrite(), quiet=True))

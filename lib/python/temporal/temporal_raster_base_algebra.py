@@ -100,6 +100,7 @@ from temporal_algebra import *
 
 ##############################################################################
 
+
 class TemporalRasterAlgebraLexer(TemporalAlgebraLexer):
     """Lexical analyzer for the GRASS GIS temporal algebra"""
 
@@ -108,22 +109,22 @@ class TemporalRasterAlgebraLexer(TemporalAlgebraLexer):
 
     # Supported r.mapcalc functions.
     mapcalc_functions = {
-        'exp'     : 'EXP',
-        'log'     : 'LOG',
-        'sqrt'    : 'SQRT',
-        'abs'     : 'ABS',
-        'cos'     : 'COS',
-        'acos'    : 'ACOS',
-        'sin'     : 'SIN',
-        'asin'    : 'ASIN',
-        'tan'     : 'TAN',
-        'double'  : 'DOUBLE',
-        'float'   : 'FLOATEXP',
-        'int'     : 'INTEXP',
-        'isnull'  : 'ISNULL',
+        'exp': 'EXP',
+        'log': 'LOG',
+        'sqrt': 'SQRT',
+        'abs': 'ABS',
+        'cos': 'COS',
+        'acos': 'ACOS',
+        'sin': 'SIN',
+        'asin': 'ASIN',
+        'tan': 'TAN',
+        'double': 'DOUBLE',
+        'float': 'FLOATEXP',
+        'int': 'INTEXP',
+        'isnull': 'ISNULL',
         'isntnull': 'ISNTNULL',
-        'null'    : 'NULL',
-        'exist'   : 'EXIST',
+        'null': 'NULL',
+        'exist': 'EXIST',
     }
 
     # This is the list of token names.
@@ -140,20 +141,19 @@ class TemporalRasterAlgebraLexer(TemporalAlgebraLexer):
     )
 
     # Build the token list
-    tokens = TemporalAlgebraLexer.tokens \
-                    + raster_tokens \
-                    + tuple(mapcalc_functions.values())
+    tokens = TemporalAlgebraLexer.tokens + raster_tokens \
+             + tuple(mapcalc_functions.values())
 
     # Regular expression rules for simple tokens
-    t_MOD                 = r'[\%]'
-    t_DIV                 = r'[\/]'
-    t_MULT                = r'[\*]'
-    t_ADD                 = r'[\+]'
-    t_SUB                 = r'[-]'
-    t_T_ARITH1_OPERATOR   = r'\{([a-zA-Z\| ]+[,])?([\|&+=]?[\%\*\/])\}'
-    t_T_ARITH2_OPERATOR   = r'\{([a-zA-Z\| ]+[,])?([\|&+=]?[+-])\}'
-    t_L_SPAREN            = r'\['
-    t_R_SPAREN            = r'\]'
+    t_MOD = r'[\%]'
+    t_DIV = r'[\/]'
+    t_MULT = r'[\*]'
+    t_ADD = r'[\+]'
+    t_SUB = r'[-]'
+    t_T_ARITH1_OPERATOR = r'\{([a-zA-Z\| ]+[,])?([\|&+=]?[\%\*\/])\}'
+    t_T_ARITH2_OPERATOR = r'\{([a-zA-Z\| ]+[,])?([\|&+=]?[+-])\}'
+    t_L_SPAREN = r'\['
+    t_R_SPAREN = r'\]'
 
     # Parse symbols
     def temporal_symbol(self, t):
@@ -170,7 +170,9 @@ class TemporalRasterAlgebraLexer(TemporalAlgebraLexer):
             t.type = 'NAME'
         return t
 
-##############################################################################
+#########
+#####################################################################
+
 
 class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
     """The temporal algebra class"""
@@ -180,13 +182,13 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
 
     # Setting equal precedence level for select and hash operations.
     precedence = (
-        ('left', 'T_SELECT_OPERATOR', 'T_SELECT', 'T_NOT_SELECT'), # 1
-        ('left', 'ADD', 'SUB', 'T_ARITH2_OPERATOR'), #2
+        ('left', 'T_SELECT_OPERATOR', 'T_SELECT', 'T_NOT_SELECT'),  # 1
+        ('left', 'ADD', 'SUB', 'T_ARITH2_OPERATOR'),  #2
         ('left', 'AND', 'OR', 'T_COMP_OPERATOR', 'MOD', 'DIV', 'MULT',
          'T_ARITH1_OPERATOR'))
 
-    def __init__(self, pid=None, run = True, debug = False, spatial = False, \
-                  nprocs = 1, register_null = False):
+    def __init__(self, pid=None, run=True, debug=False, spatial=False,
+                 nprocs=1, register_null=False):
         TemporalAlgebraParser.__init__(self, pid, run, debug, spatial)
         self.nprocs = nprocs
         self.empty_maps = {}
@@ -201,16 +203,16 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
 
     ######################### Temporal functions ##############################
 
-    def eval_toperator(self, operator, comparison = False):
+    def eval_toperator(self, operator, comparison=False):
         """This function evaluates a string containing temporal operations.
 
          :param operator: String of temporal operations, e.g. {equal|during,=!:}.
 
-         :return: List of temporal relations (equal, during), the given function
-          (!:) and the interval/instances (=).
-          
+         :return: List of temporal relations (equal, during), the given
+                  function (!:) and the interval/instances (=).
+
         .. code-block:: python
-        
+
              >>> init(True)
              >>> p = TemporalRasterBaseAlgebraParser()
              >>> operator = "{equal,:}"
@@ -274,15 +276,15 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             if isinstance(t[3], list):
                 num = len(t[3])
                 count = 0
-                returncode = 0
                 register_list = []
                 for i in range(num):
                     # Check if resultmap names exist in GRASS database.
                     rastername = self.basename + "_" + str(i) + "@" + self.mapset
                     rastermap = RasterDataset(rastername)
-                    if rastermap.map_exists() and self.overwrite == False:
-                        self.msgr.fatal("Error raster maps with basename %s exist. Use --o flag to overwrite existing file" \
-                                            %(rastername))
+                    if rastermap.map_exists() and self.overwrite is False:
+                        self.msgr.fatal("Error raster maps with basename %s "
+                                        "exist. Use --o flag to overwrite "
+                                        "existing file" % (rastername))
                 map_test_list = []
                 for map_i in t[3]:
                     newident = self.basename + "_" + str(count)
@@ -305,23 +307,23 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                     else:
                         map_i.set_id(newident + "@" + self.mapset)
                         map_test_list.append(map_i)
-                    count  += 1
+                    count += 1
 
                 process_queue.wait()
 
                 for map_i in map_test_list:
                     if not map_test.map_exists():
-                        self.msgr.error(_("Error computing map <%s>"%(map_i.get_id()) ))
+                        self.msgr.error(_("Error computing map <%s>" %
+                                          (map_i.get_id())))
                     else:
                         register_list.append(map_i)
 
                 # Open connection to temporal database.
                 dbif, connect = init_dbif(self.dbif)
                 # Create result space time dataset.
-                resultstds = open_new_stds(t[1], self.stdstype, \
-                                                         'absolute', t[1], t[1], \
-                                                         'mean', self.dbif, \
-                                                         overwrite = self.overwrite)
+                resultstds = open_new_stds(t[1], self.stdstype, 'absolute',
+                                           t[1], t[1], 'mean', self.dbif,
+                                           overwrite=self.overwrite)
                 for map_i in register_list:
                     # Get meta data from grass database.
                     map_i.load()
@@ -337,10 +339,12 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                     if map_i.is_in_db(dbif) and self.overwrite:
                         # Update map in temporal database.
                         map_i.update_all(dbif)
-                    elif map_i.is_in_db(dbif) and self.overwrite == False:
+                    elif map_i.is_in_db(dbif) and self.overwrite is False:
                         # Raise error if map exists and no overwrite flag is given.
-                        self.msgr.fatal("Error vector map %s exist in temporal database. Use overwrite flag.  : \n%s" \
-                                            %(map_i.get_map_id(), cmd.popen.stderr))
+                        self.msgr.fatal("Error vector map %s exist in temporal"
+                                        " database. Use overwrite flag.  : "
+                                        "\n%s" % (map_i.get_map_id(),
+                                                  cmd.popen.stderr))
                     else:
                         # Insert map into temporal database.
                         map_i.insert(dbif)
@@ -382,7 +386,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             resultlist = []
             for map_i in topolist:
                 # Generate an intermediate map for the result map list.
-                map_new = self.generate_new_map(base_map=map_i, bool_op = 'and', copy = True)
+                map_new = self.generate_new_map(base_map=map_i, bool_op='and',
+                                                copy=True)
                 # Set first input for overlay module.
                 mapainput = map_i.get_id()
                 # Loop over temporal related maps and create overlay modules.
@@ -390,8 +395,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 count = 0
                 for map_j in (tbrelations['EQUAL']):
                     # Create overlayed map extent.
-                    returncode = self.overlay_map_extent(map_new, map_j, 'and', \
-                                                            temp_op = '=')
+                    returncode = self.overlay_map_extent(map_new, map_j, 'and',
+                                                         temp_op='=')
                     # Stop the loop if no temporal or spatial relationship exist.
                     if returncode == 0:
                         break
@@ -405,18 +410,21 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                     if "map_value" in dir(map_j) and len(map_j.map_value) > 0 and map_j.map_value[0].get_type() == "timediff":
                         mapbinput = map_j.map_value[0].get_type_value()[0]
                     else:
-                    # Set first input for overlay module.
+                        # Set first input for overlay module.
                         mapbinput = map_j.get_id()
 
                     # Create r.mapcalc expression string for the operation.
                     if "cmd_list" in dir(map_new) and "cmd_list" not in dir(map_j):
-                        cmdstring = "(%s %s %s)" %(map_new.cmd_list, t[2], mapbinput)
+                        cmdstring = "(%s %s %s)" % (map_new.cmd_list, t[2],
+                                                    mapbinput)
                     elif "cmd_list" in dir(map_j) and "cmd_list" not in dir(map_new):
-                        cmdstring = "(%s %s %s)" %(mapainput, t[2], map_j.cmd_list)
+                        cmdstring = "(%s %s %s)" % (mapainput, t[2],
+                                                    map_j.cmd_list)
                     elif "cmd_list" in dir(map_j) and "cmd_list" in dir(map_new):
-                        cmdstring = "(%s %s %s)" %(map_new.cmd_list, t[2], map_j.cmd_list)
+                        cmdstring = "(%s %s %s)" % (map_new.cmd_list, t[2],
+                                                    map_j.cmd_list)
                     else:
-                        cmdstring = "(%s %s %s)" %(mapainput, t[2], mapbinput)
+                        cmdstring = "(%s %s %s)" % (mapainput, t[2], mapbinput)
                     # Conditional append of module command.
                     map_new.cmd_list = cmdstring
                     # Set new map name to temporary map name.
@@ -450,9 +458,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 mapinput = map_i.get_id()
                 # Create r.mapcalc expression string for the operation.
                 if "cmd_list" in dir(map_i):
-                    cmdstring = "(%s %s %s)" %(map_i.cmd_list, t[2], t[3])
+                    cmdstring = "(%s %s %s)" % (map_i.cmd_list, t[2], t[3])
                 else:
-                    cmdstring = "(%s %s %s)" %(mapinput, t[2], t[3])
+                    cmdstring = "(%s %s %s)" % (mapinput, t[2], t[3])
                 # Conditional append of module command.
                 map_i.cmd_list = cmdstring
                 # Append map to result map list.
@@ -463,7 +471,6 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         if self.debug:
             for map in resultlist:
                 print map.cmd_list
-
 
     def p_arith1_operation_numeric2(self, t):
         """
@@ -483,9 +490,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 mapinput = map_i.get_id()
                 # Create r.mapcalc expression string for the operation.
                 if "cmd_list" in dir(map_i):
-                    cmdstring = "(%s %s %s)" %(t[1], t[2], map_i.cmd_list)
+                    cmdstring = "(%s %s %s)" % (t[1], t[2], map_i.cmd_list)
                 else:
-                    cmdstring = "(%s %s %s)" %(t[1], t[2], mapinput)
+                    cmdstring = "(%s %s %s)" % (t[1], t[2], mapinput)
                 # Conditional append of module command.
                 map_i.cmd_list = cmdstring
                 # Append map to result map list.
@@ -496,7 +503,6 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         if self.debug:
             for map in resultlist:
                 print map.cmd_list
-
 
     def p_arith2_operation(self, t):
         """
@@ -523,7 +529,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             resultlist = []
             for map_i in topolist:
                 # Generate an intermediate map for the result map list.
-                map_new = self.generate_new_map(base_map=map_i, bool_op = 'and', copy = True)
+                map_new = self.generate_new_map(base_map=map_i, bool_op='and',
+                                                copy=True)
                 # Set first input for overlay module.
                 mapainput = map_i.get_id()
                 # Loop over temporal related maps and create overlay modules.
@@ -531,8 +538,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 count = 0
                 for map_j in (tbrelations['EQUAL']):
                     # Create overlayed map extent.
-                    returncode = self.overlay_map_extent(map_new, map_j, 'and', \
-                                                            temp_op = '=')
+                    returncode = self.overlay_map_extent(map_new, map_j, 'and',
+                                                         temp_op='=')
                     # Stop the loop if no temporal or spatial relationship exist.
                     if returncode == 0:
                         break
@@ -546,18 +553,21 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                     if "map_value" in dir(map_j) and len(map_j.map_value) > 0 and map_j.map_value[0].get_type() == "timediff":
                         mapbinput = map_j.map_value[0].get_type_value()[0]
                     else:
-                    # Set first input for overlay module.
+                        # Set first input for overlay module.
                         mapbinput = map_j.get_id()
 
                     # Create r.mapcalc expression string for the operation.
                     if "cmd_list" in dir(map_new) and "cmd_list" not in dir(map_j):
-                        cmdstring = "(%s %s %s)" %(map_new.cmd_list, t[2], mapbinput)
+                        cmdstring = "(%s %s %s)" % (map_new.cmd_list, t[2],
+                                                    mapbinput)
                     elif "cmd_list" in dir(map_j) and "cmd_list" not in dir(map_new):
-                        cmdstring = "(%s %s %s)" %(mapainput, t[2], map_j.cmd_list)
+                        cmdstring = "(%s %s %s)" % (mapainput, t[2],
+                                                    map_j.cmd_list)
                     elif "cmd_list" in dir(map_j) and "cmd_list" in dir(map_new):
-                        cmdstring = "(%s %s %s)" %(map_new.cmd_list, t[2], map_j.cmd_list)
+                        cmdstring = "(%s %s %s)" % (map_new.cmd_list, t[2],
+                                                    map_j.cmd_list)
                     else:
-                        cmdstring = "(%s %s %s)" %(mapainput, t[2], mapbinput)
+                        cmdstring = "(%s %s %s)" % (mapainput, t[2], mapbinput)
                     # Conditional append of module command.
                     map_new.cmd_list = cmdstring
                     # Set new map name to temporary map name.
@@ -590,9 +600,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 mapinput = map_i.get_id()
                 # Create r.mapcalc expression string for the operation.
                 if "cmd_list" in dir(map_i):
-                    cmdstring = "(%s %s %s)" %(map_i.cmd_list, t[2], t[3])
+                    cmdstring = "(%s %s %s)" % (map_i.cmd_list, t[2], t[3])
                 else:
-                    cmdstring = "(%s %s %s)" %(mapinput, t[2], t[3])
+                    cmdstring = "(%s %s %s)" % (mapinput, t[2], t[3])
                 # Conditional append of module command.
                 map_i.cmd_list = cmdstring
                 # Append map to result map list.
@@ -620,9 +630,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 mapinput = map_i.get_id()
                 # Create r.mapcalc expression string for the operation.
                 if "cmd_list" in dir(map_i):
-                    cmdstring = "(%s %s %s)" %(t[1], t[2], map_i.cmd_list)
+                    cmdstring = "(%s %s %s)" % (t[1], t[2], map_i.cmd_list)
                 else:
-                    cmdstring = "(%s %s %s)" %(t[1], t[2], mapinput)
+                    cmdstring = "(%s %s %s)" % (t[1], t[2], mapinput)
                 # Conditional append of module command.
                 map_i.cmd_list = cmdstring
                 # Append map to result map list.
@@ -646,14 +656,16 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         # Check input stds.
         maplistA = self.check_stds(t[1])
         maplistB = self.check_stds(t[3])
-        relations, temporal, function= self.eval_toperator(t[2])
-        topolist = self.get_temporal_topo_list(maplistA, maplistB, topolist = relations)
+        relations, temporal, function = self.eval_toperator(t[2])
+        topolist = self.get_temporal_topo_list(maplistA, maplistB,
+                                               topolist=relations)
 
         if self.run:
             resultlist = []
             for map_i in topolist:
                 # Generate an intermediate map for the result map list.
-                map_new = self.generate_new_map(base_map=map_i, bool_op = 'and', copy = True)
+                map_new = self.generate_new_map(base_map=map_i, bool_op='and',
+                                                copy=True)
                 # Set first input for overlay module.
                 mapainput = map_i.get_id()
                 # Loop over temporal related maps and create overlay modules.
@@ -663,10 +675,12 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                     if topo in tbrelations.keys():
                         for map_j in (tbrelations[topo]):
                             # Create overlayed map extent.
-                            returncode = self.overlay_map_extent(map_new, map_j, 'and', \
-                                                                    temp_op = temporal)
+                            returncode = self.overlay_map_extent(map_new,
+                                                                 map_j, 'and',
+                                                                 temp_op=temporal)
                             print(returncode)
-                            # Stop the loop if no temporal or spatial relationship exist.
+                            # Stop the loop if no temporal or spatial
+                            # relationship exist.
                             if returncode == 0:
                                 break
                             if count == 0:
@@ -681,21 +695,29 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                             if "map_value" in dir(map_j) and len(map_j.map_value) > 0 and map_j.map_value[0].get_type() == "timediff":
                                 mapbinput = map_j.map_value[0].get_type_value()[0]
                             else:
-                            # Set first input for overlay module.
+                                # Set first input for overlay module.
                                 mapbinput = map_j.get_id()
 
                             # Create r.mapcalc expression string for the operation.
                             if "cmd_list" in dir(map_new):
-                                cmdstring = "(%s %s %s)" %(map_new.cmd_list, function, mapbinput)
+                                cmdstring = "(%s %s %s)" % (map_new.cmd_list,
+                                                            function,
+                                                            mapbinput)
                                 print('with cmd in a: ' + map_j.get_id())
                             elif "cmd_list" in dir(map_j):
-                                cmdstring = "(%s %s %s)" %(mapainput, function, map_j.cmd_list)
+                                cmdstring = "(%s %s %s)" % (mapainput,
+                                                            function,
+                                                            map_j.cmd_list)
                                 print('with cmd in b')
                             elif "cmd_list" in dir(map_j) and "cmd_list" in dir(map_new):
-                                cmdstring = "(%s %s %s)" %(map_new.cmd_list, function, map_j.cmd_list)
+                                cmdstring = "(%s %s %s)" % (map_new.cmd_list,
+                                                            function,
+                                                            map_j.cmd_list)
                                 print('with cmd in b')
                             else:
-                                cmdstring = "(%s %s %s)" %(mapainput, function, mapbinput)
+                                cmdstring = "(%s %s %s)" % (mapainput,
+                                                            function,
+                                                            mapbinput)
                             print(cmdstring)
                             # Conditional append of module command.
                             map_new.cmd_list = cmdstring
@@ -726,14 +748,16 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         # Check input stds.
         maplistA = self.check_stds(t[1])
         maplistB = self.check_stds(t[3])
-        relations, temporal, function= self.eval_toperator(t[2])
-        topolist = self.get_temporal_topo_list(maplistA, maplistB, topolist = relations)
+        relations, temporal, function = self.eval_toperator(t[2])
+        topolist = self.get_temporal_topo_list(maplistA, maplistB,
+                                               topolist=relations)
 
         if self.run:
             resultlist = []
             for map_i in topolist:
                 # Generate an intermediate map for the result map list.
-                map_new = self.generate_new_map(base_map=map_i, bool_op = 'and', copy = True)
+                map_new = self.generate_new_map(base_map=map_i, bool_op='and',
+                                                copy=True)
                 # Set first input for overlay module.
                 mapainput = map_i.get_id()
                 # Loop over temporal related maps and create overlay modules.
@@ -743,9 +767,11 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                     if topo in tbrelations.keys():
                         for map_j in (tbrelations[topo]):
                             # Create overlayed map extent.
-                            returncode = self.overlay_map_extent(map_new, map_j, 'and', \
-                                                                    temp_op = temporal)
-                            # Stop the loop if no temporal or spatial relationship exist.
+                            returncode = self.overlay_map_extent(map_new,
+                                                                 map_j, 'and',
+                                                                 temp_op=temporal)
+                            # Stop the loop if no temporal or spatial
+                            # relationship exist.
                             if returncode == 0:
                                 break
                             if count == 0:
@@ -765,13 +791,21 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
 
                             # Create r.mapcalc expression string for the operation.
                             if "cmd_list" in dir(map_new) and "cmd_list" not in dir(map_j):
-                                cmdstring = "(%s %s %s)" %(map_new.cmd_list, function, mapbinput)
+                                cmdstring = "(%s %s %s)" % (map_new.cmd_list,
+                                                            function,
+                                                            mapbinput)
                             elif "cmd_list" in dir(map_j) and "cmd_list" not in dir(map_new):
-                                cmdstring = "(%s %s %s)" %(mapainput, function, map_j.cmd_list)
+                                cmdstring = "(%s %s %s)" % (mapainput,
+                                                            function,
+                                                            map_j.cmd_list)
                             elif "cmd_list" in dir(map_j) and "cmd_list" in dir(map_new):
-                                cmdstring = "(%s %s %s)" %(map_new.cmd_list, function, map_j.cmd_list)
+                                cmdstring = "(%s %s %s)" % (map_new.cmd_list,
+                                                            function,
+                                                            map_j.cmd_list)
                             else:
-                                cmdstring = "(%s %s %s)" %(mapainput, function, mapbinput)
+                                cmdstring = "(%s %s %s)" % (mapainput,
+                                                            function,
+                                                            mapbinput)
                             # Conditional append of module command.
                             map_new.cmd_list = cmdstring
                             # Set new map name to temporary map name.
@@ -811,7 +845,6 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map in resultlist:
                 print map.cmd_list
 
-
     def p_mapcalc_operation(self, t):
         # Examples:
         # sin(A)
@@ -828,9 +861,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map_i in maplist:
                 # Create r.mapcalc expression string for the operation.
                 if "cmd_list" in dir(map_i):
-                    cmdstring = "%s(%s)" %(t[1].lower(), map_i.cmd_list)
+                    cmdstring = "%s(%s)" % (t[1].lower(), map_i.cmd_list)
                 else:
-                    cmdstring = "%s(%s)" %(t[1].lower(), map_i.get_id())
+                    cmdstring = "%s(%s)" % (t[1].lower(), map_i.get_id())
                 # Set new command list for map.
                 map_i.cmd_list = cmdstring
                 # Append map with updated command list to result list.
@@ -841,7 +874,6 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         if self.debug:
             for map in resultlist:
                 print map.cmd_list
-
 
     def p_s_var_expr(self, t):
         # Examples:
@@ -858,9 +890,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map_i in maplist:
                 # Create r.mapcalc expression string for the operation.
                 if "cmd_list" in dir(map_i):
-                    cmdstring = "%s(%s)" %(t[1].lower(), map_i.cmd_list)
+                    cmdstring = "%s(%s)" % (t[1].lower(), map_i.cmd_list)
                 else:
-                    cmdstring = "%s(%s)" %(t[1].lower(), map_i.get_id())
+                    cmdstring = "%s(%s)" % (t[1].lower(), map_i.get_id())
                 # Set new command list for map.
                 map_i.cmd_list = cmdstring
                 # Append map with updated command list to result list.
@@ -887,9 +919,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map_i in maplist:
                 # Create r.mapcalc expression string for the operation.
                 if "cmd_list" in dir(map_i):
-                    cmdstring = "!isnull(%s)" %(map_i.cmd_list)
+                    cmdstring = "!isnull(%s)" % (map_i.cmd_list)
                 else:
-                    cmdstring = "!isnull(%s)" %(map_i.get_id())
+                    cmdstring = "!isnull(%s)" % (map_i.get_id())
                 # Set new command list for map.
                 map_i.cmd_list = cmdstring
                 # Append map with updated command list to result list.
@@ -916,9 +948,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map_i in maplist:
                 # Create r.mapcalc expression string for the operation.
                 if "cmd_list" in dir(map_i):
-                    cmdstring = "%s %s %s" %(map_i.cmd_list, t[2], t[3])
+                    cmdstring = "%s %s %s" % (map_i.cmd_list, t[2], t[3])
                 else:
-                    cmdstring = "%s %s %s" %(map_i.get_id(), t[2], t[3])
+                    cmdstring = "%s %s %s" % (map_i.get_id(), t[2], t[3])
                 # Set new command list for map.
                 map_i.cmd_list = cmdstring
                 # Append map with updated command list to result list.
@@ -951,12 +983,13 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 count = 0
                 for map_j in (tbrelations['EQUAL']):
                     # Generate an intermediate map for the result map list.
-                    map_new = self.generate_new_map(base_map=map_i, bool_op = 'and', copy = True)
+                    map_new = self.generate_new_map(base_map=map_i,
+                                                    bool_op='and', copy=True)
                     # Set first input for overlay module.
                     mapainput = map_i.get_id()
                     # Create overlayed map extent.
-                    returncode = self.overlay_map_extent(map_new, map_j, 'and', \
-                                                            temp_op = '=')
+                    returncode = self.overlay_map_extent(map_new, map_j, 'and',
+                                                         temp_op='=')
                     # Stop the loop if no temporal or spatial relationship exist.
                     if returncode == 0:
                         break
@@ -971,13 +1004,17 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                     mapbinput = map_j.get_id()
                     # Create r.mapcalc expression string for the operation.
                     if "cmd_list" in dir(map_new) and "cmd_list" not in dir(map_j):
-                        cmdstring = "%s %s %s" %(map_new.cmd_list, t[2] + t[3], mapbinput)
+                        cmdstring = "%s %s %s" % (map_new.cmd_list,
+                                                  t[2] + t[3], mapbinput)
                     elif "cmd_list" in dir(map_j) and "cmd_list" not in dir(map_new):
-                        cmdstring = "%s %s %s" %(mapainput, t[2] + t[3], map_j.cmd_list)
+                        cmdstring = "%s %s %s" % (mapainput, t[2] + t[3],
+                                                  map_j.cmd_list)
                     elif "cmd_list" in dir(map_j) and "cmd_list" in dir(map_new):
-                        cmdstring = "%s %s %s" %(map_new.cmd_list, t[2] + t[3], map_j.cmd_list)
+                        cmdstring = "%s %s %s" % (map_new.cmd_list,
+                                                  t[2] + t[3], map_j.cmd_list)
                     else:
-                        cmdstring = "%s %s %s" %(mapainput, t[2] + t[3], mapbinput)
+                        cmdstring = "%s %s %s" % (mapainput, t[2] + t[3],
+                                                  mapbinput)
                     # Conditional append of module command.
                     map_new.cmd_list = cmdstring
                     # Set new map name to temporary map name.
@@ -1007,9 +1044,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map_i in maplist:
                 # Create r.mapcalc expression string for the operation.
                 if "cmd_list" in dir(map_i):
-                    cmdstring = "%s" %(map_i.cmd_list)
+                    cmdstring = "%s" % (map_i.cmd_list)
                 else:
-                    cmdstring = "%s" %(map_i.get_id())
+                    cmdstring = "%s" % (map_i.get_id())
                 # Set new command list for map.
                 map_i.cmd_list = cmdstring
                 # Append map with updated command list to result list.
@@ -1041,12 +1078,13 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             count = 0
             for map_j in (tbrelations['EQUAL']):
                 # Generate an intermediate map for the result map list.
-                map_new = self.generate_new_map(base_map=map_i, bool_op = 'and', copy = True)
+                map_new = self.generate_new_map(base_map=map_i, bool_op='and',
+                                                copy=True)
                 # Set first input for overlay module.
                 mapainput = map_i.get_id()
                 # Create overlayed map extent.
-                returncode = self.overlay_map_extent(map_new, map_j, 'and', \
-                                                        temp_op = '=')
+                returncode = self.overlay_map_extent(map_new, map_j, 'and',
+                                                     temp_op='=')
                 # Stop the loop if no temporal or spatial relationship exist.
                 if returncode == 0:
                     break
@@ -1061,13 +1099,14 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 mapbinput = map_j.get_id()
                 # Create r.mapcalc expression string for the operation.
                 if "cmd_list" in dir(map_new) and "cmd_list" not in dir(map_j):
-                    cmdstring = "if(%s,%s)" %(map_new.cmd_list, mapbinput)
+                    cmdstring = "if(%s,%s)" % (map_new.cmd_list, mapbinput)
                 elif "cmd_list" in dir(map_j) and "cmd_list" not in dir(map_new):
-                    cmdstring = "if(%s,%s)" %(mapainput, map_j.cmd_list)
+                    cmdstring = "if(%s,%s)" % (mapainput, map_j.cmd_list)
                 elif "cmd_list" in dir(map_j) and "cmd_list" in dir(map_new):
-                    cmdstring = "if(%s,%s)" %(map_new.cmd_list, map_j.cmd_list)
+                    cmdstring = "if(%s,%s)" % (map_new.cmd_list,
+                                               map_j.cmd_list)
                 else:
-                    cmdstring = "if(%s,%s)" %(mapainput, mapbinput)
+                    cmdstring = "if(%s,%s)" % (mapainput, mapbinput)
                 # Conditional append of module command.
                 map_new.cmd_list = cmdstring
                 # Set new map name to temporary map name.
@@ -1104,9 +1143,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             mapinput = map_i.get_id()
             # Create r.mapcalc expression string for the operation.
             if "cmd_list" in dir(map_i):
-                cmdstring = "if(%s,%s)" %(map_i.cmd_list, numinput)
+                cmdstring = "if(%s,%s)" % (map_i.cmd_list, numinput)
             else:
-                cmdstring = "if(%s,%s)" %(mapinput, numinput)
+                cmdstring = "if(%s,%s)" % (mapinput, numinput)
             # Conditional append of module command.
             map_i.cmd_list = cmdstring
             # Append map to result map list.
@@ -1125,11 +1164,11 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         expr : IF LPAREN T_REL_OPERATOR COMMA s_var_expr COMMA stds RPAREN
              | IF LPAREN T_REL_OPERATOR COMMA s_var_expr COMMA expr RPAREN
         """
-        relations, temporal, function= self.eval_toperator(t[3])
+        relations, temporal, function = self.eval_toperator(t[3])
         ifmaplist = self.check_stds(t[5])
         thenmaplist = self.check_stds(t[7])
         topolist = self.get_temporal_topo_list(ifmaplist, thenmaplist,
-                    topolist = relations)
+                                               topolist=relations)
         resultlist = []
         for map_i in topolist:
             #print(map_i.get_id())
@@ -1140,12 +1179,15 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 if topo in tbrelations.keys():
                     for map_j in (tbrelations[topo]):
                         # Generate an intermediate map for the result map list.
-                        map_new = self.generate_new_map(base_map=map_i, bool_op = 'and', copy = True)
+                        map_new = self.generate_new_map(base_map=map_i,
+                                                        bool_op='and',
+                                                        copy=True)
                         # Set first input for overlay module.
                         mapainput = map_i.get_id()
                         # Create overlayed map extent.
-                        returncode = self.overlay_map_extent(map_new, map_j, 'and', \
-                                                                temp_op = '=')
+                        returncode = self.overlay_map_extent(map_new, map_j,
+                                                             'and',
+                                                             temp_op='=')
                         # Stop the loop if no temporal or spatial relationship exist.
                         if returncode == 0:
                             break
@@ -1162,13 +1204,16 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                         #mapbinput = mapbinput.split('@')[0]
                         # Create r.mapcalc expression string for the operation.
                         if "cmd_list" in dir(map_new) and "cmd_list" not in dir(map_j):
-                            cmdstring = "if(%s,%s)" %(map_new.cmd_list, mapbinput)
+                            cmdstring = "if(%s,%s)" % (map_new.cmd_list,
+                                                       mapbinput)
                         elif "cmd_list" in dir(map_j) and "cmd_list" not in dir(map_new):
-                            cmdstring = "if(%s,%s)" %(mapainput, map_j.cmd_list)
+                            cmdstring = "if(%s,%s)" % (mapainput,
+                                                       map_j.cmd_list)
                         elif "cmd_list" in dir(map_j) and "cmd_list" in dir(map_new):
-                            cmdstring = "if(%s,%s)" %(map_new.cmd_list, map_j.cmd_list)
+                            cmdstring = "if(%s,%s)" % (map_new.cmd_list,
+                                                       map_j.cmd_list)
                         else:
-                            cmdstring = "if(%s,%s)" %(mapainput, mapbinput)
+                            cmdstring = "if(%s,%s)" % (mapainput, mapbinput)
                         # Conditional append of module command.
                         map_new.cmd_list = cmdstring
                         # Set new map name to temporary map name.
@@ -1243,7 +1288,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for i in range(iternum):
                 conclusionmaps = conclusionlist[i]
                 # Generate an intermediate map for the result map list.
-                map_new = self.generate_new_map(base_map=map_i, bool_op = 'and', copy = True)
+                map_new = self.generate_new_map(base_map=map_i, bool_op='and',
+                                                copy=True)
                 # Set first input for overlay module.
                 mapifinput = map_i.get_id()
                 # Get conclusion maps.
@@ -1253,8 +1299,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 # Check if conclusions are map objects.
                 if map_then != 'null()':
                     # Create overlayed map extent.
-                    returncode = self.overlay_map_extent(map_new, map_then, 'and', \
-                                                            temp_op = '=')
+                    returncode = self.overlay_map_extent(map_new, map_then,
+                                                         'and', temp_op='=')
                     maptheninput = map_then.get_id()
                     # Continue the loop if no temporal or spatial relationship exist.
                     if returncode == 0:
@@ -1264,8 +1310,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 # Check if conclusions are map objects.
                 if map_else != 'null()':
                     # Create overlayed map extent.
-                    returncode = self.overlay_map_extent(map_new, map_else, 'and', \
-                                                            temp_op = '=')
+                    returncode = self.overlay_map_extent(map_new, map_else,
+                                                         'and', temp_op='=')
                     mapelseinput = map_else.get_id()
                     # Continue the loop if no temporal or spatial relationship exist.
                     if returncode == 0:
@@ -1277,35 +1323,43 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 # Create r.mapcalc expression string for the operation.
                 if "cmd_list" in dir(map_new) and "cmd_list" not in dir(map_then) \
                     and "cmd_list" not in dir(map_else):
-                    cmdstring = "if(%s, %s, %s)" %(map_new.cmd_list, maptheninput,
-                    mapelseinput)
+                    cmdstring = "if(%s, %s, %s)" % (map_new.cmd_list,
+                                                    maptheninput,
+                                                    mapelseinput)
                 elif "cmd_list" in dir(map_new) and "cmd_list" in dir(map_then) \
                     and "cmd_list" not in dir(map_else):
-                    cmdstring = "if(%s, %s, %s)" %(map_new.cmd_list, map_then.cmd_list,
-                    mapelseinput)
+                    cmdstring = "if(%s, %s, %s)" % (map_new.cmd_list,
+                                                    map_then.cmd_list,
+                                                    mapelseinput)
                 elif "cmd_list" in dir(map_new) and "cmd_list" not in dir(map_then) \
                     and "cmd_list" in dir(map_else):
-                    cmdstring = "if(%s, %s, %s)" %(map_new.cmd_list, maptheninput,
-                    map_else.cmd_list)
+                    cmdstring = "if(%s, %s, %s)" % (map_new.cmd_list,
+                                                    maptheninput,
+                                                    map_else.cmd_list)
                 elif "cmd_list" in dir(map_new) and "cmd_list" in dir(map_then) \
                     and "cmd_list" in dir(map_else):
-                    cmdstring = "if(%s, %s, %s)" %(map_new.cmd_list, map_then.cmd_list,
-                    map_else.cmd_list)
+                    cmdstring = "if(%s, %s, %s)" % (map_new.cmd_list,
+                                                    map_then.cmd_list,
+                                                    map_else.cmd_list)
                 elif "cmd_list" not in dir(map_new) and "cmd_list" in dir(map_then) \
                     and "cmd_list" not in dir(map_else):
-                    cmdstring = "if(%s, %s, %s)" %(mapifinput, map_then.cmd_list,
-                    mapelseinput)
+                    cmdstring = "if(%s, %s, %s)" % (mapifinput,
+                                                    map_then.cmd_list,
+                                                    mapelseinput)
                 elif "cmd_list" not in dir(map_new) and "cmd_list" not in dir(map_then) \
                     and "cmd_list" in dir(map_else):
-                    cmdstring = "if(%s, %s, %s)" %(mapifinput, maptheninput,
-                    map_else.cmd_list)
+                    cmdstring = "if(%s, %s, %s)" % (mapifinput,
+                                                    maptheninput,
+                                                    map_else.cmd_list)
                 elif "cmd_list" not in dir(map_new) and "cmd_list" in dir(map_then) \
                     and "cmd_list" in dir(map_else):
-                    cmdstring = "if(%s, %s, %s)" %(mapifinput, map_then.cmd_list,
-                    map_else.cmd_list)
+                    cmdstring = "if(%s, %s, %s)" % (mapifinput,
+                                                    map_then.cmd_list,
+                                                    map_else.cmd_list)
                 else:
-                    cmdstring = "if(%s, %s, %s)" %(mapifinput, maptheninput,
-                    mapelseinput)
+                    cmdstring = "if(%s, %s, %s)" % (mapifinput,
+                                                    maptheninput,
+                                                    mapelseinput)
                 # Conditional append of module command.
                 map_new.cmd_list = cmdstring
                 # Append map to result map list.
@@ -1348,9 +1402,10 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             mapinput = map_i.get_id()
             # Create r.mapcalc expression string for the operation.
             if "cmd_list" in dir(map_i):
-                cmdstring = "if(%s, %s, %s)" %(map_i.cmd_list, numthen, numelse)
+                cmdstring = "if(%s, %s, %s)" % (map_i.cmd_list, numthen,
+                                                numelse)
             else:
-                cmdstring = "if(%s, %s, %s)" %(mapinput, numthen, numelse)
+                cmdstring = "if(%s, %s, %s)" % (mapinput, numthen, numelse)
             # Conditional append of module command.
             map_i.cmd_list = cmdstring
             # Append map to result map list.
@@ -1406,9 +1461,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             topolist = self.get_temporal_topo_list(ifmaplist, thenmaplist)
         elif elsemaplist != []:
             topolist = self.get_temporal_topo_list(ifmaplist, elsemaplist)
-        if numthen !=  '':
+        if numthen != '':
             numinput = numthen
-        elif numelse !=  '':
+        elif numelse != '':
             numinput = numelse
 
         # Iterate over condition map lists with temporal relations.
@@ -1418,12 +1473,13 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             count = 0
             for map_j in (tbrelations['EQUAL']):
                 # Generate an intermediate map for the result map list.
-                map_new = self.generate_new_map(base_map=map_i, bool_op = 'and', copy = True)
+                map_new = self.generate_new_map(base_map=map_i, bool_op='and',
+                                                copy=True)
                 # Set first input for overlay module.
                 mapainput = map_i.get_id()
                 # Create overlayed map extent.
-                returncode = self.overlay_map_extent(map_new, map_j, 'and', \
-                                                        temp_op = '=')
+                returncode = self.overlay_map_extent(map_new, map_j, 'and',
+                                                     temp_op='=')
                 # Stop the loop if no temporal or spatial relationship exist.
                 if returncode == 0:
                     break
@@ -1439,28 +1495,36 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 # Create r.mapcalc expression string for the operation.
                 if thenmaplist != []:
                     if "cmd_list" in dir(map_new) and "cmd_list" not in dir(map_j):
-                        cmdstring = "if(%s,%s,%s)" %(map_new.cmd_list, mapbinput, \
+                        cmdstring = "if(%s,%s,%s)" % (map_new.cmd_list,
+                                                      mapbinput,
                                                       numinput)
                     elif "cmd_list" in dir(map_j) and "cmd_list" not in dir(map_new):
-                        cmdstring = "if(%s,%s,%s)" %(mapainput, map_j.cmd_list, \
+                        cmdstring = "if(%s,%s,%s)" % (mapainput,
+                                                      map_j.cmd_list,
                                                       numinput)
                     elif "cmd_list" in dir(map_j) and "cmd_list" in dir(map_new):
-                        cmdstring = "if(%s,%s,%s)" %(map_new.cmd_list, map_j.cmd_list, \
+                        cmdstring = "if(%s,%s,%s)" % (map_new.cmd_list,
+                                                      map_j.cmd_list,
                                                       numinput)
                     else:
-                        cmdstring = "if(%s,%s,%s)" %(mapainput, mapbinput, numinput)
+                        cmdstring = "if(%s,%s,%s)" % (mapainput,
+                                                      mapbinput, numinput)
                 if elsemaplist != []:
                     if "cmd_list" in dir(map_new) and "cmd_list" not in dir(map_j):
-                        cmdstring = "if(%s,%s,%s)" %(map_new.cmd_list, numinput, \
+                        cmdstring = "if(%s,%s,%s)" % (map_new.cmd_list,
+                                                      numinput,
                                                       mapbinput)
                     elif "cmd_list" in dir(map_j) and "cmd_list" not in dir(map_new):
-                        cmdstring = "if(%s,%s,%s)" %(mapainput, numinput, \
+                        cmdstring = "if(%s,%s,%s)" % (mapainput,
+                                                      numinput,
                                                       map_j.cmd_list)
                     elif "cmd_list" in dir(map_j) and "cmd_list" in dir(map_new):
-                        cmdstring = "if(%s,%s,%s)" %(map_new.cmd_list, numinput, \
+                        cmdstring = "if(%s,%s,%s)" % (map_new.cmd_list,
+                                                      numinput,
                                                       map_j.cmd_list)
                     else:
-                        cmdstring = "if(%s,%s,%s)" %(mapainput, numinput, mapbinput)
+                        cmdstring = "if(%s,%s,%s)" % (mapainput, numinput,
+                                                      mapbinput)
                 # Conditional append of module command.
                 map_new.cmd_list = cmdstring
                 # Set new map name to temporary map name.
@@ -1490,7 +1554,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
              | IF LPAREN T_REL_OPERATOR COMMA s_var_expr COMMA expr COMMA number RPAREN
              | IF LPAREN T_REL_OPERATOR COMMA s_var_expr COMMA expr COMMA NULL LPAREN RPAREN RPAREN
         """
-        relations, temporal, function= self.eval_toperator(t[3])
+        relations, temporal, function = self.eval_toperator(t[3])
         ifmaplist = self.check_stds(t[5])
         resultlist = []
         thenmaplist = []
@@ -1518,14 +1582,14 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 numelse = self.check_null(t[9])
 
         if thenmaplist != []:
-            topolist = self.get_temporal_topo_list(ifmaplist, thenmaplist, \
-                                                    topolist = relations)
+            topolist = self.get_temporal_topo_list(ifmaplist, thenmaplist,
+                                                   topolist=relations)
         elif elsemaplist != []:
-            topolist = self.get_temporal_topo_list(ifmaplist, elsemaplist, \
-                                                    topolist = relations)
-        if numthen !=  '':
+            topolist = self.get_temporal_topo_list(ifmaplist, elsemaplist,
+                                                   topolist=relations)
+        if numthen != '':
             numinput = numthen
-        elif numelse !=  '':
+        elif numelse != '':
             numinput = numelse
 
         # Iterate over condition map lists with temporal relations.
@@ -1537,12 +1601,15 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 if topo in tbrelations.keys():
                     for map_j in (tbrelations[topo]):
                         # Generate an intermediate map for the result map list.
-                        map_new = self.generate_new_map(base_map=map_i, bool_op = 'and', copy = True)
+                        map_new = self.generate_new_map(base_map=map_i,
+                                                        bool_op='and',
+                                                        copy=True)
                         # Set first input for overlay module.
                         mapainput = map_i.get_id()
                         # Create overlayed map extent.
-                        returncode = self.overlay_map_extent(map_new, map_j, 'and', \
-                                                                temp_op = '=')
+                        returncode = self.overlay_map_extent(map_new, map_j,
+                                                             'and',
+                                                             temp_op='=')
                         # Stop the loop if no temporal or spatial relationship exist.
                         if returncode == 0:
                             break
@@ -1558,28 +1625,38 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                         # Create r.mapcalc expression string for the operation.
                         if thenmaplist != []:
                             if "cmd_list" in dir(map_new) and "cmd_list" not in dir(map_j):
-                                cmdstring = "if(%s,%s,%s)" %(map_new.cmd_list, mapbinput, \
+                                cmdstring = "if(%s,%s,%s)" % (map_new.cmd_list,
+                                                              mapbinput,
                                                               numinput)
                             elif "cmd_list" in dir(map_j) and "cmd_list" not in dir(map_new):
-                                cmdstring = "if(%s,%s,%s)" %(mapainput, map_j.cmd_list, \
+                                cmdstring = "if(%s,%s,%s)" % (mapainput,
+                                                              map_j.cmd_list,
                                                               numinput)
                             elif "cmd_list" in dir(map_j) and "cmd_list" in dir(map_new):
-                                cmdstring = "if(%s,%s,%s)" %(map_new.cmd_list, map_j.cmd_list, \
+                                cmdstring = "if(%s,%s,%s)" % (map_new.cmd_list,
+                                                              map_j.cmd_list,
                                                               numinput)
                             else:
-                                cmdstring = "if(%s,%s,%s)" %(mapainput, mapbinput, numinput)
+                                cmdstring = "if(%s,%s,%s)" % (mapainput,
+                                                              mapbinput,
+                                                              numinput)
                         if elsemaplist != []:
                             if "cmd_list" in dir(map_new) and "cmd_list" not in dir(map_j):
-                                cmdstring = "if(%s,%s,%s)" %(map_new.cmd_list, numinput, \
+                                cmdstring = "if(%s,%s,%s)" % (map_new.cmd_list,
+                                                              numinput,
                                                               mapbinput)
                             elif "cmd_list" in dir(map_j) and "cmd_list" not in dir(map_new):
-                                cmdstring = "if(%s,%s,%s)" %(mapainput, numinput, \
+                                cmdstring = "if(%s,%s,%s)" % (mapainput,
+                                                              numinput,
                                                               map_j.cmd_list)
                             elif "cmd_list" in dir(map_j) and "cmd_list" in dir(map_new):
-                                cmdstring = "if(%s,%s,%s)" %(map_new.cmd_list, numinput, \
+                                cmdstring = "if(%s,%s,%s)" % (map_new.cmd_list,
+                                                              numinput,
                                                               map_j.cmd_list)
                             else:
-                                cmdstring = "if(%s,%s,%s)" %(mapainput, numinput, mapbinput)
+                                cmdstring = "if(%s,%s,%s)" % (mapainput,
+                                                              numinput,
+                                                              mapbinput)
                         # Conditional append of module command.
                         map_new.cmd_list = cmdstring
                         # Set new map name to temporary map name.
@@ -1595,7 +1672,6 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for map in resultlist:
                 print map.cmd_list
 
-
     def p_s_expr_condition_elif_relation(self, t):
         # Examples:
         #   if({equal||during}, s_var_expr, A, B)
@@ -1605,7 +1681,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
              | IF LPAREN T_REL_OPERATOR COMMA s_var_expr COMMA expr COMMA stds RPAREN
              | IF LPAREN T_REL_OPERATOR COMMA s_var_expr COMMA expr COMMA expr RPAREN
         """
-        relations, temporal, function= self.eval_toperator(t[3])
+        relations, temporal, function = self.eval_toperator(t[3])
         ifmaplist = self.check_stds(t[5])
         thenmaplist = self.check_stds(t[7])
         elsemaplist = self.check_stds(t[9])
@@ -1613,8 +1689,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         thendict = {}
         elsedict = {}
         # Get topologies for the appropriate conclusion term.
-        thentopolist = self.get_temporal_topo_list(ifmaplist, thenmaplist, \
-                                                    topolist = relations)
+        thentopolist = self.get_temporal_topo_list(ifmaplist, thenmaplist,
+                                                   topolist=relations)
         # Fill dictionaries with related maps for both conclusion terms.
         for map_i in thentopolist:
             thenrelations = map_i.get_temporal_relations()
@@ -1624,8 +1700,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                     relationmaps = relationmaps + thenrelations[topo]
             thendict[map_i.get_id()] = relationmaps
         # Get topologies for the alternative conclusion term.
-        elsetopolist = self.get_temporal_topo_list(ifmaplist, elsemaplist, \
-                                                    topolist = relations)
+        elsetopolist = self.get_temporal_topo_list(ifmaplist, elsemaplist,
+                                                   topolist=relations)
         for map_i in elsetopolist:
             elserelations = map_i.get_temporal_relations()
             relationmaps = []
@@ -1665,7 +1741,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for i in range(iternum):
                 conclusionmaps = conclusionlist[i]
                 # Generate an intermediate map for the result map list.
-                map_new = self.generate_new_map(base_map=map_i, bool_op = 'and', copy = True)
+                map_new = self.generate_new_map(base_map=map_i, bool_op='and',
+                                                copy=True)
                 # Set first input for overlay module.
                 mapifinput = map_i.get_id()
                 # Get conclusion maps.
@@ -1675,8 +1752,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 # Check if conclusions are map objects.
                 if map_then != 'null()':
                     # Create overlayed map extent.
-                    returncode = self.overlay_map_extent(map_new, map_then, 'and', \
-                                                            temp_op = '=')
+                    returncode = self.overlay_map_extent(map_new, map_then,
+                                                         'and', temp_op='=')
                     maptheninput = map_then.get_id()
                     # Continue the loop if no temporal or spatial relationship exist.
                     if returncode == 0:
@@ -1686,8 +1763,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 # Check if conclusions are map objects.
                 if map_else != 'null()':
                     # Create overlayed map extent.
-                    returncode = self.overlay_map_extent(map_new, map_else, 'and', \
-                                                            temp_op = '=')
+                    returncode = self.overlay_map_extent(map_new, map_else,
+                                                         'and', temp_op='=')
                     mapelseinput = map_else.get_id()
                     # Continue the loop if no temporal or spatial relationship exist.
                     if returncode == 0:
@@ -1699,35 +1776,43 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 # Create r.mapcalc expression string for the operation.
                 if "cmd_list" in dir(map_new) and "cmd_list" not in dir(map_then) \
                     and "cmd_list" not in dir(map_else):
-                    cmdstring = "if(%s, %s, %s)" %(map_new.cmd_list, maptheninput,
-                    mapelseinput)
+                    cmdstring = "if(%s, %s, %s)" % (map_new.cmd_list,
+                                                    maptheninput,
+                                                    mapelseinput)
                 elif "cmd_list" in dir(map_new) and "cmd_list" in dir(map_then) \
                     and "cmd_list" not in dir(map_else):
-                    cmdstring = "if(%s, %s, %s)" %(map_new.cmd_list, map_then.cmd_list,
-                    mapelseinput)
+                    cmdstring = "if(%s, %s, %s)" % (map_new.cmd_list,
+                                                    map_then.cmd_list,
+                                                    mapelseinput)
                 elif "cmd_list" in dir(map_new) and "cmd_list" not in dir(map_then) \
                     and "cmd_list" in dir(map_else):
-                    cmdstring = "if(%s, %s, %s)" %(map_new.cmd_list, maptheninput,
-                    map_else.cmd_list)
+                    cmdstring = "if(%s, %s, %s)" % (map_new.cmd_list,
+                                                    maptheninput,
+                                                    map_else.cmd_list)
                 elif "cmd_list" in dir(map_new) and "cmd_list" in dir(map_then) \
                     and "cmd_list" in dir(map_else):
-                    cmdstring = "if(%s, %s, %s)" %(map_new.cmd_list, map_then.cmd_list,
-                    map_else.cmd_list)
+                    cmdstring = "if(%s, %s, %s)" % (map_new.cmd_list,
+                                                    map_then.cmd_list,
+                                                    map_else.cmd_list)
                 elif "cmd_list" not in dir(map_new) and "cmd_list" in dir(map_then) \
                     and "cmd_list" not in dir(map_else):
-                    cmdstring = "if(%s, %s, %s)" %(mapifinput, map_then.cmd_list,
-                    mapelseinput)
+                    cmdstring = "if(%s, %s, %s)" % (mapifinput,
+                                                    map_then.cmd_list,
+                                                    mapelseinput)
                 elif "cmd_list" not in dir(map_new) and "cmd_list" not in dir(map_then) \
                     and "cmd_list" in dir(map_else):
-                    cmdstring = "if(%s, %s, %s)" %(mapifinput, maptheninput,
-                    map_else.cmd_list)
+                    cmdstring = "if(%s, %s, %s)" % (mapifinput,
+                                                    maptheninput,
+                                                    map_else.cmd_list)
                 elif "cmd_list" not in dir(map_new) and "cmd_list" in dir(map_then) \
                     and "cmd_list" in dir(map_else):
-                    cmdstring = "if(%s, %s, %s)" %(mapifinput, map_then.cmd_list,
-                    map_else.cmd_list)
+                    cmdstring = "if(%s, %s, %s)" % (mapifinput,
+                                                    map_then.cmd_list,
+                                                    map_else.cmd_list)
                 else:
-                    cmdstring = "if(%s, %s, %s)" %(mapifinput, maptheninput,
-                    mapelseinput)
+                    cmdstring = "if(%s, %s, %s)" % (mapifinput,
+                                                    maptheninput,
+                                                    mapelseinput)
                 # Conditional append of module command.
                 map_new.cmd_list = cmdstring
                 # Append map to result map list.
@@ -1763,7 +1848,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         """
         # Check whether inputs are map lists or global temporal variables and
         # store each in separate lists.
-        ts_var_dict = {"temporal" : [], "spatial" : []}
+        ts_var_dict = {"temporal": [], "spatial": []}
         temporal_list = []
         spatial_list = []
         operator = t[2] + t[3]
@@ -1782,8 +1867,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 spatial_list.append(tsexprA)
         elif isinstance(t[1], ta.GlobalTemporalVar):
             temporal_list.append(t[1])
-        if temporal_list != [] and \
-            isinstance(t[4], ta.GlobalTemporalVar):
+        if temporal_list != [] and isinstance(t[4], ta.GlobalTemporalVar):
             temporal_list.append(temporalop)
         if temporal_list != [] and \
             isinstance(t[4], list) and \
@@ -1805,7 +1889,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         # Condition for two map lists in spatio temporal expression.
         if len(spatial_list) == 2:
             # Build topology for both map lists in spatio temporal expression.
-            topolist = self.get_temporal_topo_list(spatial_list[0], spatial_list[1])
+            topolist = self.get_temporal_topo_list(spatial_list[0],
+                                                   spatial_list[1])
             resultlist = []
             for map_i in topolist:
                 # Loop over temporal related maps and create overlay modules.
@@ -1813,12 +1898,13 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 count = 0
                 for map_j in (tbrelations['EQUAL']):
                     # Generate an intermediate map for the result map list.
-                    map_new = self.generate_new_map(base_map=map_i, bool_op = 'and', copy = True)
+                    map_new = self.generate_new_map(base_map=map_i,
+                                                    bool_op='and', copy=True)
                     # Set first input for overlay module.
                     mapainput = map_i.get_id()
                     # Create overlayed map extent.
-                    returncode = self.overlay_map_extent(map_new, map_j, 'and', \
-                                                            temp_op = '=')
+                    returncode = self.overlay_map_extent(map_new, map_j,
+                                                         'and', temp_op='=')
                     # Stop the loop if no temporal or spatial relationship exist.
                     if returncode == 0:
                         break
@@ -1833,13 +1919,17 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                     mapbinput = map_j.get_id()
                     # Create r.mapcalc expression string for the operation.
                     if "cmd_list" in dir(map_new) and "cmd_list" not in dir(map_j):
-                        cmdstring = "%s %s %s" %(map_new.cmd_list, operator, mapbinput)
+                        cmdstring = "%s %s %s" % (map_new.cmd_list, operator,
+                                                  mapbinput)
                     elif "cmd_list" in dir(map_j) and "cmd_list" not in dir(map_new):
-                        cmdstring = "%s %s %s" %(mapainput, operator, map_j.cmd_list)
+                        cmdstring = "%s %s %s" % (mapainput, operator,
+                                                  map_j.cmd_list)
                     elif "cmd_list" in dir(map_j) and "cmd_list" in dir(map_new):
-                        cmdstring = "%s %s %s" %(map_new.cmd_list, operator, map_j.cmd_list)
+                        cmdstring = "%s %s %s" % (map_new.cmd_list, operator,
+                                                  map_j.cmd_list)
                     else:
-                        cmdstring = "%s %s %s" %(mapainput, operator, mapbinput)
+                        cmdstring = "%s %s %s" % (mapainput, operator,
+                                                  mapbinput)
                     # Conditional append of module command.
                     map_new.cmd_list = cmdstring
                     # Set new map name to temporary map name.
@@ -1847,7 +1937,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                     count += 1
                     # Append map to result map list.
                     if returncode == 1:
-                      resultlist.append(map_new)
+                        resultlist.append(map_new)
                     # Return dictionary with spatial map list of temporal
                     # intersected maps and temporal expression in list form.
                     ts_var_dict["spatial"] = resultlist
@@ -1880,12 +1970,13 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             count = 0
             for map_j in (tbrelations['EQUAL']):
                 # Generate an intermediate map for the result map list.
-                map_new = self.generate_new_map(base_map=map_i, bool_op = 'and', copy = True)
+                map_new = self.generate_new_map(base_map=map_i, bool_op='and',
+                                                copy=True)
                 # Set first input for overlay module.
                 mapainput = map_i.get_id()
                 # Create overlayed map extent.
-                returncode = self.overlay_map_extent(map_new, map_j, 'and', \
-                                                        temp_op = '=')
+                returncode = self.overlay_map_extent(map_new, map_j, 'and',
+                                                     temp_op='=')
                 # Stop the loop if no temporal or spatial relationship exist.
                 if returncode == 0:
                     break
@@ -1900,13 +1991,14 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 mapbinput = map_j.get_id()
                 # Create r.mapcalc expression string for the operation.
                 if "cmd_list" in dir(map_new) and "cmd_list" not in dir(map_j):
-                    cmdstring = "if(%s,%s)" %(map_new.cmd_list, mapbinput)
+                    cmdstring = "if(%s,%s)" % (map_new.cmd_list, mapbinput)
                 elif "cmd_list" in dir(map_j) and "cmd_list" not in dir(map_new):
-                    cmdstring = "if(%s,%s)" %(mapainput, map_j.cmd_list)
+                    cmdstring = "if(%s,%s)" % (mapainput, map_j.cmd_list)
                 elif "cmd_list" in dir(map_j) and "cmd_list" in dir(map_new):
-                    cmdstring = "if(%s,%s)" %(map_new.cmd_list, map_j.cmd_list)
+                    cmdstring = "if(%s,%s)" % (map_new.cmd_list,
+                                               map_j.cmd_list)
                 else:
-                    cmdstring = "if(%s,%s)" %(mapainput, mapbinput)
+                    cmdstring = "if(%s,%s)" % (mapainput, mapbinput)
                 # Conditional append of module command.
                 map_new.cmd_list = cmdstring
                 # Set new map name to temporary map name.
@@ -1925,14 +2017,13 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         thencond = self.build_condition_list(temporalcond, resultspatial)
         thenresult = self.eval_condition_list(thencond)
         # Clear the map list.
-        resultlist = self.check_stds(thenresult, clear = True)
+        resultlist = self.check_stds(thenresult, clear=True)
 
         t[0] = resultlist
 
         if self.debug:
             for map in resultlist:
                 print map.cmd_list
-
 
     def p_ts_expr_condition_if_relation(self, t):
         # Examples:
@@ -1942,14 +2033,14 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         expr : IF LPAREN T_REL_OPERATOR COMMA ts_var_expr COMMA stds RPAREN
              | IF LPAREN T_REL_OPERATOR COMMA ts_var_expr COMMA expr RPAREN
         """
-        relations, temporal, function= self.eval_toperator(t[3])
+        relations, temporal, function = self.eval_toperator(t[3])
         ts_var_dict = t[5]
         spatialcond = ts_var_dict["spatial"]
         # Extract spatial map list from condition.
         ifmaplist = self.check_stds(spatialcond)
         thenmaplist = self.check_stds(t[7])
         topolist = self.get_temporal_topo_list(ifmaplist, thenmaplist,
-                                                topolist = relations)
+                                               topolist=relations)
         resultspatial = []
         for map_i in topolist:
             #print(map_i.get_id())
@@ -1960,12 +2051,15 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 if topo in tbrelations.keys():
                     for map_j in (tbrelations[topo]):
                         # Generate an intermediate map for the result map list.
-                        map_new = self.generate_new_map(base_map=map_i, bool_op = 'and', copy = True)
+                        map_new = self.generate_new_map(base_map=map_i,
+                                                        bool_op='and',
+                                                        copy=True)
                         # Set first input for overlay module.
                         mapainput = map_i.get_id()
                         # Create overlayed map extent.
-                        returncode = self.overlay_map_extent(map_new, map_j, 'and', \
-                                                                temp_op = '=')
+                        returncode = self.overlay_map_extent(map_new, map_j,
+                                                             'and',
+                                                             temp_op='=')
                         # Stop the loop if no temporal or spatial relationship exist.
                         if returncode == 0:
                             break
@@ -1980,13 +2074,16 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                         mapbinput = map_j.get_id()
                         # Create r.mapcalc expression string for the operation.
                         if "cmd_list" in dir(map_new) and "cmd_list" not in dir(map_j):
-                            cmdstring = "if(%s,%s)" %(map_new.cmd_list, mapbinput)
+                            cmdstring = "if(%s,%s)" % (map_new.cmd_list,
+                                                       mapbinput)
                         elif "cmd_list" in dir(map_j) and "cmd_list" not in dir(map_new):
-                            cmdstring = "if(%s,%s)" %(mapainput, map_j.cmd_list)
+                            cmdstring = "if(%s,%s)" % (mapainput,
+                                                       map_j.cmd_list)
                         elif "cmd_list" in dir(map_j) and "cmd_list" in dir(map_new):
-                            cmdstring = "if(%s,%s)" %(map_new.cmd_list, map_j.cmd_list)
+                            cmdstring = "if(%s,%s)" % (map_new.cmd_list,
+                                                       map_j.cmd_list)
                         else:
-                            cmdstring = "if(%s,%s)" %(mapainput, mapbinput)
+                            cmdstring = "if(%s,%s)" % (mapainput, mapbinput)
                         # Conditional append of module command.
                         map_new.cmd_list = cmdstring
                         # Set new map name to temporary map name.
@@ -2002,17 +2099,17 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         #else:
         temporalcond = ts_var_dict["temporal"]
         resultspatial = self.check_stds(resultspatial)
-        thencond = self.build_condition_list(temporalcond, resultspatial, relations)
+        thencond = self.build_condition_list(temporalcond, resultspatial,
+                                             relations)
         thenresult = self.eval_condition_list(thencond)
         # Clear the map list.
-        resultlist = self.check_stds(thenresult, clear = True)
+        resultlist = self.check_stds(thenresult, clear=True)
 
         t[0] = resultlist
 
         if self.debug:
             for map in resultlist:
                 print map.cmd_list
-
 
     def p_ts_numeric_condition_if(self, t):
         # Examples:
@@ -2036,9 +2133,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             mapinput = map_i.get_id()
             # Create r.mapcalc expression string for the operation.
             if "cmd_list" in dir(map_i):
-                cmdstring = "if(%s,%s)" %(map_i.cmd_list, numinput)
+                cmdstring = "if(%s,%s)" % (map_i.cmd_list, numinput)
             else:
-                cmdstring = "if(%s,%s)" %(mapinput, numinput)
+                cmdstring = "if(%s,%s)" % (mapinput, numinput)
             # Conditional append of module command.
             map_i.cmd_list = cmdstring
             # Append map to result map list.
@@ -2049,14 +2146,13 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         thencond = self.build_condition_list(temporalcond, resultspatial)
         thenresult = self.eval_condition_list(thencond)
         # Clear the map list.
-        resultlist = self.check_stds(thenresult, clear = True)
+        resultlist = self.check_stds(thenresult, clear=True)
 
         t[0] = resultlist
 
         if self.debug:
             for map in resultlist:
                 print map.cmd_list
-
 
     def p_ts_expr_condition_elif(self, t):
         # Examples:
@@ -2120,7 +2216,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for i in range(iternum):
                 conclusionmaps = conclusionlist[i]
                 # Generate an intermediate map for the result map list.
-                map_new = self.generate_new_map(base_map=map_i, bool_op = 'and', copy = True)
+                map_new = self.generate_new_map(base_map=map_i,
+                                                bool_op='and', copy=True)
                 # Set first input for overlay module.
                 mapifinput = map_i.get_id()
                 # Get conclusion maps.
@@ -2130,8 +2227,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 # Check if conclusions are map objects.
                 if map_then != 'null()':
                     # Create overlayed map extent.
-                    returncode = self.overlay_map_extent(map_new, map_then, 'and', \
-                                                            temp_op = '=')
+                    returncode = self.overlay_map_extent(map_new, map_then,
+                                                         'and', temp_op='=')
                     maptheninput = map_then.get_id()
                     # Continue the loop if no temporal or spatial relationship exist.
                     if returncode == 0:
@@ -2141,8 +2238,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 # Check if conclusions are map objects.
                 if map_else != 'null()':
                     # Create overlayed map extent.
-                    returncode = self.overlay_map_extent(map_new, map_else, 'and', \
-                                                            temp_op = '=')
+                    returncode = self.overlay_map_extent(map_new, map_else,
+                                                         'and', temp_op='=')
                     mapelseinput = map_else.get_id()
                     # Continue the loop if no temporal or spatial relationship exist.
                     if returncode == 0:
@@ -2154,35 +2251,43 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 # Create r.mapcalc expression string for the operation.
                 if "cmd_list" in dir(map_new) and "cmd_list" not in dir(map_then) \
                     and "cmd_list" not in dir(map_else):
-                    cmdstring = "if(%s, %s, %s)" %(map_new.cmd_list, maptheninput,
-                    mapelseinput)
+                    cmdstring = "if(%s, %s, %s)" % (map_new.cmd_list,
+                                                    maptheninput,
+                                                    mapelseinput)
                 elif "cmd_list" in dir(map_new) and "cmd_list" in dir(map_then) \
                     and "cmd_list" not in dir(map_else):
-                    cmdstring = "if(%s, %s, %s)" %(map_new.cmd_list, map_then.cmd_list,
-                    mapelseinput)
+                    cmdstring = "if(%s, %s, %s)" % (map_new.cmd_list,
+                                                    map_then.cmd_list,
+                                                    mapelseinput)
                 elif "cmd_list" in dir(map_new) and "cmd_list" not in dir(map_then) \
                     and "cmd_list" in dir(map_else):
-                    cmdstring = "if(%s, %s, %s)" %(map_new.cmd_list, maptheninput,
-                    map_else.cmd_list)
+                    cmdstring = "if(%s, %s, %s)" % (map_new.cmd_list,
+                                                    maptheninput,
+                                                    map_else.cmd_list)
                 elif "cmd_list" in dir(map_new) and "cmd_list" in dir(map_then) \
                     and "cmd_list" in dir(map_else):
-                    cmdstring = "if(%s, %s, %s)" %(map_new.cmd_list, map_then.cmd_list,
-                    map_else.cmd_list)
+                    cmdstring = "if(%s, %s, %s)" % (map_new.cmd_list,
+                                                    map_then.cmd_list,
+                                                    map_else.cmd_list)
                 elif "cmd_list" not in dir(map_new) and "cmd_list" in dir(map_then) \
                     and "cmd_list" not in dir(map_else):
-                    cmdstring = "if(%s, %s, %s)" %(mapifinput, map_then.cmd_list,
-                    mapelseinput)
+                    cmdstring = "if(%s, %s, %s)" % (mapifinput,
+                                                    map_then.cmd_list,
+                                                    mapelseinput)
                 elif "cmd_list" not in dir(map_new) and "cmd_list" not in dir(map_then) \
                     and "cmd_list" in dir(map_else):
-                    cmdstring = "if(%s, %s, %s)" %(mapifinput, maptheninput,
-                    map_else.cmd_list)
+                    cmdstring = "if(%s, %s, %s)" % (mapifinput,
+                                                    maptheninput,
+                                                    map_else.cmd_list)
                 elif "cmd_list" not in dir(map_new) and "cmd_list" in dir(map_then) \
                     and "cmd_list" in dir(map_else):
-                    cmdstring = "if(%s, %s, %s)" %(mapifinput, map_then.cmd_list,
-                    map_else.cmd_list)
+                    cmdstring = "if(%s, %s, %s)" % (mapifinput,
+                                                    map_then.cmd_list,
+                                                    map_else.cmd_list)
                 else:
-                    cmdstring = "if(%s, %s, %s)" %(mapifinput, maptheninput,
-                    mapelseinput)
+                    cmdstring = "if(%s, %s, %s)" % (mapifinput,
+                                                    maptheninput,
+                                                    mapelseinput)
                 # Conditional append of module command.
                 map_new.cmd_list = cmdstring
                 # Append map to result map list.
@@ -2199,14 +2304,13 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         #resultlist = sorted(combilist, key = AbstractDatasetComparisonKeyStartTime)
         # Clear the map list.
         #resultlist = self.check_stds(resultlist, clear = True)
-        resultlist = self.check_stds(thenresult, clear = True)
+        resultlist = self.check_stds(thenresult, clear=True)
 
         t[0] = resultlist
 
         if self.debug:
             for map in resultlist:
                 print map.cmd_list
-
 
     def p_ts_expr_condition_elif_relation(self, t):
         # Examples:
@@ -2218,7 +2322,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
              | IF LPAREN T_REL_OPERATOR COMMA ts_var_expr COMMA expr COMMA stds RPAREN
              | IF LPAREN T_REL_OPERATOR COMMA ts_var_expr COMMA expr COMMA expr RPAREN
         """
-        relations, temporal, function= self.eval_toperator(t[3])
+        relations, temporal, function = self.eval_toperator(t[3])
         ts_var_dict = t[5]
         spatialcond = ts_var_dict["spatial"]
         # Extract spatial map list from condition.
@@ -2229,8 +2333,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         thendict = {}
         elsedict = {}
         # Get topologies for the appropriate conclusion term.
-        thentopolist = self.get_temporal_topo_list(ifmaplist, thenmaplist, \
-                                                    topolist = relations)
+        thentopolist = self.get_temporal_topo_list(ifmaplist, thenmaplist,
+                                                   topolist=relations)
         # Fill dictionaries with related maps for both conclusion terms.
         for map_i in thentopolist:
             thenrelations = map_i.get_temporal_relations()
@@ -2240,8 +2344,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                     relationmaps = relationmaps + thenrelations[topo]
             thendict[map_i.get_id()] = relationmaps
         # Get topologies for the alternative conclusion term.
-        elsetopolist = self.get_temporal_topo_list(ifmaplist, elsemaplist, \
-                                                    topolist = relations)
+        elsetopolist = self.get_temporal_topo_list(ifmaplist, elsemaplist,
+                                                   topolist=relations)
         for map_i in elsetopolist:
             elserelations = map_i.get_temporal_relations()
             relationmaps = []
@@ -2281,7 +2385,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             for i in range(iternum):
                 conclusionmaps = conclusionlist[i]
                 # Generate an intermediate map for the result map list.
-                map_new = self.generate_new_map(base_map=map_i, bool_op = 'and', copy = True)
+                map_new = self.generate_new_map(base_map=map_i, bool_op='and',
+                                                copy=True)
                 # Set first input for overlay module.
                 mapifinput = map_i.get_id()
                 # Get conclusion maps.
@@ -2291,8 +2396,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 # Check if conclusions are map objects.
                 if map_then != 'null()':
                     # Create overlayed map extent.
-                    returncode = self.overlay_map_extent(map_new, map_then, 'and', \
-                                                            temp_op = '=')
+                    returncode = self.overlay_map_extent(map_new, map_then,
+                                                         'and', temp_op='=')
                     maptheninput = map_then.get_id()
                     # Continue the loop if no temporal or spatial relationship exist.
                     if returncode == 0:
@@ -2302,8 +2407,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 # Check if conclusions are map objects.
                 if map_else != 'null()':
                     # Create overlayed map extent.
-                    returncode = self.overlay_map_extent(map_new, map_else, 'and', \
-                                                            temp_op = '=')
+                    returncode = self.overlay_map_extent(map_new, map_else,
+                                                         'and', temp_op='=')
                     mapelseinput = map_else.get_id()
                     # Continue the loop if no temporal or spatial relationship exist.
                     if returncode == 0:
@@ -2315,35 +2420,41 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 # Create r.mapcalc expression string for the operation.
                 if "cmd_list" in dir(map_new) and "cmd_list" not in dir(map_then) \
                     and "cmd_list" not in dir(map_else):
-                    cmdstring = "if(%s, %s, %s)" %(map_new.cmd_list, maptheninput,
-                    mapelseinput)
+                    cmdstring = "if(%s, %s, %s)" % (map_new.cmd_list,
+                                                    maptheninput,
+                                                    mapelseinput)
                 elif "cmd_list" in dir(map_new) and "cmd_list" in dir(map_then) \
                     and "cmd_list" not in dir(map_else):
-                    cmdstring = "if(%s, %s, %s)" %(map_new.cmd_list, map_then.cmd_list,
-                    mapelseinput)
+                    cmdstring = "if(%s, %s, %s)" % (map_new.cmd_list,
+                                                    map_then.cmd_list,
+                                                    mapelseinput)
                 elif "cmd_list" in dir(map_new) and "cmd_list" not in dir(map_then) \
                     and "cmd_list" in dir(map_else):
-                    cmdstring = "if(%s, %s, %s)" %(map_new.cmd_list, maptheninput,
-                    map_else.cmd_list)
+                    cmdstring = "if(%s, %s, %s)" % (map_new.cmd_list,
+                                                    maptheninput,
+                                                    map_else.cmd_list)
                 elif "cmd_list" in dir(map_new) and "cmd_list" in dir(map_then) \
                     and "cmd_list" in dir(map_else):
-                    cmdstring = "if(%s, %s, %s)" %(map_new.cmd_list, map_then.cmd_list,
-                    map_else.cmd_list)
+                    cmdstring = "if(%s, %s, %s)" % (map_new.cmd_list,
+                                                    map_then.cmd_list,
+                                                    map_else.cmd_list)
                 elif "cmd_list" not in dir(map_new) and "cmd_list" in dir(map_then) \
                     and "cmd_list" not in dir(map_else):
-                    cmdstring = "if(%s, %s, %s)" %(mapifinput, map_then.cmd_list,
-                    mapelseinput)
+                    cmdstring = "if(%s, %s, %s)" % (mapifinput,
+                                                    map_then.cmd_list,
+                                                    mapelseinput)
                 elif "cmd_list" not in dir(map_new) and "cmd_list" not in dir(map_then) \
                     and "cmd_list" in dir(map_else):
-                    cmdstring = "if(%s, %s, %s)" %(mapifinput, maptheninput,
-                    map_else.cmd_list)
+                    cmdstring = "if(%s, %s, %s)" % (mapifinput, maptheninput,
+                                                    map_else.cmd_list)
                 elif "cmd_list" not in dir(map_new) and "cmd_list" in dir(map_then) \
                     and "cmd_list" in dir(map_else):
-                    cmdstring = "if(%s, %s, %s)" %(mapifinput, map_then.cmd_list,
-                    map_else.cmd_list)
+                    cmdstring = "if(%s, %s, %s)" % (mapifinput,
+                                                    map_then.cmd_list,
+                                                    map_else.cmd_list)
                 else:
-                    cmdstring = "if(%s, %s, %s)" %(mapifinput, maptheninput,
-                    mapelseinput)
+                    cmdstring = "if(%s, %s, %s)" % (mapifinput, maptheninput,
+                                                    mapelseinput)
                 # Conditional append of module command.
                 map_new.cmd_list = cmdstring
                 # Append map to result map list.
@@ -2352,21 +2463,21 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
 
         temporalcond = ts_var_dict["temporal"]
         resultspatial = self.check_stds(resultspatial)
-        thencond = self.build_condition_list(temporalcond, resultspatial, relations)
+        thencond = self.build_condition_list(temporalcond, resultspatial,
+                                             relations)
         thenresult = self.eval_condition_list(thencond)
         #elseresult = self.eval_condition_list(thencond, inverse = True)
         # Combine and sort else and then statement to result map list.
         #combilist = thenresult + elseresult
         #resultlist = sorted(combilist, key = AbstractDatasetComparisonKeyStartTime)
         # Clear the map list.
-        resultlist = self.check_stds(thenresult, clear = True)
+        resultlist = self.check_stds(thenresult, clear=True)
 
         t[0] = resultlist
 
         if self.debug:
             for map in resultlist:
                 print map.cmd_list
-
 
     def p_ts_numeric_condition_elif(self, t):
         # Examples:
@@ -2399,9 +2510,10 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             mapinput = map_i.get_id()
             # Create r.mapcalc expression string for the operation.
             if "cmd_list" in dir(map_i):
-                cmdstring = "if(%s, %s, %s)" %(map_i.cmd_list, numthen, numelse)
+                cmdstring = "if(%s, %s, %s)" % (map_i.cmd_list, numthen,
+                                                numelse)
             else:
-                cmdstring = "if(%s, %s, %s)" %(mapinput, numthen, numelse)
+                cmdstring = "if(%s, %s, %s)" % (mapinput, numthen, numelse)
             # Conditional append of module command.
             map_i.cmd_list = cmdstring
             # Append map to result map list.
@@ -2417,7 +2529,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         #resultlist = sorted(combilist, key = AbstractDatasetComparisonKeyStartTime)
         # Clear the map list.
         #resultlist = self.check_stds(resultlist, clear = True)
-        resultlist = self.check_stds(thenresult, clear = True)
+        resultlist = self.check_stds(thenresult, clear=True)
 
         t[0] = resultlist
 
@@ -2466,9 +2578,9 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             topolist = self.get_temporal_topo_list(ifmaplist, thenmaplist)
         elif elsemaplist != []:
             topolist = self.get_temporal_topo_list(ifmaplist, elsemaplist)
-        if numthen !=  '':
+        if numthen != '':
             numinput = numthen
-        elif numelse !=  '':
+        elif numelse != '':
             numinput = numelse
 
         # Iterate over condition map lists with temporal relations.
@@ -2478,12 +2590,13 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             count = 0
             for map_j in (tbrelations['EQUAL']):
                 # Generate an intermediate map for the result map list.
-                map_new = self.generate_new_map(base_map=map_i, bool_op = 'and', copy = True)
+                map_new = self.generate_new_map(base_map=map_i, bool_op='and',
+                                                copy=True)
                 # Set first input for overlay module.
                 mapainput = map_i.get_id()
                 # Create overlayed map extent.
-                returncode = self.overlay_map_extent(map_new, map_j, 'and', \
-                                                        temp_op = '=')
+                returncode = self.overlay_map_extent(map_new, map_j, 'and',
+                                                     temp_op='=')
                 # Stop the loop if no temporal or spatial relationship exist.
                 if returncode == 0:
                     break
@@ -2499,28 +2612,34 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 # Create r.mapcalc expression string for the operation.
                 if thenmaplist != []:
                     if "cmd_list" in dir(map_new) and "cmd_list" not in dir(map_j):
-                        cmdstring = "if(%s,%s,%s)" %(map_new.cmd_list, mapbinput, \
+                        cmdstring = "if(%s,%s,%s)" % (map_new.cmd_list,
+                                                      mapbinput,
                                                       numinput)
                     elif "cmd_list" in dir(map_j) and "cmd_list" not in dir(map_new):
-                        cmdstring = "if(%s,%s,%s)" %(mapainput, map_j.cmd_list, \
+                        cmdstring = "if(%s,%s,%s)" % (mapainput,
+                                                      map_j.cmd_list,
                                                       numinput)
                     elif "cmd_list" in dir(map_j) and "cmd_list" in dir(map_new):
-                        cmdstring = "if(%s,%s,%s)" %(map_new.cmd_list, map_j.cmd_list, \
+                        cmdstring = "if(%s,%s,%s)" % (map_new.cmd_list,
+                                                      map_j.cmd_list,
                                                       numinput)
                     else:
-                        cmdstring = "if(%s,%s,%s)" %(mapainput, mapbinput, numinput)
+                        cmdstring = "if(%s,%s,%s)" % (mapainput, mapbinput,
+                                                      numinput)
                 if elsemaplist != []:
                     if "cmd_list" in dir(map_new) and "cmd_list" not in dir(map_j):
-                        cmdstring = "if(%s,%s,%s)" %(map_new.cmd_list, numinput, \
+                        cmdstring = "if(%s,%s,%s)" % (map_new.cmd_list,
+                                                      numinput,
                                                       mapbinput)
                     elif "cmd_list" in dir(map_j) and "cmd_list" not in dir(map_new):
-                        cmdstring = "if(%s,%s,%s)" %(mapainput, numinput, \
+                        cmdstring = "if(%s,%s,%s)" % (mapainput, numinput,
                                                       map_j.cmd_list)
                     elif "cmd_list" in dir(map_j) and "cmd_list" in dir(map_new):
-                        cmdstring = "if(%s,%s,%s)" %(map_new.cmd_list, numinput, \
-                                                      map_j.cmd_list)
+                        cmdstring = "if(%s,%s,%s)" % (map_new.cmd_list,
+                                                      numinput, map_j.cmd_list)
                     else:
-                        cmdstring = "if(%s,%s,%s)" %(mapainput, numinput, mapbinput)
+                        cmdstring = "if(%s,%s,%s)" % (mapainput, numinput,
+                                                      mapbinput)
                 # Conditional append of module command.
                 map_new.cmd_list = cmdstring
                 # Set new map name to temporary map name.
@@ -2535,14 +2654,13 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         thencond = self.build_condition_list(temporalcond, resultspatial)
         thenresult = self.eval_condition_list(thencond)
         # Clear the map list.
-        resultlist = self.check_stds(thenresult, clear = True)
+        resultlist = self.check_stds(thenresult, clear=True)
 
         t[0] = resultlist
 
         if self.debug:
             for map in resultlist:
                 print map.cmd_list
-
 
     def p_ts_numeric_expr_condition_elif_relation(self, t):
         # Examples:
@@ -2558,7 +2676,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
              | IF LPAREN T_REL_OPERATOR COMMA ts_var_expr COMMA expr COMMA number RPAREN
              | IF LPAREN T_REL_OPERATOR COMMA ts_var_expr COMMA expr COMMA NULL LPAREN RPAREN RPAREN
         """
-        relations, temporal, function= self.eval_toperator(t[3])
+        relations, temporal, function = self.eval_toperator(t[3])
         ts_var_dict = t[5]
         spatialcond = ts_var_dict["spatial"]
         ifmaplist = self.check_stds(spatialcond)
@@ -2587,14 +2705,14 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             except:
                 numelse = t[9] + t[10] + t[11]
         if thenmaplist != []:
-            topolist = self.get_temporal_topo_list(ifmaplist, thenmaplist, \
-                                                    topolist = relations)
+            topolist = self.get_temporal_topo_list(ifmaplist, thenmaplist,
+                                                   topolist=relations)
         elif elsemaplist != []:
-            topolist = self.get_temporal_topo_list(ifmaplist, elsemaplist, \
-                                                    topolist = relations)
-        if numthen !=  '':
+            topolist = self.get_temporal_topo_list(ifmaplist, elsemaplist,
+                                                   topolist=relations)
+        if numthen != '':
             numinput = numthen
-        elif numelse !=  '':
+        elif numelse != '':
             numinput = numelse
 
         # Iterate over condition map lists with temporal relations.
@@ -2606,12 +2724,15 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 if topo in tbrelations.keys():
                     for map_j in (tbrelations[topo]):
                         # Generate an intermediate map for the result map list.
-                        map_new = self.generate_new_map(base_map=map_i, bool_op = 'and', copy = True)
+                        map_new = self.generate_new_map(base_map=map_i,
+                                                        bool_op='and',
+                                                        copy=True)
                         # Set first input for overlay module.
                         mapainput = map_i.get_id()
                         # Create overlayed map extent.
-                        returncode = self.overlay_map_extent(map_new, map_j, 'and', \
-                                                                temp_op = '=')
+                        returncode = self.overlay_map_extent(map_new, map_j,
+                                                             'and',
+                                                             temp_op='=')
                         # Stop the loop if no temporal or spatial relationship exist.
                         if returncode == 0:
                             break
@@ -2627,28 +2748,38 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                         # Create r.mapcalc expression string for the operation.
                         if thenmaplist != []:
                             if "cmd_list" in dir(map_new) and "cmd_list" not in dir(map_j):
-                                cmdstring = "if(%s,%s,%s)" %(map_new.cmd_list, mapbinput, \
+                                cmdstring = "if(%s,%s,%s)" % (map_new.cmd_list,
+                                                              mapbinput,
                                                               numinput)
                             elif "cmd_list" in dir(map_j) and "cmd_list" not in dir(map_new):
-                                cmdstring = "if(%s,%s,%s)" %(mapainput, map_j.cmd_list, \
+                                cmdstring = "if(%s,%s,%s)" % (mapainput,
+                                                              map_j.cmd_list,
                                                               numinput)
                             elif "cmd_list" in dir(map_j) and "cmd_list" in dir(map_new):
-                                cmdstring = "if(%s,%s,%s)" %(map_new.cmd_list, map_j.cmd_list, \
+                                cmdstring = "if(%s,%s,%s)" % (map_new.cmd_list,
+                                                              map_j.cmd_list,
                                                               numinput)
                             else:
-                                cmdstring = "if(%s,%s,%s)" %(mapainput, mapbinput, numinput)
+                                cmdstring = "if(%s,%s,%s)" % (mapainput,
+                                                              mapbinput,
+                                                              numinput)
                         if elsemaplist != []:
                             if "cmd_list" in dir(map_new) and "cmd_list" not in dir(map_j):
-                                cmdstring = "if(%s,%s,%s)" %(map_new.cmd_list, numinput, \
+                                cmdstring = "if(%s,%s,%s)" % (map_new.cmd_list,
+                                                              numinput,
                                                               mapbinput)
                             elif "cmd_list" in dir(map_j) and "cmd_list" not in dir(map_new):
-                                cmdstring = "if(%s,%s,%s)" %(mapainput, numinput, \
+                                cmdstring = "if(%s,%s,%s)" % (mapainput,
+                                                              numinput,
                                                               map_j.cmd_list)
                             elif "cmd_list" in dir(map_j) and "cmd_list" in dir(map_new):
-                                cmdstring = "if(%s,%s,%s)" %(map_new.cmd_list, numinput, \
+                                cmdstring = "if(%s,%s,%s)" % (map_new.cmd_list,
+                                                              numinput,
                                                               map_j.cmd_list)
                             else:
-                                cmdstring = "if(%s,%s,%s)" %(mapainput, numinput, mapbinput)
+                                cmdstring = "if(%s,%s,%s)" % (mapainput,
+                                                              numinput,
+                                                              mapbinput)
                         # Conditional append of module command.
                         map_new.cmd_list = cmdstring
                         # Set new map name to temporary map name.
@@ -2663,7 +2794,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
         thencond = self.build_condition_list(temporalcond, resultspatial)
         thenresult = self.eval_condition_list(thencond)
         # Clear the map list.
-        resultlist = self.check_stds(thenresult, clear = True)
+        resultlist = self.check_stds(thenresult, clear=True)
 
         t[0] = resultlist
 

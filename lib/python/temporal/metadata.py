@@ -74,8 +74,8 @@ class RasterMetadataBase(SQLDatabaseInterface):
 
     """
     def __init__(self, table=None, ident=None, datatype=None, cols=None,
-		rows=None, number_of_cells=None, nsres=None, ewres=None,
-		min=None, max=None):
+                 rows=None, number_of_cells=None, nsres=None, ewres=None,
+                 min=None, max=None):
 
         SQLDatabaseInterface.__init__(self, table, ident)
 
@@ -224,7 +224,8 @@ class RasterMetadataBase(SQLDatabaseInterface):
     datatype = property(fget=get_datatype, fset=set_datatype)
     cols = property(fget=get_cols, fset=set_cols)
     rows = property(fget=get_rows, fset=set_rows)
-    number_of_cells = property(fget=get_number_of_cells, fset=set_number_of_cells)
+    number_of_cells = property(fget=get_number_of_cells,
+                               fset=set_number_of_cells)
     nsres = property(fget=get_nsres, fset=set_nsres)
     ewres = property(fget=get_ewres, fset=set_ewres)
     min = property(fget=get_min, fset=set_min)
@@ -313,12 +314,12 @@ class RasterMetadata(RasterMetadataBase):
 
     """
     def __init__(self, ident=None, datatype=None,
-		 cols=None, rows=None, number_of_cells=None, nsres=None,
-		 ewres=None, min=None, max=None):
+                 cols=None, rows=None, number_of_cells=None, nsres=None,
+                 ewres=None, min=None, max=None):
 
         RasterMetadataBase.__init__(self, "raster_metadata", ident, datatype,
-                                      cols, rows, number_of_cells, nsres,
-                                      ewres, min, max)
+                                    cols, rows, number_of_cells, nsres,
+                                    ewres, min, max)
 
     def print_info(self):
         """Print information about this class in human readable style"""
@@ -399,12 +400,12 @@ class Raster3DMetadata(RasterMetadataBase):
 
     """
     def __init__(self, ident=None, datatype=None,
-		 cols=None, rows=None, depths=None, number_of_cells=None,
-		 nsres=None, ewres=None, tbres=None, min=None, max=None):
+                 cols=None, rows=None, depths=None, number_of_cells=None,
+                 nsres=None, ewres=None, tbres=None, min=None, max=None):
 
         RasterMetadataBase.__init__(self, "raster3d_metadata", ident,
-				datatype, cols, rows, number_of_cells, nsres,
-				ewres, min, max)
+                                    datatype, cols, rows, number_of_cells,
+                                    nsres,	ewres, min, max)
 
         self.set_tbres(tbres)
         self.set_depths(depths)
@@ -536,12 +537,13 @@ class VectorMetadata(SQLDatabaseInterface):
             volumes=12
 
     """
-    def __init__(
-        self, ident=None, is_3d=False,
-        number_of_points=None, number_of_lines=None, number_of_boundaries=None,
-        number_of_centroids=None, number_of_faces=None, number_of_kernels=None,
-        number_of_primitives=None, number_of_nodes=None, number_of_areas=None,
-        number_of_islands=None, number_of_holes=None, number_of_volumes=None):
+    def __init__(self, ident=None, is_3d=False, number_of_points=None,
+                 number_of_lines=None, number_of_boundaries=None,
+                 number_of_centroids=None, number_of_faces=None,
+                 number_of_kernels=None, number_of_primitives=None,
+                 number_of_nodes=None, number_of_areas=None,
+                 number_of_islands=None, number_of_holes=None,
+                 number_of_volumes=None):
 
         SQLDatabaseInterface.__init__(self, "vector_metadata", ident)
 
@@ -731,8 +733,8 @@ class VectorMetadata(SQLDatabaseInterface):
             return None
 
     # Set the properties
-    id  = property(fget=get_id, fset=set_id)
-    is_3d  = property(fget=get_3d_info, fset=set_3d_info)
+    id = property(fget=get_id, fset=set_id)
+    is_3d = property(fget=get_3d_info, fset=set_3d_info)
     number_of_points = property(fget=get_number_of_points,
                                 fset=set_number_of_points)
     number_of_lines = property(fget=get_number_of_lines,
@@ -826,7 +828,8 @@ class STDSMetadataBase(SQLDatabaseInterface):
             number_of_maps=None
 
     """
-    def __init__(self, table=None, ident=None, title=None, description=None, command=None):
+    def __init__(self, table=None, ident=None, title=None, description=None,
+                 command=None):
 
         SQLDatabaseInterface.__init__(self, table, ident)
 
@@ -897,10 +900,10 @@ class STDSMetadataBase(SQLDatabaseInterface):
         else:
             return None
 
-    id  = property(fget=get_id, fset=set_id)
-    title  = property(fget=get_title, fset=set_title)
-    description  = property(fget=get_description, fset=set_description)
-    number_of_maps  = property(fget=get_number_of_maps)
+    id = property(fget=get_id, fset=set_id)
+    title = property(fget=get_title, fset=set_title)
+    description = property(fget=get_description, fset=set_description)
+    number_of_maps = property(fget=get_number_of_maps)
 
     def print_info(self):
         """Print information about this class in human readable style"""
@@ -967,7 +970,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
         Usage:
 
         .. code-block:: python
-        
+
             >>> init()
             >>> meta = STDSRasterMetadataBase(ident="soils@PERMANENT",
             ... title="Soils", description="Soils 1950 - 2010")
@@ -1016,7 +1019,8 @@ class STDSRasterMetadataBase(STDSMetadataBase):
             max_max=None
 
     """
-    def __init__(self, table=None, ident=None, title=None, description=None, aggregation_type=None):
+    def __init__(self, table=None, ident=None, title=None, description=None,
+                 aggregation_type=None):
 
         STDSMetadataBase.__init__(self, table, ident, title, description)
 
@@ -1043,7 +1047,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
             return self.D["aggregation_type"]
         else:
             return None
-            
+
     def get_max_min(self):
         """Get the minimal maximum of all registered maps,
            this value is set in the database
@@ -1132,7 +1136,7 @@ class STDSRasterMetadataBase(STDSMetadataBase):
     min_max = property(fget=get_min_max)
     max_min = property(fget=get_max_min)
     max_max = property(fget=get_max_max)
-    aggregation_type = property(fset=set_aggregation_type, 
+    aggregation_type = property(fset=set_aggregation_type,
                                 fget=get_aggregation_type)
 
     def print_info(self):
@@ -1232,7 +1236,8 @@ class STRDSMetadata(STDSRasterMetadataBase):
             raster_register=None
 
     """
-    def __init__(self, ident=None, raster_register=None, title=None, description=None):
+    def __init__(self, ident=None, raster_register=None, title=None,
+                 description=None):
 
         STDSRasterMetadataBase.__init__(
             self, "strds_metadata", ident, title, description)
@@ -1343,7 +1348,8 @@ class STR3DSMetadata(STDSRasterMetadataBase):
             raster3d_register=None
 
         """
-    def __init__(self, ident=None, raster3d_register=None, title=None, description=None):
+    def __init__(self, ident=None, raster3d_register=None, title=None,
+                 description=None):
 
         STDSRasterMetadataBase.__init__(
             self, "str3ds_metadata", ident, title, description)
@@ -1385,7 +1391,7 @@ class STR3DSMetadata(STDSRasterMetadataBase):
             return None
 
     raster3d_register = property(fget=get_raster3d_register,
-                               fset=set_raster3d_register)
+                                 fset=set_raster3d_register)
     tbres_min = property(fget=get_tbres_min)
     tbres_max = property(fget=get_tbres_max)
 
@@ -1408,6 +1414,7 @@ class STR3DSMetadata(STDSRasterMetadataBase):
         print "raster3d_register=" + str(self.get_raster3d_register())
 
 ###############################################################################
+
 
 class STVDSMetadata(STDSMetadataBase):
     """This is the space time vector dataset metadata class
@@ -1485,8 +1492,8 @@ class STVDSMetadata(STDSMetadataBase):
             volumes=None
 
     """
-    def __init__(
-        self, ident=None, vector_register=None, title=None, description=None):
+    def __init__(self, ident=None, vector_register=None, title=None,
+                 description=None):
 
         STDSMetadataBase.__init__(
             self, "stvds_metadata", ident, title, description)
@@ -1638,8 +1645,8 @@ class STVDSMetadata(STDSMetadataBase):
             return None
 
     # Set the properties
-    vector_register  = property(fget=get_vector_register,
-                                fset=set_vector_register)
+    vector_register = property(fget=get_vector_register,
+                               fset=set_vector_register)
     number_of_points = property(fget=get_number_of_points)
     number_of_lines = property(fget=get_number_of_lines)
     number_of_boundaries = property(fget=get_number_of_boundaries)
