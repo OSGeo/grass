@@ -96,7 +96,7 @@ from grass.pygrass.modules.interface.parameter import Parameter
 from grass.pygrass.modules.interface.flag import Flag
 from grass.pygrass.modules.interface.typedict import TypeDict
 from grass.pygrass.modules.interface.read import GETFROMTAG, DOC
-
+from grass.pygrass.messages import Messenger
 
 class ParallelModuleQueue(object):
     """This class is designed to run an arbitrary number of pygrass Module
@@ -274,6 +274,8 @@ class Module(object):
     and keyword arguments to the grass module.
     """
     def __init__(self, cmd, *args, **kargs):
+        self._msgr = Messenger()
+        
         if isinstance(cmd, unicode):
             self.name = str(cmd)
         elif isinstance(cmd, str):
@@ -348,9 +350,12 @@ class Module(object):
         self.__call__.__func__.__doc__ = self.__doc__
 
     def __call__(self, *args, **kargs):
+        self._msgr.debug(1, "Module.__call__(): %s" % (self.get_bash()))
+        
         if not args and not kargs:
             self.run()
             return
+        
         #
         # check for extra kargs, set attribute and remove from dictionary
         #
