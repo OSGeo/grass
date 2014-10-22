@@ -213,7 +213,7 @@ class TestCase(unittest.TestCase):
         in the map::
 
             values = 'null_cells=0\nmin=55.5787925720215\nmax=156.329864501953'
-            self.assertRasterFitsUnivar(map='elevation', reference=values)
+            self.assertRasterFitsUnivar(raster='elevation', reference=values)
 
         Use keyword arguments syntax for all function parameters.
 
@@ -236,7 +236,7 @@ class TestCase(unittest.TestCase):
         Typical example is checking minimum, maximum and type of the map::
 
             minmax = 'min=0\nmax=1451\ndatatype=FCELL'
-            self.assertRasterFitsInfo(map='elevation', reference=values)
+            self.assertRasterFitsInfo(raster='elevation', reference=minmax)
 
         Use keyword arguments syntax for all function parameters.
 
@@ -294,7 +294,7 @@ class TestCase(unittest.TestCase):
         A example of checking number of points::
 
             topology = dict(points=10938, primitives=10938)
-            self.assertVectorFitsTopoInfo(map='bridges', reference=topology)
+            self.assertVectorFitsTopoInfo(vector='bridges', reference=topology)
 
         Note that here we are checking also the number of primitives to prove
         that there are no other features besides points.
