@@ -257,11 +257,11 @@ class RasterSegment(RasterAbstractBase):
     """Raster_segment_access": Inherits "Raster_abstract_base" and uses the
     segment library for cached randomly reading and writing access.
         * Implements the [row][col] operator for read and write access using
-          segement_get() and segment_put() functions internally
+          Segment_get() and Segment_put() functions internally
         * Implements row read and write access with the [row] operator using
-          segment_get_row() segment_put_row() internally
+          Segment_get_row() Segment_put_row() internally
         * Implements the get_row() and put_row() method  using
-          segment_get_row() segment_put_row() internally
+          Segment_get_row() Segment_put_row() internally
         * Implements the flush_segment() method
         * Implements the copying of raster maps to segments and vice verse
         * Overwrites the open and close methods

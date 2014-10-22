@@ -22,7 +22,7 @@
 #include "local_proto.h"
 
 
-static int _segment_format(int, off_t, off_t, int, int, int, int);
+static int _Segment_format(int, off_t, off_t, int, int, int, int);
 static int write_int(int, int);
 static int write_off_t(int, off_t);
 static int zero_fill(int, off_t);
@@ -59,10 +59,10 @@ static int zero_fill(int, off_t);
  * \return -3 if illegal parameters are passed
  */
 
-int segment_format(int fd, off_t nrows, off_t ncols, int srows, int scols,
+int Segment_format(int fd, off_t nrows, off_t ncols, int srows, int scols,
 		   int len)
 {
-    return _segment_format(fd, nrows, ncols, srows, scols, len, 1);
+    return _Segment_format(fd, nrows, ncols, srows, scols, len, 1);
 }
 
 /**
@@ -97,14 +97,14 @@ int segment_format(int fd, off_t nrows, off_t ncols, int srows, int scols,
  * \return -3 if illegal parameters are passed
  */
 
-int segment_format_nofill(int fd, off_t nrows, off_t ncols, int srows, int scols,
+int Segment_format_nofill(int fd, off_t nrows, off_t ncols, int srows, int scols,
 			  int len)
 {
-    return _segment_format(fd, nrows, ncols, srows, scols, len, 0);
+    return _Segment_format(fd, nrows, ncols, srows, scols, len, 0);
 }
 
 
-static int _segment_format(int fd,
+static int _Segment_format(int fd,
 			   off_t nrows, off_t ncols,
 			   int srows, int scols, int len, int fill)
 {
@@ -112,7 +112,7 @@ static int _segment_format(int fd,
     int spr, size;
 
     if (nrows <= 0 || ncols <= 0 || len <= 0 || srows <= 0 || scols <= 0) {
-	G_warning("segment_format(fd,%lld,%lld,%d,%d,%d): illegal value(s)",
+	G_warning("Segment_format(fd,%lld,%lld,%d,%d,%d): illegal value(s)",
 		  nrows, ncols, srows, scols, len);
 	return -3;
     }
@@ -147,7 +147,7 @@ static int _segment_format(int fd,
     }
 
     if (lseek(fd, 0L, SEEK_SET) == (off_t) -1) {
-	G_warning("segment_format(): Unable to seek (%s)", strerror(errno));
+	G_warning("Segment_format(): Unable to seek (%s)", strerror(errno));
 	return -1;
     }
 
@@ -179,7 +179,7 @@ static int _segment_format(int fd,
 static int write_int(int fd, int n)
 {
     if (write(fd, &n, sizeof(int)) != sizeof(int)) {
-	G_warning("segment_format(): Unable to write (%s)", strerror(errno));
+	G_warning("Segment_format(): Unable to write (%s)", strerror(errno));
 	return 0;
     }
 
@@ -189,7 +189,7 @@ static int write_int(int fd, int n)
 static int write_off_t(int fd, off_t n)
 {
     if (write(fd, &n, sizeof(off_t)) != sizeof(off_t)) {
-	G_warning("segment_format(): Unable to write (%s)", strerror(errno));
+	G_warning("Segment_format(): Unable to write (%s)", strerror(errno));
 	return 0;
     }
 

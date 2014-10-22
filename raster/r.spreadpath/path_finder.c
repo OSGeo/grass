@@ -21,7 +21,7 @@ void path_finder(int row, int col, int backrow, int backcol)
 
     /* if the pt has already been traversed, return */
     value = (char *)&data;
-    segment_get(&out_seg, value, row, col);
+    Segment_get(&out_seg, value, row, col);
     if (data == 1)
 	return;			/* already traversed */
 
@@ -37,9 +37,9 @@ void path_finder(int row, int col, int backrow, int backcol)
     }				/* reach an origin */
 
     value = (char *)&new_backrow;
-    segment_get(&in_row_seg, value, backrow, backcol);
+    Segment_get(&in_row_seg, value, backrow, backcol);
     value = (char *)&new_backcol;
-    segment_get(&in_col_seg, value, backrow, backcol);
+    Segment_get(&in_col_seg, value, backrow, backcol);
 
     path_finder(backrow, backcol, new_backrow, new_backcol);
     return;

@@ -21,7 +21,7 @@
 
 
 /**
- * \fn int segment_pagein (SEGMENT *SEG, int n)
+ * \fn int Segment_pagein (SEGMENT *SEG, int n)
  *
  * \brief Segment pagein.
  *
@@ -34,7 +34,7 @@
  * \return -1 if unable to seek or read segment file
  */
 
-int segment_pagein(SEGMENT * SEG, int n)
+int Segment_pagein(SEGMENT * SEG, int n)
 {
     int cur;
     int read_result;
@@ -77,7 +77,7 @@ int segment_pagein(SEGMENT * SEG, int n)
 
 	    /* write it out if dirty */
 	    if (SEG->scb[cur].dirty) {
-		if (segment_pageout(SEG, cur) < 0)
+		if (Segment_pageout(SEG, cur) < 0)
 		    return -1;
 	    }
 	}
@@ -90,20 +90,20 @@ int segment_pagein(SEGMENT * SEG, int n)
     /* read in the segment */
     SEG->scb[cur].n = n;
     SEG->scb[cur].dirty = 0;
-    SEG->segment_seek(SEG, SEG->scb[cur].n, 0);
+    SEG->Segment_seek(SEG, SEG->scb[cur].n, 0);
 
     read_result = read(SEG->fd, SEG->scb[cur].buf, SEG->size);
     if (read_result != SEG->size) {
-	G_debug(2, "segment_pagein: read_result=%d  SEG->size=%d",
+	G_debug(2, "Segment_pagein: read_result=%d  SEG->size=%d",
 		read_result, SEG->size);
 
 	if (read_result < 0)
-	    G_warning("segment_pagein: %s", strerror(errno));
+	    G_warning("Segment_pagein: %s", strerror(errno));
 	else if (read_result == 0)
-	    G_warning("segment_pagein: read EOF");
+	    G_warning("Segment_pagein: read EOF");
 	else
 	    G_warning
-		("segment_pagein: short count during read(), got %d, expected %d",
+		("Segment_pagein: short count during read(), got %d, expected %d",
 		 read_result, SEG->size);
 
 	return -1;

@@ -21,7 +21,7 @@
 
 
 /**
- * \fn int segment_pageout(SEGMENT *SEG, int i)
+ * \fn int Segment_pageout(SEGMENT *SEG, int i)
  *
  * \brief Pages segment to disk.
  *
@@ -34,11 +34,11 @@
  * \return -1 on error
  */
 
-int segment_pageout(SEGMENT * SEG, int i)
+int Segment_pageout(SEGMENT * SEG, int i)
 {
-    SEG->segment_seek(SEG, SEG->scb[i].n, 0);
+    SEG->Segment_seek(SEG, SEG->scb[i].n, 0);
     if (write(SEG->fd, SEG->scb[i].buf, SEG->size) != SEG->size) {
-	G_warning("segment_pageout: %s", strerror(errno));
+	G_warning("Segment_pageout: %s", strerror(errno));
 	return -1;
     }
     SEG->scb[i].dirty = 0;

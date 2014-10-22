@@ -19,7 +19,7 @@ int cseg_read_cell(CSEG * cseg, char *map_name, char *mapset)
     buffer = Rast_allocate_c_buf();
     for (row = 0; row < nrows; row++) {
 	Rast_get_c_row(map_fd, buffer, row);
-	if (segment_put_row(&(cseg->seg), buffer, row) < 0) {
+	if (Segment_put_row(&(cseg->seg), buffer, row) < 0) {
 	    G_free(buffer);
 	    Rast_close(map_fd);
 	    G_warning("%s(): unable to segment put row for [%s] in [%s]",

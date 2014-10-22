@@ -18,7 +18,7 @@
 #include "local_proto.h"
 
 /**
- * \fn int segment_close (SEGMENT *SEG)
+ * \fn int Segment_close (SEGMENT *SEG)
  *
  * \brief Free memory allocated to segment, delete temp file.
  *
@@ -30,12 +30,12 @@
  * \return -1 if SEGMENT is not available (not open)
  */
 
-int segment_close(SEGMENT *SEG)
+int Segment_close(SEGMENT *SEG)
 {
     if (SEG->open != 1)
 	return -1;
 
-    segment_release(SEG);
+    Segment_release(SEG);
     close(SEG->fd);
     unlink(SEG->fname);
 

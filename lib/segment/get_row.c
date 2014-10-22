@@ -21,14 +21,14 @@
 
 
 /**
- * \fn int segment_get_row (SEGMENT *SEG, void *buf, int row)
+ * \fn int Segment_get_row (SEGMENT *SEG, void *buf, int row)
  *
  * \brief Read row from segment file.
  *
  * Transfers data from a segment file, row by row, into memory
  * (which can then be written to a regular matrix file). <b>Seg</b> is the
  * segment structure that was configured from a call to 
- * <i>segment_init()</i>.
+ * <i>Segment_init()</i>.
  *
  * <b>Buf</b> will be filled with <em>ncols*len</em> bytes of data
  * corresponding to the <b>row</b> in the data matrix.
@@ -40,7 +40,7 @@
  * \return -1 if unable to seek or read segment file
  */
 
-int segment_get_row(const SEGMENT * SEG, void *buf, off_t row)
+int Segment_get_row(const SEGMENT * SEG, void *buf, off_t row)
 {
     int size;
     off_t ncols, col;
@@ -52,11 +52,11 @@ int segment_get_row(const SEGMENT * SEG, void *buf, off_t row)
     size = scols * SEG->len;
 
     for (col = 0; col < ncols; col += scols) {
-	SEG->segment_address(SEG, row, col, &n, &index);
-	SEG->segment_seek(SEG, n, index);
+	SEG->Segment_address(SEG, row, col, &n, &index);
+	SEG->Segment_seek(SEG, n, index);
 
 	if (read(SEG->fd, buf, size) != size) {
-	    G_warning("segment_get_row: %s", strerror(errno));
+	    G_warning("Segment_get_row: %s", strerror(errno));
 	    return -1;
 	}
 
@@ -68,11 +68,11 @@ int segment_get_row(const SEGMENT * SEG, void *buf, off_t row)
 	buf = ((char *)buf) + size;
     }
     if ((size = SEG->spill * SEG->len)) {
-	SEG->segment_address(SEG, row, col, &n, &index);
-	SEG->segment_seek(SEG, n, index);
+	SEG->Segment_address(SEG, row, col, &n, &index);
+	SEG->Segment_seek(SEG, n, index);
 
 	if (read(SEG->fd, buf, size) != size) {
-	    G_warning("segment_get_row: %s", strerror(errno));
+	    G_warning("Segment_get_row: %s", strerror(errno));
 	    return -1;
 	}
     }

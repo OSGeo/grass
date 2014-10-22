@@ -178,7 +178,7 @@ The segment library allow to open a map in a read-write mode. ::
 The RasterSegment class define two methods to read and write the map:
 
     * ``get_row`` that return the buffer object with the row that call the
-      C function ``segment_get_row``. ::
+      C function ``Segment_get_row``. ::
 
         >>> # call explicity the method
         >>> elev_row0 = elev.get_row(0)
@@ -186,7 +186,7 @@ The RasterSegment class define two methods to read and write the map:
         >>> elev_row0 = elev[0]
 
     * ``get`` that return the value of the call map that call the
-      C function ``segment_get``. ::
+      C function ``Segment_get``. ::
 
         >>> # call explicity the method
         >>> elev_val_0_0 = elev.get(0, 0)

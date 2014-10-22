@@ -152,8 +152,8 @@ int seg_calculate_downstream(SEGMENT *dirs, SEGMENT * distance,
     c = outlet.c;
 
     if (elevation) {
-	segment_get(elevation, &target_elev, r, c);
-	segment_put(elevation, &zero_cell, r, c);
+	Segment_get(elevation, &target_elev, r, c);
+	Segment_put(elevation, &zero_cell, r, c);
     }
 
     while (tail != head) {
@@ -169,11 +169,11 @@ int seg_calculate_downstream(SEGMENT *dirs, SEGMENT * distance,
 	    next_r = NR(i);
 	    next_c = NC(i);
 
-	    segment_get(dirs, &dirs_cell, next_r, next_c);
+	    Segment_get(dirs, &dirs_cell, next_r, next_c);
 	    if (dirs_cell == j) {	/* countributing cell, reset distance and elevation */
 
 		if (outs) {	/* outlet mode */
-		    segment_get(distance, &distance_cell, next_r, next_c);
+		    Segment_get(distance, &distance_cell, next_r, next_c);
 		    if (distance_cell == 0)
 			continue;	/* continue loop, point is not added to the queue! */
 		    else {
@@ -185,17 +185,17 @@ int seg_calculate_downstream(SEGMENT *dirs, SEGMENT * distance,
 			    tmp_dist + G_distance(easting, northing,
 						  cell_easting,
 						  cell_northing);
-			segment_put(distance, &cur_dist, next_r, next_c);
+			Segment_put(distance, &cur_dist, next_r, next_c);
 
 		    }
 
 		}
 		else {		/* stream mode */
-		    segment_get(distance, &distance_cell, next_r, next_c);
+		    Segment_get(distance, &distance_cell, next_r, next_c);
 		    if (distance_cell == 0) {
 			cur_dist = 0;
 			if (elevation)
-			    segment_get(elevation, &target_elev, next_r,
+			    Segment_get(elevation, &target_elev, next_r,
 					next_c);
 		    }
 		    else {
@@ -207,14 +207,14 @@ int seg_calculate_downstream(SEGMENT *dirs, SEGMENT * distance,
 			    tmp_dist + G_distance(easting, northing,
 						  cell_easting,
 						  cell_northing);
-			segment_put(distance, &cur_dist, next_r, next_c);
+			Segment_put(distance, &cur_dist, next_r, next_c);
 		    }
 		}		/* end stream mode */
 
 		if (elevation) {
-		    segment_get(elevation, &elevation_cell, next_r, next_c);
+		    Segment_get(elevation, &elevation_cell, next_r, next_c);
 		    elevation_cell -= target_elev;
-		    segment_put(elevation, &elevation_cell, next_r, next_c);
+		    Segment_put(elevation, &elevation_cell, next_r, next_c);
 		    n_cell.target_elev = target_elev;
 		}
 
@@ -297,7 +297,7 @@ int seg_fill_basins(OUTLET outlet, SEGMENT * distance, SEGMENT * dirs)
     val = 1;
     stop = 0;
 
-    segment_put(distance, &stop, r, c);
+    Segment_put(distance, &stop, r, c);
 
     while (tail != head) {
 
@@ -309,13 +309,13 @@ int seg_fill_basins(OUTLET outlet, SEGMENT * distance, SEGMENT * dirs)
 	    next_r = NR(i);
 	    next_c = NC(i);
 
-	    segment_get(dirs, &dirs_cell, next_r, next_c);
+	    Segment_get(dirs, &dirs_cell, next_r, next_c);
 
 	    if (dirs_cell == j) {	/* countributing cell */
 
-		segment_get(distance, &distance_cell, next_r, next_c);
+		Segment_get(distance, &distance_cell, next_r, next_c);
 		distance_cell = (distance_cell == stop) ? stop : val;
-		segment_put(distance, &distance_cell, next_r, next_c);
+		Segment_put(distance, &distance_cell, next_r, next_c);
 		n_cell.r = next_r;
 		n_cell.c = next_c;
 		fifo_insert(n_cell);
@@ -495,15 +495,15 @@ int seg_calculate_upstream(SEGMENT * distance, SEGMENT * dirs,
         /* elevation_data_size = Rast_cell_size(FCELL_TYPE); */
 	for (r = 0; r < nrows; ++r)
 	    for (c = 0; c < ncols; ++c) {
-		segment_get(elevation, &elevation_cell, r, c);
-		segment_put(tmp_elevation, &elevation_cell, r, c);
+		Segment_get(elevation, &elevation_cell, r, c);
+		Segment_put(tmp_elevation, &elevation_cell, r, c);
 	    }
     }
 
     for (r = 0; r < nrows; ++r)
 	for (c = 0; c < ncols; ++c) {
 
-	    segment_get(distance, &distance_cell, r, c);
+	    Segment_get(distance, &distance_cell, r, c);
 
 	    for (i = 1; i < 9; ++i) {
 		if (NOT_IN_REGION(i))
@@ -513,21 +513,21 @@ int seg_calculate_upstream(SEGMENT * distance, SEGMENT * dirs,
 		next_r = NR(i);
 		next_c = NC(i);
 
-		segment_get(dirs, &dirs_cell, next_r, next_c);
+		Segment_get(dirs, &dirs_cell, next_r, next_c);
 
 		if (dirs_cell == j && distance_cell != 0) {	/* is contributing cell */
-		    segment_put(distance, &minus_one_cell, r, c);
+		    Segment_put(distance, &minus_one_cell, r, c);
 		    break;
 		}
 	    }			/* end for i */
 
-	    segment_get(distance, &distance_cell, r, c);
-	    segment_get(dirs, &dirs_cell, r, c);
+	    Segment_get(distance, &distance_cell, r, c);
+	    Segment_get(dirs, &dirs_cell, r, c);
 	    if (distance_cell == 1) {
 		if (distance_cell == 1 && dirs_cell > 0)
 		    n_inits++;
 		else if (dirs_cell > 0)
-		    segment_put(distance, &minus_one_cell, r, c);
+		    Segment_put(distance, &minus_one_cell, r, c);
 	    }
 
 	}
@@ -538,15 +538,15 @@ int seg_calculate_upstream(SEGMENT * distance, SEGMENT * dirs,
     for (r = 0; r < nrows; ++r)
 	for (c = 0; c < ncols; ++c) {
 
-	    segment_get(distance, &distance_cell, r, c);
+	    Segment_get(distance, &distance_cell, r, c);
 	    if (distance_cell == 1) {
 
-		segment_put(distance, &zero_cell, r, c);
+		Segment_put(distance, &zero_cell, r, c);
 		if (elevation)
-		    segment_put(elevation, &zero_cell, r, c);
+		    Segment_put(elevation, &zero_cell, r, c);
 
-		segment_get(dirs, &d, r, c);
-		segment_get(dirs, &d_next, NR(d), NR(d));
+		Segment_get(dirs, &d, r, c);
+		Segment_get(dirs, &d_next, NR(d), NR(d));
 
 		if (d_next < 0)
 		    continue;
@@ -556,7 +556,7 @@ int seg_calculate_upstream(SEGMENT * distance, SEGMENT * dirs,
 		d_inits[k].cur_dist = 0;
 
 		if (elevation)
-		    segment_get(tmp_elevation, &(d_inits[k].target_elev), r,
+		    Segment_get(tmp_elevation, &(d_inits[k].target_elev), r,
 				c);
 		k++;
 	    }
@@ -573,7 +573,7 @@ int seg_calculate_upstream(SEGMENT * distance, SEGMENT * dirs,
 	    r = d_inits[i].r;
 	    c = d_inits[i].c;
 
-	    segment_get(dirs, &d, r, c);
+	    Segment_get(dirs, &d, r, c);
 	    next_r = NR(d);
 	    next_c = NC(d);
 	    tmp_dist = d_inits[i].cur_dist;
@@ -589,7 +589,7 @@ int seg_calculate_upstream(SEGMENT * distance, SEGMENT * dirs,
 	    cur_dist = tmp_dist +
 		G_distance(easting, northing, cell_easting, cell_northing);
 
-	    segment_get(distance, &distance_cell, next_r, next_c);
+	    Segment_get(distance, &distance_cell, next_r, next_c);
 
 	    if (near)
 		done = (distance_cell > cur_dist ||
@@ -599,16 +599,16 @@ int seg_calculate_upstream(SEGMENT * distance, SEGMENT * dirs,
 			distance_cell <= 0) ? 1 : 0;
 
 	    if (done) {
-		segment_put(distance, &cur_dist, next_r, next_c);
+		Segment_put(distance, &cur_dist, next_r, next_c);
 		if (elevation) {
-		    segment_get(tmp_elevation, &tmp_elevation_cell, next_r,
+		    Segment_get(tmp_elevation, &tmp_elevation_cell, next_r,
 				next_c);
 		    tmp_elevation_cell = target_elev - tmp_elevation_cell;
-		    segment_put(elevation, &tmp_elevation_cell, next_r,
+		    Segment_put(elevation, &tmp_elevation_cell, next_r,
 				next_c);
 		}
 
-		segment_get(dirs, &dirs_cell, NR(d), NC(d));
+		Segment_get(dirs, &dirs_cell, NR(d), NC(d));
 		if (dirs_cell < 1)
 		    continue;
 

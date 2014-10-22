@@ -19,7 +19,7 @@ int bseg_open(BSEG *bseg, int srows, int scols, int nsegs_in_memory)
 	G_warning(_("Unable to create segment file"));
 	return -2;
     }
-    if (0 > (errflag = segment_format(fd, Rast_window_rows(),
+    if (0 > (errflag = Segment_format(fd, Rast_window_rows(),
 				      Rast_window_cols(), srows, scols,
 				      sizeof(char)))) {
 	close(fd);
@@ -39,7 +39,7 @@ int bseg_open(BSEG *bseg, int srows, int scols, int nsegs_in_memory)
 	G_warning(_("Unable to re-open segment file"));
 	return -4;
     }
-    if (0 > (errflag = segment_init(&(bseg->seg), fd, nsegs_in_memory))) {
+    if (0 > (errflag = Segment_init(&(bseg->seg), fd, nsegs_in_memory))) {
 	close(fd);
 	unlink(filename);
 	if (errflag == -1) {
@@ -58,7 +58,7 @@ int bseg_open(BSEG *bseg, int srows, int scols, int nsegs_in_memory)
 
 int bseg_close(BSEG *bseg)
 {
-    segment_release(&(bseg->seg));
+    Segment_release(&(bseg->seg));
     close(bseg->fd);
     unlink(bseg->filename);
     if (bseg->name) {
@@ -74,7 +74,7 @@ int bseg_close(BSEG *bseg)
 
 int bseg_put(BSEG *bseg, char *value, int row, int col)
 {
-    if (segment_put(&(bseg->seg), value, row, col) < 0) {
+    if (Segment_put(&(bseg->seg), value, row, col) < 0) {
 	G_warning(_("Unable to write segment file"));
 	return -1;
     }
@@ -83,7 +83,7 @@ int bseg_put(BSEG *bseg, char *value, int row, int col)
 
 int bseg_put_row(BSEG *bseg, char *value, int row)
 {
-    if (segment_put_row(&(bseg->seg), value, row) < 0) {
+    if (Segment_put_row(&(bseg->seg), value, row) < 0) {
 	G_warning(_("Unable to write segment file"));
 	return -1;
     }
@@ -92,7 +92,7 @@ int bseg_put_row(BSEG *bseg, char *value, int row)
 
 int bseg_get(BSEG *bseg, char *value, int row, int col)
 {
-    if (segment_get(&(bseg->seg), value, row, col) < 0) {
+    if (Segment_get(&(bseg->seg), value, row, col) < 0) {
 	G_warning(_("Unable to read segment file"));
 	return -1;
     }
