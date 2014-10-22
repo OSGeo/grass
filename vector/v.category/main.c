@@ -778,9 +778,12 @@ int main(int argc, char *argv[])
         for(i = 1; i < nfields; i++)
 	    G_important_message(_("Categories copied from layer %d to layer %d"),
 		                  fields[0], fields[i]);
-    G_done_msg(_n("%d feature modified.",
-                  "%d features modified.",
-                  nmodified), nmodified);
+
+    if (option != O_REP && option != O_PRN) 
+        G_done_msg(_n("%d feature modified.",
+                      "%d features modified.",
+                      nmodified), nmodified);
+    
     Vect_close(&In);
 
     exit(EXIT_SUCCESS);
