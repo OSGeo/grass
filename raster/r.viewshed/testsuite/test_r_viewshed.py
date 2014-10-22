@@ -28,7 +28,23 @@ class TestViewshed(grass.gunittest.TestCase):
             coordinates=(634720,216180), output=self.viewshed,
             obs_elev=obs_elev)
         self.assertRasterMinMax(map=self.viewshed, refmin=0, refmax=180,
-            msg="Viewing angle above the ground must be between 0 and 180 deg")
+                                msg="Viewing angle above the ground must be between 0 and 180 deg")
+
+    def test_limits_flags(self):
+        obs_elev = '1.72'
+        # test e flag
+        self.assertModule('r.viewshed', input='elevation', flags='e',
+                          coordinates=(634720, 216180), output=self.viewshed,
+                          obs_elev=obs_elev)
+        minmax = 'null_cells=1963758\nmin=-24.98421\nmax=43.15356'
+        self.assertRasterFitsUnivar(raster=self.viewshed, reference=minmax, precision=1e-5)
+        # test b flag (#1788)
+        self.assertModule('r.viewshed', input='elevation', flags='b',
+                          coordinates=(634720, 216180), output=self.viewshed,
+                          obs_elev=obs_elev, overwrite=True)
+        minmax = 'min=0\nmax=1\ndatatype=CELL'
+        self.assertRasterFitsInfo(raster=self.viewshed, reference=minmax,
+                                  msg="Values of binary output must be 0 or 1")
 
     def test_limits_extreme_value(self):
         """Test extremely high observer elevation
