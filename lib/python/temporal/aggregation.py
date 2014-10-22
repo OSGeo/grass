@@ -126,13 +126,14 @@ def aggregate_raster_maps(inputs, base, start, end, count, method,
 
     # Check if new map is in the temporal database
     if new_map.is_in_db(dbif):
-        if gscript.overwrite() == True:
+        if gscript.overwrite() is True:
             # Remove the existing temporal database entry
             new_map.delete(dbif)
             new_map = RasterDataset(map_id)
         else:
-            msgr.error(_("Raster map <%(name)s> is already in temporal database, " \
-                         "use overwrite flag to overwrite"%({"name":new_map.get_name()})))
+            msgr.error(_("Raster map <%(name)s> is already in temporal "
+                         "database, use overwrite flag to overwrite" %
+                       ({"name": new_map.get_name()})))
             return
 
     msgr.verbose(_("Computing aggregation of maps between %(st)s - %(end)s" % {
@@ -147,16 +148,15 @@ def aggregate_raster_maps(inputs, base, start, end, count, method,
         file.write(string)
 
     file.close()
-    
     # Run r.series
-    if len(inputs) > 1000 :
+    if len(inputs) > 1000:
         ret = gscript.run_command("r.series", flags="z", file=filename,
-                               output=output, overwrite=gscript.overwrite(),
-                               method=method)
+                                  output=output, overwrite=gscript.overwrite(),
+                                  method=method)
     else:
         ret = gscript.run_command("r.series", file=filename,
-                               output=output, overwrite=gscript.overwrite(),
-                               method=method)
+                                  output=output, overwrite=gscript.overwrite(),
+                                  method=method)
 
     if ret != 0:
         dbif.close()
@@ -166,41 +166,47 @@ def aggregate_raster_maps(inputs, base, start, end, count, method,
     new_map.load()
 
     # In case of a null map continue, do not register null maps
-    if new_map.metadata.get_min() is None and new_map.metadata.get_max() is None:
+    if new_map.metadata.get_min() is None and \
+       new_map.metadata.get_max() is None:
         if not register_null:
-            gscript.run_command("g.remove", flags='f', type='rast', pattern=output)
+            gscript.run_command("g.remove", flags='f', type='rast',
+                                pattern=output)
             return None
 
     return new_map
 
 ##############################################################################
 
-def aggregate_by_topology(granularity_list,  granularity,  map_list,  topo_list,  basename,  time_suffix,
-                          offset=0,  method="average",  nprocs=1,  spatial=None,  dbif=None, 
-                          overwrite=False):
+
+def aggregate_by_topology(granularity_list, granularity, map_list, topo_list,
+                          basename, time_suffix, offset=0, method="average",
+                          nprocs=1, spatial=None, dbif=None, overwrite=False):
     """Aggregate a list of raster input maps with r.series
 
-       :param granularity_list: A list of AbstractMapDataset objects. 
-                               The temporal extents of the objects are used
-                               to build the spatio-temporal topology with the map list objects
+       :param granularity_list: A list of AbstractMapDataset objects.
+                                The temporal extents of the objects are used
+                                to build the spatio-temporal topology with the
+                                map list objects
        :param granularity: The granularity of the granularity list
-       :param map_list: A list of RasterDataset objects that contain the raster 
-                       maps that should be aggregated
-       :param topo_list: A list of strings of topological relations that are 
-                        used to select the raster maps for aggregation
+       :param map_list: A list of RasterDataset objects that contain the raster
+                        maps that should be aggregated
+       :param topo_list: A list of strings of topological relations that are
+                         used to select the raster maps for aggregation
        :param basename: The basename of the new generated raster maps
-       :param time_suffix: Use the granularity truncated start time of the 
-                          actual granule to create the suffix for the basename
-       :param offset: Use a numerical offset for suffix generation (overwritten by time_suffix)
+       :param time_suffix: Use the granularity truncated start time of the
+                           actual granule to create the suffix for the basename
+       :param offset: Use a numerical offset for suffix generation
+                      (overwritten by time_suffix)
        :param method: The aggregation method of r.series (average,min,max, ...)
        :param nprocs: The number of processes used for parallel computation
-       :param spatial: This indicates if the spatial topology is created as well:
-                      spatial can be None (no spatial topology), "2D" using west, east,
-                      south, north or "3D" using west, east, south, north, bottom, top
+       :param spatial: This indicates if the spatial topology is created as
+                       well: spatial can be None (no spatial topology), "2D"
+                       using west, east, south, north or "3D" using west,
+                       east, south, north, bottom, top
        :param dbif: The database interface to be used
        :param overwrite: Overwrite existing raster maps
-       :return: A list of RasterDataset objects that contain the new map names and
-               the temporal extent for map registration
+       :return: A list of RasterDataset objects that contain the new map names
+                and the temporal extent for map registration
     """
     import grass.pygrass.modules as pymod
     import copy
@@ -260,26 +266,27 @@ def aggregate_by_topology(granularity_list,  granularity,  map_list,  topo_list,
                 aggregation_list.append(map_layer.get_name())
 
         if aggregation_list:
-            msgr.verbose(_("Aggregating %(len)i raster maps from %(start)s to %(end)s") \
-                           %({"len":len(aggregation_list),
-                           "start":str(granule.temporal_extent.get_start_time()), 
-                           "end":str(granule.temporal_extent.get_end_time())}))
+            msgr.verbose(_("Aggregating %(len)i raster maps from %(start)s to"
+                           " %(end)s")  %({"len": len(aggregation_list),
+                           "start": str(granule.temporal_extent.get_start_time()),
+                           "end": str(granule.temporal_extent.get_end_time())}))
 
             if granule.is_time_absolute() is True and time_suffix is True:
-                suffix = create_suffix_from_datetime(granule.temporal_extent.get_start_time(), 
+                suffix = create_suffix_from_datetime(granule.temporal_extent.get_start_time(),
                                                      granularity)
             else:
                 suffix = gscript.get_num_suffix(count + int(offset),
                                                 len(granularity_list) + int(offset))
-            output_name = "%s_%s"%(basename,  suffix)
+            output_name = "%s_%s" % (basename, suffix)
 
-            map_layer = RasterDataset("%s@%s"%(output_name,
-                                               get_current_mapset()))
+            map_layer = RasterDataset("%s@%s" % (output_name,
+                                                 get_current_mapset()))
             map_layer.set_temporal_extent(granule.get_temporal_extent())
 
             if map_layer.map_exists() is True and overwrite is False:
-                msgr.fatal(_("Unable to perform aggregation. Output raster map <%(name)s> "\
-                             "exists and overwrite flag was not set"%({"name":output_name})))
+                msgr.fatal(_("Unable to perform aggregation. Output raster "
+                             "map <%(name)s> exists and overwrite flag was "
+                             "not set" % ({"name": output_name})))
 
             output_list.append(map_layer)
 
@@ -294,7 +301,7 @@ def aggregate_by_topology(granularity_list,  granularity,  map_list,  topo_list,
 
                 mod = copy.deepcopy(r_series)
                 mod(file=filename, output=output_name)
-                if len(aggregation_list) > 1000 :
+                if len(aggregation_list) > 1000:
                     mod(flags="z")
                 process_queue.put(mod)
             else:

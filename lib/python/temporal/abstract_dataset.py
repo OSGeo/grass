@@ -10,8 +10,6 @@ for details.
 
 :authors: Soeren Gebbert
 """
-import uuid
-import copy
 from abc import ABCMeta, abstractmethod
 from temporal_extent import *
 from spatial_extent import *
@@ -19,11 +17,11 @@ from metadata import *
 from temporal_topology_dataset_connector import *
 from spatial_topology_dataset_connector import *
 
-from grass.exceptions import ImplementationError
-
 ###############################################################################
 
-class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetConnector):
+
+class AbstractDataset(SpatialTopologyDatasetConnector,
+                      TemporalTopologyDatasetConnector):
     """This is the base class for all datasets
        (raster, vector, raster3d, strds, stvds, str3ds)"""
 
@@ -35,21 +33,19 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
         self.msgr = get_tgis_message_interface()
 
     def reset_topology(self):
-        """
-        Reset any information about temporal topology"""
-        
+        """Reset any information about temporal topology"""
+
         self.reset_spatial_topology()
         self.reset_temporal_topology()
 
     def get_number_of_relations(self):
-        """ 
-        Return a dictionary in which the keys are the relation names and the value
-        are the number of relations.
+        """Return a dictionary in which the keys are the relation names and the
+        value are the number of relations.
 
         The following relations are available:
 
         Spatial relations:
-        
+
             - equivalent
             - overlap
             - in
@@ -59,7 +55,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
             - covered
 
         Temporal relations:
-        
+
             - equal
             - follows
             - precedes
@@ -72,18 +68,19 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
             - finishes
             - finished
 
-        To access topological information the spatial, temporal or booth topologies must be build first
-        using the SpatioTemporalTopologyBuilder.
+        To access topological information the spatial, temporal or booth
+        topologies must be build first using the SpatioTemporalTopologyBuilder.
 
-        :return: The dictionary with relations as keys and number as values or None in case the topology  wasn't build
+        :return: The dictionary with relations as keys and number as values or
+                 None in case the topology  wasn't build
         """
         if self.is_temporal_topology_build() and not self.is_spatial_topology_build():
             return self.get_number_of_temporal_relations()
         elif self.is_spatial_topology_build() and not self.is_temporal_topology_build():
             self.get_number_of_spatial_relations()
         else:
-            return  self.get_number_of_temporal_relations() + \
-                    self.get_number_of_spatial_relations()
+            return self.get_number_of_temporal_relations() + \
+                   self.get_number_of_spatial_relations()
 
         return None
 
@@ -91,7 +88,6 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
         """Use this method when the spatio-temporal topology was build"""
         self.set_spatial_topology_build_true()
         self.set_temporal_topology_build_true()
-
 
     def set_topology_build_false(self):
         """Use this method when the spatio-temporal topology was not build"""
@@ -101,14 +97,14 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
     def is_topology_build(self):
         """Check if the spatial and temporal topology was build
 
-           :return: A dictionary with "spatial" and "temporal" as keys that have boolen values
+           :return: A dictionary with "spatial" and "temporal" as keys that
+                    have boolen values
         """
         d = {}
         d["spatial"] = self.is_spatial_topology_build()
         d["temporal"] = self.is_temporal_topology_build()
 
         return d
-
 
     def print_topology_info(self):
         if self.is_temporal_topology_build():
@@ -131,7 +127,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
             and the metadata. It must be implemented in the dataset
             specific subclasses. This is the code for the
             vector dataset:
-            
+
             .. code-block:: python
 
                 self.base = VectorBase(ident=ident)
@@ -140,7 +136,8 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
                 self.spatial_extent = VectorSpatialExtent(ident=ident)
                 self.metadata = VectorMetadata(ident=ident)
 
-           :param ident: The identifier of the dataset that  "name@mapset" or in case of vector maps "name:layer@mapset"
+           :param ident: The identifier of the dataset that  "name@mapset" or
+                         in case of vector maps "name:layer@mapset"
         """
 
     @abstractmethod
@@ -205,7 +202,8 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
     def spatial_relation(self, dataset):
         """Return the spatial relationship between self and dataset
 
-           :param dataset: The abstract dataset to compute the spatial relation with self
+           :param dataset: The abstract dataset to compute the spatial
+                           relation with self
            :return: The spatial relationship as string
         """
 
@@ -251,8 +249,8 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
     def get_temporal_extent_as_tuple(self):
         """Returns a tuple of the valid start and end time
 
-           Start and end time can be either of type datetime or of type integer,
-           depending on the temporal type.
+           Start and end time can be either of type datetime or of type
+           integer, depending on the temporal type.
 
            :return: A tuple of (start_time, end_time)
         """
@@ -327,9 +325,11 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
     def get_spatial_extent_as_tuple(self):
         """Return the spatial extent as tuple
 
-           Top and bottom are set to 0 in case of a two dimensional spatial extent.
+           Top and bottom are set to 0 in case of a two dimensional spatial
+           extent.
 
-           :return: A the spatial extent as tuple (north, south, east, west, top, bottom)
+           :return: A the spatial extent as tuple (north, south, east, west,
+                    top, bottom)
         """
         return self.spatial_extent.get_spatial_extent_as_tuple()
 
@@ -378,15 +378,18 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
 
            :param dbif: The database interface to be used
            :param execute: If True the SQL statements will be executed.
-                                      If False the prepared SQL statements are returned
-                                     and must be executed by the caller.
-            :return: The SQL insert statement in case execute=False, or an empty string otherwise
+                           If False the prepared SQL statements are returned
+                           and must be executed by the caller.
+           :return: The SQL insert statement in case execute=False, or an
+                    empty string otherwise
         """
 
         if get_enable_mapset_check() is True and self.get_mapset() != get_current_mapset():
-            self.msgr.fatal(_("Unable to insert dataset <%(ds)s> of type %(type)s in the temporal database."
-                         " The mapset of the dataset does not match the current mapset")%\
-                         {"ds":self.get_id(), "type":self.get_type()})
+            self.msgr.fatal(_("Unable to insert dataset <%(ds)s> of type "
+                              "%(type)s in the temporal database. The mapset "
+                              "of the dataset does not match the current "
+                              "mapset") % {"ds": self.get_id(),
+                                           "type": self.get_type()})
 
         dbif, connected = init_dbif(dbif)
 
@@ -414,17 +417,19 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
 
            :param dbif: The database interface to be used
            :param execute: If True the SQL statements will be executed.
-                                      If False the prepared SQL statements are returned
-                                      and must be executed by the caller.
+                           If False the prepared SQL statements are returned
+                           and must be executed by the caller.
            :param ident: The identifier to be updated, useful for renaming
-           :return: The SQL update statement in case execute=False, or an empty string otherwise
+           :return: The SQL update statement in case execute=False, or an
+                    empty string otherwise
         """
 
         if get_enable_mapset_check() is True and self.get_mapset() != get_current_mapset():
-            self.msgr.fatal(_("Unable to update dataset <%(ds)s> of type %(type)s in the temporal database."
-                         " The mapset of the dataset does not match the current mapset")%\
-                                 {"ds":self.get_id(), "type":self.get_type()})
-
+            self.msgr.fatal(_("Unable to update dataset <%(ds)s> of type "
+                              "%(type)s in the temporal database. The mapset "
+                              "of the dataset does not match the current "
+                              "mapset") % {"ds": self.get_id(),
+                                           "type": self.get_type()})
 
         dbif, connected = init_dbif(dbif)
 
@@ -455,16 +460,19 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
 
            :param dbif: The database interface to be used
            :param execute: If True the SQL statements will be executed.
-                                      f False the prepared SQL statements are returned
-                                     and must be executed by the caller.
+                           If False the prepared SQL statements are returned
+                           and must be executed by the caller.
            :param ident: The identifier to be updated, useful for renaming
-           :return: The SQL update statement in case execute=False, or an empty string otherwise
+           :return: The SQL update statement in case execute=False, or an
+                    empty string otherwise
         """
 
         if get_enable_mapset_check() is True and self.get_mapset() != get_current_mapset():
-            self.msgr.fatal(_("Unable to update dataset <%(ds)s> of type %(type)s in the temporal database."
-                         " The mapset of the dataset does not match the current mapset")%\
-                         {"ds":self.get_id(), "type":self.get_type()})
+            self.msgr.fatal(_("Unable to update dataset <%(ds)s> of type "
+                              "%(type)s in the temporal database. The mapset"
+                              " of the dataset does not match the current "
+                              "mapset") % {"ds": self.get_id(),
+                                           "type": self.get_type()})
 
         dbif, connected = init_dbif(dbif)
 
@@ -472,9 +480,10 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
         statement = self.base.get_update_all_statement_mogrified(dbif, ident)
         statement += self.temporal_extent.get_update_all_statement_mogrified(dbif,
                                                                              ident)
-        statement += self.spatial_extent.get_update_all_statement_mogrified(
-            dbif, ident)
-        statement += self.metadata.get_update_all_statement_mogrified(dbif, ident)
+        statement += self.spatial_extent.get_update_all_statement_mogrified(dbif,
+                                                                            ident)
+        statement += self.metadata.get_update_all_statement_mogrified(dbif,
+                                                                      ident)
 
         if self.is_stds() is False:
             statement += self.stds_register.get_update_all_statement_mogrified(dbif, ident)
@@ -492,7 +501,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
     def is_time_absolute(self):
         """Return True in case the temporal type is absolute
 
-            :return: True if temporal type is absolute, False otherwise
+           :return: True if temporal type is absolute, False otherwise
         """
         if "temporal_type" in self.base.D:
             return self.base.get_ttype() == "absolute"
@@ -502,7 +511,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
     def is_time_relative(self):
         """Return True in case the temporal type is relative
 
-            :return: True if temporal type is relative, False otherwise
+           :return: True if temporal type is relative, False otherwise
         """
         if "temporal_type" in self.base.D:
             return self.base.get_ttype() == "relative"
@@ -523,7 +532,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
     def temporal_relation(self, dataset):
         """Return the temporal relation of self and the provided dataset
 
-            :return: The temporal relation as string
+           :return: The temporal relation as string
         """
         return self.temporal_extent.temporal_relation(dataset.temporal_extent)
 
@@ -533,7 +542,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
 
            :param dataset: The abstract dataset to temporal intersect with
            :return: The new temporal extent with start and end time,
-                        or None in case of no intersection
+                    or None in case of no intersection
         """
         return self.temporal_extent.intersect(dataset.temporal_extent)
 
@@ -543,7 +552,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
 
            :param dataset: The abstract dataset to create temporal union with
            :return: The new temporal extent with start and end time,
-                        or None in case of no intersection
+                    or None in case of no intersection
         """
         return self.temporal_extent.union(dataset.temporal_extent)
 
@@ -558,6 +567,7 @@ class AbstractDataset(SpatialTopologyDatasetConnector, TemporalTopologyDatasetCo
 
 ###############################################################################
 
+
 class AbstractDatasetComparisonKeyStartTime(object):
     """This comparison key can be used to sort lists of abstract datasets
        by start time
@@ -565,7 +575,7 @@ class AbstractDatasetComparisonKeyStartTime(object):
         Example:
 
         .. code-block:: python
-        
+
             # Return all maps in a space time raster dataset as map objects
             map_list = strds.get_registered_maps_as_objects()
 
@@ -607,6 +617,7 @@ class AbstractDatasetComparisonKeyStartTime(object):
 
 ###############################################################################
 
+
 class AbstractDatasetComparisonKeyEndTime(object):
     """This comparison key can be used to sort lists of abstract datasets
        by end time
@@ -614,7 +625,7 @@ class AbstractDatasetComparisonKeyEndTime(object):
         Example:
 
         .. code-block:: python
-        
+
             # Return all maps in a space time raster dataset as map objects
             map_list = strds.get_registered_maps_as_objects()
 

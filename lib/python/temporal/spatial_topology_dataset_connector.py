@@ -16,14 +16,16 @@ for details.
 """
 import copy
 
-class SpatialTopologyDatasetConnector(object):
-    """This class implements a spatial topology access structure to connect spatial related datasets
 
-       This object will be set up by spatial topology creation method provided by the 
-       SpatioTemporalTopologyBuilder.
+class SpatialTopologyDatasetConnector(object):
+    """This class implements a spatial topology access structure to connect
+       spatial related datasets
+
+       This object will be set up by spatial topology creation method provided
+       by the SpatioTemporalTopologyBuilder.
 
        The following spatial relations with access methods are supported:
-       
+
        - equivalent
        - overlap
        - in
@@ -31,11 +33,11 @@ class SpatialTopologyDatasetConnector(object):
        - meet
        - cover
        - covered
-            
+
         Usage:
-        
+
         .. code-block:: python
-        
+
             >>> import grass.temporal as tgis
             >>> tgis.init()
             >>> map = tgis.RasterDataset("a@P")
@@ -78,17 +80,17 @@ class SpatialTopologyDatasetConnector(object):
         """Reset any information about temporal topology"""
         self._spatial_topology = {}
         self._has_spatial_topology = False
-        
+
     def get_spatial_relations(self):
         """Return the dictionary of spatial relationships
-        
-            Keys are the spatial relationships in upper case,
-            values are abstract map objects.
-            
-            :return: The spatial relations dictionary
+
+           Keys are the spatial relationships in upper case,
+           values are abstract map objects.
+
+           :return: The spatial relations dictionary
         """
         return copy.copy(self._spatial_topology)
-    
+
     def get_number_of_spatial_relations(self):
         """ Return a dictionary in which the keys are the relation names and the value
             are the number of relations.
@@ -103,44 +105,45 @@ class SpatialTopologyDatasetConnector(object):
             - cover
             - covered
 
-            To access topological information the spatial topology must be build first
-            using the SpatialTopologyBuilder.
+            To access topological information the spatial topology must be
+            build first using the SpatialTopologyBuilder.
 
-            :return: the dictionary with relations as keys and number as values or None in case the topology wasn't build
+            :return: the dictionary with relations as keys and number as
+                     values or None in case the topology wasn't build
         """
-        if self._has_spatial_topology == False:
+        if self._has_spatial_topology is False:
             return None
-    
+
         relations = {}
         try:
-            relations["equivalent"] = len(self._spatial_topology["EQUIVALENT"]) 
+            relations["equivalent"] = len(self._spatial_topology["EQUIVALENT"])
         except:
             relations["equivalent"] = 0
-        try: 
-            relations["overlap"] = len(self._spatial_topology["OVERLAP"]) 
-        except: 
+        try:
+            relations["overlap"] = len(self._spatial_topology["OVERLAP"])
+        except:
             relations["overlap"] = 0
-        try: 
+        try:
             relations["in"] = len(self._spatial_topology["IN"])
-        except: 
+        except:
             relations["in"] = 0
-        try: 
+        try:
             relations["contain"] = len(self._spatial_topology["CONTAIN"])
-        except: 
+        except:
             relations["contain"] = 0
-        try: 
+        try:
             relations["meet"] = len(self._spatial_topology["MEET"])
-        except: 
+        except:
             relations["meet"] = 0
-        try: 
+        try:
             relations["cover"] = len(self._spatial_topology["COVER"])
-        except: 
+        except:
             relations["cover"] = 0
-        try: 
+        try:
             relations["covered"] = len(self._spatial_topology["COVERED"])
-        except: 
+        except:
             relations["covered"] = 0
-            
+
         return relations
 
     def set_spatial_topology_build_true(self):
@@ -158,8 +161,8 @@ class SpatialTopologyDatasetConnector(object):
     def append_equivalent(self, map):
         """Append a map with equivalent spatial extent as this map
 
-           :param map: This object should be of type AbstractMapDataset 
-                        or derived classes
+           :param map: This object should be of type AbstractMapDataset
+                       or derived classes
         """
         if "EQUIVALENT" not in self._spatial_topology:
             self._spatial_topology["EQUIVALENT"] = []
@@ -177,8 +180,8 @@ class SpatialTopologyDatasetConnector(object):
     def append_overlap(self, map):
         """Append a map that this spatial overlap with this map
 
-           :param map: This object should be of type AbstractMapDataset 
-                        or derived classes
+           :param map: This object should be of type AbstractMapDataset
+                       or derived classes
         """
         if "OVERLAP" not in self._spatial_topology:
             self._spatial_topology["OVERLAP"] = []
@@ -196,8 +199,8 @@ class SpatialTopologyDatasetConnector(object):
     def append_in(self, map):
         """Append a map that this is spatial in this map
 
-           :param map: This object should be of type AbstractMapDataset 
-                        or derived classes
+           :param map: This object should be of type AbstractMapDataset
+                       or derived classes
         """
         if "IN" not in self._spatial_topology:
             self._spatial_topology["IN"] = []
@@ -215,8 +218,8 @@ class SpatialTopologyDatasetConnector(object):
     def append_contain(self, map):
         """Append a map that this map spatially contains
 
-           :param map: This object should be of type AbstractMapDataset 
-                        or derived classes
+           :param map: This object should be of type AbstractMapDataset
+                       or derived classes
         """
         if "CONTAIN" not in self._spatial_topology:
             self._spatial_topology["CONTAIN"] = []
@@ -234,8 +237,8 @@ class SpatialTopologyDatasetConnector(object):
     def append_meet(self, map):
         """Append a map that spatially meet with this map
 
-           :param map: This object should be of type AbstractMapDataset 
-                        or derived classes
+           :param map: This object should be of type AbstractMapDataset
+                       or derived classes
         """
         if "MEET" not in self._spatial_topology:
             self._spatial_topology["MEET"] = []
@@ -253,8 +256,8 @@ class SpatialTopologyDatasetConnector(object):
     def append_cover(self, map):
         """Append a map that spatially cover this map
 
-           :param map: This object should be of type AbstractMapDataset 
-                        or derived classes
+           :param map: This object should be of type AbstractMapDataset
+                       or derived classes
         """
         if "COVER" not in self._spatial_topology:
             self._spatial_topology["COVER"] = []
@@ -272,8 +275,8 @@ class SpatialTopologyDatasetConnector(object):
     def append_covered(self, map):
         """Append a map that is spatially covered by this map
 
-           :param map: This object should be of type AbstractMapDataset 
-                        or derived classes
+           :param map: This object should be of type AbstractMapDataset
+                       or derived classes
         """
         if "COVERED" not in self._spatial_topology:
             self._spatial_topology["COVERED"] = []
@@ -287,7 +290,6 @@ class SpatialTopologyDatasetConnector(object):
         if "COVERED" not in self._spatial_topology:
             return None
         return self._spatial_topology["COVERED"]
-
 
     def _generate_map_list_string(self, map_list, line_wrap=True):
         count = 0
@@ -303,26 +305,19 @@ class SpatialTopologyDatasetConnector(object):
             count += 1
 
         return string
-    
+
     # Set the properties
-    equivalent = property(fget=get_equivalent, 
-                                       fset=append_equivalent)
-    cover = property(fget=get_cover, 
-                                     fset=append_cover)
-    covered = property(fget=get_covered, 
-                                       fset=append_covered)
-    overlap = property(fget=get_overlap, 
-                                     fset=append_overlap)
-    in_ = property(fget=get_in, 
-                                     fset=append_in)
-    contain = property(fget=get_contain, 
-                                     fset=append_contain)
-    meet = property(fget=get_meet, 
-                                     fset=append_meet)
+    equivalent = property(fget=get_equivalent, fset=append_equivalent)
+    cover = property(fget=get_cover, fset=append_cover)
+    covered = property(fget=get_covered, fset=append_covered)
+    overlap = property(fget=get_overlap, fset=append_overlap)
+    in_ = property(fget=get_in, fset=append_in)
+    contain = property(fget=get_contain, fset=append_contain)
+    meet = property(fget=get_meet, fset=append_meet)
 
     def print_spatial_topology_info(self):
         """Print information about this class in human readable style"""
-        
+
         print " +-------------------- Spatial Topology --------------------------------------+"
         #          0123456789012345678901234567890
         if self.equivalent is not None:
@@ -351,7 +346,8 @@ class SpatialTopologyDatasetConnector(object):
         """Print information about this class in shell style"""
 
         if self.equivalent is not None:
-            print "equivalent=" + self._generate_map_list_string(self.equivalent, False)
+            print "equivalent=" + self._generate_map_list_string(self.equivalent,
+                                                                 False)
         if self.cover is not None:
             print "cover=" + self._generate_map_list_string(
                 self.cover, False)

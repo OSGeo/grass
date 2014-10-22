@@ -4,6 +4,7 @@ Class to build the spatio-temporal topology between map lists
 Usage:
 
 .. code-block:: python
+
     import grass.temporal as tgis
 
     tgis.print_temporal_relations(maps)
@@ -25,11 +26,13 @@ from ctypes import *
 
 ###############################################################################
 
+
 class SpatioTemporalTopologyBuilder(object):
     """This class is designed to build the spatio-temporal topology
        of spatio-temporally related abstract dataset objects.
 
-       The abstract dataset objects must be provided as a single list, or in two lists.
+       The abstract dataset objects must be provided as a single list, or in
+       two lists.
 
         Example:
 
@@ -355,7 +358,7 @@ class SpatioTemporalTopologyBuilder(object):
     def __init__(self):
         self._reset()
         # 0001-01-01 00:00:00
-        self._timeref = datetime(1,1,1)
+        self._timeref = datetime(1, 1, 1)
 
     def _reset(self):
         self._store = {}
@@ -443,9 +446,10 @@ class SpatioTemporalTopologyBuilder(object):
         """Use the spatio-temporal extent of a map to create and
            return a RTree rectange
 
-           :param spatial: This indicates if the spatial topology is created as well:
-                          spatial can be None (no spatial topology), "2D" using west, east,
-                          #south, north or "3D" using west, east, south, north, bottom, top
+           :param spatial: This indicates if the spatial topology is created
+                           as well: spatial can be None (no spatial topology),
+                           "2D" using west, east, south, north or "3D" using
+                           west, east, south, north, bottom, top
         """
         rect = rtree.RTreeAllocRect(tree)
 
@@ -463,21 +467,21 @@ class SpatioTemporalTopologyBuilder(object):
         elif spatial == "2D":
             north, south, east, west, top, bottom = map_.get_spatial_extent_as_tuple()
             rtree.RTreeSetRect3D(rect, tree, west, east, south, north,
-                                  float(start), float(end))
+                                 float(start), float(end))
         elif spatial == "3D":
             north, south, east, west, top, bottom = map_.get_spatial_extent_as_tuple()
             rtree.RTreeSetRect4D(rect, tree, west, east, south, north,
-                                  bottom, top, float(start), float(end))
+                                 bottom, top, float(start), float(end))
 
         return rect
 
     def _build_rtree(self, maps, spatial=None):
         """Build and return the 1-4 dimensional R*-Tree
 
-
-           :param spatial: This indicates if the spatial topology is created as well:
-                          spatial can be None (no spatial topology), "2D" using west, east,
-                          south, north or "3D" using west, east, south, north, bottom, top
+           :param spatial: This indicates if the spatial topology is created
+                           as well: spatial can be None (no spatial topology),
+                           "2D" using west, east, south, north or "3D" using
+                           west, east, south, north, bottom, top
         """
         dim = 1
         if spatial == "2D":
@@ -498,9 +502,10 @@ class SpatioTemporalTopologyBuilder(object):
         """Build the spatio-temporal topology structure between
            one or two unordered lists of abstract dataset objects
 
-           This method builds the temporal or spatio-temporal topology from mapsA to
-           mapsB and vice verse. The spatio-temporal topology structure of each map
-           will be reseted and rebuild for mapsA and mapsB.
+           This method builds the temporal or spatio-temporal topology from
+           mapsA to mapsB and vice verse. The spatio-temporal topology
+           structure of each map will be reseted and rebuild for mapsA and
+           mapsB.
 
            After building the temporal or spatio-temporal topology the modified
            map objects of mapsA can be accessed
@@ -512,16 +517,17 @@ class SpatioTemporalTopologyBuilder(object):
                          objects with initiated spatio-temporal extent
            :param mapsB: An optional list of abstract_dataset
                          objects with initiated spatio-temporal extent
-           :param spatial: This indicates if the spatial topology is created as well:
-                          spatial can be None (no spatial topology), "2D" using west, east,
-                          south, north or "3D" using west, east, south, north, bottom, top
+           :param spatial: This indicates if the spatial topology is created
+                           as well: spatial can be None (no spatial topology),
+                           "2D" using west, east, south, north or "3D" using
+                           west, east, south, north, bottom, top
         """
 
         identical = False
         if mapsA == mapsB:
             identical = True
 
-        if mapsB == None:
+        if mapsB is None:
             mapsB = mapsA
             identical = True
 
@@ -557,7 +563,7 @@ class SpatioTemporalTopologyBuilder(object):
                     set_spatial_relationship(A, B, relation)
 
         self._build_internal_iteratable(mapsA, spatial)
-        if not identical and mapsB != None:
+        if not identical and mapsB is not None:
             self._build_iteratable(mapsB, spatial)
 
         gis.G_free_ilist(list_)
@@ -580,6 +586,7 @@ class SpatioTemporalTopologyBuilder(object):
         return _map in self._store.values()
 
 ###############################################################################
+
 
 def set_temoral_relationship(A, B, relation):
     if relation == "equal" or relation == "equals":
@@ -756,6 +763,7 @@ def set_spatial_relationship(A, B, relation):
 
 ###############################################################################
 
+
 def print_temporal_topology_relationships(maps1, maps2=None, dbif=None):
     """Print the temporal relationships of the
        map lists maps1 and maps2 to stdout.
@@ -784,6 +792,7 @@ def print_temporal_topology_relationships(maps1, maps2=None, dbif=None):
 
 ###############################################################################
 
+
 def print_spatio_temporal_topology_relationships(maps1, maps2=None,
                                                  spatial="2D", dbif=None):
     """Print the temporal relationships of the
@@ -793,8 +802,9 @@ def print_spatio_temporal_topology_relationships(maps1, maps2=None,
                       objects with initiated temporal extent
         :param maps2: An optional list of abstract_dataset
                       objects with initiated temporal extent
-        :param spatial: The dimension of the spatial extent to be used: "2D" using west, east,
-                        south, north or "3D" using west, east, south, north, bottom, top
+        :param spatial: The dimension of the spatial extent to be used: "2D"
+                        using west, east, south, north or "3D" using west,
+                        east, south, north, bottom, top
         :param dbif: The database interface to be used
     """
 
@@ -815,8 +825,10 @@ def print_spatio_temporal_topology_relationships(maps1, maps2=None,
 
 ###############################################################################
 
+
 def count_temporal_topology_relationships(maps1, maps2=None, dbif=None):
-    """Count the temporal relations of a single list of maps or between two lists of maps
+    """Count the temporal relations of a single list of maps or between two
+       lists of maps
 
 
         :param maps1: A list of abstract_dataset
@@ -826,7 +838,6 @@ def count_temporal_topology_relationships(maps1, maps2=None, dbif=None):
         :param dbif: The database interface to be used
         :return: A dictionary with counted temporal relationships
     """
-
 
     tb = SpatioTemporalTopologyBuilder()
     tb.build(maps1, maps2)
@@ -850,65 +861,70 @@ def count_temporal_topology_relationships(maps1, maps2=None, dbif=None):
 
 ###############################################################################
 
-def create_temporal_relation_sql_where_statement(
-                        start, end, use_start=True, use_during=False,
-                        use_overlap=False, use_contain=False, use_equal=False,
-                        use_follows=False, use_precedes=False):
-    """Create a SQL WHERE statement for temporal relation selection of maps in space time datasets
+
+def create_temporal_relation_sql_where_statement(start, end, use_start=True,
+                                                 use_during=False,
+                                                 use_overlap=False,
+                                                 use_contain=False,
+                                                 use_equal=False,
+                                                 use_follows=False,
+                                                 use_precedes=False):
+    """Create a SQL WHERE statement for temporal relation selection of maps in
+       space time datasets
 
         :param start: The start time
         :param end: The end time
-        :param use_start: Select maps of which the start time is located in the selection granule
-                         ::
-                         
-                             map    :        s
-                             granule:  s-----------------e
+        :param use_start: Select maps of which the start time is located in
+                          the selection granule ::
 
-                             map    :        s--------------------e
-                             granule:  s-----------------e
+                              map    :        s
+                              granule:  s-----------------e
 
-                             map    :        s--------e
-                             granule:  s-----------------e
+                              map    :        s--------------------e
+                              granule:  s-----------------e
+
+                              map    :        s--------e
+                              granule:  s-----------------e
 
 
-        :param use_during: Select maps which are temporal during the selection granule
-                         ::
-                         
-                             map    :     s-----------e
-                             granule:  s-----------------e
+        :param use_during: Select maps which are temporal during the selection
+                           granule  ::
 
-        :param use_overlap: Select maps which temporal overlap the selection granule
-                         ::
-                         
-                             map    :     s-----------e
-                             granule:        s-----------------e
+                               map    :     s-----------e
+                               granule:  s-----------------e
 
-                             map    :     s-----------e
-                             granule:  s----------e
+        :param use_overlap: Select maps which temporal overlap the selection
+                            granule ::
 
-        :param use_contain: Select maps which temporally contain the selection granule
-                         ::
-                         
-                             map    :  s-----------------e
-                             granule:     s-----------e
+                                map    :     s-----------e
+                                granule:        s-----------------e
 
-        :param use_equal: Select maps which temporally equal to the selection granule
-                         ::
-                         
-                             map    :  s-----------e
-                             granule:  s-----------e
+                                map    :     s-----------e
+                                granule:  s----------e
 
-        :param use_follows: Select maps which temporally follow the selection granule
-                         ::
-                         
-                             map    :              s-----------e
-                             granule:  s-----------e
+        :param use_contain: Select maps which temporally contain the selection
+                            granule ::
 
-        :param use_precedes: Select maps which temporally precedes the selection granule
-                         ::
-                         
-                             map    :  s-----------e
-                             granule:              s-----------e
+                                map    :  s-----------------e
+                                granule:     s-----------e
+
+        :param use_equal: Select maps which temporally equal to the selection
+                          granule ::
+
+                              map    :  s-----------e
+                              granule:  s-----------e
+
+        :param use_follows: Select maps which temporally follow the selection
+                            granule ::
+
+                                map    :              s-----------e
+                                granule:  s-----------e
+
+        :param use_precedes: Select maps which temporally precedes the
+                             selection granule ::
+
+                                 map    :  s-----------e
+                                 granule:              s-----------e
 
         Usage:
 
@@ -986,7 +1002,8 @@ def create_temporal_relation_sql_where_statement(
 
     if use_start:
         if isinstance(start, datetime):
-            where += "(start_time >= '%s' and start_time < '%s') " % (start, end)
+            where += "(start_time >= '%s' and start_time < '%s') " % (start,
+                                                                      end)
         else:
             where += "(start_time >= %i and start_time < %i) " % (start, end)
 
@@ -995,8 +1012,10 @@ def create_temporal_relation_sql_where_statement(
             where += " OR "
 
         if isinstance(start, datetime):
-            where += "((start_time > '%s' and end_time < '%s') OR " % (start, end)
-            where += "(start_time >= '%s' and end_time < '%s') OR " % (start, end)
+            where += "((start_time > '%s' and end_time < '%s') OR " % (start,
+                                                                       end)
+            where += "(start_time >= '%s' and end_time < '%s') OR " % (start,
+                                                                       end)
             where += "(start_time > '%s' and end_time <= '%s'))" % (start, end)
         else:
             where += "((start_time > %i and end_time < %i) OR " % (start, end)
@@ -1008,19 +1027,25 @@ def create_temporal_relation_sql_where_statement(
             where += " OR "
 
         if isinstance(start, datetime):
-            where += "((start_time < '%s' and end_time > '%s' and end_time < '%s') OR " % (start, start, end)
-            where += "(start_time < '%s' and start_time > '%s' and end_time > '%s'))" % (end, start, end)
+            where += "((start_time < '%s' and end_time > '%s' and end_time <" \
+                     " '%s') OR " % (start, start, end)
+            where += "(start_time < '%s' and start_time > '%s' and end_time " \
+                     "> '%s'))" % (end, start, end)
         else:
-            where += "((start_time < %i and end_time > %i and end_time < %i) OR " % (start, start, end)
-            where += "(start_time < %i and start_time > %i and end_time > %i))" % (end, start, end)
+            where += "((start_time < %i and end_time > %i and end_time < %i)" \
+                     " OR " % (start, start, end)
+            where += "(start_time < %i and start_time > %i and end_time > " \
+                     "%i))" % (end, start, end)
 
     if use_contain:
         if use_start or use_during or use_overlap:
             where += " OR "
 
         if isinstance(start, datetime):
-            where += "((start_time < '%s' and end_time > '%s') OR " % (start, end)
-            where += "(start_time <= '%s' and end_time > '%s') OR " % (start, end)
+            where += "((start_time < '%s' and end_time > '%s') OR " % (start,
+                                                                       end)
+            where += "(start_time <= '%s' and end_time > '%s') OR " % (start,
+                                                                       end)
             where += "(start_time < '%s' and end_time >= '%s'))" % (start, end)
         else:
             where += "((start_time < %i and end_time > %i) OR " % (start, end)

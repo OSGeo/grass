@@ -72,23 +72,24 @@ try:
 except:
     pass
 
+
 class TemporalRasterOperatorLexer(object):
     """Lexical analyzer for the GRASS GIS temporal operator"""
 
     # Functions that defines topological relations.
     relations = {
-        'equal'      : "EQUAL",
-        'follows'    : "FOLLOWS",
-        'precedes'   : "PRECEDES",
-        'overlaps'   : "OVERLAPS",
-        'overlapped' : "OVERLAPPED",
-        'during'     : "DURING",
-        'starts'     : "STARTS",
-        'finishes'   : "FINISHES",
-        'contains'   : "CONTAINS",
-        'started'    : "STARTED",
-        'finished'   : "FINISHED",
-        'over'       : "OVER"
+        'equal': "EQUAL",
+        'follows': "FOLLOWS",
+        'precedes': "PRECEDES",
+        'overlaps': "OVERLAPS",
+        'overlapped': "OVERLAPPED",
+        'during': "DURING",
+        'starts': "STARTS",
+        'finishes': "FINISHES",
+        'contains': "CONTAINS",
+        'started': "STARTED",
+        'finished': "FINISHED",
+        'over': "OVER"
         }
 
     # This is the list of token names.
@@ -113,20 +114,20 @@ class TemporalRasterOperatorLexer(object):
     tokens = tokens + tuple(relations.values())
 
     # Regular expression rules for simple tokens
-    t_T_SELECT           = r':'
-    t_T_NOT_SELECT       = r'!:'
-    t_COMMA              = r','
-    t_LEFTREF             = r'='
-    t_HASH               = r'\#'
-    t_OR                 = r'[\|]'
-    t_AND                = r'[&]'
-    t_MOD                = r'[\%]'
-    t_DIV                = r'[\/]'
-    t_MULT               = r'[\*]'
-    t_ADD                = r'[\+]'
-    t_SUB                = r'[-]'
-    t_CLPAREN             = r'\{'
-    t_CRPAREN             = r'\}'
+    t_T_SELECT = r':'
+    t_T_NOT_SELECT = r'!:'
+    t_COMMA = r','
+    t_LEFTREF = r'='
+    t_HASH = r'\#'
+    t_OR = r'[\|]'
+    t_AND = r'[&]'
+    t_MOD = r'[\%]'
+    t_DIV = r'[\/]'
+    t_MULT = r'[\*]'
+    t_ADD = r'[\+]'
+    t_SUB = r'[-]'
+    t_CLPAREN = r'\{'
+    t_CRPAREN = r'\}'
 
     # These are the things that should be ignored.
     t_ignore = ' \t'
@@ -153,23 +154,24 @@ class TemporalRasterOperatorLexer(object):
     # Handle errors.
     def t_error(self, t):
         raise SyntaxError("syntax error on line %d near '%s'" %
-            (t.lineno, t.value))
+                          (t.lineno, t.value))
 
     # Build the lexer
-    def build(self,**kwargs):
+    def build(self, **kwargs):
         self.lexer = lex.lex(module=self, **kwargs)
 
     # Just for testing
-    def test(self,data):
+    def test(self, data):
         self.name_list = {}
         print(data)
         self.lexer.input(data)
         while True:
-             tok = self.lexer.token()
-             if not tok: break
-             print tok
+            tok = self.lexer.token()
+            if not tok: break
+            print tok
 
 ###############################################################################
+
 
 class TemporalRasterOperatorParser(object):
     """The temporal algebra class"""
@@ -179,7 +181,7 @@ class TemporalRasterOperatorParser(object):
         self.lexer.build()
         self.parser = yacc.yacc(module=self)
 
-    def parse(self, expression, comparison = False):
+    def parse(self, expression, comparison=False):
         self.comparison = comparison
         self.parser.parse(expression)
 
@@ -201,11 +203,10 @@ class TemporalRasterOperatorParser(object):
             self.relations = t[2]
         else:
             self.relations = [t[2]]
-        self.temporal  = None
-        self.function  = None
+        self.temporal = None
+        self.function = None
 
         t[0] = t[2]
-
 
     def p_operator(self, t):
         # The expression should always return a list of maps.
@@ -216,8 +217,8 @@ class TemporalRasterOperatorParser(object):
         """
         # Set three operator components.
         self.relations = ['equal']
-        self.temporal  = "="
-        self.function  = t[2]
+        self.temporal = "="
+        self.function = t[2]
 
         t[0] = t[2]
 
@@ -229,12 +230,12 @@ class TemporalRasterOperatorParser(object):
         """
         # Set three operator components.
         self.relations = ['equal']
-        self.temporal  = "="
+        self.temporal = "="
         if t[2] == t[3]:
-            self.function  = t[2] + t[3]
+            self.function = t[2] + t[3]
         else:
             raise SyntaxError("syntax error on line %d near '%s'" %
-                                (t.lineno, t.value))
+                              (t.lineno, t.value))
 
         t[0] = t[2]
 
@@ -267,8 +268,8 @@ class TemporalRasterOperatorParser(object):
             self.relations = t[2]
         else:
             self.relations = [t[2]]
-        self.temporal  = "="
-        self.function  = t[4]
+        self.temporal = "="
+        self.function = t[4]
 
         t[0] = t[4]
 
@@ -285,12 +286,12 @@ class TemporalRasterOperatorParser(object):
             self.relations = t[2]
         else:
             self.relations = [t[2]]
-        self.temporal  = "="
+        self.temporal = "="
         if t[4] == t[5]:
-            self.function  = t[4] + t[5]
+            self.function = t[4] + t[5]
         else:
             raise SyntaxError("syntax error on line %d near '%s'" %
-                                (t.lineno, t.value))
+                              (t.lineno, t.value))
 
         t[0] = t[4]
 
@@ -350,7 +351,7 @@ class TemporalRasterOperatorParser(object):
             rel_list = rel_list + t[3]
         else:
             rel_list.append(t[3])
-        t[0] =  rel_list
+        t[0] = rel_list
 
     def p_temporal_operator(self, t):
         # The list of relations.
@@ -386,4 +387,3 @@ class TemporalRasterOperatorParser(object):
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-

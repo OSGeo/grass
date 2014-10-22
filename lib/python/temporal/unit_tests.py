@@ -9,7 +9,7 @@ for details.
 :authors: Soeren Gebbert
 """
 import copy
-from datetime import datetime, date, time, timedelta
+from datetime import datetime
 import grass.script.core as core
 from temporal_granularity import *
 from datetime_math import *
@@ -24,6 +24,7 @@ from ctypes import *
 core.set_raise_on_error(True)
 
 ###############################################################################
+
 
 def test_increment_datetime_by_string():
 
@@ -92,6 +93,7 @@ def test_increment_datetime_by_string():
         core.fatal("increment computation is wrong %s" % (delta))
 
 ###############################################################################
+
 
 def test_adjust_datetime_to_granularity():
 
@@ -208,6 +210,7 @@ def test_adjust_datetime_to_granularity():
         core.fatal("Granularity adjustment computation is wrong %s" % (delta))
 
 ###############################################################################
+
 
 def test_compute_datetime_delta():
 
@@ -552,6 +555,7 @@ def test_compute_datetime_delta():
     if delta != 0:
         core.fatal("Compute datetime delta is wrong %s" % (delta))
 
+
 def test_compute_absolute_time_granularity():
 
     # First we test intervals
@@ -890,6 +894,7 @@ def test_compute_absolute_time_granularity():
 
 ###############################################################################
 
+
 def test_spatial_extent_intersection():
     # Generate the extents
 
@@ -952,6 +957,7 @@ def test_spatial_extent_intersection():
         core.fatal("Wrong intersection computation")
 
 ###############################################################################
+
 
 def test_spatial_relations():
     # Generate the extents
@@ -1308,7 +1314,6 @@ def test_spatial_relations():
     print relation
     if relation != "meet":
         core.fatal("Wrong spatial relation: %s" % (relation))
- ###
 
     A = SpatialExtent(north=80, south=40, east=60, west=20, bottom=-50, top=0)
     A.print_info()
@@ -1362,6 +1367,7 @@ def test_spatial_relations():
 
 ###############################################################################
 
+
 def test_temporal_topology_builder():
     map_listA = []
 
@@ -1390,7 +1396,7 @@ def test_temporal_topology_builder():
         _map.print_topology_info()
         if _map.get_id() != map_listA[count].get_id():
             core.fatal("Error building temporal topology <%s> != <%s>" %
-                (_map.get_id(), map_listA[count].get_id()))
+                       (_map.get_id(), map_listA[count].get_id()))
         count += 1
 
     map_listB = []
@@ -1426,12 +1432,11 @@ def test_temporal_topology_builder():
 
     count = 0
     for _map in tb:
-        print "[%s]" % (_map.get_map_id
-        ())
+        print "[%s]" % (_map.get_map_id())
         _map.print_topology_shell_info()
         if _map.get_id() != map_listB[count].get_id():
             core.fatal("Error building temporal topology <%s> != <%s>" %
-                (_map.get_id(), map_listB[count].get_id()))
+                       (_map.get_id(), map_listB[count].get_id()))
         count += 1
 
     tb = SpatioTemporalTopologyBuilder()
@@ -1443,7 +1448,7 @@ def test_temporal_topology_builder():
         _map.print_topology_shell_info()
         if _map.get_id() != map_listA[count].get_id():
             core.fatal("Error building temporal topology <%s> != <%s>" %
-                (_map.get_id(), map_listA[count].get_id()))
+                       (_map.get_id(), map_listA[count].get_id()))
         count += 1
 
     count = 0
@@ -1467,6 +1472,7 @@ def test_temporal_topology_builder():
         core.fatal("Error building temporal topology")
 
 ###############################################################################
+
 
 def test_map_list_sorting():
 
@@ -1511,13 +1517,14 @@ def test_map_list_sorting():
 
 ###############################################################################
 
+
 def test_1d_rtree():
     """Testing the rtree ctypes wrapper"""
 
     tree = rtree.RTreeCreateTree(-1, 0, 1)
 
     for i in xrange(10):
-        
+
         rect = rtree.RTreeAllocRect(tree)
         rtree.RTreeSetRect1D(rect, tree, float(i - 2), float(i + 2))
         rtree.RTreeInsertRect(rect, i + 1, tree)
@@ -1528,7 +1535,7 @@ def test_1d_rtree():
     list_ = gis.ilist()
 
     num = vector.RTreeSearch2(tree, rect, byref(list_))
-    
+
     rtree.RTreeFreeRect(rect)
 
     # print rectangle ids
@@ -1537,8 +1544,9 @@ def test_1d_rtree():
         print "id", list_.value[i]
 
     rtree.RTreeDestroyTree(tree)
-    
+
 ###############################################################################
+
 
 def test_2d_rtree():
     """Testing the rtree ctypes wrapper"""
@@ -1546,15 +1554,14 @@ def test_2d_rtree():
     tree = rtree.RTreeCreateTree(-1, 0, 2)
 
     for i in xrange(10):
-        
-        
+
         rect = rtree.RTreeAllocRect(tree)
 
-        rtree.RTreeSetRect2D(rect, tree, 
-                              float(i - 2), float(i + 2), 
-                              float(i - 2), float(i + 2))
+        rtree.RTreeSetRect2D(rect, tree,
+                             float(i - 2), float(i + 2),
+                             float(i - 2), float(i + 2))
         rtree.RTreeInsertRect(rect, i + 1, tree)
-    
+
     rect = rtree.RTreeAllocRect(tree)
     rtree.RTreeSetRect2D(rect, tree, 2.0, 7.0, 2.0, 7.0)
 
@@ -1569,8 +1576,9 @@ def test_2d_rtree():
         print "id", list_.value[i]
 
     rtree.RTreeDestroyTree(tree)
-    
+
 ###############################################################################
+
 
 def test_3d_rtree():
     """Testing the rtree ctypes wrapper"""
@@ -1578,12 +1586,12 @@ def test_3d_rtree():
     tree = rtree.RTreeCreateTree(-1, 0, 3)
 
     for i in xrange(10):
-        
+
         rect = rtree.RTreeAllocRect(tree)
-        rtree.RTreeSetRect3D(rect, tree, 
-                              float(i - 2), float(i + 2), 
-                              float(i - 2), float(i + 2), 
-                              float(i - 2), float(i + 2))
+        rtree.RTreeSetRect3D(rect, tree,
+                             float(i - 2), float(i + 2),
+                             float(i - 2), float(i + 2),
+                             float(i - 2), float(i + 2))
         rtree.RTreeInsertRect(rect, i + 1, tree)
         print i + 1
         rtree.RTreePrintRect(rect, 1, tree)
@@ -1592,7 +1600,7 @@ def test_3d_rtree():
     rtree.RTreeSetRect3D(rect, tree, 2.0, 7.0, 2.0, 7.0, 2.0, 7.0)
     print "Select"
     rtree.RTreePrintRect(rect, 1, tree)
-        
+
     list_ = gis.ilist()
 
     num = vector.RTreeSearch2(tree, rect, byref(list_))
@@ -1602,10 +1610,11 @@ def test_3d_rtree():
     print "Number of overlapping rectangles", num
     for i in xrange(list_.n_values):
         print "id", list_.value[i]
-        
+
     rtree.RTreeDestroyTree(tree)
 
 ###############################################################################
+
 
 def test_4d_rtree():
     """Testing the rtree ctypes wrapper"""
@@ -1613,20 +1622,20 @@ def test_4d_rtree():
     tree = rtree.RTreeCreateTree(-1, 0, 4)
 
     for i in xrange(10):
-        
+
         # Allocate the boundary
         rect = rtree.RTreeAllocRect(tree)
-        rtree.RTreeSetRect4D(rect, tree, 
-                              float(i - 2), float(i + 2), 
-                              float(i - 2), float(i + 2), 
-                              float(i - 2), float(i + 2), 
-                              float(i - 2), float(i + 2))
+        rtree.RTreeSetRect4D(rect, tree,
+                             float(i - 2), float(i + 2),
+                             float(i - 2), float(i + 2),
+                             float(i - 2), float(i + 2),
+                             float(i - 2), float(i + 2))
         rtree.RTreeInsertRect(rect, i + 1, tree)
 
     rect = rtree.RTreeAllocRect(tree)
-    rtree.RTreeSetRect4D(rect, tree, 2.0, 7.0, 2.0, 
-                          7.0, 2.0, 7.0, 2.0, 7.0)
-    
+    rtree.RTreeSetRect4D(rect, tree, 2.0, 7.0, 2.0,
+                         7.0, 2.0, 7.0, 2.0, 7.0)
+
     list_ = gis.ilist()
 
     num = vector.RTreeSearch2(tree, rect, byref(list_))
@@ -1637,7 +1646,7 @@ def test_4d_rtree():
     print "Number of overlapping rectangles", num
     for i in xrange(list_.n_values):
         print "id", list_.value[i]
-        
+
     rtree.RTreeDestroyTree(tree)
 
 ###############################################################################

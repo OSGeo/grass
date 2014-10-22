@@ -23,51 +23,53 @@ from base import *
 
 ###############################################################################
 
+
 class TemporalExtent(SQLDatabaseInterface):
-    """This is the abstract time base class for relative and absolute time objects
+    """This is the abstract time base class for relative and absolute time
+    objects.
 
-        It abstract class implements the interface to absolute and relative time.
-        Absolute time is represented by datetime time stamps,
-        relative time is represented by a unit an integer value.
+    It abstract class implements the interface to absolute and relative time.
+    Absolute time is represented by datetime time stamps,
+    relative time is represented by a unit an integer value.
 
-        This class implements temporal topology relationships computation
-        after [Allen and Ferguson 1994 Actions and Events in Interval Temporal Logic].
+    This class implements temporal topology relationships computation
+    after [Allen and Ferguson 1994 Actions and Events in Interval Temporal Logic].
 
-        Usage:
+    Usage:
 
-        .. code-block:: python
+    .. code-block:: python
 
-            >>> init()
-            >>> A = TemporalExtent(table="raster_absolute_time",
-            ... ident="soil@PERMANENT", start_time=datetime(2001, 01, 01),
-            ... end_time=datetime(2005,01,01) )
-            >>> A.id
-            'soil@PERMANENT'
-            >>> A.start_time
-            datetime.datetime(2001, 1, 1, 0, 0)
-            >>> A.end_time
-            datetime.datetime(2005, 1, 1, 0, 0)
-            >>> A.print_info()
-             | Start time:................. 2001-01-01 00:00:00
-             | End time:................... 2005-01-01 00:00:00
-            >>> A.print_shell_info()
-            start_time=2001-01-01 00:00:00
-            end_time=2005-01-01 00:00:00
-            >>> # relative time
-            >>> A = TemporalExtent(table="raster_absolute_time",
-            ... ident="soil@PERMANENT", start_time=0, end_time=1 )
-            >>> A.id
-            'soil@PERMANENT'
-            >>> A.start_time
-            0
-            >>> A.end_time
-            1
-            >>> A.print_info()
-             | Start time:................. 0
-             | End time:................... 1
-            >>> A.print_shell_info()
-            start_time=0
-            end_time=1
+        >>> init()
+        >>> A = TemporalExtent(table="raster_absolute_time",
+        ... ident="soil@PERMANENT", start_time=datetime(2001, 01, 01),
+        ... end_time=datetime(2005,01,01) )
+        >>> A.id
+        'soil@PERMANENT'
+        >>> A.start_time
+        datetime.datetime(2001, 1, 1, 0, 0)
+        >>> A.end_time
+        datetime.datetime(2005, 1, 1, 0, 0)
+        >>> A.print_info()
+         | Start time:................. 2001-01-01 00:00:00
+         | End time:................... 2005-01-01 00:00:00
+        >>> A.print_shell_info()
+        start_time=2001-01-01 00:00:00
+        end_time=2005-01-01 00:00:00
+        >>> # relative time
+        >>> A = TemporalExtent(table="raster_absolute_time",
+        ... ident="soil@PERMANENT", start_time=0, end_time=1 )
+        >>> A.id
+        'soil@PERMANENT'
+        >>> A.start_time
+        0
+        >>> A.end_time
+        1
+        >>> A.print_info()
+         | Start time:................. 0
+         | End time:................... 1
+        >>> A.print_shell_info()
+        start_time=0
+        end_time=1
 
     """
     def __init__(self, table=None, ident=None, start_time=None, end_time=None):
@@ -386,7 +388,8 @@ class TemporalExtent(SQLDatabaseInterface):
 
            :param extent: The temporal extent to create a union with
            :return: The new temporal extent with start and end time,
-                   or None in case the temporal extents are unrelated (before or after)
+                    or None in case the temporal extents are unrelated
+                    (before or after)
 
            .. code-block:: python
 
@@ -415,12 +418,13 @@ class TemporalExtent(SQLDatabaseInterface):
         """Return True if this temporal extent (A) starts at the start of the
            provided temporal extent (B) and finishes within it
            ::
-           
+
                A  |-----|
                B  |---------|
 
 
-           :param extent: The temporal extent object with which this extent starts
+           :param extent: The temporal extent object with which this extent
+                          starts
 
            Usage:
 
@@ -434,7 +438,7 @@ class TemporalExtent(SQLDatabaseInterface):
                False
 
         """
-        if  self.D["end_time"] is None or extent.D["end_time"] is None:
+        if self.D["end_time"] is None or extent.D["end_time"] is None:
             return False
 
         if self.D["start_time"] == extent.D["start_time"] and \
@@ -447,11 +451,12 @@ class TemporalExtent(SQLDatabaseInterface):
         """Return True if this temporal extent (A) started at the start of the
            provided temporal extent (B) and finishes after it
            ::
-           
+
                A  |---------|
                B  |-----|
 
-           :param extent: The temporal extent object with which this extent started
+           :param extent: The temporal extent object with which this extent
+                          started
 
            Usage:
 
@@ -465,7 +470,7 @@ class TemporalExtent(SQLDatabaseInterface):
                False
 
         """
-        if  self.D["end_time"] is None or extent.D["end_time"] is None:
+        if self.D["end_time"] is None or extent.D["end_time"] is None:
             return False
 
         if self.D["start_time"] == extent.D["start_time"] and \
@@ -475,14 +480,15 @@ class TemporalExtent(SQLDatabaseInterface):
             return False
 
     def finishes(self, extent):
-        """Return True if this temporal extent (A) starts after the start of the
-           provided temporal extent (B) and finishes with it
+        """Return True if this temporal extent (A) starts after the start of
+           the provided temporal extent (B) and finishes with it
            ::
-           
+
                A      |-----|
                B  |---------|
 
-           :param extent: The temporal extent object with which this extent finishes
+           :param extent: The temporal extent object with which this extent
+                          finishes
 
            Usage:
 
@@ -496,7 +502,7 @@ class TemporalExtent(SQLDatabaseInterface):
                False
 
         """
-        if  self.D["end_time"] is None or extent.D["end_time"] is None:
+        if self.D["end_time"] is None or extent.D["end_time"] is None:
             return False
 
         if self.D["end_time"] == extent.D["end_time"] and \
@@ -506,14 +512,15 @@ class TemporalExtent(SQLDatabaseInterface):
             return False
 
     def finished(self, extent):
-        """Return True if this temporal extent (A) starts before the start of the
-           provided temporal extent (B) and finishes with it
+        """Return True if this temporal extent (A) starts before the start of
+           the provided temporal extent (B) and finishes with it
            ::
-           
+
                A  |---------|
                B      |-----|
 
-           :param extent: The temporal extent object with which this extent finishes
+           :param extent: The temporal extent object with which this extent
+                          finishes
 
            Usage:
 
@@ -527,7 +534,7 @@ class TemporalExtent(SQLDatabaseInterface):
                False
 
         """
-        if  self.D["end_time"] is None or extent.D["end_time"] is None:
+        if self.D["end_time"] is None or extent.D["end_time"] is None:
             return False
 
         if self.D["end_time"] == extent.D["end_time"] and \
@@ -540,11 +547,12 @@ class TemporalExtent(SQLDatabaseInterface):
         """Return True if this temporal extent (A) is located after the
            provided temporal extent (B)
            ::
-           
+
                A             |---------|
                B  |---------|
 
-           :param extent: The temporal extent object that is located before this extent
+           :param extent: The temporal extent object that is located before
+                          this extent
 
            Usage:
 
@@ -573,11 +581,12 @@ class TemporalExtent(SQLDatabaseInterface):
         """Return True if this temporal extent (A) is located before the
            provided temporal extent (B)
            ::
-           
+
                A  |---------|
                B             |---------|
 
-           :param extent: The temporal extent object that is located after this extent
+           :param extent: The temporal extent object that is located after
+                          this extent
 
            Usage:
 
@@ -606,7 +615,7 @@ class TemporalExtent(SQLDatabaseInterface):
         """Return True if this temporal extent (A) is a meeting neighbor the
            provided temporal extent (B)
            ::
-           
+
                A            |---------|
                B  |---------|
                A  |---------|
@@ -633,7 +642,7 @@ class TemporalExtent(SQLDatabaseInterface):
                True
 
         """
-        if  self.D["end_time"] is None and extent.D["end_time"] is None:
+        if self.D["end_time"] is None and extent.D["end_time"] is None:
             return False
 
         if (self.D["start_time"] == extent.D["end_time"]) or \
@@ -646,7 +655,7 @@ class TemporalExtent(SQLDatabaseInterface):
         """Return True if this temporal extent (A) follows the
            provided temporal extent (B)
            ::
-           
+
                A            |---------|
                B  |---------|
 
@@ -665,7 +674,7 @@ class TemporalExtent(SQLDatabaseInterface):
                False
 
         """
-        if  extent.D["end_time"] is None:
+        if extent.D["end_time"] is None:
             return False
 
         if self.D["start_time"] == extent.D["end_time"]:
@@ -677,7 +686,7 @@ class TemporalExtent(SQLDatabaseInterface):
         """Return True if this temporal extent (A) precedes the provided
            temporal extent (B)
            ::
-           
+
                A  |---------|
                B            |---------|
 
@@ -698,7 +707,7 @@ class TemporalExtent(SQLDatabaseInterface):
 
 
         """
-        if  self.D["end_time"] is None:
+        if self.D["end_time"] is None:
             return False
 
         if self.D["end_time"] == extent.D["start_time"]:
@@ -710,7 +719,7 @@ class TemporalExtent(SQLDatabaseInterface):
         """Return True if this temporal extent (A) is located during the provided
            temporal extent (B)
            ::
-           
+
                A   |-------|
                B  |---------|
 
@@ -729,11 +738,11 @@ class TemporalExtent(SQLDatabaseInterface):
 
         """
         # Check single point of time in interval
-        if  extent.D["end_time"] is None:
+        if extent.D["end_time"] is None:
             return False
 
         # Check single point of time in interval
-        if  self.D["end_time"] is None:
+        if self.D["end_time"] is None:
             if self.D["start_time"] >= extent.D["start_time"] and \
                self.D["start_time"] < extent.D["end_time"]:
                 return True
@@ -750,7 +759,7 @@ class TemporalExtent(SQLDatabaseInterface):
         """Return True if this temporal extent (A) contains the provided
            temporal extent (B)
            ::
-           
+
                A  |---------|
                B   |-------|
 
@@ -770,11 +779,11 @@ class TemporalExtent(SQLDatabaseInterface):
 
         """
         # Check single point of time in interval
-        if  self.D["end_time"] is None:
+        if self.D["end_time"] is None:
             return False
 
         # Check single point of time in interval
-        if  extent.D["end_time"] is None:
+        if extent.D["end_time"] is None:
             if self.D["start_time"] <= extent.D["start_time"] and \
                self.D["end_time"] > extent.D["start_time"]:
                 return True
@@ -791,7 +800,7 @@ class TemporalExtent(SQLDatabaseInterface):
         """Return True if this temporal extent (A) is equal to the provided
            temporal extent (B)
            ::
-           
+
                A  |---------|
                B  |---------|
 
@@ -810,13 +819,13 @@ class TemporalExtent(SQLDatabaseInterface):
                True
 
         """
-        if  self.D["end_time"] is None and extent.D["end_time"] is None:
+        if self.D["end_time"] is None and extent.D["end_time"] is None:
             if self.D["start_time"] == extent.D["start_time"]:
                 return True
             else:
                 return False
 
-        if  self.D["end_time"] is None or extent.D["end_time"] is None:
+        if self.D["end_time"] is None or extent.D["end_time"] is None:
             return False
 
         if self.D["start_time"] == extent.D["start_time"] and \
@@ -829,7 +838,7 @@ class TemporalExtent(SQLDatabaseInterface):
         """Return True if this temporal extent (A) overlapped the provided
            temporal extent (B)
            ::
-           
+
                A  |---------|
                B    |---------|
 
@@ -855,7 +864,7 @@ class TemporalExtent(SQLDatabaseInterface):
                False
 
         """
-        if  self.D["end_time"] is None or extent.D["end_time"] is None:
+        if self.D["end_time"] is None or extent.D["end_time"] is None:
             return False
 
         if self.D["start_time"] < extent.D["start_time"] and \
@@ -869,7 +878,7 @@ class TemporalExtent(SQLDatabaseInterface):
         """Return True if this temporal extent (A) overlapps the provided
            temporal extent (B)
            ::
-           
+
                A    |---------|
                B  |---------|
 
@@ -896,7 +905,7 @@ class TemporalExtent(SQLDatabaseInterface):
                False
 
         """
-        if  self.D["end_time"] is None or extent.D["end_time"] is None:
+        if self.D["end_time"] is None or extent.D["end_time"] is None:
             return False
 
         if self.D["start_time"] > extent.D["start_time"] and \
@@ -908,27 +917,28 @@ class TemporalExtent(SQLDatabaseInterface):
 
     def temporal_relation(self, extent):
         """Returns the temporal relation between temporal objects
-           Temporal relationships are implemented after
-           [Allen and Ferguson 1994 Actions and Events in Interval Temporal Logic]
+        Temporal relationships are implemented after
+        [Allen and Ferguson 1994 Actions and Events in Interval Temporal Logic]
 
-           The following temporal relationships are supported:
+        The following temporal relationships are supported:
 
-               - equal
-               - during
-               - contains
-               - overlaps
-               - overlapped
-               - after
-               - before
-               - starts
-               - finishes
-               - started
-               - finished
-               - follows
-               - precedes
+            - equal
+            - during
+            - contains
+            - overlaps
+            - overlapped
+            - after
+            - before
+            - starts
+            - finishes
+            - started
+            - finished
+            - follows
+            - precedes
 
-           :param extent: The temporal extent
-           :return: The name of the temporal relation or None if no relation found
+        :param extent: The temporal extent
+        :return: The name of the temporal relation or None if no relation
+                 found
         """
 
         # First check for correct time
@@ -1051,22 +1061,26 @@ class AbsoluteTemporalExtent(TemporalExtent):
 
 ###############################################################################
 
+
 class RasterAbsoluteTime(AbsoluteTemporalExtent):
     def __init__(self, ident=None, start_time=None, end_time=None):
         AbsoluteTemporalExtent.__init__(self, "raster_absolute_time",
-            ident, start_time, end_time)
+                                        ident, start_time, end_time)
+
 
 class Raster3DAbsoluteTime(AbsoluteTemporalExtent):
     def __init__(self, ident=None, start_time=None, end_time=None):
         AbsoluteTemporalExtent.__init__(self, "raster3d_absolute_time",
-            ident, start_time, end_time)
+                                        ident, start_time, end_time)
+
 
 class VectorAbsoluteTime(AbsoluteTemporalExtent):
     def __init__(self, ident=None, start_time=None, end_time=None):
         AbsoluteTemporalExtent.__init__(self, "vector_absolute_time",
-            ident, start_time, end_time)
+                                        ident, start_time, end_time)
 
 ###############################################################################
+
 
 class STDSAbsoluteTime(AbsoluteTemporalExtent):
     """This class implements the absolute time extent for space time dataset
@@ -1122,7 +1136,7 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
         """Set the type of the map time
 
            Registered maps may have different types of time:
-           
+
            - Single point of time "point"
            - Time intervals "interval"
            - Single point and interval time "mixed"
@@ -1143,7 +1157,7 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
         """Get the type of the map time
 
            Registered maps may have different types of time:
-           
+
            - Single point of time "point"
            - Time intervals "interval"
            - Single point and interval time "mixed"
@@ -1174,27 +1188,29 @@ class STDSAbsoluteTime(AbsoluteTemporalExtent):
 
 ###############################################################################
 
+
 class STRDSAbsoluteTime(STDSAbsoluteTime):
     def __init__(self, ident=None, start_time=None, end_time=None,
                  granularity=None):
         STDSAbsoluteTime.__init__(self, "strds_absolute_time",
-            ident, start_time, end_time, granularity)
+                                  ident, start_time, end_time, granularity)
 
 
 class STR3DSAbsoluteTime(STDSAbsoluteTime):
     def __init__(self, ident=None, start_time=None, end_time=None,
                  granularity=None):
         STDSAbsoluteTime.__init__(self, "str3ds_absolute_time",
-            ident, start_time, end_time, granularity)
+                                  ident, start_time, end_time, granularity)
 
 
 class STVDSAbsoluteTime(STDSAbsoluteTime):
     def __init__(self, ident=None, start_time=None, end_time=None,
                  granularity=None):
         STDSAbsoluteTime.__init__(self, "stvds_absolute_time",
-            ident, start_time, end_time, granularity)
+                                  ident, start_time, end_time, granularity)
 
 ###############################################################################
+
 
 class RelativeTemporalExtent(TemporalExtent):
     """This is the relative time class for all maps and space time datasets
@@ -1289,18 +1305,19 @@ class RelativeTemporalExtent(TemporalExtent):
 
 ###############################################################################
 
+
 class RasterRelativeTime(RelativeTemporalExtent):
     def __init__(self, ident=None, start_time=None, end_time=None,
                  unit=None):
-        RelativeTemporalExtent.__init__(
-            self, "raster_relative_time", ident, start_time, end_time, unit)
+        RelativeTemporalExtent.__init__(self, "raster_relative_time", ident,
+                                        start_time, end_time, unit)
 
 
 class Raster3DRelativeTime(RelativeTemporalExtent):
     def __init__(self, ident=None, start_time=None, end_time=None,
                  unit=None):
-        RelativeTemporalExtent.__init__(self,
-            "raster3d_relative_time", ident, start_time, end_time, unit)
+        RelativeTemporalExtent.__init__(self, "raster3d_relative_time", ident,
+                                        start_time, end_time, unit)
 
 
 class VectorRelativeTime(RelativeTemporalExtent):
@@ -1310,6 +1327,7 @@ class VectorRelativeTime(RelativeTemporalExtent):
             self, "vector_relative_time", ident, start_time, end_time, unit)
 
 ###############################################################################
+
 
 class STDSRelativeTime(RelativeTemporalExtent):
     """This is the relative time class for all maps and space time datasets
@@ -1367,7 +1385,7 @@ class STDSRelativeTime(RelativeTemporalExtent):
         """Set the type of the map time
 
            Registered maps may have different types of time:
-           
+
            - Single point of time "point"
            - Time intervals "interval"
            - Single point and interval time "mixed"
@@ -1388,7 +1406,7 @@ class STDSRelativeTime(RelativeTemporalExtent):
         """Get the type of the map time
 
            Registered maps may have different types of time:
-           
+
            - Single point of time "point"
            - Time intervals "interval"
            - Single point and interval time "mixed"
@@ -1419,25 +1437,29 @@ class STDSRelativeTime(RelativeTemporalExtent):
 
 ###############################################################################
 
+
 class STRDSRelativeTime(STDSRelativeTime):
     def __init__(self, ident=None, start_time=None, end_time=None,
                  unit=None, granularity=None, map_time=None):
-        STDSRelativeTime.__init__(self, "strds_relative_time",
-            ident, start_time, end_time, unit, granularity, map_time)
+        STDSRelativeTime.__init__(self, "strds_relative_time", ident,
+                                  start_time, end_time, unit, granularity,
+                                  map_time)
 
 
 class STR3DSRelativeTime(STDSRelativeTime):
     def __init__(self, ident=None, start_time=None, end_time=None,
                  unit=None, granularity=None, map_time=None):
-        STDSRelativeTime.__init__(self, "str3ds_relative_time",
-            ident, start_time, end_time, unit, granularity, map_time)
+        STDSRelativeTime.__init__(self, "str3ds_relative_time", ident,
+                                  start_time, end_time, unit, granularity,
+                                  map_time)
 
 
 class STVDSRelativeTime(STDSRelativeTime):
     def __init__(self, ident=None, start_time=None, end_time=None,
                  unit=None, granularity=None, map_time=None):
-        STDSRelativeTime.__init__(self, "stvds_relative_time",
-            ident, start_time, end_time, unit, granularity, map_time)
+        STDSRelativeTime.__init__(self, "stvds_relative_time", ident,
+                                  start_time, end_time, unit, granularity,
+                                  map_time)
 
 ###############################################################################
 
