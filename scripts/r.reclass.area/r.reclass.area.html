@@ -6,16 +6,25 @@ less than a user specified area size (in hectares).
 If the <em>-c</em> flag is used, <em>r.reclass.area</em> will skip the creation
 of a clumped raster and assume that the input raster is already clumped.
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
 
-In this example, the ZIP code map in the
-North Carolina sample dataset location is filtered for large areas:
+In this example, the ZIP code map in the North Carolina sample dataset location
+is filtered for large areas (removing smaller areas from the map):
 
 <div class="code"><pre>
 g.region rast=zipcodes -p
 r.report zipcodes unit=h
-# extract only areas &gt; 2000 ha:
+# extract only areas &gt; 2000 ha, NULL otherwise:
 r.reclass.area input=zipcodes output=zipcodes_larger2000ha greater=2000
+</pre></div>
+
+In this example, the ZIP code map in the North Carolina sample dataset location
+is filtered for smaller  areas which are substituted with the value of the respective
+adjacent area with largest shared boundary:
+
+<div class="code"><pre>
+# reclass removing area minor of 1000 ha
+r.reclass.area input=zipcodes output=zipcodes_rmarea1000 lesser=1000 method=rmarea
 </pre></div>
 
 <h2>SEE ALSO</h2>
