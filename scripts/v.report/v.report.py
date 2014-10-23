@@ -124,8 +124,8 @@ def main():
         records2.sort()
 
         #make pre-table
-	# len(records1) may not be the same as len(records2) because
-	# v.db.select can return attributes that are not linked to features.
+        # len(records1) may not be the same as len(records2) because
+        # v.db.select can return attributes that are not linked to features.
         records3 = []
         for r2 in records2:
             records3.append(filter(lambda r1: r1[0] == r2[0], records1)[0] + r2[1:])
