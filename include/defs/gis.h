@@ -135,6 +135,11 @@ int G_rasprintf(char **, size_t *,const char *, ...)
 
 /* basename.c */
 char *G_basename(char *, const char *);
+size_t G_get_num_decimals(const char *);
+char *G_double_to_basename_format(double, size_t, size_t);
+char *G_get_basename_separator();
+char *G_join_basename_strings(const char**, size_t);
+char *G_generate_basename(const char*, double, size_t, size_t);
 
 /* bres_line.c */
 void G_bresenham_line(int, int, int, int, int (*)(int, int));
