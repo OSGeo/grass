@@ -72,8 +72,11 @@ Example Bash script to run be used as a cron job
     echo "Nightly ($NOW) GRASS GIS test finished: $(date $DATE_FLAGS)" >> $LOGFILE
 
 A script similar to this one can be used as a cron job, on most Linux systems
-using ``crontab -e`` and adding the following line::
+using ``crontab -e`` and adding a line similar to the following one::
 
-    0 4 * * 1 /home/vpetras/grasstests/test_grass_gis.sh
+    0 4 * * 1 .../grasstests/test_grass_gis.sh
 
-Which will perform the tests every Monday at 4am in the (North Carolina) morning.
+Which will perform the tests every Monday at 4:00 in the morning (local time).
+
+Particular script and frequency depends on what you want to test and
+how many resources you want to use.
