@@ -139,7 +139,7 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #define GPATH_MAX 4096
 
 /* Basename default separator */
-#define GBASENAME_SEP "__"
+#define GBASENAME_SEP "_"
 
 /* Macros for type size independent integers                    */
 /* Use these for portability to ensure integers are truly 32bit */
