@@ -242,7 +242,7 @@ class DisplayAttributesDialog(wx.Dialog):
                             if ctype != str:
                                 updatedValues.append(str(newvalue))
                             else:
-                                updatedValues.append("'" + str(newvalue) + "'")
+                                updatedValues.append("'" + newvalue + "'")
                         columns[name]['values'][idx] = newvalue
 
                 if self.action != "add" and len(updatedValues) == 0:
@@ -265,7 +265,7 @@ class DisplayAttributesDialog(wx.Dialog):
                 if self.action == "add":
                     sqlString += ") VALUES (%s," % cat
                     for value in updatedValues:
-                        sqlString += str(value) + ","
+                        sqlString += value + ","
                     sqlString = sqlString[:-1] # remove last comma
                     sqlString += ")"
                 else:
@@ -327,6 +327,8 @@ class DisplayAttributesDialog(wx.Dialog):
                 continue
             if enc:
                 sql = sql.encode(enc)
+            else:
+                sql = sql.encode('utf-8')
             
             driver, database = self.mapDBInfo.GetDbSettings(layer)
             Debug.msg(1, "SQL: %s" % sql)
