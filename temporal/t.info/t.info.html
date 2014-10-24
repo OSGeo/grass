@@ -1,31 +1,33 @@
 <h2>DESCRIPTION</h2>
 
-<em>t.info</em> reports informations about any dataset that is registered in the temporal database in
-human readable or shell script style. Datasets are raster, 3D raster and vector maps as well as their 
-corresponding space time datasets (STRDS, STR3DS and STVDS). This module reports the informations that 
-are stored in the temporal database. These are basic informations (id, name, mapset, creator, 
-creation time, temporal type),
-the temporal and spatial extent and dataset type specific metadata. 
-The user has to utilize <em>r.info, r3.info, v.info</em> 
-to report detailed informations about raster, 3D raster and vector maps, since
-not all map specific informations and metadata are stored in the temporal database. 
+<em>t.info</em> reports informations about any dataset that is 
+registered in the temporal database in human readable or shell script 
+style. Datasets are raster, 3D raster and vector maps as well as their 
+corresponding space time datasets (STRDS, STR3DS and STVDS). This 
+module reports the informations that are stored in the temporal 
+database. These are basic informations (id, name, mapset, creator, 
+creation time, temporal type), the temporal and spatial extent and 
+dataset type specific metadata. The user has to utilize <em>r.info</em>, 
+<em>r3.info</em>, <em>v.info</em> to report detailed informations about 
+raster, 3D raster and vector maps, since not all map specific 
+informations and metadata are stored in the temporal database. 
 <p>
-In addition, informations about the chosen temporal database backend can be reported.
+In addition, informations about the chosen temporal database backend 
+can be reported.
 
 <h2>EXAMPLE</h2>
 
-In this example we first report temporal database backend information using <em>t.info -s</em>.
-Then we create a single raster maps using <em>r.mapcalc</em> with random values 
-that will be registered in a single space time
-raster dataset named <em>precipitation_daily</em> using a daily temporal granularity.
-We use <em>t.create</em> for the space time raster dataset creation 
-and <em>t.register</em> to register the raster map
-in the space time raster dataset.
-At the end we report informations about the raster map and the
-space time raster dataset to stdout.
+In this example we first report temporal database backend information 
+using <em>t.info -s</em>. Then we create a single raster maps using 
+<em>r.mapcalc</em> with random values that will be registered in a 
+single space time raster dataset named <em>precipitation_daily</em> 
+using a daily temporal granularity. We use <em>t.create</em> for the 
+space time raster dataset creation and <em>t.register</em> to register 
+the raster map in the space time raster dataset. At the end we report 
+informations about the raster map and the space time raster dataset to 
+stdout.
 
 <div class="code"><pre>
-
 t.info -s
  +------------------- Temporal DBMI backend information ----------------------+
  | DBMI Python interface:...... sqlite3
@@ -128,6 +130,7 @@ t.info type=strds input=precipitation_daily
  | 
  +----------------------------------------------------------------------------+
 </pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em>

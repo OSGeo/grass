@@ -1,30 +1,37 @@
 <h2>DESCRIPTION</h2> 
 
-t.vect.mapcalc performs temporal and spatial overlay and buffer functions on space time vector datasets (STVDS)
-by using the temporal vector algebra. New STVDS can be created, which are expressions of existing STVDS.
+<em>t.vect.mapcalc</em> performs temporal and spatial overlays and buffer 
+functions on space time vector datasets (STVDS) by using the temporal 
+vector algebra. New STVDS can be created, which are expressions of 
+existing STVDS.
 
-<h3>PROGRAM USE</h3> 
+<h3>NOTES</h3> 
 The module expects an <b>expression</b> as input parameter in the following form: <br>
 <br>
 <b> "result = expression" </b>
 <br>
 <br>
 
-The statement structure is similar to r.mapcalc, see <a href="r.mapcalc.html">r.mapcalc</a>.
-Where <b>result</b> represents the name of a space time vector dataset (STVDS)that will 
-contain the result of the calculation that is given as <b>expression</b> 
-on the right side of the equality sign. 
-These expression can be any valid or nested combination of temporal 
-operations and spatial overlay or buffer functions that are provided by the temporal algebra.  <br>
-The temporal vector algebra works with space time vector datasets only (STVDS).
-The algebra provides methods for map selection from STVDS based on their temporal relations. 
-It is also possible to temporally shift maps, to create temporal buffer and to snap time 
-instances to create a valid temporal topology. Furthermore expressions can be nested and 
-evaluated in conditional statements (if, else statements). Within if-statements the algebra 
-provides temporal variables like start time, end time, day of year, time differences or 
-number of maps per time interval to build up conditions. In addition the algebra provides 
-the spatial operations for vector overlay and buffering. All these operations can be assigned 
-to STVDS or to the resulting map lists of operations between STVDS. 
+The statement structure is similar to r.mapcalc, see <a 
+href="r.mapcalc.html">r.mapcalc</a>. Where <b>result</b> represents the 
+name of a space time vector dataset (STVDS)that will contain the result 
+of the calculation that is given as <b>expression</b> on the right side 
+of the equality sign. These expression can be any valid or nested 
+combination of temporal operations and spatial overlay or buffer 
+functions that are provided by the temporal algebra.
+<br>
+The temporal vector algebra works with space time vector datasets only 
+(STVDS). The algebra provides methods for map selection from STVDS 
+based on their temporal relations. It is also possible to temporally 
+shift maps, to create temporal buffer and to snap time instances to 
+create a valid temporal topology. Furthermore expressions can be nested 
+and evaluated in conditional statements (if, else statements). Within 
+if-statements the algebra provides temporal variables like start time, 
+end time, day of year, time differences or number of maps per time 
+interval to build up conditions. In addition the algebra provides the 
+spatial operations for vector overlay and buffering. All these 
+operations can be assigned to STVDS or to the resulting map lists of 
+operations between STVDS. 
 <br>
 <br>
 As default, topological relationships between space time datasets will be 
@@ -279,14 +286,19 @@ And vector functions:
 <p>
 <h3>Combinations of temporal, vector and select operators</h3>
 
-We combine the temporal topology relations, the temporal operators and the spatial/select operators to create spatio-temporal operators:
+We combine the temporal topology relations, the temporal operators and 
+the spatial/select operators to create spatio-temporal operators:
 
-<pre class="code">
+<div class="code"> <pre>
 {"list of temporal relations", "temporal operator" "spatial or select operator"} 
-</pre><p>
-The spatial and the select operators can be used stand-alone. In this case the temporal topology relation "equal" and the temporal operator "left reference =" is assumed and used as default. This allows the convenient use of the spatial and select 
-operators in case of space time vector datasets with equal time stamps.
-</p>
+</pre></div>
+
+The spatial and the select operators can be used stand-alone. In this 
+case the temporal topology relation "equal" and the temporal operator 
+"left reference =" is assumed and used as default. This allows the 
+convenient use of the spatial and select operators in case of space 
+time vector datasets with equal time stamps.
+
 <div class="code"> <pre>
  ---------------------------------------
 |   |  &amp; |  | |  ^ |  ~ |  + |  : |  !: |
@@ -300,9 +312,10 @@ operators in case of space time vector datasets with equal time stamps.
 
 <h3>Examples: </h3>
 
-Spatio-temporal intersect all maps from space time dataset A with all maps from space time dataset 
-B which have equal time stamps and are temporary before Jan. 1. 2005 and 
-store them in space time dataset D.
+Spatio-temporal intersect all maps from space time dataset A with all 
+maps from space time dataset B which have equal time stamps and are 
+temporary before Jan. 1. 2005 and store them in space time dataset D.
+
 <div class="code"><pre>
 D = if(start_date() < "2005-01-01", A & B)
 </pre></div>
@@ -323,7 +336,7 @@ D = if(contain, td(buff_t(A, "1 days")) == 3, B, C)
 
 <h2>REFERENCES</h2>
 
-<tt><a href="http://www.dabeaz.com/ply/">PLY(Python-Lex-Yacc)</a></tt>
+<a href="http://www.dabeaz.com/ply/">PLY(Python-Lex-Yacc)</a>
 
 <h2>SEE ALSO</h2>
 

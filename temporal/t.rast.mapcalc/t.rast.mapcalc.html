@@ -1,23 +1,28 @@
 <h2>DESCRIPTION</h2>
 
-The purpose of <em>t.rast.mapcalc</em> is to perform spatio-temporal <em>mapcalc</em> expressions
-on maps of temporally sampled space time raster datasets (STRDS). Spatial and temporal 
-operators and internal variables are available in the expression string. The description of the spatial 
-operators, functions and internal variables is available in the <a href="r.mapcalc.html">r.mapcalc</a> manual page.
-The temporal functions are described in detail below.
+The purpose of <em>t.rast.mapcalc</em> is to perform spatio-temporal 
+<em>mapcalc</em> expressions on maps of temporally sampled space time 
+raster datasets (STRDS). Spatial and temporal operators and internal 
+variables are available in the expression string. The description of 
+the spatial operators, functions and internal variables is available in 
+the <a href="r.mapcalc.html">r.mapcalc</a> manual page. The temporal 
+functions are described in detail below.
 <p>
-This module expects several parameter. All space time raster datasets that are referenced in 
-the <em>mapcalc expression</em> must be listed in the <em>input</em> option. The <em>first</em> space time raster
-dataset that is listed as input will be used to temporally sample all other
-space time raster datasets. The temporal sampling method can be chosen using
-the <em>method</em> option. The order of the STRDS's in the mapcalc expression can be different 
-to the order of the STRDS's in the input option. The resulting space time raster dataset
-must be specified in the <em>output</em> option together with the <em>base</em> name
-of generated raster maps that are registered in the resulting STRDS. Empty maps
-resulting from map-calculation are not registered by default. This behavior can be changed
-with the <em>-n</em> flag. The flag <em>-s</em> can be used to assure that only spatial related
-maps in the STRDS's are processed. Spatial related means that temporally related maps overlap
-in their spatial extent.
+This module expects several parameter. All space time raster datasets 
+that are referenced in the <em>mapcalc expression</em> must be listed 
+in the <em>input</em> option. The <em>first</em> space time raster 
+dataset that is listed as input will be used to temporally sample all 
+other space time raster datasets. The temporal sampling method can be 
+chosen using the <em>method</em> option. The order of the STRDS's in 
+the mapcalc expression can be different to the order of the STRDS's in 
+the input option. The resulting space time raster dataset must be 
+specified in the <em>output</em> option together with the <em>base</em> 
+name of generated raster maps that are registered in the resulting 
+STRDS. Empty maps resulting from map-calculation are not registered by 
+default. This behavior can be changed with the <em>-n</em> flag. The 
+flag <em>-s</em> can be used to assure that only spatial related maps 
+in the STRDS's are processed. Spatial related means that temporally 
+related maps overlap in their spatial extent.
 <p>
 The module <em>t.rast.mapcalc</em> supports parallel processing. The option
 <em>nprocs</em> specifies the number of processes that can be started in parallel. 
@@ -74,13 +79,15 @@ in case of time instances.
 
 <h2>NOTE</h2>
 
-We will discuss the internal work of <em>t.rast.mapcalc</em> with an example.
-Imagine we have two STRDS as input, each with monthly granularity. The first one 
-<em>A</em> has 6 raster maps (a3 ... a8) with a temporal range from March to August. The second
-STRDS <em>B</em> has 12 raster maps (b1 ... b12) ranging from January to December. 
-The value of the raster maps is the number of the month from their interval start time.
-Dataset <em>A</em> will be used to sample dataset <em>B</em> to create a dataset <em>C</em>.
-We want to add all maps with equal time stamps if the month of the start time is May or June,
+We will discuss the internal work of <em>t.rast.mapcalc</em> with an 
+example. Imagine we have two STRDS as input, each with monthly 
+granularity. The first one <em>A</em> has 6 raster maps (a3 ... a8) 
+with a temporal range from March to August. The second STRDS <em>B</em> 
+has 12 raster maps (b1 ... b12) ranging from January to December. The 
+value of the raster maps is the number of the month from their interval 
+start time. Dataset <em>A</em> will be used to sample dataset 
+<em>B</em> to create a dataset <em>C</em>. We want to add all maps with 
+equal time stamps if the month of the start time is May or June, 
 otherwise we multiply the maps. The command will look as follows:
 <p>
 <div class="code"><pre>

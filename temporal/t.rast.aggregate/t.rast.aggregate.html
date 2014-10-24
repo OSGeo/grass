@@ -1,13 +1,13 @@
 <h2>DESCRIPTION</h2>
 
-<em>t.rast.aggregate</em> temporally aggregates space time raster datasets
-by a specific temporal granularity.
-This module support <em>absolute</em> and <em>relative time</em>.
-The temporal granularity of absolute time can be 
-<em>seconds, minutes, hours, days, weeks, months</em> or <em>years</em>.
-Mixing of granularities eg. "1 year, 3 months 5 days" is not supported. 
-In case of relative time the temporal unit of the input space time raster 
-dataset is used. The granularity must be specified with an integer value. 
+<em>t.rast.aggregate</em> temporally aggregates space time raster 
+datasets by a specific temporal granularity. This module support 
+<em>absolute</em> and <em>relative time</em>. The temporal granularity 
+of absolute time can be <em>seconds, minutes, hours, days, weeks, 
+months</em> or <em>years</em>. Mixing of granularities eg. "1 year, 3 
+months 5 days" is not supported. In case of relative time the temporal 
+unit of the input space time raster dataset is used. The granularity 
+must be specified with an integer value. 
 <p>
 This module is sensitive to the current region and mask settings, 
 hence spatial extent and spatial resolution. In case the registered 
@@ -17,12 +17,13 @@ is used for runtime spatial aggregation.
 
 <h2>NOTES</h2>
 
-The raster module <em>r.series</em> is used internally. Hence all aggregate
-methods of <em>r.series</em> are supported. See the
+The raster module <em>r.series</em> is used internally. Hence all 
+aggregate methods of <em>r.series</em> are supported. See the
 <a href="r.series.html">r.series</a> manual page for details.
 <p>
-This module will shift the start date for each aggregation process depending on the 
-provided temporal granularity. The following shifts will performed:
+This module will shift the start date for each aggregation process 
+depending on the provided temporal granularity. The following shifts 
+will performed:
 
 <ul>
     <li><em>granularity years</em>: will start at the first of January, hence 14-08-2012 00:01:30 will be shifted to 01-01-2012 00:00:00</li>
@@ -34,27 +35,35 @@ provided temporal granularity. The following shifts will performed:
 </ul>
 
 <p>
-The specification of the temporal relation between the aggregation intervals and the raster map layers
-is always formulated from the aggregation interval viewpoint. Hence, the relation <em>contains</em>
-has to be specified to aggregate map layer that are temporally located in an aggregation interval.
+The specification of the temporal relation between the aggregation 
+intervals and the raster map layers is always formulated from the 
+aggregation interval viewpoint. Hence, the relation <em>contains</em> 
+has to be specified to aggregate map layer that are temporally located 
+in an aggregation interval.
 <p>
-Parallel processing is supported in case that more than one interval is available for aggregation computation. Internally several 
-<em>r.series</em> modules will be started, depending on the number of specified parallel processes (<em>nprocs</em>)
-and the number of intervals to aggregate. 
+Parallel processing is supported in case that more than one interval is 
+available for aggregation computation. Internally several 
+<em>r.series</em> modules will be started, depending on the number of 
+specified parallel processes (<em>nprocs</em>) and the number of 
+intervals to aggregate. 
 
 <h2>EXAMPLES</h2>
 
-In this example, we create 7 raster maps that will be registered in a single space time
-raster dataset named <em>precipitation_daily</em> using a daily temporal granularity.
-The names of the raster maps are stored in a text file that is used for raster map registration. 
+In this example, we create 7 raster maps that will be registered in a 
+single space time raster dataset named <em>precipitation_daily</em> 
+using a daily temporal granularity. The names of the raster maps are 
+stored in a text file that is used for raster map registration. 
 <p>
-The space time raster dataset <em>precipitation_daily</em> with daily temporal granularity 
-will be aggregated to weekly precipitation resulting in the output space time raster dataset
-<em>precipitation_weekly</em>. The base name of the new generated raster maps is <em>prec_weekly</em>, the
-granularity is 1 week. The aggregation method is set to <em>sum</em> to accumulate the precipitation values
-of all raster maps that are temporally <em>contained</em> in a week. 
-The sampling option <em>contains</em> assures that only raster maps that are 
-temporally during a week will be considered for computation: 
+The space time raster dataset <em>precipitation_daily</em> with daily 
+temporal granularity will be aggregated to weekly precipitation 
+resulting in the output space time raster dataset 
+<em>precipitation_weekly</em>. The base name of the new generated 
+raster maps is <em>prec_weekly</em>, the granularity is 1 week. The 
+aggregation method is set to <em>sum</em> to accumulate the 
+precipitation values of all raster maps that are temporally 
+<em>contained</em> in a week. The sampling option <em>contains</em> 
+assures that only raster maps that are temporally during a week will be 
+considered for computation: 
 
 <div class="code"><pre>
 MAPS="map_1 map_2 map_3 map_4 map_5 map_6 map_7"

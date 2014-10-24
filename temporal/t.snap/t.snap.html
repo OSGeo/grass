@@ -1,14 +1,17 @@
 <h2>DESCRIPTION</h2>
 
-<em>t.snap</em> is designed to convert time instances of maps into time intervals or to 
-create valid temporal topologies for space time datasets. Raster, 3D raster and vector space time datasets are supported
-with absolute and relative time.
+<em>t.snap</em> is designed to convert time instances of maps into time 
+intervals or to create valid temporal topologies for space time 
+datasets. Raster, 3D raster and vector space time datasets are 
+supported with absolute and relative time.
 <p>
-This module "snaps" the end time of each registered map of a space time dataset to the start time
-of the map that is the temporal nearest neighbour in the future. Maps with equal time stamps
-are not modified and must be removed or modified to create a valid temporal topology.
-In case the last map in the space time dataset is a time instance, the granularity of the space time
-dataset will be used to create the time interval.
+This module "snaps" the end time of each registered map of a space time 
+dataset to the start time of the map that is the temporal nearest 
+neighbour in the future. Maps with equal time stamps are not modified 
+and must be removed or modified to create a valid temporal topology. In 
+case the last map in the space time dataset is a time instance, the 
+granularity of the space time dataset will be used to create the time 
+interval.
 
 <h2>EXAMPLE</h2>
 
@@ -157,7 +160,6 @@ prec_3  soeren  2012-01-03 00:00:00 2012-01-04 00:00:00
 prec_4  soeren  2012-01-04 00:00:00 2012-01-05 00:00:00
 prec_5  soeren  2012-01-05 00:00:00 2012-01-06 00:00:00
 prec_6  soeren  2012-01-06 00:00:00 2012-01-07 00:00:00
-
 </pre></div>
 
 <h2>SEE ALSO</h2>
