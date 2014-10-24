@@ -75,7 +75,7 @@ int Segment_init(SEGMENT *SEG, int fd, int nseg)
 	|| !read_int(fd, &SEG->len))
 	return -1;
 
-    return Segment_setup(SEG);
+    return seg_setup(SEG);
 }
 
 

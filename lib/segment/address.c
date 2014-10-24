@@ -27,7 +27,7 @@
 #define INDEX_ADJ(SEG, i) \
     ((SEG)->fast_seek ? ((i) << (SEG)->lenbits) : ((i) * (SEG)->len))
 
-int Segment_address_fast(const SEGMENT * SEG, off_t row, off_t col, int *n,
+int seg_address_fast(const SEGMENT * SEG, off_t row, off_t col, int *n,
 			 int *index)
 {
 
@@ -70,7 +70,7 @@ int Segment_address_fast(const SEGMENT * SEG, off_t row, off_t col, int *n,
     return 0;
 }
 
-int Segment_address_slow(const SEGMENT * SEG, off_t row, off_t col, int *n,
+int seg_address_slow(const SEGMENT * SEG, off_t row, off_t col, int *n,
 			 int *index)
 {
     if (row) {
@@ -92,7 +92,9 @@ int Segment_address_slow(const SEGMENT * SEG, off_t row, off_t col, int *n,
 }
 
 /**
- * \brief Gets segment address and returns <b>n</b> and <b>index</b>.
+ * \brief Internal use only
+ * 
+ * Gets segment address and sets<b>n</b> and <b>index</b>.
  *
  * \param[in] SEG segment
  * \param[in] row
@@ -102,7 +104,7 @@ int Segment_address_slow(const SEGMENT * SEG, off_t row, off_t col, int *n,
  * \return always returns 0
  */
 
-int Segment_address(const SEGMENT * SEG, off_t row, off_t col, int *n, int *index)
+int seg_address(const SEGMENT * SEG, off_t row, off_t col, int *n, int *index)
 {
     /* old code
      *n = row / SEG->srows * SEG->spr + col / SEG->scols;
@@ -112,5 +114,5 @@ int Segment_address(const SEGMENT * SEG, off_t row, off_t col, int *n, int *inde
     /* this function is called at least once every time data are accessed in SEG
      * avoid very slow modulus and divisions, modulus was the main time killer */
 
-    return SEG->Segment_address(SEG, row, col, n, index);
+    return SEG->address(SEG, row, col, n, index);
 }
