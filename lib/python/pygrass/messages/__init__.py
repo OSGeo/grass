@@ -17,7 +17,7 @@ import sys
 from multiprocessing import Process, Lock, Pipe
 
 import grass.lib.gis as libgis
-libgis.G_gisinit('')
+
 from grass.exceptions import FatalError
 
 
