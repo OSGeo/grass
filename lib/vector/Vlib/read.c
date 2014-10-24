@@ -192,13 +192,13 @@ int Vect_read_line(const struct Map_info *Map,
   \param line feature id
   
   \return 1 feature alive
-  \return 0 feature is dead
-  \return -1 on error
+  \return 0 feature is dead or index is out of range
  */
 int Vect_line_alive(const struct Map_info *Map, int line)
 {
     if (line < 1 || line > Map->plus.n_lines) {
-        return -1;
+	G_warning(_("Line index is out of range"));
+        return 0;
     }
 
     if (Map->plus.Line[line] != NULL)
@@ -216,12 +216,13 @@ int Vect_line_alive(const struct Map_info *Map, int line)
   \param node node id
   
   \return 1 node alive
-  \return 0 node is dead
+  \return 0 node is dead or index is out of range
  */
 int Vect_node_alive(const struct Map_info *Map, int node)
 {
     if (node < 1 || node > Map->plus.n_nodes) {
-        return -1;
+	G_warning(_("Node index is out of range"));
+        return 0;
     }
 
     if (Map->plus.Node[node] != NULL)
@@ -239,13 +240,14 @@ int Vect_node_alive(const struct Map_info *Map, int node)
   \param area area id
   
   \return 1 area alive
-  \return 0 area is dead
-  \return -1 on error
+  \return 0 area is dead or index is out of range
 */
 int Vect_area_alive(const struct Map_info *Map, int area)
 {
-    if (area < 1 || area > Map->plus.n_areas)
-        return -1;
+    if (area < 1 || area > Map->plus.n_areas) {
+	G_warning(_("Area index is out of range"));
+        return 0;
+    }
     
     if (Map->plus.Area[area] != NULL)
 	return 1;
@@ -262,12 +264,14 @@ int Vect_area_alive(const struct Map_info *Map, int area)
   \param isle isle id
   
   \return 1 isle alive
-  \return 0 isle is dead
+  \return 0 isle is dead or index is out of range
 */
 int Vect_isle_alive(const struct Map_info *Map, int isle)
 {
-    if (isle < 1 || isle > Map->plus.n_isles)
-        return -1;
+    if (isle < 1 || isle > Map->plus.n_isles) {
+	G_warning(_("Isle index is out of range"));
+        return 0;
+    }
 
     if (Map->plus.Isle[isle] != NULL)
 	return 1;
