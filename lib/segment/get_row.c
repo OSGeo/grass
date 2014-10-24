@@ -52,8 +52,8 @@ int Segment_get_row(const SEGMENT * SEG, void *buf, off_t row)
     size = scols * SEG->len;
 
     for (col = 0; col < ncols; col += scols) {
-	SEG->Segment_address(SEG, row, col, &n, &index);
-	SEG->Segment_seek(SEG, n, index);
+	SEG->address(SEG, row, col, &n, &index);
+	SEG->seek(SEG, n, index);
 
 	if (read(SEG->fd, buf, size) != size) {
 	    G_warning("Segment_get_row: %s", strerror(errno));
@@ -68,8 +68,8 @@ int Segment_get_row(const SEGMENT * SEG, void *buf, off_t row)
 	buf = ((char *)buf) + size;
     }
     if ((size = SEG->spill * SEG->len)) {
-	SEG->Segment_address(SEG, row, col, &n, &index);
-	SEG->Segment_seek(SEG, n, index);
+	SEG->address(SEG, row, col, &n, &index);
+	SEG->seek(SEG, n, index);
 
 	if (read(SEG->fd, buf, size) != size) {
 	    G_warning("Segment_get_row: %s", strerror(errno));

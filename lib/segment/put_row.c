@@ -56,8 +56,8 @@ int Segment_put_row(const SEGMENT * SEG, const void *buf, off_t row)
     /*      printf("Segment_put_row ncols: %d, scols %d, size: %d, col %d, row: %d,  SEG->fd: %d\n",ncols,scols,size,col,row, SEG->fd); */
 
     for (col = 0; col < ncols; col += scols) {
-	SEG->Segment_address(SEG, row, col, &n, &index);
-	SEG->Segment_seek(SEG, n, index);
+	SEG->address(SEG, row, col, &n, &index);
+	SEG->seek(SEG, n, index);
 
 	if ((result = write(SEG->fd, buf, size)) != size) {
 	    G_warning("Segment_put_row write error %s", strerror(errno));
@@ -74,8 +74,8 @@ int Segment_put_row(const SEGMENT * SEG, const void *buf, off_t row)
     }
 
     if ((size = SEG->spill * SEG->len)) {
-	SEG->Segment_address(SEG, row, col, &n, &index);
-	SEG->Segment_seek(SEG, n, index);
+	SEG->address(SEG, row, col, &n, &index);
+	SEG->seek(SEG, n, index);
 
 	if (write(SEG->fd, buf, size) != size) {
 	    G_warning("Segment_put_row final write error: %s",

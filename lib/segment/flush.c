@@ -35,7 +35,7 @@ int Segment_flush(SEGMENT * SEG)
 
     for (i = 0; i < SEG->nseg; i++)
 	if (SEG->scb[i].n >= 0 && SEG->scb[i].dirty)
-	    Segment_pageout(SEG, i);
+	    seg_pageout(SEG, i);
 
     return 0;
 }
