@@ -21,9 +21,9 @@
 
 
 /**
- * \fn int Segment_pageout(SEGMENT *SEG, int i)
- *
- * \brief Pages segment to disk.
+ * \brief Internal use only
+ * 
+ * Pages segment to disk.
  *
  * Finds segment value <b>i</b> in segment <b>seg</b> and pages it out 
  * to disk.
@@ -34,11 +34,11 @@
  * \return -1 on error
  */
 
-int Segment_pageout(SEGMENT * SEG, int i)
+int seg_pageout(SEGMENT * SEG, int i)
 {
-    SEG->Segment_seek(SEG, SEG->scb[i].n, 0);
+    SEG->seek(SEG, SEG->scb[i].n, 0);
     if (write(SEG->fd, SEG->scb[i].buf, SEG->size) != SEG->size) {
-	G_warning("Segment_pageout: %s", strerror(errno));
+	G_warning("Segment pageout: %s", strerror(errno));
 	return -1;
     }
     SEG->scb[i].dirty = 0;
