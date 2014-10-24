@@ -1,12 +1,13 @@
 <h2>DESCRIPTION</h2>
 
-t.select performs selection of maps that are registered in space time datasets using temporal algebra.
+<em>t.select</em> performs selection of maps that are registered in 
+space time datasets using temporal algebra.
 
 <h3>PROGRAM USE</h3>
-The module expects an <b>expression</b> as input parameter in the following form: <br>
+The module expects an <b>expression</b> as input parameter in the
+following form:<br>
 <br>
 <b> "result = expression" </b>
-<br>
 <br>
 
 The statement structure is similar to r.mapcalc, see <a href="r.mapcalc.html">r.mapcalc</a>.
@@ -14,44 +15,49 @@ Where <b>result</b> represents the name of a space time dataset (STDS)that will
 contain the result of the calculation that is given as <b>expression</b>
 on the right side of the equality sign.
 These expression can be any valid or nested combination of temporal
-operations and functions that are provided by the temporal algebra.  <br>
-The temporal algebra works with space time datasets of any type (STRDS, STR3DS and STVDS).
-The algebra provides methods for map selection from STDS based on their temporal relations.
-It is also possible to temporally shift maps, to create temporal buffer and to snap time
-instances to create a valid temporal topology. Furthermore expressions can be nested and
-evaluated in conditional statements (if, else statements). Within if-statements the algebra
-provides temporal variables like start time, end time, day of year, time differences or
-number of maps per time interval to build up conditions. These operations can be assigned
-to space time datasets or to the results of operations between space time datasets.
-<br>
-<br>
+operations and functions that are provided by the temporal algebra.
+<p>
+The temporal algebra works with space time datasets of any type (STRDS, 
+STR3DS and STVDS). The algebra provides methods for map selection from 
+STDS based on their temporal relations. It is also possible to 
+temporally shift maps, to create temporal buffer and to snap time 
+instances to create a valid temporal topology. Furthermore expressions 
+can be nested and evaluated in conditional statements (if, else 
+statements). Within if-statements the algebra provides temporal 
+variables like start time, end time, day of year, time differences or 
+number of maps per time interval to build up conditions. These 
+operations can be assigned to space time datasets or to the results of 
+operations between space time datasets.
+<p>
 The type of the input space time datasets must be defined with the input
 parameter <b>type</b>. Possible options are STRDS, STVDS or STR3DS.
 The default is set to space time raster datasets (STRDS).
-<br>
-<br>
+<p>
 As default, topological relationships between space time datasets will be
 evaluated only temporal. Use the <b>s</b> flag to activate the
 additionally spatial topology evaluation.
-<br>
-<br>
+<p>
 The expression option must be passed as <b>quoted</b>
-expression, for example: <br>
-<div class="code"><pre>t.select expression="C = A : B"</pre></div>
+expression, for example:
+<br>
+<div class="code"><pre>
+t.select expression="C = A : B"
+</pre></div>
+
 Where <b>C</b> is the new space time raster dataset that will contain maps
 from <b>A</b> that are selected by equal temporal relationships
-to the existing dataset <b>B</b> in this case. <br>
-<br>
+to the existing dataset <b>B</b> in this case.
+
 <h2>TEMPORAL ALGEBRA</h2>
 
 The temporal algebra provides a wide range of temporal operators and
-functions that will be presented in the following section. <br>
-<br>
+functions that will be presented in the following section.
 
 <h3>TEMPORAL RELATIONS</h3>
 
 Several temporal topology relations between registered maps of space
-time datasets are supported: <br>
+time datasets are supported:
+<br>
 <div class="code"><pre>
 equals            A ------
                   B ------
@@ -90,15 +96,15 @@ over              booth overlaps and overlapped
 
 </pre></div>
 The relations must be read as: A is related to B, like - A equals B - A is
-during B - A contains B <br>
-<br>
-Topological relations must be specified in {} parentheses. <br>
+during B - A contains B
+<p>
+Topological relations must be specified in {} parentheses.
 
 <h3>TEMPORAL SELECTION</h3>
 
 The temporal selection simply selects parts of a space time dataset without
 processing raster or vector data.
-
+<p>
 The algebra provides a selection operator <b>:</b> that selects parts
 of a space time dataset that are temporally equal to parts of a second one
 by default. The following expression
@@ -106,23 +112,23 @@ by default. The following expression
 C = A : B
 </pre></div>
 means: Select all parts of space time dataset A that are equal to B and store
-it in space time dataset C. The parts are time stamped maps. <br>
-<br>
-In addition the inverse selection operator <b>!:</b> is defined as the complement of
-the selection operator, hence the following expression
+it in space time dataset C. The parts are time stamped maps.
+<p>
+In addition the inverse selection operator <b>!:</b> is defined as the
+complement of the selection operator, hence the following expression
 <div class="code"><pre>
 C = A !: B
 </pre></div>
 means: select all parts of space time time dataset A that are not equal to B
-and store it in space time dataset (STDS) C. <br>
-<br>
+and store it in space time dataset (STDS) C.
+<p>
 To select parts of a STDS by different topological relations to other STDS,
 the temporal topology selection operator can be used. The operator consists of
 topological relations, that must be separated by the logical OR operator
 <b>||</b> and the temporal selection operator. Both parts are separated by
 comma and surrounded by curly braces:
-{"topological relations", "temporal selection operator"}  <br>
-<br>
+{"topological relations", "temporal selection operator"}
+<p>
 Examples:
 <div class="code"><pre>
 C = A {equals,:} B
@@ -133,8 +139,8 @@ to connect them:
 <div class="code"><pre>
 C = A {equals|during|overlaps,:} B
 </pre></div>
-Select all parts of A that are equal to B, during B or overlaps B. <br>
-<br>
+Select all parts of A that are equal to B, during B or overlaps B.
+<p>
 The selection operator is implicitly contained in the temporal topology
 selection operator, so that the following statements are exactly the same:
 <div class="code"><pre>
@@ -167,8 +173,7 @@ if statement                         decision option                        temp
 The conditions are comparison expressions that are used to evaluate
 space time datasets. Specific values of temporal variables are
 compared by logical operators and evaluated for each map of the STDS.
-<br>
-<br>
+<p>
 The supported logical operators:
 <div class="code"><pre>
 Symbol  description
@@ -183,7 +188,8 @@ Symbol  description
   ||    or
 </pre></div>
 
-Temporal functions: <br>
+Temporal functions:
+<br>
 <div class="code"><pre>
 
 td(A)                   Returns a list of time intervals of STDS A
@@ -226,12 +232,13 @@ This expression computes the number of maps from space
 time dataset B which are during the time intervals of maps from
 space time dataset A.<br>
 A list of integers (scalars) corresponding to the maps of A
-that contain maps from B will be returned. <br>
-<br>
+that contain maps from B will be returned.
+<p>
 
 Furthermore the temporal algebra allows temporal buffering, shifting
 and snapping with the functions buff_t(), tshift() and tsnap()
 respectively.
+
 <div class="code"><pre>
 buff_t(A, size)         Buffer STDS A with granule ("1 month" or 5)
 tshift(A, size)         Shift STDS A with granule ("1 month" or 5)
@@ -243,6 +250,7 @@ tsnap(A)                Snap time instances and intervals of STDS A
 Select all maps from space time dataset A which have equal time stamps
 with space time dataset B and C and are ealier that Jan. 1. 2005 and
 store them in space time dataset D.
+
 <div class="code"><pre>
 D = if(start_date() < "2005-01-01", A : B : C)
 </pre></div>

@@ -1,30 +1,33 @@
 <h2>DESCRIPTION</h2>
 
-This module works like <a href="t.rast.aggregate.html">t.rast.aggregate</a> but instead
-of defining a fixed granularity for temporal aggregation the time intervals of
-all maps registered in a second space time dataset (can be STRDS, STR3DS or STVDS)
-are used to aggregate the maps of the input space time raster dataset.
+This module works like
+<a href="t.rast.aggregate.html">t.rast.aggregate</a> but instead of 
+defining a fixed granularity for temporal aggregation the time 
+intervals of all maps registered in a second space time dataset (can be 
+STRDS, STR3DS or STVDS) are used to aggregate the maps of the input 
+space time raster dataset.
 
 <h2>EXAMPLE</h2>
 
-In this example we create 7 raster maps that will be registered in a single space time
-raster dataset named <em>precipitation_daily</em> using a daily temporal granularity.
-The names of the raster maps are stored in a text file that is used for raster map registration.
+In this example we create 7 raster maps that will be registered in a 
+single space time raster dataset named <em>precipitation_daily</em> 
+using a daily temporal granularity. The names of the raster maps are 
+stored in a text file that is used for raster map registration.
 <p>
-A space time vector dataset is created out of two vector maps with different
-temporal resolution. The maps are created using v.random. 
-The first map has a granule of 3 days the second a granule of 4 days.  
+A space time vector dataset is created out of two vector maps with 
+different temporal resolution. The maps are created using v.random. The 
+first map has a granule of 3 days the second a granule of 4 days.  
 <p>
-The space time raster dataset <em>precipitation_daily</em> with daily temporal granularity 
-will be aggregated using the space time vector dataset 
-resulting in the output space time raster dataset
-<em>precipitation_agg</em>. The aggregation method is set to <em>sum</em> to accumulate the precipitation values
-of all intervals in the space time vector dataset. The sampling option assures that only raster maps that are 
-temporally during the time intervals of the space time vector dataset are
-considered for computation: 
+The space time raster dataset <em>precipitation_daily</em> with daily 
+temporal granularity will be aggregated using the space time vector 
+dataset resulting in the output space time raster dataset 
+<em>precipitation_agg</em>. The aggregation method is set to 
+<em>sum</em> to accumulate the precipitation values of all intervals in 
+the space time vector dataset. The sampling option assures that only 
+raster maps that are temporally during the time intervals of the space 
+time vector dataset are considered for computation: 
 
 <div class="code"><pre>
-
 MAPS="map_1 map_2 map_3 map_4 map_5 map_6 map_7"
 
 for map in ${MAPS} ; do
