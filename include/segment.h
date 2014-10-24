@@ -37,12 +37,12 @@ typedef struct
     int fast_seek;      	/* toggles fast seek mode */
     int lenbits;        	/* data size bitshift */
     int sizebits;       	/* segment size bitshift */
-    int (*Segment_address)();
-    int (*Segment_seek)();
+    int (*address)();
+    int (*seek)();
     
     char *fname;		/* segment file name */
     int fd;			/* file descriptor to read/write segment */
-    struct Segment_SCB		/* control blocks */
+    struct scb			/* control blocks */
     {
 	char *buf;		/* data buffer */
 	char dirty;		/* dirty flag */

@@ -46,8 +46,8 @@ int Segment_put(SEGMENT * SEG, const void *buf, off_t row, off_t col)
 {
     int index, n, i;
 
-    SEG->Segment_address(SEG, row, col, &n, &index);
-    if ((i = Segment_pagein(SEG, n)) < 0) {
+    SEG->address(SEG, row, col, &n, &index);
+    if ((i = seg_pagein(SEG, n)) < 0) {
 	G_warning("segment lib: put: pagein failed");
 	return -1;
     }
