@@ -138,29 +138,40 @@ The examples are intended for the North Carolina sample dataset.
 
 <h3>Single point mode</h3>
 
-Single point mode (output of horizon angles CCW from East):
+<b>Example 1</b>: determine horizon angle in 225 degree direction (output
+of horizon angles CCW from East):
+
 <div class="code"><pre>
-# determine horizon angle in 225 degree direction:
+g.region rast=elevation -p
 r.horizon elevation=elevation direction=215 step=0 bufferzone=200 \
     coordinate=638871.6,223384.4 maxdistance=5000
+</pre></div>
+<p>
+<b>Example 2</b>: determine horizon values starting at 90 deg (North), 
+step size of 5 deg, saving result as CSV file:
 
-# determine horizon values starting at 90 deg (North), step size of 5 deg:
-# save result in CSV file
+<div class="code"><pre>
 r.horizon elevation=elevation direction=90 step=5 bufferzone=200 \
     coordinate=638871.6,223384.4 maxdistance=5000 output=horizon.csv
+</pre></div>
 
-# test point near high way intersection
+<p>
+<b>Example 3</b>: test point near highway intersection, saving result
+as CSV file for plotting the horizon around the highway intersection:
+
+<div class="code"><pre>
 g.region n=223540 s=220820 w=634650 e=638780 res=10 -p
 r.horizon elevation=elevation direction=0 step=5 bufferzone=200 \
     coordinate=636483.54,222176.25 maxdistance=5000 -d output=horizon.csv
 </pre></div>
 
+<center>
 <img src="rhorizon_shaded_dem_point.png"><br>
 Test point near high way intersection (North Carolina sample dataset)
 <p>
 <img src="rhorizon_singlepoint_plot.png"><br>
 Horizon angles for test point (CCW from East)
-<p>
+</center>
 
 <h3>Raster map mode</h3>
 
@@ -171,14 +182,6 @@ Raster map mode (output maps "horangle*" become input for <em>r.sun</em>):
 r.horizon elevation=elevation step=30 start=90 end=300 \
     bufferzone=200 basename=horangle maxdistance=5000
 </pre></div>
-
-
-<h2>SEE ALSO</h2>
-
-<em>
-<a href="r.sun.html">r.sun</a>,
-<a href="r.sunmask.html">r.sunmask</a>,
-<a href="r.viewshed.html">r.viewshed</a></em>
 
 
 <h2>REFERENCES</h2>
@@ -201,6 +204,13 @@ A New GIS-based Solar Radiation Model and Its Application for
 Photovoltaic Assessments. <a href="http://www.blackwellpublishing.com/toc.asp?ref=1361-1682">Transactions
 in GIS</a>, 8(2), 175-190
 
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.sun.html">r.sun</a>,
+<a href="r.sunmask.html">r.sunmask</a>,
+<a href="r.viewshed.html">r.viewshed</a>
+</em>
 
 <h2>AUTHORS</h2>
 <p>Thomas Huld, Joint Research Centre of
