@@ -3,6 +3,7 @@ from __future__ import (nested_scopes, generators, division, absolute_import,
                         with_statement, print_function, unicode_literals)
 import sys
 from multiprocessing import cpu_count
+from functools import wraps
 
 if sys.version_info[0] == 2:
     from itertools import izip_longest as zip_longest
@@ -19,7 +20,43 @@ from grass.pygrass.modules.interface.parameter import Parameter
 from grass.pygrass.modules.interface.flag import Flag
 from grass.pygrass.modules.interface.typedict import TypeDict
 from grass.pygrass.modules.interface.read import GETFROMTAG, DOC
-from grass.pygrass.messages import Messenger
+from grass.pygrass.messages import get_msgr
+
+
+def mdebug(level, msg='', extra=None):
+    """Debug decorators for class methods.
+
+    :param level: the debug level
+    :type level: int
+    :param msg: Debug message
+    :type msg: str
+    :param extra: Function that return a string
+    :type msg: func
+    """
+    msgr = get_msgr()
+
+    def decorator(method):
+
+        @wraps(method)
+        def wrapper(self, *args, **kargs):
+            sargs = ', ' + ' , '.join([repr(a) for a in args]) if args else ''
+            skargs = (' , '.join(['%s=%r' % (k, v) for k, v in kargs.items()])
+                      if kargs else '')
+            opts = "%s%s%s" % (sargs, ',' if sargs and skargs else '', skargs)
+            dmsg = "%s.%s(self%s): %s %s" % (self.__class__.__name__,
+                                             method.__name__,
+                                             opts, msg,
+                                             extra(self, *args, **kargs)
+                                             if extra else '')
+            msgr.debug(level, dmsg)
+            return method(self, *args, **kargs)
+        return wrapper
+    return decorator
+
+
+def _get_bash(self, *args, **kargs):
+    return self.get_bash()
+
 
 class ParallelModuleQueue(object):
     """This class is designed to run an arbitrary number of pygrass Module
@@ -337,8 +374,6 @@ class Module(object):
     and keyword arguments to the grass module.
     """
     def __init__(self, cmd, *args, **kargs):
-        self._msgr = Messenger()
-        
         if isinstance(cmd, unicode):
             self.name = str(cmd)
         elif isinstance(cmd, str):
@@ -421,7 +456,7 @@ class Module(object):
         if not args and not kargs:
             self.run()
             return self
-        
+
         #
         # check for extra kargs, set attribute and remove from dictionary
         #
@@ -456,11 +491,6 @@ class Module(object):
                 self.flags[key].value = val
             else:
                 raise ParameterError('%s is not a valid parameter.' % key)
-
-        #
-        # print debug message
-        #
-        self._msgr.debug(1, "Module.__call__(): %s" % (self.get_bash()))
 
         #
         # check if execute
@@ -558,7 +588,8 @@ class Module(object):
                 args.append(str(self.flags[flg]))
         return args
 
-    def run(self, node=None):
+    @mdebug(1, extra=_get_bash)
+    def run(self):
         """Run the module
 
         :param node:
