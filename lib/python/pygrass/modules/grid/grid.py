@@ -11,7 +11,7 @@ from grass.script.setup import write_gisrc
 from grass.pygrass.gis import Mapset, Location
 from grass.pygrass.gis.region import Region
 from grass.pygrass.modules import Module
-from grass.pygrass.functions import get_mapset_raster, findmaps
+from grass.pygrass.utils import get_mapset_raster, findmaps
 
 from grass.pygrass.modules.grid.split import split_region_tiles
 from grass.pygrass.modules.grid.patch import rpatch_map

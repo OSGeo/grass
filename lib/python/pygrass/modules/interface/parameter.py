@@ -8,7 +8,7 @@ from __future__ import (nested_scopes, generators, division, absolute_import,
                         with_statement, print_function, unicode_literals)
 import re
 
-from grass.pygrass.functions import docstring_property
+from grass.pygrass.utils import docstring_property
 from grass.pygrass.modules.interface.read import GETTYPE, element2dict, DOC
 
 
