@@ -55,7 +55,7 @@ def _check(value, path, type):
     if value and CHECK_IS[type](join(path, value)):
         return value
     elif value is '':
-        from grass.pygrass.functions import getenv
+        from grass.pygrass.utils import getenv
         return getenv(type)
     else:
         raise GrassError("%s <%s> not found" % (type.title(),

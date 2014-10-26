@@ -22,7 +22,7 @@ libgis.G_gisinit('')
 #
 from grass.pygrass.errors import OpenError, must_be_open
 from grass.pygrass.gis.region import Region
-from grass.pygrass import functions
+from grass.pygrass import utils
 
 #
 # import raster classes
@@ -664,7 +664,7 @@ class RasterNumpy(np.memmap, RasterAbstractBase):
         """
         if not region:
             region = Region()
-        x, y = functions.coor2pixel(point.coords(), region)
+        x, y = utils.coor2pixel(point.coords(), region)
         return self[x][y]
 
 

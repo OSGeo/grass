@@ -25,7 +25,7 @@ except:
 import grass.lib.vector as libvect
 from grass.pygrass.gis import Mapset
 from grass.pygrass.errors import DBError
-from grass.pygrass.functions import table_exist
+from grass.pygrass.utils import table_exist
 from grass.script.db import db_table_in_vector
 from grass.script.core import warning
 
@@ -382,7 +382,7 @@ class Columns(object):
 
         >>> import sqlite3
         >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
-        >>> from grass.pygrass.functions import copy, remove
+        >>> from grass.pygrass.utils import copy, remove
         >>> copy('census','mycensus','vect')
         >>> cols_sqlite = Columns('mycensus',
         ...                       sqlite3.connect(get_path(path)))
@@ -441,7 +441,7 @@ class Columns(object):
 
         >>> import sqlite3
         >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
-        >>> from grass.pygrass.functions import copy, remove
+        >>> from grass.pygrass.utils import copy, remove
         >>> copy('census','mycensus','vect')
         >>> cols_sqlite = Columns('mycensus',
         ...                       sqlite3.connect(get_path(path)))
@@ -495,7 +495,7 @@ class Columns(object):
 
         >>> import sqlite3
         >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
-        >>> from grass.pygrass.functions import copy, remove
+        >>> from grass.pygrass.utils import copy, remove
         >>> copy('census','mycensus','vect')
         >>> cols_sqlite = Columns('mycensus',
         ...                       sqlite3.connect(get_path(path)))
@@ -536,7 +536,7 @@ class Columns(object):
 
         >>> import sqlite3
         >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
-        >>> from grass.pygrass.functions import copy, remove
+        >>> from grass.pygrass.utils import copy, remove
         >>> copy('census','mycensus','vect')
         >>> cols_sqlite = Columns('mycensus',
         ...                       sqlite3.connect(get_path(path)))
