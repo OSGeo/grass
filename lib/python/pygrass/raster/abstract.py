@@ -27,7 +27,7 @@ from grass.pygrass.shell.show import raw_figure
 #
 # import raster classes
 #
-from grass.pygrass.raster.raster_type import TYPE as RTYPE
+from grass.pygrass.raster.raster_type import TYPE as RTYPE, RTYPE_STR
 from grass.pygrass.raster.category import Category
 from grass.pygrass.raster.history import History
 
@@ -50,7 +50,8 @@ class Info(object):
         """Read the information for a raster map. ::
 
             >>> info = Info('elevation')
-            >>> info                                      # doctest: +ELLIPSIS
+            >>> info.read()
+            >>> info
             elevation@
             rows: 1350
             cols: 1500
@@ -58,20 +59,24 @@ class Info(object):
             east:  645000.0 west: 630000.0 ewres:10.0
             range: 56, 156
             proj: 99
-            ...
+            <BLANKLINE>
 
         """
         self.name = name
         self.mapset = mapset
         self.c_region = ctypes.pointer(libgis.Cell_head())
-        self.c_range = ctypes.pointer(libraster.Range())
+        self.c_range = None
 
     def _get_range(self):
-        libraster.Rast_read_range(self.name, self.mapset, self.c_range)
+        if self.mtype == 'CELL':
+            self.c_range = ctypes.pointer(libraster.Range())
+            libraster.Rast_read_range(self.name, self.mapset, self.c_range)
+        else:
+            self.c_range = ctypes.pointer(libraster.FPRange())
+            libraster.Rast_read_fp_range(self.name, self.mapset, self.c_range)
 
     def _get_raster_region(self):
-        if self.name and self.mapset:
-            libraster.Rast_get_cellhd(self.name, self.mapset, self.c_region)
+        libraster.Rast_get_cellhd(self.name, self.mapset, self.c_region)
 
     def read(self):
         self._get_range()
@@ -131,15 +136,41 @@ class Info(object):
 
     @property
     def min(self):
+        if self.c_range is None:
+            return None
         return self.c_range.contents.min
 
     @property
     def max(self):
+        if self.c_range is None:
+            return None
         return self.c_range.contents.max
 
     @property
     def range(self):
+        if self.c_range is None:
+            return None, None
         return self.c_range.contents.min, self.c_range.contents.max
+
+    @property
+    def mtype(self):
+        return RTYPE_STR[libraster.Rast_map_type(self.name, self.mapset)]
+
+    def _get_units(self):
+        return libraster.Rast_read_units(self.name, self.mapset)
+
+    def _set_units(self, units):
+        libraster.Rast_write_units(self.name, units)
+
+    units = property(_get_units, _set_units)
+
+    def _get_vdatum(self):
+        return libraster.Rast_read_vdatum(self.name, self.mapset)
+
+    def _set_vdatum(self, vdatum):
+        libraster.Rast_write_vdatum(self.name, vdatum)
+
+    vdatum = property(_get_vdatum, _set_vdatum)
 
     def __repr__(self):
         return INFO.format(name=self.name, mapset=self.mapset,
@@ -167,6 +198,7 @@ class Info(object):
 class RasterAbstractBase(object):
     """Raster_abstract_base: The base class from which all sub-classes
     inherit. It does not implement any row or map access methods:
+
     * Implements raster metadata information access (Type, ...)
     * Implements an open method that will be overwritten by the sub-classes
     * Implements the close method that might be overwritten by sub-classes
@@ -174,19 +206,19 @@ class RasterAbstractBase(object):
     * Implements get and set region methods
     * Implements color, history and category handling
     * Renaming, deletion, ...
-    """
-    def __init__(self, name, mapset="",
-                 mode='r', mtype='FCELL', overwrite=False):
-        """The constructor need at least the name of the map
-        *optional* field is the `mapset`. ::
 
-            >>> ele = RasterAbstractBase('elevation')
-            >>> ele.name
-            u'elevation'
-            >>> ele.exist()
-            True
-            >>> ele.mapset
-            'PERMANENT'
+    """
+    def __init__(self, name, mapset="", *aopen, **kwopen):
+        """The constructor need at least the name of the map
+        *optional* field is the `mapset`.
+
+        >>> ele = RasterAbstractBase('elevation')
+        >>> ele.name
+        u'elevation'
+        >>> ele.exist()
+        True
+        >>> ele.mapset
+        'PERMANENT'
 
         ..
         """
@@ -206,12 +238,14 @@ class RasterAbstractBase(object):
         self.hist = History(self.name, self.mapset)
         self.cats = Category(self.name, self.mapset)
         self.info = Info(self.name, self.mapset)
-        self.mode = mode
-        self.mtype = mtype
-        self.overwrite = overwrite
+        self._aopen = aopen
+        self._kwopen = kwopen
+        self._mtype = 'CELL'
+        self._mode = 'r'
+        self._overwrite = False
 
     def __enter__(self):
-        self.open()
+        self.open(*self._aopen, **self._kwopen)
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
@@ -319,11 +353,11 @@ class RasterAbstractBase(object):
         """Return True if the map already exist, and
         set the mapset if were not set.
 
-        call the C function `G_find_raster`. ::
+        call the C function `G_find_raster`.
 
-            >>> ele = RasterAbstractBase('elevation')
-            >>> ele.exist()
-            True
+        >>> ele = RasterAbstractBase('elevation')
+        >>> ele.exist()
+        True
         """
         if self.name:
             if self.mapset == '':
@@ -335,11 +369,11 @@ class RasterAbstractBase(object):
             return False
 
     def is_open(self):
-        """Return True if the map is open False otherwise. ::
+        """Return True if the map is open False otherwise.
 
-            >>> ele = RasterAbstractBase('elevation')
-            >>> ele.is_open()
-            False
+        >>> ele = RasterAbstractBase('elevation')
+        >>> ele.is_open()
+        False
 
         """
         return True if self._fd is not None and self._fd >= 0 else False
@@ -364,11 +398,11 @@ class RasterAbstractBase(object):
         return "{name}@{mapset}".format(name=self.name, mapset=self.mapset)
 
     def name_mapset(self, name=None, mapset=None):
-        """Return the full name of the Raster. ::
+        """Return the full name of the Raster.
 
-            >>> ele = RasterAbstractBase('elevation')
-            >>> ele.name_mapset()
-            u'elevation@PERMANENT'
+        >>> ele = RasterAbstractBase('elevation')
+        >>> ele.name_mapset()
+        u'elevation@PERMANENT'
 
         """
         if name is None:
@@ -414,10 +448,7 @@ class RasterAbstractBase(object):
     def get_value(self, point, region=None):
         """This method returns the pixel value of a given pair of coordinates:
 
-        Parameters
-        ------------
-
-        point = pair of coordinates in tuple object
+        :param point: pair of coordinates in tuple object
         """
         if not region:
             region = Region()
@@ -431,8 +462,7 @@ class RasterAbstractBase(object):
     def has_cats(self):
         """Return True if the raster map has categories"""
         if self.exist():
-            self.cats.read(self)
-            self.close()
+            self.cats.read()
             if len(self.cats) != 0:
                 return True
         return False

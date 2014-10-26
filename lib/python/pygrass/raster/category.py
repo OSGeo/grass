@@ -53,19 +53,17 @@ class Category(list):
 
     >>> import grass.lib.raster as libraster
     >>> import ctypes
-    >>> import grass.pygrass as pygrass
-    >>> land = pygrass.raster.RasterRow('geology')
-    >>> cats = pygrass.raster.Category()
-    >>> cats.read(land) # or with cats.read(land.name, land.mapset, land.mtype)
-    >>> cats.labels()
-    ['pond', 'forest', 'developed', 'bare', 'paved road', 'dirt road',
-        'vineyard', 'agriculture', 'wetland', 'bare ground path', 'grass']
-    >>> min_cat = ctypes.c_void_p()
-    >>> max_cat = ctypes.c_void_p()
-    >>> libraster.Rast_get_ith_c_cat(ctypes.byref(cats.cats), 0,
-    ...                              min_cat, max_cat)
+    >>> from grass.pygrass.raster.category import Category
+    >>> cats = Category('landuse')
+    >>> cats.read()
+    >>> cats.labels()                                     # doctest: +ELLIPSIS
+    ['undefined', 'developed', 'agriculture', ..., 'water', 'sediment']
+    >>> cats[0]
+    ('undefined', 0, None)
+    >>> cats[1]
+    ('developed', 1, None)
     """
-    def __init__(self, name, mapset='', mtype=None, *args, **kargs):
+    def __init__(self, name, mapset='', mtype='CELL', *args, **kargs):
         self.name = name
         self.mapset = mapset
         self.c_cats = libraster.Categories()
@@ -299,11 +297,9 @@ class Category(list):
             0.5:1.0:road
             1.0:1.5:urban
 
-        :param filename: the name of file with categories rules
-        :type filename: str
-        :param sep: the separator used to divide values and category
-        :type sep: str
-        ..
+        :param str filename: the name of file with categories rules
+        :param str sep: the separator used to divide values and category
+
         """
         self.reset()
         with open(filename, 'r') as f:
@@ -331,11 +327,8 @@ class Category(list):
             0.5:1.0:road
             1.0:1.5:urban
 
-        :param filename: the name of file with categories rules
-        :type filename: str
-        :param sep: the separator used to divide values and category
-        :type sep: str
-        ..
+        :param str filename: the name of file with categories rules
+        :param str sep: the separator used to divide values and category
         """
         with open(filename, 'w') as f:
             cats = []

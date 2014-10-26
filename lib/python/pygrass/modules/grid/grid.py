@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Thu Mar 28 11:06:00 2013
-
-@author: pietro
-"""
 from __future__ import (nested_scopes, generators, division, absolute_import,
                         with_statement, print_function, unicode_literals)
 import os
@@ -36,7 +31,7 @@ def select(parms, ptype):
     ...              elevation='ele', slope='slp', aspect='asp',
     ...              run_=False)
     >>> for rast in select(slp.outputs, 'raster'):
-    ...     print rast
+    ...     print(rast)
     ...
     slp
     asp
@@ -86,8 +81,8 @@ def copy_mapset(mapset, path):
     [u'PERMANENT', u'user1']
     >>> sorted(os.listdir(os.path.join(path, 'PERMANENT')))
     [u'DEFAULT_WIND', u'PROJ_INFO', u'PROJ_UNITS', u'VAR', u'WIND']
-    >>> sorted(os.listdir(os.path.join(path, 'user1')))
-    [u'CURGROUP', u'SEARCH_PATH', u'VAR', u'WIND']
+    >>> sorted(os.listdir(os.path.join(path, 'user1'))) # doctest: +ELLIPSIS
+    [...u'SEARCH_PATH', u'VAR', u'WIND']
     >>> import shutil
     >>> shutil.rmtree(path)
 
@@ -255,7 +250,7 @@ def copy_rasters(rasters, gisrc_src, gisrc_dst, region=None):
         mpclc(expression="%s=%s" % (name, rast), overwrite=True, env_=env)
         file_dst = "%s.pack" % os.path.join(path_dst, name)
         rpck(input=name, output=file_dst, overwrite=True, env_=env)
-        remove(rast=name, env_=env)
+        remove(flags='f', type='rast', pattern=name, env_=env)
         # change gisdbase to dst
         env['GISRC'] = gisrc_dst
         rupck(input=file_dst, output=rast_clean, overwrite=True, env_=env)
@@ -289,7 +284,7 @@ def copy_vectors(vectors, gisrc_src, gisrc_dst):
         name = nam % vect
         file_dst = "%s.pack" % os.path.join(path_dst, name)
         vpck(input=name, output=file_dst, overwrite=True, env_=env)
-        remove(vect=name, env_=env)
+        remove(flags='f', type='vect', pattern=name, env_=env)
         # change gisdbase to dst
         env['GISRC'] = gisrc_dst
         vupck(input=file_dst, output=vect, overwrite=True, env_=env)
@@ -308,7 +303,7 @@ def get_cmd(cmdd):
     ...              elevation='ele', slope='slp', aspect='asp',
     ...              overwrite=True, run_=False)
     >>> get_cmd(slp.get_dict())  # doctest: +ELLIPSIS
-    ['r.slope.aspect', 'elevation=ele', 'format=degrees', ..., '--o']
+    ['r.slope.aspect', u'elevation=ele', u'format=degrees', ..., u'--o']
     """
     cmd = [cmdd['name'], ]
     cmd.extend(("%s=%s" % (k, v) for k, v in cmdd['inputs']
@@ -391,7 +386,7 @@ class GridModule(object):
     :param run_: if False only instantiate the object
     :type run_: bool
     :param args: give all the parameters to the command
-    :param kargs: give all the parameters to the command 
+    :param kargs: give all the parameters to the command
 
     >>> grd = GridModule('r.slope.aspect',
     ...                  width=500, height=500, overlap=2,
@@ -540,7 +535,7 @@ class GridModule(object):
             result = pool.map_async(cmd_exe, self.get_works())
             result.wait()
             if not result.successful():
-                raise RuntimeError
+                raise RuntimeError(_("Execution of subprocesses was not successful"))
 
         if patch:
             if self.move:
@@ -603,4 +598,4 @@ class GridModule(object):
         if self.inlist:
             grm = Module('g.remove')
             for key in self.inlist:
-                grm(rast=self.inlist[key])
+                grm(flags='f', type='rast', pattern=self.inlist[key])

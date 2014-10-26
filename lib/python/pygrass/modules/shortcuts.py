@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Tue Apr  2 18:49:11 2013
-
-@author: pietro
-"""
 from __future__ import (nested_scopes, generators, division, absolute_import,
                         with_statement, print_function, unicode_literals)
 import fnmatch
@@ -20,16 +15,17 @@ class MetaModule(object):
     """Example how to use MetaModule
 
        >>> g = MetaModule('g')
-       >>> g_mlist = g.mlist
-       >>> g_mlist.name
-       'g.mlist'
-       >>> g_mlist.required
+       >>> g_list = g.list
+       >>> g_list.name
+       'g.list'
+       >>> g_list.required
        ['type']
-       >>> g_mlist.inputs.type = 'rast'
-       >>> g_mlist.stdout_ = -1
-       >>> g_mlist.run()
-       >>> g_mlist.outputs.stdout                         # doctest: +ELLIPSIS
-       'basins...soils...'
+       >>> g_list.inputs.type = 'rast'
+       >>> g_list.stdout_ = -1
+       >>> g_list.run()
+       Module('g.list')
+       >>> g_list.outputs.stdout                         # doctest: +ELLIPSIS
+       '...basins...soils...'
        >>> r = MetaModule('r')
        >>> what = r.what
        >>> what.description

@@ -17,6 +17,7 @@ import sys
 from multiprocessing import Process, Lock, Pipe
 
 import grass.lib.gis as libgis
+
 from grass.exceptions import FatalError
 
 
@@ -76,6 +77,10 @@ def message_server(lock, conn):
             sys.exit()
 
         message = data[1]
+        # libgis limitation
+        if isinstance(message,  type(" ")):
+            if len(message) >= 2000:
+                message = message[:1999]
 
         if message_type == "PERCENT":
             n = int(data[1])
@@ -130,12 +135,6 @@ class Messenger(object):
        >>> msgr.percent(1, 1, 1)
        >>> msgr.warning("Ohh")
        >>> msgr.error("Ohh no")
-       D0/0: debug 0
-       message
-       important message
-        100%
-       WARNING: Ohh
-       ERROR: Ohh no
 
        >>> msgr = Messenger()
        >>> msgr.fatal("Ohh no no no!")
@@ -174,9 +173,6 @@ class Messenger(object):
         self.server = None
         self.raise_on_error = raise_on_error
         self.start_server()
-
-    def __del__(self):
-        self.stop()
 
     def start_server(self):
         """Start the messenger server and open the pipe

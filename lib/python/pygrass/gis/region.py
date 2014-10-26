@@ -15,11 +15,11 @@ from grass.pygrass.shell.conversion import dict2html
 
 
 class Region(object):
-    """
-    ::
+    """This class is design to easily access and modify GRASS computational
+    region. ::
 
         >>> default = Region(default=True)
-        >>> current_good = Region()
+        >>> current_original = Region()
         >>> current = Region()
         >>> current.align('elevation')
         >>> default == current
@@ -41,7 +41,7 @@ class Region(object):
         >>> default = Region(default=True)
         >>> default == current
         True
-        >>> current_good.set_current()
+        >>> current_original.set_current()
 
     ..
     """
@@ -225,6 +225,17 @@ class Region(object):
         return self.__unicode__()
 
     def __eq__(self, reg):
+        """Compare two region.
+
+        >>> r0 = Region()
+        >>> r1 = Region()
+        >>> r2 = Region()
+        >>> r2.nsres = 5
+        >>> r0 == r1
+        True
+        >>> r1 == r2
+        False
+        """
         attrs = ['north', 'south', 'west', 'east', 'top', 'bottom',
                  'nsres', 'ewres', 'tbres']
         for attr in attrs:
@@ -232,12 +243,34 @@ class Region(object):
                 return False
         return True
 
+    def __ne__(self, other):
+        return not self == other
+
+    # Restore Python 2 hashing beaviour on Python 3
+    __hash__ = object.__hash__
+
     def keys(self):
+        """Return a list of valid keys. ::
+
+            >>> reg = Region()
+            >>> reg.keys()                               # doctest: +ELLIPSIS
+            [u'proj', u'zone', ..., u'cols', u'cells']
+
+        ..
+        """
         return ['proj', 'zone', 'north', 'south', 'west', 'east',
                 'top', 'bottom', 'nsres', 'ewres', 'tbres', 'rows',
                 'cols', 'cells']
 
     def items(self):
+        """Return a list of tuple with key and value. ::
+
+            >>> reg = Region()
+            >>> reg.items()                              # doctest: +ELLIPSIS
+            [(u'proj', 99), ..., (u'cells', 2025000)]
+
+        ..
+        """
         return [(k, self.__getattribute__(k)) for k in self.keys()]
 
     #----------METHODS----------
@@ -274,19 +307,18 @@ class Region(object):
 
         ::
 
-        >>> reg = Region()
-        >>> reg.vect('census')
-        >>> reg.get_bbox()
-        Bbox(230963.640878, 212125.562878, 645837.437393, 628769.374393)
-        >>> reg.get_default()
+            >>> reg = Region()
+            >>> reg.vect('census')
+            >>> reg.get_bbox()
+            Bbox(230963.640878, 212125.562878, 645837.437393, 628769.374393)
+            >>> reg.get_default()
 
         ..
         """
         from grass.pygrass.vector import VectorTopo
-        vect = VectorTopo(vector_name)
-        vect.open()
-        bbox = vect.bbox()
-        self.set_bbox(bbox)
+        with VectorTopo(vector_name, mode='r') as vect:
+            bbox = vect.bbox()
+            self.set_bbox(bbox)
 
     def get_current(self):
         """Set the current GRASS region to the Region object"""
@@ -313,11 +345,11 @@ class Region(object):
             raise GrassError("Cannot change region (DEFAUL_WIND file).")
 
     def get_bbox(self):
-        """Return a Bbox object with the extension of the region ::
+        """Return a Bbox object with the extension of the region. ::
 
-        >>> reg = Region()
-        >>> reg.get_bbox()
-        Bbox(228500.0, 215000.0, 645000.0, 630000.0)
+            >>> reg = Region()
+            >>> reg.get_bbox()
+            Bbox(228500.0, 215000.0, 645000.0, 630000.0)
 
         ..
         """
@@ -334,13 +366,13 @@ class Region(object):
 
         ::
 
-        >>> from grass.pygrass.vector.basic import Bbox
-        >>> b = Bbox(230963.640878, 212125.562878, 645837.437393, 628769.374393)
-        >>> reg = Region()
-        >>> reg.set_bbox(b)
-        >>> reg.get_bbox()
-        Bbox(230963.640878, 212125.562878, 645837.437393, 628769.374393)
-        >>> reg.get_current()
+            >>> from grass.pygrass.vector.basic import Bbox
+            >>> b = Bbox(230963.640878, 212125.562878, 645837.437393, 628769.374393)
+            >>> reg = Region()
+            >>> reg.set_bbox(b)
+            >>> reg.get_bbox()
+            Bbox(230963.640878, 212125.562878, 645837.437393, 628769.374393)
+            >>> reg.get_current()
 
         ..
         """

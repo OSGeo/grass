@@ -4,8 +4,9 @@ Created on Wed Jun 18 17:21:42 2014
 
 @author: pietro
 """
-import unittest
 import numpy as np
+
+from grass.gunittest import TestCase, test
 
 from grass.script.core import run_command
 
@@ -26,7 +27,7 @@ def generate_coordinates(number, bbox=None, with_z=False):
     return x, y
 
 
-class VectorTopo3DTestCase(unittest.TestCase):
+class VectorTopo3DTestCase(TestCase):
 
     npoints = 10
     tmpname = "tmp_vect3d"
@@ -60,8 +61,8 @@ class VectorTopo3DTestCase(unittest.TestCase):
         """Remove the generated vector map, if exist"""
         mset = get_mapset_vector(cls.tmpname, mapset='')
         if mset:
-            run_command("g.remove", vect="%s@%s" % (cls.tmpname, mset))
+            run_command("g.remove", flags='f', type='vect', pattern=cls.tmpname)
 
 
 if __name__ == '__main__':
-    unittest.main()
+    test()

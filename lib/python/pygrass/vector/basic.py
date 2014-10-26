@@ -14,27 +14,27 @@ from grass.pygrass.shell.conversion import dict2html
 class Bbox(object):
     """Instantiate a Bounding Box class that contains
     a ctypes pointer to the C struct bound_box, that could be used
-    by C GRASS functions. ::
+    by C GRASS functions.
 
-        >>> bbox = Bbox()
-        >>> bbox
-        Bbox(0.0, 0.0, 0.0, 0.0)
+    >>> bbox = Bbox()
+    >>> bbox
+    Bbox(0.0, 0.0, 0.0, 0.0)
 
     The default parameters are 0. It is possible to set or change
-    the parameters later, with: ::
+    the parameters later, with:
 
-        >>> bbox.north = 10
-        >>> bbox.south = -10
-        >>> bbox.east = -20
-        >>> bbox.west = 20
-        >>> bbox
-        Bbox(10.0, -10.0, -20.0, 20.0)
+    >>> bbox.north = 10
+    >>> bbox.south = -10
+    >>> bbox.east = -20
+    >>> bbox.west = 20
+    >>> bbox
+    Bbox(10.0, -10.0, -20.0, 20.0)
 
-    Or directly istantiate the class with the values, with: ::
+    Or directly istantiate the class with the values, with:
 
-        >>> bbox = Bbox(north=100, south=0, east=0, west=100)
-        >>> bbox
-        Bbox(100.0, 0.0, 0.0, 100.0)
+    >>> bbox = Bbox(north=100, south=0, east=0, west=100)
+    >>> bbox
+    Bbox(100.0, 0.0, 0.0, 100.0)
 
     ..
     """
@@ -351,7 +351,7 @@ class Ilist(object):
         with a list of integers
 
         :param ilist: the ilist to append
-        :type ilist: a Ilist object        
+        :type ilist: a Ilist object
         """
         if isinstance(ilist, Ilist):
             libvect.Vect_list_append_list(self.c_ilist, ilist.ilist)
@@ -378,35 +378,34 @@ class Ilist(object):
 
 class Cats(object):
     """Instantiate a Category class that contains a ctypes pointer
-    to the C line_cats struct. ::
+    to the C line_cats struct.
 
-        >>> cats = Cats()
-        >>> for cat in xrange(100, 110): cats.set(cat, layer=cat-50)
-        >>> cats.n_cats
-        10
-        >>> cats.cat
-        [100, 101, 102, 103, 104, 105, 106, 107, 108, 109]
-        >>> cats.layer
-        [50, 51, 52, 53, 54, 55, 56, 57, 58, 59]
-        >>> cats.get()  # default layer is 1
-        (-1, 0)
-        >>> cats.get(50)
-        (100, 1)
-        >>> cats.get(51)
-        (101, 1)
-        >>> cats.set(1001, 52)
-        >>> cats.cat
-        [100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 1001]
-        >>> cats.layer
-        [50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 52]
-        >>> cats.get(52)
-        (102, 2)
-        >>> cats.reset()
-        >>> cats.layer
-        []
-        >>> cats.cat
-        []
-
+    >>> cats = Cats()
+    >>> for cat in xrange(100, 110): cats.set(cat, layer=cat-50)
+    >>> cats.n_cats
+    10
+    >>> cats.cat
+    [100, 101, 102, 103, 104, 105, 106, 107, 108, 109]
+    >>> cats.layer
+    [50, 51, 52, 53, 54, 55, 56, 57, 58, 59]
+    >>> cats.get()  # default layer is 1
+    (-1, 0)
+    >>> cats.get(50)
+    (100, 1)
+    >>> cats.get(51)
+    (101, 1)
+    >>> cats.set(1001, 52)
+    >>> cats.cat
+    [100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 1001]
+    >>> cats.layer
+    [50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 52]
+    >>> cats.get(52)
+    (102, 2)
+    >>> cats.reset()
+    >>> cats.layer
+    []
+    >>> cats.cat
+    []
 
     """
     @property
@@ -497,25 +496,25 @@ class Cats(object):
 
 
 class CatsList(object):
-    """::
+    """
 
-        >>> cats_list = CatsList()
-        >>> cats_list.min
-        []
-        >>> cats_list.max
-        []
-        >>> cats_list.n_ranges
-        0
-        >>> cats_list.layer
-        0
-        >>> string = "2,3,5-9,20"
-        >>> cats_list.from_string(string)
-        >>> cats_list.min
-        [2, 3, 5, 20]
-        >>> cats_list.max
-        [2, 3, 9, 20]
-        >>> cats_list.n_ranges
-        4
+    >>> cats_list = CatsList()
+    >>> cats_list.min
+    []
+    >>> cats_list.max
+    []
+    >>> cats_list.n_ranges
+    0
+    >>> cats_list.layer
+    0
+    >>> string = "2,3,5-9,20"
+    >>> cats_list.from_string(string)
+    >>> cats_list.min
+    [2, 3, 5, 20]
+    >>> cats_list.max
+    [2, 3, 9, 20]
+    >>> cats_list.n_ranges
+    4
 
     """
     @property
