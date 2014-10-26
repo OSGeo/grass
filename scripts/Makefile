@@ -3,6 +3,7 @@ MODULE_TOPDIR = ..
 SUBDIRS = \
 	d.correlate \
 	d.out.file \
+	d.to.rast \
 	d.polar \
 	d.rast.edit \
 	d.rast.leg \
