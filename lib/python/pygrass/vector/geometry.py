@@ -176,7 +176,7 @@ class Attrs(object):
         """Set value of a given column of a table attribute.
 
         >>> from grass.pygrass.vector import VectorTopo
-        >>> from grass.pygrass.functions import copy, remove
+        >>> from grass.pygrass.utils import copy, remove
         >>> copy('schools', 'myschools', 'vect')
         >>> schools = VectorTopo('myschools')
         >>> schools.open('r')
