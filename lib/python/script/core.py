@@ -34,6 +34,8 @@ import codecs
 
 from utils import KeyValue, parse_key_val, basename, encode
 
+from grass.exceptions import ScriptError
+
 # i18N
 import gettext
 gettext.install('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale'))
@@ -67,13 +69,6 @@ class Popen(subprocess.Popen):
 PIPE = subprocess.PIPE
 STDOUT = subprocess.STDOUT
 
-
-class ScriptError(Exception):
-    def __init__(self, msg):
-        self.value = msg
-
-    def __str__(self):
-        return self.value
 
 raise_on_error = False  # raise exception instead of calling fatal()
 
@@ -873,9 +868,25 @@ def compare_key_value_text_files(filename_a, filename_b, sep=":",
                 return False
     return True
 
+
+def diff_files(filename_a, filename_b):
+    """!Diffs two text files and returns difference.
+
+    @param filename_a first file path
+    @param filename_b second file path
+
+    @return list of strings
+    """
+    import difflib
+    differ = difflib.Differ()
+    fh_a = open(filename_a, 'r')
+    fh_b = open(filename_b, 'r')
+    result = list(differ.compare(fh_a.readlines(),
+                                 fh_b.readlines()))
+    return result
+
+
 # interface to g.gisenv
-
-
 def gisenv():
     """!Returns the output from running g.gisenv (with no arguments), as a
     dictionary. Example:

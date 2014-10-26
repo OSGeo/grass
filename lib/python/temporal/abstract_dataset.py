@@ -22,15 +22,7 @@ from metadata import *
 from temporal_topology_dataset_connector import *
 from spatial_topology_dataset_connector import *
 
-
-class ImplementationError(Exception):
-    """!Exception raised for the calling of methods that should be implemented in
-       sub classes.
-    """
-    def __init__(self, msg):
-        self.msg = msg
-    def __str__(self):
-        return repr(self.msg)
+from grass.exceptions import ImplementationError
 
 ###############################################################################
 

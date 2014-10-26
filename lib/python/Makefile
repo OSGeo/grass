@@ -5,7 +5,7 @@ include $(MODULE_TOPDIR)/include/Make/Python.make
 
 PYDIR = $(ETC)/python/grass
 
-SUBDIRS = script ctypes temporal pygrass pydispatch imaging
+SUBDIRS = exceptions script ctypes temporal pygrass pydispatch imaging
 
 default: $(PYDIR)/__init__.py
 	$(MAKE) subdirs
