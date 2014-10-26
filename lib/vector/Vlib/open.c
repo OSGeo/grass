@@ -765,7 +765,7 @@ int open_new(struct Map_info *Map, const char *name, int with_z, int is_tmp)
     /* check for fully-qualified map name */
     if (G_name_is_fully_qualified(name, xname, xmapset)) {
         if (strcmp(xmapset, G_mapset()) != 0) {
-            G_warning(_("Unable to create new vector map: <%s> is not the current mapset (%s)"),
+            G_warning(_("Unable to create vector map: <%s> is not in the current mapset (%s)"),
                       name, G_mapset());
             return -1;
         }
@@ -774,7 +774,7 @@ int open_new(struct Map_info *Map, const char *name, int with_z, int is_tmp)
 
     /* check for [A-Za-z][A-Za-z0-9_]* in name */
     if (Vect_legal_filename(name) < 0) {
-        G_fatal_error(_("Unable to create vector map <%s>. Name is not SQL compliant."),
+        G_fatal_error(_("Unable to create vector map: <%s> is not SQL compliant"),
                       name);
         return -1;
     }
