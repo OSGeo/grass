@@ -18,14 +18,14 @@
 /*!
    \brief  Check if output is legal vector name.
 
-   Rule:  [A-Za-z][A-Za-z0-9_@]*
+   Rule:  [A-Za-z][A-Za-z0-9_]*
 
    Check also for SQL keywords.
 
    \param s filename to be checked
 
    \return 1 OK
-   \return -1 if name does not start with letter A..Za..z or if name does not continue with A..Za..z0..9_@
+   \return -1 if name does not start with letter A..Za..z or if name does not continue with A..Za..z0..9_
  */
 
 int Vect_legal_filename(const char *s)
@@ -54,7 +54,7 @@ int Vect_legal_filename(const char *s)
 
     for (s++; *s; s++)
 	if (!((*s >= 'A' && *s <= 'Z') || (*s >= 'a' && *s <= 'z') ||
-	      (*s >= '0' && *s <= '9') || *s == '_') || *s == '@') {
+	      (*s >= '0' && *s <= '9') || *s == '_')) {
 	    G_warning(_("Illegal vector map name <%s>. Character '%c' not allowed."),
 		      buf, *s);
 	    return -1;
@@ -90,15 +90,35 @@ int Vect_check_input_output_name(const char *input, const char *output,
 				 int error)
 {
     const char *mapset;
-    char nm[GNAME_MAX], ms[GMAPSET_MAX];
+    char inm[GNAME_MAX], ims[GMAPSET_MAX];
+    char onm[GNAME_MAX], oms[GMAPSET_MAX];
+
+    /* check for fully-qualified map name */
+    if (G_name_is_fully_qualified(output, onm, oms)) {
+        if (strcmp(oms, G_mapset()) != 0) {
+	    if (error == G_FATAL_EXIT) {
+		G_fatal_error(_("Output vector map name <%s> is not in the current mapset (%s)"),
+			      output, G_mapset());
+	    }
+	    else if (error == G_FATAL_PRINT) {
+		G_warning(_("Output vector map name <%s> is not in the current mapset (%s)"),
+			  output, G_mapset());
+		return 1;
+	    }
+	    else {			/* GV_FATAL_RETURN */
+		return 1;
+	    }
+        }
+        output = onm;
+    }
 
     if (Vect_legal_filename(output) == -1) {
 	if (error == G_FATAL_EXIT) {
-	    G_fatal_error(_("Output vector map name <%s> is not valid map name"),
+	    G_fatal_error(_("Output vector map name <%s> is not SQL compliant"),
 			  output);
 	}
 	else if (error == G_FATAL_PRINT) {
-	    G_warning(_("Output vector map name <%s> is not valid map name"),
+	    G_warning(_("Output vector map name <%s> is not SQL compliant"),
 		      output);
 	    return 1;
 	}
@@ -107,11 +127,11 @@ int Vect_check_input_output_name(const char *input, const char *output,
 	}
     }
 
-    if (G_name_is_fully_qualified(input, nm, ms)) {
-	if (strcasecmp(ms, "ogr") != 0)
+    if (G_name_is_fully_qualified(input, inm, ims)) {
+	if (strcasecmp(ims, "ogr") != 0)
 	    mapset = G_find_vector2(input, "");
 	else
-	    mapset = ms;
+	    mapset = ims;
     }
     else
 	mapset = G_find_vector2(input, "");
@@ -130,16 +150,11 @@ int Vect_check_input_output_name(const char *input, const char *output,
     }
 
     if (strcmp(mapset, G_mapset()) == 0) {
-	const char *in;
-
-	if (G_name_is_fully_qualified(input, nm, ms)) {
-	    in = nm;
-	}
-	else {
-	    in = input;
+	if (G_name_is_fully_qualified(input, inm, ims)) {
+	    input = inm;
 	}
 
-	if (strcmp(in, output) == 0) {
+	if (strcmp(input, output) == 0) {
 	    if (error == G_FATAL_EXIT) {
 		G_fatal_error(_("Output vector map <%s> is used as input"),
 			      output);
