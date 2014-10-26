@@ -212,7 +212,7 @@ class Vector(Info):
         False
 
         >>> cens.close()
-        >>> from grass.pygrass.functions import copy, remove
+        >>> from grass.pygrass.utils import copy, remove
         >>> copy('census','mycensus','vect')
         >>> from grass.pygrass.modules.shortcuts import vector as v
         >>> v.colors(map='mycensus', color='population', column='TOTAL_POP')

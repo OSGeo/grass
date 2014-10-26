@@ -18,7 +18,7 @@ import grass.lib.raster as libraster
 #
 # import pygrass modules
 #
-from grass.pygrass import functions
+from grass.pygrass import utils
 from grass.pygrass.gis.region import Region
 from grass.pygrass.errors import must_be_open
 from grass.pygrass.shell.conversion import dict2html
@@ -294,7 +294,7 @@ class RasterAbstractBase(object):
 
     def _set_name(self, newname):
         """Private method to change the Raster name"""
-        if not functions.is_clean_name(newname):
+        if not utils.is_clean_name(newname):
             str_err = _("Map name {0} not valid")
             raise ValueError(str_err.format(newname))
         if self.exist():
@@ -347,7 +347,7 @@ class RasterAbstractBase(object):
         return (self.__getitem__(irow) for irow in range(self._rows))
 
     def _repr_png_(self):
-        return raw_figure(functions.r_export(self))
+        return raw_figure(utils.r_export(self))
 
     def exist(self):
         """Return True if the map already exist, and
@@ -361,10 +361,10 @@ class RasterAbstractBase(object):
         """
         if self.name:
             if self.mapset == '':
-                mapset = functions.get_mapset_raster(self.name, self.mapset)
+                mapset = utils.get_mapset_raster(self.name, self.mapset)
                 self.mapset = mapset if mapset else ''
                 return True if mapset else False
-            return bool(functions.get_mapset_raster(self.name, self.mapset))
+            return bool(utils.get_mapset_raster(self.name, self.mapset))
         else:
             return False
 
@@ -391,7 +391,7 @@ class RasterAbstractBase(object):
         """Remove the map"""
         if self.is_open():
             self.close()
-        functions.remove(self.name, 'rast')
+        utils.remove(self.name, 'rast')
 
     def fullname(self):
         """Return the full name of a raster map: name@mapset"""
@@ -421,7 +421,7 @@ class RasterAbstractBase(object):
     def rename(self, newname):
         """Rename the map"""
         if self.exist():
-            functions.rename(self.name, newname, 'rast')
+            utils.rename(self.name, newname, 'rast')
         self._name = newname
 
     def set_from_rast(self, rastname='', mapset=''):
@@ -452,7 +452,7 @@ class RasterAbstractBase(object):
         """
         if not region:
             region = Region()
-        row, col = functions.coor2pixel(point.coords(), region)
+        row, col = utils.coor2pixel(point.coords(), region)
         if col < 0 or col > region.cols or row < 0 or row > region.rows:
             return None
         line = self.get_row(int(row))
