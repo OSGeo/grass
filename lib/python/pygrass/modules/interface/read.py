@@ -8,34 +8,44 @@ from __future__ import (nested_scopes, generators, division, absolute_import,
                         with_statement, print_function, unicode_literals)
 
 
+def do_nothing(p):
+    return p
+
+
+def get_None(p):
+    return None
+
+
+def get_dict(p):
+    return dict(p.items())
+
+
+def get_values(p):
+    return [e.text.strip() for e in p.findall('value/name')]
+
+
+def read_text(p):
+    return p.text.strip()
+
+
 def read_keydesc(par):
     name = par.text.strip()
     items = [e.text.strip() for e in par.findall('item')]
-    #import ipdb; ipdb.set_trace()
     return name, tuple(items) if len(items) > 1 else None
 
 
-#
-# this dictionary is used to extract the value of interest from the xml
-# the lambda experssion is used to define small simple functions,
-# is equivalent to: ::
-#
-# def f(p):
-#     return p.text.strip()
-#
-# and then we call f(p)
-#
 GETFROMTAG = {
-    'description': lambda p: p.text.strip(),
+    'description': read_text,
     'keydesc': read_keydesc,
-    'gisprompt': lambda p: dict(p.items()),
-    'default': lambda p: p.text.strip(),
-    'values': lambda p: [e.text.strip() for e in p.findall('value/name')],
-    'value': lambda p: None,
-    'guisection': lambda p: p.text.strip(),
-    'label': lambda p: p.text.strip(),
-    'suppress_required': lambda p: None,
-    'keywords': lambda p: p.text.strip(),
+    'gisprompt': get_dict,
+    'default': read_text,
+    'values': get_values,
+    'value': get_None,
+    'guisection': read_text,
+    'label': read_text,
+    'suppress_required': get_None,
+    'keywords': read_text,
+    'guidependency': read_text,
 }
 
 GETTYPE = {
@@ -44,7 +54,7 @@ GETTYPE = {
     'float': float,
     'double': float,
     'file': str,
-    'all': lambda x: x,
+    'all': do_nothing,
 }
 
 

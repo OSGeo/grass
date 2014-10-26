@@ -8,12 +8,15 @@ import sys
 import unittest
 import numpy as np
 
+from grass.gunittest import TestCase, test
+
 import grass.lib.vector as libvect
 
-from grass.pygrass.vector.geometry import Point, Line
+from grass.pygrass.vector import VectorTopo
+from grass.pygrass.vector.geometry import Point, Line, Node
 
 
-class PointTestCase(unittest.TestCase):
+class PointTestCase(TestCase):
 
     def test_empty_init(self):
         """Test Point()"""
@@ -83,7 +86,7 @@ class PointTestCase(unittest.TestCase):
         pass
 
 
-class LineTestCase(unittest.TestCase):
+class LineTestCase(TestCase):
 
     def test_len(self):
         """Test __len__ magic method"""
@@ -122,9 +125,68 @@ class LineTestCase(unittest.TestCase):
         self.assertTupleEqual(line.get_pnt(1).coords(), vals)
 
     def test_bbox(self):
-        line = Line([(0, 0), (0, 1), (2, 1), (2, 0)])
+        """Test bbox method"""
+        line = Line([(0, 10), (0, 11), (1, 11), (1, 10)])
         bbox = line.bbox()
+        self.assertEqual(11, bbox.north)
+        self.assertEqual(10, bbox.south)
+        self.assertEqual(1, bbox.east)
+        self.assertEqual(0, bbox.west)
 
+    def test_nodes(self):
+        """Test inodes method"""
+        def nodes2tuple(nodes):
+            """Convert an iterable of nodes to a tuple of nodes id"""
+            return tuple(n.id for n in nodes)
+
+        with VectorTopo("roadsmajor", mode='r') as vect:
+            self.assertTupleEqual((206, 172), nodes2tuple(vect[284].nodes()))
+            self.assertTupleEqual((208, 206), nodes2tuple(vect[287].nodes()))
+            self.assertTupleEqual((206, 209), nodes2tuple(vect[288].nodes()))
+            self.assertTupleEqual((218, 206), nodes2tuple(vect[301].nodes()))
+
+
+
+class NodeTestCase(TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.vect = None
+        cls.vect = VectorTopo("roadsmajor")
+        cls.vect.open('r')
+        cls.c_mapinfo = cls.vect.c_mapinfo
+
+    @classmethod
+    def tearDownClass(cls):
+        if cls.vect is not None:
+            cls.vect.close()
+            cls.c_mapinfo = None
+
+    def test_init(self):
+        """Test Node __init__"""
+        node = Node(v_id=206, c_mapinfo=self.c_mapinfo)
+        self.assertEqual(206, node.id)
+        self.assertTrue(node.is2D)
+        self.assertEqual(4, node.nlines)
+
+    def test_coords(self):
+        """Test Node coordinates"""
+        node = Node(v_id=206, c_mapinfo=self.c_mapinfo)
+        self.assertTupleEqual((620906.5786131569, 221685.65913128198),
+                              node.coords())
+
+    def test_ilines(self):
+        """Test Node coordinates"""
+        node = Node(v_id=206, c_mapinfo=self.c_mapinfo)
+        self.assertTupleEqual((288, -301, -287, 284), tuple(node.ilines()))
+        self.assertTupleEqual((-301, -287), tuple(node.ilines(only_in=True)))
+        self.assertTupleEqual((288, 284), tuple(node.ilines(only_out=True)))
+
+    def test_angles(self):
+        """Test Node angles"""
+        node = Node(v_id=206, c_mapinfo=self.c_mapinfo)
+        angles = (-3.044905185699463, -1.026218056678772,
+                  0.10362745821475983, 2.2236430644989014)
+        self.assertTupleEqual(angles, tuple(node.angles()))
 
 if __name__ == '__main__':
-    unittest.main()
+    test()
