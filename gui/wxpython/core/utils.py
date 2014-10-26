@@ -1002,6 +1002,7 @@ command2ltype = {'d.rast'         : 'raster',
                  'd.colortable'   : 'colortable',
                  'd.graph'        : 'graph',
                  'd.out.file'     : 'export',
+                 'd.to.rast'      : 'torast',
                  'd.text'         : 'text'
                  }
 ltype2command = {}

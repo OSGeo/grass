@@ -35,7 +35,7 @@ from core.render        import Map
 from vdigit.toolbars    import VDigitToolbar
 from mapdisp.toolbars   import MapToolbar, NvizIcons
 from mapdisp.gprint     import PrintOptions
-from core.gcmd          import GError, GMessage
+from core.gcmd          import GError, GMessage, RunCommand
 from dbmgr.dialogs      import DisplayAttributesDialog
 from core.utils         import ListOfCatsToRange, GetLayerNameFromCmd, _
 from gui_core.dialogs import GetImageHandlers, ImageSizeDialog
@@ -648,6 +648,76 @@ class MapFrame(SingleMapFrame):
             return
 
         self.DOutFile(dcmd)
+
+    def DToRast(self, command):
+        """Saves currently loaded composition of layers as a raster map.
+        """
+        if self.IsPaneShown('3d'):
+            self._giface.WriteError(_('d.to.rast can be used only in 2D mode.'))
+            return
+        outputRaster = None
+        overwrite = False
+        for param in command[1:]:
+            try:
+                p, val = param.split('=')
+                if p == 'output':
+                    outputRaster = val
+            except ValueError:
+                if param.startswith('--overwrite'):
+                    overwrite = True
+
+        if not outputRaster:
+            return
+        # output file as PNG
+        tmpName = 'd_to_rast_tmp'
+        pngFile = grass.tempfile(create=False) + '.png'
+        dOutFileCmd = ['d.out.file', 'output=' + pngFile, 'format=png']
+        self.DOutFile(dOutFileCmd)
+        # import back as red, green, blue rasters
+        returncode, messages = RunCommand('r.in.png', input=pngFile, output=tmpName,
+                                          quiet=True, overwrite=overwrite, getErrorMsg=True)
+        if not returncode == 0:
+            self._giface.WriteError(_('Failed to run d.to.rast:\n') + messages)
+            return
+        # set region for composite
+        grass.use_temp_region()
+        returncode, messages = RunCommand('g.region', rast=tmpName + '.r',
+                                          quiet=True, getErrorMsg=True)
+        if not returncode == 0:
+            grass.del_temp_region()
+            self._giface.WriteError(_('Failed to run d.to.rast:\n') + messages)
+            return
+        # composite
+        returncode, messages = RunCommand('r.composite', red=tmpName + '.r',
+                                          green=tmpName + '.g', blue=tmpName + '.b',
+                                          output=outputRaster, quiet=True,
+                                          overwrite=overwrite, getErrorMsg=True)
+        grass.del_temp_region()
+        RunCommand('g.remove', type='rast', flags='f', quiet=True,
+                   names=[tmpName + '.r', tmpName + '.g', tmpName + '.b'])
+        if not returncode == 0:
+            self._giface.WriteError(_('Failed to run d.to.rast:\n') + messages)
+            grass.try_remove(pngFile)
+            return
+
+        # alignExtent changes only region variable
+        oldRegion = self.GetMap().GetCurrentRegion().copy()
+        self.GetMap().AlignExtentFromDisplay()
+        region = self.GetMap().GetCurrentRegion().copy()
+        self.GetMap().region.update(oldRegion)
+        RunCommand('r.region', map=outputRaster, n=region['n'], s=region['s'],
+                   e=region['e'], w=region['w'], quiet=True)
+
+        grass.try_remove(pngFile)
+
+    def DToRastOptData(self, dcmd, layer, params, propwin):
+        """Dummy function which is called when d.to.rast is called
+        and returns parsed and validated command which is then passed
+        to DToRast method."""
+        if not dcmd:
+            return
+
+        self.DToRast(dcmd)
 
     def _prepareSaveToFile(self):
         """!Get wildcards and format extensions."""
