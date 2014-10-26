@@ -9,7 +9,7 @@ import datetime
 import grass.lib.vector as libvect
 from grass.pygrass.vector.vector_type import MAPTYPE
 
-from grass.pygrass import functions
+from grass.pygrass import utils
 from grass.pygrass.errors import GrassError, OpenError, must_be_open
 from grass.pygrass.vector.table import DBlinks, Link
 from grass.pygrass.vector.find import PointFinder, BboxFinder, PolygonFinder
@@ -104,7 +104,7 @@ class Info(object):
 
     def _set_name(self, newname):
         """Private method to change the Vector name"""
-        if not functions.is_clean_name(newname):
+        if not utils.is_clean_name(newname):
             str_err = _("Map name {0} not valid")
             raise ValueError(str_err.format(newname))
         if self.exist():
@@ -268,7 +268,7 @@ class Info(object):
         """
         if self.exist():
             if not self.is_open():
-                functions.rename(self.name, newname, 'vect')
+                utils.rename(self.name, newname, 'vect')
             else:
                 raise GrassError("The map is open, not able to renamed it.")
         self._name = newname
@@ -281,10 +281,10 @@ class Info(object):
         """Return if the Vector exists or not"""
         if self.name:
             if self.mapset == '':
-                mapset = functions.get_mapset_vector(self.name, self.mapset)
+                mapset = utils.get_mapset_vector(self.name, self.mapset)
                 self.mapset = mapset if mapset else ''
                 return True if mapset else False
-            return bool(functions.get_mapset_vector(self.name, self.mapset))
+            return bool(utils.get_mapset_vector(self.name, self.mapset))
         else:
             return False
 
@@ -388,7 +388,7 @@ class Info(object):
             self.layer = self.dblinks.by_layer(layer).layer
             self.table = self.dblinks.by_layer(layer).table()
             self.n_lines = self.table.n_rows()
-        self.writable = self.mapset == functions.getenv("MAPSET")
+        self.writable = self.mapset == utils.getenv("MAPSET")
         self.find = {'by_point': PointFinder(self.c_mapinfo, self.table,
                                              self.writable),
                      'by_box': BboxFinder(self.c_mapinfo, self.table,
@@ -417,7 +417,7 @@ class Info(object):
         """Remove vector map"""
         if self.is_open():
             self.close()
-        functions.remove(self.name, 'vect')
+        utils.remove(self.name, 'vect')
 
     def build(self):
         """Close the vector map and build vector Topology"""
