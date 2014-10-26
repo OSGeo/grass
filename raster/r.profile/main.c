@@ -273,7 +273,7 @@ int do_profile(double e1, double e2, double n1, double n2,
 	       char *null_string, const char *unit, double factor)
 {
     float rows, cols, LEN;
-    double Y, X, AZI;
+    double Y, X, k;
 
     cols = e1 - e2;
     rows = n1 - n2;
@@ -292,18 +292,20 @@ int do_profile(double e1, double e2, double n1, double n2,
 	read_rast(e, n, dist / factor, fd, coords, data_type, fp, null_string);
     }
 
+    k = res / hypot(rows, cols);
+    Y = k * rows;
+    X = k * cols;
+    if (Y < 0)
+        Y = Y * -1.;
+    if (X < 0)
+        X = X * -1.;
+
+    if (e != 0.0 && (e != e1 || n != n1)) {
+        dist -= G_distance(e, n, e1, n1);
+    }
+
     if (rows >= 0 && cols < 0) {
 	/* SE Quad or due east */
-	AZI = atan((rows / cols));
-	Y = res * sin(AZI);
-	X = res * cos(AZI);
-	if (Y < 0)
-	    Y = Y * -1.;
-	if (X < 0)
-	    X = X * -1.;
-	if (e != 0.0 && (e != e1 || n != n1)) {
-	    dist -= G_distance(e, n, e1, n1);
-	}
 	for (e = e1, n = n1; e < e2 || n > n2; e += X, n -= Y) {
 	    read_rast(e, n, dist / factor, fd, coords, data_type, fp, null_string);
 	    /* d+=res; */
@@ -313,19 +315,6 @@ int do_profile(double e1, double e2, double n1, double n2,
 
     if (rows < 0 && cols <= 0) {
 	/* NE Quad  or due north */
-	AZI = atan((cols / rows));
-	X = res * sin(AZI);
-	Y = res * cos(AZI);
-	if (Y < 0)
-	    Y = Y * -1.;
-	if (X < 0)
-	    X = X * -1.;
-	if (e != 0.0 && (e != e1 || n != n1)) {
-	    dist -= G_distance(e, n, e1, n1);
-	    /*
-	     * read_rast (e1, n1, dist, fd, coords, data_type, fp, null_string);
-	     */
-	}
 	for (e = e1, n = n1; e < e2 || n < n2; e += X, n += Y) {
 	    read_rast(e, n, dist / factor, fd, coords, data_type, fp, null_string);
 	    /* d+=res; */
@@ -335,16 +324,6 @@ int do_profile(double e1, double e2, double n1, double n2,
 
     if (rows > 0 && cols >= 0) {
 	/* SW Quad or due south */
-	AZI = atan((rows / cols));
-	X = res * cos(AZI);
-	Y = res * sin(AZI);
-	if (Y < 0)
-	    Y = Y * -1.;
-	if (X < 0)
-	    X = X * -1.;
-	if (e != 0.0 && (e != e1 || n != n1)) {
-	    dist -= G_distance(e, n, e1, n1);
-	}
 	for (e = e1, n = n1; e > e2 || n > n2; e -= X, n -= Y) {
 	    read_rast(e, n, dist / factor, fd, coords, data_type, fp, null_string);
 	    /* d+=res; */
@@ -354,16 +333,6 @@ int do_profile(double e1, double e2, double n1, double n2,
 
     if (rows <= 0 && cols > 0) {
 	/* NW Quad  or due west */
-	AZI = atan((rows / cols));
-	X = res * cos(AZI);
-	Y = res * sin(AZI);
-	if (Y < 0)
-	    Y = Y * -1.;
-	if (X < 0)
-	    X = X * -1.;
-	if (e != 0.0 && (e != e1 || n != n1)) {
-	    dist -= G_distance(e, n, e1, n1);
-	}
 	for (e = e1, n = n1; e > e2 || n < n2; e -= X, n += Y) {
 	    read_rast(e, n, dist / factor, fd, coords, data_type, fp, null_string);
 	    /* d+=res; */
