@@ -8,7 +8,7 @@ import doctest
 import grass.gunittest
 import grass.gunittest.utils
 
-import grass.pygrass.functions as gfunctions
+import grass.pygrass.utils as gutils
 
 
 # doctest does not allow changing the base classes of test case, skip test case
@@ -30,7 +30,7 @@ def load_tests(loader, tests, ignore):
     # for now it is the only place where it works
     grass.gunittest.utils.do_doctest_gettext_workaround()
     # this should be called at some top level
-    tests.addTests(doctest.DocTestSuite(gfunctions))
+    tests.addTests(doctest.DocTestSuite(gutils))
     return tests
 
 

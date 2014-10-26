@@ -15,7 +15,7 @@ import time
 from grass.exceptions import CalledModuleError
 from grass.script.core import Popen, PIPE
 from grass.pygrass.errors import GrassError, ParameterError
-from grass.pygrass.functions import docstring_property
+from grass.pygrass.utils import docstring_property
 from grass.pygrass.modules.interface.parameter import Parameter
 from grass.pygrass.modules.interface.flag import Flag
 from grass.pygrass.modules.interface.typedict import TypeDict
