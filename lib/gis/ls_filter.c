@@ -122,6 +122,9 @@ static int wc2regex(struct buffer *buf, const char *pat)
 	    add(buf, *p);
 	    break;
 	}
+
+	if (!p)
+	    return 0;
     }
 
     if (!p)
