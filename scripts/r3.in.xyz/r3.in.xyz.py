@@ -178,7 +178,7 @@ from grass.script import core as grass
 
 
 def cleanup():
-    grass.run_command('g.mremove', flags='f',
+    grass.run_command('g.remove', flags='f',
                       type="rast", pattern='tmp.r3xyz.%d.*' % os.getpid(),
                       quiet=True)
 
@@ -306,7 +306,7 @@ def main():
     grass.verbose(_("Assembling 3D cube ..."))
 
     #input order: lower most strata first
-    slices = grass.read_command('g.mlist', type='rast', sep=',',
+    slices = grass.read_command('g.list', type='rast', sep=',',
                                 pattern='tmp.r3xyz.%d.*' % os.getpid()).rstrip(os.linesep)
     grass.debug(slices)
 

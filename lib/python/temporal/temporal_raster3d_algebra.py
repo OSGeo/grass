@@ -23,7 +23,7 @@ class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
         TemporalRasterBaseAlgebraParser.__init__(self, pid, run, debug, spatial, nprocs, register_null)
 
         self.m_mapcalc = pymod.Module('r3.mapcalc')
-        self.m_mremove = pymod.Module('g.mremove')
+        self.m_remove = pymod.Module('g.remove')
 
     def parse(self, expression, basename = None, overwrite=False):
         self.lexer = TemporalRasterAlgebraLexer()
@@ -49,7 +49,7 @@ class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
                 stringlist = ",".join(chunk)
 
                 if self.run:
-                    m = copy.deepcopy(self.m_mremove)
+                    m = copy.deepcopy(self.m_remove)
                     m.inputs["type"].value = "rast3d"
                     m.inputs["pattern"].value = stringlist
                     m.flags["f"].value = True

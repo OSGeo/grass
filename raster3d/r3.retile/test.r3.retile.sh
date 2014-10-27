@@ -36,7 +36,7 @@ r3.retile --o input=volume_null output=test_retile_map_10 tiledim=34x46x22 -c
 r3.info -g map=test_retile_map_10 > test_retile_map_10_info.txt
 
 # Create the validation files
-for map in `g.mlist type=rast3d pattern=test_retile_map_*` ; do
+for map in `g.list type=rast3d pattern=test_retile_map_*` ; do
   r3.out.ascii input=${map} output=${map}.txt dp=0
 done
 

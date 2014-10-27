@@ -34,4 +34,4 @@ t.info type=rast input=prec_7
 
 t.unregister --v type=rast maps=prec_1,prec_2,prec_3,prec_6,prec_7
 t.remove --v type=strds input=precip_abs
-g.remove rast=prec_1,prec_2,prec_3,prec_6,prec_7
+g.remove -f type=rast name=prec_1,prec_2,prec_3,prec_6,prec_7

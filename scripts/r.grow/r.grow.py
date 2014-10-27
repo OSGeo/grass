@@ -68,7 +68,7 @@ import grass.script as grass
 def cleanup():
     for map in [temp_dist, temp_val]:
         if map:
-            grass.run_command('g.remove', quiet = True, flags = 'f', rast = map)
+            grass.run_command('g.remove', quiet=True, flags='bf', type='rast', name=map)
 
 def main():
     global temp_dist, temp_val

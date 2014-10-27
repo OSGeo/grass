@@ -464,8 +464,9 @@ class GRASSImporter:
             if maps:
                 grass.run_command('g.remove',
                                   quiet = True,
-                                  flags = 'f',
-                                  rast  = ','.join(maps))
+                                  flags = 'bf',
+                                  type = 'rast',
+                                  name  = ','.join(maps))
         
         # delete environmental variable which overrides region 
         if 'GRASS_REGION' in os.environ.keys():

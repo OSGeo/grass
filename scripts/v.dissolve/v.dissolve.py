@@ -40,7 +40,7 @@ import grass.script as grass
 
 def cleanup():
     nuldev = file(os.devnull, 'w')
-    grass.run_command('g.remove', vect = '%s_%s' % (output, tmp), quiet = True, stderr = nuldev)
+    grass.run_command('g.remove', type='vect', name='%s_%s' % (output, tmp), quiet=True, flags='f', stderr=nuldev)
 
 def main():
     global output, tmp

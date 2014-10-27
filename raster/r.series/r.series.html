@@ -132,11 +132,11 @@ name and the weight the character "|" must be used.
 Using <em>r.series</em> with wildcards:
 <br>
 <div class="code"><pre>
-r.series input="`g.mlist pattern='insitu_data.*' sep=,`" \
+r.series input="`g.list pattern='insitu_data.*' sep=,`" \
          output=insitu_data.stddev method=stddev
 </pre></div>
 <p>
-Note the <em>g.mlist</em> script also supports regular expressions for
+Note the <em>g.list</em> script also supports regular expressions for
 selecting map names.
 
 <p>
@@ -186,11 +186,11 @@ Example for counting the number of days above a certain temperature using
 daily average maps ('???' as DOY wildcard):
 <div class="code"><pre>
 # Approach for shell based systems
-r.series input=`g.mlist rast pattern="temp_2003_???_avg" sep=,` \
+r.series input=`g.list rast pattern="temp_2003_???_avg" sep=,` \
          output=temp_2003_days_over_25deg range=25.0,100.0 method=count
 
 # Approach in two steps (e.g., for Windows systems)
-g.mlist rast pattern="temp_2003_???_avg" output=mapnames.txt
+g.list rast pattern="temp_2003_???_avg" output=mapnames.txt
 r.series file=mapnames.txt \
          output=temp_2003_days_over_25deg range=25.0,100.0 method=count
 </pre></div>

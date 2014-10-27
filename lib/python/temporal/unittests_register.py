@@ -297,7 +297,7 @@ class TestRegisterFunctions(unittest.TestCase):
         """!Remove maps from temporal database
         """
         ret = grass.run_command("t.unregister", maps="register_map_1,register_map_2", quiet=True)
-        ret = grass.run_command("g.remove", rast="register_map_1,register_map_2", quiet=True)
+        ret = grass.run_command("g.remove", type="rast", name="register_map_1,register_map_2", quiet=True, flags="f")
         self.assertEqual(ret, 0)
         self.strds_abs.delete()
         self.strds_rel.delete()

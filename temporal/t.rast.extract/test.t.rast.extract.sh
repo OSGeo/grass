@@ -28,7 +28,7 @@ t.rast.extract --o --v -n input=precip_abs1 output=precip_abs3 where="start_time
 t.info type=strds input=precip_abs3
 
 # Let the test fail
-g.remove rast=prec_1
+g.remove -f type=rast name=prec_1
 
 t.rast.extract --o --v input=precip_abs1 output=precip_abs4 \
           where="start_time > '2001-01-01'" expr="precip_abs1/1.0"\
