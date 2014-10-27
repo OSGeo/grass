@@ -559,7 +559,9 @@ int G_parser(int argc, char **argv)
     /* Make sure all required options are set */
     if (!st->suppress_required)
 	check_required();
-    
+
+    G__check_option_rules();
+
     if (st->n_errors > 0) {
         if (G_verbose() > -1) {
             if (G_verbose() > G_verbose_min())
