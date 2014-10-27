@@ -6,60 +6,60 @@
  * Parses the command line provided through argc and argv.  Example:
  * Assume the previous calls:
  *
- * \code
- *  opt1 = G_define_option() ;
- *  opt1->key        = "map",
- *  opt1->type       = TYPE_STRING,
- *  opt1->required   = YES,
- *  opt1->checker    = sub,
- *  opt1->description= "Name of an existing raster map" ;
- *
- *  opt2 = G_define_option() ;
- *  opt2->key        = "color",
- *  opt2->type       = TYPE_STRING,
- *  opt2->required   = NO,
- *  opt2->answer     = "white",
- *  opt2->options    = "red,orange,blue,white,black",
- *  opt2->description= "Color used to display the map" ;
- *
- *  opt3 = G_define_option() ;
- *  opt3->key        = "number",
- *  opt3->type       = TYPE_DOUBLE,
- *  opt3->required   = NO,
- *  opt3->answer     = "12345.67",
- *  opt3->options    = "0-99999",
- *  opt3->description= "Number to test parser" ;
- * \endcode
+ \code
+  opt1 = G_define_option() ;
+  opt1->key        = "map",
+  opt1->type       = TYPE_STRING,
+  opt1->required   = YES,
+  opt1->checker    = sub,
+  opt1->description= "Name of an existing raster map" ;
+
+  opt2 = G_define_option() ;
+  opt2->key        = "color",
+  opt2->type       = TYPE_STRING,
+  opt2->required   = NO,
+  opt2->answer     = "white",
+  opt2->options    = "red,orange,blue,white,black",
+  opt2->description= "Color used to display the map" ;
+
+  opt3 = G_define_option() ;
+  opt3->key        = "number",
+  opt3->type       = TYPE_DOUBLE,
+  opt3->required   = NO,
+  opt3->answer     = "12345.67",
+  opt3->options    = "0-99999",
+  opt3->description= "Number to test parser" ;
+ \endcode
  *
  * G_parser() will respond to the following command lines as described:
  *
- * \verbatim
- * command      (No command line arguments)
- * \endverbatim
+ \verbatim
+ command      (No command line arguments)
+ \endverbatim
  *    Parser enters interactive mode.
  *
- * \verbatim
- * command map=map.name
- * \endverbatim
+ \verbatim
+ command map=map.name
+ \endverbatim
  *    Parser will accept this line.  Map will be set to "map.name", the
  *    'a' and 'b' flags will remain off and the num option will be set
  *    to the default of 5.
  *
- * \verbatim
- * command -ab map=map.name num=9
- * command -a -b map=map.name num=9
- * command -ab map.name num=9
- * command map.name num=9 -ab
- * command num=9 -a map=map.name -b
- * \endverbatim
+ \verbatim
+ command -ab map=map.name num=9
+ command -a -b map=map.name num=9
+ command -ab map.name num=9
+ command map.name num=9 -ab
+ command num=9 -a map=map.name -b
+ \endverbatim
  *    These are all treated as acceptable and identical. Both flags are
  *    set to on, the map option is "map.name" and the num option is "9".
  *    Note that the "map=" may be omitted from the command line if it
  *    is part of the first option (flags do not count).
  *
- * \verbatim
- * command num=12
- * \endverbatim
+ \verbatim
+ command num=12
+ \endverbatim
  *    This command line is in error in two ways.  The user will be told
  *    that the "map" option is required and also that the number 12 is
  *    out of range.  The acceptable range (or list) will be printed.
@@ -277,16 +277,31 @@ struct GModule *G_define_module(void)
  *  - G_define_module()
  *  - G_define_flag()
  *  - G_define_option()
+ *  - G_define_standard_flag()
  *  - G_define_standard_option()
  *  - G_disable_interactive()
+ *  - G_option_exclusive()
+ *  - G_option_required()
+ *  - G_option_requires()
+ *  - G_option_requires_all()
+ *  - G_option_excludes()
+ *  - G_option_collective()
  *
  * The usual order a module calls functions is:
  *
- *  # G_gisinit()
- *  # G_define_module()
- *  # G_define_flag()
- *  # G_define_option()
- *  # G_parser()
+ *  1. G_gisinit()
+ *  2. G_define_module()
+ *  3. G_define_standard_flag()
+ *  4. G_define_standard_option()
+ *  5. G_define_flag()
+ *  6. G_define_option()
+ *  7. G_option_exclusive()
+ *  8. G_option_required()
+ *  9. G_option_requires()
+ *  10. G_option_requires_all()
+ *  11. G_option_excludes()
+ *  12. G_option_collective()
+ *  13. G_parser()
  *
  * \param argc number of arguments
  * \param argv argument list
