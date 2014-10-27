@@ -1,5 +1,12 @@
 <h2>DESCRIPTION</h2>
 
+<em>r.spreadpath</em> is part of the wildfire simulation toolset. Preparational
+steps for the fire simulation are the calculation of the rate of spread (ROS)
+with <em>r.ros</em>, and the creating of spread map with <em>r.spread</em>.
+Eventually, the fire path(s) based on starting point(s) are calculated
+with <em>r.spreadpath</em>.
+<p>
+
 <em>r.spreadpath</em> recursively traces the least cost path backwards to
 the origin, given backlink information input map layers and target locations
 from where paths are to be traced. The backlink information map layers
@@ -23,25 +30,38 @@ coordinates.
 <dd>Name of input raster map layer containing backlink UTM northing coordinates.
 
 <dt><b>coordinate=</b><em>x,y[,x,y,x,y, ...]</em>
-<dd>Each x,y coordinate pair gives the easting and northing (respectively) geographic coordinates of a target point from which to backwards trace the least cost path. As many
-points as desired can be entered by the user.
+<dd>Each x,y coordinate pair gives the easting and northing 
+(respectively) geographic coordinates of a target point from which to 
+backwards trace the least cost path. As many points as desired can be 
+entered by the user.
 
 <dt><b>output=</b><em>name</em>
-<dd>Name of raster map layer to contain output. Also can be used as the map layer of the input target points. If so used, the input target point map will be overwritten by the output.
+<dd>Name of raster map layer to contain output. Also can be used as the 
+map layer of the input target points. If so used, the input target 
+point map will be overwritten by the output.
 </dl>
 
-<h2>SEE ALSO</h2>
-<em><a href="r.spread.html">r.spread</a></em>,
-<em><a href="r.ros.html">r.ros</a></em>
-
-
 <h2>REFERENCES</h2>
-Xu, Jianping, 1994, Simulating the spread of wildfires using a geographic
-information system and remote sensing, Ph. D. Dissertation, Rutgers University,
-New Brunswick, New Jersey.
+
+<ul>
+<li>Xu, Jianping, 1994, Simulating the spread of wildfires using a
+geographic information system and remote sensing, Ph. D. Dissertation,
+Rutgers University, New Brunswick, New Jersey
+(<a href="https://dl.acm.org/citation.cfm?id=921466">ref</a>).</li>
+</ul>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.spread.html">r.spread</a>,
+<a href="r.ros.html">r.ros</a>
+</em>
+
+Sample data download: <a href="http://grass.osgeo.org/download/sample-data/">firedemo.sh</a>
+(run this script within the "Fire simulation data set" location.
 
 <h2>AUTHOR</h2>
 Jianping Xu and Richard G. Lathrop, Jr., Center for Remote Sensing and
 Spatial Analysis, Rutgers University.
 
-<p><i>Last changed: $Date$</i>
+<p><em>Last changed: $Date$</em>
