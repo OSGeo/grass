@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 	struct Option *type;
 	struct Option *pattern;
 	struct Option *exclude;
-	struct Option *names;
+	struct Option *name;
 	struct Option *ignore;
     } opt;
     struct
@@ -78,16 +78,16 @@ int main(int argc, char *argv[])
     opt.type->multiple = YES;
     opt.type->options = M_get_options(TRUE);
     opt.type->descriptions = M_get_option_desc(TRUE);
-    opt.type->guidependency = "pattern,exclude,names,ignore";
+    opt.type->guidependency = "pattern,exclude,name,ignore";
     opt.type->guisection = _("Basic");
 
-    opt.names = G_define_option();
-    opt.names->key = "names";
-    opt.names->type = TYPE_STRING;
-    opt.names->multiple = YES;
-    opt.names->gisprompt = "old,element,element";
-    opt.names->description = _("File names separated by a comma");
-    opt.names->guisection = _("Basic");
+    opt.name = G_define_option();
+    opt.name->key = "name";
+    opt.name->type = TYPE_STRING;
+    opt.name->multiple = YES;
+    opt.name->gisprompt = "old,element,element";
+    opt.name->description = _("Name of file(s) to remove");
+    opt.name->guisection = _("Basic");
 
     opt.ignore = G_define_option();
     opt.ignore->key = "ignore";
@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
     opt.ignore->multiple = YES;
     opt.ignore->gisprompt = "old,element,element";
     opt.ignore->description =
-	_("File names to ignore separated by a comma (default: none)");
+	_("Name of file(s) to ignore (default: none)");
     opt.ignore->guisection = _("Pattern");
 
     opt.pattern = G_define_option();
@@ -133,9 +133,9 @@ int main(int argc, char *argv[])
     flag.basemap->description = _("Remove base raster maps");
 
     G_option_exclusive(flag.regex, flag.extended, NULL);
-    G_option_exclusive(opt.pattern, opt.names, NULL);
+    G_option_exclusive(opt.pattern, opt.name, NULL);
     G_option_exclusive(opt.exclude, opt.ignore, NULL);
-    G_option_required(opt.pattern, opt.names, NULL);
+    G_option_required(opt.pattern, opt.name, NULL);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
     if (opt.pattern->answer)
 	pattern = opt.pattern->answer;
     else
-	pattern = construct_pattern(opt.names->answers);
+	pattern = construct_pattern(opt.name->answers);
 
     if (opt.exclude->answer)
 	exclude = opt.exclude->answer;
