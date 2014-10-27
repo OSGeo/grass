@@ -10,6 +10,8 @@ SUBDIRS = \
 	d.redraw \
 	d.shadedmap \
 	d.vect.thematic \
+	d.what.rast \
+	d.what.vect \
 	db.dropcolumn \
 	db.droptable \
 	db.in.ogr \
