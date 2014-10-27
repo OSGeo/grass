@@ -1,5 +1,12 @@
 <h2>DESCRIPTION</h2>
 
+<em>r.ros</em> is part of the wildfire simulation toolset. Preparational
+steps for the fire simulation are the calculation of the rate of spread (ROS)
+with <em>r.ros</em>, and the creating of spread map with <em>r.spread</em>.
+Eventually, the fire path(s) based on starting point(s) are calculated
+with <em>r.spreadpath</em>.
+<p>
+
 <em>r.ros</em> is used for fire (wildfire) modeling. The input is fuel model
 and moisture and the outputs are rate of spread (ROS) values.
 The module generates the base ROS value, maximum ROS value,
@@ -80,7 +87,7 @@ r.ros -s model=fire_model moisture_1h=1hour_moisture moisture_live=live_moisture
 <h2>NOTES</h2>
 
 <ol>
-  <li>r.ros is supposed to be run before running
+  <li><em>r.ros</em> is supposed to be run before running
     <em><a href="r.spread.html">r.spread</a></em> module.
     The combination of these two modules forms
     a simulation of the spread of wildfires.
@@ -102,37 +109,41 @@ r.ros -s model=fire_model moisture_1h=1hour_moisture moisture_live=live_moisture
 <ul>
   <li><b>Albini,</b> F. A., 1976, Computer-based models of wildland fire behavior:
     a user's manual, USDA Forest Service, Intermountain Forest and Range Experiment
-    Station, Ogden, Utah.
+    Station, Ogden, Utah.</li>
   <li><b>Andrews</b>, P. L., 1986, BEHAVE: fire behavior prediction and fuel
     modeling system -- BURN subsystem, Part 1, USDA Forest Service, Intermountain
-    Research Station, Gen. Tech. Rep. INT-194, Ogden, Utah.
+    Research Station, Gen. Tech. Rep. INT-194, Ogden, Utah.</li>
   <li><b>Chase</b>, Carolyn, H., 1984, Spotting distance from wind-driven
     surface fires -- extensions of equations for pocket calculators, US Forest
-    Service, Res. Note INT-346, Ogden, Utah.
+    Service, Res. Note INT-346, Ogden, Utah.</li>
   <li><b>Lathrop</b>, Richard G. and Jianping Xu, A geographic information
-    system-based approach for calculating spotting distance. (in preparation)
+    system-based approach for calculating spotting distance. (in preparation)</li>
   <li><b>Rothermel</b>, R. E., 1972, A mathematical model for predicting
     fire spread in wildland fuels, USDA Forest Service, Intermountain Forest
-    and Range Experiment Station, Res. Pap. INT-115, Ogden, Utah.
+    and Range Experiment Station, Res. Pap. INT-115, Ogden, Utah.</li>
   <li><b>Rothermel</b>, Richard, 1991, Predicting behavior and size of crown
     fires in the northern Rocky Mountains, US Forest Service, Res. Paper INT-438,
-    Ogden, Utah.
+    Ogden, Utah.</li>
   <li><b>Xu</b>, Jianping, 1994, Simulating the spread of wildfires using
     a geographic information system and remote sensing, Ph. D. Dissertation,
-    Rutgers University, New Brunswick, New Jersey.
+    Rutgers University, New Brunswick, Jersey
+    (<a href="https://dl.acm.org/citation.cfm?id=921466">ref</a>).</li>
 </ul>
 
 <h2>SEE ALSO</h2>
 
 <em>
-  <a href="g.region.html">g.region</a>,
-  <a href="r.slope.aspect.html">r.slope.aspect</a>,
-  <a href="r.spread.html">r.spread</a>,
-  <a href="r.spreadpath.html">r.spreadpath</a>
+<a href="g.region.html">g.region</a>,
+<a href="r.slope.aspect.html">r.slope.aspect</a>,
+<a href="r.spread.html">r.spread</a>,
+<a href="r.spreadpath.html">r.spreadpath</a>
 </em>
+
+Sample data download: <a href="http://grass.osgeo.org/download/sample-data/">firedemo.sh</a>
+(run this script within the "Fire simulation data set" location.
 
 <h2> AUTHOR</h2>
 
 Jianping Xu, Center for Remote Sensing and Spatial Analysis, Rutgers University.
 
-<p><i>Last changed: $Date$</i>
+<p><em>Last changed: $Date$</em>
