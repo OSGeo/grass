@@ -1,7 +1,7 @@
 
 /****************************************************************************
  *
- * MODULE:       g.mlist
+ * MODULE:       g.list
  *
  * AUTHOR(S):    Huidae Cho
  * 		 Based on general/manage/cmd/list.c by Michael Shapiro.
@@ -31,7 +31,6 @@ enum {
     TYPE_RAST,
     TYPE_RAST3D,
     TYPE_VECT,
-    TYPE_3DVIEW,
     TYPE_OTHERS
 };
 
@@ -67,9 +66,8 @@ int main(int argc, char *argv[])
     void *filter, *exclude;
     struct Popen pager;
     FILE *fp;
-    const char *mapset;
     char *separator;
-    int use_region;
+    int use_region, use_pager;
     struct Cell_head window;
 
     G_gisinit(argv[0]);
@@ -88,12 +86,14 @@ int main(int argc, char *argv[])
     opt.type->multiple = YES;
     opt.type->options = M_get_options(TRUE);
     opt.type->descriptions = M_get_option_desc(TRUE);
+    opt.type->guidependency = "pattern,exclude";
 
     opt.pattern = G_define_option();
     opt.pattern->key = "pattern";
     opt.pattern->type = TYPE_STRING;
     opt.pattern->required = NO;
     opt.pattern->multiple = NO;
+    opt.pattern->gisprompt = "new,element,element";
     opt.pattern->description = _("Map name search pattern (default: all)");
     opt.pattern->guisection = _("Pattern");
 
@@ -102,6 +102,7 @@ int main(int argc, char *argv[])
     opt.exclude->type = TYPE_STRING;
     opt.exclude->required = NO;
     opt.exclude->multiple = NO;
+    opt.exclude->gisprompt = "new,element,element";
     opt.exclude->description = _("Map name exclusion pattern (default: none)");
     opt.exclude->guisection = _("Pattern");
 
@@ -113,6 +114,7 @@ int main(int argc, char *argv[])
 	_("'.' for current mapset; '*' for all mapsets in location");
     opt.separator = G_define_standard_option(G_OPT_F_SEP);
     opt.separator->answer = "newline";
+    opt.separator->guisection = _("Print");
 
     opt.region = G_define_standard_option(G_OPT_M_REGION);
     opt.region->label = _("Name of saved region for map search (default: not restricted)");
@@ -123,6 +125,7 @@ int main(int argc, char *argv[])
     opt.output->required = NO;
     opt.output->label = _("Name for output file");
     opt.output->description = _("If not given or '-' then standard output");
+    opt.output->guisection = _("Print");
 
     flag.regex = G_define_flag();
     flag.regex->key = 'r';
@@ -158,10 +161,6 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-
-    if ((flag.pretty->answer || flag.full->answer) && opt.output->answer)
-        G_fatal_error(_("-%c/-%c and %s= are mutually exclusive"),
-		      flag.pretty->key, flag.full->key, opt.output->key);
 
     if ((flag.pretty->answer || flag.full->answer) && opt.region->answer)
         G_fatal_error(_("-%c/-%c and %s= are mutually exclusive"),
@@ -264,6 +263,8 @@ int main(int argc, char *argv[])
     }
 
     if (opt.mapset->answers && opt.mapset->answers[0]) {
+	const char *mapset;
+
 	G_create_alt_search_path();
 	for (i = 0; (mapset = opt.mapset->answers[i]); i++) {
 	    if (strcmp(mapset, "*") == 0) {
@@ -283,12 +284,16 @@ int main(int argc, char *argv[])
 	}
     }
 
-    if (flag.pretty->answer || flag.full->answer) {
+    use_pager = !opt.output->answer || !opt.output->answer[0] ||
+		strcmp(opt.output->answer, "-") == 0;
+
+    if (use_pager)
 	fp = G_open_pager(&pager);
-	dup2(fileno(fp), STDOUT_FILENO);
-    }
     else
 	fp = G_open_option_file(opt.output);
+
+    if (flag.pretty->answer || flag.full->answer)
+	dup2(fileno(fp), STDOUT_FILENO);
 
     for (i = 0; i < num_types; i++) {
 	const struct list *elem;
@@ -303,29 +308,42 @@ int main(int argc, char *argv[])
 
 	    G_debug(3, "lister CMD: %s", lister);
 
-	    if (access(lister, X_OK) == 0)	/* execute permission? */
-		G_spawn(lister, lister, mapset, NULL);
-	    else
+	    if (access(lister, X_OK) == 0) {	/* execute permission? */
+		const char **args;
+		const char *mapset;
+
+		for (j = 0; (mapset = G_get_mapset_name(j)); j++);
+		args = (const char **)G_calloc(j + 2, sizeof(char *));
+
+		args[0] = lister;
+		for (j = 0; (mapset = G_get_mapset_name(j)); j++)
+		    args[j + 1] = mapset;
+		args[j + 1] = NULL;
+
+		G_vspawn_ex(lister, args);
+	    } else
 		M_do_list(n, "");
 	}
 	else if (flag.pretty->answer)
 	    M_do_list(n, "");
 	else {
+	    const char *mapset;
+
 	    for (j = 0; (mapset = G_get_mapset_name(j)); j++)
 		make_list(fp, elem, mapset, separator, flag.type->answer,
 			  flag.mapset->answer, use_region ? &window : NULL);
 	}
     }
 
-    if (flag.pretty->answer || flag.full->answer) {
+    if (flag.pretty->answer || flag.full->answer)
 	fclose(stdout);
+    else if (any)
+	fprintf(fp, "\n");
+
+    if (use_pager)
 	G_close_pager(&pager);
-    }
-    else {
-	if (any)
-	    fprintf(fp, "\n");
+    else
 	G_close_option_file(fp);
-    }
 
     if (filter)
 	G_free_ls_filter(filter);
@@ -363,8 +381,6 @@ static void make_list(FILE *fp, const struct list *elem, const char *mapset,
 	type = TYPE_RAST3D;
     else if (strcmp(alias, "vect") == 0)
 	type = TYPE_VECT;
-    else if (strcmp(alias, "3dview") == 0)
-	type = TYPE_3DVIEW;
     else
 	type = TYPE_OTHERS;
 
@@ -431,8 +447,6 @@ static int region_overlaps(struct Cell_head *window, const char *name,
     RASTER3D_Region region3d;
     struct Map_info Map;
     struct bound_box box;
-    int ret;
-    struct G_3dview view3d;
 
     switch (type) {
     case TYPE_RAST:
@@ -459,23 +473,6 @@ static int region_overlaps(struct Cell_head *window, const char *name,
 	map_window.west = box.W;
 	map_window.east = box.E;
 	has_region = 1;
-	break;
-    case TYPE_3DVIEW:
-	if ((ret = G_get_3dview(name, mapset, &view3d)) < 0)
-	    G_fatal_error(_("Unable to read 3dview file <%s@%s>"),
-			  name, mapset);
-	if (ret == 0) {
-	    G_warning(_("No region support in an old 3dview file <%s@%s>. Listing anyway"),
-		      name, mapset);
-	    has_region = 0;
-	}
-	else {
-	    map_window.north = view3d.vwin.north;
-	    map_window.south = view3d.vwin.south;
-	    map_window.west = view3d.vwin.west;
-	    map_window.east = view3d.vwin.east;
-	    has_region = 1;
-	}
 	break;
     default:
 	has_region = 0;
