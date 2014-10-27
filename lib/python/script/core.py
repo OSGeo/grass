@@ -1017,7 +1017,7 @@ def del_temp_region():
     """Unsets WIND_OVERRIDE and removes any region named by it."""
     try:
         name = os.environ.pop('WIND_OVERRIDE')
-        run_command("g.remove", flags='f', quiet=True, type='region', pattern=name)
+        run_command("g.remove", flags='f', quiet=True, type='region', name=name)
     except:
         pass
 

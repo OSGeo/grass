@@ -176,7 +176,7 @@ def main():
 
         # Cleanup
         grass.run_command('g.remove', flags='f', quiet=True, type='rast',
-                          pattern='%s,%s,%s' % (panmatch1, panmatch2, panmatch3))
+                          name='%s,%s,%s' % (panmatch1, panmatch2, panmatch3))
 
     elif sharpen == "ihs":
         grass.verbose(_("Using IHS<->RGB algorithm"))
@@ -207,7 +207,7 @@ def main():
 
         # Cleanup
         grass.run_command('g.remove', flags='f', quiet=True, type='rast',
-                          pattern=panmatch)
+                          name=panmatch)
         
     elif sharpen == "pca":
         grass.verbose(_("Using PCA/inverse PCA algorithm"))
@@ -422,7 +422,7 @@ def matchhist(original, target, matched):
     result = grass.core.find_file(matched, element = 'cell')
     if result['fullname']:
         grass.run_command('g.remove', flags='f', quiet=True, type='rast',
-                          pattern=matched)
+                          name=matched)
         grass.run_command('r.reclass', input=original, out=matched, rules=outfile.name)
     else:
         grass.run_command('r.reclass', input=original, out=matched, rules=outfile.name)

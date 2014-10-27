@@ -125,7 +125,7 @@ class TestMultiLayerMap(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        cls.runModule('g.remove', type='vect', names='test_vector', flags='f')
+        cls.runModule('g.remove', type='vect', name='test_vector', flags='f')
 
     def setUp(self):
         self.vwhat = SimpleModule('v.what', map='test_vector',

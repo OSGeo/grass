@@ -256,7 +256,7 @@ class IClassMapFrame(DoubleMapFrame):
                          parent = self,
                          flags = 'f',
                          type = 'vect',
-                         pattern = self.trainingAreaVector)
+                         name = self.trainingAreaVector)
         if ret != 0:
             return False
         return True
@@ -269,7 +269,7 @@ class IClassMapFrame(DoubleMapFrame):
                          parent = self,
                          flags = 'f',
                          type = 'rast',
-                         pattern = raster)
+                         name = raster)
         if ret != 0:
             return False
         return True

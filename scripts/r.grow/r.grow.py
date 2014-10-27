@@ -69,7 +69,7 @@ def cleanup():
     for map in [temp_dist, temp_val]:
         if map:
             grass.run_command('g.remove', flags = 'fb', quiet = True,
-                              type='rast', pattern = map)
+                              type='rast', name = map)
 
 def main():
     global temp_dist, temp_val

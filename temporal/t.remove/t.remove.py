@@ -107,7 +107,7 @@ def main():
     statement = ""
 
     # Create the pygrass Module object for g.remove
-    remove = pyg.Module("g.remove", quiet=True, run_=False)
+    remove = pyg.Module("g.remove", quiet=True, flags='f', run_=False)
 
     for name in dataset_list:
         name = name.strip()
@@ -132,7 +132,7 @@ def main():
                 # Delete every 100 maps
                 if count%100 == 0:
                     dbif.execute_transaction(map_statement)
-                    remove(type="rast",  pattern=name_list, run_=True)
+                    remove(type="rast", name=name_list, run_=True)
                     map_statement = ""
                     name_list = []
 
@@ -140,11 +140,11 @@ def main():
                 dbif.execute_transaction(map_statement)
             if name_list:
                 if type == "strds":
-                    remove(type="rast",  pattern=",".join(name_list), run_=True)
+                    remove(type="rast", name=",".join(name_list), run_=True)
                 if type == "stvds":
-                    remove(type="vect",  pattern=",".join(name_list), run_=True)
+                    remove(type="vect", name=",".join(name_list), run_=True)
                 if type == "str3ds":
-                    remove(type="rast3d",  pattern=",".join(name_list), run_=True)
+                    remove(type="rast3d", name=",".join(name_list), run_=True)
 
         statement += sp.delete(dbif=dbif, execute=False)
 

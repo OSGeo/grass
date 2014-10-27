@@ -91,7 +91,7 @@ def main():
     elif overwrite == '1' and gfile['file']:
         grass.warning(_("Vector map <%s> already exists and will be overwritten") % map_name)
         grass.run_command('g.remove', flags='f', quiet=True, type='vect',
-                          pattern=map_name)
+                          name=map_name)
         shutil.rmtree(new_dir, True)
 
     # extract data

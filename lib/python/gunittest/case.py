@@ -122,7 +122,7 @@ class TestCase(unittest.TestCase):
                                "does not corresond to currently set"
                                " WIND_OVERRIDE ({c})",
                                n=cls._temp_region, c=name)
-        call_module("g.remove", quiet=True, flags='f', type='region', pattern=name)
+        call_module("g.remove", quiet=True, flags='f', type='region', name=name)
         # TODO: we don't know if user calls this
         # so perhaps some decorator which would use with statemet
         # but we have zero chance of infuencing another test class
@@ -625,7 +625,7 @@ class TestCase(unittest.TestCase):
                                           sep='=', precision=precision,
                                           reference=statistics, msg=msg)
             finally:
-                call_module('g.remove', flags='f', type='rast', pattern=diff)
+                call_module('g.remove', flags='f', type='rast', name=diff)
         else:
             # general case
             # TODO: we are using r.info min max and r.univar min max interchangably
@@ -651,7 +651,7 @@ class TestCase(unittest.TestCase):
             self.assertRasterFitsUnivar(raster=diff, reference=statistics,
                                         precision=precision, msg=msg)
         finally:
-            call_module('g.remove', flags='f', type='rast', pattern=diff)
+            call_module('g.remove', flags='f', type='rast', name=diff)
 
     def assertRasters3dNoDifference(self, actual, reference,
                                     precision, statistics=None, msg=None):
@@ -672,7 +672,7 @@ class TestCase(unittest.TestCase):
                                           sep='=', precision=precision,
                                           reference=statistics, msg=msg)
             finally:
-                call_module('g.remove', flags='f', type='rast3d', pattern=diff)
+                call_module('g.remove', flags='f', type='rast3d', name=diff)
         else:
             # general case
             # TODO: we are using r.info min max and r.univar min max interchangably
@@ -698,7 +698,7 @@ class TestCase(unittest.TestCase):
             self.assertRaster3dFitsUnivar(raster=diff, reference=statistics,
                                           precision=precision, msg=msg)
         finally:
-            call_module('g.remove', flags='f', type='rast3d', pattern=diff)
+            call_module('g.remove', flags='f', type='rast3d', name=diff)
 
     # TODO: this works only in 2D
     # TODO: write tests
@@ -741,7 +741,7 @@ class TestCase(unittest.TestCase):
                                             reference=ref_info,
                                             msg=msg, precision=precision)
         finally:
-            call_module('g.remove', flags='f', type='vect', pattern=remove)
+            call_module('g.remove', flags='f', type='vect', name=remove)
 
     # TODO: write tests
     def assertVectorsNoAreaDifference(self, actual, reference, precision,
@@ -774,7 +774,7 @@ class TestCase(unittest.TestCase):
                     va=actual, vr=reference, p=precision, a=total_area)
                 self.fail(self._formatMessage(msg, stdmsg))
         finally:
-            call_module('g.remove', flags='f', type='vect', pattern=diff)
+            call_module('g.remove', flags='f', type='vect', name=diff)
 
     # TODO: here we have to have significant digits which is not consistent
     # TODO: documentation for all new asserts
@@ -838,7 +838,7 @@ class TestCase(unittest.TestCase):
             # we rely on fail method to either raise or return (soon)
             os.remove(factual)
             if vreference:
-                self.runModule('g.remove', flags='f', type='vect', pattern=vreference)
+                self.runModule('g.remove', flags='f', type='vect', name=vreference)
 
     # TODO: we expect v.out.ascii to give the same order all the time, is that OK?
     def assertVectorAsciiEqualsVectorAscii(self, actual, reference,

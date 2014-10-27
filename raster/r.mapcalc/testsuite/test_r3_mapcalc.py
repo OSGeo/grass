@@ -22,7 +22,7 @@ class TestBasicOperations(grass.gunittest.TestCase):
         cls.del_temp_region()
         if cls.to_remove:
             cls.runModule('g.remove', flags='f', type='rast3d',
-                pattern=','.join(cls.to_remove), verbose=True)
+                name=','.join(cls.to_remove), verbose=True)
 
     def test_difference_of_the_same_map_double(self):
         """Test zero difference of map with itself"""

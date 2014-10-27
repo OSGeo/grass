@@ -416,17 +416,17 @@ class DataCatalogTree(LocationMapTree):
                 self.showNotification.emit(message=label)
                 if (self.GetItemText(self.selected_type)=='vect'):
                     removed = RunCommand('g.remove', flags='f', type='vect',
-                                         pattern=string)
+                                         name=string)
                 elif (self.GetItemText(self.selected_type)=='rast'):
                     removed = RunCommand('g.remove', flags='f', type='rast',
-                                         pattern=string)
+                                         name=string)
                 else:
                     removed = RunCommand('g.remove', flags='f', type='rast3d',
-                                         pattern=string)
+                                         name=string)
                 if (removed==0):
                     self.Delete(self.selected_layer)
                     Debug.msg(1,"LAYER "+string+" DELETED")
-                    label = "g.remove -f type="+self.GetItemText(self.selected_type)+" pattern="+string+"    -- completed" # generate this message (command) automatically?
+                    label = "g.remove -f type="+self.GetItemText(self.selected_type)+" name="+string+"    -- completed" # generate this message (command) automatically?
                     self.showNotification.emit(message=label)
             self.RestoreBackup()
             
