@@ -5,7 +5,7 @@
 char *construct_pattern(char **names)
 {
     char *pattern, *p;
-    int i, len, found_illegal_names;
+    int i, j, len, found_illegal_names;
     const char *mapset;
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
 
@@ -15,6 +15,10 @@ char *construct_pattern(char **names)
 	    len += p - names[i];
 	else
 	    len += strlen(names[i]);
+
+	/* make room for escaping special characters */
+	for (j = 0; names[i][j]; j++)
+	    len += !isalnum(names[i][j]);
     }
     len += i; /* # names - 1 commas + \0 */
 
@@ -39,9 +43,14 @@ char *construct_pattern(char **names)
 
 	if (i)
 	    *p++ = ',';
-	strcpy(p, name);
-	p += strlen(name);
+
+	for (j = 0; name[j]; j++) {
+	    if (!isalnum(name[j]))
+		*p++ = '\\';
+	    *p++ = name[j];
+	}
     }
+    *p = '\0';
 
     if (found_illegal_names)
 	G_fatal_error(_("Illegal filenames not allowed in the names or ignore "
