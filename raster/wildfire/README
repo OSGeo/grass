@@ -1,7 +1,0 @@
-A sample location is available from
-
-http://grass.osgeo.org/download/sample-data/
-
- Fire simulation data set:
- - sample data for r.ros, r.spread, and r.spreadpath fire simulation modules.
- - demo script: firedemo.sh (run within fire simulation data set)
