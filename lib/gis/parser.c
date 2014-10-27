@@ -1447,8 +1447,12 @@ char* G_option_to_separator(const struct Option *option)
 {
     char* sep;
     
+    if (option->gisprompt == NULL ||
+	strcmp(option->gisprompt, "old,separator,separator") != 0)
+        G_fatal_error(_("%s= is not a separator option"), option->key);
+
     if (option->answer == NULL)
-        G_fatal_error(_("No separator given"));
+        G_fatal_error(_("No separator given for %s="), option->key);
 
     if (strcmp(option->answer, "pipe") == 0)
         sep = G_store("|");
@@ -1459,7 +1463,8 @@ char* G_option_to_separator(const struct Option *option)
     else if (strcmp(option->answer, "tab") == 0 ||
              strcmp(option->answer, "\\t") == 0)
         sep = G_store("\t");
-    else if (strcmp(option->answer, "newline") == 0)
+    else if (strcmp(option->answer, "newline") == 0 ||
+	     strcmp(option->answer, "\\n") == 0)
         sep = G_store("\n");
     else
         sep = G_store(option->answer);
@@ -1509,9 +1514,10 @@ FILE *G_open_option_file(const struct Option *option)
 	    strcmp(option->answer, "-") == 0;
 
     if (option->gisprompt == NULL)
-        G_fatal_error(_("Not a file option"));
+        G_fatal_error(_("%s= is not a file option"), option->key);
     else if (option->multiple)
-	G_fatal_error(_("Multiple files not supported"));
+	G_fatal_error(_("Opening multiple files not supported for %s="),
+			option->key);
     else if (strcmp(option->gisprompt, "old,file,file") == 0) {
 	if (stdinout)
 	    fp = stdin;
@@ -1525,7 +1531,7 @@ FILE *G_open_option_file(const struct Option *option)
 	    G_fatal_error(_("Unable to create %s file <%s>"),
 			    option->key, option->answer);
     } else
-        G_fatal_error(_("Not a file option"));
+        G_fatal_error(_("%s= is not a file option"), option->key);
 
     return fp;
 }
