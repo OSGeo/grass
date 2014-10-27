@@ -95,7 +95,7 @@ void write_png(void)
 	}
     }
 
-    str = getenv("GRASS_PNG_COMPRESSION");
+    str = getenv("GRASS_RENDER_FILE_COMPRESSION");
     if (str && sscanf(str, "%d", &compress) == 1)
 	png_set_compression_level(png_ptr, compress);
 

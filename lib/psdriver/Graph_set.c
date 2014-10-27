@@ -127,7 +127,7 @@ static void swap(double *x, double *y)
 
 static void get_paper(void)
 {
-    const char *name = getenv("GRASS_PAPER");
+    const char *name = getenv("GRASS_RENDER_PS_PAPER");
     const struct paper *paper;
     int i;
 
@@ -176,7 +176,7 @@ int PS_Graph_set(void)
 
     G_gisinit("PS driver");
 
-    p = getenv("GRASS_PSFILE");
+    p = getenv("GRASS_RENDER_FILE");
     if (!p || strlen(p) == 0)
 	p = FILE_NAME;
 
@@ -184,16 +184,16 @@ int PS_Graph_set(void)
     p = file_name + strlen(file_name) - 4;
     ps.encapsulated = (G_strcasecmp(p, ".eps") == 0);
 
-    p = getenv("GRASS_TRUECOLOR");
+    p = getenv("GRASS_RENDER_TRUECOLOR");
     ps.true_color = p && strcmp(p, "TRUE") == 0;
 
-    p = getenv("GRASS_LANDSCAPE");
+    p = getenv("GRASS_RENDER_PS_LANDSCAPE");
     landscape = p && strcmp(p, "TRUE") == 0;
 
-    p = getenv("GRASS_PS_HEADER");
+    p = getenv("GRASS_RENDER_PS_HEADER");
     ps.no_header = p && strcmp(p, "FALSE") == 0;
 
-    p = getenv("GRASS_PS_TRAILER");
+    p = getenv("GRASS_RENDER_PS_TRAILER");
     ps.no_trailer = p && strcmp(p, "FALSE") == 0;
 
     G_verbose_message(_("ps: truecolor status %s"),

@@ -8,7 +8,7 @@ continually refreshed.
 <h2>NOTES</h2>
 
 The display driver must be configure to map the file, with
-<em>GRASS_PNG_MAPPED=TRUE</em>. This ensures that the file will remain
+<em>GRASS_RENDER_FILE_MAPPED=TRUE</em>. This ensures that the file will remain
 a constant size, rather than being truncated whenever it is updated.
 
 
@@ -16,15 +16,15 @@ a constant size, rather than being truncated whenever it is updated.
 
 (bash shell syntax)
 <div class="code"><pre>
-export GRASS_PNGFILE=map.bmp
-export GRASS_WIDTH=640
-export GRASS_HEIGHT=480
+export GRASS_RENDER_FILE=map.bmp
+export GRASS_RENDER_WIDTH=640
+export GRASS_RENDER_HEIGHT=480
 export GRASS_RENDER_IMMEDIATE=cairo
-export GRASS_PNG_MAPPED=TRUE
-export GRASS_PNG_READ=TRUE
+export GRASS_RENDER_FILE_MAPPED=TRUE
+export GRASS_RENDER_FILE_READ=TRUE
 
 d.erase
-wximgview $GRASS_PNGFILE percent=50 &
+wximgview $GRASS_RENDER_FILE percent=50 &
 d.rast elevation.dem
 d.vect roads
 </pre></div>

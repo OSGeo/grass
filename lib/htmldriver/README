@@ -14,7 +14,7 @@ at all!)
 
   Polygons can at most have 100 vertices (this limit imposed by HTML image map 
 formats.)  The driver will attempt to trim polygons that have more that 100 
-vertices (also see GRASS_HTMLMAXPOINTS, below.)  Also, any polygon that is 
+vertices (also see GRASS_RENDER_HTMLMAXPOINTS, below.)  Also, any polygon that is 
 entirely bounded by another polygon will be discarded.
 
   Text written to the driver before polygons are used as the HREF tag for
@@ -28,15 +28,15 @@ that exists in a vector file will have the same HREF tag.
 
     0. Set environment variables:
 
-       GRASS_WIDTH=xxx   #if you want another size than the default 640
-       export GRASS_WIDTH
-       GRASS_HEIGHT=xxx  #if you want another size than the default 480
-       export GRASS_WIDTH
+       GRASS_RENDER_WIDTH=xxx   #if you want another size than the default 640
+       export GRASS_RENDER_WIDTH
+       GRASS_RENDER_HEIGHT=xxx  #if you want another size than the default 480
+       export GRASS_RENDER_WIDTH
 
        Additionally, HTMLMAP driver recognizes:
 
-       export GRASS_HTMLTYPE
-       GRASS_HTMLTYPE=xxx  
+       export GRASS_RENDER_HTMLTYPE
+       GRASS_RENDER_HTMLTYPE=xxx  
             specifies the type of Html map to create:
 	    CLIENT  - Netscape client-side image map (default).  (NAME="map")
 	    APACHE  - Apache/NCSA server-side image map
@@ -44,8 +44,8 @@ that exists in a vector file will have the same HREF tag.
                       suitable for conversion to CERN server format, or
                       any other format with user supplied conversion program.
 
-       export GRASS_HTMLFILE
-       GRASS_HTMLFILE=xxxxxx
+       export GRASS_RENDER_FILE
+       GRASS_RENDER_FILE=xxxxxx
 	    specifies the resulting file to store the html image map,
 	    default is 'htmlmap'.  Files without absolute path names are
             written in the current directory where the driver was started.
@@ -53,8 +53,8 @@ that exists in a vector file will have the same HREF tag.
             Any existing file is overwritten without warning.
 
 
-	export GRASS_HTMLMINDIST
-	GRASS_HTMLMINDIST=xx
+	export GRASS_RENDER_HTMLMINDIST
+	GRASS_RENDER_HTMLMINDIST=xx
 	    specifies the minimum distance (in pixels) that a point must
 	    change from the previous one to keep in the list of vertices
             for a polygon.  The default is '2', which means that a point's
@@ -63,8 +63,8 @@ that exists in a vector file will have the same HREF tag.
 	    to eliminate points closely spaced points.
 
 
-	export GRASS_HTMLMINBBOX
-	GRASS_HTMLMINBBOX=xx
+	export GRASS_RENDER_HTMLMINBBOX
+	GRASS_RENDER_HTMLMINBBOX=xx
 	    specifies the minimum bounding box dimenions (both width and
 	    height) in order to store a polygon.  The default is '2', which
 	    means any polygon having bounding box width or height extent
@@ -73,8 +73,8 @@ that exists in a vector file will have the same HREF tag.
 	    pixel in height or width, typically a single point or line.
 	
 
-	export GRASS_HTMLMAXPOINTS
-	GRASS_HTMLMAXPOINTS=xx
+	export GRASS_RENDER_HTMLMAXPOINTS
+	GRASS_RENDER_HTMLMAXPOINTS=xx
 	    specifies the maxiumum number of vertices that a polygon can 
 	    have.  The default is 99.  Some browser can only handle
 	    image map polygons of less that 100 vertices.
@@ -99,13 +99,13 @@ that exists in a vector file will have the same HREF tag.
          d.mon stop=HTMLMAP
 
        This will write the image map file file. A new file called 'htmlmap' 
-       (or whatever you specified with GRASS_HTMLFILE) will be created  
+       (or whatever you specified with GRASS_RENDER_FILE) will be created  
        in your current directory.  
 
     4. In practice, you'll want to create gif/jpg/png images that correspond 
        with your newly created image map:
 
-         # using previous GRASS_WIDTH & GRASS_HEIGHT
+         # using previous GRASS_RENDER_WIDTH & GRASS_RENDER_HEIGHT
          d.mon start=CELL
          d.mon select=CELL
          d.rast map=terrain

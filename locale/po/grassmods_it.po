@@ -25468,7 +25468,7 @@ msgid "Name of monitor to select"
 msgstr "Nome del monitor grafico da selezionare"
 
 #: ../display/d.mon/main.c:66
-msgid "Width for display monitor if not set by GRASS_WIDTH"
+msgid "Width for display monitor if not set by GRASS_RENDER_WIDTH"
 msgstr ""
 
 #: ../display/d.mon/main.c:67
@@ -25476,7 +25476,7 @@ msgid "Default value: 640"
 msgstr ""
 
 #: ../display/d.mon/main.c:74
-msgid "Height for display monitor if not set by GRASS_HEIGHT"
+msgid "Height for display monitor if not set by GRASS_RENDER_HEIGHT"
 msgstr ""
 
 #: ../display/d.mon/main.c:75

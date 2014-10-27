@@ -34,7 +34,7 @@ int HTML_Graph_set(void)
      * set the minimum bounding box dimensions 
      */
 
-    if (NULL != (p = getenv("GRASS_HTMLMINBBOX"))) {
+    if (NULL != (p = getenv("GRASS_RENDER_HTMLMINBBOX"))) {
 	html.BBOX_MINIMUM = atoi(p);
 	if (html.BBOX_MINIMUM <= 0) {
 	    html.BBOX_MINIMUM = DEF_MINBBOX;
@@ -48,7 +48,7 @@ int HTML_Graph_set(void)
      * set the maximum number of points
      */
 
-    if (NULL != (p = getenv("GRASS_HTMLMAXPOINTS"))) {
+    if (NULL != (p = getenv("GRASS_RENDER_HTMLMAXPOINTS"))) {
 	html.MAX_POINTS = atoi(p);
 	if (html.MAX_POINTS <= 0) {
 	    html.MAX_POINTS = DEF_MAXPTS;
@@ -62,7 +62,7 @@ int HTML_Graph_set(void)
      * set the minimum difference to keep a point
      */
 
-    if (NULL != (p = getenv("GRASS_HTMLMINDIST"))) {
+    if (NULL != (p = getenv("GRASS_RENDER_HTMLMINDIST"))) {
 	html.MINIMUM_DIST = atoi(p);
 	if (html.MINIMUM_DIST <= 0) {
 	    html.MINIMUM_DIST = DEF_MINDIST;
@@ -77,7 +77,7 @@ int HTML_Graph_set(void)
      * open the output file
      */
 
-    if (NULL != (p = getenv("GRASS_HTMLFILE"))) {
+    if (NULL != (p = getenv("GRASS_RENDER_FILE"))) {
 	if (strlen(p) == 0) {
 	    p = FILE_NAME;
 	}
@@ -102,7 +102,7 @@ int HTML_Graph_set(void)
      * check type of map wanted
      */
 
-    if (NULL == (p = getenv("GRASS_HTMLTYPE"))) {
+    if (NULL == (p = getenv("GRASS_RENDER_HTMLTYPE"))) {
 	p = "CLIENT";
     }
     

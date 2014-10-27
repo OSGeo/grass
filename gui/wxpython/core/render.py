@@ -147,7 +147,7 @@ class Layer(object):
                                  {'type' : self.type, 'name' : self.name})
 
         if self.mapfile:
-            self.environ["GRASS_PNGFILE"] = self.mapfile
+            self.environ["GRASS_RENDER_FILE"] = self.mapfile
 
         # execute command
         try:
@@ -158,9 +158,9 @@ class Layer(object):
                     if ret != 0:
                         break
                     if not read:
-                        self.environ["GRASS_PNG_READ"] = "TRUE"
+                        self.environ["GRASS_RENDER_FILE_READ"] = "TRUE"
 
-                self.environ["GRASS_PNG_READ"] = "FALSE"
+                self.environ["GRASS_RENDER_FILE_READ"] = "FALSE"
             else:
                 ret, msg = self._runCommand(self.cmd)
             if ret != 0:
@@ -416,10 +416,10 @@ class Map(object):
         self.progressInfo = None
 
         # GRASS environment variable (for rendering)
-        self.default_env = {"GRASS_BACKGROUNDCOLOR" : "000000",
-                            "GRASS_PNG_COMPRESSION" : "0",
-                            "GRASS_TRUECOLOR"       : "TRUE",
-                            "GRASS_TRANSPARENT"     : "TRUE"
+        self.default_env = {"GRASS_RENDER_BACKGROUNDCOLOR" : "000000",
+                            "GRASS_RENDER_FILE_COMPRESSION" : "0",
+                            "GRASS_RENDER_TRUECOLOR"       : "TRUE",
+                            "GRASS_RENDER_TRANSPARENT"     : "TRUE"
                             }
 
         # projection info
@@ -936,8 +936,8 @@ class Map(object):
         if self.gisrc:
             env['GISRC'] = self.gisrc
         env['GRASS_REGION'] = self.SetRegion(windres)
-        env['GRASS_WIDTH'] = str(self.width)
-        env['GRASS_HEIGHT'] = str(self.height)
+        env['GRASS_RENDER_WIDTH'] = str(self.width)
+        env['GRASS_RENDER_HEIGHT'] = str(self.height)
         driver = UserSettings.Get(group = 'display', key = 'driver', subkey = 'type')
         if driver == 'png':
             env['GRASS_RENDER_IMMEDIATE'] = 'png'

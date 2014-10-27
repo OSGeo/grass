@@ -203,7 +203,7 @@ def main():
         wms = WMSGdalDrv()
     
     temp_map = wms.GetMap(options, flags) 
-    os.rename(temp_map, os.environ["GRASS_PNGFILE"])
+    os.rename(temp_map, os.environ["GRASS_RENDER_FILE"])
 
     return 0
 
