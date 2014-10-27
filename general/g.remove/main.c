@@ -79,6 +79,7 @@ int main(int argc, char *argv[])
     opt.type->options = M_get_options(TRUE);
     opt.type->descriptions = M_get_option_desc(TRUE);
     opt.type->guidependency = "pattern,exclude,names,ignore";
+    opt.type->guisection = _("Basic");
 
     opt.names = G_define_option();
     opt.names->key = "names";
@@ -86,7 +87,7 @@ int main(int argc, char *argv[])
     opt.names->multiple = YES;
     opt.names->gisprompt = "old,element,element";
     opt.names->description = _("File names separated by a comma");
-    opt.names->guisection = _("Names");
+    opt.names->guisection = _("Basic");
 
     opt.ignore = G_define_option();
     opt.ignore->key = "ignore";
@@ -95,7 +96,7 @@ int main(int argc, char *argv[])
     opt.ignore->gisprompt = "old,element,element";
     opt.ignore->description =
 	_("File names to ignore separated by a comma (default: none)");
-    opt.ignore->guisection = _("Names");
+    opt.ignore->guisection = _("Pattern");
 
     opt.pattern = G_define_option();
     opt.pattern->key = "pattern";
@@ -123,6 +124,7 @@ int main(int argc, char *argv[])
 
     flag.force = G_define_flag();
     flag.force->key = 'f';
+    flag.force->guisection = _("Basic");
     flag.force->description =
 	_("Force removal (required for actual deletion of files)");
 
