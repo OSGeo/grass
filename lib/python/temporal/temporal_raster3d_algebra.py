@@ -53,7 +53,7 @@ class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
                 if self.run:
                     m = copy.deepcopy(self.m_remove)
                     m.inputs["type"].value = "rast3d"
-                    m.inputs["pattern"].value = stringlist
+                    m.inputs["name"].value = stringlist
                     m.flags["f"].value = True
                     m.run()
 

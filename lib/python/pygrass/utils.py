@@ -92,7 +92,7 @@ def findmaps(type, pattern=None, mapset='', location='', gisdbase=''):
 def remove(oldname, maptype):
     """Remove a map"""
     grasscore.run_command('g.remove', quiet=True, flags='f',
-                          type=maptype, pattern=oldname)
+                          type=maptype, name=oldname)
 
 
 def rename(oldname, newname, maptype, **kwargs):

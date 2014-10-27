@@ -19,7 +19,7 @@ class TestViewshed(grass.gunittest.TestCase):
         """Remove viewshed map after each test method"""
         # TODO: eventually, removing maps should be handled through testing framework fucntions
         cls.runModule('g.remove', flags='f', type='rast',
-                      pattern=cls.viewshed)
+                      name=cls.viewshed)
 
     def test_limits(self):
         """Test if results is in expected limits"""
@@ -92,10 +92,10 @@ class TestViewshedAgainstReference(grass.gunittest.TestCase):
     def tearDownClass(cls):
         cls.del_temp_region()
         cls.runModule('g.remove', flags='f', type='rast',
-                      pattern=cls.elevation)
+                      name=cls.elevation)
         if cls.to_remove:
             cls.runModule('g.remove', flags='f', type='rast',
-                          pattern=','.join(cls.to_remove))
+                          name=','.join(cls.to_remove))
 
     def test_viewshed(self):
         ref_viewshed = 'reference_viewshed'

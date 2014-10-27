@@ -70,9 +70,9 @@ import grass.script as grass
 def cleanup():
     if rastertmp:
         grass.run_command('g.remove', flags='f', type='rast',
-                          pattern=rastertmp, quiet=True)
+                          name=rastertmp, quiet=True)
     grass.run_command('g.remove', flags='f', type='rast',
-                      pattern='MASK', quiet=True, stderr=nuldev)
+                      name='MASK', quiet=True, stderr=nuldev)
     if mask_found:
         grass.message(_("Restoring previous MASK..."))
         grass.run_command('g.rename', rast=(tmpname + "_origmask", 'MASK'),
@@ -282,7 +282,7 @@ def main():
                                  database=fi['database'], driver=fi['driver'])
 
     grass.run_command('g.remove', flags='f', type='rast',
-                      pattern='MASK', quiet=True, stderr=nuldev)
+                      name='MASK', quiet=True, stderr=nuldev)
 
     if exitcode == 0:
         grass.verbose((_("Statistics calculated from raster map <%s>") % raster) +

@@ -144,8 +144,8 @@ def main():
             count += 1
 
     if use_granularity:
-        grass.run_command("g.remove", flags='f', type='rast', pattern=null_map)
-    grass.run_command("g.remove", flags='f', type='rast', pattern=map_name)
+        grass.run_command("g.remove", flags='f', type='rast', name=null_map)
+    grass.run_command("g.remove", flags='f', type='rast', name=map_name)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

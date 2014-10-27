@@ -939,7 +939,7 @@ class VNETTmpVectMaps:
         if vectMap:
             vectMap.DeleteRenderLayer()
             RunCommand('g.remove', flags = 'f', type = 'vect',
-                        pattern = vectMap.GetVectMapName())
+                        name = vectMap.GetVectMapName())
             self.RemoveFromTmpMaps(vectMap)
             return True
         return False
@@ -949,7 +949,7 @@ class VNETTmpVectMaps:
         update = False
         for tmpMap in self.tmpMaps:
             RunCommand('g.remove', flags = 'f', type = 'vect',
-                        pattern = tmpMap.GetVectMapName())
+                        name = tmpMap.GetVectMapName())
             if tmpMap.DeleteRenderLayer():
                 update = True
         return update

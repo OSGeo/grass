@@ -466,7 +466,7 @@ class GRASSImporter:
                                   quiet = True,
                                   flags = 'fb',
                                   type = 'rast',
-                                  pattern = ','.join(maps))
+                                  name = ','.join(maps))
         
         # delete environmental variable which overrides region 
         if 'GRASS_REGION' in os.environ.keys():

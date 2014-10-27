@@ -185,7 +185,7 @@ def main():
 
                 if aggreagated_map_name:
                     ret = grass.run_command("g.remove", flags='f', type=rast,
-                                            pattern=aggreagated_map_name)
+                                            name=aggreagated_map_name)
                     if ret != 0:
                         dbif.close()
                         grass.fatal(_("Unable to remove raster map <%s>")

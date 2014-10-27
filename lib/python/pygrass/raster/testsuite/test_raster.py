@@ -21,7 +21,7 @@ class RasterRowTestCate(TestCase):
     def tearDownClass(cls):
         """Remove the generated vector map, if exist"""
         from grass.pygrass.modules.shortcuts import general as g
-        g.remove(type='rast', pattern=cls.tmp, flags='f')
+        g.remove(type='rast', name=cls.tmp, flags='f')
 
     def test_type(self):
         r = RasterRow(self.name)

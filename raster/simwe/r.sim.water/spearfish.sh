@@ -57,5 +57,5 @@ echo "Now open paraview from this command line and load the vtk files as time se
 echo "Step throu the time steps and adjust the color tables"
 
 # cleanup
-g.remove --q -f type=rast pattern=${output}_dx,${output}_dy,${output}_rain,${output}_manin,${output}_infil,${output}_null
-g.remove --q -f type=vect pattern=observation_points
+g.remove --q -f type=rast name=${output}_dx,${output}_dy,${output}_rain,${output}_manin,${output}_infil,${output}_null
+g.remove --q -f type=vect name=observation_points

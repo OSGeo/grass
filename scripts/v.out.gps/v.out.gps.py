@@ -100,11 +100,11 @@ def cleanup():
     if tmp_vogb:
 	if grass.find_file(tmp_vogb, element = 'vector')['name']:
 	    grass.run_command('g.remove', flags = 'f', type = 'vect',
-                          pattern = tmp_vogb, quiet = True)
+                          name = tmp_vogb, quiet = True)
     if tmp_extr:
 	if grass.find_file(tmp_extr, element = 'vector')['name']:
 	    grass.run_command('g.remove', flags = 'f', type = 'vect',
-                          pattern = tmp_vogb, quiet = True)
+                          name = tmp_vogb, quiet = True)
 
 tmp = None
 tmp_proj = None

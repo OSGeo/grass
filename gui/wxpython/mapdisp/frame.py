@@ -694,7 +694,7 @@ class MapFrame(SingleMapFrame):
                                           overwrite=overwrite, getErrorMsg=True)
         grass.del_temp_region()
         RunCommand('g.remove', type='rast', flags='f', quiet=True,
-                   names=[tmpName + '.r', tmpName + '.g', tmpName + '.b'])
+                   name=[tmpName + '.r', tmpName + '.g', tmpName + '.b'])
         if not returncode == 0:
             self._giface.WriteError(_('Failed to run d.to.rast:\n') + messages)
             grass.try_remove(pngFile)

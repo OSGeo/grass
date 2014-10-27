@@ -30,7 +30,7 @@ class TestRaster3dMapAssertions(gunittest.TestCase):
         cls.del_temp_region()
         # TODO: input as list does not work, why?
         cls.runModule('g.remove', flags='f', type='rast3d',
-                      pattern=','.join([cls.constant_map, cls.rcd_increasing_map]))
+                      name=','.join([cls.constant_map, cls.rcd_increasing_map]))
 
     def test_assertRaster3dFitsUnivar(self):
         reference = dict(n=1000000,

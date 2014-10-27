@@ -263,8 +263,8 @@ class RLiSetupMapPanel(wx.Panel):
 
         marea = MaskedArea(region, rasterName)
 
-        RunCommand('g.remove', flags='f', type='rast', pattern=tmpraster)
-        RunCommand('g.remove', flags='f', type='vect', pattern=tmpvector)
+        RunCommand('g.remove', flags='f', type='rast', name=tmpraster)
+        RunCommand('g.remove', flags='f', type='vect', name=tmpvector)
 
         os.unlink(polyfile.name)
         return marea

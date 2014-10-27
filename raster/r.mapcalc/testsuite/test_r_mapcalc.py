@@ -74,7 +74,7 @@ class TestRandFunction(grass.gunittest.TestCase):
         cls.del_temp_region()
         if cls.to_remove:
             cls.runModule('g.remove', flags='f', type='rast',
-                pattern=','.join(cls.to_remove))
+                name=','.join(cls.to_remove))
 
     def rinfo_contains_number(self, raster, number):
         """Test that r.info standard output for raster contains a given number
@@ -179,7 +179,7 @@ class TestBasicOperations(grass.gunittest.TestCase):
         cls.del_temp_region()
         if cls.to_remove:
             cls.runModule('g.remove', flags='f', type='rast',
-                pattern=','.join(cls.to_remove), verbose=True)
+                name=','.join(cls.to_remove), verbose=True)
 
     def test_difference_of_the_same_map_double(self):
         """Test zero difference of map with itself"""
