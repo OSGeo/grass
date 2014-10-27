@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
     double xmin, ymin, xmax, ymax;
     int ncols = 0, type;
     double min_area, snap;
-    char buf[2000], namebuf[2000];
+    char buf[DB_SQL_MAX], namebuf[1024];
     char *separator;
     
     struct Key_Value *loc_proj_info, *loc_proj_units;
