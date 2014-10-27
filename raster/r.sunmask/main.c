@@ -361,7 +361,7 @@ int main(int argc, char *argv[])
 		    fprintf(stdout, "sunangleabovehorizon=%f\n",
 			    pdat->elevref);
 
-		    if (sretr / 60 <= 24.0) {
+		    if (sretr / 60 <= 24) {
 			fprintf(stdout, "sunrise=%02d:%02d:%02d\n",
 				sretr / 60, sretr % 60, sretr_sec);
 			fprintf(stdout, "sunset=%02d:%02d:%02d\n", ssetr / 60,
@@ -382,7 +382,7 @@ int main(int argc, char *argv[])
 		    fprintf(stdout, "Solar position: sun azimuth: %f, sun angle above horz. (refraction corrected): %f\n",
 			    pdat->azim, pdat->elevref);
 		    
-		    if (sretr / 60 <= 24.0) {
+		    if (sretr / 60 <= 24) {
 			fprintf(stdout, "Sunrise time (without refraction): %02d:%02d:%02d\n",
 				sretr / 60, sretr % 60, sretr_sec);
 			fprintf(stdout, "Sunset time  (without refraction): %02d:%02d:%02d\n",
@@ -409,7 +409,7 @@ int main(int argc, char *argv[])
     if (use_solpos) {
 	G_debug(3, "current_time:%f sunrise:%f", current_time, sunrise);
 	if ((current_time < sunrise)) {
-	    if (sretr / 60 <= 24.0)
+	    if (sretr / 60 <= 24)
 		G_message(_("Time (%02i:%02i:%02i) is before sunrise (%02d:%02d:%02d)"),
 			  pdat->hour, pdat->minute, pdat->second, sretr / 60,
 			  sretr % 60, sretr_sec);
@@ -420,7 +420,7 @@ int main(int argc, char *argv[])
 	    G_warning(_("Nothing to calculate. Please verify settings."));
 	}
 	if ((current_time > sunset)) {
-	    if (sretr / 60 <= 24.0)
+	    if (sretr / 60 <= 24)
 		G_message(_("Time (%02i:%02i:%02i) is after sunset (%02d:%02d:%02d)"),
 			  pdat->hour, pdat->minute, pdat->second, ssetr / 60,
 			  ssetr % 60, ssetr_sec);

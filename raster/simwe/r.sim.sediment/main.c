@@ -101,7 +101,6 @@ int main(int argc, char *argv[])
 {
     int ii;
     int ret_val;
-    double x_orig, y_orig;
     static int rand1 = 12345;
     static int rand2 = 67891;
 
@@ -274,8 +273,6 @@ int main(int argc, char *argv[])
     step = (stepx + stepy) / 2.;
     mx = cellhd.cols;
     my = cellhd.rows;
-    x_orig = cellhd.west * conv;
-    y_orig = cellhd.south * conv;	/* do we need this? */
     xmin = 0.;
     ymin = 0.;
     xp0 = xmin + stepx / 2.;
@@ -330,9 +327,9 @@ int main(int argc, char *argv[])
 
     /* Recompute timesec from user input in minutes
      * to real timesec in seconds */
-    timesec = timesec * 60.0;
-    iterout = iterout * 60.0;
-    if ((timesec / iterout) > 100.0)
+    timesec = timesec * 60;
+    iterout = iterout * 60;
+    if ((timesec / iterout) > 100)
 	G_message(_("More than 100 files are going to be created !!!!!"));
 
     /* compute how big the raster is and set this to appr 2 walkers per cell */
