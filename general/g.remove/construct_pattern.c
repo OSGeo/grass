@@ -1,3 +1,4 @@
+#include <ctype.h>
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
