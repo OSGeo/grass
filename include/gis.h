@@ -305,6 +305,16 @@ typedef enum
     G_FLG_V_TOPO,               /*!< do not build topology */
 } STD_FLG;
 
+/* Parser rules for G__option_rule() */
+enum rule_type {
+    RULE_EXCLUSIVE,
+    RULE_REQUIRED,
+    RULE_REQUIRES,
+    RULE_REQUIRES_ALL,
+    RULE_EXCLUDES,
+    RULE_COLLECTIVE
+};
+
 /* Message format */
 #define G_INFO_FORMAT_STANDARD 0	/* GRASS_MESSAGE_FORMAT=standard or not defined */
 #define G_INFO_FORMAT_GUI      1	/* GRASS_MESSAGE_FORMAT=gui */
