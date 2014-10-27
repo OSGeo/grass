@@ -175,7 +175,7 @@ def main():
             
 
         # Cleanup
-        grass.run_command('g.remove', quiet=True, rast='%s,%s,%s' % (panmatch1, panmatch2, panmatch3))
+        grass.run_command('g.remove', quiet=True, flags='f', type='rast', name='%s,%s,%s' % (panmatch1, panmatch2, panmatch3))
 
     elif sharpen == "ihs":
         grass.verbose(_("Using IHS<->RGB algorithm"))
@@ -205,7 +205,7 @@ def main():
                           blue_output="%s_blue" % out)
 
         # Cleanup
-        grass.run_command('g.remove', quiet=True, rast=panmatch)
+        grass.run_command('g.remove', quiet=True, flags='f', type='rast', name=panmatch)
         
     elif sharpen == "pca":
         grass.verbose(_("Using PCA/inverse PCA algorithm"))
@@ -299,7 +299,7 @@ def main():
 
         
         # Cleanup
-        grass.run_command('g.mremove', flags='f', quiet=True, type="rast", pattern='tmp%s*,%s' % (pid,panmatch))
+        grass.run_command('g.remove', flags='f', quiet=True, type="rast", pattern='tmp%s*,%s' % (pid,panmatch))
         
     #Could add other sharpening algorithms here, e.g. wavelet transformation
 
@@ -335,7 +335,7 @@ def main():
         grass.raster_history("%s_%s" % (out, ch))
 
     # Cleanup        
-    grass.run_command('g.mremove', flags="f", type="rast", pattern="tmp%s*" % pid, quiet=True)
+    grass.run_command('g.remove', flags="f", type="rast", pattern="tmp%s*" % pid, quiet=True)
 
         
 def matchhist(original, target, matched):
@@ -417,7 +417,7 @@ def matchhist(original, target, matched):
     # create reclass of target from reclass rules file
     result = grass.core.find_file(matched, element = 'cell')
     if result['fullname']:
-        grass.run_command('g.remove', quiet=True, rast=matched)
+        grass.run_command('g.remove', quiet=True, flags='f', type='rast', name=matched)
         grass.run_command('r.reclass', input=original, out=matched, rules=outfile.name)
     else:
         grass.run_command('r.reclass', input=original, out=matched, rules=outfile.name)

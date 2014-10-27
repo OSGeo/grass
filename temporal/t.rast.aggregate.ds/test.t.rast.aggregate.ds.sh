@@ -47,4 +47,4 @@ t.unregister type=vect maps=soil_1,soil_2,soil_3
 t.remove type=stvds input=soil_abs1
 
 t.remove -rf type=strds input=precip_abs1,precip_abs2
-g.remove vect=soil_1,soil_2,soil_3
+g.remove -f type=vect name=soil_1,soil_2,soil_3

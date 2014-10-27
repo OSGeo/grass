@@ -402,7 +402,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         # get current mapset
         curr_mapset = grass.gisenv()['MAPSET']
         
-        # map element types to g.mlist types
+        # map element types to g.list types
         elementdict = {'cell':'rast',
                        'raster':'rast',
                        'rast':'rast',
@@ -464,12 +464,8 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             else:
                 filesdict = None
         else:
-            if globalvar.have_mlist:
-                filesdict = grass.mlist_grouped(elementdict[element],
-                                                check_search_path = False)
-            else:
-                filesdict = grass.list_grouped(elementdict[element],
-                                               check_search_path = False)
+            filesdict = grass.list_grouped(elementdict[element],
+                                            check_search_path = False)
         
         # add extra items first
         if self.extraItems:

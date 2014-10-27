@@ -45,4 +45,4 @@ r.to.rast3elev --o -l  input=elev_45_double,elev_25_double,elev_5_double elevati
 # r.to.rast3elev --o -lu input=elev_25_double,elev_5_double elevation=elev_25_double,elev_5_double output=test_elev_volume_double_9
 
 # Export of the references
-# for i in `g.mlist type=rast3d pattern=test_elev_volume_*` ; do r3.out.ascii dp=0 input=$i output=${i}.ref; done
+# for i in `g.list type=rast3d pattern=test_elev_volume_*` ; do r3.out.ascii dp=0 input=$i output=${i}.ref; done

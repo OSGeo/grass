@@ -708,11 +708,11 @@ class Model(object):
         rast, vect, rast3d, msg = self.GetIntermediateData()
         
         if rast:
-            log.RunCmd(['g.remove', 'rast=%s' %','.join(rast)])
+            log.RunCmd(['g.remove', '-f', 'type=rast', 'name=%s' %','.join(rast)])
         if rast3d:
-            log.RunCmd(['g.remove', 'rast3d=%s' %','.join(rast3d)])
+            log.RunCmd(['g.remove', '-f', 'type=rast3d', 'name=%s' %','.join(rast3d)])
         if vect:
-            log.RunCmd(['g.remove', 'vect=%s' %','.join(vect)])
+            log.RunCmd(['g.remove', '-f', 'type=vect', 'name=%s' %','.join(vect)])
         
     def GetIntermediateData(self):
         """!Get info about intermediate data"""
@@ -2337,18 +2337,18 @@ def cleanup():
 """)
         if rast:
             self.fd.write(
-r"""    run_command('g.remove',
-                      rast=%s)
+r"""    run_command('g.remove', flags='f', type='rast',
+                      name=%s)
 """ % ','.join(map(lambda x: "'" + x + "'", rast)))
         if vect:
             self.fd.write(
-r"""    run_command('g.remove',
-                      vect = %s)
+r"""    run_command('g.remove', flags='f', type='vect',
+                      name=%s)
 """ % ','.join(map(lambda x: "'" + x + "'", vect)))
         if rast3d:
             self.fd.write(
-r"""    run_command('g.remove',
-                      rast3d = %s)
+r"""    run_command('g.remove', flags='f', type='rast3d',
+                      name=%s)
 """ % ','.join(map(lambda x: "'" + x + "'", rast3d)))
         if not rast and not vect and not rast3d:
             self.fd.write('    pass\n')

@@ -185,7 +185,7 @@ def main():
             else:
                 names += ",%s" % (map.get_name())
 
-        grass.run_command("g.remove", rast=names, quiet=True)
+        grass.run_command("g.remove", type='rast', name=names, quiet=True, flags='f')
 
     dbif.close()
 

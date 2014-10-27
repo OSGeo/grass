@@ -326,11 +326,11 @@ class ModelFrame(wx.Frame):
             dlg.Destroy()
             
             if rast:
-                self._gconsole.RunCmd(['g.remove', 'rast=%s' %','.join(rast)])
+                self._gconsole.RunCmd(['g.remove', '-f', 'type=rast', 'name=%s' %','.join(rast)])
             if rast3d:
-                self._gconsole.RunCmd(['g.remove', 'rast3d=%s' %','.join(rast3d)])
+                self._gconsole.RunCmd(['g.remove', '-f', 'type=rast3d', 'name=%s' %','.join(rast3d)])
             if vect:
-                self._gconsole.RunCmd(['g.remove', 'vect=%s' %','.join(vect)])
+                self._gconsole.RunCmd(['g.remove', '-f', 'type=vect', 'name=%s' %','.join(vect)])
             
             self.SetStatusText(_("%d maps deleted from current mapset") % \
                                  int(len(rast) + len(rast3d) + len(vect)))

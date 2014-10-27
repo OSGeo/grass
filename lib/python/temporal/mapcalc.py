@@ -331,9 +331,9 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
                     names += ",%s" % (map.get_name())
                 count += 1
             if type == "raster":
-                gscript.run_command("g.remove", rast=names, quiet=True)
+                gscript.run_command("g.remove", type='rast', name=names, quiet=True, flags='f')
             elif type == "raster3d":
-                gscript.run_command("g.remove", rast3d=names, quiet=True)
+                gscript.run_command("g.remove", type='rast3d', name=names, quiet=True, flags='f')
 
     dbif.close()
 

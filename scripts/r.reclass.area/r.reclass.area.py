@@ -229,9 +229,9 @@ def cleanup():
     TMPRAST.reverse()  # reclassed map first
     for mapp in TMPRAST:
         if METHOD == 'rmarea':
-            grass.run_command("g.remove", vect=mapp, quiet=True)
+            grass.run_command("g.remove", type='vect', name=mapp, quiet=True, flags='f')
         else:
-            grass.run_command("g.remove", rast=mapp, quiet=True)
+            grass.run_command("g.remove", type='rast', name=mapp, quiet=True, flags='f')
 
 if __name__ == "__main__":
     options, flags = grass.parser()

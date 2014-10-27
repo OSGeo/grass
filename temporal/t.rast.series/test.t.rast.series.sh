@@ -32,4 +32,4 @@ r.info prec_sum
 t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6,prec_sum,prec_max
 t.remove type=strds input=precip_abs
 
-g.remove rast=prec_sum,prec_max,prec_average
+g.remove -f type=rast name=prec_sum,prec_max,prec_average
