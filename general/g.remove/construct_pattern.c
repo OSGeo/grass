@@ -54,7 +54,7 @@ char *construct_pattern(char **names)
     *p = '\0';
 
     if (found_illegal_names)
-	G_fatal_error(_("Illegal filenames not allowed in the names or ignore "
+	G_fatal_error(_("Illegal filenames not allowed in the name or ignore "
 			"option."));
 
     return pattern;
