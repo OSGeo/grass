@@ -1378,8 +1378,8 @@ set_browser()
 #predefine monitor size for certain architectures
 if os.getenv('HOSTTYPE') == 'arm':
     # small monitor on ARM (iPAQ, zaurus... etc)
-    os.environ['GRASS_HEIGHT'] = "320"
-    os.environ['GRASS_WIDTH'] = "240"
+    os.environ['GRASS_RENDER_HEIGHT'] = "320"
+    os.environ['GRASS_RENDER_WIDTH'] = "240"
 
 # First time user - GISRC is defined in the GRASS script
 if not os.access(gisrc, os.F_OK):

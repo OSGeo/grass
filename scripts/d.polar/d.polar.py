@@ -87,7 +87,7 @@ def plot_dgraph():
     fb = frame_height - dy
 
     tenv = os.environ.copy()
-    tenv['GRASS_FRAME'] = '%f,%f,%f,%f' % (ft, fb, fl, fr)
+    tenv['GRASS_RENDER_FRAME'] = '%f,%f,%f,%f' % (ft, fb, fl, fr)
 
     # polyline calculations
     ring = 0.95

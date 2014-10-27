@@ -66,11 +66,11 @@ static void init_xlib(void)
     if (!ca.dpy)
 	G_fatal_error(_("Unable to open display"));
 
-    p = getenv("GRASS_CAIRO_SCREEN");
+    p = getenv("GRASS_RENDER_CAIRO_SCREEN");
     if (!p || sscanf(p, "%i", &scrn) != 1)
 	scrn = DefaultScreen(ca.dpy);
 
-    p = getenv("GRASS_CAIRO_VISUAL");
+    p = getenv("GRASS_RENDER_CAIRO_VISUAL");
     if (!p || sscanf(p, "%li", &xid) != 1)
 	xid = DefaultVisual(ca.dpy, scrn)->visualid;
 
@@ -121,7 +121,7 @@ static void init_file(void)
     ca.stride = ca.width * 4;
 
     /* get file name */
-    p = getenv("GRASS_PNGFILE");
+    p = getenv("GRASS_RENDER_FILE");
     if (!p || strlen(p) == 0)
 	p = DEFAULT_FILE_NAME;
 
@@ -167,10 +167,10 @@ static void init_file(void)
 	break;
     }
 
-    p = getenv("GRASS_PNG_MAPPED");
+    p = getenv("GRASS_RENDER_FILE_MAPPED");
     do_map = p && strcmp(p, "TRUE") == 0 && ends_with(ca.file_name, ".bmp");
 
-    p = getenv("GRASS_PNG_READ");
+    p = getenv("GRASS_RENDER_FILE_READ");
     do_read = p && strcmp(p, "TRUE") == 0;
 
     if (is_vector) {
@@ -236,7 +236,7 @@ int Cairo_Graph_set(void)
     G_debug(1, "Cairo_Graph_set");
 
     /* get background color */
-    p = getenv("GRASS_BACKGROUNDCOLOR");
+    p = getenv("GRASS_RENDER_BACKGROUNDCOLOR");
     if (p && *p) {
 	unsigned int red, green, blue;
 
@@ -253,14 +253,14 @@ int Cairo_Graph_set(void)
 	ca.bgcolor_r = ca.bgcolor_g = ca.bgcolor_b = 1.0;
 
     /* get background transparency setting */
-    p = getenv("GRASS_TRANSPARENT");
+    p = getenv("GRASS_RENDER_TRANSPARENT");
     if (p && strcmp(p, "TRUE") == 0)
 	ca.bgcolor_a = 0.0;
     else
 	ca.bgcolor_a = 1.0;
 
     antialias = CAIRO_ANTIALIAS_DEFAULT;
-    p = getenv("GRASS_ANTIALIAS");
+    p = getenv("GRASS_RENDER_ANTIALIAS");
     if (p && G_strcasecmp(p, "default") == 0)
 	antialias = CAIRO_ANTIALIAS_DEFAULT;
     if (p && G_strcasecmp(p, "none") == 0)

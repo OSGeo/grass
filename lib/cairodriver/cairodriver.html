@@ -28,25 +28,25 @@ export GRASS_RENDER_IMMEDIATE=cairo
 Several environment variables affect the operation of the Cairo driver:
 
 <ul>
-  <li><b>GRASS_WIDTH=xxx</b><br>
+  <li><b>GRASS_RENDER_WIDTH=xxx</b><br>
     the width of the image map (default is 640).
   </li>
-  <li><b>GRASS_HEIGHT=yyy</b><br>
+  <li><b>GRASS_RENDER_HEIGHT=yyy</b><br>
     the height of the image map (default is 480).
   </li>
-  <li><b>GRASS_BACKGROUNDCOLOR=RRGGBB</b><br>
+  <li><b>GRASS_RENDER_BACKGROUNDCOLOR=RRGGBB</b><br>
     specifies the background color to use in RGB notation (hex or
     R:G:B values). Named colors are also supported. Default
     is <b>FFFFFF</b> (white).
   </li>
-  <li><b>GRASS_TRANSPARENT=[TRUE|FALSE]</b><br>
+  <li><b>GRASS_RENDER_TRANSPARENT=[TRUE|FALSE]</b><br>
     sets transparent background on (TRUE) or off (FALSE, default).
   </li>
-  <li><b>GRASS_ANTIALIAS</b><br> can be <em>default</em>,
+  <li><b>GRASS_RENDER_ANTIALIAS</b><br> can be <em>default</em>,
     <em>none</em>, <em>gray</em>, or <em>subpixel</em>, corresponding to
     <a href="http://www.cairographics.org/manual/cairo-cairo-t.html#cairo-antialias-t">cairo_antialias_t</a>
   </li>
-  <li><b>GRASS_PNGFILE=filename</b><br>
+  <li><b>GRASS_RENDER_FILE=filename</b><br>
      the name and format of the resulting image file, default is
      <tt>map.png</tt>.<br>
      The image format is determined from the file extension.<br>
@@ -66,20 +66,20 @@ Several environment variables affect the operation of the Cairo driver:
      (Note: Some formats may not be available, depending on your platform and
      the Cairo library that GRASS was built with.)
   </li> 
-  <li><b>GRASS_PNG_READ</b><br>
+  <li><b>GRASS_RENDER_FILE_READ</b><br>
      if <tt>TRUE</tt>, the Cairo driver will initialize the image from
-    the contents of GRASS_PNGFILE.<br>
+    the contents of GRASS_RENDER_FILE.<br>
     (<em>Note: This is only supported for bitmap formats</em>)
   </li>
-  <li><b>GRASS_PNG_MAPPED</b><br>
-    if <tt>TRUE</tt>, the Cairo driver will map GRASS_PNGFILE as its framebuffer,
+  <li><b>GRASS_RENDER_FILE_MAPPED</b><br>
+    if <tt>TRUE</tt>, the Cairo driver will map GRASS_RENDER_FILE as its framebuffer,
     rather than using memory.<br>
     (<em>Note: This only works with BMP files.</em>)
   </li>
-  <li><b>GRASS_CAIRO_SCREEN</b><br>
+  <li><b>GRASS_RENDER_CAIRO_SCREEN</b><br>
     defines Cairo screen
   </li>
-  <li><b>GRASS_CAIRO_VISUAL</b><br>
+  <li><b>GRASS_RENDER_CAIRO_VISUAL</b><br>
     defines Cairo visual
   </li>
 </ul>
@@ -90,10 +90,10 @@ Example: using the driver to generate a PNG file (bash-syntax):
 
 <div class="code"><pre>
 export GRASS_RENDER_IMMEDIATE=cairo
-export GRASS_PNGFILE=nc_spm.png
-export GRASS_WIDTH=800
-export GRASS_HEIGHT=800
-export GRASS_PNG_READ=TRUE
+export GRASS_RENDER_FILE=nc_spm.png
+export GRASS_RENDER_WIDTH=800
+export GRASS_RENDER_HEIGHT=800
+export GRASS_RENDER_FILE_READ=TRUE
 
 g.region rast=elevation
 d.rast map=elevation
@@ -107,9 +107,9 @@ Example: using the driver to generate a PDF file with a vector map (bash-syntax)
 
 <div class="code"><pre>
 export GRASS_RENDER_IMMEDIATE=cairo
-export GRASS_PNGFILE=nc_spm.pdf
-export GRASS_WIDTH=800
-export GRASS_HEIGHT=800
+export GRASS_RENDER_FILE=nc_spm.pdf
+export GRASS_RENDER_WIDTH=800
+export GRASS_RENDER_HEIGHT=800
 
 g.region vect=roadsmajor
 # activate vector font
@@ -122,9 +122,9 @@ Example: using the driver to generate a PDF file with a raster map (bash-syntax)
 
 <div class="code"><pre>
 export GRASS_RENDER_IMMEDIATE=cairo
-export GRASS_PNGFILE=nc_spm.pdf
-export GRASS_WIDTH=800
-export GRASS_HEIGHT=800
+export GRASS_RENDER_FILE=nc_spm.pdf
+export GRASS_RENDER_WIDTH=800
+export GRASS_RENDER_HEIGHT=800
 
 g.region rast=elevation
 d.rast map=elevation

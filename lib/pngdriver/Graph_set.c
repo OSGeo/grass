@@ -88,19 +88,19 @@ int PNG_Graph_set(void)
 
     G_gisinit("PNG driver");
 
-    p = getenv("GRASS_PNGFILE");
+    p = getenv("GRASS_RENDER_FILE");
     if (!p || strlen(p) == 0)
 	p = FILE_NAME;
 
     png.file_name = p;
 
-    p = getenv("GRASS_TRUECOLOR");
+    p = getenv("GRASS_RENDER_TRUECOLOR");
     png.true_color = !p || strcmp(p, "FALSE") != 0;
 
     G_verbose_message(_("png: truecolor status %s"),
 		      png.true_color ? _("enabled") : _("disabled"));
 
-    p = getenv("GRASS_PNG_MAPPED");
+    p = getenv("GRASS_RENDER_FILE_MAPPED");
     do_map = p && strcmp(p, "TRUE") == 0;
 
     if (do_map) {
@@ -110,7 +110,7 @@ int PNG_Graph_set(void)
 	    do_map = 0;
     }
 
-    p = getenv("GRASS_PNG_READ");
+    p = getenv("GRASS_RENDER_FILE_READ");
     do_read = p && strcmp(p, "TRUE") == 0;
 
     if (do_read && access(png.file_name, 0) != 0)
@@ -124,12 +124,12 @@ int PNG_Graph_set(void)
     png.clip_left = 0;
     png.clip_rite = png.width;
 
-    p = getenv("GRASS_TRANSPARENT");
+    p = getenv("GRASS_RENDER_TRANSPARENT");
     png.has_alpha = p && strcmp(p, "TRUE") == 0;
 
     png_init_color_table();
 
-    p = getenv("GRASS_BACKGROUNDCOLOR");
+    p = getenv("GRASS_RENDER_BACKGROUNDCOLOR");
     if (p && *p && 
 	(sscanf(p, "%02x%02x%02x", &red, &grn, &blu) == 3 ||
 	 G_str_to_color(p, (int *)&red, (int *)&grn, (int *)&blu) == 1)) {

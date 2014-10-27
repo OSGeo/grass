@@ -11,7 +11,7 @@ HTML driver can create both client-side image maps embedded into HTML
 files, or server-side image maps used by web server software.
 
 <p>Polygons can at most have 100 vertices (this limit imposed by HTML
-image map formats, see <b>GRASS_HTMLMAXPOINTS</b> below.) The driver
+image map formats, see <b>GRASS_RENDER_HTMLMAXPOINTS</b> below.) The driver
 will attempt to trim polygons that have more that 100 vertices by
 removing vertices with the least amount of angle to the next
 vertice. Also, any polygon that is entirely bounded by another polygon
@@ -44,13 +44,13 @@ export GRASS_RENDER_IMMEDIATE=html
 Several environment variables affect the operation of the HTML driver:
 
 <ul>
-  <li><b>GRASS_WIDTH=xxx</b><br>
+  <li><b>GRASS_RENDER_WIDTH=xxx</b><br>
      the width of the image map (default is 640).
   </li>
-  <li><b>GRASS_HEIGHT=yyy</b><br>
+  <li><b>GRASS_RENDER_HEIGHT=yyy</b><br>
     the height of the image map (default is 480).
   </li>
-  <li><b>GRASS_HTMLTYPE=type</b><br> type of image mape to create
+  <li><b>GRASS_RENDER_HTMLTYPE=type</b><br> type of image mape to create
     (default is CLIENT):
     <dl>
       <dd><tt><b>CLIENT</b></tt> &nbsp;&nbsp; Netscape/IE client-side
@@ -64,7 +64,7 @@ Several environment variables affect the operation of the HTML driver:
 	any other format with user supplied conversion program.</dd>
     </dl>
   </li>
-  <li><b>GRASS_HTMLFILE=filename</b><br>
+  <li><b>GRASS_RENDER_FILE=filename</b><br>
     specifies the resulting file to store the html image map, default
     is <tt>htmlmap</tt>. Files without absolute path names are written
     in the current directory where the driver was started.
@@ -72,7 +72,7 @@ Several environment variables affect the operation of the HTML driver:
     <em>Any existing file of the same name is overwritten without
       warning.</em>
   </li>
-  <li><b>GRASS_HTMLMINDIST=n</b><br>
+  <li><b>GRASS_RENDER_HTMLMINDIST=n</b><br>
     specifies the minimum distance in pixels that a point must change
     from the previous point to keep in the list of vertices for a
     polygon.  The default is <tt>2</tt>, which means that a point's x
@@ -80,14 +80,14 @@ Several environment variables affect the operation of the HTML driver:
     of pixels greater than this value.  This parameter helps to
     eliminate closely spaced points.
   </li>
-  <li><b>GRASS_HTMLMINBBOX=n</b><br>
+  <li><b>GRASS_RENDER_HTMLMINBBOX=n</b><br>
     specifies the minimum bounding box dimensions to record a polygon
     as a clickable area.  The default is <tt>2</tt>, which means that a
     polygon with a bounding box of less than this value is not
     included. This parameter helps to eliminate polygons than are a
     point or line.
   </li>
-  <li><b>GRASS_HTMLMAXPOINTS=n</b><br>
+  <li><b>GRASS_RENDER_HTMLMAXPOINTS=n</b><br>
     specifies the maximum number of vertices included in a polygon's
     clickable area.  The default is <tt>99</tt>. Some browsers can only
     accommodate polygons of 100 vertices or less. The HTMLMAP driver
@@ -125,7 +125,7 @@ driver and other utilities to create .gif or .jpg files.
   available in GRASS 5.</i>
 
 <div class="code"><pre>
-# using previous GRASS_WIDTH &amp; GRASS_HEIGHT
+# using previous GRASS_RENDER_WIDTH &amp; GRASS_RENDER_HEIGHT
 d.mon start=png
 d.rast map=terrain
 d.vect map=area51  fillcolor=white  linecolor=blue

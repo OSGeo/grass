@@ -20,33 +20,33 @@ export GRASS_RENDER_IMMEDIATE=ps
 Several environment variables affect the operation of the PS driver:
 
 <ul>
-  <li><b>GRASS_WIDTH=xxx</b><br>
+  <li><b>GRASS_RENDER_WIDTH=xxx</b><br>
      the width of the image map (default is 640).
   </li>
-  <li><b>GRASS_HEIGHT=yyy</b><br>
+  <li><b>GRASS_RENDER_HEIGHT=yyy</b><br>
     the height of the image map (default is 480).
   </li>
-  <li><b>GRASS_TRUECOLOR=[TRUE|FALSE]</b><br>
+  <li><b>GRASS_RENDER_TRUECOLOR=[TRUE|FALSE]</b><br>
     sets true-color support. Default is FALSE.
   </li>
-  <li><b>GRASS_PSFILE</b><br>
+  <li><b>GRASS_RENDER_FILE</b><br>
     name of output file. If it ends with ".eps" an EPS file
     will be created.
   </li>
-  <li><b>GRASS_PAPER</b><br>
+  <li><b>GRASS_RENDER_PS_PAPER</b><br>
     sets the screen dimensions and margins to
-    fit a standard paper size, see also GRASS_WIDTH, GRASS_HEIGHT.
+    fit a standard paper size, see also GRASS_RENDER_WIDTH, GRASS_RENDER_HEIGHT.
   </li>
-  <li><b>GRASS_LANDSCAPE</b><br>
+  <li><b>GRASS_RENDER_PS_LANDSCAPE</b><br>
     if <tt>TRUE</tt>, the screen is rotated 90 degrees
     counter-clockwise so that a "landscape" screen fits better on
     "portrait" paper.
   </li>
-  <li><b>GRASS_PS_HEADER</b><br>
+  <li><b>GRASS_RENDER_PS_HEADER</b><br>
     if <tt>FALSE</tt>, the output is appended to any existing file,
     and no prolog or setup sections are generated.
   </li>
-  <li><b>GRASS_PS_TRAILER</b><br>
+  <li><b>GRASS_RENDER_PS_TRAILER</b><br>
     if <tt>FALSE</tt>, no trailer section is generated.
   </li>
 </ul>
@@ -55,7 +55,7 @@ Several environment variables affect the operation of the PS driver:
 
 <div class="code"><pre>
 export GRASS_RENDER_IMMEDIATE=ps
-export GRASS_TRUECOLOR=TRUE
+export GRASS_RENDER_TRUECOLOR=TRUE
 
 g.region rast=elevation
 d.rast elevation
@@ -71,7 +71,7 @@ and use the environment variables to set the image size. If you would
 like a larger image, multiply both rows and cols by the same whole
 number to preserve the aspect ratio.
 
-<p>GRASS_TRUECOLOR requires either PostScript level 2 or level 1 plus the
+<p>GRASS_RENDER_TRUECOLOR requires either PostScript level 2 or level 1 plus the
 colorimage and setrgbcolor operators (this is the case for colour
 printers which pre-date level 2 PostScript).
 

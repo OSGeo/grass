@@ -172,18 +172,18 @@ def main():
     tmp_grad_rel = "tmp_grad_rel_%d" % pid
     tmp_img = grass.tempfile() + ".ppm"
 
-    os.environ['GRASS_WIDTH'] = '%d' % width
-    os.environ['GRASS_HEIGHT'] = '%d' % height
-    os.environ['GRASS_FRAME'] = '%f,%f,%f,%f' % (0,height,0,width)
-    os.environ['GRASS_PNGFILE'] = tmp_img
-    os.environ['GRASS_TRUECOLOR'] = 'TRUE'
-    os.environ['GRASS_PNG_READ'] = 'FALSE'
-    os.environ['GRASS_PNG_MAPPED'] = 'FALSE'
-    os.environ['GRASS_TRANSPARENT'] = 'FALSE'
-    os.environ['GRASS_BACKGROUNDCOLOR'] = 'ffffff'
+    os.environ['GRASS_RENDER_WIDTH'] = '%d' % width
+    os.environ['GRASS_RENDER_HEIGHT'] = '%d' % height
+    os.environ['GRASS_RENDER_FRAME'] = '%f,%f,%f,%f' % (0,height,0,width)
+    os.environ['GRASS_RENDER_FILE'] = tmp_img
+    os.environ['GRASS_RENDER_TRUECOLOR'] = 'TRUE'
+    os.environ['GRASS_RENDER_FILE_READ'] = 'FALSE'
+    os.environ['GRASS_RENDER_FILE_MAPPED'] = 'FALSE'
+    os.environ['GRASS_RENDER_TRANSPARENT'] = 'FALSE'
+    os.environ['GRASS_RENDER_BACKGROUNDCOLOR'] = 'ffffff'
     os.environ['GRASS_RENDER_IMMEDIATE'] = 'cairo'
 
-    for var in ['GRASS_LINE_WIDTH', 'GRASS_ANTIALIAS']:
+    for var in ['GRASS_RENDER_LINE_WIDTH', 'GRASS_RENDER_ANTIALIAS']:
         if var in os.environ:
             del os.environ[var]
 
