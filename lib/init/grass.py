@@ -167,7 +167,7 @@ help_text = r"""GRASS GIS %s
 Geographic Resources Analysis Support System (GRASS GIS).
 
 %s:
-  $CMD_NAME [-h | -help | --help] [-v | --version] [-c | -c geofile | -c EPSG:code]
+  $CMD_NAME [-h | -help | --help] [-v | --version] [-c | -c geofile | -c EPSG:code[:datum_trans]]
           [-e] [-text | -gui] [--config param]
           [[[<GISDBASE>/]<LOCATION_NAME>/]<MAPSET>]
 
@@ -646,8 +646,12 @@ def non_interactive(arg, geofile=None):
                         if geofile and geofile.upper().find('EPSG:') > -1:
                             # create location using EPSG code
                             epsg = geofile.split(':', 1)[1]
+                            if ':' in epsg:
+                                epsg, datum_trans = epsg.split(':', 1)
+                            else:
+                                datum_trans = None
                             grass.create_location(gisdbase, location_name,
-                                                      epsg=epsg)
+                                                  epsg=epsg, datum_trans=datum_trans)
                         else:
                             # create location using georeferenced file
                             grass.create_location(gisdbase, location_name,

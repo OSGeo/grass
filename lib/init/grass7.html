@@ -3,7 +3,7 @@
 <h2>SYNOPSIS</h2>
 
 <b>grass71</b> [<b>-h</b> | <b>-help</b> | <b>--help</b>] [<b>-v</b> | <b>--version</b>]
-    [<b>-c</b> | <b>-c geofile</b> | <b>-c EPSG:code</b>]
+    [<b>-c</b> | <b>-c geofile</b> | <b>-c EPSG:code[:datum_trans]</b>]
     [<b>-text</b> | <b>-gtext</b> | <b>-gui</b>]
     [[[<b>&lt;GISDBASE&gt;/</b>]<b>&lt;LOCATION_NAME&gt;/</b>]
     	<b>&lt;MAPSET&gt;</b>]
@@ -26,6 +26,9 @@
 
 <dt><b>-c EPSG:code</b>
 <dd> Creates new GRASS projected location in specified GISDBASE with given EPSG code
+
+<dt><b>-c EPSG:code:datum_trans</b>
+  <dd> Creates new GRASS projected location in specified GISDBASE with given EPSG code and datum transform parameters
 
 <dt><b>-text</b>
 <dd> Indicates that Text-based User Interface should be used (skip welcome screen)
@@ -237,6 +240,11 @@ examples bellow) otherwise taken from the last GRASS session.</dd>
 <dt><b>grass71 -c EPSG:4326 $HOME/grassdata/mylocation</b>
 <dd> Creates new GRASS location with EPSG code 4326 (latitude-longitude, WGS84)
     in the specified GISDBASE
+
+<dt><b>grass71 -c EPSG:5514:3 $HOME/grassdata/mylocation</b>
+<dd> Creates new GRASS location with EPSG code 5514 (S-JTSK / Krovak
+    East North - SJTSK) with datum transformation paramaters used in
+    Czech Republic in the specified GISDBASE
 
 <dt><b>grass71 -c myvector.shp $HOME/grassdata/mylocation</b>
 <dd> Creates new GRASS location based on georeferenced Shapefile
