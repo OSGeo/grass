@@ -84,6 +84,11 @@ static int wc2regex(struct buffer *buf, const char *pat)
     for (p = pat; p && *p; p++) {
 	switch (*p) {
 	case '\\':
+	    add(buf, '\\');
+	    if (!*++p)
+		return 0;
+	    add(buf, *p);
+	    break;
 	case '.':
 	case '|':
 	case '(':
@@ -100,15 +105,13 @@ static int wc2regex(struct buffer *buf, const char *pat)
 	    add(buf, '.');
 	    break;
 	case '{':
-	    if (in_brace)
-		return 0;
-	    in_brace = 1;
+	    in_brace++;
 	    add(buf, '(');
 	    break;
 	case '}':
 	    if (!in_brace)
 		return 0;
-	    in_brace = 0;
+	    in_brace--;
 	    add(buf, ')');
 	    break;
 	case ',':
@@ -118,7 +121,8 @@ static int wc2regex(struct buffer *buf, const char *pat)
 		add(buf, ',');
 	    break;
 	case '[':
-	    p = do_set(buf, p);
+	    if (!(p = do_set(buf, p)))
+		return 0;
 	    break;
 	default:
 	    add(buf, *p);
