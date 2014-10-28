@@ -62,7 +62,7 @@ int begin_rasterization(int cache_mb, int f, int do_dense)
     if (max_rows > region.rows)
 	max_rows = region.rows;
 
-    G_debug(0, "%d of %d rows are cached", max_rows, region.rows);
+    G_debug(1, "%d of %d rows are cached", max_rows, region.rows);
 
     size = (size_t) max_rows * region.cols;
     switch (format) {
