@@ -89,17 +89,25 @@ def db_table_exist(table, **args):
     return False
 
 
-def db_connection():
+def db_connection(force=False):
     """Return the current database connection parameters
     (interface to `db.connect -g`). Example:
 
     >>> db_connection()
     {'group': '', 'schema': '', 'driver': 'sqlite', 'database': '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'}
 
+    :param force True to set up default DB connection if not defined
+
     :return: parsed output of db.connect
     """
-    return parse_command('db.connect', flags='g')
-
+    nuldev = file(os.devnull, 'w')
+    conn = parse_command('db.connect', flags='g', stderr=nuldev)
+    nuldev.close()
+    if not conn and force:
+        run_command('db.connect', flags='c')
+        conn = parse_command('db.connect', flags='g')
+    
+    return conn
 
 def db_select(sql=None, filename=None, table=None, **args):
     """Perform SQL select statement
