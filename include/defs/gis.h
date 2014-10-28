@@ -81,9 +81,9 @@ void *G_incr_void_ptr(const void *, size_t);
 #endif
 
 #ifndef CTYPESGEN
-#define G_malloc(n)     G__malloc(__FILE__, __LINE__, (n))
-#define G_calloc(m, n)  G__calloc(__FILE__, __LINE__, (m), (n))
-#define G_realloc(p, n) G__realloc(__FILE__, __LINE__, (p), (n))
+#define G_malloc(n)     G__malloc(RELDIR "/" __FILE__, __LINE__, (n))
+#define G_calloc(m, n)  G__calloc(RELDIR "/" __FILE__, __LINE__, (m), (n))
+#define G_realloc(p, n) G__realloc(RELDIR "/" __FILE__, __LINE__, (p), (n))
 #else
 #define G_malloc(n)     G__malloc("<ctypesgen>", 0, (n))
 #define G_calloc(m, n)  G__calloc("<ctypesgen>", 0, (m), (n))
