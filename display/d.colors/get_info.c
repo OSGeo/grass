@@ -26,8 +26,5 @@ int get_map_info(char *name, char *mapset)
 
     interact(&categories, &colors, name, mapset);
 
-    /* Wrapup graphics */
-    R_flush();
-
     return 0;
 }

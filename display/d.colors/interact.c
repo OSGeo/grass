@@ -57,7 +57,6 @@ interact(struct Categories *categories, struct Colors *colors, char *name,
     /*  mark_category(at_cat, 1) ; */
 
     while (1) {
-	R_flush();
 	cur_char = getchar() & 0177;
 	sprintf(buffer, "  %c", cur_char);
 	Write_message(2, buffer);

@@ -1,6 +1,7 @@
 #include <curses.h>
 #include <grass/gis.h>
 #include <grass/colors.h>
+#include <grass/raster.h>
 
 
 /*               " <------------ Room for text --------------> " */

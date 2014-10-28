@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       d.colors
@@ -20,6 +19,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/display.h>
+#include <grass/raster.h>
 #include "colors.h"
 
 int main(int argc, char **argv)
@@ -78,7 +78,7 @@ int main(int argc, char **argv)
     }
 
     /* connect to the driver */
-    if (R_open_driver() != 0)
+    if (D_open_driver() != 0)
 	G_fatal_error("No graphics device selected");
 
     /* Read in the map region associated with graphics window */
@@ -86,6 +86,6 @@ int main(int argc, char **argv)
 
     get_map_info(map->answer, mapset);
 
-    R_close_driver();
+    D_close_driver();
     exit(0);
 }
