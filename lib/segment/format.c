@@ -22,7 +22,7 @@
 #include "local_proto.h"
 
 
-static int _Segment_format(int, off_t, off_t, int, int, int, int);
+static int seg_format(int, off_t, off_t, int, int, int, int);
 static int write_int(int, int);
 static int write_off_t(int, off_t);
 static int zero_fill(int, off_t);
@@ -62,7 +62,7 @@ static int zero_fill(int, off_t);
 int Segment_format(int fd, off_t nrows, off_t ncols, int srows, int scols,
 		   int len)
 {
-    return _Segment_format(fd, nrows, ncols, srows, scols, len, 1);
+    return seg_format(fd, nrows, ncols, srows, scols, len, 1);
 }
 
 /**
@@ -100,11 +100,11 @@ int Segment_format(int fd, off_t nrows, off_t ncols, int srows, int scols,
 int Segment_format_nofill(int fd, off_t nrows, off_t ncols, int srows, int scols,
 			  int len)
 {
-    return _Segment_format(fd, nrows, ncols, srows, scols, len, 0);
+    return seg_format(fd, nrows, ncols, srows, scols, len, 0);
 }
 
 
-static int _Segment_format(int fd,
+static int seg_format(int fd,
 			   off_t nrows, off_t ncols,
 			   int srows, int scols, int len, int fill)
 {
@@ -147,7 +147,9 @@ static int _Segment_format(int fd,
     }
 
     if (lseek(fd, 0L, SEEK_SET) == (off_t) -1) {
-	G_warning("Segment_format(): Unable to seek (%s)", strerror(errno));
+	int err = errno;
+
+	G_warning("Segment_format(): Unable to seek (%s)", strerror(err));
 	return -1;
     }
 
@@ -178,8 +180,14 @@ static int _Segment_format(int fd,
 
 static int write_int(int fd, int n)
 {
+    errno = 0;
     if (write(fd, &n, sizeof(int)) != sizeof(int)) {
-	G_warning("Segment_format(): Unable to write (%s)", strerror(errno));
+	int err = errno;
+
+	if (err)
+	    G_warning("Segment format: Unable to write (%s)", strerror(err));
+	else
+	    G_warning("Segment format: Unable to write (insufficient disk space?)");
 	return 0;
     }
 
@@ -188,8 +196,14 @@ static int write_int(int fd, int n)
 
 static int write_off_t(int fd, off_t n)
 {
+    errno = 0;
     if (write(fd, &n, sizeof(off_t)) != sizeof(off_t)) {
-	G_warning("Segment_format(): Unable to write (%s)", strerror(errno));
+	int err = errno;
+
+	if (err)
+	    G_warning("Segment format: Unable to write (%s)", strerror(err));
+	else
+	    G_warning("Segment format: Unable to write (insufficient disk space?)");
 	return 0;
     }
 
@@ -211,8 +225,14 @@ static int zero_fill(int fd, off_t nbytes)
 
     while (nbytes > 0) {
 	n = nbytes > sizeof(buf) ? sizeof(buf) : nbytes;
+	errno = 0;
 	if (write(fd, buf, n) != n) {
-	    G_warning("segment zero_fill(): Unable to write (%s)", strerror(errno));
+	    int err = errno;
+
+	    if (err)
+		G_warning("segment zero_fill(): Unable to write (%s)", strerror(err));
+	    else
+		G_warning("segment zero_fill(): Unable to write (insufficient disk space?)");
 	    return -1;
 	}
 	nbytes -= n;
@@ -229,12 +249,21 @@ static int zero_fill(int fd, off_t nbytes)
     static const char buf[10];
 
     G_debug(3, "Using new segmentation code...");
+    errno = 0;
     if (lseek(fd, nbytes - 1, SEEK_CUR) < 0) {
-	G_warning("segment zero_fill(): Unable to seek (%s)", strerror(errno));
+	int err = errno;
+
+	G_warning("segment zero_fill(): Unable to seek (%s)", strerror(err));
 	return -1;
     }
+    errno = 0;
     if (write(fd, buf, 1) != 1) {
-	G_warning("segment zero_fill(): Unable to write (%s)", strerror(errno));
+	int err = errno;
+
+	if (err)
+	    G_warning("segment zero_fill(): Unable to write (%s)", strerror(err));
+	else
+	    G_warning("segment zero_fill(): Unable to write (insufficient disk space?)");
 	return -1;
     }
 
