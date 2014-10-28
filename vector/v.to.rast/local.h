@@ -14,10 +14,6 @@
 #define SETNULL(x)  Rast_set_c_null_value (x, 1)
 #define SETDNULL(x) Rast_set_d_null_value (x, 1)
 
-/* cell type */
-#define USE_CELL  1
-#define USE_DCELL 2
-
 /* value type */
 #define USE_ATTR  1
 #define USE_CAT   2
