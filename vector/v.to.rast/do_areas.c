@@ -68,7 +68,7 @@ int do_areas(struct Map_info *Map, struct line_pnts *Points,
 		set_cat(cat);
 	    }
 	    else {
-		if (value_type == USE_CELL)
+		if (value_type == CELL_TYPE)
 		    set_cat((int)value);
 		else
 		    set_dcat(value);
