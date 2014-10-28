@@ -31,6 +31,7 @@ import atexit
 import subprocess
 import shutil
 import codecs
+import types as python_types
 
 from utils import KeyValue, parse_key_val, basename, encode
 
@@ -1083,7 +1084,7 @@ def find_file(name, element='cell', mapset=None):
 # interface to g.list
 
 
-def list_strings(type, pattern=None, mapset=None, flag=''):
+def list_strings(type, pattern=None, mapset=None, exclude=None, flag=''):
     """!List of elements as strings.
 
     Returns the output from running g.list, as a list of qualified
@@ -1106,14 +1107,15 @@ def list_strings(type, pattern=None, mapset=None, flag=''):
                              flags='m' + flag,
                              type=type,
                              pattern=pattern,
+                             exclude=exclude,
                              mapset=mapset).splitlines():
         result.append(line.strip())
 
     return result
 
 
-def list_pairs(type, pattern=None, mapset=None, flag=''):
-    """!List of elements as pairs
+def list_pairs(type, pattern=None, mapset=None, exclude=None, flag=''):
+    """List of elements as pairs
 
     Returns the output from running g.list, as a list of
     (name, mapset) pairs
@@ -1121,17 +1123,20 @@ def list_pairs(type, pattern=None, mapset=None, flag=''):
     @param type element type (rast, vect, rast3d, region, ...)
     @param pattern pattern string
     @param mapset mapset name (if not given use search path)
+    @param exclude pattern string to exclude maps from the research
     @param flag pattern type: 'r' (basic regexp), 'e' (extended regexp), or ''
                 (glob pattern)
 
     @return list of elements
     """
-    return [tuple(map.split('@', 1)) for map in mlist_strings(type, pattern,
-                                                              mapset, flag)]
+    return [tuple(map.split('@', 1)) for map in list_strings(type, pattern,
+                                                              mapset, exclude,
+                                                              flag)]
 
 
-def list_grouped(type, pattern=None, check_search_path=True, flag=''):
-    """!List of elements grouped by mapsets.
+def list_grouped(type, pattern=None, check_search_path=True, exclude=None,
+                 flag=''):
+    """List of elements grouped by mapsets.
 
     Returns the output from running g.list, as a dictionary where the
     keys are mapset names and the values are lists of maps in that
@@ -1147,32 +1152,54 @@ def list_grouped(type, pattern=None, check_search_path=True, flag=''):
     @param pattern pattern string
     @param check_search_path True to add mapsets for the search path with no
                              found elements
+    @param exclude pattern string to exclude maps from the research
     @param flag pattern type: 'r' (basic regexp), 'e' (extended regexp), or ''
                 (glob pattern)
 
     @return directory of mapsets/elements
     """
-    if type == 'raster' or type == 'cell':
-        verbose(_('Element type should be "rast" and not "%s"') % type)
-        type = 'rast'
+    if isinstance(type, python_types.StringTypes) or len(type) == 1:
+        types = [type]
+        store_types = False
+    else:
+        types = type
+        store_types = True
+        flag += 't'
+    for i in range(len(types)):
+        if types[i] == 'raster' or types[i] == 'cell':
+            verbose(_('Element type should be "rast" and not "%s"') % types[i])
+            types[i] = 'rast'
     result = {}
     if check_search_path:
         for mapset in mapsets(search_path=True):
-            result[mapset] = []
+            if store_types:
+                result[mapset] = {}
+            else:
+                result[mapset] = []
 
     mapset = None
     for line in read_command("g.list", quiet=True, flags="m" + flag,
-                             type=type, pattern=pattern).splitlines():
+                             type=types, pattern=pattern, exclude=exclude).splitlines():
         try:
             name, mapset = line.split('@')
         except ValueError:
             warning(_("Invalid element '%s'") % line)
             continue
 
-        if mapset in result:
-            result[mapset].append(name)
+        if store_types:
+            type_, name = name.split('/')
+            if mapset in result:
+                if type_ in result[mapset]:
+                    result[mapset][type_].append(name)
+                else:
+                    result[mapset][type_] = [name, ]
+            else:
+                result[mapset] = {type_: [name, ]}
         else:
-            result[mapset] = [name, ]
+            if mapset in result:
+                result[mapset].append(name)
+            else:
+                result[mapset] = [name, ]
 
     return result
 
