@@ -20,7 +20,7 @@ linker_c = $(call linker_x,$(CC))
 linker_cxx = $(call linker_x,$(CXX))
 linker = $(call linker_x,$(LINK))
 
-ALL_CFLAGS = $(LFS_CFLAGS) $(EXTRA_CFLAGS) $(NLS_CFLAGS) $(DEFS) $(EXTRA_INC) $(INC)
+ALL_CFLAGS = $(LFS_CFLAGS) $(EXTRA_CFLAGS) $(NLS_CFLAGS) $(DEFS) $(EXTRA_INC) $(INC) -DRELDIR=\"$(RELDIR)\"
 
 compiler_x = $(1) $(2) $(ALL_CFLAGS) -o $@ -c $<
 compiler_c = $(call compiler_x,$(CC),$(COMPILE_FLAGS_C) $($*_c_FLAGS))
