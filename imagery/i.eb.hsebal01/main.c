@@ -47,12 +47,12 @@ int main(int argc, char *argv[])
     void *inrast_Rn, *inrast_g0;
     void *inrast_z0m, *inrast_t0dem;
     DCELL *outrast;
-    int nrows, ncols;
-    int row, col;
-    int row_wet, col_wet;
-    int row_dry, col_dry;
-    double m_row_wet, m_col_wet;
-    double m_row_dry, m_col_dry;
+    int nrows=0, ncols=0;
+    int row=0, col=0;
+    int row_wet=0, col_wet=0;
+    int row_dry=0, col_dry=0;
+    double m_row_wet=0.0, m_col_wet=0.0;
+    double m_row_dry=0.0, m_col_dry=0.0;
     int infd_Rn, infd_g0;
     int infd_z0m, infd_t0dem;
     int outfd;
@@ -70,12 +70,12 @@ int main(int argc, char *argv[])
     struct Option *input_row_dry, *input_col_dry;
     struct Flag *flag2, *flag3;
     /********************************/
-    double xp, yp;
-    double xmin, ymin;
-    double xmax, ymax;
-    double stepx, stepy;
-    double latitude, longitude;
-    int rowDry, colDry, rowWet, colWet;
+    double xp=0.0, yp=0.0;
+    double xmin=0.0, ymin=0.0;
+    double xmax=0.0, ymax=0.0;
+    double stepx=0.0, stepy=0.0;
+    double latitude=0.0, longitude=0.0;
+    int rowDry=0, colDry=0, rowWet=0, colWet=0;
     /********************************/
     G_gisinit(argv[0]);
 
@@ -254,15 +254,15 @@ int main(int argc, char *argv[])
     /***************************************************/
 
     /* MANUAL T0DEM WET/DRY PIXELS */
-    DCELL d_Rn_dry,d_g0_dry;
-    DCELL d_t0dem_dry,d_t0dem_wet;
+    DCELL d_Rn_dry=0.0,d_g0_dry=0.0;
+    DCELL d_t0dem_dry=0.0,d_t0dem_wet=0.0;
 
     if (flag2->answer) {
 	/* Process tempk min / max pixels */
 	/* Internal use only */
-	DCELL d_Rn_wet,d_g0_wet;
+	DCELL d_Rn_wet=0.0,d_g0_wet=0.0;
 	DCELL d_Rn,d_g0,d_h0;
-	DCELL t0dem_min,t0dem_max;
+	DCELL t0dem_min=1000.0,t0dem_max=0.0;
         /*********************/
 	for (row = 0; row < nrows; row++) {
 	    DCELL d_t0dem;
@@ -421,7 +421,7 @@ int main(int argc, char *argv[])
     b = (sumy - (a * sumx)) / 2.0;
     G_message("d_dT_dry=%f", d_dT_dry);
     G_message("dT1=%f * t0dem + (%f)", a, b);
-    DCELL d_h_dry;
+    DCELL d_h_dry=0.0;
 
     /* ITERATION 1 */
     for (row = 0; row < nrows; row++) {
@@ -486,7 +486,7 @@ int main(int argc, char *argv[])
 	DCELL d_t0dem;
 	DCELL d_z0m;
 	DCELL d_rah2;
-	DCELL d_rah3;
+	DCELL d_rah3=0.0;
 	DCELL d_roh1;
 	DCELL d_h2;
 	DCELL d_L;
@@ -557,11 +557,11 @@ int main(int argc, char *argv[])
 	DCELL d_rah3;
 	DCELL d_roh1;
 	DCELL d_h3;
-	DCELL d_L;
-	DCELL d_x;
-	DCELL d_psih;
-	DCELL d_psim;
-	DCELL d;		/* Output pixel */
+	DCELL d_L=0.0;
+	DCELL d_x=0.0;
+	DCELL d_psih=0.0;
+	DCELL d_psim=0.0;
+	DCELL d=0.0;		/* Output pixel */
 	G_percent(row, nrows, 2);
 	/* read a line input maps into buffers */
 	Rast_get_d_row(infd_z0m, inrast_z0m, row);
