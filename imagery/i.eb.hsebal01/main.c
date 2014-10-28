@@ -180,7 +180,12 @@ int main(int argc, char *argv[])
     ustar = atof(input_ustar->answer);
     ea = atof(input_ea->answer);
 
-    if(input_row_wet->answer&&
+    /*If automatic flag, just forget the rest of options*/ 
+    if(flag2->answer) 
+	    G_message(_("Automatic mode selected"));
+    /*If not automatic & all pixels locations in col/row given*/
+    else if (!flag2->answer && 
+    input_row_wet->answer&&
     input_col_wet->answer&&
     input_row_dry->answer&&
     input_col_dry->answer){
@@ -188,25 +193,17 @@ int main(int argc, char *argv[])
         m_col_wet = atof(input_col_wet->answer);
         m_row_dry = atof(input_row_dry->answer);
         m_col_dry = atof(input_col_dry->answer);
-    }
-    if ((!input_row_wet->answer || !input_col_wet->answer ||
-	 !input_row_dry->answer || !input_col_dry->answer) &&
-	!flag2->answer) {
-	G_fatal_error(_("Either auto-mode either wet/dry pixels coordinates should be provided!"));
-    }
-    if (flag3->answer) {
-	G_message(_("Manual wet/dry pixels in image coordinates"));
+        /*If pixels locations are in projected coordinates*/
+        if (flag3->answer)
+	    G_message(_("Manual wet/dry pixels in image coordinates"));
 	G_message(_("Wet Pixel=> x:%f y:%f"), m_col_wet, m_row_wet);
 	G_message(_("Dry Pixel=> x:%f y:%f"), m_col_dry, m_row_dry);
     }
+    /*If not automatic & missing any of the pixel location, Fatal Error*/
     else {
-        if(flag2->answer)
-	    G_message(_("Automatic mode selected"));
-	else {
-	    G_message(_("Wet Pixel=> row:%.0f col:%.0f"), m_row_wet, m_col_wet);
-	    G_message(_("Dry Pixel=> row:%.0f col:%.0f"), m_row_dry, m_col_dry);
-	}
+	G_fatal_error(_("Either auto-mode either wet/dry pixels coordinates should be provided!"));
     }
+
     /* check legal output name */
     if (G_legal_filename(h0) < 0)
 	G_fatal_error(_("<%s> is an illegal name"), h0);
