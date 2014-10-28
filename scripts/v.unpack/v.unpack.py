@@ -139,7 +139,7 @@ def main():
     # exist fromdb
     if os.path.exists(fromdb):
         # the db connection in the output mapset
-        dbconn = grassdb.db_connection()
+        dbconn = grassdb.db_connection(force=True)
         todb = dbconn['database']
         # return all tables
         list_fromtable = grass.read_command('db.tables', driver='sqlite',
