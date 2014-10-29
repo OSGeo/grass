@@ -1041,8 +1041,7 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
 	       int buffer_s, int buffer_n)
 {
     int i, j, l, k = 0;
-    size_t numDigits = 3;
-    size_t decimals, add;
+    size_t decimals;
 
     int xindex, yindex;
     double shadow_angle;
@@ -1055,7 +1054,6 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
     double delt_east, delt_nor;
     double delt_dist;
 
-    char *formatString;
     char msg_buff[256];
 
     int hor_row_start = buffer_s;
@@ -1068,8 +1066,7 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
     int hor_numcols = n - (buffer_e + buffer_w);
 
     int arrayNumInt;
-    int start_indx;
-    double dfr_rad, start_rad, angle_deg;
+    double dfr_rad, angle_deg;
 
     xindex = (int)((xcoord - xmin) / stepx);
     yindex = (int)((ycoord - ymin) / stepy);
@@ -1133,13 +1130,8 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
 	}
 	else {
 	    dfr_rad = step * deg2rad;
-            start_rad = start * deg2rad;
 	    arrayNumInt = (int)((end - start) / fabs(step));
-            start_indx = (int)(start / step);
 	}
-
-	/* numDigits = (int)(log10(1. * arrayNumInt)) + 1;
-	sprintf(formatString, "%%s_%%0%dd", numDigits); */
 
         decimals = G_get_num_decimals(str_step);
 
