@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
     opt.mapset = G_define_standard_option(G_OPT_M_MAPSET);
     opt.mapset->required = YES;
     opt.mapset->description = _("Name of mapset where to switch");
-    opt.mapset->guisection = _("Settings");
+    opt.mapset->guisection = _("Mapset");
     opt.mapset->gisprompt = "new,mapset,mapset";
 
     opt.location = G_define_option();
@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
     opt.location->multiple = NO;
     opt.location->key_desc = "name";
     opt.location->description = _("Location name (not location path)");
-    opt.location->guisection = _("Settings");
+    opt.location->guisection = _("Mapset");
 
     opt.gisdbase = G_define_option();
     opt.gisdbase->key = "gisdbase";
@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
     opt.gisdbase->key_desc = "path";
     opt.gisdbase->label = _("GIS data directory");
     opt.gisdbase->description = _("Full path to the directory where the new location is");
-    opt.gisdbase->guisection = _("Settings");
+    opt.gisdbase->guisection = _("Mapset");
 
     flag.add = G_define_flag();
     flag.add->key = 'c';

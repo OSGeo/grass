@@ -153,6 +153,7 @@ int main(int argc, char *argv[])
     opt.upload->type = TYPE_STRING;
     opt.upload->required = YES;
     opt.upload->multiple = YES;
+    opt.upload->guisection = _("From");
     opt.upload->options = "cat,dist,to_x,to_y,to_along,to_angle,to_attr";
     opt.upload->description =
 	_("Values describing the relation between two nearest features");
@@ -184,7 +185,7 @@ int main(int argc, char *argv[])
     opt.upload->descriptions = desc;
 
     opt.column = G_define_standard_option(G_OPT_DB_COLUMN);
-    opt.column->required = YES;
+    opt.column->required = NO;
     opt.column->multiple = YES;
     opt.column->description =
 	_("Column name(s) where values specified by 'upload' option will be uploaded");
@@ -224,6 +225,9 @@ int main(int argc, char *argv[])
     sprintf(buf1, "%s,%s", opt.to_field->key, opt.to_column->key);
     opt.to->guidependency = G_store(buf1);
     opt.to_field->guidependency = G_store(opt.to_column->key);
+    
+    G_option_exclusive(opt.column, flag.print, NULL);
+    G_option_required(opt.column, flag.print, NULL);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -287,7 +291,7 @@ int main(int argc, char *argv[])
     Upload[i].upload = END;
     /* read columns */
     i = 0;
-    while (opt.column->answers[i]) {
+    while (opt.column->answer && opt.column->answers[i]) {
 	if (Upload[i].upload == END) {
 	    G_warning(_("Too many column names"));
 	    break;
@@ -295,7 +299,7 @@ int main(int argc, char *argv[])
 	Upload[i].column = G_store(opt.column->answers[i]);
 	i++;
     }
-    if (Upload[i].upload != END)
+    if (opt.column->answer && Upload[i].upload != END)
 	G_fatal_error(_("Not enough column names"));
 
     sep = G_option_to_separator(opt.sep);
