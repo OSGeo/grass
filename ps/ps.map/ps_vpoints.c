@@ -48,6 +48,7 @@ int PS_vpoints_plot(struct Map_info *P_map, int vec)
     PSCOLOR color;
 
     cv_rgb = NULL;
+    Symb = NULL;
 
     /* Create vector array if required */
     if (vector.layer[vec].cats != NULL || vector.layer[vec].where != NULL) {
