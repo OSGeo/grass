@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
     } opt;
     struct
     {
+	struct Flag *ignorecase;
 	struct Flag *regex;
 	struct Flag *extended;
 	struct Flag *type;
@@ -125,6 +126,11 @@ int main(int argc, char *argv[])
     opt.output->description = _("If not given or '-' then standard output");
     opt.output->guisection = _("Print");
 
+    flag.ignorecase = G_define_flag();
+    flag.ignorecase->key = 'i';
+    flag.ignorecase->description = _("Ignore case");
+    flag.ignorecase->guisection = _("Pattern");
+
     flag.regex = G_define_flag();
     flag.regex->key = 'r';
     flag.regex->description =
@@ -181,7 +187,8 @@ int main(int argc, char *argv[])
     if (opt.pattern->answer) {
 	if (flag.regex->answer || flag.extended->answer)
 	    filter = G_ls_regex_filter(opt.pattern->answer, 0,
-			    	       (int)flag.extended->answer);
+			    	       (int)flag.extended->answer,
+				       (int)flag.ignorecase->answer);
 	else {
 	    /* handle individual map names */
 	    if (strchr(opt.pattern->answer, ',')) {
@@ -190,10 +197,12 @@ int main(int argc, char *argv[])
 		pattern = (char *)G_malloc(strlen(opt.pattern->answer) + 3);
 		sprintf(pattern, "{%s}", opt.pattern->answer);
 
-		filter = G_ls_glob_filter(pattern, 0);
+		filter = G_ls_glob_filter(pattern, 0,
+					  (int)flag.ignorecase->answer);
 	    }
 	    else
-		filter = G_ls_glob_filter(opt.pattern->answer, 0);
+		filter = G_ls_glob_filter(opt.pattern->answer, 0,
+					  (int)flag.ignorecase->answer);
 	}
 	if (!filter)
 	    G_fatal_error(_("Unable to compile pattern <%s>"),
@@ -205,7 +214,8 @@ int main(int argc, char *argv[])
     if (opt.exclude->answer) {
 	if (flag.regex->answer || flag.extended->answer)
 	    exclude = G_ls_regex_filter(opt.exclude->answer, 1,
-			    		(int)flag.extended->answer);
+			    		(int)flag.extended->answer,
+					(int)flag.ignorecase->answer);
 	else {
 	    /* handle individual map names */
 	    if (strchr(opt.exclude->answer, ',')) {
@@ -214,10 +224,12 @@ int main(int argc, char *argv[])
 		pattern = (char *)G_malloc(strlen(opt.exclude->answer) + 3);
 		sprintf(pattern, "{%s}", opt.exclude->answer);
 
-		exclude = G_ls_glob_filter(pattern, 1);
+		exclude = G_ls_glob_filter(pattern, 1,
+					   (int)flag.ignorecase->answer);
 	    }
 	    else
-		exclude = G_ls_glob_filter(opt.exclude->answer, 1);
+		exclude = G_ls_glob_filter(opt.exclude->answer, 1,
+					   (int)flag.ignorecase->answer);
 	}
 	if (!exclude)
 	    G_fatal_error(_("Unable to compile pattern <%s>"),

@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
     } opt;
     struct
     {
+	struct Flag *ignorecase;
 	struct Flag *regex;
 	struct Flag *extended;
 	struct Flag *force;
@@ -110,6 +111,11 @@ int main(int argc, char *argv[])
     opt.exclude->description = _("File name exclusion pattern (default: none)");
     opt.exclude->guisection = _("Pattern");
 
+    flag.ignorecase = G_define_flag();
+    flag.ignorecase->key = 'i';
+    flag.ignorecase->description = _("Ignore case");
+    flag.ignorecase->guisection = _("Pattern");
+
     flag.regex = G_define_flag();
     flag.regex->key = 'r';
     flag.regex->description =
@@ -153,7 +159,8 @@ int main(int argc, char *argv[])
 	exclude = NULL;
 
     if ((flag.regex->answer || flag.extended->answer) && opt.pattern->answer)
-	filter = G_ls_regex_filter(pattern, 0, (int)flag.extended->answer);
+	filter = G_ls_regex_filter(pattern, 0, (int)flag.extended->answer,
+				   (int)flag.ignorecase->answer);
     else {
 	/* handle individual map names */
 	if (strchr(pattern, ',')) {
@@ -162,10 +169,10 @@ int main(int argc, char *argv[])
 	    buf = (char *)G_malloc(strlen(pattern) + 3);
 	    sprintf(buf, "{%s}", pattern);
 
-	    filter = G_ls_glob_filter(buf, 0);
+	    filter = G_ls_glob_filter(buf, 0, (int)flag.ignorecase->answer);
 	}
 	else
-	    filter = G_ls_glob_filter(pattern, 0);
+	    filter = G_ls_glob_filter(pattern, 0, (int)flag.ignorecase->answer);
     }
     if (!filter)
 	G_fatal_error(_("Unable to compile pattern <%s>"), pattern);
@@ -174,7 +181,8 @@ int main(int argc, char *argv[])
 	if ((flag.regex->answer || flag.extended->answer) &&
 	    opt.exclude->answer)
 	    exclude_filter = G_ls_regex_filter(exclude, 1,
-					       (int)flag.extended->answer);
+					       (int)flag.extended->answer,
+					       (int)flag.ignorecase->answer);
 	else {
 	    /* handle individual map names */
 	    if (strchr(exclude, ',')) {
@@ -183,10 +191,12 @@ int main(int argc, char *argv[])
 		buf = (char *)G_malloc(strlen(exclude) + 3);
 		sprintf(buf, "{%s}", exclude);
 
-		exclude_filter = G_ls_glob_filter(buf, 1);
+		exclude_filter = G_ls_glob_filter(buf, 1,
+						  (int)flag.ignorecase->answer);
 	    }
 	    else
-		exclude_filter = G_ls_glob_filter(exclude, 1);
+		exclude_filter = G_ls_glob_filter(exclude, 1,
+						  (int)flag.ignorecase->answer);
 	}
 	if (!exclude_filter)
 	    G_fatal_error(_("Unable to compile pattern <%s>"), exclude);
