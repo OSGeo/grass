@@ -36,7 +36,7 @@ int G_legal_filename(const char *s)
     const char *name = s;
     
     if (*s == '.' || *s == 0) {
-	G_warning(_("Illegal filename <%s>. Cannot be '.' or 'NULL'."), name);
+	G_warning(_("Illegal filename <%s>. Cannot start with '.' or be 'NULL'."), name);
 	return -1;
     }
 
