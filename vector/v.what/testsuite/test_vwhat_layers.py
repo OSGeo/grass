@@ -48,7 +48,7 @@ Database: ...
 Table: t1
 Key column: cat_
 cat_ : 1
-text : xxx
+text : Petrášová
 number : 6
 Layer: 2
 Category: 3
@@ -92,7 +92,7 @@ Database=...
 Table=t1
 Key_column=cat_
 cat_=1
-text=xxx
+text=Petrášová
 number=6
 Layer=2
 Category=3
@@ -143,6 +143,16 @@ class TestMultiLayerMap(TestCase):
         self.vwhat.flags['g'].value = True
         self.assertModule(self.vwhat)
         self.assertLooksLike(reference=out3, actual=self.vwhat.outputs.stdout)
+
+    def test_print_options_json(self):
+        import json
+        self.vwhat.flags['j'].value = True
+        self.vwhat.flags['a'].value = True
+        self.assertModule(self.vwhat)
+        try:
+            json.loads(self.vwhat.outputs.stdout, encoding='utf-8')
+        except ValueError:
+            self.fail(msg="No JSON object could be decoded:\n" + self.vwhat.outputs.stdout)
 
 
 if __name__ == '__main__':

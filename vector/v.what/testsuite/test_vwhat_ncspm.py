@@ -6,6 +6,10 @@ from grass.gunittest.gmodules import SimpleModule
 out1 = """East: 636661
 North: 226489
 ------------------------------------------------------------------
+Map: bridges 
+Mapset: PERMANENT
+Nothing found.
+------------------------------------------------------------------
 Map: roadsmajor 
 Mapset: PERMANENT
 Type: Line
@@ -35,6 +39,10 @@ Category: 7168
 
 out2 = """East: 636661
 North: 226489
+------------------------------------------------------------------
+Map: bridges 
+Mapset: PERMANENT
+Nothing found.
 ------------------------------------------------------------------
 Map: roadsmajor 
 Mapset: PERMANENT
@@ -114,6 +122,9 @@ NAME :
 out3 = """East=636661
 North=226489
 
+Map=bridges
+Mapset=PERMANENT
+
 Map=roadsmajor
 Mapset=PERMANENT
 Type=Line
@@ -189,13 +200,17 @@ NAME=
 out4 = """East: 636661
 North: 226489
 ------------------------------------------------------------------
+Map: bridges 
+Mapset: PERMANENT
+Nothing found.
+------------------------------------------------------------------
 Map: roadsmajor 
 Mapset: PERMANENT
-Nothing Found.
+Nothing found.
 ------------------------------------------------------------------
 Map: precip_30ynormals_3d 
 Mapset: PERMANENT
-Nothing Found.
+Nothing found.
 ------------------------------------------------------------------
 Map: lakes 
 Mapset: PERMANENT
@@ -212,8 +227,8 @@ Category: 7168
 class TestNCMaps(TestCase):
 
     def setUp(self):
-        self.vwhat = SimpleModule('v.what', map=['roadsmajor', 'precip_30ynormals_3d', 'lakes'],
-                                  layer=['-1', '-1', '-1'], coordinates=[636661, 226489],
+        self.vwhat = SimpleModule('v.what', map=['bridges', 'roadsmajor', 'precip_30ynormals_3d', 'lakes'],
+                                  layer=['-1', '-1', '-1', '-1'], coordinates=[636661, 226489],
                                   distance=1000)
 
     def test_multiple_maps(self):
@@ -234,6 +249,14 @@ class TestNCMaps(TestCase):
         self.assertModule(self.vwhat)
         self.assertLooksLike(reference=out4, actual=self.vwhat.outputs.stdout)
 
+    def test_print_options_json(self):
+        import json
+        self.vwhat.flags['j'].value = True
+        self.assertModule(self.vwhat)
+        try:
+            json.loads(self.vwhat.outputs.stdout)
+        except ValueError:
+            self.fail(msg="No JSON object could be decoded:\n" + self.vwhat.outputs.stdout)
 
 if __name__ == '__main__':
     test()
