@@ -656,7 +656,8 @@ save_grid_to_GRASS(Grid * grid, char *filename, RASTER_MAP_TYPE type,
 	Rast_put_row(outfd, outrast, type);
     }				/* for i */
     G_percent(1, 1, 1);
-    
+
+    G_free(outrast);
     Rast_close(outfd);
     return;
 }
