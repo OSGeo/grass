@@ -114,7 +114,7 @@ AMI_STREAM < AEvent > *init_event_list(char *rastName, Viewpoint * vp,
    in row-column order and writes fun(x) to file. */
 void
 save_grid_to_GRASS(Grid * grid, char *filename, RASTER_MAP_TYPE type,
-		   float (*fun) (float));
+		   OutputMode mode);
 
 
 /* ************************************************************ */

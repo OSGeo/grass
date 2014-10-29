@@ -261,10 +261,10 @@ void save_inmem_visibilitygrid(MemoryVisibilityGrid * visgrid,
 
     if (viewOptions.outputMode == OUTPUT_BOOL)
 	save_grid_to_GRASS(visgrid->grid, viewOptions.outputfname, CELL_TYPE,
-			   booleanVisibilityOutput);
+			   OUTPUT_BOOL);
     else if (viewOptions.outputMode == OUTPUT_ANGLE)
 	save_grid_to_GRASS(visgrid->grid, viewOptions.outputfname, FCELL_TYPE,
-			   angleVisibilityOutput);
+			   OUTPUT_ANGLE);
     else
 	/* elevation  output */
 	save_vis_elev_to_GRASS(visgrid->grid, viewOptions.inputfname,
