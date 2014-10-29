@@ -616,7 +616,7 @@ AMI_STREAM < AEvent > *init_event_list(char *rastName, Viewpoint * vp,
    in row-column order and writes fun(x) to file. */
 void
 save_grid_to_GRASS(Grid * grid, char *filename, RASTER_MAP_TYPE type,
-		   float (*fun) (float))
+                   OutputMode mode)
 {
 
     G_important_message(_("Writing output raster map..."));
@@ -638,22 +638,20 @@ save_grid_to_GRASS(Grid * grid, char *filename, RASTER_MAP_TYPE type,
     for (i = 0; i < Rast_window_rows(); i++) {
         G_percent(i, Rast_window_rows(), 5);
 	for (j = 0; j < Rast_window_cols(); j++) {
-
-	    if (is_visible(grid->grid_data[i][j])) {
-		switch (type) {
-		case CELL_TYPE:
-		    ((CELL *) outrast)[j] = (CELL) fun(grid->grid_data[i][j]);
-		    break;
-		case FCELL_TYPE:
-		    ((FCELL *) outrast)[j] = (FCELL) fun(grid->grid_data[i][j]);
-		    break;
-		case DCELL_TYPE:
-		    ((DCELL *) outrast)[j] = (DCELL) fun(grid->grid_data[i][j]);
-		    break;
+	    if (is_invisible_nodata(grid->grid_data[i][j])) {
+		writeNodataValue(outrast, j, type);
+	    }
+	    else if (mode == OUTPUT_BOOL) {
+		((CELL *) outrast)[j] = (CELL) booleanVisibilityOutput(grid->grid_data[i][j]);
+	    }
+	    else if (mode == OUTPUT_ANGLE) {
+		if (is_visible(grid->grid_data[i][j])) {
+		    ((FCELL *) outrast)[j] = (FCELL) angleVisibilityOutput(grid->grid_data[i][j]);
+		}
+		else {
+		    writeNodataValue(outrast, j, FCELL_TYPE);
 		}
 	    }
-	    else
-		writeNodataValue(outrast, j, type);
 	}			/* for j */
 	Rast_put_row(outfd, outrast, type);
     }				/* for i */
