@@ -77,6 +77,22 @@ int main(int argc, char *argv[])
     double latitude=0.0, longitude=0.0;
     int rowDry=0, colDry=0, rowWet=0, colWet=0;
     /********************************/
+    /********************************/
+    xp=yp;
+    yp=xp;
+    xmin=ymin;
+    ymin=xmin;
+    xmax=ymax;
+    ymax=xmax;
+    stepx=stepy;
+    stepy=stepx;
+    latitude=longitude;
+    longitude=latitude;
+    rowDry=colDry;
+    colDry=rowDry;
+    rowWet=colWet;
+    colWet=rowWet;
+    /********************************/
     G_gisinit(argv[0]);
 
     module = G_define_module();
@@ -367,14 +383,19 @@ int main(int argc, char *argv[])
     G_message("h_dry = %f", h_dry);
     G_message("t0dem_dry = %f", d_t0dem_dry);
     G_message("t0dem_wet = %f", d_t0dem_wet);
-    DCELL d_rah_dry;
-    DCELL d_roh_dry;
+
+    DCELL d_rah_dry=0.0;
+    DCELL d_roh_dry=0.0;
+
+    DCELL d_t0dem,d_z0m;
+    DCELL d_u5;
+    DCELL d_roh1;
+    DCELL d_h1,d_h2,d_h3;
+    DCELL d_rah1,d_rah2,d_rah3;
+    DCELL d_L,d_x,d_psih,d_psim;
 
     /* INITIALIZATION */
     for (row = 0; row < nrows; row++) {
-	DCELL d_t0dem,d_z0m;
-	DCELL d_rah1,d_roh1;
-	DCELL d_u5;
 	G_percent(row, nrows, 2);
 	/* read a line input maps into buffers */
 	Rast_get_d_row(infd_z0m, inrast_z0m, row);
@@ -425,10 +446,6 @@ int main(int argc, char *argv[])
 
     /* ITERATION 1 */
     for (row = 0; row < nrows; row++) {
-	DCELL d_t0dem,d_z0m;
-	DCELL d_h1,d_rah1,d_rah2,d_roh1;
-	DCELL d_L,d_x,d_psih,d_psim;
-	DCELL d_u5;
 	G_percent(row, nrows, 2);
 	/* read a line input maps into buffers */
 	Rast_get_d_row(infd_z0m, inrast_z0m, row);
@@ -483,17 +500,6 @@ int main(int argc, char *argv[])
     /***************************************************/
     /***************************************************/
     for (row = 0; row < nrows; row++) {
-	DCELL d_t0dem;
-	DCELL d_z0m;
-	DCELL d_rah2;
-	DCELL d_rah3=0.0;
-	DCELL d_roh1;
-	DCELL d_h2;
-	DCELL d_L;
-	DCELL d_x;
-	DCELL d_psih;
-	DCELL d_psim;
-	DCELL d_u5;
 	G_percent(row, nrows, 2);
 	/* read a line input maps into buffers */
 	Rast_get_d_row(infd_z0m,inrast_z0m,row);
@@ -523,14 +529,14 @@ int main(int argc, char *argv[])
 		d_rah3=(1/(d_u5*pow(0.41,2)))*log((5/d_z0m)-d_psim)*
                        log((5/(d_z0m*0.1))-d_psih);
 		if (row == rowDry && col == colDry) {/*collect dry pix info */
-		    d_rah_dry = d_rah2;
+		    d_rah_dry = d_rah3;
 		    d_h_dry = d_h2;
 		}
 		d_Rah[row][col] = d_rah2;
 	    }
 	}
     }
-
+    
     /*Calculate dT_dry */
     d_dT_dry = (d_h_dry * d_rah_dry) / (1004 * d_roh_dry);
     /*Calculate coefficients for next dT equation */
@@ -552,16 +558,6 @@ int main(int argc, char *argv[])
     /***************************************************/
 
     for (row = 0; row < nrows; row++) {
-	DCELL d_t0dem;
-	DCELL d_z0m;
-	DCELL d_rah3;
-	DCELL d_roh1;
-	DCELL d_h3;
-	DCELL d_L=0.0;
-	DCELL d_x=0.0;
-	DCELL d_psih=0.0;
-	DCELL d_psim=0.0;
-	DCELL d=0.0;		/* Output pixel */
 	G_percent(row, nrows, 2);
 	/* read a line input maps into buffers */
 	Rast_get_d_row(infd_z0m, inrast_z0m, row);
