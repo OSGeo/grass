@@ -1321,7 +1321,7 @@ class Isle(Geo):
         """Return the perimeter value of an Isle.
         """
         border = self.points()
-        return libvect.Vect_area_perimeter(border.c_points)
+        return libvect.Vect_line_geodesic_length(border.c_points)
 
 
 class Isles(object):
@@ -1562,7 +1562,7 @@ class Area(Geo):
 
         """
         border = self.get_points()
-        return libvect.Vect_area_perimeter(border.c_points)
+        return libvect.Vect_line_geodesic_length(border.c_points)
 
     def read(self, line=None, centroid=None, isles=None):
         self.boundary = self.get_points(line)
