@@ -346,14 +346,22 @@ int main(int argc, char *argv[])
     }
     
     /*mod09A1 stateqa or mod09CMG stateqa*/
-    if ((strcmp(qcflag, "cirrus_detected") && ( !(strcmp(product, "mod09A1s")) || !(strcmp(product, "mod09CMGs")) )) ||
+/* - What is this block for?
+    G_debug(1, "qcflag: %s - product %s", qcflag, product);
+    if ((strcmp(qcflag, "cloud_state") && ( !(strcmp(product, "mod09A1s")) || !(strcmp(product, "mod09CMGs")) )) ||
 	(strcmp(qcflag, "cloud_shadow") && ( !(strcmp(product, "mod09A1s")) || !(strcmp(product, "mod09CMGs")) )) ||
-	(strcmp(qcflag, "cloud_state") && ( !(strcmp(product, "mod09A1s")) || !(strcmp(product, "mod09CMGs")) )) ||
-	(strcmp(qcflag, "internal_cloud_algorithm") && ( !(strcmp(product, "mod09A1s")) || !(strcmp(product, "mod09CMGs")) ))||
+	(strcmp(qcflag, "land_water") && ( !(strcmp(product, "mod09A1s")) || !(strcmp(product, "mod09CMGs")) )) ||
+	(strcmp(qcflag, "aerosol_quantity") && ( !(strcmp(product, "mod09A1s")) || !(strcmp(product, "mod09CMGs")) )) ||
+	(strcmp(qcflag, "cirrus_detected") && ( !(strcmp(product, "mod09A1s")) || !(strcmp(product, "mod09CMGs")) )) ||
+	(strcmp(qcflag, "internal_cloud_algorithm") && ( !(strcmp(product, "mod09A1s")) || !(strcmp(product, "mod09CMGs")) )) ||
 	(strcmp(qcflag, "internal_fire_algorithm") && ( !(strcmp(product, "mod09A1s")) || !(strcmp(product, "mod09CMGs")) )) ||
 	(strcmp(qcflag, "internal_snow_mask") && ( !(strcmp(product, "mod09A1s")) || !(strcmp(product, "mod09CMGs")) )) ||
-	(strcmp(qcflag, "mod35_snow_ice") && ( !(strcmp(product, "mod09A1s")) || !(strcmp(product, "mod09CMGs")) )))
+	(strcmp(qcflag, "mod35_snow_ice") && ( !(strcmp(product, "mod09A1s")) || !(strcmp(product, "mod09CMGs")) )) ||
+	(strcmp(qcflag, "pixel_is_adjacent_to_cloud") && ( !(strcmp(product, "mod09A1s")) || !(strcmp(product, "mod09CMGs")) )) ||
+	(strcmp(qcflag, "BRDF_correction_performed") && ( !(strcmp(product, "mod09A1s")) || !(strcmp(product, "mod09CMGs")) )) ||
+	(strcmp(qcflag, "internal_snow_mask") && ( !(strcmp(product, "mod09A1s")) || !(strcmp(product, "mod09CMGs")) )) )
 	G_fatal_error(_("This bit flag is only available for MOD09A1s @ 500m or MOD09CMG @ 5000m products"));
+*/
 
     /*mod09CMG*/
     if ((strcmp(qcflag, "icm_cloudy") && !(strcmp(product, "mod09CMGi"))) ||
