@@ -488,8 +488,6 @@ class ColorTable(wx.Frame):
     def _createBody(self, parent):
         """!Create dialog body consisting of rules and preview"""
         bodySizer =  wx.GridBagSizer(hgap = 5, vgap = 5)
-        bodySizer.AddGrowableRow(1)
-        bodySizer.AddGrowableCol(2)
 
         row = 0
         # label with range
@@ -533,6 +531,9 @@ class ColorTable(wx.Frame):
                       flag = wx.ALIGN_CENTER_VERTICAL)
         bodySizer.Add(item = self.rulesPanel.btnAdd, pos = (row, 1))
         
+        bodySizer.AddGrowableRow(1)
+        bodySizer.AddGrowableCol(2)
+
         return bodySizer    
         
     def InitDisplay(self):
