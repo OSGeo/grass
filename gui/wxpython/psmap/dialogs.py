@@ -2492,7 +2492,6 @@ class LegendDialog(PsmapDialog):
         box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Source raster"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         flexSizer = wx.FlexGridSizer (cols = 2, hgap = 5, vgap = 5)
-        flexSizer.AddGrowableCol(1)
         
         self.rasterDefault = wx.RadioButton(panel, id = wx.ID_ANY, label = _("current raster"), style = wx.RB_GROUP)
         self.rasterOther = wx.RadioButton(panel, id = wx.ID_ANY, label = _("select raster"))
@@ -2515,6 +2514,7 @@ class LegendDialog(PsmapDialog):
         flexSizer.Add(self.rasterCurrent, proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL|wx.LEFT, border = 10)
         flexSizer.Add(self.rasterOther, proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
         flexSizer.Add(self.rasterSelect, proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL|wx.ALIGN_RIGHT, border = 0)
+        flexSizer.AddGrowableCol(1)
         
         sizer.Add(item = flexSizer, proportion = 1, flag = wx.ALL | wx.EXPAND, border = 1)
         border.Add(item = sizer, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 5)
@@ -2788,7 +2788,6 @@ class LegendDialog(PsmapDialog):
         box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Font settings"))
         fontSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         flexSizer = wx.FlexGridSizer (cols = 2, hgap = 5, vgap = 5)
-        flexSizer.AddGrowableCol(1)
         
         if legendType == 'raster':
             self.AddFont(parent = panel, dialogDict = legendDict, color = True)
@@ -2801,6 +2800,7 @@ class LegendDialog(PsmapDialog):
         if legendType == 'raster':
             flexSizer.Add(panel.font['colorLabel'], proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL, border = 0)        
             flexSizer.Add(panel.font['colorCtrl'], proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
+        flexSizer.AddGrowableCol(1)
         
         fontSizer.Add(item = flexSizer, proportion = 1, flag = wx.ALL | wx.EXPAND, border = 1)
         border.Add(item = fontSizer, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 5)    
@@ -3283,7 +3283,6 @@ class MapinfoDialog(PsmapDialog):
         box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " %_("Color settings"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         flexSizer = wx.FlexGridSizer (cols = 2, hgap = 5, vgap = 5)
-        flexSizer.AddGrowableCol(1)
         
         self.colors = {}
         self.colors['borderCtrl'] = wx.CheckBox(panel, id = wx.ID_ANY, label = _("use border color:"))
@@ -3313,6 +3312,7 @@ class MapinfoDialog(PsmapDialog):
         flexSizer.Add(self.colors['borderColor'], proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
         flexSizer.Add(self.colors['backgroundCtrl'], proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
         flexSizer.Add(self.colors['backgroundColor'], proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
+        flexSizer.AddGrowableCol(1)
         
         sizer.Add(item = flexSizer, proportion = 1, flag = wx.ALL | wx.EXPAND, border = 1)
         border.Add(item = sizer, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 5)
@@ -3721,7 +3721,6 @@ class TextDialog(PsmapDialog):
         box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Font settings"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         flexGridSizer = wx.FlexGridSizer (rows = 3, cols = 2, hgap = 5, vgap = 5)
-        flexGridSizer.AddGrowableCol(1)
         
         self.AddFont(parent = panel, dialogDict = self.textDict)
         
@@ -3731,6 +3730,7 @@ class TextDialog(PsmapDialog):
         flexGridSizer.Add(panel.font['fontSizeCtrl'], proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
         flexGridSizer.Add(panel.font['colorLabel'], proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL, border = 0)        
         flexGridSizer.Add(panel.font['colorCtrl'], proportion = 0, flag = wx.ALIGN_CENTER_VERTICAL, border = 0)
+        flexGridSizer.AddGrowableCol(1)
         
         sizer.Add(item = flexGridSizer, proportion = 1, flag = wx.ALL | wx.EXPAND, border = 1)
         border.Add(item = sizer, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 5)
@@ -3822,8 +3822,6 @@ class TextDialog(PsmapDialog):
         
         #Position
         self.AddExtendedPosition(panel, gridBagSizer, self.textDict)
-        gridBagSizer.AddGrowableCol(0)
-        gridBagSizer.AddGrowableCol(1)
         
         #offset
         box3   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " %_("Offset"))
@@ -3846,9 +3844,6 @@ class TextDialog(PsmapDialog):
         box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " %_(" Reference point"))
         sizerR = wx.StaticBoxSizer(box, wx.VERTICAL)
         flexSizer = wx.FlexGridSizer(rows = 3, cols = 3, hgap = 5, vgap = 5)
-        flexSizer.AddGrowableCol(0)
-        flexSizer.AddGrowableCol(1)
-        flexSizer.AddGrowableCol(2)
         ref = []
         for row in ["upper", "center", "lower"]:
             for col in ["left", "center", "right"]:
@@ -3861,9 +3856,14 @@ class TextDialog(PsmapDialog):
             self.radio[-1].SetValue(False)
             flexSizer.Add(self.radio[-1], proportion = 0, flag = wx.ALIGN_CENTER, border = 0)
         self.FindWindowByName(self.textDict['ref']).SetValue(True)
+        flexSizer.AddGrowableCol(0)
+        flexSizer.AddGrowableCol(1)
+        flexSizer.AddGrowableCol(2)
                 
         sizerR.Add(flexSizer, proportion = 1, flag = wx.EXPAND, border = 0)
         gridBagSizer.Add(sizerR, pos = (3,1), flag = wx.ALIGN_LEFT|wx.EXPAND, border = 0)
+        gridBagSizer.AddGrowableCol(0)
+        gridBagSizer.AddGrowableCol(1)
         
         sizer.Add(gridBagSizer, proportion = 1, flag = wx.ALIGN_CENTER_VERTICAL|wx.ALL, border = 5)
         border.Add(item = sizer, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 5)
