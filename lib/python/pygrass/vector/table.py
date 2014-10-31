@@ -1125,7 +1125,6 @@ class Table(object):
         :type cursor: Cursor object
         """
         cur = cursor if cursor else self.conn.cursor()
-        values.append(key)
         return cur.execute(self.columns.update_str, values)
 
     def create(self, cols, name=None, overwrite=False, cursor=None):
