@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
 	       _("add the value specified by cat option to the current category value"),
 	       _("copy values from one layer to another (e.g. layer=1,2,3 copies values from layer 1 to layer 2 and 3)"),
 	       _("print report (statistics), in shell style: layer type count min max"),
-	       _("print category values, more cats in the same layer are separated by '/'"),
+	       _("print category values, layers are separated by '|', more cats in the same layer are separated by '/'"),
 	       _("print only layer numbers"));
     option_opt->descriptions = desc;
     
