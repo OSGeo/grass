@@ -55,7 +55,6 @@
 # 	grass-> WHERE a.library = 'libgrass_form.6.1.cvs.so' AND a.symbol = b.symbol ;
 # 	                          object                           
 # 	-----------------------------------------------------------
-# 	 display/d.what.vect/OBJ.i686-pc-linux-gnu/what.o
 # 	 vector/v.digit/OBJ.i686-pc-linux-gnu/attr.o
 # 	 vector/v.digit/OBJ.i686-pc-linux-gnu/line.o
 # 	 vector/v.what/OBJ.i686-pc-linux-gnu/what.o

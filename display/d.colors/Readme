@@ -1,5 +1,0 @@
-On two occasions this program has crashed (segmentation fault) when
-in colormode=fixed upon entering d.colors file_name.  I can get this
-to happen everytime, but  I suspect a bug.
-Jan
-1/6/91
