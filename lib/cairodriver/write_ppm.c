@@ -1,5 +1,5 @@
 /*!
-  \file cairodriver/write_ppm.c
+  \file lib/cairodriver/write_ppm.c
 
   \brief GRASS cairo display driver - write PPM image (lower level functions)
 

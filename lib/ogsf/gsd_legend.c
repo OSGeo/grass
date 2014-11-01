@@ -1,5 +1,5 @@
 /*!
-   \file gsd_legend.c
+   \file lib/ogsf/gsd_legend.c
 
    \brief OGSF library - legend creation
 

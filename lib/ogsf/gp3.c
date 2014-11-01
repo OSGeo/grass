@@ -1,5 +1,5 @@
 /*!
-   \file lib/ogsf/Gp3.c
+   \file lib/ogsf/gp3.c
 
    \brief OGSF library - loading point sets (lower level functions)
 

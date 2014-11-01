@@ -1,5 +1,5 @@
 /*!
-   \file gsdrape.c
+   \file lib/ogsf/gsdrape.c
 
    \brief OGSF library - functions to intersect line segments with edges of surface polygons
 

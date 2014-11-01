@@ -1,5 +1,5 @@
 /*!
-   \file Gs3.c
+   \file lib/ogsf/gs3.c
 
    \brief OGSF library - loading surfaces (lower level functions)
 

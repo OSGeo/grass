@@ -1,5 +1,5 @@
 /*!
-  \file lib/cairodriver/Driver.c
+  \file lib/cairodriver/driver.c
 
   \brief GRASS cairo display driver - driver initialization
 

@@ -1,5 +1,5 @@
 /*!
-  \file pngdriver/read_png.c
+  \file lib/pngdriver/read_png.c
 
   \brief GRASS png display driver - read png
 

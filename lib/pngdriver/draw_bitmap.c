@@ -1,5 +1,5 @@
 /*!
-  \file pngdriver/Draw_bitmap.c
+  \file lib/pngdriver/Draw_bitmap.c
 
   \brief GRASS png display driver - draw bitmap
 

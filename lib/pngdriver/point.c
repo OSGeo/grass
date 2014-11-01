@@ -1,5 +1,5 @@
 /*!
-  \file pngdriver/Point.c
+  \file lib/pngdriver/point.c
 
   \brief GRASS png display driver - draw point
 

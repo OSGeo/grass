@@ -1,5 +1,5 @@
 /*!
-  \file cairodriver/Draw_bitmap.c
+  \file lib/cairodriver/draw_bitmap.c
 
   \brief GRASS cairo display driver - draw bitmap
 

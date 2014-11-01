@@ -1,5 +1,5 @@
 /*!
-   \file gsd_wire.c
+   \file lib/ogsf/gsd_wire.c
 
    \brief OGSF library - 
 

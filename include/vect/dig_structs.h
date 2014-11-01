@@ -1207,7 +1207,7 @@ struct Plus_head
 };
 
 /*!
-  \brief Graph-related section (see \ref dblib)
+  \brief Graph-related section (see \ref dglib)
 */
 struct Graph_info {
     /*!

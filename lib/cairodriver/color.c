@@ -1,5 +1,5 @@
 /*!
-  \file cairodriver/Color.c
+  \file lib/cairodriver/color.c
 
   \brief GRASS cairo display driver - colors management
 

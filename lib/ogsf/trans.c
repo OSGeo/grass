@@ -1,5 +1,5 @@
 /*!
-   \file trans.c
+   \file lib/ogsf/trans.c
 
    \brief OGSF library - matrix transformation (higher level functions)
 

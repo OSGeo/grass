@@ -1,5 +1,5 @@
 /*!
-  \file pngdriver/Raster.c
+  \file lib/pngdriver/raster.c
 
   \brief GRASS png display driver - draw raster
 

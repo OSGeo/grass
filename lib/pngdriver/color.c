@@ -1,5 +1,5 @@
 /*!
-  \file pngdriver/Color.c
+  \file lib/pngdriver/Color.c
 
   \brief GRASS png display driver - PNG_color_rgb
 
