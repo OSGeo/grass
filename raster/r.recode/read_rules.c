@@ -50,7 +50,8 @@ int read_rules(FILE * fp)
     DCELL oLow, oHigh, nLow, nHigh;
     int line, n;
 
-    in_type = out_type = CELL_TYPE;
+    in_type = DCELL_TYPE;
+    out_type = CELL_TYPE;
 
     rules = (char **)G_malloc(INCR * sizeof(char *));
     rule_size = INCR;
@@ -98,16 +99,12 @@ int read_rules(FILE * fp)
 	   lookup the values in the quant table */
 	switch (sscanf(buf, "%lf:%lf:%lf:%lf", &oLow, &oHigh, &nLow, &nHigh)) {
 	case 3:
-	    update_type(&in_type, oLow);
-	    update_type(&in_type, oHigh);
 	    update_type(&out_type, nLow);
 	    update_rules(buf);
 	    Rast_fpreclass_add_rule(&rcl_struct, oLow, oHigh, nLow, nLow);
 	    break;
 
 	case 4:
-	    update_type(&in_type, oLow);
-	    update_type(&in_type, oHigh);
 	    update_type(&out_type, nLow);
 	    update_type(&out_type, nHigh);
 	    update_rules(buf);
@@ -116,13 +113,11 @@ int read_rules(FILE * fp)
 
 	default:
 	    if (sscanf(buf, "%lf:*:%lf", &oLow, &nLow) == 2) {
-		update_type(&in_type, oLow);
 		update_type(&out_type, nLow);
 		update_rules(buf);
 		Rast_fpreclass_set_pos_infinite_rule(&rcl_struct, oLow, nLow);
 	    }
 	    else if (sscanf(buf, "*:%lf:%lf", &oHigh, &nLow) == 2) {
-		update_type(&in_type, oHigh);
 		update_type(&out_type, nLow);
 		update_rules(buf);
 		Rast_fpreclass_set_neg_infinite_rule(&rcl_struct, oHigh, nLow);
