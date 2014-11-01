@@ -812,7 +812,7 @@ class CmdPanel(wx.Panel):
         self.Bind(wx.EVT_SIZE, self.OnSize)
         
         for task in not_hidden:
-            if task.get('required', False):
+            if task.get('required', False) and not task.get('guisection', ''):
                 # All required go into Main, even if they had defined another guisection
                 task['guisection'] = _('Required')
             if task.get('guisection','') == '':
@@ -941,12 +941,6 @@ class CmdPanel(wx.Panel):
                 tooltip = None
             
             prompt = p.get('prompt', '')
-            
-            # text style (required -> bold)
-            if not p.get('required', False):
-                text_style = wx.FONTWEIGHT_NORMAL
-            else:
-                text_style = wx.FONTWEIGHT_BOLD
 
             # title sizer (description, name, type)
             if (len(p.get('values', [])) > 0) and \
@@ -961,10 +955,19 @@ class CmdPanel(wx.Panel):
                     ltype = ','.join(p['key_desc'])
                 else:
                     ltype = p['type']
+                # red star for required options
+                if p.get('required', False):
+                    required_txt = wx.StaticText(parent=which_panel, label="*")
+                    required_txt.SetForegroundColour(wx.RED)
+                    required_txt.SetToolTipString(_("This option is required"))
+                else:
+                    required_txt = wx.StaticText(parent=which_panel, label="")
                 rtitle_txt = wx.StaticText(parent = which_panel,
                                            label = '(' + p['name'] + '=' + ltype + ')')
-                title_sizer.Add(item = title_txt, proportion = 1,
+                title_sizer.Add(item = title_txt, proportion = 0,
                                 flag = wx.LEFT | wx.TOP | wx.EXPAND, border = 5)
+                title_sizer.Add(item = required_txt, proportion=1,
+                                flag = wx.EXPAND, border=0)
                 title_sizer.Add(item = rtitle_txt, proportion = 0,
                                 flag = wx.ALIGN_RIGHT | wx.RIGHT | wx.TOP, border = 5)
                 which_sizer.Add(item = title_sizer, proportion = 0,
@@ -980,11 +983,11 @@ class CmdPanel(wx.Panel):
             if (len(p.get('values', [])) > 0):
                 valuelist      = map(str, p.get('values',[]))
                 valuelist_desc = map(unicode, p.get('values_desc',[]))
-
+                required_text = "*" if p.get('required', False) else ""
                 if p.get('multiple', False) and \
                         p.get('gisprompt',False) == False and \
                         p.get('type', '') == 'string':
-                    title_txt.SetLabel(" %s: (%s, %s) " % (title, p['name'], p['type']))
+                    title_txt.SetLabel(" %s:%s  (%s=%s) " % (title, required_text, p['name'], p['type']))
                     stSizer = wx.StaticBoxSizer(box = title_txt, orient = wx.VERTICAL)
                     if valuelist_desc:
                         hSizer = wx.FlexGridSizer(cols = 1, vgap = 1)
