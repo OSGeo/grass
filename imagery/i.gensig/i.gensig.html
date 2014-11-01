@@ -34,7 +34,9 @@ raster digitizer. Of course other methods could be devised by the user
 for creating this training map - <em>i.gensig</em> makes no assumption
 about the origin of this map layer. It simply creates signatures for
 the classes defined in the training map for the image to be classified
-(the image is specified in other options - see below).
+(the image is specified in other options - see below). The
+<em><a href="wxGUI.vdigit.html">wxGUI vector digitizer</a></em> can be
+used for interactively creating the training map.
 
 <dt><b>group=</b><em>name</em> 
 <dd>imagery group
@@ -100,6 +102,7 @@ SIG file "lsat7_2000_gensig":
  9 0.561184 2.30762 5.18846 20.5364 20.4926 
 10 0.393218 1.2184 2.63628 9.61528 9.36025 5.85314 
 </pre></div>
+
 <ul>
 <li> Line 2: text label
 <li> Line 3: number of points in class
@@ -109,21 +112,14 @@ SIG file "lsat7_2000_gensig":
 
 <h2>SEE ALSO</h2>
 
-<em><a href="i.group.html">i.group</a></em>
-for creating groups and subgroups.
-<p>
-<em><a href="wxGUI.vdigit.html">wxGUI vector digitizer</a></em>
-and
-<em><a href="r.digit.html">r.digit</a></em>
-for interactively  creating the training map.
-<p>
-<em><a href="i.cluster.html">i.cluster</a></em>
-for unsupervised clustering as an alternative to 
-<em>i.gensig</em> to create signatures.
-<p>
-<em><a href="g.gui.iclass.html">g.gui.iclass</a></em>
-for a graphic/interactive as an alternative to 
-<em>i.gensig</em> to create signatures.
+<em>
+<a href="g.gui.iclass.html">g.gui.iclass</a>,
+<a href="i.group.html">i.group</a>,
+<a href="i.smap.html">i.smap</a>,
+<a href="r.info.html">r.info</a>,
+<a href="r.univar.html">r.univar</a>,
+<a href="wxGUI.vdigit.html">wxGUI vector digitizer</a>
+</em>
 
 <h2>AUTHOR</h2>
 
