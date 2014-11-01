@@ -1,7 +1,0 @@
-
-Module to import ARC/INFO ascii raster files 
-
-This undocumented program was found in "untested"
-portion of 4.2.1 distribution from Hannover.  I 
-added support for null value and floating point. 
-- Bill
