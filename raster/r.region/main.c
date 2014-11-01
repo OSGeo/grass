@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 	struct Option
 	    *map,
 	    *north, *south, *east, *west,
-	    *raster, *vect, *region, *view, *align;
+	    *raster, *vect, *region, *align;
     } parm;
 
     G_gisinit(argv[0]);
@@ -93,16 +93,6 @@ int main(int argc, char *argv[])
     parm.vect->multiple = NO;
     parm.vect->description = _("Set region to match this vector map");
     parm.vect->guisection = _("Existing");
-
-    parm.view = G_define_option();
-    parm.view->key = "3dview";
-    parm.view->key_desc = "name";
-    parm.view->required = NO;
-    parm.view->multiple = NO;
-    parm.view->type = TYPE_STRING;
-    parm.view->description = _("Set region to match this 3dview file");
-    parm.view->gisprompt = "old,3d.view,3d view";
-    parm.view->guisection = _("Existing");
 
     parm.north = G_define_option();
     parm.north->key = "n";
@@ -166,33 +156,6 @@ int main(int argc, char *argv[])
 
     if ((name = parm.region->answer))	/* region= */
 	G__get_window(&window, "windows", name, "");
-
-    if ((name = parm.view->answer)) {	/* 3dview= */
-	struct G_3dview v;
-	FILE *fp;
-	int ret;
-
-	G_3dview_warning(0);	/* suppress boundary mismatch warning */
-
-	fp = G_fopen_old("3d.view", name, "");
-	if (!fp)
-	    G_fatal_error(_("Unable to open 3dview file <%s>"), name);
-
-	ret = G_get_3dview(name, "", &v);
-	if (ret < 0)
-	    G_fatal_error(_("Unable to read 3dview file <%s>"), name);
-	if (ret == 0)
-	    G_fatal_error(_("Old 3dview file. Region <%s> not found"), name);
-
-
-	window.north = v.vwin.north;
-	window.south = v.vwin.south;
-	window.west = v.vwin.west;
-	window.east = v.vwin.east;
-
-	fclose(fp);
-
-    }
 
     if ((name = parm.raster->answer)) {	/* raster= */
 	Rast_get_cellhd(name, "", &window);
