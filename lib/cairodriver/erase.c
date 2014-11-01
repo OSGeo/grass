@@ -1,5 +1,5 @@
 /*!
-  \file cairodriver/Erase.c
+  \file lib/cairodriver/erase.c
 
   \brief GRASS cairo display driver - erase screen
 

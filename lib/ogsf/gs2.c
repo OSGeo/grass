@@ -1,5 +1,5 @@
 /*!
-   \file GS2.c
+   \file lib/ogsf/gs2.c
 
    \brief OGSF library - loading and manipulating surfaces (higher level functions)
 

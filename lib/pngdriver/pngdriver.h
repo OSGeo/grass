@@ -1,5 +1,5 @@
 /*!
-  \file pngdriver/pngdriver.h
+  \file lib/pngdriver/pngdriver.h
 
   \brief GRASS png display driver - header file
 

@@ -1,5 +1,5 @@
 /*!
-  \file pngdriver/Polygon.c
+  \file lib/pngdriver/polygon.c
 
   \brief GRASS png display driver - draw polygon
 

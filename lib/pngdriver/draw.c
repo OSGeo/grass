@@ -1,5 +1,5 @@
 /*!
-  \file pngdriver/Draw.c
+  \file lib/pngdriver/Draw.c
 
   \brief GRASS PNG display driver
 

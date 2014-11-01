@@ -1,5 +1,5 @@
 /*!
-  \file cairodriver/Box.c
+  \file lib/cairodriver/box.c
 
   \brief GRASS cairo display driver - draw box
 

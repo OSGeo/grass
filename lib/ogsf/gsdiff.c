@@ -1,5 +1,5 @@
 /*!
-   \file gsdiff.c
+   \file lib/ogsf/gsdiff.c
 
    \brief OGSF library - manipulating surfaces (lower level functions)
 

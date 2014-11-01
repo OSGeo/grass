@@ -1,5 +1,5 @@
 /*!
-  \file pngdriver/Set_window.c
+  \file lib/pngdriver/set_window.c
 
   \brief GRASS png display driver - set window
 

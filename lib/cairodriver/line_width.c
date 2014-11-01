@@ -1,5 +1,5 @@
 /*!
-  \file cairodriver/Line_width.c
+  \file lib/cairodriver/line_width.c
 
   \brief GRASS cairo display driver - set line width
 

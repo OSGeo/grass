@@ -1,5 +1,5 @@
 /*!
-   \file lib/ogsf/GP2.c
+   \file lib/ogsf/gp2.c
 
    \brief OGSF library - loading and manipulating point sets (higher level functions)
 

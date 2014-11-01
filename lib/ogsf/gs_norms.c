@@ -1,5 +1,5 @@
 /*!
-   \file gs_norms.c
+   \file lib/ogsf/gs_norms.c
 
    \brief OGSF library - calculation normals (lower level functions)
 
