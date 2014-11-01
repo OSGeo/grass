@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
     parm.max->type = TYPE_STRING;
     parm.max->required = YES;
     parm.max->gisprompt = "old,cell,raster";
-    parm.max->guisection = _("Input maps");
+    parm.max->guisection = _("Input");
     parm.max->label =
 	_("Raster map containing maximal ROS (cm/min)");
 	parm.max->description =
@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
     parm.dir->type = TYPE_STRING;
     parm.dir->required = YES;
     parm.dir->gisprompt = "old,cell,raster";
-    parm.dir->guisection = _("Input maps");
+    parm.dir->guisection = _("Input");
     parm.dir->label =
 	_("Raster map containing directions of maximal ROS (degree)");
     parm.dir->description =
@@ -143,7 +143,7 @@ int main(int argc, char *argv[])
     parm.base->type = TYPE_STRING;
     parm.base->required = YES;
     parm.base->gisprompt = "old,cell,raster";
-    parm.base->guisection = _("Input maps");
+    parm.base->guisection = _("Input");
     parm.base->label =
 	_("Raster map containing base ROS (cm/min)");
     parm.base->description =
@@ -157,8 +157,8 @@ int main(int argc, char *argv[])
     parm.start->type = TYPE_STRING;
     parm.start->required = YES;
     parm.start->gisprompt = "old,cell,raster";
-    parm.start->guisection = _("Input maps");
-    parm.start->description =
+    parm.start->guisection = _("Input");
+    parm.start->label =
 	_("Raster map containing starting sources");
     parm.start->description =
 	_("Name of an existing raster map layer in the "
@@ -170,7 +170,7 @@ int main(int argc, char *argv[])
     parm.spotdist->key = "spot_dist";
     parm.spotdist->type = TYPE_STRING;
     parm.spotdist->gisprompt = "old,cell,raster";
-    parm.spotdist->guisection = _("Input maps");
+    parm.spotdist->guisection = _("Input");
     parm.spotdist->label =
 	_("Raster map containing maximal spotting distance (m, required with -s)");
     parm.spotdist->description =
@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
     parm.velocity->key = "w_speed";
     parm.velocity->type = TYPE_STRING;
     parm.velocity->gisprompt = "old,cell,raster";
-    parm.velocity->guisection = _("Input maps");
+    parm.velocity->guisection = _("Input");
     parm.velocity->label =
 	_("Raster map containing midflame wind speed (ft/min, required with -s)");
     parm.velocity->description =
@@ -194,7 +194,7 @@ int main(int argc, char *argv[])
     parm.mois->key = "f_mois";
     parm.mois->type = TYPE_STRING;
     parm.mois->gisprompt = "old,cell,raster";
-    parm.mois->guisection = _("Input maps");
+    parm.mois->guisection = _("Input");
     parm.mois->label =
 	_("Raster map containing fine fuel moisture of the cell receiving a spotting firebrand (%, required with -s)");
     parm.mois->description =
@@ -207,7 +207,7 @@ int main(int argc, char *argv[])
     parm.least->type = TYPE_STRING;
     parm.least->key_desc = "odd int";
     parm.least->options = "3,5,7,9,11,13,15";
-    parm.least->description =
+    parm.least->label =
 	_("Basic sampling window size needed to meet certain accuracy (3)"); /* TODO: what is 3 here? default? */
     parm.least->description =
 	_("An odd integer ranging 3 - 15 indicating "
@@ -244,7 +244,7 @@ int main(int argc, char *argv[])
     parm.time_lag->key = "lag";
     parm.time_lag->type = TYPE_STRING;
     parm.time_lag->key_desc = "int (>= 0)"; /* TODO: move to ->options */
-    parm.time_lag->description =
+    parm.time_lag->label =
 	_("Simulating time duration LAG (fill the region) (min)"); /* TODO: what does this mean? */
     parm.time_lag->description =
 	_("A non-negative integer specifying the simulating "
@@ -270,7 +270,7 @@ int main(int argc, char *argv[])
     parm.out->type = TYPE_STRING;
     parm.out->required = YES;
     parm.out->gisprompt = "new,cell,raster";
-    parm.out->guisection = _("Output maps");
+    parm.out->guisection = _("Output");
     parm.out->label =
 	_("Raster map to contain output spread time (min)");
     parm.out->description =
@@ -282,7 +282,7 @@ int main(int argc, char *argv[])
     parm.x_out->key = "x_output";
     parm.x_out->type = TYPE_STRING;
     parm.x_out->gisprompt = "new,cell,raster";
-    parm.x_out->guisection = _("Output maps");
+    parm.x_out->guisection = _("Output");
     parm.x_out->label =
 	_("Name of raster map to contain X back coordinates");
     parm.x_out->description =
@@ -294,7 +294,7 @@ int main(int argc, char *argv[])
     parm.y_out->key = "y_output";
     parm.y_out->type = TYPE_STRING;
     parm.y_out->gisprompt = "new,cell,raster";
-    parm.y_out->guisection = _("Output maps");
+    parm.y_out->guisection = _("Output");
     parm.y_out->label =
 	_("Name of raster map to contain Y back coordinates");
     parm.y_out->description =
@@ -302,15 +302,13 @@ int main(int argc, char *argv[])
 	  "the results of backlink information in UTM northing coordinates for each "
 	  "cell.");
 
+#if 0
     flag.display = G_define_flag();
     flag.display->key = 'd';
-#if 0
     flag.display->label = _("DISPLAY 'live' spread process on screen");
     flag.display->description =
 	_("Display the "live" simulation on screen. A graphics window "
 	  "must be opened and selected before using this option.");
-#else
-    flag.display->description = _("Live display - disabled and depreciated");
 #endif
 
     flag.spotting = G_define_flag();
@@ -325,11 +323,8 @@ int main(int argc, char *argv[])
     /* FIXME - allow seed to be specified for repeatability */
     G_srand48_auto();
 
-    display = flag.display->answer;
-#if 1
-    if (display)
-	G_fatal_error(_("The display feature is disabled"));
-#endif
+    display = NULL;
+
     spotting = flag.spotting->answer;
 
     max_layer = parm.max->answer;
