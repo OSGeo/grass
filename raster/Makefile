@@ -28,7 +28,6 @@ SUBDIRS = \
 	r.gwflow \
 	r.his \
 	r.horizon \
-	r.in.arc \
 	r.in.ascii \
 	r.in.bin \
 	r.in.gdal \
@@ -48,7 +47,6 @@ SUBDIRS = \
 	r.mode \
 	r.neighbors \
 	r.null \
-	r.out.arc \
 	r.out.ascii \
 	r.out.bin \
 	r.out.gdal \
@@ -59,7 +57,6 @@ SUBDIRS = \
 	r.out.pov \
 	r.out.ppm \
 	r.out.ppm3 \
-	r.out.tiff \
 	r.out.vrml \
 	r.out.vtk \
 	r.param.scale \
