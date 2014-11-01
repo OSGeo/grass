@@ -1,5 +1,5 @@
 /*!
-   \file gsds.c
+   \file lib/ogsf/gsds.c
 
    \brief OGSF library - dataset loading and management (lower level functions) 
 

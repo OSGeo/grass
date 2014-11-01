@@ -1,5 +1,5 @@
 /*!
-  \file pngdriver/write.c
+  \file lib/pngdriver/write.c
 
   \brief GRASS png display driver - write image (lower level functions)
 

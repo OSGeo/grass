@@ -1,5 +1,5 @@
 /*!
-  \file cairodriver/Draw.c
+  \file lib/cairodriver/draw.c
 
   \brief GRASS cairo display driver
 

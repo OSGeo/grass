@@ -1,5 +1,5 @@
 /*!
-   \file gsget.c
+   \file lib/ogsf/gsget.c
 
    \brief OGSF library - get map attribute (lower level functions)
 

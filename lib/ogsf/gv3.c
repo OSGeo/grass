@@ -1,5 +1,5 @@
 /*!
-   \file lib/ogsf/Gv3.c
+   \file lib/ogsf/gv3.c
 
    \brief OGSF library - loading vector sets (lower level functions)
 

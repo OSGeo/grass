@@ -1,5 +1,5 @@
 /*!
-   \file gs_query.c
+   \file lib/ogsf/gs_query.c
 
    \brief OGSF library - query (lower level functions)
 

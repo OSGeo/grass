@@ -1,5 +1,5 @@
 /*!
-   \file GK2.c
+   \file lib/ogsf/gk2.c
 
    \brief OGSF library - setting and manipulating keyframes animation
 

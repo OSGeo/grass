@@ -1,5 +1,5 @@
 /*!
-   \file gvl_calc.c
+   \file lib/ogsf/gvl_calc.c
 
    \brief OGSF library - loading and manipulating volumes (lower level functions)
 

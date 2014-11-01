@@ -1,5 +1,5 @@
 /*!
-   \file gsd_cplane.c
+   \file lib/ogsf/gsd_cplane.c
 
    \brief OGSF library - manipulating surfaces (lower level functions)
 

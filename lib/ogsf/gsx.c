@@ -1,5 +1,5 @@
 /*!
-   \file GSX.c
+   \file lib/ogsf/gsx.c
 
    \brief OGSF library - loading and manipulating surfaces
 

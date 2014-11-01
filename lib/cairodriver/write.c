@@ -1,5 +1,5 @@
 /*!
-  \file cairodriver/write.c
+  \file lib/cairodriver/write.c
 
   \brief GRASS cairo display driver - write image (lower level functions)
 

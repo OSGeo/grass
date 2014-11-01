@@ -1,5 +1,5 @@
 /*!
-   \file gsd_img_tif.c
+   \file lib/ogsf/gsd_img_tif.c
 
    \brief OGSF library - TIFF stuff
 

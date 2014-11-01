@@ -1,5 +1,5 @@
 /*!
-  \file cairodriver/write_bmp.c
+  \file lib/cairodriver/write_bmp.c
 
   \brief GRASS cairo display driver - write bitmap (lower level functions)
 

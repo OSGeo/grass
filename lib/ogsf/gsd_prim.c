@@ -1,5 +1,5 @@
 /*!
-   \file gsd_prim.c
+   \file lib/ogsf/gsd_prim.c
 
    \brief OGSF library - primitive drawing functions (lower level functions)
 

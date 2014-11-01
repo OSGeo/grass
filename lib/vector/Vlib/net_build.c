@@ -1,5 +1,5 @@
 /*!
- * \file lib/vector/Vlib/net.c
+ * \file lib/vector/Vlib/net_build.c
  *
  * \brief Vector library - releated fns for vector network building
  *

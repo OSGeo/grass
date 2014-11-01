@@ -1,5 +1,5 @@
 /*!
-   \file gs_bm.c
+   \file lib/ogsf/gs_bm.c
 
    \brief OGSF library - manipulating bitmaps (lower level functions)
 

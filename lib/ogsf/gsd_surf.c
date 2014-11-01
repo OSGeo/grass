@@ -1,5 +1,5 @@
 /*!
-   \file gsd_surf.c
+   \file lib/ogsf/gsd_surf.c
 
    \brief OGSF library - loading and manipulating surfaces
 

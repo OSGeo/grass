@@ -1,5 +1,5 @@
 /*!
-  \file cairodriver/Raster.c
+  \file lib/cairodriver/raster.c
 
   \brief GRASS cairo display driver - draw raster
 

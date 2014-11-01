@@ -1,3 +1,16 @@
+/*!
+  \file lib/pngdriver/read_ppm.c
+
+  \brief GRASS png display driver - read image (lower level functions)
+
+  (C) 2007-2014 by Glynn Clements and the GRASS Development Team
+  
+  This program is free software under the GNU General Public License
+  (>=v2). Read the file COPYING that comes with GRASS for details.
+  
+  \author Glynn Clements
+*/
+
 
 #include <stdio.h>
 #include <stdlib.h>

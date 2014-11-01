@@ -1,5 +1,5 @@
 /*!
-  \file cairodriver/Text.c
+  \file lib/cairodriver/text.c
 
   \brief GRASS cairo display driver - text subroutines
 
