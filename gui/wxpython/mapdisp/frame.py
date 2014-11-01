@@ -674,27 +674,27 @@ class MapFrame(SingleMapFrame):
         dOutFileCmd = ['d.out.file', 'output=' + pngFile, 'format=png']
         self.DOutFile(dOutFileCmd)
         # import back as red, green, blue rasters
-        returncode, messages = RunCommand('r.in.png', input=pngFile, output=tmpName,
+        returncode, messages = RunCommand('r.in.gdal', flags='o', input=pngFile, output=tmpName,
                                           quiet=True, overwrite=overwrite, getErrorMsg=True)
         if not returncode == 0:
             self._giface.WriteError(_('Failed to run d.to.rast:\n') + messages)
             return
         # set region for composite
         grass.use_temp_region()
-        returncode, messages = RunCommand('g.region', rast=tmpName + '.r',
+        returncode, messages = RunCommand('g.region', rast=tmpName + '.red',
                                           quiet=True, getErrorMsg=True)
         if not returncode == 0:
             grass.del_temp_region()
             self._giface.WriteError(_('Failed to run d.to.rast:\n') + messages)
             return
         # composite
-        returncode, messages = RunCommand('r.composite', red=tmpName + '.r',
-                                          green=tmpName + '.g', blue=tmpName + '.b',
+        returncode, messages = RunCommand('r.composite', red=tmpName + '.red',
+                                          green=tmpName + '.green', blue=tmpName + '.blue',
                                           output=outputRaster, quiet=True,
                                           overwrite=overwrite, getErrorMsg=True)
         grass.del_temp_region()
         RunCommand('g.remove', type='rast', flags='f', quiet=True,
-                   names=[tmpName + '.r', tmpName + '.g', tmpName + '.b'])
+                   name=[tmpName + '.red', tmpName + '.green', tmpName + '.blue'])
         if not returncode == 0:
             self._giface.WriteError(_('Failed to run d.to.rast:\n') + messages)
             grass.try_remove(pngFile)
