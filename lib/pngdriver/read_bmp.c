@@ -1,5 +1,5 @@
 /*!
-  \file pngdriver/read_bmp.c
+  \file lib/pngdriver/read_bmp.c
 
   \brief GRASS png display driver - read bitmap (lower level functions)
 

@@ -1,5 +1,5 @@
 /*!
-   \file gsd_img_ppm.c
+   \file lib/ogsf/gsd_img_ppm.c
 
    \brief OGSF library - PPM stuff
 

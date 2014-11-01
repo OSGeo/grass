@@ -1,5 +1,5 @@
 /*!
-  \file pngdriver/write_bmp.c
+  \file lib/pngdriver/write_bmp.c
 
   \brief GRASS png display driver - write bitmap (lower level functions)
 

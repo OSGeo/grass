@@ -1,5 +1,5 @@
 /*!
-  \file cairodriver/read_bmp.c
+  \file lib/cairodriver/read_bmp.c
 
   \brief GRASS cairo display driver - read bitmap (lower level functions)
 

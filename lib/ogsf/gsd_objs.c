@@ -1,5 +1,5 @@
 /*!
-   \file gsd_label.c
+   \file lib/ogsf/gsd_label.c
 
    \brief OGSF library - objects management (lower level functions)
 

@@ -1,5 +1,5 @@
 /*!
-   \file gsd_fonts.c
+   \file lib/ogsf/gsd_fonts.c
 
    \brief OGSF library - loading and manipulating surfaces
 

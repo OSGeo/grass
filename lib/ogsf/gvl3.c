@@ -1,5 +1,5 @@
 /*!
-   \file Gvl3.c
+   \file lib/ogsf/gvl3.c
 
    \brief OGSF library - loading volumes (lower level functions)
 

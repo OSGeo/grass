@@ -1,5 +1,5 @@
 /*!
-   \file GS_util.c
+   \file lib/ogsf/gs_util.c
 
    \brief OGSF library - loading and manipulating surfaces
 

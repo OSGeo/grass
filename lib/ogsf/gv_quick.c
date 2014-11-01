@@ -1,5 +1,5 @@
 /*!
-   \file gv_quick.c
+   \file lib/ogsf/gv_quick.c
 
    \brief OGSF library - 
 

@@ -1,5 +1,5 @@
 /*!
-   \file gk.c
+   \file lib/ogsf/gk.c
 
    \brief OGSF library - setting and manipulating keyframes animation (lower level functions)
 

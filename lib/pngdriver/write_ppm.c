@@ -1,5 +1,5 @@
 /*!
-  \file pngdriver/write_ppm.c
+  \file lib/pngdriver/write_ppm.c
 
   \brief GRASS png display driver - write PPM image (lower level functions)
 

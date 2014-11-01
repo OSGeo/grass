@@ -1,5 +1,5 @@
 /*!
-  \file pngdriver/Box.c
+  \file lib/pngdriver/Box.c
 
   \brief GRASS png display driver - draw box
 

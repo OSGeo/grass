@@ -1,5 +1,5 @@
 /*!
-   \file gvl_calc2.c
+   \file lib/ogsf/gvl_calc2.c
 
    \brief OGSF library - loading and manipulating volumes, MarchingCubes 33 Algorithm (lower level functions)
 

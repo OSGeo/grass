@@ -1,5 +1,5 @@
 /*!
-   \file gsd_views.c
+   \file lib/ogsf/gsd_views.c
 
    \brief OGSF library - manipulating views (lower level functions)
 

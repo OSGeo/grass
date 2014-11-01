@@ -1,5 +1,5 @@
 /*!
-  \file cairodriver/Set_window.c
+  \file lib/cairodriver/set_window.c
 
   \brief GRASS cairo display driver - set window
 
