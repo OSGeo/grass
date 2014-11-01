@@ -34,12 +34,6 @@ SUBDIRS = \
 	d.vect.chart \
 	d.thematic.area \
 	d.where
-#	d.colors \
-#	d.extract \
-#	d.measure \
-#	d.what.rast \
-#	d.what.vect \
-#	d.zoom \
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
