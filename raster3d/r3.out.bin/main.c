@@ -225,7 +225,6 @@ int main(int argc, char *argv[]) {
 	parm.bytes->required = YES;
 	parm.bytes->options = "1,2,4,8";
 	parm.bytes->description = _("Number of bytes per cell in binary file");
-	parm.bytes->guisection = _("Settings");
 
 	parm.order = G_define_option();
 	parm.order->key = "order";
