@@ -263,9 +263,6 @@
       <module-item name="r.in.bin">
         <label>Raw binary array import</label>
       </module-item>
-      <module-item name="r.in.arc">
-        <label>ESRI ASCII grid import</label>
-      </module-item>
       <module-item name="r.in.gridatb">
         <label>GRIDATB.FOR import</label>
       </module-item>
@@ -385,9 +382,6 @@
         <label>ASCII x,y,z points export</label>
       </module-item>
       <separator/>
-      <module-item name="r.out.arc">
-        <label>ESRI ASCII grid export</label>
-      </module-item>
       <module-item name="r.out.gridatb">
         <label>GRIDATB.FOR export</label>
       </module-item>
@@ -413,9 +407,6 @@
       </module-item>
       <module-item name="r.out.pov">
         <label>POV-Ray export</label>
-      </module-item>
-      <module-item name="r.out.tiff">
-        <label>TIFF export</label>
       </module-item>
       <module-item name="r.out.vrml">
         <label>VRML export</label>
