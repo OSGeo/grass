@@ -509,8 +509,7 @@ class SavedRegion(wx.Dialog):
         
         box.Add(item=self._selection, proportion=0, flag=wx.ALIGN_CENTRE | wx.ALL, border=5)
         self._selection.SetFocus()
-        if self.loadsave == 'save':
-            self._selection.Bind(wx.EVT_TEXT, self.OnRegion)
+        self._selection.Bind(wx.EVT_TEXT, self.OnRegion)
         
         sizer.Add(item = box, proportion = 0, flag = wx.GROW | wx.ALIGN_CENTER_VERTICAL | wx.ALL,
                   border = 5)
@@ -537,6 +536,8 @@ class SavedRegion(wx.Dialog):
 
     def OnRegion(self, event):
         value = self._selection.GetValue()
+        if '@' in value:
+            value = value.rsplit('@', 1)[0]
         if not grass.legal_name(value):
             GMessage(parent=self,
                      message=_("Name cannot begin with '.' "
