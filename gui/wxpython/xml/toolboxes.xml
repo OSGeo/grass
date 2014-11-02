@@ -857,29 +857,8 @@
         <label>Watershed basin creation</label>
       </module-item>
       <separator/>
-      <module-item name="r.stream.channel">
-        <label>Stream channel characteristics</label>
-      </module-item>
-      <module-item name="r.stream.distance">
-        <label>Stream distance and elevation characteristics</label>
-      </module-item>
       <module-item name="r.stream.extract">
         <label>Extraction of stream networks</label>
-      </module-item>
-      <module-item name="r.stream.order">
-        <label>Stream ordering and hierarchy</label>
-      </module-item>
-      <module-item name="r.stream.segment">
-        <label>Stream segment characteristics</label>
-      </module-item>
-      <module-item name="r.stream.slope">
-        <label>Stream elevation change</label>
-      </module-item>
-      <module-item name="r.stream.snap">
-        <label>Position correction of water outlet point</label>
-      </module-item>
-      <module-item name="r.stream.stats">
-        <label>Horton's statistics</label>
       </module-item>
       <separator/>
       <module-item name="r.sim.water">
