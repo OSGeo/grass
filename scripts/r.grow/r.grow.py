@@ -102,7 +102,10 @@ def main():
 
     if metric == 'euclidean':
         metric = 'squared'
-        radius = radius * radius
+        if radius > 0:
+            radius = radius * radius
+        else:
+            radius = - (radius * radius)
 
     #check if input file exists
     if not grass.find_file(input)['file']:
