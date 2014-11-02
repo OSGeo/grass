@@ -184,7 +184,7 @@ def main():
                                                                  rastermap))
 
                 if aggreagated_map_name:
-                    ret = grass.run_command("g.remove", flags='f', type=rast,
+                    ret = grass.run_command("g.remove", flags='f', type='rast',
                                             name=aggreagated_map_name)
                     if ret != 0:
                         dbif.close()
