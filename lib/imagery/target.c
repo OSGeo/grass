@@ -9,7 +9,7 @@
  * Reads the target <b>location</b> and <b>mapset</b>
  * from the TARGET file for the specified group. Returns 1 if successful; 0
  * otherwise (and prints a diagnostic error). This routine is used by
- * <i>i.points</i> and <i>i.rectify</i> and probably should not be used by
+ * <i>g.gui.gcp</i> and <i>i.rectify</i> and probably should not be used by
  * other programs.
  * <b>Note.</b> This routine does <b>not</b> validate the target information.
  *

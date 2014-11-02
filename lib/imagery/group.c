@@ -386,7 +386,7 @@ int I_add_file_to_group_ref(const char *name, const char *mapset,
  for (n = 0; n < src.nfiles; n++)
  I_transfer_group_ref_file (&src, n, &dst);
  \endcode
- * This routine is used by <i>i.points</i> to create the REF file for a
+ * This routine is used by <i>g.gui.gcp</i> to create the REF file for a
  * subgroup.
  *
  *  \param src
