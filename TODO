@@ -26,12 +26,18 @@ Imagery
     - lib/image3/: never finished improvement which integrated the standard lib and
                    the ortho lib. Seems to provide also ortho rectification for
                    satellite data (i.points3, i.rectify3)
+- See
+  http://grasswiki.osgeo.org/wiki/Image_processing#Ideas_collection_for_improving_GRASS.27_Image_processing_capabilities
 - image modules:
-    - merge of i.points, i.vpoints, i.points3
     - merge of i.rectify and i.rectify3
     - addition of new resampling algorithms such as bilinear, cubic convolution
       (take from r.proj?)
     - add other warping methods (maybe thin splines from GDAL?)
     - implement/finish linewise ortho-rectification of satellite data
     - Add support for > 8bit colors (only 0-255 supported currently)
+
+-----------------
+See also
+
+http://trac.osgeo.org/grass/wiki/Grass7Planning
 

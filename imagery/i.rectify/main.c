@@ -14,7 +14,7 @@
  *               Markus Metz
  * PURPOSE:      calculate a transformation matrix and then convert x,y cell 
  *               coordinates to standard map coordinates for each pixel in the 
- *               image (control points can come from i.points or i.vpoints)
+ *               image (control points can come from g.gui.gcp)
  * COPYRIGHT:    (C) 2002-2011 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public

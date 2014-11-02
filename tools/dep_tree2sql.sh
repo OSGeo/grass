@@ -44,9 +44,7 @@
 # 	 imagery/i.ortho.photo/photo.elev/OBJ.i686-pc-linux-gnu/main.o
 # 	 imagery/i.ortho.photo/photo.rectify/OBJ.i686-pc-linux-gnu/target.o
 # 	 imagery/i.ortho.photo/photo.target/OBJ.i686-pc-linux-gnu/main.o
-# 	 imagery/i.points/OBJ.i686-pc-linux-gnu/target.o
 # 	 imagery/i.rectify/OBJ.i686-pc-linux-gnu/target.o
-# 	 imagery/i.vpoints/OBJ.i686-pc-linux-gnu/target.o
 #
 # to discover which files import a given symbol, or more complex queries
 # such as:
