@@ -79,8 +79,8 @@ wxguiclean:
 wxguiapidoc:
 	@echo $(SPHINXAPIDOC)
 	@echo $(SPHINXBUILD)
-	$(call run_grass,$(SPHINXAPIDOC) -T -f -o src/ ../../ ../../*/g.gui.*.py)
-
+	$(call run_grass,$(SPHINXAPIDOC) -T -f -o src/ ../../)
+	
 wxguihtml:
 	$(call run_grass,$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR_HTML))
 	@echo
