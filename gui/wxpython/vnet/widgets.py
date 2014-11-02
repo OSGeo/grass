@@ -227,7 +227,9 @@ class PointsList(wx.ListCtrl,
             self.selIdxs[key][colNum] = -1
 
         self.itemDataMap[key][colNum] = cellVal
-        self.SetStringItem(index, colNum, str(cellVal))
+        if not isinstance(cellVal, basestring):
+            cellVal = str(cellVal)
+        self.SetStringItem(index, colNum, cellVal)
 
     def EditCellKey(self, key, colName, cellData):
         """!Changes value in list using index (changes during sorting)"""
@@ -245,7 +247,9 @@ class PointsList(wx.ListCtrl,
         index = self._findIndex(key)
 
         if index != -1:
-            self.SetStringItem(index, colNum, str(cellVal))
+            if not isinstance(cellVal, basestring):
+                cellVal = str(cellVal)
+            self.SetStringItem(index, colNum, cellVal)
 
     def _findIndex(self, key):
         """!Find index for key"""
@@ -375,7 +379,10 @@ class PointsList(wx.ListCtrl,
                 i = 0
                 for editedCell in editedData:
                     if editedCell[1] != data[i][1]:
-                        self.SetStringItem(index, editedCell[0], str(editedCell[1]))
+                        value = editedCell[1]
+                        if not isinstance(editedCell[1], basestring):
+                            value = str(editedCell[1])
+                        self.SetStringItem(index, editedCell[0], value)
                         self.itemDataMap[key][editedCell[0]] = editedCell[1]
                         changed = True
                     i += 1 
@@ -562,7 +569,10 @@ class EditItem(wx.Dialog):
                 else:
                     self.fields.append(wx.TextCtrl(parent=panel, id=wx.ID_ANY, 
                                                    size=(150, -1)))
-                    self.fields[iField].SetValue(str(cell[1]))
+                    value = cell[1]
+                    if not isinstance(cell[1], basestring):
+                        value = str(cell[1])
+                    self.fields[iField].SetValue(value)
 
             label = wx.StaticText(parent = panel, id=wx.ID_ANY,
                                   label = _(parent.GetColumn(cell[0]).GetText()) + ":") # name of column)
