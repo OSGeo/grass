@@ -51,7 +51,7 @@ href="http://grass.osgeo.org">http://grass.osgeo.org</a>
  - gis: \ref gislib
  - raster: \ref rasterlib
  - vector: \ref vectorlib
- - Temporal GIS API: \ref pythontemporallib
+ - Temporal GIS API: See http://grass.osgeo.org/grass71/manuals/libpython/temporal_framework.html
 
 \section interfaces Interfaces
 

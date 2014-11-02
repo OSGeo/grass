@@ -131,8 +131,6 @@ SUBDIRS = \
 	r.what.color \
 	simwe
 
-#	r.le \
-
 PGM = rasterintro
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
