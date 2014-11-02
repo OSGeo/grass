@@ -359,7 +359,7 @@ EXTRACT_STATIC         = NO
 # defined locally in source files will be included in the documentation.
 # If set to NO only classes defined in header files are included.
 
-EXTRACT_LOCAL_CLASSES  = YES
+EXTRACT_LOCAL_CLASSES  = NO
 
 # This flag is only useful for Objective-C code. When set to YES local
 # methods, which are defined in the implementation section but not in
@@ -659,8 +659,7 @@ INPUT_ENCODING         = UTF-8
 
 FILE_PATTERNS          = *.h \
                          *.c \
-                         *.i \
-                         *.py \
+                         *.cpp \
                          *.dox
 
 # The RECURSIVE tag can be used to turn specify whether or not subdirectories
@@ -683,11 +682,7 @@ EXCLUDE                = bin.@ARCH@ \
                          dist.@ARCH@ \
                          doc \
                          general \
-                         gui/scripts \
-                         gui/wxpython/compat \
-                         gui/wxpython/icons \
-                         gui/wxpython/scripts \
-                         gui/wxpython/tools \
+                         gui \
                          imagery \
                          include/defs \
                          lib/btree/test \
@@ -697,7 +692,7 @@ EXCLUDE                = bin.@ARCH@ \
                          lib/gpde/test \
                          lib/linkm/test \
                          lib/raster3d/test \
-                         lib/python/ctypes \
+                         lib/python \
                          lib/vector/dglib/examples \
                          lib/vector/rtree/docs \
                          locale \
@@ -739,8 +734,7 @@ EXCLUDE_PATTERNS       = */test/* \
                          */testsuite/* \
                          */test_* \
                          */test.* \
-                         */*local_proto.h \
-                         */g.gui.*.py
+                         */*local_proto.h
 
 # The EXCLUDE_SYMBOLS tag can be used to specify one or more symbol names
 # (namespaces, classes, functions, etc.) that should be excluded from the
@@ -957,7 +951,7 @@ HTML_EXTRA_FILES       =
 # 180 is cyan, 240 is blue, 300 purple, and 360 is red again.
 # The allowed range is 0 to 359.
 
-HTML_COLORSTYLE_HUE    = 220
+HTML_COLORSTYLE_HUE    = 120
 
 # The HTML_COLORSTYLE_SAT tag controls the purity (or saturation) of
 # the colors in the HTML output. For a value of 0 the output will use
@@ -972,7 +966,7 @@ HTML_COLORSTYLE_SAT    = 100
 # so 80 represents a gamma of 0.8, The value 220 represents a gamma of 2.2,
 # and 100 does not change the gamma.
 
-HTML_COLORSTYLE_GAMMA  = 80
+HTML_COLORSTYLE_GAMMA  = 56
 
 # If the HTML_TIMESTAMP tag is set to YES then the footer of each generated HTML
 # page will contain the date and time when the page was generated. Setting
@@ -1166,7 +1160,7 @@ DISABLE_INDEX          = NO
 # Since the tree basically has the same information as the tab index you
 # could consider to set DISABLE_INDEX to NO when enabling this option.
 
-GENERATE_TREEVIEW      = NO
+GENERATE_TREEVIEW      = YES
 
 # The ENUM_VALUES_PER_LINE tag can be used to set the number of enum values
 # (range [0,1..20]) that doxygen will group on one line in the generated HTML
@@ -1261,7 +1255,7 @@ GENERATE_LATEX         = YES
 # If a relative path is entered the value of OUTPUT_DIRECTORY will be
 # put in front of it. If left blank `latex' will be used as the default path.
 
-LATEX_OUTPUT           =
+LATEX_OUTPUT           = latex
 
 # The LATEX_CMD_NAME tag can be used to specify the LaTeX command name to be
 # invoked. If left blank `latex' will be used as the default command name.
