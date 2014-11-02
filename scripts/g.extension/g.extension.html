@@ -1,8 +1,8 @@
 <h2>DESCRIPTION</h2>
 
 <em>g.extension</em> downloads and installs, removes or updates
-extensions from <a href="http://svn.osgeo.org/grass/grass-addons/grass7/">GRASS Addons SVN repository</a> into the local GRASS
-installation.
+extensions from
+<a href="http://svn.osgeo.org/grass/grass-addons/grass7/">GRASS Addons SVN repository</a> into the local GRASS GIS installation.
 
 <p>Re-running <em>g.extension</em> on an installed GRASS Addons
 extension re-installs the requested extension which may include
@@ -12,16 +12,16 @@ by <em><a href="g.extension.all.html">g.extension.all</a></em>.
 
 <h2>EXAMPLES</h2>
 
-Download and install <em>i.points.auto</em> into current GRASS installation
+Download and install <em>r.stream.distance</em> into current GRASS installation
 
 <div class="code"><pre>
-g.extension extension=i.points.auto
+g.extension extension=r.stream.distance
 </pre></div>
 
 Remove locally installed extension
 
 <div class="code"><pre>
-g.extension extension=i.points.auto operation=remove
+g.extension extension=r.stream.distance operation=remove
 </pre></div>
 
 List all available extensions from GRASS Addons SVN repository
@@ -39,16 +39,16 @@ g.extension -a
 <h2>SEE ALSO</h2>
 
 <em>
-  <a href="g.extension.all.html">g.extension.all</a>
+<a href="g.extension.all.html">g.extension.all</a>
 </em>
 
 <p>
 See also <a href="http://grasswiki.osgeo.org/wiki/GRASS_AddOns">GRASS Addons</a> wiki page.
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
-Markus Neteler<br>
-Martin Landa, Czech Technical University in Prague, Czech Republic
+Markus Neteler (original shell script)<br>
+Martin Landa, Czech Technical University in Prague, Czech Republic (Python rewrite)
 
 <p>
 <i>Last changed: $Date$</i>
