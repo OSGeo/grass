@@ -920,17 +920,6 @@
       </module-item>
     </items>
   </toolbox>
-  <toolbox name="LandscapeStructureModeling">
-    <label>Landscape structure modeling</label>
-    <items>
-      <module-item name="r.le.pixel">
-        <label>Analyze landscape</label>
-      </module-item>
-      <module-item name="r.le.patch">
-        <label>Analyze patches</label>
-      </module-item>
-    </items>
-  </toolbox>
   <toolbox name="LandscapePatchAnalysis">
     <label>Landscape patch analysis</label>
     <items>
