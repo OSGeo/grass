@@ -7,7 +7,7 @@
  * PURPOSE:      calculate a transformation matrix and then convert x,y(,z) 
  *               coordinates to standard map coordinates for all objects in 
  *               the vector
- *               control points can come from i.points or i.vpoints or 
+ *               control points can come from g.gui.gcp or 
  *               a user-given text file
  * COPYRIGHT:    (C) 2002-2011 by the GRASS Development Team
  *

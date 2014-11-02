@@ -210,7 +210,7 @@ for (n = 0; n < src.nfiles; n++)
 \endverbatim
 
 <P>
-This routine is used by <I>i.points</I> to create the REF file for a
+This routine is used by <I>g.gui.gcp</I> to create the REF file for a
 subgroup.
 
 <P>
@@ -229,7 +229,7 @@ int I_get_target() read target information
 Reads the target <B>location</B> and <B>mapset</B> from the TARGET
 file for the specified group. Returns 1 if successful; 0 otherwise
 (and prints a diagnostic error). This routine is used by
-<I>i.points</I> and <I>i.rectify</I> and probably should not be used
+<I>g.gui.gcp</I> and <I>i.rectify</I> and probably should not be used
 by other programs.
 
 <P>
@@ -256,7 +256,7 @@ information.
 <P>
 The following routines read and write the POINTS file, which contains
 the image registration control points. This file is created and
-updated by the module <I>i.points</I>,and read by <I>i.rectify.</I>
+updated by the module <I>g.gui.gcp</I>,and read by <I>i.rectify.</I>
 
 <P>
 These routines use the <I>Control_Points</I> structure, which is

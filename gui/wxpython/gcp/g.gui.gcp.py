@@ -24,6 +24,7 @@
 #% keywords: general
 #% keywords: GUI
 #% keywords: georectification
+#% keywords: GCP
 #%end
 
 """
