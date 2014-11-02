@@ -1,4 +1,4 @@
-/*! \mainpage GRASS 7 Programmer's Manual
+/*! \mainpage GRASS GIS 7 Programmer's Manual
 <!-- * doxygenized from "GRASS 5 Programmer's Manual"
        by M. Neteler 2/2004
      * updated 8/2005, 2006-2008, 2010-2011
@@ -59,11 +59,12 @@ href="http://grass.osgeo.org">http://grass.osgeo.org</a>
 
 \subsection displaylibs Display Libraries and Drivers
 
- - cairodriver: \ref cairodriver
- - display:	\ref displaylib
+ - display:	\ref displaylib (general displaylibrary)
+ - cairodriver: \ref cairodriver (cairo graphics driver)
  - %driver:     Graphics monitor driver
- - pngdriver:   \ref pngdriverlib
- - psdriver:    \ref psdriverlib
+ - htmldriver:  \ref htmldriverlib (HTML graphics driver)
+ - pngdriver:   \ref pngdriverlib (PNG graphics driver)
+ - psdriver:    \ref psdriverlib (Postscript graphics driver)
 
 \subsection statslibs Math and Statisctics Libraries
 
@@ -74,26 +75,25 @@ href="http://grass.osgeo.org">http://grass.osgeo.org</a>
 
 \subsection rasteribs Raster Libraries
 
- - edit:	\ref editlib (raster edit library for cellhd, history, cats)
- - raster3d:	\ref raster3dlib
- - raster:	\ref rasterlib
- - rowio:	\ref rowiolib
+ - raster:	\ref rasterlib (2D raster library)
+ - raster3d:	\ref raster3dlib (3D raster library - voxels)
+ - rowio:	\ref rowiolib (library for reading/writing raster rows)
  - rst:	        \ref rstlib (library for interpolation with regularized splines with tension)
  - segment:	\ref segmentlib (segment library for segmented raster reading)
- - stats:       \ref statslib (raster stats library)
+ - stats:       \ref statslib (statistics library)
 
-\subsection imagerylibs Imagery Liraries (image processing)
+\subsection imagerylibs Imagery Libraries (image processing)
 
- - cluster:     \ref clusterlib (image processing)
- - imagery:	\ref imagerylib 
+ - cluster:     \ref clusterlib (library for k-means style of cluster analysis processing)
+ - imagery:	\ref imagerylib (library for image processing)
 
 \subsection vectoribs Vector Libraries
 
- - %vector: \ref vectorlib
-  - dglib (internal library)
-  - vedit: \ref veditlib - %vector editing
-  - neta: \ref netalib
- - sites:	Old Sites library, now interfaced to \ref vectorlib - \ref sites
+ - %vector: \ref vectorlib (architecture description)
+  - dglib:  \ref dglib (directed graph library)
+  - vedit:  \ref veditlib (vector editing library)
+  - neta:   \ref netalib (network analysis library)
+  - rtree:  \ref rtree (R search tree library)
 
 \subsection dblibs Database Management Libraries
 
@@ -104,20 +104,23 @@ href="http://grass.osgeo.org">http://grass.osgeo.org</a>
  - ogsf:	\ref ogsflib (OpenGL (R) ported gsurf library (required for NVIZ))
  - nviz:        \ref nvizlib (used by wxGUI Nviz extension and CLI-based Nviz module)
 
+\subsection pythonlibs Python API
+
+ - python:	See GRASS GIS Python library (http://grass.osgeo.org/grass71/manuals/libpython/)
+
 \subsection projlibs Projection Libraries
 
  - proj:	\ref projlib (wrapper to PROJ4 projection library)
 
 \subsection misclibs Misc Libraries
 
- - bitmap:	\ref bitmap (Bitmap library for X Window Bitmaps)
- - btree:	\ref btree (Binary tree library)
  - datetime:	\ref datetime (DateTime library) 
- - dspf:        \ref dspf (obsolete, DSPF libary)
  - external:	\ref external (External libraries from other projects such as shapelib)
- - fonts:	\ref fonts (Hershey fonts library)
+ - fonts:	\ref fonts (GRASS fonts library)
  - init:	\ref init (GRASS initialization code + scripts)
- - linkm:	Linked list memory manager - \ref linkm (obsolete?)
+ - iostream:	\ref iostream (fast I/O library)
+ - lidar:	\ref lidar (LiDAR data related library)
+ - linkm:	\ref linkm (linked list memory manager)
  - manage:      \ref managelib
  - symbol:	\ref symbol (Drawing symbols for %point %vector data library)
 
