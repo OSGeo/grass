@@ -77,7 +77,6 @@
       <separator/>
       <subtoolbox name="HydrologicModeling"/>
       <subtoolbox name="GroundwaterModeling"/>
-      <subtoolbox name="LandscapeStructureModeling"/>
       <subtoolbox name="LandscapePatchAnalysis"/>
       <subtoolbox name="WildfireModeling"/>
       <separator/>
