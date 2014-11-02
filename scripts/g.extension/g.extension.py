@@ -47,14 +47,6 @@
 #% key_desc: url
 #% description: SVN Addons repository URL
 #% answer: http://svn.osgeo.org/grass/grass-addons/grass7
-#% required: no
-#%end
-#%option
-#% key: srcdir
-#% type: string
-#% key_desc: directory
-#% description: Directory with source code
-#% required: no
 #%end
 #%option
 #% key: prefix
@@ -732,14 +724,11 @@ def install_extension_win(name):
     return 0
 
 # install extension on other plaforms
-def install_extension_other(name, src_dir=None):
+def install_extension_other(name):
     gisbase = os.getenv('GISBASE')
     classchar = name.split('.', 1)[0]
     moduleclass = expand_module_class_name(classchar)
-    if not src_dir:
-        url = options['svnurl'] + '/' + moduleclass + '/' + name
-    else:
-        url = None
+    url = options['svnurl'] + '/' + moduleclass + '/' + name
     
     grass.message(_("Fetching <%s> from GRASS-Addons SVN repository (be patient)...") % name)
 
@@ -749,13 +738,9 @@ def install_extension_other(name, src_dir=None):
     else:
         outdev = sys.stdout
 
-    if url:
-        grass.message(_("Fetching <%s> from GRASS-Addons SVN (be patient)...") % name)
-        if grass.call(['svn', 'checkout',
-                       url], stdout = outdev) != 0:
-            grass.fatal(_("GRASS Addons <%s> not found") % name)
-    else:
-        grass.message(_("Instaling <%s> from directory <%s>...") % (name, src_dir))
+    if grass.call(['svn', 'checkout',
+                   url], stdout = outdev) != 0:
+        grass.fatal(_("GRASS Addons <%s> not found") % name)
 
     dirs = { 'bin'     : os.path.join(TMPDIR, name, 'bin'),
              'docs'    : os.path.join(TMPDIR, name, 'docs'),
@@ -795,10 +780,7 @@ def install_extension_other(name, src_dir=None):
         sys.stderr.write(' '.join(installCmd) + '\n')
         return 0
 
-    if url:
-        os.chdir(os.path.join(TMPDIR, name))
-    else:
-        os.chdir(src_dir)
+    os.chdir(os.path.join(TMPDIR, name))
 
     grass.message(_("Compiling..."))
     if 0 != grass.call(makeCmd,
@@ -1044,17 +1026,6 @@ def main():
             options['prefix'] = os.path.join(os.environ['HOME'], '.grass%s' % version[0], 'addons')
         else:
             options['prefix'] = os.environ['GRASS_ADDON_BASE']
-
-    src_dir = options['srcdir']
-    if src_dir:
-        if sys.platform != "win32":
-            install_extension_other(options['extension'], src_dir)
-            return 0
-        else:
-            grass.fatal(_("Cannot compile and install from source code on"
-                          " MS Windows (TODO: this is not true for Python"
-                          " except for the fact that make is not available)."))
-
     if 'svn.osgeo.org/grass/grass-addons/grass7' in options['svnurl']:
         # use pregenerated modules XML file
         xmlurl = "http://grass.osgeo.org/addons/grass%s" % version[0]
