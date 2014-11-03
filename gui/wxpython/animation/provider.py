@@ -691,19 +691,19 @@ def _setEnvironment(width, height, filename, transparent, bgcolor):
                                                                      t=transparent,
                                                                      b=bgcolor))
 
-    os.environ['GRASS_WIDTH'] = str(width)
-    os.environ['GRASS_HEIGHT'] = str(height)
+    os.environ['GRASS_RENDER_WIDTH'] = str(width)
+    os.environ['GRASS_RENDER_HEIGHT'] = str(height)
     driver = UserSettings.Get(group='display', key='driver', subkey='type')
     os.environ['GRASS_RENDER_IMMEDIATE'] = driver
-    os.environ['GRASS_BACKGROUNDCOLOR'] = '{r:02x}{g:02x}{b:02x}'.format(r=bgcolor[0],
+    os.environ['GRASS_RENDER_BACKGROUNDCOLOR'] = '{r:02x}{g:02x}{b:02x}'.format(r=bgcolor[0],
                                                                          g=bgcolor[1],
                                                                          b=bgcolor[2])
-    os.environ['GRASS_TRUECOLOR'] = "TRUE"
+    os.environ['GRASS_RENDER_TRUECOLOR'] = "TRUE"
     if transparent:
-        os.environ['GRASS_TRANSPARENT'] = "TRUE"
+        os.environ['GRASS_RENDER_TRANSPARENT'] = "TRUE"
     else:
-        os.environ['GRASS_TRANSPARENT'] = "FALSE"
-    os.environ['GRASS_PNGFILE'] = str(filename)
+        os.environ['GRASS_RENDER_TRANSPARENT'] = "FALSE"
+    os.environ['GRASS_RENDER_FILE'] = str(filename)
 
 
 def createNoDataBitmap(imageWidth, imageHeight, text="No data"):

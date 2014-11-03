@@ -354,9 +354,9 @@ if [ "$GIS_FLAG_S" -eq 1 ] ; then
     # if running in GUI, turn off immediate mode rendering so that the
     # iterated d.vect commands will composite using the display driver
     autowrite=$GRASS_PNG_AUTO_WRITE
-    pngread=$GRASS_PNG_READ
-    GRASS_PNG_READ=TRUE
-    export GRASS_PNG_READ
+    pngread=$GRASS_RENDER_FILE_READ
+    GRASS_RENDER_FILE_READ=TRUE
+    export GRASS_RENDER_FILE_READ
     GRASS_PNG_AUTO_WRITE=FALSE
     export GRASS_PNG_AUTO_WRITE
 fi
@@ -1154,8 +1154,8 @@ fi
 
 if [ "$GIS_FLAG_S" -eq 1 ] ; then
     # reset display parameters
-    GRASS_PNG_READ=$pngread
-    export GRASS_PNG_READ
+    GRASS_RENDER_FILE_READ=$pngread
+    export GRASS_RENDER_FILE_READ
     GRASS_PNG_AUTO_WRITE=$autowrite
     export GRASS_PNG_AUTO_WRITE
 fi

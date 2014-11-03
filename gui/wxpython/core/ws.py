@@ -87,8 +87,8 @@ class RenderWMSMgr(wx.EvtHandler):
             return
 
         env = copy.copy(env)
-        self.dstSize['cols'] = int(env["GRASS_WIDTH"])
-        self.dstSize['rows'] = int(env["GRASS_HEIGHT"])
+        self.dstSize['cols'] = int(env["GRASS_RENDER_WIDTH"])
+        self.dstSize['rows'] = int(env["GRASS_RENDER_HEIGHT"])
 
         region = self._getRegionDict(env)
         self._fitAspect(region, self.dstSize)
@@ -130,7 +130,7 @@ class RenderWMSMgr(wx.EvtHandler):
             if Debug.GetLevel() < 3:
                 cmdList.append('--quiet')
 
-            env["GRASS_PNGFILE"] = self.tempMap
+            env["GRASS_RENDER_FILE"] = self.tempMap
             env["GRASS_REGION"] = self._createRegionStr(region)
 
             self.thread.RunCmd(cmdList, env=env, stderr=self.cmdStdErr)

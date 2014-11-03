@@ -40,9 +40,9 @@ static void init(void)
 {
     const char *fenc = getenv("GRASS_ENCODING");
     const char *font = getenv("GRASS_FONT");
-    const char *line_width = getenv("GRASS_LINE_WIDTH");
-    const char *text_size = getenv("GRASS_TEXT_SIZE");
-    const char *frame = getenv("GRASS_FRAME");
+    const char *line_width = getenv("GRASS_RENDER_LINE_WIDTH");
+    const char *text_size = getenv("GRASS_RENDER_TEXT_SIZE");
+    const char *frame = getenv("GRASS_RENDER_FRAME");
 
     D_font(font ? font : "romans");
 
@@ -125,13 +125,9 @@ int D_open_driver(void)
 	v = G__getenv(env);
 	p = m;
 
-	if (v) {
-	    if (G_strcasecmp(p, "ps") == 0)
-		G_putenv("GRASS_PSFILE", v);
-	    else
-		G_putenv("GRASS_PNGFILE", v);
-	}
-	
+	if (v)
+            G_putenv("GRASS_RENDER_FILE", v);
+        
 	G_asprintf(&env, "MONITOR_%s_ENVFILE", u_m);
 	v = G__getenv(env);
 	if (v) 

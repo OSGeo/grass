@@ -85,25 +85,25 @@ int start_mon(const char *name, const char *output, int select,
     if (env_fd < 0)
 	G_fatal_error(_("Unable to create file '%s'"), env_value);
 
-    sprintf(buf, "GRASS_PNG_READ=TRUE\n");
+    sprintf(buf, "GRASS_RENDER_FILE_READ=TRUE\n");
     write(env_fd, buf, strlen(buf));
     if (width) {
-	sprintf(buf, "GRASS_WIDTH=%d\n", width);
+	sprintf(buf, "GRASS_RENDER_WIDTH=%d\n", width);
 	write(env_fd, buf, strlen(buf));
     }
     if (height) {
-	sprintf(buf, "GRASS_HEIGHT=%d\n", height);
+	sprintf(buf, "GRASS_RENDER_HEIGHT=%d\n", height);
 	write(env_fd, buf, strlen(buf));
     }
     if (bgcolor) {
 	if (strcmp(bgcolor, "none") == 0)
-	    sprintf(buf, "GRASS_TRANSPARENT=TRUE\n");
+	    sprintf(buf, "GRASS_RENDER_TRANSPARENT=TRUE\n");
 	else
-	    sprintf(buf, "GRASS_BACKGROUNDCOLOR=%s\n", bgcolor);
+	    sprintf(buf, "GRASS_RENDER_BACKGROUNDCOLOR=%s\n", bgcolor);
 	write(env_fd, buf, strlen(buf));
     }
     if (truecolor) {
-	sprintf(buf, "GRASS_TRUECOLOR=TRUE\n");
+	sprintf(buf, "GRASS_RENDER_TRUECOLOR=TRUE\n");
 	write(env_fd, buf, strlen(buf));
     }
     close(env_fd);
