@@ -56,6 +56,8 @@ import sys
 import os
 from grass.script.utils import try_remove, basename
 from grass.script import core as grass
+from grass.exceptions import CalledModuleError
+
 
 def main():
     input = options['input']
@@ -78,14 +80,21 @@ def main():
 	grass.fatal(_("File <%s> already exists") % dbffile)
 
     if olayer:
-	if grass.run_command('v.out.ogr', quiet = True, input = input, layer = layer,
-			     dsn = dsn,
-			     format = format, type = 'point,line,area', olayer = olayer) != 0:
-	    sys.exit(1)
+        try:
+            grass.run_command('v.out.ogr', quiet=True, input=input, layer=layer,
+                              dsn=dsn,
+                              format=format, type='point,line,area',
+                              olayer=olayer)
+        except CalledModuleError:
+            grass.fatal(_("Module <%s> failed") % 'v.out.ogr')
+
     else:
-	if grass.run_command('v.out.ogr', quiet = True, input = input, layer = layer,
-			     dsn = dsn, format = format, type = 'point,line,area') != 0:
-	    sys.exit(1)
+        try:
+            grass.run_command('v.out.ogr', quiet=True, input=input,
+                              layer=layer, dsn=dsn,
+                              format=format, type='point,line,area')
+        except CalledModuleError:
+            grass.fatal(_("Module <%s> failed") % 'v.out.ogr')
 
     if format == "ESRI_Shapefile":
 	exts = ['shp', 'shx', 'prj']

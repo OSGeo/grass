@@ -66,10 +66,12 @@
 #% guisection: Remove
 #%end
 
-import sys
 import os
-import grass.script as grass
 import atexit
+
+import grass.script as grass
+from grass.exceptions import CalledModuleError
+
 
 def cleanup():
     if tmp:
@@ -145,9 +147,11 @@ def main():
                 tmp_hull = "tmp_hull_%d" % os.getpid()
                 to_rast_input = tmp_hull
                 # force 'flat' convex hull for 3D vector maps
-                if 0 != grass.run_command('v.hull', flags = 'f', quiet = True,
-                                          input = vector_name, output = tmp_hull,
-                                          layer = layer, cats = cats, where = where):
+                try:
+                    grass.run_command('v.hull', flags='f', quiet=True,
+                                      input=vector_name, output=tmp_hull,
+                                      layer=layer, cats=cats, where=where)
+                except CalledModuleError:
                     grass.fatal(_("Unable to create a convex hull for vector map <%s>") % vector_name)
             else:
                 to_rast_input = vector_name

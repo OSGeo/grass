@@ -96,6 +96,7 @@
 
 import grass.script as grass
 import grass.temporal as tgis
+from grass.exceptions import CalledModuleError
 
 ############################################################################
 
@@ -162,11 +163,11 @@ def main():
         if(equi):
             flags_+="e"
 
-        ret = grass.run_command("r.colors", flags=flags_, file=filename,
-                                color=color, raster=raster, volume=volume,
-                                rules=rules, overwrite=grass.overwrite())
-
-        if ret != 0:
+        try:
+            grass.run_command("r.colors", flags=flags_, file=filename,
+                              color=color, raster=raster, volume=volume,
+                              rules=rules, overwrite=grass.overwrite())
+        except CalledModuleError:
             grass.fatal(_("Error in r.colors call"))
 
 if __name__ == "__main__":

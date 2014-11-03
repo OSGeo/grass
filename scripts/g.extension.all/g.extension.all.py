@@ -45,6 +45,8 @@ except ImportError:
     import elementtree.ElementTree as etree # Python <= 2.4
 
 import grass.script as grass
+from grass.exceptions import CalledModuleError
+
 
 def get_extensions():
     addon_base = os.getenv('GRASS_ADDON_BASE')
@@ -109,10 +111,12 @@ def main():
         else:
             operation = 'add'
             operation_flags = ''
-        if 0 != grass.run_command('g.extension', flags = operation_flags,
-                                  extension = ext, operation = operation):
+        try:
+            grass.run_command('g.extension', flags=operation_flags,
+                              extension=ext, operation=operation)
+        except CalledModuleError:
             grass.error(_("Unable to process extension:%s") % ext)
-    
+
     return 0
 
 if __name__ == "__main__":

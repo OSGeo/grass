@@ -19,6 +19,7 @@ for details.
 
 from space_time_datasets import *
 import grass.script as gscript
+from grass.exceptions import CalledModuleError
 
 ###############################################################################
 
@@ -149,16 +150,17 @@ def aggregate_raster_maps(inputs, base, start, end, count, method,
 
     file.close()
     # Run r.series
-    if len(inputs) > 1000:
-        ret = gscript.run_command("r.series", flags="z", file=filename,
-                                  output=output, overwrite=gscript.overwrite(),
-                                  method=method)
-    else:
-        ret = gscript.run_command("r.series", file=filename,
-                                  output=output, overwrite=gscript.overwrite(),
-                                  method=method)
+    try:
+        if len(inputs) > 1000:
+            gscript.run_command("r.series", flags="z", file=filename,
+                                output=output, overwrite=gscript.overwrite(),
+                                method=method)
+        else:
+            gscript.run_command("r.series", file=filename,
+                                output=output, overwrite=gscript.overwrite(),
+                                method=method)
 
-    if ret != 0:
+    except CalledModuleError:
         dbif.close()
         msgr.fatal(_("Error occurred in r.series computation"))
 

@@ -175,6 +175,7 @@ import sys
 import os
 import atexit
 from grass.script import core as grass
+from grass.exceptions import CalledModuleError
 
 
 def cleanup():
@@ -310,7 +311,9 @@ def main():
                                 pattern='tmp.r3xyz.%d.*' % os.getpid()).rstrip(os.linesep)
     grass.debug(slices)
 
-    if grass.run_command('r.to.rast3', input=slices, output=output) is 0:
+    try:
+        grass.run_command('r.to.rast3', input=slices, output=output)
+    except CalledModuleError:
         grass.message(_("Done. 3D raster map <%s> created.") % output)
 
 

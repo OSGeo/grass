@@ -20,6 +20,7 @@
 
 import sys
 from grass.script import core as grass
+from grass.exceptions import CalledModuleError
 
 def main():
     env = grass.gisenv()
@@ -36,16 +37,19 @@ def main():
         
     i = 1
     for vect in vectors:
-	map = "%s@%s" % (vect, mapset)
-	grass.message(_("%s\nBuilding topology for vector map <%s> (%d of %d)...\n%s") % \
+        map = "%s@%s" % (vect, mapset)
+        grass.message(_("%s\nBuilding topology for vector map <%s> (%d of %d)...\n%s") % \
                           ('-' * 80, map, i, num_vectors, '-' * 80))
-	grass.verbose(_("v.build map=%s") % map)
-	if grass.run_command("v.build", map = map, quiet = quiet) != 0:
+        grass.verbose(_("v.build map=%s") % map)
+        try:
+            grass.run_command("v.build", map=map, quiet=quiet)
+        except CalledModuleError:
             grass.error(_("Building topology for vector map <%s> failed") % map)
-	    ret = 1
+            ret = 1
         i += 1
-    
+
     return ret
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

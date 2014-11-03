@@ -57,9 +57,10 @@
 #%end
 
 import sys
-import os
 import string
 import grass.script as grass
+from grass.exceptions import CalledModuleError
+
 
 def main():
     map = options['map']
@@ -132,16 +133,22 @@ def main():
 
 	# add only the new column to the table
 	if colname not in all_cols_tt:
-	    if grass.run_command('v.db.addcolumn', map = map, columns = colspec, layer = layer) != 0:
-	        grass.fatal(_("Error creating column <%s>") % colname)
+            try:
+                grass.run_command('v.db.addcolumn', map=map,
+                                  columns=colspec, layer=layer)
+            except CalledModuleError:
+                grass.fatal(_("Error creating column <%s>") % colname)
 
 	stmt = template.substitute(table = maptable, column = column,
 				   otable = otable, ocolumn = ocolumn,
 				   colname = colname)
         grass.debug(stmt, 1)
         grass.verbose(_("Updating column <%s> of vector map <%s>...") % (colname, map))
-	if grass.write_command('db.execute', stdin = stmt, input = '-', database = database, driver = driver) != 0:
-	    grass.fatal(_("Error filling column <%s>") % colname)
+        try:
+            grass.write_command('db.execute', stdin=stmt, input='-',
+                                database=database, driver=driver)
+        except CalledModuleError:
+            grass.fatal(_("Error filling column <%s>") % colname)
 
     # write cmd history
     grass.vector_history(map)
