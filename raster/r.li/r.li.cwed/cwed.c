@@ -365,12 +365,11 @@ int calculate(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	    if (masked && mask_corr[i] == 0) {
 		Rast_set_c_null_value(&corrCell, 1);
 	    }
-	    else {
-		/* total sample area */
-		area++;
-	    }
 	    
 	    if (!(Rast_is_null_value(&corrCell, CELL_TYPE))) {
+		/* total sample area */
+		area += 1;
+
 		supCell = buf_sup[i + ad->x];
 		if (masked && (mask_sup[i] == 0)) {
 		    Rast_set_c_null_value(&supCell, 1);
@@ -512,12 +511,11 @@ int calculateD(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	    if (masked && mask_corr[i] == 0) {
 		Rast_set_d_null_value(&corrCell, 1);
 	    }
-	    else {
-		/* total sample area */
-		area++;
-	    }
 
 	    if (!(Rast_is_null_value(&corrCell, DCELL_TYPE))) {
+		/* total sample area */
+		area += 1;
+
 		supCell = buf_sup[i + ad->x];
 		if (masked && (mask_sup[i] == 0)) {
 		    Rast_set_d_null_value(&supCell, 1);
@@ -660,12 +658,11 @@ int calculateF(int fd, struct area_entry *ad, Coppie * cc, long totCoppie,
 	    if (masked && mask_corr[i] == 0) {
 		Rast_set_f_null_value(&corrCell, 1);
 	    }
-	    else {
-		/* total sample area */
-		area++;
-	    }
 
 	    if (!(Rast_is_null_value(&corrCell, FCELL_TYPE))) {
+		/* total sample area */
+		area += 1;
+
 		supCell = buf_sup[i + ad->x];
 		if (masked && (mask_sup[i] == 0)) {
 		    Rast_set_f_null_value(&supCell, 1);
