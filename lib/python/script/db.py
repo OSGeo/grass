@@ -89,7 +89,7 @@ def db_table_exist(table, **args):
         return True
     return False
 
-def db_connection():
+def db_connection(force=False):
     """!Return the current database connection parameters
     (interface to `db.connect -g'). Example:
 
@@ -98,13 +98,22 @@ def db_connection():
     {'group': 'x', 'schema': '', 'driver': 'dbf', 'database': '$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/'}
     \endcode
 
-    @return parsed output of db.connect
+    :param force True to set up default DB connection if not defined
+
+    :return: parsed output of db.connect
     """
-    return parse_command('db.connect', flags = 'g')
+    nuldev = file(os.devnull, 'w')
+    conn = parse_command('db.connect', flags='g', stderr=nuldev)
+    nuldev.close()
+    if not conn['driver'] and force:
+        run_command('db.connect', flags='c')
+        conn = parse_command('db.connect', flags='g')
+    
+    return conn
 
 def db_select(sql = None, filename = None, table = None, **args):
     """!Perform SQL select statement
-
+    
     Note: one of <em>sql</em>, <em>filename</em>, or <em>table</em>
     arguments must be provided.
     
