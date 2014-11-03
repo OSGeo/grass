@@ -45,7 +45,7 @@ def main():
 
     grass.write_command('d.text', color = 'black', size = 4, line = 1, stdin = "CORRELATION")
 
-    os.environ['GRASS_PNG_READ'] = 'TRUE'
+    os.environ['GRASS_RENDER_FILE_READ'] = 'TRUE'
 
     colors = "red black blue green gray violet".split()
     line = 2

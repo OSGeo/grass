@@ -296,7 +296,7 @@ def main():
         flag_l = False
         # if running in GUI, turn off immediate mode rendering so that the
         # iterated d.vect commands will composite using the display driver
-        os.environ['GRASS_PNG_READ'] = 'TRUE'
+        os.environ['GRASS_RENDER_FILE_READ'] = 'TRUE'
         os.environ['GRASS_PNG_AUTO_WRITE'] = 'FALSE'
 
     db = grass.vector_db(map)[1]

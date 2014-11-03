@@ -52,10 +52,10 @@ void LIB_init(const struct driver *drv)
     ftcap = parse_fontcap();
 
     /* initialize graphics */
-    p = getenv("GRASS_WIDTH");
+    p = getenv("GRASS_RENDER_WIDTH");
     screen_width = (p && atoi(p)) ? atoi(p) : DEF_WIDTH;
 
-    p = getenv("GRASS_HEIGHT");
+    p = getenv("GRASS_RENDER_HEIGHT");
     screen_height = (p && atoi(p)) ? atoi(p) : DEF_HEIGHT;
 
     if (COM_Graph_set() < 0)

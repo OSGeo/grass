@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 
     width_opt = G_define_option();
     width_opt->key = "width";
-    width_opt->label = _("Width for display monitor if not set by GRASS_WIDTH");
+    width_opt->label = _("Width for display monitor if not set by GRASS_RENDER_WIDTH");
     width_opt->description = _("Default value: 640");
     width_opt->type = TYPE_INTEGER;
     width_opt->key_desc = "value";
@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 
     height_opt = G_define_option();
     height_opt->key = "height";
-    height_opt->label = _("Height for display monitor if not set by GRASS_HEIGHT");
+    height_opt->label = _("Height for display monitor if not set by GRASS_RENDER_HEIGHT");
     height_opt->description = _("Default value: 480");
     height_opt->type = TYPE_INTEGER;
     height_opt->key_desc = "value";
