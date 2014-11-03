@@ -200,7 +200,7 @@ int calculate(int fd, struct area_entry *ad, char **par, double *result)
 	    if (masked && mask_buf[j] == 0) {
 		Rast_set_c_null_value(&corrCell, 1);
 	    }
-	    else {
+	    if (!Rast_is_c_null_value(&corrCell)) {
 		/* total sample area */
 		area++;
 	    }
@@ -378,7 +378,7 @@ int calculateD(int fd, struct area_entry *ad, char **par, double *result)
 	    if (masked && mask_buf[j] == 0) {
 		Rast_set_d_null_value(&corrCell, 1);
 	    }
-	    else {
+	    if (!Rast_is_d_null_value(&corrCell)) {
 		/* total sample area */
 		area++;
 	    }
@@ -556,7 +556,7 @@ int calculateF(int fd, struct area_entry *ad, char **par, double *result)
 	    if (masked && mask_buf[j] == 0) {
 		Rast_set_f_null_value(&corrCell, 1);
 	    }
-	    else {
+	    if (!Rast_is_f_null_value(&corrCell)) {
 		/* total sample area */
 		area++;
 	    }
