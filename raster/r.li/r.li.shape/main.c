@@ -112,7 +112,7 @@ int calculate(int fd, struct area_entry *ad, double *result)
 {
     CELL *buf, *buf_sup, *buf_null;
     CELL corrCell, precCell, supCell;
-    long npatch, area; 
+    long npatch; 
     long pid, old_pid, new_pid, *pid_corr, *pid_sup, *ltmp;
     struct pst *pst;
     long nalloc, incr;
@@ -158,7 +158,6 @@ int calculate(int fd, struct area_entry *ad, double *result)
 
     /* calculate number of patches */
     npatch = 0;
-    area = 0;
     pid = 0;
 
     /* patch size and type */
@@ -203,10 +202,6 @@ int calculate(int fd, struct area_entry *ad, double *result)
 	    corrCell = buf[j + ad->x];
 	    if (masked && (mask_buf[j] == 0)) {
 		Rast_set_c_null_value(&corrCell, 1);
-	    }
-	    else {
-		/* total sample area */
-		area++;
 	    }
 
 	    supCell = buf_sup[j + ad->x];
@@ -351,7 +346,7 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 {
     DCELL *buf, *buf_sup, *buf_null;
     DCELL corrCell, precCell, supCell;
-    long npatch, area; 
+    long npatch; 
     long pid, old_pid, new_pid, *pid_corr, *pid_sup, *ltmp;
     struct pst *pst;
     long nalloc, incr;
@@ -397,7 +392,6 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 
     /* calculate number of patches */
     npatch = 0;
-    area = 0;
     pid = 0;
 
     /* patch size and type */
@@ -442,10 +436,6 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 	    corrCell = buf[j + ad->x];
 	    if (masked && (mask_buf[j] == 0)) {
 		Rast_set_d_null_value(&corrCell, 1);
-	    }
-	    else {
-		/* total sample area */
-		area++;
 	    }
 
 	    supCell = buf_sup[j + ad->x];
@@ -590,7 +580,7 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 {
     FCELL *buf, *buf_sup, *buf_null;
     FCELL corrCell, precCell, supCell;
-    long npatch, area; 
+    long npatch; 
     long pid, old_pid, new_pid, *pid_corr, *pid_sup, *ltmp;
     struct pst *pst;
     long nalloc, incr;
@@ -636,7 +626,6 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 
     /* calculate number of patches */
     npatch = 0;
-    area = 0;
     pid = 0;
 
     /* patch size and type */
@@ -681,10 +670,6 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 	    corrCell = buf[j + ad->x];
 	    if (masked && (mask_buf[j] == 0)) {
 		Rast_set_f_null_value(&corrCell, 1);
-	    }
-	    else {
-		/* total sample area */
-		area++;
 	    }
 
 	    supCell = buf_sup[j + ad->x];
