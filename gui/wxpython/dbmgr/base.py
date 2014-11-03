@@ -14,6 +14,7 @@ List of classes:
  - base::TableListCtrl
  - base::LayerListCtrl
  - base::LayerBook
+ - base::FieldStatistics
 
 .. todo::
     Implement giface class
@@ -39,6 +40,7 @@ from core import globalvar
 import wx
 import wx.lib.mixins.listctrl as listmix
 import wx.lib.flatnotebook    as FN
+import wx.lib.scrolledpanel as scrolled
 
 import grass.script as grass
 
@@ -77,7 +79,8 @@ class VirtualAttributeList(wx.ListCtrl,
         self.layer   = layer
         self.pages = pages
 
-        self.fieldCalc = None      
+        self.fieldCalc = None
+        self.fieldStats = None      
         self.columns = {} # <- LoadData()
         
         self.sqlFilter = {}
@@ -411,7 +414,7 @@ class VirtualAttributeList(wx.ListCtrl,
             self.popupID11 = wx.NewId()
             self.popupID12 = wx.NewId()
             self.popupID13 = wx.NewId()
-
+            self.popupID14 = wx.NewId()
 
         popupMenu.Append(self.popupID1, text = _("Sort ascending"))
         popupMenu.Append(self.popupID2, text = _("Sort descending"))
@@ -420,7 +423,9 @@ class VirtualAttributeList(wx.ListCtrl,
         popupMenu.AppendMenu(self.popupID3, _("Calculate (only numeric columns)"),
                              subMenu)
         popupMenu.Append(self.popupID13, text = _("Field calculator"))
-
+        popupMenu.AppendSeparator()
+        popupMenu.Append(self.popupID14, text = _("Statistics"))
+        
         if not self.pages['manageTable']:
             popupMenu.AppendSeparator()
             self.popupID14 = wx.NewId()
@@ -434,6 +439,7 @@ class VirtualAttributeList(wx.ListCtrl,
         if not self.dbMgrData['editable'] or \
                 self.columns[self.GetColumn(self._col).GetText()]['ctype'] not in (types.IntType, types.FloatType):
             popupMenu.Enable(self.popupID3, False)
+            popupMenu.Enable(self.popupID14, False)
         
         subMenu.Append(self.popupID4,  text = _("Area size"))
         subMenu.Append(self.popupID5,  text = _("Line length"))
@@ -447,7 +453,8 @@ class VirtualAttributeList(wx.ListCtrl,
         
         self.Bind (wx.EVT_MENU, self.OnColumnSortAsc, id = self.popupID10)
         self.Bind (wx.EVT_MENU, self.OnColumnSortDesc, id = self.popupID2)
-        self.Bind(wx.EVT_MENU, self.OnFiledCalculator, id = self.popupID13)
+        self.Bind(wx.EVT_MENU, self.OnFieldCalculator, id = self.popupID13)
+        self.Bind(wx.EVT_MENU, self.OnFieldStatistics, id = self.popupID14)
         if not self.pages['manageTable']:
             self.Bind(wx.EVT_MENU, self.OnAddColumn, id = self.popupID14)
 
@@ -524,7 +531,7 @@ class VirtualAttributeList(wx.ListCtrl,
             info.m_text = self.GetColumn(column).GetText()
             self.SetColumn(column, info)
         
-    def OnFiledCalculator(self, event):
+    def OnFieldCalculator(self, event):
         """Calls SQLBuilderUpdate instance"""
         if not self.fieldCalc:
             self.fieldCalc = SQLBuilderUpdate(parent = self, id = wx.ID_ANY,
@@ -534,6 +541,20 @@ class VirtualAttributeList(wx.ListCtrl,
             self.fieldCalc.Show()
         else:
             self.fieldCalc.Raise()
+
+    def OnFieldStatistics(self, event):
+        """Calls FieldStatistics instance"""
+        if not self.fieldStats:
+            self.fieldStats = FieldStatistics(parent = self, id = wx.ID_ANY)
+            self.fieldStats.Show()
+        else:
+            self.fieldStats.Raise()
+
+        selLayer = self.dbMgrData['mapDBInfo'].layers[self.layer]
+        self.fieldStats.Update(driver = selLayer['driver'],
+                               database = selLayer['database'],
+                               table = selLayer['table'],
+                               column = self.GetColumn(self._col).GetText())
 
     def OnAddColumn(self, event):
         """Add column into table"""
@@ -3360,3 +3381,108 @@ class LayerBook(wx.Notebook):
             self.mapDBInfo = self.parentDialog.dbMgrData['mapDBInfo']
 
         event.Skip()
+
+class FieldStatistics(wx.Frame):
+    def __init__(self, parent, id=wx.ID_ANY,
+                 style = wx.DEFAULT_FRAME_STYLE, **kwargs):
+        """Dialog to display and save statistics of field stats
+        """
+        self.parent = parent
+        wx.Frame.__init__(self, parent, id, style = style, **kwargs)
+        self.SetTitle(_("Field statistics"))
+        
+        self.sp = scrolled.ScrolledPanel(parent=self, id=wx.ID_ANY, size=(300, 200),
+                                         style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER, name="Statistics" )
+        self.text = wx.TextCtrl(parent=self.sp, id=wx.ID_ANY, style=wx.TE_MULTILINE|wx.TE_READONLY)
+        self.text.SetBackgroundColour("white")
+                
+        # buttons
+        self.btnClipboard = wx.Button(self, id = wx.ID_COPY)
+        self.btnClipboard.SetToolTipString(_("Copy statistics the clipboard (Ctrl+C)"))
+        self.btnCancel = wx.Button(self, wx.ID_CLOSE)
+        self.btnCancel.SetDefault()
+
+        # bindings
+        self.btnCancel.Bind(wx.EVT_BUTTON, self.OnClose)
+        self.btnClipboard.Bind(wx.EVT_BUTTON, self.OnCopy)
+        
+        self._layout()
+
+    def _layout(self):
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        txtSizer = wx.BoxSizer(wx.VERTICAL)
+        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+
+        txtSizer.Add(item = self.text, proportion = 1, 
+                     flag = wx.EXPAND|wx.ALIGN_CENTER_VERTICAL|wx.ALL, border = 5)
+        
+        self.sp.SetSizer(txtSizer)
+        self.sp.SetAutoLayout(True)
+        self.sp.SetupScrolling() 
+
+        sizer.Add(item = self.sp, proportion = 1, flag = wx.GROW |
+                  wx.LEFT | wx.RIGHT | wx.BOTTOM, border = 3)
+
+        line = wx.StaticLine(parent = self, id = wx.ID_ANY,
+                             size = (20, -1), style = wx.LI_HORIZONTAL)
+        sizer.Add(item = line, proportion = 0,
+                  flag = wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.LEFT|wx.RIGHT, border = 3)
+
+        # buttons
+        btnSizer.Add(item = self.btnClipboard, proportion = 0,
+                     flag = wx.ALIGN_LEFT | wx.ALL, border = 5)
+        btnSizer.Add(item = self.btnCancel, proportion = 0,
+                     flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)        
+        sizer.Add(item = btnSizer, proportion = 0, flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
+
+        self.SetSizer(sizer)
+        sizer.Fit(self)
+
+    def OnCopy(self, event):
+        """!Copy the statistics to the clipboard
+        """
+        stats = self.text.GetValue()
+        rdata = wx.TextDataObject()
+        rdata.SetText(stats)
+        
+        if wx.TheClipboard.Open():
+            wx.TheClipboard.SetData(rdata)
+            wx.TheClipboard.Close()
+
+    def OnClose(self, event):
+        """!Button 'Close' pressed
+        """
+        self.Close(True)
+
+    def Update(self, driver, database, table, column):
+        """!Update statistics for given column
+
+        :param: column column name
+        """
+        fd, sqlFilePath = tempfile.mkstemp(text=True)
+        sqlFile = open(sqlFilePath, 'w')
+        stats = ['count', 'min', 'max', 'avg', 'sum']
+        for fn in stats:
+            sqlFile.write('select %s(%s) from %s;%s' % (fn, column, table, os.linesep))
+        sqlFile.close()
+        
+        dataStr = RunCommand('db.select',
+                             parent = self.parent,
+                             read = True,
+                             flags='c',
+                             input = sqlFilePath,
+                             driver = driver,
+                             database = database)
+        if not dataStr:
+            return
+        dataLines = dataStr.splitlines()
+        if len(dataLines) != len(stats):
+            GError(parent = self.parent,
+                   message = _("Unable to calculte statistics. "
+                               "Invalid number of lines %d (should be %d).") % (len(dataLines), len(stats)))
+            
+        self.SetTitle(_("Field statistics <%s>") % column)
+        self.text.Clear()
+        for idx in range(len(stats)):
+            self.text.AppendText('%s: %s\n' % (stats[idx], dataLines[idx]))
+                
