@@ -27,7 +27,7 @@ import wx
 import wx.gizmos as gizmos
 
 from core.gcmd import RunCommand, GError, GMessage
-from core.utils import GetListOfLocations
+from core.utils import GetListOfLocations, ListOfMapsets
 from core.gthread import gThread
 from core.debug import Debug
 from gui_core.dialogs import TextEntryDialog
@@ -114,8 +114,13 @@ class LocationMapTree(wx.TreeCtrl):
                 first = False
             else:
                 self.ChangeEnvironment(location)
+            
             varloc = self.AppendItem(self.root, loc)
-            #get list of all maps in location
+            # add all mapsets
+            for mapset in ListOfMapsets():
+                self.AppendItem(varloc, mapset)
+            
+            # get list of all maps in location
             maplist = RunCommand('g.list', flags='mt', type='rast,rast3d,vect', mapset=','.join(mapsets),
                                  quiet=True, read=True)
             maplist = maplist.splitlines()
@@ -126,16 +131,19 @@ class LocationMapTree(wx.TreeCtrl):
                 mapset = parts2[1]
                 mlayer = parts2[0]
                 ltype = parts1[0]
+
+                # add mapset
                 if self.itemExists(mapset, varloc) == False:
                     varmapset = self.AppendItem(varloc, mapset)
-                if (self.GetItemText(varmapset) == mapset):
-                    if (self.itemExists(ltype, varmapset) == False):
-                        vartype = self.AppendItem(varmapset, ltype)
                 else:
                     varmapset = self.getItemByName(mapset, varloc)
-                    if (self.itemExists(ltype, varmapset) == False):
-                        vartype = self.AppendItem(varmapset, ltype)
+
+                # add type node if not exists
+                if self.itemExists(ltype, varmapset) == False:
+                    vartype = self.AppendItem(varmapset, ltype)
+                
                 self.AppendItem(vartype, mlayer)
+            
         self.RestoreBackup()          
         Debug.msg(1, "Tree filled")    
 
@@ -388,9 +396,12 @@ class DataCatalogTree(LocationMapTree):
             else:
                 pasted = RunCommand('g.copy', rast3d=string)
                 node = 'rast3d'
-            if (pasted==0):
-                if (self.selected_type == None):
+            if pasted == 0:
+                if self.selected_type == None:
                     self.selected_type = self.getItemByName(node, self.selected_mapset)
+                    if self.selected_type == None:
+                        # add type node if not exists
+                        self.selected_type = self.AppendItem(self.selected_mapset, node)
                 self.AppendItem(self.selected_type,self.new_name) 
                 self.SortChildren(self.selected_type)
                 Debug.msg(1,"COPIED TO: "+self.new_name)
@@ -399,6 +410,10 @@ class DataCatalogTree(LocationMapTree):
         else:
             GError(_("Failed to copy layer: action is allowed only within the same location."),
                    parent=self)
+        
+        # expand selected mapset
+        self.ExpandAllChildren(self.selected_mapset)
+        self.EnsureVisible(self.selected_mapset)
         
         self.RestoreBackup()
         
