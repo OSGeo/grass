@@ -68,10 +68,15 @@ void Cairo_begin_raster(int mask, int s[2][2], double d[2][2])
     src_surf = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, src_w, src_h);
     status = cairo_surface_status(src_surf);
     if (status != CAIRO_STATUS_SUCCESS)
-	G_fatal_error("Cairo_begin_raster(): %s (%s). Using rows: %d, cols: %d ",
+#ifdef HAVE_LONG_LONG_INT
+        G_fatal_error("Cairo_begin_raster(): %s - %s. Using rows: %d, cols: %d, cells: %lld.",
                       _("Failed to create surface"),
-                      cairo_status_to_string (status), src_b, src_r);
-
+                      cairo_status_to_string (status), src_b, src_r, (long long) src_b * src_r);
+#else
+        G_fatal_error("Cairo_begin_raster(): %s - %s. Using rows: %d, cols: %d, cells: %ld.",
+                      _("Failed to create surface"),
+                      cairo_status_to_string (status), src_b, src_r, (long) src_b * src_r);
+#endif
     src_data = cairo_image_surface_get_data(src_surf);
     src_stride = cairo_image_surface_get_stride(src_surf);
 }
