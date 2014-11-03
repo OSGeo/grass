@@ -207,16 +207,14 @@ int calculate(int fd, struct area_entry *ad, double *result)
 	    if (masked && (mask_buf[j] == 0)) {
 		Rast_set_c_null_value(&corrCell, 1);
 	    }
-	    else {
-		/* total landscape area */
-		area++;
-	    }
 
 	    if (Rast_is_c_null_value(&corrCell)) {
 		connected = 0;
 		precCell = corrCell;
 		continue;
 	    }
+
+	    area++;
 
 	    supCell = buf_sup[j + ad->x];
 	    if (masked && (mask_sup[j] == 0)) {
@@ -432,16 +430,14 @@ int calculateD(int fd, struct area_entry *ad, double *result)
 	    if (masked && (mask_buf[j] == 0)) {
 		Rast_set_d_null_value(&corrCell, 1);
 	    }
-	    else {
-		/* total landscape area */
-		area++;
-	    }
 
 	    if (Rast_is_d_null_value(&corrCell)) {
 		connected = 0;
 		precCell = corrCell;
 		continue;
 	    }
+
+	    area++;
 
 	    supCell = buf_sup[j + ad->x];
 	    if (masked && (mask_sup[j] == 0)) {
@@ -657,16 +653,14 @@ int calculateF(int fd, struct area_entry *ad, double *result)
 	    if (masked && (mask_buf[j] == 0)) {
 		Rast_set_f_null_value(&corrCell, 1);
 	    }
-	    else {
-		/* total landscape area */
-		area++;
-	    }
 
 	    if (Rast_is_f_null_value(&corrCell)) {
 		connected = 0;
 		precCell = corrCell;
 		continue;
 	    }
+
+	    area++;
 
 	    supCell = buf_sup[j + ad->x];
 	    if (masked && (mask_sup[j] == 0)) {
