@@ -2,7 +2,6 @@ MODULE_TOPDIR = ..
 
 SUBDIRS = \
 	r.basins.fill \
-	r.bitpattern \
 	r.buffer \
 	r.carve \
 	r.category \
