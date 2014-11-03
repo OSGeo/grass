@@ -42,6 +42,7 @@ import atexit
 from grass.script.utils import diff_files, try_rmdir
 from grass.script import core as grass
 from grass.script import db as grassdb
+from grass.exceptions import CalledModuleError
 
 
 def cleanup():
@@ -177,21 +178,25 @@ def main():
                                                                   to_table))
 
             # copy the table in the default database
-            if 0 != grass.run_command('db.copy', to_driver=dbconn['driver'],
-                                      to_database=todb, to_table=to_table,
-                                      from_driver='sqlite',
-                                      from_database=fromdb,
-                                      from_table=from_table):
+            try:
+                grass.run_command('db.copy', to_driver=dbconn['driver'],
+                                  to_database=todb, to_table=to_table,
+                                  from_driver='sqlite',
+                                  from_database=fromdb,
+                                  from_table=from_table)
+            except CalledModuleError:
                 grass.fatal(_("Unable to copy table <%s> as table <%s>") % (from_table, to_table))
 
             grass.verbose(_("Connect table <%s> to vector map <%s> at layer <%s>") %
                            (to_table, map_name, layer))
 
             # and connect the new tables with the right layer
-            if 0 != grass.run_command('v.db.connect', flags='o', quiet=True,
-                                      driver=dbconn['driver'], database=todb,
-                                      map=map_name, key=values[2],
-                                      layer=layer, table=to_table):
+            try:
+                grass.run_command('v.db.connect', flags='o', quiet=True,
+                                  driver=dbconn['driver'], database=todb,
+                                  map=map_name, key=values[2],
+                                  layer=layer, table=to_table)
+            except CalledModuleError:
                 grass.fatal(_("Unable to connect table <%s> to vector map <%s>") %
                              (to_table, map_name))
 

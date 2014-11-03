@@ -63,6 +63,7 @@
 
 import grass.script as grass
 import grass.temporal as tgis
+from grass.exceptions import CalledModuleError
 
 ############################################################################
 
@@ -100,11 +101,14 @@ def main():
         if nulls:
             flag += "n"
 
-        ret = grass.run_command("r.series", flags=flag, file=filename,
-                                output=output, overwrite=grass.overwrite(),
-                                method=method)
+        try:
+            grass.run_command("r.series", flags=flag, file=filename,
+                              output=output, overwrite=grass.overwrite(),
+                              method=method)
+        except CalledModuleError:
+            grass.fatal(_("%s failed. Check above error messages.") % 'r.series')
 
-        if ret == 0 and not add_time:
+        if not add_time:
             # Create the time range for the output map
             if output.find("@") >= 0:
                 id = output

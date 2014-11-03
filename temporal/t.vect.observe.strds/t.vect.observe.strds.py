@@ -53,6 +53,7 @@
 import grass.script as grass
 import grass.temporal as tgis
 import grass.script.raster as raster
+from grass.exceptions import CalledModuleError
 
 ############################################################################
 
@@ -191,10 +192,11 @@ def main():
     vectmap = vector_output
 
     # We create a new vector map using the categories of the original map
-    ret = grass.run_command("v.category", input=input, layer=layers,
-                            output=vectmap, option="transfer",
-                            overwrite=overwrite)
-    if ret != 0:
+    try:
+        grass.run_command("v.category", input=input, layer=layers,
+                          output=vectmap, option="transfer",
+                          overwrite=overwrite)
+    except CalledModuleError:
         grass.fatal(_("Unable to create new layers for vector map <%s>")
                     % (vectmap))
 
@@ -240,29 +242,32 @@ def main():
 
         # Try to add a column
         if vector_db and count in vector_db and vector_db[count]["table"]:
-            ret = grass.run_command("v.db.addcolumn", map=vectmap,
-                                    layer=count, column=columns_string,
-                                    overwrite=overwrite)
-            if ret != 0:
+            try:
+                grass.run_command("v.db.addcolumn", map=vectmap,
+                                  layer=count, column=columns_string,
+                                  overwrite=overwrite)
+            except CalledModuleError:
                 dbif.close()
                 grass.fatal(_("Unable to add column %s to vector map <%s> "
                               "with layer %i") % (columns_string, vectmap, count))
         else:
             # Try to add a new table
             grass.message("Add table to layer %i" % (count))
-            ret = grass.run_command("v.db.addtable", map=vectmap, layer=count,
-                                    columns=columns_string, overwrite=overwrite)
-            if ret != 0:
+            try:
+                grass.run_command("v.db.addtable", map=vectmap, layer=count,
+                                  columns=columns_string, overwrite=overwrite)
+            except CalledModuleError:
                 dbif.close()
                 grass.fatal(_("Unable to add table to vector map "
                               "<%s> with layer %i") % (vectmap, count))
 
         # Call v.what.rast for each raster map
         for name, column in zip(raster_names, column_names):
-            ret = grass.run_command("v.what.rast", map=vectmap,
-                                    layer=count, raster=name,
-                                    column=column, where=where)
-            if ret != 0:
+            try:
+                grass.run_command("v.what.rast", map=vectmap,
+                                  layer=count, raster=name,
+                                  column=column, where=where)
+            except CalledModuleError:
                 dbif.close()
                 grass.fatal(_("Unable to run v.what.rast for vector map <%s> "
                             "with layer %i and raster map <%s>") % \

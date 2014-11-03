@@ -102,11 +102,12 @@ proj = ''.join([
     'UNIT["degree",0.0174532925199433]',
     ']'])
 
-import sys
 import os
 import shutil
 import atexit
 import grass.script as grass
+from grass.exceptions import CalledModuleError
+
 
 def cleanup():
     if not in_temp:
@@ -226,8 +227,10 @@ def main():
     outf.write(proj)
     outf.close()
 
-    if grass.run_command('r.in.gdal', input = bilfile, out = tileout) != 0:
-	grass.fatal(_("Unable to import data"))
+    try:
+        grass.run_command('r.in.gdal', input=bilfile, out=tileout)
+    except:
+        grass.fatal(_("Unable to import data"))
 
     # nice color table
     grass.run_command('r.colors', map = tileout, color = 'srtm')

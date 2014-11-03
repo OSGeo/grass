@@ -24,6 +24,7 @@ import types
 import time
 
 from core import *
+from grass.exceptions import CalledModuleError
 from utils import float_or_dms, parse_key_val
 
 
@@ -97,8 +98,10 @@ def mapcalc(exp, quiet=False, verbose=False, overwrite=False,
     t = string.Template(exp)
     e = t.substitute(**kwargs)
 
-    if write_command('r.mapcalc', file='-', stdin=e, env=env, seed=seed,
-                     quiet=quiet, verbose=verbose, overwrite=overwrite) != 0:
+    try:
+        write_command('r.mapcalc', file='-', stdin=e, env=env, seed=seed,
+                      quiet=quiet, verbose=verbose, overwrite=overwrite)
+    except CalledModuleError:
         fatal(_("An error occurred while running r.mapcalc"))
 
 

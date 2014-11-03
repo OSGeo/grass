@@ -41,6 +41,8 @@ import sys
 import os
 import string
 import grass.script as grass
+from grass.exceptions import CalledModuleError
+
 
 def main():
     map    = options['map']
@@ -103,9 +105,11 @@ def main():
             sql = tmpl.substitute(table = table, coldef = coltypes, colnames = colnames, keycol = keycol)
         else:
             sql = "ALTER TABLE %s DROP COLUMN %s" % (table, column)
-        
-        if grass.write_command('db.execute', input = '-', database = database, driver = driver,
-                              stdin = sql) != 0:
+
+        try:
+            grass.write_command('db.execute', input = '-', database = database, driver = driver,
+                                stdin = sql)
+        except CalledModuleError:
             grass.fatal(_("Deleting column failed"))
     
     # write cmd history:

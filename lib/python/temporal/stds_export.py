@@ -34,6 +34,8 @@ from space_time_datasets import *
 from factory import *
 from open_stds import *
 import grass.script as gscript
+from grass.exceptions import CalledModuleError
+
 
 proj_file_name = "proj.txt"
 init_file_name = "init.txt"
@@ -64,33 +66,34 @@ def _export_raster_maps_as_gdal(rows, tar, list_file, new_cwd, fs, format_):
         # Write the filename, the start_time and the end_time
         list_file.write(string)
 
-        if format_ == "GTiff":
-            # Export the raster map with r.out.gdal as tif
-            out_name = name + ".tif"
-            if datatype == "CELL":
-                nodata = max_val + 1
-                if nodata < 256 and min_val >= 0:
-                    gdal_type = "Byte"
-                elif nodata < 65536 and min_val >= 0:
-                    gdal_type = "UInt16"
-                elif min_val >= 0:
-                    gdal_type = "UInt32"
+        try:
+            if format_ == "GTiff":
+                # Export the raster map with r.out.gdal as tif
+                out_name = name + ".tif"
+                if datatype == "CELL":
+                    nodata = max_val + 1
+                    if nodata < 256 and min_val >= 0:
+                        gdal_type = "Byte"
+                    elif nodata < 65536 and min_val >= 0:
+                        gdal_type = "UInt16"
+                    elif min_val >= 0:
+                        gdal_type = "UInt32"
+                    else:
+                        gdal_type = "Int32"
+                    gscript.run_command("r.out.gdal", flags="c", input=name,
+                                        output=out_name, nodata=nodata,
+                                        type=gdal_type, format="GTiff")
                 else:
-                    gdal_type = "Int32"
-                ret = gscript.run_command("r.out.gdal", flags="c", input=name,
-                                          output=out_name, nodata=nodata,
-                                          type=gdal_type, format="GTiff")
-            else:
-                ret = gscript.run_command("r.out.gdal", flags="c",
-                                          input=name, output=out_name,
-                                          format="GTiff")
-        elif format_ == "AAIGrid":
-            # Export the raster map with r.out.gdal as Arc/Info ASCII Grid
-            out_name = name + ".asc"
-            ret = gscript.run_command("r.out.gdal", flags="c", input=name,
-                                      output=out_name, format="AAIGrid")
+                    gscript.run_command("r.out.gdal", flags="c",
+                                        input=name, output=out_name,
+                                        format="GTiff")
+            elif format_ == "AAIGrid":
+                # Export the raster map with r.out.gdal as Arc/Info ASCII Grid
+                out_name = name + ".asc"
+                gscript.run_command("r.out.gdal", flags="c", input=name,
+                                    output=out_name, format="AAIGrid")
 
-        if ret != 0:
+        except CalledModuleError:
             shutil.rmtree(new_cwd)
             tar.close()
             gscript.fatal(_("Unable to export raster map <%s>" % name))
@@ -99,8 +102,9 @@ def _export_raster_maps_as_gdal(rows, tar, list_file, new_cwd, fs, format_):
 
         # Export the color rules
         out_name = name + ".color"
-        ret = gscript.run_command("r.colors.out", map=name, rules=out_name)
-        if ret != 0:
+        try:
+            gscript.run_command("r.colors.out", map=name, rules=out_name)
+        except CalledModuleError:
             shutil.rmtree(new_cwd)
             tar.close()
             gscript.fatal(_("Unable to export color rules for raster "
@@ -122,8 +126,9 @@ def _export_raster_maps(rows, tar, list_file, new_cwd, fs):
         # Write the filename, the start_time and the end_time
         list_file.write(string)
         # Export the raster map with r.pack
-        ret = gscript.run_command("r.pack", input=name, flags="c")
-        if ret != 0:
+        try:
+            gscript.run_command("r.pack", input=name, flags="c")
+        except CalledModuleError:
             shutil.rmtree(new_cwd)
             tar.close()
             gscript.fatal(_("Unable to export raster map <%s> with r.pack" %
@@ -148,9 +153,10 @@ def _export_vector_maps_as_gml(rows, tar, list_file, new_cwd, fs):
         # Write the filename, the start_time and the end_time
         list_file.write(string)
         # Export the vector map with v.out.ogr
-        ret = gscript.run_command("v.out.ogr", input=name, dsn=(name + ".xml"),
-                                  layer=layer, format="GML")
-        if ret != 0:
+        try:
+            gscript.run_command("v.out.ogr", input=name, dsn=(name + ".xml"),
+                                layer=layer, format="GML")
+        except CalledModuleError:
             shutil.rmtree(new_cwd)
             tar.close()
             gscript.fatal(_("Unable to export vector map <%s> as "
@@ -181,8 +187,9 @@ def _export_vector_maps(rows, tar, list_file, new_cwd, fs):
         # Write the filename, the start_time and the end_time
         list_file.write(string)
         # Export the vector map with v.pack
-        ret = gscript.run_command("v.pack", input=name, flags="c")
-        if ret != 0:
+        try:
+            gscript.run_command("v.pack", input=name, flags="c")
+        except CalledModuleError:
             shutil.rmtree(new_cwd)
             tar.close()
             gscript.fatal(_("Unable to export vector map <%s> with v.pack" %
@@ -206,8 +213,9 @@ def _export_raster3d_maps(rows, tar, list_file, new_cwd, fs):
         # Write the filename, the start_time and the end_time
         list_file.write(string)
         # Export the raster 3d map with r3.pack
-        ret = gscript.run_command("r3.pack", input=name, flags="c")
-        if ret != 0:
+        try:
+            gscript.run_command("r3.pack", input=name, flags="c")
+        except CalledModuleError:
             shutil.rmtree(new_cwd)
             tar.close()
             gscript.fatal(_("Unable to export raster map <%s> with r3.pack" %

@@ -50,9 +50,10 @@
 #% required : no
 #%end
 
-import sys
 import os
 import grass.script as grass
+from grass.exceptions import CalledModuleError
+
 
 def main():
     dsn = options['dsn']
@@ -85,13 +86,15 @@ def main():
     else:
 	layer = None
 
-    if grass.run_command('v.in.ogr', flags = 'o', dsn = dsn, output = output,
-			 layer = layer, quiet = True) != 0:
-	if db_table:
-	    grass.fatal(_("Input table <%s> not found or not readable") % input)
-	else:
-	    grass.fatal(_("Input DSN <%s> not found or not readable") % input)
-    
+    try:
+        grass.run_command('v.in.ogr', flags='o', dsn=dsn, output=output,
+                          layer=layer, quiet=True)
+    except CalledModuleError:
+        if db_table:
+            grass.fatal(_("Input table <%s> not found or not readable") % input)
+        else:
+            grass.fatal(_("Input DSN <%s> not found or not readable") % input)
+
     # rename ID col if requested from cat to new name
     if key:
 	grass.write_command('db.execute', quiet = True,

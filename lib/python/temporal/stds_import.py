@@ -38,6 +38,7 @@ from register import *
 import factory
 from factory import *
 import grass.script as gscript
+from grass.exceptions import CalledModuleError
 
 proj_file_name = "proj.txt"
 init_file_name = "init.txt"
@@ -67,28 +68,30 @@ def _import_raster_maps_from_gdal(maplist, overr, exp, location, link, format_,
             if not overr:
                 impflags += "o"
 
-        if link:
-            ret = gscript.run_command("r.external", input=filename,
-                                      output=name,
-                                      flags=impflags,
-                                      overwrite=gscript.overwrite())
-        else:
-            ret = gscript.run_command("r.in.gdal", input=filename,
-                                      output=name,
-                                      flags=impflags,
-                                      overwrite=gscript.overwrite())
+        try:
+            if link:
+                gscript.run_command("r.external", input=filename,
+                                    output=name,
+                                    flags=impflags,
+                                    overwrite=gscript.overwrite())
+            else:
+                gscript.run_command("r.in.gdal", input=filename,
+                                    output=name,
+                                    flags=impflags,
+                                    overwrite=gscript.overwrite())
 
-        if ret != 0:
+        except CalledModuleError:
             gscript.fatal(_("Unable to import/link raster map <%s> from file"
                             " %s.") % (name, filename))
 
         # Set the color rules if present
         filename = row["filename"] + ".color"
         if os.path.isfile(filename):
-            ret = gscript.run_command("r.colors", map=name,
-                                      rules=filename,
-                                      overwrite=gscript.overwrite())
-            if ret != 0:
+            try:
+                gscript.run_command("r.colors", map=name,
+                                    rules=filename,
+                                    overwrite=gscript.overwrite())
+            except CalledModuleError:
                 gscript.fatal(_("Unable to set the color rules for "
                                 "raster map <%s>.") % name)
 
@@ -106,12 +109,13 @@ def _import_raster_maps(maplist, set_current_region=False):
     for row in maplist:
         name = row["name"]
         filename = row["filename"] + ".pack"
-        ret = gscript.run_command("r.unpack", input=filename,
-                                  output=name, flags=impflags,
-                                  overwrite=gscript.overwrite(),
-                                  verbose=True)
+        try:
+            gscript.run_command("r.unpack", input=filename,
+                                output=name, flags=impflags,
+                                overwrite=gscript.overwrite(),
+                                verbose=True)
 
-        if ret != 0:
+        except CalledModuleError:
             gscript.fatal(_("Unable to unpack raster map <%s> from file "
                             "%s.") % (name, filename))
 
@@ -130,11 +134,12 @@ def _import_vector_maps_from_gml(maplist, overr, exp, location, link):
         name = row["name"]
         filename = row["filename"] + ".xml"
 
-        ret = gscript.run_command("v.in.ogr", dsn=filename,
-                                  output=name, flags=impflags,
-                                  overwrite=gscript.overwrite())
+        try:
+            gscript.run_command("v.in.ogr", dsn=filename,
+                                output=name, flags=impflags,
+                                overwrite=gscript.overwrite())
 
-        if ret != 0:
+        except CalledModuleError:
             gscript.fatal(_("Unable to import vector map <%s> from file "
                             "%s.") % (name, filename))
 
@@ -152,12 +157,13 @@ def _import_vector_maps(maplist):
         if name in imported_maps:
             continue
         filename = row["filename"] + ".pack"
-        ret = gscript.run_command("v.unpack", input=filename,
-                                  output=name, flags=impflags,
-                                  overwrite=gscript.overwrite(),
-                                  verbose=True)
+        try:
+            gscript.run_command("v.unpack", input=filename,
+                                output=name, flags=impflags,
+                                overwrite=gscript.overwrite(),
+                                verbose=True)
 
-        if ret != 0:
+        except CalledModuleError:
             gscript.fatal(_("Unable to unpack vector map <%s> from file "
                             "%s.") % (name, filename))
 
@@ -264,14 +270,16 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
             gscript.fatal(_("Unable to create location %(l)s. Reason: %(e)s")
                           % {'l': location, 'e': str(e)})
         # Switch to the new created location
-        ret = gscript.run_command("g.mapset", mapset="PERMANENT",
-                                  location=location,
-                                  gisdbase=old_env["GISDBASE"])
-        if ret != 0:
+        try:
+            gscript.run_command("g.mapset", mapset="PERMANENT",
+                                location=location,
+                                gisdbase=old_env["GISDBASE"])
+        except CalledModuleError:
             gscript.fatal(_("Unable to switch to location %s") % location)
         # create default database connection
-        ret = gscript.run_command("t.connect", flags="d")
-        if ret != 0:
+        try:
+            gscript.run_command("t.connect", flags="d")
+        except CalledModuleError:
             gscript.fatal(_("Unable to create default temporal database "
                             "in new location %s") % location)
 
@@ -461,8 +469,11 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
     finally:
         if location:
             # Switch to the old location
-            ret = gscript.run_command("g.mapset", mapset=old_env["MAPSET"],
-                                      location=old_env["LOCATION_NAME"],
-                                      gisdbase=old_env["GISDBASE"])
+            try:
+                gscript.run_command("g.mapset", mapset=old_env["MAPSET"],
+                                    location=old_env["LOCATION_NAME"],
+                                    gisdbase=old_env["GISDBASE"])
+            except CalledModuleError:
+                grass.warning(_("Switching to original location failed"))
 
         gscript.set_raise_on_error(old_state)

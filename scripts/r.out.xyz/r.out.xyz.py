@@ -35,7 +35,7 @@
 
 import sys
 from grass.script import core as grass
-
+from grass.exceptions import CalledModuleError
 
 def main():
     # if no output filename, output to stdout
@@ -47,7 +47,11 @@ def main():
     if output:
         parameters.update(output=output)
 
-    ret = grass.run_command("r.stats", **parameters)
+    ret = 0
+    try:
+        grass.run_command("r.stats", **parameters)
+    except CalledModuleError:
+        ret = 1
     sys.exit(ret)
 
 if __name__ == "__main__":
