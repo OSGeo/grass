@@ -118,6 +118,7 @@ class TestMultiLayerMap(TestCase):
     def setUpClass(cls):
         cls.runModule('v.in.ascii', input='./data/testing.ascii', output='test_vector',
                       format='standard')
+        cls.runModule('db.connect', flags='c')
         cls.runModule('db.in.ogr', dsn='./data/table1.csv', output='t1')
         cls.runModule('db.in.ogr', dsn='./data/table2.csv', output='t2')
         cls.runModule('v.db.connect', map='test_vector', table='t1', key='cat_', layer=1)
