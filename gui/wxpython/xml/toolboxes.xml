@@ -496,15 +496,12 @@
       <module-item name="g.copy">
         <label>Copy</label>
       </module-item>
-      <separator/>
       <module-item name="g.list">
         <label>List</label>
       </module-item>
-      <separator/>
       <module-item name="g.rename">
         <label>Rename</label>
       </module-item>
-      <separator/>
       <module-item name="g.remove">
         <label>Delete</label>
       </module-item>
