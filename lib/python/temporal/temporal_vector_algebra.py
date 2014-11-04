@@ -1,4 +1,5 @@
-"""
+"""@package grass.temporal
+
 Temporal vector algebra
 
 (C) 2014 by the GRASS Development Team
@@ -15,286 +16,6 @@ for details.
     >>> p = tgis.TemporalVectorAlgebraLexer()
     >>> p.build()
     >>> p.debug = True
-    >>> expression =  "C = A : B"
-    >>> p.test(expression)
-    C = A : B
-    LexToken(NAME,'C',1,0)
-    LexToken(EQUALS,'=',1,2)
-    LexToken(NAME,'A',1,4)
-    LexToken(T_SELECT,':',1,6)
-    LexToken(NAME,'B',1,8)
-    >>> expression =  "C = test1 !: test2"
-    >>> p.test(expression)
-    C = test1 !: test2
-    LexToken(NAME,'C',1,0)
-    LexToken(EQUALS,'=',1,2)
-    LexToken(NAME,'test1',1,4)
-    LexToken(T_NOT_SELECT,'!:',1,10)
-    LexToken(NAME,'test2',1,13)
-    >>> expression =  "C = test1 {equal,:} test2"
-    >>> p.test(expression)
-    C = test1 {equal,:} test2
-    LexToken(NAME,'C',1,0)
-    LexToken(EQUALS,'=',1,2)
-    LexToken(NAME,'test1',1,4)
-    LexToken(T_SELECT_OPERATOR,'{equal,:}',1,10)
-    LexToken(NAME,'test2',1,20)
-    >>> expression =  "C = test1 {equal,!:} test2"
-    >>> p.test(expression)
-    C = test1 {equal,!:} test2
-    LexToken(NAME,'C',1,0)
-    LexToken(EQUALS,'=',1,2)
-    LexToken(NAME,'test1',1,4)
-    LexToken(T_SELECT_OPERATOR,'{equal,!:}',1,10)
-    LexToken(NAME,'test2',1,21)
-    >>> expression =  "C = test1 # test2"
-    >>> p.test(expression)
-    C = test1 # test2
-    LexToken(NAME,'C',1,0)
-    LexToken(EQUALS,'=',1,2)
-    LexToken(NAME,'test1',1,4)
-    LexToken(HASH,'#',1,10)
-    LexToken(NAME,'test2',1,12)
-    >>> expression =  "C = test1 {#} test2"
-    >>> p.test(expression)
-    C = test1 {#} test2
-    LexToken(NAME,'C',1,0)
-    LexToken(EQUALS,'=',1,2)
-    LexToken(NAME,'test1',1,4)
-    LexToken(T_HASH_OPERATOR,'{#}',1,10)
-    LexToken(NAME,'test2',1,14)
-    >>> expression =  "C = test1 {equal,#} test2"
-    >>> p.test(expression)
-    C = test1 {equal,#} test2
-    LexToken(NAME,'C',1,0)
-    LexToken(EQUALS,'=',1,2)
-    LexToken(NAME,'test1',1,4)
-    LexToken(T_HASH_OPERATOR,'{equal,#}',1,10)
-    LexToken(NAME,'test2',1,20)
-    >>> expression =  "C = test1 {equal|during,#} test2"
-    >>> p.test(expression)
-    C = test1 {equal|during,#} test2
-    LexToken(NAME,'C',1,0)
-    LexToken(EQUALS,'=',1,2)
-    LexToken(NAME,'test1',1,4)
-    LexToken(T_HASH_OPERATOR,'{equal|during,#}',1,10)
-    LexToken(NAME,'test2',1,27)
-    >>> expression =  "E = test1 : test2 !: test1"
-    >>> p.test(expression)
-    E = test1 : test2 !: test1
-    LexToken(NAME,'E',1,0)
-    LexToken(EQUALS,'=',1,2)
-    LexToken(NAME,'test1',1,4)
-    LexToken(T_SELECT,':',1,10)
-    LexToken(NAME,'test2',1,12)
-    LexToken(T_NOT_SELECT,'!:',1,18)
-    LexToken(NAME,'test1',1,21)
-    >>> expression =  'D = buff_t(test1,"10 months")'
-    >>> p.test(expression)
-    D = buff_t(test1,"10 months")
-    LexToken(NAME,'D',1,0)
-    LexToken(EQUALS,'=',1,2)
-    LexToken(BUFF_T,'buff_t',1,4)
-    LexToken(LPAREN,'(',1,10)
-    LexToken(NAME,'test1',1,11)
-    LexToken(COMMA,',',1,16)
-    LexToken(QUOTE,'"',1,17)
-    LexToken(INT,10,1,18)
-    LexToken(NAME,'months',1,21)
-    LexToken(QUOTE,'"',1,27)
-    LexToken(RPAREN,')',1,28)
-    >>> expression =  'H = tsnap(test1)'
-    >>> p.test(expression)
-    H = tsnap(test1)
-    LexToken(NAME,'H',1,0)
-    LexToken(EQUALS,'=',1,2)
-    LexToken(TSNAP,'tsnap',1,4)
-    LexToken(LPAREN,'(',1,9)
-    LexToken(NAME,'test1',1,10)
-    LexToken(RPAREN,')',1,15)
-    >>> expression =  'H = tsnap(test2 {during,:} buff_t(test1, "1 days"))'
-    >>> p.test(expression)
-    H = tsnap(test2 {during,:} buff_t(test1, "1 days"))
-    LexToken(NAME,'H',1,0)
-    LexToken(EQUALS,'=',1,2)
-    LexToken(TSNAP,'tsnap',1,4)
-    LexToken(LPAREN,'(',1,9)
-    LexToken(NAME,'test2',1,10)
-    LexToken(T_SELECT_OPERATOR,'{during,:}',1,16)
-    LexToken(BUFF_T,'buff_t',1,27)
-    LexToken(LPAREN,'(',1,33)
-    LexToken(NAME,'test1',1,34)
-    LexToken(COMMA,',',1,39)
-    LexToken(QUOTE,'"',1,41)
-    LexToken(INT,1,1,42)
-    LexToken(NAME,'days',1,44)
-    LexToken(QUOTE,'"',1,48)
-    LexToken(RPAREN,')',1,49)
-    LexToken(RPAREN,')',1,50)
-    >>> expression =  'H = tshift(test2 {during,:} buff_t(test1, "1 days"), "1 months")'
-    >>> p.test(expression)
-    H = tshift(test2 {during,:} buff_t(test1, "1 days"), "1 months")
-    LexToken(NAME,'H',1,0)
-    LexToken(EQUALS,'=',1,2)
-    LexToken(TSHIFT,'tshift',1,4)
-    LexToken(LPAREN,'(',1,10)
-    LexToken(NAME,'test2',1,11)
-    LexToken(T_SELECT_OPERATOR,'{during,:}',1,17)
-    LexToken(BUFF_T,'buff_t',1,28)
-    LexToken(LPAREN,'(',1,34)
-    LexToken(NAME,'test1',1,35)
-    LexToken(COMMA,',',1,40)
-    LexToken(QUOTE,'"',1,42)
-    LexToken(INT,1,1,43)
-    LexToken(NAME,'days',1,45)
-    LexToken(QUOTE,'"',1,49)
-    LexToken(RPAREN,')',1,50)
-    LexToken(COMMA,',',1,51)
-    LexToken(QUOTE,'"',1,53)
-    LexToken(INT,1,1,54)
-    LexToken(NAME,'months',1,56)
-    LexToken(QUOTE,'"',1,62)
-    LexToken(RPAREN,')',1,63)
-    >>> expression =  'H = tshift(A , 10)'
-    >>> p.test(expression)
-    H = tshift(A , 10)
-    LexToken(NAME,'H',1,0)
-    LexToken(EQUALS,'=',1,2)
-    LexToken(TSHIFT,'tshift',1,4)
-    LexToken(LPAREN,'(',1,10)
-    LexToken(NAME,'A',1,11)
-    LexToken(COMMA,',',1,13)
-    LexToken(INT,10,1,15)
-    LexToken(RPAREN,')',1,17)
-    >>> expression =  'H = if(td(A) > 10, A)'
-    >>> p.test(expression)
-    H = if(td(A) > 10, A)
-    LexToken(NAME,'H',1,0)
-    LexToken(EQUALS,'=',1,2)
-    LexToken(IF,'if',1,4)
-    LexToken(LPAREN,'(',1,6)
-    LexToken(TD,'td',1,7)
-    LexToken(LPAREN,'(',1,9)
-    LexToken(NAME,'A',1,10)
-    LexToken(RPAREN,')',1,11)
-    LexToken(GREATER,'>',1,13)
-    LexToken(INT,10,1,15)
-    LexToken(COMMA,',',1,17)
-    LexToken(NAME,'A',1,19)
-    LexToken(RPAREN,')',1,20)
-    >>> expression =  'H = if(td(A) > 10, A, B)'
-    >>> p.test(expression)
-    H = if(td(A) > 10, A, B)
-    LexToken(NAME,'H',1,0)
-    LexToken(EQUALS,'=',1,2)
-    LexToken(IF,'if',1,4)
-    LexToken(LPAREN,'(',1,6)
-    LexToken(TD,'td',1,7)
-    LexToken(LPAREN,'(',1,9)
-    LexToken(NAME,'A',1,10)
-    LexToken(RPAREN,')',1,11)
-    LexToken(GREATER,'>',1,13)
-    LexToken(INT,10,1,15)
-    LexToken(COMMA,',',1,17)
-    LexToken(NAME,'A',1,19)
-    LexToken(COMMA,',',1,20)
-    LexToken(NAME,'B',1,22)
-    LexToken(RPAREN,')',1,23)
-    >>> expression =  'I = if(equals,td(A) > 10 {equals,||} td(B) < 10, A)'
-    >>> p.test(expression)
-    I = if(equals,td(A) > 10 {equals,||} td(B) < 10, A)
-    LexToken(NAME,'I',1,0)
-    LexToken(EQUALS,'=',1,2)
-    LexToken(IF,'if',1,4)
-    LexToken(LPAREN,'(',1,6)
-    LexToken(NAME,'equals',1,7)
-    LexToken(COMMA,',',1,13)
-    LexToken(TD,'td',1,14)
-    LexToken(LPAREN,'(',1,16)
-    LexToken(NAME,'A',1,17)
-    LexToken(RPAREN,')',1,18)
-    LexToken(GREATER,'>',1,20)
-    LexToken(INT,10,1,22)
-    LexToken(T_OVERLAY_OPERATOR,'{equals,||}',1,25)
-    LexToken(TD,'td',1,37)
-    LexToken(LPAREN,'(',1,39)
-    LexToken(NAME,'B',1,40)
-    LexToken(RPAREN,')',1,41)
-    LexToken(LOWER,'<',1,43)
-    LexToken(INT,10,1,45)
-    LexToken(COMMA,',',1,47)
-    LexToken(NAME,'A',1,49)
-    LexToken(RPAREN,')',1,50)
-    >>> expression =  'I = if(equals,td(A) > 10 || start_day() < 10, A)'
-    >>> p.test(expression)
-    I = if(equals,td(A) > 10 || start_day() < 10, A)
-    LexToken(NAME,'I',1,0)
-    LexToken(EQUALS,'=',1,2)
-    LexToken(IF,'if',1,4)
-    LexToken(LPAREN,'(',1,6)
-    LexToken(NAME,'equals',1,7)
-    LexToken(COMMA,',',1,13)
-    LexToken(TD,'td',1,14)
-    LexToken(LPAREN,'(',1,16)
-    LexToken(NAME,'A',1,17)
-    LexToken(RPAREN,')',1,18)
-    LexToken(GREATER,'>',1,20)
-    LexToken(INT,10,1,22)
-    LexToken(OR,'|',1,25)
-    LexToken(OR,'|',1,26)
-    LexToken(START_DAY,'start_day',1,28)
-    LexToken(LPAREN,'(',1,37)
-    LexToken(RPAREN,')',1,38)
-    LexToken(LOWER,'<',1,40)
-    LexToken(INT,10,1,42)
-    LexToken(COMMA,',',1,44)
-    LexToken(NAME,'A',1,46)
-    LexToken(RPAREN,')',1,47)
-    >>> expression =  'E = if({equals},td(A) >= 4 {contain,&&} td(B) == 2, C : D)'
-    >>> p.test(expression)
-    E = if({equals},td(A) >= 4 {contain,&&} td(B) == 2, C : D)
-    LexToken(NAME,'E',1,0)
-    LexToken(EQUALS,'=',1,2)
-    LexToken(IF,'if',1,4)
-    LexToken(LPAREN,'(',1,6)
-    LexToken(T_REL_OPERATOR,'{equals}',1,7)
-    LexToken(COMMA,',',1,15)
-    LexToken(TD,'td',1,16)
-    LexToken(LPAREN,'(',1,18)
-    LexToken(NAME,'A',1,19)
-    LexToken(RPAREN,')',1,20)
-    LexToken(GREATER_EQUALS,'>=',1,22)
-    LexToken(INT,4,1,25)
-    LexToken(T_OVERLAY_OPERATOR,'{contain,&&}',1,27)
-    LexToken(TD,'td',1,40)
-    LexToken(LPAREN,'(',1,42)
-    LexToken(NAME,'B',1,43)
-    LexToken(RPAREN,')',1,44)
-    LexToken(CEQUALS,'==',1,46)
-    LexToken(INT,2,1,49)
-    LexToken(COMMA,',',1,50)
-    LexToken(NAME,'C',1,52)
-    LexToken(T_SELECT,':',1,54)
-    LexToken(NAME,'D',1,56)
-    LexToken(RPAREN,')',1,57)
-    >>> expression =  'F = if({equals},A {equal,#}, B, C : D)'
-    >>> p.test(expression)
-    F = if({equals},A {equal,#}, B, C : D)
-    LexToken(NAME,'F',1,0)
-    LexToken(EQUALS,'=',1,2)
-    LexToken(IF,'if',1,4)
-    LexToken(LPAREN,'(',1,6)
-    LexToken(T_REL_OPERATOR,'{equals}',1,7)
-    LexToken(COMMA,',',1,15)
-    LexToken(NAME,'A',1,16)
-    LexToken(T_HASH_OPERATOR,'{equal,#}',1,18)
-    LexToken(COMMA,',',1,27)
-    LexToken(NAME,'B',1,29)
-    LexToken(COMMA,',',1,30)
-    LexToken(NAME,'C',1,32)
-    LexToken(T_SELECT,':',1,34)
-    LexToken(NAME,'D',1,36)
-    LexToken(RPAREN,')',1,37)
     >>> expression =  'E = A : B ^ C : D'
     >>> p.test(expression)
     E = A : B ^ C : D
@@ -307,18 +28,6 @@ for details.
     LexToken(NAME,'C',1,12)
     LexToken(T_SELECT,':',1,14)
     LexToken(NAME,'D',1,16)
-    >>> expression =  'E = A : B {|^} C : D'
-    >>> p.test(expression)
-    E = A : B {|^} C : D
-    LexToken(NAME,'E',1,0)
-    LexToken(EQUALS,'=',1,2)
-    LexToken(NAME,'A',1,4)
-    LexToken(T_SELECT,':',1,6)
-    LexToken(NAME,'B',1,8)
-    LexToken(T_OVERLAY_OPERATOR,'{|^}',1,10)
-    LexToken(NAME,'C',1,15)
-    LexToken(T_SELECT,':',1,17)
-    LexToken(NAME,'D',1,19)
     >>> expression =  'E = buff_a(A, 10)'
     >>> p.test(expression)
     E = buff_a(A, 10)
@@ -330,99 +39,14 @@ for details.
     LexToken(COMMA,',',1,12)
     LexToken(INT,10,1,14)
     LexToken(RPAREN,')',1,16)
-    >>> p = tgis.TemporalVectorAlgebraParser()
-    >>> p.run = False
-    >>> p.debug = True
-    >>> expression =  "D = A : (B !: C)"
-    >>> p.parse(expression)
-    B* =  B !: C
-    A* =  A : B*
-    D = A*
-    >>> expression =  "D = A {!:} B {during,:} C"
-    >>> print(expression)
-    D = A {!:} B {during,:} C
-    >>> p.parse(expression)
-    A* =  A {!:} B
-    A** =  A* {during,:} C
-    D = A**
-    >>> expression =  "D = A {:} B {during,!:} C"
-    >>> print(expression)
-    D = A {:} B {during,!:} C
-    >>> p.parse(expression)
-    A* =  A {:} B
-    A** =  A* {during,!:} C
-    D = A**
-    >>> expression =  "D = A {:} (B {during,!:} (C : E))"
-    >>> print(expression)
-    D = A {:} (B {during,!:} (C : E))
-    >>> p.parse(expression)
-    C* =  C : E
-    B* =  B {during,!:} C*
-    A* =  A {:} B*
-    D = A*
-    >>> p.run = False
-    >>> p.debug = False
-    >>> expression =  "C = test1 : test2"
-    >>> print(expression)
-    C = test1 : test2
-    >>> p.parse(expression, 'stvds')
-    >>> expression =  'D = buff_t(test1,"10 months")'
-    >>> print(expression)
-    D = buff_t(test1,"10 months")
-    >>> p.parse(expression, 'stvds')
-    >>> expression =  'E = test2 {during,:} buff_t(test1,"1 days")'
-    >>> print(expression)
-    E = test2 {during,:} buff_t(test1,"1 days")
-    >>> p.parse(expression, 'stvds')
-    >>> expression =  'F = test2 {equal,:} buff_t(test1,"1 days")'
-    >>> print(expression)
-    F = test2 {equal,:} buff_t(test1,"1 days")
-    >>> p.parse(expression, 'stvds')
-    >>> p.debug = True
-    >>> expression =  'H = tsnap(test2 {during,:} buff_t(test1, "1 days"))'
-    >>> p.parse(expression, 'stvds')
-    test1* = buff_t( test1 , " 1 days " )
-    test2* =  test2 {during,:} test1*
-    test2** = tsnap( test2* )
-    H = test2**
-    >>> expression =  'H = tshift(test2 {during,:} test1, "1 days")'
-    >>> p.parse(expression, 'stvds')
-    test2* =  test2 {during,:} test1
-    test2** = tshift( test2* , " 1 days " )
-    H = test2**
-    >>> expression =  'H = tshift(H, 3)'
-    >>> p.parse(expression, 'stvds')
-    H* = tshift( H , 3 )
-    H = H*
-    >>> expression =  'C = if(td(A) == 2, A)'
-    >>> p.parse(expression, 'stvds')
-    td(A)
-    td(A) == 2
-    A* =  if condition True  then  A
-    C = A*
-    >>> expression =  'C = if(td(A) == 5 || start_date() >= "2010-01-01", A, B)'
-    >>> p.parse(expression, 'stvds')
-    td(A)
-    td(A) == 5
-    start_date >= "2010-01-01"
-    True || True
-    A* =  if condition True  then  A  else  B
-    C = A*
-    >>> expression =  'C = if(td(A) == 5, A, B)'
-    >>> p.parse(expression, 'stvds')
-    td(A)
-    td(A) == 5
-    A* =  if condition True  then  A  else  B
-    C = A*
 
 """
 
 import grass.pygrass.modules as pygrass
-from temporal_vector_operator import *
+from temporal_operator import *
 from temporal_algebra import *
 
 ##############################################################################
-
 
 class TemporalVectorAlgebraLexer(TemporalAlgebraLexer):
     """Lexical analyzer for the GRASS GIS temporal vector algebra"""
@@ -432,9 +56,9 @@ class TemporalVectorAlgebraLexer(TemporalAlgebraLexer):
 
     # Buffer functions from v.buffer
     vector_buff_functions = {
-       'buff_p': 'BUFF_POINT',
-       'buff_l': 'BUFF_LINE',
-       'buff_a': 'BUFF_AREA',
+       'buff_p'  : 'BUFF_POINT',
+       'buff_l'   : 'BUFF_LINE',
+       'buff_a'   : 'BUFF_AREA',
        }
 
     # This is the list of token names.
@@ -446,14 +70,16 @@ class TemporalVectorAlgebraLexer(TemporalAlgebraLexer):
     )
 
     # Build the token list
-    tokens = TemporalAlgebraLexer.tokens + vector_tokens \
-             + tuple(vector_buff_functions.values())
+    tokens = TemporalAlgebraLexer.tokens \
+                    + vector_tokens \
+                    + tuple(vector_buff_functions.values())
 
     # Regular expression rules for simple tokens
-    t_DISOR = r'\+'
-    t_XOR = r'\^'
-    t_NOT = r'\~'
-    t_T_OVERLAY_OPERATOR = r'\{([a-zA-Z\|]+[,])?([\|&+=]?[\|&+=\^\~])\}'
+    t_DISOR              = r'\+'
+    t_XOR                = r'\^'
+    t_NOT                = r'\~'
+    #t_T_OVERLAY_OPERATOR = r'\{([a-zA-Z\|]+[,])?([\|&+=]?[\|&+=\^\~])\}'
+    t_T_OVERLAY_OPERATOR = r'\{[\|&+\^\~][,]?[a-zA-Z\| ]*([,])?([lrudi]|left|right|union|disjoint|intersect)?\}'
 
     # Parse symbols
     def temporal_symbol(self, t):
@@ -472,7 +98,6 @@ class TemporalVectorAlgebraLexer(TemporalAlgebraLexer):
 
 ##############################################################################
 
-
 class TemporalVectorAlgebraParser(TemporalAlgebraParser):
     """The temporal algebra class"""
 
@@ -481,21 +106,21 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
     # Setting equal precedence level for select and hash operations.
     precedence = (
-        ('left', 'T_SELECT_OPERATOR', 'T_SELECT', 'T_NOT_SELECT'),  # 1
-        ('left', 'AND', 'OR', 'T_COMP_OPERATOR', 'T_OVERLAY_OPERATOR', 'DISOR',
-         'NOT', 'XOR'),  # 2
+        ('left', 'T_SELECT_OPERATOR', 'T_SELECT', 'T_NOT_SELECT'), # 1
+        ('left', 'AND', 'OR', 'T_COMP_OPERATOR', 'T_OVERLAY_OPERATOR', 'DISOR', \
+          'NOT', 'XOR'), #2
         )
 
-    def __init__(self, pid=None, run=False, debug=True, spatial=False):
+    def __init__(self, pid=None, run=False, debug=True, spatial = False):
         TemporalAlgebraParser.__init__(self, pid, run, debug, spatial)
 
         self.m_overlay = pygrass.Module('v.overlay', quiet=True, run_=False)
         self.m_rename = pygrass.Module('g.rename', quiet=True, run_=False)
         self.m_patch = pygrass.Module('v.patch', quiet=True, run_=False)
-        self.m_remove = pygrass.Module('g.remove', quiet=True, run_=False)
+        self.m_mremove = pygrass.Module('g.remove', quiet=True, run_=False)
         self.m_buffer = pygrass.Module('v.buffer', quiet=True, run_=False)
 
-    def parse(self, expression, basename=None, overwrite=False):
+    def parse(self, expression, basename = None, overwrite = False):
         self.lexer = TemporalVectorAlgebraLexer()
         self.lexer.build()
         self.parser = yacc.yacc(module=self, debug=self.debug)
@@ -503,6 +128,8 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         self.overwrite = overwrite
         self.count = 0
         self.stdstype = "stvds"
+        self.maptype = "vect"
+        self.mapclass = VectorDataset
         self.basename = basename
         self.expression = expression
         self.parser.parse(expression)
@@ -519,105 +146,207 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
             for chunk in chunklist:
                 stringlist = ",".join(chunk)
                 if self.debug:
-                    print "g.remove type=vect name=%s" % (stringlist)
+                    print "g.remove type=vect name=%s"%(stringlist)
 
                 if self.run:
-                    m = copy.deepcopy(self.m_remove)
+                    m = copy.deepcopy(self.m_mremove)
                     m.inputs["type"].value = "vect"
                     m.inputs["name"].value = stringlist
                     m.flags["f"].value = True
                     m.run()
 
-    def eval_toperator(self, operator, comparison=False):
-        """This function evaluates a string containing temporal operations.
-
-          :param operator: String of temporal operations, e.g.
-                           {equal|during,=!:}.
-
-          :return: List of temporal relations (equal, during), the given
-                   function (!:) and the interval/instances (=).
-
-          .. code-block:: python
-
-              >>> import grass.temporal as tgis
-              >>> tgis.init(True)
-              >>> p = tgis.TemporalVectorAlgebraParser()
-              >>> operator = "{equal,:}"
-              >>> p.eval_toperator(operator)
-              (['EQUAL'], '=', ':')
-              >>> operator = "{equal|during,:}"
-              >>> p.eval_toperator(operator)
-              (['EQUAL', 'DURING'], '=', ':')
-              >>> operator = "{equal,!:}"
-              >>> p.eval_toperator(operator)
-              (['EQUAL'], '=', '!:')
-              >>> operator = "{equal|during,!:}"
-              >>> p.eval_toperator(operator)
-              (['EQUAL', 'DURING'], '=', '!:')
-              >>> operator = "{equal|during,=!:}"
-              >>> p.eval_toperator(operator)
-              (['EQUAL', 'DURING'], '=', '!:')
-              >>> operator = "{equal|during|starts,#}"
-              >>> p.eval_toperator(operator)
-              (['EQUAL', 'DURING', 'STARTS'], '=', '#')
-              >>> operator = "{!:}"
-              >>> p.eval_toperator(operator)
-              (['EQUAL'], '=', '!:')
-              >>> operator = "{=:}"
-              >>> p.eval_toperator(operator)
-              (['EQUAL'], '=', ':')
-              >>> operator = "{#}"
-              >>> p.eval_toperator(operator)
-              (['EQUAL'], '=', '#')
-              >>> operator = "{equal|during}"
-              >>> p.eval_toperator(operator)
-              (['EQUAL', 'DURING'], None, None)
-              >>> operator = "{equal}"
-              >>> p.eval_toperator(operator)
-              (['EQUAL'], None, None)
-              >>> operator = "{equal,||}"
-              >>> p.eval_toperator(operator, True)
-              (['EQUAL'], '=', '||')
-              >>> operator = "{equal|during,&&}"
-              >>> p.eval_toperator(operator, True)
-              (['EQUAL', 'DURING'], '=', '&&')
-              >>> operator = "{&}"
-              >>> p.eval_toperator(operator)
-              (['EQUAL'], '=', '&')
-
+    def get_temporal_topo_list(self, maplistA, maplistB = None, topolist = ["EQUAL"],
+                               assign_val = False, count_map = False, compare_bool = False,  
+                               compare_cmd = False,  compop = None, aggregate = None,  
+                               new = False,  convert = False,  overlay_cmd = False):
+        """Build temporal topology for two space time data sets, copy map objects
+          for given relation into map list.
+          :param maplistA List of maps.
+          :param maplistB List of maps.
+          :param topolist List of strings of temporal relations.
+          :param assign_val Boolean for assigning a boolean map value based on
+                            the map_values from the compared map list by
+                            topological relationships.
+          :param count_map Boolean if the number of topological related maps
+                           should be returned.
+          :param compare_bool Boolean for comparing boolean map values based on
+                            related map list and compariosn operator.
+          :param compare_cmd Boolean for comparing command list values based on
+                            related map list and compariosn operator.
+          :param compop Comparison operator, && or ||.
+          :param aggregate Aggregation operator for relation map list, & or |.
+          :param new Boolean if new temporary maps should be created.
+          :param convert Boolean if conditional values should be converted to 
+                        r.mapcalc command strings.
+          :param overlay_cmd Boolean for aggregate overlay operators implicitly 
+                        in command list values based on related map lists.
+                    
+          :return: List of maps from maplistA that fulfil the topological relationships
+                  to maplistB specified in topolist.
         """
+        topologylist = ["EQUAL", "FOLLOWS", "PRECEDES", "OVERLAPS", "OVERLAPPED", \
+                        "DURING", "STARTS", "FINISHES", "CONTAINS", "STARTED", \
+                        "FINISHED"]
+        complementdict = {"EQUAL": "EQUAL", "FOLLOWS" : "PRECEDES",
+                          "PRECEDES" : "FOLLOWS", "OVERLAPS" : "OVERLAPPED",
+                          "OVERLAPPED" : "OVERLAPS", "DURING" : "CONTAINS",
+                          "CONTAINS" : "DURING", "STARTS" : "STARTED",
+                          "STARTED" : "STARTS", "FINISHES" : "FINISHED",
+                          "FINISHED" : "FINISHES"}
+        resultdict = {}
+        # Check if given temporal relation are valid.
+        for topo in topolist:
+          if topo.upper() not in topologylist:
+              raise SyntaxError("Unpermitted temporal relation name '" + topo + "'")
 
-        p = TemporalVectorOperatorParser()
-        p.parse(operator, comparison)
-        p.relations = [rel.upper() for rel in p.relations]
+        # Create temporal topology for maplistA to maplistB.
+        tb = SpatioTemporalTopologyBuilder()
+        # Dictionary with different spatial variables used for topology builder.
+        spatialdict = {'strds' : '2D', 'stvds' : '2D', 'str3ds' : '3D'}
+        # Build spatial temporal topology
+        if self.spatial:
+            tb.build(maplistA, maplistB, spatial = spatialdict[self.stdstype])
+        else:
+            tb.build(maplistA, maplistB)
+        # Iterate through maps in maplistA and search for relationships given
+        # in topolist.
+        for map_i in maplistA:
+            tbrelations = map_i.get_temporal_relations()
+            # Check for boolean parameters for further calculations.
+            if assign_val:
+                self.assign_bool_value(map_i,  tbrelations,  topolist)
+            elif compare_bool:
+                self.compare_bool_value(map_i,  tbrelations, compop, aggregate, topolist)
+            elif compare_cmd:
+                self.compare_cmd_value(map_i,  tbrelations, compop, aggregate, topolist, convert)
+            elif overlay_cmd:
+                self.overlay_cmd_value(map_i,  tbrelations, compop, topolist)
+                
+            for topo in topolist:
+                if topo.upper() in tbrelations.keys():
+                    if count_map:
+                        relationmaplist = tbrelations[topo.upper()]
+                        gvar = GlobalTemporalVar()
+                        gvar.td = len(relationmaplist)
+                        if "map_value" in dir(map_i):
+                            map_i.map_value.append(gvar)
+                        else:
+                            map_i.map_value = gvar
+                    resultdict[map_i.get_id()] = map_i
+        resultlist = resultdict.values()
+        
+        # Sort list of maps chronological.
+        resultlist = sorted(resultlist, key = AbstractDatasetComparisonKeyStartTime)
+        
+        return(resultlist)
 
-        return(p.relations, p.temporal, p.function)
-
-    def overlay_map_extent(self, mapA, mapB, bool_op=None, temp_op='=',
-                           copy=False):
-        """Compute the spatio-temporal extent of two topological related maps
-
-           :param mapA: The first map
-           :param mapB: The second maps
-           :param bool_op: The boolean operator specifying the spatial extent
-                  operation (intersection, union, disjoint union)
-           :param temp_op: The temporal operator specifying the temporal
-                  exntent operation (intersection, union, disjoint union)
-           :param copy: Specifies if the temporal extent of mapB should be
-                  copied to mapA
+    def overlay_cmd_value(self,  map_i, tbrelations, function, topolist = ["EQUAL"]):
+        """ Function to evaluate two map lists by given overlay operator.
+          :param map_i Map object with temporal extent.
+          :param tbrelations List of temporal relation to map_i.
+          :param topolist List of strings for given temporal relations.
+          :param function Overlay operator, &|+^~.
+          
+          :return: Map object with command list with  operators that has been 
+                        evaluated by implicit aggregration.
         """
-        returncode = TemporalAlgebraParser.overlay_map_extent(self, mapA, mapB,
-                                                              bool_op, temp_op,
-                                                              copy)
-        if not copy and returncode == 1:
-            # Conditional append of command list.
-            if "cmd_list" in dir(mapA) and "cmd_list" in dir(mapB):
-                mapA.cmd_list = mapA.cmd_list + mapB.cmd_list
-            elif "cmd_list" not in dir(mapA) and "cmd_list" in dir(mapB):
-                mapA.cmd_list = mapB.cmd_list
+        # Build comandlist list with elements from related maps and given relation operator.
+        resultlist = []
+        # Define overlay operation dictionary.
+        overlaydict = {"&":"and",  "|":"or",  "^":"xor",  "~":"not", "+":"disor"}
+        operator = overlaydict[function]
+        # Set first input for overlay module.
+        mapainput = map_i.get_id()
+        # Append command list of given map to result command list.
+        if "cmd_list" in dir(map_i):
+            resultlist = resultlist + map_i.cmd_list
+        for topo in topolist:
+            if topo.upper() in tbrelations.keys():
+                relationmaplist = tbrelations[topo.upper()]
+                for relationmap in relationmaplist:
+                    # Append command list of given map to result command list.
+                    if "cmd_list" in dir(relationmap):
+                        resultlist = resultlist + relationmap.cmd_list
+                    # Generate an intermediate name
+                    name = self.generate_map_name()
+                    map_i.set_id(name + "@" + self.mapset)
+                    # Set second input for overlay module.
+                    mapbinput = relationmap.get_id()
+                    # Create module command in PyGRASS for v.overlay and v.patch.
+                    if operator != "disor":
+                        m = copy.deepcopy(self.m_overlay)
+                        m.run_ = False
+                        m.inputs["operator"].value = operator
+                        m.inputs["ainput"].value = str(mapainput)
+                        m.inputs["binput"].value = str(mapbinput)
+                        m.outputs["output"].value = name
+                        m.flags["overwrite"].value = self.overwrite
+                    else:
+                        patchinput = str(mapainput) + ',' + str(mapbinput)
+                        m = copy.deepcopy(self.m_patch)
+                        m.run_ = False
+                        m.inputs["input"].value = patchinput
+                        m.outputs["output"].value = name
+                        m.flags["overwrite"].value = self.overwrite
+                    # Conditional append of module command.
+                    resultlist.append(m)
+                    # Set new map name to temporary map name.
+                    mapainput = name
+        # Add command list to result map.
+        map_i.cmd_list = resultlist
+        
+        return(resultlist)
 
-        return(returncode)
+    def set_temporal_extent_list(self, maplist, topolist = ["EQUAL"], temporal = 'l' ):
+        """ Change temporal extent of map list based on temporal relations to 
+                other map list and given temporal operator.
 
+            :param maplist List of map objects for which relations has been build 
+                                        correctely.
+            :param topolist List of strings of temporal relations.
+            :param temporal The temporal operator specifying the temporal
+                                            extent operation (intersection, union, disjoint 
+                                            union, right reference, left reference).
+
+            :return: Map list with specified temporal extent.
+        """
+        resultdict = {}
+        
+        for map_i in maplist:
+            # Loop over temporal related maps and create overlay modules.
+            tbrelations = map_i.get_temporal_relations()
+            # Generate an intermediate map for the result map list.
+            map_new = self.generate_new_map(base_map=map_i, bool_op = 'and', 
+                                                                        copy = True,  rename = False)
+            # Combine temporal and spatial extents of intermediate map with related maps.
+            for topo in topolist:
+                if topo in tbrelations.keys():
+                    for map_j in (tbrelations[topo]):
+                        if temporal == 'r':
+                            # Generate an intermediate map for the result map list.
+                            map_new = self.generate_new_map(base_map=map_i, bool_op = 'and', 
+                                                                                        copy = True,  rename = False)
+                        # Create overlayed map extent.
+                        returncode = self.overlay_map_extent(map_new, map_j, 'and', \
+                                                                temp_op = temporal)
+                        # Stop the loop if no temporal or spatial relationship exist.
+                        if returncode == 0:
+                            break
+                        # Append map to result map list.
+                        elif returncode == 1:
+                            # resultlist.append(map_new)
+                            resultdict[map_new.get_id()] = map_new
+                    if returncode == 0:
+                        break
+            # Append map to result map list.
+            #if returncode == 1:
+            #    resultlist.append(map_new)
+        # Get sorted map objects as values from result dictionoary.
+        resultlist = resultdict.values()
+        resultlist = sorted(resultlist, key = AbstractDatasetComparisonKeyStartTime)
+        
+        return(resultlist)
+    
     ###########################################################################
 
     def p_statement_assign(self, t):
@@ -636,20 +365,18 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                 for i in range(num):
                     # Check if resultmap names exist in GRASS database.
                     vectorname = self.basename + "_" + str(i)
-                    vectormap = VectorDataset(vectorname + "@" +
-                                              get_current_mapset())
-                    if vectormap.map_exists() and self.overwrite is False:
-                        self.msgr.fatal(_("Error vector maps with basename %s"
-                                          " exist. Use --o flag to overwrite"
-                                          " existing file") % (vectorname))
+                    vectormap = VectorDataset(vectorname + "@" + get_current_mapset())
+                    if vectormap.map_exists() and self.overwrite == False:
+                        self.msgr.fatal(_("Error vector maps with basename %s exist. "
+                                      "Use --o flag to overwrite existing file") \
+                                      %(vectorname))
                 for map_i in t[3]:
                     if "cmd_list" in dir(map_i):
                         # Execute command list.
                         for cmd in map_i.cmd_list:
                             try:
-                                # We need to check if the input maps have
-                                # areas in case of v.overlay otherwise
-                                # v.overlay will break
+                                # We need to check if the input maps have areas in case of v.overlay
+                                # otherwise v.overlay will break
                                 if cmd.name == "v.overlay":
                                     for name in (cmd.inputs["ainput"].value,
                                                     cmd.inputs["binput"].value):
@@ -672,16 +399,14 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                             self.msgr.message("Run command:\n" + cmd.get_bash())
                             cmd.run()
                             if cmd.popen.returncode != 0:
-                                self.msgr.fatal(_("Error starting %s : \n%s")
-                                                % (cmd.get_bash(),
-                                                   cmd.popen.stderr))
+                                self.msgr.fatal(_("Error starting %s : \n%s") \
+                                                    %(cmd.get_bash(), \
+                                                    cmd.popen.stderr))
                             mapname = cmd.outputs['output'].value
                             if mapname.find("@") >= 0:
                                 map_test = map_i.get_new_instance(mapname)
                             else:
-                                map_test = map_i.get_new_instance(mapname +
-                                                                  "@" +
-                                                                  self.mapset)
+                                map_test = map_i.get_new_instance(mapname + "@" + self.mapset)
                             if not map_test.map_exists():
                                 returncode = 1
                                 break
@@ -693,8 +418,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                             # Change map name to given basename.
                             newident = self.basename + "_" + str(count)
                             m = copy.deepcopy(self.m_rename)
-                            m.inputs["vect"].value = (map_i.get_name(),
-                                                      newident)
+                            m.inputs["vect"].value = (map_i.get_name(),newident)
                             m.flags["overwrite"].value = self.overwrite
                             m.run()
                             #m(vect = (map_i.get_name(),newident), \
@@ -707,45 +431,41 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
                 if len(register_list) > 0:
                     # Open connection to temporal database.
-                    dbif, connected = init_dbif(dbif=self.dbif)
+                    dbif, connect = init_dbif(dbif=self.dbif)
                     # Create result space time dataset.
-                    resultstds = open_new_stds(t[1], self.stdstype, 'absolute',
-                                               t[1], t[1],
-                                               "temporal vector algebra",
-                                               dbif=dbif,
-                                               overwrite=self.overwrite)
+                    resultstds = open_new_stds(t[1], self.stdstype, \
+                                                                'absolute', t[1], t[1], \
+                                                                "temporal vector algebra", self.dbif,
+                                                                overwrite = self.overwrite)
                     for map_i in register_list:
-                        # Check if modules should be executed from command list
+                        # Check if modules should be executed from command list.
                         if "cmd_list" in dir(map_i):
                             # Get meta data from grass database.
                             map_i.load()
                             if map_i.is_in_db(dbif=dbif) and self.overwrite:
                                 # Update map in temporal database.
                                 map_i.update_all(dbif=dbif)
-                            elif map_i.is_in_db(dbif=dbif) and self.overwrite is False:
-                                # Raise error if map exists and no overwrite
-                                # flag is given.
-                                self.msgr.fatal(_("Error vector map %s exist"
-                                                  " in temporal database. Use "
-                                                  "overwrite flag.  : \n%s") %
-                                                (map_i.get_map_id(),
-                                                 cmd.popen.stderr))
+                            elif map_i.is_in_db(dbif=dbif) and self.overwrite == False:
+                                # Raise error if map exists and no overwrite flag is given.
+                                self.msgr.fatal(_("Error vector map %s exist in temporal database. "
+                                                  "Use overwrite flag.  : \n%s") \
+                                                  %(map_i.get_map_id(), cmd.popen.stderr))
                             else:
                                 # Insert map into temporal database.
                                 map_i.insert(dbif=dbif)
                         else:
-                            # Get metadata from temporal database.
-                            map_i.select(dbif=dbif)
+                            #Get metadata from temporal database.                          
+                            #map_i.select(dbif=dbif)
+                            map_i.load()
                         # Register map in result space time dataset.
-                        resultstds.register_map(map_i, dbif=dbif)
+                        success = resultstds.register_map(map_i, dbif=dbif)
                         #count += 1
                         #if count % 10 == 0:
                         #    grass.percent(count, num, 1)
-                    resultstds.update_from_registered_maps(dbif=dbif)
-                    if connected:
-                        dbif.close()
+                    resultstds.update_from_registered_maps(dbif)
+                    dbif.close()
                 self.remove_intermediate_vector_maps()
-            t[0] = register_list
+            t[0] = t[3]
 
     def p_overlay_operation(self, t):
         """
@@ -770,15 +490,23 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
              | stds DISOR expr
              | expr DISOR expr
         """
-        # Check input stds.
-        maplistA = self.check_stds(t[1])
-        maplistB = self.check_stds(t[3])
-
         if self.run:
-            t[0] = self.create_overlay_operations(maplistA, maplistB,
-                                                  ("EQUAL",), "=", t[2])
-        else:
-            t[0] = t[1]
+            # Check input stds and operator.
+            maplistA = self.check_stds(t[1])
+            maplistB = self.check_stds(t[3])
+            relations = ["EQUAL"]
+            temporal = 'l' 
+            function = t[2] 
+            # Build commmand list for related maps.
+            complist = self.get_temporal_topo_list(maplistA, maplistB, topolist = relations,
+                                                                    compop = function, overlay_cmd = True)
+            # Set temporal extent based on topological relationships.
+            resultlist = self.set_temporal_extent_list(complist, topolist = relations, 
+                                temporal = temporal)
+
+            t[0] = resultlist
+        if self.debug:
+            str(t[1]) + t[2] + str(t[3])
 
     def p_overlay_operation_relation(self, t):
         """
@@ -787,112 +515,23 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
              | stds T_OVERLAY_OPERATOR expr
              | expr T_OVERLAY_OPERATOR expr
         """
-        # Check input stds.
-        maplistA = self.check_stds(t[1])
-        maplistB = self.check_stds(t[3])
-        relations, temporal, function = self.eval_toperator(t[2])
-
         if self.run:
-            t[0] = self.create_overlay_operations(maplistA, maplistB,
-                                                  relations, temporal,
-                                                  function)
-        else:
-            t[0] = t[1]
+            # Check input stds and operator.
+            maplistA = self.check_stds(t[1])
+            maplistB = self.check_stds(t[3])
+            relations, temporal, function,  aggregate = self.eval_toperator(t[2],  optype = 'overlay')
+            # Build commmand list for related maps.
+            complist = self.get_temporal_topo_list(maplistA, maplistB, topolist = relations,
+                                                                    compop = function, overlay_cmd = True)
+            # Set temporal extent based on topological relationships.
+            resultlist = self.set_temporal_extent_list(complist, topolist = relations, 
+                                temporal = temporal)
+          
+            t[0] = resultlist
+        if self.debug:
+            str(t[1]) + t[2] + str(t[3])
 
-    def create_overlay_operations(self, maplistA, maplistB, relations,
-                                  temporal, function):
-        """Create the spatial overlay operation commad list
-
-           :param maplistA: A list of map objects
-           :param maplistB: A list of map objects
-           :param relations: The temporal relationships that must be
-                             fullfilled as list of strings("EQUAL", "DURING",
-                             ...)
-           :param temporal: The temporal operator as string "=" or "&", ...
-           :param function: The spatial overlay operations as string "&", "|",
-                            ...
-           :return: Return the list of maps with overlay commands
-        """
-        topolist = self.get_temporal_topo_list(maplistA, maplistB,
-                                               topolist=relations)
-
-        # Select operation name.
-        if function == "&":
-            opname = "and"
-        elif function == "|":
-            opname = "or"
-        elif function == "^":
-            opname = "xor"
-        elif function == "~":
-            opname = "not"
-        elif function == "+":
-            opname = "disor"
-
-        if self.run:
-            resultlist = []
-            for map_i in topolist:
-                # Generate an intermediate name for the result map list.
-                map_new = self.generate_new_map(base_map=map_i, bool_op=opname,
-                                                copy=True)
-                # Set first input for overlay module.
-                mapainput = map_i.get_id()
-                # Loop over temporal related maps and create overlay modules.
-                tbrelations = map_i.get_temporal_relations()
-                count = 0
-                for topo in relations:
-                    if topo in tbrelations.keys():
-                        for map_j in (tbrelations[topo]):
-                            # Create overlayed map extent.
-                            returncode = self.overlay_map_extent(map_new,
-                                                                 map_j, opname,
-                                                                 temp_op=temporal)
-                            # Stop the loop if no temporal or spatial
-                            # relationship exist.
-                            if returncode == 0:
-                                break
-                            if count == 0:
-                                # Set map name.
-                                name = map_new.get_id()
-                            else:
-                                # Generate an intermediate name
-                                name = self.generate_map_name()
-                                map_new.set_id(name + "@" + mapset)
-                            # Set second input for overlay module.
-                            mapbinput = map_j.get_id()
-                            # Create module command in PyGRASS for v.overlay
-                            # and v.patch.
-                            if opname != "disor":
-                                m = copy.deepcopy(self.m_overlay)
-                                m.run_ = False
-                                m.inputs["operator"].value = opname
-                                m.inputs["ainput"].value = str(mapainput)
-                                m.inputs["binput"].value = str(mapbinput)
-                                m.outputs["output"].value = name
-                                m.flags["overwrite"].value = self.overwrite
-                            else:
-                                patchinput = str(mapainput) + ',' + str(mapbinput)
-                                m = copy.deepcopy(self.m_patch)
-                                m.run_ = False
-                                m.inputs["input"].value = patchinput
-                                m.outputs["output"].value = name
-                                m.flags["overwrite"].value = self.overwrite
-                            # Conditional append of module command.
-                            if "cmd_list" in dir(map_new):
-                                map_new.cmd_list.append(m)
-                            else:
-                                map_new.cmd_list = [m]
-                            # Set new map name to temporary map name.
-                            mapainput = name
-                            count += 1
-                        if returncode == 0:
-                            break
-                # Append map to result map list.
-                if returncode == 1:
-                    resultlist.append(map_new)
-
-            return resultlist
-
-    def p_buffer_operation(self, t):
+    def p_buffer_operation(self,t):
         """
         expr : buff_function LPAREN stds COMMA number RPAREN
              | buff_function LPAREN expr COMMA number RPAREN
@@ -944,7 +583,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
     # Handle errors.
     def p_error(self, t):
         raise SyntaxError("syntax error on line %d near '%s' expression '%s'" %
-                          (t.lineno, t.value, self.expression))
+            (t.lineno, t.value, self.expression))
 
 ###############################################################################
 

@@ -42,10 +42,8 @@ def load_tests(loader, tests, ignore):
     tests.addTests(doctest.DocTestSuite(grass.temporal.temporal_raster3d_algebra))
     tests.addTests(doctest.DocTestSuite(grass.temporal.temporal_raster_algebra))
     tests.addTests(doctest.DocTestSuite(grass.temporal.temporal_raster_base_algebra))
-    tests.addTests(doctest.DocTestSuite(grass.temporal.temporal_raster_operator))
-    # TODO: Fix tests
-    #tests.addTests(doctest.DocTestSuite(grass.temporal.temporal_vector_algebra))
-    tests.addTests(doctest.DocTestSuite(grass.temporal.temporal_vector_operator))
+    tests.addTests(doctest.DocTestSuite(grass.temporal.temporal_operator))
+    tests.addTests(doctest.DocTestSuite(grass.temporal.temporal_vector_algebra))
     return tests
 
 if __name__ == '__main__':

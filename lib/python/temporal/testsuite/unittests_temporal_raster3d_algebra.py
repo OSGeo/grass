@@ -1,13 +1,12 @@
-"""!Unit test to register raster maps with absolute and relative
-   time using tgis.register_maps_in_space_time_dataset()
-
-(C) 2013 by the GRASS Development Team
+"""
+(C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Soeren Gebbert
+:authors: Soeren Gebbert and Thomas Leppelt
 """
+
 
 import grass.script
 import grass.temporal as tgis
@@ -15,30 +14,37 @@ import grass.gunittest as gunittest
 import datetime
 import os
 
-
-class TestRegisterFunctions(gunittest.TestCase):
+class TestTemporalRaster3dAlgebra(gunittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        """!Initiate the temporal GIS and set the region
+        """Initiate the temporal GIS and set the region
         """
-        os.putenv("GRASS_OVERWRITE", "1")
         tgis.init(True) # Raise on error instead of exit(1)
-        grass.script.use_temp_region()
+        cls.use_temp_region()
         ret = grass.script.run_command("g.region", n=80.0, s=0.0, e=120.0,
                                        w=0.0, t=100.0, b=0.0, res=10.0)
 
-        ret += grass.script.run_command("r3.mapcalc", overwrite=True, quiet=True, expression="a1 = 1")
-        ret += grass.script.run_command("r3.mapcalc", overwrite=True, quiet=True, expression="a2 = 2")
-        ret += grass.script.run_command("r3.mapcalc", overwrite=True, quiet=True, expression="a3 = 3")
-        ret += grass.script.run_command("r3.mapcalc", overwrite=True, quiet=True, expression="a4 = 4")
-
+        cls.runModule("r3.mapcalc", overwrite=True, quiet=True, expression="a1 = 1")
+        cls.runModule("r3.mapcalc", overwrite=True, quiet=True, expression="a2 = 2")
+        cls.runModule("r3.mapcalc", overwrite=True, quiet=True, expression="a3 = 3")
+        cls.runModule("r3.mapcalc", overwrite=True, quiet=True, expression="a4 = 4")
 
         tgis.open_new_stds(name="A", type="str3ds", temporaltype="absolute",
                                          title="A", descr="A", semantic="field", overwrite=True)
 
         tgis.register_maps_in_space_time_dataset(type="rast3d", name="A", maps="a1,a2,a3,a4",
                                                  start="2001-01-01", increment="1 day", interval=True)
+
+    def tearDown(self):
+        self.runModule("t.remove", type="str3ds", flags="rf", inputs="D", quiet=True)
+
+    @classmethod
+    def tearDownClass(cls):
+        """Remove the temporary region
+        """
+        cls.runModule("t.remove", type="str3ds", flags="rf", inputs="A", quiet=True)
+        cls.del_temp_region()
 
     def test_temporal_neighbors_1(self):
         """Simple temporal neighborhood computation test"""
@@ -70,15 +76,8 @@ class TestRegisterFunctions(gunittest.TestCase):
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
 
-    def tearDown(self):
-        ret = grass.script.run_command("t.remove", type="str3ds", flags="rf", input="D", quiet=True)
-
-    @classmethod
-    def tearDownClass(cls):
-        """!Remove the temporary region
-        """
-        ret = grass.script.run_command("t.remove", type="str3ds", flags="rf", input="A", quiet=True)
-        grass.script.del_temp_region()
-
 if __name__ == '__main__':
-    gunittest.test()
+    grass.gunittest.test()
+
+
+
