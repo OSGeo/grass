@@ -1143,7 +1143,7 @@ def list_grouped(type, pattern=None, check_search_path=True, exclude=None,
     mapset. Example:
 
     @code
-    >>> mlist_grouped('vect', pattern='*roads*')['PERMANENT']
+    >>> list_grouped('vect', pattern='*roads*')['PERMANENT']
     ['railroads', 'roadsmajor']
 
     @endcode
