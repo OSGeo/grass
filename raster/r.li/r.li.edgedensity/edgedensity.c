@@ -200,58 +200,39 @@ int calculate(int fd, struct area_entry *ad, char **par, double *result)
 	    if (masked && mask_buf[j] == 0) {
 		Rast_set_c_null_value(&corrCell, 1);
 	    }
-	    if (!Rast_is_c_null_value(&corrCell)) {
-		/* total sample area */
-		area++;
-	    }
 
 	    supCell = buf_sup[j + ad->x];
 	    if (masked && (mask_sup[j] == 0)) {
 		Rast_set_c_null_value(&supCell, 1);
 	    }
 
-	    if (!Rast_is_c_null_value(&ptype)) {
-		/* only one patch type */
-		if (!Rast_is_c_null_value(&corrCell) && corrCell == ptype) {
-		    if (corrCell != precCell)
+	    if (!Rast_is_c_null_value(&corrCell)) {
+		area++; 
+	        if (Rast_is_c_null_value(&ptype) || corrCell == ptype) {
+		    
+		    if (Rast_is_c_null_value(&precCell) || precCell != corrCell) {
 			nedges++;
-		    if (corrCell != supCell)
+		    }
+		    if (Rast_is_c_null_value(&supCell) || supCell != corrCell) {
 			nedges++;
+		    }
 		    /* right and bottom */
 		    if (i == ad->rl - 1)
 			nedges++;
 		    if (j == ad->cl - 1)
-			nedges++;
-		}
-		if (!Rast_is_c_null_value(&precCell) && precCell == ptype) {
-		    if (corrCell != precCell)
-			nedges++;
-		}
-		if (!Rast_is_c_null_value(&supCell) && supCell == ptype) {
-		    if (corrCell != supCell)
 			nedges++;
 		}
 	    }
-	    else {
-		/* all patch types */
-		if (!Rast_is_c_null_value(&corrCell)) {
-		    if (corrCell != precCell) {
+	    else /* corrCell == NULL */ {
+		if (!Rast_is_c_null_value(&precCell)) {
+		    if (Rast_is_c_null_value(&ptype) || precCell == ptype) {
 			nedges++;
 		    }
-		    if (corrCell != supCell) {
+		}
+		if (!Rast_is_c_null_value(&supCell)) {
+		    if (Rast_is_c_null_value(&ptype) || supCell == ptype) {
 			nedges++;
 		    }
-		    /* right and bottom */
-		    if (i == ad->rl - 1)
-			nedges++;
-		    if (j == ad->cl - 1)
-			nedges++;
-		}
-		if (!Rast_is_c_null_value(&precCell) && corrCell != precCell) {
-		    nedges++;
-		}
-		if (!Rast_is_c_null_value(&supCell) && corrCell != supCell) {
-		    nedges++;
 		}
 	    }
 	    precCell = corrCell;
@@ -378,58 +359,39 @@ int calculateD(int fd, struct area_entry *ad, char **par, double *result)
 	    if (masked && mask_buf[j] == 0) {
 		Rast_set_d_null_value(&corrCell, 1);
 	    }
-	    if (!Rast_is_d_null_value(&corrCell)) {
-		/* total sample area */
-		area++;
-	    }
 
 	    supCell = buf_sup[j + ad->x];
 	    if (masked && (mask_sup[j] == 0)) {
 		Rast_set_d_null_value(&supCell, 1);
 	    }
 
-	    if (!Rast_is_d_null_value(&ptype)) {
-		/* only one patch type */
-		if (!Rast_is_d_null_value(&corrCell) && corrCell == ptype) {
-		    if (corrCell != precCell)
+	    if (!Rast_is_d_null_value(&corrCell)) {
+		area++; 
+	        if (Rast_is_d_null_value(&ptype) || corrCell == ptype) {
+		    
+		    if (Rast_is_d_null_value(&precCell) || precCell != corrCell) {
 			nedges++;
-		    if (corrCell != supCell)
+		    }
+		    if (Rast_is_d_null_value(&supCell) || supCell != corrCell) {
 			nedges++;
+		    }
 		    /* right and bottom */
 		    if (i == ad->rl - 1)
 			nedges++;
 		    if (j == ad->cl - 1)
-			nedges++;
-		}
-		if (!Rast_is_d_null_value(&precCell) && precCell == ptype) {
-		    if (corrCell != precCell)
-			nedges++;
-		}
-		if (!Rast_is_d_null_value(&supCell) && supCell == ptype) {
-		    if (corrCell != supCell)
 			nedges++;
 		}
 	    }
-	    else {
-		/* all patch types */
-		if (!Rast_is_d_null_value(&corrCell)) {
-		    if (corrCell != precCell) {
+	    else /* corrCell == NULL */ {
+		if (!Rast_is_d_null_value(&precCell)) {
+		    if (Rast_is_d_null_value(&ptype) || precCell == ptype) {
 			nedges++;
 		    }
-		    if (corrCell != supCell) {
+		}
+		if (!Rast_is_d_null_value(&supCell)) {
+		    if (Rast_is_d_null_value(&ptype) || supCell == ptype) {
 			nedges++;
 		    }
-		    /* right and bottom */
-		    if (i == ad->rl - 1)
-			nedges++;
-		    if (j == ad->cl - 1)
-			nedges++;
-		}
-		if (!Rast_is_d_null_value(&precCell) && corrCell != precCell) {
-		    nedges++;
-		}
-		if (!Rast_is_d_null_value(&supCell) && corrCell != supCell) {
-		    nedges++;
 		}
 	    }
 	    precCell = corrCell;
@@ -556,58 +518,39 @@ int calculateF(int fd, struct area_entry *ad, char **par, double *result)
 	    if (masked && mask_buf[j] == 0) {
 		Rast_set_f_null_value(&corrCell, 1);
 	    }
-	    if (!Rast_is_f_null_value(&corrCell)) {
-		/* total sample area */
-		area++;
-	    }
 
 	    supCell = buf_sup[j + ad->x];
 	    if (masked && (mask_sup[j] == 0)) {
 		Rast_set_f_null_value(&supCell, 1);
 	    }
 
-	    if (!Rast_is_f_null_value(&ptype)) {
-		/* only one patch type */
-		if (!Rast_is_f_null_value(&corrCell) && corrCell == ptype) {
-		    if (corrCell != precCell)
+	    if (!Rast_is_f_null_value(&corrCell)) {
+		area++; 
+	        if (Rast_is_f_null_value(&ptype) || corrCell == ptype) {
+		    
+		    if (Rast_is_f_null_value(&precCell) || precCell != corrCell) {
 			nedges++;
-		    if (corrCell != supCell)
+		    }
+		    if (Rast_is_f_null_value(&supCell) || supCell != corrCell) {
 			nedges++;
+		    }
 		    /* right and bottom */
 		    if (i == ad->rl - 1)
 			nedges++;
 		    if (j == ad->cl - 1)
-			nedges++;
-		}
-		if (!Rast_is_f_null_value(&precCell) && precCell == ptype) {
-		    if (corrCell != precCell)
-			nedges++;
-		}
-		if (!Rast_is_f_null_value(&supCell) && supCell == ptype) {
-		    if (corrCell != supCell)
 			nedges++;
 		}
 	    }
-	    else {
-		/* all patch types */
-		if (!Rast_is_f_null_value(&corrCell)) {
-		    if (corrCell != precCell) {
+	    else /* corrCell == NULL */ {
+		if (!Rast_is_f_null_value(&precCell)) {
+		    if (Rast_is_f_null_value(&ptype) || precCell == ptype) {
 			nedges++;
 		    }
-		    if (corrCell != supCell) {
+		}
+		if (!Rast_is_f_null_value(&supCell)) {
+		    if (Rast_is_f_null_value(&ptype) || supCell == ptype) {
 			nedges++;
 		    }
-		    /* right and bottom */
-		    if (i == ad->rl - 1)
-			nedges++;
-		    if (j == ad->cl - 1)
-			nedges++;
-		}
-		if (!Rast_is_f_null_value(&precCell) && corrCell != precCell) {
-		    nedges++;
-		}
-		if (!Rast_is_f_null_value(&supCell) && corrCell != supCell) {
-		    nedges++;
 		}
 	    }
 	    precCell = corrCell;
