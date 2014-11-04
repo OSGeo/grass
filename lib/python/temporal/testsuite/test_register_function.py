@@ -1,4 +1,4 @@
-"""!Unit test to register raster maps with absolute and relative
+"""Unit test to register raster maps with absolute and relative
    time using tgis.register_maps_in_space_time_dataset()
 
 (C) 2013 by the GRASS Development Team
@@ -6,7 +6,7 @@ This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Soeren Gebbert
+:authors: Soeren Gebbert
 """
 
 import grass.temporal as tgis
@@ -14,12 +14,11 @@ import grass.gunittest
 import datetime
 import os
 
-
 class TestRegisterFunctions(grass.gunittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        """!Initiate the temporal GIS and set the region
+        """Initiate the temporal GIS and set the region
         """
         os.putenv("GRASS_OVERWRITE", "1")
         # Use always the current mapset as temporal database
@@ -31,12 +30,12 @@ class TestRegisterFunctions(grass.gunittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """!Remove the temporary region
+        """Remove the temporary region
         """
         cls.del_temp_region()
 
     def setUp(self):
-        """!Create the test maps and the space time raster datasets
+        """Create the test maps and the space time raster datasets
         """
         self.runModule("r.mapcalc", overwrite=True, quiet=True,
                        expression="register_map_1 = 1")
@@ -49,7 +48,7 @@ class TestRegisterFunctions(grass.gunittest.TestCase):
                                             title="Test strds", descr="Test strds", semantic="field")
 
     def tearDown(self):
-        """!Remove maps from temporal database
+        """Remove maps from temporal database
         """
         self.runModule("t.unregister", maps="register_map_1,register_map_2", quiet=True)
         self.runModule("g.remove", flags='f', type="rast", name="register_map_1,register_map_2", quiet=True)
@@ -57,7 +56,7 @@ class TestRegisterFunctions(grass.gunittest.TestCase):
         self.strds_rel.delete()
 
     def test_absolute_time_strds_1(self):
-        """!Test the registration of maps with absolute time in a
+        """Test the registration of maps with absolute time in a
            space time raster dataset
         """
         tgis.register_maps_in_space_time_dataset(type="rast", name=self.strds_abs.get_name(),
@@ -82,7 +81,7 @@ class TestRegisterFunctions(grass.gunittest.TestCase):
         self.assertEqual(end, datetime.datetime(2001, 1, 3))
 
     def test_absolute_time_strds_2(self):
-        """!Test the registration of maps with absolute time in a
+        """Test the registration of maps with absolute time in a
            space time raster dataset.
            The timestamps are set using the C-Interface beforehand, so that the register function needs
            to read the timetsamp from the map metadata.
@@ -113,7 +112,7 @@ class TestRegisterFunctions(grass.gunittest.TestCase):
         self.assertEqual(end, datetime.datetime(2001, 1, 3))
 
     def test_absolute_time_1(self):
-        """!Test the registration of maps with absolute time
+        """Test the registration of maps with absolute time
         """
         tgis.register_maps_in_space_time_dataset(type="rast", name=None,
                  maps="register_map_1,register_map_2",
@@ -132,7 +131,7 @@ class TestRegisterFunctions(grass.gunittest.TestCase):
         self.assertEqual(end, datetime.datetime(2001, 1, 3))
 
     def test_absolute_time_2(self):
-        """!Test the registration of maps with absolute time
+        """Test the registration of maps with absolute time
         """
         tgis.register_maps_in_space_time_dataset(type="rast", name=None,
                  maps="register_map_1,register_map_2",
@@ -149,7 +148,7 @@ class TestRegisterFunctions(grass.gunittest.TestCase):
         self.assertEqual(start, datetime.datetime(2001, 1, 1, 18, 30, 1))
 
     def test_absolute_time_3(self):
-        """!Test the registration of maps with absolute time.
+        """Test the registration of maps with absolute time.
            The timestamps are set using the C-Interface beforehand, so that the register function needs
            to read the timetsamp from the map metadata.
         """
@@ -172,7 +171,7 @@ class TestRegisterFunctions(grass.gunittest.TestCase):
         self.assertEqual(start, datetime.datetime(2001, 1, 1, 18, 30, 1))
 
     def test_relative_time_strds_1(self):
-        """!Test the registration of maps with relative time in a
+        """Test the registration of maps with relative time in a
            space time raster dataset
         """
 
@@ -201,7 +200,7 @@ class TestRegisterFunctions(grass.gunittest.TestCase):
         self.assertEqual(unit, "day")
 
     def test_relative_time_strds_2(self):
-        """!Test the registration of maps with relative time in a
+        """Test the registration of maps with relative time in a
            space time raster dataset. The timetsamps are set for the maps using the
            C-interface before registration.
         """
@@ -233,7 +232,7 @@ class TestRegisterFunctions(grass.gunittest.TestCase):
         self.assertEqual(unit, "seconds")
 
     def test_relative_time_1(self):
-        """!Test the registration of maps with relative time
+        """Test the registration of maps with relative time
         """
         tgis.register_maps_in_space_time_dataset(type="rast", name=None,
                  maps="register_map_1,register_map_2",
@@ -254,7 +253,7 @@ class TestRegisterFunctions(grass.gunittest.TestCase):
         self.assertEqual(unit, "day")
 
     def test_relative_time_2(self):
-        """!Test the registration of maps with relative time
+        """Test the registration of maps with relative time
         """
         tgis.register_maps_in_space_time_dataset(type="rast", name=None,
                  maps="register_map_1,register_map_2",
@@ -275,7 +274,7 @@ class TestRegisterFunctions(grass.gunittest.TestCase):
         self.assertEqual(unit, "seconds")
 
     def test_relative_time_3(self):
-        """!Test the registration of maps with relative time. The timetsamps are set beforhand using
+        """Test the registration of maps with relative time. The timetsamps are set beforhand using
            the C-interface.
         """
         ciface = tgis.get_tgis_c_library_interface()
