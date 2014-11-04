@@ -91,7 +91,7 @@ Lines and boundaries can be composed of multiple vertices.
 <p>
 Area topology also holds information about isles. These isles are located
 within that area, not touching the boundaries of the outer area. Isles
-are holes inside the area, can consist of one or more areas and are used 
+are holes inside the area, and can consist of one or more areas. They are used 
 internally to maintain correct topology for areas.
 
 <p>
@@ -226,7 +226,7 @@ To bulk process attributes, it is recommended to use SQL
 The module <a href="v.in.region.html">v.in.region</a> saves the
 current region extents as a vector area.
 
-Split vector lines can be changes to polylines by
+Split vector lines can be converted to polylines by
 <a href="v.build.polylines.html">v.build.polylines</a>. Long lines can be
 split by <a href="v.split.html">v.split</a> and
 <a href="v.segment.html">v.segment</a>.
@@ -368,10 +368,10 @@ from outlier detection).
 <h3>See also</h3>
 
 <ul>
-  <li><a href="rasterintro.html">Introduction into raster data processing</a></li>
-  <li><a href="raster3dintro.html">Introduction into 3D raster data (voxel) processing</a></li>
-  <li><a href="vectorintro.html">Introduction into vector data processing</a></li>
-  <li><a href="imageryintro.html">Introduction into image processing</a></li>
-  <li><a href="databaseintro.html">Database management</a></li>
+  <li><a href="databaseintro.html">Introduction to database management</a></li>
+  <li><a href="rasterintro.html">Introduction to raster data processing</a></li>
+  <li><a href="raster3dintro.html">Introduction to 3D raster data (voxel) processing</a></li>
+  <li><a href="vectorintro.html">Introduction to vector data processing</a></li>
+  <li><a href="imageryintro.html">Introduction to image processing</a></li>
   <li><a href="projectionintro.html">Projections and spatial transformations</a></li>
 </ul>
