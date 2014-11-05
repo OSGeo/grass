@@ -44,10 +44,16 @@ def normalize_whitespace(text):
 
 def split(s):
     """Platform spefic shlex.split"""
-    if sys.platform == "win32":
-        return shlex.split(s.replace('\\', r'\\'))
-    else:
-        return shlex.split(s)
+    try:
+        if sys.platform == "win32":
+            return shlex.split(s.replace('\\', r'\\'))
+        else:
+            print shlex.split(s)
+            return shlex.split(s)
+    except ValueError as e:
+        sys.stderr.write(_("Syntax error: %s") % e)
+    
+    return []
 
 def GetTempfile(pref=None):
     """Creates GRASS temporary file using defined prefix.
