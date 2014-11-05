@@ -197,16 +197,27 @@ def compute_relative_time_granularity(maps):
             >>> tgis.compute_relative_time_granularity(maps)
             2
 
+            >>> maps = []
+            >>> count = 0
+            >>> timelist = ((0,21),)
+            >>> for t in timelist:
+            ...   map = tgis.RasterDataset("a%i@P"%count)
+            ...   check = map.set_relative_time(t[0],t[1],"hours")
+            ...   if check:
+            ...     maps.append(map)
+            ...   count += 1
+            >>> tgis.compute_relative_time_granularity(maps)
+            21
+
     """
 
     # The interval time must be scaled to days resolution
     granularity = None
-
     delta = []
     # First we compute the timedelta of the intervals
     for map in maps:
         start, end = map.get_temporal_extent_as_tuple()
-        if start and end:
+        if (start == 0 or start) and end:
             t = abs(end - start)
             delta.append(int(t))
 
