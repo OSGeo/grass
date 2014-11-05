@@ -176,7 +176,12 @@ def main():
         output_strds = tgis.open_new_stds(output, "strds", temporal_type,
                                                                  title, description, semantic_type,
                                                                  dbif, gcore.overwrite())
-        tgis.register_map_object_list("rast", output_list,  output_strds,  register_null,  
+        if register_null: 
+            register_null=False 
+        else: 
+            register_null=True
+        
+        tgis.register_map_object_list("rast", output_list,  output_strds, register_null,  
                                                        sp.get_relative_time_unit(),  dbif)
 
         # Update the raster metadata table entries with aggregation type
