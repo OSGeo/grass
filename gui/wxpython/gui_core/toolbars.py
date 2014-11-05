@@ -262,8 +262,8 @@ class BaseToolbar(wx.ToolBar):
             bitmap = wx.Bitmap(name = arrowPath)
         else:
             bitmap = wx.ArtProvider.GetBitmap(id = wx.ART_MISSING_IMAGE, client = wx.ART_TOOLBAR)
-        button =  wx.BitmapButton(parent = self, id = wx.ID_ANY, size = ((-1, self.GetSize()[1])),
-                                  bitmap = bitmap, style = wx.NO_BORDER)
+        button =  wx.BitmapButton(parent=self, id=wx.ID_ANY, size=((-1, self.GetToolSize()[1])),
+                                  bitmap=bitmap, style=wx.NO_BORDER)
         button.SetToolTipString(tooltip)
 
         return button
