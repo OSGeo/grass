@@ -964,7 +964,7 @@ class GMFrame(wx.Frame):
         
                 dispId = 1
                 for display in self.GetMapDisplay(onlyCurrent = False):
-                    display.SetTitle(dispId) # TODO: signal ?
+                    display.SetTitleNumber(dispId) # TODO: signal ?
                     dispId += 1 
         
     def OnChangeCWD(self, event=None, cmd=None):
@@ -1481,10 +1481,9 @@ class GMFrame(wx.Frame):
             name = dlg.GetValue()
             self.notebookLayers.SetPageText(page = self.currentPageNum, text = name)
             mapdisplay = self.GetMapDisplay()
-            mapdisplay.SetTitle(_("GRASS GIS %(version) Map Display: %(name)s - Location: %(loc)s") % \
-                                    { 'version' : grass.version()['version'],
-                                      'name' : name,
-                                      'loc' : grass.gisenv()["LOCATION_NAME"] })
+            mapdisplay.SetTitle(_("GRASS GIS {version} Map Display: {name} - Location: {loc}").format(
+                                 version=grass.version()['version'], name=name,
+                                 loc=grass.gisenv()["LOCATION_NAME"]))
         dlg.Destroy()
         
     def OnRasterRules(self, event):

@@ -175,7 +175,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                    lmgr = self.lmgr, page = self.treepg,
                                    Map = self.Map)
         
-        self.mapdisplay.SetTitle(self.displayIndex + 1)
+        self.mapdisplay.SetTitleNumber(self.displayIndex + 1)
         
         # show new display
         if showMapDisplay is True:
