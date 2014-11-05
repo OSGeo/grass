@@ -189,6 +189,7 @@ class VDigitCategoryDialog(wx.Dialog, listmix.ColumnSorterMixin):
         btnOk.Bind(wx.EVT_BUTTON, self.OnOK)
         btnAddCat.Bind(wx.EVT_BUTTON, self.OnAddCat)
         btnCancel.Bind(wx.EVT_BUTTON, self.OnCancel)
+        self.Bind(wx.EVT_CLOSE, lambda evt: self.Hide())
                                      
         # list
         self.list.Bind(wx.EVT_COMMAND_RIGHT_CLICK, self.OnRightUp) #wxMSW
