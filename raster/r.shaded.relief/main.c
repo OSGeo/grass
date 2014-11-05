@@ -112,9 +112,7 @@ int main(int argc, char *argv[])
     parm.elevation = G_define_standard_option(G_OPT_R_INPUT);
 
     parm.relief = G_define_standard_option(G_OPT_R_OUTPUT);
-    parm.relief->required = NO;
     parm.relief->label = _("Name for output shaded relief map");
-    parm.relief->description = _("Default: <input_map>.shade");
 
     parm.altitude = G_define_option();
     parm.altitude->key = "altitude";
@@ -123,6 +121,7 @@ int main(int argc, char *argv[])
     parm.altitude->answer = "30";
     parm.altitude->options = "0-90";
     parm.altitude->description = _("Altitude of the sun in degrees above the horizon");
+    parm.altitude->guisection = _("Sun position");
 
     parm.azimuth = G_define_option();
     parm.azimuth->key = "azimuth";
@@ -132,6 +131,7 @@ int main(int argc, char *argv[])
     parm.azimuth->options = "0-360";
     parm.azimuth->description =
 	_("Azimuth of the sun in degrees to the east of north");
+    parm.azimuth->guisection = _("Sun position");
 
     parm.zmult = G_define_option();
     parm.zmult->key = "zmult";
