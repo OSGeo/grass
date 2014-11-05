@@ -17,7 +17,7 @@ class TestUnregister(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        """!Initiate the temporal GIS and set the region
+        """Initiate the temporal GIS and set the region
         """
         tgis.init()
         cls.use_temp_region()
