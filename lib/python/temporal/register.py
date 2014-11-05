@@ -488,8 +488,9 @@ def register_map_object_list(type,  map_list, output_stds,
             if map.is_in_db(dbif):
                 map.delete(dbif)
             mod = copy.deepcopy(g_remove)
-            mod(type='rast', name=map.get_name())
-            mod.run()
+            if map.get_name():
+                mod(type='rast', name=map.get_name())
+                mod.run()
 
     if connected:
         dbif.close()
