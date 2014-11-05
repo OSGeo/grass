@@ -240,7 +240,7 @@ class MapFrame(SingleMapFrame):
     def GetMapWindow(self):
         return self.MapWindow
 
-    def SetTitle(self, displayId = 1):
+    def SetTitleNumber(self, displayId=1):
         """Set map display title"""
         try:
             grassVersion = grass.version()['version']
@@ -255,7 +255,7 @@ class MapFrame(SingleMapFrame):
              'loc': gisenv["LOCATION_NAME"],
              'mapset': gisenv["MAPSET"]}
 
-        super(MapFrame, self).SetTitle(title)
+        self.SetTitle(title)
 
     def _addToolbarVDigit(self):
         """Add vector digitizer toolbar
