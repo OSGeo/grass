@@ -27,12 +27,12 @@ class TestUnregister(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """!Remove the temporary region
+        """Remove the temporary region
         """
         cls.del_temp_region()
 
     def setUp(self):
-        """Create input data for transient groundwater flow computation
+        """Create input data
         """
         self.runModule("r.mapcalc", expression="a1 = 100",  overwrite=True)
         self.runModule("r.mapcalc", expression="a2 = 200",  overwrite=True)
@@ -62,8 +62,8 @@ class TestUnregister(TestCase):
         self.runModule("g.remove", type="rast",  
                                    name="a1,a2,a3,a4,a5,a6")
 
-    def test_selection(self):
-        """Perform a simple selection by datetime"""
+    def test_1(self):
+        """Perform several unregistration operations"""
         
         # Prepare some strings for the tests
         new_line = os.linesep
