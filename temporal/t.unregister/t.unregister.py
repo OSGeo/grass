@@ -151,7 +151,11 @@ def main():
     grass.percent(num_maps, num_maps, 1)
 
     # Update space time datasets
-    grass.message(_("Unregister maps from space time dataset(s)"))
+    if input:
+        grass.message(_("Unregister maps from space time dataset <%s>"%(input)))
+    else:
+        grass.message(_("Unregister maps from the temporal database"))
+
     if input:
         sp.update_from_registered_maps(dbif)
         sp.update_command_string(dbif=dbif)
