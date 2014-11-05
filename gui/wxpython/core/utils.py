@@ -48,7 +48,6 @@ def split(s):
         if sys.platform == "win32":
             return shlex.split(s.replace('\\', r'\\'))
         else:
-            print shlex.split(s)
             return shlex.split(s)
     except ValueError as e:
         sys.stderr.write(_("Syntax error: %s") % e)
