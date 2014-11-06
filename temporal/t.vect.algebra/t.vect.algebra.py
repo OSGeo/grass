@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:       t.vect.mapcalc
+# MODULE:       t.vect.algebra
 # AUTHOR(S):    Thomas Leppelt, Soeren Gebbert
 #
 # PURPOSE:      Provide temporal vector algebra to perform spatial an temporal operations

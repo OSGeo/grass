@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../../
 
-PGM = t.rast3d.mapcalc2
+PGM = t.rast3d.algebra
 
 include $(MODULE_TOPDIR)/include/Make/Script.make
 
