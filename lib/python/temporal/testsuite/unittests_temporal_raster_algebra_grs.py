@@ -1,12 +1,10 @@
-"""Unit test to register raster maps with absolute and relative
-   time using tgis.register_maps_in_space_time_dataset()
-
-(C) 2013 by the GRASS Development Team
+"""
+(C) 2014 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Soeren Gebbert
+:authors: Soeren Gebbert and Thomas Leppelt
 """
 
 import datetime

@@ -167,7 +167,7 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
         msgr.percent(0, num_rows, 1)
 
         temporal_type, semantic_type, title, description = sp.get_initial_values()
-        new_sp = open_new_stds(output, type, sp.get_temporal_type(), title.
+        new_sp = open_new_stds(output, type, sp.get_temporal_type(), title, 
                                description, semantic_type, dbif,
                                gscript.overwrite())
 
