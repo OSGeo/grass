@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:       t.rast3d.mapcalc2
+# MODULE:       t.rast.algebra
 # AUTHOR(S):    Thomas Leppelt, Soeren Gebbert
 #
-# PURPOSE:      Provide temporal 3D raster algebra to perform spatial an temporal operations
+# PURPOSE:      Provide temporal raster algebra to perform spatial an temporal operations
 #               for space time datasets by topological relationships to other space time
 #               datasets.
 # COPYRIGHT:    (C) 2014 by the GRASS Development Team
@@ -17,7 +17,7 @@
 #############################################################################
 
 #%module
-#% description: Apply temporal and spatial operations on space time 3D raster datasets using temporal raster algebra.
+#% description: Apply temporal and spatial operations on space time raster datasets using temporal raster algebra.
 #% keywords: temporal
 #% keywords: algebra
 #%end
@@ -25,7 +25,7 @@
 #%option
 #% key: expression
 #% type: string
-#% description: r3.mapcalc expression for temporal and spatial analysis of space time 3D raster datasets
+#% description: r.mapcalc expression for temporal and spatial analysis of space time raster datasets
 #% required : yes
 #%end
 
@@ -40,7 +40,7 @@
 #%option
 #% key: nprocs
 #% type: integer
-#% description: Number of r3.mapcalc processes to run in parallel
+#% description: Number of r.mapcalc processes to run in parallel
 #% required: no
 #% multiple: no
 #% answer: 1
@@ -74,11 +74,11 @@ def main():
         import ply.yacc as yacc
     except:
         grass.script.fatal(_("Please install PLY (Lex and Yacc Python implementation) to use the temporal algebra modules. "
-                             "You can use t.rast3d.mapcalc that provides a limited but useful alternative to "
-                             "t.rast3d.mapcalc2 without PLY requirement."))
+                             "You can use t.rast.mapcalc that provides a limited but useful alternative to "
+                             "t.rast.mapcalc2 without PLY requirement."))
 
     tgis.init(True)
-    p = tgis.TemporalRaster3DAlgebraParser(run = True, debug=False, spatial = spatial, nprocs = nprocs, register_null = register_null)
+    p = tgis.TemporalRasterAlgebraParser(run = True, debug=False, spatial = spatial, nprocs = nprocs, register_null = register_null)
     p.parse(expression, basename, grass.script.overwrite())
 
 if __name__ == "__main__":
