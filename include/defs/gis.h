@@ -64,6 +64,10 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#ifndef RELDIR
+#define RELDIR "?"
+#endif
+
 /* adj_cellhd.c */
 void G_adjust_Cell_head(struct Cell_head *, int, int);
 void G_adjust_Cell_head3(struct Cell_head *, int, int, int);
