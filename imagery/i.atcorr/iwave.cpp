@@ -3231,7 +3231,7 @@ void IWave::print()
 	string(" vgt1 spot4 MIR  "),
 	string(" vgt2 spot5 0    "), string(" vgt2 spot5 2    "), string(" vgt2 spot5 3    "),
 	string(" vgt2 spot5 MIR  "), string(" worldview 2 pan  "), string(" worldview 2 coastal blue"),
-	string(" worldview 2 blue "), string(" worldview 2 blue "), string(" worldview 2 green"),
+	string(" worldview 2 blue "),  string(" worldview 2 green"),
 	string(" worldview 2 yellow"), string(" worldview 2 red"), string(" worldview 2 red edge"),
 	string(" worldview 2 nir1"), string(" worldview 2 nir2"), string(" quickbird 2 pan"),
 	string(" quickbird 2 blue"), string(" quickbird 2 green"), string(" quickbird 2 red"),
