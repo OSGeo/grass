@@ -370,10 +370,14 @@ def vector_what(map, coord, distance=0.0, ttype=None, encoding=None):
         except ImportError:
             orderedDict = dict
 
+    kwargs = {}
     if encoding:
-        result = json.loads(ret, object_pairs_hook=orderedDict, encoding=encoding)
-    else:
-        result = json.loads(ret, object_pairs_hook=orderedDict)
+        kwargs['encoding'] = encoding
+
+    if sys.version_info[0:2] > (2, 6):
+        kwargs['object_pairs_hook'] = orderedDict
+
+    result = json.loads(ret, **kwargs)
 
     for vmap in result['Maps']:
         cats = vmap.pop('Categories', None)
