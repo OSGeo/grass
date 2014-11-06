@@ -495,9 +495,30 @@ def compute_absolute_time_granularity(maps):
 
 ###############################################################################
 
+def compute_common_relative_time_granularity(gran_list):
+	"""Compute the greatest common granule from a list of relative time granules
+    
+        .. code-block:: python
+
+            >>> import grass.temporal as tgis
+            >>> tgis.init()
+            >>> grans = [1,2,30]
+            >>> tgis.compute_common_relative_time_granularity(grans)
+            1
+            
+            >>> import grass.temporal as tgis
+            >>> tgis.init()
+            >>> grans = [10,20,30]
+            >>> tgis.compute_common_relative_time_granularity(grans)
+            10
+    """
+	return gcd_list(gran_list)
+
+###############################################################################
+
 def compute_common_absolute_time_granularity(gran_list):
     """Compute the greatest common granule from a list of absolute time granules
-    
+
         .. code-block:: python
 
             >>> import grass.temporal as tgis
