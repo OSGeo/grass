@@ -232,7 +232,8 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                             map_i.map_value.append(gvar)
                         else:
                             map_i.map_value = gvar
-                    resultdict[map_i.get_id()] = map_i
+                    # Use unique identifier, since map names may be equal
+                    resultdict[map_i.uid] = map_i
         resultlist = resultdict.values()
         
         # Sort list of maps chronological.
