@@ -1427,8 +1427,8 @@ class BarscalesComboBox(PictureComboBox):
 class NArrowsComboBox(PictureComboBox):
     """ComboBox with north arrows for d.barscale."""
     def _getPath(self, name):
-        path = os.path.join(os.getenv("GISBASE"), "etc", "gui", "images",
-                                      'symbols', 'n_arrows')
+        path = os.path.join(os.getenv("GISBASE"), "gui", "images",
+                            'symbols', 'n_arrows')
         try:
             int(name[0])
             return os.path.join(path, 'n_arrow{name}.png'.format(name=name))
