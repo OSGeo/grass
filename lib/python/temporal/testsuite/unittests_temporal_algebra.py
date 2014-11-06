@@ -348,38 +348,5 @@ class TestTemporalAlgebra(grass.gunittest.TestCase):
         self.assertEqual( D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'1 day')
 
-    def test_common_granularity(self):
-        """Testing the common granularity function. """
-        ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ret = ta.setup_common_granularity(expression='R = A : B')
-
-        self.assertEqual(ret, True)
-        self.assertEqual(ta.granularity, "1 days")
-
-        ta.count = 0
-        ta.stdstype = "strds"
-        ta.maptype = "rast"
-        ta.mapclass = tgis.RasterDataset
-
-        maplist = ta.check_stds("A")
-        self.assertEqual(len(maplist), 4)
-        maplist = ta.check_stds("B")
-        self.assertEqual(len(maplist), 4)
-
-        ta.parse(expression='R = A : B', basename="r", overwrite=True)
-
-        D = tgis.open_old_stds("R", type="strds")
-        D.select()
-        self.assertEqual(D.metadata.get_number_of_maps(), 4)
-        self.assertEqual(D.metadata.get_min_min(), 1) 
-        self.assertEqual(D.metadata.get_max_max(), 4) 
-        start, end = D.get_absolute_time()
-        self.assertEqual(start, datetime.datetime(2001, 1, 1))
-        self.assertEqual(end, datetime.datetime(2001, 1, 5))
-        self.assertEqual( D.check_temporal_topology(),  True)
-        self.assertEqual(D.get_granularity(),  u'1 day')
-
-       
-
 if __name__ == '__main__':
     grass.gunittest.test()

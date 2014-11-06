@@ -231,7 +231,8 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                             map_i.map_value.append(gvar)
                         else:
                             map_i.map_value = gvar
-                    resultdict[map_i.get_id()] = map_i
+                    # Use unique identifier, since map names may be equal
+                    resultdict[map_i.uid] = map_i
         resultlist = resultdict.values()
         
         # Sort list of maps chronological.
@@ -422,7 +423,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                                 # Conditional append of module command.
                                 map_new.cmd_list = cmdstring
                             # Write map object to result dictionary.
-                            resultdict[map_new.get_id()] = map_new
+                            resultdict[map_new.uid] = map_new
                     if returncode == 0:
                         break
             # Append map to result map list.

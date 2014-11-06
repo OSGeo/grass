@@ -377,7 +377,6 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None,
         if end:
             end_time = string_to_datetime(end)
             if end_time is None:
-                dbif.close()
                 msgr.fatal(_("Unable to convert string \"%s\"into a "
                              "datetime object") % (end))
 

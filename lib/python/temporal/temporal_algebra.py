@@ -689,7 +689,7 @@ class TemporalAlgebraParser(object):
         if self.dbif.connected:
             self.dbif.close()
             
-    def setup_common_granularity(self,  expression,  stdstype = 'strds'):
+    def setup_common_granularity(self,  expression,  stdstype = 'strds',  lexer = None):
         """Configure the temporal algebra to use the common granularity of all
              space time datasets in the expression to generate the map lists.
              
@@ -702,32 +702,49 @@ class TemporalAlgebraParser(object):
              
              :param expression: The algebra expression to analyze
              
+             :param lexer: The temporal algebra lexer (select, raster, voxel, vector) that should be used to
+                                    parse the expression, default is TemporalAlgebraLexer
+             
              :return: True if successful, False otherwise
+             
+             :TODO: Check for tmap and map functions in the expression to avoid
+                         problems with map names that are handled as STDS
         """
-        
+        l = lexer
         # Split the expression to ignore the left part
-        expression = expression.split("=")[1]
-        
+        expressions = expression.split("=")[1:]
+        expression = " ".join(expressions)
+
         # detect all STDS
-        l = TemporalAlgebraLexer()
+        if l is None:
+            l = TemporalAlgebraLexer()
         l.build()
         l.lexer.input(expression)
         
-        self.name_list = []
-        ignore = False
+        name_list = []
+        tokens = []
         
+        count = 0
         while True:
             tok = l.lexer.token()
             if not tok: break
             
+            # Ignore map layer
+            tokens.append(tok.type)
+            ignore = False
+            if count > 1:
+                if tokens[count - 2] == "MAP" or tokens[count - 2] == "TMAP":
+                    ignore = True
+            
             if tok.type == "NAME" and ignore == False:
-                self.name_list.append(tok.value)
+                name_list.append(tok.value)
+            count += 1
         
         grans = []
         ttypes = {}
         dbif, connected = init_dbif(self.dbif)
         
-        for name in self.name_list:
+        for name in name_list:
             stds = open_old_stds(name,  stdstype,  dbif)
             # We need valid temporal topology
             if stds.check_temporal_topology() is False:
@@ -803,6 +820,8 @@ class TemporalAlgebraParser(object):
         if not rename:
             name = base_map.get_id()
             map_new.set_id(name)
+        # Make sure to set the uid that is used in several dictionaries
+        map_new.uid = name
         return map_new
 
     def overlay_map_extent(self, mapA, mapB, bool_op = None, temp_op = 'l',
@@ -973,7 +992,6 @@ class TemporalAlgebraParser(object):
                         # Ignore gap objects
                         if entry[0].get_id() is not None:
                             maplist.append(entry[0])
-                    print maplist
                 else:
                     maplist = stds.get_registered_maps_as_objects(dbif=self.dbif)
                 # Create map_value as empty list item.
@@ -1013,6 +1031,14 @@ class TemporalAlgebraParser(object):
                     map_i.condition_value = []
         else:
             self.msgr.fatal(_("Wrong type of input"))
+            
+        # We generate a unique map id that will be used
+        # in the topology analysis, since the maplist can 
+        # contain maps with equal map ids 
+        for map in maplist:
+            map.uid = self.generate_map_name()
+            if self.debug:
+                print map.get_name(), map.uid,  map.get_temporal_extent_as_tuple()
         
         return(maplist)
 
@@ -1049,8 +1075,10 @@ class TemporalAlgebraParser(object):
               >>> for i in range(10):
               ...     idA = "a%i@B"%(i)
               ...     mapA = tgis.RasterDataset(idA)
+              ...     mapA.uid = idA
               ...     idB = "b%i@B"%(i)
               ...     mapB = tgis.RasterDataset(idB)
+              ...     mapB.uid = idB
               ...     check = mapA.set_relative_time(i, i + 1, "months")
               ...     check = mapB.set_relative_time(i, i + 1, "months")
               ...     mapsA.append(mapA)
@@ -1080,8 +1108,10 @@ class TemporalAlgebraParser(object):
               >>> for i in range(10):
               ...     idA = "a%i@B"%(i)
               ...     mapA = tgis.RasterDataset(idA)
+              ...     mapA.uid = idA
               ...     idB = "b%i@B"%(i)
               ...     mapB = tgis.RasterDataset(idB)
+              ...     mapB.uid = idB
               ...     check = mapA.set_relative_time(i, i + 1, "months")
               ...     check = mapB.set_relative_time(i, i + 2, "months")
               ...     mapsA.append(mapA)
@@ -1123,8 +1153,10 @@ class TemporalAlgebraParser(object):
               >>> for i in range(10):
               ...     idA = "a%i@B"%(i)
               ...     mapA = tgis.RasterDataset(idA)
+              ...     mapA.uid = idA
               ...     idB = "b%i@B"%(i)
               ...     mapB = tgis.RasterDataset(idB)
+              ...     mapB.uid = idB
               ...     check = mapA.set_relative_time(i, i + 1, "months")
               ...     check = mapB.set_relative_time(i, i + 1, "months")
               ...     mapB.map_value = True
@@ -1136,9 +1168,11 @@ class TemporalAlgebraParser(object):
               >>> for i in range(10):
               ...     idA = "a%i@B"%(i)
               ...     mapA = tgis.RasterDataset(idA)
+              ...     mapA.uid = idA
               ...     mapA.map_value = True
               ...     idB = "b%i@B"%(i)
               ...     mapB = tgis.RasterDataset(idB)
+              ...     mapB.uid = idB
               ...     mapB.map_value = False
               ...     check = mapA.set_absolute_time(datetime(2000,1,i+1),
               ...             datetime(2000,1,i + 2))
@@ -1201,7 +1235,8 @@ class TemporalAlgebraParser(object):
                             map_i.map_value.append(gvar)
                         else:
                             map_i.map_value = gvar
-                    resultdict[map_i.get_id()] = map_i
+                    # Use unique identifier, since map names may be equal
+                    resultdict[map_i.uid] = map_i
         resultlist = resultdict.values()
         
         # Sort list of maps chronological.
@@ -1335,8 +1370,10 @@ class TemporalAlgebraParser(object):
               >>> for i in range(10):
               ...     idA = "a%i@B"%(i)
               ...     mapA = tgis.RasterDataset(idA)
+              ...     mapA.uid = idA
               ...     idB = "b%i@B"%(i)
               ...     mapB = tgis.RasterDataset(idB)
+              ...     mapB.uid = idB
               ...     check = mapA.set_relative_time(i, i + 1, "months")
               ...     check = mapB.set_relative_time(i + 5, i + 6, "months")
               ...     mapsA.append(mapA)
@@ -1407,8 +1444,10 @@ class TemporalAlgebraParser(object):
               >>> for i in range(10):
               ...     idA = "a%i@B"%(i)
               ...     mapA = tgis.RasterDataset(idA)
+              ...     mapA.uid = idA
               ...     idB = "b%i@B"%(i)
               ...     mapB = tgis.RasterDataset(idB)
+              ...     mapB.uid = idB
               ...     check = mapA.set_relative_time(i, i + 1, "months")
               ...     check = mapB.set_relative_time(i*2, i*2 + 2, "months")
               ...     mapsA.append(mapA)
@@ -1519,6 +1558,7 @@ class TemporalAlgebraParser(object):
               >>> for i in range(1):
               ...     idA = "a%i@B"%(i)
               ...     mapA = tgis.RasterDataset(idA)
+              ...     mapA.uid = idA
               ...     check = mapA.set_absolute_time(datetime.datetime(2000,1,1),
               ...             datetime.datetime(2000,10,1))
               ...     tfuncdict = l.get_temporal_func_dict(mapA)
