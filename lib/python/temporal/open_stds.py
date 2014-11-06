@@ -37,6 +37,8 @@ def open_old_stds(name, type, dbif=None):
        :param type: The type of the space time dataset (strd, str3ds, stvds,
                     raster, vector, raster3d)
        :param dbif: The optional database interface to be used
+       
+       :return: New stds object
 
     """
     mapset = get_current_mapset()

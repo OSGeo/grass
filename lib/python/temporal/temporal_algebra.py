@@ -683,10 +683,72 @@ class TemporalAlgebraParser(object):
         self.m_mremove = pymod.Module('g.remove')
         self.m_copy = pymod.Module('g.copy')
         self.nprocs = nprocs
+        self.use_granularity = False
 
     def __del__(self):
         if self.dbif.connected:
             self.dbif.close()
+            
+    def setup_common_granularity(self,  expression,  stdstype = 'strds'):
+        """Configure the temporal algebra to use the common granularity of all
+             space time datasets in the expression to generate the map lists.
+             
+             This function will analyze the expression to detect space time datasets
+             and computes are common granularity  from all granularities.
+          
+             This granularity is then be used to generate the map lists. Hence, all
+             maps from all STDS will have equidistant temporal extents. The only meaningful
+             temporal relation is "equal".
+             
+             :param expression: The algebra expression to analyze
+             
+             :return: True if successful, False otherwise
+        """
+        
+        # Split the expression to ignore the left part
+        expression = expression.split("=")[1]
+        
+        # detect all STDS
+        l = TemporalAlgebraLexer()
+        l.build()
+        l.lexer.input(expression)
+        
+        self.name_list = []
+        ignore = False
+        
+        while True:
+            tok = l.lexer.token()
+            if not tok: break
+            
+            if tok.type == "NAME" and ignore == False:
+                self.name_list.append(tok.value)
+        
+        grans = []
+        ttypes = {}
+        dbif, connected = init_dbif(self.dbif)
+        
+        for name in self.name_list:
+            stds = open_old_stds(name,  stdstype,  dbif)
+            # We need valid temporal topology
+            if stds.check_temporal_topology() is False:
+                return False
+
+            grans.append(stds.get_granularity())
+            ttypes[stds.get_temporal_type()] = stds.get_temporal_type()
+        
+        # Only one temporal type is allowed
+        if len(ttypes) > 1:
+            return False
+            
+        # Compute the common granularity
+        if "absolute" in ttypes.keys():
+            self.granularity = compute_common_absolute_time_granularity(grans)
+        else:
+            self.granularity = compute_common_relative_time_granularity(grans)
+            
+        self.use_granularity = True
+        
+        return True
 
     def parse(self, expression, stdstype = 'strds', maptype = 'rast',  mapclass = RasterDataset, basename = None, overwrite=False):
         self.lexer = TemporalAlgebraLexer()
@@ -903,7 +965,17 @@ class TemporalAlgebraParser(object):
             else:
                 # Select temporal dataset entry from database.
                 stds.select(dbif=self.dbif)
-                maplist = stds.get_registered_maps_as_objects(dbif=self.dbif)
+                if self.use_granularity:
+                    # We create the maplist out of the map array from none-gap objects
+                    maplist = []
+                    map_array = stds.get_registered_maps_as_objects_by_granularity(gran=self.granularity,  dbif=self.dbif)
+                    for entry in map_array:
+                        # Ignore gap objects
+                        if entry[0].get_id() is not None:
+                            maplist.append(entry[0])
+                    print maplist
+                else:
+                    maplist = stds.get_registered_maps_as_objects(dbif=self.dbif)
                 # Create map_value as empty list item.
                 for map_i in maplist:
                     if "map_value" not in dir(map_i):
