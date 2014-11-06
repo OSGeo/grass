@@ -78,19 +78,19 @@ t.register -i type=vect input=P3 file=vinput3_point_test.txt increment="3 days" 
 t.register -i type=vect input=P4 file=vinput4_point_test.txt increment="3 days" start="2013-01-10"
 
 # Test different options.
-t.vect.mapcalc expression='B1 = A1 & A2' basename="bmap1"
+t.vect.algebra expression='B1 = A1 & A2' basename="bmap1"
 t.vect.list input=B1 column=name,start_time,end_time
-t.vect.mapcalc expression='B2 = A1 {equal|during,+&} A3' basename="bmap2"
+t.vect.algebra expression='B2 = A1 {+,equal|during,i} A3' basename="bmap2"
 t.vect.list input=B2 column=name,start_time,end_time
-t.vect.mapcalc expression='B3 = buff_p(P1,10)' basename="bmap3"
+t.vect.algebra expression='B3 = buff_p(P1,10)' basename="bmap3"
 t.vect.list input=B3 column=name,start_time,end_time
-t.vect.mapcalc expression='B4 = buff_p(P2,30) {equal|during,|^} A4' basename="bmap4"
+t.vect.algebra expression='B4 = buff_p(P2,30) {|,equal|during} A4' basename="bmap4"
 t.vect.list input=B4 column=name,start_time,end_time
-t.vect.mapcalc expression='B5 = if(td(A1) == 1 || start_date() >= "2010-01-10", A2)' basename="bmap5"
+t.vect.algebra expression='B5 = if(td(A1) == 1 || start_date(A1) >= "2010-01-10", A2)' basename="bmap5"
 t.vect.list input=B5 column=name,start_time,end_time
-t.vect.mapcalc expression='B6 = buff_p(P2,30) {equal|during|started,&^} buff_p(P3,30)' basename="bmap6"
+t.vect.algebra expression='B6 = buff_p(P2,30) {&,equal|during|started,d} buff_p(P3,30)' basename="bmap6"
 t.vect.list input=B6 column=name,start_time,end_time
-t.vect.mapcalc expression='B7 = buff_p(P2,30) {starts,&^} buff_p(P3,30)' basename="bmap7"
+t.vect.algebra expression='B7 = buff_p(P2,30) {&,starts,d} buff_p(P3,30)' basename="bmap7"
 t.vect.list input=B8 column=name,start_time,end_time
-t.vect.mapcalc expression='B8 = buff_p(P2,30) {starts,|^} buff_p(P3,30)' basename="bmap8"
+t.vect.algebra expression='B8 = buff_p(P2,30) {|,starts,d} buff_p(P3,30)' basename="bmap8"
 t.vect.list input=B8 column=name,start_time,end_time
