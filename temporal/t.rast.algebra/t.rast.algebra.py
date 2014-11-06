@@ -56,6 +56,11 @@
 #% description: Register Null maps
 #%end
 
+#%flag
+#% key: g
+#% description: Use granularity sampling instead of the temporal topology approach
+#%end
+
 
 import grass.script
 import grass.temporal as tgis
@@ -67,6 +72,7 @@ def main():
     nprocs = options["nprocs"]
     spatial = flags["s"]
     register_null = flags["n"]
+    granularity = flags["g"]
 
     # Check for PLY istallation
     try:
@@ -75,10 +81,14 @@ def main():
     except:
         grass.script.fatal(_("Please install PLY (Lex and Yacc Python implementation) to use the temporal algebra modules. "
                              "You can use t.rast.mapcalc that provides a limited but useful alternative to "
-                             "t.rast.mapcalc2 without PLY requirement."))
+                             "t.rast.algebra without PLY requirement."))
 
     tgis.init(True)
     p = tgis.TemporalRasterAlgebraParser(run = True, debug=False, spatial = spatial, nprocs = nprocs, register_null = register_null)
+    
+    if granularity:
+        p.setup_common_granularity(expression=expression,  lexer = tgis.TemporalRasterAlgebraLexer())
+    
     p.parse(expression, basename, grass.script.overwrite())
 
 if __name__ == "__main__":
