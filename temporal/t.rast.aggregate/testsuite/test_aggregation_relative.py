@@ -19,6 +19,7 @@ class TestUnregister(TestCase):
     def setUpClass(cls):
         """Initiate the temporal GIS and set the region
         """
+        os.putenv("GRASS_OVERWRITE",  "1")
         tgis.init()
         cls.use_temp_region()
         cls.runModule("g.region",  s=0,  n=80,  w=0,  e=120,  b=0,  
