@@ -21,6 +21,7 @@ SUBDIRS = \
 	t.rast.univar \
 	t.rast.list \
 	t.rast.mapcalc \
+	t.rast.algebra \
 	t.rast.neighbors \
 	t.rast.series \
 	t.rast.export \
@@ -31,6 +32,7 @@ SUBDIRS = \
 	t.rast3d.list \
 	t.rast3d.extract \
 	t.rast3d.mapcalc \
+	t.rast3d.algebra \
 	t.rast3d.univar \
 	t.rename \
 	t.select \
@@ -40,7 +42,7 @@ SUBDIRS = \
 	t.vect.db.select \
 	t.vect.export \
 	t.vect.extract \
-	t.vect.mapcalc \
+	t.vect.algebra \
 	t.vect.import \
 	t.vect.what.strds \
 	t.vect.observe.strds \
