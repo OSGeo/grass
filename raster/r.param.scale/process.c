@@ -36,7 +36,8 @@ void process(void)
 	/* raster row, each element is of type  */
 	/* DCELL        */
 	*window_ptr,		/* Stores local terrain window.         */
-	centre;			/* Elevation of central cell in window. */
+	centre,			/* Elevation of central cell in window. */
+	*window_cell;		/* Stores last read cell in window. */
 
     CELL *featrow_out = NULL;	/* store features in CELL */
 
@@ -55,7 +56,7 @@ void process(void)
       temp;			/* Unused */
 
     double *weight_ptr;		/* Weighting matrix for observed values. */
-
+    int found_null;             /* If null was found among window cells  */
 
     /*--------------------------------------------------------------------------*/
     /*                     GET RASTER AND WINDOW DETAILS                        */
@@ -86,10 +87,14 @@ void process(void)
     row_in = (DCELL *) G_malloc(ncols * sizeof(DCELL) * wsize);
     /* Reserve `wsize' rows of memory.      */
 
-    if (mparam != FEATURE)
+    if (mparam != FEATURE) {
 	row_out = Rast_allocate_buf(DCELL_TYPE);	/* Initialise output row buffer.     */
-    else
+	Rast_set_d_null_value(row_out, ncols);
+    }
+    else {
 	featrow_out = Rast_allocate_buf(CELL_TYPE);	/* Initialise output row buffer.  */
+	Rast_set_c_null_value(featrow_out, ncols);
+    }
 
     window_ptr = (DCELL *) G_malloc(SQR(wsize) * sizeof(DCELL));
     /* Reserve enough memory for local wind. */
@@ -167,16 +172,41 @@ void process(void)
 	for (col = EDGE; col < (ncols - EDGE); col++) {
 	    /* Find central z value */
 	    centre = *(row_in + EDGE * ncols + col);
-
-	    for (wind_row = 0; wind_row < wsize; wind_row++)
-		for (wind_col = 0; wind_col < wsize; wind_col++)
+	    /* Test for no data and propagate */
+	    if (Rast_is_d_null_value(&centre)) {
+		if (mparam == FEATURE)
+		    Rast_set_c_null_value(featrow_out + col, 1);
+		else {
+		    Rast_set_d_null_value(row_out + col, 1);
+		}
+		continue;
+	    }
+	    found_null = FALSE;
+	    for (wind_row = 0; wind_row < wsize; wind_row++) {
+		if (found_null)
+		    break;
+		for (wind_col = 0; wind_col < wsize; wind_col++) {
 
 		    /* Express all window values relative   */
 		    /* to the central elevation.            */
+		    window_cell = row_in + (wind_row * ncols) + col + wind_col - EDGE;
+		    /* Test for no data and propagate */
+		    if (Rast_is_d_null_value(window_cell)) {
+			if (mparam == FEATURE)
+			    Rast_set_c_null_value(featrow_out + col, 1);
+			else {
+			    Rast_set_d_null_value(row_out + col, 1);
+			}
+			found_null = TRUE;
+			break;
+		    }
 		    *(window_ptr + (wind_row * wsize) + wind_col) =
-			*(row_in + (wind_row * ncols) + col + wind_col -
-			  EDGE) - centre;
+			*(window_cell) - centre;
+		}
+	    }
 
+	    if (found_null)
+		continue;
 
 	    /*--- Use LU back substitution to solve normal equations. ---*/
 	    find_obs(window_ptr, obs_ptr, weight_ptr);
@@ -225,6 +255,10 @@ void process(void)
 		    *(row_in + ((wind_row + 1) * ncols) + col);
     }
 
+    if (mparam != FEATURE)
+	Rast_set_d_null_value(row_out, ncols);
+    else
+	Rast_set_c_null_value(featrow_out, ncols);
     for (wind_row = 0; wind_row < EDGE; wind_row++) {
 	if (mparam != FEATURE)
 	    Rast_put_row(fd_out, row_out, DCELL_TYPE);	/* Write out the edge cells as NULL. */
