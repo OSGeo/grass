@@ -179,9 +179,10 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 		    fprintf(stdout, "East=%s\nNorth=%s\n", east_buf,
 			    north_buf);
 		}
-		else if (json){
-		    fprintf(stdout, "{\"Coordinates\": {\"East\": %s, \"North\": %s}", east_buf,
-			    north_buf);}
+		else if (json) {
+		    fprintf(stdout, "{\"Coordinates\": {\"East\": \"%s\", \"North\": \"%s\"}",
+			    east_buf, north_buf);
+		}
 		else {
 		    fprintf(stdout, "East: %s\nNorth: %s\n", east_buf,
 			    north_buf);
@@ -346,7 +347,6 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 			}
 		    }
 		}
-
 	    }
 	    else {
 		if (script) {
