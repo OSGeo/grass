@@ -10,7 +10,7 @@ Classes:
  - decorations::LegendController
  - decorations::TextLayerDialog
 
-(C) 2006-2013 by the GRASS Development Team
+(C) 2006-2014 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -18,9 +18,11 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
-import wx
 from core.utils import _
 
+import wx
+from wx.lib.expando import ExpandoTextCtrl, EVT_ETC_LAYOUT_NEEDED
+        
 from grass.pydispatch.signal import Signal
 try:
     from PIL import Image
@@ -288,17 +290,12 @@ class LegendController(OverlayController):
 
 
 class TextLayerDialog(wx.Dialog):
-
+    """!Controls setting options and displaying/hiding map overlay decorations
     """
-    Controls setting options and displaying/hiding map overlay decorations
-    """
+    def __init__(self, parent, ovlId, title, name='text', size=wx.DefaultSize,
+                 style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
 
-    def __init__(self, parent, ovlId, title, name='text',
-                 pos=wx.DefaultPosition, size=wx.DefaultSize,
-                 style=wx.DEFAULT_DIALOG_STYLE):
-
-        wx.Dialog.__init__(self, parent, wx.ID_ANY, title, pos, size, style)
-        from wx.lib.expando import ExpandoTextCtrl, EVT_ETC_LAYOUT_NEEDED
+        wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY, title=title, style=style, size=size)
 
         self.ovlId = ovlId
         self.parent = parent
@@ -320,7 +317,9 @@ class TextLayerDialog(wx.Dialog):
 
         self.sizer = wx.BoxSizer(wx.VERTICAL)
         box = wx.GridBagSizer(vgap=5, hgap=5)
-
+        box.AddGrowableCol(1)
+        box.AddGrowableRow(1)
+        
         # show/hide
         self.chkbox = wx.CheckBox(parent=self, id=wx.ID_ANY,
                                   label=_('Show text object'))
@@ -329,17 +328,14 @@ class TextLayerDialog(wx.Dialog):
         else:
             self.chkbox.SetValue(self.parent.MapWindow.overlays[self.ovlId]['layer'].IsActive())
         box.Add(item=self.chkbox, span=(1, 2),
-                flag=wx.ALIGN_LEFT | wx.ALL, border=5,
                 pos=(0, 0))
 
         # text entry
-        label = wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Enter text:"))
-        box.Add(item=label,
+        box.Add(item=wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Text:")),
                 flag=wx.ALIGN_CENTER_VERTICAL,
                 pos=(1, 0))
 
-        self.textentry = ExpandoTextCtrl(
-            parent=self, id=wx.ID_ANY, value="", size=(300, -1))
+        self.textentry = ExpandoTextCtrl(parent=self, id=wx.ID_ANY, value="", size=(300, -1))
         self.textentry.SetFont(self.currFont)
         self.textentry.SetForegroundColour(self.currClr)
         self.textentry.SetValue(self.currText)
@@ -347,11 +343,11 @@ class TextLayerDialog(wx.Dialog):
         self.textentry.SetClientSize((300, -1))
 
         box.Add(item=self.textentry,
+                flag=wx.EXPAND,
                 pos=(1, 1))
 
         # rotation
-        label = wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Rotation:"))
-        box.Add(item=label,
+        box.Add(item=wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Rotation:")),
                 flag=wx.ALIGN_CENTER_VERTICAL,
                 pos=(2, 0))
         self.rotation = wx.SpinCtrl(parent=self, id=wx.ID_ANY, value="", pos=(30, 50),
@@ -363,13 +359,16 @@ class TextLayerDialog(wx.Dialog):
                 pos=(2, 1))
 
         # font
+        box.Add(item=wx.StaticText(parent=self, id=wx.ID_ANY, label=_("Font:")),
+                flag=wx.ALIGN_CENTER_VERTICAL,
+                pos=(3, 0))
         fontbtn = wx.Button(parent=self, id=wx.ID_ANY, label=_("Set font"))
         box.Add(item=fontbtn,
                 flag=wx.ALIGN_RIGHT,
                 pos=(3, 1))
 
         self.sizer.Add(item=box, proportion=1,
-                       flag=wx.ALL, border=10)
+                       flag=wx.ALL | wx.EXPAND, border=10)
 
         # note
         box = wx.BoxSizer(wx.HORIZONTAL)
@@ -408,6 +407,8 @@ class TextLayerDialog(wx.Dialog):
         self.Bind(wx.EVT_TEXT,       self.OnText,       self.textentry)
         self.Bind(wx.EVT_SPINCTRL,   self.OnRotation,   self.rotation)
 
+        self.SetMinSize((400, 230))
+        
     def OnRefit(self, event):
         """!Resize text entry to match text"""
         self.sizer.Fit(self)
