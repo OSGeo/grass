@@ -14,6 +14,7 @@ List of classes:
  - base::TableListCtrl
  - base::LayerListCtrl
  - base::LayerBook
+ - base::FieldStatistics
 
 @todo Implement giface class
 
@@ -33,11 +34,13 @@ import locale
 import tempfile
 import copy
 import types
+import math
 
 from core import globalvar
 import wx
 import wx.lib.mixins.listctrl as listmix
 import wx.lib.flatnotebook    as FN
+import wx.lib.scrolledpanel as scrolled
 
 import grass.script as grass
 
@@ -76,7 +79,8 @@ class VirtualAttributeList(wx.ListCtrl,
         self.layer   = layer
         self.pages = pages
 
-        self.fieldCalc = None      
+        self.fieldCalc = None
+        self.fieldStats = None      
         self.columns = {} # <- LoadData()
         
         self.sqlFilter = {}
@@ -395,64 +399,66 @@ class VirtualAttributeList(wx.ListCtrl,
         
         popupMenu = wx.Menu()
 
-        if not hasattr (self, "popupID1"):
-            #TODO put to dict
-            self.popupID1 = wx.NewId()
-            self.popupID2 = wx.NewId()
-            self.popupID3 = wx.NewId()
-            self.popupID4 = wx.NewId()
-            self.popupID5 = wx.NewId()
-            self.popupID6 = wx.NewId()
-            self.popupID7 = wx.NewId()
-            self.popupID8 = wx.NewId()
-            self.popupID9 = wx.NewId()
-            self.popupID10 = wx.NewId()
-            self.popupID11 = wx.NewId()
-            self.popupID12 = wx.NewId()
-            self.popupID13 = wx.NewId()
-
-
-        popupMenu.Append(self.popupID1, text = _("Sort ascending"))
-        popupMenu.Append(self.popupID2, text = _("Sort descending"))
+        if not hasattr (self, "popupID"):
+            self.popupId = { 'sortAsc' : wx.NewId(),
+                             'sortDesc' : wx.NewId(),
+                             'calculate' : wx.NewId(),
+                             'area' : wx.NewId(),
+                             'length' : wx.NewId(),
+                             'compact' : wx.NewId(),
+                             'fractal' : wx.NewId(),
+                             'perimeter' : wx.NewId(),
+                             'ncats' : wx.NewId(),
+                             'slope' : wx.NewId(),
+                             'lsin' : wx.NewId(),
+                             'lazimuth' : wx.NewId(),
+                             'calculator' : wx.NewId(),
+                             'stats' : wx.NewId() }
+        
+        popupMenu.Append(self.popupId['sortAsc'], text = _("Sort ascending"))
+        popupMenu.Append(self.popupId['sortDesc'], text = _("Sort descending"))
         popupMenu.AppendSeparator()
         subMenu = wx.Menu()
-        popupMenu.AppendMenu(self.popupID3, _("Calculate (only numeric columns)"),
+        popupMenu.AppendMenu(self.popupId['calculate'], _("Calculate (only numeric columns)"),
                              subMenu)
-        popupMenu.Append(self.popupID13, text = _("Field calculator"))
-
+        popupMenu.Append(self.popupId['calculator'], text = _("Field calculator"))
+        popupMenu.AppendSeparator()
+        popupMenu.Append(self.popupId['stats'], text = _("Statistics"))
+        
         if not self.pages['manageTable']:
             popupMenu.AppendSeparator()
-            self.popupID14 = wx.NewId()
-            popupMenu.Append(self.popupID14, text = _("Add column"))
+            self.popupId['addCol'] = wx.NewId()
+            popupMenu.Append(self.popupId['addCol'], text = _("Add column"))
             if not self.dbMgrData['editable']:
-                popupMenu.Enable(self.popupID14, False)
+                popupMenu.Enable(self.popupId['addCol'], False)
 
         if not self.dbMgrData['editable']:
-            popupMenu.Enable(self.popupID13, False)
+            popupMenu.Enable(self.popupId['calculator'], False)
           
         if not self.dbMgrData['editable'] or \
                 self.columns[self.GetColumn(self._col).GetText()]['ctype'] not in (types.IntType, types.FloatType):
-            popupMenu.Enable(self.popupID3, False)
+            popupMenu.Enable(self.popupId['calculate'], False)
         
-        subMenu.Append(self.popupID4,  text = _("Area size"))
-        subMenu.Append(self.popupID5,  text = _("Line length"))
-        subMenu.Append(self.popupID6,  text = _("Compactness of an area"))
-        subMenu.Append(self.popupID7,  text = _("Fractal dimension of boundary defining a polygon"))
-        subMenu.Append(self.popupID8,  text = _("Perimeter length of an area"))
-        subMenu.Append(self.popupID9,  text = _("Number of features for each category"))
-        subMenu.Append(self.popupID10, text = _("Slope steepness of 3D line"))
-        subMenu.Append(self.popupID11, text = _("Line sinuousity"))
-        subMenu.Append(self.popupID12, text = _("Line azimuth"))
+        subMenu.Append(self.popupId['area'],  text = _("Area size"))
+        subMenu.Append(self.popupId['length'],  text = _("Line length"))
+        subMenu.Append(self.popupId['compact'],  text = _("Compactness of an area"))
+        subMenu.Append(self.popupId['fractal'],  text = _("Fractal dimension of boundary defining a polygon"))
+        subMenu.Append(self.popupId['perimeter'],  text = _("Perimeter length of an area"))
+        subMenu.Append(self.popupId['ncats'],  text = _("Number of features for each category"))
+        subMenu.Append(self.popupId['slope'], text = _("Slope steepness of 3D line"))
+        subMenu.Append(self.popupId['lsin'], text = _("Line sinuousity"))
+        subMenu.Append(self.popupId['lazimuth'], text = _("Line azimuth"))
         
-        self.Bind (wx.EVT_MENU, self.OnColumnSortAsc, id = self.popupID10)
-        self.Bind (wx.EVT_MENU, self.OnColumnSortDesc, id = self.popupID2)
-        self.Bind(wx.EVT_MENU, self.OnFiledCalculator, id = self.popupID13)
+        self.Bind (wx.EVT_MENU, self.OnColumnSortAsc,  id = self.popupId['sortAsc'])
+        self.Bind (wx.EVT_MENU, self.OnColumnSortDesc, id = self.popupId['sortDesc'])
+        self.Bind(wx.EVT_MENU, self.OnFieldCalculator, id = self.popupId['calculator'])
+        self.Bind(wx.EVT_MENU, self.OnFieldStatistics, id = self.popupId['stats'])
         if not self.pages['manageTable']:
-            self.Bind(wx.EVT_MENU, self.OnAddColumn, id = self.popupID14)
+            self.Bind(wx.EVT_MENU, self.OnAddColumn, id = self.popupId['addCol'])
 
-        for id in (self.popupID4, self.popupID5, self.popupID6,
-                   self.popupID7, self.popupID8, self.popupID9,
-                   self.popupID10, self.popupID11, self.popupID12):
+        for id in (self.popupId['area'], self.popupId['length'], self.popupId['compact'],
+                   self.popupId['fractal'], self.popupId['perimeter'], self.popupId['ncats'],
+                   self.popupId['slope'], self.popupId['lsin'], self.popupId['lazimuth']):
             self.Bind(wx.EVT_MENU, self.OnColumnCompute, id = id)
 
         self.PopupMenu(popupMenu)
@@ -481,23 +487,23 @@ class VirtualAttributeList(wx.ListCtrl,
         id = event.GetId()
         
         option = None
-        if id == self.popupID4:
+        if id == self.popupId['area']:
             option = 'area'
-        elif id == self.popupID5:
+        elif id == self.popupId['length']:
             option = 'length'
-        elif id == self.popupID6:
+        elif id == self.popupId['compact']:
             option = 'compact'
-        elif id == self.popupID7:
+        elif id == self.popupId['fractal']:
             option = 'fd'
-        elif id == self.popupID8:
+        elif id == self.popupId['perimeter']:
             option = 'perimeter'
-        elif id == self.popupID9:
+        elif id == self.popupId['ncats']:
             option = 'count'
-        elif id == self.popupID10:
+        elif id == self.popupId['slope']:
             option = 'slope'
-        elif id == self.popupID11:
+        elif id == self.popupId['lsin']:
             option = 'sinuous'
-        elif id == self.popupID12:
+        elif id == self.popupId['lazimuth']:
             option = 'azimuth'
         
         if not option:
@@ -523,7 +529,7 @@ class VirtualAttributeList(wx.ListCtrl,
             info.m_text = self.GetColumn(column).GetText()
             self.SetColumn(column, info)
         
-    def OnFiledCalculator(self, event):
+    def OnFieldCalculator(self, event):
         """!Calls SQLBuilderUpdate instance"""
         if not self.fieldCalc:
             self.fieldCalc = SQLBuilderUpdate(parent = self, id = wx.ID_ANY,
@@ -533,6 +539,20 @@ class VirtualAttributeList(wx.ListCtrl,
             self.fieldCalc.Show()
         else:
             self.fieldCalc.Raise()
+
+    def OnFieldStatistics(self, event):
+        """Calls FieldStatistics instance"""
+        if not self.fieldStats:
+            self.fieldStats = FieldStatistics(parent = self, id = wx.ID_ANY)
+            self.fieldStats.Show()
+        else:
+            self.fieldStats.Raise()
+
+        selLayer = self.dbMgrData['mapDBInfo'].layers[self.layer]
+        self.fieldStats.Update(driver = selLayer['driver'],
+                               database = selLayer['database'],
+                               table = selLayer['table'],
+                               column = self.GetColumn(self._col).GetText())
 
     def OnAddColumn(self, event):
         """!Add column into table"""
@@ -3353,3 +3373,146 @@ class LayerBook(wx.Notebook):
             self.mapDBInfo = self.parentDialog.dbMgrData['mapDBInfo']
 
         event.Skip()
+
+class FieldStatistics(wx.Frame):
+    def __init__(self, parent, id=wx.ID_ANY,
+                 style = wx.DEFAULT_FRAME_STYLE, **kwargs):
+        """Dialog to display and save statistics of field stats
+        """
+        self.parent = parent
+        wx.Frame.__init__(self, parent, id, style = style, **kwargs)
+        
+        self.SetTitle(_("Field statistics"))
+        self.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, 'grass_sql.ico'), wx.BITMAP_TYPE_ICO))
+
+        self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
+        
+        self.sp = scrolled.ScrolledPanel(parent=self.panel, id=wx.ID_ANY, size=(250, 150),
+                                         style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER, name="Statistics" )
+        self.text = wx.TextCtrl(parent=self.sp, id=wx.ID_ANY, style=wx.TE_MULTILINE|wx.TE_READONLY)
+        self.text.SetBackgroundColour("white")
+                
+        # buttons
+        self.btnClipboard = wx.Button(parent=self.panel, id = wx.ID_COPY)
+        self.btnClipboard.SetToolTipString(_("Copy statistics the clipboard (Ctrl+C)"))
+        self.btnCancel = wx.Button(parent=self.panel, id=wx.ID_CLOSE)
+        self.btnCancel.SetDefault()
+
+        # bindings
+        self.btnCancel.Bind(wx.EVT_BUTTON, self.OnClose)
+        self.btnClipboard.Bind(wx.EVT_BUTTON, self.OnCopy)
+        
+        self._layout()
+
+    def _layout(self):
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        txtSizer = wx.BoxSizer(wx.VERTICAL)
+        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+
+        txtSizer.Add(item = self.text, proportion = 1, 
+                     flag = wx.EXPAND|wx.ALIGN_CENTER_VERTICAL|wx.ALL, border = 5)
+        
+        self.sp.SetSizer(txtSizer)
+        self.sp.SetAutoLayout(True)
+        self.sp.SetupScrolling() 
+
+        sizer.Add(item = self.sp, proportion = 1, flag = wx.GROW |
+                  wx.LEFT | wx.RIGHT | wx.BOTTOM, border = 3)
+
+        line = wx.StaticLine(parent = self.panel, id = wx.ID_ANY,
+                             size = (20, -1), style = wx.LI_HORIZONTAL)
+        sizer.Add(item = line, proportion = 0,
+                  flag = wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.LEFT|wx.RIGHT, border = 3)
+
+        # buttons
+        btnSizer.Add(item = self.btnClipboard, proportion = 0,
+                     flag = wx.ALIGN_LEFT | wx.ALL, border = 5)
+        btnSizer.Add(item = self.btnCancel, proportion = 0,
+                     flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)        
+        sizer.Add(item = btnSizer, proportion = 0, flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
+
+        self.panel.SetSizer(sizer)
+        sizer.Fit(self.panel)
+
+    def OnCopy(self, event):
+        """!Copy the statistics to the clipboard
+        """
+        stats = self.text.GetValue()
+        rdata = wx.TextDataObject()
+        rdata.SetText(stats)
+        
+        if wx.TheClipboard.Open():
+            wx.TheClipboard.SetData(rdata)
+            wx.TheClipboard.Close()
+
+    def OnClose(self, event):
+        """!Button 'Close' pressed
+        """
+        self.Close(True)
+
+    def Update(self, driver, database, table, column):
+        """!Update statistics for given column
+        
+        :param: column column name
+        """
+        if driver == 'dbf':
+            GError(parent=self,
+                   message=_("Statistics is not support for DBF tables."))
+            self.Close()
+            return
+        
+        fd, sqlFilePath = tempfile.mkstemp(text=True)
+        sqlFile = open(sqlFilePath, 'w')
+        stats = ['count', 'min', 'max', 'avg', 'sum', 'null']
+        for fn in stats:
+            if fn == 'null':
+                sqlFile.write('select count(*) from %s where %s is null;%s' % (table, column, os.linesep))
+            else:
+                sqlFile.write('select %s(%s) from %s;%s' % (fn, column, table, os.linesep))
+        sqlFile.close()
+        
+        dataStr = RunCommand('db.select',
+                             parent = self.parent,
+                             read = True,
+                             flags='c',
+                             input = sqlFilePath,
+                             driver = driver,
+                             database = database)
+        if not dataStr:
+            GError(parent = self.parent,
+                   message = _("Unable to calculte statistics."))
+            self.Close()
+            return
+        
+        dataLines = dataStr.splitlines()
+        if len(dataLines) != len(stats):
+            GError(parent = self.parent,
+                   message = _("Unable to calculte statistics. "
+                               "Invalid number of lines %d (should be %d).") % (len(dataLines), len(stats)))
+            self.Close()
+            return
+        
+        # calculate stddev
+        avg = float(dataLines[stats.index('avg')])
+        count = float(dataLines[stats.index('count')])
+        sql = "select (%(column)s - %(avg)f)*(%(column)s - %(avg)f) from %(table)s" % { 'column' : column, 'avg' : avg, 'table' : table }
+        dataVar = RunCommand('db.select',
+                             parent = self.parent,
+                             read = True,
+                             flags='c',
+                             sql = sql,
+                             driver = driver,
+                             database = database)
+        if not dataVar:
+            GWarning(parent = self.parent,
+                     message = _("Unable to calculte standard deviation."))
+        varSum = 0
+        for var in dataVar.splitlines():
+            varSum += float(var)
+        stddev = math.sqrt(varSum/count)
+        
+        self.SetTitle(_("Field statistics <%s>") % column)
+        self.text.Clear()
+        for idx in range(len(stats)):
+            self.text.AppendText('%s: %s\n' % (stats[idx], dataLines[idx]))
+        self.text.AppendText('stddev: %f\n' % stddev)
