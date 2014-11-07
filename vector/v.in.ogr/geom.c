@@ -72,6 +72,10 @@ centroid(OGRGeometryH hGeom, CENTR * Centr, struct spatial_index *Sindex,
 
 	/* Area */
 	hRing = OGR_G_GetGeometryRef(hGeom, 0);
+        if (hRing == NULL) {
+            G_warning(_("Skipping empty geometry feature %d"), cat);
+	    return 0;
+        }
 	np = OGR_G_GetPointCount(hRing);
 	Vect_reset_line(Points);
 	for (j = 0; j < np; j++) {
@@ -254,7 +258,7 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 
     if (eType == wkbPoint) {
 	if ((np = OGR_G_GetPointCount(hGeom)) == 0) {
-	    G_warning(_("Skipping empty geometry feature"));
+	    G_warning(_("Skipping empty geometry feature %d"), cat);
 	    return 0;
 	}
 
@@ -268,7 +272,7 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
     }
     else if (eType == wkbLineString) {
 	if ((np = OGR_G_GetPointCount(hGeom)) == 0) {
-	    G_warning(_("Skipping empty geometry feature"));
+	    G_warning(_("Skipping empty geometry feature %d"), cat);
 	    return 0;
 	}
 
@@ -296,8 +300,8 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 
 	/* Area */
 	hRing = OGR_G_GetGeometryRef(hGeom, 0);
-	if ((np = OGR_G_GetPointCount(hRing)) == 0) {
-	    G_warning(_("Skipping empty geometry feature"));
+	if (hRing == NULL || (np = OGR_G_GetPointCount(hRing)) == 0) {
+            G_warning(_("Skipping empty geometry feature %d"), cat);
 	    return 0;
 	}
 
@@ -319,7 +323,7 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 
 	size = G_area_of_polygon(Points->x, Points->y, Points->n_points);
 	if (size < min_area) {
-	    G_debug(2, "\tArea size [%.1e], area not imported", size);
+	    G_debug(2, "\tArea size %.1e, area not imported", size);
 	    return 0;
 	}
 
@@ -344,7 +348,7 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 	    hRing = OGR_G_GetGeometryRef(hGeom, i);
 
 	    if ((np = OGR_G_GetPointCount(hRing)) == 0) {
-		G_warning(_("Skipping empty geometry feature"));
+		G_warning(_("Skipping empty geometry feature %d"), cat);
 	    }
 	    else {
 		IPoints[valid_isles] = Vect_new_line_struct();
@@ -358,7 +362,7 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 		Vect_line_prune(IPoints[valid_isles]);
 
 		if (IPoints[valid_isles]->n_points < 4)
-		    G_warning(_("Degenerate island ([%d] vertices)"),
+		    G_warning(_("Degenerate island (%d vertices)"),
 			      IPoints[i - 1]->n_points);
 
 		size =
@@ -366,7 +370,7 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 				      IPoints[valid_isles]->y,
 				      IPoints[valid_isles]->n_points);
 		if (size < min_area) {
-		    G_debug(2, "\tIsland size [%.1e], island not imported",
+		    G_debug(2, "\tIsland size %.1e, island not imported",
 			      size);
 		}
 		else {
