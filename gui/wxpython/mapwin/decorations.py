@@ -407,6 +407,8 @@ class TextLayerDialog(wx.Dialog):
         self.Bind(wx.EVT_TEXT,       self.OnText,       self.textentry)
         self.Bind(wx.EVT_SPINCTRL,   self.OnRotation,   self.rotation)
 
+        self.SetMinSize((400, 230))
+        
     def OnRefit(self, event):
         """Resize text entry to match text"""
         self.sizer.Fit(self)
