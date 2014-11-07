@@ -1046,33 +1046,11 @@ def GetGEventAttribsForHandler(method, event):
 
 def GuiModuleMain(mainfn):
     """!Main function for g.gui.* modules
-    
-    Note: os.fork() is supported only on Unix platforms
-    
-    @todo: Replace os.fork() by multiprocessing (?)
-    
-    @param module's main function
+
+    os.fork removed in r62649 as fragile
     """
-    if sys.platform != 'win32':
-        # launch GUI in the background
-        child_pid = os.fork()
-        if child_pid == 0:
-            # To become the session leader of this new session and the process group
-            # leader of the new process group, we call os.setsid().  The process is
-            # also guaranteed not to have a controlling terminal.
-            os.setsid()
-            mainfn()
-        else:      
-            # exit() or _exit()?
-            # _exit is like exit(), but it doesn't call any functions registered
-            # with atexit (and on_exit) or any registered signal handlers.  It also
-            # closes any open file descriptors.  Using exit() may cause all stdio
-            # streams to be flushed twice and any temporary files may be unexpectedly
-            # removed.  It's therefore recommended that child branches of a fork()
-            # and the parent branch(es) of a daemon use _exit().
-            os._exit(0)   # Exit parent of the child.
-    else:
-        mainfn()
+    mainfn()
+
 
 def PilImageToWxImage(pilImage, copyAlpha = True):
     """!Convert PIL image to wx.Image
