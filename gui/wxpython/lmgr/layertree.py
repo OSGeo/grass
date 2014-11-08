@@ -666,11 +666,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         mapLayer = self.GetLayerInfo(self.layer_selected, key = 'maplayer')
         
         cmd = ['g.region',
-               '-p',
                'zoom=%s' % mapLayer.GetName()]
         
         # print output to command log area
-        self._giface.RunCmd(cmd, notification=Notification.HIGHLIGHT)
+        self._giface.RunCmd(cmd, notification=Notification.NO_NOTIFICATION)
         
         # re-render map display
         self._giface.GetMapWindow().UpdateMap(render=True)
@@ -705,11 +704,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         # print output to command log area
         if len(cmd) > 1:
-            cmd.append('-p')
             if mltype == '3d-raster':
                 cmd.append('-3')
             self._giface.RunCmd(cmd, compReg = False,
-                                notification=Notification.HIGHLIGHT)
+                                notification=Notification.NO_NOTIFICATION)
         
         # re-render map display
         self._giface.GetMapWindow().UpdateMap(render=True)
