@@ -2847,7 +2847,7 @@ class GrSettingsDialog(wx.Dialog):
         UserSettings.ReadSettingsFile(settings=fileSettings)
         fileSettings['gcpman'] = UserSettings.Get(group='gcpman')
         file = UserSettings.SaveToFile(fileSettings)
-        self._giface.WriteLog(_('GCP Manager settings saved to file \'%s\'.') % file)
+        self.parent._giface.WriteLog(_('GCP Manager settings saved to file \'%s\'.') % file)
         #self.Close()
 
     def OnApply(self, event):
