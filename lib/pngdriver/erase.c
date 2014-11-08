@@ -1,5 +1,5 @@
 /*!
-  \file lib/pngdriver/Erase.c
+  \file lib/pngdriver/erase.c
 
   \brief GRASS png display driver - erase screen
 

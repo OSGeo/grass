@@ -1,5 +1,5 @@
 /*!
-  \file lib/pngdriver/Graph_set.c
+  \file lib/pngdriver/graph_set.c
 
   \brief GRASS png display driver - set graphics processing
 

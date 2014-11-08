@@ -1,5 +1,5 @@
 /*!
-  \file lib/pngdriver/Line_width.c
+  \file lib/pngdriver/line_width.c
 
   \brief GRASS png display driver - set line width
 

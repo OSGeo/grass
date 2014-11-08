@@ -1,5 +1,5 @@
 /*!
-  \file lib/pngdriver/Graph_close.c
+  \file lib/pngdriver/graph_close.c
 
   \brief GRASS png display driver - close graphics processing
 
