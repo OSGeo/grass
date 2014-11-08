@@ -1,5 +1,5 @@
 /*!
-  \file psdriver/Draw.c
+  \file lib/psdriver/draw.c
 
   \brief GRASS PS display driver
 

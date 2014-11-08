@@ -1,5 +1,5 @@
 /*!
-  \file lib/pngdriver/Driver.c
+  \file lib/pngdriver/driver.c
 
   \brief GRASS png display driver - driver initialization
 
