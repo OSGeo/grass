@@ -123,7 +123,7 @@ dbDriver *db_start_driver(const char *name)
     /* run the driver as a child process and create pipes to its stdin, stdout */
 
 #ifdef __MINGW32__
-#define pipe(fds) _pipe(fds, 250000, _O_BINARY)
+#define pipe(fds) _pipe(fds, 250000, _O_BINARY | _O_NOINHERIT)
 #endif
 
     /* open the pipes */
