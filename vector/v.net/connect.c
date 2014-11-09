@@ -29,6 +29,11 @@ int connect_arcs(struct Map_info *In, struct Map_info *Pnts,
     struct line_cats *Cats, *Cline, *Cnew;
     int maxcat, findex, ncats;
 
+    struct ilist *exclude_list;
+    int pline;
+
+    exclude_list = Vect_new_list();
+
     narcs = 0;
 
     Points = Vect_new_line_struct();
@@ -53,9 +58,9 @@ int connect_arcs(struct Map_info *In, struct Map_info *Pnts,
 	    continue;
 
 	/* find the nearest line in given threshold */
-	line = Vect_find_line(Out,
-			      Points->x[0], Points->y[0], Points->z[0],
-			      GV_LINES, thresh, WITHOUT_Z, 0);
+	line = Vect_find_line_list(Out, Points->x[0], Points->y[0], Points->z[0],
+				   GV_LINES, thresh, WITHOUT_Z, 
+				   exclude_list, NULL);
 
 	if (line < 1 || !Vect_line_alive(Out, line))
 	    continue;
@@ -114,7 +119,9 @@ int connect_arcs(struct Map_info *In, struct Map_info *Pnts,
 		maxcat++;
 		Vect_reset_cats(Cnew);
 		Vect_cat_set(Cnew, afield, maxcat);
-		Vect_write_line(Out, ltype, Pout, Cnew);
+		pline = Vect_write_line(Out, ltype, Pout, Cnew);
+		
+		Vect_list_append(exclude_list, pline);
 
 		narcs++;
 	    }
