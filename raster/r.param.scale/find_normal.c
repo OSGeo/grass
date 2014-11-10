@@ -16,7 +16,7 @@ void find_normal(double **normal,	/* Matrix of cross-products.    */
 
     /* on computation               */
 
-    float x, y,			/* Local coordinates of window. */
+    double x, y,			/* Local coordinates of window. */
       x1 = 0, y1 = 0,		/* coefficients of X-products.  */
 	x2 = 0, y2 = 0,
 	x3 = 0, y3 = 0,
@@ -110,7 +110,7 @@ void find_obs(DCELL * z,	/* Local window of elevs.       */
       edge = EDGE,		/* EDGE = (wsize-1)/2.          */
 	offset;			/* Array offset for weights & z */
 
-    float x, y;			/* Local window coordinates.    */
+    double x, y;			/* Local window coordinates.    */
 
     for (row = 0; row < 6; row++)	/* Initialise column vector.        */
 	obs[row] = 0.0;
