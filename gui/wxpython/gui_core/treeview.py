@@ -101,6 +101,8 @@ class AbstractTreeViewMixin(VirtualTree):
         for i in range(len(index))[1:]:
             item = self.GetItemByIndex(index[:i])
             self.Expand(item)
+            # needed for wxPython 3:
+            self.EnsureVisible(item)
 
         item = self.GetItemByIndex(index)
         self.SelectItem(item, select)
