@@ -52,6 +52,7 @@ from core import globalvar
 
 import grass.script as grass
 from   grass.script import task as gtask
+from grass.exceptions import CalledModuleError
 try:
     from grass.pygrass import messages
 except ImportError as e:
@@ -727,12 +728,14 @@ class VectorDBInfo:
 
     def _CheckDBConnection(self):
         """Check DB connection"""
-        # if map is not defined (happens with vnet initialization)
-        if not self.map:
-            return False
         nuldev = file(os.devnull, 'w+')
-        self.layers = grass.vector_db(map = self.map, stderr = nuldev)
-        nuldev.close()
+        # if map is not defined (happens with vnet initialization) or it doesn't exist
+        try:
+            self.layers = grass.vector_db(map=self.map, stderr=nuldev)
+        except CalledModuleError:
+            return False
+        finally:  # always close nuldev
+            nuldev.close()
 
         return bool(len(self.layers.keys()) > 0)
 
