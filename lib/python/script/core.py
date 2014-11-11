@@ -247,7 +247,7 @@ def get_real_command(cmd):
 
 
 def make_command(prog, flags="", overwrite=False, quiet=False, verbose=False,
-                 **options):
+                 errors=None, **options):
     """Return a list of strings suitable for use as the args parameter to
     Popen() or call(). Example:
 
@@ -290,6 +290,22 @@ def make_command(prog, flags="", overwrite=False, quiet=False, verbose=False,
             args.append("%s=%s" % (opt, _make_val(val)))
     return args
 
+
+def handle_errors(returncode, result, args, kwargs):
+    if returncode == 0:
+        return result
+    handler = kwargs.get('errors', 'raise')
+    if handler.lower() == 'ignore':
+        return result
+    elif handler.lower() == 'status':
+        return returncode
+    elif handler.lower() == 'exit':
+        sys.exit(1)
+    else:
+        # TODO: construction of the whole command is far from perfect
+        args = make_command(*args, **kwargs)
+        raise CalledModuleError(module=None, code=repr(args),
+                                returncode=returncode)
 
 def start_command(prog, flags="", overwrite=False, quiet=False,
                   verbose=False, **kwargs):
@@ -354,14 +370,7 @@ def run_command(*args, **kwargs):
     """
     ps = start_command(*args, **kwargs)
     returncode = ps.wait()
-    if returncode:
-        # TODO: construction of the whole command is far from perfect
-        args = make_command(*args, **kwargs)
-        raise CalledModuleError(module=None, code=' '.join(args),
-                                returncode=returncode)
-    else:
-        # the else is just for compatibility, remove before 7.1
-        return 0
+    return handle_errors(returncode, returncode, args, kwargs)
 
 
 def pipe_command(*args, **kwargs):
@@ -413,12 +422,7 @@ def read_command(*args, **kwargs):
     process = pipe_command(*args, **kwargs)
     stdout, unused = process.communicate()
     returncode = process.poll()
-    if returncode:
-        # TODO: construction of the whole command is far from perfect
-        args = make_command(*args, **kwargs)
-        raise CalledModuleError(module=None, code=' '.join(args),
-                                returncode=returncode)
-    return stdout
+    return handle_errors(returncode, stdout, args, kwargs)
 
 
 def parse_command(*args, **kwargs):
@@ -476,14 +480,7 @@ def write_command(*args, **kwargs):
     process = feed_command(*args, **kwargs)
     process.communicate(stdin)
     returncode = process.poll()
-    if returncode:
-        # TODO: construction of the whole command is far from perfect
-        args = make_command(*args, **kwargs)
-        raise CalledModuleError(module=None, code=' '.join(args),
-                                returncode=returncode)
-    else:
-        # the else is just for compatibility, remove before 7.1
-        return 0
+    return handle_errors(returncode, returncode, args, kwargs)
 
 
 def exec_command(prog, flags="", overwrite=False, quiet=False, verbose=False,
@@ -514,7 +511,7 @@ def message(msg, flag=None):
     :param str msg: message to be displayed
     :param str flag: flags (given as string)
     """
-    run_command("g.message", flags=flag, message=msg)
+    run_command("g.message", flags=flag, message=msg, errors='ignore')
 
 
 def debug(msg, debug=1):
