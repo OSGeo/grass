@@ -398,7 +398,7 @@ class Columns(object):
         >>> remove('mycensus', 'vect')
 
         """
-        def check_col(col_type):
+        def check(col_type):
             """Check the column type if it is supported by GRASS
 
             :param col_type: the type of column
@@ -409,24 +409,16 @@ class Columns(object):
             if 'VARCHAR' in col_type or col_type.upper() not in valid_type:
                 str_err = "Type is not supported, supported types are: %s"
                 raise TypeError(str_err % ", ".join(valid_type))
+            return col_type
 
-        if isinstance(col_name, unicode):
-            check_col(col_type)
-        else:
-            if len(col_name) == len(col_type):
-                cvars = []
-                for name, ctype in zip(col_name, col_type):
-                    check_col(ctype)
-                    cvars.append('%s %s' % (name, ctype))
-                col_name = ''
-                col_type = ','.join(cvars)
-            else:
-                str_err = "The lenghts of the columns are different:\n%r\n%r"
-                raise TypeError(str_err % (col_name, col_type))
+        col_type = ([check(col_type), ] if isinstance(col_type, (str, unicode))
+                    else [check(col) for col in col_type])
+        col_name = ([col_name, ] if isinstance(col_name, (str, unicode))
+                    else col_name)
+        sqlcode = [sql.ADD_COL.format(tname=self.tname, cname=cn, ctype=ct)
+                   for cn, ct in zip(col_name, col_type)]
         cur = self.conn.cursor()
-        cur.execute(sql.ADD_COL.format(tname=self.tname,
-                                       cname=col_name,
-                                       ctype=col_type))
+        cur.executescript('\n'.join(sqlcode))
         self.conn.commit()
         cur.close()
         self.update_odict()
@@ -1022,7 +1014,7 @@ class Table(object):
         cur = cursor if cursor else self.conn.cursor()
         if self.exist(cursor=cur):
             used = db_table_in_vector(self.name)
-            if len(used) > 0 and not force:
+            if used is not None and len(used) > 0 and not force:
                 print(_("Deleting table <%s> which is attached"
                         " to following map(s):") % self.name)
                 for vect in used:
@@ -1125,7 +1117,8 @@ class Table(object):
         :type cursor: Cursor object
         """
         cur = cursor if cursor else self.conn.cursor()
-        return cur.execute(self.columns.update_str, values)
+        vals = list(values) + [key, ]
+        return cur.execute(self.columns.update_str, vals)
 
     def create(self, cols, name=None, overwrite=False, cursor=None):
         """Create a new table
