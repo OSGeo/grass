@@ -56,6 +56,11 @@
 #% description: Register Null maps
 #%end
 
+#%flag
+#% key: g
+#% description: Use granularity sampling instead of the temporal topology approach
+#%end
+
 
 import grass.script
 import grass.temporal as tgis
@@ -67,6 +72,7 @@ def main():
     nprocs = options["nprocs"]
     spatial = flags["s"]
     register_null = flags["n"]
+    granularity = flags["g"]
 
     # Check for PLY istallation
     try:
@@ -79,6 +85,11 @@ def main():
 
     tgis.init(True)
     p = tgis.TemporalRaster3DAlgebraParser(run = True, debug=False, spatial = spatial, nprocs = nprocs, register_null = register_null)
+    
+    if granularity:
+        if not p.setup_common_granularity(expression=expression,  stdstype = 'str3ds',  lexer = tgis.TemporalRasterAlgebraLexer()):
+            grass.script.fatal(_("Unable to process the expression in granularity algebra mode"))
+            
     p.parse(expression, basename, grass.script.overwrite())
 
 if __name__ == "__main__":
