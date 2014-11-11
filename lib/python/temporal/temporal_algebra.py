@@ -694,7 +694,7 @@ class TemporalAlgebraParser(object):
              space time datasets in the expression to generate the map lists.
              
              This function will analyze the expression to detect space time datasets
-             and computes are common granularity  from all granularities.
+             and computes the common granularity  from all granularities.
           
              This granularity is then be used to generate the map lists. Hence, all
              maps from all STDS will have equidistant temporal extents. The only meaningful
@@ -706,15 +706,18 @@ class TemporalAlgebraParser(object):
                                     parse the expression, default is TemporalAlgebraLexer
              
              :return: True if successful, False otherwise
-             
-             :TODO: Check for tmap and map functions in the expression to avoid
-                         problems with map names that are handled as STDS
+ 
         """
         l = lexer
         # Split the expression to ignore the left part
         expressions = expression.split("=")[1:]
         expression = " ".join(expressions)
-
+        
+        # Check if spatio-temporal operators are present in the expression
+        if "{" in expression or "}" in expression:
+            self.msgr.error(_("Spatio temporal operators are not supported in granularity algebra mode"))
+            return False
+            
         # detect all STDS
         if l is None:
             l = TemporalAlgebraLexer()
@@ -748,6 +751,7 @@ class TemporalAlgebraParser(object):
             stds = open_old_stds(name,  stdstype,  dbif)
             # We need valid temporal topology
             if stds.check_temporal_topology() is False:
+                self.msgr.error(_("All input space time datasets must have a valid temporal topology."))
                 return False
 
             grans.append(stds.get_granularity())
@@ -755,6 +759,7 @@ class TemporalAlgebraParser(object):
         
         # Only one temporal type is allowed
         if len(ttypes) > 1:
+            self.msgr.error(_("All input space time datasets must have the same temporal type."))
             return False
             
         # Compute the common granularity
@@ -767,7 +772,8 @@ class TemporalAlgebraParser(object):
         
         return True
 
-    def parse(self, expression, stdstype = 'strds', maptype = 'rast',  mapclass = RasterDataset, basename = None, overwrite=False):
+    def parse(self, expression, stdstype = 'strds', maptype = 'rast',  mapclass = RasterDataset, 
+                      basename = None, overwrite=False):
         self.lexer = TemporalAlgebraLexer()
         self.lexer.build()
         self.parser = yacc.yacc(module=self, debug=self.debug)
@@ -1264,7 +1270,8 @@ class TemporalAlgebraParser(object):
                     for boolean in relationmap.condition_value:
                         if isinstance(boolean, bool):
                             condition_value_list.append(boolean)
-                    print(str(relationmap.get_temporal_extent_as_tuple()) + str(boolean))
+                    if self.debug:
+                        print(str(relationmap.get_temporal_extent_as_tuple()) + str(boolean))
         if all(condition_value_list):
             resultbool = True
         else:
@@ -1306,9 +1313,11 @@ class TemporalAlgebraParser(object):
             condition_value_list.append(')')
         # Convert conditional list to concatenated string and evaluate booleans.
         condition_value_str = ''.join(map(str, condition_value_list))
-        print(condition_value_str)
+        if self.debug:
+            print(condition_value_str)
         resultbool = eval(condition_value_str)
-        print(resultbool)
+        if self.debug:
+            print(resultbool)
         # Add boolean value to result list.
         map_i.condition_value = [resultbool]
         
@@ -1524,10 +1533,12 @@ class TemporalAlgebraParser(object):
                                 map_i.set_relative_time(int(start), int(end), relunit)
                             resultdict[map_i.get_id()] = map_i
                 else:
-                    print('Topologic relation: ' + topo.upper() + ' not found.')
+                    if self.debug:
+                        print('Topologic relation: ' + topo.upper() + ' not found.')
                     resultdict[map_i.get_id()] = map_i
             if unchanged == True:
-                print('Leave temporal extend of result map: ' +  map_i.get_map_id() + ' unchanged.')
+                if self.debug:
+                    print('Leave temporal extend of result map: ' +  map_i.get_map_id() + ' unchanged.')
         
         resultlist = resultdict.values()
         # Sort list of maps chronological.
@@ -1861,7 +1872,8 @@ class TemporalAlgebraParser(object):
                 # Add all maps that fulfill the conditions to result list.
                 if resultbool[0]:
                     resultlist.append(map_i)
-                    print(map_i.get_map_id() + ' ' + str(map_i.condition_value))
+                    if self.debug:
+                        print(map_i.get_map_id() + ' ' + str(map_i.condition_value))
                 else:
                     inverselist.append(map_i)
         if inverse:
