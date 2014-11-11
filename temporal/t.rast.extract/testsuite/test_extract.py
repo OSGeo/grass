@@ -17,7 +17,7 @@ class TestRasterExtraction(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        """!Initiate the temporal GIS and set the region
+        """Initiate the temporal GIS and set the region
         """
         cls.use_temp_region()
         cls.runModule("g.gisenv",  set="TGIS_USE_CURRENT_MAPSET=1")
@@ -25,7 +25,7 @@ class TestRasterExtraction(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """!Remove the temporary region
+        """Remove the temporary region
         """
         cls.del_temp_region()
 
@@ -151,7 +151,7 @@ class TestRasterExtractionFails(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        """!Initiate the temporal GIS and set the region
+        """Initiate the temporal GIS and set the region
         """
         cls.use_temp_region()
         cls.runModule("g.gisenv",  set="TGIS_USE_CURRENT_MAPSET=1")
@@ -159,7 +159,7 @@ class TestRasterExtractionFails(TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        """!Remove the temporary region
+        """Remove the temporary region
         """
         cls.del_temp_region()
 

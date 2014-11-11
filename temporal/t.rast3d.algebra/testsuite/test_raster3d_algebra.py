@@ -77,6 +77,49 @@ class TestTRast3dAlgebra(gunittest.TestCase):
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
 
+    def test_temporal_neighbors_granularity(self):
+        """Simple temporal neighborhood computation test with granularity algebra"""
+        
+        self.assertModule("t.rast3d.algebra",  flags="g",  expression='D = A[0,0,0,-1] + A[0,0,0,1]',
+                  basename="d")
+
+        D = tgis.open_old_stds("D", type="str3ds")
+        
+        self.assertEqual(D.metadata.get_number_of_maps(), 2)
+        self.assertEqual(D.metadata.get_min_min(), 4)  # 1 + 3
+        self.assertEqual(D.metadata.get_max_max(), 6) # 2 + 4
+        start, end = D.get_absolute_time()
+        self.assertEqual(start, datetime.datetime(2001, 1, 2))
+        self.assertEqual(end, datetime.datetime(2001, 1, 4))
+
+
+class TestTRast3dAlgebraFails(gunittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        """Set the region
+        """
+        cls.use_temp_region()
+        cls.runModule("g.gisenv",  set="TGIS_USE_CURRENT_MAPSET=1")
+        cls.runModule("g.region",  s=0,  n=80,  w=0,  e=120,  b=0,  t=50,  res=10,  res3=10)
+
+    @classmethod
+    def tearDownClass(cls):
+        """Remove the temporary region
+        """
+        cls.del_temp_region()
+
+    def test_error_handling(self):        
+        # Syntax error
+        self.assertModuleFail("t.rast3d.algebra",  expression="R = A {+,equal| precedes| follows,l B", basename="r")       
+        # Granularity syntax error
+        self.assertModuleFail("t.rast3d.algebra",  flags="g",  expression="R = A {+,equal| precedes| follows,l} B", basename="r")
+        # No STRDS
+        self.assertModuleFail("t.rast3d.algebra",  expression="R = NoSTR3DS + NoSTR3DS", basename="r")
+        # No basename
+        self.assertModuleFail("t.rast3d.algebra",  expression="R = A + B")
+
+
 if __name__ == '__main__':
     grass.gunittest.test()
 

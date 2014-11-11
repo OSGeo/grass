@@ -87,7 +87,8 @@ def main():
     p = tgis.TemporalRasterAlgebraParser(run = True, debug=False, spatial = spatial, nprocs = nprocs, register_null = register_null)
     
     if granularity:
-        p.setup_common_granularity(expression=expression,  lexer = tgis.TemporalRasterAlgebraLexer())
+        if not p.setup_common_granularity(expression=expression,  lexer = tgis.TemporalRasterAlgebraLexer()):
+            grass.script.fatal(_("Unable to process the expression in granularity algebra mode"))
     
     p.parse(expression, basename, grass.script.overwrite())
 
