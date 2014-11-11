@@ -161,24 +161,25 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                                new = False,  convert = False,  overlay_cmd = False):
         """Build temporal topology for two space time data sets, copy map objects
           for given relation into map list.
-          :param maplistA List of maps.
-          :param maplistB List of maps.
-          :param topolist List of strings of temporal relations.
-          :param assign_val Boolean for assigning a boolean map value based on
+          
+          :param maplistA: List of maps.
+          :param maplistB: List of maps.
+          :param topolist: List of strings of temporal relations.
+          :param assign_val: Boolean for assigning a boolean map value based on
                             the map_values from the compared map list by
                             topological relationships.
-          :param count_map Boolean if the number of topological related maps
+          :param count_map: Boolean if the number of topological related maps
                            should be returned.
-          :param compare_bool Boolean for comparing boolean map values based on
+          :param compare_bool: Boolean for comparing boolean map values based on
                             related map list and compariosn operator.
-          :param compare_cmd Boolean for comparing command list values based on
+          :param compare_cmd: Boolean for comparing command list values based on
                             related map list and compariosn operator.
-          :param compop Comparison operator, && or ||.
-          :param aggregate Aggregation operator for relation map list, & or |.
-          :param new Boolean if new temporary maps should be created.
-          :param convert Boolean if conditional values should be converted to 
+          :param compop: Comparison operator, && or ||.
+          :param aggregate: Aggregation operator for relation map list, & or |.
+          :param new: Boolean if new temporary maps should be created.
+          :param convert: Boolean if conditional values should be converted to 
                         r.mapcalc command strings.
-          :param overlay_cmd Boolean for aggregate overlay operators implicitly 
+          :param overlay_cmd: Boolean for aggregate overlay operators implicitly 
                         in command list values based on related map lists.
                     
           :return: List of maps from maplistA that fulfil the topological relationships
@@ -243,10 +244,11 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
     def overlay_cmd_value(self,  map_i, tbrelations, function, topolist = ["EQUAL"]):
         """ Function to evaluate two map lists by given overlay operator.
-          :param map_i Map object with temporal extent.
-          :param tbrelations List of temporal relation to map_i.
-          :param topolist List of strings for given temporal relations.
-          :param function Overlay operator, &|+^~.
+        
+          :param map_i: Map object with temporal extent.
+          :param tbrelations: List of temporal relation to map_i.
+          :param topolist: List of strings for given temporal relations.
+          :param function: Overlay operator, &|+^~.
           
           :return: Map object with command list with  operators that has been 
                         evaluated by implicit aggregration.
@@ -302,10 +304,10 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         """ Change temporal extent of map list based on temporal relations to 
                 other map list and given temporal operator.
 
-            :param maplist List of map objects for which relations has been build 
+            :param maplist: List of map objects for which relations has been build 
                                         correctely.
-            :param topolist List of strings of temporal relations.
-            :param temporal The temporal operator specifying the temporal
+            :param topolist: List of strings of temporal relations.
+            :param temporal: The temporal operator specifying the temporal
                                             extent operation (intersection, union, disjoint 
                                             union, right reference, left reference).
 

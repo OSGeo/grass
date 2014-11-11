@@ -1053,6 +1053,7 @@ class TemporalAlgebraParser(object):
                                compop = None, aggregate = None):
         """Build temporal topology for two space time data sets, copy map objects
           for given relation into map list.
+
           :param maplistA: List of maps.
           :param maplistB: List of maps.
           :param topolist: List of strings of temporal relations.
@@ -1253,6 +1254,7 @@ class TemporalAlgebraParser(object):
     def assign_bool_value(self,  map_i, tbrelations, topolist = ["EQUAL"]):
         """ Function to assign boolean map value based on the map_values from the 
                 compared map list by topological relationships.
+                
           :param map_i: Map object with temporal extent.
           :param tbrelations: List of temporal relation to map_i.
           :param topolist: List of strings for given temporal relations.
@@ -1283,6 +1285,7 @@ class TemporalAlgebraParser(object):
     def compare_bool_value(self,  map_i, tbrelations, compop, aggregate,  topolist = ["EQUAL"]):
         """ Function to evaluate two map lists with boolean values by boolean 
             comparison operator. 
+            
           :param map_i: Map object with temporal extent.
           :param tbrelations: List of temporal relation to map_i.
           :param topolist: List of strings for given temporal relations.
@@ -1744,14 +1747,14 @@ class TemporalAlgebraParser(object):
              For example: td(A) == 1 && start_day() > 5 --> [True || False]
                           (for one map.condition_value in a then map list)
 
-             :param tvarexpr List of GlobalTemporalVar objects and map lists.
+             :param tvarexpr: List of GlobalTemporalVar objects and map lists.
                          The list is constructed by the TemporalAlgebraParser
                          in order of expression evaluation in the parser.
 
-             :param thenlist Map list object of the conclusion statement.
+             :param thenlist: Map list object of the conclusion statement.
                          It will be compared and evaluated by the conditions.
           
-             :param topolist List of temporal relations between the conditions and the 
+             :param topolist: List of temporal relations between the conditions and the 
                          conclusions.
                           
              :return: Map list with conditional values for all temporal expressions.
@@ -1813,15 +1816,17 @@ class TemporalAlgebraParser(object):
              A recursive function is used to evaluate comparison statements
              from left to right in the given conditional list.
 
-            For example: [True,  '||', False, '&&', True]  -> True
-                          [True,  '||', False, '&&', False] -> False
-                          [True,  '&&', False, '&&', True]  -> False
-                          [False, '||', True,  '||', False] -> True
-                          [False, '&&', True,  '&&', True]  -> False
-                          [True,  '&&', True,  '&&', True]  -> True
-                          [True,  '&&', True]               -> True
-                          [True,  '&&', False]              -> False
-                          [False, '||', True]               -> True
+             For example: 
+            
+                  - [True,  '||', False, '&&', True]  -> True
+                  - [True,  '||', False, '&&', False] -> False
+                  - [True,  '&&', False, '&&', True]  -> False
+                  - [False, '||', True,  '||', False] -> True
+                  - [False, '&&', True,  '&&', True]  -> False
+                  - [True,  '&&', True,  '&&', True]  -> True
+                  - [True,  '&&', True]               -> True
+                  - [True,  '&&', False]              -> False
+                  - [False, '||', True]               -> True
 
              :param tvarexpr: List of GlobalTemporalVar objects and map lists.
                           The list is constructed by the TemporalAlgebraParser

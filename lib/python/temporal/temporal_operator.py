@@ -1,4 +1,4 @@
-"""!@package grass.temporal
+"""@package grass.temporal
 
 Temporal operator evaluation with PLY
 
@@ -7,9 +7,10 @@ This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Thomas Leppelt and Soeren Gebbert
+:authors: Thomas Leppelt and Soeren Gebbert
 
-@code
+.. code-block:: python
+
     >>> p = TemporalOperatorParser()
     >>> expression =  "{equal| during}"
     >>> p.parse(expression, optype = 'relation')
@@ -100,8 +101,7 @@ for details.
     >>> p.parse(expression, optype = 'overlay')
     >>> print(p.relations, p.temporal, p.function)
     (['overlaps', 'overlapped'], 'r', '^')
-    
-@endcode
+
 """
 
 try:
@@ -111,7 +111,7 @@ except:
     pass
 
 class TemporalOperatorLexer(object):
-    """!Lexical analyzer for the GRASS GIS temporal operator"""
+    """Lexical analyzer for the GRASS GIS temporal operator"""
 
     # Functions that defines topological relations.
     relations = {

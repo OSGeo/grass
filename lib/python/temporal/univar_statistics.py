@@ -5,10 +5,9 @@ Usage:
 
 .. code-block:: python
 
-import grass.temporal as tgis
+    import grass.temporal as tgis
 
-    tgis.print_gridded_dataset_univar_statistics(
-        type, input, where, extended, no_header, fs)
+    tgis.print_gridded_dataset_univar_statistics(type, input, where, extended, no_header, fs)
 
 
 (C) 2012-2013 by the GRASS Development Team
