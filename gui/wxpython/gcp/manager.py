@@ -1,4 +1,4 @@
-"""!
+"""
 @package gcp.manager
 
 @brief Georectification module for GRASS GIS. Includes ground control
@@ -240,14 +240,14 @@ class GCPWizard(object):
             self.Cleanup()
                             
     def SetSrcEnv(self, location, mapset):
-        """!Create environment to use for location and mapset
+        """Create environment to use for location and mapset
         that are the source of the file(s) to georectify
 
-        @param location source location
-        @param mapset source mapset
+        :param location: source location
+        :param mapset: source mapset
 
-        @return False on error
-        @return True on success
+        :return: False on error
+        :return: True on success
         """
         
         self.newlocation = location
@@ -293,13 +293,13 @@ class GCPWizard(object):
         return True
         
     def OnGLMFocus(self, event):
-        """!Layer Manager focus"""
+        """Layer Manager focus"""
         # self.SwitchEnv('target')
         
         event.Skip()
 
     def Cleanup(self):
-        """!Return to current location and mapset"""
+        """Return to current location and mapset"""
         # here was also the cleaning of gcpmanagement from layer manager
         # which is no longer needed
 
@@ -363,7 +363,7 @@ class LocationPage(TitledPage):
         # self.Bind(wx.EVT_CLOSE, self.parent.Cleanup)
 
     def OnMaptype(self,event):
-        """!Change map type"""
+        """Change map type"""
         global maptype
 
         if event.GetInt() == 0:
@@ -372,7 +372,7 @@ class LocationPage(TitledPage):
             maptype = 'vector'
         
     def OnLocation(self, event):
-        """!Sets source location for map(s) to georectify"""
+        """Sets source location for map(s) to georectify"""
         self.xylocation = event.GetString()
         
         #create a list of valid mapsets
@@ -394,7 +394,7 @@ class LocationPage(TitledPage):
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
 
     def OnMapset(self, event):
-        """!Sets source mapset for map(s) to georectify"""
+        """Sets source mapset for map(s) to georectify"""
         if self.xylocation == '':
             GMessage(_('You must select a valid location '
                        'before selecting a mapset'),
@@ -500,7 +500,7 @@ class GroupPage(TitledPage):
         self.xygroup = event.GetString()
         
     def OnMkGroup(self, event):
-        """!Create new group in source location/mapset"""
+        """Create new group in source location/mapset"""
         dlg = GroupDialog(parent = self, defaultGroup = self.xygroup)
         dlg.DisableSubgroupEdit()
         dlg.ShowModal()
@@ -515,7 +515,7 @@ class GroupPage(TitledPage):
         self.Update()
         
     def OnVGroup(self, event):
-        """!Add vector maps to group"""
+        """Add vector maps to group"""
         dlg = VectGroup(parent = self,
                         id = wx.ID_ANY,
                         grassdb = self.grassdatabase,
@@ -659,7 +659,7 @@ class DispMapPage(TitledPage):
         self.Bind(wx.EVT_CLOSE, self.parent.Cleanup)
 
     def OnSrcSelection(self, event):
-        """!Source map to display selected"""
+        """Source map to display selected"""
         global src_map
         global maptype
 
@@ -684,13 +684,13 @@ class DispMapPage(TitledPage):
             pass
 
     def OnTgtRastSelection(self, event):
-        """!Source map to display selected"""
+        """Source map to display selected"""
         global tgt_map
 
         tgt_map['raster'] = self.tgtrastselection.GetValue()
 
     def OnTgtVectSelection(self,event):
-        """!Source map to display selected"""
+        """Source map to display selected"""
         global tgt_map
 
         tgt_map['vector'] = self.tgtvectselection.GetValue()
@@ -779,7 +779,7 @@ class DispMapPage(TitledPage):
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
 
 class GCP(MapFrame, ColumnSorterMixin):
-    """!
+    """
     Manages ground control points for georectifying. Calculates RMS statistics.
     Calls i.rectify or v.rectify to georectify map.
     """
@@ -956,13 +956,13 @@ class GCP(MapFrame, ColumnSorterMixin):
         self.SetSettings()
 
     def __del__(self):
-        """!Disable GCP manager mode"""
+        """Disable GCP manager mode"""
         # leaving the method here but was used only to delete gcpmanagement
         # from layer manager which is now not needed
         pass
         
     def CreateGCPList(self):
-        """!Create GCP List Control"""
+        """Create GCP List Control"""
 
         return GCPList(parent=self, gcp=self)
 
@@ -1089,7 +1089,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         self.mapcoordlist[key] = [key, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
 
     def SetSettings(self):
-        """!Sets settings for drawing of GCP's.
+        """Sets settings for drawing of GCP's.
         """
         self.highest_only = UserSettings.Get(group='gcpman', key='rms', subkey='highestonly')
         self.show_unused =  UserSettings.Get(group='gcpman', key='symbol', subkey='unused')
@@ -1122,7 +1122,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         self.pointsToDrawTgt.SetPropertyVal("text", copy(textProp))
         
     def SetGCPSatus(self, item, itemIndex):
-        """!Before GCP is drawn, decides it's colour and whether it
+        """Before GCP is drawn, decides it's colour and whether it
         will be drawed.
         """
         key = self.list.GetItemData(itemIndex)
@@ -1155,7 +1155,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         item.SetPropertyVal('penName', wxPen)
 
     def SetGCPData(self, coordtype, coord, mapdisp=None, confirm=False):
-        """!Inserts coordinates from file, mouse click on map, or
+        """Inserts coordinates from file, mouse click on map, or
         after editing into selected item of GCP list and checks it for
         use.
         """
@@ -1211,7 +1211,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         # self.list.ResizeColumns()
         
     def SaveGCPs(self, event):
-        """!Make a POINTS file or save GCP coordinates to existing
+        """Make a POINTS file or save GCP coordinates to existing
         POINTS file
         """
         self.GCPcount = 0
@@ -1313,7 +1313,7 @@ class GCP(MapFrame, ColumnSorterMixin):
             self.RMSError(self.xygroup, self.gr_order)
 
     def ReloadGCPs(self, event):
-        """!Reload data from file"""
+        """Reload data from file"""
 
         # use backup
         shutil.copy(self.file['points_bak'], self.file['points'])
@@ -1472,7 +1472,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         self.grwiz.SwitchEnv('target')
 
     def OnGeorectDone(self, **kargs):
-        """!Print final message"""
+        """Print final message"""
         global maptype
         if maptype == 'raster':
             return
@@ -1488,7 +1488,7 @@ class GCP(MapFrame, ColumnSorterMixin):
 
          
     def OnSettings(self, event):
-        """!GCP Manager settings"""
+        """GCP Manager settings"""
         dlg = GrSettingsDialog(parent=self, giface=self._giface,
                                id=wx.ID_ANY, title=_('GCP Manager settings'))
 
@@ -1499,7 +1499,7 @@ class GCP(MapFrame, ColumnSorterMixin):
 
     def UpdateColours(self, srcrender=False, srcrenderVector=False,
                             tgtrender=False, tgtrenderVector=False):
-        """!update colours"""
+        """update colours"""
         highest_fwd_err = 0.0
         self.highest_key = 0
         highest_idx = 0
@@ -1533,7 +1533,7 @@ class GCP(MapFrame, ColumnSorterMixin):
             targetMapWin.UpdateMap(render=tgtrender, renderVector=tgtrenderVector)
 
     def OnQuit(self, event):
-        """!Quit georectifier"""
+        """Quit georectifier"""
         ret = wx.MessageBox(parent=self,
                       caption=_("Quit GCP Manager"),
                       message=_('Save ground control points?'),
@@ -1768,7 +1768,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         return newreg
 
     def OnHelp(self, event):
-        """!Show GCP Manager manual page"""
+        """Show GCP Manager manual page"""
         self._giface.Help(entry='wxGUI.gcp')
 
     def OnUpdateActive(self, event):
@@ -1795,7 +1795,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         self.StatusbarUpdate()
 
     def AdjustMap(self, newreg):
-        """!Adjust map window to new extents
+        """Adjust map window to new extents
         """
 
         # adjust map window
@@ -1834,7 +1834,7 @@ class GCP(MapFrame, ColumnSorterMixin):
         self.StatusbarUpdate()
 
     def OnZoomToSource(self, event):
-        """!Set target map window to match extents of source map window
+        """Set target map window to match extents of source map window
         """
 
         if not self.MapWindow == self.TgtMapWindow:
@@ -1848,7 +1848,7 @@ class GCP(MapFrame, ColumnSorterMixin):
             self.AdjustMap(newreg)
 
     def OnZoomToTarget(self, event):
-        """!Set source map window to match extents of target map window
+        """Set source map window to match extents of target map window
         """
 
         if not self.MapWindow == self.SrcMapWindow:
@@ -1862,7 +1862,7 @@ class GCP(MapFrame, ColumnSorterMixin):
             self.AdjustMap(newreg)
 
     def OnZoomMenuGCP(self, event):
-        """!Popup Zoom menu
+        """Popup Zoom menu
         """
         point = wx.GetMousePosition()
         zoommenu = wx.Menu()
@@ -1882,14 +1882,14 @@ class GCP(MapFrame, ColumnSorterMixin):
         zoommenu.Destroy()
         
     def OnSize(self, event):
-        """!Adjust Map Windows after GCP Map Display has been resized
+        """Adjust Map Windows after GCP Map Display has been resized
         """
         # re-render image on idle
         self.resize = time.clock()
         super(MapFrame, self).OnSize(event)
 
     def OnIdle(self, event):
-        """!GCP Map Display resized, adjust Map Windows
+        """GCP Map Display resized, adjust Map Windows
         """
         if self.GetMapToolbar():
             if self.resize and self.resize + 0.2 < time.clock():
@@ -1974,7 +1974,7 @@ class GCPList(wx.ListCtrl,
                 idx_col += 1
 
     def LoadData(self):
-        """!Load data into list"""
+        """Load data into list"""
         self.DeleteAllItems()
 
         self.render = False
@@ -1998,7 +1998,7 @@ class GCPList(wx.ListCtrl,
         self.EnsureVisible(self.selected)
 
     def OnCheckItem(self, index, flag):
-        """!Item is checked/unchecked"""
+        """Item is checked/unchecked"""
 
         if self.render:
             # redraw points
@@ -2039,7 +2039,7 @@ class GCPList(wx.ListCtrl,
         return self.selected
 
     def DeleteGCPItem(self):
-        """!Deletes selected item in GCP list.
+        """Deletes selected item in GCP list.
         """
         if self.selected == wx.NOT_FOUND:
             return
@@ -2057,7 +2057,7 @@ class GCPList(wx.ListCtrl,
         return key
         
     def ResizeColumns(self):
-        """!Resize columns"""
+        """Resize columns"""
         minWidth = [90, 120]
         for i in range(self.GetColumnCount()):
             self.SetColumnWidth(i, wx.LIST_AUTOSIZE)
@@ -2068,11 +2068,11 @@ class GCPList(wx.ListCtrl,
         self.SendSizeEvent()
 
     def GetSelected(self):
-        """!Get index of selected item"""
+        """Get index of selected item"""
         return self.selected
 
     def OnItemSelected(self, event):
-        """!Item selected
+        """Item selected
         """
         if self.render and self.selected != event.GetIndex():
             self.selected = event.GetIndex()
@@ -2130,7 +2130,7 @@ class GCPList(wx.ListCtrl,
                     self.gcp.UpdateColours()
                     
     def OnColClick(self, event):
-        """!ListCtrl forgets selected item..."""
+        """ListCtrl forgets selected item..."""
         self.selected = self.FindItemData(-1, self.selectedkey)
         self.SetItemState(self.selected,
                           wx.LIST_STATE_SELECTED,
@@ -2139,9 +2139,10 @@ class GCPList(wx.ListCtrl,
         event.Skip()
 
 class VectGroup(wx.Dialog):
-    """!Dialog to create a vector group (VREF file) for georectifying
+    """Dialog to create a vector group (VREF file) for georectifying
 
-    @todo Replace by g.group
+    .. todo::
+        Replace by g.group
     """
     def __init__(self, parent, id, grassdb, location, mapset, group,
                  style=wx.DEFAULT_DIALOG_STYLE):
@@ -2251,7 +2252,7 @@ class VectGroup(wx.Dialog):
         self.Layout()
         
     def MakeVGroup(self):
-        """!Create VREF file"""
+        """Create VREF file"""
         vgrouplist = []
         for item in range(self.listMap.GetCount()):
             if not self.listMap.IsChecked(item):
@@ -2269,7 +2270,7 @@ class EditGCP(wx.Dialog):
     def __init__(self, parent, data, gcpno, id=wx.ID_ANY,
                  title=_("Edit GCP"),
                  style=wx.DEFAULT_DIALOG_STYLE):
-        """!Dialog for editing GPC and map coordinates in list control"""
+        """Dialog for editing GPC and map coordinates in list control"""
 
         wx.Dialog.__init__(self, parent, id, title=title, style=style)
 
@@ -2345,7 +2346,7 @@ class EditGCP(wx.Dialog):
         sizer.Fit(self)
 
     def GetValues(self, columns=None):
-        """!Return list of values (as strings).
+        """Return list of values (as strings).
         """
         valuelist = []
         try:
@@ -2426,7 +2427,7 @@ class GrSettingsDialog(wx.Dialog):
         mainSizer.Fit(self)
         
     def __CreateSymbologyPage(self, notebook):
-        """!Create notebook page with symbology settings"""
+        """Create notebook page with symbology settings"""
 
         panel = wx.Panel(parent=notebook, id=wx.ID_ANY)
         notebook.AddPage(page=panel, text=_("Symbology"))
@@ -2626,7 +2627,7 @@ class GrSettingsDialog(wx.Dialog):
         return panel
 
     def __CreateRectificationPage(self, notebook):
-        """!Create notebook page with symbology settings"""
+        """Create notebook page with symbology settings"""
 
         panel = wx.Panel(parent=notebook, id=wx.ID_ANY)
         notebook.AddPage(page=panel, text=_("Rectification"))
@@ -2680,7 +2681,7 @@ class GrSettingsDialog(wx.Dialog):
         return panel
 
     def OnHighlight(self, event):
-        """!Checkbox 'highlighthighest' checked/unchecked"""
+        """Checkbox 'highlighthighest' checked/unchecked"""
         if self.highlighthighest.IsChecked():
             self.parent.highest_only = True
             self.rmsWin.Disable()
@@ -2689,7 +2690,7 @@ class GrSettingsDialog(wx.Dialog):
             self.rmsWin.Enable()
 
     def OnSDFactor(self,event):
-        """!New factor for RMS threshold = M + SD * factor"""
+        """New factor for RMS threshold = M + SD * factor"""
         try:
             self.sdfactor = float(self.rmsWin.GetValue())
         except ValueError:
@@ -2703,7 +2704,7 @@ class GrSettingsDialog(wx.Dialog):
                              'Too many points might be highlighted'))
         
     def OnSrcSelection(self,event):
-        """!Source map to display selected"""
+        """Source map to display selected"""
         global src_map
 
         tmp_map = self.srcselection.GetValue()
@@ -2712,13 +2713,13 @@ class GrSettingsDialog(wx.Dialog):
             self.new_src_map = tmp_map
 
     def OnTgtRastSelection(self,event):
-        """!Target map to display selected"""
+        """Target map to display selected"""
         global tgt_map
 
         self.new_tgt_map['raster'] = self.tgtrastselection.GetValue()
 
     def OnTgtVectSelection(self,event):
-        """!Target map to display selected"""
+        """Target map to display selected"""
         global tgt_map
 
         self.new_tgt_map['vector'] = self.tgtvectselection.GetValue()
@@ -2840,7 +2841,7 @@ class GrSettingsDialog(wx.Dialog):
         self.parent.SetSettings()        
 
     def OnSave(self, event):
-        """!Button 'Save' pressed"""
+        """Button 'Save' pressed"""
         self.UpdateSettings()
         fileSettings = {}
         UserSettings.ReadSettingsFile(settings=fileSettings)
@@ -2850,10 +2851,10 @@ class GrSettingsDialog(wx.Dialog):
         #self.Close()
 
     def OnApply(self, event):
-        """!Button 'Apply' pressed"""
+        """Button 'Apply' pressed"""
         self.UpdateSettings()
         #self.Close()
 
     def OnClose(self, event):
-        """!Button 'Cancel' pressed"""
+        """Button 'Cancel' pressed"""
         self.Close()

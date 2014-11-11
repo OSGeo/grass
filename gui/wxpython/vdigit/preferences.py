@@ -1,4 +1,4 @@
-"""!
+"""
 @package vdigit.preferences
 
 @brief wxGUI vector digitizer preferences dialogs
@@ -30,7 +30,7 @@ from core.utils import _
 class VDigitSettingsDialog(wx.Dialog):
     def __init__(self, parent, giface, title = _("Digitization settings"),
                  style = wx.DEFAULT_DIALOG_STYLE):
-        """!Standard settings dialog for digitization purposes
+        """Standard settings dialog for digitization purposes
         """
         wx.Dialog.__init__(self, parent = parent, id = wx.ID_ANY, title = title, style = style)
 
@@ -79,7 +79,7 @@ class VDigitSettingsDialog(wx.Dialog):
         mainSizer.Fit(self)
 
     def _createSymbologyPage(self, notebook):
-        """!Create notebook page concerning symbology settings"""
+        """Create notebook page concerning symbology settings"""
         panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
         notebook.AddPage(page = panel, text = _("Symbology"))
 
@@ -117,7 +117,7 @@ class VDigitSettingsDialog(wx.Dialog):
         return panel
 
     def _createGeneralPage(self, notebook):
-        """!Create notebook page concerning general settings"""
+        """Create notebook page concerning general settings"""
         panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
         notebook.AddPage(page = panel, text = _("General"))
 
@@ -275,7 +275,7 @@ class VDigitSettingsDialog(wx.Dialog):
         return panel
 
     def _createQueryPage(self, notebook):
-        """!Create notebook page for query tool"""
+        """Create notebook page for query tool"""
         panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
         notebook.AddPage(page = panel, text = _("Query tool"))
 
@@ -356,7 +356,7 @@ class VDigitSettingsDialog(wx.Dialog):
         return panel
 
     def _createAttributesPage(self, notebook):
-        """!Create notebook page for attributes"""
+        """Create notebook page for attributes"""
         panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
         notebook.AddPage(page = panel, text = _("Attributes"))
 
@@ -523,7 +523,7 @@ class VDigitSettingsDialog(wx.Dialog):
         return panel
 
     def _symbologyData(self):
-        """!Data for _createSymbologyPage()
+        """Data for _createSymbologyPage()
 
         label | checkbox | color
         """
@@ -548,7 +548,7 @@ class VDigitSettingsDialog(wx.Dialog):
             (_("Direction"), "direction"),)
 
     def OnGeomAttrb(self, event):
-        """!Register geometry attributes (enable/disable)
+        """Register geometry attributes (enable/disable)
         """
         checked = event.IsChecked()
         id = event.GetId()
@@ -565,7 +565,7 @@ class VDigitSettingsDialog(wx.Dialog):
             column.Enable(False)
         
     def OnChangeCategoryMode(self, event):
-        """!Change category mode
+        """Change category mode
         """
         mode = event.GetSelection()
         UserSettings.Set(group = 'vdigit', key = "categoryMode", subkey = 'selection', value = mode)
@@ -581,7 +581,7 @@ class VDigitSettingsDialog(wx.Dialog):
         self.category.SetValue(UserSettings.Get(group = 'vdigit', key = 'category', subkey = 'value'))
 
     def OnChangeLayer(self, event):
-        """!Layer changed
+        """Layer changed
         """
         layer = event.GetInt()
         if layer > 0:
@@ -592,13 +592,13 @@ class VDigitSettingsDialog(wx.Dialog):
         event.Skip()
 
     def OnChangeAddRecord(self, event):
-        """!Checkbox 'Add new record' status changed
+        """Checkbox 'Add new record' status changed
         """
         pass
         # self.category.SetValue(self.digit.SetCategory())
             
     def OnChangeSnappingValue(self, event):
-        """!Change snapping value - update static text
+        """Change snapping value - update static text
         """
         value = self.snappingValue.GetValue()
         
@@ -627,7 +627,7 @@ class VDigitSettingsDialog(wx.Dialog):
         event.Skip()
 
     def OnChangeSnappingUnits(self, event):
-        """!Snapping units change -> update static text
+        """Snapping units change -> update static text
         """
         value = self.snappingValue.GetValue()
         units = self.snappingUnit.GetStringSelection()
@@ -645,7 +645,7 @@ class VDigitSettingsDialog(wx.Dialog):
         event.Skip()
 
     def OnChangeQuery(self, event):
-        """!Change query
+        """Change query
         """
         if self.queryLength.GetValue():
             # length
@@ -661,7 +661,7 @@ class VDigitSettingsDialog(wx.Dialog):
             self.queryDangleValue.Enable(True)
 
     def OnSave(self, event):
-        """!Button 'Save' pressed
+        """Button 'Save' pressed
         """
         self.UpdateSettings()
         self.parent.toolbars['vdigit'].settingsDialog = None
@@ -678,12 +678,12 @@ class VDigitSettingsDialog(wx.Dialog):
         event.Skip()
         
     def OnApply(self, event):
-        """!Button 'Apply' pressed
+        """Button 'Apply' pressed
         """
         self.UpdateSettings()
 
     def OnCancel(self, event):
-        """!Button 'Cancel' pressed
+        """Button 'Cancel' pressed
         """
         self.parent.toolbars['vdigit'].settingsDialog = None
         self.Destroy()
@@ -692,9 +692,10 @@ class VDigitSettingsDialog(wx.Dialog):
             event.Skip()
         
     def UpdateSettings(self):
-        """!Update digitizer settings
+        """Update digitizer settings
 
-        @todo Needs refactoring 
+        .. todo::
+            Needs refactoring 
         """
         # TODO: it seems that it needs to be replaced by signal
         # but if it makes sense generally for wxGUI it can be added to giface 

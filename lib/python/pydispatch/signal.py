@@ -15,7 +15,7 @@ def _islambda(function):
 
     Should work on the most of Python implementations where name of lambda
     function is not unique.
-    
+
     >>> mylambda = lambda x: x*x
     >>> _islambda(mylambda)
     True
@@ -173,7 +173,7 @@ class Signal(object):
         DispatcherKeyError: 'No receivers found for signal <__main__.Signal object at 0x...> from sender _Any'
 
         Disconnecting the non-exiting or unknown handler will result in error.
-        
+
         >>> signal1.disconnect(some_function)
         Traceback (most recent call last):
         NameError: name 'some_function' is not defined

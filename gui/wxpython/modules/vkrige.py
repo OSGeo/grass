@@ -51,7 +51,7 @@ maxint = 1e6 # instead of sys.maxint, not working with SpinCtrl on 64bit [report
 #@TODO move away functions not regarding the GUI
 
 class KrigingPanel(wx.Panel):
-    """ Main panel. Contains all widgets except Menus and Statusbar. """
+    """Main panel. Contains all widgets except Menus and Statusbar. """
     def __init__(self, parent, Rinstance, controller, *args, **kwargs):
         wx.Panel.__init__(self, parent, *args, **kwargs)
         
@@ -169,7 +169,7 @@ class KrigingPanel(wx.Panel):
         self.InputDataMap.GetElementList()
         
     def CreatePage(self, package, Rinstance, controller):
-        """ Creates the three notebook pages, one for each R package """
+        """Creates the three notebook pages, one for each R package """
         for package in ["gstat"]: #@TODO add here other packages when they will be implemented
             classobj = eval("RBook"+package+"Panel")
             setattr(self, "RBook"+package+"Panel", (classobj(self,
@@ -179,11 +179,11 @@ class KrigingPanel(wx.Panel):
             self.RPackagesBook.AddPage(page = getattr(self, "RBook"+package+"Panel"), text = package)
 
     def OnButtonRefresh(self, event):
-        """ Forces refresh of list of available layers. """
+        """Forces refresh of list of available layers. """
         self.InputDataMap.GetElementList()
 
     def OnCloseWindow(self, event):
-        """ Cancel button pressed"""
+        """Cancel button pressed"""
         self.parent.Close()
         event.Skip()
 
@@ -192,7 +192,7 @@ class KrigingPanel(wx.Panel):
         event.Skip()
 
     def OnInputMapChanged(self, event):
-        """ Refreshes list of columns."""
+        """Refreshes list of columns."""
         MapName = event.GetString()
         self.InputDataColumn.InsertColumns(vector = MapName,
                                    layer = 1, excludeKey = False,
@@ -213,7 +213,7 @@ class KrigingPanel(wx.Panel):
             self.OutputVarianceMapName.SetValue('')
         
     def OnRunButton(self,event):
-        """ Execute R analysis. """
+        """Execute R analysis. """
         #@FIXME: send data to main method instead of running it here.
         
         #-1: get the selected notebook page. The user shall know that [s]he can modify settings in all
@@ -257,7 +257,7 @@ class KrigingPanel(wx.Panel):
         event.Skip()
 
     def _switchPage(self, notification):
-        """!Manages @c 'output' notebook page according to event notification."""
+        """Manages @c 'output' notebook page according to event notification."""
         if notification == Notification.HIGHLIGHT:
             self.RPackagesBook.HighlightPageByName('output')
         if notification == Notification.MAKE_VISIBLE:
@@ -269,7 +269,7 @@ class KrigingPanel(wx.Panel):
 
 
 class KrigingModule(wx.Frame):
-    """ Kriging module for GRASS GIS. Depends on R and its packages gstat and geoR. """
+    """Kriging module for GRASS GIS. Depends on R and its packages gstat and geoR. """
     def __init__(self, parent, Rinstance, controller, *args, **kwargs):
         wx.Frame.__init__(self, parent, *args, **kwargs)
         # setting properties and all widgettery
@@ -284,16 +284,16 @@ class KrigingModule(wx.Frame):
         self.SetSize(self.GetBestSize())
     
 class Log:
-    """ The log output is redirected to the status bar of the containing frame. """
+    """The log output is redirected to the status bar of the containing frame. """
     def __init__(self, parent):
         self.parent = parent
 
     def message(self, text_string):
-        """ Updates status bar """
+        """Updates status bar """
         self.parent.SetStatusText(text_string.strip())
 
 class RBookPanel(wx.Panel):
-    """ Generic notebook page with shared widgets and empty kriging functions. """
+    """Generic notebook page with shared widgets and empty kriging functions. """
     def __init__(self, parent, *args, **kwargs):
         wx.Panel.__init__(self, parent, *args, **kwargs)
         
@@ -376,16 +376,16 @@ class RBookPanel(wx.Panel):
         self.BlockSpinBox.Enable(event.GetInt() == 1)
     
     def OnPlotButton(self,event):
-        """ Plots variogram with current options. """
+        """Plots variogram with current options. """
         pass
     
     def UseValue(self, event):
-        """ Enables/Disables the SpinCtrl in respect of the checkbox. """
+        """Enables/Disables the SpinCtrl in respect of the checkbox. """
         n = self.ParametersList[event.GetId()]
         getattr(self, n+"Ctrl").Enable(event.IsChecked())
 
 class RBookgstatPanel(RBookPanel):
-    """ Subclass of RBookPanel, with specific gstat options and kriging functions. """
+    """Subclass of RBookPanel, with specific gstat options and kriging functions. """
     def __init__(self, parent, Rinstance, controller, *args, **kwargs):
         RBookPanel.__init__(self, parent, *args, **kwargs)
         
@@ -443,7 +443,7 @@ class RBookgstatPanel(RBookPanel):
         #@FIXME: was for n in self.ParametersSizer.GetChildren(): n.Enable(False) but doesn't work
         
     def OnPlotButton(self,event):
-        """ Plots variogram with current options. """
+        """Plots variogram with current options. """
         ## BIG WARNING: smell of code duplication. Fix this asap. emminchia!
         #controller = Controller() # sed, if needed,
         #controller = self.controller
@@ -501,7 +501,7 @@ class RBookgstatPanel(RBookPanel):
             time.sleep(0.2)
         
 class RBookgeoRPanel(RBookPanel):
-    """ Subclass of RBookPanel, with specific geoR options and kriging functions. """
+    """Subclass of RBookPanel, with specific geoR options and kriging functions. """
     def __init__(self, parent, *args, **kwargs):
         RBookPanel.__init__(self, parent, *args, **kwargs)
         #@TODO: change these two lines as soon as geoR f(x)s are integrated.

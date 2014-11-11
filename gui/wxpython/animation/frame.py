@@ -1,4 +1,4 @@
-"""!
+"""
 @package animation.frame
 
 @brief Animation frame and different types of sliders
@@ -116,7 +116,7 @@ class AnimationFrame(wx.Frame):
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
     def InitStatusbar(self):
-        """!Init statusbar."""
+        """Init statusbar."""
         self.CreateStatusBar(number=1, style=0)
 
     def _addPanes(self):
@@ -132,7 +132,7 @@ class AnimationFrame(wx.Frame):
             self._mgr.GetPane('slider_' + name).Hide()
 
     def _addToolbar(self, name):
-        """!Add defined toolbar to the window
+        """Add defined toolbar to the window
 
         Currently known toolbars are:
          - 'mainToolbar'          - data management
@@ -172,9 +172,9 @@ class AnimationFrame(wx.Frame):
                               BestSize((self.toolbars['miscToolbar'].GetBestSize())))
 
     def SetAnimations(self, layerLists):
-        """!Set animation data
+        """Set animation data
 
-        @param layerLists list of layerLists
+        :param layerLists: list of layerLists
         """
         self.controller.SetAnimations(layerLists)
 
@@ -313,7 +313,7 @@ class AnimationFrame(wx.Frame):
         self.Destroy()
 
     def __del__(self):
-        """!It might not be called, therefore we try to clean it all in OnCloseWindow."""
+        """It might not be called, therefore we try to clean it all in OnCloseWindow."""
         if hasattr(self, 'controller') and hasattr(self.controller, 'timer'):
             if self.controller.timer.IsRunning():
                 self.controller.timer.Stop()

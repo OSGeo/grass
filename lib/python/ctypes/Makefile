@@ -3,14 +3,9 @@ MODULE_TOPDIR = ../../..
 PACKAGE = "grasslibs"
 
 include $(MODULE_TOPDIR)/include/Make/Other.make
-include $(MODULE_TOPDIR)/include/Make/Doxygen.make
-
-# doxygen:
-DOXNAME=
-DOXINPUT=grasspython.dox
 
 MODULES = date gis raster gmath proj imagery vector rtree display stats \
-	dbmi raster3d arraystats cluster vedit ogsf nviz segment rowio
+	dbmi raster3d arraystats cluster vedit ogsf nviz segment rowio temporal
 
 date_LIBS       = $(DATETIMELIB)
 gis_LIBS        = $(GISLIB)
@@ -31,6 +26,7 @@ ogsf_LIBS       = $(OGSFLIB)
 nviz_LIBS       = $(NVIZLIB)
 segment_LIBS	= $(SEGMENTLIB)
 rowio_LIBS	= $(ROWIOLIB)
+temporal_LIBS	= $(TEMPORALLIB)
 
 date_HDRS       = datetime.h defs/datetime.h
 gis_HDRS        = gis.h defs/gis.h
@@ -51,6 +47,7 @@ ogsf_HDRS       = ogsf.h defs/ogsf.h
 nviz_HDRS       = nviz.h defs/nviz.h
 segment_HDRS    = segment.h defs/segment.h
 rowio_HDRS      = rowio.h defs/rowio.h
+temporal_HDRS   = temporal.h
 
 proj_INC        = $(PROJINC)
 vector_INC      = $(VECT_INC) $(VECT_CFLAGS)

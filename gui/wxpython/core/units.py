@@ -1,15 +1,14 @@
-"""!
+"""
 @package core.units
 
 @brief Units management
 
-@todo Probably will be replaced by Python ctypes fns in the near
-future(?)
+.. todo::
+    Probably will be replaced by Python ctypes fns in the near future(?)
 
 Usage:
-@code
-from core.units import Units
-@endcode
+
+    from core.units import Units
 
 Classes:
  - units::BaseUnits
@@ -46,11 +45,11 @@ class BaseUnits:
                              4 : { 'key' : 'ht', 'label' : _('hectares') } }
 
     def GetUnitsList(self, type):
-        """!Get list of units (their labels)
+        """Get list of units (their labels)
         
-        @param type units type ('length' or 'area')
+        :param type: units type ('length' or 'area')
         
-        @return list of units labels
+        :return: list of units labels
         """
         result = list()
         try:
@@ -64,20 +63,20 @@ class BaseUnits:
         return result
 
     def GetUnitsKey(self, type, index):
-        """!Get units key based on index
+        """Get units key based on index
         
-        @param type units type ('length' or 'area')
-        @param index units index
+        :param type: units type ('length' or 'area')
+        :param index: units index
         """
         return self._units[type][index]['key']
 
     def GetUnitsIndex(self, type, key):
-        """!Get units index based on key
+        """Get units index based on key
         
-        @param type units type ('length' or 'area')
-        @param key units key, e.g. 'me' for meters
+        :param type: units type ('length' or 'area')
+        :param key: units key, e.g. 'me' for meters
 
-        @return index
+        :return: index
         """
         for k, u in self._units[type].iteritems():
             if u['key'] == key:
@@ -87,13 +86,13 @@ class BaseUnits:
 Units = BaseUnits()
 
 def ConvertValue(value, type, units):
-    """!Convert value from map units to given units
+    """Convert value from map units to given units
 
     Inspired by vector/v.to.db/units.c
 
-    @param value value to be converted
-    @param type units type ('length', 'area')
-    @param unit  destination units
+    :param value: value to be converted
+    :param type: units type ('length', 'area')
+    :param unit: destination units
     """
     # get map units
     # TODO
@@ -126,11 +125,10 @@ def ConvertValue(value, type, units):
 
 
 def formatDist(distance, mapunits):
-        """!Formats length numbers and units in a nice way.
+        """Formats length numbers and units in a nice way.
 
         Formats length numbers and units as a function of length.
 
-        @code
         >>> formatDist(20.56915, 'metres')
         (20.57, 'm')
         >>> formatDist(6983.4591, 'metres')
@@ -146,13 +144,11 @@ def formatDist(distance, mapunits):
         >>> formatDist(82.146, 'unknown')
         (82.15, 'units')
 
-        @endcode
-
         Accepted map units are 'meters', 'metres', 'feet', 'degree'.
         Returns 'units' instead of unrecognized units.
 
-        @param distance map units
-        @param mapunits map units
+        :param distance: map units
+        :param mapunits: map units
 
         From code by Hamish Bowman Grass Development Team 2006.
         """
@@ -206,7 +202,7 @@ def formatDist(distance, mapunits):
 def doc_test():
     """Tests the module using doctest
 
-    @return a number of failed tests
+    :return: a number of failed tests
     """
     import doctest
     from core.utils import do_doctest_gettext_workaround

@@ -1,4 +1,4 @@
-"""!
+"""
 @package iscatt.iscatt_core
 
 @brief Non GUI functions.
@@ -44,7 +44,7 @@ MAX_NCELLS = 65536 * 65536
 WARN_NCELLS = 12000 * 12000
 
 class Core:
-    """!Represents scatter plot backend.
+    """Represents scatter plot backend.
     """
     def __init__(self):
         
@@ -211,7 +211,7 @@ class Core:
         return val
 
 class CatRastUpdater:
-    """!Update backend data structures according to selected areas in mapwindow.
+    """Update backend data structures according to selected areas in mapwindow.
     """
     def __init__(self, scatts_dt, an_data, core):
         self.scatts_dt = scatts_dt
@@ -284,8 +284,7 @@ class CatRastUpdater:
             ret = UpdateCatRast(patch_rast, region, self.scatts_dt.GetCatRastCond(cat))
             if ret < 0:
                 GException(_("Patching category raster conditions file failed."))            
-            RunCommand("g.remove", flags = 'f',
-                      type = 'rast', name = patch_rast)
+            RunCommand("g.remove", flags='f', type='rast', name=patch_rast)
 
     def _rasterize(self, grass_region, layer, cat, out_rast):
 
@@ -367,7 +366,7 @@ class CatRastUpdater:
         return {"GRASS_REGION" :  grass.region_env(**new_r)}
 
 class AnalyzedData:
-    """!Represents analyzed data (bands, region).
+    """Represents analyzed data (bands, region).
     """
     def __init__(self):
         
@@ -408,7 +407,7 @@ class AnalyzedData:
         return self.bands_info[band]
 
 class ScattPlotsCondsData:
-    """!Data structure for selected areas in scatter plot(condtions).
+    """Data structure for selected areas in scatter plot(condtions).
     """
     def __init__(self, an_data):
 
@@ -557,7 +556,7 @@ class ScattPlotsCondsData:
 
                    
 class ScattPlotsData(ScattPlotsCondsData):
-    """!Data structure for computed points (classes) in scatter plots.\
+    """Data structure for computed points (classes) in scatter plots.\
     """
     def __init__(self, an_data):
 
@@ -598,8 +597,8 @@ class ScattPlotsData(ScattPlotsCondsData):
         grass.try_remove(self.cats_rasts_conds[cat_id])
         del self.cats_rasts_conds[cat_id]
 
-        RunCommand("g.remove", flags='f',
-                   type='rast', name=self.cats_rasts[cat_id])
+        RunCommand("g.remove", flags='f', type='rast',
+                   name=self.cats_rasts[cat_id])
         del self.cats_rasts[cat_id]
 
         return True
@@ -709,10 +708,8 @@ class ScattPlotsData(ScattPlotsCondsData):
         for tmp in self.cats_rasts_conds.itervalues():
             grass.try_remove(tmp) 
         for tmp in self.cats_rasts.itervalues():
-            RunCommand("g.remove",
-                       flags='f',
-                       type='rast',
-                       name=tmp,
+            RunCommand("g.remove", flags='f',
+                       type='rast', name=tmp,
                        getErrorMsg=True)
 
         self.cats_rasts = {}
@@ -776,7 +773,7 @@ def RasterizePolygon(pol, height, min_h, width, min_w):
 """
 
 def idScattToidBands(scatt_id, n_bands):
-    """!Get bands ids from scatter plot id.""" 
+    """Get bands ids from scatter plot id."""
     n_b1 = n_bands - 1
 
     band_1 = (int) ((2 * n_b1 + 1 - sqrt(((2 * n_b1 + 1) * (2 * n_b1 + 1) - 8 * scatt_id))) / 2)
@@ -786,7 +783,7 @@ def idScattToidBands(scatt_id, n_bands):
     return band_1, band_2
 
 def idBandsToidScatt(band_1_id, band_2_id, n_bands):
-    """!Get scatter plot id from band ids."""
+    """Get scatter plot id from band ids."""
     if band_2_id <  band_1_id:
         tmp = band_1_id
         band_1_id = band_2_id

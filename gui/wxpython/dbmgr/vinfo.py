@@ -26,11 +26,11 @@ from core.utils import _
 import grass.script as grass
 
 def GetUnicodeValue(value):
-    """!Get unicode value
+    """Get unicode value
 
-    @param value value to be recoded
+    :param value: value to be recoded
 
-    @return unicode value
+    :return: unicode value
     """
     if type(value) == types.UnicodeType:
         return value
@@ -44,7 +44,7 @@ def GetUnicodeValue(value):
     return unicode(str(value), enc, errors = 'replace')
 
 def CreateDbInfoDesc(panel, mapDBInfo, layer):
-    """!Create database connection information content"""
+    """Create database connection information content"""
     infoFlexSizer = wx.FlexGridSizer (cols = 2, hgap = 1, vgap = 1)
     infoFlexSizer.AddGrowableCol(1)
     
@@ -68,13 +68,13 @@ def CreateDbInfoDesc(panel, mapDBInfo, layer):
     return infoFlexSizer
         
 class VectorDBInfo(VectorDBInfoBase):
-    """!Class providing information about attribute tables
+    """Class providing information about attribute tables
     linked to the vector map"""
     def __init__(self, map):
         VectorDBInfoBase.__init__(self, map)
         
     def GetColumns(self, table):
-        """!Return list of columns names (based on their index)"""
+        """Return list of columns names (based on their index)"""
         try:
             names = [''] * len(self.tables[table].keys())
         except KeyError:
@@ -86,7 +86,7 @@ class VectorDBInfo(VectorDBInfoBase):
         return names
 
     def SelectByPoint(self, queryCoords, qdist):
-        """!Get attributes by coordinates (all available layers)
+        """Get attributes by coordinates (all available layers)
 
         Return line id or None if no line is found"""
         line = None
@@ -130,7 +130,7 @@ class VectorDBInfo(VectorDBInfoBase):
         return ret
     
     def SelectFromTable(self, layer, cols = '*', where = None):
-        """!Select records from the table
+        """Select records from the table
 
         Return number of selected records, -1 on error
         """

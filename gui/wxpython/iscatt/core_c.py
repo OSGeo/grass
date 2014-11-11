@@ -1,4 +1,4 @@
-"""!
+"""
 @package iscatt.core_c
 
 @brief Wrappers for scatter plot C backend.

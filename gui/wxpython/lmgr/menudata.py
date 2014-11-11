@@ -1,4 +1,4 @@
-"""!
+"""
 @package lmgr.menudata
 
 @brief wxGUI Layer Manager - menu data

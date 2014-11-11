@@ -1,4 +1,4 @@
-"""!
+"""
 @package nviz.main
 
 @brief Nviz (3D view) module

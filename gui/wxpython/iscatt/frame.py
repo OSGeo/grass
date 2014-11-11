@@ -1,4 +1,4 @@
-"""!
+"""
 @package iscatt.frame
 
 @brief Main scatter plot widgets.
@@ -295,7 +295,7 @@ class ScatterPlotsPanel(scrolled.ScrolledPanel):
         self.SetupScrolling()
 
     def OnClose(self, event):
-        """!Close dialog"""
+        """Close dialog"""
         #TODO
         print "closed"
         self.scatt_mgr.CleanUp()
@@ -478,7 +478,7 @@ class CategoryListCtrl(wx.ListCtrl,
         return indices        
 
     def DeselectAll(self):
-        """!Deselect all items"""
+        """Deselect all items"""
         indexList = self.GetSelectedIndices()
         for i in indexList:
             self.Select(i, on = 0)
@@ -514,7 +514,7 @@ class CategoryListCtrl(wx.ListCtrl,
         return self.l
 
     def OnCategoryRightUp(self, event):
-        """!Show context menu on right click"""
+        """Show context menu on right click"""
         item, flags = self.HitTest((event.GetX(), event.GetY()))
         if item != wx.NOT_FOUND and flags & wx.LIST_HITTEST_ONITEM:
             self.rightClickedItemIdx = item
@@ -589,7 +589,7 @@ class CategoryListCtrl(wx.ListCtrl,
         menu.Destroy()
 
     def OnExportCatRast(self, event):
-        """!Export training areas"""
+        """Export training areas"""
         #TODO
         #   GMessage(parent=self, message=_("No class raster to export."))
         #    return
@@ -625,7 +625,7 @@ class CategoryListCtrl(wx.ListCtrl,
         self.RefreshItems(0, len(self.cats_mgr.GetCategories()))
 
     def OnSetColor(self, event):
-        """!Popup opacity level indicator"""
+        """Popup opacity level indicator"""
         cat_idx = self.rightClickedItemIdx
         cat_id = self.cats_mgr.GetCategories()[cat_idx]
 
@@ -646,7 +646,7 @@ class CategoryListCtrl(wx.ListCtrl,
         dlg.Destroy()
 
     def OnPopupOpacityLevel(self, event):
-        """!Popup opacity level indicator"""
+        """Popup opacity level indicator"""
 
         cat_id = self.cats_mgr.GetCategories()[self.rightClickedItemIdx]
         cat_attrs = self.cats_mgr.GetCategoryAttrs(cat_id)

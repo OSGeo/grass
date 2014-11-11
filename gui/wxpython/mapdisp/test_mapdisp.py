@@ -67,7 +67,7 @@ from mapdisp.main import LayerList
 
 
 class MapdispGrassInterface(StandaloneGrassInterface):
-    """!@implements GrassInterface"""
+    """@implements GrassInterface"""
     def __init__(self, map_):
         StandaloneGrassInterface.__init__(self)
         self._map = map_
@@ -82,7 +82,7 @@ class MapdispGrassInterface(StandaloneGrassInterface):
 
 # this is a copy of method from some frame class
 def copyOfInitMap(map_, width, height):
-    """!Initialize map display, set dimensions and map region
+    """Initialize map display, set dimensions and map region
     """
     if not grass.find_program('g.region', '--help'):
         sys.exit(_("GRASS module '%s' not found. Unable to start map "
@@ -269,7 +269,7 @@ class Tester(object):
 
         
 def main():
-    """!Sets the GRASS display driver
+    """Sets the GRASS display driver
     """
     driver = UserSettings.Get(group='display', key='driver', subkey='type')
     if driver == 'png':

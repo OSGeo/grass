@@ -1,4 +1,4 @@
-"""!
+"""
 @package mapswipe.frame
 
 @brief Map Swipe Frame
@@ -119,7 +119,7 @@ class SwipeMapFrame(DoubleMapFrame):
         wx.CallAfter(self.CallAfterInit)
 
     def TrackCursor(self, event):
-        """!Track cursor in one window and show cross in the other.
+        """Track cursor in one window and show cross in the other.
 
         Only for mirror mode.
         """
@@ -135,14 +135,14 @@ class SwipeMapFrame(DoubleMapFrame):
         event.Skip()
 
     def ActivateFirstMap(self, event = None):
-        """!Switch tracking direction"""
+        """Switch tracking direction"""
         super(SwipeMapFrame, self).ActivateFirstMap(event)
 
         self.firstMapWindow.ClearLines()
         self.firstMapWindow.Refresh()
 
     def ActivateSecondMap(self, event = None):
-        """!Switch tracking direction"""
+        """Switch tracking direction"""
         super(SwipeMapFrame, self).ActivateSecondMap(event)
 
         self.secondMapWindow.ClearLines()
@@ -156,7 +156,7 @@ class SwipeMapFrame(DoubleMapFrame):
             self.OnSelectLayers(event=None)
         
     def InitStatusbar(self):
-        """!Init statusbar (default items)."""
+        """Init statusbar (default items)."""
         # items for choice
         self.statusbarItems = [sb.SbCoordinates,
                                sb.SbRegionExtent,
@@ -201,7 +201,7 @@ class SwipeMapFrame(DoubleMapFrame):
 
 
     def OnSliderPositionChanging(self, event):
-        """!Slider changes its position, sash must be moved too."""
+        """Slider changes its position, sash must be moved too."""
         Debug.msg (5, "SwipeMapFrame.OnSliderPositionChanging()")
 
         self.GetFirstWindow().movingSash = True
@@ -213,21 +213,21 @@ class SwipeMapFrame(DoubleMapFrame):
             self.splitter.OnSashChanging(None)
 
     def OnSliderPositionChanged(self, event):
-        """!Slider position changed, sash must be moved too."""
+        """Slider position changed, sash must be moved too."""
         Debug.msg (5, "SwipeMapFrame.OnSliderPositionChanged()")
 
         self.splitter.SetSashPosition(event.GetPosition())
         self.splitter.OnSashChanged(None)
 
     def OnSashChanging(self, event):
-        """!Sash position is changing, slider must be moved too."""
+        """Sash position is changing, slider must be moved too."""
         Debug.msg (5, "SwipeMapFrame.OnSashChanging()")
 
         self.slider.SetValue(self.splitter.GetSashPosition())
         event.Skip()
 
     def OnSashChanged(self, event):
-        """!Sash position changed, slider must be moved too."""
+        """Sash position changed, slider must be moved too."""
         Debug.msg (5, "SwipeMapFrame.OnSashChanged()")
 
         self.OnSashChanging(event)
@@ -253,13 +253,13 @@ class SwipeMapFrame(DoubleMapFrame):
             self.resize = False
 
     def OnAutoRenderChanged(self, value):
-        """!Auto rendering state changed."""
+        """Auto rendering state changed."""
         style = self.splitter.GetWindowStyle()
         style ^= wx.SP_LIVE_UPDATE
         self.splitter.SetWindowStyle(style)
 
     def AddToolbar(self, name):
-        """!Add defined toolbar to the window
+        """Add defined toolbar to the window
         
         Currently known toolbars are:
          - 'swipeMap'          - basic map toolbar
@@ -301,7 +301,7 @@ class SwipeMapFrame(DoubleMapFrame):
                       BestSize((self.toolbars[name].GetBestSize())))
 
     def _addPanes(self):
-        """!Add splitter window and sliders to aui manager"""
+        """Add splitter window and sliders to aui manager"""
         # splitter window
         self._mgr.AddPane(self.splitter, wx.aui.AuiPaneInfo().
                   Name('splitter').CaptionVisible(False).PaneBorder(True).
@@ -324,7 +324,7 @@ class SwipeMapFrame(DoubleMapFrame):
                   Right().Layer(1).BestSize((self.sliderV.GetBestSize())))
 
     def ZoomToMap(self):
-        """!
+        """
         Set display extents to match selected raster (including NULLs)
         or vector map.
         """
@@ -339,7 +339,7 @@ class SwipeMapFrame(DoubleMapFrame):
             self.GetSecondWindow().ZoomToMap(layers=layers)
 
     def OnZoomToMap(self, event):
-        """!Zoom to map"""
+        """Zoom to map"""
         self.ZoomToMap()
 
     def OnZoomBack(self, event):
@@ -409,7 +409,7 @@ class SwipeMapFrame(DoubleMapFrame):
             self.OnRender(event=None)
 
     def SetFirstRaster(self, name):
-        """!Set raster map to first Map"""
+        """Set raster map to first Map"""
         raster = grass.find_file(name = name, element = 'cell')
         if raster['fullname']:
             self.rasters['first'] = raster['fullname']
@@ -419,7 +419,7 @@ class SwipeMapFrame(DoubleMapFrame):
         return False
 
     def SetSecondRaster(self, name):
-        """!Set raster map to second Map"""
+        """Set raster map to second Map"""
         raster = grass.find_file(name = name, element = 'cell')
         if raster['fullname']:
             self.rasters['second'] = raster['fullname']
@@ -429,9 +429,9 @@ class SwipeMapFrame(DoubleMapFrame):
         return False
 
     def SetLayer(self, name, mapInstance):
-        """!Sets layer in Map.
+        """Sets layer in Map.
         
-        @param name layer (raster) name
+        :param name: layer (raster) name
         """
         Debug.msg (3, "SwipeMapFrame.SetLayer(): name=%s" % name)
         
@@ -444,7 +444,7 @@ class SwipeMapFrame(DoubleMapFrame):
                                         render = True)
 
     def OnSwitchWindows(self, event):
-        """!Switch windows position."""
+        """Switch windows position."""
         Debug.msg(3, "SwipeMapFrame.OnSwitchWindows()")
 
         splitter = self.splitter
@@ -455,11 +455,13 @@ class SwipeMapFrame(DoubleMapFrame):
         splitter.OnSashChanged(None)
 
     def _saveToFile(self, fileName, fileType):
-        """!Creates composite image by rendering both images and
+        """Creates composite image by rendering both images and
         pasting them into the new one.
 
-        @todo specify size of the new image (problem is inaccurate scaling)
-        @todo make dividing line width and color optional
+        .. todo::
+            specify size of the new image (problem is inaccurate scaling)
+        .. todo::
+            make dividing line width and color optional
         """
         w1 = self.splitter.GetWindow1()
         w2 = self.splitter.GetWindow2()
@@ -508,7 +510,7 @@ class SwipeMapFrame(DoubleMapFrame):
         grass.try_remove(filename2)
 
     def SaveToFile(self, event):
-        """!Save map to image
+        """Save map to image
         """
         img = self.firstMapWindow.img or self.secondMapWindow.img
         if not img:
@@ -541,7 +543,7 @@ class SwipeMapFrame(DoubleMapFrame):
         dlg.Destroy()
 
     def OnSwitchOrientation(self, event):
-        """!Switch orientation of the sash."""
+        """Switch orientation of the sash."""
         Debug.msg(3, "SwipeMapFrame.OnSwitchOrientation()")
 
         splitter = self.splitter
@@ -564,16 +566,16 @@ class SwipeMapFrame(DoubleMapFrame):
         self.SetRasterNames()
 
     def OnAddText(self, event):
-        """!Double click on text overlay
+        """Double click on text overlay
 
         So far not implemented.
         """
         pass
 
     def SetViewMode(self, mode):
-        """!Sets view mode.
+        """Sets view mode.
 
-        @param mode view mode ('swipe', 'mirror')
+        :param mode: view mode ('swipe', 'mirror')
         """
         if self._mode == mode:
             return
@@ -610,9 +612,9 @@ class SwipeMapFrame(DoubleMapFrame):
             self.GetSecondWindow().SetRasterNameText('', 102)
 
     def Query(self, x, y):
-        """!Query active layers from both mapwindows.
+        """Query active layers from both mapwindows.
 
-        @param x,y coordinates
+        :param x,y: coordinates
         """
         rasters = ([layer.GetName() for layer in
                     self.GetFirstMap().GetListOfLayers(ltype='raster', active=True)],
@@ -665,7 +667,7 @@ class SwipeMapFrame(DoubleMapFrame):
         event.Skip()
 
     def _QueryMapDone(self):
-        """!Restore settings after querying (restore GRASS_REGION)
+        """Restore settings after querying (restore GRASS_REGION)
         """
         if hasattr(self, "tmpreg"):
             if self.tmpreg:
@@ -679,11 +681,11 @@ class SwipeMapFrame(DoubleMapFrame):
             del self.tmpreg
 
     def GetMapToolbar(self):
-        """!Returns toolbar with zooming tools"""
+        """Returns toolbar with zooming tools"""
         return self.toolbars['swipeMap']
 
     def IsStandalone(self):
-        """!Since we do not need layer manager, we are standalone"""
+        """Since we do not need layer manager, we are standalone"""
         return True
 
     def OnHelp(self, event):
@@ -704,7 +706,7 @@ class SwipeMapFrame(DoubleMapFrame):
 
 
 class MapSplitter(wx.SplitterWindow):
-    """!Splitter window for displaying two maps"""
+    """Splitter window for displaying two maps"""
     def __init__(self, parent, id):
         wx.SplitterWindow.__init__(self, parent = parent, id = id,
                                    style = wx.SP_LIVE_UPDATE

@@ -1,4 +1,4 @@
-"""!
+"""
 @package mapdisp.statusbar
 
 @brief Classes for statusbar management
@@ -44,7 +44,7 @@ from grass.script  import core as grass
 from grass.pydispatch.signal import Signal
 
 class SbException:
-    """! Exception class used in SbManager and SbItems"""
+    """Exception class used in SbManager and SbItems"""
     def __init__(self, message):
         self.message = message
     def __str__(self):
@@ -52,7 +52,7 @@ class SbException:
 
 
 class SbManager:
-    """!Statusbar manager for wx.Statusbar and SbItems.
+    """Statusbar manager for wx.Statusbar and SbItems.
     
     Statusbar manager manages items added by AddStatusbarItem method.
     Provides progress bar (SbProgress) and choice (wx.Choice).
@@ -63,11 +63,14 @@ class SbManager:
     User settings (group = 'display', key = 'statusbarMode', subkey = 'selection')
     are taken into account.
     
-    @todo generalize access to UserSettings (specify group, etc.) 
-    @todo add GetMode method using name instead of index
+    .. todo::
+        generalize access to UserSettings (specify group, etc.) 
+
+    .. todo::
+        add GetMode method using name instead of index
     """
     def __init__(self, mapframe, statusbar):
-        """!Connects manager to statusbar
+        """Connects manager to statusbar
         
         Creates choice and progress bar.
         """
@@ -92,64 +95,66 @@ class SbManager:
         self._hiddenItems = {}
     
     def SetProperty(self, name, value):
-        """!Sets property represented by one of contained SbItems
+        """Sets property represented by one of contained SbItems
             
-        @param name name of SbItem (from name attribute)
-        @param value value to be set
+        :param name: name of SbItem (from name attribute)
+        :param value: value to be set
         """
         self.statusbarItems[name].SetValue(value)
         
     def GetProperty(self, name):
-        """!Returns property represented by one of contained SbItems
+        """Returns property represented by one of contained SbItems
         
-        @param name name of SbItem (from name attribute)
+        :param name: name of SbItem (from name attribute)
         """
         return self.statusbarItems[name].GetValue()
         
     def HasProperty(self, name):
-        """!Checks whether property is represented by one of contained SbItems
+        """Checks whether property is represented by one of contained SbItems
         
-        @param name name of SbItem (from name attribute)
+        :param name: name of SbItem (from name attribute)
         
-        @returns True if particular SbItem is contained, False otherwise
+        :return: True if particular SbItem is contained, False otherwise
         """
         if name in self.statusbarItems:
             return True
         return False
     
     def AddStatusbarItem(self, item):
-        """!Adds item to statusbar
+        """Adds item to statusbar
         
         If item position is 0, item is managed by choice.        
         
-        @see AddStatusbarItemsByClass
+        :func:`AddStatusbarItemsByClass`
         """
         self.statusbarItems[item.name] = item
         if item.GetPosition() == 0:
             self.choice.Append(item.label, clientData = item) #attrError?
             
     def AddStatusbarItemsByClass(self, itemClasses, **kwargs):
-        """!Adds items to statusbar
+        """Adds items to statusbar
 
-        @param itemClasses list of classes of items to be add
-        @param kwargs SbItem constructor parameters
+        :param list itemClasses: list of classes of items to be add
+        :param kwargs: SbItem constructor parameters
         
-        @see AddStatusbarItem
+        :func:`AddStatusbarItem`
         """
         for Item in itemClasses:
             item = Item(**kwargs)
             self.AddStatusbarItem(item)
                       
     def HideStatusbarChoiceItemsByClass(self, itemClasses):
-        """!Hides items showed in choice
+        """Hides items showed in choice
         
         Hides items with position 0 (items showed in choice) by removing
         them from choice.
         
-        @param itemClasses list of classes of items to be hided
+        :param itemClasses list of classes of items to be hided
         
-        @see ShowStatusbarChoiceItemsByClass
-        @todo consider adding similar function which would take item names
+        :func:`ShowStatusbarChoiceItemsByClass`
+        
+        .. todo::
+            consider adding similar function which would take item names
         """
         index = []
         for itemClass in itemClasses:
@@ -163,15 +168,15 @@ class SbManager:
             self.choice.Delete(i)
         
     def ShowStatusbarChoiceItemsByClass(self, itemClasses):
-        """!Shows items showed in choice
+        """Shows items showed in choice
         
         Shows items with position 0 (items showed in choice) by adding
         them to choice.
         Items are restored in their old positions.
         
-        @param itemClasses list of classes of items to be showed
+        :param itemClasses list of classes of items to be showed
         
-        @see HideStatusbarChoiceItemsByClass
+        :func:`HideStatusbarChoiceItemsByClass`
         """
         # must be sorted to be inserted correctly
         for pos in sorted(self._hiddenItems.keys()):
@@ -180,16 +185,16 @@ class SbManager:
                 self.choice.Insert(item.label, pos, item)
         
     def ShowItem(self, itemName):
-        """!Invokes showing of particular item
+        """Invokes showing of particular item
         
-        @see Update
+        :func:`Update`
         """
         if self.statusbarItems[itemName].GetPosition() != 0 or \
            not self.progressbar.IsShown():
             self.statusbarItems[itemName].Show()
         
     def _postInit(self):
-        """!Post-initialization method
+        """Post-initialization method
         
         It sets internal user settings,
         set choice's selection (from user settings) and does reposition.
@@ -211,7 +216,7 @@ class SbManager:
         self._postInitialized = True
         
     def Update(self):
-        """!Updates statusbar
+        """Updates statusbar
 
         It always updates mask.
         """
@@ -233,7 +238,7 @@ class SbManager:
             item.Update()
         
     def Reposition(self):
-        """!Reposition items in statusbar
+        """Reposition items in statusbar
         
         Set positions to all items managed by statusbar manager.
         It should not be necessary to call it manually.
@@ -274,7 +279,7 @@ class SbManager:
             win.SetSize((w, h))
         
     def GetProgressBar(self):
-        """!Returns progress bar"""
+        """Returns progress bar"""
         return self.progressbar
 
     def _progressShown(self):
@@ -286,7 +291,7 @@ class SbManager:
         self.choice.GetClientData(self.choice.GetSelection()).Show()
 
     def OnToggleStatus(self, event):
-        """!Toggle status text
+        """Toggle status text
         """
         self.Update()
         if event.GetSelection() == 3: # use something better than magic numbers
@@ -297,7 +302,7 @@ class SbManager:
                 self.mapFrame.OnRender(None)
         
     def SetMode(self, modeIndex):
-        """!Sets current mode
+        """Sets current mode
         
         Mode is usually driven by user through choice.
         """
@@ -305,7 +310,7 @@ class SbManager:
         self.choice.SetSelection(modeIndex)
     
     def GetMode(self):
-        """!Returns current mode"""
+        """Returns current mode"""
         return self.choice.GetSelection()
 
     def SetProgress(self, range, value, text):
@@ -316,7 +321,7 @@ class SbManager:
             self.statusbar.SetStatusText(text)
         
 class SbItem:
-    """!Base class for statusbar items.
+    """Base class for statusbar items.
     
     Each item represents functionality (or action) controlled by statusbar
     and related to MapFrame.
@@ -326,23 +331,25 @@ class SbItem:
     Items usually has requirements to MapFrame instance
     (specified as MapFrame.methodname or MapWindow.methodname).
     
-    @todo consider externalizing position (see SbProgress use in SbManager)
+    .. todo::
+        consider externalizing position (see SbProgress use in SbManager)
     """
     def __init__(self, mapframe, statusbar, position = 0):
-        """!
+        """
         
-        @param mapframe instance of class with MapFrame interface
-        @param statusbar statusbar instance (wx.Statusbar)
-        @param position item position in statusbar
+        :param mapframe: instance of class with MapFrame interface
+        :param statusbar: statusbar instance (wx.Statusbar)
+        :param position: item position in statusbar
         
-        @todo rewrite Update also in derived classes to take in account item position
+        .. todo::
+            rewrite Update also in derived classes to take in account item position
         """
         self.mapFrame = mapframe
         self.statusbar = statusbar
         self.position = position
     
     def Show(self):
-        """!Invokes showing of underlying widget.
+        """Invokes showing of underlying widget.
         
         In derived classes it can do what is appropriate for it,
         e.g. showing text on statusbar (only).
@@ -362,28 +369,28 @@ class SbItem:
         return self.position
     
     def GetWidget(self):
-        """!Returns underlaying winget.
+        """Returns underlaying winget.
         
-        @return widget or None if doesn't exist
+        :return: widget or None if doesn't exist
         """
         return self.widget
     
     def _update(self, longHelp):
-        """!Default implementation for Update method.
+        """Default implementation for Update method.
         
-        @param longHelp True to enable long help (help from toolbars)
+        :param longHelp: True to enable long help (help from toolbars)
         """
         self.statusbar.SetStatusText("", 0)
         self.Show()
         self.mapFrame.StatusbarEnableLongHelp(longHelp)
         
     def Update(self):
-        """!Called when statusbar action is activated (e.g. through wx.Choice).
+        """Called when statusbar action is activated (e.g. through wx.Choice).
         """
         self._update(longHelp = False)
 
 class SbRender(SbItem):
-    """!Checkbox to enable and disable auto-rendering.
+    """Checkbox to enable and disable auto-rendering.
     
     Requires MapFrame.OnRender method.
     """
@@ -419,7 +426,7 @@ class SbRender(SbItem):
         self.Show()
         
 class SbShowRegion(SbItem):
-    """!Checkbox to enable and disable showing of computational region.
+    """Checkbox to enable and disable showing of computational region.
     
     Requires MapFrame.OnRender, MapFrame.IsAutoRendered, MapFrame.GetWindow.
     """
@@ -452,11 +459,12 @@ class SbShowRegion(SbItem):
         self._properties.showRegionChanged.disconnect(self._setValue)
 
     def OnToggleShowRegion(self, event):
-        """!Shows/Hides extent (comp. region) in map canvas.
+        """Shows/Hides extent (comp. region) in map canvas.
         
         Shows or hides according to checkbox value.
 
-        @todo needs refactoring
+        .. todo::
+            needs refactoring
         """
         self._disconnectShowRegion()
         self._properties.showRegion = self.widget.GetValue()
@@ -473,7 +481,7 @@ class SbShowRegion(SbItem):
         self._connectShowRegion()
 
 class SbAlignExtent(SbItem):
-    """!Checkbox to select zoom behavior.
+    """Checkbox to select zoom behavior.
     
     Used by BufferedWindow (through MapFrame property).
     See tooltip for explanation.
@@ -514,7 +522,7 @@ class SbAlignExtent(SbItem):
 
 
 class SbResolution(SbItem):
-    """!Checkbox to select used display resolution.
+    """Checkbox to select used display resolution.
     
     Requires MapFrame.OnRender method. 
     """
@@ -545,7 +553,7 @@ class SbResolution(SbItem):
         self._properties.resolutionChanged.disconnect(self._setValue)
 
     def OnToggleUpdateMap(self, event):
-        """!Update display when toggle display mode
+        """Update display when toggle display mode
         """
         self._disconnectResolutionChange()
         self._properties.resolution = self.widget.GetValue()
@@ -556,7 +564,7 @@ class SbResolution(SbItem):
 
 
 class SbMapScale(SbItem):
-    """!Editable combobox to get/set current map scale.
+    """Editable combobox to get/set current map scale.
     
     Requires MapFrame.GetMapScale, MapFrame.SetMapScale
     and MapFrame.GetWindow (and GetWindow().UpdateMap()).
@@ -603,7 +611,7 @@ class SbMapScale(SbItem):
         self.mapFrame.StatusbarEnableLongHelp(False)
 
     def OnChangeMapScale(self, event):
-        """!Map scale changed by user
+        """Map scale changed by user
         """
         scale = event.GetString()
 
@@ -623,7 +631,7 @@ class SbMapScale(SbItem):
         
         
 class SbGoTo(SbItem):
-    """!Textctrl to set coordinates which to focus on.
+    """Textctrl to set coordinates which to focus on.
     
     Requires MapFrame.GetWindow, MapWindow.GoTo method.
     """
@@ -642,10 +650,10 @@ class SbGoTo(SbItem):
         self.widget.Bind(wx.EVT_TEXT_ENTER, self.OnGoTo)
     
     def ReprojectENToMap(self, e, n, useDefinedProjection):
-        """!Reproject east, north from user defined projection
+        """Reproject east, north from user defined projection
         
-        @param e,n coordinate (for DMS string, else float or string)
-        @param useDefinedProjection projection defined by user in settings dialog
+        :param e,n: coordinate (for DMS string, else float or string)
+        :param useDefinedProjection: projection defined by user in settings dialog
         
         @throws SbException if useDefinedProjection is True and projection is not defined in UserSettings
         """
@@ -679,7 +687,7 @@ class SbGoTo(SbItem):
         return e, n
 
     def OnGoTo(self, event):
-        """!Go to position
+        """Go to position
         """
         try:
             e, n = self.GetValue().split(';')
@@ -706,7 +714,7 @@ class SbGoTo(SbItem):
             self.statusbar.SetStatusText(str(e), 0)
 
     def GetCenterString(self, map):
-        """!Get current map center in appropriate format"""
+        """Get current map center in appropriate format"""
         region = map.GetCurrentRegion()
         precision = int(UserSettings.Get(group = 'projection', key = 'format',
                                          subkey = 'precision'))
@@ -740,7 +748,7 @@ class SbGoTo(SbItem):
 
 
     def SetCenter(self):
-        """!Set current map center as item value"""
+        """Set current map center as item value"""
         center = self.GetCenterString(self.mapFrame.GetMap())
         self.SetValue(center)
         
@@ -758,7 +766,7 @@ class SbGoTo(SbItem):
         
 
 class SbProjection(SbItem):
-    """!Checkbox to enable user defined projection (can be set in settings)"""
+    """Checkbox to enable user defined projection (can be set in settings)"""
     def __init__(self, mapframe, statusbar, position = 0):
         SbItem.__init__(self, mapframe, statusbar, position)
         self.name = 'projection'
@@ -796,7 +804,7 @@ class SbProjection(SbItem):
         
 
 class SbMask(SbItem):
-    """!StaticText to show whether mask is activated."""
+    """StaticText to show whether mask is activated."""
     def __init__(self, mapframe, statusbar, position = 0):
         SbItem.__init__(self, mapframe, statusbar, position)
         self.name = 'mask'
@@ -813,7 +821,7 @@ class SbMask(SbItem):
             self.Hide()
         
 class SbTextItem(SbItem):
-    """!Base class for items without widgets.
+    """Base class for items without widgets.
     
     Only sets statusbar text.
     """
@@ -841,7 +849,7 @@ class SbTextItem(SbItem):
         self._update(longHelp = True)
 
 class SbDisplayGeometry(SbTextItem):
-    """!Show current display resolution."""
+    """Show current display resolution."""
     def __init__(self, mapframe, statusbar, position = 0):
         SbTextItem.__init__(self, mapframe, statusbar, position)
         self.name = 'displayGeometry'
@@ -861,7 +869,7 @@ class SbDisplayGeometry(SbTextItem):
         SbTextItem.Show(self)
 
 class SbCoordinates(SbTextItem):
-    """!Show map coordinates when mouse moves.
+    """Show map coordinates when mouse moves.
     
     Requires MapWindow.GetLastEN method."""
     def __init__(self, mapframe, statusbar, position = 0):
@@ -874,7 +882,8 @@ class SbCoordinates(SbTextItem):
     def Show(self):
         """Show the last map window coordinates.
 
-        @todo remove last EN call and use coordinates comming from signal
+        .. todo::
+            remove last EN call and use coordinates comming from signal
         """
         precision = int(UserSettings.Get(group = 'projection', key = 'format',
                              subkey = 'precision'))
@@ -908,14 +917,14 @@ class SbCoordinates(SbTextItem):
         It does not show the changed text immediately, it waits for the Show()
         method to be called.
 
-        @param text string to be shown
+        :param text: string to be shown
         """
         self._additionalInfo = text
 
     def ReprojectENFromMap(self, e, n, useDefinedProjection, precision, format):
-        """!Reproject east, north to user defined projection.
+        """Reproject east, north to user defined projection.
         
-        @param e,n coordinate
+        :param e,n: coordinate
         
         @throws SbException if useDefinedProjection is True and projection is not defined in UserSettings
         """
@@ -943,7 +952,7 @@ class SbCoordinates(SbTextItem):
                 return "%.*f; %.*f" % (precision, e, precision, n)
         
 class SbRegionExtent(SbTextItem):
-    """!Shows current display region"""
+    """Shows current display region"""
     def __init__(self, mapframe, statusbar, position = 0):
         SbTextItem.__init__(self, mapframe, statusbar, position)
         self.name = 'displayRegion'
@@ -964,13 +973,13 @@ class SbRegionExtent(SbTextItem):
         SbTextItem.Show(self)
     
     def _getRegion(self):
-        """!Get current display region"""
+        """Get current display region"""
         return self.mapFrame.GetMap().GetCurrentRegion() # display region
         
     def _formatRegion(self, w, e, s, n, nsres, ewres, precision = None):
-        """!Format display region string for statusbar
+        """Format display region string for statusbar
 
-        @param nsres,ewres unused
+        :param nsres,ewres: unused
         """
         if precision is not None:
             return "%.*f - %.*f, %.*f - %.*f" % (precision, w, precision, e,
@@ -980,9 +989,10 @@ class SbRegionExtent(SbTextItem):
          
            
     def ReprojectRegionFromMap(self, region, useDefinedProjection, precision, format):
-        """!Reproject region values
+        """Reproject region values
         
-        @todo reorganize this method to remove code useful only for derived class SbCompRegionExtent
+        .. todo::
+            reorganize this method to remove code useful only for derived class SbCompRegionExtent
         """
         if useDefinedProjection:
             settings = UserSettings.Get(group = 'projection', key = 'statusbar', subkey = 'proj4')
@@ -1038,14 +1048,14 @@ class SbRegionExtent(SbTextItem):
                                 
                                 
 class SbCompRegionExtent(SbRegionExtent):
-    """!Shows computational region."""
+    """Shows computational region."""
     def __init__(self, mapframe, statusbar, position = 0):
         SbRegionExtent.__init__(self, mapframe, statusbar, position)
         self.name = 'computationalRegion'
         self.label = _("Computational region")
         
     def _formatRegion(self, w, e, s, n, ewres, nsres, precision = None):
-        """!Format computational region string for statusbar"""
+        """Format computational region string for statusbar"""
         if precision is not None:
             return "%.*f - %.*f, %.*f - %.*f (%.*f, %.*f)" % (precision, w, precision, e,
                                                               precision, s, precision, n,
@@ -1054,12 +1064,12 @@ class SbCompRegionExtent(SbRegionExtent):
             return "%s - %s, %s - %s (%s, %s)" % (w, e, s, n, ewres, nsres)
         
     def _getRegion(self):
-        """!Returns computational region."""
+        """Returns computational region."""
         return self.mapFrame.GetMap().GetRegion() # computational region
         
         
 class SbProgress(SbItem):
-    """!General progress bar to show progress.
+    """General progress bar to show progress.
     
     Underlaying widget is wx.Gauge.
     """
@@ -1076,11 +1086,11 @@ class SbProgress(SbItem):
         
         
     def GetRange(self):
-        """!Returns progress range."""
+        """Returns progress range."""
         return self.widget.GetRange()
     
     def SetRange(self, range):
-        """!Sets progress range."""
+        """Sets progress range."""
         if range > 0:        
             if self.GetRange() != range:
                 self.widget.SetRange(range)
@@ -1099,12 +1109,12 @@ class SbProgress(SbItem):
             self.widget.Hide()
 
     def IsShown(self):
-        """!Is progress bar shown
+        """Is progress bar shown
         """
         return self.widget.IsShown()
 
     def SetValue(self, value):
-        """!Sets value of progressbar."""
+        """Sets value of progressbar."""
         if value > self.GetRange():
             self.Hide()
             return
@@ -1115,9 +1125,9 @@ class SbProgress(SbItem):
 
 
     def GetWidget(self):
-        """!Returns underlaying winget.
+        """Returns underlaying winget.
         
-        @return widget or None if doesn't exist
+        :return: widget or None if doesn't exist
         """
         return self.widget
 

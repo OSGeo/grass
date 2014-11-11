@@ -1,4 +1,4 @@
-"""!
+"""
 @package gcp.toolbars
 
 @brief Georectification module - toolbars
@@ -27,9 +27,9 @@ from icons.icon import MetaIcon
 
 
 class GCPManToolbar(BaseToolbar):
-    """!Toolbar for managing ground control points
+    """Toolbar for managing ground control points
 
-    @param parent reference to GCP widget
+    :param parent: reference to GCP widget
     """
     def __init__(self, parent):
         BaseToolbar.__init__(self, parent)
@@ -76,10 +76,10 @@ class GCPManToolbar(BaseToolbar):
                                     )
     
 class GCPDisplayToolbar(BaseToolbar):
-    """!GCP Display toolbar
+    """GCP Display toolbar
     """
     def __init__(self, parent, toolSwitcher):
-        """!GCP Display toolbar constructor
+        """GCP Display toolbar constructor
         """
         BaseToolbar.__init__(self, parent, toolSwitcher)
         
@@ -106,7 +106,7 @@ class GCPDisplayToolbar(BaseToolbar):
         self.EnableTool(self.zoomback, False)
         
     def _toolbarData(self):
-        """!Toolbar data"""
+        """Toolbar data"""
         icons = {
             'gcpSet'    : MetaIcon(img = 'gcp-create',
                                    label = _('Update GCP coordinates'),

@@ -1,4 +1,4 @@
-"""!
+"""
 @package frame
 
 @brief Timeline Tool
@@ -50,7 +50,7 @@ COLORS = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
 
 
 def check_version(*version):
-    """!Checks if given version or newer is installed"""
+    """Checks if given version or newer is installed"""
     versionInstalled = []
     for i in matplotlib.__version__.split('.'):
         try:
@@ -65,7 +65,7 @@ def check_version(*version):
 
 
 class TimelineFrame(wx.Frame):
-    """!The main frame of the application"""
+    """The main frame of the application"""
     def __init__(self, parent):
         wx.Frame.__init__(self, parent, id=wx.ID_ANY, title=_("GRASS GIS Timeline Tool"))
 
@@ -80,7 +80,7 @@ class TimelineFrame(wx.Frame):
         self.dbif.connect()
 
     def __del__(self):
-        """!Close the database interface and stop the messenger and C-interface
+        """Close the database interface and stop the messenger and C-interface
            subprocesses.
         """
         if self.dbif.connected is True:
@@ -88,7 +88,7 @@ class TimelineFrame(wx.Frame):
         tgis.stop_subprocesses()
 
     def _layout(self):
-        """!Creates the main panel with all the controls on it:
+        """Creates the main panel with all the controls on it:
              * mpl canvas
              * mpl navigation toolbar
              * Control panel for interaction
@@ -149,7 +149,7 @@ class TimelineFrame(wx.Frame):
         self.vbox.Fit(self)
 
     def _getData(self, timeseries):
-        """!Load data and read properties"""
+        """Load data and read properties"""
         self.timeData = {}
         mode = None
         unit = None
@@ -220,7 +220,7 @@ class TimelineFrame(wx.Frame):
         self.unit = unit
 
     def _draw3dFigure(self):
-        """!Draws 3d view (spatio-temporal extents).
+        """Draws 3d view (spatio-temporal extents).
 
 
         Only for matplotlib versions >= 1.0.0.
@@ -272,7 +272,7 @@ class TimelineFrame(wx.Frame):
         self.canvas.draw()
 
     def _draw2dFigure(self):
-        """!Draws 2D plot (temporal extents)"""
+        """Draws 2D plot (temporal extents)"""
         self.axes2d.clear()
         self.axes2d.grid(True)
         if self.temporalType == 'absolute':
@@ -337,7 +337,7 @@ class TimelineFrame(wx.Frame):
         DataCursor(plots, lookUp, InfoFormat)
 
     def OnRedraw(self, event):
-        """!Required redrawing."""
+        """Required redrawing."""
         datasets = self.datasetSelect.GetValue().strip()
         if not datasets:
             return
@@ -352,7 +352,7 @@ class TimelineFrame(wx.Frame):
         self._redraw()
 
     def _redraw(self):
-        """!Readraw data.
+        """Readraw data.
 
         Decides if to draw also 3D and adjusts layout if needed.
         """
@@ -380,11 +380,11 @@ class TimelineFrame(wx.Frame):
                 self.canvas.draw()
 
     def _checkDatasets(self, datasets):
-        """!Checks and validates datasets.
+        """Checks and validates datasets.
 
         Reports also type of dataset (e.g. 'strds').
 
-        @return (mapName, mapset, type)
+        :return: (mapName, mapset, type)
         """
         validated = []
         tDict = tgis.tlist_grouped('stds', group_type=True, dbif=self.dbif)
@@ -431,7 +431,7 @@ class TimelineFrame(wx.Frame):
 #  interface
 
     def SetDatasets(self, datasets):
-        """!Set data"""
+        """Set data"""
         if not datasets:
             return
         try:
@@ -444,13 +444,13 @@ class TimelineFrame(wx.Frame):
         self._redraw()
 
     def Show3D(self, show):
-        """!Show also 3D if possible"""
+        """Show also 3D if possible"""
         if check_version(1, 0, 0):
             self.view3dCheck.SetValue(show)
 
 
 class LookUp:
-    """!Helper class for searching info by coordinates"""
+    """Helper class for searching info by coordinates"""
     def __init__(self, timeData):
         self.data = {}
         self.timeData = timeData
@@ -484,7 +484,7 @@ class LookUp:
 
 
 def InfoFormat(timeData, datasetName, mapIndex):
-    """!Formats information about dataset"""
+    """Formats information about dataset"""
     text = []
     etype = timeData[datasetName]['elementType']
     name, mapset = datasetName.split('@')
@@ -550,7 +550,7 @@ class DataCursor(object):
             fig.canvas.mpl_connect('key_press_event', self.keyPressed)
 
     def keyPressed(self, event):
-        """!Key pressed - hide annotation if Delete was pressed"""
+        """Key pressed - hide annotation if Delete was pressed"""
         if event.key != 'delete':
             return
         for ax in self.axes:

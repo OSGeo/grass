@@ -1,4 +1,4 @@
-"""!
+"""
 @package wxplot.scatter
 
 @brief Scatter plotting using PyPlot
@@ -32,7 +32,7 @@ from core.gcmd         import RunCommand, GException, GError, GMessage
 from core.utils import _
 
 class ScatterFrame(BasePlotFrame):
-    """!Mainframe for displaying bivariate scatter plot of two raster maps. Uses wx.lib.plot.
+    """Mainframe for displaying bivariate scatter plot of two raster maps. Uses wx.lib.plot.
     """
     def __init__(self, parent, id = wx.ID_ANY, style = wx.DEFAULT_FRAME_STYLE, 
                  size = wx.Size(700, 400),
@@ -68,12 +68,12 @@ class ScatterFrame(BasePlotFrame):
             self.raster = {}
 
     def _initOpts(self):
-        """!Initialize plot options
+        """Initialize plot options
         """
         self.InitPlotOpts('scatter')            
 
     def OnCreateScatter(self, event):
-        """!Main routine for creating a scatterplot. Uses r.stats to
+        """Main routine for creating a scatterplot. Uses r.stats to
         create a list of cell value pairs. This is passed to
         plot to create a scatterplot.
         """
@@ -87,7 +87,7 @@ class ScatterFrame(BasePlotFrame):
             GMessage(_("Nothing to plot."), parent = self)
 
     def OnSelectRaster(self, event):
-        """!Select raster map(s) to profile
+        """Select raster map(s) to profile
         """
         dlg = ScatterRasterDialog(parent = self)
         dlg.CenterOnParent()
@@ -109,7 +109,7 @@ class ScatterFrame(BasePlotFrame):
         dlg.Destroy()
         
     def SetupScatterplot(self):
-        """!Build data list for ploting each raster
+        """Build data list for ploting each raster
         """
 
         #
@@ -145,7 +145,7 @@ class ScatterFrame(BasePlotFrame):
             self.ylabel += _(': %s') % units
             
     def CreateDatalist(self, rpair):
-        """!Build a list of cell value, frequency pairs for histogram
+        """Build a list of cell value, frequency pairs for histogram
             frequency can be in cell counts, percents, or area
         """
         datalist = []
@@ -196,7 +196,7 @@ class ScatterFrame(BasePlotFrame):
             return None
         
     def CreatePlotList(self):
-        """!Make list of elements to plot
+        """Make list of elements to plot
         """
         # graph the cell value, frequency pairs for the histogram
         self.plotlist = []
@@ -222,7 +222,7 @@ class ScatterFrame(BasePlotFrame):
         return self.plotlist
     
     def Update(self):
-        """!Update histogram after changing options
+        """Update histogram after changing options
         """
         self.SetGraphStyle()
         p = self.CreatePlotList()
@@ -232,7 +232,7 @@ class ScatterFrame(BasePlotFrame):
             GMessage(_("Nothing to plot."), parent = self)
     
     def OnRegression(self, event):
-        """!Displays regression information in messagebox
+        """Displays regression information in messagebox
         """
         message = []
         title = _('Regression Statistics for Scatterplot(s)')
@@ -265,8 +265,8 @@ class ScatterFrame(BasePlotFrame):
             stats.Destroy()       
 
 class ScatterToolbar(BaseToolbar):
-    """!Toolbar for bivariate scatterplots of raster map pairs
-    """ 
+    """Toolbar for bivariate scatterplots of raster map pairs
+    """
     def __init__(self, parent):
         BaseToolbar.__init__(self, parent)
 
@@ -280,7 +280,7 @@ class ScatterToolbar(BaseToolbar):
         self.Realize()
         
     def _toolbarData(self):
-        """!Toolbar data"""
+        """Toolbar data"""
         return self._getToolbarData((('addraster', BaseIcons["addRast"],
                                       self.parent.OnSelectRaster),
                                      (None, ),

@@ -1,4 +1,4 @@
-"""!
+"""
 @package vnet.dialogs
 
 @brief Dialogs for vector network analysis front-end
@@ -66,7 +66,7 @@ class VNETDialog(wx.Dialog):
     def __init__(self, parent, giface,
                  id = wx.ID_ANY, title = _("GRASS GIS Vector Network Analysis Tool"),
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
-        """!Dialog for vector network analysis"""
+        """Dialog for vector network analysis"""
 
         wx.Dialog.__init__(self, parent, id, style=style, title = title, **kwargs)
         self.SetIcon(wx.Icon(os.path.join(globalvar.ICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
@@ -159,7 +159,7 @@ class VNETDialog(wx.Dialog):
 
 
     def _addPanes(self):
-        """!Adds toolbar pane and pane with tabs"""
+        """Adds toolbar pane and pane with tabs"""
         self._mgr.AddPane(self.toolbars['mainToolbar'],
                               wx.aui.AuiPaneInfo().
                               Name("pointlisttools").Caption(_("Point list toolbar")).
@@ -195,7 +195,7 @@ class VNETDialog(wx.Dialog):
         self.Layout()
 
     def _createPointsPage(self):
-        """!Tab with points list and analysis settings"""
+        """Tab with points list and analysis settings"""
         pointsPanel = wx.Panel(parent = self)
         maxValue = 1e8
 
@@ -282,7 +282,7 @@ class VNETDialog(wx.Dialog):
         self.vnet_mgr.SetParams({"iso_lines" : val}, {})
 
     def OnShowCut(self, event):
-        """!Shows vector map with minimal cut (v.net.flow) - not yet implemented"""
+        """Shows vector map with minimal cut (v.net.flow) - not yet implemented"""
         val = event.IsChecked()
         if val and self.tmp_result:
             self.tmp_result.DeleteRenderLayer()
@@ -296,7 +296,7 @@ class VNETDialog(wx.Dialog):
         self.giface.updateMap.emit(render=True, renderVector=True)
 
     def _createOutputPage(self):
-        """!Tab with output console"""
+        """Tab with output console"""
         outputPanel = wx.Panel(parent = self)
         self.notebook.AddPage(page = outputPanel, 
                               text = _("Output"), 
@@ -313,7 +313,7 @@ class VNETDialog(wx.Dialog):
         outputPanel.SetSizer(outputSizer)
 
     def _createParametersPage(self):
-        """!Tab for selection of data for analysis"""
+        """Tab for selection of data for analysis"""
         dataPanel = scrolled.ScrolledPanel(parent=self)
         self.notebook.AddPage(page = dataPanel,
                               text=_('Parameters'), 
@@ -444,7 +444,7 @@ class VNETDialog(wx.Dialog):
         return selSizer
 
     def _createInputDbMgrPage(self):
-        """!Tab with attribute tables of analysis input layers"""
+        """Tab with attribute tables of analysis input layers"""
         self.inpDbMgrData['dbMgr'] = DbMgrBase()
 
         selMapName = None
@@ -463,7 +463,7 @@ class VNETDialog(wx.Dialog):
             self.OnVectSel(None)
 
     def _updateInputDbMgrPage(self, show):
-        """!Show or hide input tables tab"""
+        """Show or hide input tables tab"""
         if show and self.notebook.GetPageIndexByName('inputDbMgr') == -1:
             self.notebook.AddPage(page = self.inpDbMgrData['browse'],
                                   text=_('Input tables'), 
@@ -472,7 +472,7 @@ class VNETDialog(wx.Dialog):
             self.notebook.RemovePage(page = 'inputDbMgr')
 
     def _createResultDbMgrPage(self):
-        """!Tab with attribute tables of analysis result layers"""
+        """Tab with attribute tables of analysis result layers"""
         self.resultDbMgrData['dbMgr'] = DbMgrBase() 
         self.resultDbMgrData['browse'] = self.resultDbMgrData['dbMgr'].CreateDbMgrPage(parent = self.notebook,
                                                                                        pageName = 'browse')
@@ -484,7 +484,7 @@ class VNETDialog(wx.Dialog):
             self.resultDbMgrData['input'] = None
 
     def _updateResultDbMgrPage(self):
-        """!Show or Hide Result tables tab"""
+        """Show or Hide Result tables tab"""
         # analysis, which created result
         analysis = self.resultDbMgrData['analysis']
         #TODO maybe no need to store this information, just check it has attribute table, if so show it
@@ -498,7 +498,7 @@ class VNETDialog(wx.Dialog):
             self.notebook.RemovePage(page = 'resultDbMgr')
 
     def OnPageChanged(self, event):
-        """!Tab switched"""
+        """Tab switched"""
         if event.GetEventObject() == self.notebook:
             dbMgrIndxs = []
             dbMgrIndxs.append(self.notebook.GetPageIndexByName('inputDbMgr'))
@@ -515,7 +515,7 @@ class VNETDialog(wx.Dialog):
                 self.OnNLayerSel(None)
 
     def _updateDbMgrData(self):
-            """!Updates input/result tables page """
+            """Updates input/result tables page """
             if self.notebook.GetSelection() == self.notebook.GetPageIndexByName('inputDbMgr'):
                 self._updateInputDbMgrData()
             elif self.notebook.GetSelection() == self.notebook.GetPageIndexByName('resultDbMgr'):
@@ -524,7 +524,7 @@ class VNETDialog(wx.Dialog):
                 self.stBar.RemoveStatusItem('manager')   
 
     def _updateInputDbMgrData(self):
-        """!Loads data according to selected layers in Parameters tab"""
+        """Loads data according to selected layers in Parameters tab"""
         inpSel = self.inputData['input'].GetValue().strip()
         # changed vector map
         if self.inpDbMgrData['input'] != inpSel:
@@ -562,7 +562,7 @@ class VNETDialog(wx.Dialog):
                     self.inpDbMgrData['browse'].DeletePage(layer)
 
     def _updateResultDbMgrData(self):
-        """!Loads data from analysis result map"""
+        """Loads data from analysis result map"""
         if not self.tmp_result:
             return
         vectName = self.tmp_result.GetVectMapName()
@@ -579,7 +579,7 @@ class VNETDialog(wx.Dialog):
             wx.EndBusyCursor()
 
     def OnToTreeBtn(self, event):
-        """!Add vector map into layer tree"""
+        """Add vector map into layer tree"""
         vectorMap = self.inputData['input'].GetValue()
         vectMapName, mapSet = ParseMapStr(vectorMap)
         vectorMap = vectMapName + '@' + mapSet
@@ -654,7 +654,7 @@ class VNETDialog(wx.Dialog):
         self.stBar.RemoveStatusItem('ttb')  
 
     def OnVectSel(self, event):
-        """!When vector map is selected it populates other comboboxes in Parameters tab (layer selects, columns selects)"""
+        """When vector map is selected it populates other comboboxes in Parameters tab (layer selects, columns selects)"""
         if self.vnet_mgr.IsSnappingActive(): #TODO should be in vnet_mgr
             self.vnet_mgr.Snapping(activate = True)
 
@@ -704,7 +704,7 @@ class VNETDialog(wx.Dialog):
             self.inputData[k].SetValue(params[k])
 
     def OnALayerSel(self, event):
-        """!When arc layer from vector map is selected, populates corespondent columns selects"""
+        """When arc layer from vector map is selected, populates corespondent columns selects"""
         self.inputData['afcolumn'].InsertColumns(vector = self.inputData['input'].GetValue(), 
                                                  layer = self.inputData['alayer'].GetValue(), 
                                                  type = self.columnTypes)
@@ -715,7 +715,7 @@ class VNETDialog(wx.Dialog):
         self._setInputData()
 
     def OnNLayerSel(self, event):
-        """!When node layer from vector map is selected, populates corespondent column select"""
+        """When node layer from vector map is selected, populates corespondent column select"""
         if self.vnet_mgr.IsSnappingActive():
             self.vnet_mgr.Snapping(activate = True)
 
@@ -733,7 +733,7 @@ class VNETDialog(wx.Dialog):
         self.vnet_mgr.SetParams(params, flags)
 
     def _parseMapStr(self, vectMapStr):
-        """!Create full map name (add current mapset if it is not present in name)"""
+        """Create full map name (add current mapset if it is not present in name)"""
         mapValSpl = vectMapStr.strip().split("@")
         if len(mapValSpl) > 1:
             mapSet = mapValSpl[1]
@@ -744,7 +744,7 @@ class VNETDialog(wx.Dialog):
         return mapName, mapSet      
 
     def OnCloseDialog(self, event):
-        """!Cancel dialog"""
+        """Cancel dialog"""
         self.vnet_mgr.CleanUp()
         toolSwitcher = self.giface.GetMapDisplay().GetToolSwitcher()
         toolSwitcher.RemoveToolbarFromGroup('mouseUse', self.toolbars['pointsList'])
@@ -752,7 +752,7 @@ class VNETDialog(wx.Dialog):
         self.Destroy()
 
     def OnDefIsecTurnCosts(self, event):
-        """!Registers/unregisters mouse handler into map window"""
+        """Registers/unregisters mouse handler into map window"""
         if self.defIsecTurnsHndlrReg == False:
             self.mapWin.RegisterMouseEventHandler(wx.EVT_LEFT_DOWN, 
                                                   self.OnDefIsecTurnCost,
@@ -770,7 +770,7 @@ class VNETDialog(wx.Dialog):
         dialog.Show()
 
     def OnDefIsecTurnCost(self, event): #TODO move to vnet mgr?
-        """!Take coordinates from map window"""
+        """Take coordinates from map window"""
         if event == 'unregistered':
             ptListToolbar = self.toolbars['pointsList']
             if ptListToolbar:
@@ -808,7 +808,7 @@ class VNETDialog(wx.Dialog):
         self.def_isec_turns.Show()
 
     def OnAnalyze(self, event):
-        """!Called when network analysis is started"""
+        """Called when network analysis is started"""
 
         self.stBar.AddStatusItem(text = _('Analysing...'),
                                  key = 'analyze',
@@ -844,7 +844,7 @@ class VNETDialog(wx.Dialog):
         self.giface.updateMap.emit(render=True, renderVector=True)
 
     def OnShowResult(self, event):
-        """!Show/hide analysis result"""
+        """Show/hide analysis result"""
         mainToolbar = self.toolbars['mainToolbar']
         id = vars(mainToolbar)['showResult']
         toggleState = mainToolbar.GetToolState(id)
@@ -864,7 +864,7 @@ class VNETDialog(wx.Dialog):
         dlg.Destroy()
 
     def OnSettings(self, event):
-        """!Displays vnet settings dialog"""
+        """Displays vnet settings dialog"""
         dlg = SettingsDialog(parent=self, id=wx.ID_ANY, 
                              title=_('Settings'), vnet_mgr = self.vnet_mgr)
         
@@ -872,7 +872,7 @@ class VNETDialog(wx.Dialog):
         dlg.Destroy()
 
     def OnAnalysisChanged(self, event):
-        """!Updates dialog when analysis is changed"""
+        """Updates dialog when analysis is changed"""
         # set chosen analysis
         iAn = self.toolbars['analysisToolbar'].anChoice.GetSelection() 
         self.currAnModule = self.vnet_mgr.GetAnalyses()[iAn]
@@ -924,7 +924,7 @@ class VNETDialog(wx.Dialog):
         self.Layout()
 
     def Snapping(self, evt):
-        """!Start/stop snapping mode"""
+        """Start/stop snapping mode"""
 
         if evt == "deactivated":
             self.stBar.RemoveStatusItem(key = 'snap')
@@ -941,18 +941,18 @@ class VNETDialog(wx.Dialog):
             self.stBar.RemoveStatusItem(key = 'snap')
 
     def SnapPointsDone(self):
-        """!Update map window, when map with nodes to snap is created"""
+        """Update map window, when map with nodes to snap is created"""
         self.stBar.RemoveStatusItem(key = 'snap')
 
     def OnUndo(self, event):
-        """!Step back in history"""
+        """Step back in history"""
 
         curr_step, steps_num = self.vnet_mgr.Undo()
         self._updateDialog()
         self.toolbars['mainToolbar'].UpdateUndoRedo(curr_step, steps_num)
 
     def OnRedo(self, event):
-        """!Step forward in history"""
+        """Step forward in history"""
 
         curr_step, steps_num = self.vnet_mgr.Redo()
         self._updateDialog()
@@ -978,7 +978,7 @@ class VNETDialog(wx.Dialog):
 
 class PtsList(PointsList):
     def __init__(self, parent, vnet_mgr, id=wx.ID_ANY):
-        """! List with points for analysis"""
+        """ List with points for analysis"""
         self.updateMap = True
         self.vnet_mgr = vnet_mgr
         self.pts_data = self.vnet_mgr.GetPointsManager()
@@ -1091,7 +1091,7 @@ class PtsList(PointsList):
 
 
     def OnItemSelected(self, event):
-        """!Item selected"""
+        """Item selected"""
         PointsList.OnItemSelected(self, event)
         self.selectedkey = self.GetItemData(self.selected)
 
@@ -1112,7 +1112,7 @@ class PtsList(PointsList):
 class SettingsDialog(wx.Dialog):
     def __init__(self, parent, id, title, vnet_mgr, pos=wx.DefaultPosition, size=wx.DefaultSize,
                  style=wx.DEFAULT_DIALOG_STYLE):
-        """!Settings dialog"""
+        """Settings dialog"""
         wx.Dialog.__init__(self, parent, id, title, pos, size, style)
 
         self.vnet_mgr = vnet_mgr
@@ -1279,7 +1279,7 @@ class SettingsDialog(wx.Dialog):
         sizer.Fit(self)
      
     def OnSave(self, event):
-        """!Button 'Save' pressed"""
+        """Button 'Save' pressed"""
         self.UpdateSettings()
 
         fileSettings = {}
@@ -1313,19 +1313,19 @@ class SettingsDialog(wx.Dialog):
         self.vnet_mgr.SettingsUpdated()
 
     def OnApply(self, event):
-        """!Button 'Apply' pressed"""
+        """Button 'Apply' pressed"""
         self.UpdateSettings()
         #self.Close()
 
     def OnClose(self, event):
-        """!Button 'Cancel' pressed"""
+        """Button 'Cancel' pressed"""
         self.Close()
 
 class CreateTtbDialog(wx.Dialog):
 
     def __init__(self, parent, init_data, id=wx.ID_ANY,
                  title = _("New vector map with turntable"), style=wx.DEFAULT_DIALOG_STYLE):
-        """!Create turntable dialog."""
+        """Create turntable dialog."""
         wx.Dialog.__init__(self, parent, id, title = _(title), style = style)
 
         label = {}
@@ -1427,7 +1427,7 @@ class CreateTtbDialog(wx.Dialog):
         return selSizer
 
     def InputSel(self):
-        """!When vector map is selected it populates other comboboxes in Parameters tab (layer selects, columns selects)"""
+        """When vector map is selected it populates other comboboxes in Parameters tab (layer selects, columns selects)"""
         vectMapName, mapSet = self._parseMapStr(self.inputData['input'].GetValue())
         vectorMap = vectMapName + '@' + mapSet
 
@@ -1464,7 +1464,7 @@ class CreateTtbDialog(wx.Dialog):
 class OutputVectorDialog(wx.Dialog):
     def __init__(self, parent,id=wx.ID_ANY,
                  title =_("Save analysis result"), style=wx.DEFAULT_DIALOG_STYLE):
-        """!Save analysis result"""
+        """Save analysis result"""
         wx.Dialog.__init__(self, parent, id, title = _(title), style = style)
 
         self.panel = wx.Panel(parent = self)
@@ -1514,7 +1514,7 @@ class OutputVectorDialog(wx.Dialog):
         sizer.Fit(self)
 
 class VnetStatusbar(wx.StatusBar):
-    """!Extends wx.StatusBar class with functionality to show multiple messages with the highest priority"""        
+    """Extends wx.StatusBar class with functionality to show multiple messages with the highest priority"""       
     def __init__(self, parent, style, id = wx.ID_ANY, **kwargs):
 
         wx.StatusBar.__init__(self, parent, id, style, **kwargs)
@@ -1523,13 +1523,13 @@ class VnetStatusbar(wx.StatusBar):
         self.statusItems = []
 
     def AddStatusItem(self, text, key, priority):
-        """!Add new item to show
+        """Add new item to show
 
-            @param text - string to show
-            @param key - item identifier, if already contains 
-                         item with same identifier, overwrites this item
-            @param priority - only items with highest priority are showed 
-        """        
+        :param text: string to show
+        :param key: item identifier, if already contains 
+                    item with same identifier, overwrites this item
+        :param priority: only items with highest priority are showed 
+        """       
         statusTextItem = {
                             'text' : text, 
                             'key' : key,
@@ -1555,9 +1555,9 @@ class VnetStatusbar(wx.StatusBar):
         wx.StatusBar.SetStatusText(self, currStatusText)
 
     def RemoveStatusItem(self, key):
-        """!Remove item 
+        """Remove item 
 
-            @param key - item identifier
+        :param key: item identifier
         """
         update = False
         for iItem, item in enumerate(self.statusItems):
@@ -1654,7 +1654,7 @@ class DefGlobalTurnsDialog(wx.Dialog):
      
 
     def OnAddButtonClick(self, event):
-        """!Add new direction over selected row"""
+        """Add new direction over selected row"""
         selected_indices = self.angle_list.GetSelectedIndices()
  
         if not selected_indices:
@@ -1675,7 +1675,7 @@ class DefGlobalTurnsDialog(wx.Dialog):
 
 
     def OnRemoveButtonClick(self, event):
-        """!Delete one or more selected directions"""
+        """Delete one or more selected directions"""
         selected_indices = self.angle_list.GetSelectedIndices()
   
         i_reduction = 0
@@ -1685,11 +1685,11 @@ class DefGlobalTurnsDialog(wx.Dialog):
             i_reduction += 1
 
     def OnCloseDialog(self, event):
-        """!Close dialog"""
+        """Close dialog"""
         self.Close()
 
     def OnCheckedUTurns(self, event):
-        """!Use U-turns in analyse"""
+        """Use U-turns in analyse"""
         self.data.SetUTurns(self.useUTurns.GetValue())
        
     def SetData(self, data):
@@ -1699,7 +1699,7 @@ class DefGlobalTurnsDialog(wx.Dialog):
 
 
 class TurnAnglesList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEditMixin):
-    """!Virtual editable table with global turns"""
+    """Virtual editable table with global turns"""
     def __init__(self, parent, data, id= wx.ID_ANY, style= wx.LC_REPORT | wx.LC_VIRTUAL, **kwargs):
         wx.ListCtrl.__init__(self, parent, id,style= style, **kwargs)
         listmix.ListCtrlAutoWidthMixin.__init__(self)
@@ -1711,7 +1711,7 @@ class TurnAnglesList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEd
         
 
     def Populate(self):
-        """!Columns definition"""
+        """Columns definition"""
         self.InsertColumn(col= 0, heading= "Direction", format= wx.LIST_FORMAT_LEFT) # v Gassu dopln preklad 
         self.InsertColumn(col= 1, heading= "From Angle", format= wx.LIST_FORMAT_RIGHT)
         self.InsertColumn(col= 2, heading= "To Angle", format= wx.LIST_FORMAT_RIGHT)
@@ -1724,7 +1724,7 @@ class TurnAnglesList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEd
         return str(val)
 
     def SetVirtualData(self, row, column, text):
-        """!Set data to table"""
+        """Set data to table"""
         if column in [1,2,3]:
             try:
                 text = float(text)
@@ -1764,7 +1764,7 @@ class TurnAnglesList(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.TextEd
 
 
     def GetSelectedIndices(self, state =  wx.LIST_STATE_SELECTED):
-        """!Get numbers of selected rows"""
+        """Get numbers of selected rows"""
         indices = []
         lastFound = -1
         while True:

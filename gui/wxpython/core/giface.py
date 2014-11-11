@@ -1,4 +1,4 @@
-"""!
+"""
 @package core.giface
 
 @brief GRASS interface for standalone application (without layer manager)
@@ -27,7 +27,7 @@ from grass.pydispatch.signal import Signal
 
 
 class Notification:
-    """!Enum class for notifications suggestions.
+    """Enum class for notifications suggestions.
 
     Can be used for log messages, commands, warnings, errors.
     The value is the suggestion how user should be notified
@@ -40,76 +40,84 @@ class Notification:
 
 
 class Layer(object):
-    """!Layer is generaly usable layer object.
+    """Layer is generaly usable layer object.
 
-    @note Currently without specifying the interface.
-    Current implementations only provides all attributes of existing layer
-    as used in lmgr.
+    .. note::
+        Currently without specifying the interface.
+        Current implementations only provides all attributes of existing
+        layer as used in lmgr.
     """
     pass
 
 
 class LayerList(object):
     def GetSelectedLayers(self, checkedOnly=True):
-        """!Returns list of selected layers.
+        """Returns list of selected layers.
 
-        @note Usage of checked and selected is still subject to change.
-        Checked layers should be showed. Selected are for analyses.
-        However, this may be the same for some implementations
-        (e.g. it d.mon has all layers checked and selected).
+        .. note::
+            Usage of checked and selected is still subject to change.
+            Checked layers should be showed. Selected are for analyses.
+            However, this may be the same for some implementations
+            (e.g. it d.mon has all layers checked and selected).
         """
         raise NotImplementedError()
 
     def GetSelectedLayer(self, checkedOnly=False):
-        """!Returns selected layer or None when there is no selected layer.
+        """Returns selected layer or None when there is no selected layer.
 
-        @note Parameter checkedOnly is here False by default. This might change
-        if we find the right way of handling unchecked layers.
+        .. note::
+            Parameter checkedOnly is here False by default. This might
+            change if we find the right way of handling unchecked layers.
         """
         raise NotImplementedError()
 
     def AddLayer(self, ltype, name=None, checked=None,
                  opacity=1.0, cmd=None):
-        """!Adds a new layer to the layer list.
+        """Adds a new layer to the layer list.
 
         Launches property dialog if needed (raster, vector, etc.)
 
-        @param ltype layer type (raster, vector, 3d-raster, ...)
-        @param name layer name
-        @param checked if True layer is checked
-        @param opacity layer opacity level
-        @param cmd command (given as a list)
+        :param ltype: layer type (raster, vector, 3d-raster, ...)
+        :param name: layer name
+        :param checked: if True layer is checked
+        :param opacity: layer opacity level
+        :param cmd: command (given as a list)
         """
         raise NotImplementedError()
 
     def GetLayersByName(self, name):
-        """!Returns list of layers with a given name.
+        """Returns list of layers with a given name.
 
-        @param name fully qualified map name
+        :param name: fully qualified map name
 
-        @todo if common usage is just to check the presence of layer,
-        intoroduce a new method ContainsLayerByName(name)
+        .. todo::
+            if common usage is just to check the presence of layer,
+            intoroduce a new method ContainsLayerByName(name)
         """
         raise NotImplementedError()
 
     def GetLayerByData(self, key, value):
-        """!Returns layer with specified.
+        """Returns layer with specified.
 
-        @note Returns only one layer. This might change.
+        .. note::
+            Returns only one layer. This might change.
 
-        @warning Avoid using this method, it might be removed in the future.
+        .. warning::
+            Avoid using this method, it might be removed in the future.
         """
         raise NotImplementedError()
 
 
 class GrassInterface:
-    """!GrassInterface provides the functionality which should be available
+    """GrassInterface provides the functionality which should be available
     to every GUI component.
 
-    @note The GrassInterface process is not finished.
+    .. note::
+
+        The GrassInterface process is not finished.
     """
     def RunCmd(self, *args, **kwargs):
-        """!Executes a command.
+        """Executes a command.
         """
         raise NotImplementedError()
 
@@ -119,70 +127,81 @@ class GrassInterface:
         raise NotImplementedError()
 
     def WriteLog(self, text, wrap=None, notification=Notification.HIGHLIGHT):
-        """!Writes log message.
+        """Writes log message.
         """
         raise NotImplementedError()
 
     def WriteCmdLog(self, text, pid=None, notification=Notification.MAKE_VISIBLE):
-        """!Writes message related to start or end of the command.
+        """Writes message related to start or end of the command.
         """
         raise NotImplementedError()
 
     def WriteWarning(self, text):
-        """!Writes warning message for the user.
+        """Writes warning message for the user.
         """
         raise NotImplementedError()
 
     def WriteError(self, text):
-        """!Writes error message for the user."""
+        """Writes error message for the user."""
         raise NotImplementedError()
 
     def GetLayerTree(self):
-        """!Returns LayerManager's tree GUI object.
-        @note Will be removed from the interface.
+        """Returns LayerManager's tree GUI object.
+        .. note::
+
+            Will be removed from the interface.
         """
         raise NotImplementedError()
 
     def GetLayerList(self):
-        """!Returns a layer management object.
+        """Returns a layer management object.
         """
         raise NotImplementedError()
 
     def GetMapDisplay(self):
-        """!Returns current map display.
+        """Returns current map display.
 
-        @note For layer related tasks use GetLayerList().
+        .. note::
 
-        @return MapFrame instance
-        @return None when no mapdisplay open
+            For layer related tasks use GetLayerList().
+
+        :return: MapFrame instance
+        :return: None when no mapdisplay open
         """
         raise NotImplementedError()
 
     def GetAllMapDisplays(self):
-        """!Get list of all map displays.
+        """Get list of all map displays.
 
-        @note Might be removed from the interface.
+        .. note::
 
-        @return list of MapFrame instances
+            Might be removed from the interface.
+
+        :return: list of MapFrame instances
         """
         raise NotImplementedError()
 
     def GetMapWindow(self):
-        """!Returns current map window.
-        @note For layer related tasks use GetLayerList().
+        """Returns current map window.
+
+        .. note::
+
+            For layer related tasks use GetLayerList().
         """
         raise NotImplementedError()
 
     def GetProgress(self):
-        """!Returns object which shows the progress.
+        """Returns object which shows the progress.
 
-        @note Some implementations may not implement this method.
+        .. note::
+
+            Some implementations may not implement this method.
         """
         raise NotImplementedError()
 
 
 class StandaloneGrassInterface():
-    """!@implements GrassInterface"""
+    """@implements GrassInterface"""
     def __init__(self):
 
         # Signal when some map is created or updated by a module.
@@ -206,7 +225,7 @@ class StandaloneGrassInterface():
         self._gconsole.writeError.connect(self.WriteError)
 
     def _onCmdOutput(self, event):
-        """!Print command output"""
+        """Print command output"""
         message = event.text
         style = event.type
 
@@ -219,7 +238,7 @@ class StandaloneGrassInterface():
         event.Skip()
 
     def _onCmdProgress(self, event):
-        """!Update progress message info"""
+        """Update progress message info"""
         grass.percent(event.value, 100, 1)
         event.Skip()
 
@@ -260,12 +279,12 @@ class StandaloneGrassInterface():
         return None
 
     def GetMapDisplay(self):
-        """!Get current map display.
+        """Get current map display.
         """
         return None
 
     def GetAllMapDisplays(self):
-        """!Get list of all map displays.
+        """Get list of all map displays.
         """
         return []
 

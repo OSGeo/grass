@@ -1,4 +1,4 @@
-"""!
+"""
 @package iclass.dialogs
 
 @brief wxIClass dialogs
@@ -37,15 +37,15 @@ from iclass.statistics  import Statistics, BandStatistics
 import grass.script as grass
 
 class IClassGroupDialog(SimpleDialog):
-    """!Dialog for imagery group selection"""
+    """Dialog for imagery group selection"""
     def __init__(self, parent, group = None, subgroup = None, 
                  title = _("Select imagery group"), id = wx.ID_ANY):
-        """!
+        """
         Does post init and layout.
         
-        @param gui parent
-        @param title dialog window title
-        @param id wx id
+        :param parent: gui parent
+        :param title: dialog window title
+        :param id: wx id
         """
         SimpleDialog.__init__(self, parent, title)
         
@@ -80,7 +80,7 @@ class IClassGroupDialog(SimpleDialog):
         self.SetMinSize(self.GetSize())
 
     def _layout(self):
-        """!Do layout"""
+        """Do layout"""
         self.dataSizer.Add(wx.StaticText(self.panel, id = wx.ID_ANY,
                                          label = _("Name of imagery group:")),
                                          proportion = 0, 
@@ -123,7 +123,7 @@ class IClassGroupDialog(SimpleDialog):
         self.Layout()
 
     def GetData(self):
-        """!Returns selected group and subgroup"""
+        """Returns selected group and subgroup"""
 
         if self.use_subg:
             ret = (self.groupSelect.GetValue(), self.subGroupSelect.GetValue())
@@ -133,7 +133,7 @@ class IClassGroupDialog(SimpleDialog):
         return ret
         
     def OnEditGroup(self, event):
-        """!Launch edit group dialog"""
+        """Launch edit group dialog"""
         g, s = self.GetData()
         dlg = GroupDialog(parent=self, defaultGroup=g, defaultSubgroup=s)
 
@@ -150,11 +150,11 @@ class IClassGroupDialog(SimpleDialog):
         self.subGroupSelect.Insert(group)
 
     def GetSelectedGroup(self):
-        """!Return currently selected group (without mapset)"""
+        """Return currently selected group (without mapset)"""
         return self.groupSelect.GetValue().split('@')[0]
 
     def GetGroupBandsErr(self, parent):
-        """!Get list of raster bands which are in the soubgroup of group with both having same name.
+        """Get list of raster bands which are in the soubgroup of group with both having same name.
            If the group does not exists or it does not contain any bands in subgoup with same name, 
            error dialog is shown.
         """
@@ -191,7 +191,7 @@ class IClassGroupDialog(SimpleDialog):
         return bands
 
     def GetGroupBands(self, group, subgroup):
-        """!Get list of raster bands which are in the soubgroup of group with both having same name."""
+        """Get list of raster bands which are in the soubgroup of group with both having same name."""
 
         kwargs = {}
         if subgroup:
@@ -212,13 +212,13 @@ class IClassGroupDialog(SimpleDialog):
                            read=True, flags='sg').splitlines()
 
 class IClassMapDialog(SimpleDialog):
-    """!Dialog for adding raster/vector map"""
+    """Dialog for adding raster/vector map"""
     def __init__(self, parent, title, element):
-        """!
+        """
         
-        @param parent gui parent
-        @param title dialog title
-        @param element element type ('raster', 'vector')
+        :param parent: gui parent
+        :param title: dialog title
+        :param element: element type ('raster', 'vector')
         """
         
         SimpleDialog.__init__(self, parent, title = title)
@@ -234,7 +234,7 @@ class IClassMapDialog(SimpleDialog):
         self.SetMinSize(self.GetSize())
 
     def _layout(self):
-        """!Do layout"""
+        """Do layout"""
         if self.elementType == 'raster':
             label = _("Name of raster map:")
         elif self.elementType == 'vector':
@@ -249,22 +249,22 @@ class IClassMapDialog(SimpleDialog):
         self.sizer.Fit(self)
 
     def GetMap(self):
-        """!Returns selected raster/vector map"""
+        """Returns selected raster/vector map"""
         return self.element.GetValue()
 
 
 class IClassCategoryManagerDialog(wx.Dialog):
-    """!Dialog for managing categories (classes).
+    """Dialog for managing categories (classes).
     
     Alows adding, deleting class and changing its name and color.
     """
     def __init__(self, parent, title = _("Class manager"), id = wx.ID_ANY):
-        """!
+        """
         Does post init and layout.
         
-        @param gui parent
-        @param title dialog window title
-        @param id wx id
+        :param parent: gui parent
+        :param title: dialog window title
+        :param id: wx id
         """
         wx.Dialog.__init__(self, parent = parent, title = title, id = id)
         
@@ -330,26 +330,27 @@ class IClassCategoryManagerDialog(wx.Dialog):
         #event.Skip()
         
     def GetListCtrl(self):
-        """!Returns list widget"""
+        """Returns list widget"""
         return self.catList
         
 class CategoryListCtrl(wx.ListCtrl,
                        listmix.ListCtrlAutoWidthMixin,
                        listmix.TextEditMixin):
-    """! Widget for controling list of classes (categories).
+    """Widget for controling list of classes (categories).
     
     CategoryListCtrl updates choice in mapwindow and removes raster map
     when deleting class (category).
     It uses virtual data in the terms of @c wx.ListCtrl.
     
-    @todo delete vector features after deleting class
+    .. todo::
+        delete vector features after deleting class
     """
     def __init__(self, parent, mapwindow, stats_data, id = wx.ID_ANY):
-        """!
-        @param parent gui parent
-        @param mapwindow mapwindow instance with iclass toolbar and remove raster method
-        @param stats_data StatisticsData instance (defined in statistics.py)
-        @param id wx id
+        """
+        :param parent: gui parent
+        :param mapwindow: mapwindow instance with iclass toolbar and remove raster method
+        :param stats_data: StatisticsData instance (defined in statistics.py)
+        :param id: wx id
         """
         wx.ListCtrl.__init__(self, parent, id,
                              style = wx.LC_REPORT|wx.LC_VIRTUAL|wx.LC_HRULES|wx.LC_VRULES)
@@ -409,7 +410,7 @@ class CategoryListCtrl(wx.ListCtrl,
         self.SetColumnWidth(1, 100)
         
     def AddCategory(self, cat, name, color):
-        """!Add category record (used when importing areas)"""
+        """Add category record (used when importing areas)"""
 
         self.stats_data.AddStatistics(cat, name, color)
         self.SetItemCount(len(self.stats_data.GetCategories()))
@@ -473,7 +474,7 @@ class CategoryListCtrl(wx.ListCtrl,
         event.Skip()
         
     def OnCategorySelected(self, event):
-        """!Highlight selected areas"""
+        """Highlight selected areas"""
         indexList = self.GetSelectedIndices()
         sel_cats = []
         cats = self.stats_data.GetCategories()
@@ -485,7 +486,7 @@ class CategoryListCtrl(wx.ListCtrl,
             event.Skip()
         
     def OnClassRightUp(self, event):
-        """!Show context menu on right click"""
+        """Show context menu on right click"""
         item, flags = self.HitTest((event.GetX(), event.GetY()))
         if item != wx.NOT_FOUND and flags & wx.LIST_HITTEST_ONITEM:
             self.rightClickedItemIdx = item
@@ -502,12 +503,12 @@ class CategoryListCtrl(wx.ListCtrl,
         menu.Destroy()
     
     def OnZoomToAreasByCat(self, event):
-        """!Zoom to areas of given category"""
+        """Zoom to areas of given category"""
         cat = self.stats_data.GetCategories()[self.rightClickedItemIdx]
         self.mapWindow.ZoomToAreasByCat(cat)
         
     def DeselectAll(self):
-        """!Deselect all items"""
+        """Deselect all items"""
         indexList = self.GetSelectedIndices()
         for i in indexList:
             self.Select(i, on = 0)
@@ -527,7 +528,7 @@ class CategoryListCtrl(wx.ListCtrl,
         return None
 
     def OnGetItemAttr(self, item):
-        """!Set correct class color for a item"""
+        """Set correct class color for a item"""
         back_c = wx.Colour(*map(int, self.OnGetItemText(item, 1).split(':')))
         text_c = wx.Colour(*ContrastColor(back_c))
 
@@ -536,10 +537,11 @@ class CategoryListCtrl(wx.ListCtrl,
         return self.l
     
 def ContrastColor(color):
-    """!Decides which value shoud have text to be contrast with backgroud color 
+    """Decides which value shoud have text to be contrast with backgroud color 
         (bright bg -> black, dark bg -> white)
 
-    @todo could be useful by other apps, consider moving it into gui_core 
+    .. todo::
+        could be useful by other apps, consider moving it into gui_core 
     """
     #gacek, http://stackoverflow.com/questions/1855884/determine-font-color-based-on-background-color
     a = 1 - ( 0.299 * color[0] + 0.587 * color[1] + 0.114 * color[2])/255;
@@ -556,12 +558,12 @@ class IClassSignatureFileDialog(wx.Dialog):
                  file = None, title = _("Save signature file"), id = wx.ID_ANY,
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
                  **kwargs):
-        """!Dialog for saving signature file
+        """Dialog for saving signature file
         
-        @param parent window
-        @param group group name
-        @param file signature file name
-        @param title window title
+        :param parent: window
+        :param group: group name
+        :param file: signature file name
+        :param title: window title
         """
         wx.Dialog.__init__(self, parent, id, title, style = style, **kwargs)
         
@@ -590,7 +592,7 @@ class IClassSignatureFileDialog(wx.Dialog):
         self.OnTextChanged(None)
         
     def OnTextChanged(self, event):
-        """!Name for signature file given"""
+        """Name for signature file given"""
         file = self.fileNameCtrl.GetValue()
         if len(file) > 0:
             self.btnOK.Enable(True)
@@ -604,7 +606,7 @@ class IClassSignatureFileDialog(wx.Dialog):
         self.pathPanel.Scroll(*bestSize)
         
     def __layout(self):
-        """!Do layout"""
+        """Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
         
         dataSizer = wx.BoxSizer(wx.VERTICAL)
@@ -651,9 +653,9 @@ class IClassSignatureFileDialog(wx.Dialog):
         self.SetMinSize(self.GetSize())
         
     def GetFileName(self, fullPath = False):
-        """!Returns signature file name
+        """Returns signature file name
         
-        @param fullPath return full path of sig. file
+        :param fullPath: return full path of sig. file
         """
         if fullPath:
             return os.path.join(self.baseFilePath, self.fileNameCtrl.GetValue())
@@ -664,11 +666,11 @@ class IClassExportAreasDialog(wx.Dialog):
     def __init__(self, parent, vectorName = None, title = _("Export training areas"), id = wx.ID_ANY,
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
                  **kwargs):
-        """!Dialog for export of training areas to vector layer
+        """Dialog for export of training areas to vector layer
         
-        @param parent window
-        @param vectorName name of vector layer for export
-        @param title window title
+        :param parent: window
+        :param vectorName: name of vector layer for export
+        :param title: window title
         """
         wx.Dialog.__init__(self, parent, id, title, style = style, **kwargs)
         
@@ -688,7 +690,7 @@ class IClassExportAreasDialog(wx.Dialog):
         wx.CallAfter(self.vectorNameCtrl.SetFocus)
 
     def OnTextChanged(self, event):
-        """!Name of new vector map given.
+        """Name of new vector map given.
         
         Enable/diable OK button.
         """
@@ -699,7 +701,7 @@ class IClassExportAreasDialog(wx.Dialog):
             self.btnOK.Enable(False)
         
     def __layout(self):
-        """!Do layout"""
+        """Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
         
         dataSizer = wx.BoxSizer(wx.VERTICAL)
@@ -741,15 +743,15 @@ class IClassExportAreasDialog(wx.Dialog):
         self.SetMinSize(self.GetSize())
         
     def GetVectorName(self):
-        """!Returns vector name"""
+        """Returns vector name"""
         return self.vectorNameCtrl.GetValue()
         
     def WithTable(self):
-        """!Returns true if attribute table should be exported too"""
+        """Returns true if attribute table should be exported too"""
         return self.withTableCtrl.IsChecked()
         
     def OnOK(self, event):
-        """!Checks if map exists and can be overwritten."""
+        """Checks if map exists and can be overwritten."""
         overwrite = UserSettings.Get(group = 'cmd', key = 'overwrite', subkey = 'enabled')
         vName = self.GetVectorName()
         res = grass.find_file(vName, element = 'vector')

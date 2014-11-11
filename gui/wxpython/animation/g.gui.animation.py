@@ -84,7 +84,8 @@ def main():
         
 
     if numInputs > 1:
-        grass.fatal(_("Options 'rast', 'vect', 'strds' and 'stvds' are mutually exclusive."))
+        grass.fatal(_("%s=, %s=, %s= and %s= are mutually exclusive.") %
+                ("rast", "vect", "strds", "stvds"))
         
     if numInputs > 0:
         # We need to initialize the temporal framework in case
