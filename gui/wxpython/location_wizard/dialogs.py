@@ -1,4 +1,4 @@
-"""!
+"""
 @package location_wizard.dialogs
 
 @brief Location wizard - dialogs
@@ -30,7 +30,7 @@ from location_wizard.base import BaseClass
 from grass.script import core as grass
 
 class RegionDef(BaseClass, wx.Dialog):
-    """!Page for setting default region extents and resolution
+    """Page for setting default region extents and resolution
     """
     def __init__(self, parent, id = wx.ID_ANY, size = (800, 600),
                  title = _("Set default region extent and resolution"), location = None):
@@ -208,7 +208,7 @@ class RegionDef(BaseClass, wx.Dialog):
         wx.CallAfter(self.settings3D.Collapse, True)
     
     def MakeSettings3DPaneContent(self, pane):
-        """!Create 3D region settings pane"""
+        """Create 3D region settings pane"""
         border = wx.BoxSizer(wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap = 0, hgap = 0)
 
@@ -285,7 +285,7 @@ class RegionDef(BaseClass, wx.Dialog):
         border.Fit(pane)
 
     def OnSettings3DPaneChanged(self, event):
-        """!Collapse 3D settings box"""
+        """Collapse 3D settings box"""
 
         if self.settings3D.IsExpanded():
             self.settings3D.SetLabel(self.infoCollapseLabelCol)
@@ -301,7 +301,7 @@ class RegionDef(BaseClass, wx.Dialog):
         self.SendSizeEvent()
 
     def __DoLayout(self, panel):
-        """!Window layout"""
+        """Window layout"""
         frameSizer = wx.BoxSizer(wx.VERTICAL)
         gridSizer = wx.GridBagSizer(vgap = 0, hgap = 0)
         settings3DSizer = wx.BoxSizer(wx.VERTICAL)
@@ -405,7 +405,7 @@ class RegionDef(BaseClass, wx.Dialog):
         self.Layout()
 
     def OnValue(self, event):
-        """!Set given value"""
+        """Set given value"""
         try:
             if event.GetId() == self.tnorth.GetId():
                 self.north = float(event.GetString())
@@ -454,7 +454,7 @@ class RegionDef(BaseClass, wx.Dialog):
         event.Skip()
 
     def __UpdateInfo(self):
-        """!Update number of rows/cols/cells"""
+        """Update number of rows/cols/cells"""
         self.rows = int((self.north - self.south) / self.nsres)
         self.cols = int((self.east - self.west) / self.ewres)
         self.cells = self.rows * self.cols
@@ -471,7 +471,7 @@ class RegionDef(BaseClass, wx.Dialog):
         self.lcells3.SetLabel(_("3D Cells: %d" % self.cells3))
 
     def OnSetButton(self, event = None):
-        """!Set default region"""
+        """Set default region"""
         ret = RunCommand('g.region',
                          flags = 'sgpa',
                          n = self.north,
@@ -490,7 +490,7 @@ class RegionDef(BaseClass, wx.Dialog):
         self.Destroy()
 
 class TransList(wx.VListBox):
-    """!Creates a multiline listbox for selecting datum transforms"""
+    """Creates a multiline listbox for selecting datum transforms"""
         
     def OnDrawItem(self, dc, rect, n):
         if self.GetSelection() == n:
@@ -518,7 +518,7 @@ class TransList(wx.VListBox):
             return transitem
 
 class SelectTransformDialog(wx.Dialog):
-    """!Dialog for selecting datum transformations"""
+    """Dialog for selecting datum transformations"""
     def __init__(self, parent, transforms, title = _("Select datum transformation"),
                  pos = wx.DefaultPosition, size = wx.DefaultSize, 
                  style = wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER):
@@ -603,12 +603,12 @@ class SelectTransformDialog(wx.Dialog):
         self.Layout()
         
     def ClickTrans(self, event):
-        """!Get the number of the datum transform to use in g.proj"""
+        """Get the number of the datum transform to use in g.proj"""
         self.transnum = event.GetSelection()
         self.transnum = self.transnum - 1
     
     def GetTransform(self):
-        """!Get the number of the datum transform to use in g.proj"""
+        """Get the number of the datum transform to use in g.proj"""
         self.transnum = self.translist.GetSelection()
         self.transnum = self.transnum - 1
         return self.transnum

@@ -1,4 +1,4 @@
-"""!
+"""
 @package iclass.plots
 
 @brief wxIClass plots (histograms, coincidence plots).
@@ -22,7 +22,7 @@ from core.utils import _
 from core.gcmd import GError
 
 class PlotPanel(scrolled.ScrolledPanel):
-    """!Panel for drawing multiple plots.
+    """Panel for drawing multiple plots.
     
     There are three types of plots: histograms, coincidence plots and scatter plots.
     Histograms show frequency of cell category values in training areas
@@ -70,7 +70,7 @@ class PlotPanel(scrolled.ScrolledPanel):
         self.plotSwitch.Bind(wx.EVT_CHOICE, self.OnPlotTypeSelected)
     
     def _createScatterPlotPanel(self):
-        """!Init interactive scatter plot tool
+        """Init interactive scatter plot tool
         """
         try:
             from iscatt.frame import IClassIScattPanel
@@ -86,7 +86,7 @@ class PlotPanel(scrolled.ScrolledPanel):
             self.iscatt_panel = None
 
     def OnPlotTypeSelected(self, event):
-        """!Plot type selected"""
+        """Plot type selected"""
 
         if self.plotSwitch.GetSelection() in [0, 1]:
             self.SetupScrolling(scroll_x = False, scroll_y = True)
@@ -119,7 +119,7 @@ class PlotPanel(scrolled.ScrolledPanel):
         self.Layout()
 
     def StddevChanged(self):
-        """!Standard deviation multiplier changed, redraw histograms"""
+        """Standard deviation multiplier changed, redraw histograms"""
         if self.plotSwitch.GetSelection() == 0:
             stat = self.stats_data.GetStatistics(self.currentCat)
             self.UpdateRanges(stat)
@@ -135,25 +135,25 @@ class PlotPanel(scrolled.ScrolledPanel):
             canvas.SetEnableDrag(enable)
             
     def DestroyPlots(self):
-        """!Destroy all plot canvases"""
+        """Destroy all plot canvases"""
         for panel in self.canvasList:
             panel.Destroy()
             
         self.canvasList = []
 
     def ClearPlots(self):
-        """!Clears plot canvases"""
+        """Clears plot canvases"""
         for bandIdx in range(len(self.bandList)):
             self.canvasList[bandIdx].Clear()
             
     def Reset(self):
-        """!Reset plots (when new map imported)"""
+        """Reset plots (when new map imported)"""
         self.currentCat = None
         self.ClearPlots()
         # bands are still the same
         
     def CreatePlotCanvases(self):
-        """!Create plot canvases according to the number of bands"""
+        """Create plot canvases according to the number of bands"""
         for band in self.bandList:
             canvas = plot.PlotCanvas(self.canvasPanel)
             canvas.SetMinSize((-1, 140))
@@ -167,12 +167,12 @@ class PlotPanel(scrolled.ScrolledPanel):
         self.Layout()
         
     def UpdatePlots(self, group, subgroup, currentCat, stats_data):
-        """!Update plots after new analysis
+        """Update plots after new analysis
         
-        @param group imagery group
-        @param subgroup imagery group
-        @param currentCat currently selected category (class)
-        @param stats_data StatisticsData instance (defined in statistics.py)
+        :param group: imagery group
+        :param subgroup: imagery group
+        :param currentCat: currently selected category (class)
+        :param stats_data: StatisticsData instance (defined in statistics.py)
         """
         self.stats_data = stats_data
         self.currentCat = currentCat
@@ -192,7 +192,7 @@ class PlotPanel(scrolled.ScrolledPanel):
         self.currentCat = cat
     
     def DrawCoincidencePlots(self):
-        """!Draw coincidence plots"""
+        """Draw coincidence plots"""
         for bandIdx in range(len(self.bandList)):
             self.canvasList[bandIdx].SetYSpec(type = 'none')
             lines = []
@@ -217,11 +217,11 @@ class PlotPanel(scrolled.ScrolledPanel):
             self.canvasList[bandIdx].Draw(plotGraph)
         
     def DrawCoincidenceLine(self, level, color, bandValues):
-        """!Draw line between band min and max values
+        """Draw line between band min and max values
         
-        @param level y coordinate of line
-        @param color class color
-        @param bandValues BandStatistics instance
+        :param level: y coordinate of line
+        :param color: class color
+        :param bandValues: BandStatistics instance
         """
         minim = bandValues.min
         maxim = bandValues.max
@@ -230,14 +230,14 @@ class PlotPanel(scrolled.ScrolledPanel):
         return plot.PolyLine(points, colour = color, width = 4)
         
     def DrawInvisibleLine(self, level):
-        """!Draw white line to achieve better margins"""
+        """Draw white line to achieve better margins"""
         points = [(100, level), (101, level)]
         return plot.PolyLine(points, colour = wx.WHITE, width = 1)
         
     def DrawHistograms(self, statistics):
-        """!Draw histograms for one class
+        """Draw histograms for one class
         
-        @param statistics statistics for one class
+        :param statistics: statistics for one class
         """
         self.histogramLines = []
         for bandIdx in range(len(self.bandList)):
@@ -308,9 +308,9 @@ class PlotPanel(scrolled.ScrolledPanel):
         return plot.PolyLine(points, colour = wx.BLACK, width = 1)
          
     def UpdateRanges(self, statistics):
-        """!Redraw ranges lines in histograms when std dev multiplier changes
+        """Redraw ranges lines in histograms when std dev multiplier changes
         
-        @param statistics python Statistics instance
+        :param statistics: python Statistics instance
         """
         for bandIdx in range(len(self.bandList)):
             self.canvasList[bandIdx].Clear()

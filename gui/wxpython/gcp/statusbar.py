@@ -1,4 +1,4 @@
-"""!
+"""
 @package gcp.statusbar
 
 @brief Classes for statusbar management in GCP Manager
@@ -25,7 +25,7 @@ from mapdisp.statusbar import SbItem, SbTextItem
 
 
 class SbGoToGCP(SbItem):
-    """!SpinCtrl to select GCP to focus on
+    """SpinCtrl to select GCP to focus on
 
     Requires MapFrame.GetSrcWindow, MapFrame.GetTgtWindow,
     MapFrame.GetListCtrl, MapFrame.GetMapCoordList.
@@ -43,7 +43,7 @@ class SbGoToGCP(SbItem):
         self.widget.Bind(wx.EVT_SPINCTRL, self.OnGoToGCP)
 
     def OnGoToGCP(self, event):
-        """!Zooms to given GCP."""
+        """Zooms to given GCP."""
         gcpNumber = self.GetValue()
         mapCoords = self.mapFrame.GetMapCoordList()
 
@@ -108,7 +108,7 @@ class SbGoToGCP(SbItem):
 
 
 class SbRMSError(SbTextItem):
-    """!Shows RMS error.
+    """Shows RMS error.
 
     Requires MapFrame.GetFwdError, MapFrame.GetBkwError.
     """

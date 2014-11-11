@@ -1,4 +1,4 @@
-"""!
+"""
 @package animation.toolbars
 
 @brief Animation toolbars
@@ -52,10 +52,10 @@ simpleLmgrIcons = {
 
 
 class MainToolbar(BaseToolbar):
-    """!Main toolbar (data management)
+    """Main toolbar (data management)
     """
     def __init__(self, parent):
-        """!Main toolbar constructor
+        """Main toolbar constructor
         """
         BaseToolbar.__init__(self, parent)
 
@@ -65,7 +65,7 @@ class MainToolbar(BaseToolbar):
         self.Realize()
 
     def _toolbarData(self):
-        """!Returns toolbar data (name, icon, handler)"""
+        """Returns toolbar data (name, icon, handler)"""
         # BaseIcons are a set of often used icons. It is possible
         # to reuse icons in ./trunk/gui/icons/grass or add new ones there.
         icons = ganimIcons
@@ -81,10 +81,10 @@ class MainToolbar(BaseToolbar):
 
 
 class AnimationToolbar(BaseToolbar):
-    """!Animation toolbar (to control animation)
+    """Animation toolbar (to control animation)
     """
     def __init__(self, parent):
-        """!Animation toolbar constructor
+        """Animation toolbar constructor
         """
         BaseToolbar.__init__(self, parent)
 
@@ -97,7 +97,7 @@ class AnimationToolbar(BaseToolbar):
         self.EnableAnimTools(False)
 
     def _toolbarData(self):
-        """!Returns toolbar data (name, icon, handler)"""
+        """Returns toolbar data (name, icon, handler)"""
         # BaseIcons are a set of often used icons. It is possible
         # to reuse icons in ./trunk/gui/icons/grass or add new ones there.
         icons = ganimIcons
@@ -194,7 +194,7 @@ class AnimationToolbar(BaseToolbar):
         self.ToggleTool(self.bothDirectionReplay, both)
 
     def EnableAnimTools(self, enable):
-        """!Enable or diable animation tools"""
+        """Enable or diable animation tools"""
         self.EnableTool(self.playForward, enable)
         self.EnableTool(self.playBack, enable)
         self.EnableTool(self.pause, enable)
@@ -202,10 +202,10 @@ class AnimationToolbar(BaseToolbar):
 
 
 class MiscToolbar(BaseToolbar):
-    """!Toolbar with miscellaneous tools related to app
+    """Toolbar with miscellaneous tools related to app
     """
     def __init__(self, parent):
-        """!Toolbar constructor
+        """Toolbar constructor
         """
         BaseToolbar.__init__(self, parent)
 
@@ -214,7 +214,7 @@ class MiscToolbar(BaseToolbar):
         self.Realize()
 
     def _toolbarData(self):
-        """!Toolbar data"""
+        """Toolbar data"""
         return self._getToolbarData((("settings", BaseIcons['settings'],
                                       self.parent.OnPreferences),
                                      ("help", BaseIcons['help'],
@@ -225,7 +225,7 @@ class MiscToolbar(BaseToolbar):
 
 
 class AnimSimpleLmgrToolbar(SimpleLmgrToolbar):
-    """!Simple layer manager toolbar for animation tool.
+    """Simple layer manager toolbar for animation tool.
     Allows to add space-time dataset or series of maps.
     """
     def __init__(self, parent, lmgrStyle):

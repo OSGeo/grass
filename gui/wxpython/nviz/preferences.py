@@ -28,7 +28,7 @@ from core.utils import _
 from gui_core.preferences import PreferencesBaseDialog
 
 class NvizPreferencesDialog(PreferencesBaseDialog):
-    """!Nviz preferences dialog"""
+    """Nviz preferences dialog"""
     def __init__(self, parent, giface, title = _("3D view default settings"),
                  settings = UserSettings):
         PreferencesBaseDialog.__init__(self, parent = parent, title = title, giface = giface,
@@ -49,7 +49,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
         self.btnDefault.SetToolTipString(_("Revert settings to default, changes are not applied"))
         
     def _createViewPage(self, notebook):
-        """!Create notebook page for view settings"""
+        """Create notebook page for view settings"""
         panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
         
         notebook.AddPage(page = panel,
@@ -198,7 +198,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
         return panel
         
     def _createFlyPage(self, notebook):
-        """!Create notebook page for view settings"""
+        """Create notebook page for view settings"""
         panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
         
         notebook.AddPage(page = panel,
@@ -246,7 +246,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
         return panel
         
     def _createLightPage(self, notebook):
-        """!Create notebook page for light settings"""
+        """Create notebook page for light settings"""
         panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
         
         notebook.AddPage(page = panel,
@@ -354,7 +354,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
         return panel
     
     def _createSurfacePage(self, notebook):
-        """!Create notebook page for surface settings"""
+        """Create notebook page for surface settings"""
         panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
         
         notebook.AddPage(page = panel,
@@ -456,7 +456,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
         return panel
     
     def _createVectorPage(self, notebook):
-        """!Create notebook page for vector settings"""
+        """Create notebook page for vector settings"""
         panel = wx.Panel(parent = notebook, id = wx.ID_ANY)
         
         notebook.AddPage(page = panel,
@@ -564,7 +564,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
         return panel
 
     def OnDefault(self, event):
-        """!Button 'Set to default' pressed"""
+        """Button 'Set to default' pressed"""
         self.settings.userSettings = copy.deepcopy(self.settings.defaultSettings)
         
         # update widgets
@@ -615,7 +615,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
         
         
     def OnSave(self, event):
-        """!Save button pressed
+        """Save button pressed
         
         Apply changes and save settings to configuration file
         """

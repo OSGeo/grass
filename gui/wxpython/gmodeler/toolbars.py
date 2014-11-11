@@ -1,4 +1,4 @@
-"""!
+"""
 @package gmodeler.toolbars
 
 @brief wxGUI Graphical Modeler toolbars classes
@@ -26,7 +26,7 @@ from gui_core.toolbars import BaseToolbar, BaseIcons
 from icons.icon        import MetaIcon
 
 class ModelerToolbar(BaseToolbar):
-    """!Graphical modeler toolbaro (see gmodeler.py)
+    """Graphical modeler toolbaro (see gmodeler.py)
     """
     def __init__(self, parent):
         BaseToolbar.__init__(self, parent)
@@ -41,7 +41,7 @@ class ModelerToolbar(BaseToolbar):
         self.Realize()
         
     def _toolbarData(self):
-        """!Toolbar data"""
+        """Toolbar data"""
         icons = {
             'new'        : MetaIcon(img = 'create',
                                     label = _('Create new model (Ctrl+N)')),

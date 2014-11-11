@@ -1,4 +1,4 @@
-"""!
+"""
 @package psmap.instructions
 
 @brief Map feature objects
@@ -46,7 +46,7 @@ from dbmgr.vinfo        import VectorDBInfo
 from psmap.utils        import *
 
 class Instruction:
-    """!Class which represents instruction file"""
+    """Class which represents instruction file"""
     def __init__(self, parent, objectsToDraw):
         
         self.parent = parent
@@ -55,7 +55,7 @@ class Instruction:
         self.instruction = list()
         
     def __str__(self):
-        """!Returns text for instruction file"""
+        """Returns text for instruction file"""
         comment = "# timestamp: " + strftime("%Y-%m-%d %H:%M", localtime()) + '\n'
         env = grass.gisenv()
         comment += "# location: %s\n" % env['LOCATION_NAME']
@@ -74,14 +74,14 @@ class Instruction:
         return None
 
     def __contains__(self, id):
-        """!Test if instruction is included"""
+        """Test if instruction is included"""
         for each in self.instruction:
             if each.id == id:
                 return True
         return False
     
     def __delitem__(self, id):
-        """!Delete instruction"""
+        """Delete instruction"""
         for each in self.instruction:
             if each.id == id:
                 if each.type == 'map':
@@ -99,7 +99,7 @@ class Instruction:
                 return
             
     def AddInstruction(self, instruction):
-        """!Add instruction"""
+        """Add instruction"""
         # add to instructions
         if instruction.type == 'map':
             self.instruction.insert(0, instruction)
@@ -114,7 +114,7 @@ class Instruction:
                 
             
     def FindInstructionByType(self, type, list = False):
-        """!Find instruction(s) with the given type"""
+        """Find instruction(s) with the given type"""
         inst = []
         for each in self.instruction:
             if each.type == type:
@@ -124,7 +124,7 @@ class Instruction:
         return inst
     
     def Read(self, filename):
-        """!Reads instruction file and creates instruction objects"""
+        """Reads instruction file and creates instruction objects"""
         self.filename = filename
         # open file
         try:
@@ -435,7 +435,7 @@ class Instruction:
         return True
     
     def SetRegion(self, regionInstruction):
-        """!Sets region from file comment or sets current region in case of no comment"""
+        """Sets region from file comment or sets current region in case of no comment"""
         map = MapFrame(wx.NewId())
         self.AddInstruction(map)
         if regionInstruction:
@@ -474,7 +474,7 @@ class Instruction:
         
 
 class InstructionObject:
-    """!Abtract class representing single instruction"""
+    """Abtract class representing single instruction"""
     def __init__(self, id): 
         self.id = id
         
@@ -486,7 +486,7 @@ class InstructionObject:
         self.unitConv = UnitConversion() 
     
     def __str__(self):
-        """!Returns particular part of text instruction"""
+        """Returns particular part of text instruction"""
         return ''
     
     def __getitem__(self, key):
@@ -499,19 +499,19 @@ class InstructionObject:
         self.instruction[key] = value
     
     def GetInstruction(self):
-        """!Get current values"""
+        """Get current values"""
         return self.instruction
     
     def SetInstruction(self, instruction):
-        """!Set default values"""
+        """Set default values"""
         self.instruction = instruction
         
     def Read(self, instruction, text, **kwargs):
-        """!Read instruction and save them"""
+        """Read instruction and save them"""
         pass
         
     def PercentToReal(self, e, n):
-        """!Converts text coordinates from percent of region to map coordinates"""
+        """Converts text coordinates from percent of region to map coordinates"""
         e, n = float(e.strip('%')), float(n.strip('%'))
         region = grass.region()
         N = region['s'] + (region['n'] - region['s']) / 100 * n
@@ -519,7 +519,7 @@ class InstructionObject:
         return E, N
 
 class InitMap(InstructionObject):
-    """!Class representing virtual map"""
+    """Class representing virtual map"""
     def __init__(self, id):
         InstructionObject.__init__(self, id = id)
         self.type = 'initMap'
@@ -531,7 +531,7 @@ class InitMap(InstructionObject):
         
     
 class MapFrame(InstructionObject):
-    """!Class representing map (instructions maploc, scale, border)"""
+    """Class representing map (instructions maploc, scale, border)"""
     def __init__(self, id):
         InstructionObject.__init__(self, id = id)
         self.type = 'map'
@@ -588,7 +588,7 @@ class MapFrame(InstructionObject):
         return instr  
     
     def Read(self, instruction, text, **kwargs):
-        """!Read instruction and save information"""
+        """Read instruction and save information"""
         if 'isRegionComment' in kwargs:
             isRegionComment = kwargs['isRegionComment']
         instr = {}
@@ -649,7 +649,7 @@ class MapFrame(InstructionObject):
         return True 
     
 class PageSetup(InstructionObject):
-    """!Class representing page instruction"""
+    """Class representing page instruction"""
     def __init__(self, id):
         InstructionObject.__init__(self, id = id)
         self.type = 'page'
@@ -669,7 +669,7 @@ class PageSetup(InstructionObject):
         return instr
     
     def Read(self, instruction, text, **kwargs):
-        """!Read instruction and save information"""
+        """Read instruction and save information"""
         instr = {}
         self.cats = ['Width', 'Height', 'Left', 'Right', 'Top', 'Bottom']
         self.subInstr = dict(zip(['width', 'height', 'left', 'right', 'top', 'bottom'], self.cats))
@@ -720,7 +720,7 @@ class PageSetup(InstructionObject):
         return sizeDict    
     
 class Mapinfo(InstructionObject):
-    """!Class representing mapinfo instruction"""
+    """Class representing mapinfo instruction"""
     def __init__(self, id):
         InstructionObject.__init__(self, id = id)
         self.type = 'mapinfo'
@@ -740,7 +740,7 @@ class Mapinfo(InstructionObject):
         return instr
     
     def Read(self, instruction, text):
-        """!Read instruction and save information"""
+        """Read instruction and save information"""
         instr = {}
         try:
             for line in text:
@@ -765,7 +765,7 @@ class Mapinfo(InstructionObject):
         return True
     
     def EstimateRect(self, mapinfoDict):
-        """!Estimate size to draw mapinfo"""
+        """Estimate size to draw mapinfo"""
         w = mapinfoDict['fontsize'] * 20 # any better estimation? 
         h = mapinfoDict['fontsize'] * 7
         width = self.unitConv.convert(value = w, fromUnit = 'point', toUnit = 'inch')
@@ -774,7 +774,7 @@ class Mapinfo(InstructionObject):
                       width = width, height = height)
     
 class Text(InstructionObject):
-    """!Class representing text instruction"""
+    """Class representing text instruction"""
     def __init__(self, id):
         InstructionObject.__init__(self, id = id)
         self.type = 'text'
@@ -828,7 +828,7 @@ class Text(InstructionObject):
         return instr
     
     def Read(self, instruction, text, **kwargs):
-        """!Read instruction and save information"""
+        """Read instruction and save information"""
         map = kwargs['mapInstruction']
         instr = {}
         for line in text:
@@ -882,7 +882,7 @@ class Text(InstructionObject):
         return True 
         
 class Image(InstructionObject):
-    """!Class representing eps instruction - image"""
+    """Class representing eps instruction - image"""
     def __init__(self, id, settings):
         InstructionObject.__init__(self, id = id)
         self.settings = settings
@@ -908,7 +908,7 @@ class Image(InstructionObject):
         return instr
     
     def Read(self, instruction, text, **kwargs):
-        """!Read instruction and save information"""
+        """Read instruction and save information"""
         mapInstr = kwargs['mapInstruction']
         instr = {}
         for line in text:
@@ -957,7 +957,7 @@ class Image(InstructionObject):
         return True 
         
     def ChangeRefPoint(self, toCenter):
-        """!Change reference point (left top x center)"""
+        """Change reference point (left top x center)"""
         mapInstr = self.settings.FindInstructionByType('map')
         if not mapInstr:
             mapInstr = self.settings.FindInstructionByType('initMap')
@@ -979,7 +979,7 @@ class Image(InstructionObject):
             self.instruction['east'], self.instruction['north'] = e, n
 
     def GetImageOrigSize(self, imagePath):
-        """!Get image size.
+        """Get image size.
         
         If eps, size is read from image header.
         """
@@ -1001,7 +1001,7 @@ class Image(InstructionObject):
             return img.GetWidth(), img.GetHeight()
             
 class NorthArrow(Image):
-    """!Class representing eps instruction -- North Arrow"""
+    """Class representing eps instruction -- North Arrow"""
     def __init__(self, id, settings):
         Image.__init__(self, id = id, settings = settings)
         self.type = 'northArrow'
@@ -1021,7 +1021,7 @@ class NorthArrow(Image):
         return instr
         
 class Point(InstructionObject):
-    """!Class representing point instruction"""
+    """Class representing point instruction"""
     def __init__(self, id):
         InstructionObject.__init__(self, id = id)
         self.type = 'point'
@@ -1045,7 +1045,7 @@ class Point(InstructionObject):
         return instr
     
     def Read(self, instruction, text, **kwargs):
-        """!Read instruction and save information"""
+        """Read instruction and save information"""
         mapInstr = kwargs['mapInstruction']
         instr = {}
         for line in text:
@@ -1087,7 +1087,7 @@ class Point(InstructionObject):
         return True
 
 class Line(InstructionObject):
-    """!Class representing line instruction"""
+    """Class representing line instruction"""
     def __init__(self, id):
         InstructionObject.__init__(self, id = id)
         self.type = 'line'
@@ -1107,7 +1107,7 @@ class Line(InstructionObject):
         return instr
     
     def Read(self, instruction, text, **kwargs):
-        """!Read instruction and save information"""
+        """Read instruction and save information"""
         mapInstr = kwargs['mapInstruction']
         instr = {}
         for line in text:
@@ -1143,7 +1143,7 @@ class Line(InstructionObject):
         return True
 
 class Rectangle(InstructionObject):
-    """!Class representing rectangle instruction"""
+    """Class representing rectangle instruction"""
     def __init__(self, id):
         InstructionObject.__init__(self, id = id)
         self.type = 'rectangle'
@@ -1163,7 +1163,7 @@ class Rectangle(InstructionObject):
         return instr
     
     def Read(self, instruction, text, **kwargs):
-        """!Read instruction and save information"""
+        """Read instruction and save information"""
         mapInstr = kwargs['mapInstruction']
         instr = {}
         for line in text:
@@ -1201,7 +1201,7 @@ class Rectangle(InstructionObject):
         return True
         
 class Scalebar(InstructionObject):
-    """!Class representing scalebar instruction"""
+    """Class representing scalebar instruction"""
     def __init__(self, id):
         InstructionObject.__init__(self, id = id)
         self.type = 'scalebar'
@@ -1225,7 +1225,7 @@ class Scalebar(InstructionObject):
         return instr
     
     def Read(self, instruction, text, **kwargs):
-        """!Read instruction and save information"""
+        """Read instruction and save information"""
         scale = kwargs['scale']
         instr = {}
         for line in text:
@@ -1267,7 +1267,7 @@ class Scalebar(InstructionObject):
         return True 
     
     def EstimateSize(self, scalebarDict, scale):
-        """!Estimate size to draw scalebar"""
+        """Estimate size to draw scalebar"""
         units = projInfo()['units']
         if not units or units not in self.unitConv.getAllUnits():
             units = 'meters'
@@ -1282,7 +1282,7 @@ class Scalebar(InstructionObject):
         return (length, height)
     
 class RasterLegend(InstructionObject):
-    """!Class representing colortable instruction"""
+    """Class representing colortable instruction"""
     def __init__(self, id):
         InstructionObject.__init__(self, id = id)
         self.type = 'rasterLegend'
@@ -1320,7 +1320,7 @@ class RasterLegend(InstructionObject):
     
     
     def Read(self, instruction, text, **kwargs):
-        """!Read instruction and save information"""
+        """Read instruction and save information"""
         instr = {}
         instr['rLegend'] = True
         for line in text:
@@ -1383,7 +1383,7 @@ class RasterLegend(InstructionObject):
         return True 
     
     def EstimateHeight(self, raster, discrete, fontsize, cols = None,  height = None):
-        """!Estimate height to draw raster legend"""
+        """Estimate height to draw raster legend"""
         if discrete == 'n':
             if height:
                 height = height
@@ -1412,7 +1412,7 @@ class RasterLegend(InstructionObject):
         return height
         
     def EstimateWidth(self, raster, discrete, fontsize, cols = None, width = None, paperInstr = None):
-        """!Estimate size to draw raster legend"""
+        """Estimate size to draw raster legend"""
         
         if discrete == 'n':
             rinfo = grass.raster_info(raster)
@@ -1442,7 +1442,7 @@ class RasterLegend(InstructionObject):
         return width    
              
 class VectorLegend(InstructionObject):
-    """!Class representing colortable instruction"""
+    """Class representing colortable instruction"""
     def __init__(self, id):
         InstructionObject.__init__(self, id = id)
         self.type = 'vectorLegend'
@@ -1466,7 +1466,7 @@ class VectorLegend(InstructionObject):
         return instr
 
     def Read(self, instruction, text, **kwargs):
-        """!Read instruction and save information"""
+        """Read instruction and save information"""
         instr = {}
         instr['vLegend'] = True
         for line in text:
@@ -1495,7 +1495,7 @@ class VectorLegend(InstructionObject):
         return True 
     
     def EstimateSize(self, vectorInstr, fontsize, width = None, cols = None):
-        """!Estimate size to draw vector legend"""
+        """Estimate size to draw vector legend"""
         if width:
             width = width 
         else:
@@ -1518,7 +1518,7 @@ class VectorLegend(InstructionObject):
             
    
 class Raster(InstructionObject):
-    """!Class representing raster instruction"""
+    """Class representing raster instruction"""
     def __init__(self, id):
         InstructionObject.__init__(self, id = id)
         self.type = 'raster'
@@ -1532,7 +1532,7 @@ class Raster(InstructionObject):
         return instr
     
     def Read(self, instruction, text):
-        """!Read instruction and save information"""
+        """Read instruction and save information"""
         instr = {}
         instr['isRaster'] = True
         try:
@@ -1552,7 +1552,7 @@ class Raster(InstructionObject):
         return True
     
 class Vector(InstructionObject):
-    """!Class keeps vector layers"""
+    """Class keeps vector layers"""
     def __init__(self, id):
         InstructionObject.__init__(self, id = id)
         self.type = 'vector'
@@ -1564,7 +1564,7 @@ class Vector(InstructionObject):
         return ''
     
     def Read(self, instruction, text, **kwargs):
-        """!Read instruction and save information"""
+        """Read instruction and save information"""
         instr = {}
         
         for line in text:
@@ -1599,7 +1599,7 @@ class Vector(InstructionObject):
         return True    
     
 class VProperties(InstructionObject):
-    """!Class represents instructions vareas, vlines, vpoints"""
+    """Class represents instructions vareas, vlines, vpoints"""
     def __init__(self, id, subType):
         InstructionObject.__init__(self, id = id)
         self.type = 'vProperties'
@@ -1709,7 +1709,7 @@ class VProperties(InstructionObject):
         return vInstruction
     
     def Read(self, instruction, text, **kwargs):
-        """!Read instruction and save information"""
+        """Read instruction and save information"""
         instr = {}
         try:
             info = grass.find_file(name = text[0].split()[1], element = 'vector')
@@ -1823,7 +1823,7 @@ class VProperties(InstructionObject):
         return True
 
 class Labels(InstructionObject):
-    """!Class representing labels instruction"""
+    """Class representing labels instruction"""
     def __init__(self, id):
         InstructionObject.__init__(self, id = id)
         self.type = 'labels'
@@ -1840,7 +1840,7 @@ class Labels(InstructionObject):
         return instr
     
     def Read(self, instruction, text, **kwargs):
-        """!Read instruction and save information"""
+        """Read instruction and save information"""
         for line in text:
             try:
                 if line.startswith('labels'):

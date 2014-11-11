@@ -1,4 +1,4 @@
-"""!
+"""
 @package core.settings
 
 @brief Default GUI settings
@@ -29,7 +29,7 @@ from core.gcmd  import GException, GError
 from core.utils import GetSettingsPath, PathJoin, rgb2str, _
 
 class Settings:
-    """!Generic class where to store settings"""
+    """Generic class where to store settings"""
     def __init__(self):
         # settings file
         self.filePath = os.path.join(GetSettingsPath(), 'wx')
@@ -51,7 +51,7 @@ class Settings:
         self._internalSettings() # -> self.internalSettings
 
     def _generateLocale(self):
-        """!Generate locales
+        """Generate locales
         """
         try:
             self.locs = os.listdir(os.path.join(os.environ['GISBASE'], 'locale'))
@@ -66,7 +66,7 @@ class Settings:
         return 'system'
         
     def _defaultSettings(self):
-        """!Define default settings
+        """Define default settings
         """
         try:
             projFile = PathJoin(os.environ["GRASS_PROJSHARE"], 'epsg')
@@ -826,7 +826,7 @@ class Settings:
             self.defaultSettings['general']['defWindowPos']['enabled'] = False
 
     def _internalSettings(self):
-        """!Define internal settings (based on user settings)
+        """Define internal settings (based on user settings)
         """
         self.internalSettings = {}
         for group in self.userSettings.keys():
@@ -919,7 +919,7 @@ class Settings:
                                                                           _("circle"))
 
     def ReadSettingsFile(self, settings = None):
-        """!Reads settings file (mapset, location, gisdbase)"""
+        """Reads settings file (mapset, location, gisdbase)"""
         if settings is None:
             settings = self.userSettings
         
@@ -934,10 +934,10 @@ class Settings:
             os.environ["GRASS_ENCODING"] = enc
         
     def _readFile(self, filename, settings = None):
-        """!Read settings from file to dict
+        """Read settings from file to dict
 
-        @param filename settings file path
-        @param settings dict where to store settings (None for self.userSettings)
+        :param filename: settings file path
+        :param settings: dict where to store settings (None for self.userSettings)
         """
         if settings is None:
             settings = self.userSettings
@@ -982,7 +982,7 @@ class Settings:
         fd.close()
         
     def SaveToFile(self, settings = None):
-        """!Save settings to the file"""
+        """Save settings to the file"""
         if settings is None:
             settings = self.userSettings
         
@@ -1034,7 +1034,7 @@ class Settings:
         return self.filePath
         
     def _parseValue(self, value, read = False):
-        """!Parse value to be store in settings file"""
+        """Parse value to be store in settings file"""
         if read: # -> read settings (cast values)
             if value == 'True':
                 value = True
@@ -1064,16 +1064,16 @@ class Settings:
         return value
 
     def Get(self, group, key = None, subkey = None, internal = False):
-        """!Get value by key/subkey
+        """Get value by key/subkey
 
         Raise KeyError if key is not found
         
-        @param group settings group
-        @param key (value, None)
-        @param subkey (value, list or None)
-        @param internal use internal settings instead
+        :param group: settings group
+        :param key: (value, None)
+        :param subkey: (value, list or None)
+        :param internal: use internal settings instead
 
-        @return value
+        :return: value
         """
         if internal is True:
             settings = self.internalSettings
@@ -1098,15 +1098,15 @@ class Settings:
                 (group, key, subkey)
         
     def Set(self, group, value, key = None, subkey = None, internal = False):
-        """!Set value of key/subkey
+        """Set value of key/subkey
         
         Raise KeyError if group/key is not found
         
-        @param group settings group
-        @param key key (value, None)
-        @param subkey subkey (value, list or None)
-        @param value value
-        @param internal use internal settings instead
+        :param group: settings group
+        :param key: key (value, None)
+        :param subkey: subkey (value, list or None)
+        :param value: value
+        :param internal: use internal settings instead
         """
         if internal is True:
             settings = self.internalSettings
@@ -1129,16 +1129,16 @@ class Settings:
             raise GException("%s '%s:%s:%s'" % (_("Unable to set "), group, key, subkey))
         
     def Append(self, dict, group, key, subkey, value, overwrite = True):
-        """!Set value of key/subkey
+        """Set value of key/subkey
 
         Create group/key/subkey if not exists
         
-        @param dict settings dictionary to use
-        @param group settings group
-        @param key key
-        @param subkey subkey (value or list)
-        @param value value
-        @param overwrite True to overwrite existing value
+        :param dict: settings dictionary to use
+        :param group: settings group
+        :param key: key
+        :param subkey: subkey (value or list)
+        :param value: value
+        :param overwrite: True to overwrite existing value
         """
 
         hasValue = True
@@ -1176,13 +1176,13 @@ class Settings:
                     ' (' + group + ':' + key + ':' + subkey + ')'
         
     def GetDefaultSettings(self):
-        """!Get default user settings"""
+        """Get default user settings"""
         return self.defaultSettings
 
     def Reset(self, key = None):
-        """!Reset to default settings
+        """Reset to default settings
 
-        @param key key in settings dict (None for all keys)
+        :param key: key in settings dict (None for all keys)
         """
         if not key:
             self.userSettings = copy.deepcopy(self.defaultSettings)

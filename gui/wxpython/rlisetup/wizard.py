@@ -537,7 +537,7 @@ class FirstPage(TitledPage):
         """Check input fields.
 
         :return: True if configuration file is given and raster xor vector map,
-                 False otherwise
+        False otherwise
         """
         #R#return bool(self.conf_name and (bool(self.rast) != bool(self.vect)))
         return bool(self.conf_name and bool(self.rast))

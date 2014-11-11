@@ -1,4 +1,4 @@
-"""!
+"""
 @package wxplot.histogram
 
 @brief Histogramming using PyPlot
@@ -32,7 +32,7 @@ from core.gcmd         import RunCommand, GException, GError
 from core.utils import _
 
 class HistogramPlotFrame(BasePlotFrame):
-    """!Mainframe for displaying histogram of raster map. Uses wx.lib.plot.
+    """Mainframe for displaying histogram of raster map. Uses wx.lib.plot.
     """
     def __init__(self, parent, id = wx.ID_ANY, style = wx.DEFAULT_FRAME_STYLE, 
                  size = wx.Size(700, 400), rasterList = [], **kwargs):
@@ -69,12 +69,12 @@ class HistogramPlotFrame(BasePlotFrame):
             self.raster = {}
 
     def _initOpts(self):
-        """!Initialize plot options
+        """Initialize plot options
         """
         self.InitPlotOpts('histogram')            
 
     def OnCreateHist(self, event):
-        """!Main routine for creating a histogram. Uses r.stats to
+        """Main routine for creating a histogram. Uses r.stats to
         create a list of cell value and count/percent/area pairs. This is passed to
         plot to create a line graph of the histogram.
         """
@@ -89,7 +89,7 @@ class HistogramPlotFrame(BasePlotFrame):
         self.DrawPlot(p)
 
     def OnSelectRaster(self, event):
-        """!Select raster map(s) to profile
+        """Select raster map(s) to profile
         """
         dlg = HistRasterDialog(parent = self)
         
@@ -108,7 +108,7 @@ class HistogramPlotFrame(BasePlotFrame):
         dlg.Destroy()
 
     def SetupHistogram(self):
-        """!Build data list for ploting each raster
+        """Build data list for ploting each raster
         """
 
         #
@@ -147,7 +147,7 @@ class HistogramPlotFrame(BasePlotFrame):
         if self.histtype == 'area': self.ylabel = _('Area')
 
     def CreateDatalist(self, raster):
-        """!Build a list of cell value, frequency pairs for histogram
+        """Build a list of cell value, frequency pairs for histogram
             frequency can be in cell counts, percents, or area
         """
         datalist = []
@@ -190,7 +190,7 @@ class HistogramPlotFrame(BasePlotFrame):
             return None
         
     def CreatePlotList(self):
-        """!Make list of elements to plot
+        """Make list of elements to plot
         """
         
         # graph the cell value, frequency pairs for the histogram
@@ -217,14 +217,14 @@ class HistogramPlotFrame(BasePlotFrame):
             return None
 
     def Update(self):
-        """!Update histogram after changing options
+        """Update histogram after changing options
         """
         self.SetGraphStyle()
         p = self.CreatePlotList()
         self.DrawPlot(p)
  
     def OnStats(self, event):
-        """!Displays regression information in messagebox
+        """Displays regression information in messagebox
         """
         message = []
         title = _('Statistics for Map(s) Histogrammed')
@@ -241,8 +241,8 @@ class HistogramPlotFrame(BasePlotFrame):
             stats.Destroy()       
 
 class HistogramPlotToolbar(BaseToolbar):
-    """!Toolbar for histogramming raster map
-    """ 
+    """Toolbar for histogramming raster map
+    """
     def __init__(self, parent):
         BaseToolbar.__init__(self, parent)
 
@@ -256,7 +256,7 @@ class HistogramPlotToolbar(BaseToolbar):
         self.Realize()
         
     def _toolbarData(self):
-        """!Toolbar data"""
+        """Toolbar data"""
         return self._getToolbarData((('addraster', BaseIcons["addRast"],
                                       self.parent.OnSelectRaster),
                                      (None, ),

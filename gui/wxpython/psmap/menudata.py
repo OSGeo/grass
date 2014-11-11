@@ -1,4 +1,4 @@
-"""!
+"""
 @package ps.menudata
 
 @brief wxPsMap - menu entries
@@ -21,9 +21,9 @@ from core.menutree import MenuTreeModelBuilder
 
 class PsMapMenuData(MenuTreeModelBuilder):
     def __init__(self, path = None):
-        """!Menu for Cartographic Composer (psmap.py)
+        """Menu for Cartographic Composer (psmap.py)
         
-        @param path path to XML to be read (None for menudata_psmap.xml)
+        :param path: path to XML to be read (None for menudata_psmap.xml)
         """
         if not path:
             path = os.path.join(globalvar.WXGUIDIR, 'xml', 'menudata_psmap.xml')

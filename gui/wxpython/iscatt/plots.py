@@ -1,4 +1,4 @@
-"""!
+"""
 @package iscatt.plots
 
 @brief Ploting widgets.
@@ -200,7 +200,7 @@ class ScatterPlotWidget(wx.Panel, ManageBusyCursorMixin):
         self.main_sizer.Fit(self)
     
     def Plot(self, cats_order, scatts, ellipses, styles):
-        """ Redraws the figure
+        """Redraws the figure
         """
 
         callafter_list = []
@@ -899,7 +899,7 @@ class ModestImage(mi.AxesImage):
         return self._full_res
 
     def _scale_to_res(self):
-        """ Change self._A and _extent to render an image whose
+        """Change self._A and _extent to render an image whose
         resolution is matched to the eventual rendering."""
 
         ax = self.axes
@@ -945,7 +945,7 @@ def imshow(axes, X, cmap=None, norm=None, aspect=None,
     """Similar to matplotlib's imshow command, but produces a ModestImage
 
     Unlike matplotlib version, must explicitly specify axes
-    Author: Chris Beaumont <beaumont@hawaii.edu>
+    @author: Chris Beaumont <beaumont@hawaii.edu>
     """
 
     if not axes._hold:

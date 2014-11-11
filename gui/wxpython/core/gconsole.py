@@ -1,4 +1,4 @@
-"""!
+"""
 @package core.gconsole
 
 @brief Command output widgets
@@ -55,18 +55,18 @@ wxCmdPrepare, EVT_CMD_PREPARE = NewEvent()
 
 
 def GrassCmd(cmd, env=None, stdout=None, stderr=None):
-    """!Return GRASS command thread"""
+    """Return GRASS command thread"""
     return CommandThread(cmd, env=env,
                          stdout=stdout, stderr=stderr)
 
 
 class CmdThread(threading.Thread):
-    """!Thread for GRASS commands"""
+    """Thread for GRASS commands"""
     requestId = 0
 
     def __init__(self, receiver, requestQ=None, resultQ=None, **kwds):
-        """!
-        @param receiver event receiver (used in PostEvent)
+        """
+        :param receiver: event receiver (used in PostEvent)
         """
         threading.Thread.__init__(self, **kwds)
 
@@ -90,12 +90,12 @@ class CmdThread(threading.Thread):
         self.start()
 
     def RunCmd(self, *args, **kwds):
-        """!Run command in queue
+        """Run command in queue
 
-        @param args unnamed command arguments
-        @param kwds named command arguments
+        :param args: unnamed command arguments
+        :param kwds: named command arguments
 
-        @return request id in queue
+        :return: request id in queue
         """
         CmdThread.requestId += 1
 
@@ -105,11 +105,11 @@ class CmdThread(threading.Thread):
         return CmdThread.requestId
 
     def GetId(self):
-         """!Get id for next command"""
-         return CmdThread.requestId + 1
+        """Get id for next command"""
+        return CmdThread.requestId + 1
 
     def SetId(self, id):
-        """!Set starting id"""
+        """Set starting id"""
         CmdThread.requestId = id
 
     def run(self):
@@ -208,7 +208,7 @@ class CmdThread(threading.Thread):
                 wx.PostEvent(self.receiver, event)
 
     def abort(self, abortall=True):
-        """!Abort command(s)"""
+        """Abort command(s)"""
         if abortall:
             self._want_abort_all = True
         if self.requestCmd is not None:
@@ -217,7 +217,7 @@ class CmdThread(threading.Thread):
             self._want_abort_all = False
 
 class GStdout:
-    """!GConsole standard output
+    """GConsole standard output
 
     Based on FrameOutErr.py
 
@@ -228,8 +228,8 @@ class GStdout:
     Licence:   GPL
     """
     def __init__(self, receiver):
-        """!
-        @param receiver event receiver (used in PostEvent)
+        """
+        :param receiver: event receiver (used in PostEvent)
         """
         self.receiver = receiver
 
@@ -250,7 +250,7 @@ class GStdout:
 
 
 class GStderr:
-    """!GConsole standard error output
+    """GConsole standard error output
 
     Based on FrameOutErr.py
 
@@ -261,8 +261,8 @@ class GStderr:
     Licence:   GPL
     """
     def __init__(self, receiver):
-        """!
-        @param receiver event receiver (used in PostEvent)
+        """
+        :param receiver: event receiver (used in PostEvent)
         """
         self.receiver = receiver
         self.type = ''
@@ -331,14 +331,15 @@ gIgnoredCmdRun, EVT_IGNORED_CMD_RUN = NewEvent()
 
 
 class GConsole(wx.EvtHandler):
-    """!
+    """
     """
     def __init__(self, guiparent=None, giface=None, ignoredCmdPattern=None):
-        """!
-        @param guiparent parent window for created GUI objects
-        @param lmgr layer manager window (TODO: replace by giface)
-        @param ignoredCmdPattern regular expression specifying commads
-        to be ignored (e.g. @c '^d\..*' for display commands)
+        """
+        :param guiparent: parent window for created GUI objects
+        :param lmgr: layer manager window (TODO: replace by giface)
+        :param ignoredCmdPattern: regular expression specifying commads
+                                  to be ignored (e.g. @c '^d\..*' for
+                                  display commands)
         """
         wx.EvtHandler.__init__(self)
 
@@ -378,7 +379,7 @@ class GConsole(wx.EvtHandler):
         self.cmdThread = CmdThread(self, self.requestQ, self.resultQ)
 
     def Redirect(self):
-        """!Redirect stdout/stderr
+        """Redirect stdout/stderr
         """
         if Debug.GetLevel() == 0 and int(grass.gisenv().get('DEBUG', 0)) == 0:
             # don't redirect when debugging is enabled
@@ -395,54 +396,56 @@ class GConsole(wx.EvtHandler):
 
     def WriteLog(self, text, style=None, wrap=None,
                  notification=Notification.HIGHLIGHT):
-        """!Generic method for writing log message in
+        """Generic method for writing log message in
         given style
 
-        @param text text line
-        @param notification form of notification
+        :param text: text line
+        :param notification: form of notification
         """
         self.writeLog.emit(text=text, wrap=wrap,
                           notification=notification)
 
     def WriteCmdLog(self, text, pid=None, notification=Notification.MAKE_VISIBLE):
-        """!Write message in selected style
+        """Write message in selected style
 
-        @param text message to be printed
-        @param pid process pid or None
-        @param notification form of notification
+        :param text: message to be printed
+        :param pid: process pid or None
+        :param notification: form of notification
         """
         self.writeCmdLog.emit(text=text, pid=pid,
                               notification=notification)
 
     def WriteWarning(self, text):
-        """!Write message in warning style"""
+        """Write message in warning style"""
         self.writeWarning.emit(text=text)
 
     def WriteError(self, text):
-        """!Write message in error style"""
+        """Write message in error style"""
         self.writeError.emit(text=text)
 
     def RunCmd(self, command, compReg=True, skipInterface=False,
                onDone=None, onPrepare=None, userData=None, notification=Notification.MAKE_VISIBLE):
-        """!Run command typed into console command prompt (GPrompt).
+        """Run command typed into console command prompt (GPrompt).
 
-        @todo Document the other event.
-        @todo Solve problem with the other event
-        (now uses gOutputText event but there is no text,
-        use onPrepare handler instead?)
+        .. todo::
+            Document the other event.
+        .. todo::
+            Solve problem with the other event (now uses gOutputText
+            event but there is no text, use onPrepare handler instead?)
 
         Posts event EVT_IGNORED_CMD_RUN when command which should be ignored
         (according to ignoredCmdPattern) is run.
         For example, see layer manager which handles d.* on its own.
 
-        @param command command given as a list (produced e.g. by utils.split())
-        @param compReg True use computation region
-        @param notification form of notification
-        @param skipInterface True to do not launch GRASS interface
-        parser when command has no arguments given
-        @param onDone function to be called when command is finished
-        @param onPrepare function to be called before command is launched
-        @param userData data defined for the command
+        :param command: command given as a list (produced e.g. by utils.split())
+        :param compReg: True use computation region
+        :param notification: form of notification
+        :param bool skipInterface: True to do not launch GRASS interface
+                                   parser when command has no arguments
+                                   given
+        :param onDone: function to be called when command is finished
+        :param onPrepare: function to be called before command is launched
+        :param userData: data defined for the command
         """
         if len(command) == 0:
             Debug.msg(2, "GPrompt:RunCmd(): empty command")
@@ -567,11 +570,12 @@ class GConsole(wx.EvtHandler):
             self.cmdOutputTimer.Start(50)
 
     def GetLog(self, err=False):
-        """!Get widget used for logging
+        """Get widget used for logging
 
-        @todo what's this?
+        .. todo::
+           what's this?
 
-        @param err True to get stderr widget
+        :param bool err: True to get stderr widget
         """
         if err:
             return self.cmdStdErr
@@ -579,22 +583,22 @@ class GConsole(wx.EvtHandler):
         return self.cmdStdOut
 
     def GetCmd(self):
-        """!Get running command or None"""
+        """Get running command or None"""
         return self.requestQ.get()
 
     def OnCmdAbort(self, event):
-        """!Abort running command"""
+        """Abort running command"""
         self.cmdThread.abort()
         event.Skip()
 
     def OnCmdRun(self, event):
-        """!Run command"""
+        """Run command"""
         self.WriteCmdLog('(%s)\n%s' % (str(time.ctime()), ' '.join(event.cmd)),
                          notification=event.notification)
         event.Skip()
 
     def OnCmdDone(self, event):
-        """!Command done (or aborted)
+        """Command done (or aborted)
 
         Sends signal mapCreated if map is recognized in output
         parameters or for specific modules (as r.colors).
@@ -676,9 +680,9 @@ class GConsole(wx.EvtHandler):
         wx.GetApp().ProcessPendingEvents()
 
     def UpdateHistoryFile(self, command):
-        """!Update history file
+        """Update history file
         
-        @param command the command given as a string
+        :param command: the command given as a string
         """
         env = grass.gisenv()
         try:

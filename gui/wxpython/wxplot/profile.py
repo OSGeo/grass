@@ -1,4 +1,4 @@
-"""!
+"""
 @package wxplot.profile
 
 @brief Profiling using PyPlot
@@ -45,7 +45,7 @@ from core.gcmd         import RunCommand, GWarning, GError, GMessage
 
 
 class ProfileFrame(BasePlotFrame):
-    """!Mainframe for displaying profile of one or more raster maps. Uses wx.lib.plot.
+    """Mainframe for displaying profile of one or more raster maps. Uses wx.lib.plot.
     """
     def __init__(self, parent, controller, units, size=wx.Size(700, 400),
                  rasterList = None, **kwargs):
@@ -99,7 +99,7 @@ class ProfileFrame(BasePlotFrame):
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
         
     def _initOpts(self):
-        """!Initialize plot options
+        """Initialize plot options
         """
         self.InitPlotOpts('profile')
 
@@ -111,7 +111,7 @@ class ProfileFrame(BasePlotFrame):
             self.OnErase(None)
 
     def OnDrawTransect(self, event):
-        """!Draws transect to profile in map display
+        """Draws transect to profile in map display
         """
         if self.controller.IsActive():
             self.controller.Stop()
@@ -121,7 +121,7 @@ class ProfileFrame(BasePlotFrame):
         self.parent.Raise()
 
     def OnSelectRaster(self, event):
-        """!Select raster map(s) to profile
+        """Select raster map(s) to profile
         """
         dlg = ProfileRasterDialog(parent = self)
         dlg.CenterOnParent()
@@ -136,7 +136,7 @@ class ProfileFrame(BasePlotFrame):
         dlg.Destroy()
 
     def SetupProfile(self):
-        """!Create coordinate string for profiling. Create segment
+        """Create coordinate string for profiling. Create segment
            list for transect segment markers.
         """
         # create list of coordinate points for r.profile
@@ -230,7 +230,7 @@ class ProfileFrame(BasePlotFrame):
             self.ylabel = self.ylabel.rstrip(',')
 
     def CreateDatalist(self, raster, coords):
-        """!Build a list of distance, value pairs for points along transect using r.profile
+        """Build a list of distance, value pairs for points along transect using r.profile
         """
         datalist = []
         
@@ -267,7 +267,7 @@ class ProfileFrame(BasePlotFrame):
         return datalist
 
     def OnCreateProfile(self, event):
-        """!Main routine for creating a profile. Uses r.profile to
+        """Main routine for creating a profile. Uses r.profile to
         create a list of distance,cell value pairs. This is passed to
         plot to create a line graph of the profile. If the profile
         transect is in multiple segments, these are drawn as
@@ -290,7 +290,7 @@ class ProfileFrame(BasePlotFrame):
         self.DrawPlot(p)
 
     def CreatePlotList(self):
-        """!Create a plot data list from transect datalist and
+        """Create a plot data list from transect datalist and
             transect segment endpoint coordinates.
         """
         # graph the distance, value pairs for the transect
@@ -329,15 +329,15 @@ class ProfileFrame(BasePlotFrame):
             return None
 
     def Update(self):
-        """!Update profile after changing options
+        """Update profile after changing options
         """
         self.SetGraphStyle()
         p = self.CreatePlotList()
         self.DrawPlot(p)
 
     def SaveProfileToFile(self, event):
-        """!Save r.profile data to a csv file
-        """    
+        """Save r.profile data to a csv file
+        """   
         dlg = wx.FileDialog(parent = self,
                             message = _("Choose prefix for file(s) where to save profile values..."),
                             defaultDir = os.getcwd(), 
@@ -381,7 +381,7 @@ class ProfileFrame(BasePlotFrame):
         GMessage(parent = self, message = message)
                         
     def OnStats(self, event):
-        """!Displays regression information in messagebox
+        """Displays regression information in messagebox
         """
         message = []
         title = _('Statistics for Profile(s)')
@@ -422,8 +422,8 @@ class ProfileFrame(BasePlotFrame):
         self.Destroy()
     
 class ProfileToolbar(BaseToolbar):
-    """!Toolbar for profiling raster map
-    """ 
+    """Toolbar for profiling raster map
+    """
     def __init__(self, parent):
         BaseToolbar.__init__(self, parent)
 
@@ -437,7 +437,7 @@ class ProfileToolbar(BaseToolbar):
         self.Realize()
         
     def _toolbarData(self):
-        """!Toolbar data"""
+        """Toolbar data"""
         return self._getToolbarData((('addraster', BaseIcons["addRast"],
                                       self.parent.OnSelectRaster),
                                      ('transect', PlotIcons["transect"],

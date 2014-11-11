@@ -1,4 +1,4 @@
-"""!
+"""
 @package modules::mcalc_builder
 
 @brief Map calculator, GUI wrapper for r.mapcalc
@@ -32,7 +32,7 @@ from gui_core.widgets import IntegerValidator
 from core.settings    import UserSettings
 
 class MapCalcFrame(wx.Frame):
-    """!Mapcalc Frame class. Calculator-style window to create and run
+    """Mapcalc Frame class. Calculator-style window to create and run
     r(3).mapcalc statements.
     """
     def __init__(self, parent, giface, cmd, id = wx.ID_ANY,
@@ -420,7 +420,7 @@ class MapCalcFrame(wx.Frame):
         self.Layout()
         
     def AddMark(self,event):
-        """!Sends operators to insertion method
+        """Sends operators to insertion method
         """
         if event.GetId() == self.btn['compl'].GetId(): mark = "~"
         elif event.GetId() == self.btn['not'].GetId(): mark = "!"
@@ -452,7 +452,7 @@ class MapCalcFrame(wx.Frame):
         
     ### unused
     # def OnSelectTextEvt(self, event):
-    #     """!Checks if user is typing or the event was emited by map selection.
+    #     """Checks if user is typing or the event was emited by map selection.
     #     Prevents from changing focus.
     #     """
     #     item = self.mapselect.GetValue().strip()
@@ -463,7 +463,7 @@ class MapCalcFrame(wx.Frame):
     #     self.lastMapName = item
 
     def OnSelect(self, event):
-        """!Gets raster map or function selection and send it to
+        """Gets raster map or function selection and send it to
         insertion method. 
 
         Checks for characters which can be in raster map name but 
@@ -511,7 +511,7 @@ class MapCalcFrame(wx.Frame):
                         seed_flag=seed_flag, seed=seed, overwrite=overwrite))
 
     def _addSomething(self, what):
-        """!Inserts operators, map names, and functions into text area
+        """Inserts operators, map names, and functions into text area
         """
         mcalcstr  = self.text_mcalc.GetValue()
         position  = self.text_mcalc.GetInsertionPoint()
@@ -541,7 +541,7 @@ class MapCalcFrame(wx.Frame):
         self.text_mcalc.SetFocus()
         
     def OnMCalcRun(self,event):
-        """!Builds and runs r.mapcalc statement
+        """Builds and runs r.mapcalc statement
         """
         name = self.newmaptxt.GetValue().strip()
         if not name:
@@ -594,7 +594,7 @@ class MapCalcFrame(wx.Frame):
                        **params)
 
     def OnDone(self, cmd, returncode):
-        """!Add create map to the layer tree
+        """Add create map to the layer tree
 
         Sends the mapCreated signal from the grass interface.
         """
@@ -607,7 +607,7 @@ class MapCalcFrame(wx.Frame):
         self._giface.mapCreated.emit(name=name, ltype=ltype, add=self.addbox.IsChecked())
 
     def OnSaveExpression(self, event):
-        """!Saves expression to file
+        """Saves expression to file
         """
         mctxt = self.newmaptxt.GetValue() + ' = ' + self.text_mcalc.GetValue() + os.linesep
         
@@ -631,7 +631,7 @@ class MapCalcFrame(wx.Frame):
         dlg.Destroy()
 
     def OnLoadExpression(self, event):
-        """!Load expression from file
+        """Load expression from file
         """
         dlg = wx.FileDialog(parent = self,
                             message = _("Choose a file name to load the expression"),
@@ -672,17 +672,17 @@ class MapCalcFrame(wx.Frame):
             self.SetStatusText(_("'{cmd}' copied to clipboard").format(cmd=command))
 
     def OnClear(self, event):
-        """!Clears text area
+        """Clears text area
         """
         self.text_mcalc.SetValue('')
         
     def OnHelp(self, event):
-        """!Launches r.mapcalc help
+        """Launches r.mapcalc help
         """
         RunCommand('g.manual', parent = self, entry = self.cmd)
         
     def OnClose(self,event):
-        """!Close window"""
+        """Close window"""
         self.Destroy()
 
 if __name__ == "__main__":

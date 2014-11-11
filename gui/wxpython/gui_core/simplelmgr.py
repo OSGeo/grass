@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""!
+"""
 @package gui_core.simplelmgr
 
 @brief GUI class for simple layer management.
@@ -42,7 +42,7 @@ SIMPLE_LMGR_TB_RIGHT = 128
 
 
 class SimpleLayerManager(wx.Panel):
-    """!Simple layer manager class provides similar functionality to
+    """Simple layer manager class provides similar functionality to
     Layertree, but it's just list, not tree."""
     def __init__(self, parent, layerList,
                  lmgrStyle=SIMPLE_LMGR_RASTER | SIMPLE_LMGR_VECTOR | SIMPLE_LMGR_TB_LEFT,
@@ -110,7 +110,7 @@ class SimpleLayerManager(wx.Panel):
         self._auimgr.Update()
 
     def _selectionChanged(self):
-        """!Selection was changed externally,
+        """Selection was changed externally,
         updates selection info in layers."""
         if self._blockSelectionChanged:
             return
@@ -119,7 +119,7 @@ class SimpleLayerManager(wx.Panel):
             layer.Select(i in selected)
 
     def OnContextMenu(self, event):
-        """!Show context menu.
+        """Show context menu.
 
         So far offers only copying layer list to clipboard
         """
@@ -144,7 +144,7 @@ class SimpleLayerManager(wx.Panel):
         event.Skip()
 
     def _copyText(self, text):
-        """!Helper function for copying
+        """Helper function for copying
 
         TODO: move to utils?        
         """
@@ -155,7 +155,7 @@ class SimpleLayerManager(wx.Panel):
             wx.TheClipboard.Close()
 
     def OnLayerChecked(self, event):
-        """!Layer was (un)checked, update layer's info."""
+        """Layer was (un)checked, update layer's info."""
         checkedIdxs = self._checkList.GetChecked()
         for i, layer in enumerate(self._layerList):
             if i in checkedIdxs and not layer.IsActive():
@@ -168,7 +168,7 @@ class SimpleLayerManager(wx.Panel):
         event.Skip()
 
     def OnAddRaster(self, event):
-        """!Opens d.rast dialog and adds layer.
+        """Opens d.rast dialog and adds layer.
         Dummy layer is added first."""
         cmd = ['d.rast']
         layer = self.AddRaster(name='', cmd=cmd, hidden=True, dialog=None)
@@ -177,7 +177,7 @@ class SimpleLayerManager(wx.Panel):
         event.Skip()
 
     def OnAddVector(self, event):
-        """!Opens d.vect dialog and adds layer.
+        """Opens d.vect dialog and adds layer.
         Dummy layer is added first."""
         cmd = ['d.vect']
 
@@ -187,7 +187,7 @@ class SimpleLayerManager(wx.Panel):
         event.Skip()
 
     def OnAddRast3d(self, event):
-        """!Opens d.rast3d dialog and adds layer.
+        """Opens d.rast3d dialog and adds layer.
         Dummy layer is added first."""
         cmd = ['d.rast3d']
         layer = self.AddRast3d(name='', cmd=cmd, hidden=True, dialog=None)
@@ -196,7 +196,7 @@ class SimpleLayerManager(wx.Panel):
         event.Skip()
 
     def OnAddRGB(self, event):
-        """!Opens d.rgb dialog and adds layer.
+        """Opens d.rgb dialog and adds layer.
         Dummy layer is added first."""
         cmd = ['d.rgb']
         layer = self.AddRGB(name='', cmd=cmd, hidden=True, dialog=None)
@@ -205,7 +205,7 @@ class SimpleLayerManager(wx.Panel):
         event.Skip()
 
     def OnRemove(self, event):
-        """!Removes selected layers from list."""
+        """Removes selected layers from list."""
         layers = self._layerList.GetSelectedLayers(activeOnly=False)
         for layer in layers:
             self.layerRemoved.emit(index=self._layerList.GetLayerIndex(layer), layer=layer)
@@ -215,7 +215,7 @@ class SimpleLayerManager(wx.Panel):
         event.Skip()
 
     def OnLayerUp(self, event):
-        """!Moves selected layers one step up.
+        """Moves selected layers one step up.
 
         Note: not completely correct for multiple layers."""
         layers = self._layerList.GetSelectedLayers()
@@ -231,7 +231,7 @@ class SimpleLayerManager(wx.Panel):
         event.Skip()
 
     def OnLayerDown(self, event):
-        """!Moves selected layers one step down.
+        """Moves selected layers one step down.
 
         Note: not completely correct for multiple layers."""
         layers = self._layerList.GetSelectedLayers()
@@ -255,13 +255,13 @@ class SimpleLayerManager(wx.Panel):
         event.Skip()
 
     def _layerChangeProperties(self, layer):
-        """!Opens new module dialog or recycles it."""
+        """Opens new module dialog or recycles it."""
         GUI(parent=self, giface=None,
             modal=self._modal).ParseCommand(cmd=layer.cmd,
                                             completed=(self.GetOptData, layer, ''))
 
     def OnLayerChangeOpacity(self, event):
-        """!Opacity of a layer is changing."""
+        """Opacity of a layer is changing."""
         layers = self._layerList.GetSelectedLayers()
         if not layers or len(layers) > 1:
             return
@@ -278,14 +278,14 @@ class SimpleLayerManager(wx.Panel):
         event.Skip()
 
     def _setLayerOpacity(self, layer, value):
-        """!Sets layer's opacity.'"""
+        """Sets layer's opacity.'"""
         layer.opacity = value 
         self._update()
         self.opacityChanged.emit(index=self._layerList.GetLayerIndex(layer), layer=layer)
         self.anyChange.emit()
 
     def _update(self):
-        """!Updates checklistbox according to layerList structure."""
+        """Updates checklistbox according to layerList structure."""
         items = []
         active = []
         selected = []
@@ -315,7 +315,7 @@ class SimpleLayerManager(wx.Panel):
                 self._checkList.Deselect(i)
 
     def GetOptData(self, dcmd, layer, params, propwin):
-        """!Handler for module dialogs."""
+        """Handler for module dialogs."""
         if dcmd:
             layer.cmd = dcmd
             layer.selected = True
@@ -340,35 +340,35 @@ class SimpleLayerManager(wx.Panel):
             self.anyChange.emit()
 
     def AddRaster(self, name, cmd, hidden, dialog):
-        """!Ads new raster layer."""
+        """Ads new raster layer."""
         layer = self._layerList.AddNewLayer(name=name, mapType='rast',
                                             active=True,
                                             cmd=cmd, hidden=hidden)
         return layer
 
     def AddRast3d(self, name, cmd, hidden, dialog):
-        """!Ads new raster3d layer."""
+        """Ads new raster3d layer."""
         layer = self._layerList.AddNewLayer(name=name, mapType='rast3d',
                                             active=True,
                                             cmd=cmd, hidden=hidden)
         return layer
 
     def AddVector(self, name, cmd, hidden, dialog):
-        """!Ads new vector layer."""
+        """Ads new vector layer."""
         layer = self._layerList.AddNewLayer(name=name, mapType='vect',
                                             active=True,
                                             cmd=cmd, hidden=hidden)
         return layer
 
     def AddRGB(self, name, cmd, hidden, dialog):
-        """!Ads new vector layer."""
+        """Ads new vector layer."""
         layer = self._layerList.AddNewLayer(name=name, mapType='rgb',
                                             active=True,
                                             cmd=cmd, hidden=hidden)
         return layer
 
     def GetLayerInfo(self, layer, key):
-        """!Just for compatibility, should be removed in the future"""
+        """Just for compatibility, should be removed in the future"""
         value = getattr(layer, key)
         # hack to return empty list, required in OnCancel in forms
         # not sure why it should be empty
@@ -377,18 +377,18 @@ class SimpleLayerManager(wx.Panel):
         return value
 
     def Delete(self, layer):
-        """!Just for compatibility, should be removed in the future"""
+        """Just for compatibility, should be removed in the future"""
         self._layerList.RemoveLayer(layer)
 
 
 class SimpleLmgrToolbar(BaseToolbar):
-    """!Toolbar of simple layer manager.
+    """Toolbar of simple layer manager.
 
     Style of the toolbar can be changed (horizontal,
     vertical, which map types to include).
     """
     def __init__(self, parent, lmgrStyle):
-        """!Toolbar constructor
+        """Toolbar constructor
         """
         self._style = lmgrStyle
         if lmgrStyle & (SIMPLE_LMGR_TB_LEFT | SIMPLE_LMGR_TB_RIGHT):
@@ -403,7 +403,7 @@ class SimpleLmgrToolbar(BaseToolbar):
         self.Realize()
 
     def _toolbarData(self):
-        """!Toolbar data"""
+        """Toolbar data"""
         data = [('edit', icons['edit'],
                  self.parent.OnLayerChangeProperties),
                  ('remove', icons['remove'],

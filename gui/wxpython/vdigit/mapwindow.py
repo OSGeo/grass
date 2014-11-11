@@ -1,4 +1,4 @@
-"""!
+"""
 @package vdigit.mapwindow
 
 @brief Map display canvas for wxGUI vector digitizer
@@ -30,7 +30,7 @@ from vdigit.dialogs import VDigitCategoryDialog, VDigitZBulkDialog, VDigitDuplic
 from gui_core       import gselect
 
 class VDigitWindow(BufferedMapWindow):
-    """!A Buffered window extended for vector digitizer.
+    """A Buffered window extended for vector digitizer.
     """
     def __init__(self, parent, giface, Map, properties, tree=None,
                  id=wx.ID_ANY, lmgr=None,
@@ -66,11 +66,11 @@ class VDigitWindow(BufferedMapWindow):
         return None
 
     def GetDigit(self):
-        """!Get digit class"""
+        """Get digit class"""
         return self.digit
     
     def SetToolbar(self, toolbar):
-        """!Set up related toolbar
+        """Set up related toolbar
         """
         self.toolbar = toolbar
 
@@ -104,7 +104,7 @@ class VDigitWindow(BufferedMapWindow):
         self.digitizingInfo.emit(text=text)
 
     def OnKeyDown(self, event):
-        """!Key pressed"""
+        """Key pressed"""
         shift = event.ShiftDown()
         kc = event.GetKeyCode()
         
@@ -158,7 +158,7 @@ class VDigitWindow(BufferedMapWindow):
                 del self.moveInfo['beginDiff']
         
     def OnLeftDownAddLine(self, event):
-        """!Left mouse button pressed - add new feature
+        """Left mouse button pressed - add new feature
         """
         try:
             mapLayer = self.toolbar.GetLayer().GetName()
@@ -216,7 +216,7 @@ class VDigitWindow(BufferedMapWindow):
             self.DrawLines(pdc = self.pdcTmp)
         
     def _geomAttrb(self, fid, dialog, attrb):
-        """!Define geometry attributes
+        """Define geometry attributes
         """
         mapLayer = self.toolbar.GetLayer()
         if self.tree:
@@ -249,9 +249,9 @@ class VDigitWindow(BufferedMapWindow):
             dialog.OnReset()
         
     def _geomAttrbUpdate(self, fids):
-        """!Update geometry atrributes of currently selected features
+        """Update geometry atrributes of currently selected features
         
-        @param fid list feature id
+        :param fid: list feature id
         """
         mapLayer = self.parent.toolbars['vdigit'].GetLayer()
         vectorName =  mapLayer.GetName()
@@ -297,9 +297,10 @@ class VDigitWindow(BufferedMapWindow):
                        input = sqlfile.name)
             
     def _updateATM(self):
-        """!Update open Attribute Table Manager
+        """Update open Attribute Table Manager
         
-        @todo: use AddDataRow() instead
+        .. todo::
+            use AddDataRow() instead
         """
         if not self.lmgr:
             return
@@ -315,7 +316,7 @@ class VDigitWindow(BufferedMapWindow):
                 atm.LoadData(layer)
         
     def OnLeftDownEditLine(self, event):
-        """!Left mouse button pressed - edit linear feature - add new
+        """Left mouse button pressed - edit linear feature - add new
         vertex.
         """
         self.polycoords.append(self.Pixel2Cell(self.mouse['begin']))
@@ -323,7 +324,7 @@ class VDigitWindow(BufferedMapWindow):
         self.DrawLines(pdc = self.pdcTmp)
         
     def OnLeftDownMoveLine(self, event):
-        """!Left mouse button pressed - vector digitizer move
+        """Left mouse button pressed - vector digitizer move
         feature/vertex, edit linear feature
         """
         self.moveInfo = dict()
@@ -341,7 +342,7 @@ class VDigitWindow(BufferedMapWindow):
             self.pdcTmp.SetPen(self.polypen)
         
     def OnLeftDownDisplayCA(self, event):
-        """!Left mouse button pressed - vector digitizer display categories
+        """Left mouse button pressed - vector digitizer display categories
         or attributes action
         """
         try:
@@ -425,7 +426,7 @@ class VDigitWindow(BufferedMapWindow):
         self.UpdateMap(render = False, renderVector = True)
         
     def OnLeftDownCopyCA(self, event):
-        """!Left mouse button pressed - vector digitizer copy
+        """Left mouse button pressed - vector digitizer copy
         categories or attributes action
         """
         if not hasattr(self, "copyCatsList"):
@@ -435,7 +436,7 @@ class VDigitWindow(BufferedMapWindow):
             self.mouse['box'] = 'box'
         
     def OnLeftDownCopyLine(self, event):
-        """!Left mouse button pressed - vector digitizer copy lines
+        """Left mouse button pressed - vector digitizer copy lines
         action
         """
         if not hasattr(self, "copyIds"):
@@ -443,7 +444,7 @@ class VDigitWindow(BufferedMapWindow):
             self.layerTmp = None
         
     def OnLeftDownBulkLine(self, event):
-        """!Left mouse button pressed - vector digitizer label 3D
+        """Left mouse button pressed - vector digitizer label 3D
         vector lines
         """
         if len(self.polycoords) > 1: # start new line
@@ -460,7 +461,7 @@ class VDigitWindow(BufferedMapWindow):
             self.DrawLines(self.pdcTmp, polycoords = (begin, end))
         
     def OnLeftDownUndo(self, event):
-        """!Left mouse button pressed with control key - vector
+        """Left mouse button pressed with control key - vector
         digitizer undo functionality
         """
         if self.mouse["use"] != "pointer" or not self.toolbar:
@@ -525,7 +526,7 @@ class VDigitWindow(BufferedMapWindow):
         self.UpdateMap(render = False, renderVector = False)
 
     def _onLeftDown(self, event):
-        """!Left mouse button donw - vector digitizer various actions
+        """Left mouse button donw - vector digitizer various actions
         """
         try:
             mapLayer = self.toolbar.GetLayer().GetName()
@@ -588,7 +589,7 @@ class VDigitWindow(BufferedMapWindow):
             self.OnLeftDownBulkLine(event)
         
     def OnLeftUpVarious(self, event):
-        """!Left mouse button released - vector digitizer various
+        """Left mouse button released - vector digitizer various
         actions
         """
         pos1 = self.Pixel2Cell(self.mouse['begin'])
@@ -716,7 +717,7 @@ class VDigitWindow(BufferedMapWindow):
                 self.UpdateMap(render = False, renderVector = False)
         
     def OnLeftUpModifyLine(self, event):
-        """!Left mouse button released - vector digitizer split line,
+        """Left mouse button released - vector digitizer split line,
         add/remove vertex action
         """
         pos1 = self.Pixel2Cell(self.mouse['begin'])
@@ -748,7 +749,7 @@ class VDigitWindow(BufferedMapWindow):
                 self.UpdateMap(render = False)
         
     def OnLeftUpCopyLine(self, event):
-        """!Left mouse button released - vector digitizer copy feature
+        """Left mouse button released - vector digitizer copy feature
         action
         """
         pos1 = self.Pixel2Cell(self.mouse['begin'])
@@ -795,7 +796,7 @@ class VDigitWindow(BufferedMapWindow):
             self.UpdateMap(render = True, renderVector = True)
             
     def OnLeftUpBulkLine(self, event):
-        """!Left mouse button released - vector digitizer z-bulk line
+        """Left mouse button released - vector digitizer z-bulk line
         action
         """
         # select lines to be labeled
@@ -811,14 +812,14 @@ class VDigitWindow(BufferedMapWindow):
             self.UpdateMap(render = False, renderVector = False)
             
     def OnLeftUpConnectLine(self, event):
-        """!Left mouse button released - vector digitizer connect line
+        """Left mouse button released - vector digitizer connect line
         action
         """
         if len(self.digit.GetDisplay().GetSelected()) > 0:
             self.UpdateMap(render = False)
         
     def _onLeftUp(self, event):
-        """!Left mouse button released"""
+        """Left mouse button released"""
         if event.ControlDown():
             return
         
@@ -890,7 +891,7 @@ class VDigitWindow(BufferedMapWindow):
             del self.moveInfo
         
     def _onRightUp(self, event):
-        """!Right mouse button released (confirm action)
+        """Right mouse button released (confirm action)
         """
         action = self.toolbar.GetAction()
         if action == "addLine" and \

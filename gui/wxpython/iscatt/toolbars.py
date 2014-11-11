@@ -1,4 +1,4 @@
-"""!
+"""
 @package iscatt.toolbars
 
 @brief Scatter plot - toolbars
@@ -23,7 +23,7 @@ from iscatt.iscatt_core import idBandsToidScatt
 from iscatt.dialogs import SettingsDialog
 
 class MainToolbar(BaseToolbar):
-    """!Main toolbar
+    """Main toolbar
     """
     def __init__(self, parent, scatt_mgr, opt_tools=None):
         BaseToolbar.__init__(self, parent)
@@ -142,7 +142,7 @@ class MainToolbar(BaseToolbar):
                        entry = 'wxGUI.iscatt')
 
 class EditingToolbar(BaseToolbar):
-    """!Main toolbar
+    """Main toolbar
     """
     def __init__(self, parent, scatt_mgr):
         BaseToolbar.__init__(self, parent)
@@ -155,7 +155,7 @@ class EditingToolbar(BaseToolbar):
         self.scatt_mgr.modeSet.connect(self.ModeSet)
 
     def _toolbarData(self):
-        """!Toolbar data
+        """Toolbar data
         """
         self.icons = {
             'sel_add'         : MetaIcon(img = 'layer-add',
@@ -236,7 +236,7 @@ class EditingToolbar(BaseToolbar):
         return vars(self)[toolName]
 
 class CategoryToolbar(BaseToolbar):
-    """!Main toolbar
+    """Main toolbar
     """
     def __init__(self, parent, scatt_mgr, cats_list):
         BaseToolbar.__init__(self, parent)
@@ -250,7 +250,7 @@ class CategoryToolbar(BaseToolbar):
         self.Realize()
 
     def _toolbarData(self):
-        """!Toolbar data
+        """Toolbar data
         """
         self.icons = {
             'add_class'     : MetaIcon(img = 'layer-add',

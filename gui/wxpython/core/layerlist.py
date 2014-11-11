@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""!
+"""
 @package core.layerlist
 
 @brief Non GUI classes for layer management (so far used for class simplelmgr only)
@@ -21,7 +21,7 @@ from grass.script import core as gcore
 
 
 class LayerList(object):
-    """!Non GUI class managing list of layers.
+    """Non GUI class managing list of layers.
 
     It provides API for handling layers. In the future,
     a non GUI class (e.g. named LayerTree) which includes this API,
@@ -31,9 +31,9 @@ class LayerList(object):
         self._list = []
 
     def GetSelectedLayers(self, activeOnly=True):
-        """!Returns list of selected layers.
+        """Returns list of selected layers.
 
-        @param activeOnly return only active layers
+        :param bool activeOnly: return only active layers
         """
         layers = []
         for layer in self._list:
@@ -45,9 +45,9 @@ class LayerList(object):
         return layers
 
     def GetSelectedLayer(self, activeOnly=False):
-        """!Returns selected layer or None when there is no selected layer.
+        """Returns selected layer or None when there is no selected layer.
 
-        @param activeOnly return only active layers
+        :param bool activeOnly: return only active layers
         """
         layers = self.GetSelectedLayers(activeOnly)
         if layers:
@@ -55,13 +55,13 @@ class LayerList(object):
         return None
 
     def GetActiveLayers(self):
-        """!Returns list of active layers."""
+        """Returns list of active layers."""
         return [layer for layer in self._list if layer.IsActive()]
 
     def GetLayersByTypes(self, mapTypes):
-        """!Returns layers by types.
+        """Returns layers by types.
 
-        @param mapTypes list of types
+        :param mapTypes: list of types
         """
         layers = []
         for layer in self._list:
@@ -71,16 +71,16 @@ class LayerList(object):
 
     def AddNewLayer(self, name, mapType, cmd, active=True, hidden=False,
                     opacity=1, label=None, pos=0):
-        """!Creates new layer and adds it to the list (insert to the first position).
+        """Creates new layer and adds it to the list (insert to the first position).
 
-        @param ltype layer type (raster, vector, 3d-raster, ...)
-        @param cmd command (given as a list)
-        @param active if True layer is active
-        @param hidden if True layer is hidden
-        @param opacity layer opacity level (0 - 100)
-        @param name layer name (set automatically from cmd)
-        @param label layer label (set automatically from name)
-        @param pos add layer to position
+        :param ltype: layer type (raster, vector, 3d-raster, ...)
+        :param cmd: command (given as a list)
+        :param active: if True layer is active
+        :param hidden: if True layer is hidden
+        :param opacity: layer opacity level (0 - 100)
+        :param name: layer name (set automatically from cmd)
+        :param label: layer label (set automatically from name)
+        :param pos: add layer to position
         """
         layer = Layer()
         layer.hidden = hidden
@@ -96,41 +96,43 @@ class LayerList(object):
         return layer
 
     def AddLayer(self, layer):
-        """!Adds a layer to the layer list.
+        """Adds a layer to the layer list.
         """
         self._list.insert(0, layer)
 
     def InsertLayer(self, index, layer):
-        """!Adds a layer to the layer list.
+        """Adds a layer to the layer list.
         """
         self._list.insert(index, layer)
 
     def RemoveLayer(self, layer):
-        """!Removes layer."""
+        """Removes layer."""
         self._list.remove(layer)
 
     def GetLayerByData(self, key, value):
-        """!Returns layer with specified.
+        """Returns layer with specified.
 
-        @note Returns only one layer. This might change.
+        .. note::
+            Returns only one layer. This might change.
 
-        @warning Avoid using this method, it might be removed in the future.
+        .. warning::
+            Avoid using this method, it might be removed in the future.
         """
         raise NotImplementedError()
 
     def GetLayerIndex(self, layer):
-        """!Get index of layer."""
+        """Get index of layer."""
         return self._list.index(layer)
 
     def MoveLayerUp(self, layer):
-        """!Moves layer up (1 step)."""
+        """Moves layer up (1 step)."""
         idx = self._list.index(layer)
         if idx > 0:
             lr = self._list.pop(idx)
             self._list.insert(idx - 1, lr)
 
     def MoveLayerDown(self, layer):
-        """!Moves layer down (1 step)."""
+        """Moves layer down (1 step)."""
         idx = self._list.index(layer)
         if idx < len(self._list) - 1:
             lr = self._list.pop(idx)
@@ -154,28 +156,28 @@ class LayerList(object):
 
 
 class Layer(object):
-    """!Object representing layer.
+    """Object representing layer.
 
     Properties of the object are checked during setting.
     Map types can be extended if needed.
 
-    >>> layer = Layer()
-    >>> layer.selected = True
-    >>> layer.IsSelected()
-    True
-    >>> layer.opacity = 0.1
-    Traceback (most recent call last):
-    ...
-    ValueError: Opacity must be an integer between 0 and 100, not 0.1.
-    >>> layer.name = 'blablabla'
-    Traceback (most recent call last):
-    ...
-    ValueError: To set layer name, the type of layer must be specified.
-    >>> layer.mapType = 'rast'
-    >>> layer.name = 'blablabla'
-    Traceback (most recent call last):
-    ...
-    ValueError: Map <blablabla> not found.
+        >>> layer = Layer()
+        >>> layer.selected = True
+        >>> layer.IsSelected()
+        True
+        >>> layer.opacity = 0.1
+        Traceback (most recent call last):
+        ...
+        ValueError: Opacity must be an integer between 0 and 100, not 0.1.
+        >>> layer.name = 'blablabla'
+        Traceback (most recent call last):
+        ...
+        ValueError: To set layer name, the type of layer must be specified.
+        >>> layer.mapType = 'rast'
+        >>> layer.name = 'blablabla'
+        Traceback (most recent call last):
+        ...
+        ValueError: Map <blablabla> not found.
     """
     def __init__(self):
         self._mapType = None
@@ -199,7 +201,7 @@ class Layer(object):
         return self._name
 
     def SetName(self, name):
-        """!Sets name of the layer.
+        """Sets name of the layer.
 
         It checks the name of the layer by g.findfile
         (raises ValueError if map does not exist).
@@ -242,9 +244,9 @@ class Layer(object):
         return self._mapType
 
     def SetMapType(self, mapType):
-        """!Sets map type of the layer.
+        """Sets map type of the layer.
 
-        @param mapType can be 'rast', 'vect', 'rast3'
+        :param mapType: can be 'rast', 'vect', 'rast3'
         """
         if mapType not in self._mapTypes:
             raise ValueError("Wrong map type used: {mtype}".format(mtype=mapType))
@@ -254,16 +256,16 @@ class Layer(object):
     mapType = property(fget=GetMapType, fset=SetMapType)
 
     def GetOpacity(self):
-        """!Returns opacity value.
+        """Returns opacity value.
 
-        @return opacity as float between 0 and 1
+        :return: opacity as float between 0 and 1
         """
         return self._opacity
 
     def SetOpacity(self, opacity):
-        """!Sets opacity of the layer.
+        """Sets opacity of the layer.
 
-        @param opacity float between 0 and 1
+        :param float opacity: value between 0 and 1
         """
         if not (0 <= opacity <= 1):
             raise ValueError("Opacity value must be between 0 and 1, not {op}.".format(op=opacity))
@@ -283,7 +285,7 @@ class Layer(object):
         return self._active
 
     def Activate(self, active=True):
-        """!Sets if layer is active (checked)."""
+        """Sets if layer is active (checked)."""
         self._active = active
 
     active = property(fget=IsActive, fset=Activate)
@@ -292,30 +294,30 @@ class Layer(object):
         return self._hidden
 
     def Hide(self, hide=True):
-        """!Sets if layer is hidden."""
+        """Sets if layer is hidden."""
         self._hidden = hide
 
     hidden = property(fget=IsHidden, fset=Hide)
 
 
 class LayerListToRendererConverter:
-    """!Help class for converting LayerList layers into renderer list (Map)"""
+    """Help class for converting LayerList layers into renderer list (Map)"""
     def __init__(self, renderer):
-        """!
+        """
 
-        @param layerList instance of LayerList
-        @param renderer instance of Map
+        :param layerList: instance of LayerList
+        :param renderer: instance of Map
         """
         self._renderer = renderer
 
     def _getRendererLayer(self, index):
-        """!Returns corresponding layer of renderer."""
+        """Returns corresponding layer of renderer."""
         rLayers = self._renderer.GetListOfLayers()
         index = len(rLayers) - index - 1
         return rLayers[index]
 
     def ConvertAll(self, layerList):
-        """!Removes all layers in Map and adds new layers form layerList.
+        """Removes all layers in Map and adds new layers form layerList.
         It's not meant for continuous update because everything is rerendered.
         """
         self._renderer.DeleteAllLayers()
@@ -323,22 +325,22 @@ class LayerListToRendererConverter:
             self.AddLayer(index=-1, layer=layer)
 
     def ChangeLayerOpacity(self, index, layer):
-        """!Changes layer opacity in renderer."""
+        """Changes layer opacity in renderer."""
         rLayer = self._getRendererLayer(index)
         self._renderer.ChangeLayer(rLayer, opacity=layer.opacity)
 
     def ChangeLayerCmd(self, index, layer):
-        """!Changes layer cmd in renderer."""
+        """Changes layer cmd in renderer."""
         rLayer = self._getRendererLayer(index)
         self._renderer.ChangeLayer(rLayer, command=layer.cmd)
 
     def ChangeLayerActive(self, index, layer):
-        """!Changes layer active state in renderer."""
+        """Changes layer active state in renderer."""
         rLayer = self._getRendererLayer(index)
         self._renderer.ChangeLayer(rLayer, active=layer.active)
 
     def MoveLayerUp(self, index):
-        """!Moves layer up in renderer."""
+        """Moves layer up in renderer."""
         rLayers = self._renderer.GetListOfLayers()
         index = len(rLayers) - index - 1
         rLayer = rLayers.pop(index)
@@ -346,7 +348,7 @@ class LayerListToRendererConverter:
         self._renderer.SetLayers(rLayers)
 
     def MoveLayerDown(self, index):
-        """!Moves layer down in renderer."""
+        """Moves layer down in renderer."""
         rLayers = self._renderer.GetListOfLayers()
         index = len(rLayers) - index - 1
         rLayer = rLayers.pop(index)
@@ -354,7 +356,7 @@ class LayerListToRendererConverter:
         self._renderer.SetLayers(rLayers)
 
     def AddLayer(self, index, layer):
-        """!Adds layer to renderer (prepends)."""
+        """Adds layer to renderer (prepends)."""
         mapType = None
         if layer.mapType == 'rast':
             mapType = 'raster'
@@ -370,5 +372,5 @@ class LayerListToRendererConverter:
                                 render=True, pos=-1)
 
     def RemoveLayer(self, index):
-        """!Removes layer from renderer."""
+        """Removes layer from renderer."""
         self._renderer.DeleteLayer(self._getRendererLayer(index))

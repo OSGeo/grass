@@ -21,12 +21,10 @@ docs_dirs = \
 	lib/gmath \
 	lib/gpde \
 	lib/proj \
-	lib/python \
 	lib/ogsf \
 	lib/segment \
 	lib/vector \
-	lib/vector/dglib \
-	gui/wxpython
+	lib/vector/dglib
 
 htmldocs_dirs := $(patsubst %,%/html,$(docs_dirs))
 latexdocs_dirs := $(patsubst %,%/latex,$(docs_dirs))

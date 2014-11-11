@@ -1,4 +1,4 @@
-"""!
+"""
 @package mapdisp.gprint
 
 @brief Print context and utility functions for printing

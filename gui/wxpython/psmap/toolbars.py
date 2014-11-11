@@ -1,4 +1,4 @@
-"""!
+"""
 @package psmap.toolbars
 
 @brief wxPsMap toolbars classes
@@ -25,9 +25,9 @@ from icons.icon        import MetaIcon
 
 class PsMapToolbar(BaseToolbar):
     def __init__(self, parent, toolSwitcher):
-        """!Toolbar Cartographic Composer (psmap.py)
+        """Toolbar Cartographic Composer (psmap.py)
         
-        @param parent parent window
+        :param parent: parent window
         """
         BaseToolbar.__init__(self, parent, toolSwitcher)
 
@@ -58,7 +58,7 @@ class PsMapToolbar(BaseToolbar):
             self.EnableTool(self.preview, False)
         
     def _toolbarData(self):
-        """!Toolbar data
+        """Toolbar data
         """
         icons = {
             'scriptSave' : MetaIcon(img = 'script-save',
@@ -157,7 +157,7 @@ class PsMapToolbar(BaseToolbar):
                                     )
 
     def OnDecoration(self, event):
-        """!Decorations overlay menu
+        """Decorations overlay menu
         """
         self._onMenu(((self.icons["addLegend"],     self.parent.OnAddLegend),
                       (self.icons["addMapinfo"],    self.parent.OnAddMapinfo),
@@ -170,7 +170,7 @@ class PsMapToolbar(BaseToolbar):
         self._onMenu(((self.icons['labelsAdd'], self.parent.OnAddLabels), ))
 
     def OnDrawGraphics(self, event):
-        """!Graphics tool activated."""
+        """Graphics tool activated."""
         # we need the previous id
         if self.drawGraphicsAction == 'pointAdd':
             self.parent.OnAddPoint(event)
@@ -180,7 +180,7 @@ class PsMapToolbar(BaseToolbar):
             self.parent.OnAddRectangle(event)
 
     def OnDrawGraphicsMenu(self, event):
-        """!Simple geometry features (point, line, rectangle) overlay menu
+        """Simple geometry features (point, line, rectangle) overlay menu
         """
         self._onMenu(((self.icons["pointAdd"],      self.OnAddPoint),
                       (self.icons["lineAdd"],       self.OnAddLine),
@@ -188,7 +188,7 @@ class PsMapToolbar(BaseToolbar):
                     ))
 
     def OnAddPoint(self, event):
-        """!Point mode selected.
+        """Point mode selected.
 
         Graphics drawing tool is activated. Tooltip changed.
         """
@@ -200,7 +200,7 @@ class PsMapToolbar(BaseToolbar):
             self.parent.OnAddPoint(event)
 
     def OnAddLine(self, event):
-        """!Line mode selected.
+        """Line mode selected.
 
         Graphics drawing tool is activated. Tooltip changed.
         """
@@ -212,7 +212,7 @@ class PsMapToolbar(BaseToolbar):
             self.parent.OnAddLine(event)
 
     def OnAddRectangle(self, event):
-        """!Rectangle mode selected.
+        """Rectangle mode selected.
 
         Graphics drawing tool is activated. Tooltip changed.
         """

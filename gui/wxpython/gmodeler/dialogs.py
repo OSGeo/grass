@@ -1,4 +1,4 @@
-"""!
+"""
 @package gmodeler.dialogs
 
 @brief wxGUI Graphical Modeler - dialogs
@@ -43,7 +43,7 @@ from lmgr.menudata        import LayerManagerMenuData
 from grass.script import task as gtask
 
 class ModelDataDialog(SimpleDialog):
-    """!Data item properties dialog"""
+    """Data item properties dialog"""
     def __init__(self, parent, shape, title = _("Data properties")):
         self.parent = parent
         self.shape = shape
@@ -83,7 +83,7 @@ class ModelDataDialog(SimpleDialog):
         return label, etype
     
     def _layout(self):
-        """!Do layout"""
+        """Do layout"""
         if self.etype:
             self.dataSizer.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
                                                     label = _("Type of element:")),
@@ -100,18 +100,18 @@ class ModelDataDialog(SimpleDialog):
         self.sizer.Fit(self)
 
     def GetType(self):
-        """!Get element type"""
+        """Get element type"""
         if not self.etype:
             return
         return self.element.tcp.GetType()
 
     def OnType(self, event):
-        """!Select element type"""
+        """Select element type"""
         evalue = self.typeSelect.GetValue(event.GetString())
         self.element.SetType(evalue)
 
     def OnOK(self, event):
-        """!Ok pressed"""
+        """Ok pressed"""
         self.shape.SetValue(self.element.GetValue())
         if self.etype:
             elem = self.GetType()
@@ -130,7 +130,7 @@ class ModelDataDialog(SimpleDialog):
             self.Destroy()
     
     def OnCancel(self, event):
-        """!Cancel pressed"""
+        """Cancel pressed"""
         self.shape.SetPropDialog(None)
         if self.IsModal():
             event.Skip()
@@ -140,12 +140,12 @@ class ModelDataDialog(SimpleDialog):
 class ModelSearchDialog(wx.Dialog):
     def __init__(self, parent, title = _("Add GRASS command to the model"),
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
-        """!Graphical modeler module search window
+        """Graphical modeler module search window
         
-        @param parent parent window
-        @param id window id
-        @param title window title
-        @param kwargs wx.Dialogs' arguments
+        :param parent: parent window
+        :param id: window id
+        :param title: window title
+        :param kwargs: wx.Dialogs' arguments
         """
         self.parent = parent
         
@@ -226,7 +226,7 @@ class ModelSearchDialog(wx.Dialog):
         self.Layout()
 
     def GetPanel(self):
-        """!Get dialog panel"""
+        """Get dialog panel"""
         return self.panel
 
     def _getCmd(self):
@@ -241,11 +241,11 @@ class ModelSearchDialog(wx.Dialog):
         return cmd
 
     def GetCmd(self):
-        """!Get command"""
+        """Get command"""
         return self._command
 
     def GetLabel(self):
-        """!Get label and comment"""
+        """Get label and comment"""
         return self.label.GetValue(), self.comment.GetValue()
     
     def ValidateCmd(self, cmd):
@@ -263,13 +263,13 @@ class ModelSearchDialog(wx.Dialog):
         return True
 
     def OnCommand(self, cmd):
-        """!Command in prompt confirmed"""
+        """Command in prompt confirmed"""
         if self.ValidateCmd(cmd):
             self._command = cmd
             self.EndModal(wx.ID_OK)
 
     def OnOk(self, event):
-        """!Button 'OK' pressed"""
+        """Button 'OK' pressed"""
         cmd = self._getCmd()
         if self.ValidateCmd(cmd):
             self._command = cmd
@@ -280,7 +280,7 @@ class ModelSearchDialog(wx.Dialog):
         self.Hide()
         
     def Reset(self):
-        """!Reset dialog"""
+        """Reset dialog"""
         self.search.Reset()
         self.label.SetValue('')
         self.comment.SetValue('')
@@ -288,7 +288,7 @@ class ModelSearchDialog(wx.Dialog):
         self.cmd_prompt.SetFocus()
 
 class ModelRelationDialog(wx.Dialog):
-    """!Relation properties dialog"""
+    """Relation properties dialog"""
     def __init__(self, parent, shape, id = wx.ID_ANY, title = _("Relation properties"),
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
         self.parent = parent
@@ -372,7 +372,7 @@ class ModelRelationDialog(wx.Dialog):
                       border = 5)
             
     def _getOptions(self):
-        """!Get relevant options"""
+        """Get relevant options"""
         items = []
         fromShape = self.shape.GetFrom()
         if not isinstance(fromShape, ModelData):
@@ -402,22 +402,22 @@ class ModelRelationDialog(wx.Dialog):
         return items
     
     def GetOption(self):
-        """!Get selected option"""
+        """Get selected option"""
         return self.option.GetStringSelection()
     
     def IsValid(self):
-        """!Check if relation is valid"""
+        """Check if relation is valid"""
         return self.valid
     
     def OnOption(self, event):
-        """!Set option"""
+        """Set option"""
         if event.GetString():
             self.btnOk.Enable()
         else:
             self.btnOk.Enable(False)
 
 class ModelItemDialog(wx.Dialog):
-    """!Abstract item properties dialog"""
+    """Abstract item properties dialog"""
     def __init__(self, parent, shape, title, id = wx.ID_ANY,
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
         self.parent = parent
@@ -445,15 +445,15 @@ class ModelItemDialog(wx.Dialog):
         self.btnOk.SetDefault()
         
     def _layout(self):
-        """!Do layout (virtual method)"""
+        """Do layout (virtual method)"""
         pass
     
     def GetCondition(self):
-        """!Get loop condition"""
+        """Get loop condition"""
         return self.condText.GetValue()
 
 class ModelLoopDialog(ModelItemDialog):
-    """!Loop properties dialog"""
+    """Loop properties dialog"""
     def __init__(self, parent, shape, id = wx.ID_ANY, title = _("Loop properties"),
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
         ModelItemDialog.__init__(self, parent, shape, title,
@@ -472,7 +472,7 @@ class ModelLoopDialog(ModelItemDialog):
         self.SetSize((500, 400))
         
     def _layout(self):
-        """!Do layout"""
+        """Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
         
         condSizer = wx.StaticBoxSizer(self.condBox, wx.HORIZONTAL)
@@ -503,11 +503,11 @@ class ModelLoopDialog(ModelItemDialog):
         self.Layout()
         
     def GetItems(self):
-        """!Get list of selected actions"""
+        """Get list of selected actions"""
         return self.itemList.GetItems()
 
     def OnSeries(self, event):
-        """!Define map series as condition"""
+        """Define map series as condition"""
         dialog = MapLayersDialogForModeler(parent = self, title = _("Define series of maps"))
         if dialog.ShowModal() != wx.ID_OK:
             dialog.Destroy()
@@ -522,7 +522,7 @@ class ModelLoopDialog(ModelItemDialog):
         dialog.Destroy()
 
 class ModelConditionDialog(ModelItemDialog):
-    """!Condition properties dialog"""
+    """Condition properties dialog"""
     def __init__(self, parent, shape, id = wx.ID_ANY, title = _("If-else properties"),
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
         ModelItemDialog.__init__(self, parent, shape, title,
@@ -547,7 +547,7 @@ class ModelConditionDialog(ModelItemDialog):
         self.SetSize((500, 400))
         
     def _layout(self):
-        """!Do layout"""
+        """Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
         
         condSizer = wx.StaticBoxSizer(self.condBox, wx.VERTICAL)
@@ -581,7 +581,7 @@ class ModelConditionDialog(ModelItemDialog):
         self.Layout()
 
     def OnCheckItemIf(self, index, flag):
-        """!Item in if-block checked/unchecked"""
+        """Item in if-block checked/unchecked"""
         if flag is False:
             return
         
@@ -590,7 +590,7 @@ class ModelConditionDialog(ModelItemDialog):
             self.itemListElse.CheckItemById(aId, False)
             
     def OnCheckItemElse(self, index, flag):
-        """!Item in else-block checked/unchecked"""
+        """Item in else-block checked/unchecked"""
         if flag is False:
             return
         
@@ -599,7 +599,7 @@ class ModelConditionDialog(ModelItemDialog):
             self.itemListIf.CheckItemById(aId, False)
         
     def GetItems(self):
-        """!Get items"""
+        """Get items"""
         return { 'if'   : self.itemListIf.GetItems(),
                  'else' : self.itemListElse.GetItems() }
 
@@ -609,7 +609,7 @@ class ModelListCtrl(wx.ListCtrl,
     def __init__(self, parent, columns, frame, id = wx.ID_ANY, columnsNotEditable = [],
                  style = wx.LC_REPORT | wx.BORDER_NONE |
                  wx.LC_HRULES | wx.LC_VRULES, **kwargs):
-        """!List of model variables"""
+        """List of model variables"""
         self.parent = parent
         self.columns = columns
         self.shape = None
@@ -636,7 +636,7 @@ class ModelListCtrl(wx.ListCtrl,
         self.Bind(wx.EVT_RIGHT_UP, self.OnRightUp)            #wxGTK
                 
     def OnBeginEdit(self, event):
-        """!Editing of item started"""
+        """Editing of item started"""
         if self.columnNotEditable and event.m_col in self.columnNotEditable:
             event.Veto()
             self.SetItemState(event.m_itemIndex,
@@ -645,30 +645,30 @@ class ModelListCtrl(wx.ListCtrl,
             event.Allow()
 
     def OnEndEdit(self, event):
-        """!Finish editing of item"""
+        """Finish editing of item"""
         pass
     
     def GetListCtrl(self):
-        """!Used by ColumnSorterMixin"""
+        """Used by ColumnSorterMixin"""
         return self
     
     def OnColClick(self, event):
-        """!Click on column header (order by)"""
+        """Click on column header (order by)"""
         event.Skip()
 
 class VariableListCtrl(ModelListCtrl):
     def __init__(self, parent, columns, **kwargs):
-        """!List of model variables"""
+        """List of model variables"""
         ModelListCtrl.__init__(self, parent, columns, **kwargs)
 
         self.SetColumnWidth(2, 200) # default value
 
     def GetData(self):
-        """!Get list data"""
+        """Get list data"""
         return self.itemDataMap
     
     def Populate(self, data):
-        """!Populate the list"""
+        """Populate the list"""
         self.itemDataMap = dict()
         i = 0
         for name, values in data.iteritems():
@@ -690,10 +690,10 @@ class VariableListCtrl(ModelListCtrl):
             i += 1
         
     def Append(self, name, vtype, value, desc):
-        """!Append new item to the list
+        """Append new item to the list
 
-        @return None on success
-        @return error string
+        :return: None on success
+        :return: error string
         """
         for iname, ivtype, ivalue, idesc in self.itemDataMap.itervalues():
             if iname == name:
@@ -713,7 +713,7 @@ class VariableListCtrl(ModelListCtrl):
         return None
 
     def OnRemove(self, event):
-        """!Remove selected variable(s) from the model"""
+        """Remove selected variable(s) from the model"""
         item = self.GetFirstSelected()
         while item != -1:
             self.DeleteItem(item)
@@ -724,7 +724,7 @@ class VariableListCtrl(ModelListCtrl):
         event.Skip()
         
     def OnRemoveAll(self, event):
-        """!Remove all variable(s) from the model"""
+        """Remove all variable(s) from the model"""
         dlg = wx.MessageBox(parent=self,
                             message=_("Do you want to delete all variables from "
                                       "the model?"),
@@ -739,7 +739,7 @@ class VariableListCtrl(ModelListCtrl):
         self.parent.UpdateModelVariables()
         
     def OnEndEdit(self, event):
-        """!Finish editing of item"""
+        """Finish editing of item"""
         itemIndex = event.GetIndex()
         columnIndex = event.GetColumn()
         nameOld = self.GetItem(itemIndex, 0).GetText()
@@ -752,11 +752,11 @@ class VariableListCtrl(ModelListCtrl):
         self.parent.UpdateModelVariables()
 
     def OnReload(self, event):
-        """!Reload list of variables"""
+        """Reload list of variables"""
         self.Populate(self.parent.parent.GetModel().GetVariables())
 
     def OnRightUp(self, event):
-        """!Mouse right button up"""
+        """Mouse right button up"""
         if not hasattr(self, "popupID1"):
             self.popupID1 = wx.NewId()
             self.popupID2 = wx.NewId()
@@ -781,7 +781,7 @@ class VariableListCtrl(ModelListCtrl):
 
 class ItemListCtrl(ModelListCtrl):
     def __init__(self, parent, columns, frame, disablePopup = False, **kwargs):
-        """!List of model actions"""
+        """List of model actions"""
         self.disablePopup = disablePopup
 
         ModelListCtrl.__init__(self, parent, columns, frame, **kwargs)
@@ -792,11 +792,11 @@ class ItemListCtrl(ModelListCtrl):
         self.SetColumnWidth(2, 65)
         
     def GetData(self):
-        """!Get list data"""
+        """Get list data"""
         return self.itemDataMap
     
     def Populate(self, data):
-        """!Populate the list"""
+        """Populate the list"""
         self.itemDataMap = dict()
         self.itemIdMap = list()
         
@@ -864,7 +864,7 @@ class ItemListCtrl(ModelListCtrl):
                 i += 1
                 
     def OnRemove(self, event):
-        """!Remove selected action(s) from the model"""
+        """Remove selected action(s) from the model"""
         model = self.frame.GetModel()
         canvas = self.frame.GetCanvas()
         
@@ -888,7 +888,7 @@ class ItemListCtrl(ModelListCtrl):
         event.Skip()
     
     def OnEndEdit(self, event):
-        """!Finish editing of item"""
+        """Finish editing of item"""
         itemIndex = event.GetIndex()
         columnIndex = event.GetColumn()
         self.itemDataMap[itemIndex][columnIndex] = event.GetText()
@@ -901,11 +901,11 @@ class ItemListCtrl(ModelListCtrl):
         self.frame.ModelChanged()
 
     def OnReload(self, event = None):
-        """!Reload list of actions"""
+        """Reload list of actions"""
         self.Populate(self.frame.GetModel().GetItems(objType=ModelAction))
 
     def OnRightUp(self, event):
-        """!Mouse right button up"""
+        """Mouse right button up"""
         if self.disablePopup:
             return
         
@@ -928,10 +928,10 @@ class ItemListCtrl(ModelListCtrl):
         menu.Destroy()
     
     def MoveItems(self, items, up):
-        """!Move items in the list
+        """Move items in the list
 
-        @param items list of items to move
-        @param up True to move up otherwise down
+        :param items: list of items to move
+        :param up: True to move up otherwise down
         """
         if len(items) < 1:
             return
@@ -980,11 +980,11 @@ class ItemCheckListCtrl(ItemListCtrl, listmix.CheckListCtrlMixin):
         self.shape  = shape
         
     def OnBeginEdit(self, event):
-        """!Disable editing"""
+        """Disable editing"""
         event.Veto()
         
     def OnCheckItem(self, index, flag):
-        """!Item checked/unchecked"""
+        """Item checked/unchecked"""
         name = self.GetLabel()
         if name == 'IfBlockList' and self.window:
             self.window.OnCheckItemIf(index, flag)
@@ -992,7 +992,7 @@ class ItemCheckListCtrl(ItemListCtrl, listmix.CheckListCtrlMixin):
             self.window.OnCheckItemElse(index, flag)
         
     def GetItems(self):
-        """!Get list of selected actions"""
+        """Get list of selected actions"""
         ids = { 'checked'   : list(),
                 'unchecked' : list() }
         
@@ -1006,7 +1006,7 @@ class ItemCheckListCtrl(ItemListCtrl, listmix.CheckListCtrlMixin):
         return ids
 
     def CheckItemById(self, aId, flag):
-        """!Check/uncheck given item by id"""
+        """Check/uncheck given item by id"""
         for i in range(self.GetItemCount()):
             iId = int(self.GetItem(i, 0).GetText())
             if iId == aId:

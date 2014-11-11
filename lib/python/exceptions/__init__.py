@@ -1,5 +1,6 @@
-# -*- coding: utf-8 -*-
-"""GRASS GIS interface to Python exceptions"""
+"""GRASS GIS interface to Python exceptions
+"""
+
 import subprocess
 
 
@@ -52,6 +53,7 @@ class Usage(Exception):
 
 
 # TODO: we inherit from subprocess to be aligned with check_call but it is needed?
+# perhaps it would be better to inherit from Exception or from ScriptError
 class CalledModuleError(subprocess.CalledProcessError):
     """Raised when a called module ends with error (non-zero return code)
 
@@ -61,6 +63,7 @@ class CalledModuleError(subprocess.CalledProcessError):
     :param error: errors provided by the module (stderr)
     """
     def __init__(self, module, code, returncode, errors=None):
+        # CalledProcessError has undocumented constructor
         super(CalledModuleError, self).__init__(returncode, module)
         msg = _("Module run %s %s ended with error") % (module, code)
         msg += _("\nProcess ended with non-zero return code %s") % returncode

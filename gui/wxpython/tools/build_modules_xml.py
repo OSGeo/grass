@@ -1,4 +1,4 @@
-"""!
+"""
 @package tools.build_modules_xml
 
 @brief Builds XML metadata of GRASS modules. Runs only during compilation.
@@ -20,7 +20,7 @@ import grass.script.task as gtask
 
 
 def escapeXML(text):
-    """!This is a duplicate of function in core/toolboxes.
+    """This is a duplicate of function in core/toolboxes.
 
     >>> escapeXML('<>&')
     '&amp;lt;&gt;&amp;'
@@ -47,7 +47,7 @@ def do_doctest_gettext_workaround():
 
 
 def parse_modules(fd):
-    """!Writes metadata to xml file."""
+    """Writes metadata to xml file."""
     # TODO: what about ms windows? does gtask handle this? 
     mlist = list(gcore.get_commands()[0])
     indent = 4
@@ -105,7 +105,7 @@ def footer(fd):
 def doc_test():
     """Tests the module using doctest
 
-    @return a number of failed tests
+    :return: a number of failed tests
     """
     import doctest
     do_doctest_gettext_workaround()

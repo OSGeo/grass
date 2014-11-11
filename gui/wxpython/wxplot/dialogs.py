@@ -1,4 +1,4 @@
-"""!
+"""
 @package wxplot.dialogs
 
 @brief Dialogs for different plotting routines
@@ -34,7 +34,7 @@ class ProfileRasterDialog(wx.Dialog):
     def __init__(self, parent, id = wx.ID_ANY, 
                  title = _("Select raster maps to profile"),
                  style = wx.DEFAULT_DIALOG_STYLE, **kwargs):
-        """!Dialog to select raster maps to profile.
+        """Dialog to select raster maps to profile.
         """
 
         wx.Dialog.__init__(self, parent, id, title, style = style, **kwargs)
@@ -97,7 +97,7 @@ class ProfileRasterDialog(wx.Dialog):
         sizer.Fit(self)
 
     def OnSelection(self, event):
-        """!Choose maps to profile. Convert these into a list
+        """Choose maps to profile. Convert these into a list
         """
         self.rasterList = self.FindWindowById(event.GetId()).GetValue().split(',')
 
@@ -105,7 +105,7 @@ class ScatterRasterDialog(wx.Dialog):
     def __init__(self, parent, id = wx.ID_ANY, 
                  title = _("Select pairs of raster maps for scatterplots"),
                  style = wx.DEFAULT_DIALOG_STYLE, **kwargs):
-        """!Dialog to select raster maps to profile.
+        """Dialog to select raster maps to profile.
         """
 
         wx.Dialog.__init__(self, parent, id, title, style = style, **kwargs)
@@ -204,12 +204,12 @@ class ScatterRasterDialog(wx.Dialog):
         sizer.Fit(self)
 
     def OnSelection(self, event):
-        """!Select raster maps for scatterplot. Must select maps in pairs.
+        """Select raster maps for scatterplot. Must select maps in pairs.
         """
         self.rasterList = self.FindWindowById(event.GetId()).GetValue().split(',', 1)
         
     def OnSetBins(self, event):
-        """!Bins for histogramming FP maps (=nsteps in r.stats)
+        """Bins for histogramming FP maps (=nsteps in r.stats)
         """
         self.bins = self.spinbins.GetValue()
         
@@ -217,7 +217,7 @@ class ScatterRasterDialog(wx.Dialog):
         self.scattertype = event.GetString()
         
     def GetRasterPairs(self):
-        """!Get raster pairs"""
+        """Get raster pairs"""
         pairsList = list()
         pair = list()
         for r in self.rasterList:
@@ -229,13 +229,13 @@ class ScatterRasterDialog(wx.Dialog):
         return list(pairsList)
     
     def GetSettings(self):
-        """!Get type and bins"""
+        """Get type and bins"""
         return self.scattertype, self.bins
     
 class PlotStatsFrame(wx.Frame):
     def __init__(self, parent, id, message = '', title = '',
                  style = wx.DEFAULT_FRAME_STYLE, **kwargs):
-        """!Dialog to display and save statistics for plots
+        """Dialog to display and save statistics for plots
         """
         wx.Frame.__init__(self, parent, id, style = style, **kwargs)
         self.SetLabel(_("Statistics"))
@@ -307,7 +307,7 @@ class PlotStatsFrame(wx.Frame):
         sizer.Fit(self)
 
     def OnCopy(self, event):
-        """!Copy the regression stats to the clipboard
+        """Copy the regression stats to the clipboard
         """
         str = self.title + '\n'
         for item in self.message:
@@ -322,7 +322,7 @@ class PlotStatsFrame(wx.Frame):
             wx.MessageBox(_("Regression statistics copied to clipboard"))
         
     def OnClose(self, event):
-        """!Button 'Close' pressed
+        """Button 'Close' pressed
         """
         self.Close(True)
 
@@ -330,7 +330,7 @@ class HistRasterDialog(wx.Dialog):
     def __init__(self, parent, id = wx.ID_ANY, 
                  title = _("Select raster map or imagery group to histogram"),
                  style = wx.DEFAULT_DIALOG_STYLE, **kwargs):
-        """!Dialog to select raster maps to histogram.
+        """Dialog to select raster maps to histogram.
         """
 
         wx.Dialog.__init__(self, parent, id, title, style = style, **kwargs)
@@ -456,15 +456,15 @@ class HistRasterDialog(wx.Dialog):
         sizer.Fit(self)
 
     def OnHistMap(self, event):
-        """!Hander for radio buttons to choose between histogramming a
+        """Hander for radio buttons to choose between histogramming a
             single raster and an imagery group
         """
-        if self.rasterRadio.GetValue() == True:
+        if self.rasterRadio.GetValue() is True:
             self.maptype = 'raster'
             self.rselection.Enable()
             self.gselection.Disable()
             self.gselection.SetValue('')
-        elif self.groupRadio.GetValue() == True:
+        elif self.groupRadio.GetValue() is True:
             self.maptype = 'group'
             self.gselection.Enable()
             self.rselection.Disable()
@@ -473,13 +473,13 @@ class HistRasterDialog(wx.Dialog):
             pass
         
     def OnRasterSelection(self, event):
-        """!Handler for selecting a single raster map
+        """Handler for selecting a single raster map
         """
         self.rasterList = []
         self.rasterList.append(event.GetString())
 
     def OnGroupSelection(self, event):
-        """!Handler for selecting imagery group
+        """Handler for selecting imagery group
         """
         self.rasterList = []
         self.group = event.GetString()
@@ -493,10 +493,10 @@ class HistRasterDialog(wx.Dialog):
         else:
             wx.MessageBox(message = _("Selected group must be in current mapset"), 
                           caption = _('Invalid input'), 
-                          style = wx.OK|wx.ICON_ERROR)
+                          style = wx.OK | wx.ICON_ERROR)
                                                                                             
     def OnSetBins(self, event):
-        """!Bins for histogramming FP maps (=nsteps in r.stats)
+        """Bins for histogramming FP maps (=nsteps in r.stats)
         """
         self.bins = self.spinbins.GetValue()
         
@@ -507,7 +507,7 @@ class HistRasterDialog(wx.Dialog):
 class TextDialog(wx.Dialog):
     def __init__(self, parent, id, title, plottype = '', 
                  style = wx.DEFAULT_DIALOG_STYLE, **kwargs):
-        """!Dialog to set histogram text options: font, title
+        """Dialog to set histogram text options: font, title
         and font size, axis labels and font size
         """
         wx.Dialog.__init__(self, parent, id, title, style = style, **kwargs)
@@ -548,7 +548,7 @@ class TextDialog(wx.Dialog):
         self._do_layout()
                 
     def _do_layout(self):
-        """!Do layout"""
+        """Do layout"""
         # dialog layout
         sizer = wx.BoxSizer(wx.VERTICAL)
 
@@ -734,7 +734,7 @@ class TextDialog(wx.Dialog):
         self.properties['font']['wxfont'].SetWeight(weight)
 
     def OnSave(self, event):
-        """!Button 'Save' pressed"""
+        """Button 'Save' pressed"""
         self.OnApply(None)
         fileSettings = {}
         UserSettings.ReadSettingsFile(settings = fileSettings)
@@ -744,23 +744,23 @@ class TextDialog(wx.Dialog):
         self.EndModal(wx.ID_OK)
 
     def OnApply(self, event):
-        """!Button 'Apply' pressed"""
+        """Button 'Apply' pressed"""
         self.UpdateSettings()
         self.parent.OnPlotText(self)
         
     def OnOk(self, event):
-        """!Button 'OK' pressed"""
+        """Button 'OK' pressed"""
         self.OnApply(None)
         self.EndModal(wx.ID_OK)
 
     def OnCancel(self, event):
-        """!Button 'Cancel' pressed"""
+        """Button 'Cancel' pressed"""
         self.EndModal(wx.ID_CANCEL)
         
 class OptDialog(wx.Dialog):
     def __init__(self, parent, id, title, plottype = '', 
                  style = wx.DEFAULT_DIALOG_STYLE, **kwargs): 
-        """!Dialog to set various options for data plotted, including: line
+        """Dialog to set various options for data plotted, including: line
         width, color, style; marker size, color, fill, and style; grid
         and legend options.
         """
@@ -804,8 +804,8 @@ class OptDialog(wx.Dialog):
         self._do_layout()
         
     def ConvertTuples(self, tlist):
-        """!Converts tuples to strings when rasterList contains raster pairs
-            for scatterplot
+        """Converts tuples to strings when rasterList contains raster
+        pairs for scatterplot
         """
         list = []
         for i in tlist:
@@ -815,7 +815,7 @@ class OptDialog(wx.Dialog):
         return list
 
     def _do_layout(self):
-        """!Options dialog layout
+        """Options dialog layout
         """
         sizer = wx.BoxSizer(wx.VERTICAL)
 
@@ -1162,7 +1162,7 @@ class OptDialog(wx.Dialog):
         sizer.Fit(self)
 
     def OnSetMap(self, event):
-        """!Handler for changing map selection"""
+        """Handler for changing map selection"""
         idx = event.GetSelection()
         self.map = self.rasterList[idx]
         
@@ -1184,7 +1184,7 @@ class OptDialog(wx.Dialog):
         self.Refresh()
         
     def OnSetOpt(self, event):
-        """!Handler for changing any other option"""
+        """Handler for changing any other option"""
         self.map = self.rasterList[self.mapchoice.GetCurrentSelection()]
         self.UpdateSettings()
         self.parent.SetGraphStyle()
@@ -1192,7 +1192,7 @@ class OptDialog(wx.Dialog):
         self.parent.DrawPlot(p)
 
     def UpdateSettings(self):
-        """!Apply settings to each map and to entire plot"""
+        """Apply settings to each map and to entire plot"""
         self.raster[self.map]['pcolor'] = self.FindWindowById(self.wxId['pcolor']).GetColour()
         self.properties['raster']['pcolor'] = self.raster[self.map]['pcolor']
         
@@ -1237,7 +1237,7 @@ class OptDialog(wx.Dialog):
         self.parent.UpdateLabels()
 
     def OnSave(self, event):
-        """!Button 'Save' pressed"""
+        """Button 'Save' pressed"""
         self.OnApply(None)
         fileSettings = {}
         UserSettings.ReadSettingsFile(settings = fileSettings)
@@ -1247,18 +1247,17 @@ class OptDialog(wx.Dialog):
         self.Close()
 
     def OnApply(self, event):
-        """!Button 'Apply' pressed. Does not close dialog"""
+        """Button 'Apply' pressed. Does not close dialog"""
         self.UpdateSettings()
         self.parent.SetGraphStyle()
         p = self.parent.CreatePlotList()
         self.parent.DrawPlot(p)
 
     def OnOk(self, event):
-        """!Button 'OK' pressed"""
+        """Button 'OK' pressed"""
         self.OnApply(None)
         self.EndModal(wx.ID_OK)
         
     def OnCancel(self, event):
-        """!Button 'Cancel' pressed"""
+        """Button 'Cancel' pressed"""
         self.Close()
-     

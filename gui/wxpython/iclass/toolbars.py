@@ -1,4 +1,4 @@
-"""!
+"""
 @package iclass.toolbars
 
 @brief wxIClass toolbars and icons.
@@ -50,10 +50,10 @@ iClassIcons = {
         }
         
 class IClassMapToolbar(BaseToolbar):
-    """!IClass Map toolbar
+    """IClass Map toolbar
     """
     def __init__(self, parent, toolSwitcher):
-        """!IClass Map toolbar constructor
+        """IClass Map toolbar constructor
         """
         BaseToolbar.__init__(self, parent, toolSwitcher)
         
@@ -79,19 +79,19 @@ class IClassMapToolbar(BaseToolbar):
         self.EnableTool(self.zoomBack, False)
         
     def GetActiveMapTool(self):
-        """!Return widget for selecting active maps"""
+        """Return widget for selecting active maps"""
         return self.togglemap
         
     def GetActiveMap(self):
-        """!Get currently selected map"""
+        """Get currently selected map"""
         return self.togglemap.GetSelection()
         
     def SetActiveMap(self, index):
-        """!Set currently selected map"""
+        """Set currently selected map"""
         return self.togglemap.SetSelection(index)
         
     def _toolbarData(self):
-        """!Toolbar data"""
+        """Toolbar data"""
         icons = BaseIcons
         return self._getToolbarData((("displaymap", icons["display"],
                                       self.parent.OnDraw),
@@ -120,10 +120,10 @@ class IClassMapToolbar(BaseToolbar):
                                       self.parent.OnZoomToMap)
                                     ))
 class IClassToolbar(BaseToolbar):
-    """!IClass toolbar
+    """IClass toolbar
     """
     def __init__(self, parent, stats_data):
-        """!IClass toolbar constructor
+        """IClass toolbar constructor
         """
         self.stats_data = stats_data
 
@@ -157,7 +157,7 @@ class IClassToolbar(BaseToolbar):
         self.Realize()
         
     def _toolbarData(self):
-        """!Toolbar data"""
+        """Toolbar data"""
         icons = iClassIcons
         return self._getToolbarData((("selectGroup", icons['selectGroup'],
                                       lambda event : self.parent.AddBands()),
@@ -281,10 +281,10 @@ class IClassToolbar(BaseToolbar):
         # don't forget to update maps, histo, ...
         
 class IClassMapManagerToolbar(BaseToolbar):
-    """!IClass toolbar
+    """IClass toolbar
     """
     def __init__(self, parent, mapManager):
-        """!IClass toolbar constructor
+        """IClass toolbar constructor
         """
         BaseToolbar.__init__(self, parent)
         
@@ -300,7 +300,7 @@ class IClassMapManagerToolbar(BaseToolbar):
         self.Realize()
         
     def _toolbarData(self):
-        """!Toolbar data"""
+        """Toolbar data"""
         return self._getToolbarData((("addRast", BaseIcons['addRast'],
                                       self.OnAddRast),
                                      ('addRgb', iClassIcons['addRgb'],
@@ -347,10 +347,10 @@ class IClassMapManagerToolbar(BaseToolbar):
         self.mapManager.SetOpacity(name = layer)
 
 class IClassMiscToolbar(BaseToolbar):
-    """!IClass toolbar
+    """IClass toolbar
     """
     def __init__(self, parent):
-        """!IClass toolbar constructor
+        """IClass toolbar constructor
         """
         BaseToolbar.__init__(self, parent)
         
@@ -359,7 +359,7 @@ class IClassMiscToolbar(BaseToolbar):
         self.Realize()
         
     def _toolbarData(self):
-        """!Toolbar data"""
+        """Toolbar data"""
         icons = BaseIcons
         return self._getToolbarData((("help", icons['help'],
                                       self.parent.OnHelp),

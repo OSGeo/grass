@@ -1,4 +1,4 @@
-"""!
+"""
 @package gui_core.goutput
 
 @brief Command output widgets
@@ -43,21 +43,21 @@ GC_PROMPT = 2
 
 
 class GConsoleWindow(wx.SplitterWindow):
-    """!Create and manage output console for commands run by GUI.
+    """Create and manage output console for commands run by GUI.
     """
     def __init__(self, parent, gconsole, menuModel = None, margin = False,
                  style = wx.TAB_TRAVERSAL | wx.FULL_REPAINT_ON_RESIZE,
                  gcstyle = GC_EMPTY,
                  **kwargs):
-        """!
-        @param parent gui parent
-        @param gconsole console logic
-        @param menuModel tree model of modules (from menu)
-        @param margin use margin in output pane (GStc)
-        @param style wx.SplitterWindow style
-        @param gcstyle GConsole style
-        (GC_EMPTY, GC_PROMPT to show command prompt,
-        GC_SEARCH to show search widget)
+        """
+        :param parent: gui parent
+        :param gconsole: console logic
+        :param menuModel: tree model of modules (from menu)
+        :param margin: use margin in output pane (GStc)
+        :param style: wx.SplitterWindow style
+        :param gcstyle: GConsole style
+                        (GC_EMPTY, GC_PROMPT to show command prompt,
+                        GC_SEARCH to show search widget)
         """
         wx.SplitterWindow.__init__(self, parent, id = wx.ID_ANY, style = style, **kwargs)
         self.SetName("GConsole")
@@ -162,7 +162,7 @@ class GConsoleWindow(wx.SplitterWindow):
         self._layout()
         
     def _layout(self):
-        """!Do layout"""
+        """Do layout"""
         self.outputSizer = wx.BoxSizer(wx.VERTICAL)
         progressSizer = wx.BoxSizer(wx.HORIZONTAL)
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -249,7 +249,7 @@ class GConsoleWindow(wx.SplitterWindow):
         self.Layout()
 
     def MakeSearchPaneContent(self, pane, model):
-        """!Create search pane"""
+        """Create search pane"""
         border = wx.BoxSizer(wx.VERTICAL)
         
         self.search = SearchModuleWidget(parent = pane,
@@ -264,7 +264,7 @@ class GConsoleWindow(wx.SplitterWindow):
         border.Fit(pane)
         
     def OnSearchPaneChanged(self, event):
-        """!Collapse search module box"""
+        """Collapse search module box"""
         if self.searchPane.IsExpanded():
             self.searchPane.SetLabel(self.infoCollapseLabelCol)
         else:
@@ -274,11 +274,11 @@ class GConsoleWindow(wx.SplitterWindow):
         self.panelOutput.SendSizeEvent()
         
     def GetPanel(self, prompt = True):
-        """!Get panel
+        """Get panel
 
-        @param prompt get prompt / output panel
+        :param prompt: get prompt / output panel
 
-        @return wx.Panel reference
+        :return: wx.Panel reference
         """
         if prompt:
             return self.panelPrompt
@@ -287,15 +287,15 @@ class GConsoleWindow(wx.SplitterWindow):
 
     def WriteLog(self, text, style=None, wrap=None,
                  notification=Notification.HIGHLIGHT):
-        """!Generic method for writing log message in 
+        """Generic method for writing log message in 
         given style. 
 
         Emits contentChanged signal.
 
-        @param line text line
-        @param style text style (see GStc)
-        @param stdout write to stdout or stderr
-        @param notification form of notification
+        :param line: text line
+        :param style: text style (see GStc)
+        :param stdout: write to stdout or stderr
+        :param notification: form of notification
         """
 
         self.cmdOutput.SetStyle()
@@ -330,37 +330,37 @@ class GConsoleWindow(wx.SplitterWindow):
         self.contentChanged.emit(notification=notification)
         
     def WriteCmdLog(self, text, pid=None, notification=Notification.MAKE_VISIBLE):
-        """!Write message in selected style
+        """Write message in selected style
         
-        @param text message to be printed
-        @param pid process pid or None
-        @param switchPage True to switch page
+        :param text: message to be printed
+        :param pid: process pid or None
+        :param switchPage: True to switch page
         """
         if pid:
             text = '(' + str(pid) + ') ' + text
         self.WriteLog(text, style=self.cmdOutput.StyleCommand, notification=notification)
 
     def WriteWarning(self, text):
-        """!Write message in warning style"""
+        """Write message in warning style"""
         self.WriteLog(text, style=self.cmdOutput.StyleWarning, notification=Notification.MAKE_VISIBLE)
 
     def WriteError(self, text):
-        """!Write message in error style"""
+        """Write message in error style"""
         self.WriteLog(text, style=self.cmdOutput.StyleError, notification=Notification.MAKE_VISIBLE)
 
     def OnOutputClear(self, event):
-        """!Clear content of output window"""
+        """Clear content of output window"""
         self.cmdOutput.SetReadOnly(False)
         self.cmdOutput.ClearAll()
         self.cmdOutput.SetReadOnly(True)
         self.progressbar.SetValue(0)
 
     def GetProgressBar(self):
-        """!Return progress bar widget"""
+        """Return progress bar widget"""
         return self.progressbar
 
     def OnOutputSave(self, event):
-        """!Save (selected) text from output window to the file"""
+        """Save (selected) text from output window to the file"""
         text = self.cmdOutput.GetSelectedText()
         if not text:
             text = self.cmdOutput.GetText()
@@ -393,10 +393,10 @@ class GConsoleWindow(wx.SplitterWindow):
         dlg.Destroy()
 
     def SetCopyingOfSelectedText(self, copy):
-        """!Enable or disable copying of selected text in to clipboard.
+        """Enable or disable copying of selected text in to clipboard.
         Effects prompt and output.
         
-        @param copy True for enable, False for disable
+        :param bool copy: True for enable, False for disable
         """
         if copy:
             self.cmdPrompt.Bind(stc.EVT_STC_PAINTED, self.cmdPrompt.OnTextSelectionChanged)
@@ -406,7 +406,7 @@ class GConsoleWindow(wx.SplitterWindow):
             self.cmdOutput.Unbind(stc.EVT_STC_PAINTED)
 
     def OnCmdOutput(self, event):
-        """!Prints command output.
+        """Prints command output.
 
         Emits contentChanged signal.
         """
@@ -421,7 +421,7 @@ class GConsoleWindow(wx.SplitterWindow):
             self.contentChanged.emit(notification=Notification.HIGHLIGHT)
 
     def OnCmdProgress(self, event):
-        """!Update progress message info"""
+        """Update progress message info"""
         self.progressbar.SetValue(event.value)
         event.Skip()
 
@@ -447,7 +447,7 @@ class GConsoleWindow(wx.SplitterWindow):
         del self.cmdFileProtocol
         
     def OnCmdProtocol(self, event = None):
-        """!Save commands into file"""
+        """Save commands into file"""
         if not event.IsChecked():
             # stop capturing commands, save list of commands to the
             # protocol file
@@ -471,13 +471,13 @@ class GConsoleWindow(wx.SplitterWindow):
         event.Skip()
 
     def OnCmdRun(self, event):
-        """!Run command"""
+        """Run command"""
         self.outputSizer.Show(self.panelProgress)
         self.outputSizer.Layout()
         event.Skip()
 
     def OnCmdDone(self, event):
-        """!Command done (or aborted)
+        """Command done (or aborted)
         """
         self.progressbar.SetValue(0) # reset progress bar on '0%'
         wx.CallLater(100, self._hideProgress)
@@ -488,16 +488,16 @@ class GConsoleWindow(wx.SplitterWindow):
         self.outputSizer.Layout()
 
     def ResetFocus(self):
-        """!Reset focus"""
+        """Reset focus"""
         self.cmdPrompt.SetFocus()
         
     def GetPrompt(self):
-        """!Get prompt"""
+        """Get prompt"""
         return self.cmdPrompt
 
 
 class GStc(stc.StyledTextCtrl):
-    """!Styled text control for GRASS stdout and stderr.
+    """Styled text control for GRASS stdout and stderr.
 
     Based on FrameOutErr.py
 
@@ -506,7 +506,7 @@ class GStc(stc.StyledTextCtrl):
     Author:    Jean-Michel Fauth, Switzerland
     Copyright: (c) 2005-2007 Jean-Michel Fauth
     Licence:   GPL
-    """    
+    """  
     def __init__(self, parent, id, margin = False, wrap = None):
         stc.StyledTextCtrl.__init__(self, parent, id)
         self.parent = parent
@@ -549,14 +549,14 @@ class GStc(stc.StyledTextCtrl):
         self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroy)
         
     def OnTextSelectionChanged(self, event):
-        """!Copy selected text to clipboard and skip event.
+        """Copy selected text to clipboard and skip event.
         The same function is in TextCtrlAutoComplete class (prompt.py).
         """
         wx.CallAfter(self.Copy)
         event.Skip()
         
     def SetStyle(self):
-        """!Set styles for styled text output windows with type face 
+        """Set styles for styled text output windows with type face 
         and point size selected by user (Courier New 10 is default)"""
         
         typeface = UserSettings.Get(group = 'appearance', key = 'outputfont', subkey = 'type')   
@@ -598,14 +598,14 @@ class GStc(stc.StyledTextCtrl):
         self.StyleSetSpec(self.StyleUnknown, self.StyleUnknownSpec)        
 
     def OnDestroy(self, evt):
-        """!The clipboard contents can be preserved after
+        """The clipboard contents can be preserved after
         the app has exited"""
         
         wx.TheClipboard.Flush()
         evt.Skip()
 
     def AddTextWrapped(self, txt, wrap = None):
-        """!Add string to text area.
+        """Add string to text area.
 
         String is wrapped and linesep is also added to the end
         of the string"""
@@ -647,12 +647,13 @@ class GStc(stc.StyledTextCtrl):
         self.SetReadOnly(True)
 
     def AddStyledMessage(self, message, style = None):
-        """!Add message to text area.
+        """Add message to text area.
 
         Handles messages with progress percentages.
 
-        @param message message to be added
-        @param style style of message, allowed values: 'message', 'warning', 'error' or None
+        :param message: message to be added
+        :param style: style of message, allowed values: 'message',
+                      'warning', 'error' or None
         """
         # message prefix
         if style == 'warning':
@@ -708,7 +709,7 @@ class GStc(stc.StyledTextCtrl):
 
 
 class GConsoleFrame(wx.Frame):
-    """!Standalone GConsole for testing only"""
+    """Standalone GConsole for testing only"""
     def __init__(self, parent, id = wx.ID_ANY, title = "GConsole Test Frame",
                  style = wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL, **kwargs):
         wx.Frame.__init__(self, parent = parent, id = id, title = title, style = style)
