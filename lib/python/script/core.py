@@ -571,15 +571,21 @@ def warning(msg):
 def error(msg):
     """Display an error message using `g.message -e`
 
+    This function does not end the execution of the program.
+    The right action after the error is up to the caller.
+    For error handling using the standard mechanism use :func:`fatal`.
+
     :param str msg: error message to be displayed
     """
     message(msg, flag='e')
 
 
 def fatal(msg):
-    """Display an error message using `g.message -e`, then abort
+    """Display an error message using `g.message -e`, then abort or raise
 
-    Raise exception when raise_on_error is 'True'.
+    Raises exception when module global raise_on_error is 'True', abort
+    (calls exit) otherwise.
+    Use func:`set_raise_on_error` to set the behavior.
 
     :param str msg: error message to be displayed
     """
