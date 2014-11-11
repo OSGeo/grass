@@ -204,10 +204,11 @@ class IClassMapFrame(DoubleMapFrame):
     def OnCloseWindow(self, event):
         self.GetFirstWindow().GetDigit().CloseMap()
         self.plotPanel.CloseWindow()
+        self._cleanup()
 
         self.Destroy()
-        
-    def __del__(self):
+
+    def _cleanup(self):
         """Frees C structs and removes vector map and all raster maps."""
         I_free_signatures(self.signatures)
         I_free_group_ref(self.refer)
