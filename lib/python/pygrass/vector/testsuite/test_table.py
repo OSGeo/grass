@@ -195,10 +195,11 @@ class TableUpdateTestCase(DBconnection, TestCase):
 
     def test_update(self):
         """Test Table.update method"""
-        vals = (1111, 0.1111, 'test')
+        vals = (1122, 0.1122, 'test')
         cat = 1
         cur = self.connection.cursor()
         self.table.update(cat, list(vals), cursor=cur)
+        self.connection.commit()
         sqlquery = "SELECT cint, creal, ctxt FROM %s WHERE cat=%d"
         cur.execute(sqlquery % (self.tname, cat))
         self.assertTupleEqual(vals, cur.fetchone())
