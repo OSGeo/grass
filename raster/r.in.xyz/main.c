@@ -3,7 +3,7 @@
  *
  *  Calculates univariate statistics from the non-null cells of a GRASS raster map
  *
- *   Copyright 2006-2012 by M. Hamish Bowman, and The GRASS Development Team
+ *   Copyright 2006-2014 by M. Hamish Bowman, and The GRASS Development Team
  *   Author: M. Hamish Bowman, University of Otago, Dunedin, New Zealand
  *
  *   Extended 2007 by Volker Wichmann to support the aggregate functions
@@ -159,6 +159,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("import"));
     G_add_keyword(_("conversion"));
+    G_add_keyword(_("aggregation"));
     G_add_keyword("ASCII");
     G_add_keyword(_("LIDAR"));
     module->description =
