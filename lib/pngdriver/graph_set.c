@@ -91,6 +91,7 @@ int PNG_Graph_set(void)
     p = getenv("GRASS_RENDER_FILE");
     if (!p || strlen(p) == 0)
 	p = FILE_NAME;
+    G_debug(1, "png: GRASS_RENDER_FILE: %s", p);
 
     png.file_name = p;
 
