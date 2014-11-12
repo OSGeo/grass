@@ -124,6 +124,7 @@ static void init_file(void)
     p = getenv("GRASS_RENDER_FILE");
     if (!p || strlen(p) == 0)
 	p = DEFAULT_FILE_NAME;
+    G_debug(1, "cairo: GRASS_RENDER_FILE: %s", p);
 
     ca.file_name = p;
 
