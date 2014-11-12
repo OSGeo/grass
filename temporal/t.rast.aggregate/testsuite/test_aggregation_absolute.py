@@ -13,7 +13,7 @@ import grass.temporal as tgis
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 
-class TestUnregister(TestCase):
+class TestAggregationAbsolute(TestCase):
 
     @classmethod
     def setUpClass(cls):
