@@ -4,9 +4,21 @@ Makes each cell value a function of the attribute values assigned to the
 vector points or centroids around it, and stores new cell values in
 an output raster map layer.
 
+<h2>EXAMPLE</h2>
+
+Count the number of schools for a given grid (North Carolina sample
+dataset) in a moving windows:
+
+<div class="code"><pre>
+g.region rast=zipcodes -p res=500
+v.neighbors input=schools_wake output=schools_wake_500m method=count size=3
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
+<em>
 <a href="r.neighbors.html">r.neighbors</a>
+</em>
 
 <h2>AUTHOR</h2>
 
