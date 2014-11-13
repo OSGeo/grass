@@ -77,16 +77,33 @@ def checkMapExists(name, typ='rast'):
         return False
 
 
-def convertFeature(vect, outrast, cat, origrast):
+def convertFeature(vect, outrast, cat, origrast, layer='1', overwrite=False):
     """Convert a single feature to a raster"""
     tmp_vect = "tmp_{rast}".format(rast=outrast)
-    grass.run_command('v.extract', input=vect, output=tmp_vect, cats=cat,
-                      overwrite=True, quiet=True)
-    grass.run_command('g.region', vect=tmp_vect, align=origrast)
-    grass.run_command('v.to.rast', input=vect, output=outrast, use='cat',
-                      cats=cat, overwrite=True, quiet=True)
+    grass.run_command('v.extract', input=vect, cats=cat, type='area', 
+                      layer=layer, output=tmp_vect, flags='d', 
+		      overwrite=overwrite, quiet=True)
+    grass.run_command('g.region', rast=origrast)
+    grass.run_command('g.region', vect=tmp_vect)
+    grass.run_command('g.region', align=origrast)
+    grass.run_command('v.to.rast', input=tmp_vect, type='area', 
+                      layer=layer, use='val', value=cat, output=outrast, 
+		      overwrite=overwrite, quiet=True)
     grass.run_command('g.remove', flags='f', type='vect',
                       name=tmp_vect, quiet=True)
+
+
+def obtainCategories(vector, layer='1'):
+    """This function returns a list of categories for all areas in 
+    the given layer"""
+    vect_cats = []
+    vc = grass.read_command('v.category', input=vector, layer=layer,
+                            option='print', type='centroid')
+    for lc in vc.splitlines():
+        for cat in lc.split('/'):
+            vect_cats.append(int(cat))
+
+    return sorted(set(vect_cats))
 
 
 def obtainAreaVector(outrast):
@@ -99,7 +116,7 @@ def obtainAreaVector(outrast):
                                                              w=reg['w'])
 
 
-def sampleAreaVector(vect, rast, vect_cats, progDialog=None):
+def sampleAreaVector(vect, rast, vect_cats, layer='1', progDialog=None):
     """Create the strings to add to the configuration file using vector"""
     areanum = len(vect_cats)
     output = []
@@ -108,9 +125,9 @@ def sampleAreaVector(vect, rast, vect_cats, progDialog=None):
         GError(message=_("The polygon seems to have 0 areas"))
         return None
     for n in range(areanum):
-        cat = vect_cats[n]
+        cat = str(vect_cats[n])
         rast_name = "{name}_{cat}".format(name=vect.split('@')[0], cat=cat)
-        convertFeature(vect, rast_name, cat, rast)
+        convertFeature(vect, rast_name, cat, rast, layer=layer)
         output.append(obtainAreaVector(rast_name))
         if progDialog:
             progDialog.Update(n)

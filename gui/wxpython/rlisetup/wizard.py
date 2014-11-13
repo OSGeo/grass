@@ -33,7 +33,11 @@ from rlisetup.functions import checkValue, retRLiPath
 from rlisetup.sampling_frame import RLiSetupMapPanel
 from grass.script import core as grass
 from grass.script import raster as grast
-from functions import SamplingType, sampleAreaVector, convertFeature, obtainAreaVector
+from grass.script import vector as gvect
+from grass.exceptions import CalledModuleError
+
+from functions import SamplingType, sampleAreaVector, convertFeature
+from functions import obtainAreaVector, obtainCategories
 from core.gcmd import GError, GMessage, RunCommand
 
 
@@ -194,21 +198,21 @@ class RLIWizard(object):
             self.SF_W = newreg['w']  # set env(SF_W) $w
 
             self.SF_Y = abs(round(self.gregion['n'] - newreg['n']) / newreg['nsres'])
-#		 set env(SF_Y) [expr abs(round(($s_n - $n) / $nres)) ]
+#         set env(SF_Y) [expr abs(round(($s_n - $n) / $nres)) ]
             self.SF_X = abs(round(self.gregion['w'] - newreg['w']) / newreg['ewres'])
-#		 set env(SF_X) [expr abs(round(($s_w - $w) / $sres)) ]
+#         set env(SF_X) [expr abs(round(($s_w - $w) / $sres)) ]
             self.SF_RL = abs(round(newreg['n'] - newreg['s']) / newreg['nsres'])
-#		 set env(SF_RL) [expr abs(round(($n - $s) / $nres)) ]
+#         set env(SF_RL) [expr abs(round(($n - $s) / $nres)) ]
             self.SF_CL = abs(round(newreg['e'] - newreg['w']) / newreg['ewres'])
-#		 set env(SF_CL) [expr abs(round(($e - $w) / $sres)) ]
+#         set env(SF_CL) [expr abs(round(($e - $w) / $sres)) ]
             self.per_x = float(self.SF_X) / float(self.rasterinfo['cols'])
-#		 double($env(SF_X)) / double($cols)
+#         double($env(SF_X)) / double($cols)
             self.per_y = float(self.SF_Y) / float(self.rasterinfo['rows'])
-#	       double($env(SF_Y)) / double($rows)
+#           double($env(SF_Y)) / double($rows)
             self.per_rl = float(self.SF_RL) / float(self.rasterinfo['rows'])
-#		 double($env(SF_RL)) / double($rows)
+#         double($env(SF_RL)) / double($rows)
             self.per_cl = float(self.SF_CL) / float(self.rasterinfo['cols'])
-#		 double($env(SF_CL)) / double($cols)
+#         double($env(SF_CL)) / double($cols)
             fil.write("SAMPLINGFRAME %r|%r|%r|%r\n" % (self.per_x, self.per_y,
                                                        self.per_rl, self.per_cl))
 
@@ -428,6 +432,7 @@ class FirstPage(TitledPage):
         self.rast = ''
         self.conf_name = ''
         self.vect = ''
+        self.VectorEnabled = True
 
         self.parent = parent
 
@@ -463,6 +468,15 @@ class FirstPage(TitledPage):
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(item=self.vectselect, border=5, pos=(2, 1),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
+        #vector layer
+        self.vectlaylabel = wx.StaticText(parent=self, id=wx.ID_ANY,
+                                          label=_('Vector map layer to use to select areas'))
+        self.vectlayer = wx.ComboBox(parent = self, id = wx.ID_ANY,
+                                     size=(250, -1))
+        self.sizer.Add(item=self.vectlaylabel, border=5, pos=(3, 0),
+                       flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
+        self.sizer.Add(item=self.vectlayer, border=5, pos=(3, 1),
+                       flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         #define sampling region
         self.sampling_reg = wx.RadioBox(parent=self, id=wx.ID_ANY,
                                         label=" %s " % _("Define sampling "
@@ -475,13 +489,20 @@ class FirstPage(TitledPage):
 
         self.sizer.Add(item=self.sampling_reg,
                        flag=wx.ALIGN_CENTER | wx.ALL | wx.EXPAND, border=5,
-                       pos=(4, 0), span=(1, 2))
+                       pos=(5, 0), span=(1, 2))
+        self.infoError = wx.StaticText(self, label='')
+        self.infoError.SetForegroundColour(wx.RED)
+        self.sizer.Add(item=self.infoError,
+                       flag=wx.ALIGN_CENTER | wx.ALL | wx.EXPAND, border=5,
+                       pos=(6, 0), span=(1, 2))
+
         #bindings
         self.sampling_reg.Bind(wx.EVT_RADIOBOX, self.OnSampling)
         self.newconftxt.Bind(wx.EVT_KILL_FOCUS, self.OnName)
         self.newconftxt.Bind(wx.EVT_TEXT, self.OnNameChanged)
         self.vectselect.Bind(wx.EVT_TEXT, self.OnVector)
         self.mapselect.Bind(wx.EVT_TEXT, self.OnRast)
+        self.vectlayer.Bind(wx.EVT_TEXT, self.OnLayer)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnExitPage)
 
@@ -515,13 +536,38 @@ class FirstPage(TitledPage):
 
     def OnRast(self, event):
         """Sets raster map"""
-        self.rast = event.GetString()
+        self.rast = self.mapselect.GetValue()
         next = wx.FindWindowById(wx.ID_FORWARD)
         next.Enable(self.CheckInput())
 
     def OnVector(self, event):
         """Sets vector map"""
-        self.vect = event.GetString()
+        self.vect = self.vectselect.GetValue()
+        if self.vect:
+            self.VectorEnabled, layers = self.CheckVector(self.vect)
+            if self.VectorEnabled:
+                self.vectlayer.SetItems(layers)
+                self.vectlayer.SetSelection(0)
+                self.vectorlayer = self.vectlayer.GetValue()
+                self.infoError.SetLabel('')
+            else:
+                self.vectlayer.Clear()
+                self.vectlayer.SetValue('')
+                self.vect = ''
+        else:
+            self.infoError.SetLabel('')
+            self.vectlayer.Clear()
+            self.vectlayer.SetValue('')
+
+        next = wx.FindWindowById(wx.ID_FORWARD)
+        next.Enable(self.CheckInput())
+
+
+    def OnLayer(self, event):
+        try:
+            self.vectorlayer = self.vectlayer.GetValue()
+        except:
+            self.vectorlayer = None
         next = wx.FindWindowById(wx.ID_FORWARD)
         next.Enable(self.CheckInput())
 
@@ -533,14 +579,40 @@ class FirstPage(TitledPage):
         wx.CallAfter(wx.FindWindowById(wx.ID_FORWARD).Enable,
                      self.CheckInput())
 
+    def CheckVector(self, vector):
+        """Check if the type of vector is area and return the number of
+        vector's layer"""
+        try:
+            areas = gvect.vector_info_topo(vector)['areas']
+        except CalledModuleError:
+            self.infoError.SetLabel(_("Vector %s was not found, please "
+                                    "select another vector") % vector)
+            return False, []
+        if areas == 0:
+            self.infoError.SetLabel(_("Vector %s has no areas, please "
+                                    "select another vector") % vector)
+            return False, []
+        links = gvect.vector_info(vector)['num_dblinks']
+        if links == 0:
+            self.infoError.SetLabel(_("Vector %s has no table connected, "
+                                    "please select another vector") % vector)
+            return False, []
+        elif links > 0:
+            layers = []
+            for i in range(1, links + 1):
+                layers.append(str(i))
+            return True, layers
+        else:
+            return False, []
+
     def CheckInput(self):
         """Check input fields.
 
         :return: True if configuration file is given and raster xor vector map,
                  False otherwise
         """
-        #R#return bool(self.conf_name and (bool(self.rast) != bool(self.vect)))
-        return bool(self.conf_name and bool(self.rast))
+        return bool(self.conf_name and bool(self.rast and
+                    bool(self.VectorEnabled)))
 
     def OnExitPage(self, event=None):
         """Function during exiting"""
@@ -801,10 +873,10 @@ class SamplingAreasPage(TitledPage):
 
     def OnNumRegions(self, event):
         """Obtain the number of regions"""
-        if event.GetString():
+        if self.regionNumTxt.GetValue():
             self.SetNext(self.parent.regions)
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
-            self.numregions = event.GetString()
+            self.numregions = self.regionNumTxt.GetValue()
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
@@ -882,9 +954,9 @@ class SamplingAreasPage(TitledPage):
         self.sizer.Hide(self.regionBox)
         self.sizer.Hide(self.areaPanel)
         self.SetNext(self.parent.summarypage)
-        vect_cats = sorted(set(grass.parse_command('v.category', input=self.parent.startpage.vect,
-                                                   option='print',
-                                                   type='centroid').keys()))
+
+        vect_cats = obtainCategories(self.parent.startpage.vect, self.vectorlayer)
+
         self._progressDlg = wx.ProgressDialog(title=_("Analysing vector"),
                                               message="Analysing vector",
                                               maximum=len(vect_cats),
@@ -896,6 +968,7 @@ class SamplingAreasPage(TitledPage):
         self.parent.msAreaList = sampleAreaVector(self.parent.startpage.vect,
                                                   self.parent.startpage.rast,
                                                   vect_cats,
+                                                  self.parent.startpage.vectorlayer,
                                                   self._progressDlg)
         grass.del_temp_region()
         if self.parent.msAreaList:
@@ -1150,16 +1223,16 @@ class SampleUnitsKeyPage(TitledPage):
             self.panelSizer.Layout()
 
     def OnWidth(self, event):
-        self.width = event.GetString()
+        self.width = self.widthTxt.GetValue()
 
     def OnHeight(self, event):
-        self.height = event.GetString()
+        self.height = self.heightTxt.GetValue()
 
     def OnDistr1(self, event):
-        self.distr1 = event.GetString()
+        self.distr1 = self.distr1Txt.GetValue()
 
     def OnDistr2(self, event):
-        self.distr2 = event.GetString()
+        self.distr2 = self.distr2Txt.GetValue()
 
 
 class MovingKeyPage(TitledPage):
@@ -1239,12 +1312,12 @@ class MovingKeyPage(TitledPage):
         return bool(self.width and bool(self.height))
 
     def OnWidth(self, event):
-        self.width = event.GetString()
+        self.width = self.widthTxt.GetValue()
         next = wx.FindWindowById(wx.ID_FORWARD)
         next.Enable(self.CheckInput())
 
     def OnHeight(self, event):
-        self.height = event.GetString()
+        self.height = self.heightTxt.GetValue()
         next = wx.FindWindowById(wx.ID_FORWARD)
         next.Enable(self.CheckInput())
 
@@ -1339,10 +1412,10 @@ class UnitsMousePage(TitledPage):
 
     def OnNumRegions(self, event):
         """Set the number of region"""
-        if event.GetString():
+        if self.regionNumTxt.GetValue():
             self.SetNext(self.parent.drawsampleunitspage)
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
-            self.numregions = event.GetString()
+            self.numregions = self.regionNumTxt.GetValue()
         else:
             wx.FindWindowById(wx.ID_FORWARD).Enable(False)
 
@@ -1479,7 +1552,8 @@ class VectorAreasPage(TitledPage):
         cat = self.vect_cats[self.areascount]
         self.outname = "{name}_{cat}".format(name=self.vect.split('@')[0],
                                              cat=cat)
-        convertFeature(self.vect, self.outname, cat, self.rast)
+        convertFeature(self.vect, self.outname, cat, self.rast,
+                       layer=self.vectlayer)
         cmdlistcat = ['d.rast', 'map=%s' % self.outname]
         self.map_.AddLayer(ltype='raster', command=cmdlistcat, active=True,
                            name=self.outname, hidden=False, opacity=1.0,
@@ -1504,10 +1578,8 @@ class VectorAreasPage(TitledPage):
 
         self.rast = self.parent.startpage.rast
         self.vect = self.parent.startpage.vect
-        self.vect_cats = sorted(set(grass.parse_command('v.category',
-                                                        input=self.vect,
-                                                        type='centroid',
-                                                        option='print').keys()))
+        self.vect_cats = obtainCategories(self.vect, layer=self.vectlayer)
+
         self.areanum = len(self.vect_cats)
         if self.areanum == 0:
             GError(parent=self, message=_("The polygon seems to have 0 areas"))
