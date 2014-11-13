@@ -27,7 +27,6 @@ from grass.script import core as gcore
 
 def main():
     options, flags = gcore.parser()
-    print options, flags
     gisenv = gcore.gisenv()
     if 'MONITOR' in gisenv:
         cmd_file = gisenv['MONITOR_{monitor}_CMDFILE'.format(monitor=gisenv['MONITOR'].upper())]
