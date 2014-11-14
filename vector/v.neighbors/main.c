@@ -8,7 +8,7 @@
  *               
  * PURPOSE:      Category manipulations
  *               
- * COPYRIGHT:    (C) 2001-2009 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2001-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2).  Read the file COPYING that
@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     struct Option *in_opt, *out_opt, *field_opt;
     struct Option *method_opt, *size_opt;
     struct Map_info In;
-    double radius, raster_res;
+    double radius, grid_res;
     struct boxlist *List;
     struct Cell_head region;
     struct bound_box box;
@@ -91,6 +91,10 @@ int main(int argc, char *argv[])
     G_get_set_window(&region);
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
+    grid_res = (region.ew_res + region.ns_res)/2.;
+    if ( atof(size_opt->answer) < grid_res)
+	G_warning(_("Neighborhood diameter smaller than cell resolution: %.1f < %.1f "),
+		  radius * 2., grid_res);
 
     result = Rast_allocate_buf(CELL_TYPE);
     Points = Vect_new_line_struct();
@@ -157,9 +161,8 @@ int main(int argc, char *argv[])
     Rast_close(out_fd);
 
     if (count_sum < 1) {
-	raster_res = (region.ew_res + region.ns_res)/2.;
-	G_warning(_("No points found (using raster resolution: %.1f, moving window size: %.1f)"),
-			raster_res, (box.E - box.W) * raster_res );
+	G_warning(_("No points found (using cell resolution: %.1f, neighborhood diameter: %.1f)"),
+			grid_res, radius * 2.);
 	G_message(_("You can calculate the distance statistics between the vector point using:\nv.univar -d %s"), in_opt->answer);
 	exit(EXIT_FAILURE);
     }
