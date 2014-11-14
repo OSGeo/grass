@@ -7,11 +7,15 @@ an output raster map layer.
 <h2>EXAMPLE</h2>
 
 Count the number of schools for a given grid (North Carolina sample
-dataset) in a moving windows:
+dataset):
 
 <div class="code"><pre>
-g.region rast=zipcodes -p res=500
-v.neighbors input=schools_wake output=schools_wake_500m method=count size=3
+g.region vect=schools_wake res=10 -p
+v.neighbors input=schools_wake output=schools_wake_3000m method=count size=3000
+
+d.mon wx0
+d.rast schools_wake_3000m
+d.vect schools_wake
 </pre></div>
 
 <h2>SEE ALSO</h2>
