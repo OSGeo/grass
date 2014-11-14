@@ -957,6 +957,9 @@
   <toolbox name="ChangeCategoryValuesAndLabels">
     <label>Change category values and labels</label>
     <items>
+      <module-item name="r.category">
+        <label>Manage category information</label>
+      </module-item>
       <module-item name="d.rast.edit">
         <label>Interactively edit category values</label>
       </module-item>
