@@ -141,11 +141,18 @@ Levels: (recommended levels)
   <li> 5 - each cell (raster) or point (vector)
 </ul>
 
-To disable debugging messages, DEBUG must be set back to 0:
+To disable debugging messages:
 
 <div class="code"><pre>
-g.gisenv set="DEBUG=0"
+g.gisenv unset="DEBUG"
 </pre></div>
+
+The variable DEBUG controls debugging messages from GRASS libraries
+and modules.
+
+<p>
+Similarly WX_DEBUG controls debugging messages
+from <a href="wxGUI.html">wxGUI</a>.
 
 <h2>SEE ALSO</h2>
 
@@ -155,14 +162,14 @@ g.gisenv set="DEBUG=0"
   <a href="g.findfile.html">g.findfile</a>,
   <a href="g.mapsets.html">g.mapsets</a>
 </em>
-<br><br>
-<em>
-  See also <a href="variables.html">variables list</a>
-</em>
+
+<p>
+See also <a href="variables.html">variables list</a>
 
 <h2>AUTHOR</h2>
 
 Michael Shapiro,
 U.S.Army Construction Engineering Research Laboratory
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
