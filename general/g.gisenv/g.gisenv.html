@@ -124,9 +124,15 @@ eval `g.gisenv`
 This works only for <em>Bash</em>. The format of the output is not
 compatible with other UNIX shells.
 
+<p>
+By default the GRASS variables are stored in <em>gisrc</em> file
+(defined by environmental
+variable <tt>GISRC</tt>). If <b>store=mapset</b> is given than the
+variables are stored in <tt>$GISDBASE/$LOCATION_NAME/$MAPSET/VAR</tt>.
+  
 <h3>GRASS Debugging</h3>
 
-To print debugging messages, the variable DEBUG must be set to level
+To print debugging messages, the variable <tt>DEBUG</tt> must be set to level
 equal or greater than 0:
 
 <div class="code"><pre>
@@ -151,7 +157,7 @@ The variable DEBUG controls debugging messages from GRASS libraries
 and modules.
 
 <p>
-Similarly WX_DEBUG controls debugging messages
+Similarly <tt>WX_DEBUG</tt> controls debugging messages
 from <a href="wxGUI.html">wxGUI</a>.
 
 <h2>SEE ALSO</h2>
