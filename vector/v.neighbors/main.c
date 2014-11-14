@@ -36,7 +36,7 @@ int main(int argc, char *argv[])
     struct Option *in_opt, *out_opt, *field_opt;
     struct Option *method_opt, *size_opt;
     struct Map_info In;
-    double radius;
+    double radius, raster_res;
     struct boxlist *List;
     struct Cell_head region;
     struct bound_box box;
@@ -156,8 +156,13 @@ int main(int argc, char *argv[])
     Vect_close(&In);
     Rast_close(out_fd);
 
-    if (count_sum < 1)
-	G_warning(_("No points found"));
+    if (count_sum < 1) {
+	raster_res = (region.ew_res + region.ns_res)/2.;
+	G_warning(_("No points found (using raster resolution: %.1f, moving window size: %.1f)"),
+			raster_res, (box.E - box.W) * raster_res );
+	G_message(_("You can calculate the distance statistics between the vector point using:\nv.univar -d %s"), in_opt->answer);
+	exit(EXIT_FAILURE);
+    }
     
     exit(EXIT_SUCCESS);
 }
