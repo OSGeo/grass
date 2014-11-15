@@ -1131,10 +1131,12 @@ class GMFrame(wx.Frame):
         """
         self._popupMenu((('rastImport',    self.OnImportGdalLayers),
                          ('rastLink',      self.OnLinkGdalLayers),
+                         ('rastUnpack',    self.OnUnpackRaster),
                          ('rastOut',       self.OnRasterOutputFormat),
                          (None, None),
                          ('vectImport',    self.OnImportOgrLayers),
                          ('vectLink',      self.OnLinkOgrLayers),
+                         ('vectUnpack',    self.OnUnpackVector),
                          ('vectOut',       self.OnVectorOutputFormat)))
         
     def OnWorkspaceNew(self, event = None):
@@ -1648,7 +1650,15 @@ class GMFrame(wx.Frame):
         dlg = GdalOutputDialog(parent = self, ogr = True)
         dlg.CentreOnScreen()
         dlg.Show()
-    
+
+    def OnUnpackRaster(self, event):
+        """Unpack raster map handler"""
+        self.OnMenuCmd(cmd = ['r.unpack'])
+
+    def OnUnpackVector(self, event):
+        """Unpack vector map handler"""
+        self.OnMenuCmd(cmd = ['v.unpack'])
+
     def OnImportDxfFile(self, event, cmd = None):
         """Convert multiple DXF layers to GRASS vector map layers"""
         dlg = DxfImportDialog(parent = self, giface = self._giface)
