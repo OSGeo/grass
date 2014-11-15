@@ -19,6 +19,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <math.h>
 
 #include <grass/gis.h>
 #include <grass/raster.h>
@@ -36,7 +37,7 @@ int main(int argc, char *argv[])
     struct Option *in_opt, *out_opt, *field_opt;
     struct Option *method_opt, *size_opt;
     struct Map_info In;
-    double radius, grid_res;
+    double radius, dia;
     struct boxlist *List;
     struct Cell_head region;
     struct bound_box box;
@@ -89,12 +90,23 @@ int main(int argc, char *argv[])
     field = Vect_get_field_number(&In, field_opt->answer);
 
     G_get_set_window(&region);
+    Vect_get_map_box(&In, &box);
+    
+    if (box.N > region.north + radius || box.S < region.south - radius ||
+        box.E > region.east + radius || box.W < region.west - radius) {
+	Vect_close(&In);
+	G_fatal_error(_("Input vector and computational region do not overlap"));
+	exit(EXIT_FAILURE);
+    }
+
+    dia = sqrt(region.ns_res * region.ns_res + region.ew_res * region.ew_res);
+    if (radius * 2.0 < dia) {
+	G_warning(_("The search diameter %g is smaller than cell diagonal %g: some points could not be detected"),
+	          radius * 2, dia);
+    }
+
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
-    grid_res = (region.ew_res + region.ns_res)/2.;
-    if ( atof(size_opt->answer) < grid_res)
-	G_warning(_("Neighborhood diameter smaller than cell resolution: %.1f < %.1f "),
-		  radius * 2., grid_res);
 
     result = Rast_allocate_buf(CELL_TYPE);
     Points = Vect_new_line_struct();
@@ -160,12 +172,8 @@ int main(int argc, char *argv[])
     Vect_close(&In);
     Rast_close(out_fd);
 
-    if (count_sum < 1) {
-	G_warning(_("No points found (using cell resolution: %.1f, neighborhood diameter: %.1f)"),
-			grid_res, radius * 2.);
-	G_message(_("You can calculate the distance statistics between the vector point using:\nv.univar -d %s"), in_opt->answer);
-	exit(EXIT_FAILURE);
-    }
-    
+    if (count_sum < 1) 
+	G_warning(_("No points found")); 
+
     exit(EXIT_SUCCESS);
 }
