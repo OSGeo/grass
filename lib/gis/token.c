@@ -87,39 +87,40 @@ char **G_tokenize2(const char *buf, const char *delim, const char *valchar)
 
 char **tokenize(const char *buf, const char *delim, const char *inchar)
 {
-    int i, invalue;
+    int i;
     char **tokens;
     char *p;
 
-    /* needed for G_free () */
-    while (!strchr(delim, *buf) && (*buf == ' ' || *buf == '\t'))
-	buf++;
-
+    /* do not modify buf, make a copy */
     p = G_store(buf);
 
-    tokens = (char **)G_malloc(sizeof(char *));
-
     i = 0;
-    invalue = FALSE;
+    tokens = (char **)G_malloc(2 * sizeof(char *));
+
+    /* always one token */
+    tokens[i++] = p;
+
     while (TRUE) {
-	while (!(strchr(delim, *p) && !invalue) && (*p == ' ' || *p == '\t')) {
-	    if (inchar && *p == *inchar)
-		invalue = invalue ? FALSE : TRUE;
+	/* find next delimiter */
+	while (!strchr(delim, *p)) {
+	    /* opening border ? */
+	    if (inchar && *p == *inchar) {
+		p++;
+		/* find closing border */
+		while (*p != *inchar && *p != 0)
+		    p++;
+		if (*p == 0)
+		    break;
+	    }
 	    p++;
 	}
 	if (*p == 0)
 	    break;
+	/* replace delim with '\0' */
+	*p++ = 0;
+	/* set next token */
 	tokens[i++] = p;
 	tokens = (char **)G_realloc((char *)tokens, (i + 1) * sizeof(char *));
-
-	while (*p && !(strchr(delim, *p) && !invalue)) {
-	    if (inchar && *p == *inchar)
-		invalue = invalue ? FALSE : TRUE;
-	    p++;
-	}
-	if (*p == 0)
-	    break;
-	*p++ = 0;
     }
     tokens[i] = NULL;
 

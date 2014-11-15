@@ -119,8 +119,9 @@ int main(int argc, char *argv[])
     if (gish_rev->answer) {
 	char **rev_ver = G_tokenize(GIS_H_VERSION, "$");
 	char **rev_time = G_tokenize(GIS_H_DATE, "$");
-	const int tokens_expected = 2;
+	const int tokens_expected = 3;
 	int no_libgis = FALSE;
+
 	/* if number of tokes is right, print it */
 	if (G_number_of_tokens(rev_ver) == tokens_expected &&
 	    G_number_of_tokens(rev_time) == tokens_expected) {
