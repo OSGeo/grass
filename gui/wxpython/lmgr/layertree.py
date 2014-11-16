@@ -6,7 +6,7 @@
 Classes:
  - layertree::LayerTree
 
-(C) 2007-2013 by the GRASS Development Team
+(C) 2007-2014 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -56,12 +56,16 @@ LMIcons = {
                             label = _('Import raster data')),
     'rastLink'   : MetaIcon(img = 'layer-import',
                             label = _('Link external raster data')),
+    'rastUnpack' : MetaIcon(img = 'layer-import',
+                            label = _('Unpack raster map')),
     'rastOut'    : MetaIcon(img = 'layer-export',
                             label = _('Set raster output format')),
     'vectImport' : MetaIcon(img = 'layer-import',
                             label = _('Import vector data')),
     'vectLink'   : MetaIcon(img = 'layer-import',
                                     label = _('Link external vector data')),
+    'vectUnpack' : MetaIcon(img = 'layer-import',
+                            label = _('Unpack vector map')),
     'vectOut'    : MetaIcon(img = 'layer-export',
                             label = _('Set vector output format')),
     'wmsImport'  : MetaIcon(img = 'layer-wms-add',
@@ -401,7 +405,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                         'region', 'export', 'attr', 'edit', 'save_ws',
                         'bgmap', 'topo', 'meta', 'null', 'zoom1', 'region1',
                         'color', 'hist', 'univar', 'prof', 'properties', 'sql', 'copy',
-                        'report', 'export-pg'):
+                        'report', 'export-pg', 'pack'):
                 self.popupID[key] = wx.NewId()
         
         # get current mapset
@@ -484,6 +488,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                       id = self.popupID['export-pg'])
             if 'v.out.postgis' not in globalvar.grassCmd:
                 self.popupMenu.Enable(self.popupID['export-pg'], False)
+
+            item = wx.MenuItem(self.popupMenu, id = self.popupID['pack'], text = _("Create pack"))
+            self.popupMenu.AppendItem(item)
+            self.Bind(wx.EVT_MENU, lambda x: self.lmgr.OnMenuCmd(cmd = ['v.pack',
+                                                                        'input=%s' % mapLayer.GetName()]),
+                      id = self.popupID['pack'])
             
             lmapset = self.GetLayerInfo(self.layer_selected, key = 'maplayer').GetMapset()
             if lmapset != currentMapset:
@@ -579,6 +589,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                                                             'input=%s' % mapLayer.GetName()]),
                           id = self.popupID['export'])
 
+                item = wx.MenuItem(self.popupMenu, id = self.popupID['pack'], text = _("Create pack"))
+                self.popupMenu.AppendItem(item)
+                self.Bind(wx.EVT_MENU, lambda x: self.lmgr.OnMenuCmd(cmd = ['r.pack',
+                                                                            'input=%s' % mapLayer.GetName()]),
+                          id = self.popupID['pack'])
+                
                 lmapset = self.GetLayerInfo(self.layer_selected, key = 'maplayer').GetMapset()
                 if lmapset != currentMapset:
                     self.popupMenu.Append(self.popupID['copy'], text = _("Make a copy in the current mapset"))
