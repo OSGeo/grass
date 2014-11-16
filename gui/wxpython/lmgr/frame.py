@@ -510,7 +510,7 @@ class GMFrame(wx.Frame):
         
         self.model = Model()
         self.model.LoadModel(filename)
-        self.model.Run(log = self._goutput, onDone = self.OnDone, parent = self)
+        self.model.Run(log = self.GetLogWindow(), onDone = self.OnDone, parent = self)
         
         dlg.Destroy()
         
