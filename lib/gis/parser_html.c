@@ -133,7 +133,8 @@ void G__usage_html(void)
     fprintf(stdout, " [--<b>help</b>] ");
     fprintf(stdout, " [--<b>verbose</b>] ");
     fprintf(stdout, " [--<b>quiet</b>] ");
-
+    fprintf(stdout, " [--<b>ui</b>] ");
+    
     fprintf(stdout, "\n</div>\n");
 
 
@@ -176,6 +177,9 @@ void G__usage_html(void)
 
 	fprintf(stdout, "<dt><b>--quiet</b></dt>\n");
 	fprintf(stdout, "<dd>%s</dd>\n", _("Quiet module output"));
+
+        fprintf(stdout, "<dt><b>--ui</b></dt>\n");
+	fprintf(stdout, "<dd>%s</dd>\n", _("Force launching GUI dialog"));
 
 	fprintf(stdout, "</dl>\n");
     }
