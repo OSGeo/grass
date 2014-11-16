@@ -1297,18 +1297,17 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         while item and item.IsOk():
             type = self.tree.GetLayerInfo(item, key = 'type')
             if type ==  'group':
-                subItem = self.tree.GetFirstChild(item)[0]
-                self._GetDataLayers(subItem, litems)
-                item = self.tree.GetNextSibling(item)
+                item = self.tree.GetNextItem(item)
+                continue
                 
             if not item.IsChecked() or \
                     type not in ('raster', 'vector', '3d-raster'):
-                item = self.tree.GetNextSibling(item)
+                item = self.tree.GetNextItem(item)
                 continue
             
             litems.append(item)
             
-            item = self.tree.GetNextSibling(item)
+            item = self.tree.GetNextItem(item)
         
     def LoadDataLayers(self):
         """Load raster/vector from current layer tree

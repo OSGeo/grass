@@ -264,6 +264,23 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
         return None
 
+    def GetNextItem(self, item):
+        """!Returns next item from tree (flattened expanded tree)"""
+        # this is a not empty group
+        if self.GetChildrenCount(item):
+                return self.GetFirstChild(item)[0]
+        # this is a layer outside group
+        if self.GetItemParent(item) == self.root:
+            return self.GetNextSibling(item)
+
+        # this is a layer inside group
+        sibling = self.GetNextSibling(item)
+        if sibling:
+            # this is a layer inside group
+            return sibling
+        # skip one up the hierarchy
+        return self.GetNextSibling(self.GetItemParent(item))
+
     def SetItemIcon(self, item, iconName=None):
         if not iconName:
             iconName = self.GetLayerInfo(item, key = 'maplayer').GetType()
@@ -1008,13 +1025,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """
         if lname and not multiple:
             # check for duplicates
-            item = self.GetFirstVisibleItem()
+            item = self.GetFirstChild(self.root)[0]
             while item and item.IsOk():
                 if self.GetLayerInfo(item, key = 'type') == 'vector':
                     name = self.GetLayerInfo(item, key = 'maplayer').GetName()
                     if name == lname:
                         return
-                item = self.GetNextVisible(item)
+                item = self.GetNextItem(item)
         
         selectedLayer = self.GetSelectedLayer()
         # deselect active item
@@ -1134,7 +1151,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 if self.GetLayerInfo(prevItem, key = 'maplayer'): 
                     prevMapLayer = self.GetLayerInfo(prevItem, key = 'maplayer')
                 
-                prevItem = self.GetNextSibling(prevItem) 
+                prevItem = self.GetNextItem(prevItem) 
                 
                 if prevMapLayer: 
                     pos = self.Map.GetLayerIndex(prevMapLayer)
@@ -1232,14 +1249,16 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """
         self.lmgr.WorkspaceChanged()
         layer = event.GetItem()
-        
-        self.PropertiesDialog(layer)
-        
-        if self.GetLayerInfo(layer, key = 'type') == 'group':
+
+        if self.GetLayerInfo(layer, key='type') == 'group':
             if self.IsExpanded(layer):
                 self.Collapse(layer)
             else:
                 self.Expand(layer)
+            return
+
+        self.PropertiesDialog(layer)
+        
         
     def OnDeleteLayer(self, event):
         """Remove selected layer item from the layer tree"""
@@ -1364,11 +1383,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         ctrl = event.GetEventObject().GetId()
         
         # find layer tree item by ctrl
-        layer = self.GetFirstVisibleItem()
+        layer = self.GetFirstChild(self.root)[0]
         while layer and layer.IsOk():
             if self.GetLayerInfo(layer, key = 'ctrl') == ctrl:
                 break
-            layer = self.GetNextVisible(layer)
+            layer = self.GetNextItem(layer)
         
         # change parameters for item in layers list in render.Map
         self.ChangeLayer(layer)
@@ -1492,8 +1511,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             if child:
                 while child:
                     self.RecreateItem(child, dropTarget, parent = newItem)
-                    self.Delete(child)
-                    child = self.GetNextChild(old, cookie)[0]
+                    child, cookie = self.GetNextChild(old, cookie)
         
         # delete layer at original position
         try:
@@ -1682,7 +1700,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # make a list of visible layers
         layers = []
 
-        vislayer = self.GetFirstVisibleItem()
+        vislayer = self.GetFirstChild(self.root)[0]
 
         if not vislayer or self.GetPyData(vislayer) is None:
             return layers
@@ -1692,19 +1710,16 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             digitToolbar = self.mapdisplay.GetToolbar('vdigit')
             if digitToolbar:
                 vdigitLayer = digitToolbar.GetLayer()
-        
+
         itemList = ""
-        for item in range(self.GetCount()):
+        while vislayer:
             itemList += self.GetItemText(vislayer) + ','
             lType = self.GetLayerInfo(vislayer, key='type')
             mapLayer = self.GetLayerInfo(vislayer, key='maplayer')
             if lType and lType != 'group' and mapLayer is not vdigitLayer:
                 layers.append(mapLayer)
 
-            if not self.GetNextVisible(vislayer):
-                break
-            else:
-                vislayer = self.GetNextVisible(vislayer)
+            vislayer = self.GetNextItem(vislayer)
 
         Debug.msg(5, "LayerTree.GetVisibleLayers(): items=%s" %
                   (reversed(itemList)))
@@ -1782,7 +1797,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             if i == index:
                 return item
             
-            item = self.GetNextVisible(item)
+            item = self.GetNextItem(item)
             i += 1
         
         return None
@@ -1822,7 +1837,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             except KeyError:
                 return None
             
-            if value == itemLayer.GetName():
+            if itemLayer and value == itemLayer.GetName():
                 items.append(item)
             if self.GetLayerInfo(item, key = 'type') == 'group':
                 subItem = self.GetFirstChild(item)[0]
