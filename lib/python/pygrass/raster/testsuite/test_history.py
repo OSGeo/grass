@@ -13,7 +13,7 @@ from grass.pygrass.raster.history import History
 
 class RasterHistoryTestCate(TestCase):
 
-    name = 'geology_30m'
+    name = 'geology'
 
     def testHistory(self):
         r = RasterRow(self.name)

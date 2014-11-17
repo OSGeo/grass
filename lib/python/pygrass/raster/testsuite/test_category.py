@@ -14,7 +14,7 @@ from grass.script.core import tempfile
 
 class RasterCategoryTestCate(TestCase):
 
-    name = 'geology_30m'
+    name = 'geology'
     catsname = ''
 
     def testCategory(self):
