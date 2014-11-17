@@ -10,13 +10,17 @@ Count the number of schools for a given grid (North Carolina sample
 dataset):
 
 <div class="code"><pre>
-g.region vect=schools_wake res=10 -p
+g.region vect=schools_wake res=100 -p -a
 v.neighbors input=schools_wake output=schools_wake_3000m method=count size=3000
 
 d.mon wx0
 d.rast schools_wake_3000m
 d.vect schools_wake
 </pre></div>
+
+The result gives for each grid cell the number of points (here: schools)
+not farther than 1500 meter away (half of the given <em>size</em> value)
+from the respective cell center.
 
 <h2>SEE ALSO</h2>
 
