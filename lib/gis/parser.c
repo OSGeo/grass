@@ -356,6 +356,7 @@ int G_parser(int argc, char **argv)
 
 	    i = 0;
 	    while (tokens[i]) {
+		G_chop(tokens[i]);
 		cnt++;
 		i++;
 	    }
@@ -381,6 +382,8 @@ int G_parser(int argc, char **argv)
 
 		    if (!tokens[i + 1])
 			break;
+
+		    G_chop(tokens[i]);
 
 		    j = 0;
 		    found = 0;
@@ -579,7 +582,7 @@ int G_parser(int argc, char **argv)
     /* Make sure all required options are set */
     if (!st->suppress_required)
 	check_required();
-    
+
     G__check_option_rules();
 
     if (st->n_errors > 0) {
