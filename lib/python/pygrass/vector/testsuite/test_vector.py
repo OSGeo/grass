@@ -11,7 +11,7 @@ from grass.pygrass.vector import VectorTopo
 
 class VectorTopoTestCase(TestCase):
 
-    vname = "poi_names_wake"
+    vname = "points_of_interest"
 
     def test_getitem_slice(self):
         """Test that getitem handle correctly the slice starting from 1"""
