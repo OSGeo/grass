@@ -87,6 +87,10 @@ a:visited {
     color: rgb(25%, 60%, 25%);
 }
 
+a.urlblack {
+    color: black;
+}
+
 div.code{
     width: 97%;
     color : black;
