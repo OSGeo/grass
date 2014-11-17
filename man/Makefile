@@ -29,6 +29,13 @@ INDICES := $(patsubst %,$(HTMLDIR)/%.html,$(IDXSRC))
 
 ALL_HTML := $(wildcard $(HTMLDIR)/*.*.html)
 
+ifneq (@(type sphinx-build2 > /dev/null),)
+SPHINXBUILD   = sphinx-build2
+endif
+ifneq (@(type sphinx-build > /dev/null),)
+SPHINXBUILD   = sphinx-build
+endif
+
 default: $(DSTFILES)
 	@echo "Generating HTML manual pages index (help system)..."
 	$(MAKE) $(INDICES)
@@ -92,3 +99,4 @@ $(HTMLDIR)/grass_logo.png: grass_logo.png
 
 $(HTMLDIR)/grass_icon.png: grass_icon.png
 	$(INSTALL_DATA) $< $@
+

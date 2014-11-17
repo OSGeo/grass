@@ -36,6 +36,8 @@ header_base = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <link rel="stylesheet" href="grassdocs.css" type="text/css">
 </head>
 <body bgcolor="white">
+<div id="container">
+
 <a href="index.html"><img src="grass_logo.png" alt="GRASS logo"></a>
 <hr class="header">
 """
@@ -47,10 +49,15 @@ header_pgm = """<h2>NAME</h2>
 <em><b>${PGM}</b></em>
 """
 
+header_pgm_desc = """<h2>NAME</h2>
+<em><b>${PGM}</b></em> - ${PGM_DESC}
+"""
+
 footer_index = string.Template(\
 """<hr class="header">
 <p><a href="index.html">Main index</a> | <a href="${INDEXNAME}.html">${INDEXNAMECAP} index</a> | <a href="topics.html">Topics index</a> | <a href="keywords.html">Keywords Index</a> | <a href="full_index.html">Full index</a></p>
 <p>&copy; 2003-${YEAR} <a href="http://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS ${GRASS_VERSION} Reference Manual</p>
+</div>
 </body>
 </html>
 """)
@@ -59,6 +66,7 @@ footer_noindex = string.Template(\
 """<hr class="header">
 <p><a href="index.html">Main index</a> | <a href="topics.html">Topics index</a> | <a href="keywords.html">Keywords Index</a> | <a href="full_index.html">Full index</a></p>
 <p>&copy; 2003-${YEAR} <a href="http://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS ${GRASS_VERSION} Reference Manual</p>
+</div>
 </body>
 </html>
 """)
@@ -133,6 +141,7 @@ def write_toc(data):
     
     fd = sys.stdout
     fd.write('<div class="toc">\n')
+    fd.write('<h4 class="toc">Table of contents</h4>\n')
     fd.write('<ul class="toc">\n')
     first = True
     has_h2 = False
@@ -176,20 +185,27 @@ def update_toc(data):
 # process header
 src_data = read_file(src_file)
 name = re.search('(<!-- meta page name:)(.*)(-->)', src_data, re.IGNORECASE)
+pgm_desc = None
 if name:
     pgm = name.group(2).strip().split('-', 1)[0].strip()
+    name_desc = re.search('(<!-- meta page name description:)(.*)(-->)', src_data, re.IGNORECASE)
+    if name_desc:
+        pgm_desc = name_desc.group(2).strip()
 desc = re.search('(<!-- meta page description:)(.*)(-->)', src_data,
                  re.IGNORECASE)
 if desc:
     pgm = desc.group(2).strip()
     header_tmpl = string.Template(header_base + header_nopgm)
 else:
-    header_tmpl = string.Template(header_base + header_pgm)
+    if not pgm_desc:
+        header_tmpl = string.Template(header_base + header_pgm)
+    else:
+        header_tmpl = string.Template(header_base + header_pgm_desc)
 
 if not re.search('<html>', src_data, re.IGNORECASE):
     tmp_data = read_file(tmp_file)
     if not re.search('<html>', tmp_data, re.IGNORECASE):
-        sys.stdout.write(header_tmpl.substitute(PGM=pgm))
+        sys.stdout.write(header_tmpl.substitute(PGM=pgm, PGM_DESC=pgm_desc))
     if tmp_data:
         for line in tmp_data.splitlines(True):
             if not re.search('</body>|</html>', line, re.IGNORECASE):
