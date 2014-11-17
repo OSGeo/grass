@@ -84,6 +84,22 @@ class TestTemporalVectorAlgebra(gunittest.TestCase):
         self.assertEqual( D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'1 day')
 
+    def test_temporal_extent1(self):
+        """Testing the temporal extent operators. """
+        ta = tgis.TemporalVectorAlgebraParser(run = True, debug = True)
+        ta.parse(expression="R = A {:,during,r} C",  basename="r", overwrite=True)
+
+        D = tgis.open_old_stds("R", type="stvds")
+        D.select()
+        D.print_info()
+        maplist = D.get_registered_maps_as_objects()
+        self.assertEqual(D.metadata.get_number_of_maps(), 2)
+        start, end = D.get_absolute_time()
+        self.assertEqual(start, datetime.datetime(2001, 1, 2))
+        self.assertEqual(end, datetime.datetime(2001, 1, 4))
+        self.assertEqual( D.check_temporal_topology(),  False)
+        self.assertEqual(D.get_granularity(),  u'2 days')
+
     def test_temporal_select_operators(self):
         """Testing the temporal select operator. Including temporal relations. """
         tva = tgis.TemporalVectorAlgebraParser(run = True, debug = True)

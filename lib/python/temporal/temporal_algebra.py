@@ -679,7 +679,7 @@ class TemporalAlgebraParser(object):
         self.dbif = SQLDatabaseInterfaceConnection()
         self.dbif.connect()
         self.register_null = register_null
-        self.empty_maps = {}
+        self.removable_maps = {}
         self.m_mremove = pymod.Module('g.remove')
         self.m_copy = pymod.Module('g.copy')
         self.nprocs = nprocs
@@ -788,10 +788,9 @@ class TemporalAlgebraParser(object):
         self.parser.parse(expression)
 
     def generate_map_name(self):
-        """Generate an unique intermediate vector map name
-            and register it in the objects map list for later removement.
+        """Generate an unique  map name and register it in the objects map list
 
-            The vector map names are unique between processes. Do not use the
+            The map names are unique between processes. Do not use the
             same object for map name generation in multiple threads.
         """
         self.count += 1
@@ -803,7 +802,8 @@ class TemporalAlgebraParser(object):
         self.names[name] = name
         return name
 
-    def generate_new_map(self, base_map, bool_op = 'and', copy = True,  rename = True):
+    def generate_new_map(self, base_map, bool_op = 'and', copy = True,  rename = True, 
+                                              remove = False):
         """Generate a new map using the spatio-temporal extent of the base map
 
            :param base_map: This map is used to create the new map
@@ -813,6 +813,7 @@ class TemporalAlgebraParser(object):
                   copied to mapA
            :param rename: Specifies if the generated map get a random name or get
                   the id from the base map.
+            :param remove: Set this True if this map is an intermediate or empty map that should be removed
            :return: Map object
         """
         # Generate an intermediate name for the result map list.
@@ -826,6 +827,8 @@ class TemporalAlgebraParser(object):
         if not rename:
             name = base_map.get_id()
             map_new.set_id(name)
+        if remove is True:
+            self.removable_maps[name] = map_new
         # Make sure to set the uid that is used in several dictionaries
         map_new.uid = name
         return map_new
@@ -966,11 +969,58 @@ class TemporalAlgebraParser(object):
     
     ######################### Temporal functions ##############################
 
-    def check_stds(self, input, clear = False):
+    def remove_maps(self):
+        """Removes empty or intermediate maps of different type.
+        """
+        
+        map_names = {}
+        map_names["raster"] = []
+        map_names["raster3d"] = []
+        map_names["vector"] = []
+                
+        if self.removable_maps:
+            for map in self.removable_maps.values():
+                    map_names[map.get_type()].append(map.get_name())
+        
+        for key in map_names.keys():
+            if map_names[key]:
+                self.msgr.message(_("Removing un-needed or empty %s maps"%(key)))
+                self._remove_maps(map_names[key],  key)
+
+    def _remove_maps(self,  namelist,  map_type):
+        """Remove maps of specific type
+        
+            :param namelist: List of map names to be removed
+            :param map_type: The type of the maps  (rast, rast3d or vect)
+        """
+        max = 100
+        chunklist = [namelist[i:i + max] for i in range(0, len(namelist), max)]
+        for chunk in chunklist:
+            stringlist = ",".join(chunk)
+            
+            # Transform the map type
+            if map_type == "raster":
+                map_type = "rast"
+            if map_type == "raster3d":
+                map_type = "rast3d"
+            if map_type == "vector":
+                map_type = "vect"
+
+            if self.run:
+                m = copy.deepcopy(self.m_mremove)
+                m.inputs["type"].value = map_type
+                m.inputs["name"].value = stringlist
+                m.flags["f"].value = True
+                print m.get_bash()
+                m.run()
+
+    def check_stds(self, input, clear = False,  stds_type = None):
         """ Check if input space time dataset exist in database and return its map list.
 
             :param input: Name of space time data set as string or list of maps.
             :param clear: Reset the stored conditional values to empty list.
+            :param stds_type: The type of the space time dataset to be opened, if not provided 
+                                          then self.stdstype will be used
 
             :return: List of maps.
 
@@ -982,7 +1032,10 @@ class TemporalAlgebraParser(object):
             else:
                 id_input = input + "@" + self.mapset
             # Create empty spacetime dataset.
-            stds = dataset_factory(self.stdstype, id_input)
+            if stds_type:
+                stds = dataset_factory(stds_type, id_input)
+            else:
+                stds = dataset_factory(self.stdstype, id_input)
             # Check for occurence of space time dataset.
             if stds.is_in_db(dbif=self.dbif) == False:
                 raise FatalError(_("Space time %s dataset <%s> not found") %
@@ -1895,45 +1948,47 @@ class TemporalAlgebraParser(object):
 
         """
         if self.run:
+            dbif, connected = init_dbif(self.dbif) 
             if isinstance(t[3], list):
                 num = len(t[3])
                 count = 0
-                changeflag = False
-                register_list = []                
+                register_list = []      
                 if num > 0:
+                    process_queue = pymod.ParallelModuleQueue(int(self.nprocs))
                     for map_i in t[3]:
                         # Test if temporal extents have been changed by temporal 
-                        # relation oeprators (&|+). 
+                        # relation operators (i|r). 
                         map_i_extent = map_i.get_temporal_extent_as_tuple()
                         map_test = map_i.get_new_instance(map_i.get_id())
-                        map_test.select()
+                        map_test.select(dbif)
                         map_test_extent = map_test.get_temporal_extent_as_tuple()
                         if map_test_extent != map_i_extent:
-                            changeflag = True
-                    for map_i in t[3]:
-                        if changeflag:
-                            # Check if resultmap names exist in GRASS database.
-                            mapname = self.basename + "_" + str(count) + "@" + self.mapset
-                            process_queue = pymod.ParallelModuleQueue(int(self.nprocs))
-                            if self.stdstype == 'strds':
-                                map_test = RasterDataset(mapname)
-                            elif self.stdstype == 'stvds':
-                                map_test = VectorDataset(mapname)
+                            # Create new map with basename
+                            newident = self.basename + "_" + str(count)
+                            map_result = map_i.get_new_instance(newident + "@" + self.mapset)
+
                             if map_test.map_exists() and self.overwrite == False:
                                 self.msgr.fatal("Error raster maps with basename %s exist. Use --o flag to overwrite existing file" \
                                                     %(mapname))
-                            # Create new maps with basename.
-                            newident = self.basename + "_" + str(count)
-                            map_result = map_i.get_new_instance(newident + "@" + self.mapset)
+
                             map_result.set_temporal_extent(map_i.get_temporal_extent())
                             map_result.set_spatial_extent(map_i.get_spatial_extent())
+                            # Attention we attach a new attribute
+                            map_result.is_new = True
                             register_list.append(map_result)
-                            if self.stdstype == 'strds':
+
+                            # Copy the map
+                            if map_i.get_type() == 'raster':
                                 m = copy.deepcopy(self.m_copy)
                                 m.inputs["rast"].value = map_i.get_id(),  newident
                                 m.flags["overwrite"].value = self.overwrite
                                 process_queue.put(m)
-                            elif self.stdstype == 'stvds':
+                            elif map_i.get_type() == 'raster3d':
+                                m = copy.deepcopy(self.m_copy)
+                                m.inputs["rast3d"].value = map_i.get_id(),  newident
+                                m.flags["overwrite"].value = self.overwrite
+                                process_queue.put(m)
+                            elif map_i.get_type() == 'vector':
                                 m = copy.deepcopy(self.m_copy)
                                 m.inputs["vect"].value = map_i.get_id(),  newident
                                 m.flags["overwrite"].value = self.overwrite
@@ -1941,11 +1996,11 @@ class TemporalAlgebraParser(object):
                         else:
                             register_list.append(map_i)
                         count  += 1
-                    if changeflag:
-                        process_queue.wait()
+
+                    # Wait for running processes
+                    process_queue.wait()
                     
                     # Open connection to temporal database.
-                    dbif, connect = init_dbif(self.dbif)
                     # Create result space time dataset.                        
                     resultstds = open_new_stds(t[1], self.stdstype, \
                                                              'absolute', t[1], t[1], \
@@ -1954,21 +2009,21 @@ class TemporalAlgebraParser(object):
                     for map_i in register_list:                
                         # Get meta data from grass database.
                         map_i.load()
-                        # Check if temporal extents have changed.
-                        if changeflag:
+                        # Check if temporal extents have changed and a new map was created
+                        if hasattr(map_i,  "is_new") is True:
                             # Do not register empty maps if not required
                             # In case of a null map continue, do not register null maps
                             if map_i.metadata.get_min() is None and \
                                map_i.metadata.get_max() is None:
                                 if not self.register_null:
-                                    self.empty_maps[map_i.get_name()] = map_i.get_name()
+                                    self.removable_maps[map_i.get_name()] = map_i
                                     continue
                             if map_i.is_in_db(dbif) and self.overwrite:
                                 # Update map in temporal database.
                                 map_i.update_all(dbif)
                             elif map_i.is_in_db(dbif) and self.overwrite == False:
                                 # Raise error if map exists and no overwrite flag is given.
-                                self.msgr.fatal("Error vector map %s exist in temporal database. Use overwrite flag.  : \n%s" \
+                                self.msgr.fatal("Error map %s exist in temporal database. Use overwrite flag.  : \n%s" \
                                                     %(map_i.get_map_id(), cmd.popen.stderr))
                             else:
                                 # Insert map into temporal database.
@@ -1976,20 +2031,18 @@ class TemporalAlgebraParser(object):
                         # Register map in result space time dataset.
                         success = resultstds.register_map(map_i, dbif)
                     resultstds.update_from_registered_maps(dbif)
-                    dbif.close()
                 elif num == 0:
                     self.msgr.warning('Empty result space time dataset. No map has \
 been registered in %s'  %(t[1] ))
                     # Open connection to temporal database.
-                    dbif, connect = init_dbif(self.dbif)
                     # Create result space time dataset.                        
                     resultstds = open_new_stds(t[1], self.stdstype, \
                                                              'absolute', t[1], t[1], \
-                                                             'mean', self.dbif, \
+                                                             'mean', dbif, \
                                                              overwrite = self.overwrite)
-                    dbif.close()
+            if connected:
+                dbif.close()
             t[0] = t[3]
-
         else:
             t[0] = t[3]
 

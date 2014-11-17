@@ -79,24 +79,6 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
         self.expression = expression
         self.parser.parse(expression)
 
-    def remove_empty_maps(self):
-        """! Removes the intermediate raster maps.
-        """
-        if self.empty_maps:
-            self.msgr.message(_("Removing empty raster maps"))
-            namelist = self.empty_maps.values()
-            max = 100
-            chunklist = [namelist[i:i + max] for i in range(0, len(namelist), max)]
-            for chunk in chunklist:
-                stringlist = ",".join(chunk)
-
-                if self.run:
-                    m = copy.deepcopy(self.m_mremove)
-                    m.inputs["type"].value = "rast"
-                    m.inputs["name"].value = stringlist
-                    m.flags["f"].value = True
-                    m.run()
-
     ######################### Temporal functions ##############################
 
     def p_statement_assign(self, t):
