@@ -865,7 +865,7 @@ valid command line arguments:
 Yes. There are a few conventions. Options which identify a single input map 
 are usually "map=", not "raster=" or "vector=". In the case of an 
 input and output map the convention is: "input=xx output=yy". By passing 
-the 'help' option to existing GRASS commands, it is likely that you will 
+the '--help' flag to existing GRASS commands, it is likely that you will 
 find other conventions. The desire is to make it as easy as possible for the 
 user to remember (or guess correctly) what the command line syntax is for a 
 given command.
