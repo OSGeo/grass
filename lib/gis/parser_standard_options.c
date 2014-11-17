@@ -601,7 +601,7 @@ struct Option *G_define_standard_option(int opt)
         Opt->key_desc = "name";
         Opt->required = YES;
         Opt->gisprompt = "old,dir,dir";
-        Opt->description = _("Name to input directory");
+        Opt->description = _("Name of input directory");
         break;
 
     case G_OPT_M_UNITS:
