@@ -7,7 +7,6 @@
 import os
 import sys
 import glob
-import string
 from build_html import *
 
 blacklist = ['Display', 'Database', 'General', 'Imagery', 'Misc', 'Postscript',
@@ -37,6 +36,10 @@ for fname in htmlfiles:
         continue
     for key in keys:
         key = key.strip()
+        try:
+            key = key.split('>')[1].split('<')[0]
+        except:
+            pass
         key = "%s%s" % (key[0].upper(), key[1:])
         if key not in keywords.keys():
             keywords[key] = []
@@ -56,7 +59,7 @@ keywordsfile.write(header1_tmpl.substitute(title = "GRASS GIS " \
 keywordsfile.write(headerkeywords_tmpl)
 keywordsfile.write('<dl>')
 for key, values in sorted(keywords.iteritems()):
-    keyword_line = "<dt><b>%s</b></dt><dd>" % key
+    keyword_line = '<dt><b><a name="%s" class="urlblack">%s</a></b></dt><dd>' % (key, key)
     for value in sorted(values):
         keyword_line += ' <a href="%s">%s</a>,' % (value, value.replace('.html',
                                                                         ''))
