@@ -30,9 +30,11 @@ def cleanup():
     if tmp_img:
         grass.try_remove(tmp_img)
     if tmp_grad_rel:
-        grass.run_command('g.remove', type = 'rast', name = tmp_grad_rel, quiet = True, flags = 'f')
+        grass.run_command('g.remove', flags = 'f', type = 'rast',
+                          name = tmp_grad_rel, quiet = True)
     if tmp_grad_abs:
-        grass.run_command('g.remove', type = 'rast', name = tmp_grad_abs, quiet = True, flags = 'f')
+        grass.run_command('g.remove', flags = 'f', type = 'rast',
+                          name = tmp_grad_abs, quiet = True)
 
 # def rotate(src, dst):
 #     grass.call(["convert", "-rotate", "90", src, dst])
