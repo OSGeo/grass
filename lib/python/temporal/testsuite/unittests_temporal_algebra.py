@@ -70,7 +70,7 @@ class TestTemporalAlgebra(grass.gunittest.TestCase):
     def test_temporal_select1(self):
         """Testing the temporal select operator with equal relations. """
         ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ta.parse(expression="R = A : A", basename="r", overwrite=True)
+        ta.parse(expression="R = A : A",  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -86,7 +86,7 @@ class TestTemporalAlgebra(grass.gunittest.TestCase):
     def test_temporal_select2(self):
         """Testing the temporal select operator with equal relations. """
         ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ta.parse(expression="R = A : D", basename="r", overwrite=True)
+        ta.parse(expression="R = A : D",  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -102,7 +102,7 @@ class TestTemporalAlgebra(grass.gunittest.TestCase):
     def test_temporal_select3(self):
         """Testing the temporal select operator with equal relations. """
         ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ta.parse(expression="R = A !: D", basename="r", overwrite=True)
+        ta.parse(expression="R = A !: D",  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -118,7 +118,7 @@ class TestTemporalAlgebra(grass.gunittest.TestCase):
     def test_temporal_select_operators1(self):
         """Testing the temporal select operator. Including temporal relations. """
         ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ta.parse(expression="R = A {:,during} C", basename="r", overwrite=True)
+        ta.parse(expression="R = A {:,during} C",  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -134,7 +134,7 @@ class TestTemporalAlgebra(grass.gunittest.TestCase):
     def test_temporal_select_operators2(self):
         """Testing the temporal select operator. Including temporal relations. """
         ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ta.parse(expression="R = A {:,equal|during} C", basename="r", overwrite=True)
+        ta.parse(expression="R = A {:,equal|during} C",  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -151,7 +151,7 @@ class TestTemporalAlgebra(grass.gunittest.TestCase):
         """Testing the temporal select operator. Including temporal relations 
             and negation operation. """
         ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ta.parse(expression="R = A {!:,during} C", basename="r", overwrite=True)
+        ta.parse(expression="R = A {!:,during} C",  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -168,7 +168,7 @@ class TestTemporalAlgebra(grass.gunittest.TestCase):
         """Testing the temporal select operator. Including temporal relations and 
             temporal operators. """
         ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ta.parse(expression="R = A {:,during,d} C", basename="r", overwrite=True)
+        ta.parse(expression="R = A {:,during,d} C",  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -190,7 +190,7 @@ class TestTemporalAlgebra(grass.gunittest.TestCase):
         """Testing the temporal select operator. Including temporal relations and 
             temporal operators. """
         ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ta.parse(expression="R = C {:,contains} A", basename="r", overwrite=True)
+        ta.parse(expression="R = C {:,contains} A",  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -211,7 +211,7 @@ class TestTemporalAlgebra(grass.gunittest.TestCase):
     def test_temporal_extent1(self):
         """Testing the temporal extent operators. """
         ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ta.parse(expression="R = A {:,during,r} C", basename="r", overwrite=True)
+        ta.parse(expression="R = A {:,during,r} C",  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -228,7 +228,7 @@ class TestTemporalAlgebra(grass.gunittest.TestCase):
     def test_temporal_extent2(self):
         """Testing the temporal extent operators. """
         ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ta.parse(expression="R = A {:,during,d} C", basename="r", overwrite=True)
+        ta.parse(expression="R = A {:,during,d} C",  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -245,7 +245,7 @@ class TestTemporalAlgebra(grass.gunittest.TestCase):
     def test_temporal_extent3(self):
         """Testing the temporal extent operators. """
         ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ta.parse(expression="R = A {:,during,u} C", basename="r", overwrite=True)
+        ta.parse(expression="R = A {:,during,u} C",  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -266,7 +266,7 @@ class TestTemporalAlgebra(grass.gunittest.TestCase):
     def test_temporal_hash1(self):
         """Testing the hash function in conditional statement. """
         ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ta.parse(expression="R = if(A # D == 1, A)", basename="r", overwrite=True)
+        ta.parse(expression="R = if(A # D == 1, A)",  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -283,7 +283,8 @@ class TestTemporalAlgebra(grass.gunittest.TestCase):
     def test_temporal_hash_operator1(self):
         """Testing the hash operator function in conditional statement. """
         ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ta.parse(expression="R = if(A {#,during} C == 1, A)", basename="r", overwrite=True)
+        ta.parse(expression="R = if(A {#,during} C == 1, A)",  stdstype = 'strds', 
+                                       basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -300,7 +301,8 @@ class TestTemporalAlgebra(grass.gunittest.TestCase):
     def test_temporal_hash_operator2(self):
         """Testing the hash operator function in conditional statement. """
         ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ta.parse(expression="R = if({during}, C {#,contains} A == 2, A)", basename="r", overwrite=True)
+        ta.parse(expression="R = if({during}, C {#,contains} A == 2, A)",  
+                                                 stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -317,7 +319,7 @@ class TestTemporalAlgebra(grass.gunittest.TestCase):
     def test_tmap_function1(self):
         """Testing the tmap function. """
         ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ta.parse(expression='R = tmap(singletmap)', basename="r", overwrite=True)
+        ta.parse(expression='R = tmap(singletmap)',  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
@@ -334,7 +336,7 @@ class TestTemporalAlgebra(grass.gunittest.TestCase):
     def test_tmap_function2(self):
         """Testing the tmap function. """
         ta = tgis.TemporalAlgebraParser(run = True, debug = True)
-        ta.parse(expression='R = A : tmap(singletmap)', basename="r", overwrite=True)
+        ta.parse(expression='R = A : tmap(singletmap)',  stdstype = 'strds', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()

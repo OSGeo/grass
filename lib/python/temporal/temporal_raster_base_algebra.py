@@ -142,7 +142,6 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                   nprocs = 1, register_null = False):
         TemporalAlgebraParser.__init__(self, pid, run, debug, spatial)
         self.nprocs = nprocs
-        self.empty_maps = {}
         self.register_null = register_null
 
     def check_null(self, t):
@@ -543,11 +542,14 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 register_list = []
                 for i in range(num):
                     # Check if resultmap names exist in GRASS database.
-                    rastername = self.basename + "_" + str(i) + "@" + self.mapset
-                    rastermap = RasterDataset(rastername)
-                    if rastermap.map_exists() and self.overwrite == False:
-                        self.msgr.fatal("Error raster maps with basename %s exist. Use --o flag to overwrite existing file" \
-                                            %(rastername))
+                    map_name = self.basename + "_" + str(i) + "@" + self.mapset
+                    if self.stdstype == "strds":
+                        new_map = RasterDataset(map_name)
+                    else:
+                        new_map = Raster3DDataset(map_name)
+                    if new_map.map_exists() and self.overwrite == False:
+                        self.msgr.fatal("Error maps with basename %s exist. Use --o flag to overwrite existing file" \
+                                            %(map_name))
                 map_test_list = []
                 for map_i in t[3]:
                     newident = self.basename + "_" + str(count)
@@ -568,6 +570,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                         process_queue.put(m)
                     
                     elif map_i.map_exists():
+                        # Copy map if it exists
                         map_test = map_i.get_new_instance(newident + "@" + self.mapset)
                         map_test.set_temporal_extent(map_i.get_temporal_extent())
                         map_test.set_spatial_extent(map_i.get_spatial_extent())
@@ -577,6 +580,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                         m_expression = newident + "=" + map_i.get_map_id()
                         m.inputs["expression"].value = str(m_expression)
                         m.flags["overwrite"].value = self.overwrite
+                        print m.get_bash()
                         process_queue.put(m)
                         
                     else:
@@ -603,7 +607,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                     if map_i.metadata.get_min() is None and \
                        map_i.metadata.get_max() is None:
                         if not self.register_null:
-                            self.empty_maps[map_i.get_name()] = map_i.get_name()
+                            self.removable_maps[map_i.get_name()] = map_i
                             continue
 
                     if map_i.is_in_db(dbif) and self.overwrite:
@@ -622,7 +626,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 dbif.close()
                 t[0] = register_list
 
-                self.remove_empty_maps()
+                self.remove_maps()
     
     def p_expr_spmap_function(self, t):
         # Add a single map.

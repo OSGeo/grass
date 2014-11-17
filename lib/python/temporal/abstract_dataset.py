@@ -151,9 +151,9 @@ class AbstractDataset(SpatialTopologyDatasetConnector,
     def get_type(self):
         """Return the type of this class as string
 
-           The type can be "vect", "rast", "rast3d", "stvds", "strds" or "str3ds"
+           The type can be "vector", "raster", "raster3d", "stvds", "strds" or "str3ds"
 
-           :return: "vect", "rast", "rast3d", "stvds", "strds" or "str3ds"
+           :return: "vector", "raster", "raster3d", "stvds", "strds" or "str3ds"
         """
 
     @abstractmethod

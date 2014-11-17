@@ -136,25 +136,6 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
     ######################### Temporal functions ##############################
 
-    def remove_intermediate_vector_maps(self):
-        """ Removes the intermediate vector maps.
-        """
-        if self.names != {}:
-            namelist = self.names.values()
-            max = 100
-            chunklist = [namelist[i:i + max] for i in range(0, len(namelist), max)]
-            for chunk in chunklist:
-                stringlist = ",".join(chunk)
-                if self.debug:
-                    print "g.remove type=vect name=%s"%(stringlist)
-
-                if self.run:
-                    m = copy.deepcopy(self.m_mremove)
-                    m.inputs["type"].value = "vect"
-                    m.inputs["name"].value = stringlist
-                    m.flags["f"].value = True
-                    m.run()
-
     def get_temporal_topo_list(self, maplistA, maplistB = None, topolist = ["EQUAL"],
                                assign_val = False, count_map = False, compare_bool = False,  
                                compare_cmd = False,  compop = None, aggregate = None,  
@@ -272,6 +253,8 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                         resultlist = resultlist + relationmap.cmd_list
                     # Generate an intermediate name
                     name = self.generate_map_name()
+                    # Put it into the removalbe map list
+                    self.removable_maps[name] = VectorDataset(name + "@%s"%(self.mapset))
                     map_i.set_id(name + "@" + self.mapset)
                     # Set second input for overlay module.
                     mapbinput = relationmap.get_id()
@@ -320,7 +303,8 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
             tbrelations = map_i.get_temporal_relations()
             # Generate an intermediate map for the result map list.
             map_new = self.generate_new_map(base_map=map_i, bool_op = 'and', 
-                                                                        copy = True,  rename = False)
+                                                                        copy = True,  rename = False,  
+                                                                        remove = True)
             # Combine temporal and spatial extents of intermediate map with related maps.
             for topo in topolist:
                 if topo in tbrelations.keys():
@@ -328,7 +312,8 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                         if temporal == 'r':
                             # Generate an intermediate map for the result map list.
                             map_new = self.generate_new_map(base_map=map_i, bool_op = 'and', 
-                                                                                        copy = True,  rename = False)
+                                                                                        copy = True,  rename = False,  
+                                                                                        remove = True)
                         # Create overlayed map extent.
                         returncode = self.overlay_map_extent(map_new, map_j, 'and', \
                                                                 temp_op = temporal)
@@ -360,6 +345,8 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         """
         # Execute the command lists
         if self.run:
+            # Open connection to temporal database.
+            dbif, connected = init_dbif(dbif=self.dbif)
             if isinstance(t[3], list):
                 num = len(t[3])
                 count = 0
@@ -415,8 +402,8 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                                 break
                         if returncode == 0:
                             # We remove the invalid vector name from the remove list.
-                            if self.names.has_key(map_i.get_name()):
-                                self.names.pop(map_i.get_name())
+                            if self.removable_maps.has_key(map_i.get_name()):
+                                self.removable_maps.pop(map_i.get_name())
                             mapset = map_i.get_mapset()
                             # Change map name to given basename.
                             newident = self.basename + "_" + str(count)
@@ -424,17 +411,41 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                             m.inputs["vect"].value = (map_i.get_name(),newident)
                             m.flags["overwrite"].value = self.overwrite
                             m.run()
-                            #m(vect = (map_i.get_name(),newident), \
-                            #    overwrite = self.overwrite)
                             map_i.set_id(newident + "@" + mapset)
                             count += 1
                             register_list.append(map_i)
                     else:
-                        register_list.append(map_i)
+                        # Test if temporal extents have been changed by temporal 
+                        # relation operators (i|r). This is a code copy from temporal_algebra.py
+                        map_i_extent = map_i.get_temporal_extent_as_tuple()
+                        map_test = map_i.get_new_instance(map_i.get_id())
+                        map_test.select(dbif)
+                        map_test_extent = map_test.get_temporal_extent_as_tuple()
+                        if map_test_extent != map_i_extent:
+                            # Create new map with basename
+                            newident = self.basename + "_" + str(count)
+                            map_result = map_i.get_new_instance(newident + "@" + self.mapset)
+
+                            if map_test.map_exists() and self.overwrite == False:
+                                self.msgr.fatal("Error raster maps with basename %s exist. Use --o flag to overwrite existing file" \
+                                                    %(mapname))
+
+                            map_result.set_temporal_extent(map_i.get_temporal_extent())
+                            map_result.set_spatial_extent(map_i.get_spatial_extent())
+                            # Attention we attach a new attribute
+                            map_result.is_new = True
+                            count += 1
+                            register_list.append(map_result)
+
+                            # Copy the map
+                            m = copy.deepcopy(self.m_copy)
+                            m.inputs["vect"].value = map_i.get_id(),  newident
+                            m.flags["overwrite"].value = self.overwrite
+                            m.run()
+                        else:
+                            register_list.append(map_i)
 
                 if len(register_list) > 0:
-                    # Open connection to temporal database.
-                    dbif, connect = init_dbif(dbif=self.dbif)
                     # Create result space time dataset.
                     resultstds = open_new_stds(t[1], self.stdstype, \
                                                                 'absolute', t[1], t[1], \
@@ -442,7 +453,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                                                                 overwrite = self.overwrite)
                     for map_i in register_list:
                         # Check if modules should be executed from command list.
-                        if "cmd_list" in dir(map_i):
+                        if hasattr(map_i, "cmd_list") or hasattr(map_i, "is_new"):
                             # Get meta data from grass database.
                             map_i.load()
                             if map_i.is_in_db(dbif=dbif) and self.overwrite:
@@ -457,17 +468,17 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                                 # Insert map into temporal database.
                                 map_i.insert(dbif=dbif)
                         else:
-                            #Get metadata from temporal database.                          
-                            #map_i.select(dbif=dbif)
+                            # Map is original from an input STVDS
                             map_i.load()
                         # Register map in result space time dataset.
+                        print map_i.get_temporal_extent_as_tuple()
                         success = resultstds.register_map(map_i, dbif=dbif)
-                        #count += 1
-                        #if count % 10 == 0:
-                        #    grass.percent(count, num, 1)
                     resultstds.update_from_registered_maps(dbif)
-                    dbif.close()
-                self.remove_intermediate_vector_maps()
+                
+            # Remove intermediate maps    
+            self.remove_maps()
+            if connected:
+                dbif.close()
             t[0] = t[3]
 
     def p_overlay_operation(self, t):
@@ -549,7 +560,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
             for map_i in bufflist:
                 # Generate an intermediate name for the result map list.
                 map_new = self.generate_new_map(base_map=map_i, bool_op=None,
-                                                copy=True)
+                                                copy=True,  remove = True)
                 # Change spatial extent based on buffer size.
                 map_new.spatial_buffer(float(t[5]))
                 # Check buff type.

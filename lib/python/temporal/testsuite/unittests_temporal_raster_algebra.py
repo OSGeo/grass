@@ -68,6 +68,23 @@ class TestTemporalRasterAlgebra(gunittest.TestCase):
         cls.runModule("t.unregister", maps="singletmap", quiet=True)
         cls.del_temp_region()
 
+    def test_temporal_extent1(self):
+        """Testing the temporal extent operators. """
+        ta = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
+        ta.parse(expression="R = A {:,during,r} C",   basename="r", overwrite=True)
+
+        D = tgis.open_old_stds("R", type="strds")
+        D.select()
+        maplist = D.get_registered_maps_as_objects()
+        self.assertEqual(D.metadata.get_number_of_maps(), 2)
+        self.assertEqual(D.metadata.get_min_min(), 2) 
+        self.assertEqual(D.metadata.get_max_max(), 3) 
+        start, end = D.get_absolute_time()
+        self.assertEqual(start, datetime.datetime(2001, 1, 2))
+        self.assertEqual(end, datetime.datetime(2001, 1, 4))
+        self.assertEqual( D.check_temporal_topology(),  False)
+        self.assertEqual(D.get_granularity(),  u'2 days')
+
     def test_temporal_conditional_time_dimension_bug(self):
         """Testing the conditional time dimension bug, that uses the time 
             dimension of the conditional statement instead the time dimension 
