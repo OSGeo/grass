@@ -46,6 +46,8 @@ from mapdisp.frame import MapFrame
 from core.giface import StandaloneGrassInterface
 from core.settings import UserSettings
 from vdigit.main import haveVDigit, errorMsg
+from grass.exceptions import CalledModuleError
+
 
 class VDigitMapFrame(MapFrame):
     def __init__(self, vectorMap):
@@ -95,7 +97,9 @@ if __name__ == "__main__":
                           "New vector map can be created by providing '-c' flag.") % options['map'])
         else:
             grass.message(_("New vector map <%s> created") % options['map'])
-            if 0 != grass.run_command('v.edit', map = options['map'], tool = 'create'):
+            try:
+                grass.run_command('v.edit', map = options['map'], tool = 'create')
+            except CalledModuleError:
                 grass.fatal(_("Unable to create new vector map <%s>") % options['map'])
     
     GuiModuleMain(main)

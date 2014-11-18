@@ -53,18 +53,26 @@
 
 import sys
 from grass.script import core as grass
+from grass.exceptions import CalledModuleError
+
 
 def main():
-    return grass.run_command("v.distance",
-                             _from = options['map'],
-                             to = options['qmap'],
-                             column = options['column'],
-                             to_column = options['qcolumn'],
-                             upload = "to_attr",
-                             dmax = options['dmax'],
-                             from_layer = options['layer'],
-                             to_layer = options['qlayer'])
-    
+    try:
+        grass.run_command('v.distance',
+                          from_=options['map'],
+                          to=options['qmap'],
+                          column=options['column'],
+                          to_column=options['qcolumn'],
+                          upload='to_attr',
+                          dmax=options['dmax'],
+                          from_layer=options['layer'],
+                          to_layer=options['qlayer'])
+    except CalledModuleError:
+        return 1
+    else:
+        return 0
+
+
 if __name__ == "__main__":
     options, flags = grass.parser()
     sys.exit(main())

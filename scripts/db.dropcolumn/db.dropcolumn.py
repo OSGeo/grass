@@ -39,6 +39,8 @@ import sys
 import os
 import string
 import grass.script as grass
+from grass.exceptions import CalledModuleError
+
 
 def main():
     table = options['table']
@@ -98,9 +100,11 @@ def main():
     else:
 	sql = "ALTER TABLE %s DROP COLUMN %s" % (table, column)
 
-    if grass.write_command('db.execute', input = '-', database = database, driver = driver,
-			   stdin = sql) != 0:
-	grass.fatal(_("Cannot continue (problem deleting column)"))
+    try:
+        grass.write_command('db.execute', input = '-', database = database,
+                               driver = driver, stdin = sql)
+    except CalledModuleError:
+        grass.fatal(_("Cannot continue (problem deleting column)"))
 
     return 0
 

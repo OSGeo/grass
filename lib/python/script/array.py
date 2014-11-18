@@ -121,6 +121,7 @@ import numpy
 
 from utils import try_remove
 import core as grass
+from grass.exceptions import CalledModuleError
 
 
 ###############################################################################
@@ -176,15 +177,20 @@ class array(numpy.memmap):
         if size not in [1, 2, 4, 8]:
             raise ValueError(_('Invalid size <%d>') % size)
 
-        return grass.run_command(
-            'r.out.bin',
-            flags=flags,
-            input=mapname,
-            output=self.filename,
-            bytes=size,
-            null=null,
-            quiet=True,
-            overwrite=True)
+        try:
+            grass.run_command(
+                'r.out.bin',
+                flags=flags,
+                input=mapname,
+                output=self.filename,
+                bytes=size,
+                null=null,
+                quiet=True,
+                overwrite=True)
+        except CalledModuleError:
+            return 1
+        else:
+            return 0
 
     def write(self, mapname, title=None, null=None, overwrite=None):
         """Write array into raster map
@@ -217,21 +223,26 @@ class array(numpy.memmap):
 
         reg = grass.region()
 
-        return grass.run_command(
-            'r.in.bin',
-            flags=flags,
-            input=self.filename,
-            output=mapname,
-            title=title,
-            bytes=size,
-            anull=null,
-            overwrite=overwrite,
-            north=reg['n'],
-            south=reg['s'],
-            east=reg['e'],
-            west=reg['w'],
-            rows=reg['rows'],
-            cols=reg['cols'])
+        try:
+            grass.run_command(
+                'r.in.bin',
+                flags=flags,
+                input=self.filename,
+                output=mapname,
+                title=title,
+                bytes=size,
+                anull=null,
+                overwrite=overwrite,
+                north=reg['n'],
+                south=reg['s'],
+                east=reg['e'],
+                west=reg['w'],
+                rows=reg['rows'],
+                cols=reg['cols'])
+        except CalledModuleError:
+            return 1
+        else:
+            return 0
 
 ###############################################################################
 
@@ -290,15 +301,20 @@ class array3d(numpy.memmap):
         if size not in [1, 2, 4, 8]:
             raise ValueError(_('Invalid size <%d>') % size)
 
-        return grass.run_command(
-            'r3.out.bin',
-            flags=flags,
-            input=mapname,
-            output=self.filename,
-            bytes=size,
-            null=null,
-            quiet=True,
-            overwrite=True)
+        try:
+            grass.run_command(
+                'r3.out.bin',
+                flags=flags,
+                input=mapname,
+                output=self.filename,
+                bytes=size,
+                null=null,
+                quiet=True,
+                overwrite=True)
+        except CalledModuleError:
+            exit(1)
+        else:
+            exit(0)
 
     def write(self, mapname, null=None, overwrite=None):
         """Write array into 3D raster map
@@ -326,20 +342,26 @@ class array3d(numpy.memmap):
 
         reg = grass.region(True)
 
-        return grass.run_command(
-            'r3.in.bin',
-            flags=flags,
-            input=self.filename,
-            output=mapname,
-            bytes=size,
-            null=null,
-            overwrite=overwrite,
-            north=reg['n'],
-            south=reg['s'],
-            top=reg['t'],
-            bottom=reg['b'],
-            east=reg['e'],
-            west=reg['w'],
-            depths=reg['depths'],
-            rows=reg['rows3'],
-            cols=reg['cols3'])
+        try:
+            grass.run_command(
+                'r3.in.bin',
+                flags=flags,
+                input=self.filename,
+                output=mapname,
+                bytes=size,
+                null=null,
+                overwrite=overwrite,
+                north=reg['n'],
+                south=reg['s'],
+                top=reg['t'],
+                bottom=reg['b'],
+                east=reg['e'],
+                west=reg['w'],
+                depths=reg['depths'],
+                rows=reg['rows3'],
+                cols=reg['cols3'])
+
+        except CalledModuleError:
+            exit(1)
+        else:
+            exit(0)

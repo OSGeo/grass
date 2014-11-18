@@ -23,6 +23,7 @@ import string
 
 from core import *
 from utils import float_or_dms, parse_key_val
+from grass.exceptions import CalledModuleError
 
 
 def raster3d_info(map):
@@ -75,8 +76,10 @@ def mapcalc3d(exp, quiet=False, verbose=False, overwrite=False, **kwargs):
     t = string.Template(exp)
     e = t.substitute(**kwargs)
 
-    if run_command('r3.mapcalc', expression = e,
-                   quiet = quiet,
-                   verbose = verbose,
-                   overwrite = overwrite) != 0:
+    try:
+        run_command('r3.mapcalc', expression=e,
+                    quiet=quiet,
+                    verbose=verbose,
+                    overwrite=overwrite)
+    except CalledModuleError:
         fatal(_("An error occurred while running r3.mapcalc"))

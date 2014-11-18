@@ -38,8 +38,8 @@
 #%end
 
 import grass.script as grass
+from grass.exceptions import CalledModuleError
 import os
-import sys
 
 
 def main():
@@ -86,27 +86,35 @@ def main():
     input_tmp = '{inp}_tmp_{pid}'.format(inp=input, pid=pid)
     remove_names = "%s,%s" % (out_type, input_tmp)
     grass.message(_("Processing area data (%d areas found)...") % in_info['areas'])
-    if 0 != grass.run_command('v.category', layer="2", type='boundary',
-                              option='add', input=input, out=input_tmp,
-                              quiet=quiet):
+
+    try:
+        grass.run_command('v.category', layer="2", type='boundary',
+                          option='add', input=input, out=input_tmp,
+                          quiet=quiet)
+    except CalledModuleError:
         grass.run_command('g.remove', type='vect', name=input_tmp, quiet=quiet,
                           flags='f')
         grass.fatal(_("Error creating layer 2"))
-    if 0 != grass.run_command('v.db.addtable', map=input_tmp, layer="2",
-                              columns="left integer,right integer",
-                              quiet=quiet):
+    try:
+        grass.run_command('v.db.addtable', map=input_tmp, layer="2",
+                          columns="left integer,right integer",
+                          quiet=quiet)
+    except CalledModuleError:
         grass.run_command('g.remove', type='vect', name=input_tmp, quiet=quiet,
                           flags='f')
         grass.fatal(_("Error creating new table for layer 2"))
-    if 0 != grass.run_command('v.to.db', map=input_tmp, option="sides",
-                              columns="left,right", layer="2", quiet=quiet):
+    try:
+        grass.run_command('v.to.db', map=input_tmp, option="sides",
+                          columns="left,right", layer="2", quiet=quiet)
+    except CalledModuleError:
         grass.run_command('g.remove', type='vect', name=input_tmp, quiet=quiet,
                           flags='f')
         grass.fatal(_("Error populating new table for layer 2"))
-
-    if 0 != grass.run_command('v.type', input=input_tmp, output=out_type,
-                              from_type='boundary', to_type='line',
-                              quiet=quiet, layer="2"):
+    try:
+        grass.run_command('v.type', input=input_tmp, output=out_type,
+                          from_type='boundary', to_type='line',
+                          quiet=quiet, layer="2")
+    except CalledModuleError:
         grass.run_command('g.remove', type='vect', name=remove_names,
                           quiet=quiet, flags='f')
         grass.fatal(_("Error converting polygon to line"))
@@ -118,24 +126,32 @@ def main():
             max_cat = report[0].split()[-1]
             break
     if min_cat and max_cat:
-        if 0 != grass.run_command('v.edit', map=out_type, tool='delete',
-                                  type='centroid', layer=2, quiet=quiet,
-                                  cats='{mi}-{ma}'.format(mi=min_cat, ma=max_cat)):
+        try:
+            grass.run_command('v.edit', map=out_type, tool='delete',
+                              type='centroid', layer=2, quiet=quiet,
+                              cats='{mi}-{ma}'.format(mi=min_cat, ma=max_cat))
+        except CalledModuleError:
             grass.run_command('g.remove', type='vect', name=remove_names,
                               quiet=quiet, flags='f')
             grass.fatal(_("Error removing centroids"))
 
     try:
-        if 0 != grass.run_command('v.db.droptable', map=out_type, layer=1,
-                                  flags='f', quiet=True):
+        try:
+            # TODO: fix magic numbers for layer here and there
+            grass.run_command('v.db.droptable', map=out_type, layer=1,
+                              flags='f', quiet=True)
+        except CalledModuleError:
             grass.run_command('g.remove', type='vect', name=remove_names,
                               quiet=quiet, flags='f')
             grass.fatal(_("Error removing table from layer 1"))
+    # TODO: when this except is happaning, it seems that never, so it seems wrong
     except:
         grass.warning(_("No table for layer %d" % 1))
-    if 0 != grass.run_command('v.category', input=out_type, option='transfer',
-                              output=output, layer="2,1", quiet=quiet,
-                              overwrite=overwrite):
+    try:
+        grass.run_command('v.category', input=out_type, option='transfer',
+                          output=output, layer="2,1", quiet=quiet,
+                          overwrite=overwrite)
+    except CalledModuleError:
         grass.run_command('g.remove', type='vect', name=remove_names,
                           quiet=quiet, flags='f')
         grass.fatal(_("Error adding categories"))
@@ -144,6 +160,7 @@ def main():
     if point:
         grass.run_command('g.remove', type='vect', name=out_temp, quiet=quiet,
                           flags='f')
+
 
 if __name__ == "__main__":
     options, flags = grass.parser()

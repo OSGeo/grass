@@ -63,6 +63,8 @@ import os
 import atexit
 import math
 import grass.script as grass
+from grass.exceptions import CalledModuleError
+
 
 # what to do in case of user break:
 def cleanup():
@@ -107,8 +109,10 @@ def main():
     if not grass.find_file(input)['file']:
         grass.fatal(_("Raster map <%s> not found") % input)
 
-    if grass.run_command('r.grow.distance',  input = input, metric = metric,
-                      distance = temp_dist, value = temp_val) != 0:
+    try:
+        grass.run_command('r.grow.distance', input=input, metric=metric,
+                          distance=temp_dist, value=temp_val)
+    except CalledModuleError:
         grass.fatal(_("Growing failed. Removing temporary maps."))
 
     grass.mapcalc(

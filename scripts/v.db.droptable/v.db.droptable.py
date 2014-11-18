@@ -37,6 +37,8 @@
 import sys
 import os
 import grass.script as grass
+from grass.exceptions import CalledModuleError
+
 
 def main():
     force = flags['f']
@@ -73,20 +75,24 @@ def main():
 
     grass.message(_("Dropping table <%s>...") % table)
 
-    if grass.write_command('db.execute', stdin = "DROP TABLE %s" % table, input = '-',
-                           database = database, driver = driver) != 0:
-	grass.fatal(_("An error occurred while running db.execute"))
+    try:
+        grass.write_command('db.execute', stdin="DROP TABLE %s" % table,
+                            input='-', database=database, driver=driver)
+    except CalledModuleError:
+        grass.fatal(_("An error occurred while running db.execute"))
 
     grass.run_command('v.db.connect', flags = 'd', map = map, layer = layer)
 
     grass.message(_("Current attribute table link(s):")) 
     # silently test first to avoid confusing error messages
     nuldev = file(os.devnull, 'w')
-    if grass.run_command('v.db.connect', flags ='p', map = map, quiet = True,
-			 stdout = nuldev, stderr = nuldev) != 0:
-	grass.message(_("(No database links remaining)"))
+    try:
+        grass.run_command('v.db.connect', flags='p', map=map, quiet=True,
+                          stdout=nuldev, stderr=nuldev)
+    except CalledModuleError:
+        grass.message(_("(No database links remaining)"))
     else:
-	grass.run_command('v.db.connect', flags ='p', map = map)
+        grass.run_command('v.db.connect', flags='p', map=map)
 
     # write cmd history:
     grass.vector_history(map)

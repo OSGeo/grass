@@ -67,6 +67,7 @@
 import os
 import grass.script as grass
 import grass.temporal as tgis
+from grass.exceptions import CalledModuleError
 
 ############################################################################
 
@@ -129,16 +130,17 @@ def main():
                 mflags += "c"
 
             # Export the raster map with r.out.vtk
-            if elevation:
-                ret = grass.run_command("r.out.vtk", flags=mflags, null=null,
-                                        input=map_name, elevation=elevation,
-                                        output=out_name,
-                                        overwrite=grass.overwrite())
-            else:
-                ret = grass.run_command("r.out.vtk", flags=mflags, null=null,
-                                        input=map_name, output=out_name,
-                                        overwrite=grass.overwrite())
-            if ret != 0:
+            try:
+                if elevation:
+                    grass.run_command("r.out.vtk", flags=mflags, null=null,
+                                      input=map_name, elevation=elevation,
+                                      output=out_name,
+                                      overwrite=grass.overwrite())
+                else:
+                    grass.run_command("r.out.vtk", flags=mflags, null=null,
+                                      input=map_name, output=out_name,
+                                      overwrite=grass.overwrite())
+            except CalledModuleError:
                 grass.fatal(_("Unable to export raster map <%s>" % map_name))
 
             count += 1
