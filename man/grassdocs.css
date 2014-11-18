@@ -19,11 +19,11 @@ body{
 #container
 {
     position: relative;
-    margin: 0 auto;
+    margin-left: 50px;
     padding-left:  10px;
     padding-right: 10px;
 /*    width: 750px; */
-    width: 60%;
+    width: 75%;
     background-color: white;
     height:auto !important;
     min-height: 100%;
