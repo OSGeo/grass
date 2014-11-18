@@ -20,10 +20,8 @@
 #%end
 #%option G_OPT_R_INPUT
 #%end
-#%option
-#% key: output_prefix
-#% type: string
-#% description: Prefix for output raster maps (default: input)
+#%option G_OPT_R_BASENAME_OUTPUT
+#% description: Default: input
 #% required: no
 #%end
 
@@ -31,7 +29,7 @@ import grass.script as grass
 
 def main():
     input = options['input']
-    output = options['output_prefix']
+    output = options['basename']
 
     if not grass.find_file(input)['file']:
 	grass.fatal(_("Raster map <%s> not found") % input)
@@ -46,7 +44,7 @@ def main():
 
     for ch in ['r', 'g', 'b']:
 	name = "%s.%s" % (output, ch)
-	grass.run_command('r.colors', map = name, color = 'grey255')
+	grass.run_command('r.colors', map = name, color = 'grey255', quiet = True)
 	grass.raster_history(name)
 
 if __name__ == "__main__":
