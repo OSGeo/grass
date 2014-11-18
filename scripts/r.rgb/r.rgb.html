@@ -1,7 +1,16 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.rgb</em> generates separate red, green and blue maps from a
-raster map and its associated color table.
+raster map and its associated color table (grey255).
+
+<h2>EXAMPLE</h2>
+
+<div class="code"><pre>
+r.rgb input=elevation
+</pre></div>
+
+In this case <em>r.rgb</em> produces in the current mapset three new
+raster maps - 'elevation.r', 'elevation.g', 'elevation.b'.
 
 <h2>SEE ALSO</h2>
 
