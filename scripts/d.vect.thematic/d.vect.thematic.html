@@ -19,15 +19,19 @@ from standard input or other external source.
 colors) and range of point sizes (graduated points) for thematic maps. A
 simple text legend is printed. Optionally, a graphic legend can be drawn in
 the selected display monitor. Thematic colors can be uploaded to a GRASSRGB
-column for later display,  and thematic map display commands can be saved to a
+column for later display.
+
+<!-- outdated:
+,  and thematic map display commands can be saved to a
 group file (*.dm) that can be opened, edited, and displayed in
 the GIS Manager.
+-->
 
 <p>When the psmap option is set to 'name', two psmap instruction files are
 created (in the current directory if no path is given), one for the map
 ('name.psmap') and one for the legend ('name_legend.psmap'). The map file also
 contains 'label' commands which allow to create a legend directly in the map by
-adding a 'vlegend' command. See the <em><a href="ps.map">ps.map</a></em> man
+adding a 'vlegend' command. See the <em><a href="ps.map">ps.map</a></em> manual
 page for more details.
 
 
@@ -51,6 +55,12 @@ d.vect.thematic -l recent_earthquakes column=magnitude type=point
 d.vect.thematic -l recent_earthquakes column=magnitude type=point \
                 themetype=graduated_points maxsize=15
 </pre></div>
+
+<center>
+<img src="d_vect_thematic_equake.png"><br>
+Example for earthquake map rendering
+(<a href="https://trac.osgeo.org/grass/browser/grass-promo/tutorials/batch_processing/earthquakes">script code</a>)
+</center>
 
 <p>North Carolina: differences between 'elevation' (10m) and 'elev_state_500m':
 
