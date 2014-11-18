@@ -37,6 +37,9 @@ class GraphicsSet:
             "unused":  wx.Pen(colour=wx.LIGHT_GREY, width=2, style=wx.SOLID),
             "highest":  wx.Pen(colour=wx.RED, width=2, style=wx.SOLID)
         }
+        self.brushes = {
+            'default': wx.TRANSPARENT_BRUSH
+        }
 
         # list contains instances of GraphicsSetItem
         self.itemsList = []
@@ -132,12 +135,16 @@ class GraphicsSet:
                     pen = self.pens[item.GetPropertyVal("penName")]
                 else:
                     pen = self.pens["default"]
+                if item.GetPropertyVal("brushName"):
+                    brush = self.brushes[item.GetPropertyVal("brushName")]
+                else:
+                    brush = self.brushes["default"]
                 if self.mapCoords:
                     coords = [self.parentMapWin.Cell2Pixel(coords) for coords in item.GetCoords()]
                 else:
                     coords = item.GetCoords()
 
-                self.drawFunc(pdc=pdc, pen=pen, drawid=item.GetId(),
+                self.drawFunc(pdc=pdc, pen=pen, brush=brush, drawid=item.GetId(),
                               point1=coords[0],
                               point2=coords[1])
 
@@ -146,12 +153,16 @@ class GraphicsSet:
                     pen = self.pens[item.GetPropertyVal("penName")]
                 else:
                     pen = self.pens["default"]
+                if item.GetPropertyVal("brushName"):
+                    brush = self.brushes[item.GetPropertyVal("brushName")]
+                else:
+                    brush = self.brushes["default"]
                 if self.mapCoords:
                     coords = [self.parentMapWin.Cell2Pixel(coords) for coords in item.GetCoords()]
                 else:
                     coords = item.GetCoords()
 
-                self.drawFunc(pdc=pdc, pen=pen,
+                self.drawFunc(pdc=pdc, pen=pen, brush=brush,
                               coords=coords, drawid=item.GetId())
             itemOrderNum += 1
 
@@ -218,10 +229,7 @@ class GraphicsSet:
         :return: instance of GraphicsSetItem which is drawn in drawNum order
         :return: False if drawNum was out of range
         """
-        if drawNum < len(self.itemsList) and drawNum >= 0:
-            return self.itemsList[drawNum]
-        else:
-            return False
+        return self.itemsList[drawNum]
 
     def SetPropertyVal(self, propName, propVal):
         """Set property value
@@ -288,6 +296,37 @@ class GraphicsSet:
 
         return None
 
+    def AddBrush(self, brushName, brush):
+        """Add brush
+
+        :param brushName: name of added brush
+        :type brushName: str
+        :param brush: added brush
+        :type brush: wx.Brush
+
+        :return: True - if brush was added
+        :return: False - if brush already exists
+        """
+        if brushName in self.brushes:
+            return False
+
+        self.brushes[brushName] = brush
+        return True
+
+    def GetBrush(self, brushName):
+        """Get existing brush
+
+        :param brushName: name of brush
+        :type brushName: str
+
+        :return: wx.Brush reference if is found
+        :return: None if brushName was not found
+        """
+        if brushName in self.brushes:
+            return self.brushes[brushName]
+
+        return None
+
     def SetItemDrawOrder(self, item, drawNum):
         """Set draw order for item
 
@@ -328,7 +367,7 @@ class GraphicsSet:
 
 class GraphicsSetItem:
 
-    def __init__(self, coords, penName=None, label=None, hide=False):
+    def __init__(self, coords, penName=None, brushName=None, label=None, hide=False):
         """Could be point or line according to graphicsType in
         GraphicsSet class
 
@@ -338,6 +377,8 @@ class GraphicsSetItem:
                                 rectangle: [[10, 12], [33, 45]]
         :param penName: if it is not defined 'default' pen is used
         :type penName: str
+        :param brushName: if it is not defined 'default' brush is used
+        :type brushName: str
         :param label: label, which will be drawn with point. It is
                       relevant just for 'point' type
         :type label: str
@@ -348,15 +389,26 @@ class GraphicsSetItem:
         self.coords = coords
 
         self.properties = {"penName": penName,
+                           "brushName": brushName,
                            "hide": hide,
                            "label": label}
         self.id = wx.NewId()
+
+    def AddProperty(self, propName):
+        """Adds new property, to set it, call SetPropertyVal afterwards.
+
+        :param propName - name of the newly defined property
+        :type propName: str
+        """
+        if not propName in self.properties:
+            self.properties[propName] = None
 
     def SetPropertyVal(self, propName, propVal):
         """Set property value
 
         :param propName: - property name: "penName", "hide" or "label"
                          - property "label" is relevant just for 'point' type
+                         - or newly defined property name
         :type propName: str
         :param propVal: property value to be set
 

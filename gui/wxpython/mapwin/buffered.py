@@ -128,6 +128,8 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         self.mouseLeftUpPointer = Signal('BufferedWindow.mouseLeftUpPointer')
         # Emitted when left mouse button is released
         self.mouseLeftUp = Signal('BufferedWindow.mouseLeftUp')
+        # Emitted when right mouse button is released
+        self.mouseRightUp = Signal('BufferedWindow.mouseRightUp')
         # Emitted when left mouse button was pressed
         self.mouseLeftDown = Signal('BufferedWindow.mouseLeftDown')
         # Emitted after double-click
@@ -250,7 +252,8 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         self.PopupMenu(menu)
         menu.Destroy()
 
-    def Draw(self, pdc, img = None, drawid = None, pdctype = 'image', coords = [0, 0, 0, 0], pen = None):
+    def Draw(self, pdc, img=None, drawid=None, pdctype='image',
+             coords=[0, 0, 0, 0], pen=None, brush=None):
         """Draws map and overlay decorations
         """
         if drawid is None:
@@ -307,7 +310,9 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
 
         elif pdctype == 'box': # draw a box on top of the map
             if pen:
-                pdc.SetBrush(wx.Brush(wx.CYAN, wx.TRANSPARENT))
+                if not brush:
+                    brush = wx.Brush(wx.CYAN, wx.TRANSPARENT)
+                pdc.SetBrush(brush)
                 pdc.SetPen(pen)
                 x2 = max(coords[0],coords[2])
                 x1 = min(coords[0],coords[2])
@@ -367,7 +372,9 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         elif pdctype == 'polygon':
             if pen:
                 pdc.SetPen(pen)
-                pdc.SetBrush(wx.TRANSPARENT_BRUSH)
+                if not brush:
+                    brush = wx.TRANSPARENT_BRUSH
+                pdc.SetBrush(brush)
                 pdc.DrawPolygon(points=coords)
                 x = min(coords, key=lambda x: x[0])[0]
                 y = min(coords, key=lambda x: x[1])[1]
@@ -378,7 +385,9 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         elif pdctype == 'circle': # draw circle
             if pen:
                 pdc.SetPen(pen)
-                pdc.SetBrush(wx.TRANSPARENT_BRUSH)
+                if not brush:
+                    brush = wx.TRANSPARENT_BRUSH
+                pdc.SetBrush(brush)
                 radius = abs(coords[2] - coords[0]) / 2
                 pdc.DrawCircle(max(coords[0], coords[2]) - radius,
                                max(coords[1], coords[3]) - radius, radius=radius)
@@ -540,10 +549,14 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         except NotImplementedError as e:
             print >> sys.stderr, e
             self.pdcDec.DrawToDC(dc)
-
         # draw temporary object on the foreground
-        ### self.pdcTmp.DrawToDCClipped(dc, rgn)
-        self.pdcTmp.DrawToDC(dc)
+        try:
+            gcdc = wx.GCDC(dc)
+            self.pdcTmp.DrawToDC(gcdc)
+        except NotImplementedError as e:
+            print >> sys.stderr, e
+            self.pdcTmp.DrawToDC(dc)
+
 
         if switchDraw:
             self.redrawAll = False
@@ -1125,7 +1138,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
 
         return self.lineid
 
-    def DrawRectangle(self, pdc, point1, point2, pen, drawid=None):
+    def DrawRectangle(self, pdc, point1, point2, pen, brush=None, drawid=None):
         """Draw rectangle (not filled) in PseudoDC
 
         :param pdc: PseudoDC
@@ -1137,10 +1150,11 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         Debug.msg(4, "BufferedWindow.DrawRectangle(): pdc=%s, point1=%s, point2=%s" % \
                   (pdc, point1, point2))
         coords = [point1[0], point1[1], point2[0], point2[1]]
-        self.lineid = self.Draw(pdc, drawid=drawid, pdctype='box', coords=coords, pen=pen)
+        self.lineid = self.Draw(pdc, drawid=drawid, pdctype='box', coords=coords,
+                                pen=pen, brush=brush)
         return self.lineid
 
-    def DrawCircle(self, pdc, coords, radius, pen, drawid=None):
+    def DrawCircle(self, pdc, coords, radius, pen, brush=None, drawid=None):
         """Draw circle (not filled) in PseudoDC
 
         :param pdc: PseudoDC
@@ -1153,10 +1167,11 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
                   (pdc, coords, radius))
         newcoords = [coords[0] - radius, coords[1] - radius,
                      coords[0] + radius, coords[1] + radius]
-        self.lineid = self.Draw(pdc, drawid=drawid, pdctype='circle', coords=newcoords, pen=pen)
+        self.lineid = self.Draw(pdc, drawid=drawid, pdctype='circle', coords=newcoords,
+                                pen=pen, brush=brush)
         return self.lineid
 
-    def DrawPolygon(self, pdc, coords, pen, drawid=None):
+    def DrawPolygon(self, pdc, coords, pen, brush=None, drawid=None):
         """Draws polygon from a list of points (do not append the first point)
 
         :param pdc: PseudoDC
@@ -1164,8 +1179,11 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         :param pen: pen
         :param drawid: id of the drawn object (used by PseudoDC)
         """
+        # avid wx.GCDC assert
+        if len(coords) <= 1:
+            return None
         self.lineid = self.Draw(pdc, drawid=drawid, pdctype='polygon',
-                                coords=coords, pen=pen)
+                                coords=coords, pen=pen, brush=brush)
         return self.lineid
 
     def _computeZoomToPointAndRecenter(self, position, zoomtype):
@@ -1468,6 +1486,9 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
 
         self.redrawAll = True
         self.Refresh()
+
+        coords = self.Pixel2Cell(event.GetPosition())
+        self.mouseRightUp.emit(x=coords[0], y=coords[1])
 
         event.Skip()
 
