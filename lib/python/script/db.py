@@ -89,8 +89,9 @@ def db_table_exist(table, **args):
         ok = False
     finally:
         nuldev.close()
-    
+
     return ok
+
 
 def db_connection(force=False):
     """Return the current database connection parameters
