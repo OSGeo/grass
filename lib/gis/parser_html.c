@@ -74,7 +74,7 @@ void G__usage_html(void)
     }
     fprintf(stdout, "<h2>%s</h2>\n", _("SYNOPSIS"));
     fprintf(stdout, "<div id=\"name\"><b>%s</b><br></div>\n", st->pgm_name);
-    fprintf(stdout, "<b>%s help</b><br>\n", st->pgm_name);
+    fprintf(stdout, "<b>%s --help</b><br>\n", st->pgm_name);
 
     fprintf(stdout, "<div id=\"synopsis\"><b>%s</b>", st->pgm_name);
 
@@ -133,17 +133,18 @@ void G__usage_html(void)
     fprintf(stdout, " [--<b>help</b>] ");
     fprintf(stdout, " [--<b>verbose</b>] ");
     fprintf(stdout, " [--<b>quiet</b>] ");
-
+    fprintf(stdout, " [--<b>ui</b>] ");
+    
     fprintf(stdout, "\n</div>\n");
 
 
     /* now long version */
     fprintf(stdout, "\n");
     fprintf(stdout, "<div id=\"flags\">\n");
+    fprintf(stdout, "<h3>%s:</h3>\n", _("Flags"));
+    fprintf(stdout, "<dl>\n");
     if (st->n_flags || new_prompt) {
 	flag = &st->first_flag;
-	fprintf(stdout, "<h3>%s:</h3>\n", _("Flags"));
-	fprintf(stdout, "<dl>\n");
 	while (st->n_flags && flag != NULL) {
 	    fprintf(stdout, "<dt><b>-%c</b></dt>\n", flag->key);
 
@@ -167,18 +168,21 @@ void G__usage_html(void)
 	    fprintf(stdout, "<dd>%s</dd>\n",
 		    _("Allow output files to overwrite existing files"));
 	}
-
-	fprintf(stdout, "<dt><b>--help</b></dt>\n");
-	fprintf(stdout, "<dd>%s</dd>\n", _("Print usage summary"));
-
-	fprintf(stdout, "<dt><b>--verbose</b></dt>\n");
-	fprintf(stdout, "<dd>%s</dd>\n", _("Verbose module output"));
-
-	fprintf(stdout, "<dt><b>--quiet</b></dt>\n");
-	fprintf(stdout, "<dd>%s</dd>\n", _("Quiet module output"));
-
-	fprintf(stdout, "</dl>\n");
     }
+    /* these flags are always available */
+    fprintf(stdout, "<dt><b>--help</b></dt>\n");
+    fprintf(stdout, "<dd>%s</dd>\n", _("Print usage summary"));
+
+    fprintf(stdout, "<dt><b>--verbose</b></dt>\n");
+    fprintf(stdout, "<dd>%s</dd>\n", _("Verbose module output"));
+
+    fprintf(stdout, "<dt><b>--quiet</b></dt>\n");
+    fprintf(stdout, "<dd>%s</dd>\n", _("Quiet module output"));
+
+    fprintf(stdout, "<dt><b>--ui</b></dt>\n");
+    fprintf(stdout, "<dd>%s</dd>\n", _("Force launching GUI dialog"));
+
+    fprintf(stdout, "</dl>\n");
     fprintf(stdout, "</div>\n");
 
     fprintf(stdout, "\n");
