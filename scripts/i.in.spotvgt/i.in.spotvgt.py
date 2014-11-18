@@ -45,11 +45,12 @@
 #% required : no
 #%end
 
-import sys
 import os
 import atexit
 import string
 import grass.script as grass
+from grass.exceptions import CalledModuleError
+
 
 vrt = """<VRTDataset rasterXSize="$XSIZE" rasterYSize="$YSIZE">
  <SRS>GEOGCS[&quot;wgs84&quot;,DATUM[&quot;WGS_1984&quot;,SPHEROID[&quot;wgs84&quot;,6378137,298.257223563],TOWGS84[0.000,0.000,0.000]],PRIMEM[&quot;Greenwich&quot;,0],UNIT[&quot;degree&quot;,0.0174532925199433]]</SRS>
@@ -154,8 +155,10 @@ def main():
 
     ## let's import the NDVI map...
     grass.message(_("Importing SPOT VGT NDVI map..."))
-    if grass.run_command('r.in.gdal', input = vrtfile, output = name) != 0:
-	grass.fatal(_("An error occurred. Stop."))
+    try:
+        grass.run_command('r.in.gdal', input=vrtfile, output=name)
+    except CalledModuleError:
+        grass.fatal(_("An error occurred. Stop."))
 
     grass.message(_("Imported SPOT VEGETATION NDVI map <%s>.") % name)
 
@@ -223,8 +226,10 @@ def main():
 
 	## let's import the SM quality map...
 	smfile = name + '.sm'
-	if grass.run_command('r.in.gdal', input = vrtfile, output = smfile) != 0:
-	    grass.fatal(_("An error occurred. Stop."))
+        try:
+            grass.run_command('r.in.gdal', input=vrtfile, output=smfile)
+        except CalledModuleError:
+            grass.fatal(_("An error occurred. Stop."))
 
 	# some of the possible values:
 	rules = [r + '\n' for r in [

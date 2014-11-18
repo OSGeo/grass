@@ -54,6 +54,7 @@ import os
 import string
 
 import grass.script as grass
+from grass.exceptions import CalledModuleError
 
 # substitute variables (gisdbase, location_name, mapset)
 def substitute_db(database):
@@ -88,8 +89,10 @@ def create_db(driver, database):
 
     grass.info(_("Target database doesn't exist, "
                  "creating a new database using <%s> driver...") % driver)
-    if 0 != grass.run_command('db.createdb', driver = driver,
-                              database = subst_database):
+    try:
+        grass.run_command('db.createdb', driver = driver,
+                          database = subst_database)
+    except CalledModuleError:
         grass.fatal(_("Unable to create database <%s> by driver <%s>") % \
                         (subst_database, driver))
         
@@ -105,11 +108,13 @@ def copy_tab(from_driver, from_database, from_table,
         return False
     
     grass.info("Copying table <%s> to target database..." % to_table)
-    if 0 != grass.run_command('db.copy', from_driver = from_driver,
-                              from_database = from_database,
-                              from_table = from_table, to_driver = to_driver,
-                              to_database = to_database,
-                              to_table = to_table):
+    try:
+        grass.run_command('db.copy', from_driver = from_driver,
+                          from_database = from_database,
+                          from_table = from_table, to_driver = to_driver,
+                          to_database = to_database,
+                          to_table = to_table)
+    except CalledModuleError:
         grass.fatal(_("Unable to copy table <%s>") % from_table)
     
     return True
@@ -117,13 +122,17 @@ def copy_tab(from_driver, from_database, from_table,
 # drop tables if required (-d)
 def drop_tab(vector, layer, table, driver, database):
     # disconnect
-    if 0 != grass.run_command('v.db.connect', flags = 'd', quiet = True, map = vector,
-			      layer = layer, table = table):
-	grass.warning(_("Unable to disconnect table <%s> from vector <%s>") % (table, vector))
+    try:
+        grass.run_command('v.db.connect', flags = 'd', quiet = True, map = vector,
+			          layer = layer, table = table)
+    except CalledModuleError:
+        grass.warning(_("Unable to disconnect table <%s> from vector <%s>") % (table, vector))
     # drop table
-    if 0 != grass.run_command('db.droptable', quiet = True, flags = 'f',
-                              driver = driver, database = database,
-                              table = table):
+    try:
+        grass.run_command('db.droptable', quiet = True, flags = 'f',
+                          driver = driver, database = database,
+                          table = table)
+    except CalledModuleError:
         grass.fatal(_("Unable to drop table <%s>") % table)
         
 # create index on key column
@@ -132,9 +141,11 @@ def create_index(driver, database, table, index_name, key):
 	return False
 
     grass.info(_("Creating index <%s>...") % index_name)
-    if 0 != grass.run_command('db.execute', quiet = True,
-                              driver = driver, database = database,
-                              sql = "create unique index %s on %s(%s)" % (index_name, table, key)):
+    try:
+        grass.run_command('db.execute', quiet = True,
+                          driver = driver, database = database,
+                          sql = "create unique index %s on %s(%s)" % (index_name, table, key))
+    except CalledModuleError:
         grass.warning(_("Unable to create index <%s>") % index_name)
 
 def main():
@@ -228,9 +239,11 @@ def main():
 
                 # reconnect tables (don't use substituted new_database)
 		# NOTE: v.db.connect creates an index on the key column
-                if 0 != grass.run_command('v.db.connect', flags = 'o', quiet = True, map = vect,
-                                          layer = layer, driver = new_driver, database = new_database,
-                                          table = new_schema_table, key = key):
+                try:
+                    grass.run_command('v.db.connect', flags = 'o', quiet = True, map = vect,
+                                      layer = layer, driver = new_driver, database = new_database,
+                                      table = new_schema_table, key = key)
+                except CalledModuleError:
                     grass.warning(_("Unable to connect table <%s> to vector <%s> on layer <%s>") %
 				  (table, vect, str(layer)))
 

@@ -86,6 +86,8 @@ import string
 import re
 
 import grass.script as grass
+from grass.exceptions import CalledModuleError
+
 
 #.... todo ....
 
@@ -168,12 +170,12 @@ def main():
     grass.verbose("Importing data ...")
 
     tmp_gpx = tmp + ".gpx"
-    ret = grass.run_command('v.in.ogr', dsn = tmp_gpx, output = output,
-			    type = type, format = 'GPX', lco = linetype,
-			    dsco = "GPX_USE_EXTENSIONS=YES", quiet = True)
-    if ret != 0:
-	grass.fatal(_("Error importing data"))
-
+    try:
+        grass.run_command('v.in.ogr', dsn=tmp_gpx, output=output,
+                          type=type, format='GPX', lco=linetype,
+                          dsco="GPX_USE_EXTENSIONS=YES", quiet=True)
+    except CalledModuleError:
+        grass.fatal(_("Error importing data"))
 
     #### set up projection info
     # TODO: check if we are already in ll/WGS84.  If so skip m.proj step.

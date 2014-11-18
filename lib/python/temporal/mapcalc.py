@@ -16,6 +16,7 @@ from space_time_datasets import *
 from open_stds import *
 from multiprocessing import Process
 import grass.script as gscript
+from grass.exceptions import CalledModuleError
 
 ############################################################################
 
@@ -342,16 +343,22 @@ def dataset_mapcalculator(inputs, output, type, expression, base, method,
 
 def _run_mapcalc2d(expr):
     """Helper function to run r.mapcalc in parallel"""
-    exit(gscript.run_command("r.mapcalc", expression=expr,
-                            overwrite=gscript.overwrite(), quiet=True))
+    try:
+        gscript.run_command("r.mapcalc", expression=expr,
+                            overwrite=gscript.overwrite(), quiet=True)
+    except CalledModuleError:
+        exit(1)
 
 ###############################################################################
 
 
 def _run_mapcalc3d(expr):
     """Helper function to run r3.mapcalc in parallel"""
-    exit(gscript.run_command("r3.mapcalc", expression=expr,
-                            overwrite=gscript.overwrite(), quiet=True))
+    try:
+        gscript.run_command("r3.mapcalc", expression=expr,
+                            overwrite=gscript.overwrite(), quiet=True)
+    except CalledModuleError:
+        exit(1)
 
 ###############################################################################
 

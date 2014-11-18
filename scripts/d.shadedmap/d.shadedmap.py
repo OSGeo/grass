@@ -43,6 +43,8 @@
 import os
 import sys
 from grass.script import core as grass
+from grass.exceptions import CalledModuleError
+
 
 def main():
     drape_map = options['drapemap']
@@ -63,9 +65,12 @@ def main():
         grass.run_command('g.remove', quiet=True, flags='f',
                           type='rast', name='%s,%s,%s' % (tmp_r, tmp_g, tmp_b))
 
-
-    ret = grass.run_command("d.his", h_map = drape_map, i_map = relief_map,
-                            brighten = brighten)
+    ret = 0
+    try:
+        grass.run_command('d.his', h_map=drape_map, i_map=relief_map,
+                          brighten=brighten)
+    except CalledModuleError:
+        ret = 1
 
     sys.exit(ret)
 

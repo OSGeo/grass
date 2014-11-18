@@ -23,6 +23,8 @@
 
 import sys
 from grass.script import core as grass
+from grass.exceptions import CalledModuleError
+
 
 def main():
     env = grass.gisenv()
@@ -32,11 +34,13 @@ def main():
     for vect in grass.list_grouped('oldvect')[mapset]:
 	inmap = "%s@%s" % (vect, mapset)
 	outmap = vect.replace(".", "_")
-	if grass.run_command("v.convert", input = inmap, output = outmap) == 0:
-	    converted += 1
-	else:
-	    grass.warning(_("Error converting map <%s> to <%s>") % (inmap, outmap))
-	    ret = 1
+        try:
+            grass.run_command("v.convert", input=inmap, output=outmap)
+        except CalledModuleError:
+            grass.warning(_("Error converting map <%s> to <%s>") % (inmap, outmap))
+            ret = 1
+        else:
+            converted += 1
 
 	if converted < 1:
 	    grass.warning(_("No vector maps converted as no old vector maps present in current mapset."))

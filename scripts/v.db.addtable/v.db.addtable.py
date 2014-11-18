@@ -55,6 +55,8 @@
 import sys
 import os
 import grass.script as grass
+from grass.exceptions import CalledModuleError
+
 
 def main():
     vector = options['map']
@@ -116,9 +118,12 @@ def main():
         grass.verbose(_("Creating table with columns (%s)...") % column_def)
         
         sql = "CREATE TABLE %s (%s)" % (table, column_def)
-        if grass.run_command('db.execute', database = database, driver = driver, sql = sql) != 0:
+        try:
+            grass.run_command('db.execute',
+                              database=database, driver=driver, sql=sql)
+        except CalledModuleError:
             grass.fatal(_("Unable to create table <%s>") % table)
-    
+
     # connect the map to the DB:
     if schema is not '':
         table = '%s.%s' (schema, table)

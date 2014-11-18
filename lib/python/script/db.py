@@ -21,6 +21,7 @@ for details.
 
 from core import *
 from utils import try_remove
+from grass.exceptions import CalledModuleError
 
 
 def db_describe(table, **args):
@@ -80,13 +81,16 @@ def db_table_exist(table, **args):
     :return: True for success, False otherwise
     """
     nuldev = file(os.devnull, 'w+')
-    ret = run_command('db.describe', flags = 'c', table = table,
-                      stdout = nuldev, stderr = nuldev, **args)
-    nuldev.close()
+    ok = True
+    try:
+        run_command('db.describe', flags='c', table=table,
+                    stdout=nuldev, stderr=nuldev, **args)
+    except CalledModuleError:
+        ok = False
+    finally:
+        nuldev.close()
     
-    if ret == 0:
-        return True
-    return False
+    return ok
 
 def db_connection(force=False):
     """Return the current database connection parameters
@@ -146,13 +150,11 @@ def db_select(sql=None, filename=None, table=None, **args):
 
     if 'sep' not in args:
         args['sep'] = '|'
-    
-    ret = run_command('db.select', quiet = True,
-                      flags = 'c',
-                      output = fname,
-                      **args)
-    
-    if ret != 0:
+
+    try:
+        run_command('db.select', quiet=True, flags='c',
+                    output=fname, **args)
+    except CalledModuleError:
         fatal(_("Fetching data failed"))
 
     ofile = open(fname)

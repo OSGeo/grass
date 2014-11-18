@@ -90,6 +90,7 @@ import os
 import atexit
 
 import grass.script as grass
+from grass.exceptions import CalledModuleError
 
 tmp_rmaps = list()
 tmp_vmaps = list()
@@ -169,31 +170,41 @@ def main():
         # to ignore MASKed original values
         if usermask:
             grass.message(_("Restoring user mask (MASK)..."))
-            if grass.run_command('g.rename', quiet = quiet, rast = (usermask, 'MASK')) != 0:
+            try:
+                grass.run_command('g.rename', quiet=quiet, rast=(usermask, 'MASK'))
+            except CalledModuleError:
                 grass.warning(_("Failed to restore user MASK!"))
             usermask = None
     
         # grow identified holes by X pixels
         grass.message(_("Growing NULL areas"))
         tmp_rmaps.append(prefix + 'grown')
-        if grass.run_command('r.grow', input = prefix + 'nulls', radius = edge + 0.01,
-                             old = 1, new = 1, out = prefix + 'grown', quiet = quiet) != 0:
+        try:
+            grass.run_command('r.grow', input=prefix + 'nulls',
+                              radius=edge + 0.01, old=1, new=1,
+                              out=prefix + 'grown', quiet=quiet)
+        except CalledModuleError:
             grass.fatal(_("abandoned. Removing temporary map, restoring user mask if needed:"))
-        
+
         # assign unique IDs to each hole or hole system (holes closer than edge distance)
         grass.message(_("Assigning IDs to NULL areas"))
         tmp_rmaps.append(prefix + 'clumped')
-        if grass.run_command('r.clump', input = prefix + 'grown', output = prefix + 'clumped', quiet = quiet) != 0:
+        try:
+            grass.run_command('r.clump', input=prefix + 'grown', output=prefix + 'clumped', quiet=quiet)
+        except CalledModuleError:
             grass.fatal(_("abandoned. Removing temporary map, restoring user mask if needed:"))
-        
+
         # get a list of unique hole cat's
         grass.mapcalc("$out = if(isnull($inp), null(), $clumped)",
                         out = prefix + 'holes', inp = prefix + 'nulls', clumped = prefix + 'clumped')
         tmp_rmaps.append(prefix + 'holes')
         
         # use new IDs to identify holes
-        if grass.run_command('r.to.vect', flags = 'v', input = prefix + 'holes', output = prefix + 'holes',
-                            type = 'area', quiet = quiet) != 0:
+        try:
+            grass.run_command('r.to.vect', flags='v',
+                              input=prefix + 'holes', output=prefix + 'holes',
+                              type='area', quiet=quiet)
+        except:
             grass.fatal(_("abandoned. Removing temporary maps, restoring user mask if needed:"))
         tmp_vmaps.append(prefix + 'holes')
         
@@ -220,20 +231,31 @@ def main():
             grass.message(_("Filling hole %s of %s") % (hole_n, len(cat_list)))
             hole_n = hole_n + 1
             # cut out only CAT hole for processing
-            if grass.run_command('v.extract', input = prefix + 'holes', output = holename + '_pol',
-                                cats = cat, quiet = quiet) != 0:
+            try:
+                grass.run_command('v.extract', input=prefix + 'holes',
+                                  output=holename + '_pol',
+                                  cats=cat, quiet=quiet)
+            except CalledModuleError:
                 grass.fatal(_("abandoned. Removing temporary maps, restoring user mask if needed:"))
             tmp_vmaps.append(holename + '_pol')
             
             # zoom to specific hole with a buffer of two cells around the hole to remove rest of data
-            if grass.run_command('g.region', vect = holename + '_pol', align = input, 
-                                w = 'w-%d' % (edge * 2 * ew_res), e = 'e+%d' % (edge * 2 * ew_res), 
-                                n = 'n+%d' % (edge * 2 * ns_res), s = 's-%d' % (edge * 2 * ns_res),
-                                quiet = quiet) != 0:
+            try:
+                grass.run_command('g.region',
+                                  vect=holename + '_pol', align=input, 
+                                  w = 'w-%d' % (edge * 2 * ew_res),
+                                  e = 'e+%d' % (edge * 2 * ew_res), 
+                                  n = 'n+%d' % (edge * 2 * ns_res),
+                                  s = 's-%d' % (edge * 2 * ns_res),
+                                  quiet=quiet)
+            except CalledModuleError:
                 grass.fatal(_("abandoned. Removing temporary maps, restoring user mask if needed:"))
             
             # remove temporary map to not overfill disk
-            if grass.run_command('g.remove', flags='bf', type='vect', name=holename + '_pol', quiet=quiet) != 0:
+            try:
+                grass.run_command('g.remove', flags='fb', type='vect',
+                                  name=holename + '_pol', quiet=quiet)
+            except CalledModuleError:
                 grass.fatal(_("abandoned. Removing temporary maps, restoring user mask if needed:"))
             tmp_vmaps.remove(holename + '_pol')
             
@@ -248,8 +270,10 @@ def main():
             
             # grow hole border to get it's edge area
             tmp_rmaps.append(holename + '_grown')
-            if grass.run_command('r.grow', input = holename, radius = edge + 0.01,
-                             old = -1, out = holename + '_grown', quiet = quiet) != 0:
+            try:
+                grass.run_command('r.grow', input=holename, radius=edge + 0.01,
+                             old=-1, out=holename + '_grown', quiet=quiet)
+            except CalledModuleError:
                 grass.fatal(_("abandoned. Removing temporary map, restoring user mask if needed:"))
             
             # no idea why r.grow old=-1 doesn't replace existing values with NULL
@@ -259,8 +283,11 @@ def main():
             
             # convert to points for interpolation
             tmp_vmaps.append(holename)
-            if grass.run_command('r.to.vect', input = holename + '_edges', output = holename,
-                                type = 'point', flags = 'z', quiet = quiet) != 0:
+            try:
+                grass.run_command('r.to.vect',
+                                  input=holename + '_edges', output=holename,
+                                  type='point', flags='z', quiet=quiet)
+            except CalledModuleError:
                 grass.fatal(_("abandoned. Removing temporary maps, restoring user mask if needed:"))
             
             # count number of points to control segmax parameter for interpolation:
@@ -279,9 +306,12 @@ def main():
             
             # launch v.surf.rst
             tmp_rmaps.append(holename + '_dem')
-            if grass.run_command('v.surf.rst', quiet = quiet, input = holename, elev = holename + '_dem',
-                                 tension = tension, smooth = smooth, 
-                                 segmax = segmax, npmin = npmin) != 0:
+            try:
+                grass.run_command('v.surf.rst', quiet=quiet,
+                                  input=holename, elev=holename + '_dem',
+                                  tension=tension, smooth=smooth, 
+                                  segmax=segmax, npmin=npmin)
+            except CalledModuleError:
                 # GTC Hole is NULL area in a raster map
                 grass.fatal(_("Failed to fill hole %s") % cat)
             
@@ -312,8 +342,11 @@ def main():
                 grass.run_command('g.region', align = input, rast = (filling, holename + '_dem'), quiet = quiet)
                 grass.mapcalc("$out = if(isnull($inp), if(isnull($fill), null(), $fill), $dem)", 
                                 out = filling + '_tmp', inp = holename, dem = holename + '_dem', fill = filling)
-                if grass.run_command('g.rename', rast = (filling + '_tmp', filling), 
-                                    overwrite = True, quiet = quiet) != 0:
+                try:
+                    grass.run_command('g.rename',
+                                      rast=(filling + '_tmp', filling),
+                                      overwrite=True, quiet=quiet)
+                except CalledModuleError:
                     grass.fatal(_("abandoned. Removing temporary maps, restoring user mask if needed:"))
                 tmp_rmaps.remove(filling + '_tmp') # this map has been removed. No need for later cleanup.
             
@@ -325,15 +358,23 @@ def main():
                 tmp_rmaps.remove(holename + '_dem')
             except:
                 pass
-            if grass.run_command('g.remove', quiet=quiet, flags='bf',
-                type='rast', name=(holename, holename + '_grown', holename + '_edges', holename + '_dem')) != 0:
+            try:
+                grass.run_command('g.remove', quiet=quiet,
+                                  flags='fb', type='rast',
+                                  name=(holename,
+                                        holename + '_grown',
+                                        holename + '_edges',
+                                        holename + '_dem'))
+            except CalledModuleError:
                 grass.fatal(_("abandoned. Removing temporary maps, restoring user mask if needed:"))
             try:
                 tmp_vmaps.remove(holename)
             except:
                 pass
-            if grass.run_command('g.remove', quiet=quiet, flags='bf',
-                type='vect', name=holename) != 0:
+            try:
+                grass.run_command('g.remove', quiet=quiet, flags='fb',
+                                  type='vect', name=holename)
+            except CalledModuleError:
                 grass.fatal(_("abandoned. Removing temporary maps, restoring user mask if needed:"))
     
     #check if method is different from rst to use r.resamp.bspline
@@ -361,7 +402,9 @@ def main():
     # restoring user's mask, if present:
     if usermask:
         grass.message(_("Restoring user mask (MASK)..."))
-        if grass.run_command('g.rename', quiet = quiet, rast = (usermask, 'MASK')) != 0:
+        try:
+            grass.run_command('g.rename', quiet=quiet, rast=(usermask, 'MASK'))
+        except CalledModuleError:
             grass.warning(_("Failed to restore user MASK!"))
         usermask = None
 

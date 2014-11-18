@@ -37,12 +37,13 @@
 #% required : no
 #%end
 
-import sys
 import os
 import shutil
 import glob
 from grass.script.utils import try_rmdir, try_remove, basename
 from grass.script import core as grass
+from grass.exceptions import CalledModuleError
+
 
 def main():
     filename = options['file']
@@ -131,10 +132,12 @@ def main():
     layer = dict(point = 'LAB', line = 'ARC', area = ['LAB','ARC'])
     itype = dict(point = 'point', line = 'line', area = 'centroid')
 
-    if grass.run_command('v.in.ogr', flags = 'o', dsn = e00shortname,
-			 layer = layer[type], type = itype[type],
-			 output = name) != 0:
-	grass.fatal(_("An error occurred while running v.in.ogr"))
+    try:
+        grass.run_command('v.in.ogr', flags='o', dsn=e00shortname,
+                          layer=layer[type], type=itype[type],
+                          output=name)
+    except CalledModuleError:
+        grass.fatal(_("An error occurred while running v.in.ogr"))
 
     grass.message(_("Imported <%s> vector map <%s>.") % (type, name))
 

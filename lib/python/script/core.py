@@ -29,8 +29,7 @@ import codecs
 import types as python_types
 
 from utils import KeyValue, parse_key_val, basename, encode
-
-from grass.exceptions import ScriptError
+from grass.exceptions import ScriptError, CalledModuleError
 
 # i18N
 import gettext
@@ -354,7 +353,15 @@ def run_command(*args, **kwargs):
     :return: exit code (0 for success)
     """
     ps = start_command(*args, **kwargs)
-    return ps.wait()
+    returncode = ps.wait()
+    if returncode:
+        # TODO: construction of the whole command is far from perfect
+        args = make_command(*args, **kwargs)
+        raise CalledModuleError(module=None, code=' '.join(args),
+                                returncode=returncode)
+    else:
+        # the else is just for compatibility, remove before 7.1
+        return 0
 
 
 def pipe_command(*args, **kwargs):
@@ -403,8 +410,15 @@ def read_command(*args, **kwargs):
 
     :return: stdout
     """
-    ps = pipe_command(*args, **kwargs)
-    return ps.communicate()[0]
+    process = pipe_command(*args, **kwargs)
+    stdout, unused = process.communicate()
+    returncode = process.poll()
+    if returncode:
+        # TODO: construction of the whole command is far from perfect
+        args = make_command(*args, **kwargs)
+        raise CalledModuleError(module=None, code=' '.join(args),
+                                returncode=returncode)
+    return stdout
 
 
 def parse_command(*args, **kwargs):
@@ -459,10 +473,17 @@ def write_command(*args, **kwargs):
     :return: return code
     """
     stdin = kwargs['stdin']
-    p = feed_command(*args, **kwargs)
-    p.stdin.write(stdin)
-    p.stdin.close()
-    return p.wait()
+    process = feed_command(*args, **kwargs)
+    process.communicate(stdin)
+    returncode = process.poll()
+    if returncode:
+        # TODO: construction of the whole command is far from perfect
+        args = make_command(*args, **kwargs)
+        raise CalledModuleError(module=None, code=' '.join(args),
+                                returncode=returncode)
+    else:
+        # the else is just for compatibility, remove before 7.1
+        return 0
 
 
 def exec_command(prog, flags="", overwrite=False, quiet=False, verbose=False,
