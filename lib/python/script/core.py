@@ -884,6 +884,8 @@ def compare_key_value_text_files(filename_a, filename_b, sep=":",
                 return False
     return True
 
+# interface to g.gisenv
+
 
 def gisenv():
     """Returns the output from running g.gisenv (with no arguments), as a
