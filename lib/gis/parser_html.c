@@ -78,8 +78,6 @@ void G__usage_html(void)
 
     fprintf(stdout, "<div id=\"synopsis\"><b>%s</b>", st->pgm_name);
 
-
-
     /* print short version first */
     if (st->n_flags) {
 	flag = &st->first_flag;
@@ -137,13 +135,12 @@ void G__usage_html(void)
     
     fprintf(stdout, "\n</div>\n");
 
-
     /* now long version */
     fprintf(stdout, "\n");
     fprintf(stdout, "<div id=\"flags\">\n");
     fprintf(stdout, "<h3>%s:</h3>\n", _("Flags"));
     fprintf(stdout, "<dl>\n");
-    if (st->n_flags || new_prompt) {
+    if (st->n_flags) {
 	flag = &st->first_flag;
 	while (st->n_flags && flag != NULL) {
 	    fprintf(stdout, "<dt><b>-%c</b></dt>\n", flag->key);
@@ -163,11 +160,11 @@ void G__usage_html(void)
 	    flag = flag->next_flag;
 	    fprintf(stdout, "\n");
 	}
-	if (new_prompt) {
-	    fprintf(stdout, "<dt><b>--overwrite</b></dt>\n");
-	    fprintf(stdout, "<dd>%s</dd>\n",
-		    _("Allow output files to overwrite existing files"));
-	}
+    }
+    if (new_prompt) {
+	fprintf(stdout, "<dt><b>--overwrite</b></dt>\n");
+	fprintf(stdout, "<dd>%s</dd>\n",
+		_("Allow output files to overwrite existing files"));
     }
     /* these flags are always available */
     fprintf(stdout, "<dt><b>--help</b></dt>\n");
