@@ -430,6 +430,8 @@ class Map(object):
 
         self.layerChanged = Signal('Map.layerChanged')
         self.updateProgress = Signal('Map.updateProgress')
+        self.layerRemoved = Signal('Map:layerRemoved')
+        self.layerAdded = Signal('Map:layerAdded')
 
     def GetProjInfo(self):
         """Get projection info"""
@@ -1034,6 +1036,8 @@ class Map(object):
 
         wx.EndBusyCursor()
 
+        self.layerAdded.emit(layer=layer)
+
         return layer
 
     def DeleteAllLayers(self, overlay = False):
@@ -1072,6 +1076,7 @@ class Map(object):
                     os.remove(f)
             list.remove(layer)
 
+            self.layerRemoved.emit(layer=layer)
             return layer
 
         return None
@@ -1123,6 +1128,7 @@ class Map(object):
             raise GException(_("Unable to render map layer <%s>.") %
                              layer.GetName())
 
+        self.layerChanged(layer=layer)
         return layer
 
     def ChangeOpacity(self, layer, opacity):

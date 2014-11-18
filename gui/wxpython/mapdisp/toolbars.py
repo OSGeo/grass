@@ -79,28 +79,29 @@ class MapToolbar(BaseToolbar):
         self._default = self.pointer
         
         # optional tools
+        toolNum = 0
         choices = [ _('2D view'), ]
-        self.toolId = { '2d' : 0 }
+        self.toolId = { '2d' : toolNum }
+        toolNum += 1
         if self.parent.GetLayerManager():
             log = self.parent.GetLayerManager().GetLogWindow()
         
         if haveNviz:
             choices.append(_('3D view'))
-            self.toolId['3d'] = 1
+            self.toolId['3d'] = toolNum
+            toolNum += 1
         else:
             from nviz.main import errorMsg
             if self.parent.GetLayerManager():
-              log.WriteCmdLog(_('3D view mode not available'))
-              log.WriteWarning(_('Reason: %s') % str(errorMsg))
+                log.WriteCmdLog(_('3D view mode not available'))
+                log.WriteWarning(_('Reason: %s') % str(errorMsg))
             
             self.toolId['3d'] = -1
 
         if haveVDigit:
-            choices.append(_('Digitize'))
-            if self.toolId['3d'] > -1:
-                self.toolId['vdigit'] = 2
-            else:
-                self.toolId['vdigit'] = 1
+            choices.append(_("Vector digitizer"))
+            self.toolId['vdigit'] = toolNum
+            toolNum += 1
         else:
             from vdigit.main import errorMsg
             if self.parent.GetLayerManager():
@@ -112,7 +113,9 @@ class MapToolbar(BaseToolbar):
                              'In the meantime you can use "v.digit" from the Develop Vector menu.'), wrap = 60)
             
             self.toolId['vdigit'] = -1
-        
+        choices.append(_("Raster digitizer"))
+        self.toolId['rdigit'] = toolNum
+
         self.combo = wx.ComboBox(parent = self, id = wx.ID_ANY,
                                  choices = choices,
                                  style = wx.CB_READONLY, size = (110, -1))
@@ -218,11 +221,10 @@ class MapToolbar(BaseToolbar):
         """Select / enable tool available in tools list
         """
         tool =  event.GetSelection()
-        
+
         if tool == self.toolId['2d']:
             self.ExitToolbars()
-            self.Enable2D(True)
-            self.ChangeToolsDesc(mode2d = True)            
+            self.Enable2D(True)         
         
         elif tool == self.toolId['3d'] and \
                 not (self.parent.MapWindow3D and self.parent.IsPaneShown('3d')):
@@ -234,6 +236,10 @@ class MapToolbar(BaseToolbar):
             self.ExitToolbars()
             self.parent.AddToolbar("vdigit")
             self.parent.MapWindow.SetFocus()
+
+        elif tool == self.toolId['rdigit']:
+            self.ExitToolbars()
+            self.parent.AddRDigit()
 
     def OnAnalyze(self, event):
         """Analysis tools menu
@@ -261,7 +267,9 @@ class MapToolbar(BaseToolbar):
         if self.parent.GetLayerManager() and \
                 self.parent.GetLayerManager().IsPaneShown('toolbarNviz'):
             self.parent.RemoveNviz()
-        
+        if self.parent.GetToolbar('rdigit'):
+            self.parent.QuitRDigit()
+
     def Enable2D(self, enabled):
         """Enable/Disable 2D display mode specific tools"""
         for tool in (self.zoomRegion,
@@ -269,3 +277,6 @@ class MapToolbar(BaseToolbar):
                      self.analyze,
                      self.printMap):
             self.EnableTool(tool, enabled)
+        self.ChangeToolsDesc(enabled)
+        if enabled:
+            self.combo.SetValue(_("2D view"))

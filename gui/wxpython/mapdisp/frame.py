@@ -343,7 +343,6 @@ class MapFrame(SingleMapFrame):
                                           self.OnFlyThrough, wx.ITEM_CHECK, 8),))
         self._toolSwitcher.AddToolToGroup(group='mouseUse', toolbar=self.toolbars['map'],
                                           tool=self.toolbars['map'].flyThrough)
-        self.toolbars['map'].ChangeToolsDesc(mode2d = False)
         # update status bar
         
         self.statusbarManager.HideStatusbarChoiceItemsByClass(self.statusbarItemsHiddenInNviz)
@@ -477,7 +476,7 @@ class MapFrame(SingleMapFrame):
             
         # vector digitizer
         elif name == "vdigit":
-            self.toolbars['map'].combo.SetValue(_("Digitize"))
+            self.toolbars['map'].combo.SetValue(_("Vector digitizer"))
             self._addToolbarVDigit()
         
         if fixed:
@@ -504,8 +503,7 @@ class MapFrame(SingleMapFrame):
             self._mgr.GetPane('vdigit').Hide()
             self._mgr.GetPane('2d').Show()
             self._switchMapWindow(self.MapWindow2D)
-            
-        self.toolbars['map'].combo.SetValue(_("2D view"))
+
         self.toolbars['map'].Enable2D(True)
         
         self._mgr.Update()
@@ -772,7 +770,9 @@ class MapFrame(SingleMapFrame):
                 self.toolbars['vdigit'].OnExit()
         if self.IsPaneShown('3d'):
             self.RemoveNviz()
-        
+        if hasattr(self, 'rdigit') and self.rdigit:
+            self.rdigit.CleanUp()
+
         if not self._layerManager:
             self.Destroy()
         elif self.page:
@@ -1435,3 +1435,58 @@ class MapFrame(SingleMapFrame):
         map_win.ActivateWin()
 
         self.MapWindow = map_win
+
+    def AddRDigit(self):
+        """Adds raster digitizer: creates toolbar and digitizer controller,
+        binds events and signals."""
+        from rdigit.controller import RDigitController, EVT_UPDATE_PROGRESS
+        from rdigit.toolbars import RDigitToolbar
+
+        self.rdigit = RDigitController(self._giface,
+                                       mapWindow=self.GetMapWindow())
+        self.toolbars['rdigit'] = RDigitToolbar(parent=self, controller=self.rdigit,
+                                                toolSwitcher=self._toolSwitcher)
+        # connect signals
+        self.rdigit.newRasterCreated.connect(self.toolbars['rdigit'].NewRasterAdded)
+        self.rdigit.newRasterCreated.connect(lambda name: self._giface.mapCreated.emit(name=name, ltype='raster'))
+        self.rdigit.newFeatureCreated.connect(self.toolbars['rdigit'].UpdateCellValues)
+        self.rdigit.uploadMapCategories.connect(self.toolbars['rdigit'].UpdateCellValues)
+        self.rdigit.showNotification.connect(lambda text: self.SetStatusText(text, 0))
+        self.rdigit.quitDigitizer.connect(self.QuitRDigit)
+        self.rdigit.Bind(EVT_UPDATE_PROGRESS,
+                         lambda evt: self.statusbarManager.SetProgress(evt.range, evt.value, evt.text))
+        rasters = self.GetMap().GetListOfLayers(ltype='raster', mapset=grass.gisenv()['MAPSET'])
+        self.toolbars['rdigit'].UpdateRasterLayers(rasters)
+        self.toolbars['rdigit'].SelectDefault()
+
+        self.GetMap().layerAdded.connect(self._updateRDigitLayers)
+        self.GetMap().layerRemoved.connect(self._updateRDigitLayers)
+        self.GetMap().layerChanged.connect(self._updateRDigitLayers)
+        self._mgr.AddPane(self.toolbars['rdigit'],
+                          wx.aui.AuiPaneInfo().
+                          Name("rdigit toolbar").Caption(_("Raster Digitizer Toolbar")).
+                          ToolbarPane().Top().Row(1).
+                          LeftDockable(False).RightDockable(False).
+                          BottomDockable(False).TopDockable(True).Floatable().
+                          CloseButton(False).Layer(2).DestroyOnClose().
+                          BestSize((self.toolbars['rdigit'].GetBestSize())))
+        self._mgr.Update()
+
+        self.rdigit.Start()
+
+    def _updateRDigitLayers(self, layer):
+        mapset = grass.gisenv()['MAPSET']
+        self.toolbars['rdigit'].UpdateRasterLayers(
+            rasters=self.GetMap().GetListOfLayers(ltype='raster', mapset=mapset))
+
+    def QuitRDigit(self):
+        """Calls digitizer cleanup, removes digitizer object and disconnects
+        signals from Map."""
+        self.rdigit.CleanUp()
+        # disconnect updating layers
+        self.GetMap().layerAdded.disconnect(self._updateRDigitLayers)
+        self.GetMap().layerRemoved.disconnect(self._updateRDigitLayers)
+        self.GetMap().layerChanged.disconnect(self._updateRDigitLayers)
+
+        self.RemoveToolbar('rdigit')
+        self.rdigit = None
