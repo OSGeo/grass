@@ -6,11 +6,39 @@ raster map and its associated color table (grey255).
 <h2>EXAMPLE</h2>
 
 <div class="code"><pre>
+g.region rast=elevation -p
 r.rgb input=elevation
 </pre></div>
 
+<p>
 In this case <em>r.rgb</em> produces in the current mapset three new
 raster maps - 'elevation.r', 'elevation.g', 'elevation.b'.
+<p>
+<!--
+d.split.frame frames=4
+d.frame -s uno
+d.rast elevation
+d.font Vera
+echo " elevation" | d.text col=black
+
+d.frame -s dos
+d.rast elevation.r
+d.font Vera
+echo " elevation.r" | d.text col=black
+
+d.frame -s tres
+d.rast elevation.g
+d.font Vera
+echo " elevation.g" | d.text col=black
+
+d.frame -s cuatro
+d.rast elevation.b
+d.font Vera
+echo " elevation.b" | d.text col=black
+-->
+<center>
+<img src="r_rgb_elevation.png"><br>
+</center>
 
 <h2>SEE ALSO</h2>
 
