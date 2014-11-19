@@ -55,6 +55,10 @@ class RDigitController(wx.EvtHandler):
         self._backgroundRaster = None
         # name of temporary raster used to backup original state
         self._backupRasterName = None
+        # if we edit an old raster or a new one (important for setting color table)
+        self._editOldRaster = False
+        # type of output raster map (CELL, FCELL, DCELL)
+        self._mapType = None
         # GraphicsSet for drawing areas, lines, points
         self._areas = None
         self._lines = None
@@ -335,6 +339,8 @@ class RDigitController(wx.EvtHandler):
             GError(parent=self._mapWindow, message=_("Failed to create backup copy of edited raster map."))
             return False
         self._editedRaster = name
+        self._mapType = grast.raster_info(map=name)['datatype']
+        self._editOldRaster = True
         return True
 
     def SelectNewMap(self):
@@ -374,7 +380,7 @@ class RDigitController(wx.EvtHandler):
                 gcore.run_command('r.colors', map=name, raster=self._backgroundRaster, quiet=True)
                 if mapType == 'CELL':
                     values = gcore.read_command('r.describe', flags='1n',
-                                                map=backgroundMap, quiet=True).strip()
+                                                map=name, quiet=True).strip()
                     if values:
                         self.uploadMapCategories.emit(values=values.split('\n'))
         except CalledModuleError:
@@ -383,6 +389,7 @@ class RDigitController(wx.EvtHandler):
 
         name = name + '@' + gcore.gisenv()['MAPSET']
         self._editedRaster = name
+        self._mapType = mapType
         self.newRasterCreated.emit(name=name)
 
     def _backupRaster(self, name):
@@ -426,16 +433,17 @@ class RDigitController(wx.EvtHandler):
                 (lastCellValue != item.GetPropertyVal('cellValue') or
                 lastWidthValue != item.GetPropertyVal('widthValue')):
                 if text:
-                    out = self._rasterize(text, lastWidthValue, tempRaster)
+                    out = self._rasterize(text, lastWidthValue, self._mapType, tempRaster)
                     rastersToPatch.append(out)
                     text = []
                 self._writeItem(item, text)
                 out = self._rasterize(text, item.GetPropertyVal('widthValue'),
-                                      tempRaster)
+                                      self._mapType, tempRaster)
                 rastersToPatch.append(out)
                 text = []
             else:
                 self._writeItem(item, text)
+
             lastCellValue = item.GetPropertyVal('cellValue')
             lastWidthValue = item.GetPropertyVal('widthValue')
 
@@ -444,14 +452,17 @@ class RDigitController(wx.EvtHandler):
             wx.PostEvent(self, evt)
         if text:
             out = self._rasterize(text, item.GetPropertyVal('widthValue'),
-                                  tempRaster)
+                                  self._mapType, tempRaster)
             rastersToPatch.append(out)
 
-        gcore.run_command('r.patch', input=sorted(rastersToPatch, reverse=True) + [self._backupRasterName],
+        gcore.run_command('r.patch', input=rastersToPatch[::-1] + [self._backupRasterName],
                           output=self._editedRaster, overwrite=True, quiet=True)
         gcore.run_command('g.remove', type='rast', flags='f', name=rastersToPatch + [tempRaster],
                           quiet=True)
         try:
+            # setting the right color table
+            if self._editOldRaster:
+                return
             if not self._backgroundRaster:
                 table = UserSettings.Get(group='rasterLayer', key='colorTable', subkey='selection')
                 gcore.run_command('r.colors', color=table, map=self._editedRaster, quiet=True)
@@ -484,12 +495,13 @@ class RDigitController(wx.EvtHandler):
         elif item in self._points.GetAllItems():
             self._writeFeature(item, vtype='P', text=text)
 
-    def _rasterize(self, text, bufferDist, tempRaster):
+    def _rasterize(self, text, bufferDist, mapType, tempRaster):
         """Performs the actual rasterization using r.in.poly
         and buffering with r.grow if required.
 
         :param str text: string in r.in.poly format
         :param float bufferDist: buffer distance in map units
+        :param str mapType: CELL, FCELL, DCELL
         :param str tempRaster: name of temporary raster used in computation
 
         :return: output raster map name as a result of digitization
@@ -498,13 +510,15 @@ class RDigitController(wx.EvtHandler):
         asciiFile = tempfile.NamedTemporaryFile(delete=False)
         asciiFile.write('\n'.join(text))
         asciiFile.close()
+
         if bufferDist:
+            bufferDist /= 2.
             gcore.run_command('r.in.poly', input=asciiFile.name, output=tempRaster,
-                              overwrite=True, quiet=True)
+                              type_=mapType, overwrite=True, quiet=True)
             gcore.run_command('r.grow', input=tempRaster, output=output,
                               flags='m', radius=bufferDist, quiet=True)
         else:
             gcore.run_command('r.in.poly', input=asciiFile.name, output=output,
-                              quiet=True)
+                              type_=mapType, quiet=True)
         os.unlink(asciiFile.name)
         return output
