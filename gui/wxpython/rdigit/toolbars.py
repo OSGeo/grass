@@ -79,7 +79,8 @@ class RDigitToolbar(BaseToolbar):
                                        size=(80, -1), validator=FloatValidator())
         self._widthValue.Bind(wx.EVT_TEXT, lambda evt: self._widthValueChanged())
         self._widthValueChanged()
-        self._widthValue.SetToolTipString(_("Width of currently digitized line/point in map units."))
+        self._widthValue.SetToolTipString(
+            _("Width of currently digitized line or diameter of a digitized point in map units."))
         self.InsertControl(8, wx.StaticText(self, label=" %s" % _("Width:")))
         self.InsertControl(9, self._widthValue)
 
@@ -111,7 +112,6 @@ class RDigitToolbar(BaseToolbar):
                                       lambda event: self._controller.Stop())))
 
     def CheckSelectedTool(self, id):
-        print self.toolSwitcher.IsToolInGroup(tool=id, group='mouseUse')
         if self.toolSwitcher.IsToolInGroup(tool=id, group='mouseUse') \
                 and id not in (self.area, self.line, self.point):
             self._controller.SelectType(None)
