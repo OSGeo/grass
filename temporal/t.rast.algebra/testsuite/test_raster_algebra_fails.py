@@ -31,12 +31,14 @@ class TestTRastAlgebraFails(gunittest.TestCase):
 
     def test_error_handling(self):        
         # Syntax error
-        self.assertModuleFail("t.rast.algebra",  expression="R == A {+,equal| precedes| follows,l} B", basename="r")
+        self.assertModuleFail("t.rast.algebra",  expression="R == A {+,equal| precedes| follows,l} B", 
+                                          basename="r")
         # No STRDS
         self.assertModuleFail("t.rast.algebra",  expression="R = NoSTRDS + NoSTRDS", basename="r")
         # No basename
         self.assertModuleFail("t.rast.algebra",  expression="R = A + B")
-
+        # Catch temporal lagebra expressions that are prohibited in the raster algebra
+        self.assertModuleFail("t.rast.algebra",  expression="R = strds(A) + strds(B)", basename="r")
 
 if __name__ == '__main__':
     gunittest.test()
