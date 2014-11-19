@@ -1378,7 +1378,7 @@ class GdalSelect(wx.Panel):
         fileMask += '%s (*.tar;*.TAR)|*.tar;*.TAR|' % _('TAR files')
         fileMask += '%s (*.tar.gz;*.TAR.GZ;*.tgz;*.TGZ)|*.tar.gz;*.TAR.GZ;*.tgz;*.TGZ|' % _('TARGZ files')
         # don't include last '|' - windows and mac throw error
-        fileMask += '%(all)s (*.*)|*.*' % {'all': _('All files')}
+        fileMask += '%(all)s (*)|*' % {'all': _('All files')}
         # only contains formats with extensions hardcoded
 
         self.filePanel = wx.Panel(parent=self)
