@@ -66,6 +66,18 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
         self.m_mremove = pymod.Module('g.remove')
 
     def parse(self, expression, basename = None, overwrite=False):
+        # Check for space time dataset type definitions from temporal algebra
+        l = TemporalRasterAlgebraLexer()
+        l.build()
+        l.lexer.input(expression)
+
+        while True:
+            tok = l.lexer.token()
+            if not tok: break
+            
+            if tok.type == "STVDS" or tok.type == "STRDS" or tok.type == "STR3DS":
+                raise SyntaxError("Syntax error near '%s'" %(tok.type))
+        
         self.lexer = TemporalRasterAlgebraLexer()
         self.lexer.build()
         self.parser = yacc.yacc(module=self, debug=self.debug)

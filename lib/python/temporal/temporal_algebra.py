@@ -367,6 +367,75 @@ for details.
     None || None
     A* =  if condition None  then  A  else  B
     C = A*
+    
+    >>> p = tgis.TemporalAlgebraLexer()
+    >>> p.build()
+    >>> p.debug = True
+    >>> expression =  "D = strds(A) : stvds(B) : str3ds(C)"
+    >>> p.test(expression)
+    D = strds(A) : stvds(B) : str3ds(C)
+    LexToken(NAME,'D',1,0)
+    LexToken(EQUALS,'=',1,2)
+    LexToken(STRDS,'strds',1,4)
+    LexToken(LPAREN,'(',1,9)
+    LexToken(NAME,'A',1,10)
+    LexToken(RPAREN,')',1,11)
+    LexToken(T_SELECT,':',1,13)
+    LexToken(STVDS,'stvds',1,15)
+    LexToken(LPAREN,'(',1,20)
+    LexToken(NAME,'B',1,21)
+    LexToken(RPAREN,')',1,22)
+    LexToken(T_SELECT,':',1,24)
+    LexToken(STR3DS,'str3ds',1,26)
+    LexToken(LPAREN,'(',1,32)
+    LexToken(NAME,'C',1,33)
+    LexToken(RPAREN,')',1,34)
+    
+    >>> p = tgis.TemporalAlgebraLexer()
+    >>> p.build()
+    >>> p.debug = True
+    >>> expression =  "R = if(A {#,during} stvds(C) == 1, A)"
+    >>> p.test(expression)
+    R = if(A {#,during} stvds(C) == 1, A)
+    LexToken(NAME,'R',1,0)
+    LexToken(EQUALS,'=',1,2)
+    LexToken(IF,'if',1,4)
+    LexToken(LPAREN,'(',1,6)
+    LexToken(NAME,'A',1,7)
+    LexToken(T_HASH_OPERATOR,'{#,during}',1,9)
+    LexToken(STVDS,'stvds',1,20)
+    LexToken(LPAREN,'(',1,25)
+    LexToken(NAME,'C',1,26)
+    LexToken(RPAREN,')',1,27)
+    LexToken(CEQUALS,'==',1,29)
+    LexToken(INT,1,1,32)
+    LexToken(COMMA,',',1,33)
+    LexToken(NAME,'A',1,35)
+    LexToken(RPAREN,')',1,36)
+    
+    >>> p = tgis.TemporalAlgebraLexer()
+    >>> p.build()
+    >>> p.debug = True
+    >>> expression =  "R = if({during}, stvds(C) {#,contains} A == 2, A)"
+    >>> p.test(expression)
+    R = if({during}, stvds(C) {#,contains} A == 2, A)
+    LexToken(NAME,'R',1,0)
+    LexToken(EQUALS,'=',1,2)
+    LexToken(IF,'if',1,4)
+    LexToken(LPAREN,'(',1,6)
+    LexToken(T_REL_OPERATOR,'{during}',1,7)
+    LexToken(COMMA,',',1,15)
+    LexToken(STVDS,'stvds',1,17)
+    LexToken(LPAREN,'(',1,22)
+    LexToken(NAME,'C',1,23)
+    LexToken(RPAREN,')',1,24)
+    LexToken(T_HASH_OPERATOR,'{#,contains}',1,26)
+    LexToken(NAME,'A',1,39)
+    LexToken(CEQUALS,'==',1,41)
+    LexToken(INT,2,1,44)
+    LexToken(COMMA,',',1,45)
+    LexToken(NAME,'A',1,47)
+    LexToken(RPAREN,')',1,48)
 
 """
 
@@ -397,6 +466,9 @@ class TemporalAlgebraLexer(object):
         'tsnap'  : 'TSNAP',
         'tshift' : 'TSHIFT',
         'tmap' : 'TMAP',
+        'strds' : 'STRDS',
+        'str3ds' : 'STR3DS',
+        'stvds' : 'STVDS',
     }
     
     # Variables with date and time strings
@@ -659,7 +731,7 @@ class TemporalAlgebraParser(object):
 
     # Setting equal precedence level for select and hash operations.
     precedence = (
-        ('left', 'T_SELECT_OPERATOR', 'T_SELECT', 'T_NOT_SELECT'), # 1
+        ('left', 'T_SELECT_OPERATOR', 'T_SELECT', 'T_NOT_SELECT',  'T_HASH_OPERATOR',  'HASH'), # 1
         ('left', 'AND', 'OR', 'T_COMP_OPERATOR'), #2
         )
 
@@ -731,7 +803,7 @@ class TemporalAlgebraParser(object):
         while True:
             tok = l.lexer.token()
             if not tok: break
-            
+
             # Ignore map layer
             tokens.append(tok.type)
             ignore = False
@@ -742,11 +814,11 @@ class TemporalAlgebraParser(object):
             if tok.type == "NAME" and ignore == False:
                 name_list.append(tok.value)
             count += 1
-        
+
         grans = []
         ttypes = {}
         dbif, connected = init_dbif(self.dbif)
-        
+
         for name in name_list:
             stds = open_old_stds(name,  stdstype,  dbif)
             # We need valid temporal topology
@@ -1014,11 +1086,12 @@ class TemporalAlgebraParser(object):
                 print m.get_bash()
                 m.run()
 
-    def check_stds(self, input, clear = False,  stds_type = None):
+    def check_stds(self, input, clear = False,  stds_type = None,  check_type=True):
         """ Check if input space time dataset exist in database and return its map list.
 
             :param input: Name of space time data set as string or list of maps.
             :param clear: Reset the stored conditional values to empty list.
+            :param check_type: Check the type of the space time dataset to match the global stds type
             :param stds_type: The type of the space time dataset to be opened, if not provided 
                                           then self.stdstype will be used
 
@@ -1089,7 +1162,7 @@ class TemporalAlgebraParser(object):
                 elif clear:
                     map_i.condition_value = []
         else:
-            self.msgr.fatal(_("Wrong type of input"))
+            self.msgr.fatal(_("Wrong type of input " + str(input)))
             
         # We generate a unique map id that will be used
         # in the topology analysis, since the maplist can 
@@ -1397,7 +1470,6 @@ class TemporalAlgebraParser(object):
              >>> p.parse(operator, optype = 'raster')
              >>> print(p.relations, p.temporal, p.function)
              (['during'], 'l', '+')
-
 
         """
         p = TemporalOperatorParser()
@@ -1939,7 +2011,7 @@ class TemporalAlgebraParser(object):
         else:
             return(resultlist)
 
-    ###########################################################################
+###########################################################################
 
     def p_statement_assign(self, t):
         # The expression should always return a list of maps.
@@ -1948,7 +2020,9 @@ class TemporalAlgebraParser(object):
 
         """
         if self.run:
-            dbif, connected = init_dbif(self.dbif) 
+            dbif, connected = init_dbif(self.dbif)
+            map_stds_type = None
+            map_type = None
             if isinstance(t[3], list):
                 num = len(t[3])
                 count = 0
@@ -1958,6 +2032,19 @@ class TemporalAlgebraParser(object):
                     for map_i in t[3]:
                         # Test if temporal extents have been changed by temporal 
                         # relation operators (i|r). 
+                        if count == 0:
+                            maps_stds_type = map_i.get_new_stds_instance(None).get_type()
+                            map_type = map_i.get_type()
+                            if maps_stds_type != self.stdstype:
+                                self.msgr.warning(_("The resulting space time dataset type <%(a)s> is "\
+                                                                "different from the requested type <%(b)s>"\
+                                                                %({"a":maps_stds_type,  "b":self.stdstype})))
+                        else:
+                            map_type_2 = map_i.get_type()
+                            if map_type != map_type_2:
+                                self.msgr.fatal(_("Maps that should be registered in the "\
+                                                           "resulting space time dataset have different types."))
+
                         map_i_extent = map_i.get_temporal_extent_as_tuple()
                         map_test = map_i.get_new_instance(map_i.get_id())
                         map_test.select(dbif)
@@ -1968,8 +2055,9 @@ class TemporalAlgebraParser(object):
                             map_result = map_i.get_new_instance(newident + "@" + self.mapset)
 
                             if map_test.map_exists() and self.overwrite == False:
-                                self.msgr.fatal("Error raster maps with basename %s exist. Use --o flag to overwrite existing file" \
-                                                    %(mapname))
+                                self.msgr.fatal("Error raster maps with basename %s exist. "\
+                                                        "Use --o flag to overwrite existing file" \
+                                                        %(mapname))
 
                             map_result.set_temporal_extent(map_i.get_temporal_extent())
                             map_result.set_spatial_extent(map_i.get_spatial_extent())
@@ -2001,8 +2089,8 @@ class TemporalAlgebraParser(object):
                     process_queue.wait()
                     
                     # Open connection to temporal database.
-                    # Create result space time dataset.                        
-                    resultstds = open_new_stds(t[1], self.stdstype, \
+                    # Create result space time dataset based on the map stds type        
+                    resultstds = open_new_stds(t[1],maps_stds_type, \
                                                              'absolute', t[1], t[1], \
                                                              'mean', self.dbif, \
                                                              overwrite = self.overwrite)                            
@@ -2023,8 +2111,9 @@ class TemporalAlgebraParser(object):
                                 map_i.update_all(dbif)
                             elif map_i.is_in_db(dbif) and self.overwrite == False:
                                 # Raise error if map exists and no overwrite flag is given.
-                                self.msgr.fatal("Error map %s exist in temporal database. Use overwrite flag.  : \n%s" \
-                                                    %(map_i.get_map_id(), cmd.popen.stderr))
+                                self.msgr.fatal("Error map %s exist in temporal database. "
+                                                        "Use overwrite flag.  : \n%s" \
+                                                        %(map_i.get_map_id(), cmd.popen.stderr))
                             else:
                                 # Insert map into temporal database.
                                 map_i.insert(dbif)
@@ -2032,8 +2121,8 @@ class TemporalAlgebraParser(object):
                         success = resultstds.register_map(map_i, dbif)
                     resultstds.update_from_registered_maps(dbif)
                 elif num == 0:
-                    self.msgr.warning('Empty result space time dataset. No map has \
-been registered in %s'  %(t[1] ))
+                    self.msgr.warning("Empty result space time dataset. "\
+                                                  "No map has been registered in %s"  %(t[1] ))
                     # Open connection to temporal database.
                     # Create result space time dataset.                        
                     resultstds = open_new_stds(t[1], self.stdstype, \
@@ -2066,6 +2155,46 @@ been registered in %s'  %(t[1] ))
         """
         t[0] = t[1]
 
+    def p_expr_strds_function(self, t):
+        # Specifiy a explicitely a space time raster dataset
+        # R = A : strds(B) 
+        """
+        expr : STRDS LPAREN stds RPAREN
+        """
+        if self.run:
+            t[0] = self.check_stds(t[3], stds_type = "strds",  check_type=False)
+        else:
+            t[0] = t[3]
+            if self.debug:
+                print "Opening STRDS: ",  t[0]
+
+    def p_expr_str3ds_function(self, t):
+        # Specifiy a explicitely a space time raster dataset
+        # R = A : str3ds(B) 
+        """
+        expr : STR3DS LPAREN stds RPAREN
+        """
+        if self.run:
+            t[0] = self.check_stds(t[3], stds_type = "str3ds",  check_type=False)
+        else:
+            t[0] = t[3]
+            if self.debug:
+                print "Opening STR3DS: ",  t[0]
+
+    def p_expr_stvds_function(self, t):
+        # Specifiy a explicitely a space time vector dataset
+        # R = A : stvds(B) 
+        """
+        expr : STVDS LPAREN stds RPAREN
+        """
+        if self.run:
+            print t[3]
+            t[0] = self.check_stds(t[3], stds_type = "stvds",  check_type=False)
+        else:
+            t[0] = t[3]
+            if self.debug:
+                print "Opening STVDS: ",  t[0]
+
     def p_expr_tmap_function(self, t):
         # Add a single map.
         # Only the spatial extent of the map is evaluated. 
@@ -2094,8 +2223,9 @@ been registered in %s'  %(t[1] ))
                     # Select dataset entry from database.
                     map_i.select(dbif=self.dbif)
             else:
-                raise FatalError(_("Wrong map type <%s> . TMAP only supports single maps that are registered in the temporal GRASS database") %
-                        (map_i.get_type()))
+                raise FatalError(_("Wrong map type <%s> . TMAP only supports single "\
+                                             "maps that are registered in the temporal GRASS database")\
+                                              %(map_i.get_type()))
             # Return map object.
             t[0] = [map_i]
         else:
@@ -2107,6 +2237,9 @@ been registered in %s'  %(t[1] ))
     def p_t_hash(self,t):
         """
         t_hash_var : stds HASH stds
+                        | expr HASH stds
+                        | stds HASH expr
+                        | expr HASH expr
         """
 
         if self.run:
@@ -2119,6 +2252,9 @@ been registered in %s'  %(t[1] ))
     def p_t_hash2(self,t):
         """
         t_hash_var : stds T_HASH_OPERATOR stds
+                      | stds T_HASH_OPERATOR expr
+                      | expr T_HASH_OPERATOR stds
+                      | expr T_HASH_OPERATOR expr
         """
 
         if self.run:

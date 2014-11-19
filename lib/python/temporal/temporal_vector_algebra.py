@@ -106,7 +106,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
     # Setting equal precedence level for select and hash operations.
     precedence = (
-        ('left', 'T_SELECT_OPERATOR', 'T_SELECT', 'T_NOT_SELECT'), # 1
+        ('left', 'T_SELECT_OPERATOR', 'T_SELECT', 'T_NOT_SELECT',  'T_HASH_OPERATOR',  'HASH'), # 1
         ('left', 'AND', 'OR', 'T_COMP_OPERATOR', 'T_OVERLAY_OPERATOR', 'DISOR', \
           'NOT', 'XOR'), #2
         )
@@ -121,6 +121,18 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         self.m_buffer = pygrass.Module('v.buffer', quiet=True, run_=False)
 
     def parse(self, expression, basename = None, overwrite = False):
+        # Check for space time dataset type definitions from temporal algebra
+        l = TemporalVectorAlgebraLexer()
+        l.build()
+        l.lexer.input(expression)
+
+        while True:
+            tok = l.lexer.token()
+            if not tok: break
+            
+            if tok.type == "STVDS" or tok.type == "STRDS" or tok.type == "STR3DS":
+                raise SyntaxError("Syntax error near '%s'" %(tok.type))
+
         self.lexer = TemporalVectorAlgebraLexer()
         self.lexer.build()
         self.parser = yacc.yacc(module=self, debug=self.debug)

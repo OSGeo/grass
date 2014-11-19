@@ -106,7 +106,7 @@ class TestTemporalRasterAlgebra(gunittest.TestCase):
     def test_simple_arith_hash_1(self):
         """Simple arithmetic test including the hash operator"""
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
-        tra.parse(expression='R = A + A {#, equal,l} A', basename="r", overwrite=True)
+        tra.parse(expression='R = A + (A {#, equal,l} A)', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
         D.select()
