@@ -30,6 +30,9 @@ int getformat(FILE * fd, int raster_type, int *null)
 	if (sscanf(buf + 1, "%ld", &x) != 1)
 	    continue;
 	cat = (CELL) x;
+	/* if we want to write zeros, we must use CELL */
+	if (cat == 0)
+	    return USE_CELL;
 	if (first) {
 	    first = 0;
 	    max = cat;
