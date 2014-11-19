@@ -134,7 +134,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
     # Setting equal precedence level for select and hash operations.
     precedence = (
         ('left', 'T_SELECT_OPERATOR', 'T_SELECT', 'T_NOT_SELECT'), # 1
-        ('left', 'ADD', 'SUB', 'T_ARITH2_OPERATOR'), #2
+        ('left', 'ADD', 'SUB', 'T_ARITH2_OPERATOR',  'T_HASH_OPERATOR',  'HASH'), #2
         ('left', 'AND', 'OR', 'T_COMP_OPERATOR', 'MOD', 'DIV', 'MULT',
          'T_ARITH1_OPERATOR'))
 

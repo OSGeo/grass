@@ -63,10 +63,12 @@ class TestTemporalRasterAlgebra(gunittest.TestCase):
                                                 start="2001-03-01", end="2001-04-01", interval=True)
         
     def tearDown(self):
+        return
         self.runModule("t.remove", flags="rf", inputs="R", quiet=True)
 
     @classmethod
     def tearDownClass(cls):
+        return
         """Remove the temporary region 
         """
         cls.runModule("t.remove", flags="rf", inputs="A,B,C,D", quiet=True)
@@ -116,7 +118,7 @@ class TestTemporalRasterAlgebra(gunittest.TestCase):
     def test_simple_arith_hash_1(self):
         """Simple arithmetic test including the hash operator"""
         tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
-        tra.parse(expression='R = A + A # A', basename="r", overwrite=True)
+        tra.parse(expression='R = A + (A # A)', basename="r", overwrite=True)
 
         D = tgis.open_old_stds("R", type="strds")
 
@@ -127,6 +129,19 @@ class TestTemporalRasterAlgebra(gunittest.TestCase):
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 7, 1))
 
+    def test_simple_arith_hash_2(self):
+        """Simple arithmetic test including the hash operator"""
+        tra = tgis.TemporalRasterAlgebraParser(run = True, debug = True)
+        tra.parse(expression='R = (A + A) # A', basename="r", overwrite=True)
+
+        D = tgis.open_old_stds("R", type="strds")
+
+        self.assertEqual(D.metadata.get_number_of_maps(), 6)
+        self.assertEqual(D.metadata.get_min_min(), 1)
+        self.assertEqual(D.metadata.get_max_max(), 1)
+        start, end = D.get_absolute_time()
+        self.assertEqual(start, datetime.datetime(2001, 1, 1))
+        self.assertEqual(end, datetime.datetime(2001, 7, 1))
 
     def test_simple_arith_td_1(self):
         """Simple arithmetic test"""
