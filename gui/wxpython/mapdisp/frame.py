@@ -868,8 +868,13 @@ class MapFrame(SingleMapFrame):
             rastQuery = grass.raster_what(map=rast, coord=(east, north))
         if vect:
             encoding = UserSettings.Get(group='atm', key='encoding', subkey='value')
-            vectQuery = grass.vector_what(map=vect, coord=(east, north), distance=qdist,
-                                          encoding=encoding)
+            try:
+                vectQuery = grass.vector_what(map=vect, coord=(east, north), distance=qdist,
+                                              encoding=encoding)
+            except grass.ScriptError:
+                GError(parent=self,
+                       message=_("Failed to query vector map(s) <{maps}>. "
+                                 "Check database settings and topology.").format(maps=','.join(vect)))
         self._QueryMapDone()
         if 'Id' in vectQuery:
             self._queryHighlight(vectQuery)
