@@ -6,7 +6,7 @@ current region using the selected random number generator.
 <p><em>v.random</em> can generate also 3D vector points or
 write random value to attribute table. Point height range or
 attribute value range is controlled by specifying zmin and zmax values.
-Both z values are included in range (<em>zmin <= z <= zmax</em>).
+Both z values are included in range (<em>zmin &lt;= z &lt;= zmax</em>).
 Generated random attribute value type can be controlled by column
 data type. Use <b>INTEGER</b> column type for integers and 
 <b>DOUBLE PRECISION</b> for floating point numbers. Integer values are
@@ -73,21 +73,14 @@ v.random input=landclass96 output=random_samples n=20 where="label = 'forest'" -
 
 <h2>SEE ALSO</h2>
 
-UNIX man pages for <em>rand(3)</em> and <em>drand48(3)</em>.
-<p><em>
+<em>
 <a href="g.region.html">g.region</a>,
 <a href="r.random.html">r.random</a>,
 <a href="v.perturb.html">v.perturb</a>,
-<a href="v.sample.html">v.sample</a>
-<a href="v.what.rast.html">v.what.rast</a>
+<a href="v.sample.html">v.sample</a>,
+<a href="v.what.rast.html">v.what.rast</a>,
 <a href="v.what.vect.html">v.what.vect</a>
 </em>
-
-<h2>BUGS</h2>
-
-The RNG used by 
-<em><a href="v.perturb.html">v.perturb</a></em>
-should probably be added to this program.<br>
 
 <h2>AUTHOR</h2>
 

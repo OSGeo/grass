@@ -59,7 +59,8 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("statistics"));
-    module->description = _("Indices for quadrat counts of sites lists.");
+    G_add_keyword(_("point pattern"));
+    module->description = _("Indices for quadrat counts of vector point lists.");
 
     parm.input = G_define_standard_option(G_OPT_V_INPUT);
 

@@ -60,7 +60,7 @@ just use <em>d.grid -w</em> from the projected location for the same effect):
 v.mkgrid map=p2min_grid grid=10,12 position=coor coor=167:52E,47:06S box=0:02,0:02
 </pre></div>
 
-<h3>Creating a point pattern</h3>
+<h3>Creating a simple point pattern</h3>
 
 North Carolina sample dataset example, creating a 1km spaced point grid
 based on the current region extent defined by the "elevation" map:
@@ -70,7 +70,33 @@ g.region rast=elevation -p
 # we use the row/column/resolution information to determine the grid= values:
 v.mkgrid -p map=pointpattern grid=13,15 position=region breaks=1
 </pre></div>
+<p>
 
+<h3>Creating a regular point pattern</h3>
+
+North Carolina sample dataset example, creating a regular spaced point grid
+based on the current region extent defined by the "elevation" map, using
+a two-step approach:
+
+<div class="code"><pre>
+# create first set of points, covering extent of "elevation" raster map
+g.region rast=elevation -p
+v.mkgrid -p map=pointpattern1 grid=13,15 position=region breaks=1
+
+# shift grid by half point distance (map units)
+g.region n=n+500 w=w+500 e=e+500 s=s+500 -p
+
+# create second set of points
+v.mkgrid -p map=pointpattern2 grid=13,15 position=region breaks=1
+
+# merge into final point pattern
+v.patch input=pointpattern1,pointpattern2 output=pointpattern3
+</pre></div>
+
+<center>
+<img src="v_mkgrid_ppattern.png"><br>
+Different point patterns for sampling design
+</center>
 
 <h2>SEE ALSO</h2>
 
