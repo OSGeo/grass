@@ -104,6 +104,13 @@ final pass, the threshold is ignored for any segments smaller then
 the set size, thus forcing very small segments to merge with their 
 most similar neighbor.
 
+<h3>Goodness of Fit</h3>
+The <b>goodness</b> of fit for each pixel is calculated as 1 - distance 
+of the pixel to the object it belongs to. The distance is calculated 
+with the selected <b>similarity</b> method. A value of 1 means 
+identical values, perfect fit, and a value of 0 means maximum possible 
+distance, worst possible fit.
+
 <h2>EXAMPLE</h2>
 This example uses the ortho photograph included in the NC Sample 
 Dataset. Set up an imagery group:
