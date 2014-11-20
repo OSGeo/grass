@@ -24,6 +24,7 @@ import __builtin__
 
 from utils import parse_key_val
 from core import *
+from grass.exceptions import CalledModuleError
 
 
 def vector_db(map, **args):
@@ -348,8 +349,11 @@ def vector_what(map, coord, distance=0.0, ttype=None, encoding=None):
     if ttype:
         cmdParams['type'] = ','.join(ttype)
 
-    ret = read_command('v.what',
-                       **cmdParams).strip()
+    try:
+        ret = read_command('v.what',
+                           **cmdParams).strip()
+    except CalledModuleError, e:
+        raise ScriptError(e.msg)
 
     if "LC_ALL" in os.environ:
         os.environ["LC_ALL"] = locale
@@ -377,7 +381,10 @@ def vector_what(map, coord, distance=0.0, ttype=None, encoding=None):
     if sys.version_info[0:2] > (2, 6):
         kwargs['object_pairs_hook'] = orderedDict
 
-    result = json.loads(ret, **kwargs)
+    try:
+        result = json.loads(ret, **kwargs)
+    except ValueError:
+        raise ScriptError(_("v.what output is not valid JSON format:\n {ret}").format(ret=ret))
 
     for vmap in result['Maps']:
         cats = vmap.pop('Categories', None)
