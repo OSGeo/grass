@@ -1,20 +1,22 @@
 <h2>DESCRIPTION</h2>
 
-<em>t.list</em> lists any dataset that is registered in the temporal database. 
-Datasets are raster, 3D raster and vector maps as well as their 
-corresponding space time datasets (STRDS, STR3DS and STVDS). The type of the dataset
-can be specified using the <em>type</em> option, default is STRDS. By default all datasets with
-relative and absolute time are listed. However, the user has the ability to specify
-a single temporal type with the <em>temporaltype</em> option.
-The user can define the columns that should 
-be printed for each dataset and the order of the datasets. In addition a SQL WHERE statement can
-be specified to select a subset of the requested datasets.
+<em>t.list</em> lists any dataset that is registered in the temporal 
+database. Datasets are raster, 3D raster and vector maps as well as 
+their corresponding space time datasets (STRDS, STR3DS and STVDS). The 
+type of the dataset can be specified using the <em>type</em> option, 
+default is STRDS. By default all datasets with relative and absolute 
+time are listed. However, the user has the ability to specify a single 
+temporal type with the <em>temporaltype</em> option. The user can 
+define the columns that should be printed for each dataset and the 
+order of the datasets. In addition a SQL WHERE statement can be 
+specified to select a subset of the requested datasets.
 
 <h2>EXAMPLE</h2>
 
-In this example we will create 3 raster maps and register them first only in the
-temporal database an then in the newly created space time raster dataset.
-We use t.list to show what maps are already in the 
+In this example we will create three raster maps and register them first 
+only in the temporal database an then in the newly created space time 
+raster dataset. We use <em>t.list</em> to show what maps are already
+in the temporal database:
 
 <div class="code"><pre>
 # Generate data
@@ -40,7 +42,6 @@ t.register type=rast input=precipitation_daily maps=map1,map2,map3
 
 t.list strds
  precipitation_daily@soeren
-
 </pre></div>
 
 <h2>SEE ALSO</h2>

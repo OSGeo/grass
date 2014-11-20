@@ -1,20 +1,23 @@
 <h2>DESCRIPTION</h2>
 
-This module is designed to register the maps of several input space time datasets in a single output dataset.
-The datasets to merge can be either space time raster, 3D raster or vector datasets and must
-have the same temporal type (absolute or relative).
+This module is designed to register the maps of several input space 
+time datasets in a single output dataset. The datasets to merge can be 
+either space time raster, 3D raster or vector datasets and must have 
+the same temporal type (absolute or relative).
 <p>
-Existing space time datasets located in the current mapset can be specified as output as well. The
-maps from the input space time datasets will be added to the output.
+Existing space time datasets located in the current mapset can be 
+specified as output as well. The maps from the input space time 
+datasets will be added to the output.
 <p>
-Maps from the input space time datasets will be registered only once in the 
-output space time dataset, hence the same maps can be registered in different input space time datasets.
+Maps from the input space time datasets will be registered only once in 
+the output space time dataset, hence the same maps can be registered in 
+different input space time datasets.
 
 <h2>Examples</h2>
 
-In this example we will create two space time raster datasets and register 
-two unique maps in each of it. Then we merge the two space time raster
-datasets together.
+In this example we will create two space time raster datasets and 
+register two unique maps in each of it. Then we merge the two space 
+time raster datasets together.
 
 <div class="code"><pre>
 r.mapcalc expr="map1 = rand(0, 10)"  -s

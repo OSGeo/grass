@@ -3,30 +3,29 @@
 The purpose of this module is the creation of space time datasets of 
 type raster (STRDS), 3D raster (STR3DS) and vector (STVDS).
 <p>
-Space time datasets represent spatio-temporal fields in the temporal GRASS framework.
-They are designed to collect any amount of time stamped maps with time intervals
-and time instances. 
-The temporal type of a space time dataset 
-can be absolute or relative and must be set on dataset creation besides the name and the description.
+Space time datasets represent spatio-temporal fields in the temporal 
+GRASS framework. They are designed to collect any amount of time 
+stamped maps with time intervals and time instances. The temporal type 
+of a space time dataset can be absolute or relative and must be set on 
+dataset creation besides the name and the description.
 <p>
-Time stamped maps can registered in and unregistered from space time datasets.
-The spatio-temporal extent as well as the metadata of a space time dataset is derived from its registered maps.
-Hence the metadata is dependent from the dataset type (raster, 3D raster, vector). 
-<p>
-
+Time stamped maps can registered in and unregistered from space time 
+datasets. The spatio-temporal extent as well as the metadata of a space 
+time dataset is derived from its registered maps. Hence the metadata is 
+dependent from the dataset type (raster, 3D raster, vector).
 
 <h2>EXAMPLE</h2>
 
-In this example we create 7 raster maps using r.mapcalc with random values 
-that will be registered in a single space time
-raster dataset named <em>precipitation_daily</em> using a daily temporal granularity.
-The names of the raster maps are stored in a text 
-file that is used for raster map registration.
-We use <em>t.create</em> for the space time raster dataset creation 
-and <em>t.register</em> to register the raster maps
-in the space time raster dataset.
-At the end we report informations about the 
-space time raster dataset to stdout using <em>t.info</em>.
+In this example we create 7 raster maps using r.mapcalc with random 
+values that will be registered in a single space time raster dataset 
+named <em>precipitation_daily</em> using a daily temporal granularity. 
+The names of the raster maps are stored in a text file that is used for 
+raster map registration. We use <em>t.create</em> for the space time 
+raster dataset creation and <em>t.register</em> to register the raster 
+maps in the space time raster dataset. At the end we report 
+informations about the space time raster dataset to stdout using 
+<em>t.info</em>.
+
 <div class="code"><pre>
 
 MAPS="map_1 map_2 map_3 map_4 map_5 map_6 map_7"

@@ -1,16 +1,18 @@
 <h2>DESCRIPTION</h2>
 
-The purpose of <b>t.rast.extract</b> is to extract a subset of a space time 
-raster dataset and to store that subset in a different space time raster dataset.
-The <b>where</b> condition is used to select the subset. In addition a r.mapcalc
-sub-expression can be specified that performs operations on all maps of the selected subset.
-In this expression the name of the input space time raster dataset can be used
-as simple map name. Other STRDS than the input STRDS can not be specified, but
-any raster map. In case a r.mapcalc sub-expression is defined, the base name 
-of the resulting raster maps must be specified. The r.mapcalc expression can be
-used to select maps as well, since by default resulting empty maps are not registered
-in the output space time raster dataset and removed after processing. The number of 
-parallel grass processes can be specified to speed up the processing.
+The purpose of <b>t.rast.extract</b> is to extract a subset of a space 
+time raster dataset and to store that subset in a different space time 
+raster dataset. The <b>where</b> condition is used to select the 
+subset. In addition a r.mapcalc sub-expression can be specified that 
+performs operations on all maps of the selected subset. In this 
+expression the name of the input space time raster dataset can be used 
+as simple map name. Other STRDS than the input STRDS can not be 
+specified, but any raster map. In case a r.mapcalc sub-expression is 
+defined, the base name of the resulting raster maps must be specified. 
+The r.mapcalc expression can be used to select maps as well, since by 
+default resulting empty maps are not registered in the output space 
+time raster dataset and removed after processing. The number of 
+parallel GRASS GIS processes can be specified to speed up the processing.
 <p>
 If no r.mapcalc expression is defined, the selected maps are simply registered in
 the new created output space time raster dataset to avoid data duplication.
@@ -29,16 +31,16 @@ t.rast.extract input=precipitation where="start_time > '2001-01-05'" \
 
 <h2>EXAMPLE</h2>
 
-In this example we create 8 raster maps that will be registered in a single space time
-raster dataset named <em>precipitation_yearly</em> using a yearly temporal granularity.
-The names of the raster maps are stored in a text file that is used for raster map registration.
+In this example we create 8 raster maps that will be registered in a 
+single space time raster dataset named <em>precipitation_yearly</em> 
+using a yearly temporal granularity. The names of the raster maps are 
+stored in a text file that is used for raster map registration.
 <p>
 Then we extract all maps that are later 2005 and store the selected maps in
 the space time raster dataset <em>precipitation_yearly_later_2005</em>.
 <p>
 
 <div class="code"><pre>
-
 MAPS="map_1 map_2 map_3 map_4 map_5 map_6 map_7 map_8"
 
 for map in ${MAPS} ; do

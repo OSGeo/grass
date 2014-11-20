@@ -1,51 +1,65 @@
 <h2>DESCRIPTION</h2>
 
-<b>t.rast.accumulate</b> is designed to perform temporal accumulations of space time raster datasets.
+<b>t.rast.accumulate</b> is designed to perform temporal accumulations 
+of space time raster datasets.
 
-This module expects a space time raster dataset as input that will be sampled by a given <b>granularity</b>.
-All maps that have the start time during the actual granule will be accumulated with the predecessor 
-granule accumulation result using the raster module <a href="r.series.accumulate.html">r.series.accumulate</a>. 
-The default granularity is 1 day, but any temporal granularity can be set.
+This module expects a space time raster dataset as input that will be 
+sampled by a given <b>granularity</b>. All maps that have the start 
+time during the actual granule will be accumulated with the predecessor 
+granule accumulation result using the raster module
+<a href="r.series.accumulate.html">r.series.accumulate</a>. The default 
+granularity is 1 day, but any temporal granularity can be set.
+
 <p>
-The <b>start</b> time and the <b>end</b> time of the accumulation process must be set, 
-eg. <b>start="2000-03-01" end="2011-01-01"</b>. 
-In addition a <b>cycle</b>, eg. <b>cycle="8 months"</b>, can be specified, that defines
-after which time interval the accumulation process restarts. The <b>offset</b> option specifies the
-time between two cycles that should be skipped, eg. <b>offset="4 months"</b>.
+The <b>start</b> time and the <b>end</b> time of the accumulation 
+process must be set, eg. <b>start="2000-03-01" end="2011-01-01"</b>. In 
+addition a <b>cycle</b>, eg. <b>cycle="8 months"</b>, can be specified, 
+that defines after which time interval the accumulation process 
+restarts. The <b>offset</b> option specifies the time between two 
+cycles that should be skipped, eg. <b>offset="4 months"</b>.
+
 <p>
 The <b>lower</b> and <b>upper</b> <b>limits</b> of the accumulation 
-process can be set, either by using space time raster datasets or 
-by using fixed values for all raster cells and time steps.  The raster maps that specifies the
-lower and upper limits of the actual granule will be detected using the following temporal relations: 
-equals, during, overlaps, overlapped and contains. 
-First all maps with equal time stamps to the current granule will be detected, 
-the first lower map and the first upper map that were found are used as limit definitions. 
-If no equal maps are found then maps with a temporal during relation are detected, 
-then maps that temporally overlap the actual granules, until
-maps are detected that have a temporal contain relation. 
-If no maps are found or lower/upper STRDS are not defined, then the <b>limits</b> option is used, eg. <b>limits=10,30</b>.
+process can be set, either by using space time raster datasets or by 
+using fixed values for all raster cells and time steps.  The raster 
+maps that specifies the lower and upper limits of the actual granule 
+will be detected using the following temporal relations: equals, 
+during, overlaps, overlapped and contains. First all maps with equal 
+time stamps to the current granule will be detected, the first lower 
+map and the first upper map that were found are used as limit 
+definitions. If no equal maps are found then maps with a temporal 
+during relation are detected, then maps that temporally overlap the 
+actual granules, until maps are detected that have a temporal contain 
+relation. If no maps are found or lower/upper STRDS are not defined, 
+then the <b>limits</b> option is used, eg. <b>limits=10,30</b>.
+
 <p>
-The <b>upper</b> <b>limit</b> is only used in the Biologically Effective Degree Days calculation.
+The <b>upper</b> <b>limit</b> is only used in the Biologically 
+Effective Degree Days calculation.
+
 <p>
 The options <b>shift</b>, <b>scale</b> and <b>method</b> are passed to 
 <a href="r.series.accumulate.html">r.series.accumulate</a>. 
 Please refer to the manual page of <a href="r.series.accumulate.html">r.series.accumulate</a>
 for detailed option description.
+
 <p>
-The <b>output</b> is a new space time raster dataset with the provided start time, end time and granularity
-containing the accumulated raster maps. The <b>base</b> name of of the generated maps must always be set.
-The <b>output</b> space time raster dataset can then be analyzed 
-using <a href="t.rast.accdetect.html">t.rast.accdetect</a> to detect specific accumulation patterns.
+The <b>output</b> is a new space time raster dataset with the provided 
+start time, end time and granularity containing the accumulated raster 
+maps. The <b>base</b> name of of the generated maps must always be set. 
+The <b>output</b> space time raster dataset can then be analyzed using 
+<a href="t.rast.accdetect.html">t.rast.accdetect</a> to detect specific 
+accumulation patterns.
 
 <h2>EXAMPLE</h2>
 
-This is an example how to accumulate the daily mean temperature of Europe from 1990 to 2000 using
-the growing-degree-day method to detect grass hopper reproduction cycles that are critical 
-to agriculture. 
+This is an example how to accumulate the daily mean temperature of 
+Europe from 1990 to 2000 using the growing-degree-day method to detect 
+grass hopper reproduction cycles that are critical to agriculture. 
 
 <div class="code"><pre>
 # Get the temperature data
-wget www-pool.math.tu-berlin.de/~soeren/grass/temperature_mean_1990_2000_daily_celsius.tar.gz
+wget http://www-pool.math.tu-berlin.de/~soeren/grass/temperature_mean_1990_2000_daily_celsius.tar.gz
 
 # Create a temporary location directory
 mkdir -p /tmp/grassdata/LL

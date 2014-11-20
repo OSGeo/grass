@@ -1,13 +1,13 @@
 <h2>DESCRIPTION</h2>
 
-<em>t.rast.aggregate</em> temporally aggregates space time raster datasets
-by a specific temporal granularity.
-This module support <em>absolute</em> and <em>relative time</em>.
-The temporal granularity of absolute time can be 
-<em>seconds, minutes, hours, days, weeks, months</em> or <em>years</em>.
-Mixing of granularities eg. "1 year, 3 months 5 days" is not supported. 
-In case of relative time the temporal unit of the input space time raster 
-dataset is used. The granularity must be specified with an integer value. 
+<em>t.rast.aggregate</em> temporally aggregates space time raster 
+datasets by a specific temporal granularity. This module support 
+<em>absolute</em> and <em>relative time</em>. The temporal granularity 
+of absolute time can be <em>seconds, minutes, hours, days, weeks, 
+months</em> or <em>years</em>. Mixing of granularities eg. "1 year, 3 
+months 5 days" is not supported. In case of relative time the temporal 
+unit of the input space time raster dataset is used. The granularity 
+must be specified with an integer value. 
 <p>
 This module is sensitive to the current region and mask settings, 
 hence spatial extent and spatial resolution. In case the registered 
@@ -17,12 +17,13 @@ is used for runtime spatial aggregation.
 
 <h2>NOTES</h2>
 
-The raster module <em>r.series</em> is used internally. Hence all aggregate
-methods of <em>r.series</em> are supported. See the
+The raster module <em>r.series</em> is used internally. Hence all 
+aggregate methods of <em>r.series</em> are supported. See the
 <a href="r.series.html">r.series</a> manual page for details.
 <p>
-This module will shift the start date for each aggregation process depending on the 
-provided temporal granularity. The following shifts will performed:
+This module will shift the start date for each aggregation process 
+depending on the provided temporal granularity. The following shifts 
+will performed:
 
 <ul>
     <li><em>granularity years</em>: will start at the first of January, hence 14-08-2012 00:01:30 will be shifted to 01-01-2012 00:00:00</li>
@@ -35,9 +36,10 @@ provided temporal granularity. The following shifts will performed:
 
 <h2>EXAMPLES</h2>
 
-In this example, we create 7 raster maps that will be registered in a single space time
-raster dataset named <em>precipitation_daily</em> using a daily temporal granularity.
-The names of the raster maps are stored in a text file that is used for raster map registration. 
+In this example, we create 7 raster maps that will be registered in a 
+single space time raster dataset named <em>precipitation_daily</em> 
+using a daily temporal granularity. The names of the raster maps are 
+stored in a text file that is used for raster map registration. 
 <p>
 The space time raster dataset <em>precipitation_daily</em> with daily temporal granularity 
 will be aggregated to weekly precipitation resulting in the output space time raster dataset
