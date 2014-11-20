@@ -154,7 +154,7 @@ class RDigitController(wx.EvtHandler):
         elif self._graphicsType == 'point':
             point = self._points.GetItem(-1)
             point.SetCoords([x, y])
-            self._finish(x, y)
+            self._finish()
         # draw
         self._mapWindow.ClearLines()
         self._lines.Draw(pdc=self._mapWindow.pdcTmp)
@@ -162,7 +162,7 @@ class RDigitController(wx.EvtHandler):
         self._points.Draw(pdc=self._mapWindow.pdcTmp)
         self._mapWindow.Refresh()
 
-    def _finish(self, x, y):
+    def _finish(self):
         """Finish digitizing a new object and redraws.
         Saves current cell value and buffer width for that object.
 
@@ -201,6 +201,11 @@ class RDigitController(wx.EvtHandler):
         Connects and disconnects signal to allow other tools
         in map toolbar to work.
         """
+        if self._graphicsType and drawingType and self._graphicsType != drawingType \
+                and self._drawing:
+            # if we select different drawing tool, finish the feature
+            self._finish()
+
         if self._graphicsType and not drawingType:
             self._mapWindow.ClearLines(pdc=self._mapWindow.pdcTmp)
             self._mapWindow.mouse['end'] = self._mapWindow.mouse['begin']
@@ -414,8 +419,11 @@ class RDigitController(wx.EvtHandler):
         keep the order of editing. These rasters are then patched together.
         Sets default color table for the newly digitized raster.
         """
-        if not self._editedRaster:
+        if not self._editedRaster or self._running:
             return
+
+        if self._drawing:
+            self._finish()
 
         if len(self._all) < 1:
             return
