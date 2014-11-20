@@ -191,14 +191,12 @@ def main():
     diagonal = flags['d']
     islesser = False
 
+    # check for unsupported locations
     in_proj = grass.parse_command('g.proj', flags='g')
-
-    # check non supported location
     if in_proj['unit'].lower() == 'degree':
-        grass.fatal(_("Latitude-Longitude locations are not supported"))
+        grass.fatal(_("Latitude-longitude locations are not supported"))
     if in_proj['name'].lower() == 'xy_location_unprojected':
         grass.fatal(_("xy-locations are not supported"))
-        grass.fatal(_("Need projected data with grids in metric units"))
 
     # check lesser and greater parameters
     if not lesser and not greater:
