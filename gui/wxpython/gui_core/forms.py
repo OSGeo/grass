@@ -765,7 +765,11 @@ class TaskFrame(wx.Frame):
                 self.Hide()
             # canceled layer with nothing set
             elif len(self.parent.GetLayerInfo(self.layer, key = 'cmd')) < 1:
-                self.parent.Delete(self.layer)
+                try:
+                    self.parent.Delete(self.layer)
+                except ValueError:
+                    # happens when closing dialog of a new layer which was removed from tree
+                    pass
                 self.Destroy()
         else:
             # cancel for non-display commands
