@@ -1464,7 +1464,7 @@ def version():
          'revision': '53670'}
 
     """
-    data = parse_command('g.version', flags='rge')
+    data = parse_command('g.version', flags='rge', errors='ignore')
     for k, v in data.iteritems():
         data[k.strip()] = v.replace('"', '').strip()
 
