@@ -191,14 +191,12 @@ def main():
     diagonal = flags['d']
     islesser = False
 
+    # check for unsupported locations
     in_proj = grass.parse_command('g.proj', flags='g')
-
-    # check non supported location
     if in_proj['unit'].lower() == 'degree':
-        grass.fatal(_("Latitude-Longitude locations are not supported"))
+        grass.fatal(_("Latitude-longitude locations are not supported"))
     if in_proj['name'].lower() == 'xy_location_unprojected':
         grass.fatal(_("xy-locations are not supported"))
-        grass.fatal(_("Need projected data with grids in metric units"))
 
     # check lesser and greater parameters
     if not lesser and not greater:
@@ -229,9 +227,11 @@ def cleanup():
     TMPRAST.reverse()  # reclassed map first
     for mapp in TMPRAST:
         if METHOD == 'rmarea':
-            grass.run_command("g.remove", type='vect', name=mapp, quiet=True, flags='f')
+            grass.run_command("g.remove", flags='f', type='vect', name=mapp,
+                              quiet=True)
         else:
-            grass.run_command("g.remove", type='rast', name=mapp, quiet=True, flags='f')
+            grass.run_command("g.remove", flags='f', type='rast', name=mapp,
+                              quiet=True)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
