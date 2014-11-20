@@ -15,13 +15,13 @@ manual page for further informations.
 
 <h2>EXAMPLE</h2>
 
-In this example we create 6 raster maps that will be registered in a single space time
-raster dataset named <em>precip_abs</em> using a monthly temporal granularity.
-Then we set an equilized grey color table using <em>t.rast.colors</em> and print the
-color table of the first map to stdout representing the data range of the space time raster dataset.
+In this example we create 6 raster maps that will be registered in a 
+single space time raster dataset named <em>precip_abs</em> using a 
+monthly temporal granularity. Then we set an equilized grey color table 
+using <em>t.rast.colors</em> and print the color table of the first map 
+to stdout representing the data range of the space time raster dataset.
 
 <div class="code"><pre>
-
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
 r.mapcalc --o expr="prec_1 = 100"
@@ -56,7 +56,6 @@ r.colors.out map=prec_1
 600 234:234:234
 nv 255:255:255
 default 255:255:255
-
 </pre></div>
 
 <h2>SEE ALSO</h2>

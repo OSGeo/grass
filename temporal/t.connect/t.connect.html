@@ -4,22 +4,28 @@
 
 <h2>NOTES</h2>
 
-Values are stored in the mapset's <tt>VAR</tt> file;
-the connection is not tested for validity.
-<p>The <b>-d</b> flag will set the default TGIS connection parameters. 
-A sqlite3 database "tgis/sqlite.db" will be created in the PERMANET directory 
+Values are stored in the mapset's <tt>VAR</tt> file; the connection is 
+not tested for validity. <p>The <b>-d</b> flag will set the default 
+TGIS connection parameters.
+<!-- TODO: really always PERMANENT? - see http://trac.osgeo.org/grass/ticket/2258 -->
+A SQLite3 database "tgis/sqlite.db" will be created in the PERMANENT directory 
 of the current location. It will be located in the "tgis" sub-directory to not
 interfere with the sqlite3 database used for vector attribute storage.
-<p>The <b>-p</b> flag will display the current TGIS connection parameters. 
-<p>The <b>-pg</b> flag will display the current TGIS connection parameters using shell style. 
-<p>The <b>-c</b> flag will silently check if the TGIS connection parameters have
-been set, and if not will set them to use GRASS's default values.
+
+<p>The <b>-p</b> flag will display the current TGIS connection parameters.
+<p>The <b>-pg</b> flag will display the current TGIS connection parameters
+using shell style. 
+<p>The <b>-c</b> flag will silently check if the TGIS connection 
+parameters have been set, and if not will set them to use GRASS's 
+default values.
 
 <h2>Note</h2>
-The default TGIS database of type sqlite3 is located in the PERMANENT mapset directory.
-Temporal GIS content from all created mapsets will be stored here. In case
-you have thousends of maps to register in the temporal database or you need concurrent read 
-and write access in the TGIS database, consider to use a postgresql database instead.
+
+The default TGIS database of type sqlite3 is located in the PERMANENT 
+mapset directory. Temporal GIS content from all created mapsets will be 
+stored here. In case you have thousands of maps to register in the 
+temporal database or you need concurrent read and write access in the 
+TGIS database, consider to use a postgresql database instead.
 
 <h3>SQLite</h3>
 
@@ -28,10 +34,12 @@ t.connect driver=sqlite database='$GISDBASE/$LOCATION_NAME/PERMANENT/tgis/sqlite
 t.connect -p
 t.info -s
 </pre></div>
-<p>The SQLite database is created automatically when used the first time.
+
+<p>
+The SQLite database is created automatically when used the first time.
 
 <h3>PostgreSQL</h3>
-In case you use a postgresql database, you will need to specify the TGIS database connection 
+In case you use a PostgreSQL database, you will need to specify the TGIS database connection 
 for each mapset.
 <div class="code"><pre>
 t.connect driver=pg database="dbname=grass_test user=soeren password=abcdefgh"

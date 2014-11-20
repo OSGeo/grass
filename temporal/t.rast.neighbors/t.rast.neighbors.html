@@ -1,31 +1,35 @@
 <h2>DESCRIPTION</h2>
 
-<em>t.rast.neighbors</em> performs <a href="r.neighbors.html">r.neighbors</a> computations
-on the maps of a space time raster dataset (STRDS). This module supports a subset of options
-that are available in <a href="r.neighbors.html">r.neighbors</a>.
-The size of the neighborhood and the aggregation method can be chosen.
+<em>t.rast.neighbors</em> performs <a href="r.neighbors.html">r.neighbors</a>
+computations on the maps of a space time raster dataset (STRDS). This 
+module supports a subset of options that are available in
+<a href="r.neighbors.html">r.neighbors</a>. The size of the neighborhood 
+and the aggregation method can be chosen.
 <p>
-The user must provide an input and an output space time raster dataset and the basename 
-of the resulting raster maps. The resulting STRDS will have
+The user must provide an input and an output space time raster dataset and
+the basename  of the resulting raster maps. The resulting STRDS will have
 the same temporal resolution as the input dataset. 
 All maps will be processed using the current region settings.
 <p>
-The user can select a subset of the input space time raster dataset for processing 
-using a SQL WHERE statement. The number of CPU's to be used for parallel processing can be specified
-with the <em>nprocs</em> option, to speedup the computation on multicore system.
-
+The user can select a subset of the input space time raster dataset for 
+processing using a SQL WHERE statement. The number of CPU's to be used 
+for parallel processing can be specified with the <em>nprocs</em> 
+option, to speedup the computation on multicore system.
 
 
 <h2>EXAMPLE</h2>
 
-In this example we create 7 raster maps that will be registered in a single space time
-raster dataset named <em>precipitation_daily</em> using a daily temporal granularity.
-The names of the raster maps are stored in a text file that is used for raster map registration. 
+In this example we create 7 raster maps that will be registered in a 
+single space time raster dataset named <em>precipitation_daily</em> 
+using a daily temporal granularity. The names of the raster maps are 
+stored in a text file that is used for raster map registration. 
 <p>
-A neighborhood average smoothing with a window size of 5 cells will be performed on 
-the space time raster dataset <em>precipitation_daily</em> resulting in the output space time raster dataset
-<em>precipitation_daily_smooth</em>. The base name of the new generated raster maps is <em>prec_smooth</em>. 
-The temporal resolution of the resulting STRDS is identical to the input STRDS.
+A neighborhood average smoothing with a window size of 5 cells will be 
+performed on the space time raster dataset <em>precipitation_daily</em> 
+resulting in the output space time raster dataset 
+<em>precipitation_daily_smooth</em>. The base name of the new generated 
+raster maps is <em>prec_smooth</em>. The temporal resolution of the 
+resulting STRDS is identical to the input STRDS.
 
 
 <div class="code"><pre>
@@ -155,7 +159,6 @@ prec_smooth_4   2012-08-23 00:00:00     184.3           356.583333
 prec_smooth_5   2012-08-24 00:00:00     163.966667      293.3
 prec_smooth_6   2012-08-25 00:00:00     204.98          324.611111
 prec_smooth_7   2012-08-26 00:00:00     154.25          340.366667
-
 </pre></div>
 
 <h2>SEE ALSO</h2>
