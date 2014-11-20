@@ -13,9 +13,10 @@ specified to select a subset of the requested datasets.
 
 <h2>EXAMPLE</h2>
 
-In this example we will create 3 raster maps and register them first 
+In this example we will create three raster maps and register them first 
 only in the temporal database an then in the newly created space time 
-raster dataset. We use t.list to show what maps are already in the 
+raster dataset. We use <em>t.list</em> to show what maps are already
+in the temporal database:
 
 <div class="code"><pre>
 # Generate data
@@ -41,7 +42,6 @@ t.register type=rast input=precipitation_daily maps=map1,map2,map3
 
 t.list strds
  precipitation_daily@soeren
-
 </pre></div>
 
 <h2>SEE ALSO</h2>
