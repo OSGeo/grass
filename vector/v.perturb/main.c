@@ -1,10 +1,11 @@
 
 /****************************************************************************
  *
- * MODULE:       v.pertrub
+ * MODULE:       v.perturb
  * AUTHOR(S):    James Darrell McCauley darrell@mccauley-usa.com
  * 	         http://mccauley-usa.com/
- * PURPOSE:      
+ * PURPOSE:      Random location perturbations of vector points
+ *
  * COPYRIGHT:    (C) 1994-2009 by James Darrell McCauley and the GRASS Development Team
  *
  * Modification History:
@@ -62,6 +63,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("geometry"));
     G_add_keyword(_("statistics"));
     G_add_keyword(_("random"));
+    G_add_keyword(_("point pattern"));
  
     module->description =
 	_("Random location perturbations of vector points.");

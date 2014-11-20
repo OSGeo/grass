@@ -29,25 +29,29 @@ giving an index, ranges of indices, or multiple thereof.
 
 <h2>EXAMPLE</h2>
 
-<!-- do a meaning ful example -->
-<div class="code"><pre>
-v.random random n=200
-v.db.addtable random col="elev double precision"
-v.what.rast random rast=elevation.10m col=elev
-v.normal random tests=1-3,14 col=elev
-</pre></div>
-
-computes the sample skewness and kurtosis, Geary's
+<!-- do a meaningful example -->
+Compute the sample skewness and kurtosis, Geary's
 a-statistic and an approximate normal transformation,
 extreme normal deviates, and Royston's W for the
-<em>random</em> vector points.
+<em>random</em> vector points:
+
+<div class="code"><pre>
+g.region rast=elevation -p
+v.random random n=200
+v.db.addtable random colum="elev double precision"
+v.what.rast random rast=elevation column=elev
+v.normal random tests=1-3,14 column=elev
+</pre></div>
 
 <!-- TODO: find references , e.g.
      http://www.itl.nist.gov/div898/handbook/eda/section3/eda35.htm
 -->
 
 <h2>SEE ALSO</h2>
+
+<em>
 <a href="v.univar.html">v.univar</a>
+</em>
 
 <h2>AUTHOR</h2>
 
@@ -56,4 +60,5 @@ extreme normal deviates, and Royston's W for the
 <br>when he was at:
 <a href="https://engineering.purdue.edu/ABE/">Agricultural Engineering</a>
 <a href="http://www.purdue.edu/">Purdue University</a>
+
 <p><i>Last changed: $Date$</i>

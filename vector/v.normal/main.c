@@ -72,6 +72,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("vector"));
     G_add_keyword(_("statistics"));
     G_add_keyword(_("points"));
+    G_add_keyword(_("point pattern"));
     module->description = _("Tests for normality for vector points.");
 
     parm.input = G_define_standard_option(G_OPT_V_MAP);
