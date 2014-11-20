@@ -97,6 +97,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("sampling"));
     G_add_keyword(_("statistics"));
     G_add_keyword(_("random"));
+    G_add_keyword(_("point pattern"));
     module->description = _("Generates random 2D/3D vector points.");
 
     parm.output = G_define_standard_option(G_OPT_V_OUTPUT);
