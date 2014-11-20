@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("statistics"));
     G_add_keyword(_("points"));
+    G_add_keyword(_("point pattern"));
     module->description =
 	_("Randomly partition points into test/train sets.");
 
