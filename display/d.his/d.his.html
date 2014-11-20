@@ -23,9 +23,9 @@ retains the original information in terms of <em>hue</em>,
 This program can be run non-interactively or
 interactively.  It will run non-interactively if the user
 specifies on the command line the name of a map containing
-hue values (<b>h_map</b>), and the name(s) of map(s)
-containing intensity values (<b>i_map</b>) and/or
-saturation values (<b>s_map</b>).  The resulting image will
+hue values (<b>hue</b>), and the name(s) of map(s)
+containing intensity values (<b>intensity</b>) and/or
+saturation values (<b>saturation</b>).  The resulting image will
 be displayed in the active display frame on the graphics
 monitor.
 
@@ -63,9 +63,9 @@ sounds better than <i>Normalized Scaling Factor</i>.
 
 Each map cell is processed individually. First, the working
 color is set to the color of the corresponding cell in the
-map layer chosen to represent <em>HUE</em>.  Second, this
+map layer chosen to represent <em>hue</em>.  Second, this
 color is multiplied by the <em>red</em> intensity of that
-cell in the <em>INTENSITY</em> map layer.  This map layer
+cell in the <em>intensity</em> map layer.  This map layer
 should have an appropriate gray-scale color table
 associated with it. You can ensure this by using the color
 manipulation capabilities of
@@ -73,7 +73,7 @@ manipulation capabilities of
 
 Finally, the color is made somewhat gray-based on the
 <em>red</em> intensity of that cell in the
-<em>SATURATION</em> map layer.  Again, this map layer
+<em>saturation</em> map layer.  Again, this map layer
 should have a gray-scale color table associated with it.
 
 <h2>NOTES</h2>
@@ -104,13 +104,13 @@ program <em><a href="r.his.html">r.his</a></em>.
 
 
 <h2>EXAMPLE</h2>
-<h3>Spearfish dataset</h3>
 
 <div class="code"><pre>
-g.region rast=elevation.dem
-r.shaded.relief map=elevation.dem shad=elev.shad_relf
+g.region rast=elevation
+r.shaded.relief input=elevation output=elevation_shaded_relief
+
 d.mon wx0
-d.his h=elevation.dem i=elev.shad_relf brighten=50
+d.his hue=elevation intensity=elevation_shaded_relief brighten=50
 </pre></div>
 
 <h2>SEE ALSO</h2>
@@ -119,6 +119,7 @@ d.his h=elevation.dem i=elev.shad_relf brighten=50
 <a href="d.colortable.html">d.colortable</a>,
 <a href="d.frame.html">d.frame</a>,
 <a href="d.rgb.html">d.rgb</a>,
+<a href="d.shadedmap.html">d.shadedmap</a>,
 <a href="r.colors.html">r.colors</a>,
 <a href="r.his.html">r.his</a>,
 <a href="i.his.rgb.html">i.his.rgb</a>,

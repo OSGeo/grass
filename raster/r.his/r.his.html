@@ -41,16 +41,16 @@ the valleys.
 
 Each map cell is processed individually. First, the working
 color is set to the color of the corresponding cell in the
-map layer chosen to represent <i>HUE</i>.  Second, this
+map layer chosen to represent <i>hue</i>.  Second, this
 color is multiplied by the <i>red</i> intensity of that
-cell in the <i>INTENSITY</i> map layer.  This map layer
+cell in the <i>intensity</i> map layer.  This map layer
 should have an appropriate gray-scale color table
 associated with it. You can ensure this by using the color
 manipulation capabilities of
 <em><a href="r.colors.html">r.colors</a></em>.
 Finally, the color is made somewhat gray-based on the
 <i>red</i> intensity of that cell in the
-<i>SATURATION</i> map layer.  Again, this map layer
+<i>saturation</i> map layer.  Again, this map layer
 should have a gray-scale color table associated with it.
 
 <h2>NOTES</h2>
@@ -88,18 +88,27 @@ program <em><a href="d.his.html">d.his</a></em>.
 
 <h2>EXAMPLES</h2>
 
-Recreate the following <em>d.his</em> command using <em>r.his</em>:
-<div class="code"><pre>
-g.regiopn rast=elevation
-r.shaded.relief map=elevation shad=elev.shad_relf
-d.his h=elevation i=elev.shad_relf brighten=50
-</pre></div>
+Recreate the following example for <em>d.his</em> using <em>r.his</em>.
+First, create shaded relief and show it.
 
 <div class="code"><pre>
-r.mapcalc "elev.shad_relf_bright50 = #elev.shad_relf * 1.5"
-r.colors elev.shad_relf_bright50 color=grey255
-r.his h_map=elevation i_map=elev.shad_relf_bright50 r_map=esr.r g_map=esr.g bmap=esr.b
-d.rgb red=esr.r green=esr.g blue=esr.b
+g.region rast=elevation
+r.shaded.relief input=elevation output=elevation_shaded_relief
+
+d.mon wx0
+d.his hue=elevation intensity=elevation_shaded_relief brighten=50
+</pre></div>
+
+Second, compute lighter version of color of shaded relief.
+Then convert from HIS model to RGB and show the result.
+
+<div class="code"><pre>
+r.mapcalc "elevation_shaded_relief_bright_50 = #elevation_shaded_relief * 1.5"
+r.colors elevation_shaded_relief_bright_50 color=grey255
+r.his hue=elevation intensity=elevation_shaded_relief_bright_50 red=shadedmap_r green=shadedmap_g blue=shadedmap_b
+
+d.mon wx1
+d.rgb red=shadedmap_r green=shadedmap_g blue=shadedmap_b
 </pre></div>
 
 
@@ -113,6 +122,7 @@ d.rgb red=esr.r green=esr.g blue=esr.b
 <a href="r.colors.html">r.colors</a>,
 <a href="r.composite.html">r.composite</a>,
 <a href="r.mapcalc.html">r.mapcalc</a>,
+<a href="r.shadedmap.html">r.shadedmap</a>,
 <a href="i.his.rgb.html">i.his.rgb</a>,
 <a href="i.rgb.his.html">i.rgb.his</a>
 </em>

@@ -65,51 +65,51 @@ int main(int argc, char **argv)
     G_add_keyword("HIS");
     G_add_keyword("IHS");
     module->description =
-	_("Generates red, green and blue raster map layers "
+	_("Generates red, green and blue (RGB) raster map layers "
 	  "combining hue, intensity and saturation (HIS) "
 	  "values from user-specified input raster map layers.");
 
     opt_h = G_define_option();
-    opt_h->key = "h_map";
+    opt_h->key = "hue";
     opt_h->type = TYPE_STRING;
     opt_h->required = YES;
     opt_h->gisprompt = "old,cell,raster";
-    opt_h->description = _("Name of layer to be used for HUE");
+    opt_h->description = _("Name of layer to be used for hue");
 
     opt_i = G_define_option();
-    opt_i->key = "i_map";
+    opt_i->key = "intensity";
     opt_i->type = TYPE_STRING;
     opt_i->required = NO;
     opt_i->gisprompt = "old,cell,raster";
-    opt_i->description = _("Name of layer to be used for INTENSITY");
+    opt_i->description = _("Name of layer to be used for intensity");
 
     opt_s = G_define_option();
-    opt_s->key = "s_map";
+    opt_s->key = "saturation";
     opt_s->type = TYPE_STRING;
     opt_s->required = NO;
     opt_s->gisprompt = "old,cell,raster";
-    opt_s->description = _("Name of layer to be used for SATURATION");
+    opt_s->description = _("Name of layer to be used for saturation");
 
     opt_r = G_define_option();
-    opt_r->key = "r_map";
+    opt_r->key = "red";
     opt_r->type = TYPE_STRING;
     opt_r->required = YES;
     opt_r->gisprompt = "new,cell,raster";
-    opt_r->description = _("Name of output layer to be used for RED");
+    opt_r->description = _("Name of output layer to be used for red");
 
     opt_g = G_define_option();
-    opt_g->key = "g_map";
+    opt_g->key = "green";
     opt_g->type = TYPE_STRING;
     opt_g->required = YES;
     opt_g->gisprompt = "new,cell,raster";
-    opt_g->description = _("Name of output layer to be used for GREEN");
+    opt_g->description = _("Name of output layer to be used for green");
 
     opt_b = G_define_option();
-    opt_b->key = "b_map";
+    opt_b->key = "blue";
     opt_b->type = TYPE_STRING;
     opt_b->required = YES;
     opt_b->gisprompt = "new,cell,raster";
-    opt_b->description = _("Name of output layer to be used for BLUE");
+    opt_b->description = _("Name of output layer to be used for blue");
 
     nulldraw = G_define_flag();
     nulldraw->key = 'n';
