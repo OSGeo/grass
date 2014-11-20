@@ -20,7 +20,7 @@ import types
 import wx
 
 from gui_core.gselect import VectorDBInfo as VectorDBInfoBase
-from core.gcmd        import RunCommand
+from core.gcmd        import RunCommand, GError
 from core.settings    import UserSettings
 from core.utils import _
 import grass.script as grass
@@ -92,9 +92,14 @@ class VectorDBInfo(VectorDBInfoBase):
         line = None
         nselected = 0
 
-        data = grass.vector_what(map = self.map,
-                                 coord = (float(queryCoords[0]), float(queryCoords[1])),
-                                 distance = float(qdist))
+        try:
+            data = grass.vector_what(map=self.map,
+                                     coord=(float(queryCoords[0]), float(queryCoords[1])),
+                                     distance=float(qdist))
+        except grass.ScriptError:
+            GError(parent=None,
+                   message=_("Failed to query vector map <{map}>. "
+                             "Check database settings and topology.").format(map=self.map))
 
         if len(data) < 1 or all(('Table' not in record) for record in data):
             return None
