@@ -43,6 +43,7 @@ SUBDIRS = \
 	r.plane \
 	r.reclass.area \
 	r.rgb \
+	r.shadedmap \
 	r.tileset \
 	r.unpack \
 	r3.in.xyz \
