@@ -12,8 +12,23 @@ conversion table was applied for transforming soil classes into K factor.
 <h2>NOTES</h2>
 <em>r.watershed</em> provides for USLE L, S, LS factors.
 
-<h2>TODO</h2>
+<h2>EXAMPLE</h2>
 
+TBD.
+
+<!--
+# TODO: change to meaningful values
+
+# NC data
+g.region rural_1m -p
+r.mapcalc "sand = 0.30"
+r.mapcalc "clay = 0.15"
+r.mapcalc "silt = 0.52"
+r.mapcalc "organ = 0.03"
+
+r.uslek psand=sand pclay=clay psilt=silt pomat=organ output=usle_k
+r.univar usle_k
+-->
 
 <h2>SEE ALSO</h2>
 
