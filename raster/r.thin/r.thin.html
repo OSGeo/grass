@@ -1,8 +1,10 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.thin</em> scans the named <em>input</em> raster map
-layer and thins non-zero cells that denote linear features
-into linear features having a single cell width.
+<em>r.thin</em> scans the named <em>input</em> raster map layer and 
+thins non-zero cells that denote linear features into linear features 
+having a single cell width. Raster lines often need to be thinned 
+(skeletonizing raster features) to a single pixel width before they can 
+be transformed to vector data.
 
 <p>
 <em>r.thin</em> will thin only the non-zero cells of the
@@ -18,25 +20,24 @@ cell.
 data file containing the thinned linear features.
 <em>r.thin</em> assumes that linear features are encoded
 with positive values on a background of 0's in the
-<em>input</em> raster data file.
+<em>input</em> raster data file, hence it creates a 0/1
+output map.
 
-<h2>NOTE</h2>
+<h2>NOTES</h2>
 
-<em>r.thin</em> only creates raster map layers.  The user will need to run 
+<em>r.thin</em> only creates raster map layers. In order to
+create a vector map, the user will need to run 
 <em><a href="r.to.vect.html">r.to.vect</a></em>
-on the resultant raster map to create a vector 
-(<em><a href="wxGUI.vdigit.html">wxGUI vector digitizer</a></em>) map layer.
-
-<p><em>r.thin</em> may create small spurs or "dangling lines"
-during the thinning process.  These spurs may be removed
-(after creating a vector map layer) by
-<em><a href="v.clean.html">v.clean</a></em>.
+on the resultant raster map.
 
 <p>
-<em>r.thin</em> creates a 0/1 output map.
+<em>r.thin</em> may create small spurs or "dangling lines"
+during the thinning process.  These spurs may be removed
+(after creating a vector map layer) by
+<em><a href="v.clean.html">v.clean</a></em> (<em>rmdangle</em>
+tool).
 
-<h2>NOTE</h2>
-
+<p>
 This code implements the thinning algorithm described in
 "Analysis of Thinning Algorithms Using Mathematical
 Morphology" by Ben-Kwei Jang and Ronlad T. Chin in
@@ -47,7 +48,8 @@ definition Jang and Chin give of the thinning process is
 object while retaining any pixels whose removal would alter
 the connectivity or shorten the legs of the sceleton."
 
-<p>The sceleton is finally thinned when the thinning process
+<p>
+The sceleton is finally thinned when the thinning process
 converges; i.e., "no further pixels can be removed without
 altering the connectivity or shortening the sceleton legs"
 (p. 541).  The authors prove that the thinning process
@@ -57,6 +59,56 @@ original thickness of the object.  Each iteration peels off
 the outside pixels from the object.  Therefore, if the
 object is &lt;= n pixels thick, the algorithm should
 converge in &lt;= iterations.
+
+<h2>EXAMPLE</h2>
+
+To vectorize the raster map <em>streams_derived</em> in the North 
+Carolina sample dataset that represents the stream network derived from 
+the 10m resolution DEM by <em>r.watershed</em>, run:
+
+<div class="code"><pre>
+g.region rast=elevation -p
+# create flow accumulation map
+r.watershed elevation=elevation accumulation=accum_50K thresh=50000
+# extract streams from flow accumulation map
+r.mapcalc "streams_from_flow = if(abs(accum_50K) > 1000, 1, null())"
+
+# skeletonize map
+r.thin streams_from_flow out=streams_thin
+
+d.mon wx0
+d.rast streams_from_flow
+d.erase
+d.rast streams_thin
+</pre></div>
+<p>
+
+<center>
+<img src="r_thin_network.png" alt="Raster feature thinning (skeletonizing)"><br>
+Raster feature thinning (skeletonizing)
+</center>
+<p>
+
+The resulting map cabe optionally vectorized:
+<div class="code"><pre>
+r.to.vect streams_thin output=streams_thin type=line
+# visualize
+d.rast accum_50K
+d.vect streams_thin color=red width=2
+</pre></div>
+<p>
+
+<center>
+<img src="r_thin_vectorized.png" alt="Vectorized stream network after thinning extracted from flow accumulation map"><br>
+Vectorized stream network after thinning extracted from flow accumulation map
+</center>
+
+<!--
+# compare to official NC stream map
+d.erase
+d.vect streams_thin color=red width=2
+d.vect streams color=blue width=2
+-->
 
 <h2>SEE ALSO</h2>
 
