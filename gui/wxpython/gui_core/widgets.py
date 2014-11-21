@@ -882,7 +882,6 @@ class SearchModuleWidget(wx.Panel):
             self._search.SetToolTipString(_("Type to search in all modules. Press Enter for next match."))
 
         self._search.Bind(wx.EVT_TEXT, self.OnSearchModule)
-        self._search.Bind(wx.EVT_KEY_UP,  self.OnKeyUp)
         self._search.Bind(wx.EVT_TEXT_ENTER, self.OnEnter)
 
         if self._showTip:
@@ -919,12 +918,6 @@ class SearchModuleWidget(wx.Panel):
 
         self.SetSizer(sizer)
         sizer.Fit(self)
-
-    def OnKeyUp(self, event):
-        """Key or key combination pressed"""
-        if event.GetKeyCode() in (wx.WXK_RETURN, wx.WXK_NUMPAD_ENTER) and not event.ControlDown():
-            self._showSearchResult()
-        event.Skip()
 
     def OnEnter(self, event):
         """Process EVT_TEXT_ENTER to show search results"""
