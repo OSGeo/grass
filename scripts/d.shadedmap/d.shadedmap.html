@@ -1,16 +1,28 @@
 <h2>DESCRIPTION</h2>
 
 <em>d.shadedmap</em> will drape a color raster map over a shaded relief map.
+In place of shaded relief, any raster map can be used including aspect or slope.
+The color raster map is usually an elevation raster map with colorful color
+table (as opposed to gray scale color table). However, any raster map can be
+used including categorical raster maps.
+
+<p>
+The advantage of this module is that it allows to visualize the shaded map
+without a need to create a new raster which would combine both.
+Comparing to creating shaded relief as semi-transparent overlay on
+the color raster map, this module gives result with more saturated colors.
+
+<p>
+The input for this module can be created for example using
+<a href="r.slope.aspect.html">r.slope.aspect</a> or
+<a href="r.shaded.relief.html">r.shaded.relief</a><br>.
 
 
 <h2>NOTES</h2>
 
-Refer to the <em>d.his</em> help page for more details; <em>d.shadedmap</em>
-is simply a frontend to that module.
-<p>
-If the <b>output</b> option is given the rendering will be written to a
-new raster map. The <b>output</b> map does not respect the <b>brighten</b>
-parameter. <!-- at this time. -->
+Refer to the <em><a href="d.his.html">d.his</a></em> help page for more details;
+<em>d.shadedmap</em> is simply a frontend to that module.
+
 
 <h2>EXAMPLES</h2>
 
@@ -19,23 +31,42 @@ dataset location is used to hillshade the <tt>elevation</tt> map:
 
 <div class="code"><pre>
 g.region rast=aspect -p
+d.mon wx0
 d.shadedmap reliefmap=aspect drapemap=elevation
 </pre></div>
 
-In this next example, a shaded relief raster map is created in
-the Spearfish sample dataset and used to create a colorized hillshade
-raster map for later use:
+<!--
+image generated using the example above
+display region: g.region -a n=227228 s=220895 w=631362 e=641170
+d.out.file dshadedmap.png
+optipng -o5 dshadedmap.png
+-->
+<center>
+<img src="dshadedmap.png" alt="Elevation with aspect shades">
+<p>
+Figure: A detail of raster created by applying shading effect of aspect
+to elevation raster map from North Carolina dataset elevation map
+<!--
+TODO: perhaps add some explanation or thoughts about aspect versus shaded
+relief such as: in this case the shades created using aspect are much sharper
+comparing to what shaded relief would give and there are some extreme values
+in some areas
+-->
+</center>
+
+In this next example, a shaded relief raster map is created
+and used to create a colorized hillshade:
 
 <div class="code"><pre>
-g.region rast=elevation.10m
-r.colors -e map=elevation.10m color=haxby
-r.shaded.relief elevation.10m
+g.region rast=elevation
+r.shaded.relief input=elevation output=elevation_shaded_relief
 
-d.shadedmap reliefmap=elevation.10m.shade drapemap=elevation.10m \
-   output=elevation.10m.shade.colorized
-
-r.colors -r map=elevation.10m
+d.mon wx1
+d.shadedmap reliefmap=elevation_shaded_relief drapemap=elevation
 </pre></div>
+
+Interesting visualizations can be created using different color tables for
+elevation raster map, for example using <tt>haxby</tt> color table.
 
 
 <h2>SEE ALSO</h2>
@@ -43,7 +74,7 @@ r.colors -r map=elevation.10m
 <em>
 <a href="d.his.html">d.his</a>,
 <a href="g.pnmcomp.html">g.pnmcomp</a>,
-<a href="r.his.html">r.his</a>,
+<a href="r.shadedmap.html">r.shadedmap</a>,
 <a href="r.slope.aspect.html">r.slope.aspect</a>,
 <a href="r.shaded.relief.html">r.shaded.relief</a><br>
 <a href="wxGUI.nviz.html">wxGUI 3D viewer (NVIZ)</a>

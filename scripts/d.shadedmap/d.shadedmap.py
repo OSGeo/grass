@@ -15,9 +15,12 @@
 #############################################################################
 
 #%module
-#% description: Drapes a color raster over a shaded relief map.
+#% description: Drapes a color raster over an shaded relief or aspect map.
 #% keywords: display
 #% keywords: elevation
+#% keywords: relief
+#% keywords: hillshade
+#% keywords: visualization
 #%end
 #%option G_OPT_R_INPUT
 #% key: reliefmap
@@ -25,7 +28,8 @@
 #%end
 #%option G_OPT_R_INPUT
 #% key: drapemap
-#% description: Name of raster to drape over relief raster map
+#% label: Name of raster to drape over relief raster map
+#% description: Typically, this raster is elevation or other colorful raster
 #%end
 #%option
 #% key: brighten
@@ -34,47 +38,25 @@
 #% options: -99-99
 #% answer: 0
 #%end
-#%option G_OPT_R_OUTPUT
-#% description: Create raster map from result (optional)
-#% required: no
-#%end
 
 
-import os
-import sys
-from grass.script import core as grass
+from grass.script import core as gcore
 from grass.exceptions import CalledModuleError
 
 
 def main():
+    options, unused = gcore.parser()
+
     drape_map = options['drapemap']
     relief_map = options['reliefmap']
     brighten = options['brighten']
-    output_map = options['output']
 
-    if output_map:
-        tmp_base = "tmp_drape.%d" % os.getpid()
-        tmp_r = tmp_base + '.r'
-        tmp_g = tmp_base + '.g'
-        tmp_b = tmp_base + '.b'
-
-        grass.run_command('r.his', h_map = drape_map, i_map = relief_map,
-                          r_map = tmp_r, g_map = tmp_g, b_map = tmp_b)
-        grass.run_command('r.composite', red = tmp_r, green = tmp_g,
-                          blue = tmp_b, output = output_map)
-        grass.run_command('g.remove', flags = 'f', quiet = True, type='rast',
-                          name = '%s,%s,%s' % (tmp_r, tmp_g, tmp_b))
-
-    ret = 0
     try:
-        grass.run_command('d.his', h_map=drape_map, i_map=relief_map,
+        gcore.run_command('d.his', hue=drape_map, intensity=relief_map,
                           brighten=brighten)
     except CalledModuleError:
-        ret = 1
-
-    sys.exit(ret)
+        gcore.fatal(_("Module %s failed. Check the above error messages.") % 'd.his')
 
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
     main()
