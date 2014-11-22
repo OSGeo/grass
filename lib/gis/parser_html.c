@@ -323,12 +323,15 @@ void print_escaped_for_html_options(FILE * f, const char *str)
 
 void print_escaped_for_html_keywords(FILE * f, const char * str)
 {
+    /* generate HTML links */
+
     /* HTML link only for second keyword */
     if (st->n_keys > 1 &&
         strcmp(st->module_info.keywords[1], str) == 0) {
     
         const char *s;
         
+        /* TODO: fprintf(f, _("topic: ")); */
         fprintf(f, "<a href=\"topic_");
         for (s = str; *s; s++) {
             switch (*s) {
@@ -339,8 +342,32 @@ void print_escaped_for_html_keywords(FILE * f, const char * str)
         }
         fprintf(f, ".html\">%s</a>", str);
     }
-    else {
-        fprintf(f, "%s", str);
+    else { /* first and other than second keyword */
+         if (st->n_keys > 0 &&
+             strcmp(st->module_info.keywords[0], str) == 0) {
+             /* command family */
+             const char *s;
+
+             fprintf(f, "<a href=\"");
+             for (s = str; *s; s++) {
+                 switch (*s) {
+                     do_escape(' ', "_");
+                 default:
+                     fputc(*s, f);
+                 }
+             }
+             fprintf(f, ".html\">%s</a>", str);
+         } else {
+             /* keyword index */
+             if (st->n_keys > 0 &&
+                strcmp(st->module_info.keywords[2], str) == 0) {
+
+                /* TODO: fprintf(f, _("keywords: ")); */
+                fprintf(f, "<a href=\"keywords.html#%s\">%s</a>", str, str);
+             } else {
+                fprintf(f, "<a href=\"keywords.html#%s\">%s</a>", str, str);
+             }
+         }
     }
 }
 #undef do_escape
