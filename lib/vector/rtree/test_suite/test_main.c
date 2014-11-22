@@ -1,12 +1,12 @@
 /****************************************************************************
  *
- * MODULE:       test.gpde.lib
+ * MODULE:       test.rtree.lib
  *   	    	
  * AUTHOR(S):    Original author 
  *               Soeren Gebbert soerengebbert <at> gmx <dot> de
  * 		05 Sep 2007 Berlin
  *
- * PURPOSE:      Unit and integration tests for the gmath library
+ * PURPOSE:      Unit test for the vector rtree implementation
  *
  * COPYRIGHT:    (C) 2007 by the GRASS Development Team
  *
@@ -23,8 +23,7 @@
 
 /*- Parameters and global variables -----------------------------------------*/
 typedef struct {
-    struct Option *unit, *integration, *solverbenchmark, *blasbenchmark, *rows;
-    struct Flag *full, *testunit, *testint;
+    struct Option *unit;
 } paramType;
 
 paramType param; /*Parameters */
@@ -41,13 +40,8 @@ void set_params(void) {
     param.unit->key = "unit";
     param.unit->type = TYPE_STRING;
     param.unit->required = YES;
-    param.unit->options = "basics";
+    param.unit->options = "basic";
     param.unit->description = _("Choose the unit tests to run");
-
-    param.testunit = G_define_flag();
-    param.testunit->key = 'u';
-    param.testunit->description = _("Run all unit tests");
-
 }
 
 /* ************************************************************************* */
@@ -64,7 +58,7 @@ int main(int argc, char *argv[]) {
 
     module = G_define_module();
     module->description
-            = _("Performs benchmarks, unit and integration tests for the gmath library");
+            = _("Unit tests for the vector rtree library");
 
     /* Get parameters from user */
     set_params();
@@ -76,7 +70,7 @@ int main(int argc, char *argv[]) {
     i = 0;
     if (param.unit->answers) {
         while (param.unit->answers[i]) {
-            if (strcmp(param.unit->answers[i], "basics") == 0)
+            if (strcmp(param.unit->answers[i], "basic") == 0)
                 returnstat += unit_test_basics();
             i++;
         }
@@ -85,9 +79,9 @@ int main(int argc, char *argv[]) {
 
     
     if (returnstat != 0)
-        G_warning("Errors detected while testing the gmath lib");
+        G_warning("Errors detected while testing the vector rtree lib");
     else
-        G_message("\n-- gmath lib tests finished successfully --");
+        G_message("\n-- vector rtree lib tests finished successfully --");
 
     return (returnstat);
 }
