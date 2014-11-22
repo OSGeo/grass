@@ -1,35 +1,32 @@
-"""!@package grass.temporal
-
-@brief GRASS Python scripting module (temporal GIS functions)
-
-Temporal GIS export functions to be used in temporal modules
+"""
+Space time dataset import functions
 
 Usage:
 
-@code
-import grass.temporal as tgis
+.. code-block:: python
 
-input="/tmp/temp_1950_2012.tar.gz"
-output="temp_1950_2012"
-extrdir="/tmp"
-title="My new dataset"
-descr="May new shiny dataset"
-location=None
-link=True
-exp=True
-overr=False
-create=False
-tgis.import_stds(input, output, extrdir, title, descr, location,
-                link, exp, overr, create, "strds")
-...
-@endcode
+    import grass.temporal as tgis
+
+    input="/tmp/temp_1950_2012.tar.gz"
+    output="temp_1950_2012"
+    extrdir="/tmp"
+    title="My new dataset"
+    descr="May new shiny dataset"
+    location=None
+    link=True
+    exp=True
+    overr=False
+    create=False
+    tgis.import_stds(input, output, extrdir, title, descr, location,
+                    link, exp, overr, create, "strds")
+
 
 (C) 2012-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Soeren Gebbert
+:authors: Soeren Gebbert
 """
 
 import os
@@ -55,7 +52,7 @@ imported_maps = {}
 ############################################################################
 
 
-def _import_raster_maps_from_gdal(maplist, overr, exp, location, link, format_, 
+def _import_raster_maps_from_gdal(maplist, overr, exp, location, link, format_,
                                   set_current_region=False):
     impflags = ""
     if overr:
@@ -66,7 +63,7 @@ def _import_raster_maps_from_gdal(maplist, overr, exp, location, link, format_,
         name = row["name"]
         if format_ == "GTiff":
             filename = row["filename"] + ".tif"
-        elif format_=="AAIGrid":
+        elif format_ == "AAIGrid":
             filename = row["filename"] + ".asc"
             if not overr:
                 impflags += "o"
@@ -84,8 +81,8 @@ def _import_raster_maps_from_gdal(maplist, overr, exp, location, link, format_,
                                     overwrite=gscript.overwrite())
 
         except CalledModuleError:
-            gscript.fatal(_("Unable to import/link raster map <%s> from file %s.") %(name, 
-                                                                     filename))
+            gscript.fatal(_("Unable to import/link raster map <%s> from file"
+                            " %s.") % (name, filename))
 
         # Set the color rules if present
         filename = row["filename"] + ".color"
@@ -96,7 +93,7 @@ def _import_raster_maps_from_gdal(maplist, overr, exp, location, link, format_,
                                     overwrite=gscript.overwrite())
             except CalledModuleError:
                 gscript.fatal(_("Unable to set the color rules for "
-                             "raster map <%s>.") % name)
+                                "raster map <%s>.") % name)
 
     # Set the computational region from the last map imported
     if set_current_region is True:
@@ -119,8 +116,8 @@ def _import_raster_maps(maplist, set_current_region=False):
                                 verbose=True)
 
         except CalledModuleError:
-            gscript.fatal(_("Unable to unpack raster map <%s> from file %s.") % (name, 
-                                                                              filename))
+            gscript.fatal(_("Unable to unpack raster map <%s> from file "
+                            "%s.") % (name, filename))
 
     # Set the computational region from the last map imported
     if set_current_region is True:
@@ -143,8 +140,8 @@ def _import_vector_maps_from_gml(maplist, overr, exp, location, link):
                                 overwrite=gscript.overwrite())
 
         except CalledModuleError:
-            gscript.fatal(_("Unable to import vector map <%s> from file %s.") % (name,
-                                                                              filename))
+            gscript.fatal(_("Unable to import vector map <%s> from file "
+                            "%s.") % (name, filename))
 
 ############################################################################
 
@@ -167,36 +164,36 @@ def _import_vector_maps(maplist):
                                 verbose=True)
 
         except CalledModuleError:
-            gscript.fatal(_("Unable to unpack vector map <%s> from file %s.") % (name, 
-                                                                              filename))
+            gscript.fatal(_("Unable to unpack vector map <%s> from file "
+                            "%s.") % (name, filename))
 
         imported_maps[name] = name
 ############################################################################
 
 
 def import_stds(input, output, extrdir, title=None, descr=None, location=None,
-        link=False, exp=False, overr=False, create=False, stds_type="strds", 
-        base=None, set_current_region=False):
-    """!Import space time datasets of type raster and vector
+                link=False, exp=False, overr=False, create=False,
+                stds_type="strds", base=None, set_current_region=False):
+    """Import space time datasets of type raster and vector
 
-        @param input Name of the input archive file
-        @param output The name of the output space time dataset
-        @param extrdir The extraction directory
-        @param title The title of the new created space time dataset
-        @param descr The description of the new created
+        :param input: Name of the input archive file
+        :param output: The name of the output space time dataset
+        :param extrdir: The extraction directory
+        :param title: The title of the new created space time dataset
+        :param descr: The description of the new created
                      space time dataset
-        @param location The name of the location that should be created,
+        :param location: The name of the location that should be created,
                         maps are imported into this location
-        @param link Switch to link raster maps instead importing them
-        @param exp Extend location extents based on new dataset
-        @param overr Override projection (use location's projection)
-        @param create Create the location specified by the "location"
+        :param link: Switch to link raster maps instead importing them
+        :param exp: Extend location extents based on new dataset
+        :param overr: Override projection (use location's projection)
+        :param create: Create the location specified by the "location"
                       parameter and exit.
                       Do not import the space time datasets.
-        @param stds_type The type of the space time dataset that
+        :param stds_type: The type of the space time dataset that
                          should be imported
-        @param base The base name of the new imported maps, it will be extended
-                    using a numerical index.
+        :param base: The base name of the new imported maps, it will be
+                     extended using a numerical index.
     """
 
     global raise_on_error
@@ -206,7 +203,7 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
     # Check if input file and extraction directory exits
     if not os.path.exists(input):
         gscript.fatal(_("Space time raster dataset archive <%s> not found")
-                   % input)
+                      % input)
     if not create and not os.path.exists(extrdir):
         gscript.fatal(_("Extraction directory <%s> not found") % extrdir)
 
@@ -243,15 +240,18 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
         p.communicate()
         temp_file.close()
 
-        if not gscript.compare_key_value_text_files(temp_name, proj_name, sep="="):
+        if not gscript.compare_key_value_text_files(temp_name, proj_name,
+                                                    sep="="):
             if overr:
                 gscript.warning(_("Projection information does not match. "
-                               "Proceeding..."))
+                                  "Proceeding..."))
             else:
                 diff = ''.join(gscript.diff_files(temp_name, proj_name))
-                gscript.warning(_("Difference between PROJ_INFO file of imported map "
-                               "and of current location:\n{diff}").format(diff=diff))
-                gscript.fatal(_("Projection information does not match. Aborting."))
+                gscript.warning(_("Difference between PROJ_INFO file of "
+                                  "imported map and of current location:"
+                                  "\n{diff}").format(diff=diff))
+                gscript.fatal(_("Projection information does not match. "
+                                "Aborting."))
 
     # Create a new location based on the projection information and switch
     # into it
@@ -260,15 +260,15 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
         try:
             proj4_string = open(proj_file_name, 'r').read()
             gscript.create_location(dbase=old_env["GISDBASE"],
-                                 location=location,
-                                 proj4=proj4_string)
+                                    location=location,
+                                    proj4=proj4_string)
             # Just create a new location and return
             if create:
                 os.chdir(old_cwd)
                 return
         except Exception as e:
             gscript.fatal(_("Unable to create location %(l)s. Reason: %(e)s")
-                         % {'l': location, 'e': str(e)})
+                          % {'l': location, 'e': str(e)})
         # Switch to the new created location
         try:
             gscript.run_command("g.mapset", mapset="PERMANENT",
@@ -281,7 +281,7 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
             gscript.run_command("t.connect", flags="d")
         except CalledModuleError:
             gscript.fatal(_("Unable to create default temporal database "
-                         "in new location %s") % location)
+                            "in new location %s") % location)
 
     try:
         # Make sure the temporal database exists
@@ -313,8 +313,9 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
             # that must be extended by the file suffix
             filename = line_list[0].strip().split(":")[0]
             if base:
-                mapname = "%s_%s" % (base, gscript.get_num_suffix(line_count + 1, max_count))
-                mapid= "%s@%s"%(mapname, mapset)
+                mapname = "%s_%s" % (base, gscript.get_num_suffix(line_count + 1,
+                                                                  max_count))
+                mapid = "%s@%s" % (mapname, mapset)
             else:
                 mapname = filename
                 mapid = mapname + "@" + mapset
@@ -325,16 +326,16 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
             row["id"] = mapid
             row["start"] = line_list[1].strip()
             row["end"] = line_list[2].strip()
-            
-            new_list_file.write("%s%s%s%s%s\n"%(mapname,fs, row["start"], 
-                                              fs, row["end"]))
+
+            new_list_file.write("%s%s%s%s%s\n" % (mapname, fs, row["start"],
+                                                  fs, row["end"]))
 
             maplist.append(row)
             line_count += 1
 
         list_file.close()
         new_list_file.close()
-        
+
         # Read the init file
         fs = "="
         init = {}
@@ -353,9 +354,9 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
            "semantic_type" not in init or \
            "number_of_maps" not in init:
             gscript.fatal(_("Key words %(t)s, %(s)s or %(n)s not found in init"
-                         " file.") % {'t': "temporal_type",
-                                      's': "semantic_type",
-                                      'n': "number_of_maps"})
+                            " file.") % {'t': "temporal_type",
+                                         's': "semantic_type",
+                                         'n': "number_of_maps"})
 
         if line_count != int(init["number_of_maps"]):
             gscript.fatal(_("Number of maps mismatch in init and list file."))
@@ -369,7 +370,8 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
             format_ = init["format"]
 
         if stds_type != type_:
-            gscript.fatal(_("The archive file is of wrong space time dataset type"))
+            gscript.fatal(_("The archive file is of wrong space time dataset"
+                            " type"))
 
         # Check the existence of the files
         if format_ == "GTiff":
@@ -377,19 +379,19 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
                 filename = row["filename"] + ".tif"
                 if not os.path.exists(filename):
                     gscript.fatal(_("Unable to find GeoTIFF raster file "
-                                 "<%s> in archive.") % filename)
+                                    "<%s> in archive.") % filename)
         elif format_ == "AAIGrid":
             for row in maplist:
                 filename = row["filename"] + ".asc"
                 if not os.path.exists(filename):
                     gscript.fatal(_("Unable to find AAIGrid raster file "
-                                 "<%s> in archive.") % filename)
+                                    "<%s> in archive.") % filename)
         elif format_ == "GML":
             for row in maplist:
                 filename = row["filename"] + ".xml"
                 if not os.path.exists(filename):
                     gscript.fatal(_("Unable to find GML vector file "
-                                 "<%s> in archive.") % filename)
+                                    "<%s> in archive.") % filename)
         elif format_ == "pack":
             for row in maplist:
                 if type_ == "stvds":
@@ -398,22 +400,22 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
                     filename = row["filename"] + ".pack"
                 if not os.path.exists(filename):
                     gscript.fatal(_("Unable to find GRASS package file "
-                                 "<%s> in archive.") % filename)
+                                    "<%s> in archive.") % filename)
         else:
             gscript.fatal(_("Unsupported input format"))
 
         # Check the space time dataset
         id = output + "@" + mapset
         sp = dataset_factory(type_, id)
-        if sp.is_in_db() and gscript.overwrite() == False:
-            gscript.fatal(_("Space time %(t)s dataset <%(sp)s> is already in the "
-                         "database. Use the overwrite flag.") % {'t': type_,
-                                                                 'sp': sp.get_id()})
+        if sp.is_in_db() and gscript.overwrite() is False:
+            gscript.fatal(_("Space time %(t)s dataset <%(sp)s> is already in"
+                            " the database. Use the overwrite flag.") %
+                          {'t': type_, 'sp': sp.get_id()})
 
         # Import the maps
         if type_ == "strds":
             if format_ == "GTiff" or format_ == "AAIGrid":
-                _import_raster_maps_from_gdal(maplist, overr, exp, location, 
+                _import_raster_maps_from_gdal(maplist, overr, exp, location,
                                               link, format_, set_current_region)
             if format_ == "pack":
                 _import_raster_maps(maplist, set_current_region)
@@ -425,11 +427,11 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
                 _import_vector_maps(maplist)
 
         # Create the space time dataset
-        if sp.is_in_db() and gscript.overwrite() == True:
+        if sp.is_in_db() and gscript.overwrite() is True:
             gscript.info(_("Overwrite space time %(sp)s dataset "
-                        "<%(id)s> and unregister all maps.") % {
-                        'sp': sp.get_new_map_instance(None).get_type(),
-                        'id': sp.get_id()})
+                           "<%(id)s> and unregister all maps.") %
+                         {'sp': sp.get_new_map_instance(None).get_type(),
+                          'id': sp.get_id()})
             sp.delete()
             sp = sp.get_new_instance(id)
 
@@ -438,12 +440,13 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
         relative_time_unit = None
         if temporal_type == "relative":
             if "relative_time_unit" not in init:
-                gscript.fatal(_("Key word %s not found in init file.") % ("relative_time_unit"))
+                gscript.fatal(_("Key word %s not found in init file.") %
+                              ("relative_time_unit"))
             relative_time_unit = init["relative_time_unit"]
             sp.set_relative_time_unit(relative_time_unit)
 
         gscript.verbose(_("Create space time %s dataset.") %
-                     sp.get_new_map_instance(None).get_type())
+                        sp.get_new_map_instance(None).get_type())
 
         sp.set_initial_values(temporal_type=temporal_type,
                               semantic_type=semantic_type, title=title,

@@ -7,9 +7,9 @@ This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Thomas Leppelt and Soeren Gebbert
+:authors: Thomas Leppelt and Soeren Gebbert
 
-@code
+.. code-block:: python
 
     >>> p = TemporalRasterAlgebraLexer()
     >>> p.build()
@@ -50,7 +50,6 @@ for details.
     LexToken(SUB,'-',1,40)
     LexToken(FLOAT,2.45,1,42)
 
-@endcode
 """
 
 from temporal_raster_base_algebra import *
@@ -64,9 +63,21 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
         TemporalRasterBaseAlgebraParser.__init__(self, pid, run, debug, spatial, nprocs, register_null)
 
         self.m_mapcalc = pymod.Module('r.mapcalc')
-        self.m_remove = pymod.Module('g.remove')
+        self.m_mremove = pymod.Module('g.remove')
 
     def parse(self, expression, basename = None, overwrite=False):
+        # Check for space time dataset type definitions from temporal algebra
+        l = TemporalRasterAlgebraLexer()
+        l.build()
+        l.lexer.input(expression)
+
+        while True:
+            tok = l.lexer.token()
+            if not tok: break
+            
+            if tok.type == "STVDS" or tok.type == "STRDS" or tok.type == "STR3DS":
+                raise SyntaxError("Syntax error near '%s'" %(tok.type))
+        
         self.lexer = TemporalRasterAlgebraLexer()
         self.lexer.build()
         self.parser = yacc.yacc(module=self, debug=self.debug)
@@ -74,27 +85,11 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
         self.overwrite = overwrite
         self.count = 0
         self.stdstype = "strds"
+        self.maptype = "rast"
+        self.mapclass = RasterDataset
         self.basename = basename
         self.expression = expression
         self.parser.parse(expression)
-
-    def remove_empty_maps(self):
-        """! Removes the intermediate vector maps.
-        """
-        if self.empty_maps:
-            self.msgr.message(_("Removing empty raster maps"))
-            namelist = self.empty_maps.values()
-            max = 100
-            chunklist = [namelist[i:i + max] for i in range(0, len(namelist), max)]
-            for chunk in chunklist:
-                stringlist = ",".join(chunk)
-
-                if self.run:
-                    m = copy.deepcopy(self.m_remove)
-                    m.inputs["type"].value = "rast"
-                    m.inputs["pattern"].value = stringlist
-                    m.flags["f"].value = True
-                    m.run()
 
     ######################### Temporal functions ##############################
 

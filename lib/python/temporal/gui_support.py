@@ -1,8 +1,5 @@
-"""!@package grass.temporal
-
-@brief GRASS Python scripting module (temporal GIS functions)
-
-Temporal GIS related functions to be used in Python scripts.
+"""
+GUI support functions
 
 
 (C) 2008-2011 by the GRASS Development Team
@@ -10,34 +7,36 @@ This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Soeren Gebbert
+:authors: Soeren Gebbert
 """
 
 from space_time_datasets import *
 from factory import *
+import grass.script as gscript
 
 ###############################################################################
 
-def tlist_grouped(type, group_type = False, dbif=None):
-    """!List of temporal elements grouped by mapsets.
 
-    Returns a dictionary where the keys are mapset 
+def tlist_grouped(type, group_type=False, dbif=None):
+    """List of temporal elements grouped by mapsets.
+
+    Returns a dictionary where the keys are mapset
     names and the values are lists of space time datasets in that
     mapset. Example:
 
-    @code
-    >>> tgis.tlist_grouped('strds')['PERMANENT']
-    ['precipitation', 'temperature']
-    @endcode
-    
-    @param type element type (strds, str3ds, stvds)
-    @param group_type TBD
+    .. code-block:: python
 
-    @return directory of mapsets/elements
+        >>> tgis.tlist_grouped('strds')['PERMANENT']
+        ['precipitation', 'temperature']
+
+    :param type: element type (strds, str3ds, stvds)
+    :param group_type: TBD
+
+    :return: directory of mapsets/elements
     """
     result = {}
     dbif, connected = init_dbif(dbif)
-    
+
     mapset = None
     if type == 'stds':
         types = ['strds', 'str3ds', 'stvds']
@@ -46,7 +45,7 @@ def tlist_grouped(type, group_type = False, dbif=None):
     for type in types:
         try:
             tlist_result = tlist(type=type, dbif=dbif)
-        except core.ScriptError as e:
+        except gscript.ScriptError as e:
             warning(e)
             continue
 
@@ -66,7 +65,7 @@ def tlist_grouped(type, group_type = False, dbif=None):
             if group_type:
                 if type in result[mapset]:
                     result[mapset][type].append(name)
-                else:        
+                else:
                     result[mapset][type] = [name, ]
             else:
                 result[mapset].append(name)
@@ -78,37 +77,42 @@ def tlist_grouped(type, group_type = False, dbif=None):
 
 ###############################################################################
 
-def tlist(type, dbif=None):
-    """!Return a list of space time datasets of absolute and relative time
-     
-    @param type element type (strds, str3ds, stvds)
 
-    @return a list of space time dataset ids
+def tlist(type, dbif=None):
+    """Return a list of space time datasets of absolute and relative time
+
+    :param type: element type (strds, str3ds, stvds)
+
+    :return: a list of space time dataset ids
     """
     id = None
     sp = dataset_factory(type, id)
     dbif, connected = init_dbif(dbif)
 
+    mapsets = get_available_temporal_mapsets()
+
     output = []
     temporal_type = ["absolute", 'relative']
     for type in temporal_type:
-        # Table name
-        if type == "absolute":
-            table = sp.get_type() + "_view_abs_time"
-        else:
-            table = sp.get_type() + "_view_rel_time"
+        # For each available mapset
+        for mapset in mapsets.keys():
+            # Table name
+            if type == "absolute":
+                table = sp.get_type() + "_view_abs_time"
+            else:
+                table = sp.get_type() + "_view_rel_time"
 
-        # Create the sql selection statement
-        sql = "SELECT id FROM " + table
-        sql += " ORDER BY id"
+            # Create the sql selection statement
+            sql = "SELECT id FROM " + table
+            sql += " ORDER BY id"
 
-        dbif.cursor.execute(sql)
-        rows = dbif.cursor.fetchall()
+            dbif.execute(sql,  mapset=mapset)
+            rows = dbif.fetchall(mapset=mapset)
 
-        # Append the ids of the space time datasets
-        for row in rows:
-            for col in row:
-                output.append(str(col))
+            # Append the ids of the space time datasets
+            for row in rows:
+                for col in row:
+                    output.append(str(col))
 
     if connected is True:
         dbif.close()
