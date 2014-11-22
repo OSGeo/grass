@@ -101,7 +101,7 @@ def main():
 
     overwrite = grass.overwrite()
 
-    sp = tgis.open_old_space_time_dataset(input, "strds", dbif)
+    sp = tgis.open_old_stds(input, "strds", dbif)
     maps = sp.get_registered_maps_as_objects(where=where, dbif=dbif)
 
     if not maps:
@@ -109,7 +109,7 @@ def main():
         grass.warning(_("Space time raster dataset <%s> is empty") % sp.get_id())
         return
 
-    new_sp = tgis.check_new_space_time_dataset(input, "strds", dbif=dbif,
+    new_sp = tgis.check_new_stds(input, "strds", dbif=dbif,
                                                overwrite=overwrite)
     # Configure the r.neighbor module
     neighbor_module = pymod.Module("r.neighbors", input="dummy",
@@ -135,7 +135,7 @@ def main():
         new_maps.append(new_map)
 
         mod = copy.deepcopy(neighbor_module)
-        mod(input=str(map.get_id()), output=str(new_map.get_id()))
+        mod(input=map.get_id(), output=new_map.get_id())
         print(mod.get_bash())
         process_queue.put(mod)
 
@@ -144,7 +144,7 @@ def main():
 
     # Open the new space time raster dataset
     ttype, stype, title, descr = sp.get_initial_values()
-    new_sp = tgis.open_new_space_time_dataset(output, "strds", ttype, title,
+    new_sp = tgis.open_new_stds(output, "strds", ttype, title,
                                               descr, stype, dbif, overwrite)
     num_maps = len(new_maps)
     # collect empty maps to remove them
@@ -185,7 +185,7 @@ def main():
             else:
                 names += ",%s" % (map.get_name())
 
-        grass.run_command("g.remove", type='rast', name=names, quiet=True, flags='f')
+        grass.run_command("g.remove", flags='f', type='rast', name=names, quiet=True)
 
     dbif.close()
 

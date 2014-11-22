@@ -72,7 +72,7 @@ def main():
 
     # In case a space time dataset is specified
     if input:
-        sp = tgis.open_old_space_time_dataset(input, type, dbif)
+        sp = tgis.open_old_stds(input, type, dbif)
 
     maplist = []
 
@@ -151,7 +151,11 @@ def main():
     grass.percent(num_maps, num_maps, 1)
 
     # Update space time datasets
-    grass.message(_("Unregister maps from space time dataset(s)"))
+    if input:
+        grass.message(_("Unregister maps from space time dataset <%s>"%(input)))
+    else:
+        grass.message(_("Unregister maps from the temporal database"))
+
     if input:
         sp.update_from_registered_maps(dbif)
         sp.update_command_string(dbif=dbif)
@@ -159,7 +163,7 @@ def main():
         count = 0
         for key in update_dict.keys():
             id = update_dict[key]
-            sp = tgis.open_old_space_time_dataset(id, type, dbif)
+            sp = tgis.open_old_stds(id, type, dbif)
             sp.update_from_registered_maps(dbif)
             grass.percent(count, len(update_dict), 1)
             count += 1

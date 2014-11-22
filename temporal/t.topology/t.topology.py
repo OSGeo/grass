@@ -59,7 +59,7 @@ def main():
     # Make sure the temporal database exists
     tgis.init()
 
-    sp = tgis.open_old_space_time_dataset(name, type)
+    sp = tgis.open_old_stds(name, type)
 
     # Get ordered map list
     maps = sp.get_registered_maps_as_objects(
