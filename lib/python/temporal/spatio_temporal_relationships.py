@@ -1,24 +1,21 @@
-"""!@package grass.temporal
-
-@brief GRASS Python scripting module (temporal GIS functions)
-
-Temporal GIS related functions to be used in temporal GIS Python library package.
+"""
+Class to build the spatio-temporal topology between map lists
 
 Usage:
 
-@code
-import grass.temporal as tgis
+.. code-block:: python
 
-tgis.print_temporal_relations(maps)
-...
-@endcode
+    import grass.temporal as tgis
+
+    tgis.print_temporal_relations(maps)
+
 
 (C) 2012-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Soeren Gebbert
+:authors: Soeren Gebbert
 """
 from abstract_dataset import *
 from datetime_math import *
@@ -29,339 +26,339 @@ from ctypes import *
 
 ###############################################################################
 
+
 class SpatioTemporalTopologyBuilder(object):
-    """!This class is designed to build the spatio-temporal topology
+    """This class is designed to build the spatio-temporal topology
        of spatio-temporally related abstract dataset objects.
 
-       The abstract dataset objects must be provided as a single list, or in two lists.
+       The abstract dataset objects must be provided as a single list, or in
+       two lists.
 
         Example:
 
-        @code
+        .. code-block:: python
 
-        # We have a space time raster dataset and build a map list
-        # from all registered maps ordered by start time
-        maps = strds.get_registered_maps_as_objects()
+            # We have a space time raster dataset and build a map list
+            # from all registered maps ordered by start time
+            maps = strds.get_registered_maps_as_objects()
 
-        # Now lets build the temporal topology of the maps in the list
+            # Now lets build the temporal topology of the maps in the list
 
-        tb = SpatioTemporalTopologyBuilder()
+            tb = SpatioTemporalTopologyBuilder()
 
-        tb.build(maps)
+            tb.build(maps)
 
-        dbif, connected = init_dbif(None)
+            dbif, connected = init_dbif(None)
 
-        for map in tb:
-            map.select(dbif)
-            map.print_info()
+            for map in tb:
+                map.select(dbif)
+                map.print_info()
 
-        # Same can be done with the existing map list
-        # But be aware that this is might not be temporally ordered
-        for map in maps:
-            map.select(dbf)
-            map.print_info()
+            # Same can be done with the existing map list
+            # But be aware that this is might not be temporally ordered
+            for map in maps:
+                map.select(dbf)
+                map.print_info()
 
-        # Using the next and previous methods, we can iterate over the
-        # topological related maps in this way
+            # Using the next and previous methods, we can iterate over the
+            # topological related maps in this way
 
-        first = tb.get_first()
+            first = tb.get_first()
 
-        while first:
-            first.print_topology_info()
-            first = first.next()
+            while first:
+                first.print_topology_info()
+                first = first.next()
 
-        # Dictionary like accessed
-        map = tb["name@mapset"]
+            # Dictionary like accessed
+            map = tb["name@mapset"]
 
-        >>> # Example with two lists of maps
-        >>> import grass.temporal as tgis
-        >>> import datetime
-        >>> # Create two list of maps with equal time stamps
-        >>> mapsA = []
-        >>> mapsB = []
-        >>> for i in range(4):
-        ...     idA = "a%i@B"%(i)
-        ...     mapA = tgis.RasterDataset(idA)
-        ...     idB = "b%i@B"%(i)
-        ...     mapB = tgis.RasterDataset(idB)
-        ...     check = mapA.set_relative_time(i, i + 1, "months")
-        ...     check = mapB.set_relative_time(i, i + 1, "months")
-        ...     mapsA.append(mapA)
-        ...     mapsB.append(mapB)
-        >>> # Build the topology between the two map lists
-        >>> tb = SpatioTemporalTopologyBuilder()
-        >>> tb.build(mapsA, mapsB, None)
-        >>> # Check relations of mapsA
-        >>> for map in mapsA:
-        ...     if map.get_equal():
-        ...         relations = map.get_equal()
-        ...         print "Map %s has equal relation to map %s"%(map.get_name(),
-        ...               relations[0].get_name())
-        Map a0 has equal relation to map b0
-        Map a1 has equal relation to map b1
-        Map a2 has equal relation to map b2
-        Map a3 has equal relation to map b3
-        >>> # Check relations of mapsB
-        >>> for map in mapsB:
-        ...     if map.get_equal():
-        ...         relations = map.get_equal()
-        ...         print "Map %s has equal relation to map %s"%(map.get_name(),
-        ...               relations[0].get_name())
-        Map b0 has equal relation to map a0
-        Map b1 has equal relation to map a1
-        Map b2 has equal relation to map a2
-        Map b3 has equal relation to map a3
+            >>> # Example with two lists of maps
+            >>> import grass.temporal as tgis
+            >>> import datetime
+            >>> # Create two list of maps with equal time stamps
+            >>> mapsA = []
+            >>> mapsB = []
+            >>> for i in range(4):
+            ...     idA = "a%i@B"%(i)
+            ...     mapA = tgis.RasterDataset(idA)
+            ...     idB = "b%i@B"%(i)
+            ...     mapB = tgis.RasterDataset(idB)
+            ...     check = mapA.set_relative_time(i, i + 1, "months")
+            ...     check = mapB.set_relative_time(i, i + 1, "months")
+            ...     mapsA.append(mapA)
+            ...     mapsB.append(mapB)
+            >>> # Build the topology between the two map lists
+            >>> tb = SpatioTemporalTopologyBuilder()
+            >>> tb.build(mapsA, mapsB, None)
+            >>> # Check relations of mapsA
+            >>> for map in mapsA:
+            ...     if map.get_equal():
+            ...         relations = map.get_equal()
+            ...         print "Map %s has equal relation to map %s"%(map.get_name(),
+            ...               relations[0].get_name())
+            Map a0 has equal relation to map b0
+            Map a1 has equal relation to map b1
+            Map a2 has equal relation to map b2
+            Map a3 has equal relation to map b3
+            >>> # Check relations of mapsB
+            >>> for map in mapsB:
+            ...     if map.get_equal():
+            ...         relations = map.get_equal()
+            ...         print "Map %s has equal relation to map %s"%(map.get_name(),
+            ...               relations[0].get_name())
+            Map b0 has equal relation to map a0
+            Map b1 has equal relation to map a1
+            Map b2 has equal relation to map a2
+            Map b3 has equal relation to map a3
 
 
-        >>> mapsA = []
-        >>> mapsB = []
-        >>> for i in range(4):
-        ...     idA = "a%i@B"%(i)
-        ...     mapA = tgis.RasterDataset(idA)
-        ...     idB = "b%i@B"%(i)
-        ...     mapB = tgis.RasterDataset(idB)
-        ...     check = mapA.set_relative_time(i, i + 1, "months")
-        ...     check = mapB.set_relative_time(i + 1, i + 2, "months")
-        ...     mapsA.append(mapA)
-        ...     mapsB.append(mapB)
-        >>> # Build the topology between the two map lists
-        >>> tb = SpatioTemporalTopologyBuilder()
-        >>> tb.build(mapsA, mapsB, None)
-        >>> # Check relations of mapsA
-        >>> for map in mapsA:
-        ...     print(map.get_temporal_extent_as_tuple())
-        ...     m = map.get_temporal_relations()
-        ...     for key in m.keys():
-        ...         if key not in ["NEXT", "PREV"]:
-        ...             print(key, m[key][0].get_temporal_extent_as_tuple())
-        (0, 1)
-        ('PRECEDES', (1, 2))
-        (1, 2)
-        ('PRECEDES', (2, 3))
-        ('EQUAL', (1, 2))
-        (2, 3)
-        ('FOLLOWS', (1, 2))
-        ('PRECEDES', (3, 4))
-        ('EQUAL', (2, 3))
-        (3, 4)
-        ('FOLLOWS', (2, 3))
-        ('EQUAL', (3, 4))
-        ('PRECEDES', (4, 5))
+            >>> mapsA = []
+            >>> mapsB = []
+            >>> for i in range(4):
+            ...     idA = "a%i@B"%(i)
+            ...     mapA = tgis.RasterDataset(idA)
+            ...     idB = "b%i@B"%(i)
+            ...     mapB = tgis.RasterDataset(idB)
+            ...     check = mapA.set_relative_time(i, i + 1, "months")
+            ...     check = mapB.set_relative_time(i + 1, i + 2, "months")
+            ...     mapsA.append(mapA)
+            ...     mapsB.append(mapB)
+            >>> # Build the topology between the two map lists
+            >>> tb = SpatioTemporalTopologyBuilder()
+            >>> tb.build(mapsA, mapsB, None)
+            >>> # Check relations of mapsA
+            >>> for map in mapsA:
+            ...     print(map.get_temporal_extent_as_tuple())
+            ...     m = map.get_temporal_relations()
+            ...     for key in m.keys():
+            ...         if key not in ["NEXT", "PREV"]:
+            ...             print(key, m[key][0].get_temporal_extent_as_tuple())
+            (0, 1)
+            ('PRECEDES', (1, 2))
+            (1, 2)
+            ('PRECEDES', (2, 3))
+            ('EQUAL', (1, 2))
+            (2, 3)
+            ('FOLLOWS', (1, 2))
+            ('PRECEDES', (3, 4))
+            ('EQUAL', (2, 3))
+            (3, 4)
+            ('FOLLOWS', (2, 3))
+            ('EQUAL', (3, 4))
+            ('PRECEDES', (4, 5))
 
-        >>> mapsA = []
-        >>> mapsB = []
-        >>> for i in range(4):
-        ...     idA = "a%i@B"%(i)
-        ...     mapA = tgis.RasterDataset(idA)
-        ...     idB = "b%i@B"%(i)
-        ...     mapB = tgis.RasterDataset(idB)
-        ...     start = datetime.datetime(2000 + i, 1, 1)
-        ...     end = datetime.datetime(2000 + i + 1, 1, 1)
-        ...     check = mapA.set_absolute_time(start, end)
-        ...     start = datetime.datetime(2000 + i + 1, 1, 1)
-        ...     end = datetime.datetime(2000 + i + 2, 1, 1)
-        ...     check = mapB.set_absolute_time(start, end)
-        ...     mapsA.append(mapA)
-        ...     mapsB.append(mapB)
-        >>> # Build the topology between the two map lists
-        >>> tb = SpatioTemporalTopologyBuilder()
-        >>> tb.build(mapsA, mapsB, None)
-        >>> # Check relations of mapsA
-        >>> for map in mapsA:
-        ...     print(map.get_temporal_extent_as_tuple())
-        ...     m = map.get_temporal_relations()
-        ...     for key in m.keys():
-        ...         if key not in ["NEXT", "PREV"]:
-        ...             print(key, m[key][0].get_temporal_extent_as_tuple())
-        (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0))
-        ('PRECEDES', (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2002, 1, 1, 0, 0)))
-        (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2002, 1, 1, 0, 0))
-        ('PRECEDES', (datetime.datetime(2002, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
-        ('EQUAL', (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2002, 1, 1, 0, 0)))
-        (datetime.datetime(2002, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0))
-        ('FOLLOWS', (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2002, 1, 1, 0, 0)))
-        ('PRECEDES', (datetime.datetime(2003, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0)))
-        ('EQUAL', (datetime.datetime(2002, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
-        (datetime.datetime(2003, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0))
-        ('FOLLOWS', (datetime.datetime(2002, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
-        ('EQUAL', (datetime.datetime(2003, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0)))
-        ('PRECEDES', (datetime.datetime(2004, 1, 1, 0, 0), datetime.datetime(2005, 1, 1, 0, 0)))
+            >>> mapsA = []
+            >>> mapsB = []
+            >>> for i in range(4):
+            ...     idA = "a%i@B"%(i)
+            ...     mapA = tgis.RasterDataset(idA)
+            ...     idB = "b%i@B"%(i)
+            ...     mapB = tgis.RasterDataset(idB)
+            ...     start = datetime.datetime(2000 + i, 1, 1)
+            ...     end = datetime.datetime(2000 + i + 1, 1, 1)
+            ...     check = mapA.set_absolute_time(start, end)
+            ...     start = datetime.datetime(2000 + i + 1, 1, 1)
+            ...     end = datetime.datetime(2000 + i + 2, 1, 1)
+            ...     check = mapB.set_absolute_time(start, end)
+            ...     mapsA.append(mapA)
+            ...     mapsB.append(mapB)
+            >>> # Build the topology between the two map lists
+            >>> tb = SpatioTemporalTopologyBuilder()
+            >>> tb.build(mapsA, mapsB, None)
+            >>> # Check relations of mapsA
+            >>> for map in mapsA:
+            ...     print(map.get_temporal_extent_as_tuple())
+            ...     m = map.get_temporal_relations()
+            ...     for key in m.keys():
+            ...         if key not in ["NEXT", "PREV"]:
+            ...             print(key, m[key][0].get_temporal_extent_as_tuple())
+            (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0))
+            ('PRECEDES', (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2002, 1, 1, 0, 0)))
+            (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2002, 1, 1, 0, 0))
+            ('PRECEDES', (datetime.datetime(2002, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
+            ('EQUAL', (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2002, 1, 1, 0, 0)))
+            (datetime.datetime(2002, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0))
+            ('FOLLOWS', (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2002, 1, 1, 0, 0)))
+            ('PRECEDES', (datetime.datetime(2003, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0)))
+            ('EQUAL', (datetime.datetime(2002, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
+            (datetime.datetime(2003, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0))
+            ('FOLLOWS', (datetime.datetime(2002, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
+            ('EQUAL', (datetime.datetime(2003, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0)))
+            ('PRECEDES', (datetime.datetime(2004, 1, 1, 0, 0), datetime.datetime(2005, 1, 1, 0, 0)))
 
-        >>> mapsA = []
-        >>> mapsB = []
-        >>> for i in range(4):
-        ...     idA = "a%i@B"%(i)
-        ...     mapA = tgis.RasterDataset(idA)
-        ...     idB = "b%i@B"%(i)
-        ...     mapB = tgis.RasterDataset(idB)
-        ...     start = datetime.datetime(2000 + i, 1, 1)
-        ...     end = datetime.datetime(2000 + i + 1, 1, 1)
-        ...     check = mapA.set_absolute_time(start, end)
-        ...     start = datetime.datetime(2000 + i, 1, 1)
-        ...     end = datetime.datetime(2000 + i + 3, 1, 1)
-        ...     check = mapB.set_absolute_time(start, end)
-        ...     mapsA.append(mapA)
-        ...     mapsB.append(mapB)
-        >>> # Build the topology between the two map lists
-        >>> tb = SpatioTemporalTopologyBuilder()
-        >>> tb.build(mapsA, mapsB, None)
-        >>> # Check relations of mapsA
-        >>> for map in mapsA:
-        ...     print(map.get_temporal_extent_as_tuple())
-        ...     m = map.get_temporal_relations()
-        ...     for key in m.keys():
-        ...         if key not in ["NEXT", "PREV"]:
-        ...             print(key, m[key][0].get_temporal_extent_as_tuple())
-        (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0))
-        ('DURING', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
-        ('STARTS', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
-        ('PRECEDES', (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0)))
-        (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2002, 1, 1, 0, 0))
-        ('DURING', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
-        ('STARTS', (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0)))
-        ('PRECEDES', (datetime.datetime(2002, 1, 1, 0, 0), datetime.datetime(2005, 1, 1, 0, 0)))
-        (datetime.datetime(2002, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0))
-        ('PRECEDES', (datetime.datetime(2003, 1, 1, 0, 0), datetime.datetime(2006, 1, 1, 0, 0)))
-        ('FINISHES', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
-        ('DURING', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
-        ('STARTS', (datetime.datetime(2002, 1, 1, 0, 0), datetime.datetime(2005, 1, 1, 0, 0)))
-        (datetime.datetime(2003, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0))
-        ('FOLLOWS', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
-        ('DURING', (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0)))
-        ('FINISHES', (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0)))
-        ('STARTS', (datetime.datetime(2003, 1, 1, 0, 0), datetime.datetime(2006, 1, 1, 0, 0)))
+            >>> mapsA = []
+            >>> mapsB = []
+            >>> for i in range(4):
+            ...     idA = "a%i@B"%(i)
+            ...     mapA = tgis.RasterDataset(idA)
+            ...     idB = "b%i@B"%(i)
+            ...     mapB = tgis.RasterDataset(idB)
+            ...     start = datetime.datetime(2000 + i, 1, 1)
+            ...     end = datetime.datetime(2000 + i + 1, 1, 1)
+            ...     check = mapA.set_absolute_time(start, end)
+            ...     start = datetime.datetime(2000 + i, 1, 1)
+            ...     end = datetime.datetime(2000 + i + 3, 1, 1)
+            ...     check = mapB.set_absolute_time(start, end)
+            ...     mapsA.append(mapA)
+            ...     mapsB.append(mapB)
+            >>> # Build the topology between the two map lists
+            >>> tb = SpatioTemporalTopologyBuilder()
+            >>> tb.build(mapsA, mapsB, None)
+            >>> # Check relations of mapsA
+            >>> for map in mapsA:
+            ...     print(map.get_temporal_extent_as_tuple())
+            ...     m = map.get_temporal_relations()
+            ...     for key in m.keys():
+            ...         if key not in ["NEXT", "PREV"]:
+            ...             print(key, m[key][0].get_temporal_extent_as_tuple())
+            (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0))
+            ('DURING', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
+            ('STARTS', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
+            ('PRECEDES', (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0)))
+            (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2002, 1, 1, 0, 0))
+            ('DURING', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
+            ('STARTS', (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0)))
+            ('PRECEDES', (datetime.datetime(2002, 1, 1, 0, 0), datetime.datetime(2005, 1, 1, 0, 0)))
+            (datetime.datetime(2002, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0))
+            ('PRECEDES', (datetime.datetime(2003, 1, 1, 0, 0), datetime.datetime(2006, 1, 1, 0, 0)))
+            ('FINISHES', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
+            ('DURING', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
+            ('STARTS', (datetime.datetime(2002, 1, 1, 0, 0), datetime.datetime(2005, 1, 1, 0, 0)))
+            (datetime.datetime(2003, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0))
+            ('FOLLOWS', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
+            ('DURING', (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0)))
+            ('FINISHES', (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0)))
+            ('STARTS', (datetime.datetime(2003, 1, 1, 0, 0), datetime.datetime(2006, 1, 1, 0, 0)))
 
-        >>> mapsA = []
-        >>> mapsB = []
-        >>> for i in range(4):
-        ...     idA = "a%i@B"%(i)
-        ...     mapA = tgis.RasterDataset(idA)
-        ...     idB = "b%i@B"%(i)
-        ...     mapB = tgis.RasterDataset(idB)
-        ...     start = datetime.datetime(2000 + i, 1, 1)
-        ...     end = datetime.datetime(2000 + i + 2, 1, 1)
-        ...     check = mapA.set_absolute_time(start, end)
-        ...     start = datetime.datetime(2000 + i, 1, 1)
-        ...     end = datetime.datetime(2000 + i + 3, 1, 1)
-        ...     check = mapB.set_absolute_time(start, end)
-        ...     mapsA.append(mapA)
-        ...     mapsB.append(mapB)
-        >>> # Build the topology between the two map lists
-        >>> tb = SpatioTemporalTopologyBuilder()
-        >>> tb.build(mapsA, mapsB, None)
-        >>> # Check relations of mapsA
-        >>> for map in mapsA:
-        ...     print(map.get_temporal_extent_as_tuple())
-        ...     m = map.get_temporal_relations()
-        ...     for key in m.keys():
-        ...         if key not in ["NEXT", "PREV"]:
-        ...             print(key, m[key][0].get_temporal_extent_as_tuple())
-        (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2002, 1, 1, 0, 0))
-        ('OVERLAPS', (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0)))
-        ('DURING', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
-        ('STARTS', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
-        ('PRECEDES', (datetime.datetime(2002, 1, 1, 0, 0), datetime.datetime(2005, 1, 1, 0, 0)))
-        (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0))
-        ('OVERLAPS', (datetime.datetime(2002, 1, 1, 0, 0), datetime.datetime(2005, 1, 1, 0, 0)))
-        ('PRECEDES', (datetime.datetime(2003, 1, 1, 0, 0), datetime.datetime(2006, 1, 1, 0, 0)))
-        ('FINISHES', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
-        ('DURING', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
-        ('STARTS', (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0)))
-        (datetime.datetime(2002, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0))
-        ('OVERLAPS', (datetime.datetime(2003, 1, 1, 0, 0), datetime.datetime(2006, 1, 1, 0, 0)))
-        ('OVERLAPPED', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
-        ('FINISHES', (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0)))
-        ('DURING', (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0)))
-        ('STARTS', (datetime.datetime(2002, 1, 1, 0, 0), datetime.datetime(2005, 1, 1, 0, 0)))
-        (datetime.datetime(2003, 1, 1, 0, 0), datetime.datetime(2005, 1, 1, 0, 0))
-        ('OVERLAPPED', (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0)))
-        ('DURING', (datetime.datetime(2002, 1, 1, 0, 0), datetime.datetime(2005, 1, 1, 0, 0)))
-        ('FINISHES', (datetime.datetime(2002, 1, 1, 0, 0), datetime.datetime(2005, 1, 1, 0, 0)))
-        ('STARTS', (datetime.datetime(2003, 1, 1, 0, 0), datetime.datetime(2006, 1, 1, 0, 0)))
-        ('FOLLOWS', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
+            >>> mapsA = []
+            >>> mapsB = []
+            >>> for i in range(4):
+            ...     idA = "a%i@B"%(i)
+            ...     mapA = tgis.RasterDataset(idA)
+            ...     idB = "b%i@B"%(i)
+            ...     mapB = tgis.RasterDataset(idB)
+            ...     start = datetime.datetime(2000 + i, 1, 1)
+            ...     end = datetime.datetime(2000 + i + 2, 1, 1)
+            ...     check = mapA.set_absolute_time(start, end)
+            ...     start = datetime.datetime(2000 + i, 1, 1)
+            ...     end = datetime.datetime(2000 + i + 3, 1, 1)
+            ...     check = mapB.set_absolute_time(start, end)
+            ...     mapsA.append(mapA)
+            ...     mapsB.append(mapB)
+            >>> # Build the topology between the two map lists
+            >>> tb = SpatioTemporalTopologyBuilder()
+            >>> tb.build(mapsA, mapsB, None)
+            >>> # Check relations of mapsA
+            >>> for map in mapsA:
+            ...     print(map.get_temporal_extent_as_tuple())
+            ...     m = map.get_temporal_relations()
+            ...     for key in m.keys():
+            ...         if key not in ["NEXT", "PREV"]:
+            ...             print(key, m[key][0].get_temporal_extent_as_tuple())
+            (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2002, 1, 1, 0, 0))
+            ('OVERLAPS', (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0)))
+            ('DURING', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
+            ('STARTS', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
+            ('PRECEDES', (datetime.datetime(2002, 1, 1, 0, 0), datetime.datetime(2005, 1, 1, 0, 0)))
+            (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0))
+            ('OVERLAPS', (datetime.datetime(2002, 1, 1, 0, 0), datetime.datetime(2005, 1, 1, 0, 0)))
+            ('PRECEDES', (datetime.datetime(2003, 1, 1, 0, 0), datetime.datetime(2006, 1, 1, 0, 0)))
+            ('FINISHES', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
+            ('DURING', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
+            ('STARTS', (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0)))
+            (datetime.datetime(2002, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0))
+            ('OVERLAPS', (datetime.datetime(2003, 1, 1, 0, 0), datetime.datetime(2006, 1, 1, 0, 0)))
+            ('OVERLAPPED', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
+            ('FINISHES', (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0)))
+            ('DURING', (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0)))
+            ('STARTS', (datetime.datetime(2002, 1, 1, 0, 0), datetime.datetime(2005, 1, 1, 0, 0)))
+            (datetime.datetime(2003, 1, 1, 0, 0), datetime.datetime(2005, 1, 1, 0, 0))
+            ('OVERLAPPED', (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2004, 1, 1, 0, 0)))
+            ('DURING', (datetime.datetime(2002, 1, 1, 0, 0), datetime.datetime(2005, 1, 1, 0, 0)))
+            ('FINISHES', (datetime.datetime(2002, 1, 1, 0, 0), datetime.datetime(2005, 1, 1, 0, 0)))
+            ('STARTS', (datetime.datetime(2003, 1, 1, 0, 0), datetime.datetime(2006, 1, 1, 0, 0)))
+            ('FOLLOWS', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2003, 1, 1, 0, 0)))
 
-        >>> mapsA = []
-        >>> mapsB = []
-        >>> for i in range(4):
-        ...     idA = "a%i@B"%(i)
-        ...     mapA = tgis.RasterDataset(idA)
-        ...     idB = "b%i@B"%(i)
-        ...     mapB = tgis.RasterDataset(idB)
-        ...     start = datetime.datetime(2000, 1, 1, 0, 0, i)
-        ...     end = datetime.datetime(2000, 1, 1, 0, 0, i + 2)
-        ...     check = mapA.set_absolute_time(start, end)
-        ...     start = datetime.datetime(2000, 1, 1, 0, 0, i + 1)
-        ...     end = datetime.datetime(2000, 1, 1, 0, 0, i + 3)
-        ...     check = mapB.set_absolute_time(start, end)
-        ...     mapsA.append(mapA)
-        ...     mapsB.append(mapB)
-        >>> # Build the topology between the two map lists
-        >>> tb = SpatioTemporalTopologyBuilder()
-        >>> tb.build(mapsA, mapsB, None)
-        >>> # Check relations of mapsA
-        >>> for map in mapsA:
-        ...     print(map.get_temporal_extent_as_tuple())
-        ...     m = map.get_temporal_relations()
-        ...     for key in m.keys():
-        ...         if key not in ["NEXT", "PREV"]:
-        ...             print(key, m[key][0].get_temporal_extent_as_tuple())
-        (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2000, 1, 1, 0, 0, 2))
-        ('OVERLAPS', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
-        ('PRECEDES', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
-        (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3))
-        ('OVERLAPS', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
-        ('PRECEDES', (datetime.datetime(2000, 1, 1, 0, 0, 3), datetime.datetime(2000, 1, 1, 0, 0, 5)))
-        ('EQUAL', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
-        (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4))
-        ('OVERLAPS', (datetime.datetime(2000, 1, 1, 0, 0, 3), datetime.datetime(2000, 1, 1, 0, 0, 5)))
-        ('OVERLAPPED', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
-        ('PRECEDES', (datetime.datetime(2000, 1, 1, 0, 0, 4), datetime.datetime(2000, 1, 1, 0, 0, 6)))
-        ('EQUAL', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
-        (datetime.datetime(2000, 1, 1, 0, 0, 3), datetime.datetime(2000, 1, 1, 0, 0, 5))
-        ('OVERLAPS', (datetime.datetime(2000, 1, 1, 0, 0, 4), datetime.datetime(2000, 1, 1, 0, 0, 6)))
-        ('FOLLOWS', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
-        ('OVERLAPPED', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
-        ('EQUAL', (datetime.datetime(2000, 1, 1, 0, 0, 3), datetime.datetime(2000, 1, 1, 0, 0, 5)))
+            >>> mapsA = []
+            >>> mapsB = []
+            >>> for i in range(4):
+            ...     idA = "a%i@B"%(i)
+            ...     mapA = tgis.RasterDataset(idA)
+            ...     idB = "b%i@B"%(i)
+            ...     mapB = tgis.RasterDataset(idB)
+            ...     start = datetime.datetime(2000, 1, 1, 0, 0, i)
+            ...     end = datetime.datetime(2000, 1, 1, 0, 0, i + 2)
+            ...     check = mapA.set_absolute_time(start, end)
+            ...     start = datetime.datetime(2000, 1, 1, 0, 0, i + 1)
+            ...     end = datetime.datetime(2000, 1, 1, 0, 0, i + 3)
+            ...     check = mapB.set_absolute_time(start, end)
+            ...     mapsA.append(mapA)
+            ...     mapsB.append(mapB)
+            >>> # Build the topology between the two map lists
+            >>> tb = SpatioTemporalTopologyBuilder()
+            >>> tb.build(mapsA, mapsB, None)
+            >>> # Check relations of mapsA
+            >>> for map in mapsA:
+            ...     print(map.get_temporal_extent_as_tuple())
+            ...     m = map.get_temporal_relations()
+            ...     for key in m.keys():
+            ...         if key not in ["NEXT", "PREV"]:
+            ...             print(key, m[key][0].get_temporal_extent_as_tuple())
+            (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2000, 1, 1, 0, 0, 2))
+            ('OVERLAPS', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
+            ('PRECEDES', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
+            (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3))
+            ('OVERLAPS', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
+            ('PRECEDES', (datetime.datetime(2000, 1, 1, 0, 0, 3), datetime.datetime(2000, 1, 1, 0, 0, 5)))
+            ('EQUAL', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
+            (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4))
+            ('OVERLAPS', (datetime.datetime(2000, 1, 1, 0, 0, 3), datetime.datetime(2000, 1, 1, 0, 0, 5)))
+            ('OVERLAPPED', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
+            ('PRECEDES', (datetime.datetime(2000, 1, 1, 0, 0, 4), datetime.datetime(2000, 1, 1, 0, 0, 6)))
+            ('EQUAL', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
+            (datetime.datetime(2000, 1, 1, 0, 0, 3), datetime.datetime(2000, 1, 1, 0, 0, 5))
+            ('OVERLAPS', (datetime.datetime(2000, 1, 1, 0, 0, 4), datetime.datetime(2000, 1, 1, 0, 0, 6)))
+            ('FOLLOWS', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
+            ('OVERLAPPED', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
+            ('EQUAL', (datetime.datetime(2000, 1, 1, 0, 0, 3), datetime.datetime(2000, 1, 1, 0, 0, 5)))
 
-        >>> mapsA = []
-        >>> for i in range(4):
-        ...     idA = "a%i@B"%(i)
-        ...     mapA = tgis.RasterDataset(idA)
-        ...     start = datetime.datetime(2000, 1, 1, 0, 0, i)
-        ...     end = datetime.datetime(2000, 1, 1, 0, 0, i + 2)
-        ...     check = mapA.set_absolute_time(start, end)
-        ...     mapsA.append(mapA)
-        >>> tb = SpatioTemporalTopologyBuilder()
-        >>> tb.build(mapsA)
-        >>> # Check relations of mapsA
-        >>> for map in mapsA:
-        ...     print(map.get_temporal_extent_as_tuple())
-        ...     m = map.get_temporal_relations()
-        ...     for key in m.keys():
-        ...         if key not in ["NEXT", "PREV"]:
-        ...             print(key, m[key][0].get_temporal_extent_as_tuple())
-        (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2000, 1, 1, 0, 0, 2))
-        ('OVERLAPS', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
-        ('PRECEDES', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
-        (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3))
-        ('OVERLAPS', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
-        ('OVERLAPPED', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2000, 1, 1, 0, 0, 2)))
-        ('PRECEDES', (datetime.datetime(2000, 1, 1, 0, 0, 3), datetime.datetime(2000, 1, 1, 0, 0, 5)))
-        (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4))
-        ('OVERLAPS', (datetime.datetime(2000, 1, 1, 0, 0, 3), datetime.datetime(2000, 1, 1, 0, 0, 5)))
-        ('FOLLOWS', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2000, 1, 1, 0, 0, 2)))
-        ('OVERLAPPED', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
-        (datetime.datetime(2000, 1, 1, 0, 0, 3), datetime.datetime(2000, 1, 1, 0, 0, 5))
-        ('FOLLOWS', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
-        ('OVERLAPPED', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
-
-        @endcode
+            >>> mapsA = []
+            >>> for i in range(4):
+            ...     idA = "a%i@B"%(i)
+            ...     mapA = tgis.RasterDataset(idA)
+            ...     start = datetime.datetime(2000, 1, 1, 0, 0, i)
+            ...     end = datetime.datetime(2000, 1, 1, 0, 0, i + 2)
+            ...     check = mapA.set_absolute_time(start, end)
+            ...     mapsA.append(mapA)
+            >>> tb = SpatioTemporalTopologyBuilder()
+            >>> tb.build(mapsA)
+            >>> # Check relations of mapsA
+            >>> for map in mapsA:
+            ...     print(map.get_temporal_extent_as_tuple())
+            ...     m = map.get_temporal_relations()
+            ...     for key in m.keys():
+            ...         if key not in ["NEXT", "PREV"]:
+            ...             print(key, m[key][0].get_temporal_extent_as_tuple())
+            (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2000, 1, 1, 0, 0, 2))
+            ('OVERLAPS', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
+            ('PRECEDES', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
+            (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3))
+            ('OVERLAPS', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
+            ('OVERLAPPED', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2000, 1, 1, 0, 0, 2)))
+            ('PRECEDES', (datetime.datetime(2000, 1, 1, 0, 0, 3), datetime.datetime(2000, 1, 1, 0, 0, 5)))
+            (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4))
+            ('OVERLAPS', (datetime.datetime(2000, 1, 1, 0, 0, 3), datetime.datetime(2000, 1, 1, 0, 0, 5)))
+            ('FOLLOWS', (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2000, 1, 1, 0, 0, 2)))
+            ('OVERLAPPED', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
+            (datetime.datetime(2000, 1, 1, 0, 0, 3), datetime.datetime(2000, 1, 1, 0, 0, 5))
+            ('FOLLOWS', (datetime.datetime(2000, 1, 1, 0, 0, 1), datetime.datetime(2000, 1, 1, 0, 0, 3)))
+            ('OVERLAPPED', (datetime.datetime(2000, 1, 1, 0, 0, 2), datetime.datetime(2000, 1, 1, 0, 0, 4)))
 
     """
     def __init__(self):
         self._reset()
         # 0001-01-01 00:00:00
-        self._timeref = datetime(1,1,1)
+        self._timeref = datetime(1, 1, 1)
 
     def _reset(self):
         self._store = {}
@@ -383,14 +380,14 @@ class SpatioTemporalTopologyBuilder(object):
         self._store[t.get_id()] = t
 
     def get_first(self):
-        """!Return the first map with the earliest start time
+        """Return the first map with the earliest start time
 
-           @return The map with the earliest start time
+           :return: The map with the earliest start time
         """
         return self._first
 
     def _build_internal_iteratable(self, maps, spatial):
-        """!Build an iteratable temporal topology structure for all maps in
+        """Build an iteratable temporal topology structure for all maps in
            the list and store the maps internally
 
            Basically the "next" and "prev" relations will be set in the
@@ -398,7 +395,7 @@ class SpatioTemporalTopologyBuilder(object):
            The maps will be added to the object, so they can be
            accessed using the iterator of this class
 
-           @param maps A sorted (by start_time)list of abstract_dataset
+           :param maps: A sorted (by start_time)list of abstract_dataset
                         objects with initiated temporal extent
         """
         self._build_iteratable(maps, spatial)
@@ -410,13 +407,13 @@ class SpatioTemporalTopologyBuilder(object):
         self._detect_first()
 
     def _build_iteratable(self, maps, spatial):
-        """!Build an iteratable temporal topology structure for
+        """Build an iteratable temporal topology structure for
            all maps in the list
 
            Basically the "next" and "prev" relations will be set in
            the temporal topology structure of each map.
 
-           @param maps A sorted (by start_time)list of abstract_dataset
+           :param maps: A sorted (by start_time)list of abstract_dataset
                         objects with initiated temporal extent
         """
 #        for i in xrange(len(maps)):
@@ -446,12 +443,13 @@ class SpatioTemporalTopologyBuilder(object):
                 map_.set_spatial_topology_build_true()
 
     def _map_to_rect(self, tree, map_, spatial=None):
-        """!Use the spatio-temporal extent of a map to create and
+        """Use the spatio-temporal extent of a map to create and
            return a RTree rectange
 
-           @param spatial This indicates if the spatial topology is created as well:
-                          spatial can be None (no spatial topology), "2D" using west, east,
-                          #south, north or "3D" using west, east, south, north, bottom, top
+           :param spatial: This indicates if the spatial topology is created
+                           as well: spatial can be None (no spatial topology),
+                           "2D" using west, east, south, north or "3D" using
+                           west, east, south, north, bottom, top
         """
         rect = rtree.RTreeAllocRect(tree)
 
@@ -469,21 +467,21 @@ class SpatioTemporalTopologyBuilder(object):
         elif spatial == "2D":
             north, south, east, west, top, bottom = map_.get_spatial_extent_as_tuple()
             rtree.RTreeSetRect3D(rect, tree, west, east, south, north,
-                                  float(start), float(end))
+                                 float(start), float(end))
         elif spatial == "3D":
             north, south, east, west, top, bottom = map_.get_spatial_extent_as_tuple()
             rtree.RTreeSetRect4D(rect, tree, west, east, south, north,
-                                  bottom, top, float(start), float(end))
+                                 bottom, top, float(start), float(end))
 
         return rect
 
     def _build_rtree(self, maps, spatial=None):
-        """!Build and return the 1-4 dimensional R*-Tree
+        """Build and return the 1-4 dimensional R*-Tree
 
-
-           @param spatial This indicates if the spatial topology is created as well:
-                          spatial can be None (no spatial topology), "2D" using west, east,
-                          south, north or "3D" using west, east, south, north, bottom, top
+           :param spatial: This indicates if the spatial topology is created
+                           as well: spatial can be None (no spatial topology),
+                           "2D" using west, east, south, north or "3D" using
+                           west, east, south, north, bottom, top
         """
         dim = 1
         if spatial == "2D":
@@ -501,12 +499,13 @@ class SpatioTemporalTopologyBuilder(object):
         return tree
 
     def build(self, mapsA, mapsB=None, spatial=None):
-        """!Build the spatio-temporal topology structure between
+        """Build the spatio-temporal topology structure between
            one or two unordered lists of abstract dataset objects
 
-           This method builds the temporal or spatio-temporal topology from mapsA to
-           mapsB and vice verse. The spatio-temporal topology structure of each map
-           will be reseted and rebuild for mapsA and mapsB.
+           This method builds the temporal or spatio-temporal topology from
+           mapsA to mapsB and vice verse. The spatio-temporal topology
+           structure of each map will be reseted and rebuild for mapsA and
+           mapsB.
 
            After building the temporal or spatio-temporal topology the modified
            map objects of mapsA can be accessed
@@ -514,20 +513,21 @@ class SpatioTemporalTopologyBuilder(object):
            The implemented iterator assures
            the chronological iteration over the mapsA.
 
-           @param mapsA A list of abstract_dataset
+           :param mapsA: A list of abstract_dataset
                          objects with initiated spatio-temporal extent
-           @param mapsB An optional list of abstract_dataset
+           :param mapsB: An optional list of abstract_dataset
                          objects with initiated spatio-temporal extent
-           @param spatial This indicates if the spatial topology is created as well:
-                          spatial can be None (no spatial topology), "2D" using west, east,
-                          south, north or "3D" using west, east, south, north, bottom, top
+           :param spatial: This indicates if the spatial topology is created
+                           as well: spatial can be None (no spatial topology),
+                           "2D" using west, east, south, north or "3D" using
+                           west, east, south, north, bottom, top
         """
 
         identical = False
         if mapsA == mapsB:
             identical = True
 
-        if mapsB == None:
+        if mapsB is None:
             mapsB = mapsA
             identical = True
 
@@ -563,7 +563,7 @@ class SpatioTemporalTopologyBuilder(object):
                     set_spatial_relationship(A, B, relation)
 
         self._build_internal_iteratable(mapsA, spatial)
-        if not identical and mapsB != None:
+        if not identical and mapsB is not None:
             self._build_iteratable(mapsB, spatial)
 
         gis.G_free_ilist(list_)
@@ -586,6 +586,7 @@ class SpatioTemporalTopologyBuilder(object):
         return _map in self._store.values()
 
 ###############################################################################
+
 
 def set_temoral_relationship(A, B, relation):
     if relation == "equal" or relation == "equals":
@@ -762,15 +763,16 @@ def set_spatial_relationship(A, B, relation):
 
 ###############################################################################
 
+
 def print_temporal_topology_relationships(maps1, maps2=None, dbif=None):
-    """!Print the temporal relationships of the
+    """Print the temporal relationships of the
        map lists maps1 and maps2 to stdout.
 
-        @param maps1 A list of abstract_dataset
+        :param maps1: A list of abstract_dataset
                       objects with initiated temporal extent
-        @param maps2 An optional list of abstract_dataset
+        :param maps2: An optional list of abstract_dataset
                       objects with initiated temporal extent
-        @param dbif The database interface to be used
+        :param dbif: The database interface to be used
     """
 
     tb = SpatioTemporalTopologyBuilder()
@@ -790,18 +792,20 @@ def print_temporal_topology_relationships(maps1, maps2=None, dbif=None):
 
 ###############################################################################
 
+
 def print_spatio_temporal_topology_relationships(maps1, maps2=None,
                                                  spatial="2D", dbif=None):
-    """!Print the temporal relationships of the
+    """Print the temporal relationships of the
        map lists maps1 and maps2 to stdout.
 
-        @param maps1 A list of abstract_dataset
+        :param maps1: A list of abstract_dataset
                       objects with initiated temporal extent
-        @param maps2 An optional list of abstract_dataset
+        :param maps2: An optional list of abstract_dataset
                       objects with initiated temporal extent
-        @param spatial The dimension of the spatial extent to be used: "2D" using west, east,
-                        south, north or "3D" using west, east, south, north, bottom, top
-        @param dbif The database interface to be used
+        :param spatial: The dimension of the spatial extent to be used: "2D"
+                        using west, east, south, north or "3D" using west,
+                        east, south, north, bottom, top
+        :param dbif: The database interface to be used
     """
 
     tb = SpatioTemporalTopologyBuilder()
@@ -821,18 +825,19 @@ def print_spatio_temporal_topology_relationships(maps1, maps2=None,
 
 ###############################################################################
 
+
 def count_temporal_topology_relationships(maps1, maps2=None, dbif=None):
-    """!Count the temporal relations of a single list of maps or between two lists of maps
+    """Count the temporal relations of a single list of maps or between two
+       lists of maps
 
 
-        @param maps1 A list of abstract_dataset
+        :param maps1: A list of abstract_dataset
                       objects with initiated temporal extent
-        @param maps2 A list of abstract_dataset
+        :param maps2: A list of abstract_dataset
                       objects with initiated temporal extent
-        @param dbif The database interface to be used
-        @return A dictionary with counted temporal relationships
+        :param dbif: The database interface to be used
+        :return: A dictionary with counted temporal relationships
     """
-
 
     tb = SpatioTemporalTopologyBuilder()
     tb.build(maps1, maps2)
@@ -856,143 +861,149 @@ def count_temporal_topology_relationships(maps1, maps2=None, dbif=None):
 
 ###############################################################################
 
-def create_temporal_relation_sql_where_statement(
-                        start, end, use_start=True, use_during=False,
-                        use_overlap=False, use_contain=False, use_equal=False,
-                        use_follows=False, use_precedes=False):
-    """!Create a SQL WHERE statement for temporal relation selection of maps in space time datasets
 
-        @param start The start time
-        @param end The end time
-        @param use_start Select maps of which the start time is located in the selection granule
-                         @verbatim
-                         map    :        s
-                         granule:  s-----------------e
+def create_temporal_relation_sql_where_statement(start, end, use_start=True,
+                                                 use_during=False,
+                                                 use_overlap=False,
+                                                 use_contain=False,
+                                                 use_equal=False,
+                                                 use_follows=False,
+                                                 use_precedes=False):
+    """Create a SQL WHERE statement for temporal relation selection of maps in
+       space time datasets
 
-                         map    :        s--------------------e
-                         granule:  s-----------------e
+        :param start: The start time
+        :param end: The end time
+        :param use_start: Select maps of which the start time is located in
+                          the selection granule ::
 
-                         map    :        s--------e
-                         granule:  s-----------------e
-                         @endverbatim
+                              map    :        s
+                              granule:  s-----------------e
 
-        @param use_during Select maps which are temporal during the selection granule
-                         @verbatim
-                         map    :     s-----------e
-                         granule:  s-----------------e
-                         @endverbatim
+                              map    :        s--------------------e
+                              granule:  s-----------------e
 
-        @param use_overlap Select maps which temporal overlap the selection granule
-                         @verbatim
-                         map    :     s-----------e
-                         granule:        s-----------------e
+                              map    :        s--------e
+                              granule:  s-----------------e
 
-                         map    :     s-----------e
-                         granule:  s----------e
-                         @endverbatim
 
-        @param use_contain Select maps which temporally contain the selection granule
-                         @verbatim
-                         map    :  s-----------------e
-                         granule:     s-----------e
-                         @endverbatim
+        :param use_during: Select maps which are temporal during the selection
+                           granule  ::
 
-        @param use_equal Select maps which temporally equal to the selection granule
-                         @verbatim
-                         map    :  s-----------e
-                         granule:  s-----------e
-                         @endverbatim
+                               map    :     s-----------e
+                               granule:  s-----------------e
 
-        @param use_follows Select maps which temporally follow the selection granule
-                         @verbatim
-                         map    :              s-----------e
-                         granule:  s-----------e
-                         @endverbatim
+        :param use_overlap: Select maps which temporal overlap the selection
+                            granule ::
 
-        @param use_precedes Select maps which temporally precedes the selection granule
-                         @verbatim
-                         map    :  s-----------e
-                         granule:              s-----------e
-                         @endverbatim
+                                map    :     s-----------e
+                                granule:        s-----------------e
+
+                                map    :     s-----------e
+                                granule:  s----------e
+
+        :param use_contain: Select maps which temporally contain the selection
+                            granule ::
+
+                                map    :  s-----------------e
+                                granule:     s-----------e
+
+        :param use_equal: Select maps which temporally equal to the selection
+                          granule ::
+
+                              map    :  s-----------e
+                              granule:  s-----------e
+
+        :param use_follows: Select maps which temporally follow the selection
+                            granule ::
+
+                                map    :              s-----------e
+                                granule:  s-----------e
+
+        :param use_precedes: Select maps which temporally precedes the
+                             selection granule ::
+
+                                 map    :  s-----------e
+                                 granule:              s-----------e
 
         Usage:
 
-        @code
+        .. code-block:: python
 
-        >>> # Relative time
-        >>> start = 1
-        >>> end = 2
-        >>> create_temporal_relation_sql_where_statement(start, end,
-        ... use_start=False)
-        >>> create_temporal_relation_sql_where_statement(start, end)
-        '((start_time >= 1 and start_time < 2) )'
-        >>> create_temporal_relation_sql_where_statement(start, end,
-        ... use_start=True)
-        '((start_time >= 1 and start_time < 2) )'
-        >>> create_temporal_relation_sql_where_statement(start, end,
-        ... use_start=False, use_during=True)
-        '(((start_time > 1 and end_time < 2) OR (start_time >= 1 and end_time < 2) OR (start_time > 1 and end_time <= 2)))'
-        >>> create_temporal_relation_sql_where_statement(start, end,
-        ... use_start=False, use_overlap=True)
-        '(((start_time < 1 and end_time > 1 and end_time < 2) OR (start_time < 2 and start_time > 1 and end_time > 2)))'
-        >>> create_temporal_relation_sql_where_statement(start, end,
-        ... use_start=False, use_contain=True)
-        '(((start_time < 1 and end_time > 2) OR (start_time <= 1 and end_time > 2) OR (start_time < 1 and end_time >= 2)))'
-        >>> create_temporal_relation_sql_where_statement(start, end,
-        ... use_start=False, use_equal=True)
-        '((start_time = 1 and end_time = 2))'
-        >>> create_temporal_relation_sql_where_statement(start, end,
-        ... use_start=False, use_follows=True)
-        '((start_time = 2))'
-        >>> create_temporal_relation_sql_where_statement(start, end,
-        ... use_start=False, use_precedes=True)
-        '((end_time = 1))'
-        >>> create_temporal_relation_sql_where_statement(start, end,
-        ... use_start=True, use_during=True, use_overlap=True, use_contain=True,
-        ... use_equal=True, use_follows=True, use_precedes=True)
-        '((start_time >= 1 and start_time < 2)  OR ((start_time > 1 and end_time < 2) OR (start_time >= 1 and end_time < 2) OR (start_time > 1 and end_time <= 2)) OR ((start_time < 1 and end_time > 1 and end_time < 2) OR (start_time < 2 and start_time > 1 and end_time > 2)) OR ((start_time < 1 and end_time > 2) OR (start_time <= 1 and end_time > 2) OR (start_time < 1 and end_time >= 2)) OR (start_time = 1 and end_time = 2) OR (start_time = 2) OR (end_time = 1))'
+            >>> # Relative time
+            >>> start = 1
+            >>> end = 2
+            >>> create_temporal_relation_sql_where_statement(start, end,
+            ... use_start=False)
+            >>> create_temporal_relation_sql_where_statement(start, end)
+            '((start_time >= 1 and start_time < 2) )'
+            >>> create_temporal_relation_sql_where_statement(start, end,
+            ... use_start=True)
+            '((start_time >= 1 and start_time < 2) )'
+            >>> create_temporal_relation_sql_where_statement(start, end,
+            ... use_start=False, use_during=True)
+            '(((start_time > 1 and end_time < 2) OR (start_time >= 1 and end_time < 2) OR (start_time > 1 and end_time <= 2)))'
+            >>> create_temporal_relation_sql_where_statement(start, end,
+            ... use_start=False, use_overlap=True)
+            '(((start_time < 1 and end_time > 1 and end_time < 2) OR (start_time < 2 and start_time > 1 and end_time > 2)))'
+            >>> create_temporal_relation_sql_where_statement(start, end,
+            ... use_start=False, use_contain=True)
+            '(((start_time < 1 and end_time > 2) OR (start_time <= 1 and end_time > 2) OR (start_time < 1 and end_time >= 2)))'
+            >>> create_temporal_relation_sql_where_statement(start, end,
+            ... use_start=False, use_equal=True)
+            '((start_time = 1 and end_time = 2))'
+            >>> create_temporal_relation_sql_where_statement(start, end,
+            ... use_start=False, use_follows=True)
+            '((start_time = 2))'
+            >>> create_temporal_relation_sql_where_statement(start, end,
+            ... use_start=False, use_precedes=True)
+            '((end_time = 1))'
+            >>> create_temporal_relation_sql_where_statement(start, end,
+            ... use_start=True, use_during=True, use_overlap=True, use_contain=True,
+            ... use_equal=True, use_follows=True, use_precedes=True)
+            '((start_time >= 1 and start_time < 2)  OR ((start_time > 1 and end_time < 2) OR (start_time >= 1 and end_time < 2) OR (start_time > 1 and end_time <= 2)) OR ((start_time < 1 and end_time > 1 and end_time < 2) OR (start_time < 2 and start_time > 1 and end_time > 2)) OR ((start_time < 1 and end_time > 2) OR (start_time <= 1 and end_time > 2) OR (start_time < 1 and end_time >= 2)) OR (start_time = 1 and end_time = 2) OR (start_time = 2) OR (end_time = 1))'
 
-        >>> # Absolute time
-        >>> start = datetime(2001, 1, 1, 12, 30)
-        >>> end = datetime(2001, 3, 31, 14, 30)
-        >>> create_temporal_relation_sql_where_statement(start, end,
-        ... use_start=False)
-        >>> create_temporal_relation_sql_where_statement(start, end)
-        "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00') )"
-        >>> create_temporal_relation_sql_where_statement(start, end,
-        ... use_start=True)
-        "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00') )"
-        >>> create_temporal_relation_sql_where_statement(start, end,
-        ... use_start=False, use_during=True)
-        "(((start_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time >= '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time > '2001-01-01 12:30:00' and end_time <= '2001-03-31 14:30:00')))"
-        >>> create_temporal_relation_sql_where_statement(start, end,
-        ... use_start=False, use_overlap=True)
-        "(((start_time < '2001-01-01 12:30:00' and end_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time < '2001-03-31 14:30:00' and start_time > '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00')))"
-        >>> create_temporal_relation_sql_where_statement(start, end,
-        ... use_start=False, use_contain=True)
-        "(((start_time < '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time <= '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time < '2001-01-01 12:30:00' and end_time >= '2001-03-31 14:30:00')))"
-        >>> create_temporal_relation_sql_where_statement(start, end,
-        ... use_start=False, use_equal=True)
-        "((start_time = '2001-01-01 12:30:00' and end_time = '2001-03-31 14:30:00'))"
-        >>> create_temporal_relation_sql_where_statement(start, end,
-        ... use_start=False, use_follows=True)
-        "((start_time = '2001-03-31 14:30:00'))"
-        >>> create_temporal_relation_sql_where_statement(start, end,
-        ... use_start=False, use_precedes=True)
-        "((end_time = '2001-01-01 12:30:00'))"
-        >>> create_temporal_relation_sql_where_statement(start, end,
-        ... use_start=True, use_during=True, use_overlap=True, use_contain=True,
-        ... use_equal=True, use_follows=True, use_precedes=True)
-        "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00')  OR ((start_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time >= '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time > '2001-01-01 12:30:00' and end_time <= '2001-03-31 14:30:00')) OR ((start_time < '2001-01-01 12:30:00' and end_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time < '2001-03-31 14:30:00' and start_time > '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00')) OR ((start_time < '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time <= '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time < '2001-01-01 12:30:00' and end_time >= '2001-03-31 14:30:00')) OR (start_time = '2001-01-01 12:30:00' and end_time = '2001-03-31 14:30:00') OR (start_time = '2001-03-31 14:30:00') OR (end_time = '2001-01-01 12:30:00'))"
+            >>> # Absolute time
+            >>> start = datetime(2001, 1, 1, 12, 30)
+            >>> end = datetime(2001, 3, 31, 14, 30)
+            >>> create_temporal_relation_sql_where_statement(start, end,
+            ... use_start=False)
+            >>> create_temporal_relation_sql_where_statement(start, end)
+            "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00') )"
+            >>> create_temporal_relation_sql_where_statement(start, end,
+            ... use_start=True)
+            "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00') )"
+            >>> create_temporal_relation_sql_where_statement(start, end,
+            ... use_start=False, use_during=True)
+            "(((start_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time >= '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time > '2001-01-01 12:30:00' and end_time <= '2001-03-31 14:30:00')))"
+            >>> create_temporal_relation_sql_where_statement(start, end,
+            ... use_start=False, use_overlap=True)
+            "(((start_time < '2001-01-01 12:30:00' and end_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time < '2001-03-31 14:30:00' and start_time > '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00')))"
+            >>> create_temporal_relation_sql_where_statement(start, end,
+            ... use_start=False, use_contain=True)
+            "(((start_time < '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time <= '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time < '2001-01-01 12:30:00' and end_time >= '2001-03-31 14:30:00')))"
+            >>> create_temporal_relation_sql_where_statement(start, end,
+            ... use_start=False, use_equal=True)
+            "((start_time = '2001-01-01 12:30:00' and end_time = '2001-03-31 14:30:00'))"
+            >>> create_temporal_relation_sql_where_statement(start, end,
+            ... use_start=False, use_follows=True)
+            "((start_time = '2001-03-31 14:30:00'))"
+            >>> create_temporal_relation_sql_where_statement(start, end,
+            ... use_start=False, use_precedes=True)
+            "((end_time = '2001-01-01 12:30:00'))"
+            >>> create_temporal_relation_sql_where_statement(start, end,
+            ... use_start=True, use_during=True, use_overlap=True, use_contain=True,
+            ... use_equal=True, use_follows=True, use_precedes=True)
+            "((start_time >= '2001-01-01 12:30:00' and start_time < '2001-03-31 14:30:00')  OR ((start_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time >= '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time > '2001-01-01 12:30:00' and end_time <= '2001-03-31 14:30:00')) OR ((start_time < '2001-01-01 12:30:00' and end_time > '2001-01-01 12:30:00' and end_time < '2001-03-31 14:30:00') OR (start_time < '2001-03-31 14:30:00' and start_time > '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00')) OR ((start_time < '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time <= '2001-01-01 12:30:00' and end_time > '2001-03-31 14:30:00') OR (start_time < '2001-01-01 12:30:00' and end_time >= '2001-03-31 14:30:00')) OR (start_time = '2001-01-01 12:30:00' and end_time = '2001-03-31 14:30:00') OR (start_time = '2001-03-31 14:30:00') OR (end_time = '2001-01-01 12:30:00'))"
 
-        @endcode
         """
 
     where = "("
 
     if use_start:
         if isinstance(start, datetime):
-            where += "(start_time >= '%s' and start_time < '%s') " % (start, end)
+            where += "(start_time >= '%s' and start_time < '%s') " % (start,
+                                                                      end)
         else:
             where += "(start_time >= %i and start_time < %i) " % (start, end)
 
@@ -1001,8 +1012,10 @@ def create_temporal_relation_sql_where_statement(
             where += " OR "
 
         if isinstance(start, datetime):
-            where += "((start_time > '%s' and end_time < '%s') OR " % (start, end)
-            where += "(start_time >= '%s' and end_time < '%s') OR " % (start, end)
+            where += "((start_time > '%s' and end_time < '%s') OR " % (start,
+                                                                       end)
+            where += "(start_time >= '%s' and end_time < '%s') OR " % (start,
+                                                                       end)
             where += "(start_time > '%s' and end_time <= '%s'))" % (start, end)
         else:
             where += "((start_time > %i and end_time < %i) OR " % (start, end)
@@ -1014,19 +1027,25 @@ def create_temporal_relation_sql_where_statement(
             where += " OR "
 
         if isinstance(start, datetime):
-            where += "((start_time < '%s' and end_time > '%s' and end_time < '%s') OR " % (start, start, end)
-            where += "(start_time < '%s' and start_time > '%s' and end_time > '%s'))" % (end, start, end)
+            where += "((start_time < '%s' and end_time > '%s' and end_time <" \
+                     " '%s') OR " % (start, start, end)
+            where += "(start_time < '%s' and start_time > '%s' and end_time " \
+                     "> '%s'))" % (end, start, end)
         else:
-            where += "((start_time < %i and end_time > %i and end_time < %i) OR " % (start, start, end)
-            where += "(start_time < %i and start_time > %i and end_time > %i))" % (end, start, end)
+            where += "((start_time < %i and end_time > %i and end_time < %i)" \
+                     " OR " % (start, start, end)
+            where += "(start_time < %i and start_time > %i and end_time > " \
+                     "%i))" % (end, start, end)
 
     if use_contain:
         if use_start or use_during or use_overlap:
             where += " OR "
 
         if isinstance(start, datetime):
-            where += "((start_time < '%s' and end_time > '%s') OR " % (start, end)
-            where += "(start_time <= '%s' and end_time > '%s') OR " % (start, end)
+            where += "((start_time < '%s' and end_time > '%s') OR " % (start,
+                                                                       end)
+            where += "(start_time <= '%s' and end_time > '%s') OR " % (start,
+                                                                       end)
             where += "(start_time < '%s' and end_time >= '%s'))" % (start, end)
         else:
             where += "((start_time < %i and end_time > %i) OR " % (start, end)

@@ -11,35 +11,36 @@ for details.
 
 import grass.script as grass
 import grass.temporal as tgis
-import unittest
+from gunittest.case import GrassTestCase
 import datetime
 
-class TestRegisterFunctions(unittest.TestCase):
+class TestRegisterFunctions(GrassTestCase):
 
     @classmethod
     def setUpClass(cls):
         """!Initiate the temporal GIS and set the region
         """
+        # Use always the current mapset as temporal database
+        cls.assertModule("g.gisenv",  set="TGIS_USE_CURRENT_MAPSET=1")
         tgis.init()
         grass.overwrite = True
         grass.use_temp_region()
-        ret = grass.run_command("g.region", n=80.0, s=0.0, e=120.0, 
+        cls.assertModule("g.region", n=80.0, s=0.0, e=120.0, 
                                 w=0.0, t=1.0, b=0.0, res=10.0)
 
     def setUp(self):
         """!Create the test maps and the space time raster datasets
         """
-        ret = 0
-        ret += grass.run_command("r.mapcalc", overwrite=True, quiet=True, 
+        self.assertModule("r.mapcalc", overwrite=True, quiet=True, 
                           expression="register_map_1 = 1")
-        ret += grass.run_command("r.mapcalc", overwrite=True, quiet=True, 
+        self.assertModule("r.mapcalc", overwrite=True, quiet=True, 
                           expression="register_map_2 = 2")
         self.assertEqual(ret, 0)
         
         
-        self.strds_abs = tgis.open_new_space_time_dataset(name="register_test_abs", type="strds", temporaltype="absolute", 
+        self.strds_abs = tgis.open_new_stds(name="register_test_abs", type="strds", temporaltype="absolute", 
                                             title="Test strds", descr="Test strds", semantic="field")
-        self.strds_rel = tgis.open_new_space_time_dataset(name="register_test_rel", type="strds", temporaltype="relative", 
+        self.strds_rel = tgis.open_new_stds(name="register_test_rel", type="strds", temporaltype="relative", 
                                             title="Test strds", descr="Test strds", semantic="field")
 
     def test_absolute_time_strds_1(self):
@@ -66,8 +67,6 @@ class TestRegisterFunctions(unittest.TestCase):
         start, end = self.strds_abs.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 3))
-
-        self.strds_abs.print_info()
 
     def test_absolute_time_strds_2(self):
         """!Test the registration of maps with absolute time in a
@@ -99,8 +98,6 @@ class TestRegisterFunctions(unittest.TestCase):
         start, end = self.strds_abs.get_absolute_time()
         self.assertEqual(start, datetime.datetime(2001, 1, 1))
         self.assertEqual(end, datetime.datetime(2001, 1, 3))
-
-        self.strds_abs.print_info()
 
     def test_absolute_time_1(self):
         """!Test the registration of maps with absolute time
@@ -189,8 +186,6 @@ class TestRegisterFunctions(unittest.TestCase):
         self.assertEqual(start, 0)
         self.assertEqual(end, 2)
         self.assertEqual(unit, "day")
-        
-        self.strds_rel.print_info()
 
     def test_relative_time_strds_2(self):
         """!Test the registration of maps with relative time in a
@@ -223,8 +218,6 @@ class TestRegisterFunctions(unittest.TestCase):
         self.assertEqual(start, 1000000)
         self.assertEqual(end, 2000000)
         self.assertEqual(unit, "seconds")
-        
-        self.strds_rel.print_info()
         
     def test_relative_time_1(self):
         """!Test the registration of maps with relative time
@@ -296,9 +289,8 @@ class TestRegisterFunctions(unittest.TestCase):
     def tearDown(self):
         """!Remove maps from temporal database
         """
-        ret = grass.run_command("t.unregister", maps="register_map_1,register_map_2", quiet=True)
-        ret = grass.run_command("g.remove", type="rast", name="register_map_1,register_map_2", quiet=True, flags="f")
-        self.assertEqual(ret, 0)
+        self.assertModule("t.unregister", maps="register_map_1,register_map_2", quiet=True)
+        self.assertModule("g.remove", rast="register_map_1,register_map_2", quiet=True)
         self.strds_abs.delete()
         self.strds_rel.delete()
 
@@ -309,6 +301,7 @@ class TestRegisterFunctions(unittest.TestCase):
         grass.del_temp_region()
 
 if __name__ == '__main__':
-    unittest.main()
+    from gunittest.main import test
+    test()
 
 

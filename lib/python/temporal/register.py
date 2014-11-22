@@ -1,28 +1,24 @@
-"""!@package grass.temporal
-
-@brief GRASS Python scripting module (temporal GIS functions)
-
-Temporal GIS related functions to be used in Python scripts.
+"""
+Functions to register map layer in space time datasets and the temporal database
 
 Usage:
 
-@code
-import grass.temporal as tgis
+.. code-block:: python
 
-tgis.register_maps_in_space_time_dataset(type, name, maps)
+    import grass.temporal as tgis
 
-...
-@endcode
+    tgis.register_maps_in_space_time_dataset(type, name, maps)
 
 (C) 2012-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Soeren Gebbert
+:authors: Soeren Gebbert
 """
 
 from open_stds import *
+import grass.script as gscript
 
 ###############################################################################
 
@@ -31,7 +27,7 @@ def register_maps_in_space_time_dataset(
     type, name, maps=None, file=None, start=None,
     end=None, unit=None, increment=None, dbif=None,
         interval=False, fs="|", update_cmd_list=True):
-    """!Use this method to register maps in space time datasets.
+    """Use this method to register maps in space time datasets.
 
        Additionally a start time string and an increment string can be
        specified to assign a time interval automatically to the maps.
@@ -39,29 +35,30 @@ def register_maps_in_space_time_dataset(
        It takes care of the correct update of the space time datasets from all
        registered maps.
 
-       @param type The type of the maps rast, rast3d or vect
-       @param name The name of the space time dataset. Maps will be registered in the
-                   temporal database if the name was set to None
-       @param maps A comma separated list of map names
-       @param file Input file, one map per line map with start and optional
+       :param type: The type of the maps rast, rast3d or vect
+       :param name: The name of the space time dataset. Maps will be
+                    registered in the temporal database if the name was set
+                    to None
+       :param maps: A comma separated list of map names
+       :param file: Input file, one map per line map with start and optional
                    end time
-       @param start The start date and time of the first raster map
+       :param start: The start date and time of the first raster map
                     (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd",
                     format relative is integer 5)
-       @param end The end date and time of the first raster map
+       :param end: The end date and time of the first raster map
                   (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd",
                   format relative is integer 5)
-       @param unit The unit of the relative time: years, months, days,
+       :param unit: The unit of the relative time: years, months, days,
                    hours, minutes, seconds
-       @param increment Time increment between maps for time stamp creation
+       :param increment: Time increment between maps for time stamp creation
                         (format absolute: NNN seconds, minutes, hours, days,
                         weeks, months, years; format relative: 1.0)
-       @param dbif The database interface to be used
-       @param interval If True, time intervals are created in case the start
+       :param dbif: The database interface to be used
+       :param interval: If True, time intervals are created in case the start
                        time and an increment is provided
-       @param fs Field separator used in input file
-       @param update_cmd_list If is True, the command that was invoking this process
-                              will be written to the process history
+       :param fs: Field separator used in input file
+       :param update_cmd_list: If is True, the command that was invoking this
+                               process will be written to the process history
     """
     start_time_in_file = False
     end_time_in_file = False
@@ -76,35 +73,32 @@ def register_maps_in_space_time_dataset(
         increment = str(increment)
 
     if maps and file:
-        msgr.fatal(_("%(m)s= and %(f)s= are mutually exclusive") % {'m': "maps",
-                                                                    'f': "file"})
+        msgr.fatal(_("%s= and %s= are mutually exclusive") % ("maps", "file"))
 
     if end and increment:
-        msgr.fatal(_("%(e)s= and %(i)s= are mutually exclusive") % {'e': "end",
-                   'i': "increment"})
+        msgr.fatal(_("%s= and %s= are mutually exclusive") % ("end",
+                                                              "increment"))
 
     if end and not start:
-        msgr.fatal(_("Please specify %(st)s= and %(e)s=") % {'st': "start_time",
-                                                             'e': "end_time"})
+        msgr.fatal(_("Please specify %s= and %s=") % ("start_time",
+                                                      "end_time"))
 
     if not maps and not file:
-        msgr.fatal(_("Please specify %(m)s= or %(f)s=") % {'m': "maps",
-                                                           'f': "file"})
+        msgr.fatal(_("Please specify %s= or %s=") % ("maps", "file"))
     # We may need the mapset
     mapset = get_current_mapset()
     dbif, connected = init_dbif(None)
 
     # The name of the space time dataset is optional
     if name:
-        sp = open_old_space_time_dataset(name, type, dbif)
+        sp = open_old_stds(name, type, dbif)
 
         if sp.is_time_relative() and (start or end) and not unit:
             dbif.close()
             msgr.fatal(_("Space time %(sp)s dataset <%(name)s> with relative"
                          " time found, but no relative unit set for %(sp)s "
-                         "maps") % {
-                         'sp': sp.get_new_map_instance(None).get_type(),
-                         'name': name})
+                         "maps") % {'name': name,
+                       'sp': sp.get_new_map_instance(None).get_type()})
 
     maplist = []
 
@@ -174,12 +168,11 @@ def register_maps_in_space_time_dataset(
 
         # Get a new instance of the map type
         map = dataset_factory(type, maplist[count]["id"])
-        
+
         if map.map_exists() is not True:
             msgr.fatal(_("Unable to update %(t)s map <%(id)s>. "
-                            "The map does not exist.") %
-                            {'t': map.get_type(),
-                            'id': map.get_map_id()})
+                         "The map does not exist.") % {'t': map.get_type(),
+                                                       'id': map.get_map_id()})
 
         # Use the time data from file
         if "start" in maplist[count]:
@@ -198,20 +191,22 @@ def register_maps_in_space_time_dataset(
                     msgr.fatal(_("Unable to register %(t)s map <%(id)s> with "
                                  "layer %(l)s. The map has timestamp and "
                                  "the start time is not set.") % {
-                                 't': map.get_type(), 'id': map.get_map_id(),
-                                 'l': map.get_layer()})
+                               't': map.get_type(), 'id': map.get_map_id(),
+                               'l': map.get_layer()})
                 else:
                     msgr.fatal(_("Unable to register %(t)s map <%(id)s>. The"
                                  " map has no timestamp and the start time "
                                  "is not set.") % {'t': map.get_type(),
                                                    'id': map.get_map_id()})
-            if start != "" and start != None:
+            if start != "" and start is not None:
                 # We need to check if the time is absolute and the unit was specified
                 time_object = check_datetime_string(start)
                 if isinstance(time_object, datetime) and unit:
-                    msgr.fatal(_("%(u)s= can only be set for relative time") % {'u': "unit"})
+                    msgr.fatal(_("%(u)s= can only be set for relative time") %
+                               {'u': "unit"})
                 if not isinstance(time_object, datetime) and not unit:
-                    msgr.fatal(_("%(u)s= must be set in case of relative time stamps") % {'u': "unit"})
+                    msgr.fatal(_("%(u)s= must be set in case of relative time"
+                                 " stamps") % {'u': "unit"})
 
                 if unit:
                     map.set_time_to_relative()
@@ -221,7 +216,7 @@ def register_maps_in_space_time_dataset(
         else:
             is_in_db = True
             # Check the overwrite flag
-            if not core.overwrite():
+            if not gscript.overwrite():
                 if map.get_layer():
                     msgr.warning(_("Map is already registered in temporal "
                                    "database. Unable to update %(t)s map "
@@ -232,8 +227,8 @@ def register_maps_in_space_time_dataset(
                 else:
                     msgr.warning(_("Map is already registered in temporal "
                                    "database. Unable to update %(t)s map "
-                                   "<%(id)s>. Overwrite flag is not set.") % {
-                                   't': map.get_type(), 'id': map.get_map_id()})
+                                   "<%(id)s>. Overwrite flag is not set.") %
+                                 {'t': map.get_type(), 'id': map.get_map_id()})
 
                 # Simple registration is allowed
                 if name:
@@ -257,13 +252,13 @@ def register_maps_in_space_time_dataset(
                         msgr.fatal(_("Unable to update %(t)s map <%(id)s> "
                                      "with layer %(l)s. The temporal types "
                                      "are different.") % {'t': map.get_type(),
-                                                        'id': map.get_map_id(),
-                                                        'l': map.get_layer()})
+                                                          'id': map.get_map_id(),
+                                                          'l': map.get_layer()})
                     else:
                         msgr.fatal(_("Unable to update %(t)s map <%(id)s>. "
                                      "The temporal types are different.") %
-                                     {'t': map.get_type(),
-                                      'id': map.get_map_id()})
+                                   {'t': map.get_type(),
+                                    'id': map.get_map_id()})
 
         # Load the data from the grass file database
         map.load()
@@ -293,7 +288,7 @@ def register_maps_in_space_time_dataset(
 
         # Sqlite3 performance is better for huge datasets when committing in
         # small chunks
-        if dbif.dbmi.__name__ == "sqlite3":
+        if dbif.get_dbmi().__name__ == "sqlite3":
             if count % 100 == 0:
                 if statement is not None and statement != "":
                     dbif.execute_transaction(statement)
@@ -339,7 +334,7 @@ def register_maps_in_space_time_dataset(
             ds.select(dbif)
             ds.update_from_registered_maps(dbif)
 
-    if connected == True:
+    if connected is True:
         dbif.close()
 
     msgr.percent(num_maps, num_maps, 1)
@@ -349,24 +344,24 @@ def register_maps_in_space_time_dataset(
 
 def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None,
                              mult=1, interval=False):
-    """!Assign the valid time to a map dataset
+    """Assign the valid time to a map dataset
 
-       @param ttype The temporal type which should be assigned
+       :param ttype: The temporal type which should be assigned
                      and which the time format is of
-       @param map A map dataset object derived from abstract_map_dataset
-       @param start The start date and time of the first raster map
+       :param map: A map dataset object derived from abstract_map_dataset
+       :param start: The start date and time of the first raster map
                      (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd",
                      format relative is integer 5)
-       @param end The end date and time of the first raster map
+       :param end: The end date and time of the first raster map
                    (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd",
                    format relative is integer 5)
-       @param unit The unit of the relative time: years, months,
+       :param unit: The unit of the relative time: years, months,
                     days, hours, minutes, seconds
-       @param increment Time increment between maps for time stamp creation
+       :param increment: Time increment between maps for time stamp creation
                         (format absolute: NNN seconds, minutes, hours, days,
                         weeks, months, years; format relative is integer 1)
-       @param mult A multiplier for the increment
-       @param interval If True, time intervals are created in case the start
+       :param mult: A multiplier for the increment
+       :param interval: If True, time intervals are created in case the start
                         time and an increment is provided
     """
 
@@ -382,7 +377,6 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None,
         if end:
             end_time = string_to_datetime(end)
             if end_time is None:
-                dbif.close()
                 msgr.fatal(_("Unable to convert string \"%s\"into a "
                              "datetime object") % (end))
 
@@ -400,12 +394,12 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None,
 
         if map.get_layer():
             msgr.debug(1, _("Set absolute valid time for map <%(id)s> with "
-                           "layer %(layer)s to %(start)s - %(end)s") %
-                         {'id': map.get_map_id(), 'layer': map.get_layer(),
-                          'start': str(start_time), 'end': str(end_time)})
+                            "layer %(layer)s to %(start)s - %(end)s") %
+                       {'id': map.get_map_id(), 'layer': map.get_layer(),
+                        'start': str(start_time), 'end': str(end_time)})
         else:
-            msgr.debug(1, _("Set absolute valid time for map <%s> to %s - %s") %
-                         (map.get_map_id(), str(start_time), str(end_time)))
+            msgr.debug(1, _("Set absolute valid time for map <%s> to %s - %s")
+                       % (map.get_map_id(), str(start_time), str(end_time)))
 
         map.set_absolute_time(start_time, end_time)
     else:
@@ -421,19 +415,84 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None,
                 end_time = start_time + int(increment)
 
         if map.get_layer():
-            msgr.debug(1, _("Set relative valid time for map <%s> with layer %s "
-                           "to %i - %s with unit %s") %
-                         (map.get_map_id(), map.get_layer(), start_time,
-                          str(end_time), unit))
+            msgr.debug(1, _("Set relative valid time for map <%s> with layer"
+                            " %s to %i - %s with unit %s") %
+                       (map.get_map_id(), map.get_layer(), start_time,
+                       str(end_time), unit))
         else:
             msgr.debug(1, _("Set relative valid time for map <%s> to %i - %s "
-                           "with unit %s") % (map.get_map_id(), start_time,
-                                              str(end_time), unit))
+                            "with unit %s") % (map.get_map_id(), start_time,
+                                               str(end_time), unit))
 
         map.set_relative_time(start_time, end_time, unit)
 
 
-###############################################################################
+##############################################################################
+
+def register_map_object_list(type,  map_list, output_stds,
+                             delete_empty, unit, dbif=None):
+    """Register a list of AbstractMapDataset objects in the temporal database
+       and optional in a space time dataset.
+
+       :param type: The type of the map layer (rast, rast3d, vect)
+       :param map_list: List of AbstractMapDataset objects
+       :param output_stds: The output stds
+       :param delete_empty: Set True to delete empty map layer found in the map_list
+       :param unit: The temporal unit of the space time dataset
+       :param dbif: The database interface to be used
+
+    """
+    import grass.pygrass.modules as pymod
+    import copy
+
+    dbif,  connected = init_dbif(dbif)
+
+    filename = gscript.tempfile(True)
+    file = open(filename, 'w')
+
+    empty_maps = []
+    for map_layer in map_list:
+        # Read the raster map data
+        map_layer.load()
+        # In case of a empty map continue, do not register empty maps
+
+        if delete_empty:
+            if map_layer.metadata.get_min() is None and \
+               map_layer.metadata.get_max() is None:
+                empty_maps.append(map_layer)
+                continue
+
+        start,  end = map_layer.get_temporal_extent_as_tuple()
+        id = map_layer.get_id()
+        if not end:
+            end = start
+        string = "%s|%s|%s\n" % (id,  str(start),  str(end))
+        file.write(string)
+    file.close()
+
+    if output_stds:
+        output_stds_id = output_stds.get_id()
+    else:
+        output_stds_id = None
+
+    register_maps_in_space_time_dataset(type, output_stds_id, unit=unit,
+                                        file=filename, dbif=dbif)
+
+    g_remove = pymod.Module("g.remove", flags='f', quiet=True,
+                            run_=False, finish_=True)
+
+    # Remove empty maps
+    if len(empty_maps) > 0:
+        for map in empty_maps:
+            if map.is_in_db(dbif):
+                map.delete(dbif)
+            mod = copy.deepcopy(g_remove)
+            if map.get_name():
+                mod(type='rast', name=map.get_name())
+                mod.run()
+
+    if connected:
+        dbif.close()
 
 if __name__ == "__main__":
     import doctest

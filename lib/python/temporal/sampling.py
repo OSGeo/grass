@@ -1,33 +1,29 @@
-"""!@package grass.temporal
-
-@brief GRASS Python scripting module (temporal GIS functions)
-
-Temporal GIS related functions to be used in Python scripts.
+"""
+Sampling functions for space time datasets
 
 Usage:
 
-@code
-import grass.temporal as tgis
+.. code-block:: python
 
-tgis.register_maps_in_space_time_dataset(type, name, maps)
+    import grass.temporal as tgis
 
-...
-@endcode
+    tgis.register_maps_in_space_time_dataset(type, name, maps)
 
 (C) 2012-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Soeren Gebbert
+:authors: Soeren Gebbert
 """
 
 from factory import *
 
+
 def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header,
                                  separator, method, spatial=False,
                                  print_only=True):
-    """!Sample the input space time datasets with a sample
+    """Sample the input space time datasets with a sample
        space time dataset, return the created map matrix and optionally
        print the result to stdout
 
@@ -39,21 +35,24 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header,
 
         Attention: Do not use the comma as separator for printing
 
-        @param intype  Type of the input space time dataset (strds, stvds or str3ds)
-        @param sampletype Type of the sample space time datasets (strds, stvds or str3ds)
-        @param inputs Name or comma separated names of space time datasets or a list of map names
-        @param sampler Name of a space time dataset used for temporal sampling
-        @param header Set True to print column names
-        @param separator The field separator character between the columns
-        @param method The method to be used for temporal sampling
-                       (start,during,contain,overlap,equal) as comma separated string
-                       or as a list of methods
-        @param spatial Perform spatial overlapping check
-        @param print_only If set True (default) then the result of the sampling will be
-                    printed to stdout, if set to False the resulting map matrix
-                    will be returned.
+        :param intype: Type of the input space time dataset (strds, stvds or
+                       str3ds)
+        :param sampletype: Type of the sample space time datasets (strds,
+                           stvds or str3ds)
+        :param inputs: Name or comma separated names of space time datasets or
+                       a list of map names
+        :param sampler: Name of a space time dataset used for temporal sampling
+        :param header: Set True to print column names
+        :param separator: The field separator character between the columns
+        :param method: The method to be used for temporal sampling
+                       (start,during,contain,overlap,equal) as comma separated
+                       string or as a list of methods
+        :param spatial: Perform spatial overlapping check
+        :param print_only: If set True (default) then the result of the
+                           sampling will be printed to stdout, if set to False
+                           the resulting map matrix will be returned.
 
-        @return The map matrix or None if nothing found
+        :return: The map matrix or None if nothing found
     """
     mapset = get_current_mapset()
     msgr = get_tgis_message_interface()
@@ -88,11 +87,12 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header,
     dbif.connect()
 
     for st in sts:
-        if st.is_in_db(dbif) == False:
-            msgr.fatal(_("Dataset <%s> not found in temporal database") % (st.get_id()))
+        if st.is_in_db(dbif) is False:
+            msgr.fatal(_("Dataset <%s> not found in temporal database")
+                       % (st.get_id()))
         st.select(dbif)
 
-    if sst.is_in_db(dbif) == False:
+    if sst.is_in_db(dbif) is False:
         msgr.fatal(_("Dataset <%s> not found in temporal database") % (sid))
 
     sst.select(dbif)

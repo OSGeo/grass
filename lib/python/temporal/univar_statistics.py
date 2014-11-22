@@ -1,58 +1,55 @@
-"""!@package grass.temporal
-
-@brief GRASS Python scripting module (temporal GIS functions)
-
-Temporal GIS related functions to be used in Python scripts.
+"""
+Univariate statistic function for space time datasets
 
 Usage:
 
-@code
-import grass.temporal as tgis
+.. code-block:: python
 
-tgis.print_gridded_dataset_univar_statistics(
-    type, input, where, extended, no_header, fs)
+    import grass.temporal as tgis
 
-...
-@endcode
+    tgis.print_gridded_dataset_univar_statistics(type, input, where, extended, no_header, fs)
+
 
 (C) 2012-2013 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Soeren Gebbert
+:authors: Soeren Gebbert
 """
 
 from open_stds import *
+import grass.script as gscript
 
 ###############################################################################
 
 
 def print_gridded_dataset_univar_statistics(type, input, where, extended,
                                             no_header=False, fs="|"):
-    """!Print univariate statistics for a space time raster or raster3d dataset
+    """Print univariate statistics for a space time raster or raster3d dataset
 
-       @param type Must be "strds" or "str3ds"
-       @param input The name of the space time dataset
-       @param where A temporal database where statement
-       @param extended If True compute extended statistics
-       @param no_header Supress the printing of column names
-       @param fs Field separator
+       :param type: Must be "strds" or "str3ds"
+       :param input: The name of the space time dataset
+       :param where: A temporal database where statement
+       :param extended: If True compute extended statistics
+       :param no_header: Supress the printing of column names
+       :param fs: Field separator
     """
 
     # We need a database interface
     dbif = SQLDatabaseInterfaceConnection()
     dbif.connect()
 
-    sp = open_old_space_time_dataset(input, type, dbif)
+    sp = open_old_stds(input, type, dbif)
 
     rows = sp.get_registered_maps(
         "id,start_time,end_time", where, "start_time", dbif)
 
     if not rows:
         dbif.close()
-        core.fatal(_("Space time %(sp)s dataset <%(i)s> is empty") % {
-                     'sp': sp.get_new_map_instance(None).get_type(), 'i': sp.get_id()})
+        gscript.fatal(_("Space time %(sp)s dataset <%(i)s> is empty") % {
+                      'sp': sp.get_new_map_instance(None).get_type(),
+                      'i': sp.get_id()})
 
     if no_header is False:
         string = ""
@@ -60,7 +57,7 @@ def print_gridded_dataset_univar_statistics(type, input, where, extended,
         string += "min" + fs + "max" + fs
         string += "mean_of_abs" + fs + "stddev" + fs + "variance" + fs
         string += "coeff_var" + fs + "sum" + fs + "null_cells" + fs + "cells"
-        if extended == True:
+        if extended is True:
             string += fs + "first_quartile" + fs + "median" + fs
             string += "third_quartile" + fs + "percentile_90"
 
@@ -74,28 +71,30 @@ def print_gridded_dataset_univar_statistics(type, input, where, extended,
 
         flag = "g"
 
-        if extended == True:
+        if extended is True:
             flag += "e"
 
         if type == "strds":
-            stats = core.parse_command("r.univar", map=id, flags=flag)
+            stats = gscript.parse_command("r.univar", map=id, flags=flag)
         elif type == "str3ds":
-            stats = core.parse_command("r3.univar", map=id, flags=flag)
+            stats = gscript.parse_command("r3.univar", map=id, flags=flag)
 
         if not stats:
             if type == "strds":
-                core.warning(_("Unable to get statistics for raster map <%s>") % id)
+                gscript.warning(_("Unable to get statistics for raster map "
+                                  "<%s>") % id)
             elif type == "str3ds":
-                core.warning(_("Unable to get statistics for 3d raster map <%s>") % id)
+                gscript.warning(_("Unable to get statistics for 3d raster map"
+                                  " <%s>") % id)
             continue
-        
+
         string += str(id) + fs + str(start) + fs + str(end)
         string += fs + str(stats["mean"]) + fs + str(stats["min"])
         string += fs + str(stats["max"]) + fs + str(stats["mean_of_abs"])
         string += fs + str(stats["stddev"]) + fs + str(stats["variance"])
         string += fs + str(stats["coeff_var"]) + fs + str(stats["sum"])
         string += fs + str(stats["null_cells"]) + fs + str(stats["cells"])
-        if extended == True:            
+        if extended is True:
             string += fs + str(stats["first_quartile"]) + fs + str(stats["median"])
             string += fs + str(stats["third_quartile"]) + fs + str(stats["percentile_90"])
         print string
@@ -106,19 +105,20 @@ def print_gridded_dataset_univar_statistics(type, input, where, extended,
 
 
 def print_vector_dataset_univar_statistics(input, twhere, layer, type, column,
-                                           where, extended, no_header=False, fs="|"):
-    """!Print univariate statistics for a space time vector dataset
+                                           where, extended, no_header=False,
+                                           fs="|"):
+    """Print univariate statistics for a space time vector dataset
 
-       @param input The name of the space time dataset
-       @param twhere A temporal database where statement
-       @param layer The layer number used in case no layer is present
+       :param input: The name of the space time dataset
+       :param twhere: A temporal database where statement
+       :param layer: The layer number used in case no layer is present
               in the temporal dataset
-       @param type options: point,line,boundary,centroid,area
-       @param column The name of the attribute column
-       @param where A temporal database where statement
-       @param extended If True compute extended statistics
-       @param no_header Supress the printing of column names
-       @param fs Field separator
+       :param type: options: point,line,boundary,centroid,area
+       :param column: The name of the attribute column
+       :param where: A temporal database where statement
+       :param extended: If True compute extended statistics
+       :param no_header: Supress the printing of column names
+       :param fs: Field separator
     """
 
     # We need a database interface
@@ -134,10 +134,10 @@ def print_vector_dataset_univar_statistics(input, twhere, layer, type, column,
 
     sp = dataset_factory("stvds", id)
 
-    if sp.is_in_db(dbif) == False:
+    if sp.is_in_db(dbif) is False:
         dbif.close()
-        core.fatal(_("Space time %(sp)s dataset <%(i)s> not found") % {
-                     'sp': sp.get_new_map_instance(None).get_type(), 'i': id})
+        gscript.fatal(_("Space time %(sp)s dataset <%(i)s> not found") % {
+                      'sp': sp.get_new_map_instance(None).get_type(), 'i': id})
 
     sp.select(dbif)
 
@@ -146,8 +146,8 @@ def print_vector_dataset_univar_statistics(input, twhere, layer, type, column,
 
     if not rows:
         dbif.close()
-        core.fatal(_("Space time %(sp)s dataset <%(i)s> is empty") % {
-                     'sp': sp.get_new_map_instance(None).get_type(), 'i': id})
+        gscript.fatal(_("Space time %(sp)s dataset <%(i)s> is empty") % {
+                      'sp': sp.get_new_map_instance(None).get_type(), 'i': id})
 
     string = ""
     if no_header is False:
@@ -160,7 +160,7 @@ def print_vector_dataset_univar_statistics(input, twhere, layer, type, column,
             string += "population_coeff_variation" + fs + \
                 "sample_stddev" + fs + "sample_variance" + fs
             string += "kurtosis" + fs + "skewness"
-            if extended == True:
+            if extended is True:
                 string += fs + "first_quartile" + fs + "median" + fs + \
                     "third_quartile" + fs + "percentile_90"
 
@@ -174,22 +174,23 @@ def print_vector_dataset_univar_statistics(input, twhere, layer, type, column,
 
         flags = "g"
 
-        if extended == True:
+        if extended is True:
             flags += "e"
 
         if not mylayer:
             mylayer = layer
 
-        stats = core.parse_command("v.univar", map=id, where=where,
-                                   column=column, layer=mylayer,
-                                   type=type, flags=flags)
+        stats = gscript.parse_command("v.univar", map=id, where=where,
+                                      column=column, layer=mylayer,
+                                      type=type, flags=flags)
 
         string = ""
 
         if not stats:
-            core.warning(_("Unable to get statistics for vector map <%s>") % id)
+            gscript.warning(_("Unable to get statistics for vector map <%s>")
+                            % id)
             continue
-        
+
         string += str(id) + fs + str(start) + fs + str(end)
         string += fs + str(stats["n"]) + fs + str(stats[
             "nmissing"]) + fs + str(stats["nnull"])
@@ -211,15 +212,15 @@ def print_vector_dataset_univar_statistics(input, twhere, layer, type, column,
                 str(stats["sample_variance"])
 
                 string += fs + str(stats["kurtosis"]) + fs + \
-                str(stats["skewness"])
+                          str(stats["skewness"])
             else:
                 string += fs + fs + fs + fs + fs + fs + fs + fs + fs
-            if extended == True:
+            if extended is True:
                 if "first_quartile" in stats:
                     string += fs + str(stats["first_quartile"]) + fs + \
-                    str(stats["median"]) + fs + \
-                    str(stats["third_quartile"]) + fs + \
-                    str(stats["percentile_90"])
+                              str(stats["median"]) + fs + \
+                              str(stats["third_quartile"]) + fs + \
+                              str(stats["percentile_90"])
                 else:
                     string += fs + fs + fs + fs
 
