@@ -16,7 +16,9 @@
 
 #%module
 #% description: Packs up a vector map and support files for copying.
-#% keywords: vector, export, copying
+#% keywords: vector
+#% keywords: export
+#% keywords: copying
 #%end
 #%option G_OPT_V_INPUT
 #% label: Name of vector map to pack up
