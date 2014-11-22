@@ -34,13 +34,14 @@ for fname in htmlfiles:
         keys = lines[index_keys].split(',')
     except:
         continue
+    print keys
     for key in keys:
         key = key.strip()
         try:
             key = key.split('>')[1].split('<')[0]
         except:
             pass
-        key = "%s%s" % (key[0].upper(), key[1:])
+        #key = "%s%s" % (key[0].upper(), key[1:])
         if key not in keywords.keys():
             keywords[key] = []
             keywords[key].append(fname)
