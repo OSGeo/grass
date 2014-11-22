@@ -40,8 +40,8 @@ char *tgis_get_default_database_name(void)
 {
     char default_connection[2048];
 
-    G_snprintf(default_connection, 2048, "%s/%s/%s", G_gisdbase(), G_location(),
-               TGISDB_DEFAULT_SQLITE_PATH);
+    G_snprintf(default_connection, 2048, "%s/%s/%s/%s", G_gisdbase(), G_location(),
+               G_mapset(), TGISDB_DEFAULT_SQLITE_PATH);
 
     return G_store(default_connection);
 }
