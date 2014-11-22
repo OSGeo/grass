@@ -59,7 +59,7 @@ def main():
 
     tgis.init(True)
     p = tgis.TemporalAlgebraParser(run=True, debug=False, spatial = spatial)
-    p.parse(expression, stdstype)
+    p.parse(expression, stdstype,  overwrite=grass.overwrite)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

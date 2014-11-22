@@ -74,7 +74,7 @@ def main():
     first = None
 
     for id in input_ids:
-        stds = tgis.open_old_space_time_dataset(id, type, dbif)
+        stds = tgis.open_old_stds(id, type, dbif)
         if first is None:
             first = stds
 
@@ -100,7 +100,7 @@ def main():
                       (stds.get_new_map_instance(None).get_type(), output_id))
 
     if not output_exists:
-        output_stds = tgis.open_new_space_time_dataset(output, type,
+        output_stds = tgis.open_new_stds(output, type,
                                    first.get_temporal_type(),
                                    "Merged space time dataset",
                                    "Merged space time dataset",

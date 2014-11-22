@@ -1,43 +1,34 @@
 <h2>DESCRIPTION</h2>
 
-List time stamped raster map layers that are registered in a space time 
-raster dataset. This module provides several options to list map layers 
-and their metadata. Listing of map layer can be ordered by metadata, 
-metadata columns can be specified and SQL where conditions can be 
-provided to select a map layer subset of the input space time raster 
-dataset. Most of the raster map  specific metadat is available for 
-column selection, sorting and SQL where statements.
+List time stamped raster map layers that are registered in a space time raster dataset. This module provides
+several options to list map layers and their metadata. Listing of map layer can be ordered by metadata,
+metadata columns can be specified and SQL where conditions can be provided to select a map layer subset
+of the input space time raster dataset. Most of the raster map  specific metadat is available for column selection,
+sorting and SQL where statements.
 
-Using the <b>method</b> option allows the specification of different 
-methods to list map layers. Method <i>col</i> is the deafult option and 
-sensitive to the <b>column</b>,<b>order</b> and <b>where</b> options. 
-It will simply print user specified metadata columns of one map layer 
-per line. The <i>comma</i> method will list the map layer as comma 
-separated list that can be used as input for spatial modules.
-<p>
-To print interval length in days and distance from the begin use method 
-<i>delta</i>. Method <i>deltagap</i> will additionally print temporal 
-gaps between map layer. The <i>gran</i> method allows the listing of 
-map layer sampled by a user defined <b>granule</b>. As default the 
-granularity of the space time raster dataset is used for sampling.
+Using the <b>method</b> option allows the specification of different methods to list map layers.
+Method <i>col</i> is the deafult option and sensitive to the <b>column</b>,<b>order</b>
+and <b>where</b> options. It will simply print user specified metadata columns of one map layer per line.
+The <i>comma</i> method will list the map layer as comma separated list that can be used as input
+for spatial modules.
+To print interval length in days and distance from the begin use method <i>delta</i>. Method
+<i>deltagap</i> will additionally print temporal gaps between map layer. The <i>gran</i>
+method allows the listing of map layer sampled by a user defined <b>granule</b>. As default the granularity
+of the space time raster dataset is used for sampling.
 
-For user defined column separator can be specified with the <b>separator</b>
-option.
+For user defined column separator can be specified with the <b>separator</b> option.
 
 <h2>EXAMPLE</h2>
-
 This example shows several options that are available for map layers listing.
-
 <div class="code"><pre>
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
-# Generate data
-r.mapcalc expr="map_1 = rand(0, 550)" -s
-r.mapcalc expr="map_2 = rand(0, 450)" -s
-r.mapcalc expr="map_3 = rand(0, 320)" -s
-r.mapcalc expr="map_4 = rand(0, 510)" -s
-r.mapcalc expr="map_5 = rand(0, 300)" -s
-r.mapcalc expr="map_6 = rand(0, 650)" -s
+r.mapcalc expr="map_1 = rand(0, 550)"
+r.mapcalc expr="map_2 = rand(0, 450)"
+r.mapcalc expr="map_3 = rand(0, 320)"
+r.mapcalc expr="map_4 = rand(0, 510)"
+r.mapcalc expr="map_5 = rand(0, 300)"
+r.mapcalc expr="map_6 = rand(0, 650)"
 
 cat > map_list.txt << EOF
 map_1|2001-01-01|2001-04-01
@@ -176,6 +167,7 @@ map_6@PERMANENT|map_6|PERMANENT|2002-06-25 00:00:00|2002-07-13 00:00:00|18.0|540
 
 <em>
 <a href="g.list.html">g.list</a>,
+<a href="g.mlist.html">g.mlist</a>,
 <a href="t.create.html">t.create</a>,
 <a href="t.info.html">t.info</a>,
 <a href="t.list.html">t.list</a>,

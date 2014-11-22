@@ -68,7 +68,7 @@ def main():
     # Make sure the temporal database exists
     tgis.init()
 
-    sp = tgis.open_old_space_time_dataset(input, "stvds")
+    sp = tgis.open_old_stds(input, "stvds")
 
     rows = sp.get_registered_maps("name,layer,mapset,start_time,end_time",
                                   tempwhere, "start_time", None)
