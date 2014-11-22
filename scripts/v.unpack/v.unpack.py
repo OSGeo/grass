@@ -16,7 +16,9 @@
 
 #%module
 #% description: Unpacks a vector map packed with v.pack.
-#% keywords: vector, import, copying
+#% keywords: vector
+#% keywords: import
+#% keywords: copying
 #%end
 #%option G_OPT_F_INPUT
 #% gisprompt: old,bin,file
