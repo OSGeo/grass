@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("geometry"));
     G_add_keyword(_("grid"));
     G_add_keyword(_("point pattern"));
-    module->description = _("Creates a vector map of a user-defined grid.");
+    module->description = _("Creates a vector map of a user-defined grid of area, lines or points.");
 
     vectname = G_define_standard_option(G_OPT_V_OUTPUT);
     vectname->key = "map";
