@@ -36,12 +36,12 @@ int unit_test_put_get_value_large_file(int depths, int rows, int cols, int tile_
 
     G_message("\n++ Running raster3d put/get value large file unit tests ++");
 
+    sum += test_large_file(depths, rows, cols, tile_size);
     sum += test_large_file_random(depths, rows, cols, tile_size);
     sum += test_large_file_sparse_random(depths, rows, cols, tile_size);
     sum += test_large_file(depths, rows, cols, tile_size);
-    sum += test_large_file(depths, rows, cols, tile_size);
-    sum += test_large_file(depths, rows, cols, tile_size);
     sum += test_large_file_zeros(depths, rows, cols, tile_size);
+    sum += test_large_file(depths, rows, cols, tile_size);
 
 
     if (sum > 0)
@@ -57,7 +57,7 @@ int unit_test_put_get_value_large_file(int depths, int rows, int cols, int tile_
 int test_large_file(int depths, int rows, int cols, int tile_size)
 {
     int sum = 0; 
-    int x, y, z;
+    int x, y, z, count;
     DCELL value;
     
     G_message("Testing DCELL put function for large files");
@@ -89,9 +89,25 @@ int test_large_file(int depths, int rows, int cols, int tile_size)
     /* The window is the same as the map region ... of course */
     Rast3d_set_window_map(map, &region);
     
-    int count = 1;
+    /*Write -1 first to see if the tile handling works correctly */
     for(z = 0; z < region.depths; z++) {
 	G_percent(z, region.depths, 1);
+        for(y = 0; y < region.rows; y++) {
+            for(x = 0; x < region.cols; x++) {
+              /* Put the counter as cell value */
+                value = -1;
+                Rast3d_put_value(map, x, y, z, &value, DCELL_TYPE);
+            }
+        }
+    }
+
+    G_percent(1, 1, 1);
+    G_message("Rewriting the values");
+
+    /* Now write the values to be evaluated */
+    count = 1;
+    for(z = 0; z < region.depths; z++) {
+        G_percent(z, region.depths, 1);
         for(y = 0; y < region.rows; y++) {
             for(x = 0; x < region.cols; x++) {
               /* Put the counter as cell value */
@@ -103,15 +119,9 @@ int test_large_file(int depths, int rows, int cols, int tile_size)
     }
 
     G_percent(1, 1, 1);
-    /* Write everything to the disk */
-    Rast3d_flush_all_tiles(map);
-    Rast3d_close(map);
          
     G_message("Verifying 3D raster map");
 
-    map = Rast3d_open_cell_old("test_put_get_value_dcell_large",
-    		G_mapset(), &region, DCELL_TYPE, RASTER3D_USE_CACHE_XYZ);
-    
     count = 1;
     for(z = 0; z < region.depths; z++) {
 	G_percent(z, region.depths, 1);

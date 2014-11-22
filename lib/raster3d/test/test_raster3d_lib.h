@@ -21,10 +21,11 @@
 #include <grass/raster3d.h>
 #include <grass/gis.h>
 #include <grass/glocale.h>
+#include <sys/time.h>
 
-double compute_time_difference(struct timeval start, struct timeval end);
+double compute_time_difference(struct timeval, struct timeval);
 int unit_test_coordinate_transform(void);
 int unit_test_put_get_value(void);
-int unit_test_put_get_value_large_file(int depths, int rows, int cols, int tile_size);
+int unit_test_put_get_value_large_file(int, int, int, int);
 
 #endif
