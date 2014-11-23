@@ -1,25 +1,63 @@
 <h2>DESCRIPTION</h2>
 
-TBD.
+This module exports all maps registered in a space time raster datasets as VTK legacy files
+using a numerical numbering scheme. The VTK files can be visualized with any VTK based
+visualize. Our preferred tool is ParaView. The VTK legacy files are created using <b>r.out.vtk</b>.
 
 <h2>EXAMPLE</h2>
 
-The example is based on the XXX sample dataset:
+In this simple example we create several raster maps with random values and one elevation map.
+The random value raster maps are registered in a space time raster dataset. All maps of this
+space time raster dataset are exported using <b>t.rast.out.vtk</b> into the directoy <b>/tmp/test1</b>.
+
 
 <div class="code"><pre>
-TBD
+r.mapcalc --o expr="prec_1 = rand(0, 550)" -s
+r.mapcalc --o expr="prec_2 = rand(0, 450)" -s
+r.mapcalc --o expr="prec_3 = rand(0, 320)" -s
+r.mapcalc --o expr="prec_4 = rand(0, 510)" -s
+r.mapcalc --o expr="prec_5 = rand(0, 300)" -s
+r.mapcalc --o expr="prec_6 = rand(0, 650)" -s
+r.mapcalc --o expr="elevation = sin(row() + col()) * 10"
+
+n1=`g.tempfile pid=1 -d` 
+
+cat > "${n1}" << EOF
+prec_1|2001-01-01|2001-02-01
+prec_2|2001-02-01|2001-03-01
+prec_3|2001-03-01|2001-04-01
+prec_4|2001-05-01|2001-06-01
+prec_5|2001-07-01|2001-08-01
+prec_6|2001-08-01|2001-09-01
+EOF
+
+t.create --o type=strds temporaltype=absolute output=precip_abs title="A test with input files" descr="A test with input files"
+
+t.register -i type=rast input=precip_abs file="${n1}"
+
+mkdir /tmp/test1
+t.rast.out.vtk input=precip_abs expdir=/tmp/test1 elevation=elevation
+
+ls -al /tmp/test1 
+-rw-rw-r--  1 soeren soeren   1857 Nov 23 15:59 000000_precip_abs.vtk
+-rw-rw-r--  1 soeren soeren   1849 Nov 23 15:59 000001_precip_abs.vtk
+-rw-rw-r--  1 soeren soeren   1836 Nov 23 15:59 000002_precip_abs.vtk
+-rw-rw-r--  1 soeren soeren   1854 Nov 23 15:59 000003_precip_abs.vtk
+-rw-rw-r--  1 soeren soeren   1842 Nov 23 15:59 000004_precip_abs.vtk
+-rw-rw-r--  1 soeren soeren   1858 Nov 23 15:59 000005_precip_abs.vtk
+
 </pre></div>
 
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="t.create.html">t.create</a>,
-<a href="t.info.html">t.info</a>
+<a href="r.out.vtk.html">r.out.vtk</a>,
+<a href="http://www.paraview.org">ParaView</a>
 </em>
 
 <h2>AUTHOR</h2>
 
-S&ouml;ren Gebbert
+S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
 
 <p><i>Last changed: $Date$</i>
 

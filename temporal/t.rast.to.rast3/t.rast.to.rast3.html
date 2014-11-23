@@ -1,25 +1,203 @@
 <h2>DESCRIPTION</h2>
 
-TBD.
+This module is designed to convert a space time raster dataset (STRDS) into a space time voxel cube.
+A space time voxel cube is a 3 dimensional raster map layer (3d raster map or voxel map layer) that as time as
+unit for the z-dimension.
+<p>
+A space time raster dataset that should be converted into a space time 
+voxel cube must have a valid temporal topology. Hence, overlapping or inclusion of time stamps is not allowed.
+The granularity of the STRDS is used to set the resolution of the 3d raster map layer
+and to sample the registered time stamped raster map layers.
+<p>
+Gaps between raster map layer in the STRDS will
+be represented by NULL values in the voxel map layer.
+
+
+<h2>NOTE</h2>
+
+The reference time for all space time voxel cubes is 1900-01-0100:00:00. This allows the alignment 
+space time voxel cubes with different granularities.
+<p>
+Be aware that the granularity of a STRDS is used to sample time stamped map layers! If you have gaps
+between monthly intervals that have the size of a second, the monthly intervals will be sampled by a second based granularity as well. This may result in millions of space time voxel cube layers!
 
 <h2>EXAMPLE</h2>
 
-The example is based on the XXX sample dataset:
+This simple example that converts a space time raster dataset that has gaps between its time stamped
+map layers into a space time voxel cube. The time stamped raster map layer have a interval size of three months.
+However, the granularity is one month, since of each gap has an interval size of one month. The resulting
+voxel map layer has 9 depths. Hence, the space time raster dataset is sampled by its granularity resulting
+in 9 layer.
 
 <div class="code"><pre>
-TBD
+g.region s=0 n=80 w=0 e=120 b=0 t=1 res=10 res3=10 -p3
+
+r.mapcalc --o expr="a1 = 100.0"
+r.mapcalc --o expr="a2 = 200.0"
+r.mapcalc --o expr="a3 = 300.0"
+
+n1=`g.tempfile pid=1 -d`
+
+cat > "${n1}" << EOF
+a1|2001-01-01|2001-04-01
+a2|2001-05-01|2001-07-01
+a3|2001-08-01|2001-10-01
+EOF
+
+t.create type=strds temporaltype=absolute output=A title="A test" descr="A test"
+
+t.register -i type=rast input=A file=${n1}
+
+t.info type=strds input=A
+
+ +-------------------- Space Time Raster Dataset -----------------------------+
+ |                                                                            |
+ +-------------------- Basic information -------------------------------------+
+ | Id: ........................ A@PERMANENT
+ | Name: ...................... A
+ | Mapset: .................... PERMANENT
+ | Creator: ................... soeren
+ | Temporal type: ............. absolute
+ | Creation time: ............. 2014-11-23 16:28:21.170177
+ | Modification time:.......... 2014-11-23 16:28:21.641846
+ | Semantic type:.............. mean
+ +-------------------- Absolute time -----------------------------------------+
+ | Start time:................. 2001-01-01 00:00:00
+ | End time:................... 2001-10-01 00:00:00
+ | Granularity:................ 1 month
+ | Temporal type of maps:...... interval
+ +-------------------- Spatial extent ----------------------------------------+
+ | North:...................... 80.0
+ | South:...................... 0.0
+ | East:.. .................... 120.0
+ | West:....................... 0.0
+ | Top:........................ 0.0
+ | Bottom:..................... 0.0
+ +-------------------- Metadata information ----------------------------------+
+ | Raster register table:...... raster_map_register_c70e476695a04975a03ccb655ed0bb2c
+ | North-South resolution min:. 10.0
+ | North-South resolution max:. 10.0
+ | East-west resolution min:... 10.0
+ | East-west resolution max:... 10.0
+ | Minimum value min:.......... 100.0
+ | Minimum value max:.......... 300.0
+ | Maximum value min:.......... 100.0
+ | Maximum value max:.......... 300.0
+ | Aggregation type:........... None
+ | Number of registered maps:.. 3
+ |
+ | Title:
+ | A test
+ | Description:
+ | A test
+ | Command history:
+ | # 2014-11-23 16:28:21 
+ | t.create type="strds" temporaltype="absolute"
+ |     output="A" title="A test" descr="A test"
+ | # 2014-11-23 16:28:21 
+ | t.register -i type="rast" input="A"
+ |     file="/home/soeren/grassdata/LL/PERMANENT/.tmp/knecht/1.2"
+ | 
+ +----------------------------------------------------------------------------+
+
+
+t.rast.to.rast3 input=A output=cube
+
+t.info type=rast3d input=cube
+
+ +-------------------- 3D Raster Dataset -------------------------------------+
+ |                                                                            |
+ +-------------------- Basic information -------------------------------------+
+ | Id: ........................ cube@PERMANENT
+ | Name: ...................... cube
+ | Mapset: .................... PERMANENT
+ | Creator: ................... soeren
+ | Temporal type: ............. absolute
+ | Creation time: ............. 2014-11-23 16:28:46.341227
+ +-------------------- Absolute time -----------------------------------------+
+ | Start time:................. 2001-01-01 00:00:00
+ | End time:................... 2001-10-01 00:00:00
+ +-------------------- Spatial extent ----------------------------------------+
+ | North:...................... 80.0
+ | South:...................... 0.0
+ | East:.. .................... 120.0
+ | West:....................... 0.0
+ | Top:........................ 1222.0
+ | Bottom:..................... 1213.0
+ +-------------------- Metadata information ----------------------------------+
+ | Datatype:................... DCELL
+ | Number of columns:.......... 8
+ | Number of rows:............. 12
+ | Number of cells:............ 864
+ | North-South resolution:..... 10.0
+ | East-west resolution:....... 10.0
+ | Minimum value:.............. 100.0
+ | Maximum value:.............. 300.0
+ | Number of depths:........... 9
+ | Top-Bottom resolution:...... 1.0
+ | Registered datasets ........ 
+ +----------------------------------------------------------------------------+
+
+
+r3.info cube
+
+ +----------------------------------------------------------------------------+
+ | Layer:    cube                           Date: Sun Nov 23 16:28:46 2014    |
+ | Mapset:   PERMANENT                      Login of Creator: soeren          |
+ | Location: LL                                                               |
+ | DataBase: /home/soeren/grassdata                                           |
+ | Title:    Space time voxel cube                                            |
+ | Units:    none                                                             |
+ | Vertical unit: months                                                      |
+ | Timestamp: 1 Jan 2001 00:00:00 / 1 Oct 2001 00:00:00                       |
+ |----------------------------------------------------------------------------|
+ |                                                                            |
+ |   Type of Map:  3d cell              Number of Categories: 0               |
+ |   Data Type:    DCELL                                                      |
+ |   Rows:         8                                                          |
+ |   Columns:      12                                                         |
+ |   Depths:       9                                                          |
+ |   Total Cells:  864                                                        |
+ |   Total size:           116 Bytes                                          |
+ |   Number of tiles:      1                                                  |
+ |   Mean tile size:       116 Bytes                                          |
+ |   Tile size in memory:  6912 Bytes                                         |
+ |   Number of tiles in x, y and  z:   1, 1, 1                                |
+ |   Dimension of a tile in x, y, z:   12, 8, 9                               |
+ |                                                                            |
+ |        Projection: Latitude-Longitude (zone 0)                             |
+ |            N:        80N    S:          0   Res:    10                     |
+ |            E:       120E    W:          0   Res:    10                     |
+ |            T:       1222    B:       1213   Res:     1                     |
+ |   Range of data:   min =        100 max =        300                       |
+ |                                                                            |
+ |   Data Source:                                                             |
+ |                                                                            |
+ |                                                                            |
+ |                                                                            |
+ |   Data Description:                                                        |
+ |    This space time voxel cube was created with t.rast.to.rast3             |
+ |                                                                            |
+ |   Comments:                                                                |
+ |    r.to.rast3 input="a1@PERMANENT,a1@PERMANENT,a1@PERMANENT,temporary_n\   |
+ |    ull_map_22842,a2@PERMANENT,a2@PERMANENT,temporary_null_map_22842,a3@\   |
+ |    PERMANENT,a3@PERMANENT" output="cube" tilesize=32                       |
+ |                                                                            |
+ +----------------------------------------------------------------------------+
+
+
 </pre></div>
 
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="t.create.html">t.create</a>,
-<a href="t.info.html">t.info</a>
+<a href="r3.mapcalc.html">r3.mapcalc</a>,
+<a href="r3.info.html">r3.info</a>
 </em>
 
 <h2>AUTHOR</h2>
 
-S&ouml;ren Gebbert
+S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
 
 <p><i>Last changed: $Date$</i>
 
