@@ -4,7 +4,7 @@
 3-dimensional point data (e.g. temperature, rainfall data from climatic
 stations, concentrations from drill holes etc.) given in a 3-D vector
 point file named <b>input</b>.&nbsp; The size of the output 
-3d raster map <b>elev</b> is given by the current 3D region. Sometimes, the
+3D raster map <b>elev</b> is given by the current 3D region. Sometimes, the
 user
 may want to get a 2-D map showing a modelled phenomenon at a
 crossection surface. In that case, <b>cellinp</b> and <b>cellout</b>
@@ -17,7 +17,7 @@ phenomenon can be computed (magnitude of gradient, direction of
 gradient defined by horizontal and vertical angles), change of gradient,
 Gauss-Kronecker curvature, or mean curvature). These geometric
 parameteres are saved as
-3d raster maps <b>gradient, aspect1, aspect2, ncurv, gcurv, mcurv</b>,
+3D raster maps <b>gradient, aspect1, aspect2, ncurv, gcurv, mcurv</b>,
 respectively. Maps <b>aspect1</b> and <b>aspect2</b> are in degrees.
 
 <p>At first, data points are checked for identical positions and points
@@ -48,7 +48,7 @@ containing deviations of the resulting volume from the given data.
 <p>The user can define a 2D raster map named <b>maskmap</b>, which will
 be used as a mask. The interpolation is skipped for 3-dimensional cells
 whose 2-dimensional projection has a zero value in the mask. Zero values will
-be assigned to these cells in all output 3d raster maps. 
+be assigned to these cells in all output 3D raster maps. 
 <p>If the number of given points is greater than 700, segmented
 processing is used. The region is split into 3-dimensional "box"
 segments, each having less than <b>segmax</b> points and interpolation
