@@ -35,13 +35,17 @@ will performed:
 </ul>
 
 <p>
-The specification of the temporal relation between the aggregation intervals and the raster map layers
-is always formulated from the aggregation interval viewpoint. Hence, the relation <em>contains</em>
-has to be specified to aggregate map layer that are temporally located in an aggregation interval.
+The specification of the temporal relation between the aggregation 
+intervals and the raster map layers is always formulated from the 
+aggregation interval viewpoint. Hence, the relation <em>contains</em> 
+has to be specified to aggregate map layer that are temporally located 
+in an aggregation interval.
 <p>
-Parallel processing is supported in case that more than one interval is available for aggregation computation. Internally several 
-<em>r.series</em> modules will be started, depending on the number of specified parallel processes (<em>nprocs</em>)
-and the number of intervals to aggregate. 
+Parallel processing is supported in case that more than one interval is 
+available for aggregation computation. Internally several 
+<em>r.series</em> modules will be started, depending on the number of 
+specified parallel processes (<em>nprocs</em>) and the number of 
+intervals to aggregate. 
 
 <h2>EXAMPLES</h2>
 
@@ -50,13 +54,16 @@ single space time raster dataset named <em>precipitation_daily</em>
 using a daily temporal granularity. The names of the raster maps are 
 stored in a text file that is used for raster map registration. 
 <p>
-The space time raster dataset <em>precipitation_daily</em> with daily temporal granularity 
-will be aggregated to weekly precipitation resulting in the output space time raster dataset
-<em>precipitation_weekly</em>. The base name of the new generated raster maps is <em>prec_weekly</em>, the
-granularity is 1 week. The aggregation method is set to <em>sum</em> to accumulate the precipitation values
-of all raster maps that are temporally <em>contained</em> in a week. 
-The sampling option <em>contains</em> assures that only raster maps that are 
-temporally during a week will be considered for computation: 
+The space time raster dataset <em>precipitation_daily</em> with daily 
+temporal granularity will be aggregated to weekly precipitation 
+resulting in the output space time raster dataset 
+<em>precipitation_weekly</em>. The base name of the new generated 
+raster maps is <em>prec_weekly</em>, the granularity is 1 week. The 
+aggregation method is set to <em>sum</em> to accumulate the 
+precipitation values of all raster maps that are temporally 
+<em>contained</em> in a week. The sampling option <em>contains</em> 
+assures that only raster maps that are temporally during a week will be 
+considered for computation: 
 
 <div class="code"><pre>
 MAPS="map_1 map_2 map_3 map_4 map_5 map_6 map_7"
