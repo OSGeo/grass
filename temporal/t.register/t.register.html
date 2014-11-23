@@ -110,12 +110,13 @@ r.timestamp prec_2
 
 t.rast.list input=precip_abs
 
-prec_1	test2	2001-01-01 00:00:00	2001-02-01 00:00:00
-prec_2	test2	2001-02-01 00:00:00	2001-03-01 00:00:00
-prec_3	test2	2001-03-01 00:00:00	2001-04-01 00:00:00
-prec_4	test2	2001-04-01 00:00:00	2001-05-01 00:00:00
-prec_5	test2	2001-05-01 00:00:00	2001-06-01 00:00:00
-prec_6	test2	2001-06-01 00:00:00	2001-07-01 00:00:00
+name|mapset|start_time|end_time
+prec_1|PERMANENT|2001-01-01 00:00:00|2001-02-01 00:00:00
+prec_2|PERMANENT|2001-02-01 00:00:00|2001-03-01 00:00:00
+prec_3|PERMANENT|2001-03-01 00:00:00|2001-04-01 00:00:00
+prec_4|PERMANENT|2001-04-01 00:00:00|2001-05-01 00:00:00
+prec_5|PERMANENT|2001-05-01 00:00:00|2001-06-01 00:00:00
+prec_6|PERMANENT|2001-06-01 00:00:00|2001-07-01 00:00:00
 
 r.mapcalc expr="prec_7 = 700"
 r.timestamp map=prec_7 date="1 jul 2001 / 1 aug 2001"
@@ -124,13 +125,15 @@ t.register type=rast input=precip_abs maps=prec_7
 
 t.rast.list input=precip_abs
 
-prec_1	test2	2001-01-01 00:00:00	2001-02-01 00:00:00
-prec_2	test2	2001-02-01 00:00:00	2001-03-01 00:00:00
-prec_3	test2	2001-03-01 00:00:00	2001-04-01 00:00:00
-prec_4	test2	2001-04-01 00:00:00	2001-05-01 00:00:00
-prec_5	test2	2001-05-01 00:00:00	2001-06-01 00:00:00
-prec_6	test2	2001-06-01 00:00:00	2001-07-01 00:00:00
-prec_7	test2	2001-07-01 00:00:00	2001-08-01 00:00:00
+name|mapset|start_time|end_time
+prec_1|PERMANENT|2001-01-01 00:00:00|2001-02-01 00:00:00
+prec_2|PERMANENT|2001-02-01 00:00:00|2001-03-01 00:00:00
+prec_3|PERMANENT|2001-03-01 00:00:00|2001-04-01 00:00:00
+prec_4|PERMANENT|2001-04-01 00:00:00|2001-05-01 00:00:00
+prec_5|PERMANENT|2001-05-01 00:00:00|2001-06-01 00:00:00
+prec_6|PERMANENT|2001-06-01 00:00:00|2001-07-01 00:00:00
+prec_7|PERMANENT|2001-07-01 00:00:00|2001-08-01 00:00:00
+
 </pre></div>
 
 
@@ -143,7 +146,7 @@ prec_7	test2	2001-07-01 00:00:00	2001-08-01 00:00:00
 
 <h2>AUTHOR</h2>
 
-S&ouml;ren Gebbert
+S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
 
 <p><i>Last changed: $Date$</i>
 

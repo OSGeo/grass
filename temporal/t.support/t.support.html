@@ -1,14 +1,31 @@
 <h2>DESCRIPTION</h2>
 
-TBD.
+This module is dedicated to modify and update the metadata of a space time dataset.
+<p>
+The title, description and the semantic type can be modified. 
+<p>
+The flag <em>-u</em> allows to update the STDS metadata from
+registered map layers. This is useful in case the map layers have been modified without using temporal
+commands. 
+<p>
+The flag <em>-m</em> will update the metadata from registered maps, but also checks if the registered
+map layers have been removed from the spatial database.
+It deletes missing map layers from the space time dataset register table and the temporal database.
 
-<h2>EXAMPLE</h2>
+<h2>Examples</h2>
 
-The example is based on the XXX sample dataset:
-
+Modification of title and description of space time raster dataset <em>A</em>.
+<p>
 <div class="code"><pre>
-TBD
+t.support type=strds input=A title="New title" description="New description"
 </pre></div>
+<p>
+Update the metadata of space time raster dataset <em>A</em> and check for removed map layers.
+<p>
+<div class="code"><pre>
+t.support -m type=strds input=A
+</pre></div>
+
 
 <h2>SEE ALSO</h2>
 
@@ -19,7 +36,7 @@ TBD
 
 <h2>AUTHOR</h2>
 
-S&ouml;ren Gebbert
+S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
 
 <p><i>Last changed: $Date$</i>
 
