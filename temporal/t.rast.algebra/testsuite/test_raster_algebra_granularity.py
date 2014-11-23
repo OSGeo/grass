@@ -108,7 +108,7 @@ class TestTRastAlgebraGranularity(gunittest.TestCase):
 
     def test_simple_arith_hash_1(self):
         """Simple arithmetic test including the hash operator"""
-        expr ='R = A + A # A'
+        expr ='R = A + (A # A)'
         self.assertModule("t.rast.algebra",  expression=expr, flags="g", basename="r")
         
         D = tgis.open_old_stds("R", type="strds")
