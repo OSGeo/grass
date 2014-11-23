@@ -14,7 +14,7 @@ All maps will be processed using the current region settings.
 The user can select a subset of the input space time raster dataset for 
 processing using a SQL WHERE statement. The number of CPU's to be used 
 for parallel processing can be specified with the <em>nprocs</em> 
-option, to speedup the computation on multicore system.
+option, to speedup the computation on multi-core system.
 
 
 <h2>EXAMPLE</h2>
@@ -60,13 +60,14 @@ t.info type=strds input=precipitation_daily
  | Name: ...................... precipitation_daily
  | Mapset: .................... PERMANENT
  | Creator: ................... soeren
- | Creation time: ............. 2013-03-20 18:47:25.867658
  | Temporal type: ............. absolute
+ | Creation time: ............. 2014-11-23 17:08:11.135848
+ | Modification time:.......... 2014-11-23 17:08:11.647709
  | Semantic type:.............. mean
  +-------------------- Absolute time -----------------------------------------+
  | Start time:................. 2012-08-20 00:00:00
  | End time:................... 2012-08-27 00:00:00
- | Granularity:................ 1 days
+ | Granularity:................ 1 day
  | Temporal type of maps:...... interval
  +-------------------- Spatial extent ----------------------------------------+
  | North:...................... 80.0
@@ -76,11 +77,7 @@ t.info type=strds input=precipitation_daily
  | Top:........................ 0.0
  | Bottom:..................... 0.0
  +-------------------- Metadata information ----------------------------------+
- | Number of registered maps:.. 7
- | Title:
- | Daily precipitation
- | Description:
- | Test dataset with daily precipitation
+ | Raster register table:...... raster_map_register_8a6ea51f0d584b1fb2d48747e4d4c41c
  | North-South resolution min:. 10.0
  | North-South resolution max:. 10.0
  | East-west resolution min:... 10.0
@@ -89,19 +86,36 @@ t.info type=strds input=precipitation_daily
  | Minimum value max:.......... 8.0
  | Maximum value min:.......... 533.0
  | Maximum value max:.......... 549.0
- | Raster register table:...... precipitation_daily_PERMANENT_raster_register
+ | Aggregation type:........... None
+ | Number of registered maps:.. 7
+ |
+ | Title:
+ | Daily precipitation
+ | Description:
+ | Test dataset with daily precipitation
+ | Command history:
+ | # 2014-11-23 17:08:11 
+ | t.create --o type="strds" temporaltype="absolute"
+ |     output="precipitation_daily" title="Daily precipitation"
+ |     description="Test dataset with daily precipitation"
+ | # 2014-11-23 17:08:11 
+ | t.register -i --o type="rast"
+ |     input="precipitation_daily" file="map_list.txt" start="2012-08-20"
+ |     increment="1 days"
+ | 
  +----------------------------------------------------------------------------+
 
 
 t.rast.list input=precipitation_daily columns=name,start_time,min,max
 
-map_1   2012-08-20 00:00:00     2.0     549.0
-map_2   2012-08-21 00:00:00     4.0     549.0
-map_3   2012-08-22 00:00:00     8.0     548.0
-map_4   2012-08-23 00:00:00     3.0     549.0
-map_5   2012-08-24 00:00:00     0.0     533.0
-map_6   2012-08-25 00:00:00     2.0     543.0
-map_7   2012-08-26 00:00:00     1.0     539.0
+name|start_time|min|max
+map_1|2012-08-20 00:00:00|2.0|549.0
+map_2|2012-08-21 00:00:00|4.0|549.0
+map_3|2012-08-22 00:00:00|8.0|548.0
+map_4|2012-08-23 00:00:00|3.0|549.0
+map_5|2012-08-24 00:00:00|0.0|533.0
+map_6|2012-08-25 00:00:00|2.0|543.0
+map_7|2012-08-26 00:00:00|1.0|539.0
 
 
 t.rast.neighbors --o input=precipitation_daily \
@@ -117,13 +131,14 @@ t.info type=strds input=precipitation_daily_smooth
  | Name: ...................... precipitation_daily_smooth
  | Mapset: .................... PERMANENT
  | Creator: ................... soeren
- | Creation time: ............. 2013-03-20 18:47:28.697990
  | Temporal type: ............. absolute
+ | Creation time: ............. 2014-11-23 17:08:59.430447
+ | Modification time:.......... 2014-11-23 17:08:59.482735
  | Semantic type:.............. mean
  +-------------------- Absolute time -----------------------------------------+
  | Start time:................. 2012-08-20 00:00:00
  | End time:................... 2012-08-27 00:00:00
- | Granularity:................ 1 days
+ | Granularity:................ 1 day
  | Temporal type of maps:...... interval
  +-------------------- Spatial extent ----------------------------------------+
  | North:...................... 80.0
@@ -133,32 +148,42 @@ t.info type=strds input=precipitation_daily_smooth
  | Top:........................ 0.0
  | Bottom:..................... 0.0
  +-------------------- Metadata information ----------------------------------+
- | Number of registered maps:.. 7
- | Title:
- | Daily precipitation
- | Description:
- | Test dataset with daily precipitation
+ | Raster register table:...... raster_map_register_0ae9d82363db46a991665a0e51a46743
  | North-South resolution min:. 10.0
  | North-South resolution max:. 10.0
  | East-west resolution min:... 10.0
  | East-west resolution max:... 10.0
- | Minimum value min:.......... 140.166667
- | Minimum value max:.......... 215.166667
- | Maximum value min:.......... 293.3
- | Maximum value max:.......... 373.388889
- | Raster register table:...... precipitation_daily_smooth_PERMANENT_raster_register
+ | Minimum value min:.......... 139.666667
+ | Minimum value max:.......... 214.666667
+ | Maximum value min:.......... 292.8
+ | Maximum value max:.......... 372.888889
+ | Aggregation type:........... None
+ | Number of registered maps:.. 7
+ |
+ | Title:
+ | Daily precipitation
+ | Description:
+ | Test dataset with daily precipitation
+ | Command history:
+ | # 2014-11-23 17:08:59 
+ | t.rast.neighbors --o input="precipitation_daily"
+ |     output="precipitation_daily_smooth" base="prec_smooth" size="5"
+ |     method="average" nprocs="3"
+ | 
  +----------------------------------------------------------------------------+
 
 
 t.rast.list input=precipitation_daily_smooth columns=name,start_time,min,max
 
-prec_smooth_1   2012-08-20 00:00:00     172.388889      360.566667
-prec_smooth_2   2012-08-21 00:00:00     215.166667      322.833333
-prec_smooth_3   2012-08-22 00:00:00     140.166667      373.388889
-prec_smooth_4   2012-08-23 00:00:00     184.3           356.583333
-prec_smooth_5   2012-08-24 00:00:00     163.966667      293.3
-prec_smooth_6   2012-08-25 00:00:00     204.98          324.611111
-prec_smooth_7   2012-08-26 00:00:00     154.25          340.366667
+name|start_time|min|max
+prec_smooth_1|2012-08-20 00:00:00|171.888889|360.066667
+prec_smooth_2|2012-08-21 00:00:00|214.666667|322.333333
+prec_smooth_3|2012-08-22 00:00:00|139.666667|372.888889
+prec_smooth_4|2012-08-23 00:00:00|183.8|356.083333
+prec_smooth_5|2012-08-24 00:00:00|163.466667|292.8
+prec_smooth_6|2012-08-25 00:00:00|204.48|324.111111
+prec_smooth_7|2012-08-26 00:00:00|153.75|339.866667
+
 </pre></div>
 
 <h2>SEE ALSO</h2>
@@ -175,6 +200,6 @@ prec_smooth_7   2012-08-26 00:00:00     154.25          340.366667
 
 <h2>AUTHOR</h2>
 
-S&ouml;ren Gebbert
+S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
 
 <p><i>Last changed: $Date$</i>

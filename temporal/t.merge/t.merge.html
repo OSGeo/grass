@@ -40,8 +40,9 @@ t.info precipitation_daily_1
  | Name: ...................... precipitation_daily_1
  | Mapset: .................... soeren
  | Creator: ................... soeren
- | Creation time: ............. 2013-07-15 16:05:36.198668
  | Temporal type: ............. absolute
+ | Creation time: ............. 2014-11-23 15:26:57.395355
+ | Modification time:.......... 2014-11-23 15:26:57.860513
  | Semantic type:.............. mean
  +-------------------- Absolute time -----------------------------------------+
  | Start time:................. 2012-08-20 00:00:00
@@ -49,22 +50,23 @@ t.info precipitation_daily_1
  | Granularity:................ 1 day
  | Temporal type of maps:...... interval
  +-------------------- Spatial extent ----------------------------------------+
- | North:...................... 90.0
- | South:...................... -90.0
- | East:.. .................... 180.0
- | West:....................... -180.0
+ | North:...................... 80.0
+ | South:...................... 0.0
+ | East:.. .................... 120.0
+ | West:....................... 0.0
  | Top:........................ 0.0
  | Bottom:..................... 0.0
  +-------------------- Metadata information ----------------------------------+
- | Raster register table:...... precipitation_daily_1_soeren_raster_register
- | North-South resolution min:. 1.0
- | North-South resolution max:. 1.0
- | East-west resolution min:... 1.0
- | East-west resolution max:... 1.0
+ | Raster register table:...... raster_map_register_6e6efe25ee9b40e39eb31421d737439b
+ | North-South resolution min:. 10.0
+ | North-South resolution max:. 10.0
+ | East-west resolution min:... 10.0
+ | East-west resolution max:... 10.0
  | Minimum value min:.......... 0.0
  | Minimum value max:.......... 10.0
  | Maximum value min:.......... 9.0
  | Maximum value max:.......... 19.0
+ | Aggregation type:........... None
  | Number of registered maps:.. 2
  |
  | Title:
@@ -72,16 +74,17 @@ t.info precipitation_daily_1
  | Description:
  | Test dataset with daily precipitation
  | Command history:
- | # 2013-07-15 16:05:36 
+ | # 2014-11-23 15:26:57 
  | t.create type="strds" temporaltype="absolute"
  |     output="precipitation_daily_1" title="Daily precipitation"
  |     description="Test dataset with daily precipitation"
- | # 2013-07-15 16:05:36 
+ | # 2014-11-23 15:26:57 
  | t.register -i type="rast"
  |     input="precipitation_daily_1" maps="map1,map2" start="2012-08-20"
  |     increment="1 days"
  | 
  +----------------------------------------------------------------------------+
+
 
 r.mapcalc expr="map3 = rand(20, 30)" -s
 r.mapcalc expr="map4 = rand(30, 40)" -s
@@ -103,8 +106,9 @@ t.info precipitation_daily_2
  | Name: ...................... precipitation_daily_2
  | Mapset: .................... soeren
  | Creator: ................... soeren
- | Creation time: ............. 2013-07-15 16:05:37.430380
  | Temporal type: ............. absolute
+ | Creation time: ............. 2014-11-23 15:27:20.165074
+ | Modification time:.......... 2014-11-23 15:27:20.613543
  | Semantic type:.............. mean
  +-------------------- Absolute time -----------------------------------------+
  | Start time:................. 2012-08-22 00:00:00
@@ -112,22 +116,23 @@ t.info precipitation_daily_2
  | Granularity:................ 1 day
  | Temporal type of maps:...... interval
  +-------------------- Spatial extent ----------------------------------------+
- | North:...................... 90.0
- | South:...................... -90.0
- | East:.. .................... 180.0
- | West:....................... -180.0
+ | North:...................... 80.0
+ | South:...................... 0.0
+ | East:.. .................... 120.0
+ | West:....................... 0.0
  | Top:........................ 0.0
  | Bottom:..................... 0.0
  +-------------------- Metadata information ----------------------------------+
- | Raster register table:...... precipitation_daily_2_soeren_raster_register
- | North-South resolution min:. 1.0
- | North-South resolution max:. 1.0
- | East-west resolution min:... 1.0
- | East-west resolution max:... 1.0
+ | Raster register table:...... raster_map_register_04eaede279b2476a80c2683254232f84
+ | North-South resolution min:. 10.0
+ | North-South resolution max:. 10.0
+ | East-west resolution min:... 10.0
+ | East-west resolution max:... 10.0
  | Minimum value min:.......... 20.0
  | Minimum value max:.......... 30.0
  | Maximum value min:.......... 29.0
  | Maximum value max:.......... 39.0
+ | Aggregation type:........... None
  | Number of registered maps:.. 2
  |
  | Title:
@@ -135,16 +140,17 @@ t.info precipitation_daily_2
  | Description:
  | Test dataset with daily precipitation
  | Command history:
- | # 2013-07-15 16:05:37 
+ | # 2014-11-23 15:27:20 
  | t.create type="strds" temporaltype="absolute"
  |     output="precipitation_daily_2" title="Daily precipitation"
  |     description="Test dataset with daily precipitation"
- | # 2013-07-15 16:05:37 
+ | # 2014-11-23 15:27:20 
  | t.register -i type="rast"
  |     input="precipitation_daily_2" maps="map3,map4" start="2012-08-22"
  |     increment="1 days"
  | 
  +----------------------------------------------------------------------------+
+
 
 t.merge input=precipitation_daily_1,precipitation_daily_2 \
         output=precipitation_daily_3
@@ -158,8 +164,9 @@ t.info precipitation_daily_3
  | Name: ...................... precipitation_daily_3
  | Mapset: .................... soeren
  | Creator: ................... soeren
- | Creation time: ............. 2013-07-15 16:07:47.292784
  | Temporal type: ............. absolute
+ | Creation time: ............. 2014-11-23 15:27:44.069272
+ | Modification time:.......... 2014-11-23 15:27:44.088930
  | Semantic type:.............. mean
  +-------------------- Absolute time -----------------------------------------+
  | Start time:................. 2012-08-20 00:00:00
@@ -167,22 +174,23 @@ t.info precipitation_daily_3
  | Granularity:................ 1 day
  | Temporal type of maps:...... interval
  +-------------------- Spatial extent ----------------------------------------+
- | North:...................... 90.0
- | South:...................... -90.0
- | East:.. .................... 180.0
- | West:....................... -180.0
+ | North:...................... 80.0
+ | South:...................... 0.0
+ | East:.. .................... 120.0
+ | West:....................... 0.0
  | Top:........................ 0.0
  | Bottom:..................... 0.0
  +-------------------- Metadata information ----------------------------------+
- | Raster register table:...... precipitation_daily_3_soeren_raster_register
- | North-South resolution min:. 1.0
- | North-South resolution max:. 1.0
- | East-west resolution min:... 1.0
- | East-west resolution max:... 1.0
+ | Raster register table:...... raster_map_register_33715c8c849a43fbb9bce02e1f28ff5a
+ | North-South resolution min:. 10.0
+ | North-South resolution max:. 10.0
+ | East-west resolution min:... 10.0
+ | East-west resolution max:... 10.0
  | Minimum value min:.......... 0.0
  | Minimum value max:.......... 30.0
  | Maximum value min:.......... 9.0
  | Maximum value max:.......... 39.0
+ | Aggregation type:........... None
  | Number of registered maps:.. 4
  |
  | Title:
@@ -190,12 +198,13 @@ t.info precipitation_daily_3
  | Description:
  | Merged space time dataset
  | Command history:
- | # 2013-07-15 16:07:47 
+ | # 2014-11-23 15:27:44 
  | t.merge
  |     input="precipitation_daily_1,precipitation_daily_2"
  |     output="precipitation_daily_3"
  | 
  +----------------------------------------------------------------------------+
+
 
 </pre></div>
 
@@ -209,7 +218,7 @@ t.info precipitation_daily_3
 
 <h2>AUTHOR</h2>
 
-S&ouml;ren Gebbert
+S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
 
 <p><i>Last changed: $Date$</i>
 

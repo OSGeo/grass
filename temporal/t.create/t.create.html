@@ -48,35 +48,37 @@ t.info type=strds input=precipitation_daily
  +-------------------- Space Time Raster Dataset -----------------------------+
  |                                                                            |
  +-------------------- Basic information -------------------------------------+
- | Id: ........................ precipitation_daily@test
+ | Id: ........................ precipitation_daily@soeren
  | Name: ...................... precipitation_daily
- | Mapset: .................... test
+ | Mapset: .................... soeren
  | Creator: ................... soeren
- | Creation time: ............. 2013-07-13 12:18:52.848223
  | Temporal type: ............. absolute
+ | Creation time: ............. 2014-11-23 15:18:42.710663
+ | Modification time:.......... 2014-11-23 15:18:48.868022
  | Semantic type:.............. mean
  +-------------------- Absolute time -----------------------------------------+
- | Start time:................. 2012-08-27 00:00:00
- | End time:................... 2012-09-03 00:00:00
+ | Start time:................. 2012-08-20 00:00:00
+ | End time:................... 2012-08-27 00:00:00
  | Granularity:................ 1 day
  | Temporal type of maps:...... interval
  +-------------------- Spatial extent ----------------------------------------+
  | North:...................... 80.0
- | South:...................... -1.0
- | East:.. .................... 120.5
- | West:....................... -40.5
+ | South:...................... 0.0
+ | East:.. .................... 120.0
+ | West:....................... 0.0
  | Top:........................ 0.0
  | Bottom:..................... 0.0
  +-------------------- Metadata information ----------------------------------+
- | Raster register table:...... precipitation_daily_test_raster_register
- | North-South resolution min:. 1.0
- | North-South resolution max:. 1.0
- | East-west resolution min:... 1.0
- | East-west resolution max:... 1.0
+ | Raster register table:...... raster_map_register_da8e16e0bdeb4bd3a0970a0980f11468
+ | North-South resolution min:. 10.0
+ | North-South resolution max:. 10.0
+ | East-west resolution min:... 10.0
+ | East-west resolution max:... 10.0
  | Minimum value min:.......... 0.0
  | Minimum value max:.......... 0.0
  | Maximum value min:.......... 9.0
  | Maximum value max:.......... 9.0
+ | Aggregation type:........... None
  | Number of registered maps:.. 7
  |
  | Title:
@@ -84,15 +86,16 @@ t.info type=strds input=precipitation_daily
  | Description:
  | Test dataset with daily precipitation
  | Command history:
- | # 2013-07-13 12:18:52 
+ | # 2014-11-23 15:18:42 
  | t.create type="strds" temporaltype="absolute"
  |     output="precipitation_daily" title="Daily precipitation"
  |     description="Test dataset with daily precipitation"
- | # 2013-07-13 12:18:53 
+ | # 2014-11-23 15:18:48 
  | t.register -i type="rast" input="precipitation_daily"
  |     file="map_list.txt" start="2012-08-20" increment="1 days"
  | 
  +----------------------------------------------------------------------------+
+
 </pre></div>
 
 <h2>SEE ALSO</h2>
@@ -104,7 +107,7 @@ t.info type=strds input=precipitation_daily
 
 <h2>AUTHOR</h2>
 
-S&ouml;ren Gebbert
+S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
 
 <p><i>Last changed: $Date$</i>
 
