@@ -32,13 +32,14 @@ t.register -i type=rast input=precipitation_daily \
 
 t.rast.list precipitation_daily
 
-map_1   soeren  2012-09-03 00:00:00 2012-09-04 00:00:00
-map_2   soeren  2012-09-04 00:00:00 2012-09-05 00:00:00
-map_3   soeren  2012-09-05 00:00:00 2012-09-06 00:00:00
-map_4   soeren  2012-09-06 00:00:00 2012-09-07 00:00:00
-map_5   soeren  2012-09-07 00:00:00 2012-09-08 00:00:00
-map_6   soeren  2012-09-08 00:00:00 2012-09-09 00:00:00
-map_7   soeren  2012-09-09 00:00:00 2012-09-10 00:00:00
+name|mapset|start_time|end_time
+map_1|PERMANENT|2012-08-20 00:00:00|2012-08-21 00:00:00
+map_2|PERMANENT|2012-08-21 00:00:00|2012-08-22 00:00:00
+map_3|PERMANENT|2012-08-22 00:00:00|2012-08-23 00:00:00
+map_4|PERMANENT|2012-08-23 00:00:00|2012-08-24 00:00:00
+map_5|PERMANENT|2012-08-24 00:00:00|2012-08-25 00:00:00
+map_6|PERMANENT|2012-08-25 00:00:00|2012-08-26 00:00:00
+map_7|PERMANENT|2012-08-26 00:00:00|2012-08-27 00:00:00
 
 t.rast.export input=precipitation_daily output=precipitation_daily.tar.gz \
               compression=gzip
@@ -47,13 +48,15 @@ t.rast.import input=precipitation_daily.tar.gz output=new_precipitation_daily \
               
 t.rast.list new_precipitation_daily
 
-new_map_1   soeren  2012-09-03 00:00:00 2012-09-04 00:00:00
-new_map_2   soeren  2012-09-04 00:00:00 2012-09-05 00:00:00
-new_map_3   soeren  2012-09-05 00:00:00 2012-09-06 00:00:00
-new_map_4   soeren  2012-09-06 00:00:00 2012-09-07 00:00:00
-new_map_5   soeren  2012-09-07 00:00:00 2012-09-08 00:00:00
-new_map_6   soeren  2012-09-08 00:00:00 2012-09-09 00:00:00
-new_map_7   soeren  2012-09-09 00:00:00 2012-09-10 00:00:00
+name|mapset|start_time|end_time
+new_map_1|PERMANENT|2012-08-20 00:00:00|2012-08-21 00:00:00
+new_map_2|PERMANENT|2012-08-21 00:00:00|2012-08-22 00:00:00
+new_map_3|PERMANENT|2012-08-22 00:00:00|2012-08-23 00:00:00
+new_map_4|PERMANENT|2012-08-23 00:00:00|2012-08-24 00:00:00
+new_map_5|PERMANENT|2012-08-24 00:00:00|2012-08-25 00:00:00
+new_map_6|PERMANENT|2012-08-25 00:00:00|2012-08-26 00:00:00
+new_map_7|PERMANENT|2012-08-26 00:00:00|2012-08-27 00:00:00
+
 </pre></div>
 
 <h2>SEE ALSO</h2>
@@ -66,7 +69,7 @@ new_map_7   soeren  2012-09-09 00:00:00 2012-09-10 00:00:00
 
 <h2>AUTHOR</h2>
 
-S&ouml;ren Gebbert
+S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
 
 <p><i>Last changed: $Date$</i>
 
