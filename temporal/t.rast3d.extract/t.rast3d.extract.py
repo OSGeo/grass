@@ -6,7 +6,7 @@
 # AUTHOR(S):	Soeren Gebbert
 #
 # PURPOSE:	Extract a subset of a space time 3D raster dataset
-# COPYRIGHT:	(C) 2011 by the GRASS Development Team
+# COPYRIGHT:	(C) 2011-2014 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (version 2). Read the file COPYING that comes with GRASS

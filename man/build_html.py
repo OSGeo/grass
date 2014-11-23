@@ -220,7 +220,7 @@ r"""
 <li class="toc"><a class="toc" href="full_index.html#m">Miscellaneous commands (m.*)</a></li>
 <li class="toc"><a class="toc" href="full_index.html#ps">PostScript commands (ps.*)</a></li>
 <li class="toc"><a class="toc" href="full_index.html#r">Raster commands (r.*)</a></li>
-<li class="toc"><a class="toc" href="full_index.html#r3">3d raster commands (r3.*)</a></li>
+<li class="toc"><a class="toc" href="full_index.html#r3">3D raster commands (r3.*)</a></li>
 <li class="toc"><a class="toc" href="full_index.html#t">Temporal commands (t.*)</a></li>
 <li class="toc"><a class="toc" href="full_index.html#v">Vector commands (v.*)</a></li>
 <li class="toc"><a class="toc" href="wxGUI.html">wxGUI Graphical User Interface</a></li>

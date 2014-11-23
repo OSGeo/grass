@@ -5,8 +5,8 @@
 # MODULE:       t.rast.to.rast3
 # AUTHOR(S):    Soeren Gebbert
 #
-# PURPOSE:      Convert a space time raster dataset into a 3d raster map
-# COPYRIGHT:    (C) 2011 by the GRASS Development Team
+# PURPOSE:      Convert a space time raster dataset into a 3D raster map
+# COPYRIGHT:    (C) 2011-2014 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (version 2). Read the file COPYING that comes with GRASS
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Converts a space time raster dataset into a 3d raster map.
+#% description: Converts a space time raster dataset into a 3D raster map.
 #% keywords: temporal
 #% keywords: conversion
 #% keywords: raster3d
@@ -115,7 +115,7 @@ def main():
     try:
         grass.run_command("g.region", t=top, b=bottom, tbres=granularity)
     except CalledModuleError:
-        grass.fatal(_("Unable to set 3d region"))
+        grass.fatal(_("Unable to set 3D region"))
 
     # Create a NULL map to fill the gaps
     null_map = "temporary_null_map_%i" % os.getpid()
