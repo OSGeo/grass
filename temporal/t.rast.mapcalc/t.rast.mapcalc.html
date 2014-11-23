@@ -166,7 +166,66 @@ t.rast.mapcalc input=A,B output=C base=c method=equal \
 
 t.info type=strds input=C
 
-t.rast.list -h input=C columns=name,start_time,min,max
+ +-------------------- Space Time Raster Dataset -----------------------------+
+ |                                                                            |
+ +-------------------- Basic information -------------------------------------+
+ | Id: ........................ C@PERMANENT
+ | Name: ...................... C
+ | Mapset: .................... PERMANENT
+ | Creator: ................... soeren
+ | Temporal type: ............. absolute
+ | Creation time: ............. 2014-11-23 17:06:53.273538
+ | Modification time:.......... 2014-11-23 17:06:53.326765
+ | Semantic type:.............. mean
+ +-------------------- Absolute time -----------------------------------------+
+ | Start time:................. 2001-03-01 00:00:00
+ | End time:................... 2001-09-01 00:00:00
+ | Granularity:................ 1 month
+ | Temporal type of maps:...... interval
+ +-------------------- Spatial extent ----------------------------------------+
+ | North:...................... 80.0
+ | South:...................... 0.0
+ | East:.. .................... 120.0
+ | West:....................... 0.0
+ | Top:........................ 0.0
+ | Bottom:..................... 0.0
+ +-------------------- Metadata information ----------------------------------+
+ | Raster register table:...... raster_map_register_155fc9f08e01417da73f341feaaf5ea0
+ | North-South resolution min:. 10.0
+ | North-South resolution max:. 10.0
+ | East-west resolution min:... 10.0
+ | East-west resolution max:... 10.0
+ | Minimum value min:.......... 9.0
+ | Minimum value max:.......... 64.0
+ | Maximum value min:.......... 9.0
+ | Maximum value max:.......... 64.0
+ | Aggregation type:........... None
+ | Number of registered maps:.. 6
+ |
+ | Title:
+ | Dataset A
+ | Description:
+ | Dataset A
+ | Command history:
+ | # 2014-11-23 17:06:53 
+ | t.rast.mapcalc input="A,B" output="C" base="c"
+ |     method="equal"
+ |     expr="if(start_month() == 5 || start_month() == 6, (A + B), (A * B))"
+ | 
+ +----------------------------------------------------------------------------+
+
+
+t.rast.list input=C columns=name,start_time,min,max
+
+name|start_time|min|max
+c_1|2001-03-01 00:00:00|9.0|9.0
+c_2|2001-04-01 00:00:00|16.0|16.0
+c_3|2001-05-01 00:00:00|10.0|10.0
+c_4|2001-06-01 00:00:00|12.0|12.0
+c_5|2001-07-01 00:00:00|49.0|49.0
+c_6|2001-08-01 00:00:00|64.0|64.0
+
+
 </pre></div>
 
 
@@ -181,7 +240,7 @@ t.rast.list -h input=C columns=name,start_time,min,max
 
 <h2>AUTHOR</h2>
 
-S&ouml;ren Gebbert
+S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
 
 <p><i>Last changed: $Date$</i>
 

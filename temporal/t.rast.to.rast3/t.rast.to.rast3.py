@@ -5,7 +5,7 @@
 # MODULE:       t.rast.to.rast3
 # AUTHOR(S):    Soeren Gebbert
 #
-# PURPOSE:      Convert a space time raster dataset into a rast3d map
+# PURPOSE:      Convert a space time raster dataset into a 3d raster map
 # COPYRIGHT:    (C) 2011 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Converts a space time raster dataset into a raster3d map.
+#% description: Converts a space time raster dataset into a 3d raster map.
 #% keywords: temporal
 #% keywords: conversion
 #% keywords: raster3d

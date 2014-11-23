@@ -1,31 +1,36 @@
 <h2>DESCRIPTION</h2>
 
-<em>t.connect</em> allows the user to set the temporal GIS database connection.
+<em>t.connect</em> allows the user to set the temporal database connection.
+The default setting is that the temporal database of 
+type sqlite3 is located in the current mapset directory.
 
-<h2>NOTES</h2>
-
-Values are stored in the mapset's <tt>VAR</tt> file; the connection is 
-not tested for validity. <p>The <b>-d</b> flag will set the default 
-TGIS connection parameters.
-<!-- TODO: really always PERMANENT? - see http://trac.osgeo.org/grass/ticket/2258 -->
-A SQLite3 database "tgis/sqlite.db" will be created in the PERMANENT directory 
-of the current location. It will be located in the "tgis" sub-directory to not
-interfere with the sqlite3 database used for vector attribute storage.
-
-<p>The <b>-p</b> flag will display the current TGIS connection parameters.
-<p>The <b>-pg</b> flag will display the current TGIS connection parameters
+<p>The <b>-p</b> flag will display the current temporal database connection parameters.
+<p>The <b>-pg</b> flag will display the current temporal database connection parameters
 using shell style. 
-<p>The <b>-c</b> flag will silently check if the TGIS connection 
+<p>The <b>-c</b> flag will silently check if the temporal database connection 
 parameters have been set, and if not will set them to use GRASS's 
 default values.
 
 <h2>Note</h2>
 
-The default TGIS database of type sqlite3 is located in the PERMANENT 
-mapset directory. Temporal GIS content from all created mapsets will be 
-stored here. In case you have thousands of maps to register in the 
+Setting the connection with t.connect will not test the connection for validity. 
+Hence a database connection will not be established.
+<p>
+The connection values are stored in the mapset's <tt>VAR</tt> file.  
+The <b>-d</b> flag will set the default 
+TGIS connection parameters.
+A SQLite3 database "tgis/sqlite.db" will be created in the current mapset directory. 
+It will be located in the "tgis" sub-directory to not
+interfere with the sqlite3 database used for vector attribute storage.
+<p>
+In case you have tens of thousands of maps to register in the 
 temporal database or you need concurrent read and write access in the 
-TGIS database, consider to use a postgresql database instead.
+temporal database, consider to use a postgresql connection instead.
+<p>
+Be aware that you have to set the postgresql connection explicitly in every mapset that should store 
+temporal information in the temporal database.
+<p>
+Postgresql and sqlite3 databases can not be mixed in a location.
 
 <h3>SQLite</h3>
 
@@ -49,6 +54,6 @@ t.info -s
 
 <h2>AUTHOR</h2>
 
-Soeren Gebbert, vTI/AK Braunschweig
+Soeren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
 
 <p><i>Last changed: $Date$</i>
