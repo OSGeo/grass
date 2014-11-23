@@ -1,8 +1,7 @@
 <!-- meta page description: Temporal data processing in GRASS GIS -->
 <!-- meta page index: temporal -->
-<h3>The temporal GIS framework in general</h3>
 
-The temporal GIS framework in GRASS introduces three new datatypes that
+The temporal enabled GRASS introduces three new datatypes that
 are designed to handle time series data:
 <ul>
   <li> <em>Space time raster datasets</em> (strds) are designed to manage
@@ -16,8 +15,50 @@ are designed to handle time series data:
   prefix <em>t.vect</em>.
 </ul>
 
+These new data types can be managed, analyzed and processed with temporal modules that 
+are based on the GRASS GIS temporal framework.
+
 <h3>Temporal data management in general</h3>
 
+Space time datasets are stored in a temporal database. SQLite3 or 
+PostgreSQL are supported as SQL database back end. 
+Connection settings are performed with <a href="t.connect.html">t.connect</a>.
+As default a sqlite3 database will be created in the current mapset that
+stores all space time datasets and registered time series maps.
+<p>
+New space time datasets are created in the temporal database with
+<a href="t.create.html">t.create</a>. The name of the new dataset, the
+type (strds, str3ds, stvds), the title and the description must be
+provided for creation. Optional the temporal type (absolute, relative)
+and semantic informations can be provided. 
+<p>
+The module <a href="t.remove.html">t.remove</a> will remove the space time datasets
+from the temporal database. Use  <a href="t.support.html">t.support</a>
+to modify the metadata of space time datasets or to update the metadata
+that is derived from registered maps. This module also checks for removed
+and modified maps and updates the space time datasets accordingly. 
+Rename a space time dataset with <a href="t.rename.html">t.rename</a>. 
+<p>
+The module <a href="t.register.html">t.register</a> is designed to 
+register raster, 3D raster and vector maps in the temporal database and
+optionally in a space time dataset. It supports different input options. Maps
+to register can be provided as a comma separated string at the command line, or
+in an input file. The module supports the definition of time stamps 
+(time instances or intervals) for each map in the input file.
+With  <a href="t.unregister.html">t.unregister</a> maps can be unregistered
+from space time datasets and the temporal database.
+<p>
+To print informations about space time datasets or registered maps, the
+module  <a href="t.info.html">t.info</a> can be used.
+<a href="t.list.html">t.list</a> will list all space time datasets and
+registered maps in the temporal database. 
+<p>
+To compute and check the temporal topology of a space time datasets the
+module <a href="t.topology.html">t.topology</a> was designed. The module
+<a href="t.sample.html">t.sample</a> samples input space time dataset(s)
+with a sample space time dataset and print the result to standard output.
+Several different sample methods are supported that can be combined.
+<p>
 List of general management modules: 
 <ul>
     <li><a href="t.connect.html">t.connect</a></li>
@@ -28,59 +69,26 @@ List of general management modules:
     <li><a href="t.unregister.html">t.unregister</a></li>
     <li><a href="t.info.html">t.info</a></li>
     <li><a href="t.list.html">t.list</a></li>
-    <li><a href="t.rast3d.list.html">t.rast3d.list</a></li>
-    <li><a href="t.vect.list.html">t.vect.list</a></li>
-    <li><a href="t.vect.db.select.html">t.vect.db.select</a></li>
     <li><a href="t.sample.html">t.sample</a></li>
     <li><a href="t.support.html">t.support</a></li>
     <li><a href="t.topology.html">t.topology</a></li>
 </ul>
-Space time datasets are stored in a temporal database. SQLite3 or 
-PostgreSQL are supported as SQL database back end. 
-Connection settings are performed with <a href="t.connect.html">t.connect</a>.
-<!-- TODO: really always PERMANENT? - see http://trac.osgeo.org/grass/ticket/2258 -->
-As default a sqlite3 database will be created in the PERMANENT mapset that
-stores all space time datasets and registered time series maps from all
-mapsets in the location.
-<p>
-New space time datasets can be created in the temporal database with
-<a href="t.create.html">t.create</a>. The name of the new dataset, the
-type (strds, str3ds, stvds), the title and the description must be
-provided for creation. Optional the temporal type (absolute, relative)
-and semantic informations can be provided. The module
-<a href="t.remove.html">t.remove</a> will remove the space time datasets
-from the temporal database. Use  <a href="t.support.html">t.support</a>
-to modify the metadata of space time datasets or to update the metadata
-that is derived from registered maps. This module also checks for removed
-and modified maps and updates the space time datasets accordingly. 
-You can rename a space time dataset with <a href="t.rename.html">t.rename</a>. 
-<p>
-The module <a href="t.register.html">t.register</a> was designed to 
-register raster, 3D raster and vector maps in the temporal database and
-optionally in a space time dataset. It supports different input options. Maps
-to register can be provided as a comma separated string on the command line, or
-in an input file. The module supports the definition of time stamps 
-(time instances or intervals) for each map in the input file.
-With  <a href="t.unregister.html">t.unregister</a> maps can be unregistered
-from space time datasets or the temporal database.
-<p>
-To print informations about space time datasets or registered maps, the
-module  <a href="t.info.html">t.info</a> can be used.
-<a href="t.list.html">t.list</a> will list all space time datasets and
-registered maps in the temporal database. 
-<p>
-To compute and check the temporal topology of a space time datasets the
-module <a href="t.topology.html">t.topology</a> was designed. The module
-<a href="t.sample.html">t.sample</a> samples the input space time dataset(s)
-with a sample space time dataset and print the result to standard output.
-Several different sample methods are supported that can be combined.
 
+<h3>Modules to visualize space time datasets and temporal data</h3>
+
+<ul>
+    <li><a href="g.gui.animation.html">g.gui.animation</a></li>
+    <li><a href="g.gui.timeline.html">g.gui.timeline</a></li>
+    <li><a href="g.gui.mapswipe.html">g.gui.mapswipe</a></li>
+    <li><a href="g.gui.tplot.html">g.gui.tplot</a></li>
+</ul>
 
 <h3>Modules to process space time raster datasets</h3>
 
 The focus of the temporal GIS framework is the processing and analysis of
-raster time series. Hence several modules that process space time raster
-datasets are implemented.
+raster time series. Hence the majority of the temporal modules are designed to process space time raster
+datasets. However, there are several modules to process space time 3D raster datasets 
+and space time vector datasets.
 
 <h4>Querying and map calculation</h4>
 
@@ -93,28 +101,14 @@ allows additionally to perform mapcalc operations on the selected raster
 maps.
 
 <ul>
-    <li><a href="t.rast.list.html">t.rast.list</a></li>
     <li><a href="t.rast.extract.html">t.rast.extract</a></li>
     <li><a href="t.rast.gapfill.html">t.rast.gapfill</a></li>
     <li><a href="t.rast.mapcalc.html">t.rast.mapcalc</a></li>
-    <li><a href="t.rast3d.extract.html">t.rast3d.extract</a></li>
-    <li><a href="t.rast3d.mapcalc.html">t.rast3d.mapcalc</a></li>
-    <li><a href="t.rast3d.univar.html">t.rast3d.univar</a></li>
-    <li><a href="t.vect.extract.html">t.vect.extract</a></li>
-    <li><a href="t.vect.import.html">t.vect.import</a></li>
-    <li><a href="t.vect.observe.strds.html">t.vect.observe.strds</a></li>
-    <li><a href="t.vect.univar.html">t.vect.univar</a></li>
-    <li><a href="t.vect.what.strds.html">t.vect.what.strds</a></li>
+    <li><a href="t.rast.colors.html">t.rast.colors</a></li>
+    <li><a href="t.rast.neighbors.html">t.rast.neighbors</a></li>
 </ul>
 
-
-<h4>Aggregation</h4>
-
-<ul>
-    <li><a href="t.rast.aggregate.ds.html">t.rast.aggregate.ds</a></li>
-    <li><a href="t.rast.aggregate.html">t.rast.aggregate</a></li>
-    <li><a href="t.rast.series.html">t.rast.series</a></li>
-</ul>
+<h4>Aggregation and accumulation analysis</h4>
 
 The temporal framework support the aggregation of space time raster
 datasets. It provides three modules to perform aggregation using different
@@ -128,8 +122,24 @@ aggregation of raster map series using the intervals of the maps (raster,
 <a href="t.rast.series.html">t.rast.series</a> that processes the whole
 input space time raster dataset or a subset of it.
 
+<ul>
+    <li><a href="t.rast.aggregate.html">t.rast.aggregate</a></li>
+    <li><a href="t.rast.aggregate.ds.html">t.rast.aggregate.ds</a></li>
+    <li><a href="t.rast.series.html">t.rast.series</a></li>
+    <li><a href="t.rast.accumulate.html">t.rast.accumulate</a></li>
+    <li><a href="t.rast.accdetect.html">t.rast.accdetect</a></li>
+</ul>
 
 <h4>Export/import conversion</h4>
+
+Space time raster datasets can be exported with <a href="t.rast.export.html">t.rast.export</a>
+as compressed tar archive. Such archives can be imported 
+using <a href="t.rast.import.html">t.rast.import</a>,
+<p>
+The module <a href="t.rast.to.rast3.html">t.rast.to.rast3</a> converts
+space time raster datasets into space time voxel cubes. All 3D raster modules
+can be used to process such voxel cubes. This conversion allows the export of space time raster datasets
+as netcdf files that include time as one dimension.
 
 <ul>
     <li><a href="t.rast.export.html">t.rast.export</a></li>
@@ -137,7 +147,6 @@ input space time raster dataset or a subset of it.
     <li><a href="t.rast.out.vtk.html">t.rast.out.vtk</a></li>
     <li><a href="t.rast.to.rast3.html">t.rast.to.rast3</a></li>
     <li><a href="r3.out.netcdf.html">r3.out.netcdf</a></li>
-    <li><a href="t.vect.export.html">t.vect.export</a></li>
 </ul>
 
 <h4>Statistics and gap filling</h4>
@@ -147,12 +156,40 @@ input space time raster dataset or a subset of it.
     <li><a href="t.rast.univar.html">t.rast.univar</a></li>
 </ul>
 
+<h3>Modules to manage, process and analyze STR3DS and STVDS</h3> 
+
+Several space time vector dataset modules were developed, to allow the handling
+of vector time series data.
+
+<ul>
+    <li><a href="t.vect.extract.html">t.vect.extract</a></li>
+    <li><a href="t.vect.import.html">t.vect.import</a></li>
+    <li><a href="t.vect.export.html">t.vect.export</a></li>
+    <li><a href="t.vect.observe.strds.html">t.vect.observe.strds</a></li>
+    <li><a href="t.vect.univar.html">t.vect.univar</a></li>
+    <li><a href="t.vect.what.strds.html">t.vect.what.strds</a></li>
+    <li><a href="t.vect.db.select.html">t.vect.db.select</a></li>
+</ul>
+
+The space time 3D raster dataset modules are doing exactly the same as their raster
+pendants but with 3D raster map layers:
+
+<ul>
+    <li><a href="t.rast3d.list.html">t.rast3d.list</a></li>
+    <li><a href="t.rast3d.extract.html">t.rast3d.extract</a></li>
+    <li><a href="t.rast3d.mapcalc.html">t.rast3d.mapcalc</a></li>
+    <li><a href="t.rast3d.univar.html">t.rast3d.univar</a></li>
+</ul>
+
 <h4>See also</h4>
 
 <ul>
 <li>Gebbert, S., Pebesma, E., 2014. TGRASS: A temporal GIS for field based
     environmental modeling. Environmental Modelling &amp; Software 53, 1-12.
     (<a href="http://dx.doi.org/10.1016/j.envsoft.2013.11.001">DOI</a>)</li>
+<li>Vaclav Petras, Anna Petrasova, Helena Mitasova, Markus Neteler, <b>FOSS4G 2014 workshop</b>: <br>
+    <a href="http://fatra.cnr.ncsu.edu/temporal-grass-workshop/">Spatio-temporal data handling and visualization in GRASS GIS</a></li>
+<li><a href="http://www.geostat-course.org/Topic_Gebbert">GeoStat TGRASS Course</a></li>
 </ul>
 
 
