@@ -1,13 +1,15 @@
 <h2>DESCRIPTION</h2>
 
-This module is designed to convert a space time raster dataset (STRDS) into a space time voxel cube.
-A space time voxel cube is a 3 dimensional raster map layer (3d raster map or voxel map layer) that as time as
-unit for the z-dimension.
+This module is designed to convert a space time raster dataset (STRDS) 
+into a space time voxel cube. A space time voxel cube is a 3 
+dimensional raster map layer (3D raster map or voxel map layer) that as 
+time as unit for the z-dimension.
 <p>
 A space time raster dataset that should be converted into a space time 
-voxel cube must have a valid temporal topology. Hence, overlapping or inclusion of time stamps is not allowed.
-The granularity of the STRDS is used to set the resolution of the 3d raster map layer
-and to sample the registered time stamped raster map layers.
+voxel cube must have a valid temporal topology. Hence, overlapping or 
+inclusion of time stamps is not allowed. The granularity of the STRDS 
+is used to set the resolution of the 3D raster map layer and to sample 
+the registered time stamped raster map layers.
 <p>
 Gaps between raster map layer in the STRDS will
 be represented by NULL values in the voxel map layer.
@@ -15,19 +17,25 @@ be represented by NULL values in the voxel map layer.
 
 <h2>NOTE</h2>
 
-The reference time for all space time voxel cubes is 1900-01-0100:00:00. This allows the alignment 
-space time voxel cubes with different granularities.
+The reference time for all space time voxel cubes is 
+1900-01-0100:00:00. This allows the alignment space time voxel cubes 
+with different granularities.
 <p>
-Be aware that the granularity of a STRDS is used to sample time stamped map layers! If you have gaps
-between monthly intervals that have the size of a second, the monthly intervals will be sampled by a second based granularity as well. This may result in millions of space time voxel cube layers!
+Be aware that the granularity of a STRDS is used to sample time stamped 
+map layers! If you have gaps between monthly intervals that have the 
+size of a second, the monthly intervals will be sampled by a second 
+based granularity as well. This may result in millions of space time 
+voxel cube layers!
 
 <h2>EXAMPLE</h2>
 
-This simple example that converts a space time raster dataset that has gaps between its time stamped
-map layers into a space time voxel cube. The time stamped raster map layer have a interval size of three months.
-However, the granularity is one month, since of each gap has an interval size of one month. The resulting
-voxel map layer has 9 depths. Hence, the space time raster dataset is sampled by its granularity resulting
-in 9 layer.
+This simple example that converts a space time raster dataset that has 
+gaps between its time stamped map layers into a space time voxel cube. 
+The time stamped raster map layer have a interval size of three months. 
+However, the granularity is one month, since of each gap has an 
+interval size of one month. The resulting voxel map layer has 9 depths. 
+Hence, the space time raster dataset is sampled by its granularity 
+resulting in 9 layer.
 
 <div class="code"><pre>
 g.region s=0 n=80 w=0 e=120 b=0 t=1 res=10 res3=10 -p3
@@ -184,7 +192,6 @@ r3.info cube
  |    PERMANENT,a3@PERMANENT" output="cube" tilesize=32                       |
  |                                                                            |
  +----------------------------------------------------------------------------+
-
 
 </pre></div>
 
