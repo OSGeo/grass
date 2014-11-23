@@ -64,7 +64,6 @@ import grass.temporal as tgis
 
 ############################################################################
 
-
 def main():
 
     # Get the options
