@@ -5,7 +5,7 @@
 # MODULE:       t.rast3d.algebra
 # AUTHOR(S):    Thomas Leppelt, Soeren Gebbert
 #
-# PURPOSE:      Provide temporal 3D raster algebra to perform spatial an temporal operations
+# PURPOSE:      Provide temporal 3d raster algebra to perform spatial an temporal operations
 #               for space time datasets by topological relationships to other space time
 #               datasets.
 # COPYRIGHT:    (C) 2014 by the GRASS Development Team
@@ -17,7 +17,7 @@
 #############################################################################
 
 #%module
-#% description: Apply temporal and spatial operations on space time 3D raster datasets using temporal raster algebra.
+#% description: Apply temporal and spatial operations on space time 3d raster datasets using temporal 3d raster algebra.
 #% keywords: temporal
 #% keywords: algebra
 #%end
@@ -25,7 +25,7 @@
 #%option
 #% key: expression
 #% type: string
-#% description: r3.mapcalc expression for temporal and spatial analysis of space time 3D raster datasets
+#% description: Algebraic expression for temporal and spatial analysis of space time 3d raster datasets
 #% required : yes
 #%end
 
