@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       r.uslek
@@ -19,6 +18,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/glocale.h>
@@ -136,17 +136,19 @@ int main(int argc, char *argv[])
 	    else {
                 /***************************************/ 
 		/* In case some map input not standard */
-		if ((d_sand + d_clay + d_silt) != 1.0) 
+		if (fabs(d_sand + d_clay + d_silt - 1.0) > GRASS_EPSILON )
 		    Rast_set_d_null_value(&outrast[col], 1);
 		/* if OM==NULL then make it 0.0 */
-		else if (Rast_is_d_null_value(&d_om))
-		    d_om = 0.0;	
 		else {
-                    /************************************/ 
+		    if (Rast_is_d_null_value(&d_om))
+		        d_om = 0.0;
+		    /************************************/ 
 		    /* convert to usle_k                */ 
 		    d = (double)prct2tex(d_sand, d_clay, d_silt);
-		    d = tex2usle_k((int)d, d_om);
-		    outrast[col] = d;
+		    if(d > 11.0) /* 11 is highest class */
+			Rast_set_d_null_value(&outrast[col], 1);
+		    else
+			outrast[col] = tex2usle_k((int)d, d_om);
                 }
 	    }
 	}
