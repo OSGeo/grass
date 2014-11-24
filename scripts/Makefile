@@ -63,7 +63,6 @@ SUBDIRS = \
 	v.dissolve \
 	v.in.e00 \
 	v.in.geonames \
-	v.in.gns \
 	v.in.lines \
 	v.in.mapgen \
 	v.in.wfs \
