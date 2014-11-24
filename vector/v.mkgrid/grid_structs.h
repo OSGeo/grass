@@ -4,9 +4,12 @@ struct grid_description
     int num_cols;
     int num_vect_rows;
     int num_vect_cols;
-    double length;		/*  distance to shift to the east  */
-    double width;		/*  distance to shift to the north  */
-    double origin_x;		/*  lower left point of grid  */
-    double origin_y;
+    double width;		/* grid cell width (EW res) */
+    double height;		/* grid cell height (NS res) */
+    double north, south, east, west;
+    double xo, yo;		/* grid origin = center */
     double angle;
+    /* hexagon */
+    double rrad, crad;
+    double rstep, cstep;
 };
