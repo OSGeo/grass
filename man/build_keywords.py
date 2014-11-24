@@ -34,7 +34,6 @@ for fname in htmlfiles:
         keys = lines[index_keys].split(',')
     except:
         continue
-    print keys
     for key in keys:
         key = key.strip()
         try:
