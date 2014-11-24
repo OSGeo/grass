@@ -240,13 +240,17 @@ r.in.lidar input="Serpent Mound Model LAS Data.las" \
            output=Serpent_Mound_Model_LAS_Data method=mean
 </pre></div>
 
+<h2>NOTES</h2>
+The typical file extensions for the LAS format are .las and .laz (compressed). 
+The compressed LAS (.laz) format can be imported only if libLAS has been compiled 
+with laszip support. It is also recommended to compile libLAS with GDAL, 
+needed to test for matching projections.
 
 <h2>TODO</h2>
 
 <ul>
 <li> Support for multiple map output from a single run.<br>
      <tt>method=string[,string,...] output=name[,name,...]</tt>
-<li> add option to import only one, not all returns</li>
 <!-- not really:
 <li> Merge with r.in.xyz.
 -->
