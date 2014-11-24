@@ -1,24 +1,34 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.mkgrid</em> will create a vector map representation of a regular coordinate grid.
-Both point and area vector grids can be created.
+<em>v.mkgrid</em> creates a vector map representation of a regular 
+coordinate grid. Point, line, and area vector grids can be created.
 
 
 <h2>NOTES</h2>
 
-Grid points created with the <b>-p</b> flag will be placed at the
-<i>center</i> of each grid cell, not at the grid line nodes.
-
+Grid points created with the <b>type=point</b> option will be placed at 
+the <i>center</i> of each grid cell, like centroids with the default 
+<b>type=area</b> option. 
 <p>
-This is NOT to be used to generate a vector map of USGS quadrangles,
-because USGS quads are not exact rectangles.
+Grid lines created with the <b>type=line</b> option will be identical to 
+the edges of each grid cell area, like boundaries with the default 
+<b>type=area</b> option. 
+<p>
+The resultant grid can be rotated around the origin (center of the 
+grid) with the <b>angle</b> option.
+<p>
+Optionally hexagons can be created with the <b>-h</b> flag. Hexagons 
+are by default asymmetric. Symmetric hexagons can be created with the 
+<b>-s</b> flag.
+<p>
+This module is NOT to be used to generate a vector map of USGS 
+quadrangles, because USGS quads are not exact rectangles.
 
 
 <h2>EXAMPLES</h2>
 
-<h3>Creating a global grid in a latitude-longitude</h3>
+1) Create a grid in a latitude-longitude location (WGS84):
 
-To be run in a latitude-longitude location (WGS84)
 <div class="code"><pre>
 # use g.region to easily calculate rows and column for 'grid':
 g.region n=90 s=-90 w=-180 e=180 res=10 -p
@@ -40,70 +50,29 @@ cells:      648
 v.mkgrid map=grid_10deg grid=18,36
 </pre></div>
 
-<h3>Creating a grid in a metric projection</h3>
-
-Creating a 4x3 grid, cells 20km a side, with lower left corner at 2716500,6447000:
-
+<p>
+2) Make a 4x3 grid, cells 20km a side, with lower left corner at 2716500,6447000:
 <div class="code"><pre>
 v.mkgrid map=coro_grid grid=4,3 position=coor coor=2716500,6447000 box=20000,20000
 </pre></div>
 
-<h3>Creating a positioned grid in a latitude-longitude</h3>
-
-Creating a 10x12 lat/lon grid, cells 2 arc-min a side, with lower left corner
+<p>
+3) Make a 10x12 lat/lon grid, cells 2 arc-min a side, with lower left corner
 at 167deg 52min east, 47deg 6min south. For use with e.g. QGIS you can then
 pull this grid into a projected location with <em>v.proj</em> before
-exporting as a Shapefile with <em>v.out.ogr</em> (within GRASS GIS you could
+exporting as a Shapefile with <em>v.out.ogr</em> (within GRASS you could
 just use <em>d.grid -w</em> from the projected location for the same effect):
 
 <div class="code"><pre>
 v.mkgrid map=p2min_grid grid=10,12 position=coor coor=167:52E,47:06S box=0:02,0:02
 </pre></div>
 
-<h3>Creating a simple point pattern</h3>
-
-North Carolina sample dataset example, creating a 1km spaced point grid
-based on the current region extent defined by the "elevation" map:
-
-<div class="code"><pre>
-g.region rast=elevation -p
-# we use the row/column/resolution information to determine the grid= values:
-v.mkgrid -p map=pointpattern grid=13,15 position=region breaks=1
-</pre></div>
-<p>
-
-<h3>Creating a regular point pattern</h3>
-
-North Carolina sample dataset example, creating a regular spaced point grid
-based on the current region extent defined by the "elevation" map, using
-a two-step approach:
-
-<div class="code"><pre>
-# create first set of points, covering extent of "elevation" raster map
-g.region rast=elevation -p
-v.mkgrid -p map=pointpattern1 grid=13,15 position=region breaks=1
-
-# shift grid by half point distance (map units)
-g.region n=n+500 w=w+500 e=e+500 s=s+500 -p
-
-# create second set of points
-v.mkgrid -p map=pointpattern2 grid=13,15 position=region breaks=1
-
-# merge into final point pattern
-v.patch input=pointpattern1,pointpattern2 output=pointpattern3
-</pre></div>
-
-<center>
-<img src="v_mkgrid_ppattern.png"><br>
-Different point patterns for sampling design
-</center>
 
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="d.grid.html">d.grid</a>,
-<a href="v.in.region.html">v.in.region</a>,
-<a href="v.patch.html">v.patch</a>
+<a href="v.patch.html">v.patch</a>,
+<a href="d.grid.html">d.grid</a>
 </em>
 
 <h2>AUTHORS</h2>
