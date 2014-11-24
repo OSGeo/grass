@@ -1,4 +1,5 @@
-#include<stdio.h>
+#include <stdio.h>
+#include <grass/gis.h>
 
 /* From FAOSOIL CD, after USDA 1951, p209 */
 
@@ -6,8 +7,8 @@ double tex2usle_k(int texture, double om_in)
 {
     double usle_k = 200.0; /* Initial value */
 
-    /*G_message("texture=%i, om=%5.3f",texture, om_in); */
-    if (om_in < 0.5) {
+    G_debug(1,"tex2usle_k: texture=%i, om=%5.3f", texture, om_in);
+    if (om_in < 0.05) {
 	if (texture == 0) /* G_message("clay"); */
 	    usle_k = 0.29;	/*Took max value @0.2 */
 	else if (texture == 1) /* G_message("sandy clay"); */
@@ -35,7 +36,7 @@ double tex2usle_k(int texture, double om_in)
 	else /*G_message("Unable to allocate class"); */
 	    usle_k = 500.0;/*change value to show it was processed */
     }
-    else if (om_in >= 0.5 && om_in < 0.2) {
+    else if (om_in >= 0.05 && om_in < 0.2) {
 	if (texture == 0) /* G_message("clay"); */
 	    usle_k = 0.29; /*Range=[0.13-0.29]@0.2, took max */
 	else if (texture == 1) /* G_message("sandy clay"); */
