@@ -7,7 +7,7 @@ double tex2usle_k(int texture, double om_in)
 {
     double usle_k = 200.0; /* Initial value */
 
-    G_verbose_message("tex2usle_k: texture=%i, om=%5.3f", texture, om_in);
+    G_debug(1,"tex2usle_k: texture=%i, om=%5.3f", texture, om_in);
     if (om_in < 0.05) {
 	if (texture == 0) /* G_message("clay"); */
 	    usle_k = 0.29;	/*Took max value @0.2 */
