@@ -5,112 +5,6 @@
 #include "grid_structs.h"
 #include "local_proto.h"
 
-int write_grid(struct grid_description *grid_info, struct Map_info *Map, int nbreaks, int out_type)
-{
-
-    int i, k, j;
-    int rows, cols;
-    int num_v_rows, num_v_cols;
-    double x, y, x_len;
-    double sx, sy;
-    double width, length;
-    double next_x, next_y;
-    double snext_x, snext_y;
-    double angle, dum;
-
-    struct line_pnts *Points;
-
-    Points = Vect_new_line_struct();
-
-    num_v_rows = grid_info->num_vect_rows;
-    num_v_cols = grid_info->num_vect_cols;
-    rows = grid_info->num_rows;
-    cols = grid_info->num_cols;
-    width = grid_info->width;
-    length = grid_info->length;
-    angle = grid_info->angle;
-
-    /*
-     * For latlon, must draw in shorter sections
-     * to make sure that each section of the grid
-     * line is less than half way around the globe
-     */
-     x_len = length / (1. * nbreaks + 1);
-
-    /* write out all the vector lengths (x vectors) of the entire grid  */
-    G_verbose_message(_("Writing out vector rows..."));
-
-    y = grid_info->origin_y;
-    for (i = 0; i < num_v_rows; ++i) {
-	double startx;
-
-	startx = grid_info->origin_x;
-	G_percent(i, num_v_rows, 2);
-
-	for (k = 0; k < cols; k++) {
-	    x = startx;
-            j = 0;
-	    do {
-		if (j < nbreaks)
-		    next_x = x + x_len;
-		else
-		    next_x = startx + length;
-
-		sx = x;
-		sy = y;
-		snext_x = next_x;
-		dum = y;
-
-		rotate(&x, &y, grid_info->origin_x, grid_info->origin_y,
-		       angle);
-		rotate(&next_x, &dum, grid_info->origin_x,
-		       grid_info->origin_y, angle);
-		write_vect(x, y, next_x, dum, Map, Points, out_type);
-
-		y = sy;
-		x = next_x = snext_x;
-                j++;
-	    } while (j <= nbreaks);
-	    startx += length;
-	}
-	y += width;
-    }
-
-    /* write out all the vector widths (y vectors) of the entire grid  */
-    G_verbose_message(_("Writing out vector columns..."));
-    x = grid_info->origin_x;
-    for (k = 0; k < num_v_cols; ++k) {
-	y = grid_info->origin_y;
-	G_percent(k, num_v_cols, 2);
-
-	i = 0;
-        do {
-	    next_y = y + width;
-
-	    sx = x;
-	    sy = y;
-	    snext_y = next_y;
-	    dum = x;
-	    rotate(&x, &y, grid_info->origin_x, grid_info->origin_y, angle);
-	    rotate(&dum, &next_y, grid_info->origin_x, grid_info->origin_y,
-		   angle);
-
-	    write_vect(x, y, dum, next_y, Map, Points, out_type);
-
-	    x = sx;
-	    y = next_y = snext_y;
-            i++;
-	} while (i < rows);
-	/* To get exactly the same coordinates as above, x+=length is wrong */
-	x += length;
-    }
-
-    /* new with Vlib */
-    Vect_destroy_line_struct(Points);
-
-    return (0);
-}
-
 static double xarray[10];
 static double yarray[10];
 
@@ -135,4 +29,118 @@ int write_vect(double x1, double y1, double x2, double y2,
     Vect_write_line(Map, out_type, Points, Cats);
 
     return 0;
+}
+
+int write_grid(struct grid_description *grid_info, struct Map_info *Map, int nbreaks, int out_type)
+{
+
+    int i, k, j;
+    int rows, cols;
+    int num_v_rows, num_v_cols;
+    double x, y, x_len, y_len;
+    double sx, sy;
+    double width, height;
+    double next_x, next_y;
+    double snext_x, snext_y;
+    double angle, dum;
+
+    struct line_pnts *Points;
+
+    Points = Vect_new_line_struct();
+
+    num_v_rows = grid_info->num_vect_rows;
+    num_v_cols = grid_info->num_vect_cols;
+    rows = grid_info->num_rows;
+    cols = grid_info->num_cols;
+    width = grid_info->width;
+    height = grid_info->height;
+    angle = grid_info->angle;
+
+    /*
+     * For latlon, must draw in shorter sections
+     * to make sure that each section of the grid
+     * line is less than half way around the globe
+     */
+     x_len = width / (1. * nbreaks + 1);
+     y_len = height / (1. * nbreaks + 1);
+
+    /* write out all the vector lengths (x vectors) of the entire grid  */
+    G_verbose_message(_("Writing out vector rows..."));
+    y = grid_info->south;
+    for (i = 0; i < num_v_rows; ++i) {
+	double startx;
+
+	startx = grid_info->west;
+	G_percent(i, num_v_rows, 2);
+
+	for (k = 0; k < cols; k++) {
+	    x = startx;
+            j = 0;
+	    do {
+		if (j < nbreaks)
+		    next_x = x + x_len;
+		else
+		    next_x = startx + width;
+
+		sx = x;
+		sy = y;
+		snext_x = next_x;
+		dum = y;
+
+		rotate(&x, &y, grid_info->xo, grid_info->yo,
+		       angle);
+		rotate(&next_x, &dum, grid_info->xo, grid_info->yo, 
+		       angle);
+		write_vect(x, y, next_x, dum, Map, Points, out_type);
+
+		y = sy;
+		x = next_x = snext_x;
+                j++;
+	    } while (j <= nbreaks);
+	    startx += width;
+	}
+	y += height;
+    }
+
+    /* write out all the vector widths (y vectors) of the entire grid  */
+    G_verbose_message(_("Writing out vector columns..."));
+    x = grid_info->west;
+    for (i = 0; i < num_v_cols; ++i) {
+        double starty;
+	starty = grid_info->south;
+	G_percent(i, num_v_cols, 2);
+
+	for (k = 0; k < rows; k++) {
+	  y = starty;
+	  j = 0;
+	  do {
+	      if (j < nbreaks)
+		  next_y = y + y_len;
+	      else
+		  next_y = starty + height;
+
+	      sx = x;
+	      sy = y;
+	      snext_y = next_y;
+	      dum = x;
+	      rotate(&x, &y, grid_info->xo, grid_info->yo, angle);
+	      rotate(&dum, &next_y, grid_info->xo, grid_info->yo,
+		    angle);
+
+	      write_vect(x, y, dum, next_y, Map, Points, out_type);
+
+	      x = sx;
+	      y = next_y = snext_y;
+	      j++;
+	  } while (j <= nbreaks);
+	  /* To get exactly the same coordinates as above, y+=width is wrong */
+	  starty += height;
+	}
+	x += width;
+    }
+
+    /* new with Vlib */
+    Vect_destroy_line_struct(Points);
+
+    return (0);
 }
