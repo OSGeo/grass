@@ -147,6 +147,13 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
     flag.e->description = _("Histogram equalization");
     flag.e->guisection = _("Define");
 
+    G_option_exclusive(opt.maps, opt.file, NULL);
+    G_option_required(opt.maps, opt.file, NULL);
+    G_option_exclusive(opt.rast, opt.volume, NULL);
+    G_option_required(opt.rast, opt.volume, opt.colr, opt.rules, flag.r, NULL);
+    G_option_exclusive(opt.colr, opt.rules, opt.rast, opt.volume, NULL);
+    G_option_exclusive(flag.g, flag.a, NULL);
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
@@ -161,35 +168,10 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
     rules = opt.rules->answer;
     file = opt.file->answer;
 
-    if (opt.maps->answer && opt.file->answer)
-        G_fatal_error(_("%s= and %s= are mutually exclusive"),
-		      opt.maps->key, opt.file->key);
-
-    if (!opt.maps->answer && !opt.file->answer)
-        G_fatal_error(_("%s= or %s= must be specified"),
-		      opt.maps->key, opt.file->key);
-
-    if (opt.rast->answer && opt.volume->answer)
-        G_fatal_error(_("%s= and %s= are mutually exclusive"),
-		      opt.rast->key, opt.volume->key);
-
     if (opt.rast->answer)
         cmap = opt.rast->answer;
     if (opt.volume->answer)
         cmap = opt.volume->answer;
-
-    if (!cmap && !style && !rules && !remove)
-        G_fatal_error(_("One of -%c, %s=, %s= or %s= must be specified"),
-			flag.r->key, opt.colr->key, opt.rast->key,
-			opt.rules->key);
-    
-    if (!!style + !!cmap + !!rules > 1)
-        G_fatal_error(_("%s=, %s= and %s= are mutually exclusive"),
-			opt.colr->key, opt.rules->key, opt.rast->key);
-    
-    if (flag.g->answer && flag.a->answer)
-        G_fatal_error(_("-%c and -%c are mutually exclusive"),
-		      flag.g->key, flag.a->key);
 
     is_from_stdin = rules && strcmp(rules, "-") == 0;
     if (is_from_stdin)
