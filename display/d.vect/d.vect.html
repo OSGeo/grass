@@ -10,10 +10,14 @@ map=vector_map</tt>. There are a large variety of optional parameters
 which allow the user to specify vector type, colors, data fields, SQL
 queries, label size and justification, etc.
 
-<p>By default <em>d.vect</em> fills in holes in polygons (islands). If
-you only want to show active areas limit the features with, e.g.,
+<p>By default <em>d.vect</em> areas are filled with <b>fcolor</b> and 
+outlined with <b>color</b>. Area outlines can be suppressed with
 <div class="code"><pre>
-d.vect map=vector_map cats=1-999999
+d.vect map=vector_map color=none
+</pre></div>
+and areas can be made transparent with
+<div class="code"><pre>
+d.vect map=vector_map fcolor=none
 </pre></div>
 
 <p>In order to display attributes in the map, <b>attribute_column</b> must
