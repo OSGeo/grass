@@ -21,13 +21,15 @@ TBD.
 
 # NC data
 g.region rural_1m -p
-r.mapcalc "sand = 0.30"
-r.mapcalc "clay = 0.15"
-r.mapcalc "silt = 0.52"
-r.mapcalc "organ = 0.03"
+r.mapcalc "sand = 0.11"
+r.mapcalc "clay = 0.47"
+r.mapcalc "silt = 0.42"
+r.mapcalc "organ = 0.0136"
 
 r.uslek psand=sand pclay=clay psilt=silt pomat=organ output=usle_k
 r.univar usle_k
+
+uslek = 0.25
 -->
 
 <h2>SEE ALSO</h2>
