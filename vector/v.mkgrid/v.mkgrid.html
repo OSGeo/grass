@@ -1,17 +1,28 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.mkgrid</em> will create a vector map representation of a regular coordinate grid.
-Both point and area vector grids can be created.
+<em>v.mkgrid</em> creates a vector map representation of a regular 
+coordinate grid. Point, line, and area vector grids can be created.
 
 
 <h2>NOTES</h2>
 
-Grid points created with the <b>-p</b> flag will be placed at the
-<i>center</i> of each grid cell, not at the grid line nodes.
-
+Grid points created with the <b>type=point</b> option will be placed at 
+the <i>center</i> of each grid cell, like centroids with the default 
+<b>type=area</b> option. 
 <p>
-This is NOT to be used to generate a vector map of USGS quadrangles,
-because USGS quads are not exact rectangles.
+Grid lines created with the <b>type=line</b> option will be identical to 
+the edges of each grid cell area, like boundaries with the default 
+<b>type=area</b> option. 
+<p>
+The resultant grid can be rotated around the origin (center of the 
+grid) with the <b>angle</b> option.
+<p>
+Optionally hexagons can be created with the <b>-h</b> flag. Hexagons 
+are by default asymmetric. Symmetric hexagons can be created with the 
+<b>-s</b> flag.
+<p>
+This module is NOT to be used to generate a vector map of USGS 
+quadrangles, because USGS quads are not exact rectangles.
 
 
 <h2>EXAMPLES</h2>
