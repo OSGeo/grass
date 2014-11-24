@@ -1,4 +1,5 @@
-#include<stdio.h>
+#include <stdio.h>
+#include <grass/gis.h>
 
 #define POLYGON_DIMENSION 20
 /* From FAOSOIL CD, after USDA 1951, p209 */
@@ -15,8 +16,8 @@ double point_in_triangle(double point_x, double point_y, double point_z,
 			 double t2_y, double t2_z, double t3_x, double t3_y,
 			 double t3_z)
 {
-    /*G_message("in function: sand=%5.3f clay=%5.3f silt=%5.3f",
-				point_x,point_y,point_z); */
+    G_debug(1,"point_in_triangle: sand=%5.3f clay=%5.3f silt=%5.3f",
+				point_x,point_y,point_z);
     double answer;
     double answer1_x, answer1_y, answer1_z;
     double answer2_x, answer2_y, answer2_z;
@@ -100,7 +101,7 @@ double point_in_triangle(double point_x, double point_y, double point_z,
 
 int prct2tex(double sand_input, double clay_input, double silt_input)
 {
-    /*G_message("%5.3f||%5.3f||%5.3f",sand_input,clay_input,silt_input); */
+    G_debug(1,"%5.3f||%5.3f||%5.3f",sand_input,clay_input,silt_input);
     
     /* set up index for soil texture classes */
     int index = 20;
@@ -660,32 +661,32 @@ int prct2tex(double sand_input, double clay_input, double silt_input)
 	    /* G_message("Silt: index labelled as 11"); */
 	}
     }
-    /* if(index==0){
-       G_message("clay");
+    if(index==0){
+       G_debug(1,"clay");
        } else if (index==1){
-       G_message("sandy clay");
+       G_debug(1,"sandy clay");
        } else if (index==2){
-       G_message("silty clay");
+       G_debug(1,"silty clay");
        } else if (index==3){
-       G_message("sandy clay loam");
+       G_debug(1,"sandy clay loam");
        } else if (index==4){
-       G_message("clay loam");
+       G_debug(1,"clay loam");
        } else if (index==5){
-       G_message("silty clay loam");
+       G_debug(1,"silty clay loam");
        } else if (index==6){
-       G_message("sand");
+       G_debug(1,"sand");
        } else if (index==7){
-       G_message("loamy sand");
+       G_debug(1,"loamy sand");
        } else if (index==8){
-       G_message("sandy loam");
+       G_debug(1,"sandy loam");
        } else if (index==9){
-       G_message("loam");
+       G_debug(1,"loam");
        } else if (index==10){
        G_message("silt loam");
        } else if (index==11){
-       G_message("silt");
+       G_debug(1,"silt");
        } else {
-       G_message("Unable to allocate class");
-       } */
+       G_debug(1,"Unable to allocate class");
+       }
     return index;
 }
