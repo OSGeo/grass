@@ -79,7 +79,7 @@ based on the current region extent defined by the "elevation" map:
 <div class="code"><pre>
 g.region rast=elevation -p
 # we use the row/column/resolution information to determine the grid= values:
-v.mkgrid -p map=pointpattern grid=13,15 position=region breaks=1
+v.mkgrid type=point map=pointpattern grid=13,15 position=region breaks=1
 </pre></div>
 <p>
 
@@ -92,13 +92,13 @@ a two-step approach:
 <div class="code"><pre>
 # create first set of points, covering extent of "elevation" raster map
 g.region rast=elevation -p
-v.mkgrid -p map=pointpattern1 grid=13,15 position=region breaks=1
+v.mkgrid type=point map=pointpattern1 grid=13,15 position=region breaks=1
 
 # shift grid by half point distance (map units)
 g.region n=n+500 w=w+500 e=e+500 s=s+500 -p
 
 # create second set of points
-v.mkgrid -p map=pointpattern2 grid=13,15 position=region breaks=1
+v.mkgrid type=point map=pointpattern2 grid=13,15 position=region breaks=1
 
 # merge into final point pattern
 v.patch input=pointpattern1,pointpattern2 output=pointpattern3
