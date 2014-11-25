@@ -598,4 +598,4 @@ class GridModule(object):
         if self.inlist:
             grm = Module('g.remove')
             for key in self.inlist:
-                grm(flags='f', type='rast', pattern=self.inlist[key])
+                grm(flags='f', type='rast', name=self.inlist[key])
