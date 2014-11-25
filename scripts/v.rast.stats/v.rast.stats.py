@@ -267,8 +267,9 @@ def main():
                 variable = variables_dbf[variable]
             i = variables[variable]
             value = vars[i]
-            # convert nan, +nan, -nan to NULL
-            if value.lower().endswith('nan'):
+            # convert nan, +nan, -nan, inf, +inf, -inf, Infinity, +Infinity,
+            # -Infinity to NULL
+            if value.lower().endswith('nan') or 'inf' in value.lower():
                 value = 'NULL'
             if not first_var:
                 f.write(" , ")
