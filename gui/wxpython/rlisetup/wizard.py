@@ -802,6 +802,7 @@ class SamplingAreasPage(TitledPage):
         TitledPage.__init__(self, wizard, _("Insert sampling areas"))
         self.samplingtype = 'whole'
         self.parent = parent
+        self.overwriteTemp = False
         # toggles
         self.radioBox = wx.RadioBox(parent=self, id=wx.ID_ANY,
                                     label="",
@@ -847,8 +848,12 @@ class SamplingAreasPage(TitledPage):
         self.regionNumPanel.SetSizer(self.regionPanelSizer)
         self.sizer.Add(self.regionNumPanel, flag=wx.ALIGN_CENTER, pos=(2, 0))
 
-        self.areaPanelSizer = wx.GridBagSizer(1, 3)
+        self.areaPanelSizer = wx.GridBagSizer(2, 3)
         self.areaPanel = wx.Panel(parent=self, id=wx.ID_ANY)
+        self.overwriteText = wx.StaticText(parent=self.areaPanel, id=wx.ID_ANY,
+                                      label=_('Do you want to overwrite existing'
+                                              ' temporal maps if they exist?'))
+        self.overwriteCheck = wx.CheckBox(parent=self.areaPanel, id=wx.ID_ANY)
         self.areaText = wx.StaticText(parent=self.areaPanel, id=wx.ID_ANY,
                                       label=_('Do you want to check vector areas?'))
         self.areaOK = wx.Button(self.areaPanel, wx.ID_ANY, 'Yes', (50, 80))
@@ -857,10 +862,15 @@ class SamplingAreasPage(TitledPage):
         self.areaNO.SetToolTip(wx.ToolTip(_("All the features will be used")))
         self.areaOK.Bind(wx.EVT_BUTTON, self.OnVectYes)
         self.areaNO.Bind(wx.EVT_BUTTON, self.OnVectNo)
-        self.areaPanelSizer.Add(self.areaText, flag=wx.ALIGN_CENTER,
+        self.overwriteCheck.Bind(wx.EVT_CHECKBOX, self.OnOverwrite)
+        self.areaPanelSizer.Add(self.overwriteText, flag=wx.ALIGN_CENTER,
                                 pos=(0, 0))
-        self.areaPanelSizer.Add(self.areaOK, flag=wx.ALIGN_CENTER, pos=(0, 1))
-        self.areaPanelSizer.Add(self.areaNO, flag=wx.ALIGN_CENTER, pos=(0, 2))
+        self.areaPanelSizer.Add(self.overwriteCheck, flag=wx.ALIGN_CENTER,
+                                pos=(0, 1))
+        self.areaPanelSizer.Add(self.areaText, flag=wx.ALIGN_CENTER,
+                                pos=(1, 0))
+        self.areaPanelSizer.Add(self.areaOK, flag=wx.ALIGN_CENTER, pos=(1, 1))
+        self.areaPanelSizer.Add(self.areaNO, flag=wx.ALIGN_CENTER, pos=(1, 2))
         self.areaPanel.SetSizer(self.areaPanelSizer)
         self.sizer.Add(self.areaPanel, flag=wx.ALIGN_CENTER, pos=(3, 0))
 
@@ -939,6 +949,10 @@ class SamplingAreasPage(TitledPage):
         self.RegionDraw(event.GetInt())
         return
 
+    def OnOverwrite(self, event):
+        self.overwriteTemp = self.overwriteCheck.GetValue()
+        return
+
     def OnVectYes(self, event):
         """The user choose to select the vector areas, this function set the
         next page to VectorAreasPage"""
@@ -955,7 +969,8 @@ class SamplingAreasPage(TitledPage):
         self.sizer.Hide(self.areaPanel)
         self.SetNext(self.parent.summarypage)
 
-        vect_cats = obtainCategories(self.parent.startpage.vect, self.vectorlayer)
+        vect_cats = obtainCategories(self.parent.startpage.vect,
+                                     self.parent.startpage.vectorlayer)
 
         self._progressDlg = wx.ProgressDialog(title=_("Analysing vector"),
                                               message="Analysing vector",
@@ -969,6 +984,7 @@ class SamplingAreasPage(TitledPage):
                                                   self.parent.startpage.rast,
                                                   vect_cats,
                                                   self.parent.startpage.vectorlayer,
+                                                  self.overwriteTemp,
                                                   self._progressDlg)
         grass.del_temp_region()
         if self.parent.msAreaList:
@@ -1528,6 +1544,8 @@ class VectorAreasPage(TitledPage):
         self.areascount = self.areascount + 1
         if self.areascount == self.areanum:
             wx.FindWindowById(wx.ID_FORWARD).Enable(True)
+            self.areaOK.Enable(False)
+            self.areaNO.Enable(False)
             return True
         else:
             self.title.SetLabel(_('Select sample area ' + str(self.areascount + 1) \
@@ -1550,10 +1568,23 @@ class VectorAreasPage(TitledPage):
     def newCat(self):
         """Convert to raster and draw the new feature"""
         cat = self.vect_cats[self.areascount]
-        self.outname = "{name}_{cat}".format(name=self.vect.split('@')[0],
-                                             cat=cat)
+        self.outpref = "{rast}_{vect}_".format(vect=self.vect.split('@')[0],
+                                               rast=self.rast.split('@')[0])
+        self.outname = "{pref}{cat}".format(pref=self.outpref, cat=cat)
+        # check if raster already axist
+
+        if len(grass.list_strings('rast', pattern=self.outname, mapset='.')) == 1 \
+           and not self.parent.samplingareapage.overwriteTemp:
+            GError(parent=self, message=_("The raster map <%s> already exists."
+                                          " Please remove or rename the maps "
+                                          "with the prefix '%s' or select the "
+                                          "option to overwrite existing maps"
+                                          % (self.outname, self.outpref)))
+            self.parent.wizard.ShowPage(self.parent.samplingareapage)
+            return
         convertFeature(self.vect, self.outname, cat, self.rast,
-                       layer=self.vectlayer)
+                       self.parent.startpage.vectorlayer,
+                       self.parent.samplingareapage.overwriteTemp)
         cmdlistcat = ['d.rast', 'map=%s' % self.outname]
         self.map_.AddLayer(ltype='raster', command=cmdlistcat, active=True,
                            name=self.outname, hidden=False, opacity=1.0,
@@ -1569,6 +1600,7 @@ class VectorAreasPage(TitledPage):
     def OnEnterPage(self, event):
         """Function during entering: draw the raster map and the first vector
         feature"""
+        print self.parent.samplingareapage.overwriteTemp
         if self.mapPanel is None:
             self.mapPanel = RLiSetupMapPanel(self, samplingType=self.parent.samplingareapage.samplingtype)
             self.sizer.Add(item=self.mapPanel, flag=wx.EXPAND, pos=(1, 0))
@@ -1578,7 +1610,8 @@ class VectorAreasPage(TitledPage):
 
         self.rast = self.parent.startpage.rast
         self.vect = self.parent.startpage.vect
-        self.vect_cats = obtainCategories(self.vect, layer=self.vectlayer)
+        self.vect_cats = obtainCategories(self.vect,
+                                          layer=self.parent.startpage.vectorlayer)
 
         self.areanum = len(self.vect_cats)
         if self.areanum == 0:
