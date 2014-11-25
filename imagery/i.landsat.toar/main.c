@@ -209,7 +209,7 @@ int main(int argc, char *argv[])
 	       _("Date"),
 	       _("Sun Elevation"),
 	       _("Sensor"),
-	       _("Bands count"), _("Sun Zenith Angle"), _("Time"));
+	       _("Bands count"), _("Sun Azimuth Angle"), _("Time"));
     lsatmet->descriptions = desc;
     lsatmet->guisection = _("Settings");
 
