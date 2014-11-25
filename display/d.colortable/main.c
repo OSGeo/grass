@@ -66,12 +66,9 @@ int main(int argc, char **argv)
     opt1->description =
 	_("Name of raster map whose color table is to be displayed");
 
-    opt2 = G_define_option();
-    opt2->key = "color";
-    opt2->type = TYPE_STRING;
+    opt2 = G_define_standard_option(G_OPT_C_FG);
     opt2->answer = DEFAULT_BG_COLOR;
-    opt2->gisprompt = "old_color,color,color";
-    opt2->description =
+    opt2->label =
 	_("Color of lines separating the colors of the color table");
 
     opt3 = G_define_option();
@@ -81,7 +78,7 @@ int main(int argc, char **argv)
     opt3->description = _("Number of lines to appear in the color table");
 
     opt4 = G_define_option();
-    opt4->key = "cols";
+    opt4->key = "columns";
     opt4->type = TYPE_INTEGER;
     opt4->options = "1-1000";
     opt4->description = _("Number of columns to appear in the color table");
