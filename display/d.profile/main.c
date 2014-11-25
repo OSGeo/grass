@@ -194,15 +194,12 @@ int main(int argc, char **argv)
     module->description = _("Plots profile of a transect.");
 
     /* set up command line */
-    map = G_define_standard_option(G_OPT_R_INPUT);
+    map = G_define_standard_option(G_OPT_R_MAP);
     map->description = _("Raster map to be profiled");
 
-    profile = G_define_option();
-    profile->key = "profile";
-    profile->type = TYPE_DOUBLE;
+    profile = G_define_standard_option(G_OPT_M_COORDS);
     profile->required = YES;
     profile->multiple = YES;
-    profile->key_desc = "east,north";
     profile->description = _("Profile coordinate pairs");
 
     stored = G_define_flag();
