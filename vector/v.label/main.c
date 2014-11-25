@@ -183,8 +183,6 @@ int main(int argc, char **argv)
     Hwidth->guisection = _("Effects");
 
     Bcolor = G_define_standard_option(G_OPT_C_BG);
-    Bcolor->key = "background";
-    Bcolor->label = _("Background color");
     Bcolor->answer = "none";
     Bcolor->guisection = _("Colors");
 
