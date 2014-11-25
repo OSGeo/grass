@@ -134,7 +134,7 @@ int main(int argc, char **argv)
     flag2->description = _("Gather the histogram quietly");
 
     flag3 = G_define_flag();
-    flag3->key = 'C';
+    flag3->key = 'c';
     flag3->description =
 	_("Report for ranges defined in cats file (fp maps only)");
 
