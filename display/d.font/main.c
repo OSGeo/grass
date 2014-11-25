@@ -74,7 +74,7 @@ int main(int argc, char **argv)
     flag1->description = _("List fonts");
 
     flag2 = G_define_flag();
-    flag2->key = 'L';
+    flag2->key = 'v';
     flag2->description = _("List fonts verbosely");
 
     if (G_parser(argc, argv))
