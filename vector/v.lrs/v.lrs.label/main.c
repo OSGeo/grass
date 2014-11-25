@@ -224,10 +224,7 @@ int main(int argc, char **argv)
     Hwidth->answer = "0";
     Hwidth->options = "0-100";
 
-    Bcolor = G_define_option();
-    Bcolor->key = "background";
-    Bcolor->description = _("Background color");
-    Bcolor->type = TYPE_STRING;
+    Bcolor = G_define_standard_option(G_OPT_C_BG);
     Bcolor->answer = "none";
     Bcolor->options =
 	"none,aqua,black,blue,brown,cyan,gray,green,grey,indigo,magenta,"
