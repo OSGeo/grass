@@ -51,7 +51,7 @@ int main(int argc, char **argv)
     flagl->description = _("List fonts (default; provided for compatibility with d.font)");
 
     flagL = G_define_flag();
-    flagL->key = 'L';
+    flagL->key = 'v';
     flagL->description = _("List fonts verbosely");
 
     if (G_parser(argc, argv))
