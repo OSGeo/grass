@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
     struct Option *vectname, *grid, *coord, *box, *angle, *position_opt,
                   *breaks, *type_opt;
     struct GModule *module;
-    struct Flag *hex_flag, *hs_flag;
+    struct Flag *hex_flag, *ha_flag;
     int otype, ptype, ltype;
     char *desc;
 
@@ -69,6 +69,8 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("geometry"));
+    G_add_keyword(_("grid"));
+    G_add_keyword(_("point pattern"));
     module->description = _("Creates a vector map of a user-defined grid.");
 
     vectname = G_define_standard_option(G_OPT_V_OUTPUT);
@@ -78,7 +80,7 @@ int main(int argc, char *argv[])
     grid->key = "grid";
     grid->key_desc = _("rows,columns");
     grid->type = TYPE_INTEGER;
-    grid->required = YES;
+    grid->required = NO;
     grid->multiple = NO;
     grid->description = _("Number of rows and columns in grid");
 
@@ -129,7 +131,7 @@ int main(int argc, char *argv[])
     breaks->description =
 	_("Number of vertex points per grid cell");
     breaks->options = "0-60";
-    breaks->answer = "3";
+    breaks->answer = "0";
 
     type_opt = G_define_standard_option(G_OPT_V_TYPE);
     type_opt->options = "point,line,area";
@@ -142,10 +144,10 @@ int main(int argc, char *argv[])
     hex_flag->description =
 	_("Create hexagons (default: rectangles)");
 
-    hs_flag = G_define_flag();
-    hs_flag->key = 's';
-    hs_flag->description =
-	_("Enforce symmetric hexagons");
+    ha_flag = G_define_flag();
+    ha_flag->key = 'a';
+    ha_flag->description =
+	_("Allow asymmetric hexagons");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -177,10 +179,6 @@ int main(int argc, char *argv[])
      */
     dig_file = G_store(vectname->answer);
 
-    /* Number of row and cols */
-    grid_info.num_rows = atoi(grid->answers[0]);
-    grid_info.num_cols = atoi(grid->answers[1]);
-
     grid_info.angle = M_PI / 180 * atof(angle->answer);
     set_angle(grid_info.angle);
 
@@ -191,21 +189,51 @@ int main(int argc, char *argv[])
 	if (coord->answer)
 	    G_fatal_error(_("'coor' and 'position=region' are exclusive options"));
 
-	if (box->answer)
-	    G_fatal_error(_("'box' and 'position=region' are exclusive options"));
+	if (box->answer && grid->answer)
+	    G_fatal_error(_("'box' and 'grid' are exclusive options for 'position=region'"));
 
 	grid_info.west = window.west;
 	grid_info.south = window.south;
 	grid_info.east = window.east;
 	grid_info.north = window.north;
 
-	grid_info.width = (window.east - window.west) / grid_info.num_cols;
-	grid_info.height = (window.north - window.south) / grid_info.num_rows;
+	grid_info.num_rows = window.rows;
+	grid_info.num_cols = window.cols;
+
+	grid_info.width = window.ew_res;
+	grid_info.height = window.ns_res;
+
+	if (grid->answer) {
+	    grid_info.num_rows = atoi(grid->answers[0]);
+	    grid_info.num_cols = atoi(grid->answers[1]);
+
+	    grid_info.width = (grid_info.east - grid_info.west) / grid_info.num_cols;
+	    grid_info.height = (grid_info.north - grid_info.south) / grid_info.num_rows;
+	}
+	else if (box->answer) {
+	    if (!G_scan_resolution
+		(box->answers[0], &(grid_info.width), window.proj))
+		G_fatal_error(_("Invalid width"));
+	    if (!G_scan_resolution
+		(box->answers[1], &(grid_info.height), window.proj))
+		G_fatal_error(_("Invalid height"));
+
+	    /* register to lower left corner as for position=coor */
+	    grid_info.num_cols = (grid_info.east - grid_info.west + 
+	                         grid_info.width / 2.0) / grid_info.width;
+	    grid_info.num_rows = (grid_info.north - grid_info.south + 
+	                         grid_info.height / 2.0) / grid_info.height;
+	    grid_info.north = grid_info.south + grid_info.num_rows * grid_info.height;
+	    grid_info.east = grid_info.west + grid_info.num_cols * grid_info.width;
+	}
 
 	G_debug(2, "x = %e y = %e w = %e h = %e", grid_info.west,
 		grid_info.south, grid_info.width, grid_info.height);
     }
     else {
+	if (!grid->answer)
+	    G_fatal_error(_("'grid' option missing"));
+
 	if (!coord->answer)
 	    G_fatal_error(_("'coor' option missing"));
 
@@ -225,6 +253,9 @@ int main(int argc, char *argv[])
 	if (!G_scan_resolution
 	    (box->answers[1], &(grid_info.height), window.proj))
 	    G_fatal_error(_("Invalid height"));
+
+	grid_info.num_rows = atoi(grid->answers[0]);
+	grid_info.num_cols = atoi(grid->answers[1]);
 
 	grid_info.east = grid_info.west + grid_info.width * grid_info.num_cols;
 	grid_info.north = grid_info.south + grid_info.height * grid_info.num_rows;
@@ -267,7 +298,7 @@ int main(int argc, char *argv[])
 	                  (grid_info.num_cols + 1.0 / 3.0);
 	grid_info.crad = grid_info.cstep / 1.5;
 
-	if (hs_flag->answer) {
+	if (!ha_flag->answer || grid_info.width == grid_info.height) {
 	    if (grid_info.rrad > grid_info.crad) {
 		grid_info.rrad = grid_info.crad;
 		grid_info.rstep = grid_info.rrad * sqrt(3.0) / 2.0;
@@ -277,9 +308,17 @@ int main(int argc, char *argv[])
 		grid_info.cstep = grid_info.crad * 1.5;
 	    }
 	}
+	else {
+	    if (grid_info.width != grid_info.height) {
+		G_important_message(_("The hexagons will be asymmetrical."));
+	    }
+	}
 
 	grid_info.num_vect_rows = (grid_info.north - grid_info.south) / 
-	     grid_info.rstep - 0.5;
+	     grid_info.rstep;
+	if (grid_info.north - grid_info.rstep * (grid_info.num_vect_rows + 1) < 
+	    grid_info.south)
+	    grid_info.num_vect_rows--;
 	grid_info.num_vect_cols = (grid_info.east - grid_info.west -
 	     grid_info.crad * 0.5) / grid_info.cstep;
 
@@ -289,6 +328,13 @@ int main(int argc, char *argv[])
 	if (grid_info.north - grid_info.south < 3 * grid_info.rstep) {
 	    G_fatal_error(_("Please use a higher resolution or a larger region"));
 	}
+
+	if ((int)(grid_info.num_vect_rows / 2.0 + 0.5) != grid_info.num_rows)
+	    G_message(_("The number of rows has been adjusted from %d to %d"),
+	              grid_info.num_rows, (int)(grid_info.num_vect_rows / 2.0 + 0.5));
+	if (grid_info.num_vect_cols != grid_info.num_cols)
+	    G_message(_("The number of columns has been adjusted from %d to %d"),
+	              grid_info.num_cols, grid_info.num_vect_cols);
 
 	sprintf(buf, "create table %s ( %s integer)", Fi->table, Fi->key);
 
@@ -326,6 +372,10 @@ int main(int argc, char *argv[])
 	}
     }
     else {
+	if (grid_info.width != grid_info.height) {
+	    G_important_message(_("The rectangles will be asymmetrical."));
+	}
+
 	/*
 	 * vector rows are the actual number of rows of vectors to make up the
 	 * entire grid.   ditto for cols.
