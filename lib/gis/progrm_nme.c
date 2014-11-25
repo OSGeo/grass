@@ -1,9 +1,9 @@
 /*!
- * \file gis/progrm_nme.c
+ * \file lib/gis/progrm_nme.c
  *
  * \brief GIS Library - Program name
  *
- * (C) 2001-2009 by the GRASS Development Team
+ * (C) 2001-2014 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -49,8 +49,13 @@ void G_set_program_name(const char *s)
 	    break;
 	}
     }
+
+    /* strip extension from program name */
     temp = G_store(s);
     G_basename(temp, "exe");
     name = G_store(temp);
+
+    G_debug(1, "G_set_program_name(): %s", name);
+    
     G_free(temp);
 }
