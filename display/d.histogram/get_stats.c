@@ -8,7 +8,7 @@
 #include "options.h"
 #include "dhist.h"
 
-static void run_stats(const char *mapname, int quiet, const char *tempfile)
+static void run_stats(const char *mapname, const char *tempfile)
 {
     char buf[32];
     const char *argv[12];
@@ -19,8 +19,7 @@ static void run_stats(const char *mapname, int quiet, const char *tempfile)
     argv[argc++] = "-r";
     if (cat_ranges)
 	argv[argc++] = "-C";
-    if (quiet)
-	argv[argc++] = "-q";
+
     argv[argc++] = type == COUNT
 	? "-c"
 	: "-a";
@@ -43,8 +42,7 @@ static void run_stats(const char *mapname, int quiet, const char *tempfile)
 	G_fatal_error("error running r.stats");
 }
 
-int get_stats(const char *mapname, struct stat_list *dist_stats,	/* linked list of stats */
-	      int quiet)
+int get_stats(const char *mapname, struct stat_list *dist_stats)	/* linked list of stats */
 {
     char buf[1024];		/* input buffer for reading stats */
     int done = 0;
@@ -72,7 +70,7 @@ int get_stats(const char *mapname, struct stat_list *dist_stats,	/* linked list 
 	    G_fatal_error("Can't read frange file");
     }
 
-    run_stats(mapname, quiet, tempfile);
+    run_stats(mapname, tempfile);
 
     /* open temp file and read the stats into a linked list */
     fd = fopen(tempfile, "r");
