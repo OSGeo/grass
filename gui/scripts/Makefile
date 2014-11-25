@@ -8,17 +8,15 @@ DSTDIR = $(GUIDIR)/scripts
 
 ifdef MINGW
 PYFILES := $(patsubst %.py, $(DSTDIR)/%.py, $(filter %.py, $(PY_SOURCES)))
+$(DSTDIR)/%.py: %.py | $(DSTDIR)
+	$(INSTALL) $< $@
 else
 PYFILES := $(patsubst %.py, $(DSTDIR)/%, $(filter %.py, $(PY_SOURCES)))
+$(DSTDIR)/%: %.py | $(DSTDIR)
+	$(INSTALL) $< $@
 endif
 
 default: $(PYFILES)
-
-$(DSTDIR)/%: %.py | $(DSTDIR)
-	$(INSTALL) $< $@
-
-$(DSTDIR)/%.py: %.py | $(DSTDIR)
-	$(INSTALL) $< $@
 
 $(DSTDIR):
 	-test -d $@ | $(MKDIR) $@
