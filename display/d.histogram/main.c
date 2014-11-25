@@ -129,7 +129,7 @@ int main(int argc, char **argv)
     flag1->description = _("Display information for null cells");
 
     flag3 = G_define_flag();
-    flag3->key = 'C';
+    flag3->key = 'c';
     flag3->description =
 	_("Report for ranges defined in cats file (fp maps only)");
 
