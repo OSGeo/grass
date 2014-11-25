@@ -113,6 +113,7 @@ import math
 
 from grass.script.utils import separator
 from grass.script import core as grass
+from grass.exceptions import CalledModuleError
 
 
 def bboxToPoints(bbox):
@@ -156,13 +157,16 @@ def project(file, source, dest):
     """Projects point (x, y) using projector"""
     errors = 0
     points = []
-    ret = grass.read_command('m.proj',
-                             quiet=True,
-                             flags='d',
-                             proj_in=source['proj'],
-                             proj_out=dest['proj'],
-                             sep=';',
-                             input=file)
+    try:
+        ret = grass.read_command('m.proj',
+                                 quiet=True,
+                                 flags='d',
+                                 proj_in=source['proj'],
+                                 proj_out=dest['proj'],
+                                 sep=';',
+                                 input=file)
+    except CalledModuleError:
+        grass.fatal(cs2cs + ' failed')
 
     if not ret:
         grass.fatal(cs2cs + ' failed')
