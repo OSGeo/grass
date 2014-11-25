@@ -11,15 +11,15 @@ the <i>center</i> of each grid cell, like centroids with the default
 <b>type=area</b> option. 
 <p>
 Grid lines created with the <b>type=line</b> option will be identical to 
-the edges of each grid cell area, like boundaries with the default 
+the edges of each grid cell, like boundaries with the default 
 <b>type=area</b> option. 
 <p>
 The resultant grid can be rotated around the origin (center of the 
 grid) with the <b>angle</b> option.
 <p>
 Optionally hexagons can be created with the <b>-h</b> flag. Hexagons 
-are by default asymmetric. Symmetric hexagons can be created with the 
-<b>-s</b> flag.
+are by default symmetric. Asymmetric hexagons can be allowed with the 
+<b>-a</b> flag.
 <p>
 This module is NOT to be used to generate a vector map of USGS 
 quadrangles, because USGS quads are not exact rectangles.
@@ -31,7 +31,7 @@ quadrangles, because USGS quads are not exact rectangles.
 
 To be run in a latitude-longitude location (WGS84)
 <div class="code"><pre>
-# use g.region to easily calculate rows and column for 'grid':
+# set the region:
 g.region n=90 s=-90 w=-180 e=180 res=10 -p
 projection: 3 (Latitude-Longitude)
 zone:       0
@@ -48,7 +48,10 @@ cols:       36
 cells:      648
 
 # create 10 degree size grid:
-v.mkgrid map=grid_10deg grid=18,36
+v.mkgrid map=grid_10deg
+
+# create 20 degree size grid:
+v.mkgrid map=grid_20deg box=20,20
 </pre></div>
 
 <h3>Creating a grid in a metric projection</h3>
@@ -77,9 +80,8 @@ North Carolina sample dataset example, creating a 1km spaced point grid
 based on the current region extent defined by the "elevation" map:
 
 <div class="code"><pre>
-g.region rast=elevation -p
-# we use the row/column/resolution information to determine the grid= values:
-v.mkgrid type=point map=pointpattern grid=13,15 position=region breaks=1
+g.region rast=elevation res=1000 -pa
+v.mkgrid type=point map=pointpattern
 </pre></div>
 <p>
 
@@ -91,14 +93,14 @@ a two-step approach:
 
 <div class="code"><pre>
 # create first set of points, covering extent of "elevation" raster map
-g.region rast=elevation -p
-v.mkgrid type=point map=pointpattern1 grid=13,15 position=region breaks=1
+g.region rast=elevation res=1000 -pa
+v.mkgrid type=point map=pointpattern1
 
 # shift grid by half point distance (map units)
 g.region n=n+500 w=w+500 e=e+500 s=s+500 -p
 
 # create second set of points
-v.mkgrid type=point map=pointpattern2 grid=13,15 position=region breaks=1
+v.mkgrid type=point map=pointpattern2
 
 # merge into final point pattern
 v.patch input=pointpattern1,pointpattern2 output=pointpattern3
