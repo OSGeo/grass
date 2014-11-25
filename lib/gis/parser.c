@@ -103,6 +103,8 @@ static void set_flag(int);
 static int contains(const char *, int);
 static int valid_option_name(const char *);
 static int is_option(const char *);
+static int match_option_1(const char *, const char *);
+static int match_option(const char *, const char *);
 static void set_option(const char *);
 static void check_opts(void);
 static void check_an_opt(const char *, int, const char *, const char **, char **);
@@ -114,7 +116,7 @@ static void split_opts(void);
 static void check_multiple_opts(void);
 static int check_overwrite(void);
 static void define_keywords(void);
-static void split_gisprompt(const char *gisprompt, char *age, char *element, char *desc);
+static void split_gisprompt(const char *, char *, char *, char *);
 static void module_gui_wx(void);
 static void append_error(const char *);
 
@@ -821,7 +823,7 @@ void define_keywords(void)
 /*!
   \brief Invoke GUI dialog
 */
-static void module_gui_wx(void)
+void module_gui_wx(void)
 {
     char script[GPATH_MAX];
 
@@ -835,7 +837,7 @@ static void module_gui_wx(void)
     G_spawn(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), script, G_recreate_command(), NULL);
 }
 
-static void set_flag(int f)
+void set_flag(int f)
 {
     struct Flag *flag;
     char *err;
@@ -868,7 +870,7 @@ static void set_flag(int f)
 /* contents() is used to find things strings with characters like commas and
  * dashes.
  */
-static int contains(const char *s, int c)
+int contains(const char *s, int c)
 {
     while (*s) {
 	if (*s == c)
@@ -878,7 +880,7 @@ static int contains(const char *s, int c)
     return FALSE;
 }
 
-static int valid_option_name(const char *string)
+int valid_option_name(const char *string)
 {
     int m = strlen(string);
     int n = strspn(string, "abcdefghijklmnopqrstuvwxyz0123456789_");
@@ -895,14 +897,14 @@ static int valid_option_name(const char *string)
     return 1;
 }
 
-static int is_option(const char *string)
+int is_option(const char *string)
 {
     int n = strspn(string, "abcdefghijklmnopqrstuvwxyz0123456789_");
 
     return n > 0 && string[n] == '=' && string[0] != '_' && string[n-1] != '_';
 }
 
-static int match_option_1(const char *string, const char *option)
+int match_option_1(const char *string, const char *option)
 {
     const char *next;
 
@@ -928,13 +930,13 @@ static int match_option_1(const char *string, const char *option)
     return match_option_1(string, next + 1);
 }
 
-static int match_option(const char *string, const char *option)
+int match_option(const char *string, const char *option)
 {
     return (*string == *option)
 	&& match_option_1(string + 1, option + 1);
 }
 
-static void set_option(const char *string)
+void set_option(const char *string)
 {
     struct Option *at_opt = NULL;
     struct Option *opt = NULL;
@@ -1005,7 +1007,7 @@ static void set_option(const char *string)
 	opt->answer = G_store(string);
 }
 
-static void check_opts(void)
+void check_opts(void)
 {
     struct Option *opt;
     int ans;
@@ -1037,7 +1039,7 @@ static void check_opts(void)
     }
 }
 
-static void check_an_opt(const char *key, int type, const char *options,
+void check_an_opt(const char *key, int type, const char *options,
 			const char **opts, char **answerp)
 {
     const char *answer = *answerp;
@@ -1093,7 +1095,7 @@ static void check_an_opt(const char *key, int type, const char *options,
     }
 }
 
-static int check_int(const char *ans, const char **opts)
+int check_int(const char *ans, const char **opts)
 {
     int d, i;
 
@@ -1140,7 +1142,7 @@ static int check_int(const char *ans, const char **opts)
     return OUT_OF_RANGE;
 }
 
-static int check_double(const char *ans, const char **opts)
+int check_double(const char *ans, const char **opts)
 {
     double d;
     int i;
@@ -1188,7 +1190,7 @@ static int check_double(const char *ans, const char **opts)
     return OUT_OF_RANGE;
 }
 
-static int check_string(const char *ans, const char **opts, int *result)
+int check_string(const char *ans, const char **opts, int *result)
 {
     int len = strlen(ans);
     int found = 0;
@@ -1224,7 +1226,7 @@ static int check_string(const char *ans, const char **opts, int *result)
     }
 }
 
-static void check_required(void)
+void check_required(void)
 {
     struct Option *opt;
     char *err;
@@ -1246,7 +1248,7 @@ static void check_required(void)
     }
 }
 
-static void split_opts(void)
+void split_opts(void)
 {
     struct Option *opt;
     const char *ptr1;
@@ -1303,7 +1305,7 @@ static void split_opts(void)
     }
 }
 
-static void check_multiple_opts(void)
+void check_multiple_opts(void)
 {
     struct Option *opt;
     const char *ptr;
@@ -1341,7 +1343,7 @@ static void check_multiple_opts(void)
 }
 
 /* Check for all 'new' if element already exists */
-static int check_overwrite(void)
+int check_overwrite(void)
 {
     struct Option *opt;
     char age[KEYLENGTH];
@@ -1427,7 +1429,7 @@ static int check_overwrite(void)
     return (error);
 }
 
-static void split_gisprompt(const char *gisprompt, char *age, char *element,
+void split_gisprompt(const char *gisprompt, char *age, char *element,
 			    char *desc)
 {
     const char *ptr1;
@@ -1455,7 +1457,7 @@ static void split_gisprompt(const char *gisprompt, char *age, char *element,
     *ptr2 = '\0';
 }
 
-static void append_error(const char *msg)
+void append_error(const char *msg)
 {
     st->error = G_realloc(st->error, sizeof(char *) * (st->n_errors + 1));
     st->error[st->n_errors++] = G_store(msg);
