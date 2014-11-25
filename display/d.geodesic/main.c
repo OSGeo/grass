@@ -47,28 +47,20 @@ int main(int argc, char *argv[])
 	"between two geographic points along a great circle, in "
 	"a longitude/latitude data set.");
 
-    parm.coor = G_define_option();
-    parm.coor->key = "coor";
+    parm.coor = G_define_standard_option(G_OPT_M_COORDS);
     parm.coor->key_desc = "lon1,lat1,lon2,lat2";
-    parm.coor->type = TYPE_STRING;
     parm.coor->required = YES;
     parm.coor->description = _("Starting and ending coordinates");
 
-    parm.lcolor = G_define_option();
-    parm.lcolor->key = "lcolor";
-    parm.lcolor->type = TYPE_STRING;
-    parm.lcolor->required = NO;
-    parm.lcolor->description = _("Line color");
-    parm.lcolor->gisprompt = "old_color,color,color";
-    parm.lcolor->answer = DEFAULT_FG_COLOR;
+    parm.lcolor = G_define_standard_option(G_OPT_C_FG);
+    parm.lcolor->key = "line_color";
+    parm.lcolor->label = _("Line color");
 
-    parm.tcolor = G_define_option();
-    parm.tcolor->key = "tcolor";
-    parm.tcolor->type = TYPE_STRING;
-    parm.tcolor->required = NO;
-    parm.tcolor->description = _("Text color or \"none\"");
-    parm.tcolor->gisprompt = "old_color,color,color";
-
+    parm.tcolor = G_define_standard_option(G_OPT_C_FG);
+    parm.tcolor->key = "text_color";
+    parm.tcolor->label = _("Text color or \"none\"");
+    parm.tcolor->answer = NULL;
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
