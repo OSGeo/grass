@@ -1,17 +1,15 @@
 
-/**
- * \file basename.c
+/*!
+ * \file lib/gis/basename.c
  *
  * \brief GIS Library - Program basename routines.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2014 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
- *
- * \date 1999-2007
  */
 
 #include <grass/gis.h>
@@ -23,7 +21,7 @@
 #include <stdlib.h>
 
 
-/**
+/*!
  * \brief Truncates filename to the base part (before the last '.')
  * if it matches the extension, otherwise leaves it unchanged.
  * 
@@ -31,12 +29,12 @@
  * (case insensitive) and if so, truncates the string to the
  * base file name (cf. basename Unix command)
  *
- * \param[in] filename string containing filename
- * \param[in] desired_ext string containing extension to look for (case
+ * \param filename string containing filename
+ * \param desired_ext string containing extension to look for (case
  * insensitive)
- * \return Pointer to filename
+ *
+ * \return pointer to filename
  */
-
 char *G_basename(char *filename, const char *desired_ext)
 {
     /* Find the last . in the filename */
@@ -106,9 +104,13 @@ char *G_double_to_basename_format(double number,
 
 
 /*!
- * \brief Return the environmental basename variable or the default value
+ * \brief Return the environmental basename variable or the default
+ * value
+ *
+ * return pointer to basename separator
  */
-char *G_get_basename_separator(){
+char *G_get_basename_separator()
+{
     char *envvar = "GRASS_BASENAME_SEPARATOR";
     char *envsep;
 
