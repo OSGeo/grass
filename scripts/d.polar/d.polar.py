@@ -33,7 +33,6 @@
 #% required : no
 #%End
 #%option G_OPT_F_OUTPUT
-#% key: eps
 #% description: Name for optional EPS output file
 #% required : no
 #%end
@@ -384,7 +383,7 @@ def main():
 
     map = options['map']
     undef = options['undef']
-    eps = options['eps']
+    eps = options['output']
     xgraph = flags['x']
 
     tmp = grass.tempfile()
