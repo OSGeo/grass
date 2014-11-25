@@ -83,12 +83,10 @@ int main(int argc, char **argv)
 
     map_opt = G_define_standard_option(G_OPT_V_MAP);
 
-    column_opt = G_define_option();
-    column_opt->key = "column";
-    column_opt->type = TYPE_STRING;
+    column_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     column_opt->required = YES;
     column_opt->description =
-	_("Data to be classified: column name or expression");
+	_("Name of attribute column to be classified");
 
     breaks_opt = G_define_option();
     breaks_opt->key = "breaks";
@@ -126,7 +124,7 @@ int main(int argc, char **argv)
     colors_opt->type = TYPE_STRING;
     colors_opt->required = YES;
     colors_opt->multiple = YES;
-    colors_opt->description = _("Colors (one per class).");
+    colors_opt->description = _("Colors (one per class)");
     colors_opt->gisprompt = "old_color,color,color";
 
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
@@ -138,19 +136,16 @@ int main(int argc, char **argv)
     where_opt->guisection = _("Selection");
 
     bwidth_opt = G_define_option();
-    bwidth_opt->key = "bwidth";
+    bwidth_opt->key = "boundary_width";
     bwidth_opt->type = TYPE_INTEGER;
     bwidth_opt->answer = "0";
     bwidth_opt->guisection = _("Boundaries");
     bwidth_opt->description = _("Boundary width");
 
-    bcolor_opt = G_define_option();
-    bcolor_opt->key = "bcolor";
-    bcolor_opt->type = TYPE_STRING;
-    bcolor_opt->answer = DEFAULT_FG_COLOR;
-    bcolor_opt->description = _("Boundary color");
+    bcolor_opt = G_define_standard_option(G_OPT_C_FG);
+    bcolor_opt->key = "boundary_color";
+    bcolor_opt->label = _("Boundary color");
     bcolor_opt->guisection = _("Boundaries");
-    bcolor_opt->gisprompt = "old_color,color,color";
 
     legend_file_opt = G_define_standard_option(G_OPT_F_OUTPUT);
     legend_file_opt->key = "legendfile";
