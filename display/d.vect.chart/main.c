@@ -77,7 +77,7 @@ int main(int argc, char **argv)
     field_opt->guisection = _("Selection");
 
     ctype_opt = G_define_option();
-    ctype_opt->key = "ctype";
+    ctype_opt->key = "chart_type";
     ctype_opt->type = TYPE_STRING;
     ctype_opt->required = NO;
     ctype_opt->multiple = NO;
@@ -90,9 +90,8 @@ int main(int argc, char **argv)
     columns_opt->required = YES;
     columns_opt->description = _("Attribute columns containing data");
 
-    sizecol_opt = G_define_option();
-    sizecol_opt->key = "sizecol";
-    sizecol_opt->type = TYPE_STRING;
+    sizecol_opt = G_define_standard_option(G_OPT_DB_COLUMN);
+    sizecol_opt->key = "size_column";
     sizecol_opt->required = NO;
     sizecol_opt->description = _("Column used for pie chart size");
     sizecol_opt->guisection = _("Chart properties");
@@ -112,20 +111,15 @@ int main(int argc, char **argv)
     scale_opt->description = _("Scale for size (to get size in pixels)");
     scale_opt->guisection = _("Chart properties");
 
-    ocolor_opt = G_define_option();
-    ocolor_opt->key = "ocolor";
-    ocolor_opt->type = TYPE_STRING;
-    ocolor_opt->answer = DEFAULT_FG_COLOR;
-    ocolor_opt->description = _("Outline color");
-    ocolor_opt->gisprompt = "old_color,color,color";
+    ocolor_opt = G_define_standard_option(G_OPT_C_FG);
+    ocolor_opt->key = "outline_color";
+    ocolor_opt->label = _("Outline color");
     ocolor_opt->guisection = _("Chart properties");
 
-    colors_opt = G_define_option();
+    colors_opt = G_define_standard_option(G_OPT_C_FG);
     colors_opt->key = "colors";
-    colors_opt->type = TYPE_STRING;
-    colors_opt->required = NO;
     colors_opt->multiple = YES;
-    colors_opt->description = _("Colors used to fill charts");
+    colors_opt->label = _("Colors used to fill charts");
     colors_opt->gisprompt = "old_color,color,color";
     colors_opt->guisection = _("Chart properties");
 
