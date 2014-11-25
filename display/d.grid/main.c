@@ -92,12 +92,12 @@ int main(int argc, char **argv)
     opt1->guisection = _("Color");
 
     opt4 = G_define_standard_option(G_OPT_C_FG);
-    opt4->key = "bordercolor";
+    opt4->key = "border_color";
     opt4->label = _("Border color");
     opt4->guisection = _("Color");
 
     tcolor = G_define_standard_option(G_OPT_C_FG);
-    tcolor->key = "textcolor";
+    tcolor->key = "text_color";
     tcolor->answer = "gray";
     tcolor->label = _("Text color");
     tcolor->guisection = _("Color");
