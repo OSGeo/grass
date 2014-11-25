@@ -110,39 +110,28 @@ int main(int argc, char **argv)
     opt2->options = "grass,compass,agnps,answers";
     opt2->description = _("Type of existing raster aspect map");
 
-    opt3 = G_define_option();
-    opt3->key = "arrow_color";
-    opt3->type = TYPE_STRING;
-    opt3->required = NO;
+    opt3 = G_define_standard_option(G_OPT_C_FG);
+    opt3->key = "color";
     opt3->answer = "green";
-    opt3->gisprompt = "old_color,color,color";
-    opt3->description = _("Color for drawing arrows");
+    opt3->label = _("Color for drawing arrows");
     opt3->guisection = _("Colors");
     
-    opt4 = G_define_option();
+    opt4 = G_define_standard_option(G_OPT_C_BG);
     opt4->key = "grid_color";
-    opt4->required = NO;
     opt4->answer = "gray";
-    opt4->gisprompt = "old,color_none,color";
-    opt4->description = _("Color for drawing grid or \"none\"");
+    opt4->label = _("Color for drawing drawing grid");
     opt4->guisection = _("Colors");
 
-    opt5 = G_define_option();
-    opt5->key = "x_color";
-    opt5->type = TYPE_STRING;
-    opt5->required = NO;
+    opt5 = G_define_standard_option(G_OPT_C_BG);
+    opt5->key = "null_color";
     opt5->answer = DEFAULT_FG_COLOR;
-    opt5->gisprompt = "old,color_none,color";
-    opt5->description = _("Color for drawing X's (null values)");
+    opt5->label = _("Color for drawing null values (X symbol)");
     opt5->guisection = _("Colors");
 
-    opt6 = G_define_option();
+    opt6 = G_define_standard_option(G_OPT_C_BG);
     opt6->key = "unknown_color";
-    opt6->type = TYPE_STRING;
-    opt6->required = NO;
     opt6->answer = "red";
-    opt6->gisprompt = "old,color_none,color";
-    opt6->description = _("Color for showing unknown information");
+    opt6->label = _("Color for showing unknown information (? symbol)");
     opt6->guisection = _("Colors");
 
     opt9 = G_define_option();
@@ -181,14 +170,26 @@ int main(int argc, char **argv)
     layer_name = opt1->answer;
 
     arrow_color = D_translate_color(opt3->answer);
-    x_color = D_translate_color(opt5->answer);
-    unknown_color = D_translate_color(opt6->answer);
 
+    /* Convert none (transparent) to -1 which in this module means
+       that we will not draw things having this color (-1).
+       We don't do that for arrow because we always want them.
+       (This is specified by the gisprompt ('type') of the options.)
+    */
     if (strcmp("none", opt4->answer) == 0)
 	grid_color = -1;
     else
 	grid_color = D_translate_color(opt4->answer);
 
+    if (strcmp("none", opt5->answer) == 0)
+	x_color = -1;
+    else
+	x_color = D_translate_color(opt5->answer);
+
+    if (strcmp("none", opt6->answer) == 0)
+	unknown_color = -1;
+    else
+	unknown_color = D_translate_color(opt6->answer);
 
     if (strcmp("grass", opt2->answer) == 0)
 	map_type = 1;
@@ -390,9 +391,12 @@ int main(int argc, char **argv)
 		D_use_color(arrow_color);
 
 		if (Rast_is_null_value(ptr, raster_type)) {
-		    D_use_color(x_color);
-		    draw_x();
-		    D_use_color(arrow_color);
+		    /* don't draw anything if x_color is none (transparent) */
+		    if (x_color > 0) {
+			D_use_color(x_color);
+			draw_x();
+			D_use_color(arrow_color);
+		    }
 		}
 		else if (aspect_f >= 0.0 && aspect_f <= 360.0) {
 		    if (opt7->answer)
@@ -400,7 +404,8 @@ int main(int argc, char **argv)
 		    else
 			arrow_360(aspect_f);
 		}
-		else {
+		else if (unknown_color > 0) {
+		    /* don't draw if unknown_color is none (transparent) */
 		    D_use_color(unknown_color);
 		    unknown_();
 		    D_use_color(arrow_color);
@@ -413,9 +418,12 @@ int main(int argc, char **argv)
 		D_use_color(arrow_color);
 		switch (aspect_c) {
 		case 0:
-		    D_use_color(x_color);
-		    draw_x();
-		    D_use_color(arrow_color);
+		    /* only draw if x_color is not none (transparent) */
+		    if (x_color > 0) {
+			D_use_color(x_color);
+			draw_x();
+			D_use_color(arrow_color);
+		    }
 		    break;
 		case 1:
 		    arrow_n();
@@ -442,9 +450,12 @@ int main(int argc, char **argv)
 		    arrow_nw();
 		    break;
 		default:
-		    D_use_color(unknown_color);
-		    unknown_();
-		    D_use_color(arrow_color);
+		    /* only draw if unknown_color is not none */
+		    if (unknown_color > 0) {
+			D_use_color(unknown_color);
+			unknown_();
+			D_use_color(arrow_color);
+		    }
 		    break;
 		}
 	    }
@@ -456,11 +467,15 @@ int main(int argc, char **argv)
 		if (aspect_c >= 15 && aspect_c <= 360)	/* start at zero? */
 		    arrow_360((double)aspect_c);
 		else if (aspect_c == 400) {
-		    D_use_color(unknown_color);
-		    unknown_();
-		    D_use_color(arrow_color);
+		    if (unknown_color > 0) {
+			/* only draw if unknown_color is not none */
+			D_use_color(unknown_color);
+			unknown_();
+			D_use_color(arrow_color);
+		    }
 		}
-		else {
+		else if (x_color > 0) {
+		    /* only draw if x_color is not none (transparent) */
 		    D_use_color(x_color);
 		    draw_x();
 		    D_use_color(arrow_color);
@@ -473,9 +488,12 @@ int main(int argc, char **argv)
 		D_use_color(arrow_color);
 
 		if (Rast_is_null_value(ptr, raster_type)) {
-		    D_use_color(x_color);
-		    draw_x();
-		    D_use_color(arrow_color);
+		    if (x_color > 0) {
+			/* only draw if x_color is not none */
+			D_use_color(x_color);
+			draw_x();
+			D_use_color(arrow_color);
+		    }
 		}
 		else if (aspect_f >= 0.0 && aspect_f <= 360.0) {
 		    if (opt7->answer)
@@ -483,7 +501,8 @@ int main(int argc, char **argv)
 		    else
 			arrow_360(90 - aspect_f);
 		}
-		else {
+		else if (unknown_color > 0) {
+		    /* only draw if unknown_color is not none */
 		    D_use_color(unknown_color);
 		    unknown_();
 		    D_use_color(arrow_color);
