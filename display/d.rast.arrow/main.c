@@ -110,46 +110,28 @@ int main(int argc, char **argv)
     opt2->options = "grass,compass,agnps,answers";
     opt2->description = _("Type of existing raster aspect map");
 
-    opt3 = G_define_option();
-    opt3->key = "arrow_color";
-    opt3->type = TYPE_STRING;
-    opt3->required = NO;
+    opt3 = G_define_standard_option(G_OPT_C_FG);
+    opt3->key = "color";
     opt3->answer = "green";
-    opt3->gisprompt = "old_color,color,color";
-    opt3->description = _("Color for drawing arrows");
+    opt3->label = _("Color for drawing arrows");
     opt3->guisection = _("Colors");
     
-    opt4 = G_define_option();
+    opt4 = G_define_standard_option(G_OPT_C_BG);
     opt4->key = "grid_color";
-    opt4->required = NO;
     opt4->answer = "gray";
-    opt4->gisprompt = "old,color_none,color";
     opt4->label = _("Color for drawing drawing grid");
-    opt4->description = _("Color in GRASS format for drawing grid"
-	" or \"none\" not drawing");
     opt4->guisection = _("Colors");
 
-    opt5 = G_define_option();
-    opt5->key = "x_color";
-    opt5->type = TYPE_STRING;
-    opt5->required = NO;
+    opt5 = G_define_standard_option(G_OPT_C_BG);
+    opt5->key = "null_color";
     opt5->answer = DEFAULT_FG_COLOR;
-    opt5->gisprompt = "old,color_none,color";
-    opt5->label = _("Color for drawing null values");
-    opt5->description = _("Color in GRASS format for drawing null values"
-	" (X symbol) or \"none\" not drawing");
+    opt5->label = _("Color for drawing null values (X symbol)");
     opt5->guisection = _("Colors");
 
-    opt6 = G_define_option();
+    opt6 = G_define_standard_option(G_OPT_C_BG);
     opt6->key = "unknown_color";
-    opt6->type = TYPE_STRING;
-    opt6->required = NO;
     opt6->answer = "red";
-    opt6->gisprompt = "old,color_none,color";
-    opt6->description = _("Color for showing unknown information or \"none\"");
-    opt6->label = _("Color for showing unknown information");
-    opt6->description = _("Color in GRASS format for showing unknown"
-	" information (? symbol) or \"none\" not showing");
+    opt6->label = _("Color for showing unknown information (? symbol)");
     opt6->guisection = _("Colors");
 
     opt9 = G_define_option();
