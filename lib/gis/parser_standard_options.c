@@ -588,7 +588,8 @@ struct Option *G_define_standard_option(int opt)
 	Opt->answer = DEFAULT_FG_COLOR;
 	Opt->gisprompt = "old,color,color";
 	Opt->label = _("Color");
-	Opt->description = _("Either a standard color name or R:G:B triplet");
+	Opt->description =
+	    _("Either a standard color name, R:G:B triplet, or \"none\"");
 	break;
     case G_OPT_C_BG:
 	Opt->key = "bgcolor";
