@@ -42,31 +42,23 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("display"));
     G_add_keyword(_("distance"));
+    G_add_keyword(_("rhumbline"));
     module->description =
 	_("Displays the rhumbline joining two longitude/latitude coordinates.");
 
-    parm.coor = G_define_option();
-    parm.coor->key = "coor";
+    parm.coor = G_define_standard_option(G_OPT_M_COORDS);
     parm.coor->key_desc = "lon1,lat1,lon2,lat2";
-    parm.coor->type = TYPE_STRING;
     parm.coor->required = YES;
     parm.coor->description = _("Starting and ending coordinates");
 
-    parm.lcolor = G_define_option();
-    parm.lcolor->key = "lcolor";
-    parm.lcolor->type = TYPE_STRING;
-    parm.lcolor->required = NO;
-    parm.lcolor->description = _("Line color");
-    parm.lcolor->gisprompt = "old_color,color,color";
-    parm.lcolor->answer = DEFAULT_FG_COLOR;
+    parm.lcolor = G_define_standard_option(G_OPT_C_FG);
+    parm.lcolor->key = "line_color";
+    parm.lcolor->label = _("Line color");
 
 #ifdef CAN_DO_DISTANCES
-    parm.tcolor = G_define_option();
-    parm.tcolor->key = "tcolor";
-    parm.tcolor->type = TYPE_STRING;
-    parm.tcolor->required = NO;
-    parm.tcolor->description = _("Text color");
-    parm.tcolor->gisprompt = "old_color,color,color";
+    parm.tcolor = G_define_option(G_OPT_M_COORDS);
+    parm.tcolor->key = "text_color";
+    parm.tcolor->label = _("Text color");
 #endif
 
     if (G_parser(argc, argv))
