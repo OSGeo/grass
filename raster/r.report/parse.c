@@ -66,17 +66,12 @@ int parse_command_line(int argc, char *argv[])
     parms.outfile->description =
 	_("If no output file given report is printed to standard output");
 
-    parms.nv = G_define_option();
-    parms.nv->key = "null";
-    parms.nv->type = TYPE_STRING;
-    parms.nv->required = NO;
-    parms.nv->multiple = NO;
+    parms.nv = G_define_standard_option(G_OPT_M_NULL_VALUE);
     parms.nv->answer = "*";
-    parms.nv->description = _("String representing no data cell value");
     parms.nv->guisection = _("Formatting");
 
     parms.pl = G_define_option();
-    parms.pl->key = "pl";
+    parms.pl->key = "page_length";
     parms.pl->type = TYPE_INTEGER;
     parms.pl->required = NO;
     sprintf(pl_desc, _("Page length (default: %d lines)"),
@@ -85,7 +80,7 @@ int parse_command_line(int argc, char *argv[])
     parms.pl->guisection = _("Formatting");
 
     parms.pw = G_define_option();
-    parms.pw->key = "pw";
+    parms.pw->key = "page_width";
     parms.pw->type = TYPE_INTEGER;
     parms.pw->required = NO;
     sprintf(pw_desc, _("Page width (default: %d characters)"),
@@ -138,12 +133,12 @@ int parse_command_line(int argc, char *argv[])
     flags.n->guisection = _("No data");
 
     flags.N = G_define_flag();
-    flags.N->key = 'N';
+    flags.N->key = 'a';
     flags.N->description = _("Do not report cells where all maps have no data");
     flags.N->guisection = _("No data");
 
     flags.C = G_define_flag();
-    flags.C->key = 'C';
+    flags.C->key = 'c';
     flags.C->description = _("Report for cats floating-point ranges (floating-point maps only)");
     flags.C->guisection = _("Floating point");
 
