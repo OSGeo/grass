@@ -99,7 +99,7 @@ int main(int argc, char **argv)
     parm.method->answer = "nearest";
 
     parm.z = G_define_option();
-    parm.z->key = "z";
+    parm.z->key = "zmultiplier";
     parm.z->type = TYPE_DOUBLE;
     parm.z->required = NO;
     parm.z->answer = "1.0";
