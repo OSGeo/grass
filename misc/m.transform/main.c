@@ -355,7 +355,6 @@ int main(int argc, char **argv)
     sum->description = _("Display summary information");
 
     xfm_pts = G_define_standard_option(G_OPT_F_INPUT);
-    xfm_pts->key = "coords";
     xfm_pts->required = NO;
     xfm_pts->label =
 	_("File containing coordinates to transform (\"-\" to read from stdin)");
