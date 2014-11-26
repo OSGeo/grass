@@ -28,7 +28,7 @@
 #%end
 
 #%option G_OPT_M_DIR
-#% key: workdir
+#% key: directory
 #% description: Path to the work directory, default is /tmp
 #% required: no
 #% answer: /tmp
