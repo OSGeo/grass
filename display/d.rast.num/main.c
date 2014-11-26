@@ -97,7 +97,7 @@ int main(int argc, char **argv)
     opt.grid_color->guisection = _("Colors");
 
     opt.prec = G_define_option();
-    opt.prec->key = "dp";
+    opt.prec->key = "precision";
     opt.prec->type = TYPE_INTEGER;
     opt.prec->required = NO;
     opt.prec->answer = "1";
