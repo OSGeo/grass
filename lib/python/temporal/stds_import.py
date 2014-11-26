@@ -273,7 +273,7 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
         try:
             gscript.run_command("g.mapset", mapset="PERMANENT",
                                 location=location,
-                                gisdbase=old_env["GISDBASE"])
+                                dbase=old_env["GISDBASE"])
         except CalledModuleError:
             gscript.fatal(_("Unable to switch to location %s") % location)
         # create default database connection
