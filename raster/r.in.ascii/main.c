@@ -96,14 +96,14 @@ int main(int argc, char *argv[])
     parm.title->description = _("Title for resultant raster map");
 
     parm.mult = G_define_option();
-    parm.mult->key = "mult";
+    parm.mult->key = "multiplier";
     parm.mult->type = TYPE_DOUBLE;
     parm.mult->description = _("Default: read from header");
     parm.mult->required = NO;
     parm.mult->label = _("Multiplier for ASCII data");
 
     parm.nv = G_define_option();
-    parm.nv->key = "nv";
+    parm.nv->key = "null_value";
     parm.nv->type = TYPE_STRING;
     parm.nv->required = NO;
     parm.nv->multiple = NO;
