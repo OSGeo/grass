@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
     zscale->guisection = _("Custom");
 
     zrot = G_define_option();
-    zrot->key = "zrot";
+    zrot->key = "zrotation";
     zrot->type = TYPE_DOUBLE;
     zrot->required = NO;
     zrot->multiple = NO;
