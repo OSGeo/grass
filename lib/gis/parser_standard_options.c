@@ -336,7 +336,7 @@ struct Option *G_define_standard_option(int opt)
     case G_OPT_R_BASENAME_INPUT:
         Opt->key = "input";
         Opt->type = TYPE_STRING;
-        Opt->key_desc = "input basename";
+        Opt->key_desc = "basename";
         Opt->required = YES;
         Opt->multiple = NO;
         Opt->gisprompt = "old,cell,raster";
@@ -345,7 +345,7 @@ struct Option *G_define_standard_option(int opt)
     case G_OPT_R_BASENAME_OUTPUT:
         Opt->key = "output";
         Opt->type = TYPE_STRING;
-        Opt->key_desc = "output basename";
+        Opt->key_desc = "basename";
         Opt->required = YES;
         Opt->multiple = NO;
         Opt->gisprompt = "new,cell,raster";
