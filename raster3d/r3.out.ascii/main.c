@@ -85,7 +85,7 @@ void setParams()
     param.output->description = _("Name for ASCII output file");
 
     param.decimals = G_define_option();
-    param.decimals->key = "dp";
+    param.decimals->key = "precision";
     param.decimals->type = TYPE_INTEGER;
     param.decimals->required = NO;
     param.decimals->multiple = NO;
@@ -93,11 +93,7 @@ void setParams()
     param.decimals->options = "0-20";
     param.decimals->description = _("Number of decimal places for floats");
 
-    param.null_val = G_define_option();
-    param.null_val->key = "null";
-    param.null_val->type = TYPE_STRING;
-    param.null_val->required = NO;
-    param.null_val->description = _("Char string to represent no data cell");
+    param.null_val = G_define_standard_option(G_OPT_M_NULL_VALUE);
     param.null_val->answer = "*";
 
     param.header = G_define_flag();
