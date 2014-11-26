@@ -110,11 +110,7 @@ int main(int argc, char *argv[])
 
     opt_input = G_define_standard_option(G_OPT_R_INPUT);
 
-    opt_output = G_define_option();
-    opt_output->key = "prefix";
-    opt_output->type = TYPE_STRING;
-    opt_output->required = YES;
-    opt_output->description = _("Prefix for output raster map(s)");
+    opt_output = G_define_standard_option(G_OPT_R_BASENAME_OUTPUT);
 
     opt_size = G_define_option();
     opt_size->key = "size";
