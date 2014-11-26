@@ -72,13 +72,13 @@ int main(int argc, char **argv)
 	_("Name for output quadrant centers map (number of points is written as category)");
 
     parm.n = G_define_option();
-    parm.n->key = "n";
+    parm.n->key = "nquadrats";
     parm.n->type = TYPE_INTEGER;
     parm.n->required = YES;
     parm.n->description = _("Number of quadrats");
 
     parm.r = G_define_option();
-    parm.r->key = "r";
+    parm.r->key = "radius";
     parm.r->type = TYPE_DOUBLE;
     parm.r->required = YES;
     parm.r->description = _("Quadrat radius");
