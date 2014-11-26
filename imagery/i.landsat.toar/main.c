@@ -77,20 +77,14 @@ int main(int argc, char *argv[])
     module->overwrite = TRUE;
 
     /* It defines the different parameters */
-    input_prefix = G_define_option();
-    input_prefix->key = "input_prefix";
+    input_prefix = G_define_standard_option(G_OPT_R_BASENAME_INPUT);
     input_prefix->label = _("Base name of input raster bands");
     input_prefix->description = _("Example: 'B.' for B.1, B.2, ...");
-    input_prefix->type = TYPE_STRING;
-    input_prefix->required = YES;
 
-    output_prefix = G_define_option();
-    output_prefix->key = "output_prefix";
+    output_prefix = G_define_standard_option(G_OPT_R_BASENAME_OUTPUT);
     output_prefix->label = _("Prefix for output raster maps");
     output_prefix->description =
 	_("Example: 'B.toar.' generates B.toar.1, B.toar.2, ...");
-    output_prefix->type = TYPE_STRING;
-    output_prefix->required = YES;
 
     metfn = G_define_standard_option(G_OPT_F_INPUT);
     metfn->key = "metfile";
