@@ -70,16 +70,12 @@ int main(int argc, char **argv)
     fs_opt->guisection = _("Format");
 
     vs_opt = G_define_standard_option(G_OPT_F_SEP);
-    vs_opt->key = "vs";
+    vs_opt->key = "vertical_separator";
     vs_opt->label = _("Output vertical record separator");
     vs_opt->answer = NULL;
     vs_opt->guisection = _("Format");
 
-    nv_opt = G_define_option();
-    nv_opt->key = "nv";
-    nv_opt->type = TYPE_STRING;
-    nv_opt->required = NO;
-    nv_opt->description = _("Null value indicator");
+    nv_opt = G_define_standard_option(G_OPT_M_NULL_VALUE);
     nv_opt->guisection = _("Format");
 
     file_opt = G_define_standard_option(G_OPT_F_OUTPUT); 
