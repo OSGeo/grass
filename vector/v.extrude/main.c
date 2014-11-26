@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
     opt.height->guisection = _("Height");
 
     opt.hcolumn = G_define_standard_option(G_OPT_DB_COLUMN);
-    opt.hcolumn->key = "hcolumn";
+    opt.hcolumn->key = "height_column";
     opt.hcolumn->multiple = NO;
     opt.hcolumn->description = _("Name of attribute column with feature height");
     opt.hcolumn->guisection = _("Height");
