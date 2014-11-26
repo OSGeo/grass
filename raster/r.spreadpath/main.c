@@ -63,7 +63,7 @@ SEGMENT in_row_seg, in_col_seg, out_seg;
 
 int main(int argc, char **argv)
 {
-    int n, verbose = 1,
+    int n, 
 	backrow, backcol,
 	col, row,
 	len, flag,
@@ -79,7 +79,6 @@ int main(int argc, char **argv)
     struct Cell_head window;
     double east, north;
     struct Option *opt1, *opt2, *opt3, *opt4;
-    struct Flag *flag1;
     struct GModule *module;
 
     G_gisinit(argv[0]);
@@ -93,40 +92,22 @@ int main(int argc, char **argv)
 	_("Recursively traces the least cost path backwards to "
 	  "cells from which the cumulative cost was determined.");
 
-    opt1 = G_define_option();
+    opt1 = G_define_standard_option(G_OPT_R_INPUT);
     opt1->key = "x_input";
-    opt1->type = TYPE_STRING;
-    opt1->required = YES;
-    opt1->gisprompt = "old,cell,raster";
     opt1->description =
 	_("Name of raster map containing back-path easting information");
 
-    opt2 = G_define_option();
+    opt2 = G_define_standard_option(G_OPT_R_INPUT);
     opt2->key = "y_input";
-    opt2->type = TYPE_STRING;
-    opt2->required = YES;
-    opt2->gisprompt = "old,cell,raster";
     opt2->description =
 	_("Name of raster map containing back-path northing information");
 
-    opt3 = G_define_option();
-    opt3->key = "coordinate";
-    opt3->type = TYPE_STRING;
+    opt3 = G_define_standard_option(G_OPT_M_COORDS);
     opt3->multiple = YES;
-    opt3->key_desc = "x,y";
     opt3->description =
 	_("The map E and N grid coordinates of starting points");
 
-    opt4 = G_define_option();
-    opt4->key = "output";
-    opt4->type = TYPE_STRING;
-    opt4->required = YES;
-    opt4->gisprompt = "new,cell,raster";
-    opt4->description = _("Name of spread path raster map");
-
-    flag1 = G_define_flag();
-    flag1->key = 'v';
-    flag1->description = _("Run verbosely");
+    opt4 = G_define_standard_option(G_OPT_R_OUTPUT);
 
     /*   Do command line parsing    */
     if (G_parser(argc, argv))
@@ -139,8 +120,6 @@ int main(int argc, char **argv)
 
     /*  Get database window parameters      */
     G_get_window(&window);
-
-    verbose = flag1->answer;
 
     /*  Check if backrow layer exists in data base  */
     search_mapset = "";
@@ -179,9 +158,7 @@ int main(int argc, char **argv)
     srows = nrows / 4 + 1;
     scols = ncols / 4 + 1;
 
-    if (verbose)
-	G_message
-	    ("\nReading the input map -%s- and -%s- and creating some temporary files...",
+    G_verbose_message(_("\eading the input map -%s- and -%s- and creating some temporary files..."),
 	     backrow_layer, backcol_layer);
 
     /* Create segmented files for back cell and output layers  */
@@ -301,8 +278,7 @@ int main(int argc, char **argv)
     }
 
     /* loop over the starting points to find the least cost paths */
-    if (verbose)
-	G_message("\nFinding the least cost paths ...");
+    G_verbose_message(_("Finding the least cost paths ..."));
 
     PRES_PT = head_start_pt;
     while (PRES_PT != NULL) {
@@ -317,17 +293,13 @@ int main(int argc, char **argv)
     /* Write pending updates by Segment_put() to outputmap */
     Segment_flush(&out_seg);
 
-    if (verbose)
-	G_message("\nWriting the output map  -%s-...", path_layer);
+    G_verbose_message(_("Writing the output map  -%s-..."), path_layer);
 
     path_fd = Rast_open_c_new(path_layer);
     for (row = 0; row < nrows; row++) {
 	Segment_get_row(&out_seg, cell, row);
 	Rast_put_row(path_fd, cell, CELL_TYPE);
     }
-
-    if (verbose)
-	G_message("finished.");
 
     Segment_release(&in_row_seg);	/* release memory  */
     Segment_release(&in_col_seg);
