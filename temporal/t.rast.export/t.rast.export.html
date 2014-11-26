@@ -1,24 +1,24 @@
 <h2>DESCRIPTION</h2>
 
 This module exports a space time raster dataset as a tar archive. The 
-archive contains the raster maps either as geotiff files or as GRASS 
-binary files exported using r.out.bin. The map specific color tables 
-are exported in case of geotiff files. In addition several meta 
-data files are created in the archive that describe the temporal 
-layout. All time stamps are stored in the file "list.txt". For each map 
+archive contains the raster maps either as GeoTIFF files or as GRASS 
+binary files exported using <em>r.out.bin</em>. The map specific color tables 
+are exported in case of GeoTIFF files. In addition several metadata files
+are created in the archive that describe the temporal layout.
+All time stamps are stored in the file "list.txt". For each map 
 one row. The name of the map, the start time and the end time are 
 written. In case of a time instance, the start time is equal to the end 
 time. The "init.txt" files stores the temporal type, the number of 
 maps, the chosen export format and some other metadata. The "proj.txt" 
 files stores the projection information as proj4 string of the location 
 the space time raster dataset was exported from. The file "readme.txt" 
-describes the file format. The output of r.info is stored in 
+describes the file format. The output of <em>r.info</em> is stored in 
 "metadata.txt".
 <p>
 The tar archive can be compressed using the <b>compress</b> option. 
 Gzip and bzip2 are available. A <b>where</b> option can be specified, 
 to export only a subset of the space time dataset. Archives exported 
-with <b>t.rast.export</b> can be importet with <b>t.rast.import</b>.
+with <em>t.rast.export</em> can be importet with <em>t.rast.import</em>.
 
 <h2>EXAMPLE</h2>
 

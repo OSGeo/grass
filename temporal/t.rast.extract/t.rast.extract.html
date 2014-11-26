@@ -3,24 +3,27 @@
 The purpose of <b>t.rast.extract</b> is to extract a subset of a space 
 time raster dataset and to store that subset in a different space time 
 raster dataset. The <b>where</b> condition is used to select the 
-subset. In addition a r.mapcalc sub-expression can be specified that 
-performs operations on all maps of the selected subset. In this 
-expression the name of the input space time raster dataset can be used 
-as simple map name. Other STRDS than the input STRDS can not be 
-specified, but any raster map. In case a r.mapcalc sub-expression is 
-defined, the base name of the resulting raster maps must be specified. 
-The r.mapcalc expression can be used to select maps as well, since by 
-default resulting empty maps are not registered in the output space 
-time raster dataset and removed after processing. The number of 
-parallel GRASS GIS processes can be specified to speed up the processing.
+subset. In addition a <em>r.mapcalc</em> sub-expression can be 
+specified that performs operations on all maps of the selected subset. 
+In this expression the name of the input space time raster dataset can 
+be used as simple map name. Other STRDS than the input STRDS can not be 
+specified, but any raster map. In case a <em>r.mapcalc</em> 
+sub-expression is defined, the base name of the resulting raster maps 
+must be specified. The <em>r.mapcalc</em> expression can be used to 
+select maps as well, since by default resulting empty maps are not 
+registered in the output space time raster dataset and removed after 
+processing. The number of parallel GRASS GIS processes can be specified 
+to speed up the processing.
 <p>
-If no r.mapcalc expression is defined, the selected maps are simply registered in
-the new created output space time raster dataset to avoid data duplication.
+If no <em>r.mapcalc</em> expression is defined, the selected maps are 
+simply registered in the new created output space time raster dataset 
+to avoid data duplication.
 
 <h2>Note</h2>
 
-The r.mapcalc sub-expression should not contain the left side "map =" of 
-a full r.mapcalc expression, only the right side, eg.: 
+The <em>r.mapcalc</em> sub-expression should not contain the left side
+<tt>"map ="</tt> of a full <em>r.mapcalc</em> expression, only the right
+side, eg.: 
 
 
 <div class="code"><pre>
