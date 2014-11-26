@@ -6,9 +6,9 @@
 #include <grass/dbmi.h>
 
 int points_analyse(FILE *, FILE *, char *, int *, int *, int *, int *, int **,
-		   int **, int, int, int, int);
+		   int **, int, int, int, int, int, int, int);
 
 int points_to_bin(FILE *, int, struct Map_info *, dbDriver *,
-		  char *, char *, int, int, int *, int, int, int, int, int);
+		  char *, char *, int, int *, int, int, int, int, int);
 
 #endif /* __LOCAL_PROTO_H__ */
