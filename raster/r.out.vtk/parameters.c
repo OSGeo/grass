@@ -79,7 +79,7 @@ void set_params()
 	_("Three (x,y,z) raster maps to create vector values [xmap,ymap,zmap]");
 
     param.elevscale = G_define_option();
-    param.elevscale->key = "elevscale";
+    param.elevscale->key = "zmultiplier";
     param.elevscale->type = TYPE_DOUBLE;
     param.elevscale->required = NO;
     param.elevscale->description = _("Scale factor for elevation");
@@ -87,7 +87,7 @@ void set_params()
     param.elevscale->answer = "1.0";
 
     param.decimals = G_define_option();
-    param.decimals->key = "dp";
+    param.decimals->key = "precision";
     param.decimals->type = TYPE_INTEGER;
     param.decimals->required = NO;
     param.decimals->multiple = NO;
