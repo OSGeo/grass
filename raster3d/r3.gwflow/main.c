@@ -75,16 +75,16 @@ void set_params(void)
 	_("Input 3D raster map with the z-part of the hydraulic conductivity tensor in [m/s]");
 
     param.q = G_define_standard_option(G_OPT_R3_INPUT);
-    param.q->key = "q";
+    param.q->key = "sink";
     param.q->required = NO;
     param.q->description = _("Input 3D raster map with sources and sinks in [m^3/s]");
 
     param.s = G_define_standard_option(G_OPT_R3_INPUT);
-    param.s->key = "s";
+    param.s->key = "yield";
     param.s->description = _("Specific yield [1/m] input 3D raster map");
 
     param.r = G_define_standard_option(G_OPT_R3_INPUT);
-    param.r->key = "r";
+    param.r->key = "recharge";
     param.r->required = NO;
     param.r->description = _("Recharge input 3D raster map in m^3/s");
 
@@ -93,19 +93,19 @@ void set_params(void)
     param.output->description = _("Output 3D raster map storing the piezometric head result of the numerical calculation");
 
     param.vector_x = G_define_standard_option(G_OPT_R3_OUTPUT);
-    param.vector_x->key = "vx";
+    param.vector_x->key = "velocity_x";
     param.vector_x->required = NO;
     param.vector_x->description =
 	_("Output 3D raster map storing the groundwater filter velocity vector part in x direction [m/s]");
 
     param.vector_y = G_define_standard_option(G_OPT_R3_OUTPUT);
-    param.vector_y->key = "vy";
+    param.vector_y->key = "velocity_y";
     param.vector_y->required = NO;
     param.vector_y->description =
 	_("Output 3D raster map storing the groundwater filter velocity vector part in y direction [m/s]");
 
     param.vector_z = G_define_standard_option(G_OPT_R3_OUTPUT);
-    param.vector_z->key = "vz";
+    param.vector_z->key = "velocity_z";
     param.vector_z->required = NO;
     param.vector_z->description =
 	_("Output 3D raster map storing the groundwater filter velocity vector part in z direction [m/s]");
