@@ -33,7 +33,7 @@ class Srs:
         :param string axisorder: Force / override axisorder ('xy' or 'yx')
     """
     def __init__(self, srs):
-        self.id = crs
+        self.id = srs
         self.naming_authority = None
         self.category = None
         self.type = None
@@ -86,7 +86,25 @@ class Srs:
         if self.code in axisorder_yx:
                 self.axisorder = 'yx'
 
+    def getcode(self):
+        """Create for example "EPSG:4326" string and return back
+        :returns: String code formated in "authority:code"
+        """
 
+        if self.authority is not None and self.code is not None:
+            return '%s:%s' % (self.authority, self.code)
+        return None
+
+    def getcodeurn(self):
+        """Create for example "urn:ogc:def:crs:EPSG::4326" string and return back
+        :returns: String code formated in "urn:ogc:def:authority:code"
+        """
+
+        return 'urn:%s:def:crs:%s:%s:%s' % (
+                    (self.naming_authority and self.naming_authority or "ogc"),
+                                    (self.authority or ""),
+                                    (self.version or ""),
+                                    (self.code or ""))
 
 axisorder_yx = frozenset([
     4326,
