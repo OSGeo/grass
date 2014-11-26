@@ -19,7 +19,7 @@ void define_options(struct params *params, struct flags *flags)
     params->layer->guisection = _("Selection");
 
     params->dsn = G_define_option();
-    params->dsn->key = "dsn";
+    params->dsn->key = "output";
     params->dsn->type = TYPE_STRING;
     params->dsn->required = YES;
     params->dsn->label = _("Name for output PostGIS datasource");
@@ -27,7 +27,7 @@ void define_options(struct params *params, struct flags *flags)
         _("Starts with 'PG' prefix, eg. 'PG:dbname=grass'");
     
     params->olayer = G_define_option();
-    params->olayer->key = "olayer";
+    params->olayer->key = "output_layer";
     params->olayer->type = TYPE_STRING;
     params->olayer->required = NO;
     params->olayer->key_desc = "name";
@@ -38,7 +38,7 @@ void define_options(struct params *params, struct flags *flags)
     params->olayer->guisection = _("Creation");
 
     params->olink = G_define_standard_option(G_OPT_V_OUTPUT);
-    params->olink->key = "olink";
+    params->olink->key = "output_link";
     params->olink->required = NO;
     params->olink->label = 
         _("Name for output vector map defined as a link to the PostGIS feature table");
