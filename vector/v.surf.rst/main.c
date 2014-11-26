@@ -221,7 +221,7 @@ int main(int argc, char *argv[])
     parm.mcurv->guisection = _("Outputs");
 
     parm.devi = G_define_standard_option(G_OPT_V_OUTPUT);
-    parm.devi->key = "devi";
+    parm.devi->key = "deviations";
     parm.devi->required = NO;
     parm.devi->description = _("Name for output deviations vector point map");
     parm.devi->guisection = _("Outputs");

@@ -39,12 +39,9 @@ int main(int argc, char **argv)
 	"separator (default is comma).";
 
     /* set up option */
-    sep = G_define_option();
-    sep->key = "fs";
-    sep->type = TYPE_STRING;
-    sep->required = NO;
+    sep = G_define_standard_option(G_OPT_F_SEP);
+    sep->key = "separator";
     sep->description = "Character for separation of list items";
-    sep->answer = ",";
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);

@@ -71,23 +71,23 @@ int main(int argc, char *argv[])
     
     /* Define different options */
     input_RNET = G_define_standard_option(G_OPT_R_INPUT);
-    input_RNET->key = "netradiation";
+    input_RNET->key = "net_radiation";
     input_RNET->description = _("Name of input net radiation raster map [W/m2]");
 
     input_G0 = G_define_standard_option(G_OPT_R_INPUT);
-    input_G0->key = "soilheatflux";
+    input_G0->key = "soil_heatflux";
     input_G0->description = _("Name of input soil heat flux raster map [W/m2]");
 
     input_TEMPKA = G_define_standard_option(G_OPT_R_INPUT);
-    input_TEMPKA->key = "airtemperature";
+    input_TEMPKA->key = "air_temperature";
     input_TEMPKA->description = _("Name of input air temperature raster map [K]");
 
     input_PATM = G_define_standard_option(G_OPT_R_INPUT);
-    input_PATM->key = "atmosphericpressure";
+    input_PATM->key = "atmospheric_pressure";
     input_PATM->description = _("Name of input atmospheric pressure raster map [millibars]");
 
     input_PT = G_define_option();
-    input_PT->key = "priestleytaylorcoef";
+    input_PT->key = "priestley_taylor_coef";
     input_PT->type = TYPE_DOUBLE;
     input_PT->required = YES;
     input_PT->description = _("Priestley-Taylor coefficient");
