@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
 
     npart_opt = G_define_option();
-    npart_opt->key = "k";
+    npart_opt->key = "npartitions";
     npart_opt->type = TYPE_INTEGER;
     npart_opt->required = YES;
     npart_opt->label = _("Number of partitions");
