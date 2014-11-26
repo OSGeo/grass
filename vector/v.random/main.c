@@ -103,12 +103,13 @@ int main(int argc, char *argv[])
     parm.output = G_define_standard_option(G_OPT_V_OUTPUT);
 
     parm.nsites = G_define_option();
-    parm.nsites->key = "n";
+    parm.nsites->key = "npoints";
     parm.nsites->type = TYPE_INTEGER;
     parm.nsites->required = YES;
     parm.nsites->description = _("Number of points to be created");
 
     parm.input = G_define_standard_option(G_OPT_V_INPUT);
+    parm.input->key = "restrict";
     parm.input->required = NO;
     parm.input->description = _("Restrict points to areas in input vector");
     parm.input->guisection = _("Selection");
