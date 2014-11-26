@@ -266,7 +266,8 @@ typedef enum
     G_OPT_M_COLR,               /*!< color rules */
     G_OPT_M_DIR,                /*!< directory input */    
     G_OPT_M_REGION,             /*!< saved region */
-
+    G_OPT_M_NULL_VALUE,         /*!< null value string */
+    
     G_OPT_STDS_INPUT,           /*!< old input space time dataset of type strds, str3ds or stvds */
     G_OPT_STDS_INPUTS,          /*!< old input space time datasets */
     G_OPT_STDS_OUTPUT,          /*!< new output space time dataset */
