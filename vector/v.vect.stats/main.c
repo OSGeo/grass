@@ -150,11 +150,11 @@ int main(int argc, char *argv[])
     point_type_opt->required = NO;
 
     point_field_opt = G_define_standard_option(G_OPT_V_FIELD);
-    point_field_opt->key = "player";
+    point_field_opt->key = "points_layer";
     point_field_opt->label = _("Layer number for points map");
 
     area_field_opt = G_define_standard_option(G_OPT_V_FIELD);
-    area_field_opt->key = "alayer";
+    area_field_opt->key = "areas_layer";
     area_field_opt->label = _("Layer number for area map");
 
     method_opt = G_define_option();
@@ -174,7 +174,7 @@ int main(int argc, char *argv[])
     method_opt->description = _("Method for aggregate statistics");
 
     point_column_opt = G_define_standard_option(G_OPT_DB_COLUMN);
-    point_column_opt->key = "pcolumn";
+    point_column_opt->key = "points_column";
     point_column_opt->required = NO;
     point_column_opt->multiple = NO;
     point_column_opt->label =
@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
     point_column_opt->description = _("Column of points map must be numeric");
 
     count_column_opt = G_define_option();
-    count_column_opt->key = "ccolumn";
+    count_column_opt->key = "count_column";
     count_column_opt->type = TYPE_STRING;
     count_column_opt->required = NO;
     count_column_opt->multiple = NO;
@@ -191,7 +191,7 @@ int main(int argc, char *argv[])
 	_("Column to hold points count, must be of type integer, will be created if not existing");
 
     stats_column_opt = G_define_option();
-    stats_column_opt->key = "scolumn";
+    stats_column_opt->key = "stats_column";
     stats_column_opt->type = TYPE_STRING;
     stats_column_opt->required = NO;
     stats_column_opt->multiple = NO;
