@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
     parm.fs->answer = "tab";
 
     parm.raster = G_define_standard_option(G_OPT_R_INPUT);
-    parm.raster->key = "rast";
+    parm.raster->key = "raster";
     parm.raster->required = NO;
     parm.raster->description =
 	_("Raster map from which to copy category table");
