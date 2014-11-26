@@ -99,12 +99,7 @@ int main(int argc, char *argv[])
             _("use 'coor' and 'box' options"));
     position_opt->descriptions = desc;
 
-    coord = G_define_option();
-    coord->key = "coor";
-    coord->key_desc = "x,y";
-    coord->type = TYPE_DOUBLE;
-    coord->required = NO;
-    coord->multiple = NO;
+    coord = G_define_standard_option(G_OPT_M_COORDS);
     coord->description =
 	_("Lower left easting and northing coordinates of map");
 

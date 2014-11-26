@@ -76,7 +76,7 @@ void fatal_error(void *map, int *fd, int depths, char *errorMsg)
 void set_params()
 {
     param.input = G_define_standard_option(G_OPT_R_INPUTS);
-    param.input->description = _("2d raster maps which represent the slices");
+    param.input->description = _("2D raster maps which represent the slices");
 
     param.output = G_define_standard_option(G_OPT_R3_OUTPUT);
 
@@ -223,11 +223,11 @@ int main(int argc, char *argv[])
     rows = Rast_window_rows();
     cols = Rast_window_cols();
 
-    G_debug(2, "Check the 2d and 3d region settings");
+    G_debug(2, "Check the 2D and 3D region settings");
 
     /*If not equal, set the 2D windows correct */
     if (rows != region.rows || cols != region.cols) {
-        G_message(_("The 2D and 3D region settings are different. I will use the 3D region settings to adjust the 2D region."));
+        G_message(_("The 2D and 3D region settings are different. Using the 3D region settings to adjust the 2D region."));
         G_get_set_window(&window2d);
         window2d.ns_res = region.ns_res;
         window2d.ew_res = region.ew_res;
