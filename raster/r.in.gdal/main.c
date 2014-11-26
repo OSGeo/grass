@@ -142,7 +142,7 @@ int main(int argc, char *argv[])
     parm.outloc->key_desc = "name";
 
     parm.rat = G_define_option();
-    parm.rat->key = "rat";
+    parm.rat->key = "table";
     parm.rat->type = TYPE_STRING;
     parm.rat->required = NO;
     parm.rat->label = _("File prefix for raster attribute tables");
