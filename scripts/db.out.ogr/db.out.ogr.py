@@ -26,7 +26,7 @@
 #%end
 
 #%option G_OPT_F_OUTPUT
-#% key: dsn
+#% key: output
 #% description: Table file to be exported or DB connection string
 #% required : yes
 #%end
@@ -63,14 +63,14 @@ def main():
     input = options['input']
     layer = options['layer']
     format = options['format']
-    dsn = options['dsn']
+    output = options['output']
     table = options['table']
 
     if format.lower() == 'dbf':
 	format = "ESRI_Shapefile"
 
     if format.lower() == 'csv':
-	olayer = basename(dsn, 'csv')
+	olayer = basename(output, 'csv')
     else:
 	olayer = None
 
@@ -82,7 +82,7 @@ def main():
     if olayer:
         try:
             grass.run_command('v.out.ogr', quiet=True, input=input, layer=layer,
-                              dsn=dsn,
+                              output=output,
                               format=format, type='point,line,area',
                               olayer=olayer)
         except CalledModuleError:
@@ -91,24 +91,24 @@ def main():
     else:
         try:
             grass.run_command('v.out.ogr', quiet=True, input=input,
-                              layer=layer, dsn=dsn,
+                              layer=layer, output=output,
                               format=format, type='point,line,area')
         except CalledModuleError:
             grass.fatal(_("Module <%s> failed") % 'v.out.ogr')
 
     if format == "ESRI_Shapefile":
 	exts = ['shp', 'shx', 'prj']
-	if dsn.endswith('.dbf'):
-	    outname = basename(dsn, 'dbf')
+	if output.endswith('.dbf'):
+	    outname = basename(output, 'dbf')
 	    for ext in exts:
 		try_remove("%s.%s" % (outname, ext))
 	    outname += '.dbf'
 	else:
 	    for ext in exts:
-		try_remove(os.path.join(dsn, "%s.%s" % (input, ext)))
-	    outname = os.path.join(dsn, input + ".dbf")
+		try_remove(os.path.join(output, "%s.%s" % (input, ext)))
+	    outname = os.path.join(output, input + ".dbf")
     elif format.lower() == 'csv':
-	outname = dsn + '.csv'
+	outname = output + '.csv'
     else:
 	outname = input
 

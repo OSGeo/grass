@@ -61,7 +61,7 @@ multi-features are not supported by all formats.
 Export lines from GRASS vector map to Shapefile format:
 
 <div class="code"><pre>
-v.out.ogr input=lines type=line dsn=lines.shp
+v.out.ogr input=lines type=line output=lines.shp
 </pre></div>
 
 <p>
@@ -69,34 +69,34 @@ Export areas from GRASS vector map to Shapefile format, converting
 islands (holes) to filled polygons:
 
 <div class="code"><pre>
-v.out.ogr -c input=areas_islands type=area dsn=areas_islands.shp
+v.out.ogr -c input=areas_islands type=area output=areas_islands.shp
 </pre></div>
 
 <p>
 Export 3D lines from GRASS vector map to Shapefile format:
 
 <div class="code"><pre>
-v.out.ogr input=lines_3d type=line dsn=lines_3d.shp lco="SHPT=ARCZ"
+v.out.ogr input=lines_3d type=line output=lines_3d.shp lco="SHPT=ARCZ"
 </pre></div>
 
 <p>
 Export 3D points (e.g., Lidar points) from GRASS vector map to Shapefile format
 
 <div class="code"><pre>
-v.out.ogr points_3d type=point dsn=points_3d.shp lco="SHPT=POINTZ"
+v.out.ogr points_3d type=point output=points_3d.shp lco="SHPT=POINTZ"
 </pre></div>
 
 <p>
 Export 3D faces from GRASS vector map to Shapefile format:
 <div class="code"><pre>
-v.out.ogr input=objects_3d type=face dsn=faces_3d.shp lco="SHPT=POLYGONZ"
+v.out.ogr input=objects_3d type=face output=faces_3d.shp lco="SHPT=POLYGONZ"
 </pre></div>
 
 <p>
 Export 3D faces from GRASS vector map to Shapefile format, automatic 3D setting:
 
 <div class="code"><pre>
-v.out.ogr input=objects_3d type=face dsn=faces_3d.shp"
+v.out.ogr input=objects_3d type=face output=faces_3d.shp"
 </pre></div>
 
 <h3>Export to GML</h3>
@@ -105,7 +105,7 @@ Export lines from GRASS vector map to GML format
  (generates '/tmp/testogr.gml' file with layer 'testogr'):
 
 <div class="code"><pre>
-v.out.ogr input=multi type=line dsn=/tmp/testogr.gml olayer=testogr format=GML 
+v.out.ogr input=multi type=line output=/tmp/testogr.gml olayer=testogr format=GML 
 </pre></div>
 
 <h3>Export to PostgreSQL/PostGIS</h3>
@@ -113,7 +113,7 @@ v.out.ogr input=multi type=line dsn=/tmp/testogr.gml olayer=testogr format=GML
 Export areas from GRASS vector map to PostGIS database:
 
 <div class="code"><pre>
-v.out.ogr input=polygons type=area dsn="PG:host=localhost dbname=postgis user=postgres" olayer=polymap format=PostgreSQL
+v.out.ogr input=polygons type=area output="PG:host=localhost dbname=postgis user=postgres" olayer=polymap format=PostgreSQL
 </pre></div>
 
 <i>Note:</i> For exporting GRASS vector data to PostGIS database can
@@ -127,7 +127,7 @@ simple features also topological format (PostGIS Topology).
 Export faces (3D vectors) from GRASS vector map to KML format for Google Earth:
 
 <div class="code"><pre>
-v.out.ogr input=buildings_3d dsn=buildings_3d.kml olayer=buildings_3d format=KML type=face
+v.out.ogr input=buildings_3d output=buildings_3d.kml olayer=buildings_3d format=KML type=face
 </pre></div>
 
 <p>
@@ -149,7 +149,7 @@ v.patch input=random3d_a,random3d_b output=random3d
 v.hull input=random3d output="random3d_hull"
 
 # export to KML 3D
-v.out.ogr input=random3d_hull dsn=random3d_hull.kml format=KML type=face dsco="AltitudeMode=absolute"
+v.out.ogr input=random3d_hull output=random3d_hull.kml format=KML type=face dsco="AltitudeMode=absolute"
 
 # now open KML file 'random3d_hull.kml' in Google Earth or NASA WorldWind or ...
 </pre></div>
