@@ -21,7 +21,7 @@
 #%End
 
 #%option G_OPT_F_INPUT
-#% key: dsn
+#% key: input
 #% gisprompt: old,bin,file
 #% description: Table file to be imported or DB connection string
 #% required : yes
@@ -56,7 +56,7 @@ from grass.exceptions import CalledModuleError
 
 
 def main():
-    dsn = options['dsn']
+    input = options['input']
     db_table = options['db_table']
     output = options['output']
     key = options['key']
@@ -65,8 +65,6 @@ def main():
 
     if db_table:
 	input = db_table
-    else:
-	input = dsn
 
     if not output:
 	tmpname = input.replace('.', '_')
@@ -87,7 +85,7 @@ def main():
 	layer = None
 
     try:
-        grass.run_command('v.in.ogr', flags='o', dsn=dsn, output=output,
+        grass.run_command('v.in.ogr', flags='o', input=input, output=output,
                           layer=layer, quiet=True)
     except CalledModuleError:
         if db_table:
