@@ -38,7 +38,7 @@
 #% required: no
 #%end
 #%option G_OPT_DB_COLUMN
-#% key: qcolumn
+#% key: query_column
 #% description: Name of other attribute column to query, can be combination of columns (e.g. co1+col2)
 #%end
 #%option G_OPT_DB_WHERE
