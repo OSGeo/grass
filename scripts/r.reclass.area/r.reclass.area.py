@@ -37,16 +37,19 @@
 #%end
 
 #%option
-#% key: lesser
+#% key: value
 #% type: double
-#% description: Lesser value option that sets the <= area size limit [hectares]
+#% description: Value option that sets the area size limit [hectares]
+#% required: yes
 #% guisection: Area
 #%end
 
 #%option
-#% key: greater
-#% type: double
-#% description: Greater value option that sets the >= area size limit [hectares]
+#% key: mode
+#% type: string
+#% description: Lesser or greater than the value
+#% options: lesser,greater
+#% required: yes
 #% guisection: Area
 #%end
 
@@ -182,14 +185,13 @@ def rmarea(infile, outfile, thresh, coef):
 
 def main():
     infile = options['input']
-    lesser = options['lesser']
-    greater = options['greater']
+    value = options['value']
+    mode = options['mode']
     outfile = options['output']
-    global METHOD
-    METHOD = options['method']
+    global method
+    method = options['method']
     clumped = flags['c']
     diagonal = flags['d']
-    islesser = False
 
     # check for unsupported locations
     in_proj = grass.parse_command('g.proj', flags='g')
@@ -199,24 +201,16 @@ def main():
         grass.fatal(_("xy-locations are not supported"))
 
     # check lesser and greater parameters
-    if not lesser and not greater:
-        grass.fatal(_("You have to specify one of lesser= or greater="))
-    if lesser and greater:
-        grass.fatal(_("lesser= and greater= are mutually exclusive"))
-    if lesser:
-        limit = float(lesser)
-        islesser = True
-    if greater and METHOD == 'rmarea':
-        grass.fatal(_("You have to specify lesser= with method='rmarea'"))
-    elif greater:
-        limit = float(greater)
-
+    limit = float(value)
+    if mode == 'greater' and method == 'rmarea':
+        grass.fatal(_("You have to specify mode='lesser' with method='rmarea'"))
+    
     if not grass.find_file(infile)['name']:
         grass.fatal(_("Raster map <%s> not found") % infile)
 
-    if METHOD == 'reclass':
-        reclass(infile, outfile, limit, clumped, diagonal, islesser)
-    elif METHOD == 'rmarea':
+    if method == 'reclass':
+        reclass(infile, outfile, limit, clumped, diagonal, mode == 'lesser')
+    elif method == 'rmarea':
         rmarea(infile, outfile, limit, in_proj['meters'])
 
     grass.message(_("Generating output raster map <%s>...") % outfile)
@@ -226,7 +220,7 @@ def cleanup():
     """!Delete temporary maps"""
     TMPRAST.reverse()  # reclassed map first
     for mapp in TMPRAST:
-        if METHOD == 'rmarea':
+        if method == 'rmarea':
             grass.run_command("g.remove", flags='f', type='vect', name=mapp,
                               quiet=True)
         else:
