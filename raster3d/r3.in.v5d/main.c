@@ -61,28 +61,13 @@ static paramType param;
 
 static void setParams()
 {
-    param.input = G_define_option();
-    param.input->key = "input";
-    param.input->type = TYPE_STRING;
-    param.input->required = YES;
-    param.input->description = "V5D raster map to be imported";
+    param.input = G_define_standard_option(G_OPT_F_INPUT);
+    param.input->description = _("Name of V5D raster file to be imported");
 
-    param.output = G_define_option();
-    param.output->key = "output";
-    param.output->type = TYPE_STRING;
-    param.output->required = YES;
-    param.output->multiple = NO;
-    param.output->gisprompt = "any,grid3,3d-raster";
-    param.output->description = "Name for 3D raster map";
+    param.output = G_define_standard_option(G_OPT_R3_OUTPUT);
 
-    param.nv = G_define_option();
-    param.nv->key = "nv";
-    param.nv->type = TYPE_STRING;
-    param.nv->required = NO;
-    param.nv->multiple = NO;
+    param.nv = G_define_standard_option(G_OPT_M_NULL_VALUE);
     param.nv->answer = "none";
-    param.nv->description =
-	"String representing NULL value data cell (use 'none' if no such value)";
 }
 
 /*---------------------------------------------------------------------------*/
