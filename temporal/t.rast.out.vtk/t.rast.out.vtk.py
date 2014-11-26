@@ -26,7 +26,7 @@
 #%end
 
 #%option
-#% key: expdir
+#% key: directory
 #% type: string
 #% description: Path to the export directory
 #% required: yes
