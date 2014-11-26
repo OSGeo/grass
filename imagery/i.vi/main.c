@@ -101,6 +101,8 @@ int main(int argc, char *argv[])
 	_("Name of input red channel surface reflectance map");
     opt.red->description = _("Range: [0.0;1.0]");
 
+    opt.output = G_define_standard_option(G_OPT_R_OUTPUT);
+
     opt.viname = G_define_option();
     opt.viname->key = "viname";
     opt.viname->type = TYPE_STRING;
@@ -131,8 +133,6 @@ int main(int argc, char *argv[])
     opt.viname->answer = "ndvi";
     opt.viname->key_desc = _("type");
 
-    opt.output = G_define_standard_option(G_OPT_R_OUTPUT);
-
     opt.nir = G_define_standard_option(G_OPT_R_INPUT);
     opt.nir->key = "nir";
     opt.nir->required = NO;
@@ -158,7 +158,7 @@ int main(int argc, char *argv[])
     opt.blue->guisection = _("Optional inputs");
 
     opt.chan5 = G_define_standard_option(G_OPT_R_INPUT);
-    opt.chan5->key = "chan5";
+    opt.chan5->key = "band5";
     opt.chan5->required = NO;
     opt.chan5->label =
 	_("Name of input 5th channel surface reflectance map");
@@ -166,7 +166,7 @@ int main(int argc, char *argv[])
     opt.chan5->guisection = _("Optional inputs");
 
     opt.chan7 = G_define_standard_option(G_OPT_R_INPUT);
-    opt.chan7->key = "chan7";
+    opt.chan7->key = "band7";
     opt.chan7->required = NO;
     opt.chan7->label =
 	_("Name of input 7th channel surface reflectance map");
