@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
     val->description = _("Rectification polynomial order (1-3)");
 
     tres = G_define_option();
-    tres->key = "res";
+    tres->key = "resolution";
     tres->type = TYPE_DOUBLE;
     tres->required = NO;
     tres->description = _("Target resolution (ignored if -c flag used)");
