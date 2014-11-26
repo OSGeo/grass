@@ -56,7 +56,7 @@ int main(int argc, char *argv[])
     output_opt->description = _("Name for output 3D raster map(s)");
 
     block_opt = G_define_option();
-    block_opt->key = "block_size";
+    block_opt->key = "blocksize";
     block_opt->multiple = TRUE;
     block_opt->answer = "30,30,20"; /* based on testing */
     block_opt->key_desc = "size_x,size_y,size_z";

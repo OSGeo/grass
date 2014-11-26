@@ -1,11 +1,14 @@
 <h2>DESCRIPTION</h2>
-Module <em>r3.gradient</em> computes gradient from a 3D raster map.
-Results are three 3D raster maps describing the x, y, z components of the computed gradient field.
+
+Module <em>r3.gradient</em> computes gradient from a 3D raster map. 
+Results are three 3D raster maps describing the x, y, z components of 
+the computed gradient field.
 
 <h2>EXAMPLES</h2>
+
 <div class="code"><pre>
 # create a 3D raster
-g.region s=0 n=100 w=0 e=100 b=0 t=100
+g.region s=0 n=100 w=0 e=100 b=0 t=100 -p
 r3.mapcalc "test_gradient = sqrt(row()*row() +col()*col()+ depth()*depth())"
 
 # compute gradient
@@ -13,13 +16,16 @@ r3.gradient input=test_gradient output=grad_x,grad_y,grad_z
 </pre></div>
 
 <h2>SEE ALSO</h2>
+
 <em>
 <a href="r3.flow.html">r3.flow</a>,
 <a href="r.flow.html">r.flow</a>
 </em>
 
 <h2>AUTHORS</h2>
-Anna Petrasova, <a href="http://geospatial.ncsu.edu/osgeorel/">NCSU OSGeoREL</a>, developed during GSoC 2014.
+
+Anna Petrasova, <a href="http://geospatial.ncsu.edu/osgeorel/">NCSU OSGeoREL</a>,
+developed during GSoC 2014.
 
 <p>
 <i>Last changed: $Date$</i>

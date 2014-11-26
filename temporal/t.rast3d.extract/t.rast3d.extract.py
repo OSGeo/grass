@@ -40,7 +40,7 @@
 #%option
 #% key: basename
 #% type: string
-#% description: Base name of the new created 3D raster maps
+#% description: Basename of the new generated 3D raster maps
 #% required: no
 #% multiple: no
 #%end
