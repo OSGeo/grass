@@ -141,7 +141,7 @@ built-in <em>GRASS-PostGIS data provider</em>.
 
 <h3>GRASS native format</h3>
 
-To restore original settings, ie. use GRASS native format, type:
+To restore original settings, ie. use the GRASS native format, type:
 
 <div class="code"><pre>
 v.external.out -r
@@ -152,10 +152,12 @@ v.external.out -r
 Current settings can be stored to file by specifying <b>output</b> option.
 
 <div class="code"><pre>
-# define output PostGIS database for GRASS calculation results stored as topological elements:
-v.external.out output=PG:dbname=gisdb format=PostgreSQL options=topology=YES output=gisdb_topo.txt
+# define output PostGIS database for GRASS calculation with
+# results stored as topological elements:
+v.external.out output=PG:dbname=gisdb format=PostgreSQL \
+  options=topology=YES savesettings=gisdb_topo.txt
 
-# do some processing in PostGIS Topology
+# ... and do some processing in PostGIS Topology
 </pre></div>
 
 Back to native format:
@@ -166,12 +168,13 @@ v.external.out -r
 # do some processing in native format
 </pre></div>
 
-Restore previous settings from &quot;gisdb_topo.txt&quot; file by specifying <b>input</b> option.
+Restore previous settings from &quot;gisdb_topo.txt&quot; file by 
+specifying <b>loadsettings</b> option.
 
 <div class="code"><pre>
-v.external.out output=gisdb_topo.txt
+v.external.out loadsettings=gisdb_topo.txt
 
-# do some processing in PostGIS Topology
+# ... and do some processing in PostGIS Topology
 </pre></div>
 
 <h2>REFERENCES</h2>
