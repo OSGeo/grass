@@ -44,7 +44,7 @@
  * or tangential curvature filename required
  * usage: r.slope.aspect [-av] elevation=input slope=output1 aspect=output2
  *	pcurv=output3 tcurv=output4 format=name prec=name zfactor=value
- *	min_slp_allowed=value dx=output5 dy=output6 dxx=output7 
+ *	min_slope=value dx=output5 dy=output6 dxx=output7 
  *      dyy=output8 dxy=output9
  * -a don't align window
  * -q quiet
@@ -128,7 +128,7 @@ int main(int argc, char *argv[])
     double tan_ans;
     double key;
     double slp_in_perc, slp_in_deg;
-    double min_slp = 900., max_slp = 0., min_slp_allowed;
+    double min_slp = 900., max_slp = 0., min_slope;
     int low, hi, test = 0;
     int deg = 0;
     int perc = 0;
@@ -137,7 +137,7 @@ int main(int argc, char *argv[])
     struct
     {
 	struct Option *elevation, *slope_fmt, *slope, *aspect, *pcurv, *tcurv,
-	    *zfactor, *min_slp_allowed, *out_precision,
+	    *zfactor, *min_slope, *out_precision,
 	    *dx, *dy, *dxx, *dyy, *dxy;
     } parm;
     struct
@@ -244,14 +244,14 @@ int main(int argc, char *argv[])
     parm.zfactor->answer = "1.0";
     parm.zfactor->guisection = _("Settings");
 
-    parm.min_slp_allowed = G_define_option();
-    parm.min_slp_allowed->key = "min_slope";
-    parm.min_slp_allowed->description =
+    parm.min_slope = G_define_option();
+    parm.min_slope->key = "min_slope";
+    parm.min_slope->description =
 	_("Minimum slope value (in percent) for which aspect is computed");
-    parm.min_slp_allowed->type = TYPE_DOUBLE;
-    parm.min_slp_allowed->required = NO;
-    parm.min_slp_allowed->answer = "0.0";
-    parm.min_slp_allowed->guisection = _("Settings");
+    parm.min_slope->type = TYPE_DOUBLE;
+    parm.min_slope->required = NO;
+    parm.min_slope->answer = "0.0";
+    parm.min_slope->guisection = _("Settings");
 
     flag.a = G_define_flag();
     flag.a->key = 'a';
@@ -314,11 +314,11 @@ int main(int argc, char *argv[])
 		      parm.zfactor->key, parm.zfactor->answer);
     }
 
-    if (sscanf(parm.min_slp_allowed->answer, "%lf", &min_slp_allowed) != 1 ||
-	min_slp_allowed < 0.0) {
+    if (sscanf(parm.min_slope->answer, "%lf", &min_slope) != 1 ||
+	min_slope < 0.0) {
 	G_fatal_error(_("%s=%s - must be a non-negative number"),
-		      parm.min_slp_allowed->key,
-		      parm.min_slp_allowed->answer);
+		      parm.min_slope->key,
+		      parm.min_slope->answer);
     }
 
     slope_fmt = parm.slope_fmt->answer;
@@ -746,7 +746,7 @@ int main(int argc, char *argv[])
 		if (max_slp < slp_in_perc)
 		    max_slp = slp_in_perc;
 	    }
-	    if (slp_in_perc < min_slp_allowed)
+	    if (slp_in_perc < min_slope)
 		slp_in_perc = 0.;
 
 	    if (deg && out_type == CELL_TYPE) {
@@ -808,7 +808,7 @@ int main(int argc, char *argv[])
 
 		/* if it's not the case that the slope for this cell 
 		   is below specified minimum */
-		if (!((slope_fd > 0) && (slp_in_perc < min_slp_allowed))) {
+		if (!((slope_fd > 0) && (slp_in_perc < min_slope))) {
 		    if (out_type == CELL_TYPE)
 			*((CELL *) asp_ptr) = (CELL) (aspect + .5);
 		    else
@@ -1040,7 +1040,7 @@ int main(int argc, char *argv[])
 	Rast_short_history(aspect_name, "raster", &hist);
 	Rast_append_format_history(&hist, "aspect map elev = %s", elev_name);
 	Rast_append_format_history(&hist, "zfactor = %.2f", zfactor);
-	Rast_append_format_history(&hist, "min_slp_allowed = %f", min_slp_allowed);
+	Rast_append_format_history(&hist, "min_slope = %f", min_slope);
 	Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file %s", elev_name);
 	Rast_command_history(&hist);
 	Rast_write_history(aspect_name, &hist);
@@ -1150,7 +1150,7 @@ int main(int argc, char *argv[])
 	Rast_append_format_history(&hist, "slope map elev = %s", elev_name);
 	Rast_append_format_history(&hist, "zfactor = %.2f format = %s", zfactor,
 		parm.slope_fmt->answer);
-	Rast_append_format_history(&hist, "min_slp_allowed = %f", min_slp_allowed);
+	Rast_append_format_history(&hist, "min_slope = %f", min_slope);
 	Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file %s", elev_name);
 	Rast_command_history(&hist);
 	Rast_write_history(slope_name, &hist);
@@ -1222,7 +1222,7 @@ int main(int argc, char *argv[])
 	Rast_short_history(pcurv_name, "raster", &hist);
 	Rast_append_format_history(&hist, "profile curve map elev = %s", elev_name);
 	Rast_append_format_history(&hist, "zfactor = %.2f", zfactor);
-	Rast_append_format_history(&hist, "min_slp_allowed = %f", min_slp_allowed);
+	Rast_append_format_history(&hist, "min_slope = %f", min_slope);
 	Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file %s", elev_name);
 	Rast_command_history(&hist);
 	Rast_write_history(pcurv_name, &hist);
@@ -1249,7 +1249,7 @@ int main(int argc, char *argv[])
 	Rast_short_history(tcurv_name, "raster", &hist);
 	Rast_append_format_history(&hist, "tangential curve map elev = %s", elev_name);
 	Rast_append_format_history(&hist, "zfactor = %.2f", zfactor);
-	Rast_append_format_history(&hist, "min_slp_allowed = %f", min_slp_allowed);
+	Rast_append_format_history(&hist, "min_slope = %f", min_slope);
 	Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file %s", elev_name);
 	Rast_command_history(&hist);
 	Rast_write_history(tcurv_name, &hist);
@@ -1274,7 +1274,7 @@ int main(int argc, char *argv[])
 	Rast_short_history(dx_name, "raster", &hist);
 	Rast_append_format_history(&hist, "E-W slope map elev = %s", elev_name);
 	Rast_append_format_history(&hist, "zfactor = %.2f", zfactor);
-	Rast_append_format_history(&hist, "min_slp_allowed = %f", min_slp_allowed);
+	Rast_append_format_history(&hist, "min_slope = %f", min_slope);
 	Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file %s", elev_name);
 	Rast_command_history(&hist);
 	Rast_write_history(dx_name, &hist);
@@ -1299,7 +1299,7 @@ int main(int argc, char *argv[])
 	Rast_short_history(dy_name, "raster", &hist);
 	Rast_append_format_history(&hist, "N-S slope map elev = %s", elev_name);
 	Rast_append_format_history(&hist, "zfactor = %.2f", zfactor);
-	Rast_append_format_history(&hist, "min_slp_allowed = %f", min_slp_allowed);
+	Rast_append_format_history(&hist, "min_slope = %f", min_slope);
 	Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file %s", elev_name);
 	Rast_command_history(&hist);
 	Rast_write_history(dy_name, &hist);
@@ -1324,7 +1324,7 @@ int main(int argc, char *argv[])
 	Rast_short_history(dxx_name, "raster", &hist);
 	Rast_append_format_history(&hist, "DXX map elev = %s", elev_name);
 	Rast_append_format_history(&hist, "zfactor = %.2f", zfactor);
-	Rast_append_format_history(&hist, "min_slp_allowed = %f", min_slp_allowed);
+	Rast_append_format_history(&hist, "min_slope = %f", min_slope);
 	Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file %s", elev_name);
 	Rast_command_history(&hist);
 	Rast_write_history(dxx_name, &hist);
@@ -1349,7 +1349,7 @@ int main(int argc, char *argv[])
 	Rast_short_history(dyy_name, "raster", &hist);
 	Rast_append_format_history(&hist, "DYY map elev = %s", elev_name);
 	Rast_append_format_history(&hist, "zfactor = %.2f", zfactor);
-	Rast_append_format_history(&hist, "min_slp_allowed = %f", min_slp_allowed);
+	Rast_append_format_history(&hist, "min_slope = %f", min_slope);
 	Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file %s", elev_name);
 	Rast_command_history(&hist);
 	Rast_write_history(dyy_name, &hist);
@@ -1374,7 +1374,7 @@ int main(int argc, char *argv[])
 	Rast_short_history(dxy_name, "raster", &hist);
 	Rast_append_format_history(&hist, "DXY map elev = %s", elev_name);
 	Rast_append_format_history(&hist, "zfactor = %.2f", zfactor);
-	Rast_append_format_history(&hist, "min_slp_allowed = %f", min_slp_allowed);
+	Rast_append_format_history(&hist, "min_slope = %f", min_slope);
 	Rast_format_history(&hist, HIST_DATSRC_1, "raster elevation file %s", elev_name);
 	Rast_command_history(&hist);
 	Rast_write_history(dxy_name, &hist);
