@@ -130,7 +130,7 @@ parse_args(int argc, char *argv[]) {
   /* temporary STREAM path */
   struct Option *streamdir;
   streamdir = G_define_option() ;
-  streamdir->key        = "stream_dir";
+  streamdir->key        = "directory";
   streamdir->type       = TYPE_STRING;
   streamdir->required   = NO;
   //streamdir->answer     = "";
