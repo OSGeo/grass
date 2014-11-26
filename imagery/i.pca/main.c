@@ -80,14 +80,10 @@ int main(int argc, char *argv[])
     opt_in = G_define_standard_option(G_OPT_R_INPUTS);
     opt_in->description = _("Name of two or more input raster maps or imagery group");
 
-    opt_out = G_define_option();
-    opt_out->label = _("Prefix for output raster maps");
+    opt_out = G_define_standard_option(G_OPT_R_BASENAME_OUTPUT);
+    opt_out->label = _("Name for output basename raster map(s)");
     opt_out->description =
 	_("A numerical suffix will be added for each component map");
-    opt_out->key = "output_prefix";
-    opt_out->type = TYPE_STRING;
-    opt_out->key_desc = "string";
-    opt_out->required = YES;
 
     opt_scale = G_define_option();
     opt_scale->key = "rescale";
