@@ -2502,9 +2502,9 @@ if __name__ == "__main__":
             task.get_param('map')['value'] = "map_name"
             task.get_flag('i')['value'] = True
             task.get_param('layer')['value'] = 1
-            task.get_param('bcolor')['value'] = "red"
+            task.get_param('label_bcolor')['value'] = "red"
             # the default parameter display is added automatically
-            assert ' '.join(task.get_cmd()) == "d.vect -i map=map_name layer=1 display=shape bcolor=red"
+            assert ' '.join(task.get_cmd()) == "d.vect -i map=map_name layer=1 display=shape label_bcolor=red"
             print "Creation of task successful"
         # Test interface building with handmade grassTask,
         # possibly outside of a GRASS session.

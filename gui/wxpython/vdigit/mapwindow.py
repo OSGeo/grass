@@ -778,7 +778,7 @@ class VDigitWindow(BufferedMapWindow):
                             'cats=%s' % ListOfCatsToRange(self.copyIds),
                             '-i',
                             'color=%s' % colorStr,
-                            'fcolor=%s' % colorStr,
+                            'fill_color=%s' % colorStr,
                             'type=point,line,boundary,centroid',
                             'width=2']
                 
