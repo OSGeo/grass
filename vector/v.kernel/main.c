@@ -162,7 +162,7 @@ int main(int argc, char **argv)
     netmax_opt->guisection = _("Network");
 
     multip_opt = G_define_option();
-    multip_opt->key = "mult";
+    multip_opt->key = "multiplier";
     multip_opt->type = TYPE_DOUBLE;
     multip_opt->required = NO;
     multip_opt->description = _("Multiply the density result by this number");
