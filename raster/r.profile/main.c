@@ -84,12 +84,8 @@ int main(int argc, char *argv[])
     parm.res->description =
 	_("Resolution along profile (default = current region resolution)");
 
-    parm.null_str = G_define_option();
-    parm.null_str->key = "null";
-    parm.null_str->type = TYPE_STRING;
-    parm.null_str->required = NO;
+    parm.null_str = G_define_standard_option(G_OPT_M_NULL_VALUE);
     parm.null_str->answer = "*";
-    parm.null_str->description = _("Character to represent no data cell");
 
     parm.g = G_define_flag();
     parm.g->key = 'g';
