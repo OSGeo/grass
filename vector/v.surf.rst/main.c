@@ -203,19 +203,19 @@ int main(int argc, char *argv[])
     parm.aspect->guisection = _("Outputs");
 
     parm.pcurv = G_define_standard_option(G_OPT_R_OUTPUT);
-    parm.pcurv->key = "pcurv";
+    parm.pcurv->key = "pcurvature";
     parm.pcurv->required = NO;
     parm.pcurv->description = _("Name for output profile curvature raster map");
     parm.pcurv->guisection = _("Outputs");
 
     parm.tcurv = G_define_standard_option(G_OPT_R_OUTPUT);
-    parm.tcurv->key = "tcurv";
+    parm.tcurv->key = "tcurvature";
     parm.tcurv->required = NO;
     parm.tcurv->description = _("Name for output tangential curvature raster map");
     parm.tcurv->guisection = _("Outputs");
 
     parm.mcurv = G_define_standard_option(G_OPT_R_OUTPUT);
-    parm.mcurv->key = "mcurv";
+    parm.mcurv->key = "mcurvature";
     parm.mcurv->required = NO;
     parm.mcurv->description = _("Name for output mean curvature raster map");
     parm.mcurv->guisection = _("Outputs");
@@ -269,7 +269,7 @@ int main(int argc, char *argv[])
     parm.rsm->guisection = _("Parameters");
 
     parm.scol = G_define_option();
-    parm.scol->key = "scolumn";
+    parm.scol->key = "smooth_column";
     parm.scol->type = TYPE_STRING;
     parm.scol->required = NO;
     parm.scol->description =
@@ -310,7 +310,7 @@ int main(int argc, char *argv[])
     parm.dmax->guisection = _("Parameters");
 
     parm.zmult = G_define_option();
-    parm.zmult->key = "zmult";
+    parm.zmult->key = "zmultiplier";
     parm.zmult->type = TYPE_DOUBLE;
     parm.zmult->answer = ZMULT;
     parm.zmult->required = NO;
