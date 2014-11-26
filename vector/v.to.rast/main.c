@@ -82,19 +82,19 @@ int main(int argc, char *argv[])
     use_opt->descriptions = desc;
 
     col = G_define_standard_option(G_OPT_DB_COLUMN);
-    col->key = "attrcolumn";
+    col->key = "attribute_column";
     col->description =
 	_("Name of column for 'attr' parameter (data type must be numeric)");
     col->guisection = _("Attributes");
 
     rgbcol_opt = G_define_standard_option(G_OPT_DB_COLUMN);
-    rgbcol_opt->key = "rgbcolumn";
+    rgbcol_opt->key = "rgb_column";
     rgbcol_opt->description =
 	_("Name of color definition column (with RRR:GGG:BBB entries)");
     rgbcol_opt->guisection = _("Attributes");
 
     label_opt = G_define_standard_option(G_OPT_DB_COLUMN);
-    label_opt->key = "labelcolumn";
+    label_opt->key = "label_column";
     label_opt->description =
 	_("Name of column used as raster category labels");
     label_opt->guisection = _("Attributes");
