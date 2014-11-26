@@ -50,22 +50,15 @@ int main(int argc, char *argv[])
     module->description =
 	_("Exports a raster map to the Virtual Reality Modeling Language (VRML).");
 
-    rast_el = G_define_option();
-    rast_el->key = "elev";
-    rast_el->type = TYPE_STRING;
-    rast_el->required = YES;
-    rast_el->gisprompt = "old,cell,raster";
-    rast_el->description = _("Name of elevation map");
+    rast_el = G_define_standard_option(G_OPT_R_ELEV);
 
-    rast_co = G_define_option();
+    rast_co = G_define_standard_option(G_OPT_R_INPUT);
     rast_co->key = "color";
-    rast_co->type = TYPE_STRING;
     rast_co->required = NO;
-    rast_co->gisprompt = "old,cell,raster";
-    rast_co->description = _("Name of color map");
+    rast_co->description = _("Name of input color map");
 
     exag_opt = G_define_option();
-    exag_opt->key = "exag";
+    exag_opt->key = "exaggeration";
     exag_opt->type = TYPE_DOUBLE;
     exag_opt->required = NO;
     exag_opt->answer = "1.0";
