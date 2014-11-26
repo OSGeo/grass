@@ -77,7 +77,7 @@ void G__usage_rest(void)
     }
     fprintf(stdout, "\n%s\n----------------------\n", _("SYNOPSIS"));
     fprintf(stdout, "**%s**\n\n", st->pgm_name);
-    fprintf(stdout, "**%s** help\n\n", st->pgm_name);
+    fprintf(stdout, "**%s** --help\n\n", st->pgm_name);
 
     fprintf(stdout, "**%s**", st->pgm_name);
 
