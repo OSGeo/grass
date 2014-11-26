@@ -573,7 +573,7 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     struct Option *streamdirOpt;
 
     streamdirOpt = G_define_option() ;
-    streamdirOpt->key        = "stream_dir";
+    streamdirOpt->key        = "directory";
     streamdirOpt->type       = TYPE_STRING;
     streamdirOpt->required   = NO;
     //streamdirOpt->answer     = "";
