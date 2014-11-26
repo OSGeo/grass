@@ -115,12 +115,8 @@ int main(int argc, char *argv[])
     opt.points->required = NO;
     opt.points->guisection = _("Query");
     
-    opt.null = G_define_option();
-    opt.null->key = "null";
-    opt.null->type = TYPE_STRING;
-    opt.null->required = NO;
+    opt.null = G_define_standard_option(G_OPT_M_NULL_VALUE);
     opt.null->answer = "*";
-    opt.null->description = _("String to represent no data cell");
     opt.null->guisection = _("Print");
     
     opt.output = G_define_standard_option(G_OPT_F_OUTPUT);
