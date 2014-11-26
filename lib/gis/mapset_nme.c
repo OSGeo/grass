@@ -30,7 +30,7 @@ static struct state *st = &state;
 static void new_mapset(const char *);
 
 /*!
-   \brief Get name of the n'th mapset from the mapset_name[] list.
+   \brief Get name of the n'th mapset from the current mapset search path.
 
    The first call will initialize the list.
 
@@ -97,8 +97,6 @@ void new_mapset(const char *name)
 
 /*!
    \brief Define alternative mapset search path
-
-   \return 0
  */
 void G_create_alt_search_path(void)
 {
@@ -110,8 +108,6 @@ void G_create_alt_search_path(void)
 
 /*!
    \brief Switch mapset search path
-
-   \return 0
  */
 void G_switch_search_path(void)
 {
@@ -130,8 +126,6 @@ void G_switch_search_path(void)
 
 /*!
    \brief Reset number of mapsets
-
-   \return 0
  */
 void G_reset_mapsets(void)
 {
