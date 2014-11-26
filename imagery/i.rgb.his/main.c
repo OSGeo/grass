@@ -54,27 +54,27 @@ int main(int argc, char **argv)
 
     /* Define the different options */
     opt_red = G_define_standard_option(G_OPT_R_INPUT);
-    opt_red->key = "red_input";
+    opt_red->key = "red";
     opt_red->description = _("Name of input raster map (red)");
 
     opt_green = G_define_standard_option(G_OPT_R_INPUT);
-    opt_green->key = "green_input";
+    opt_green->key = "green";
     opt_green->description = _("Name of input raster map (green)");
 
     opt_blue = G_define_standard_option(G_OPT_R_INPUT);
-    opt_blue->key = "blue_input";
+    opt_blue->key = "blue";
     opt_blue->description = _("Name of input raster map (blue)");
 
     opt_hue = G_define_standard_option(G_OPT_R_OUTPUT);
-    opt_hue->key = "hue_output";
+    opt_hue->key = "hue";
     opt_hue->description = _("Name for output raster map (hue)");
 
     opt_inten = G_define_standard_option(G_OPT_R_OUTPUT);
-    opt_inten->key = "intensity_output";
+    opt_inten->key = "intensity";
     opt_inten->description = _("Name for output raster map (intensity)");
 
     opt_sat = G_define_standard_option(G_OPT_R_OUTPUT);
-    opt_sat->key = "saturation_output";
+    opt_sat->key = "saturation";
     opt_sat->description = _("Name for output raster map (saturation)");
 
     if (G_parser(argc, argv))
