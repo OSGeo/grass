@@ -187,14 +187,14 @@ int main(int argc, char *argv[])
     parm.out_precision->guisection = _("Settings");
 
     parm.pcurv = G_define_standard_option(G_OPT_R_OUTPUT);
-    parm.pcurv->key = "pcurv";
+    parm.pcurv->key = "pcurvature";
     parm.pcurv->required = NO;
     parm.pcurv->description =
 	_("Name for output profile curvature raster map");
     parm.pcurv->guisection = _("Outputs");
 
     parm.tcurv = G_define_standard_option(G_OPT_R_OUTPUT);
-    parm.tcurv->key = "tcurv";
+    parm.tcurv->key = "tcurvature";
     parm.tcurv->required = NO;
     parm.tcurv->description =
 	_("Name for output tangential curvature raster map");
@@ -236,7 +236,7 @@ int main(int argc, char *argv[])
     parm.dxy->guisection = _("Outputs");
 
     parm.zfactor = G_define_option();
-    parm.zfactor->key = "zfactor";
+    parm.zfactor->key = "zmultiplier";
     parm.zfactor->description =
 	_("Multiplicative factor to convert elevation units to meters");
     parm.zfactor->type = TYPE_DOUBLE;
@@ -245,7 +245,7 @@ int main(int argc, char *argv[])
     parm.zfactor->guisection = _("Settings");
 
     parm.min_slp_allowed = G_define_option();
-    parm.min_slp_allowed->key = "min_slp_allowed";
+    parm.min_slp_allowed->key = "min_slope";
     parm.min_slp_allowed->description =
 	_("Minimum slope value (in percent) for which aspect is computed");
     parm.min_slp_allowed->type = TYPE_DOUBLE;
