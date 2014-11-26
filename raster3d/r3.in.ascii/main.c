@@ -84,11 +84,7 @@ static void setParams()
 
     param.output = G_define_standard_option(G_OPT_R3_OUTPUT);
 
-    param.nv = G_define_option();
-    param.nv->key = "nv";
-    param.nv->type = TYPE_STRING;
-    param.nv->required = NO;
-    param.nv->multiple = NO;
+    param.nv = G_define_standard_option(G_OPT_M_NULL_VALUE);
     param.nv->answer = "*";
     param.nv->description =  /* TODO: '*' or 'none' in the msg ?? */
 	_("String representing NULL value data cell (use 'none' if no such value)");
