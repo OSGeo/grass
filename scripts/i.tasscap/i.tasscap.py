@@ -41,20 +41,20 @@
 #% keywords: Landsat
 #% keywords: Tasseled Cap transformation
 #%end
+#%option G_OPT_R_INPUTS
+#%end
+#%option G_OPT_R_BASENAME_OUTPUT
+#% label: Name for output basename raster map(s)
+#% description: For Landsat 4-7, the raster maps should be the bands 1, 2, 3, 4, 5, and 7.
+#%end
 #%option
-#% key: satellite
+#% key: sensor
 #% type: string
 #% description: Satellite sensor
 #% required: yes
 #% multiple: no
 #% options: landsat4_tm,landsat5_tm,landsat7_etm
 #% descriptions: landsat4_tm;Use transformation rules for Landsat 4 TM;landsat5_tm;Use transformation rules for Landsat 5 TM;landsat7_etm;Use transformation rules for Landsat 7 ETM
-#%end
-#%option G_OPT_R_INPUTS
-#%end
-#%option G_OPT_R_BASENAME_OUTPUT
-#% label: Name of input raster map(s)
-#% description: For Landsat 4-7, the raster maps should be the bands 1, 2, 3, 4, 5, and 7.
 #%end
 
 import sys
