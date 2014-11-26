@@ -134,7 +134,7 @@ int main(int argc, char *argv[])
     parm.azimuth->guisection = _("Sun position");
 
     parm.zmult = G_define_option();
-    parm.zmult->key = "zmult";
+    parm.zmult->key = "zmultiplier";
     parm.zmult->type = TYPE_DOUBLE;
     parm.zmult->required = NO;
     parm.zmult->answer = "1";
