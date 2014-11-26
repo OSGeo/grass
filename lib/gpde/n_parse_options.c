@@ -98,7 +98,7 @@ struct Option *N_define_standard_option(int opt)
 	    ("The relaxation parameter used by the jacobi and sor solver for speedup or stabilizing");
 	break;
     case N_OPT_CALC_TIME:
-	Opt->key = "dt";
+	Opt->key = "dtime";
 	Opt->type = TYPE_DOUBLE;
 	Opt->required = YES;
 	Opt->answer = "86400";
