@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
     opt.location->guisection = _("Mapset");
 
     opt.gisdbase = G_define_option();
-    opt.gisdbase->key = "gisdbase";
+    opt.gisdbase->key = "dbase";
     opt.gisdbase->type = TYPE_STRING;
     opt.gisdbase->required = NO;
     opt.gisdbase->multiple = NO;
