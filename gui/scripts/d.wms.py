@@ -59,7 +59,7 @@
 #% type: string
 #% description: Image format requested from the server
 #% options: geotiff,tiff,jpeg,gif,png,png8
-#% answer: geotiff
+#% answer: png
 #% guisection: Request
 #%end
 
