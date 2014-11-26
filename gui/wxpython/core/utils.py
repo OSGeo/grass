@@ -653,7 +653,7 @@ def GetListOfMapsets(dbase, location, selectable = False):
                          read = True,
                          flags = 'l',
                          location = location,
-                         gisdbase = dbase)
+                         dbase = dbase)
         
         if not ret:
             return listOfMapsets
