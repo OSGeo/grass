@@ -40,6 +40,7 @@
 #%end
 
 #%option G_OPT_R_BASENAME_OUTPUT
+#% key: basename
 #% label: Basename for output raster maps
 #% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
 #% required: yes
