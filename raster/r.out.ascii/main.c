@@ -85,10 +85,7 @@ int main(int argc, char *argv[])
     parm.width->description =
 	_("Number of values printed before wrapping a line (only SURFER or MODFLOW format)");
 
-    parm.null = G_define_option();
-    parm.null->key = "null";
-    parm.null->type = TYPE_STRING;
-    parm.null->required = NO;
+    parm.null = G_define_standard_option(G_OPT_M_NULL_VALUE);
     parm.null->answer = "*";
     parm.null->description =
 	_("String to represent null cell (GRASS grid only)");
