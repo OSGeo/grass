@@ -117,12 +117,8 @@ int main(int argc, char *argv[])
     parms.line->required = YES;
     parms.line->multiple = YES;
 
-    parms.null_str = G_define_option();
-    parms.null_str->key = "null";
-    parms.null_str->type = TYPE_STRING;
-    parms.null_str->required = NO;
+    parms.null_str = G_define_standard_option(G_OPT_M_NULL_VALUE);
     parms.null_str->answer = "*";
-    parms.null_str->description = _("Char string to represent no data cell");
 
     coord = G_define_flag();
     coord->key = 'g';
