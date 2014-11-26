@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     parm.cover->description = _("Name of cover raster map");
 
     parm.npoints = G_define_option();
-    parm.npoints->key = "n";
+    parm.npoints->key = "npoints";
     parm.npoints->key_desc = "number[%]";
     parm.npoints->type = TYPE_STRING;
     parm.npoints->required = YES;
