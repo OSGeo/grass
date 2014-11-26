@@ -84,14 +84,13 @@ int main(int argc, char *argv[])
     /* define options */
     /* define options */
     opt.orig = G_define_standard_option(G_OPT_R_INPUT);
-    opt.orig->key = "input_image";
 
     opt.real = G_define_standard_option(G_OPT_R_OUTPUT);
-    opt.real->key = "real_image";
+    opt.real->key = "real";
     opt.real->description = _("Name for output real part arrays stored as raster map");
 
     opt.imag = G_define_standard_option(G_OPT_R_OUTPUT);
-    opt.imag->key = "imaginary_image";
+    opt.imag->key = "imaginary";
     opt.imag->description = _("Name for output imaginary part arrays stored as raster map");
     
     if (G_parser(argc, argv))
