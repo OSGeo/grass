@@ -70,7 +70,7 @@ int main(int argc, char **argv)
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
     
     file_opt = G_define_standard_option(G_OPT_F_INPUT);
-    file_opt->key = "file";
+    file_opt->key = "segments";
     file_opt->required = NO;
     file_opt->label = _("Name of file containing segment rules");
     file_opt->description = _("'-' for standard input");
