@@ -39,14 +39,10 @@
 #%option G_OPT_STRDS_OUTPUT
 #%end
 
-#%option
-#% key: basename
-#% type: string
-#% label: Basename of the new generated output maps
+#%option G_OPT_R_BASENAME_OUTPUT
+#% label: Basename for output raster maps
 #% description: A numerical suffix separated by an underscore will be attached to create a unique identifier
 #% required: yes
-#% multiple: no
-#% gisprompt:
 #%end
 
 #%option
