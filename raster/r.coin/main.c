@@ -69,19 +69,13 @@ int main(int argc, char *argv[])
 	_("Tabulates the mutual occurrence (coincidence) "
 	  "of categories for two raster map layers.");
 
-    parm.map1 = G_define_option();
-    parm.map1->key = "map1";
-    parm.map1->required = YES;
-    parm.map1->type = TYPE_STRING;
-    parm.map1->gisprompt = "old,cell,raster";
-    parm.map1->description = _("Name of first raster map");
+    parm.map1 = G_define_standard_option(G_OPT_R_INPUT);
+    parm.map1->key = "first";
+    parm.map1->description = _("Name of first input raster map");
 
-    parm.map2 = G_define_option();
-    parm.map2->key = "map2";
-    parm.map2->required = YES;
-    parm.map2->type = TYPE_STRING;
-    parm.map2->gisprompt = "old,cell,raster";
-    parm.map2->description = _("Name of second raster map");
+    parm.map2 = G_define_standard_option(G_OPT_R_INPUT);
+    parm.map2->key = "second";
+    parm.map2->description = _("Name of second input raster map");
 
     parm.units = G_define_option();
     parm.units->key = "units";
