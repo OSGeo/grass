@@ -90,7 +90,7 @@ select AddGeometryColumn ('postgis', 'test', 'geometry', -1, 'GEOMETRY', 2);
 GRASS can import this PostGIS polygon map as follows:
 
 <div class="code"><pre>
-v.in.ogr dsn="PG:host=localhost dbname=postgis user=neteler" layer=test \
+v.in.ogr input="PG:host=localhost dbname=postgis user=neteler" layer=test \
          output=test type=boundary,centroid
 v.db.select test
 v.info -t test

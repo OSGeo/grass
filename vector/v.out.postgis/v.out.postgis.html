@@ -4,7 +4,7 @@
 PostGIS feature table. Features without category are skipped.
 
 <p>
-By default GRASS topological features are converted into simple
+By default GRASS GIS topological features are converted into simple
 features
 (see <a href="http://www.opengeospatial.org/standards/sfa">OGC Simple
 Feature Access</a> specification for details). Flag <b>-l</b> allows
@@ -129,7 +129,7 @@ located in database &quot;grass&quot;, schema &quot;public&quot;. Note that this
 database schema is automatically used when not defined by the user.
 
 <div class="code"><pre>
-v.out.postgis input=urbanarea dsn="PG:dbname=grass"
+v.out.postgis input=urbanarea output="PG:dbname=grass"
 </pre></div>
 
 GRASS areas are converted into polygons, isles into holes. We can
@@ -147,7 +147,7 @@ ST_Polygon|657
 by <em><a href="v.out.ogr.html">v.out.ogr</a></em> module, eg.
 
 <div class="code"><pre>
-v.out.ogr input=urbanarea dsn="PG:dbname=grass" format=PostgreSQL
+v.out.ogr input=urbanarea output="PG:dbname=grass" format=PostgreSQL
 </pre></div>
 
 In this case GRASS vector data are exported to PostGIS database using
@@ -170,7 +170,7 @@ Export vector map &quot;bridges&quot; as feature table in database
 schema &quot;grassout&quot;.
 
 <div class="code"><pre>
-v.out.postgis input=bridges dsn="PG:dbname=grass" olayer=grassout.bridges
+v.out.postgis input=bridges output="PG:dbname=grass" olayer=grassout.bridges
 </pre></div>
 
 <h3>Export data with creation options</h3>
@@ -181,7 +181,7 @@ by <tt>srid</tt> identifier which corresponds in this case with EPSG
 3358 (North Carolina dataset).
 
 <div class="code"><pre>
-v.out.postgis input=roadsmajor dsn="PG:dbname=grass" options="GEOMETRY_NAME=wkb_geometry,SPATIAL_INDEX=NO,SRID=3358"
+v.out.postgis input=roadsmajor output="PG:dbname=grass" options="GEOMETRY_NAME=wkb_geometry,SPATIAL_INDEX=NO,SRID=3358"
 </pre></div>
 
 <h3>Link exported data</h3>
@@ -194,7 +194,7 @@ successful export also creates in the current mapset GRASS vector map
 as a link to the PostGIS feature table.
 
 <div class="code"><pre>
-v.out.postgis input=busstopsall@PERMANENT dsn="PG:dbname=grass" olink=busstopsall_pg
+v.out.postgis input=busstopsall@PERMANENT output="PG:dbname=grass" olink=busstopsall_pg
 </pre></div>
 
 Created link can be checked
@@ -225,7 +225,7 @@ Command bellow exports vector features without attributes. The feature
 will contain only two columns, the fid and geometry column.
 
 <div class="code"><pre>
-v.out.postgis -t input=railroads dsn="PG:dbname=grass"
+v.out.postgis -t input=railroads output="PG:dbname=grass"
 </pre></div>
 
 <h3>Export topological data</h3>
@@ -237,7 +237,7 @@ instead of simple features. Export topological elements is stored in
 Topology</a> schema.
 
 <div class="code"><pre>
-v.out.postgis -l input=busroutesall dsn="PG:dbname=grass"
+v.out.postgis -l input=busroutesall output="PG:dbname=grass"
 </pre></div>
 
 For more info about PostGIS Topology implementation in GRASS see

@@ -7,7 +7,7 @@
 #               Extensions by Markus Neteler
 #               Converted to Python by Glynn Clements
 # PURPOSE:      Interface to db.execute to update a column in the attribute table connected to a given map
-# COPYRIGHT:    (C) 2005,2007-2008,2011 by the GRASS Development Team
+# COPYRIGHT:    (C) 2005-2014 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
@@ -43,6 +43,10 @@
 #%end
 #%option G_OPT_DB_WHERE
 #%end
+#%option G_OPT_F_INPUT
+#% key: sqliteextra
+#% description: Name of libsqlitefunctions file for extra functions (SQLite backend only)
+#%end
 
 import sys
 import os
@@ -55,6 +59,7 @@ def main():
     value = options['value']
     qcolumn = options['qcolumn']
     where = options['where']
+    sqlitefile  = options['sqliteextra']
 
     mapset = grass.gisenv()['MAPSET']
 
@@ -70,6 +75,13 @@ def main():
     table = f['table']
     database = f['database']
     driver = f['driver']
+
+    # check for SQLite backend for extra functions
+    if sqlitefile and driver != "sqlite":
+        grass.fatal(_("Use of libsqlitefunctions only with SQLite backend"))
+    if driver == "sqlite" and sqlitefile:
+        if not os.access(sqlitefile, os.R_OK):
+            grass.fatal(_("File <%s> not found") % sqlitefile)
 
     # checking column types
     try:
@@ -93,8 +105,12 @@ def main():
     if where:
         cmd += " WHERE " + where
 
-    grass.verbose("SQL: \"%s\"" % cmd)
+    # SQLite: allow for extra functions if provided by user
+    if sqlitefile:
+        sqliteload = "SELECT load_extension('%s');\n" % sqlitefile
+        cmd = sqliteload + cmd + ";\n"
 
+    grass.verbose("SQL: \"%s\"" % cmd)
     grass.write_command('db.execute', input = '-', database = database, driver = driver, stdin = cmd)
 
     # write cmd history:

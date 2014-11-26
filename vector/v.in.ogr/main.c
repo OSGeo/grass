@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
     module->description = _("Imports vector data into a GRASS vector map using OGR library.");
 
     param.dsn = G_define_option();
-    param.dsn->key = "dsn";
+    param.dsn->key = "input";
     param.dsn->type = TYPE_STRING;
     param.dsn->required =YES;
     param.dsn->label = _("OGR datasource name");

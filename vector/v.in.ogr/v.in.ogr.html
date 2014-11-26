@@ -156,13 +156,13 @@ The command imports various vector formats:
 <h3>SHAPE files</h3>
 
 <div class="code"><pre>
-v.in.ogr dsn=/home/user/shape_data/test_shape.shp output=grass_map 
+v.in.ogr input=/home/user/shape_data/test_shape.shp output=grass_map 
 </pre></div>
 
 Alternate method:
 
 <div class="code"><pre>
-v.in.ogr dsn=/home/user/shape_data layer=test_shape output=grass_map 
+v.in.ogr input=/home/user/shape_data layer=test_shape output=grass_map 
 </pre></div>
 
 Define encoding value for attribute data (in this example we expect
@@ -172,13 +172,13 @@ encoding; ie. in Central/Eastern European languages that
 use Latin script, Microsoft Windows encoding).
 
 <div class="code"><pre>
-v.in.ogr dsn=/home/user/shape_data/test_shape.shp output=grass_map encoding=cp1250
+v.in.ogr input=/home/user/shape_data/test_shape.shp output=grass_map encoding=cp1250
 </pre></div>
 
 <h3>MapInfo files</h3>
 
 <div class="code"><pre>
-v.in.ogr dsn=./ layer=mapinfo_test output=grass_map
+v.in.ogr input=./ layer=mapinfo_test output=grass_map
 </pre></div>
 
 <h3>Arc Coverage</h3>
@@ -187,7 +187,7 @@ We import the Arcs and Label points, the module takes care to build
 areas.
 
 <div class="code"><pre>
-v.in.ogr dsn=gemeinden layer=LAB,ARC type=centroid,boundary output=mymap
+v.in.ogr input=gemeinden layer=LAB,ARC type=centroid,boundary output=mymap
 </pre></div>
 
 <h3>E00 file</h3>
@@ -203,7 +203,7 @@ fails):
 
 <div class="code"><pre>
 avcimport e00file coverage
-v.in.ogr dsn=coverage layer=LAB,ARC type=centroid,boundary output=mymap
+v.in.ogr input=coverage layer=LAB,ARC type=centroid,boundary output=mymap
 </pre></div>
 
 <h3>SDTS files</h3> 
@@ -211,13 +211,13 @@ v.in.ogr dsn=coverage layer=LAB,ARC type=centroid,boundary output=mymap
 You have to select the CATD file.
 
 <div class="code"><pre>
-v.in.ogr dsn=CITXCATD.DDF output=cities
+v.in.ogr input=CITXCATD.DDF output=cities
 </pre></div>
 
 <h3>TIGER files</h3>
 
 <div class="code"><pre>
-v.in.ogr dsn=input/2000/56015/ layer=CompleteChain,PIP output=t56015_all \
+v.in.ogr input=input/2000/56015/ layer=CompleteChain,PIP output=t56015_all \
 type=boundary,centroid snap=-1
 </pre></div>
 
@@ -226,13 +226,13 @@ type=boundary,centroid snap=-1
 Import polygons as areas:
 
 <div class="code"><pre>
-v.in.ogr dsn="PG:host=localhost dbname=postgis user=postgres" layer=polymap \
+v.in.ogr input="PG:host=localhost dbname=postgis user=postgres" layer=polymap \
 output=polygons type=boundary,centroid
 </pre></div>
 
 <h3>Default connection settings as datasource (PostgreSQL only)</h3>
 
-If datasource (<b>dsn</b>) is specified as 'PG:' and the default DB
+If datasource (<b>input</b>) is specified as 'PG:' and the default DB
 driver is <a href="grass-pg.html">PostgreSQL</a> (<tt>pg</tt>) than
 the connection string is determined from the default DB settings, see
 examples below.
@@ -250,8 +250,8 @@ Example (with schema):
 <div class="code"><pre>
 db.connect driver=pg database=test schema=user1
 db.login user=user1 password=pwd1
-# -> dsn=&quot;PG:dbname=test user=user1 password=pwd1&quot; layer=&quot;user1.river&quot;
-v.in.ogr dsn=PG: layer=river output=river     
+# -> input=&quot;PG:dbname=test user=user1 password=pwd1&quot; layer=&quot;user1.river&quot;
+v.in.ogr input=PG: layer=river output=river     
 db.select table=user1.river
 </pre></div>
 
@@ -261,8 +261,8 @@ The user can ignore schemas, if desired:
 <div class="code"><pre>
 db.connect driver=pg database=test
 db.login user=user1 password=pwd1
-# -> dsn=&quot;PG:dbname=test user=user1 password=pwd1&quot;
-v.in.ogr dsn=PG: layer=river output=river 
+# -> input=&quot;PG:dbname=test user=user1 password=pwd1&quot;
+v.in.ogr input=PG: layer=river output=river 
 db.select table=river
 </pre></div>
 
@@ -272,7 +272,7 @@ Note that you have to set the environment-variables <tt>ORACLE_BASE,
 ORACLE_SID, ORACLE_HOME</tt> and <tt>TNS_ADMIN</tt> accordingly.
 
 <div class="code"><pre>
-v.in.ogr dsn=OCI:username/password@database_instance output=grasslayer layer=roads_oci
+v.in.ogr input=OCI:username/password@database_instance output=grasslayer layer=roads_oci
 </pre></div>
 
 <h2>WARNINGS</h2>
