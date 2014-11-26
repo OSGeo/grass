@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
     parm.cats->guisection = _("Selection");
 
     parm.vals = G_define_option();
-    parm.vals->key = "vals";
+    parm.vals->key = "values";
     parm.vals->type = TYPE_DOUBLE;
     parm.vals->multiple = YES;
     parm.vals->required = NO;
@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
     parm.fs->answer = "tab";
 
     parm.raster = G_define_standard_option(G_OPT_R_INPUT);
-    parm.raster->key = "raster";
+    parm.raster->key = "rast";
     parm.raster->required = NO;
     parm.raster->description =
 	_("Raster map from which to copy category table");
