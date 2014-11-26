@@ -96,7 +96,7 @@ int main(int argc, char **argv)
     opt2->description = _("Name for output depressionless elevation raster map");
     
     opt4 = G_define_standard_option(G_OPT_R_OUTPUT);
-    opt4->key = "outdir";
+    opt4->key = "direction";
     opt4->description = _("Name for output flow direction map for depressionless elevation raster map");
 
     opt5 = G_define_standard_option(G_OPT_R_OUTPUT);
