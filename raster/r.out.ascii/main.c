@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 	_("Name for output ASCII grid map (use out=- for stdout)");
 
     parm.dp = G_define_option();
-    parm.dp->key = "dp";
+    parm.dp->key = "precision";
     parm.dp->type = TYPE_INTEGER;
     parm.dp->required = NO;
     parm.dp->description =
