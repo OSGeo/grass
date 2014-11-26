@@ -66,7 +66,7 @@ void parse_args(int argc, char **argv,
     delim_opt->guisection = _("Points");
     
     dp_opt = G_define_option();
-    dp_opt->key = "dp";
+    dp_opt->key = "precision";
     dp_opt->type = TYPE_INTEGER;
     dp_opt->required = NO;
     dp_opt->options = "0-32";
