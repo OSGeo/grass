@@ -985,7 +985,7 @@ class MapFrame(SingleMapFrame):
         pattern = ["d.vect",
                    "map=%s" % name,
                    "color=%s" % colorStr,
-                   "fcolor=%s" % colorStr,
+                   "fill_color=%s" % colorStr,
                    "width=%d"  % UserSettings.Get(group = 'atm', key = 'highlight', subkey = 'width')]
         if icon != '':
             pattern.append('icon=%s' % icon)
