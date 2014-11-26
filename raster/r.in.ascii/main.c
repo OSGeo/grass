@@ -102,11 +102,7 @@ int main(int argc, char *argv[])
     parm.mult->required = NO;
     parm.mult->label = _("Multiplier for ASCII data");
 
-    parm.nv = G_define_option();
-    parm.nv->key = "null_value";
-    parm.nv->type = TYPE_STRING;
-    parm.nv->required = NO;
-    parm.nv->multiple = NO;
+    parm.nv = G_define_standard_option(G_OPT_M_NULL_VALUE);
     parm.nv->description = _("Default: read from header");
     parm.nv->label = _("String representing NULL value data cell");
     parm.nv->guisection = _("NULL data");
