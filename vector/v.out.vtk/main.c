@@ -52,6 +52,8 @@ int main(int argc, char *argv[])
 
     input = G_define_standard_option(G_OPT_V_INPUT);
 
+    layer_opt = G_define_standard_option(G_OPT_V_FIELD);
+    
     output = G_define_standard_option(G_OPT_F_OUTPUT);
     output->required = NO;
     output->description = _("Name for output VTK file");
@@ -61,25 +63,20 @@ int main(int argc, char *argv[])
     type_opt->options = "point,kernel,centroid,line,boundary,area,face";
 
     dp_opt = G_define_option();
-    dp_opt->key = "dp";
+    dp_opt->key = "precision";
     dp_opt->type = TYPE_INTEGER;
     dp_opt->required = NO;
     dp_opt->description =
 	_("Number of significant digits (floating point only)");
 
     scale = G_define_option();
-    scale->key = "scale";
+    scale->key = "zmultiplier";
     scale->type = TYPE_DOUBLE;
     scale->required = NO;
     scale->description = _("Scale factor for elevation");
     scale->answer = "1.0";
 
-    layer_opt = G_define_option();
-    layer_opt->key = "layer";
-    layer_opt->type = TYPE_INTEGER;
-    layer_opt->required = NO;
-    layer_opt->answer = "1";
-    layer_opt->description = _("Layer number");
+
 
     coorcorr = G_define_flag();                                            
     coorcorr->key = 'c';                                                   
