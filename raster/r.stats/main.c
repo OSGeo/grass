@@ -122,13 +122,8 @@ int main(int argc, char *argv[])
     option.fs->answer = "space";
     option.fs->guisection = _("Formatting");
 
-    option.nv = G_define_option();
-    option.nv->key = "nv";
-    option.nv->type = TYPE_STRING;
-    option.nv->required = NO;
-    option.nv->multiple = NO;
+    option.nv = G_define_standard_option(G_OPT_M_NULL_VALUE);
     option.nv->answer = "*";
-    option.nv->description = _("String representing no data cell value");
     option.nv->guisection = _("Formatting");
 
     option.nsteps = G_define_option();
