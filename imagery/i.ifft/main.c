@@ -82,15 +82,14 @@ int main(int argc, char *argv[])
 
     /* define options */
     opt.real = G_define_standard_option(G_OPT_R_INPUT);
-    opt.real->key = "real_image";
+    opt.real->key = "real";
     opt.real->description = _("Name of input raster map (image fft, real part)");
 
     opt.imag = G_define_standard_option(G_OPT_R_INPUT);
-    opt.imag->key = "imaginary_image";
+    opt.imag->key = "imaginary";
     opt.imag->description = _("Name of input raster map (image fft, imaginary part");
 
     opt.orig = G_define_standard_option(G_OPT_R_OUTPUT);
-    opt.orig->key = "output_image";
     opt.orig->description = _("Name for output raster map");
     
     /*call parser */
