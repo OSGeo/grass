@@ -36,7 +36,7 @@
 #%end
 
 #%option G_OPT_M_DIR
-#% key: extrdir
+#% key: directory
 #% description: Path to the extraction directory
 #%end
 
