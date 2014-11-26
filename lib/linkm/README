@@ -45,6 +45,16 @@ Notes:      The memory returned by link_new() is NOT guaranteed to be zeroed.
 
 Interface:
 
+	The link structure must have the following form:
+
+	struct my_linked_list
+	{
+	    struct my_linked_list *next;
+	    <data_type> data;
+	    /* optional other data */
+	};
+
+	The link to the next item MUST be the first entry.
 
 void *
 link_init (int size)
@@ -65,19 +75,20 @@ link_set_chunk_size (int cnt)
 
 
 void
-link_cleanup (void *token)
+link_cleanup (struct link_head *token)
     
 	Clean up all memory when done using the list.
 	should only be called once per list per run for best performance.
 	Pass it the token returned by link_init () 
 
 void *
-link_new (void *token)
+link_new (struct link_head *token)
 	
 	return a new memory slot, 'size' bytes long as specified by link_init()
 	This return pointer should be cast to your link structure type.
 
-link_dispose (void *token, void *ptr)
+void
+link_dispose (struct link_head *token, void *ptr)
 	
 	pass it the token and a pointer to the structure to be de-allocated.
 	The memory is returned to the memory manager.

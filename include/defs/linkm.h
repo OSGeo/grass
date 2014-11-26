@@ -14,8 +14,10 @@ struct link_head *link_init(int);
 void link_cleanup(struct link_head *);
 
 /* new.c */
-struct link_head *link_new(struct link_head *);
+VOID_T *link_new(struct link_head *);
 
+
+/* for internal use only */
 /* next.c */
 VOID_T *link__get_next(VOID_T *);
 void link__set_next(VOID_T *, VOID_T *);
