@@ -1,34 +1,42 @@
 <h2>DESCRIPTION</h2>
 
-The purpose of this module is to compute and to show spatio-temporal relations between
-space time datasets of different type. Several input space time datasets are sampled 
-by a <em>sample</em> space time dataset using temporal topological relations. The types of
-the input space time datasets and the type of the sample space time dataset can be different.
+The purpose of this module is to compute and to show spatio-temporal 
+relations between space time datasets of different type. Several input 
+space time datasets are sampled by a <em>sample</em> space time dataset 
+using temporal topological relations. The types of the input space time 
+datasets and the type of the sample space time dataset can be 
+different.
 <p>
-This module is useful to analyze temporal relationships between space time datasets using temporal topology.
-The flag <em>-s</em> enables a spatio-temporal topology, so that only spatio-temporal related
-map layers of space time datasets are considered in the analysis.
+This module is useful to analyze temporal relationships between space 
+time datasets using temporal topology. The flag <em>-s</em> enables a 
+spatio-temporal topology, so that only spatio-temporal related map 
+layers of space time datasets are considered in the analysis.
 
 <h2>NOTE</h2>
 
-The temporal relation <em>start</em> means that the start time of an input map layer is temporally
-located in an interval of a sample map layer.
+The temporal relation <em>start</em> means that the start time of an 
+input map layer is temporally located in an interval of a sample map 
+layer.
 <p>
-The textual output at the command line shows the names of the maps, start and end time as well
-as the <em>interval length</em> in days and the temporal <em>distance from begin</em> in days.
+The textual output at the command line shows the names of the maps, 
+start and end time as well as the <em>interval length</em> in days and 
+the temporal <em>distance from begin</em> in days.
 <p>
 The default <em>separator</em> is the pipe symbol.
 <p>
-Temporal gaps, if present, in the input and sampling space time datasets will be used in the sampling process.
-Gaps have no map name, instead <em>None</em> is printed.
+Temporal gaps, if present, in the input and sampling space time 
+datasets will be used in the sampling process. Gaps have no map name, 
+instead <em>None</em> is printed.
 
 <h2>EXAMPLE</h2>
 
-In the examples below we create a space time raster dataset <em>A</em> and a space time vector dataset
-<em>P</em> that have different temporal layouts and number of map layers. The space time vector dataset
+In the examples below we create a space time raster dataset <em>A</em> 
+and a space time vector dataset <em>P</em> that have different temporal 
+layouts and number of map layers. The space time vector dataset 
 contains a gap, that will be used in the sampling process.
-We use <em>t.sample</em> to inspect the topological relations between the time 
-stamped map layers in <em>A</em> and <em>P</em>.
+<p>
+We use <em>t.sample</em> to inspect the topological relations between the
+time stamped map layers in <em>A</em> and <em>P</em>.
 <p>
 <div class="code"><pre>
 # Set an appropriate region
@@ -154,8 +162,6 @@ P@PERMANENT|A@PERMANENT|start_time|end_time|interval_length|distance_from_begin
 pnts1@PERMANENT|a3@PERMANENT|2001-01-01 00:00:00|2001-03-01 00:00:00|59.0|0.0
 None|a5@PERMANENT,a2@PERMANENT|2001-03-01 00:00:00|2001-05-01 00:00:00|61.0|59.0
 pnts2@PERMANENT|a4@PERMANENT|2001-05-01 00:00:00|2001-07-01 00:00:00|61.0|120.0
-
-
 </pre></div>
 
 <h2>SEE ALSO</h2>

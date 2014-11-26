@@ -1,29 +1,35 @@
 <h2>DESCRIPTION</h2>
 
-<em>t.shift</em> is designed to temporally shift all registered maps in a space time dataset
-with a user defined granularity. Raster, 3D raster and vector space time datasets are supported.
+<em>t.shift</em> is designed to temporally shift all registered maps in 
+a space time dataset with a user defined granularity. Raster, 3D raster 
+and vector space time datasets are supported.
 <p>
-The format of the absolute time granularity is "number unit". Number is an integer, unit is the temporal
-unit that can be one of year(s), month(s), week(s), day(s), hour(s), minute(s) or second(s).
+The format of the absolute time granularity is "number unit". Number is 
+an integer, unit is the temporal unit that can be one of year(s), 
+month(s), week(s), day(s), hour(s), minute(s) or second(s).
 <p>
-The granularity in case of relative time is an integer. The temporal unit is the unit of the space time dataset
-and can not be modified.
+The granularity in case of relative time is an integer. The temporal 
+unit is the unit of the space time dataset and can not be modified.
 
 <h2>Note</h2>
-Be careful when shifting space time datasets with absolute time.
-The temporal granularity may change if you shift a space time dataset with a unit that is
-different from the space time dataset granularity. Be aware that the shifting with months and years
-may result in incorrect days per month. Shifting the date 20012-03-31 with a granularity 
-of one month will result in 2012-04-31 which is incorrect. In this case an error will raise
-and the shifting will not performed for the whole dataset.
+Be careful when shifting space time datasets with absolute time. The 
+temporal granularity may change if you shift a space time dataset with 
+a unit that is different from the space time dataset granularity. Be 
+aware that the shifting with months and years may result in incorrect 
+days per month. Shifting the date 20012-03-31 with a granularity of one 
+month will result in 2012-04-31 which is incorrect. In this case an 
+error will raise and the shifting will not performed for the whole 
+dataset.
 <p>
-You can use the extraction module to shift only a subset of maps from a space time dataset.
-Be aware that the shifting of maps affect all space time datasets in which they are registered.
+You can use the extraction module to shift only a subset of maps from a 
+space time dataset. Be aware that the shifting of maps affect all space 
+time datasets in which they are registered.
 
 <h2>EXAMPLE</h2>
 
-We create 6 raster maps and register them in a space time raster dataset using an increment of one day.
-Then we shift the time intervals with a granularity of 12 hours.
+We create 6 raster maps and register them in a space time raster 
+dataset using an increment of one day. Then we shift the time intervals 
+with a granularity of 12 hours.
 
 <div class="code"><pre>
 r.mapcalc expr="prec_1 = rand(0, 550)" -s
@@ -176,7 +182,6 @@ prec_3|PERMANENT|2012-01-03 12:00:00|2012-01-04 12:00:00
 prec_4|PERMANENT|2012-01-04 12:00:00|2012-01-05 12:00:00
 prec_5|PERMANENT|2012-01-05 12:00:00|2012-01-06 12:00:00
 prec_6|PERMANENT|2012-01-06 12:00:00|2012-01-07 12:00:00
-
 </pre></div>
 
 <h2>SEE ALSO</h2>

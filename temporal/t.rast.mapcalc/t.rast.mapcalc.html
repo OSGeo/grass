@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-The purpose of <em>t.rast.mapcalc</em> is to perform spatio-temporal 
+<em>t.rast.mapcalc</em> performs spatio-temporal 
 <em>mapcalc</em> expressions on maps of temporally sampled space time 
 raster datasets (STRDS). Spatial and temporal operators and internal 
 variables are available in the expression string. The description of 
@@ -25,7 +25,8 @@ in the STRDS's are processed. Spatial related means that temporally
 related maps overlap in their spatial extent.
 <p>
 The module <em>t.rast.mapcalc</em> supports parallel processing. The option
-<em>nprocs</em> specifies the number of processes that can be started in parallel. 
+<em>nprocs</em> specifies the number of processes that can be started in
+parallel. 
 <p>
 A mapcalc expression must be provided to process the temporal 
 sampled maps. Temporal internal variables are available in addition to 
@@ -39,13 +40,13 @@ Supported internal variables for relative and absolute time:
        and in relative units in case of relative time. </li>
   <li> <em>start_time()</em> - This internal variable represent 
     the time difference between the start time of the sample space time
-    raster dataset and the start time of the current sample interval or instance. The time
-    is measured  in days and fraction of days for absolute time,
+    raster dataset and the start time of the current sample interval or instance.
+    The time is measured in days and fraction of days for absolute time,
     and in relative units in case of relative time. </li>
   <li> <em>end_time()</em> - This internal variable represent 
     the time difference between the start time of the sample space time
-    raster dataset and the end time of the current sample interval. The time
-    is measured  in days and fraction of days for absolute time,
+    raster dataset and the end time of the current sample interval. The
+    time is measured in days and fraction of days for absolute time,
     and in relative units in case of relative time. 
     The end_time() will be represented by null() in case of a time instance.</li>
 </ul>
@@ -107,10 +108,11 @@ c_5     2001-07-01 00:00:00     49.0    49.0
 c_6     2001-08-01 00:00:00     64.0    64.0
 </pre></div>
 <p>
-Internally the spatio-temporal expression will be analyzed for each time interval
-of the sample dataset A, the temporal functions will be replaced by numerical values,
-the names of the space time raster datasets will be replaced by the corresponding raster maps.
-The final expression will be passed to <em>r.mapcalc</em>, resulting in 6 runs:
+Internally the spatio-temporal expression will be analyzed for each 
+time interval of the sample dataset A, the temporal functions will be 
+replaced by numerical values, the names of the space time raster 
+datasets will be replaced by the corresponding raster maps. The final 
+expression will be passed to <em>r.mapcalc</em>, resulting in 6 runs:
 <p>
 <div class="code"><pre>
 r.mapcalc expr="c_1 = if(3 == 5 || 3 == 6, (a3 + b3), (a3 * b3))"
@@ -224,8 +226,6 @@ c_3|2001-05-01 00:00:00|10.0|10.0
 c_4|2001-06-01 00:00:00|12.0|12.0
 c_5|2001-07-01 00:00:00|49.0|49.0
 c_6|2001-08-01 00:00:00|64.0|64.0
-
-
 </pre></div>
 
 
