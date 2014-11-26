@@ -167,68 +167,52 @@ int main(int argc, char *argv[])
     parm.res_ns->required = YES;
     parm.res_ns->description = _("Desired north-south resolution");
 
-    parm.elev = G_define_option();
-    parm.elev->key = "elev";
-    parm.elev->type = TYPE_STRING;
+    parm.elev = G_define_standard_option(G_OPT_R_ELEV);
     parm.elev->required = NO;
     parm.elev->gisprompt = "new,cell,raster";
-    parm.elev->description = _("Output z-file (elevation) map");
+    parm.elev->description = _("Name for output elevation raster map");
     parm.elev->guisection = _("Output");
 
-    parm.slope = G_define_option();
+    parm.slope = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.slope->key = "slope";
-    parm.slope->type = TYPE_STRING;
     parm.slope->required = NO;
-    parm.slope->gisprompt = "new,cell,raster";
-    parm.slope->description = _("Output slope map (or fx)");
+    parm.slope->description = _("Name for output slope map (or fx)");
     parm.slope->guisection = _("Output");
 
-    parm.aspect = G_define_option();
+    parm.aspect = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.aspect->key = "aspect";
-    parm.aspect->type = TYPE_STRING;
     parm.aspect->required = NO;
-    parm.aspect->gisprompt = "new,cell,raster";
-    parm.aspect->description = _("Output aspect map (or fy)");
+    parm.aspect->description = _("Name for output aspect map (or fy)");
     parm.aspect->guisection = _("Output");
 
-    parm.pcurv = G_define_option();
-    parm.pcurv->key = "pcurv";
-    parm.pcurv->type = TYPE_STRING;
+    parm.pcurv = G_define_standard_option(G_OPT_R_OUTPUT);
+    parm.pcurv->key = "pcurvature";
     parm.pcurv->required = NO;
-    parm.pcurv->gisprompt = "new,cell,raster";
-    parm.pcurv->description = _("Output profile curvature map (or fxx)");
+    parm.pcurv->description = _("Name for output profile curvature map (or fxx)");
     parm.pcurv->guisection = _("Output");
 
-    parm.tcurv = G_define_option();
-    parm.tcurv->key = "tcurv";
-    parm.tcurv->type = TYPE_STRING;
+    parm.tcurv = G_define_standard_option(G_OPT_R_OUTPUT);
+    parm.tcurv->key = "tcurvature";
     parm.tcurv->required = NO;
-    parm.tcurv->gisprompt = "new,cell,raster";
-    parm.tcurv->description = _("Output tangential curvature map (or fyy)");
+    parm.tcurv->description = _("Name for output tangential curvature map (or fyy)");
     parm.tcurv->guisection = _("Output");
 
-    parm.mcurv = G_define_option();
-    parm.mcurv->key = "mcurv";
-    parm.mcurv->type = TYPE_STRING;
+    parm.mcurv = G_define_standard_option(G_OPT_R_OUTPUT);
+    parm.mcurv->key = "mcurvature";
     parm.mcurv->required = NO;
-    parm.mcurv->gisprompt = "new,cell,raster";
-    parm.mcurv->description = _("Output mean curvature map (or fxy)");
+    parm.mcurv->description = _("Name for output mean curvature map (or fxy)");
     parm.mcurv->guisection = _("Output");
 
-    parm.smooth = G_define_option();
+    parm.smooth = G_define_standard_option(G_OPT_R_INPUT);
     parm.smooth->key = "smooth";
-    parm.smooth->type = TYPE_STRING;
     parm.smooth->required = NO;
-    parm.smooth->gisprompt = "old,cell,raster";
-    parm.smooth->description = _("Name of raster map containing smoothing");
+    parm.smooth->description = _("Name of input raster map containing smoothing");
     parm.smooth->guisection = _("Settings");
 
-    parm.maskmap = G_define_option();
+    parm.maskmap = G_define_standard_option(G_OPT_R_INPUT);
     parm.maskmap->key = "maskmap";
-    parm.maskmap->type = TYPE_STRING;
     parm.maskmap->required = NO;
-    parm.maskmap->gisprompt = "old,cell,raster";
-    parm.maskmap->description = _("Name of raster map to be used as mask");
+    parm.maskmap->description = _("Name of input raster map to be used as mask");
     parm.maskmap->guisection = _("Settings");
 
     parm.overlap = G_define_option();
@@ -240,7 +224,7 @@ int main(int argc, char *argv[])
     parm.overlap->guisection = _("Settings");
 
     parm.zmult = G_define_option();
-    parm.zmult->key = "zmult";
+    parm.zmult->key = "zmultiplier";
     parm.zmult->type = TYPE_DOUBLE;
     parm.zmult->answer = ZMULT;
     parm.zmult->required = NO;
