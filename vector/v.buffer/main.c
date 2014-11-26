@@ -268,7 +268,6 @@ int main(int argc, char *argv[])
     angle_opt->guisection = _("Distance");
 
     bufcol_opt = G_define_standard_option(G_OPT_DB_COLUMN);
-    bufcol_opt->key = "bufcolumn";
     bufcol_opt->description =
 	_("Name of column to use for buffer distances");
     bufcol_opt->guisection = _("Distance");
