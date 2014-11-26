@@ -672,7 +672,7 @@ struct Option *G_define_standard_option(int opt)
         Opt->type = TYPE_STRING;
         Opt->required = NO;
         Opt->multiple = NO;
-        Opt->description = _("String representing NULL value data cell");
+        Opt->description = _("String representing NULL value");
         break;
         
     case G_OPT_M_REGION:
