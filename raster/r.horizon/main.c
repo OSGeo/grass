@@ -283,11 +283,7 @@ int main(int argc, char *argv[])
     parm.horizon->guisection = _("Output options");
 
 
-    parm.coord = G_define_option();
-    parm.coord->key = "coordinate";
-    parm.coord->type = TYPE_DOUBLE;
-    parm.coord->key_desc = "east,north";
-    parm.coord->required = NO;
+    parm.coord = G_define_standard_option(G_OPT_M_COORDS);
     parm.coord->description =
 	_("Coordinate for which you want to calculate the horizon");
     parm.coord->guisection = _("Output options");
@@ -301,6 +297,7 @@ int main(int argc, char *argv[])
     parm.dist->guisection = _("Output options");
 
     parm.output = G_define_standard_option(G_OPT_F_OUTPUT);
+    parm.output->key = "file";
     parm.output->required = NO;
     parm.output->answer = "-";
     parm.output->description =
