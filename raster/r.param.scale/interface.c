@@ -74,14 +74,14 @@ void interface(int argc, char **argv)
     rast_out->description =
 	_("Name for output raster map containing morphometric parameter");
 
-    tol1_val->key = "s_tol";
+    tol1_val->key = "slope_tol";
     tol1_val->description =
 	_("Slope tolerance that defines a 'flat' surface (degrees)");
     tol1_val->type = TYPE_DOUBLE;
     tol1_val->required = NO;
     tol1_val->answer = "1.0";
 
-    tol2_val->key = "c_tol";
+    tol2_val->key = "curvature_tol";
     tol2_val->description =
 	_("Curvature tolerance that defines 'planar' surface");
     tol2_val->type = TYPE_DOUBLE;
@@ -105,7 +105,7 @@ void interface(int argc, char **argv)
 	"elev,slope,aspect,profc,planc,longc,crosc,minic,maxic,feature";
     parameter->answer = "elev";
 
-    expon->key = "exp";
+    expon->key = "exponent";
     expon->description = _("Exponent for distance weighting (0.0-4.0)");
     expon->type = TYPE_DOUBLE;
     expon->required = NO;
