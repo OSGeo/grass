@@ -41,6 +41,7 @@ except ImportError: # < Python 2.7
 from wms_base import WMSBase, GetSRSParamVal
 
 from wms_cap_parsers import WMTSCapabilitiesTree, OnEarthCapabilitiesTree
+from srs import Srs
 
 class WMSDrv(WMSBase):
     def _download(self):
@@ -443,7 +444,7 @@ class WMSRequestMgr(BaseRequestMgr):
         # CRS:84 and CRS:83 are exception (CRS:83 and CRS:27 need to be tested)
         if srs_param in [84, 83] or version != '1.3.0':
             return bbox
-        elif self._isGeoProj(proj):
+        elif Srs('epsg:' + str(srs_param)).axisorder == 'yx':
             return self._flipBbox(bbox)
 
         return bbox
