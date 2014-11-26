@@ -248,7 +248,7 @@ int main(int argc, char *argv[])
     parm.input->description = NULL; /* no OGR support */
     
     parm.cellinp = G_define_standard_option(G_OPT_R_INPUT);
-    parm.cellinp->key = "cellinp";
+    parm.cellinp->key = "cross_input";
     parm.cellinp->required = NO;
     parm.cellinp->description =
 	_("Name of input surface raster map for cross-section");
@@ -258,7 +258,7 @@ int main(int argc, char *argv[])
     parm.colnum->key = "wcolumn";
     parm.colnum->required = NO;
     parm.colnum->description =
-	_("Name of column containing w attribute to interpolate");
+	_("Name of column containing w-values attribute to interpolate");
     
     parm.fi = G_define_option();
     parm.fi->key = "tension";
@@ -277,7 +277,7 @@ int main(int argc, char *argv[])
     parm.rsm->guisection = _("Settings");
 
     parm.scol = G_define_standard_option(G_OPT_DB_COLUMN);
-    parm.scol->key = "scolumn";
+    parm.scol->key = "smooth_column";
     parm.scol->required = NO;
     parm.scol->description =
 	_("Name of column with smoothing parameters");
@@ -338,7 +338,7 @@ int main(int argc, char *argv[])
     parm.dmin1->guisection = _("Settings");
 
     parm.wmult = G_define_option();
-    parm.wmult->key = "wmult";
+    parm.wmult->key = "wmultiplier";
     parm.wmult->type = TYPE_DOUBLE;
     parm.wmult->answer = ZMULT;
     parm.wmult->required = NO;
@@ -347,7 +347,7 @@ int main(int argc, char *argv[])
     parm.wmult->guisection = _("Settings");
 
     parm.zmult = G_define_option();
-    parm.zmult->key = "zmult";
+    parm.zmult->key = "zmultiplier";
     parm.zmult->type = TYPE_DOUBLE;
     parm.zmult->answer = ZMULT;
     parm.zmult->required = NO;
@@ -355,13 +355,13 @@ int main(int argc, char *argv[])
     parm.zmult->guisection = _("Settings");
 
     parm.cellout = G_define_standard_option(G_OPT_R_OUTPUT);
-    parm.cellout->key = "cellout";
+    parm.cellout->key = "cross_output";
     parm.cellout->required = NO;
     parm.cellout->description = _("Name for output cross-section raster map");
     parm.cellout->guisection = _("Outputs");
 
     parm.outz = G_define_standard_option(G_OPT_R3_OUTPUT);
-    parm.outz->key = "elev";
+    parm.outz->key = "elevation";
     parm.outz->required = NO;
     parm.outz->description = _("Name for output elevation 3D raster map");
     parm.outz->guisection = _("Outputs");
@@ -373,32 +373,32 @@ int main(int argc, char *argv[])
     parm.gradient->guisection = _("Outputs");
 
     parm.aspect1 = G_define_standard_option(G_OPT_R3_OUTPUT);
-    parm.aspect1->key = "aspect1";
+    parm.aspect1->key = "aspect_horizontal";
     parm.aspect1->required = NO;
     parm.aspect1->description =
 	_("Name for output gradient horizontal angle 3D raster map");
     parm.aspect1->guisection = _("Outputs");
 
     parm.aspect2 = G_define_standard_option(G_OPT_R3_OUTPUT);
-    parm.aspect2->key = "aspect2";
+    parm.aspect2->key = "aspect_vertical";
     parm.aspect2->required = NO;
     parm.aspect2->description = _("Name for output gradient vertical angle 3D raster map");
     parm.aspect2->guisection = _("Outputs");
 
     parm.ncurv = G_define_standard_option(G_OPT_R3_OUTPUT);
-    parm.ncurv->key = "ncurv";
+    parm.ncurv->key = "ncurvature";
     parm.ncurv->required = NO;
     parm.ncurv->description = _("Name for output change of gradient 3D raster map");
     parm.ncurv->guisection = _("Outputs");
 
     parm.gcurv = G_define_standard_option(G_OPT_R3_OUTPUT);
-    parm.gcurv->key = "gcurv";
+    parm.gcurv->key = "gcurvature";
     parm.gcurv->required = NO;
     parm.gcurv->description = _("Name for output Gaussian curvature 3D raster map");
     parm.gcurv->guisection = _("Outputs");
 
     parm.mcurv = G_define_standard_option(G_OPT_R3_OUTPUT);
-    parm.mcurv->key = "mcurv";
+    parm.mcurv->key = "mcurvature";
     parm.mcurv->required = NO;
     parm.mcurv->description = _("Name for output mean curvature 3D raster map");
     parm.mcurv->guisection = _("Outputs");
