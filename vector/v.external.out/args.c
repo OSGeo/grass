@@ -9,7 +9,7 @@ void parse_args(int argc, char **argv,
 		struct _options *options, struct _flags *flags)
 {
     options->dsn = G_define_option();
-    options->dsn->key = "dsn";
+    options->dsn->key = "input";
     options->dsn->type = TYPE_STRING;
     options->dsn->label = _("Name of input OGR or PostGIS data source");
     options->dsn->description = _("Examples:\n"
@@ -47,11 +47,13 @@ void parse_args(int argc, char **argv,
     options->opts->guisection = _("Settings");
 
     options->input = G_define_standard_option(G_OPT_F_INPUT);
+    options->input->key = "loadsettings";
     options->input->required = NO;
     options->input->description = _("Name of input file to read settings from");
     options->input->guisection = _("Settings");
 
     options->output = G_define_standard_option(G_OPT_F_OUTPUT);
+    options->output->key = "savesettings";
     options->output->required = NO;
     options->output->description = _("Name for output file where to save current settings");
 
