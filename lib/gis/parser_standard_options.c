@@ -325,18 +325,18 @@ struct Option *G_define_standard_option(int opt)
                    _("Bicubic interpolation"));
         break;
     case G_OPT_R_BASENAME_INPUT:
-        Opt->key = "basename";
+        Opt->key = "input";
         Opt->type = TYPE_STRING;
-        Opt->key_desc = "input basename";
+        Opt->key_desc = "basename";
         Opt->required = YES;
         Opt->multiple = NO;
         Opt->gisprompt = "old,cell,raster";
         Opt->description = _("Name of input basename raster map(s)");
         break;
     case G_OPT_R_BASENAME_OUTPUT:
-        Opt->key = "basename";
+        Opt->key = "output";
         Opt->type = TYPE_STRING;
-        Opt->key_desc = "output basename";
+        Opt->key_desc = "basename";
         Opt->required = YES;
         Opt->multiple = NO;
         Opt->gisprompt = "new,cell,raster";
