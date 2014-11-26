@@ -61,8 +61,6 @@ int main(int argc, char **argv)
     opt.input = G_define_standard_option(G_OPT_V_INPUT);
 
     opt.lfield = G_define_standard_option(G_OPT_V_FIELD);
-    opt.lfield->key = "llayer";
-    opt.lfield->answer = "1";
     opt.lfield->label = "Line layer number or name";
     opt.lfield->guisection = _("Selection");
 
