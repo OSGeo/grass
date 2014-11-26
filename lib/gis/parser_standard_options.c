@@ -102,6 +102,7 @@
    - G_OPT_M_COORDS
    - G_OPT_M_COLR
    - G_OPT_M_REGION
+   - G_OPT_M_NULL_VALUE
 
   - temporal GIS framework
    - G_OPT_STDS_INPUT
@@ -664,7 +665,16 @@ struct Option *G_define_standard_option(int opt)
 	Opt->descriptions = G_color_rules_descriptions();
         Opt->gisprompt = "old,colortable,colortable";
 	break;
-
+        
+    case G_OPT_M_NULL_VALUE:
+        Opt->key = "null_value";
+        Opt->key_desc = "string";
+        Opt->type = TYPE_STRING;
+        Opt->required = NO;
+        Opt->multiple = NO;
+        Opt->description = _("String representing NULL value data cell");
+        break;
+        
     case G_OPT_M_REGION:
         Opt->key = "region";
         Opt->type = TYPE_STRING;
