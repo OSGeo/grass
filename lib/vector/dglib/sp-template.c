@@ -256,8 +256,18 @@ static dglSPReport_s *DGL_SP_CACHE_REPORT_FUNC(dglGraph_s * pgraph,
 			clipInput.nFromDistance = 0; \
 			if ( fnClip( pgraph , & clipInput , & clipOutput , pvClipArg ) ) continue; \
 		} \
-		pPredistItem = dglTreePredistAdd( pCache->pvPredist, DGL_NODE_ID(pDestination) ); \
-		if ( pPredistItem == NULL ) goto sp_error; \
+		findPredist.nKey = DGL_NODE_ID(pDestination); \
+		if ( (pPredistItem = avl_find( pCache->pvPredist, &findPredist)) == NULL ) { \
+			if ( (pPredistItem = dglTreePredistAdd( pCache->pvPredist, DGL_NODE_ID(pDestination) )) == NULL ) { \
+				pgraph->iErrno = DGL_ERR_MemoryExhausted; \
+				goto sp_error; \
+			} \
+		} \
+		else { \
+			if ( pPredistItem->nDistance <= clipOutput.nEdgeCost ) { \
+				continue; \
+			} \
+		} \
 		pPredistItem->nFrom      = nStart; \
 		pPredistItem->pnEdge     = pEdge; \
 		pPredistItem->nCost      = clipOutput.nEdgeCost; \
