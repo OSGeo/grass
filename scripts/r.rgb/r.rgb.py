@@ -21,6 +21,7 @@
 #%option G_OPT_R_INPUT
 #%end
 #%option G_OPT_R_BASENAME_OUTPUT
+#% label: Name of output basename raster map(s)
 #% description: Default: input
 #% required: no
 #%end
