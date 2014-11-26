@@ -118,11 +118,10 @@ int main(int argc, char **argv)
 	G_free(buf);
     }
 
-    out = G_define_standard_option(G_OPT_R_OUTPUT);
-    out->description = _("Name for output file");
+    out = G_define_standard_option(G_OPT_F_OUTPUT);
     
     qual = G_define_option();
-    qual->key = "qual";
+    qual->key = "quality";
     qual->type = TYPE_INTEGER;
     qual->required = NO;
     qual->multiple = NO;
