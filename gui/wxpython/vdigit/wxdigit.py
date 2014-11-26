@@ -1766,13 +1766,7 @@ class IVDigit:
         if newline < 0:
             self._error.WriteLine()
             return (-1, None)
-        else:
-            fids.append(newline)
         
-        # break at intersection
-        if self._settings['breakLines']:
-            self._breakLineAtIntersection(newline, self.poPoints)
-            
         # add centroids for left/right area
         if ftype & GV_AREA:
             left = right = -1
@@ -1802,13 +1796,13 @@ class IVDigit:
                 if Vect_get_point_in_area(self.poMapInfo, left, byref(x), byref(y)) == 0:
                     Vect_reset_line(bpoints)
                     Vect_append_point(bpoints, x.value, y.value, 0.0)
-                    newline = Vect_write_line(self.poMapInfo, GV_CENTROID,
+                    newc = Vect_write_line(self.poMapInfo, GV_CENTROID,
                                               bpoints, self.poCats)
-                    if newline < 0:
+                    if newc < 0:
                         self._error.WriteLine()
                         return (len(fids), fids)
                     else:
-                        fids.append(newline)
+                        fids.append(newc)
                     
             if right > 0 and \
                     Vect_get_area_centroid(self.poMapInfo, right) == 0:
@@ -1817,16 +1811,21 @@ class IVDigit:
                 if Vect_get_point_in_area(self.poMapInfo, right, byref(x), byref(y)) == 0:
                     Vect_reset_line(bpoints)
                     Vect_append_point(bpoints, x.value, y.value, 0.0)
-                    newline =  Vect_write_line(self.poMapInfo, GV_CENTROID,
+                    newc =  Vect_write_line(self.poMapInfo, GV_CENTROID,
                                                bpoints, self.poCats)
-                    if newline < 0:
+                    if newc < 0:
                         self._error.WriteLine()
                         return (len(fids, fids))
                     else:
-                        fids.append(newline)
+                        fids.append(newc)
                     
             Vect_destroy_line_struct(bpoints)
-        
+
+        # break line or boundary at intersection
+        if self._settings['breakLines']:
+            if not self._breakLineAtIntersection(newline, self.poPoints):
+		fids.append(newline)
+
         self._addChangeset()
         
         if ftype & GV_AREA:
