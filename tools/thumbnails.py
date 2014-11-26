@@ -152,7 +152,7 @@ def make_image(output_dir, table, grad, discrete = False):
         lines, cols = None, None
     grass.run_command("r.colors", map = grad, color = table, quiet = True)
     grass.run_command("d.colortable", flags = 'n', map = grad,
-                      lines = lines, cols = cols, quiet = True)
+                      lines = lines, columns = cols, quiet = True)
     outfile = os.path.join(output_dir, "colortables", "%s.png" % table)
     convert_and_rotate(tmp_img, outfile, discrete)
 
