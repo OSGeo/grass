@@ -423,11 +423,6 @@ def set_paths():
             os.environ['MANPATH'] = addons_man_path
             path_prepend(grass_man_path, 'MANPATH')
 
-    # Add .py (Python) to list of executable extensions to search for
-    # in MS-Windows PATH
-    if windows:
-        path_append('.PY', 'PATHEXT')
-
 
 def find_exe(pgm):
     for dir in os.getenv('PATH').split(os.pathsep):
