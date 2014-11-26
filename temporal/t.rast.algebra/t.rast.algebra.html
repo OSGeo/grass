@@ -4,11 +4,9 @@ t.rast.algebra performs temporal and spatial map algebra operations on space tim
 by using the temporal raster algebra.
 
 <h3>PROGRAM USE</h3>
-The module expects an <b>expression</b> as input parameter in the following form: <br>
-<br>
+The module expects an <b>expression</b> as input parameter in the following form: <p>
 <b> "result = expression" </b>
-<br>
-<br>
+<p>
 
 The statement structure is similar to r.mapcalc, see <a href="r.mapcalc.html">r.mapcalc</a>.
 Where <b>result</b> represents the name of a space time raster dataset (STRDS)that will
@@ -27,29 +25,25 @@ number of maps per time interval to build up conditions.
 In addition the algebra provides
 a subset of the spatial operations from <a href="r.mapcalc.html">r.mapcalc</a>.
 All these operations can be assigned to STRDS or to the resulting map lists of operations between STRDS.
-<br>
-<br>
+<p>
 As default, topological relationships between space time datasets will be
 evaluated only temporal. Use the <b>s</b> flag to activate the
 additionally evaluate the spatial topology based on the spatial extents of maps.
-<br>
-<br>
+<p>
 The expression option must be passed as <b>quoted</b>
 expression, for example: <br>
 <div class="code"><pre>t.rast.mapcalc2 expression="C = A + B" basename=result</pre></div>
 Where <b>C</b> is the new space time raster dataset that will contain maps
 with the basename "result" that represent the sum of maps from STRDS <b>A</b> and
 equally temporal related maps from STRDS <b>B</b>.
-<br>
-<br>
+<p>
 The map basename for the result STRDS must always be specified.
 
 <h2>TEMPORAL RASTER ALGEBRA</h2>
 
 
 The temporal algebra provides a wide range of temporal operators and
-functions that will be presented in the following section. <br>
-<br>
+functions that will be presented in the following section. <p>
 
 <h3>TEMPORAL RELATIONS</h3>
 
@@ -93,8 +87,7 @@ over              booth overlaps and overlapped
 
 </pre></div>
 The relations must be read as: A is related to B, like - A equals B - A is
-during B - A contains B <br>
-<br>
+during B - A contains B <p>
 Topological relations must be specified in {} parentheses. <br>
 
 <h3>TEMPORAL OPERATORS</h3>
@@ -124,23 +117,20 @@ by default. The following expression
 C = A : B
 </pre></div>
 means: Select all parts of space time dataset A that are equal to B and store
-it in space time dataset C. The parts are time stamped maps. <br>
-<br>
+it in space time dataset C. The parts are time stamped maps. <p>
 In addition the inverse selection operator <b>!:</b> is defined as the complement of
 the selection operator, hence the following expression
 <div class="code"><pre>
 C = A !: B
 </pre></div>
 means: select all parts of space time time dataset A that are not equal to B
-and store it in space time dataset (STDS) C. <br>
-<br>
+and store it in space time dataset (STDS) C. <p>
 To select parts of a STDS by different topological relations to other STDS,
 the temporal topology selection operator can be used. The operator consists of
 the temporal selection operator, the topological relations, that must be separated 
 by the logical OR operator <b>|</b> and the temporal extent operator. 
 All three parts are separated by comma and surrounded by curly braces:
-{"temporal selection operator", "topological relations", "temporal operator"}  <br>
-<br>
+{"temporal selection operator", "topological relations", "temporal operator"}  <p>
 
 Examples:
 <div class="code"><pre>
@@ -288,8 +278,7 @@ This expression computes the number of maps from space
 time dataset B which are during the time intervals of maps from
 space time dataset A.<br>
 A list of integers (scalars) corresponding to the maps of A
-that contain maps from B will be returned. <br>
-<br>
+that contain maps from B will be returned. <p>
 <div class="code"><pre>
 C = if({equal}, A {#, contains} B > 2, A {:, contains} B)
 </pre></div>
@@ -298,8 +287,7 @@ maps from B and stores them in space time dataset C. The leading equal statement
 in the if condition specifies the temporal relation between the if and then part 
 of the if expression. This is very important, so we do not need to specify a 
 global time reference (a space time dataset) for temporal processing.
-<br>
-<br>
+<p>
 Furthermore the temporal algebra allows temporal buffering, shifting
 and snapping with the functions buff_t(), tshift() and tsnap()
 respectively.
@@ -310,7 +298,8 @@ tsnap(A)                Snap time instances and intervals of STDS A
 </pre></div>
 <br>
 <h4>Single map with temporal extent</h4>
-The temporal algebra can also handle single maps with time stamps in the tmap function.
+The temporal algebra can also handle single maps with time stamps in the
+tmap function.
 <div class="code"><pre>
 tmap()
 </pre></div>
@@ -318,7 +307,8 @@ For example:
 <div class="code"><pre>
  C = A {:,during} tmap(event)
 </pre></div>
-This statement select all maps from space time data set A that are during the temporal extent of single map 'event'
+This statement select all maps from space time data set A that are during 
+the temporal extent of single map 'event'
 
 <h3>Spatial raster operators</h3>
 
@@ -362,10 +352,12 @@ For example:
 <div class="code"><pre>
  C = A * map(constant_value)
 </pre></div>
-This statement multiply all raster maps from space time raster data set A with the raster map 'constant_value'
+This statement multiply all raster maps from space time raster data set A
+with the raster map 'constant_value'
 <h3>Combinations of temporal, raster and select operators</h3>
 
-We combine the temporal topology relations, the temporal operators and the spatial/select operators to create spatio-temporal operators:
+We combine the temporal topology relations, the temporal operators and the
+spatial/select operators to create spatio-temporal operators:
 
 <div class="code"><pre>
 {"spatial or select operator", "list of temporal relations", "temporal operator"}
@@ -392,8 +384,11 @@ Keep attention that the aggregation behaviour is not symmetric:
 </pre>
 <h3>Temporal neighbourhood modifier</h3>
 
-The neighbourhood modifier of r.mapcalc is extended for the temporal raster algebra by the temporal dimension.
-The format is strds[t,r,c], where t is the temporal offset, r is the row offset and c is the column offset. <br>
+The neighbourhood modifier of r.mapcalc is extended for the temporal 
+raster algebra by the temporal dimension. The format is strds[t,r,c], 
+where t is the temporal offset, r is the row offset and c is the column 
+offset. <br>
+
 <pre class="code">
 strds[2] 
 </pre>
@@ -401,15 +396,18 @@ Refers to the second successor of the current map
 <pre class="code">
 strds[1,2]
 </pre>
-Refers to the cell one row below and two columns to the right of the current cell in the current map
+Refers to the cell one row below and two columns to the right of the current
+cell in the current map
 <pre class="code">
 strds[1,-2,-1] 
 </pre>
-Refers to the cell two rows above and one column to the left of the current cell of the first successor map
+Refers to the cell two rows above and one column to the left of the current
+cell of the first successor map
 <pre class="code">
 strds[-2,0,1]
 </pre>
-Refers to the cell one column to the right of the current cell in the second predecessor map.
+Refers to the cell one column to the right of the current cell in the
+second predecessor map.
 
 <h3>Examples: </h3>
 Sum maps from space time dataset A with maps from space time dataset
@@ -419,11 +417,13 @@ store them in space time dataset D.
 D = if(start_date(A) < "2005-01-01", A + B)
 </pre></div>
 
-Create the sum of all maps from STRDS A and B that have equal time stamps and store the new maps in STRDS C:
+Create the sum of all maps from STRDS A and B that have equal time stamps
+and store the new maps in STRDS C:
 <div class="code"><pre>
 C = A + B
 </pre></div>
-Same expression with explicit definition of the temporal topology relation and temporal operators:
+Same expression with explicit definition of the temporal topology relation
+and temporal operators:
 <div class="code"><pre>
 C = A {+,equal,l} B
 </pre></div>
@@ -433,30 +433,36 @@ then 30 days (Jan, Mar, Mai, Jul, Aug, Oct, Dec):
 <div class="code"><pre>
 C = if(A > 100 && A < 1600 && td(A) > 30, B)
 </pre></div>
-Same expression with explicit definition of the temporal topology relation and temporal operators:
+Same expression with explicit definition of the temporal topology relation
+and temporal operators:
 <div class="code"><pre>
 C = if({equal}, A > 100 && A < 1600 {&&,equal} td(A) > 30, B)
 </pre></div>
-Compute the recharge in meter per second for all cells of precipitation STRDS "Prec" if the mean temperature specified in STRDS "Temp" is higher than 10 degrees. Computation is performed if STRDS "Prec" and "Temp" have equal time stamps. The number of days or fraction of days per interval is computed using the td() function that has as argument the STRDS "Prec":
+Compute the recharge in meter per second for all cells of precipitation
+STRDS "Prec" if the mean temperature specified in STRDS "Temp" is higher
+than 10 degrees. Computation is performed if STRDS "Prec" and "Temp" have
+equal time stamps. The number of days or fraction of days per interval is
+computed using the td() function that has as argument the STRDS "Prec":
 <div class="code"><pre>
 C = if(Temp > 10.0, Prec / 3600.0 /24.0 / td(Prec))
 </pre></div>
-Same expression with explicit definition of the temporal topology relation and temporal operators:
+Same expression with explicit definition of the temporal topology relation
+and temporal operators:
 <div class="code"><pre>
 C = if({equal}, Temp > 10.0, Prec / 3600.0 / 24.0 {/,equal,l} td(Prec))
 </pre></div>
-Compute the mean value of all maps from STRDS A that are located during time intervals of STRDS B if more than one map of A is contained in an interval of B, use A otherwise, the resulting time intervals are either from B or A:
+Compute the mean value of all maps from STRDS A that are located during time
+intervals of STRDS B if more than one map of A is contained in an interval
+of B, use A otherwise, the resulting time intervals are either from B or A:
 <div class="code"><pre>
 C = if(B {#,contain} A > 1, (B {+,contain,l} A - B) / (B {#,contain} A), A)
 </pre></div>
-Same expression with explicit definition of the temporal topology relation and temporal operators:
+Same expression with explicit definition of the temporal topology relation
+and temporal operators:
 <div class="code"><pre>
 C = if({equal}, B {#,contain} A > 1, (B {+,contain,l} A {-,equal,l} B) {equal,=/} (B {#,contain} A), A)
 </pre></div>
 
-<h2>REFERENCES</h2>
-
-<tt><a href="http://www.dabeaz.com/ply/">PLY(Python-Lex-Yacc)</a></tt>
 
 <h2>SEE ALSO</h2>
 
@@ -468,6 +474,10 @@ C = if({equal}, B {#,contain} A > 1, (B {+,contain,l} A {-,equal,l} B) {equal,=/
 <a href="t.rast3d.mapcalc.html">t.rast3d.mapcalc</a>
 <a href="t.rast.mapcalc.html">t.rast.mapcalc</a>
 </em>
+
+<h2>REFERENCES</h2>
+
+<a href="http://www.dabeaz.com/ply/">PLY(Python-Lex-Yacc)</a>
 
 <h2>AUTHORS</h2>
 

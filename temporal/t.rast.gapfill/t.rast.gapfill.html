@@ -1,15 +1,16 @@
 <h2>DESCRIPTION</h2>
 
-This modules fills temporal gaps in space time raster datasets using linear 
-interpolation. Temporal all gaps will be detected in the input space time 
-raster dataset automatically. The predecessor and successor maps of the gaps 
-will be identified and used to linear interpolate the raster map between
-them.
+<em>t.rast.gapfill</em> fills temporal gaps in space time raster datasets
+using linear interpolation. Temporal all gaps will be detected in the input
+space time raster dataset automatically. The predecessor and successor maps
+of the gaps will be identified and used to linear interpolate the raster
+map between them.
 
 <h2>Note</h2>
 This module uses <a href="r.series.interp.html">r.series.interp</a> to
-perform the interpolation for each gap independently. Hence several interpolation
-processes can be run in parallel.
+perform the interpolation for each gap independently. Hence several
+interpolation processes can be run in parallel.
+
 <h2>Examples</h2>
 
 In this example we will create 3 raster maps and register them in the
@@ -61,8 +62,6 @@ gap_6|2012-08-21 00:00:00|2.0|2.0
 map2|2012-08-22 00:00:00|3.0|3.0
 gap_7|2012-08-23 00:00:00|4.0|4.0
 map3|2012-08-24 00:00:00|5.0|5.0
-
-
 </pre></div>
 
 <h2>SEE ALSO</h2>
