@@ -51,7 +51,7 @@ This program is free software under the GNU General Public License
 #% type: string
 #% description: Image format requested from the server
 #% options: geotiff,tiff,jpeg,gif,png,png8
-#% answer: geotiff
+#% answer: png
 #% guisection: Request
 #%end
 
