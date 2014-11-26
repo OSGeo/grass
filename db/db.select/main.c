@@ -232,11 +232,7 @@ void parse_command_line(int argc, char **argv)
     vs->answer = NULL;
     vs->guisection = _("Format");
 
-    nv = G_define_option();
-    nv->key = "nv";
-    nv->type = TYPE_STRING;
-    nv->required = NO;
-    nv->description = _("Null value indicator");
+    nv = G_define_standard_option(G_OPT_M_NULL_VALUE);
     nv->guisection = _("Format");
 
     output = G_define_standard_option(G_OPT_F_OUTPUT); 
