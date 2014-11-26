@@ -37,20 +37,20 @@
 #%end
 
 #%option G_OPT_DB_TABLE
-#% key: otable
+#% key: other_table
 #% description: Other table name
 #% required: yes
 #% guidependency: ocolumn,scolumns
 #%end
 
 #%option G_OPT_DB_COLUMN
-#% key: ocolumn
+#% key: other_column
 #% description: Identifier column (e.g.: id) in the other table used for join
 #% required: yes
 #%end
 
 #%option G_OPT_DB_COLUMN
-#% key: scolumns
+#% key: subset_columns
 #% multiple: yes
 #% required: no
 #% description: Subset of columns from the other table
