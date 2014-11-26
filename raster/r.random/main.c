@@ -73,11 +73,11 @@ int main(int argc, char *argv[])
 
     parm.raster = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.raster->required = NO;
-    parm.raster->key = "raster_output";
+    parm.raster->key = "raster";
 
     parm.sites = G_define_standard_option(G_OPT_V_OUTPUT);
     parm.sites->required = NO;
-    parm.sites->key = "vector_output";
+    parm.sites->key = "vector";
 
     flag.zero = G_define_flag();
     flag.zero->key = 'z';
