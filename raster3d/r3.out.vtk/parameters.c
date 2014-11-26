@@ -71,28 +71,24 @@ void set_params()
 	_("Create 3D elevation output with a top and a bottom surface, both raster maps are required.");
 
 
-    param.rgbmaps = G_define_option();
+    param.rgbmaps = G_define_standard_option(G_OPT_R3_INPUT);
     param.rgbmaps->key = "rgbmaps";
-    param.rgbmaps->type = TYPE_STRING;
     param.rgbmaps->required = NO;
-    param.rgbmaps->gisprompt = "old,grid3,3d-raster";
     param.rgbmaps->multiple = YES;
     param.rgbmaps->guisection = "Advanced options";
     param.rgbmaps->description =
 	_("Three (R,G,B) 3D raster maps to create RGB values [redmap,greenmap,bluemap]");
 
-    param.vectormaps = G_define_option();
+    param.vectormaps = G_define_standard_option(G_OPT_V_OUTPUT);
     param.vectormaps->key = "vectormaps";
-    param.vectormaps->type = TYPE_STRING;
     param.vectormaps->required = NO;
-    param.vectormaps->gisprompt = "old,grid3,3d-raster";
     param.vectormaps->multiple = YES;
     param.vectormaps->guisection = "Advanced options";
     param.vectormaps->description =
 	_("Three (x,y,z) 3D raster maps to create vector values [xmap,ymap,zmap]");
 
     param.elevscale = G_define_option();
-    param.elevscale->key = "elevscale";
+    param.elevscale->key = "zmultiplier";
     param.elevscale->type = TYPE_DOUBLE;
     param.elevscale->required = NO;
     param.elevscale->description = _("Scale factor for elevation");
@@ -100,7 +96,7 @@ void set_params()
     param.elevscale->answer = "1.0";
 
     param.decimals = G_define_option();
-    param.decimals->key = "dp";
+    param.decimals->key = "precision";
     param.decimals->type = TYPE_INTEGER;
     param.decimals->required = NO;
     param.decimals->multiple = NO;
