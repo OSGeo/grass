@@ -9,7 +9,7 @@ void parse_args(int argc, char **argv,
 		struct _options *options, struct _flags* flags)
 {
     options->dsn = G_define_option();
-    options->dsn->key = "dsn";
+    options->dsn->key = "input";
     options->dsn->type = TYPE_STRING;
     options->dsn->label = _("Name of input OGR or PostGIS data source");
     options->dsn->description = _("Examples:\n"
