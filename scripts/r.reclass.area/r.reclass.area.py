@@ -39,7 +39,7 @@
 #%option
 #% key: value
 #% type: double
-#% description: Value option that sets the area size limit [hectares]
+#% description: Value option that sets the area size limit (in hectares)
 #% required: yes
 #% guisection: Area
 #%end
@@ -47,7 +47,7 @@
 #%option
 #% key: mode
 #% type: string
-#% description: Lesser or greater than the value
+#% description: Lesser or greater than specified value
 #% options: lesser,greater
 #% required: yes
 #% guisection: Area
