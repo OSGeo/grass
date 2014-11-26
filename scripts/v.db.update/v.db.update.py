@@ -7,7 +7,7 @@
 #               Extensions by Markus Neteler
 #               Converted to Python by Glynn Clements
 # PURPOSE:      Interface to db.execute to update a column in the attribute table connected to a given map
-# COPYRIGHT:    (C) 2005,2007-2008,2011 by the GRASS Development Team
+# COPYRIGHT:    (C) 2005-2014 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS

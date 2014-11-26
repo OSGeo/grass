@@ -9,9 +9,9 @@ void parse_args(int argc, char **argv,
 		struct _options *options, struct _flags *flags)
 {
     options->dsn = G_define_option();
-    options->dsn->key = "input";
+    options->dsn->key = "directory";
     options->dsn->type = TYPE_STRING;
-    options->dsn->label = _("Name of input OGR or PostGIS data source");
+    options->dsn->label = _("Name of output directory or OGR or PostGIS data source");
     options->dsn->description = _("Examples:\n"
 				  "\t\tESRI Shapefile: directory containing a shapefile\n"
 				  "\t\tMapInfo File: directory containing a mapinfo file\n"

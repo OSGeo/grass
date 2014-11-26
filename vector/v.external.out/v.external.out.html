@@ -89,10 +89,10 @@ Shapefile format:
 
 <div class="code"><pre>
 # register Shapefile in GRASS mapset:
-v.external dsn=/path/to/shapefiles layer=cities
+v.external input=/path/to/shapefiles layer=cities
 
 # define output directory for GRASS calculation results:
-v.external.out dsn=$HOME/gisoutput
+v.external.out output=$HOME/gisoutput
 
 # do something (here: spatial query), write output directly as Shapefile
 v.select ainput=cities atype=point binput=forests btype=area operator=within output=fcities
@@ -103,7 +103,7 @@ Current settings can be printed using <b>-p</b> or <b>-g</b> flag.
 <div class="code"><pre>
 v.external.out -p
 
-dsn: /path/to/home/gisoutput
+output: /path/to/home/gisoutput
 format: ESRI Shapefile
 </pre></div>
 
@@ -114,10 +114,10 @@ provider</em> (GRASS must be compiled with PostgreSQL support).
 
 <div class="code"><pre>
 # register PostGIS table in GRASS mapset:
-v.external dsn=PG:dbname=gisdb layer=cities
+v.external output=PG:dbname=gisdb layer=cities
 
 # define output PostGIS database for GRASS calculation results stored as simple features:
-v.external.out dsn=PG:dbname=gisdb format=PostgreSQL
+v.external.out output=PG:dbname=gisdb format=PostgreSQL
 
 # do some processing...
 </pre></div>
@@ -131,7 +131,7 @@ PostGIS data.
 
 <div class="code"><pre>
 # define output PostGIS database for GRASS calculation results stored as topological elements:
-v.external.out dsn=PG:dbname=gisdb format=PostgreSQL options=topology=YES
+v.external.out output=PG:dbname=gisdb format=PostgreSQL options=topology=YES
 
 # do some processing...
 </pre></div>
@@ -153,7 +153,7 @@ Current settings can be stored to file by specifying <b>output</b> option.
 
 <div class="code"><pre>
 # define output PostGIS database for GRASS calculation results stored as topological elements:
-v.external.out dsn=PG:dbname=gisdb format=PostgreSQL options=topology=YES output=gisdb_topo.txt
+v.external.out output=PG:dbname=gisdb format=PostgreSQL options=topology=YES output=gisdb_topo.txt
 
 # do some processing in PostGIS Topology
 </pre></div>
@@ -169,7 +169,7 @@ v.external.out -r
 Restore previous settings from &quot;gisdb_topo.txt&quot; file by specifying <b>input</b> option.
 
 <div class="code"><pre>
-v.external.out input=gisdb_topo.txt
+v.external.out output=gisdb_topo.txt
 
 # do some processing in PostGIS Topology
 </pre></div>
