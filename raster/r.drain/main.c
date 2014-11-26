@@ -116,7 +116,7 @@ int main(int argc, char **argv)
     opt1->description = _("Name of input elevation or cost surface raster map");
     
     opt3 = G_define_standard_option(G_OPT_R_INPUT);
-    opt3->key = "indir";
+    opt3->key = "direction";
     opt3->description =
 	_("Name of input movement direction map associated with the cost surface");
     opt3->required = NO;
@@ -125,7 +125,7 @@ int main(int argc, char **argv)
     opt2 = G_define_standard_option(G_OPT_R_OUTPUT);
     
     opt4 = G_define_standard_option(G_OPT_V_OUTPUT);
-    opt4->key = "vector_output";
+    opt4->key = "drain";
     opt4->required = NO;
     opt4->label =
         _("Name for output drain vector map");
