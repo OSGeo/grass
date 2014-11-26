@@ -50,11 +50,11 @@ int main(int argc, char *argv[])
 
     /* Define the different options */
     input_map1 = G_define_standard_option(G_OPT_R_MAP);
-    input_map1->key = "map1";
+    input_map1->key = "mapx";
     input_map1->description = (_("Map for x coefficient"));
 
     input_map2 = G_define_standard_option(G_OPT_R_MAP);
-    input_map2->key = "map2";
+    input_map2->key = "mapy";
     input_map2->description = (_("Map for y coefficient"));
 
     output_opt = G_define_standard_option(G_OPT_F_OUTPUT);
