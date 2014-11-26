@@ -82,9 +82,9 @@ int parse_command_line(int argc, char *argv[])
 	       _("line/boundary starting point coordinates, X,Y or X,Y,Z"),
 	       _("line/boundary end point coordinates, X,Y or X,Y,Z"),
 	       _("categories of areas on the left and right side of the boundary, "
-		 "'qlayer' is used for area category"),
+		 "'query_layer' is used for area category"),
 	       _("result of a database query for all records of the geometry"
-		 "(or geometries) from table specified by 'qlayer' option"),
+		 "(or geometries) from table specified by 'query_layer' option"),
 	       _("slope steepness of vector line or boundary"),
 	       _("line sinuousity, calculated as line length / distance between end points"),
 	       _("line azimuth, calculated as angle between North direction and endnode direction at startnode"));
@@ -99,13 +99,13 @@ int parse_command_line(int argc, char *argv[])
 	"miles,feet,meters,kilometers,acres,hectares,radians,degrees";
     
     parms.qfield = G_define_standard_option(G_OPT_V_FIELD);
-    parms.qfield->key = "qlayer";
+    parms.qfield->key = "query_layer";
     parms.qfield->label = _("Query layer number or name (read from)");
     parms.qfield->guisection = _("Query");
     parms.qfield->required = NO;
     
     parms.qcol = G_define_standard_option(G_OPT_DB_COLUMN);
-    parms.qcol->key = "qcolumn";
+    parms.qcol->key = "query_column";
     parms.qcol->label = _("Name of attribute column used for 'query' option");
     parms.qcol->description = _("E.g. 'cat', 'count(*)', 'sum(val)'");
     parms.qcol->required = NO;
