@@ -31,15 +31,15 @@
 #% required: yes
 #%end
 #%option G_OPT_V_MAP
-#% key: qmap
+#% key: query_map
 #% label: Name of vector map to be queried
 #% required : yes
 #%end
 #%option G_OPT_V_FIELD
-#% key: qlayer
+#% key: query_layer
 #%end
 #%option G_OPT_DB_COLUMN
-#% key: qcolumn
+#% key: query_column
 #% description: Name of attribute column to be queried
 #% required: yes
 #%end
