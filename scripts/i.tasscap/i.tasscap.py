@@ -42,7 +42,7 @@
 #% keywords: Tasseled Cap transformation
 #%end
 #%option G_OPT_R_INPUTS
-#% description: For Landsat 4-7: bands 1, 2, 3, 4, 5, and 7
+#% description: For Landsat4-7: bands 1, 2, 3, 4, 5, and 7
 #%end
 #%option G_OPT_R_BASENAME_OUTPUT
 #% label: Name for output basename raster map(s)
@@ -57,8 +57,6 @@
 #% descriptions: landsat4_tm;Use transformation rules for Landsat 4 TM;landsat5_tm;Use transformation rules for Landsat 5 TM;landsat7_etm;Use transformation rules for Landsat 7 ETM
 #%end
 
-import sys
-import os
 import grass.script as grass
 
 # weights for 6 Landsat bands: TM4, TM5, TM7
@@ -112,7 +110,7 @@ def main():
         if band_num == 6:
             band_num = 7
         bands['band' + str(band_num)] = band
-    print bands
+    grass.debug(1, bands)
 
     if satellite == 'landsat4_tm':
         calcN(output_basename, bands, 0, 4)
@@ -122,6 +120,11 @@ def main():
         calcN(output_basename, bands, 2, 7)
     else:
         raise RuntimeError("Invalid satellite: " + satellite)
+
+    grass.run_command('r.support', map = "%s.%d" % (output_basename, 1), description = "Tasseled Cap 1: brightness")
+    grass.run_command('r.support', map = "%s.%d" % (output_basename, 2), description = "Tasseled Cap 2: greenness")
+    grass.run_command('r.support', map = "%s.%d" % (output_basename, 3), description = "Tasseled Cap 3: wetness")
+    grass.run_command('r.support', map = "%s.%d" % (output_basename, 4), description = "Tasseled Cap 4: atmospheric haze")
 
     grass.message(_("Tasseled Cap components calculated"))
 
