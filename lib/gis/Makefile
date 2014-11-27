@@ -20,7 +20,7 @@ PROJFILES := $(patsubst %,$(ETC)/proj/%,$(PROJSRC))
 COLORSRC := $(filter-out colors/CVS,$(wildcard colors/[abcdefghijklmnopqrstuvwxyz]*))
 COLORFILES := $(patsubst colors/%,$(ETC)/colors/%,$(COLORSRC))
 
-default: lib $(FMODE_OBJ) $(PROJFILES) $(COLORFILES) $(ETC)/colors.desc 
+default: lib $(FMODE_OBJ) $(PROJFILES) $(COLORFILES) $(ETC)/colors.desc $(ETC)/renamed_options
 
 ifdef MINGW
 $(FMODE_OBJ): $(OBJDIR)/fmode.o
