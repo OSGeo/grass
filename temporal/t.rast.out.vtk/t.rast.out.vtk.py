@@ -77,7 +77,7 @@ def main():
     # Get the options
     input = options["input"]
     elevation = options["elevation"]
-    expdir = options["expdir"]
+    expdir = options["directory"]
     where = options["where"]
     null = options["null"]
     use_pdata = flags["p"]
