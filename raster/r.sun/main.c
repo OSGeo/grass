@@ -303,17 +303,15 @@ int main(int argc, char *argv[])
 	_("Name of the Linke atmospheric turbidity coefficient input raster map [-]");
     parm.linkein->guisection = _("Input");
 
-    if (parm.linkein->answer == NULL) {
-	parm.lin = G_define_option();
-	parm.lin->key = "lin";
-	parm.lin->type = TYPE_DOUBLE;
-	parm.lin->answer = LINKE;
-	parm.lin->required = NO;
-	parm.lin->description =
-	    _("A single value of the Linke atmospheric turbidity coefficient [-]");
-	parm.lin->guisection = _("Input");
-    }
-
+    parm.lin = G_define_option();
+    parm.lin->key = "linke_value";
+    parm.lin->type = TYPE_DOUBLE;
+    parm.lin->answer = LINKE;
+    parm.lin->required = NO;
+    parm.lin->description =
+      _("A single value of the Linke atmospheric turbidity coefficient [-]");
+    parm.lin->guisection = _("Input");
+    
     parm.albedo = G_define_option();
     parm.albedo->key = "albedo";
     parm.albedo->type = TYPE_STRING;
@@ -323,16 +321,14 @@ int main(int argc, char *argv[])
 	_("Name of the ground albedo coefficient input raster map [-]");
     parm.albedo->guisection = _("Input");
 
-    if (parm.albedo->answer == NULL) {
-	parm.alb = G_define_option();
-	parm.alb->key = "alb";
-	parm.alb->type = TYPE_DOUBLE;
-	parm.alb->answer = ALB;
-	parm.alb->required = NO;
-	parm.alb->description =
-	    _("A single value of the ground albedo coefficient [-]");
-	parm.alb->guisection = _("Input");
-    }
+    parm.alb = G_define_option();
+    parm.alb->key = "albedo_value";
+    parm.alb->type = TYPE_DOUBLE;
+    parm.alb->answer = ALB;
+    parm.alb->required = NO;
+    parm.alb->description =
+      _("A single value of the ground albedo coefficient [-]");
+    parm.alb->guisection = _("Input");
 
     parm.latin = G_define_option();
     parm.latin->key = "lat";
