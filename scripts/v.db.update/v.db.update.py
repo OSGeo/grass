@@ -53,7 +53,7 @@ def main():
     layer = options['layer']
     column = options['column']
     value = options['value']
-    qcolumn = options['qcolumn']
+    qcolumn = options['query_column']
     where = options['where']
 
     mapset = grass.gisenv()['MAPSET']
