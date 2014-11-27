@@ -84,13 +84,13 @@ def get_percentile(map, percentiles):
     val1 = percentiles[0]
     val2 = percentiles[1]
     values = '%s,%s' % (val1, val2)
-    s = grass.read_command('r.univar', flags = 'ge',
-			   map = map, percentile = values)
-    kv = grass.parse_key_val(s)
-    # cleanse to match what the key name will become
-    val_str1 = ('percentile_%.15g' % float(val1)).replace('.','_')
-    val_str2 = ('percentile_%.15g' % float(val2)).replace('.','_')
-    return (float(kv[val_str1]), float(kv[val_str2]))
+
+    s = grass.read_command('r.quantile', input = map, 
+                           percentiles = values, quiet = True)
+
+    val_str1 = s.splitlines()[0].split(':')[2]
+    val_str2 = s.splitlines()[1].split(':')[2]
+    return (float(val_str1), float(val_str2))
 
 # wrapper to handle multiprocesses communications back to the parent
 def get_percentile_mp(map, percentiles, conn):
