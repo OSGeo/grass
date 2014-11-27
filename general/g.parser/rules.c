@@ -61,6 +61,11 @@ void parse_rule(struct context *ctx, const char *cmd, const char *arg)
 	return;
     }
 
+    if (G_strcasecmp(cmd, "required") == 0) {
+	add_rule(ctx, RULE_REQUIRED, arg);
+	return;
+    }
+
     if (G_strcasecmp(cmd, "requires") == 0) {
 	add_rule(ctx, RULE_REQUIRES, arg);
 	return;
