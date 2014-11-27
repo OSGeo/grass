@@ -334,6 +334,9 @@ class DMonGrassInterface(StandaloneGrassInterface):
     def GetMapWindow(self):
         return self._mapframe.GetMapWindow()
 
+    def GetProgress(self):
+        return self._mapframe.GetProgressBar()
+
 
 class DMonFrame(MapFrame):
     def OnZoomToMap(self, event):

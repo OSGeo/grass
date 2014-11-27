@@ -43,7 +43,7 @@ import wx
 from core.globalvar import CheckWxVersion
 from core.utils import _, GuiModuleMain
 from mapdisp.frame import MapFrame
-from core.giface import StandaloneGrassInterface
+from mapdisp.main import DMonGrassInterface
 from core.settings import UserSettings
 from vdigit.main import haveVDigit, errorMsg
 from grass.exceptions import CalledModuleError
@@ -51,9 +51,10 @@ from grass.exceptions import CalledModuleError
 
 class VDigitMapFrame(MapFrame):
     def __init__(self, vectorMap):
-        MapFrame.__init__(self, parent = None, giface = StandaloneGrassInterface(),
+        MapFrame.__init__(self, parent = None, giface = DMonGrassInterface(None),
                           title = _("GRASS GIS Vector Digitizer"), size = (850, 600))
-
+        # this giface issue not solved yet, we must set mapframe aferwards
+        self._giface._mapframe = self
         # load vector map
         mapLayer = self.GetMap().AddLayer(ltype = 'vector',
                                           command = ['d.vect', 'map=%s' % vectorMap],
