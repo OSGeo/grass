@@ -115,7 +115,7 @@ const char *M_get_option_desc(int do_all)
 	len += strlen(list[n].text) + 1;
     }
     if (do_all)
-	len += strlen(str_all);
+	len += strlen(str_all) + 1;
     str = G_malloc(len);
     
     for (n = 0; n < nlist; n++) {
