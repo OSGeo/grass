@@ -153,7 +153,7 @@ This program is free software under the GNU General Public License
 #%option G_OPT_F_OUTPUT
 #% key: capfile_output
 #% required: no
-#% description: File in which the server capabilities will be saved ('c' flag)
+#% description: File where the server capabilities will be saved ('c' flag)
 #%end
 
 #%flag
