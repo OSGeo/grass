@@ -34,18 +34,19 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("display"));
     G_add_keyword(_("settings"));
+    G_add_keyword(_("colors"));
     module->description =
-	"Output a list of all available display colors with a configurable "
-	"separator (default is comma).";
+	_("Outputs a list of all available display colors.");
 
     /* set up option */
     sep = G_define_standard_option(G_OPT_F_SEP);
+    sep->answer = "comma";
     
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     sep_str = G_option_to_separator(sep);
-
+    
     colorlist = G_store(D_COLOR_LIST);
 
     /* if separator is different from ",", escape this character */
