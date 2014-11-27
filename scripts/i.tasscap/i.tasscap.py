@@ -6,7 +6,7 @@
 # AUTHOR(S):	Markus Neteler. neteler itc.it
 #               Converted to Python by Glynn Clements
 # PURPOSE:	At-satellite reflectance based tasseled cap transformation.
-# COPYRIGHT:	(C) 1997-2004,2008 by the GRASS Development Team
+# COPYRIGHT:	(C) 1997-2004,2008, 2014 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (>=v2). Read the file COPYING that comes with GRASS
@@ -42,10 +42,10 @@
 #% keywords: Tasseled Cap transformation
 #%end
 #%option G_OPT_R_INPUTS
+#% description: For Landsat 4-7: bands 1, 2, 3, 4, 5, and 7
 #%end
 #%option G_OPT_R_BASENAME_OUTPUT
 #% label: Name for output basename raster map(s)
-#% description: For Landsat 4-7, the raster maps should be the bands 1, 2, 3, 4, 5, and 7.
 #%end
 #%option
 #% key: sensor
@@ -61,14 +61,15 @@ import sys
 import os
 import grass.script as grass
 
-parms = [[( 0.3037, 0.2793, 0.4743, 0.5585, 0.5082, 0.1863),
+# weights for 6 Landsat bands: TM4, TM5, TM7
+parms = [[( 0.3037, 0.2793, 0.4743, 0.5585, 0.5082, 0.1863), # Landsat TM4
 	  (-0.2848,-0.2435,-0.5435, 0.7243, 0.0840,-0.1800),
 	  ( 0.1509, 0.1973, 0.3279, 0.3406,-0.7112,-0.4572)],
-	 [( 0.2909, 0.2493, 0.4806, 0.5568, 0.4438, 0.1706, 10.3695),
+	 [( 0.2909, 0.2493, 0.4806, 0.5568, 0.4438, 0.1706, 10.3695), # Landsat TM5
 	  (-0.2728,-0.2174,-0.5508, 0.7221, 0.0733,-0.1648, -0.7310),
 	  ( 0.1446, 0.1761, 0.3322, 0.3396,-0.6210,-0.4186, -3.3828),
 	  ( 0.8461,-0.0731,-0.4640,-0.0032,-0.0492,-0.0119,  0.7879)],
-	 [( 0.3561, 0.3972, 0.3904, 0.6966, 0.2286, 0.1596),
+	 [( 0.3561, 0.3972, 0.3904, 0.6966, 0.2286, 0.1596), # Landsat TM7
 	  (-0.3344,-0.3544,-0.4556, 0.6966,-0.0242,-0.2630),
 	  ( 0.2626, 0.2141, 0.0926, 0.0656,-0.7629,-0.5388),
 	  ( 0.0805,-0.0498, 0.1950,-0.1327, 0.5752,-0.7775)]]
@@ -82,7 +83,7 @@ def calc1(out, bands, k1, k2, k3, k4, k5, k7, k0 = 0):
     grass.run_command('r.colors', map = out, color = 'grey')
 
 def calcN(outpre, bands, i, n):
-    grass.message(_("LANDSAT-%d...") % n)
+    grass.message(_("Satellite band-%d...") % n)
     for j, p in enumerate(parms[i]):
 	out = "%s.%d" % (outpre, j + 1)
 	ord = ordinals[j]
@@ -96,12 +97,12 @@ def calcN(outpre, bands, i, n):
 
 def main():
     options, flags = grass.parser()
-    satellite = options['satellite']
-    output_basename = options['basename']
+    satellite = options['sensor']
+    output_basename = options['output']
     inputs = options['input'].split(',')
     num_of_bands = 6
     if len(inputs) != num_of_bands:
-        grass.fatal(_("The number of input raster maps (bands) should be %s.") % num_of_bands)
+        grass.fatal(_("The number of input raster maps (bands) should be %s") % num_of_bands)
 
     # this is here just for the compatibility with r.mapcalc expression
     # remove this if not really needed in new implementation
@@ -122,7 +123,7 @@ def main():
     else:
         raise RuntimeError("Invalid satellite: " + satellite)
 
-    grass.message(_("Tasseled Cap components calculated."))
+    grass.message(_("Tasseled Cap components calculated"))
 
 if __name__ == "__main__":
     main()
