@@ -100,7 +100,7 @@ def main():
     ms2       = options['green'] # green channel
     ms3       = options['red'] # red channel
     pan       = options['pan'] # high res pan channel
-    out       = options['basename'] # prefix for output RGB maps
+    out       = options['output'] # prefix for output RGB maps
     bladjust  = flags['l'] # adjust blue channel
     sproc     = flags['s'] # serial processing
     
