@@ -6,7 +6,8 @@ enum state
     S_TOPLEVEL,
     S_MODULE,
     S_FLAG,
-    S_OPTION
+    S_OPTION,
+    S_RULES
 };
 
 struct context

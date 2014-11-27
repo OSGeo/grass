@@ -126,6 +126,9 @@ int main(int argc, char *argv[])
 	case S_OPTION:
 	    parse_option(&ctx, cmd, arg);
 	    break;
+	case S_RULES:
+	    parse_rule(&ctx, cmd, arg);
+	    break;
 	}
     }
 
