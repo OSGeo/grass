@@ -169,6 +169,10 @@ This program is free software under the GNU General Public License
 #% guisection: Map style
 #%end
 
+#%rules
+#% exclusive: capfile_output, capfile
+#%end
+
 import os
 import sys
 sys.path.insert(1, os.path.join(os.path.dirname(sys.path[0]), 'etc', 'r.in.wms'))
