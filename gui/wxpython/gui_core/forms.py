@@ -1220,12 +1220,16 @@ class CmdPanel(wx.Panel):
                             p['wxId'] = [selection.GetId(), ]
                         else:
                             p['wxId'] = [textWin.GetId(), ]
+                        if prompt != 'vector':
+                            self.FindWindowById(p['wxId'][0]).Bind(wx.EVT_TEXT, self.OnSetValue)
 
                     if prompt == 'vector':
+                        win = self.FindWindowById(p['wxId'][0])
                         # handlers should be bound in this order
-                        selection.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
-                        selection.Bind(wx.EVT_TEXT, self.OnSetValue)
-                        
+                        # OnUpdateSelection depends on calling OnSetValue first which is bad
+                        win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
+                        win.Bind(wx.EVT_TEXT, self.OnSetValue)
+
                         # if formatSelector and p.get('age', 'old') == 'old':
                         #     # OGR supported (read-only)
                         #     self.hsizer = wx.BoxSizer(wx.HORIZONTAL)
