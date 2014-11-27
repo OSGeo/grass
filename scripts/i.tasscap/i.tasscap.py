@@ -30,6 +30,10 @@
 #  Compare discussion:
 #  http://adis.cesnet.cz/cgi-bin/lwgate/IMAGRS-L/archives/imagrs-l.log0211/date/article-14.html
 #
+#   Landsat8: Baig, M.H.A., Zhang, L., Shuai, T., Tong, Q., 2014. Derivation of a tasselled cap transformation
+#              based on Landsat 8 at-satellite reflectance. Remote Sensing Letters 5, 423-431. 
+#              doi:10.1080/2150704X.2014.915434
+#
 #  MODIS Tasselled Cap coefficients
 #  https://gis.stackexchange.com/questions/116107/tasseled-cap-transformation-on-modis-in-grass/116110
 #  Ref: Lobser & Cohen (2007). MODIS tasselled cap: land cover characteristics 
@@ -49,10 +53,10 @@
 #% keywords: Tasseled Cap transformation
 #%end
 #%option G_OPT_R_INPUTS
+#% description: For Landsat4-7: bands 1, 2, 3, 4, 5, and 7; for Landsat8: bands 2, 3, 4, 5, 6, and 7
 #%end
 #%option G_OPT_R_BASENAME_OUTPUT
 #% label: Name for output basename raster map(s)
-#% description: For Landsat 4-7, the raster maps should be the bands 1, 2, 3, 4, 5, and 7.
 #%end
 #%option
 #% key: sensor
@@ -60,15 +64,13 @@
 #% description: Satellite sensor
 #% required: yes
 #% multiple: no
-#% options: landsat4_tm,landsat5_tm,landsat7_etm,modis
-#% descriptions: landsat4_tm;Use transformation rules for Landsat 4 TM;landsat5_tm;Use transformation rules for Landsat 5 TM;landsat7_etm;Use transformation rules for Landsat 7 ETM;modis;Use transformation rules for MODIS
+#% options: landsat4_tm,landsat5_tm,landsat7_etm,landsat8,modis
+#% descriptions: landsat4_tm;Use transformation rules for Landsat 4 TM;landsat5_tm;Use transformation rules for Landsat 5 TM;landsat7_etm;Use transformation rules for Landsat 7 ETM;landsat8;Use transformation rules for Landsat 8;modis;Use transformation rules for MODIS
 #%end
 
-import sys
-import os
 import grass.script as grass
 
-# weights for 6 Landsat bands: TM4, TM5, TM7
+# weights for 6 Landsat bands: TM4, TM5, TM7, OLI
 # MODIS: Red, NIR1, Blue, Green, NIR2, SWIR1, SWIR2
 parms = [[( 0.3037, 0.2793, 0.4743, 0.5585, 0.5082, 0.1863), # Landsat TM4
 	  (-0.2848,-0.2435,-0.5435, 0.7243, 0.0840,-0.1800),
@@ -81,6 +83,10 @@ parms = [[( 0.3037, 0.2793, 0.4743, 0.5585, 0.5082, 0.1863), # Landsat TM4
 	  (-0.3344,-0.3544,-0.4556, 0.6966,-0.0242,-0.2630),
 	  ( 0.2626, 0.2141, 0.0926, 0.0656,-0.7629,-0.5388),
 	  ( 0.0805,-0.0498, 0.1950,-0.1327, 0.5752,-0.7775)],
+	 [( 0.3029, 0.2786, 0.4733, 0.5599, 0.5080, 0.1872), # Landsat TM8
+	  (-0.2941,-0.2430,-0.5424, 0.7276, 0.0713,-0.1608),
+	  ( 0.1511, 0.1973, 0.3283, 0.3407,-0.7117,-0.4559),
+	  (-0.8239, 0.0849, 0.4396, -0.058, 0.2013,-0.2773)],
 	 [( 0.4395, 0.5945, 0.2460, 0.3918, 0.3506, 0.2136, 0.2678), # MODIS
 	  (-0.4064, 0.5129,-0.2744,-0.2893, 0.4882,-0.0036,-0.4169),
 	  ( 0.1147, 0.2489, 0.2408, 0.3132,-0.3122,-0.6416,-0.5087)]]
@@ -108,8 +114,8 @@ def calcN(outpre, bands, i, n):
 
 def main():
     options, flags = grass.parser()
-    satellite = options['satellite']
-    output_basename = options['basename']
+    satellite = options['sensor']
+    output_basename = options['output']
     inputs = options['input'].split(',')
     num_of_bands = 6
     if len(inputs) != num_of_bands:
@@ -130,6 +136,8 @@ def main():
     elif satellite == 'landsat5_tm':
         calcN(output_basename, bands, 1, 5)
     elif satellite == 'landsat7_etm':
+        calcN(output_basename, bands, 2, 7)
+    elif satellite == 'landsat8':
         calcN(output_basename, bands, 2, 7)
     elif satellite == 'modis':
         calcN(output_basename, bands, 3, 7)
