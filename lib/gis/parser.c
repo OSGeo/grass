@@ -1,5 +1,5 @@
 /*!
- * \file gis/parser.c
+ * \file lib/gis/parser.c
  *
  * \brief GIS Library - Argument parsing functions.
  *
@@ -64,7 +64,7 @@
  *    that the "map" option is required and also that the number 12 is
  *    out of range.  The acceptable range (or list) will be printed.
  *
- * (C) 2001-2009, 2011 by the GRASS Development Team
+ * (C) 2001-2014 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -119,6 +119,7 @@ static void define_keywords(void);
 static void split_gisprompt(const char *, char *, char *, char *);
 static void module_gui_wx(void);
 static void append_error(const char *);
+static const char *get_renamed_option(const char *);
 
 /*!
  * \brief Disables the ability of the parser to operate interactively.
@@ -985,13 +986,32 @@ void set_option(const char *string)
 	return;
     }
 
-    /* If there is no match, complain */
+    /* First, check if key has been renamed in GRASS 7 */
     if (found == 0) {
-	G_asprintf(&err, _("Sorry, <%s> is not a valid parameter"), the_key);
-	append_error(err);
-	return;
+        const char *renamed_key = NULL;
+
+        renamed_key = get_renamed_option(the_key);
+        if (renamed_key) {
+            for (at_opt = &st->first_option; at_opt; at_opt = at_opt->next_opt) {
+                if (strcmp(renamed_key, at_opt->key) == 0) {
+                    G_warning(_("Please update the interface of the module: "
+                                "option <%s> has been renamed to <%s>"),
+                              the_key, renamed_key);
+                    opt = at_opt;
+                    found = 1;
+                    break; 
+                }
+            }
+        }
     }
 
+    /* If there is no match, complain */
+    if (found == 0) {
+        G_asprintf(&err, _("Sorry, <%s> is not a valid parameter"), the_key);
+        append_error(err);
+        return;
+    }
+    
     /* Allocate memory where answer is stored */
     if (opt->count++) {
 	if (!opt->multiple) {
@@ -1461,6 +1481,35 @@ void append_error(const char *msg)
 {
     st->error = G_realloc(st->error, sizeof(char *) * (st->n_errors + 1));
     st->error[st->n_errors++] = G_store(msg);
+}
+
+const char *get_renamed_option(const char *key)
+{
+    const char *pgm, *key_new;
+    char *pgm_key;
+    
+    if (!st->renamed_options) {
+        /* read renamed options from file (renamed_options) */
+        char path[GPATH_MAX];
+        
+        G_snprintf(path, GPATH_MAX, "%s/etc/renamed_options", G_gisbase());
+        st->renamed_options = G_read_key_value_file(path);
+    }
+
+    /* try to check global changes first */
+    key_new = G_find_key_value(key, st->renamed_options);
+    if (key_new)
+        return key_new;
+
+    /* then check module-relevant changes */
+    pgm = G_program_name();
+    pgm_key = (char *) G_malloc (strlen(pgm) + strlen(key) + 2);
+    G_asprintf(&pgm_key, "%s|%s", pgm, key);
+
+    key_new = G_find_key_value(pgm_key, st->renamed_options);
+    G_free(pgm_key);
+
+    return key_new;
 }
 
 /*!

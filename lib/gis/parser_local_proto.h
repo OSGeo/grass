@@ -39,6 +39,8 @@ struct state {
 
     char **error;
     int n_errors;
+
+    struct Key_Value *renamed_options;
 };
 
 extern struct state *st;

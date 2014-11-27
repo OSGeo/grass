@@ -1,0 +1,487 @@
+### Renamed options in GRASS 7.0
+################################
+### Global
+#########################
+fs:separator
+nv:null_value
+dt:dtime
+dp:precision
+##########################
+### Display module changes
+##########################
+# d.barscale
+d.barscale|background_color:bgcolor
+# d.correlate
+d.correlate|layers:map 
+# d.erase
+d.erase|background:bgcolor 
+# d.legend
+d.legend|map:rast 
+# d.rast
+d.rast|catlist:values
+d.rast|vallist:values
+# d.rast.leg
+d.rast.leg|rast:raster 
+# d.vect
+d.vect|wcolumn:width_column
+d.vect|wscale:width_scale
+d.vect|rot_column:rotation_column
+d.vect|attrcolumn:attribute_column 
+# d.colortable
+d.colortable|cols:columns 
+# d.geodetic
+d.geodetic|lcolor:line_color
+d.geodetic|tcolor:text_color 
+# d.grid
+d.grid|bordercolor:border_color
+d.grid|textcolor:text_color 
+# d.polar
+d.polar|eps:output 
+# d.profile
+d.profile|input:map
+d.profile|profile:coordinates 
+# d.rast.arrow
+d.rast.arrow|arrow_color:color
+d.rast.arrow|x_color:null_color 
+# d.rhumbline
+d.rhumbline|coord:coordinates
+d.rhumbline|lcolor:line_color 
+# d.vect
+d.vect|fcolor:fill_color
+d.vect|llayer:label_layer
+d.vect|lcolor:label_color
+d.vect|bgcolor:label_bgcolor
+d.vect|bcolor:label_boundary_color
+d.vect|lsize:label_size 
+# d.thematic.area
+d.thematic.area|bcolor:boundary_color
+d.thematic.area|bwidth:boundary_width 
+# d.vect.chart
+d.vect.chart|ctype:chart_type
+d.vect.chart|ocolor:outline_color
+d.vect.chart|sizecol:size_column 
+######################################
+### Database management module changes
+######################################
+# db.out.ogr
+db.out.ogr|db_table:table 
+# db.select
+db.select|vs:vertical_separator
+#########################################
+### General map management module changes
+#########################################
+# g.mapsets
+g.mapsets|addmapset:operation
+g.mapsets|removemapset:operation
+g.mapsets|measure:method
+# g.pnmcomp
+g.pnmcomp|background:bgcolor 
+# g.mapset
+g.mapset|gisdbase:dbase 
+###################################
+### Image processing module changes
+###################################
+# i.atcorr
+i.atcorr|iimg:input
+i.atcorr|iscl:range
+i.atcorr|ialt:elevation
+i.atcorr|ivis:visibility
+i.atcorr|icnd:parameters
+i.atcorr|oimg:output
+i.atcorr|oscl:rescale
+i.atcorr|input:map 
+# i.biomass
+i.biomass|lightuseefficiency:lightuse_efficiency
+i.biomass|transmissivitysingleway:transmissivity_singleway
+i.biomass|wateravailability:water_availability 
+# i.evapo.mh
+i.evapo.mh|averagetemperature:average_temperature
+i.evapo.mh|maximumtemperature:maximum_temperature
+i.evapo.mh|minimumtemperature:minimum_temperature
+i.evapo.mh|netradiationdiurnal:netradiation_diurnal 
+# i.evapo.pt
+i.evapo.pt|airtemperature:air_temperature
+i.evapo.pt|atmosphericpressure:atmospheric_pressure
+i.evapo.pt|netradiation:net_radiation
+i.evapo.pt|soilheatflux:soil_heatflux
+i.evapo.pt|priestley_taylor_coef:priestley_taylor_coef 
+# i.image.mosaic
+i.image.mosaic|images:input 
+# i.in.spotvgt
+i.in.spotvgt|file:input
+i.in.spotvgt|rast:output 
+# i.maxlik
+i.maxlik|sigfile:signaturefile
+i.maxlik|class:output 
+# i.spectral
+i.spectral|raster:input
+i.spectral|coord:coordinates
+# i.tasscap
+i.tasscap|outprefix:basename 
+# i.pansharpen
+i.pansharpen|ms1:blue
+i.pansharpen|ms2:green
+i.pansharpen|ms3:red
+i.pansharpen|output_prefix:output
+i.pansharpen|sharpen:method 
+# i.fft
+i.fft|input_image:input
+i.fft|real_image:real
+i.fft|imaginary_image:imaginary 
+# i.his.rgb
+i.his.rgb|hue_input:hue
+i.his.rgb|intensity_input:intensity
+i.his.rgb|saturation_input:saturation
+i.his.rgb|red_output:red
+i.his.rgb|green_output:green
+i.his.rgb|blue_output:blue 
+# i.fft
+i.fft|real_image:real
+i.fft|imaginary_image:imaginary
+i.fft|output_image:output 
+# i.landsat.acca
+i.landsat.acca|input_prefix:input 
+# i.landsat.toar
+i.landsat.toar|input_prefix:input
+i.landsat.toar|output_prefix:output 
+# i.pca
+i.pca|output_prefix:output 
+# i.rectify
+i.rectify|res:resolution 
+# i.rgb.his
+i.rgb.his|red_input:red
+i.rgb.his|green_input:green
+i.rgb.his|blue_input:blue
+i.rgb.his|hue_output:hue
+i.rgb.his|intensity_output:intensity
+i.rgb.his|saturation_output:saturation 
+# i.tasscap
+i.tasscap|sattelite:sensor 
+# i.vi
+i.vi|chan5:band5
+i.vi|chan7:band7 
+#########################
+### Raster module changes
+#########################
+# r.basins.fill
+r.basins.fill|c_map:cnetwork
+r.basins.fill|t_map:tnetwork
+r.basins.fill|result:output 
+# r.blend
+r.blend|output:output_prefix 
+# r.colors.stddev
+r.colors.stddev|input:map 
+# r.cost
+r.cost|coordinate:start_coordinates 
+# r.distance
+r.distance|maps:map
+# r.drain
+r.drain|voutput:vector_output
+r.drain|coordinates:start_coordinates
+r.drain|vector_points:start_points 
+# r.fill.dir
+r.fill.dir|elevation:input
+r.fill.dir|depressionless:output
+r.fill.dir|outdir:direction
+r.fill.dir|type:format 
+# r.flow
+r.flow|elevin:elevation
+r.flow|aspin:aspect
+r.flow|barin:barrier
+r.flow|flout:flowline
+r.flow|lgout:flowpath
+r.flow|dsout:density 
+# r.horizon
+r.horizon|elevin:elevation
+r.horizon|horizonstep:step 
+# r.in.wms
+r.in.wms|mapserver:url 
+# r.lake
+r.lake|wl:water_level
+r.lake|xy:coordinates 
+# r.li.*
+r.li.*|map:input 
+# r.los
+r.los|coodinate:coordinates 
+# r.plane
+r.plane|name:output 
+# r.resamp.bspline
+r.resamp.bspline|se:ew_step
+r.resamp.bspline|sn:ns_step 
+# r.sim.sediment
+r.sim.sediment|elevin:elevation
+r.sim.sediment|dxin:dx
+r.sim.sediment|dyin:dy
+r.sim.sediment|detin:det
+r.sim.sediment|tranin:tran
+r.sim.sediment|tauin:tau
+r.sim.sediment|manin:man
+r.sim.sediment|maninval:man_value 
+# r.sim.water
+r.sim.water|elevin:elevation
+r.sim.water|dxin:dx
+r.sim.water|dyin:dy
+r.sim.water|rain_val:rain_value
+r.sim.water|infil:infil
+r.sim.water|infil_val:infil_value
+r.sim.water|manin:man
+r.sim.water|manin_val:man_value 
+# r.sun
+r.sun|elevin:elevation
+r.sun|aspin:aspect
+r.sun|slopein:slope
+r.sun|linkein:linke
+r.sun|lin:linke_value
+r.sun|albin:albedo
+r.sun|alb:albedo_value
+r.sun|latin:lat
+r.sun|longin:long
+r.sun|coefbh:coef_bh
+r.sun|coefdh:coef_dh
+r.sun|horizonstep:horizon_step
+r.sun|declin:declination
+r.sun|dist:distance_step
+r.sun|numpartitions:num_partitions
+r.sun|civiltime:civil_time 
+# r.surf.area
+r.surf.area|input:map
+# r.texture
+r.texture|measure:method 
+# r.to.vect
+r.to.vect|feature:type 
+# r.topmodel
+r.topmodel|elevation:
+r.topmodel|basin:
+r.topmodel|depressionless:
+r.topmodel|direction:
+r.topmodel|belevation:
+r.topmodel|nidxclass:ntopidxclasses
+r.topmodel|idxstats:topidxstats
+r.topmodel|idxclass:topidxclass
+r.topmodel|qobs:
+# r.uslek
+r.uslek|usle_k:output 
+# r.walk
+r.walk|coordinate:start_coordinates 
+# r.water.outlet
+r.water.outlet|drainage:input
+r.water.outlet|basin:output 
+# r.watershed
+r.watershed|disturbed.land:disturbed_land
+r.watershed|half.basin:half_basin
+r.watershed|length.slope:length_slope
+r.watershed|slope.steepness:slope_steepness
+r.watershed|max.slope.length:max_slope_length 
+# r.what
+r.what|east_north:coordinates
+# r.rgb:
+r.rgb:|output_prefix:output 
+# r.blend
+r.blend|output_prefix:output 
+# r.category
+r.category|vals:values
+# r.circle
+r.circle|coordinate:coordinates
+r.circle|mult:multiplier 
+# r.coin
+r.coin|map1:first
+r.coin|map2:second 
+# r.composite
+r.composite|lev_red:level_red
+r.composite|lev_green:level_green
+r.composite|lev_blue:level_blue 
+# r.drain
+r.drain|indir:direction
+r.drain|vector_output:drain 
+# r.fill.dir
+r.fill.dir|outdir:direction 
+# r.horizon
+r.horizon|output:file
+r.horizon|basename:output
+r.horizon|coordinate:coordinates 
+# r.out.mpeg
+r.out.mpeg|qual:quality 
+# r.out.vrml
+r.out.vrml|elev:elevation
+r.out.vrml|exag:exaggeration 
+# r.param.scale
+r.param.scale|s_tol:slope_tol
+r.param.scale|c_tol:curvature_tol
+r.param.scale|exp:exponent 
+# r.random
+r.random|raster_output:raster
+r.random|vector_output:vector 
+# r.reclass.area
+r.reclass.area|lesser,greater:value, mode 
+# r.report
+r.report|pl:page_length
+r.report|pw:page_width
+r.report|null:null_value
+# r.resamp.rst
+r.resamp.rst|elev:elevation
+r.resamp.rst|pcurv:pcurvature
+r.resamp.rst|mcurv:mcurvature
+r.resamp.rst|tcurv:trucravture
+r.resamp.rst|zmult:zmultiplier 
+# r.slope.aspect
+r.slope.aspect|pcurv:pcurvature
+r.slope.aspect|tcurv:tcurvature
+r.slope.aspect|zfactor:zmultiplier
+r.slope.aspect|min_slp_allowed:min_slope 
+# r.spreadpath
+r.spreadpath|coordinate:coordinates 
+# r.terraflow
+r.terraflow|stream_dir:directory 
+# r.out.vtk
+r.out.vtk|elevscale:zmultiplier 
+############################
+### Raster 3D module changes
+############################
+# r3.gwflow
+r3.gwflow|q:sink
+r3.gwflow|s:yield
+r3.gwflow|r:recharge
+r3.gwflow|vx:velocity_x
+r3.gwflow|vy:velocity_y
+r3.gwflow|vz:velocity_z 
+# r3.out.ascii
+r3.out.ascii|null:null_value
+# r3.out.vtk
+r3.out.vtk|elevscale:zmultiplier
+#########################
+### Vector module changes
+#########################
+# v.clean
+v.clean|thresh:threshold 
+# v.drape
+v.drape|rast:elevation 
+# v.edit
+v.edit|measure:method
+v.edit|thresh:threshold 
+# v.extract
+v.extract|list:cats 
+# v.in.e00
+v.in.e00|file:input
+v.in.e00|vect:output 
+# v.in.gns
+v.in.gns|file:input
+v.in.gns|vect:output 
+# v.in.wfs
+v.in.wfs|wfs:url
+v.in.wfs|input:map 
+# v.lrs.create
+v.lrs.create|thresh:threshold 
+# v.lrs.where
+v.lrs.where|thresh:threshold 
+# v.mkgrid
+v.mkgrid|coor:coordinates 
+# v.net
+v.net|thresh:threshold 
+# v.outlier
+v.outlier|soe:ew_step
+v.outlier|son:ns_step 
+# v.rast.stats
+v.rast.stats|colprefix:column_prefix
+v.rast.stats|input:map 
+# v.support
+v.support|thresh:threshold 
+# v.surf.bspline
+v.surf.bspline|sie:ew_step
+v.surf.bspline|sin:ns_step 
+# v.surf.rst
+v.surf.rst|devi:deviations
+v.surf.rst|maskmap:mask
+v.surf.rst|treefile:treeseg
+v.surf.rst|overfile:overwin
+v.surf.rst|elev:elevation 
+# v.what.vect
+v.what.vect|vector:map
+v.what.vect|qvector:query_map
+v.what.vect|qlayer:query_layer
+v.what.vect|qcolumn:query_column
+# v.label
+v.label|background:bgcolor 
+# v.lrs.label
+v.lrs.label|background:bgcolor 
+# v.buffer
+v.buffer|bufcolumn:column 
+# v.db.join
+v.db.join|otable:other_table
+v.db.join|ocolumn:other_column
+v.db.join|scolumns:subset_columns 
+# v.db.select
+v.db.select|vs:vertical separator 
+# v.db.update
+v.db.update|qcolumn:query_column 
+# v.extrude
+v.extrude|hcolumn:height_column 
+# v.kcv
+v.kcv|k:npartitions 
+# v.kernel
+v.kernel|mult:multiplier 
+# v.out.ogr
+v.out.ogr|dsn:output
+v.out.ogr|olayer:output_layer
+v.out.ogr|otype:output_type 
+# v.out.postgis
+v.out.postgis|dsn:output
+v.out.postgis|olayer:output_layer
+v.out.postgis|olink:output_link 
+# v.out.vtk
+v.out.vtk|scale:zmultiplier
+# v.qcount
+v.qcount|n:nquadrants
+v.qcount|r:radius 
+# v.sample
+v.sample|z:zmultiplier 
+# v.segments
+v.segments|file:segments 
+# v.surf.rst
+v.surf.rst|pcurv:pcurvature
+v.surf.rst|tcurv:tcurvature
+v.surf.rst|mcurv:mcurvature
+v.surf.rst|scolumn:smooth_column
+v.surf.rst|zmulti:zmultiplier 
+# v.to.db
+v.to.db|qlayer:query_layer
+v.to.db|qcolumn:query_column 
+# v.to.points
+v.to.points|llayer:layer 
+# v.transform
+v.transform|attrcolumn:attribute_column
+v.transform|rgbcolumn:rgb_column
+v.transform|labelcolumn:label_column 
+# v.transform
+v.transform|zrot:zrotation 
+# v.vect.stats
+v.vect.stats|player:points_layer
+v.vect.stats|alayer:areas_layer
+v.vect.stats|pcolumn:points_column
+v.vect.stats|ccolumn:count_column
+v.vect.stats|scolumn:stats_column 
+# v.vol.rst
+v.vol.rst|cellinp:cross_input
+v.vol.rst|devi:deviations
+v.vol.rst|scolumn:smooth_column
+v.vol.rst|wmulti:wmultiplier
+v.vol.rst|zmulti:zmultiplier
+v.vol.rst|cellout:cross_output
+v.vol.rst|elev:elevation
+v.vol.rst|aspect1:aspect_horizontal
+v.vol.rst|aspect2:aspect_vertical
+v.vol.rst|ncurv:ncurvature
+v.vol.rst|gcurv:gcurvature
+v.vol.rst|mcurv:mcurvature 
+# v.what.vect
+v.what.vect|qmap:query_map
+v.what.vect|qlayer:query_layer
+v.what.vect|qcolumn:query_column
+################################
+### Miscellaneous module changes
+################################
+# m.measure
+m.measure|coords:coordinates 
+# m.cogo
+m.cogo|coords:coordinates 
+# m.transform
+m.transform|coords:input
