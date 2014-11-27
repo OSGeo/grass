@@ -198,11 +198,18 @@ class ListCtrlComboPopup(wx.combo.ComboPopup):
         # from propagating up to the parent GIS Manager layer tree
         self.seltree.Bind(wx.EVT_TREE_ITEM_EXPANDING, lambda x: None)
         self.seltree.Bind(wx.EVT_TREE_ITEM_COLLAPSED, lambda x: None)
-        self.seltree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, lambda x: None)
         self.seltree.Bind(wx.EVT_TREE_SEL_CHANGED, lambda x: None)
         self.seltree.Bind(wx.EVT_TREE_DELETE_ITEM, lambda x: None)
         self.seltree.Bind(wx.EVT_TREE_BEGIN_DRAG, lambda x: None)
         self.seltree.Bind(wx.EVT_TREE_ITEM_RIGHT_CLICK, lambda x: None)
+        # navigation in list/tree is handled automatically since wxPython 3
+        # for older versions, we have to workaround it and write our own navigation
+        if globalvar.CheckWxVersion(version=[3]):
+            self.seltree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self._onItemConfirmed)
+            self.seltree.Bind(wx.EVT_TREE_KEY_DOWN, self._onDismissPopup)
+        else:
+            self.seltree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, lambda x: None)
+            self.seltree.Bind(wx.EVT_KEY_UP, self.OnKeyUp)
 
     def GetControl(self):
         return self.seltree
@@ -273,7 +280,9 @@ class ListCtrlComboPopup(wx.combo.ComboPopup):
             self.seltree.AppendItem(root, text = item)
 
     def OnKeyUp(self, event):
-        """Enable to select items using keyboard
+        """Enable to select items using keyboard.
+        
+        Unused with wxPython 3, can be removed in the future.
         """
         item = self.seltree.GetSelection()
         if event.GetKeyCode() == wx.WXK_DOWN:
@@ -289,13 +298,28 @@ class ListCtrlComboPopup(wx.combo.ComboPopup):
         elif event.GetKeyCode() == wx.WXK_RETURN:
             self.seltree.SelectItem(item)
             self.curitem = item
-            item_str = self.seltree.GetItemText(self.curitem)
-            if self.multiple:
-                if item_str not in self.value:
-                    self.value.append(item_str)
-            else:
-                self.value = [item_str]
+            self._selectTreeItem(item)
             self.Dismiss()
+
+    def _onDismissPopup(self, event):
+        """Hide popup without selecting item on Esc"""
+        if event.GetKeyCode() == wx.WXK_ESCAPE:
+            self.Dismiss()
+        else:
+            event.Skip()
+
+    def _selectTreeItem(self, item):
+        item_str = self.seltree.GetItemText(item)
+        if self.multiple:
+            if item_str not in self.value:
+                self.value.append(item_str)
+        else:
+            self.value = [item_str]
+
+    def _onItemConfirmed(self, event):
+        item = event.GetItem()
+        self._selectTreeItem(item)
+        self.Dismiss()
 
     def OnMotion(self, evt):
         """Have the selection follow the mouse, like in a real combobox
@@ -312,12 +336,7 @@ class ListCtrlComboPopup(wx.combo.ComboPopup):
         if self.curitem is None:
             return
 
-        item_str = self.seltree.GetItemText(self.curitem)
-        if self.multiple:
-            if item_str not in self.value:
-                self.value.append(item_str)
-        else:
-            self.value = [item_str]
+        self._selectTreeItem(self.curitem)
         self.Dismiss()
 
         evt.Skip()
@@ -584,8 +603,11 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         item = self.seltree.AppendItem(parent, text = value, data = wx.TreeItemData(data))
         return item
 
-    def OnKeyDown(self, event):
-        """Enables to select items using keyboard"""
+    def OnKeyUp(self, event):
+        """Enables to select items using keyboard
+
+        Unused with wxPython 3, can be removed in the future.        
+        """
 
         item = self.seltree.GetSelection()
         if event.GetKeyCode() == wx.WXK_DOWN:
@@ -633,20 +655,7 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
             if self.seltree.GetPyData(item)['node']:
                 self.value = []
             else:
-                fullName = self.seltree.GetItemText(item)
-                if self.fullyQualified and self.seltree.GetPyData(item)['mapset']:
-                    fullName += '@' + self.seltree.GetPyData(item)['mapset']
-
-                if self.multiple:
-                    self.value.append(fullName)
-                else:
-                    if self.nmaps > 1: #  see key_desc
-                        if len(self.value) >= self.nmaps:
-                            self.value = [fullName]
-                        else:
-                            self.value.append(fullName)
-                    else:
-                        self.value = [fullName]
+                self._selectTreeItem(item)
 
             self.Dismiss()
 
@@ -661,24 +670,34 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
                 evt.Skip()
                 return
 
-            fullName = self.seltree.GetItemText(item)
-            if self.fullyQualified and self.seltree.GetPyData(item)['mapset']:
-                fullName += '@' + self.seltree.GetPyData(item)['mapset']
-
-            if self.multiple:
-                self.value.append(fullName)
-            else:
-                if self.nmaps > 1: #  see key_desc
-                    if len(self.value) >= self.nmaps:
-                        self.value = [fullName]
-                    else:
-                        self.value.append(fullName)
-                else:
-                    self.value = [fullName]
-
+            self._selectTreeItem(item)
             self.Dismiss()
 
         evt.Skip()
+
+    def _selectTreeItem(self, item):
+        fullName = self.seltree.GetItemText(item)
+        if self.fullyQualified and self.seltree.GetPyData(item)['mapset']:
+            fullName += '@' + self.seltree.GetPyData(item)['mapset']
+
+        if self.multiple:
+            self.value.append(fullName)
+        else:
+            if self.nmaps > 1:  # see key_desc
+                if len(self.value) >= self.nmaps:
+                    self.value = [fullName]
+                else:
+                    self.value.append(fullName)
+            else:
+                self.value = [fullName]
+
+    def _onItemConfirmed(self, event):
+        item = event.GetItem()
+        if self.seltree.GetPyData(item)['node']:
+            self.value = []
+        else:
+            self._selectTreeItem(item)
+        self.Dismiss()
 
     def SetData(self, **kargs):
         """Set object properties"""
