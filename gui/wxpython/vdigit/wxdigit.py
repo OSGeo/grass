@@ -1766,6 +1766,8 @@ class IVDigit:
         if newline < 0:
             self._error.WriteLine()
             return (-1, None)
+
+	fids.append(newline)
         
         # add centroids for left/right area
         if ftype & GV_AREA:
@@ -1823,8 +1825,7 @@ class IVDigit:
 
         # break line or boundary at intersection
         if self._settings['breakLines']:
-            if not self._breakLineAtIntersection(newline, self.poPoints):
-		fids.append(newline)
+            self._breakLineAtIntersection(newline, self.poPoints)
 
         self._addChangeset()
         
