@@ -129,7 +129,7 @@ def main():
         if band_num == 6:
             band_num = 7
         bands['band' + str(band_num)] = band
-    print bands
+    grass.debug(1, bands)
 
     if satellite == 'landsat4_tm':
         calcN(output_basename, bands, 0, 4)
@@ -143,6 +143,11 @@ def main():
         calcN(output_basename, bands, 3, 7)
     else:
         raise RuntimeError("Invalid satellite: " + satellite)
+
+    grass.run_command('r.support', map = "%s.%d" % (output_basename, 1), description = "Tasseled Cap 1: brightness")
+    grass.run_command('r.support', map = "%s.%d" % (output_basename, 2), description = "Tasseled Cap 2: greenness")
+    grass.run_command('r.support', map = "%s.%d" % (output_basename, 3), description = "Tasseled Cap 3: wetness")
+    grass.run_command('r.support', map = "%s.%d" % (output_basename, 4), description = "Tasseled Cap 4: atmospheric haze")
 
     grass.message(_("Tasseled Cap components calculated"))
 
