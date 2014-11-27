@@ -6,7 +6,7 @@
 # main_element:alias:description:menu text
 #    support_element:description
 #
-cell:rast:raster:raster map(s)
+cell:raster:raster:raster map(s)
   cellhd:header
   cats:category
   colr:color
@@ -14,16 +14,16 @@ cell:rast:raster:raster map(s)
   cell_misc:misc
   fcell:fcell
   g3dcell:g3dcell
-grid3:rast3d:raster3D:3D raster map(s)
-vector:vect:vector:vector map(s)
-dig:oldvect:old vector:old (GRASS 5.0) vector map(s)
+grid3:volume:3D raster:3D raster map(s)
+vector:vector:vector:vector map(s)
+dig:oldvector:old vector:old vector map(s) (GRASS 5.0) 
   dig_att:attributes
   dig_plus:topology
   dig_cats:category
   dig_misc:misc
   reg:point registration
-dig_ascii:asciivect:asciivector:ASCII vector map(s)
+dig_ascii:asciivector:ascii vector:ASCII vector map(s)
 paint/labels:labels:label:paint label file(s)
 windows:region:region definition:region definition(s)
-windows3d:region3d:region3D definition:3D region definition(s)
+windows3d:region3d:3D region definition:3D region definition(s)
 group:group:imagery group:imagery group(s)
