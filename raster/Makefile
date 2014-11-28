@@ -86,6 +86,7 @@ SUBDIRS = \
 	r.series.accumulate \
 	r.series.interp \
 	r.shaded.relief \
+	r.sim \
 	r.slope.aspect \
 	r.solute.transport \
 	r.spread \
@@ -127,8 +128,7 @@ SUBDIRS = \
 	r.water.outlet \
 	r.watershed \
 	r.what \
-	r.what.color \
-	simwe
+	r.what.color
 
 PGM = rasterintro
 
