@@ -322,18 +322,18 @@ r.resamp.rst|elev:elevation
 r.resamp.rst|pcurv:pcurvature
 r.resamp.rst|mcurv:mcurvature
 r.resamp.rst|tcurv:trucravture
-r.resamp.rst|zmult:zmultiplier 
+r.resamp.rst|zmult:zscale 
 # r.slope.aspect
 r.slope.aspect|pcurv:pcurvature
 r.slope.aspect|tcurv:tcurvature
-r.slope.aspect|zfactor:zmultiplier
+r.slope.aspect|zfactor:zscale
 r.slope.aspect|min_slp_allowed:min_slope 
 # r.spreadpath
 r.spreadpath|coordinate:coordinates 
 # r.terraflow
 r.terraflow|stream_dir:directory 
 # r.out.vtk
-r.out.vtk|elevscale:zmultiplier 
+r.out.vtk|elevscale:zscale 
 ############################
 ### Raster 3D module changes
 ############################
@@ -347,7 +347,7 @@ r3.gwflow|vz:velocity_z
 # r3.out.ascii
 r3.out.ascii|null:null_value
 # r3.out.vtk
-r3.out.vtk|elevscale:zmultiplier
+r3.out.vtk|elevscale:zscale
 #########################
 ### Vector module changes
 #########################
@@ -428,12 +428,12 @@ v.out.postgis|dsn:output
 v.out.postgis|olayer:output_layer
 v.out.postgis|olink:output_link 
 # v.out.vtk
-v.out.vtk|scale:zmultiplier
+v.out.vtk|scale:zscale
 # v.qcount
 v.qcount|n:nquadrants
 v.qcount|r:radius 
 # v.sample
-v.sample|z:zmultiplier 
+v.sample|z:zscale 
 # v.segments
 v.segments|file:segments 
 # v.surf.rst
@@ -441,7 +441,7 @@ v.surf.rst|pcurv:pcurvature
 v.surf.rst|tcurv:tcurvature
 v.surf.rst|mcurv:mcurvature
 v.surf.rst|scolumn:smooth_column
-v.surf.rst|zmulti:zmultiplier 
+v.surf.rst|zmulti:zscale 
 # v.to.db
 v.to.db|qlayer:query_layer
 v.to.db|qcolumn:query_column 
@@ -464,7 +464,7 @@ v.vol.rst|cellinp:cross_input
 v.vol.rst|devi:deviations
 v.vol.rst|scolumn:smooth_column
 v.vol.rst|wmulti:wmultiplier
-v.vol.rst|zmulti:zmultiplier
+v.vol.rst|zmulti:zscale
 v.vol.rst|cellout:cross_output
 v.vol.rst|elev:elevation
 v.vol.rst|aspect1:aspect_horizontal
