@@ -46,6 +46,7 @@ d.rast.arrow|x_color:null_color
 # d.rhumbline
 d.rhumbline|coord:coordinates
 d.rhumbline|lcolor:line_color
+d.rhumbline|tcolor:text_color
 # d.vect
 d.vect|fcolor:fill_color
 d.vect|llayer:label_layer
