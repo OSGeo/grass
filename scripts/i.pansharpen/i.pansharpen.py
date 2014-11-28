@@ -2,7 +2,7 @@
 
 ############################################################################
 #
-# MODULE:	    i.pansharpen
+# MODULE:	    i.panmethod
 #
 # AUTHOR(S):    Overall script by Michael Barton (ASU)	
 #               Brovey transformation in i.fusion.brovey by Markus Neteler <<neteler at osgeo org>>
@@ -214,7 +214,7 @@ def main():
         grass.message(_("Creating PCA images and calculating eigenvectors..."))
 
         #initial PCA with RGB channels
-        pca_out = grass.read_command('i.pca', quiet=True, rescale='0,0', input='%s,%s,%s' % (ms1, ms2, ms3), output_prefix='tmp%s.pca' % pid)
+        pca_out = grass.read_command('i.pca', quiet=True, rescale='0,0', input='%s,%s,%s' % (ms1, ms2, ms3), output='tmp%s.pca' % pid)
         if len(pca_out) < 1:
             grass.fatal(_("Input has no data. Check region settings."))
 

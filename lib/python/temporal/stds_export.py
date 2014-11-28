@@ -154,7 +154,7 @@ def _export_vector_maps_as_gml(rows, tar, list_file, new_cwd, fs):
         list_file.write(string)
         # Export the vector map with v.out.ogr
         try:
-            gscript.run_command("v.out.ogr", input=name, dsn=(name + ".xml"),
+            gscript.run_command("v.out.ogr", input=name, output=(name + ".xml"),
                                 layer=layer, format="GML")
         except CalledModuleError:
             shutil.rmtree(new_cwd)
