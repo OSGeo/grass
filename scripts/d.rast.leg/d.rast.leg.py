@@ -1,45 +1,38 @@
 #!/usr/bin/env python
 
-##############################################################################
-# d.rast.leg        (GRASS Shell Script)
+############################################################################
 #
-# displays a raster map and its legend on a graphics window. 
+# MODULE:       d.rast.leg
+# AUTHOR(S):
+#               Jianping Xu and Scott Madry, Rutgers University. October 19, 1993
+#               Markus Neteler 8/2002: added simple d.legend logic
+#               Markus Neteler 10/2003: added g.parser
+#               Michael Barton 12/2004: remove reference to (null)
+#               Glynn Clements 10/2008: converted to Python
 #
-# Usage:         d.rast.leg
-#        or      d.rast.leg help
-#        or      d.rast.leg rast_map [num_of_lines]
+# PURPOSE:      Displays a raster map and its legend on a graphics window.
 #
-# Description:   d.rast.leg clears the entire screen, divides it into a main
-#                (left) and a minor (right) frames, and then display a raster 
-#                map in the main frame and the map legend in the minor frame.
-#                The user can run the program interactively or 
-#                non-interactively.
+# Description:  d.rast.leg clears the entire screen, divides it into a main
+#               (left) and a minor (right) frames, and then display a raster 
+#               map in the main frame and the map legend in the minor frame.
+#               The user can run the program interactively or 
+#               non-interactively.
 #
-# Parameters:    rast_map         A raster map to be displayed.
+# See also:     d.rast, d.legend.
 #
-#                num_of_lines         Number of lines to appear in the legend. 
-#                                If this number is not given, the legend frame 
-#                                will display as many lines as number of 
-#                                categories in the map, otherwise, it will
-#                                display the first num_of_lines minus 1  
-#                                categories with the rest being truncated. 
-# 
-# Note:          The user may adjust the num_of_lines parameter or the size of 
-#                graphics window to get an appropriate result.
+# COPYRIGHT:	(C) 1993-2014 by the GRASS Development Team
 #
-# See also:      d.rast, d.legend.
+#               This program is free software under the GNU General Public
+#               License (>=v2). Read the file COPYING that comes with GRASS
+#               for details.
 #
-# Jianping Xu and Scott Madry, Rutgers University. October 19, 1993
-# Markus Neteler 8/2002: added simple d.legend logic
-# Markus Neteler 10/2003: added g.parser
-# Michael Barton 12/2004: remove reference to (null)
-# Glynn Clements 10/2008: converted to Python
-##############################################################################
+#############################################################################
 
 #%module
 #% description: Displays a raster map and its legend on a graphics window
 #% keywords: display
 #% keywords: cartography
+#% keywords: legend
 #%end
 #%flag
 #%  key: f
@@ -88,6 +81,11 @@ def make_frame(f, b, t, l, r):
     os.environ['GRASS_RENDER_FRAME'] = s
 
 def main():
+    env = grass.gisenv()
+    mon = env.get('MONITOR', None)
+    if not mon:
+        grass.fatal(_("No graphics device selected. Use d.mon to select graphics device."))
+
     map = options['map']
     nlines = options['lines']
     rast = options['raster']

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#
+
 ############################################################################
 #
 # MODULE:       d.vect.thematic
@@ -230,6 +230,11 @@ def out(fh, vars, tmpl):
 
 def main():
     global tmp_graph, tmp_group, tmp_psmap, tmp_psleg, tmp_gisleg
+
+    env = grass.gisenv()
+    mon = env.get('MONITOR', None)
+    if not mon:
+        grass.fatal(_("No graphics device selected. Use d.mon to select graphics device."))
 
     breakpoints = options['breakpoints']
     colorscheme = options['colorscheme']
