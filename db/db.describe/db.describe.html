@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
-<em>db.describe</em> displays table information. If parameter <b>-c</b> is used 
- only column names instead of full column descriptions is given. 
+<em>db.describe</em> displays table information. If parameter <b>-c</b>
+is used only column names instead of full column descriptions is given. 
 
 <h2>NOTE</h2>
 
@@ -11,9 +11,11 @@ do not need to be spcified each time.
  
 <h2>EXAMPLES</h2>
 
-<em>List column descriptions of table in SQLite database (note that this is the default setting)</em><br>
+<em>List column descriptions of table in SQLite database (note that this
+is the default setting)</em><br>
+
 <div class="code"><pre>
-db.describe driver=sqlite table=myarchsites \
+db.describe driver=sqlite table=hospitals \
    database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
 
 # or simply
@@ -22,21 +24,25 @@ db.describe myarchsites
 
 <h3>DBF example</h3>
 <div class="code"><pre>
-db.describe -c table=roads database='$GISDBASE/$LOCATION_NAME/PERMANENT/dbf/' \
+db.describe -c table=hospitals database='$GISDBASE/$LOCATION_NAME/PERMANENT/dbf/' \
             driver=dbf
-ncols:2
-Column 1:cat:INTEGER:11
-Column 2:label:CHARACTER:43
+ncols: 16
+nrows: 160
+Column 1: cat:INTEGER:11
+Column 2: OBJECTID:INTEGER:11
+Column 3: AREA:DOUBLE PRECISION:20
+[...]
 </pre></div>
 
 <div class="code"><pre>
-db.describe table=roads database='$GISDBASE/$LOCATION_NAME/PERMANENT/dbf/' \
+db.describe table=hospitals database='$GISDBASE/$LOCATION_NAME/PERMANENT/dbf/' \
             driver=dbf
-table:roads
+table:hospitals
 description:
 insert:yes
 delete:yes
-ncols:2
+ncols:16
+nrows:160
 
 column:cat
 description:
@@ -48,6 +54,10 @@ default:
 nullok:yes
 select:yes
 update:yes
+
+column:OBJECTID
+description:
+type:INTEGER
 [...]
 </pre></div>
 

@@ -5,11 +5,12 @@
 <h2>NOTES</h2>
 
 <em>db.execute</em> only executes SQL statements and does not return 
-any data. If you need data returned from the database, use <em><a href="db.select.html">db.select</a></em>.
+any data. If you need data returned from the database, use 
+<em><a href="db.select.html">db.select</a></em>.
 <p>
 If parameters for database connection are already set with
-<em><a href="db.connect.html">db.connect</a></em>, they are taken as default values and
-do not need to be specified each time.
+<em><a href="db.connect.html">db.connect</a></em>, they are taken as default
+values and do not need to be specified each time.
 <p>
 If you have a large number of SQL commands to process, it is much much
 faster to place all the SQL statements into a text file and
@@ -29,12 +30,12 @@ db.execute sql="CREATE TABLE soils (cat integer, soiltype varchar(10))"
 
 Create a new table using a file with SQL statements
 <div class="code"><pre>
-db.execute driver=odbc database=g60test input=file.sql
+db.execute driver=odbc database=grassdb input=file.sql
 </pre></div>
 
 Insert new row into attribute table:
 <div class="code"><pre>
-db.execute sql="INSERT INTO nobugs (id,name,east_gb,north_gb) values (30,'Ala',1657340,5072301)"
+db.execute sql="INSERT INTO mysites (id,name,east,north) values (30,'Ala',1657340,5072301)"
 </pre></div>
 
 Update attribute entries to new value based on SQL rule:
@@ -57,7 +58,8 @@ Add new column to attribute table:
 db.execute sql="ALTER TABLE roads ADD COLUMN length double"
 </pre></div>
 
-Column type conversion - update new column from existing column (all drivers except for DBF):
+Column type conversion - update new column from existing column (all
+drivers except for DBF):
 <div class="code"><pre>
 # 'z_value' is varchar and 'z' is double precision:
 echo "UPDATE geodetic_pts SET z = CAST(z_value AS numeric)" | db.execute input=-
@@ -82,17 +84,14 @@ UPDATE roads SET travelcost=2 WHERE cat=2;
 db.execute input=file.sql
 </pre></div>
 
-Join table 'myroads' into table 'extratab' based on common 'cat' column values (not supported by DBF driver):
+Join table 'myroads' to table 'extratab' based on common 'cat' column
+values (not supported by DBF driver):
 <div class="code"><pre>
 db.execute sql="UPDATE extratab SET names=(SELECT label FROM myroads WHERE extratab.cat=myroads.cat)"
 </pre></div>
 
 <h2>SEE ALSO</h2>
-<em>
-<a href="sql.html">GRASS SQL interface</a>
-<em>
 
-<p>
 <em>
 <a href="db.columns.html">db.columns</a>,
 <a href="db.describe.html">db.describe</a>,
@@ -102,6 +101,10 @@ db.execute sql="UPDATE extratab SET names=(SELECT label FROM myroads WHERE extra
 <a href="db.select.html">db.select</a>,
 <a href="db.tables.html">db.tables</a>,
 </em>
+<p>
+<em>
+<a href="sql.html">GRASS SQL interface</a>
+<em>
 
 <h2>AUTHOR</h2>
 

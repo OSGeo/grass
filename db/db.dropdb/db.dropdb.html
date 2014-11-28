@@ -1,14 +1,13 @@
 <h2>DESCRIPTION</h2>
 
-<em>db.dropdb</em> removes an existing database using given
-database <b>driver</b>. Currently
-only <a href="grass-sqlite.html">SQLite</a>
+<em>db.dropdb</em> removes an existing database using given database
+<b>driver</b>. Currently only <a href="grass-sqlite.html">SQLite</a>
 and <a href="grass-pg.html">PostgreSQL</a> database drivers are
 supported.
 
 <h2>EXAMPLES</h2>
 
-<h3>Drop an existing database connected through SQLite driver</h3>
+<h3>Drop (delete) an existing database connected through SQLite driver</h3>
 
 <div class="code"><pre>
 db.dropdb driver=sqlite database=/opt/sqlite.db
@@ -17,12 +16,12 @@ db.dropdb driver=sqlite database=/opt/sqlite.db
 <h3>Drop an existing database connected through PostgreSQL driver</h3>
 
 <div class="code"><pre>
-db.dropdb driver=pg database=grasstest
+db.dropdb driver=pg database=grassdb
 </pre></div>
 
 <h2>TODO</h2>
 
-Support other database drivers too.
+Support other database drivers, too.
 
 <h2>SEE ALSO</h2>
 
