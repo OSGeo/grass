@@ -236,7 +236,7 @@ int main(int argc, char *argv[])
     parm.dxy->guisection = _("Outputs");
 
     parm.zfactor = G_define_option();
-    parm.zfactor->key = "zmultiplier";
+    parm.zfactor->key = "zscale";
     parm.zfactor->description =
 	_("Multiplicative factor to convert elevation units to meters");
     parm.zfactor->type = TYPE_DOUBLE;

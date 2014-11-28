@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
 	_("Number of significant digits (floating point only)");
 
     scale = G_define_option();
-    scale->key = "zmultiplier";
+    scale->key = "zscale";
     scale->type = TYPE_DOUBLE;
     scale->required = NO;
     scale->description = _("Scale factor for elevation");
