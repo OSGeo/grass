@@ -14,6 +14,8 @@ allow easier usage.
 
 <h2>EXAMPLES</h2>
 
+<h3>Replacing of NULL values</h3>
+
 In this example, selectively display lakes without (blue) and with
 NULL (red) are shown to find out which type is undefined. In the
 original map there are lakes missing FTYPE attribute which are
@@ -37,7 +39,9 @@ v.db.update mylakes col=FTYPE value=WETLAND \
 v.db.select mylakes
 </pre></div>
 
-Spearfish example: adding new column, copying values from other table
+<h3>Updating of columns with on the fly calculation</h3>
+
+Spearfish example: adding new column, copying values from another table
 column with on the fly calculation:
 <div class="code"><pre>
 g.copy vect=fields,myfields
@@ -46,12 +50,35 @@ v.db.update myfields col=polynum qcol="cat*2"
 v.db.select myfields
 </pre></div>
 
+<h3>Type casting</h3>
+
 Type cast (type conversion) of strings to double precision
 (unsupported by DBF driver):
 <div class="code"><pre>
 g.copy vect=geodetic_pts,mygeodetic_pts
 v.db.update mygeodetic_pts col=zval qcol="CAST(z_value AS double precision)" \
             where="z_value &lt;&gt; 'N/A'"
+</pre></div>
+
+<h3>Updating of columns with on the fly calculation (SQLite extended functions)</h3>
+
+North Carolina data set example: adding new column, copying values from
+another table column with on the fly calculation:
+
+<div class="code"><pre>
+g.copy vect=precip_30ynormals,myprecip_30ynormals
+v.db.addcolumn myprecip_30ynormals column="logjuly double precision"
+v.db.update myprecip_30ynormals column="logjuly" qcolumn="log(jul)" \
+  sqliteextra=$HOME/sqlite_extensions/libsqlitefunctions.so
+
+v.db.select myprecip_30ynormals columns=jul,logjuly
+jul|logjuly
+132.842|4.88916045210132
+127|4.84418708645859
+124.206|4.82194147751127
+104.648|4.65060233738593
+98.298|4.58800368106618
+...
 </pre></div>
 
 
