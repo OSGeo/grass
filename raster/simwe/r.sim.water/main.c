@@ -101,7 +101,6 @@ int main(int argc, char *argv[])
     int ret_val;
     double x_orig, y_orig;
     static int rand1 = 12345;
-    static int rand2 = 67891;
     struct GModule *module;
 
     G_gisinit(argv[0]);
@@ -464,7 +463,7 @@ int main(int argc, char *argv[])
     dif = G_alloc_fmatrix(my, mx);
 
     G_debug(1, "seeding randoms");
-    seeds(rand1, rand2);
+    G_srand48(rand1);
     grad_check();
     main_loop();
 
