@@ -43,6 +43,12 @@
 #%end
 #%option G_OPT_DB_WHERE
 #%end
+#%option G_OPT_F_INPUT
+#% key: sqliteextra
+#% description: Name of SQLite extension file for extra functions (SQLite backend only)
+#% gisprompt: old,bin,file
+#% required: no
+#%end
 
 import sys
 import os
@@ -55,6 +61,7 @@ def main():
     value = options['value']
     qcolumn = options['query_column']
     where = options['where']
+    sqlitefile  = options['sqliteextra']
 
     mapset = grass.gisenv()['MAPSET']
 
@@ -70,6 +77,13 @@ def main():
     table = f['table']
     database = f['database']
     driver = f['driver']
+
+    # check for SQLite backend for extra functions
+    if sqlitefile and driver != "sqlite":
+        grass.fatal(_("Use of libsqlitefunctions only with SQLite backend"))
+    if driver == "sqlite" and sqlitefile:
+        if not os.access(sqlitefile, os.R_OK):
+            grass.fatal(_("File <%s> not found") % sqlitefile)
 
     # checking column types
     try:
@@ -93,8 +107,12 @@ def main():
     if where:
         cmd += " WHERE " + where
 
-    grass.verbose("SQL: \"%s\"" % cmd)
+    # SQLite: preload extra functions from extension lib if provided by user
+    if sqlitefile:
+        sqliteload = "SELECT load_extension('%s');\n" % sqlitefile
+        cmd = sqliteload + cmd
 
+    grass.verbose("SQL: \"%s\"" % cmd)
     grass.write_command('db.execute', input = '-', database = database, driver = driver, stdin = cmd)
 
     # write cmd history:

@@ -110,6 +110,9 @@ int db__driver_open_database(dbHandle * handle)
 	return DB_FAILED;
     }
 
+    /* enable loading of extensions */
+    sqlite3_enable_load_extension(sqlite, 1);
+
     /* set the sqlite busy handler */
     sqlite3_busy_handler(sqlite, sqlite_busy_callback, NULL);
 
