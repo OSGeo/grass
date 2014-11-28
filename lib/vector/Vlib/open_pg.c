@@ -955,8 +955,7 @@ struct P_line *read_p_line(struct Plus_head *plus, int n,
     
     if (plus->uplist.do_uplist) {
         /* collect updated lines if requested */
-        dig_line_add_updated(plus, n);
-        plus->uplist.uplines_offset[plus->uplist.n_uplines - 1] = line->offset;
+        dig_line_add_updated(plus, n, line->offset);
     }
     
     plus->Line[n] = line;

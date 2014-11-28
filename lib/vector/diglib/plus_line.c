@@ -32,8 +32,7 @@ static int add_line(struct Plus_head *plus, int lineid, int type, const struct l
 
     dig_spidx_add_line(plus, lineid, box);
     if (plus->uplist.do_uplist) {
-	dig_line_add_updated(plus, lineid);
-	plus->uplist.uplines_offset[plus->uplist.n_uplines - 1] = line->offset;
+	dig_line_add_updated(plus, lineid, offset);
     }
     
     if (type & GV_POINT) {
@@ -229,8 +228,7 @@ int dig_del_line(struct Plus_head *plus, int line, double x, double y, double z)
     dig_spidx_del_line(plus, line, x, y, z);
 
     if (plus->uplist.do_uplist) {
-	dig_line_add_updated(plus, line);
-	plus->uplist.uplines_offset[plus->uplist.n_uplines - 1] = -1 * Line->offset;
+	dig_line_add_updated(plus, line, -Line->offset);
     }
     
     if (!(Line->type & GV_LINES)) {
