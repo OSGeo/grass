@@ -46,11 +46,11 @@ void set_params()
     param.null_val->answer = "-99999.99";
 
     param.elev = G_define_option();
-    param.elev->key = "elevation2d";
+    param.elev->key = "z";
     param.elev->type = TYPE_DOUBLE;
     param.elev->required = NO;
     param.elev->description =
-	_("Elevation (if no elevation map is specified)");
+	_("Constant elevation (if no elevation map is specified)");
     param.elev->answer = "0.0";
 
     param.point = G_define_flag();
@@ -79,7 +79,7 @@ void set_params()
 	_("Three (x,y,z) raster maps to create vector values [xmap,ymap,zmap]");
 
     param.elevscale = G_define_option();
-    param.elevscale->key = "zmultiplier";
+    param.elevscale->key = "zscale";
     param.elevscale->type = TYPE_DOUBLE;
     param.elevscale->required = NO;
     param.elevscale->description = _("Scale factor for elevation");
