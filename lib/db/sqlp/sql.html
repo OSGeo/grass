@@ -2,7 +2,13 @@
 
 <!-- this file is lib/db/sqlp/sql.html -->
 
-GRASS can use various RDBMS
+Vector points, lines and areas usually have attribute data that are
+stored in DBMS. The attributes are linked to each vector object using a
+category number (attribute ID, usually the "cat" integer column). The
+category numbers are stored both in the vector geometry and the
+attribute table.
+<p>
+GRASS GIS supports various RDBMS
 (<a href="http://en.wikipedia.org/wiki/Relational_database_management_system">Relational
 database management system</a>) and embedded databases. SQL
 (<a href="http://en.wikipedia.org/wiki/Sql">Structured Query
@@ -12,57 +18,68 @@ database driver selected.
 
 <h2>Database drivers</h2>  
 
-The list of available database drivers can vary in various binary
-distributions of GRASS:<br><br>
+The default database driver used by GRASS GIS 7 is SQLite. GRASS GIS 
+handles multiattribute vector data by default. The <em>db.*</em> set of
+commands  provides basic SQL support for attribute management, while the
+<em>v.db.*</em> set of commands operates on vector maps.
 
+<p>
+Note: The list of available database drivers can vary in various binary
+distributions of GRASS GIS:
+<p>
 <table class="border">
-<tr><td><a href="grass-dbf.html">dbf</a></td><td>DBF files. Data are stored in DBF files.</td>
-<td><a href="http://shapelib.maptools.org/dbf_api.html">http://shapelib.maptools.org/dbf_api.html</a></td></tr>
-
-<tr><td><a href="grass-sqlite.html">sqlite</a></td><td>SQLite embedded database (GRASS 7 default DB backend).</td>
+<tr><td><a href="grass-sqlite.html">sqlite</a></td><td>Data storage in SQLite database files (default DB backend)</td>
 <td><a href="http://sqlite.org/">http://sqlite.org/</a></td></tr>
 
-<tr><td><a href="grass-pg.html">pg</a></td><td>PostgreSQL RDBMS.</td>
+<tr><td><a href="grass-dbf.html">dbf</a></td><td>Data storage in DBF files</td>
+<td><a href="http://shapelib.maptools.org/dbf_api.html">http://shapelib.maptools.org/dbf_api.html</a></td></tr>
+
+<tr><td><a href="grass-pg.html">pg</a></td><td>Data storage in PostgreSQL RDBMS</td>
 <td><a href="http://postgresql.org/">http://postgresql.org/</a></td></tr>
 
-<tr><td><a href="grass-mysql.html">mysql</a></td><td>MySQL RDBMS.</td>
+<tr><td><a href="grass-mysql.html">mysql</a></td><td>Data storage in MySQL RDBMS</td>
 <td><a href="http://mysql.org/">http://mysql.org/</a></td></tr>
 <!--
-<tr><td><a href="grass-mesql.html">mesql</a></td><td>MySQL embedded database.</td>
+<tr><td><a href="grass-mesql.html">mesql</a></td><td>Data are stored in MySQL embedded database</td>
 <td><a href="http://mysql.org/">http://mysql.org/</a></td></tr>
 -->
-<tr><td><a href="grass-odbc.html">odbc</a></td><td>UnixODBC. (PostgreSQL, Oracle, etc.)</td>
+<tr><td><a href="grass-odbc.html">odbc</a></td><td>Data storage via UnixODBC (PostgreSQL, Oracle, etc.)</td>
 <td><a href="http://www.unixodbc.org/">http://www.unixodbc.org/</a></td></tr>
 
-<tr><td><a href="grass-ogr.html">ogr</a></td><td>OGR files.</td>
-<td><a href="http://gdal.org/ogr">http://gdal.org/ogr</a></td></tr>
+<tr><td><a href="grass-ogr.html">ogr</a></td><td>Data storage in OGR files</td>
+<td><a href="http://gdal.org/ogr">http://gdal.org/ogr/</a></td></tr>
 </table>
 
 <h2>NOTES</h2>
 
+<h3>Database table name restrictions</h3>
+
 <ul>
-<li> SQL does not support '.' (dots) in table names.
+<li> No dots allowed as SQL does not support '.' (dots) in table names.</li>
 <li> Supported table name characters are only: <br>
-<div class="code"><pre>[A-Za-z][A-Za-z0-9_]*</pre></div>
-<li> A table name must start with a character, not a number.
+<div class="code"><pre>
+[A-Za-z][A-Za-z0-9_]*
+</pre></div></li>
+<li> A table name must start with a character, not a number.</li>
 <li> Text-string matching requires the text part to be 'single quoted'.
 When run from the command line multiple queries should be contained 
 in "double quotes". e.g.<br>
 <div class="code"><pre>
 d.vect map where="individual='juvenile' and area='beach'"
-</pre></div>
+</pre></div></li>
+<li> Attempts to use a reserved SQL word (depends on database backend) as 
+     column or table name will cause a "SQL syntax error".</li>
 <li> An error message such as &quot;<tt>dbmi: Protocol
      error</tt>&quot; either indicates an invalid column name or an
      unsupported column type (then the GRASS SQL parser needs to be
      extended).</li>
 <li> DBF column names are limited to 10 characters (DBF API definition).</li>
-<li> Attempts to use a reserved SQL word (depends on database backend) as 
-     column or table name will cause a "SQL syntax error".</li>
 </ul>
 
 
 <h2>EXAMPLES</h2>
 
+<h3>Display of vector feature selected by attribute query</h3>
 Display all vector points except for <i>LAMAR</i> valley
 and <i>extensive trapping</i> (brackets are superfluous in this
 example):
@@ -81,17 +98,16 @@ echo "SELECT * FROM archsites WHERE str1 &lt;&gt; 'No Name'" | db.select
 </pre></div>
 <p>
 
-<p>Example of subquery expressions from a list (does not work
-for DBF driver):
+<p>
+Example of subquery expressions from a list (not supported for DBF driver):
 
 <div class="code"><pre>
 v.db.select mysites where="id IN ('P04', 'P05')"
 </pre></div>
 
-<p>Example of pattern matching:
+<h3>Example of pattern matching</h3>
 
 <div class="code"><pre>
-
 # field contains string:
 #  for DBF driver:
 v.extract rivers out=rivers_noce where="DES LIKE 'NOCE'"
@@ -105,7 +121,7 @@ v.db.select mysites where="id LIKE 'P__'"
 v.db.select mysites where="id LIKE 'P%'"
 </pre></div>
 
-<p>Example of null handling:
+<h3>Example of null handling</h3>
 
 <div class="code"><pre>
 v.db.addcolumn map=roads col="nulltest int"
@@ -114,7 +130,9 @@ d.vect roads where="nulltest is null"
 v.db.update map=roads col=nulltest value=2 where="cat &lt;= 2"
 </pre></div>
 
-<p>Examples of complex expressions in updates (using <tt>v.db.*</tt>
+<h3>Update of attributes</h3>
+
+Examples of complex expressions in updates (using <tt>v.db.*</tt>
 modules):
 
 <div class="code"><pre>
@@ -123,7 +141,8 @@ v.db.update map=roads col=exprtest value=cat/nulltest
 v.db.update map=roads col=exprtest value=cat/nulltest+cat where=cat=1
 </pre></div>
 
-<p>Examples of complex expressions in updates (using <tt>db.*</tt>
+<p>
+Examples of complex expressions in updates (using <tt>db.*</tt>
 modules):
 
 <div class="code"><pre>
@@ -143,12 +162,14 @@ d.vect roads where="(cat/3*(cat+1))&gt;8"
 d.vect roads where="cat&gt;exprtest"
 </pre></div>
 
-<p>Example of changing a SQL type (type casting, does not work
-for DBF driver):
+<h3>Example of changing a SQL type (type casting)</h3>
 
+<i>Note: not supported for DBF driver.</i>
+<p>
+North Carolina data set: convert string column to double precision:
+<p>
 <div class="code"><pre>
-# North Carolina data set: convert string column to double precision
-#  copy map into current mapset
+# first copy map into current mapset
 g.copy vect=geodetic_pts,mygeodetic_pts
 v.db.addcolumn mygeodetic_pts col="zval double precision"
 
@@ -158,8 +179,9 @@ v.db.update mygeodetic_pts col=zval \
             where="z_value &lt;&gt; 'N/A'"
 </pre></div>
 
-<p>Example of concatenating fields (does not work for DBF
-driver):
+<h3>Example of concatenating fields</h3>
+
+<i>Note: not supported for DBF driver.</i>
 
 <div class="code"><pre>
 v.db.update vectormap column=column3 qcolumn="column1 || column2"
