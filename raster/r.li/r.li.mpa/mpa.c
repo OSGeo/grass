@@ -15,14 +15,13 @@
  *
  *****************************************************************************/
 
-#include <grass/gis.h>
-#include <grass/raster.h>
-#include <grass/glocale.h>
-
 #include <stdlib.h>
 #include <fcntl.h>
 #include <math.h>
 
+#include <grass/gis.h>
+#include <grass/raster.h>
+#include <grass/glocale.h>
 
 #include "../r.li.daemon/defs.h"
 #include "../r.li.daemon/daemon.h"
