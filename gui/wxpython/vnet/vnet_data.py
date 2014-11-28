@@ -611,8 +611,8 @@ class VNETAnalysisParameters:
         # check vector map
         if params["input"]:
             mapName, mapSet = params["input"].split("@")
-            if grass.list_grouped('vect').has_key(mapSet):
-                vectMaps = grass.list_grouped('vect')[mapSet]
+            if grass.list_grouped('vector').has_key(mapSet):
+                vectMaps = grass.list_grouped('vector')[mapSet]
 
         if not params["input"] or mapName not in vectMaps:
             invParams = params.keys()[:]
@@ -938,7 +938,7 @@ class VNETTmpVectMaps:
         """
         if vectMap:
             vectMap.DeleteRenderLayer()
-            RunCommand('g.remove', flags = 'f', type = 'vect',
+            RunCommand('g.remove', flags = 'f', type = 'vector',
                         name = vectMap.GetVectMapName())
             self.RemoveFromTmpMaps(vectMap)
             return True
@@ -948,7 +948,7 @@ class VNETTmpVectMaps:
         """Delete all temporary maps in the class"""
         update = False
         for tmpMap in self.tmpMaps:
-            RunCommand('g.remove', flags = 'f', type = 'vect',
+            RunCommand('g.remove', flags = 'f', type = 'vector',
                         name = tmpMap.GetVectMapName())
             if tmpMap.DeleteRenderLayer():
                 update = True

@@ -173,7 +173,7 @@ class Layer(object):
         Traceback (most recent call last):
         ...
         ValueError: To set layer name, the type of layer must be specified.
-        >>> layer.mapType = 'rast'
+        >>> layer.mapType = 'raster'
         >>> layer.name = 'blablabla'
         Traceback (most recent call last):
         ...
@@ -191,10 +191,10 @@ class Layer(object):
         self._hidden = False
         self._initialized = False
 
-        self._mapTypes = ['rast', 'vect', 'rast3d', 'rgb']
-        self._internalTypes = {'rast': 'cell',
-                               'vect': 'vector',
-                               'rast3d': 'grid3',
+        self._mapTypes = ['raster', 'vector', '3draster', 'rgb']
+        self._internalTypes = {'raster': 'cell',
+                               'vector': 'vector',
+                               '3draster': 'grid3',
                                'rgb': 'rgb'}
 
     def GetName(self):
@@ -246,7 +246,7 @@ class Layer(object):
     def SetMapType(self, mapType):
         """Sets map type of the layer.
 
-        :param mapType: can be 'rast', 'vect', 'rast3'
+        :param mapType: can be 'raster', 'vector', 'rast3'
         """
         if mapType not in self._mapTypes:
             raise ValueError("Wrong map type used: {mtype}".format(mtype=mapType))
@@ -358,11 +358,11 @@ class LayerListToRendererConverter:
     def AddLayer(self, index, layer):
         """Adds layer to renderer (prepends)."""
         mapType = None
-        if layer.mapType == 'rast':
+        if layer.mapType == 'raster':
             mapType = 'raster'
-        elif layer.mapType == 'vect':
+        elif layer.mapType == 'vector':
             mapType = 'vector'
-        elif layer.mapType == 'rast3d':
+        elif layer.mapType == '3draster':
             mapType = '3d-raster'
         elif layer.mapType == 'rgb':
             mapType = 'rgb'

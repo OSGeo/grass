@@ -27,7 +27,7 @@ class SamplingType:
     WHOLE = 'whole'
     REGIONS = 'regions'
     UNITS = 'units'
-    VECT = 'vect'
+    VECT = 'vector'
     MVWIN = 'moving'
 
     KMVWINC = 'kmvwin_circle'
@@ -67,7 +67,7 @@ def retRLiPath():
         return rlipath
 
 
-def checkMapExists(name, typ='rast'):
+def checkMapExists(name, typ='raster'):
     """Check if a map already exist in the working mapset"""
     env = grass.gisenv()
     mapset = env['MAPSET']
@@ -90,7 +90,7 @@ def convertFeature(vect, outrast, cat, origrast, layer='1', overwrite=False):
     grass.run_command('v.to.rast', input=tmp_vect, type='area',
                       layer=layer, use='val', value=cat, output=outrast,
                       overwrite=overwrite, quiet=True)
-    grass.run_command('g.remove', flags='f', type='vect',
+    grass.run_command('g.remove', flags='f', type='vector',
                       name=tmp_vect, quiet=True)
 
 
@@ -133,7 +133,7 @@ def sampleAreaVector(vect, rast, vect_cats, layer='1', overwrite=False,
         rast_name = "{pref}{cat}".format(pref=outpref, cat=cat)
         # check if raster already axist
 
-        if len(grass.list_strings('rast', pattern=rast_name, mapset='.')) == 1 \
+        if len(grass.list_strings('raster', pattern=rast_name, mapset='.')) == 1 \
            and not overwrite:
             GError(message=_("The raster map <%s> already exists."
                              " Please remove or rename the maps "

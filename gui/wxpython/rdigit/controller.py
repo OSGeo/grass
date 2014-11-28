@@ -304,7 +304,7 @@ class RDigitController(wx.EvtHandler):
         :param restore: if restore previous cursor, mouse['use']
         """
         try:
-            gcore.run_command('g.remove', type='rast', flags='f', name=self._backupRasterName, quiet=True)
+            gcore.run_command('g.remove', type='raster', flags='f', name=self._backupRasterName, quiet=True)
         except CalledModuleError:
             pass
 
@@ -465,7 +465,7 @@ class RDigitController(wx.EvtHandler):
 
         gcore.run_command('r.patch', input=rastersToPatch[::-1] + [self._backupRasterName],
                           output=self._editedRaster, overwrite=True, quiet=True)
-        gcore.run_command('g.remove', type='rast', flags='f', name=rastersToPatch + [tempRaster],
+        gcore.run_command('g.remove', type='raster', flags='f', name=rastersToPatch + [tempRaster],
                           quiet=True)
         try:
             # setting the right color table

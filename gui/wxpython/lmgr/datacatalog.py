@@ -351,9 +351,9 @@ class DataCatalogTree(LocationMapTree):
             renamed = 0
             label = _("Renaming") + " " + string + " ..."
             self.showNotification.emit(message=label)
-            if (self.GetItemText(self.selected_type)=='vect'):
+            if (self.GetItemText(self.selected_type)=='vector'):
                 renamed = RunCommand('g.rename', vect=string)
-            elif (self.GetItemText(self.selected_type)=='rast'):
+            elif (self.GetItemText(self.selected_type)=='raster'):
                 renamed = RunCommand('g.rename', rast=string)
             else:
                 renamed = RunCommand('g.rename', rast3d=string)
@@ -387,15 +387,15 @@ class DataCatalogTree(LocationMapTree):
             type = None
             label = _("Copying") + " " + string + " ..."
             self.showNotification.emit(message=label)
-            if (self.GetItemText(self.copy_type)=='vect'):
+            if (self.GetItemText(self.copy_type)=='vector'):
                 pasted = RunCommand('g.copy', vect=string)
-                node = 'vect'     
-            elif (self.GetItemText(self.copy_type)=='rast'):
+                node = 'vector'     
+            elif (self.GetItemText(self.copy_type)=='raster'):
                 pasted = RunCommand('g.copy', rast=string)
-                node = 'rast'
+                node = 'raster'
             else:
                 pasted = RunCommand('g.copy', rast3d=string)
-                node = 'rast3d'
+                node = '3draster'
             if pasted == 0:
                 if self.selected_type == None:
                     self.selected_type = self.getItemByName(node, self.selected_mapset)
@@ -429,14 +429,14 @@ class DataCatalogTree(LocationMapTree):
                                     title=_('Delete map')) == wx.ID_YES):
                 label = _("Deleting") + " " + string + " ..."
                 self.showNotification.emit(message=label)
-                if (self.GetItemText(self.selected_type)=='vect'):
-                    removed = RunCommand('g.remove', flags='f', type='vect',
+                if (self.GetItemText(self.selected_type)=='vector'):
+                    removed = RunCommand('g.remove', flags='f', type='vector',
                                          name=string)
-                elif (self.GetItemText(self.selected_type)=='rast'):
-                    removed = RunCommand('g.remove', flags='f', type='rast',
+                elif (self.GetItemText(self.selected_type)=='raster'):
+                    removed = RunCommand('g.remove', flags='f', type='raster',
                                          name=string)
                 else:
-                    removed = RunCommand('g.remove', flags='f', type='rast3d',
+                    removed = RunCommand('g.remove', flags='f', type='3draster',
                                          name=string)
                 if (removed==0):
                     self.Delete(self.selected_layer)
@@ -454,12 +454,12 @@ class DataCatalogTree(LocationMapTree):
             label = _("Displaying") + " " + string + " ..."
             self.showNotification.emit(message=label)
             label = "d."+self.GetItemText(self.selected_type)+" --q map="+string+"    -- completed. Go to Map layers for further operations."
-            if (self.GetItemText(self.selected_type)=='vect'):
-                self.parent.parent.AddMaps(layerName, 'vect', True)
-            elif (self.GetItemText(self.selected_type)=='rast'):
-                self.parent.parent.AddMaps(layerName, 'rast', True)     
+            if (self.GetItemText(self.selected_type)=='vector'):
+                self.parent.parent.AddMaps(layerName, 'vector', True)
+            elif (self.GetItemText(self.selected_type)=='raster'):
+                self.parent.parent.AddMaps(layerName, 'raster', True)     
             else:
-                self.parent.parent.AddMaps(layerName, 'rast3d', True)
+                self.parent.parent.AddMaps(layerName, '3draster', True)
                 label = "d.rast --q map="+string+"    -- completed. Go to 'Map layers' for further operations." # generate this message (command) automatically?
             self.showNotification.emit(message=label)
             Debug.msg(1,"LAYER "+self.GetItemText(self.selected_layer)+" DISPLAYED")
