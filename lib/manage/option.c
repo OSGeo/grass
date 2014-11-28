@@ -47,10 +47,11 @@ struct Option* M_define_option(int n, const char *desc, int multiple)
     G_asprintf(&str, _("%s to be %s"),
 	       list[n].text, desc);
     p->description = str;
-    if (strcmp(p->key, "rast") == 0 || strcmp(p->key, "rast3d") == 0)
+    if (strcmp(p->key, "raster") == 0 || strcmp(p->key, "3draster") == 0)
 	p->guisection = _("Raster");
-    else if (strcmp(p->key, "vect") == 0 || strcmp(p->key, "oldvect") == 0 ||
-	     strcmp(p->key, "asciivect") == 0)
+    else if (strcmp(p->key, "vector") == 0 ||
+             strcmp(p->key, "oldvector") == 0 ||
+	     strcmp(p->key, "asciivector") == 0)
 	p->guisection = _("Vector");
     else if (strcmp(p->key, "region") == 0 || strcmp(p->key, "region3d") == 0)
 	p->guisection = _("Region");
