@@ -521,8 +521,7 @@ int main(int argc, char *argv[])
     G_add_keyword("PNG");
     module->description = _("Imports non-georeferenced PNG format image.");
 
-    inopt = G_define_standard_option(G_OPT_F_INPUT);
-    inopt->gisprompt = "old,bin,file";
+    inopt = G_define_standard_option(G_OPT_F_BIN_INPUT);
     
     outopt = G_define_standard_option(G_OPT_R_OUTPUT);
 

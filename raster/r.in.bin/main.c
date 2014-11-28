@@ -284,10 +284,8 @@ int main(int argc, char *argv[])
     flag.gmt_hd->description = _("Get region info from GMT style header");
     flag.gmt_hd->guisection = _("Bounds");
 
-    parm.input = G_define_standard_option(G_OPT_F_INPUT);
-    parm.input->required = YES;
-    parm.input->description = _("Binary raster file to be imported");
-    parm.input->gisprompt = "old,bin,file";
+    parm.input = G_define_standard_option(G_OPT_F_BIN_INPUT);
+    parm.input->description = _("Name of binary raster file to be imported");
 
     parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.output->description = _("Output name or prefix if several bands are imported");
