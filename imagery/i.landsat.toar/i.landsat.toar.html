@@ -187,22 +187,22 @@ Transform digital numbers of Landsat-7 ETM+ in band rasters 203_30.1,
 files 293_39.61_toar and 293_39.62_toar:
 
 <div class="code"><pre>
-i.landsat.toar input_prefix=203_30. output_prefix=_toar \
+i.landsat.toar input=203_30. output=_toar \
   metfile=p203r030_7x20010620.met
 </pre></div>
 
 or
 
 <div class="code"><pre>
-i.landsat.toar input_prefix=L5121060_06020060714. \
-  output_prefix=L5121060_06020060714_toar \
+i.landsat.toar input=L5121060_06020060714. \
+  output=L5121060_06020060714_toar \
   metfile=L5121060_06020060714_MTL.txt
 </pre></div>
 
 or
 
 <div class="code"><pre>
-i.landsat.toar input_prefix=203_30. output_prefix=_toar \
+i.landsat.toar input=203_30. output=_toar \
   sensor=tm7 product_date=2004-06-07 date=2001-06-20 \
   sun_elevation=64.3242970 gain="HHHLHLHHL"
 </pre></div>
@@ -210,7 +210,7 @@ i.landsat.toar input_prefix=203_30. output_prefix=_toar \
 or
 
 <div class="code"><pre>
-i.landsat.toar input_prefix=LC80160352013134LGN03_B output_prefix=toar \
+i.landsat.toar input=LC80160352013134LGN03_B output=toar \
   metfile=LC80160352013134LGN03_MTL.txt sensor=oli8 date=2013-05-14
 </pre></div>
 

@@ -21,7 +21,7 @@ be used in various combinations. For example:
 <div class="code"><pre>
 v.edit map=roads tool=select \
   coord=599505,4921010,603389.0625,4918292.1875 \
-  thresh=10000 where="label='interstate'"
+  threshold=10000 where="label='interstate'"
 </pre></div>
 
 selects all features (and prints their id's to standard output)
@@ -228,7 +228,7 @@ size 1000 map units):
 <div class="code"><pre>
 v.edit map=roads tool=delete \
   coord=592542.892,4924766.996,603389.062,4918292.187 \
-  thresh=1000 cat=1,2
+  threshold=1000 cat=1,2
 </pre></div>
 
 <h3>Copy selected features from background map</h3>
@@ -253,7 +253,7 @@ map units to the south. Moved features snap to nodes in threshold
 distance 10 map units:
 
 <div class="code"><pre>
-v.edit tool=move map=roads cat=1 move=1000,-1000 snap=node thresh=-1,10
+v.edit tool=move map=roads cat=1 move=1000,-1000 snap=node threshold=-1,10
 </pre></div>
 
 Move all features defined by bounding box
@@ -301,7 +301,7 @@ v.edit map=roads tool=merge cat=4
 Split line id 810 on coordinates 604268,4923570 in threshold 50 map units:
 
 <div class="code"><pre>
-v.edit map=roads tool=break coords=604268,4923570 id=810 thresh=50
+v.edit map=roads tool=break coords=604268,4923570 id=810 threshold=50
 </pre></div>
 
 <h3>Break selected lines at each intersection</h3>
@@ -317,7 +317,7 @@ v.edit map=roads tool=break cat=1
 Snap all lines using threshold distance 20 map units:
 
 <div class="code"><pre>
-v.edit map=roads id=1-9999 tool=snap thresh=-1,20 type=line
+v.edit map=roads id=1-9999 tool=snap threshold=-1,20 type=line
 </pre></div>
 
 <h3>Connect lines</h3>
@@ -332,7 +332,7 @@ Connect line id 48 to line id 565; line id 60 to line id
 50. Maximum threshold distance is 700 map units:
 
 <div class="code"><pre>
-v.edit map=roads tool=connect id=48,565,60,50 thresh=-1,700
+v.edit map=roads tool=connect id=48,565,60,50 threshold=-1,700
 </pre></div>
 
 <h3>Add vertex</h3>
@@ -341,7 +341,7 @@ Add new vertex to the line located at 600952,4926107, threshold is
 set to 1 map unit:
 
 <div class="code"><pre>
-v.edit tool=vertexadd map=roads coords=600952,4926107 thresh=1
+v.edit tool=vertexadd map=roads coords=600952,4926107 threshold=1
 </pre></div>
 
 <h3>Delete vertices</h3>
@@ -351,7 +351,7 @@ Modify only lines with category 1:
 
 <div class="code"><pre>
 v.edit tool=vertexdel map=roads coord=593191.608,4925684.849 \
-  thresh=1-e1 cats=1
+  threshold=1-e1 cats=1
 </pre></div>
 
 <h3>Move vertices</h3>
@@ -361,7 +361,7 @@ Modify only lines with categories 1-10:
 
 <div class="code"><pre>
 v.edit tool=vertexmove map=roads cats=1-10 coord=604441,4921088 \
-  thresh=100 move=1000,1000
+  threshold=100 move=1000,1000
 </pre></div>
 
 <h3>Select features and print their id's</h3>
@@ -380,19 +380,19 @@ d.erase;
 d.vect roads;
 d.vect -i map=roads cats=`v.edit map=roads tool=select \
   coord=592542.89243878,4924766.99622811,603389.0625,4918292.1875 \
-  thresh=1000 --q` col=red
+  threshold=1000 --q` col=red
 </pre></div>
 
 Select all lines shorter (or equal) than 10 map units:
 
 <div class="code"><pre>
-v.edit map=roads tool=select query=length thresh=-1,0,-10
+v.edit map=roads tool=select query=length threshold=-1,0,-10
 </pre></div>
 
 Select from given bounding box all lines longer then 200 map units:
 
 <div class="code"><pre>
-v.edit map=roads tool=select bbox=598260,4919730,605100,4926240 query=length thresh=-1,0,200
+v.edit map=roads tool=select bbox=598260,4919730,605100,4926240 query=length threshold=-1,0,200
 </pre></div>
 
 <h3>Fix height of contours</h3>

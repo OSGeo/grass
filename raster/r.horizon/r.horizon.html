@@ -144,7 +144,7 @@ of horizon angles CCW from East):
 <div class="code"><pre>
 g.region rast=elevation -p
 r.horizon elevation=elevation direction=215 step=0 bufferzone=200 \
-    coordinate=638871.6,223384.4 maxdistance=5000
+    coordinates=638871.6,223384.4 maxdistance=5000
 </pre></div>
 <p>
 <b>Example 2</b>: determine horizon values starting at 90 deg (North), 
@@ -152,7 +152,7 @@ step size of 5 deg, saving result as CSV file:
 
 <div class="code"><pre>
 r.horizon elevation=elevation direction=90 step=5 bufferzone=200 \
-    coordinate=638871.6,223384.4 maxdistance=5000 output=horizon.csv
+    coordinates=638871.6,223384.4 maxdistance=5000 file=horizon.csv
 </pre></div>
 
 <p>
@@ -162,7 +162,7 @@ as CSV file for plotting the horizon around the highway intersection:
 <div class="code"><pre>
 g.region n=223540 s=220820 w=634650 e=638780 res=10 -p
 r.horizon elevation=elevation direction=0 step=5 bufferzone=200 \
-    coordinate=636483.54,222176.25 maxdistance=5000 -d output=horizon.csv
+    coordinates=636483.54,222176.25 maxdistance=5000 -d file=horizon.csv
 </pre></div>
 
 <center>
@@ -180,7 +180,7 @@ Raster map mode (output maps "horangle*" become input for <em>r.sun</em>):
 # we put a bufferzone of 10% of maxdistance around the study area
 # compute only direction between 90 and 270 degrees
 r.horizon elevation=elevation step=30 start=90 end=300 \
-    bufferzone=200 basename=horangle maxdistance=5000
+    bufferzone=200 file=horangle maxdistance=5000
 </pre></div>
 
 
