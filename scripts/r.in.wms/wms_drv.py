@@ -290,6 +290,9 @@ class BaseRequestMgr:
         if self.t_num_bbox['max_row'] > (mat_num_bbox['max_row']):
             self.t_num_bbox['max_row'] = int(mat_num_bbox['max_row']) 
 
+
+        grass.debug('t_num_bbox: min_col:%d max_col:%d min_row:%d max_row:%d' % (self.t_num_bbox['min_col'], self.t_num_bbox['max_col'], self.t_num_bbox['min_row'], self.t_num_bbox['max_row']), 3)
+
         num_tiles = (self.t_num_bbox['max_col'] - self.t_num_bbox['min_col'] + 1) * (self.t_num_bbox['max_row'] - self.t_num_bbox['min_row'] + 1) 
         grass.message(_('Fetching %d tiles with %d x %d pixel size per tile...') % (num_tiles, tile_size['x'], tile_size['y']))
 
@@ -444,7 +447,7 @@ class WMSRequestMgr(BaseRequestMgr):
         # CRS:84 and CRS:83 are exception (CRS:83 and CRS:27 need to be tested)
         if srs_param in [84, 83] or version != '1.3.0':
             return bbox
-        elif Srs('epsg:' + str(srs_param)).axisorder == 'yx':
+        elif Srs(GetSRSParamVal(srs_param)).axisorder == 'yx':
             return self._flipBbox(bbox)
 
         return bbox
@@ -505,7 +508,7 @@ class WMTSRequestMgr(BaseRequestMgr):
         mat_num_bbox = self._getMatSize(tile_mat, mat_set_link)
 
         # initialize data needed for iteration through tiles
-        self._computeRequestData(tile_mat, params, bbox, mat_num_bbox)
+        self._computeRequestData(tile_mat, params, bbox, mat_num_bbox, self._getMatSetSrs(mat_set))
 
     def GetMapRegion(self):
         """!Get size in pixels and bounding box of raster where all tiles will be merged.
@@ -540,14 +543,18 @@ class WMTSRequestMgr(BaseRequestMgr):
                 mat_set_id = mat_set.find(self.xml_ns.NsOws('Identifier')).text 
                 if mat_set_id != mat_set_link_id:
                     continue
-                mat_set_srs = mat_set.find(self.xml_ns.NsOws('SupportedCRS')).text
-                if mat_set_srs.lower() == ("EPSG:"+ str(srs)).lower():
+                mat_set_srs = self._getMatSetSrs(mat_set)
+                if Srs(mat_set_srs).getcode() == (GetSRSParamVal(srs)).upper():
                     suitable_mat_sets.append([mat_set, link])
 
         if not suitable_mat_sets:
             grass.fatal(_("Layer '%s' is not available with %s code.") % (layer_name,  "EPSG:" + str(srs)))
 
         return suitable_mat_sets # [[TileMatrixSet, TileMatrixSetLink], ....]
+
+    def _getMatSetSrs(self, mat_set):
+
+        return mat_set.find(self.xml_ns.NsOws('SupportedCRS')).text
 
     def _findTileMats(self, tile_mats, region, bbox):
         """!Find best tile matrix set for requested resolution.
@@ -638,7 +645,7 @@ class WMTSRequestMgr(BaseRequestMgr):
                 break
         return mat_num_bbox
 
-    def _computeRequestData(self, tile_mat, params, bbox, mat_num_bbox):
+    def _computeRequestData(self, tile_mat, params, bbox, mat_num_bbox, mat_set_srs):
         """!Initialize data needed for iteration through tiles.
         """  
         scale_den = float(tile_mat.find(self.xml_ns.NsWmts('ScaleDenominator')).text)
@@ -650,6 +657,15 @@ class WMTSRequestMgr(BaseRequestMgr):
         tl_corner = {}
         tl_corner['minx'] = float(tl_str[0])
         tl_corner['maxy'] = float(tl_str[1])
+
+        #TODO do it more generally WMS cap parser may use it in future(not needed now)???
+        s = Srs(mat_set_srs) #NOTE not used params['srs'], it is just number, encoding needed
+        # TODO needs to be tested, tried only on http://www.landesvermessung.sachsen.de/geoserver/gwc/service/wmts?:
+        if s.getcode() == 'EPSG:4326' and s.encoding in ('uri', 'urn'):
+            grass.warning('switch')
+            (tl_corner['minx'], tl_corner['maxy']) = (tl_corner['maxy'], tl_corner['minx'])
+        else:
+            grass.warning('no switch')
 
         tile_span = {}
         self.tile_size = {}
