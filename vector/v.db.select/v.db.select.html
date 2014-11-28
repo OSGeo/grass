@@ -5,46 +5,73 @@ user selected attribute table columns.
 
 <h2>EXAMPLES</h2>
 
-Select and show entire table:
+All examples are based on the North Carolina sample dataset.
+
+<h3>Select and show entire table</h3>
+
 <div class="code"><pre>
-v.db.select map=roads
-cat|label
-0|no data
-1|interstate
-2|primary highway, hard surface
-3|secondary highway, hard surface
-4|light-duty road, improved surface
-5|unimproved road
+v.db.select map=roadsmajor
+cat|MAJORRDS_|ROAD_NAME|MULTILANE|PROPYEAR|OBJECTID|SHAPE_LEN
+1|1|NC-50|no|0|1|4825.369405
+2|2|NC-50|no|0|2|14392.589058
+3|3|NC-98|no|0|3|3212.981242
+4|4|NC-50|no|0|4|13391.907552
+...
 </pre></div>
 
-Select and show single column from table (multiple columns can be
-specified as comma separated list):
+<h3>Select and show single column from table</h3>
+
+Note: multiple columns can be specified as comma separated list.
+
 <div class="code"><pre>
-v.db.select map=roads column=label
-label
-no data
-interstate
-primary highway, hard surface
-secondary highway, hard surface
-light-duty road, improved surface
-unimproved road
+v.db.select map=roadsmajor column=ROAD_NAME
+NC-50
+NC-50
+NC-98
+NC-50
+NC-98
+...
 </pre></div>
 
-Print region extent of selected vector features:
+<h3>Print region extent of selected vector features</h3>
 
 <div class="code"><pre>
-v.db.select -r map=roads where="label ~ 'highway'"
-n=4928063.398015
-s=4914089.153930
-w=589532.054964
-e=609527.210215
+v.db.select -r map=roadsmajor where="ROAD_NAME = 'NC-98'"
+n=248425.389891
+s=245640.640081
+w=635906.517653
+e=661979.801880
+</pre></div>
+
+<h3>Select empty vector features (no data entries)</h3>
+
+<div class="code"><pre>
+v.db.select geonames_wake where="ALTERNATEN IS NULL"
+cat|GEONAMEID|NAME|ASCIINAME|ALTERNATEN|FEATURECLA|FEATURECOD|...
+8|4498303|West Raleigh|West Raleigh||P|PPL|US||NC|338759|123|...
+14|4459467|Cary|Cary||P|PPL|US||NC|103945|146|152|America/Iqaluit|...
+31|4452808|Apex|Apex||P|PPL|US||NC|30873|167|134|America/Iqaluit|...
+...
+</pre></div>
+
+
+<h3>Select empty vector features (no data entries)</h3>
+
+<div class="code"><pre>
+v.db.select geonames_wake where="ALTERNATEN IS NOT NULL"
+cat|GEONAMEID|NAME|ASCIINAME|ALTERNATEN|FEATURECLA|FEATURECOD|...
+9|4487042|Raleigh|Raleigh|Raleigh,...
+31299|4487056|Raleigh-Durham Airport|Raleigh-Durham Airport|...
+...
 </pre></div>
 
 <h2>SEE ALSO</h2>
 
-<em><a href="db.select.html">db.select</a></em>
+<em>
+<a href="db.select.html">db.select</a>
+</em>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
 Radim Blazek, ITC-Irst, Trento, Italy<br>
 Minimal region extent added by Martin Landa,
