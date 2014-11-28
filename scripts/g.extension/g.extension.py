@@ -763,7 +763,7 @@ def install_extension_other(name):
                'MANDIR=%s' % dirs['man'],
                'SCRIPTDIR=%s' % dirs['script'],
                'STRINGDIR=%s' % dirs['string'],
-               'ETC=%s' % os.path.join(dirs['etc'], name)
+               'ETC=%s' % os.path.join(dirs['etc'])
     ]
     
     installCmd = ['make',
