@@ -254,6 +254,7 @@ typedef enum
     G_OPT_V_IDS,		/*!< more feature ids */
 
     G_OPT_F_INPUT,		/*!< old input file */
+    G_OPT_F_BIN_INPUT,		/*!< old binary input file */
     G_OPT_F_OUTPUT,		/*!< new output file */
     G_OPT_F_SEP,		/*!< data field separator */
 
