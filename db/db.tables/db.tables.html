@@ -10,24 +10,26 @@ do not need to be spcified each time.
 
 <h2>EXAMPLES</h2>
 
-<em>List all tables if database connection is already set</em><br>
+<h3>List all tables if database connection is already set</h3>
+
 <div class="code"><pre>
 db.tables -p
 </pre></div>
 
-<p>
-<em>List all DBF tables</em><br>
+<h3>List all DBF tables</h3>
+
 <div class="code"><pre>
-db.tables driver=dbf database=/home/user/grassdata/fire/PERMANENT/dbf
+db.tables driver=dbf database=/grassdata/nc_spm_08/user1/PERMANENT/dbf
 </pre></div>
 
-<p>
-<em>List all tables in SQLite database (note that this is the default setting)</em><br>
+<h3>List all tables in SQLite database (note that this is the default setting)</h3>
+
 <div class="code"><pre>
 db.tables -p driver=sqlite database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
 </pre></div>
 
 <h2>SEE ALSO</h2>
+
 <em>
 <a href="db.columns.html">db.columns</a>,
 <a href="db.droptable.html">db.droptable</a>,

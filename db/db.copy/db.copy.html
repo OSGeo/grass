@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 <em>db.copy</em> allows the user to copy a table between two databases.
-Databases can be connected through different drivers (see example).
+Databases can be connected through different drivers (see examples below).
 
 <h2>NOTES</h2>
 
@@ -12,7 +12,7 @@ settings are saved in the file <em>$LOCATION/vector_map/dbln</em>.
 
 <h2>EXAMPLES</h2>
 
-<h3>DBF -> PG</h3>
+<h3>From DBF to PostgreSQL</h3>
 
 <em>Storing table 'geonames.dbf' (in current directory) into PostgreSQL
 through ODBC:</em><br>
@@ -24,7 +24,7 @@ db.copy from_driver=dbf from_database='$GISDBASE/$LOCATION_NAME/PERMANENT/dbf' \
 </pre></div>
 
 
-<h3>PG -> DBF</h3>
+<h3>From PostgreSQL to DBF</h3>
 
 <div class="code"><pre>
 db.copy from_driver=pg  from_database="host=pgserver.example.org,dbname=testdb" \
@@ -33,7 +33,7 @@ db.copy from_driver=pg  from_database="host=pgserver.example.org,dbname=testdb" 
 </pre></div>
 
 
-<h3>PG -> PG with condition</h3>
+<h3>From PostgreSQL to PostgreSQL with condition</h3>
 
 <div class="code"><pre>
 db.copy from_driver=pg  from_database="host=localhost,dbname=testdb" \
@@ -41,7 +41,8 @@ db.copy from_driver=pg  from_database="host=localhost,dbname=testdb" \
   to_table=selection where="cat &lt; 500" 
 </pre></div>
 
-<h3>DBF -> SQLite</h3>
+
+<h3>From DBF to SQLite</h3>
 
 <div class="code"><pre>
 db.copy from_driver=dbf from_database='$GISDBASE/$LOCATION_NAME/PERMANENT/dbf' \
@@ -52,7 +53,9 @@ db.copy from_driver=dbf from_database='$GISDBASE/$LOCATION_NAME/PERMANENT/dbf' \
 sqlitebrowser $HOME/grassdata/nc_spm_08/user1/sqlite/sqlite.db
 </pre></div>
 
-<h3>SQLite -> DBF</h3>
+
+<h3>From SQLite to DBF</h3>
+
 <div class="code"><pre>
 db.copy from_driver=sqlite from_database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db' \
    from_table=ammprv to_driver=dbf to_database='$GISDBASE/$LOCATION_NAME/$MAPSET/dbf/' \
@@ -67,9 +70,10 @@ db.copy from_driver=sqlite from_database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlit
 <a href="db.drivers.html">db.drivers</a>,
 <a href="db.login.html">db.login</a>,
 <a href="v.db.connect.html">v.db.connect</a>,
-<a href="v.clean.html">v.clean</a>,
-<a href="sql.html">GRASS SQL interface</a>
+<a href="v.clean.html">v.clean</a>
 </em>
+<p>
+<a href="sql.html">GRASS SQL interface</a>
 
 <h2>AUTHOR</h2>
 

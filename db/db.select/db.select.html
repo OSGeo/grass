@@ -14,7 +14,7 @@ be displayed to standard output or can be directed to a file
 
 <h2>EXAMPLES</h2>
 
-Basic usage:
+<h3>Basic usage</h3>
 <div class="code"><pre>
 db.select sql="select * from roads"
 </pre></div>
@@ -34,7 +34,7 @@ cat file.sql | db.select input=-
 <p>
 Select all from table roads:
 <div class="code"><pre>
-db.select -c driver=odbc database=mydb table=roads \
+db.select -c driver=odbc database=mydb table=hospitals \
           input=file.sql output=result.csv
 </pre></div>
 
@@ -56,7 +56,7 @@ Select coordinates from PostGIS table:
 db.select sql="SELECT x(geo),y(geo) FROM localizzazione"
 </pre></div>
 
-<p>Execute multiple SQL statements:
+<h3>Execute multiple SQL statements</h3>
 
 <div class="code"><pre>
 cat file.sql
@@ -68,9 +68,12 @@ db.select input=file.sql
 
 <p>
 
-<em>Count number of cases falling into same position:</em><br>
-When multiple observation have the spatial coordinates, they can still be counted
-(if needed, coordinates can be uploaded to the attribute table by <em>v.to.db</em>:
+<h3>Count number of cases falling into same position</h3>
+
+When multiple observation have the spatial coordinates, they can still
+be counted (if needed, coordinates can be uploaded to the attribute
+table by <em>v.to.db</em>:
+
 <div class="code"><pre> 
 db.select sql="SELECT long,lat,site_id,department,obs,COUNT(long) as count_cases \
                FROM diseases GROUP BY long,lat"
@@ -78,11 +81,6 @@ db.select sql="SELECT long,lat,site_id,department,obs,COUNT(long) as count_cases
 
 <h2>SEE ALSO</h2>
 
-<em>
-  <a href="sql.html">GRASS SQL interface</a>
-</em>
-
-<p>
 <em>
 <a href="db.connect.html">db.connect</a>,
 <a href="db.describe.html">db.describe</a>,
@@ -92,8 +90,12 @@ db.select sql="SELECT long,lat,site_id,department,obs,COUNT(long) as count_cases
 <a href="db.login.html">db.login</a>,
 <a href="db.tables.html">db.tables</a>
 </em>
+<p>
+<em>
+<a href="sql.html">GRASS SQL interface</a>
+</em>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
 Original author unknown (probably CERL)<br>
 Modifications by Radim Blazek, ITC-Irst, Trento, Italy<br>

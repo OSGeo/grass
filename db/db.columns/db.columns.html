@@ -5,33 +5,38 @@ databases are supported through dbf, shp, odbc and pg drivers.
 
 <h2>NOTE</h2>
 
-If parameters for database connection are already set with 
-<a href="db.connect.html">db.connect</a>, they are taken as default values and
-do not need to be spcified each time.
+If parameters for database connection are already set with
+<a href="db.connect.html">db.connect</a>, they are taken as default values
+and do not need to be spcified each time.
 
 <h2>EXAMPLES</h2>
 
-<em>List columns of a PostgreSQL attribute table</em><br>
+<h3>List columns of a PostgreSQL attribute table</h3>
+
 <div class="code"><pre>
-db.columns table=markveggy driver=pg database=grass60test
+db.columns table=zipcodes_wake driver=pg database=grassdb
 </pre></div>
 
 <p>
-<em>If the database parameters are already set, the columns can be listed directly</em><br>
+<em>If the database parameters are already set, the columns can be listed
+directly</em><br>
+
 <div class="code"><pre>
-db.columns table=markveggy
+db.columns table=zipcodes_wake
 </pre></div>
 
-<p>
-<em>List columns from Shape file with DBF attribute table</em><br>
+<h3>List columns from Shape file with DBF attribute table</h3>
+
 <div class="code"><pre>
-db.columns table=network driver=dbf database=/daten/grassdata/fire/PERMANENT/dbf/
+db.columns table=zipcodes_wake driver=dbf database=/grassdata/nc_spm_08/PERMANENT/dbf/
 </pre></div>
 
-<p>
-<em>List columns of table in SQLite database (note that this is the default setting)</em><br>
+<h3>List columns of table in SQLite database</h3>
+
+Note that the SQLite backend is the default setting.
+
 <div class="code"><pre>
-db.columns driver=sqlite table=myarchsites database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+db.columns driver=sqlite table=archsites database='$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
 </pre></div>
 
 <h2>SEE ALSO</h2>
@@ -45,6 +50,8 @@ db.columns driver=sqlite table=myarchsites database='$GISDBASE/$LOCATION_NAME/$M
 <a href="db.tables.html">db.tables</a>,
 <a href="sql.html">GRASS SQL interface</a>
 </em>
+<p>
+<a href="sql.html">GRASS SQL interface</a>
 
 <h2>AUTHOR</h2>
 
