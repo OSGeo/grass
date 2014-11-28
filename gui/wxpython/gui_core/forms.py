@@ -1216,12 +1216,20 @@ class CmdPanel(wx.Panel):
                         # A gselect.Select is a combobox with two children: a textctl and a popupwindow;
                         # we target the textctl here
                         textWin = selection.GetTextCtrl()
-                        p['wxId'] = [ textWin.GetId(), ]
-                        textWin.Bind(wx.EVT_TEXT, self.OnSetValue)
-                    
+                        if globalvar.CheckWxVersion([3]):
+                            p['wxId'] = [selection.GetId(), ]
+                        else:
+                            p['wxId'] = [textWin.GetId(), ]
+                        if prompt != 'vector':
+                            self.FindWindowById(p['wxId'][0]).Bind(wx.EVT_TEXT, self.OnSetValue)
+
                     if prompt == 'vector':
-                        selection.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
-                        
+                        win = self.FindWindowById(p['wxId'][0])
+                        # handlers should be bound in this order
+                        # OnUpdateSelection depends on calling OnSetValue first which is bad
+                        win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
+                        win.Bind(wx.EVT_TEXT, self.OnSetValue)
+
                         # if formatSelector and p.get('age', 'old') == 'old':
                         #     # OGR supported (read-only)
                         #     self.hsizer = wx.BoxSizer(wx.HORIZONTAL)
