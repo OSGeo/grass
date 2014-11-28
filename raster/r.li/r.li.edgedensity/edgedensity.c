@@ -32,9 +32,12 @@ int calculate(int fd, struct area_entry *ad, char **par, double *result);
 int calculateD(int fd, struct area_entry *ad, char **par, double *result);
 int calculateF(int fd, struct area_entry *ad, char **par, double *result);
 
+static int brdr = 1;
+
 int main(int argc, char *argv[])
 {
     struct Option *raster, *conf, *output, *class;
+    struct Flag *flag_brdr;
     struct GModule *module;
     char **par = NULL;
 
@@ -66,6 +69,10 @@ int main(int argc, char *argv[])
     class->description = _("It can be integer, double or float; "
 			   "it will be changed in function of map type");
 
+    flag_brdr = G_define_flag();
+    flag_brdr->key = 'b';
+    flag_brdr->description = _("Exclude border edges");
+
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -75,6 +82,7 @@ int main(int argc, char *argv[])
     else
 	par = &class->answer;
 
+    brdr = flag_brdr->answer == 0;
 
     return calculateIndex(conf->answer, edgedensity, par, raster->answer,
 			  output->answer);
@@ -206,32 +214,61 @@ int calculate(int fd, struct area_entry *ad, char **par, double *result)
 		Rast_set_c_null_value(&supCell, 1);
 	    }
 
-	    if (!Rast_is_c_null_value(&corrCell)) {
-		area++; 
-	        if (Rast_is_c_null_value(&ptype) || corrCell == ptype) {
-		    
-		    if (Rast_is_c_null_value(&precCell) || precCell != corrCell) {
-			nedges++;
+	    if (brdr) {
+		if (!Rast_is_c_null_value(&corrCell)) {
+		    area++; 
+		    if (Rast_is_c_null_value(&ptype) || corrCell == ptype) {
+			if (Rast_is_c_null_value(&precCell) || precCell != corrCell) {
+			    nedges++;
+			}
+			if (Rast_is_c_null_value(&supCell) || supCell != corrCell) {
+			    nedges++;
+			}
+			/* right and bottom */
+			if (i == ad->rl - 1)
+			    nedges++;
+			if (j == ad->cl - 1)
+			    nedges++;
 		    }
-		    if (Rast_is_c_null_value(&supCell) || supCell != corrCell) {
-			nedges++;
+		}
+		else /* corrCell == NULL */ {
+		    if (!Rast_is_c_null_value(&precCell)) {
+			if (Rast_is_c_null_value(&ptype) || precCell == ptype) {
+			    nedges++;
+			}
 		    }
-		    /* right and bottom */
-		    if (i == ad->rl - 1)
-			nedges++;
-		    if (j == ad->cl - 1)
-			nedges++;
+		    if (!Rast_is_c_null_value(&supCell)) {
+			if (Rast_is_c_null_value(&ptype) || supCell == ptype) {
+			    nedges++;
+			}
+		    }
 		}
 	    }
-	    else /* corrCell == NULL */ {
-		if (!Rast_is_c_null_value(&precCell)) {
-		    if (Rast_is_c_null_value(&ptype) || precCell == ptype) {
-			nedges++;
+	    else {
+		/* exclude border edges */
+		if (!Rast_is_c_null_value(&corrCell)) {
+		    area++; 
+		    if (Rast_is_c_null_value(&ptype) || corrCell == ptype) {
+			if (j > 0 && !(masked && mask_buf[j - 1] == 0) &&
+			    (Rast_is_c_null_value(&precCell) || precCell != corrCell)) {
+			    nedges++;
+			}
+			if (i > 0 && !(masked && mask_sup[i - 1] == 0) &&
+			    (Rast_is_c_null_value(&supCell) || supCell != corrCell)) {
+			    nedges++;
+			}
 		    }
 		}
-		if (!Rast_is_c_null_value(&supCell)) {
-		    if (Rast_is_c_null_value(&ptype) || supCell == ptype) {
-			nedges++;
+		else if (Rast_is_c_null_value(&corrCell) && !(masked && mask_buf[j] == 0)) {
+		    if (!Rast_is_c_null_value(&precCell)) {
+			if (Rast_is_c_null_value(&ptype) || precCell == ptype) {
+			    nedges++;
+			}
+		    }
+		    if (!Rast_is_c_null_value(&supCell)) {
+			if (Rast_is_c_null_value(&ptype) || supCell == ptype) {
+			    nedges++;
+			}
 		    }
 		}
 	    }
@@ -365,32 +402,61 @@ int calculateD(int fd, struct area_entry *ad, char **par, double *result)
 		Rast_set_d_null_value(&supCell, 1);
 	    }
 
-	    if (!Rast_is_d_null_value(&corrCell)) {
-		area++; 
-	        if (Rast_is_d_null_value(&ptype) || corrCell == ptype) {
-		    
-		    if (Rast_is_d_null_value(&precCell) || precCell != corrCell) {
-			nedges++;
+	    if (brdr) {
+		if (!Rast_is_d_null_value(&corrCell)) {
+		    area++; 
+		    if (Rast_is_d_null_value(&ptype) || corrCell == ptype) {
+			if (Rast_is_d_null_value(&precCell) || precCell != corrCell) {
+			    nedges++;
+			}
+			if (Rast_is_d_null_value(&supCell) || supCell != corrCell) {
+			    nedges++;
+			}
+			/* right and bottom */
+			if (i == ad->rl - 1)
+			    nedges++;
+			if (j == ad->cl - 1)
+			    nedges++;
 		    }
-		    if (Rast_is_d_null_value(&supCell) || supCell != corrCell) {
-			nedges++;
+		}
+		else /* corrCell == NULL */ {
+		    if (!Rast_is_d_null_value(&precCell)) {
+			if (Rast_is_d_null_value(&ptype) || precCell == ptype) {
+			    nedges++;
+			}
 		    }
-		    /* right and bottom */
-		    if (i == ad->rl - 1)
-			nedges++;
-		    if (j == ad->cl - 1)
-			nedges++;
+		    if (!Rast_is_d_null_value(&supCell)) {
+			if (Rast_is_d_null_value(&ptype) || supCell == ptype) {
+			    nedges++;
+			}
+		    }
 		}
 	    }
-	    else /* corrCell == NULL */ {
-		if (!Rast_is_d_null_value(&precCell)) {
-		    if (Rast_is_d_null_value(&ptype) || precCell == ptype) {
-			nedges++;
+	    else {
+		/* exclude border edges */
+		if (!Rast_is_d_null_value(&corrCell)) {
+		    area++; 
+		    if (Rast_is_d_null_value(&ptype) || corrCell == ptype) {
+			if (j > 0 && !(masked && mask_buf[j - 1] == 0) &&
+			    (Rast_is_d_null_value(&precCell) || precCell != corrCell)) {
+			    nedges++;
+			}
+			if (i > 0 && !(masked && mask_sup[i - 1] == 0) &&
+			    (Rast_is_d_null_value(&supCell) || supCell != corrCell)) {
+			    nedges++;
+			}
 		    }
 		}
-		if (!Rast_is_d_null_value(&supCell)) {
-		    if (Rast_is_d_null_value(&ptype) || supCell == ptype) {
-			nedges++;
+		else if (Rast_is_d_null_value(&corrCell) && !(masked && mask_buf[j] == 0)) {
+		    if (!Rast_is_d_null_value(&precCell)) {
+			if (Rast_is_d_null_value(&ptype) || precCell == ptype) {
+			    nedges++;
+			}
+		    }
+		    if (!Rast_is_d_null_value(&supCell)) {
+			if (Rast_is_d_null_value(&ptype) || supCell == ptype) {
+			    nedges++;
+			}
 		    }
 		}
 	    }
@@ -524,32 +590,61 @@ int calculateF(int fd, struct area_entry *ad, char **par, double *result)
 		Rast_set_f_null_value(&supCell, 1);
 	    }
 
-	    if (!Rast_is_f_null_value(&corrCell)) {
-		area++; 
-	        if (Rast_is_f_null_value(&ptype) || corrCell == ptype) {
-		    
-		    if (Rast_is_f_null_value(&precCell) || precCell != corrCell) {
-			nedges++;
+	    if (brdr) {
+		if (!Rast_is_f_null_value(&corrCell)) {
+		    area++; 
+		    if (Rast_is_f_null_value(&ptype) || corrCell == ptype) {
+			if (Rast_is_f_null_value(&precCell) || precCell != corrCell) {
+			    nedges++;
+			}
+			if (Rast_is_f_null_value(&supCell) || supCell != corrCell) {
+			    nedges++;
+			}
+			/* right and bottom */
+			if (i == ad->rl - 1)
+			    nedges++;
+			if (j == ad->cl - 1)
+			    nedges++;
 		    }
-		    if (Rast_is_f_null_value(&supCell) || supCell != corrCell) {
-			nedges++;
+		}
+		else /* corrCell == NULL */ {
+		    if (!Rast_is_f_null_value(&precCell)) {
+			if (Rast_is_f_null_value(&ptype) || precCell == ptype) {
+			    nedges++;
+			}
 		    }
-		    /* right and bottom */
-		    if (i == ad->rl - 1)
-			nedges++;
-		    if (j == ad->cl - 1)
-			nedges++;
+		    if (!Rast_is_f_null_value(&supCell)) {
+			if (Rast_is_f_null_value(&ptype) || supCell == ptype) {
+			    nedges++;
+			}
+		    }
 		}
 	    }
-	    else /* corrCell == NULL */ {
-		if (!Rast_is_f_null_value(&precCell)) {
-		    if (Rast_is_f_null_value(&ptype) || precCell == ptype) {
-			nedges++;
+	    else {
+		/* exclude border edges */
+		if (!Rast_is_f_null_value(&corrCell)) {
+		    area++; 
+		    if (Rast_is_f_null_value(&ptype) || corrCell == ptype) {
+			if (j > 0 && !(masked && mask_buf[j - 1] == 0) &&
+			    (Rast_is_f_null_value(&precCell) || precCell != corrCell)) {
+			    nedges++;
+			}
+			if (i > 0 && !(masked && mask_sup[i - 1] == 0) &&
+			    (Rast_is_f_null_value(&supCell) || supCell != corrCell)) {
+			    nedges++;
+			}
 		    }
 		}
-		if (!Rast_is_f_null_value(&supCell)) {
-		    if (Rast_is_f_null_value(&ptype) || supCell == ptype) {
-			nedges++;
+		else if (Rast_is_f_null_value(&corrCell) && !(masked && mask_buf[j] == 0)) {
+		    if (!Rast_is_f_null_value(&precCell)) {
+			if (Rast_is_f_null_value(&ptype) || precCell == ptype) {
+			    nedges++;
+			}
+		    }
+		    if (!Rast_is_f_null_value(&supCell)) {
+			if (Rast_is_f_null_value(&ptype) || supCell == ptype) {
+			    nedges++;
+			}
 		    }
 		}
 	    }
