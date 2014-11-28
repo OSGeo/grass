@@ -52,7 +52,7 @@ def main():
 
     if not options['driver'] or not options['database']:
         # check if DB parameters are set, and if not set them.
-        grass.run_command('db.connect', flags='c')
+        grass.run_command('db.connect', flags='c', quiet=True)
 
     kv = grass.db_connection()
     if options['database']:
