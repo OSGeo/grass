@@ -34,7 +34,7 @@
 */
 int M_do_copy(int n, const char *old, const char *mapset, const char *new)
 {
-    int i, ret, len;
+    int i, ret;
     char path[GPATH_MAX], path2[GPATH_MAX];
     int result = 0;
 
@@ -43,10 +43,8 @@ int M_do_copy(int n, const char *old, const char *mapset, const char *new)
     G_message(_("Copy %s <%s> to current mapset as <%s>"),
 	      list[n].maindesc, G_fully_qualified_name(old, mapset), new);
 
-    len = M__get_description_len(n);
-
     M__hold_signals(1);
-    if (G_strcasecmp(list[n].alias, "vect") == 0) {
+    if (G_strcasecmp(list[n].alias, "vector") == 0) {
 	ret = Vect_copy(old, mapset, new);
 	if (ret == -1) {
 	    G_warning(_("Unable to copy <%s> to current mapset as <%s>"),

@@ -385,11 +385,11 @@ static void make_list(FILE *fp, const struct list *elem, const char *mapset,
     if ((list = G__ls(path, &count)) == NULL)
 	return;
 
-    if (strcmp(alias, "rast") == 0)
+    if (strcmp(alias, "raster") == 0)
 	type = TYPE_RAST;
-    else if (strcmp(alias, "rast3d") == 0)
+    else if (strcmp(alias, "3draster") == 0)
 	type = TYPE_RAST3D;
-    else if (strcmp(alias, "vect") == 0)
+    else if (strcmp(alias, "vector") == 0)
 	type = TYPE_VECT;
     else
 	type = TYPE_OTHERS;

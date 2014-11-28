@@ -235,7 +235,7 @@ int main(int argc, char *argv[])
 	if (access(path, 0) != 0)
 	    continue;
 
-	rast = !G_strcasecmp(elem->alias, "rast");
+	rast = !G_strcasecmp(elem->alias, "raster");
 	files = G__ls(path, &num_files);
 
 	for (j = 0; j < num_files; j++) {
