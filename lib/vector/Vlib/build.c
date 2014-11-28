@@ -843,7 +843,7 @@ int Vect_build_partial(struct Map_info *Map, int build)
     plus->with_z = Map->head.with_z;
     plus->spidx_with_z = Map->head.with_z;
 
-    if (build == GV_BUILD_ALL && plus->build < GV_BUILD_ALL) {
+    if (build == GV_BUILD_ALL && plus->built < GV_BUILD_ALL) {
 	dig_cidx_free(plus);	/* free old (if any) category index */
 	dig_cidx_init(plus);
     }
