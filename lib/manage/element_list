@@ -16,7 +16,7 @@ cell:raster:raster:raster map(s)
   g3dcell:g3dcell
 grid3:3draster:3D raster:3D raster map(s)
 vector:vector:vector:vector map(s)
-dig:oldvector:old vector:old vector map(s) (GRASS 5.0) 
+dig:oldvector:old vector:old  (GRASS 5.0) vector map(s) 
   dig_att:attributes
   dig_plus:topology
   dig_cats:category
