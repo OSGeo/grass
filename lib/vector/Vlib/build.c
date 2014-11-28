@@ -523,18 +523,12 @@ int Vect_attach_centroids(struct Map_info *Map, const struct bound_box * box)
 		G_debug(3, "\tfirst centroid -> attach to area");
 		Area->centroid = centr;
 		topo->area = sel_area;
-
-		if (sel_area != orig_area && plus->uplist.do_uplist)
-                  dig_line_add_updated(plus, centr);
 	    }
 	    else if (Area->centroid != centr) {	/* duplicate centroid */
 		/* Note: it cannot happen that Area->centroid == centr, because the centroid
 		 * was not registered or a duplicate */
 		G_debug(3, "\tduplicate centroid -> do not attach to area");
 		topo->area = -sel_area;
-
-		if (-sel_area != orig_area && plus->uplist.do_uplist)
-                  dig_line_add_updated(plus, centr);
 	    }
 	}
     }
@@ -849,7 +843,7 @@ int Vect_build_partial(struct Map_info *Map, int build)
     plus->with_z = Map->head.with_z;
     plus->spidx_with_z = Map->head.with_z;
 
-    if (build == GV_BUILD_ALL) {
+    if (build == GV_BUILD_ALL && plus->build < GV_BUILD_ALL) {
 	dig_cidx_free(plus);	/* free old (if any) category index */
 	dig_cidx_init(plus);
     }
