@@ -84,8 +84,8 @@ r3.mapcalc expression="hydcond = 0.00025"
 r3.mapcalc expression="syield = 0.0001"
 r.mapcalc  expression="recharge = 0.0"
 
-r3.gwflow solver=cg phead=phead status=status hc_x=hydcond hc_y=hydcond  \
-   hc_z=hydcond q=well s=syield r=recharge output=gwresult dt=8640000 vx=vx vy=vy vz=vz budget=budget
+r3.gwflow solver=cg phead=phead statuyield=status hc_x=hydcond hc_y=hydcond  \
+   hc_z=hydcond sink=well yield=syield r=recharge output=gwresult dt=8640000 vx=vx vy=vy vz=vz budget=budget
 
 # The data can be visualized with ParaView when exported with r3.out.vtk
 r3.out.vtk -p in=gwresult,status,budget vector=vx,vy,vz out=/tmp/gwdata3d.vtk
@@ -113,8 +113,8 @@ r3.mapcalc expression="hydcond = if(depth() &lt; 20 && depth() > 13 && col() >  
 r3.mapcalc expression="hydcond = if(depth() &lt; 10 && depth() >  7 && col() &lt; 60, 0.000025, hydcond)"
 r3.mapcalc expression="syield = 0.0001"
 
-r3.gwflow solver=cg phead=phead status=status hc_x=hydcond hc_y=hydcond  \
-   hc_z=hydcond q=well s=syield output=gwresult dt=8640000 vx=vx vy=vy vz=vz budget=budget
+r3.gwflow solver=cg phead=phead statuyield=status hc_x=hydcond hc_y=hydcond  \
+   hc_z=hydcond sink=well yield=syield output=gwresult dt=8640000 vx=vx vy=vy vz=vz budget=budget
 
 # The data can be visualized with paraview when exported with r3.out.vtk
 r3.out.vtk -p in=gwresult,status,budget,hydcond,well vector=vx,vy,vz out=/tmp/gwdata3d.vtk

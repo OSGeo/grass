@@ -210,7 +210,7 @@ topology is always built for <em>error</em> vector.
 
 <h3>Snap lines to vertex in threshold</h3>
 <div class="code"><pre>
-v.clean input=testmap output=cleanmap tool=snap thresh=1
+v.clean input=testmap output=cleanmap tool=snap threshold=1
 </pre></div>
 
 <h3>Cleaning OGR imported data (Simple Feature data) such as SHAPE file</h3>
@@ -277,7 +277,7 @@ v.clean type=boundary would remove nothing.
 
 <div class="code"><pre>
 v.clean input=testmap output=cleanmap type=line \
-        tool=rmdangle,rmdangle,rmdangle,rmdangle thresh=5,10,20,50
+        tool=rmdangle,rmdangle,rmdangle,rmdangle threshold=5,10,20,50
 </pre></div>
 
 <h2>SEE ALSO</h2>

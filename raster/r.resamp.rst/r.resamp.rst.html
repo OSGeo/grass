@@ -103,7 +103,7 @@ Resampling the Spearfish 30m resolution elevation model to 15m:
 g.region rast=elevation.dem -p
 
 # resample to 15m
-r.resamp.rst input=elevation.dem ew_res=15 ns_res=15 elev=elev15
+r.resamp.rst input=elevation.dem ew_res=15 ns_res=15 elevation=elev15
 
 # set computation region to resulting map
 g.region rast=elev15 -p

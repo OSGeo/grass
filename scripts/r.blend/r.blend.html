@@ -11,7 +11,7 @@ Blending the aspect map with the elevation map for a shaded map
 
 <div class="code"><pre>
 g.region rast=aspect -p
-r.blend first=aspect second=elevation output_prefix=elev_shade_blend
+r.blend first=aspect second=elevation output=elev_shade_blend
 d.mon wx0
 d.rgb blue=elev_shade_blend.b green=elev_shade_blend.g red=elev_shade_blend.r
 </pre></div>

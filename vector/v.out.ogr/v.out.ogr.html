@@ -105,7 +105,7 @@ Export lines from GRASS vector map to GML format
  (generates '/tmp/testogr.gml' file with layer 'testogr'):
 
 <div class="code"><pre>
-v.out.ogr input=multi type=line output=/tmp/testogr.gml olayer=testogr format=GML 
+v.out.ogr input=multi type=line output=/tmp/testogr.gml output_layer=testogr format=GML 
 </pre></div>
 
 <h3>Export to PostgreSQL/PostGIS</h3>
@@ -113,7 +113,7 @@ v.out.ogr input=multi type=line output=/tmp/testogr.gml olayer=testogr format=GM
 Export areas from GRASS vector map to PostGIS database:
 
 <div class="code"><pre>
-v.out.ogr input=polygons type=area output="PG:host=localhost dbname=postgis user=postgres" olayer=polymap format=PostgreSQL
+v.out.ogr input=polygons type=area output="PG:host=localhost dbname=postgis user=postgres" output_layer=polymap format=PostgreSQL
 </pre></div>
 
 <i>Note:</i> For exporting GRASS vector data to PostGIS database can
@@ -127,7 +127,7 @@ simple features also topological format (PostGIS Topology).
 Export faces (3D vectors) from GRASS vector map to KML format for Google Earth:
 
 <div class="code"><pre>
-v.out.ogr input=buildings_3d output=buildings_3d.kml olayer=buildings_3d format=KML type=face
+v.out.ogr input=buildings_3d output=buildings_3d.kml output_layer=buildings_3d format=KML type=face
 </pre></div>
 
 <p>

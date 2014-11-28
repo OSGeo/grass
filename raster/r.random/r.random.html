@@ -72,7 +72,7 @@ Spearfish region, result stored in 2D vector map:
 
 <div class="code"><pre>
 g.region rast=elevation.10m -p
-r.random elevation.10m vector_output=elevrand n=100
+r.random elevation.10m vector=elevrand n=100
 v.db.select elevrand
 v.univar elevrand col=value type=point
 </pre></div>
@@ -84,7 +84,7 @@ result stored in 3D vector map:
 
 <div class="code"><pre>
 g.region rast=elevation.10m -p
-r.random -d elevation.10m cover=landcover.30m vector_output=luserand3d n=100
+r.random -d elevation.10m cover=landcover.30m vector=luserand3d n=100
 
 # data output (value: elevation, covervalue: landuse class):
 v.db.select luserand3d
