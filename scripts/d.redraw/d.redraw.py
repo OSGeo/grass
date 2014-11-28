@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+
 ############################################################################
 #
 # MODULE:	d.redraw
@@ -25,7 +26,7 @@ import shlex
 from grass.script import core as grass
 
 def split(s):
-    """!Platform spefic shlex.split"""
+    """!Platform specific shlex.split"""
     if sys.version_info >= (2, 6):
         return shlex.split(s, posix = (sys.platform != "win32"))
     elif sys.platform == "win32":
@@ -37,7 +38,7 @@ def main():
     env = grass.gisenv()
     mon = env.get('MONITOR', None)
     if not mon:
-        grass.fatal(_("No monitor selected. Run `d.mon` to select monitor."))
+        grass.fatal(_("No graphics device selected. Use d.mon to select graphics device."))
     
     monCmd = env.get('MONITOR_%s_CMDFILE' % mon.upper())
     if not monCmd:
