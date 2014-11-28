@@ -29,9 +29,9 @@ d.vect|rot_column:rotation_column
 d.vect|attrcolumn:attribute_column 
 # d.colortable
 d.colortable|cols:columns 
-# d.geodetic
-d.geodetic|lcolor:line_color
-d.geodetic|tcolor:text_color 
+# d.geodesic
+d.geodesic|lcolor:line_color
+d.geodesic|tcolor:text_color 
 # d.grid
 d.grid|bordercolor:border_color
 d.grid|textcolor:text_color 
@@ -200,9 +200,22 @@ r.in.wms|mapserver:url
 r.lake|wl:water_level
 r.lake|xy:coordinates 
 # r.li.*
-r.li.*|map:input 
-# r.los
-r.los|coodinate:coordinates 
+r.li.cwed|map:input 
+r.li.edgedensity|map:input 
+r.li.mps|map:input 
+r.li.padrange|map:input 
+r.li.patchdensity|map:input 
+r.li.pielou|map:input 
+r.li.richness|map:input 
+r.li.shape|map:input 
+r.li.dominance|map:input 
+r.li.mpa|map:input 
+r.li.padcv|map:input 
+r.li.padsd|map:input 
+r.li.patchnum|map:input 
+r.li.renyi|map:input 
+r.li.shannon|map:input 
+r.li.simpson|map:input 
 # r.plane
 r.plane|name:output 
 # r.resamp.bspline
@@ -363,9 +376,6 @@ v.extract|list:cats
 # v.in.e00
 v.in.e00|file:input
 v.in.e00|vect:output 
-# v.in.gns
-v.in.gns|file:input
-v.in.gns|vect:output 
 # v.in.wfs
 v.in.wfs|wfs:url
 v.in.wfs|input:map 
@@ -434,8 +444,8 @@ v.qcount|n:nquadrants
 v.qcount|r:radius 
 # v.sample
 v.sample|z:zmultiplier 
-# v.segments
-v.segments|file:segments 
+# v.segment
+v.segment|file:segments 
 # v.surf.rst
 v.surf.rst|pcurv:pcurvature
 v.surf.rst|tcurv:tcurvature
