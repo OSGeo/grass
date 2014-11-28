@@ -86,6 +86,7 @@ class IClassMapFrame(DoubleMapFrame):
                                 firstMap = Map(), secondMap = Map(),
                                 **kwargs)
         self._giface = giface
+	self.tree = None
         self.mapWindowProperties = MapWindowProperties()
         self.mapWindowProperties.setValuesFromUserSettings()
         # show computation region by defaut
@@ -329,7 +330,7 @@ class IClassMapFrame(DoubleMapFrame):
                                                 tools = ['addArea', 'moveVertex', 'addVertex',
                                                          'removeVertex', 'editLine', 'moveLine',
                                                          'deleteArea',
-                                                         'undo', 'redo'])
+                                                         'undo', 'redo', 'settings'])
             self._mgr.AddPane(self.toolbars[name],
                               wx.aui.AuiPaneInfo().
                               Name(name).Caption(_("Digitization Toolbar")).
