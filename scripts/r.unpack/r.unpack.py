@@ -19,9 +19,8 @@
 #% keywords: import
 #% keywords: copying
 #%end
-#%option G_OPT_F_INPUT
+#%option G_OPT_F_BIN_INPUT
 #% description: Name of input pack file
-#% gisprompt: old,bin,file
 #% key_desc: name.pack
 #%end
 #%option G_OPT_R_OUTPUT
