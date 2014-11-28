@@ -15,7 +15,7 @@ number <b>cats</b>, coordinates <b>coords</b>, bounding
 box <b>bbox</b>, <b>polygon</b>, <b>where</b> statement (attribute
 data) or by <b>query</b>. Selecting features by coordinates is
 affected by the current 2D resolution or by the threshold distance
-given by <b>thresh</b>. The options are <em>orthogonal</em>, i.e. can
+given by <b>threshold</b>. The options are <em>orthogonal</em>, i.e. can
 be used in various combinations. For example:
 
 <div class="code"><pre>
@@ -43,7 +43,7 @@ Vector features can be selected in several ways:
     <li><b>ids</b> - using internal (unique) feature id's</li>
     <li><b>cats</b> - using category numbers</li>
     <li><b>coords</b> - using x,y coordinate pairs (center of bounding
-    box, size defined by <b>thresh</b>)</li>
+    box, size defined by <b>threshold</b>)</li>
     <li><b>bbox</b> - using bounding box</li>
     <li><b>polygon</b> - using polygon (at least 3 coordinate pairs have to be set)</li>
     <li><b>where</b> - using where statement (attribute data)
@@ -54,7 +54,7 @@ Additional parameters for vector feature specification are:
 <ul>
     <li><b>layer</b> - layer number (currently used only
     with <b>cats</b> or <b>where</b> option)</li>
-    <li><b>thresh</b> - threshold distance used for selecting vector
+    <li><b>threshold</b> - threshold distance used for selecting vector
     features by coordinates</li>
 </ul>
 
@@ -73,7 +73,7 @@ Additional parameters for vector feature specification are:
     from the given text file (<b>input</b> option). If no header is
     given, the <b>-n</b> flag must be used. Added features can be
     snapped (defined by <b>snap</b> parameter) to nodes or vertices
-    based on threshold distance <b>thresh</b>.</li>
+    based on threshold distance <b>threshold</b>.</li>
 
     <li><b>delete</b> - Delete selected vector features from existing
     vector map.</li>
@@ -87,7 +87,7 @@ Additional parameters for vector feature specification are:
     <b>move</b> option. The option defines coordinates of the movement
     direction. Moved features can be snapped (defined by <b>snap</b>
     parameter) to nodes or vertices based on threshold
-    distance <b>thresh</b>.</li>
+    distance <b>threshold</b>.</li>
 
     <li><b>flip</b> - Flip direction of selected vector lines
     (lines or boundaries).</li>
@@ -119,7 +119,7 @@ Additional parameters for vector feature specification are:
     first given line is connected to the second one. The second line
     is broken if necessary. The lines are connected only if distance
     between them is not greater than snapping threshold
-    distance <b>thresh</b>.</li>
+    distance <b>threshold</b>.</li>
 
     <li><b>chtype</b> - Change feature type of selected geometry
     objects. Points are converted to centroids, centroids to points,
@@ -139,7 +139,7 @@ Additional parameters for vector feature specification are:
     the <b>move</b> option. If -1 is given only first found
     line or boundary in bounding box is modified. Moved vertex can be
     snapped (defined <b>snap</b>) to nodes or vertices based on
-    threshold distance <b>thresh</b>.</li>
+    threshold distance <b>threshold</b>.</li>
     
     <li><b>zbulk</b> - Assign z coordinate to 3D vector lines in given
     bounding box. The first found line will get z coordinate based on

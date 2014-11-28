@@ -47,7 +47,7 @@ preserving the geometrical properties of the surface.  With the
 smoothing parameter set to zero (<b>smooth=0</b>) the resulting
 surface passes exactly through the data points (spatial interpolation
 is performed). When smoothing parameter is used, it is also possible
-to output a vector point map <b>devi</b> containing deviations of the
+to output a vector point map <b>deviations</b> containing deviations of the
 resulting surface from the given data.
 
 <p>
@@ -162,7 +162,7 @@ stability of the computation):
     depend on the actual scale (distances) of the original data (which
     can be km for regional applications or cm for field
     experiments).</li>
-  <li>Flag<b> -t </b>: The given <b>tension</b> is applied to
+  <li>Flag<b>-t</b>: The given <b>tension</b> is applied to
     un-normalized data (rescaled <em>tension = tension*dnorm/1000</em>
     is applied to normalized data (<em>x/dnorm</em>) and
     therefore <b>dnorm</b> cancels out) so here <b>tension</b> truly
@@ -262,7 +262,7 @@ must be done outside <em>v.surf.rst</em>.
 
 <p>
 The &quot;optimal&quot; approximation parameters for given data can be
-found using a cross-validation (CV) procedure (<b>-c </b>flag).  The
+found using a cross-validation (CV) procedure (<b>-c</b>flag).  The
 CV procedure is based on removing one input data point at a time,
 performing the approximation for the location of the removed point
 using the remaining data points and calculating the difference between
