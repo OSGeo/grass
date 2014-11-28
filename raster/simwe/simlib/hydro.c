@@ -204,8 +204,8 @@ void main_loop(void)
 			if (lw >= MAXW)  /* max valid value is MAXW - 1, not MAXW */
 			    G_fatal_error(_("nwalk (%d) > maxw (%d)!"), lw, MAXW);
 
-			w[lw][0] = x + stepx * (ulec() - 0.5);
-			w[lw][1] = y + stepy * (ulec() - 0.5);
+			w[lw][0] = x + stepx * (simwe_rand() - 0.5);
+			w[lw][1] = y + stepy * (simwe_rand() - 0.5);
 			w[lw][2] = wei;
 
 			walkwe += w[lw][2];
@@ -323,7 +323,7 @@ void main_loop(void)
 
 			if (traps != NULL && trap[k][l] != 0.) {	/* traps */
 
-			    eff = ulec();	/* random generator */
+			    eff = simwe_rand();	/* random generator */
 
 			    if (eff <= trap[k][l]) {
 				velx = -0.1 * v1[k][l];	/* move it slightly back */

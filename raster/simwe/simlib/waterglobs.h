@@ -78,14 +78,12 @@ struct _points
 
 extern struct _points points;
 extern int input_data(void);
-extern int seeds(long int, long int);
-extern int seedg(long int, long int);
 extern int grad_check(void);
 extern void erod(double **);
 extern void main_loop(void);
 extern int output_data(int, double);
 extern int output_et(void);
-extern double ulec(void);
+extern double simwe_rand(void);
 extern double gasdev(void);
 extern double amax1(double, double);
 extern double amin1(double, double);
