@@ -252,7 +252,7 @@ int dig_type_from_store(int);
 /* update.c */
 /* list of updated */
 void dig_line_reset_updated(struct Plus_head *);
-void dig_line_add_updated(struct Plus_head *, int);
+void dig_line_add_updated(struct Plus_head *, int, off_t);
 void dig_node_reset_updated(struct Plus_head *);
 void dig_node_add_updated(struct Plus_head *, int);
 
