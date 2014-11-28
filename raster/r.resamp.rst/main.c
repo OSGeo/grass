@@ -224,7 +224,7 @@ int main(int argc, char *argv[])
     parm.overlap->guisection = _("Settings");
 
     parm.zmult = G_define_option();
-    parm.zmult->key = "zmultiplier";
+    parm.zmult->key = "zscale";
     parm.zmult->type = TYPE_DOUBLE;
     parm.zmult->answer = ZMULT;
     parm.zmult->required = NO;
