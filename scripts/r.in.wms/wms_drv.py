@@ -642,6 +642,10 @@ class WMTSRequestMgr(BaseRequestMgr):
                     i_tag = limit.find(self.xml_ns.NsWmts(i[1]))
 
                     mat_num_bbox[i[0]] = int(i_tag.text)
+
+                    if i[0] in ('max_row', 'max_col'):
+                        mat_num_bbox[i[0]] = mat_num_bbox[i[0]] - 1
+
                 break
         return mat_num_bbox
 
