@@ -21,9 +21,7 @@
 #% keywords: copying
 #%end
 #%option G_OPT_F_INPUT
-#% gisprompt: old,bin,file
 #% description: Name of input pack file
-#% required : yes
 #%end
 #%option G_OPT_V_OUTPUT
 #% label: Name for output vector map

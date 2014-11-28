@@ -254,9 +254,8 @@ int main(int argc, char *argv[]) {
 	module->description =
 			_("Imports a binary raster file into a GRASS 3D raster map.");
 
-	parm.input = G_define_standard_option(G_OPT_F_INPUT);
+	parm.input = G_define_standard_option(G_OPT_F_BIN_INPUT);
 	parm.input->description = _("Name of binary 3D raster file to be imported");
-	parm.input->gisprompt = "old,bin,file";
 
 	parm.output = G_define_standard_option(G_OPT_R3_OUTPUT);
 
