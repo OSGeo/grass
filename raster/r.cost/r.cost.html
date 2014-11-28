@@ -24,18 +24,18 @@ name of the resultant raster map of movement directions (see <a href="#move">Mov
 <p>
 <em>r.cost</em> can be run with three different methods of identifying the
 starting point(s). One or more points (geographic coordinate pairs) can be
-provided as specified <b>start_coordinate</b> on the command line, from a vector
+provided as specified <b>start_coordinates</b> on the command line, from a vector
 points file, or from a raster map.
 All non-NULL cells are considered to be starting points.
 <p>
-Each <em>x,y</em> <b>start_coordinate</b> pair gives the geographic location of a
+Each <em>x,y</em> <b>start_coordinates</b> pair gives the geographic location of a
 point from which the transportation cost should be figured. As many points as
 desired can be entered by the user. These starting points can also be read
 from a vector points file through the <b>start_points</b> option or from a
 raster map through the <b>start_rast</b> option.
 <p>
 <em>r.cost</em> will stop cumulating costs when either <b>max_cost</b> is reached,
-or one of the stop points given with <b>stop_coordinate</b> is reached.
+or one of the stop points given with <b>stop_coordinates</b> is reached.
 Alternatively, the stop points can be read from a vector points file with the
 <b>stop_points</b> option. During execution, once the cumulative cost to all 
 stopping points has been determined, processing stops.<br>
