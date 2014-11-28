@@ -38,7 +38,7 @@ v.edit -r busroute_tmp2 tool=delete coords=590273,4927304,\
 590346,4927246,590414,4927210,590438,4927096,590468,4926966,\
 590491,4926848,590566,4926798,590637,4926753,590701,4926698,\
 590830,4926726,590935,4926751,590993,4926830,590972,4926949,\
-590948,4927066,590922,4927182,590957,4927251 thresh=5
+590948,4927066,590922,4927182,590957,4927251 threshold=5
 
 # vector line needs to be polyline
 v.build.polylines busroute_tmp2 out=busroute_tmp3
@@ -124,7 +124,7 @@ As second step, the linear reference network is created:
 
 <div class="code"><pre>
 v.lrs.create busroute points=busstops out=route_lrs err=lrs_error \
-             lidcol=lid pidcol=lid rstable=route_lrs thresh=50
+             lidcol=lid pidcol=lid rstable=route_lrs threshold=50
 </pre></div>
 
 This creates the maps 'route_lrs' containing the LRS and 'lrs_error'

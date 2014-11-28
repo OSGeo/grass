@@ -310,13 +310,13 @@ v.info -c elevrand
 v.db.select elevrand
 
 # interpolation based on all points
-v.surf.rst elevrand zcol=value elev=elev_full
+v.surf.rst elevrand zcol=value elevation=elev_full
 r.colors elev_full rast=elevation.10m
 d.rast elev_full
 d.vect elevrand
 
 # interpolation based on subset of points (only those over 1300m/asl)
-v.surf.rst elevrand zcol=value elev=elev_partial where="value > 1300"
+v.surf.rst elevrand zcol=value elevation=elev_partial where="value > 1300"
 r.colors elev_partial rast=elevation.10m
 d.rast elev_partial
 d.vect elevrand where="value > 1300"

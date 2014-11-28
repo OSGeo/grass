@@ -68,7 +68,7 @@ another table column with on the fly calculation:
 <div class="code"><pre>
 g.copy vect=precip_30ynormals,myprecip_30ynormals
 v.db.addcolumn myprecip_30ynormals column="logjuly double precision"
-v.db.update myprecip_30ynormals column="logjuly" qcolumn="log(jul)" \
+v.db.update myprecip_30ynormals column="logjuly" query_column="log(jul)" \
   sqliteextra=$HOME/sqlite_extensions/libsqlitefunctions.so
 
 v.db.select myprecip_30ynormals columns=jul,logjuly
