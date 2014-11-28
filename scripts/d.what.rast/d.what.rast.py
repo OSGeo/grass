@@ -1,7 +1,8 @@
 #!/usr/bin/env python
+
 ############################################################################
 #
-# MODULE: d.what.rast
+# MODULE:    d.what.rast
 # AUTHOR(S): Anna Petrasova <kratochanna gmail.com>
 # PURPOSE:   Script for querying raster maps in d.mon
 # COPYRIGHT: (C) 2014 by the GRASS Development Team
@@ -26,6 +27,11 @@ from grass.script import core as gcore
 
 
 def main():
+    env = gcore.gisenv()
+    mon = env.get('MONITOR', None)
+    if not mon:
+        gcore.fatal(_("No graphics device selected. Use d.mon to select graphics device."))
+
     options, flags = gcore.parser()
     gisenv = gcore.gisenv()
     if 'MONITOR' in gisenv:

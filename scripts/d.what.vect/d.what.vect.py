@@ -1,9 +1,10 @@
 #!/usr/bin/env python
+
 ############################################################################
 #
-# MODULE: d.what.vect
+# MODULE:    d.what.vect
 # AUTHOR(S): Anna Petrasova <kratochanna gmail.com>
-# PURPOSE:	Script for querying vector maps in d.mon
+# PURPOSE:	 Script for querying vector maps in d.mon
 # COPYRIGHT: (C) 2014 by the GRASS Development Team
 #
 #		This program is free software under the GNU General

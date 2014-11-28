@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#
+
 ############################################################################
 #
 # MODULE:        d.shadedmap
@@ -47,6 +47,11 @@ from grass.exceptions import CalledModuleError
 
 
 def main():
+    env = gcore.gisenv()
+    mon = env.get('MONITOR', None)
+    if not mon:
+        gcore.fatal(_("No graphics device selected. Use d.mon to select graphics device."))
+
     drape_map = options['drapemap']
     relief_map = options['reliefmap']
     brighten = options['brighten']
