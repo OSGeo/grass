@@ -51,6 +51,7 @@ if rinwms_path not in sys.path:
     sys.path.append(rinwms_path)
 
 from wms_base import WMSDriversInfo
+from srs import Srs 
 
 from grass.pydispatch.signal import Signal
 
@@ -644,7 +645,7 @@ class WSPanel(wx.Panel):
 
         if 'srs' not in self.drv_props['ignored_params']:
             i_srs = self.params['srs'].GetSelection()
-            epsg_num = int(self.projs_list[i_srs].split(':')[1])
+            epsg_num = int(self.projs_list[i_srs].split(':')[-1])
             lcmd.append("srs=%s" % epsg_num)
 
         for k in ['maxcols', 'maxrows', 'urlparams']:
@@ -702,12 +703,12 @@ class WSPanel(wx.Panel):
         if 'srs' not in self.drv_props['ignored_params']:
 
             for proj in projs_list:
-                proj_spl = proj.strip().split(':')
-
+                proj_code = Srs(proj.strip()).getcode()
+                proj_spl = proj_code.split(':')
                 if proj_spl[0].strip().lower() in self.drv_info.GetSrs():
                     try:
                         int(proj_spl[1])
-                        self.projs_list.append(proj)
+                        self.projs_list.append(proj_code)
                     except ValueError, IndexError:
                         continue
 
