@@ -103,7 +103,6 @@ int main(int argc, char *argv[])
     int ret_val;
     double x_orig, y_orig;
     static int rand1 = 12345;
-    static int rand2 = 67891;
 
     G_gisinit(argv[0]);
 
@@ -370,7 +369,7 @@ int main(int argc, char *argv[])
     if (erdep != NULL || et != NULL)
 	er = G_alloc_fmatrix(my, mx);
 
-    seeds(rand1, rand2);
+    G_srand48(rand1);
     grad_check();
 
     if (et != NULL)
