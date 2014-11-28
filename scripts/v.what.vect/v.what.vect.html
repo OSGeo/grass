@@ -1,19 +1,19 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.what.vect</em> transfers attributes from the <b>qvector</b>'s map
+<em>v.what.vect</em> transfers attributes from the <b>query_map</b>'s map
 attribute table into the attribute table of <u>points</u> present in the
-<b>vector</b> map. The script is based on <em>v.distance</em>.
+<b>map</b> map. The script is based on <em>v.distance</em>.
 
 <h2>NOTES</h2>
 
 The upload <b>column</b>, into which the query results are stored, must be
-present in the <b>vector</b> map. Use <em>v.db.addcolumn</em> to add one if needed.
+present in the <b>map</b> map. Use <em>v.db.addcolumn</em> to add one if needed.
 <p>Use dmax parameter to control query distance tolerance (how far points/centroids
-can be from <b>qvector</b> features). For more options, use
+can be from <b>query_map</b> features). For more options, use
 <em>v.distance</em> instead.
-<p>In case of a multipoint input <b>vector</b> map, with several points having the
+<p>In case of a multipoint input <b>map</b> map, with several points having the
 same category number, it can happen, that the query result is NULL, if the same
-category number falls into different <b>qvector</b> polygons.
+category number falls into different <b>query_map</b> polygons.
 <p>When transferring attributes from a point map to a polygon map, usually <b>dmax</b>
 has to be larger than zero (determined by distance between query points and
 polygon centroids).

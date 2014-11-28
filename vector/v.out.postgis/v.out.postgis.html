@@ -54,7 +54,7 @@ ignored by <em>v.out.postgis</em>.
 
 <p>
 <em>v.out.postgis</em> optionally also creates a new vector map in the
-current mapset if <b>olink</b> is defined.
+current mapset if <b>output_link</b> is defined.
 
 <h2>NOTES</h2>
 
@@ -161,7 +161,7 @@ topological access to the data.
 <h3>Export data into specific database schema</h3>
 
 Database schema for storing exported data can be defined
-by <b>olayer</b> as
+by <b>output_layer</b> as
 <tt>&lt;schema_name&gt;.&lt;table_name&gt;</tt>. If the specified
 schema doesn't exist in the database, then it's automatically created.
 
@@ -187,7 +187,7 @@ v.out.postgis input=roadsmajor output="PG:dbname=grass" options="GEOMETRY_NAME=w
 <h3>Link exported data</h3>
 
 Exported data can be linked as vector map created in the current
-mapset by specifying <b>olink</b> parameter. In the example below
+mapset by specifying <b>output_link</b> parameter. In the example below
 vector map &quot;busstopsall&quot; from PERMANENT mapset is exported
 into &quot;grass&quot; PostGIS database. <em>v.out.postgis</em> after
 successful export also creates in the current mapset GRASS vector map
