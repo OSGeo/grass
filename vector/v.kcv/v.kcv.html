@@ -35,13 +35,13 @@ All examples are based on the North Carolina sample dataset.
 
 <div class="code"><pre>
 g.copy vect=geonames_wake,my_geonames_wake
-v.kcv map=my_geonames_wake column=part k=10
+v.kcv map=my_geonames_wake column=part npartitions=10
 </pre></div>
 
 <p>
 <div class="code"><pre>
 g.copy vect=geodetic_pts,my_geodetic_pts
-v.kcv map=my_geodetic_pts column=part k=10
+v.kcv map=my_geodetic_pts column=part npartitions=10
 </pre></div>
 
 <h2>SEE ALSO</h2>

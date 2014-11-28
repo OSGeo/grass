@@ -89,7 +89,7 @@ Example of small flooding along a street (North Carolina sample dataset):
 g.region rast=elev_lid792_1m -p
 
 # water accumulation next to street dam
-r.lake elev_lid792_1m coordinates=638759.3,220264.1 wl=113.4 lake=flooding
+r.lake elev_lid792_1m coordinates=638759.3,220264.1 water_level=113.4 lake=flooding
 
 # draw resulting lake map over shaded terrain map
 r.shaded.relief elev_lid792_1m

@@ -28,7 +28,7 @@ map at the hospital points' locations:
 <div class="code"><pre>
 g.copy vect=hospitals,myhospitals
 v.db.addcolumn myhospitals column="urb_name varchar(25)"
-v.what.vect myhospitals qmap=urbanarea column=urb_name qcolumn=NAME
+v.what.vect myhospitals query_map=urbanarea column=urb_name query_column=NAME
 # verification:
 v.db.select myhospitals
 </pre></div>
@@ -46,8 +46,8 @@ v.extract geonames_IT where="featurecla='P'" output=geonames_IT_cities
 # add new column 
 v.db.addcol corine_code111_112_cities column="gnameid double precision"
 # transfer geonameid (3000m maximal distance between points and centroids)
-v.what.vect corine_code111_112_cities qmap=geonames_IT_cities column=gnameid \
-            qcolumn=geonameid dmax=3000
+v.what.vect corine_code111_112_cities query_map=geonames_IT_cities column=gnameid \
+            query_column=geonameid dmax=3000
 # now gnameid can be used for v.db.join to join further
 # attributes in from geonames.org
 </pre></div>

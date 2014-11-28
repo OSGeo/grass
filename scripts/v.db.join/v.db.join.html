@@ -50,7 +50,7 @@ id|shortname|longname
 ...
 
 # join soils_legend into mysoils attribute table
-v.db.join mysoils col=label otable=soils_legend ocol=shortname
+v.db.join mysoils col=label other_table=soils_legend ocol=shortname
 
 # verification of join
 v.db.select mysoils

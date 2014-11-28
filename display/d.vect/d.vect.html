@@ -17,7 +17,7 @@ d.vect map=vector_map color=none
 </pre></div>
 and areas can be made transparent with
 <div class="code"><pre>
-d.vect map=vector_map fcolor=none
+d.vect map=vector_map fill_color=none
 </pre></div>
 
 <p>In order to display attributes in the map, <b>attribute_column</b> must
@@ -72,7 +72,7 @@ Spearfish examples:
 
 <div class="code"><pre>
 # display roads with category numbers:
-d.vect map=roads display=shape,cat lcolor=green
+d.vect map=roads display=shape,cat label_color=green
 
 # display randomly colorized soils map with attributes
 d.vect -c map=soils attribute_column=label

@@ -29,7 +29,7 @@ in <a href="http://www.povray.org/">POVRAY</a>.
 Spearfish example:
 
 <div class="code"><pre>
-v.drape in=roads rast=elevation.10m method=bilinear out=roads3d
+v.drape in=roads elevation=elevation.10m method=bilinear out=roads3d
 v.info roads3d
 </pre></div>
 
@@ -38,7 +38,7 @@ Create 3D vector roads map containing only "unimproved" roads. Set
 road height to 1000 m for all parts without height information.
 
 <div class="code"><pre>
-v.drape input=roads type=line rast=elevation.dem output=roads_3d \
+v.drape input=roads type=line elevation=elevation.dem output=roads_3d \
         method=nearest scale=1.0 where='cat=5' layer=1 null_value=1000
 </pre></div>
 
@@ -46,7 +46,7 @@ v.drape input=roads type=line rast=elevation.dem output=roads_3d \
 
 <div class="code"><pre>
 #export the vector data
-v.drape in=roads out=roads3d rast=elevation.10m
+v.drape in=roads out=roads3d elevation=elevation.10m
 v.out.pov roads3d out=roads3d.pov
 #export the raster data
 r.out.pov elevation.10m tga=elevation.tga

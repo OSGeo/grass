@@ -89,9 +89,9 @@ d.rgb b=p034r032_7dt20010924_z13_10 g=lp034r032_7dt20010924_z13_20
     r=p034r032_7dt20010924_z13_30
 
 # i.pansharpen with IHS algorithm
-i.pansharpen ms3=p034r032_7dt20010924_z13_30 ms2=p034r032_7dt20010924_z13_20 
-    ms1=p034r032_7dt20010924_z13_10 pan=p034r032_7dp20010924_z13_80 
-    output_prefix=ihs321 sharpen=ihs
+i.pansharpen red=p034r032_7dt20010924_z13_30 green=p034r032_7dt20010924_z13_20 
+    blue=p034r032_7dt20010924_z13_10 pan=p034r032_7dp20010924_z13_80 
+    output=ihs321 method=ihs
 
 # display at 15m
 g.region rast=ihs321_blue -p
@@ -150,10 +150,10 @@ d.mon wx0
 d.rgb b=lsat7_2002_10 g=lsat7_2002_20 r=lsat7_2002_30
 
 # i.pansharpen with IHS algorithm
-i.pansharpen ms3=lsat7_2002_30@PERMANENT \
-  ms2=lsat7_2002_20 ms1=lsat7_2002_10 \
-  pan=lsat7_2002_80 sharpen=ihs \
-  output_prefix=lsat7_2002_ihs
+i.pansharpen red=lsat7_2002_30@PERMANENT \
+  green=lsat7_2002_20 blue=lsat7_2002_10 \
+  pan=lsat7_2002_80 method=ihs \
+  output=lsat7_2002_ihs
 
 # display at 14.25m
 g.region rast=lsat7_2002_ihs_red -p

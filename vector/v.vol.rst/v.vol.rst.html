@@ -69,7 +69,7 @@ only a subset of the input vectors.
 
 <div class="code"><pre>
 # preparation as in above example
-v.vol.rst elevrand_3d wcol=soilrange elev=soilrange zmult=100 where="soilrange > 3"
+v.vol.rst elevrand_3d wcol=soilrange elevation=soilrange zmult=100 where="soilrange > 3"
 </pre></div>
 
 
@@ -209,7 +209,7 @@ paraview --data=elevrand_3d.vtk
 
 ### Second part: 3D interpolation from 3D point data
 # interpolate volume to "soilrange" voxel map
-v.vol.rst input=elevrand_3d wcol=soilrange elev=soilrange zmult=100
+v.vol.rst input=elevrand_3d wcol=soilrange elevation=soilrange zmult=100
 
 # visualize I: in GRASS GIS wxGUI
 g.gui

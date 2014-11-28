@@ -170,7 +170,7 @@ Export vector map &quot;bridges&quot; as feature table in database
 schema &quot;grassout&quot;.
 
 <div class="code"><pre>
-v.out.postgis input=bridges output="PG:dbname=grass" olayer=grassout.bridges
+v.out.postgis input=bridges output="PG:dbname=grass" output_layer=grassout.bridges
 </pre></div>
 
 <h3>Export data with creation options</h3>
@@ -194,7 +194,7 @@ successful export also creates in the current mapset GRASS vector map
 as a link to the PostGIS feature table.
 
 <div class="code"><pre>
-v.out.postgis input=busstopsall@PERMANENT output="PG:dbname=grass" olink=busstopsall_pg
+v.out.postgis input=busstopsall@PERMANENT output="PG:dbname=grass" output_link=busstopsall_pg
 </pre></div>
 
 Created link can be checked
