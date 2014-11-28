@@ -256,7 +256,7 @@ class IClassMapFrame(DoubleMapFrame):
         ret = RunCommand(prog = 'g.remove',
                          parent = self,
                          flags = 'f',
-                         type = 'vect',
+                         type = 'vector',
                          name = self.trainingAreaVector)
         if ret != 0:
             return False
@@ -269,7 +269,7 @@ class IClassMapFrame(DoubleMapFrame):
         ret = RunCommand(prog = 'g.remove',
                          parent = self,
                          flags = 'f',
-                         type = 'rast',
+                         type = 'raster',
                          name = raster)
         if ret != 0:
             return False

@@ -1573,7 +1573,7 @@ class VectorAreasPage(TitledPage):
         self.outname = "{pref}{cat}".format(pref=self.outpref, cat=cat)
         # check if raster already axist
 
-        if len(grass.list_strings('rast', pattern=self.outname, mapset='.')) == 1 \
+        if len(grass.list_strings('raster', pattern=self.outname, mapset='.')) == 1 \
            and not self.parent.samplingareapage.overwriteTemp:
             GError(parent=self, message=_("The raster map <%s> already exists."
                                           " Please remove or rename the maps "

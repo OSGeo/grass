@@ -35,8 +35,8 @@ class NewRasterDialog(wx.Dialog):
         self._type = None
 
         # create widgets
-        self._mapSelect = Select(parent=self, type='rast')
-        self._backgroundSelect = Select(parent=self, type='rast')
+        self._mapSelect = Select(parent=self, type='raster')
+        self._backgroundSelect = Select(parent=self, type='raster')
         self._typeChoice = wx.Choice(self, choices=['CELL', 'FCELL', 'DCELL'])
         self._typeChoice.SetSelection(0)
         self._mapSelect.SetFocus()

@@ -341,21 +341,21 @@ class SimpleLayerManager(wx.Panel):
 
     def AddRaster(self, name, cmd, hidden, dialog):
         """Ads new raster layer."""
-        layer = self._layerList.AddNewLayer(name=name, mapType='rast',
+        layer = self._layerList.AddNewLayer(name=name, mapType='raster',
                                             active=True,
                                             cmd=cmd, hidden=hidden)
         return layer
 
     def AddRast3d(self, name, cmd, hidden, dialog):
         """Ads new raster3d layer."""
-        layer = self._layerList.AddNewLayer(name=name, mapType='rast3d',
+        layer = self._layerList.AddNewLayer(name=name, mapType='3draster',
                                             active=True,
                                             cmd=cmd, hidden=hidden)
         return layer
 
     def AddVector(self, name, cmd, hidden, dialog):
         """Ads new vector layer."""
-        layer = self._layerList.AddNewLayer(name=name, mapType='vect',
+        layer = self._layerList.AddNewLayer(name=name, mapType='vector',
                                             active=True,
                                             cmd=cmd, hidden=hidden)
         return layer

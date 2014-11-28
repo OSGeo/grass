@@ -1423,7 +1423,7 @@ class ProcessGrcFile(object):
                     "group"   : self.inGroup,
                     "display" : 0})
 
-        elif element == 'vect' and self.inVector:
+        elif element == 'vector' and self.inVector:
             self.layers[-1]['cmd'].append('map=%s' % self._get_value(line))
                 
         elif element in ('display_shape',

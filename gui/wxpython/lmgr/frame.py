@@ -1591,7 +1591,7 @@ class GMFrame(wx.Frame):
                 from animation.data import AnimLayer
                 layerList = LayerList()
                 layer = AnimLayer()
-                layer.mapType = 'rast'
+                layer.mapType = 'raster'
                 layer.name = ','.join(rasters)
                 layer.cmd = ['d.rast', 'map=']
                 layerList.AddLayer(layer)
@@ -1840,7 +1840,7 @@ class GMFrame(wx.Frame):
         """Add map layers to layer tree.
 
         :param list mapLayers: list of map names
-        :param str ltype: layer type ('rast', 'rast3d', 'vect')
+        :param str ltype: layer type ('raster', '3draster', 'vector')
         :param bool check: True if new layers should be checked in
                            layer tree False otherwise
         """
@@ -1851,13 +1851,13 @@ class GMFrame(wx.Frame):
         maptree = self.GetLayerTree()
         
         for layerName in mapLayers:
-            if ltype == 'rast':
+            if ltype == 'raster':
                 cmd = ['d.rast', 'map=%s' % layerName]
                 wxType = 'raster'
-            elif ltype == 'rast3d':
+            elif ltype == '3draster':
                 cmd = ['d.rast3d', 'map=%s' % layerName]
                 wxType = '3d-raster'
-            elif ltype == 'vect':
+            elif ltype == 'vector':
                 cmd = ['d.vect', 'map=%s' % layerName] + GetDisplayVectSettings()
                 wxType = 'vector'
             else:
@@ -1899,9 +1899,9 @@ class GMFrame(wx.Frame):
         # start new map display if no display is available
 
         # TODO: standardize type identifiers
-        convertType = {'raster': 'rast',
-                       '3d-raster': 'rast3d',
-                       'vector': 'vect'}
+        convertType = {'raster': 'raster',
+                       '3d-raster': '3draster',
+                       'vector': 'vector'}
         try:
             grassType = convertType[ltype]
         except KeyError:

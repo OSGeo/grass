@@ -443,14 +443,14 @@ class Instruction:
             
             # define scaleType
             if len(cmd[1]) <= 3:
-                if 'rast' in cmd[1]:
+                if 'raster' in cmd[1]:
                     map['scaleType'] = 0
                     map['mapType'] = 'raster'   
-                    map['map'] = cmd[1]['rast']  
-                elif 'vect' in cmd[1]:
+                    map['map'] = cmd[1]['raster']  
+                elif 'vector' in cmd[1]:
                     map['scaleType'] = 0
                     map['mapType'] = 'vector' 
-                    map['map'] = cmd[1]['vect']  
+                    map['map'] = cmd[1]['vector']  
                 elif 'region' in cmd[1]:
                     map['scaleType'] = 1  
                     map['region'] = cmd[1]['region']

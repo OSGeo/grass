@@ -795,13 +795,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         lnameSrc = self.GetLayerInfo(layer, key = 'maplayer').GetName()
         
         if ltype == 'raster':
-            key = 'rast'
+            key = 'raster'
             label = _('Raster map')
         elif ltype == 'vector':
-            key = 'vect'
+            key = 'vector'
             label = _('Vector map')
         elif ltype == '3d-raster':
-            key = 'rast3d'
+            key = '3draster'
             label = _('3D raster map')
         else:
             GError(_("Unsupported map type <%s>") % ltype, parent = self)

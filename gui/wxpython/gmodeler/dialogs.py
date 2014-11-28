@@ -115,9 +115,9 @@ class ModelDataDialog(SimpleDialog):
         self.shape.SetValue(self.element.GetValue())
         if self.etype:
             elem = self.GetType()
-            if elem == 'rast':
+            if elem == 'raster':
                 self.shape.SetPrompt('raster')
-            elif elem == 'vect':
+            elif elem == 'vector':
                 self.shape.SetPrompt('raster')
         
         self.parent.canvas.Refresh()
