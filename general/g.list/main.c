@@ -34,10 +34,20 @@ enum {
     TYPE_OTHERS
 };
 
+struct elist
+{
+    char *type;
+    char *name;
+    char *mapset;
+};
+
 static int any = 0;
 
-static void make_list(FILE *, const struct list *, const char *,
-		      const char *, int, int, struct Cell_head *);
+static void make_list(struct elist **, int *, int *, 
+                      const struct list *, const char *,
+		      struct Cell_head *);
+static void print_list(FILE *, struct elist *, int,
+		      const char *, int, int);
 static int region_overlaps(struct Cell_head *, const char *, const char *, int);
 
 int main(int argc, char *argv[])
@@ -70,6 +80,8 @@ int main(int argc, char *argv[])
     char *separator;
     int use_region, use_pager;
     struct Cell_head window;
+    struct elist *el;
+    int lcount, lalloc;
 
     G_gisinit(argv[0]);
 
@@ -305,6 +317,9 @@ int main(int argc, char *argv[])
     if (flag.pretty->answer || flag.full->answer)
 	dup2(fileno(fp), STDOUT_FILENO);
 
+    lcount = 0;
+    lalloc = 0;
+    el = NULL;
     for (i = 0; i < num_types; i++) {
 	const struct list *elem;
 
@@ -340,10 +355,18 @@ int main(int argc, char *argv[])
 	    const char *mapset;
 
 	    for (j = 0; (mapset = G_get_mapset_name(j)); j++)
-		make_list(fp, elem, mapset, separator, flag.type->answer,
-			  flag.mapset->answer, use_region ? &window : NULL);
+		make_list(&el, &lcount, &lalloc, elem, mapset, 
+			  use_region ? &window : NULL);
 	}
     }
+
+    if (!flag.pretty->answer && !flag.full->answer) {
+	print_list(fp, el, lcount, separator, flag.type->answer,
+		  flag.mapset->answer);
+    }
+
+    if (el)
+	G_free(el);
 
     if (flag.pretty->answer || flag.full->answer)
 	fclose(stdout);
@@ -364,15 +387,14 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
-static void make_list(FILE *fp, const struct list *elem, const char *mapset,
-		      const char *separator, int add_type, int add_mapset,
+static void make_list(struct elist **el, int *lcount, int *lalloc, 
+                      const struct list *elem, const char *mapset,
 		      struct Cell_head *window)
 {
-    static int first_mapset = 1;
     char path[GPATH_MAX];
     const char *element, *alias;
     char **list;
-    int count, first, i;
+    int count, i;
     int type;
 
     element = elem->element[0];
@@ -385,11 +407,11 @@ static void make_list(FILE *fp, const struct list *elem, const char *mapset,
     if ((list = G__ls(path, &count)) == NULL)
 	return;
 
-    if (strcmp(alias, "rast") == 0)
+    if (strcmp(alias, "raster") == 0)
 	type = TYPE_RAST;
-    else if (strcmp(alias, "rast3d") == 0)
+    else if (strcmp(alias, "3draster") == 0)
 	type = TYPE_RAST3D;
-    else if (strcmp(alias, "vect") == 0)
+    else if (strcmp(alias, "vector") == 0)
 	type = TYPE_VECT;
     else
 	type = TYPE_OTHERS;
@@ -397,56 +419,80 @@ static void make_list(FILE *fp, const struct list *elem, const char *mapset,
     /* Suppress "... found in more mapsets" warnings from G_find_file2. */
     G_suppress_warnings(1);
 
-    first = 1;
+    if (*lcount + count > *lalloc) {
+	*lalloc = *lcount + count + 10;
+	*el = G_realloc(*el, *lalloc * sizeof(struct elist));
+    }
+
     for (i = 0; i < count; i++) {
-	char *name = list[i];
-	int need_mapset = 0;
 
 	/* If region= is used, read the map region. */
 	if (window) {
 	    /* If the map region doesn't overlap with the input region, don't
 	     * print the map. */
-	    if (!region_overlaps(window, name, mapset, type))
+	    if (!region_overlaps(window, list[i], mapset, type))
 		continue;
 	}
 
-        if (first) {
-	    first = 0;
-
-	    if (any)
-		fprintf(fp, "%s", separator);
-	    if (fp == stdout && isatty(STDOUT_FILENO))
-		G_message(_("%s available in mapset <%s>:"),
-			  elem->text, mapset);
-	}
-
-	if (any && i != 0)
-	    fprintf(fp, "%s", separator);
-
-	if (add_type)
-	    fprintf(fp, "%s/", alias);
-
-	fprintf(fp, "%s", name);
-
-	if (!add_mapset && !first_mapset) {
-	    const char *mapset2 = G_find_file2(element, name, "");
-            if (mapset2)
-                need_mapset = strcmp(mapset, mapset2) != 0;
-	}
-	if (add_mapset || need_mapset)
-	    fprintf(fp, "@%s", mapset);
-
-	G_free(name);
+	(*el)[*lcount].type = G_store(alias);
+	(*el)[*lcount].name = list[i];
+	(*el)[*lcount].mapset = G_store(mapset);
+	(*lcount)++;
 
 	any++;
     }
 
     G_suppress_warnings(0);
-    fflush(fp);
 
     G_free(list);
+}
 
-    first_mapset = 0;
+int cmp(const void *a, const void *b)
+{
+    struct elist *al = (struct elist *)a;
+    struct elist *bl = (struct elist *)b;
+    int ret;
+
+    if (!(ret = strcmp(al->type, bl->type))) {
+	if (!(ret = strcmp(al->name, bl->name)))
+	    ret = strcmp(al->mapset, bl->mapset);
+    }
+
+    return ret;
+}
+
+static void print_list(FILE *fp, struct elist *el, int count,
+		      const char *separator, int add_type, int add_mapset)
+{
+    int i;
+
+    if (!count)
+	return;
+
+    qsort(el, count, sizeof(struct elist), cmp);
+
+    for (i = 0; i < count; i++) {
+	int need_mapset = 0;
+
+	if (i != 0)
+	    fprintf(fp, "%s", separator);
+
+	if (add_type)
+	    fprintf(fp, "%s/", el[i].type);
+
+	fprintf(fp, "%s", el[i].name);
+
+	if (!add_mapset) {
+	    if (i + 1 < count)
+		need_mapset = strcmp(el[i].name, el[i + 1].name) == 0;
+	    if (!need_mapset && i > 0)
+		need_mapset = strcmp(el[i].name, el[i - 1].name) == 0;
+	}
+	if (add_mapset || need_mapset)
+	    fprintf(fp, "@%s", el[i].mapset);
+    }
+
+    fflush(fp);
 }
 
 static int region_overlaps(struct Cell_head *window, const char *name,
