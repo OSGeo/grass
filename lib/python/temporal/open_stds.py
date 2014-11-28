@@ -52,7 +52,7 @@ def open_old_stds(name, type, dbif=None):
 
     if type == "strds" or type == "rast" or type == "raster":
         sp = dataset_factory("strds", id)
-    elif type == "str3ds" or type == "rast3d" or type == "raster3d":
+    elif type == "str3ds" or type == "rast3d" or type == "3draster":
         sp = dataset_factory("str3ds", id)
     elif type == "stvds" or type == "vect" or type == "vector":
         sp = dataset_factory("stvds", id)
@@ -108,7 +108,7 @@ def check_new_stds(name, type, dbif=None, overwrite=False):
 
     if type == "strds" or type == "rast" or type == "raster":
         sp = dataset_factory("strds", id)
-    elif type == "str3ds" or type == "rast3d" or type == "raster3d":
+    elif type == "str3ds" or type == "rast3d" or type == "3draster":
         sp = dataset_factory("str3ds", id)
     elif type == "stvds" or type == "vect" or type == "vector":
         sp = dataset_factory("stvds", id)

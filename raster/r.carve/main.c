@@ -78,11 +78,11 @@ int main(int argc, char **argv)
 			    "to raster and subtracts depth from the output DEM.");
 
     parm.inrast = G_define_standard_option(G_OPT_R_INPUT);
-    parm.inrast->key = "rast";
+    parm.inrast->key = "raster";
     parm.inrast->description = _("Name of input raster elevation map");
 
     parm.invect = G_define_standard_option(G_OPT_V_INPUT);
-    parm.invect->key = "vect";
+    parm.invect->key = "vector";
     parm.invect->label =
 	_("Name of input vector map containing stream(s)");
 
