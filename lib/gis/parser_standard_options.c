@@ -3,7 +3,7 @@
   
   \brief GIS Library - Argument parsing functions (standard options)
   
-  (C) 2001-2013 by the GRASS Development Team
+  (C) 2001-2014 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -87,6 +87,7 @@
    
   - files
    - G_OPT_F_INPUT
+   - G_OPT_F_BIN_INPUT
    - G_OPT_F_OUTPUT
    - G_OPT_F_SEP
    
@@ -559,6 +560,14 @@ struct Option *G_define_standard_option(int opt)
 	Opt->key_desc = "name";
 	Opt->required = YES;
 	Opt->gisprompt = "old,file,file";
+	Opt->description = _("Name of input file");
+	break;
+    case G_OPT_F_BIN_INPUT:
+	Opt->key = "input";
+	Opt->type = TYPE_STRING;
+	Opt->key_desc = "name";
+	Opt->required = YES;
+	Opt->gisprompt = "old,bin,file";
 	Opt->description = _("Name of input file");
 	break;
     case G_OPT_F_OUTPUT:
