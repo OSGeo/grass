@@ -110,12 +110,9 @@ class Select(wx.combo.ComboCtrl):
 
     def OnKeyDown(self, event):
         """Open popup and send key events to the tree."""
-        if self.IsPopupShown():
-            self.tcp.OnKeyDown(event)
-        else:
-            if event.GetKeyCode() == wx.WXK_DOWN:
-                self.ShowPopup()
-            event.Skip()
+        if event.GetKeyCode() == wx.WXK_DOWN:
+            self.ShowPopup()
+        event.Skip()
 
     def SetElementList(self, type, mapsets = None):
         """Set element list
