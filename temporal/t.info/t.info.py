@@ -24,15 +24,10 @@
 #% description: Name of an existing space time dataset or map
 #%end
 
-#%option
-#% key: type
-#% type: string
-#% description: Type of the dataset, default is strds (space time raster dataset)
-#% required: no
+#%option G_OPT_STDS_TYPE
 #% guidependency: input
 #% guisection: Required
-#% options: strds, str3ds, stvds, rast, rast3d, vect
-#% answer: strds
+#% options: strds, str3ds, stvds, rast, 3draster, vect
 #%end
 
 #%flag

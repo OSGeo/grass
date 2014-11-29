@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:	t.create
+# MODULE:       t.create
 # AUTHOR(S):	Soeren Gebbert
 #
-# PURPOSE:	Create a space time dataset
-# COPYRIGHT:	(C) 2011 by the GRASS Development Team
+# PURPOSE:      Create a space time dataset
+# COPYRIGHT:	(C) 2011-2014 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (version 2). Read the file COPYING that comes with GRASS
@@ -25,7 +25,7 @@
 #%end
 
 #%option G_OPT_STDS_TYPE
-#% description: The output type of the space time dataset
+#% description: Type of the output space time dataset
 #%end
 
 #%option G_OPT_T_TYPE
@@ -57,8 +57,8 @@
 #% multiple: no
 #%end
 
-import grass.temporal as tgis
 import grass.script as grass
+import grass.temporal as tgis
 
 ############################################################################
 
@@ -73,6 +73,7 @@ def main():
     descr = options["description"]
     semantic = options["semantictype"]
 
+    # Make sure the temporal database exists
     tgis.init()
     
     tgis.open_new_stds(name, type, temporaltype, title, descr, 

@@ -144,7 +144,7 @@ def main():
                 if type == "stvds":
                     remove(type="vect", name=",".join(name_list), run_=True)
                 if type == "str3ds":
-                    remove(type="rast3d", name=",".join(name_list), run_=True)
+                    remove(type="3draster", name=",".join(name_list), run_=True)
 
         statement += sp.delete(dbif=dbif, execute=False)
 
