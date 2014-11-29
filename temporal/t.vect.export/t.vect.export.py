@@ -69,7 +69,7 @@ def main():
     _input = options["input"]
     output = options["output"]
     compression = options["compression"]
-    workdir = options["workdir"]
+    workdir = options["directory"]
     where = options["where"]
     _format = options["format"]
 
