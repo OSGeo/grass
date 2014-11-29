@@ -68,19 +68,19 @@ earth. The user can turn this on with flag
 <p>
 By default the observer is assumed to have height 1.75 map units above
 the terrain.  The user can change this using option
-<b>obs_elev</b>. The value entered is in the same units as the
+<b>observer_elevation</b>. The value entered is in the same units as the
 elevation.
 
 <p>
 By default the target is assumed to have height of 0 map units above the
 terrain.  The user can change this using option
-<b>tgt_elev</b> to determine if objects of a given height would be
+<b>target_elevation</b> to determine if objects of a given height would be
 visible. The value entered is in the same units as the elevation.
 
 <p>
 By default there is no restriction on the maximum distance to which
 the observer can see.  The user can set a maximum distance of
-visibility using option <b>max_dist</b>.  The value entered is in the
+visibility using option <b>max_distance</b>.  The value entered is in the
 same units as the cell size of the raster.
 
 <p>
@@ -180,7 +180,7 @@ above ground:
 <div class="code"><pre>
 g.region rast=elev_lid792_1m -p
 r.viewshed input=elev_lid792_1m output=elev_lid792_1m_viewshed \
-  coordinates=638728.087167,220609.261501 obs_elev=5.0
+  coordinates=638728.087167,220609.261501 observer_elevation=5.0
 </pre></div>
 
 <div align="center" style="margin: 10px">
