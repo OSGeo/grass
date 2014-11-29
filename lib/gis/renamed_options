@@ -348,6 +348,10 @@ r.spreadpath|coordinate:coordinates
 r.terraflow|stream_dir:directory
 # r.out.vtk
 r.out.vtk|elevscale:zscale
+# r.viewshed
+r.viewshed|obs_elev:observer_elevation
+r.viewshed|tgt_elev:target_elevation
+r.viewshed|max_dist:max_distance
 ############################
 ### Raster 3D module changes
 ############################
