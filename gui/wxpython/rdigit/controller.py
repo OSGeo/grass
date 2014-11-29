@@ -101,7 +101,7 @@ class RDigitController(wx.EvtHandler):
     def _disconnectAll(self):
         self._mapWindow.mouseLeftDown.disconnect(self._start)
         self._mapWindow.mouseLeftUp.disconnect(self._addPoint)
-        self._mapWindow.mouseRightUp.connect(self._finish)
+        self._mapWindow.mouseRightUp.disconnect(self._finish)
         self._mapWindow.Bind(wx.EVT_CONTEXT_MENU, self._mapWindow.OnContextMenu)
 
     def _start(self, x, y):
