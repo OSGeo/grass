@@ -26,6 +26,7 @@ from core import globalvar
 from core.utils import _
 
 from grass.exceptions import Usage
+from grass.script.core import set_raise_on_error
 
 import wx
 try:
@@ -133,6 +134,7 @@ def main(argv = None):
     app = GMApp(workspaceFile)
     # suppress wxPython logs
     q = wx.LogNull()
+    set_raise_on_error(True)
 
     app.MainLoop()
 
