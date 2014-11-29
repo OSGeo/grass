@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:	t.topology
+# MODULE:		t.topology
 # AUTHOR(S):	Soeren Gebbert
 #
-# PURPOSE:	List temporal topology of a space time dataset
+# PURPOSE:		List temporal topology of a space time dataset
 # COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
