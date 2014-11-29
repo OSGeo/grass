@@ -9,12 +9,12 @@ particles and the underlying equations are solved by Green's
 function Monte  Carlo method, to provide robustness necessary for 
 spatially variable conditions and high resolutions (Mitas and Mitasova 
 1998).  Key inputs of the model include the following raster maps:
- elevation (<i>  elevin</i> [m]), flow gradient given by the first-order partial 
-derivatives of elevation field (<i> dxin</i> and <i>dyin</i>), 
-overland flow water depth (<i> wdepth</i> [m]), detachment capacity coefficient 
-(<i>detin</i> [s/m]), transport capacity coefficient (<i>tranin</i> [s]), 
-critical shear stress (<i>tauin</i> [Pa]) 
-and surface  roughness coefficient called Manning's n (<i>manin</i> raster map). 
+ elevation (<i>elevation</i> [m]), flow gradient given by the first-order partial 
+derivatives of elevation field (<i> dx</i> and <i>dy</i>), 
+overland flow water depth (<i>water_depth</i> [m]), detachment capacity coefficient 
+(<i>detachment_coeff</i> [s/m]), transport capacity coefficient (<i>transport_coeff</i> [s]), 
+critical shear stress (<i>shear_stress</i> [Pa]) 
+and surface  roughness coefficient called Manning's n (<i>man</i> raster map). 
 Partial derivatives can be computed by <a href="v.surf.rst.html">v.surf.rst</a>
 or <a href="r.slope.aspect.html">r.slope.aspect</a>
 module. The data are automatically converted from feet to metric
@@ -24,20 +24,20 @@ module. Other parameters must be determined using field measurements or
 reference literature (see suggested values in Notes and References). <br>
 
 <p>
-Output includes transport capacity raster map <i>tc</i>  in [kg/ms],
+Output includes transport capacity raster map <i>sedflow_capacity</i>  in [kg/ms],
 transport capacity limited erosion/deposition raster map
-<i>et</i> [kg/m<sup>2</sup>s]i that are output almost immediately and
+<i>tlimit_erosion_deposition</i> [kg/m<sup>2</sup>s]i that are output almost immediately and
 can be viewed while the simulation continues. Sediment flow rate raster map 
 <i>flux</i> [kg/ms], and net erosion/deposition raster map [kg/m<sup>2</sup>s]
 can take longer time depending on time step and simulation time. 
-Simulation time is controled by <i> niter</i> [minutes] parameter. 
+Simulation time is controled by <i>niterations</i> [minutes] parameter. 
 <!-- Output files can be saved during simulation using <i>outiter</i> parameter
 defining simulation time step for writing output files. This option requires
 time series flag <i>-t</i>. Files are saved with suffix   containing
 iteration number (e.g. name.500, name.1000, etc.) representing time in seconds.
 -->
 If the resulting erosion/deposition map is noisy, higher number of walkers,
-given by <i>nwalk</i> should be used. 
+given by <i>nwalkers</i> should be used. 
 <br>
 
 <h2>NOTES</h2>

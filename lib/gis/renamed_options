@@ -226,11 +226,21 @@ r.resamp.bspline|sn:ns_step
 r.sim.sediment|elevin:elevation
 r.sim.sediment|dxin:dx
 r.sim.sediment|dyin:dy
-r.sim.sediment|detin:det
-r.sim.sediment|tranin:tran
-r.sim.sediment|tauin:tau
+r.sim.sediment|wdepth:water_depth
+r.sim.sediment|detin:detachment_coeff
+r.sim.sediment|tranin:transport_coeff
+r.sim.sediment|tauin:shear_stress
 r.sim.sediment|manin:man
 r.sim.sediment|maninval:man_value
+r.sim.sediment|outwalk:walkers_output
+r.sim.sediment|tc:sedflow_capacity
+r.sim.sediment|et:tlimit_erosion_deposition
+r.sim.sediment|conc:concentration
+r.sim.sediment|erdep:erosion_deposition
+r.sim.sediment|nwalk:nwalkers
+r.sim.sediment|niter:niterations
+r.sim.sediment|outiter:output_step
+r.sim.sediment|diffc:diffusion_coeff
 # r.sim.water
 r.sim.water|elevin:elevation
 r.sim.water|dxin:dx
@@ -240,6 +250,14 @@ r.sim.water|infil:infil
 r.sim.water|infil_val:infil_value
 r.sim.water|manin:man
 r.sim.water|manin_val:man_value
+r.sim.water|traps:flow_control
+r.sim.water|disch:discharge
+r.sim.water|err:error
+r.sim.water|outwalk:walkers_output
+r.sim.water|nwalk:nwalkers
+r.sim.water|niter:niterations
+r.sim.water|outiter:output_step
+r.sim.water|diffc:diffusion_coeff
 # r.sun
 r.sun|elevin:elevation
 r.sun|aspin:aspect
