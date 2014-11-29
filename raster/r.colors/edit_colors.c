@@ -147,10 +147,10 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
     flag.e->description = _("Histogram equalization");
     flag.e->guisection = _("Define");
 
-    G_option_exclusive(opt.maps, opt.file, NULL);
-    G_option_required(opt.maps, opt.file, NULL);
+    G_option_exclusive(opt.maps, opt.file, flag.l, NULL);
+    G_option_required(opt.maps, opt.file, flag.l, NULL);
     G_option_exclusive(opt.rast, opt.volume, NULL);
-    G_option_required(opt.rast, opt.volume, opt.colr, opt.rules, flag.r, NULL);
+    G_option_required(opt.rast, opt.volume, opt.colr, opt.rules, flag.r, flag.l, NULL);
     G_option_exclusive(opt.colr, opt.rules, opt.rast, opt.volume, NULL);
     G_option_exclusive(flag.g, flag.a, NULL);
 
