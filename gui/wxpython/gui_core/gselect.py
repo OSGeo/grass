@@ -111,7 +111,10 @@ class Select(wx.combo.ComboCtrl):
     def OnKeyDown(self, event):
         """Open popup and send key events to the tree."""
         if self.IsPopupShown():
-            self.tcp.OnKeyDown(event)
+            # on some configurations we get key down, with some only key up
+            # so we are trying to catch either key up or down
+            # this mess shouldn't be necessary with wxPython 3
+            self.tcp.OnKeyUp(event)
         else:
             if event.GetKeyCode() == wx.WXK_DOWN:
                 self.ShowPopup()
