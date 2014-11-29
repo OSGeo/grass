@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
     parm.elevin = G_define_standard_option(G_OPT_R_ELEV);
     
     parm.wdepth = G_define_standard_option(G_OPT_R_INPUT);
-    parm.wdepth->key = "wdepth";
+    parm.wdepth->key = "water_depth";
     parm.wdepth->description = _("Name of water depth raster map [m]");
 
     parm.dxin = G_define_standard_option(G_OPT_R_INPUT);
@@ -131,17 +131,17 @@ int main(int argc, char *argv[])
     parm.dyin->description = _("Name of y-derivatives raster map [m/m]");
     
     parm.detin = G_define_standard_option(G_OPT_R_INPUT);
-    parm.detin->key = "det";
+    parm.detin->key = "detachment_coeff";
     parm.detin->description =
 	_("Name of detachment capacity coefficient raster map [s/m]");
 
     parm.tranin = G_define_standard_option(G_OPT_R_INPUT);
-    parm.tranin->key = "tran";
+    parm.tranin->key = "transport_coeff";
     parm.tranin->description =
 	_("Name of transport capacity coefficient raster map [s]");
     
     parm.tauin = G_define_standard_option(G_OPT_R_INPUT);
-    parm.tauin->key = "tau";
+    parm.tauin->key = "shear_stress";
     parm.tauin->description =
 	_("Name of critical shear stress raster map [Pa]");
 
@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
     parm.maninval->guisection = _("Input");
 
     parm.outwalk = G_define_standard_option(G_OPT_V_OUTPUT);
-    parm.outwalk->key = "outwalk";
+    parm.outwalk->key = "walkers_output";
     parm.outwalk->required = NO;
     parm.outwalk->description =
 	_("Base name of the output walkers vector points map");
@@ -181,20 +181,20 @@ int main(int argc, char *argv[])
     parm.logfile->guisection = _("Output");
 
     parm.tc = G_define_standard_option(G_OPT_R_OUTPUT);
-    parm.tc->key = "tc";
+    parm.tc->key = "sedflow_capacity";
     parm.tc->required = NO;
     parm.tc->description = _("Name for output transport capacity raster map [kg/ms]");
     parm.tc->guisection = _("Output");
 
     parm.et = G_define_standard_option(G_OPT_R_OUTPUT);
-    parm.et->key = "et";
+    parm.et->key = "tlimit_erosion_deposition";
     parm.et->required = NO;
     parm.et->description =
 	_("Name for output transport limited erosion-deposition raster map [kg/m2s]");
     parm.et->guisection = _("Output");
 
     parm.conc = G_define_standard_option(G_OPT_R_OUTPUT);
-    parm.conc->key = "conc";
+    parm.conc->key = "concentration";
     parm.conc->required = NO;
     parm.conc->description =
 	_("Name for output sediment concentration raster map [particle/m3]");
@@ -207,21 +207,21 @@ int main(int argc, char *argv[])
     parm.flux->guisection = _("Output");
 
     parm.erdep = G_define_standard_option(G_OPT_R_OUTPUT);
-    parm.erdep->key = "erdep";
+    parm.erdep->key = "erosion_deposition";
     parm.erdep->required = NO;
     parm.erdep->description =
 	_("Name for output erosion-deposition raster map [kg/m2s]");
     parm.erdep->guisection = _("Output");
 
     parm.nwalk = G_define_option();
-    parm.nwalk->key = "nwalk";
+    parm.nwalk->key = "nwalkers";
     parm.nwalk->type = TYPE_INTEGER;
     parm.nwalk->required = NO;
     parm.nwalk->description = _("Number of walkers");
     parm.nwalk->guisection = _("Parameters");
 
     parm.niter = G_define_option();
-    parm.niter->key = "niter";
+    parm.niter->key = "niterations";
     parm.niter->type = TYPE_INTEGER;
     parm.niter->answer = NITER;
     parm.niter->required = NO;
@@ -229,7 +229,7 @@ int main(int argc, char *argv[])
     parm.niter->guisection = _("Parameters");
 
     parm.outiter = G_define_option();
-    parm.outiter->key = "outiter";
+    parm.outiter->key = "output_step";
     parm.outiter->type = TYPE_INTEGER;
     parm.outiter->answer = ITEROUT;
     parm.outiter->required = NO;
@@ -248,7 +248,7 @@ int main(int argc, char *argv[])
 */
 
     parm.diffc = G_define_option();
-    parm.diffc->key = "diffc";
+    parm.diffc->key = "diffusion_coeff";
     parm.diffc->type = TYPE_DOUBLE;
     parm.diffc->answer = DIFFC;
     parm.diffc->required = NO;

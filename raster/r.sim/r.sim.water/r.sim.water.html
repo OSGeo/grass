@@ -8,11 +8,11 @@ on the concept of duality between the field and particle representation of
 the modeled quantity. Green's function Monte Carlo method, used to solve the equation,
 provides robustness necessary for spatially variable conditions and high
 resolutions (Mitas and Mitasova 1998). The key inputs of the model include
-elevation (<i>elevin</i> raster map), flow gradient vector given by
-first-order partial derivatives of elevation field (<i>dxin</i> and <i>dyin</i>
-raster maps), rainfall excess rate (<i>rain</i> raster map or <i>rain_val</i> single
+elevation (<i>elevation</i> raster map), flow gradient vector given by
+first-order partial derivatives of elevation field (<i>dx</i> and <i>dy</i>
+raster maps), rainfall excess rate (<i>rain</i> raster map or <i>rain_value</i> single
 value) and a surface roughness coefficient given by Manning's n 
-(<i>manin</i> raster map or <i>manin_val</i> single value). Partial
+(<i>man</i> raster map or <i>man_value</i> single value). Partial
 derivatives raster maps can be computed along with interpolation of a DEM using
 the -d option in <a href="v.surf.rst.html">v.surf.rst</a> module. If elevation raster 
 map is already provided, partial derivatives can be computed using
@@ -39,19 +39,19 @@ For saturated soil and steady-state water flow it can be estimated using
 saturated hydraulic conductivity rates based on field measurements or using
 reference values which can be found in literature.
 Optionally, user can provide an overland flow infiltration rate map 
-<i>infil</i> or a single value <i>infil_val</i> in [mm/hr] that control the rate of
+<i>infil</i> or a single value <i>infil_value</i> in [mm/hr] that control the rate of
 infiltration for the already flowing water, effectively reducing the flow depth and 
 discharge.
 Overland flow can be further controled by permeable check dams or similar type of structures,
 the user can provide a map of these structures and their permeability ratio
-in the map <i>traps</i> that defines the probability of particles to pass
+in the map <i>flow_control</i> that defines the probability of particles to pass
 through the structure (the values will be 0-1).
 
 <p>
 Output includes a water depth raster map <i>depth</i> in [m], and a water discharge 
-raster map <i>disch</i> in [m3/s]. Error of the numerical solution can be analyzed using 
-the <i>err</i> raster map (the resulting water depth is an average, and err is its RMSE).
-The output vector points map <i>outwalk</i> can be used to analyze and visualize 
+raster map <i>discharge</i> in [m3/s]. Error of the numerical solution can be analyzed using 
+the <i>error</i> raster map (the resulting water depth is an average, and err is its RMSE).
+The output vector points map <i>output_walkers</i> can be used to analyze and visualize 
 spatial distribution of walkers at different simulation times (note that 
 the resulting water depth is based on the density of these walkers). 
 <!--Number of the output walkers is controled by the <i>density</i> parameter, which controls
@@ -62,13 +62,13 @@ http://www.ing.unitn.it/~grass/conferences/GRASS2002/proceedings/proceedings/pdf
 The spatial distribution of numerical error associated with path sampling solution can be
 analysed using the output error raster file [m]. This error is a function of the number
 of particles used in the simulation and can be reduced by increasing the number of walkers
-given by parameter <i>nwalk</i>.
+given by parameter <i>nwalkers</i>.
 <!--(<font color="#ff0000"> toto treba upresnit/zmenit, lebo nwalk ide prec</font>). -->
-Duration of simulation is controled by the <i>niter</i> parameter. The default value 
+Duration of simulation is controled by the <i>niterations</i> parameter. The default value 
 is 10 minutes, reaching the steady-state may require much longer time, 
 depending on the time step, complexity of terrain, land cover and size of the area. 
 Output walker, water depth and discharge maps can be saved during simulation using 
-the time series flag <i>-t</i> and <i>outiter</i> parameter 
+the time series flag <i>-t</i> and <i>output_step</i> parameter 
 defining the time step in minutes for writing output files. 
 Files are saved with a suffix representing time since the start of simulation in minutes 
 (e.g. wdepth.05, wdepth.10).
@@ -82,7 +82,7 @@ In case of invalid water depth data the value -1 is used.
 <p>
 Overland flow is routed based on partial derivatives of elevation
 field or other landscape features influencing water flow. Simulation
-equations include a diffusion term (<i>diffc</i> parameter) which enables 
+equations include a diffusion term (<i>diffusion_coeff</i> parameter) which enables 
 water flow to overcome elevation depressions or obstacles when water depth exceeds 
 a threshold water depth value (<i>hmax)</i>, given in [m]. When it is reached, 
 diffusion term increases as given by <i>halpha</i> and advection term 
@@ -151,7 +151,7 @@ r.mapcalc "infilt  = if(elevation.10m, 0.0, null())"
 # simulate
 r.sim.water elevation=elevation.10m dx=elev_dx dy=elev_dy \
             rain=rain man=manning infil=infilt \
-            nwalk=5000000 depth=depth
+            nwalkers=5000000 depth=depth
 </pre></div>
 
 <p>
@@ -169,7 +169,7 @@ If the module fails with
 ERROR: nwalk (7000001) &gt; maxw (7000000)!
 </pre></div>
 
-then a lower <em>nwalk</em> parameter value has to be selected.
+then a lower <em>nwalkers</em> parameter value has to be selected.
 
 <h2>SEE ALSO</h2>
 

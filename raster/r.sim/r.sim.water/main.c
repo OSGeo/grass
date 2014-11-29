@@ -169,7 +169,7 @@ int main(int argc, char *argv[])
     parm.maninval->guisection = _("Input");
 
     parm.traps = G_define_standard_option(G_OPT_R_INPUT);
-    parm.traps->key = "traps";
+    parm.traps->key = "flow_control";
     parm.traps->required = NO;
     parm.traps->description =
 	_("Name of flow controls raster map (permeability ratio 0-1)");
@@ -196,26 +196,26 @@ int main(int argc, char *argv[])
     parm.depth->guisection = _("Output");
 
     parm.disch = G_define_standard_option(G_OPT_R_OUTPUT);
-    parm.disch->key = "disch";
+    parm.disch->key = "discharge";
     parm.disch->required = NO;
     parm.disch->description = _("Name for output water discharge raster map [m3/s]");
     parm.disch->guisection = _("Output");
 
     parm.err = G_define_standard_option(G_OPT_R_OUTPUT);
-    parm.err->key = "err";
+    parm.err->key = "error";
     parm.err->required = NO;
     parm.err->description = _("Name for output simulation error raster map [m]");
     parm.err->guisection = _("Output");
 
     parm.outwalk = G_define_standard_option(G_OPT_V_OUTPUT);
-    parm.outwalk->key = "outwalk";
+    parm.outwalk->key = "walkers_output";
     parm.outwalk->required = NO;
     parm.outwalk->description =
 	_("Base name of the output walkers vector points map");
     parm.outwalk->guisection = _("Output options");
 
     parm.nwalk = G_define_option();
-    parm.nwalk->key = "nwalk";
+    parm.nwalk->key = "nwalkers";
     parm.nwalk->type = TYPE_INTEGER;
     parm.nwalk->required = NO;
     parm.nwalk->description =
@@ -223,7 +223,7 @@ int main(int argc, char *argv[])
     parm.nwalk->guisection = _("Parameters");
 
     parm.niter = G_define_option();
-    parm.niter->key = "niter";
+    parm.niter->key = "niterations";
     parm.niter->type = TYPE_INTEGER;
     parm.niter->answer = NITER;
     parm.niter->required = NO;
@@ -231,7 +231,7 @@ int main(int argc, char *argv[])
     parm.niter->guisection = _("Parameters");
 
     parm.outiter = G_define_option();
-    parm.outiter->key = "outiter";
+    parm.outiter->key = "output_step";
     parm.outiter->type = TYPE_INTEGER;
     parm.outiter->answer = ITEROUT;
     parm.outiter->required = NO;
@@ -250,7 +250,7 @@ int main(int argc, char *argv[])
 */
 
     parm.diffc = G_define_option();
-    parm.diffc->key = "diffc";
+    parm.diffc->key = "diffusion_coeff";
     parm.diffc->type = TYPE_DOUBLE;
     parm.diffc->answer = DIFFC;
     parm.diffc->required = NO;
