@@ -43,11 +43,11 @@ t.info type=rast input=prec_2
 t.info -g type=rast input=prec_2
 
 
-t.register type=rast3d -i input=precip_abs1 maps=prec_1,prec_2 start="2001-01-01" increment="20 years"
+t.register type=3draster -i input=precip_abs1 maps=prec_1,prec_2 start="2001-01-01" increment="20 years"
 t.info type=str3ds input=precip_abs1
 t.info -g type=str3ds input=precip_abs1
 
-t.register type=rast3d -i input=precip_abs2 maps=prec_1,prec_2 start="2001-01-01" increment="20 years"
+t.register type=3draster -i input=precip_abs2 maps=prec_1,prec_2 start="2001-01-01" increment="20 years"
 t.info type=str3ds input=precip_abs2
 t.info -g type=str3ds input=precip_abs2
 t.info -h type=str3ds input=precip_abs2
