@@ -490,7 +490,7 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     struct Option *obsElevOpt;
 
     obsElevOpt = G_define_option();
-    obsElevOpt->key = "obs_elev";
+    obsElevOpt->key = "observer_elevation";
     obsElevOpt->type = TYPE_DOUBLE;
     obsElevOpt->required = NO;
     obsElevOpt->key_desc = "value";
@@ -502,7 +502,7 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     struct Option *tgtElevOpt;
 
     tgtElevOpt = G_define_option();
-    tgtElevOpt->key = "tgt_elev";
+    tgtElevOpt->key = "target_elevation";
     tgtElevOpt->type = TYPE_DOUBLE;
     tgtElevOpt->required = NO;
     tgtElevOpt->key_desc = "value";
@@ -514,7 +514,7 @@ parse_args(int argc, char *argv[], int *vpRow, int *vpCol,
     struct Option *maxDistOpt;
 
     maxDistOpt = G_define_option();
-    maxDistOpt->key = "max_dist";
+    maxDistOpt->key = "max_distance";
     maxDistOpt->type = TYPE_DOUBLE;
     maxDistOpt->required = NO;
     maxDistOpt->key_desc = "value";
