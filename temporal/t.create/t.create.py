@@ -3,10 +3,10 @@
 ############################################################################
 #
 # MODULE:       t.create
-# AUTHOR(S):	Soeren Gebbert
+# AUTHOR(S):    Soeren Gebbert
 #
 # PURPOSE:      Create a space time dataset
-# COPYRIGHT:	(C) 2011-2014 by the GRASS Development Team
+# COPYRIGHT:    (C) 2011-2014 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (version 2). Read the file COPYING that comes with GRASS

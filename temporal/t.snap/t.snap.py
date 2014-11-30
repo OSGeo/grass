@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:   t.snap
+# MODULE:       t.snap
 # AUTHOR(S):    Soeren Gebbert
 #
-# PURPOSE:  Temporally snap the maps of a space time dataset.
+# PURPOSE:      Temporally snap the maps of a space time dataset.
 # COPYRIGHT:    (C) 2013 by the GRASS Development Team
 #
 #       This program is free software under the GNU General Public
