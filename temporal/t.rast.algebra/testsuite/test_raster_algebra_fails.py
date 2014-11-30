@@ -37,7 +37,7 @@ class TestTRastAlgebraFails(gunittest.TestCase):
         self.assertModuleFail("t.rast.algebra",  expression="R = NoSTRDS + NoSTRDS", basename="r")
         # No basename
         self.assertModuleFail("t.rast.algebra",  expression="R = A + B")
-        # Catch temporal lagebra expressions that are prohibited in the raster algebra
+        # Catch temporal algebra expressions that are prohibited in the raster algebra
         self.assertModuleFail("t.rast.algebra",  expression="R = strds(A) + strds(B)", basename="r")
 
 if __name__ == '__main__':
