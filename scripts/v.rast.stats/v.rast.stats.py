@@ -281,7 +281,7 @@ def main():
     f.close()
 
     grass.message(_("Updating the database ..."))
-    exitcode = 1
+    exitcode = 0
     try:
         grass.run_command('db.execute', input=sqltmp,
                           database=fi['database'], driver=fi['driver'])
