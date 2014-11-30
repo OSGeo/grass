@@ -45,7 +45,7 @@ class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
         self.overwrite = overwrite
         self.count = 0
         self.stdstype = "str3ds"
-        self.maptype = "rast3d"
+        self.maptype = "3draster"
         self.mapclass = Raster3DDataset
         self.basename = basename
         self.expression = expression

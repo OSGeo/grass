@@ -237,7 +237,7 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
                 gscript.run_command("g.remove", flags='f', type='rast',
                                     name=names, quiet=True)
             elif type == "raster3d":
-                gscript.run_command("g.remove", flags='f', type='rast3d',
+                gscript.run_command("g.remove", flags='f', type='3draster',
                                     name=names, quiet=True)
             elif type == "vector":
                 gscript.run_command("g.remove", flags='f', type='vect',

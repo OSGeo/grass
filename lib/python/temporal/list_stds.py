@@ -34,7 +34,7 @@ def get_dataset_list(type, temporal_type, columns=None, where=None,
         the values are the rows from the SQL database query.
 
         :param type: The type of the datasets (strds, str3ds, stvds, rast,
-                     rast3d, vect)
+                     3draster, vect)
         :param temporal_type: The temporal type of the datasets (absolute,
                               relative)
         :param columns: A comma separated list of columns that will be selected

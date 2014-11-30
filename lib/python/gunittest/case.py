@@ -672,7 +672,7 @@ class TestCase(unittest.TestCase):
                                           sep='=', precision=precision,
                                           reference=statistics, msg=msg)
             finally:
-                call_module('g.remove', flags='f', type='rast3d', name=diff)
+                call_module('g.remove', flags='f', type='3draster', name=diff)
         else:
             # general case
             # TODO: we are using r.info min max and r.univar min max interchangably
@@ -698,7 +698,7 @@ class TestCase(unittest.TestCase):
             self.assertRaster3dFitsUnivar(raster=diff, reference=statistics,
                                           precision=precision, msg=msg)
         finally:
-            call_module('g.remove', flags='f', type='rast3d', name=diff)
+            call_module('g.remove', flags='f', type='3draster', name=diff)
 
     # TODO: this works only in 2D
     # TODO: write tests

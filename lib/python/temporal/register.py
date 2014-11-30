@@ -35,7 +35,7 @@ def register_maps_in_space_time_dataset(
        It takes care of the correct update of the space time datasets from all
        registered maps.
 
-       :param type: The type of the maps rast, rast3d or vect
+       :param type: The type of the maps rast, 3draster or vect
        :param name: The name of the space time dataset. Maps will be
                     registered in the temporal database if the name was set
                     to None
@@ -327,7 +327,7 @@ def register_maps_in_space_time_dataset(
         for dataset in datatsets_to_modify:
             if type == "rast" or type == "raster":
                 ds = dataset_factory("strds", dataset)
-            elif type == "rast3d":
+            elif type == "3draster":
                 ds = dataset_factory("str3ds", dataset)
             elif type == "vect" or type == "vector":
                 ds = dataset_factory("stvds", dataset)
@@ -434,7 +434,7 @@ def register_map_object_list(type,  map_list, output_stds,
     """Register a list of AbstractMapDataset objects in the temporal database
        and optional in a space time dataset.
 
-       :param type: The type of the map layer (rast, rast3d, vect)
+       :param type: The type of the map layer (rast, 3draster, vect)
        :param map_list: List of AbstractMapDataset objects
        :param output_stds: The output stds
        :param delete_empty: Set True to delete empty map layer found in the map_list
