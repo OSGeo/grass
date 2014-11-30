@@ -37,4 +37,4 @@ t.remove type=strds input=precip_abs1
 t.remove type=stvds input=prec_observer
 
 #g.remove -f type=vect name=prec_observer
-g.remove -f type=rast pattern=test_prec_*
+#g.remove -f type=rast pattern="test_prec_*"

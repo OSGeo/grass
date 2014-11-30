@@ -1,5 +1,9 @@
 MODULE_TOPDIR = ..
 
+#	t.rast.algebra \
+#	t.rast3d.algebra \
+#	t.vect.algebra \
+
 SUBDIRS = \
 	t.connect \
 	t.create \

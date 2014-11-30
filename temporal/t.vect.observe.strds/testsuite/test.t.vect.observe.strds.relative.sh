@@ -19,7 +19,7 @@ t.create --o type=strds temporaltype=relative output=precip_abs1 title="A test" 
 t.register -i input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start=0 increment=1 unit=months
 
 # The @test
-t.vect.observe.strds input=prec strds=precip_abs1 output=prec_observer vector=prec_observer
+t.vect.observe.strds input=prec strds=precip_abs1 output=prec_observer vector=prec_observer column=observation
 v.info prec_observer
 t.info type=stvds input=prec_observer
 t.vect.list input=prec_observer
@@ -31,5 +31,5 @@ t.remove type=strds input=precip_abs1
 t.remove type=stvds input=prec_observer
 t.unregister type=vect maps=prec_observer:1,prec_observer:2,prec_observer:3,prec_observer:4,prec_observer:5,prec_observer:6
 
-g.remove -f type=vect name=prec_observer,test_extract
-g.remove -f type=rast name=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+#g.remove -f type=vect name=prec_observer,test_extract
+#g.remove -f type=rast name=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6

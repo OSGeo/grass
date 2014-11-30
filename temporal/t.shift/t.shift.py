@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:	t.shift
-# AUTHOR(S):	Soeren Gebbert
+# MODULE:       t.shift
+# AUTHOR(S):    Soeren Gebbert
 #
-# PURPOSE:	Temporally shift the maps of a space time dataset.
-# COPYRIGHT:	(C) 2013 by the GRASS Development Team
+# PURPOSE:      Temporally shift the maps of a space time dataset
+# COPYRIGHT:    (C) 2013-2014 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (version 2). Read the file COPYING that comes with GRASS
@@ -24,15 +24,9 @@
 #% description: Name of an existing space time dataset
 #%end
 
-#%option
-#% key: type
-#% type: string
-#% description: Type of the dataset, default is strds (space time raster dataset)
-#% required: no
+#%option G_OPT_T_TYPE
 #% guidependency: input
 #% guisection: Required
-#% options: strds, str3ds, stvds
-#% answer: strds
 #%end
 
 #%option
