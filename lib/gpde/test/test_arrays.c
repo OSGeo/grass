@@ -857,7 +857,7 @@ int test_array_3d(void)
     N_free_array_3d(tmp);
 
     sprintf(buff,
-	    "g.remove -f type=rast3d name=gpde_lib_test_volume_1,gpde_lib_test_volume_2");
+	    "g.remove -f type=3draster name=gpde_lib_test_volume_1,gpde_lib_test_volume_2");
     system(buff);
 
     N_free_array_3d(data1);

@@ -1063,7 +1063,7 @@ class TemporalAlgebraParser(object):
         """Remove maps of specific type
         
             :param namelist: List of map names to be removed
-            :param map_type: The type of the maps  (rast, rast3d or vect)
+            :param map_type: The type of the maps  (rast, 3draster or vect)
         """
         max = 100
         chunklist = [namelist[i:i + max] for i in range(0, len(namelist), max)]
@@ -1074,7 +1074,7 @@ class TemporalAlgebraParser(object):
             if map_type == "raster":
                 map_type = "rast"
             if map_type == "raster3d":
-                map_type = "rast3d"
+                map_type = "3draster"
             if map_type == "vector":
                 map_type = "vect"
 
@@ -2073,7 +2073,7 @@ class TemporalAlgebraParser(object):
                                 process_queue.put(m)
                             elif map_i.get_type() == 'raster3d':
                                 m = copy.deepcopy(self.m_copy)
-                                m.inputs["rast3d"].value = map_i.get_id(),  newident
+                                m.inputs["3draster"].value = map_i.get_id(),  newident
                                 m.flags["overwrite"].value = self.overwrite
                                 process_queue.put(m)
                             elif map_i.get_type() == 'vector':

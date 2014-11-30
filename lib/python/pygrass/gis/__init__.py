@@ -16,7 +16,7 @@ from grass.pygrass.errors import GrassError
 
 
 ETYPE = {'rast': libgis.G_ELEMENT_RASTER,
-         'rast3d': libgis.G_ELEMENT_RASTER3D,
+         '3draster': libgis.G_ELEMENT_RASTER3D,
          'vect': libgis.G_ELEMENT_VECTOR,
          'oldvect': libgis.G_ELEMENT_OLDVECTOR,
          'asciivect': libgis.G_ELEMENT_ASCIIVECTOR,
@@ -315,7 +315,7 @@ class Mapset(object):
             * 'labels',
             * 'oldvect',
             * 'rast',
-            * 'rast3d',
+            * '3draster',
             * 'region',
             * 'region3d',
             * 'sites',
