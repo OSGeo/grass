@@ -149,7 +149,7 @@ def main():
         except CalledModuleError:
             grass.fatal(_("Unable to create 3D raster map <%s>" % output))
 
-    grass.run_command("g.remove", type='rast', name=null_map, flags='f')
+    grass.run_command("g.remove", flags='f', type='rast', name=null_map)
 
     title = _("Space time voxel cube")
     descr = _("This space time voxel cube was created with t.rast.to.rast3")

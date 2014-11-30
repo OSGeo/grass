@@ -65,8 +65,9 @@
 #% description: Update metadata information, temporal and spatial extent from registered maps
 #%end
 
-import grass.temporal as tgis
+
 import grass.script as grass
+import grass.temporal as tgis
 
 ############################################################################
 

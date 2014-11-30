@@ -6,10 +6,10 @@
 # AUTHOR(S):	Soeren Gebbert
 #
 # PURPOSE:	Aggregates data of an existing space time raster dataset using the time intervals of a second space time dataset
-# COPYRIGHT:	(C) 2011 by the gcore Development Team
+# COPYRIGHT:	(C) 2011 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
-#		License (version 2). Read the file COPYING that comes with gcore
+#		License (version 2). Read the file COPYING that comes with GRASS
 #		for details.
 #
 #############################################################################
@@ -29,7 +29,7 @@
 #%end
 
 #%option G_OPT_STDS_TYPE
-#% description: Type of the aggregation space time dataset, default is strds
+#% description: Type of the aggregation space time dataset
 #%end
 
 #%option G_OPT_STRDS_OUTPUT

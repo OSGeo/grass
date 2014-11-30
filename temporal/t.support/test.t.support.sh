@@ -38,6 +38,7 @@ t.info type=strds input=precip_abs1
 
 # @test the map update function
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=20 res3=20
+
 # Generate data
 r.mapcalc --o expr="prec_1 = rand(0, 55)" -s
 r.mapcalc --o expr="prec_2 = rand(0, 45)" -s

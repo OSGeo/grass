@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 ############################################################################
 #
-# MODULE:   t.info
+# MODULE:       t.info
 # AUTHOR(S):    Soeren Gebbert
 #
-# PURPOSE:  Print information about a space-time dataset
-# COPYRIGHT:    (C) 2011 by the GRASS Development Team
+# PURPOSE:      Print information about a space-time dataset
+# COPYRIGHT:    (C) 2011-2014 by the GRASS Development Team
 #
 #       This program is free software under the GNU General Public
 #       License (version 2). Read the file COPYING that comes with GRASS
@@ -24,15 +24,10 @@
 #% description: Name of an existing space time dataset or map
 #%end
 
-#%option
-#% key: type
-#% type: string
-#% description: Type of the dataset, default is strds (space time raster dataset)
-#% required: no
+#%option G_OPT_STDS_TYPE
 #% guidependency: input
 #% guisection: Required
 #% options: strds, str3ds, stvds, rast, rast3d, vect
-#% answer: strds
 #%end
 
 #%flag

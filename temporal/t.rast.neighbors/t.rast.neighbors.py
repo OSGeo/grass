@@ -109,7 +109,7 @@ def main():
         grass.warning(_("Space time raster dataset <%s> is empty") % sp.get_id())
         return
 
-    new_sp = tgis.check_new_stds(input, "strds", dbif=dbif,
+    new_sp = tgis.check_new_stds(output, "strds", dbif=dbif,
                                                overwrite=overwrite)
     # Configure the r.neighbor module
     neighbor_module = pymod.Module("r.neighbors", input="dummy",
