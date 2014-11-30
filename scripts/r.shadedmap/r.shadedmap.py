@@ -42,6 +42,24 @@
 #% options: -99-99
 #% answer: 0
 #%end
+#%option
+#% key: bgcolor
+#% type: string
+#% key_desc: name
+#% label: Color to use instead of NULL values
+#% description: Either a standard color name, R:G:B triplet, or "none"
+#% gisprompt: old,color_none,color
+#%end
+#%flag
+#% key: c
+#% description: Use colors from color tables for NULL values
+#%end
+#%rules
+#% exclusive: bgcolor, -c
+#%end
+
+# TODO: bgcolor is not using standard option because it has default white
+# using `answer:` will cause `default:` which is not the same as no default
 
 
 import os
@@ -57,12 +75,19 @@ def remove(maps):
 
 
 def main():
-    options, unused = gcore.parser()
+    options, flags = gcore.parser()
 
     drape_map = options['drapemap']
     relief_map = options['reliefmap']
     brighten = int(options['brighten'])
     output_map = options['output']
+    bgcolor = options['bgcolor']
+
+    rhis_extra_args = {}
+    if bgcolor:
+        rhis_extra_args['bgcolor'] = bgcolor
+    if flags['c']:
+        rhis_extra_args['flags'] = 'c'
 
     to_remove = []
     try:
@@ -86,7 +111,7 @@ def main():
             relief_map = relief_map_tmp
             to_remove.append(relief_map_tmp)
         gcore.run_command('r.his', hue=drape_map, intensity=relief_map,
-                          red=tmp_r, green=tmp_g, blue=tmp_b)
+                          red=tmp_r, green=tmp_g, blue=tmp_b, **rhis_extra_args)
         to_remove.extend([tmp_r, tmp_g, tmp_b])
         gcore.run_command('r.composite', red=tmp_r, green=tmp_g,
                           blue=tmp_b, output=output_map)
@@ -94,7 +119,7 @@ def main():
     except CalledModuleError, error:
         remove(to_remove)
         # TODO: implement module name to CalledModuleError
-        gcore.fatal(_("Module %s failed. Check the above error messages.") % error.args)
+        gcore.fatal(_("Module %s failed. Check the above error messages.") % error.cmd)
 
 
 if __name__ == "__main__":

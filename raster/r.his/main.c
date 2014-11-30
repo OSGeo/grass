@@ -19,6 +19,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/display.h>
+#include <grass/colors.h>
 #include "his.h"
 #include <grass/glocale.h>
 
@@ -45,6 +46,9 @@ int main(int argc, char **argv)
     int g_used;
     int b_file = 0;
     int b_used;
+    int bg_r, bg_g, bg_b;
+    int bgcolor_state;
+    int draw_nulls;  /* 0 as nulls, 1 draw using bgcolor, 2 draw from table */
     struct Cell_head window;
     struct Colors hue_colors;
     struct Colors int_colors;
@@ -54,6 +58,7 @@ int main(int argc, char **argv)
     struct GModule *module;
     struct Option *opt_h, *opt_i, *opt_s;
     struct Option *opt_r, *opt_g, *opt_b;
+    struct Option *bgcolor;
     struct Flag *nulldraw;
 
     G_gisinit(argv[0]);
@@ -111,13 +116,34 @@ int main(int argc, char **argv)
     opt_b->gisprompt = "new,cell,raster";
     opt_b->description = _("Name of output layer to be used for blue");
 
+    bgcolor = G_define_standard_option(G_OPT_C_BG);
+    bgcolor->label = _("Color to use instead of NULL values");
+    bgcolor->answer = NULL;
+
     nulldraw = G_define_flag();
-    nulldraw->key = 'n';
-    nulldraw->description = _("Respect NULL values while drawing");
+    nulldraw->key = 'c';
+    nulldraw->description = _("Use colors from color tables for NULL values");
+
+    G_option_exclusive(bgcolor, nulldraw, NULL);
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+    draw_nulls = 0;
+    if (nulldraw->answer) {
+        draw_nulls = 2;
+    }
+    if (bgcolor->answer) {
+        bgcolor_state = G_str_to_color(bgcolor->answer, &bg_r, &bg_g, &bg_b);
+        if (bgcolor_state == 1) {
+                draw_nulls = 1;
+        } else if (bgcolor_state == 2) {
+            /* none is the same as not providing the color */
+            draw_nulls = 0;
+        } else {
+            G_fatal_error(_("No such color <%s>"), bgcolor->answer);
+        }
+    }
 
     /* read in current window */
     G_get_window(&window);
@@ -220,15 +246,24 @@ int main(int argc, char **argv)
 	    Rast_get_row_colors(sat_file, atrow, &sat_colors, sat_r, dummy, dummy, sat_n);
 
 	for (atcol = 0; atcol < window.cols; atcol++) {
-	    if (nulldraw->answer) {
-		if (hue_n[atcol]
-		    || (int_used && int_n[atcol])
-		    || (sat_used && sat_n[atcol])) {
+	    if (hue_n[atcol]
+                || (int_used && int_n[atcol])
+                || (sat_used && sat_n[atcol]))
+		{
+		    if (draw_nulls == 0) {
+			/* write nulls where nulls are by default */
 		    Rast_set_c_null_value(&r_array[atcol], 1);
 		    Rast_set_c_null_value(&g_array[atcol], 1);
 		    Rast_set_c_null_value(&b_array[atcol], 1);
 		    continue;
+		} else if (draw_nulls == 1) {
+			/* if nulls opaque and bgcolor provided use it */
+			r_array[atcol] = bg_r;
+			g_array[atcol] = bg_g;
+			b_array[atcol] = bg_b;
+			continue;
 		}
+		/* else use the color table colors, G6 default */
 	    }
 
 	    if (int_used)

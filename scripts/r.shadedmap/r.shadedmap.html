@@ -16,6 +16,15 @@ The input for this module can be created for example using
 <a href="r.slope.aspect.html">r.slope.aspect</a> or
 <a href="r.shaded.relief.html">r.shaded.relief</a><br>.
 
+<p>
+NULL values are propagated by default, so if any of the two input rasters
+contains NULL cell NULL will be also in the output. If <b>-c</b> flag is
+used and cell in <b>drapemap</b> raster is NULL, just <b>reliefmap</b>
+color is used. If cell in <b>reliefmap</b> raster is NULL, shading effect
+is not applied and original colors are used. If <b>bgcolor</b> option is
+used, NULL value in any input raster will be in the output replaced
+by the given color.
+
 
 <h2>NOTES</h2>
 
