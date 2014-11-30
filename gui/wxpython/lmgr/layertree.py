@@ -736,7 +736,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if vect:
             cmd.append('vect=%s' % ','.join(vect))
         if rast3d:
-            cmd.append('rast3d=%s' % ','.join(rast3d))
+            cmd.append('3draster=%s' % ','.join(rast3d))
         
         # print output to command log area
         if len(cmd) > 1:
