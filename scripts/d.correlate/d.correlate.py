@@ -32,11 +32,6 @@ from grass.script.utils import try_remove
 from grass.script import core as grass
 
 def main():
-    env = grass.gisenv()
-    mon = env.get('MONITOR', None)
-    if not mon:
-        grass.fatal(_("No graphics device selected. Use d.mon to select graphics device."))
-
     layers = options['map'].split(',')
 
     if len(layers) < 2:
