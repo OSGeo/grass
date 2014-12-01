@@ -81,11 +81,6 @@ def make_frame(f, b, t, l, r):
     os.environ['GRASS_RENDER_FRAME'] = s
 
 def main():
-    env = grass.gisenv()
-    mon = env.get('MONITOR', None)
-    if not mon:
-        grass.fatal(_("No graphics device selected. Use d.mon to select graphics device."))
-
     map = options['map']
     nlines = options['lines']
     rast = options['raster']
