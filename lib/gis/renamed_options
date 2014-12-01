@@ -448,6 +448,8 @@ v.db.select|vs:vertical separator
 v.db.update|qcolumn:query_column
 # v.extrude
 v.extrude|hcolumn:height_column
+# v.in.ogr
+v.in.ogr|dsn:input
 # v.kcv
 v.kcv|k:npartitions
 # v.kernel
