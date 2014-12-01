@@ -66,10 +66,10 @@ def main():
     map = options['map']
     layer = options['layer']
     column = options['column']
-    otable = options['otable']
-    ocolumn = options['ocolumn']
-    if options['scolumns']:
-        scolumns = options['scolumns'].split(',')
+    otable = options['other_table']
+    ocolumn = options['other_column']
+    if options['subset_columns']:
+        scolumns = options['subset_columns'].split(',')
     else:
         scolumns = None
     
