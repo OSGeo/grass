@@ -93,7 +93,7 @@ First, create shaded relief and show it.
 
 <div class="code"><pre>
 g.region rast=elevation
-r.shaded.relief input=elevation output=elevation_shaded_relief
+r.relief input=elevation output=elevation_shaded_relief
 
 d.mon wx0
 d.his hue=elevation intensity=elevation_shaded_relief brighten=50
@@ -122,7 +122,7 @@ d.rgb red=shadedmap_r green=shadedmap_g blue=shadedmap_b
 <a href="r.colors.html">r.colors</a>,
 <a href="r.composite.html">r.composite</a>,
 <a href="r.mapcalc.html">r.mapcalc</a>,
-<a href="r.shadedmap.html">r.shadedmap</a>,
+<a href="r.shade.html">r.shade</a>,
 <a href="i.his.rgb.html">i.his.rgb</a>,
 <a href="i.rgb.his.html">i.rgb.his</a>
 </em>

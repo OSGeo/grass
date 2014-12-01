@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../..
 
-PGM = r.shaded.relief
+PGM = r.relief
 
 LIBES = $(RASTERLIB) $(GISLIB) $(MATHLIB)
 DEPENDENCIES = $(RASTERDEP) $(GISDEP)

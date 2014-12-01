@@ -2,7 +2,7 @@
 
 ############################################################################
 #
-# MODULE:        d.shadedmap
+# MODULE:        d.shade
 # AUTHOR(S):        Unknown; updated to GRASS 5.7 by Michael Barton
 #                Converted to Python by Glynn Clements
 # PURPOSE:        Uses d.his to drape a color raster over a shaded relief map

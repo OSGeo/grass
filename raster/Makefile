@@ -85,7 +85,7 @@ SUBDIRS = \
 	r.series \
 	r.series.accumulate \
 	r.series.interp \
-	r.shaded.relief \
+	r.relief \
 	r.sim \
 	r.slope.aspect \
 	r.solute.transport \
