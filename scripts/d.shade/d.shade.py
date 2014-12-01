@@ -47,15 +47,6 @@ from grass.exceptions import CalledModuleError
 def main():
     options, unused = gcore.parser()
 
-    env = gcore.gisenv()
-    mon = env.get('MONITOR', None)
-    if not mon:
-        # os is needed only here
-        import os
-        if not 'GRASS_RENDER_IMMEDIATE' in os.environ:
-            gcore.fatal(_("No graphics device selected."
-                          " Use d.mon to select graphics device."))
-
     drape_map = options['drapemap']
     relief_map = options['reliefmap']
     brighten = options['brighten']

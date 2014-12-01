@@ -231,13 +231,6 @@ def out(fh, vars, tmpl):
 def main():
     global tmp_graph, tmp_group, tmp_psmap, tmp_psleg, tmp_gisleg
 
-    env = gcore.gisenv()
-    mon = env.get('MONITOR', None)
-    if not mon:
-        if not 'GRASS_RENDER_IMMEDIATE' in os.environ:
-            gcore.fatal(_("No graphics device selected."
-                          " Use d.mon to select graphics device."))
-
     breakpoints = options['breakpoints']
     colorscheme = options['colorscheme']
     column = options['column']
