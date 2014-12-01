@@ -352,6 +352,7 @@ class RDigitController(wx.EvtHandler):
         """After selecting new raster, shows dialog to choose name,
         background map and type of the new map."""
         dlg = NewRasterDialog(parent=self._mapWindow)
+        dlg.CenterOnParent()
         if dlg.ShowModal() == wx.ID_OK:
             try:
                 self._createNewMap(mapName=dlg.GetMapName(),
