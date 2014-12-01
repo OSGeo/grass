@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.shadedmap</em> will drape a color raster map over a shaded relief map.
+<em>r.shade</em> will drape a color raster map over a shaded relief map.
 In place of shaded relief, any raster map can be used including aspect or slope.
 The color raster map is usually an elevation raster map with colorful color
 table (as opposed to gray scale color table). However, any raster map can be
@@ -14,7 +14,7 @@ the color raster map, this module gives result with more saturated colors.
 <p>
 The input for this module can be created for example using
 <a href="r.slope.aspect.html">r.slope.aspect</a> or
-<a href="r.shaded.relief.html">r.shaded.relief</a><br>.
+<a href="r.relief.html">r.relief</a><br>.
 
 <p>
 NULL values are propagated by default, so if any of the two input rasters
@@ -29,13 +29,13 @@ by the given color.
 <h2>NOTES</h2>
 
 Refer to the <a href="r.his.html">r.his</a> help page for more details;
-<em>r.shadedmap</em> is a frontend to that module with addition of
+<em>r.shade</em> is a frontend to that module with addition of
 brightness support similar to one provided by
-<em><a href="d.shadedmap.html">d.shadedmap</a></em>.
+<em><a href="d.shade.html">d.shade</a></em>.
 However, note that the brightness is not implemenented in the same way as for
-<em><a href="d.shadedmap.html">d.shadedmap</a></em> and the results might
+<em><a href="d.shade.html">d.shade</a></em> and the results might
 be different.
-<em>r.shadedmap</em> is using method described in <a href="r.his.html">r.his</a>
+<em>r.shade</em> is using method described in <a href="r.his.html">r.his</a>
 manual page.
 
 
@@ -46,7 +46,7 @@ dataset location is used to hillshade the <tt>elevation</tt> map:
 
 <div class="code"><pre>
 g.region rast=aspect -p
-r.shadedmap reliefmap=aspect drapemap=elevation output=elevation_aspect_shaded
+r.shade reliefmap=aspect drapemap=elevation output=elevation_aspect_shaded
 
 d.mon wx0
 d.rast elevation_aspect_shaded
@@ -58,9 +58,9 @@ raster map for later use:
 
 <div class="code"><pre>
 g.region rast=elevation
-r.shaded.relief input=elevation output=elevation_shaded_relief
+r.relief input=elevation output=elevation_shaded_relief
 
-r.shadedmap reliefmap=elevation_shaded_relief drapemap=elevation \
+r.shade reliefmap=elevation_shaded_relief drapemap=elevation \
     output=elevation_relief_shaded
 
 d.mon wx1
@@ -73,13 +73,13 @@ elevation raster map, for example using <tt>haxby</tt> color table.
 <!--
 image generated using the example above
 display region: g.region -a n=227228 s=220895 w=631362 e=641170
-d.out.file rshadedmap.png
-optipng -o5 rshadedmap.png
+d.out.file rshade.png
+optipng -o5 rshade.png
 Note: The image is darker in the GNOME image viewer than the one in the map
 display. However, Firefox shows the same colors.
 -->
 <center>
-<img src="rshadedmap.png" alt="Elevation with shaded relief (hillshade)">
+<img src="rshade.png" alt="Elevation with shaded relief (hillshade)">
 <p>
 Figure: A detail of raster created by applying shading effect of shaded relief
 (hillshade) to elevation raster map from North Carolina dataset elevation map
@@ -91,10 +91,10 @@ Figure: A detail of raster created by applying shading effect of shaded relief
 <em>
 <a href="r.his.html">r.his</a>,
 <a href="d.his.html">d.his</a>,
-<a href="d.shadedmap.html">d.shadedmap</a>,
+<a href="d.shade.html">d.shade</a>,
 <a href="g.pnmcomp.html">g.pnmcomp</a>,
 <a href="r.slope.aspect.html">r.slope.aspect</a>,
-<a href="r.shaded.relief.html">r.shaded.relief</a>
+<a href="r.relief.html">r.relief</a>
 </em>
 
 
@@ -102,7 +102,7 @@ Figure: A detail of raster created by applying shading effect of shaded relief
 
 Hamish Bowman<br>
 Vaclav Petras, <a href="http://geospatial.ncsu.edu/osgeorel/">NCSU OSGeoREL</a><br>
-Inspired by <em><a href="d.shadedmap.html">d.shadedmap</a></em> and
+Inspired by <em><a href="d.shade.html">d.shade</a></em> and
 manual for <em><a href="r.his.html">r.his</a></em>.
 
 <p>

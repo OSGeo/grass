@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<em>d.shadedmap</em> will drape a color raster map over a shaded relief map.
+<em>d.shade</em> will drape a color raster map over a shaded relief map.
 In place of shaded relief, any raster map can be used including aspect or slope.
 The color raster map is usually an elevation raster map with colorful color
 table (as opposed to gray scale color table). However, any raster map can be
@@ -15,13 +15,13 @@ the color raster map, this module gives result with more saturated colors.
 <p>
 The input for this module can be created for example using
 <a href="r.slope.aspect.html">r.slope.aspect</a> or
-<a href="r.shaded.relief.html">r.shaded.relief</a><br>.
+<a href="r.relief.html">r.relief</a><br>.
 
 
 <h2>NOTES</h2>
 
 Refer to the <em><a href="d.his.html">d.his</a></em> help page for more details;
-<em>d.shadedmap</em> is simply a frontend to that module.
+<em>d.shade</em> is simply a frontend to that module.
 
 
 <h2>EXAMPLES</h2>
@@ -32,14 +32,14 @@ dataset location is used to hillshade the <tt>elevation</tt> map:
 <div class="code"><pre>
 g.region rast=aspect -p
 d.mon wx0
-d.shadedmap reliefmap=aspect drapemap=elevation
+d.shade reliefmap=aspect drapemap=elevation
 </pre></div>
 
 <!--
 image generated using the example above
 display region: g.region -a n=227228 s=220895 w=631362 e=641170
-d.out.file dshadedmap.png
-optipng -o5 dshadedmap.png
+d.out.file dshade.png
+optipng -o5 dshade.png
 -->
 <center>
 <img src="dshadedmap.png" alt="Elevation with aspect shades">
@@ -59,10 +59,10 @@ and used to create a colorized hillshade:
 
 <div class="code"><pre>
 g.region rast=elevation
-r.shaded.relief input=elevation output=elevation_shaded_relief
+r.relief input=elevation output=elevation_shaded_relief
 
 d.mon wx1
-d.shadedmap reliefmap=elevation_shaded_relief drapemap=elevation
+d.shade reliefmap=elevation_shaded_relief drapemap=elevation
 </pre></div>
 
 Interesting visualizations can be created using different color tables for
@@ -74,9 +74,9 @@ elevation raster map, for example using <tt>haxby</tt> color table.
 <em>
 <a href="d.his.html">d.his</a>,
 <a href="g.pnmcomp.html">g.pnmcomp</a>,
-<a href="r.shadedmap.html">r.shadedmap</a>,
+<a href="r.shade.html">r.shade</a>,
 <a href="r.slope.aspect.html">r.slope.aspect</a>,
-<a href="r.shaded.relief.html">r.shaded.relief</a><br>
+<a href="r.relief.html">r.relief</a><br>
 <a href="wxGUI.nviz.html">wxGUI 3D viewer (NVIZ)</a>
 </em>
 

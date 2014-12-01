@@ -2,10 +2,10 @@
 #
 ############################################################################
 #
-# MODULE:        r.shadedmap
+# MODULE:        r.shade
 # AUTHOR(S):     Hamish Bowman
 #                Vaclav Petras <wenzeslaus gmail com>
-#                Inspired by d.shadedmap
+#                Inspired by d.shade (formerly d.shadedmap)
 # PURPOSE:       Uses r.his to drape a color raster over a shaded relief map
 # COPYRIGHT:     (C) 2014 by Hamish Bowman, and the GRASS Development Team
 #
@@ -91,7 +91,7 @@ def main():
 
     to_remove = []
     try:
-        unique_name = 'tmp__rshadedmap_%d' % os.getpid()
+        unique_name = 'tmp__rshade_%d' % os.getpid()
         tmp_base = '%s_drape' % unique_name
         tmp_r = tmp_base + '.r'
         tmp_g = tmp_base + '.g'
@@ -99,9 +99,9 @@ def main():
 
         if brighten:
             # steps taken from r.his manual page
-            # how much they are similar with d.shadedmap/d.his is unknown
+            # how much they are similar with d.shade/d.his is unknown
             # perhaps even without brightness, there can be some differences
-            # comparing to d.shadedmap
+            # comparing to d.shade
             relief_map_tmp = '%s_relief' % unique_name
             # convert [-99, -99] to [0.01, 1.99]
             brighten = 1 + brighten / 100.

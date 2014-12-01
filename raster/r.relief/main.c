@@ -1,7 +1,7 @@
 
 /****************************************************************************
  *
- * MODULE:       r.shaded.relief
+ * MODULE:       r.relief
  * AUTHOR(S):	CERL
  *               parameters standardized: Markus Neteler, 2008
  *               updates: Michael Barton, 2004
@@ -106,7 +106,9 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("elevation"));
+    G_add_keyword(_("relief"));
     G_add_keyword(_("terrain"));
+    G_add_keyword(_("hillshade"));
     module->label = _("Creates shaded relief map from an elevation map (DEM).");
     
     parm.elevation = G_define_standard_option(G_OPT_R_INPUT);
@@ -459,7 +461,7 @@ int main(int argc, char *argv[])
 
     /* writing history file */
     Rast_short_history(sr_name, "raster", &hist);
-    Rast_append_format_history(&hist, "r.shaded.relief settings:");
+    Rast_append_format_history(&hist, "r.relief settings:");
     Rast_append_format_history(&hist,
                                "altitude=%f  azimuth=%f zmult=%f  scale=%f",
 			       altitude * radians_to_degrees,

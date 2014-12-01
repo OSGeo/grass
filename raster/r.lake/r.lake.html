@@ -92,10 +92,10 @@ g.region rast=elev_lid792_1m -p
 r.lake elev_lid792_1m coordinates=638759.3,220264.1 water_level=113.4 lake=flooding
 
 # draw resulting lake map over shaded terrain map
-r.shaded.relief elev_lid792_1m
-d.rast elev_lid792_1m.shade
+r.relief input=elev_lid792_1m output=elev_lid792_1m_shade
+d.rast elev_lid792_1m_shade
 d.rast -o flooding
-d.vect streets_wake 
+d.vect streets_wake
 d.vect bldg_cmcl_pol type=area
 </pre></div>
 
