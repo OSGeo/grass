@@ -143,13 +143,15 @@ class RDigitToolbar(BaseToolbar):
         self._mapSelectionCombo.SetSelection(idx)
 
     def UpdateCellValues(self, values=None):
+        orig = self._valueCombo.GetValue()
         if not values:
-            values = [self._valueCombo.GetValue()]
+            values = [orig]
         for value in values:
             self._cellValues.add(str(value))
 
         valList = sorted(list(self._cellValues), key=float)
         self._valueCombo.SetItems(valList)
+        self._valueCombo.SetStringSelection(orig)
 
     def _cellValueChanged(self):
         value = self._valueCombo.GetValue()
