@@ -861,7 +861,7 @@ class LayerSelect(wx.ComboBox):
                              read = True,
                              quiet = True,
                              flags = 'l',
-                             dsn = dsn)
+                             input = dsn)
             if ret:
                 layers = ret.splitlines()
 
@@ -1921,7 +1921,7 @@ class GdalSelect(wx.Panel):
                              quiet = True,
                              read = True,
                              flags = 't',
-                             dsn = dsn)
+                             input = dsn)
             if not ret:
                 self.reloadDataRequired.emit(data=None)
                 return
