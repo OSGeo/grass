@@ -96,6 +96,7 @@ int walk_forward_and_pick_up_coords(struct Map_info *map,
     }
     else {
 	cats_tmp = NULL;
+	Vect_reset_cats(Cats);
     }
 
     Vect_reset_line(points);
