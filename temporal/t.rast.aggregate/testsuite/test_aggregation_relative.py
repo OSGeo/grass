@@ -36,7 +36,7 @@ class TestAggregationRelative(TestCase):
                                     output="A",  title="A test",  
                                     description="A test",  overwrite=True)
 
-        cls.runModule("t.register", flags="i",  type="rast",  input="A",  
+        cls.runModule("t.register", flags="i",  type="raster",  input="A",  
                                      maps="a1,a2,a3,a4,a5,a6,a7",
                                      start=0, unit="days", increment=3, 
                                      overwrite=True)

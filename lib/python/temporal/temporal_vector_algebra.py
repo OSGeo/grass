@@ -140,7 +140,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         self.overwrite = overwrite
         self.count = 0
         self.stdstype = "stvds"
-        self.maptype = "vect"
+        self.maptype = "vector"
         self.mapclass = VectorDataset
         self.basename = basename
         self.expression = expression
@@ -420,7 +420,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                             # Change map name to given basename.
                             newident = self.basename + "_" + str(count)
                             m = copy.deepcopy(self.m_rename)
-                            m.inputs["vect"].value = (map_i.get_name(),newident)
+                            m.inputs["vector"].value = (map_i.get_name(),newident)
                             m.flags["overwrite"].value = self.overwrite
                             m.run()
                             map_i.set_id(newident + "@" + mapset)
@@ -451,7 +451,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
 
                             # Copy the map
                             m = copy.deepcopy(self.m_copy)
-                            m.inputs["vect"].value = map_i.get_id(),  newident
+                            m.inputs["vector"].value = map_i.get_id(),  newident
                             m.flags["overwrite"].value = self.overwrite
                             m.run()
                         else:

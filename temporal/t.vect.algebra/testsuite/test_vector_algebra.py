@@ -25,18 +25,18 @@ class TestTemporalVectorAlgebra(gunittest.TestCase):
         cls.runModule("g.region", n=80.0, s=0.0, e=120.0,
                                        w=0.0, t=1.0, b=0.0, res=10.0)
 
-        cls.runModule("v.random", quiet=True, n=20, seed=1,  output='a1')
-        cls.runModule("v.random", quiet=True, n=20, seed=1,  output='a2')
-        cls.runModule("v.random", quiet=True, n=20, seed=1,  output='a3')
-        cls.runModule("v.random", quiet=True, n=20, seed=1,  output='a4')
-        cls.runModule("v.random", quiet=True, n=20, seed=2,  output='b1')
-        cls.runModule("v.random", quiet=True, n=20, seed=2,  output='b2')
-        cls.runModule("v.random", quiet=True, n=20, seed=3,  output='c1')
-        cls.runModule("v.random", quiet=True, n=20, seed=4,  output='d1')
-        cls.runModule("v.random", quiet=True, n=20, seed=4,  output='d2')
-        cls.runModule("v.random", quiet=True, n=20, seed=4,  output='d3')
-        cls.runModule("v.random", quiet=True, n=20, seed=5,  output='singletmap')
-        cls.runModule("v.random", quiet=True, n=20, seed=6,  output='singlemap')        
+        cls.runModule("v.random", quiet=True, npoints=20, seed=1,  output='a1')
+        cls.runModule("v.random", quiet=True, npoints=20, seed=1,  output='a2')
+        cls.runModule("v.random", quiet=True, npoints=20, seed=1,  output='a3')
+        cls.runModule("v.random", quiet=True, npoints=20, seed=1,  output='a4')
+        cls.runModule("v.random", quiet=True, npoints=20, seed=2,  output='b1')
+        cls.runModule("v.random", quiet=True, npoints=20, seed=2,  output='b2')
+        cls.runModule("v.random", quiet=True, npoints=20, seed=3,  output='c1')
+        cls.runModule("v.random", quiet=True, npoints=20, seed=4,  output='d1')
+        cls.runModule("v.random", quiet=True, npoints=20, seed=4,  output='d2')
+        cls.runModule("v.random", quiet=True, npoints=20, seed=4,  output='d3')
+        cls.runModule("v.random", quiet=True, npoints=20, seed=5,  output='singletmap')
+        cls.runModule("v.random", quiet=True, npoints=20, seed=6,  output='singlemap')        
 
         tgis.open_new_stds(name="A", type="stvds", temporaltype="absolute",
                                          title="A", descr="A", semantic="field")
@@ -47,15 +47,15 @@ class TestTemporalVectorAlgebra(gunittest.TestCase):
         tgis.open_new_stds(name="D", type="stvds", temporaltype="absolute",
                                          title="D", descr="D", semantic="field")
 
-        tgis.register_maps_in_space_time_dataset(type="vect", name="A", maps="a1,a2,a3,a4",
+        tgis.register_maps_in_space_time_dataset(type="vector", name="A", maps="a1,a2,a3,a4",
                                                  start="2001-01-01", increment="1 day", interval=True)
-        tgis.register_maps_in_space_time_dataset(type="vect", name="B", maps="b1,b2",
+        tgis.register_maps_in_space_time_dataset(type="vector", name="B", maps="b1,b2",
                                                  start="2001-01-01", increment="2 day", interval=True)
-        tgis.register_maps_in_space_time_dataset(type="vect", name="C", maps="c1",
+        tgis.register_maps_in_space_time_dataset(type="vector", name="C", maps="c1",
                                                  start="2001-01-02", increment="2 day", interval=True)
-        tgis.register_maps_in_space_time_dataset(type="vect", name="D", maps="d1,d2,d3",
+        tgis.register_maps_in_space_time_dataset(type="vector", name="D", maps="d1,d2,d3",
                                                  start="2001-01-03", increment="1 day", interval=True)
-        tgis.register_maps_in_space_time_dataset(type="vect", name=None,  maps="singletmap", 
+        tgis.register_maps_in_space_time_dataset(type="vector", name=None,  maps="singletmap", 
                                                 start="2001-01-03", end="2001-01-04", interval=True)
     
     def tearDown(self):

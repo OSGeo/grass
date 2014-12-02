@@ -19,7 +19,7 @@ r.mapcalc  expr="prec_8 = 500.0"
 r.mapcalc  expr="prec_9 = 600.0"
 
 
-v.random output=prec n=5 seed=1
+v.random output=prec npoints=5 seed=1
 v.random -z output=test_1 column=test n=5 seed=1 
 
 t.create type=strds temporaltype=absolute output=precip_abs1 title="A test" descr="A test"

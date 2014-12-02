@@ -25,10 +25,10 @@ soil_3|2001-08-01|2001-12-01
 EOF
 
 t.create --o type=stvds temporaltype=absolute output=soil_abs1 title="A test" descr="A test"
-t.register type=vect input=soil_abs1 file="${n1}" 
+t.register type=vector input=soil_abs1 file="${n1}" 
 
 t.create --o type=strds temporaltype=absolute output=precip_abs1 title="A test" descr="A test"
-t.register -i type=rast input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-03-01 00:00:00" increment="1 months"
+t.register -i type=raster input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-03-01 00:00:00" increment="1 months"
 
 # The @test
 
@@ -48,11 +48,11 @@ v.db.select map=soil_2
 v.db.select map=soil_3
 
 # @postprocess
-t.unregister type=vect maps=soil_1,soil_2,soil_3
+t.unregister type=vector maps=soil_1,soil_2,soil_3
 t.remove type=stvds input=soil_abs1
 
-t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.unregister type=raster maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_abs1
 
-g.remove -f type=rast name=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
-g.remove -f type=vect name=soil_1,soil_2,soil_3
+g.remove -f type=raster name=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+g.remove -f type=vector name=soil_1,soil_2,soil_3

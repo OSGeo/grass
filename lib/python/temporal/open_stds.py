@@ -52,7 +52,7 @@ def open_old_stds(name, type, dbif=None):
 
     if type == "strds" or type == "rast" or type == "raster":
         sp = dataset_factory("strds", id)
-    elif type == "str3ds" or type == "3draster" or type == "3draster":
+    elif type == "str3ds" or type == "raster3d" or type == "rast3d" or type == "3draster":
         sp = dataset_factory("str3ds", id)
     elif type == "stvds" or type == "vect" or type == "vector":
         sp = dataset_factory("stvds", id)
@@ -108,7 +108,7 @@ def check_new_stds(name, type, dbif=None, overwrite=False):
 
     if type == "strds" or type == "rast" or type == "raster":
         sp = dataset_factory("strds", id)
-    elif type == "str3ds" or type == "3draster" or type == "3draster":
+    elif type == "str3ds" or type == "raster3d" or type == "rast3d "or type == "3draster":
         sp = dataset_factory("str3ds", id)
     elif type == "stvds" or type == "vect" or type == "vector":
         sp = dataset_factory("stvds", id)
@@ -235,7 +235,7 @@ def open_new_map_dataset(name, layer=None, type="raster",
     mapset = get_current_mapset()
 
     dbif, connected = init_dbif(dbif)
-    new_map = check_new_map_dataset(name, layer, "raster", overwrite, dbif)
+    new_map = check_new_map_dataset(name, layer, type, overwrite, dbif)
 
     # Check if new map is in the temporal database
     if new_map.is_in_db(dbif):

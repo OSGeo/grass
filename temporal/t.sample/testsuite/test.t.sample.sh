@@ -16,15 +16,15 @@ r.mapcalc expr="prec_4 = rand(0, 510)" -s
 r.mapcalc expr="prec_5 = rand(0, 300)" -s
 r.mapcalc expr="prec_6 = rand(0, 650)" -s
 
-v.random -z output=pnts1 n=20 zmin=0 zmax=100 column=height
-v.random -z output=pnts2 n=20 zmin=0 zmax=100 column=height
+v.random -z output=pnts1 npoints=20 zmin=0 zmax=100 column=height
+v.random -z output=pnts2 npoints=20 zmin=0 zmax=100 column=height
 
-v.random -z output=pnts3 n=20 zmin=0 zmax=100 column=height
-v.random -z output=pnts4 n=20 zmin=0 zmax=100 column=height
-v.random -z output=pnts5 n=20 zmin=0 zmax=100 column=height
-v.random -z output=pnts6 n=20 zmin=0 zmax=100 column=height
-v.random -z output=pnts7 n=20 zmin=0 zmax=100 column=height
-v.random -z output=pnts8 n=20 zmin=0 zmax=100 column=height
+v.random -z output=pnts3 npoints=20 zmin=0 zmax=100 column=height
+v.random -z output=pnts4 npoints=20 zmin=0 zmax=100 column=height
+v.random -z output=pnts5 npoints=20 zmin=0 zmax=100 column=height
+v.random -z output=pnts6 npoints=20 zmin=0 zmax=100 column=height
+v.random -z output=pnts7 npoints=20 zmin=0 zmax=100 column=height
+v.random -z output=pnts8 npoints=20 zmin=0 zmax=100 column=height
 
 n1=`g.tempfile pid=1 -d` 
 n2=`g.tempfile pid=2 -d`
