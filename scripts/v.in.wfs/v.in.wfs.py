@@ -138,7 +138,7 @@ def main():
 
     grass.message(_("Importing data..."))
     try:
-        grass.run_command('v.in.ogr', flags='o', dsn=tmpxml, out=out)
+        grass.run_command('v.in.ogr', flags='o', input=tmpxml, output=out)
         grass.message(_("Vector points map <%s> imported from WFS.") % out)
     except:
         grass.message(_("WFS import failed"))

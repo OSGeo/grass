@@ -171,7 +171,7 @@ def main():
 
     tmp_gpx = tmp + ".gpx"
     try:
-        grass.run_command('v.in.ogr', dsn=tmp_gpx, output=output,
+        grass.run_command('v.in.ogr', input=tmp_gpx, output=output,
                           type=type, format='GPX', lco=linetype,
                           dsco="GPX_USE_EXTENSIONS=YES", quiet=True)
     except CalledModuleError:

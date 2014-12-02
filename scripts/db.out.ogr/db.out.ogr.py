@@ -6,7 +6,7 @@
 # AUTHOR(S):   	Markus Neteler
 #               Converted to Python by Glynn Clements
 # PURPOSE:      exports attribute tables into various formats
-# COPYRIGHT:    (C) 2007 by Markus Neteler and the GRASS Development Team
+# COPYRIGHT:    (C) 2007-2014 by Markus Neteler and the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
@@ -18,16 +18,18 @@
 #% description: Exports attribute tables into various formats.
 #% keywords: database
 #% keywords: attribute table
+#% keywords: export
 #%end
 
 #%option G_OPT_V_INPUT
 #% key: input
+#% label: GRASS table name
 #% required: yes
 #%end
 
 #%option G_OPT_F_OUTPUT
 #% key: output
-#% description: Table file to be exported or DB connection string
+#% description: Output table file name or DB connection string
 #% required : yes
 #%end
 
@@ -48,7 +50,7 @@
 #% key: table
 #% type: string
 #% key_desc: name
-#% description: Name for output table (defaut: input)
+#% description: Name for output table (default: input name)
 #% required: no
 #%end
 
