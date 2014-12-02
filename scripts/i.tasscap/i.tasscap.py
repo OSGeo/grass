@@ -15,6 +15,7 @@
 # TODO: Check if MODIS Tasseled Cap makes sense to be added
 #       http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=1025776
 #       Add other, e.g from here: http://www.sjsu.edu/faculty/watkins/tassel.htm
+#
 #############################################################################
 # References:
 # LANDSAT-4/LANDSAT-5:
@@ -32,6 +33,11 @@
 #  This is published as well in INT. J. OF RS, 2002, VOL 23, NO. 8, 1741-1748.
 #  Compare discussion:
 #  http://adis.cesnet.cz/cgi-bin/lwgate/IMAGRS-L/archives/imagrs-l.log0211/date/article-14.html
+#
+#   Landsat8: Baig, M.H.A., Zhang, L., Shuai, T., Tong, Q., 2014. Derivation of a tasselled cap transformation
+#              based on Landsat 8 at-satellite reflectance. Remote Sensing Letters 5, 423-431. 
+#              doi:10.1080/2150704X.2014.915434
+#
 #############################################################################
 #
 #%Module
@@ -42,7 +48,7 @@
 #% keywords: Tasseled Cap transformation
 #%end
 #%option G_OPT_R_INPUTS
-#% description: For Landsat4-7: bands 1, 2, 3, 4, 5, and 7
+#% description: For Landsat4-7: bands 1, 2, 3, 4, 5, and 7; for Landsat8: bands 2, 3, 4, 5, 6, and 7
 #%end
 #%option G_OPT_R_BASENAME_OUTPUT
 #% label: Name for output basename raster map(s)
@@ -53,13 +59,13 @@
 #% description: Satellite sensor
 #% required: yes
 #% multiple: no
-#% options: landsat4_tm,landsat5_tm,landsat7_etm
-#% descriptions: landsat4_tm;Use transformation rules for Landsat 4 TM;landsat5_tm;Use transformation rules for Landsat 5 TM;landsat7_etm;Use transformation rules for Landsat 7 ETM
+#% options: landsat4_tm,landsat5_tm,landsat7_etm,landsat8
+#% descriptions: landsat4_tm;Use transformation rules for Landsat 4 TM;landsat5_tm;Use transformation rules for Landsat 5 TM;landsat7_etm;Use transformation rules for Landsat 7 ETM;landsat8;Use transformation rules for Landsat 8
 #%end
 
 import grass.script as grass
 
-# weights for 6 Landsat bands: TM4, TM5, TM7
+# weights for 6 Landsat bands: TM4, TM5, TM7, OLI
 parms = [[( 0.3037, 0.2793, 0.4743, 0.5585, 0.5082, 0.1863), # Landsat TM4
 	  (-0.2848,-0.2435,-0.5435, 0.7243, 0.0840,-0.1800),
 	  ( 0.1509, 0.1973, 0.3279, 0.3406,-0.7112,-0.4572)],
@@ -70,7 +76,11 @@ parms = [[( 0.3037, 0.2793, 0.4743, 0.5585, 0.5082, 0.1863), # Landsat TM4
 	 [( 0.3561, 0.3972, 0.3904, 0.6966, 0.2286, 0.1596), # Landsat TM7
 	  (-0.3344,-0.3544,-0.4556, 0.6966,-0.0242,-0.2630),
 	  ( 0.2626, 0.2141, 0.0926, 0.0656,-0.7629,-0.5388),
-	  ( 0.0805,-0.0498, 0.1950,-0.1327, 0.5752,-0.7775)]]
+	  ( 0.0805,-0.0498, 0.1950,-0.1327, 0.5752,-0.7775)],
+	 [( 0.3029, 0.2786, 0.4733, 0.5599, 0.5080, 0.1872), # Landsat TM8
+	  (-0.2941,-0.2430,-0.5424, 0.7276, 0.0713,-0.1608),
+	  ( 0.1511, 0.1973, 0.3283, 0.3407,-0.7117,-0.4559),
+	  (-0.8239, 0.0849, 0.4396, -0.058, 0.2013,-0.2773)]]
 ordinals = ["first", "second", "third", "fourth"]
 names = ["Brightness", "Greenness", "Wetness", "Haze"]
 
@@ -117,6 +127,8 @@ def main():
     elif satellite == 'landsat5_tm':
         calcN(output_basename, bands, 1, 5)
     elif satellite == 'landsat7_etm':
+        calcN(output_basename, bands, 2, 7)
+    elif satellite == 'landsat8':
         calcN(output_basename, bands, 2, 7)
     else:
         raise RuntimeError("Invalid satellite: " + satellite)
