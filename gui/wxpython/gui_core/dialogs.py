@@ -412,7 +412,7 @@ def CreateNewVector(parent, cmd, title = _('Create new vector map'),
                                    parent = parent,
                                    read = True,
                                    flags = 'l',
-                                   dsn = vExternalOut['dsn']).splitlines()
+                                   input = vExternalOut['dsn']).splitlines()
     
     overwrite = False
     if not UserSettings.Get(group = 'cmd', key = 'overwrite', subkey = 'enabled') and \
@@ -446,7 +446,7 @@ def CreateNewVector(parent, cmd, title = _('Create new vector map'),
         RunCommand('v.external',
                    overwrite = overwrite,
                    parent = parent,
-                   dsn = vExternalOut['dsn'],
+                   input = vExternalOut['dsn'],
                    layer = outmap)
         
     # create attribute table
@@ -1891,12 +1891,12 @@ class GdalImportDialog(ImportDialog):
                     layer = layer.replace('.' + ext, '')
                 if self.link:
                     cmd = ['v.external',
-                           'dsn=%s' % dsn,
+                           'input=%s' % dsn,
                            'output=%s' % output,
                            'layer=%s' % layer]
                 else:
                     cmd = ['v.in.ogr',
-                           'dsn=%s' % dsn,
+                           'input=%s' % dsn,
                            'layer=%s' % layer,
                            'output=%s' % output]
             else: # gdal
@@ -2041,7 +2041,7 @@ class GdalOutputDialog(wx.Dialog):
             
             RunCommand('v.external.out',
                        parent = self,
-                       dsn = dsn, format = frmt,
+                       output = dsn, format = frmt,
                        options = options)
         self.Close()
         

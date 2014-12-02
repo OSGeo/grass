@@ -513,14 +513,14 @@ class GRASSStartup(wx.Frame):
         """
         RunCommand('db.connect', flags='c')
         mapName = os.path.splitext(os.path.basename(filePath))[0]
-        vectors = RunCommand('v.in.ogr', dsn = filePath, flags = 'l',
+        vectors = RunCommand('v.in.ogr', input = filePath, flags = 'l',
                              read = True)
         
         wx.BeginBusyCursor()
         wx.Yield()
         if mapName in vectors:
             # vector detected
-            returncode, error = RunCommand('v.in.ogr', dsn = filePath, output = mapName,
+            returncode, error = RunCommand('v.in.ogr', input = filePath, output = mapName,
                                            getErrorMsg = True)
         else:
             returncode, error = RunCommand('r.in.gdal', input = filePath, output = mapName,
