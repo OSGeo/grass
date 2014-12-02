@@ -38,7 +38,7 @@ static int close_new(RASTER3D_Map * map)
     Rast3d_write_cats(map->fileName, &cats);
     Rast_free_cats(&cats);
 
-    /*genrate the history file, use the normal G_ functions */
+    /*generate the history file, use the normal G_ functions */
     Rast_short_history(map->fileName, "raster3d", &hist);
     Rast_command_history(&hist);
     /*Use the G3d function to write the history file,
@@ -59,7 +59,7 @@ static int close_new(RASTER3D_Map * map)
     if (link(map->tempName, path) < 0) {
 #endif
 	if (rename(map->tempName, path)) {
-	    G_warning(_("Unable to move temp raster map <%s> to 3d data file <%s>"),
+	    G_warning(_("Unable to move temp raster map <%s> to 3D raster map <%s>"),
 		      map->tempName, path);
 	    return 0;
 	}
