@@ -133,7 +133,7 @@ def main():
     itype = dict(point = 'point', line = 'line', area = 'centroid')
 
     try:
-        grass.run_command('v.in.ogr', flags='o', dsn=e00shortname,
+        grass.run_command('v.in.ogr', flags='o', input=e00shortname,
                           layer=layer[type], type=itype[type],
                           output=name)
     except CalledModuleError:

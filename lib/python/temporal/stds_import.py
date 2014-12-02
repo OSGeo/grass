@@ -135,7 +135,7 @@ def _import_vector_maps_from_gml(maplist, overr, exp, location, link):
         filename = row["filename"] + ".xml"
 
         try:
-            gscript.run_command("v.in.ogr", dsn=filename,
+            gscript.run_command("v.in.ogr", input=filename,
                                 output=name, flags=impflags,
                                 overwrite=gscript.overwrite())
 
