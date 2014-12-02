@@ -370,6 +370,13 @@ class IVDigit:
         return ret
     
     def _addChangeset(self):
+
+	# disable redo
+	changesetLast = len(self.changesets) - 1
+	if self.changesetCurrent < changesetLast and len(self.changesets) > 0:
+	    del self.changesets[self.changesetCurrent + 1:changesetLast + 1]
+            self.toolbar.EnableRedo(False)
+
         data = list()
         for i in range(Vect_get_num_updated_lines(self.poMapInfo) - 1, -1, -1):
             line = Vect_get_updated_line(self.poMapInfo, i)
@@ -1548,13 +1555,11 @@ class IVDigit:
         if changesetLast < 0:
             return changesetLast
         
-        if level > 0 and self.changesetCurrent < 0:
-            self.changesetCurrent = 0
         elif level < 0 and self.changesetCurrent > changesetLast:
             self.changesetCurrent = changesetLast
         elif level == 0:
             # 0 -> undo all
-            level = -1 * changesetLast + 1
+            level = -1 * self.changesetCurrent - 1
         
         Debug.msg(2, "Digit.Undo(): changeset_last=%d, changeset_current=%d, level=%d",
                   changesetLast, self.changesetCurrent, level)
@@ -1565,9 +1570,9 @@ class IVDigit:
             for changeset in range(self.changesetCurrent, self.changesetCurrent + level, -1):
                 self._applyChangeset(changeset, undo = True)
         elif level > 0: # redo 
-            if self.changesetCurrent + level > len(self.changesets):
+            if self.changesetCurrent + 1 > changesetLast:
                 return self.changesetCurrent
-            for changeset in range(self.changesetCurrent, self.changesetCurrent + level):
+            for changeset in range(self.changesetCurrent + 1, self.changesetCurrent + 1 + level):
                 self._applyChangeset(changeset, undo = False)
         
         self.changesetCurrent += level
@@ -1582,7 +1587,7 @@ class IVDigit:
         else:
             self.toolbar.EnableUndo(True)
         
-        if self.changesetCurrent <= changesetLast:
+        if self.changesetCurrent < changesetLast:
             self.toolbar.EnableRedo(True)
         else:
             self.toolbar.EnableRedo(False)
