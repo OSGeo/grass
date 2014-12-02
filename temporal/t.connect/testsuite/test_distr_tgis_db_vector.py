@@ -14,7 +14,6 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 import os
 
-
 mapset_count = 0
 class TestRasterExtraction(TestCase):
 
@@ -25,13 +24,13 @@ class TestRasterExtraction(TestCase):
             cls.runModule("g.mapset", flags="c", mapset="testvect%i"%i)
             cls.runModule("g.region",  s=0,  n=80,  w=0,  e=120,  b=0,  t=50,  res=10,  res3=10)
             # Use always the current mapset as temporal database
-            cls.runModule("v.random", output="a1",  n=20)
-            cls.runModule("v.random", output="a2",  n=20)
-            cls.runModule("v.random", output="a3",  n=20)
+            cls.runModule("v.random", output="a1",  npoints=20)
+            cls.runModule("v.random", output="a2",  npoints=20)
+            cls.runModule("v.random", output="a3",  npoints=20)
             
             cls.runModule("t.create",  type="stvds",  temporaltype="absolute",  
                                          output="A",  title="A testvect",  description="A testvect")
-            cls.runModule("t.register",  flags="i",  type="vect",  input="A",  
+            cls.runModule("t.register",  flags="i",  type="vector",  input="A",  
                                          maps="a1,a2,a3",  
                                          start="2001-01-01", increment="%i months"%i)
 
@@ -176,7 +175,7 @@ class TestRasterExtraction(TestCase):
                                 start_time=2001-01-01 00:00:00
                                 end_time=2001-02-01 00:00:00 """
 
-        info = SimpleModule("t.info", flags="g", type="vect",  input="a1@testvect1")
+        info = SimpleModule("t.info", flags="g", type="vector",  input="a1@testvect1")
         self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
 
         tinfo_string="""id=a1@testvect2
@@ -186,7 +185,7 @@ class TestRasterExtraction(TestCase):
                                 start_time=2001-01-01 00:00:00
                                 end_time=2001-03-01 00:00:00 """
 
-        info = SimpleModule("t.info", flags="g", type="vect",  input="a1@testvect2")
+        info = SimpleModule("t.info", flags="g", type="vector",  input="a1@testvect2")
         self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
 
         tinfo_string="""id=a1@testvect3
@@ -196,7 +195,7 @@ class TestRasterExtraction(TestCase):
                                 start_time=2001-01-01 00:00:00
                                 end_time=2001-04-01 00:00:00 """
 
-        info = SimpleModule("t.info", flags="g", type="vect",  input="a1@testvect3")
+        info = SimpleModule("t.info", flags="g", type="vector",  input="a1@testvect3")
         self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
 
         tinfo_string="""id=a1@testvect4
@@ -206,7 +205,7 @@ class TestRasterExtraction(TestCase):
                                 start_time=2001-01-01 00:00:00
                                 end_time=2001-05-01 00:00:00 """
 
-        info = SimpleModule("t.info", flags="g", type="vect",  input="a1@testvect4")
+        info = SimpleModule("t.info", flags="g", type="vector",  input="a1@testvect4")
         self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
 
 if __name__ == '__main__':

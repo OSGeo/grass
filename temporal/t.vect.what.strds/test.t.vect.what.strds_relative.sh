@@ -12,9 +12,9 @@ r.mapcalc --o expr="prec_4 = 400"
 r.mapcalc --o expr="prec_5 = 500.0"
 r.mapcalc --o expr="prec_6 = 600.0"
 
-v.random --o -z output=soil_1 n=5 zmin=0 zmax=100 column=heigh seed=1
-v.random --o -z output=soil_2 n=5 zmin=0 zmax=100 column=height seed=2
-v.random --o -z output=soil_3 n=5 zmin=0 zmax=100 column=height seed=3
+v.random --o -z output=soil_1 npoints=5 zmin=0 zmax=100 column=heigh seed=1
+v.random --o -z output=soil_2 npoints=5 zmin=0 zmax=100 column=height seed=2
+v.random --o -z output=soil_3 npoints=5 zmin=0 zmax=100 column=height seed=3
 
 n1=`g.tempfile pid=1 -d` 
 
@@ -25,11 +25,11 @@ soil_3|20|30
 EOF
 
 t.create --o type=stvds temporaltype=relative output=soil_rel1 title="A test" descr="A test"
-t.register type=vect input=soil_rel1 file="${n1}" unit=minutes
+t.register type=vector input=soil_rel1 file="${n1}" unit=minutes
 t.info type=stvds input=soil_rel1
 
 t.create --o type=strds temporaltype=relative output=precip_rel1 title="A test" descr="A test"
-t.register type=rast input=precip_rel1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start=0 increment=5 unit=minutes
+t.register type=raster input=precip_rel1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start=0 increment=5 unit=minutes
 
 # The @test
 
@@ -49,11 +49,11 @@ v.db.select map=soil_2
 v.db.select map=soil_3
 
 # @postprocess
-t.unregister type=vect maps=soil_1,soil_2,soil_3
+t.unregister type=vector maps=soil_1,soil_2,soil_3
 t.remove type=stvds input=soil_rel1
 
-t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.unregister type=raster maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_rel1
 
-g.remove -f type=rast name=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
-g.remove -f type=vect name=soil_1,soil_2,soil_3
+g.remove -f type=raster name=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+g.remove -f type=vector name=soil_1,soil_2,soil_3

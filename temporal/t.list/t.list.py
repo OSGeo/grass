@@ -27,7 +27,7 @@
 #% description: Type of the space time dataset or map, default is strds
 #% guisection: Selection
 #% required: no
-#% options: strds, str3ds, stvds, rast, 3draster, vect
+#% options: strds, str3ds, stvds, raster, 3draster, vector
 #% answer: strds
 #%end
 

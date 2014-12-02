@@ -1070,14 +1070,6 @@ class TemporalAlgebraParser(object):
         for chunk in chunklist:
             stringlist = ",".join(chunk)
             
-            # Transform the map type
-            if map_type == "raster":
-                map_type = "rast"
-            if map_type == "raster3d":
-                map_type = "3draster"
-            if map_type == "vector":
-                map_type = "vect"
-
             if self.run:
                 m = copy.deepcopy(self.m_mremove)
                 m.inputs["type"].value = map_type
@@ -2068,7 +2060,7 @@ class TemporalAlgebraParser(object):
                             # Copy the map
                             if map_i.get_type() == 'raster':
                                 m = copy.deepcopy(self.m_copy)
-                                m.inputs["rast"].value = map_i.get_id(),  newident
+                                m.inputs["raster"].value = map_i.get_id(),  newident
                                 m.flags["overwrite"].value = self.overwrite
                                 process_queue.put(m)
                             elif map_i.get_type() == 'raster3d':
@@ -2078,7 +2070,7 @@ class TemporalAlgebraParser(object):
                                 process_queue.put(m)
                             elif map_i.get_type() == 'vector':
                                 m = copy.deepcopy(self.m_copy)
-                                m.inputs["vect"].value = map_i.get_id(),  newident
+                                m.inputs["vector"].value = map_i.get_id(),  newident
                                 m.flags["overwrite"].value = self.overwrite
                                 process_queue.put(m)
                         else:

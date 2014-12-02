@@ -34,7 +34,7 @@ class TestTRast3dAlgebra(gunittest.TestCase):
         tgis.open_new_stds(name="A", type="str3ds", temporaltype="absolute",
                                          title="A", descr="A", semantic="field", overwrite=True)
 
-        tgis.register_maps_in_space_time_dataset(type="rast3d", name="A", maps="a1,a2,a3,a4",
+        tgis.register_maps_in_space_time_dataset(type="3draster", name="A", maps="a1,a2,a3,a4",
                                                  start="2001-01-01", increment="1 day", interval=True)
 
     def tearDown(self):

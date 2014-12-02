@@ -31,7 +31,7 @@ class TestRasterExtraction(TestCase):
             
             cls.runModule("t.create",  type="strds",  temporaltype="absolute",  
                                          output="A",  title="A test",  description="A test")
-            cls.runModule("t.register",  flags="i",  type="rast",  input="A",  
+            cls.runModule("t.register",  flags="i",  type="raster",  input="A",  
                                          maps="a1,a2,a3",  
                                          start="2001-01-01", increment="%i months"%i)
 
@@ -56,7 +56,7 @@ class TestRasterExtraction(TestCase):
             
             cls.runModule("t.create",  type="strds",  temporaltype="absolute",  
                                          output="A",  title="A test",  description="A test")
-            cls.runModule("t.register",  flags="i",  type="rast",  input="A",  
+            cls.runModule("t.register",  flags="i",  type="raster",  input="A",  
                                          maps="a1,a2,a3",  
                                          start="2001-01-01", increment="%i months"%i)
 
@@ -219,7 +219,7 @@ class TestRasterExtraction(TestCase):
                                 start_time=2001-01-01 00:00:00
                                 end_time=2001-02-01 00:00:00 """
 
-        info = SimpleModule("t.info", flags="g", type="rast",  input="a1@test1")
+        info = SimpleModule("t.info", flags="g", type="raster",  input="a1@test1")
         self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
 
         tinfo_string="""id=a1@test2
@@ -229,7 +229,7 @@ class TestRasterExtraction(TestCase):
                                 start_time=2001-01-01 00:00:00
                                 end_time=2001-03-01 00:00:00 """
 
-        info = SimpleModule("t.info", flags="g", type="rast",  input="a1@test2")
+        info = SimpleModule("t.info", flags="g", type="raster",  input="a1@test2")
         self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
 
         tinfo_string="""id=a1@test3
@@ -239,7 +239,7 @@ class TestRasterExtraction(TestCase):
                                 start_time=2001-01-01 00:00:00
                                 end_time=2001-04-01 00:00:00 """
 
-        info = SimpleModule("t.info", flags="g", type="rast",  input="a1@test3")
+        info = SimpleModule("t.info", flags="g", type="raster",  input="a1@test3")
         self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
 
         tinfo_string="""id=a1@test4
@@ -249,7 +249,7 @@ class TestRasterExtraction(TestCase):
                                 start_time=2001-01-01 00:00:00
                                 end_time=2001-05-01 00:00:00 """
 
-        info = SimpleModule("t.info", flags="g", type="rast",  input="a1@test4")
+        info = SimpleModule("t.info", flags="g", type="raster",  input="a1@test4")
         self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
 
         tinfo_string="""id=a1@test5
@@ -259,7 +259,7 @@ class TestRasterExtraction(TestCase):
                                 start_time=2001-01-01 00:00:00
                                 end_time=2001-06-01 00:00:00 """
 
-        info = SimpleModule("t.info", flags="g", type="rast",  input="a1@test5")
+        info = SimpleModule("t.info", flags="g", type="raster",  input="a1@test5")
         self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
 
 if __name__ == '__main__':

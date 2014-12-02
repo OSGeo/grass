@@ -13,15 +13,15 @@ for i in {1..60}
   do
     if [ "$i" -le 20 ]; then
       echo testpoint1_$i >> ${n1}
-      v.random  -z output=testpoint1_$i n=3 seed=$i
+      v.random  -z output=testpoint1_$i npoints=3 seed=$i
     elif [ "$i" -gt 20 ] && [ "$i" -le 40 ]; then
       echo testpoint2_$i >>  ${n2}
-      v.random  -z output=testpoint2_$i n=3 seed=$i
+      v.random  -z output=testpoint2_$i npoints=3 seed=$i
     else
       echo testpoint3_$i >>  ${n3}
       echo testpoint4_$i >>  ${n4}
-      v.random  -z output=testpoint3_$i n=3 seed=$i
-      v.random  -z output=testpoint4_$i n=3 seed=$i
+      v.random  -z output=testpoint3_$i npoints=3 seed=$i
+      v.random  -z output=testpoint4_$i npoints=3 seed=$i
     fi
   done
 

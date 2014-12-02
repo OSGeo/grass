@@ -32,9 +32,9 @@ t.vect.list input=prec_observer
 t.vect.db.select input=prec_observer
 
 # @postprocess
-t.unregister type=rast file=${MAP_LIST}
+t.unregister type=raster file=${MAP_LIST}
 t.remove type=strds input=precip_abs1
 t.remove type=stvds input=prec_observer
 
-#g.remove -f type=vect name=prec_observer
-#g.remove -f type=rast pattern="test_prec_*"
+#g.remove -f type=vector name=prec_observer
+#g.remove -f type=raster pattern="test_prec_*"

@@ -35,7 +35,7 @@ class TestAggregationAbsoluteParallel(TestCase):
                                     output="A",  title="A test",  
                                     description="A test",  overwrite=True)
 
-        cls.runModule("t.register", flags="i",  type="rast",  input="A",  
+        cls.runModule("t.register", flags="i",  type="raster",  input="A",  
                                      maps=name_list,
                                      start="2001-01-01", 
                                      increment="4 hours",  
