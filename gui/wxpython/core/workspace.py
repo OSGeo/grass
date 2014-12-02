@@ -1232,7 +1232,7 @@ class WriteWorkspaceFile(object):
         self.indent -= 4
         self.file.write('%s</focus>\n' % (' ' * self.indent))
         # rotation
-        rotation = ','.join([str(i) for i in iview['rotation']]) if iview['rotation'] else ''
+        rotation = ','.join([str(i) for i in iview['rotation']]) if iview.get('rotation', '') else ''
         self.file.write('%s<rotation>%s</rotation>\n' % (' ' * self.indent, rotation))
 
         # background

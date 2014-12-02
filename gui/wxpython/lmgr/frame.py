@@ -104,6 +104,7 @@ class GMFrame(wx.Frame):
         self.currentPageNum  = None       # currently selected page number for layer tree notebook
         self.workspaceFile = workspace    # workspace file
         self.workspaceChanged = False     # track changes in workspace
+        self.loadingWorkspace = False     # if we are currently loading workspace to ignore some events
         self.cwdPath = None               # current working directory
 
         wx.Frame.__init__(self, parent = parent, id = id, size = size,
@@ -1199,8 +1200,9 @@ class GMFrame(wx.Frame):
         
         # delete current layer tree content
         self.OnWorkspaceClose()
-        
+        self.loadingWorkspace = True
         self.LoadWorkspaceFile(filename)
+        self.loadingWorkspace = False
 
         self.workspaceFile = filename
         self._setTitle()
@@ -1285,6 +1287,8 @@ class GMFrame(wx.Frame):
             
             displayId += 1
             mapdisp.Show() # show mapdisplay
+            # set render property to False to speed up loading layers
+            mapdisp.mapWindowProperties.autoRender = False
 
         maptree = None
         selectList = []  # list of selected layers
@@ -1315,6 +1319,10 @@ class GMFrame(wx.Frame):
                 maptree.SelectItem(layer, select=False)
 
         busy.Destroy()
+
+        # set render property again when all layers are loaded
+        for i, display in enumerate(gxwXml.displays):
+            mapdisplay[i].mapWindowProperties.autoRender = display['render']
             
         for idx, mdisp in enumerate(mapdisplay):
             ### avoid double-rendering when loading workspace
@@ -1812,6 +1820,8 @@ class GMFrame(wx.Frame):
         # moved from mapdisp/frame.py
         # TODO: why it is called 3 times when getting focus?
         # and one times when loosing focus?
+        if self.loadingWorkspace:
+            return
         pgnum = self.notebookLayers.GetPageIndex(notebookLayerPage)
         if pgnum > -1:
             self.notebookLayers.SetSelection(pgnum)
