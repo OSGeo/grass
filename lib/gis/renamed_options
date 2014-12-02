@@ -446,6 +446,8 @@ v.db.join|scolumns:subset_columns
 v.db.select|vs:vertical separator
 # v.db.update
 v.db.update|qcolumn:query_column
+# v.external
+v.external|dsn:input
 # v.extrude
 v.extrude|hcolumn:height_column
 # v.in.ogr
