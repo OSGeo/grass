@@ -388,7 +388,7 @@ else # CREATE_LINES
 	    #   use '-c location=', then v.proj it in, then rm -rf the temp locn?
 	    #? GPX_USE_EXTENSIONS=YES
 	    #? export GPX_USE_EXTENSIONS
-	    #v.in.ogr dsn="$TEMPFILE.gpx" out=$map_name
+	    #v.in.ogr input="$TEMPFILE.gpx" output=$map_name
 	    echo
 	fi
 

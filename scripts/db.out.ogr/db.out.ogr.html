@@ -1,42 +1,55 @@
 <h2>DESCRIPTION</h2>
 
-<em>db.out.ogr</em> exports GRASS GIS attribute tables into various formats as
-supported by the OGR driver on the local system (CSV, DBF,
+<em>db.out.ogr</em> exports GRASS GIS attribute tables into various formats
+as supported by the OGR driver on the local system (CSV, DBF,
 PostgreSQL, SQLite, MySQL, ODBC, etc.).
 <p>
-The <em>dsn</em> parameter is commonly the output file name (if the path is not
-defined, too, the module will attempt write to the current directory). In case
-of a database connection as output, the connection string has to be specified.
+The <em>output</em> parameter is used to define the output file name (if
+the path is not defined, the module will attempt to write to the current
+directory). In case of a database connection as output, the connection
+string has to be specified.
 <p>
 The <em>layer</em> parameter is needed if the attribute table to be exported
 is linked as non-default layer to a vector map.
 
 <h2>EXAMPLES</h2>
 
-Export of GRASS table to a DBF table (default format):
-<p><div class="code"><pre>
-db.out.ogr precip_30ynormals dsn=/tmp/precip_30ynormals.dbf
+<h3>Export of GRASS GIS attribute table to a CSV table file (default format)</h3>
+
+<div class="code"><pre>
+db.out.ogr input=precip_30ynormals output=precip_30ynormals.csv
 </pre></div>
 
-<p>Export of GRASS table to a CSV table file:<br>
-<p><div class="code"><pre>
-db.out.ogr precip_30ynormals dsn=precip_30ynormals.csv format=CSV
+<h3>Export of a GRASS GIS attribute table to a DBF table</h3>
+
+<div class="code"><pre>
+db.out.ogr input=precip_30ynormals output=precip_30ynormals.dbf format=DBF
 </pre></div>
 
-<p>Export of GRASS table into a PostgreSQL table:
-<p><div class="code"><pre>
-db.out.ogr precip_30ynormals dsn="PG:host=localhost dbname=meteo user=neteler" \
+<h3>Export of GRASS GIS attribute table into a PostgreSQL table</h3>
+
+<div class="code"><pre>
+db.out.ogr input=precip_30ynormals \
+	   output="PG:host=localhost dbname=meteo user=neteler" \
            format=PostgreSQL
+# verify
 echo "SELECT * FROM precip_30ynormals" | psql meteo
 </pre></div>
 
 
 <h2>SEE ALSO</h2>
 
-<em><a href="sql.html">GRASS SQL interface</a></em>
+<em>
+<a href="db.tables.html">db.tables</a>
+</em>
+<p>
+<em>
+<a href="sql.html">GRASS SQL interface</a>
+</em>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
-Markus Neteler
+Markus Neteler<br>
+Converted to Python by Glynn Clements
 
 <p><i>Last changed: $Date$</i>
