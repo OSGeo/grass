@@ -2,15 +2,15 @@
 
 This module is dedicated to modify and update the metadata of a space time dataset.
 <p>
-The title, description and the semantic type can be modified. 
+The title, description and the semantic type can be modified.
 <p>
-The flag <em>-u</em> allows to update the STDS metadata from registered 
-map layers. This is useful in case the map layers have been modified 
-without using temporal commands. 
+The flag <em>-u</em> allows to update the STDS metadata from registered
+map layers. This is useful in case the map layers have been modified
+without using temporal commands.
 <p>
-The flag <em>-m</em> will update the metadata from registered maps, but 
-also checks if the registered map layers have been removed from the 
-spatial database. It deletes missing map layers from the space time 
+The flag <em>-m</em> will update the metadata from registered maps, but
+also checks if the registered map layers have been removed from the
+spatial database. It deletes missing map layers from the space time
 dataset register table and the temporal database.
 
 <h2>Examples</h2>
@@ -18,14 +18,15 @@ dataset register table and the temporal database.
 Modification of title and description of space time raster dataset <em>A</em>.
 <p>
 <div class="code"><pre>
-t.support type=strds input=A title="New title" description="New description"
+t.support type=strds input=tempmean_monthly title="Monthly temperature for North Carolina" \
+          description="Dataset with monthly temperature for North Carolina"
 </pre></div>
 <p>
-Update the metadata of space time raster dataset <em>A</em> and check 
+Update the metadata of space time raster dataset <em>A</em> and check
 for removed map layers.
 <p>
 <div class="code"><pre>
-t.support -m type=strds input=A
+t.support -m type=strds input=tempmean_monthly
 </pre></div>
 
 

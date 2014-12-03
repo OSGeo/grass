@@ -1,97 +1,29 @@
 <h2>DESCRIPTION</h2>
 
-<em>t.rast.univar</em> calculates univariate statistics from the 
-non-null cells for each registered raster map of a space time raster 
+<em>t.rast.univar</em> calculates univariate statistics from the
+non-null cells for each registered raster map of a space time raster
 dataset.
 <p>
-By default it returns the name of the map, the start and end date of 
-dataset and the following values: mean, minimum and maximum vale, 
-mean_of_abs, standard deviation, variance,coeff_var, number of null 
+By default it returns the name of the map, the start and end date of
+dataset and the following values: mean, minimum and maximum vale,
+mean_of_abs, standard deviation, variance,coeff_var, number of null
 cells, total number of cell.
 <p>
-Using the <em>e</em> flag it can calculate also extended statistics: 
+Using the <em>e</em> flag it can calculate also extended statistics:
 first quartile, median value, third quartile and percentile 90.
 
+<h2>EXAMPLE</h2>
+
+Obtain the univariate statistics for the raster space time dataset.
+
 <div class="code"><pre>
-MAPS="map_1 map_2 map_3 map_4 map_5 map_6 map_7"
-maxn=10
-
-for map in ${MAPS} ; do
-    r.mapcalc --o expr="${map} = rand(0,$maxn)" -s
-    echo ${map} >> map_list.txt 
-    maxn=`expr $maxn + 10`
-done
-
-t.create type=strds temporaltype=absolute \
-         output=precipitation_daily \
-         title="Daily precipitation" \
-         description="Test dataset with daily precipitation"
-
-t.register -i type=rast input=precipitation_daily \
-           file=map_list.txt start="2012-08-20" increment="1 day"
-
-t.info type=strds input=precipitation_daily
- +-------------------- Space Time Raster Dataset -----------------------------+
- |                                                                            |
- +-------------------- Basic information -------------------------------------+
- | Id: ........................ precipitation_daily@PERMANENT
- | Name: ...................... precipitation_daily
- | Mapset: .................... PERMANENT
- | Creator: ................... soeren
- | Temporal type: ............. absolute
- | Creation time: ............. 2014-06-29 23:08:48.165581
- | Modification time:.......... 2014-06-29 23:08:52.729316
- | Semantic type:.............. mean
- +-------------------- Absolute time -----------------------------------------+
- | Start time:................. 2012-08-20 00:00:00
- | End time:................... 2012-08-27 00:00:00
- | Granularity:................ 1 day
- | Temporal type of maps:...... interval
- +-------------------- Spatial extent ----------------------------------------+
- | North:...................... 80.0
- | South:...................... 0.0
- | East:.. .................... 120.0
- | West:....................... 0.0
- | Top:........................ 0.0
- | Bottom:..................... 0.0
- +-------------------- Metadata information ----------------------------------+
- | Raster register table:...... raster_map_register_3446b4c32e4f4f9fbcc3d0757995b9ec
- | North-South resolution min:. 10.0
- | North-South resolution max:. 10.0
- | East-west resolution min:... 10.0
- | East-west resolution max:... 10.0
- | Minimum value min:.......... 0.0
- | Minimum value max:.......... 0.0
- | Maximum value min:.......... 9.0
- | Maximum value max:.......... 69.0
- | Aggregation type:........... None
- | Number of registered maps:.. 7
- |
- | Title:
- | Daily precipitation
- | Description:
- | Test dataset with daily precipitation
- | Command history:
- | # 2014-06-29 23:08:48 
- | t.create type="strds" temporaltype="absolute"
- |     output="precipitation_daily" title="Daily precipitation"
- |     description="Test dataset with daily precipitation"
- | # 2014-06-29 23:08:52 
- | t.register -i type="rast" input="precipitation_daily"
- |     file="map_list.txt" start="2012-08-20" increment="1 day"
- | 
- +----------------------------------------------------------------------------+
-
- 
-t.rast.univar -e precipitation_daily
+t.rast.univar -e tempmean_monthly
 id|start|end|mean|min|max|mean_of_abs|stddev|variance|coeff_var|sum|null_cells|cells|first_quartile|median|third_quartile|percentile_90
-map_1@PERMANENT|2012-08-27 00:00:00|2012-08-28 00:00:00|4.16666666666667|0|9|4.16666666666667|3.01270458042087|9.07638888888889|72.3049099301009|400|0|96|2|3|7|9
-map_2@PERMANENT|2012-08-28 00:00:00|2012-08-29 00:00:00|9.58333333333333|0|19|9.58333333333333|6.0736223860962|36.8888888888889|63.3769292462212|920|0|96|3|11|14|18
-map_3@PERMANENT|2012-08-29 00:00:00|2012-08-30 00:00:00|14.4791666666667|0|29|14.4791666666667|8.78680256438914|77.2078993055555|60.6858306605293|1390|0|96|8|13|22|26
-map_4@PERMANENT|2012-08-30 00:00:00|2012-08-31 00:00:00|19.1666666666667|0|39|19.1666666666667|11.7132996584604|137.201388888889|61.1128677832717|1840|0|96|9|19|30|35
-map_5@PERMANENT|2012-08-31 00:00:00|2012-09-01 00:00:00|24.7916666666667|0|48|24.7916666666667|14.2937316292454|204.310763888889|57.655388084351|2380|0|96|13|22.5|39|44
-map_6@PERMANENT|2012-09-01 00:00:00|2012-09-02 00:00:00|31.0416666666667|0|59|31.0416666666667|17.2885539367011|298.894097222222|55.6946704001108|2980|0|96|17|33|44|54
-map_7@PERMANENT|2012-09-02 00:00:00|2012-09-03 00:00:00|34.7916666666667|0|69|34.7916666666667|20.8401238933191|434.310763888889|59.8997572981626|3340|0|96|14|36|52|62
+2009_01_tempmean@climate_2009_2012|2009-01-01 00:00:00|2009-02-01 00:00:00|3.89849421589013|-3.38082313537598|7.42605421278212|3.94753539201851|1.78991938025743|3.20381138782113|45.9130957014576|1977967.31483353|503233|1010600|2.79614|3.92288|5.21245|6.22511
+2009_02_tempmean@climate_2009_2012|2009-02-01 00:00:00|2009-03-01 00:00:00|5.91200374639234|-1.82026121351454|8.00638622707791|5.91619095651249|1.62749663159835|2.64874528586399|27.5286806540252|2999555.60479584|503233|1010600|5.43935|6.25721|7.06546|7.4834
+...
+2012_11_tempmean@climate_2009_2012|2012-11-01 00:00:00|2012-12-01 00:00:00|8.02668042229112|1.78565343221029|10.9111891852485|8.02668042229112|1.31691138968006|1.73425560826908|16.4066752430162|4072472.76581658|503233|1010600|7.4863|8.13301|8.96423|9.48106
+2012_12_tempmean@climate_2009_2012|2012-12-01 00:00:00|2013-01-01 00:00:00|8.70849654378088|1.76101896497938|11.9838566250271|8.70849654378088|1.71871196592494|2.95397082181358|19.7360354601317|4418403.76592848|503233|1010600|7.83597|8.95478|9.99429|10.6702
 </pre></div>
 
 <h2>SEE ALSO</h2>

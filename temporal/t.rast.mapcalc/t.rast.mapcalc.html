@@ -1,35 +1,35 @@
 <h2>DESCRIPTION</h2>
 
-<em>t.rast.mapcalc</em> performs spatio-temporal 
-<em>mapcalc</em> expressions on maps of temporally sampled space time 
-raster datasets (STRDS). Spatial and temporal operators and internal 
-variables are available in the expression string. The description of 
-the spatial operators, functions and internal variables is available in 
-the <a href="r.mapcalc.html">r.mapcalc</a> manual page. The temporal 
+<em>t.rast.mapcalc</em> performs spatio-temporal
+<em>mapcalc</em> expressions on maps of temporally sampled space time
+raster datasets (STRDS). Spatial and temporal operators and internal
+variables are available in the expression string. The description of
+the spatial operators, functions and internal variables is available in
+the <a href="r.mapcalc.html">r.mapcalc</a> manual page. The temporal
 functions are described in detail below.
 <p>
-This module expects several parameter. All space time raster datasets 
-that are referenced in the <em>mapcalc expression</em> must be listed 
-in the <em>input</em> option. The <em>first</em> space time raster 
-dataset that is listed as input will be used to temporally sample all 
-other space time raster datasets. The temporal sampling method can be 
-chosen using the <em>method</em> option. The order of the STRDS's in 
-the mapcalc expression can be different to the order of the STRDS's in 
-the input option. The resulting space time raster dataset must be 
-specified in the <em>output</em> option together with the <em>base</em> 
-name of generated raster maps that are registered in the resulting 
-STRDS. Empty maps resulting from map-calculation are not registered by 
-default. This behavior can be changed with the <em>-n</em> flag. The 
-flag <em>-s</em> can be used to assure that only spatial related maps 
-in the STRDS's are processed. Spatial related means that temporally 
+This module expects several parameter. All space time raster datasets
+that are referenced in the <em>mapcalc expression</em> must be listed
+in the <em>input</em> option. The <em>first</em> space time raster
+dataset that is listed as input will be used to temporally sample all
+other space time raster datasets. The temporal sampling method can be
+chosen using the <em>method</em> option. The order of the STRDS's in
+the mapcalc expression can be different to the order of the STRDS's in
+the input option. The resulting space time raster dataset must be
+specified in the <em>output</em> option together with the <em>base</em>
+name of generated raster maps that are registered in the resulting
+STRDS. Empty maps resulting from map-calculation are not registered by
+default. This behavior can be changed with the <em>-n</em> flag. The
+flag <em>-s</em> can be used to assure that only spatial related maps
+in the STRDS's are processed. Spatial related means that temporally
 related maps overlap in their spatial extent.
 <p>
 The module <em>t.rast.mapcalc</em> supports parallel processing. The option
 <em>nprocs</em> specifies the number of processes that can be started in
-parallel. 
+parallel.
 <p>
-A mapcalc expression must be provided to process the temporal 
-sampled maps. Temporal internal variables are available in addition to 
+A mapcalc expression must be provided to process the temporal
+sampled maps. Temporal internal variables are available in addition to
 the <em>r.mapcalc</em> spatial operators and functions:
 <p>
 Supported internal variables for relative and absolute time:
@@ -38,23 +38,23 @@ Supported internal variables for relative and absolute time:
        represents the size of the current sample time interval
        in days and fraction of days for absolute time,
        and in relative units in case of relative time. </li>
-  <li> <em>start_time()</em> - This internal variable represent 
+  <li> <em>start_time()</em> - This internal variable represent
     the time difference between the start time of the sample space time
     raster dataset and the start time of the current sample interval or instance.
     The time is measured in days and fraction of days for absolute time,
     and in relative units in case of relative time. </li>
-  <li> <em>end_time()</em> - This internal variable represent 
+  <li> <em>end_time()</em> - This internal variable represent
     the time difference between the start time of the sample space time
     raster dataset and the end time of the current sample interval. The
     time is measured in days and fraction of days for absolute time,
-    and in relative units in case of relative time. 
+    and in relative units in case of relative time.
     The end_time() will be represented by null() in case of a time instance.</li>
 </ul>
 <p>
 Supported internal variables for absolute time of the current sample interval or instance:
 <ul>
   <li> <em>start_doy()</em> - Day of year (doy) from the start time [1 - 366] </li>
-  <li> <em>start_dow()</em> - Day of week (dow) from the start time [1 - 7], 
+  <li> <em>start_dow()</em> - Day of week (dow) from the start time [1 - 7],
          the start of the week is monday == 1 </li>
   <li> <em>start_year()</em> - The year of the start time [0 - 9999] </li>
   <li> <em>start_month()</em> - The month of the start time [1 - 12] </li>
@@ -63,9 +63,8 @@ Supported internal variables for absolute time of the current sample interval or
   <li> <em>start_hour()</em> - The hour of the start time [0 - 23] </li>
   <li> <em>start_minute()</em> - The minute of the start time [0 - 59] </li>
   <li> <em>start_second()</em> - The second of the start time [0 - 59] </li>
-       
   <li> <em>end_doy()</em> - Day of year (doy) from the end time [1 - 366] </li>
-  <li> <em>end_dow()</em> - Day of week (dow) from the end time [1 - 7], 
+  <li> <em>end_dow()</em> - Day of week (dow) from the end time [1 - 7],
          the start of the week is monday == 1 </li>
   <li> <em>end_year()</em> - The year of the end time [0 - 9999] </li>
   <li> <em>end_month()</em> - The month of the end time [1 - 12] </li>
@@ -75,20 +74,20 @@ Supported internal variables for absolute time of the current sample interval or
   <li> <em>end_minute()</em> - The minute of the end time [0 - 59] </li>
   <li> <em>end_second()</em> - The second of the end time [0 - 59] </li>
 </ul>
-The <em>end_*</em> functions are represented by the null() internal variables 
+The <em>end_*</em> functions are represented by the null() internal variables
 in case of time instances.
 
 <h2>NOTE</h2>
 
-We will discuss the internal work of <em>t.rast.mapcalc</em> with an 
-example. Imagine we have two STRDS as input, each with monthly 
-granularity. The first one <em>A</em> has 6 raster maps (a3 ... a8) 
-with a temporal range from March to August. The second STRDS <em>B</em> 
-has 12 raster maps (b1 ... b12) ranging from January to December. The 
-value of the raster maps is the number of the month from their interval 
-start time. Dataset <em>A</em> will be used to sample dataset 
-<em>B</em> to create a dataset <em>C</em>. We want to add all maps with 
-equal time stamps if the month of the start time is May or June, 
+We will discuss the internal work of <em>t.rast.mapcalc</em> with an
+example. Imagine we have two STRDS as input, each with monthly
+granularity. The first one <em>A</em> has 6 raster maps (a3 ... a8)
+with a temporal range from March to August. The second STRDS <em>B</em>
+has 12 raster maps (b1 ... b12) ranging from January to December. The
+value of the raster maps is the number of the month from their interval
+start time. Dataset <em>A</em> will be used to sample dataset
+<em>B</em> to create a dataset <em>C</em>. We want to add all maps with
+equal time stamps if the month of the start time is May or June,
 otherwise we multiply the maps. The command will look as follows:
 <p>
 <div class="code"><pre>
@@ -108,10 +107,10 @@ c_5     2001-07-01 00:00:00     49.0    49.0
 c_6     2001-08-01 00:00:00     64.0    64.0
 </pre></div>
 <p>
-Internally the spatio-temporal expression will be analyzed for each 
-time interval of the sample dataset A, the temporal functions will be 
-replaced by numerical values, the names of the space time raster 
-datasets will be replaced by the corresponding raster maps. The final 
+Internally the spatio-temporal expression will be analyzed for each
+time interval of the sample dataset A, the temporal functions will be
+replaced by numerical values, the names of the space time raster
+datasets will be replaced by the corresponding raster maps. The final
 expression will be passed to <em>r.mapcalc</em>, resulting in 6 runs:
 <p>
 <div class="code"><pre>
@@ -126,108 +125,30 @@ r.mapcalc expr="c_6 = if(8 == 5 || 8 == 6, (a8 + b8), (a8 * b8))"
 
 <h2>EXAMPLE</h2>
 
-Here the full script to reproduce the example:
-<p>
+The following command it is creating a new raster space time dataset where
+in the January maps are if the temperature is more than 0 it is setting
+null otherwise it set the original value. The other months are copied as
+the original one.
+
 <div class="code"><pre>
-g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
-# Lets create the raster maps
-r.mapcalc  expr="a3 = 3"
-r.mapcalc  expr="a4 = 4"
-r.mapcalc  expr="a5 = 5"
-r.mapcalc  expr="a6 = 6"
-r.mapcalc  expr="a7 = 7"
-r.mapcalc  expr="a8 = 8"
+t.rast.mapcalc input=tempmean_monthly output=january_under_0 base=january_under_0 \
+    expr="if(start_month() == 1 && tempmean_monthly > 0, null(), tempmean_monthly)"
 
-r.mapcalc  expr="b1 = 1"
-r.mapcalc  expr="b2 = 2"
-r.mapcalc  expr="b3 = 3"
-r.mapcalc  expr="b4 = 4"
-r.mapcalc  expr="b5 = 5"
-r.mapcalc  expr="b6 = 6"
-r.mapcalc  expr="b7 = 7"
-r.mapcalc  expr="b8 = 8"
-r.mapcalc  expr="b9 = 8"
-r.mapcalc  expr="b10 = 10"
-r.mapcalc  expr="b11 = 11"
-r.mapcalc  expr="b12 = 12"
-
-t.create  type=strds temporaltype=absolute \
-    output=A title="Dataset A" descr="Dataset A"
-    
-t.create  type=strds temporaltype=absolute \
-    output=B title="Dataset B" descr="Dataset B"
-    
-t.register  -i type=rast input=A maps=a3,a4,a5,a6,a7,a8 \
-    start="2001-03-01" increment="1 months"
-    
-t.register  -i type=rast input=B maps=b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11,b12 \
-    start="2001-01-01" increment="1 months"
-
-t.rast.mapcalc input=A,B output=C base=c method=equal \
-    expr="if(start_month() == 5 || start_month() == 6, (A + B), (A * B))"
-
-t.info type=strds input=C
-
- +-------------------- Space Time Raster Dataset -----------------------------+
- |                                                                            |
- +-------------------- Basic information -------------------------------------+
- | Id: ........................ C@PERMANENT
- | Name: ...................... C
- | Mapset: .................... PERMANENT
- | Creator: ................... soeren
- | Temporal type: ............. absolute
- | Creation time: ............. 2014-11-23 17:06:53.273538
- | Modification time:.......... 2014-11-23 17:06:53.326765
- | Semantic type:.............. mean
- +-------------------- Absolute time -----------------------------------------+
- | Start time:................. 2001-03-01 00:00:00
- | End time:................... 2001-09-01 00:00:00
- | Granularity:................ 1 month
- | Temporal type of maps:...... interval
- +-------------------- Spatial extent ----------------------------------------+
- | North:...................... 80.0
- | South:...................... 0.0
- | East:.. .................... 120.0
- | West:....................... 0.0
- | Top:........................ 0.0
- | Bottom:..................... 0.0
- +-------------------- Metadata information ----------------------------------+
- | Raster register table:...... raster_map_register_155fc9f08e01417da73f341feaaf5ea0
- | North-South resolution min:. 10.0
- | North-South resolution max:. 10.0
- | East-west resolution min:... 10.0
- | East-west resolution max:... 10.0
- | Minimum value min:.......... 9.0
- | Minimum value max:.......... 64.0
- | Maximum value min:.......... 9.0
- | Maximum value max:.......... 64.0
- | Aggregation type:........... None
- | Number of registered maps:.. 6
- |
- | Title:
- | Dataset A
- | Description:
- | Dataset A
- | Command history:
- | # 2014-11-23 17:06:53 
- | t.rast.mapcalc input="A,B" output="C" base="c"
- |     method="equal"
- |     expr="if(start_month() == 5 || start_month() == 6, (A + B), (A * B))"
- | 
- +----------------------------------------------------------------------------+
-
-
-t.rast.list input=C columns=name,start_time,min,max
-
+# printing the minimum or maximum values only for January
+t.rast.list january_under_0 columns=name,start_time,min,max | grep 01-01
 name|start_time|min|max
-c_1|2001-03-01 00:00:00|9.0|9.0
-c_2|2001-04-01 00:00:00|16.0|16.0
-c_3|2001-05-01 00:00:00|10.0|10.0
-c_4|2001-06-01 00:00:00|12.0|12.0
-c_5|2001-07-01 00:00:00|49.0|49.0
-c_6|2001-08-01 00:00:00|64.0|64.0
-</pre></div>
+january_under_0_01|2009-01-01 00:00:00|-3.380823|-7e-06
+january_under_0_13|2010-01-01 00:00:00|-5.266929|-0.000154
+january_under_0_25|2011-01-01 00:00:00|-4.968747|-6.1e-05
+january_under_0_37|2012-01-01 00:00:00|-0.534994|-0.014581
 
+# these are the original data, you can see that the maximum is different
+t.rast.list tempmean_monthly columns=name,start_time,min,max | grep 01-01
+2009_01_tempmean|2009-01-01 00:00:00|-3.380823|7.426054
+2010_01_tempmean|2010-01-01 00:00:00|-5.266929|5.71131
+2011_01_tempmean|2011-01-01 00:00:00|-4.968747|4.967295
+2012_01_tempmean|2012-01-01 00:00:00|-0.534994|9.69511
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
