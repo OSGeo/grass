@@ -994,9 +994,9 @@ void set_option(const char *string)
         if (renamed_key) {
             for (at_opt = &st->first_option; at_opt; at_opt = at_opt->next_opt) {
                 if (strcmp(renamed_key, at_opt->key) == 0) {
-                    G_warning(_("Please update the interface of the module: "
+                    G_warning(_("Please update the user interface of <%s>: "
                                 "option <%s> has been renamed to <%s>"),
-                              the_key, renamed_key);
+                              G_program_name(), the_key, renamed_key);
                     opt = at_opt;
                     found = 1;
                     break; 
