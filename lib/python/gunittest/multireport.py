@@ -16,7 +16,7 @@ import argparse
 import itertools
 import datetime
 import operator
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 
 
 # TODO: we should be able to work without matplotlib
@@ -53,13 +53,102 @@ class TestResultSummary(object):
         self.tested_modules = []
         self.tested_dirs = []
         self.test_files_authors = []
+        self.tested_dirs = []
         self.time = []
         self.names = []
 
         self.report = None
 
 
-def tests_plot(x, xlabels, results, filename):
+def plot_percents(x, xticks, xlabels, successes, failures, filename, style):
+    fig = plt.figure()
+    graph = fig.add_subplot(111)
+
+    # Plot the data as a red line with round markers
+    graph.plot(x, successes, color=style.success_color,
+               linestyle=style.linestyle, linewidth=style.linewidth)
+    graph.plot(x, failures, color=style.fail_color,
+               linestyle=style.linestyle, linewidth=style.linewidth)
+
+    fig.autofmt_xdate()
+    graph.set_xticks(xticks)
+    graph.set_xticklabels(xlabels)
+
+    percents = range(0, 110, 10)
+    graph.set_yticks(percents)
+    graph.set_yticklabels(['%d%%' % p for p in percents])
+
+    fig.savefig(filename)
+
+
+def plot_percent_successful(x, xticks, xlabels, successes, filename, style):
+    fig = plt.figure()
+    graph = fig.add_subplot(111)
+   
+    def median(values):
+        n = len(values)
+        if n == 1:
+            return values[0]
+        sorted_values = sorted(values)
+        if n % 2 == 0:
+            return (sorted_values[n / 2 - 1] + sorted_values[n / 2]) / 2
+        else:
+            return sorted_values[n / 2]
+    
+    # this is useful for debugging or some other stat
+    # cmeans = []
+    # cmedians = []
+    # csum = 0
+    # count = 0
+    # for i, s in enumerate(successes):
+    #     csum += s
+    #     count += 1
+    #     cmeans.append(csum/count)
+    #     cmedians.append(median(successes[:i + 1]))
+
+    smedian = median(successes)
+    smax = max(successes)
+    if successes[-1] < smedian:
+        color = 'r'
+    else:
+        color = 'g'
+    # another possibility is to color according to the gradient, ideally
+    # on the whole curve but that's much more complicated
+
+    graph.plot(x, successes, color=color,
+               linestyle=style.linestyle, linewidth=style.linewidth)
+
+    # rotates the xlables
+    fig.autofmt_xdate()
+    graph.set_xticks(xticks)
+    graph.set_xticklabels(xlabels)
+
+    step = 5
+    ymin = int(min(successes) / step) * step
+    ymax =  int(smax / step) * step
+    percents = range(ymin, ymax + step + 1, step)
+    graph.set_yticks(percents)
+    graph.set_yticklabels(['%d%%' % p for p in percents])
+
+    fig.savefig(filename)
+
+
+def tests_successful_plot(x, xticks, xlabels, results, filename, style):
+    successes = []
+    for result in results:
+        if result.total:
+            successes.append(float(result.successes) / result.total * 100)
+        else:
+            # this is not expected to happen
+            # but we don't want any exceptions if it happens
+            successes.append(0)
+
+    plot_percent_successful(x=x, xticks=xticks, xlabels=xlabels,
+                            successes=successes,
+                            filename=filename, style=style)
+
+
+def tests_plot(x, xticks, xlabels, results, filename, style):
 
     total = [result.total for result in results]
     successes = [result.successes for result in results]
@@ -70,22 +159,54 @@ def tests_plot(x, xlabels, results, filename):
 
     graph = fig.add_subplot(111)
 
-    # Plot the data as a red line with round markers
-    graph.plot(x, total, 'b-o')
-    graph.plot(x, successes, 'g-o')
-    graph.plot(x, failures, 'r-o')
+    graph.plot(x, total, color=style.total_color,
+               linestyle=style.linestyle, linewidth=style.linewidth)
+    graph.plot(x, successes, color=style.success_color,
+               linestyle=style.linestyle, linewidth=style.linewidth)
+    graph.plot(x, failures, color=style.fail_color,
+               linestyle=style.linestyle, linewidth=style.linewidth)
+
     fig.autofmt_xdate()
-
-    # Set the xtick locations to correspond to just the dates you entered.
-    graph.set_xticks(x)
-
-    # Set the xtick labels to correspond to just the dates you entered.
+    graph.set_xticks(xticks)
     graph.set_xticklabels(xlabels)
 
     fig.savefig(filename)
 
+def tests_percent_plot(x, xticks, xlabels, results, filename, style):
+    successes = []
+    failures = []
+    for result in results:
+        if result.total:
+            successes.append(float(result.successes) / result.total * 100)
+            # TODO: again undocumented, counting errors and failures together
+            failures.append(float(result.failures + result.errors) / result.total * 100)
+        else:
+            # this is not expected to happen
+            # but we don't want any exceptions if it happens
+            successes.append(0)
+            failures.append(0)
 
-def files_plot(x, xlabels, results, filename):
+    plot_percents(x=x, xticks=xticks, xlabels=xlabels,
+                  successes=successes, failures=failures,
+                  filename=filename, style=style)
+
+
+def files_successful_plot(x, xticks, xlabels, results, filename, style):
+    successes = []
+    for result in results:
+        if result.total:
+            successes.append(float(result.files_successes) / result.files_total * 100)
+        else:
+            # this is not expected to happen
+            # but we don't want any exceptions if it happens
+            successes.append(0)
+
+    plot_percent_successful(x=x, xticks=xticks, xlabels=xlabels,
+                            successes=successes,
+                            filename=filename, style=style)
+
+
+def files_plot(x, xticks, xlabels, results, filename, style):
     total = [result.files_total for result in results]
     successes = [result.files_successes for result in results]
     failures = [result.files_failures for result in results]
@@ -94,45 +215,64 @@ def files_plot(x, xlabels, results, filename):
 
     graph = fig.add_subplot(111)
 
-    # Plot the data as a red line with round markers
-    graph.plot(x, total, 'b-o')
-    graph.plot(x, successes, 'g-o')
-    graph.plot(x, failures, 'r-o')
-    #fig.autofmt_xdate(bottom=0.2, rotation=30, ha='left')
+    graph.plot(x, total, color=style.total_color,
+               linestyle=style.linestyle, linewidth=style.linewidth)
+    graph.plot(x, successes, color=style.success_color,
+               linestyle=style.linestyle, linewidth=style.linewidth)
+    graph.plot(x, failures, color=style.fail_color,
+               linestyle=style.linestyle, linewidth=style.linewidth)
+
     fig.autofmt_xdate()
-
-    # Set the xtick locations to correspond to just the dates you entered.
-    graph.set_xticks(x)
-
-    # Set the xtick labels to correspond to just the dates you entered.
+    graph.set_xticks(xticks)
     graph.set_xticklabels(xlabels)
 
     fig.savefig(filename)
 
 
-def info_plot(x, xlabels, results, filename):
+def files_percent_plot(x, xticks, xlabels, results, filename, style):
+    successes = []
+    failures = []
+    for result in results:
+        if result.files_total:
+            successes.append(float(result.files_successes) / result.files_total * 100)
+            failures.append(float(result.files_failures) / result.files_total * 100)
+        else:
+            # this is not expected to happen
+            # but we don't want any exceptions if it happens
+            successes.append(0)
+            failures.append(0)
+
+    plot_percents(x=x, xticks=xticks, xlabels=xlabels,
+                  successes=successes, failures=failures,
+                  filename=filename, style=style)
+
+
+def info_plot(x, xticks, xlabels, results, filename, style):
 
     modules = [len(result.tested_modules) for result in results]
     names = [len(result.names) for result in results]
     authors = [len(result.test_files_authors) for result in results]
+    # we want just unique directories
+    dirs = [len(set(result.tested_dirs)) for result in results]
 
     fig = plt.figure()
 
     graph = fig.add_subplot(111)
 
-    # Plot the data as a red line with round markers
-    graph.plot(x, names, 'b-o', label="Test files")
-    graph.plot(x, modules, 'g-o', label="Tested modules")
-    graph.plot(x, authors, 'r-o', label="Test authors")
+    graph.plot(x, names, color='b', label="Test files",
+               linestyle=style.linestyle, linewidth=style.linewidth)
+    graph.plot(x, modules, color='g', label="Tested modules",
+               linestyle=style.linestyle, linewidth=style.linewidth)
+    # dirs == testsuites
+    graph.plot(x, dirs, color='orange', label="Tested directories",
+               linestyle=style.linestyle, linewidth=style.linewidth)
+    graph.plot(x, authors, color='r', label="Test authors",
+               linestyle=style.linestyle, linewidth=style.linewidth)
+
+    graph.legend(loc='best', shadow=False)
+
     fig.autofmt_xdate()
-
-    # Now add the legend with some customizations.
-    graph.legend(loc='upper center', shadow=True)
-
-    # Set the xtick locations to correspond to just the dates you entered.
-    graph.set_xticks(x)
-
-    # Set the xtick labels to correspond to just the dates you entered.
+    graph.set_xticks(xticks)
     graph.set_xticklabels(xlabels)
 
     fig.savefig(filename)
@@ -154,7 +294,7 @@ def main_page(results, filename, images, captions, title='Test reports',
             '<tbody>'
             .format(title=title)
             )
-        for result in results:
+        for result in reversed(results):
             # TODO: include name to summary file
             # now using location or test report directory as name
             if result.location != 'unknown':
@@ -243,6 +383,7 @@ def main():
             result.tested_modules = summary['tested_modules']
             result.names = summary['names']
             result.test_files_authors = summary['test_files_authors']
+            result.tested_dirs = summary['tested_dirs']
             result.report = report
 
             # let's consider no location as valid state and use 'unknown'
@@ -273,6 +414,12 @@ def main():
         '<tbody>'
         )
 
+    PlotStyle = namedtuple('PlotStyle',
+                           ['linestyle', 'linewidth',
+                           'success_color', 'fail_color', 'total_color'])
+    plot_style = PlotStyle(linestyle='-', linewidth=4.0,
+                           success_color='g', fail_color='r', total_color='b')
+
     for location_type, results in results_in_locations.iteritems():
         results = sorted(results, key=operator.attrgetter('timestamp'))
         # TODO: document: location type must be a valid dir name
@@ -284,19 +431,51 @@ def main():
         else:
             title = ('Test reports for &lt;{type}&gt; location type'
                      .format(type=location_type))
-
+        
         x = [date2num(result.timestamp) for result in results]
+        # the following would be an alternative but it does not work with
+        # labels and automatic axis limits even after removing another date fun
+        # x = [result.svn_revision for result in results]
         xlabels = [result.timestamp.strftime("%Y-%m-%d") + ' (r' + result.svn_revision + ')' for result in results]
-        tests_plot(x=x, xlabels=xlabels, results=results,
-                   filename=os.path.join(directory, 'tests_plot.png'))
-        files_plot(x=x, xlabels=xlabels, results=results,
-                   filename=os.path.join(directory, 'files_plot.png'))
-        info_plot(x=x, xlabels=xlabels, results=results,
-                  filename=os.path.join(directory, 'info_plot.png'))
+        step = len(x) / 10
+        xticks = x[step::step]
+        xlabels = xlabels[step::step]
+        tests_successful_plot(x=x, xticks=xticks, xlabels=xlabels, results=results,
+                              filename=os.path.join(directory, 'tests_successful_plot.png'),
+                              style=plot_style)
+        files_successful_plot(x=x, xticks=xticks, xlabels=xlabels, results=results,
+                              filename=os.path.join(directory, 'files_successful_plot.png'),
+                              style=plot_style)
+        tests_plot(x=x, xticks=xticks, xlabels=xlabels, results=results,
+                   filename=os.path.join(directory, 'tests_plot.png'),
+                   style=plot_style)
+        tests_percent_plot(x=x, xticks=xticks, xlabels=xlabels, results=results,
+                           filename=os.path.join(directory, 'tests_percent_plot.png'),
+                           style=plot_style)
+        files_plot(x=x, xticks=xticks, xlabels=xlabels, results=results,
+                   filename=os.path.join(directory, 'files_plot.png'),
+                   style=plot_style)
+        files_percent_plot(x=x, xticks=xticks, xlabels=xlabels, results=results,
+                           filename=os.path.join(directory, 'files_percent_plot.png'),
+                           style=plot_style)
+        info_plot(x=x, xticks=xticks, xlabels=xlabels, results=results,
+                  filename=os.path.join(directory, 'info_plot.png'),
+                   style=plot_style)
 
         main_page(results=results, filename='index.html',
-                  images=['tests_plot.png', 'files_plot.png', 'info_plot.png'],
-                  captions=['Success of individual tests', 'Success of test files',
+                  images=['tests_successful_plot.png',
+                          'files_successful_plot.png',
+                          'tests_plot.png',
+                          'files_plot.png',
+                          'tests_percent_plot.png',
+                          'files_percent_plot.png',
+                          'info_plot.png'],
+                  captions=['Success of individual tests in percents',
+                            'Success of test files in percents',
+                            'Successes, failures and number of individual tests',
+                            'Successes, failures and number of test files',
+                            'Successes and failures of individual tests in percent',
+                            'Successes and failures of test files in percents',
                             'Additional information'],
                   directory=directory,
                   title=title)
