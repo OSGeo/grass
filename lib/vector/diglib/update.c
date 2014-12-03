@@ -42,8 +42,8 @@ void dig_line_add_updated(struct Plus_head *Plus, int line, off_t offset)
 
     /* Check if already in list */
     for (i = 0; i < Plus->uplist.n_uplines; i++) {
-	if (Plus->uplist.uplines[i] == line) {
-	    Plus->uplist.uplines_offset[i] = offset;
+	if (Plus->uplist.uplines[i] == line && 
+	    Plus->uplist.uplines_offset[i] == offset) {
             G_debug(3, "\tskipped");
 	    return;
         }
