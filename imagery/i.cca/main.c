@@ -84,6 +84,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("imagery"));
     G_add_keyword(_("statistics"));
     G_add_keyword("CCA");
+    G_add_keyword(_("canonical components analysis");
     module->description =
 	_("Canonical components analysis (CCA) "
 	  "program for image processing.");

@@ -27,6 +27,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("map management"));
+    G_add_keyword(_("scripts"));
     module->description = "Searches for GRASS support files.";
 
     G_gisinit(argv[0]);

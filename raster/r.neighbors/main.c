@@ -168,6 +168,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("algebra"));
     G_add_keyword(_("statistics"));
     G_add_keyword(_("aggregation"));
+    G_add_keyword(_("neighbor"));
+    G_add_keyword(_("focal statistics"));
     G_add_keyword(_("filter"));
     module->description =
 	_("Makes each cell category value a "

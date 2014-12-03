@@ -18,7 +18,9 @@
 #% description: Converts a space time raster dataset into a 3D raster map.
 #% keywords: temporal
 #% keywords: conversion
+#% keywords: raster
 #% keywords: raster3d
+#% keywords: voxel
 #%end
 
 #%option G_OPT_STRDS_INPUT

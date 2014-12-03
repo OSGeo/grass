@@ -6,7 +6,7 @@
 # AUTHOR(S):	Soeren Gebbert
 #
 # PURPOSE:	Aggregates data of an existing space time raster dataset using the time intervals of a second space time dataset
-# COPYRIGHT:	(C) 2011 by the GRASS Development Team
+# COPYRIGHT:	(C) 2011-2014 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (version 2). Read the file COPYING that comes with GRASS
@@ -18,6 +18,7 @@
 #% description: Aggregates data of an existing space time raster dataset using the time intervals of a second space time dataset.
 #% keywords: temporal
 #% keywords: aggregation
+#% keywords: raster
 #%end
 
 #%option G_OPT_STRDS_INPUT
