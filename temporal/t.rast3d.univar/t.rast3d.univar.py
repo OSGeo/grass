@@ -19,7 +19,8 @@
 #% description: Calculates univariate statistics from the non-null cells for each registered 3D raster map of a space time 3D raster dataset.
 #% keywords: temporal
 #% keywords: statistics
-#% keywords: raster
+#% keywords: raster3d
+#% keywords: voxel
 #%end
 
 #%option G_OPT_STR3DS_INPUT

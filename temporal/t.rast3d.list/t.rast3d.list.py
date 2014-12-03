@@ -18,8 +18,9 @@
 #% description: Lists registered maps of a space time raster3d dataset.
 #% keywords: temporal
 #% keywords: map management
-#% keywords: raster3d
 #% keywords: list
+#% keywords: raster3d
+#% keywords: voxel
 #%end
 
 #%option G_OPT_STR3DS_INPUT

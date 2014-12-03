@@ -56,7 +56,7 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("Linear Reference System"));
-    G_add_keyword(_("networking"));
+    G_add_keyword(_("network"));
     module->description =
 	_("Finds line id and real km+offset for given points in vector map "
 	  "using linear reference system.");

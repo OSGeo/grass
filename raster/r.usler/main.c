@@ -52,6 +52,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("hydrology"));
     G_add_keyword(_("rainfall"));
+    G_add_keyword(_("soil"));
     G_add_keyword(_("erosion"));
     module->description = _("Computes USLE R factor, Rainfall erosivity index.");
     

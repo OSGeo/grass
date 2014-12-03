@@ -17,8 +17,8 @@
 #%module
 #% description: Exports attribute tables into various formats.
 #% keywords: database
-#% keywords: attribute table
 #% keywords: export
+#% keywords: attribute table
 #%end
 
 #%option G_OPT_V_INPUT

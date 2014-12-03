@@ -150,6 +150,9 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("terrain"));
+    G_add_keyword(_("aspect"));
+    G_add_keyword(_("slope"));
+    G_add_keyword(_("curvature"));
     module->label = _("Generates raster maps of slope, aspect, curvatures and "
 		      "partial derivatives from an elevation raster map.");
     module->description = _("Aspect is calculated counterclockwise from east.");

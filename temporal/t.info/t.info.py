@@ -18,6 +18,7 @@
 #% description: Lists information about space time datasets and maps.
 #% keywords: temporal
 #% keywords: metadata
+#% keywords: extent
 #%end
 
 #%option G_OPT_STDS_INPUT

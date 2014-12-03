@@ -21,6 +21,7 @@
 #%module
 #% description: Launches graphical attribute table manager.
 #% keywords: general
+#% keywords: user interface
 #% keywords: GUI
 #% keywords: attribute table
 #% keywords: database
