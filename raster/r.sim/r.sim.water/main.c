@@ -178,16 +178,9 @@ int main(int argc, char *argv[])
     parm.observation = G_define_standard_option(G_OPT_V_INPUT);
     parm.observation->key = "observation";
     parm.observation->required = NO;
-    parm.observation->description =
+    parm.observation->label =
 	_("Name of sampling locations vector points map");
-    parm.observation->guisection = _("Input options");
-
-    parm.logfile = G_define_standard_option(G_OPT_F_OUTPUT);
-    parm.logfile->key = "logfile";
-    parm.logfile->required = NO;
-    parm.logfile->description =
-	_("Name for sampling points output text file. For each observation vector point the time series of sediment transport is stored.");
-    parm.logfile->guisection = _("Output");
+    parm.observation->guisection = _("Input");
 
     parm.depth = G_define_standard_option(G_OPT_R_OUTPUT);
     parm.depth->key = "depth";
@@ -210,9 +203,16 @@ int main(int argc, char *argv[])
     parm.outwalk = G_define_standard_option(G_OPT_V_OUTPUT);
     parm.outwalk->key = "walkers_output";
     parm.outwalk->required = NO;
-    parm.outwalk->description =
+    parm.outwalk->label =
 	_("Base name of the output walkers vector points map");
-    parm.outwalk->guisection = _("Output options");
+    parm.outwalk->guisection = _("Output");
+
+    parm.logfile = G_define_standard_option(G_OPT_F_OUTPUT);
+    parm.logfile->key = "logfile";
+    parm.logfile->required = NO;
+    parm.logfile->description =
+	_("Name for sampling points output text file. For each observation vector point the time series of sediment transport is stored.");
+    parm.logfile->guisection = _("Output");
 
     parm.nwalk = G_define_option();
     parm.nwalk->key = "nwalkers";
@@ -287,6 +287,7 @@ int main(int argc, char *argv[])
     flag.tserie = G_define_flag();
     flag.tserie->key = 't';
     flag.tserie->description = _("Time-series output");
+    flag.tserie->guisection = _("Output");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
