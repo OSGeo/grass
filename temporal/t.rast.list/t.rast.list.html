@@ -1,24 +1,24 @@
 <h2>DESCRIPTION</h2>
 
-List time stamped raster map layers that are registered in a space time 
-raster dataset. <em>t.rast.list</em> provides several options to list map layers 
-and their metadata. Listing of map layer can be ordered by metadata, 
-metadata columns can be specified and SQL where conditions can be 
-provided to select a map layer subset of the input space time raster 
-dataset. Most of the raster map  specific metadat is available for 
+List time stamped raster map layers that are registered in a space time
+raster dataset. <em>t.rast.list</em> provides several options to list map layers
+and their metadata. Listing of map layer can be ordered by metadata,
+metadata columns can be specified and SQL where conditions can be
+provided to select a map layer subset of the input space time raster
+dataset. Most of the raster map  specific metadat is available for
 column selection, sorting and SQL where statements.
 
-Using the <b>method</b> option allows the specification of different 
-methods to list map layers. Method <i>col</i> is the deafult option and 
-sensitive to the <b>column</b>,<b>order</b> and <b>where</b> options. 
-It will simply print user specified metadata columns of one map layer 
-per line. The <i>comma</i> method will list the map layer as comma 
+Using the <b>method</b> option allows the specification of different
+methods to list map layers. Method <i>col</i> is the deafult option and
+sensitive to the <b>column</b>,<b>order</b> and <b>where</b> options.
+It will simply print user specified metadata columns of one map layer
+per line. The <i>comma</i> method will list the map layer as comma
 separated list that can be used as input for spatial modules.
 <p>
-To print interval length in days and distance from the begin use method 
-<i>delta</i>. Method <i>deltagap</i> will additionally print temporal 
-gaps between map layer. The <i>gran</i> method allows the listing of 
-map layer sampled by a user defined <b>granule</b>. As default the 
+To print interval length in days and distance from the begin use method
+<i>delta</i>. Method <i>deltagap</i> will additionally print temporal
+gaps between map layer. The <i>gran</i> method allows the listing of
+map layer sampled by a user defined <b>granule</b>. As default the
 granularity of the space time raster dataset is used for sampling.
 
 For user defined column separator can be specified with the <b>separator</b>
@@ -28,150 +28,125 @@ option.
 
 This example shows several options that are available for map layers listing.
 
+<h3>Default query</h3>
+
+The following command is the default one, returning standard information
+like name, mapset, start_time, end_time of each map in the space time dataset
+
 <div class="code"><pre>
-g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
-
-# Generate data
-r.mapcalc expr="map_1 = rand(0, 550)" -s
-r.mapcalc expr="map_2 = rand(0, 450)" -s
-r.mapcalc expr="map_3 = rand(0, 320)" -s
-r.mapcalc expr="map_4 = rand(0, 510)" -s
-r.mapcalc expr="map_5 = rand(0, 300)" -s
-r.mapcalc expr="map_6 = rand(0, 650)" -s
-
-cat > map_list.txt << EOF
-map_1|2001-01-01|2001-04-01
-map_2|2001-05-01|2001-07-01
-map_3|2001-08-01|2001-10-01
-map_4|2001-11-01|2002-01-01
-map_5|2002-02-01|2002-04-01
-map_6|2002-05-01|2002-07-01
-EOF
-
-t.create type=strds temporaltype=absolute \
-         output=test_strds \
-         title="Test STRDS" \
-         description="Test dataset"
-
-t.register type=rast -i input=test_strds file=map_list.txt
-
-t.rast.list method=comma input=test_strds
-map_1@PERMANENT,map_2@PERMANENT,map_3@PERMANENT,map_4@PERMANENT,map_5@PERMANENT,map_6@PERMANENT
-
-t.rast.list method=col input=test_strds
+t.rast.list tempmean_monthly
 name|mapset|start_time|end_time
-map_1|PERMANENT|2001-01-01 00:00:00|2001-04-01 00:00:00
-map_2|PERMANENT|2001-05-01 00:00:00|2001-07-01 00:00:00
-map_3|PERMANENT|2001-08-01 00:00:00|2001-10-01 00:00:00
-map_4|PERMANENT|2001-11-01 00:00:00|2002-01-01 00:00:00
-map_5|PERMANENT|2002-02-01 00:00:00|2002-04-01 00:00:00
-map_6|PERMANENT|2002-05-01 00:00:00|2002-07-01 00:00:00
-
-t.rast.list  method=col input=test_strds columns=name,start_time,min,max
-name|start_time|min|max
-map_1|2001-01-01 00:00:00|0.0|548.0
-map_2|2001-05-01 00:00:00|0.0|445.0
-map_3|2001-08-01 00:00:00|0.0|318.0
-map_4|2001-11-01 00:00:00|0.0|503.0
-map_5|2002-02-01 00:00:00|0.0|296.0
-map_6|2002-05-01 00:00:00|0.0|648.0
-
-t.rast.list  method=col input=test_strds columns=name,start_time,min,max where="max > 500"
-name|start_time|min|max
-map_1|2001-01-01 00:00:00|0.0|548.0
-map_4|2001-11-01 00:00:00|0.0|503.0
-map_6|2002-05-01 00:00:00|0.0|648.0
-
-t.rast.list  method=delta input=test_strds
-id|name|mapset|start_time|end_time|interval_length|distance_from_begin
-map_1@PERMANENT|map_1|PERMANENT|2001-01-01 00:00:00|2001-04-01 00:00:00|90.0|0.0
-map_2@PERMANENT|map_2|PERMANENT|2001-05-01 00:00:00|2001-07-01 00:00:00|61.0|120.0
-map_3@PERMANENT|map_3|PERMANENT|2001-08-01 00:00:00|2001-10-01 00:00:00|61.0|212.0
-map_4@PERMANENT|map_4|PERMANENT|2001-11-01 00:00:00|2002-01-01 00:00:00|61.0|304.0
-map_5@PERMANENT|map_5|PERMANENT|2002-02-01 00:00:00|2002-04-01 00:00:00|59.0|396.0
-map_6@PERMANENT|map_6|PERMANENT|2002-05-01 00:00:00|2002-07-01 00:00:00|61.0|485.0
-
-t.rast.list  method=deltagaps input=test_strds
-id|name|mapset|start_time|end_time|interval_length|distance_from_begin
-map_1@PERMANENT|map_1|PERMANENT|2001-01-01 00:00:00|2001-04-01 00:00:00|90.0|0.0
-None|None|None|2001-04-01 00:00:00|2001-05-01 00:00:00|30.0|90.0
-map_2@PERMANENT|map_2|PERMANENT|2001-05-01 00:00:00|2001-07-01 00:00:00|61.0|120.0
-None|None|None|2001-07-01 00:00:00|2001-08-01 00:00:00|31.0|181.0
-map_3@PERMANENT|map_3|PERMANENT|2001-08-01 00:00:00|2001-10-01 00:00:00|61.0|212.0
-None|None|None|2001-10-01 00:00:00|2001-11-01 00:00:00|31.0|273.0
-map_4@PERMANENT|map_4|PERMANENT|2001-11-01 00:00:00|2002-01-01 00:00:00|61.0|304.0
-None|None|None|2002-01-01 00:00:00|2002-02-01 00:00:00|31.0|365.0
-map_5@PERMANENT|map_5|PERMANENT|2002-02-01 00:00:00|2002-04-01 00:00:00|59.0|396.0
-None|None|None|2002-04-01 00:00:00|2002-05-01 00:00:00|30.0|455.0
-map_6@PERMANENT|map_6|PERMANENT|2002-05-01 00:00:00|2002-07-01 00:00:00|61.0|485.0
-
-t.rast.list  method=gran input=test_strds
-id|name|mapset|start_time|end_time|interval_length|distance_from_begin
-map_1@PERMANENT|map_1|PERMANENT|2001-01-01 00:00:00|2001-02-01 00:00:00|31.0|0.0
-map_1@PERMANENT|map_1|PERMANENT|2001-02-01 00:00:00|2001-03-01 00:00:00|28.0|31.0
-map_1@PERMANENT|map_1|PERMANENT|2001-03-01 00:00:00|2001-04-01 00:00:00|31.0|59.0
-None|None|None|2001-04-01 00:00:00|2001-05-01 00:00:00|30.0|90.0
-map_2@PERMANENT|map_2|PERMANENT|2001-05-01 00:00:00|2001-06-01 00:00:00|31.0|120.0
-map_2@PERMANENT|map_2|PERMANENT|2001-06-01 00:00:00|2001-07-01 00:00:00|30.0|151.0
-None|None|None|2001-07-01 00:00:00|2001-08-01 00:00:00|31.0|181.0
-map_3@PERMANENT|map_3|PERMANENT|2001-08-01 00:00:00|2001-09-01 00:00:00|31.0|212.0
-map_3@PERMANENT|map_3|PERMANENT|2001-09-01 00:00:00|2001-10-01 00:00:00|30.0|243.0
-None|None|None|2001-10-01 00:00:00|2001-11-01 00:00:00|31.0|273.0
-map_4@PERMANENT|map_4|PERMANENT|2001-11-01 00:00:00|2001-12-01 00:00:00|30.0|304.0
-map_4@PERMANENT|map_4|PERMANENT|2001-12-01 00:00:00|2002-01-01 00:00:00|31.0|334.0
-None|None|None|2002-01-01 00:00:00|2002-02-01 00:00:00|31.0|365.0
-map_5@PERMANENT|map_5|PERMANENT|2002-02-01 00:00:00|2002-03-01 00:00:00|28.0|396.0
-map_5@PERMANENT|map_5|PERMANENT|2002-03-01 00:00:00|2002-04-01 00:00:00|31.0|424.0
-None|None|None|2002-04-01 00:00:00|2002-05-01 00:00:00|30.0|455.0
-map_6@PERMANENT|map_6|PERMANENT|2002-05-01 00:00:00|2002-06-01 00:00:00|31.0|485.0
-map_6@PERMANENT|map_6|PERMANENT|2002-06-01 00:00:00|2002-07-01 00:00:00|30.0|516.0
-
-t.rast.list  method=gran input=test_strds gran="2 months"
-id|name|mapset|start_time|end_time|interval_length|distance_from_begin
-map_1@PERMANENT|map_1|PERMANENT|2001-01-01 00:00:00|2001-03-01 00:00:00|59.0|0.0
-map_1@PERMANENT|map_1|PERMANENT|2001-03-01 00:00:00|2001-05-01 00:00:00|61.0|59.0
-map_2@PERMANENT|map_2|PERMANENT|2001-05-01 00:00:00|2001-07-01 00:00:00|61.0|120.0
-map_3@PERMANENT|map_3|PERMANENT|2001-07-01 00:00:00|2001-09-01 00:00:00|62.0|181.0
-map_3@PERMANENT|map_3|PERMANENT|2001-09-01 00:00:00|2001-11-01 00:00:00|61.0|243.0
-map_4@PERMANENT|map_4|PERMANENT|2001-11-01 00:00:00|2002-01-01 00:00:00|61.0|304.0
-map_5@PERMANENT|map_5|PERMANENT|2002-01-01 00:00:00|2002-03-01 00:00:00|59.0|365.0
-map_5@PERMANENT|map_5|PERMANENT|2002-03-01 00:00:00|2002-05-01 00:00:00|61.0|424.0
-map_6@PERMANENT|map_6|PERMANENT|2002-05-01 00:00:00|2002-07-01 00:00:00|61.0|485.0
-
-t.rast.list  method=gran         input=test_strds gran="18 days"
-id|name|mapset|start_time|end_time|interval_length|distance_from_begin
-map_1@PERMANENT|map_1|PERMANENT|2001-01-01 00:00:00|2001-01-19 00:00:00|18.0|0.0
-map_1@PERMANENT|map_1|PERMANENT|2001-01-19 00:00:00|2001-02-06 00:00:00|18.0|18.0
-map_1@PERMANENT|map_1|PERMANENT|2001-02-06 00:00:00|2001-02-24 00:00:00|18.0|36.0
-map_1@PERMANENT|map_1|PERMANENT|2001-02-24 00:00:00|2001-03-14 00:00:00|18.0|54.0
-map_1@PERMANENT|map_1|PERMANENT|2001-03-14 00:00:00|2001-04-01 00:00:00|18.0|72.0
-None|None|None|2001-04-01 00:00:00|2001-04-19 00:00:00|18.0|90.0
-map_2@PERMANENT|map_2|PERMANENT|2001-04-19 00:00:00|2001-05-07 00:00:00|18.0|108.0
-map_2@PERMANENT|map_2|PERMANENT|2001-05-07 00:00:00|2001-05-25 00:00:00|18.0|126.0
-map_2@PERMANENT|map_2|PERMANENT|2001-05-25 00:00:00|2001-06-12 00:00:00|18.0|144.0
-map_2@PERMANENT|map_2|PERMANENT|2001-06-12 00:00:00|2001-06-30 00:00:00|18.0|162.0
-map_2@PERMANENT|map_2|PERMANENT|2001-06-30 00:00:00|2001-07-18 00:00:00|18.0|180.0
-map_3@PERMANENT|map_3|PERMANENT|2001-07-18 00:00:00|2001-08-05 00:00:00|18.0|198.0
-map_3@PERMANENT|map_3|PERMANENT|2001-08-05 00:00:00|2001-08-23 00:00:00|18.0|216.0
-map_3@PERMANENT|map_3|PERMANENT|2001-08-23 00:00:00|2001-09-10 00:00:00|18.0|234.0
-map_3@PERMANENT|map_3|PERMANENT|2001-09-10 00:00:00|2001-09-28 00:00:00|18.0|252.0
-map_3@PERMANENT|map_3|PERMANENT|2001-09-28 00:00:00|2001-10-16 00:00:00|18.0|270.0
-map_4@PERMANENT|map_4|PERMANENT|2001-10-16 00:00:00|2001-11-03 00:00:00|18.0|288.0
-map_4@PERMANENT|map_4|PERMANENT|2001-11-03 00:00:00|2001-11-21 00:00:00|18.0|306.0
-map_4@PERMANENT|map_4|PERMANENT|2001-11-21 00:00:00|2001-12-09 00:00:00|18.0|324.0
-map_4@PERMANENT|map_4|PERMANENT|2001-12-09 00:00:00|2001-12-27 00:00:00|18.0|342.0
-map_4@PERMANENT|map_4|PERMANENT|2001-12-27 00:00:00|2002-01-14 00:00:00|18.0|360.0
-None|None|None|2002-01-14 00:00:00|2002-02-01 00:00:00|18.0|378.0
-map_5@PERMANENT|map_5|PERMANENT|2002-02-01 00:00:00|2002-02-19 00:00:00|18.0|396.0
-map_5@PERMANENT|map_5|PERMANENT|2002-02-19 00:00:00|2002-03-09 00:00:00|18.0|414.0
-map_5@PERMANENT|map_5|PERMANENT|2002-03-09 00:00:00|2002-03-27 00:00:00|18.0|432.0
-map_5@PERMANENT|map_5|PERMANENT|2002-03-27 00:00:00|2002-04-14 00:00:00|18.0|450.0
-map_6@PERMANENT|map_6|PERMANENT|2002-04-14 00:00:00|2002-05-02 00:00:00|18.0|468.0
-map_6@PERMANENT|map_6|PERMANENT|2002-05-02 00:00:00|2002-05-20 00:00:00|18.0|486.0
-map_6@PERMANENT|map_6|PERMANENT|2002-05-20 00:00:00|2002-06-07 00:00:00|18.0|504.0
-map_6@PERMANENT|map_6|PERMANENT|2002-06-07 00:00:00|2002-06-25 00:00:00|18.0|522.0
-map_6@PERMANENT|map_6|PERMANENT|2002-06-25 00:00:00|2002-07-13 00:00:00|18.0|540.0
+2009_01_tempmean|climate_2000_2012|2009-01-01 00:00:00|2009-02-01 00:00:00
+2009_02_tempmean|climate_2000_2012|2009-02-01 00:00:00|2009-03-01 00:00:00
+....
+2012_11_tempmean|climate_2000_2012|2012-11-01 00:00:00|2012-12-01 00:00:00
+2012_12_tempmean|climate_2000_2012|2012-12-01 00:00:00|2013-01-01 00:00:00
 </pre></div>
+
+<h3>Add more info</h3>
+
+The following command let the user to choose the columns to show
+
+<div class="code"><pre>
+t.rast.list tempmean_monthly columns=name,start_time,min,max
+name|start_time|min|max
+2009_01_tempmean|2009-01-01 00:00:00|-3.380823|7.426054
+2009_02_tempmean|2009-02-01 00:00:00|-1.820261|8.006386
+...
+2009_01_tempmean|2009-01-01 00:00:00|-3.380823|7.426054
+2009_02_tempmean|2009-02-01 00:00:00|-1.820261|8.006386
+</pre></div>
+
+<h3>Filtering the result</h3>
+
+In this example the result is filtered showing only the maps with max
+value major than 24
+
+<div class="code"><pre>
+t.rast.list tempmean_monthly columns=name,start_time,min,max where="max > 24"
+name|start_time|min|max
+2009_06_tempmean|2009-06-01 00:00:00|15.962669|25.819681
+2009_07_tempmean|2009-07-01 00:00:00|15.32852|26.103664
+2009_08_tempmean|2009-08-01 00:00:00|16.37995|27.293282
+....
+2012_06_tempmean|2012-06-01 00:00:00|14.929379|24.000651
+2012_07_tempmean|2012-07-01 00:00:00|18.455802|28.794653
+2012_08_tempmean|2012-08-01 00:00:00|15.718526|26.151115
+</pre></div>
+
+<h3>Using method option</h3>
+
+Method option is able to show raster in different way. By default <em>cols</em>
+value is used, the value <em>comma</em> will print only the list of maps
+inside the space time dataset
+
+<div class="code"><pre>
+t.rast.list method=comma input=tempmean_monthly
+2009_01_tempmean@climate_2009_2012,2009_02_tempmean@climate_2009_2012,2009_03_tempmean@climate_2009_2012, \
+2009_04_tempmean@climate_2009_2012,2009_05_tempmean@climate_2009_2012,2009_06_tempmean@climate_2009_2012, \
+2009_07_tempmean@climate_2009_2012,2009_08_tempmean@climate_2009_2012,2009_09_tempmean@climate_2009_2012, \
+2009_10_tempmean@climate_2009_2012,2009_11_tempmean@climate_2009_2012,2009_12_tempmean@climate_2009_2012, \
+2010_01_tempmean@climate_2009_2012,2010_02_tempmean@climate_2009_2012,2010_03_tempmean@climate_2009_2012, \
+2010_04_tempmean@climate_2009_2012,2010_05_tempmean@climate_2009_2012,2010_06_tempmean@climate_2009_2012, \
+2010_07_tempmean@climate_2009_2012,2010_08_tempmean@climate_2009_2012,2010_09_tempmean@climate_2009_2012, \
+2010_10_tempmean@climate_2009_2012,2010_11_tempmean@climate_2009_2012,2010_12_tempmean@climate_2009_2012, \
+2011_01_tempmean@climate_2009_2012,2011_02_tempmean@climate_2009_2012,2011_03_tempmean@climate_2009_2012, \
+2011_04_tempmean@climate_2009_2012,2011_05_tempmean@climate_2009_2012,2011_06_tempmean@climate_2009_2012, \
+2011_07_tempmean@climate_2009_2012,2011_08_tempmean@climate_2009_2012,2011_09_tempmean@climate_2009_2012, \
+2011_10_tempmean@climate_2009_2012,2011_11_tempmean@climate_2009_2012,2011_12_tempmean@climate_2009_2012, \
+2012_01_tempmean@climate_2009_2012,2012_02_tempmean@climate_2009_2012,2012_03_tempmean@climate_2009_2012, \
+2012_04_tempmean@climate_2009_2012,2012_05_tempmean@climate_2009_2012,2012_06_tempmean@climate_2009_2012, \
+2012_07_tempmean@climate_2009_2012,2012_08_tempmean@climate_2009_2012,2012_09_tempmean@climate_2009_2012, \
+2012_10_tempmean@climate_2009_2012,2012_11_tempmean@climate_2009_2012,2012_12_tempmean@climate_2009_2012
+</pre></div>
+
+The <em>delta</em> value calculate the interval between maps and the
+distance from the first map.
+
+<div class="code"><pre>
+t.rast.list method=delta input=tempmean_monthly
+id|name|mapset|start_time|end_time|interval_length|distance_from_begin
+2009_01_tempmean@climate_2000_2012|2009_01_tempmean|climate_2000_2012|2009-01-01 00:00:00|2009-02-01 00:00:00|31.0|0.0
+2009_02_tempmean@climate_2000_2012|2009_02_tempmean|climate_2000_2012|2009-02-01 00:00:00|2009-03-01 00:00:00|28.0|31.0
+2009_03_tempmean@climate_2000_2012|2009_03_tempmean|climate_2000_2012|2009-03-01 00:00:00|2009-04-01 00:00:00|31.0|59.0
+...
+2012_10_tempmean@climate_2000_2012|2012_10_tempmean|climate_2000_2012|2012-10-01 00:00:00|2012-11-01 00:00:00|31.0|1369.0
+2012_11_tempmean@climate_2000_2012|2012_11_tempmean|climate_2000_2012|2012-11-01 00:00:00|2012-12-01 00:00:00|30.0|1400.0
+2012_12_tempmean@climate_2000_2012|2012_12_tempmean|climate_2000_2012|2012-12-01 00:00:00|2013-01-01 00:00:00|31.0|1430.0
+</pre></div>
+
+The <em>gran</em> value it is used to return data sampled by a user
+defined granule. As default the granularity of the space time raster
+dataset is used for sampling.
+
+<div class="code"><pre>
+t.rast.list  method=gran input=tempmean_monthly
+id|name|mapset|start_time|end_time|interval_length|distance_from_begin
+2009_01_tempmean@climate_2009_2012|2009_01_tempmean|climate_2009_2012|2009-01-01 00:00:00|2009-02-01 00:00:00|31.0|0.0
+2009_02_tempmean@climate_2009_2012|2009_02_tempmean|climate_2009_2012|2009-02-01 00:00:00|2009-03-01 00:00:00|28.0|31.0
+2009_03_tempmean@climate_2009_2012|2009_03_tempmean|climate_2009_2012|2009-03-01 00:00:00|2009-04-01 00:00:00|31.0|59.0
+2009_04_tempmean@climate_2009_2012|2009_04_tempmean|climate_2009_2012|2009-04-01 00:00:00|2009-05-01 00:00:00|30.0|90.0
+....
+2012_09_tempmean@climate_2009_2012|2012_09_tempmean|climate_2009_2012|2012-09-01 00:00:00|2012-10-01 00:00:00|30.0|1339.0
+2012_10_tempmean@climate_2009_2012|2012_10_tempmean|climate_2009_2012|2012-10-01 00:00:00|2012-11-01 00:00:00|31.0|1369.0
+2012_11_tempmean@climate_2009_2012|2012_11_tempmean|climate_2009_2012|2012-11-01 00:00:00|2012-12-01 00:00:00|30.0|1400.0
+2012_12_tempmean@climate_2009_2012|2012_12_tempmean|climate_2009_2012|2012-12-01 00:00:00|2013-01-01 00:00:00|31.0|1430.0
+</pre></div>
+
+<div class="code"><pre>
+t.rast.list  method=gran input=tempmean_monthly gran="2 months"
+id|name|mapset|start_time|end_time|interval_length|distance_from_begin
+2009_01_tempmean@climate_2009_2012|2009_01_tempmean|climate_2009_2012|2009-01-01 00:00:00|2009-03-01 00:00:00|59.0|0.0
+2009_03_tempmean@climate_2009_2012|2009_03_tempmean|climate_2009_2012|2009-03-01 00:00:00|2009-05-01 00:00:00|61.0|59.0
+2009_05_tempmean@climate_2009_2012|2009_05_tempmean|climate_2009_2012|2009-05-01 00:00:00|2009-07-01 00:00:00|61.0|120.0
+....
+2012_07_tempmean@climate_2009_2012|2012_07_tempmean|climate_2009_2012|2012-07-01 00:00:00|2012-09-01 00:00:00|62.0|1277.0
+2012_09_tempmean@climate_2009_2012|2012_09_tempmean|climate_2009_2012|2012-09-01 00:00:00|2012-11-01 00:00:00|61.0|1339.0
+2012_11_tempmean@climate_2009_2012|2012_11_tempmean|climate_2009_2012|2012-11-01 00:00:00|2013-01-01 00:00:00|61.0|1400.0
+</pre></div>
+
+For the <em>deltagaps</em> value you can see the example for space time
+vector dataset <a href="t.vect.list.html#using-method-option">t.vect.list</a>
 
 <h2>SEE ALSO</h2>
 

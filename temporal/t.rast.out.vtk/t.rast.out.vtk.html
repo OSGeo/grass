@@ -15,40 +15,22 @@ are exported using <b>t.rast.out.vtk</b> into the directoy
 
 
 <div class="code"><pre>
-r.mapcalc --o expr="prec_1 = rand(0, 550)" -s
-r.mapcalc --o expr="prec_2 = rand(0, 450)" -s
-r.mapcalc --o expr="prec_3 = rand(0, 320)" -s
-r.mapcalc --o expr="prec_4 = rand(0, 510)" -s
-r.mapcalc --o expr="prec_5 = rand(0, 300)" -s
-r.mapcalc --o expr="prec_6 = rand(0, 650)" -s
-r.mapcalc --o expr="elevation = sin(row() + col()) * 10"
+mkdir /tmp/export
+t.rast.out.vtk input=precip_abs expdir=/tmp/export elevation=elevation
 
-n1=`g.tempfile pid=1 -d` 
-
-cat > "${n1}" << EOF
-prec_1|2001-01-01|2001-02-01
-prec_2|2001-02-01|2001-03-01
-prec_3|2001-03-01|2001-04-01
-prec_4|2001-05-01|2001-06-01
-prec_5|2001-07-01|2001-08-01
-prec_6|2001-08-01|2001-09-01
-EOF
-
-t.create --o type=strds temporaltype=absolute output=precip_abs \
-  title="A test with input files" descr="A test with input files"
-
-t.register -i type=rast input=precip_abs file="${n1}"
-
-mkdir /tmp/test1
-t.rast.out.vtk input=precip_abs expdir=/tmp/test1 elevation=elevation
-
-ls -al /tmp/test1 
--rw-rw-r--  1 soeren soeren   1857 Nov 23 15:59 000000_precip_abs.vtk
--rw-rw-r--  1 soeren soeren   1849 Nov 23 15:59 000001_precip_abs.vtk
--rw-rw-r--  1 soeren soeren   1836 Nov 23 15:59 000002_precip_abs.vtk
--rw-rw-r--  1 soeren soeren   1854 Nov 23 15:59 000003_precip_abs.vtk
--rw-rw-r--  1 soeren soeren   1842 Nov 23 15:59 000004_precip_abs.vtk
--rw-rw-r--  1 soeren soeren   1858 Nov 23 15:59 000005_precip_abs.vtk
+ls -1 /tmp/export
+000000_tempmean_monthly.vtk
+000001_tempmean_monthly.vtk
+000002_tempmean_monthly.vtk
+000003_tempmean_monthly.vtk
+000004_tempmean_monthly.vtk
+000005_tempmean_monthly.vtk
+000006_tempmean_monthly.vtk
+000007_tempmean_monthly.vtk
+000008_tempmean_monthly.vtk
+000009_tempmean_monthly.vtk
+000010_tempmean_monthly.vtk
+000011_tempmean_monthly.vtk
 </pre></div>
 
 <h2>SEE ALSO</h2>
