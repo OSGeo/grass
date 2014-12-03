@@ -157,9 +157,6 @@ int D_open_driver(void)
 
     init();
 
-    if (!getenv("GRASS_RENDER_IMMEDIATE") && !m)
-	return 1;
-
     return 0;
 }
 
