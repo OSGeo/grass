@@ -405,8 +405,18 @@ class IVDigit:
         
         ret = 0
         actions = self.changesets[changeset]
-        
-        for action in actions:
+	
+        if undo:
+            firstaction = 0
+            lastaction = len(actions)
+            step = 1
+        else:
+            firstaction = len(actions) - 1
+            lastaction = -1
+            step = -1
+
+        for i in range(firstaction, lastaction, step):
+            action = actions[i]
             line = action['line']
             if action['offset'] > 0:
                 if Vect_line_alive(self.poMapInfo, line):
