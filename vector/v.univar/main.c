@@ -91,6 +91,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("statistics"));
+    G_add_keyword(_("univariate statistics"));
     module->label =
 	_("Calculates univariate statistics for attribute.");
     module->description = _("Variance and standard "
