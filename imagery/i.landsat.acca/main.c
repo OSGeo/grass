@@ -105,6 +105,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("imagery"));
     G_add_keyword(_("Landsat"));
     G_add_keyword("ACCA");
+    G_add_keyword(_("cloud detection"));
     
     band_prefix = G_define_standard_option(G_OPT_R_BASENAME_INPUT);
     band_prefix->label = _("Base name of input raster bands");

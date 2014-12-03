@@ -61,7 +61,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("general"));
     G_add_keyword(_("support"));
     module->label = _("Displays GRASS version info.");
-    module->description = _("Optionally also print build or copyright information.");
+    module->description = _("Optionally also prints build or copyright information.");
 
     copyright = G_define_flag();
     copyright->key = 'c';

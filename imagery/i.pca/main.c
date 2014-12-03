@@ -72,6 +72,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("imagery"));
     G_add_keyword(_("transformation"));
     G_add_keyword(_("PCA"));
+    G_add_keyword(_("principal components analysis");
     module->description = _("Principal components analysis (PCA) "
 			    "for image processing.");
     module->overwrite = 1;

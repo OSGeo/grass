@@ -18,6 +18,8 @@
 #% description: Extracts a subset of a space time 3D raster dataset.
 #% keywords: temporal
 #% keywords: extract
+#% keywords: raster3d
+#% keywords: voxel
 #%end
 
 #%option G_OPT_STR3DS_INPUT

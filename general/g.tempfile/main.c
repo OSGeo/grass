@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("support"));
-    
+    G_add_keyword(_("scripts"));    
     module->description = _("Creates a temporary file and prints it's file name.");
 
     pid = G_define_option();

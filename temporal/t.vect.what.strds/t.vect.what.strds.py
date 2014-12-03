@@ -6,7 +6,7 @@
 # AUTHOR(S):    Soeren Gebbert
 #
 # PURPOSE:      Store raster map values at spatial and temporal positions of vector points as vector attributes.
-# COPYRIGHT:    (C) 2011 by the GRASS Development Team
+# COPYRIGHT:    (C) 2011-2014 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (version 2). Read the file COPYING that comes with GRASS
@@ -18,6 +18,7 @@
 #% description: Stores raster map values at spatial and temporal positions of vector points as vector attributes.
 #% keywords: temporal
 #% keywords: sampling
+#% keywords: vector
 #%end
 
 #%option G_OPT_STVDS_INPUT

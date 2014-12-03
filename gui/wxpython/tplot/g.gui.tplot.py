@@ -23,6 +23,7 @@
 #%module
 #% description: Allows the user to see in a plot the values of one or more temporal datasets for a queried point defined by a coordinate pair.
 #% keywords: general
+#% keywords: user interface
 #% keywords: GUI
 #% keywords: temporal
 #%end

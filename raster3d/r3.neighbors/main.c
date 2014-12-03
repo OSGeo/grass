@@ -206,10 +206,13 @@ int main(int argc, char **argv)
 
     module = G_define_module();
     G_add_keyword(_("raster3d"));
-    G_add_keyword(_("neighbor"));
-    G_add_keyword(_("aggregation"));
+    G_add_keyword(_("algebra"));
     G_add_keyword(_("statistics"));
+    G_add_keyword(_("aggregation"));
+    G_add_keyword(_("neighbor"));
+    G_add_keyword(_("focal statistics"));
     G_add_keyword(_("filter"));
+
     module->description =
 	_("Makes each voxel value a "
 	  "function of the values assigned to the voxels "

@@ -108,6 +108,9 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("hydrology"));
+    G_add_keyword(_("soil"));
+    G_add_keyword(_("flow"));
+    G_add_keyword(_("overland flow"));
     module->description =
 	_("Overland flow hydrologic simulation using "
 	  "path sampling method (SIMWE).");

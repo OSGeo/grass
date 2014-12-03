@@ -51,6 +51,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("statistics"));
     G_add_keyword(_("reclass"));
+    G_add_keyword(_("clumps"));
     module->description =
 	_("Recategorizes data in a raster map by grouping cells "
 	  "that form physically discrete areas into unique categories.");
