@@ -1555,7 +1555,7 @@ class IVDigit:
         if changesetLast < 0:
             return changesetLast
         
-        elif level < 0 and self.changesetCurrent > changesetLast:
+        if level < 0 and self.changesetCurrent > changesetLast:
             self.changesetCurrent = changesetLast
         elif level == 0:
             # 0 -> undo all
