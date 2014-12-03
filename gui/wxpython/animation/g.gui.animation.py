@@ -26,13 +26,13 @@
 #% keywords: display
 #%end
 #%option G_OPT_R_INPUTS
-#% key: rast
+#% key: raster
 #% description: Raster maps to animate
 #% required: no
 #% guisection: Input
 #%end
 #%option G_OPT_V_INPUTS
-#% key: vect
+#% key: vector
 #% label: Vector maps to animate
 #% required: no
 #% guisection: Input
