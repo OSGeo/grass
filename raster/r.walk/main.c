@@ -30,7 +30,7 @@
  *               Updated for GRASS 7
  *                 Markus Metz
  * PURPOSE:      anisotropic movements on cost surfaces
- * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -178,14 +178,12 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("cost surface"));
     G_add_keyword(_("cumulative costs"));
-    module->label =
-	_("Outputs a raster map showing the "
-	  "anisotropic cumulative cost.");
-    module->description = _("Computes anisotropic cumulative cost of moving between different "
-	  "geographic locations on an input elevation raster map "
-	  "whose cell category values represent elevation "
-	  "combined with an input raster map layer whose cell "
-	  "values represent friction cost.");
+    G_add_keyword(_("cost allocation"));
+    module->description =
+	_("Creates a raster map showing the "
+	  "anisotropic cumulative cost of moving between different "
+	  "geographic locations on an input raster map "
+	  "whose cell category values represent cost.");
 
     opt12 = G_define_standard_option(G_OPT_R_ELEV);
 

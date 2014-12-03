@@ -1,5 +1,11 @@
 <h2>DESCRIPTION</h2>
 
+<em>r.walk</em> computes anisotropic cumulative cost of moving between
+different geographic locations on an input elevation raster map whose
+cell category values represent elevation combined with an input raster
+map layer whose cell values represent friction cost.
+
+<p>
 <em>r.walk</em> outputs 1) a raster map showing the lowest
 cumulative cost of moving between each cell and the user-specified
 starting points and 2) a second raster map showing the movement 
@@ -78,6 +84,7 @@ K x x x K
 <p>The minimum cumulative costs are computed using Dijkstra's
 algorithm, that find an optimum solution (for more details see
 <em>r.cost</em>, that uses the same algorithm).
+
 <a name="move"></a>
 <h2>Movement Direction</h2>
 <p>The movement direction surface is created to record the sequence of
@@ -143,8 +150,11 @@ Franceschetti Simone, Sorrentino Diego, Mussi Fabiano and Pasolli Mattia<br>
 Correction by: Fontanari Steno, Napolitano Maurizio and  Flor Roberto<br>
 In collaboration with: Franchi Matteo, Vaglia Beatrice, Bartucca Luisa, Fava Valentina and Tolotti Mathias, 2004
 
-<p><b>Updated for Grass 6.1:</b><br>
+<p><b>Updated for GRASS 6.1:</b><br>
 Roberto Flor and Markus Neteler
+
+<p><b>Updated for GRASS GIS 7:</b><br>
+Markus Metz
 
 <p>
 <i>Last changed: $Date$</i>
