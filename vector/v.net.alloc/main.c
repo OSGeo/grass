@@ -63,7 +63,7 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("network"));
-    G_add_keyword(_("allocation"));
+    G_add_keyword(_("cost allocation"));
     module->label =
 	_("Allocates subnets for nearest centers (direction from center).");
     module->description =

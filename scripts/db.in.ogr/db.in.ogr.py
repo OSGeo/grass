@@ -6,7 +6,7 @@
 # AUTHOR(S):   	Markus Neteler
 # PURPOSE:      imports attribute tables in various formats
 #               Converted to Python by Glynn Clements
-# COPYRIGHT:    (C) 2007, 2008 by Markus Neteler and the GRASS Development Team
+# COPYRIGHT:    (C) 2007-2014 by Markus Neteler and the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
@@ -15,9 +15,10 @@
 #############################################################################
 
 #%Module
-#%  description: Imports attribute tables in various formats.
-#%  keywords: database
-#%  keywords: attribute table
+#% description: Imports attribute tables in various formats.
+#% keywords: database
+#% keywords: import
+#% keywords: attribute table
 #%End
 
 #%option G_OPT_F_BIN_INPUT

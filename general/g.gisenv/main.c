@@ -43,6 +43,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("general"));
     G_add_keyword(_("settings"));
     G_add_keyword(_("variables"));
+    G_add_keyword(_("scripts"));
     module->label =
 	_("Outputs and modifies the user's current GRASS variable settings.");
     module->description = _("Prints all defined GRASS variables if no option is given.");

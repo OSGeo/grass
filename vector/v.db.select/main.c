@@ -53,6 +53,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("vector"));
     G_add_keyword(_("attribute table"));
     G_add_keyword(_("database"));
+    G_add_keyword(_("SQL"));
     module->description = _("Prints vector map attributes.");
 
     map_opt = G_define_standard_option(G_OPT_V_MAP);

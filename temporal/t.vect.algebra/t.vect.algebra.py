@@ -20,6 +20,7 @@
 #% description: Apply temporal and spatial oeprations on space time vector datasets using temporal vector algebra.
 #% keywords: temporal
 #% keywords: algebra
+#% keywords: vector
 #%end
 
 #%option

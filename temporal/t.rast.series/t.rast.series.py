@@ -7,7 +7,7 @@
 #
 # PURPOSE:	Perform different aggregation algorithms from r.series on all or a
 #          selected subset of raster maps in a space time raster dataset
-# COPYRIGHT:	(C) 2011 by the GRASS Development Team
+# COPYRIGHT:	(C) 2011-2014 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (version 2). Read the file COPYING that comes with GRASS
@@ -19,6 +19,7 @@
 #% description: Performs different aggregation algorithms from r.series on all or a subset of raster maps in a space time raster dataset.
 #% keywords: temporal
 #% keywords: series
+#% keywords: raster
 #%end
 
 #%option G_OPT_STRDS_INPUT

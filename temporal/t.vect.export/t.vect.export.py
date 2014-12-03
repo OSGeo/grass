@@ -6,7 +6,7 @@
 # AUTHOR(S):    Soeren Gebbert
 #
 # PURPOSE:      Export a space time vector dataset.as GRASS specific archive file
-# COPYRIGHT:    (C) 2011 by the GRASS Development Team
+# COPYRIGHT:    (C) 2011-2014 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (version 2). Read the file COPYING that comes with GRASS
@@ -18,6 +18,7 @@
 #% description: Exports a space time vector dataset as GRASS GIS specific archive file.
 #% keywords: temporal
 #% keywords: export
+#% keywords: vector
 #%end
 
 #%option G_OPT_STVDS_INPUT

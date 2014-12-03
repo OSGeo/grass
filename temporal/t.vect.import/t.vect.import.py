@@ -18,6 +18,7 @@
 #% description: Imports a space time vector dataset from a GRASS GIS specific archive file.
 #% keywords: temporal
 #% keywords: import
+#% keywords: vector
 #%end
 
 #%option G_OPT_F_INPUT

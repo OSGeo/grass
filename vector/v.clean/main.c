@@ -51,6 +51,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("topology"));
     G_add_keyword(_("geometry"));
+    G_add_keyword(_("snapping"));
     module->description = _("Toolset for cleaning topology of vector map.");
 
     opt.in = G_define_standard_option(G_OPT_V_INPUT);
