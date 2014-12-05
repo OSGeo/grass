@@ -392,12 +392,12 @@ def main():
             grass.run_command('r.resamp.bspline', input = input, mask = usermask,
                 output = prefix + 'filled', method = method, 
                 ew_step = 3 * reg['ewres'], ns_step = 3 * reg['nsres'], 
-                _lambda = 0.01, flags = 'n')
+                lambda_ = 0.01, flags = 'n')
         else:
             grass.run_command('r.resamp.bspline', input = input,
                 output = prefix + 'filled', method = method, 
                 ew_step = 3 * reg['ewres'], ns_step = 3 * reg['nsres'], 
-                _lambda = 0.01, flags = 'n')
+                lambda_ = 0.01, flags = 'n')
 
     # restoring user's mask, if present:
     if usermask:
