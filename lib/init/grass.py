@@ -69,6 +69,7 @@ location = None
 create_new = None
 grass_gui = None
 exit_grass = None
+force_gislock_removal = None
 
 def warning(text):
     sys.stderr.write(_("WARNING") + ': ' + text + os.linesep)
@@ -168,7 +169,7 @@ Geographic Resources Analysis Support System (GRASS GIS).
 
 %s:
   $CMD_NAME [-h | -help | --help] [-v | --version] [-c | -c geofile | -c EPSG:code[:datum_trans]]
-          [-e] [-text | -gui] [--config param]
+          [-e] [-f] [-text | -gui] [--config param]
           [[[<GISDBASE>/]<LOCATION_NAME>/]<MAPSET>]
 
 %s:
@@ -176,6 +177,7 @@ Geographic Resources Analysis Support System (GRASS GIS).
   -v or --version                %s
   -c                             %s
   -e                             %s
+  -f                             %s
   -text                          %s
                                    %s
   -gtext                         %s
@@ -206,6 +208,7 @@ Geographic Resources Analysis Support System (GRASS GIS).
        _("show version information and exit"),
        _("create given database, location or mapset if it doesn't exist"),
        _("exit after creation of location or mapset. Only with -c flag"),
+       _("force removal of .gislock if exists (use with care!). Only with -text flag"),
        _("use text based interface (skip welcome screen)"),
        _("and set as default"),
        _("use text based interface (show welcome screen)"),
@@ -867,20 +870,27 @@ def set_language():
         gettext.install('grasslibs', os.path.join(gisbase, 'locale'), unicode=True)
 
 def check_lock():
-    global lockfile
+    global lockfile, force_gislock_removal
     if not os.path.exists(location):
         fatal(_("Path '%s' doesn't exist") % location)
 
     # Check for concurrent use
     lockfile = os.path.join(location, ".gislock")
     ret = call([gfile("etc", "lock"), lockfile, "%d" % os.getpid()])
-    if ret == 0:
-        msg = None
-    elif ret == 2:
-        msg = _("%(user)s is currently running GRASS in selected mapset (" \
-                "file %(file)s found). Concurrent use not allowed." % {
-                'user': user, 'file': lockfile})
-    else:
+    msg = None
+    if ret == 2:
+        if not force_gislock_removal:
+            msg = _("%(user)s is currently running GRASS in selected mapset (" \
+                    "file %(file)s found). Concurrent use not allowed.\nYou can force launching GRASS using -f flag " \
+                    "(note that you need permission for this operation). Have another look in the processor " \
+                    "manager just to be sure..." % {
+                        'user': user, 'file': lockfile})
+        else:
+            try_remove(lockfile)
+            message(_("%(user)s is currently running GRASS in selected mapset (" \
+                      "file %(file)s found). Forcing to launch GRASS..." % {
+                          'user': user, 'file': lockfile}))
+    elif ret != 0:
         msg = _("Unable to properly access '%s'.\n"
                 "Please notify system personel.") % lockfile
 
@@ -1244,7 +1254,7 @@ def get_username():
 
 
 def parse_cmdline():
-    global args, grass_gui, create_new, exit_grass
+    global args, grass_gui, create_new, exit_grass, force_gislock_removal
     args = []
     for i in sys.argv[1:]:
         # Check if the user asked for the version
@@ -1272,6 +1282,8 @@ def parse_cmdline():
             create_new = True
         elif i == "-e":
             exit_grass = True
+        elif i == "-f":
+            force_gislock_removal = True
         elif i == "--config":
             print_params()
             sys.exit()
