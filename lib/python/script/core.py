@@ -280,11 +280,11 @@ def make_command(prog, flags="", overwrite=False, quiet=False, verbose=False,
         if val != None:
             if opt.startswith('_'):
                 opt = opt[1:]
-                warning(_("To run the module add underscore at the end"
+                warning(_("To run the module <%s> add underscore at the end"
                     " of the option <%s> to avoid conflict with Python"
                     " keywords. Underscore at the beginning is"
                     " depreciated in GRASS GIS 7.0 and will be removed"
-                    " in version 7.1.") % opt)
+                    " in version 7.1.") % (prog, opt))
             elif opt.endswith('_'):
                 opt = opt[:-1]
             args.append("%s=%s" % (opt, _make_val(val)))
