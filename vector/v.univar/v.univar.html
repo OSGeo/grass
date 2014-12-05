@@ -7,18 +7,39 @@ Variance and standard deviation is calculated only for points if
 <tt>type=point</tt> is defined.
 
 <p>Extended statistics adds median, 1st and 3rd quartiles, and 90th
-percentile.
+percentile to the output.
+
+<h2>NOTES</h2>
+
+When using the <em>-d</em> flag, univariate statistics of vector
+geometry are calculated. Depending on the selected vector <em>type</em>,
+distances are calculated as follows:
+
+<ul>
+<li> <em>type=point</em>: point distances are considered;</li>
+<li> <em>type=line</em>: the first point of each line is considered;</li>
+<li> <em>type=area</em>: the centroid of each area is considered.</li>
+</ul>
 
 <h2>EXAMPLE</h2>
 
-<div class="code"><pre>
-g.region rast=elevation.10m -p
-v.random out=samples n=100
-v.db.addtable samples col="heights double precision"
-v.what.rast samples rast=elevation.10m col=heights
-v.db.select samples
+The example is based on the North Carolina sample dataset:
 
-v.univar samples col=heights type=point
+<div class="code"><pre>
+g.region rast=elevation -p
+v.random output=samples npoints=100
+v.db.addtable map=samples columns="heights double precision"
+v.what.rast map=samples rast=elevation column=heights
+v.db.select map=samples
+
+# calculate height attribute statistics:
+v.univar -e samples column=heights type=point
+
+# compare to statistics of original raster map:
+r.univar -e elevation
+
+# calculate distance between sampling points statistics:
+v.univar -d samples column=heights type=point
 </pre></div>
 
 
@@ -30,8 +51,12 @@ v.univar samples col=heights type=point
 </em>
 
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
 Radim Blazek, ITC-irst
+<p>
+extended by:<br>
+Hamish Bowman, University of Otago, New Zealand<br>
+Martin Landa 
 
 <p><i>Last changed: $Date$</i>
