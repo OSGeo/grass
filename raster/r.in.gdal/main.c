@@ -61,6 +61,7 @@ int main(int argc, char *argv[])
     GDALDriverH hDriver;
     GDALRasterBandH hBand;
     double adfGeoTransform[6];
+    int n_bands;
     int force_imagery = FALSE;
     char error_msg[8096];
     int projcomp_error = 0;
@@ -97,8 +98,9 @@ int main(int argc, char *argv[])
     parm.band = G_define_option();
     parm.band->key = "band";
     parm.band->type = TYPE_INTEGER;
+    parm.band->multiple = YES;
     parm.band->required = NO;
-    parm.band->description = _("Band to select (default is all bands)");
+    parm.band->description = _("Band(s) to select (default is all bands)");
 
     parm.memory = G_define_option();
     parm.memory->key = "memory";
@@ -506,7 +508,13 @@ int main(int argc, char *argv[])
     /* -------------------------------------------------------------------- */
     /*      Do we want to generate a simple raster, or an imagery group?    */
     /* -------------------------------------------------------------------- */
-    if ((GDALGetRasterCount(hDS) > 1 && parm.band->answer == NULL)
+    n_bands = 0;
+    if (parm.band->answer != NULL) {
+	while (parm.band->answers[n_bands])
+	    n_bands++;
+    }
+
+    if ((GDALGetRasterCount(hDS) > 1 && n_bands != 1)
 	|| GDALGetGCPCount(hDS) > 0)
 	force_imagery = TRUE;
 
@@ -517,7 +525,7 @@ int main(int argc, char *argv[])
 	int nBand = 1;
 
 	if (parm.band->answer != NULL)
-	    nBand = atoi(parm.band->answer);
+	    nBand = atoi(parm.band->answers[0]);
 
 	hBand = GDALGetRasterBand(hDS, nBand);
 	if (hBand == NULL) {
@@ -539,13 +547,26 @@ int main(int argc, char *argv[])
     else {
 	struct Ref ref;
 	char szBandName[512];
-	int nBand;
+	int nBand = 0;
 	char colornamebuf[512], colornamebuf2[512];
 
 	I_init_group_ref(&ref);
 
 	colornamebuf2[0] = '\0';
-	for (nBand = 1; nBand <= GDALGetRasterCount(hDS); nBand++) {
+
+	n_bands = 0;
+	while (TRUE) {
+	    if (parm.band->answer != NULL) {
+		if (parm.band->answers[n_bands] == NULL)
+		    break;
+		nBand = atoi(parm.band->answers[n_bands++]);
+	    }
+	    else {
+		if (nBand >= GDALGetRasterCount(hDS))
+		    break;
+		nBand++;
+	    }
+
 	    G_debug(3, "Import raster band %d", nBand);
 	    hBand = GDALGetRasterBand(hDS, nBand);
 	    if (!hBand)
@@ -1144,7 +1165,8 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	    GDALRATFieldUsage field_use;
 	    struct Colors colors;
 	    DCELL val1, val2;
-	    int r1, g1, b1, r2, g2, b2;
+	    double r1, g1, b1, r2, g2, b2;
+	    int cf;
 
 	    Rast_init_colors(&colors);
 	    
@@ -1179,11 +1201,15 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 		 else if (field_use == GFU_BlueMax)
 		    bmaxc = indx;
 	    }
+	    
+	    /* guess color range 0, 1 or 0, 255 */
 
 	    if (minc >= 0 && maxc >= 0 && rminc >= 0 && rmaxc >= 0 &&
 		gminc >= 0 && gmaxc >= 0 && bminc >= 0 && bmaxc >= 0) {
+
+		cf = 1;
 		
-		/* fetch color rules */
+		/* analyze color rules */
 		for (indx = 0; indx < nrows; indx++) {
 		    val1 = GDALRATGetValueAsDouble(gdal_rat, indx, minc);
 		    val2 = GDALRATGetValueAsDouble(gdal_rat, indx, maxc);
@@ -1196,25 +1222,119 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 		    g2 = GDALRATGetValueAsDouble(gdal_rat, indx, gmaxc);
 		    b2 = GDALRATGetValueAsDouble(gdal_rat, indx, bmaxc);
 
-		    Rast_add_d_color_rule(&val1, r1, g1, b1,
-					  &val2, r2, g2, b2,
-					  &colors);
+		    if (r1 > 0.0 && r1 < 1.0)
+			cf = 255;
+		    else if (cf == 255 && r1 > 1.0) {
+			cf = 0;
+			break;
+		    }
+
+		    if (g1 > 0.0 && g1 < 1.0)
+			cf = 255;
+		    else if (cf == 255 && g1 > 1.0) {
+			cf = 0;
+			break;
+		    }
+
+		    if (b1 > 0.0 && b1 < 1.0)
+			cf = 255;
+		    else if (cf == 255 && b1 > 1.0) {
+			cf = 0;
+			break;
+		    }
+
+		    if (r2 > 0.0 && r2 < 1.0)
+			cf = 255;
+		    else if (cf == 255 && r2 > 1.0) {
+			cf = 0;
+			break;
+		    }
+
+		    if (g2 > 0.0 && g2 < 1.0)
+			cf = 255;
+		    else if (cf == 255 && g2 > 1.0) {
+			cf = 0;
+			break;
+		    }
+
+		    if (b2 > 0.0 && b2 < 1.0)
+			cf = 255;
+		    else if (cf == 255 && b2 > 1.0) {
+			cf = 0;
+			break;
+		    }
+		}
+
+		if (cf == 0)
+		    G_warning(_("Inconsistent color rules in RAT"));
+		else {
+		    /* fetch color rules */
+		    for (indx = 0; indx < nrows; indx++) {
+			val1 = GDALRATGetValueAsDouble(gdal_rat, indx, minc);
+			val2 = GDALRATGetValueAsDouble(gdal_rat, indx, maxc);
+
+			r1 = GDALRATGetValueAsDouble(gdal_rat, indx, rminc);
+			g1 = GDALRATGetValueAsDouble(gdal_rat, indx, gminc);
+			b1 = GDALRATGetValueAsDouble(gdal_rat, indx, bminc);
+
+			r2 = GDALRATGetValueAsDouble(gdal_rat, indx, rmaxc);
+			g2 = GDALRATGetValueAsDouble(gdal_rat, indx, gmaxc);
+			b2 = GDALRATGetValueAsDouble(gdal_rat, indx, bmaxc);
+
+			Rast_add_d_color_rule(&val1, r1 * cf, g1 * cf, b1 * cf,
+					      &val2, r2 * cf, g2 * cf, b2 * cf,
+					      &colors);
+		    }
 		}
 	    }
 	    else if (minmaxc >= 0 && rc >= 0 && gc >= 0 && bc >= 0) {
-		    
-		if (minc < 0)
-		    minc = maxc;
+		
+		cf = 1;
 
-		/* fetch color table */
+		/* analyze color table */
 		for (indx = 0; indx < nrows; indx++) {
 		    val1 = GDALRATGetValueAsDouble(gdal_rat, indx, minmaxc);
 
 		    r1 = GDALRATGetValueAsDouble(gdal_rat, indx, rc);
 		    g1 = GDALRATGetValueAsDouble(gdal_rat, indx, gc);
 		    b1 = GDALRATGetValueAsDouble(gdal_rat, indx, bc);
-		    
-		    Rast_set_d_color(val1, r1, g1, b1, &colors);
+
+
+		    if (r1 > 0.0 && r1 < 1.0)
+			cf = 255;
+		    else if (cf == 255 && r1 > 1.0) {
+			cf = 0;
+			break;
+		    }
+
+		    if (g1 > 0.0 && g1 < 1.0)
+			cf = 255;
+		    else if (cf == 255 && g1 > 1.0) {
+			cf = 0;
+			break;
+		    }
+
+		    if (b1 > 0.0 && b1 < 1.0)
+			cf = 255;
+		    else if (cf == 255 && b1 > 1.0) {
+			cf = 0;
+			break;
+		    }
+		}
+
+		if (cf == 0)
+		    G_warning(_("Inconsistent color rules in RAT"));
+		else {
+		    /* fetch color table */
+		    for (indx = 0; indx < nrows; indx++) {
+			val1 = GDALRATGetValueAsDouble(gdal_rat, indx, minmaxc);
+
+			r1 = GDALRATGetValueAsDouble(gdal_rat, indx, rc);
+			g1 = GDALRATGetValueAsDouble(gdal_rat, indx, gc);
+			b1 = GDALRATGetValueAsDouble(gdal_rat, indx, bc);
+			
+			Rast_set_d_color(val1, r1 * cf, g1 * cf, b1 * cf, &colors);
+		    }
 		}
 	    }
 	    
