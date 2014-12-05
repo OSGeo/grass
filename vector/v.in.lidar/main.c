@@ -8,7 +8,7 @@
  *
  * PURPOSE:      Import LiDAR LAS points
  *
- * COPYRIGHT:    (C) 2003 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2011-2014 by the GRASS Development Team
  *
  *               This program is free software under the
  *               GNU General Public License (>=v2).
@@ -635,7 +635,7 @@ int main(int argc, char *argv[])
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
     
-    G_important_message(_("Importing %d points..."), n_features);
+    G_important_message(_("Scanning %d points..."), n_features);
     while ((LAS_point = LASReader_GetNextPoint(LAS_reader)) != NULL) {
 	double x, y, z;
 
@@ -809,9 +809,9 @@ int main(int argc, char *argv[])
     if (n_outside)
 	G_message(_("%d input points were outside of the selected area"), n_outside);
     if (n_filtered)
-	G_message(_("%d input points were filtered by return number"), n_filtered);
+	G_message(_("%d input points were filtered out by return number"), n_filtered);
     if (n_class_filtered)
-        G_message(_("%d input points were filtered by class number"), n_class_filtered);
+        G_message(_("%d input points were filtered out by class number"), n_class_filtered);
 
     /* -------------------------------------------------------------------- */
     /*      Extend current window based on dataset.                         */
