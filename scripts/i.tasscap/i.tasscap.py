@@ -100,7 +100,7 @@ def calc1(out, bands, k1, k2, k3, k4, k5, k7, k0 = 0):
     grass.run_command('r.colors', map = out, color = 'grey')
 
 def calcN(outpre, bands, i, n):
-    grass.message(_("Satellite band-%d...") % n)
+    #grass.message(_("Landsat-%d...") % n)
     for j, p in enumerate(parms[i]):
 	out = "%s.%d" % (outpre, j + 1)
 	ord = ordinals[j]
@@ -138,9 +138,9 @@ def main():
     elif satellite == 'landsat7_etm':
         calcN(output_basename, bands, 2, 7)
     elif satellite == 'landsat8':
-        calcN(output_basename, bands, 2, 7)
+        calcN(output_basename, bands, 3, 8)
     elif satellite == 'modis':
-        calcN(output_basename, bands, 3, 7)
+        calcN(output_basename, bands, 4, 99)
     else:
         raise RuntimeError("Invalid satellite: " + satellite)
 
