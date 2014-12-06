@@ -15,6 +15,35 @@ for computing Discrete Fourier Transforms.
 
 <h2>EXAMPLE</h2>
 
+Generate surface using fractals in selected region, set color table and
+display with shade.
+
+<div class="code"><pre>
+g.region rast=elevation
+
+r.surf.fractal output=fractals
+
+r.colors map=fractals color=byr
+r.relief input=fractals output=fractals_shade
+
+d.mon wx0
+d.shade relief=fractals_shade drape=fractals b=50
+</pre></div>
+
+<center>
+<img src="r_surf_fractal_simple.png" alt="Artificial surface created with fractals"><br>
+Artificial surface created with fractals<br>
+</center>
+
+<!--
+# leave out d.mon wx0 when generating image
+mogrify -trim map.png
+optipng -o5 map.png
+mv map.png r_surf_fractal_simple.png
+-->
+
+Compare results when using different fractal dimensions:
+
 <div class="code"><pre>
 # D=2.0005
 g.region -dp
