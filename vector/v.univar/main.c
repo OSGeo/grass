@@ -209,7 +209,7 @@ int main(int argc, char *argv[])
     exit(EXIT_SUCCESS);
 }
 
-static void select_from_geometry(void)
+void select_from_geometry(void)
 {
     int i, j, k, ncats, *cats;
     int type;
@@ -331,7 +331,7 @@ static void select_from_geometry(void)
     }
 }
 
-static void select_from_database(void)
+void select_from_database(void)
 {
     int nrec, ctype, nlines, line, nareas, area;
     struct line_pnts *Points;
@@ -526,7 +526,7 @@ static void select_from_database(void)
     G_debug(2, "sum = %f total_size = %f", sum, total_size);
 }
 
-static void summary(void)
+void summary(void)
 {
     if (compatible) {
 	if (!geometry->answer && weight_flag->answer) {
