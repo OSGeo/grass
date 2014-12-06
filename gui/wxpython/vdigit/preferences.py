@@ -48,7 +48,7 @@ class VDigitSettingsDialog(wx.Dialog):
 
         # buttons
         btnApply = wx.Button(self, wx.ID_APPLY)
-        btnCancel = wx.Button(self, wx.ID_CANCEL)
+        btnCancel = wx.Button(self, wx.ID_CLOSE)
         btnSave = wx.Button(self, wx.ID_SAVE)
         btnSave.SetDefault()
 
@@ -62,16 +62,18 @@ class VDigitSettingsDialog(wx.Dialog):
         btnCancel.SetToolTipString(_("Close dialog and ignore changes"))
         
         # sizers
-        btnSizer = wx.StdDialogButtonSizer()
-        btnSizer.AddButton(btnCancel)
-        btnSizer.AddButton(btnApply)
-        btnSizer.AddButton(btnSave)
-        btnSizer.Realize()
+        btnSizer = wx.wx.BoxSizer(wx.HORIZONTAL)
+        btnSizer.Add(btnCancel, proportion = 0,
+                     flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
+        btnSizer.Add(btnApply, proportion = 0,
+                     flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
+        btnSizer.Add(btnSave, proportion = 0,
+                     flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)
         
         mainSizer = wx.BoxSizer(wx.VERTICAL)
         mainSizer.Add(item = notebook, proportion = 1, flag = wx.EXPAND | wx.ALL, border = 5)
         mainSizer.Add(item = btnSizer, proportion = 0,
-                      flag = wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border = 5)
+                      flag = wx.ALIGN_RIGHT, border = 5)
         
         self.Bind(wx.EVT_CLOSE, self.OnCancel)
         

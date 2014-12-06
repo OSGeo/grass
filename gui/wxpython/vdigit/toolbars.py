@@ -913,7 +913,7 @@ class VDigitToolbar(BaseToolbar):
         if self.combo:
             self.combo.SetValue(mapLayer.GetName())
         if 'map' in self.parent.toolbars:
-            self.parent.toolbars['map'].combo.SetValue (_('Digitize'))
+            self.parent.toolbars['map'].combo.SetValue (_('Vector digitizer'))
         
         # here was dead code to enable vdigit button in toolbar
         # with if to ignore iclass

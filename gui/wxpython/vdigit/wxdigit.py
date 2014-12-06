@@ -370,6 +370,13 @@ class IVDigit:
         return ret
     
     def _addChangeset(self):
+
+	# disable redo
+	changesetLast = len(self.changesets) - 1
+	if self.changesetCurrent < changesetLast and len(self.changesets) > 0:
+	    del self.changesets[self.changesetCurrent + 1:changesetLast + 1]
+            self.toolbar.EnableRedo(False)
+
         data = list()
         for i in range(Vect_get_num_updated_lines(self.poMapInfo) - 1, -1, -1):
             line = Vect_get_updated_line(self.poMapInfo, i)
@@ -398,8 +405,18 @@ class IVDigit:
         
         ret = 0
         actions = self.changesets[changeset]
-        
-        for action in actions:
+	
+        if undo:
+            firstaction = 0
+            lastaction = len(actions)
+            step = 1
+        else:
+            firstaction = len(actions) - 1
+            lastaction = -1
+            step = -1
+
+        for i in range(firstaction, lastaction, step):
+            action = actions[i]
             line = action['line']
             if action['offset'] > 0:
                 if Vect_line_alive(self.poMapInfo, line):
@@ -1548,13 +1565,11 @@ class IVDigit:
         if changesetLast < 0:
             return changesetLast
         
-        if level > 0 and self.changesetCurrent < 0:
-            self.changesetCurrent = 0
-        elif level < 0 and self.changesetCurrent > changesetLast:
+        if level < 0 and self.changesetCurrent > changesetLast:
             self.changesetCurrent = changesetLast
         elif level == 0:
             # 0 -> undo all
-            level = -1 * changesetLast + 1
+            level = -1 * self.changesetCurrent - 1
         
         Debug.msg(2, "Digit.Undo(): changeset_last=%d, changeset_current=%d, level=%d",
                   changesetLast, self.changesetCurrent, level)
@@ -1565,9 +1580,9 @@ class IVDigit:
             for changeset in range(self.changesetCurrent, self.changesetCurrent + level, -1):
                 self._applyChangeset(changeset, undo = True)
         elif level > 0: # redo 
-            if self.changesetCurrent + level > len(self.changesets):
+            if self.changesetCurrent + 1 > changesetLast:
                 return self.changesetCurrent
-            for changeset in range(self.changesetCurrent, self.changesetCurrent + level):
+            for changeset in range(self.changesetCurrent + 1, self.changesetCurrent + 1 + level):
                 self._applyChangeset(changeset, undo = False)
         
         self.changesetCurrent += level
@@ -1582,7 +1597,7 @@ class IVDigit:
         else:
             self.toolbar.EnableUndo(True)
         
-        if self.changesetCurrent <= changesetLast:
+        if self.changesetCurrent < changesetLast:
             self.toolbar.EnableRedo(True)
         else:
             self.toolbar.EnableRedo(False)
@@ -1766,13 +1781,9 @@ class IVDigit:
         if newline < 0:
             self._error.WriteLine()
             return (-1, None)
-        else:
-            fids.append(newline)
+
+	fids.append(newline)
         
-        # break at intersection
-        if self._settings['breakLines']:
-            self._breakLineAtIntersection(newline, self.poPoints)
-            
         # add centroids for left/right area
         if ftype & GV_AREA:
             left = right = -1
@@ -1802,13 +1813,13 @@ class IVDigit:
                 if Vect_get_point_in_area(self.poMapInfo, left, byref(x), byref(y)) == 0:
                     Vect_reset_line(bpoints)
                     Vect_append_point(bpoints, x.value, y.value, 0.0)
-                    newline = Vect_write_line(self.poMapInfo, GV_CENTROID,
+                    newc = Vect_write_line(self.poMapInfo, GV_CENTROID,
                                               bpoints, self.poCats)
-                    if newline < 0:
+                    if newc < 0:
                         self._error.WriteLine()
                         return (len(fids), fids)
                     else:
-                        fids.append(newline)
+                        fids.append(newc)
                     
             if right > 0 and \
                     Vect_get_area_centroid(self.poMapInfo, right) == 0:
@@ -1817,16 +1828,20 @@ class IVDigit:
                 if Vect_get_point_in_area(self.poMapInfo, right, byref(x), byref(y)) == 0:
                     Vect_reset_line(bpoints)
                     Vect_append_point(bpoints, x.value, y.value, 0.0)
-                    newline =  Vect_write_line(self.poMapInfo, GV_CENTROID,
+                    newc =  Vect_write_line(self.poMapInfo, GV_CENTROID,
                                                bpoints, self.poCats)
-                    if newline < 0:
+                    if newc < 0:
                         self._error.WriteLine()
                         return (len(fids, fids))
                     else:
-                        fids.append(newline)
+                        fids.append(newc)
                     
             Vect_destroy_line_struct(bpoints)
-        
+
+        # break line or boundary at intersection
+        if self._settings['breakLines']:
+            self._breakLineAtIntersection(newline, self.poPoints)
+
         self._addChangeset()
         
         if ftype & GV_AREA:
