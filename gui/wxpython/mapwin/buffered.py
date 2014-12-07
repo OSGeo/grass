@@ -232,10 +232,23 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
             self.popupCopyCoordinates = wx.NewId()
             self.Bind(wx.EVT_MENU, self.OnCopyCoordinates, id = self.popupCopyCoordinates)
         menu.Append(self.popupCopyCoordinates, _("Copy coordinates to clipboard"))
+        menu.AppendSeparator()
+        if not hasattr(self, "popupShowAllToolbars"):
+            self.popupShowAllToolbars = wx.NewId()
+            self.Bind(wx.EVT_MENU, self.OnShowAllToolbars, id = self.popupShowAllToolbars)
+        menu.Append(self.popupShowAllToolbars, _("Hide all toolbars") if self._giface.AreAllToolbarsShown() else _("Show all toolbars"))
+        if not hasattr(self, "popupShowStatusbar"):
+            self.popupShowStatusbar = wx.NewId()
+            self.Bind(wx.EVT_MENU, self.OnShowStatusbar, id = self.popupShowStatusbar)
+        menu.Append(self.popupShowStatusbar, _("Hide statusbar") if self._giface.IsStatusbarShown() else _("Show statusbar"))
 
         pos = self.ScreenToClient(event.GetPosition())
         idlist = self.pdc.FindObjects(pos[0], pos[1], self.hitradius)
+        separator = True
         if idlist and idlist[0] in (0, 1, 2):  # legend, scale bar, north arrow
+            if separator:
+                menu.AppendSeparator()
+                separator = False
             self._hide = wx.NewId()
             self.Bind(wx.EVT_MENU,
                       lambda evt: self.overlayHidden.emit(overlayId=idlist[0]),
@@ -1541,6 +1554,14 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
             do.SetText(str(e) + delim + str(n))
             wx.TheClipboard.SetData(do)
             wx.TheClipboard.Close()
+
+    def OnShowStatusbar(self, event):
+        """Show/hide statusbar"""
+        self._giface.ShowStatusbar(not self._giface.IsStatusbarShown())
+
+    def OnShowAllToolbars(self, event):
+        """Show/hide all toolbars"""
+        self._giface.ShowAllToolbars(not self._giface.AreAllToolbarsShown())
 
     def ClearLines(self, pdc = None):
         """Clears temporary drawn lines from PseudoDC

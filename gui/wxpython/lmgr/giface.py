@@ -194,7 +194,23 @@ class LayerManagerGrassInterface(object):
 
     def UpdateCmdHistory(self, cmd):
         self.lmgr.goutput.GetPrompt().UpdateCmdHistory(cmd)
+        
+    def ShowStatusbar(self, show=True):
+        self.lmgr.GetMapDisplay().statusbarManager.Show(show)
 
+    def IsStatusbarShown(self):
+        return self.lmgr.GetMapDisplay().statusbarManager.IsShown()
+
+    def ShowAllToolbars(self, show=True):
+        if not show: # hide
+            action = self.lmgr.GetMapDisplay().RemoveToolbar
+        else:
+            action = self.lmgr.GetMapDisplay().AddToolbar
+        for toolbar in self.lmgr.GetMapDisplay().GetToolbarNames():
+            action(toolbar)
+            
+    def AreAllToolbarsShown(self):
+        return self.lmgr.GetMapDisplay().GetMapToolbar().IsShown()
 
 class LayerManagerGrassInterfaceForMapDisplay(object):
     """Provides reference only to the given layer list (according to tree),
