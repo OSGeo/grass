@@ -4,9 +4,9 @@ A rhumbline (loxodrome) is a line following a constant angle of the
 compass (i.e., a line of constant direction). It crosses all meridians
 at the same angle, i.e. a path of constant bearing.
 
- <!-- There are 32
-points on the compass (points are roughly 11 degrees 15
-minutes apart). --> <em>d.rhumbline</em> displays the
+<!-- There are 32 points on the compass (points are roughly 11 degrees 15
+minutes apart). -->
+<em>d.rhumbline</em> displays the
 rhumbline joining any two user-specified points in the
 active frame on the user's graphics monitor.  The named
 coordinate locations must fall within the boundaries of the
@@ -20,11 +20,17 @@ non-interactively.
 
 <h2>EXAMPLE</h2>
 
+A geodesic line if shown over the political map of the world
+(demolocation dataset):
+
 <div class="code"><pre>
-g.region vect=world_political -p
+g.region vect=country_boundaries -p
 d.mon wx0
-d.vect world_political type=area
-d.rhumbline coor=55:58W,33:18S,26:43E,60:37N line_color=yellow text_color=red
+d.vect country_boundaries type=area
+d.rhumbline coordinates=55:58W,33:18S,26:43E,60:37N \
+  line_color=yellow
+# show additionally 10 degree grid
+d.grid 10
 </pre></div>
 
 <p><center>
@@ -32,19 +38,20 @@ d.rhumbline coor=55:58W,33:18S,26:43E,60:37N line_color=yellow text_color=red
 <i>Rhumbline (loxodrome)</i>
 </center>
 
-
 <h2>NOTES</h2>
 
-This program works only with longitude-latitude locations. 
+This program works only in GRASS locations with longitude/latitude 
+coordinate system. 
 
 <h2>SEE ALSO</h2>
 
-<em><a href="d.geodesic.html">d.geodesic</a></em>
+<em>
+<a href="d.geodesic.html">d.geodesic</a>,
+<a href="d.grid.html">d.grid</a>
+</em>
 
 <h2>AUTHOR</h2>
 
-Michael Shapiro, 
-U.S. Army Construction Engineering 
-Research Laboratory
+Michael Shapiro, U.S. Army Construction Engineering Research Laboratory
 
 <p><i>Last changed: $Date$</i>

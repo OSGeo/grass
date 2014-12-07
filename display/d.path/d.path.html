@@ -8,9 +8,13 @@ boundary lines.
 
 <h2>NOTE</h2>
 
-The user needs to display a vector map before using d.path. The 'from' and 'to'
-points are entered by mouse into the map displayed in the GRASS monitor, or
-if the <b>coor</b> option is used they can be specified non-interactively.
+<!-- TODO: apparently d.path does not render into wxGUI? -->
+The user needs to display a vector map before using d.path. If no graphics monitor
+is open, a file <tt>map.png</tt> is generated in the current directory.
+
+<p>
+The 'from' and 'to' points are entered by mouse into the map displayed in the GRASS monitor,
+or if the <b>coordinates</b> option is used they can be specified non-interactively.
 The actions bound to the mouse buttons are described in the terminal
 window when running the command.
 <p>To calculate shortest path non-interactively and save the path to a new vector
@@ -20,7 +24,7 @@ map, use the <em>v.net.path</em> module.
 
 Interactive shortest path routing on road network (North Carolina sample dataset):
 <div class="code"><pre>
-g.region vect=roadsmajor
+g.region vect=roadsmajor -p
 d.vect roadsmajor
 d.path roadsmajor coordinates=668646.15,224447.16,668348.83,235894.02
 </pre></div>
