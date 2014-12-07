@@ -3,7 +3,7 @@
 <em>d.mon</em> allows the user to start, select, list, release, and
 stop available graphics monitors.
 
-<h3>Start a monitor</h3> 
+<h3>Starting a monitor</h3> 
 
 In order to display on-screen GRASS graphics, the user must
 <b>start</b> and <b>select</b> a graphics monitor. By default,
@@ -23,7 +23,7 @@ explicitly <b>select</b> a monitor that has been started.
 unless it is stopped for some reason. A monitor may continue to run
 for any length of time, even when no GRASS session is being run.
 
-<h3>Stop a monitor</h3> 
+<h3>Stopping a monitor</h3> 
 
 A graphics monitor has two different types of status: monitor
 program <em>not running</em>, and monitor <em>running</em>. A monitor
@@ -31,7 +31,7 @@ that has been started and/or selected will be listed as running; a
 monitor that has been stopped (or not started) will be listed as not
 running.  The <b>-l</b> flag will list all currently running monitors.
 
-<h3>Select a monitor</h3> 
+<h3>Selecting a monitor</h3> 
 
 When the user <em>starts</em> a monitor, it is also
 (automatically) <em>selected</em> for graphics output unless the user
@@ -44,28 +44,38 @@ be selected for graphics output.
 <p>The user can run multiple graphics monitors by simply starting each of
 the graphics monitors he wishes to direct output to.
 
-<h3>Release a monitor</h3>
+<h3>Releasing (unselecting) a monitor</h3>
 
 Currently <em>selected</em> a monitor can be released by <b>-r</b>
 flag.
 
 <h2>EXAMPLES</h2>
 
+<h3>wx0 monitor</h3>
+
 To start interactive <em><a href="wxGUI.html#map-display-window">wxGUI map
-display</a></em>
+display</a></em>, run
 
 <div class="code"><pre>
 d.mon start=wx0
 </pre></div>
 
-All data will be rendered on <tt>wx0</tt> display. New monitor can be
-started (and selected ) by
+All data will be rendered on <tt>wx0</tt> display.
+
+<h3>CAIRO file renderer monitor</h3>
+
+A new CAIRO monitor can be started (and selected) by
 
 <div class="code"><pre>
 d.mon start=cairo output=out.pdf
 </pre></div>
 
-To list running monitors
+From this moment all data will be rendered into
+file <tt>output.pdf</tt>. 
+
+<h3>List running monitors</h3>
+
+To list running monitors, use
 
 <div class="code"><pre>
 d.mon -l
@@ -75,6 +85,8 @@ wx0
 cairo
 </pre></div>
 
+<h3>Show currently selected monitor</h3>
+
 To determine currently selected monitor
 
 <div class="code"><pre>
@@ -83,15 +95,18 @@ d.mon -p
 cairo
 </pre></div>
 
-From this moment all data will be rendered into
-file <tt>output.pdf</tt>. To switch back to interactive wxGUI monitor
+<h3>Switching between monitors</h3>
 
+To switch back to interactive, earlier started and still running wxGUI
+monitor
 
 <div class="code"><pre>
 d.mon select=wx0
 </pre></div>
 
-To close this monitor
+<h3>Stopping a monitor</h3> 
+
+To close the wxGUI monitor
 
 <div class="code"><pre>
 d.mon stop=wx0
@@ -100,11 +115,12 @@ d.mon stop=wx0
 <h2>SEE ALSO</h2>
 
 <em>
-  <a href="d.erase.html">d.erase</a>,
-  <a href="d.redraw.html">d.redraw</a>,
-  <a href="d.rast.html">d.rast</a>,
-  <a href="d.vect.html">d.vect</a>
-</em>
+<a href="d.erase.html">d.erase</a>,
+<a href="d.redraw.html">d.redraw</a>,
+<a href="d.rast.html">d.rast</a>,
+<a href="d.vect.html">d.vect</a>,
+<a href="wxGUI.html">wxGUI</a>
+<em>
 
 <p>
 See also
