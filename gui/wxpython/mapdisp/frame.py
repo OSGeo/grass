@@ -298,9 +298,10 @@ class MapFrame(SingleMapFrame):
         elif self._mgr.GetPane('3d').IsShown():
             self._mgr.GetPane('3d').Hide()
         self._mgr.GetPane('vdigit').Show()
-        self.toolbars['vdigit'] = VDigitToolbar(parent=self, toolSwitcher=self._toolSwitcher,
-                                                MapWindow = self.MapWindow,
-                                                digitClass=VDigit, giface=self._giface)
+        if 'vdigit' not in self.toolbars:
+            self.toolbars['vdigit'] = VDigitToolbar(parent=self, toolSwitcher=self._toolSwitcher,
+                                                    MapWindow = self.MapWindow,
+                                                    digitClass=VDigit, giface=self._giface)
         self.MapWindowVDigit.SetToolbar(self.toolbars['vdigit'])
         
         self._mgr.AddPane(self.toolbars['vdigit'],
@@ -463,7 +464,8 @@ class MapFrame(SingleMapFrame):
         """
         # default toolbar
         if name == "map":
-            self.toolbars['map'] = MapToolbar(self, toolSwitcher=self._toolSwitcher)
+            if 'map' not in self.toolbars:
+                self.toolbars['map'] = MapToolbar(self, toolSwitcher=self._toolSwitcher)
             
             self._mgr.AddPane(self.toolbars['map'],
                               wx.aui.AuiPaneInfo().
@@ -484,20 +486,19 @@ class MapFrame(SingleMapFrame):
          
         self._mgr.Update()
         
-    def RemoveToolbar (self, name):
+    def RemoveToolbar (self, name, destroy=False):
         """Removes defined toolbar from the window
 
-        .. todo::
-            Only hide, activate by calling AddToolbar()
+        :param name toolbar to remove
+        :param destroy True to destroy otherwise toolbar is only hidden
         """
-        # cannot hide main toolbar
-        if name == "map":
-            return
-        
         self._mgr.DetachPane(self.toolbars[name])
         self._toolSwitcher.RemoveToolbarFromGroup('mouseUse', self.toolbars[name])
-        self.toolbars[name].Destroy()
-        self.toolbars.pop(name)
+        if destroy:
+            self.toolbars[name].Destroy()
+            self.toolbars.pop(name)
+        else:
+            self.toolbars[name].Hide()
         
         if name == 'vdigit':
             self._mgr.GetPane('vdigit').Hide()
@@ -1412,8 +1413,12 @@ class MapFrame(SingleMapFrame):
 
     def GetMapToolbar(self):
         """Returns toolbar with zooming tools"""
-        return self.toolbars['map']
+        return self.toolbars['map'] if 'map' in self.toolbars else None
 
+    def GetToolbarNames(self):
+        """Return toolbar names"""
+        return self.toolbars.keys()
+    
     def OnVNet(self, event):
         """Dialog for v.net* modules 
         """

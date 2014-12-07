@@ -319,7 +319,15 @@ class SbManager:
         self.progressbar.SetValue(value)
         if text:
             self.statusbar.SetStatusText(text)
-        
+
+    def Show(self, show=True):
+        """Show/hide statusbar"""
+        self.statusbar.Show(show)
+
+    def IsShown(self):
+        """Check if statusbar is shown"""
+        return self.statusbar.IsShown()
+
 class SbItem:
     """Base class for statusbar items.
     
