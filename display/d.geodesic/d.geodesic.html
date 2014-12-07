@@ -26,12 +26,17 @@ the great circle distance is not displayed.
 
 <h2>EXAMPLE</h2>
 
+A geodesic line if shown over the political map of the world
+(demolocation dataset):
+
 <div class="code"><pre>
-g.region vect=world_political -p
+g.region vect=country_boundaries -p
 d.mon wx0
-d.vect world_political type=area
+d.vect country_boundaries type=area
 d.geodesic coordinates=55:58W,33:18S,26:43E,60:37N \
   line_color=yellow text_color=red
+# show additionally 10 degree grid
+d.grid 10
 </pre></div>
 
 <p><center>
@@ -41,12 +46,15 @@ d.geodesic coordinates=55:58W,33:18S,26:43E,60:37N \
 
 <h2>NOTES</h2>
 
-This program works only with GRASS locations using a longitude/latitude 
+This program works only in GRASS locations with longitude/latitude 
 coordinate system. 
 
 <h2>SEE ALSO</h2>
 
-<em><a href="d.rhumbline.html">d.rhumbline</a></em>
+<em>
+<a href="d.rhumbline.html">d.rhumbline</a>,
+<a href="d.grid.html">d.grid</a>
+</em>
 
 <h2>AUTHOR</h2>
 
