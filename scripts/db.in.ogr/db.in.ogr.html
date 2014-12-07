@@ -1,8 +1,9 @@
 <h2>DESCRIPTION</h2>
 
 <em>db.in.ogr</em> imports attribute tables in various formats as
-supported by the <a href="http://gdal.org/ogr">OGR library</a> on the local system (DBF, CSV, PostgreSQL,
-SQLite, MySQL, ODBC, etc.). Optionally a unique <b>key</b> (ID) column can be
+supported by the <a href="http://gdal.org/ogr">OGR library</a>
+on the local system (DBF, CSV, PostgreSQL, SQLite, MySQL, ODBC,
+etc.). Optionally a unique <b>key</b> (ID) column can be
 added to the table.
 
 <h2>EXAMPLES</h2>
@@ -14,7 +15,7 @@ columns through a descriptive file with same name as the CSV file, but .csvt ext
 (see details <a href="http://www.gdal.org/ogr/drv_csv.html">here</a>).
 
 <div class="code"><pre>
-# NOTE: create koeppen_gridcode.csvt first for type recognition
+# NOTE: create koeppen_gridcode.csvt first for automated type recognition
 db.in.ogr input=koeppen_gridcode.csv output=koeppen_gridcode
 db.select koeppen_gridcode
 </pre></div>
@@ -60,8 +61,8 @@ db.in.ogr input=address.xls db_table=address_data
 <h2>SEE ALSO</h2>
 
 <em>
-  <a href="v.in.ogr.html">v.in.ogr</a>,
-  <a href="v.in.db.html">v.in.db</a>
+<a href="v.in.ogr.html">v.in.ogr</a>,
+<a href="v.in.db.html">v.in.db</a>
 </em>
 
 <p>

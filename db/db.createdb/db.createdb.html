@@ -13,24 +13,29 @@ supported.
 
 <h3>Create a new SQLite file-based database</h3>
 
+Note that the standard GRASS GIS SQLite database is by default
+generated in the user's current mapset. This example shows an
+out-of-mapset database file creation:
+
 <div class="code"><pre>
 db.createdb driver=sqlite database=/opt/sqlite.db
 </pre></div>
 
 <h3>Create a new PostgreSQL database</h3>
 
-Create a new PostgreSQL database (if PostgreSQL connection is
-established through <em>odbc</em> driver):
-
-<div class="code"><pre>
-db.createdb driver=odbc database=grassdb
-</pre></div>
-
-Create a new PostgreSQL database (if PostgreSQL connection is established
-through <em>pg</em> driver):
+Create a new PostgreSQL database (after the PostgreSQL connection got
+established through the <em>pg</em> driver):
 
 <div class="code"><pre>
 db.createdb driver=pg database=grassdb
+</pre></div>
+
+<p>
+Create a new PostgreSQL database (after the PostgreSQL connection got
+established through the <em>odbc</em> driver):
+
+<div class="code"><pre>
+db.createdb driver=odbc database=grassdb
 </pre></div>
 
 <h2>TODO</h2>
@@ -40,10 +45,11 @@ Support other database drivers, too.
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="db.dropdb.html">db.dropdb</a>,
 <a href="db.columns.html">db.columns</a>,
+<a href="db.connect.html">db.connect</a>,
 <a href="db.describe.html">db.describe</a>,
 <a href="db.drivers.html">db.drivers</a>,
+<a href="db.dropdb.html">db.dropdb</a>,
 <a href="db.droptable.html">db.droptable</a>,
 <a href="db.execute.html">db.execute</a>,
 <a href="db.login.html">db.login</a>,
