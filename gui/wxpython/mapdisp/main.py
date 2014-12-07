@@ -79,7 +79,10 @@ class DMonMap(Map):
             self.maskfileCmd = os.path.splitext(mapfile)[0] + '.pgm'
 
         # generated file for g.pnmcomp output for rendering the map
-        self.mapfile = monFile['map'] + '.ppm'
+        self.mapfile = monFile['map']
+        if os.path.splitext(self.mapfile)[1] != '.ppm':
+            self.mapfile += '.ppm'
+        
         # signal sent when d.out.file/d.to.rast appears in cmd file, attribute is cmd
         self.saveToFile = Signal('DMonMap.saveToFile')
         self.dToRast = Signal('DMonMap.dToRast')
