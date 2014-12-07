@@ -132,7 +132,7 @@ int start_mon(const char *name, const char *output, int select,
     if (select)
 	G_setenv("MONITOR", name);
     
-    if (strncmp(name, "wx", 2) == 0) /* use G_strncasecmp() instead */
+    if (strncmp(name, "wx", 2) == 0) 
 	start_wx(name, tempfile, env_value, cmd_value, 
 		 width, height);
     else
