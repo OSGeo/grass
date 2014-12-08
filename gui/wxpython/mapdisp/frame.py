@@ -196,11 +196,6 @@ class MapFrame(SingleMapFrame):
         # used by Nviz (3D display mode)
         self.MapWindow3D = None 
 
-        #
-        # initialize region values
-        #
-        self._initMap(Map = self.Map) 
-
         self.toolbars['map'].SelectDefault()
         #
         # Bind various events
