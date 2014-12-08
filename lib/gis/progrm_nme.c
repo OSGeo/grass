@@ -35,6 +35,8 @@ const char *G_program_name(void)
   Program name set to name (name will be returned by
   G_program_name*())
 
+  Extension like .exe or .py is stripped from program name.
+
   \param s program name
 */
 void G_set_program_name(const char *s)
@@ -51,6 +53,7 @@ void G_set_program_name(const char *s)
     }
     temp = G_store(s);
     G_basename(temp, "exe");
+    G_basename(temp, "py");
     name = G_store(temp);
     G_free(temp);
 }
