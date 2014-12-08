@@ -232,6 +232,8 @@ class MapFrame(SingleMapFrame):
 
         self.measureController = None
 
+        self._resize()
+     
     def GetMapWindow(self):
         return self.MapWindow
 

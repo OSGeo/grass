@@ -119,6 +119,14 @@ class MapFrameBase(wx.Frame):
         Map.region = Map.GetRegion() # g.region -upgc
         # self.Map.SetRegion() # adjust region to match display window
 
+    def _resize(self):
+        Debug.msg(1, "MapFrame._resize():")
+        wm, hw = self.MapWindow.GetClientSize()
+        wf, hf = self.GetSize()
+        dw = wf - wm
+        dh = hf - hw
+        self.SetSize((wf + dw, hf + dh))
+
     def _onToggleTool(self):
         self.GetWindow().UnregisterAllHandlers()
 
