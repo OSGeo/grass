@@ -9,7 +9,7 @@ GRASS_PDFDIR=		$(DOCSDIR)/pdf
 
 htmldocs-single:
 	$(MAKE) -C . htmldox-single
-	for dir in lib gui/wxpython ; do \
+	for dir in lib ; do \
 	  $(MAKE) -C $$dir htmldox-single ; \
 	done
 

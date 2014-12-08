@@ -45,6 +45,7 @@ SUBDIRS = \
 	manage
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
+include $(MODULE_TOPDIR)/include/Make/Doxygen.make
 
 default: subdirs
 
