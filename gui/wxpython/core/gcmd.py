@@ -689,7 +689,6 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False,
         messageFormat = os.getenv('GRASS_MESSAGE_FORMAT', 'gui')
         os.environ['GRASS_MESSAGE_FORMAT'] = 'standard'
     
-    Debug.msg(2, "gcmd.RunCommand(): command started")
     start = time.time()
     
     ps = grass.start_command(prog, flags, overwrite, quiet, verbose, **kwargs)
@@ -699,7 +698,6 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False,
         ps.stdin.close()
         ps.stdin = None
     
-    Debug.msg(3, "gcmd.RunCommand(): decoding string")
     stdout, stderr = map(DecodeString, ps.communicate())
     
     if parent: # restore previous settings
@@ -709,7 +707,6 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False,
     Debug.msg(1, "gcmd.RunCommand(): get return code %d (%.6f sec)" % \
                   (ret, (time.time() - start)))
     
-    Debug.msg(3, "gcmd.RunCommand(): print error")
     if ret != 0:
         if stderr:
             Debug.msg(2, "gcmd.RunCommand(): error %s" % stderr)
@@ -721,7 +718,6 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False,
                    caption = _("Error in %s") % prog,
                    message = stderr)
     
-    Debug.msg(3, "gcmd.RunCommand(): print read error")
     if not read:
         if not getErrorMsg:
             return ret
@@ -729,9 +725,9 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False,
             return ret, _formatMsg(stderr)
 
     if stdout:
-        Debug.msg(2, "gcmd.RunCommand(): return stdout\n'%s'" % stdout)
+        Debug.msg(3, "gcmd.RunCommand(): return stdout\n'%s'" % stdout)
     else:
-        Debug.msg(2, "gcmd.RunCommand(): return stdout = None")
+        Debug.msg(3, "gcmd.RunCommand(): return stdout = None")
     
     if parse:
         stdout = parse(stdout)
@@ -739,11 +735,9 @@ def RunCommand(prog, flags = "", overwrite = False, quiet = False,
     if not getErrorMsg:
         return stdout
     
-    Debug.msg(2, "gcmd.RunCommand(): return ret, stdout")
     if read and getErrorMsg:
         return ret, stdout, _formatMsg(stderr)
     
-    Debug.msg(2, "gcmd.RunCommand(): return result")
     return stdout, _formatMsg(stderr)
 
 def GetDefaultEncoding(forceUTF8 = False):
