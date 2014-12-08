@@ -389,6 +389,7 @@ class Map(object):
 
         :param gisrc: alternative gisrc (used eg. by georectifier)
         """
+        Debug.msg (1, "Map.__init__(): %s" % gisrc)
         # region/extent settigns
         self.wind      = dict() # WIND settings (wind file)
         self.region    = dict() # region settings (g.region)

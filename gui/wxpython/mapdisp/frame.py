@@ -68,7 +68,7 @@ class MapFrame(SingleMapFrame):
     """
     def __init__(self, parent, giface, title = _("GRASS GIS - Map display"),
                  toolbars = ["map"], tree = None, notebook = None, lmgr = None,
-                 page = None, Map = Map(), auimgr = None, name = 'MapWindow', **kwargs):
+                 page = None, Map = None, auimgr = None, name = 'MapWindow', **kwargs):
         """Main map display window with toolbars, statusbar and
         2D map window, 3D map window and digitizer.
         
@@ -83,7 +83,7 @@ class MapFrame(SingleMapFrame):
         :param kwargs: wx.Frame attributes
         """
         SingleMapFrame.__init__(self, parent = parent, title = title,
-                              Map = Map, auimgr = auimgr, name = name, **kwargs)
+                                Map = Map, auimgr = auimgr, name = name, **kwargs)
         
         self._giface = giface
         # Layer Manager object
