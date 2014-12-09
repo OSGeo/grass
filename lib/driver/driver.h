@@ -60,56 +60,56 @@ extern void LIB_init(const struct driver *drv);
 
 /* Commands */
 
-/* Box.c */
+/* box.c */
 extern void COM_Box_abs(double, double, double, double);
 
-/* Color.c */
+/* color.c */
 extern void COM_Color_RGB(unsigned char, unsigned char, unsigned char);
 extern void COM_Standard_color(int);
 
-/* Erase.c */
+/* erase.c */
 extern void COM_Erase(void);
 
-/* Font.c */
+/* font.c */
 extern void COM_Set_font(const char *);
 extern void COM_Set_encoding(const char *);
 extern void COM_Font_list(char ***, int *);
 extern void COM_Font_info(char ***, int *);
 
-/* Get_t_box.c */
+/* get_t_box.c */
 extern void COM_Get_text_box(const char *, double *, double *, double *, double *);
 
-/* Graph.c */
+/* graph.c */
 extern int COM_Graph_set(void);
 extern void COM_Graph_close(void);
 
-/* Line_width.c */
+/* line_width.c */
 extern void COM_Line_width(double);
 
-/* Move.c */
+/* move.c */
 extern void COM_Pos_abs(double, double);
 
-/* Raster.c */
+/* raster.c */
 extern void COM_begin_raster(int, int[2][2], double[2][2]);
 extern int COM_raster(int, int, const unsigned char *,
 		      const unsigned char *, const unsigned char *,
 		      const unsigned char *);
 extern void COM_end_raster(void);
 
-/* Set_window.c */
+/* set_window.c */
 extern void COM_Set_window(double, double, double, double);
 extern void COM_Get_window(double *, double *, double *, double *);
 
-/* Text.c */
+/* text.c */
 extern void COM_Text(const char *);
 
-/* Text_size.c */
+/* text_size.c */
 extern void COM_Text_size(double, double);
 extern void COM_Text_rotation(double);
 
 /* Driver Operations */
 
-/* Draw.c */
+/* draw.c */
 extern void COM_Bitmap(int, int, int, const unsigned char *);
 extern void COM_Begin(void);
 extern void COM_Move(double, double);
