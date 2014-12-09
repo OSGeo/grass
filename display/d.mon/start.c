@@ -14,16 +14,13 @@ static void start_wx(const char *, const char *, const char *,
 void start(const char *name, const char *output)
 {
     char *env_name;
-    const char *output_path;
 
-    output_path = realpath(output, NULL);
-    if (!output_path) {
-        G_debug(1, "Unable to get full path for '%s'", output);
-        output_path = output;
-    }
+    if (!output)
+	return;
+
     env_name = NULL;
     G_asprintf(&env_name, "MONITOR_%s_MAPFILE", G_store_upper(name));
-    G_setenv(env_name, output_path);
+    G_setenv(env_name, output);
 }
 
 /* start wxGUI display monitor */
@@ -76,7 +73,6 @@ int start_mon(const char *name, const char *output, int select,
         G_fatal_error(_("Monitor <%s> already running"), name);
     }
 
-    /* write env file */
     tempfile = G_tempfile();
 
     u_name = G_store_upper(name);
