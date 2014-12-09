@@ -11,14 +11,30 @@ when used with <em>separator=comma</em>.
 
 <h2>EXAMPLES</h2>
 
+List all raster maps as continuous, sorted list:
+<div class="code"><pre>
+g.list type=rast
+</pre></div>
+
+List all vector maps as continuous, sorted list with MAPSET info (i.e.
+fully-qualified map names):
+<div class="code"><pre>
+g.list type=vect -m
+</pre></div>
+
+List all raster and vector maps ordered by mapset:
+<div class="code"><pre>
+g.list type=rast -p
+</pre></div>
+
+List all raster and vector maps as continuous, sorted list:
+<div class="code"><pre>
+g.list type=rast,vect
+</pre></div>
+
 List all available GRASS data base files:
 <div class="code"><pre>
 g.list type=all
-</pre></div>
-
-List all raster and vector maps:
-<div class="code"><pre>
-g.list type=rast,vect
 </pre></div>
 
 <h3>Mapset search path</h3>
@@ -29,7 +45,7 @@ data files in the mapsets which are included in the search path
 see <tt>g.mapsets -p</tt>.
 
 <div class="code"><pre>
-g.list rast
+g.list rast -p
 
 raster map(s) available in mapset &lt;user1&gt;:
 dmt
@@ -44,16 +60,16 @@ the current mapset:
 
 <div class="code"><pre>
 g.list rast mapset=.
-raster map(s) available in mapset &lt;user1&gt;:
-dmt
+...
 </pre></div>
 
+<!-- better quote * as "*"? -->
 Similarly <b>mapset</b>=* (one asterisk) prints data files from all
 available mapsets also including those which are not listed in the
 current search path (see <tt>g.mapsets -l</tt>).
 
 <div class="code"><pre>
-g.list rast mapset=*
+g.list rast mapset=* -p
 
 raster map(s) available in mapset &lt;landsat&gt;:
 lsat5_1987_10
@@ -181,6 +197,8 @@ regardless of their region.
 
 Huidae Cho<br>
 grass4u@gmail.com
+<br>
+based on general/manage/cmd/list.c by Michael Shapiro
 
 <p>
 <i>Last changed: $Date$</i>

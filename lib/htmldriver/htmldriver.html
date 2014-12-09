@@ -133,7 +133,8 @@ d.vect map=roswell fillcolor=yellow linecolor=blue
 d.vect map=states  color=green
 d.vect map=roads   color=black
 d.mon stop=png
-<!-- ????  FIXME -->
+
+<!-- ????  FIXME and the ppm stuff looks overly complicated -->
 # make the region the same as the newly created cell for ppm export
 g.region save=saved.reg
 g.region raster=D_cell
@@ -172,9 +173,9 @@ will need to edit the map names. The HTML driver creates its map
 with the name
 <tt>map</tt>. A small sed script can easily change the map name:
 
-<pre>
-  sed -e 's/NAME="map"/NAME="foomap"/' &lt; htmlmap &gt; foomap.html
-</pre>
+<div class="code"><pre>
+sed -e 's/NAME="map"/NAME="foomap"/' &lt; htmlmap &gt; foomap.html
+</pre></div>
 
 <h2>SEE ALSO</h2>
 

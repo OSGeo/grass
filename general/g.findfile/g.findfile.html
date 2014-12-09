@@ -33,7 +33,9 @@ as follows:
 <div class="code"><pre>
 eval `g.findfile element=name mapset=name file=name`
 </pre></div>
-<p>For example (raster map):
+
+<p>
+For example (raster map):
 <div class="code"><pre>
 eval `g.findfile element=cell file=elevation`
 </pre></div>
@@ -52,28 +54,31 @@ The following is a way to test for this case:
 <div class="code"><pre>
 if [ ! "$file" ]
 then
-	exit
+	exit 1
 fi
 </pre></div>
 
 <h2>PYTHON</h2>
 
-See <em><a href="http://grass.osgeo.org/programming7/pythonlib.html">Python
+See <em><a href="http://grass.osgeo.org/grass70/manuals/libpython/">Python
 Scripting Library</a></em> for more info.
-
+<p>
+Note: The Python shell in the <em>wxGUI</em> can be used for entering the
+following code:
+<p>
 <div class="code"><pre>
-import grass.script as grass
+import grass.script as gcore
     
-grass.find_file('elevation', element = 'cell')
+gcore.find_file('elevation', element = 'cell')
 </pre></div>
 
 <h2>SEE ALSO</h2>
 
 <em>
-  <a href="g.filename.html">g.filename</a>,
-  <a href="g.gisenv.html">g.gisenv</a>,
-  <a href="g.mapsets.html">g.mapsets</a>,
-  <a href="g.parser.html">g.parser</a>
+<a href="g.filename.html">g.filename</a>,
+<a href="g.gisenv.html">g.gisenv</a>,
+<a href="g.mapsets.html">g.mapsets</a>,
+<a href="g.parser.html">g.parser</a>
 </em>
 
 <h2>AUTHOR</h2>

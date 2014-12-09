@@ -5,8 +5,8 @@ the full file name, including it's path, for mapset elements, like raster,
 vector and site maps, region definitions and imagery groups.
 <p>The list of element names to search for is not fixed; any subdirectory of the
 mapset directory is a valid element name.
-<p>However, the user can find the list of standard GRASS element names in
-the file $GISBASE/etc/element_list. This is the file which
+<p>However, the user can find the list of standard GRASS GIS element names in
+the file <tt>$GISBASE/etc/element_list</tt>. This is the file which
 g.remove/g.rename/g.copy use to determine which files need to be
 deleted/renamed/copied for a given entity type.
 
@@ -50,14 +50,14 @@ be set in the <em>/bin/sh</em> as follows:
 <dl>
 <dd>
 <div class="code"><pre>
-eval `g.filename element=<em>name</em> mapset=<em>name</em> file=<em>name</em>`
+eval `g.filename element=name mapset=name file=name`
 </pre></div>
 </dl>
 
 
 <h2>NOTES</h2>
 
-This routine generates the filename, but does not care if the file (or mapset
+This module generates the filename, but does not care if the file (or mapset
 or element) exists or not. This feature allows shell scripts to create new data
 base files as well as use existing ones.
 

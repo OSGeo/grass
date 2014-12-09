@@ -1,17 +1,17 @@
 <h2>DESCRIPTION</h2>
 
 <em>g.version</em> prints to standard output the GRASS version number,
-date, the GRASS copyright (<b>-c</b> flag), and GRASS build information
+date, the GRASS GIS copyright (<b>-c</b> flag), and GRASS build information
 (<b>-b</b> flag).
 
 <h2>NOTES</h2>
 
 This program requires no command line arguments; the user simply types
 <em>g.version</em> on the command line to see the version number and
-date of the GRASS software currently being run by the user.
+date of the GRASS GIS software currently being run by the user.
 
 <p>
-Information about GRASS
+Information about GRASS GIS
 core <a href="http://grass.osgeo.org/programming7/gislib.html">GIS
 Library</a> can be printed by <b>-r</b> flag.
 
@@ -27,9 +27,9 @@ from <a href="http://grasswiki.osgeo.org/wiki/GRASS_Python_Scripting_Library">Py
 Scripting Library</a>.
 
 <div class="code"><pre>
-import grass.script as grass
+import grass.script as gcore
 
-print grass.version()
+print gcore.version()
 </pre></div>
 
 <h2>EXAMPLES</h2>
@@ -38,7 +38,7 @@ print grass.version()
 <div class="code"><pre>
 g.version 
 
-GRASS 7.0.svn (2012)
+GRASS 7.0.0svn (2014)
 </pre></div>
 
 <h3>GIS Library info</h3>
@@ -46,24 +46,26 @@ GRASS 7.0.svn (2012)
 <div class="code"><pre>
 g.version -r
 
-GRASS 7.0.svn (2012)
-libgis Revision: 52468 
-libgis Date: 2012-07-27 22:53:30 +0200 (Fri, 27 Jul 2012) 
+GRASS 7.0.0svn (2014)
+libgis Revision: 63222 
+libgis Date: 2014-11-28 10:04:17 +0100 (Fri, 28 Nov 2014) 
 </pre></div>
 
 <h3>Full info in shell script style</h3>
 <div class="code"><pre>
 g.version -rge
 
-version=7.0.svn
-revision=53670
-date=2012
-libgis_revision=52468 
-libgis_date="2012-07-27 22:53:30 +0200 (Fri, 27 Jul 2012) "
+version=7.0.0svn
+date=2014
+revision=63285M
+build_date=2014-12-03
+build_platform=x86_64-unknown-linux-gnu
+libgis_revision=63222 
+libgis_date="2014-11-28 10:04:17 +0100 (Fri, 28 Nov 2014) "
 proj4=4.8.0
-gdal=1.9.2
-geos=3.3.5
-sqlite=3.7.14.1
+gdal=1.10.1
+geos=3.4.2
+sqlite=3.8.7
 </pre></div>
 
 <h2>AUTHORS</h2>
