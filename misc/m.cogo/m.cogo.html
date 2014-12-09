@@ -107,19 +107,19 @@ P016 S 88:44:56 W 18.7164
 <p>
 Round trip:
 <div class="code"><pre>
-   m.cogo -l in=cogo.dat | m.cogo -rl in="-"
+   m.cogo -l input=cogo.dat | m.cogo -rl in="-"
 </pre></div>
 
 <p>
 Import as a vector points map:
 <div class="code"><pre>
-   m.cogo -l in=cogo.dat | v.in.ascii out=cogo_points x=1 y=2 separator=space
+   m.cogo -l input=cogo.dat | v.in.ascii output=cogo_points x=1 y=2 separator=space
 </pre></div>
 
 <p>
 Shell script to import as a vector line map:
 <div class="code"><pre>
-   m.cogo -l in=cogo.dat | tac | awk '
+   m.cogo -l input=cogo.dat | tac | awk '
        BEGIN { FS=" " ; R=0 }
        $1~/\d*\.\d*/ { printf(" %.8f %.8f\n", $1, $2) ; ++R }
        END { printf("L %d\n", R) }' | tac | \
@@ -130,10 +130,10 @@ Shell script to import as a vector line map:
 Convert that lines map into an area:
 <div class="code"><pre>
    # Add the -c flag to the above example to close the loop:
-   m.cogo -l -c in=cogo.dat | ...
+   m.cogo -l -c input=cogo.dat | ...
        ...
    v.type input=cogo_line output=cogo_boundary from_type=line to_type=boundary
-   v.centroids in=cogo_boundary out=cogo_area
+   v.centroids input=cogo_boundary output=cogo_area
 </pre></div>
 
 If necessary, snap the boundary closed with the <em>v.clean</em> module.

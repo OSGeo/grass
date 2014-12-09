@@ -155,7 +155,7 @@ i.group group=my_lsat7_2002 subgroup=my_lsat7_2002 \
 
 # Now digitize training areas "training" with the digitizer
 # and convert to raster model with v.to.rast
-v.to.rast training out=training use=cat labelcolumn=label
+v.to.rast input=training output=training use=cat label_column=label
 
 # calculate statistics
 i.gensigset trainingmap=training group=my_lsat7_2002 subgroup=my_lsat7_2002 \

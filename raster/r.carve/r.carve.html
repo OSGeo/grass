@@ -1,16 +1,16 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.carve</em> accepts vector stream data as input, transforms them to
-raster, and subtracts a defaultdepth+additionaldepth from a DEM. If
+raster, and subtracts a default-depth + additional-depth from a DEM. If
 the given width is more than 1 cell, it will carve the stream with the
-given width. With the -n flag it should eliminate all flat cells within
+given width. With the <b>-n</b> flag it should eliminate all flat cells within
 the stream, so when and if the water gets into the stream it will
 flow. The <em>points</em> option generates x,y,z for points which define the stream
 with the z-value of the bottom of the carved-in stream. These points
 can then be combined with contours to interpolate a new DEM with
 better representation of valleys.
 
-<h2>NOTE</h2>
+<h2>NOTES</h2>
 
 <em>r.carve</em> does not create a depressionless DEM because many
 depressions are in flat areas and not in the streams.
@@ -18,9 +18,11 @@ depressions are in flat areas and not in the streams.
 
 <h2>EXAMPLE</h2>
 
+North Carolina sample dataset:
+
 <div class="code"><pre>
-g.region rast=elevation.10m -p
-r.carve rast=elevation.10m vect=streams out=carve_dem width=20 depth=5
+g.region rast=elevation -p
+r.carve rast=elevation vect=streams out=carve_dem width=20 depth=5
 </pre></div>
 
 <h2>BUGS</h2>
@@ -37,9 +39,12 @@ areas</a>, by Helena Mitasova, Lubos Mitas, William M. Brown, Douglas
 M.  Johnston, GMSL (Report for CERL 1999)
 
 <h2>SEE ALSO</h2>
-<em><a href="r.flow.html">r.flow</a></em>,
-<em><a href="r.fill.dir.html">r.fill.dir</a></em>,
-<em><a href="r.watershed.html">r.watershed</a></em> 
+
+<em>
+<a href="r.flow.html">r.flow</a>,
+<a href="r.fill.dir.html">r.fill.dir</a>,
+<a href="r.watershed.html">r.watershed</a>
+</em> 
 
 <h2>AUTHOR</h2>
 Bill Brown (GMSL)<br>

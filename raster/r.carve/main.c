@@ -210,7 +210,8 @@ static int init_projection(struct Cell_head *window, int *wrap_ncols)
 	*wrap_ncols =
 	    (360.0 - (window->east - window->west)) / window->ew_res + 1.1;
 #else
-	G_fatal_error(_("lat/lon projection not supported at this time."));
+	G_fatal_error(_("Lat/Long location is not supported by %s. Please reproject map first."),
+		      G_program_name());
 #endif
     }
     else {
