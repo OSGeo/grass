@@ -27,8 +27,10 @@ thermal band <tt>226_62.toar.61</tt>, outputing to a new raster map
 named <tt>226_62.acca</tt>:
 
 <div class="code"><pre>
-    i.landsat.toar sensor=7 gain=HHHLHLHHL date=2003-04-07 product_date=2008-11-27 band_prefix=226_62 solar_elevation=49.51654
-    i.landsat.acca -f band_prefix=226_62.toar output=226_62.acca
+i.landsat.toar sensor=7 gain=HHHLHLHHL date=2003-04-07 \
+  product_date=2008-11-27 band_prefix=226_62 solar_elevation=49.51654
+
+i.landsat.acca -f band_prefix=226_62.toar output=226_62.acca
 </pre></div>
 
 
@@ -49,7 +51,7 @@ named <tt>226_62.acca</tt>:
 <h2>SEE ALSO</h2>
 
 <em>
-  <a href="i.landsat.toar.html">i.landsat.toar</a>
+<a href="i.landsat.toar.html">i.landsat.toar</a>
 </em>
 
 <h2>AUTHOR</h2>

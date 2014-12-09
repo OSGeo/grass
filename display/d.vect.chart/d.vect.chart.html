@@ -7,9 +7,9 @@ frame on the graphics monitor.
 
 The charts are positioned as follows:
 <ul>
-<li> vector points: on point position
-<li> vector lines: on line centers
-<li> vector areas: on area centroids
+<li> vector points: on point position,
+<li> vector lines: on line centers,
+<li> vector areas: on area centroids.
 </ul>
 
 Bar charts are placed with their lower edge starting from the y-coordinate
@@ -27,25 +27,38 @@ plot if <b>chart_type</b> is <em>bar</em> (See Example 2).
 <h2>EXAMPLES</h2>
 
 <h3>Example 1</h3>
+
+Pie-chart of winter precipitation (North Carolina sample dataset):
+
 <div class="code"><pre>
-d.vect.chart map=vectmap columns=cens51,cens61,cens71,cens81
+d.vect.chart precip_30ynormals columns=nov,dec,jan,feb -l
 </pre></div>
 
 <h3>Example 2</h3>
 
-Create framed bar graphs of an erodibiliy index from the SPEARFISH dataset.
+Bar-chart of different census map values:
+
+<div class="code"><pre>
+d.vect.chart map=vectmap columns=cens51,cens61,cens71,cens81 chart_type=bar
+</pre></div>
+
+<h3>Example 3</h3>
+
+Creation of framed bar charts of an erodibiliy index from the Spearfish
+sample dataset:
+
 <div class="code"><pre>
 g.region rast=erode.index -p
-r.to.vect -s -v input=erode.index output=erode_index type=area 
+r.to.vect -s input=erode.index output=erode_index type=area 
 v.extract input=erode_index output=erode_index_ctrds type=centroid 
 d.rast aspect
 d.vect.chart map=erode_index_ctrds chart_type=bar columns=cat \
-             size=10 max_ref=12 scale=1.5 colors=yellow 
+             size=10 max_ref=12 scale=0.05 colors=yellow 
 d.vect erode_index_ctrds icon=basic/circle fcol=black col=black size=5
 </pre></div>
 
-Example screenshot (zoomed):<br>
-<img src="d.vect.chart_example.jpg" alt="d.vect.chart example">
+<img src="d.vect.chart_example.jpg" alt="d.vect.chart example"><br>
+Bar charts of an erodibiliy index (spatial subset)
 
 <h2>SEE ALSO</h2>
 

@@ -67,25 +67,27 @@ Example for earthquake map rendering
 <div class="code"><pre>
 # random sampling of elevation points:
 g.region rast=elevation -p
-v.random random n=200
-v.db.addtable random col="el10 double precision"
+v.random random npoints=200
+v.db.addtable random column="el10 double precision"
 # transfer elevations to attribute table of random points map:
-v.what.rast random rast=elevation col=el10
+v.what.rast random rast=elevation column=el10
 v.db.select random
 
 # comparative sampling of second map, incl. differences:
-v.sample in=random col=el10 rast=elev_state_500m out=elev_sample
+v.sample input=random column=el10 raster=elev_state_500m output=elev_sample
 v.db.select elev_sample
 
 # univariate statistics:
-v.univar -e elev_sample col=diff type=point
+v.univar -e elev_sample column=diff type=point
 
 # thematic map:
 d.mon wx0
 d.vect.thematic -l elev_sample column=diff type=point
 </pre></div>
 
-<p>North Carolina data set example:
+<p>
+North Carolina sample dataset example:
+
 <div class="code"><pre>
 g.region vect=nc_state
 d.vect.thematic -l precip_30ynormals column=annual type=point
@@ -94,7 +96,7 @@ d.vect.thematic -l precip_30ynormals column=annual type=point
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="d.vect.html">d.vect</a>, 
+<a href="d.vect.html">d.vect</a>,
 <a href="d.vect.chart.html">d.vect.chart</a>,
 <a href="v.univar.html">v.univar</a>
 </em>

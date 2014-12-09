@@ -9,7 +9,7 @@ on the fly which may take some time.
 
 <h2>EXAMPLE</h2>
 
-<h3>Basic info</h3>
+<h3>Basic metadata information</h3>
 
 <div class="code"><pre>
 v.info map=geology
@@ -46,7 +46,7 @@ v.info map=geology
  +----------------------------------------------------------------------------+
 </pre></div>
 
-<h3>History</h3>
+<h3>Map history</h3>
 
 <div class="code"><pre>
 v.info -h map=geology
@@ -78,7 +78,7 @@ DOUBLE PRECISION|SHAPE_area
 DOUBLE PRECISION|SHAPE_len
 </pre></div>
 
-<h3>Basic info in shell script style</h3>
+<h3>Basic metadata information in shell script style</h3>
 
 <div class="code"><pre>
 v.info -get map=geology 
@@ -128,21 +128,25 @@ bottom=0.000000
 
 <h2>PYTHON</h2>
 
-See <em><a href="http://grass.osgeo.org/programming7/pythonlib.html">Python
+See <em><a href="http://grass.osgeo.org/grass71/manuals/libpython/">Python
 Scripting Library</a></em> for more info.
-
+<p>
+Note: The Python shell in the <em>wxGUI</em> can be used for entering the
+following code:
+<p>
 <div class="code"><pre>
-import grass.script as grass
+import grass.script as gcore
     
-grass.vector_columns('geology')   # for `v.info -c`
-grass.vector_info_topo('geology') # for `v.info shell=topo`
+gcore.vector_columns('geology')   # for `v.info -c`
+gcore.vector_info_topo('geology') # for `v.info shell=topo`
 </pre></div>
 
 <h2>SEE ALSO</h2>
 
 <em>
-  <a href="r.info.html">r.info</a>,
-  <a href="r3.info.html">r3.info</a>
+<a href="r.info.html">r.info</a>,
+<a href="r3.info.html">r3.info</a>,
+<a href="t.info.html">t.info</a>
 </em>
 
 <h2>AUTHOR</h2>

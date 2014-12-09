@@ -47,7 +47,7 @@ you are enouraged to single-quote messages that do not require
 
 <h3>Usage in Python scripts</h3>
 
-<a href="http://grass.osgeo.org/programming7/pythonlib.html">GRASS
+<a href="http://grass.osgeo.org/grass71/manuals/libpython/">GRASS
 Python Scripting Library</a> defines special wrappers
 for <em>g.message</em>.
 
@@ -61,11 +61,15 @@ for <em>g.message</em>.
   <li><tt>warning()</tt> for <tt>g.message -w</tt>
 </ul>
 
-Eg.
+<p>
+Note: The Python shell in the <em>wxGUI</em> can be used for entering the
+following sample code:
+<p>
 
 <div class="code"><pre>
-import grass.script as grass
-grass.warning("This is a warning")
+import grass.script as gcore
+
+gcore.warning("This is a warning")
 </pre></div>
 
 is identical with

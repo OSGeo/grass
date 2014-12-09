@@ -13,24 +13,21 @@ new name to be assigned to this file element (<em>new</em>)
 in the current mapset.  The file element <em>old</em> is
 then renamed to <em>new</em>.
 
-
 <p>
-Users can also simply type <em>g.rename -help</em> without
+Users can also simply type <em>g.rename --help</em> without
 arguments on the command line, to receive a menu of
 existing data base element types and files from which to
 choose for possible renaming:
 
-<div class="code">
-<pre>
-     rast   rast file(s) to be renamed
-  oldvect   oldvect file(s) to be renamed (GRASS 5.0)
-     vect   vect file(s) to be renamed	  (GRASS >5.1)
-     icon   icon file(s) to be renamed
-   labels   labels file(s) to be renamed
-    sites   sites file(s) to be renamed
-   region   region file(s) to be renamed
-    group   group file(s) to be renamed
-   3dview   3dview file(s) to be renamed
+<div class="code"><pre>
+       raster   raster map(s) to be renamed
+     3draster   3D raster map(s) to be renamed
+       vector   vector map(s) to be renamed
+    oldvector   old  (GRASS 5.0) vector map(s) to be renamed
+  asciivector   ASCII vector map(s) to be renamed
+       labels   paint label file(s) to be renamed
+       region   region definition(s) to be renamed
+        group   imagery group(s) to be renamed
 </pre></div>
 
 
@@ -43,7 +40,7 @@ also are renamed.
 <p>
 If the user attempts to rename a file to itself by setting
 the <em>new</em> file name equal to the <em>old</em> file
-name (e.g., <b>g.rename rast=soils,soils</b>),
+name (e.g., <b>g.rename raster=soils,soils</b>),
 <em>g.rename</em> will not execute the rename, but instead
 state that no rename is needed.  However, <em>g.rename</em>
 
@@ -59,19 +56,22 @@ the intended name.
 
 <div class="code"><pre>
 # rename raster map
-g.rename rast=oldrast,newrast
+g.rename raster=oldrast,newrast
 
 # rename vector map
-g.rename vect=oldvect,newvect
+g.rename vector=oldvect,newvect
 
 # combined renaming
-g.rename rast=oldrast,newrast vect=oldvect,newvect
+g.rename raster=oldrast,newrast vector=oldvect,newvect
 </pre></div>
+
 <h2>SEE ALSO</h2>
 
-<em><a href="g.copy.html">g.copy</a></em><br>
-<em><a href="g.list.html">g.list</a></em><br>
-<em><a href="g.remove.html">g.remove</a></em>
+<em>
+<a href="g.copy.html">g.copy</a>,
+<a href="g.list.html">g.list</a>,
+<a href="g.remove.html">g.remove</a>
+</em>
 
 <h2>AUTHOR</h2>
 

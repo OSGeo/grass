@@ -6,7 +6,7 @@
  * PURPOSE:      Calculate Broadband Albedo (0.3-3 Micrometers)
  *               from Surface Reflectance (Modis, AVHRR, Landsat, Aster).
  *
- * COPYRIGHT:    (C) 2004-2008 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2004-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU Lesser General Public
  *                License. Read the file COPYING that comes with GRASS for details.
@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
 
     flag3 = G_define_flag();
     flag3->key = 'l';
-    flag3->description = _("Landsat (6 input bands:1,2,3,4,5,7)");
+    flag3->description = _("Landsat 5+7 (6 input bands:1,2,3,4,5,7)");
 
     flag4 = G_define_flag();
     flag4->key = '8';

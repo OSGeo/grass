@@ -16,7 +16,11 @@ to copy an existing vector map <em>roads</em> to a file
 called <em>rds.old</em>, the user could type:
 
 <div class="code"><pre>
-g.copy rast=soils,soils.ph vect=roads,rds.old
+g.copy raster=soils,soils.ph
+g.copy vector=roads,rds.old
+
+# or even combined:
+g.copy raster=soils,soils.ph vector=roads,rds.old
 </pre></div>
 
 <p>
@@ -27,7 +31,7 @@ file called <em>soils</em> to be placed under the user's
 current mapset:
 
 <div class="code"><pre>
-g.copy rast=soils@wilson,soils
+g.copy raster=soils@wilson,soils
 </pre></div>
 
 If no mapset name is specified, <em>g.copy</em> searches for the
