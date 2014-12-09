@@ -919,8 +919,28 @@ class Line(Geo):
         libvect.Vect_line_reverse(self.c_points)
 
     def segment(self, start, end):
-        # TODO improve documentation
         """Create line segment. using the ``Vect_line_segment`` C function.
+
+        :param start: distance from the begining of the line where
+                      the segment start
+        :type start: float
+        :param end: distance from the begining of the line where
+                    the segment end
+        :type end: float
+
+        ::
+            #            x (1, 1)
+            #            |
+            #            |-
+            #            |
+            #   x--------x (1, 0)
+            # (0, 0) ^
+
+            >>> line = Line([(0, 0), (1, 0), (1, 1)])
+            >>> line.segment(0.5, 1.5)         #doctest: +NORMALIZE_WHITESPACE
+            Line([Point(0.500000, 0.000000),
+                  Point(1.000000, 0.000000),
+                  Point(1.000000, 0.500000)])
         """
         line = Line()
         libvect.Vect_line_segment(self.c_points, start, end, line.c_points)
