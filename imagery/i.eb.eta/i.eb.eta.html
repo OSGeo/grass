@@ -2,28 +2,28 @@
 
 <em>i.eb.eta</em> calculates the actual evapotranspiration (ETa ; mm/d) for
 diurnal period after [1], implemented in [3].
-It takes input of Diurnal Net Radiation (see <i>r.sun</i>), evaporative fraction (see
-<i>i.eb.evapfr</i>) and surface skin temperature. 
+It takes input of Diurnal Net Radiation (see <em>r.sun</em>), evaporative fraction (see
+<em>i.eb.evapfr</em>) and surface skin temperature. 
 
 <h2>NOTES</h2>
 Full ETa processing will need those:
 <ul>
-  <li>i.vi, i.albedo, r.latlong, i.emissivity
-  <li>i.evapo.potrad (Addon)
-  <li>i.eb.netrad, i.eb.soilheatflux, i.eb.hsebal01
-  <li>i.eb.evapfr, i.eb.eta
+  <li><em>i.vi</em>, <em>i.albedo</em>, <em>r.latlong</em>, <em>i.emissivity</em>
+  <li><em>i.evapo.potrad</em> (GRASS Addon)
+  <li><em>i.eb.netrad</em>, <em>i.eb.soilheatflux</em>, <em>i.eb.hsebal01</em>
+  <li><em>i.eb.evapfr</em>, <em>i.eb.eta</em>
 </ul>
 
-(for time integration: i.evapo.time_integration)
+(for time integration: <em>i.evapo.time_integration</em>) <!-- TODO unknown module -->
 
 <p>For more details on the algorithms see [1][2][3][4].
 
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="r.sun.html">r.sun</a><br>
-<a href="i.eb.evapfr.html">i.eb.evapfr</a><br>
-<a href="i.eb.netrad.html">i.eb.netrad</a><br>
+<a href="r.sun.html">r.sun</a>,
+<a href="i.eb.evapfr.html">i.eb.evapfr</a>,
+<a href="i.eb.netrad.html">i.eb.netrad</a>
 </em>
 
 <h2>REFERENCES</h2>
@@ -46,7 +46,6 @@ agricultural areas. Remote Sensing. 2009, 1, 445-465.
 A Distributed Benchmarking Framework for Actual ET Models, 
 in: Irmak, A. (Ed.), Evapotranspiration - Remote Sensing and Modeling. InTech.
 (<a href="http://www.intechopen.com/books/evapotranspiration-remote-sensing-and-modeling/a-distributed-benchmarking-framework-for-actual-et-models">PDF</a>)
-
 
 <h2>AUTHORS</h2>
 
