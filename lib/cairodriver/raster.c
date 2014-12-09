@@ -3,7 +3,7 @@
 
   \brief GRASS cairo display driver - draw raster
 
-  (C) 2007-2008 by Lars Ahlzen and the GRASS Development Team
+  (C) 2007-2014 by Lars Ahlzen and the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -15,6 +15,8 @@
 
 #include "cairodriver.h"
 #include <grass/glocale.h>
+
+#define MAX_IMAGE_SIZE 32767
 
 static int src_t, src_b, src_l, src_r, src_w, src_h;
 static double dst_t, dst_b, dst_l, dst_r, dst_w, dst_h;
@@ -28,22 +30,17 @@ static int masked;
 /*!
   \brief Start drawing raster
 
-  \param mask
-  \param s
-  \param d
+  \todo are top and left swapped?
+
+  \param mask non-zero int for mask
+  \param s source (map) extent (left, right, top, bottom)
+  \param d destination (image) extent (left, right, top, bottom)
 */
 void Cairo_begin_raster(int mask, int s[2][2], double d[2][2])
 {
     cairo_status_t status;
     
-    G_debug(1, "Cairo_begin_raster: %d, %d %d %d %d, %f %f %f %f",
-	    mask,
-	    s[0][0], s[0][1], s[1][0], s[1][1],
-	    d[0][0], d[0][1], d[1][0], d[1][1]);
-
     masked = mask;
-
-    /* TODO: are top and left swapped? */
 
     src_l = s[0][0];
     src_r = s[0][1];
@@ -61,22 +58,20 @@ void Cairo_begin_raster(int mask, int s[2][2], double d[2][2])
     dst_w = dst_r - dst_l;
     dst_h = dst_b - dst_t;
 
-    G_debug(1, " src (TBLR): %d %d %d %d, dst (TBLR) %f %f %f %f",
-	    src_t, src_b, src_l, src_r, dst_t, dst_b, dst_l, dst_r);
+    G_debug(1, "Cairo_begin_raster(): masked=%d, src_lrtb=%d %d %d %d -> w/h=%d/%d, "
+            "dst_lrtb=%f %f %f %f -> w/h=%f %f",
+            masked, src_l, src_r, src_t, src_b, src_w, src_h,
+            dst_l, dst_r, dst_t, dst_b, dst_w, dst_h);
 
     /* create source surface */
     src_surf = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, src_w, src_h);
     status = cairo_surface_status(src_surf);
     if (status != CAIRO_STATUS_SUCCESS)
-#ifdef HAVE_LONG_LONG_INT
-        G_fatal_error("Cairo_begin_raster(): %s - %s. Using rows: %d, cols: %d, cells: %lld.",
-                      _("Failed to create surface"),
-                      cairo_status_to_string (status), src_b, src_r, (long long) src_b * src_r);
-#else
-        G_fatal_error("Cairo_begin_raster(): %s - %s. Using rows: %d, cols: %d, cells: %ld.",
-                      _("Failed to create surface"),
-                      cairo_status_to_string (status), src_b, src_r, (long) src_b * src_r);
-#endif
+        G_fatal_error("%s - %s - size: %dx%d (cairo limit: %dx%d)",
+                      _("Failed to create cairo surface"),
+                      cairo_status_to_string (status), src_w, src_h,
+                      MAX_IMAGE_SIZE, MAX_IMAGE_SIZE);
+    
     src_data = cairo_image_surface_get_data(src_surf);
     src_stride = cairo_image_surface_get_stride(src_surf);
 }
@@ -85,7 +80,7 @@ void Cairo_begin_raster(int mask, int s[2][2], double d[2][2])
   \brief Draw raster row
 
   \param n number of cell
-  \param row raster row
+  \param row raster row (starting at 0)
   \param red,grn,blu,nul red,green,blue and null value
 
   \return next row
@@ -94,11 +89,12 @@ int Cairo_raster(int n, int row,
 		 const unsigned char *red, const unsigned char *grn,
 		 const unsigned char *blu, const unsigned char *nul)
 {
-    unsigned int *dst =
-	(unsigned int *)(src_data + (row - src_t) * src_stride);
     int i;
+    unsigned int *dst;
 
-    G_debug(3, "Cairo_raster: %d %d", n, row);
+    dst = (unsigned int *)(src_data + (row - src_t) * src_stride);
+
+    G_debug(3, "Cairo_raster(): n=%d row=%d", n, row);
 
     for (i = 0; i < n; i++) {
 	if (masked && nul && nul[i])
@@ -121,9 +117,9 @@ int Cairo_raster(int n, int row,
 */
 void Cairo_end_raster(void)
 {
-    G_debug(1, "Cairo_end_raster");
+    G_debug(1, "Cairo_end_raster()");
 
-    /* paint source surface onto dstination (scaled) */
+    /* paint source surface onto destination (scaled) */
     cairo_save(cairo);
     cairo_translate(cairo, dst_l, dst_t);
     cairo_scale(cairo, dst_w / src_w, dst_h / src_h);
