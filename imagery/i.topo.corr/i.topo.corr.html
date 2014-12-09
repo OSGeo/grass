@@ -90,10 +90,10 @@ method:
 
 <div class="code"><pre>
 # first pass: create illumination model
-i.topo.corr -i base=SRTM zenith=33.3631 azimuth=59.8897 out=SRTM.illumination
+i.topo.corr -i base=SRTM zenith=33.3631 azimuth=59.8897 output=SRTM.illumination
 
 # second pass: apply illumination model
-i.topo.corr base=SRTM.illumination input=toar.5,toar.4,toar.3 out=tcor \ 
+i.topo.corr base=SRTM.illumination input=toar.5,toar.4,toar.3 output=tcor \ 
   zenith=33.3631 method=c-factor
 </pre></div>
 
