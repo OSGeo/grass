@@ -222,6 +222,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("buffer"));
     G_add_keyword(_("geometry"));
+    G_add_keyword(_("circle"));
     module->description =
 	_("Creates a buffer around vector features of given type.");
 
