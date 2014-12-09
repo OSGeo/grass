@@ -13,14 +13,31 @@ static void start_wx(const char *, const char *, const char *,
 /* start file-based monitor */
 void start(const char *name, const char *output)
 {
-    char *env_name;
-
+    char *env_name, output_path[GPATH_MAX];
+    
     if (!output)
 	return;
 
+    if (!strchr(output, HOST_DIRSEP)) { /* relative path */
+        char *ptr;
+        
+        if (!getcwd(output_path, PATH_MAX))
+            G_fatal_error(_("Unable to get current working directory"));
+        ptr = output_path + strlen(output_path) - 1;
+        if (*(ptr++) != HOST_DIRSEP) {
+            *(ptr++) = HOST_DIRSEP;
+            *(ptr) = '\0';
+        }
+        strcat(output_path, output);
+        G_message(_("Output file: %s"), output_path);
+    }
+    else {
+        strcpy(output_path, output); /* already full path */
+    }
+    
     env_name = NULL;
     G_asprintf(&env_name, "MONITOR_%s_MAPFILE", G_store_upper(name));
-    G_setenv(env_name, output);
+    G_setenv(env_name, output_path);
 }
 
 /* start wxGUI display monitor */
