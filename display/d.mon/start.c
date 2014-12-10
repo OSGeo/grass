@@ -28,10 +28,15 @@ void start(const char *name, const char *output)
         output_name = D_get_file();
         if (!output_name) 
             return;
-        if (!G_get_overwrite() && access(output_name, F_OK) == 0) {
-            D_close_driver();
-            G_fatal_error(_("option <%s>: <%s> exists."),
-                          "output", output_name);
+        if (access(output_name, F_OK) == 0) {
+            if (G_get_overwrite()) {
+                G_warning(_("File '%s' already exists and will be overwritten"), output_name);
+            }
+            else {
+                D_close_driver();
+                G_fatal_error(_("option <%s>: <%s> exists."),
+                              "output", output_name);
+            }
         }
         D_close_driver(); /* must be called after check because this
                            * function produces default map file */
