@@ -412,14 +412,19 @@ class MapApp(wx.App):
         """Redraw, if new layer appears (check's timestamp of
         cmdfile)
         """
-        try:
-            # GISBASE and other sytem enviromental variables can not be used
+        ###
+        ### TODO: fint better solution
+        ###
+        ### the check bellow disabled, it's invasive to call g.gisenv
+        ### in the watcher...
+        # try:
+            # GISBASE and other system enviromental variables can not be used
             # since the process inherited them from GRASS
             # raises exception when vaiable does not exists
-            grass.gisenv()['GISDBASE']
-        except KeyError:
-            self.timer.Stop()
-            return
+            ### grass.gisenv()['GISDBASE']
+        # except KeyError:
+        #    self.timer.Stop()
+        #    return
         
         # todo: events
         try:
