@@ -286,6 +286,22 @@ def get_lib_path(modname, libname):
     return path
 
 
+def set_path(modulename, dirname, path='.'):
+    import sys
+    """Set sys.path looking in the the local directory GRASS directories."""
+    pathlib = os.path.join(path, dirname)
+    if os.path.exists(pathlib):
+        # we are running the script from the script directory
+        sys.path.append(os.path.abspath(path))
+    else:
+        # running from GRASS GIS session
+        from grass.pygrass.utils import get_lib_path
+        path = get_lib_path(modulename, dirname)
+        if path is None:
+            raise ImportError("Not able to find the path %s directory." % path)
+        sys.path.append(path)
+
+
 def split_in_chunk(iterable, lenght=10):
     """Split a list in chunk.
 
