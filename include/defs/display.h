@@ -166,4 +166,6 @@ void D_get_frame(double *, double *, double *, double *);
 void D_set_clip_window_to_map_window(void);
 void D_set_clip_window_to_screen_window(void);
 
+const char *D_get_file(void);
+
 #endif /* GRASS_DISPLAYDEFS_H */

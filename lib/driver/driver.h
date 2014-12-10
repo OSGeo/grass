@@ -22,11 +22,12 @@ extern struct GFONT_CAP *ftcap;
 struct driver
 {
     char *name;
-    
+
     void (*Box)(double, double, double, double);
     void (*Erase)(void);
     int (*Graph_set)(void);
     void (*Graph_close)(void);
+    const char * (*Graph_get_file)(void);
     void (*Line_width)(double);
     void (*Set_window)(double, double, double, double);
     void (*Begin_raster)(int, int[2][2], double[2][2]);
@@ -82,6 +83,7 @@ extern void COM_Get_text_box(const char *, double *, double *, double *, double 
 /* graph.c */
 extern int COM_Graph_set(void);
 extern void COM_Graph_close(void);
+extern const char *COM_Graph_get_file(void);
 
 /* line_width.c */
 extern void COM_Line_width(double);

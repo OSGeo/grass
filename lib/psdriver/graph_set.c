@@ -220,6 +220,16 @@ int PS_Graph_set(void)
     return 0;
 }
 
+/*!
+  \brief Get render file
+
+  \return file name
+*/
+const char *PS_Graph_get_file(void)
+{
+    return file_name;
+}
+
 void output(const char *fmt, ...)
 {
     va_list va;

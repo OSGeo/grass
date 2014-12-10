@@ -279,6 +279,16 @@ int Cairo_Graph_set(void)
 }
 
 /*!
+  \brief Get render file
+
+  \return file name
+*/
+const char *Cairo_Graph_get_file(void)
+{
+    return ca.file_name;
+}
+ 
+/*!
   \brief Close driver
 */
 void Cairo_Graph_close(void)
