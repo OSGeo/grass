@@ -24,7 +24,13 @@ void start(const char *name, const char *output)
         output_name = D_get_file();
         if (!output_name) 
             return;
-        D_close_driver();
+        if (!G_get_overwrite() && access(output_name, F_OK) == 0) {
+            D_close_driver();
+            G_fatal_error(_("option <%s>: <%s> exists."),
+                          "output", output_name);
+        }
+        D_close_driver(); /* must be called after check because this
+                           * function produces default map file */
     }
     else {
         output_name = output;
