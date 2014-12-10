@@ -10,12 +10,16 @@
 static void start(const char *, const char *);
 static void start_wx(const char *, const char *, const char *,
 		     const char *, int, int);
+static void error_handler(void *);
 
 /* start file-based monitor */
 void start(const char *name, const char *output)
 {
     char *env_name, output_path[GPATH_MAX];
     const char *output_name;
+    
+    /* stop monitor on failure */
+    G_add_error_handler(error_handler, (char *)name);
     
     if (!output) {
         if (D_open_driver() != 0)
@@ -175,4 +179,10 @@ int start_mon(const char *name, const char *output, int select,
 	start(name, output);
     
     return 0;
+}
+
+void error_handler(void *p)
+{
+    const char *name = (const char *) p;
+    stop_mon(name);
 }
