@@ -3,18 +3,16 @@
 ############################################################################
 #
 # MODULE:	i.tasscap
-# AUTHOR(S):	Markus Neteler. neteler itc.it
+# AUTHOR(S):	Agustin Lobo, Markus Neteler
 #               Converted to Python by Glynn Clements
+#               Code improvements by Leonardo Perathoner
+#
 # PURPOSE:	At-satellite reflectance based tasseled cap transformation.
-# COPYRIGHT:	(C) 1997-2004,2008, 2014 by the GRASS Development Team
+# COPYRIGHT:	(C) 1997-2014 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (>=v2). Read the file COPYING that comes with GRASS
 #		for details.
-#
-# TODO: Check if MODIS Tasseled Cap makes sense to be added
-#       http://ieeexplore.ieee.org/xpls/abs_all.jsp?arnumber=1025776
-#       Add other, e.g from here: http://www.sjsu.edu/faculty/watkins/tassel.htm
 #
 #############################################################################
 # References:
@@ -34,9 +32,15 @@
 #  Compare discussion:
 #  http://adis.cesnet.cz/cgi-bin/lwgate/IMAGRS-L/archives/imagrs-l.log0211/date/article-14.html
 #
-#   Landsat8: Baig, M.H.A., Zhang, L., Shuai, T., Tong, Q., 2014. Derivation of a tasselled cap transformation
+#  Landsat8: Baig, M.H.A., Zhang, L., Shuai, T., Tong, Q., 2014. Derivation of a tasselled cap transformation
 #              based on Landsat 8 at-satellite reflectance. Remote Sensing Letters 5, 423-431. 
 #              doi:10.1080/2150704X.2014.915434
+#
+#  MODIS Tasselled Cap coefficients
+#  https://gis.stackexchange.com/questions/116107/tasseled-cap-transformation-on-modis-in-grass/116110
+#  Ref: Lobser & Cohen (2007). MODIS tasselled cap: land cover characteristics 
+#                              expressed through transformed MODIS data.
+#       International Journal of Remote Sensing, Volume 28(22), Table 3
 #
 #############################################################################
 #
@@ -45,10 +49,11 @@
 #% keywords: imagery
 #% keywords: transformation
 #% keywords: Landsat
+#% keywords: MODIS
 #% keywords: Tasseled Cap transformation
 #%end
 #%option G_OPT_R_INPUTS
-#% description: For Landsat4-7: bands 1, 2, 3, 4, 5, and 7; for Landsat8: bands 2, 3, 4, 5, 6, and 7
+#% description: For Landsat4-7: bands 1, 2, 3, 4, 5, 7; for Landsat8: bands 2, 3, 4, 5, 6, 7; for MODIS: bands 1, 2, 3, 4, 5, 6, 7
 #%end
 #%option G_OPT_R_BASENAME_OUTPUT
 #% label: Name for output basename raster map(s)
@@ -59,13 +64,14 @@
 #% description: Satellite sensor
 #% required: yes
 #% multiple: no
-#% options: landsat4_tm,landsat5_tm,landsat7_etm,landsat8
-#% descriptions: landsat4_tm;Use transformation rules for Landsat 4 TM;landsat5_tm;Use transformation rules for Landsat 5 TM;landsat7_etm;Use transformation rules for Landsat 7 ETM;landsat8;Use transformation rules for Landsat 8
+#% options: landsat4_tm,landsat5_tm,landsat7_etm,landsat8_oli,modis
+#% descriptions: landsat4_tm;Use transformation rules for Landsat 4 TM;landsat5_tm;Use transformation rules for Landsat 5 TM;landsat7_etm;Use transformation rules for Landsat 7 ETM;landsat8_oli;Use transformation rules for Landsat 8 OLI;modis;Use transformation rules for MODIS
 #%end
 
 import grass.script as grass
 
 # weights for 6 Landsat bands: TM4, TM5, TM7, OLI
+# MODIS: Red, NIR1, Blue, Green, NIR2, SWIR1, SWIR2
 parms = [[( 0.3037, 0.2793, 0.4743, 0.5585, 0.5082, 0.1863), # Landsat TM4
 	  (-0.2848,-0.2435,-0.5435, 0.7243, 0.0840,-0.1800),
 	  ( 0.1509, 0.1973, 0.3279, 0.3406,-0.7112,-0.4572)],
@@ -80,27 +86,36 @@ parms = [[( 0.3037, 0.2793, 0.4743, 0.5585, 0.5082, 0.1863), # Landsat TM4
 	 [( 0.3029, 0.2786, 0.4733, 0.5599, 0.5080, 0.1872), # Landsat TM8
 	  (-0.2941,-0.2430,-0.5424, 0.7276, 0.0713,-0.1608),
 	  ( 0.1511, 0.1973, 0.3283, 0.3407,-0.7117,-0.4559),
-	  (-0.8239, 0.0849, 0.4396, -0.058, 0.2013,-0.2773)]]
+	  (-0.8239, 0.0849, 0.4396, -0.058, 0.2013,-0.2773)],
+	 [( 0.4395, 0.5945, 0.2460, 0.3918, 0.3506, 0.2136, 0.2678), # MODIS
+	  (-0.4064, 0.5129,-0.2744,-0.2893, 0.4882,-0.0036,-0.4169),
+	  ( 0.1147, 0.2489, 0.2408, 0.3132,-0.3122,-0.6416,-0.5087)]]
+#satellite information
+satellites = ["landsat4_tm", 'landsat5_tm', 'landsat7_etm', 'landsat8_oli', 'modis']
+used_bands = [6,6,6,6,7]
+#components information
 ordinals = ["first", "second", "third", "fourth"]
 names = ["Brightness", "Greenness", "Wetness", "Haze"]
 
-def calc1(out, bands, k1, k2, k3, k4, k5, k7, k0 = 0):
-    grass.mapcalc(
-	"$out = $k1 * $band1 + $k2 * $band2 + $k3 * $band3 + $k4 * $band4 + $k5 * $band5 + $k7 * $band7 + $k0",
-	out = out, k1 = k1, k2 = k2, k3 = k3, k4 = k4, k5 = k5, k7 = k7, k0 = k0, **bands)
-    grass.run_command('r.colors', map = out, color = 'grey')
+def calc1bands6(out, bands, k1, k2, k3, k4, k5, k6, k0 = 0):
+    grass.mapcalc("$out = $k1 * $in1band + $k2 * $in2band + $k3 * $in3band + $k4 * $in4band + $k5 * $in5band + $k6 * $in6band + $k0",
+    out = out, k1 = k1, k2 = k2, k3 = k3, k4 = k4, k5 = k5, k6 = k6, k0 = k0, **bands)    
 
-def calcN(outpre, bands, i, n):
-    grass.message(_("Landsat-%d...") % n)
+def calc1bands7(out, bands, k1, k2, k3, k4, k5, k6, k7):
+    grass.mapcalc("$out = $k1 * $in1band + $k2 * $in2band + $k3 * $in3band + $k4 * $in4band + $k5 * $in5band + $k6 * $in6band + $k7 * $in7band",
+    out = out, k1 = k1, k2 = k2, k3 = k3, k4 = k4, k5 = k5, k6 = k6, k7 = k7, **bands)
+
+def calcN(outpre, bands, satel):
+    i=satellites.index(satel)
+    grass.message(_("Satellite %s...") % satel)        
     for j, p in enumerate(parms[i]):
-	out = "%s.%d" % (outpre, j + 1)
-	ord = ordinals[j]
-	if n == 4:
-	    name = ''
-	else:
-	    name = " (%s)" % names[j]
-	grass.message(_("Calculating %s TC component %s%s ...") % (ord, out, name))
-	calc1(out, bands, *p)
+        out = "%s.%d" % (outpre, j + 1)
+        ord = ordinals[j]
+        name = " (%s)" % names[j]        
+        grass.message(_("Calculating %s TC component %s%s ...") % (ord, out, name))
+        bands_num=used_bands[i]
+        eval("calc1bands%d(out, bands, *p)" % bands_num) #use combination function suitable for used number of bands
+        grass.run_command('r.colors', map = out, color = 'grey', quiet=True)
 
 
 def main():
@@ -108,35 +123,21 @@ def main():
     satellite = options['sensor']
     output_basename = options['output']
     inputs = options['input'].split(',')
-    num_of_bands = 6
+    num_of_bands = used_bands[satellites.index(satellite)]
     if len(inputs) != num_of_bands:
         grass.fatal(_("The number of input raster maps (bands) should be %s") % num_of_bands)
 
-    # this is here just for the compatibility with r.mapcalc expression
-    # remove this if not really needed in new implementation
     bands = {}
-    for i, band in enumerate(inputs):
-        band_num = i + 1
-        if band_num == 6:
-            band_num = 7
-        bands['band' + str(band_num)] = band
+    for i, band in enumerate(inputs):        
+        band_num = i + 1        
+        bands['in' + str(band_num) + 'band'] = band
     grass.debug(1, bands)
 
-    if satellite == 'landsat4_tm':
-        calcN(output_basename, bands, 0, 4)
-    elif satellite == 'landsat5_tm':
-        calcN(output_basename, bands, 1, 5)
-    elif satellite == 'landsat7_etm':
-        calcN(output_basename, bands, 2, 7)
-    elif satellite == 'landsat8':
-        calcN(output_basename, bands, 3, 8)
-    else:
-        raise RuntimeError("Invalid satellite: " + satellite)
+    calcN(output_basename, bands, satellite) #core tasseled cap components computation
 
-    grass.run_command('r.support', map = "%s.%d" % (output_basename, 1), description = "Tasseled Cap 1: brightness")
-    grass.run_command('r.support', map = "%s.%d" % (output_basename, 2), description = "Tasseled Cap 2: greenness")
-    grass.run_command('r.support', map = "%s.%d" % (output_basename, 3), description = "Tasseled Cap 3: wetness")
-    grass.run_command('r.support', map = "%s.%d" % (output_basename, 4), description = "Tasseled Cap 4: atmospheric haze")
+    #assign "Data Description" field in all four component maps
+    for i, comp in enumerate(names):
+        grass.run_command('r.support', map = "%s.%d" % (output_basename, i+1), description = "Tasseled Cap %d: %s" % (i+1, comp))
 
     grass.message(_("Tasseled Cap components calculated"))
 
