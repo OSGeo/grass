@@ -111,35 +111,32 @@ int D_open_driver(void)
     p = getenv("GRASS_RENDER_IMMEDIATE");
     m = G__getenv("MONITOR");
     
-    if (m) {
-        char *env;
-        const char *v;
-        char *u_m;
-        
-        /* GRASS variable names should be upper case. */
-        u_m = G_store_upper(m);
+    if (m && G_strncasecmp(m, "wx", 2) == 0) {
+	/* wx monitors always use GRASS_RENDER_IMMEDIATE. */
+	p = NULL; /* use default display driver */
+    } else if (m) {
+	char *env;
+	const char *v;
+	char *u_m;
+	
+	if (p)
+	    G_warning(_("%s variable defined, %s ignored"),
+		      "MONITOR", "GRASS_RENDER_IMMEDIATE");
+	/* GRASS variable names should be upper case. */
+	u_m = G_store_upper(m);
 
-        env = NULL;
-        G_asprintf(&env, "MONITOR_%s_MAPFILE", u_m);
-        v = G__getenv(env);
-        
-        if (v)
+	env = NULL;
+	G_asprintf(&env, "MONITOR_%s_MAPFILE", u_m);
+	v = G__getenv(env);
+	p = m;
+
+	if (v)
             G_putenv("GRASS_RENDER_FILE", v);
-                
-        if (G_strncasecmp(m, "wx", 2) == 0) {
-            /* wx monitors always use GRASS_RENDER_IMMEDIATE. */
-            p = NULL; /* use default display driver */
-        } else {
-            if (p)
-                G_warning(_("%s variable defined, %s ignored"),
-                          "MONITOR", "GRASS_RENDER_IMMEDIATE");
-            p = m;            
-            
-            G_asprintf(&env, "MONITOR_%s_ENVFILE", u_m);
-            v = G__getenv(env);
-            if (v) 
-                read_env_file(v);
-        }
+        
+	G_asprintf(&env, "MONITOR_%s_ENVFILE", u_m);
+	v = G__getenv(env);
+	if (v) 
+	    read_env_file(v);
     }
     
     const struct driver *drv =
