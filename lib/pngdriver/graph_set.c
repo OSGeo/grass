@@ -171,3 +171,13 @@ int PNG_Graph_set(void)
 
     return 0;
 }
+
+/*!
+  \brief Get render file
+
+  \return file name
+*/
+const char *PNG_Graph_get_file(void)
+{
+    return png.file_name;
+}

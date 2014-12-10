@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "driver.h"
 #include "driverlib.h"
 
@@ -12,4 +13,12 @@ void COM_Graph_close(void)
 {
     if (driver->Graph_close)
 	(*driver->Graph_close) ();
+}
+
+const char *COM_Graph_get_file(void)
+{
+    if (driver->Graph_get_file)
+        return (*driver->Graph_get_file) ();
+
+    return NULL;
 }
