@@ -413,10 +413,10 @@ class MapApp(wx.App):
         cmdfile)
         """
         ###
-        ### TODO: fint better solution
+        ### TODO: find a better solution
         ###
-        ### the check bellow disabled, it's invasive to call g.gisenv
-        ### in the watcher...
+        ### the check bellow disabled, it's too much invasive to call
+        ### g.gisenv in the watcher...
         # try:
             # GISBASE and other system enviromental variables can not be used
             # since the process inherited them from GRASS
