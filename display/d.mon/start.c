@@ -2,6 +2,7 @@
 #include <string.h>
 #include <grass/gis.h>
 #include <grass/spawn.h>
+#include <grass/display.h>
 #include <grass/glocale.h>
 
 #include "proto.h"
@@ -14,11 +15,23 @@ static void start_wx(const char *, const char *, const char *,
 void start(const char *name, const char *output)
 {
     char *env_name, output_path[GPATH_MAX];
+    const char *output_name;
     
-    if (!output)
-	return;
+    if (!output) {
+        if (D_open_driver() != 0)
+            G_fatal_error(_("No graphics device selected. "
+                            "Use d.mon to select graphics device."));
+        output_name = D_get_file();
+        if (!output_name) 
+            return;
+        D_close_driver();
+    }
+    else {
+        output_name = output;
+    }
 
-    if (!strchr(output, HOST_DIRSEP)) { /* relative path */
+        
+    if (!strchr(output_name, HOST_DIRSEP)) { /* relative path */
         char *ptr;
         
         if (!getcwd(output_path, PATH_MAX))
@@ -28,13 +41,13 @@ void start(const char *name, const char *output)
             *(ptr++) = HOST_DIRSEP;
             *(ptr) = '\0';
         }
-        strcat(output_path, output);
+        strcat(output_path, output_name);
         G_message(_("Output file: %s"), output_path);
     }
     else {
-        strcpy(output_path, output); /* already full path */
+        strcpy(output_path, output_name); /* already full path */
     }
-    
+
     env_name = NULL;
     G_asprintf(&env_name, "MONITOR_%s_MAPFILE", G_store_upper(name));
     G_setenv(env_name, output_path);
