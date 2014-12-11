@@ -29,7 +29,7 @@ map's before export.
 The set of <a href="http://www.gdal.org/formats_list.html">supported
 raster formats</a> written by <em>r.out.gdal</em> depends on the
 local GDAL installation. Available may be (incomplete list):<p>
-<pre>
+<div class="code"><pre>
   AAIGrid: Arc/Info ASCII Grid
   BMP: MS Windows Device Independent Bitmap
   BSB: Maptech BSB Nautical Charts
@@ -53,7 +53,7 @@ local GDAL installation. Available may be (incomplete list):<p>
   PNM: Portable Pixmap Format (netpbm)
   VRT: Virtual Raster
   XPM: X11 PixMap Format
-</pre>
+</pre></div>
 
 
 <h2>NOTES</h2>
@@ -75,7 +75,7 @@ for details.
 
 
 <h3>Ranges of GDAL data types</h3>
-<pre>
+<div class="code"><pre>
   GDAL data type	       minimum  	maximum
 
   Byte  			     0  	    255
@@ -85,7 +85,7 @@ for details.
   Int32, CInt32 	-2,147,483,648    2,147,483,647
   Float32, CFloat32	       -3.4E38  	 3.4E38
   Float64, CFloat64	     -1.79E308         1.79E308
-</pre>
+</pre></div>
 
 <p>If there is a need to keep file sizes small, use the simplest data type
 covering the data range of the raster(s) to be exported, e.g., if suitable

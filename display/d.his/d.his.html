@@ -80,17 +80,17 @@ should have a gray-scale color table associated with it.
 
 The name is misleading. The actual conversion used is
 
-<pre>
-  <U>H</U>.i.s + <U>G</U>.(1-s)
+<div class="code"><pre>
+  <u>H</u>.i.s + <u>G</u>.(1-s)
 
 where
 
-  <U>H</U>   is the R,G,B color from the hue map
+  <u>H</u>   is the R,G,B color from the hue map
   i   is the red value from the intensity map
   s   is the red value from the saturation map
-  <U>G</U>   is 50% gray (R = G = B = 0.5)
+  <u>G</u>   is 50% gray (R = G = B = 0.5)
 
-</pre>
+</pre></div>
 
 <p>
 Either (but not both) of the intensity or the saturation
@@ -100,7 +100,7 @@ to produce output images that represent combinations of
 
 <p>Users wishing to store the result in new raster map layers
 instead of displaying it on the monitor should use the
-program <em><a href="r.his.html">r.his</a></em>.
+command <em><a href="r.his.html">r.his</a></em>.
 
 
 <h2>EXAMPLE</h2>

@@ -122,10 +122,10 @@ map layer "roads" to category 1 with category label "good quality" in the output
 layer, and reclassifies input raster map layer categories 4 and 5 to
 category 2 with the label "poor quality" in the output map layer.
 
-<pre>
+<div class="code"><pre>
     1 2 3   = 1    good quality
     4 5     = 2    poor quality
-</pre>
+</pre></div>
 
 
 <p><dd>2. This example reclassifies categories 1, 3 and 5 in the input raster
@@ -133,23 +133,23 @@ map layer to category 1 with category label "poor quality" in the output
 map layer, and reclassifies input raster map layer categories 2, 4, and 6
 to category 2 with the label "good quality" in the output map layer.
 All other values are reclassified to NULL.
-<pre>
+<div class="code"><pre>
     1 3 5   = 1    poor quality
     2 4 6   = 2    good quality
     *       = NULL
-</pre>
+</pre></div>
 
 <p><dd>3. This example reclassifies input raster map layer categories 1 thru 10 to output 
 map layer category 1, input map layer categories 11 thru 20 to output map layer
 category 2, and input map layer categories 21 thru 30 to output map layer
 category 3, all without labels. The range from 30 to 40 is reclassified as
 NULL.
-<pre>
+<div class="code"><pre>
      1 thru 10	= 1
     11 thru 20	= 2
     21 thru 30	= 3
     30 thru 40  = NULL
-</pre>
+</pre></div>
 
 <p><dd>4. Subsequent rules override previous rules.  Therefore, the below example
 reclassifies input raster map layer categories 1 thru 19 and 51 thru 100
@@ -157,26 +157,26 @@ to category 1 in the output map layer,
 input raster map layer categories 20 thru 24 and 26 thru 50 to
 the output map layer category 2, and input raster map layer category 25
 to the output category 3.
-<pre>
+<div class="code"><pre>
      1 thru 100	= 1    poor quality
     20 thru 50	= 2    medium quality
     25	        = 3    good quality
-</pre>
+</pre></div>
 
 <p><dd>5. The previous example could also have been entered as:
-<pre>
+<div class="code"><pre>
      1 thru 19  51 thru 100	= 1    poor quality
     20 thru 24  26 thru 50	= 2    medium quality
     25				= 3    good quality
-</pre>
+</pre></div>
 or as:
-<pre>
+<div class="code"><pre>
      1 thru 19	 = 1    poor quality
     51 thru 100	 = 1
     20 thru 24	 = 2
     26 thru 50	 = 2    medium quality
     25		 = 3    good quality
-</pre>
+</pre></div>
 </dd>
 </dl>
 <p>
