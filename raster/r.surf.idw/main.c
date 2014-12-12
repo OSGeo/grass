@@ -105,7 +105,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("interpolation"));
     G_add_keyword(_("IDW"));
     module->description =
-	_("Surface interpolation utility for raster map.");
+	_("Provides surface interpolation from raster point data by Inverse Distance Squared Weighting.");
 
     parm.input = G_define_standard_option(G_OPT_R_INPUT);
 
