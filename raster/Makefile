@@ -106,7 +106,6 @@ SUBDIRS = \
 	r.surf.fractal \
 	r.surf.gauss \
 	r.surf.idw \
-	r.surf.idw2 \
 	r.surf.random \
 	r.terraflow \
 	r.texture \

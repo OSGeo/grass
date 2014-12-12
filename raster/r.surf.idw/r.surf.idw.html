@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.surf.idw</em> fills a grid cell (raster) matrix with
-interpolated values generated from a set of input layer
+interpolated values generated from input raster
 data points. It uses a numerical approximation technique
 based on distance squared weighting of the values of
 nearest data points. The number of nearest data points used
@@ -21,12 +21,11 @@ outputs the difference (see <a href="#minuse.html">NOTES</a> below).
 <p>The <b>npoints</b> parameter defines the number of nearest data points used
 to determine the interpolated value of an output raster cell.
 
-<A NAME="notes.html"></a>
 <h2>NOTES</h2>
 
 <em>r.surf.idw</em> is a surface generation utility which
 uses inverse distance squared weighting (as described in
-<b>Applied Geostatistics</b> by E. H. Isaaks and R. M.
+<i>Applied Geostatistics</i> by E. H. Isaaks and R. M.
 Srivastava, Oxford University Press, 1989) to assign
 interpolated values. The implementation includes a
 customized data structure somewhat akin to a sparse matrix
@@ -36,7 +35,7 @@ distances are calculated from point to point along a
 geodesic.
 
 <p>
-Unlike <em><a href="r.surf.idw2.html">r.surf.idw2</a></em>, which processes
+Unlike <em><a href="http://grass.osgeo.org/grass70/manuals/addons/r.surf.idw2.html">r.surf.idw2</a></em> (addons), which processes
 all input data points in each interpolation cycle, <em>r.surf.idw</em>
 attempts to minimize the number of input data for which distances must be
 calculated. Execution speed is therefore a function of the search effort,
@@ -44,10 +43,10 @@ and does not increase appreciably with the number of input data points.
 
 <p>
 <em>r.surf.idw</em> will generally outperform 
-<em><a href="r.surf.idw2.html">r.surf.idw2</a></em> except when the input data
+<em>r.surf.idw2</em> except when the input data
 layer contains few non-zero data, i.e. when the cost of the search exceeds
 the cost of the additional distance calculations performed by 
-<em><a href="r.surf.idw2.html">r.surf.idw2</a></em>. The relative performance
+<em>r.surf.idw2</em>. The relative performance
 of these utilities will depend on the comparative speed of boolean, integer
 and floating point operations on a particular platform.
 
@@ -67,8 +66,9 @@ irregularly spaced input data.  However, the output result
 for the former may include unacceptable nonconformities in
 the surface pattern.
 
+<a name="minuse.html"></a>
 <p>
-The <A NAME="minuse.html"><b>-e</b></a> flag option provides a standard
+The <b>-e</b> flag option provides a standard
 surface-generation error analysis facility. It produces an output raster map
 of the difference of interpolated values minus input values for those cells
 whose input data are non-zero. For each interpolation cycle, the known value
@@ -81,14 +81,14 @@ considered for surface generation.
 
 <h2>SEE ALSO</h2>
 
-<em><a href="r.surf.contour.html">r.surf.contour</a></em>,
-<em><a href="r.surf.idw2.html">r.surf.idw2</a></em>,
-<em><a href="r.surf.gauss.html">r.surf.gauss</a></em>,
-<em><a href="r.surf.fractal.html">r.surf.fractal</a></em>,
-<em><a href="r.surf.random.html">r.surf.random</a></em>,
-<em><a href="v.surf.idw.html">v.surf.idw</a></em>,
-<em><a href="v.surf.rst.html">v.surf.rst</a></em>
-
+<em>
+  <a href="r.surf.contour.html">r.surf.contour</a>,
+  <a href="r.surf.gauss.html">r.surf.gauss</a>,
+  <a href="r.surf.fractal.html">r.surf.fractal</a>,
+  <a href="r.surf.random.html">r.surf.random</a>,
+  <a href="v.surf.idw.html">v.surf.idw</a>,
+  <a href="v.surf.rst.html">v.surf.rst</a>
+</em>
 
 <h2>AUTHOR</h2>
 
@@ -98,4 +98,5 @@ U.S. EPA Environmental Research Laboratory <br>
 200 S.W. 35th Street, JSB <br>
 Corvallis, OR 97333 
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
