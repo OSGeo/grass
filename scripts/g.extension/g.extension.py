@@ -973,10 +973,16 @@ def update_manual_page(module):
     else:
         f.close()
 
+    pos = []
+    
+    # fix logo URL
+    pattern = r'''<a href="([^"]+)"><img src="grass_logo.png"'''
+    for match in re.finditer(pattern, shtml):
+        pos.append(match.start(1))
+    
     # find URIs
     pattern = r'''<a href="([^"]+)">([^>]+)</a>'''
     addons = get_installed_extensions(force = True)
-    pos = []
     for match in re.finditer(pattern, shtml):
         if match.group(1)[:7] == 'http://':
             continue
