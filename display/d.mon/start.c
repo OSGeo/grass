@@ -21,7 +21,7 @@ void start(const char *name, const char *output)
     if (!strchr(output, HOST_DIRSEP)) { /* relative path */
         char *ptr;
         
-        if (!getcwd(output_path, PATH_MAX))
+        if (!getcwd(output_path, GPATH_MAX))
             G_fatal_error(_("Unable to get current working directory"));
         ptr = output_path + strlen(output_path) - 1;
         if (*(ptr++) != HOST_DIRSEP) {
