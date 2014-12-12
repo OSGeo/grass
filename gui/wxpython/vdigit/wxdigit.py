@@ -371,10 +371,10 @@ class IVDigit:
     
     def _addChangeset(self):
 
-	# disable redo
-	changesetLast = len(self.changesets) - 1
-	if self.changesetCurrent < changesetLast and len(self.changesets) > 0:
-	    del self.changesets[self.changesetCurrent + 1:changesetLast + 1]
+        # disable redo
+        changesetLast = len(self.changesets) - 1
+        if self.changesetCurrent < changesetLast and len(self.changesets) > 0:
+            del self.changesets[self.changesetCurrent + 1:changesetLast + 1]
             self.toolbar.EnableRedo(False)
 
         data = list()
@@ -405,7 +405,7 @@ class IVDigit:
         
         ret = 0
         actions = self.changesets[changeset]
-	
+        
         if undo:
             firstaction = 0
             lastaction = len(actions)
@@ -1782,7 +1782,7 @@ class IVDigit:
             self._error.WriteLine()
             return (-1, None)
 
-	fids.append(newline)
+        fids.append(newline)
         
         # add centroids for left/right area
         if ftype & GV_AREA:
