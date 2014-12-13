@@ -1560,7 +1560,7 @@ char* G_option_to_separator(const struct Option *option)
     else
         sep = G_store(option->answer);
     
-    G_debug(1, "G_option_to_separator(): key = %s -> sep = '%s'",
+    G_debug(2, "G_option_to_separator(): key = %s -> sep = '%s'",
 	    option->key, sep);
     
     return sep;

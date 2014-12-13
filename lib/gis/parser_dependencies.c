@@ -153,7 +153,7 @@ static const char *describe_rule(const struct rule *rule, int start,
 	char *s0 = s;
 	char *ss = get_name(rule->opts[i]);
 	s = NULL;
-	G_asprintf(&s, "%s, %s", s0, ss);
+	G_asprintf(&s, "%s>, <%s", s0, ss);
 	G_free(s0);
 	G_free(ss);
     }
@@ -162,7 +162,7 @@ static const char *describe_rule(const struct rule *rule, int start,
 	char *s0 = s;
 	char *ss = get_name(rule->opts[i]);
 	s = NULL;
-	G_asprintf(&s, disjunction ? _("%s or %s") : _("%s and %s"), s0, ss);
+	G_asprintf(&s, disjunction ? _("<%s> or <%s>") : _("<%s> and <%s>"), s0, ss);
 	G_free(s0);
 	G_free(ss);
     }
@@ -324,7 +324,7 @@ static void check_collective(const struct rule *rule)
 
 void G__check_option_rules(void)
 {
-    int i;
+    unsigned int i;
 
     for (i = 0; i < rules.count; i++) {
 	const struct rule *rule = &((const struct rule *) rules.data)[i];
@@ -357,7 +357,7 @@ void G__check_option_rules(void)
 
 void G__describe_option_rules(void)
 {
-    int i;
+    unsigned int i;
 
     for (i = 0; i < rules.count; i++) {
 	const struct rule *rule = &((const struct rule *) rules.data)[i];
