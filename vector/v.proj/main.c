@@ -44,15 +44,16 @@ int main(int argc, char *argv[])
     const char *gbase;
     char date[40], mon[4];
     struct GModule *module;
-    struct Option *omapopt, *mapopt, *isetopt, *ilocopt, *ibaseopt;
+    struct Option *omapopt, *mapopt, *isetopt, *ilocopt, *ibaseopt, *smax;
     struct Key_Value *in_proj_keys, *in_unit_keys;
     struct Key_Value *out_proj_keys, *out_unit_keys;
-    struct line_pnts *Points;
+    struct line_pnts *Points, *Points2;
     struct line_cats *Cats;
     struct Map_info Map;
     struct Map_info Out_Map;
     struct bound_box src_box, tgt_box;
     int nowrap = 0, recommend_nowrap = 0;
+    double lmax;
     struct
     {
 	struct Flag *list;	/* list files in source location */
@@ -98,6 +99,15 @@ int main(int argc, char *argv[])
     ibaseopt->gisprompt = "old,dbase,dbase";
     ibaseopt->key_desc = "path";
     ibaseopt->guisection = _("Source");
+
+    smax = G_define_option();
+    smax->key = "smax";
+    smax->type = TYPE_DOUBLE;
+    smax->required = NO;
+    smax->answer = "10000";
+    smax->label = _("Maximum segment length in meters in output vector map");
+    smax->description = _("Increases accuracy of reprojected shapes, disable with smax=0");
+    smax->guisection = _("Target");
 
     omapopt = G_define_standard_option(G_OPT_V_OUTPUT);
     omapopt->required = NO;
@@ -157,9 +167,15 @@ int main(int argc, char *argv[])
     if (!ibaseopt->answer && strcmp(iloc_name, G_location()) == 0)
 	G_fatal_error(_("Input and output locations can not be the same"));
 
+    lmax = atof(smax->answer);
+    if (lmax < 0)
+	lmax = 0;
+
     Out_proj = G_projection();
     if (Out_proj == PROJECTION_LL && flag.wrap->answer)
 	nowrap = 1;
+    
+    G_begin_distance_calculations();
 
     /* Change the location here and then come back */
 
@@ -258,6 +274,7 @@ int main(int argc, char *argv[])
 
     /* Initialize the Point / Cat structure */
     Points = Vect_new_line_struct();
+    Points2 = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
     /* test if latlon wrapping to -180,180 should be disabled */
@@ -380,6 +397,10 @@ int main(int argc, char *argv[])
     sprintf(date, "%s %d %d", mon, day, yr);
     Vect_set_date(&Out_Map, date);
 
+    /* line densification works only with vector topology */
+    if (Map.format != GV_FORMAT_NATIVE)
+	lmax = 0;
+
     /* Cycle through all lines */
     Vect_rewind(&Map);
     i = 0;
@@ -395,14 +416,84 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Reading input vector map"));
 	if (type == -2)
 	    break;
-	if (pj_do_transform(Points->n_points, Points->x, Points->y,
-			    flag.transformz->answer ? Points->z : NULL,
-			    &info_in, &info_out) < 0) {
-	  G_fatal_error(_("Unable to re-project vector map <%s> from <%s>"),
-			Vect_get_full_name(&Map), ilocopt->answer);
-	}
 
-	Vect_write_line(&Out_Map, type, Points, Cats);	/* write line */
+	Vect_line_prune(Points);
+	if (lmax > 0 && (type & GV_LINES) && Points->n_points > 1) {
+	    double x1, y1, z1, x2, y2, z2;
+	    double dx, dy, dz;
+	    double l;
+	    int i, n;
+
+	    Vect_reset_line(Points2);
+	    for (i = 0; i < Points->n_points - 1; i++) {
+		x1 = Points->x[i];
+		y1 = Points->y[i];
+		z1 = Points->z[i];
+		n = i + 1;
+		x2 = Points->x[n];
+		y2 = Points->y[n];
+		z2 = Points->z[n];
+
+		dx = x2 - x1;
+		dy = y2 - y1;
+		dz = z2 - z1;
+
+		if (pj_do_transform(1, &x1, &y1,
+				    flag.transformz->answer ? &z1 : NULL,
+				    &info_in, &info_out) < 0) {
+		  G_fatal_error(_("Unable to re-project vector map <%s> from <%s>"),
+				Vect_get_full_name(&Map), ilocopt->answer);
+		}
+
+		if (pj_do_transform(1, &x2, &y2,
+				    flag.transformz->answer ? &z2 : NULL,
+				    &info_in, &info_out) < 0) {
+		  G_fatal_error(_("Unable to re-project vector map <%s> from <%s>"),
+				Vect_get_full_name(&Map), ilocopt->answer);
+		}
+
+		Vect_append_point(Points2, x1, y1, z1);
+
+		l = G_distance(x1, y1, x2, y2);
+
+		if (l > lmax) {
+		    int j;
+		    double x, y, z;
+
+		    x1 = Points->x[i];
+		    y1 = Points->y[i];
+		    z1 = Points->z[i];
+
+		    n = ceil(l / lmax);
+
+		    for (j = 1; j < n; j++) {
+			x = x1 + dx * j / n;
+			y = y1 + dy * j / n;
+			z = z1 + dz * j / n;
+
+			if (pj_do_transform(1, &x, &y,
+					    flag.transformz->answer ? &z : NULL,
+					    &info_in, &info_out) < 0) {
+			  G_fatal_error(_("Unable to re-project vector map <%s> from <%s>"),
+					Vect_get_full_name(&Map), ilocopt->answer);
+			}
+			Vect_append_point(Points2, x, y, z);
+		    }
+		}
+	    }
+	    Vect_append_point(Points2, x2, y2, z2);
+	    Vect_write_line(&Out_Map, type, Points2, Cats);	/* write line */
+	}
+	else {
+	    if (pj_do_transform(Points->n_points, Points->x, Points->y,
+				flag.transformz->answer ? Points->z : NULL,
+				&info_in, &info_out) < 0) {
+	      G_fatal_error(_("Unable to re-project vector map <%s> from <%s>"),
+			    Vect_get_full_name(&Map), ilocopt->answer);
+	    }
+
+	    Vect_write_line(&Out_Map, type, Points, Cats);	/* write line */
+	}
     }				/* end lines section */
     G_progress(1, 1);
 
