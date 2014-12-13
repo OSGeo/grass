@@ -67,13 +67,16 @@ static void init_xlib(void)
 	G_fatal_error(_("Unable to open display"));
 
     p = getenv("GRASS_RENDER_CAIRO_SCREEN");
-    if (!p || sscanf(p, "%i", &scrn) != 1)
+    if (!p || sscanf(p, "%i", &scrn) != 1) {
+        G_debug(1, "cairo: GRASS_RENDER_CAIRO_SCREEN=%s", p);
 	scrn = DefaultScreen(ca.dpy);
+    }
 
     p = getenv("GRASS_RENDER_CAIRO_VISUAL");
-    if (!p || sscanf(p, "%li", &xid) != 1)
+    if (!p || sscanf(p, "%li", &xid) != 1) {
+        G_debug(1, "cairo: GRASS_RENDER_CAIRO_VISUAL=%s", p);
 	xid = DefaultVisual(ca.dpy, scrn)->visualid;
-
+    }
     templ.visualid = xid;
     templ.screen = scrn;
 
@@ -124,7 +127,7 @@ static void init_file(void)
     p = getenv("GRASS_RENDER_FILE");
     if (!p || strlen(p) == 0)
 	p = DEFAULT_FILE_NAME;
-    G_debug(1, "cairo: GRASS_RENDER_FILE: %s", p);
+    G_debug(1, "cairo: GRASS_RENDER_FILE=%s", p);
 
     ca.file_name = p;
 
@@ -155,7 +158,7 @@ static void init_file(void)
 #endif
     else
 	G_fatal_error(_("Unknown file extension: %s"), p);
-    G_debug(1, "File type: %s (%d)", ca.file_name, ca.file_type);
+    G_debug(1, "cairo: file type=%d", ca.file_type);
 
     switch (ca.file_type) {
     case FTYPE_PDF:
@@ -170,9 +173,11 @@ static void init_file(void)
 
     p = getenv("GRASS_RENDER_FILE_MAPPED");
     do_map = p && strcmp(p, "TRUE") == 0 && ends_with(ca.file_name, ".bmp");
-
+    G_debug(1, "cairo: GRASS_RENDER_FILE_MAPPED=%d", do_map);
+    
     p = getenv("GRASS_RENDER_FILE_READ");
     do_read = p && strcmp(p, "TRUE") == 0;
+    G_debug(1, "cairo: GRASS_RENDER_FILE_READ=%d", do_read);
 
     if (is_vector) {
 	do_read = do_map = 0;
@@ -234,7 +239,6 @@ int Cairo_Graph_set(void)
     char *p;
 
     G_gisinit("Cairo driver");
-    G_debug(1, "Cairo_Graph_set");
 
     /* get background color */
     p = getenv("GRASS_RENDER_BACKGROUNDCOLOR");
@@ -249,6 +253,7 @@ int Cairo_Graph_set(void)
 	}
 	else
 	    G_fatal_error("Unknown background color: %s", p);
+        G_debug(1, "cairo: GRASS_RENDER_BACKGROUNDCOLOR=%s", p);
     }
     else
 	ca.bgcolor_r = ca.bgcolor_g = ca.bgcolor_b = 1.0;
@@ -259,7 +264,8 @@ int Cairo_Graph_set(void)
 	ca.bgcolor_a = 0.0;
     else
 	ca.bgcolor_a = 1.0;
-
+    G_debug(1, "cairo: GRASS_RENDER_TRANSPARENT=%s", p ? p : "FALSE");
+    
     antialias = CAIRO_ANTIALIAS_DEFAULT;
     p = getenv("GRASS_RENDER_ANTIALIAS");
     if (p && G_strcasecmp(p, "default") == 0)
@@ -270,7 +276,8 @@ int Cairo_Graph_set(void)
 	antialias = CAIRO_ANTIALIAS_GRAY;
     if (p && G_strcasecmp(p, "subpixel") == 0)
 	antialias = CAIRO_ANTIALIAS_SUBPIXEL;
-
+    G_debug(1, "cairo: GRASS_RENDER_ANTIALIAS=%s", p ? p : "FALSE");
+    
     init_file();
 
     cairo_set_antialias(cairo, antialias);
