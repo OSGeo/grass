@@ -277,6 +277,8 @@ def make_command(prog, flags="", overwrite=False, quiet=False, verbose=False,
             raise ScriptError("'-' is not a valid flag")
         args.append("-%s" % flags)
     for opt, val in options.iteritems():
+        if opt in _popen_args:
+            continue
         if val != None:
             if opt.startswith('_'):
                 opt = opt[1:]
