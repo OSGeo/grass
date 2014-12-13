@@ -21,7 +21,6 @@
 #%module
 #% description: Tool for creating hardcopy map outputs.
 #% keywords: general
-#% keywords: user interface
 #% keywords: GUI
 #% keywords: printing
 #%end
