@@ -31,6 +31,7 @@ extern void PS_Client_Close(void);
 extern void PS_Erase(void);
 extern void PS_Graph_close(void);
 extern int PS_Graph_set(void);
+extern const char *PS_Graph_get_file(void);
 extern void PS_Line_width(double);
 extern void PS_Set_window(double, double, double, double);
 extern void PS_Color(int, int, int);

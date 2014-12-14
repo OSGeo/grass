@@ -84,6 +84,7 @@ extern const struct driver *Cairo_Driver(void);
 
 extern void Cairo_Client_Close(void);
 extern int Cairo_Graph_set(void);
+extern const char *Cairo_Graph_get_file(void);
 extern void Cairo_Graph_close(void);
 extern void Cairo_Box(double, double, double, double);
 extern void Cairo_Set_window(double, double, double, double);

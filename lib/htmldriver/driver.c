@@ -30,6 +30,7 @@ const struct driver *HTML_Driver(void)
     drv.Erase = NULL;
     drv.Graph_set = HTML_Graph_set;
     drv.Graph_close = HTML_Graph_close;
+    drv.Graph_get_file = NULL;
     drv.Line_width = NULL;
     drv.Set_window = NULL;
     drv.Begin_raster = NULL;

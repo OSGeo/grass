@@ -162,4 +162,6 @@ void D_encoding(const char *);
 void D_font_list(char ***, int *);
 void D_font_info(char ***, int *);
 
+const char *D_get_file(void);
+
 #endif /* GRASS_DISPLAYDEFS_H */

@@ -32,6 +32,7 @@ const struct driver *PS_Driver(void)
     drv.Erase = PS_Erase;
     drv.Graph_set = PS_Graph_set;
     drv.Graph_close = PS_Graph_close;
+    drv.Graph_get_file = PS_Graph_get_file;
     drv.Line_width = PS_Line_width;
     drv.Set_window = PS_Set_window;
     drv.Begin_raster = PS_begin_raster;

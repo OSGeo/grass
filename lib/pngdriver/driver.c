@@ -3,7 +3,7 @@
 
   \brief GRASS png display driver - driver initialization
 
-  (C) 2007 by Glynn Clements and the GRASS Development Team
+  (C) 2007-2014 by Glynn Clements and the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -31,6 +31,7 @@ const struct driver *PNG_Driver(void)
     drv.Erase = PNG_Erase;
     drv.Graph_set = PNG_Graph_set;
     drv.Graph_close = PNG_Graph_close;
+    drv.Graph_get_file = PNG_Graph_get_file;
     drv.Line_width = PNG_Line_width;
     drv.Set_window = PNG_Set_window;
     drv.Begin_raster = PNG_begin_raster;

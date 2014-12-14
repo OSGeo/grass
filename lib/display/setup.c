@@ -17,6 +17,8 @@
 #include <grass/raster.h>
 #include <grass/display.h>
 
+#include "driver.h"
+
 /*!
   \brief Graphics frame setup
 
@@ -117,4 +119,14 @@ void D_setup2(int clear, int fit, double st, double sb, double sl, double sr)
 
     if (clear)
 	D_erase(DEFAULT_BG_COLOR);
+}
+
+/*!
+  \brief Get driver output file
+
+  \return file name or NULL if not defined
+*/
+const char *D_get_file(void)
+{
+    return COM_Graph_get_file();
 }

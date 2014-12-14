@@ -76,6 +76,7 @@ extern void PNG_Client_Close(void);
 extern void PNG_Erase(void);
 extern void PNG_Graph_close(void);
 extern int PNG_Graph_set(void);
+extern const char *PNG_Graph_get_file(void);
 extern void PNG_Line_width(double);
 extern void PNG_begin_raster(int, int[2][2], double[2][2]);
 extern int PNG_raster(int, int, const unsigned char *,

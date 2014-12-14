@@ -3,7 +3,7 @@
 
   \brief GRASS cairo display driver - driver initialization
 
-  (C) 2007-2008, 2011 by Lars Ahlzen and the GRASS Development Team
+  (C) 2007-2014 by Lars Ahlzen and the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -31,6 +31,7 @@ const struct driver *Cairo_Driver(void)
     drv.Box = Cairo_Box;
     drv.Erase = Cairo_Erase;
     drv.Graph_set = Cairo_Graph_set;
+    drv.Graph_get_file = Cairo_Graph_get_file;
     drv.Graph_close = Cairo_Graph_close;
     drv.Line_width = Cairo_Line_width;
     drv.Set_window = Cairo_Set_window;
@@ -51,7 +52,7 @@ const struct driver *Cairo_Driver(void)
     drv.Set_font = Cairo_set_font;
     drv.Font_list = Cairo_font_list;
     drv.Font_info = Cairo_font_info;
-
+      
     initialized = 1;
 
     return &drv;
