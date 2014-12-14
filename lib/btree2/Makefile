@@ -8,4 +8,12 @@ LIB = BTREE2
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 
-default: lib
+HEADERS := $(ARCH_INCDIR)/kdtree.h
+
+default: headers
+	$(MAKE) lib
+
+headers: $(HEADERS)
+
+$(ARCH_INCDIR)/kdtree.h: kdtree.h
+	$(INSTALL_DATA) $< $@
