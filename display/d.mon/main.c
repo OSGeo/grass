@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     struct Option *start_opt, *select_opt, *stop_opt, *output_opt,
         *width_opt, *height_opt, *bgcolor_opt, *res_opt;
     struct Flag *list_flag, *selected_flag, *select_flag, *release_flag, 
-        *cmd_flag, *truecolor_flag, *update_flag;
+        *cmd_flag, *truecolor_flag, *update_flag, *x_flag;
     
     int nopts, ret;
     const char *mon;
@@ -130,9 +130,19 @@ int main(int argc, char *argv[])
     update_flag->description = _("Requires --overwrite flag. If not given the output file is overwritten.");
     update_flag->guisection = _("Settings");
 
+    x_flag = G_define_flag();
+    x_flag->key = 'x';
+    x_flag->label = _("Launch light-weight wx monitor without toolbars and statusbar");
+    x_flag->description = _("Requires 'start=wx0-7'");
+    x_flag->guisection = _("Settings");
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-    
+
+    if (x_flag->answer && start_opt->answer && strncmp(start_opt->answer, "wx", 2) != 0)
+        G_warning(_("Flag -%c has effect only for wx monitors (%s=wx0-7)"),
+                  x_flag->key, start_opt->key);
+            
     if (selected_flag->answer || release_flag->answer || cmd_flag->answer) {
 	if (list_flag->answer)
 	    G_warning(_("Flag -%c ignored"), list_flag->key);
@@ -194,7 +204,7 @@ int main(int argc, char *argv[])
 
 	ret = start_mon(start_opt->answer, output_opt->answer, !select_flag->answer,
 			width, height, bgcolor_opt->answer,
-			!truecolor_flag->answer);
+			!truecolor_flag->answer, x_flag->answer);
         if (output_opt->answer && !update_flag->answer) {
             if (D_open_driver() != 0)
                 G_fatal_error(_("No graphics device selected. "

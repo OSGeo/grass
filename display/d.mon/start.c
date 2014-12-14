@@ -9,7 +9,7 @@
 
 static void start(const char *, const char *);
 static void start_wx(const char *, const char *, const char *,
-		     const char *, int, int);
+		     const char *, int, int, int);
 static void error_handler(void *);
 
 /* start file-based monitor */
@@ -71,10 +71,10 @@ void start(const char *name, const char *output)
 /* start wxGUI display monitor */
 void start_wx(const char *name, const char *tempfile,
 	      const char *env_value, const char *cmd_value,
-	      int width, int height)
+	      int width, int height, int x_only)
 {
     char progname[GPATH_MAX];
-    char *env_name, *map_value, str_width[1024], str_height[1024];
+    char *env_name, *map_value, str_width[1024], str_height[1024], *str_x_only;
 
     env_name = NULL;
     G_asprintf(&env_name, "MONITOR_%s_MAPFILE", G_store_upper(name));
@@ -94,14 +94,19 @@ void start_wx(const char *name, const char *tempfile,
     else
         str_height[0] = '\0';
 
+    if (x_only)
+        str_x_only = "1";
+    else
+        str_x_only = "0";
+
     G_spawn_ex(getenv("GRASS_PYTHON"), progname, progname,
 	       name, map_value, cmd_value, env_value,
-               str_width, str_height, SF_BACKGROUND, NULL);
+               str_width, str_height, str_x_only, SF_BACKGROUND, NULL);
 }
 
 int start_mon(const char *name, const char *output, int select,
 	      int width, int height, const char *bgcolor,
-	      int truecolor)
+	      int truecolor, int x_only)
 {
     char *u_name;
     char *env_name, *env_value, *cmd_value;
@@ -179,7 +184,7 @@ int start_mon(const char *name, const char *output, int select,
     
     if (strncmp(name, "wx", 2) == 0) 
 	start_wx(name, tempfile, env_value, cmd_value, 
-		 width, height);
+		 width, height, x_only);
     else
 	start(name, output);
     
