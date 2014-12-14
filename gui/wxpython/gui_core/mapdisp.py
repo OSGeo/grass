@@ -276,8 +276,9 @@ class MapFrameBase(wx.Frame):
        
     def StatusbarUpdate(self):
         """Update statusbar content"""
-        Debug.msg(5, "MapFrameBase.StatusbarUpdate()")
-        self.statusbarManager.Update()
+        if self.statusbarManager:
+            Debug.msg(5, "MapFrameBase.StatusbarUpdate()")
+            self.statusbarManager.Update()
         
     def IsAutoRendered(self):
         """Check if auto-rendering is enabled"""
@@ -292,12 +293,14 @@ class MapFrameBase(wx.Frame):
         """
         # assuming that the first mode is coordinates
         # probably shold not be here but good solution is not available now
-        if self.statusbarManager.GetMode() == 0:
-            self.statusbarManager.ShowItem('coordinates')
+        if self.statusbarManager:
+            if self.statusbarManager.GetMode() == 0:
+                self.statusbarManager.ShowItem('coordinates')
         
     def StatusbarReposition(self):
         """Reposition items in statusbar"""
-        self.statusbarManager.Reposition()
+        if self.statusbarManager:
+            self.statusbarManager.Reposition()
         
     def StatusbarEnableLongHelp(self, enable = True):
         """Enable/disable toolbars long help"""
@@ -334,12 +337,13 @@ class MapFrameBase(wx.Frame):
     def _setUpMapWindow(self, mapWindow):
         """Binds map windows' zoom history signals to map toolbar."""
         # enable or disable zoom history tool
-        mapWindow.zoomHistoryAvailable.connect(
-            lambda:
-            self.GetMapToolbar().Enable('zoomBack', enable=True))
-        mapWindow.zoomHistoryUnavailable.connect(
-            lambda:
-            self.GetMapToolbar().Enable('zoomBack', enable=False))
+        if self.GetMapToolbar():
+            mapWindow.zoomHistoryAvailable.connect(
+                lambda:
+                self.GetMapToolbar().Enable('zoomBack', enable=True))
+            mapWindow.zoomHistoryUnavailable.connect(
+                lambda:
+                self.GetMapToolbar().Enable('zoomBack', enable=False))
         mapWindow.mouseMoving.connect(self.CoordinatesChanged)
 
     def OnPointer(self, event):

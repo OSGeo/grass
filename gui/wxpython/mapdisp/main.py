@@ -52,6 +52,7 @@ monFile = { 'cmd' : None,
             }
 monName = None
 monSize = list(globalvar.MAP_WINDOW_SIZE)
+monDecor = False
 
 class DMonMap(Map):
     def __init__(self, giface, cmdfile=None, mapfile=None):
@@ -341,9 +342,15 @@ class DMonGrassInterface(StandaloneGrassInterface):
         return self._mapframe.GetProgressBar()
 
     def ShowStatusbar(self, show=True):
+        if not self._mapframe.statusbarManager:
+            self._mapframe.CreateStatusbar()
+        
         self._mapframe.statusbarManager.Show(show)
 
     def IsStatusbarShown(self):
+        if not self._mapframe.statusbarManager:
+            return False
+        
         return self._mapframe.statusbarManager.IsShown()
 
     def ShowAllToolbars(self, show=True):
@@ -351,11 +358,18 @@ class DMonGrassInterface(StandaloneGrassInterface):
             action = self._mapframe.RemoveToolbar
         else:
             action = self._mapframe.AddToolbar
-        for toolbar in self._mapframe.GetToolbarNames():
+        toolbars = self._mapframe.GetToolbarNames()
+        if not toolbars:
+            toolbars.append('map')
+        for toolbar in toolbars:
             action(toolbar)
     
     def AreAllToolbarsShown(self):
-        return self._mapframe.GetMapToolbar().IsShown()
+        toolbar = self._mapframe.GetMapToolbar()
+        if toolbar is None:
+            return False
+        
+        return toolbar.IsShown()
 
 class DMonFrame(MapFrame):
     def OnZoomToMap(self, event):
@@ -371,26 +385,25 @@ class MapApp(wx.App):
         grass.set_raise_on_error(True)
         # actual use of StandaloneGrassInterface not yet tested
         # needed for adding functionality in future
-        giface = DMonGrassInterface(None)
+        self._giface = DMonGrassInterface(None)
 
         if __name__ == "__main__":
             self.cmdTimeStamp = os.path.getmtime(monFile['cmd'])
-            self.Map = DMonMap(giface=giface, cmdfile=monFile['cmd'],
+            self.Map = DMonMap(giface=self._giface, cmdfile=monFile['cmd'],
                                mapfile = monFile['map'])
         else:
             self.Map = None
 
         self.mapFrm = DMonFrame(parent = None, id = wx.ID_ANY, Map = self.Map,
-                                giface = giface, size = monSize)
+                                giface = self._giface, size = monSize, toolbars = [], statusbar = False)
         # FIXME: hack to solve dependency
-        giface._mapframe = self.mapFrm
+        self._giface._mapframe = self.mapFrm
         # self.SetTopWindow(Map)
         self.mapFrm.GetMapWindow().SetAlwaysRenderEnabled(True)
         self.Map.saveToFile.connect(lambda cmd: self.mapFrm.DOutFile(cmd))
         self.Map.dToRast.connect(lambda cmd: self.mapFrm.DToRast(cmd))
         self.Map.query.connect(lambda ltype, maps: self.mapFrm.SetQueryLayersAndActivate(ltype=ltype, maps=maps))
-        self.mapFrm.Show()
-        
+                
         if __name__ == "__main__":
             self.timer = wx.PyTimer(self.watcher)
             #check each 0.5s
@@ -459,12 +472,17 @@ if __name__ == "__main__":
         except ValueError:
             pass
     
-    if len(sys.argv) == 7:
+    if len(sys.argv) >= 7:
         try:
             monSize[1] = int(sys.argv[6])
         except ValueError:
             pass
 
+    if len(sys.argv) == 8:
+        try:
+            monDecor = True if sys.argv[7] == "0" else False
+        except ValueError:
+            monDecor = True
     
     grass.verbose(_("Starting map display <%s>...") % (monName))
 
@@ -472,8 +490,12 @@ if __name__ == "__main__":
                set = 'MONITOR_%s_PID=%d' % (monName.upper(), os.getpid()))
     
     gmMap = MapApp(0)
-    # set title
-    gmMap.mapFrm.SetTitle(monName)
+    mapFrame = gmMap.GetMapFrame()
+    mapFrame.SetTitle(monName)
+    if monDecor:
+        mapFrame._giface.ShowAllToolbars(monDecor)
+        mapFrame._giface.ShowStatusbar(monDecor)
+    mapFrame.Show()
     
     gmMap.MainLoop()
     
