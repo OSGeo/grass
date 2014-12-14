@@ -67,18 +67,20 @@ class MapFrame(SingleMapFrame):
     child double buffered drawing window.
     """
     def __init__(self, parent, giface, title = _("GRASS GIS - Map display"),
-                 toolbars = ["map"], tree = None, notebook = None, lmgr = None,
+                 toolbars = ["map"], statusbar = True,
+                 tree = None, notebook = None, lmgr = None,
                  page = None, Map = None, auimgr = None, name = 'MapWindow', **kwargs):
         """Main map display window with toolbars, statusbar and
         2D map window, 3D map window and digitizer.
         
         :param toolbars: array of activated toolbars, e.g. ['map', 'digit']
+        :param statusbar: True to add statusbar
         :param tree: reference to layer tree
         :param notebook: control book ID in Layer Manager
         :param lmgr: Layer Manager
         :param page: notebook page with layer tree
         :param map: instance of render.Map
-        :param auimgs: AUI manager
+        :param auimgr: AUI manager
         :param name: frame name
         :param kwargs: wx.Frame attributes
         """
@@ -119,41 +121,10 @@ class MapFrame(SingleMapFrame):
         #
         # Add statusbar
         #
+        self.statusbarManager = None
+        if statusbar:
+            self.CreateStatusbar()
         
-        # items for choice
-        self.statusbarItems = [sb.SbCoordinates,
-                               sb.SbRegionExtent,
-                               sb.SbCompRegionExtent,
-                               sb.SbShowRegion,
-                               sb.SbAlignExtent,
-                               sb.SbResolution,
-                               sb.SbDisplayGeometry,
-                               sb.SbMapScale,
-                               sb.SbGoTo,
-                               sb.SbProjection]
-                            
-        self.statusbarItemsHiddenInNviz = (sb.SbAlignExtent,
-                                           sb.SbDisplayGeometry,
-                                           sb.SbShowRegion,
-                                           sb.SbResolution,
-                                           sb.SbMapScale)
-        
-        # create statusbar and its manager
-        statusbar = self.CreateStatusBar(number = 4, style = 0)
-        statusbar.SetStatusWidths([-5, -2, -1, -1])
-        self.statusbarManager = sb.SbManager(mapframe = self, statusbar = statusbar)
-        
-        # fill statusbar manager
-        self.statusbarManager.AddStatusbarItemsByClass(self.statusbarItems, mapframe = self, statusbar = statusbar)
-        self.statusbarManager.AddStatusbarItem(sb.SbMask(self, statusbar = statusbar, position = 2))
-        sbRender = sb.SbRender(self, statusbar = statusbar, position = 3)
-        self.statusbarManager.AddStatusbarItem(sbRender)
-        
-        self.statusbarManager.Update()
-        
-        #
-        self.Map.updateProgress.connect(self.statusbarManager.SetProgress)
-
         # init decoration objects
         self.decorations = {}
         self.legend = LegendController(self.Map, self._giface)
@@ -196,7 +167,9 @@ class MapFrame(SingleMapFrame):
         # used by Nviz (3D display mode)
         self.MapWindow3D = None 
 
-        self.toolbars['map'].SelectDefault()
+        if 'map' in self.toolbars:
+            self.toolbars['map'].SelectDefault()
+        
         #
         # Bind various events
         #
@@ -233,7 +206,45 @@ class MapFrame(SingleMapFrame):
         self.measureController = None
 
         self._resize()
-     
+
+    def CreateStatusbar(self):
+        if self.statusbarManager:
+            return
+        
+        # items for choice
+        self.statusbarItems = [sb.SbCoordinates,
+                               sb.SbRegionExtent,
+                               sb.SbCompRegionExtent,
+                               sb.SbShowRegion,
+                               sb.SbAlignExtent,
+                               sb.SbResolution,
+                               sb.SbDisplayGeometry,
+                               sb.SbMapScale,
+                               sb.SbGoTo,
+                               sb.SbProjection]
+                            
+        self.statusbarItemsHiddenInNviz = (sb.SbAlignExtent,
+                                           sb.SbDisplayGeometry,
+                                           sb.SbShowRegion,
+                                           sb.SbResolution,
+                                           sb.SbMapScale)
+        
+        # create statusbar and its manager
+        statusbar = self.CreateStatusBar(number = 4, style = 0)
+        statusbar.SetStatusWidths([-5, -2, -1, -1])
+        self.statusbarManager = sb.SbManager(mapframe = self, statusbar = statusbar)
+        
+        # fill statusbar manager
+        self.statusbarManager.AddStatusbarItemsByClass(self.statusbarItems, mapframe = self, statusbar = statusbar)
+        self.statusbarManager.AddStatusbarItem(sb.SbMask(self, statusbar = statusbar, position = 2))
+        sbRender = sb.SbRender(self, statusbar = statusbar, position = 3)
+        self.statusbarManager.AddStatusbarItem(sbRender)
+        
+        self.statusbarManager.Update()
+        
+        #
+        self.Map.updateProgress.connect(self.statusbarManager.SetProgress)
+        
     def GetMapWindow(self):
         return self.MapWindow
 
