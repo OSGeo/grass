@@ -135,9 +135,9 @@ int D_open_driver(void)
     }
     
     const struct driver *drv =
-	(p && G_strcasecmp(p, "PNG")   == 0) ? PNG_Driver() :
-	(p && G_strcasecmp(p, "PS")    == 0) ? PS_Driver() :
-	(p && G_strcasecmp(p, "HTML")  == 0) ? HTML_Driver() :
+	(p && G_strcasecmp(p, "png")   == 0) ? PNG_Driver() :
+	(p && G_strcasecmp(p, "ps")    == 0) ? PS_Driver() :
+	(p && G_strcasecmp(p, "html")  == 0) ? HTML_Driver() :
 #ifdef USE_CAIRO
 	(p && G_strcasecmp(p, "cairo") == 0) ? Cairo_Driver() :
 	Cairo_Driver();
