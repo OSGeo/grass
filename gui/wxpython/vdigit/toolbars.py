@@ -597,14 +597,14 @@ class VDigitToolbar(BaseToolbar):
         
         # close open background map if any
         bgMap = UserSettings.Get(group = 'vdigit', key = 'bgmap', subkey = 'value',
-                                 internal = True)
+                                 settings_type='internal')
         if bgMap:
             self.digit.CloseBackgroundMap()
             self.editingBgMap.emit(mapName = bgMap, unset=True)
 
         # open background map for reading
         UserSettings.Set(group = 'vdigit', key = 'bgmap', subkey = 'value',
-                         value = str(mapName), internal = True)
+                         value=str(mapName), settings_type='internal')
         self.digit.OpenBackgroundMap(mapName)
         self.editingBgMap.emit(mapName = mapName)
 
@@ -867,7 +867,7 @@ class VDigitToolbar(BaseToolbar):
             if UserSettings.Get(group = 'vdigit', key = 'bgmap',
                                 subkey = 'value', internal = True) == mapLayer.GetName():
                 UserSettings.Set(group = 'vdigit', key = 'bgmap',
-                                 subkey = 'value', value = '', internal = True)
+                                 subkey='value', value='', settings_type='internal')
             
             self.parent.SetStatusText(_("Please wait, "
                                         "opening vector map <%s> for editing...") % mapLayer.GetName(),
@@ -979,7 +979,7 @@ class VDigitToolbar(BaseToolbar):
 
             # close open background map if any
             bgMap = UserSettings.Get(group = 'vdigit', key = 'bgmap', subkey = 'value',
-                                     internal = True)
+                                     settings_type='internal')
             if bgMap:
                 self.digit.CloseBackgroundMap()
                 self.editingBgMap.emit(mapName = bgMap, unset=True)

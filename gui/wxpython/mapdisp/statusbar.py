@@ -205,7 +205,7 @@ class SbManager:
                          key = 'statusbarMode',
                          subkey = 'choices',
                          value = self.choice.GetItems(),
-                         internal = True)
+                         settings_type='internal')
 
         if not self._modeIndexSet:
             self.choice.SetSelection(UserSettings.Get(group = 'display',
