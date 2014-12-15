@@ -1,4 +1,3 @@
-
 /***************************************************************
  *
  * MODULE:       v.type
@@ -8,7 +7,7 @@
  *
  * PURPOSE:      Feature type manipulations
  *               
- * COPYRIGHT:    (C) 2001-2010 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2001-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2).  Read the file COPYING that
@@ -38,6 +37,10 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("geometry"));
+    G_add_keyword(_("editing"));
+    G_add_keyword(_("area"));
+    G_add_keyword(_("line"));
+    G_add_keyword(_("point"));
     module->description = _("Changes type of vector features.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
