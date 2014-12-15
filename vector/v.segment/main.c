@@ -9,7 +9,7 @@
  *               
  * PURPOSE:      Generate segments or points from input map and segments read from stdin 
  *               
- * COPYRIGHT:    (C) 2002-2013 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -59,6 +59,10 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("geometry"));
+    G_add_keyword(_("node"));
+    G_add_keyword(_("point"));
+    G_add_keyword(_("segment"));
+    G_add_keyword(_("vertex"));
     module->description =
 	_("Creates points/segments from input vector lines and positions.");
 

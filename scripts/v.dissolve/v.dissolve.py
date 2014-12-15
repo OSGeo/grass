@@ -20,6 +20,7 @@
 #% keywords: vector
 #% keywords: dissolve
 #% keywords: area
+#% keywords: line
 #%end
 #%option G_OPT_V_INPUT
 #%end

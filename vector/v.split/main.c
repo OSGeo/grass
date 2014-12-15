@@ -1,15 +1,14 @@
-
 /***************************************************************
  *
  * MODULE:       v.split
  * 
  * AUTHOR(S):    Radim Blazek
  *               OGR support by Martin Landa <landa.martin gmail.com>
- *               update for GRASS 7 Markus Metz
+ *               update for GRASS 7 by Markus Metz
  *
  * PURPOSE:      Split lines to segments
  *               
- * COPYRIGHT:    (C) 2001-2009 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2001-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2).  Read the file COPYING that
@@ -54,6 +53,10 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("geometry"));
+    G_add_keyword(_("densification"));
+    G_add_keyword(_("node"));
+    G_add_keyword(_("segment"));
+    G_add_keyword(_("vertex"));
     module->description = _("Splits vector lines to shorter segments.");
     
     in_opt = G_define_standard_option(G_OPT_V_INPUT);
