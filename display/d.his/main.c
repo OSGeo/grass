@@ -187,7 +187,7 @@ int main(int argc, char **argv)
     intensity = 255;		/* default is to not change intensity */
     saturation = 255;		/* default is to not change saturation */
 
-    D_cell_draw_begin();
+    D_raster_draw_begin();
 
     next_row = 0;
     for (atrow = 0; atrow < window.rows;) {
@@ -238,7 +238,7 @@ int main(int argc, char **argv)
 	    break;
     }
     G_percent(window.rows, window.rows, 5);
-    D_cell_draw_end();
+    D_raster_draw_end();
 
     D_save_command(G_recreate_command());
     
