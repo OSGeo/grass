@@ -49,6 +49,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("geometry"));
     G_add_keyword(_("buffer"));
+    G_add_keyword(_("line"));
     module->description = _("Creates parallel line to input vector lines.");
 
     in_opt = G_define_standard_option(G_OPT_V_INPUT);

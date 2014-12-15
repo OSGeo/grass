@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:     v.edit
@@ -9,7 +8,7 @@
  *             Jachym Cepicky
  *             Major updates by Martin Landa <landa.martin gmail.com>
  *
- * COPYRIGHT:  (C) 2006-2011, 2013 by the GRASS Development Team
+ * COPYRIGHT:  (C) 2006-2014 by the GRASS Development Team
  *
  *             This program is free software under the GNU General
  *             Public License (>=v2). Read the file COPYING that comes
@@ -55,7 +54,9 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("geometry"));
     G_add_keyword(_("editing"));
+    G_add_keyword(_("line"));
     G_add_keyword(_("node"));
+    G_add_keyword(_("point"));
     G_add_keyword(_("vertex"));
     module->description = _("Edits a vector map, allows adding, deleting "
 			    "and modifying selected vector features.");
