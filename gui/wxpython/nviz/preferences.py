@@ -64,7 +64,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
         row = 0
         # perspective
         pvals = UserSettings.Get(group = 'nviz', key = 'view', subkey = 'persp')
-        ipvals = UserSettings.Get(group = 'nviz', key = 'view', subkey = 'persp', internal = True)
+        ipvals = UserSettings.Get(group='nviz', key='view', subkey='persp', settings_type='internal')
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
                                          label = _("Perspective:")),
                       pos = (row, 0), flag = wx.ALIGN_CENTER_VERTICAL)
@@ -127,7 +127,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
         
         # twist
         tvals = UserSettings.Get(group = 'nviz', key = 'view', subkey = 'twist')
-        itvals = UserSettings.Get(group = 'nviz', key = 'view', subkey = 'twist', internal = True)
+        itvals = UserSettings.Get(group='nviz', key='view', subkey='twist', settings_type='internal')
         gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
                                          label = _("Twist:")),
                       pos = (row, 0), flag = wx.ALIGN_CENTER_VERTICAL)
@@ -532,7 +532,7 @@ class NvizPreferencesDialog(PreferencesBaseDialog):
                       pos = (row, 2), flag = wx.ALIGN_CENTER_VERTICAL)
         isym = wx.Choice (parent = panel, id = wx.ID_ANY, size = (100, -1),
                           choices = UserSettings.Get(group = 'nviz', key = 'vector',
-                                                   subkey = ['points', 'marker'], internal = True))
+                                                   subkey=['points', 'marker'], settings_type='internal'))
         isym.SetName("GetSelection")
         self.winId['nviz:vector:points:marker'] = isym.GetId()
         isym.SetSelection(UserSettings.Get(group = 'nviz', key = 'vector',

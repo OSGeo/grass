@@ -482,7 +482,7 @@ class ProcessWorkspaceFile:
         """
         marker = str(nodePoints.get('marker', ''))
         markerId = list(UserSettings.Get(group='nviz', key='vector',
-                                         subkey=['points', 'marker'], internal=True)).index(marker)
+                                         subkey=['points', 'marker'], settings_type='internal')).index(marker)
         nvizData['vector']['points']['marker'] = {'value': markerId}
 
         node_mode = nodePoints.find('mode')
@@ -1118,7 +1118,7 @@ class WriteWorkspaceFile(object):
             elif attrb == 'points':
                 markerId = data[attrb]['marker']['value']
                 marker = UserSettings.Get(group = 'nviz', key = 'vector',
-                                          subkey = ['points', 'marker'], internal = True)[markerId]
+                                          subkey = ['points', 'marker'], settings_type='internal')[markerId]
                 self.file.write('%s<v%s marker="%s">\n' % (' ' * self.indent,
                                                            attrb,
                                                            marker))

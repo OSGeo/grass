@@ -1500,13 +1500,14 @@ class GMFrame(wx.Frame):
         """General GUI preferences/settings
         """
         if not self.dialogs['preferences']:
-            dlg = PreferencesDialog(parent = self, giface = self._giface)
+            dlg = PreferencesDialog(parent=self, giface=self._giface)
             self.dialogs['preferences'] = dlg
-            self.dialogs['preferences'].CenterOnScreen()
-            
+            self.dialogs['preferences'].CenterOnParent()
+
             dlg.settingsChanged.connect(self.OnSettingsChanged)
-        
-        self.dialogs['preferences'].ShowModal()
+            self.Bind(wx.EVT_CLOSE, lambda evt: self.dialogs.update(preferences=None), dlg)
+
+        self.dialogs['preferences'].Show()
         
     def OnNvizPreferences(self, event):
         """Show nviz preferences"""

@@ -256,7 +256,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
         cursors = wx.Choice(parent=panel,
                             choices=self.settings.Get(group='mapswipe', key='cursor',
-                                                      subkey=['type', 'choices'], internal=True),
+                                                      subkey=['type', 'choices'], settings_type='internal'),
                             name="GetSelection")
         cursors.SetSelection(self.settings.Get(group='mapswipe', key='cursor',
                                                subkey=['type', 'selection']))

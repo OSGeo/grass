@@ -756,7 +756,7 @@ class VDigitWindow(BufferedMapWindow):
         pos2 = self.Pixel2Cell(self.mouse['end'])
         
         if UserSettings.Get(group = 'vdigit', key = 'bgmap',
-                            subkey = 'value', internal = True) == '':
+                            subkey='value', settings_type='internal') == '':
             # no background map -> copy from current vector map layer
             nselected = self.digit.GetDisplay().SelectLinesByBox((pos1, pos2))
             
@@ -774,7 +774,7 @@ class VDigitWindow(BufferedMapWindow):
                 colorStr = str(color[0]) + ":" + str(color[1]) + ":" + str(color[2])
                 dVectTmp = ['d.vect',
                             'map=%s' % UserSettings.Get(group = 'vdigit', key = 'bgmap',
-                                                        subkey = 'value', internal = True),
+                                                        subkey='value', settings_type='internal'),
                             'cats=%s' % ListOfCatsToRange(self.copyIds),
                             '-i',
                             'color=%s' % colorStr,

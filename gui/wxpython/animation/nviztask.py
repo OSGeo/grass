@@ -139,7 +139,7 @@ class NvizTask:
         if 'marker' in points:
             marker = list(UserSettings.Get(group='nviz', key='vector',
                                            subkey=['points', 'marker'],
-                                           internal=True))[points['marker']['value']]
+                                           settings_type='internal'))[points['marker']['value']]
             self._setMultiTaskParam('vpoint_marker', marker)
         if 'mode' in points:
             if points['mode']['type'] == '3d':
