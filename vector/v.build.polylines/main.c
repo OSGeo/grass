@@ -1,4 +1,3 @@
-
 /****************************************************************************
  *
  * MODULE:       v.build.polylines
@@ -8,7 +7,7 @@
  *               Martin Landa <landa.martin gmail.com> (cats)
  *               Markus Metz (geometry type management, cats, attributes)
  * PURPOSE:      
- * COPYRIGHT:    (C) 2002-2012 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2000-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -112,6 +111,9 @@ int main(int argc, char **argv)
     G_add_keyword(_("vector"));
     G_add_keyword(_("topology"));
     G_add_keyword(_("geometry"));
+    G_add_keyword(_("line"));
+    G_add_keyword(_("node"));
+    G_add_keyword(_("vertex"));
     module->description = _("Builds polylines from lines or boundaries.");
 
     /* Define the options */

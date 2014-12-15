@@ -18,6 +18,8 @@
 #% keywords: vector
 #% keywords: sampling
 #% keywords: database
+#% keywords: position
+#% keywords: querying
 #% keywords: attribute table
 #%end
 
