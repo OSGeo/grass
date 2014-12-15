@@ -85,9 +85,10 @@ class PreferencesBaseDialog(wx.Dialog):
         
         # bindigs
         self.btnDefault.Bind(wx.EVT_BUTTON, self.OnDefault)
-        self.btnDefault.SetToolTipString(_("Revert settings to default and apply changes"))
+        self.btnDefault.SetToolTipString(_("Revert settings to default"))
         self.btnApply.Bind(wx.EVT_BUTTON, self.OnApply)
-        self.btnApply.SetToolTipString(_("Apply changes for the current session"))
+        self.btnApply.SetToolTipString(_("Apply changes for the current session only and close"))
+        self.btnApply.SetLabel(_("Save for this session only"))
         self.btnSave.Bind(wx.EVT_BUTTON, self.OnSave)
         self.btnSave.SetToolTipString(_("Apply and save changes to user settings file (default for next sessions)"))
         self.btnSave.SetDefault()
@@ -119,21 +120,19 @@ class PreferencesBaseDialog(wx.Dialog):
         
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
-        
+
     def OnDefault(self, event):
         """Button 'Set to default' pressed"""
-        self.settings.userSettings = copy.deepcopy(self.settings.defaultSettings)
-        
         # update widgets
         for gks in self.winId.keys():
             try:
                 group, key, subkey = gks.split(':')
-                value = self.settings.Get(group, key, subkey)
+                value = self.settings.Get(group, key, subkey, settings_type='default')
             except ValueError:
                 group, key, subkey, subkey1 = gks.split(':')
-                value = self.settings.Get(group, key, [subkey, subkey1])
+                value = self.settings.Get(group, key, [subkey, subkey1], settings_type='default')
             win = self.FindWindowById(self.winId[gks])
-            
+
             if win.GetName() in ('GetValue', 'IsChecked'):
                 value = win.SetValue(value)
             elif win.GetName() == 'GetSelection':
@@ -144,7 +143,7 @@ class PreferencesBaseDialog(wx.Dialog):
                 value = win.SetLabel(value)
             else:
                 value = win.SetValue(value)
-        
+
     def OnApply(self, event):
         """Button 'Apply' pressed
         Emits signal settingsChanged.
@@ -155,7 +154,8 @@ class PreferencesBaseDialog(wx.Dialog):
             self.Close()
 
     def OnCloseWindow(self, event):
-        self.Hide()
+        event.Skip()
+        self.Destroy()
         
     def OnCancel(self, event):
         """Button 'Cancel' pressed"""
@@ -414,7 +414,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 0))
         locales = self.settings.Get(group = 'language', key = 'locale', 
-                                         subkey = 'choices', internal = True)
+                                         subkey = 'choices', settings_type='internal')
         loc = self.settings.Get(group = 'language', key = 'locale', subkey = 'lc_all')
         elementList = wx.Choice(parent = panel, id = wx.ID_ANY, size = (325, -1),
                                 choices = locales, name = "GetStringSelection")
@@ -450,7 +450,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       pos = (row, 0))
         elementList = wx.Choice(parent = panel, id = wx.ID_ANY, size = (325, -1),
                                 choices = self.settings.Get(group = 'appearance', key = 'elementListExpand',
-                                                            subkey = 'choices', internal = True),
+                                                            subkey = 'choices', settings_type='internal'),
                                 name = "GetSelection")
         elementList.SetSelection(self.settings.Get(group = 'appearance', key = 'elementListExpand',
                                                    subkey = 'selection'))
@@ -471,7 +471,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 0))
         listOfStyles = self.settings.Get(group = 'appearance', key = 'menustyle',
-                                         subkey = 'choices', internal = True)
+                                         subkey='choices', settings_type='internal')
         
         menuItemText = wx.Choice(parent = panel, id = wx.ID_ANY, size = (325, -1),
                                  choices = listOfStyles,
@@ -494,8 +494,8 @@ class PreferencesDialog(PreferencesBaseDialog):
                       flag = wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 0))
-        min = self.settings.Get(group = 'appearance', key = 'gSelectPopupHeight', subkey = 'min', internal = True)
-        max = self.settings.Get(group = 'appearance', key = 'gSelectPopupHeight', subkey = 'max', internal = True)
+        min = self.settings.Get(group = 'appearance', key = 'gSelectPopupHeight', subkey = 'min', settings_type='internal')
+        max = self.settings.Get(group = 'appearance', key = 'gSelectPopupHeight', subkey = 'max', settings_type='internal')
         value = self.settings.Get(group = 'appearance', key = 'gSelectPopupHeight', subkey = 'value')
         
         popupHeightSpin = wx.SpinCtrl(parent = panel, id = wx.ID_ANY, size = (100, -1))
@@ -520,7 +520,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       pos = (row, 0))
         iconTheme = wx.Choice(parent = panel, id = wx.ID_ANY, size = (100, -1),
                               choices = self.settings.Get(group = 'appearance', key = 'iconTheme',
-                                                        subkey = 'choices', internal = True),
+                                                        subkey = 'choices', settings_type='internal'),
                               name = "GetStringSelection")
         iconTheme.SetStringSelection(self.settings.Get(group = 'appearance', key = 'iconTheme', subkey = 'type'))
         self.winId['appearance:iconTheme:type'] = iconTheme.GetId()
@@ -540,7 +540,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       pos = (row, 0))
         styleList = wx.Choice(parent = panel, id = wx.ID_ANY, size = (325, -1),
                                 choices = self.settings.Get(group = 'appearance', key = 'commandNotebook',
-                                                            subkey = 'choices', internal = True),
+                                                            subkey = 'choices', settings_type='internal'),
                                 name = "GetSelection")
         styleList.SetSelection(self.settings.Get(group = 'appearance', key = 'commandNotebook',
                                                    subkey = 'selection'))
@@ -613,7 +613,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       flag = wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 0))
-        listOfDrivers = self.settings.Get(group = 'display', key = 'driver', subkey = 'choices', internal = True)
+        listOfDrivers = self.settings.Get(group = 'display', key = 'driver', subkey = 'choices', settings_type='internal')
         driver = wx.Choice(parent = panel, id = wx.ID_ANY, size = (150, -1),
                            choices = listOfDrivers,
                            name = "GetStringSelection")
@@ -633,7 +633,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       flag = wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 0))
-        listOfModes = self.settings.Get(group = 'display', key = 'statusbarMode', subkey = 'choices', internal = True)
+        listOfModes = self.settings.Get(group = 'display', key = 'statusbarMode', subkey = 'choices', settings_type='internal')
         statusbarMode = wx.Choice(parent = panel, id = wx.ID_ANY, size = (150, -1),
                                   choices = listOfModes,
                                   name = "GetSelection")
@@ -724,7 +724,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       flag = wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 0))
-        listOfModes = self.settings.Get(group = 'display', key = 'mouseWheelZoom', subkey = 'choices', internal = True)
+        listOfModes = self.settings.Get(group = 'display', key = 'mouseWheelZoom', subkey = 'choices', settings_type='internal')
         zoomAction = wx.Choice(parent = panel, id = wx.ID_ANY, size = (200, -1),
                                choices = listOfModes,
                                name = "GetSelection")
@@ -739,7 +739,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       flag = wx.ALIGN_LEFT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 0))
-        listOfModes = self.settings.Get(group = 'display', key = 'scrollDirection', subkey = 'choices', internal = True)
+        listOfModes = self.settings.Get(group = 'display', key = 'scrollDirection', subkey = 'choices', settings_type='internal')
         scrollDir = wx.Choice(parent = panel, id = wx.ID_ANY, size = (200, -1),
                                choices = listOfModes,
                                name = "GetSelection")
@@ -859,7 +859,7 @@ class PreferencesDialog(PreferencesBaseDialog):
                       wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 0))
         verbosity = wx.Choice(parent = panel, id = wx.ID_ANY, size = (200, -1),
-                              choices = self.settings.Get(group = 'cmd', key = 'verbosity', subkey = 'choices', internal = True),
+                              choices = self.settings.Get(group = 'cmd', key = 'verbosity', subkey = 'choices', settings_type='internal'),
                               name = "GetStringSelection")
         verbosity.SetStringSelection(self.settings.Get(group = 'cmd', key = 'verbosity', subkey = 'selection'))
         self.winId['cmd:verbosity:selection'] = verbosity.GetId()
@@ -1113,7 +1113,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         flexSizer.AddGrowableCol(0)
         label = wx.StaticText(parent = panel, id = wx.ID_ANY, label = _("Left mouse double click:"))
         leftDbClick = wx.Choice(parent = panel, id = wx.ID_ANY,
-                                choices = self.settings.Get(group = 'atm', key = 'leftDbClick', subkey = 'choices', internal = True),
+                                choices = self.settings.Get(group = 'atm', key = 'leftDbClick', subkey = 'choices', settings_type='internal'),
                                 name = "GetSelection")
         leftDbClick.SetSelection(self.settings.Get(group = 'atm', key = 'leftDbClick', subkey = 'selection'))
         self.winId['atm:leftDbClick:selection'] = leftDbClick.GetId()

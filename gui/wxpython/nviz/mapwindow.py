@@ -182,7 +182,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         # default values
         self.nvizDefault = NvizSettings()
         self.view = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'view')) # copy
-        self.iview = UserSettings.Get(group = 'nviz', key = 'view', internal = True)
+        self.iview = UserSettings.Get(group='nviz', key='view', settings_type='internal')
         self.light = copy.deepcopy(UserSettings.Get(group = 'nviz', key = 'light')) # copy
         self.decoration = self.nvizDefault.SetDecorDefaultProp(type = 'arrow')
         self.decoration['scalebar'] = []

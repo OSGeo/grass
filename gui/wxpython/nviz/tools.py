@@ -1420,7 +1420,7 @@ class NvizToolWindow(FN.FlatNotebook):
                       pos = (0, 5), flag = wx.ALIGN_CENTER_VERTICAL | wx.ALIGN_RIGHT)
         isym = wx.Choice (parent = panel, id = wx.ID_ANY, size = (100, -1),
                           choices = UserSettings.Get(group = 'nviz', key = 'vector',
-                                                   subkey = ['points', 'marker'], internal = True))
+                                                   subkey=['points', 'marker'], settings_type='internal'))
         isym.SetName("selection")
         self.win['vector']['points']['marker'] = isym.GetId()
         isym.Bind(wx.EVT_CHOICE, self.OnVectorPoints)

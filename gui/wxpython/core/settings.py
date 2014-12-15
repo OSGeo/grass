@@ -1063,23 +1063,26 @@ class Settings:
                 
         return value
 
-    def Get(self, group, key = None, subkey = None, internal = False):
+    def Get(self, group, key=None, subkey=None, settings_type='user'):
         """Get value by key/subkey
 
         Raise KeyError if key is not found
-        
+
         :param group: settings group
         :param key: (value, None)
         :param subkey: (value, list or None)
-        :param internal: use internal settings instead
+        :param settings_type: 'user', 'internal', 'default'
 
         :return: value
         """
-        if internal is True:
+
+        if settings_type == 'user':
+            settings = self.userSettings
+        elif settings_type == 'internal':
             settings = self.internalSettings
         else:
-            settings = self.userSettings
-            
+            settings = self.defaultSettings
+
         try:
             if subkey is None:
                 if key is None:
@@ -1091,28 +1094,31 @@ class Settings:
                         type(subkey) == type(list()):
                     return settings[group][key][subkey[0]][subkey[1]]
                 else:
-                    return settings[group][key][subkey]  
+                    return settings[group][key][subkey]
 
         except KeyError:
             print >> sys.stderr, "Settings: unable to get value '%s:%s:%s'\n" % \
                 (group, key, subkey)
-        
-    def Set(self, group, value, key = None, subkey = None, internal = False):
+
+    def Set(self, group, value, key=None, subkey=None, settings_type='user'):
         """Set value of key/subkey
-        
+
         Raise KeyError if group/key is not found
-        
+
         :param group: settings group
         :param key: key (value, None)
         :param subkey: subkey (value, list or None)
         :param value: value
-        :param internal: use internal settings instead
+        :param settings_type: 'user', 'internal', 'default'
         """
-        if internal is True:
+
+        if settings_type == 'user':
+            settings = self.userSettings
+        elif settings_type == 'internal':
             settings = self.internalSettings
         else:
-            settings = self.userSettings
-        
+            settings = self.defaultSettings
+
         try:
             if subkey is None:
                 if key is None:
@@ -1127,7 +1133,7 @@ class Settings:
                     settings[group][key][subkey] = value
         except KeyError:
             raise GException("%s '%s:%s:%s'" % (_("Unable to set "), group, key, subkey))
-        
+
     def Append(self, dict, group, key, subkey, value, overwrite = True):
         """Set value of key/subkey
 

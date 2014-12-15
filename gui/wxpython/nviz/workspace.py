@@ -344,7 +344,7 @@ class NvizSettings(object):
                                  subkey='color')[:3])
             data['arrow'].update(copy.deepcopy(UserSettings.Get(group='nviz',
                                                                 key='arrow',
-                                                                internal=True)))
+                                                                settings_type='internal')))
             data['arrow']['show'] = False
 
         # arrow
@@ -356,6 +356,6 @@ class NvizSettings(object):
                                  subkey='color')[:3])
             data['scalebar'].update(copy.deepcopy(UserSettings.Get(group='nviz',
                                                                    key='scalebar',
-                                                                   internal=True)))
+                                                                   settings_type='internal')))
             data['scalebar']['id'] = 0
         return data
