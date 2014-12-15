@@ -27,40 +27,26 @@ static double dst[2][2];
 
 static int draw_cell(int, const void *, struct Colors *, RASTER_MAP_TYPE);
 
-/* routines used by programs such as Dcell, display, combine, and weight
- * for generating raster images (for 1-byte, i.e. not super-cell, data)
- *
- * D_cell_draw_setup(t, b, l, r)
- *    int t, b, l, r    (pixle extents of display window)
- *                      (obtainable via D_get_dst(&t, &b, &l, &r)
- *   Sets up the environment for D_draw_cell
- *
- * D_draw_cell(A_row, xarray, colors)
- *    int A_row ;  
- *    CELL *xarray ;
- *   - determinew which pixle row gets the data
- *   - resamples the data to create a pixle array
- *   - determines best way to draw the array
- *      a - for single cat array, a move and a draw
- *      b - otherwise, a call to D_raster()
- *   - returns  -1 on error or end of picture
- *         or array row number needed for next pixle row.
- *
- *   presumes the map is drawn from north to south
- *
- * ALSO: if overlay mode is desired, then call D_set_overlay_mode(1)
- *       first.
- */
-
 /*!
   \brief Draw raster row
   
-  \param A_row row number
-  \param array
+  - determine which pixel row gets the data
+  - resamples the data to create a pixel array
+  - determines best way to draw the array
+  a - for single cat array, a move and a draw
+  b - otherwise, a call to D_raster()
+
+  Presumes the map is drawn from north to south.
+
+  If overlay mode is desired, then call D_set_overlay_mode() first.
+
+  \param A_row row number (starts at 0)
+  \param array data buffer
   \param colors pointer to Colors structure
   \param data_type raster type (CELL, FCELL, DCELL)
 
-  \return 
+  \return next row number needed for next pixel row
+  \return -1 nothing to draw (on error or end of raster)
 */
 int D_draw_raster(int A_row,
 		  const void *array,
@@ -72,8 +58,8 @@ int D_draw_raster(int A_row,
 /*!
   \brief Draw raster row (DCELL)
   
-  \param A_row row number
-  \param darray
+  \param A_row row number (starts at 0)
+  \param darray data buffer
   \param colors pointer to Colors structure
 
   \return 
@@ -129,7 +115,8 @@ int D_draw_c_raster(int A_row, const CELL * carray, struct Colors *colors)
   \param carray
   \param colors pointer to Colors structure
   
-  \return
+  \return next row to draw
+  \return -1 nothing to draw
 */
 int D_draw_cell(int A_row, const CELL * carray, struct Colors *colors)
 {
