@@ -30,8 +30,6 @@ int display(const char *name,
 	Rast_set_null_value_color(r, g, b, &colors);
     }
 
-    D_setup(0);
-
     /* Go draw the raster map */
     cell_draw(name, &colors, overlay, invert, data_type);
 
