@@ -107,12 +107,11 @@ int D_draw_raster(int, const void *, struct Colors *, RASTER_MAP_TYPE);
 int D_draw_d_raster(int, const DCELL *, struct Colors *);
 int D_draw_f_raster(int, const FCELL *, struct Colors *);
 int D_draw_c_raster(int, const CELL *, struct Colors *);
-int D_draw_cell(int, const CELL *, struct Colors *);
-void D_cell_draw_begin(void);
+void D_raster_draw_begin(void);
 int D_draw_raster_RGB(int, const void *, const void *, const void *,
 		      struct Colors *, struct Colors *, struct Colors *,
 		      RASTER_MAP_TYPE, RASTER_MAP_TYPE, RASTER_MAP_TYPE);
-void D_cell_draw_end(void);
+void D_raster_draw_end(void);
 
 /* raster2.c */
 int D_set_overlay_mode(int);
