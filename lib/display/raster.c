@@ -86,6 +86,14 @@ int D_draw_f_raster(int A_row, const FCELL * farray, struct Colors *colors)
 
 /*!
   \brief Draw raster row (CELL)
+
+  The <b>row</b> gives the map array row. The <b>carray</b> array
+  provides the categories for each raster value in that row.  This
+  routine is called consecutively with the information necessary to
+  draw a raster image from north to south. No rows can be skipped. All
+  screen pixel rows which represent the current map array row are
+  rendered. The routine returns the map array row which is needed to
+  draw the next screen pixel row.
   
   \param A_row row number (starts at 0)
   \param carray data buffer
@@ -95,32 +103,6 @@ int D_draw_f_raster(int A_row, const FCELL * farray, struct Colors *colors)
   \return -1 nothing to draw (on error or end of raster)
 */
 int D_draw_c_raster(int A_row, const CELL * carray, struct Colors *colors)
-{
-    return draw_cell(A_row, carray, colors, CELL_TYPE);
-}
-
-
-/*!
-  \brief Render a raster row
-
-  \todo Replace by D_draw_c_raster()
-  
-  The <b>row</b> gives the map array row. The <b>raster</b> array
-  provides the categories for each raster value in that row.  This
-  routine is called consecutively with the information necessary to
-  draw a raster image from north to south. No rows can be skipped. All
-  screen pixel rows which represent the current map array row are
-  rendered. The routine returns the map array row which is needed to
-  draw the next screen pixel row.
- 
-  \param A_row row number
-  \param carray
-  \param colors pointer to Colors structure
-  
-  \return next row to draw
-  \return -1 nothing to draw
-*/
-int D_draw_cell(int A_row, const CELL * carray, struct Colors *colors)
 {
     return draw_cell(A_row, carray, colors, CELL_TYPE);
 }
@@ -167,7 +149,7 @@ static int draw_cell(int A_row,
   <b>right</b>, all of which are obtainable from D_get_dst() for the
   current frame.
 */
-void D_cell_draw_begin(void)
+void D_raster_draw_begin(void)
 {
     /* Set up the screen for drawing map */
     D_get_a(src);
@@ -244,9 +226,9 @@ int D_draw_raster_RGB(int A_row,
 }
 
 /*!
-  \brief Finish rendering
+  \brief Finish raster rendering
 */
-void D_cell_draw_end(void)
+void D_raster_draw_end(void)
 {
     COM_end_raster();
 }
