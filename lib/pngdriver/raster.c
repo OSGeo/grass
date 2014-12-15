@@ -102,8 +102,8 @@ void PNG_begin_raster(int mask, int s[2][2], double fd[2][2])
 /*!
   \brief Draw raster row
 
-  \param n number of cell
-  \param row raster row
+  \param n number of cells
+  \param row raster row (starts at 0)
   \param red,grn,blu,nul red,green,blue and null value
 
   \return next row
