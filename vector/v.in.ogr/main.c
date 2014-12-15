@@ -1141,6 +1141,7 @@ int main(int argc, char *argv[])
 			}
 #endif
 			else if (Ogr_ftype == OFTString ||
+			         Ogr_ftype == OFTStringList ||
 				 Ogr_ftype == OFTIntegerList) {
 			    db_set_string(&strval, (char *)
 					  OGR_F_GetFieldAsString(Ogr_feature,
@@ -1166,6 +1167,7 @@ int main(int argc, char *argv[])
 			}
 #endif
 			else if (Ogr_ftype == OFTString ||
+			         Ogr_ftype == OFTStringList ||
 				 Ogr_ftype == OFTIntegerList) {
 			    sprintf(buf, ", ''");
 			}
