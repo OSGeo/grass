@@ -45,7 +45,7 @@ static int draw_cell(int, const void *, struct Colors *, RASTER_MAP_TYPE);
   \param colors pointer to Colors structure
   \param data_type raster type (CELL, FCELL, DCELL)
 
-  \return next row number needed for next pixel row
+  \return row number needed for next pixel row
   \return -1 nothing to draw (on error or end of raster)
 */
 int D_draw_raster(int A_row,
@@ -72,11 +72,12 @@ int D_draw_d_raster(int A_row, const DCELL * darray, struct Colors *colors)
 /*!
   \brief Draw raster row (FCELL)
   
-  \param A_row row number
-  \param farray
+  \param A_row row number (starts at 0)
+  \param farray data buffer
   \param colors pointer to Colors structure
 
-  \return 
+  \return row number needed for next pixel row
+  \return -1 nothing to draw (on error or end of raster)
 */
 int D_draw_f_raster(int A_row, const FCELL * farray, struct Colors *colors)
 {
@@ -86,11 +87,12 @@ int D_draw_f_raster(int A_row, const FCELL * farray, struct Colors *colors)
 /*!
   \brief Draw raster row (CELL)
   
-  \param A_row row number
-  \param carray
+  \param A_row row number (starts at 0)
+  \param carray data buffer
   \param colors pointer to Colors structure
 
-  \return 
+  \return row number needed for next pixel row
+  \return -1 nothing to draw (on error or end of raster)
 */
 int D_draw_c_raster(int A_row, const CELL * carray, struct Colors *colors)
 {
@@ -162,10 +164,9 @@ static int draw_cell(int A_row,
  
   The raster display subsystem establishes conversion parameters based
   on the screen extent defined by <b>top, bottom, left</b>, and
-  <b>right</b>, all of which are obtainable from <i>D_get_dst for the
-  current frame.</i>
+  <b>right</b>, all of which are obtainable from D_get_dst() for the
+  current frame.
 */
-
 void D_cell_draw_begin(void)
 {
     /* Set up the screen for drawing map */
@@ -177,7 +178,7 @@ void D_cell_draw_begin(void)
 /*!
   \brief Draw raster row in RGB mode
 
-  \param A_row row number
+  \param A_row row number (starts at 0)
   \param r_raster red data buffer
   \param g_raster green data buffer
   \param b_raster blue data buffer
@@ -188,7 +189,8 @@ void D_cell_draw_begin(void)
   \param g_type raster type used for red channel
   \param b_type raster type used for red channel
 
-  \return
+  \return row number needed for next pixel row
+  \return -1 nothing to draw (on error or end of raster)
 */
 int D_draw_raster_RGB(int A_row,
 		      const void *r_raster, const void *g_raster,
