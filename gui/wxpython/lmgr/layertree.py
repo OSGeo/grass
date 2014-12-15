@@ -1450,7 +1450,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if digitToolbar:
             mapLayer = self.GetLayerInfo(layer, key = 'maplayer')
             bgmap = UserSettings.Get(group = 'vdigit', key = 'bgmap', subkey = 'value',
-                                     internal = True)
+                                     settings_type='internal')
             
             if digitToolbar.GetLayer() == mapLayer:
                 self._setGradient('vdigit')
