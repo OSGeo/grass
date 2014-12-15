@@ -29,10 +29,10 @@ static char *parse_variable(const char *, char **);
 
 int main(int argc, char *argv[])
 {
-    int n, store, nopts;
-    const char *name, *u_name;
+    int n, store;
+    const char *name, *u_name, *sep;
     char *value;
-    struct Option *get_opt, *set_opt, *unset_opt, *store_opt;
+    struct Option *get_opt, *set_opt, *unset_opt, *store_opt, *sep_opt;
     struct Flag *flag_s, *flag_n;
     struct GModule *module;
 
@@ -52,15 +52,16 @@ int main(int argc, char *argv[])
     get_opt->key = "get";
     get_opt->type = TYPE_STRING;
     get_opt->description = _("GRASS variable to get");
-    get_opt->key_desc = "VARIABLE";
+    get_opt->key_desc = "variable";
     get_opt->required = NO;
     get_opt->guisection = _("Get");
-
+    get_opt->multiple = YES;
+    
     set_opt = G_define_option();
     set_opt->key = "set";
     set_opt->type = TYPE_STRING;
     set_opt->description = _("GRASS variable to set");
-    set_opt->key_desc = "\"VARIABLE=value\"";
+    set_opt->key_desc = "\"variable=value\"";
     set_opt->required = NO;
     set_opt->guisection = _("Set");
 
@@ -68,7 +69,7 @@ int main(int argc, char *argv[])
     unset_opt->key = "unset";
     unset_opt->type = TYPE_STRING;
     unset_opt->description = _("GRASS variable to unset");
-    unset_opt->key_desc = "VARIABLE";
+    unset_opt->key_desc = "variable";
     unset_opt->required = NO;
     unset_opt->guisection = _("Set");
 
@@ -81,6 +82,10 @@ int main(int argc, char *argv[])
     store_opt->required = NO;
     store_opt->guisection = _("Set");
 
+    sep_opt = G_define_standard_option(G_OPT_F_SEP);
+    sep_opt->label = _("Separator for multiple GRASS variables");
+    sep_opt->answer = "newline";
+    
     flag_s = G_define_flag();
     flag_s->key = 's';
     flag_s->description = _("Use shell syntax (for \"eval\")");
@@ -91,21 +96,15 @@ int main(int argc, char *argv[])
     flag_n->description = _("Do not use shell syntax");
     flag_n->guisection = _("Format");
 
+    G_option_exclusive(flag_s, flag_n, NULL);
+    G_option_exclusive(get_opt, set_opt, unset_opt, NULL);
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (flag_s->answer && flag_n->answer)
-	G_fatal_error(_("Flags -%c and -%c are mutually exclusive"), flag_s->key, flag_n->key);
-
-    nopts = 0;
-    if (get_opt->answer)
-	nopts++;
-    if (set_opt->answer)
-	nopts++;
-    if (unset_opt->answer)
-	nopts++;
-
-    if (nopts == 0) {
+    sep = G_option_to_separator(sep_opt);
+    
+    if (!get_opt->answer && !set_opt->answer && !unset_opt->answer) {
 	/* Print or optionally set environment variables */
 	int quote;
 	
@@ -128,18 +127,23 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
     }
     
-    if (nopts != 1)
-	G_fatal_error(_("Options <%s>, <%s>, and <%s> are mutually exclusive"),
-		      get_opt->key, set_opt->key, unset_opt->key);
-    
     store = G_VAR_GISRC;
     if (store_opt->answer[0] == 'm')
 	store = G_VAR_MAPSET;
 
     if (get_opt->answer) {
-        u_name = parse_variable(get_opt->answer, NULL);
-	value = (char *)G_getenv2(u_name, store);
-	fprintf(stdout, "%s\n", value);
+        n = 0;
+        while (get_opt->answers[n]) {
+            if (n > 0)
+                fprintf(stdout, "%s", sep);
+            u_name = parse_variable(get_opt->answers[n], NULL);
+            value = (char *)G_getenv2(u_name, store);
+            fprintf(stdout, "%s", value);
+            n++;
+        }
+        if (strcmp(sep, "\n") != 0)
+            fprintf(stdout, "\n");
+        
 	exit(EXIT_SUCCESS);
     }
 
