@@ -73,9 +73,9 @@ static void alloc_buffers(void)
 /*!
   \brief Start drawing raster
 
-  \param mask
-  \param s
-  \param d
+  \param mask non-zero int for mask
+  \param s source (map) extent (left, right, top, bottom)
+  \param fd destination (image) extent (left, right, top, bottom)
 */
 void PNG_begin_raster(int mask, int s[2][2], double fd[2][2])
 {
