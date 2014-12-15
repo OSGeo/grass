@@ -1109,7 +1109,7 @@ def bash_startup():
         f.write("PS1='GRASS %s (%s):\w > '\n" % (grass_version, location_name))
     
     f.write("""grass_prompt() {
-	LOCATION="`g.gisenv GISDBASE`/`g.gisenv LOCATION_NAME`/`g.gisenv MAPSET`"
+	LOCATION="`g.gisenv get=GISDBASE,LOCATION_NAME,MAPSET separator='/'`"
 	if test -d "$LOCATION/grid3/G3D_MASK" && test -f "$LOCATION/cell/MASK" ; then
 		echo [%s]
 	elif test -f "$LOCATION/cell/MASK" ; then
