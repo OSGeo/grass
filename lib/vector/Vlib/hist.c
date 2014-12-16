@@ -28,22 +28,27 @@
  */
 int Vect_hist_command(struct Map_info *Map)
 {
-    char *cmd, buf[2000];
+    char *cmd, buf[GPATH_MAX];
 
     G_debug(3, "Vect_hist_command()");
 
     cmd = G_recreate_command();
 
-    Vect_hist_write(Map, "COMMAND: ");
-    Vect_hist_write(Map, cmd);
-    Vect_hist_write(Map, "\n");
+    if (0 > Vect_hist_write(Map, "COMMAND: "))
+        return -1;
+    if (0 > Vect_hist_write(Map, cmd))
+        return -1;
+    if (0 > Vect_hist_write(Map, "\n"))
+        return -1;
 
     sprintf(buf, "GISDBASE: %s\n", G_gisdbase());	/* Needed ? */
-    Vect_hist_write(Map, buf);
+    if (0 > Vect_hist_write(Map, buf))
+        return -1;
 
     sprintf(buf, "LOCATION: %s MAPSET: %s USER: %s DATE: %s\n",
 	    G_location(), G_mapset(), G_whoami(), G_date());	/* Needed ? */
-    Vect_hist_write(Map, buf);
+    if (0 > Vect_hist_write(Map, buf))
+        return -1;
 
     return 0;
 }
@@ -55,6 +60,7 @@ int Vect_hist_command(struct Map_info *Map)
    \param str string to write
 
    \return the number of characters printed
+   \return -1 on error
  */
 int Vect_hist_write(struct Map_info *Map, const char *str)
 {
