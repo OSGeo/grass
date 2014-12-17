@@ -183,12 +183,12 @@ def main():
         # transform RGB channels into IHS color space
         grass.message(_("Transforming to IHS color space..."))
         grass.run_command('i.rgb.his', overwrite=True,
-                          red_input=ms3,
-                          green_input=ms2,
-                          blue_input=ms1,
-                          hue_output="tmp%s_hue" % pid,
-                          intensity_output="tmp%s_int" % pid,
-                          saturation_output="tmp%s_sat" % pid)
+                          red=ms3,
+                          green=ms2,
+                          blue=ms1,
+                          hue="tmp%s_hue" % pid,
+                          intensity="tmp%s_int" % pid,
+                          saturation="tmp%s_sat" % pid)
 
         # pan/intensity histogram matching using linear regression
         target = "tmp%s_int" % pid
@@ -198,12 +198,12 @@ def main():
         # substitute pan for intensity channel and transform back to RGB color space
         grass.message(_("Transforming back to RGB color space and sharpening..."))
         grass.run_command('i.his.rgb', overwrite=True,
-                          hue_input="tmp%s_hue" % pid,
-                          intensity_input="%s" % panmatch,
-                          saturation_input="tmp%s_sat" % pid,
-                          red_output="%s_red" % out,
-                          green_output="%s_green" % out,
-                          blue_output="%s_blue" % out)
+                          hue="tmp%s_hue" % pid,
+                          intensity="%s" % panmatch,
+                          saturation="tmp%s_sat" % pid,
+                          red="%s_red" % out,
+                          green="%s_green" % out,
+                          blue="%s_blue" % out)
 
         # Cleanup
         grass.run_command('g.remove', flags='f', quiet=True, type='rast',
