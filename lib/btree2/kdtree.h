@@ -25,3 +25,4 @@ int kdtree_insert(struct kdtree *, double *, int, int);
 int kdtree_remove(struct kdtree *, double *, int);
 int kdtree_knn(struct kdtree *, double *, int *, double *, int, int *);
 int kdtree_dnn(struct kdtree *, double *, int **, double **, double, int *);
+void kdtree_optimize(struct kdtree *, int);

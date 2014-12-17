@@ -1,20 +1,18 @@
 
+Red-Black tree
+==============
+
 #include <grass/rbtree.h>
 
 and link to BTREE2LIB
 
-to make use of this binary balanced (Red-Black) search tree
+to make use of the binary balanced (Red-Black) search tree
 
 NOTE: duplicates are not supported
-
-
-USAGE
-=====
 
 see also grass/rbtree.h for instructions on how to use it
   
 /* custom compare function */
-extern int my_compare_fn(const void *, const void *);
 int my_compare_fn(const void *a, const void *b)
 {
     if ((mydatastruct *) a < (mydatastruct *) b)
@@ -73,3 +71,24 @@ struct RB_TREE *mytree = rbtree_create(my_compare_fn, item_size);
 /* debug the whole tree with */
     rbtree_debug(mytree, mytree->root);
     
+
+k-d tree
+========
+
+#include <grass/kdtree.h>
+
+and link to BTREE2LIB
+
+/* create a new k-d tree, here 3D */
+struct kdtree *t = kdtree_create(3, NULL);
+
+/* insert items */
+for (i = 0; i < npoints; i++)
+    kdtree_insert(t, c, i, 1);
+
+/* find nearest neighbor for each point */
+for (i = 0; i < npoints; i++)
+    int found = kdtree_knn(t, c, &uid, &dist, 1, i);
+
+/* destroy the tree */
+    kdtree_destroy(t);
