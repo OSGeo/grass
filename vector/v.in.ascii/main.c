@@ -27,17 +27,36 @@
 
 #define	A_DIR	"dig_ascii"
 
+static char *get_td(const struct Option *option)
+{
+    char* sep;
+
+    if (option->answer == NULL)
+        return NULL;
+
+    if (strcmp(option->answer, "doublequote") == 0)
+        sep = G_store("\"");
+    else if (strcmp(option->answer, "singlequote") == 0)
+        sep = G_store("\'");
+    else
+        sep = G_store(option->answer);
+
+    return sep;
+}
+
+
 int main(int argc, char *argv[])
 {
     FILE *ascii;
     struct GModule *module;
-    struct Option *old, *new, *delim_opt, *columns_opt, *xcol_opt,
-	*ycol_opt, *zcol_opt, *catcol_opt, *format_opt, *skip_opt;
+    struct Option *old, *new, *delim_opt, *tdelim_opt, *columns_opt, 
+	          *xcol_opt, *ycol_opt, *zcol_opt, *catcol_opt,
+		  *format_opt, *skip_opt;
     int xcol, ycol, zcol, catcol, format, skip_lines;
     struct Flag *zcoorf, *t_flag, *e_flag, *noheader_flag, *notopol_flag,
 	*region_flag, *ignore_flag;
     char *table;
-    char *fs;
+    char *fs, *td;
     char *desc;
     int zcoor = WITHOUT_Z, make_table;
 
@@ -78,6 +97,13 @@ int main(int argc, char *argv[])
     delim_opt = G_define_standard_option(G_OPT_F_SEP);
     delim_opt->guisection = _("Input format");
     
+    tdelim_opt = G_define_standard_option(G_OPT_F_SEP);
+    tdelim_opt->key = "text";
+    tdelim_opt->label = "text delimiter";
+    tdelim_opt->answer = "doublequote";
+    tdelim_opt->description = _("Special characters: doublequote, singlequote");
+    tdelim_opt->guisection = _("Input format");
+
     skip_opt = G_define_option();
     skip_opt->key = "skip";
     skip_opt->type = TYPE_INTEGER;
@@ -210,6 +236,7 @@ int main(int argc, char *argv[])
 
     ascii = G_open_option_file(old);
     fs = G_option_to_separator(delim_opt);
+    td = get_td(tdelim_opt);
 
     /* check dimension */
     if (zcoorf->answer) {
@@ -245,7 +272,7 @@ int main(int argc, char *argv[])
 	}
 	unlink(tmp);
 
-	points_analyse(ascii, tmpascii, fs, &rowlen, &ncols, &minncols,
+	points_analyse(ascii, tmpascii, fs, td, &rowlen, &ncols, &minncols,
 		       &nrows, &coltype, &collen, skip_lines, xcol, ycol,
 		       zcol, catcol, region_flag->answer, ignore_flag->answer);
 
@@ -258,7 +285,7 @@ int main(int argc, char *argv[])
 	   G_message(_("Number of columns: %d"), ncols);
         }
 
-       G_message(_("Number of rows: %d"), nrows);
+        G_message(_("Number of rows: %d"), nrows);
         
 	/* check column numbers */
 	if (xcol >= minncols) {
@@ -501,7 +528,7 @@ int main(int argc, char *argv[])
 	    table = NULL;
 	}
 
-	points_to_bin(tmpascii, rowlen, &Map, driver, table, fs, nrows,
+	points_to_bin(tmpascii, rowlen, &Map, driver, table, fs, td, nrows,
 		      coltype2, xcol, ycol, zcol, catcol, skip_lines);
 
 	if (driver) {
