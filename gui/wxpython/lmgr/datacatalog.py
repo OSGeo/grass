@@ -395,7 +395,7 @@ class DataCatalogTree(LocationMapTree):
                 node = 'raster'
             else:
                 pasted = RunCommand('g.copy', rast3d=string)
-                node = '3draster'
+                node = 'raster_3d'
             if pasted == 0:
                 if self.selected_type == None:
                     self.selected_type = self.getItemByName(node, self.selected_mapset)
@@ -436,7 +436,7 @@ class DataCatalogTree(LocationMapTree):
                     removed = RunCommand('g.remove', flags='f', type='raster',
                                          name=string)
                 else:
-                    removed = RunCommand('g.remove', flags='f', type='3draster',
+                    removed = RunCommand('g.remove', flags='f', type='raster_3d',
                                          name=string)
                 if (removed==0):
                     self.Delete(self.selected_layer)
@@ -459,7 +459,7 @@ class DataCatalogTree(LocationMapTree):
             elif (self.GetItemText(self.selected_type)=='raster'):
                 self.parent.parent.AddMaps(layerName, 'raster', True)     
             else:
-                self.parent.parent.AddMaps(layerName, '3draster', True)
+                self.parent.parent.AddMaps(layerName, 'raster_3d', True)
                 label = "d.rast --q map="+string+"    -- completed. Go to 'Map layers' for further operations." # generate this message (command) automatically?
             self.showNotification.emit(message=label)
             Debug.msg(1,"LAYER "+self.GetItemText(self.selected_layer)+" DISPLAYED")

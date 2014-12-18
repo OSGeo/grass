@@ -729,7 +729,7 @@ class Model(object):
                 rast.append(name)
             elif prompt == 'vector':
                 vect.append(name)
-            elif prompt == '3draster':
+            elif prompt == 'raster_3d':
                 rast3d.append(name)
         
         msg = ''
@@ -2348,7 +2348,7 @@ r"""  run_command('g.remove', flags='f', type='vector',
 """% ','.join(map(lambda x: "'" + x + "'", vect)))
         if rast3d:
             self.fd.write(
-r"""  run_command('g.remove', flags='f', type='3draster',
+r"""  run_command('g.remove', flags='f', type='raster_3d',
                       name=%s)
 """% ','.join(map(lambda x: "'" + x + "'", rast3d)))
         if not rast and not vect and not rast3d:

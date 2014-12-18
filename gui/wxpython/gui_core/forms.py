@@ -206,7 +206,7 @@ class UpdateThread(Thread):
                 maps_param = self.task.get_param('maps', element='name', raiseError=False)
                 if self.task.get_name().startswith('t') and maps_param is not None:
                     if maps_param['wxId'][0] != uid:
-                        element_dict = {'raster': 'strds', 'vector': 'stvds', '3draster': 'str3ds'}
+                        element_dict = {'raster': 'strds', 'vector': 'stvds', 'raster_3d': 'str3ds'}
                         self.data[win.GetParent().SetType] = {'etype': element_dict[type_param.get('value')]}
 
             map = layer = None
@@ -1195,7 +1195,7 @@ class CmdPanel(wx.Panel):
                                 # for t.(un)register:
                                 maps_param = self.task.get_param('maps', element = 'name', raiseError = False)
                                 if maps_param and orig_elem == 'stds':
-                                    element_dict = {'raster': 'strds', 'vector': 'stvds', '3draster': 'str3ds'}
+                                    element_dict = {'raster': 'strds', 'vector': 'stvds', 'raster_3d': 'str3ds'}
                                     elem = element_dict[type_param.get('default')]
                         
                         if self._giface and hasattr(self._giface, "_model"):

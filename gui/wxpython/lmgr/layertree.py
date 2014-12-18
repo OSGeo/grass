@@ -732,11 +732,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         cmd = ['g.region']
         if rast:
-            cmd.append('rast=%s' % ','.join(rast))
+            cmd.append('raster=%s' % ','.join(rast))
         if vect:
-            cmd.append('vect=%s' % ','.join(vect))
+            cmd.append('vector=%s' % ','.join(vect))
         if rast3d:
-            cmd.append('3draster=%s' % ','.join(rast3d))
+            cmd.append('raster_3d=%s' % ','.join(rast3d))
         
         # print output to command log area
         if len(cmd) > 1:
@@ -801,7 +801,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             key = 'vector'
             label = _('Vector map')
         elif ltype == '3d-raster':
-            key = '3draster'
+            key = 'raster_3d'
             label = _('3D raster map')
         else:
             GError(_("Unsupported map type <%s>") % ltype, parent = self)
