@@ -1280,7 +1280,7 @@ class AddTemporalLayerDialog(wx.Dialog):
 
         types = [('raster', _("Multiple raster maps")),
                  ('vector', _("Multiple vector maps")),
-                 ('3draster', _("Multiple 3D raster maps")),
+                 ('raster_3d', _("Multiple 3D raster maps")),
                  ('strds', _("Space time raster dataset")),
                  ('stvds', _("Space time vector dataset")),
                  ('str3ds', _("Space time 3D raster dataset"))]
@@ -1381,10 +1381,10 @@ class AddTemporalLayerDialog(wx.Dialog):
             cmd.append('d.rast')
         elif self._mapType in ('vector', 'stvds'):
             cmd.append('d.vect')
-        elif self._mapType in ('3draster', 'str3ds'):
+        elif self._mapType in ('raster_3d', 'str3ds'):
             cmd.append('d.rast3d')
         if self._name:
-            if self._mapType in ('raster', 'vector', '3draster'):
+            if self._mapType in ('raster', 'vector', 'raster_3d'):
                 cmd.append('map={name}'.format(name=self._name.split(',')[0]))
             else:
                 try:

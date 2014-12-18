@@ -348,7 +348,7 @@ class SimpleLayerManager(wx.Panel):
 
     def AddRast3d(self, name, cmd, hidden, dialog):
         """Ads new raster3d layer."""
-        layer = self._layerList.AddNewLayer(name=name, mapType='3draster',
+        layer = self._layerList.AddNewLayer(name=name, mapType='raster_3d',
                                             active=True,
                                             cmd=cmd, hidden=hidden)
         return layer

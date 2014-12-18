@@ -1851,7 +1851,7 @@ class GMFrame(wx.Frame):
         """Add map layers to layer tree.
 
         :param list mapLayers: list of map names
-        :param str ltype: layer type ('raster', '3draster', 'vector')
+        :param str ltype: layer type ('raster', 'raster_3d', 'vector')
         :param bool check: True if new layers should be checked in
                            layer tree False otherwise
         """
@@ -1865,7 +1865,7 @@ class GMFrame(wx.Frame):
             if ltype == 'raster':
                 cmd = ['d.rast', 'map=%s' % layerName]
                 wxType = 'raster'
-            elif ltype == '3draster':
+            elif ltype == 'raster_3d':
                 cmd = ['d.rast3d', 'map=%s' % layerName]
                 wxType = '3d-raster'
             elif ltype == 'vector':
@@ -1911,7 +1911,7 @@ class GMFrame(wx.Frame):
 
         # TODO: standardize type identifiers
         convertType = {'raster': 'raster',
-                       '3d-raster': '3draster',
+                       '3d-raster': 'raster_3d',
                        'vector': 'vector'}
         try:
             grassType = convertType[ltype]

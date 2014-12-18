@@ -651,7 +651,7 @@ class Map(object):
             cmd['vector'] = ','.join(vect)
 
         if rast3d:
-            cmd['3draster'] = rast3d
+            cmd['raster_3d'] = rast3d
 
         ret, reg, msg = RunCommand('g.region',
                                    read = True,

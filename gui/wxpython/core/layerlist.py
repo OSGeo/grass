@@ -191,10 +191,10 @@ class Layer(object):
         self._hidden = False
         self._initialized = False
 
-        self._mapTypes = ['raster', 'vector', '3draster', 'rgb']
+        self._mapTypes = ['raster', 'vector', 'raster_3d', 'rgb']
         self._internalTypes = {'raster': 'cell',
                                'vector': 'vector',
-                               '3draster': 'grid3',
+                               'raster_3d': 'grid3',
                                'rgb': 'rgb'}
 
     def GetName(self):
@@ -362,7 +362,7 @@ class LayerListToRendererConverter:
             mapType = 'raster'
         elif layer.mapType == 'vector':
             mapType = 'vector'
-        elif layer.mapType == '3draster':
+        elif layer.mapType == 'raster_3d':
             mapType = '3d-raster'
         elif layer.mapType == 'rgb':
             mapType = 'rgb'

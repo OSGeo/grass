@@ -1523,7 +1523,7 @@ class MapLayersDialogBase(wx.Dialog):
         if sel == 0:
             ltype = 'raster'
         elif sel == 1:
-            ltype = '3draster'
+            ltype = 'raster_3d'
         else:
             ltype = 'vector'
         
