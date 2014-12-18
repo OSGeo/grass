@@ -137,7 +137,7 @@ def main():
                     if type == "stvds":
                         remove(type="vector", name=name_list, run_=True)
                     if type == "str3ds":
-                        remove(type="3draster", name=name_list, run_=True)
+                        remove(type="raster_3d", name=name_list, run_=True)
                     map_statement = ""
                     name_list = []
 
@@ -149,7 +149,7 @@ def main():
                 if type == "stvds":
                     remove(type="vector", name=name_list, run_=True)
                 if type == "str3ds":
-                    remove(type="3draster", name=name_list, run_=True)
+                    remove(type="raster_3d", name=name_list, run_=True)
 
         statement += sp.delete(dbif=dbif, execute=False)
 
