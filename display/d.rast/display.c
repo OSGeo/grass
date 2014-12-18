@@ -63,7 +63,7 @@ static int cell_draw(const char *name,
     /* Allocate space for cell buffer */
     xarray = Rast_allocate_buf(data_type);
 
-    D_cell_draw_begin();
+    D_raster_draw_begin();
 
     /* loop for array rows */
     for (cur_A_row = 0; cur_A_row != -1;) {
@@ -76,7 +76,7 @@ static int cell_draw(const char *name,
 	cur_A_row = D_draw_raster(cur_A_row, xarray, colors, data_type);
 
     }
-    D_cell_draw_end();
+    D_raster_draw_end();
 
     G_percent(nrows, nrows, 2);
 
