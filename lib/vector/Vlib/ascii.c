@@ -419,11 +419,11 @@ int Vect_write_ascii(FILE *ascii,
 	    db_shutdown_driver(driver);
 	}
 	else {
+	    int icol, ncols;
+	    const char *col_name;
             int len_all = 0;
             
             if (column_names[0] && strcmp(column_names[0], "*") == 0) {
-                int icol, ncols;
-                const char *col_name;
                 
                 /* all columns */
                 db_set_string(&dbstring, Fi->table);
@@ -433,24 +433,21 @@ int Vect_write_ascii(FILE *ascii,
                 }
                 
                 ncols = db_get_table_number_of_columns(Table);
-                /* key column skipped */
                 columns = (char **) G_malloc(ncols * sizeof(char *));
                 icol = 0;
                 for (i = 0; i < ncols; i++) {
                     col_name = db_get_column_name(db_get_table_column(Table, i));
+		    /* key column skipped */
                     if (strcmp(Fi->key, col_name) != 0)
 			columns[icol++] = G_store(col_name);
                 }
-                columns[ncols - 1] = NULL;
+                columns[icol] = NULL;
                 
                 db_zero_string(&dbstring);
                 db_free_table(Table);
                 Table = NULL;
             }
             else {
-                int icol, ncols;
-                const char *col_name;
-
 		ncols = 0;
 		while (column_names[ncols])
 		    ncols++;
@@ -466,32 +463,42 @@ int Vect_write_ascii(FILE *ascii,
                 columns[icol] = NULL;
             }
             
-            /* selected columns only */
-            i = 0;
-            while (columns[i])
-                len_all += strlen(columns[i++]);
-            
-	    coltypes = G_malloc(i * sizeof(int));
-	    
-	    all_columns = G_malloc(len_all + i + 2);
+	    if (columns[0]) {
+		/* selected columns only */
+		i = 0;
+		while (columns[i])
+		    len_all += strlen(columns[i++]);
+		
+		coltypes = G_malloc(i * sizeof(int));
+		
+		all_columns = G_malloc(len_all + i + 2);
 
-	    i = 0;
-	    strcpy(all_columns, columns[0]);
-	    while (columns[i]) {
-		/* get column types */
-		coltypes[i] = db_column_Ctype(driver, Fi->table, columns[i]);
-		if (coltypes[i] < 0) {
-		    db_close_database(driver);
-		    db_shutdown_driver(driver);
-		    G_warning(_("Unknown type of column <%s>, export cancelled"),
-		              columns[i]);
-		    return -1;
+		i = 0;
+		strcpy(all_columns, columns[0]);
+		while (columns[i]) {
+		    /* get column types */
+		    coltypes[i] = db_column_Ctype(driver, Fi->table, columns[i]);
+		    if (coltypes[i] < 0) {
+			db_close_database(driver);
+			db_shutdown_driver(driver);
+			G_warning(_("Unknown type of column <%s>, export cancelled"),
+				  columns[i]);
+			return -1;
+		    }
+		    if (i > 0) {
+			strcat(all_columns, ",");
+			strcat(all_columns, columns[i]);
+		    }
+		    i++;
 		}
-		if (i > 0) {
-		    strcat(all_columns, ",");
-		    strcat(all_columns, columns[i]);
-		}
-		i++;
+	    }
+	    else {
+		/* no column or only key column selected */
+		G_free(columns);
+		columns = NULL;
+
+		db_close_database(driver);
+		db_shutdown_driver(driver);
 	    }
 	}
     }
