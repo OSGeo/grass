@@ -339,7 +339,7 @@ int Vect_write_ascii(FILE *ascii,
 		     int field, const struct cat_list *Clist, const char* where,
 		     const char **column_names, int header)
 {
-    int ltype, ctype, i, cat, n_lines, line, left, right, found;
+    int ltype, ctype, i, cat, line, left, right, found;
     double *xptr, *yptr, *zptr, x, y;
     static struct line_pnts *Points;
     struct line_cats *Cats, *ACats;
@@ -388,7 +388,7 @@ int Vect_write_ascii(FILE *ascii,
     /* get the region */
     G_get_window(&window);
 
-    count = n_lines = ncats = 0;
+    count = ncats = 0;
     xstring = ystring = zstring = NULL;
     cats = NULL;
     
@@ -423,17 +423,18 @@ int Vect_write_ascii(FILE *ascii,
 	    const char *col_name;
             int len_all = 0;
             
+	    db_set_string(&dbstring, Fi->table);
+	    if (db_describe_table(driver, &dbstring, &Table) != DB_OK) {
+		G_warning(_("Unable to describe table <%s>"), Fi->table);
+		return -1;
+	    }
+	    
+	    ncols = db_get_table_number_of_columns(Table);
+	    columns = (char **) G_malloc((ncols + 1) * sizeof(char *));
+
             if (column_names[0] && strcmp(column_names[0], "*") == 0) {
                 
                 /* all columns */
-                db_set_string(&dbstring, Fi->table);
-                if (db_describe_table(driver, &dbstring, &Table) != DB_OK) {
-                    G_warning(_("Unable to describe table <%s>"), Fi->table);
-                    return -1;
-                }
-                
-                ncols = db_get_table_number_of_columns(Table);
-                columns = (char **) G_malloc(ncols * sizeof(char *));
                 icol = 0;
                 for (i = 0; i < ncols; i++) {
                     col_name = db_get_column_name(db_get_table_column(Table, i));
@@ -442,26 +443,46 @@ int Vect_write_ascii(FILE *ascii,
 			columns[icol++] = G_store(col_name);
                 }
                 columns[icol] = NULL;
-                
-                db_zero_string(&dbstring);
-                db_free_table(Table);
-                Table = NULL;
             }
             else {
-		ncols = 0;
-		while (column_names[ncols])
-		    ncols++;
+		int j;
 
-                columns = (char **) G_malloc((ncols + 1) * sizeof(char *));
 		icol = 0;
-                for (i = 0; i < ncols; i++) {
-                    col_name = column_names[i];
+		i = 0;
+		while (column_names[i]) {
 		    /* key column skipped */
-                    if (strcmp(Fi->key, col_name) != 0)
-			columns[icol++] = G_store(col_name);
+                    if (strcmp(Fi->key, column_names[i]) != 0) {
+			found = 0;
+			for (j = 0; j < ncols; j++) {
+			    col_name = db_get_column_name(db_get_table_column(Table, j));
+			    if (strcmp(col_name, column_names[i]) == 0) {
+				columns[icol++] = G_store(col_name);
+				found = 1;
+				break;
+			    }
+			}
+			if (!found) {
+			    G_warning(_("Column <%s> does not exist"),
+				      column_names[i]);
+			    G_important_message(_("Available columns:"));
+			    for (j = 0; j < ncols; j++) {
+				col_name = db_get_column_name(db_get_table_column(Table, j));
+				G_important_message("%s", col_name);
+			    }
+			    G_warning(_("Export cancelled"));
+			    db_close_database(driver);
+			    db_shutdown_driver(driver);
+			    return -1;
+			}
+		    }
+		    i++;
                 }
                 columns[icol] = NULL;
             }
+
+	    db_zero_string(&dbstring);
+	    db_free_table(Table);
+	    Table = NULL;
             
 	    if (columns[0]) {
 		/* selected columns only */
@@ -503,6 +524,29 @@ int Vect_write_ascii(FILE *ascii,
 	}
     }
 
+    if (format == GV_ASCII_FORMAT_POINT && header) {
+
+	/* print header */
+	if (Map->head.with_z)
+	    fprintf(ascii, "east%snorth%sheight%scat", fs, fs, fs);
+	else
+	    fprintf(ascii, "east%snorth%scat", fs, fs);
+	if (columns) {
+	    for (i = 0; columns[i]; i++) {
+		if (db_select_value
+		    (driver, Fi->table, Fi->key, cat,
+		     columns[i], &value) < 0)
+		    G_fatal_error(_("Unable to select record from table <%s> (key %s, column %s)"),
+				  Fi->table, Fi->key, columns[i]);
+		if (columns[i])
+		    fprintf(ascii, "%s%s", fs, columns[i]);
+		else
+		    fprintf(ascii, "%s", columns[i]); /* can not happen */
+	    }
+	}
+	fprintf(ascii, "\n");
+    }
+
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
     ACats = Vect_new_cats_struct();
@@ -514,7 +558,7 @@ int Vect_write_ascii(FILE *ascii,
 
     Vect_rewind(Map);
 
-    n_skipped = line = 0;
+    count = n_skipped = line = 0;
     while (TRUE) {
 	ltype = Vect_read_next_line(Map, Points, Cats);
 	if (ltype == -1 ) {      /* failure */
@@ -637,30 +681,6 @@ int Vect_write_ascii(FILE *ascii,
 
 	    Vect_field_cat_get(Cats, field, fcats);
 
-	    /* print header */
-	    if (header && count < 1) {
-		count++;
-		if (Map->head.with_z)
-		    fprintf(ascii, "east%snorth%sheight%scat", fs, fs, fs);
-		else
-		    fprintf(ascii, "east%snorth%scat", fs, fs);
-		if (columns) {
-		    for (i = 0; columns[i]; i++) {
-			if (db_select_value
-			    (driver, Fi->table, Fi->key, cat,
-			     columns[i], &value) < 0)
-			    G_fatal_error(_("Unable to select record from table <%s> (key %s, column %s)"),
-					  Fi->table, Fi->key, columns[i]);
-			if (columns[i])
-			    fprintf(ascii, "%s%s", fs, columns[i]);
-			else
-			    fprintf(ascii, "%s", columns[i]); /* can not happen */
-		    }
-		}
-		fprintf(ascii, "\n");
-
-	    }
-
 	    if (Map->head.with_z && ver == 5) {
 		if (region_flag) {
 		    if ((window.top < Points->z[0]) ||
@@ -676,7 +696,6 @@ int Vect_write_ascii(FILE *ascii,
 		fprintf(ascii, "%s%s%s", xstring, fs, ystring);
 	    }
 
-	    
 	    if (fcats->n_values > 0 && cat > -1) {
 		if (fcats->n_values > 1) {
 		    G_warning(_("Feature has more categories. Only one category (%d) "
@@ -815,11 +834,12 @@ int Vect_write_ascii(FILE *ascii,
 		continue;
 	    /* Well-Known Text */
 	    Vect_sfa_line_astext(Points, ltype, Vect_is_3d(Map), dp, ascii);
+	    count++;
 	}
 	else {
 	    G_fatal_error(_("Unknown format"));
 	}
-	n_lines++;
+	count++;
     }
 
     if (format == GV_ASCII_FORMAT_WKT) {
@@ -860,6 +880,8 @@ int Vect_write_ascii(FILE *ascii,
 		Vect_sfa_line_astext(Points, GV_BOUNDARY, 0, dp, ascii); /* boundary is always 2D */
 	    }
 	    fprintf(ascii, ")\n");
+	    
+	    count++;
 	}
     }
 
@@ -871,7 +893,7 @@ int Vect_write_ascii(FILE *ascii,
     Vect_destroy_cats_struct(Cats);
     Vect_destroy_cats_struct(ACats);
     
-    return n_lines;
+    return count;
 }
 
 int srch(const void *pa, const void *pb)
