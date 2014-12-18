@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
     opt.field = G_define_standard_option(G_OPT_V_FIELD);
 
     opt.rast3d = G_define_standard_option(G_OPT_R3_MAP);
-    opt.rast3d->key = "raster3d";
+    opt.rast3d->key = "raster_3d";
     opt.rast3d->description = _("Name of existing 3D raster map to be queried");
 
     opt.col = G_define_standard_option(G_OPT_DB_COLUMN);

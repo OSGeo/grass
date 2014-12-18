@@ -168,7 +168,7 @@ int main(int argc, char *argv[])
     parm.raster->guisection = _("Existing");
 
     parm.raster3d = G_define_standard_option(G_OPT_R3_MAP);
-    parm.raster3d->key = "3draster";
+    parm.raster3d->key = "raster_3d";
     parm.raster3d->required = NO;
     parm.raster3d->multiple = NO;
     parm.raster3d->description =
