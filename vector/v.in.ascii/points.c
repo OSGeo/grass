@@ -51,14 +51,15 @@ static int is_double(char *str)
  * column_length: column lengths (string only)
  */
 
-int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
+int points_analyse(FILE * ascii_in, FILE * ascii, char *fs, char *td,
 		   int *rowlength, int *ncolumns, int *minncolumns,
 		   int *nrows, int **column_type, int **column_length,
-		   int skip_lines, int xcol, int ycol, int region_flag)
+		   int skip_lines, int xcol, int ycol, int zcol, int catcol, 
+		   int region_flag, int ignore_flag)
 {
     int i;
     int buflen;			/* buffer length */
-    char *buf, *buf_raw;	/* buffer */
+    char *buf;			/* buffer */
     int row = 1;		/* line number, first is 1 */
     int ncols = 0;		/* number of columns */
     int minncols = -1;
@@ -70,23 +71,27 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
     struct Cell_head window;
     double northing = .0;
     double easting = .0;
-    char *coorbuf, *tmp_token, *sav_buf;
+    char *xtoken, *ytoken, *sav_buf;
     int skip = FALSE, skipped = 0;
 
     buflen = 4000;
     buf = (char *)G_malloc(buflen);
-    buf_raw = (char *)G_malloc(buflen);
-    coorbuf = (char *)G_malloc(256);
-    tmp_token = (char *)G_malloc(256);
-    sav_buf = NULL;
+    xtoken = (char *)G_malloc(256);
+    ytoken = (char *)G_malloc(256);
 
     G_message(_("Scanning input for column types..."));
     /* fetch projection for LatLong test */
     G_get_window(&window);
 
+    /* points_to_bin() would be faster if we would write out 
+     * clean data to ascii
+     * points_to_bin() would then not need G_chop() and 
+     * for latlon not G_scan_[easting|northing]() */
+
     while (1) {
 	len = 0;		/* not really needed, but what the heck */
 	skip = FALSE;		/* reset out-of-region check */
+	sav_buf = NULL;
 
 	if (G_getl2(buf, buflen - 1, ascii_in) == 0)
 	    break;		/* EOF */
@@ -113,22 +118,43 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
 	/* no G_chop() as first/last column may be empty fs=tab value */
 	G_debug(3, "row %d : %d chars", row, (int)strlen(buf));
 
-	/* G_tokenize() will modify the buffer, so we make a copy */
-	strcpy(buf_raw, buf);
+	tokens = G_tokenize2(buf, fs, td);
+	ntokens = G_number_of_tokens(tokens);
+	if (ntokens == 0) {
+	    continue;
+	}
+
+	if (ncols > 0 && ntokens != ncols) {
+	    /* these rows can not be imported into the attribute table */
+	    if (ignore_flag) {
+		G_warning(_("Row %d: '%s' can not be imported into the attribute table"),
+		          row, buf);
+	    }
+	    else {
+		G_fatal_error(_("Broken row %d: '%s'"), row, buf);
+	    }
+	}
+	if (xcol >= ntokens || ycol >= ntokens || zcol >= ntokens || 
+	    catcol >= ntokens) {
+	    if (ignore_flag) {
+		G_debug(3, "Skipping broken row %d: '%s'", row, buf);
+		continue;
+	    }
+	    else {
+		G_fatal_error(_("Broken row %d: '%s'"), row, buf);
+	    }
+	}
 
 	len = strlen(buf) + 1;
 	if (len > rowlen)
 	    rowlen = len;
 
-	tokens = G_tokenize(buf, fs);
-	ntokens = G_number_of_tokens(tokens);
 	if (ntokens > ncols) {
-	    int c;
 	    coltype = (int *)G_realloc(coltype, ntokens * sizeof(int));
 	    collen = (int *)G_realloc(collen, ntokens * sizeof(int));
-	    for (c = ncols; c < ntokens; c++) {
-		coltype[c] = DB_C_TYPE_INT;	/* default type */
-		collen[c] = 0;
+	    for (i = ncols; i < ntokens; i++) {
+		coltype[i] = DB_C_TYPE_INT;	/* default type */
+		collen[i] = 0;
 	    }
 	    ncols = ntokens;
 	}
@@ -138,6 +164,7 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
 
 	/* Determine column types */
 	for (i = 0; i < ntokens; i++) {
+	    G_chop(tokens[i]);
 	    if ((G_projection() == PROJECTION_LL)) {
 		if (i == xcol || i == ycol) {
 		    if (i == 0) {	/* Save position of original internal token buffer */
@@ -145,15 +172,12 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
 			sav_buf = tokens[0];
 		    }
 		    /* check if coordinates are DMS or decimal or not latlong at all */
-		    sprintf(coorbuf, "%s", tokens[i]);
-		    G_debug(4, "token: %s", coorbuf);
-
 		    if (i == xcol) {
-			if (G_scan_easting(coorbuf, &easting, window.proj)) {
-			    G_debug(4, "is_latlong east: %f", easting);
-			    sprintf(tmp_token, "%.12f", easting);
+			if (G_scan_easting(tokens[i], &easting, window.proj)) {
+			    G_debug(4, "is_latlong east: %g", easting);
+			    sprintf(xtoken, "%.15g", easting);
 			    /* replace current DMS token by decimal degree */
-			    tokens[i] = tmp_token;
+			    tokens[i] = xtoken;
 			    if (region_flag) {
 				if ((window.east < easting) ||
 				    (window.west > easting))
@@ -161,18 +185,18 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
 			    }
 			}
 			else {
-                            fprintf(stderr, _("Current row %d:\n%s\n"), row, buf_raw);
-			    G_fatal_error(_("Unparsable longitude value in column num %d: %s"),
+                            fprintf(stderr, _("Current row %d:\n%s\n"), row, buf);
+			    G_fatal_error(_("Unparsable longitude value in column %d: %s"),
 					  i + 1, tokens[i]);
 			}
 		    }
 
 		    if (i == ycol) {
-			if (G_scan_northing(coorbuf, &northing, window.proj)) {
-			    G_debug(4, "is_latlong north: %f", northing);
-			    sprintf(tmp_token, "%.12f", northing);
+			if (G_scan_northing(tokens[i], &northing, window.proj)) {
+			    G_debug(4, "is_latlong north: %g", northing);
+			    sprintf(ytoken, "%.15g", northing);
 			    /* replace current DMS token by decimal degree */
-			    tokens[i] = tmp_token;
+			    tokens[i] = ytoken;
 			    if (region_flag) {
 				if ((window.north < northing) ||
 				    (window.south > northing))
@@ -180,21 +204,24 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
 			    }
 			}
 			else {
-			    fprintf(stderr, _("Current row %d:\n%s\n"), row, buf_raw);
-			    G_fatal_error(_("Unparsable latitude value in column num %d: %s"),
-					  i, tokens[i]);
+			    fprintf(stderr, _("Current row %d:\n%s\n"), row, buf);
+			    G_fatal_error(_("Unparsable latitude value in column %d: %s"),
+					  i + 1, tokens[i]);
 			}
 		    }
 		}		/* if (x or y) */
-
-		if (i == ntokens - 1 && sav_buf != NULL) {
-		    /* Restore original token buffer so free_tokens works */
-		    /* Only do this if tokens[0] was re-assigned */
-		    tokens[0] = sav_buf;
-		    sav_buf = NULL;
-		}
 	    }			/* PROJECTION_LL */
 	    else {
+		if (strlen(tokens[i]) == 0) {
+		    if (i == xcol) {
+			G_fatal_error(_("Unparsable longitude value in column %d: %s"),
+				      i + 1, tokens[i]);
+		    }
+		    if (i == ycol) {
+			G_fatal_error(_("Unparsable latitude value in column %d: %s"),
+				      i + 1, tokens[i]);
+		    }
+		}
 		if (region_flag) {
 		    /* consider z range if -z flag is used? */
 		    /* change to if(>= east,north){skip=1;} to allow correct tiling */
@@ -218,10 +245,10 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
 	    len = strlen(tokens[i]); 
 	    /* do not guess column type for missing values */ 
 	    if (len == 0) 
-		continue; 
+		continue;
 
 	    G_debug(4, "row %d col %d: '%s' is_int = %d is_double = %d",
-		    row, i, tokens[i], is_int(tokens[i]),
+		    row + 1, i + 1, tokens[i], is_int(tokens[i]),
 		    is_double(tokens[i]));
 
 	    if (is_int(tokens[i])) {
@@ -241,9 +268,16 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
 
 	/* write dataline to tmp file */
 	if (!skip)
-	    fprintf(ascii, "%s\n", buf_raw);
+	    fprintf(ascii, "%s\n", buf);
 	else
 	    skipped++;
+
+	if (sav_buf != NULL) {
+	    /* Restore original token buffer so free_tokens works */
+	    /* Only do this if tokens[0] was re-assigned */
+	    tokens[0] = sav_buf;
+	    sav_buf = NULL;
+	}
 
 	G_free_tokens(tokens);
 	row++;
@@ -257,9 +291,8 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
     *nrows = row - 1;		/* including skipped lines */
 
     G_free(buf);
-    G_free(buf_raw);
-    G_free(coorbuf);
-    G_free(tmp_token);
+    G_free(xtoken);
+    G_free(ytoken);
 
     if (region_flag)
 	G_message(_n("Skipping %d of %d row falling outside of current region",
@@ -280,13 +313,13 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
  * Note: column types (both in header or coldef) must be supported by driver
  */
 int points_to_bin(FILE * ascii, int rowlen, struct Map_info *Map,
-		  dbDriver * driver, char *table, char *fs, int nrows,
-		  int ncols, int *coltype, int xcol, int ycol, int zcol,
+		  dbDriver * driver, char *table, char *fs, char *td,
+		  int nrows, int *coltype, int xcol, int ycol, int zcol,
 		  int catcol, int skip_lines)
 {
     char *buf, buf2[4000];
     int cat = 0;
-    int row = 1;
+    int row = 0;
     struct line_pnts *Points;
     struct line_cats *Cats;
     dbString sql, val;
@@ -317,12 +350,14 @@ int points_to_bin(FILE * ascii, int rowlen, struct Map_info *Map,
 	char **tokens;
 	int ntokens;		/* number of tokens */
 
+	G_percent(row, nrows, 2);
+	row++;
+
 	if (row <= skip_lines) {
 	    G_debug(4, "writing skip line %d to hist : %d chars", row,
 		    (int)strlen(buf));
 	    Vect_hist_write(Map, buf);
 	    Vect_hist_write(Map, "\n");
-	    row++;
 	    continue;
 	}
 
@@ -332,8 +367,11 @@ int points_to_bin(FILE * ascii, int rowlen, struct Map_info *Map,
 
 	G_debug(4, "row: %s", buf);
 
-	tokens = G_tokenize(buf, fs);
+	tokens = G_tokenize2(buf, fs, td);
 	ntokens = G_number_of_tokens(tokens);
+
+	G_chop(tokens[xcol]);
+	G_chop(tokens[ycol]);
 
 	if ((G_projection() == PROJECTION_LL)) {
 	    G_scan_easting(tokens[xcol], &x, window.proj);
@@ -345,13 +383,17 @@ int points_to_bin(FILE * ascii, int rowlen, struct Map_info *Map,
 	}
 	G_debug(4, "x: %f, y: %f", x, y);
 
-	if (zcol >= 0)
+	if (zcol >= 0) {
+	    G_chop(tokens[zcol]);
 	    z = atof(tokens[zcol]);
+	}
 	else
 	    z = 0.0;
 
-	if (catcol >= 0)
+	if (catcol >= 0) {
+	    G_chop(tokens[catcol]);
 	    cat = atof(tokens[catcol]);
+	}
 	else
 	    cat++;
 
@@ -374,6 +416,7 @@ int points_to_bin(FILE * ascii, int rowlen, struct Map_info *Map,
 	    }
 
 	    for (i = 0; i < ntokens; i++) {
+		G_chop(tokens[i]);
 		if (i > 0)
 		    db_append_string(&sql, ", ");
 
@@ -411,12 +454,9 @@ int points_to_bin(FILE * ascii, int rowlen, struct Map_info *Map,
 	    }
 	}
 
-	G_percent(row, nrows, 2);
-
 	G_free_tokens(tokens);
-
-	row++;
     }
+    G_percent(nrows, nrows, 2);
 
     return 0;
 }
