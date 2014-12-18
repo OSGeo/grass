@@ -826,7 +826,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->key_desc = "name";
 	Opt->required = NO;
 	Opt->answer = "raster";
-	Opt->options = "raster,vector,3draster";
+	Opt->options = "raster,vector,raster_3d";
 	Opt->description = _("Type of the input map");
 	break;
     case G_OPT_T_TYPE:
