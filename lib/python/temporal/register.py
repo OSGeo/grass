@@ -35,7 +35,7 @@ def register_maps_in_space_time_dataset(
        It takes care of the correct update of the space time datasets from all
        registered maps.
 
-       :param type: The type of the maps raster, 3draster or vector
+       :param type: The type of the maps raster, raster_3d or vector
        :param name: The name of the space time dataset. Maps will be
                     registered in the temporal database if the name was set
                     to None
@@ -327,7 +327,7 @@ def register_maps_in_space_time_dataset(
         for dataset in datatsets_to_modify:
             if type == "rast" or type == "raster":
                 ds = dataset_factory("strds", dataset)
-            elif type == "3draster" or type == "rast3d" or type == "raster3d":
+            elif type == "raster_3d" or type == "rast3d" or type == "raster3d":
                 ds = dataset_factory("str3ds", dataset)
             elif type == "vect" or type == "vector":
                 ds = dataset_factory("stvds", dataset)
@@ -434,7 +434,7 @@ def register_map_object_list(type,  map_list, output_stds,
     """Register a list of AbstractMapDataset objects in the temporal database
        and optional in a space time dataset.
 
-       :param type: The type of the map layer (raster, 3draster, vector)
+       :param type: The type of the map layer (raster, raster_3d, vector)
        :param map_list: List of AbstractMapDataset objects
        :param output_stds: The output stds
        :param delete_empty: Set True to delete empty map layer found in the map_list
@@ -491,7 +491,7 @@ def register_map_object_list(type,  map_list, output_stds,
                 if map.get_type() == "raster":
                     mod(type='raster', name=map.get_name())
                 if map.get_type() == "raster3d":
-                    mod(type='3draster', name=map.get_name())
+                    mod(type='raster_3d', name=map.get_name())
                 if map.get_type() == "vector":
                     mod(type='vector', name=map.get_name())
                 mod.run()

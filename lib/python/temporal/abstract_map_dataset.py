@@ -46,7 +46,7 @@ class AbstractMapDataset(AbstractDataset):
     @abstractmethod
     def get_new_stds_instance(self, ident):
         """Return a new space time dataset instance that store maps with the
-           type of this map object (rast, 3draster or vect)
+           type of this map object (raster, raster_3d or vector)
 
            :param ident The identifier of the space time dataset
            :return: The new space time dataset instance
