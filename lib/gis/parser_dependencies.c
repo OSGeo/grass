@@ -212,7 +212,7 @@ static void check_required(const struct rule *rule)
 {
     if (count_present(rule, 0) < 1) {
 	char *err;
-	G_asprintf(&err, _("At least one of %s is required"),
+	G_asprintf(&err, _("At least one of the following options is required: %s"),
 		   describe_rule(rule, 0, 0));
 	append_error(err);
     }
