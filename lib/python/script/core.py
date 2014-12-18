@@ -964,7 +964,7 @@ def region_env(region3d=False, **kwargs):
     temporary region used for raster-based computation.
 
     :param bool region3d: True to get 3D region
-    :param kwargs: g.region's parameters like 'rast', 'vect' or 'region'
+    :param kwargs: g.region's parameters like 'raster', 'vector' or 'region'
 
     ::
 
@@ -1097,9 +1097,9 @@ def list_strings(type, pattern=None, mapset=None, exclude=None, flag=''):
 
     :return: list of elements
     """
-    if type == 'raster' or type == 'cell':
-        verbose(_('Element type should be "rast" and not "%s"') % type)
-        type = 'rast'
+    if type == 'cell':
+        verbose(_('Element type should be "raster" and not "%s"') % type)
+    
     result = list()
     for line in read_command("g.list",
                              quiet=True,
@@ -1162,9 +1162,9 @@ def list_grouped(type, pattern=None, check_search_path=True, exclude=None,
         store_types = True
         flag += 't'
     for i in range(len(types)):
-        if types[i] == 'raster' or types[i] == 'cell':
-            verbose(_('Element type should be "rast" and not "%s"') % types[i])
-            types[i] = 'rast'
+        if types[i] == 'cell':
+            verbose(_('Element type should be "raster" and not "%s"') % types[i])
+            types[i] = 'raster'
     result = {}
     if check_search_path:
         for mapset in mapsets(search_path=True):
