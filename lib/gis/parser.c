@@ -847,7 +847,7 @@ void set_flag(int f)
 
     /* Flag is not valid if there are no flags to set */
     if (!st->n_flags) {
-	G_asprintf(&err, _("Sorry, <%c> is not a valid flag"), f);
+	G_asprintf(&err, _("%s: Sorry, <%c> is not a valid flag"), G_program_name(), f);
 	append_error(err);
 	return;
     }
@@ -864,7 +864,7 @@ void set_flag(int f)
 	flag = flag->next_flag;
     }
 
-    G_asprintf(&err, _("Sorry, <%c> is not a valid flag"), f);
+    G_asprintf(&err, _("%s: Sorry, <%c> is not a valid flag"), G_program_name(), f);
     append_error(err);
 }
 
@@ -981,7 +981,7 @@ void set_option(const char *string)
     }
 
     if (found > 1 && prefix > 1) {
-	G_asprintf(&err, _("Sorry, <%s=> is ambiguous"), the_key);
+	G_asprintf(&err, _("%s: Sorry, <%s=> is ambiguous"), G_program_name(), the_key);
 	append_error(err);
 	return;
     }
@@ -1007,7 +1007,7 @@ void set_option(const char *string)
 
     /* If there is no match, complain */
     if (found == 0) {
-        G_asprintf(&err, _("Sorry, <%s> is not a valid parameter"), the_key);
+        G_asprintf(&err, _("%s: Sorry, <%s> is not a valid parameter"), G_program_name(), the_key);
         append_error(err);
         return;
     }
