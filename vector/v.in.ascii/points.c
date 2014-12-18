@@ -51,7 +51,7 @@ static int is_double(char *str)
  * column_length: column lengths (string only)
  */
 
-int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
+int points_analyse(FILE * ascii_in, FILE * ascii, char *fs, char *td,
 		   int *rowlength, int *ncolumns, int *minncolumns,
 		   int *nrows, int **column_type, int **column_length,
 		   int skip_lines, int xcol, int ycol, int zcol, int catcol, 
@@ -118,7 +118,7 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
 	/* no G_chop() as first/last column may be empty fs=tab value */
 	G_debug(3, "row %d : %d chars", row, (int)strlen(buf));
 
-	tokens = G_tokenize(buf, fs);
+	tokens = G_tokenize2(buf, fs, td);
 	ntokens = G_number_of_tokens(tokens);
 	if (ntokens == 0) {
 	    continue;
@@ -313,8 +313,8 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs,
  * Note: column types (both in header or coldef) must be supported by driver
  */
 int points_to_bin(FILE * ascii, int rowlen, struct Map_info *Map,
-		  dbDriver * driver, char *table, char *fs, int nrows,
-		  int *coltype, int xcol, int ycol, int zcol,
+		  dbDriver * driver, char *table, char *fs, char *td,
+		  int nrows, int *coltype, int xcol, int ycol, int zcol,
 		  int catcol, int skip_lines)
 {
     char *buf, buf2[4000];
@@ -367,7 +367,7 @@ int points_to_bin(FILE * ascii, int rowlen, struct Map_info *Map,
 
 	G_debug(4, "row: %s", buf);
 
-	tokens = G_tokenize(buf, fs);
+	tokens = G_tokenize2(buf, fs, td);
 	ntokens = G_number_of_tokens(tokens);
 
 	G_chop(tokens[xcol]);
