@@ -28,10 +28,10 @@ soil_3|2001-08-01|2001-12-01
 EOF
 
 t.create type=stvds temporaltype=absolute output=soil_abs1 title="A test" descr="A test"
-t.register type=vect input=soil_abs1 file="${n1}"
+t.register type=vector input=soil_abs1 file="${n1}"
 
 t.create type=strds temporaltype=absolute output=precip_abs1 title="A test" descr="A test"
-t.register -i type=rast input=precip_abs1 \
+t.register -i type=raster input=precip_abs1 \
     maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 \
     start="2001-03-01 00:00:00" increment="1 months"
 

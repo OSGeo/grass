@@ -68,14 +68,14 @@ t.create output=P2 type=stvds title="Point test dataset" descr="Point test datas
 t.create output=P3 type=stvds title="Point test dataset" descr="Point test dataset"
 t.create output=P4 type=stvds title="Point test dataset" descr="Point test dataset"
 
-t.register -i type=vect input=A1 file=vinput1_area_test.txt increment="1 days" start="2013-01-01"
-t.register -i type=vect input=A2 file=vinput2_area_test.txt increment="1 days" start="2013-01-10"
-t.register -i type=vect input=A3 file=vinput3_area_test.txt increment="3 days" start="2013-01-01"
-t.register -i type=vect input=A4 file=vinput4_area_test.txt increment="3 days" start="2013-01-10"
-t.register -i type=vect input=P1 file=vinput1_point_test.txt increment="1 days" start="2013-01-01"
-t.register -i type=vect input=P2 file=vinput2_point_test.txt increment="1 days" start="2013-01-10"
-t.register -i type=vect input=P3 file=vinput3_point_test.txt increment="3 days" start="2013-01-01"
-t.register -i type=vect input=P4 file=vinput4_point_test.txt increment="3 days" start="2013-01-10"
+t.register -i type=vector input=A1 file=vinput1_area_test.txt increment="1 days" start="2013-01-01"
+t.register -i type=vector input=A2 file=vinput2_area_test.txt increment="1 days" start="2013-01-10"
+t.register -i type=vector input=A3 file=vinput3_area_test.txt increment="3 days" start="2013-01-01"
+t.register -i type=vector input=A4 file=vinput4_area_test.txt increment="3 days" start="2013-01-10"
+t.register -i type=vector input=P1 file=vinput1_point_test.txt increment="1 days" start="2013-01-01"
+t.register -i type=vector input=P2 file=vinput2_point_test.txt increment="1 days" start="2013-01-10"
+t.register -i type=vector input=P3 file=vinput3_point_test.txt increment="3 days" start="2013-01-01"
+t.register -i type=vector input=P4 file=vinput4_point_test.txt increment="3 days" start="2013-01-10"
 
 # Test different options.
 t.vect.algebra expression='B1 = A1 & A2' basename="bmap1"
