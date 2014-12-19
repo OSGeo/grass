@@ -32,7 +32,7 @@ prec_6
 
 EOF
 
-# The second file includes weights. The deafult weight of 1.0 
+# The second file includes weights. The default weight of 1.0 
 # must not be specified
 cat > "${TMP_FILE_WEIGHTS}" << EOF
 prec_1|3

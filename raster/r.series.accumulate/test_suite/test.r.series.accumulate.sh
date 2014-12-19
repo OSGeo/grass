@@ -12,9 +12,9 @@ r.mapcalc expr="basemap = if(row() == 3, null(), 10)"
 r.mapcalc expr="lower = 5"
 r.mapcalc expr="upper = 10"
 
-r.mapcalc expr="map_a = rand(0, 15)"
-r.mapcalc expr="map_b = rand(1, 14)"
-r.mapcalc expr="map_c = rand(2, 13)"
+r.mapcalc expr="map_a = rand(0, 15)" -s
+r.mapcalc expr="map_b = rand(1, 14)" -s
+r.mapcalc expr="map_c = rand(2, 13)" -s
 
 # BEDD with lower limit map and upper limit value
 r.series.accumulate basemap=basemap input=map_a lower=lower limits=5,10 \
@@ -24,19 +24,19 @@ r.series.accumulate basemap=basemap input=map_a lower=lower \
                     output=test_accu_1 method=gdd -f --verbose 
 # Winkler with lower limit map
 r.series.accumulate basemap=basemap input=map_a lower=lower \
-                    output=test_accu_2 method=gdd -a -f --verbose 
+                    output=test_accu_2 method=gdd -f --verbose 
 # Mean
 r.series.accumulate basemap=basemap input=map_a \
                     output=test_accu_3  method=mean --verbose 
 # Average
 r.series.accumulate basemap=basemap input=map_a \
-                    output=test_accu_3  method=mean -a --verbose 
+                    output=test_accu_3  method=mean --verbose 
 # GDD with lower limit value
 r.series.accumulate basemap=basemap input=map_a,map_b,map_c limits=5,10 \
                     output=test_accu_4 method=gdd -f --verbose 
 # Winkler with  multiple maps, lower limit value
 r.series.accumulate basemap=basemap input=map_a,map_b,map_c limits=5,10 \
-                    output=test_accu_5 method=bedd -a -f --verbose 
+                    output=test_accu_5 method=bedd -f --verbose 
 # BEDD with  multiple maps, lower limit map and upper limit value
 r.series.accumulate basemap=basemap input=map_a,map_b,map_c lower=lower limits=5,10 \
                     output=test_accu_6 method=bedd -f --verbose 
@@ -52,12 +52,13 @@ r.series.accumulate basemap=basemap input=map_a, \
 
 # Test for correct results
 for map in `g.list type=raster pattern=test_accu_*` ; do
-    r.out.ascii input=${map} output=${map}.ref dp=2
+    r.out.ascii input=${map} output=${map}.ref precision=2
 done
 
-for i in `ls test_accu_*.txt` ; do
-    diff $i "`basename $i .txt`.ref" >> out.diff
+for i in `ls test_accu_*.ref` ; do
+    diff $i "`basename $i`" >> out.diff
 done
+rm -f test_accu_*.ref
 
 CHAR_NUM=`cat out.diff | wc -c`
 
