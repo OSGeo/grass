@@ -1362,14 +1362,16 @@ class GdalSelect(wx.Panel):
             fType = 'gdal'
 
         # file
+        fileMask = '%(all)s (*)|*|' % {'all': _('All files')}
         if not ogr:
             extList = rasterFormatExtension
-            fileMask = ('%(name)s (*.%(low1)s;*.%(low2)s;*.%(up1)s;*.%(up2)s)|'
+            fileMask += ('%(name)s (*.%(low1)s;*.%(low2)s;*.%(up1)s;*.%(up2)s)|'
                         '*.%(low1)s;*.%(low2)s;*.%(up1)s;*.%(up2)s|' %
                         {'name': 'GeoTIFF', 'low1': 'tif', 'low2': 'tiff', 'up1': 'TIF', 'up2': 'TIFF'})
         else:
             extList = vectorFormatExtension
-            fileMask = '%(name)s (*.%(low)s;*.%(up)s)|*.%(low)s;*.%(up)s|' % {'name': 'ESRI Shapefile', 'low': 'shp', 'up': 'SHP'}
+            fileMask += '%(name)s (*.%(low)s;*.%(up)s)|*.%(low)s;*.%(up)s|' % {'name': 'ESRI Shapefile', 'low': 'shp', 'up': 'SHP'}
+        
         for name, ext in sorted(extList.items()):
             if name in ('ESRI Shapefile', 'GeoTIFF'):
                 continue
@@ -1379,9 +1381,8 @@ class GdalSelect(wx.Panel):
         fileMask += '%s (*.zip;*.ZIP)|*.zip;*.ZIP|' % _('ZIP files')
         fileMask += '%s (*.gz;*.GZ)|*.gz;*.GZ|' % _('GZIP files')
         fileMask += '%s (*.tar;*.TAR)|*.tar;*.TAR|' % _('TAR files')
-        fileMask += '%s (*.tar.gz;*.TAR.GZ;*.tgz;*.TGZ)|*.tar.gz;*.TAR.GZ;*.tgz;*.TGZ|' % _('TARGZ files')
         # don't include last '|' - windows and mac throw error
-        fileMask += '%(all)s (*)|*' % {'all': _('All files')}
+        fileMask += '%s (*.tar.gz;*.TAR.GZ;*.tgz;*.TGZ)|*.tar.gz;*.TAR.GZ;*.tgz;*.TGZ' % _('TARGZ files')
         # only contains formats with extensions hardcoded
 
         self.filePanel = wx.Panel(parent=self)
