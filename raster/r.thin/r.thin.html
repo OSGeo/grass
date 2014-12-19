@@ -67,7 +67,7 @@ Carolina sample dataset that represents the stream network derived from
 the 10m resolution DEM by <em>r.watershed</em>, run:
 
 <div class="code"><pre>
-g.region rast=elevation -p
+g.region raster=elevation -p
 # create flow accumulation map
 r.watershed elevation=elevation accumulation=accum_50K thresh=50000
 # extract streams from flow accumulation map

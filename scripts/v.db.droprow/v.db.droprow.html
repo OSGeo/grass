@@ -16,7 +16,7 @@ The existing database connection(s) can be verified with <em>v.db.connect</em>.
 
 Dropping all vector points without elevation attribute (North Carolina data set):<br>
 <div class="code"><pre>
-g.region rast=elevation -p
+g.region raster=elevation -p
 v.random output=rand5k_elev n=5000 
 
 v.db.addtable map=rand5k_elev column="elevation double precision"

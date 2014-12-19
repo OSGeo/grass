@@ -33,7 +33,7 @@ pairs directly. The maximum number of pairs will be limited by your system's
 maximum input line length (e.g. 4096 characters).
 
 <div class="code"><pre>
-g.region rast=landuse96_28m,aspect -p
+g.region raster=landuse96_28m,aspect -p
 r.what map=landuse96_28m,aspect coordinates=633614.08,224125.12,632972.36,225382.87 -f
 
 633614.08|224125.12||2|Low Intensity Developed|209.5939|209 degrees ccw from east
@@ -48,7 +48,7 @@ centroids are ignored. Example: query North Carolina county number for
 each community college:
 
 <div class="code"><pre>
-g.region rast=boundary_county_500m -p
+g.region raster=boundary_county_500m -p
 r.what map=boundary_county_500m points=comm_colleges
 
 145096.859150|154534.264884||39
@@ -65,7 +65,7 @@ centroids are ignored. The output is stored in a CSV file including header
 row. Example: query North Carolina county number for each community college:
 
 <div class="code"><pre>
-g.region rast=boundary_county_500m -p
+g.region raster=boundary_county_500m -p
 r.what map=boundary_county_500m points=comm_colleges \
        separator=comma output=result.csv -n
        

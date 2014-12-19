@@ -48,7 +48,7 @@ Creation of framed bar charts of an erodibiliy index from the Spearfish
 sample dataset:
 
 <div class="code"><pre>
-g.region rast=erode.index -p
+g.region raster=erode.index -p
 r.to.vect -s input=erode.index output=erode_index type=area 
 v.extract input=erode_index output=erode_index_ctrds type=centroid 
 d.rast aspect

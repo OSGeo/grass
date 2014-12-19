@@ -126,11 +126,6 @@ with the UNIX eval command, "<tt>eval `g.region -g`</tt>".
 <h3>Additional parameter information:</h3>
 
 <dl>
-<dt><b>3dview=</b><em>name</em> 
-<dd>Make current region settings same as those in the named
-3dview file, which holds the region that was current when
-the 3dview was saved.
-
 
 <dt><b>zoom=</b><em>name</em>
 <dd>Shrink current region settings to the smallest region
@@ -138,7 +133,7 @@ encompassing all non-NULL data in the named raster map
 layer that fall inside the user's current region. In this
 way you can tightly zoom in on isolated clumps within a
 bigger map.
-<p>If the user also includes the <b>rast=</b><em>name</em>
+<p>If the user also includes the <b>raster=</b><em>name</em>
 option on the command line, <b>zoom=</b><em>name</em> will
 set the current region settings to the smallest region
 encompassing all non-NULL data in the named <b>zoom</b> map
@@ -154,7 +149,7 @@ column edge in the named map.  Alignment only moves the
 existing region edges outward to the edges of the next
 nearest cell in the named raster map - not to the named
 map's edges.  To perform the latter function, use the
-<b>rast=</b><em>name</em> option.
+<b>raster=</b><em>name</em> option.
 </dl>
 
 
@@ -222,7 +217,7 @@ northern and eastern boundary values.
 
 
 <dt><span class="code"><tt>
-g.region rast=soils
+g.region raster=soils
 </tt></span>
 
 <dd> This form will make the current region settings
@@ -232,7 +227,7 @@ the raster map layer <em>soils</em>.
 <p>
 
 <dt><span class="code"><tt>
-g.region rast=soils zoom=soils
+g.region raster=soils zoom=soils
 </tt></span>
 
 <dd> This form will first look up the cell header file for
@@ -240,7 +235,7 @@ the raster map layer <em>soils</em>, use this as the
 current region setting, and then shrink the region down to
 the smallest region which still encompasses all non-NULL
 data in the map layer <em>soils</em>.  Note that if the
-parameter <em>rast=soils</em> were not specified, the
+parameter <em>raster=soils</em> were not specified, the
 zoom would shrink to encompass all non-NULL data values in
 the soils map that were located within the <i>current region</i>
 settings.
@@ -248,7 +243,7 @@ settings.
 <p>
 
 <dt><span class="code"><tt>
-g.region -up rast=soils
+g.region -up raster=soils
 </tt></span>
 
 <dd> The <b>-u</b> option suppresses the re-setting of the

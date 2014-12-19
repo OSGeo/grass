@@ -40,7 +40,7 @@ Example to upload DEM statistics to ZIP codes vector map
 <div class="code"><pre>
 g.copy vect=zipcodes_wake,myzipcodes_wake
 # set computational region to DEM:
-g.region rast=elevation -p
+g.region raster=elevation -p
 # calculate DEM statistics, upload to vector map table:
 v.rast.stats myzipcodes_wake raster=elevation \
   column_prefix=elev method=minimum,maximum,average,stddev,percentile \

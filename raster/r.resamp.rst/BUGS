@@ -5,7 +5,7 @@ bugs in segmenting procedure and colortables
 Resolution bug: 
 
 r.resamp.rst N46E011.meters.90 el=N46E011.meters.1425 ew=14.25 ns=14.25
-GRASS 5.7.cvs:/nfsmnt/levi0/ssi/srtm_DEM90m_egm96geoid/original > g.region rast=N46E011.meters.1425 -p
+GRASS 5.7.cvs:/nfsmnt/levi0/ssi/srtm_DEM90m_egm96geoid/original > g.region raster=N46E011.meters.1425 -p
 projection: 1 (UTM)
 zone:       32
 datum:      WGS84

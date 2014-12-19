@@ -17,14 +17,14 @@ identical to that obtained from R-stats's lm() function.
 
 Comparison of the old and the new DEM in Spearfish:
 <div class="code"><pre>
-g.region rast=elevation.10m -p
+g.region raster=elevation.10m -p
 r.regression.line map1=elevation.dem map2=elevation.10m
 </pre></div>
 <p>
 Using the script style flag AND <em>eval</em> to make results
 available in the shell:
 <div class="code"><pre>
-g.region rast=elevation.10m -p
+g.region raster=elevation.10m -p
 eval `r.regression.line -g map1=elevation.dem map2=elevation.10m`
 echo $a
 479.615

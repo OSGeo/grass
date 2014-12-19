@@ -217,7 +217,7 @@ used. The calculation is done with <em>r.cost</em> as follows
 (example for Spearfish region):
 
 <div class="code"><pre>
-  g.region rast=roads -p
+  g.region raster=roads -p
   r.mapcalc "area.one = 1"
   r.cost -k input=area.one output=distance start_rast=roads
   d.rast distance

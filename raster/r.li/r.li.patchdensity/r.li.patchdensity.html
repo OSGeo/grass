@@ -40,7 +40,7 @@ r.li.patchdensity input=my_map conf=my_conf output=my_out
 <p>
 Example for Spearfish forest areas:
 <div class="code"><pre>
-g.region rast=landcover.30m -p
+g.region raster=landcover.30m -p
 # extract forested areas:
 r.category landcover.30m
 r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <= 43, 1, null())"
@@ -57,7 +57,7 @@ d.vect forests type=boundary
 
 Forest map (North Carolina sample dataset) example:
 <div class="code"><pre>
-g.region rast=landclass96 -p
+g.region raster=landclass96 -p
 r.mapcalc "forests = if(landclass96 == 5, 1, null() )"
 r.li.patchdensity input=forests conf=movwindow7 out=forests_patchdensity_mov7
 
