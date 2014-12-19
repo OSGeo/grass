@@ -15,7 +15,7 @@ v.voronoi input=rpoints1 output=rvoronoi1
 v.voronoi input=rpoints2 output=rvoronoi2
 
 t.create type=stvds temporaltype=absolute output=random_data title="A test" descr="A test"
-t.register type=vect --v -i input=random_data maps=rpoints1,rpoints2,rvoronoi1,rvoronoi2 start="2001-01-15 12:05:45" increment="14 days"
+t.register type=vector --v -i input=random_data maps=rpoints1,rpoints2,rvoronoi1,rvoronoi2 start="2001-01-15 12:05:45" increment="14 days"
 
 # The first @test
 t.vect.univar input=random_data column=height where='height > 50' twhere="start_time > '2000-01-01'" layer=1
@@ -25,7 +25,7 @@ t.vect.univar -e type=centroid input=random_data column=height where='height > 2
 t.vect.univar type=line input=random_data column=height where='height > 20' twhere="start_time > '2000-01-01'" layer=1
 
 # @postprocess
-t.unregister type=vect maps=rpoints1,rpoints2,rvoronoi1,rvoronoi2
+t.unregister type=vector maps=rpoints1,rpoints2,rvoronoi1,rvoronoi2
 t.remove type=stvds input=random_data
-g.remove -f type=vect name=rpoints1,rpoints2,rvoronoi1,rvoronoi2
+g.remove -f type=vector name=rpoints1,rpoints2,rvoronoi1,rvoronoi2
 

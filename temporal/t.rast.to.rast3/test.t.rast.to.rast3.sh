@@ -26,61 +26,61 @@ EOF
 t.create --o type=strds temporaltype=absolute output=precip_abs title="A test" descr="A test"
 t.create --o type=strds temporaltype=relative output=precip_rel title="A test" descr="A test"
 
-t.register --o --v -i type=rast input=precip_abs maps=prec_1,prec_2,prec_3 start="2001-01-01" increment="3 years"
+t.register --o --v -i type=raster input=precip_abs maps=prec_1,prec_2,prec_3 start="2001-01-01" increment="3 years"
 t.info type=strds input=precip_abs
 
 t.rast.to.rast3 --o input=precip_abs output=precipitation
-t.info type=rast3d input=precipitation
+t.info type=raster3d input=precipitation
 r3.info precipitation
 
-t.register --o --v -i type=rast input=precip_abs maps=prec_1,prec_2,prec_3 start="2001-01-01" increment="2 months"
+t.register --o --v -i type=raster input=precip_abs maps=prec_1,prec_2,prec_3 start="2001-01-01" increment="2 months"
 t.info type=strds input=precip_abs
 
 t.rast.to.rast3 --o input=precip_abs output=precipitation
-t.info type=rast3d input=precipitation
+t.info type=raster3d input=precipitation
 r3.info precipitation
 
-t.register --o --v -i type=rast input=precip_abs maps=prec_1,prec_2,prec_3 start="2001-01-01" increment="8 days"
+t.register --o --v -i type=raster input=precip_abs maps=prec_1,prec_2,prec_3 start="2001-01-01" increment="8 days"
 t.info type=strds input=precip_abs
 
 t.rast.to.rast3 --o input=precip_abs output=precipitation
-t.info type=rast3d input=precipitation
+t.info type=raster3d input=precipitation
 r3.info precipitation
 
-t.register --o --v -i type=rast input=precip_abs maps=prec_1,prec_2,prec_3 start="2001-01-01" increment="6 hours"
+t.register --o --v -i type=raster input=precip_abs maps=prec_1,prec_2,prec_3 start="2001-01-01" increment="6 hours"
 t.info type=strds input=precip_abs
 
 t.rast.to.rast3 --o input=precip_abs output=precipitation
-t.info type=rast3d input=precipitation
+t.info type=raster3d input=precipitation
 r3.info precipitation
 
-t.register --o --v -i type=rast input=precip_abs maps=prec_1,prec_2,prec_3 start="2001-01-01" increment="30 minutes"
+t.register --o --v -i type=raster input=precip_abs maps=prec_1,prec_2,prec_3 start="2001-01-01" increment="30 minutes"
 t.info type=strds input=precip_abs
 
 t.rast.to.rast3 --o input=precip_abs output=precipitation
-t.info type=rast3d input=precipitation
+t.info type=raster3d input=precipitation
 r3.info precipitation
 
-t.register --o --v -i type=rast input=precip_abs maps=prec_1,prec_2,prec_3 start="2001-01-01" increment="1 seconds"
+t.register --o --v -i type=raster input=precip_abs maps=prec_1,prec_2,prec_3 start="2001-01-01" increment="1 seconds"
 t.info type=strds input=precip_abs
 
 t.rast.to.rast3 --o input=precip_abs output=precipitation
-t.info type=rast3d input=precipitation
+t.info type=raster3d input=precipitation
 r3.info precipitation
 
-t.register --o --v -i type=rast input=precip_abs file=${n1}
+t.register --o --v -i type=raster input=precip_abs file=${n1}
 t.info type=strds input=precip_abs
 
 t.rast.to.rast3 --o input=precip_abs output=precipitation
-t.info type=rast3d input=precipitation
+t.info type=raster3d input=precipitation
 r3.info precipitation
 
-t.register --o --v -i type=rast input=precip_rel maps=prec_4,prec_5,prec_6 start=1000 increment=100 unit=years
+t.register --o --v -i type=raster input=precip_rel maps=prec_4,prec_5,prec_6 start=1000 increment=100 unit=years
 t.info type=strds input=precip_rel
 
 t.rast.to.rast3 --o input=precip_rel output=precipitation
-t.info type=rast3d input=precipitation
+t.info type=raster3d input=precipitation
 r3.info precipitation
 
-t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.unregister type=raster maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_abs,precip_rel
