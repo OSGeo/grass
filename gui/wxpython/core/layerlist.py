@@ -246,7 +246,7 @@ class Layer(object):
     def SetMapType(self, mapType):
         """Sets map type of the layer.
 
-        :param mapType: can be 'raster', 'vector', 'rast3'
+        :param mapType: can be 'raster', 'vector', 'raster_3d'
         """
         if mapType not in self._mapTypes:
             raise ValueError("Wrong map type used: {mtype}".format(mtype=mapType))
