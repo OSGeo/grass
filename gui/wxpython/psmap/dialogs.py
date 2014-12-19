@@ -1014,7 +1014,7 @@ class MapFramePanel(wx.Panel):
                 mapFrameDict['center'] = self.center[0]
                 # set region
                 if self.mapType == 'raster':
-                    RunCommand('g.region', rast = mapFrameDict['map'])
+                    RunCommand('g.region', raster = mapFrameDict['map'])
                 if self.mapType == 'vector':
                     raster = self.instruction.FindInstructionByType('raster')
                     if raster:
@@ -1024,9 +1024,9 @@ class MapFramePanel(wx.Panel):
 
                     if rasterId:
                         
-                        RunCommand('g.region', vect = mapFrameDict['map'], rast = self.instruction[rasterId]['raster'])
+                        RunCommand('g.region', vector = mapFrameDict['map'], raster = self.instruction[rasterId]['raster'])
                     else:
-                        RunCommand('g.region', vect = mapFrameDict['map'])
+                        RunCommand('g.region', vector = mapFrameDict['map'])
                 
                     
                 
