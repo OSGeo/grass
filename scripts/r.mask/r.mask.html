@@ -62,7 +62,7 @@ Create a raster mask, for contraining the calculation of
 univariate statistics of the elevation values for "lakes":
 <div class="code"><pre>
 # set computation region to lakes raster map
-g.region rast=lakes -p
+g.region raster=lakes -p
 # use lakes as MASK
 r.mask raster=lakes
 # get statistics for elevation pixels of lakes:
@@ -77,7 +77,7 @@ r.mask -r
 Creating a mask from selected categories in the North Carolina
 'geology_30m' raster map:
 <div class="code"><pre>
-g.region rast=geology_30m -p
+g.region raster=geology_30m -p
 r.category geology_30m
 d.mon wx0
 d.rast geology_30m

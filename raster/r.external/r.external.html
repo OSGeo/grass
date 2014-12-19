@@ -29,7 +29,7 @@ changed to NULL (if() condition).
 <div class="code"><pre>
 # import of all channels (each channel will become a GRASS raster map):
 r.external  /home/user/data/maps/059100.tif out=ortho
-g.region rast=ortho.3 -p
+g.region raster=ortho.3 -p
 d.rgb r=ortho.1 g=ortho.2 b=ortho.3
 r.composite r=ortho.1 g=ortho.2 b=ortho.3 output=ortho.rgb
 </pre></div>

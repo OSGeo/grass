@@ -10,6 +10,7 @@ import sys
 from grass.script import core as grass
 from core.gcmd import GError
 
+
 class SamplingType:
     """"
     KMVWINC = samplingtype=moving, regionbox=keyboard, shape=circle
@@ -82,11 +83,11 @@ def convertFeature(vect, outrast, cat, origrast):
     tmp_vect = "tmp_{rast}".format(rast=outrast)
     grass.run_command('v.extract', input=vect, output=tmp_vect, cats=cat,
                       overwrite=True, quiet=True)
-    grass.run_command('g.region', vect=tmp_vect, align=origrast)
+    grass.run_command('g.region', vector=tmp_vect, align=origrast)
     grass.run_command('v.to.rast', input=vect, output=outrast, use='cat',
                       cats=cat, overwrite=True, quiet=True)
-    grass.run_command('g.remove', type='vector', name=tmp_vect, quiet=True, flags='f')
-
+    grass.run_command('g.remove', flags='f', type='vector',
+                      name=tmp_vect, quiet=True)
 
 def obtainAreaVector(outrast):
     """Create the string for configuration file"""

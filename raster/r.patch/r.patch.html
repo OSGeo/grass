@@ -63,7 +63,7 @@ geographic region settings to one or several raster maps, the <em>g.region</em>
 program can be used:
 
 <div class="code"><pre>
-g.region rast=map1[,map2[,...]]
+g.region raster=map1[,map2[,...]]
 </pre></div>
 
 <p>
@@ -104,7 +104,7 @@ used in the order listed.
 
 <div class="code"><pre>
 MAPS=`g.list type=rast sep=, pat="map_*"`
-g.region rast=$MAPS
+g.region raster=$MAPS
 r.patch in=$MAPS out=mosaic
 </pre></div>
 <br>

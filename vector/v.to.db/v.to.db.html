@@ -97,7 +97,7 @@ g.copy vect=soils,mysoils
 v.db.addcolumn mysoils col="d double precision"
 v.to.db mysoils option=fd column="d"
 
-g.region vect=mysoils res=50
+g.region vector=mysoils res=50
 v.to.rast in=mysoils out=soils_fd type=area use=attr column=d
 r.colors map=soils_fd color=gyr
 

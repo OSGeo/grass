@@ -26,7 +26,7 @@ distances are calculated as follows:
 The example is based on the North Carolina sample dataset:
 
 <div class="code"><pre>
-g.region rast=elevation -p
+g.region raster=elevation -p
 v.random output=samples npoints=100
 v.db.addtable map=samples columns="heights double precision"
 v.what.rast map=samples rast=elevation column=heights

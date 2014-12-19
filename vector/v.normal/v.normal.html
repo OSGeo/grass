@@ -36,7 +36,7 @@ extreme normal deviates, and Royston's W for the
 <em>random</em> vector points:
 
 <div class="code"><pre>
-g.region rast=elevation -p
+g.region raster=elevation -p
 v.random random n=200
 v.db.addtable random colum="elev double precision"
 v.what.rast random rast=elevation column=elev

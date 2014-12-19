@@ -87,7 +87,7 @@ elevation raster, as if it came from a point survey.
 
 <div class="code"><pre>
 # reduce resolution for this example
-g.region rast=elevation -p res=100
+g.region raster=elevation -p res=100
 v.random output=rand2k_elev n=2000
 v.db.addtable map=rand2k_elev column="elevation double precision"
 v.what.rast map=rand2k_elev rast=elevation column=elevation

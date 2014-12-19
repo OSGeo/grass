@@ -11,7 +11,7 @@ from <em>v.lrs.create</em>).
 v.lrs.label route_lrs rstable=route_lrs output=route_lrs_labels \
             labels=labels col=red size=50 xoffset=100
 
-g.region vect=route_lrs n=n+100 s=s-100 -p
+g.region vector=route_lrs n=n+100 s=s-100 -p
 d.erase
 d.vect route_lrs
 d.vect route_lrs_labels col=grey type=line

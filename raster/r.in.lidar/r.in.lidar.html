@@ -207,7 +207,7 @@ Import of a LAS file into an existing location/mapset (metric):
 <div class="code"><pre>
 # set the computational region automatically, resol. for binning is 5m
 r.in.lidar -e -o input=points.las resolution=5 output=lidar_dem_mean
-g.region rast=lidar_dem_mean -p
+g.region raster=lidar_dem_mean -p
 r.univar lidar_dem_mean
 </pre></div>
 

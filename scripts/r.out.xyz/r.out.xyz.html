@@ -25,7 +25,7 @@ In this example, a LiDAR elevation map in the
 North Carolina sample dataset location is exported to CSV format.
 
 <div class="code"><pre>
-g.region rast=elev_lid792_1m -p
+g.region raster=elev_lid792_1m -p
 r.out.xyz input=elev_lid792_1m output=elev_lid792_1m.csv separator=","
 </pre></div>
 
@@ -36,7 +36,7 @@ combined file (requires the import of the supplementary high-resolution
 <a href="http://grass.osgeo.org/sampledata/north_carolina/ortho2010_t792_subset_20cm.tif">color orthophoto</a>, here called "ortho2010_t792"):
 
 <div class="code"><pre>
-g.region rast=elev_lid792_1m res=1 -a -p
+g.region raster=elev_lid792_1m res=1 -a -p
 r.out.xyz input=elev_lid792_1m,ortho2010_t792.red,ortho2010_t792.green,ortho2010_t792.blue \
         separator=space output=pointcloud.asc
 

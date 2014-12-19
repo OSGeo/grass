@@ -5,7 +5,7 @@
 ####### GRASS procedure:
 
 #setup the region
-g.region vect=roads align=elevation.10m -p
+g.region vector=roads align=elevation.10m -p
 #export the vector data
 v.drape in=roads out=roads3d rast=elevation.10m
 v.out.pov roads3d out=roads3d.pov

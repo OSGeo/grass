@@ -15,7 +15,7 @@ GRASS 7:
 # TODO: change the examples to North Carolina wherever possible:
 
 # Spearfish tests
-g.region rast=landcover.30m -p
+g.region raster=landcover.30m -p
 r.mapcalc "forests = if(landcover.30m >= 41 && landcover.30m <= 43,1,null())"
 d.mon wx0
 d.rast forests
@@ -61,7 +61,7 @@ sh ./r.li.testing_nc_asc.sh
 echo "SAMPLINGFRAME 0|0|1|1
 SAMPLEAREA 0.0|0.0|1.0|1.0" > $HOME/.grass7/r.li/landsat_test
 
-g.region rast=lsat7_2002_40 -p
+g.region raster=lsat7_2002_40 -p
 r.li.shannon input=lsat7_2002_40 conf=landsat_test output=landsat_shannon
 --> Result written to ASCII file <$HOME/.grass7/r.li/output/landsat_shannon>
 

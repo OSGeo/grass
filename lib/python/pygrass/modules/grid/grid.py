@@ -353,7 +353,7 @@ def cmd_exe(args):
             inputs[key] = mapnames[key]
         cmd['inputs'] = inputs.items()
         # set the region to the tile
-        sub.Popen(['g,region', 'rast=%s' % key], env=env).wait()
+        sub.Popen(['g,region', 'raster=%s' % key], env=env).wait()
     else:
         # set the computational region
         lcmd = ['g.region', ]

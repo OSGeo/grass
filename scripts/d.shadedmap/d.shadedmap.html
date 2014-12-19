@@ -18,7 +18,7 @@ In this example, the <tt>aspect</tt> map in the North Carolina sample
 dataset location is used to hillshade the <tt>elevation</tt> map:
 
 <div class="code"><pre>
-g.region rast=aspect -p
+g.region raster=aspect -p
 d.shadedmap reliefmap=aspect drapemap=elevation
 </pre></div>
 
@@ -27,7 +27,7 @@ the Spearfish sample dataset and used to create a colorized hillshade
 raster map for later use:
 
 <div class="code"><pre>
-g.region rast=elevation.10m
+g.region raster=elevation.10m
 r.colors -e map=elevation.10m color=haxby
 r.shaded.relief elevation.10m
 
