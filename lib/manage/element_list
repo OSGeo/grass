@@ -16,13 +16,13 @@ cell:raster:raster:raster map(s)
   g3dcell:g3dcell
 grid3:raster_3d:3D raster:3D raster map(s)
 vector:vector:vector:vector map(s)
-dig:oldvector:old vector:old  (GRASS 5.0) vector map(s) 
+dig:old_vector:old vector:old  (GRASS 5.0) vector map(s) 
   dig_att:attributes
   dig_plus:topology
   dig_cats:category
   dig_misc:misc
   reg:point registration
-dig_ascii:asciivector:ascii vector:ASCII vector map(s)
+dig_ascii:ascii_vector:ascii vector:ASCII vector map(s)
 paint/labels:labels:label:paint label file(s)
 windows:region:region definition:region definition(s)
 group:group:imagery group:imagery group(s)
