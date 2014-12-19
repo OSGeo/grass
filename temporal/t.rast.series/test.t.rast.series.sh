@@ -15,7 +15,7 @@ r.mapcalc --o expr="prec_6 = 600"
 # @test
 t.create --o type=strds temporaltype=absolute output=precip_abs title="A test" descr="A test"
 
-t.register type=rast input=precip_abs maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="1 months"
+t.register type=raster input=precip_abs maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="1 months"
 t.rast.list precip_abs
 
 t.rast.series --o -t input=precip_abs method=average output=prec_average where="start_time > '2001-03-01'"
@@ -29,7 +29,7 @@ r.info prec_average
 r.info prec_max
 r.info prec_sum
 
-t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6,prec_sum,prec_max
+t.unregister type=raster maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6,prec_sum,prec_max
 t.remove type=strds input=precip_abs
 
-g.remove -f type=rast name=prec_sum,prec_max,prec_average
+g.remove -f type=raster name=prec_sum,prec_max,prec_average

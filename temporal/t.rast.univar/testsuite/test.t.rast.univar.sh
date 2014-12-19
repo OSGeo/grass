@@ -17,7 +17,7 @@ r.mapcalc expr="prec_5 = rand(0, 300)" -s
 r.mapcalc expr="prec_6 = rand(0, 650)" -s
 
 t.create type=strds temporaltype=absolute output=precip_abs1 title="A test" descr="A test"
-t.register type=rast --v -i input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-15 12:05:45" increment="14 days"
+t.register type=raster --v -i input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-15 12:05:45" increment="14 days"
 
 # The first @test
 t.rast.univar -e input=precip_abs1 

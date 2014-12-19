@@ -15,7 +15,7 @@ r.mapcalc --o expr="prec_6 = 600"
 # @test
 t.create --o type=strds temporaltype=absolute output=precip_abs title="A test" descr="A test"
 
-t.register --o type=rast input=precip_abs maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="1 months"
+t.register --o type=raster input=precip_abs maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="1 months"
 
 t.rast.colors input=precip_abs color=random
 r.colors.out map=prec_1
@@ -25,5 +25,5 @@ t.rast.colors input=precip_abs color=grey.log
 r.colors.out map=prec_3
 
 
-t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.unregister type=raster maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_abs

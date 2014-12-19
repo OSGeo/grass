@@ -33,14 +33,14 @@ t.info precip_abs3
 t.rename --o type=strds input=precip_abs1 output=precip_abs2
 t.info precip_abs2
 
-t.info type=rast input=prec_1
-t.info type=rast input=prec_2
+t.info type=raster input=prec_1
+t.info type=raster input=prec_2
 
 t.rename --o type=strds input=precip_abs2 output=precip_abs4
 t.info precip_abs4
 
-t.info type=rast input=prec_1
-t.info type=rast input=prec_2
+t.info type=raster input=prec_1
+t.info type=raster input=prec_2
 
 # Error checking, new dataset has the wrong mapset
 t.rename type=strds input=precip_abs4 output=precip_abs3@BLABLA
@@ -48,5 +48,5 @@ t.rename type=strds input=precip_abs4 output=precip_abs3@BLABLA
 t.rename type=strds input=precip_abs4 output=precip_abs3
 
 t.remove --v type=strds input=precip_abs3,precip_abs4
-t.unregister type=rast maps=prec_1,prec_2
-g.remove -f type=rast name=prec_1,prec_2
+t.unregister type=raster maps=prec_1,prec_2
+g.remove -f type=raster name=prec_1,prec_2
