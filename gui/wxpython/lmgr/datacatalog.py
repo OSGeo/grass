@@ -352,11 +352,11 @@ class DataCatalogTree(LocationMapTree):
             label = _("Renaming") + " " + string + " ..."
             self.showNotification.emit(message=label)
             if (self.GetItemText(self.selected_type)=='vector'):
-                renamed = RunCommand('g.rename', vect=string)
+                renamed = RunCommand('g.rename', vector=string)
             elif (self.GetItemText(self.selected_type)=='raster'):
-                renamed = RunCommand('g.rename', rast=string)
+                renamed = RunCommand('g.rename', raster=string)
             else:
-                renamed = RunCommand('g.rename', rast3d=string)
+                renamed = RunCommand('g.rename', raster3d=string)
             if (renamed==0):
                 self.SetItemText(self.selected_layer,self.new_name)
                 label = "g.rename "+self.GetItemText(self.selected_type)+"="+string+"   -- completed"

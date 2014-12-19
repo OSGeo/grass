@@ -106,7 +106,7 @@ def cleanup():
         grass.run_command('g.remove', quiet = True, flags = 'fb', type = 'rast', name = tmp_rmaps)
     if usermask and mapset:
         if grass.find_file(usermask, mapset = mapset)['file']:
-            grass.run_command('g.rename', quiet = True, rast = (usermask, 'MASK'), overwrite = True)
+            grass.run_command('g.rename', quiet = True, raster = (usermask, 'MASK'), overwrite = True)
 
 def main():
     global usermask, mapset, tmp_rmaps, tmp_vmaps
@@ -139,7 +139,7 @@ def main():
     if grass.find_file('MASK', mapset = mapset)['file']:
         usermask = "usermask_mask." + unique
         grass.message(_("A user raster mask (MASK) is present. Saving it..."))
-        grass.run_command('g.rename', quiet = quiet, rast = ('MASK',usermask))
+        grass.run_command('g.rename', quiet = quiet, raster = ('MASK',usermask))
 
     #check if method is rst to use v.surf.rst
     if method == 'rst':
@@ -171,7 +171,7 @@ def main():
         if usermask:
             grass.message(_("Restoring user mask (MASK)..."))
             try:
-                grass.run_command('g.rename', quiet=quiet, rast=(usermask, 'MASK'))
+                grass.run_command('g.rename', quiet=quiet, raster = (usermask, 'MASK'))
             except CalledModuleError:
                 grass.warning(_("Failed to restore user MASK!"))
             usermask = None
@@ -242,7 +242,7 @@ def main():
             # zoom to specific hole with a buffer of two cells around the hole to remove rest of data
             try:
                 grass.run_command('g.region',
-                                  vect=holename + '_pol', align=input, 
+                                  vector=holename + '_pol', align=input, 
                                   w = 'w-%d' % (edge * 2 * ew_res),
                                   e = 'e+%d' % (edge * 2 * ew_res), 
                                   n = 'n+%d' % (edge * 2 * ns_res),
@@ -333,18 +333,18 @@ def main():
             # append hole result to interpolated version later used to patch into original DEM
             if first:
                 tmp_rmaps.append(filling)
-                grass.run_command('g.region', align = input, rast = holename + '_dem', quiet = quiet)
+                grass.run_command('g.region', align = input, raster = holename + '_dem', quiet = quiet)
                 grass.mapcalc("$out = if(isnull($inp), null(), $dem)", 
                                 out = filling, inp = holename, dem = holename + '_dem')
                 first = False
             else:
                 tmp_rmaps.append(filling + '_tmp')
-                grass.run_command('g.region', align = input, rast = (filling, holename + '_dem'), quiet = quiet)
+                grass.run_command('g.region', align = input, raster = (filling, holename + '_dem'), quiet = quiet)
                 grass.mapcalc("$out = if(isnull($inp), if(isnull($fill), null(), $fill), $dem)", 
                                 out = filling + '_tmp', inp = holename, dem = holename + '_dem', fill = filling)
                 try:
                     grass.run_command('g.rename',
-                                      rast=(filling + '_tmp', filling),
+                                      raster=(filling + '_tmp', filling),
                                       overwrite=True, quiet=quiet)
                 except CalledModuleError:
                     grass.fatal(_("abandoned. Removing temporary maps, restoring user mask if needed:"))
@@ -403,7 +403,7 @@ def main():
     if usermask:
         grass.message(_("Restoring user mask (MASK)..."))
         try:
-            grass.run_command('g.rename', quiet=quiet, rast=(usermask, 'MASK'))
+            grass.run_command('g.rename', quiet=quiet, raster=(usermask, 'MASK'))
         except CalledModuleError:
             grass.warning(_("Failed to restore user MASK!"))
         usermask = None

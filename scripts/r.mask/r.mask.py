@@ -166,7 +166,7 @@ def main():
         if invert:
             global tmp
             tmp = "r_mask_%d" % os.getpid()
-            grass.run_command('g.rename', rast = ('MASK', tmp), quiet = True)
+            grass.run_command('g.rename', raster = ('MASK', tmp), quiet = True)
             grass.message(_("Creating inverted raster MASK..."))
             grass.mapcalc("MASK = if(isnull($tmp), 1, null())", tmp = tmp)
             grass.verbose(_("Inverted raster MASK created"))
