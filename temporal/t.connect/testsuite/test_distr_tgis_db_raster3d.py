@@ -28,7 +28,7 @@ class testRaster3dExtraction(TestCase):
             
             cls.runModule("t.create",  type="str3ds",  temporaltype="absolute",  
                                          output="A",  title="A test3d",  description="A test3d")
-            cls.runModule("t.register",  flags="i",  type="3draster",  input="A",  
+            cls.runModule("t.register",  flags="i",  type="raster_3d",  input="A",  
                                          maps="a1,a2,a3",  
                                          start="2001-01-01", increment="%i months"%i)
 
@@ -165,7 +165,7 @@ class testRaster3dExtraction(TestCase):
                                 start_time=2001-01-01 00:00:00
                                 end_time=2001-02-01 00:00:00 """
 
-        info = SimpleModule("t.info", flags="g", type="3draster",  input="a1@test3d1")
+        info = SimpleModule("t.info", flags="g", type="raster_3d",  input="a1@test3d1")
         self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
 
         tinfo_string="""id=a1@test3d2
@@ -175,7 +175,7 @@ class testRaster3dExtraction(TestCase):
                                 start_time=2001-01-01 00:00:00
                                 end_time=2001-03-01 00:00:00 """
 
-        info = SimpleModule("t.info", flags="g", type="3draster",  input="a1@test3d2")
+        info = SimpleModule("t.info", flags="g", type="raster_3d",  input="a1@test3d2")
         self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
 
         tinfo_string="""id=a1@test3d3
@@ -185,7 +185,7 @@ class testRaster3dExtraction(TestCase):
                                 start_time=2001-01-01 00:00:00
                                 end_time=2001-04-01 00:00:00 """
 
-        info = SimpleModule("t.info", flags="g", type="3draster",  input="a1@test3d3")
+        info = SimpleModule("t.info", flags="g", type="raster_3d",  input="a1@test3d3")
         self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
 
         tinfo_string="""id=a1@test3d4
@@ -195,7 +195,7 @@ class testRaster3dExtraction(TestCase):
                                 start_time=2001-01-01 00:00:00
                                 end_time=2001-05-01 00:00:00 """
 
-        info = SimpleModule("t.info", flags="g", type="3draster",  input="a1@test3d4")
+        info = SimpleModule("t.info", flags="g", type="raster_3d",  input="a1@test3d4")
         self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
 
 if __name__ == '__main__':
