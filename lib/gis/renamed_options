@@ -452,6 +452,7 @@ v.external|dsn:input
 v.extrude|hcolumn:height_column
 # v.in.ogr
 v.in.ogr|dsn:input
+v.in.ogr|cnames:columns
 # v.kcv
 v.kcv|k:npartitions
 # v.kernel
