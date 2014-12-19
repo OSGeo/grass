@@ -471,7 +471,7 @@ class Application(wx.App):
     def initialize(self):
 	grass.use_temp_region()
 
-	run('g.region', rast = self.inmap)
+	run('g.region', raster = self.inmap)
 
 	reg = grass.region()
 	for k, f in wind_keys.values():
@@ -526,7 +526,7 @@ class Application(wx.App):
 	outf.close()
 	p.wait()
 
-	run('g.region', rast = self.inmap)
+	run('g.region', raster = self.inmap)
 	run('r.patch', input = (self.tempmap, self.outmap), output = self.outmap, overwrite = True)
 	run('r.colors', map = self.outmap, rast = self.inmap)
 	run('g.remove', flags = 'f', type = 'rast', name = self.tempmap)

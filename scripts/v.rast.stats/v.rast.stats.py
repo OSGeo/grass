@@ -74,7 +74,7 @@ def cleanup():
     grass.run_command('g.remove', type='rast', name='MASK', quiet=True, flags='f', stderr=nuldev)
     if mask_found:
         grass.message(_("Restoring previous MASK..."))
-        grass.run_command('g.rename', rast=(tmpname + "_origmask", 'MASK'),
+        grass.run_command('g.rename', raster=(tmpname + "_origmask", 'MASK'),
                           quiet=True)
 #    for f in [tmp, tmpname, sqltmp]:
 #        grass.try_remove(f)
@@ -125,7 +125,7 @@ def main():
     mask_found = bool(grass.find_file('MASK', 'cell')['file'])
     if mask_found:
         grass.message(_("Raster MASK found, temporarily disabled"))
-        grass.run_command('g.rename', rast=('MASK', tmpname + "_origmask"),
+        grass.run_command('g.rename', raster=('MASK', tmpname + "_origmask"),
                           quiet=True)
 
     # save current settings:

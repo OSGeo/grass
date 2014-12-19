@@ -203,11 +203,11 @@ def AutoAdjust(self, scaleType, rect, map=None, mapType=None, region=None):
         res = ''
         if mapType == 'raster': 
             try:
-                res = grass.read_command("g.region", flags = 'gu', rast = map)
+                res = grass.read_command("g.region", flags = 'gu', raster = map)
             except grass.ScriptError:
                 pass
         elif mapType == 'vector':
-            res = grass.read_command("g.region", flags = 'gu', vect = map)
+            res = grass.read_command("g.region", flags = 'gu', vector = map)
         currRegionDict = grass.parse_key_val(res, val_type = float)
     elif scaleType == 1 and region: # saved region
         res = grass.read_command("g.region", flags = 'gu', region = region)
