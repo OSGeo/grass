@@ -278,7 +278,6 @@ int list_layers_ogr(FILE *fd, const char *dsn, const char *layer, int print_type
     for (i = 0; i < nlayers; i++) {
 	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, i);
 	Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
-	Ogr_geom_type = OGR_FD_GetGeomType(Ogr_featuredefn);
 	layer_name = (char *) OGR_FD_GetName(Ogr_featuredefn);
 
 	if (fd) {
@@ -312,7 +311,8 @@ int list_layers_ogr(FILE *fd, const char *dsn, const char *layer, int print_type
                         G_warning(_("Invalid geometry column %d"), igeom);
                         continue;
                     }
-                    
+
+                    Ogr_geom_type = OGR_GFld_GetType(Ogr_geomdefn);
                     fprintf(fd, "%s,%s,%d,%s\n", layer_name,
                             feature_type(OGRGeometryTypeToName(Ogr_geom_type)),
                             proj_same, OGR_GFld_GetNameRef(Ogr_geomdefn));
