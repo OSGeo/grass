@@ -161,14 +161,14 @@ int main(int argc, char *argv[])
     parm.region->guisection = _("Existing");
 
     parm.raster = G_define_standard_option(G_OPT_R_MAP);
-    parm.raster->key = "rast";
+    parm.raster->key = "raster";
     parm.raster->required = NO;
     parm.raster->multiple = YES;
     parm.raster->description = _("Set region to match raster map(s)");
     parm.raster->guisection = _("Existing");
 
     parm.raster3d = G_define_standard_option(G_OPT_R3_MAP);
-    parm.raster3d->key = "rast3d";
+    parm.raster3d->key = "raster_3d";
     parm.raster3d->required = NO;
     parm.raster3d->multiple = NO;
     parm.raster3d->description =
@@ -177,7 +177,7 @@ int main(int argc, char *argv[])
     parm.raster3d->guisection = _("Existing");
 
     parm.vect = G_define_standard_option(G_OPT_V_MAP);
-    parm.vect->key = "vect";
+    parm.vect->key = "vector";
     parm.vect->required = NO;
     parm.vect->multiple = YES;
     parm.vect->label = _("Set region to match vector map(s)");

@@ -693,7 +693,7 @@ class MapFrame(SingleMapFrame):
                                           output=outputRaster, quiet=True,
                                           overwrite=overwrite, getErrorMsg=True)
         grass.del_temp_region()
-        RunCommand('g.remove', type='rast', flags='f', quiet=True,
+        RunCommand('g.remove', type='raster', flags='f', quiet=True,
                    name=[tmpName + '.red', tmpName + '.green', tmpName + '.blue'])
         if not returncode == 0:
             self._giface.WriteError(_('Failed to run d.to.rast:\n') + messages)
@@ -842,9 +842,9 @@ class MapFrame(SingleMapFrame):
         """Activate query mode and set layers to query.
         This method is used for querying in d.mon using d.what.rast/vect"""
         self.toolbars['map'].SelectTool(self.toolbars['map'].query)
-        if ltype == 'vect':
+        if ltype == 'vector':
             self._vectQueryLayers = maps
-        elif ltype == 'rast':
+        elif ltype == 'raster':
             self._rastQueryLayers = maps
 
     def QueryMap(self, east, north, qdist, rast, vect):
@@ -1171,7 +1171,7 @@ class MapFrame(SingleMapFrame):
                         if len(param_val) != 2:
                             continue
                         param, val = param_val
-                        if param == 'rast':
+                        if param == 'raster':
                             self.legend.cmd[idx] = 'rast={rast}'.format(rast=layer.maplayer.name)
                             isMap = True
                         elif param in ('use', 'range'):

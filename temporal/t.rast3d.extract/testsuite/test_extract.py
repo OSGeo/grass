@@ -41,7 +41,7 @@ class TestRaster3dExtraction(TestCase):
 
         self.runModule("t.create",  type="str3ds",  temporaltype="absolute",  
                                      output="A",  title="A test",  description="A test",  overwrite=True)
-        self.runModule("t.register",  flags="i",  type="rast3d",  input="A",  
+        self.runModule("t.register",  flags="i",  type="raster_3d",  input="A",  
                                      maps="a1,a2,a3,a4,a5,a6",  
                                      start="2001-01-01", increment="3 months",  overwrite=True)
 

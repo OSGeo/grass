@@ -27,7 +27,7 @@ soil_8
 EOF
 
 t.create --o type=stvds temporaltype=absolute output=soil_abs1 title="A test" descr="A test"
-t.register -i type=vect input=soil_abs1 file="${n1}" start='2001-01-01' increment="1 months"
+t.register -i type=vector input=soil_abs1 file="${n1}" start='2001-01-01' increment="1 months"
 t.info type=stvds input=soil_abs1
 t.vect.list input=soil_abs1
 
@@ -42,7 +42,7 @@ t.info type=stvds input=soil_abs3
 t.vect.list input=soil_abs3 columns=name,start_time,end_time,primitives
 
 # @postprocess
-t.unregister type=vect maps=soil_1,soil_2,soil_3,soil_4,soil_5,soil_6,soil_7,soil_8
+t.unregister type=vector maps=soil_1,soil_2,soil_3,soil_4,soil_5,soil_6,soil_7,soil_8
 t.remove type=stvds input=soil_abs1,soil_abs2,soil_abs3
-g.remove -f type=vect name=soil_1,soil_2,soil_3,soil_4,soil_5,soil_6,soil_7,soil_8
-g.remove -f type=vect name=new_vect_1,new_vect_2,new_vect_3,new_vect_4,new_vect_5,new_vect_6
+g.remove -f type=vector name=soil_1,soil_2,soil_3,soil_4,soil_5,soil_6,soil_7,soil_8
+g.remove -f type=vector name=new_vect_1,new_vect_2,new_vect_3,new_vect_4,new_vect_5,new_vect_6

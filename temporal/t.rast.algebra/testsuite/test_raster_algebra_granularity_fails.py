@@ -32,9 +32,9 @@ class TestTRastAlgebraGranularityFails(gunittest.TestCase):
         tgis.open_new_stds(name="A", type="strds", temporaltype="absolute",
                                          title="A", descr="A", semantic="field", overwrite=True)
 
-        tgis.register_maps_in_space_time_dataset(type="rast", name="A",  maps="a1", 
+        tgis.register_maps_in_space_time_dataset(type="raster", name="A",  maps="a1", 
                                                 start="2001-02-01", end="2001-04-01", interval=True)
-        tgis.register_maps_in_space_time_dataset(type="rast", name="A",  maps="a2", 
+        tgis.register_maps_in_space_time_dataset(type="raster", name="A",  maps="a2", 
                                                 start="2001-03-01", end="2001-05-01", interval=True)
         
     @classmethod

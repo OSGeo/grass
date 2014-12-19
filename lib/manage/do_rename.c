@@ -49,7 +49,7 @@ int M_do_rename(int n, const char *old, const char *new)
 
     M__hold_signals(1);
 
-    if (G_strcasecmp(list[n].alias, "vect") == 0) {
+    if (G_strcasecmp(list[n].alias, "vector") == 0) {
 	if ((mapset = G_find_vector2(old, "")) == NULL) {
 	    G_warning(_("Vector map <%s> not found"), old);
 	}
@@ -66,12 +66,12 @@ int M_do_rename(int n, const char *old, const char *new)
 	}
     }
     else {
-	if (G_strcasecmp(list[n].alias, "rast") == 0) {
+	if (G_strcasecmp(list[n].alias, "raster") == 0) {
 	    if ((mapset = G_find_raster2(old, "")) == NULL)
 		G_warning(_("Raster map <%s> not found"), old);
 	}
 
-	if (G_strcasecmp(list[n].alias, "rast3d") == 0) {
+	if (G_strcasecmp(list[n].alias, "raster_3d") == 0) {
 	    if ((mapset = G_find_raster3d(old, "")) == NULL)
 		G_warning(_("3D raster map <%s> not found"), old);
 	}

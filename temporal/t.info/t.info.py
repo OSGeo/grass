@@ -28,7 +28,7 @@
 #%option G_OPT_STDS_TYPE
 #% guidependency: input
 #% guisection: Required
-#% options: strds, str3ds, stvds, rast, rast3d, vect
+#% options: strds, str3ds, stvds, raster, raster_3d, vector
 #%end
 
 #%flag

@@ -642,13 +642,13 @@ class Map(object):
             if zoom:
                 cmd['zoom'] = rast[0]
             else:
-                cmd['rast'] = ','.join(rast)
+                cmd['raster'] = ','.join(rast)
 
         if vect:
-            cmd['vect'] = ','.join(vect)
+            cmd['vector'] = ','.join(vect)
 
         if rast3d:
-            cmd['rast3d'] = rast3d
+            cmd['raster_3d'] = rast3d
 
         ret, reg, msg = RunCommand('g.region',
                                    read = True,

@@ -409,7 +409,7 @@ static void make_list(struct elist **el, int *lcount, int *lalloc,
 
     if (strcmp(alias, "raster") == 0)
 	type = TYPE_RAST;
-    else if (strcmp(alias, "3draster") == 0)
+    else if (strcmp(alias, "raster_3d") == 0)
 	type = TYPE_RAST3D;
     else if (strcmp(alias, "vector") == 0)
 	type = TYPE_VECT;

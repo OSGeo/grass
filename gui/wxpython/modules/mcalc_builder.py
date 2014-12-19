@@ -110,7 +110,7 @@ class MapCalcFrame(wx.Frame):
         if self.rast3d:
             self.funct_dict['z()'] = 'z()'
             self.funct_dict['tbres()'] = 'tbres()'
-            element = 'rast3d'
+            element = 'raster_3d'
         else:
             element = 'cell'
 
@@ -601,9 +601,9 @@ class MapCalcFrame(wx.Frame):
         if returncode != 0:
             return
         name = self.newmaptxt.GetValue().strip(' "') + '@' + grass.gisenv()['MAPSET']
-        ltype = 'rast'
+        ltype = 'raster'
         if self.rast3d:
-            ltype = 'rast3d'
+            ltype = 'raster_3d'
         self._giface.mapCreated.emit(name=name, ltype=ltype, add=self.addbox.IsChecked())
 
     def OnSaveExpression(self, event):

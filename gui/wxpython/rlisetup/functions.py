@@ -26,7 +26,7 @@ class SamplingType:
     WHOLE = 'whole'
     REGIONS = 'regions'
     UNITS = 'units'
-    VECT = 'vect'
+    VECT = 'vector'
     MVWIN = 'moving'
 
     KMVWINC = 'kmvwin_circle'
@@ -66,7 +66,7 @@ def retRLiPath():
         return rlipath
 
 
-def checkMapExists(name, typ='rast'):
+def checkMapExists(name, typ='raster'):
     """Check if a map already exist in the working mapset"""
     env = grass.gisenv()
     mapset = env['MAPSET']
@@ -85,7 +85,7 @@ def convertFeature(vect, outrast, cat, origrast):
     grass.run_command('g.region', vect=tmp_vect, align=origrast)
     grass.run_command('v.to.rast', input=vect, output=outrast, use='cat',
                       cats=cat, overwrite=True, quiet=True)
-    grass.run_command('g.remove', type='vect', name=tmp_vect, quiet=True, flags='f')
+    grass.run_command('g.remove', type='vector', name=tmp_vect, quiet=True, flags='f')
 
 
 def obtainAreaVector(outrast):

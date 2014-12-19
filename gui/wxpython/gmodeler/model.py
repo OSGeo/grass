@@ -729,7 +729,7 @@ class Model(object):
                 rast.append(name)
             elif prompt == 'vector':
                 vect.append(name)
-            elif prompt == 'rast3d':
+            elif prompt == 'raster_3d':
                 rast3d.append(name)
         
         msg = ''
@@ -2338,17 +2338,17 @@ def cleanup():
 """)
         if rast:
             self.fd.write(
-r"""  run_command('g.remove', flags='f', type='rast',
+r"""  run_command('g.remove', flags='f', type='raster',
                       name=%s)
 """% ','.join(map(lambda x: "'" + x + "'", rast)))
         if vect:
             self.fd.write(
-r"""  run_command('g.remove', flags='f', type='vect',
+r"""  run_command('g.remove', flags='f', type='vector',
                       name=%s)
 """% ','.join(map(lambda x: "'" + x + "'", vect)))
         if rast3d:
             self.fd.write(
-r"""  run_command('g.remove', flags='f', type='rast3d',
+r"""  run_command('g.remove', flags='f', type='raster_3d',
                       name=%s)
 """% ','.join(map(lambda x: "'" + x + "'", rast3d)))
         if not rast and not vect and not rast3d:

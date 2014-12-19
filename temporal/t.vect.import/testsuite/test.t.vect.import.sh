@@ -21,7 +21,7 @@ soil_3
 EOF
 
 t.create --o type=stvds temporaltype=absolute output=soil_abs1 title="A test" descr="A test"
-t.register -i type=vect input=soil_abs1 file="${n1}" start='2001-01-01' increment="1 months"
+t.register -i type=vector input=soil_abs1 file="${n1}" start='2001-01-01' increment="1 months"
 
 # The first @test
 t.vect.export format=GML input=soil_abs1 output=stvds_export_gml.tar.bz2 compression=bzip2 workdir=/tmp
@@ -59,8 +59,8 @@ v.info soil_1
 
 # Cleaning up
 rm -rf test
-g.remove -f type=vect name=soil_1,soil_2,soil_3
-t.unregister type=vect file="${n1}"
+g.remove -f type=vector name=soil_1,soil_2,soil_3
+t.unregister type=vector file="${n1}"
 t.remove type=stvds input=soil_abs1,soil_abs2
 rm stvds_export_gml.tar.bz2
 rm stvds_export_gml.tar.gz

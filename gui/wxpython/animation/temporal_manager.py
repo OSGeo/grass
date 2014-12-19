@@ -410,7 +410,7 @@ def createAbsoluteInterval():
     fd.close()
     name1 = 'absinterval1'
     name2 = 'absinterval2'
-    grass.run_command('t.unregister', type='rast',
+    grass.run_command('t.unregister', type='raster',
                       maps='prec_1,prec_2,prec_3,prec_4,prec_5,prec_6,'
                       'temp_1,temp_2,temp_3,temp_4,temp_5,temp_6')
     for name, fname in zip((name1, name2), (n1, n2)):
@@ -465,7 +465,7 @@ def createRelativeInterval():
     fd.close()
     name1 = 'relinterval1'
     name2 = 'relinterval2'
-    grass.run_command('t.unregister', type='rast',
+    grass.run_command('t.unregister', type='raster',
                       maps='prec_1,prec_2,prec_3,prec_4,prec_5,prec_6,'
                       'temp_1,temp_2,temp_3,temp_4,temp_5,temp_6')
     for name, fname in zip((name1, name2), (n1, n2)):

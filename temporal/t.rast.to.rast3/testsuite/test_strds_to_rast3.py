@@ -46,21 +46,21 @@ class TestSTRDSToRast3(TestCase):
         self.runModule("t.create", type="strds",  temporaltype="absolute",  
                        output="precip_i",  title="A test integer",  
                        description="A test integer values")
-        self.runModule("t.register", flags="i",  type="rast",  input="precip_i",  
+        self.runModule("t.register", flags="i",  type="raster",  input="precip_i",  
                        maps="prec_1i,prec_2i,prec_3i,prec_4i,prec_5i,prec_6i",  
                        start="2001-01-01", increment="3 months")
 
         self.runModule("t.create", type="strds",  temporaltype="absolute",  
                        output="precip_f",  title="A test float",  
                        description="A test float values")
-        self.runModule("t.register", flags="i",  type="rast",  input="precip_f",  
+        self.runModule("t.register", flags="i",  type="raster",  input="precip_f",
                        maps="prec_1f,prec_2f,prec_3f,prec_4f,prec_5f,prec_6f",  
                        start="2001-01-01", increment="3 months")
 
         self.runModule("t.create", type="strds",  temporaltype="absolute",  
                        output="precip_d",  title="A test float",  
                        description="A test float values")
-        self.runModule("t.register", flags="i",  type="rast",  input="precip_d",  
+        self.runModule("t.register", flags="i",  type="raster",  input="precip_d",  
                        maps="prec_1d,prec_2d,prec_3d,prec_4d,prec_5d,prec_6d",  
                        start="2001-01-01", increment="3 months")
 
