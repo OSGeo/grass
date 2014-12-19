@@ -214,11 +214,7 @@ int main(int argc, char *argv[])
     param.outloc->description = _("Name for new location to create");
     param.outloc->key_desc = "name";
     
-    param.cnames = G_define_option();
-    param.cnames->key = "cnames";
-    param.cnames->type = TYPE_STRING;
-    param.cnames->required = NO;
-    param.cnames->multiple = YES;
+    param.cnames = G_define_standard_option(G_OPT_DB_COLUMNS);
     param.cnames->description =
 	_("List of column names to be used instead of original names, "
 	  "first is used for category column");
