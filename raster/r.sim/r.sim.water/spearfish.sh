@@ -7,7 +7,7 @@
 
 dem=elevation.10m
 output=simwe
-g.region rast=${output}
+g.region raster=${output}
 g.region n=4920800 s=4917800 w=602500 e=606000
 g.region -p
 

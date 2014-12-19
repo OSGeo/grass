@@ -28,7 +28,7 @@ v.db.select mylakes
 v.db.select mylakes where="FTYPE IS NULL"
 
 # display the lakes, show undefined FTYPE lakes in red
-g.region vect=mylakes
+g.region vector=mylakes
 d.mon wx0
 d.vect mylakes where="FTYPE NOT NULL" type=area col=blue
 d.vect mylakes where="FTYPE IS NULL" type=area col=red

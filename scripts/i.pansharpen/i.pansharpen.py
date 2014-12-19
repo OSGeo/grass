@@ -335,7 +335,7 @@ def main():
     for ch in ['red', 'green', 'blue']:
         grass.verbose(_("%s_%s") % (out, ch))
 
-    grass.verbose(_("To visualize output, run: g.region -p rast=%s_red" % out))
+    grass.verbose(_("To visualize output, run: g.region -p raster=%s_red" % out))
     grass.verbose(_("d.rgb r=%s_red g=%s_green b=%s_blue" % (out, out, out)))
     grass.verbose(_("If desired, combine channels into a single RGB map with 'r.composite'."))
     grass.verbose(_("Channel colors can be rebalanced using i.colors.enhance."))

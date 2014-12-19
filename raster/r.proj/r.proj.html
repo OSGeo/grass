@@ -261,7 +261,7 @@ v.proj input=bounds location=source_location_name output=bounds_reprojected
 # bounds map, and align the resolution to the desired cell resolution of the 
 # final, reprojected raster map:
 
-g.region vect=bounds_reprojected res=5 -a
+g.region vector=bounds_reprojected res=5 -a
 
 # Now reproject the raster into the target location
 

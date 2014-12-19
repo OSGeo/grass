@@ -19,7 +19,7 @@ a group, when the imagery group's name is entered as input.
 module)
 <p>As with most GRASS raster modules, the current region extents and region
 resolution are used, and a MASK is respected if present.
-Use <em><a href="g.region.html">g.region</a></em>'s "align=", or "rast="
+Use <em><a href="g.region.html">g.region</a></em>'s "align=", or "raster="
 options if you need to realign the region settings to match the original
 map's before export.
 
@@ -164,33 +164,33 @@ overviews.
 
 <h3>Export the integer raster basin_50K map to GeoTIFF format:</h3>
 <div class="code"><pre>
-g.region rast=basin_50K -p
+g.region raster=basin_50K -p
 r.out.gdal input=basin_50K output=basin_50K.tif
 </pre></div>
 <p>
 <h3>Export a DCELL raster map in GeoTIFF format suitable for ESRI software:</h3>
 <div class="code"><pre>
-g.region rast=elevation -p
+g.region raster=elevation -p
 r.out.gdal in=elevation output=elevation.tif createopt="PROFILE=GeoTIFF,TFW=YES"
 </pre></div>
 <p>
 <h3>Export a raster map in "Deflate" compressed GeoTIFF format:</h3>
 <div class="code"><pre>
-g.region rast=elevation -p
+g.region raster=elevation -p
 r.out.gdal in=elevation output=elevation.tif createopt="COMPRESS=DEFLATE"
 </pre></div>
 <p>
 <h3>Export R,G,B imagery bands in GeoTIFF format suitable for ESRI software:</h3>
 <div class="code"><pre>
 i.group group=nc_landsat_rgb input=lsat7_2002_30,lsat7_2002_20,lsat7_2002_10
-g.region rast=lsat7_2002_30 -p
+g.region raster=lsat7_2002_30 -p
 r.out.gdal in=nc_landsat_rgb output=nc_landsat_rgb.tif type=Byte \
   createopt="PROFILE=GeoTIFF,INTERLEAVE=PIXEL,TFW=YES"
 </pre></div>
 <p>
 <h3>Export the floating point raster elevation map to ERDAS/IMG format:</h3>
 <div class="code"><pre>
-g.region rast=elevation -p
+g.region raster=elevation -p
 r.out.gdal input=elevation output=elelevation.img format=HFA type=Float32
 </pre></div>
 
@@ -199,7 +199,7 @@ r.out.gdal input=elevation output=elelevation.img format=HFA type=Float32
 g.list group
 i.group group=tm7 subgroup=tm7 input=tm7_10,tm7_20,tm7_30,tm7_40,tm7_50,tm7_60,tm7_70
 i.group -l tm7
-g.region rast=tm7_10 -p
+g.region raster=tm7_10 -p
 r.out.gdal tm7 output=lsat_multiband.tif
 gdalinfo lsat_multiband.tif
 </pre></div>

@@ -25,13 +25,13 @@ queried from the raster map:
 <br>
 <div class="code"><pre>
 # create new random 3d vector points map
-v.random -z output=pnts n=100 zmin=0  zmax=50
+v.random -z output=pnts npoints=100 zmin=0  zmax=50
 
 # add new table, link to map
 v.db.addtable map=pnts column="concentration double precision"
 
 # query raster map and upload values to vector table into specified column
-g.region rast3d=plume -p
+g.region raster3d=plume -p
 v.what.rast3 map=pnts raster3d=plume column=concentration
 
 # verify new attribute table:

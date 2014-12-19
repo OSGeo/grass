@@ -30,7 +30,7 @@ In this example, the <tt>aspect</tt> map in the North Carolina sample
 dataset location is used to hillshade the <tt>elevation</tt> map:
 
 <div class="code"><pre>
-g.region rast=aspect -p
+g.region raster=aspect -p
 d.mon wx0
 d.shade reliefmap=aspect drapemap=elevation
 </pre></div>
@@ -58,7 +58,7 @@ In this next example, a shaded relief raster map is created
 and used to create a colorized hillshade:
 
 <div class="code"><pre>
-g.region rast=elevation
+g.region raster=elevation
 r.relief input=elevation output=elevation_shaded_relief
 
 d.mon wx1

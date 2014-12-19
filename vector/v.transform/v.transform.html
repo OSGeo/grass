@@ -63,7 +63,7 @@ g.copy vect=archsites@PERMANENT,myarchsites
 v.db.addcolumn myarchsites col="zs double precision"
 
 # set region to elevation map and fetch individual heights:
-g.region rast=elevation.10m -p
+g.region raster=elevation.10m -p
 v.what.rast myarchsites rast=elevation.10m col=zs
 # verify:
 v.db.select myarchsites

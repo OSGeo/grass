@@ -31,7 +31,7 @@ class TestRInPoly(grass.gunittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
-        cls.runModule('g.region', rast='elevation')
+        cls.runModule('g.region', raster='elevation')
 
     @classmethod
     def tearDownClass(cls):

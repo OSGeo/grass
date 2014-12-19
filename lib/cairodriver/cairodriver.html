@@ -95,7 +95,7 @@ export GRASS_RENDER_WIDTH=800
 export GRASS_RENDER_HEIGHT=800
 export GRASS_RENDER_FILE_READ=TRUE
 
-g.region rast=elevation
+g.region raster=elevation
 d.rast map=elevation
 d.vect map=streams width=1 color=blue fcolor=aqua type=area,line
 d.vect map=roadsmajor width=2
@@ -111,7 +111,7 @@ export GRASS_RENDER_FILE=nc_spm.pdf
 export GRASS_RENDER_WIDTH=800
 export GRASS_RENDER_HEIGHT=800
 
-g.region vect=roadsmajor
+g.region vector=roadsmajor
 # activate vector font
 d.font Vera
 d.vect map=roadsmajor layer=1 display=shape attrcolumn=ROAD_NAME lcolor=0:90:255
@@ -126,7 +126,7 @@ export GRASS_RENDER_FILE=nc_spm.pdf
 export GRASS_RENDER_WIDTH=800
 export GRASS_RENDER_HEIGHT=800
 
-g.region rast=elevation
+g.region raster=elevation
 d.rast map=elevation
 </pre></div>
 

@@ -134,7 +134,7 @@ class TestProfileNCSPM(TestCase):
     @classmethod
     def setUpClass(cls):
         gcore.use_temp_region()
-        gcore.run_command('g.region', rast='elevation')
+        gcore.run_command('g.region', raster='elevation')
 
     @classmethod
     def tearDownClass(cls):

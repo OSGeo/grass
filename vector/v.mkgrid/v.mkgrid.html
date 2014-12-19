@@ -80,7 +80,7 @@ North Carolina sample dataset example, creating a 1km spaced point grid
 based on the current region extent defined by the "elevation" map:
 
 <div class="code"><pre>
-g.region rast=elevation res=1000 -pa
+g.region raster=elevation res=1000 -pa
 v.mkgrid type=point map=pointpattern
 </pre></div>
 <p>
@@ -93,7 +93,7 @@ a two-step approach:
 
 <div class="code"><pre>
 # create first set of points, covering extent of "elevation" raster map
-g.region rast=elevation res=1000 -pa
+g.region raster=elevation res=1000 -pa
 v.mkgrid type=point map=pointpattern1
 
 # shift grid by half point distance (map units)

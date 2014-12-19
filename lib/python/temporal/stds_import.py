@@ -97,7 +97,7 @@ def _import_raster_maps_from_gdal(maplist, overr, exp, location, link, format_,
 
     # Set the computational region from the last map imported
     if set_current_region is True:
-        gscript.run_command("g.region", rast=name)
+        gscript.run_command("g.region", raster=name)
 
 ############################################################################
 
@@ -121,7 +121,7 @@ def _import_raster_maps(maplist, set_current_region=False):
 
     # Set the computational region from the last map imported
     if set_current_region is True:
-        gscript.run_command("g.region", rast=name)
+        gscript.run_command("g.region", raster=name)
 
 ############################################################################
 

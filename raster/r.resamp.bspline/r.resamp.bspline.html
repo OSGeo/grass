@@ -72,7 +72,7 @@ g.region n=north s=south e=east w=west align=input -p
 # interpolate NULL cells
 r.resamp.bspline -n input=input_raster output=interpolated_nulls method=bicubic
 # set region to area with NULL cells, align region to input map
-g.region rast=input -p
+g.region raster=input -p
 # patch original map and interpolated NULLs
 r.patch input=input_raster,interpolated_nulls output=input_raster_gapfilled
 </pre></div>
@@ -85,7 +85,7 @@ elevation values; missing pixels are then re-interpolated to obtain
 a complete elevation map:
 
 <div class="code"><pre>
-g.region rast=elev_srtm_30m -p
+g.region raster=elev_srtm_30m -p
 d.mon wx0
 d.histogram elev_srtm_30m
 

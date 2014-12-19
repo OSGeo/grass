@@ -450,7 +450,7 @@ int main(int argc, char *argv[])
 	Rast3d_region_to_cell_head(&win, &window);
     }
 
-    /* vect= */
+    /* vector= */
     if (parm.vect->answer) {
 	int first = 0;
 

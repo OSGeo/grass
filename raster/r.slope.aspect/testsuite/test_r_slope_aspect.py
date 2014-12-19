@@ -109,7 +109,7 @@ class TestSlopeAspectAgainstItself(grass.gunittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
-        call_module('g.region', rast='elevation')
+        call_module('g.region', raster='elevation')
 
     @classmethod
     def tearDownClass(cls):
@@ -150,7 +150,7 @@ class TestExtremes(grass.gunittest.TestCase):
         aspect = 'small_aspect'
         self.runModule('r.in.ascii', input='-', output=elevation,
                        stdin_=SMALL_MAP)
-        call_module('g.region', rast=elevation)
+        call_module('g.region', raster=elevation)
         self.assertModule('r.slope.aspect', elevation=elevation,
                           slope=slope, aspect=aspect)
         self.assertRasterMinMax(map=slope, refmin=0, refmax=90,

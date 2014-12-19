@@ -4,7 +4,7 @@
 #### r.blend for 3-in-1 testing
 #spearfish
 
-g.region rast=elevation.10m res=5
+g.region raster=elevation.10m res=5
 export GRASS_OVERWRITE=1
 export GRASS_VERBOSE=0
 

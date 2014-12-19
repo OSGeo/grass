@@ -255,7 +255,7 @@ memory_bytes = rows*cols*((IR*4+horizon_steps)/num_partitions  + OR*4)
 
 North Carolina example (considering also cast shadows):
 <div class="code"><pre>
-g.region rast=elevation -p
+g.region raster=elevation -p
 
 # calculate horizon angles (to speed up the subsequent r.sun calculation)
 r.horizon elevation=elevation step=30 bufferzone=200 basename=horangle \
@@ -277,7 +277,7 @@ for a given day of the year at 30m resolution. Here day 172 (i.e., 21 June
 in non-leap years):
 
 <div class="code"><pre>
-g.region rast=elev_ned_30m -p
+g.region raster=elev_ned_30m -p
 
 # considering cast shadows
 r.sun elevation=elev_ned_30m linke_value=2.5 albedo_value=0.2 day=172 \

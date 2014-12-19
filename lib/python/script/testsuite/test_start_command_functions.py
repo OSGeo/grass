@@ -15,27 +15,27 @@ class TestPythonKeywordsInParameters(grass.gunittest.TestCase):
 
     def test_prefixed_underscore(self):
         proc = start_command(
-            'g.region', _rast=self.raster, stderr=PIPE)
+            'g.region', _raster=self.raster, stderr=PIPE)
         stderr = proc.communicate()[1]
-        self.assertNotIn('_rast', stderr)
+        self.assertNotIn('_raster', stderr)
         self.assertIn(self.raster, stderr,
             msg="Raster map name should appear in the error output")
 
     def test_suffixed_underscore(self):
         proc = start_command(
-            'g.region', rast_=self.raster, stderr=PIPE)
+            'g.region', raster_=self.raster, stderr=PIPE)
         stderr = proc.communicate()[1]
-        self.assertNotIn('rast_', stderr)
+        self.assertNotIn('raster_', stderr)
         self.assertIn(self.raster, stderr,
             msg="Raster map name should appear in the error output")
 
     def test_multiple_underscores(self):
         proc = start_command(
-            'g.region', _rast_=self.raster, stderr=PIPE)
+            'g.region', _raster_=self.raster, stderr=PIPE)
         stderr = proc.communicate()[1]
         returncode = proc.poll()
         self.assertEquals(returncode, 1)
-        self.assertIn('rast', stderr)
+        self.assertIn('raster', stderr)
 
 if __name__ == '__main__':
     grass.gunittest.test()

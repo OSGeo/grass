@@ -32,7 +32,7 @@ All examples use the North Carolina sample dataset.
 <p>
 Generate 20 random points with binary attribute (only 0 or 1):
 <div class="code"><pre>
-v.random output=binary_random n=20 zmin=0 zmax=1 column='binary INTEGER'
+v.random output=binary_random npoints=20 zmin=0 zmax=1 column='binary INTEGER'
 </pre></div>
 
 Generate 20 random 3D points using a specific random seed:
@@ -47,7 +47,7 @@ Random points with different X, Y, and Z coordinates
 </center>
 
 <!--
-g.region rast=elev_lid792_1m
+g.region raster=elev_lid792_1m
 ...
 d.vect height_random color=60:60:60 icon=basic/point size=40 width=2 zcolor=gyr
 optipng -o5 map.png
@@ -56,32 +56,35 @@ mv map.png vrandom_z.png
 
 Get 20 random samples from raster map:
 <div class="code"><pre>
-g.region -p rast=elevation
-v.random output=random_samples n=20
+g.region -p raster=elevation
+v.random output=random_samples npoints=20
 v.db.addtable map=random_samples layer=1 columns='cat INTEGER, sample DOUBLE PRECISION'
 v.what.rast vector=random_samples raster=elevation@PERMANENT layer=1 column=sample 
 </pre></div>
 
 Generate 20 random points and sample attribute data from geology (vector) map:
 <div class="code"><pre>
-g.region -p vect=geology
-v.random output=random_samples n=20
+g.region -p vector=geology
+v.random output=random_samples npoints=20
 v.db.addtable map=random_samples layer=1 columns='cat integer, geology varchar(100)'
-v.what.vect vector=random_samples layer=1 column=geology qvector=geology@PERMANENT qlayer=1 qcolumn=label 
+v.what.vect vector=random_samples layer=1 column=geology \
+  qvector=geology@PERMANENT qlayer=1 qcolumn=label 
 </pre></div>
 
 Generate 20 random points in forested areas
 <div class="code"><pre>
-g.region -p rast=landclass96
+g.region -p raster=landclass96
 r.to.vect -v input=landclass96 output=landclass96 type=area
-v.random input=landclass96 output=random_samples n=20 where="label = 'forest'"
+v.random input=landclass96 output=random_samples npoints=20 \
+  where="label = 'forest'"
 </pre></div>
 
 Generate 20 random points in each forest patch
 <div class="code"><pre>
-g.region -p rast=landclass96
+g.region -p raster=landclass96
 r.to.vect -v input=landclass96 output=landclass96 type=area
-v.random input=landclass96 output=random_samples n=20 where="label = 'forest'" -a
+v.random input=landclass96 output=random_samples npoints=20 \
+  where="label = 'forest'" -a
 </pre></div>
 
 

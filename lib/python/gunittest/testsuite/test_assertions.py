@@ -81,7 +81,7 @@ class TestAssertModuleKeyValue(grass.gunittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
-        cls.runModule(SimpleModule('g.region', rast='elevation'))
+        cls.runModule(SimpleModule('g.region', raster='elevation'))
 
     @classmethod
     def tearDownClass(cls):
@@ -123,7 +123,7 @@ class TestRasterMapAssertions(grass.gunittest.TestCase):
     def setUpClass(cls):
         cls.use_temp_region()
         # TODO: here we should actually not call self.runModule but call_module
-        cls.runModule(SimpleModule('g.region', rast='elevation'))
+        cls.runModule(SimpleModule('g.region', raster='elevation'))
 
     @classmethod
     def tearDownClass(cls):

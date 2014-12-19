@@ -12,7 +12,7 @@ In this example, the ZIP code map in the North Carolina sample dataset location
 is filtered for large areas (removing smaller areas from the map):
 
 <div class="code"><pre>
-g.region rast=zipcodes -p
+g.region raster=zipcodes -p
 r.report zipcodes unit=h
 # extract only areas &gt; 2000 ha, NULL otherwise:
 r.reclass.area input=zipcodes output=zipcodes_larger2000ha greater=2000

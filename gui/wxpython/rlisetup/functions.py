@@ -84,8 +84,8 @@ def convertFeature(vect, outrast, cat, origrast, layer='1', overwrite=False):
     grass.run_command('v.extract', input=vect, cats=cat, type='area',
                       layer=layer, output=tmp_vect, flags='d',
                       overwrite=overwrite, quiet=True)
-    grass.run_command('g.region', rast=origrast)
-    grass.run_command('g.region', vect=tmp_vect)
+    grass.run_command('g.region', rastor=origrast)
+    grass.run_command('g.region', vector=tmp_vect)
     grass.run_command('g.region', align=origrast)
     grass.run_command('v.to.rast', input=tmp_vect, type='area',
                       layer=layer, use='val', value=cat, output=outrast,

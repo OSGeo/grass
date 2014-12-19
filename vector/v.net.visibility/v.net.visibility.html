@@ -62,7 +62,7 @@ v.net.visibility input=map vis=vis_map output=new_vis_map \
 A simple example (North Carolina sample data) showing how to use the module:
 <div class="code"><pre>
 v.extract input=zipcodes_wake output=areas_7_11_25 cats=7,11,25
-g.region vect=zipcodes_wake
+g.region vector=zipcodes_wake
 d.mon wx0
 d.vect areas_7_11_25
 v.net.visibility input=areas_7_11_25 output=graph
@@ -98,7 +98,7 @@ Here the vector map graph is computed then a new visibility graph is computed
 from it with the point 669547.97,208348.20 extra:
 <div class="code"><pre>
 v.extract input=zipcodes_wake output=areas_7_11_25 cats=7,11,25
-g.region vect=zipcodes_wake
+g.region vector=zipcodes_wake
 d.mon wx0
 d.vect areas_7_11_25
 v.net.visibility input=zipcodes_wake output=graph
@@ -116,7 +116,7 @@ d.vect areas_7_11_25 color=red type=boundary
 An example for connections of points (Spearfish):
 <div class="code"><pre>
 v.net.visibility input=archsites output=graph
-g.region vect=archsites
+g.region vector=archsites
 d.mon wx0
 d.vect graph
 d.vect archsites col=red

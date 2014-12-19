@@ -39,7 +39,7 @@ class TestNCMaps(TestCase):
     @classmethod
     def setUpClass(cls):
         cls.use_temp_region()
-        cls.runModule('g.region', rast='elevation@PERMANENT')
+        cls.runModule('g.region', raster='elevation@PERMANENT')
         cls.runModule('r.mapcalc', expression="random01 = rand(0, 1.)", seed=1, overwrite=True)
 
     @classmethod
