@@ -83,7 +83,7 @@ d.vect -c map=soils where="label='VBF'" display=shape attribute_column=label
 
 <p>3D points, 3D lines and 3D polygons colorized according to z height:
 <div class="code"><pre>
-g.region rast=elevation.10m
+g.region raster=elevation.10m
 r.random input=elevation.10m n=5000 vector=random3d -d
 d.mon start=x0
 # display as black points

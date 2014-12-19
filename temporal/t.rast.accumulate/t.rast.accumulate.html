@@ -73,7 +73,7 @@ t.rast.import in=temperature_mean_1990_2000_daily_celsius.tar.gz \
       out=temperature_mean_1990_2000_daily_celsius extr=/tmp
 
 # We need to set the region correctly
-g.region -p rast=`t.rast.list input=temperature_mean_1990_2000_daily_celsius column=name | tail -1`
+g.region -p raster=`t.rast.list input=temperature_mean_1990_2000_daily_celsius column=name | tail -1`
 # We can zoom to the raster map
 g.region -p zoom=`t.rast.list input=temperature_mean_1990_2000_daily_celsius column=name | tail -1`
 

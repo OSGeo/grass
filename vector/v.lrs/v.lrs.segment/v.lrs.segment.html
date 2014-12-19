@@ -28,7 +28,7 @@ position (point) along the LRS after bus stop 4:
 # new point on LRS
 echo "P 7 22 4+180" | v.lrs.segment route_lrs out=route_lrs_new rstable=route_lrs
 
-g.region vect=route_lrs n=n+100 s=s-100 -p
+g.region vector=route_lrs n=n+100 s=s-100 -p
 d.erase
 # existing LRS
 d.vect route_lrs

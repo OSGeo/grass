@@ -160,7 +160,7 @@ map produced with <em><a href="r.watershed.html">r.watershed</a></em>.
 
 <div class="code"><pre>
 # set region
-g.region -p rast=elev_ned_30m@PERMANENT
+g.region -p raster=elev_ned_30m@PERMANENT
 
 # calculate flow accumulation
 r.watershed ele=elev_ned_30m@PERMANENT acc=elevation.10m.acc

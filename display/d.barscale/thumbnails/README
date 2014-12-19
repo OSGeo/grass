@@ -7,7 +7,7 @@ export GRASS_RENDER_IMMEDIATE=png
 export GRASS_RENDER_TRUECOLOR=TRUE
 export GRASS_RENDER_WIDTH=300
 export GRASS_RENDER_HEIGHT=300
-g.region rast=elevation
+g.region raster=elevation
 
 for STYLE in classic line solid hollow full_checker part_checker mixed_checker tail_checker up_ticks down_ticks both_ticks arrow_ends
 do

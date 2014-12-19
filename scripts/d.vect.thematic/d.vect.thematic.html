@@ -66,7 +66,7 @@ Example for earthquake map rendering
 
 <div class="code"><pre>
 # random sampling of elevation points:
-g.region rast=elevation -p
+g.region raster=elevation -p
 v.random random npoints=200
 v.db.addtable random column="el10 double precision"
 # transfer elevations to attribute table of random points map:
@@ -89,7 +89,7 @@ d.vect.thematic -l elev_sample column=diff type=point
 North Carolina sample dataset example:
 
 <div class="code"><pre>
-g.region vect=nc_state
+g.region vector=nc_state
 d.vect.thematic -l precip_30ynormals column=annual type=point
 </pre></div>
 

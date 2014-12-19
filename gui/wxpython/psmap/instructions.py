@@ -551,9 +551,9 @@ class MapFrame(InstructionObject):
         if self.instruction['scaleType'] == 0: #match map
             map = self.instruction['map']
             if self.instruction['mapType'] == 'raster':
-                comment = "# g.region rast=%s nsres=%s ewres=%s\n" % (map, region['nsres'], region['ewres'])
+                comment = "# g.region raster=%s nsres=%s ewres=%s\n" % (map, region['nsres'], region['ewres'])
             else:
-                comment = "# g.region vect=%s\n" % (map)
+                comment = "# g.region vector=%s\n" % (map)
         elif self.instruction['scaleType'] == 1:# saved region
             region = self.instruction['region']
             comment = "# g.region region=%s\n" % region

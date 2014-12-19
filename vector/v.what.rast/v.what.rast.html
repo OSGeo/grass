@@ -66,7 +66,7 @@ v.random pnts n=100
 v.db.addtable pnts column="heights double precision"
 
 # query raster map and upload values to vector table into specified column
-g.region rast=elevation -p
+g.region raster=elevation -p
 v.what.rast map=pnts raster=elevation column=heights
 
 # verify new attribute table:

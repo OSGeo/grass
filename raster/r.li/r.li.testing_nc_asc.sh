@@ -11,7 +11,7 @@ SAMPLEAREA 0.0|0.0|1.0|1.0" > $G_RLI/landcover_whole_whole # GRASS7
 
 # North Carolina location:
 export GRASS_OVERWRITE=1
-g.region rast=landclass96 -p
+g.region raster=landclass96 -p
 RASTER_MAP=landclass96
 #r.to.vect in=basin_50K output=basin_50K feature=area
 

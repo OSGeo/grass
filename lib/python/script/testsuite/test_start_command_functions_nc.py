@@ -24,30 +24,30 @@ class TestPythonKeywordsInParameters(grass.gunittest.TestCase):
 
     def test_prefixed_underscore(self):
         proc = start_command(
-            'g.region', _rast=self.raster, stderr=PIPE)
+            'g.region', _raster=self.raster, stderr=PIPE)
         stderr = proc.communicate()[1]
         returncode = proc.poll()
         self.assertEquals(returncode, 0,
-            msg="Undersocre as prefix was not accepted")
-        self.assertNotIn('_rast', stderr)
+            msg="Underscore as prefix was not accepted")
+        self.assertNotIn('_raster', stderr)
 
     def test_suffixed_underscore(self):
         proc = start_command(
-            'g.region', rast_=self.raster, stderr=PIPE)
+            'g.region', raster_=self.raster, stderr=PIPE)
         stderr = proc.communicate()[1]
         returncode = proc.poll()
         self.assertEquals(returncode, 0,
-            msg="Undersocre as suffix was not accepted, stderr is:\n%s" % stderr)
-        self.assertNotIn('rast_', stderr)
+            msg="Underscore as suffix was not accepted, stderr is:\n%s" % stderr)
+        self.assertNotIn('raster_', stderr)
 
     def test_multiple_underscores(self):
         proc = start_command(
-            'g.region', _rast_=self.raster, stderr=PIPE)
+            'g.region', _raster_=self.raster, stderr=PIPE)
         stderr = proc.communicate()[1]
         returncode = proc.poll()
         self.assertEquals(returncode, 1,
-            msg="Undersocre at both sides was accepted")
-        self.assertIn('rast', stderr)
+            msg="Underscore at both sides was accepted")
+        self.assertIn('raster', stderr)
 
 if __name__ == '__main__':
     grass.gunittest.test()

@@ -10,7 +10,7 @@ Blending the aspect map with the elevation map for a shaded map
 (North Carolina sample dataset):
 
 <div class="code"><pre>
-g.region rast=aspect -p
+g.region raster=aspect -p
 r.blend first=aspect second=elevation output=elev_shade_blend
 d.mon wx0
 d.rgb blue=elev_shade_blend.b green=elev_shade_blend.g red=elev_shade_blend.r

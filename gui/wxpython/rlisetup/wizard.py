@@ -144,7 +144,7 @@ class RLIWizard(object):
         grass.use_temp_region()
         # Temporarily aligning region resolution to $RASTER resolution
         # keep boundary settings
-        grass.run_command('g.region', rast=self.startpage.rast)
+        grass.run_command('g.region', raster=self.startpage.rast)
         self.gregion = grass.region()
         self.SF_NSRES = self.gregion['nsres']
         self.SF_EWRES = self.gregion['ewres']
@@ -240,7 +240,7 @@ class RLIWizard(object):
                           coordinate=[xcenter, ycenter], quiet=True)
         grass.del_temp_region()
         grass.use_temp_region()
-        grass.run_command('g.region', rast=self.startpage.rast)
+        grass.run_command('g.region', raster=self.startpage.rast)
 
     def getSamplingType(self):
         """Obtain the sampling type"""
@@ -353,7 +353,7 @@ class RLIWizard(object):
                                                     SamplingType.MUNITSC]:
             # get the raster region into rastregion
             grass.use_temp_region()
-            grass.run_command('g.region', rast=self.startpage.rast)
+            grass.run_command('g.region', raster=self.startpage.rast)
             rastregion = grass.region()
             s_n = rastregion['n']
             s_w = rastregion['w']

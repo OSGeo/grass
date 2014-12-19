@@ -15,7 +15,7 @@ Classes:
  - manager::EditGCP
  - manager::GrSettingsDialog
 
-(C) 2006-2012 by the GRASS Development Team
+(C) 2006-2014 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -673,9 +673,9 @@ class DispMapPage(TitledPage):
         try:
         # set computational region to match selected map and zoom display to region
             if maptype == 'raster':
-                p = RunCommand('g.region', 'rast=src_map')
+                p = RunCommand('g.region', 'raster=src_map')
             elif maptype == 'vector':
-                p = RunCommand('g.region', 'vect=src_map')
+                p = RunCommand('g.region', 'vector=src_map')
             
             if p.returncode == 0:
                 print 'returncode = ', str(p.returncode)

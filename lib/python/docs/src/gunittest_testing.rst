@@ -55,7 +55,7 @@ it must be placed into a directory named ``testsuite``.
             # to not override mapset's region (which might be used by other tests)
             cls.use_temp_region()
             # cls.runModule or self.runModule is used for general module calls
-            cls.runModule('g.region', rast='elevation')
+            cls.runModule('g.region', raster='elevation')
             # note that the region set by default for NC location is the same as
             # the elevation raster map, this is an example shows what to do
             # in the general case

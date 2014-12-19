@@ -258,7 +258,7 @@ class RLiSetupMapPanel(wx.Panel):
                    value=1, use='val')
         wx.EndBusyCursor()
         grass.use_temp_region()
-        grass.run_command('g.region', vect=tmpvector)
+        grass.run_command('g.region', vector=tmpvector)
         region = grass.region()
 
         marea = MaskedArea(region, rasterName)

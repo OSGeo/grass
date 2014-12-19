@@ -413,7 +413,7 @@ int parseSetup(char *path, struct list *l, struct g_area *g, char *raster)
 	char maskname[GNAME_MAX] = {'\0'};
 	msg m;
 
-	/* Get the window setting. g.region rast=<input raster> */
+	/* Get the window setting. g.region raster=<input raster> */
 	/*   ? same as cellhd above ? */
 	/* no. the current window might be different */
 

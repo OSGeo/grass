@@ -1,6 +1,6 @@
 #spearfish
 MAP=elevation.10m
-g.region rast=$MAP
+g.region raster=$MAP
 CMD="r.stats -a $MAP"
 
 time $CMD

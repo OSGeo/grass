@@ -5,7 +5,7 @@
 export GRASS_OVERWRITE=1
 
 r.in.ascii testascii_nc.asc out=testascii
-g.region rast=testascii -p
+g.region raster=testascii -p
 
 d.mon wx0
 sleep 2

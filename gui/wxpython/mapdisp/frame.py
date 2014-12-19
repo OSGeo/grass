@@ -688,7 +688,7 @@ class MapFrame(SingleMapFrame):
             return
         # set region for composite
         grass.use_temp_region()
-        returncode, messages = RunCommand('g.region', rast=tmpName + '.red',
+        returncode, messages = RunCommand('g.region', raster=tmpName + '.red',
                                           quiet=True, getErrorMsg=True)
         if not returncode == 0:
             grass.del_temp_region()

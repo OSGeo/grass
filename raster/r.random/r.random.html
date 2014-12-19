@@ -71,7 +71,7 @@ and then use the reclassed raster map layer as input to <em>r.random</em>.
 Spearfish region, result stored in 2D vector map:
 
 <div class="code"><pre>
-g.region rast=elevation.10m -p
+g.region raster=elevation.10m -p
 r.random elevation.10m vector=elevrand n=100
 v.db.select elevrand
 v.univar elevrand col=value type=point
@@ -83,7 +83,7 @@ Spearfish region with collocated values sampled from landuse map,
 result stored in 3D vector map:
 
 <div class="code"><pre>
-g.region rast=elevation.10m -p
+g.region raster=elevation.10m -p
 r.random -d elevation.10m cover=landcover.30m vector=luserand3d n=100
 
 # data output (value: elevation, covervalue: landuse class):
