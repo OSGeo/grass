@@ -1889,6 +1889,10 @@ class GdalImportDialog(ImportDialog):
             if self.importType == 'ogr':
                 if ext and layer.rfind(ext) > -1:
                     layer = layer.replace('.' + ext, '')
+                if '|' in layer:
+                    layer, geometry = layer.split('|', 1)
+                else:
+                    geometry = None
                 if self.link:
                     cmd = ['v.external',
                            'input=%s' % dsn,
@@ -1898,7 +1902,8 @@ class GdalImportDialog(ImportDialog):
                     cmd = ['v.in.ogr',
                            'input=%s' % dsn,
                            'layer=%s' % layer,
-                           'output=%s' % output]
+                           'output=%s' % output,
+                           'geometry=%s' % geometry]
             else: # gdal
                 if self.dsnInput.GetType() == 'dir':
                     idsn = os.path.join(dsn, layer)
@@ -2201,8 +2206,12 @@ class LayersList(GListCtrl, listmix.TextEditMixin):
             if not self.IsChecked(item):
                 continue
             # layer / output name
-            data.append((self.GetItem(item, 1).GetText(),
-                         self.GetItem(item, self.GetColumnCount() - 1).GetText()))
+            layer = self.GetItem(item, 1).GetText()
+            ftype = self.GetItem(item, 2).GetText()
+            if '/' in ftype:
+                layer += '|%s' % ftype.split('/', 1)[0]
+            output = self.GetItem(item, self.GetColumnCount() - 1).GetText()
+            data.append((layer, output))
         
         return data
 

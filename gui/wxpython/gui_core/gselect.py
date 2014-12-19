@@ -1946,12 +1946,14 @@ class GdalSelect(wx.Panel):
 
             layerId = 1
             for line in ret.splitlines():
-                layerName, featureType, projection = map(lambda x: x.strip(), line.split(','))
+                layerName, featureType, projection, geometryColumn = map(lambda x: x.strip(), line.split(','))
                 if projection == '0':
                     projectionMatch = _("No")
                 else:
                     projectionMatch = _("Yes")
                 grassName = GetValidLayerName(layerName)
+                if geometryColumn:
+                    featureType = geometryColumn + '/' + featureType
                 data.append((layerId, layerName, featureType, projectionMatch, grassName))
                 layerId += 1
         else:
