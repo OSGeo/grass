@@ -7,7 +7,7 @@
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
 
 # Lets gerenate a test map
-v.random --o seed=1 n=20 output=map
+v.random --o seed=1 npoints=20 output=map
 
 # The first @test uses several different absolute datum formats
 v.timestamp map=map date=none
@@ -62,6 +62,7 @@ v.timestamp map=map layer=2
 v.timestamp map=map layer=3
 
 # The third @test to check @failure with wrong time stamps
+g.message message="Now checking for expected failures due to wrong time stamps..."
 v.timestamp map=map date="2 years 3 months 8 days"
 v.timestamp map=map date="1 month 5 days"
 v.timestamp map=map date="July 2003"
