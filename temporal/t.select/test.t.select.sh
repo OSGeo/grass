@@ -32,10 +32,10 @@ t.create  output=test3 type=stvds title="test dataset" descr="test dataset"
 t.create  output=test4 type=stvds title="test dataset" descr="test dataset"
 
 
-t.register -i  type=vect input=test1 file=${n1} increment="1 days" start="2013-01-01"
-t.register -i  type=vect input=test2 file=${n2} increment="1 days" start="2013-01-10"
-t.register -i  type=vect input=test3 file=${n3} increment="3 days" start="2013-01-01"
-t.register -i  type=vect input=test4 file=${n4} increment="3 days" start="2013-01-10"
+t.register -i  type=vector input=test1 file=${n1} increment="1 days" start="2013-01-01"
+t.register -i  type=vector input=test2 file=${n2} increment="1 days" start="2013-01-10"
+t.register -i  type=vector input=test3 file=${n3} increment="3 days" start="2013-01-01"
+t.register -i  type=vector input=test4 file=${n4} increment="3 days" start="2013-01-10"
 
 t.info type=stvds input=test1
 t.info type=stvds input=test2

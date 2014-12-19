@@ -25,9 +25,9 @@ t.create --o type=strds temporaltype=absolute \
     output=A title="Dataset A" descr="Dataset A"
 t.create --o type=strds temporaltype=absolute \
     output=B title="Dataset B" descr="Dataset B"
-t.register --o -i type=rast input=A maps=a3,a4,a5,a6,a7,a8 \
+t.register --o -i type=raster input=A maps=a3,a4,a5,a6,a7,a8 \
     start="2001-03-01" increment="1 months"
-t.register --o -i type=rast input=B maps=b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11,b12 \
+t.register --o -i type=raster input=B maps=b1,b2,b3,b4,b5,b6,b7,b8,b9,b10,b11,b12 \
     start="2001-01-01" increment="1 months"
 
 t.rast.mapcalc --o --v input=A,B output=C base=c method=equal \

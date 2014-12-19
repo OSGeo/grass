@@ -80,4 +80,4 @@ t.info type=strds input=precip_abs8
 t.rast.list input=precip_abs8
 
 t.remove --v type=strds input=precip_abs8
-t.unregister --v type=rast file="${n1}"
+t.unregister --v type=raster file="${n1}"

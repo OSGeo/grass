@@ -24,7 +24,7 @@ TMP="disk.$$"
 cleanup()
 {
  echo "Removing temporary map"
- g.remove --q -f type=rast name=$TMP > /dev/null
+ g.remove --q -f type=raster name=$TMP > /dev/null
 }
 
 ########################

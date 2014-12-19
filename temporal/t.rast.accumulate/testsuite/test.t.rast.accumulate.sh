@@ -16,7 +16,7 @@ r.mapcalc expr="prec_5 = rand(0, 23)" -s
 r.mapcalc expr="prec_6 = rand(0, 26)" -s
 
 t.create type=strds temporaltype=absolute output=precip_abs1 title="A test" descr="A test"
-t.register -i type=rast input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 \
+t.register -i type=raster input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 \
     start="2001-01-01" increment="2 months"
 
 # The first @test
@@ -53,10 +53,10 @@ r.mapcalc expr="lower = 10"
 r.mapcalc expr="upper = 35"
 
 t.create type=strds temporaltype=absolute output=lower title="lower limit" descr="lower limit"
-t.register -i type=rast input=lower maps=lower start="2001-01-01" increment="8 months"
+t.register -i type=raster input=lower maps=lower start="2001-01-01" increment="8 months"
 
 t.create type=strds temporaltype=absolute output=upper title="upper limit" descr="upper limit"
-t.register -i type=rast input=upper maps=upper start="2001-01-01" increment="10 months"
+t.register -i type=raster input=upper maps=upper start="2001-01-01" increment="10 months"
 
 t.rast.accumulate input=precip_abs1 output=precip_abs2 base=prec_acc \
     limits=8,33 lower=lower upper=upper start="2001-01-01" stop="2002-01-01" gran="1 months" \
