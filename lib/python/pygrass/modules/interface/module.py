@@ -697,7 +697,7 @@ class Module(object):
                 args.append(str(self.flags[flg]))
         return args
 
-    @mdebug(1, extra=_get_bash)
+    # @mdebug(1, extra=_get_bash)
     def run(self):
         """Run the module
 
@@ -711,6 +711,7 @@ class Module(object):
         termination. The handling of stdout and stderr must then be done
         outside of this function.
         """
+        get_msgr().debug(1, self.get_bash())
         if self.inputs['stdin'].value:
             self.stdin = self.inputs['stdin'].value
             self.stdin_ = PIPE

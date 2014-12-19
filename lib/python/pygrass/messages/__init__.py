@@ -81,10 +81,6 @@ def message_server(lock, conn):
         if isinstance(message,  type(" ")):
             if len(message) >= 2000:
                 message = message[:1999]
-        # libgis limitation
-        if isinstance(message,  type(" ")):
-            if len(message) >= 2000:
-                message = message[:1999]
 
         if message_type == "PERCENT":
             n = int(data[1])

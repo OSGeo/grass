@@ -4,8 +4,10 @@ import ctypes
 import numpy as np
 
 
-CELL = (np.int, np.int0, np.int8, np.int16, np.int32, np.int64)
-FCELL = (np.float, np.float16, np.float32)
+_CELL = ('int', 'int0', 'int8', 'int16', 'int32', 'int64')
+CELL = tuple([getattr(np, attr) for attr in _CELL if hasattr(np, attr)])
+_FCELL = 'float', 'float16', 'float32'
+FCELL = tuple([getattr(np, attr) for attr in _FCELL if hasattr(np, attr)])
 _DCELL = 'float64', 'float128'
 DCELL = tuple([getattr(np, attr) for attr in _DCELL if hasattr(np, attr)])
 

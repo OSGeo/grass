@@ -7,6 +7,7 @@ Created on Wed Jul 18 10:46:25 2012
 """
 import ctypes
 import re
+from collections import namedtuple
 
 import numpy as np
 
@@ -18,6 +19,8 @@ from grass.pygrass.errors import GrassError
 from grass.pygrass.vector.basic import Ilist, Bbox, Cats
 from grass.pygrass.vector import sql
 
+
+LineDist = namedtuple('LineDist', 'point dist spdist sldist')
 
 WKT = {'POINT\((.*)\)': 'point',  # 'POINT\(\s*([+-]*\d+\.*\d*)+\s*\)'
        'LINESTRING\((.*)\)': 'line'}
@@ -763,18 +766,20 @@ class Line(Geo):
         :param pnt: the point to calculate distance
         :type pnt: a Point object or a tuple with the coordinates
 
-        Return a tuple with:
+        Return a namedtuple with:
 
-            * the closest point on the line,
-            * the distance between these two points,
-            * distance of point from segment beginning
-            * distance of point from line
+            * point: the closest point on the line,
+            * dist: the distance between these two points,
+            * spdist: distance to point on line from segment beginning
+            * sldist: distance to point on line form line beginning along line
 
         The distance is compute using the ``Vect_line_distance`` C function.
 
-            >>> line = Line([(0, 0), (0, 2)])
-            >>> line.distance(Point(1, 1))
-            (Point(0.000000, 1.000000), 1.0, 1.0, 1.0)
+            >>> point = Point(2.3, 0.5)
+            >>> line = Line([(0, 0), (2, 0), (3, 0)])
+            >>> line.distance(point)           #doctest: +NORMALIZE_WHITESPACE
+            LineDist(point=Point(2.300000, 0.000000),
+                     dist=0.5, spdist=0.2999999999999998, sldist=2.3)
 
         """
         # instantite outputs
@@ -795,7 +800,7 @@ class Line(Geo):
         # instantiate the Point class
         point = Point(cx.value, cy.value, cz.value)
         point.is2D = self.is2D
-        return point, dist.value, sp_dist.value, lp_dist.value
+        return LineDist(point, dist.value, sp_dist.value, lp_dist.value)
 
     def get_first_cat(self):
         """Fetches FIRST category number for given vector line and field, using
@@ -919,8 +924,27 @@ class Line(Geo):
         libvect.Vect_line_reverse(self.c_points)
 
     def segment(self, start, end):
-        # TODO improve documentation
         """Create line segment. using the ``Vect_line_segment`` C function.
+        :param start: distance from the begining of the line where
+                      the segment start
+        :type start: float
+        :param end: distance from the begining of the line where
+                    the segment end
+        :type end: float
+
+        ::
+            #            x (1, 1)
+            #            |
+            #            |-
+            #            |
+            #   x--------x (1, 0)
+            # (0, 0) ^
+
+            >>> line = Line([(0, 0), (1, 0), (1, 1)])
+            >>> line.segment(0.5, 1.5)         #doctest: +NORMALIZE_WHITESPACE
+            Line([Point(0.500000, 0.000000),
+                  Point(1.000000, 0.000000),
+                  Point(1.000000, 0.500000)])
         """
         line = Line()
         libvect.Vect_line_segment(self.c_points, start, end, line.c_points)
@@ -1122,7 +1146,7 @@ class Node(object):
         :type only_out: bool
         """
         for iline in self.ilines(only_in, only_out):
-            yield Line(id=abs(iline), c_mapinfo=self.c_mapinfo)
+            yield Line(v_id=abs(iline), c_mapinfo=self.c_mapinfo)
 
     def angles(self):
         """Return a generator with all lines angles in a node."""
@@ -1321,7 +1345,7 @@ class Isle(Geo):
         """Return the perimeter value of an Isle.
         """
         border = self.points()
-        return libvect.Vect_area_perimeter(border.c_points)
+        return libvect.Vect_line_geodesic_length(border.c_points)
 
 
 class Isles(object):
@@ -1562,7 +1586,7 @@ class Area(Geo):
 
         """
         border = self.get_points()
-        return libvect.Vect_area_perimeter(border.c_points)
+        return libvect.Vect_line_geodesic_length(border.c_points)
 
     def read(self, line=None, centroid=None, isles=None):
         self.boundary = self.get_points(line)
