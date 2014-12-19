@@ -15,11 +15,11 @@ libgis.G_gisinit('')
 from grass.pygrass.errors import GrassError
 
 
-ETYPE = {'rast': libgis.G_ELEMENT_RASTER,
-         'rast3d': libgis.G_ELEMENT_RASTER3D,
-         'vect': libgis.G_ELEMENT_VECTOR,
-         'oldvect': libgis.G_ELEMENT_OLDVECTOR,
-         'asciivect': libgis.G_ELEMENT_ASCIIVECTOR,
+ETYPE = {'raster': libgis.G_ELEMENT_RASTER,
+         'raster_3d': libgis.G_ELEMENT_RASTER3D,
+         'vector': libgis.G_ELEMENT_VECTOR,
+         'oldvector': libgis.G_ELEMENT_OLDVECTOR,
+         'asciivector': libgis.G_ELEMENT_ASCIIVECTOR,
          'icon': libgis.G_ELEMENT_ICON,
          'labels': libgis.G_ELEMENT_LABEL,
          'sites': libgis.G_ELEMENT_SITE,
@@ -309,17 +309,17 @@ class Mapset(object):
     def glist(self, type, pattern=None):
         """Return a list of grass types like:
 
-            * 'asciivect',
+            * 'asciivector',
             * 'group',
             * 'icon',
             * 'labels',
-            * 'oldvect',
-            * 'rast',
-            * 'rast3d',
+            * 'oldvector',
+            * 'raster',
+            * 'raster_3d',
             * 'region',
             * 'region3d',
             * 'sites',
-            * 'vect',
+            * 'vector',
             * 'view3d'
 
         :param type: the type of element to query
