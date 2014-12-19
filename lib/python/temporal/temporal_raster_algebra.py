@@ -85,7 +85,7 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
         self.overwrite = overwrite
         self.count = 0
         self.stdstype = "strds"
-        self.maptype = "rast"
+        self.maptype = "raster"
         self.mapclass = RasterDataset
         self.basename = basename
         self.expression = expression

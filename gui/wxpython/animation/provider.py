@@ -757,7 +757,7 @@ def test():
     layerList.AddLayer(layer)
 
     layer = Layer()
-    layer.mapType = 'vect'
+    layer.mapType = 'vector'
     layer.name = 'buildings_2009_approx'
     layer.cmd = ['d.vect', 'map=buildings_2009_approx',
                  'color=grey']

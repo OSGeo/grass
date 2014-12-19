@@ -228,7 +228,7 @@ def aggregate_by_topology(granularity_list, granularity, map_list, topo_list,
     r_series = pymod.Module("r.series", output="spam", method=[method],
                             overwrite=overwrite, quiet=True, run_=False,
                             finish_=False)
-    g_copy = pymod.Module("g.copy", rast=['spam', 'spamspam'],
+    g_copy = pymod.Module("g.copy", raster=['spam', 'spamspam'],
                           quiet=True, run_=False, finish_=False)
     output_list = []
     count = 0
@@ -308,7 +308,7 @@ def aggregate_by_topology(granularity_list, granularity, map_list, topo_list,
                 process_queue.put(mod)
             else:
                 mod = copy.deepcopy(g_copy)
-                mod(rast=[aggregation_list[0],  output_name])
+                mod(raster=[aggregation_list[0],  output_name])
                 process_queue.put(mod)
 
     if connected:

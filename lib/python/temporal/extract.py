@@ -234,13 +234,13 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
                     names += ",%s" % (map.get_name())
                 count += 1
             if type == "raster":
-                gscript.run_command("g.remove", flags='f', type='rast',
+                gscript.run_command("g.remove", flags='f', type='raster',
                                     name=names, quiet=True)
             elif type == "raster3d":
-                gscript.run_command("g.remove", flags='f', type='rast3d',
+                gscript.run_command("g.remove", flags='f', type='raster_3d',
                                     name=names, quiet=True)
             elif type == "vector":
-                gscript.run_command("g.remove", flags='f', type='vect',
+                gscript.run_command("g.remove", flags='f', type='vector',
                                     name=names, quiet=True)
 
     dbif.close()

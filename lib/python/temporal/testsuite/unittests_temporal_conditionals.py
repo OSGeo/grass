@@ -51,17 +51,17 @@ class TestTemporalConditionals(grass.gunittest.TestCase):
         tgis.open_new_stds(name="E", type="strds", temporaltype="absolute",
                                          title="E", descr="E", semantic="field", overwrite=True)
                                          
-        tgis.register_maps_in_space_time_dataset(type="rast", name="A", maps="a1,a2,a3,a4",
+        tgis.register_maps_in_space_time_dataset(type="raster", name="A", maps="a1,a2,a3,a4",
                                                  start="2001-01-01", increment="1 day", interval=True)
-        tgis.register_maps_in_space_time_dataset(type="rast", name="B", maps="b1,b2",
+        tgis.register_maps_in_space_time_dataset(type="raster", name="B", maps="b1,b2",
                                                  start="2001-01-01", increment="2 day", interval=True)
-        tgis.register_maps_in_space_time_dataset(type="rast", name="C", maps="c1",
+        tgis.register_maps_in_space_time_dataset(type="raster", name="C", maps="c1",
                                                  start="2001-01-02", increment="2 day", interval=True)
-        tgis.register_maps_in_space_time_dataset(type="rast", name="D", maps="d1,d2,d3",
+        tgis.register_maps_in_space_time_dataset(type="raster", name="D", maps="d1,d2,d3",
                                                  start="2001-01-03", increment="1 day", interval=True)
-        tgis.register_maps_in_space_time_dataset(type="rast", name="E", maps="e1,e2,e3",
+        tgis.register_maps_in_space_time_dataset(type="raster", name="E", maps="e1,e2,e3",
                                                  start="2000-12-31", increment="2 day", interval=True)
-        tgis.register_maps_in_space_time_dataset(type="rast", name=None,  maps="singletmap", 
+        tgis.register_maps_in_space_time_dataset(type="raster", name=None,  maps="singletmap", 
                                                 start="2001-01-03", end="2001-01-04", interval=True)
 
     def tearDown(self):

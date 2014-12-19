@@ -48,19 +48,19 @@ class TestTRastAlgebraGranularity(gunittest.TestCase):
         tgis.open_new_stds(name="D", type="strds", temporaltype="absolute",
                                          title="D", descr="D", semantic="field", overwrite=True)
 
-        tgis.register_maps_in_space_time_dataset(type="rast", name="A", maps="a1,a2,a3,a4,a5,a6",
+        tgis.register_maps_in_space_time_dataset(type="raster", name="A", maps="a1,a2,a3,a4,a5,a6",
                                                  start="2001-01-01", increment="1 month", interval=True)
-        tgis.register_maps_in_space_time_dataset(type="rast", name="B", maps="b1,b2",
+        tgis.register_maps_in_space_time_dataset(type="raster", name="B", maps="b1,b2",
                                                  start="2001-01-01", increment="3 months", interval=True)
-        tgis.register_maps_in_space_time_dataset(type="rast", name="C", maps="c1",
+        tgis.register_maps_in_space_time_dataset(type="raster", name="C", maps="c1",
                                                  start="2001-01-01", increment="1 year", interval=True)
-        tgis.register_maps_in_space_time_dataset(type="rast", name="D", maps="d1",
+        tgis.register_maps_in_space_time_dataset(type="raster", name="D", maps="d1",
                                                  start="2001-01-01", increment="5 days", interval=True)
-        tgis.register_maps_in_space_time_dataset(type="rast", name="D", maps="d2",
+        tgis.register_maps_in_space_time_dataset(type="raster", name="D", maps="d2",
                                                  start="2001-03-01", increment="5 days", interval=True)
-        tgis.register_maps_in_space_time_dataset(type="rast", name="D", maps="d3",
+        tgis.register_maps_in_space_time_dataset(type="raster", name="D", maps="d3",
                                                  start="2001-05-01", increment="5 days", interval=True)
-        tgis.register_maps_in_space_time_dataset(type="rast", name=None,  maps="singletmap", 
+        tgis.register_maps_in_space_time_dataset(type="raster", name=None,  maps="singletmap", 
                                                 start="2001-03-01", end="2001-04-01", interval=True)
         
     def tearDown(self):

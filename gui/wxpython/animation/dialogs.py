@@ -1278,9 +1278,9 @@ class AddTemporalLayerDialog(wx.Dialog):
         self.addManyMapsButton = wx.BitmapButton(self, bitmap=bitmap)
         self.addManyMapsButton.Bind(wx.EVT_BUTTON, self._onAddMaps)
 
-        types = [('rast', _("Multiple raster maps")),
-                 ('vect', _("Multiple vector maps")),
-                 ('rast3d', _("Multiple 3D raster maps")),
+        types = [('raster', _("Multiple raster maps")),
+                 ('vector', _("Multiple vector maps")),
+                 ('raster_3d', _("Multiple 3D raster maps")),
                  ('strds', _("Space time raster dataset")),
                  ('stvds', _("Space time vector dataset")),
                  ('str3ds', _("Space time 3D raster dataset"))]
@@ -1308,7 +1308,7 @@ class AddTemporalLayerDialog(wx.Dialog):
         if self.layer.mapType:
             self._setType(self.layer.mapType)
         else:
-            self._setType('rast')
+            self._setType('raster')
         if self.layer.name:
             self.tselect.SetValue(self.layer.name)
         if self.layer.cmd:
@@ -1377,14 +1377,14 @@ class AddTemporalLayerDialog(wx.Dialog):
 
     def _createDefaultCommand(self):
         cmd = []
-        if self._mapType in ('rast', 'strds'):
+        if self._mapType in ('raster', 'strds'):
             cmd.append('d.rast')
-        elif self._mapType in ('vect', 'stvds'):
+        elif self._mapType in ('vector', 'stvds'):
             cmd.append('d.vect')
-        elif self._mapType in ('rast3d', 'str3ds'):
+        elif self._mapType in ('raster_3d', 'str3ds'):
             cmd.append('d.rast3d')
         if self._name:
-            if self._mapType in ('rast', 'vect', 'rast3d'):
+            if self._mapType in ('raster', 'vector', 'raster_3d'):
                 cmd.append('map={name}'.format(name=self._name.split(',')[0]))
             else:
                 try:
@@ -1401,9 +1401,9 @@ class AddTemporalLayerDialog(wx.Dialog):
         dlg = MapLayersDialog(self, title=_("Select raster/vector maps."))
         dlg.applyAddingMapLayers.connect(lambda mapLayers:
                                          self.tselect.SetValue(','.join(mapLayers)))
-        if self._mapType == 'rast':
+        if self._mapType == 'raster':
             index = 0
-        elif self._mapType == 'vect':
+        elif self._mapType == 'vector':
             index = 2
         else:  # rast3d
             index = 1

@@ -284,7 +284,7 @@ class CatRastUpdater:
             ret = UpdateCatRast(patch_rast, region, self.scatts_dt.GetCatRastCond(cat))
             if ret < 0:
                 GException(_("Patching category raster conditions file failed."))            
-            RunCommand("g.remove", flags='f', type='rast', name=patch_rast)
+            RunCommand("g.remove", flags='f', type='raster', name=patch_rast)
 
     def _rasterize(self, grass_region, layer, cat, out_rast):
 
@@ -597,7 +597,7 @@ class ScattPlotsData(ScattPlotsCondsData):
         grass.try_remove(self.cats_rasts_conds[cat_id])
         del self.cats_rasts_conds[cat_id]
 
-        RunCommand("g.remove", flags='f', type='rast',
+        RunCommand("g.remove", flags='f', type='raster',
                    name=self.cats_rasts[cat_id])
         del self.cats_rasts[cat_id]
 
@@ -709,7 +709,7 @@ class ScattPlotsData(ScattPlotsCondsData):
             grass.try_remove(tmp) 
         for tmp in self.cats_rasts.itervalues():
             RunCommand("g.remove", flags='f',
-                       type='rast', name=tmp,
+                       type='raster', name=tmp,
                        getErrorMsg=True)
 
         self.cats_rasts = {}

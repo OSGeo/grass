@@ -792,7 +792,7 @@ class SaveWMSLayerDialog(wx.Dialog):
 
         self.labels['output'] = wx.StaticText(parent = self, id = wx.ID_ANY, label = _("Name for output raster map:"))
 
-        self.params['output'] = Select(parent = self, type = 'rast', mapsets = [grass.gisenv()['MAPSET']],
+        self.params['output'] = Select(parent = self, type = 'raster', mapsets = [grass.gisenv()['MAPSET']],
                                        size = globalvar.DIALOG_GSELECT_SIZE)
 
         self.regionStBoxLabel = wx.StaticBox(parent = self, id = wx.ID_ANY,

@@ -1063,21 +1063,13 @@ class TemporalAlgebraParser(object):
         """Remove maps of specific type
         
             :param namelist: List of map names to be removed
-            :param map_type: The type of the maps  (rast, rast3d or vect)
+            :param map_type: The type of the maps  (raster, raster_3d or vector)
         """
         max = 100
         chunklist = [namelist[i:i + max] for i in range(0, len(namelist), max)]
         for chunk in chunklist:
             stringlist = ",".join(chunk)
             
-            # Transform the map type
-            if map_type == "raster":
-                map_type = "rast"
-            if map_type == "raster3d":
-                map_type = "rast3d"
-            if map_type == "vector":
-                map_type = "vect"
-
             if self.run:
                 m = copy.deepcopy(self.m_mremove)
                 m.inputs["type"].value = map_type
@@ -2068,17 +2060,17 @@ class TemporalAlgebraParser(object):
                             # Copy the map
                             if map_i.get_type() == 'raster':
                                 m = copy.deepcopy(self.m_copy)
-                                m.inputs["rast"].value = map_i.get_id(),  newident
+                                m.inputs["raster"].value = map_i.get_id(),  newident
                                 m.flags["overwrite"].value = self.overwrite
                                 process_queue.put(m)
                             elif map_i.get_type() == 'raster3d':
                                 m = copy.deepcopy(self.m_copy)
-                                m.inputs["rast3d"].value = map_i.get_id(),  newident
+                                m.inputs["raster_3d"].value = map_i.get_id(),  newident
                                 m.flags["overwrite"].value = self.overwrite
                                 process_queue.put(m)
                             elif map_i.get_type() == 'vector':
                                 m = copy.deepcopy(self.m_copy)
-                                m.inputs["vect"].value = map_i.get_id(),  newident
+                                m.inputs["vector"].value = map_i.get_id(),  newident
                                 m.flags["overwrite"].value = self.overwrite
                                 process_queue.put(m)
                         else:

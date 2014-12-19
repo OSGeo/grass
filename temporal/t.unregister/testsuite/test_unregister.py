@@ -44,7 +44,7 @@ class TestUnregister(TestCase):
         self.runModule("t.create",  type="strds",  temporaltype="absolute",  
                                     output="A",  title="A test",  
                                     description="A test",  overwrite=True)
-        self.runModule("t.register", flags="i",  type="rast",  input="A",  
+        self.runModule("t.register", flags="i",  type="raster",  input="A",  
                                      maps="a1,a2,a3,a4,a5,a6",
                                      start="2001-01-01", increment="3 months",  
                                      overwrite=True)
@@ -52,14 +52,14 @@ class TestUnregister(TestCase):
         self.runModule("t.create",  type="strds",  temporaltype="absolute",  
                                     output="B",  title="B test",  
                                     description="B test",  overwrite=True)
-        self.runModule("t.register", flags="i",  type="rast",  input="B",  
+        self.runModule("t.register", flags="i",  type="raster",  input="B",  
                                      maps="a1,a2,a3,a4,a5,a6",
                                      start="2001-01-01", increment="3 months",  
                                      overwrite=True)
 
     def tearDown(self):
         """Remove generated data"""
-        self.runModule("g.remove", type="rast",  
+        self.runModule("g.remove", type="raster",  
                                    name="a1,a2,a3,a4,a5,a6")
 
     def test_1(self):
@@ -95,7 +95,7 @@ class TestUnregister(TestCase):
 
 
         # Check if maps a1, a2 and a3 are still present in the temporal database
-        lister = SimpleModule("t.list", type="rast", columns="name", 
+        lister = SimpleModule("t.list", type="raster", columns="name", 
                               where='mapset = "%s" AND (name = "a1" OR name = "a2" OR name = "a3")'%(tgis.get_current_mapset()))
         self.runModule(lister)
         self.assertEqual(a123, lister.outputs.stdout)
@@ -104,7 +104,7 @@ class TestUnregister(TestCase):
         # Unregister maps a1, a2 and a3 from the temporal database
         self.assertModule("t.unregister",  maps="a1,a2,a3")
 
-        lister = SimpleModule("t.list", type="rast", columns="name", 
+        lister = SimpleModule("t.list", type="raster", columns="name", 
                               where='mapset = "%s" AND (name = "a1" OR name = "a2" OR name = "a3")'%(tgis.get_current_mapset()))
         self.runModule(lister)
         self.assertEqual("", lister.outputs.stdout)
@@ -120,7 +120,7 @@ class TestUnregister(TestCase):
         # Remove STRDS A and B and chceck if maps a4, a5 and a6 are still in the temporal database
         self.assertModule("t.remove",  type="strds", inputs="A,B")
 
-        lister = SimpleModule("t.list", type="rast", columns="name", 
+        lister = SimpleModule("t.list", type="raster", columns="name", 
                               where='mapset = "%s" AND (name = "a4" OR name = "a5" OR name = "a6")'%(tgis.get_current_mapset()))
         self.runModule(lister)
         self.assertEqual(a456, lister.outputs.stdout)
@@ -129,7 +129,7 @@ class TestUnregister(TestCase):
         # Unregister maps a4, a5 and a6 from the temporal database
         self.assertModule("t.unregister",  maps="a4,a5,a6")
 
-        lister = SimpleModule("t.list", type="rast", columns="name", 
+        lister = SimpleModule("t.list", type="raster", columns="name", 
                               where='mapset = "%s" AND (name = "a4" OR name = "a5" OR name = "a6")'%(tgis.get_current_mapset()))
         self.runModule(lister)
         self.assertEqual("", lister.outputs.stdout)

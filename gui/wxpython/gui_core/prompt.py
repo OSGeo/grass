@@ -93,8 +93,8 @@ class GPrompt(object):
     def _getListOfMaps(self):
         """Get list of maps"""
         result = dict()
-        result['raster'] = grass.list_strings('rast')
-        result['vector'] = grass.list_strings('vect')
+        result['raster'] = grass.list_strings('raster')
+        result['vector'] = grass.list_strings('vector')
         
         return result
     

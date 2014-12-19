@@ -962,7 +962,7 @@ def region_env(region3d=False, **kwargs):
     temporary region used for raster-based computation.
 
     :param bool region3d: True to get 3D region
-    :param kwargs: g.region's parameters like 'rast', 'vect' or 'region'
+    :param kwargs: g.region's parameters like 'raster', 'vector' or 'region'
 
     ::
 
@@ -1086,7 +1086,7 @@ def list_strings(type, pattern=None, mapset=None, exclude=None, flag=''):
     Returns the output from running g.list, as a list of qualified
     names.
 
-    :param str type: element type (rast, vect, rast3d, region, ...)
+    :param str type: element type (raster, vector, raster_3d, region, ...)
     :param str pattern: pattern string
     :param str mapset: mapset name (if not given use search path)
     :param str exclude: pattern string to exclude maps from the research
@@ -1095,9 +1095,9 @@ def list_strings(type, pattern=None, mapset=None, exclude=None, flag=''):
 
     :return: list of elements
     """
-    if type == 'raster' or type == 'cell':
-        verbose(_('Element type should be "rast" and not "%s"') % type)
-        type = 'rast'
+    if type == 'cell':
+        verbose(_('Element type should be "raster" and not "%s"') % type)
+    
     result = list()
     for line in read_command("g.list",
                              quiet=True,
@@ -1117,7 +1117,7 @@ def list_pairs(type, pattern=None, mapset=None, exclude=None, flag=''):
     Returns the output from running g.list, as a list of
     (name, mapset) pairs
 
-    :param str type: element type (rast, vect, rast3d, region, ...)
+    :param str type: element type (raster, vector, raster_3d, region, ...)
     :param str pattern: pattern string
     :param str mapset: mapset name (if not given use search path)
     :param str exclude: pattern string to exclude maps from the research
@@ -1142,7 +1142,7 @@ def list_grouped(type, pattern=None, check_search_path=True, exclude=None,
     >>> list_grouped('vect', pattern='*roads*')['PERMANENT']
     ['railroads', 'roadsmajor']
 
-    :param str type: element type (rast, vect, rast3d, region, ...) or list of elements
+    :param str type: element type (raster, vector, raster_3d, region, ...) or list of elements
     :param str pattern: pattern string
     :param str check_search_path: True to add mapsets for the search path
                                   with no found elements
@@ -1160,9 +1160,9 @@ def list_grouped(type, pattern=None, check_search_path=True, exclude=None,
         store_types = True
         flag += 't'
     for i in range(len(types)):
-        if types[i] == 'raster' or types[i] == 'cell':
-            verbose(_('Element type should be "rast" and not "%s"') % types[i])
-            types[i] = 'rast'
+        if types[i] == 'cell':
+            verbose(_('Element type should be "raster" and not "%s"') % types[i])
+            types[i] = 'raster'
     result = {}
     if check_search_path:
         for mapset in mapsets(search_path=True):

@@ -100,7 +100,7 @@ class RasterDataset(AbstractMapDataset):
             >>> rmap.is_time_relative()
             False
 
-            >>> grass.run_command("g.remove", flags="f", type="rast", name=name, quiet=True)
+            >>> grass.run_command("g.remove", flags="f", type="raster", name=name, quiet=True)
             0
             >>> grass.del_temp_region()
 
@@ -418,7 +418,7 @@ class Raster3DDataset(AbstractMapDataset):
             True
             >>> r3map.is_time_relative()
             False
-            >>> grass.run_command("g.remove", flags="f", type="rast3d", name=name, quiet=True)
+            >>> grass.run_command("g.remove", flags="f", type="raster_3d", name=name, quiet=True)
             0
             >>> grass.del_temp_region()
 
@@ -746,7 +746,7 @@ class VectorDataset(AbstractMapDataset):
             True
             >>> vmap.is_time_relative()
             False
-            >>> grass.run_command("g.remove", flags="f", type="vect", name=name, quiet=True)
+            >>> grass.run_command("g.remove", flags="f", type="vector", name=name, quiet=True)
             0
             >>> grass.del_temp_region()
 

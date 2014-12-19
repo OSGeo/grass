@@ -405,7 +405,7 @@ def CreateNewVector(parent, cmd, title = _('Create new vector map'),
         
     curMapset = grass.gisenv()['MAPSET']
     if isNative:
-        listOfVectors = grass.list_grouped('vect')[curMapset]
+        listOfVectors = grass.list_grouped('vector')[curMapset]
     else:
         listOfVectors = RunCommand('v.external',
                                    quiet = True,
@@ -1521,11 +1521,11 @@ class MapLayersDialogBase(wx.Dialog):
         
         sel = self.layerType.GetSelection()
         if sel == 0:
-            ltype = 'rast'
+            ltype = 'raster'
         elif sel == 1:
-            ltype = 'rast3d'
+            ltype = 'raster_3d'
         else:
-            ltype = 'vect'
+            ltype = 'vector'
         
         return ltype
 

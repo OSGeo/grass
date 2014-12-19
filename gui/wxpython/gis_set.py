@@ -540,9 +540,9 @@ class GRASSStartup(wx.Frame):
                        message = _("Map <%s> not found.") % mapName)
             else:
                 if mapName in vectors:
-                    args = {'vect' : mapName}
+                    args = {'vector' : mapName}
                 else:
-                    args = {'rast' : mapName}
+                    args = {'raster' : mapName}
                 RunCommand('g.region', flags = 's', parent = self, **args)
         
     def OnManageLoc(self, event):

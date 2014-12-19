@@ -234,9 +234,9 @@ class LegendController(OverlayController):
         inputs = 0
         for param in self._cmd:
             param = param.split('=')
-            if param[0] == 'rast' and len(param) == 2:
+            if param[0] == 'raster' and len(param) == 2:
                 inputs += 1
-            elif param[0] == 'rast3d' and len(param) == 2:
+            elif param[0] == 'raster_3d' and len(param) == 2:
                 inputs += 1
             if inputs == 1:
                 return True

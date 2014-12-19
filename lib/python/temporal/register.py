@@ -35,17 +35,17 @@ def register_maps_in_space_time_dataset(
        It takes care of the correct update of the space time datasets from all
        registered maps.
 
-       :param type: The type of the maps rast, rast3d or vect
+       :param type: The type of the maps raster, raster_3d or vector
        :param name: The name of the space time dataset. Maps will be
                     registered in the temporal database if the name was set
                     to None
        :param maps: A comma separated list of map names
        :param file: Input file, one map per line map with start and optional
                    end time
-       :param start: The start date and time of the first raster map
+       :param start: The start date and time of the first map
                     (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd",
                     format relative is integer 5)
-       :param end: The end date and time of the first raster map
+       :param end: The end date and time of the first map
                   (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd",
                   format relative is integer 5)
        :param unit: The unit of the relative time: years, months, days,
@@ -117,7 +117,7 @@ def register_maps_in_space_time_dataset(
             row["id"] = mapid
             maplist[count] = row
 
-    # Read the map list from file
+    # Read the raster map list from file
     if file:
         fd = open(file, "r")
 
@@ -327,7 +327,7 @@ def register_maps_in_space_time_dataset(
         for dataset in datatsets_to_modify:
             if type == "rast" or type == "raster":
                 ds = dataset_factory("strds", dataset)
-            elif type == "rast3d":
+            elif type == "raster_3d" or type == "rast3d" or type == "raster3d":
                 ds = dataset_factory("str3ds", dataset)
             elif type == "vect" or type == "vector":
                 ds = dataset_factory("stvds", dataset)
@@ -349,10 +349,10 @@ def assign_valid_time_to_map(ttype, map, start, end, unit, increment=None,
        :param ttype: The temporal type which should be assigned
                      and which the time format is of
        :param map: A map dataset object derived from abstract_map_dataset
-       :param start: The start date and time of the first raster map
+       :param start: The start date and time of the first map
                      (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd",
                      format relative is integer 5)
-       :param end: The end date and time of the first raster map
+       :param end: The end date and time of the first map
                    (format absolute: "yyyy-mm-dd HH:MM:SS" or "yyyy-mm-dd",
                    format relative is integer 5)
        :param unit: The unit of the relative time: years, months,
@@ -434,7 +434,7 @@ def register_map_object_list(type,  map_list, output_stds,
     """Register a list of AbstractMapDataset objects in the temporal database
        and optional in a space time dataset.
 
-       :param type: The type of the map layer (rast, rast3d, vect)
+       :param type: The type of the map layer (raster, raster_3d, vector)
        :param map_list: List of AbstractMapDataset objects
        :param output_stds: The output stds
        :param delete_empty: Set True to delete empty map layer found in the map_list
@@ -452,7 +452,7 @@ def register_map_object_list(type,  map_list, output_stds,
 
     empty_maps = []
     for map_layer in map_list:
-        # Read the raster map data
+        # Read the map data
         map_layer.load()
         # In case of a empty map continue, do not register empty maps
 
@@ -488,7 +488,12 @@ def register_map_object_list(type,  map_list, output_stds,
                 map.delete(dbif)
             mod = copy.deepcopy(g_remove)
             if map.get_name():
-                mod(type='rast', name=map.get_name())
+                if map.get_type() == "raster":
+                    mod(type='raster', name=map.get_name())
+                if map.get_type() == "raster3d":
+                    mod(type='raster_3d', name=map.get_name())
+                if map.get_type() == "vector":
+                    mod(type='vector', name=map.get_name())
                 mod.run()
 
     if connected:

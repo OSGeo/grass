@@ -42,7 +42,7 @@ class TestRasterExtraction(TestCase):
 
         self.runModule("t.create",  type="strds",  temporaltype="absolute",  
                                      output="precip_abs1",  title="A test",  description="A test",  overwrite=True)
-        self.runModule("t.register",  flags="i",  type="rast",  input="precip_abs1",  
+        self.runModule("t.register",  flags="i",  type="raster",  input="precip_abs1",  
                                      maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6",  
                                      start="2001-01-01", increment="3 months",  overwrite=True)
 

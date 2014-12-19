@@ -132,7 +132,12 @@ def main():
                 # Delete every 100 maps
                 if count%100 == 0:
                     dbif.execute_transaction(map_statement)
-                    remove(type="rast", name=name_list, run_=True)
+                    if type == "strds":
+                        remove(type="raster", name=name_list, run_=True)
+                    if type == "stvds":
+                        remove(type="vector", name=name_list, run_=True)
+                    if type == "str3ds":
+                        remove(type="raster_3d", name=name_list, run_=True)
                     map_statement = ""
                     name_list = []
 
@@ -140,11 +145,11 @@ def main():
                 dbif.execute_transaction(map_statement)
             if name_list:
                 if type == "strds":
-                    remove(type="rast", name=",".join(name_list), run_=True)
+                    remove(type="raster", name=name_list, run_=True)
                 if type == "stvds":
-                    remove(type="vect", name=",".join(name_list), run_=True)
+                    remove(type="vector", name=name_list, run_=True)
                 if type == "str3ds":
-                    remove(type="rast3d", name=",".join(name_list), run_=True)
+                    remove(type="raster_3d", name=name_list, run_=True)
 
         statement += sp.delete(dbif=dbif, execute=False)
 

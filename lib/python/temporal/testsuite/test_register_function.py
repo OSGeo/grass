@@ -43,15 +43,17 @@ class TestRegisterFunctions(grass.gunittest.TestCase):
                        expression="register_map_2 = 2")
 
         self.strds_abs = tgis.open_new_stds(name="register_test_abs", type="strds", temporaltype="absolute",
-                                            title="Test strds", descr="Test strds", semantic="field")
+                                            title="Test strds", descr="Test strds", semantic="field", 
+                                            overwrite=True)
         self.strds_rel = tgis.open_new_stds(name="register_test_rel", type="strds", temporaltype="relative",
-                                            title="Test strds", descr="Test strds", semantic="field")
+                                            title="Test strds", descr="Test strds", semantic="field",
+                                            overwrite=True)
 
     def tearDown(self):
         """Remove maps from temporal database
         """
         self.runModule("t.unregister", maps="register_map_1,register_map_2", quiet=True)
-        self.runModule("g.remove", flags='f', type="rast", name="register_map_1,register_map_2", quiet=True)
+        self.runModule("g.remove", flags='f', type="raster", name="register_map_1,register_map_2", quiet=True)
         self.strds_abs.delete()
         self.strds_rel.delete()
 
@@ -59,7 +61,7 @@ class TestRegisterFunctions(grass.gunittest.TestCase):
         """Test the registration of maps with absolute time in a
            space time raster dataset
         """
-        tgis.register_maps_in_space_time_dataset(type="rast", name=self.strds_abs.get_name(),
+        tgis.register_maps_in_space_time_dataset(type="raster", name=self.strds_abs.get_name(),
                  maps="register_map_1,register_map_2",
                  start="2001-01-01", increment="1 day", interval=True)
 
@@ -91,7 +93,7 @@ class TestRegisterFunctions(grass.gunittest.TestCase):
         ciface.write_raster_timestamp("register_map_1", tgis.get_current_mapset(), "1 Jan 2001/2 Jan 2001")
         ciface.write_raster_timestamp("register_map_2", tgis.get_current_mapset(), "2 Jan 2001/3 Jan 2001")
 
-        tgis.register_maps_in_space_time_dataset(type="rast", name=self.strds_abs.get_name(),
+        tgis.register_maps_in_space_time_dataset(type="raster", name=self.strds_abs.get_name(),
                                                  maps="register_map_1,register_map_2")
 
         map = tgis.RasterDataset("register_map_1@" + tgis.get_current_mapset())
@@ -114,7 +116,7 @@ class TestRegisterFunctions(grass.gunittest.TestCase):
     def test_absolute_time_1(self):
         """Test the registration of maps with absolute time
         """
-        tgis.register_maps_in_space_time_dataset(type="rast", name=None,
+        tgis.register_maps_in_space_time_dataset(type="raster", name=None,
                  maps="register_map_1,register_map_2",
                  start="2001-01-01", increment="1 day", interval=True)
 
@@ -133,7 +135,7 @@ class TestRegisterFunctions(grass.gunittest.TestCase):
     def test_absolute_time_2(self):
         """Test the registration of maps with absolute time
         """
-        tgis.register_maps_in_space_time_dataset(type="rast", name=None,
+        tgis.register_maps_in_space_time_dataset(type="raster", name=None,
                  maps="register_map_1,register_map_2",
                  start="2001-01-01 10:30:01", increment="8 hours", interval=False)
 
@@ -157,7 +159,7 @@ class TestRegisterFunctions(grass.gunittest.TestCase):
         ciface.write_raster_timestamp("register_map_1", tgis.get_current_mapset(), "1 Jan 2001 10:30:01")
         ciface.write_raster_timestamp("register_map_2", tgis.get_current_mapset(), "1 Jan 2001 18:30:01")
 
-        tgis.register_maps_in_space_time_dataset(type="rast", name=None,
+        tgis.register_maps_in_space_time_dataset(type="raster", name=None,
                  maps="register_map_1,register_map_2")
 
         map = tgis.RasterDataset("register_map_1@" + tgis.get_current_mapset())
@@ -175,7 +177,7 @@ class TestRegisterFunctions(grass.gunittest.TestCase):
            space time raster dataset
         """
 
-        tgis.register_maps_in_space_time_dataset(type="rast", name=self.strds_rel.get_name(),
+        tgis.register_maps_in_space_time_dataset(type="raster", name=self.strds_rel.get_name(),
                                                  maps="register_map_1,register_map_2", start=0,
                                                  increment=1, unit="day", interval=True)
 
@@ -208,7 +210,7 @@ class TestRegisterFunctions(grass.gunittest.TestCase):
         ciface.write_raster_timestamp("register_map_1", tgis.get_current_mapset(), "1000000 seconds/1500000 seconds")
         ciface.write_raster_timestamp("register_map_2", tgis.get_current_mapset(), "1500000 seconds/2000000 seconds")
 
-        tgis.register_maps_in_space_time_dataset(type="rast", name=self.strds_rel.get_name(),
+        tgis.register_maps_in_space_time_dataset(type="raster", name=self.strds_rel.get_name(),
                                                  maps="register_map_1,register_map_2")
 
         map = tgis.RasterDataset("register_map_1@" + tgis.get_current_mapset())
@@ -234,7 +236,7 @@ class TestRegisterFunctions(grass.gunittest.TestCase):
     def test_relative_time_1(self):
         """Test the registration of maps with relative time
         """
-        tgis.register_maps_in_space_time_dataset(type="rast", name=None,
+        tgis.register_maps_in_space_time_dataset(type="raster", name=None,
                  maps="register_map_1,register_map_2",
                  start=0, increment=1, unit="day", interval=True)
 
@@ -255,7 +257,7 @@ class TestRegisterFunctions(grass.gunittest.TestCase):
     def test_relative_time_2(self):
         """Test the registration of maps with relative time
         """
-        tgis.register_maps_in_space_time_dataset(type="rast", name=None,
+        tgis.register_maps_in_space_time_dataset(type="raster", name=None,
                  maps="register_map_1,register_map_2",
                  start=1000000, increment=500000, unit="seconds", interval=True)
 
@@ -281,7 +283,7 @@ class TestRegisterFunctions(grass.gunittest.TestCase):
         ciface.write_raster_timestamp("register_map_1", tgis.get_current_mapset(), "1000000 seconds/1500000 seconds")
         ciface.write_raster_timestamp("register_map_2", tgis.get_current_mapset(), "1500000 seconds/2000000 seconds")
 
-        tgis.register_maps_in_space_time_dataset(type="rast", name=None,
+        tgis.register_maps_in_space_time_dataset(type="raster", name=None,
                  maps="register_map_1,register_map_2")
 
         map = tgis.RasterDataset("register_map_1@" + tgis.get_current_mapset())
