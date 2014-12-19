@@ -43,18 +43,18 @@ t.info type=raster input=prec_2
 t.info -g type=raster input=prec_2
 
 
-t.register type=3draster -i input=precip_abs1 maps=prec_1,prec_2 start="2001-01-01" increment="20 years"
+t.register type=raster_3d -i input=precip_abs1 maps=prec_1,prec_2 start="2001-01-01" increment="20 years"
 t.info type=str3ds input=precip_abs1
 t.info -g type=str3ds input=precip_abs1
 
-t.register type=3draster -i input=precip_abs2 maps=prec_1,prec_2 start="2001-01-01" increment="20 years"
+t.register type=raster_3d -i input=precip_abs2 maps=prec_1,prec_2 start="2001-01-01" increment="20 years"
 t.info type=str3ds input=precip_abs2
 t.info -g type=str3ds input=precip_abs2
 t.info -h type=str3ds input=precip_abs2
-t.info type=3draster input=prec_1
-t.info -g type=3draster input=prec_1
-t.info type=3draster input=prec_2
-t.info -g type=3draster input=prec_2
+t.info type=raster_3d input=prec_1
+t.info -g type=raster_3d input=prec_1
+t.info type=raster_3d input=prec_2
+t.info -g type=raster_3d input=prec_2
 
 t.register type=vector --v -i input=lidar_abs_ds1 maps=lidar_abs_1,lidar_abs_2 start="2001-01-01" increment="20 years"
 t.info type=stvds input=lidar_abs_ds1
@@ -74,6 +74,6 @@ t.remove type=stvds input=lidar_abs_ds1,lidar_abs_ds2
 t.unregister type=raster maps=prec_1,prec_2
 t.remove type=strds input=precip_abs1,precip_abs2
 
-t.unregister type=3draster maps=prec_1,prec_2
+t.unregister type=raster_3d maps=prec_1,prec_2
 t.remove type=str3ds input=precip_abs1,precip_abs2
 
