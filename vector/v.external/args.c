@@ -51,7 +51,7 @@ void parse_args(int argc, char **argv,
     flags->tlist->key = 't';
     flags->tlist->label = _("List available layers including feature type "
 			    "in data source and exit");
-    flags->tlist->description = _("Format: layer name,type,projection check");
+    flags->tlist->description = _("Format: layer name,type,projection check,geometry");
     flags->tlist->guisection = _("Print");
     flags->tlist->suppress_required = YES;
 

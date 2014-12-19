@@ -283,9 +283,10 @@ int list_layers_ogr(FILE *fd, const char *dsn, const char *layer, int print_type
 
 	if (fd) {
 	    if (print_types) {
-		int proj_same;
+                int proj_same, igeom;
 		OGRSpatialReferenceH Ogr_projection;
-
+                OGRGeomFieldDefnH Ogr_geomdefn;
+                
 		/* projection check */
 		Ogr_projection = OGR_L_GetSpatialRef(Ogr_layer);
 		proj_same = 0;
@@ -304,9 +305,18 @@ int list_layers_ogr(FILE *fd, const char *dsn, const char *layer, int print_type
 			proj_same = 0;
 		}
 		G_suppress_warnings(FALSE);
-		fprintf(fd, "%s,%s,%d\n", layer_name,
-			feature_type(OGRGeometryTypeToName(Ogr_geom_type)),
-			proj_same);
+
+                for (igeom = 0; igeom < OGR_FD_GetGeomFieldCount(Ogr_featuredefn); igeom++) {
+                    Ogr_geomdefn = OGR_FD_GetGeomFieldDefn(Ogr_featuredefn, igeom);
+                    if (!Ogr_geomdefn) {
+                        G_warning(_("Invalid geometry column %d"), igeom);
+                        continue;
+                    }
+                    
+                    fprintf(fd, "%s,%s,%d,%s\n", layer_name,
+                            feature_type(OGRGeometryTypeToName(Ogr_geom_type)),
+                            proj_same, OGR_GFld_GetNameRef(Ogr_geomdefn));
+                }
 	    }
 	    else {
 		fprintf(fd, "%s\n", layer_name);
