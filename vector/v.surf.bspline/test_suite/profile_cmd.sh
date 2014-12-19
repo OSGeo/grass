@@ -1,9 +1,13 @@
 # nc2008/grass7 mapset
-g.region n=221230 s=220404 w=638634 e=639530 res=2
-CMD="v.surf.bspline in=lidar_test raster=elev.lidar_test_cubic method=bicubic -z --o"
-valgrind --tool=callgrind --trace-children=yes $CMD
 
-kcachegrind callgrind.out.1196
+OUTFILE=callgrind.out.1196
+
+g.region n=221230 s=220404 w=638634 e=639530 res=2
+CMD="v.surf.bspline in=lidar_test raster=elev.lidar_test_cubic method=bicubic --o"
+valgrind --tool=callgrind --callgrind-out-file=$OUTFILE --trace-children=yes $CMD
+
+# http://kcachegrind.sourceforge.net
+kcachegrind $OUTFILE
 
 99% of time is spent in gmath lib's G_math_cholesky_sband_decomposition()
 
