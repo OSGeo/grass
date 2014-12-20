@@ -1,9 +1,9 @@
 /*!
-   \file gis/color_str.c
+   \file lib/gis/color_str.c
 
    \brief GIS library - color management, named color to RGB triplet
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2014 by the GRASS Development Team
 
    This program is free software under the 
    GNU General Public License (>=v2). 

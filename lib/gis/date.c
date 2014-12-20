@@ -1,5 +1,5 @@
 /*!
- * \file gis/date.c
+ * \file lib/gis/date.c
  *
  * \brief GIS Library - Date functions.
  *

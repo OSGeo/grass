@@ -1,5 +1,5 @@
 /*!
- * \file gis/area_sphere.c
+ * \file lib/gis/area_sphere.c
  *
  * \brief GIS Library - Sphereical area calculation routines.
  *

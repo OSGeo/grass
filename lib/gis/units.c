@@ -1,5 +1,5 @@
 /*!
-  \file gis/units.c
+  \file lib/gis/units.c
 
   \brief GIS Library - Units management and conversion
   

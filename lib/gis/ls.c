@@ -1,6 +1,6 @@
 
 /**
-   \file ls.c
+   \file lib/gis/ls.c
 
    \brief Functions to list the files in a directory.
 

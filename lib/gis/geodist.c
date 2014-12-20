@@ -1,5 +1,5 @@
 /*!
- * \file gis/geodist.c
+ * \file lib/gis/geodist.c
  *
  * \brief GIS Library - Geodesic distance routines.
  *

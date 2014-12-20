@@ -1,5 +1,5 @@
 /*!
- * \file gis/parser_interface.c
+ * \file lib/gis/parser_interface.c
  *
  * \brief GIS Library - Argument parsing functions (interface)
  *

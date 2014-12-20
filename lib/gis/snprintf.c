@@ -1,6 +1,6 @@
 
-/**
- * \file snprintf.c
+/*!
+ * \file lib/gis/snprintf.c
  *
  * \brief GIS Library - snprintf() clone functions.
  *
@@ -10,7 +10,7 @@
  *   - http://www.ijs.si/software/snprintf/
  *   - openssh's snprintf() implementation: bsd-snprintf.c
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2014 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.

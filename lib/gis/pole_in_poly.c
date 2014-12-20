@@ -1,5 +1,5 @@
 /*!
-  \file gis/pole_in_poly.c
+  \file lib/gis/pole_in_poly.c
 
   \brief GIS Library - Pole in polygon
   

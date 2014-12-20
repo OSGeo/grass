@@ -1,6 +1,6 @@
 
-/**
- * \file user_config.c
+/*!
+ * \file lib/gis/user_config.c
  *
  * \brief GIS Library - Routines related to user's GRASS configuration, tmp, and 
  * miscellaneous files.
@@ -15,7 +15,7 @@
  * subdirectories. There may be more functionality desired (such as 
  * deletion routines, directory globs).<br>
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2014 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.

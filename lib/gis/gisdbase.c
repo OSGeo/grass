@@ -1,5 +1,5 @@
 /*!
-   \file gis/gisdbase.c
+   \file lib/gis/gisdbase.c
 
    \brief GIS library - environment routines (gisdbase)
 
