@@ -107,7 +107,7 @@ def main():
     else:
 	# remove the vector part
 	grass.run_command('v.db.connect', quiet = True, map = output, layer = '1', flags = 'd')
-	grass.run_command('g.remove', flags = 'f', quiet = True, type = 'vect', name = output)
+	grass.run_command('g.remove', flags = 'f', quiet = True, type = 'vector', name = output)
 
     # get rid of superfluous auto-added cat column (and cat_ if present)
     nuldev = file(os.devnull, 'w+')

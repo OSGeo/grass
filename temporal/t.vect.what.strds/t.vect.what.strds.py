@@ -188,7 +188,7 @@ def main():
 
                 if aggreagated_map_name:
                     try:
-                        grass.run_command("g.remove", flags='f', type='rast',
+                        grass.run_command("g.remove", flags='f', type='raster',
                                           name=aggreagated_map_name)
                     except CalledModuleError:
                         dbif.close()

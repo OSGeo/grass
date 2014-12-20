@@ -32,7 +32,7 @@ def db_describe(table, **args):
     0
     >>> db_describe('myfirestations') # doctest: +ELLIPSIS
     {'nrows': 71, 'cols': [['cat', 'INTEGER', '20'], ... 'ncols': 22}
-    >>> run_command('g.remove', flags='f', type='vect', name='myfirestations')
+    >>> run_command('g.remove', flags='f', type='vector', name='myfirestations')
     0
 
     :param str table: table name
@@ -72,7 +72,7 @@ def db_table_exist(table, **args):
     0
     >>> db_table_exist('myfirestations')
     True
-    >>> run_command('g.remove', flags='f', type='vect', name='myfirestations')
+    >>> run_command('g.remove', flags='f', type='vector', name='myfirestations')
     0
 
     :param str table: table name
@@ -130,7 +130,7 @@ def db_select(sql=None, filename=None, table=None, **args):
 
     >>> db_select(table = 'myfirestations') # doctest: +ELLIPSIS
     (('1', '24', 'Morrisville #3', ... 'HS2A', '1.37'))
-    >>> run_command('g.remove', flags='f', type='vect', name='myfirestations')
+    >>> run_command('g.remove', flags='f', type='vector', name='myfirestations')
     0
 
     :param str sql: SQL statement to perform (or None)
@@ -176,7 +176,7 @@ def db_table_in_vector(table):
     >>> db_table_in_vector('myfirestations')
     ['myfirestations@user1']
     >>> db_table_in_vector('mfirestations')
-    >>> run_command('g.remove', flags='f', type='vect', name='myfirestations')
+    >>> run_command('g.remove', flags='f', type='vector', name='myfirestations')
     0
 
     :param str table: name of table to query

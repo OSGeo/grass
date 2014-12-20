@@ -91,7 +91,7 @@ def main():
         grass.fatal(_("Vector map <%s> already exists") % map_name)
     elif overwrite == '1' and gfile['file']:
         grass.warning(_("Vector map <%s> already exists and will be overwritten") % map_name)
-        grass.run_command('g.remove', flags='f', quiet=True, type='vect',
+        grass.run_command('g.remove', flags='f', quiet=True, type='vector',
                           name=map_name)
         shutil.rmtree(new_dir, True)
 

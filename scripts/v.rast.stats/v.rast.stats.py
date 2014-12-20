@@ -70,9 +70,9 @@ from grass.exceptions import CalledModuleError
 
 def cleanup():
     if rastertmp:
-        grass.run_command('g.remove', flags='f', type='rast',
+        grass.run_command('g.remove', flags='f', type='raster',
                           name=rastertmp, quiet=True)
-    grass.run_command('g.remove', flags='f', type='rast',
+    grass.run_command('g.remove', flags='f', type='raster',
                       name='MASK', quiet=True, stderr=nuldev)
     if mask_found:
         grass.message(_("Restoring previous MASK..."))
@@ -296,7 +296,7 @@ def main():
         grass.warning(_("Failed to upload statistics to attribute table of vector map <%s>.") % vector)
         exitcode = 1
     finally:
-         grass.run_command('g.remove', flags='f', type='rast',
+         grass.run_command('g.remove', flags='f', type='raster',
                            name='MASK', quiet=True, stderr=nuldev)
 
     sys.exit(exitcode)

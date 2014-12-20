@@ -40,7 +40,7 @@ def z(n):
 
 def cleanup():
     if tmpmap:
-	grass.run_command('g.remove', flags = 'f', type = 'rast',
+	grass.run_command('g.remove', flags = 'f', type = 'raster',
                       name = tmpmap, quiet = True)
 
 def main():
