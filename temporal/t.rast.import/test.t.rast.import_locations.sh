@@ -35,25 +35,25 @@ t.create --o type=strds temporaltype=absolute output=precip_abs1 title="A test w
 # The first @test
 t.register -i type=rast input=precip_abs1 file="${n1}" start="2001-01-01" increment="1 months"
 
-t.rast.export input=precip_abs1 output=strds_export.tar.bz2 compression=bzip2 format=GTiff workdir=test
-t.rast.export input=precip_abs1 output=strds_export_pack.tar.gz compression=gzip format=pack workdir=test
+t.rast.export input=precip_abs1 output=strds_export.tar.bz2 compression=bzip2 format=GTiff directory=test
+t.rast.export input=precip_abs1 output=strds_export_pack.tar.gz compression=gzip format=pack directory=test
 
 g.proj -p
 
 # Import the data into a new location
-t.rast.import --o location=new_test_1 input=strds_export.tar.bz2 output=precip_abs1 extrdir=test\
+t.rast.import --o location=new_test_1 input=strds_export.tar.bz2 output=precip_abs1 directory=test\
               title="A test" description="Description of a test"
 ls -la $GISDBASE/new_test_1/PERMANENT
 
-t.rast.import --o location=new_test_2 input=strds_export.tar.bz2 output=precip_abs1 extrdir=test\
+t.rast.import --o location=new_test_2 input=strds_export.tar.bz2 output=precip_abs1 directory=test\
           -l  title="A test" description="Description of a test"
 ls -la $GISDBASE/new_test_2/PERMANENT
 
-t.rast.import --o location=new_test_3 input=strds_export.tar.bz2 output=precip_abs1 extrdir=test\
+t.rast.import --o location=new_test_3 input=strds_export.tar.bz2 output=precip_abs1 directory=test\
           -c  title="A test" description="Description of a test"
 ls -la $GISDBASE/new_test_3/PERMANENT
 
-t.rast.import --o location=new_test_4 input=strds_export_pack.tar.gz output=precip_abs1 extrdir=test\
+t.rast.import --o location=new_test_4 input=strds_export_pack.tar.gz output=precip_abs1 directory=test\
               title="A test" description="Description of a test"
 ls -la $GISDBASE/new_test_4/PERMANENT
 

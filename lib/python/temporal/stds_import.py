@@ -9,7 +9,7 @@ Usage:
 
     input="/tmp/temp_1950_2012.tar.gz"
     output="temp_1950_2012"
-    extrdir="/tmp"
+    directory="/tmp"
     title="My new dataset"
     descr="May new shiny dataset"
     location=None
@@ -17,7 +17,7 @@ Usage:
     exp=True
     overr=False
     create=False
-    tgis.import_stds(input, output, extrdir, title, descr, location,
+    tgis.import_stds(input, output, directory, title, descr, location,
                     link, exp, overr, create, "strds")
 
 
@@ -171,14 +171,14 @@ def _import_vector_maps(maplist):
 ############################################################################
 
 
-def import_stds(input, output, extrdir, title=None, descr=None, location=None,
+def import_stds(input, output, directory, title=None, descr=None, location=None,
                 link=False, exp=False, overr=False, create=False,
                 stds_type="strds", base=None, set_current_region=False):
     """Import space time datasets of type raster and vector
 
         :param input: Name of the input archive file
         :param output: The name of the output space time dataset
-        :param extrdir: The extraction directory
+        :param directory: The extraction directory
         :param title: The title of the new created space time dataset
         :param descr: The description of the new created
                      space time dataset
@@ -204,8 +204,8 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
     if not os.path.exists(input):
         gscript.fatal(_("Space time raster dataset archive <%s> not found")
                       % input)
-    if not create and not os.path.exists(extrdir):
-        gscript.fatal(_("Extraction directory <%s> not found") % extrdir)
+    if not create and not os.path.exists(directory):
+        gscript.fatal(_("Extraction directory <%s> not found") % directory)
 
     tar = tarfile.open(name=input, mode='r')
 
@@ -219,7 +219,7 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
     if proj_file_name not in members:
         gscript.fatal(_("Unable to find projection file <%s>") % proj_file_name)
 
-    tar.extractall(path=extrdir)
+    tar.extractall(path=directory)
     tar.close()
 
     # We use a new list file name for map registration
@@ -228,7 +228,7 @@ def import_stds(input, output, extrdir, title=None, descr=None, location=None,
     old_cwd = os.getcwd()
 
     # Switch into the data directory
-    os.chdir(extrdir)
+    os.chdir(directory)
 
     # Check projection information
     if not location:

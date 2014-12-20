@@ -38,7 +38,7 @@
 #%end
 
 #%option G_OPT_M_DIR
-#% key: extrdir
+#% key: directory
 #% description: Path to the extraction directory
 #%end
 
@@ -100,7 +100,7 @@ def main():
     # Get the options
     input = options["input"]
     output = options["output"]
-    extrdir = options["extrdir"]
+    directory = options["directory"]
     title = options["title"]
     descr = options["description"]
     location = options["location"]
@@ -113,7 +113,7 @@ def main():
 
     tgis.init()
 
-    tgis.import_stds(input, output, extrdir, title, descr, location,
+    tgis.import_stds(input, output, directory, title, descr, location,
                      link, exp, overr, create, "strds", base, 
                      set_current_region)
 
