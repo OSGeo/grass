@@ -1,5 +1,5 @@
 /*!
- * \file gis/short_way.c
+ * \file lib/gis/short_way.c
  *
  * \brief GIS Library - Shortest path functions.
  *

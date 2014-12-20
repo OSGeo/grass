@@ -1,5 +1,5 @@
 /*!
- * \file gis/remove.c
+ * \file lib/gis/remove.c
  *
  * \brief GIS Library - File remove functions.
  *

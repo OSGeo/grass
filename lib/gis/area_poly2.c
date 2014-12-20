@@ -1,5 +1,5 @@
 /*!
- * \file gis/area_poly2.c
+ * \file lib/gis/area_poly2.c
  *
  * \brief GIS Library - Planimetric polygon area calculation routines.
  *

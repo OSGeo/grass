@@ -1,5 +1,5 @@
 /*!
- * \file gis/area.c
+ * \file lib/gis/area.c
  *
  * \brief GIS Library - Area calculation functions.
  *

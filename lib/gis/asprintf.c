@@ -1,6 +1,6 @@
 
-/**
- * \file asprintf.c
+/*!
+ * \file lib/gis/asprintf.c
  *
  * \brief GIS Library - GRASS implementation of asprintf().
  *
@@ -9,7 +9,7 @@
  * Rewritten by Glynn Clements, Sat, 6 Feb 2010
  * Assumes that vsnprintf() is available
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2002-2014 by the GRASS Development Team
  * (C) 2010 by Glynn Clements
  *
  * This program is free software under the GNU General Public License

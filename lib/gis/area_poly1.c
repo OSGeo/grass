@@ -1,5 +1,5 @@
 /*!
- * \file gis/area_poly1.c
+ * \file lib/gis/area_poly1.c
  *
  * \brief GIS Library - Polygon area calculation routines.
  *

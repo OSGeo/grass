@@ -1,5 +1,5 @@
 /*!
- * \file gis/open.c
+ * \file lib/gis/open.c
  * 
  * \brief GIS Library - Open file functions
  *

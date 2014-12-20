@@ -1,5 +1,5 @@
-/**
- * \file debug.c
+/*!
+ * \file lib/gis/debug.c
  *
  * \brief GIS Library - Debug functions.
  *

@@ -1,5 +1,5 @@
 /*!
- * \file gis/endian.c
+ * \file lib/gis/endian.c
  *
  * \brief GIS Library - Functions to determine architecture endian.
  *
