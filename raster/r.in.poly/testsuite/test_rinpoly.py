@@ -42,7 +42,7 @@ class TestRInPoly(grass.gunittest.TestCase):
 
     def tearDown(self):
         """Remove rinpoly map after each test method"""
-        self.runModule('g.remove', flags='f', type='rast',
+        self.runModule('g.remove', flags='f', type='raster',
                        name=self.rinpoly)
         os.unlink(self.tmpFile.name)
 

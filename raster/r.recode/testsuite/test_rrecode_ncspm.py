@@ -45,7 +45,7 @@ class TestNCMaps(TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()
-        cls.runModule('g.remove', type='rast', name=['random01', 'recoded'], flags='f')
+        cls.runModule('g.remove', type='raster', name=['random01', 'recoded'], flags='f')
 
     def test_formats_elevation(self):
         recode = SimpleModule('r.recode', input='elevation@PERMANENT', output='recoded',

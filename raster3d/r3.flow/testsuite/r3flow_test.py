@@ -86,7 +86,7 @@ class FlowlineTest(TestCase):
                           direction='down')
         self.runModule('v.out.ascii', input='test_flowline',
                        format='standard', output='./data/flowline_tmp.ascii',
-                       dp=6)
+                       precision=6)
         self.assertVectorAsciiEqualsVectorAscii(actual='./data/flowline_tmp.ascii',
                                                 reference='./data/flowline.ascii')
         self.assertRaster3dFitsUnivar('test_flowaccum', reference=flowaccum, precision=1e-6)

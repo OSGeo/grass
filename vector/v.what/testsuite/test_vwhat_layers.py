@@ -119,14 +119,14 @@ class TestMultiLayerMap(TestCase):
         cls.runModule('v.in.ascii', input='./data/testing.ascii', output='test_vector',
                       format='standard')
         cls.runModule('db.connect', flags='c')
-        cls.runModule('db.in.ogr', dsn='./data/table1.csv', output='t1')
-        cls.runModule('db.in.ogr', dsn='./data/table2.csv', output='t2')
+        cls.runModule('db.in.ogr', input='./data/table1.csv', output='t1')
+        cls.runModule('db.in.ogr', input='./data/table2.csv', output='t2')
         cls.runModule('v.db.connect', map='test_vector', table='t1', key='cat_', layer=1)
         cls.runModule('v.db.connect', map='test_vector', table='t2', key='cat_', layer=2)
 
     @classmethod
     def tearDownClass(cls):
-        cls.runModule('g.remove', type='vect', name='test_vector', flags='f')
+        cls.runModule('g.remove', type='vector', name='test_vector', flags='f')
 
     def setUp(self):
         self.vwhat = SimpleModule('v.what', map='test_vector',

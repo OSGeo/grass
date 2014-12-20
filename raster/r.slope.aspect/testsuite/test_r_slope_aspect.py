@@ -68,7 +68,7 @@ class TestSlopeAspectAgainstReference(grass.gunittest.TestCase):
     @classmethod
     def tearDownClass(cls):
         cls.del_temp_region()
-        cls.runModule('g.remove', flags='f', type='rast', name=cls.elevation)
+        cls.runModule('g.remove', flags='f', type='raster', name=cls.elevation)
 
     def test_slope(self):
         ref_slope = 'reference_slope'

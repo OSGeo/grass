@@ -137,7 +137,7 @@ class GradientTest(TestCase):
 
     def test_gradient_block(self):
         self.runModule('g.region', res3=10, n=100, s=0, w=0, e=120, b=0, t=50)
-        self.assertModule('r3.gradient', input='test_map_1_ref', block_size=[200, 2, 50],
+        self.assertModule('r3.gradient', input='test_map_1_ref', blocksize=[200, 2, 50],
                           output=['test_grad_x', 'test_grad_y', 'test_grad_z'], overwrite=True)
         self.assertRaster3dFitsUnivar(raster='test_grad_x', reference=r3univar_test_grad_x, precision=1e-8)
         self.assertRaster3dFitsUnivar(raster='test_grad_y', reference=r3univar_test_grad_y, precision=1e-8)
@@ -145,7 +145,7 @@ class GradientTest(TestCase):
 
     def test_gradient_nulls(self):
         self.runModule('g.region', res3=1, n=5, s=0, w=0, e=5, b=0, t=5)
-        self.assertModule('r3.gradient', input='test_map_2_ref', block_size=[200, 2, 50],
+        self.assertModule('r3.gradient', input='test_map_2_ref', blocksize=[200, 2, 50],
                           output=['test_null_grad_x', 'test_null_grad_y', 'test_null_grad_z'])
         self.assertRaster3dFitsUnivar(raster='test_null_grad_x',
                                       reference=r3univar_test_nulls_grad_x, precision=1e-8)
