@@ -1,5 +1,5 @@
 /*!
- * \file gis/timestamp.c
+ * \file lib/gis/timestamp.c
  *
  * \brief GIS Library - Timestamp management
  *

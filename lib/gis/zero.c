@@ -1,5 +1,5 @@
 /*!
- * \file gis/zero.c
+ * \file lib/gis/zero.c
  *
  * \brief GIS Library - Zeroing functions.
  *

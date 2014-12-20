@@ -1,5 +1,5 @@
 /*!
- * \file gis/rename.c
+ * \file lib/gis/rename.c
  *
  * \brief GIS Library - Rename file functions.
  *

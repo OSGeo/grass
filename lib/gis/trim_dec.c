@@ -1,5 +1,5 @@
 /*!
- * \file trim_dec.c
+ * \file lib/gis/trim_dec.c
  *
  * \brief GIS Library - Trim string decimal functions.
  *

@@ -1,5 +1,5 @@
 /*!
- * \file strings.c
+ * \file lib/gis/strings.c
  * 
  * \brief GIS Library - Find raster map
  *

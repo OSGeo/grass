@@ -1,5 +1,5 @@
 /*!
-   \file gis/find_file.c
+   \file lib/gis/find_file.c
 
    \brief GIS library - Find GRASS data base files
 

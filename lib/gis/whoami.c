@@ -1,5 +1,5 @@
 /*!
- * \file gis/whoami.c
+ * \file lib/gis/whoami.c
  *
  * \brief GIS Library - Login name functions.
  *

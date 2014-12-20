@@ -1,5 +1,5 @@
 /*!
-  \file gis/get_ellipse.c
+  \file lib/gis/get_ellipse.c
 
   \brief GIS Library - Getting ellipsoid parameters from the database.
 

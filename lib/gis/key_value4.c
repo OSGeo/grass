@@ -1,9 +1,9 @@
 /*!
-   \file key_value4.c
+   \file lib/gis/key_value4.c
 
    \brief Key_Value management.
 
-   (C) 2001-2008 by the GRASS Development Team
+   (C) 2001-2014 by the GRASS Development Team
 
    This program is free software under the 
    GNU General Public License (>=v2). 

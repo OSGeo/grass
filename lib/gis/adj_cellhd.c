@@ -1,5 +1,5 @@
 /*!
- * \file gis/adj_cellhd.c
+ * \file lib/gis/adj_cellhd.c
  *
  * \brief GIS Library - CELL header adjustment.
  *

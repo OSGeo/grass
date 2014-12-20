@@ -1,5 +1,5 @@
 /*!
-  \file gis/radii.c
+  \file lib/gis/radii.c
 
   \brief GIS Library - Calculating the Meridional Radius of Curvature
   
