@@ -231,9 +231,9 @@ This is useful when test is runned in location which is not deleted
 when test finishes. It could test if everything which was expected
 to be created was created if it would check all outputs properly.
 
->>> run_command('g.remove', flags='f', type='rast', name='test')
+>>> run_command('g.remove', flags='f', type='raster', name='test')
 0
->>> run_command('g.remove', flags='f', type='rast', name='test_14')
+>>> run_command('g.remove', flags='f', type='raster', name='test_14')
 0
->>> run_command('g.remove', flags='f', type='rast', name='test_d')
+>>> run_command('g.remove', flags='f', type='raster', name='test_d')
 0
