@@ -24,36 +24,36 @@ t.create --o type=stvds temporaltype=absolute output=soil_abs1 title="A test" de
 t.register -i type=vector input=soil_abs1 file="${n1}" start='2001-01-01' increment="1 months"
 
 # The first @test
-t.vect.export format=GML input=soil_abs1 output=stvds_export_gml.tar.bz2 compression=bzip2 workdir=/tmp
-t.vect.export format=GML input=soil_abs1 output=stvds_export_gml.tar.gz compression=gzip workdir=/tmp
-t.vect.export format=GML input=soil_abs1 output=stvds_export_gml.tar compression=no workdir=/tmp
+t.vect.export format=GML input=soil_abs1 output=stvds_export_gml.tar.bz2 compression=bzip2 directory=/tmp
+t.vect.export format=GML input=soil_abs1 output=stvds_export_gml.tar.gz compression=gzip directory=/tmp
+t.vect.export format=GML input=soil_abs1 output=stvds_export_gml.tar compression=no directory=/tmp
 
-t.vect.export format=pack input=soil_abs1 output=stvds_export_pack.tar.bz2 compression=bzip2 workdir=/tmp
-t.vect.export format=pack input=soil_abs1 output=stvds_export_pack.tar.gz compression=gzip workdir=/tmp
-t.vect.export format=pack input=soil_abs1 output=stvds_export_pack.tar compression=no workdir=/tmp
+t.vect.export format=pack input=soil_abs1 output=stvds_export_pack.tar.bz2 compression=bzip2 directory=/tmp
+t.vect.export format=pack input=soil_abs1 output=stvds_export_pack.tar.gz compression=gzip directory=/tmp
+t.vect.export format=pack input=soil_abs1 output=stvds_export_pack.tar compression=no directory=/tmp
 
 # Checking different flags
-t.vect.import --o input=stvds_export_gml.tar.bz2 output=precip_abs1 extrdir=test\
+t.vect.import --o input=stvds_export_gml.tar.bz2 output=precip_abs1 directory=test\
           -oe title="A test" description="Description of a test"
-t.vect.import --o input=stvds_export_gml.tar.bz2 output=precip_abs1 extrdir=test\
+t.vect.import --o input=stvds_export_gml.tar.bz2 output=precip_abs1 directory=test\
           -o title="A test" description="Description of a test"
-t.vect.import --o input=stvds_export_gml.tar.bz2 output=precip_abs1 extrdir=test\
+t.vect.import --o input=stvds_export_gml.tar.bz2 output=precip_abs1 directory=test\
               title="A test" description="Description of a test"
 
 # Import using different compression and formats
-t.vect.import --o input=stvds_export_gml.tar.gz output=soil_abs2 extrdir=test\
+t.vect.import --o input=stvds_export_gml.tar.gz output=soil_abs2 directory=test\
               title="A test" description="Description of a test"
 v.info soil_1
-t.vect.import --o input=stvds_export_gml.tar output=soil_abs2 extrdir=test\
+t.vect.import --o input=stvds_export_gml.tar output=soil_abs2 directory=test\
               title="A test" description="Description of a test"
 v.info soil_1
-t.vect.import --o input=stvds_export_pack.tar output=soil_abs2 extrdir=test\
+t.vect.import --o input=stvds_export_pack.tar output=soil_abs2 directory=test\
               title="A test" description="Description of a test"
 v.info soil_1
-t.vect.import --o input=stvds_export_pack.tar.gz output=soil_abs2 extrdir=test\
+t.vect.import --o input=stvds_export_pack.tar.gz output=soil_abs2 directory=test\
               title="A test" description="Description of a test"
 v.info soil_1
-t.vect.import --o input=stvds_export_pack.tar.bz2 output=soil_abs2 extrdir=test\
+t.vect.import --o input=stvds_export_pack.tar.bz2 output=soil_abs2 directory=test\
               title="A test" description="Description of a test"
 v.info soil_1
 
