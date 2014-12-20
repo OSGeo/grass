@@ -8,7 +8,7 @@ SUBDIRS = \
 	d.rast.edit \
 	d.rast.leg \
 	d.redraw \
-	d.shadedmap \
+	d.shade \
 	d.vect.thematic \
 	d.what.rast \
 	d.what.vect \
@@ -43,6 +43,7 @@ SUBDIRS = \
 	r.plane \
 	r.reclass.area \
 	r.rgb \
+	r.shade \
 	r.tileset \
 	r.unpack \
 	r3.in.xyz \

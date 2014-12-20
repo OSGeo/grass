@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../..
 
-PGM = d.shadedmap
+PGM = d.shade
 
 include $(MODULE_TOPDIR)/include/Make/Script.make
 

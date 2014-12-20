@@ -785,8 +785,11 @@
         <label>Least cost route or flow</label>
       </module-item>
       <separator/>
-      <module-item name="r.shaded.relief">
-        <label>Shaded relief</label>
+      <module-item name="r.relief">
+        <label>Compute shaded relief</label>
+      </module-item>
+      <module-item name="r.shade">
+        <label>Apply shade to raster</label>
       </module-item>
       <separator/>
       <module-item name="r.slope.aspect">
