@@ -326,13 +326,13 @@ class ModelFrame(wx.Frame):
             dlg.Destroy()
             
             if rast:
-                self._gconsole.RunCmd(['g.remove', '-f', 'type=rast',
+                self._gconsole.RunCmd(['g.remove', '-f', 'type=raster',
                                        'name=%s' %','.join(rast)])
             if rast3d:
-                self._gconsole.RunCmd(['g.remove', '-f', 'type=rast3d',
+                self._gconsole.RunCmd(['g.remove', '-f', 'type=raster_3d',
                                        'name=%s' %','.join(rast3d)])
             if vect:
-                self._gconsole.RunCmd(['g.remove', '-f', 'type=vect',
+                self._gconsole.RunCmd(['g.remove', '-f', 'type=vector',
                                        'name=%s' %','.join(vect)])
             
             self.SetStatusText(_("%d maps deleted from current mapset") % \
@@ -786,7 +786,7 @@ class ModelFrame(wx.Frame):
             x = width/2 - 200 + self._randomShift()
             y = height/2 + self._randomShift()
             for p in params['params']:
-                if p.get('prompt', '') in ('raster', 'vector', 'raster3d') and \
+                if p.get('prompt', '') in ('raster', 'vector', 'raster_3d') and \
                         (p.get('value', None) or \
                              (p.get('age', 'old') != 'old' and p.get('required', 'no') == 'yes')):
                     data = layer.FindData(p.get('name', ''))

@@ -625,7 +625,7 @@ class TestCase(unittest.TestCase):
                                           sep='=', precision=precision,
                                           reference=statistics, msg=msg)
             finally:
-                call_module('g.remove', flags='f', type='rast', name=diff)
+                call_module('g.remove', flags='f', type='raster', name=diff)
         else:
             # general case
             # TODO: we are using r.info min max and r.univar min max interchangably
@@ -651,7 +651,7 @@ class TestCase(unittest.TestCase):
             self.assertRasterFitsUnivar(raster=diff, reference=statistics,
                                         precision=precision, msg=msg)
         finally:
-            call_module('g.remove', flags='f', type='rast', name=diff)
+            call_module('g.remove', flags='f', type='raster', name=diff)
 
     def assertRasters3dNoDifference(self, actual, reference,
                                     precision, statistics=None, msg=None):
@@ -741,7 +741,7 @@ class TestCase(unittest.TestCase):
                                             reference=ref_info,
                                             msg=msg, precision=precision)
         finally:
-            call_module('g.remove', flags='f', type='vect', name=remove)
+            call_module('g.remove', flags='f', type='vector', name=remove)
 
     # TODO: write tests
     def assertVectorsNoAreaDifference(self, actual, reference, precision,
@@ -774,7 +774,7 @@ class TestCase(unittest.TestCase):
                     va=actual, vr=reference, p=precision, a=total_area)
                 self.fail(self._formatMessage(msg, stdmsg))
         finally:
-            call_module('g.remove', flags='f', type='vect', name=diff)
+            call_module('g.remove', flags='f', type='vector', name=diff)
 
     # TODO: here we have to have significant digits which is not consistent
     # TODO: documentation for all new asserts
@@ -838,7 +838,7 @@ class TestCase(unittest.TestCase):
             # we rely on fail method to either raise or return (soon)
             os.remove(factual)
             if vreference:
-                self.runModule('g.remove', flags='f', type='vect', name=vreference)
+                self.runModule('g.remove', flags='f', type='vector', name=vreference)
 
     # TODO: we expect v.out.ascii to give the same order all the time, is that OK?
     def assertVectorAsciiEqualsVectorAscii(self, actual, reference,
@@ -943,10 +943,10 @@ class TestCase(unittest.TestCase):
             import re
             if re.search('Raster map.*not found', errors, flags=re.DOTALL):
                 errors += "\nSee available raster maps:\n"
-                errors += call_module('g.list', type='rast')
+                errors += call_module('g.list', type='raster')
             if re.search('Vector map.*not found', errors, flags=re.DOTALL):
                 errors += "\nSee available vector maps:\n"
-                errors += call_module('g.list', type='vect')
+                errors += call_module('g.list', type='vector')
             # TODO: message format, parameters
             raise CalledModuleError(module.popen.returncode, module.name,
                                     module.get_python(),

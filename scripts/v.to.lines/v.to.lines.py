@@ -95,7 +95,7 @@ def main():
                           option='add', input=input, out=input_tmp,
                           quiet=quiet)
     except CalledModuleError:
-        grass.run_command('g.remove', flags='f', type='vect',
+        grass.run_command('g.remove', flags='f', type='vector',
                           name=input_tmp, quiet=quiet)
         grass.fatal(_("Error creating layer 2"))
     try:
@@ -103,14 +103,14 @@ def main():
                           columns="left integer,right integer",
                           quiet=quiet)
     except CalledModuleError:
-        grass.run_command('g.remove', flags='f', type='vect',
+        grass.run_command('g.remove', flags='f', type='vector',
                           name=input_tmp, quiet=quiet)
         grass.fatal(_("Error creating new table for layer 2"))
     try:
         grass.run_command('v.to.db', map=input_tmp, option="sides",
                           columns="left,right", layer="2", quiet=quiet)
     except CalledModuleError:
-        grass.run_command('g.remove', flags='f', type='vect',
+        grass.run_command('g.remove', flags='f', type='vector',
                           name=input_tmp, quiet=quiet)
         grass.fatal(_("Error populating new table for layer 2"))
     try:
@@ -118,7 +118,7 @@ def main():
                           from_type='boundary', to_type='line',
                           quiet=quiet, layer="2")
     except CalledModuleError:
-        grass.run_command('g.remove', flags='f', type='vect',
+        grass.run_command('g.remove', flags='f', type='vector',
                           name=remove_names, quiet=quiet)
         grass.fatal(_("Error converting polygon to line"))
     report = grass.read_command('v.category', flags='g', input=out_type,
@@ -134,7 +134,7 @@ def main():
                               type='centroid', layer=2, quiet=quiet,
                               cats='{mi}-{ma}'.format(mi=min_cat, ma=max_cat))
         except CalledModuleError:
-            grass.run_command('g.remove', flags='f', type='vect',
+            grass.run_command('g.remove', flags='f', type='vector',
                               name=remove_names, quiet=quiet)
             grass.fatal(_("Error removing centroids"))
 
@@ -144,7 +144,7 @@ def main():
             grass.run_command('v.db.droptable', map=out_type, layer=1,
                               flags='f', quiet=True)
         except CalledModuleError:
-            grass.run_command('g.remove', flags='f', type='vect',
+            grass.run_command('g.remove', flags='f', type='vector',
                               name=remove_names, quiet=quiet)
             grass.fatal(_("Error removing table from layer 1"))
     # TODO: when this except is happaning, it seems that never, so it seems wrong
@@ -155,13 +155,13 @@ def main():
                           output=output, layer="2,1", quiet=quiet,
                           overwrite=overwrite)
     except CalledModuleError:
-        grass.run_command('g.remove', flags='f', type='vect',
+        grass.run_command('g.remove', flags='f', type='vector',
                           name=remove_names, quiet=quiet)
         grass.fatal(_("Error adding categories"))
-    grass.run_command('g.remove', flags='f', type='vect',
+    grass.run_command('g.remove', flags='f', type='vector',
                       name=remove_names, quiet=quiet)
     if point:
-        grass.run_command('g.remove', flags='f', type='vect',
+        grass.run_command('g.remove', flags='f', type='vector',
                           name=out_temp, quiet=quiet)
 
 

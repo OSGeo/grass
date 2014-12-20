@@ -56,13 +56,13 @@ class GMRemoveTest(grass.gunittest.TestCase):
         rmapcalc("test_two = 2")
 
         module = SimpleModule('g.remove',
-                              type='rast', pattern='test_map_*,*two')
+                              type='raster', pattern='test_map_*,*two')
         self.assertModule(module)
         self.assertMultiLineEqual(module.outputs.stdout,
                                   REMOVE_RASTERS.replace('user1',
                                                          get_current_mapset()))
 
-        module = SimpleModule('g.remove', type='rast',
+        module = SimpleModule('g.remove', type='raster',
                               pattern='test_map_*,*two', flags='f')
         self.assertModule(module)
         self.assertMultiLineEqual(module.outputs.stdout, '')
@@ -74,7 +74,7 @@ class GMRemoveTest(grass.gunittest.TestCase):
         rmapcalc("test_oranges = 200")
         rmapcalc("test_apples_big = 300")
         rmapcalc("test_apples_small = 300")
-        module = SimpleModule('g.remove', type='rast',
+        module = SimpleModule('g.remove', type='raster',
                               pattern='test_{apples,oranges}*',
                               exclude="*_small")
         self.assertModule(module)
@@ -83,7 +83,7 @@ class GMRemoveTest(grass.gunittest.TestCase):
                                   'rast/test_apples_big@user1\n'
                                   'rast/test_oranges@user1\n'.replace(
                                       'user1', get_current_mapset()))
-        module = SimpleModule('g.remove', type='rast',
+        module = SimpleModule('g.remove', type='raster',
                               pattern='test_{apples,oranges}{_small,_big,*}',
                               flags='f')
         self.assertModule(module)
@@ -98,7 +98,7 @@ class GMRemoveWrongInputTest(grass.gunittest.TestCase):
     def test_re_flags(self):
         """Test that -r and -e flags are exclusive"""
         module = SimpleModule('g.remove', flags='re',
-                              type='rast', pattern='xxxyyyzzz')
+                              type='raster', pattern='xxxyyyzzz')
         self.assertModuleFail(module)
         stderr = module.outputs.stderr
         self.assertIn('-r', stderr)

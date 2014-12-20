@@ -171,7 +171,7 @@ def aggregate_raster_maps(inputs, base, start, end, count, method,
     if new_map.metadata.get_min() is None and \
        new_map.metadata.get_max() is None:
         if not register_null:
-            gscript.run_command("g.remove", flags='f', type='rast',
+            gscript.run_command("g.remove", flags='f', type='raster',
                                 name=output)
             return None
 

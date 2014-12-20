@@ -138,7 +138,7 @@ class TestVectorGeometryAssertions(gunittest.TestCase):
         # when invoking separately, no need to delete maps since mapset
         # is deleted
         if cls.maps_to_remove:
-            cls.runModule('g.remove', flags='f', type='vect',
+            cls.runModule('g.remove', flags='f', type='vector',
                           name=','.join(cls.maps_to_remove))
 
     def test_assertVectorEqualsVector_basic(self):

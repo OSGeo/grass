@@ -75,10 +75,10 @@ from grass.exceptions import CalledModuleError
 
 def cleanup():
     if tmp:
-        grass.run_command('g.remove', flags = 'f', type = 'rast',
+        grass.run_command('g.remove', flags = 'f', type = 'raster',
                           name = tmp, quiet = True)
     if tmp_hull:
-        grass.run_command('g.remove', flags = 'f', type = 'vect',
+        grass.run_command('g.remove', flags = 'f', type = 'vector',
                           name = tmp_hull, quiet = True)
 
 def main():
@@ -101,7 +101,7 @@ def main():
         # -> remove
         if exists:
             grass.run_command('g.remove', flags = 'f', quiet = True,
-                              type = 'rast', name = 'MASK')
+                              type = 'raster', name = 'MASK')
             grass.message(_("Raster MASK removed"))
         else:
             grass.fatal(_("No existing MASK to remove"))
@@ -113,7 +113,7 @@ def main():
             else:
                 grass.warning(_("MASK already exists and will be overwritten"))
                 grass.run_command('g.remove', flags = 'f', quiet = True,
-                                  type = 'rast', name = 'MASK')
+                                  type = 'raster', name = 'MASK')
         
         if raster:
             # check if input raster exists
