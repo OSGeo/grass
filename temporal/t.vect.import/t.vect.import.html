@@ -35,7 +35,7 @@ t.vect.export input=random_locations output=random_locations.tar.gz \
               compression=gzip
 
 t.vect.import input=random_locations.tar.gz output=new_random_locations \
-              base=new_map extrdir=/tmp
+              base=new_map directory=/tmp
 
 t.vect.list new_random_locations
 id|name|layer|mapset|start_time|end_time

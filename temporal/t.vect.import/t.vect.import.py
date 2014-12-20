@@ -89,7 +89,7 @@ def main():
     # Get the options
     input = options["input"]
     output = options["output"]
-    extrdir = options["extrdir"]
+    directory = options["directory"]
     title = options["title"]
     descr = options["description"]
     location = options["location"]
@@ -100,7 +100,7 @@ def main():
 
     tgis.init()
 
-    tgis.import_stds(input, output, extrdir, title, descr, location,
+    tgis.import_stds(input, output, directory, title, descr, location,
                      None, exp, overr, create, "stvds", base)
 
 if __name__ == "__main__":

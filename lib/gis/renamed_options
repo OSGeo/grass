@@ -385,6 +385,17 @@ r3.out.ascii|null:null_value
 # r3.out.vtk
 r3.out.vtk|elevscale:zscale
 #########################
+### Temporal module changes
+#########################
+# t.rast.import
+t.rast.import|extrdir:directory
+# t.rast.export
+t.rast.export|extrdir:directory
+# t.vect.import
+t.vect.import|extrdir:directory
+# t.vect.export
+t.vect.export|extrdir:directory
+#########################
 ### Vector module changes
 #########################
 # v.clean

@@ -10,11 +10,11 @@ Usage:
     input="temp_1950_2012@PERMANENT"
     output="/tmp/temp_1950_2012.tar.gz"
     compression="gzip"
-    workdir="/tmp"
+    directory="/tmp"
     where=None
     format_="GTiff"
     type_="strds"
-    tgis.export_stds(input, output, compression, workdir, where, format_, type_)
+    tgis.export_stds(input, output, compression, directory, where, format_, type_)
 
 
 (C) 2012-2013 by the GRASS Development Team
@@ -226,7 +226,7 @@ def _export_raster3d_maps(rows, tar, list_file, new_cwd, fs):
 ############################################################################
 
 
-def export_stds(input, output, compression, workdir, where, format_="pack",
+def export_stds(input, output, compression, directory, where, format_="pack",
                 type_="strds"):
     """Export space time datasets as tar archive with optional compression
 
@@ -242,7 +242,7 @@ def export_stds(input, output, compression, workdir, where, format_="pack",
               - "gzip" GNU zip compression
               - "bzip2" Bzip compression
 
-        :param workdir: The working directory used for extraction and packing
+        :param directory: The working directory used for extraction and packing
         :param where: The temporal WHERE SQL statement to select a subset
                       of maps from the space time dataset
         :param format_: The export format:
@@ -265,7 +265,7 @@ def export_stds(input, output, compression, workdir, where, format_="pack",
     old_cwd = os.getcwd()
 
     # Create the temporary directory and jump into it
-    new_cwd = tempfile.mkdtemp(dir=workdir)
+    new_cwd = tempfile.mkdtemp(dir=directory)
     os.chdir(new_cwd)
 
     if type_ == "strds":

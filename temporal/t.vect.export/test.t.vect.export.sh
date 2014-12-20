@@ -22,13 +22,13 @@ t.create --o type=stvds temporaltype=absolute output=soil_abs1 title="A test" de
 t.register -i type=vector input=soil_abs1 file="${n1}" start='2001-01-01' increment="1 months"
 
 # The first @test
-t.vect.export format=GML input=soil_abs1 output=stvds_export_gml.tar.bz2 compression=bzip2 workdir=/tmp
-t.vect.export format=GML input=soil_abs1 output=stvds_export_gml.tar.gz compression=gzip workdir=/tmp
-t.vect.export format=GML input=soil_abs1 output=stvds_export_gml.tar compression=no workdir=/tmp
+t.vect.export format=GML input=soil_abs1 output=stvds_export_gml.tar.bz2 compression=bzip2 directory=/tmp
+t.vect.export format=GML input=soil_abs1 output=stvds_export_gml.tar.gz compression=gzip directory=/tmp
+t.vect.export format=GML input=soil_abs1 output=stvds_export_gml.tar compression=no directory=/tmp
 
-t.vect.export format=pack input=soil_abs1 output=stvds_export_pack.tar.bz2 compression=bzip2 workdir=/tmp
-t.vect.export format=pack input=soil_abs1 output=stvds_export_pack.tar.gz compression=gzip workdir=/tmp
-t.vect.export format=pack input=soil_abs1 output=stvds_export_pack.tar compression=no workdir=/tmp
+t.vect.export format=pack input=soil_abs1 output=stvds_export_pack.tar.bz2 compression=bzip2 directory=/tmp
+t.vect.export format=pack input=soil_abs1 output=stvds_export_pack.tar.gz compression=gzip directory=/tmp
+t.vect.export format=pack input=soil_abs1 output=stvds_export_pack.tar compression=no directory=/tmp
 
 t.unregister type=vector file="${n1}"
 t.remove type=stvds input=soil_abs1
