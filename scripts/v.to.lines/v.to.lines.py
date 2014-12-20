@@ -95,31 +95,31 @@ def main():
                           option='add', input=input, out=input_tmp,
                           quiet=quiet)
     except CalledModuleError:
-        grass.run_command('g.remove', type='vect', name=input_tmp, quiet=quiet,
-                          flags='f')
+        grass.run_command('g.remove', flags='f', type='vector',
+                          name=input_tmp, quiet=quiet)
         grass.fatal(_("Error creating layer 2"))
     try:
         grass.run_command('v.db.addtable', map=input_tmp, layer="2",
                           columns="left integer,right integer",
                           quiet=quiet)
     except CalledModuleError:
-        grass.run_command('g.remove', type='vect', name=input_tmp, quiet=quiet,
-                          flags='f')
+        grass.run_command('g.remove', flags='f', type='vector',
+                          name=input_tmp, quiet=quiet)
         grass.fatal(_("Error creating new table for layer 2"))
     try:
         grass.run_command('v.to.db', map=input_tmp, option="sides",
                           columns="left,right", layer="2", quiet=quiet)
     except CalledModuleError:
-        grass.run_command('g.remove', type='vect', name=input_tmp, quiet=quiet,
-                          flags='f')
+        grass.run_command('g.remove', flags='f', type='vector',
+                          name=input_tmp, quiet=quiet)
         grass.fatal(_("Error populating new table for layer 2"))
     try:
         grass.run_command('v.type', input=input_tmp, output=out_type,
                           from_type='boundary', to_type='line',
                           quiet=quiet, layer="2")
     except CalledModuleError:
-        grass.run_command('g.remove', type='vect', name=remove_names,
-                          quiet=quiet, flags='f')
+        grass.run_command('g.remove', flags='f', type='vector',
+                          name=remove_names, quiet=quiet)
         grass.fatal(_("Error converting polygon to line"))
     report = grass.read_command('v.category', flags='g', input=out_type,
                                 option='report', quiet=quiet).split('\n')
@@ -134,8 +134,8 @@ def main():
                               type='centroid', layer=2, quiet=quiet,
                               cats='{mi}-{ma}'.format(mi=min_cat, ma=max_cat))
         except CalledModuleError:
-            grass.run_command('g.remove', type='vect', name=remove_names,
-                              quiet=quiet, flags='f')
+            grass.run_command('g.remove', flags='f', type='vector',
+                              name=remove_names, quiet=quiet)
             grass.fatal(_("Error removing centroids"))
 
     try:
@@ -144,8 +144,8 @@ def main():
             grass.run_command('v.db.droptable', map=out_type, layer=1,
                               flags='f', quiet=True)
         except CalledModuleError:
-            grass.run_command('g.remove', type='vect', name=remove_names,
-                              quiet=quiet, flags='f')
+            grass.run_command('g.remove', flags='f', type='vector',
+                              name=remove_names, quiet=quiet)
             grass.fatal(_("Error removing table from layer 1"))
     # TODO: when this except is happaning, it seems that never, so it seems wrong
     except:
@@ -155,14 +155,14 @@ def main():
                           output=output, layer="2,1", quiet=quiet,
                           overwrite=overwrite)
     except CalledModuleError:
-        grass.run_command('g.remove', type='vect', name=remove_names,
-                          quiet=quiet, flags='f')
+        grass.run_command('g.remove', flags='f', type='vector',
+                          name=remove_names, quiet=quiet)
         grass.fatal(_("Error adding categories"))
-    grass.run_command('g.remove', type='vect', name=remove_names, quiet=quiet,
-                      flags='f')
+    grass.run_command('g.remove', flags='f', type='vector',
+                      name=remove_names, quiet=quiet)
     if point:
-        grass.run_command('g.remove', type='vect', name=out_temp, quiet=quiet,
-                          flags='f')
+        grass.run_command('g.remove', flags='f', type='vector',
+                          name=out_temp, quiet=quiet)
 
 
 if __name__ == "__main__":

@@ -43,7 +43,7 @@ from grass.exceptions import CalledModuleError
 
 def cleanup():
     nuldev = file(os.devnull, 'w')
-    grass.run_command('g.remove', type='vect', name='%s_%s' % (output, tmp), quiet=True, flags='f', stderr=nuldev)
+    grass.run_command('g.remove', flags = 'f', type = 'vector', name = '%s_%s' % (output, tmp), quiet = True, stderr = nuldev)
 
 def main():
     global output, tmp

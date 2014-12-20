@@ -68,7 +68,7 @@ class TestSTRDSToRast3(TestCase):
         """Remove generated data"""
         #self.runModule("t.remove",  flags="rf",  type="strds",  
         #                           inputs="precip_i,precip_f,precip_d")
-        #self.runModule('g.remove', type='rast', pattern='prec_*', flags='f')
+        #self.runModule('g.remove', type='raster', pattern='prec_*', flags='f')
         self.del_temp_region()
 
     def otest_3m(self):
@@ -257,13 +257,13 @@ class TestSTRDSToRast3MultiGran(TestCase):
     def tearDown(self):
         """Remove generated data"""
         #self.runModule("t.remove",  flags="rf",  type="strds", inputs="precip_d")
-        #self.runModule('g.remove', type='rast', pattern='prec_*', flags='f')
+        #self.runModule('g.remove', type='raster', pattern='prec_*', flags='f')
         self.del_temp_region()
 
     def otest_years(self):
         """Convert STRDS into 3d raster map, granularity5 years"""
 
-        self.runModule("t.register", flags="i",  type="rast",  input="precip_d",  
+        self.runModule("t.register", flags="i",  type="raster",  input="precip_d",  
                        maps="prec_1d,prec_2d,prec_3d,prec_4d,prec_5d,prec_6d",  
                        start="2000-01-01", increment="5 years")
 
@@ -291,7 +291,7 @@ class TestSTRDSToRast3MultiGran(TestCase):
     def otest_months(self):
         """Convert STRDS into 3d raster map, granularity 6 months"""
 
-        self.runModule("t.register", flags="i",  type="rast",  input="precip_d",  
+        self.runModule("t.register", flags="i",  type="raster",  input="precip_d",  
                        maps="prec_1d,prec_2d,prec_3d,prec_4d,prec_5d,prec_6d",  
                        start="2000-01-01", increment="6 months")
 
@@ -319,7 +319,7 @@ class TestSTRDSToRast3MultiGran(TestCase):
     def otest_days(self):
         """Convert STRDS into 3d raster map, granularity 7 days"""
 
-        self.runModule("t.register", flags="i",  type="rast",  input="precip_d",  
+        self.runModule("t.register", flags="i",  type="raster",  input="precip_d",  
                        maps="prec_1d,prec_2d,prec_3d,prec_4d,prec_5d,prec_6d",  
                        start="2000-01-01", increment="7 days")
 
@@ -348,7 +348,7 @@ class TestSTRDSToRast3MultiGran(TestCase):
     def otest_hours(self):
         """Convert STRDS into 3d raster map, granularity 7 days"""
 
-        self.runModule("t.register", flags="i",  type="rast",  input="precip_d",  
+        self.runModule("t.register", flags="i",  type="raster",  input="precip_d",  
                        maps="prec_1d,prec_2d,prec_3d,prec_4d,prec_5d,prec_6d",  
                        start="2000-01-01", increment="3 hours")
 
@@ -377,7 +377,7 @@ class TestSTRDSToRast3MultiGran(TestCase):
     def otest_minutes(self):
         """Convert STRDS into 3d raster map, granularity 7 days"""
 
-        self.runModule("t.register", flags="i",  type="rast",  input="precip_d",  
+        self.runModule("t.register", flags="i",  type="raster",  input="precip_d",  
                        maps="prec_1d,prec_2d,prec_3d,prec_4d,prec_5d,prec_6d",  
                        start="2000-01-01", increment="17 minutes")
 

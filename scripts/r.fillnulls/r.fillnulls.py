@@ -101,9 +101,9 @@ mapset = None
 def cleanup():
     #delete internal mask and any TMP files:
     if len(tmp_vmaps) > 0:
-        grass.run_command('g.remove', quiet=True, flags='bf', type='vect', name=tmp_vmaps)
+        grass.run_command('g.remove', quiet = True, flags = 'fb', type = 'vector', name = tmp_vmaps)
     if len(tmp_rmaps) > 0:
-        grass.run_command('g.remove', quiet=True, flags='bf', type='rast', name=tmp_rmaps)
+        grass.run_command('g.remove', quiet = True, flags = 'fb', type = 'raster', name = tmp_rmaps)
     if usermask and mapset:
         if grass.find_file(usermask, mapset = mapset)['file']:
             grass.run_command('g.rename', quiet = True, raster = (usermask, 'MASK'), overwrite = True)
@@ -253,7 +253,7 @@ def main():
             
             # remove temporary map to not overfill disk
             try:
-                grass.run_command('g.remove', flags='fb', type='vect',
+                grass.run_command('g.remove', flags='fb', type='vector',
                                   name=holename + '_pol', quiet=quiet)
             except CalledModuleError:
                 grass.fatal(_("abandoned. Removing temporary maps, restoring user mask if needed:"))
@@ -360,7 +360,7 @@ def main():
                 pass
             try:
                 grass.run_command('g.remove', quiet=quiet,
-                                  flags='fb', type='rast',
+                                  flags='fb', type='raster',
                                   name=(holename,
                                         holename + '_grown',
                                         holename + '_edges',
@@ -373,7 +373,7 @@ def main():
                 pass
             try:
                 grass.run_command('g.remove', quiet=quiet, flags='fb',
-                                  type='vect', name=holename)
+                                  type='vector', name=holename)
             except CalledModuleError:
                 grass.fatal(_("abandoned. Removing temporary maps, restoring user mask if needed:"))
     
