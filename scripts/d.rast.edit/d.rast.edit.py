@@ -490,7 +490,7 @@ class Application(wx.App):
 
 	atexit.register(self.cleanup)
 
-	run('g.copy', rast = (self.inmap, self.outmap), overwrite = True)
+	run('g.copy', raster = (self.inmap, self.outmap), overwrite = True)
 	run('r.colors', map = self.outmap, rast = self.inmap)
 
     def cleanup(self):

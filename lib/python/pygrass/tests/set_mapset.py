@@ -60,7 +60,7 @@ def main():
     grasscore.run_command('db.login', user=opts.user)
     print("\n\nCopy the map from PERMANENT to user1...\n")
     grasscore.run_command('g.copy',
-                          vect="boundary_municp@PERMANENT,boundary_municp_pg",
+                          vector="boundary_municp@PERMANENT,boundary_municp_pg",
                           overwrite=True)
     print("\n\nBuild topology...\n")
     grasscore.run_command('v.build', map='boundary_municp_pg', overwrite=True)
@@ -75,7 +75,7 @@ def main():
                           database=os.path.join(db))
     print("\n\nCopy the map from PERMANENT to user1...\n")
     grasscore.run_command('g.copy',
-                          vect="boundary_municp@PERMANENT,boundary_municp_sqlite",
+                          vector="boundary_municp@PERMANENT,boundary_municp_sqlite",
                           overwrite=True)
     print("\n\nBuild topology...\n")
     grasscore.run_command('v.build', map='boundary_municp_sqlite', overwrite=True)

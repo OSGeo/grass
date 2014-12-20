@@ -452,7 +452,7 @@ class GRASSImporter:
                 try:
                     mask_copy = self.opt_output + self.original_mask_suffix
                     grass.run_command('g.copy', quiet=True,
-                                      rast=mask_copy + ',MASK')
+                                      raster=mask_copy + ',MASK')
                 except CalledModuleError:
                     grass.fatal(_('%s failed') % 'g.copy')
 
@@ -468,7 +468,7 @@ class GRASSImporter:
                 grass.run_command('g.remove',
                                   quiet = True,
                                   flags = 'fb',
-                                  type = 'rast',
+                                  type = 'raster',
                                   name = ','.join(maps))
         
         # delete environmental variable which overrides region 
@@ -506,7 +506,7 @@ class GRASSImporter:
                 try:
                     mask_copy = self.opt_output + self.original_mask_suffix
                     grass.run_command('g.copy', quiet=True,
-                                      rast='MASK,' + mask_copy)
+                                      raster='MASK,' + mask_copy)
                 except CalledModuleError:
                     grass.fatal(_('%s failed') % 'g.copy')
 
