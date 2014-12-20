@@ -35,10 +35,24 @@ Generate 20 random points with binary attribute (only 0 or 1):
 v.random output=binary_random npoints=20 zmin=0 zmax=1 column='binary INTEGER'
 </pre></div>
 
-Generate 20 random 3d points with height attribute [0:20] and specific random seed:
+Generate 20 random 3D points using a specific random seed:
 <div class="code"><pre>
-v.random seed=501 output=height_random n=20 zmin=0 zmax=1 column=height
+v.random seed=52 output=height_random npoints=40 zmin=110 zmax=170 -z
 </pre></div>
+
+<p>
+<center>
+<img src="vrandom_z.png"><br>
+Random points with different X, Y, and Z coordinates
+</center>
+
+<!--
+g.region rast=elev_lid792_1m
+...
+d.vect height_random color=60:60:60 icon=basic/point size=40 width=2 zcolor=gyr
+optipng -o5 map.png
+mv map.png vrandom_z.png
+-->
 
 Get 20 random samples from raster map:
 <div class="code"><pre>
