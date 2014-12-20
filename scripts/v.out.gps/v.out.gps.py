@@ -174,7 +174,7 @@ def main():
 
 	inmap = tmp_extr
     else:
-	#   g.copy "$GIS_OPT_INPUT,tmp_vogb_extr_$$"   # to get a copy of DB into local mapset
+	#   g.copy vector="$GIS_OPT_INPUT,tmp_vogb_extr_$$"   # to get a copy of DB into local mapset
 	#   INMAP="tmp_vogb_extr_$$"
 	inmap = input
 

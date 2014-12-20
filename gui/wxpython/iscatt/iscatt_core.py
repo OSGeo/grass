@@ -197,7 +197,7 @@ class Core:
             return 1
         
         return RunCommand("g.copy", 
-                          rast=cat_rast + ',' + rast_name,
+                          raster=cat_rast + ',' + rast_name,
                           getErrorMsg=True,
                           overwrite=True)
 
