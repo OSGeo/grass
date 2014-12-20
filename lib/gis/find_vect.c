@@ -1,5 +1,5 @@
 /*!
-  \file gis/find_vect.c
+  \file lib/gis/find_vect.c
   
   \brief GIS library - Find a vector map
   

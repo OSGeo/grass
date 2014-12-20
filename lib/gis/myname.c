@@ -1,5 +1,5 @@
 /*!
- * \file gis/myname.c
+ * \file lib/gis/myname.c
  *
  * \brief GIS Library - Database name functions.
  *

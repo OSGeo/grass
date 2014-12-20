@@ -1,9 +1,9 @@
 /*!
-   \file mapset_msc.c
+   \file lib/gis/mapset_msc.c
 
    \brief GIS library - Mapset user permission routines.
 
-   (C) 1999-2008 The GRASS development team
+   (C) 1999-2014 The GRASS development team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.

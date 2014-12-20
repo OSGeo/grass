@@ -1,17 +1,17 @@
 
-/**
- * \file writ_zeros.c
+/*!
+ * \file lib/gis/writ_zeros.c
  *
  * \brief GIS Library - Write zero functions.
  *
- * (C) 2001-2008 by the GRASS Development Team
+ * (C) 2001-2014 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
  *
  * \author GRASS GIS Development Team
  *
- * \date 1999-2008
+ * \date 1999-2014
  */
 
 #include <unistd.h>

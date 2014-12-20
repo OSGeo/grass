@@ -1,6 +1,6 @@
 
-/**
- * \file wind_in.c
+/*!
+ * \file lib/gis/wind_in.c
  *
  * \brief Point in region functions.
  *

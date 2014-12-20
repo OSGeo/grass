@@ -1,5 +1,5 @@
 /*!
- * \file gis/ls_filter.c
+ * \file lib/gis/ls_filter.c
  *
  * \brief GIS Library - Filename filter functions
  *

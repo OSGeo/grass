@@ -1,5 +1,5 @@
 /*!
- * \file gis/wind_format.c
+ * \file lib/gis/wind_format.c
  *
  * \brief GIS Library - Window formatting functions.
  *

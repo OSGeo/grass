@@ -1,5 +1,5 @@
 /*!
- * \file gis/area_ellipse.c
+ * \file lib/gis/area_ellipse.c
  *
  * \brief GIS Library - Ellipse area routines.
  *

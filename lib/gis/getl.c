@@ -1,5 +1,5 @@
 /*!
- * \file gis/getl.c
+ * \file lib/gis/getl.c
  *
  * \brief GIS Library - Get line of text from file
  *

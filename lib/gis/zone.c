@@ -1,5 +1,5 @@
 /*!
- * \file gis/zone.c
+ * \file lib/gis/zone.c
  *
  * \brief GIS Library - Cartographic zone functions.
  *

@@ -1,5 +1,5 @@
 /*!
-  \file gis/put_window.c
+  \file lib/gis/put_window.c
 
   \brief GIS Library - Modify window (i.e. GRASS region)
 

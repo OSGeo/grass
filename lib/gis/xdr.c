@@ -1,3 +1,15 @@
+/*!
+ * \file lib/gis/xdr.c
+ *
+ * \brief GIS Library - XDR related functions.
+ *
+ * (C) 2012-2014 by the GRASS Development Team
+ *
+ * This program is free software under the GNU General Public License
+ * (>=v2). Read the file COPYING that comes with GRASS for details.
+ *
+ * \author Glynn Clements
+ */
 
 #include <stdlib.h>
 #include <string.h>
