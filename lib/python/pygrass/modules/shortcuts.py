@@ -20,7 +20,7 @@ class MetaModule(object):
        'g.list'
        >>> g_list.required
        ['type']
-       >>> g_list.inputs.type = 'rast'
+       >>> g_list.inputs.type = 'raster'
        >>> g_list.stdout_ = -1
        >>> g_list.run()
        Module('g.list')

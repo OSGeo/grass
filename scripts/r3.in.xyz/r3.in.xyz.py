@@ -307,7 +307,7 @@ def main():
     grass.verbose(_("Assembling 3D cube ..."))
 
     #input order: lower most strata first
-    slices = grass.read_command('g.list', type='rast', sep=',',
+    slices = grass.read_command('g.list', type='raster', sep=',',
                                 pattern='tmp.r3xyz.%d.*' % os.getpid()).rstrip(os.linesep)
     grass.debug(slices)
 
