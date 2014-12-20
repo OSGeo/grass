@@ -348,7 +348,7 @@ class VNETManager:
 
         RunCommand("g.copy",
                     overwrite = True,
-                    vect = [self.results["vect_map"].GetVectMapName(), mapName])
+                    vector = [self.results["vect_map"].GetVectMapName(), mapName])
 
         if len(self.giface.GetLayerList().GetLayersByName(mapName)) == 0:
             # TODO: get rid of insert
@@ -429,14 +429,14 @@ class VNETAnalyses:
             mapName, mapSet = ParseMapStr(self.tmpTurnAn.GetVectMapName())
             cmdCopy = [ 
                         "g.copy",
-                        "vect=%s,%s" % (params["input"], mapName), 
+                        "vector=%s,%s" % (params["input"], mapName), 
                         "--overwrite",                             
                        ]
             cmdParams.append("input=" + self.tmpTurnAn.GetVectMapName())
 
             ret, msg, err = RunCommand('g.copy',
                                         getErrorMsg = True,
-                                        vect = "%s,%s" % (params['input'], mapName),
+                                        vector = "%s,%s" % (params['input'], mapName),
                                         read = True,
                                         overwrite = True)
 
@@ -514,14 +514,14 @@ class VNETAnalyses:
         mapName, mapSet = ParseMapStr(self.tmpTurnAn.GetVectMapName())
         cmdCopy = [ 
                     "g.copy",
-                    "vect=%s,%s" % (params['input'], mapName), 
+                    "vector=%s,%s" % (params['input'], mapName), 
                     "--overwrite",                             
                    ]
         cmdParams.append("input=" + self.tmpTurnAn.GetVectMapName())
 
         ret, msg, err = RunCommand('g.copy',
                                     getErrorMsg = True,
-                                    vect = "%s,%s" % (params['input'], mapName),
+                                    vector = "%s,%s" % (params['input'], mapName),
                                     read = True,
                                     overwrite = True)
 
