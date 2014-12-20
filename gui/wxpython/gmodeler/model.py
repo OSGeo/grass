@@ -709,11 +709,11 @@ class Model(object):
         rast, vect, rast3d, msg = self.GetIntermediateData()
         
         if rast:
-            log.RunCmd(['g.remove', '-f', 'type=rast', 'name=%s' %','.join(rast)])
+            log.RunCmd(['g.remove', '-f', 'type=raster', 'name=%s' %','.join(rast)])
         if rast3d:
-            log.RunCmd(['g.remove', '-f', 'type=rast3d', 'name=%s' %','.join(rast3d)])
+            log.RunCmd(['g.remove', '-f', 'type=raster_3d', 'name=%s' %','.join(rast3d)])
         if vect:
-            log.RunCmd(['g.remove', '-f', 'type=vect', 'name=%s' %','.join(vect)])
+            log.RunCmd(['g.remove', '-f', 'type=vector', 'name=%s' %','.join(vect)])
         
     def GetIntermediateData(self):
         """Get info about intermediate data"""

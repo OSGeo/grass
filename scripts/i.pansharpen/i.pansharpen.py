@@ -175,7 +175,7 @@ def main():
             pr.wait()
 
         # Cleanup
-        grass.run_command('g.remove', flags='f', quiet=True, type='rast',
+        grass.run_command('g.remove', flags='f', quiet=True, type='raster',
                           name='%s,%s,%s' % (panmatch1, panmatch2, panmatch3))
 
     elif sharpen == "ihs":
@@ -206,7 +206,7 @@ def main():
                           blue="%s_blue" % out)
 
         # Cleanup
-        grass.run_command('g.remove', flags='f', quiet=True, type='rast',
+        grass.run_command('g.remove', flags='f', quiet=True, type='raster',
                           name=panmatch)
 
     elif sharpen == "pca":
@@ -307,7 +307,7 @@ def main():
             pb.wait()
 
         # Cleanup
-        grass.run_command('g.remove', flags='f', quiet=True, type="rast",
+        grass.run_command('g.remove', flags='f', quiet=True, type="raster",
                           pattern='tmp%s*,%s' % (pid, panmatch))
 
     # Could add other sharpening algorithms here, e.g. wavelet transformation
@@ -349,7 +349,7 @@ def main():
                       input="{n}_red,{n}_blue,{n}_green".format(n=out))
 
     # Cleanup
-    grass.run_command('g.remove', flags="f", type="rast",
+    grass.run_command('g.remove', flags="f", type="raster",
                       pattern="tmp%s*" % pid, quiet=True)
 
 
@@ -432,7 +432,7 @@ def matchhist(original, target, matched):
     # create reclass of target from reclass rules file
     result = grass.core.find_file(matched, element='cell')
     if result['fullname']:
-        grass.run_command('g.remove', flags='f', quiet=True, type='rast',
+        grass.run_command('g.remove', flags='f', quiet=True, type='raster',
                           name=matched)
         grass.run_command('r.reclass', input=original, out=matched,
                           rules=outfile.name)

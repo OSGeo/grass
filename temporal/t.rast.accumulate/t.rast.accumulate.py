@@ -501,7 +501,7 @@ def main():
     # Remove empty maps
     if len(empty_maps) > 0:
         for map in empty_maps:
-            grass.run_command("g.remove", flags='f', type="rast", name=map.get_name(), quiet=True)
+            grass.run_command("g.remove", flags='f', type="raster", name=map.get_name(), quiet=True)
 
 if __name__ == "__main__":
     options, flags = grass.parser()

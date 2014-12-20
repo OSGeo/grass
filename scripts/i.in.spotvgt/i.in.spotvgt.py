@@ -180,7 +180,7 @@ def main():
     grass.message(_("Remapping digital numbers to NDVI..."))
     tmpname = "%s_%s" % (name, pid)
     grass.mapcalc("$tmpname = 0.004 * $name - 0.1", tmpname = tmpname, name = name)
-    grass.run_command('g.remove', type = 'rast', name = name, quiet = True, flags = 'f')
+    grass.run_command('g.remove', type = 'raster', name = name, quiet = True, flags = 'f')
     grass.run_command('g.rename', raster = (tmpname, name), quiet = True)
 
     # write cmd history:
