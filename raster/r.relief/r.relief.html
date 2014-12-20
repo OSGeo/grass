@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.shaded.relief</em> creates a raster shaded relief map based on 
+<em>r.relief</em> creates a raster shaded relief map based on 
 current resolution settings and on sun altitude, azimuth, and 
 z-exaggeration values entered by the user. If no output shademap 
 name is given, the new shaded relief map is named <em>&lt;input_map
@@ -37,14 +37,14 @@ the <b>scale</b> parameter.
 
 </ol>
 
-<p><em>r.shaded.relief</em> assigns a grey-scale color table to the new 
+<p><em>r.relief</em> assigns a grey-scale color table to the new 
 shaded relief map.
 
 <h2>NOTES</h2>
 
 To visually improve the result of shade maps from low resolution elevation
 models, use <em>r.resamp.interp</em> with bilinear or bicubic method to
-resample the DEM at higher resolution. <em>r.shaded.relief</em> is then
+resample the DEM at higher resolution. <em>r.relief</em> is then
 run on the resampled DEM.
 
 <h2>EXAMPLES</h2>
@@ -54,31 +54,43 @@ dataset location is used to hillshade the elevation map:
 
 <div class="code"><pre>
 g.region raster=elevation -p
-r.shaded.relief input=elevation output=elevation.shaded
+r.relief input=elevation output=elevation_shade
 </pre></div>
 
 <center>
-<img src="r_shaded_relief.png" alt="GRASS r.shaded.relief result (subset)" border=0>
+<img src="r_relief.png" alt="GRASS r.relief result (subset)" border=0>
 <br>
-<i>r.shaded.relief: shaded elevation map (subset)</i>
+<i>r.relief: shaded elevation map (subset)</i>
 </center>
+
+Color can be added later using <em><a href="r.shade.html">r.shade</a></em>:
+<div class="code"><pre>
+r.shade reliefmap=elevation_shade drapemap=elevation output=elevation_shaded
+</pre></div>
 
 <p>In Latitude-Longitude locations (or other non-metric locations), the
 <em>scale</em> factor has to be used:
 
 <div class="code"><pre>
 # Latitude-Longitude example
-r.shaded.relief input=srtm output=srtm.shaded scale=111120
+r.relief input=srtm output=srtm_shaded scale=111120
 </pre></div>
 
 <h2>SEE ALSO</h2>
 
-<p><!-- RGB version not ported to GRASS 6 (why?):
+<p>
+<!--
+  RGB version not ported to GRASS 6 (why?):
   <em><a href="shade.clr.sh.html">shade.clr.sh</a></em><br>
- -->
+  d.shade and r.shade probably cover most of the shade.clr functionality
+  however, it is not possible to create shade+color map in one step
+  delete this note when it is solved or if it is not considered as an issue
+-->
 <em>
+<a href="d.shade.html">d.shade</a>,
 <a href="d.his.html">d.his</a>,
 <a href="g.region.html">g.region</a>,
+<a href="r.shade.html">r.shade</a>,
 <a href="r.blend.html">r.blend</a>,
 <a href="r.colors.html">r.colors</a>,
 <a href="r.mapcalc.html">r.mapcalc</a>,
@@ -89,6 +101,6 @@ r.shaded.relief input=srtm output=srtm.shaded scale=111120
 
 Jim Westervelt, U.S. Army Construction Engineering Research Laboratory
 <br>
-Markus Metz: GRASS GIS 7- enhanced fast C version of r.shaded.relief
+Markus Metz: Enhanced fast C version of r.relief for GRASS GIS 7
 
 <p><i>Last changed: $Date$</i>

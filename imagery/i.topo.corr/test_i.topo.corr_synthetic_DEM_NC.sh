@@ -45,7 +45,7 @@ solarzenith=`echo $sunangleabovehorizon | awk '{printf "%f", 90. - $1}'`
 echo "Sun position ($DATETIME): solarzenith: $solarzenith, sunazimuth: $sunazimuth"
 
 # shade relief
-r.shaded.relief input=myplane_pyr output=myplane_pyr_shaded altitude=$sunangleabovehorizon azimuth=$sunazimuth
+r.relief input=myplane_pyr output=myplane_pyr_shaded altitude=$sunangleabovehorizon azimuth=$sunazimuth
 # show raw map as shaded map
 #d.mon wx0
 #sleep 5 # this is rather annoying
