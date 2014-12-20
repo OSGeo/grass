@@ -259,9 +259,9 @@ Vect_snap_lines_list_kdtree(struct Map_info *Map, const struct ilist *List_lines
     }
     G_percent(line_idx, List_lines->n_values, 2); /* finish it */
 
-    G_debug(0, "KD Tree depth: %d", (int)KDTree->root->depth);
+    G_debug(1, "KD Tree depth: %d", (int)KDTree->root->depth);
     kdtree_optimize(KDTree, 2);
-    G_debug(0, "KD Tree depth: %d", (int)KDTree->root->depth);
+    G_debug(1, "KD Tree depth: %d", (int)KDTree->root->depth);
 
     npoints = point - 1;
 
