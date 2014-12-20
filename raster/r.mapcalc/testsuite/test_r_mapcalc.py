@@ -73,7 +73,7 @@ class TestRandFunction(grass.gunittest.TestCase):
     def tearDownClass(cls):
         cls.del_temp_region()
         if cls.to_remove:
-            cls.runModule('g.remove', flags='f', type='rast',
+            cls.runModule('g.remove', flags='f', type='raster',
                 name=','.join(cls.to_remove))
 
     def rinfo_contains_number(self, raster, number):
@@ -178,7 +178,7 @@ class TestBasicOperations(grass.gunittest.TestCase):
     def tearDownClass(cls):
         cls.del_temp_region()
         if cls.to_remove:
-            cls.runModule('g.remove', flags='f', type='rast',
+            cls.runModule('g.remove', flags='f', type='raster',
                 name=','.join(cls.to_remove), verbose=True)
 
     def test_difference_of_the_same_map_double(self):

@@ -40,13 +40,13 @@ class Validation7x7Grid(TestCase):
         #First compute the groundwater flow after 500 seconds to have initial conditions
         self.assertModule("r.gwflow", flags="f", solver="cholesky", top="top_conf", bottom="bottom", phead="phead",\
          status="status", hc_x="hydcond", hc_y="hydcond", q="well", s="s",\
-         recharge="recharge", output="gwresult_conf", dt=500, type="confined", budget="water_budget",  overwrite=True)
+         recharge="recharge", output="gwresult_conf", dtime=500, type="confined", budget="water_budget",  overwrite=True)
 
         # loop over the timesteps each 500 seconds
         for i in range(20):
             self.assertModule("r.gwflow",  flags="f", solver="cholesky", top="top_conf", bottom="bottom", phead="gwresult_conf",\
              status="status", hc_x="hydcond", hc_y="hydcond", q="well", s="s",\
-             recharge="recharge", output="gwresult_conf", dt=500, type="confined", budget="water_budget",  overwrite=True)
+             recharge="recharge", output="gwresult_conf", dtime=500, type="confined", budget="water_budget",  overwrite=True)
 
         # Output of r.univar
         univar_string="""n=49
