@@ -406,7 +406,7 @@ class RDigitController(wx.EvtHandler):
         name = name.split('@')[0]
         backup = name + '_backupcopy_' + str(os.getpid())
         try:
-            gcore.run_command('g.copy', rast=[name, backup], quiet=True)
+            gcore.run_command('g.copy', raster=[name, backup], quiet=True)
         except CalledModuleError:
             raise ScriptError
 

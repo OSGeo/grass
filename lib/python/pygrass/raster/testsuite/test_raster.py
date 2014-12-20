@@ -15,7 +15,7 @@ class RasterRowTestCate(TestCase):
 
         cls.name = 'elevation'
         cls.tmp = 'tmp' + cls.name
-        g.copy(rast=[cls.name, cls.tmp], overwrite=True)
+        g.copy(raster=[cls.name, cls.tmp], overwrite=True)
 
     @classmethod
     def tearDownClass(cls):

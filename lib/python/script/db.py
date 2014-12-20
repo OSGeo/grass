@@ -28,7 +28,7 @@ def db_describe(table, **args):
     """Return the list of columns for a database table
     (interface to `db.describe -c`). Example:
 
-    >>> run_command('g.copy', vect='firestations,myfirestations')
+    >>> run_command('g.copy', vector='firestations,myfirestations')
     0
     >>> db_describe('myfirestations') # doctest: +ELLIPSIS
     {'nrows': 71, 'cols': [['cat', 'INTEGER', '20'], ... 'ncols': 22}
@@ -68,7 +68,7 @@ def db_table_exist(table, **args):
     If no driver or database are given, then default settings is used
     (check db_connection()).
 
-    >>> run_command('g.copy', vect='firestations,myfirestations')
+    >>> run_command('g.copy', vector='firestations,myfirestations')
     0
     >>> db_table_exist('myfirestations')
     True
@@ -121,7 +121,7 @@ def db_select(sql=None, filename=None, table=None, **args):
 
     Examples:
 
-    >>> run_command('g.copy', vect='firestations,myfirestations')
+    >>> run_command('g.copy', vector='firestations,myfirestations')
     0
     >>> db_select(sql = 'SELECT cat,CITY FROM myfirestations WHERE cat < 4')
     (('1', 'Morrisville'), ('2', 'Morrisville'), ('3', 'Apex'))
@@ -171,7 +171,7 @@ def db_table_in_vector(table):
     """Return the name of vector connected to the table.
     It returns None if no vectors are connected to the table.
 
-    >>> run_command('g.copy', vect='firestations,myfirestations')
+    >>> run_command('g.copy', vector='firestations,myfirestations')
     0
     >>> db_table_in_vector('myfirestations')
     ['myfirestations@user1']

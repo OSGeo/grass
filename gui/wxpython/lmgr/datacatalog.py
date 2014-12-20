@@ -388,13 +388,13 @@ class DataCatalogTree(LocationMapTree):
             label = _("Copying") + " " + string + " ..."
             self.showNotification.emit(message=label)
             if (self.GetItemText(self.copy_type)=='vector'):
-                pasted = RunCommand('g.copy', vect=string)
+                pasted = RunCommand('g.copy', vector=string)
                 node = 'vector'     
             elif (self.GetItemText(self.copy_type)=='raster'):
-                pasted = RunCommand('g.copy', rast=string)
+                pasted = RunCommand('g.copy', raster=string)
                 node = 'raster'
             else:
-                pasted = RunCommand('g.copy', rast3d=string)
+                pasted = RunCommand('g.copy', raster_3d=string)
                 node = 'raster_3d'
             if pasted == 0:
                 if self.selected_type == None:

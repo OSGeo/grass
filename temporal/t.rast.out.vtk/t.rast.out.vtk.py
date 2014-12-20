@@ -119,7 +119,7 @@ def main():
             if id is None:
                 id = null_map
 
-            grass.run_command("g.copy", rast="%s,%s" % (id, map_name),
+            grass.run_command("g.copy", raster="%s,%s" % (id, map_name),
                               overwrite=True)
             out_name = "%6.6i_%s.vtk" % (count, sp.base.get_name())
 
