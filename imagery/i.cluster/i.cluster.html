@@ -222,19 +222,24 @@ a LANDSAT subscene in North Carolina:
 g.region raster=lsat7_2002_10 -p
 
 # store VIZ, NIR, MIR into group/subgroup
-i.group group=my_lsat7_2002 subgroup=my_lsat7_2002 \
+i.group group=lsat7_2002 subgroup=lsat7_2002 \
   input=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70
 
 i.cluster group=my_lsat7_2002 subgroup=my_lsat7_2002 \
-  signaturefile=sig_clust_lsat2002 \
+  signaturefile=sig_cluster_lsat2002 \
   classes=10 report=rep_clust_lsat2002.txt
 </pre></div>
 
 To complete the unsupervised classification, <em>i.maxlik</em> is subsequently used.
+See example in its manual page.
 
 <h2>SEE ALSO</h2>
 
-The GRASS GIS 4 <em>
+<a href="http://grasswiki.osgeo.org/wiki/Image_processing">Image processing</a>
+and
+<a href="http://grasswiki.osgeo.org/wiki/Image_classification">Image classification</a>
+wiki pages and for historical reference also
+the GRASS GIS 4<em>
 <a href="http://grass.osgeo.org/gdp/imagery/grass4_image_processing.pdf">Image
 Processing manual</a></em>
 

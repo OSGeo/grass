@@ -83,19 +83,41 @@ a LANDSAT subscene (VIZ, NIR, MIR channels) in North Carolina
 (see <em><a href="i.cluster.html">i.cluster</a></em> manual page for the first part):
 
 <div class="code"><pre>
-i.maxlik group=my_lsat7_2002 subgroup=my_lsat7_2002 \
-  signaturefile=sig_clust_lsat2002 \
-  class=lsat7_2002_clust_classes reject=lsat7_2002_clust_classes.rej
+i.maxlik group=lsat7_2002 subgroup=lsat7_2002 \
+  signaturefile=sig_cluster_lsat2002 \
+  output=lsat7_2002_cluster_classes reject=lsat7_2002_cluster_reject
 
-# Visually check result
+# visually check result
 d.mon wx0
-d.rast.leg lsat7_2002_clust_classes
-d.rast.leg lsat7_2002_clust_classes.rej
+d.rast.leg lsat7_2002_cluster_classes
+d.rast.leg lsat7_2002_cluster_reject
+
+# see how many pixels were rejected at given levels
+r.report lsat7_2002_cluster_reject units=k,p
+
+# optionally, filter out pixels with high level of rejection
+# here we select 90% which is category 12
+r.mapcalc "lsat7_2002_cluster_classes_filtered = if(lsat7_2002_cluster_reject &lt; 12, lsat7_2002_cluster_classes, null())"
 </pre></div>
+
+<!--
+saved using d.mon wx0; d.rast lsat7_2002_cluster_classes; and save
+then trimmed using mogrify -trim *.png
+-->
+<p>
+<center>
+<img src="i_maxlik_classes.png"><br>
+Resulting raster with classified pixels
+</center>
+
 
 <h2>SEE ALSO</h2>
 
-The GRASS GIS 4 <em>
+<a href="http://grasswiki.osgeo.org/wiki/Image_processing">Image processing</a>
+and
+<a href="http://grasswiki.osgeo.org/wiki/Image_classification">Image classification</a>
+wiki pages and for historical reference also
+the GRASS GIS 4<em>
 <a href="http://grass.osgeo.org/gdp/imagery/grass4_image_processing.pdf">Image
 Processing manual</a></em>
 
