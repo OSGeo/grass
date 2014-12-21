@@ -8,17 +8,17 @@ from grass.gunittest.gutils import get_current_mapset
 from grass.gunittest.gmodules import SimpleModule
 
 # when used user1 must be replaced by current mapset
-REMOVE_RASTERS = """rast/test_map_0@user1
-rast/test_map_1@user1
-rast/test_map_2@user1
-rast/test_map_3@user1
-rast/test_map_4@user1
-rast/test_map_5@user1
-rast/test_map_6@user1
-rast/test_map_7@user1
-rast/test_map_8@user1
-rast/test_map_9@user1
-rast/test_two@user1
+REMOVE_RASTERS = """raster/test_map_0@user1
+raster/test_map_1@user1
+raster/test_map_2@user1
+raster/test_map_3@user1
+raster/test_map_4@user1
+raster/test_map_5@user1
+raster/test_map_6@user1
+raster/test_map_7@user1
+raster/test_map_8@user1
+raster/test_map_9@user1
+raster/test_two@user1
 """
 
 REMOVING_RASTERS_LOG = """Removing raster <test_map_0>
@@ -79,9 +79,9 @@ class GMRemoveTest(grass.gunittest.TestCase):
                               exclude="*_small")
         self.assertModule(module)
         self.assertMultiLineEqual(module.outputs.stdout,
-                                  'rast/test_apples@user1\n'
-                                  'rast/test_apples_big@user1\n'
-                                  'rast/test_oranges@user1\n'.replace(
+                                  'raster/test_apples@user1\n'
+                                  'raster/test_apples_big@user1\n'
+                                  'raster/test_oranges@user1\n'.replace(
                                       'user1', get_current_mapset()))
         module = SimpleModule('g.remove', type='raster',
                               pattern='test_{apples,oranges}{_small,_big,*}',

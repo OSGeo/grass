@@ -170,7 +170,7 @@ class TestProfileNCSPM(TestCase):
         self.assertMultiLineEqual(rprofile.outputs.stdout.strip(), output2.strip())
 
     def test_profile_region(self):
-        rprofile = SimpleModule('r.profile', input='elevation', null='nodata',
+        rprofile = SimpleModule('r.profile', input='elevation', null_value='nodata',
                                 coordinates=[644914, 224579, 644986,
                                              224627, 645091, 224549])
         self.assertModule(rprofile)

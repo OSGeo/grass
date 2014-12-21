@@ -340,6 +340,8 @@ r.out.vrml|exag:exaggeration
 r.param.scale|s_tol:slope_tol
 r.param.scale|c_tol:curvature_tol
 r.param.scale|exp:exponent
+# r.profile
+r.profile|null:null_value
 # r.random
 r.random|raster_output:raster
 r.random|vector_output:vector
