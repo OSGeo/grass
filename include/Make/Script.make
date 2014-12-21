@@ -39,7 +39,7 @@ install:
 		$(INSTALL_DATA) $(IMG)  $(INST_DIR)/docs/html/ ; \
 	fi
 	$(INSTALL_DATA) $(ARCH_DISTDIR)/docs/man/man1/$(PGM).1 $(INST_DIR)/docs/man/man1/
-	if [ -d "$(ETC)/$(PGM)" -a "$(ls -A $(ETC)/$(PGM))" ] ; then \
+	if [ -d "$(ETC)/$(PGM)" ] ; then \
 		cp -rL $(ETC)/$(PGM) $(INST_DIR)/etc/ ; \
 	fi
 
