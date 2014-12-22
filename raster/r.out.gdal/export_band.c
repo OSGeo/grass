@@ -237,11 +237,6 @@ int export_band(GDALDatasetH hMEMDS, int band,
 	Rast_get_fp_range_min_max(&sRange, &dfCellMin, &dfCellMax);
     }
 
-    /* suppress useless warnings */
-    CPLPushErrorHandler(CPLQuietErrorHandler);
-    GDALSetRasterColorInterpretation(hBand, GPI_RGB);
-    CPLPopErrorHandler();
-    
     sprintf(value, "GRASS GIS %s", GRASS_VERSION_NUMBER);
     GDALSetMetadataItem(hBand, "Generated_with", value, NULL);
 
