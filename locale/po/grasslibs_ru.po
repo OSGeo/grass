@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-02 17:10+0100\n"
+"POT-Creation-Date: 2014-12-22 13:06+0100\n"
 "PO-Revision-Date: 2009-01-27 22:58-0600\n"
 "Last-Translator: Maxim Dubinin <sim@gis-lab.info>\n"
 "Language-Team: Russian <grass-translations@lists.osgeo.org>\n"
@@ -80,19 +80,19 @@ msgstr ""
 msgid "Copy %s <%s> to current mapset as <%s>"
 msgstr "в текущем наборе (%s) файлов %s нет"
 
-#: ../lib/manage/do_copy.c:52
+#: ../lib/manage/do_copy.c:50
 #, fuzzy, c-format
 msgid "Unable to copy <%s> to current mapset as <%s>"
 msgstr "в текущем наборе (%s) файлов %s нет"
 
-#: ../lib/manage/do_copy.c:63 ../lib/manage/do_rename.c:87
+#: ../lib/manage/do_copy.c:61 ../lib/manage/do_rename.c:87
 #: ../lib/manage/do_rename.c:107 ../lib/manage/do_remove.c:89
 #: ../lib/manage/do_remove.c:109
 #, fuzzy, c-format
 msgid "%s is missing"
 msgstr "который отсутствует."
 
-#: ../lib/manage/do_copy.c:72
+#: ../lib/manage/do_copy.c:70
 #, c-format
 msgid "%s copied"
 msgstr ""
@@ -106,15 +106,15 @@ msgstr "%s завершен. %s"
 msgid "Raster"
 msgstr ""
 
-#: ../lib/manage/option.c:54
+#: ../lib/manage/option.c:55
 msgid "Vector"
 msgstr ""
 
-#: ../lib/manage/option.c:56
+#: ../lib/manage/option.c:57
 msgid "Region"
 msgstr ""
 
-#: ../lib/manage/option.c:58
+#: ../lib/manage/option.c:59
 msgid "Group"
 msgstr ""
 
@@ -1283,14 +1283,14 @@ msgid "Internal error: option or flag not found"
 msgstr ""
 
 #: ../lib/gis/parser_dependencies.c:165
-#, c-format
-msgid "%s or %s"
-msgstr ""
+#, fuzzy, c-format
+msgid "<%s> or <%s>"
+msgstr " "
 
 #: ../lib/gis/parser_dependencies.c:165
-#, c-format
-msgid "%s and %s"
-msgstr ""
+#, fuzzy, c-format
+msgid "<%s> and <%s>"
+msgstr "<%s> в наборе <%s>"
 
 #: ../lib/gis/parser_dependencies.c:196
 #, c-format
@@ -1299,7 +1299,7 @@ msgstr ""
 
 #: ../lib/gis/parser_dependencies.c:215
 #, c-format
-msgid "At least one of %s is required"
+msgid "At least one of the following options is required: %s"
 msgstr ""
 
 #: ../lib/gis/parser_dependencies.c:246
@@ -1332,7 +1332,7 @@ msgstr ""
 msgid "LOCATION <%s> not available"
 msgstr "Область << %s >> недоступна"
 
-#: ../lib/gis/worker.c:72
+#: ../lib/gis/worker.c:84
 msgid "Task already has a worker"
 msgstr ""
 
@@ -1421,7 +1421,7 @@ msgstr ""
 msgid "<%s> file not found for location <%s>"
 msgstr "Файл <%s> не найден для области <%s>"
 
-#: ../lib/gis/make_mapset.c:66 ../lib/init/grass.py:611
+#: ../lib/gis/make_mapset.c:66 ../lib/init/grass.py:606
 #, fuzzy, c-format, python-format
 msgid "Location <%s> doesn't exist"
 msgstr "%s: Полигон %d не существует"
@@ -2044,24 +2044,22 @@ msgstr "Невозможно определить имя программы"
 
 #: ../lib/gis/parser.c:850 ../lib/gis/parser.c:867
 #, fuzzy, c-format
-msgid "Sorry, <%c> is not a valid flag"
+msgid "%s: Sorry, <%c> is not a valid flag"
 msgstr "Извините, флаг <%c> неверен\n"
 
 #: ../lib/gis/parser.c:984
 #, fuzzy, c-format
-msgid "Sorry, <%s=> is ambiguous"
+msgid "%s: Sorry, <%s=> is ambiguous"
 msgstr "Извините, параметр <%s=> неоднозначен\n"
 
 #: ../lib/gis/parser.c:997
 #, c-format
-msgid ""
-"Please update the interface of the module: option <%s> has been renamed to <"
-"%s>"
+msgid "Please update the usage of <%s>: option <%s> has been renamed to <%s>"
 msgstr ""
 
 #: ../lib/gis/parser.c:1010
 #, fuzzy, c-format
-msgid "Sorry, <%s> is not a valid parameter"
+msgid "%s: Sorry, <%s> is not a valid parameter"
 msgstr "Извините, параметр <%s> неверен\n"
 
 #: ../lib/gis/parser.c:1018
@@ -3568,9 +3566,9 @@ msgid ""
 "Cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d"
 msgstr ""
 
-#: ../lib/cairodriver/raster.c:73 ../lib/cairodriver/raster.c:77
+#: ../lib/cairodriver/raster.c:109
 #, fuzzy
-msgid "Failed to create surface"
+msgid "Failed to create cairo surface"
 msgstr "Невозможно создать новый процесс"
 
 #: ../lib/cairodriver/graph.c:67
@@ -3578,32 +3576,32 @@ msgstr "Невозможно создать новый процесс"
 msgid "Unable to open display"
 msgstr "Невозможно открыть [%s]"
 
-#: ../lib/cairodriver/graph.c:82
+#: ../lib/cairodriver/graph.c:85
 #, fuzzy
 msgid "Unable to obtain visual"
 msgstr "Невозможно открыть файл %s"
 
-#: ../lib/cairodriver/graph.c:157
+#: ../lib/cairodriver/graph.c:160
 #, c-format
 msgid "Unknown file extension: %s"
 msgstr ""
 
-#: ../lib/cairodriver/graph.c:185
+#: ../lib/cairodriver/graph.c:190
 #, fuzzy, c-format
 msgid "cairo: collecting to file '%s'"
 msgstr "Ошибка закрытия g3d файла"
 
-#: ../lib/cairodriver/graph.c:187
+#: ../lib/cairodriver/graph.c:192
 #, c-format
 msgid "cairo: image size %dx%d"
 msgstr ""
 
-#: ../lib/cairodriver/graph.c:354
+#: ../lib/cairodriver/graph.c:371
 #, fuzzy
 msgid "Unknown Cairo surface type"
 msgstr "Неизвестный тип интерполяции"
 
-#: ../lib/cairodriver/graph.c:359
+#: ../lib/cairodriver/graph.c:376
 #, fuzzy
 msgid "Failed to initialize Cairo surface"
 msgstr "Невозможно инициализировать pj причину: %s"
@@ -4620,7 +4618,7 @@ msgid "Error computing map <%s>"
 msgstr "Ошибка открытия g3d слоя <%s>"
 
 #: ../lib/python/temporal/temporal_raster_base_algebra.py:653
-#: ../lib/python/temporal/temporal_algebra.py:2220
+#: ../lib/python/temporal/temporal_algebra.py:2212
 #, fuzzy, python-format
 msgid "%s map <%s> not found in GRASS spatial database"
 msgstr "Невозможно найти векторный слой <%s> в <%s>"
@@ -4677,38 +4675,38 @@ msgstr "Невозможно найти векторный слой <%s> в <%s>
 msgid "Removing un-needed or empty %s maps"
 msgstr "Имя исходной растровой карты"
 
-#: ../lib/python/temporal/temporal_algebra.py:1114
+#: ../lib/python/temporal/temporal_algebra.py:1106
 #, fuzzy, python-format
 msgid "Space time %s dataset <%s> not found"
 msgstr "Растровый слой <%s> не найден"
 
-#: ../lib/python/temporal/temporal_algebra.py:1141
-#: ../lib/python/temporal/temporal_algebra.py:1145
+#: ../lib/python/temporal/temporal_algebra.py:1133
+#: ../lib/python/temporal/temporal_algebra.py:1137
 #, python-format
 msgid ""
 "Wrong temporal type of space time dataset <"
 "%s>                                       <%s> time is required"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:1165
+#: ../lib/python/temporal/temporal_algebra.py:1157
 #, fuzzy
 msgid "Wrong type of input "
 msgstr "Невозможно закрыть исходный слой"
 
-#: ../lib/python/temporal/temporal_algebra.py:2039
+#: ../lib/python/temporal/temporal_algebra.py:2031
 #, python-format
 msgid ""
 "The resulting space time dataset type <%(a)s> is different from the "
 "requested type <%(b)s>"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:2045
+#: ../lib/python/temporal/temporal_algebra.py:2037
 msgid ""
 "Maps that should be registered in the resulting space time dataset have "
 "different types."
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:2226
+#: ../lib/python/temporal/temporal_algebra.py:2218
 #, python-format
 msgid ""
 "Wrong map type <%s> . TMAP only supports single maps that are registered in "
@@ -4809,7 +4807,7 @@ msgstr "Невозможно получить данные из таблицы <
 #: ../lib/python/script/core.py:283
 #, python-format
 msgid ""
-"To run the module add underscore at the end of the option <%s> to avoid "
+"To run the module <%s> add underscore at the end of the option <%s> to avoid "
 "conflict with Python keywords. Underscore at the beginning is depreciated in "
 "GRASS GIS 7.0 and will be removed in version 7.1."
 msgstr ""
@@ -4825,7 +4823,7 @@ msgstr ""
 
 #: ../lib/python/script/core.py:1099 ../lib/python/script/core.py:1164
 #, python-format
-msgid "Element type should be \"rast\" and not \"%s\""
+msgid "Element type should be \"raster\" and not \"%s\""
 msgstr ""
 
 #: ../lib/python/script/core.py:1319
@@ -5011,21 +5009,6 @@ msgstr "Векторный слой <%s> уже существует и буде
 msgid "Raster map <{0}> does not exists"
 msgstr "Таблица <%s> связанная с векторным слоем <%s> не существует"
 
-#: ../lib/python/pygrass/raster/__init__.py:547
-#, fuzzy, python-brace-format
-msgid "Mode type: {0} not supported."
-msgstr "тип данных OGR %d не поддерживается"
-
-#: ../lib/python/pygrass/raster/__init__.py:582
-#, fuzzy, python-brace-format
-msgid "Invalid type {0}"
-msgstr "Неправильное имя векторного слоя <%s>"
-
-#: ../lib/python/pygrass/raster/__init__.py:584
-#, fuzzy, python-brace-format
-msgid "Invalid size {0}"
-msgstr "Неправильное имя векторного слоя <%s>"
-
 #: ../lib/python/pygrass/errors.py:17
 msgid "The map is close!"
 msgstr ""
@@ -5034,12 +5017,12 @@ msgstr ""
 msgid "Vector doesn't contain points"
 msgstr ""
 
-#: ../lib/python/pygrass/vector/table.py:1026
+#: ../lib/python/pygrass/vector/table.py:1019
 #, python-format
 msgid "Deleting table <%s> which is attached to following map(s):"
 msgstr ""
 
-#: ../lib/python/pygrass/vector/table.py:1030
+#: ../lib/python/pygrass/vector/table.py:1023
 msgid "You must use the force flag to actually remove it. Exiting."
 msgstr ""
 
@@ -6098,11 +6081,11 @@ msgstr "Невозможно разместить временное изобр�
 msgid "GUI <%s> not supported in this version"
 msgstr "Запрашиваемый формат для этой версии не скомпилирован."
 
-#: ../lib/init/grass.py:499
+#: ../lib/init/grass.py:494
 msgid "Searched for a web browser, but none found"
 msgstr ""
 
-#: ../lib/init/grass.py:507
+#: ../lib/init/grass.py:502
 #, python-format
 msgid ""
 "\n"
@@ -6119,12 +6102,12 @@ msgid ""
 "      http://grass.osgeo.org\n"
 msgstr ""
 
-#: ../lib/init/grass.py:523
+#: ../lib/init/grass.py:518
 #, fuzzy
 msgid "Hit RETURN to continue"
 msgstr "нажмите RETURN для продолжения -->"
 
-#: ../lib/init/grass.py:552
+#: ../lib/init/grass.py:547
 msgid ""
 "The python command does not work as expected!\n"
 "Please check your GRASS_PYTHON environment variable.\n"
@@ -6134,7 +6117,7 @@ msgid ""
 "Hit RETURN to continue.\n"
 msgstr ""
 
-#: ../lib/init/grass.py:564
+#: ../lib/init/grass.py:559
 msgid ""
 "It appears that the X Windows system is not active.\n"
 "A graphical based user interface is not supported.\n"
@@ -6143,41 +6126,41 @@ msgid ""
 "Hit RETURN to continue"
 msgstr ""
 
-#: ../lib/init/grass.py:616
+#: ../lib/init/grass.py:611
 #, fuzzy, python-format
 msgid "ERROR: <%s> is not a valid GRASS location"
 msgstr "Извините, опция <%s> неверна\n"
 
-#: ../lib/init/grass.py:619
+#: ../lib/init/grass.py:614
 #, python-format
 msgid ""
 "Mapset <%s> doesn't exist in GRASS location <%s>. A new mapset can be "
 "created by '-c' switch."
 msgstr ""
 
-#: ../lib/init/grass.py:638
+#: ../lib/init/grass.py:633
 #, python-format
 msgid "Failed to create new location. The location <%s> already exists."
 msgstr ""
 
-#: ../lib/init/grass.py:670
+#: ../lib/init/grass.py:665
 msgid "Missing WIND file fixed"
 msgstr ""
 
-#: ../lib/init/grass.py:682
+#: ../lib/init/grass.py:677
 msgid ""
 "GISDBASE, LOCATION_NAME and MAPSET variables not set properly.\n"
 "Interactive startup needed."
 msgstr ""
 
-#: ../lib/init/grass.py:697
+#: ../lib/init/grass.py:692
 #, python-format
 msgid ""
 "Invalid user interface specified - <%s>. Use the --help option to see valid "
 "interface names."
 msgstr ""
 
-#: ../lib/init/grass.py:710
+#: ../lib/init/grass.py:705
 msgid ""
 "Error in GUI startup. If necessary, please report this error to the GRASS "
 "developers.\n"
@@ -6186,20 +6169,20 @@ msgid ""
 "Hit RETURN to continue..."
 msgstr ""
 
-#: ../lib/init/grass.py:720
+#: ../lib/init/grass.py:715
 msgid ""
 "Received EXIT message from GUI.\n"
 "GRASS is not started. Bye."
 msgstr ""
 
-#: ../lib/init/grass.py:723
+#: ../lib/init/grass.py:718
 #, fuzzy
 msgid ""
 "Invalid return code from GUI startup script.\n"
 "Please advise GRASS developers of this error."
 msgstr "Сообщите разработчикам GRASS об этой ошибке.\n"
 
-#: ../lib/init/grass.py:734
+#: ../lib/init/grass.py:729
 msgid ""
 "Error reading data path information from g.gisenv.\n"
 "GISDBASE=%(gisbase)s\n"
@@ -6209,46 +6192,46 @@ msgid ""
 "Check the <%s(file)> file."
 msgstr ""
 
-#: ../lib/init/grass.py:761
+#: ../lib/init/grass.py:756
 #, python-format
 msgid "Environmental variable '%s' already set, ignoring value '%s'"
 msgstr ""
 
-#: ../lib/init/grass.py:871
+#: ../lib/init/grass.py:866
 #, fuzzy, python-format
 msgid "Path '%s' doesn't exist"
 msgstr "%s: Полигон %d не существует"
 
-#: ../lib/init/grass.py:879
+#: ../lib/init/grass.py:874
 #, python-format
 msgid ""
 "%(user)s is currently running GRASS in selected mapset (file %(file)s "
 "found). Concurrent use not allowed."
 msgstr ""
 
-#: ../lib/init/grass.py:883
+#: ../lib/init/grass.py:878
 #, python-format
 msgid ""
 "Unable to properly access '%s'.\n"
 "Please notify system personel."
 msgstr ""
 
-#: ../lib/init/grass.py:898
+#: ../lib/init/grass.py:893
 #, fuzzy
 msgid "Building user fontcap..."
 msgstr "Построение графа..."
 
-#: ../lib/init/grass.py:943
+#: ../lib/init/grass.py:938
 #, python-format
 msgid "Unsupported shell <%(sh)s>: %(env)s"
 msgstr ""
 
-#: ../lib/init/grass.py:948
+#: ../lib/init/grass.py:943
 #, fuzzy
 msgid "The SHELL variable is not set"
 msgstr "GISRC - переменная не установлена"
 
-#: ../lib/init/grass.py:959
+#: ../lib/init/grass.py:954
 #, python-format
 msgid ""
 "Job file '%s' has been defined in the 'GRASS_BATCH_JOB' variable but not "
@@ -6257,106 +6240,106 @@ msgid ""
 "Use 'unset GRASS_BATCH_JOB' to disable batch job processing."
 msgstr ""
 
-#: ../lib/init/grass.py:964
+#: ../lib/init/grass.py:959
 #, python-format
 msgid "Change file permission to 'executable' for '%s'"
 msgstr ""
 
-#: ../lib/init/grass.py:966
+#: ../lib/init/grass.py:961
 #, python-format
 msgid "Executing '%s' ..."
 msgstr ""
 
-#: ../lib/init/grass.py:971
+#: ../lib/init/grass.py:966
 #, python-format
 msgid "Execution of '%s' finished."
 msgstr ""
 
-#: ../lib/init/grass.py:977
+#: ../lib/init/grass.py:972
 #, python-format
 msgid "GRASS GUI should be <%s>"
 msgstr ""
 
-#: ../lib/init/grass.py:1006
+#: ../lib/init/grass.py:1001
 #, python-format
 msgid "Welcome to GRASS %s"
 msgstr ""
 
-#: ../lib/init/grass.py:1025
+#: ../lib/init/grass.py:1020
 msgid "GRASS homepage:"
 msgstr ""
 
-#: ../lib/init/grass.py:1026
+#: ../lib/init/grass.py:1021
 msgid "This version running through:"
 msgstr ""
 
-#: ../lib/init/grass.py:1028
+#: ../lib/init/grass.py:1023
 #, fuzzy
 msgid "Help is available with the command:"
 msgstr "Нет справки для команды [%s]\n"
 
-#: ../lib/init/grass.py:1029
+#: ../lib/init/grass.py:1024
 msgid "See the licence terms with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1032
+#: ../lib/init/grass.py:1027
 msgid "If required, restart the GUI with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1034
+#: ../lib/init/grass.py:1029
 msgid "Start the GUI with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1036
+#: ../lib/init/grass.py:1031
 msgid "When ready to quit enter:"
 msgstr ""
 
-#: ../lib/init/grass.py:1126
+#: ../lib/init/grass.py:1121
 msgid "2D and 3D raster MASKs present"
 msgstr ""
 
-#: ../lib/init/grass.py:1127
+#: ../lib/init/grass.py:1122
 msgid "Raster MASK present"
 msgstr ""
 
-#: ../lib/init/grass.py:1128
+#: ../lib/init/grass.py:1123
 msgid "3D raster MASK present"
 msgstr ""
 
-#: ../lib/init/grass.py:1167
+#: ../lib/init/grass.py:1162
 #, fuzzy, python-format
 msgid "Failed to start shell '%s'"
 msgstr "Невозможен запуск драйвера <%s>"
 
-#: ../lib/init/grass.py:1172
+#: ../lib/init/grass.py:1167
 #, python-format
 msgid "Batch job '%s' (defined in GRASS_BATCH_JOB variable) was executed."
 msgstr ""
 
-#: ../lib/init/grass.py:1173 ../lib/init/grass.py:1178
+#: ../lib/init/grass.py:1168 ../lib/init/grass.py:1173
 msgid "Goodbye from GRASS GIS"
 msgstr ""
 
-#: ../lib/init/grass.py:1176
+#: ../lib/init/grass.py:1171
 #, fuzzy
 msgid "Done."
 msgstr "нет"
 
-#: ../lib/init/grass.py:1183
+#: ../lib/init/grass.py:1178
 #, fuzzy
 msgid "Cleaning up temporary files..."
 msgstr "Невозможно открыть временный файл"
 
-#: ../lib/init/grass.py:1227
+#: ../lib/init/grass.py:1222
 #, fuzzy, python-format
 msgid "Parameter <%s> not supported"
 msgstr "тип данных OGR %d не поддерживается"
 
-#: ../lib/init/grass.py:1349
+#: ../lib/init/grass.py:1344
 msgid "Flag -e required also flag -c"
 msgstr ""
 
-#: ../lib/init/grass.py:1392
+#: ../lib/init/grass.py:1387
 #, python-format
 msgid ""
 "Unable to start GRASS. You can:\n"
@@ -6366,15 +6349,15 @@ msgid ""
 "path/to/location/mapset`)"
 msgstr ""
 
-#: ../lib/init/grass.py:1402
+#: ../lib/init/grass.py:1397
 msgid "Creating new GRASS GIS location/mapset..."
 msgstr ""
 
-#: ../lib/init/grass.py:1404
+#: ../lib/init/grass.py:1399
 msgid "Starting GRASS GIS..."
 msgstr ""
 
-#: ../lib/init/grass.py:1462
+#: ../lib/init/grass.py:1457
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr ""
@@ -6425,7 +6408,7 @@ msgstr "Невозможно прочитать диапазон растров�
 
 #: ../lib/raster3d/close.c:62
 #, fuzzy, c-format
-msgid "Unable to move temp raster map <%s> to 3d data file <%s>"
+msgid "Unable to move temp raster map <%s> to 3D raster map <%s>"
 msgstr "Невозможно скопировать векторный слой <%s> в <%s>"
 
 #: ../lib/raster3d/close.c:79
@@ -7258,8 +7241,8 @@ msgstr ""
 msgid "Area merging failed"
 msgstr "Загрузка не выполнена"
 
-#: ../lib/vector/Vlib/write_nat.c:265 ../lib/vector/Vlib/write_nat.c:362
-#: ../lib/vector/Vlib/write_nat.c:595 ../lib/vector/Vlib/read_sfa.c:50
+#: ../lib/vector/Vlib/write_nat.c:267 ../lib/vector/Vlib/write_nat.c:364
+#: ../lib/vector/Vlib/write_nat.c:597 ../lib/vector/Vlib/read_sfa.c:50
 #: ../lib/vector/Vlib/read.c:173 ../lib/vector/Vlib/write.c:233
 #: ../lib/vector/Vlib/write.c:278 ../lib/vector/Vlib/write.c:319
 #: ../lib/vector/Vlib/write_sfa.c:155 ../lib/vector/Vlib/write_sfa.c:204
@@ -7270,7 +7253,7 @@ msgstr "Загрузка не выполнена"
 msgid "Attempt to access feature with invalid id (%d)"
 msgstr "Попытка удалить уже удаленный объект"
 
-#: ../lib/vector/Vlib/write_nat.c:271 ../lib/vector/Vlib/write_nat.c:601
+#: ../lib/vector/Vlib/write_nat.c:273 ../lib/vector/Vlib/write_nat.c:603
 #: ../lib/vector/Vlib/read_sfa.c:56 ../lib/vector/Vlib/write_pg.c:241
 #: ../lib/vector/Vlib/write_pg.c:396 ../lib/vector/Vlib/write_pg.c:2570
 #: ../lib/vector/Vlib/write_pg.c:2667 ../lib/vector/Vlib/read_pg.c:337
@@ -7279,17 +7262,17 @@ msgstr "Попытка удалить уже удаленный объект"
 msgid "Attempt to access dead feature %d"
 msgstr "Попытка удалить уже удаленный объект"
 
-#: ../lib/vector/Vlib/write_nat.c:368
+#: ../lib/vector/Vlib/write_nat.c:370
 #, fuzzy, c-format
 msgid "Attempt to access alive feature %d"
 msgstr "Попытка восстановить нормальный объект"
 
-#: ../lib/vector/Vlib/write_nat.c:510 ../lib/vector/Vlib/write_nat.c:546
+#: ../lib/vector/Vlib/write_nat.c:512 ../lib/vector/Vlib/write_nat.c:548
 #, c-format
 msgid "%s: Area %d does not exist"
 msgstr "%s: Полигон %d не существует"
 
-#: ../lib/vector/Vlib/write_nat.c:700
+#: ../lib/vector/Vlib/write_nat.c:702
 #, fuzzy, c-format
 msgid "Attempt to access dead area %d"
 msgstr "Попытка удалить уже удаленный объект"
@@ -7581,7 +7564,7 @@ msgid "Arc field < 1"
 msgstr "поле Arc < 1"
 
 #: ../lib/vector/Vlib/net.c:186 ../lib/vector/Vlib/net.c:203
-#: ../lib/vector/Vlib/net.c:363 ../lib/vector/Vlib/ascii.c:730
+#: ../lib/vector/Vlib/net.c:363 ../lib/vector/Vlib/ascii.c:737
 #, c-format
 msgid "Column <%s> not found in table <%s>"
 msgstr "Поле <%s> не найдено в таблице <%s>"
@@ -8704,61 +8687,61 @@ msgstr ""
 msgid "Unknown keyword <%s> in vector head"
 msgstr "Неизвестное ключевое слово %s в заголовке вектора"
 
-#: ../lib/vector/Vlib/ascii.c:486
+#: ../lib/vector/Vlib/ascii.c:484
 #, fuzzy, c-format
 msgid "Unknown type of column <%s>, export cancelled"
 msgstr "Неизвестный тип поля (поле <%s>)"
 
-#: ../lib/vector/Vlib/ascii.c:610
+#: ../lib/vector/Vlib/ascii.c:617
 #, fuzzy, c-format
 msgid "Unknown feature type %d"
 msgstr "Неизвестный тип вектора."
 
-#: ../lib/vector/Vlib/ascii.c:645
+#: ../lib/vector/Vlib/ascii.c:652
 #, fuzzy, c-format
 msgid "Unable to select record from table <%s> (key %s, column %s)"
 msgstr "Невозможно выбрать записи из таблицы <%s> (ключ %s, где %s)"
 
-#: ../lib/vector/Vlib/ascii.c:675
+#: ../lib/vector/Vlib/ascii.c:682
 #, c-format
 msgid "Feature has more categories. Only one category (%d) is exported."
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:692
+#: ../lib/vector/Vlib/ascii.c:699
 #, fuzzy, c-format
 msgid "Cannot select attributes for cat = %d"
 msgstr "Невозможно выбрать атрибуты"
 
-#: ../lib/vector/Vlib/ascii.c:698
+#: ../lib/vector/Vlib/ascii.c:705
 #, fuzzy
 msgid "Unable to fetch data from table"
 msgstr "Невозможно получить данные из таблицы <%s>"
 
-#: ../lib/vector/Vlib/ascii.c:732
+#: ../lib/vector/Vlib/ascii.c:739
 #, fuzzy, c-format
 msgid "Column <%s>: unsupported data type"
 msgstr "Nviz_new_map_obj(): тип данных не поддерживается"
 
-#: ../lib/vector/Vlib/ascii.c:813
+#: ../lib/vector/Vlib/ascii.c:820
 #, fuzzy
 msgid "Unknown format"
 msgstr "неизвестный оператор"
 
-#: ../lib/vector/Vlib/ascii.c:823
+#: ../lib/vector/Vlib/ascii.c:830
 msgid "Topology not available, unable to process areas"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:836
+#: ../lib/vector/Vlib/ascii.c:843
 #, fuzzy, c-format
 msgid "Unable to get boundary of area id %d"
 msgstr "Невозможно перезаписать объект %d"
 
-#: ../lib/vector/Vlib/ascii.c:848
+#: ../lib/vector/Vlib/ascii.c:855
 #, fuzzy, c-format
 msgid "Unable to get boundary of isle id %d (area id %d)"
 msgstr "Невозможно установить категорию %d для (id объекта %d)"
 
-#: ../lib/vector/Vlib/ascii.c:860
+#: ../lib/vector/Vlib/ascii.c:867
 #, c-format
 msgid ""
 "%d features without category skipped. To export also features without "
@@ -9332,6 +9315,18 @@ msgstr "Объект %d без геометрии проигнорирован"
 #, fuzzy, c-format
 msgid "Unable to create field <%s>"
 msgstr "Невозможно создать таблицу <%s>"
+
+#, fuzzy
+#~ msgid "Mode type: {0} not supported."
+#~ msgstr "тип данных OGR %d не поддерживается"
+
+#, fuzzy
+#~ msgid "Invalid type {0}"
+#~ msgstr "Неправильное имя векторного слоя <%s>"
+
+#, fuzzy
+#~ msgid "Invalid size {0}"
+#~ msgstr "Неправильное имя векторного слоя <%s>"
 
 #~ msgid "Either a standard color name or R:G:B triplet"
 #~ msgstr "Либо стандратное название цвета, либо триплет R:G:B"

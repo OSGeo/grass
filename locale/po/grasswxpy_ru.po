@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-02 17:10+0100\n"
+"POT-Creation-Date: 2014-12-22 13:06+0100\n"
 "PO-Revision-Date: 2008-10-10 19:44-0600\n"
 "Last-Translator: Maxim Dubinin <sim@gis-lab.info>\n"
 "Language-Team: Russian <grass-translations@lists.osgeo.org>\n"
@@ -218,14 +218,14 @@ msgstr "Загрузить заново"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:836
 #: ../gui/wxpython/location_wizard/wizard.py:776
-#: ../gui/wxpython/gui_core/gselect.py:1933
+#: ../gui/wxpython/gui_core/gselect.py:1951
 #, fuzzy
 msgid "No"
 msgstr "С:"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:838
 #: ../gui/wxpython/location_wizard/wizard.py:776
-#: ../gui/wxpython/gui_core/gselect.py:1935
+#: ../gui/wxpython/gui_core/gselect.py:1953
 msgid "Yes"
 msgstr ""
 
@@ -238,7 +238,7 @@ msgstr "Общие настройки"
 #: ../gui/wxpython/gmodeler/preferences.py:47
 #: ../gui/wxpython/animation/dialogs.py:285
 #: ../gui/wxpython/animation/dialogs.py:1487
-#: ../gui/wxpython/vdigit/preferences.py:122
+#: ../gui/wxpython/vdigit/preferences.py:124
 #: ../gui/wxpython/gui_core/preferences.py:246
 msgid "General"
 msgstr "Общие"
@@ -378,16 +378,16 @@ msgstr "Свойства слоя"
 #: ../gui/wxpython/wxplot/dialogs.py:692
 #: ../gui/wxpython/wxplot/dialogs.py:1137 ../gui/wxpython/psmap/dialogs.py:355
 #: ../gui/wxpython/vdigit/preferences.py:62
-#: ../gui/wxpython/gui_core/preferences.py:95
+#: ../gui/wxpython/gui_core/preferences.py:96
 msgid "Close dialog and ignore changes"
 msgstr "Закрыть диалоговое окно и игнорировать изменения"
 
 #: ../gui/wxpython/gmodeler/preferences.py:549
 #: ../gui/wxpython/vnet/dialogs.py:1476
 #: ../gui/wxpython/animation/dialogs.py:329
-#: ../gui/wxpython/gui_core/gselect.py:1442
-#: ../gui/wxpython/gui_core/gselect.py:1452
-#: ../gui/wxpython/gui_core/gselect.py:1453
+#: ../gui/wxpython/gui_core/gselect.py:1460
+#: ../gui/wxpython/gui_core/gselect.py:1470
+#: ../gui/wxpython/gui_core/gselect.py:1471
 #: ../gui/wxpython/gui_core/widgets.py:1081
 msgid "Name:"
 msgstr ""
@@ -593,7 +593,7 @@ msgid "Choose model file"
 msgstr "Выбрать файл DXF:"
 
 #: ../gui/wxpython/gmodeler/frame.py:396 ../gui/wxpython/gmodeler/frame.py:440
-#: ../gui/wxpython/lmgr/frame.py:504
+#: ../gui/wxpython/lmgr/frame.py:505
 msgid "GRASS Model File (*.gxm)|*.gxm"
 msgstr ""
 
@@ -622,7 +622,7 @@ msgstr "файл POINTS <%s> сохранен"
 msgid "Choose file to save current model"
 msgstr "Выберите файл для сохранения текущего проекта"
 
-#: ../gui/wxpython/gmodeler/frame.py:458 ../gui/wxpython/iclass/frame.py:1014
+#: ../gui/wxpython/gmodeler/frame.py:458 ../gui/wxpython/iclass/frame.py:1015
 msgid "File already exists"
 msgstr ""
 
@@ -687,7 +687,7 @@ msgstr "Ждите, загружаются данные..."
 msgid "Writing current settings to model file failed."
 msgstr "Сохранение текущих настроек в файл проекта не удалось (%s)."
 
-#: ../gui/wxpython/gmodeler/frame.py:960 ../gui/wxpython/lmgr/frame.py:1418
+#: ../gui/wxpython/gmodeler/frame.py:960 ../gui/wxpython/lmgr/frame.py:1444
 #, fuzzy, python-format
 msgid "Unable to open file <%s> for writing."
 msgstr "Невозможно открыть файл <%s> для чтения."
@@ -1051,7 +1051,6 @@ msgstr "Вес:"
 #: ../gui/wxpython/wxplot/dialogs.py:685
 #: ../gui/wxpython/wxplot/dialogs.py:1134 ../gui/wxpython/vnet/dialogs.py:1186
 #: ../gui/wxpython/iscatt/dialogs.py:357 ../gui/wxpython/gcp/manager.py:2407
-#: ../gui/wxpython/gui_core/preferences.py:90
 msgid "Apply changes for the current session"
 msgstr "Применить изменения для существующей сессии"
 
@@ -1064,7 +1063,7 @@ msgstr "Применить изменения для существующей с
 #: ../gui/wxpython/wxplot/dialogs.py:690
 #: ../gui/wxpython/wxplot/dialogs.py:1136 ../gui/wxpython/vnet/dialogs.py:1188
 #: ../gui/wxpython/iscatt/dialogs.py:359 ../gui/wxpython/gcp/manager.py:2409
-#: ../gui/wxpython/gui_core/preferences.py:92
+#: ../gui/wxpython/gui_core/preferences.py:93
 msgid ""
 "Apply and save changes to user settings file (default for next sessions)"
 msgstr ""
@@ -1107,7 +1106,7 @@ msgid "Line color"
 msgstr "Цвет линии"
 
 #: ../gui/wxpython/wxplot/dialogs.py:878
-#: ../gui/wxpython/vdigit/preferences.py:134
+#: ../gui/wxpython/vdigit/preferences.py:136
 msgid "Line width"
 msgstr "Ширина линии"
 
@@ -2121,11 +2120,11 @@ msgstr "Укажите базу данных GRASS и название обла�
 #: ../gui/wxpython/animation/dialogs.py:967
 #: ../gui/wxpython/animation/dialogs.py:990 ../gui/wxpython/nviz/tools.py:483
 #: ../gui/wxpython/gui_core/dialogs.py:2057
-#: ../gui/wxpython/gui_core/gselect.py:1081
-#: ../gui/wxpython/gui_core/gselect.py:1392
-#: ../gui/wxpython/gui_core/gselect.py:1405
-#: ../gui/wxpython/gui_core/gselect.py:1444
-#: ../gui/wxpython/gui_core/gselect.py:1467
+#: ../gui/wxpython/gui_core/gselect.py:1098
+#: ../gui/wxpython/gui_core/gselect.py:1410
+#: ../gui/wxpython/gui_core/gselect.py:1423
+#: ../gui/wxpython/gui_core/gselect.py:1462
+#: ../gui/wxpython/gui_core/gselect.py:1485
 #: ../gui/wxpython/gui_core/forms.py:1518
 #: ../gui/wxpython/gui_core/forms.py:1582
 msgid "Browse"
@@ -2974,7 +2973,7 @@ msgstr "Отрисовать"
 msgid "Reason"
 msgstr ""
 
-#: ../gui/wxpython/core/gcmd.py:149 ../gui/wxpython/lmgr/frame.py:2203
+#: ../gui/wxpython/core/gcmd.py:149 ../gui/wxpython/lmgr/frame.py:2230
 #: ../gui/wxpython/gis_set.py:587 ../gui/wxpython/gis_set.py:623
 msgid "Message"
 msgstr "Сообщение"
@@ -3232,11 +3231,11 @@ msgstr ""
 "\n"
 "Подробности: %(detail)s"
 
-#: ../gui/wxpython/core/settings.py:1129
+#: ../gui/wxpython/core/settings.py:1135
 msgid "Unable to set "
 msgstr "Невозможно установить"
 
-#: ../gui/wxpython/core/settings.py:1165 ../gui/wxpython/core/settings.py:1175
+#: ../gui/wxpython/core/settings.py:1171 ../gui/wxpython/core/settings.py:1181
 #, fuzzy, python-format
 msgid "Unable to parse settings '%s'"
 msgstr "Невозможно обработать команду %s"
@@ -3634,7 +3633,7 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:1315 ../gui/wxpython/nviz/tools.py:1098
 #: ../gui/wxpython/nviz/tools.py:1976 ../gui/wxpython/nviz/tools.py:2024
-#: ../gui/wxpython/menustrings.py:173 ../gui/wxpython/menustrings.py:1163
+#: ../gui/wxpython/menustrings.py:172 ../gui/wxpython/menustrings.py:1162
 #: ../gui/wxpython/menustrings.py:2019
 msgid "Delete"
 msgstr "Удалить"
@@ -3699,8 +3698,8 @@ msgid "list of categories (e.g. 1,3,5-7)"
 msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:1727 ../gui/wxpython/nviz/tools.py:789
-#: ../gui/wxpython/nviz/tools.py:2400 ../gui/wxpython/menustrings.py:324
-#: ../gui/wxpython/menustrings.py:1235
+#: ../gui/wxpython/nviz/tools.py:2400 ../gui/wxpython/menustrings.py:323
+#: ../gui/wxpython/menustrings.py:1234
 msgid "Mask"
 msgstr "Маскировать"
 
@@ -3769,7 +3768,7 @@ msgid "Size and style"
 msgstr "Стиль линии"
 
 #: ../gui/wxpython/psmap/dialogs.py:1954
-#: ../gui/wxpython/vdigit/preferences.py:84
+#: ../gui/wxpython/vdigit/preferences.py:86
 #: ../gui/wxpython/gcp/manager.py:2433
 msgid "Symbology"
 msgstr "Символизация"
@@ -4232,8 +4231,8 @@ msgid "Compute convergence"
 msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:4526 ../gui/wxpython/psmap/toolbars.py:100
-#: ../gui/wxpython/vdigit/preferences.py:536
-#: ../gui/wxpython/gui_core/gselect.py:2114
+#: ../gui/wxpython/vdigit/preferences.py:538
+#: ../gui/wxpython/gui_core/gselect.py:2132
 msgid "Point"
 msgstr "Точка"
 
@@ -4669,7 +4668,7 @@ msgid "Scale bar"
 msgstr "Добавить слой"
 
 #: ../gui/wxpython/psmap/toolbars.py:102
-#: ../gui/wxpython/vdigit/preferences.py:537
+#: ../gui/wxpython/vdigit/preferences.py:539
 msgid "Line"
 msgstr "Линия"
 
@@ -4718,22 +4717,22 @@ msgid ""
 "Perhaps your current printer is not set correctly?"
 msgstr ""
 
-#: ../gui/wxpython/mapdisp/main.py:140
+#: ../gui/wxpython/mapdisp/main.py:143
 #, fuzzy, python-format
 msgid "Unsupported command %s."
 msgstr "Тип слоя не поддерживается '%s'"
 
-#: ../gui/wxpython/mapdisp/main.py:202
+#: ../gui/wxpython/mapdisp/main.py:205
 #, fuzzy, python-format
 msgid "Unable to read cmdfile '%(cmd)s'. Details: %(det)s"
 msgstr "Невозможно прочитать коды EPSG: %s"
 
-#: ../gui/wxpython/mapdisp/main.py:442
+#: ../gui/wxpython/mapdisp/main.py:448
 #, fuzzy, python-format
 msgid "Starting map display <%s>..."
 msgstr "Создать новый дисплей"
 
-#: ../gui/wxpython/mapdisp/main.py:453
+#: ../gui/wxpython/mapdisp/main.py:459
 #, fuzzy, python-format
 msgid "Stopping map display <%s>..."
 msgstr "Создать новый дисплей"
@@ -4774,7 +4773,7 @@ msgid "GRASS GIS - Map display"
 msgstr "GRASS GIS - Окно слоя"
 
 #: ../gui/wxpython/mapdisp/frame.py:248 ../gui/wxpython/lmgr/frame.py:95
-#: ../gui/wxpython/lmgr/frame.py:1036 ../gui/wxpython/gui_core/ghelp.py:100
+#: ../gui/wxpython/lmgr/frame.py:1062 ../gui/wxpython/gui_core/ghelp.py:100
 #: ../gui/wxpython/gui_core/ghelp.py:810
 #, fuzzy
 msgid "Unable to get GRASS version\n"
@@ -4837,13 +4836,12 @@ msgstr ""
 
 #: ../gui/wxpython/mapdisp/frame.py:471
 #: ../gui/wxpython/rlisetup/sampling_frame.py:99
-#: ../gui/wxpython/mapswipe/frame.py:272 ../gui/wxpython/iclass/frame.py:293
+#: ../gui/wxpython/mapswipe/frame.py:272 ../gui/wxpython/iclass/frame.py:294
 #: ../gui/wxpython/gcp/mapdisplay.py:248
 msgid "Map Toolbar"
 msgstr "Панель инструментов карты"
 
 #: ../gui/wxpython/mapdisp/frame.py:480 ../gui/wxpython/mapdisp/toolbars.py:99
-#: ../gui/wxpython/vdigit/toolbars.py:916
 msgid "Digitize"
 msgstr "Оцифровать"
 
@@ -5139,7 +5137,7 @@ msgid "Click mouse to unzoom"
 msgstr "Уменьшите карту щелчком мыши"
 
 #: ../gui/wxpython/mapdisp/toolbars.py:88 ../gui/wxpython/animation/data.py:45
-#: ../gui/wxpython/lmgr/frame.py:358
+#: ../gui/wxpython/lmgr/frame.py:359
 msgid "3D view"
 msgstr ""
 
@@ -5268,8 +5266,8 @@ msgstr "Регион"
 msgid "Sample units"
 msgstr "Получить значения с трансект"
 
-#: ../gui/wxpython/rlisetup/wizard.py:739 ../gui/wxpython/menustrings.py:329
-#: ../gui/wxpython/menustrings.py:1240
+#: ../gui/wxpython/rlisetup/wizard.py:739 ../gui/wxpython/menustrings.py:328
+#: ../gui/wxpython/menustrings.py:1239
 msgid "Moving window"
 msgstr "Плавающее окно"
 
@@ -5490,7 +5488,7 @@ msgid "Select sample area "
 msgstr "Цвет каркаса:"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1514
-#: ../gui/wxpython/rlisetup/functions.py:107
+#: ../gui/wxpython/rlisetup/functions.py:108
 msgid "The polygon seems to have 0 areas"
 msgstr ""
 
@@ -5667,8 +5665,8 @@ msgid "Create a new configuration file"
 msgstr "Создать новую область?"
 
 #: ../gui/wxpython/rlisetup/frame.py:136 ../gui/wxpython/lmgr/layertree.py:424
-#: ../gui/wxpython/menustrings.py:171 ../gui/wxpython/menustrings.py:920
-#: ../gui/wxpython/menustrings.py:1161 ../gui/wxpython/menustrings.py:1831
+#: ../gui/wxpython/menustrings.py:170 ../gui/wxpython/menustrings.py:920
+#: ../gui/wxpython/menustrings.py:1160 ../gui/wxpython/menustrings.py:1831
 msgid "Rename"
 msgstr "Переименовать"
 
@@ -6044,8 +6042,8 @@ msgid "File format:"
 msgstr "Координаты"
 
 #: ../gui/wxpython/animation/dialogs.py:925
-#: ../gui/wxpython/gui_core/gselect.py:1403
-#: ../gui/wxpython/gui_core/gselect.py:1465
+#: ../gui/wxpython/gui_core/gselect.py:1421
+#: ../gui/wxpython/gui_core/gselect.py:1483
 #, fuzzy
 msgid "Directory:"
 msgstr "Направление"
@@ -6247,7 +6245,7 @@ msgstr "Удалить слой"
 msgid "Directory {t} not removed."
 msgstr "Слой <%s> не найден."
 
-#: ../gui/wxpython/animation/g.gui.animation.py:87
+#: ../gui/wxpython/animation/g.gui.animation.py:88
 #, python-format
 msgid "%s=, %s=, %s= and %s= are mutually exclusive."
 msgstr ""
@@ -6379,7 +6377,7 @@ msgstr ""
 msgid "Exporting animation, please wait..."
 msgstr "Ректифицировать изображение или растр"
 
-#: ../gui/wxpython/animation/nviztask.py:42 ../gui/wxpython/lmgr/frame.py:1190
+#: ../gui/wxpython/animation/nviztask.py:42 ../gui/wxpython/lmgr/frame.py:1216
 #, fuzzy, python-format
 msgid ""
 "Reading workspace file <%s> failed.\n"
@@ -7026,7 +7024,7 @@ msgid "Set options..."
 msgstr "Установить настройки"
 
 #: ../gui/wxpython/nviz/tools.py:1292 ../gui/wxpython/nviz/tools.py:1466
-#: ../gui/wxpython/vdigit/preferences.py:129
+#: ../gui/wxpython/vdigit/preferences.py:131
 msgid "Display"
 msgstr "Дисплей"
 
@@ -7282,8 +7280,8 @@ msgstr "Добавить слой"
 msgid "None"
 msgstr ""
 
-#: ../gui/wxpython/nviz/tools.py:4587 ../gui/wxpython/menustrings.py:484
-#: ../gui/wxpython/menustrings.py:1395
+#: ../gui/wxpython/nviz/tools.py:4587 ../gui/wxpython/menustrings.py:485
+#: ../gui/wxpython/menustrings.py:1396
 msgid "Plane"
 msgstr "Плоскость"
 
@@ -7615,8 +7613,8 @@ msgstr "Слой <%s> не найден."
 msgid "Import raster data"
 msgstr "Импортировать растровый слой"
 
-#: ../gui/wxpython/lmgr/layertree.py:58 ../gui/wxpython/menustrings.py:158
-#: ../gui/wxpython/menustrings.py:1148
+#: ../gui/wxpython/lmgr/layertree.py:58 ../gui/wxpython/menustrings.py:157
+#: ../gui/wxpython/menustrings.py:1147
 #: ../gui/wxpython/gui_core/dialogs.py:1840
 #, fuzzy
 msgid "Link external raster data"
@@ -7640,15 +7638,15 @@ msgstr "Выбрать шрифт"
 msgid "Import vector data"
 msgstr "Импорт векторного слоя"
 
-#: ../gui/wxpython/lmgr/layertree.py:66 ../gui/wxpython/menustrings.py:160
-#: ../gui/wxpython/menustrings.py:1150
+#: ../gui/wxpython/lmgr/layertree.py:66 ../gui/wxpython/menustrings.py:159
+#: ../gui/wxpython/menustrings.py:1149
 #: ../gui/wxpython/gui_core/dialogs.py:1834
 #, fuzzy
 msgid "Link external vector data"
 msgstr "Основные векторные метаданные"
 
-#: ../gui/wxpython/lmgr/layertree.py:68 ../gui/wxpython/menustrings.py:83
-#: ../gui/wxpython/menustrings.py:1073
+#: ../gui/wxpython/lmgr/layertree.py:68 ../gui/wxpython/menustrings.py:82
+#: ../gui/wxpython/menustrings.py:1072
 #, fuzzy
 msgid "Unpack vector map"
 msgstr "Векторные слои участков"
@@ -7928,7 +7926,7 @@ msgstr "(используйте двойной щелчок мыши для ус
 msgid "Please wait, updating data..."
 msgstr "Загрузка обновление данных, пожалуйста подождите ..."
 
-#: ../gui/wxpython/lmgr/layertree.py:1644 ../gui/wxpython/lmgr/frame.py:2091
+#: ../gui/wxpython/lmgr/layertree.py:1644 ../gui/wxpython/lmgr/frame.py:2118
 msgid "opacity:"
 msgstr ""
 
@@ -7962,31 +7960,31 @@ msgstr "Панель инструментов векторизации"
 msgid "3D view Toolbar"
 msgstr "Панель инструментов Nviz"
 
-#: ../gui/wxpython/lmgr/frame.py:261 ../gui/wxpython/lmgr/frame.py:1455
+#: ../gui/wxpython/lmgr/frame.py:262 ../gui/wxpython/lmgr/frame.py:1481
 #, fuzzy
 msgid "Rename Map Display"
 msgstr "Дисплей"
 
-#: ../gui/wxpython/lmgr/frame.py:289
+#: ../gui/wxpython/lmgr/frame.py:290
 #, fuzzy
 msgid "Map layers"
 msgstr "Слои карты"
 
-#: ../gui/wxpython/lmgr/frame.py:300
+#: ../gui/wxpython/lmgr/frame.py:301
 #, fuzzy
 msgid "Command console"
 msgstr "Операция завершена"
 
-#: ../gui/wxpython/lmgr/frame.py:317
+#: ../gui/wxpython/lmgr/frame.py:318
 msgid "Search modules"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:324
+#: ../gui/wxpython/lmgr/frame.py:325
 #: ../gui/wxpython/gui_core/preferences.py:292
 msgid "Python shell"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:397
+#: ../gui/wxpython/lmgr/frame.py:398
 #, python-format
 msgid ""
 "Location <%s> created.\n"
@@ -7994,250 +7992,264 @@ msgid ""
 "Do you want to switch to the new location?"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:400
+#: ../gui/wxpython/lmgr/frame.py:401
 #, fuzzy
 msgid "Switch to new location?"
 msgstr "Создать новую область?"
 
-#: ../gui/wxpython/lmgr/frame.py:416 ../gui/wxpython/lmgr/frame.py:913
+#: ../gui/wxpython/lmgr/frame.py:417 ../gui/wxpython/lmgr/frame.py:914
 #, python-format
 msgid ""
 "Current location is <%(loc)s>.\n"
 "Current mapset is <%(mapset)s>."
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:422 ../gui/wxpython/gis_set.py:492
+#: ../gui/wxpython/lmgr/frame.py:423 ../gui/wxpython/gis_set.py:492
 msgid "Do you want to set the default region extents and resolution now?"
 msgstr "Вы хотите установить охват и разрешение региона сейчас?"
 
-#: ../gui/wxpython/lmgr/frame.py:424 ../gui/wxpython/gis_set.py:491
+#: ../gui/wxpython/lmgr/frame.py:425 ../gui/wxpython/gis_set.py:491
 #, python-format
 msgid "Location <%s> created"
 msgstr "Область <%s> создана"
 
-#: ../gui/wxpython/lmgr/frame.py:502
+#: ../gui/wxpython/lmgr/frame.py:503
 #, fuzzy
 msgid "Choose model to run"
 msgstr "Выберите проекцию"
 
-#: ../gui/wxpython/lmgr/frame.py:560 ../gui/wxpython/lmgr/frame.py:2162
+#: ../gui/wxpython/lmgr/frame.py:561 ../gui/wxpython/lmgr/frame.py:2189
 #, fuzzy
 msgid "Do you want to save changes in the workspace?"
 msgstr "Сохранить изменения в векторном слое <%s>?"
 
-#: ../gui/wxpython/lmgr/frame.py:562 ../gui/wxpython/lmgr/frame.py:2164
+#: ../gui/wxpython/lmgr/frame.py:563 ../gui/wxpython/lmgr/frame.py:2191
 #, fuzzy
 msgid "Do you want to store current settings to workspace file?"
 msgstr "Проект не пуст. Сохранить текущие настройки в файл проекта?"
 
-#: ../gui/wxpython/lmgr/frame.py:570
+#: ../gui/wxpython/lmgr/frame.py:571
 #, fuzzy, python-format
 msgid "Close Map Display %s"
 msgstr "GRASS GIS дисплей слоя: "
 
-#: ../gui/wxpython/lmgr/frame.py:645
+#: ../gui/wxpython/lmgr/frame.py:646
 #, python-format
 msgid ""
 "Command '%s' not yet implemented in the WxGUI. Try adding it as a command "
 "layer instead."
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:806 ../gui/wxpython/lmgr/frame.py:1697
+#: ../gui/wxpython/lmgr/frame.py:807 ../gui/wxpython/lmgr/frame.py:1724
 msgid "Selected map layer is not vector."
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:811
+#: ../gui/wxpython/lmgr/frame.py:812
 #, fuzzy
 msgid "Editing is allowed only for vector maps from the current mapset."
 msgstr "Создать топологию для векторного слоя GRASS"
 
-#: ../gui/wxpython/lmgr/frame.py:835
+#: ../gui/wxpython/lmgr/frame.py:836
 #, fuzzy
 msgid "Choose script file to run"
 msgstr "Выберите исходную папку"
 
-#: ../gui/wxpython/lmgr/frame.py:837
+#: ../gui/wxpython/lmgr/frame.py:838
 msgid "Python script (*.py)|*.py|Bash script (*.sh)|*.sh"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:848
+#: ../gui/wxpython/lmgr/frame.py:849
 #, fuzzy, python-format
 msgid "Script file '%s' doesn't exist. Operation canceled."
 msgstr ""
 "Необходимо как минимум %d точек привязки. Операция не может быть выполнена."
 
-#: ../gui/wxpython/lmgr/frame.py:855
+#: ../gui/wxpython/lmgr/frame.py:856
 #, python-format
 msgid ""
 "Script <%s> is not executable. Do you want to set the permissions that "
 "allows you to run this script (note that you must be the owner of the file)?"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:860
+#: ../gui/wxpython/lmgr/frame.py:861
 #, fuzzy
 msgid "Set permission?"
 msgstr "Установить регион"
 
-#: ../gui/wxpython/lmgr/frame.py:869
+#: ../gui/wxpython/lmgr/frame.py:870
 #, fuzzy
 msgid "Unable to set permission. Operation canceled."
 msgstr "Некорректное значение координаты. Операция отменена."
 
-#: ../gui/wxpython/lmgr/frame.py:880
+#: ../gui/wxpython/lmgr/frame.py:881
 #, python-format
 msgid ""
 "Directory '%s' is not defined in GRASS_ADDON_PATH. Do you want add this "
 "directory to GRASS_ADDON_PATH?"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:883
+#: ../gui/wxpython/lmgr/frame.py:884
 msgid "Update Addons path?"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:889
+#: ../gui/wxpython/lmgr/frame.py:890
 #, python-format
 msgid "Launching script '%s'..."
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:901
+#: ../gui/wxpython/lmgr/frame.py:902
 #, fuzzy
 msgid "No location/mapset provided. Operation canceled."
 msgstr "Не выбран слой. Операция прервана."
 
-#: ../gui/wxpython/lmgr/frame.py:920 ../gui/wxpython/gis_set.py:849
+#: ../gui/wxpython/lmgr/frame.py:921 ../gui/wxpython/gis_set.py:849
 msgid "Enter name for new mapset:"
 msgstr "Введите имя для нового набора:"
 
-#: ../gui/wxpython/lmgr/frame.py:921 ../gui/wxpython/gis_set.py:479
-#: ../gui/wxpython/gis_set.py:850 ../gui/wxpython/menustrings.py:236
+#: ../gui/wxpython/lmgr/frame.py:922 ../gui/wxpython/gis_set.py:479
+#: ../gui/wxpython/gis_set.py:850 ../gui/wxpython/menustrings.py:235
 msgid "Create new mapset"
 msgstr "Создать новый набор"
 
-#: ../gui/wxpython/lmgr/frame.py:927 ../gui/wxpython/lmgr/frame.py:948
+#: ../gui/wxpython/lmgr/frame.py:928 ../gui/wxpython/lmgr/frame.py:949
 #, fuzzy
 msgid "No mapset provided. Operation canceled."
 msgstr "Не выбран слой. Операция прервана."
 
-#: ../gui/wxpython/lmgr/frame.py:936 ../gui/wxpython/lmgr/frame.py:955
+#: ../gui/wxpython/lmgr/frame.py:937 ../gui/wxpython/lmgr/frame.py:956
 #, fuzzy, python-format
 msgid "Current mapset is <%s>."
 msgstr "Изменить текущий набор."
 
-#: ../gui/wxpython/lmgr/frame.py:973
+#: ../gui/wxpython/lmgr/frame.py:978
 #, python-format
 msgid ""
 "Working directory changed to:\n"
 "\"%s\""
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:987
+#: ../gui/wxpython/lmgr/frame.py:985
 #, fuzzy
 msgid "Changes current working directory for this GUI."
 msgstr "Изменить рабочую среду"
 
-#: ../gui/wxpython/lmgr/frame.py:989
+#: ../gui/wxpython/lmgr/frame.py:987
 #, fuzzy
 msgid "Usage: cd [directory]"
 msgstr "Выберите исходную папку"
 
-#: ../gui/wxpython/lmgr/frame.py:1001
+#: ../gui/wxpython/lmgr/frame.py:988
+msgid "Without parameters it opens a dialog."
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:992
+msgid ""
+"If ~ (tilde) is present as the first directory on the path, it is replaced "
+"by user's home directory."
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:1006
+msgid "More than one parameter provided."
+msgstr ""
+
+#: ../gui/wxpython/lmgr/frame.py:1027
 #, fuzzy
 msgid "Choose a working directory"
 msgstr "Выберите исходную папку"
 
-#: ../gui/wxpython/lmgr/frame.py:1045
+#: ../gui/wxpython/lmgr/frame.py:1071
 msgid "System Info"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1060
+#: ../gui/wxpython/lmgr/frame.py:1086
 #, fuzzy
 msgid "GRASS version"
 msgstr "Вход в сессию GRASS"
 
-#: ../gui/wxpython/lmgr/frame.py:1060 ../gui/wxpython/gui_core/ghelp.py:114
+#: ../gui/wxpython/lmgr/frame.py:1086 ../gui/wxpython/gui_core/ghelp.py:114
 #, fuzzy
 msgid "unknown version"
 msgstr "Неизвестно"
 
-#: ../gui/wxpython/lmgr/frame.py:1061
+#: ../gui/wxpython/lmgr/frame.py:1087
 #, fuzzy
 msgid "GRASS SVN Revision"
 msgstr "Проекция:"
 
-#: ../gui/wxpython/lmgr/frame.py:1062 ../gui/wxpython/gui_core/ghelp.py:152
+#: ../gui/wxpython/lmgr/frame.py:1088 ../gui/wxpython/gui_core/ghelp.py:152
 msgid "Build Date"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1063
+#: ../gui/wxpython/lmgr/frame.py:1089
 msgid "Build Platform"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1068
+#: ../gui/wxpython/lmgr/frame.py:1094
 msgid "Platform"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1126
+#: ../gui/wxpython/lmgr/frame.py:1152
 #, fuzzy
 msgid ""
 "Current workspace is not empty. Do you want to store current settings to "
 "workspace file?"
 msgstr "Проект не пуст. Сохранить текущие настройки в файл проекта?"
 
-#: ../gui/wxpython/lmgr/frame.py:1129
+#: ../gui/wxpython/lmgr/frame.py:1155
 #, fuzzy
 msgid "Create new workspace?"
 msgstr "Создать файл рабочей области"
 
-#: ../gui/wxpython/lmgr/frame.py:1155
+#: ../gui/wxpython/lmgr/frame.py:1181
 msgid "Choose workspace file"
 msgstr "Выберите файл проекта"
 
-#: ../gui/wxpython/lmgr/frame.py:1156 ../gui/wxpython/lmgr/frame.py:1353
+#: ../gui/wxpython/lmgr/frame.py:1182 ../gui/wxpython/lmgr/frame.py:1379
 msgid "GRASS Workspace File (*.gxw)|*.gxw"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1194 ../gui/wxpython/lmgr/frame.py:1330
+#: ../gui/wxpython/lmgr/frame.py:1220 ../gui/wxpython/lmgr/frame.py:1356
 msgid "Please wait, loading workspace..."
 msgstr "Загрузка проекта, пожалуйста подождите ..."
 
-#: ../gui/wxpython/lmgr/frame.py:1314
+#: ../gui/wxpython/lmgr/frame.py:1340
 msgid "Choose GRC file to load"
 msgstr "Выберите загружаемый файл GRC"
 
-#: ../gui/wxpython/lmgr/frame.py:1315
+#: ../gui/wxpython/lmgr/frame.py:1341
 msgid "Old GRASS Workspace File (*.grc)|*.grc"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1352
+#: ../gui/wxpython/lmgr/frame.py:1378
 msgid "Choose file to save current workspace"
 msgstr "Выберите файл для сохранения текущего проекта"
 
-#: ../gui/wxpython/lmgr/frame.py:1367 ../gui/wxpython/lmgr/frame.py:1383
+#: ../gui/wxpython/lmgr/frame.py:1393 ../gui/wxpython/lmgr/frame.py:1409
 #, python-format
 msgid "Workspace file <%s> already exists. Do you want to overwrite this file?"
 msgstr "Файл проекта <%s> уже существует. Перезаписать этот файл?"
 
-#: ../gui/wxpython/lmgr/frame.py:1369 ../gui/wxpython/lmgr/frame.py:1386
+#: ../gui/wxpython/lmgr/frame.py:1395 ../gui/wxpython/lmgr/frame.py:1412
 #: ../gui/wxpython/menustrings.py:10
 msgid "Save workspace"
 msgstr "Сохранить проект"
 
-#: ../gui/wxpython/lmgr/frame.py:1407
+#: ../gui/wxpython/lmgr/frame.py:1433
 #, fuzzy
 msgid "Writing current settings to workspace file failed."
 msgstr "Сохранение текущих настроек в файл проекта не удалось (%s)."
 
-#: ../gui/wxpython/lmgr/frame.py:1454
+#: ../gui/wxpython/lmgr/frame.py:1480
 #, fuzzy
 msgid "Enter new name:"
 msgstr "Введите имя для нового набора:"
 
-#: ../gui/wxpython/lmgr/frame.py:1460
+#: ../gui/wxpython/lmgr/frame.py:1486
 #, fuzzy, python-brace-format
 msgid "GRASS GIS {version} Map Display: {name} - Location: {loc}"
 msgstr "GRASS GIS дисплей слоя: "
 
-#: ../gui/wxpython/lmgr/frame.py:1539
+#: ../gui/wxpython/lmgr/frame.py:1566
 #, python-format
 msgid ""
 "Unable to launch \"Supervised Classification Tool\".\n"
@@ -8245,28 +8257,28 @@ msgid ""
 "Reason: %s"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:1579
+#: ../gui/wxpython/lmgr/frame.py:1606
 #, fuzzy
 msgid "Unable to start Timeline Tool."
 msgstr "Невозможно вставить новую запись."
 
-#: ../gui/wxpython/lmgr/frame.py:1807
+#: ../gui/wxpython/lmgr/frame.py:1834
 #, fuzzy
 msgid "Add selected map layers into layer tree"
 msgstr "Добавить импортированные слои в содержание"
 
-#: ../gui/wxpython/lmgr/frame.py:1841 ../gui/wxpython/lmgr/frame.py:1888
+#: ../gui/wxpython/lmgr/frame.py:1868 ../gui/wxpython/lmgr/frame.py:1915
 #, fuzzy, python-format
 msgid "Unsupported map layer type <%s>."
 msgstr "Тип слоя '%s' не поддерживается"
 
-#: ../gui/wxpython/lmgr/frame.py:2017
+#: ../gui/wxpython/lmgr/frame.py:2044
 msgid ""
 "Note that cell values can only be displayed for regions of less than 10,000 "
 "cells."
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:2099
+#: ../gui/wxpython/lmgr/frame.py:2126
 #, fuzzy, python-format
 msgid ""
 "Do you want to remove map layer(s)\n"
@@ -8274,33 +8286,33 @@ msgid ""
 "from layer tree?"
 msgstr "Удалить слой %s из дерева слоев?"
 
-#: ../gui/wxpython/lmgr/frame.py:2102
+#: ../gui/wxpython/lmgr/frame.py:2129
 #, fuzzy
 msgid "Do you want to remove selected map layer(s) from layer tree?"
 msgstr "Удалить выбранный слой из содержания?"
 
-#: ../gui/wxpython/lmgr/frame.py:2106
+#: ../gui/wxpython/lmgr/frame.py:2133
 msgid "Remove map layer"
 msgstr "Удалить слой"
 
-#: ../gui/wxpython/lmgr/frame.py:2171
+#: ../gui/wxpython/lmgr/frame.py:2198
 #, fuzzy
 msgid "Quit GRASS GUI"
 msgstr "О ГИС GRASS"
 
-#: ../gui/wxpython/lmgr/frame.py:2202
+#: ../gui/wxpython/lmgr/frame.py:2229
 #, fuzzy
 msgid "No map layer selected. Operation canceled."
 msgstr "Не выбран слой. Операция прервана."
 
-#: ../gui/wxpython/lmgr/frame.py:2212
+#: ../gui/wxpython/lmgr/frame.py:2239
 msgid ""
 "Display resolution is currently not constrained to computational settings. "
 "It's suggested to constrain map to region geometry. Do you want to constrain "
 "the resolution?"
 msgstr ""
 
-#: ../gui/wxpython/lmgr/frame.py:2221
+#: ../gui/wxpython/lmgr/frame.py:2248
 msgid "Constrain map to region geometry?"
 msgstr ""
 
@@ -8422,7 +8434,7 @@ msgstr "Помощь ГИС GRASS"
 msgid "Georectifier"
 msgstr "Провести геометрическую коррекцию"
 
-#: ../gui/wxpython/lmgr/toolbars.py:144 ../gui/wxpython/menustrings.py:203
+#: ../gui/wxpython/lmgr/toolbars.py:144 ../gui/wxpython/menustrings.py:202
 #: ../gui/wxpython/menustrings.py:1931
 msgid "Cartographic Composer"
 msgstr ""
@@ -8495,15 +8507,15 @@ msgid "Add new category"
 msgstr "Добавить новую категорию"
 
 #: ../gui/wxpython/vdigit/dialogs.py:113 ../gui/wxpython/vdigit/dialogs.py:558
-#: ../gui/wxpython/vdigit/preferences.py:379
 #: ../gui/wxpython/vdigit/preferences.py:381
+#: ../gui/wxpython/vdigit/preferences.py:383
 #: ../gui/wxpython/dbmgr/dialogs.py:493 ../gui/wxpython/dbmgr/base.py:2610
 #: ../gui/wxpython/dbmgr/base.py:2724 ../gui/wxpython/dbmgr/base.py:2974
 msgid "Layer"
 msgstr "Слой"
 
 #: ../gui/wxpython/vdigit/dialogs.py:120 ../gui/wxpython/vdigit/dialogs.py:559
-#: ../gui/wxpython/vdigit/preferences.py:379
+#: ../gui/wxpython/vdigit/preferences.py:381
 #: ../gui/wxpython/dbmgr/dialogs.py:494 ../gui/wxpython/dbmgr/dialogs.py:612
 msgid "Category"
 msgstr "Категория"
@@ -8578,261 +8590,261 @@ msgstr "Применить изменения для этой сессии"
 msgid "Close dialog and save changes to user settings file"
 msgstr "Закрыть диалог и сохранить изменения в файле настроек пользователя"
 
-#: ../gui/wxpython/vdigit/preferences.py:152
+#: ../gui/wxpython/vdigit/preferences.py:154
 msgid "Snapping"
 msgstr "Прилипание"
 
-#: ../gui/wxpython/vdigit/preferences.py:158
+#: ../gui/wxpython/vdigit/preferences.py:160
 msgid "Snapping threshold"
 msgstr "Порог прилипания"
 
-#: ../gui/wxpython/vdigit/preferences.py:165
+#: ../gui/wxpython/vdigit/preferences.py:167
 msgid "screen pixels"
 msgstr ""
 
-#: ../gui/wxpython/vdigit/preferences.py:165
+#: ../gui/wxpython/vdigit/preferences.py:167
 msgid "map units"
 msgstr ""
 
-#: ../gui/wxpython/vdigit/preferences.py:174
+#: ../gui/wxpython/vdigit/preferences.py:176
 msgid "Snap also to vertex"
 msgstr "Прилипать также к узлу"
 
-#: ../gui/wxpython/vdigit/preferences.py:179
-#: ../gui/wxpython/vdigit/preferences.py:623
-#: ../gui/wxpython/vdigit/preferences.py:637
-#: ../gui/wxpython/vdigit/preferences.py:641
+#: ../gui/wxpython/vdigit/preferences.py:181
+#: ../gui/wxpython/vdigit/preferences.py:625
+#: ../gui/wxpython/vdigit/preferences.py:639
+#: ../gui/wxpython/vdigit/preferences.py:643
 #, python-format
 msgid "Snapping threshold is %(value).1f %(units)s"
 msgstr "Порог прилипания равен %(value).1f %(units)s"
 
-#: ../gui/wxpython/vdigit/preferences.py:192
+#: ../gui/wxpython/vdigit/preferences.py:194
 msgid "Select vector features"
 msgstr "Выбрать векторные объекты"
 
-#: ../gui/wxpython/vdigit/preferences.py:209
+#: ../gui/wxpython/vdigit/preferences.py:211
 msgid "Select threshold"
 msgstr "Выберите пороговое значение"
 
-#: ../gui/wxpython/vdigit/preferences.py:222
+#: ../gui/wxpython/vdigit/preferences.py:224
 msgid "Select only features inside of selection bounding box"
 msgstr "Выбрать только объекты в пределах охвата"
 
-#: ../gui/wxpython/vdigit/preferences.py:224
+#: ../gui/wxpython/vdigit/preferences.py:226
 msgid ""
 "By default are selected all features overlapping selection bounding box "
 msgstr "По умолчанию выбираются все объекты пересекающиеся с охватом"
 
-#: ../gui/wxpython/vdigit/preferences.py:227
+#: ../gui/wxpython/vdigit/preferences.py:229
 msgid "Check for duplicates"
 msgstr "Проверка дубликатов"
 
-#: ../gui/wxpython/vdigit/preferences.py:239
+#: ../gui/wxpython/vdigit/preferences.py:241
 #, fuzzy
 msgid "Digitize lines/boundaries"
 msgstr "Создать новую границу"
 
-#: ../gui/wxpython/vdigit/preferences.py:242
+#: ../gui/wxpython/vdigit/preferences.py:244
 msgid "Break lines at intersection"
 msgstr "Разбить линии в местах пересечения"
 
-#: ../gui/wxpython/vdigit/preferences.py:252
+#: ../gui/wxpython/vdigit/preferences.py:254
 #, fuzzy
 msgid "Digitize areas"
 msgstr "Создать новый объект"
 
-#: ../gui/wxpython/vdigit/preferences.py:255
+#: ../gui/wxpython/vdigit/preferences.py:257
 msgid "Close boundary (snap to the start node)"
 msgstr ""
 
-#: ../gui/wxpython/vdigit/preferences.py:265
+#: ../gui/wxpython/vdigit/preferences.py:267
 msgid "Save changes"
 msgstr "Сохранить изменения"
 
-#: ../gui/wxpython/vdigit/preferences.py:268
+#: ../gui/wxpython/vdigit/preferences.py:270
 msgid "Save changes on exit"
 msgstr "Сохранить изменения при выходе"
 
-#: ../gui/wxpython/vdigit/preferences.py:280
+#: ../gui/wxpython/vdigit/preferences.py:282
 msgid "Query tool"
 msgstr "Запросы"
 
-#: ../gui/wxpython/vdigit/preferences.py:287
+#: ../gui/wxpython/vdigit/preferences.py:289
 msgid "Choose query tool"
 msgstr "Выбрать инструмент запросов"
 
-#: ../gui/wxpython/vdigit/preferences.py:292
+#: ../gui/wxpython/vdigit/preferences.py:294
 msgid "Select by box"
 msgstr "Выбрать прямоугольником"
 
-#: ../gui/wxpython/vdigit/preferences.py:301
-#: ../gui/wxpython/vdigit/preferences.py:432
+#: ../gui/wxpython/vdigit/preferences.py:303
+#: ../gui/wxpython/vdigit/preferences.py:434
 msgid "length"
 msgstr "длина"
 
-#: ../gui/wxpython/vdigit/preferences.py:306
+#: ../gui/wxpython/vdigit/preferences.py:308
 msgid "Select lines"
 msgstr "Выбрать линии"
 
-#: ../gui/wxpython/vdigit/preferences.py:308
-#: ../gui/wxpython/vdigit/preferences.py:331
+#: ../gui/wxpython/vdigit/preferences.py:310
+#: ../gui/wxpython/vdigit/preferences.py:333
 msgid "shorter than"
 msgstr "короче чем"
 
-#: ../gui/wxpython/vdigit/preferences.py:308
-#: ../gui/wxpython/vdigit/preferences.py:331
+#: ../gui/wxpython/vdigit/preferences.py:310
+#: ../gui/wxpython/vdigit/preferences.py:333
 msgid "longer than"
 msgstr "длиннее чем"
 
-#: ../gui/wxpython/vdigit/preferences.py:324
+#: ../gui/wxpython/vdigit/preferences.py:326
 msgid "dangle"
 msgstr "висящий узел"
 
-#: ../gui/wxpython/vdigit/preferences.py:329
+#: ../gui/wxpython/vdigit/preferences.py:331
 msgid "Select dangles"
 msgstr "Выбрать висящие узлы"
 
-#: ../gui/wxpython/vdigit/preferences.py:361
+#: ../gui/wxpython/vdigit/preferences.py:363
 #: ../gui/wxpython/gui_core/preferences.py:1053
 msgid "Attributes"
 msgstr "Атрибуты"
 
-#: ../gui/wxpython/vdigit/preferences.py:368
+#: ../gui/wxpython/vdigit/preferences.py:370
 msgid "Digitize new feature"
 msgstr "Создать новый объект"
 
-#: ../gui/wxpython/vdigit/preferences.py:373
+#: ../gui/wxpython/vdigit/preferences.py:375
 msgid "Add new record into table"
 msgstr "Добавить новую запись в таблицу"
 
-#: ../gui/wxpython/vdigit/preferences.py:379
+#: ../gui/wxpython/vdigit/preferences.py:381
 msgid "Mode"
 msgstr "Режим"
 
-#: ../gui/wxpython/vdigit/preferences.py:379
-#: ../gui/wxpython/vdigit/preferences.py:401
+#: ../gui/wxpython/vdigit/preferences.py:381
+#: ../gui/wxpython/vdigit/preferences.py:403
 msgid "Next to use"
 msgstr "Использовать следующий "
 
-#: ../gui/wxpython/vdigit/preferences.py:389
+#: ../gui/wxpython/vdigit/preferences.py:391
 msgid "Category number"
 msgstr "Номер категории"
 
-#: ../gui/wxpython/vdigit/preferences.py:399
+#: ../gui/wxpython/vdigit/preferences.py:401
 msgid "Category mode"
 msgstr "Режим категорий"
 
-#: ../gui/wxpython/vdigit/preferences.py:401
+#: ../gui/wxpython/vdigit/preferences.py:403
 msgid "Manual entry"
 msgstr "Ручной ввод"
 
-#: ../gui/wxpython/vdigit/preferences.py:401
+#: ../gui/wxpython/vdigit/preferences.py:403
 msgid "No category"
 msgstr "Нет категорий"
 
-#: ../gui/wxpython/vdigit/preferences.py:414
+#: ../gui/wxpython/vdigit/preferences.py:416
 msgid "Delete existing feature(s)"
 msgstr "Удалить существующий объект(ы)"
 
-#: ../gui/wxpython/vdigit/preferences.py:419
+#: ../gui/wxpython/vdigit/preferences.py:421
 msgid "Delete record from table"
 msgstr "Удалить запись из таблицы"
 
-#: ../gui/wxpython/vdigit/preferences.py:429
+#: ../gui/wxpython/vdigit/preferences.py:431
 #, fuzzy
 msgid "Geometry attributes"
 msgstr "Запрос атрибутов"
 
-#: ../gui/wxpython/vdigit/preferences.py:433
+#: ../gui/wxpython/vdigit/preferences.py:435
 #: ../gui/wxpython/modules/vclean.py:200
 msgid "area"
 msgstr ""
 
-#: ../gui/wxpython/vdigit/preferences.py:434
+#: ../gui/wxpython/vdigit/preferences.py:436
 #, fuzzy
 msgid "perimeter"
 msgstr "Параметры"
 
-#: ../gui/wxpython/vdigit/preferences.py:503
+#: ../gui/wxpython/vdigit/preferences.py:505
 msgid ""
 "Note: These settings are stored in the workspace not in the vector digitizer "
 "preferences."
 msgstr ""
 
-#: ../gui/wxpython/vdigit/preferences.py:532
+#: ../gui/wxpython/vdigit/preferences.py:534
 #, fuzzy
 msgid "Digitize new line segment"
 msgstr "Создать новую линию"
 
-#: ../gui/wxpython/vdigit/preferences.py:533
+#: ../gui/wxpython/vdigit/preferences.py:535
 #, fuzzy
 msgid "Digitize new line/boundary"
 msgstr "Создать новую границу"
 
-#: ../gui/wxpython/vdigit/preferences.py:534
+#: ../gui/wxpython/vdigit/preferences.py:536
 msgid "Highlight"
 msgstr "Подсветка"
 
-#: ../gui/wxpython/vdigit/preferences.py:535
+#: ../gui/wxpython/vdigit/preferences.py:537
 msgid "Highlight (duplicates)"
 msgstr "Подсветить (дубликаты)"
 
-#: ../gui/wxpython/vdigit/preferences.py:538
+#: ../gui/wxpython/vdigit/preferences.py:540
 msgid "Boundary (no area)"
 msgstr "Граница (без полигона)"
 
-#: ../gui/wxpython/vdigit/preferences.py:539
+#: ../gui/wxpython/vdigit/preferences.py:541
 msgid "Boundary (one area)"
 msgstr "Граница (один полигон)"
 
-#: ../gui/wxpython/vdigit/preferences.py:540
+#: ../gui/wxpython/vdigit/preferences.py:542
 msgid "Boundary (two areas)"
 msgstr "Граница (два полигона)"
 
-#: ../gui/wxpython/vdigit/preferences.py:541
+#: ../gui/wxpython/vdigit/preferences.py:543
 msgid "Centroid (in area)"
 msgstr "Центроид (в полигоне)"
 
-#: ../gui/wxpython/vdigit/preferences.py:542
+#: ../gui/wxpython/vdigit/preferences.py:544
 msgid "Centroid (outside area)"
 msgstr "Центроид (вне полигона)"
 
-#: ../gui/wxpython/vdigit/preferences.py:543
+#: ../gui/wxpython/vdigit/preferences.py:545
 msgid "Centroid (duplicate in area)"
 msgstr "Центроид (дубликаты в полигоне)"
 
-#: ../gui/wxpython/vdigit/preferences.py:544
+#: ../gui/wxpython/vdigit/preferences.py:546
 msgid "Node (one line)"
 msgstr "Узел (одна линия)"
 
-#: ../gui/wxpython/vdigit/preferences.py:545
+#: ../gui/wxpython/vdigit/preferences.py:547
 msgid "Node (two lines)"
 msgstr "Узел (две линии)"
 
-#: ../gui/wxpython/vdigit/preferences.py:546
+#: ../gui/wxpython/vdigit/preferences.py:548
 msgid "Vertex"
 msgstr "Узел"
 
-#: ../gui/wxpython/vdigit/preferences.py:547
+#: ../gui/wxpython/vdigit/preferences.py:549
 msgid "Area (closed boundary + centroid)"
 msgstr "Полигон (замкнутая граница + центроид)"
 
-#: ../gui/wxpython/vdigit/preferences.py:548
+#: ../gui/wxpython/vdigit/preferences.py:550
 msgid "Direction"
 msgstr "Направление"
 
-#: ../gui/wxpython/vdigit/preferences.py:616
+#: ../gui/wxpython/vdigit/preferences.py:618
 msgid "Snapping disabled"
 msgstr "Прилипание отключено"
 
-#: ../gui/wxpython/vdigit/preferences.py:618
+#: ../gui/wxpython/vdigit/preferences.py:620
 #, python-format
 msgid "Snapping threshold is %(value).1f %(units)s (based on comp. resolution)"
 msgstr ""
 "Порог прилипания равен %(value).1f %(units)s (основано на расчетном "
 "разрешении)"
 
-#: ../gui/wxpython/vdigit/preferences.py:674
+#: ../gui/wxpython/vdigit/preferences.py:676
 #, python-format
 msgid "Vector digitizer settings saved to file <%s>."
 msgstr "Настройки инструмента векторизации сохранены в файл <%s>."
@@ -8859,24 +8871,24 @@ msgstr "диалог массовой подписи Z"
 msgid "GRASS GIS Vector Digitizer"
 msgstr "Ошибка векторизации"
 
-#: ../gui/wxpython/vdigit/g.gui.vdigit.py:91
+#: ../gui/wxpython/vdigit/g.gui.vdigit.py:92
 #, fuzzy, python-format
 msgid "Vector digitizer not available. %s"
 msgstr "Панель инструментов векторизации"
 
-#: ../gui/wxpython/vdigit/g.gui.vdigit.py:96
+#: ../gui/wxpython/vdigit/g.gui.vdigit.py:97
 #, fuzzy, python-format
 msgid ""
 "Vector map <%s> not found in current mapset. New vector map can be created "
 "by providing '-c' flag."
 msgstr "Слой <%s> не найден."
 
-#: ../gui/wxpython/vdigit/g.gui.vdigit.py:99
+#: ../gui/wxpython/vdigit/g.gui.vdigit.py:100
 #, python-format
 msgid "New vector map <%s> created"
 msgstr "Создан новый векторный слой <%s>"
 
-#: ../gui/wxpython/vdigit/g.gui.vdigit.py:103
+#: ../gui/wxpython/vdigit/g.gui.vdigit.py:104
 #, fuzzy, python-format
 msgid "Unable to create new vector map <%s>"
 msgstr "Не могу создать новый векторный слой <%s>."
@@ -8958,12 +8970,12 @@ msgstr ""
 msgid "Unsupported feature type %d. Operation canceled."
 msgstr "Некорректное значение координаты. Операция отменена."
 
-#: ../gui/wxpython/vdigit/wxdigit.py:456
+#: ../gui/wxpython/vdigit/wxdigit.py:473
 #, fuzzy, python-format
 msgid "Unknown feature type '%s'"
 msgstr "ID объекта:"
 
-#: ../gui/wxpython/vdigit/wxdigit.py:461
+#: ../gui/wxpython/vdigit/wxdigit.py:478
 #, fuzzy
 msgid "Not enough points for line"
 msgstr "Создать точки вдоль линий"
@@ -9199,6 +9211,11 @@ msgid ""
 "Unsupported feature type '%(type)s'. Unable to edit OGR layer <%(layer)s>."
 msgstr "Некорректное значение координаты. Операция отменена."
 
+#: ../gui/wxpython/vdigit/toolbars.py:916
+#, fuzzy
+msgid "Vector digitizer"
+msgstr "Ошибка векторизации"
+
 #: ../gui/wxpython/vdigit/toolbars.py:965
 #, python-format
 msgid "Do you want to save changes in vector map <%s>?"
@@ -9273,7 +9290,7 @@ msgid "Password:"
 msgstr ""
 
 #: ../gui/wxpython/web_services/dialogs.py:281
-#: ../gui/wxpython/gui_core/gselect.py:1799
+#: ../gui/wxpython/gui_core/gselect.py:1817
 msgid "No data source defined, settings are not saved."
 msgstr ""
 
@@ -9822,7 +9839,7 @@ msgstr "Выбирите область проекта и набор"
 msgid "Path '%s' doesn't exist."
 msgstr ""
 
-#: ../gui/wxpython/gis_set.py:836 ../gui/wxpython/gui_core/gselect.py:1080
+#: ../gui/wxpython/gis_set.py:836 ../gui/wxpython/gui_core/gselect.py:1097
 #, fuzzy
 msgid "Choose GIS Data Directory"
 msgstr "Выберите каталог с ГИС-данными:"
@@ -10115,8 +10132,8 @@ msgid ""
 "using gdalwarp."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:53 ../gui/wxpython/menustrings.py:82
-#: ../gui/wxpython/menustrings.py:1043 ../gui/wxpython/menustrings.py:1072
+#: ../gui/wxpython/menustrings.py:53 ../gui/wxpython/menustrings.py:81
+#: ../gui/wxpython/menustrings.py:1043 ../gui/wxpython/menustrings.py:1071
 #, fuzzy
 msgid "LAS LiDAR points import"
 msgstr "Экспорт ASCII x,y,z"
@@ -10125,14 +10142,14 @@ msgstr "Экспорт ASCII x,y,z"
 msgid "Unpacks a raster map packed with r.pack."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:56 ../gui/wxpython/menustrings.py:282
-#: ../gui/wxpython/menustrings.py:1046 ../gui/wxpython/menustrings.py:1193
+#: ../gui/wxpython/menustrings.py:56 ../gui/wxpython/menustrings.py:281
+#: ../gui/wxpython/menustrings.py:1046 ../gui/wxpython/menustrings.py:1192
 #, fuzzy
 msgid "Reproject raster map from different GRASS location"
 msgstr "Перепроектировать растровый слой из одной области в текущую."
 
-#: ../gui/wxpython/menustrings.py:57 ../gui/wxpython/menustrings.py:283
-#: ../gui/wxpython/menustrings.py:1047 ../gui/wxpython/menustrings.py:1194
+#: ../gui/wxpython/menustrings.py:57 ../gui/wxpython/menustrings.py:282
+#: ../gui/wxpython/menustrings.py:1047 ../gui/wxpython/menustrings.py:1193
 #, fuzzy
 msgid "Re-projects a raster map from given location to the current location."
 msgstr "Перепроектировать растровый слой из одной области в текущую."
@@ -10233,398 +10250,392 @@ msgid "GEOnet import"
 msgstr "Импорт GEOnet"
 
 #: ../gui/wxpython/menustrings.py:79 ../gui/wxpython/menustrings.py:1069
-msgid ""
-"Imports US-NGA GEOnet Names Server (GNS) country files into a GRASS vector "
-"points map."
-msgstr ""
-
-#: ../gui/wxpython/menustrings.py:80 ../gui/wxpython/menustrings.py:1070
 #, fuzzy
 msgid "Matlab array or Mapgen format import"
 msgstr "Импорт Matlab и MapGen"
 
-#: ../gui/wxpython/menustrings.py:81 ../gui/wxpython/menustrings.py:1071
+#: ../gui/wxpython/menustrings.py:80 ../gui/wxpython/menustrings.py:1070
 msgid "Imports Mapgen or Matlab-ASCII vector maps into GRASS."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:84 ../gui/wxpython/menustrings.py:1074
+#: ../gui/wxpython/menustrings.py:83 ../gui/wxpython/menustrings.py:1073
 #, fuzzy
 msgid "Unpacks a vector map packed with v.pack."
 msgstr "Основные векторные метаданные"
 
-#: ../gui/wxpython/menustrings.py:85 ../gui/wxpython/menustrings.py:563
-#: ../gui/wxpython/menustrings.py:1075 ../gui/wxpython/menustrings.py:1474
+#: ../gui/wxpython/menustrings.py:84 ../gui/wxpython/menustrings.py:563
+#: ../gui/wxpython/menustrings.py:1074 ../gui/wxpython/menustrings.py:1474
 #, fuzzy
 msgid "Reproject vector map from different GRASS location"
 msgstr "Перепроектировать растровый слой из одной области в текущую."
 
-#: ../gui/wxpython/menustrings.py:86 ../gui/wxpython/menustrings.py:564
-#: ../gui/wxpython/menustrings.py:1076 ../gui/wxpython/menustrings.py:1475
+#: ../gui/wxpython/menustrings.py:85 ../gui/wxpython/menustrings.py:564
+#: ../gui/wxpython/menustrings.py:1075 ../gui/wxpython/menustrings.py:1475
 #, fuzzy
 msgid "Re-projects a vector map from one location to the current location."
 msgstr "Перепроектировать растровый слой из одной области в текущую."
 
-#: ../gui/wxpython/menustrings.py:87 ../gui/wxpython/menustrings.py:1077
+#: ../gui/wxpython/menustrings.py:86 ../gui/wxpython/menustrings.py:1076
 #, fuzzy
 msgid "Import 3D raster data"
 msgstr "Импортировать растровый слой"
 
-#: ../gui/wxpython/menustrings.py:88 ../gui/wxpython/menustrings.py:1078
+#: ../gui/wxpython/menustrings.py:87 ../gui/wxpython/menustrings.py:1077
 msgid "ASCII 3D import"
 msgstr "Импорт ASCII 3D"
 
-#: ../gui/wxpython/menustrings.py:89 ../gui/wxpython/menustrings.py:1079
+#: ../gui/wxpython/menustrings.py:88 ../gui/wxpython/menustrings.py:1078
 #, fuzzy
 msgid "Converts a 3D ASCII raster text file into a (binary) 3D raster map."
 msgstr ""
 "Конвертация текстового файла 3D ASCII растра в бинарный 3D растровый слой"
 
-#: ../gui/wxpython/menustrings.py:90 ../gui/wxpython/menustrings.py:1080
+#: ../gui/wxpython/menustrings.py:89 ../gui/wxpython/menustrings.py:1079
 #, fuzzy
 msgid "Raw binary array 3D import"
 msgstr "Импорт Matlab и MapGen"
 
-#: ../gui/wxpython/menustrings.py:91 ../gui/wxpython/menustrings.py:1081
+#: ../gui/wxpython/menustrings.py:90 ../gui/wxpython/menustrings.py:1080
 #, fuzzy
 msgid "Imports a binary raster file into a GRASS 3D raster map."
 msgstr "Импорт бинарного растрового файла в растровый слой GRASS."
 
-#: ../gui/wxpython/menustrings.py:92 ../gui/wxpython/menustrings.py:1082
+#: ../gui/wxpython/menustrings.py:91 ../gui/wxpython/menustrings.py:1081
 msgid "Vis5D import"
 msgstr "Импорт Vis5D"
 
-#: ../gui/wxpython/menustrings.py:93 ../gui/wxpython/menustrings.py:1083
+#: ../gui/wxpython/menustrings.py:92 ../gui/wxpython/menustrings.py:1082
 #, fuzzy
 msgid "Import 3-dimensional Vis5D files."
 msgstr "Экспорт растрового слоя GRASS 3D в 3D файл Vis5D."
 
-#: ../gui/wxpython/menustrings.py:94 ../gui/wxpython/menustrings.py:1084
+#: ../gui/wxpython/menustrings.py:93 ../gui/wxpython/menustrings.py:1083
 msgid "Import database table"
 msgstr "Импорт таблицы базы данных"
 
-#: ../gui/wxpython/menustrings.py:95 ../gui/wxpython/menustrings.py:1085
+#: ../gui/wxpython/menustrings.py:94 ../gui/wxpython/menustrings.py:1084
 msgid "Multiple import formats using OGR"
 msgstr "Форматы импорта использующие OGR"
 
-#: ../gui/wxpython/menustrings.py:96 ../gui/wxpython/menustrings.py:1086
+#: ../gui/wxpython/menustrings.py:95 ../gui/wxpython/menustrings.py:1085
 #, fuzzy
 msgid "Imports attribute tables in various formats."
 msgstr "Заполнить значения базы данных из векторных объектов."
 
-#: ../gui/wxpython/menustrings.py:97 ../gui/wxpython/menustrings.py:1087
+#: ../gui/wxpython/menustrings.py:96 ../gui/wxpython/menustrings.py:1086
 msgid "Export raster map"
 msgstr "Экспорт растрового слоя"
 
-#: ../gui/wxpython/menustrings.py:98 ../gui/wxpython/menustrings.py:127
-#: ../gui/wxpython/menustrings.py:1088 ../gui/wxpython/menustrings.py:1117
+#: ../gui/wxpython/menustrings.py:97 ../gui/wxpython/menustrings.py:126
+#: ../gui/wxpython/menustrings.py:1087 ../gui/wxpython/menustrings.py:1116
 #, fuzzy
 msgid "Common export formats"
 msgstr "Конвертировать координаты"
 
-#: ../gui/wxpython/menustrings.py:99 ../gui/wxpython/menustrings.py:1089
+#: ../gui/wxpython/menustrings.py:98 ../gui/wxpython/menustrings.py:1088
 #, fuzzy
 msgid "Exports GRASS raster maps into GDAL supported formats."
 msgstr "Экспорт растрового слоя GRASS в форматы поддерживаемые GDAL."
 
-#: ../gui/wxpython/menustrings.py:100 ../gui/wxpython/menustrings.py:1090
+#: ../gui/wxpython/menustrings.py:99 ../gui/wxpython/menustrings.py:1089
 msgid "ASCII grid export"
 msgstr "Экспорт ASCII"
 
-#: ../gui/wxpython/menustrings.py:101 ../gui/wxpython/menustrings.py:1091
+#: ../gui/wxpython/menustrings.py:100 ../gui/wxpython/menustrings.py:1090
 #, fuzzy
 msgid "Converts a raster map layer into a GRASS ASCII text file."
 msgstr "Конвертирует растровый слой в текстовый файл ASCII."
 
-#: ../gui/wxpython/menustrings.py:102 ../gui/wxpython/menustrings.py:1092
+#: ../gui/wxpython/menustrings.py:101 ../gui/wxpython/menustrings.py:1091
 #, fuzzy
 msgid "ASCII x,y,z points export"
 msgstr "Экспорт ASCII x,y,z"
 
-#: ../gui/wxpython/menustrings.py:103 ../gui/wxpython/menustrings.py:1093
+#: ../gui/wxpython/menustrings.py:102 ../gui/wxpython/menustrings.py:1092
 msgid ""
 "Exports a raster map to a text file as x,y,z values based on cell centers."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:104 ../gui/wxpython/menustrings.py:1094
+#: ../gui/wxpython/menustrings.py:103 ../gui/wxpython/menustrings.py:1093
 msgid "GRIDATB.FOR export"
 msgstr "Экспорт GRIDATB.FOR"
 
-#: ../gui/wxpython/menustrings.py:105 ../gui/wxpython/menustrings.py:1095
+#: ../gui/wxpython/menustrings.py:104 ../gui/wxpython/menustrings.py:1094
 #, fuzzy
 msgid "Exports GRASS raster map to GRIDATB.FOR map file (TOPMODEL)."
 msgstr "Экспорт растрового слоя GRASS в слой GRIDATB.FOR (TOPMODEL)"
 
-#: ../gui/wxpython/menustrings.py:106 ../gui/wxpython/menustrings.py:1096
+#: ../gui/wxpython/menustrings.py:105 ../gui/wxpython/menustrings.py:1095
 msgid "Matlab 2D array export"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:107 ../gui/wxpython/menustrings.py:1097
+#: ../gui/wxpython/menustrings.py:106 ../gui/wxpython/menustrings.py:1096
 msgid "Exports a GRASS raster to a binary MAT-File."
 msgstr "Экспорт растра GRASS в бинарный файл MAT-File."
 
-#: ../gui/wxpython/menustrings.py:108 ../gui/wxpython/menustrings.py:1098
+#: ../gui/wxpython/menustrings.py:107 ../gui/wxpython/menustrings.py:1097
 #, fuzzy
 msgid "Raw binary array export"
 msgstr "Бинарный экспорт"
 
-#: ../gui/wxpython/menustrings.py:109 ../gui/wxpython/menustrings.py:1099
+#: ../gui/wxpython/menustrings.py:108 ../gui/wxpython/menustrings.py:1098
 msgid "Exports a GRASS raster to a binary array."
 msgstr "Экспорт растра GRASS как бинарного массива."
 
-#: ../gui/wxpython/menustrings.py:110 ../gui/wxpython/menustrings.py:1100
+#: ../gui/wxpython/menustrings.py:109 ../gui/wxpython/menustrings.py:1099
 msgid "MPEG-1 export"
 msgstr "Экспорт MPEG-1"
 
-#: ../gui/wxpython/menustrings.py:111 ../gui/wxpython/menustrings.py:1101
+#: ../gui/wxpython/menustrings.py:110 ../gui/wxpython/menustrings.py:1100
 #, fuzzy
 msgid "Converts raster map series to MPEG movie."
 msgstr "Программа перевод серий растровых файлов в MPEG."
 
-#: ../gui/wxpython/menustrings.py:112 ../gui/wxpython/menustrings.py:1102
+#: ../gui/wxpython/menustrings.py:111 ../gui/wxpython/menustrings.py:1101
 msgid "PNG export"
 msgstr "Экспорт PNG"
 
-#: ../gui/wxpython/menustrings.py:113 ../gui/wxpython/menustrings.py:1103
+#: ../gui/wxpython/menustrings.py:112 ../gui/wxpython/menustrings.py:1102
 #, fuzzy
 msgid "Export a GRASS raster map as a non-georeferenced PNG image."
 msgstr "Экспорт растра GRASS в графический формат PNG без привязки."
 
-#: ../gui/wxpython/menustrings.py:114 ../gui/wxpython/menustrings.py:1104
+#: ../gui/wxpython/menustrings.py:113 ../gui/wxpython/menustrings.py:1103
 msgid "PPM export"
 msgstr "Экспорт PPM"
 
-#: ../gui/wxpython/menustrings.py:115 ../gui/wxpython/menustrings.py:1105
+#: ../gui/wxpython/menustrings.py:114 ../gui/wxpython/menustrings.py:1104
 #, fuzzy
 msgid "Converts a GRASS raster map to a PPM image file."
 msgstr "Конвертировать растровый слой в векторный."
 
-#: ../gui/wxpython/menustrings.py:116 ../gui/wxpython/menustrings.py:1106
+#: ../gui/wxpython/menustrings.py:115 ../gui/wxpython/menustrings.py:1105
 msgid "PPM from RGB export"
 msgstr "Экспорт PPM из RGB"
 
-#: ../gui/wxpython/menustrings.py:117 ../gui/wxpython/menustrings.py:1107
+#: ../gui/wxpython/menustrings.py:116 ../gui/wxpython/menustrings.py:1106
 #, fuzzy
 msgid "Converts 3 GRASS raster layers (R,G,B) to a PPM image file."
 msgstr ""
 "Конвертировать 3 растровых слоя GRASS (R,G,B) в изображение PPM  с "
 "разрешением текущего региона."
 
-#: ../gui/wxpython/menustrings.py:118 ../gui/wxpython/menustrings.py:137
-#: ../gui/wxpython/menustrings.py:1108 ../gui/wxpython/menustrings.py:1127
+#: ../gui/wxpython/menustrings.py:117 ../gui/wxpython/menustrings.py:136
+#: ../gui/wxpython/menustrings.py:1107 ../gui/wxpython/menustrings.py:1126
 msgid "POV-Ray export"
 msgstr "Экспорт POV-Ray"
 
-#: ../gui/wxpython/menustrings.py:119 ../gui/wxpython/menustrings.py:1109
+#: ../gui/wxpython/menustrings.py:118 ../gui/wxpython/menustrings.py:1108
 #, fuzzy
 msgid "Converts a raster map layer into a height-field file for POV-Ray."
 msgstr "Конвертировать растровый слой в файл высот для POVRAY."
 
-#: ../gui/wxpython/menustrings.py:120 ../gui/wxpython/menustrings.py:1110
+#: ../gui/wxpython/menustrings.py:119 ../gui/wxpython/menustrings.py:1109
 msgid "VRML export"
 msgstr "экспорт VRML"
 
-#: ../gui/wxpython/menustrings.py:121 ../gui/wxpython/menustrings.py:1111
+#: ../gui/wxpython/menustrings.py:120 ../gui/wxpython/menustrings.py:1110
 #, fuzzy
 msgid "Exports a raster map to the Virtual Reality Modeling Language (VRML)."
 msgstr "Экспорт растрового слоя в Virtual Reality Modeling Language (VRML)"
 
-#: ../gui/wxpython/menustrings.py:122 ../gui/wxpython/menustrings.py:141
-#: ../gui/wxpython/menustrings.py:152 ../gui/wxpython/menustrings.py:1112
-#: ../gui/wxpython/menustrings.py:1131 ../gui/wxpython/menustrings.py:1142
+#: ../gui/wxpython/menustrings.py:121 ../gui/wxpython/menustrings.py:140
+#: ../gui/wxpython/menustrings.py:151 ../gui/wxpython/menustrings.py:1111
+#: ../gui/wxpython/menustrings.py:1130 ../gui/wxpython/menustrings.py:1141
 msgid "VTK export"
 msgstr "экспорт VTK"
 
-#: ../gui/wxpython/menustrings.py:123 ../gui/wxpython/menustrings.py:1113
+#: ../gui/wxpython/menustrings.py:122 ../gui/wxpython/menustrings.py:1112
 #, fuzzy
 msgid "Converts raster maps into the VTK-ASCII format."
 msgstr "Конвертировать растровые слои в формат VTK-Ascii"
 
-#: ../gui/wxpython/menustrings.py:124 ../gui/wxpython/menustrings.py:1114
+#: ../gui/wxpython/menustrings.py:123 ../gui/wxpython/menustrings.py:1113
 #, fuzzy
 msgid "Pack raster map"
 msgstr "Залатать растровые слои"
 
-#: ../gui/wxpython/menustrings.py:125 ../gui/wxpython/menustrings.py:1115
+#: ../gui/wxpython/menustrings.py:124 ../gui/wxpython/menustrings.py:1114
 msgid "Packs up a raster map and support files for copying."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:126 ../gui/wxpython/menustrings.py:1116
+#: ../gui/wxpython/menustrings.py:125 ../gui/wxpython/menustrings.py:1115
 msgid "Export vector map"
 msgstr "Экспорт векторного слоя"
 
-#: ../gui/wxpython/menustrings.py:128 ../gui/wxpython/menustrings.py:1118
+#: ../gui/wxpython/menustrings.py:127 ../gui/wxpython/menustrings.py:1117
 #, fuzzy
 msgid ""
 "Exports a vector map layer to any of the supported OGR vector formats. By "
 "default a vector map layer is exported to Esri Shapefile format."
 msgstr "Конвертировать один из поддерживаемых форматов OGR."
 
-#: ../gui/wxpython/menustrings.py:129 ../gui/wxpython/menustrings.py:1119
+#: ../gui/wxpython/menustrings.py:128 ../gui/wxpython/menustrings.py:1118
 #, fuzzy
 msgid "ASCII points or GRASS ASCII vector export"
 msgstr "Экспорт точек ASCII/GRASS ASCII"
 
-#: ../gui/wxpython/menustrings.py:130 ../gui/wxpython/menustrings.py:1120
+#: ../gui/wxpython/menustrings.py:129 ../gui/wxpython/menustrings.py:1119
 msgid ""
 "Exports a vector map to a GRASS ASCII vector representation. By default only "
 "features with category are exported. To export all features use 'layer=-1'."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:131 ../gui/wxpython/menustrings.py:1121
+#: ../gui/wxpython/menustrings.py:130 ../gui/wxpython/menustrings.py:1120
 msgid "DXF export"
 msgstr "экспорт DXF"
 
-#: ../gui/wxpython/menustrings.py:132 ../gui/wxpython/menustrings.py:1122
+#: ../gui/wxpython/menustrings.py:131 ../gui/wxpython/menustrings.py:1121
 #, fuzzy
 msgid "Exports vector map to DXF file format."
 msgstr "Экспорт векторного слоя GRASS в формат DXF."
 
-#: ../gui/wxpython/menustrings.py:133 ../gui/wxpython/menustrings.py:1123
+#: ../gui/wxpython/menustrings.py:132 ../gui/wxpython/menustrings.py:1122
 #, fuzzy
 msgid "Multiple GPS export formats using GPSBabel"
 msgstr "Форматы экспорта использующие OGR"
 
-#: ../gui/wxpython/menustrings.py:134 ../gui/wxpython/menustrings.py:1124
+#: ../gui/wxpython/menustrings.py:133 ../gui/wxpython/menustrings.py:1123
 #, fuzzy
 msgid ""
 "Exports a vector map to a GPS receiver or file format supported by GPSBabel."
 msgstr "Экспорт векторного слоя GRASS в формат DXF."
 
-#: ../gui/wxpython/menustrings.py:135 ../gui/wxpython/menustrings.py:1125
+#: ../gui/wxpython/menustrings.py:134 ../gui/wxpython/menustrings.py:1124
 #, fuzzy
 msgid "PostGIS export"
 msgstr "Экспорт PNG"
 
-#: ../gui/wxpython/menustrings.py:136 ../gui/wxpython/menustrings.py:1126
+#: ../gui/wxpython/menustrings.py:135 ../gui/wxpython/menustrings.py:1125
 #, fuzzy
 msgid "Exports a vector map layer to PostGIS feature table."
 msgstr "Экспорт векторного слоя GRASS в SVG."
 
-#: ../gui/wxpython/menustrings.py:138 ../gui/wxpython/menustrings.py:1128
+#: ../gui/wxpython/menustrings.py:137 ../gui/wxpython/menustrings.py:1127
 #, fuzzy
 msgid "Converts GRASS x,y,z points to POV-Ray x,z,y format."
 msgstr "Конвертировать в формат POV-Ray, GRASS x,y,z -> POV-Ray x,z,y"
 
-#: ../gui/wxpython/menustrings.py:139 ../gui/wxpython/menustrings.py:1129
+#: ../gui/wxpython/menustrings.py:138 ../gui/wxpython/menustrings.py:1128
 msgid "SVG export"
 msgstr "экспорт SVG"
 
-#: ../gui/wxpython/menustrings.py:140 ../gui/wxpython/menustrings.py:1130
+#: ../gui/wxpython/menustrings.py:139 ../gui/wxpython/menustrings.py:1129
 #, fuzzy
 msgid "Exports a vector map to SVG file."
 msgstr "Экспорт векторного слоя GRASS в SVG."
 
-#: ../gui/wxpython/menustrings.py:142 ../gui/wxpython/menustrings.py:1132
+#: ../gui/wxpython/menustrings.py:141 ../gui/wxpython/menustrings.py:1131
 #, fuzzy
 msgid "Converts a vector map to VTK ASCII output."
 msgstr "Конвертировать бинарный векторный слой GRASS в VTK ASCII."
 
-#: ../gui/wxpython/menustrings.py:143 ../gui/wxpython/menustrings.py:1133
+#: ../gui/wxpython/menustrings.py:142 ../gui/wxpython/menustrings.py:1132
 #, fuzzy
 msgid "Pack vector map"
 msgstr "Векторные слои участков"
 
-#: ../gui/wxpython/menustrings.py:144 ../gui/wxpython/menustrings.py:1134
+#: ../gui/wxpython/menustrings.py:143 ../gui/wxpython/menustrings.py:1133
 msgid "Packs up a vector map and support files for copying."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:145 ../gui/wxpython/menustrings.py:1135
+#: ../gui/wxpython/menustrings.py:144 ../gui/wxpython/menustrings.py:1134
 #, fuzzy
 msgid "Export 3D raster maps"
 msgstr "Экспорт растрового слоя"
 
-#: ../gui/wxpython/menustrings.py:146 ../gui/wxpython/menustrings.py:1136
+#: ../gui/wxpython/menustrings.py:145 ../gui/wxpython/menustrings.py:1135
 msgid "ASCII 3D export"
 msgstr "экспорт ASCII 3D"
 
-#: ../gui/wxpython/menustrings.py:147 ../gui/wxpython/menustrings.py:1137
+#: ../gui/wxpython/menustrings.py:146 ../gui/wxpython/menustrings.py:1136
 #, fuzzy
 msgid "Converts a 3D raster map layer into a ASCII text file."
 msgstr "Конвертировать 3D растровый слой в текстовый файл ASCII"
 
-#: ../gui/wxpython/menustrings.py:148 ../gui/wxpython/menustrings.py:1138
+#: ../gui/wxpython/menustrings.py:147 ../gui/wxpython/menustrings.py:1137
 #, fuzzy
 msgid "Raw binary array 3D export"
 msgstr "Бинарный экспорт"
 
-#: ../gui/wxpython/menustrings.py:149 ../gui/wxpython/menustrings.py:1139
+#: ../gui/wxpython/menustrings.py:148 ../gui/wxpython/menustrings.py:1138
 #, fuzzy
 msgid "Exports a GRASS 3D raster map to a binary array."
 msgstr "Экспорт растра GRASS как бинарного массива."
 
-#: ../gui/wxpython/menustrings.py:150 ../gui/wxpython/menustrings.py:1140
+#: ../gui/wxpython/menustrings.py:149 ../gui/wxpython/menustrings.py:1139
 msgid "Vis5D export"
 msgstr "экспорт Vis5D"
 
-#: ../gui/wxpython/menustrings.py:151 ../gui/wxpython/menustrings.py:1141
+#: ../gui/wxpython/menustrings.py:150 ../gui/wxpython/menustrings.py:1140
 #, fuzzy
 msgid "Exports GRASS 3D raster map to 3-dimensional Vis5D file."
 msgstr "Экспорт растрового слоя GRASS 3D в 3D файл Vis5D."
 
-#: ../gui/wxpython/menustrings.py:153 ../gui/wxpython/menustrings.py:1143
+#: ../gui/wxpython/menustrings.py:152 ../gui/wxpython/menustrings.py:1142
 #, fuzzy
 msgid "Converts 3D raster maps into the VTK-ASCII format."
 msgstr "Конвертировать растровые слои в формат VTK-Ascii"
 
-#: ../gui/wxpython/menustrings.py:154 ../gui/wxpython/menustrings.py:1144
+#: ../gui/wxpython/menustrings.py:153 ../gui/wxpython/menustrings.py:1143
 #, fuzzy
 msgid "Export database table"
 msgstr "Импорт таблицы базы данных"
 
-#: ../gui/wxpython/menustrings.py:155 ../gui/wxpython/menustrings.py:1145
+#: ../gui/wxpython/menustrings.py:154 ../gui/wxpython/menustrings.py:1144
 #, fuzzy
 msgid "Common export formats using OGR"
 msgstr "Конвертировать координаты"
 
-#: ../gui/wxpython/menustrings.py:156 ../gui/wxpython/menustrings.py:1146
+#: ../gui/wxpython/menustrings.py:155 ../gui/wxpython/menustrings.py:1145
 #, fuzzy
 msgid "Exports attribute tables into various formats."
 msgstr "Создать атрибутивную таблицу"
 
-#: ../gui/wxpython/menustrings.py:157 ../gui/wxpython/menustrings.py:1147
+#: ../gui/wxpython/menustrings.py:156 ../gui/wxpython/menustrings.py:1146
 #, fuzzy
 msgid "Link external data"
 msgstr "Загрузка растрового слоя"
 
-#: ../gui/wxpython/menustrings.py:159 ../gui/wxpython/menustrings.py:1149
+#: ../gui/wxpython/menustrings.py:158 ../gui/wxpython/menustrings.py:1148
 #, fuzzy
 msgid "Link GDAL supported raster data as a pseudo GRASS raster map layer."
 msgstr "Импорт растра поддерживаемый GDAL в бинарный растровый слой."
 
-#: ../gui/wxpython/menustrings.py:161 ../gui/wxpython/menustrings.py:1151
+#: ../gui/wxpython/menustrings.py:160 ../gui/wxpython/menustrings.py:1150
 #, fuzzy
 msgid "Creates a new pseudo-vector map as a link to an OGR-supported layer."
 msgstr ""
 "Создать новый векторный слой путем комбинирования других векторных слоев."
 
-#: ../gui/wxpython/menustrings.py:162 ../gui/wxpython/menustrings.py:1152
+#: ../gui/wxpython/menustrings.py:161 ../gui/wxpython/menustrings.py:1151
 #, fuzzy
 msgid "Output format for raster data"
 msgstr "Импортировать растровый слой"
 
-#: ../gui/wxpython/menustrings.py:163 ../gui/wxpython/menustrings.py:1153
+#: ../gui/wxpython/menustrings.py:162 ../gui/wxpython/menustrings.py:1152
 msgid "Defines raster output format utilizing GDAL library."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:164 ../gui/wxpython/menustrings.py:1154
+#: ../gui/wxpython/menustrings.py:163 ../gui/wxpython/menustrings.py:1153
 #, fuzzy
 msgid "Output format for vector data"
 msgstr "Импорт векторного слоя"
 
-#: ../gui/wxpython/menustrings.py:165 ../gui/wxpython/menustrings.py:1155
+#: ../gui/wxpython/menustrings.py:164 ../gui/wxpython/menustrings.py:1154
 msgid "Defines vector output format utilizing OGR library."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:166 ../gui/wxpython/menustrings.py:1156
+#: ../gui/wxpython/menustrings.py:165 ../gui/wxpython/menustrings.py:1155
 #, fuzzy
 msgid "Manage maps"
 msgstr "Очистить векторный слой"
 
-#: ../gui/wxpython/menustrings.py:167 ../gui/wxpython/menustrings.py:1157
+#: ../gui/wxpython/menustrings.py:166 ../gui/wxpython/menustrings.py:1156
 msgid "Copy"
 msgstr "Копировать"
 
-#: ../gui/wxpython/menustrings.py:168 ../gui/wxpython/menustrings.py:1158
+#: ../gui/wxpython/menustrings.py:167 ../gui/wxpython/menustrings.py:1157
 #, fuzzy
 msgid ""
 "Copies available data files in the current mapset search path to the user's "
@@ -10633,12 +10644,12 @@ msgstr ""
 "Скопировать доступные файлы текущего набора и области пользователя в "
 "соответствующие папки текущего набора."
 
-#: ../gui/wxpython/menustrings.py:169 ../gui/wxpython/menustrings.py:932
-#: ../gui/wxpython/menustrings.py:1159 ../gui/wxpython/menustrings.py:1843
+#: ../gui/wxpython/menustrings.py:168 ../gui/wxpython/menustrings.py:932
+#: ../gui/wxpython/menustrings.py:1158 ../gui/wxpython/menustrings.py:1843
 msgid "List"
 msgstr "Список"
 
-#: ../gui/wxpython/menustrings.py:170 ../gui/wxpython/menustrings.py:1160
+#: ../gui/wxpython/menustrings.py:169 ../gui/wxpython/menustrings.py:1159
 #, fuzzy
 msgid ""
 "Lists available GRASS data base files of the user-specified data type "
@@ -10647,73 +10658,73 @@ msgstr ""
 "Вывести список в стандартный вывод доступных файлов элементов базы данных "
 "указанного  пользователем типа."
 
-#: ../gui/wxpython/menustrings.py:172 ../gui/wxpython/menustrings.py:1162
+#: ../gui/wxpython/menustrings.py:171 ../gui/wxpython/menustrings.py:1161
 msgid "Renames data base element files in the user's current mapset."
 msgstr ""
 "Переименовать файлы элементов базы данных из текущего набора пользователя."
 
-#: ../gui/wxpython/menustrings.py:174 ../gui/wxpython/menustrings.py:1164
+#: ../gui/wxpython/menustrings.py:173 ../gui/wxpython/menustrings.py:1163
 #, fuzzy
 msgid ""
 "Removes data base element files from the user's current mapset using the "
 "search pattern."
 msgstr "Удалить файлы элементов базы данных из текущего набора пользователя."
 
-#: ../gui/wxpython/menustrings.py:175 ../gui/wxpython/menustrings.py:306
+#: ../gui/wxpython/menustrings.py:174 ../gui/wxpython/menustrings.py:305
 #: ../gui/wxpython/menustrings.py:601 ../gui/wxpython/menustrings.py:835
-#: ../gui/wxpython/menustrings.py:1217 ../gui/wxpython/menustrings.py:1512
+#: ../gui/wxpython/menustrings.py:1216 ../gui/wxpython/menustrings.py:1512
 #: ../gui/wxpython/menustrings.py:1746
 msgid "Map type conversions"
 msgstr "Конвертация типов слоев"
 
-#: ../gui/wxpython/menustrings.py:176 ../gui/wxpython/menustrings.py:307
-#: ../gui/wxpython/menustrings.py:1218
+#: ../gui/wxpython/menustrings.py:175 ../gui/wxpython/menustrings.py:306
+#: ../gui/wxpython/menustrings.py:1217
 msgid "Raster to vector"
 msgstr "Растр в вектор"
 
-#: ../gui/wxpython/menustrings.py:177 ../gui/wxpython/menustrings.py:308
-#: ../gui/wxpython/menustrings.py:1219
+#: ../gui/wxpython/menustrings.py:176 ../gui/wxpython/menustrings.py:307
+#: ../gui/wxpython/menustrings.py:1218
 #, fuzzy
 msgid "Converts a raster map into a vector map."
 msgstr "Конвертировать растровый слой в векторный."
 
-#: ../gui/wxpython/menustrings.py:178 ../gui/wxpython/menustrings.py:309
-#: ../gui/wxpython/menustrings.py:1220
+#: ../gui/wxpython/menustrings.py:177 ../gui/wxpython/menustrings.py:308
+#: ../gui/wxpython/menustrings.py:1219
 msgid "Raster series to volume"
 msgstr "Серия растров в объем"
 
-#: ../gui/wxpython/menustrings.py:179 ../gui/wxpython/menustrings.py:310
-#: ../gui/wxpython/menustrings.py:1221
+#: ../gui/wxpython/menustrings.py:178 ../gui/wxpython/menustrings.py:309
+#: ../gui/wxpython/menustrings.py:1220
 msgid "Converts 2D raster map slices to one 3D raster volume map."
 msgstr "Конвертировать растровые 2D слои в один растровый 3D слой объема."
 
-#: ../gui/wxpython/menustrings.py:180 ../gui/wxpython/menustrings.py:311
-#: ../gui/wxpython/menustrings.py:1222
+#: ../gui/wxpython/menustrings.py:179 ../gui/wxpython/menustrings.py:310
+#: ../gui/wxpython/menustrings.py:1221
 msgid "Raster 2.5D to volume"
 msgstr "2.5D растр в объем"
 
-#: ../gui/wxpython/menustrings.py:181 ../gui/wxpython/menustrings.py:312
-#: ../gui/wxpython/menustrings.py:1223
+#: ../gui/wxpython/menustrings.py:180 ../gui/wxpython/menustrings.py:311
+#: ../gui/wxpython/menustrings.py:1222
 msgid "Creates a 3D volume map based on 2D elevation and value raster maps."
 msgstr "Создать 3D слой объема из 2D слоя высот растровых слоев со значениями."
 
-#: ../gui/wxpython/menustrings.py:182 ../gui/wxpython/menustrings.py:602
+#: ../gui/wxpython/menustrings.py:181 ../gui/wxpython/menustrings.py:602
 #: ../gui/wxpython/menustrings.py:1513
 msgid "Vector to raster"
 msgstr "Вектор в растр"
 
-#: ../gui/wxpython/menustrings.py:183 ../gui/wxpython/menustrings.py:603
+#: ../gui/wxpython/menustrings.py:182 ../gui/wxpython/menustrings.py:603
 #: ../gui/wxpython/menustrings.py:1514
 #, fuzzy
 msgid "Converts (rasterize) a vector map into a raster map."
 msgstr "Конвертировать бинарный векторный слой GRASS в растровый слой GRASS."
 
-#: ../gui/wxpython/menustrings.py:184 ../gui/wxpython/menustrings.py:604
+#: ../gui/wxpython/menustrings.py:183 ../gui/wxpython/menustrings.py:604
 #: ../gui/wxpython/menustrings.py:1515
 msgid "Vector to volume"
 msgstr "Вектор в объем"
 
-#: ../gui/wxpython/menustrings.py:185 ../gui/wxpython/menustrings.py:605
+#: ../gui/wxpython/menustrings.py:184 ../gui/wxpython/menustrings.py:605
 #: ../gui/wxpython/menustrings.py:1516
 #, fuzzy
 msgid "Converts a vector map (only points) into a 3D raster map."
@@ -10721,253 +10732,253 @@ msgstr ""
 "Конвертировать бинарный векторный слой GRASS (только точки) в растровый слой "
 "3D GRASS."
 
-#: ../gui/wxpython/menustrings.py:186 ../gui/wxpython/menustrings.py:606
+#: ../gui/wxpython/menustrings.py:185 ../gui/wxpython/menustrings.py:606
 #: ../gui/wxpython/menustrings.py:1517
 #, fuzzy
 msgid "2D vector to 3D vector"
 msgstr "Растр в вектор"
 
-#: ../gui/wxpython/menustrings.py:187 ../gui/wxpython/menustrings.py:607
+#: ../gui/wxpython/menustrings.py:186 ../gui/wxpython/menustrings.py:607
 #: ../gui/wxpython/menustrings.py:1518
 msgid "Performs transformation of 2D vector features to 3D."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:188 ../gui/wxpython/menustrings.py:608
+#: ../gui/wxpython/menustrings.py:187 ../gui/wxpython/menustrings.py:608
 #: ../gui/wxpython/menustrings.py:1519
 msgid "Sites to vector"
 msgstr "Сайты в вектор"
 
-#: ../gui/wxpython/menustrings.py:189 ../gui/wxpython/menustrings.py:836
+#: ../gui/wxpython/menustrings.py:188 ../gui/wxpython/menustrings.py:836
 #: ../gui/wxpython/menustrings.py:1747
 msgid "Volume to raster series"
 msgstr "Объем в серию растров"
 
-#: ../gui/wxpython/menustrings.py:190 ../gui/wxpython/menustrings.py:837
+#: ../gui/wxpython/menustrings.py:189 ../gui/wxpython/menustrings.py:837
 #: ../gui/wxpython/menustrings.py:1748
 msgid "Converts 3D raster maps to 2D raster maps"
 msgstr "Конвертировать растровые 3D слои в растровые 2D слои"
 
-#: ../gui/wxpython/menustrings.py:191 ../gui/wxpython/menustrings.py:1923
+#: ../gui/wxpython/menustrings.py:190 ../gui/wxpython/menustrings.py:1923
 msgid "Georectify"
 msgstr "Провести геометрическую коррекцию"
 
-#: ../gui/wxpython/menustrings.py:192 ../gui/wxpython/menustrings.py:1924
+#: ../gui/wxpython/menustrings.py:191 ../gui/wxpython/menustrings.py:1924
 #, fuzzy
 msgid "Manage Ground Control Points for Georectification"
 msgstr "Контрольные точки"
 
-#: ../gui/wxpython/menustrings.py:193 ../gui/wxpython/menustrings.py:1925
+#: ../gui/wxpython/menustrings.py:192 ../gui/wxpython/menustrings.py:1925
 msgid "Graphical modeler"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:194 ../gui/wxpython/menustrings.py:1926
+#: ../gui/wxpython/menustrings.py:193 ../gui/wxpython/menustrings.py:1926
 msgid "Launch Graphical modeler"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:195 ../gui/wxpython/menustrings.py:1974
+#: ../gui/wxpython/menustrings.py:194 ../gui/wxpython/menustrings.py:1974
 msgid "Run model"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:196
+#: ../gui/wxpython/menustrings.py:195
 msgid "Run model prepared by Graphical modeler"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:197
+#: ../gui/wxpython/menustrings.py:196
 #, fuzzy
 msgid "3D image rendering"
 msgstr "Включить авто-отрисовку"
 
-#: ../gui/wxpython/menustrings.py:198
+#: ../gui/wxpython/menustrings.py:197
 msgid ""
 "Creates a 3D rendering of GIS data. Renders surfaces (raster data), 2D/3D "
 "vector data, and volumes (3D raster data) in 3D."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:199 ../gui/wxpython/menustrings.py:1004
+#: ../gui/wxpython/menustrings.py:198 ../gui/wxpython/menustrings.py:1004
 #: ../gui/wxpython/menustrings.py:1915 ../gui/wxpython/menustrings.py:1920
 #, fuzzy
 msgid "Animation tool"
 msgstr "Квантование"
 
-#: ../gui/wxpython/menustrings.py:200 ../gui/wxpython/menustrings.py:1005
+#: ../gui/wxpython/menustrings.py:199 ../gui/wxpython/menustrings.py:1005
 #: ../gui/wxpython/menustrings.py:1916 ../gui/wxpython/menustrings.py:1921
 msgid "Launch animation tool."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:201
+#: ../gui/wxpython/menustrings.py:200
 msgid "Bearing/distance to coordinates"
 msgstr "Направление/расстояние до координат"
 
-#: ../gui/wxpython/menustrings.py:202
+#: ../gui/wxpython/menustrings.py:201
 msgid ""
 "A simple utility for converting bearing and distance measurements to "
 "coordinates and vice versa. It assumes a cartesian coordinate system"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:204 ../gui/wxpython/menustrings.py:1932
+#: ../gui/wxpython/menustrings.py:203 ../gui/wxpython/menustrings.py:1932
 msgid "Launch Cartographic Composer"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:205 ../gui/wxpython/menustrings.py:1929
+#: ../gui/wxpython/menustrings.py:204 ../gui/wxpython/menustrings.py:1929
 #, fuzzy
 msgid "Map Swipe"
 msgstr "Тип слоя:"
 
-#: ../gui/wxpython/menustrings.py:206 ../gui/wxpython/menustrings.py:1930
+#: ../gui/wxpython/menustrings.py:205 ../gui/wxpython/menustrings.py:1930
 #, fuzzy
 msgid "Launch Map Swipe"
 msgstr "Описание слоя"
 
-#: ../gui/wxpython/menustrings.py:207
+#: ../gui/wxpython/menustrings.py:206
 #, fuzzy
 msgid "Launch script"
 msgstr "Описание слоя"
 
-#: ../gui/wxpython/menustrings.py:208
+#: ../gui/wxpython/menustrings.py:207
 msgid "Launches script file."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:209
+#: ../gui/wxpython/menustrings.py:208
 msgid "Exit GUI"
 msgstr "Выйти из интерфейса"
 
-#: ../gui/wxpython/menustrings.py:210
+#: ../gui/wxpython/menustrings.py:209
 #, fuzzy
 msgid "Quit the GRASS wxGUI session."
 msgstr "Вход в сессию GRASS"
 
-#: ../gui/wxpython/menustrings.py:211 ../gui/wxpython/menustrings.py:1952
+#: ../gui/wxpython/menustrings.py:210 ../gui/wxpython/menustrings.py:1952
 #, fuzzy
 msgid "&Settings"
 msgstr "Установки"
 
-#: ../gui/wxpython/menustrings.py:212
+#: ../gui/wxpython/menustrings.py:211
 msgid "Region"
 msgstr "Регион"
 
-#: ../gui/wxpython/menustrings.py:213
+#: ../gui/wxpython/menustrings.py:212
 msgid "Display region"
 msgstr "Показать регион"
 
-#: ../gui/wxpython/menustrings.py:214 ../gui/wxpython/menustrings.py:216
+#: ../gui/wxpython/menustrings.py:213 ../gui/wxpython/menustrings.py:215
 msgid "Manages the boundary definitions for the geographic region."
 msgstr "Управлять границами географического региона."
 
-#: ../gui/wxpython/menustrings.py:215
+#: ../gui/wxpython/menustrings.py:214
 msgid "Set region"
 msgstr "Установить регион"
 
-#: ../gui/wxpython/menustrings.py:217
+#: ../gui/wxpython/menustrings.py:216
 msgid "GRASS working environment"
 msgstr "Рабочая среда GRASS"
 
-#: ../gui/wxpython/menustrings.py:218
+#: ../gui/wxpython/menustrings.py:217
 msgid "Mapset access"
 msgstr "Доступ к набору"
 
-#: ../gui/wxpython/menustrings.py:219
+#: ../gui/wxpython/menustrings.py:218
 msgid "Set/unset access to other mapsets in current location"
 msgstr "Установить/убрать доступ к другим наборам этой области"
 
-#: ../gui/wxpython/menustrings.py:220
+#: ../gui/wxpython/menustrings.py:219
 msgid "User access"
 msgstr "Пользовательский доступ"
 
-#: ../gui/wxpython/menustrings.py:221
+#: ../gui/wxpython/menustrings.py:220
 #, fuzzy
 msgid ""
 "Controls access to the current mapset for other users on the system. If no "
 "option given, prints current status."
 msgstr "Управление доступом к текущему набору другими пользователями системы."
 
-#: ../gui/wxpython/menustrings.py:222
+#: ../gui/wxpython/menustrings.py:221
 msgid "Change working environment"
 msgstr "Изменить рабочую среду"
 
-#: ../gui/wxpython/menustrings.py:223
+#: ../gui/wxpython/menustrings.py:222
 msgid ""
 "Changes/reports current mapset. Optionally create new mapset or list "
 "available mapsets in given location."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:224
+#: ../gui/wxpython/menustrings.py:223
 #, fuzzy
 msgid "Change location and mapset"
 msgstr "Выбирите область проекта и набор"
 
-#: ../gui/wxpython/menustrings.py:225
+#: ../gui/wxpython/menustrings.py:224
 #, fuzzy
 msgid "Change current location and mapset."
 msgstr "Выбирите область проекта и набор"
 
-#: ../gui/wxpython/menustrings.py:226
+#: ../gui/wxpython/menustrings.py:225
 #, fuzzy
 msgid "Change mapset"
 msgstr "Создать набор"
 
-#: ../gui/wxpython/menustrings.py:227
+#: ../gui/wxpython/menustrings.py:226
 msgid "Change current mapset."
 msgstr "Изменить текущий набор."
 
-#: ../gui/wxpython/menustrings.py:228 ../gui/wxpython/menustrings.py:229
+#: ../gui/wxpython/menustrings.py:227 ../gui/wxpython/menustrings.py:228
 #, fuzzy
 msgid "Change working directory"
 msgstr "Изменить рабочую среду"
 
-#: ../gui/wxpython/menustrings.py:230
+#: ../gui/wxpython/menustrings.py:229
 msgid "Show settings"
 msgstr "Показать настройки"
 
-#: ../gui/wxpython/menustrings.py:231
+#: ../gui/wxpython/menustrings.py:230
 msgid "Outputs and modifies the user's current GRASS variable settings."
 msgstr "Вывести и изменить текущие пользовательские настройки GRASS."
 
-#: ../gui/wxpython/menustrings.py:232
+#: ../gui/wxpython/menustrings.py:231
 msgid "Change settings"
 msgstr "Изменить настройки"
 
-#: ../gui/wxpython/menustrings.py:233
+#: ../gui/wxpython/menustrings.py:232
 #, fuzzy
 msgid ""
 "Outputs and modifies the user's current GRASS variable settings. Prints all "
 "defined GRASS variables if no option is given."
 msgstr "Вывести и изменить текущие пользовательские настройки GRASS."
 
-#: ../gui/wxpython/menustrings.py:234
+#: ../gui/wxpython/menustrings.py:233
 #, fuzzy
 msgid "Create new location"
 msgstr "Создать новую область?"
 
-#: ../gui/wxpython/menustrings.py:235
+#: ../gui/wxpython/menustrings.py:234
 #, fuzzy
 msgid "Launches location wizard to create new GRASS location."
 msgstr "Вы хотите создать новую область GRASS <%s>?"
 
-#: ../gui/wxpython/menustrings.py:237
+#: ../gui/wxpython/menustrings.py:236
 #, fuzzy
 msgid "Creates new mapset in the current location, changes current mapset."
 msgstr "Выбирите область проекта и набор"
 
-#: ../gui/wxpython/menustrings.py:238
+#: ../gui/wxpython/menustrings.py:237
 #, fuzzy
 msgid "Version and copyright"
 msgstr "Показать версию и информацию о копирайте."
 
-#: ../gui/wxpython/menustrings.py:239
+#: ../gui/wxpython/menustrings.py:238
 msgid "Displays version and copyright information."
 msgstr "Показать версию и информацию о копирайте."
 
-#: ../gui/wxpython/menustrings.py:240
+#: ../gui/wxpython/menustrings.py:239
 #, fuzzy
 msgid "Map projections"
 msgstr "Управление проекциями"
 
-#: ../gui/wxpython/menustrings.py:241
+#: ../gui/wxpython/menustrings.py:240
 #, fuzzy
 msgid "Display map projection"
 msgstr "Показать регион"
 
-#: ../gui/wxpython/menustrings.py:242
+#: ../gui/wxpython/menustrings.py:241
 #, fuzzy
 msgid ""
 "Converts co-ordinate system descriptions (i.e. projection information) "
@@ -10977,141 +10988,141 @@ msgstr ""
 "между различными форматами (включая формат GRASS). Может так же использовано "
 "для областей GRASS."
 
-#: ../gui/wxpython/menustrings.py:243
+#: ../gui/wxpython/menustrings.py:242
 msgid "Manage projections"
 msgstr "Управление проекциями"
 
-#: ../gui/wxpython/menustrings.py:244
+#: ../gui/wxpython/menustrings.py:243
 msgid ""
 "Prints or modifies GRASS projection information files (in various co-"
 "ordinate system descriptions). Can also be used to create new GRASS "
 "locations."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:245
+#: ../gui/wxpython/menustrings.py:244
 msgid "Convert coordinates"
 msgstr "Конвертировать координаты"
 
-#: ../gui/wxpython/menustrings.py:246
+#: ../gui/wxpython/menustrings.py:245
 msgid "Converts coordinates from one projection to another (cs2cs frontend)."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:247
+#: ../gui/wxpython/menustrings.py:246
 #, fuzzy
 msgid "Addons extensions"
 msgstr "Список категорий"
 
-#: ../gui/wxpython/menustrings.py:248
+#: ../gui/wxpython/menustrings.py:247
 #, fuzzy
 msgid "Install extension from addons"
 msgstr "Список категорий"
 
-#: ../gui/wxpython/menustrings.py:249
+#: ../gui/wxpython/menustrings.py:248
 msgid "Installs new extension from GRASS AddOns SVN repository."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:250
+#: ../gui/wxpython/menustrings.py:249
 #, fuzzy
 msgid "Manage installed extension"
 msgstr "Список категорий"
 
-#: ../gui/wxpython/menustrings.py:251
+#: ../gui/wxpython/menustrings.py:250
 #, fuzzy
 msgid "Updates or removes installed GRASS AddOns extension(s)."
 msgstr "Управление проекциями"
 
-#: ../gui/wxpython/menustrings.py:252 ../gui/wxpython/menustrings.py:1953
+#: ../gui/wxpython/menustrings.py:251 ../gui/wxpython/menustrings.py:1953
 msgid "Preferences"
 msgstr "Настройки"
 
-#: ../gui/wxpython/menustrings.py:253
+#: ../gui/wxpython/menustrings.py:252
 msgid "User GUI preferences (display font, commands, digitizer, etc.)"
 msgstr ""
 "Пользовательские настройки интерфейса (шрифт, команды, оцифровка и т.д.)"
 
-#: ../gui/wxpython/menustrings.py:254 ../gui/wxpython/menustrings.py:1165
+#: ../gui/wxpython/menustrings.py:253 ../gui/wxpython/menustrings.py:1164
 #, fuzzy
 msgid "&Raster"
 msgstr "Растр"
 
-#: ../gui/wxpython/menustrings.py:255 ../gui/wxpython/menustrings.py:1166
+#: ../gui/wxpython/menustrings.py:254 ../gui/wxpython/menustrings.py:1165
 msgid "Develop raster map"
 msgstr "Обработать растровый слой"
 
-#: ../gui/wxpython/menustrings.py:256 ../gui/wxpython/menustrings.py:1167
+#: ../gui/wxpython/menustrings.py:255 ../gui/wxpython/menustrings.py:1166
 msgid "Compress/decompress"
 msgstr "Сжать/распаковать"
 
-#: ../gui/wxpython/menustrings.py:257 ../gui/wxpython/menustrings.py:1168
+#: ../gui/wxpython/menustrings.py:256 ../gui/wxpython/menustrings.py:1167
 msgid "Compresses and decompresses raster maps."
 msgstr "Сжать и распаковать растровые слои."
 
-#: ../gui/wxpython/menustrings.py:258 ../gui/wxpython/menustrings.py:1169
+#: ../gui/wxpython/menustrings.py:257 ../gui/wxpython/menustrings.py:1168
 msgid "Region boundaries"
 msgstr "Границы региона"
 
-#: ../gui/wxpython/menustrings.py:259 ../gui/wxpython/menustrings.py:1170
+#: ../gui/wxpython/menustrings.py:258 ../gui/wxpython/menustrings.py:1169
 msgid "Sets the boundary definitions for a raster map."
 msgstr "Установить границы для растрового слоя."
 
-#: ../gui/wxpython/menustrings.py:260 ../gui/wxpython/menustrings.py:1171
+#: ../gui/wxpython/menustrings.py:259 ../gui/wxpython/menustrings.py:1170
 msgid "Manage NULL values"
 msgstr "Управление значениями NULL"
 
-#: ../gui/wxpython/menustrings.py:261 ../gui/wxpython/menustrings.py:1172
+#: ../gui/wxpython/menustrings.py:260 ../gui/wxpython/menustrings.py:1171
 msgid "Manages NULL-values of given raster map."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:262 ../gui/wxpython/menustrings.py:1173
+#: ../gui/wxpython/menustrings.py:261 ../gui/wxpython/menustrings.py:1172
 msgid "Quantization"
 msgstr "Квантование"
 
-#: ../gui/wxpython/menustrings.py:263 ../gui/wxpython/menustrings.py:1174
+#: ../gui/wxpython/menustrings.py:262 ../gui/wxpython/menustrings.py:1173
 msgid "Produces the quantization file for a floating-point map."
 msgstr "Создать файл квантования для слоя с плавающей запятой."
 
-#: ../gui/wxpython/menustrings.py:264 ../gui/wxpython/menustrings.py:1175
+#: ../gui/wxpython/menustrings.py:263 ../gui/wxpython/menustrings.py:1174
 msgid "Timestamp"
 msgstr "Временная метка"
 
-#: ../gui/wxpython/menustrings.py:265 ../gui/wxpython/menustrings.py:1176
+#: ../gui/wxpython/menustrings.py:264 ../gui/wxpython/menustrings.py:1175
 #, fuzzy
 msgid ""
 "Modifies a timestamp for a raster map. Print/add/remove a timestamp for a "
 "raster map."
 msgstr "Вывести/добавить/удалить временную метку для 3D растрового слоя"
 
-#: ../gui/wxpython/menustrings.py:266 ../gui/wxpython/menustrings.py:1177
+#: ../gui/wxpython/menustrings.py:265 ../gui/wxpython/menustrings.py:1176
 msgid "Resample using aggregate statistics"
 msgstr "Пересчет с использованием статистики агрегации"
 
-#: ../gui/wxpython/menustrings.py:267 ../gui/wxpython/menustrings.py:1178
+#: ../gui/wxpython/menustrings.py:266 ../gui/wxpython/menustrings.py:1177
 #, fuzzy
 msgid "Resamples raster map layers to a coarser grid using aggregation."
 msgstr "Пересчет растрового слоя с использованием агрегации."
 
-#: ../gui/wxpython/menustrings.py:268 ../gui/wxpython/menustrings.py:1179
+#: ../gui/wxpython/menustrings.py:267 ../gui/wxpython/menustrings.py:1178
 msgid "Resample using multiple methods"
 msgstr "Пересчет используя различные методы"
 
-#: ../gui/wxpython/menustrings.py:269 ../gui/wxpython/menustrings.py:1180
+#: ../gui/wxpython/menustrings.py:268 ../gui/wxpython/menustrings.py:1179
 #, fuzzy
 msgid "Resamples raster map to a finer grid using interpolation."
 msgstr "Пересчет растрового слоя используя интерполяцию."
 
-#: ../gui/wxpython/menustrings.py:270 ../gui/wxpython/menustrings.py:1181
+#: ../gui/wxpython/menustrings.py:269 ../gui/wxpython/menustrings.py:1180
 msgid "Resample using nearest neighbor"
 msgstr "Пересчет используя метод ближайшего соседа"
 
-#: ../gui/wxpython/menustrings.py:271 ../gui/wxpython/menustrings.py:1182
+#: ../gui/wxpython/menustrings.py:270 ../gui/wxpython/menustrings.py:1181
 msgid "GRASS raster map layer data resampling capability."
 msgstr "Возможности пересчета растрового слоя GRASS."
 
-#: ../gui/wxpython/menustrings.py:272 ../gui/wxpython/menustrings.py:1183
+#: ../gui/wxpython/menustrings.py:271 ../gui/wxpython/menustrings.py:1182
 msgid "Resample using spline tension"
 msgstr "Пересчет с использованием сплайнов"
 
-#: ../gui/wxpython/menustrings.py:273 ../gui/wxpython/menustrings.py:1184
+#: ../gui/wxpython/menustrings.py:272 ../gui/wxpython/menustrings.py:1183
 msgid ""
 "Reinterpolates and optionally computes topographic analysis from input "
 "raster map to a new raster map (possibly with different resolution) using "
@@ -11121,12 +11132,12 @@ msgstr ""
 "с получением нового растрового слоя (возможно с другим разрешением) "
 "используя сплайны со сглаживанием."
 
-#: ../gui/wxpython/menustrings.py:274 ../gui/wxpython/menustrings.py:1185
+#: ../gui/wxpython/menustrings.py:273 ../gui/wxpython/menustrings.py:1184
 #, fuzzy
 msgid "Resample using bspline"
 msgstr "Пересчет с использованием сплайнов"
 
-#: ../gui/wxpython/menustrings.py:275 ../gui/wxpython/menustrings.py:1186
+#: ../gui/wxpython/menustrings.py:274 ../gui/wxpython/menustrings.py:1185
 #, fuzzy
 msgid ""
 "Performs bilinear or bicubic spline interpolation with Tykhonov "
@@ -11134,155 +11145,157 @@ msgid ""
 msgstr ""
 "Бикубическая или билинейная интерполяция с помощью регуляризации Тихонова."
 
-#: ../gui/wxpython/menustrings.py:276 ../gui/wxpython/menustrings.py:1187
+#: ../gui/wxpython/menustrings.py:275 ../gui/wxpython/menustrings.py:1186
 #, fuzzy
 msgid "Resample using analytic kernel"
 msgstr "Пересчет с использованием сплайнов"
 
-#: ../gui/wxpython/menustrings.py:277 ../gui/wxpython/menustrings.py:1188
+#: ../gui/wxpython/menustrings.py:276 ../gui/wxpython/menustrings.py:1187
 #, fuzzy
 msgid "Resamples raster map layers using an analytic kernel."
 msgstr "Пересчет растрового слоя с использованием агрегации."
 
-#: ../gui/wxpython/menustrings.py:278 ../gui/wxpython/menustrings.py:565
-#: ../gui/wxpython/menustrings.py:1189 ../gui/wxpython/menustrings.py:1476
+#: ../gui/wxpython/menustrings.py:277 ../gui/wxpython/menustrings.py:565
+#: ../gui/wxpython/menustrings.py:1188 ../gui/wxpython/menustrings.py:1476
 msgid "Support file maintenance"
 msgstr "Обновление файла поддержки"
 
-#: ../gui/wxpython/menustrings.py:279 ../gui/wxpython/menustrings.py:1190
+#: ../gui/wxpython/menustrings.py:278 ../gui/wxpython/menustrings.py:1189
 msgid "Allows creation and/or modification of raster map layer support files."
 msgstr "Позволяет создание и/или модификацию файлов поддержки растровых слоев."
 
-#: ../gui/wxpython/menustrings.py:280 ../gui/wxpython/menustrings.py:1191
+#: ../gui/wxpython/menustrings.py:279 ../gui/wxpython/menustrings.py:1190
 msgid "Update map statistics"
 msgstr "Обновить статистику слоя"
 
-#: ../gui/wxpython/menustrings.py:281 ../gui/wxpython/menustrings.py:1192
+#: ../gui/wxpython/menustrings.py:280 ../gui/wxpython/menustrings.py:1191
 msgid "Update raster map statistics"
 msgstr "Обновить статистику растрового слоя"
 
-#: ../gui/wxpython/menustrings.py:284 ../gui/wxpython/menustrings.py:1195
+#: ../gui/wxpython/menustrings.py:283 ../gui/wxpython/menustrings.py:1194
 msgid "Tiling"
 msgstr "Тайлинг"
 
-#: ../gui/wxpython/menustrings.py:285 ../gui/wxpython/menustrings.py:1196
+#: ../gui/wxpython/menustrings.py:284 ../gui/wxpython/menustrings.py:1195
 msgid ""
 "Produces tilings of the source projection for use in the destination region "
 "and projection."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:286 ../gui/wxpython/menustrings.py:584
-#: ../gui/wxpython/menustrings.py:1197 ../gui/wxpython/menustrings.py:1495
+#: ../gui/wxpython/menustrings.py:285 ../gui/wxpython/menustrings.py:584
+#: ../gui/wxpython/menustrings.py:1196 ../gui/wxpython/menustrings.py:1495
 msgid "Manage colors"
 msgstr "Управлять цветами"
 
-#: ../gui/wxpython/menustrings.py:287 ../gui/wxpython/menustrings.py:585
-#: ../gui/wxpython/menustrings.py:1198 ../gui/wxpython/menustrings.py:1496
+#: ../gui/wxpython/menustrings.py:286 ../gui/wxpython/menustrings.py:585
+#: ../gui/wxpython/menustrings.py:1197 ../gui/wxpython/menustrings.py:1496
 msgid "Color tables"
 msgstr "Цветовые таблицы"
 
-#: ../gui/wxpython/menustrings.py:288 ../gui/wxpython/menustrings.py:1199
+#: ../gui/wxpython/menustrings.py:287 ../gui/wxpython/menustrings.py:1198
 #, fuzzy
 msgid "Creates/modifies the color table associated with a raster map."
 msgstr "Создать/изменить цветовую таблицу растрового слоя"
 
-#: ../gui/wxpython/menustrings.py:289 ../gui/wxpython/menustrings.py:1200
+#: ../gui/wxpython/menustrings.py:288 ../gui/wxpython/menustrings.py:1199
 #, fuzzy
 msgid "Color tables (stddev)"
 msgstr "Цветовые таблицы"
 
-#: ../gui/wxpython/menustrings.py:290 ../gui/wxpython/menustrings.py:1201
+#: ../gui/wxpython/menustrings.py:289 ../gui/wxpython/menustrings.py:1200
 msgid "Sets color rules based on stddev from a raster map's mean value."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:291 ../gui/wxpython/menustrings.py:587
-#: ../gui/wxpython/menustrings.py:1202 ../gui/wxpython/menustrings.py:1498
+#: ../gui/wxpython/menustrings.py:290 ../gui/wxpython/menustrings.py:587
+#: ../gui/wxpython/menustrings.py:1201 ../gui/wxpython/menustrings.py:1498
 #, fuzzy
 msgid "Manage color rules interactively"
 msgstr "Интерактивная перекодировка"
 
-#: ../gui/wxpython/menustrings.py:292 ../gui/wxpython/menustrings.py:1203
+#: ../gui/wxpython/menustrings.py:291 ../gui/wxpython/menustrings.py:1202
 #, fuzzy
 msgid "Interactive management of raster color tables."
 msgstr "Интерактивное редактирование значений категорий"
 
-#: ../gui/wxpython/menustrings.py:293 ../gui/wxpython/menustrings.py:589
-#: ../gui/wxpython/menustrings.py:1204 ../gui/wxpython/menustrings.py:1500
+#: ../gui/wxpython/menustrings.py:292 ../gui/wxpython/menustrings.py:589
+#: ../gui/wxpython/menustrings.py:1203 ../gui/wxpython/menustrings.py:1500
 #, fuzzy
 msgid "Export color table"
 msgstr "Цветовые таблицы"
 
-#: ../gui/wxpython/menustrings.py:294 ../gui/wxpython/menustrings.py:1205
+#: ../gui/wxpython/menustrings.py:293 ../gui/wxpython/menustrings.py:1204
 #, fuzzy
 msgid "Exports the color table associated with a raster map."
 msgstr "Создать/изменить цветовую таблицу растрового слоя"
 
-#: ../gui/wxpython/menustrings.py:295 ../gui/wxpython/menustrings.py:1206
+#: ../gui/wxpython/menustrings.py:294 ../gui/wxpython/menustrings.py:1205
 msgid "Blend 2 color rasters"
 msgstr "Смешать 2 цветных растра"
 
-#: ../gui/wxpython/menustrings.py:296 ../gui/wxpython/menustrings.py:1207
+#: ../gui/wxpython/menustrings.py:295 ../gui/wxpython/menustrings.py:1206
 msgid "Blends color components of two raster maps by a given ratio."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:297 ../gui/wxpython/menustrings.py:1208
+#: ../gui/wxpython/menustrings.py:296 ../gui/wxpython/menustrings.py:1207
 msgid "Create RGB"
 msgstr "Создать RGB"
 
-#: ../gui/wxpython/menustrings.py:298 ../gui/wxpython/menustrings.py:1209
+#: ../gui/wxpython/menustrings.py:297 ../gui/wxpython/menustrings.py:1208
 #, fuzzy
 msgid ""
 "Combines red, green and blue raster maps into a single composite raster map."
 msgstr "Комбинировать красный, зеленый и синий слои в единый композитный слой."
 
-#: ../gui/wxpython/menustrings.py:299 ../gui/wxpython/menustrings.py:741
-#: ../gui/wxpython/menustrings.py:1210 ../gui/wxpython/menustrings.py:1652
+#: ../gui/wxpython/menustrings.py:298 ../gui/wxpython/menustrings.py:741
+#: ../gui/wxpython/menustrings.py:1209 ../gui/wxpython/menustrings.py:1652
 msgid "RGB to HIS"
 msgstr "RGB в HIS"
 
-#: ../gui/wxpython/menustrings.py:300 ../gui/wxpython/menustrings.py:1211
+#: ../gui/wxpython/menustrings.py:299 ../gui/wxpython/menustrings.py:1210
+#, fuzzy
 msgid ""
-"Generates red, green and blue raster map layers combining hue, intensity and "
-"saturation (HIS) values from user-specified input raster map layers."
+"Generates red, green and blue (RGB) raster map layers combining hue, "
+"intensity and saturation (HIS) values from user-specified input raster map "
+"layers."
 msgstr ""
 "Создать красный, зеленый и синий слои комбинацией значений тона, яркости и "
 "насыщенности (HIS) из заданных растровых слоев."
 
-#: ../gui/wxpython/menustrings.py:301 ../gui/wxpython/menustrings.py:1212
+#: ../gui/wxpython/menustrings.py:300 ../gui/wxpython/menustrings.py:1211
 #, fuzzy
 msgid "Query raster maps"
 msgstr "Наложить растровые слои"
 
-#: ../gui/wxpython/menustrings.py:302 ../gui/wxpython/menustrings.py:1213
+#: ../gui/wxpython/menustrings.py:301 ../gui/wxpython/menustrings.py:1212
 #, fuzzy
 msgid "Query values by coordinates"
 msgstr "Запрос по координатам"
 
-#: ../gui/wxpython/menustrings.py:303 ../gui/wxpython/menustrings.py:1214
+#: ../gui/wxpython/menustrings.py:302 ../gui/wxpython/menustrings.py:1213
 #, fuzzy
 msgid "Queries raster maps on their category values and category labels."
 msgstr "Запрашивает значения категорий и подписи растровых слоев."
 
-#: ../gui/wxpython/menustrings.py:304 ../gui/wxpython/menustrings.py:1215
+#: ../gui/wxpython/menustrings.py:303 ../gui/wxpython/menustrings.py:1214
 #, fuzzy
 msgid "Query colors by value"
 msgstr "Цветовые таблицы"
 
-#: ../gui/wxpython/menustrings.py:305 ../gui/wxpython/menustrings.py:1216
+#: ../gui/wxpython/menustrings.py:304 ../gui/wxpython/menustrings.py:1215
 #, fuzzy
 msgid "Queries colors for a raster map layer."
 msgstr "Показать статистику для растровых слоев."
 
-#: ../gui/wxpython/menustrings.py:313 ../gui/wxpython/menustrings.py:1224
+#: ../gui/wxpython/menustrings.py:312 ../gui/wxpython/menustrings.py:1223
 #, fuzzy
 msgid "Raster buffers and distance"
 msgstr "Измерить расстояние"
 
-#: ../gui/wxpython/menustrings.py:314 ../gui/wxpython/menustrings.py:1225
+#: ../gui/wxpython/menustrings.py:313 ../gui/wxpython/menustrings.py:1224
 msgid "Buffer rasters"
 msgstr "Буферизировать растры"
 
-#: ../gui/wxpython/menustrings.py:315 ../gui/wxpython/menustrings.py:1226
+#: ../gui/wxpython/menustrings.py:314 ../gui/wxpython/menustrings.py:1225
 #, fuzzy
 msgid ""
 "Creates a raster map showing buffer zones surrounding cells that contain non-"
@@ -11291,67 +11304,67 @@ msgstr ""
 "Создать растровый слой показывающий растровые зоны окружающие ячейки "
 "содержащие не-NULL значения категории."
 
-#: ../gui/wxpython/menustrings.py:316 ../gui/wxpython/menustrings.py:1227
+#: ../gui/wxpython/menustrings.py:315 ../gui/wxpython/menustrings.py:1226
 msgid "Concentric circles"
 msgstr "Концентрические окружности"
 
-#: ../gui/wxpython/menustrings.py:317 ../gui/wxpython/menustrings.py:1228
+#: ../gui/wxpython/menustrings.py:316 ../gui/wxpython/menustrings.py:1227
 msgid "Creates a raster map containing concentric rings around a given point."
 msgstr ""
 "Создать растровый слой, содержащий концентрические окружности вокруг данной "
 "точки"
 
-#: ../gui/wxpython/menustrings.py:318 ../gui/wxpython/menustrings.py:1229
+#: ../gui/wxpython/menustrings.py:317 ../gui/wxpython/menustrings.py:1228
 msgid "Closest points"
 msgstr "Ближайшие точки"
 
-#: ../gui/wxpython/menustrings.py:319 ../gui/wxpython/menustrings.py:1230
+#: ../gui/wxpython/menustrings.py:318 ../gui/wxpython/menustrings.py:1229
 msgid "Locates the closest points between objects in two raster maps."
 msgstr "Находит ближайшие точки между объектами двух растров."
 
-#: ../gui/wxpython/menustrings.py:320 ../gui/wxpython/menustrings.py:1231
+#: ../gui/wxpython/menustrings.py:319 ../gui/wxpython/menustrings.py:1230
 msgid "Grow by one cell"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:321 ../gui/wxpython/menustrings.py:382
-#: ../gui/wxpython/menustrings.py:1232 ../gui/wxpython/menustrings.py:1293
+#: ../gui/wxpython/menustrings.py:320 ../gui/wxpython/menustrings.py:383
+#: ../gui/wxpython/menustrings.py:1231 ../gui/wxpython/menustrings.py:1294
 #, fuzzy
 msgid "Generates a raster map layer with contiguous areas grown by one cell."
 msgstr "Конвертирует растровый слой в текстовый файл ASCII."
 
-#: ../gui/wxpython/menustrings.py:322 ../gui/wxpython/menustrings.py:374
-#: ../gui/wxpython/menustrings.py:1233 ../gui/wxpython/menustrings.py:1285
+#: ../gui/wxpython/menustrings.py:321 ../gui/wxpython/menustrings.py:375
+#: ../gui/wxpython/menustrings.py:1232 ../gui/wxpython/menustrings.py:1286
 #, fuzzy
 msgid "Distance to features"
 msgstr "Ближайшие объекты"
 
-#: ../gui/wxpython/menustrings.py:323 ../gui/wxpython/menustrings.py:375
-#: ../gui/wxpython/menustrings.py:1234 ../gui/wxpython/menustrings.py:1286
+#: ../gui/wxpython/menustrings.py:322 ../gui/wxpython/menustrings.py:376
+#: ../gui/wxpython/menustrings.py:1233 ../gui/wxpython/menustrings.py:1287
 #, fuzzy
 msgid "Generates a raster map containing distances to nearest raster features."
 msgstr ""
 "Создать растровый слой с протяженными зонами выращенными вокруг единичных "
 "ячеек."
 
-#: ../gui/wxpython/menustrings.py:325 ../gui/wxpython/menustrings.py:1236
+#: ../gui/wxpython/menustrings.py:324 ../gui/wxpython/menustrings.py:1235
 msgid "Creates a MASK for limiting raster operation."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:326 ../gui/wxpython/menustrings.py:1237
+#: ../gui/wxpython/menustrings.py:325 ../gui/wxpython/menustrings.py:1236
 #, fuzzy
 msgid "Raster map calculator"
 msgstr "3D растровый калькулятор"
 
-#: ../gui/wxpython/menustrings.py:327 ../gui/wxpython/menustrings.py:1238
+#: ../gui/wxpython/menustrings.py:326 ../gui/wxpython/menustrings.py:1237
 #, fuzzy
 msgid "Raster map calculator."
 msgstr "3D растровый калькулятор"
 
-#: ../gui/wxpython/menustrings.py:328 ../gui/wxpython/menustrings.py:1239
+#: ../gui/wxpython/menustrings.py:327 ../gui/wxpython/menustrings.py:1238
 msgid "Neighborhood analysis"
 msgstr "Анализ соседства"
 
-#: ../gui/wxpython/menustrings.py:330 ../gui/wxpython/menustrings.py:1241
+#: ../gui/wxpython/menustrings.py:329 ../gui/wxpython/menustrings.py:1240
 msgid ""
 "Makes each cell category value a function of the category values assigned to "
 "the cells around it, and stores new cell values in an output raster map "
@@ -11360,11 +11373,11 @@ msgstr ""
 "Задать значения ячеек, как функцию значений категорий ячеек вокруг, "
 "сохранить новые значения в выходном растровом слое."
 
-#: ../gui/wxpython/menustrings.py:331 ../gui/wxpython/menustrings.py:1242
+#: ../gui/wxpython/menustrings.py:330 ../gui/wxpython/menustrings.py:1241
 msgid "Neighborhood points"
 msgstr "Соседние точки"
 
-#: ../gui/wxpython/menustrings.py:332 ../gui/wxpython/menustrings.py:1243
+#: ../gui/wxpython/menustrings.py:331 ../gui/wxpython/menustrings.py:1242
 #, fuzzy
 msgid ""
 "Neighborhood analysis tool for vector point maps. Makes each cell value a "
@@ -11374,26 +11387,26 @@ msgstr ""
 "Задать значения ячеек, как функцию значений атрибутов векторных точек или "
 "центроидов вокруг них, сохранить новые значения в выходном растровом слое."
 
-#: ../gui/wxpython/menustrings.py:333 ../gui/wxpython/menustrings.py:1244
+#: ../gui/wxpython/menustrings.py:332 ../gui/wxpython/menustrings.py:1243
 msgid "Overlay rasters"
 msgstr "Наложить растры"
 
-#: ../gui/wxpython/menustrings.py:334 ../gui/wxpython/menustrings.py:1245
+#: ../gui/wxpython/menustrings.py:333 ../gui/wxpython/menustrings.py:1244
 msgid "Cross product"
 msgstr "Кросс-продукт"
 
-#: ../gui/wxpython/menustrings.py:335 ../gui/wxpython/menustrings.py:1246
+#: ../gui/wxpython/menustrings.py:334 ../gui/wxpython/menustrings.py:1245
 msgid ""
 "Creates a cross product of the category values from multiple raster map "
 "layers."
 msgstr ""
 "Создать кросс-продукт значений категорий из нескольких растровых слоев."
 
-#: ../gui/wxpython/menustrings.py:336 ../gui/wxpython/menustrings.py:1247
+#: ../gui/wxpython/menustrings.py:335 ../gui/wxpython/menustrings.py:1246
 msgid "Patch raster maps"
 msgstr "Залатать растровые слои"
 
-#: ../gui/wxpython/menustrings.py:337 ../gui/wxpython/menustrings.py:1248
+#: ../gui/wxpython/menustrings.py:336 ../gui/wxpython/menustrings.py:1247
 msgid ""
 "Creates a composite raster map layer by using known category values from one "
 "(or more) map layer(s) to fill in areas of \"no data\" in another map layer."
@@ -11401,12 +11414,12 @@ msgstr ""
 "Создать композитный растровый слой используя значения категорий ячеек из "
 "одного (или нескольких) слоев для заполнения значений \"no data\" слоя."
 
-#: ../gui/wxpython/menustrings.py:338 ../gui/wxpython/menustrings.py:1249
+#: ../gui/wxpython/menustrings.py:337 ../gui/wxpython/menustrings.py:1248
 #, fuzzy
 msgid "Raster series aggregation"
 msgstr "Серии растров"
 
-#: ../gui/wxpython/menustrings.py:339 ../gui/wxpython/menustrings.py:1250
+#: ../gui/wxpython/menustrings.py:338 ../gui/wxpython/menustrings.py:1249
 msgid ""
 "Makes each output cell value a function of the values assigned to the "
 "corresponding cells in the input raster map layers."
@@ -11414,12 +11427,12 @@ msgstr ""
 "Задать значения для новых ячеек, как функцию значений ячеек исходных "
 "растровых слое."
 
-#: ../gui/wxpython/menustrings.py:340 ../gui/wxpython/menustrings.py:1251
+#: ../gui/wxpython/menustrings.py:339 ../gui/wxpython/menustrings.py:1250
 #, fuzzy
 msgid "Raster series accumulation"
 msgstr "3D растровый калькулятор"
 
-#: ../gui/wxpython/menustrings.py:341 ../gui/wxpython/menustrings.py:1252
+#: ../gui/wxpython/menustrings.py:340 ../gui/wxpython/menustrings.py:1251
 #, fuzzy
 msgid ""
 "Makes each output cell value a accumulationfunction of the values assigned "
@@ -11428,44 +11441,44 @@ msgstr ""
 "Задать значения для новых ячеек, как функцию значений ячеек исходных "
 "растровых слое."
 
-#: ../gui/wxpython/menustrings.py:342 ../gui/wxpython/menustrings.py:1253
+#: ../gui/wxpython/menustrings.py:341 ../gui/wxpython/menustrings.py:1252
 msgid "Statistical overlay"
 msgstr "Статистическое наложение"
 
-#: ../gui/wxpython/menustrings.py:343 ../gui/wxpython/menustrings.py:1254
+#: ../gui/wxpython/menustrings.py:342 ../gui/wxpython/menustrings.py:1253
 #, fuzzy
 msgid ""
 "Calculates category or object oriented statistics (accumulator-based "
 "statistics)."
 msgstr "Рассчитать статистику по категориям или объектам."
 
-#: ../gui/wxpython/menustrings.py:344 ../gui/wxpython/menustrings.py:1255
+#: ../gui/wxpython/menustrings.py:343 ../gui/wxpython/menustrings.py:1254
 #, fuzzy
 msgid "Quantiles overlay"
 msgstr "Статистическое наложение"
 
-#: ../gui/wxpython/menustrings.py:345 ../gui/wxpython/menustrings.py:1256
+#: ../gui/wxpython/menustrings.py:344 ../gui/wxpython/menustrings.py:1255
 msgid "Compute category quantiles using two passes."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:346 ../gui/wxpython/menustrings.py:1257
+#: ../gui/wxpython/menustrings.py:345 ../gui/wxpython/menustrings.py:1256
 msgid "Solar radiance and shadows"
 msgstr "Солнечная освещенность и тени"
 
-#: ../gui/wxpython/menustrings.py:347 ../gui/wxpython/menustrings.py:1258
+#: ../gui/wxpython/menustrings.py:346 ../gui/wxpython/menustrings.py:1257
 msgid "LatLong map"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:348 ../gui/wxpython/menustrings.py:1259
+#: ../gui/wxpython/menustrings.py:347 ../gui/wxpython/menustrings.py:1258
 #, fuzzy
 msgid "Creates a latitude/longitude raster map."
 msgstr "Создать новый векторный слой"
 
-#: ../gui/wxpython/menustrings.py:349 ../gui/wxpython/menustrings.py:1260
+#: ../gui/wxpython/menustrings.py:348 ../gui/wxpython/menustrings.py:1259
 msgid "Solar irradiance and irradiation"
 msgstr "Солнечная освещенность и иррадиация"
 
-#: ../gui/wxpython/menustrings.py:350 ../gui/wxpython/menustrings.py:1261
+#: ../gui/wxpython/menustrings.py:349 ../gui/wxpython/menustrings.py:1260
 #, fuzzy
 msgid ""
 "Solar irradiance and irradiation model. Computes direct (beam), diffuse and "
@@ -11484,11 +11497,11 @@ msgstr ""
 "освещения солнцем и/или irradiance. Может быть также учтен затеняющий эффект "
 "рельефа."
 
-#: ../gui/wxpython/menustrings.py:351 ../gui/wxpython/menustrings.py:1262
+#: ../gui/wxpython/menustrings.py:350 ../gui/wxpython/menustrings.py:1261
 msgid "Shadows map"
 msgstr "Слой теней"
 
-#: ../gui/wxpython/menustrings.py:352 ../gui/wxpython/menustrings.py:1263
+#: ../gui/wxpython/menustrings.py:351 ../gui/wxpython/menustrings.py:1262
 #, fuzzy
 msgid ""
 "Calculates cast shadow areas from sun position and elevation raster map. "
@@ -11499,12 +11512,12 @@ msgstr ""
 "быть указаны либо А: точное положение солнца, либо Б: дата/время для которых "
 "надо рассчитать положение солнца с помощью r.sunmask."
 
-#: ../gui/wxpython/menustrings.py:353 ../gui/wxpython/menustrings.py:1264
+#: ../gui/wxpython/menustrings.py:352 ../gui/wxpython/menustrings.py:1263
 #, fuzzy
 msgid "Sunshine hours and solar angles"
 msgstr "Создать новый векторный слой"
 
-#: ../gui/wxpython/menustrings.py:354 ../gui/wxpython/menustrings.py:1265
+#: ../gui/wxpython/menustrings.py:353 ../gui/wxpython/menustrings.py:1264
 msgid ""
 "Calculates solar elevation, solar azimuth, and sun hours. Solar elevation: "
 "the angle between the direction of the geometric center of the sun's "
@@ -11512,24 +11525,24 @@ msgid ""
 "north in clockwise direction."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:355 ../gui/wxpython/menustrings.py:1266
+#: ../gui/wxpython/menustrings.py:354 ../gui/wxpython/menustrings.py:1265
 msgid "Terrain analysis"
 msgstr "Анализ рельефа"
 
-#: ../gui/wxpython/menustrings.py:356 ../gui/wxpython/menustrings.py:1267
+#: ../gui/wxpython/menustrings.py:355 ../gui/wxpython/menustrings.py:1266
 msgid "Generate contour lines"
 msgstr "Создать изолинии"
 
-#: ../gui/wxpython/menustrings.py:357 ../gui/wxpython/menustrings.py:1268
+#: ../gui/wxpython/menustrings.py:356 ../gui/wxpython/menustrings.py:1267
 #, fuzzy
 msgid "Produces a vector map of specified contours from a raster map."
 msgstr "Создает векторный слой заданных изолиний из растрового слоя."
 
-#: ../gui/wxpython/menustrings.py:358 ../gui/wxpython/menustrings.py:1269
+#: ../gui/wxpython/menustrings.py:357 ../gui/wxpython/menustrings.py:1268
 msgid "Cost surface"
 msgstr "Стоимостная поверхность"
 
-#: ../gui/wxpython/menustrings.py:359 ../gui/wxpython/menustrings.py:1270
+#: ../gui/wxpython/menustrings.py:358 ../gui/wxpython/menustrings.py:1269
 #, fuzzy
 msgid ""
 "Creates a raster map showing the cumulative cost of moving between different "
@@ -11540,48 +11553,55 @@ msgstr ""
 "разными местоположениями исходного растрового слой, чьи ячейки имеют "
 "значение стоимости."
 
-#: ../gui/wxpython/menustrings.py:360 ../gui/wxpython/menustrings.py:1271
+#: ../gui/wxpython/menustrings.py:359 ../gui/wxpython/menustrings.py:1270
 msgid "Cumulative movement costs"
 msgstr "Кумулятивная цена перемещения"
 
-#: ../gui/wxpython/menustrings.py:361 ../gui/wxpython/menustrings.py:1272
+#: ../gui/wxpython/menustrings.py:360 ../gui/wxpython/menustrings.py:1271
 #, fuzzy
 msgid ""
-"Outputs a raster map showing the anisotropic cumulative cost. Computes "
-"anisotropic cumulative cost of moving between different geographic locations "
-"on an input elevation raster map whose cell category values represent "
-"elevation combined with an input raster map layer whose cell values "
-"represent friction cost."
+"Creates a raster map showing the anisotropic cumulative cost of moving "
+"between different geographic locations on an input raster map whose cell "
+"category values represent cost."
 msgstr ""
-"Вывести растровый слой показывающий анизотропную кумулятивную стоимость "
-"передвижения между разными местоположениями на растровом слое высот, "
-"значения ячеек которого представляют значения высот комбинированные со "
-"значениями расходов на преодоление с другого растрового слоя."
+"Вывести растровый слой показывающий кумулятивную стоимость перемещения между "
+"разными местоположениями исходного растрового слой, чьи ячейки имеют "
+"значение стоимости."
 
-#: ../gui/wxpython/menustrings.py:362 ../gui/wxpython/menustrings.py:1273
+#: ../gui/wxpython/menustrings.py:361 ../gui/wxpython/menustrings.py:1272
 msgid "Least cost route or flow"
 msgstr "Путь или поток наименьшей стоимости "
 
-#: ../gui/wxpython/menustrings.py:363 ../gui/wxpython/menustrings.py:1274
+#: ../gui/wxpython/menustrings.py:362 ../gui/wxpython/menustrings.py:1273
 #, fuzzy
 msgid ""
 "Traces a flow through an elevation model or cost surface on a raster map."
 msgstr "Построить поток по модели рельефа на основе растрового слоя."
 
-#: ../gui/wxpython/menustrings.py:364 ../gui/wxpython/menustrings.py:1275
-msgid "Shaded relief"
+#: ../gui/wxpython/menustrings.py:363 ../gui/wxpython/menustrings.py:1274
+#, fuzzy
+msgid "Compute shaded relief"
 msgstr "Теневой рельеф"
 
-#: ../gui/wxpython/menustrings.py:365 ../gui/wxpython/menustrings.py:1276
+#: ../gui/wxpython/menustrings.py:364 ../gui/wxpython/menustrings.py:1275
 #, fuzzy
 msgid "Creates shaded relief map from an elevation map (DEM). "
 msgstr "Создать слой теневого рельефа из слоя рельефа (DEM)."
 
+#: ../gui/wxpython/menustrings.py:365 ../gui/wxpython/menustrings.py:1276
+#, fuzzy
+msgid "Apply shade to raster"
+msgstr "Применить изменения для этой сессии"
+
 #: ../gui/wxpython/menustrings.py:366 ../gui/wxpython/menustrings.py:1277
+msgid "Drapes a color raster over an shaded relief or aspect map."
+msgstr ""
+
+#: ../gui/wxpython/menustrings.py:367 ../gui/wxpython/menustrings.py:1278
 msgid "Slope and aspect"
 msgstr "Крутизна и экспозиция"
 
-#: ../gui/wxpython/menustrings.py:367 ../gui/wxpython/menustrings.py:1278
+#: ../gui/wxpython/menustrings.py:368 ../gui/wxpython/menustrings.py:1279
 #, fuzzy
 msgid ""
 "Generates raster maps of slope, aspect, curvatures and partial derivatives "
@@ -11592,11 +11612,11 @@ msgstr ""
 "производных склона ипользуя растровый слой высот. Экспозиция вычисляется "
 "простив часовой стрелки начиная с востока."
 
-#: ../gui/wxpython/menustrings.py:368 ../gui/wxpython/menustrings.py:1279
+#: ../gui/wxpython/menustrings.py:369 ../gui/wxpython/menustrings.py:1280
 msgid "Terrain parameters"
 msgstr "Параметры рельефа"
 
-#: ../gui/wxpython/menustrings.py:369 ../gui/wxpython/menustrings.py:1280
+#: ../gui/wxpython/menustrings.py:370 ../gui/wxpython/menustrings.py:1281
 #, fuzzy
 msgid ""
 "Extracts terrain parameters from a DEM. Uses a multi-scale approach by "
@@ -11605,30 +11625,30 @@ msgstr ""
 "Использовать мульти-масштабный подход используя расчетные квадратичные "
 "параметры для окон любых размеров (метод наименьших квадратов)"
 
-#: ../gui/wxpython/menustrings.py:370 ../gui/wxpython/menustrings.py:1281
+#: ../gui/wxpython/menustrings.py:371 ../gui/wxpython/menustrings.py:1282
 msgid "Textural features"
 msgstr "Текстурные признаки"
 
-#: ../gui/wxpython/menustrings.py:371 ../gui/wxpython/menustrings.py:1282
+#: ../gui/wxpython/menustrings.py:372 ../gui/wxpython/menustrings.py:1283
 msgid "Generate images with textural features from a raster map."
 msgstr "Создать изображения с текстурными признаками для растровых слоев."
 
-#: ../gui/wxpython/menustrings.py:372 ../gui/wxpython/menustrings.py:1283
+#: ../gui/wxpython/menustrings.py:373 ../gui/wxpython/menustrings.py:1284
 msgid "Visibility"
 msgstr "Видимость"
 
-#: ../gui/wxpython/menustrings.py:373 ../gui/wxpython/menustrings.py:1284
+#: ../gui/wxpython/menustrings.py:374 ../gui/wxpython/menustrings.py:1285
 #, fuzzy
 msgid ""
 "Computes the viewshed of a point on an elevation raster map. Default format: "
 "NULL (invisible), vertical angle wrt viewpoint (visible)."
 msgstr "Вычислить плотность границ взвешенную по контрасту для растрового слоя"
 
-#: ../gui/wxpython/menustrings.py:376 ../gui/wxpython/menustrings.py:1287
+#: ../gui/wxpython/menustrings.py:377 ../gui/wxpython/menustrings.py:1288
 msgid "Horizon angle"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:377 ../gui/wxpython/menustrings.py:1288
+#: ../gui/wxpython/menustrings.py:378 ../gui/wxpython/menustrings.py:1289
 msgid ""
 "Computes horizon angle height from a digital elevation model. The module has "
 "two different modes of operation: 1. Computes the entire horizon around a "
@@ -11639,15 +11659,15 @@ msgid ""
 "output is the horizon height in radians."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:378 ../gui/wxpython/menustrings.py:1289
+#: ../gui/wxpython/menustrings.py:379 ../gui/wxpython/menustrings.py:1290
 msgid "Transform features"
 msgstr "Трансформировать объекты"
 
-#: ../gui/wxpython/menustrings.py:379 ../gui/wxpython/menustrings.py:1290
+#: ../gui/wxpython/menustrings.py:380 ../gui/wxpython/menustrings.py:1291
 msgid "Clump"
 msgstr "Кластеризация"
 
-#: ../gui/wxpython/menustrings.py:380 ../gui/wxpython/menustrings.py:1291
+#: ../gui/wxpython/menustrings.py:381 ../gui/wxpython/menustrings.py:1292
 #, fuzzy
 msgid ""
 "Recategorizes data in a raster map by grouping cells that form physically "
@@ -11656,29 +11676,29 @@ msgstr ""
 "Объединяет ячейки исходного растра образующие дискретные области и назначает "
 "им уникальные категории."
 
-#: ../gui/wxpython/menustrings.py:381 ../gui/wxpython/menustrings.py:1292
+#: ../gui/wxpython/menustrings.py:382 ../gui/wxpython/menustrings.py:1293
 msgid "Grow"
 msgstr "Вырастить"
 
-#: ../gui/wxpython/menustrings.py:383 ../gui/wxpython/menustrings.py:1294
+#: ../gui/wxpython/menustrings.py:384 ../gui/wxpython/menustrings.py:1295
 msgid "Thin"
 msgstr "Проредить"
 
-#: ../gui/wxpython/menustrings.py:384 ../gui/wxpython/menustrings.py:1295
+#: ../gui/wxpython/menustrings.py:385 ../gui/wxpython/menustrings.py:1296
 msgid "Thins non-zero cells that denote linear features in a raster map layer."
 msgstr ""
 "Проредить не-нулевые ячейки представляющие линейные объекты на растровом "
 "слое."
 
-#: ../gui/wxpython/menustrings.py:385 ../gui/wxpython/menustrings.py:1296
+#: ../gui/wxpython/menustrings.py:386 ../gui/wxpython/menustrings.py:1297
 msgid "Hydrologic modeling"
 msgstr "Гидрологическое моделирование"
 
-#: ../gui/wxpython/menustrings.py:386 ../gui/wxpython/menustrings.py:1297
+#: ../gui/wxpython/menustrings.py:387 ../gui/wxpython/menustrings.py:1298
 msgid "Carve stream channels"
 msgstr "Прорезать каналы водотоков"
 
-#: ../gui/wxpython/menustrings.py:387 ../gui/wxpython/menustrings.py:1298
+#: ../gui/wxpython/menustrings.py:388 ../gui/wxpython/menustrings.py:1299
 #, fuzzy
 msgid ""
 "Generates stream channels. Takes vector stream data, transforms it to raster "
@@ -11687,20 +11707,20 @@ msgstr ""
 "Выбрать векторные водотоки, трансформировать их в растр и вычесть глубину из "
 "выходного DEM."
 
-#: ../gui/wxpython/menustrings.py:388 ../gui/wxpython/menustrings.py:1299
+#: ../gui/wxpython/menustrings.py:389 ../gui/wxpython/menustrings.py:1300
 msgid "Fill lake"
 msgstr "Заполнить озеро"
 
-#: ../gui/wxpython/menustrings.py:389 ../gui/wxpython/menustrings.py:1300
+#: ../gui/wxpython/menustrings.py:390 ../gui/wxpython/menustrings.py:1301
 #, fuzzy
 msgid "Fills lake at given point to given level."
 msgstr "Заполнить озеро из затравки на заданном уровне"
 
-#: ../gui/wxpython/menustrings.py:390 ../gui/wxpython/menustrings.py:1301
+#: ../gui/wxpython/menustrings.py:391 ../gui/wxpython/menustrings.py:1302
 msgid "Depressionless map and flowlines"
 msgstr "Слой без депрессий и линии стока"
 
-#: ../gui/wxpython/menustrings.py:391 ../gui/wxpython/menustrings.py:1302
+#: ../gui/wxpython/menustrings.py:392 ../gui/wxpython/menustrings.py:1303
 #, fuzzy
 msgid ""
 "Filters and generates a depressionless elevation map and a flow direction "
@@ -11709,20 +11729,20 @@ msgstr ""
 "Отфильтровать и создать слой высот без депрессий и слой направлений потоков "
 "из имеющегося слоя высот."
 
-#: ../gui/wxpython/menustrings.py:392 ../gui/wxpython/menustrings.py:1303
+#: ../gui/wxpython/menustrings.py:393 ../gui/wxpython/menustrings.py:1304
 msgid "Flow accumulation"
 msgstr "Аккумуляция стока"
 
-#: ../gui/wxpython/menustrings.py:393 ../gui/wxpython/menustrings.py:1304
+#: ../gui/wxpython/menustrings.py:394 ../gui/wxpython/menustrings.py:1305
 #, fuzzy
 msgid "Flow computation for massive grids (float version)."
 msgstr "Расчет потока для массивных гридов (версия с плавающей запятой)"
 
-#: ../gui/wxpython/menustrings.py:394 ../gui/wxpython/menustrings.py:1305
+#: ../gui/wxpython/menustrings.py:395 ../gui/wxpython/menustrings.py:1306
 msgid "Flow lines"
 msgstr "Линии стока"
 
-#: ../gui/wxpython/menustrings.py:395 ../gui/wxpython/menustrings.py:1306
+#: ../gui/wxpython/menustrings.py:396 ../gui/wxpython/menustrings.py:1307
 #, fuzzy
 msgid ""
 "Constructs flowlines. Computes flowlines, flowpath lengths, and "
@@ -11731,57 +11751,57 @@ msgstr ""
 "Расчет крутизны склонов (линий стока), длины стока и плотности потоков из "
 "растровой цифровой модели рельефа (ЦМР)"
 
-#: ../gui/wxpython/menustrings.py:396 ../gui/wxpython/menustrings.py:1307
+#: ../gui/wxpython/menustrings.py:397 ../gui/wxpython/menustrings.py:1308
 msgid "Watershed analysis"
 msgstr "Анализ водосборов"
 
-#: ../gui/wxpython/menustrings.py:397 ../gui/wxpython/menustrings.py:1308
+#: ../gui/wxpython/menustrings.py:398 ../gui/wxpython/menustrings.py:1309
 msgid "Calculates hydrological parameters and RUSLE factors."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:398 ../gui/wxpython/menustrings.py:1309
+#: ../gui/wxpython/menustrings.py:399 ../gui/wxpython/menustrings.py:1310
 msgid "Watershed subbasins"
 msgstr "Водосборные суббассейны"
 
-#: ../gui/wxpython/menustrings.py:399 ../gui/wxpython/menustrings.py:1310
+#: ../gui/wxpython/menustrings.py:400 ../gui/wxpython/menustrings.py:1311
 #, fuzzy
 msgid "Generates watershed subbasins raster map."
 msgstr "Показать статистику по площади для растровых слоев."
 
-#: ../gui/wxpython/menustrings.py:400 ../gui/wxpython/menustrings.py:1311
+#: ../gui/wxpython/menustrings.py:401 ../gui/wxpython/menustrings.py:1312
 msgid "Watershed basin creation"
 msgstr "Создание водосборного бассейна"
 
-#: ../gui/wxpython/menustrings.py:401 ../gui/wxpython/menustrings.py:1312
+#: ../gui/wxpython/menustrings.py:402 ../gui/wxpython/menustrings.py:1313
 #, fuzzy
 msgid "Creates watershed basins from a drainage direction map."
 msgstr "Показать статистику по площади для растровых слоев."
 
-#: ../gui/wxpython/menustrings.py:402 ../gui/wxpython/menustrings.py:1313
+#: ../gui/wxpython/menustrings.py:403 ../gui/wxpython/menustrings.py:1314
 msgid "Extraction of stream networks"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:403 ../gui/wxpython/menustrings.py:1314
+#: ../gui/wxpython/menustrings.py:404 ../gui/wxpython/menustrings.py:1315
 #, fuzzy
 msgid "Performs stream network extraction."
 msgstr "Обслуживание сети."
 
-#: ../gui/wxpython/menustrings.py:404 ../gui/wxpython/menustrings.py:1315
+#: ../gui/wxpython/menustrings.py:405 ../gui/wxpython/menustrings.py:1316
 msgid "SIMWE Overland flow modeling"
 msgstr "SIMWE моделирование поверхностного стока"
 
-#: ../gui/wxpython/menustrings.py:405 ../gui/wxpython/menustrings.py:1316
+#: ../gui/wxpython/menustrings.py:406 ../gui/wxpython/menustrings.py:1317
 #, fuzzy
 msgid "Overland flow hydrologic simulation using path sampling method (SIMWE)."
 msgstr ""
 "Гидрологическая симуляция  поверхностного стока с использованием метода "
 "выбора траекторий (SIMWE)"
 
-#: ../gui/wxpython/menustrings.py:406 ../gui/wxpython/menustrings.py:1317
+#: ../gui/wxpython/menustrings.py:407 ../gui/wxpython/menustrings.py:1318
 msgid "SIMWE Sediment flux modeling"
 msgstr "SIMWE-моделирование наносных потоков "
 
-#: ../gui/wxpython/menustrings.py:407 ../gui/wxpython/menustrings.py:1318
+#: ../gui/wxpython/menustrings.py:408 ../gui/wxpython/menustrings.py:1319
 #, fuzzy
 msgid ""
 "Sediment transport and erosion/deposition simulation using path sampling "
@@ -11790,101 +11810,101 @@ msgstr ""
 "Симуляция переноса и эрозии/отложения наносов используя метод линейной "
 "выборки (SIMWE)"
 
-#: ../gui/wxpython/menustrings.py:408 ../gui/wxpython/menustrings.py:1319
+#: ../gui/wxpython/menustrings.py:409 ../gui/wxpython/menustrings.py:1320
 msgid "Topographic index map"
 msgstr "Слой индекса рельефа"
 
-#: ../gui/wxpython/menustrings.py:409 ../gui/wxpython/menustrings.py:1320
+#: ../gui/wxpython/menustrings.py:410 ../gui/wxpython/menustrings.py:1321
 #, fuzzy
 msgid "Creates a topographic index raster map from an elevation raster map."
 msgstr "Создает слой индекса рельефа [ln(a/tan(beta))] слоя высот"
 
-#: ../gui/wxpython/menustrings.py:410 ../gui/wxpython/menustrings.py:1321
+#: ../gui/wxpython/menustrings.py:411 ../gui/wxpython/menustrings.py:1322
 msgid "TOPMODEL simulation"
 msgstr "Симуляция TOPMODEL"
 
-#: ../gui/wxpython/menustrings.py:411 ../gui/wxpython/menustrings.py:1322
+#: ../gui/wxpython/menustrings.py:412 ../gui/wxpython/menustrings.py:1323
 msgid "Simulates TOPMODEL which is a physically based hydrologic model."
 msgstr "Симулирует физически обоснованную гидрологическую модель TOPMODEL."
 
-#: ../gui/wxpython/menustrings.py:412 ../gui/wxpython/menustrings.py:1323
+#: ../gui/wxpython/menustrings.py:413 ../gui/wxpython/menustrings.py:1324
 msgid "USLE K-factor"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:413 ../gui/wxpython/menustrings.py:1324
+#: ../gui/wxpython/menustrings.py:414 ../gui/wxpython/menustrings.py:1325
 msgid "Computes USLE Soil Erodibility Factor (K)."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:414 ../gui/wxpython/menustrings.py:1325
+#: ../gui/wxpython/menustrings.py:415 ../gui/wxpython/menustrings.py:1326
 msgid "USLE R-factor"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:415 ../gui/wxpython/menustrings.py:1326
+#: ../gui/wxpython/menustrings.py:416 ../gui/wxpython/menustrings.py:1327
 msgid "Computes USLE R factor, Rainfall erosivity index."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:416 ../gui/wxpython/menustrings.py:848
-#: ../gui/wxpython/menustrings.py:1327 ../gui/wxpython/menustrings.py:1759
+#: ../gui/wxpython/menustrings.py:417 ../gui/wxpython/menustrings.py:848
+#: ../gui/wxpython/menustrings.py:1328 ../gui/wxpython/menustrings.py:1759
 #, fuzzy
 msgid "Groundwater modeling"
 msgstr "Точка привязки"
 
-#: ../gui/wxpython/menustrings.py:417 ../gui/wxpython/menustrings.py:1328
+#: ../gui/wxpython/menustrings.py:418 ../gui/wxpython/menustrings.py:1329
 msgid "Groundwater flow"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:418 ../gui/wxpython/menustrings.py:1329
+#: ../gui/wxpython/menustrings.py:419 ../gui/wxpython/menustrings.py:1330
 msgid ""
 "Numerical calculation program for transient, confined and unconfined "
 "groundwater flow in two dimensions."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:419 ../gui/wxpython/menustrings.py:1330
+#: ../gui/wxpython/menustrings.py:420 ../gui/wxpython/menustrings.py:1331
 msgid "Groundwater solute transport"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:420 ../gui/wxpython/menustrings.py:1331
+#: ../gui/wxpython/menustrings.py:421 ../gui/wxpython/menustrings.py:1332
 msgid ""
 "Numerical calculation program for transient, confined and unconfined solute "
 "transport in two dimensions"
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:421 ../gui/wxpython/menustrings.py:1332
+#: ../gui/wxpython/menustrings.py:422 ../gui/wxpython/menustrings.py:1333
 msgid "Landscape patch analysis"
 msgstr "Анализ участков ландшафта"
 
-#: ../gui/wxpython/menustrings.py:422 ../gui/wxpython/menustrings.py:1333
+#: ../gui/wxpython/menustrings.py:423 ../gui/wxpython/menustrings.py:1334
 msgid "Set up sampling and analysis framework"
 msgstr "Задать схему анализа и сэмплинга"
 
-#: ../gui/wxpython/menustrings.py:423 ../gui/wxpython/menustrings.py:1334
+#: ../gui/wxpython/menustrings.py:424 ../gui/wxpython/menustrings.py:1335
 msgid "Configuration editor for r.li.'index'"
 msgstr "Редактор конфигурации для r.li.'index'"
 
-#: ../gui/wxpython/menustrings.py:424 ../gui/wxpython/menustrings.py:1335
+#: ../gui/wxpython/menustrings.py:425 ../gui/wxpython/menustrings.py:1336
 msgid "Edge density"
 msgstr "Плотность границ"
 
-#: ../gui/wxpython/menustrings.py:425 ../gui/wxpython/menustrings.py:1336
+#: ../gui/wxpython/menustrings.py:426 ../gui/wxpython/menustrings.py:1337
 msgid ""
 "Calculates edge density index on a raster map, using a 4 neighbour algorithm"
 msgstr ""
 "Рассчитать индекс плотности границ растрового слоя, используя алгоритм 4-х "
 "ближайших соседей"
 
-#: ../gui/wxpython/menustrings.py:426 ../gui/wxpython/menustrings.py:1337
+#: ../gui/wxpython/menustrings.py:427 ../gui/wxpython/menustrings.py:1338
 msgid "Contrast weighted edge density"
 msgstr "Плотность границ взвешенная по контрасту"
 
-#: ../gui/wxpython/menustrings.py:427 ../gui/wxpython/menustrings.py:1338
+#: ../gui/wxpython/menustrings.py:428 ../gui/wxpython/menustrings.py:1339
 msgid "Calculates contrast weighted edge density index on a raster map"
 msgstr "Вычислить плотность границ взвешенную по контрасту для растрового слоя"
 
-#: ../gui/wxpython/menustrings.py:428 ../gui/wxpython/menustrings.py:1339
+#: ../gui/wxpython/menustrings.py:429 ../gui/wxpython/menustrings.py:1340
 msgid "Patch area mean"
 msgstr "Средняя площадь участка"
 
-#: ../gui/wxpython/menustrings.py:429 ../gui/wxpython/menustrings.py:1340
+#: ../gui/wxpython/menustrings.py:430 ../gui/wxpython/menustrings.py:1341
 msgid ""
 "Calculates mean patch size index on a raster map, using a 4 neighbour "
 "algorithm"
@@ -11892,102 +11912,102 @@ msgstr ""
 "Вычислить индекс среднего размера участка для растра, используя алгоритм 4 "
 "ближайших соседей."
 
-#: ../gui/wxpython/menustrings.py:430 ../gui/wxpython/menustrings.py:1341
+#: ../gui/wxpython/menustrings.py:431 ../gui/wxpython/menustrings.py:1342
 msgid "Patch area range"
 msgstr "Диапазон площадей участков"
 
-#: ../gui/wxpython/menustrings.py:431 ../gui/wxpython/menustrings.py:1342
+#: ../gui/wxpython/menustrings.py:432 ../gui/wxpython/menustrings.py:1343
 msgid "Calculates range of patch area size on a raster map"
 msgstr "Рассчитать диапазон площадей участков растрового слоя"
 
-#: ../gui/wxpython/menustrings.py:432 ../gui/wxpython/menustrings.py:1343
+#: ../gui/wxpython/menustrings.py:433 ../gui/wxpython/menustrings.py:1344
 msgid "Patch area Std Dev"
 msgstr "Стандартное отклонение площади участков"
 
-#: ../gui/wxpython/menustrings.py:433 ../gui/wxpython/menustrings.py:1344
+#: ../gui/wxpython/menustrings.py:434 ../gui/wxpython/menustrings.py:1345
 msgid "Calculates standard deviation of patch area a raster map"
 msgstr "Рассчитать стандартное отклонение площади участков растрового слоя"
 
-#: ../gui/wxpython/menustrings.py:434 ../gui/wxpython/menustrings.py:1345
+#: ../gui/wxpython/menustrings.py:435 ../gui/wxpython/menustrings.py:1346
 msgid "Patch area Coeff Var"
 msgstr "Коэффициент вариации площади участка"
 
-#: ../gui/wxpython/menustrings.py:435 ../gui/wxpython/menustrings.py:1346
+#: ../gui/wxpython/menustrings.py:436 ../gui/wxpython/menustrings.py:1347
 msgid "Calculates coefficient of variation of patch area on a raster map"
 msgstr "Рассчитывает коэффициент вариации площади участка растрового слоя"
 
-#: ../gui/wxpython/menustrings.py:436 ../gui/wxpython/menustrings.py:1347
+#: ../gui/wxpython/menustrings.py:437 ../gui/wxpython/menustrings.py:1348
 msgid "Patch density"
 msgstr "Плотность участков"
 
-#: ../gui/wxpython/menustrings.py:437 ../gui/wxpython/menustrings.py:1348
+#: ../gui/wxpython/menustrings.py:438 ../gui/wxpython/menustrings.py:1349
 msgid ""
 "Calculates patch density index on a raster map, using a 4 neighbour algorithm"
 msgstr ""
 "Рассчитать индекс плотности участков растрового слоя, используя алгоритм 4-х "
 "ближайших соседей"
 
-#: ../gui/wxpython/menustrings.py:438 ../gui/wxpython/menustrings.py:1349
+#: ../gui/wxpython/menustrings.py:439 ../gui/wxpython/menustrings.py:1350
 msgid "Patch number"
 msgstr "Количество участков"
 
-#: ../gui/wxpython/menustrings.py:439 ../gui/wxpython/menustrings.py:1350
+#: ../gui/wxpython/menustrings.py:440 ../gui/wxpython/menustrings.py:1351
 msgid ""
 "Calculates patch number index on a raster map, using a 4 neighbour algorithm."
 msgstr ""
 "Рассчитать индекс количества участков растрового слоя, используя алгоритм 4-"
 "х ближайших соседей"
 
-#: ../gui/wxpython/menustrings.py:440 ../gui/wxpython/menustrings.py:1351
+#: ../gui/wxpython/menustrings.py:441 ../gui/wxpython/menustrings.py:1352
 msgid "Dominance's diversity"
 msgstr "Доминантное разнообразие"
 
-#: ../gui/wxpython/menustrings.py:441 ../gui/wxpython/menustrings.py:1352
+#: ../gui/wxpython/menustrings.py:442 ../gui/wxpython/menustrings.py:1353
 msgid "Calculates dominance's diversity index on a raster map"
 msgstr "Рассчитать индекс доминантного разнообразия растрового слоя"
 
-#: ../gui/wxpython/menustrings.py:442 ../gui/wxpython/menustrings.py:1353
+#: ../gui/wxpython/menustrings.py:443 ../gui/wxpython/menustrings.py:1354
 msgid "Shannon's diversity"
 msgstr "Разнообразие Шеннона"
 
-#: ../gui/wxpython/menustrings.py:443 ../gui/wxpython/menustrings.py:1354
+#: ../gui/wxpython/menustrings.py:444 ../gui/wxpython/menustrings.py:1355
 msgid "Calculates Shannon's diversity index on a raster map"
 msgstr "Рассчитать индекс разнообразия Шеннона для растрового слоя"
 
-#: ../gui/wxpython/menustrings.py:444 ../gui/wxpython/menustrings.py:1355
+#: ../gui/wxpython/menustrings.py:445 ../gui/wxpython/menustrings.py:1356
 msgid "Simpson's diversity"
 msgstr "Разнообразие Симпсона"
 
-#: ../gui/wxpython/menustrings.py:445 ../gui/wxpython/menustrings.py:1356
+#: ../gui/wxpython/menustrings.py:446 ../gui/wxpython/menustrings.py:1357
 msgid "Calculates Simpson's diversity index on a raster map"
 msgstr "Рассчитать индекс разнообразия Симпсона для растрового слоя"
 
-#: ../gui/wxpython/menustrings.py:446 ../gui/wxpython/menustrings.py:1357
+#: ../gui/wxpython/menustrings.py:447 ../gui/wxpython/menustrings.py:1358
 msgid "Richness"
 msgstr "Богатство"
 
-#: ../gui/wxpython/menustrings.py:447 ../gui/wxpython/menustrings.py:1358
+#: ../gui/wxpython/menustrings.py:448 ../gui/wxpython/menustrings.py:1359
 #, fuzzy
 msgid "Calculates richness index on a raster map"
 msgstr "Рассчитать индекс формы для растрового слоя"
 
-#: ../gui/wxpython/menustrings.py:448 ../gui/wxpython/menustrings.py:1359
+#: ../gui/wxpython/menustrings.py:449 ../gui/wxpython/menustrings.py:1360
 msgid "Shape index"
 msgstr "Индекс формы"
 
-#: ../gui/wxpython/menustrings.py:449 ../gui/wxpython/menustrings.py:1360
+#: ../gui/wxpython/menustrings.py:450 ../gui/wxpython/menustrings.py:1361
 msgid "Calculates shape index on a raster map"
 msgstr "Рассчитать индекс формы для растрового слоя"
 
-#: ../gui/wxpython/menustrings.py:450 ../gui/wxpython/menustrings.py:1361
+#: ../gui/wxpython/menustrings.py:451 ../gui/wxpython/menustrings.py:1362
 msgid "Wildfire modeling"
 msgstr "Моделирование пожаров"
 
-#: ../gui/wxpython/menustrings.py:451 ../gui/wxpython/menustrings.py:1362
+#: ../gui/wxpython/menustrings.py:452 ../gui/wxpython/menustrings.py:1363
 msgid "Rate of spread"
 msgstr "Скорость распространения"
 
-#: ../gui/wxpython/menustrings.py:452 ../gui/wxpython/menustrings.py:1363
+#: ../gui/wxpython/menustrings.py:453 ../gui/wxpython/menustrings.py:1364
 #, fuzzy
 msgid ""
 "Generates rate of spread raster maps. Generates three, or four raster map "
@@ -12000,11 +12020,11 @@ msgstr ""
 "ROS, 3) направление максимальной ROS, и опционально 4) максимальное "
 "расстояние потенциального обнаружения."
 
-#: ../gui/wxpython/menustrings.py:453 ../gui/wxpython/menustrings.py:1364
+#: ../gui/wxpython/menustrings.py:454 ../gui/wxpython/menustrings.py:1365
 msgid "Least-cost spread paths"
 msgstr "Траектории минимальной стоимости распространения"
 
-#: ../gui/wxpython/menustrings.py:454 ../gui/wxpython/menustrings.py:1365
+#: ../gui/wxpython/menustrings.py:455 ../gui/wxpython/menustrings.py:1366
 msgid ""
 "Recursively traces the least cost path backwards to cells from which the "
 "cumulative cost was determined."
@@ -12012,11 +12032,11 @@ msgstr ""
 "Рекурсивно проследить путь наименьшей стоимости к ячейкам для которых была "
 "определена кумулятивная стоимость."
 
-#: ../gui/wxpython/menustrings.py:455 ../gui/wxpython/menustrings.py:1366
+#: ../gui/wxpython/menustrings.py:456 ../gui/wxpython/menustrings.py:1367
 msgid "Anisotropic spread simulation"
 msgstr "Моделирование анизотропного распространения"
 
-#: ../gui/wxpython/menustrings.py:456 ../gui/wxpython/menustrings.py:1367
+#: ../gui/wxpython/menustrings.py:457 ../gui/wxpython/menustrings.py:1368
 msgid ""
 "Simulates elliptically anisotropic spread. Generates a raster map of the "
 "cumulative time of spread, given raster maps containing the rates of spread "
@@ -12025,17 +12045,17 @@ msgid ""
 "Usable for fire spread simulations."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:457 ../gui/wxpython/menustrings.py:1368
+#: ../gui/wxpython/menustrings.py:458 ../gui/wxpython/menustrings.py:1369
 msgid "Change category values and labels"
 msgstr "Изменить значения категорий и подписи"
 
-#: ../gui/wxpython/menustrings.py:458 ../gui/wxpython/menustrings.py:512
-#: ../gui/wxpython/menustrings.py:1369 ../gui/wxpython/menustrings.py:1423
+#: ../gui/wxpython/menustrings.py:459 ../gui/wxpython/menustrings.py:512
+#: ../gui/wxpython/menustrings.py:1370 ../gui/wxpython/menustrings.py:1423
 msgid "Manage category information"
 msgstr "Управление информацией о категориях"
 
-#: ../gui/wxpython/menustrings.py:459 ../gui/wxpython/menustrings.py:513
-#: ../gui/wxpython/menustrings.py:1370 ../gui/wxpython/menustrings.py:1424
+#: ../gui/wxpython/menustrings.py:460 ../gui/wxpython/menustrings.py:513
+#: ../gui/wxpython/menustrings.py:1371 ../gui/wxpython/menustrings.py:1424
 msgid ""
 "Manages category values and labels associated with user-specified raster map "
 "layers."
@@ -12043,32 +12063,32 @@ msgstr ""
 "Управление значениями категорий и подписями, связанными с растровыми слоями "
 "определенными пользователем."
 
-#: ../gui/wxpython/menustrings.py:460 ../gui/wxpython/menustrings.py:1371
+#: ../gui/wxpython/menustrings.py:461 ../gui/wxpython/menustrings.py:1372
 msgid "Interactively edit category values"
 msgstr "Интерактивное редактирование значений категорий"
 
-#: ../gui/wxpython/menustrings.py:461 ../gui/wxpython/menustrings.py:1372
+#: ../gui/wxpython/menustrings.py:462 ../gui/wxpython/menustrings.py:1373
 #, fuzzy
 msgid "Edits cell values in a raster map."
 msgstr "Создать/изменить цветовую таблицу растрового слоя"
 
-#: ../gui/wxpython/menustrings.py:462 ../gui/wxpython/menustrings.py:1373
+#: ../gui/wxpython/menustrings.py:463 ../gui/wxpython/menustrings.py:1374
 msgid "Reclassify by size"
 msgstr "Переклассифицировать по размеру"
 
-#: ../gui/wxpython/menustrings.py:463 ../gui/wxpython/menustrings.py:1374
+#: ../gui/wxpython/menustrings.py:464 ../gui/wxpython/menustrings.py:1375
 msgid ""
 "Reclasses a raster map greater or less than user specified area size (in "
 "hectares)."
 msgstr ""
 
-#: ../gui/wxpython/menustrings.py:464 ../gui/wxpython/menustrings.py:674
-#: ../gui/wxpython/menustrings.py:1375 ../gui/wxpython/menustrings.py:1585
+#: ../gui/wxpython/menustrings.py:465 ../gui/wxpython/menustrings.py:674
+#: ../gui/wxpython/menustrings.py:1376 ../gui/wxpython/menustrings.py:1585
 #, fuzzy
 msgid "Reclassify"
 msgstr "Переклассифицировать по размеру"
 
-#: ../gui/wxpython/menustrings.py:465 ../gui/wxpython/menustrings.py:1376
+#: ../gui/wxpython/menustrings.py:466 ../gui/wxpython/menustrings.py:1377
 #, fuzzy
 msgid ""
 "Reclassify raster map based on category values. Creates a new raster map "
@@ -12078,29 +12098,29 @@ msgstr ""
 "Создать новый растровый слой, чьи значения категорий будут основаны на "
 "переклассификации категорий существующего растрового слоя."
 
-#: ../gui/wxpython/menustrings.py:466 ../gui/wxpython/menustrings.py:1377
+#: ../gui/wxpython/menustrings.py:467 ../gui/wxpython/menustrings.py:1378
 #, fuzzy
 msgid "Recode"
 msgstr "Загрузить заново"
 
-#: ../gui/wxpython/menustrings.py:467 ../gui/wxpython/menustrings.py:1378
+#: ../gui/wxpython/menustrings.py:468 ../gui/wxpython/menustrings.py:1379
 #, fuzzy
 msgid "Recodes categorical raster maps."
 msgstr "Перекодированная растровый слой:"
 
-#: ../gui/wxpython/menustrings.py:468 ../gui/wxpython/menustrings.py:1379
+#: ../gui/wxpython/menustrings.py:469 ../gui/wxpython/menustrings.py:1380
 msgid "Rescale"
 msgstr "Изменить масштаб"
 
-#: ../gui/wxpython/menustrings.py:469 ../gui/wxpython/menustrings.py:1380
+#: ../gui/wxpython/menustrings.py:470 ../gui/wxpython/menustrings.py:1381
 msgid "Rescales the range of category values in a raster map layer."
 msgstr "Изменить масштаб значений категорий растрового слоя."
 
-#: ../gui/wxpython/menustrings.py:470 ../gui/wxpython/menustrings.py:1381
+#: ../gui/wxpython/menustrings.py:471 ../gui/wxpython/menustrings.py:1382
 msgid "Rescale with histogram"
 msgstr "Изменить масштаб с помощью гистограммы"
 
-#: ../gui/wxpython/menustrings.py:471 ../gui/wxpython/menustrings.py:1382
+#: ../gui/wxpython/menustrings.py:472 ../gui/wxpython/menustrings.py:1383
 msgid ""
 "Rescales histogram equalized the range of category values in a raster map "
 "layer."
@@ -12108,25 +12128,25 @@ msgstr ""
 "Масштабировать гистограмму уравнивания диапазона значений категорий в "
 "растровом слое."
 
-#: ../gui/wxpython/menustrings.py:472 ../gui/wxpython/menustrings.py:1383
+#: ../gui/wxpython/menustrings.py:473 ../gui/wxpython/menustrings.py:1384
 msgid "Generate random cells"
 msgstr "Генерировать случайные ячейки"
 
-#: ../gui/wxpython/menustrings.py:473 ../gui/wxpython/menustrings.py:1384
+#: ../gui/wxpython/menustrings.py:474 ../gui/wxpython/menustrings.py:1385
 msgid "Random cells"
 msgstr "Случайные ячейки"
 
-#: ../gui/wxpython/menustrings.py:474 ../gui/wxpython/menustrings.py:1385
+#: ../gui/wxpython/menustrings.py:475 ../gui/wxpython/menustrings.py:1386
 msgid "Generates random cell values with spatial dependence."
 msgstr ""
 "Генерировать случайные значения для ячеек с учетом пространственной "
 "зависимости."
 
-#: ../gui/wxpython/menustrings.py:475 ../gui/wxpython/menustrings.py:1386
+#: ../gui/wxpython/menustrings.py:476 ../gui/wxpython/menustrings.py:1387
 msgid "Random cells and vector points"
 msgstr "Случайные ячейки и векторные точки"
 
-#: ../gui/wxpython/menustrings.py:476 ../gui/wxpython/menustrings.py:1387
+#: ../gui/wxpython/menustrings.py:477 ../gui/wxpython/menustrings.py:1388
 #, fuzzy
 msgid ""
 "Creates a raster map layer and vector point map containing randomly located "
@@ -12135,23 +12155,23 @@ msgstr ""
 "Создать растровый слой или векторный точечный слой, содержащий случайно "
 "расположенные объекты."
 
-#: ../gui/wxpython/menustrings.py:477 ../gui/wxpython/menustrings.py:1388
+#: ../gui/wxpython/menustrings.py:478 ../gui/wxpython/menustrings.py:1389
 msgid "Generate surfaces"
 msgstr "Генерировать поверхности"
 
-#: ../gui/wxpython/menustrings.py:478 ../gui/wxpython/menustrings.py:1389
+#: ../gui/wxpython/menustrings.py:479 ../gui/wxpython/menustrings.py:1390
 msgid "Fractal surface"
 msgstr "Фрактальная поверхность"
 
-#: ../gui/wxpython/menustrings.py:479 ../gui/wxpython/menustrings.py:1390
+#: ../gui/wxpython/menustrings.py:480 ../gui/wxpython/menustrings.py:1391
 msgid "Creates a fractal surface of a given fractal dimension."
 msgstr "Создать фрактальную поверхность заданной фрактальной размерности."
 
-#: ../gui/wxpython/menustrings.py:480 ../gui/wxpython/menustrings.py:1391
+#: ../gui/wxpython/menustrings.py:481 ../gui/wxpython/menustrings.py:1392
 msgid "Gaussian kernel density surface"
 msgstr "Поверхность плотности функции Гаусса"
 
-#: ../gui/wxpython/menustrings.py:481 ../gui/wxpython/menustrings.py:1392
+#: ../gui/wxpython/menustrings.py:482 ../gui/wxpython/menustrings.py:1393
 #, fuzzy
 msgid ""
 "Generates a raster density map from vector points map. Density is computed "
@@ -12162,11 +12182,11 @@ msgstr ""
 "гауссово ядро или по выбору создать векторный слой плотности для векторной "
 "сети с помощью 1D ядра."
 
-#: ../gui/wxpython/menustrings.py:482 ../gui/wxpython/menustrings.py:1393
+#: ../gui/wxpython/menustrings.py:483 ../gui/wxpython/menustrings.py:1394
 msgid "Gaussian deviates surface"
 msgstr "Поверхность Гауссовых отклонений"
 
-#: ../gui/wxpython/menustrings.py:483 ../gui/wxpython/menustrings.py:1394
+#: ../gui/wxpython/menustrings.py:484 ../gui/wxpython/menustrings.py:1395
 #, fuzzy
 msgid ""
 "Generates a raster map using gaussian random number generator. Mean and "
@@ -12175,7 +12195,7 @@ msgstr ""
 "Создать растровый слой с протяженными зонами выращенными вокруг единичных "
 "ячеек."
 
-#: ../gui/wxpython/menustrings.py:485 ../gui/wxpython/menustrings.py:1396
+#: ../gui/wxpython/menustrings.py:486 ../gui/wxpython/menustrings.py:1397
 #, fuzzy
 msgid ""
 "Creates raster plane map given dip (inclination), aspect (azimuth) and one "
@@ -12184,11 +12204,11 @@ msgstr ""
 "Создать растровый слой или векторный точечный слой, содержащий случайно "
 "расположенные объекты."
 
-#: ../gui/wxpython/menustrings.py:486 ../gui/wxpython/menustrings.py:1397
+#: ../gui/wxpython/menustrings.py:487 ../gui/wxpython/menustrings.py:1398
 msgid "Random deviates surface"
 msgstr "Поверхность случайных отклонений"
 
-#: ../gui/wxpython/menustrings.py:487 ../gui/wxpython/menustrings.py:1398
+#: ../gui/wxpython/menustrings.py:488 ../gui/wxpython/menustrings.py:1399
 #, fuzzy
 msgid ""
 "Produces a raster surface map of uniform random deviates with defined range."
@@ -12196,23 +12216,23 @@ msgstr ""
 "Создать растровый слой равномерных случайных отклонений, с диапазоном "
 "определенным пользователем."
 
-#: ../gui/wxpython/menustrings.py:488 ../gui/wxpython/menustrings.py:1399
+#: ../gui/wxpython/menustrings.py:489 ../gui/wxpython/menustrings.py:1400
 msgid "Random surface with spatial dependence"
 msgstr "Случайная поверхность с пространственной зависимостью"
 
-#: ../gui/wxpython/menustrings.py:489 ../gui/wxpython/menustrings.py:1400
+#: ../gui/wxpython/menustrings.py:490 ../gui/wxpython/menustrings.py:1401
 msgid "Generates random surface(s) with spatial dependence."
 msgstr "Создать случайную поверхность(и) с пространственной зависимостью."
 
-#: ../gui/wxpython/menustrings.py:490 ../gui/wxpython/menustrings.py:1401
+#: ../gui/wxpython/menustrings.py:491 ../gui/wxpython/menustrings.py:1402
 msgid "Interpolate surfaces"
 msgstr "Интерполировать поверхности"
 
-#: ../gui/wxpython/menustrings.py:491 ../gui/wxpython/menustrings.py:1402
+#: ../gui/wxpython/menustrings.py:492 ../gui/wxpython/menustrings.py:1403
 msgid "Bilinear and bicubic from vector points"
 msgstr "Билинейная и бикубическая интерполяция векторных точек"
 
-#: ../gui/wxpython/menustrings.py:492 ../gui/wxpython/menustrings.py:1403
+#: ../gui/wxpython/menustrings.py:493 ../gui/wxpython/menustrings.py:1404
 #, fuzzy
 msgid ""
 "Performs bicubic or bilinear spline interpolation with Tykhonov "
@@ -12220,23 +12240,22 @@ msgid ""
 msgstr ""
 "Бикубическая или билинейная интерполяция с помощью регуляризации Тихонова."
 
-#: ../gui/wxpython/menustrings.py:493 ../gui/wxpython/menustrings.py:1404
+#: ../gui/wxpython/menustrings.py:494 ../gui/wxpython/menustrings.py:1405
 msgid "IDW from raster points"
 msgstr "IDW из растровых точек"
 
-#: ../gui/wxpython/menustrings.py:494 ../gui/wxpython/menustrings.py:1405
-#, fuzzy
-msgid "Surface interpolation utility for raster map."
-msgstr "Утилита интерполяции поверхности для растрового слоя."
-
 #: ../gui/wxpython/menustrings.py:495 ../gui/wxpython/menustrings.py:1406
-msgid "IDW from raster points (alternate method for sparse points)"
+#, fuzzy
+msgid ""
+"Provides surface interpolation from raster point data by Inverse Distance "
+"Squared Weighting."
 msgstr ""
+"Интерполяция векторных точечных данных с использованием Inverse Distance "
+"Squared Weighting."
 
 #: ../gui/wxpython/menustrings.py:496 ../gui/wxpython/menustrings.py:1407
-#, fuzzy
-msgid "Surface generation program."
-msgstr "Программа генерирования поверхности из растеризованных изолиний."
+msgid "IDW from raster points (alternate method for sparse points)"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:497 ../gui/wxpython/menustrings.py:1408
 msgid "IDW from vector points"
@@ -15515,7 +15534,7 @@ msgid "Driver"
 msgstr "Драйвер"
 
 #: ../gui/wxpython/dbmgr/base.py:2610 ../gui/wxpython/dbmgr/base.py:2735
-#: ../gui/wxpython/dbmgr/base.py:2988 ../gui/wxpython/gui_core/gselect.py:1328
+#: ../gui/wxpython/dbmgr/base.py:2988 ../gui/wxpython/gui_core/gselect.py:1345
 msgid "Database"
 msgstr "База данных"
 
@@ -16814,155 +16833,155 @@ msgstr ""
 msgid "GRASS GIS Supervised Classification Tool"
 msgstr "Панель инструментов привязки"
 
-#: ../gui/wxpython/iclass/frame.py:305
+#: ../gui/wxpython/iclass/frame.py:306
 #, fuzzy
 msgid "IClass Toolbar"
 msgstr "Панель инструментов карты"
 
-#: ../gui/wxpython/iclass/frame.py:317
+#: ../gui/wxpython/iclass/frame.py:318
 #, fuzzy
 msgid "IClass Misc Toolbar"
 msgstr "Панель инструментов карты"
 
-#: ../gui/wxpython/iclass/frame.py:334
+#: ../gui/wxpython/iclass/frame.py:335
 #, fuzzy
 msgid "Digitization Toolbar"
 msgstr "настройки векторизации"
 
-#: ../gui/wxpython/iclass/frame.py:358
+#: ../gui/wxpython/iclass/frame.py:359
 msgid "Plots"
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:378
+#: ../gui/wxpython/iclass/frame.py:379
 #, fuzzy
 msgid "Preview Display"
 msgstr "Распечатать дисплей"
 
-#: ../gui/wxpython/iclass/frame.py:381
+#: ../gui/wxpython/iclass/frame.py:382
 #, fuzzy
 msgid "Training Areas Display"
 msgstr "Дисплей"
 
-#: ../gui/wxpython/iclass/frame.py:451
+#: ../gui/wxpython/iclass/frame.py:452
 msgid "Adjust Training Area Display to Preview Display"
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:452
+#: ../gui/wxpython/iclass/frame.py:453
 msgid "Adjust Preview display to Training Area Display"
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:453
+#: ../gui/wxpython/iclass/frame.py:454
 #, fuzzy
 msgid "Display synchronization ON"
 msgstr "Показать регион"
 
-#: ../gui/wxpython/iclass/frame.py:454
+#: ../gui/wxpython/iclass/frame.py:455
 #, fuzzy
 msgid "Display synchronization OFF"
 msgstr "Показать регион"
 
-#: ../gui/wxpython/iclass/frame.py:524
+#: ../gui/wxpython/iclass/frame.py:525
 msgid "All changes will be lost. Do you want to continue?"
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:532
+#: ../gui/wxpython/iclass/frame.py:533
 msgid "Import vector map"
 msgstr "Импорт векторного слоя"
 
-#: ../gui/wxpython/iclass/frame.py:551
+#: ../gui/wxpython/iclass/frame.py:552
 #, fuzzy, python-format
 msgid "No areas in vector map <%s>.\n"
 msgstr "Не могу создать новый векторный слой <%s>."
 
-#: ../gui/wxpython/iclass/frame.py:553
+#: ../gui/wxpython/iclass/frame.py:554
 #, python-format
 msgid "Vector map <%s> contains points or lines, these features are ignored."
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:578
+#: ../gui/wxpython/iclass/frame.py:579
 #, fuzzy, python-format
 msgid "Unable to open vector map <%s>"
 msgstr "Не могу создать новый векторный слой <%s>."
 
-#: ../gui/wxpython/iclass/frame.py:585
+#: ../gui/wxpython/iclass/frame.py:586
 #, fuzzy, python-format
 msgid "Unable to copy vector features from <%s>"
 msgstr "Не могу создать новый векторный слой <%s>."
 
-#: ../gui/wxpython/iclass/frame.py:595
+#: ../gui/wxpython/iclass/frame.py:596
 #, fuzzy
 msgid "Unable to open temporary vector map"
 msgstr "Не могу создать новый векторный слой <%s>."
 
-#: ../gui/wxpython/iclass/frame.py:685
+#: ../gui/wxpython/iclass/frame.py:686
 #, fuzzy
 msgid "No training areas to export."
 msgstr "Нечего не выбрано."
 
-#: ../gui/wxpython/iclass/frame.py:697
+#: ../gui/wxpython/iclass/frame.py:698
 #, python-format
 msgid "%d training areas (%d classes) exported to vector map <%s>."
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:896
+#: ../gui/wxpython/iclass/frame.py:897
 #, fuzzy
 msgid "Failed to create temporary vector map."
 msgstr "Не могу создать новый векторный слой <%s>."
 
-#: ../gui/wxpython/iclass/frame.py:972
+#: ../gui/wxpython/iclass/frame.py:973
 #, python-format
 msgid "No area in category %s. Category skipped."
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:975
+#: ../gui/wxpython/iclass/frame.py:976
 #, fuzzy
 msgid "Analysis failed."
 msgstr "Проанализировать"
 
-#: ../gui/wxpython/iclass/frame.py:982
+#: ../gui/wxpython/iclass/frame.py:983
 msgid "results"
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:988
+#: ../gui/wxpython/iclass/frame.py:989
 #, fuzzy
 msgid "No imagery group selected."
 msgstr "Слои для выборки не выбраны."
 
-#: ../gui/wxpython/iclass/frame.py:993
+#: ../gui/wxpython/iclass/frame.py:994
 msgid ""
 "Due to recent changes in classes, signatures can be outdated and should be "
 "recalculated. Do you still want to continue?"
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:996
+#: ../gui/wxpython/iclass/frame.py:997
 msgid "Outdated signatures"
 msgstr ""
 
-#: ../gui/wxpython/iclass/frame.py:1012
+#: ../gui/wxpython/iclass/frame.py:1013
 #, fuzzy, python-format
 msgid ""
 "A signature file named %s already exists.\n"
 "Do you want to replace it?"
 msgstr "Файл региона <%s> уже существует. Перезаписать?"
 
-#: ../gui/wxpython/iclass/frame.py:1060
+#: ../gui/wxpython/iclass/frame.py:1061
 #, fuzzy
 msgid "No imagery group selected. Operation canceled."
 msgstr "Не выбран слой. Операция прервана."
 
-#: ../gui/wxpython/iclass/frame.py:1069
+#: ../gui/wxpython/iclass/frame.py:1070
 #, fuzzy, python-format
 msgid ""
 "Group <%(group)s> does not have enough files (it has %(files)d files). "
 "Operation canceled."
 msgstr "Некорректное значение координаты. Операция отменена."
 
-#: ../gui/wxpython/iclass/frame.py:1078
+#: ../gui/wxpython/iclass/frame.py:1079
 #, fuzzy
 msgid "No areas given. Operation canceled."
 msgstr "Не выбран слой. Операция прервана."
 
-#: ../gui/wxpython/iclass/frame.py:1093
+#: ../gui/wxpython/iclass/frame.py:1094
 #, fuzzy
 msgid "Vector features are outside raster layers. Operation canceled."
 msgstr ""
@@ -18070,160 +18089,160 @@ msgid ""
 "Some functionality will be not accessible"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:462
+#: ../gui/wxpython/gui_core/gselect.py:479
 #, fuzzy
 msgid "Not selectable element"
 msgstr "Удалить выбранное поле"
 
-#: ../gui/wxpython/gui_core/gselect.py:497
+#: ../gui/wxpython/gui_core/gselect.py:514
 #: ../gui/wxpython/gui_core/preferences.py:1772
 msgid "Mapset"
 msgstr "Набор"
 
-#: ../gui/wxpython/gui_core/gselect.py:508
+#: ../gui/wxpython/gui_core/gselect.py:525
 #, fuzzy
 msgid "Type: "
 msgstr "Тип"
 
-#: ../gui/wxpython/gui_core/gselect.py:519
+#: ../gui/wxpython/gui_core/gselect.py:536
 #, python-format
 msgid "GSelect: invalid item: %s"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1301
+#: ../gui/wxpython/gui_core/gselect.py:1318
 #, fuzzy
 msgid "Output settings"
 msgstr "Общие настройки"
 
-#: ../gui/wxpython/gui_core/gselect.py:1303
+#: ../gui/wxpython/gui_core/gselect.py:1320
 #, fuzzy
 msgid "Source settings"
 msgstr "Настройки растра"
 
-#: ../gui/wxpython/gui_core/gselect.py:1314
+#: ../gui/wxpython/gui_core/gselect.py:1331
 #, fuzzy
 msgid "Native"
 msgstr "Сохранить изменения"
 
-#: ../gui/wxpython/gui_core/gselect.py:1320
+#: ../gui/wxpython/gui_core/gselect.py:1337
 msgid "File"
 msgstr "Файл"
 
-#: ../gui/wxpython/gui_core/gselect.py:1324
+#: ../gui/wxpython/gui_core/gselect.py:1341
 #: ../gui/wxpython/gui_core/forms.py:1581
 #, fuzzy
 msgid "Directory"
 msgstr "Направление"
 
-#: ../gui/wxpython/gui_core/gselect.py:1332
+#: ../gui/wxpython/gui_core/gselect.py:1349
 msgid "Protocol"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1343
+#: ../gui/wxpython/gui_core/gselect.py:1360
 #, fuzzy
 msgid "Output type"
 msgstr "Вывод"
 
-#: ../gui/wxpython/gui_core/gselect.py:1345
+#: ../gui/wxpython/gui_core/gselect.py:1362
 msgid "Source type"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1379
-#, fuzzy
-msgid "ZIP files"
-msgstr "Значения ячеек"
-
-#: ../gui/wxpython/gui_core/gselect.py:1380
-#, fuzzy
-msgid "GZIP files"
-msgstr "Значения ячеек"
-
-#: ../gui/wxpython/gui_core/gselect.py:1381
-#, fuzzy
-msgid "TAR files"
-msgstr "Значения ячеек"
-
 #: ../gui/wxpython/gui_core/gselect.py:1382
-#, fuzzy
-msgid "TARGZ files"
-msgstr "Значения ячеек"
-
-#: ../gui/wxpython/gui_core/gselect.py:1384
 #, fuzzy
 msgid "All files"
 msgstr "Значения ячеек"
 
-#: ../gui/wxpython/gui_core/gselect.py:1390
+#: ../gui/wxpython/gui_core/gselect.py:1398
+#, fuzzy
+msgid "ZIP files"
+msgstr "Значения ячеек"
+
+#: ../gui/wxpython/gui_core/gselect.py:1399
+#, fuzzy
+msgid "GZIP files"
+msgstr "Значения ячеек"
+
+#: ../gui/wxpython/gui_core/gselect.py:1400
+#, fuzzy
+msgid "TAR files"
+msgstr "Значения ячеек"
+
+#: ../gui/wxpython/gui_core/gselect.py:1402
+#, fuzzy
+msgid "TARGZ files"
+msgstr "Значения ячеек"
+
+#: ../gui/wxpython/gui_core/gselect.py:1408
 #, fuzzy
 msgid "File:"
 msgstr "Файл"
 
-#: ../gui/wxpython/gui_core/gselect.py:1391
+#: ../gui/wxpython/gui_core/gselect.py:1409
 #, fuzzy
 msgid "Choose file to import"
 msgstr "Выберите импортируемый файл DXF"
 
-#: ../gui/wxpython/gui_core/gselect.py:1404
-#: ../gui/wxpython/gui_core/gselect.py:1466
+#: ../gui/wxpython/gui_core/gselect.py:1422
+#: ../gui/wxpython/gui_core/gselect.py:1484
 msgid "Choose input directory"
 msgstr "Выберите исходную папку"
 
-#: ../gui/wxpython/gui_core/gselect.py:1418
+#: ../gui/wxpython/gui_core/gselect.py:1436
 #, fuzzy
 msgid "Extension:"
 msgstr "Выброс"
 
-#: ../gui/wxpython/gui_core/gselect.py:1443
+#: ../gui/wxpython/gui_core/gselect.py:1461
 #, fuzzy
 msgid "Choose file"
 msgstr "Выбрать файл DXF:"
 
-#: ../gui/wxpython/gui_core/gselect.py:1455
-#: ../gui/wxpython/gui_core/gselect.py:2122
+#: ../gui/wxpython/gui_core/gselect.py:1473
+#: ../gui/wxpython/gui_core/gselect.py:2140
 #, fuzzy
 msgid "Feature type:"
 msgstr "ID объекта:"
 
-#: ../gui/wxpython/gui_core/gselect.py:1456
+#: ../gui/wxpython/gui_core/gselect.py:1474
 #, fuzzy
 msgid "simple features"
 msgstr "Запрос по объектам"
 
-#: ../gui/wxpython/gui_core/gselect.py:1456
+#: ../gui/wxpython/gui_core/gselect.py:1474
 #, fuzzy
 msgid "topological"
 msgstr "Создать/построить топологию"
 
-#: ../gui/wxpython/gui_core/gselect.py:1562
-#: ../gui/wxpython/gui_core/gselect.py:1593
-#: ../gui/wxpython/gui_core/gselect.py:1644
-#: ../gui/wxpython/gui_core/gselect.py:1682
+#: ../gui/wxpython/gui_core/gselect.py:1580
+#: ../gui/wxpython/gui_core/gselect.py:1611
+#: ../gui/wxpython/gui_core/gselect.py:1662
+#: ../gui/wxpython/gui_core/gselect.py:1700
 #, fuzzy
 msgid "Creation options:"
 msgstr "Установить настройки"
 
-#: ../gui/wxpython/gui_core/gselect.py:1576
-#: ../gui/wxpython/gui_core/gselect.py:1615
-#: ../gui/wxpython/gui_core/gselect.py:1667
+#: ../gui/wxpython/gui_core/gselect.py:1594
+#: ../gui/wxpython/gui_core/gselect.py:1633
+#: ../gui/wxpython/gui_core/gselect.py:1685
 msgid "Format:"
 msgstr ""
 
-#: ../gui/wxpython/gui_core/gselect.py:1674
+#: ../gui/wxpython/gui_core/gselect.py:1692
 #, fuzzy
 msgid "Protocol:"
 msgstr "Код проекции:"
 
-#: ../gui/wxpython/gui_core/gselect.py:1697
+#: ../gui/wxpython/gui_core/gselect.py:1715
 #, fuzzy
 msgid "No settings available"
 msgstr "Панель инструментов векторизации"
 
-#: ../gui/wxpython/gui_core/gselect.py:2114
+#: ../gui/wxpython/gui_core/gselect.py:2132
 #, fuzzy
 msgid "LineString"
 msgstr "Подсветка"
 
-#: ../gui/wxpython/gui_core/gselect.py:2114
+#: ../gui/wxpython/gui_core/gselect.py:2132
 msgid "Polygon"
 msgstr ""
 
@@ -18237,10 +18256,21 @@ msgid "Set to default"
 msgstr "Установить по умолчанию"
 
 #: ../gui/wxpython/gui_core/preferences.py:88
-msgid "Revert settings to default and apply changes"
+#, fuzzy
+msgid "Revert settings to default"
 msgstr "Возвратить настройки по умолчанию и применить изменения"
 
-#: ../gui/wxpython/gui_core/preferences.py:153
+#: ../gui/wxpython/gui_core/preferences.py:90
+#, fuzzy
+msgid "Apply changes for the current session only and close"
+msgstr "Применить изменения для существующей сессии"
+
+#: ../gui/wxpython/gui_core/preferences.py:91
+#, fuzzy
+msgid "Save for this session only"
+msgstr "Применить изменения для этой сессии"
+
+#: ../gui/wxpython/gui_core/preferences.py:152
 msgid "Settings applied to current session but not saved"
 msgstr ""
 
@@ -19252,6 +19282,27 @@ msgstr ""
 #, fuzzy
 msgid "Run selected module from the tree"
 msgstr "Исполнить команду"
+
+#, fuzzy
+#~ msgid ""
+#~ "Outputs a raster map showing the anisotropic cumulative cost. Computes "
+#~ "anisotropic cumulative cost of moving between different geographic "
+#~ "locations on an input elevation raster map whose cell category values "
+#~ "represent elevation combined with an input raster map layer whose cell "
+#~ "values represent friction cost."
+#~ msgstr ""
+#~ "Вывести растровый слой показывающий анизотропную кумулятивную стоимость "
+#~ "передвижения между разными местоположениями на растровом слое высот, "
+#~ "значения ячеек которого представляют значения высот комбинированные со "
+#~ "значениями расходов на преодоление с другого растрового слоя."
+
+#, fuzzy
+#~ msgid "Surface interpolation utility for raster map."
+#~ msgstr "Утилита интерполяции поверхности для растрового слоя."
+
+#, fuzzy
+#~ msgid "Surface generation program."
+#~ msgstr "Программа генерирования поверхности из растеризованных изолиний."
 
 #, fuzzy
 #~ msgid ""
