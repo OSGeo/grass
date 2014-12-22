@@ -529,9 +529,6 @@
       <module-item name="v.to.3d">
         <label>2D vector to 3D vector</label>
       </module-item>
-      <module-item name="v.in.sites">
-        <label>Sites to vector</label>
-      </module-item>
       <separator/>
       <module-item name="r3.to.rast">
         <label>Volume to raster series</label>
@@ -1259,9 +1256,6 @@
       </module-item>
       <module-item name="v.to.3d">
         <label>2D vector to 3D vector</label>
-      </module-item>
-      <module-item name="v.in.sites">
-        <label>Sites to vector</label>
       </module-item>
     </items>
   </toolbox>
