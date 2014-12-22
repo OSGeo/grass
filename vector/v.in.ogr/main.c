@@ -243,7 +243,7 @@ int main(int argc, char *argv[])
     param.geom = G_define_standard_option(G_OPT_DB_COLUMN);
     param.geom->key = "geometry";
     param.geom->label = _("Name of geometry column");
-    param.geom->description = _("If not given, first geometry column from the input is used");
+    param.geom->description = _("If not given, all geometry columns from the input are used");
     param.geom->guisection = _("Selection");
 
     flag.formats = G_define_flag();
