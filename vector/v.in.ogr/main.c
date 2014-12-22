@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     struct _param {
 	struct Option *dsn, *out, *layer, *spat, *where,
 	    *min_area;
-        struct Option *snap, *type, *outloc, *cnames, *encoding, *key;
+        struct Option *snap, *type, *outloc, *cnames, *encoding, *key, *geom;
     } param;
     struct _flag {
 	struct Flag *list, *no_clean, *force2d, *notab,
@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
 
     char *desc;
 
-    int i, j, layer, nogeom, ncnames;
+    int i, j, layer, nogeom, ncnames, igeom;
     double xmin, ymin, xmax, ymax;
     int ncols = 0, type;
     double min_area, snap;
@@ -239,6 +239,12 @@ int main(int argc, char *argv[])
     param.key->description = 
         _("If not given, categories are generated as unique values and stored in 'cat' column");
     param.key->guisection = _("Attributes");
+
+    param.geom = G_define_standard_option(G_OPT_DB_COLUMN);
+    param.geom->key = "geometry";
+    param.geom->label = _("Name of geometry column");
+    param.geom->description = _("If not given, all geometry columns from the input are used");
+    param.geom->guisection = _("Selection");
 
     flag.formats = G_define_flag();
     flag.formats->key = 'f';
@@ -426,6 +432,20 @@ int main(int argc, char *argv[])
 	Ogr_ds = OGROpen(dsn, FALSE, NULL);
     if (Ogr_ds == NULL)
 	G_fatal_error(_("Unable to open data source <%s>"), dsn);
+
+    if (param.geom->answer) {
+#if GDAL_VERSION_NUM >= 1110000
+        if (!OGR_DS_TestCapability(Ogr_ds, ODsCCreateGeomFieldAfterCreateLayer)) {
+            G_warning(_("Option <%s> will be ignored. OGR doesn't support it for selected format (%s)."),
+                      param.geom->key, OGR_Dr_GetName(OGR_DS_GetDriver(Ogr_ds)));
+            param.geom->answer = NULL;
+        }
+#else
+        G_warning(_("Option <%s> will be ignored. Multiple geometry fields are supported by GDAL >= 1.11"),
+                  param.geom->key);
+        param.geom->answer = NULL;
+#endif
+    }
 
     /* check encoding for given driver */
     if (param.encoding->answer) {
@@ -816,7 +836,15 @@ int main(int argc, char *argv[])
 
 	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, layer_id);
 	Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
-
+        igeom = -1;
+#if GDAL_VERSION_NUM >= 1110000
+        if (param.geom->answer) {
+            igeom = OGR_FD_GetGeomFieldIndex(Ogr_featuredefn, param.geom->answer);
+            if (igeom < 0)
+                G_fatal_error(_("Geometry column <%s> not found in OGR layer <%s>"),
+                              param.geom->answer, OGR_L_GetName(Ogr_layer));
+        }
+#endif
 	n_features = feature_count = 0;
 
 	n_features = OGR_L_GetFeatureCount(Ogr_layer, 1);
@@ -827,15 +855,27 @@ int main(int argc, char *argv[])
 		  layer_names[layer]);
 	while ((Ogr_feature = OGR_L_GetNextFeature(Ogr_layer)) != NULL) {
 	    G_percent(feature_count++, n_features, 1);	/* show something happens */
-	    /* Geometry */
-	    Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
-	    if (Ogr_geometry != NULL) {
-		if (!flag.no_clean->answer)
-		    poly_count(Ogr_geometry, (type & GV_BOUNDARY));
-		if (OGR_G_GetCoordinateDimension(Ogr_geometry) > 2)
-		    input3d = 1;
-	    }
-	    OGR_F_Destroy(Ogr_feature);
+
+            /* Geometry */
+#if GDAL_VERSION_NUM >= 1110000
+            for (i = 0; i < OGR_FD_GetGeomFieldCount(Ogr_featuredefn); i++) {
+                if (igeom > -1 && i != igeom)
+                    continue; /* use only geometry defined via param.geom */
+            
+                Ogr_geometry = OGR_F_GetGeomFieldRef(Ogr_feature, i);
+#else
+                Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
+#endif
+                if (Ogr_geometry != NULL) {
+                    if (!flag.no_clean->answer)
+                        poly_count(Ogr_geometry, (type & GV_BOUNDARY));
+                    if (OGR_G_GetCoordinateDimension(Ogr_geometry) > 2)
+                        input3d = 1;
+                }
+#if GDAL_VERSION_NUM >= 1110000                
+            }
+#endif
+            OGR_F_Destroy(Ogr_feature);
 	}
 	G_percent(1, 1, 1);
     }
@@ -897,6 +937,12 @@ int main(int argc, char *argv[])
 	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, layer_id);
 	Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
 
+        igeom = -1;
+#if GDAL_VERSION_NUM >= 1110000
+        if (param.geom->answer)
+            igeom = OGR_FD_GetGeomFieldIndex(Ogr_featuredefn, param.geom->answer);
+#endif
+        
         if (param.key->answer) {
             const char *fid_column;
             fid_column = OGR_L_GetFIDColumn(Ogr_layer);
@@ -1077,34 +1123,44 @@ int main(int argc, char *argv[])
 	    db_begin_transaction(driver);
 	}
 
-	/* Import feature */
+	/* Import features */
 	cat = 1;
 	nogeom = 0;
-	OGR_L_ResetReading(Ogr_layer);
-	n_features = feature_count = 0;
+	feature_count = 0;
 
-	n_features = OGR_L_GetFeatureCount(Ogr_layer, 1);
-
+	n_features = OGR_L_GetFeatureCount(Ogr_layer, TRUE);
 	G_important_message(_("Importing %d features (OGR layer <%s>)..."),
 			    n_features, layer_names[layer]);
-
+        
+        OGR_L_ResetReading(Ogr_layer);
 	while ((Ogr_feature = OGR_L_GetNextFeature(Ogr_layer)) != NULL) {
 	    G_percent(feature_count++, n_features, 1);	/* show something happens */
-	    /* Geometry */
-	    Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
-	    if (Ogr_geometry == NULL) {
-		nogeom++;
-	    }
-	    else {
-                if (key_idx > -1)
-                    cat = OGR_F_GetFieldAsInteger(Ogr_feature, key_idx);
-                else if (key_idx == -1)
-                    cat = OGR_F_GetFID(Ogr_feature);
-                
-		geom(Ogr_geometry, Out, layer + 1, cat, min_area, type,
-		     flag.no_clean->answer);
-	    }
 
+            /* Geometry */
+#if GDAL_VERSION_NUM >= 1110000
+            for (i = 0; i < OGR_FD_GetGeomFieldCount(Ogr_featuredefn); i++) {
+                if (igeom > -1 && i != igeom)
+                    continue; /* use only geometry defined via param.geom */
+            
+                Ogr_geometry = OGR_F_GetGeomFieldRef(Ogr_feature, i);
+#else
+                Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
+#endif                
+                if (Ogr_geometry == NULL) {
+                    nogeom++;
+                }
+                else {
+                    if (key_idx > -1)
+                        cat = OGR_F_GetFieldAsInteger(Ogr_feature, key_idx);
+                    else if (key_idx == -1)
+                        cat = OGR_F_GetFID(Ogr_feature);
+                    
+                    geom(Ogr_geometry, Out, layer + 1, cat, min_area, type,
+                         flag.no_clean->answer);
+                }
+#if GDAL_VERSION_NUM >= 1110000              
+            }
+#endif
 	    /* Attributes */
 	    if (!flag.notab->answer) {
 		sprintf(buf, "insert into %s values ( %d", Fi->table, cat);
@@ -1335,6 +1391,14 @@ int main(int argc, char *argv[])
 	    G_message(_("Finding centroids for OGR layer <%s>..."), layer_names[layer]);
 	    layer_id = layers[layer];
 	    Ogr_layer = OGR_DS_GetLayer(Ogr_ds, layer_id);
+            Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
+
+            igeom = -1;
+#if GDAL_VERSION_NUM >= 1110000
+            if (param.geom->answer)
+                igeom = OGR_FD_GetGeomFieldIndex(Ogr_featuredefn, param.geom->answer);
+#endif
+            
 	    n_features = OGR_L_GetFeatureCount(Ogr_layer, 1);
 	    OGR_L_ResetReading(Ogr_layer);
 
@@ -1344,12 +1408,22 @@ int main(int argc, char *argv[])
 		cat++;
 		G_percent(cat, n_features, 2);
 		/* Geometry */
-		Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
-		if (Ogr_geometry != NULL) {
-		    centroid(Ogr_geometry, Centr, &si, layer + 1, cat,
-			     min_area, type);
-		}
-
+#if GDAL_VERSION_NUM >= 1110000
+                for (i = 0; i < OGR_FD_GetGeomFieldCount(Ogr_featuredefn); i++) {
+                    if (igeom > -1 && i != igeom)
+                        continue; /* use only geometry defined via param.geom */
+            
+                    Ogr_geometry = OGR_F_GetGeomFieldRef(Ogr_feature, i);
+#else
+                    Ogr_geometry = OGR_F_GetGeometryRef(Ogr_feature);
+#endif
+                    if (Ogr_geometry != NULL) {
+                        centroid(Ogr_geometry, Centr, &si, layer + 1, cat,
+                                 min_area, type);
+                    }
+#if GDAL_VERSION_NUM >= 1110000
+                }
+#endif
 		OGR_F_Destroy(Ogr_feature);
 	    }
 	}
