@@ -121,7 +121,7 @@ class LocationMapTree(wx.TreeCtrl):
                 self.AppendItem(varloc, mapset)
             
             # get list of all maps in location
-            maplist = RunCommand('g.list', flags='mt', type='rast,rast3d,vect', mapset=','.join(mapsets),
+            maplist = RunCommand('g.list', flags='mt', type='raster,raster_3d,vector', mapset=','.join(mapsets),
                                  quiet=True, read=True)
             maplist = maplist.splitlines()
             for ml in maplist:
