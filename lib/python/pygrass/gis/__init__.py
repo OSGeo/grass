@@ -24,9 +24,7 @@ ETYPE = {'raster': libgis.G_ELEMENT_RASTER,
          'labels': libgis.G_ELEMENT_LABEL,
          'sites': libgis.G_ELEMENT_SITE,
          'region': libgis.G_ELEMENT_REGION,
-         'region3d': libgis.G_ELEMENT_REGION3D,
-         'group': libgis.G_ELEMENT_GROUP,
-         'view3d': libgis.G_ELEMENT_3DVIEW}
+         'group': libgis.G_ELEMENT_GROUP}
 
 
 CHECK_IS = {"GISBASE": libgis.G_is_gisbase,
@@ -317,10 +315,8 @@ class Mapset(object):
             * 'raster',
             * 'raster_3d',
             * 'region',
-            * 'region3d',
             * 'sites',
             * 'vector',
-            * 'view3d'
 
         :param type: the type of element to query
         :type type: str

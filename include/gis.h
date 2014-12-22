@@ -357,8 +357,8 @@ enum rule_type {
 */
 enum
 {				/* Dir */
-    G_ELEMENT_RASTER = 1,	/*!< cell */
-    G_ELEMENT_RASTER3D = 2,	/*!< 3dcell */
+    G_ELEMENT_RASTER = 1,	/*!< raster */
+    G_ELEMENT_RASTER3D = 2,	/*!< 3d raster */
     G_ELEMENT_VECTOR = 3,	/*!< vector */
     G_ELEMENT_OLDVECTOR = 4,	/*!< GRASS < 5.7 vector */
     G_ELEMENT_ASCIIVECTOR = 5,	/*!< ASCII vector */
@@ -366,9 +366,7 @@ enum
     G_ELEMENT_LABEL = 7,	/*!< labels */
     G_ELEMENT_SITE = 8,		/*!< sites */
     G_ELEMENT_REGION = 9,	/*!< region */
-    G_ELEMENT_REGION3D = 10,	/*!< 3dregion */
-    G_ELEMENT_GROUP = 11,	/*!< group */
-    G_ELEMENT_3DVIEW = 12	/*!< 3dview */
+    G_ELEMENT_GROUP = 10,	/*!< group */
 };
 
 /*=========================== Typedefs/Structures ==========================*/
