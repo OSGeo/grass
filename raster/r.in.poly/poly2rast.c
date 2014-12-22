@@ -6,11 +6,12 @@
 #include "format.h"
 #include "local_proto.h"
 
-int poly_to_rast(char *input_file, char *raster_map, char *title, int nrows)
+int poly_to_rast(char *input_file, char *raster_map, char *title, int nrows, int raster_type, int *null)
 {
     double *x, *y;
     int count;
-    long cat;
+    int cat_int;
+    double cat_double;
     int type;
     struct Categories labels;
     FILE *ifd;			/* for input file */
@@ -32,7 +33,7 @@ int poly_to_rast(char *input_file, char *raster_map, char *title, int nrows)
 	exit(EXIT_FAILURE);
     }
 
-    rfd = Rast_open_c_new(raster_map);
+    rfd = Rast_open_new(raster_map, raster_type);
 
     if (title == NULL)
 	title = "";
@@ -40,7 +41,7 @@ int poly_to_rast(char *input_file, char *raster_map, char *title, int nrows)
 
     Rast_init_cats(title, &labels);
 
-    format = getformat(ifd);
+    format = getformat(ifd, raster_type, null);
     
     /* ?? otherwise get complaints about window changes */
     G_suppress_warnings(TRUE);
@@ -55,8 +56,11 @@ int poly_to_rast(char *input_file, char *raster_map, char *title, int nrows)
 	    G_message(_("Pass #%d (of %d) ..."), pass, npasses);
 
 	G_fseek(ifd, 0L, 0);
-	while (get_item(ifd, &type, &cat, &x, &y, &count, &labels)) {
-	    set_cat(cat);
+	while (get_item(ifd, format, &type, &cat_int, &cat_double, &x, &y, &count, &labels)) {
+	    if (format == USE_FCELL || format == USE_DCELL)
+		set_cat_double(cat_double);
+	    else
+		set_cat_int(cat_int);
 	    switch (type) {
 	    case 'A':
 		G_plot_polygon(x, y, count);
@@ -76,7 +80,7 @@ int poly_to_rast(char *input_file, char *raster_map, char *title, int nrows)
 
 	G_message(_("Writing raster map..."));
 
-	stat = output_raster(rfd);
+	stat = output_raster(rfd, null);
     } while (stat == 0);
     /* stat: 0 means repeat
      *       1 means done
