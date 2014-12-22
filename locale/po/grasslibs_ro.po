@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ro\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-13 11:29+0100\n"
+"POT-Creation-Date: 2014-12-22 16:11+0100\n"
 "PO-Revision-Date: 2013-11-21 22:05+0200\n"
 "Last-Translator: Mihai Moise\n"
 "Language-Team: GRASS Translation Team <grass-translations@lists.osgeo.org>\n"
@@ -1543,7 +1543,7 @@ msgid "Unknown column type (column <%s>)"
 msgstr ""
 
 #: ../lib/db/dbmi_client/column.c:136 ../lib/python/script/db.py:45
-#: ../lib/vector/Vlib/write_pg.c:656 ../lib/vector/Vlib/ascii.c:431
+#: ../lib/vector/Vlib/write_pg.c:656 ../lib/vector/Vlib/ascii.c:428
 #, c-format, python-format
 msgid "Unable to describe table <%s>"
 msgstr ""
@@ -1585,15 +1585,15 @@ msgstr ""
 msgid "Raster"
 msgstr ""
 
-#: ../lib/manage/option.c:54
+#: ../lib/manage/option.c:55
 msgid "Vector"
 msgstr ""
 
-#: ../lib/manage/option.c:56
+#: ../lib/manage/option.c:57
 msgid "Region"
 msgstr ""
 
-#: ../lib/manage/option.c:58
+#: ../lib/manage/option.c:59
 msgid "Group"
 msgstr ""
 
@@ -1613,7 +1613,7 @@ msgid "Unable to rename %s"
 msgstr "Nu s-a putut deschide <%s>"
 
 #: ../lib/manage/do_rename.c:87 ../lib/manage/do_rename.c:107
-#: ../lib/manage/do_copy.c:63 ../lib/manage/do_remove.c:89
+#: ../lib/manage/do_copy.c:61 ../lib/manage/do_remove.c:89
 #: ../lib/manage/do_remove.c:109
 #, c-format
 msgid "%s is missing"
@@ -1634,12 +1634,12 @@ msgstr ""
 msgid "Copy %s <%s> to current mapset as <%s>"
 msgstr ""
 
-#: ../lib/manage/do_copy.c:52
+#: ../lib/manage/do_copy.c:50
 #, fuzzy, c-format
 msgid "Unable to copy <%s> to current mapset as <%s>"
 msgstr "Nu s-a putut dechide harta vectorială <%s>"
 
-#: ../lib/manage/do_copy.c:72
+#: ../lib/manage/do_copy.c:70
 #, c-format
 msgid "%s copied"
 msgstr ""
@@ -1689,31 +1689,31 @@ msgstr ""
 msgid "Unable to open display"
 msgstr "Nu s-a putut deschide <%s>"
 
-#: ../lib/cairodriver/graph.c:82
+#: ../lib/cairodriver/graph.c:85
 #, fuzzy
 msgid "Unable to obtain visual"
 msgstr "Nu s-a putut deschide <%s>"
 
-#: ../lib/cairodriver/graph.c:157
+#: ../lib/cairodriver/graph.c:160
 #, c-format
 msgid "Unknown file extension: %s"
 msgstr ""
 
-#: ../lib/cairodriver/graph.c:185
+#: ../lib/cairodriver/graph.c:190
 #, c-format
 msgid "cairo: collecting to file '%s'"
 msgstr ""
 
-#: ../lib/cairodriver/graph.c:187
+#: ../lib/cairodriver/graph.c:192
 #, c-format
 msgid "cairo: image size %dx%d"
 msgstr ""
 
-#: ../lib/cairodriver/graph.c:354
+#: ../lib/cairodriver/graph.c:371
 msgid "Unknown Cairo surface type"
 msgstr ""
 
-#: ../lib/cairodriver/graph.c:359
+#: ../lib/cairodriver/graph.c:376
 msgid "Failed to initialize Cairo surface"
 msgstr ""
 
@@ -1770,9 +1770,9 @@ msgstr "Nu s-a putut dechide harta vectorială <%s>"
 msgid "Some characters could not be converted to UTF-8"
 msgstr ""
 
-#: ../lib/cairodriver/raster.c:73 ../lib/cairodriver/raster.c:77
+#: ../lib/cairodriver/raster.c:109
 #, fuzzy
-msgid "Failed to create surface"
+msgid "Failed to create cairo surface"
 msgstr "Nu s-a putut crea rasterul <%s>"
 
 #: ../lib/cairodriver/read_ppm.c:38
@@ -1829,132 +1829,137 @@ msgstr ""
 msgid "png: image size %dx%d"
 msgstr ""
 
-#: ../lib/init/grass.py:74
+#: ../lib/init/grass.py:75
 msgid "WARNING"
 msgstr ""
 
-#: ../lib/init/grass.py:129 ../lib/gis/parser.c:591
+#: ../lib/init/grass.py:130 ../lib/gis/parser.c:597
 msgid "ERROR"
 msgstr ""
 
-#: ../lib/init/grass.py:130
+#: ../lib/init/grass.py:131
 msgid "Exiting..."
 msgstr ""
 
-#: ../lib/init/grass.py:203
+#: ../lib/init/grass.py:205
 msgid "Usage"
 msgstr ""
 
-#: ../lib/init/grass.py:204 ../lib/gis/parser_html.c:145
+#: ../lib/init/grass.py:206 ../lib/gis/parser_html.c:141
 #: ../lib/gis/parser_rest.c:146
 msgid "Flags"
 msgstr ""
 
-#: ../lib/init/grass.py:205
+#: ../lib/init/grass.py:207
 msgid "print this help message"
 msgstr ""
 
-#: ../lib/init/grass.py:206
+#: ../lib/init/grass.py:208
 msgid "show version information and exit"
 msgstr ""
 
-#: ../lib/init/grass.py:207
+#: ../lib/init/grass.py:209
 msgid "create given database, location or mapset if it doesn't exist"
 msgstr ""
 
-#: ../lib/init/grass.py:208
+#: ../lib/init/grass.py:210
 msgid "exit after creation of location or mapset. Only with -c flag"
 msgstr ""
 
-#: ../lib/init/grass.py:209
+#: ../lib/init/grass.py:211
+msgid ""
+"force removal of .gislock if exists (use with care!). Only with -text flag"
+msgstr ""
+
+#: ../lib/init/grass.py:212
 msgid "use text based interface (skip welcome screen)"
 msgstr ""
 
-#: ../lib/init/grass.py:210 ../lib/init/grass.py:212 ../lib/init/grass.py:214
+#: ../lib/init/grass.py:213 ../lib/init/grass.py:215 ../lib/init/grass.py:217
 msgid "and set as default"
 msgstr ""
 
-#: ../lib/init/grass.py:211
+#: ../lib/init/grass.py:214
 msgid "use text based interface (show welcome screen)"
 msgstr ""
 
-#: ../lib/init/grass.py:213
+#: ../lib/init/grass.py:216
 msgid "use $DEFAULT_GUI graphical user interface"
 msgstr ""
 
-#: ../lib/init/grass.py:215
+#: ../lib/init/grass.py:218
 msgid "print GRASS configuration parameters"
 msgstr ""
 
-#: ../lib/init/grass.py:216
+#: ../lib/init/grass.py:219
 msgid "options: arch,build,compiler,path,revision"
 msgstr ""
 
-#: ../lib/init/grass.py:217 ../lib/gis/parser_html.c:188
+#: ../lib/init/grass.py:220 ../lib/gis/parser_html.c:189
 #: ../lib/gis/parser_rest.c:179
 msgid "Parameters"
 msgstr "Parametrii"
 
-#: ../lib/init/grass.py:218
+#: ../lib/init/grass.py:221
 msgid "initial database (path to GIS data)"
 msgstr ""
 
-#: ../lib/init/grass.py:219
+#: ../lib/init/grass.py:222
 msgid "initial location"
 msgstr ""
 
-#: ../lib/init/grass.py:220
+#: ../lib/init/grass.py:223
 msgid "initial mapset"
 msgstr ""
 
-#: ../lib/init/grass.py:221
+#: ../lib/init/grass.py:224
 msgid "fully qualified initial mapset directory"
 msgstr ""
 
-#: ../lib/init/grass.py:222
+#: ../lib/init/grass.py:225
 msgid "Environment variables relevant for startup"
 msgstr ""
 
-#: ../lib/init/grass.py:223
+#: ../lib/init/grass.py:226
 msgid "select GUI (text, gui)"
 msgstr ""
 
-#: ../lib/init/grass.py:224
+#: ../lib/init/grass.py:227
 msgid "set html web browser for help pages"
 msgstr ""
 
-#: ../lib/init/grass.py:225
+#: ../lib/init/grass.py:228
 msgid "set additional path(s) to local GRASS modules or user scripts"
 msgstr ""
 
-#: ../lib/init/grass.py:226
+#: ../lib/init/grass.py:229
 msgid "set additional GISBASE for locally installed GRASS Addons"
 msgstr ""
 
-#: ../lib/init/grass.py:227
+#: ../lib/init/grass.py:230
 msgid "shell script to be processed as batch job"
 msgstr ""
 
-#: ../lib/init/grass.py:228
+#: ../lib/init/grass.py:231
 msgid "set python shell name to override 'python'"
 msgstr ""
 
-#: ../lib/init/grass.py:266
+#: ../lib/init/grass.py:269
 #, python-format
 msgid ""
 "Unable to create temporary directory <grass7-%(user)s-%(lock)s>! Exiting."
 msgstr ""
 
-#: ../lib/init/grass.py:350
+#: ../lib/init/grass.py:353
 #, python-format
 msgid "GUI <%s> not supported in this version"
 msgstr ""
 
-#: ../lib/init/grass.py:499
+#: ../lib/init/grass.py:497
 msgid "Searched for a web browser, but none found"
 msgstr ""
 
-#: ../lib/init/grass.py:507
+#: ../lib/init/grass.py:505
 #, python-format
 msgid ""
 "\n"
@@ -1971,11 +1976,11 @@ msgid ""
 "      http://grass.osgeo.org\n"
 msgstr ""
 
-#: ../lib/init/grass.py:523
+#: ../lib/init/grass.py:521
 msgid "Hit RETURN to continue"
 msgstr ""
 
-#: ../lib/init/grass.py:552
+#: ../lib/init/grass.py:550
 msgid ""
 "The python command does not work as expected!\n"
 "Please check your GRASS_PYTHON environment variable.\n"
@@ -1985,7 +1990,7 @@ msgid ""
 "Hit RETURN to continue.\n"
 msgstr ""
 
-#: ../lib/init/grass.py:564
+#: ../lib/init/grass.py:562
 msgid ""
 "It appears that the X Windows system is not active.\n"
 "A graphical based user interface is not supported.\n"
@@ -1994,46 +1999,46 @@ msgid ""
 "Hit RETURN to continue"
 msgstr ""
 
-#: ../lib/init/grass.py:611 ../lib/gis/make_mapset.c:66
+#: ../lib/init/grass.py:609 ../lib/gis/make_mapset.c:66
 #, fuzzy, c-format, python-format
 msgid "Location <%s> doesn't exist"
 msgstr "Harta raster <%s> nu este găsită"
 
-#: ../lib/init/grass.py:616
+#: ../lib/init/grass.py:614
 #, python-format
 msgid "ERROR: <%s> is not a valid GRASS location"
 msgstr ""
 
-#: ../lib/init/grass.py:619
+#: ../lib/init/grass.py:617
 #, python-format
 msgid ""
 "Mapset <%s> doesn't exist in GRASS location <%s>. A new mapset can be "
 "created by '-c' switch."
 msgstr ""
 
-#: ../lib/init/grass.py:638
+#: ../lib/init/grass.py:636
 #, python-format
 msgid "Failed to create new location. The location <%s> already exists."
 msgstr ""
 
-#: ../lib/init/grass.py:670
+#: ../lib/init/grass.py:668
 msgid "Missing WIND file fixed"
 msgstr ""
 
-#: ../lib/init/grass.py:682
+#: ../lib/init/grass.py:680
 msgid ""
 "GISDBASE, LOCATION_NAME and MAPSET variables not set properly.\n"
 "Interactive startup needed."
 msgstr ""
 
-#: ../lib/init/grass.py:697
+#: ../lib/init/grass.py:695
 #, python-format
 msgid ""
 "Invalid user interface specified - <%s>. Use the --help option to see valid "
 "interface names."
 msgstr ""
 
-#: ../lib/init/grass.py:710
+#: ../lib/init/grass.py:708
 msgid ""
 "Error in GUI startup. If necessary, please report this error to the GRASS "
 "developers.\n"
@@ -2042,13 +2047,13 @@ msgid ""
 "Hit RETURN to continue..."
 msgstr ""
 
-#: ../lib/init/grass.py:720
+#: ../lib/init/grass.py:718
 msgid ""
 "Received EXIT message from GUI.\n"
 "GRASS is not started. Bye."
 msgstr ""
 
-#: ../lib/init/grass.py:723
+#: ../lib/init/grass.py:721
 #, fuzzy
 msgid ""
 "Invalid return code from GUI startup script.\n"
@@ -2057,7 +2062,7 @@ msgstr ""
 "gsd_rot(): %c este o specificare de axă invalidă. Rotația ignorată. Adresați-"
 "vă dezvoltatorilor GRASS pentru această eroare"
 
-#: ../lib/init/grass.py:734
+#: ../lib/init/grass.py:732
 msgid ""
 "Error reading data path information from g.gisenv.\n"
 "GISDBASE=%(gisbase)s\n"
@@ -2067,39 +2072,49 @@ msgid ""
 "Check the <%s(file)> file."
 msgstr ""
 
-#: ../lib/init/grass.py:877
+#: ../lib/init/grass.py:875
 #, python-format
 msgid "Path '%s' doesn't exist"
 msgstr ""
 
-#: ../lib/init/grass.py:885
+#: ../lib/init/grass.py:883
 #, python-format
 msgid ""
 "%(user)s is currently running GRASS in selected mapset (file %(file)s "
-"found). Concurrent use not allowed."
+"found). Concurrent use not allowed.\n"
+"You can force launching GRASS using -f flag (note that you need permission "
+"for this operation). Have another look in the processor manager just to be "
+"sure..."
 msgstr ""
 
-#: ../lib/init/grass.py:889
+#: ../lib/init/grass.py:890
+#, python-format
+msgid ""
+"%(user)s is currently running GRASS in selected mapset (file %(file)s "
+"found). Forcing to launch GRASS..."
+msgstr ""
+
+#: ../lib/init/grass.py:894
 #, python-format
 msgid ""
 "Unable to properly access '%s'.\n"
 "Please notify system personel."
 msgstr ""
 
-#: ../lib/init/grass.py:904
+#: ../lib/init/grass.py:909
 msgid "Building user fontcap..."
 msgstr ""
 
-#: ../lib/init/grass.py:949
+#: ../lib/init/grass.py:954
 #, python-format
 msgid "Unsupported shell <%(sh)s>: %(env)s"
 msgstr ""
 
-#: ../lib/init/grass.py:954
+#: ../lib/init/grass.py:959
 msgid "The SHELL variable is not set"
 msgstr ""
 
-#: ../lib/init/grass.py:965
+#: ../lib/init/grass.py:970
 #, python-format
 msgid ""
 "Job file '%s' has been defined in the 'GRASS_BATCH_JOB' variable but not "
@@ -2108,103 +2123,103 @@ msgid ""
 "Use 'unset GRASS_BATCH_JOB' to disable batch job processing."
 msgstr ""
 
-#: ../lib/init/grass.py:970
+#: ../lib/init/grass.py:975
 #, python-format
 msgid "Change file permission to 'executable' for '%s'"
 msgstr ""
 
-#: ../lib/init/grass.py:972
+#: ../lib/init/grass.py:977
 #, python-format
 msgid "Executing '%s' ..."
 msgstr ""
 
-#: ../lib/init/grass.py:977
+#: ../lib/init/grass.py:982
 #, python-format
 msgid "Execution of '%s' finished."
 msgstr ""
 
-#: ../lib/init/grass.py:983
+#: ../lib/init/grass.py:988
 #, python-format
 msgid "GRASS GUI should be <%s>"
 msgstr ""
 
-#: ../lib/init/grass.py:1012
+#: ../lib/init/grass.py:1017
 #, python-format
 msgid "Welcome to GRASS %s"
 msgstr ""
 
-#: ../lib/init/grass.py:1031
+#: ../lib/init/grass.py:1036
 msgid "GRASS homepage:"
 msgstr ""
 
-#: ../lib/init/grass.py:1032
+#: ../lib/init/grass.py:1037
 msgid "This version running through:"
 msgstr ""
 
-#: ../lib/init/grass.py:1034
+#: ../lib/init/grass.py:1039
 msgid "Help is available with the command:"
 msgstr ""
 
-#: ../lib/init/grass.py:1035
+#: ../lib/init/grass.py:1040
 msgid "See the licence terms with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1038
+#: ../lib/init/grass.py:1043
 msgid "If required, restart the GUI with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1040
+#: ../lib/init/grass.py:1045
 msgid "Start the GUI with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1042
+#: ../lib/init/grass.py:1047
 msgid "When ready to quit enter:"
 msgstr ""
 
-#: ../lib/init/grass.py:1132
+#: ../lib/init/grass.py:1137
 msgid "2D and 3D raster MASKs present"
 msgstr ""
 
-#: ../lib/init/grass.py:1133
+#: ../lib/init/grass.py:1138
 msgid "Raster MASK present"
 msgstr ""
 
-#: ../lib/init/grass.py:1134
+#: ../lib/init/grass.py:1139
 msgid "3D raster MASK present"
-msgstr ""
-
-#: ../lib/init/grass.py:1166
-#, python-format
-msgid "Failed to start shell '%s'"
 msgstr ""
 
 #: ../lib/init/grass.py:1171
 #, python-format
+msgid "Failed to start shell '%s'"
+msgstr ""
+
+#: ../lib/init/grass.py:1176
+#, python-format
 msgid "Batch job '%s' (defined in GRASS_BATCH_JOB variable) was executed."
 msgstr ""
 
-#: ../lib/init/grass.py:1172 ../lib/init/grass.py:1177
+#: ../lib/init/grass.py:1177 ../lib/init/grass.py:1182
 msgid "Goodbye from GRASS GIS"
 msgstr ""
 
-#: ../lib/init/grass.py:1175
+#: ../lib/init/grass.py:1180
 msgid "Done."
 msgstr ""
 
-#: ../lib/init/grass.py:1182
+#: ../lib/init/grass.py:1187
 msgid "Cleaning up temporary files..."
 msgstr ""
 
-#: ../lib/init/grass.py:1226
+#: ../lib/init/grass.py:1231
 #, fuzzy, python-format
 msgid "Parameter <%s> not supported"
 msgstr "rasterul 3D <%s> nu a fost găsit"
 
-#: ../lib/init/grass.py:1348
+#: ../lib/init/grass.py:1355
 msgid "Flag -e required also flag -c"
 msgstr ""
 
-#: ../lib/init/grass.py:1391
+#: ../lib/init/grass.py:1398
 #, python-format
 msgid ""
 "Unable to start GRASS. You can:\n"
@@ -2214,15 +2229,15 @@ msgid ""
 "path/to/location/mapset`)"
 msgstr ""
 
-#: ../lib/init/grass.py:1401
+#: ../lib/init/grass.py:1408
 msgid "Creating new GRASS GIS location/mapset..."
 msgstr ""
 
-#: ../lib/init/grass.py:1403
+#: ../lib/init/grass.py:1410
 msgid "Starting GRASS GIS..."
 msgstr ""
 
-#: ../lib/init/grass.py:1461
+#: ../lib/init/grass.py:1468
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr ""
@@ -2266,7 +2281,7 @@ msgstr ""
 msgid "Using display driver <%s>..."
 msgstr ""
 
-#: ../lib/display/r_raster.c:228
+#: ../lib/display/r_raster.c:225
 #, fuzzy, c-format
 msgid "Unable to open file '%s'"
 msgstr "Nu s-a putut deschide <%s>"
@@ -2340,7 +2355,7 @@ msgstr "Nu s-a putut citi intervalul rasterului 3D <%s>"
 
 #: ../lib/raster3d/close.c:62
 #, fuzzy, c-format
-msgid "Unable to move temp raster map <%s> to 3d data file <%s>"
+msgid "Unable to move temp raster map <%s> to 3D raster map <%s>"
 msgstr "Nu s-a putut crea rasterul <%s>"
 
 #: ../lib/raster3d/close.c:79
@@ -2968,7 +2983,7 @@ msgstr ""
 msgid "Cannot open debug file '%s'"
 msgstr ""
 
-#: ../lib/gis/worker.c:72
+#: ../lib/gis/worker.c:84
 msgid "Task already has a worker"
 msgstr ""
 
@@ -2992,31 +3007,35 @@ msgstr ""
 msgid "SYNOPSIS"
 msgstr ""
 
-#: ../lib/gis/parser_html.c:168 ../lib/gis/parser_rest.c:164
-#: ../lib/gis/parser_interface.c:329 ../lib/gis/parser_help.c:197
+#: ../lib/gis/parser_html.c:167 ../lib/gis/parser_rest.c:164
+#: ../lib/gis/parser_interface.c:329 ../lib/gis/parser_help.c:200
 msgid "Allow output files to overwrite existing files"
 msgstr "Permiteți fișierele de ieșire pentru a suprascrie fișierele existente"
 
-#: ../lib/gis/parser_html.c:172 ../lib/gis/parser_interface.c:337
-#: ../lib/gis/parser_help.c:199
+#: ../lib/gis/parser_html.c:171 ../lib/gis/parser_interface.c:337
+#: ../lib/gis/parser_help.c:202
 msgid "Print usage summary"
 msgstr ""
 
-#: ../lib/gis/parser_html.c:175 ../lib/gis/parser_rest.c:168
-#: ../lib/gis/parser_interface.c:344 ../lib/gis/parser_help.c:200
+#: ../lib/gis/parser_html.c:174 ../lib/gis/parser_rest.c:168
+#: ../lib/gis/parser_interface.c:344 ../lib/gis/parser_help.c:203
 msgid "Verbose module output"
 msgstr ""
 
-#: ../lib/gis/parser_html.c:178 ../lib/gis/parser_rest.c:171
-#: ../lib/gis/parser_interface.c:351 ../lib/gis/parser_help.c:201
+#: ../lib/gis/parser_html.c:177 ../lib/gis/parser_rest.c:171
+#: ../lib/gis/parser_interface.c:351 ../lib/gis/parser_help.c:204
 msgid "Quiet module output"
 msgstr ""
 
-#: ../lib/gis/parser_html.c:232 ../lib/gis/parser_rest.c:223
+#: ../lib/gis/parser_html.c:180 ../lib/gis/parser_help.c:205
+msgid "Force launching GUI dialog"
+msgstr ""
+
+#: ../lib/gis/parser_html.c:233 ../lib/gis/parser_rest.c:223
 msgid "Options"
 msgstr "Opțiuni"
 
-#: ../lib/gis/parser_html.c:238 ../lib/gis/parser_rest.c:230
+#: ../lib/gis/parser_html.c:239 ../lib/gis/parser_rest.c:230
 msgid "Default"
 msgstr ""
 
@@ -3222,426 +3241,428 @@ msgstr ""
 msgid "ERROR: "
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:142
+#: ../lib/gis/parser_standard_options.c:144
 msgid "SQL select statement"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:144
+#: ../lib/gis/parser_standard_options.c:146
 msgid "For example: 'select * from rybniky where kapri = 'hodne'"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:151
+#: ../lib/gis/parser_standard_options.c:153
 msgid "WHERE conditions of SQL statement without 'where' keyword"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:152
+#: ../lib/gis/parser_standard_options.c:154
 msgid "Example: income < 1000 and inhab >= 10000"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:160
+#: ../lib/gis/parser_standard_options.c:162
 msgid "Name of attribute table"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:169
+#: ../lib/gis/parser_standard_options.c:171
 msgid "Name of database driver"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:178
+#: ../lib/gis/parser_standard_options.c:180
 msgid "Name of database"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:187
+#: ../lib/gis/parser_standard_options.c:189
 msgid "Database schema"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:188
+#: ../lib/gis/parser_standard_options.c:190
 msgid ""
 "Do not use this option if schemas are not supported by driver/database server"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:197
+#: ../lib/gis/parser_standard_options.c:199
 msgid "Name of attribute column"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:206
+#: ../lib/gis/parser_standard_options.c:208
 msgid "Name of attribute column(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:215
+#: ../lib/gis/parser_standard_options.c:217
 msgid "Name of key column"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:216
+#: ../lib/gis/parser_standard_options.c:218
 msgid "Must refer to an integer column"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:228
+#: ../lib/gis/parser_standard_options.c:230
 msgid "Name of input imagery group"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:236
+#: ../lib/gis/parser_standard_options.c:238
 msgid "Name of input imagery subgroup"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:246
+#: ../lib/gis/parser_standard_options.c:248
 msgid "Name of input raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:255
+#: ../lib/gis/parser_standard_options.c:257
 msgid "Name of input raster map(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:263
+#: ../lib/gis/parser_standard_options.c:265
 msgid "Name for output raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:272
+#: ../lib/gis/parser_standard_options.c:274
 #, fuzzy
 msgid "Name for output raster map(s)"
 msgstr "Nume pentru harta vectorială de ieșire"
 
-#: ../lib/gis/parser_standard_options.c:280
+#: ../lib/gis/parser_standard_options.c:282
 #, fuzzy
 msgid "Name of raster map"
 msgstr "Nume pentru harta vectorială de intrare"
 
-#: ../lib/gis/parser_standard_options.c:289
+#: ../lib/gis/parser_standard_options.c:291
 #, fuzzy
 msgid "Name of raster map(s)"
 msgstr "Nume pentru harta vectorială de intrare"
 
-#: ../lib/gis/parser_standard_options.c:297
+#: ../lib/gis/parser_standard_options.c:299
 msgid "Name of base raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:305
+#: ../lib/gis/parser_standard_options.c:307
 msgid "Name of cover raster map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:313
+#: ../lib/gis/parser_standard_options.c:315
 #, fuzzy
 msgid "Name of input elevation raster map"
 msgstr "Nume pentru harta vectorială de intrare"
 
-#: ../lib/gis/parser_standard_options.c:322
+#: ../lib/gis/parser_standard_options.c:324
 #, fuzzy
 msgid "Name of input elevation raster map(s)"
 msgstr "Nume pentru harta vectorială de intrare"
 
-#: ../lib/gis/parser_standard_options.c:328
+#: ../lib/gis/parser_standard_options.c:330
 msgid "Sampling interpolation method"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:332
+#: ../lib/gis/parser_standard_options.c:334
 #, fuzzy
 msgid "Nearest-neighbor interpolation"
 msgstr "Sunt necesare cel puțin două cadre principale pentru interpolare"
 
-#: ../lib/gis/parser_standard_options.c:333
+#: ../lib/gis/parser_standard_options.c:335
 #, fuzzy
 msgid "Bilinear interpolation"
 msgstr "Sunt necesare cel puțin două cadre principale pentru interpolare"
 
-#: ../lib/gis/parser_standard_options.c:334
+#: ../lib/gis/parser_standard_options.c:336
 #, fuzzy
 msgid "Bicubic interpolation"
 msgstr "Sunt necesare cel puțin două cadre principale pentru interpolare"
 
-#: ../lib/gis/parser_standard_options.c:343
+#: ../lib/gis/parser_standard_options.c:345
 #, fuzzy
 msgid "Name of input basename raster map(s)"
 msgstr "Nume pentru harta vectorială de intrare"
 
-#: ../lib/gis/parser_standard_options.c:352
+#: ../lib/gis/parser_standard_options.c:354
 #, fuzzy
 msgid "Name for output basename raster map(s)"
 msgstr "Nume pentru harta vectorială de ieșire"
 
-#: ../lib/gis/parser_standard_options.c:362
+#: ../lib/gis/parser_standard_options.c:364
 #, fuzzy
 msgid "Name of input 3D raster map"
 msgstr "Nume pentru harta vectorială de intrare"
 
-#: ../lib/gis/parser_standard_options.c:371
+#: ../lib/gis/parser_standard_options.c:373
 #, fuzzy
 msgid "Name of input 3D raster map(s)"
 msgstr "Nume pentru harta vectorială de intrare"
 
-#: ../lib/gis/parser_standard_options.c:379
+#: ../lib/gis/parser_standard_options.c:381
 #, fuzzy
 msgid "Name for output 3D raster map"
 msgstr "Nume pentru harta vectorială de ieșire"
 
-#: ../lib/gis/parser_standard_options.c:387
+#: ../lib/gis/parser_standard_options.c:389
 #, fuzzy
 msgid "Name of 3D raster map"
 msgstr "Nu s-a putut deschide rasterul 3D <%s> "
 
-#: ../lib/gis/parser_standard_options.c:396
+#: ../lib/gis/parser_standard_options.c:398
 #, fuzzy
 msgid "Name of 3D raster map(s)"
 msgstr "Nu s-a putut deschide rasterul 3D <%s> "
 
-#: ../lib/gis/parser_standard_options.c:405
+#: ../lib/gis/parser_standard_options.c:407
 msgid "Data type used in the output raster3d map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:414
+#: ../lib/gis/parser_standard_options.c:416
 msgid ""
 "Number of digits used as mantissa in the internal map storage, 0 -23 for "
 "float, 0 - 52 for double, max or default"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:424
+#: ../lib/gis/parser_standard_options.c:426
 msgid "The compression method used in the output raster3d map"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:434
+#: ../lib/gis/parser_standard_options.c:436
 msgid ""
 "The dimensions of the tiles used in the output raster3d map (XxYxZ or "
 "default: 16x16x8)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:444
+#: ../lib/gis/parser_standard_options.c:446
 msgid "Name of input vector map"
 msgstr "Nume pentru harta vectorială de intrare"
 
-#: ../lib/gis/parser_standard_options.c:445
-#: ../lib/gis/parser_standard_options.c:472
+#: ../lib/gis/parser_standard_options.c:447
+#: ../lib/gis/parser_standard_options.c:474
 msgid "Or data source for direct OGR access"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:454
+#: ../lib/gis/parser_standard_options.c:456
 msgid "Name of input vector map(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:455
+#: ../lib/gis/parser_standard_options.c:457
 msgid "Or data source(s) for direct OGR access"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:463
+#: ../lib/gis/parser_standard_options.c:465
 msgid "Name for output vector map"
 msgstr "Nume pentru harta vectorială de ieșire"
 
-#: ../lib/gis/parser_standard_options.c:471
+#: ../lib/gis/parser_standard_options.c:473
 #, fuzzy
 msgid "Name of vector map"
 msgstr "Nume pentru harta vectorială de intrare"
 
-#: ../lib/gis/parser_standard_options.c:481
+#: ../lib/gis/parser_standard_options.c:483
 #, fuzzy
 msgid "Name of vector map(s)"
 msgstr "Nume pentru harta vectorială de intrare"
 
-#: ../lib/gis/parser_standard_options.c:490
-#: ../lib/gis/parser_standard_options.c:499
+#: ../lib/gis/parser_standard_options.c:492
+#: ../lib/gis/parser_standard_options.c:501
 #, fuzzy
 msgid "Input feature type"
 msgstr "Tipul trăsăturii"
 
-#: ../lib/gis/parser_standard_options.c:506
+#: ../lib/gis/parser_standard_options.c:508
 msgid "Layer number or name"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:508
+#: ../lib/gis/parser_standard_options.c:510
 msgid ""
 "Vector features can have category values in different layers. This number "
 "determines which layer to use. When used with direct OGR access this is the "
 "layer name."
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:518
+#: ../lib/gis/parser_standard_options.c:520
 msgid "Layer number or name ('-1' for all layers)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:520
+#: ../lib/gis/parser_standard_options.c:522
 msgid ""
 "A single vector map can be connected to multiple database tables. This "
 "number determines which table to use. When used with direct OGR access this "
 "is the layer name."
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:529
+#: ../lib/gis/parser_standard_options.c:531
 msgid "Category value"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:536
+#: ../lib/gis/parser_standard_options.c:538
 msgid "Category values"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:537
-#: ../lib/gis/parser_standard_options.c:551
+#: ../lib/gis/parser_standard_options.c:539
+#: ../lib/gis/parser_standard_options.c:553
 msgid "Example: 1,3,7-9,13"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:543
+#: ../lib/gis/parser_standard_options.c:545
 msgid "Feature id"
 msgstr "Id trăsătură"
 
-#: ../lib/gis/parser_standard_options.c:550
+#: ../lib/gis/parser_standard_options.c:552
 msgid "Feature ids"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:561
+#: ../lib/gis/parser_standard_options.c:563
+#: ../lib/gis/parser_standard_options.c:571
 msgid "Name of input file"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:569
+#: ../lib/gis/parser_standard_options.c:579
 msgid "Name for output file"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:578
+#: ../lib/gis/parser_standard_options.c:588
 msgid "Field separator"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:579
+#: ../lib/gis/parser_standard_options.c:589
 msgid "Special characters: pipe, comma, space, tab, newline"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:590
+#: ../lib/gis/parser_standard_options.c:600
 msgid "Color"
 msgstr "Culoare"
 
-#: ../lib/gis/parser_standard_options.c:591
-msgid "Either a standard color name or R:G:B triplet"
-msgstr ""
-
-#: ../lib/gis/parser_standard_options.c:600
-msgid "Background color"
-msgstr ""
-
 #: ../lib/gis/parser_standard_options.c:602
+#: ../lib/gis/parser_standard_options.c:613
 msgid "Either a standard color name, R:G:B triplet, or \"none\""
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:613
+#: ../lib/gis/parser_standard_options.c:611
+msgid "Background color"
+msgstr ""
+
+#: ../lib/gis/parser_standard_options.c:624
 #, fuzzy
 msgid "Name of input directory"
 msgstr "Nume pentru harta vectorială de intrare"
 
-#: ../lib/gis/parser_standard_options.c:623
+#: ../lib/gis/parser_standard_options.c:634
 msgid "Units"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:632
+#: ../lib/gis/parser_standard_options.c:643
 msgid "Data type(s)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:642
+#: ../lib/gis/parser_standard_options.c:653
 msgid "Name of mapset (default: current search path)"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:643
+#: ../lib/gis/parser_standard_options.c:654
 msgid "'.' for current mapset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:653
+#: ../lib/gis/parser_standard_options.c:664
 msgid "Coordinates"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:662
+#: ../lib/gis/parser_standard_options.c:673
 #, fuzzy
 msgid "Name of color table"
 msgstr "Nume pentru harta vectorială de intrare"
 
-#: ../lib/gis/parser_standard_options.c:673
+#: ../lib/gis/parser_standard_options.c:684
+msgid "String representing NULL value"
+msgstr ""
+
+#: ../lib/gis/parser_standard_options.c:693
 msgid "Name of saved region"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:683
+#: ../lib/gis/parser_standard_options.c:703
 #, fuzzy
 msgid "Name of the input space time dataset"
 msgstr "Nume pentru harta vectorială de intrare"
 
-#: ../lib/gis/parser_standard_options.c:692
+#: ../lib/gis/parser_standard_options.c:712
 msgid "Name of the input space time datasets"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:700
+#: ../lib/gis/parser_standard_options.c:720
 msgid "Name of the output space time dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:708
+#: ../lib/gis/parser_standard_options.c:728
 msgid "Name of the input space time raster dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:717
+#: ../lib/gis/parser_standard_options.c:737
 msgid "Name of the input space time raster datasets"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:725
+#: ../lib/gis/parser_standard_options.c:745
 msgid "Name of the output space time raster dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:733
+#: ../lib/gis/parser_standard_options.c:753
 #, fuzzy
 msgid "Name of the input space time vector dataset"
 msgstr "Nume pentru harta vectorială de intrare"
 
-#: ../lib/gis/parser_standard_options.c:742
+#: ../lib/gis/parser_standard_options.c:762
 #, fuzzy
 msgid "Name of the input space time vector datasets"
 msgstr "Nume pentru harta vectorială de intrare"
 
-#: ../lib/gis/parser_standard_options.c:750
+#: ../lib/gis/parser_standard_options.c:770
 #, fuzzy
 msgid "Name of the output space time vector dataset"
 msgstr "Nume pentru harta vectorială de ieșire"
 
-#: ../lib/gis/parser_standard_options.c:758
+#: ../lib/gis/parser_standard_options.c:778
 msgid "Name of the input space time raster3d dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:767
+#: ../lib/gis/parser_standard_options.c:787
 msgid "Name of the input space time raster3d datasets"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:775
+#: ../lib/gis/parser_standard_options.c:795
 msgid "Name of the output space time raster3d dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:784
+#: ../lib/gis/parser_standard_options.c:804
 msgid "Type of the input space time dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:792
+#: ../lib/gis/parser_standard_options.c:812
 #, fuzzy
 msgid "Name of the input map"
 msgstr "Nume pentru harta vectorială de intrare"
 
-#: ../lib/gis/parser_standard_options.c:801
+#: ../lib/gis/parser_standard_options.c:821
 #, fuzzy
 msgid "Name of the input maps"
 msgstr "Nume pentru harta vectorială de intrare"
 
-#: ../lib/gis/parser_standard_options.c:810
+#: ../lib/gis/parser_standard_options.c:830
 #, fuzzy
 msgid "Type of the input map"
 msgstr "Nu s-a putut închide harta de intrare"
 
-#: ../lib/gis/parser_standard_options.c:819
+#: ../lib/gis/parser_standard_options.c:839
 msgid "The temporal type of the space time dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:826
+#: ../lib/gis/parser_standard_options.c:846
 msgid ""
 "WHERE conditions of SQL statement without 'where' keyword used in the "
 "temporal GIS framework"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:827
+#: ../lib/gis/parser_standard_options.c:847
 msgid "Example: start_time > '2001-01-01 12:30:00'"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:837
+#: ../lib/gis/parser_standard_options.c:857
 msgid "The method to be used for sampling the input dataset"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:871
+#: ../lib/gis/parser_standard_options.c:891
 msgid "Do not create attribute table"
 msgstr ""
 
-#: ../lib/gis/parser_standard_options.c:875
+#: ../lib/gis/parser_standard_options.c:895
 msgid "Do not build topology"
 msgstr ""
 
@@ -4027,124 +4048,129 @@ msgstr ""
 msgid "No ellipsoid info given in file %s in <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:346
+#: ../lib/gis/parser.c:349
 #, c-format
 msgid "BUG in option name, '%s' is not valid"
 msgstr ""
 
-#: ../lib/gis/parser.c:395
+#: ../lib/gis/parser.c:401
 #, c-format
 msgid "BUG in descriptions, option '%s' in <%s> does not exist"
 msgstr ""
 
-#: ../lib/gis/parser.c:511
+#: ../lib/gis/parser.c:517
 msgid "Use either --quiet or --verbose flag, not both. Assuming --verbose."
 msgstr ""
 
-#: ../lib/gis/parser.c:525
+#: ../lib/gis/parser.c:531
 msgid "Use either --quiet or --verbose flag, not both. Assuming --quiet."
 msgstr ""
 
-#: ../lib/gis/parser.c:556
+#: ../lib/gis/parser.c:562
 #, c-format
 msgid "Sorry <%s> is not a valid option"
 msgstr ""
 
-#: ../lib/gis/parser.c:828
+#: ../lib/gis/parser.c:834
 msgid "Unable to determine program name"
 msgstr ""
 
-#: ../lib/gis/parser.c:844 ../lib/gis/parser.c:861
+#: ../lib/gis/parser.c:850 ../lib/gis/parser.c:867
 #, c-format
-msgid "Sorry, <%c> is not a valid flag"
+msgid "%s: Sorry, <%c> is not a valid flag"
 msgstr ""
 
-#: ../lib/gis/parser.c:978
+#: ../lib/gis/parser.c:984
 #, c-format
-msgid "Sorry, <%s=> is ambiguous"
+msgid "%s: Sorry, <%s=> is ambiguous"
 msgstr ""
 
-#: ../lib/gis/parser.c:985
+#: ../lib/gis/parser.c:997
 #, c-format
-msgid "Sorry, <%s> is not a valid parameter"
+msgid "Please update the usage of <%s>: option <%s> has been renamed to <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:993
+#: ../lib/gis/parser.c:1010
+#, c-format
+msgid "%s: Sorry, <%s> is not a valid parameter"
+msgstr ""
+
+#: ../lib/gis/parser.c:1018
 #, c-format
 msgid "Option <%s> does not accept multiple answers"
 msgstr ""
 
-#: ../lib/gis/parser.c:1064
+#: ../lib/gis/parser.c:1089
 #, c-format
 msgid ""
 "Illegal range syntax for parameter <%s>\n"
 "\tPresented as: %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1070
+#: ../lib/gis/parser.c:1095
 #, c-format
 msgid ""
 "Value <%s> out of range for parameter <%s>\n"
 "\tLegal range: %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1076
+#: ../lib/gis/parser.c:1101
 #, fuzzy, c-format
 msgid "Missing value for parameter <%s>"
 msgstr "Parametri formatului de ieșire invalizi"
 
-#: ../lib/gis/parser.c:1082
+#: ../lib/gis/parser.c:1107
 #, c-format
 msgid ""
 "Value <%s> ambiguous for parameter <%s>\n"
 "\tValid options: %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1237
+#: ../lib/gis/parser.c:1262
 #, c-format
 msgid ""
 "Required parameter <%s> not set:\n"
 "\t(%s)"
 msgstr ""
 
-#: ../lib/gis/parser.c:1329
+#: ../lib/gis/parser.c:1354
 #, c-format
 msgid ""
 "Option <%s> must be provided in multiples of %d\n"
 "\tYou provided %d item(s): %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1404
+#: ../lib/gis/parser.c:1429
 #, c-format
 msgid "ERROR: option <%s>: <%s> exists.\n"
 msgstr ""
 
-#: ../lib/gis/parser.c:1489
+#: ../lib/gis/parser.c:1543
 #, c-format
 msgid "%s= is not a separator option"
 msgstr ""
 
-#: ../lib/gis/parser.c:1492
+#: ../lib/gis/parser.c:1546
 #, c-format
 msgid "No separator given for %s="
 msgstr ""
 
-#: ../lib/gis/parser.c:1554 ../lib/gis/parser.c:1571
+#: ../lib/gis/parser.c:1608 ../lib/gis/parser.c:1625
 #, c-format
 msgid "%s= is not a file option"
 msgstr ""
 
-#: ../lib/gis/parser.c:1556
+#: ../lib/gis/parser.c:1610
 #, fuzzy, c-format
 msgid "Opening multiple files not supported for %s="
 msgstr "rasterul 3D <%s> nu a fost găsit"
 
-#: ../lib/gis/parser.c:1562
+#: ../lib/gis/parser.c:1616
 #, fuzzy, c-format
 msgid "Unable to open %s file <%s>"
 msgstr "Nu s-a putut deschide <%s>"
 
-#: ../lib/gis/parser.c:1568
+#: ../lib/gis/parser.c:1622
 #, fuzzy, c-format
 msgid "Unable to create %s file <%s>"
 msgstr "Nu s-a putut crea rasterul <%s>"
@@ -4369,21 +4395,21 @@ msgstr ""
 msgid "ERROR: Option key not defined"
 msgstr ""
 
-#: ../lib/gis/parser_help.c:174
+#: ../lib/gis/parser_help.c:177
 msgid "Flags:"
 msgstr ""
 
-#: ../lib/gis/parser_help.c:209
+#: ../lib/gis/parser_help.c:213
 #, fuzzy
 msgid "Parameters:"
 msgstr "Parametrii"
 
-#: ../lib/gis/parser_help.c:232
+#: ../lib/gis/parser_help.c:236
 #, c-format
 msgid "  %*s   default: %s\n"
 msgstr ""
 
-#: ../lib/gis/parser_help.c:258
+#: ../lib/gis/parser_help.c:262
 #, c-format
 msgid "  %*s   options: "
 msgstr ""
@@ -4419,12 +4445,12 @@ msgstr ""
 
 #: ../lib/gis/parser_dependencies.c:165
 #, c-format
-msgid "%s or %s"
+msgid "<%s> or <%s>"
 msgstr ""
 
 #: ../lib/gis/parser_dependencies.c:165
 #, c-format
-msgid "%s and %s"
+msgid "<%s> and <%s>"
 msgstr ""
 
 #: ../lib/gis/parser_dependencies.c:196
@@ -4434,7 +4460,7 @@ msgstr ""
 
 #: ../lib/gis/parser_dependencies.c:215
 #, c-format
-msgid "At least one of %s is required"
+msgid "At least one of the following options is required: %s"
 msgstr ""
 
 #: ../lib/gis/parser_dependencies.c:246
@@ -4731,11 +4757,6 @@ msgid ""
 "Unable to execute transaction:\n"
 " %(sql)s"
 msgstr ""
-
-#: ../lib/python/temporal/temporal_raster_algebra.py:86
-#, fuzzy
-msgid "Removing empty raster maps"
-msgstr "Nume pentru harta vectorială de intrare"
 
 #: ../lib/python/temporal/base.py:379
 #, python-format
@@ -5121,12 +5142,12 @@ msgstr "Traducere culori pentru rasterul <%s>..."
 
 #: ../lib/python/temporal/register.py:311
 #, fuzzy
-msgid "Registering maps in the space time raster dataset..."
+msgid "Registering maps in the space time dataset..."
 msgstr "Nume pentru harta vectorială de intrare"
 
 #: ../lib/python/temporal/register.py:320
 #, fuzzy
-msgid "Updating space time raster dataset..."
+msgid "Updating space time dataset..."
 msgstr "Nume pentru harta vectorială de intrare"
 
 #: ../lib/python/temporal/register.py:373
@@ -5347,21 +5368,21 @@ msgstr ""
 msgid "Area computation is not supported for LL projections"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_vector_algebra.py:373
+#: ../lib/python/temporal/temporal_vector_algebra.py:372
 #, python-format
 msgid ""
 "Error vector maps with basename %s exist. Use --o flag to overwrite existing "
 "file"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_vector_algebra.py:405
+#: ../lib/python/temporal/temporal_vector_algebra.py:404
 #, fuzzy, python-format
 msgid ""
 "Error starting %s : \n"
 "%s"
 msgstr "Eroare în timpul scrierii unui cadru video"
 
-#: ../lib/python/temporal/temporal_vector_algebra.py:453
+#: ../lib/python/temporal/temporal_vector_algebra.py:476
 #, python-format
 msgid ""
 "Error vector map %s exist in temporal database. Use overwrite flag.  : \n"
@@ -5373,43 +5394,61 @@ msgstr ""
 msgid "Unknown dataset type: %s"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:718
+#: ../lib/python/temporal/temporal_algebra.py:790
 msgid "Spatio temporal operators are not supported in granularity algebra mode"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:754
+#: ../lib/python/temporal/temporal_algebra.py:826
 msgid "All input space time datasets must have a valid temporal topology."
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:762
+#: ../lib/python/temporal/temporal_algebra.py:834
 msgid "All input space time datasets must have the same temporal type."
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:988
+#: ../lib/python/temporal/temporal_algebra.py:1059
+#, fuzzy, python-format
+msgid "Removing un-needed or empty %s maps"
+msgstr "Nume pentru harta vectorială de intrare"
+
+#: ../lib/python/temporal/temporal_algebra.py:1106
 #, fuzzy, python-format
 msgid "Space time %s dataset <%s> not found"
 msgstr "rasterul 3D <%s> nu a fost găsit"
 
-#: ../lib/python/temporal/temporal_algebra.py:1015
-#: ../lib/python/temporal/temporal_algebra.py:1019
+#: ../lib/python/temporal/temporal_algebra.py:1133
+#: ../lib/python/temporal/temporal_algebra.py:1137
 #, python-format
 msgid ""
 "Wrong temporal type of space time dataset <"
 "%s>                                       <%s> time is required"
 msgstr ""
 
-#: ../lib/python/temporal/temporal_algebra.py:1039
+#: ../lib/python/temporal/temporal_algebra.py:1157
 #, fuzzy
-msgid "Wrong type of input"
+msgid "Wrong type of input "
 msgstr "Nu s-a putut închide harta de intrare"
 
-#: ../lib/python/temporal/temporal_algebra.py:2038
-#: ../lib/python/temporal/temporal_raster_base_algebra.py:649
+#: ../lib/python/temporal/temporal_algebra.py:2031
+#, python-format
+msgid ""
+"The resulting space time dataset type <%(a)s> is different from the "
+"requested type <%(b)s>"
+msgstr ""
+
+#: ../lib/python/temporal/temporal_algebra.py:2037
+msgid ""
+"Maps that should be registered in the resulting space time dataset have "
+"different types."
+msgstr ""
+
+#: ../lib/python/temporal/temporal_algebra.py:2212
+#: ../lib/python/temporal/temporal_raster_base_algebra.py:653
 #, fuzzy, python-format
 msgid "%s map <%s> not found in GRASS spatial database"
 msgstr "Harta vectorială <%s> nu a fost găsită"
 
-#: ../lib/python/temporal/temporal_algebra.py:2044
+#: ../lib/python/temporal/temporal_algebra.py:2218
 #, python-format
 msgid ""
 "Wrong map type <%s> . TMAP only supports single maps that are registered in "
@@ -5484,7 +5523,7 @@ msgstr ""
 msgid "Unable to get statistics for vector map <%s>"
 msgstr "Nu s-a putut crea rasterul <%s>"
 
-#: ../lib/python/temporal/temporal_raster_base_algebra.py:583
+#: ../lib/python/temporal/temporal_raster_base_algebra.py:587
 #, fuzzy, python-format
 msgid "Error computing map <%s>"
 msgstr "Eroare în dechiderea hărții g3d <%s>"
@@ -5609,15 +5648,10 @@ msgstr "rasterul 3D <%s> nu a fost găsit"
 msgid "Unable to parse time string: %s"
 msgstr "Nu s-a putut deschide rasterul <%s>"
 
-#: ../lib/python/temporal/gui_support.py:56 ../lib/python/script/core.py:1180
+#: ../lib/python/temporal/gui_support.py:56 ../lib/python/script/core.py:1182
 #, python-format
 msgid "Invalid element '%s'"
 msgstr ""
-
-#: ../lib/python/temporal/temporal_raster3d_algebra.py:46
-#, fuzzy
-msgid "Removing empty 3D raster maps"
-msgstr "Nume pentru harta vectorială de intrare"
 
 #: ../lib/python/temporal/stds_export.py:99
 #, fuzzy, python-format
@@ -5673,65 +5707,72 @@ msgstr ""
 msgid "Error in computation process"
 msgstr "Eroare în dechiderea hărții g3d <%s>"
 
-#: ../lib/python/script/core.py:283
+#: ../lib/python/script/core.py:285
 #, python-format
 msgid ""
-"To run the module add underscore at the end of the option <%s> to avoid "
+"To run the module <%s> add underscore at the end of the option <%s> to avoid "
 "conflict with Python keywords. Underscore at the beginning is depreciated in "
 "GRASS GIS 7.0 and will be removed in version 7.1."
 msgstr ""
 
-#: ../lib/python/script/core.py:875
+#: ../lib/python/script/core.py:877
 msgid "Mixing value types. Will try to compare after integer conversion"
 msgstr ""
 
-#: ../lib/python/script/core.py:1070
+#: ../lib/python/script/core.py:1072
 #, python-format
 msgid "Element type should be \"cell\" and not \"%s\""
 msgstr ""
 
-#: ../lib/python/script/core.py:1099 ../lib/python/script/core.py:1164
+#: ../lib/python/script/core.py:1101 ../lib/python/script/core.py:1166
 #, python-format
-msgid "Element type should be \"rast\" and not \"%s\""
+msgid "Element type should be \"raster\" and not \"%s\""
 msgstr ""
 
-#: ../lib/python/script/core.py:1319
+#: ../lib/python/script/core.py:1321
 #, fuzzy
 msgid "Unable to list mapsets"
 msgstr "Nu s-a putut închide harta de intrare"
 
-#: ../lib/python/script/core.py:1358
+#: ../lib/python/script/core.py:1360
 #, python-format
 msgid "Location <%s> already exists. Operation canceled."
 msgstr ""
 
-#: ../lib/python/script/core.py:1361
+#: ../lib/python/script/core.py:1363
 #, python-format
 msgid "Location <%s> already exists and will be overwritten"
 msgstr ""
 
-#: ../lib/python/script/core.py:1497
+#: ../lib/python/script/core.py:1499
 #, python-format
 msgid "Illegal filename <%s>. Cannot be 'NULL' or start with '.'."
 msgstr ""
 
-#: ../lib/python/script/core.py:1506
+#: ../lib/python/script/core.py:1508
 #, python-format
 msgid "Illegal filename <%(s)s>. <%(il)s> not allowed.\n"
 msgstr ""
 
-#: ../lib/python/script/vector.py:81
+#: ../lib/python/script/vector.py:82
 #, python-format
 msgid "Database connection not defined for layer %s"
 msgstr ""
 
-#: ../lib/python/script/vector.py:221
+#: ../lib/python/script/vector.py:222
 #, python-format
 msgid "Missing layer %(layer)d in vector map <%(map)s>"
 msgstr ""
 
-#: ../lib/python/script/vector.py:236
+#: ../lib/python/script/vector.py:237
 msgid "vector_db_select() failed"
+msgstr ""
+
+#: ../lib/python/script/vector.py:387
+#, python-brace-format
+msgid ""
+"v.what output is not valid JSON format:\n"
+" {ret}"
 msgstr ""
 
 #: ../lib/python/script/raster3d.py:85
@@ -5858,21 +5899,6 @@ msgstr ""
 msgid "Raster map <{0}> does not exists"
 msgstr "Harta raster <%s> nu este găsită"
 
-#: ../lib/python/pygrass/raster/__init__.py:547
-#, python-brace-format
-msgid "Mode type: {0} not supported."
-msgstr ""
-
-#: ../lib/python/pygrass/raster/__init__.py:582
-#, python-brace-format
-msgid "Invalid type {0}"
-msgstr ""
-
-#: ../lib/python/pygrass/raster/__init__.py:584
-#, python-brace-format
-msgid "Invalid size {0}"
-msgstr ""
-
 #: ../lib/python/pygrass/raster/category.py:81
 #, fuzzy, python-brace-format
 msgid "Raster type: {0} not supported"
@@ -5902,12 +5928,12 @@ msgstr ""
 msgid "Vector doesn't contain points"
 msgstr ""
 
-#: ../lib/python/pygrass/vector/table.py:1018
+#: ../lib/python/pygrass/vector/table.py:1019
 #, python-format
 msgid "Deleting table <%s> which is attached to following map(s):"
 msgstr ""
 
-#: ../lib/python/pygrass/vector/table.py:1022
+#: ../lib/python/pygrass/vector/table.py:1023
 msgid "You must use the force flag to actually remove it. Exiting."
 msgstr ""
 
@@ -6562,44 +6588,44 @@ msgid ""
 "rebuild topology."
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:217 ../lib/vector/diglib/plus_area.c:719
+#: ../lib/vector/diglib/plus_area.c:215 ../lib/vector/diglib/plus_area.c:711
 #, c-format
 msgid "Line %d already has area/isle %d to left"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:227 ../lib/vector/diglib/plus_area.c:727
+#: ../lib/vector/diglib/plus_area.c:225 ../lib/vector/diglib/plus_area.c:719
 #, c-format
 msgid "Line %d already has area/isle %d to right"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:281
+#: ../lib/vector/diglib/plus_area.c:279
 msgid "Isle already registered in area"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:315
+#: ../lib/vector/diglib/plus_area.c:313
 msgid "Attempt to delete isle from dead area"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:332
+#: ../lib/vector/diglib/plus_area.c:330
 #, c-format
 msgid "Attempt to delete not registered isle %d from area %d"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:371
+#: ../lib/vector/diglib/plus_area.c:369
 msgid "Attempt to delete dead area"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:412
+#: ../lib/vector/diglib/plus_area.c:408
 #, c-format
 msgid "Dead centroid %d registered for area (bug in the vector library)"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:437
+#: ../lib/vector/diglib/plus_area.c:431
 #, c-format
 msgid "Attempt to delete area %d info from dead isle %d"
 msgstr ""
 
-#: ../lib/vector/diglib/plus_area.c:787
+#: ../lib/vector/diglib/plus_area.c:777
 #, c-format
 msgid "Attempt to delete isle %d info from dead area %d"
 msgstr ""
@@ -6677,29 +6703,29 @@ msgstr ""
 msgid "Problem loading category values"
 msgstr ""
 
-#: ../lib/vector/Vlib/snap.c:213
+#: ../lib/vector/Vlib/snap.c:223 ../lib/vector/Vlib/snap.c:582
 msgid "Snap vertices Pass 1: select points"
 msgstr ""
 
-#: ../lib/vector/Vlib/snap.c:267
+#: ../lib/vector/Vlib/snap.c:271 ../lib/vector/Vlib/snap.c:636
 msgid "Snap vertices Pass 2: assign anchor vertices"
 msgstr ""
 
-#: ../lib/vector/Vlib/snap.c:336
+#: ../lib/vector/Vlib/snap.c:340 ../lib/vector/Vlib/snap.c:705
 msgid "Snap vertices Pass 3: snap to assigned points"
 msgstr ""
 
-#: ../lib/vector/Vlib/snap.c:518
+#: ../lib/vector/Vlib/snap.c:525 ../lib/vector/Vlib/snap.c:887
 #, c-format
 msgid "Snapped vertices: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/snap.c:519
+#: ../lib/vector/Vlib/snap.c:526 ../lib/vector/Vlib/snap.c:888
 #, c-format
 msgid "New vertices: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/snap.c:546
+#: ../lib/vector/Vlib/snap.c:915
 msgid "Reading features..."
 msgstr ""
 
@@ -6813,8 +6839,8 @@ msgstr ""
 msgid "Unable to remove directory '%s'"
 msgstr ""
 
-#: ../lib/vector/Vlib/read_nat.c:144 ../lib/vector/Vlib/write_nat.c:265
-#: ../lib/vector/Vlib/write_nat.c:362 ../lib/vector/Vlib/write_nat.c:595
+#: ../lib/vector/Vlib/read_nat.c:144 ../lib/vector/Vlib/write_nat.c:283
+#: ../lib/vector/Vlib/write_nat.c:382 ../lib/vector/Vlib/write_nat.c:631
 #: ../lib/vector/Vlib/write_pg.c:235 ../lib/vector/Vlib/write_pg.c:375
 #: ../lib/vector/Vlib/write_pg.c:390 ../lib/vector/Vlib/box.c:213
 #: ../lib/vector/Vlib/read.c:173 ../lib/vector/Vlib/write_sfa.c:155
@@ -6825,8 +6851,8 @@ msgstr ""
 msgid "Attempt to access feature with invalid id (%d)"
 msgstr ""
 
-#: ../lib/vector/Vlib/read_nat.c:150 ../lib/vector/Vlib/write_nat.c:271
-#: ../lib/vector/Vlib/write_nat.c:601 ../lib/vector/Vlib/write_pg.c:241
+#: ../lib/vector/Vlib/read_nat.c:150 ../lib/vector/Vlib/write_nat.c:289
+#: ../lib/vector/Vlib/write_nat.c:637 ../lib/vector/Vlib/write_pg.c:241
 #: ../lib/vector/Vlib/write_pg.c:396 ../lib/vector/Vlib/write_pg.c:2570
 #: ../lib/vector/Vlib/write_pg.c:2667 ../lib/vector/Vlib/read_pg.c:337
 #: ../lib/vector/Vlib/read_sfa.c:56
@@ -6947,57 +6973,57 @@ msgstr ""
 msgid "Inconsistency in topology: node %d - unexpected feature type %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:994
+#: ../lib/vector/Vlib/open_pg.c:993
 #, c-format
 msgid "Area %d without boundary detected"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:1052
+#: ../lib/vector/Vlib/open_pg.c:1051
 #, c-format
 msgid "Isle %d without boundary detected"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:1119
+#: ../lib/vector/Vlib/open_pg.c:1118
 msgid "Unable to get map bounding box from topology"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:1126
+#: ../lib/vector/Vlib/open_pg.c:1125
 #, fuzzy, c-format
 msgid ""
 "Unable to parse map bounding box:\n"
 "%s"
 msgstr "Nu s-a putut deschide rasterul <%s>"
 
-#: ../lib/vector/Vlib/open_pg.c:1150
+#: ../lib/vector/Vlib/open_pg.c:1149
 #, c-format
 msgid "Different number of nodes detected (%d, %d)"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:1178 ../lib/vector/Vlib/open_pg.c:1200
+#: ../lib/vector/Vlib/open_pg.c:1177 ../lib/vector/Vlib/open_pg.c:1199
 #, c-format
 msgid "Different number of areas detected (%d, %d)"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:1371
+#: ../lib/vector/Vlib/open_pg.c:1370
 msgid "To be implemented: isles not attached in Topo-Geo-only mode"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:1476 ../lib/vector/Vlib/build_pg.c:212
+#: ../lib/vector/Vlib/open_pg.c:1475 ../lib/vector/Vlib/build_pg.c:212
 #, c-format
 msgid "Inconsistency in topology: number of nodes %d (should be %d)"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:1560
+#: ../lib/vector/Vlib/open_pg.c:1559
 #, c-format
 msgid "Inconsistency in topology: number of points %d (should be %d)"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:1605
+#: ../lib/vector/Vlib/open_pg.c:1604
 #, c-format
 msgid "Inconsistency in topology: number of lines %d (should be %d)"
 msgstr ""
 
-#: ../lib/vector/Vlib/open_pg.c:1659
+#: ../lib/vector/Vlib/open_pg.c:1658
 #, c-format
 msgid "Inconsistency in topology: number of centroids %d (should be %d)"
 msgstr ""
@@ -7057,17 +7083,17 @@ msgstr "Un s-a putut citi harta vectorială <%s>"
 msgid "Output vector map <%s> is used as input"
 msgstr ""
 
-#: ../lib/vector/Vlib/write_nat.c:368
+#: ../lib/vector/Vlib/write_nat.c:388
 #, c-format
 msgid "Attempt to access alive feature %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/write_nat.c:510 ../lib/vector/Vlib/write_nat.c:546
+#: ../lib/vector/Vlib/write_nat.c:546 ../lib/vector/Vlib/write_nat.c:582
 #, c-format
 msgid "%s: Area %d does not exist"
 msgstr ""
 
-#: ../lib/vector/Vlib/write_nat.c:700
+#: ../lib/vector/Vlib/write_nat.c:736
 #, c-format
 msgid "Attempt to access dead area %d"
 msgstr ""
@@ -7547,7 +7573,7 @@ msgstr ""
 #: ../lib/vector/Vlib/net_build.c:216 ../lib/vector/Vlib/net_build.c:501
 #: ../lib/vector/Vlib/net_build.c:519 ../lib/vector/Vlib/net_build.c:799
 #: ../lib/vector/Vlib/net_build.c:817 ../lib/vector/Vlib/net_build.c:978
-#: ../lib/vector/Vlib/ascii.c:730
+#: ../lib/vector/Vlib/ascii.c:756
 #, c-format
 msgid "Column <%s> not found in table <%s>"
 msgstr ""
@@ -8096,60 +8122,73 @@ msgstr ""
 msgid "Unknown keyword <%s> in vector head"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:486
+#: ../lib/vector/Vlib/ascii.c:465
+#, fuzzy, c-format
+msgid "Column <%s> does not exist"
+msgstr "Coloana <%s> nu este de tip integer"
+
+#: ../lib/vector/Vlib/ascii.c:467
+msgid "Available columns:"
+msgstr ""
+
+#: ../lib/vector/Vlib/ascii.c:472
+msgid "Export cancelled"
+msgstr ""
+
+#: ../lib/vector/Vlib/ascii.c:505
 #, c-format
 msgid "Unknown type of column <%s>, export cancelled"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:610
-#, fuzzy, c-format
-msgid "Unknown feature type %d"
-msgstr "Tipul trăsăturii"
-
-#: ../lib/vector/Vlib/ascii.c:645
+#: ../lib/vector/Vlib/ascii.c:539
 #, c-format
 msgid "Unable to select record from table <%s> (key %s, column %s)"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:675
+#: ../lib/vector/Vlib/ascii.c:661
+#, fuzzy, c-format
+msgid "Unknown feature type %d"
+msgstr "Tipul trăsăturii"
+
+#: ../lib/vector/Vlib/ascii.c:701
 #, c-format
 msgid "Feature has more categories. Only one category (%d) is exported."
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:692
+#: ../lib/vector/Vlib/ascii.c:718
 #, c-format
 msgid "Cannot select attributes for cat = %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:698
+#: ../lib/vector/Vlib/ascii.c:724
 #, fuzzy
 msgid "Unable to fetch data from table"
 msgstr "Nu s-a putut scrie rândul %i din raster"
 
-#: ../lib/vector/Vlib/ascii.c:732
+#: ../lib/vector/Vlib/ascii.c:758
 #, c-format
 msgid "Column <%s>: unsupported data type"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:813
+#: ../lib/vector/Vlib/ascii.c:840
 msgid "Unknown format"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:823
+#: ../lib/vector/Vlib/ascii.c:850
 msgid "Topology not available, unable to process areas"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:836
+#: ../lib/vector/Vlib/ascii.c:863
 #, c-format
 msgid "Unable to get boundary of area id %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:848
+#: ../lib/vector/Vlib/ascii.c:875
 #, c-format
 msgid "Unable to get boundary of isle id %d (area id %d)"
 msgstr ""
 
-#: ../lib/vector/Vlib/ascii.c:860
+#: ../lib/vector/Vlib/ascii.c:889
 #, c-format
 msgid ""
 "%d features without category skipped. To export also features without "
@@ -8777,7 +8816,7 @@ msgid "Unable to open topology file for vector map <%s>"
 msgstr ""
 
 #: ../lib/vector/Vlib/open.c:356 ../lib/vector/Vlib/open.c:860
-#: ../lib/vector/Vlib/build.c:855
+#: ../lib/vector/Vlib/build.c:849
 #, fuzzy, c-format
 msgid "Unable to open spatial index file for vector map <%s>"
 msgstr "Nu s-a putut dechide harta vectorială <%s>"
@@ -8892,156 +8931,156 @@ msgstr ""
 msgid "Larger bbox but smaller area!!!"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:596
+#: ../lib/vector/Vlib/build.c:590
 msgid "Checking for topological errors..."
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:631
+#: ../lib/vector/Vlib/build.c:625
 #, c-format
 msgid "Number of lines of length zero: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:633
+#: ../lib/vector/Vlib/build.c:627
 #, c-format
 msgid "Number of boundaries of length zero: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:642
+#: ../lib/vector/Vlib/build.c:636
 #, c-format
 msgid "Number of boundary intersections: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:666
+#: ../lib/vector/Vlib/build.c:660
 msgid "Skipping further checks because of incorrect boundaries"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:716
+#: ../lib/vector/Vlib/build.c:710
 #, c-format
 msgid "Number of redundant holes: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:861
+#: ../lib/vector/Vlib/build.c:855
 #, c-format
 msgid "Building topology for vector map <%s>..."
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:879
+#: ../lib/vector/Vlib/build.c:873
 msgid "Topology was built"
 msgstr "Topologia a fost construită"
 
-#: ../lib/vector/Vlib/build.c:890
+#: ../lib/vector/Vlib/build.c:884
 #, c-format
 msgid "Number of nodes: %d"
 msgstr "Numărul de noduri: %d"
 
-#: ../lib/vector/Vlib/build.c:891
+#: ../lib/vector/Vlib/build.c:885
 #, c-format
 msgid "Number of primitives: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:892
+#: ../lib/vector/Vlib/build.c:886
 #, c-format
 msgid "Number of points: %d"
 msgstr "Numărul de puncte: %d"
 
-#: ../lib/vector/Vlib/build.c:893
+#: ../lib/vector/Vlib/build.c:887
 #, c-format
 msgid "Number of lines: %d"
 msgstr "Numărul de linii: %d"
 
-#: ../lib/vector/Vlib/build.c:894
+#: ../lib/vector/Vlib/build.c:888
 #, c-format
 msgid "Number of boundaries: %d"
 msgstr "Numărul de limite: %d"
 
-#: ../lib/vector/Vlib/build.c:895
+#: ../lib/vector/Vlib/build.c:889
 #, c-format
 msgid "Number of centroids: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:898
+#: ../lib/vector/Vlib/build.c:892
 #, c-format
 msgid "Number of faces: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:901
+#: ../lib/vector/Vlib/build.c:895
 #, c-format
 msgid "Number of kernels: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:947
+#: ../lib/vector/Vlib/build.c:941
 #, c-format
 msgid "Number of areas: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:948
+#: ../lib/vector/Vlib/build.c:942
 #, c-format
 msgid "Number of isles: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:953
+#: ../lib/vector/Vlib/build.c:947
 #, c-format
 msgid "Number of areas without centroid: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:958
+#: ../lib/vector/Vlib/build.c:952
 #, c-format
 msgid "Number of centroids exceeds number of areas: %d > %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:962
+#: ../lib/vector/Vlib/build.c:956
 #, c-format
 msgid "Number of incorrect boundaries: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:966
+#: ../lib/vector/Vlib/build.c:960
 #, c-format
 msgid "Number of centroids outside area: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:970
+#: ../lib/vector/Vlib/build.c:964
 #, c-format
 msgid "Number of duplicate centroids: %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:974
+#: ../lib/vector/Vlib/build.c:968
 msgid "Number of areas: -"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:975
+#: ../lib/vector/Vlib/build.c:969
 msgid "Number of isles: -"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:1004
+#: ../lib/vector/Vlib/build.c:998
 #, fuzzy, c-format
 msgid "Unable to create topo file for vector map <%s>"
 msgstr "Nu s-a putut citit fișierul foto al rasterului <%s>"
 
-#: ../lib/vector/Vlib/build.c:1012
+#: ../lib/vector/Vlib/build.c:1006
 msgid "Error writing out topo file"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:1201
+#: ../lib/vector/Vlib/build.c:1195
 msgid ""
 "Unable to build spatial index from topology, vector map is not opened at "
 "topology level 2"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:1224
+#: ../lib/vector/Vlib/build.c:1218
 #, c-format
 msgid "%s is no longer supported"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:1247
+#: ../lib/vector/Vlib/build.c:1241
 msgid "Spatial index not available, can not be saved"
 msgstr ""
 
-#: ../lib/vector/Vlib/build.c:1260
+#: ../lib/vector/Vlib/build.c:1254
 #, fuzzy, c-format
 msgid "Unable to create spatial index file for vector map <%s>"
 msgstr "Un s-a putut citi harta vectorială <%s>"
 
-#: ../lib/vector/Vlib/build.c:1269
+#: ../lib/vector/Vlib/build.c:1263
 msgid "Error writing out spatial index file"
 msgstr ""
 
@@ -9078,6 +9117,10 @@ msgstr ""
 #: ../lib/vector/vedit/select.c:231
 msgid "Unknown query tool"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Removing empty 3D raster maps"
+#~ msgstr "Nume pentru harta vectorială de intrare"
 
 #~ msgid "Category must be integer"
 #~ msgstr "Categoria trebuie să fie de tip integer"
