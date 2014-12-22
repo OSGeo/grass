@@ -865,7 +865,7 @@ class VDigitToolbar(BaseToolbar):
         # unset background map if needed
         if mapLayer:
             if UserSettings.Get(group = 'vdigit', key = 'bgmap',
-                                subkey = 'value', internal = True) == mapLayer.GetName():
+                                subkey = 'value', settings_type='internal') == mapLayer.GetName():
                 UserSettings.Set(group = 'vdigit', key = 'bgmap',
                                  subkey='value', value='', settings_type='internal')
             
