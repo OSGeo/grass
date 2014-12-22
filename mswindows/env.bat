@@ -1,6 +1,6 @@
 REM
 REM Environmental variables for GRASS stand-alone installer
-rem
+REM
 
 REM Default prompt: cmd.exe
 REM To enable bash prompt please uncomment the line bellow
