@@ -149,6 +149,13 @@ categories. This column must be integer. If not specified, categories
 numbers are generated starting with 1 and stored in the column named
 &quot;cat&quot;.
 
+<p>
+Starting with GDAL 1.11 the library supports multiple geometry columns
+in OGR. By default <em>v.in.ogr</em> reads all geometry columns from
+given layer. The user can choose desired geometry column
+by <b>geometry</b> option,
+see <a href="#multiple-geometry-columns">example bellow</a>.
+
 <h2>EXAMPLES</h2>
 
 The command imports various vector formats:
@@ -269,6 +276,35 @@ db.select table=river
 </pre></div>
 -->
 
+<h3>Multiple geometry columns</h3>
+
+This example shows how to work with data which contain multiple
+geometry per feature. The number of geometry columns per feature can
+be checked by <em><a href="v.external.html">v.external</a></em>
+together with <b>-t</b> flag.
+                  
+<div class="code"><pre>
+v.external -t input=20141130_ST_UKSH.xml.gz
+...
+Okresy,point,1,DefinicniBod
+Okresy,multipolygon,1,OriginalniHranice
+Okresy,multipolygon,1,GeneralizovaneHranice
+...
+</pre></div>      
+
+In our example layer &quot;Okresy&quot; has three geometry columns:
+&quot;DefinicniBod&quot;, &quot;OriginalniHranice&quot; and
+&quot;GeneralizovanaHranice&quot;. By default <em>v.in.ogr</em> reads data from
+all three geometry columns. The user can specify desired geometry
+column by <b>geometry</b> option, in this case the module will read
+geometry only from the specified geometry column. In the example bellow,
+the output vector map will contain only geometry saved in
+&quot;OriginalniHranice&quot; geometry column.
+
+<div class="code"><pre>
+v.in.ogr input=20141130_ST_UKSH.xml.gz layer=Okresy geometry=OriginalniHranice
+</pre></div>      
+
 <h2>WARNINGS</h2>
 
 If a message like &quot;WARNING: Area size 1.3e-06, area not
@@ -323,11 +359,13 @@ with <em><a href="v.proj.html">v.proj</a></em>.</dd>
 
 <h2>AUTHORS</h2>
 
-Radim Blazek, ITC-irst, Trento, Italy
+Original author: Radim Blazek, ITC-irst, Trento, Italy
 <br>
 Location and spatial extent support by Markus Neteler and Paul Kelly
 <br>
-Markus Metz
+Various improvements by Markus Metz
+<br>
+Multiple geometry columns support by Martin Landa, OSGeoREL, Czech Technical University in Prague, Czech Republic
 
 <p>
 <i>Last changed: $Date$</i>

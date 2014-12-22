@@ -278,14 +278,18 @@ int list_layers_ogr(FILE *fd, const char *dsn, const char *layer, int print_type
     for (i = 0; i < nlayers; i++) {
 	Ogr_layer = OGR_DS_GetLayer(Ogr_ds, i);
 	Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
-	Ogr_geom_type = OGR_FD_GetGeomType(Ogr_featuredefn);
+#if GDAL_VERSION_NUM < 1110000      
+        Ogr_geom_type = OGR_FD_GetGeomType(Ogr_featuredefn);
+#endif
 	layer_name = (char *) OGR_FD_GetName(Ogr_featuredefn);
 
 	if (fd) {
 	    if (print_types) {
-		int proj_same;
+                int proj_same, igeom;
 		OGRSpatialReferenceH Ogr_projection;
-
+#if GDAL_VERSION_NUM >= 1110000
+                OGRGeomFieldDefnH Ogr_geomdefn;
+#endif
 		/* projection check */
 		Ogr_projection = OGR_L_GetSpatialRef(Ogr_layer);
 		proj_same = 0;
@@ -304,9 +308,24 @@ int list_layers_ogr(FILE *fd, const char *dsn, const char *layer, int print_type
 			proj_same = 0;
 		}
 		G_suppress_warnings(FALSE);
-		fprintf(fd, "%s,%s,%d\n", layer_name,
-			feature_type(OGRGeometryTypeToName(Ogr_geom_type)),
-			proj_same);
+#if GDAL_VERSION_NUM >= 1110000
+                for (igeom = 0; igeom < OGR_FD_GetGeomFieldCount(Ogr_featuredefn); igeom++) {
+                    Ogr_geomdefn = OGR_FD_GetGeomFieldDefn(Ogr_featuredefn, igeom);
+                    if (!Ogr_geomdefn) {
+                        G_warning(_("Invalid geometry column %d"), igeom);
+                        continue;
+                    }
+
+                    Ogr_geom_type = OGR_GFld_GetType(Ogr_geomdefn);
+                    fprintf(fd, "%s,%s,%d,%s\n", layer_name,
+                            feature_type(OGRGeometryTypeToName(Ogr_geom_type)),
+                            proj_same, OGR_GFld_GetNameRef(Ogr_geomdefn));
+                }
+#else
+                    fprintf(fd, "%s,%s,%d,\n", layer_name,
+                            feature_type(OGRGeometryTypeToName(Ogr_geom_type)),
+                            proj_same);
+#endif
 	    }
 	    else {
 		fprintf(fd, "%s\n", layer_name);
