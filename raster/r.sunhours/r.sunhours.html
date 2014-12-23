@@ -24,13 +24,31 @@ standard time (<em>-t</em> flag) and the solpos algorithm of NREL
 
 <h2>EXAMPLES</h2>
 
-Calculate sun's elevation angle map for 2010-10-11 at 14:00h solar time:
+<h3>Calculating a sun elevation angle map</h3>
+
+Calculate the sun elevation angle map for 2010-10-11 at 14:00h solar time:
+
 <div class="code"><pre>
+# set computational region to North Carolina state extent
+g.region n=318500 s=-16000 w=124000 e=963000 res=500 -p
 r.sunhours elevation=sun_elev year=2010 month=10 day=11 hour=14 minute=00
+
+# visualize
+d.mon wx0
+d.rast sun_elev 
+d.vect nc_state type=boundary
+d.legend sun_elev -s 
 </pre></div>
 <p>
+<center>
+<img src="r_sunhours.png" alt="Sun angle map (in degree) of NC, USA"><br>
+<i>Sun angle map (in degree) of North Carolina for the 2010-10-11 at 14:00h solar time</i>
+</center>
 
-Calculate photoperiod of day of year 1 (1st January) 2012
+<h3>Calculate map of photoperiod (insolation time)</h3>
+
+Calculate photoperiod of day of year 1 (1st January) 2012:
+
 <div class="code"><pre>
 r.sunhours -s sunhour=photoperiod_doy_001 year=2012 day=1
 </pre></div>
