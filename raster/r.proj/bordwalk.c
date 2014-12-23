@@ -226,8 +226,59 @@ void bordwalk(const struct Cell_head *from_hd, struct Cell_head *to_hd,
     debug("Final check", to_hd);
 }
 
-void bordwalk2(const struct Cell_head *from_hd, struct Cell_head *to_hd,
-	      const struct pj_info *from_pj, const struct pj_info *to_pj)
+void bordwalk_edge(const struct Cell_head *from_hd, struct Cell_head *to_hd,
+	           const struct pj_info *from_pj, const struct pj_info *to_pj)
 {
-    bordwalk1(from_pj, to_pj, from_hd, to_hd);
+    double idx;
+    double hx, hy;
+
+    /* like bordwalk1, but use cell edges instead of cell centers */
+
+    /* start with cell head center */
+    hx = (from_hd->west + from_hd->east) / 2.0;
+    hy = (from_hd->north + from_hd->south) / 2.0;
+
+    if (pj_do_proj(&hx, &hy, from_pj, to_pj) < 0)
+	G_fatal_error(_("Unable to reproject map center"));
+
+    to_hd->east  = hx;
+    to_hd->west  = hx;
+    to_hd->north = hy;
+    to_hd->south = hy;
+
+    /* Top */
+    for (idx = from_hd->west; idx < from_hd->east;
+	 idx += from_hd->ew_res)
+	proj_update(from_pj, to_pj, to_hd, idx, from_hd->north);
+    idx = from_hd->east;
+    proj_update(from_pj, to_pj, to_hd, idx, from_hd->north);
+
+    debug("Top", to_hd);
+
+    /* Right */
+    for (idx = from_hd->north; idx > from_hd->south;
+	 idx -= from_hd->ns_res)
+	proj_update(from_pj, to_pj, to_hd, from_hd->east, idx);
+    idx = from_hd->south;
+    proj_update(from_pj, to_pj, to_hd, from_hd->east, idx);
+
+    debug("Right", to_hd);
+
+    /* Bottom */
+    for (idx = from_hd->east; idx > from_hd->west;
+	 idx -= from_hd->ew_res)
+	proj_update(from_pj, to_pj, to_hd, idx, from_hd->south);
+    idx = from_hd->west;
+    proj_update(from_pj, to_pj, to_hd, idx, from_hd->south);
+
+    debug("Bottom", to_hd);
+
+    /* Left */
+    for (idx = from_hd->south; idx < from_hd->north;
+	 idx += from_hd->ns_res)
+	proj_update(from_pj, to_pj, to_hd, from_hd->west, idx);
+    idx = from_hd->north;
+    proj_update(from_pj, to_pj, to_hd, from_hd->west, idx);
+
+    debug("Left", to_hd);
 }
