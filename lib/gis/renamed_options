@@ -445,6 +445,7 @@ v.net|tuclayer:turn_cat_layer
 v.net.alloc|alayer:arc_layer
 v.net.alloc|nlayer:node_layer
 v.net.alloc|type:arc_type
+v.net.alloc|ccats:center_cats
 # v.net.allpairs
 v.net.allpairs|alayer:arc_layer
 v.net.allpairs|nlayer:node_layer
@@ -471,6 +472,7 @@ v.net.flow|nlayer:node_layer
 v.net.iso|alayer:arc_layer
 v.net.iso|nlayer:node_layer
 v.net.iso|type:arc_type
+v.net.iso|ccats:center_cats
 # v.net.path
 v.net.path|alayer:arc_layer
 v.net.path|nlayer:node_layer
@@ -479,6 +481,7 @@ v.net.path|type:arc_type
 v.net.salesman|alayer:arc_layer
 v.net.salesman|nlayer:node_layer
 v.net.salesman|type:arc_type
+v.net.salesman|ccats:center_cats
 # v.net.spanningtree
 v.net.spanningtree|alayer:arc_layer
 v.net.spanningtree|nlayer:node_layer
