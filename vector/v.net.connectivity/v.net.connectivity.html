@@ -8,7 +8,7 @@
 Two sets (<em>set1</em> and <em>set2</em>) are specified by respective
 <b>layer</b>, <b>where</b> and <b>cats</b> parameters. Similarly to
 <a href="v.net.flow.html">v.net.flow</a> module, capacities of nodes can
-be given by <b>ncolumn</b> option. <em>v.net.connectivity</em> finds the
+be given by <b>node_column</b> option. <em>v.net.connectivity</em> finds the
 set of nodes of minimum total capacitiy separating the two given sets and
 outputs map containing points on the positions of these nodes. Default
 capacity, which is used when no column is specified, is one.
@@ -24,7 +24,7 @@ v.net.connectivity input=roads output=roads_conn set1_where="bank=left" \
 
 <div class="code"><pre>
 v.net.connectivity input=airtraffic output=connectivity \
-      set1_where="name=JFK" set2_where="name=Heathrow" ncolumn=capacity
+      set1_where="name=JFK" set2_where="name=Heathrow" node_column=capacity
 </pre></div>
 
 
