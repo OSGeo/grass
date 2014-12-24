@@ -81,6 +81,7 @@ int main(int argc, char *argv[])
     afield_opt->guisection = _("Cost");
 
     atype_opt = G_define_standard_option(G_OPT_V_TYPE);
+    atype_opt->key = "arc_type";
     atype_opt->options = "line,boundary";
     atype_opt->answer = "line,boundary";
     atype_opt->label = _("Arc type");
