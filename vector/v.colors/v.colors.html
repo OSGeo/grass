@@ -38,13 +38,15 @@ items is slow.
 
 <h2>EXAMPLES</h2>
 
-<h3>Define color table</h3>
+<h3>Define color table based on categories</h3>
 
 Define color table <tt>wave</tt> based on categories from layer 1
 
 <div class="code"><pre>
 v.colors map=soils_general layer=1 color=wave
 </pre></div>
+
+<h3>Define color table based on attribute values</h3>
 
 Define color table <tt>ryg</tt> based on values from attribute
 column <tt>AREA</tt>. Attribute table is linked to layer 1.
@@ -54,6 +56,8 @@ v.to.db map=soils_general layer=1 option=area column=AREA
 v.colors map=soils_general layer=1 color=wave use=attr column=AREA
 </pre></div>
 
+<h3>Define color table stored as RGB values in attribute table</h3>
+  
 Write color values to the attribute table (column <tt>GRASSRGB</tt>)
 instead of creating color table.
 
@@ -127,6 +131,7 @@ help people select good color schemes for maps and other graphics.
 
 <h2>AUTHORS</h2>
 
-Martin Landa, Czech Technical University in Prague, Czech Republic
+Martin Landa, OSGeoREL, Czech Technical University in Prague, Czech Republic
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
