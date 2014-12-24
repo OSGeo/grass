@@ -142,14 +142,14 @@ int main(int argc, char *argv[])
     input.memory->description = _("Cache size for raster rows");
 
     output.stream_rast = G_define_standard_option(G_OPT_R_OUTPUT);
-    output.stream_rast->key = "stream_rast";
+    output.stream_rast->key = "stream_raster";
     output.stream_rast->description =
 	_("Name for output raster map with unique stream ids");
     output.stream_rast->required = NO;
     output.stream_rast->guisection = _("Output maps");
 
     output.stream_vect = G_define_standard_option(G_OPT_V_OUTPUT);
-    output.stream_vect->key = "stream_vect";
+    output.stream_vect->key = "stream_vector";
     output.stream_vect->description =
 	_("Name for output vector map with unique stream ids");
     output.stream_vect->required = NO;
