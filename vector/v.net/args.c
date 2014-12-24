@@ -106,7 +106,7 @@ void define_options(struct opt *opt)
     ("Layer where turntable will be attached. Format: layer number[/layer name]."
      "Required for operation 'turntable'.");
     opt->tfield->answer = "3";
-    opt->tfield->key = "tlayer";
+    opt->tfield->key = "turn_layer";
     opt->tfield->required = NO;
     opt->tfield->guisection = _("Turntable");
 
@@ -118,7 +118,7 @@ void define_options(struct opt *opt)
      " The categories are used in turntable. Format: layer number[/layer name]. "
      "Required for operation 'turntable'.");
     opt->tucfield->answer = "4";
-    opt->tucfield->key = "tuclayer";
+    opt->tucfield->key = "turn_uc_layer";
     opt->tucfield->required = NO;
     opt->tucfield->guisection = _("Turntable");
 }
