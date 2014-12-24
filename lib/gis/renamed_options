@@ -260,6 +260,9 @@ r.sim.water|nwalk:nwalkers
 r.sim.water|niter:niterations
 r.sim.water|outiter:output_step
 r.sim.water|diffc:diffusion_coeff
+# r.stream.extract
+r.stream.extract|stream_rast:stream_raster
+r.stream.extract|stream_vect:stream_vector
 # r.sun
 r.sun|elevin:elevation
 r.sun|aspin:aspect
