@@ -99,7 +99,7 @@ class VNETManager:
 
         params, err_params, flags = self.vnet_data.GetParams()
         relevant_params = self.vnet_data.GetRelevantParams(analysis)
-
+        
         if not relevant_params:
             return -1
 
@@ -272,9 +272,9 @@ class VNETManager:
                         "v.net.turntable",
                         "input=" + params["input"], 
                         "output=" + params["output"],
-                        "alayer=" + params["alayer"],
-                        "tlayer=" + params["tlayer"],
-                        "tuclayer=" + params["tuclayer"],
+                        "arc_layer=" + params["arc_layer"],
+                        "turn_layer=" + params["turn_layer"],
+                        "turn_cat_layer=" + params["turn_cat_layer"],
                         "--overwrite", 
                        ]
 
@@ -441,7 +441,7 @@ class VNETAnalyses:
                                         overwrite = True)
 
             self._updateTtbByGlobalCosts(self.tmpTurnAn.GetVectMapName(), 
-                                         int(params["tlayer"]))
+                                         int(params["turn_layer"]))
             
             #self._prepareCmd(cmdCopy)
             #self.goutput.RunCmd(command = cmdCopy)
@@ -492,7 +492,7 @@ class VNETAnalyses:
             for coor in pts_coor:
                 cat_num = str(GetNearestNodeCat(e = coor[0], 
                                                 n = coor[1], 
-                                                field = int(params["tuclayer"],
+                                                field = int(params["turn_cat_layer"],
                                                 tresh = params["max_dist"]), 
                                                 vectMap = params["input"]))
                 if cat_num < 0:
@@ -526,7 +526,7 @@ class VNETAnalyses:
                                     overwrite = True)
 
         self._updateTtbByGlobalCosts(self.tmpTurnAn.GetVectMapName(), 
-                                     int(params["tlayer"]))
+                                     int(params["turn_layer"]))
 
 
         self._setCmdForSpecificAn(cmdParams)
@@ -630,7 +630,7 @@ class VNETAnalyses:
                 maxCat = int(cat[4])
                 break
 
-        layerNum = params["nlayer"]
+        layerNum = params["node_layer"]
 
         pt_ascii, catsNums = self._getAsciiPts (catPts = catPts, 
                                                 maxCat = maxCat, 
@@ -678,8 +678,8 @@ class VNETAnalyses:
                     "points=" + self.tmpInPts.GetVectMapName(), 
                     "input=" + params['input'],
                     "output=" + self.tmpInPtsConnected.GetVectMapName(),
-                    "alayer=" +  params["alayer"],
-                    "nlayer=" +  params["nlayer"], 
+                    "arc_layer=" +  params["arc_layer"],
+                    "node_layer=" +  params["node_layer"], 
                     "operation=connect",
                     "thresh=" + str(params["max_dist"]),             
                     "--overwrite"                         
@@ -705,7 +705,7 @@ class VNETAnalyses:
     def _setInputParams(self, analysis, params, flags):
         """Return list of chosen values (vector map, layers). 
 
-        The list items are in form to be used in command for analysis e.g. 'alayer=1'.    
+        The list items are in form to be used in command for analysis e.g. 'arc_layer=1'.    
         """
 
         inParams = []
@@ -718,12 +718,12 @@ class VNETAnalyses:
 
             inParams.append(col + '=' + params[colInptF])
 
-        for layer in ['alayer', 'nlayer', 'tlayer', 'tuclayer']:
-            if not flags["t"] and layer in ['tlayer', 'tuclayer']:
+        for layer in ['arc_layer', 'node_layer', 'turn_layer', 'turn_cat_layer']:
+            if not flags["t"] and layer in ['turn_layer', 'turn_cat_layer']:
                 continue
             # TODO
-            if flags["t"] and layer == 'nlayer':
-                inParams.append(layer + "=" + params['tuclayer'])
+            if flags["t"] and layer == 'node_layer':
+                inParams.append(layer + "=" + params['turn_cat_layer'])
                 continue
 
             inParams.append(layer + "=" + params[layer])
@@ -1026,7 +1026,7 @@ class SnappingNodes(wx.EvtHandler):
                                      params = params,
                                      inv_params = inv_params,
                                      flags = flags,
-                                     relevant_params = ["input", "nlayer"]):
+                                     relevant_params = ["input", "node_layer"]):
             return -1
 
         if not self.tmp_maps.HasTmpVectMap("vnet_snap_points"):
