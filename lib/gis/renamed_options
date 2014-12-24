@@ -178,6 +178,7 @@ r.colors|volume:raster_3d
 r.colors.stddev|input:map
 # r.cost
 r.cost|coordinate:start_coordinates
+r.cost|start_rast:start_raster
 # r.distance
 r.distance|maps:map
 # r.drain
@@ -302,6 +303,7 @@ r.topmodel|qobs:
 r.uslek|usle_k:output
 # r.walk
 r.walk|coordinate:start_coordinates
+r.walk|start_rast:start_raster
 # r.water.outlet
 r.water.outlet|drainage:input
 r.water.outlet|basin:output
