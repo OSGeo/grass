@@ -40,14 +40,24 @@ int main(int argc, char *argv[])
 
     parse_command_line(argc, argv);
 
+    if (!options.print && !options.total) {
+        const char *mapset;
+
+        mapset = G_find_vector2(options.name, "");
+        if (!mapset || (strcmp(mapset, G_mapset()) != 0))
+            G_fatal_error(_("Vector map <%s> not found in the current mapset. "
+                            "Unable to modify vector maps from different mapsets."),
+                          options.name);
+    }
+
     G_begin_distance_calculations();
     G_begin_polygon_area_calculations();
 
     /* open map */
     Vect_set_open_level(2);
-    if (Vect_open_old(&Map, options.name, "") < 0)
-	G_fatal_error(_("Unable to open vector map <%s>"), options.name);
-
+    Vect_open_old(&Map, options.name, "");
+    Vect_set_error_handler_io(&Map, NULL);
+   
     Fi = Vect_get_field(&Map, options.field);
 
     if (!options.print && Fi == NULL) {
