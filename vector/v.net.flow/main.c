@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
     abcol->guisection = _("Cost");
 
     ncol = G_define_standard_option(G_OPT_DB_COLUMN);
-    ncol->key = "ncolumn";
+    ncol->key = "node_column";
     ncol->required = NO;
     ncol->description = _("Node cost column (number)");
     ncol->guisection = _("Cost");

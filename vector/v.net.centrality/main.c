@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
     abcol->guisection = _("Cost");
 
     ncol = G_define_option();
-    ncol->key = "ncolumn";
+    ncol->key = "node_column";
     ncol->type = TYPE_STRING;
     ncol->required = NO;
     ncol->description = _("Node cost column (number)");
