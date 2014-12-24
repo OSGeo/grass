@@ -36,22 +36,22 @@ and boundaries not intersecting each other (that includes overlapping).
 The resulting map containing the visibility graph is given in the output map.
 <p>
 If you need to add additional points to compute a shortest path 
-between them afterwards you can use the <em>coordinate</em> parameter, e.g.:
+between them afterwards you can use the <em>coordinates</em> parameter, e.g.:
 <div class="code"><pre>
-coordinate=25556200,6686400,25556400,6686600
+coordinates=25556200,6686400,25556400,6686600
 </pre></div>
 where 25556200,6686400 are the coordinate of the first point and 
 25556400,6686600 are the coordinates of the second point. Of course 
 you can give as many points as you need. They will be added to the 
 visibility graph and edges from them will be computed. You can 
 always add those points after computing the visibility graph. Simply 
-use the <em>vis</em> parameter. The input will be the original 
+use the <em>visibility</em> parameter. The input will be the original 
 vector map, the vis will be the computed visibility graph and the 
 output the new visibility graph which will be the vis + the new 
 points given with coordinate (edges will be computed as well).
 <div class="code"><pre>
-v.net.visibility input=map vis=vis_map output=new_vis_map \
-      coordinate=25556200,6686400,25556400,6686600
+v.net.visibility input=map visibility=vis_map output=new_vis_map \
+      coordinates=25556200,6686400,25556400,6686600
 </pre></div>
 
 <h2>EXAMPLES</h2>
@@ -85,7 +85,7 @@ d.vect lines col=red
 An example on how to use the coordinate parameter. This will compute the
 visibility graph of the vector map lines with the point 2555678,6686343:
 <div class="code"><pre>
-v.net.visibility input=lines output=graph coordinate=2555678,6686343
+v.net.visibility input=lines output=graph coordinates=2555678,6686343
 d.vect graph
 d.vect lines col=red
 </pre></div>
@@ -102,8 +102,8 @@ g.region vector=zipcodes_wake
 d.mon wx0
 d.vect areas_7_11_25
 v.net.visibility input=zipcodes_wake output=graph
-v.net.visibility input=zipcodes_wake vis=graph output=new_graph \
-      coordinate=669547.97,208348.20
+v.net.visibility input=zipcodes_wake visibility=graph output=new_graph \
+      coordinates=669547.97,208348.20
 d.erase
 d.vect areas_7_11_25
 echo "symbol basic/star 20 669547.97 208348.20 black red" | d.graph -m

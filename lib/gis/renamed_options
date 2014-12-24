@@ -530,6 +530,9 @@ v.net.timetable|nlayer:node_layer
 v.net.timetable|ncolumn:node_column
 v.net.timetable|afcolumn:arc_column
 v.net.timetable|abcolumn:arc_backward_column
+# v.net.visibility
+v.net.visibility|coordinate|coordinates
+v.net.visibility|vis|visibility
 # v.outlier
 v.outlier|soe:ew_step
 v.outlier|son:ns_step
