@@ -522,6 +522,8 @@ v.net.spanningtree|afcolumn:arc_columnw
 v.net.steiner|alayer:arc_layer
 v.net.steiner|nlayer:node_layer
 v.net.steiner|type:arc_type
+v.net.steiner|tcats:terminal_cats
+v.net.steiner|nsp:npoints
 # v.net.timetable
 v.net.timetable|alayer:arc_layer
 v.net.timetable|nlayer:node_layer

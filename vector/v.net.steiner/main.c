@@ -378,13 +378,13 @@ int main(int argc, char **argv)
     afcol->description = _("Arcs' cost column (for both directions)");
 
     term_opt = G_define_standard_option(G_OPT_V_CATS);
-    term_opt->key = "tcats";
+    term_opt->key = "terminal_cats";
     term_opt->required = YES;
     term_opt->description =
 	_("Categories of points on terminals (layer is specified by nlayer)");
 
     nsp_opt = G_define_option();
-    nsp_opt->key = "nsp";
+    nsp_opt->key = "npoints";
     nsp_opt->type = TYPE_INTEGER;
     nsp_opt->required = NO;
     nsp_opt->multiple = NO;
