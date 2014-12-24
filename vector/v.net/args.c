@@ -56,6 +56,13 @@ void define_options(struct opt *opt)
     opt->afield_opt->label = _("Arc layer");
     opt->afield_opt->guisection = _("Arcs");
 
+    opt->type = G_define_standard_option(G_OPT_V_TYPE);
+    opt->type->key = "arc_type";
+    opt->type->options = "line,boundary";
+    opt->type->answer = "line,boundary";
+    opt->type->label = _("Arc type");
+    opt->type->guisection = _("Turntable");
+
     opt->nfield_opt = G_define_standard_option(G_OPT_V_FIELD);
     opt->nfield_opt->key = "node_layer";
     opt->nfield_opt->answer = "2";
@@ -114,13 +121,6 @@ void define_options(struct opt *opt)
     opt->tucfield->key = "tuclayer";
     opt->tucfield->required = NO;
     opt->tucfield->guisection = _("Turntable");
-
-    opt->type = G_define_standard_option(G_OPT_V_TYPE);
-    opt->type->options = "line,boundary";
-    opt->type->answer = "line,boundary";
-    opt->type->label = _("Arc type");
-    opt->type->guisection = _("Turntable");
-
 }
 
 void parse_arguments(const struct opt *opt,
