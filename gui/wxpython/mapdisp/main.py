@@ -392,27 +392,40 @@ class MapApp(wx.App):
             self.cmdTimeStamp = os.path.getmtime(monFile['cmd'])
             self.Map = DMonMap(giface=self._giface, cmdfile=monFile['cmd'],
                                mapfile = monFile['map'])
-        else:
-            self.Map = None
-
-        self.mapFrm = DMonFrame(parent = None, id = wx.ID_ANY, Map = self.Map,
-                                giface = self._giface, size = monSize, toolbars = [], statusbar = False)
-        # FIXME: hack to solve dependency
-        self._giface._mapframe = self.mapFrm
-        # self.SetTopWindow(Map)
-        self.mapFrm.GetMapWindow().SetAlwaysRenderEnabled(True)
-        self.Map.saveToFile.connect(lambda cmd: self.mapFrm.DOutFile(cmd))
-        self.Map.dToRast.connect(lambda cmd: self.mapFrm.DToRast(cmd))
-        self.Map.query.connect(lambda ltype, maps: self.mapFrm.SetQueryLayersAndActivate(ltype=ltype, maps=maps))
-                
-        if __name__ == "__main__":
+            
             self.timer = wx.PyTimer(self.watcher)
             #check each 0.5s
             global mtime
             mtime = 500
             self.timer.Start(mtime)
-            
+        else:
+            self.Map = None
+        
         return True
+    
+    def CreateMapFrame(self, name, decorations=True):
+        if decorations:
+            toolbars = ['map']
+            statusbar = True
+        else:
+            toolbars = []
+            statusbar = False
+        
+        self.mapFrm = DMonFrame(parent = None, id = wx.ID_ANY, Map = self.Map,
+                                giface = self._giface, size = monSize,
+                                toolbars = toolbars, statusbar = statusbar)
+        
+        # FIXME: hack to solve dependency
+        self._giface._mapframe = self.mapFrm
+        
+        self.mapFrm.GetMapWindow().SetAlwaysRenderEnabled(True)
+        
+        self.Map.saveToFile.connect(lambda cmd: self.mapFrm.DOutFile(cmd))
+        self.Map.dToRast.connect(lambda cmd: self.mapFrm.DToRast(cmd))
+        self.Map.query.connect(lambda ltype, maps: \
+                               self.mapFrm.SetQueryLayersAndActivate(ltype=ltype, maps=maps))
+
+        return self.mapFrm
     
     def OnExit(self):
         if __name__ == "__main__":
@@ -492,11 +505,7 @@ if __name__ == "__main__":
 
     start = time.time()
     gmMap = MapApp(0)
-    mapFrame = gmMap.GetMapFrame()
-    mapFrame.SetTitle(monName)
-    if monDecor:
-        mapFrame._giface.ShowAllToolbars(monDecor)
-        mapFrame._giface.ShowStatusbar(monDecor)
+    mapFrame = gmMap.CreateMapFrame(monName, monDecor)
     mapFrame.Show()
     Debug.msg(1, "WxMonitor started in %.6f sec" % \
                   (time.time() - start))
