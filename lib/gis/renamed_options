@@ -170,6 +170,8 @@ r.basins.fill|t_map:tnetwork
 r.basins.fill|result:output
 # r.blend
 r.blend|output:output_prefix
+# r.colors
+r.colors|volume:raster_3d
 # r.colors.stddev
 r.colors.stddev|input:map
 # r.cost
@@ -375,6 +377,8 @@ r.viewshed|max_dist:max_distance
 ############################
 ### Raster 3D module changes
 ############################
+# r3.colors
+r3.colors|volume:raster_3d
 # r3.gwflow
 r3.gwflow|q:sink
 r3.gwflow|s:yield
@@ -402,6 +406,8 @@ t.vect.export|extrdir:directory
 #########################
 # v.clean
 v.clean|thresh:threshold
+# v.colors
+v.colors|volume:raster_3d
 # v.drape
 v.drape|rast:elevation
 # v.edit

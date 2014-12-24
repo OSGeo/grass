@@ -97,7 +97,7 @@ int edit_colors(int argc, char **argv, int type, const char *maptype,
     opt.rast->guisection = _("Define");
 
     opt.volume = G_define_standard_option(G_OPT_R3_INPUT);
-    opt.volume->key = "volume";
+    opt.volume->key = "raster_3d";
     opt.volume->required = NO;
     opt.volume->description =
         _("3D raster map from which to copy color table");
