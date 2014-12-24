@@ -111,7 +111,7 @@ int main(int argc, char **argv)
     turntable_f->guisection = _("Turntable");
 
     tfield_opt = G_define_standard_option(G_OPT_V_FIELD);
-    tfield_opt->key = "tlayer";
+    tfield_opt->key = "turn_layer";
     tfield_opt->answer = "3";
     tfield_opt->label = _("Layer with turntable");
     tfield_opt->description =
@@ -119,7 +119,7 @@ int main(int argc, char **argv)
     tfield_opt->guisection = _("Turntable");
 
     tucfield_opt = G_define_standard_option(G_OPT_V_FIELD);
-    tucfield_opt->key = "tuclayer";
+    tucfield_opt->key = "turn_cat_layer";
     tucfield_opt->answer = "4";
     tucfield_opt->label = _("Layer with unique categories used in turntable");
     tucfield_opt->description =

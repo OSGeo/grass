@@ -449,6 +449,8 @@ v.net.alloc|ccats:center_cats
 v.net.alloc|ncolumn:node_column
 v.net.alloc|afcolumn:arc_column
 v.net.alloc|abcolumn:arc_backward_column
+v.net.alloc|tlayer:turn_layer
+v.net.alloc|tuclayer:turn_cat_layer
 # v.net.allpairs
 v.net.allpairs|alayer:arc_layer
 v.net.allpairs|nlayer:node_layer
@@ -499,6 +501,8 @@ v.net.iso|ccats:center_cats
 v.net.iso|ncolumn:node_column
 v.net.iso|afcolumn:arc_column
 v.net.iso|abcolumn:arc_backward_column
+v.net.iso|tlayer:turn_layer
+v.net.iso|tuclayer:turn_cat_layer
 # v.net.path
 v.net.path|alayer:arc_layer
 v.net.path|nlayer:node_layer
@@ -506,6 +510,8 @@ v.net.path|type:arc_type
 v.net.path|ncolumn:node_column
 v.net.path|afcolumn:arc_column
 v.net.path|abcolumn:arc_backward_column
+v.net.path|tlayer:turn_layer
+v.net.path|tuclayer:turn_cat_layer
 # v.net.salesman
 v.net.salesman|alayer:arc_layer
 v.net.salesman|nlayer:node_layer
@@ -513,6 +519,8 @@ v.net.salesman|type:arc_type
 v.net.salesman|ccats:center_cats
 v.net.salesman|afcolumn:arc_column
 v.net.salesman|abcolumn:arc_backward_column
+v.net.salesman|tlayer:turn_layer
+v.net.salesman|tuclayer:turn_cat_layer
 # v.net.spanningtree
 v.net.spanningtree|alayer:arc_layer
 v.net.spanningtree|nlayer:node_layer
