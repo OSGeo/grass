@@ -75,7 +75,7 @@ int main(int argc, char **argv)
     output = G_define_standard_option(G_OPT_V_OUTPUT);
 
     term_opt = G_define_standard_option(G_OPT_V_CATS);
-    term_opt->key = "ccats";
+    term_opt->key = "center_cats";
     term_opt->required = YES;
     term_opt->description =
 	_("Categories of centers (points on nodes) to which net "

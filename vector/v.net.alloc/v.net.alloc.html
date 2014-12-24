@@ -63,7 +63,7 @@ g.copy vect=roads,myroads
 v.net myroads points=centernodes out=myroads_net op=connect thresh=200
 
 # allocate, specifying range of center cats (easier to catch all):
-v.net.alloc myroads_net out=myroads_net_alloc ccats=1-100000 node_layer=2
+v.net.alloc myroads_net out=myroads_net_alloc center_cats=1-100000 node_layer=2
 
 # report categories
 v.category myroads_net_alloc option=report
@@ -131,7 +131,7 @@ v.db.update myroads_net_time layer=3 col=cost val="length / speed * 60"
 v.db.update myroads_net_time layer=3 col=bcost val="length / speed * 60"
 
 # subnetwork allocation with fastest paths
-v.net.alloc in=myroads_net_time arc_layer=3 node_layer=2 afcol=cost abcol=bcost out=myroads_net_alloc_time ccats=1-3
+v.net.alloc in=myroads_net_time arc_layer=3 node_layer=2 afcol=cost abcol=bcost out=myroads_net_alloc_time center_cats=1-3
 </pre></div>
 
 To display the result, run for example:
