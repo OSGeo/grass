@@ -23,7 +23,6 @@ import os
 import sys
 
 import wx
-import wx.aui
 
 from core        import globalvar
 from core.debug  import Debug
@@ -93,7 +92,8 @@ class MapFrameBase(wx.Frame):
         # Fancy gui
         #
         if auimgr == None:
-            self._mgr = wx.aui.AuiManager(self)
+            from wx.aui import AuiManager
+            self._mgr = AuiManager(self)
         else:
             self._mgr = auimgr
         
@@ -101,11 +101,14 @@ class MapFrameBase(wx.Frame):
         self._toolSwitcher = ToolSwitcher()
         self._toolSwitcher.toggleToolChanged.connect(self._onToggleTool)
 
-        # set accelerator table for fullscreen
-        fullScreenId = wx.NewId()
-        self.Bind(wx.EVT_MENU, self.OnFullScreen, id=fullScreenId)
-        accelTable = wx.AcceleratorTable([(wx.ACCEL_NORMAL, wx.WXK_F11, fullScreenId)])
-        self.SetAcceleratorTable(accelTable)
+        # set accelerator table (fullscreen, close window)
+        accelTable = []
+        for wxId, handler, entry, kdb in ((wx.NewId(), self.OnFullScreen, wx.ACCEL_NORMAL, wx.WXK_F11),
+                                          (wx.NewId(), self.OnCloseWindow, wx.ACCEL_CTRL, ord('W'))):
+            self.Bind(wx.EVT_MENU, handler, id=wxId)
+            accelTable.append((entry, kdb, wxId))
+        
+        self.SetAcceleratorTable(wx.AcceleratorTable(accelTable))
 
     def _initMap(self, Map):
         """Initialize map display, set dimensions and map region
@@ -146,6 +149,9 @@ class MapFrameBase(wx.Frame):
         self.ShowFullScreen(not self.IsFullScreen())
         event.Skip()
 
+    def OnCloseWindow(self, event):
+        self.Destroy()
+        
     def GetToolSwitcher(self):
         return self._toolSwitcher
 
