@@ -80,10 +80,10 @@ v.db.update myroads_net_time layer=3 col=speed val="5.0" where="label='unimprove
 v.db.update myroads_net_time layer=3 col=cost val="length / speed * 60"
 
 # shortest path
-v.net.steiner myroads_net_time arc_layer=3 node_layer=2 tcats=1-6 out=mysteiner_distance
+v.net.steiner myroads_net_time arc_layer=3 node_layer=2 terminal_cats=1-6 out=mysteiner_distance
 
 # fastest path
-v.net.steiner myroads_net_time arc_layer=3 node_layer=2 acol=cost tcats=1-6 out=mysteiner_time
+v.net.steiner myroads_net_time arc_layer=3 node_layer=2 acol=cost terminal_cats=1-6 out=mysteiner_time
 </pre></div>
 
 To display the result, run for example:
