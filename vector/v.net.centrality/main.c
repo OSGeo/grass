@@ -123,14 +123,14 @@ int main(int argc, char *argv[])
     where_opt->guisection = _("Selection");
 
     afcol = G_define_standard_option(G_OPT_DB_COLUMN);
-    afcol->key = "afcolumn";
+    afcol->key = "arc_column";
     afcol->required = NO;
     afcol->description =
 	_("Arc forward/both direction(s) cost column (number)");
     afcol->guisection = _("Cost");
 
     abcol = G_define_standard_option(G_OPT_DB_COLUMN);
-    abcol->key = "abcolumn";
+    abcol->key = "arc_backward_column";
     abcol->required = NO;
     abcol->description = _("Arc backward direction cost column (number)");
     abcol->guisection = _("Cost");

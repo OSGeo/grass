@@ -281,7 +281,7 @@ int main(int argc, char *argv[])
     nfield_opt->guisection = _("Cost");
 
     afcol = G_define_option();
-    afcol->key = "afcolumn";
+    afcol->key = "arc_column";
     afcol->type = TYPE_STRING;
     afcol->required = NO;
     afcol->description =
@@ -289,7 +289,7 @@ int main(int argc, char *argv[])
     afcol->guisection = _("Cost");
 
     abcol = G_define_option();
-    abcol->key = "abcolumn";
+    abcol->key = "arc_backward_column";
     abcol->type = TYPE_STRING;
     abcol->required = NO;
     abcol->description = _("Arc backward direction cost column (number)");

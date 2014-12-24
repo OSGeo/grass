@@ -6,8 +6,8 @@ between two sets of nodes.
 <h2>NOTES</h2>
 The two sets of nodes are called <em>sources</em> and <em>sink</em> 
 and <em>v.net.flow</em> finds the maximimum flow from the former to 
-the latter ones. Edge capacities can be specified by <b>afcolumn</b> 
-for forward direction and <b>abcolumn</b> for backward direction. If 
+the latter ones. Edge capacities can be specified by <b>arc_column</b> 
+for forward direction and <b>arc_backward_column</b> for backward direction. If 
 the latter parameter is ommited then the same capacity is used in 
 either direction. The sets are given by the respective <b>cats</b>, 
 <b>layer</b> and <b>where</b> parameters. Maximum flow corresponds 
@@ -30,7 +30,7 @@ cut.
 
 Find maximum flow from factories to stores using SPEED for the capacities.
 <div class="code"><pre>
-v.net.flow input=roads output=roads_flow cut=roads_cut afcolumn=SPEED \
+v.net.flow input=roads output=roads_flow cut=roads_cut arc_column=SPEED \
            source_where="type=factory" sink_where="type=store"
 </pre></div>
 <p>
@@ -38,7 +38,7 @@ v.net.flow input=roads output=roads_flow cut=roads_cut afcolumn=SPEED \
 If all the capacties are one then the minimum cut corresponds to the 
 minimum number of edges separating sources from sinks. 
 <div class="code"><pre>
-v.net.flow input=network output=flow cut=cut afcolumn=ones \
+v.net.flow input=network output=flow cut=cut arc_column=ones \
            source_cats=1-10 sink_cats=100-100
 </pre></div>
 
