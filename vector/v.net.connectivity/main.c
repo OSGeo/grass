@@ -59,13 +59,13 @@ int main(int argc, char *argv[])
     map_in = G_define_standard_option(G_OPT_V_INPUT);
 
     afield_opt = G_define_standard_option(G_OPT_V_FIELD);
-    afield_opt->key = "alayer";
+    afield_opt->key = "arc_layer";
     afield_opt->answer = "1";
     afield_opt->label = _("Arc layer");
     afield_opt->guisection = _("Cost");
 
     nfield_opt = G_define_standard_option(G_OPT_V_FIELD);
-    nfield_opt->key = "nlayer";
+    nfield_opt->key = "node_layer";
     nfield_opt->answer = "2";
     nfield_opt->label = _("Node layer");
     nfield_opt->guisection = _("Cost");

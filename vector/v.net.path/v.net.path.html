@@ -114,7 +114,7 @@ v.db.select startend
 g.copy vect=roads,myroads
 
 # create lines map connecting points to network
-v.net myroads points=startend out=myroads_net op=connect thresh=500 alayer=1 nlayer=2
+v.net myroads points=startend out=myroads_net op=connect thresh=500 arc_layer=1 node_layer=2
 
 # set up costs
 
@@ -148,10 +148,10 @@ v.db.update myroads_net_time layer=3 col=bcost val="length / speed * 60"
 # ... the 'start' and 'end' nodes have category number 1 and 2
 
 # Shortest path: ID as first number, then cat1 and cat2
-echo "1 1 2" | v.net.path myroads_net_time alayer=3 nlayer=2 out=mypath
+echo "1 1 2" | v.net.path myroads_net_time arc_layer=3 node_layer=2 out=mypath
 
 # Fastest path: ID as first number, then cat1 and cat2
-echo "1 1 2" | v.net.path myroads_net_time alayer=3 nlayer=2 afcol=cost abcol=bcost out=mypath_time
+echo "1 1 2" | v.net.path myroads_net_time arc_layer=3 node_layer=2 afcol=cost abcol=bcost out=mypath_time
 </pre></div>
 
 To display the result, run for example:
