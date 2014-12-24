@@ -9,9 +9,9 @@ table. These attribute values are taken as costs of whole segments, not
 as costs to traverse a length unit (e.g. meter) of the segment. 
 For example, if the speed limit is 100 km / h, the cost to traverse a 
 10 km long road segment must be calculated as 
-<br>
+<div class="code"><pre>
 length / speed = 10 km / (100 km/h) = 0.1 h.
-<br>
+</pre></div>
 Supported are cost assignments for both arcs and nodes, 
 and also different costs for both directions of a vector line. 
 For areas, costs will be calculated along boundary lines.
@@ -19,7 +19,7 @@ For areas, costs will be calculated along boundary lines.
 The input vector needs to be prepared with <tt>v.net operation=connect</tt> 
 in order to connect points representing center nodes to the network.
 
-<p>Nodes and arcs can be closed using cost = -1. 
+<p>Nodes and arcs can be closed using <tt>cost = -1</tt>. 
 <p>Least cost paths are written to the output vector map with an 
 attached attribute table.
 <p>Nodes can be
@@ -52,23 +52,23 @@ pair is used.
 The attribute table will contain the following attributes:
 
 <ul>
-    <li>cat  - path unique category assigned by module</li>
-    <li>id   - path id (read from input)</li>
-    <li>fcat - from point category</li>
-    <li>tcat - to point category</li>
-    <li>sp - result status:
+    <li><tt>cat</tt>  - path unique category assigned by module</li>
+    <li><tt>id</tt>   - path id (read from input)</li>
+    <li><tt>fcat</tt> - from point category</li>
+    <li><tt>tcat</tt> - to point category</li>
+    <li><tt>sp</tt> - result status:
     <ul>
         <li>     0 - OK, path found</li>
         <li>     1 - node is not reachable</li>
         <li>     2 - point of given category does not exist</li>
     </ul>
-    <li>cost - travelling costs (on the network, not to/from network)</li>
-    <li>fdist - the distance from first point to the network</li>
-    <li>tdist - the distance from the network to second point</li>
+    <li><tt>cost</tt> - travelling costs (on the network, not to/from network)</li>
+    <li><tt>fdist</tt> - the distance from first point to the network</li>
+    <li><tt>tdist</tt> - the distance from the network to second point</li>
 </ul>
 
 <h2>NOTES</h2>
-Nodes and arcs can be closed using cost = -1. 
+Nodes and arcs can be closed using <tt>cost = -1</tt>. 
 <p>If the cost columns <b>arc_column</b>, <b>arc_backward_column</b> and <b>node_column</b> are not
 specified, the length of network segments is measured and 
 zero costs are assumed for nodes.
@@ -78,15 +78,18 @@ assigning costs as attributes. For example, to get the <em>fastest path</em>,
 the columns 'max_speed' and 'length' are required. The correct fastest 
 path can then be found by specifying <tt>arc_column=length/max_speed</tt>. If not yet
 existing, the column containing the line length ("length") has to added to the
-attributes table using <em>v.to.db</em>.
+attributes table using <em><a href="v.to.db.html">v.to.db</a></em>.
 
 <h2>EXAMPLE</h2>
 
 Shortest (red) and fastest (blue) path between two digitized nodes (Spearfish):
 
-<p><img src="vnetpath.png" alt="v.net.path example" border="1">
+<p>
+<center>
+<img src="vnetpath.png" alt="v.net.path example" border="1">
+</center>
 
-<p><div class="code"><pre>
+<div class="code"><pre>
 # Spearfish
 
 echo "1|601955.1|4916944.9|start
@@ -158,17 +161,20 @@ d.vect startend disp=cat type=point lsize=14 layer=2
 
 <h2>SEE ALSO</h2>
 
-<em><a href="d.path.html">d.path</a></em>,
-<em><a href="v.net.html">v.net</a></em>,
-<em><a href="v.net.alloc.html">v.net.alloc</a></em>,
-<em><a href="v.net.iso.html">v.net.iso</a></em>,
-<em><a href="v.net.salesman.html">v.net.salesman</a></em>,
-<em><a href="v.net.steiner.html">v.net.steiner</a></em>,
-<em><a href="v.to.db.html">v.to.db</a></em>
+<em>
+  <a href="d.path.html">d.path</a>,
+  <a href="v.net.html">v.net</a>,
+  <a href="v.net.alloc.html">v.net.alloc</a>,
+  <a href="v.net.iso.html">v.net.iso</a>,
+  <a href="v.net.salesman.html">v.net.salesman</a>,
+  <a href="v.net.steiner.html">v.net.steiner</a>,
+  <a href="v.to.db.html">v.to.db</a>
+</em>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
 Radim Blazek, ITC-Irst, Trento, Italy<br>
 Documentation: Markus Neteler, Markus Metz
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
