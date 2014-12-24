@@ -492,7 +492,7 @@ int main(int argc, char *argv[])
 	_("Sampling distance step coefficient (0.5-1.5)");
 
     parm.numPartitions = G_define_option();
-    parm.numPartitions->key = "num_partitions";
+    parm.numPartitions->key = "npartitions";
     parm.numPartitions->type = TYPE_INTEGER;
     parm.numPartitions->answer = NUM_PARTITIONS;
     parm.numPartitions->required = NO;

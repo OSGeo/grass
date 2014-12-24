@@ -281,7 +281,7 @@ r.sun|coefdh:coef_dh
 r.sun|horizonstep:horizon_step
 r.sun|declin:declination
 r.sun|dist:distance_step
-r.sun|numpartitions:num_partitions
+r.sun|numpartitions:npartitions
 r.sun|civiltime:civil_time
 # r.surf.area
 r.surf.area|input:map
