@@ -83,7 +83,7 @@ int main(int argc, char **argv)
 	  "layer for this categories is given by nlayer option");
 
     afield_opt = G_define_standard_option(G_OPT_V_FIELD);
-    afield_opt->key = "alayer";
+    afield_opt->key = "arc_layer";
     afield_opt->answer = "1";
     afield_opt->required = YES;
     afield_opt->label = _("Arc layer");
@@ -95,7 +95,7 @@ int main(int argc, char **argv)
     type_opt->label = _("Arc type");
 
     nfield_opt = G_define_standard_option(G_OPT_V_FIELD);
-    nfield_opt->key = "nlayer";
+    nfield_opt->key = "node_layer";
     nfield_opt->answer = "2";
     nfield_opt->required = YES;
     nfield_opt->label = _("Node layer");

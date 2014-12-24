@@ -51,13 +51,13 @@ void define_options(struct opt *opt)
     opt->action->descriptions = desc;
 
     opt->afield_opt = G_define_standard_option(G_OPT_V_FIELD);
-    opt->afield_opt->key = "alayer";
+    opt->afield_opt->key = "arc_layer";
     opt->afield_opt->gisprompt = "new,layer,layer";
     opt->afield_opt->label = _("Arc layer");
     opt->afield_opt->guisection = _("Arcs");
 
     opt->nfield_opt = G_define_standard_option(G_OPT_V_FIELD);
-    opt->nfield_opt->key = "nlayer";
+    opt->nfield_opt->key = "node_layer";
     opt->nfield_opt->answer = "2";
     opt->nfield_opt->gisprompt = "new,layer,layer";
     opt->nfield_opt->label = _("Node layer");
@@ -107,7 +107,7 @@ void define_options(struct opt *opt)
     opt->tucfield->label = _("Layer with unique categories used in turntable");
     opt->tucfield->description =
     _
-    ("Layer with unique categories for every line in alayer and point on every node. "
+    ("Layer with unique categories for every line in arc_layer and point on every node. "
      " The categories are used in turntable. Format: layer number[/layer name]. "
      "Required for operation 'turntable'.");
     opt->tucfield->answer = "4";

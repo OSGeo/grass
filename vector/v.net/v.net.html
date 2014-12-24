@@ -81,7 +81,7 @@ and update the new table with cat values with <em><a href="v.to.db.html">v.to.db
 <p>
 The <em>turntable</em> operation creates a turntable  
 with the costs for every possible 
-turn on every possible node (intersection, crossroad) in given layer (alayer). 
+turn on every possible node (intersection, crossroad) in given layer (arc_layer). 
 U-turns are taken in account too.
 Turntable is created in <b>tlayer</b> and <b>tuclayer</b>.
 Building the turntable allows you to model e.g. trafic code, where some turns 
@@ -89,7 +89,7 @@ may be prohibited.
 If features in analyzed network are changed, the turntable must be created again
 (e.g. it includes v.net connect operation).
 Turntable name consists of output vector map name + "_turntable_" + "t" + "_" + tlayer +
- "_" + "tuc" + "_" + tuclayer + "_" + "a" + "_" + alayer  e. g. roads_turntable_t_3_tuc_4_a_1
+ "_" + "tuc" + "_" + tuclayer + "_" + "a" + "_" + arc_layer  e. g. roads_turntable_t_3_tuc_4_a_1
 
 <p>These modules are able to work with the turntable: 
 <em><a href="v.net.alloc.html">v.net.alloc</a></em>,

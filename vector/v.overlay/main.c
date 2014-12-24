@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
 
     field_opt[0] = G_define_standard_option(G_OPT_V_FIELD);
     field_opt[0]->label = _("Layer number or name (vector map A)");
-    field_opt[0]->key = "alayer";
+    field_opt[0]->key = "arc_layer";
 
     type_opt[0] = G_define_standard_option(G_OPT_V_TYPE);
     type_opt[0]->label = _("Feature type (vector map A)");

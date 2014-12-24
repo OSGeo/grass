@@ -48,10 +48,10 @@ crosses, shortest paths are blue lines:
 
 <p><div class="code"><pre>
 # connect schools to streets as layer 2
-v.net input=streets_wake points=schools_wake output=streets_net1 operation=connect thresh=400 alayer=1 nlayer=2
+v.net input=streets_wake points=schools_wake output=streets_net1 operation=connect thresh=400 arc_layer=1 node_layer=2
 
 # connect hospitals to streets as layer 3
-v.net input=streets_net1 points=hospitals output=streets_net2 operation=connect thresh=400 alayer=1 nlayer=3
+v.net input=streets_net1 points=hospitals output=streets_net2 operation=connect thresh=400 arc_layer=1 node_layer=3
 
 # inspect the result
 v.category in=streets_net2 op=report
