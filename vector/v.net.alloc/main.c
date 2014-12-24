@@ -78,7 +78,7 @@ int main(int argc, char **argv)
     afield_opt->label = _("Arc layer");
 
     type_opt = G_define_standard_option(G_OPT_V_TYPE);
-    type_opt->key "arc_type";
+    type_opt->key = "arc_type";
     type_opt->options = "line,boundary";
     type_opt->answer = "line,boundary";
     type_opt->description = _("Arc type");
