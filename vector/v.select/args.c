@@ -14,7 +14,7 @@ void parse_options(struct GParm *parm, struct GFlag *flag)
 
     parm->field[0] = G_define_standard_option(G_OPT_V_FIELD);
     parm->field[0]->label = _("Layer number (vector map A)");
-    parm->field[0]->key = "arc_layer";
+    parm->field[0]->key = "alayer";
     parm->field[0]->guisection = _("Selection");
 
     parm->type[0] = G_define_standard_option(G_OPT_V_TYPE);
