@@ -118,7 +118,7 @@ void define_options(struct opt *opt)
      " The categories are used in turntable. Format: layer number[/layer name]. "
      "Required for operation 'turntable'.");
     opt->tucfield->answer = "4";
-    opt->tucfield->key = "turn_uc_layer";
+    opt->tucfield->key = "turn_cat_layer";
     opt->tucfield->required = NO;
     opt->tucfield->guisection = _("Turntable");
 }
