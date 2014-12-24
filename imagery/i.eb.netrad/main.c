@@ -89,7 +89,7 @@ int main(int argc, char *argv[])
     input6->description = _("Name of the emissivity map [-]");
 
     input7 = G_define_standard_option(G_OPT_R_INPUT);
-    input7->key = "transmissivitysingleway";
+    input7->key = "transmissivity_singleway";
     input7->description =
 	_("Name of the single-way atmospheric transmissivitymap [-]");
 

@@ -95,6 +95,8 @@ i.atcorr|input:map
 i.biomass|lightuseefficiency:lightuse_efficiency
 i.biomass|transmissivitysingleway:transmissivity_singleway
 i.biomass|wateravailability:water_availability
+# i.eb.netrad
+i.eb.netrad|transmissivitysingleway|transmissivity_singleway
 # i.evapo.mh
 i.evapo.mh|averagetemperature:average_temperature
 i.evapo.mh|maximumtemperature:maximum_temperature
