@@ -230,11 +230,11 @@ if the <em>-p</em> flag has been used.
 
 With a large number or columns and rows, <b>r.sun</b> can consume
 significant amount of memory. While output raster maps are not
-partitionable, the input raster maps are using the <em>num_partitions</em>
+partitionable, the input raster maps are using the <em>npartitions</em>
 parameter.
 
 In case of out of memory error (<tt>ERROR: G_malloc: out of memory</tt>), the
-<em>num_partitions</em> parameter can be used to run a segmented calculation
+<em>npartitions</em> parameter can be used to run a segmented calculation
 which consumes less memory during the computations.
 
 The amount of memory by <b>r.sun</b> is estimated as follows:
@@ -248,7 +248,7 @@ The amount of memory by <b>r.sun</b> is estimated as follows:
 memory_bytes = rows*cols*(IR*4 + horizon_steps + OR*4)
 
 # with input raster map partitioning:
-memory_bytes = rows*cols*((IR*4+horizon_steps)/num_partitions  + OR*4)
+memory_bytes = rows*cols*((IR*4+horizon_steps)/npartitions  + OR*4)
 </pre></div>
 
 <h2>EXAMPLES</h2>
