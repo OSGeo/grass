@@ -356,17 +356,18 @@ int main(int argc, char **argv)
     output = G_define_standard_option(G_OPT_V_OUTPUT);
 
     type_opt = G_define_standard_option(G_OPT_V_TYPE);
+    type_opt->key = "arc_type";
     type_opt->options = "line,boundary";
     type_opt->answer = "line,boundary";
     type_opt->label = _("Arc type");
 
     afield_opt = G_define_standard_option(G_OPT_V_FIELD);
-    afield_opt->key = "alayer";
+    afield_opt->key = "arc_layer";
     afield_opt->answer = "1";
     afield_opt->label = _("Arc layer");
 
     tfield_opt = G_define_standard_option(G_OPT_V_FIELD);
-    tfield_opt->key = "nlayer";
+    tfield_opt->key = "node_layer";
     tfield_opt->answer = "2";
     tfield_opt->label = _("Node layer (used for terminals)");
 
@@ -377,13 +378,13 @@ int main(int argc, char **argv)
     afcol->description = _("Arcs' cost column (for both directions)");
 
     term_opt = G_define_standard_option(G_OPT_V_CATS);
-    term_opt->key = "tcats";
+    term_opt->key = "terminal_cats";
     term_opt->required = YES;
     term_opt->description =
 	_("Categories of points on terminals (layer is specified by nlayer)");
 
     nsp_opt = G_define_option();
-    nsp_opt->key = "nsp";
+    nsp_opt->key = "npoints";
     nsp_opt->type = TYPE_INTEGER;
     nsp_opt->required = NO;
     nsp_opt->multiple = NO;

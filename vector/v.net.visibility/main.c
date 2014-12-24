@@ -52,18 +52,12 @@ int main(int argc, char *argv[])
     input = G_define_standard_option(G_OPT_V_INPUT);
     output = G_define_standard_option(G_OPT_V_OUTPUT);
 
-    coor = G_define_option();
-    coor->key = "coordinate";
-    coor->key_desc = "x,y";
-    coor->type = TYPE_STRING;
-    coor->required = NO;
-    coor->multiple = YES;
-    coor->description = _("One or more coordinates");
-
-    ovis = G_define_option();
-    ovis->key = "vis";
-    ovis->type = TYPE_STRING;
+    coor = G_define_standard_option(G_OPT_M_COORDS);
+    
+    ovis = G_define_standard_option(G_OPT_V_MAP);
+    ovis->key = "visibility";
     ovis->required = NO;
+    ovis->label = _("Name of input vector map containing visable points");
     ovis->description = _("Add points after computing the visibility graph");
 
     /* options and flags parser */

@@ -69,7 +69,7 @@ v.category myroads_net op=report
 # point          6          1          5
 
 # find the shortest path
-v.net.salesman myroads_net ccats=1-6 out=mysalesman_distance
+v.net.salesman myroads_net center_cats=1-6 out=mysalesman_distance
 
 # set up costs as traveling time
 
@@ -101,7 +101,7 @@ v.db.update myroads_net_time layer=3 col=cost val="length / speed * 60"
 v.db.update myroads_net_time layer=3 col=bcost val="length / speed * 60"
 
 # find the fastest path
-v.net.salesman myroads_net_time alayer=3 nlayer=2 afcol=cost abcol=bcost ccats=1-6 out=mysalesman_time
+v.net.salesman myroads_net_time arc_layer=3 node_layer=2 arc_column=cost arc_backward_column=bcost center_cats=1-6 out=mysalesman_time
 </pre></div>
 
 To display the result, run for example:

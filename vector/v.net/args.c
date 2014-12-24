@@ -50,13 +50,13 @@ void define_options(struct opt *opt)
     opt->action->descriptions = desc;
 
     opt->afield_opt = G_define_standard_option(G_OPT_V_FIELD);
-    opt->afield_opt->key = "alayer";
+    opt->afield_opt->key = "arc_layer";
     opt->afield_opt->gisprompt = "new,layer,layer";
     opt->afield_opt->label = _("Arc layer");
     opt->afield_opt->guisection = _("Arcs");
 
     opt->nfield_opt = G_define_standard_option(G_OPT_V_FIELD);
-    opt->nfield_opt->key = "nlayer";
+    opt->nfield_opt->key = "node_layer";
     opt->nfield_opt->answer = "2";
     opt->nfield_opt->gisprompt = "new,layer,layer";
     opt->nfield_opt->label = _("Node layer");
@@ -90,6 +90,7 @@ void define_options(struct opt *opt)
     opt->snap_flag->description =
 	_("For operation 'connect'. By default, a new line from the point to the network is created.");
     opt->snap_flag->guisection = _("Nodes");
+
 }
 
 void parse_arguments(const struct opt *opt,

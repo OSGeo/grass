@@ -52,7 +52,7 @@ g.copy vect=roads,myroads
 v.net myroads points=startnode out=myroads_net op=connect thresh=200
 
 # define iso networks using distance:
-v.net.iso input=myroads_net output=myroads_net_iso ccats=1-100000 costs=1000,2000,5000
+v.net.iso input=myroads_net output=myroads_net_iso center_cats=1-100000 costs=1000,2000,5000
 </pre></div>
 
 The network is divided into 4 categories:
@@ -125,7 +125,7 @@ v.db.update myroads_net_time layer=3 col=cost val="length / speed * 60"
 v.db.update myroads_net_time layer=3 col=bcost val="length / speed * 60"
 
 # define iso networks using traveling time:
-v.net.iso input=myroads_net_time output=myroads_net_iso_time alayer=3 nlayer=2 afcol=cost abcol=bcost ccats=1-100000 costs=1,2,5
+v.net.iso input=myroads_net_time output=myroads_net_iso_time arc_layer=3 node_layer=2 arc_column=cost arc_backward_column=bcost center_cats=1-100000 costs=1,2,5
 </pre></div>
 
 To display the result, run for example:

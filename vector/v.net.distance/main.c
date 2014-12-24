@@ -75,19 +75,20 @@ int main(int argc, char *argv[])
     map_out = G_define_standard_option(G_OPT_V_OUTPUT);
 
     afield_opt = G_define_standard_option(G_OPT_V_FIELD);
-    afield_opt->key = "alayer";
+    afield_opt->key = "arc_layer";
     afield_opt->answer = "1";
     afield_opt->label = _("Arc layer");
     afield_opt->guisection = _("Cost");
 
     atype_opt = G_define_standard_option(G_OPT_V_TYPE);
+    atype_opt->key = "arc_type";
     atype_opt->options = "line,boundary";
     atype_opt->answer = "line,boundary";
     atype_opt->label = _("Arc type");
     atype_opt->guisection = _("Cost");
 
     nfield_opt = G_define_standard_option(G_OPT_V_FIELD);
-    nfield_opt->key = "nlayer";
+    nfield_opt->key = "node_layer";
     nfield_opt->answer = "2";
     nfield_opt->label = _("Node layer");
     nfield_opt->guisection = _("Cost");
@@ -132,20 +133,20 @@ int main(int argc, char *argv[])
     wheret_opt->guisection = _("To");
 
     afcol = G_define_standard_option(G_OPT_DB_COLUMN);
-    afcol->key = "afcolumn";
+    afcol->key = "arc_column";
     afcol->required = NO;
     afcol->description =
 	_("Arc forward/both direction(s) cost column (number)");
     afcol->guisection = _("Cost");
 
     abcol = G_define_standard_option(G_OPT_DB_COLUMN);
-    abcol->key = "abcolumn";
+    abcol->key = "arc_backward_column";
     abcol->required = NO;
     abcol->description = _("Arc backward direction cost column (number)");
     abcol->guisection = _("Cost");
 
     ncol = G_define_standard_option(G_OPT_DB_COLUMN);
-    ncol->key = "ncolumn";
+    ncol->key = "node_column";
     ncol->required = NO;
     ncol->description = _("Node cost column (number)");
     ncol->guisection = _("Cost");
