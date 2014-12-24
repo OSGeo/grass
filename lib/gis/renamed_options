@@ -346,8 +346,8 @@ r.out.mpeg|qual:quality
 r.out.vrml|elev:elevation
 r.out.vrml|exag:exaggeration
 # r.param.scale
-r.param.scale|s_tol:slope_tol
-r.param.scale|c_tol:curvature_tol
+r.param.scale|s_tol:slope_tolerance
+r.param.scale|c_tol:curvature_tolerance
 r.param.scale|exp:exponent
 # r.profile
 r.profile|null:null_value
