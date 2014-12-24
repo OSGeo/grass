@@ -74,14 +74,14 @@ void interface(int argc, char **argv)
     rast_out->description =
 	_("Name for output raster map containing morphometric parameter");
 
-    tol1_val->key = "slope_tol";
+    tol1_val->key = "slope_tolerance";
     tol1_val->description =
 	_("Slope tolerance that defines a 'flat' surface (degrees)");
     tol1_val->type = TYPE_DOUBLE;
     tol1_val->required = NO;
     tol1_val->answer = "1.0";
 
-    tol2_val->key = "curvature_tol";
+    tol2_val->key = "curvature_tolerance";
     tol2_val->description =
 	_("Curvature tolerance that defines 'planar' surface");
     tol2_val->type = TYPE_DOUBLE;
