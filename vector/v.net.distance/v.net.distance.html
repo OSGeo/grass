@@ -57,7 +57,7 @@ v.net input=streets_net1 points=hospitals output=streets_net2 operation=connect 
 v.category in=streets_net2 op=report
 
 # shortest paths from schools (points in layer 2) to nearest hospitals (points in layer 3)
-v.net.distance in=streets_net2 out=schools_to_hospitals flayer=2 tlayer=3
+v.net.distance in=streets_net2 out=schools_to_hospitals flayer=2 turn_layer=3
 </pre></div>
 
 <p>
