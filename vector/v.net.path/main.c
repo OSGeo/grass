@@ -51,12 +51,12 @@ int main(int argc, char **argv)
     type_opt->label = _("Arc type");
 
     afield_opt = G_define_standard_option(G_OPT_V_FIELD);
-    afield_opt->key = "alayer";
+    afield_opt->key = "arc_layer";
     afield_opt->answer = "1";
     afield_opt->label = _("Arc layer");
 
     nfield_opt = G_define_standard_option(G_OPT_V_FIELD);
-    nfield_opt->key = "nlayer";
+    nfield_opt->key = "node_layer";
     nfield_opt->answer = "2";
     nfield_opt->label = _("Node layer");
 
@@ -67,21 +67,21 @@ int main(int argc, char **argv)
 			      "If not given, read from stdin");
 
     afcol = G_define_option();
-    afcol->key = "afcolumn";
+    afcol->key = "arc_column";
     afcol->type = TYPE_STRING;
     afcol->required = NO;
     afcol->description = _("Arc forward/both direction(s) cost column (number)");
     afcol->guisection = _("Cost");
 
     abcol = G_define_option();
-    abcol->key = "abcolumn";
+    abcol->key = "arc_backward_column";
     abcol->type = TYPE_STRING;
     abcol->required = NO;
     abcol->description = _("Arc backward direction cost column (number)");
     abcol->guisection = _("Cost");
 
     ncol = G_define_option();
-    ncol->key = "ncolumn";
+    ncol->key = "node_column";
     ncol->type = TYPE_STRING;
     ncol->required = NO;
     ncol->description = _("Node cost column (number)");

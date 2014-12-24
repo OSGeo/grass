@@ -135,28 +135,29 @@ int main(int argc, char **argv)
     map = G_define_standard_option(G_OPT_V_INPUT);
     output = G_define_standard_option(G_OPT_V_OUTPUT);
 
+    afield_opt = G_define_standard_option(G_OPT_V_FIELD);
+    afield_opt->key = "arc_layer";
+    afield_opt->label = _("Arc layer");
+
     type_opt = G_define_standard_option(G_OPT_V_TYPE);
+    type_opt->key = "arc_type";
     type_opt->options = "line,boundary";
     type_opt->answer = "line,boundary";
     type_opt->description = _("Arc type");
 
-    afield_opt = G_define_standard_option(G_OPT_V_FIELD);
-    afield_opt->key = "alayer";
-    afield_opt->label = _("Arc layer");
-
     tfield_opt = G_define_standard_option(G_OPT_V_FIELD);
-    tfield_opt->key = "nlayer";
+    tfield_opt->key = "node_layer";
     tfield_opt->answer = "2";
     tfield_opt->label = _("Node layer (used for cities)");
 
     afcol = G_define_option();
-    afcol->key = "afcolumn";
+    afcol->key = "arc_column";
     afcol->type = TYPE_STRING;
     afcol->required = NO;
     afcol->description = _("Arc forward/both direction(s) cost column (number)");
 
     abcol = G_define_option();
-    abcol->key = "abcolumn";
+    abcol->key = "arc_backward_column";
     abcol->type = TYPE_STRING;
     abcol->required = NO;
     abcol->description = _("EXPERIMENTAL: Arc backward direction cost column (number)");
@@ -168,7 +169,7 @@ int main(int argc, char **argv)
     seq->description = _("Name for output file holding node sequence (\"-\" for stdout)");
 
     term_opt = G_define_standard_option(G_OPT_V_CATS);
-    term_opt->key = "ccats";
+    term_opt->key = "center_cats";
     term_opt->required = YES;
     term_opt->description = _("Categories of points ('cities') on nodes "
 			      "(layer is specified by nlayer)");
