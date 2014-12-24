@@ -117,13 +117,13 @@ int main(int argc, char **argv)
     nfield_opt->label = _("Node layer");
 
     afcol = G_define_standard_option(G_OPT_DB_COLUMN);
-    afcol->key = "afcolumn";
+    afcol->key = "arc_column";
     afcol->description =
 	_("Arc forward/both direction(s) cost column (number)");
     afcol->guisection = _("Cost");
 
     abcol = G_define_standard_option(G_OPT_DB_COLUMN);
-    abcol->key = "abcolumn";
+    abcol->key = "arc_backward_column";
     abcol->description = _("Arc backward direction cost column (number)");
     abcol->guisection = _("Cost");
 

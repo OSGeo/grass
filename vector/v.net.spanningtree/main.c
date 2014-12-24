@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
     nfield_opt->guisection = _("Cost");
 
     afcol = G_define_standard_option(G_OPT_DB_COLUMN);
-    afcol->key = "afcolumn";
+    afcol->key = "arc_column";
     afcol->required = NO;
     afcol->description =
 	_("Arc forward/both direction(s) cost column (number)");
