@@ -32,7 +32,7 @@ Each <em>x,y</em> <b>start_coordinates</b> pair gives the geographic location of
 point from which the transportation cost should be figured. As many points as
 desired can be entered by the user. These starting points can also be read
 from a vector points file through the <b>start_points</b> option or from a
-raster map through the <b>start_rast</b> option.
+raster map through the <b>start_raster</b> option.
 <p>
 <em>r.cost</em> will stop cumulating costs when either <b>max_cost</b> is reached,
 or one of the stop points given with <b>stop_coordinates</b> is reached.
@@ -219,7 +219,7 @@ used. The calculation is done with <em>r.cost</em> as follows
 <div class="code"><pre>
   g.region raster=roads -p
   r.mapcalc "area.one = 1"
-  r.cost -k input=area.one output=distance start_rast=roads
+  r.cost -k input=area.one output=distance start_raster=roads
   d.rast distance
   d.rast.num distance
 
@@ -251,7 +251,7 @@ cost map "costsurf" for given starting points (map "sources") and given
 cost raster map "costs":
 
 <div class="code"><pre>
-r.cost input=costs start_rast=sources output=costsurf nearest=costalloc
+r.cost input=costs start_raster=sources output=costsurf nearest=costalloc
 </pre></div>
 
 
