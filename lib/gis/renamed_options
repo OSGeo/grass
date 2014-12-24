@@ -436,6 +436,59 @@ v.lrs.where|thresh:threshold
 v.mkgrid|coor:coordinates
 # v.net
 v.net|thresh:threshold
+v.net|alayer:arc_layer
+v.net|nlayer:node_layer
+v.net|type:arc_type
+v.net|tlayer:turn_layer
+v.net|tuclayer:turn_cat_layer
+# v.net.alloc
+v.net.alloc|alayer:arc_layer
+v.net.alloc|nlayer:node_layer
+v.net.alloc|type:arc_type
+# v.net.allpairs
+v.net.allpairs|alayer:arc_layer
+v.net.allpairs|nlayer:node_layer
+# v.net.bridge
+v.net.bridge|alayer:arc_layer
+v.net.bridge|nlayer:node_layer
+# v.net.centrality
+v.net.centrality|alayer:arc_layer
+v.net.centrality|nlayer:node_layer
+# v.net.components
+v.net.components|alayer:arc_layer
+v.net.components|nlayer:node_layer
+# v.net.connectivity
+v.net.connectivity|alayer:arc_layer
+v.net.connectivity|nlayer:node_layer
+# v.net.distance
+v.net.distance|alayer:arc_layer
+v.net.distance|nlayer:node_layer
+v.net.distance|type:arc_type
+# v.net.flow
+v.net.flow|alayer:arc_layer
+v.net.flow|nlayer:node_layer
+# v.net.iso
+v.net.iso|alayer:arc_layer
+v.net.iso|nlayer:node_layer
+v.net.iso|type:arc_type
+# v.net.path
+v.net.path|alayer:arc_layer
+v.net.path|nlayer:node_layer
+v.net.path|type:arc_type
+# v.net.salesman
+v.net.salesman|alayer:arc_layer
+v.net.salesman|nlayer:node_layer
+v.net.salesman|type:arc_type
+# v.net.spanningtree
+v.net.spanningtree|alayer:arc_layer
+v.net.spanningtree|nlayer:node_layer
+# v.net.steiner
+v.net.steiner|alayer:arc_layer
+v.net.steiner|nlayer:node_layer
+v.net.steiner|type:arc_type
+# v.net.timetable
+v.net.timetable|alayer:arc_layer
+v.net.timetable|nlayer:node_layer
 # v.outlier
 v.outlier|soe:ew_step
 v.outlier|son:ns_step
