@@ -36,7 +36,7 @@ and boundaries not intersecting each other (that includes overlapping).
 The resulting map containing the visibility graph is given in the output map.
 <p>
 If you need to add additional points to compute a shortest path 
-between them afterwards you can use the <em>coordinates</em> parameter, e.g.:
+between them afterwards you can use the <b>coordinates</b> parameter, e.g.:
 <div class="code"><pre>
 coordinates=25556200,6686400,25556400,6686600
 </pre></div>
@@ -45,7 +45,7 @@ where 25556200,6686400 are the coordinate of the first point and
 you can give as many points as you need. They will be added to the 
 visibility graph and edges from them will be computed. You can 
 always add those points after computing the visibility graph. Simply 
-use the <em>visibility</em> parameter. The input will be the original 
+use the <b>visibility</b> parameter. The input will be the original 
 vector map, the vis will be the computed visibility graph and the 
 output the new visibility graph which will be the vis + the new 
 points given with coordinate (edges will be computed as well).
