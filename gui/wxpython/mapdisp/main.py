@@ -28,6 +28,7 @@ This program is free software under the GNU General Public License
 
 import os
 import sys
+import time
 
 from core          import globalvar
 import wx
@@ -488,7 +489,8 @@ if __name__ == "__main__":
 
     RunCommand('g.gisenv',
                set = 'MONITOR_%s_PID=%d' % (monName.upper(), os.getpid()))
-    
+
+    start = time.time()
     gmMap = MapApp(0)
     mapFrame = gmMap.GetMapFrame()
     mapFrame.SetTitle(monName)
@@ -496,6 +498,8 @@ if __name__ == "__main__":
         mapFrame._giface.ShowAllToolbars(monDecor)
         mapFrame._giface.ShowStatusbar(monDecor)
     mapFrame.Show()
+    Debug.msg(1, "WxMonitor started in %.6f sec" % \
+                  (time.time() - start))
     
     gmMap.MainLoop()
     
