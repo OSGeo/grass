@@ -180,9 +180,7 @@ int main(int argc, char **argv)
 
     /* set up the graphics driver and initialize its color-table */
 
-    if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected. "
-			"Use d.mon to select graphics device."));
+    D_open_driver();
     
     D_setup_unity(0);			/* 0 = don't clear frame */
     D_get_src(&t, &b, &l, &r);

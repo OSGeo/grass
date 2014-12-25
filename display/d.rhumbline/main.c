@@ -84,9 +84,7 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("%s - illegal longitude"), parm.coor->answers[3]);
 
 
-    if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected. "
-			"Use d.mon to select graphics device."));
+    D_open_driver();
     
     line_color = D_translate_color(parm.lcolor->answer);
     if (!line_color)

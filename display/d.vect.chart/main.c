@@ -243,9 +243,7 @@ int main(int argc, char **argv)
     if (ctype_opt->answer[0] == 'b')
 	ctype = CTYPE_BAR;
 
-    if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected. "
-			"Use d.mon to select graphics device."));
+    D_open_driver();
     
     /* should we plot the maximum reference on bar plots? */
     if (max_reference_opt->answer != NULL) {

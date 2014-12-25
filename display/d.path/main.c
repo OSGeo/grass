@@ -150,9 +150,7 @@ int main(int argc, char **argv)
 	G_fatal_error(_("%s - illegal y value"), coor_opt->answers[3]);
 
 
-    if (D_open_driver() != 0)
-      	G_fatal_error(_("No graphics device selected. "
-			"Use d.mon to select graphics device."));
+    D_open_driver();
     
     color = G_standard_color_rgb(BLACK);
     if (G_str_to_color(color_opt->answer, &r, &g, &b)) {
