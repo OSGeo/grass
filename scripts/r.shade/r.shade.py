@@ -24,11 +24,11 @@
 #% keywords: visualization
 #%end
 #%option G_OPT_R_INPUT
-#% key: reliefmap
+#% key: shade
 #% description: Name of shaded relief or aspect raster map
 #%end
 #%option G_OPT_R_INPUT
-#% key: drapemap
+#% key: color
 #% label: Name of raster to drape over relief raster map
 #% description: Typically, this raster is elevation or other colorful raster
 #%end
@@ -77,8 +77,8 @@ def remove(maps):
 def main():
     options, flags = gcore.parser()
 
-    drape_map = options['drapemap']
-    relief_map = options['reliefmap']
+    drape_map = options['color']
+    relief_map = options['shade']
     brighten = int(options['brighten'])
     output_map = options['output']
     bgcolor = options['bgcolor']
