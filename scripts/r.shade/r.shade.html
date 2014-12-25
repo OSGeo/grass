@@ -19,8 +19,8 @@ The input for this module can be created for example using
 <p>
 NULL values are propagated by default, so if any of the two input rasters
 contains NULL cell NULL will be also in the output. If <b>-c</b> flag is
-used and cell in <b>drapemap</b> raster is NULL, just <b>reliefmap</b>
-color is used. If cell in <b>reliefmap</b> raster is NULL, shading effect
+used and cell in <b>color</b> raster is NULL, just <b>shade</b>
+color is used. If cell in <b>shade</b> raster is NULL, shading effect
 is not applied and original colors are used. If <b>bgcolor</b> option is
 used, NULL value in any input raster will be in the output replaced
 by the given color.
@@ -46,7 +46,7 @@ dataset location is used to hillshade the <tt>elevation</tt> map:
 
 <div class="code"><pre>
 g.region raster=aspect -p
-r.shade reliefmap=aspect drapemap=elevation output=elevation_aspect_shaded
+r.shade shade=aspect color=elevation output=elevation_aspect_shaded
 
 d.mon wx0
 d.rast elevation_aspect_shaded
@@ -60,7 +60,7 @@ raster map for later use:
 g.region raster=elevation
 r.relief input=elevation output=elevation_shaded_relief
 
-r.shade reliefmap=elevation_shaded_relief drapemap=elevation \
+r.shade shade=elevation_shaded_relief color=elevation \
     output=elevation_relief_shaded
 
 d.mon wx1

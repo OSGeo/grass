@@ -450,7 +450,7 @@ cut-off value. This only works with SFD, not with MFD.
 Display output in a nice way
 <div class="code"><pre>
   r.relief map=elevation.dem
-  d.shade rel=elevation.dem.shade drape=rwater.basin bright=40
+  d.shade shade=elevation.dem.shade color=rwater.basin bright=40
   d.vect rwater_course color=orange
 </pre></div>
 
