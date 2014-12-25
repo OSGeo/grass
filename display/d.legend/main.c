@@ -314,9 +314,7 @@ int main(int argc, char **argv)
 	flip = !flip;
     }
 
-    if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected. "
-			"Use d.mon to select graphics device."));
+    D_open_driver();
 
     white = D_translate_color(DEFAULT_FG_COLOR);
     black = D_translate_color(DEFAULT_BG_COLOR);

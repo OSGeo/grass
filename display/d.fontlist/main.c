@@ -57,9 +57,7 @@ int main(int argc, char **argv)
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected. "
-			"Use d.mon to select graphics device."));
+    D_open_driver();
     
     if (flagL->answer)
 	D_font_info(&list, &count);
