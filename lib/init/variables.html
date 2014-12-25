@@ -329,15 +329,20 @@ PERMANENT
 
 <h3>List of selected GRASS environment variables for rendering</h3>
 <blockquote>
-[ In addition to those which are understood by specific <em>GRASS display
- drivers</em>, the following variables affect rendering. ]
+[ In addition to those which are understood by
+ specific <em><a href="displaydrivers.html">GRASS display
+ drivers</a></em>, the following variables affect rendering. ]
 </blockquote>
 
 <dl>
   <dt>GRASS_RENDER_IMMEDIATE</dt>
   <dd>tells the display library which driver to use; possible
-  values: <em><a href="cairodriver.html">cairo</a></em>, <em><a href="pngdriver.html">png</a></em>, <em><a href="psdriver.html">ps</a></em>
-  or <em><a href="htmldriver.html">html</a></em></dd>
+  values: <em><a href="cairodriver.html">cairo</a></em>, <em><a href="pngdriver.html">png</a></em>, <em><a href="psdriver.html">ps</a></em>,
+    <em><a href="htmldriver.html">html</a></em>
+    or <em>default</em><br>Default display driver
+    is <em><a href="cairodriver.html">cairo</a></em> (if available)
+    otherwise <em><a href="pngdriver.html">png</a></em>.
+  </dd>
   
   <dt>GRASS_RENDER_WIDTH</dt>
   <dd>defines the width of output image (default is 640).</dd>

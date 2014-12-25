@@ -3,7 +3,7 @@
 
   \brief Display Library - Raster graphics subroutines
 
-  (C) 2001-2009, 2011 by the GRASS Development Team
+  (C) 2001-2014 by the GRASS Development Team
 
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -71,6 +71,8 @@ int read_env_file(const char *path)
     FILE *fd;
     char buf[1024];
     char **token;
+
+    G_debug(1, "read_env_file(): %s", path);
     
     fd = fopen(path, "r");
     if (!fd)
@@ -101,6 +103,7 @@ int read_env_file(const char *path)
 int D_open_driver(void)
 {
     const char *p, *m;
+    const struct driver *drv;
     
     G_debug(1, "D_open_driver():");
     p = getenv("GRASS_RENDER_IMMEDIATE");
@@ -109,7 +112,8 @@ int D_open_driver(void)
     if (m && G_strncasecmp(m, "wx", 2) == 0) {
 	/* wx monitors always use GRASS_RENDER_IMMEDIATE. */
 	p = NULL; /* use default display driver */
-    } else if (m) {
+    }
+    else if (m) {
 	char *env;
 	const char *v;
 	char *u_m;
@@ -133,8 +137,14 @@ int D_open_driver(void)
 	if (v) 
 	    read_env_file(v);
     }
+    else if (!p)
+	G_fatal_error(_("Neither %s (managed by d.mon command) nor %s (used for direct rendering) defined"),
+		      "MONITOR", "GRASS_RENDER_IMMEDIATE");
+
+    if (p && G_strcasecmp(p, "default") == 0)
+	p = NULL;
     
-    const struct driver *drv =
+    drv =
 	(p && G_strcasecmp(p, "png")   == 0) ? PNG_Driver() :
 	(p && G_strcasecmp(p, "ps")    == 0) ? PS_Driver() :
 	(p && G_strcasecmp(p, "html")  == 0) ? HTML_Driver() :
@@ -151,9 +161,6 @@ int D_open_driver(void)
     LIB_init(drv);
 
     init();
-
-    if (!getenv("GRASS_RENDER_IMMEDIATE") && !m)
-	return 1;
 
     return 0;
 }
