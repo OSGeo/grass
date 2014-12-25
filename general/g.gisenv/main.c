@@ -9,7 +9,7 @@
  *               Markus Neteler <neteler itc.it>
  *               Martin Landa <landa.martin gmail.com>
  * PURPOSE:      
- * COPYRIGHT:    (C) 2003-2006, 2011-2013 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -72,7 +72,8 @@ int main(int argc, char *argv[])
     unset_opt->key_desc = "variable";
     unset_opt->required = NO;
     unset_opt->guisection = _("Set");
-
+    unset_opt->multiple = YES;
+    
     store_opt = G_define_option();
     store_opt->key = "store";
     store_opt->type = TYPE_STRING;
@@ -161,13 +162,17 @@ int main(int argc, char *argv[])
     }
     
     if (unset_opt->answer) {
-        u_name = parse_variable(unset_opt->answer, &value);
-        if (value)
-            G_warning(_("Value '%s' ignored when unsetting the GRASS variable"),
-                      value);
+        n = 0;
+        while (unset_opt->answers[n]) {
+            u_name = parse_variable(unset_opt->answers[n], &value);
+            if (value)
+                G_warning(_("Value '%s' ignored when unsetting the GRASS variable"),
+                          value);
         
-	G_getenv2(u_name, store); /* G_fatal_error() if not defined */
-	G_unsetenv2(u_name, store);
+            G_getenv2(u_name, store); /* G_fatal_error() if not defined */
+            G_unsetenv2(u_name, store);
+            n++;
+        }
     }
 
     if (u_name)
