@@ -221,9 +221,7 @@ int main(int argc, char **argv)
 
 
     /* Setup driver and check important information */
-    if (D_open_driver() != 0)
-      	G_fatal_error(_("No graphics device selected. "
-			"Use d.mon to select graphics device."));
+    D_open_driver();
     
     D_setup(0);
 

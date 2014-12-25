@@ -166,10 +166,8 @@ int main(int argc, char **argv)
     else
 	fp = stdin;
 
-    if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected. "
-			"Use d.mon to select graphics device."));
-    
+    D_open_driver();
+
     D_setup(0);
 
     where_am_i(coords->answers, fp, have_spheroid, decimal->answer, dcoord->answer);
