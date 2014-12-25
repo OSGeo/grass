@@ -143,7 +143,7 @@ int D_open_driver(void)
 	    read_env_file(v);
     }
     else if (!p)
-	G_fatal_error(_("Neither %s nor %s defined"),
+	G_fatal_error(_("Neither %s (managed by d.mon command) nor %s (used for direct rendering) defined"),
 		      "MONITOR", "GRASS_RENDER_IMMEDIATE");
 
     if (p && G_strcasecmp(p, "default") == 0)
