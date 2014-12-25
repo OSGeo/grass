@@ -123,11 +123,12 @@ def GetLayerNameFromCmd(dcmd, fullyQualified = False, param = None,
             if p == param:
                 params = [(idx, p, v)]
                 break
-            
+
+            # this does not use types, just some (incomplete subset of?) names
             if p in ('map', 'input', 'layer',
                      'red', 'blue', 'green',
-                     'h_map', 's_map', 'i_map',
-                     'reliefmap', 'labels'):
+                     'hue', 'saturation', 'intensity',
+                     'shade', 'labels'):
                 params.append((idx, p, v))
 
         if len(params) < 1:
