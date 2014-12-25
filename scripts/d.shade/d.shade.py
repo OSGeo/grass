@@ -23,11 +23,11 @@
 #% keywords: visualization
 #%end
 #%option G_OPT_R_INPUT
-#% key: reliefmap
+#% key: shade
 #% description: Name of shaded relief or aspect raster map
 #%end
 #%option G_OPT_R_INPUT
-#% key: drapemap
+#% key: color
 #% label: Name of raster to drape over relief raster map
 #% description: Typically, this raster is elevation or other colorful raster
 #%end
@@ -47,8 +47,8 @@ from grass.exceptions import CalledModuleError
 def main():
     options, unused = gcore.parser()
 
-    drape_map = options['drapemap']
-    relief_map = options['reliefmap']
+    drape_map = options['color']
+    relief_map = options['shade']
     brighten = options['brighten']
 
     try:

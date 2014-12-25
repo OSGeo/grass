@@ -32,7 +32,7 @@ dataset location is used to hillshade the <tt>elevation</tt> map:
 <div class="code"><pre>
 g.region raster=aspect -p
 d.mon wx0
-d.shade reliefmap=aspect drapemap=elevation
+d.shade shade=aspect color=elevation
 </pre></div>
 
 <!--
@@ -62,7 +62,7 @@ g.region raster=elevation
 r.relief input=elevation output=elevation_shaded_relief
 
 d.mon wx1
-d.shade reliefmap=elevation_shaded_relief drapemap=elevation
+d.shade shade=elevation_shaded_relief color=elevation
 </pre></div>
 
 Interesting visualizations can be created using different color tables for
