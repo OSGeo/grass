@@ -94,9 +94,7 @@ int main(int argc, char **argv)
 	infile = stdin;
 
     /* open graphics window */
-    if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected. "
-			"Use d.mon to select graphics device."));
+    D_open_driver();
     
     /* Parse and select color */
     if (opt2->answer != NULL) {
