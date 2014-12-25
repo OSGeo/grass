@@ -411,9 +411,9 @@ class MapApp(wx.App):
             toolbars = []
             statusbar = False
         
-        self.mapFrm = DMonFrame(parent = None, id = wx.ID_ANY, Map = self.Map,
-                                giface = self._giface, size = monSize,
-                                toolbars = toolbars, statusbar = statusbar)
+        self.mapFrm = DMonFrame(parent=None, id=wx.ID_ANY, title=name, Map=self.Map,
+                                giface=self._giface, size=monSize,
+                                toolbars=toolbars, statusbar=statusbar)
         
         # FIXME: hack to solve dependency
         self._giface._mapframe = self.mapFrm
