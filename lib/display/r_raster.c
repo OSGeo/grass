@@ -108,6 +108,7 @@ int read_env_file(const char *path)
 int D_open_driver(void)
 {
     const char *p, *m;
+    const struct driver *drv;
     
     G_debug(1, "D_open_driver():");
     p = getenv("GRASS_RENDER_IMMEDIATE");
@@ -116,7 +117,8 @@ int D_open_driver(void)
     if (m && G_strncasecmp(m, "wx", 2) == 0) {
 	/* wx monitors always use GRASS_RENDER_IMMEDIATE. */
 	p = NULL; /* use default display driver */
-    } else if (m) {
+    }
+    else if (m) {
 	char *env;
 	const char *v;
 	char *u_m;
@@ -140,8 +142,14 @@ int D_open_driver(void)
 	if (v) 
 	    read_env_file(v);
     }
+    else if (!p)
+	G_fatal_error(_("Neither %s nor %s defined"),
+		      "MONITOR", "GRASS_RENDER_IMMEDIATE");
+
+    if (p && G_strcasecmp(p, "default") == 0)
+	p = NULL;
     
-    const struct driver *drv =
+    drv =
 	(p && G_strcasecmp(p, "png")   == 0) ? PNG_Driver() :
 	(p && G_strcasecmp(p, "ps")    == 0) ? PS_Driver() :
 	(p && G_strcasecmp(p, "html")  == 0) ? HTML_Driver() :
