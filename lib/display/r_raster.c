@@ -3,7 +3,7 @@
 
   \brief Display Library - Raster graphics subroutines
 
-  (C) 2001-2009, 2011 by the GRASS Development Team
+  (C) 2001-2014 by the GRASS Development Team
 
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -76,6 +76,8 @@ int read_env_file(const char *path)
     FILE *fd;
     char buf[1024];
     char **token;
+
+    G_debug(1, "read_env_file(): %s", path);
     
     fd = fopen(path, "r");
     if (!fd)
