@@ -113,9 +113,7 @@ int main(int argc, char **argv)
     if (infile == NULL)
 	G_fatal_error(_("Unable to open label file <%s>"), label_name);
 
-    if (D_open_driver() != 0)
-      	G_fatal_error(_("No graphics device selected. "
-			"Use d.mon to select graphics device."));
+    D_open_driver();
     
     D_setup(0);
 
