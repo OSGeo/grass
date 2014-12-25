@@ -96,7 +96,7 @@ void Cairo_begin_raster(int mask, int s[2][2], double d[2][2])
     dst_w = dst_r - dst_l;
     dst_h = dst_b - dst_t;
 
-    G_debug(1, "Cairo_begin_raster(): masked=%d, src_lrtb=%d %d %d %d -> w/h=%d/%d, "
+    G_debug(1, "Cairo_begin_raster(): masked=%d, src_lrtb=%d %d %d %d -> w/h=%d %d, "
             "dst_lrtb=%d %d %d %d -> w/h=%d %d",
             masked, src_l, src_r, src_t, src_b, src_w, src_h,
             dst_l, dst_r, dst_t, dst_b, dst_w, dst_h);
@@ -145,7 +145,7 @@ int Cairo_raster(int n, int row,
     if (y1 <= y0)
         return next_row(row, d_y1);
 
-    G_debug(3, "Cairo_raster(): row=%d", row);
+    G_debug(3, "Cairo_raster(): n=%d row=%d", n, row);
 
     for (x = x0; x < x1; x++) {
 	int xx = dst_l + x;
