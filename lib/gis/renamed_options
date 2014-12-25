@@ -17,6 +17,10 @@ d.correlate|layers:map
 d.erase|background:bgcolor
 # d.legend
 d.legend|map:rast
+# d.his
+d.his|h_map:hue
+d.his|i_map:intensity
+d.his|s_map:saturation
 # d.rast
 d.rast|catlist:values
 d.rast|vallist:values
@@ -197,6 +201,13 @@ r.flow|barin:barrier
 r.flow|flout:flowline
 r.flow|lgout:flowpath
 r.flow|dsout:density
+# r.his
+r.his|h_map:hue
+r.his|i_map:intensity
+r.his|s_map:saturation
+r.his|r_map:red
+r.his|g_map:green
+r.his|b_map:blue
 # r.horizon
 r.horizon|elevin:elevation
 r.horizon|horizonstep:step
