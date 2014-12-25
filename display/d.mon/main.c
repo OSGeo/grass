@@ -206,9 +206,7 @@ int main(int argc, char *argv[])
 			width, height, bgcolor_opt->answer,
 			!truecolor_flag->answer, x_flag->answer);
         if (output_opt->answer && !update_flag->answer) {
-            if (D_open_driver() != 0)
-                G_fatal_error(_("No graphics device selected. "
-                                "Use d.mon to select graphics device."));
+            D_open_driver();
             D_setup_unity(0);
             D_erase(bgcolor_opt->answer);
             D_close_driver();

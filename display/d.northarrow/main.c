@@ -126,14 +126,11 @@ int main(int argc, char **argv)
         line_width = 72;
 
 
-    if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected. "
-			"Use d.mon to select graphics device."));
+    D_open_driver();
+
     D_setup(0);
 
-
     draw_n_arrow(east, north, fontsize, n_arrow->answer, line_width);
-
 
     D_save_command(G_recreate_command());
     D_close_driver();

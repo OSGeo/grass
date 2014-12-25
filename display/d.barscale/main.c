@@ -217,14 +217,11 @@ int main(int argc, char **argv)
 	do_background = FALSE;
 
 
-    if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected. "
-			"Use d.mon to select graphics device."));
+    D_open_driver();
+
     D_setup(0);
 
-
     draw_scale(east, north, bar_style, text_position, fontsize);
-
 
     D_save_command(G_recreate_command());
     D_close_driver();
