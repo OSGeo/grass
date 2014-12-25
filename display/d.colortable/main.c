@@ -134,9 +134,8 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Color file for <%s> not available"), map_name);
     if (Rast_read_fp_range(map_name, "", &fp_range) == -1)
 	G_fatal_error(_("Range file for <%s> not available"), map_name);
-    if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected. "
-			"Use d.mon to select graphics device."));
+    
+    D_open_driver();
 
     D_setup_unity(0);
     D_get_src(&t, &b, &l, &r);

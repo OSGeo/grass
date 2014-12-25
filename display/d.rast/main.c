@@ -93,9 +93,7 @@ int main(int argc, char **argv)
     overlay = !flag_n->answer;
     invert = flag_i->answer;
 
-    if (D_open_driver() != 0)
-	G_fatal_error(_("No graphics device selected. "
-			"Use d.mon to select graphics device."));
+    D_open_driver();
 
     fp = Rast_map_is_fp(name, "");
     if (vallist->answer) {

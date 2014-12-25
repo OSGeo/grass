@@ -22,9 +22,8 @@ void start(const char *name, const char *output)
     G_add_error_handler(error_handler, (char *)name);
     
     if (!output) {
-        if (D_open_driver() != 0)
-            G_fatal_error(_("No graphics device selected. "
-                            "Use d.mon to select graphics device."));
+        D_open_driver();
+        
         output_name = D_get_file();
         if (!output_name) 
             return;
