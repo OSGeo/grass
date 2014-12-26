@@ -971,7 +971,7 @@ void set_option(const char *string)
         if (strncmp(the_key, at_opt->key, key_len) == 0 ||
 	    match_option(the_key, at_opt->key)) {
 	    if (found >= MAX_MATCHES)
-		G_fatal_error("too many matches (limit %d)", MAX_MATCHES);
+		G_fatal_error("Too many matches (limit %d)", MAX_MATCHES);
 	    matches[found++] = at_opt;
 	}
     }
@@ -1034,6 +1034,9 @@ void set_option(const char *string)
         append_error(err);
         return;
     }
+
+    if (getenv("GRASS_FULL_OPTION_NAMES") && strcmp(the_key, opt->key) != 0)
+	G_warning(_("<%s> is an abbreviation for <%s>"), the_key, opt->key);
     
     /* Allocate memory where answer is stored */
     if (opt->count++) {
@@ -1276,6 +1279,9 @@ int check_string(const char *ans, const char **opts, int *result)
 
     if (found == 1)
 	*result = matches[0];
+
+    if (found > 0 && getenv("GRASS_FULL_OPTION_NAMES") && strcmp(ans, opts[matches[0]]) != 0)
+	G_warning(_("<%s> is an abbreviation for <%s>"), ans, opts[matches[0]]);
 
     switch (found) {
     case 0: return OUT_OF_RANGE;
