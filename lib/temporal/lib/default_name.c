@@ -3,7 +3,7 @@
   
   \brief Temporal GIS Library (base) - default settings
   
-  (C) 2012 by the GRASS Development Team
+  (C) 2012-2014 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -32,7 +32,7 @@ const char *tgis_get_default_driver_name(void)
 /*!
   \brief Get default TGIS database name for the sqlite connection
 
-  The default name is $GISDBASE/$LOCATION_NAME/PERMANENT/tgis/sqlite.db
+  The default name is $GISDBASE/$LOCATION_NAME/$MAPSET/tgis/sqlite.db
 
   \return pointer to default TGIS database name
 */
