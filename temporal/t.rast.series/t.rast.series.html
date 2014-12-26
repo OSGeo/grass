@@ -1,36 +1,36 @@
 <h2>DESCRIPTION</h2>
 
-<em>t.rast.series</em> is a simple wrapper for the raster module 
-<b>r.series</b>. It supports a subset of the aggregation methods of 
+<em>t.rast.series</em> is a simple wrapper for the raster module
+<b>r.series</b>. It supports a subset of the aggregation methods of
 <b>r.series</b>.
 <p>
-The input of this module is a single space time raster dataset, the 
-output is a single raster map layer. A subset of the input space time 
-raster dataset can be selected using the <b>where</b> option. The 
-sorting of the raster map layer can be set using the <b>order</b> 
-option. Be aware that the order of the maps can significantly influence 
-the result of the aggregation (e.g.: slope). By default the maps are 
+The input of this module is a single space time raster dataset, the
+output is a single raster map layer. A subset of the input space time
+raster dataset can be selected using the <b>where</b> option. The
+sorting of the raster map layer can be set using the <b>order</b>
+option. Be aware that the order of the maps can significantly influence
+the result of the aggregation (e.g.: slope). By default the maps are
 ordered by <b>start_time</b>.
 
 
 <h2>EXAMPLE</h2>
 
-Example for monthly aggregation with complex <b>where</b> statements 
+Example for monthly aggregation with complex <b>where</b> statements
 to aggregate a single month in a time series of several years:
-<p>
+
 <div class="code"><pre>
 # January averages
-t.rast.series input=monthly_aggregates \
+t.rast.series input=tempmean_monthly \
     output=jan_average method=average \
     where="start_time = datetime(start_time, 'start of year', '0 month')"
 
 # February averages
-t.rast.series input=monthly_aggregates \
+t.rast.series input=tempmean_monthly \
     output=feb_average method=average \
     where="start_time = datetime(start_time, 'start of year', '1 month')"
 
 # March averages
-t.rast.series input=monthly_aggregates \
+t.rast.series input=tempmean_monthly \
     output=mar_average method=average \
     where="start_time = datetime(start_time, 'start of year', '2 month')"
 </pre></div>

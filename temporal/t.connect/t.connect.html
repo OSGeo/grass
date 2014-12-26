@@ -1,39 +1,41 @@
 <h2>DESCRIPTION</h2>
 
 <em>t.connect</em> allows the user to set the temporal database connection.
-The default setting is that the temporal database of 
-type sqlite3 is located in the current mapset directory.
+The default setting is that the temporal database of
+type <em>sqlite3</em> is located in the current mapset directory.
 
 <p>The <b>-p</b> flag will display the current temporal database connection parameters.
 <p>The <b>-pg</b> flag will display the current temporal database connection parameters
-using shell style. 
-<p>The <b>-c</b> flag will silently check if the temporal database connection 
-parameters have been set, and if not will set them to use GRASS's 
+using shell style.
+<p>The <b>-c</b> flag will silently check if the temporal database connection
+parameters have been set, and if not will set them to use GRASS's
 default values.
 
-<h2>Note</h2>
+<h2>NOTE</h2>
 
-Setting the connection with t.connect will not test the connection for validity. 
+Setting the connection with t.connect will not test the connection for validity.
 Hence a database connection will not be established.
 <p>
-The connection values are stored in the mapset's <tt>VAR</tt> file.  
-The <b>-d</b> flag will set the default 
+The connection values are stored in the mapset's <tt>VAR</tt> file.
+The <b>-d</b> flag will set the default
 TGIS connection parameters.
-A SQLite3 database "tgis/sqlite.db" will be created in the current mapset directory. 
+A SQLite database "tgis/sqlite.db" will be created in the current mapset directory.
 It will be located in the "tgis" sub-directory to not
-interfere with the sqlite3 database used for vector attribute storage.
+interfere with the <em>sqlite3<em> database used for vector attribute storage.
 <p>
-In case you have tens of thousands of maps to register in the 
-temporal database or you need concurrent read and write access in the 
-temporal database, consider to use a postgresql connection instead.
+In case you have tens of thousands of maps to register in the
+temporal database or you need concurrent read and write access in the
+temporal database, consider to use a PostgreSQL connection instead.
 <p>
-Be aware that you have to set the postgresql connection explicitly in
+Be aware that you have to set the PostgreSQL connection explicitly in
 every mapset that should store temporal information in the temporal database.
 <p>
-Postgresql and sqlite3 databases can not be mixed in a location.
+PostgreSQL and SQLite databases can not be mixed in a location.
+
+<h2>EXAMPLES</h2>
 
 <h3>SQLite</h3>
-
+The SQLite database is created automatically when used the first time.
 <div class="code"><pre>
 t.connect driver=sqlite database='$GISDBASE/$LOCATION_NAME/PERMANENT/tgis/sqlite.db'
 t.connect -p
@@ -41,11 +43,12 @@ t.info -s
 </pre></div>
 
 <p>
-The SQLite database is created automatically when used the first time.
 
 <h3>PostgreSQL</h3>
-In case you use a PostgreSQL database, you will need to specify the TGIS database connection 
-for each mapset.
+
+When using a PostgreSQL database, the user will need to specify the TGIS
+database connection for each mapset.
+
 <div class="code"><pre>
 t.connect driver=pg database="dbname=grass_test user=soeren password=abcdefgh"
 t.connect -p

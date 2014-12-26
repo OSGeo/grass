@@ -1,187 +1,103 @@
 <h2>DESCRIPTION</h2>
 
 <em>t.rast.neighbors</em> performs <a href="r.neighbors.html">r.neighbors</a>
-computations on the maps of a space time raster dataset (STRDS). This 
+computations on the maps of a space time raster dataset (STRDS). This
 module supports a subset of options that are available in
-<a href="r.neighbors.html">r.neighbors</a>. The size of the neighborhood 
+<a href="r.neighbors.html">r.neighbors</a>. The size of the neighborhood
 and the aggregation method can be chosen.
 <p>
 The user must provide an input and an output space time raster dataset and
 the basename  of the resulting raster maps. The resulting STRDS will have
-the same temporal resolution as the input dataset. 
+the same temporal resolution as the input dataset.
 All maps will be processed using the current region settings.
 <p>
-The user can select a subset of the input space time raster dataset for 
-processing using a SQL WHERE statement. The number of CPU's to be used 
-for parallel processing can be specified with the <em>nprocs</em> 
+The user can select a subset of the input space time raster dataset for
+processing using a SQL WHERE statement. The number of CPU's to be used
+for parallel processing can be specified with the <em>nprocs</em>
 option, to speedup the computation on multi-core system.
 
 
 <h2>EXAMPLE</h2>
 
-In this example we create 7 raster maps that will be registered in a 
-single space time raster dataset named <em>precipitation_daily</em> 
-using a daily temporal granularity. The names of the raster maps are 
-stored in a text file that is used for raster map registration. 
-<p>
-A neighborhood average smoothing with a window size of 5 cells will be 
-performed on the space time raster dataset <em>precipitation_daily</em> 
-resulting in the output space time raster dataset 
-<em>precipitation_daily_smooth</em>. The base name of the new generated 
-raster maps is <em>prec_smooth</em>. The temporal resolution of the 
-resulting STRDS is identical to the input STRDS.
-
+To smooth the maps contained into a space time dataset run:
 
 <div class="code"><pre>
-MAPS="map_1 map_2 map_3 map_4 map_5 map_6 map_7"
+t.rast.neighbors input=tempmean_monthly output=smooth_tempmean_monthly \
+                 base=tmean_smooth size=5 method=average nprocs=4
 
-count=1
-for map in ${MAPS} ; do
-    r.mapcalc --o expr="${map} = rand(0, 550)" seed=${count}
-    echo ${map} >> map_list.txt 
-    count=$((count+1))
-done
-
-t.create --o type=strds temporaltype=absolute \
-         output=precipitation_daily \
-         title="Daily precipitation" \
-         description="Test dataset with daily precipitation"
-
-t.register -i --o type=rast input=precipitation_daily \
-           file=map_list.txt start="2012-08-20" increment="1 days"
-
-t.info type=strds input=precipitation_daily
-
+# show some info about the new space time dataset
+t.info smooth_tempmean_monthly
  +-------------------- Space Time Raster Dataset -----------------------------+
  |                                                                            |
  +-------------------- Basic information -------------------------------------+
- | Id: ........................ precipitation_daily@PERMANENT
- | Name: ...................... precipitation_daily
- | Mapset: .................... PERMANENT
- | Creator: ................... soeren
+ | Id: ........................ smooth_tempmean_monthly@climate_2000_2012
+ | Name: ...................... smooth_tempmean_monthly
+ | Mapset: .................... climate_2000_2012
+ | Creator: ................... lucadelu
  | Temporal type: ............. absolute
- | Creation time: ............. 2014-11-23 17:08:11.135848
- | Modification time:.......... 2014-11-23 17:08:11.647709
+ | Creation time: ............. 2014-11-27 11:41:36.444579
+ | Modification time:.......... 2014-11-27 11:41:39.978232
  | Semantic type:.............. mean
  +-------------------- Absolute time -----------------------------------------+
- | Start time:................. 2012-08-20 00:00:00
- | End time:................... 2012-08-27 00:00:00
- | Granularity:................ 1 day
+ | Start time:................. 2009-01-01 00:00:00
+ | End time:................... 2013-01-01 00:00:00
+ | Granularity:................ 1 month
  | Temporal type of maps:...... interval
  +-------------------- Spatial extent ----------------------------------------+
- | North:...................... 80.0
- | South:...................... 0.0
- | East:.. .................... 120.0
- | West:....................... 0.0
+ | North:...................... 320000.0
+ | South:...................... 10000.0
+ | East:.. .................... 935000.0
+ | West:....................... 120000.0
  | Top:........................ 0.0
  | Bottom:..................... 0.0
  +-------------------- Metadata information ----------------------------------+
- | Raster register table:...... raster_map_register_8a6ea51f0d584b1fb2d48747e4d4c41c
- | North-South resolution min:. 10.0
- | North-South resolution max:. 10.0
- | East-west resolution min:... 10.0
- | East-west resolution max:... 10.0
- | Minimum value min:.......... 0.0
- | Minimum value max:.......... 8.0
- | Maximum value min:.......... 533.0
- | Maximum value max:.......... 549.0
+ | Raster register table:...... raster_map_register_ea1c9a83524e41a784d72744b08c6107
+ | North-South resolution min:. 500.0
+ | North-South resolution max:. 500.0
+ | East-west resolution min:... 500.0
+ | East-west resolution max:... 500.0
+ | Minimum value min:.......... -6.428905
+ | Minimum value max:.......... 18.867296
+ | Maximum value min:.......... 4.247691
+ | Maximum value max:.......... 28.767953
  | Aggregation type:........... None
- | Number of registered maps:.. 7
+ | Number of registered maps:.. 48
  |
  | Title:
- | Daily precipitation
+ | Monthly precipitation
  | Description:
- | Test dataset with daily precipitation
+ | Dataset with monthly precipitation
  | Command history:
- | # 2014-11-23 17:08:11 
- | t.create --o type="strds" temporaltype="absolute"
- |     output="precipitation_daily" title="Daily precipitation"
- |     description="Test dataset with daily precipitation"
- | # 2014-11-23 17:08:11 
- | t.register -i --o type="rast"
- |     input="precipitation_daily" file="map_list.txt" start="2012-08-20"
- |     increment="1 days"
- | 
+ | # 2014-11-27 11:41:36
+ | t.rast.neighbors input="tempmean_monthly"
+ |     output="smooth_tempmean_monthly" base="tmean_smooth" size="5"
+ |     method="average" nprocs="4"
+ |
  +----------------------------------------------------------------------------+
 
 
-t.rast.list input=precipitation_daily columns=name,start_time,min,max
+# new now compare the values between original data and the smoothed one
+t.rast.list input=smooth_tempmean_monthly columns=name,start_time,min,max
 
+t.rast.list input=smooth_tempmean_monthly columns=name,start_time,min,max
 name|start_time|min|max
-map_1|2012-08-20 00:00:00|2.0|549.0
-map_2|2012-08-21 00:00:00|4.0|549.0
-map_3|2012-08-22 00:00:00|8.0|548.0
-map_4|2012-08-23 00:00:00|3.0|549.0
-map_5|2012-08-24 00:00:00|0.0|533.0
-map_6|2012-08-25 00:00:00|2.0|543.0
-map_7|2012-08-26 00:00:00|1.0|539.0
+tmean_smooth_1|2009-01-01 00:00:00|-3.361714|7.409861
+tmean_smooth_2|2009-02-01 00:00:00|-1.820261|7.986794
+tmean_smooth_3|2009-03-01 00:00:00|2.912971|11.799684
+...
+tmean_smooth_46|2012-10-01 00:00:00|9.38767|18.709297
+tmean_smooth_47|2012-11-01 00:00:00|1.785653|10.911189
+tmean_smooth_48|2012-12-01 00:00:00|1.784212|11.983857
 
-
-t.rast.neighbors --o input=precipitation_daily \
-    output=precipitation_daily_smooth base=prec_smooth \
-    size=5 method=average nprocs=3
-    
-t.info type=strds input=precipitation_daily_smooth
-
- +-------------------- Space Time Raster Dataset -----------------------------+
- |                                                                            |
- +-------------------- Basic information -------------------------------------+
- | Id: ........................ precipitation_daily_smooth@PERMANENT
- | Name: ...................... precipitation_daily_smooth
- | Mapset: .................... PERMANENT
- | Creator: ................... soeren
- | Temporal type: ............. absolute
- | Creation time: ............. 2014-11-23 17:08:59.430447
- | Modification time:.......... 2014-11-23 17:08:59.482735
- | Semantic type:.............. mean
- +-------------------- Absolute time -----------------------------------------+
- | Start time:................. 2012-08-20 00:00:00
- | End time:................... 2012-08-27 00:00:00
- | Granularity:................ 1 day
- | Temporal type of maps:...... interval
- +-------------------- Spatial extent ----------------------------------------+
- | North:...................... 80.0
- | South:...................... 0.0
- | East:.. .................... 120.0
- | West:....................... 0.0
- | Top:........................ 0.0
- | Bottom:..................... 0.0
- +-------------------- Metadata information ----------------------------------+
- | Raster register table:...... raster_map_register_0ae9d82363db46a991665a0e51a46743
- | North-South resolution min:. 10.0
- | North-South resolution max:. 10.0
- | East-west resolution min:... 10.0
- | East-west resolution max:... 10.0
- | Minimum value min:.......... 139.666667
- | Minimum value max:.......... 214.666667
- | Maximum value min:.......... 292.8
- | Maximum value max:.......... 372.888889
- | Aggregation type:........... None
- | Number of registered maps:.. 7
- |
- | Title:
- | Daily precipitation
- | Description:
- | Test dataset with daily precipitation
- | Command history:
- | # 2014-11-23 17:08:59 
- | t.rast.neighbors --o input="precipitation_daily"
- |     output="precipitation_daily_smooth" base="prec_smooth" size="5"
- |     method="average" nprocs="3"
- | 
- +----------------------------------------------------------------------------+
-
-
-t.rast.list input=precipitation_daily_smooth columns=name,start_time,min,max
-
+t.rast.list input=tempmean_monthly columns=name,start_time,min,max
 name|start_time|min|max
-prec_smooth_1|2012-08-20 00:00:00|171.888889|360.066667
-prec_smooth_2|2012-08-21 00:00:00|214.666667|322.333333
-prec_smooth_3|2012-08-22 00:00:00|139.666667|372.888889
-prec_smooth_4|2012-08-23 00:00:00|183.8|356.083333
-prec_smooth_5|2012-08-24 00:00:00|163.466667|292.8
-prec_smooth_6|2012-08-25 00:00:00|204.48|324.111111
-prec_smooth_7|2012-08-26 00:00:00|153.75|339.866667
+2009_01_tempmean|2009-01-01 00:00:00|-3.380823|7.426054
+2009_02_tempmean|2009-02-01 00:00:00|-1.820261|8.006386
+2009_03_tempmean|2009-03-01 00:00:00|2.656992|11.819274
+...
+2012_10_tempmean|2012-10-01 00:00:00|9.070884|18.709297
+2012_11_tempmean|2012-11-01 00:00:00|1.785653|10.911189
+2012_12_tempmean|2012-12-01 00:00:00|1.761019|11.983857
 </pre></div>
 
 <h2>SEE ALSO</h2>

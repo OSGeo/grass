@@ -1,140 +1,130 @@
 <h2>DESCRIPTION</h2>
 
-<em>t.info</em> reports informations about any dataset that is 
-registered in the temporal database in human readable or shell script 
-style. Datasets are raster, 3D raster and vector maps as well as their 
-corresponding space time datasets (STRDS, STR3DS and STVDS). This 
-module reports the informations that are stored in the temporal 
-database. These are basic informations (id, name, mapset, creator, 
-creation time, temporal type), the temporal and spatial extent and 
-dataset type specific metadata. The user has to utilize <em>r.info</em>, 
-<em>r3.info</em>, <em>v.info</em> to report detailed informations about 
-raster, 3D raster and vector maps, since not all map specific 
-informations and metadata are stored in the temporal database. 
+<em>t.info</em> reports informations about any dataset that is
+registered in the temporal database in human readable or shell script
+style. Datasets are raster, 3D raster and vector maps as well as their
+corresponding space time datasets (STRDS, STR3DS and STVDS). This
+module reports the informations that are stored in the temporal
+database. These are basic informations (id, name, mapset, creator,
+creation time, temporal type), the temporal and spatial extent and
+dataset type specific metadata. The user has to utilize <em>r.info</em>,
+<em>r3.info</em>, <em>v.info</em> to report detailed informations about
+raster, 3D raster and vector maps, since not all map specific
+informations and metadata are stored in the temporal database.
 <p>
-In addition, informations about the chosen temporal database backend 
+In addition, informations about the chosen temporal database backend
 can be reported.
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
 
-In this example we first report temporal database backend information 
-using <em>t.info -s</em>. Then we create a single raster maps using 
-<em>r.mapcalc</em> with random values that will be registered in a 
-single space time raster dataset named <em>precipitation_daily</em> 
-using a daily temporal granularity. We use <em>t.create</em> for the 
-space time raster dataset creation and <em>t.register</em> to register 
-the raster map in the space time raster dataset. At the end we report 
-informations about the raster map and the space time raster dataset to 
-stdout.
+<h3>Temporal DBMI information</h3>
+
+In order to obtain information about temporal DBMI backend, run:
 
 <div class="code"><pre>
-
 t.info -s
  +------------------- Temporal DBMI backend information ----------------------+
  | DBMI Python interface:...... sqlite3
- | Temporal database string:... /home/soeren/grassdata/LL/soeren/tgis/sqlite.db
- | SQL template path:.......... /home/soeren/src/grass7.1/grass_trunk/dist.x86_64-unknown-linux-gnu/etc/sql
+ | Temporal database string:... /grassdata/nc_spm_temporal_workshop/climate_2000_2012/tgis/sqlite.db
+ | SQL template path:.......... /usr/local/grass-7.0.0/etc/sql
  | tgis_db_version .......... 2
  | creation_time .......... 2014-11-22 20:06:46.863733
  | tgis_version .......... 2
  +----------------------------------------------------------------------------+
+</pre></div>
 
+<h3>space time dataset information</h3>
 
-r.mapcalc expr="map1 = rand(0, 10)" -s
+In order to obtain information about a space time dataset, run:
 
-t.create type=strds temporaltype=absolute \
-         output=precipitation_daily \
-         title="Daily precipitation" \
-         description="Test dataset with daily precipitation"
-
-t.register -i type=rast input=precipitation_daily \
-           maps=map1 start=2012-08-20 increment="1 days"
-
-t.info type=rast input=map1
-
- +-------------------- Raster Dataset ----------------------------------------+
- |                                                                            |
- +-------------------- Basic information -------------------------------------+
- | Id: ........................ map1@soeren
- | Name: ...................... map1
- | Mapset: .................... soeren
- | Creator: ................... soeren
- | Temporal type: ............. absolute
- | Creation time: ............. 2014-11-23 15:20:28.034464
- +-------------------- Absolute time -----------------------------------------+
- | Start time:................. 2012-08-20 00:00:00
- | End time:................... 2012-08-21 00:00:00
- +-------------------- Spatial extent ----------------------------------------+
- | North:...................... 80.0
- | South:...................... 0.0
- | East:.. .................... 120.0
- | West:....................... 0.0
- | Top:........................ 0.0
- | Bottom:..................... 0.0
- +-------------------- Metadata information ----------------------------------+
- | Datatype:................... CELL
- | Number of columns:.......... 8
- | Number of rows:............. 12
- | Number of cells:............ 96
- | North-South resolution:..... 10.0
- | East-west resolution:....... 10.0
- | Minimum value:.............. 0.0
- | Maximum value:.............. 9.0
- | Registered datasets ........ precipitation_daily@soeren
- +----------------------------------------------------------------------------+
-
-
-t.info type=strds input=precipitation_daily
-
+<div class="code"><pre>
+t.info in=tempmean_monthly
  +-------------------- Space Time Raster Dataset -----------------------------+
  |                                                                            |
  +-------------------- Basic information -------------------------------------+
- | Id: ........................ precipitation_daily@soeren
- | Name: ...................... precipitation_daily
- | Mapset: .................... soeren
- | Creator: ................... soeren
+ | Id: ........................ tempmean_monthly@climate_2000_2012
+ | Name: ...................... tempmean_monthly
+ | Mapset: .................... climate_2000_2012
+ | Creator: ................... lucadelu
  | Temporal type: ............. absolute
- | Creation time: ............. 2014-11-23 15:20:27.587727
- | Modification time:.......... 2014-11-23 15:20:28.054839
+ | Creation time: ............. 2014-11-27 08:50:48.443229
+ | Modification time:.......... 2014-11-27 09:44:32.800282
  | Semantic type:.............. mean
  +-------------------- Absolute time -----------------------------------------+
- | Start time:................. 2012-08-20 00:00:00
- | End time:................... 2012-08-21 00:00:00
- | Granularity:................ 1 day
+ | Start time:................. 2009-01-01 00:00:00
+ | End time:................... 2013-01-01 00:00:00
+ | Granularity:................ 1 month
  | Temporal type of maps:...... interval
  +-------------------- Spatial extent ----------------------------------------+
- | North:...................... 80.0
- | South:...................... 0.0
- | East:.. .................... 120.0
- | West:....................... 0.0
+ | North:...................... 320000.0
+ | South:...................... 10000.0
+ | East:.. .................... 935000.0
+ | West:....................... 120000.0
  | Top:........................ 0.0
  | Bottom:..................... 0.0
  +-------------------- Metadata information ----------------------------------+
- | Raster register table:...... raster_map_register_068a3f307c774379805285e33bbaa6d8
- | North-South resolution min:. 10.0
- | North-South resolution max:. 10.0
- | East-west resolution min:... 10.0
- | East-west resolution max:... 10.0
- | Minimum value min:.......... 0.0
- | Minimum value max:.......... 0.0
- | Maximum value min:.......... 9.0
- | Maximum value max:.......... 9.0
+ | Raster register table:...... raster_map_register_d567423784c740bea1fba75dc7c0fa3d
+ | North-South resolution min:. 500.0
+ | North-South resolution max:. 500.0
+ | East-west resolution min:... 500.0
+ | East-west resolution max:... 500.0
+ | Minimum value min:.......... -6.464337
+ | Minimum value max:.......... 18.54137
+ | Maximum value min:.......... 4.247691
+ | Maximum value max:.......... 28.805381
  | Aggregation type:........... None
- | Number of registered maps:.. 1
+ | Number of registered maps:.. 48
  |
  | Title:
- | Daily precipitation
+ | Monthly precipitation
  | Description:
- | Test dataset with daily precipitation
+ | Dataset with monthly precipitation
  | Command history:
- | # 2014-11-23 15:20:27 
+ | # 2014-11-27 08:50:48
  | t.create type="strds" temporaltype="absolute"
- |     output="precipitation_daily" title="Daily precipitation"
- |     description="Test dataset with daily precipitation"
- | # 2014-11-23 15:20:28 
- | t.register -i type="rast" input="precipitation_daily"
- |     maps="map1" start="2012-08-20" increment="1 days"
- | 
+ |     output="tempmean_monthly" title="Monthly precipitation"
+ |     description="Dataset with monthly precipitation"
+ | # 2014-11-27 09:44:32
+ | t.register -i type="rast" inp="tempmean_monthly" maps="2009_01_tempmean,...,2012_12_tempmean" start="2009-01-01" increment="1 months"
+ |
+ +----------------------------------------------------------------------------+
+</pre></div>
+
+<h3>Temporal maps information</h3>
+
+In order to obtain information about a map in a space time dataset, run:
+
+<div class="code"><pre>
+t.info in=2009_01_tempmean type=rast
+ +-------------------- Raster Dataset ----------------------------------------+
+ |                                                                            |
+ +-------------------- Basic information -------------------------------------+
+ | Id: ........................ 2009_01_tempmean@climate_2000_2012
+ | Name: ...................... 2009_01_tempmean
+ | Mapset: .................... climate_2000_2012
+ | Creator: ................... lucadelu
+ | Temporal type: ............. absolute
+ | Creation time: ............. 2014-11-27 09:44:26.280147
+ +-------------------- Absolute time -----------------------------------------+
+ | Start time:................. 2009-01-01 00:00:00
+ | End time:................... 2009-02-01 00:00:00
+ +-------------------- Spatial extent ----------------------------------------+
+ | North:...................... 320000.0
+ | South:...................... 10000.0
+ | East:.. .................... 935000.0
+ | West:....................... 120000.0
+ | Top:........................ 0.0
+ | Bottom:..................... 0.0
+ +-------------------- Metadata information ----------------------------------+
+ | Datatype:................... DCELL
+ | Number of columns:.......... 620
+ | Number of rows:............. 1630
+ | Number of cells:............ 1010600
+ | North-South resolution:..... 500.0
+ | East-west resolution:....... 500.0
+ | Minimum value:.............. -3.380823
+ | Maximum value:.............. 7.426054
+ | Registered datasets ........ tempmean_monthly@climate_2000_2012
  +----------------------------------------------------------------------------+
 </pre></div>
 
