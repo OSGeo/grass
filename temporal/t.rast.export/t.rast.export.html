@@ -1,67 +1,59 @@
 <h2>DESCRIPTION</h2>
 
-This module exports a space time raster dataset as a tar archive. The 
-archive contains the raster maps either as GeoTIFF files or as GRASS 
-binary files exported using <em>r.out.bin</em>. The map specific color tables 
+This module exports a space time raster dataset as a tar archive. The
+archive contains the raster maps either as GeoTIFF files or as GRASS
+binary files exported using <em>r.out.bin</em>. The map specific color tables
 are exported in case of GeoTIFF files. In addition several metadata files
 are created in the archive that describe the temporal layout.
-All time stamps are stored in the file "list.txt". For each map 
-one row. The name of the map, the start time and the end time are 
-written. In case of a time instance, the start time is equal to the end 
-time. The "init.txt" files stores the temporal type, the number of 
-maps, the chosen export format and some other metadata. The "proj.txt" 
-files stores the projection information as proj4 string of the location 
-the space time raster dataset was exported from. The file "readme.txt" 
-describes the file format. The output of <em>r.info</em> is stored in 
+All time stamps are stored in the file "list.txt". For each map
+one row. The name of the map, the start time and the end time are
+written. In case of a time instance, the start time is equal to the end
+time. The "init.txt" files stores the temporal type, the number of
+maps, the chosen export format and some other metadata. The "proj.txt"
+files stores the projection information as proj4 string of the location
+the space time raster dataset was exported from. The file "readme.txt"
+describes the file format. The output of <em>r.info</em> is stored in
 "metadata.txt".
 <p>
-The tar archive can be compressed using the <b>compress</b> option. 
-Gzip and bzip2 are available. A <b>where</b> option can be specified, 
-to export only a subset of the space time dataset. Archives exported 
+The tar archive can be compressed using the <b>compress</b> option.
+Gzip and bzip2 are available. A <b>where</b> option can be specified,
+to export only a subset of the space time dataset. Archives exported
 with <em>t.rast.export</em> can be importet with <em>t.rast.import</em>.
 
 <h2>EXAMPLE</h2>
 
-In this example we create 7 raster maps that will be registered in a 
-single space time raster dataset named <em>precipitation_daily</em> 
-using a daily temporal granularity. The names of the raster maps are 
-stored in a text file that is used for raster map registration. We 
-export the created space time raster dataset and will have a look at 
-some files that are created: 
+In this example all the maps of 2012 of tempmean_monthly will be exported
 
 <div class="code"><pre>
-MAPS="map_1 map_2 map_3 map_4 map_5 map_6 map_7"
-
-for map in ${MAPS} ; do
-    r.mapcalc --o expr="${map} = 1" 
-    echo ${map} >> map_list.txt 
-done
-
-t.create type=strds temporaltype=absolute \
-         output=precipitation_daily \
-         title="Daily precipitation" \
-         description="Test dataset with daily precipitation"
-
-t.register -i type=rast input=precipitation_daily \
-           file=map_list.txt start="2012-08-20" increment="1 days"
-
-t.rast.export input=precipitation_daily output=precipitation_daily.tar
+t.rast.export input=tempmean_monthly output=tempmean_monthly.tar.bzip2 \
+              where="start_time >= '2012-01-01' and start_time < '2013-01-01'"
 
 tar xvf precipitation_daily.tar
-map_1.tif
-map_1.color
-map_2.tif
-map_2.color
-map_3.tif
-map_3.color
-map_4.tif
-map_4.color
-map_5.tif
-map_5.color
-map_6.tif
-map_6.color
-map_7.tif
-map_7.color
+
+2012_01_tempmean.tif
+2012_01_tempmean.color
+2012_02_tempmean.tif
+2012_02_tempmean.color
+2012_03_tempmean.tif
+2012_03_tempmean.color
+2012_04_tempmean.tif
+2012_04_tempmean.color
+2012_05_tempmean.tif
+2012_05_tempmean.color
+2012_06_tempmean.tif
+2012_06_tempmean.color
+2012_07_tempmean.tif
+2012_07_tempmean.color
+2012_08_tempmean.tif
+2012_08_tempmean.color
+2012_09_tempmean.tif
+2012_09_tempmean.color
+2012_10_tempmean.tif
+2012_10_tempmean.color
+2012_11_tempmean.tif
+2012_11_tempmean.color
+2012_12_tempmean.tif
+2012_12_tempmean.color
 list.txt
 proj.txt
 init.txt
@@ -74,32 +66,44 @@ stds_type=strds
 format=GTiff
 temporal_type=absolute
 semantic_type=mean
-number_of_maps=7
-north=80.0
-south=0.0
-east=120.0
-west=0.0
+number_of_maps=48
+north=320000.0
+south=10000.0
+east=935000.0
+west=120000.0
 
 
 cat proj.txt
-+proj=longlat
++proj=lcc
++lat_1=36.16666666666666
++lat_2=34.33333333333334
++lat_0=33.75
++lon_0=-79
++x_0=609601.22
++y_0=0
 +no_defs
 +a=6378137
-+rf=298.257223563
-+towgs84=0,0,0,0,0,0,0
++rf=298.257222101
++towgs84=0.000,0.000,0.000
++to_meter=1
 
 
 cat list.txt
-map_1|2012-08-20 00:00:00|2012-08-21 00:00:00
-map_2|2012-08-21 00:00:00|2012-08-22 00:00:00
-map_3|2012-08-22 00:00:00|2012-08-23 00:00:00
-map_4|2012-08-23 00:00:00|2012-08-24 00:00:00
-map_5|2012-08-24 00:00:00|2012-08-25 00:00:00
-map_6|2012-08-25 00:00:00|2012-08-26 00:00:00
-map_7|2012-08-26 00:00:00|2012-08-27 00:00:00
+2012_01_tempmean|2012-01-01 00:00:00|2012-02-01 00:00:00
+2012_02_tempmean|2012-02-01 00:00:00|2012-03-01 00:00:00
+2012_03_tempmean|2012-03-01 00:00:00|2012-04-01 00:00:00
+2012_04_tempmean|2012-04-01 00:00:00|2012-05-01 00:00:00
+2012_05_tempmean|2012-05-01 00:00:00|2012-06-01 00:00:00
+2012_06_tempmean|2012-06-01 00:00:00|2012-07-01 00:00:00
+2012_07_tempmean|2012-07-01 00:00:00|2012-08-01 00:00:00
+2012_08_tempmean|2012-08-01 00:00:00|2012-09-01 00:00:00
+2012_09_tempmean|2012-09-01 00:00:00|2012-10-01 00:00:00
+2012_10_tempmean|2012-10-01 00:00:00|2012-11-01 00:00:00
+2012_11_tempmean|2012-11-01 00:00:00|2012-12-01 00:00:00
+2012_12_tempmean|2012-12-01 00:00:00|2013-01-01 00:00:00
 
 
-cat readme.txt 
+cat readme.txt
 This space time raster dataset was exported with t.rast.export of GRASS GIS 7
 
 Files:

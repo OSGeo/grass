@@ -1,100 +1,43 @@
 <h2>DESCRIPTION</h2>
 
-<em>t.create</em> is used to create space time datasets of 
+<em>t.create</em> is used to create space time datasets of
 type raster (STRDS), 3D raster (STR3DS) and vector (STVDS).
 <p>
-Space time datasets represent spatio-temporal fields in the temporal 
-GRASS framework. They are designed to collect any amount of time 
-stamped maps with time intervals and time instances. The temporal type 
-of a space time dataset can be absolute or relative and must be set on 
-dataset creation besides the name and the description.
+Space time datasets represent spatio-temporal fields in the temporal
+GRASS framework. They are designed to collect any amount of time
+stamped maps with time intervals and time instances. The temporal
+type of a space time dataset can be absolute (means with a fixed date)
+or relative (only sequential maps) and must be set during
+dataset creation along with the name and the description.
 <p>
-Time stamped maps can registered in and unregistered from space time 
-datasets. The spatio-temporal extent as well as the metadata of a space 
-time dataset is derived from its registered maps. Hence the metadata is 
+Time stamped maps can registered in and unregistered from space time
+datasets. The spatio-temporal extent as well as the metadata of a space
+time dataset is derived from its registered maps. Hence the metadata is
 dependent from the dataset type (raster, 3D raster, vector).
 
 <h2>EXAMPLE</h2>
 
-In this example we create 7 raster maps using r.mapcalc with random 
-values that will be registered in a single space time raster dataset 
-named <em>precipitation_daily</em> using a daily temporal granularity. 
-The names of the raster maps are stored in a text file that is used for 
-raster map registration. We use <em>t.create</em> for the space time 
-raster dataset creation and <em>t.register</em> to register the raster 
-maps in the space time raster dataset. At the end we report 
-informations about the space time raster dataset to stdout using 
-<em>t.info</em>.
+<h3>Absolute STRDS dataset</h3>
+
+Create a raster space time datasets
 
 <div class="code"><pre>
-
-MAPS="map_1 map_2 map_3 map_4 map_5 map_6 map_7"
-
-for map in ${MAPS} ; do
-    r.mapcalc --o expr="${map} = rand(0, 10)" -s
-    echo ${map} >> map_list.txt 
-done
-
 t.create type=strds temporaltype=absolute \
-         output=precipitation_daily \
-         title="Daily precipitation" \
-         description="Test dataset with daily precipitation"
+         output=precipitation_monthly \
+         title="Monthly precipitation" \
+         description="Dataset with monthly precipitation"
+</pre></div>
 
-t.register -i type=rast input=precipitation_daily \
-           file=map_list.txt start=2012-08-20 increment="1 days"
+<h3>Relative STVDS dataset</h3>
 
-t.info type=strds input=precipitation_daily
+Create a vector space time datasets
 
- +-------------------- Space Time Raster Dataset -----------------------------+
- |                                                                            |
- +-------------------- Basic information -------------------------------------+
- | Id: ........................ precipitation_daily@soeren
- | Name: ...................... precipitation_daily
- | Mapset: .................... soeren
- | Creator: ................... soeren
- | Temporal type: ............. absolute
- | Creation time: ............. 2014-11-23 15:18:42.710663
- | Modification time:.......... 2014-11-23 15:18:48.868022
- | Semantic type:.............. mean
- +-------------------- Absolute time -----------------------------------------+
- | Start time:................. 2012-08-20 00:00:00
- | End time:................... 2012-08-27 00:00:00
- | Granularity:................ 1 day
- | Temporal type of maps:...... interval
- +-------------------- Spatial extent ----------------------------------------+
- | North:...................... 80.0
- | South:...................... 0.0
- | East:.. .................... 120.0
- | West:....................... 0.0
- | Top:........................ 0.0
- | Bottom:..................... 0.0
- +-------------------- Metadata information ----------------------------------+
- | Raster register table:...... raster_map_register_da8e16e0bdeb4bd3a0970a0980f11468
- | North-South resolution min:. 10.0
- | North-South resolution max:. 10.0
- | East-west resolution min:... 10.0
- | East-west resolution max:... 10.0
- | Minimum value min:.......... 0.0
- | Minimum value max:.......... 0.0
- | Maximum value min:.......... 9.0
- | Maximum value max:.......... 9.0
- | Aggregation type:........... None
- | Number of registered maps:.. 7
- |
- | Title:
- | Daily precipitation
- | Description:
- | Test dataset with daily precipitation
- | Command history:
- | # 2014-11-23 15:18:42 
- | t.create type="strds" temporaltype="absolute"
- |     output="precipitation_daily" title="Daily precipitation"
- |     description="Test dataset with daily precipitation"
- | # 2014-11-23 15:18:48 
- | t.register -i type="rast" input="precipitation_daily"
- |     file="map_list.txt" start="2012-08-20" increment="1 days"
- | 
- +----------------------------------------------------------------------------+
+<div class="code"><pre>
+t.create type=stvds temporaltype=relative \
+         output=precipitation_monthly_30y \
+         title="Monthly precipitation 30 years" \
+         description="Test dataset with monthly average \
+         precipitation in the last 30 year"
 </pre></div>
 
 <h2>SEE ALSO</h2>

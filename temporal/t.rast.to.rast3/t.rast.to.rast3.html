@@ -1,14 +1,14 @@
 <h2>DESCRIPTION</h2>
 
-<em>t.rast.to.rast3</em> is designed to convert a space time raster 
-dataset (STRDS) into a space time voxel cube. A space time voxel cube 
-is a 3 dimensional raster map layer (3D raster map or voxel map layer) 
+<em>t.rast.to.rast3</em> is designed to convert a space time raster
+dataset (STRDS) into a space time voxel cube. A space time voxel cube
+is a 3 dimensional raster map layer (3D raster map or voxel map layer)
 that as time as unit for the z-dimension.
 <p>
-A space time raster dataset that should be converted into a space time 
-voxel cube must have a valid temporal topology. Hence, overlapping or 
-inclusion of time stamps is not allowed. The granularity of the STRDS 
-is used to set the resolution of the 3D raster map layer and to sample 
+A space time raster dataset that should be converted into a space time
+voxel cube must have a valid temporal topology. Hence, overlapping or
+inclusion of time stamps is not allowed. The granularity of the STRDS
+is used to set the resolution of the 3D raster map layer and to sample
 the registered time stamped raster map layers.
 <p>
 Gaps between raster map layer in the STRDS will
@@ -17,34 +17,30 @@ be represented by NULL values in the voxel map layer.
 
 <h2>NOTE</h2>
 
-The reference time for all space time voxel cubes is 
-1900-01-0100:00:00. This allows the alignment space time voxel cubes 
+The reference time for all space time voxel cubes is
+1900-01-0100:00:00. This allows the alignment space time voxel cubes
 with different granularities.
 <p>
-Be aware that the granularity of a STRDS is used to sample time stamped 
-map layers! If you have gaps between monthly intervals that have the 
-size of a second, the monthly intervals will be sampled by a second 
-based granularity as well. This may result in millions of space time 
+Be aware that the granularity of a STRDS is used to sample time stamped
+map layers! If you have gaps between monthly intervals that have the
+size of a second, the monthly intervals will be sampled by a second
+based granularity as well. This may result in millions of space time
 voxel cube layers!
 
 <h2>EXAMPLE</h2>
-
-This simple example that converts a space time raster dataset that has 
-gaps between its time stamped map layers into a space time voxel cube. 
-The time stamped raster map layer have a interval size of three months. 
-However, the granularity is one month, since of each gap has an 
-interval size of one month. The resulting voxel map layer has 9 depths. 
-Hence, the space time raster dataset is sampled by its granularity 
-resulting in 9 layer.
+To create a voxel map layer from a subset of the <em>tempmean_monthly</em>
+space time dataset, run:
 
 <div class="code"><pre>
-g.region s=0 n=80 w=0 e=120 b=0 t=1 res=10 res3=10 -p3
+# create the subset for 2012 data
+t.rast.extract input=tempmean_monthly output=tempmean_monthly_later_2012 \
+               where="start_time >= '2012-01-01'"
 
-r.mapcalc --o expr="a1 = 100.0"
-r.mapcalc --o expr="a2 = 200.0"
-r.mapcalc --o expr="a3 = 300.0"
+# set the right 3D region
+g.region -p3 res3=500
 
-n1=`g.tempfile pid=1 -d`
+# convert to 3D raster map
+t.rast.to.rast3 in=tempmean_monthly_later_2012@climate_2009_2012 out=tempmean_monthly_2012
 
 cat > "${n1}" << EOF
 a1|2001-01-01|2001-04-01
@@ -116,68 +112,67 @@ t.info type=rast3d input=cube
  +-------------------- 3D Raster Dataset -------------------------------------+
  |                                                                            |
  +-------------------- Basic information -------------------------------------+
- | Id: ........................ cube@PERMANENT
- | Name: ...................... cube
- | Mapset: .................... PERMANENT
- | Creator: ................... soeren
+ | Id: ........................ tempmean_monthly_2012@climate_2009_2012
+ | Name: ...................... tempmean_monthly_2012
+ | Mapset: .................... climate_2009_2012
+ | Creator: ................... lucadelu
  | Temporal type: ............. absolute
- | Creation time: ............. 2014-11-23 16:28:46.341227
+ | Creation time: ............. 2014-11-28 11:10:51.679294
  +-------------------- Absolute time -----------------------------------------+
- | Start time:................. 2001-01-01 00:00:00
- | End time:................... 2001-10-01 00:00:00
+ | Start time:................. 2012-01-01 00:00:00
+ | End time:................... 2013-01-01 00:00:00
  +-------------------- Spatial extent ----------------------------------------+
- | North:...................... 80.0
- | South:...................... 0.0
- | East:.. .................... 120.0
- | West:....................... 0.0
- | Top:........................ 1222.0
- | Bottom:..................... 1213.0
+ | North:...................... 320000.0
+ | South:...................... 10000.0
+ | East:.. .................... 935000.0
+ | West:....................... 120000.0
+ | Top:........................ 1357.0
+ | Bottom:..................... 1345.0
  +-------------------- Metadata information ----------------------------------+
  | Datatype:................... DCELL
- | Number of columns:.......... 8
- | Number of rows:............. 12
- | Number of cells:............ 864
- | North-South resolution:..... 10.0
- | East-west resolution:....... 10.0
- | Minimum value:.............. 100.0
- | Maximum value:.............. 300.0
- | Number of depths:........... 9
+ | Number of columns:.......... 620
+ | Number of rows:............. 1630
+ | Number of cells:............ 12127200
+ | North-South resolution:..... 500.0
+ | East-west resolution:....... 500.0
+ | Minimum value:.............. -0.534994
+ | Maximum value:.............. 28.794653
+ | Number of depths:........... 12
  | Top-Bottom resolution:...... 1.0
- | Registered datasets ........ 
+ | Registered datasets ........
  +----------------------------------------------------------------------------+
 
 
-r3.info cube
-
+r3.info tempmean_monthly_2012
  +----------------------------------------------------------------------------+
- | Layer:    cube                           Date: Sun Nov 23 16:28:46 2014    |
- | Mapset:   PERMANENT                      Login of Creator: soeren          |
- | Location: LL                                                               |
- | DataBase: /home/soeren/grassdata                                           |
+ | Layer:    tempmean_monthly_2012          Date: Fri Nov 28 11:10:50 2014    |
+ | Mapset:   climate_2009_2012              Login of Creator: lucadelu        |
+ | Location: nc_spm_temporal_workshop                                         |
+ | DataBase: /grassdata                                                       |
  | Title:    Space time voxel cube                                            |
  | Units:    none                                                             |
  | Vertical unit: months                                                      |
- | Timestamp: 1 Jan 2001 00:00:00 / 1 Oct 2001 00:00:00                       |
+ | Timestamp: none                                                            |
  |----------------------------------------------------------------------------|
  |                                                                            |
  |   Type of Map:  3d cell              Number of Categories: 0               |
  |   Data Type:    DCELL                                                      |
- |   Rows:         8                                                          |
- |   Columns:      12                                                         |
- |   Depths:       9                                                          |
- |   Total Cells:  864                                                        |
- |   Total size:           116 Bytes                                          |
- |   Number of tiles:      1                                                  |
- |   Mean tile size:       116 Bytes                                          |
- |   Tile size in memory:  6912 Bytes                                         |
- |   Number of tiles in x, y and  z:   1, 1, 1                                |
- |   Dimension of a tile in x, y, z:   12, 8, 9                               |
+ |   Rows:         620                                                        |
+ |   Columns:      1630                                                       |
+ |   Depths:       12                                                         |
+ |   Total Cells:  12127200                                                   |
+ |   Total size:           28414287 Bytes                                     |
+ |   Number of tiles:      4230                                               |
+ |   Mean tile size:       6717 Bytes                                         |
+ |   Tile size in memory:  23520 Bytes                                        |
+ |   Number of tiles in x, y and  z:   47, 45, 2                              |
+ |   Dimension of a tile in x, y, z:   35, 14, 6                              |
  |                                                                            |
- |        Projection: Latitude-Longitude (zone 0)                             |
- |            N:        80N    S:          0   Res:    10                     |
- |            E:       120E    W:          0   Res:    10                     |
- |            T:       1222    B:       1213   Res:     1                     |
- |   Range of data:   min =        100 max =        300                       |
+ |        Projection: Lambert Conformal Conic (zone 0)                        |
+ |            N:     320000    S:      10000   Res:   500                     |
+ |            E:     935000    W:     120000   Res:   500                     |
+ |            T:       1357    B:       1345   Res:     1                     |
+ |   Range of data:   min = -0.53499434 max = 28.79465315                     |
  |                                                                            |
  |   Data Source:                                                             |
  |                                                                            |
@@ -187,9 +182,14 @@ r3.info cube
  |    This space time voxel cube was created with t.rast.to.rast3             |
  |                                                                            |
  |   Comments:                                                                |
- |    r.to.rast3 input="a1@PERMANENT,a1@PERMANENT,a1@PERMANENT,temporary_n\   |
- |    ull_map_22842,a2@PERMANENT,a2@PERMANENT,temporary_null_map_22842,a3@\   |
- |    PERMANENT,a3@PERMANENT" output="cube" tilesize=32                       |
+ |    r.to.rast3 input="2012_01_tempmean@climate_2009_2012,2012_02_tempmea\   |
+ |    n@climate_2009_2012,2012_03_tempmean@climate_2009_2012,2012_04_tempm\   |
+ |    ean@climate_2009_2012,2012_05_tempmean@climate_2009_2012,2012_06_tem\   |
+ |    pmean@climate_2009_2012,2012_07_tempmean@climate_2009_2012,2012_08_t\   |
+ |    empmean@climate_2009_2012,2012_09_tempmean@climate_2009_2012,2012_10\   |
+ |    _tempmean@climate_2009_2012,2012_11_tempmean@climate_2009_2012,2012_\   |
+ |    12_tempmean@climate_2009_2012" output="tempmean_monthly_2012" tilesi\   |
+ |    ze=32                                                                   |
  |                                                                            |
  +----------------------------------------------------------------------------+
 </pre></div>

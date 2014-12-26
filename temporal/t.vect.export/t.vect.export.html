@@ -28,50 +28,44 @@ Each vector map represents random locations
 within the boundary of the state taken at 1 month intervals.
 
 <div class="code"><pre>
-db.connect -d
+    
+t.vect.export in=shoreline out=shoreline_nc
 
-for i in `seq 1 5` ; do
-    v.random output=map_$i n=500 input=boundary_state@PERMANENT
-    echo map_$i >> map_list.txt
-done
-
-t.create type=stvds temporaltype=absolute \
-         output=random_locations \
-         title="Random locations" \
-         description="Vector test dataset with random locations"
-
-t.register -i type=vect input=random_locations \
-           file=map_list.txt start="2012-01-01" increment="1 months"
-
-t.vect.export input=random_locations output=random_locations.tar
-
-tar xvf random_locations.tar
-map_1.xml
-map_1.xsd
-map_2.xml
-map_2.xsd
-map_3.xml
-map_3.xsd
-map_4.xml
-map_4.xsd
-map_5.xml
-map_5.xsd
+tar xvfj shoreline_nc
+shoreline_1849_1873.xml
+shoreline_1849_1873.xsd
+shoreline_1925_1946.xml
+shoreline_1925_1946.xsd
+shoreline_1970_1988.xml
+shoreline_1970_1988.xsd
+shoreline_1997.xml
+shoreline_1997.xsd
+shoreline_1998.xml
+shoreline_1998.xsd
+shoreline_2003.xml
+shoreline_2003.xsd
+shoreline_2004.xml
+shoreline_2004.xsd
+shoreline_2009.xml
+shoreline_2009.xsd
 list.txt
 proj.txt
 init.txt
 readme.txt
 metadata.txt
 
+
 cat init.txt
 stds_type=stvds
 format=GML
-temporal_type=absolute
+temporal_type=relative
 semantic_type=mean
-number_of_maps=5
-north=258414.015442
-south=185016.401592
-east=678328.848292
-west=596711.453211
+relative_time_unit=years
+number_of_maps=8
+north=1039175.31479
+south=9403.301982
+east=3052352.00337
+west=651481.84739
 
 cat proj.txt
 +proj=lcc
@@ -87,12 +81,17 @@ cat proj.txt
 +towgs84=0.000,0.000,0.000
 +to_meter=1
 
+
 cat list.txt
-map_1|2012-01-01 00:00:00|2012-02-01 00:00:00
-map_2|2012-02-01 00:00:00|2012-03-01 00:00:00
-map_3|2012-03-01 00:00:00|2012-04-01 00:00:00
-map_4|2012-04-01 00:00:00|2012-05-01 00:00:00
-map_5|2012-05-01 00:00:00|2012-06-01 00:00:00
+shoreline_1849_1873|1849|1873
+shoreline_1925_1946|1925|1946
+shoreline_1970_1988|1970|1988
+shoreline_1997|1997|1997
+shoreline_1998|1998|1998
+shoreline_2003|2003|2003
+shoreline_2004|2004|2004
+shoreline_2009|2009|2009
+
 
 cat readme.txt
 This space time vector dataset was exported with t.vect.export of GRASS GIS 7
@@ -105,6 +104,7 @@ Files:
                  time stamps in ISO-Format. Field separator is |
  metadata.txt -- The output of t.info
    readme.txt -- This file
+
 </pre></div>
 
 

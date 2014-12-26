@@ -1,11 +1,25 @@
 <h2>DESCRIPTION</h2>
 
-This module renames space time datasets of different types (strds, stvds, str3ds) 
+This module renames space time datasets of different types (STRDS, STVDS, STR3DS)
 and updates the space time dataset register entries of the registered maps.
 
 <h2>NOTE</h2>
 
-Renaming of space time datasets works only for sqlite3 based temporal databases.
+Renaming of space time datasets works only for SQLite based temporal databases.
+
+<h2>EXAMPLE</h2>
+
+A new vector space time dataset will be created, renamed and in the end removed
+
+<div class="code"><pre>
+#Create new and empty STVDS
+t.create type=stvds output=toberenamed semantictype=mean \
+  title="Example to rename" \
+  description="This is an example just to show how rename"
+
+t.rename input=toberenamed output=newname type=stvds
+
+t.remove input=newname type=stvds
 
 <h2>SEE ALSO</h2>
 
