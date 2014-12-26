@@ -33,7 +33,7 @@ eval `g.gisenv`
 t.create --o type=strds temporaltype=absolute output=precip_abs1 title="A test with input files" descr="A test with input files"
 
 # The first @test
-t.register -i type=rast input=precip_abs1 file="${n1}" start="2001-01-01" increment="1 months"
+t.register -i type=raster input=precip_abs1 file="${n1}" start="2001-01-01" increment="1 months"
 
 t.rast.export input=precip_abs1 output=strds_export.tar.bz2 compression=bzip2 format=GTiff directory=test
 t.rast.export input=precip_abs1 output=strds_export_pack.tar.gz compression=gzip format=pack directory=test
@@ -57,9 +57,9 @@ t.rast.import --o location=new_test_4 input=strds_export_pack.tar.gz output=prec
               title="A test" description="Description of a test"
 ls -la $GISDBASE/new_test_4/PERMANENT
 
-t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.unregister type=raster maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_abs1
-g.remove -f type=rast name=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+g.remove -f type=raster name=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 rm -rf test
 rm strds_export.tar.bz2
 rm strds_export_pack.tar.gz

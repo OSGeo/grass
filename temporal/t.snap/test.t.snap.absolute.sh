@@ -25,7 +25,7 @@ prec_6|2001-06-01|2001-07-01
 EOF
 
 t.create --o type=strds temporaltype=absolute output=precip_abs title="A test" descr="A test"
-t.register --o type=rast input=precip_abs maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 \
+t.register --o type=raster input=precip_abs maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 \
     start="2001-01-01 12:00:00" increment="14 days"
 
 # The first @test
@@ -39,7 +39,7 @@ t.rast.list input=precip_abs
 
 # The second @test
 # Creating a valid topology
-t.register --o type=rast input=precip_abs file=${n1}
+t.register --o type=raster input=precip_abs file=${n1}
 
 t.rast.list input=precip_abs
 t.topology input=precip_abs
@@ -49,5 +49,5 @@ t.snap --o input=precip_abs
 t.rast.list input=precip_abs
 t.topology input=precip_abs
 
-t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.unregister type=raster maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_abs

@@ -26,7 +26,7 @@ t.create type=stvds temporaltype=absolute \
          title="Random locations" \
          description="Vector test dataset with random locations"
 
-t.register -i type=vect input=random_locations \
+t.register -i type=vector input=random_locations \
            file=map_list.txt start="2012-01-01" increment="1 months"
 
 t.vect.list random_locations

@@ -16,8 +16,8 @@ r3.mapcalc --o expr="prec_6 = rand(0, 650)" -s
 
 t.create --o type=str3ds temporaltype=absolute output=precip_abs1 title="A test" descr="A test"
 t.create --o type=str3ds temporaltype=absolute output=precip_abs2 title="A test" descr="A test"
-t.register -i type=raster3d input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="3 months"
-t.register --o type=raster3d input=precip_abs2 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.register -i type=raster_3d input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="3 months"
+t.register --o type=raster_3d input=precip_abs2 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 
 t.info type=str3ds input=precip_abs1
 t.info type=str3ds input=precip_abs2
@@ -33,6 +33,6 @@ t.rast3d.mapcalc --o --v -s inputs=precip_abs1,precip_abs2,precip_abs3 output=pr
            method=equal nprocs=6
 t.info type=str3ds input=precip_abs4
 
-t.unregister type=raster3d maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
-t.unregister type=raster3d maps=new_prec_1,new_prec_2,new_prec_3,new_prec_4,new_prec_5,new_prec_6
+t.unregister type=raster_3d maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.unregister type=raster_3d maps=new_prec_1,new_prec_2,new_prec_3,new_prec_4,new_prec_5,new_prec_6
 t.remove type=str3ds input=precip_abs1,precip_abs2,precip_abs3,precip_abs4

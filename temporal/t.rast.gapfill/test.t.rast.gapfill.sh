@@ -21,17 +21,17 @@ prec_3|2001-05-01|2001-06-01
 EOF
 
 t.create --v  type=strds temporaltype=absolute output=precip_abs title="A test" descr="A test"
-t.register --v type=rast input=precip_abs file="${n1}"
+t.register --v type=raster input=precip_abs file="${n1}"
 
 # @test
 t.rast.gapfill input=precip_abs base="prec" nprocs=2
 t.info precip_abs
 
-t.info type=rast input=prec_6
-t.info type=rast input=prec_7
+t.info type=raster input=prec_6
+t.info type=raster input=prec_7
 
 # @postprocess
 
-t.unregister --v type=rast maps=prec_1,prec_2,prec_3,prec_6,prec_7
+t.unregister --v type=raster maps=prec_1,prec_2,prec_3,prec_6,prec_7
 t.remove --v type=strds input=precip_abs
-g.remove -f type=rast name=prec_1,prec_2,prec_3,prec_6,prec_7
+g.remove -f type=raster name=prec_1,prec_2,prec_3,prec_6,prec_7

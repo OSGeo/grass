@@ -35,7 +35,7 @@ eval `g.gisenv`
 t.create type=strds temporaltype=absolute output=precip_abs1 title="A test with input files" descr="A test with input files"
 
 # The first @test
-t.register -i type=rast input=precip_abs1 file="${n1}"
+t.register -i type=raster input=precip_abs1 file="${n1}"
 
 t.rast.export input=precip_abs1 output=strds_export.tar.bz2 compression=bzip2 format=AAIGrid directory=test
 t.rast.export input=precip_abs1 output=strds_export.tar.gz compression=gzip format=GTiff directory=test
@@ -72,9 +72,9 @@ t.rast.import --o input=strds_export_pack.tar.bz2 output=precip_abs1 directory=t
 r.info prec_1
 
 # Cleaning up
-t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.unregister type=raster maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_abs1
-g.remove -f type=rast name=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+g.remove -f type=raster name=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 rm -rf test
 rm strds_export.tar.bz2
 rm strds_export.tar.gz

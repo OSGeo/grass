@@ -28,7 +28,7 @@ t.create type=strds temporaltype=absolute \
          title="Daily precipitation" \
          description="Test dataset with daily precipitation"
 
-t.register -i type=rast input=precipitation_daily_1 \
+t.register -i type=raster input=precipitation_daily_1 \
            maps=map1,map2 start=2012-08-20 increment="1 days"
 
 t.info precipitation_daily_1
@@ -94,7 +94,7 @@ t.create type=strds temporaltype=absolute \
          title="Daily precipitation" \
          description="Test dataset with daily precipitation"
 
-t.register -i type=rast input=precipitation_daily_2 \
+t.register -i type=raster input=precipitation_daily_2 \
            maps=map3,map4 start=2012-08-22 increment="1 days"
 
 t.info precipitation_daily_2

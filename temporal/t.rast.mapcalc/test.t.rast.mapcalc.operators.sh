@@ -16,8 +16,8 @@ r.mapcalc -s expr="prec_6 = rand(0, 650)"
 
 t.create type=strds temporaltype=absolute output=precip_abs1 title="A test" descr="A test"
 t.create type=strds temporaltype=absolute output=precip_abs2 title="A test" descr="A test"
-t.register -i type=rast input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="3 months"
-t.register type=rast input=precip_abs2 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.register -i type=raster input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="3 months"
+t.register type=raster input=precip_abs2 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 
 t.info precip_abs1
 t.info precip_abs2

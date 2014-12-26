@@ -14,7 +14,7 @@ r.mapcalc --o expr="prec_5 = rand(0, 300)" -s
 r.mapcalc --o expr="prec_6 = rand(0, 650)" -s
 
 t.create --o type=strds temporaltype=absolute output=precip_abs title="A test" descr="A test"
-t.register -i --o type=rast input=precip_abs maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 \
+t.register -i --o type=raster input=precip_abs maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 \
     start="2001-01-01 12:00:00" increment="14 days"
 
 t.rast.list input=precip_abs
@@ -42,5 +42,5 @@ t.rast.list input=precip_abs
 # that will result in wrong number of days in the next month
 t.shift --o input=precip_abs granularity="1 month"
 
-t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.unregister type=raster maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_abs

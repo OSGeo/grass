@@ -16,7 +16,7 @@ r.mapcalc expr="temp_5 = 25"
 r.mapcalc expr="temp_6 = 30"
 
 t.create type=strds temporaltype=absolute output=temp_abs1 title="A test" descr="A test"
-t.register -i type=rast input=temp_abs1 maps=temp_1,temp_2,temp_3,temp_4,temp_5,temp_6 \
+t.register -i type=raster input=temp_abs1 maps=temp_1,temp_2,temp_3,temp_4,temp_5,temp_6 \
     start="2001-01-01" increment="2 months"
 
 # The first @test
@@ -38,10 +38,10 @@ r.mapcalc expr="maximum = 78"
 
 # We use different
 t.create type=strds temporaltype=absolute output=minimum title="minimum limit" descr="minimum limit"
-t.register -i type=rast input=minimum maps=minimum start="2001-01-01" increment="8 months"
+t.register -i type=raster input=minimum maps=minimum start="2001-01-01" increment="8 months"
 
 t.create type=strds temporaltype=absolute output=maximum title="maximum limit" descr="maximum limit"
-t.register -i type=rast input=maximum maps=maximum start="2001-01-01" increment="10 months"
+t.register -i type=raster input=maximum maps=maximum start="2001-01-01" increment="10 months"
 
 t.rast.accdetect input=temp_accumulation occurrence=temp_occ base=temp_occ \
     range=20,80 start="2001-01-01" cycle="12 months" min=minimum \

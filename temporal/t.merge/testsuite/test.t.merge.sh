@@ -38,7 +38,7 @@ t.merge inputs=precip_abs1 output=precip_abs4
 t.info precip_abs4
 t.rast.list precip_abs4
 
-t.unregister type=rast maps=prec_1,prec_2,prec_3 input=precip_abs4
+t.unregister type=raster maps=prec_1,prec_2,prec_3 input=precip_abs4
 t.merge --o inputs=precip_abs1,precip_abs2,precip_abs3 output=precip_abs4
 t.info precip_abs4
 t.rast.list precip_abs4
@@ -48,5 +48,5 @@ t.info precip_abs4
 t.rast.list precip_abs4
 
 t.remove type=strds input=precip_abs1,precip_abs2,precip_abs3,precip_abs4
-t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
-g.remove -f type=rast name=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.unregister type=raster maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+g.remove -f type=raster name=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6

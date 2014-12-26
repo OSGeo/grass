@@ -84,7 +84,7 @@ prec_6|2002-04-01|2002-07-01
 Register maps in a absolute space time dataset, creating a time interval
 
 <div class="code"><pre>
-t.register -i type=rast input=precipitation_monthly \
+t.register -i type=raster input=precipitation_monthly \
     maps=`g.list rast patt=*precip* sep=,` start=2009-01-01 \
     increment="1 months"
 </pre></div>
@@ -105,7 +105,7 @@ t.create type=strds temporaltype=absolute \
     output=precip_abs title="Example" \
     descr="Example"
 
-t.register -i type=rast input=precip_abs \
+t.register -i type=raster input=precip_abs \
     maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 \
     start="2001-01-01" increment="1 months"
 
@@ -128,7 +128,7 @@ prec_6|PERMANENT|2001-06-01 00:00:00|2001-07-01 00:00:00
 r.mapcalc expr="prec_7 = 700"
 r.timestamp map=prec_7 date="1 jul 2001 / 1 aug 2001"
 
-t.register type=rast input=precip_abs maps=prec_7
+t.register type=raster input=precip_abs maps=prec_7
 
 t.rast.list input=precip_abs
 

@@ -15,12 +15,12 @@ r3.mapcalc --o expr="prec_5 = rand(0, 300)" -s
 r3.mapcalc --o expr="prec_6 = rand(0, 650)" -s
 
 t.create --o type=str3ds temporaltype=absolute output=precip_abs1 title="A test" descr="A test"
-t.register -i type=raster3d input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="3 months"
+t.register -i type=raster_3d input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="3 months"
 
 # The @test
 t.rast3d.extract --o input=precip_abs1 output=precip_abs2 where="start_time > '2001-06-01'" expression=" if(precip_abs1 > 400, precip_abs1, null())" base=new_prec
 
 t.info type=str3ds input=precip_abs2
 
-t.unregister type=raster3d maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.unregister type=raster_3d maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=str3ds input=precip_abs1,precip_abs2
