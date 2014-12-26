@@ -42,73 +42,7 @@ g.region -p3 res3=500
 # convert to 3D raster map
 t.rast.to.rast3 in=tempmean_monthly_later_2012@climate_2009_2012 out=tempmean_monthly_2012
 
-cat > "${n1}" << EOF
-a1|2001-01-01|2001-04-01
-a2|2001-05-01|2001-07-01
-a3|2001-08-01|2001-10-01
-EOF
-
-t.create type=strds temporaltype=absolute output=A title="A test" descr="A test"
-
-t.register -i type=rast input=A file=${n1}
-
-t.info type=strds input=A
-
- +-------------------- Space Time Raster Dataset -----------------------------+
- |                                                                            |
- +-------------------- Basic information -------------------------------------+
- | Id: ........................ A@PERMANENT
- | Name: ...................... A
- | Mapset: .................... PERMANENT
- | Creator: ................... soeren
- | Temporal type: ............. absolute
- | Creation time: ............. 2014-11-23 16:28:21.170177
- | Modification time:.......... 2014-11-23 16:28:21.641846
- | Semantic type:.............. mean
- +-------------------- Absolute time -----------------------------------------+
- | Start time:................. 2001-01-01 00:00:00
- | End time:................... 2001-10-01 00:00:00
- | Granularity:................ 1 month
- | Temporal type of maps:...... interval
- +-------------------- Spatial extent ----------------------------------------+
- | North:...................... 80.0
- | South:...................... 0.0
- | East:.. .................... 120.0
- | West:....................... 0.0
- | Top:........................ 0.0
- | Bottom:..................... 0.0
- +-------------------- Metadata information ----------------------------------+
- | Raster register table:...... raster_map_register_c70e476695a04975a03ccb655ed0bb2c
- | North-South resolution min:. 10.0
- | North-South resolution max:. 10.0
- | East-west resolution min:... 10.0
- | East-west resolution max:... 10.0
- | Minimum value min:.......... 100.0
- | Minimum value max:.......... 300.0
- | Maximum value min:.......... 100.0
- | Maximum value max:.......... 300.0
- | Aggregation type:........... None
- | Number of registered maps:.. 3
- |
- | Title:
- | A test
- | Description:
- | A test
- | Command history:
- | # 2014-11-23 16:28:21 
- | t.create type="strds" temporaltype="absolute"
- |     output="A" title="A test" descr="A test"
- | # 2014-11-23 16:28:21 
- | t.register -i type="rast" input="A"
- |     file="/home/soeren/grassdata/LL/PERMANENT/.tmp/knecht/1.2"
- | 
- +----------------------------------------------------------------------------+
-
-
-t.rast.to.rast3 input=A output=cube
-
-t.info type=rast3d input=cube
-
+t.info type=raster_3d input=tempmean_monthly_2012
  +-------------------- 3D Raster Dataset -------------------------------------+
  |                                                                            |
  +-------------------- Basic information -------------------------------------+

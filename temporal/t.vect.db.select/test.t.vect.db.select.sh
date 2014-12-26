@@ -34,11 +34,11 @@ t.vect.db.select input=prec_observer
 t.vect.db.select input=prec_observer where="cat = 1" separator="  |  "
 
 # @postprocess
-t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.unregister type=raster maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_abs1
 t.remove type=stvds input=prec_observer
 t.unregister type=vector maps=prec_observer:1,prec_observer:2,prec_observer:3,prec_observer:4,prec_observer:5,prec_observer:6
 
 g.remove -f type=vector name=prec_observer,test_extract
-g.remove -f type=rast name=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+g.remove -f type=raster name=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 

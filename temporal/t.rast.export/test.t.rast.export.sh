@@ -28,7 +28,7 @@ EOF
 t.create --o type=strds temporaltype=absolute output=precip_abs1 title="A test with input files" descr="A test with input files"
 
 # The first @test
-t.register -i type=rast input=precip_abs1 file="${n1}" start="2001-01-01" increment="1 months"
+t.register -i type=raster input=precip_abs1 file="${n1}" start="2001-01-01" increment="1 months"
 t.rast.export format=GTiff input=precip_abs1 output=strds_export_gtiff.tar.bz2 compression=bzip2 directory=/tmp
 t.rast.export format=GTiff input=precip_abs1 output=strds_export_gtiff.tar.gz compression=gzip directory=/tmp
 t.rast.export format=GTiff input=precip_abs1 output=strds_export_gtiff.tar compression=no directory=/tmp
@@ -37,7 +37,7 @@ t.rast.export format=pack input=precip_abs1 output=strds_export_pack.tar.bz2 com
 t.rast.export format=pack input=precip_abs1 output=strds_export_pack.tar.gz compression=gzip directory=/tmp
 t.rast.export format=pack input=precip_abs1 output=strds_export_pack.tar compression=no directory=/tmp
 
-t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.unregister type=raster maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_abs1
 rm strds_export_gtiff.tar.bz2
 rm strds_export_gtiff.tar.gz

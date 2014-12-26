@@ -16,7 +16,7 @@ r.mapcalc expr="temp_2 = 25"
 r.mapcalc expr="temp_1 = 30"
 
 t.create type=strds temporaltype=absolute output=temp_abs1 title="A test" descr="A test"
-t.register -i type=rast input=temp_abs1 maps=temp_1,temp_2,temp_3,temp_4,temp_5,temp_6 \
+t.register -i type=raster input=temp_abs1 maps=temp_1,temp_2,temp_3,temp_4,temp_5,temp_6 \
     start="2001-01-01" increment="2 months"
 
 # The first @test

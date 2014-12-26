@@ -14,7 +14,7 @@ r.mapcalc --o expr="prec_5 = rand(0, 300)" -s
 r.mapcalc --o expr="prec_6 = rand(0, 650)" -s
 
 t.create --o type=strds temporaltype=relative output=precip_rel title="A test" descr="A test"
-t.register --o type=rast input=precip_rel unit="days" \
+t.register --o type=raster input=precip_rel unit="days" \
     maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 \
     start=0 increment=14
 
@@ -26,5 +26,5 @@ t.snap --o input=precip_rel
 t.info type=strds input=precip_rel
 t.rast.list input=precip_rel
 
-t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.unregister type=raster maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_rel

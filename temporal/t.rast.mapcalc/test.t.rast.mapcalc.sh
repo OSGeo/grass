@@ -19,8 +19,8 @@ r.mapcalc expr="prec_6 = rand(0, 650)" -s
 
 t.create type=strds temporaltype=absolute output=precip_abs1 title="A test" descr="A test"
 t.create type=strds temporaltype=absolute output=precip_abs2 title="A test" descr="A test"
-t.register -i type=rast input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="3 months"
-t.register type=rast input=precip_abs2 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.register -i type=raster input=precip_abs1 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 start="2001-01-01" increment="3 months"
+t.register type=raster input=precip_abs2 maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 
 t.info precip_abs1
 t.info precip_abs2
@@ -47,7 +47,7 @@ t.rast.mapcalc -sn inputs=precip_abs1,precip_abs2 output=precip_abs4 \
 t.info type=strds input=precip_abs4
 
 # Let the test fail
-g.remove -f type=rast name=prec_1
+g.remove -f type=raster name=prec_1
 t.rast.mapcalc -sn inputs=precip_abs1,precip_abs2 output=precip_abs4 \
            expression=" (precip_abs1 + precip_abs2) * null()" base=new_prec \
            method=equal nprocs=5

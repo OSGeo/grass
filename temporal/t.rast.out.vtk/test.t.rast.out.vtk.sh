@@ -33,17 +33,17 @@ t.create --o type=strds temporaltype=absolute output=precip_abs3 title="A test w
 
 # The first @test
 mkdir /tmp/test1
-t.register -i --o type=rast input=precip_abs1 file="${n1}"
+t.register -i --o type=raster input=precip_abs1 file="${n1}"
 t.rast.out.vtk input=precip_abs1 expdir=/tmp/test1 
 ls -al /tmp/test1 
 
 mkdir /tmp/test2
-t.register -i --o type=rast input=precip_abs2 file="${n1}" 
+t.register -i --o type=raster input=precip_abs2 file="${n1}" 
 t.rast.out.vtk input=precip_abs2 expdir=/tmp/test2 elevation=elevation
 ls -al /tmp/test2 
 
 mkdir /tmp/test3
-t.register -i --o type=rast input=precip_abs3 file="${n1}"
+t.register -i --o type=raster input=precip_abs3 file="${n1}"
 t.rast.out.vtk -g input=precip_abs3 expdir=/tmp/test3 elevation=elevation
 ls -al /tmp/test3 
 
@@ -51,5 +51,5 @@ rm -rf /tmp/test1
 rm -rf /tmp/test2
 rm -rf /tmp/test3
 
-t.unregister type=rast maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
+t.unregister type=raster maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6
 t.remove type=strds input=precip_abs1,precip_abs2,precip_abs3
