@@ -17,7 +17,7 @@ Classes:
  - render::Overlay
  - render::Map
 
-(C) 2006-2013 by the GRASS Development Team
+(C) 2006-2014 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -373,7 +373,7 @@ class Overlay(Layer):
         :param type: overlay type ('barscale', 'legend', etc.)
         :param cmd: GRASS command to render overlay,
                     given as list, e.g. ['d.legend',
-                    'rast=elevation@PERMANENT']
+                    'raster=elevation@PERMANENT']
         :param map: render.Map instance
         :param active: layer is active, will be rendered only if True
         :param hidden: layer is hidden, won't be listed in Layer Manager if True
