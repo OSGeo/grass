@@ -47,7 +47,7 @@ t.create type=strds temporaltype=absolute \
          title="Daily precipitation" \
          description="Test dataset with daily precipitation"
 
-t.register -i type=rast input=precipitation_daily \
+t.register -i type=raster input=precipitation_daily \
            file=map_list.txt start="2012-08-20" increment="1 days"
 
 t.info type=strds input=precipitation_daily
@@ -112,9 +112,9 @@ t.create type=stvds temporaltype=absolute \
          title="Points" \
          description="Points for aggregation"
 
-t.register -i type=vect input=points \
+t.register -i type=vector input=points \
            map=points_1 start="2012-08-20" increment="3 days"
-t.register -i type=vect input=points \
+t.register -i type=vector input=points \
            map=points_2 start="2012-08-23" increment="4 days"
 
 t.info type=stvds input=points

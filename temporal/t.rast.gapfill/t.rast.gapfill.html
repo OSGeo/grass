@@ -24,16 +24,16 @@ r.mapcalc expr="map1 = 1"
 r.mapcalc expr="map2 = 3" 
 r.mapcalc expr="map3 = 5" 
 
-t.register type=rast maps=map1 start=2012-08-20 end=2012-08-21
-t.register type=rast maps=map2 start=2012-08-22 end=2012-08-23
-t.register type=rast maps=map3 start=2012-08-24 end=2012-08-25
+t.register type=raster maps=map1 start=2012-08-20 end=2012-08-21
+t.register type=raster maps=map2 start=2012-08-22 end=2012-08-23
+t.register type=raster maps=map3 start=2012-08-24 end=2012-08-25
 
 t.create type=strds temporaltype=absolute \
          output=precipitation_daily \
          title="Daily precipitation" \
          description="Test dataset with daily precipitation"
          
-t.register type=rast input=precipitation_daily maps=map1,map2,map3
+t.register type=raster input=precipitation_daily maps=map1,map2,map3
 
 t.rast.list input=precipitation_daily columns=name,start_time,min,max
 
