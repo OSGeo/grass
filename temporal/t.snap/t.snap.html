@@ -28,8 +28,8 @@ t.create type=strds temporaltype=absolute \
          title="Monthly precipitation" \
          description="Dataset with monthly precipitation"
 
-t.register type=rast input=precipitation_monthly \
-           maps=`g.list type=rast patt=2012*precip sep=,` \
+t.register type=raster input=precipitation_monthly \
+           maps=`g.list type=raster patt=2012*precip sep=,` \
            start=2012-01-01 increment="1 months"
 
 # please take attention to "Temporal type of maps" value

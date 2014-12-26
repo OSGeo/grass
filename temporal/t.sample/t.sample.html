@@ -78,7 +78,7 @@ t.create type=strds temporaltype=absolute output=A \
 t.create type=stvds temporaltype=absolute output=P \
     title="A test with vector input files" descr="A test with vector input files"
 
-t.register type=rast -i input=A file="${n1}" start="2001-01-01" increment="1 months"
+t.register type=raster -i input=A file="${n1}" start="2001-01-01" increment="1 months"
 
 # Raster map layer in A
 t.rast.list A
@@ -92,7 +92,7 @@ a5|PERMANENT|2001-05-01 00:00:00|2001-06-01 00:00:00
 a6|PERMANENT|2001-06-01 00:00:00|2001-07-01 00:00:00
 
 
-t.register type=vect input=P file="${n2}"
+t.register type=vector input=P file="${n2}"
 
 # Vector map layer in P
 t.vect.list P
