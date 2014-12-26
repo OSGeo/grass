@@ -971,7 +971,7 @@ void set_option(const char *string)
         if (strncmp(the_key, at_opt->key, key_len) == 0 ||
 	    match_option(the_key, at_opt->key)) {
 	    if (found >= MAX_MATCHES)
-		G_fatal_error("too many matches (limit %d)", MAX_MATCHES);
+		G_fatal_error("Too many matches (limit %d)", MAX_MATCHES);
 	    matches[found++] = at_opt;
 	}
     }
