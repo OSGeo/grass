@@ -111,6 +111,24 @@ v.patch input=pointpattern1,pointpattern2 output=pointpattern3
 Different point patterns for sampling design
 </center>
 
+<h3>Creating hexagons in a metric projection</h3>
+
+North Carolina sample dataset example, creating regular hexagons
+based on the current region extent defined by the "elevation" map and
+raster resolution for the hexagon size:
+
+<div class="code"><pre>
+g.region raster=elevation res=5000 -pa
+v.mkgrid map=hexagons -h
+
+d.grid 5000
+</pre></div>
+
+<center>
+<img src="v_mkgrid_hexagons.png"><br>
+Hexagon map
+</center>
+
 <h2>SEE ALSO</h2>
 
 <em>
