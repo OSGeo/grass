@@ -14,7 +14,11 @@ Gaussian random number generator instead.
 <h2>EXAMPLE</h2>
 
 <div class="code"><pre>
+g.region -p n=228500 s=215000 w=630000 e=645000 res=10
 r.surf.gauss out=gauss mean=0 sigma=10
+
+# check result
+r.univar gauss
 </pre></div>
 
 <h2>SEE ALSO</h2>
@@ -23,7 +27,6 @@ r.surf.gauss out=gauss mean=0 sigma=10
 <a href="r.surf.contour.html">r.surf.contour</a>,
 <a href="r.surf.fractal.html">r.surf.fractal</a>,
 <a href="r.surf.idw.html">r.surf.idw</a>,
-<a href="r.surf.idw2.html">r.surf.idw2</a>,
 <a href="r.surf.random.html">r.surf.random</a>,
 <a href="v.surf.rst.html">v.surf.rst</a>
 </em>
