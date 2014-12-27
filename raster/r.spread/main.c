@@ -116,33 +116,8 @@ int main(int argc, char *argv[])
 	  "coordinates for tracing spread paths. "
 	  "Usable for fire spread simulations.");
 
-    parm.max = G_define_option();
-    parm.max->key = "max";
-    parm.max->type = TYPE_STRING;
-    parm.max->required = YES;
-    parm.max->gisprompt = "old,cell,raster";
-    parm.max->guisection = _("Input");
-    parm.max->label =
-	_("Raster map containing maximal ROS (cm/min)");
-	parm.max->description =
-	_("Name of an existing raster map layer in the user's current "
-	  "mapset search path containing the maximum ROS values (cm/minute).");
-
-    parm.dir = G_define_option();
-    parm.dir->key = "dir";
-    parm.dir->type = TYPE_STRING;
-    parm.dir->required = YES;
-    parm.dir->gisprompt = "old,cell,raster";
-    parm.dir->guisection = _("Input");
-    parm.dir->label =
-	_("Raster map containing directions of maximal ROS (degree)");
-    parm.dir->description =
-	_("Name of an existing raster map layer in the user's "
-	  "current mapset search path containing directions of the maximum ROSes, "
-	  "clockwise from north (degree)."); /* TODO: clockwise from north? see r.ros */
-
     parm.base = G_define_option();
-    parm.base->key = "base";
+    parm.base->key = "base_ros";
     parm.base->type = TYPE_STRING;
     parm.base->required = YES;
     parm.base->gisprompt = "old,cell,raster";
@@ -154,6 +129,31 @@ int main(int argc, char *argv[])
 	  "current mapset search path containing the ROS values in the directions "
 	  "perpendicular to maximum ROSes' (cm/minute). These ROSes are also the ones "
 	  "without the effect of directional factors.");
+    
+    parm.max = G_define_option();
+    parm.max->key = "max_ros";
+    parm.max->type = TYPE_STRING;
+    parm.max->required = YES;
+    parm.max->gisprompt = "old,cell,raster";
+    parm.max->guisection = _("Input");
+    parm.max->label =
+	_("Raster map containing maximal ROS (cm/min)");
+	parm.max->description =
+	_("Name of an existing raster map layer in the user's current "
+	  "mapset search path containing the maximum ROS values (cm/minute).");
+
+    parm.dir = G_define_option();
+    parm.dir->key = "direction_ros";
+    parm.dir->type = TYPE_STRING;
+    parm.dir->required = YES;
+    parm.dir->gisprompt = "old,cell,raster";
+    parm.dir->guisection = _("Input");
+    parm.dir->label =
+	_("Raster map containing directions of maximal ROS (degree)");
+    parm.dir->description =
+	_("Name of an existing raster map layer in the user's "
+	  "current mapset search path containing directions of the maximum ROSes, "
+	  "clockwise from north (degree)."); /* TODO: clockwise from north? see r.ros */
 
     parm.start = G_define_option();
     parm.start->key = "start";
@@ -170,7 +170,7 @@ int main(int argc, char *argv[])
 	  "starting sources (seeds).");
 
     parm.spotdist = G_define_option();
-    parm.spotdist->key = "spot_dist";
+    parm.spotdist->key = "spotting_distance";
     parm.spotdist->type = TYPE_STRING;
     parm.spotdist->gisprompt = "old,cell,raster";
     parm.spotdist->guisection = _("Input");
@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
 	  "spotting distances (meters).");
 
     parm.velocity = G_define_option();
-    parm.velocity->key = "w_speed";
+    parm.velocity->key = "wind_speed";
     parm.velocity->type = TYPE_STRING;
     parm.velocity->gisprompt = "old,cell,raster";
     parm.velocity->guisection = _("Input");
@@ -194,7 +194,7 @@ int main(int argc, char *argv[])
 	  "the average flame height (feet/minute).");
 
     parm.mois = G_define_option();
-    parm.mois->key = "f_mois";
+    parm.mois->key = "fuel_moisture";
     parm.mois->type = TYPE_STRING;
     parm.mois->gisprompt = "old,cell,raster";
     parm.mois->guisection = _("Input");
