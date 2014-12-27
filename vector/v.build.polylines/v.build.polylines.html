@@ -42,12 +42,13 @@ a new polyline, i.e. lines and boundaries are kept separate.
   polyline. Also attributes tables linked to the input vector map are
   not copied to the output vector map.</li>
   <li><b>cats=first</b> - Assign to a polyline category number of the
-first line. All linked attributes tables are copied to the output
-vector map.</li>
+  first line. All linked attributes tables are copied to the output
+  vector map without filtering, but the categories are processed according 
+  to the cats option.</li>
   <li><b>cats=multi</b> - If the lines that make up a polyline have
-    different category numbers then <em>v.build.polylines</em> will
-    set the multiple catetory numbers to a polyline.  Also all linked
-    attributes tables are copied to the output vector map.</li>
+  different category numbers then <em>v.build.polylines</em> will
+  set the multiple category numbers to a polyline.  Also all linked
+  attributes tables are copied to the output vector map.</li>
 </ul>
 
 <em>v.build.polylines</em> correctly handles <b>input</b> vector maps
