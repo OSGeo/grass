@@ -228,7 +228,7 @@ think using one or more assert methods.
 
 ::
 
-    from grass.guinttest import TestCase, test
+    from grass.gunittest import TestCase, test
 
 
     class TestPython(TestCase):
