@@ -100,10 +100,13 @@ int main(int argc, char **argv)
 
     /* The color option specifies the color for the labels, tic-marks,
      * and borders of the chart. */
-    opt2 = G_define_standard_option(G_OPT_C_FG);
+    opt2 = G_define_standard_option(G_OPT_C);
     opt2->label = _("Color for text and axes");
 
-    bg_opt = G_define_standard_option(G_OPT_C_BG);
+    bg_opt = G_define_standard_option(G_OPT_CN);
+    bg_opt->key = "bgcolor";
+    bg_opt->label = _("Background color");
+    bg_opt->answer = DEFAULT_BG_COLOR;
 
 #ifdef CAN_DO_AREAS
     opt3 = G_define_option();

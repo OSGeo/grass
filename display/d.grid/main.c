@@ -86,17 +86,17 @@ int main(int argc, char **argv)
     lwidth->required = NO;
     lwidth->description = _("Grid line width");
 
-    opt1 = G_define_standard_option(G_OPT_C_FG);
+    opt1 = G_define_standard_option(G_OPT_C);
     opt1->answer = "gray";
     opt1->label = _("Grid color");
     opt1->guisection = _("Color");
 
-    opt4 = G_define_standard_option(G_OPT_C_FG);
+    opt4 = G_define_standard_option(G_OPT_C);
     opt4->key = "border_color";
     opt4->label = _("Border color");
     opt4->guisection = _("Color");
 
-    tcolor = G_define_standard_option(G_OPT_C_FG);
+    tcolor = G_define_standard_option(G_OPT_C);
     tcolor->key = "text_color";
     tcolor->answer = "gray";
     tcolor->label = _("Text color");

@@ -116,7 +116,8 @@ int main(int argc, char **argv)
     opt_b->gisprompt = "new,cell,raster";
     opt_b->description = _("Name of output layer to be used for blue");
 
-    bgcolor = G_define_standard_option(G_OPT_C_BG);
+    bgcolor = G_define_standard_option(G_OPT_CN);
+    bgcolor->key = "bgcolor";
     bgcolor->label = _("Color to use instead of NULL values");
     bgcolor->answer = NULL;
 
