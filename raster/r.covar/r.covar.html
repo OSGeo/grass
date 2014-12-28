@@ -17,18 +17,27 @@ eigen values and eigen vectors. An NxN covariance matrix would result in
 N real eigen values and N eigen vectors (each composed of N real numbers). 
 
 <p>
-The module <em><a href="http://grasswiki.osgeo.org/wiki/AddOns/GRASS_6#m.eigensystem">m.eigensystem</a></em>
+The module <em><a href="http://grasswiki.osgeo.org/wiki/AddOns/GRASS_7/misc#m.eigensystem">m.eigensystem</a></em>
 in <a href="http://grass.osgeo.org/download/addons/">GRASS GIS Addons</a>
 can be compiled and used to generate the eigen values and vectors.
 
 <h2>EXAMPLE</h2>
 
+<!--
+For example (North Carolina sample dataset),
+
+<div class="code"><pre>
+g.region raster=elev_ned_30m -p
+r.covar -r map=elevation,elev_ned_30m,elev_srtm_30m
+</pre></div>
+-->
+
 For example, 
 
-<dl>
-<dd>
-<b>r.covar</b> map=<em>layer.1</em>,<em>layer.2</em>,<em>layer.3</em>
-</dl>
+<div class="code"><pre>
+g.region raster=layer.1 -p
+r.covar -r map=layer.1,layer.2,layer.3
+</pre></div>
 
 would produce a 3x3 matrix (values are example only): 
 
@@ -43,23 +52,20 @@ for the covariance matrix are:
 
 <div class="code"><pre>
 component   eigen value               eigen vector
-    1       1159.745202   &lt; 0.691002    0.720528    0.480511 &gt;
-    2          5.970541   &lt; 0.711939   -0.635820   -0.070394 &gt;
-    3        146.503197   &lt; 0.226584    0.347470   -0.846873 &gt;
+    1       1159.745202   &lt;0.691002  0.720528  0.480511&gt;
+    2          5.970541   &lt;0.711939 -0.635820 -0.070394&gt;
+    3        146.503197   &lt;0.226584  0.347470 -0.846873&gt;
 </pre></div>
 
 The component corresponding to each vector can be produced using 
 <em><a href="r.mapcalc.html">r.mapcalc</a></em>
 as follows: 
 
-<dl>
-<dd>
-<b>r.mapcalc</b> 'pc.1 = 0.691002*layer.1 + 0.720528*layer.2 + 0.480511*layer.3'
-<br>
-<b>r.mapcalc</b> 'pc.2 = 0.711939*layer.1 - 0.635820*layer.2 - 0.070394*layer.3'
-<br>
-<b>r.mapcalc</b> 'pc.3 = 0.226584*layer.1 + 0.347470*layer.2 - 0.846873*layer.3'
-</dl>
+<div class="code"><pre>
+r.mapcalc "pc.1 = 0.691002*layer.1 + 0.720528*layer.2 + 0.480511*layer.3" 
+r.mapcalc "pc.2 = 0.711939*layer.1 - 0.635820*layer.2 - 0.070394*layer.3" 
+r.mapcalc "pc.3 = 0.226584*layer.1 + 0.347470*layer.2 - 0.846873*layer.3"
+</pre></div>
 
 Note that based on the relative sizes of the eigen values, 
 <em>pc.1</em>
@@ -80,10 +86,12 @@ This can be done with <em><a href="r.rescale.html">r.rescale</a></em>.
 
 <h2>SEE ALSO</h2>
 
-<em><a href="i.pca.html">i.pca</a></em>,
-<em><a href="m.eigensystem.html">m.eigensystem</a></em>,
-<em><a href="r.mapcalc.html">r.mapcalc</a></em>,
-<em><a href="r.rescale.html">r.rescale</a></em>
+<em>
+<a href="i.pca.html">i.pca</a>,
+<a href="m.eigensystem.html">m.eigensystem</a> (Addon),
+<a href="r.mapcalc.html">r.mapcalc</a>,
+<a href="r.rescale.html">r.rescale</a>
+</em>
 
 <h2>AUTHOR</h2>
 

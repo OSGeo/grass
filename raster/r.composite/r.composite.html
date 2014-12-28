@@ -4,7 +4,7 @@ This program combines three raster maps to form a
 composite RGB map. For each input map layer, the corresponding
 component from the map's color table is used (e.g. for
 the red map, the red component is used, and so on). In
-general, the maps should use a gray-scale color table.
+general, the maps should use a grey-scale color table.
 
 <h2>NOTES</h2>
 
@@ -17,11 +17,24 @@ also be significantly slower.
 
 <p>Floyd-Steinberg dithering is optionally used with the <b>-d</b> flag.
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
+
+<h3>RGB composite of three satellite bands</h3>
+
+Color composite of a LANDSAT scene (North Carolina sample dataset):
+
+<div class="code"><pre>
+g.region raster=lsat7_2002_10
+r.composite blue=lsat7_2002_10 green=lsat7_2002_20 red=lsat7_2002_30 \
+            output=lsat7_2002_rgb
+</pre></div>
+
+<h3>RGB composite with dithering</h3>
 Creating a composite RGB raster using 32 color levels per layer, with dithering:
 
 <div class="code"><pre>
-r.composite -d red=elevation.r green=elevation.g blue=elevation.b output=elev.composite
+r.composite -d red=elevation.r green=elevation.g blue=elevation.b \
+            output=elev.composite
 </pre></div>
 
 <h2>SEE ALSO</h2>
@@ -31,7 +44,7 @@ r.composite -d red=elevation.r green=elevation.g blue=elevation.b output=elev.co
 <a href="d.rgb.html">d.rgb</a>,
 <a href="r.blend.html">r.blend</a>,
 <a href="r.colors.html">r.colors</a>,
-<a href="r.rgb.html">r.rgb</a>,
+<a href="r.rgb.html">r.rgb</a>
 </em>
 <p><em>
 <a href="http://en.wikipedia.org/wiki/Floyd-Steinberg_dithering">Wikipedia Entry: Floyd-Steinberg dithering</a>

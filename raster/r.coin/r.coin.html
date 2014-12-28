@@ -45,7 +45,6 @@ printed with either 80 or 132 columns.  Finally, the user
 is given the option to rerun the coincidence tabulation
 using a different unit of measurement.
 
-<p>
 <h2>NOTES</h2>
 
 It is <b>not</b> a good idea to run <em>r.coin</em> on a
@@ -56,7 +55,6 @@ reclassify those categories (using <em>r.reclass</em>)
 into a more manageable number prior to running
 <em>r.coin</em> on the reclassed raster map layer.
 
-<p>
 <h2>EXAMPLE</h2>
 
 Below is a sample of tabular output produced by
@@ -168,6 +166,23 @@ rerun the report using different units, it is not possible
 to simply rerun the report with different map layers.  In
 order to choose new map layers, it is necessary to rerun
 <em>r.coin.</em>
+
+<!-- North Carolina sample dataset:
+
+Show percentage of each landclass for each town as well as
+the summaries:
+
+<div class="code"><pre>
+g.region raster=landclass96,towns -p
+r.cats landclass96
+r.cats towns
+r.coin -w first=landclass96 second=towns unit=p
+</pre></div>
+
+The result shows that 60% of the current region is located
+in South Raleigh, about half of the area is covered by
+forest and 30% is developed.
+-->
 
 <h2>SEE ALSO</h2>
 
