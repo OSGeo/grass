@@ -1,13 +1,11 @@
-#include <string.h>
-#include <grass/display.h>
-#include <grass/gis.h>
 #include <stdio.h>
+#include <string.h>
+#include <grass/gis.h>
+#include <grass/display.h>
 #include "local_proto.h"
 
-#define METERS_TO_MILES(x) ((x) * 6.213712e-04)
-
 void plot(double lon1, double lat1, double lon2, double lat2,
-     int line_color, int text_color)
+	  int line_color, int text_color, double factor, const char *unit)
 {
     double distance;
     double text_x, text_y;
@@ -33,6 +31,7 @@ void plot(double lon1, double lat1, double lon2, double lat2,
 	for (i = 0; i <= nsteps; i++) {
 	    double lon = lon1 + (lon2 - lon1) * i / nsteps;
 	    double lat = G_geodesic_lat_from_lon(lon);
+
 	    if (i == 0)
 		D_move_abs(lon, lat);
 	    else
@@ -58,7 +57,7 @@ void plot(double lon1, double lat1, double lon2, double lat2,
 	D_text_size(10, 10);
 
 	distance = G_geodesic_distance(lon1, lat1, lon2, lat2);
-	sprintf(buf, "%.0f miles", METERS_TO_MILES(distance));
+	sprintf(buf, "%.0f %s", distance / factor, unit);
 
 	D_pos_abs(text_x, text_y);
 	D_get_text_box(buf, &t, &b, &l, &r);

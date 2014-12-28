@@ -17,7 +17,8 @@
  *               for details.
  *
  *****************************************************************************/
-/* TODO: implement G_rhumbline_distance() in libgis 
+/* TODO: implement G_rhumbline_distance() in libgis
+ * see also d.geodesic
  */
 
 #include <stdlib.h>
@@ -56,9 +57,15 @@ int main(int argc, char *argv[])
     parm.lcolor->label = _("Line color");
 
 #ifdef CAN_DO_DISTANCES
-    parm.tcolor = G_define_option(G_OPT_M_COORDS);
+    parm.tcolor = G_define_standard_option(G_OPT_C_FG);
     parm.tcolor->key = "text_color";
-    parm.tcolor->label = _("Text color");
+    parm.tcolor->label = _("Text color or \"none\"");
+    parm.tcolor->answer = NULL;
+
+    parm.units = G_define_standard_option(G_OPT_M_UNITS);
+    parm.units->options = "meters,kilometers,feet,miles";
+    parm.units->label = parm.units->description;
+    parm.units->answer = "meters";
 #endif
 
     if (G_parser(argc, argv))
@@ -67,6 +74,13 @@ int main(int argc, char *argv[])
     if (G_projection() != PROJECTION_LL)
 	G_fatal_error(_("Location is not %s"),
 		      G__projection_name(PROJECTION_LL));
+
+#ifdef CAN_DO_DISTANCES
+    /* get conversion factor and unit name */
+    unit_id = G_units(parm.units->answer);
+    factor = 1. / G_meters_to_units_factor(unit_id);
+    unit = G_get_units_name(unit_id, 1, 0);
+#endif
 
     if (parm.coor->answers[0] == NULL)
 	G_fatal_error(_("No coordinates given"));
@@ -98,10 +112,11 @@ int main(int argc, char *argv[])
 	deftcolor = DEFAULT_FG_COLOR;
 
     if (parm.tcolor->answer == NULL)
-	parm.tcolor->answer = deftcolor;
-    text_color = D_translate_color(parm.tcolor->answer);
-    if (!text_color)
 	text_color = D_translate_color(deftcolor);
+    else if (strcmp(parm.tcolor->answer, "none") == 0)
+	text_color = -1;
+    else
+	text_color = D_translate_color(parm.tcolor->answer);
 #endif
 
     plot(lon1, lat1, lon2, lat2, line_color, text_color);
