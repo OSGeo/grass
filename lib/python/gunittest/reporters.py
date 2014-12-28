@@ -671,11 +671,14 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
                 status=returncode_to_success_html_par(returncode),
                 ))
 
-        # TODO: include optionaly link to test suite
+        # TODO: include optionaly hyper link to test suite
+        # TODO: file_path is reconstucted in a naive way
+        # file_path should be stored in the module/test file object and just used here
         summary_section = (
             '<table><tbody>'
-            '<tr><td>Test file</td><td>{m}</td></tr>'
+            '<tr><td>Test</td><td>{m}</td></tr>'
             '<tr><td>Testsuite</td><td>{d}</td></tr>'
+            '<tr><td>Test file</td><td>{file_path}</td></tr>'
             '<tr><td>Status</td><td>{status}</td></tr>'
             '<tr><td>Return code</td><td>{rc}</td></tr>'
             '<tr><td>Number of tests</td><td>{ntests}</td></tr>'
@@ -685,6 +688,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             '<tr><td>Test duration</td><td>{dur}</td></tr>'
             .format(
                 d=module.tested_dir, m=module.name,
+                file_path=os.path.join(module.tested_dir, 'testsuite', module.name + '.' + module.file_type),
                 status=returncode_to_html_text(returncode),
                 stests=successes, ftests=bad_ones, ntests=total,
                 ptests=pass_per, rc=returncode,
