@@ -242,8 +242,11 @@ class VirtualAttributeList(wx.ListCtrl,
         
         while True:
             # os.linesep doesn't work here (MSYS)
-            record = outFile.readline().replace('\n', '')
-            
+            # not sure what the replace is for?
+            # but we need strip to get rid of the ending newline
+            # which on windows leaves \r in a last empty attribute table cell and causes error
+            record = outFile.readline().strip().replace('\n', '')
+
             if not record:
                 break
 
