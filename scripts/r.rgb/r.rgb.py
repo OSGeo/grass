@@ -20,34 +20,53 @@
 #%end
 #%option G_OPT_R_INPUT
 #%end
-#%option G_OPT_R_BASENAME_OUTPUT
-#% label: Name of output basename raster map(s)
-#% description: Default: input
+#%option G_OPT_R_OUTPUT
+#% key: red
+#% description: Red channel raster map name
+#% required: no
+#%end
+#%option G_OPT_R_OUTPUT
+#% key: green
+#% description: Green channel raster map name
+#% required: no
+#%end
+#%option G_OPT_R_OUTPUT
+#% key: blue
+#% description: Blue channel raster map name
 #% required: no
 #%end
 
-import grass.script as grass
+import grass.script as gscript
+
 
 def main():
+    options, unused = gscript.parser()
     input = options['input']
-    output = options['output']
+    red = options['red']
+    green = options['green']
+    blue = options['blue']
 
-    if not grass.find_file(input)['file']:
-	grass.fatal(_("Raster map <%s> not found") % input)
+    if not gscript.find_file(input)['file']:
+        gscript.fatal(_("Raster map <%s> not found") % input)
 
-    if not output:
-	output = input.split('@')[0]
+    expressions = []
+    maps = []
+    if red:
+        expressions.append('%s = r#${input}' % red)
+        maps.append(red)
+    if green:
+        expressions.append('%s = g#${input}' % green)
+        maps.append(green)
+    if blue:
+        expressions.append('%s = b#${input}' % blue)
+        maps.append(blue)
+    expr = ';'.join(expressions)
+    gscript.mapcalc(expr, input=input)
 
-    expr = ';'.join(["${output}.r = r#${input}",
-		     "${output}.g = g#${input}",
-		     "${output}.b = b#${input}"])
-    grass.mapcalc(expr, input = input, output = output)
+    for name in maps:
+        gscript.run_command('r.colors', map=name, color='grey255')
+        gscript.raster_history(name)
 
-    for ch in ['r', 'g', 'b']:
-	name = "%s.%s" % (output, ch)
-	grass.run_command('r.colors', map = name, color = 'grey255', quiet = True)
-	grass.raster_history(name)
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
     main()
