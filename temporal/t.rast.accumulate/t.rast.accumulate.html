@@ -90,8 +90,8 @@ g.region -p zoom=`t.rast.list input=temperature_mean_1990_2000_daily_celsius col
 
 # Now we compute the Biologically Effective Degree Days 
 # from 1990 - 2000 for each year (12 month cycle) with
-# a granularity of one day. Base temperature is 10°C, upper limit is 30°C.
-# Hence the accumulation starts at 10°C and does not accumulate values above 30°C. 
+# a granularity of one day. Base temperature is 10&deg;C, upper limit is 30&deg;C.
+# Hence the accumulation starts at 10&deg;C and does not accumulate values above 30&deg;C. 
 t.rast.accumulate input="temperature_mean_1990_2000_daily_celsius" \
       output="temperature_mean_1990_2000_daily_celsius_accumulated_10_30" \
       limits="10,30" start="1990-01-01" stop="2000-01-01" cycle="12 months" \
@@ -102,17 +102,17 @@ t.rast.accumulate input="temperature_mean_1990_2000_daily_celsius" \
 #############################################################################
 # Now we detect the three grasshopper pest control cycles
 
-# First cycle at 325°C - 427°C GDD
+# First cycle at 325&deg;C - 427&deg;C GDD
 t.rast.accdetect input=temperature_mean_1990_2000_daily_celsius_accumulated_10_30@PERMANENT \
       occ=leafhopper_occurrence_c1_1990_2000 start="1990-01-01" stop="2000-01-01" \
       cycle="12 months" range=325,427 base=lh_c1 indicator=leafhopper_indicator_c1_1990_2000
 
-# Second cycle at 685°C - 813°C GDD
+# Second cycle at 685&deg;C - 813&deg;C GDD
 t.rast.accdetect input=temperature_mean_1990_2000_daily_celsius_accumulated_10_30@PERMANENT \
       occ=leafhopper_occurrence_c2_1990_2000 start="1990-01-01" stop="2000-01-01" \
       cycle="12 months" range=685,813 base=lh_c2 indicator=leafhopper_indicator_c2_1990_2000
 
-# Third cycle at 1047°C - 1179°C GDD
+# Third cycle at 1047&deg;C - 1179&deg;C GDD
 t.rast.accdetect input=temperature_mean_1990_2000_daily_celsius_accumulated_10_30@PERMANENT \
       occ=leafhopper_occurrence_c3_1990_2000 start="1990-01-01" stop="2000-01-01" \
       cycle="12 months" range=1047,1179 base=lh_c3 indicator=leafhopper_indicator_c3_1990_2000
@@ -148,7 +148,10 @@ t.rast.mapcalc input=leafhopper_cycle_3_1990_2000_yearly base=lh_clean_c3 \
 t.rast.mapcalc input=leafhopper_cycle_1_1990_2000_yearly_clean,leafhopper_cycle_2_1990_2000_yearly_clean,leafhopper_cycle_3_1990_2000_yearly_clean \
                base=lh_cleann_all_cycles \
                output=leafhopper_all_cycles_1990_2000_yearly_clean \
-               expr="if(isnull(leafhopper_cycle_3_1990_2000_yearly_clean), if(isnull(leafhopper_cycle_2_1990_2000_yearly_clean), if(isnull(leafhopper_cycle_1_1990_2000_yearly_clean), null() ,1),2),3)"
+               expr="if(isnull(leafhopper_cycle_3_1990_2000_yearly_clean), \
+	         if(isnull(leafhopper_cycle_2_1990_2000_yearly_clean), \
+		 if(isnull(leafhopper_cycle_1_1990_2000_yearly_clean), \
+		 null() ,1),2),3)"
 
 cat > color.table << EOF
 3 yellow
