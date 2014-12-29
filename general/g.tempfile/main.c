@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *pid;
     struct Flag *dry_run;
-    char *tempfile, *G__tempfile();
+    char *tempfile;
     int p;
     
     G_gisinit(argv[0]);
@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 	G_usage();
 	exit(EXIT_FAILURE);
     }
-    tempfile = G__tempfile(p);
+    tempfile = G_tempfile_pid(p);
     
     /* create tempfile so next run of this program will create a unique name */
     if (!dry_run->answer)
