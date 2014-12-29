@@ -648,7 +648,7 @@ v.vect.stats|scolumn:stats_column
 v.vol.rst|cellinp:cross_input
 v.vol.rst|devi:deviations
 v.vol.rst|scolumn:smooth_column
-v.vol.rst|wmulti:wmultiplier
+v.vol.rst|wmulti:wscale
 v.vol.rst|zmulti:zscale
 v.vol.rst|cellout:cross_output
 v.vol.rst|elev:elevation
