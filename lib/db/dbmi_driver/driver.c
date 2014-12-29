@@ -53,10 +53,10 @@ int db_driver(int argc, char *argv[])
 
 	if (mode == G_GISRC_MODE_MEMORY) {
 	    G_set_gisrc_mode(G_GISRC_MODE_MEMORY);
-	    G__setenv("DEBUG", getenv("DEBUG"));
-	    G__setenv("GISDBASE", getenv("GISDBASE"));
-	    G__setenv("LOCATION_NAME", getenv("LOCATION_NAME"));
-	    G__setenv("MAPSET", getenv("MAPSET"));
+	    G_setenv_nogisrc("DEBUG", getenv("DEBUG"));
+	    G_setenv_nogisrc("GISDBASE", getenv("GISDBASE"));
+	    G_setenv_nogisrc("LOCATION_NAME", getenv("LOCATION_NAME"));
+	    G_setenv_nogisrc("MAPSET", getenv("MAPSET"));
 	    G_debug(3, "Driver GISDBASE set to '%s'", G_getenv("GISDBASE"));
 	}
     }

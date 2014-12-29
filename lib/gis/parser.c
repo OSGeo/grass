@@ -1424,7 +1424,7 @@ int check_overwrite(void)
 
     over = 0;
     /* Check the GRASS OVERWRITE variable */
-    if ((overstr = G__getenv("OVERWRITE"))) {
+    if ((overstr = G_getenv_nofatal("OVERWRITE"))) {
 	over = atoi(overstr);
     }
 

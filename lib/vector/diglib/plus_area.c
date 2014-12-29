@@ -62,7 +62,7 @@ dig_build_area_with_line(struct Plus_head *plus, plus_t first_line, int side,
     int node;
 
     if (debug_level == -1) {
-	const char *dstr = G__getenv("DEBUG");
+	const char *dstr = G_getenv_nofatal("DEBUG");
 
 	if (dstr != NULL)
 	    debug_level = atoi(dstr);
@@ -260,7 +260,7 @@ int dig_area_add_isle(struct Plus_head *plus, int area, int isle)
     G_debug(3, "dig_area_add_isle(): area = %d isle = %d", area, isle);
 
     if (debug_level == -1) {
-	const char *dstr = G__getenv("DEBUG");
+	const char *dstr = G_getenv_nofatal("DEBUG");
 
 	if (dstr != NULL)
 	    debug_level = atoi(dstr);
@@ -472,7 +472,7 @@ dig_angle_next_line(struct Plus_head *plus, plus_t current_line, int side,
     struct P_line *Line;
 
     if (debug_level == -1) {
-	const char *dstr = G__getenv("DEBUG");
+	const char *dstr = G_getenv_nofatal("DEBUG");
 
 	if (dstr != NULL)
 	    debug_level = atoi(dstr);

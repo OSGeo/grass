@@ -50,7 +50,7 @@ const char *G_mapset(void)
 */
 const char *G__mapset(void)
 {
-    return G__getenv("MAPSET");
+    return G_getenv_nofatal("MAPSET");
 }
 
 /*!

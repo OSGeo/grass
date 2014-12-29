@@ -70,21 +70,21 @@ int db_get_connection(dbConnection * connection)
 {
     G_zero(connection, sizeof(dbConnection));
     
-    connection->driverName = (char *)G__getenv2("DB_DRIVER", G_VAR_MAPSET);
-    connection->databaseName = (char *)G__getenv2("DB_DATABASE", G_VAR_MAPSET);
+    connection->driverName = (char *)G_getenv_nofatal2("DB_DRIVER", G_VAR_MAPSET);
+    connection->databaseName = (char *)G_getenv_nofatal2("DB_DATABASE", G_VAR_MAPSET);
     
     if (connection->driverName == NULL ||
         connection->databaseName == NULL)
         return DB_FAILED;
     
-    connection->schemaName = (char *)G__getenv2("DB_SCHEMA", G_VAR_MAPSET);
-    connection->group = (char *)G__getenv2("DB_GROUP", G_VAR_MAPSET);
+    connection->schemaName = (char *)G_getenv_nofatal2("DB_SCHEMA", G_VAR_MAPSET);
+    connection->group = (char *)G_getenv_nofatal2("DB_GROUP", G_VAR_MAPSET);
 
     /* below commented due to new mechanism: see db_get_login()
-       connection->hostName = G__getenv("DB_HOST");
-       connection->location = G__getenv("DB_LOCATION");
-       connection->user = G__getenv("DB_USER");
-       connection->password = G__getenv("DB_PASSWORD");
+       connection->hostName = G_getenv_nofatal("DB_HOST");
+       connection->location = G_getenv_nofatal("DB_LOCATION");
+       connection->user = G_getenv_nofatal("DB_USER");
+       connection->password = G_getenv_nofatal("DB_PASSWORD");
      */
 
     /* try to get user/password */
