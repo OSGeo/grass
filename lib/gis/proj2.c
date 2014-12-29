@@ -29,7 +29,7 @@
   \return units code (see gis.h)
   \return U_UNDEFINED if not defined
 */
-int G__projection_units(int n)
+int G_projection_units(int n)
 {
     switch (n) {
     case PROJECTION_XY:
@@ -52,7 +52,7 @@ int G__projection_units(int n)
   \return projection name
   \return NULL on error
 */
-const char *G__projection_name(int n)
+const char *G_projection_name(int n)
 {
     switch (n) {
     case PROJECTION_XY:

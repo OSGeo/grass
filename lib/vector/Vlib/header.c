@@ -539,7 +539,7 @@ const char *Vect_get_proj_name(const struct Map_info *Map)
     case PROJECTION_XY:
     case PROJECTION_UTM:
     case PROJECTION_LL:
-	return G__projection_name(n);
+	return G_projection_name(n);
     case PROJECTION_OTHER:
 	/* this won't protect against differing "other" projections, so
 	   better to just include P_OTHER in the above list so we return the

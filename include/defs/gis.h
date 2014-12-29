@@ -575,8 +575,8 @@ void G_set_program_name(const char *);
 int G_projection(void);
 
 /* proj2.c */
-int G__projection_units(int);
-const char *G__projection_name(int);
+int G_projection_units(int);
+const char *G_projection_name(int);
 
 /* proj3.c */
 const char *G_database_unit_name(int);
