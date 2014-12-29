@@ -31,6 +31,7 @@ int main(int argc, char *argv[])
 {
     struct GModule *module;
     int infile;
+    const char *mapset;
     size_t cell_size;
     int ytile, xtile, y, overlap;
     int *outfiles;
@@ -79,6 +80,10 @@ int main(int argc, char *argv[])
 
     G_get_set_window(&src_w);
     overlap = parm.overlap->answer ? atoi(parm.overlap->answer) : 0;
+
+    mapset = G_find_raster2(parm.rastin->answer, "");
+    if (mapset == NULL)
+        G_fatal_error(_("Raster map <%s> not found"), parm.rastin->answer);
 
     /* set window to old map */
     Rast_get_cellhd(parm.rastin->answer, "", &src_w);
