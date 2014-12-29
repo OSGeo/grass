@@ -57,7 +57,7 @@ void G_init_tempfile(void)
  */
 char *G_tempfile(void)
 {
-    return G__tempfile(getpid());
+    return G_tempfile_pid(getpid());
 }
 
 /*!
@@ -68,7 +68,7 @@ char *G_tempfile(void)
  * \param pid
  * \return pointer to string path
  */
-char *G__tempfile(int pid)
+char *G_tempfile_pid(int pid)
 {
     char path[GPATH_MAX];
     char name[GNAME_MAX];
