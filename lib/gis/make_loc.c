@@ -75,8 +75,8 @@ int G_make_location(const char *location_name,
     G__setenv("MAPSET", "PERMANENT");
 
     /* Create the default, and current window files */
-    G__put_window(wind, "", "DEFAULT_WIND");
-    G__put_window(wind, "", "WIND");
+    G_put_element_window(wind, "", "DEFAULT_WIND");
+    G_put_element_window(wind, "", "WIND");
 
     /* Write out the PROJ_INFO, and PROJ_UNITS if available. */
     if (proj_info != NULL) {

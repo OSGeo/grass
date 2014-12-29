@@ -588,7 +588,7 @@ const char *G_database_epsg_code(void);
 
 /* put_window.c */
 int G_put_window(const struct Cell_head *);
-int G__put_window(const struct Cell_head *, const char *, const char *);
+int G_put_element_window(const struct Cell_head *, const char *, const char *);
 
 /* putenv.c */
 void G_putenv(const char *, const char *);
