@@ -17,6 +17,8 @@
 #include <unistd.h>
 #include <grass/gis.h>
 
+#include "local_proto.h"
+
 static struct state {
     struct list {
 	char **names;
