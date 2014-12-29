@@ -6,19 +6,24 @@ at spatio-temporal locations of a space time vector dataset.
 
 <h2>EXAMPLE</h2>
 
-The example is based on the XXX sample dataset:
+The example is based on the space time vector dataset "precip_stations@climate_2009_2012"
+created in the <a href="t.vect.observe.strds.html">t.vect.observe.strds</a> example.
+In below example the command fills the new column "new_temp" with values
+extracted from the "tempmean_monthly" space time raster dataset:
 
 <div class="code"><pre>
-TBD
+t.vect.what.strds in=precip_stations@climate_2009_2012 \
+                  strds=tempmean_monthly@climate_2009_2012 \
+                  column=new_temp method=average
 </pre></div>
 
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="r.univar.html">r.univar</a>,  
+<a href="r.univar.html">r.univar</a>,
 <a href="v.univar.html">v.univar</a>,
 <a href="v.what.rast.html">v.what.rast</a>,
-<a href="v.what.rast3.html">v.what.rast3</a>, 
+<a href="v.what.rast3.html">v.what.rast3</a>,
 <a href="v.what.vect.html">v.what.vect</a>,
 <a href="t.create.html">t.create</a>,
 <a href="t.info.html">t.info</a>
