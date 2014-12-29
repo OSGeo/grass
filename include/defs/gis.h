@@ -51,11 +51,11 @@
 #   include <alloca.h>
 #  endif
 # endif
-# define G__alloca(n) alloca(n)
-# define G__freea(p)
+# define G_alloca(n) alloca(n)
+# define G_freea(p)
 #else
-# define G__alloca(n) G_malloc(n)
-# define G__freea(p) G_free(p)
+# define G_alloca(n) G_malloc(n)
+# define G_freea(p) G_free(p)
 #endif
 
 #include <stdarg.h>
@@ -412,7 +412,7 @@ double G_drand48(void);
 /* ls.c */
 void G_set_ls_filter(int (*)(const char *, void *), void *);
 void G_set_ls_exclude_filter(int (*)(const char *, void *), void *);
-char **G__ls(const char *, int *);
+char **G_ls2(const char *, int *);
 void G_ls(const char *, FILE *);
 void G_ls_format(char **, int, int, FILE *);
 
