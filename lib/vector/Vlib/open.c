@@ -1447,7 +1447,7 @@ char *Vect__get_path(const struct Map_info *Map)
     
     if (Map->temporary) {
         char path_tmp[GPATH_MAX];
-        G__temp_element(path_tmp);
+        G_temp_element(path_tmp);
         sprintf(path, "%s/%s/%s", path_tmp, GV_DIRECTORY, Map->name);
     }
     else {

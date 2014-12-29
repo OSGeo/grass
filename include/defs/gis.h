@@ -657,7 +657,7 @@ char *G_strcasestr(const char *, const char *);
 void G_init_tempfile(void);
 char *G_tempfile(void);
 char *G__tempfile(int);
-void G__temp_element(char *);
+void G_temp_element(char *);
 
 /* mkstemp.c */
 char *G_mktemp(char *);
