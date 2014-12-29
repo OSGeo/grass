@@ -155,7 +155,7 @@ int main(int argc, char *argv[])
 	G_get_window(&window);
 
     if ((name = parm.region->answer))	/* region= */
-	G__get_window(&window, "windows", name, "");
+	G_get_element_window(&window, "windows", name, "");
 
     if ((name = parm.raster->answer)) {	/* raster= */
 	Rast_get_cellhd(name, "", &window);

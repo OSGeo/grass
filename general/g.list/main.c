@@ -263,9 +263,9 @@ int main(int argc, char *argv[])
 	    char name[GNAME_MAX], mapset[GMAPSET_MAX];
 
 	    if (G_name_is_fully_qualified(opt.region->answer, name, mapset))
-		G__get_window(&window, "windows", name, mapset);
+		G_get_element_window(&window, "windows", name, mapset);
 	    else
-		G__get_window(&window, "windows", opt.region->answer, "");
+		G_get_element_window(&window, "windows", opt.region->answer, "");
 	}
     }
     else
