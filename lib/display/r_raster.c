@@ -107,7 +107,7 @@ int D_open_driver(void)
     
     G_debug(1, "D_open_driver():");
     p = getenv("GRASS_RENDER_IMMEDIATE");
-    m = G__getenv("MONITOR");
+    m = G_getenv_nofatal("MONITOR");
     
     if (m && G_strncasecmp(m, "wx", 2) == 0) {
 	/* wx monitors always use GRASS_RENDER_IMMEDIATE. */
@@ -126,14 +126,14 @@ int D_open_driver(void)
 
 	env = NULL;
 	G_asprintf(&env, "MONITOR_%s_MAPFILE", u_m);
-	v = G__getenv(env);
+	v = G_getenv_nofatal(env);
 	p = m;
 
 	if (v)
             G_putenv("GRASS_RENDER_FILE", v);
         
 	G_asprintf(&env, "MONITOR_%s_ENVFILE", u_m);
-	v = G__getenv(env);
+	v = G_getenv_nofatal(env);
 	if (v) 
 	    read_env_file(v);
     }
@@ -204,7 +204,7 @@ int D_save_command(const char *cmd)
 
     G_debug(1, "D_save_command(): %s", cmd);
 
-    mon_name = G__getenv("MONITOR");
+    mon_name = G_getenv_nofatal("MONITOR");
     if (!mon_name || /* if no monitor selected */
 	/* or wx monitor selected and display commands called by the monitor */
 	(G_strncasecmp(mon_name, "wx", 2) == 0 &&
@@ -216,7 +216,7 @@ int D_save_command(const char *cmd)
 
     env = NULL;
     G_asprintf(&env, "MONITOR_%s_CMDFILE", u_mon_name);
-    mon_cmd = G__getenv(env);
+    mon_cmd = G_getenv_nofatal(env);
     if (!mon_cmd)
 	return 0;
 

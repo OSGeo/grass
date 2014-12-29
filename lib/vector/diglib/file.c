@@ -200,7 +200,7 @@ int dig_file_load(struct gvfile * file)
 
     /* Get mode */
     mode = GV_MEMORY_NEVER;
-    cmode = G__getenv("GV_MEMORY");
+    cmode = G_getenv_nofatal("GV_MEMORY");
     if (cmode != NULL) {
 	if (G_strcasecmp(cmode, "ALWAYS") == 0)
 	    mode = GV_MEMORY_ALWAYS;

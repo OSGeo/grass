@@ -110,7 +110,7 @@ int start_mon(const char *name, const char *output, int select,
     if (check_mon(name)) {
         const char *curr_mon;
 
-        curr_mon = G__getenv("MONITOR");
+        curr_mon = G_getenv_nofatal("MONITOR");
 	if (select && (!curr_mon || strcmp(curr_mon, name) != 0))
 	    G_setenv("MONITOR", name);
 

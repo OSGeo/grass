@@ -31,7 +31,7 @@ void G_init_debug(void)
     if (G_is_initialized(&initialized))
 	return;
 
-    lstr = G__getenv("DEBUG");
+    lstr = G_getenv_nofatal("DEBUG");
 
     if (lstr != NULL)
 	grass_debug_level = atoi(lstr);

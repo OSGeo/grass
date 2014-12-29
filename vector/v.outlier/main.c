@@ -142,10 +142,10 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (!(db = G__getenv2("DB_DATABASE", G_VAR_MAPSET)))
+    if (!(db = G_getenv_nofatal2("DB_DATABASE", G_VAR_MAPSET)))
 	G_fatal_error(_("Unable to read name of database"));
 
-    if (!(dvr = G__getenv2("DB_DRIVER", G_VAR_MAPSET)))
+    if (!(dvr = G_getenv_nofatal2("DB_DRIVER", G_VAR_MAPSET)))
 	G_fatal_error(_("Unable to read name of driver"));
 
     stepN = atof(stepN_opt->answer);

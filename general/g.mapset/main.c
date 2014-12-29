@@ -98,9 +98,9 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     /* Store original values */
-    gisdbase_old = G__getenv("GISDBASE");
-    location_old = G__getenv("LOCATION_NAME");
-    mapset_old = G__getenv("MAPSET");
+    gisdbase_old = G_getenv_nofatal("GISDBASE");
+    location_old = G_getenv_nofatal("LOCATION_NAME");
+    mapset_old = G_getenv_nofatal("MAPSET");
 
     if (flag.curr->answer) {
 	fprintf(stdout, "%s\n", mapset_old);
@@ -125,8 +125,8 @@ int main(int argc, char *argv[])
 	char **ms;
 	int nmapsets;
 
-	G__setenv("LOCATION_NAME", location_new);
-	G__setenv("GISDBASE", gisdbase_new);
+	G_setenv_nogisrc("LOCATION_NAME", location_new);
+	G_setenv_nogisrc("GISDBASE", gisdbase_new);
 
 	ms = G_get_available_mapsets();
 

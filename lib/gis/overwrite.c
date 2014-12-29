@@ -37,7 +37,7 @@ int G_check_overwrite(int argc, char **argv)
     int overwrite;
 
     overwrite = 0;
-    if ((overstr = G__getenv("OVERWRITE"))) {
+    if ((overstr = G_getenv_nofatal("OVERWRITE"))) {
 	overwrite = atoi(overstr);
     }
 
@@ -59,7 +59,7 @@ int G_check_overwrite(int argc, char **argv)
 	}
     }
 
-    G__setenv("OVERWRITE", "1");
+    G_setenv_nogisrc("OVERWRITE", "1");
 
     return overwrite;
 }

@@ -649,7 +649,7 @@ int main(int argc, char *argv[])
 		
 		/* does the target location exist? */
 		G_create_alt_env();
-		G__setenv("LOCATION_NAME", parm.target->answer);
+		G_setenv_nogisrc("LOCATION_NAME", parm.target->answer);
 		sprintf(target_mapset, "PERMANENT");	/* must exist */
 
 		if (G__mapset_permissions(target_mapset) == -1) {
@@ -822,7 +822,7 @@ static void SetupReprojector(const char *pszSrcWKT, const char *pszDstLoc,
 
     /* Change to user defined target location for GCPs transformation */
     G_create_alt_env();
-    G__setenv("LOCATION_NAME", (char *)pszDstLoc);
+    G_setenv_nogisrc("LOCATION_NAME", (char *)pszDstLoc);
     sprintf(target_mapset, "PERMANENT");	/* to find PROJ_INFO */
 
     permissions = G__mapset_permissions(target_mapset);

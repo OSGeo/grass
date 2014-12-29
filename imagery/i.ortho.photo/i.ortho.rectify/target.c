@@ -20,10 +20,10 @@ int get_target(char *group)
 	goto error;
     }
     select_target_env();
-    G__setenv("LOCATION_NAME", location);
+    G_setenv_nogisrc("LOCATION_NAME", location);
     stat = G__mapset_permissions(mapset);
     if (stat > 0) {
-	G__setenv("MAPSET", mapset);
+	G_setenv_nogisrc("MAPSET", mapset);
 	G_get_window(&target_window);
 	select_current_env();
 	return 1;

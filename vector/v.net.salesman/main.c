@@ -197,7 +197,7 @@ int main(int argc, char **argv)
     tfield = atoi(tfield_opt->answer);
     Vect_str_to_cat_list(term_opt->answer, Clist);
 
-    dstr = G__getenv("DEBUG");
+    dstr = G_getenv_nofatal("DEBUG");
 
     if (dstr != NULL)
 	debug_level = atoi(dstr);

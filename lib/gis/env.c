@@ -335,7 +335,7 @@ static FILE *open_env(const char *mode, int loc)
 */
 const char *G_getenv(const char *name)
 {
-    const char *value = G__getenv(name);
+    const char *value = G_getenv_nofatal(name);
 
     if (value)
 	return value;
@@ -361,7 +361,7 @@ const char *G_getenv(const char *name)
 */
 const char *G_getenv2(const char *name, int loc)
 {
-    const char *value = G__getenv2(name, loc);
+    const char *value = G_getenv_nofatal2(name, loc);
 
     if (value)
 	return value;
@@ -378,7 +378,7 @@ const char *G_getenv2(const char *name, int loc)
   \return char pointer to value for name
   \return NULL if name not set
 */
-const char *G__getenv(const char *name)
+const char *G_getenv_nofatal(const char *name)
 {
     if (strcmp(name, "GISBASE") == 0)
 	return getenv(name);
@@ -397,7 +397,7 @@ const char *G__getenv(const char *name)
   \return char pointer to value for name
   \return NULL if name not set
 */
-const char *G__getenv2(const char *name, int loc)
+const char *G_getenv_nofatal2(const char *name, int loc)
 {
     if (strcmp(name, "GISBASE") == 0)
 	return getenv(name);
@@ -445,7 +445,7 @@ void G_setenv2(const char *name, const char *value, int loc)
   \param name variable name
   \param value variable value
 */
-void G__setenv(const char *name, const char *value)
+void G_setenv_nogisrc(const char *name, const char *value)
 {
     read_env(G_VAR_GISRC);
     set_env(name, value, G_VAR_GISRC);
@@ -458,7 +458,7 @@ void G__setenv(const char *name, const char *value)
   \param value variable value
   \param loc location (G_VAR_GISRC, G_VAR_MAPSET)
 */
-void G__setenv2(const char *name, const char *value, int loc)
+void G_setenv_nogisrc2(const char *name, const char *value, int loc)
 {
     read_env(loc);
     set_env(name, value, loc);
