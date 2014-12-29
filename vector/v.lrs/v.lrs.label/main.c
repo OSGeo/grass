@@ -201,12 +201,12 @@ int main(int argc, char **argv)
     Width->options = "1-100";
 
     Hcolor = G_define_standard_option(G_OPT_CN);
-    Hcolor->key = "hcolor";
+    Hcolor->key = "highlight_color";
     Hcolor->label = _("Highlight color for text");
     Hcolor->answer = "none";
 
     Hwidth = G_define_option();
-    Hwidth->key = "hwidth";
+    Hwidth->key = "highlight_width";
     Hwidth->label = _("Line width of highlight color");
     Hwidth->description = _("Only for d.label output");
     Hwidth->type = TYPE_INTEGER;
