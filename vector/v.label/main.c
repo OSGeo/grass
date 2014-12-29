@@ -170,13 +170,13 @@ int main(int argc, char **argv)
     Width->guisection = _("Effects");
 
     Hcolor = G_define_standard_option(G_OPT_CN);
-    Hcolor->key = "hcolor";
+    Hcolor->key = "highlight_color";
     Hcolor->label = _("Highlight color for text");
     Hcolor->answer = "none";
     Hcolor->guisection = _("Colors");
 
     Hwidth = G_define_option();
-    Hwidth->key = "hwidth";
+    Hwidth->key = "highlight_width";
     Hwidth->description = _("Width of highlight coloring");
     Hwidth->type = TYPE_DOUBLE;
     Hwidth->answer = "0";

@@ -102,7 +102,7 @@ int main(int argc, char **argv)
     color_opt->guisection = _("Rendering");
 
     hcolor_opt = G_define_option();
-    hcolor_opt->key = "hcolor";
+    hcolor_opt->key = "highlight_color";
     hcolor_opt->type = TYPE_STRING;
     hcolor_opt->answer = "red";
     hcolor_opt->description = _("Highlight color");
