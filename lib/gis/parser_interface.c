@@ -59,7 +59,7 @@ static void print_escaped_for_xml(FILE *fp, const char *str)
 	char *src = (char *) str;
 	size_t srclen = strlen(src);
 	size_t dstlen = srclen * 4 + 1;
-	char *dst = G__alloca(dstlen);
+	char *dst = G_alloca(dstlen);
 	size_t ret;
 
 	enc = dst;
@@ -90,7 +90,7 @@ static void print_escaped_for_xml(FILE *fp, const char *str)
 
 #ifdef HAVE_ICONV_H
     if (enc)
-	G__freea(enc);
+	G_freea(enc);
 
     if (conv != (iconv_t) -1)
 	iconv_close(conv);
