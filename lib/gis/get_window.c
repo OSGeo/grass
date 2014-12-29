@@ -26,10 +26,10 @@ static struct state {
 static struct state *st = &state;
 
 /*!
-  \brief Read the database region
+  \brief Get the current region
   
-  Reads the database region as stored in the WIND file in the user's
-  current mapset into region.
+  Reads the region as stored in the WIND file in the user's current
+  mapset into region.
   
   3D values are set to defaults if not available in WIND file.  An
   error message is printed and exit() is called if there is a problem
@@ -63,9 +63,9 @@ void G_get_window(struct Cell_head *window)
     else {
 	char *wind = getenv("WIND_OVERRIDE");
 	if (wind)
-	    G__get_window(&st->dbwindow, "windows", wind, G_mapset());
+	    G_get_element_window(&st->dbwindow, "windows", wind, G_mapset());
 	else
-	    G__get_window(&st->dbwindow, "", "WIND", G_mapset());
+	    G_get_element_window(&st->dbwindow, "", "WIND", G_mapset());
     }
 
     *window = st->dbwindow;
@@ -79,7 +79,7 @@ void G_get_window(struct Cell_head *window)
 }
 
 /*!
-  \brief Read the default region
+  \brief Get the default region
   
   Reads the default region for the location into <i>region.</i> 3D
   values are set to defaults if not available in WIND file.
@@ -91,21 +91,21 @@ void G_get_window(struct Cell_head *window)
 */
 void G_get_default_window(struct Cell_head *window)
 {
-    G__get_window(window, "", "DEFAULT_WIND", "PERMANENT");
+    G_get_element_window(window, "", "DEFAULT_WIND", "PERMANENT");
 }
 
 /*!
-  \brief Get window (region) of selected map
+  \brief Get region for selected element (raster, vector, window, etc.)
   
   G_fatal_error() is called on error
   
-  \param window pointer to Cell_head
+  \param[out] window pointer to Cell_head
   \param element element type
-  \param name map name
+  \param name element name
   \param mapset mapset name
 */
-void G__get_window(struct Cell_head *window,
-		   const char *element, const char *name, const char *mapset)
+void G_get_element_window(struct Cell_head *window,
+                          const char *element, const char *name, const char *mapset)
 {
     FILE *fp;
 
@@ -122,7 +122,7 @@ void G__get_window(struct Cell_head *window,
 }
 
 /*!
-  \brief Unset current window
+  \brief Unset current region
 */
 void G_unset_window()
 {
