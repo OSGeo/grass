@@ -76,7 +76,7 @@ char *G__tempfile(int pid)
 
     if (pid <= 0)
 	pid = getpid();
-    G__temp_element(element);
+    G_temp_element(element);
     G_init_tempfile();
     do {
 	int uniq = G_counter_next(&unique);
@@ -93,7 +93,7 @@ char *G__tempfile(int pid)
  *
  * \param[out] element element name
  */
-void G__temp_element(char *element)
+void G_temp_element(char *element)
 {
     const char *machine;
 
