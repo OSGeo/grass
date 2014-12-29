@@ -56,7 +56,7 @@ void find_stroke_fonts(void)
 
     G_asprintf(&dirpath, "%s/fonts", G_gisbase());
 
-    dirlisting = G__ls(dirpath, &numfiles);
+    dirlisting = G_ls2(dirpath, &numfiles);
 
     G_asprintf(&fonttable, "%s/fonts.table", dirpath);
     if (access(fonttable, R_OK) == 0)
