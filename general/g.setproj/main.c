@@ -639,7 +639,7 @@ int main(int argc, char *argv[])
 	G_free_key_value(in_unit_keys);
     }				/* if */
 
-    if (G__put_window(&cellhd, "", "DEFAULT_WIND") < 0)
+    if (G_put_element_window(&cellhd, "", "DEFAULT_WIND") < 0)
 	G_fatal_error(_("Unable to write to DEFAULT_WIND region file"));
     fprintf(stderr,
 	    _("\nProjection information has been recorded for this location\n\n"));

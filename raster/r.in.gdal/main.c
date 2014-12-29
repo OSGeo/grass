@@ -780,7 +780,7 @@ int main(int argc, char *argv[])
 	cur_wind.east = cur_wind.west + cur_wind.cols * cur_wind.ew_res;
 
 	if (strcmp(G_mapset(), "PERMANENT") == 0) {
-	    G__put_window(&cur_wind, "", "DEFAULT_WIND");
+	    G_put_element_window(&cur_wind, "", "DEFAULT_WIND");
 	    G_message(_("Default region for this location updated"));
 	}
 	G_put_window(&cur_wind);
