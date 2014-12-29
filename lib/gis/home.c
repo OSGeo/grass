@@ -16,6 +16,8 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
+#include "local_proto.h"
+
 /*!
  * \brief Get user's home directory
  *
