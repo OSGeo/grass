@@ -652,7 +652,7 @@ int main(int argc, char *argv[])
 		G_setenv_nogisrc("LOCATION_NAME", parm.target->answer);
 		sprintf(target_mapset, "PERMANENT");	/* must exist */
 
-		if (G__mapset_permissions(target_mapset) == -1) {
+		if (G_mapset_permissions(target_mapset) == -1) {
 		    /* create target location later */
 		    create_target = 1;
 		}
@@ -825,7 +825,7 @@ static void SetupReprojector(const char *pszSrcWKT, const char *pszDstLoc,
     G_setenv_nogisrc("LOCATION_NAME", (char *)pszDstLoc);
     sprintf(target_mapset, "PERMANENT");	/* to find PROJ_INFO */
 
-    permissions = G__mapset_permissions(target_mapset);
+    permissions = G_mapset_permissions(target_mapset);
     if (permissions >= 0) {
 
 	/* Get projection info from target location */

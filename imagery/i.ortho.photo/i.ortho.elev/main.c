@@ -124,7 +124,7 @@ int main(int argc, char *argv[])
     G_create_alt_env();
     G_setenv_nogisrc("LOCATION_NAME", location);
 
-    stat = G__mapset_permissions(mapset);
+    stat = G_mapset_permissions(mapset);
     if (stat > 0) {
 	G_setenv_nogisrc("MAPSET", mapset);
 	G_create_alt_search_path();
