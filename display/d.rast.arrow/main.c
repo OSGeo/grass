@@ -110,25 +110,25 @@ int main(int argc, char **argv)
     opt2->options = "grass,compass,agnps,answers";
     opt2->description = _("Type of existing raster aspect map");
 
-    opt3 = G_define_standard_option(G_OPT_C_FG);
+    opt3 = G_define_standard_option(G_OPT_C);
     opt3->key = "color";
     opt3->answer = "green";
     opt3->label = _("Color for drawing arrows");
     opt3->guisection = _("Colors");
     
-    opt4 = G_define_standard_option(G_OPT_C_BG);
+    opt4 = G_define_standard_option(G_OPT_CN);
     opt4->key = "grid_color";
     opt4->answer = "gray";
     opt4->label = _("Color for drawing drawing grid");
     opt4->guisection = _("Colors");
 
-    opt5 = G_define_standard_option(G_OPT_C_BG);
+    opt5 = G_define_standard_option(G_OPT_CN);
     opt5->key = "null_color";
     opt5->answer = DEFAULT_FG_COLOR;
     opt5->label = _("Color for drawing null values (X symbol)");
     opt5->guisection = _("Colors");
 
-    opt6 = G_define_standard_option(G_OPT_C_BG);
+    opt6 = G_define_standard_option(G_OPT_CN);
     opt6->key = "unknown_color";
     opt6->answer = "red";
     opt6->label = _("Color for showing unknown information (? symbol)");

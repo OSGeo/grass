@@ -142,7 +142,7 @@ int main(int argc, char **argv)
     bwidth_opt->guisection = _("Boundaries");
     bwidth_opt->description = _("Boundary width");
 
-    bcolor_opt = G_define_standard_option(G_OPT_C_FG);
+    bcolor_opt = G_define_standard_option(G_OPT_C);
     bcolor_opt->key = "boundary_color";
     bcolor_opt->label = _("Boundary color");
     bcolor_opt->guisection = _("Boundaries");

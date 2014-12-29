@@ -147,7 +147,7 @@ int main(int argc, char **argv)
     FontSize->options = "1-1000";
     FontSize->guisection = _("Font");
 
-    Color = G_define_standard_option(G_OPT_C_FG);
+    Color = G_define_standard_option(G_OPT_C);
     Color->label = _("Text color");
     Color->guisection = _("Colors");
 
@@ -169,7 +169,7 @@ int main(int argc, char **argv)
     Width->options = "0-25";
     Width->guisection = _("Effects");
 
-    Hcolor = G_define_standard_option(G_OPT_C_BG);
+    Hcolor = G_define_standard_option(G_OPT_CN);
     Hcolor->key = "hcolor";
     Hcolor->label = _("Highlight color for text");
     Hcolor->answer = "none";
@@ -182,11 +182,13 @@ int main(int argc, char **argv)
     Hwidth->answer = "0";
     Hwidth->guisection = _("Effects");
 
-    Bcolor = G_define_standard_option(G_OPT_C_BG);
+    Bcolor = G_define_standard_option(G_OPT_CN);
+    Bcolor->key = "bgcolor";
+    Bcolor->label = _("Background color");
     Bcolor->answer = "none";
     Bcolor->guisection = _("Colors");
 
-    Border = G_define_standard_option(G_OPT_C_BG);
+    Border = G_define_standard_option(G_OPT_CN);
     Border->key = "border";
     Border->label = _("Border color");
     Border->answer = "none";

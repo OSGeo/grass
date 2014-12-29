@@ -65,7 +65,10 @@ void parse_command(int argc, char *argv[], struct GParams *params)
 
     /*** misc ***/
     /* background color */
-    params->bgcolor = G_define_standard_option(G_OPT_C_BG);
+    params->bgcolor = G_define_standard_option(G_OPT_C);
+    params->bgcolor->key = "bgcolor";
+    params->bgcolor->label = _("Background color");
+    params->bgcolor->answer = DEFAULT_BG_COLOR;
 
     /*** viewpoint ***/
     args_viewpoint(params);
@@ -147,7 +150,7 @@ void args_surface(struct GParams *params)
     params->color_map->guisection = _("Surfaces");
     params->color_map->key = "color_map";
 
-    params->color_const = G_define_standard_option(G_OPT_C_FG);
+    params->color_const = G_define_standard_option(G_OPT_C);
     params->color_const->multiple = YES;
     params->color_const->label = _("Color value(s)");
     params->color_const->guisection = _("Surfaces");
@@ -276,7 +279,7 @@ void args_surface(struct GParams *params)
     params->shade->guisection = _("Draw");
 
     /* wire color */
-    params->wire_color = G_define_standard_option(G_OPT_C_FG);
+    params->wire_color = G_define_standard_option(G_OPT_C);
     params->wire_color->multiple = YES;
     params->wire_color->required = NO;
     params->wire_color->label = _("Wire color");
@@ -336,7 +339,7 @@ void args_vline(struct GParams *params)
     params->vline_width_column->guisection = _("Vector lines");
 
     /* line color */
-    params->vline_color = G_define_standard_option(G_OPT_C_FG);
+    params->vline_color = G_define_standard_option(G_OPT_C);
     params->vline_color->multiple = YES;
     params->vline_color->required = NO;
     params->vline_color->label = _("Vector line color");
@@ -448,7 +451,7 @@ void args_vpoint(struct GParams *params)
     params->vpoint_width_column->guisection = _("Vector points");
 
     /* point color */
-    params->vpoint_color = G_define_standard_option(G_OPT_C_FG);
+    params->vpoint_color = G_define_standard_option(G_OPT_C);
     params->vpoint_color->multiple = YES;
     params->vpoint_color->required = NO;
     params->vpoint_color->label = _("Icon color");
@@ -658,7 +661,7 @@ void args_volume(struct GParams *params)
     params->isosurf_color_map->guisection = _("Volumes");
 
     /* isosurface color value */
-    params->isosurf_color_const = G_define_standard_option(G_OPT_C_FG);
+    params->isosurf_color_const = G_define_standard_option(G_OPT_C);
     params->isosurf_color_const->key = "isosurf_color_value";
     params->isosurf_color_const->required = NO;
     params->isosurf_color_const->multiple = YES;
@@ -769,7 +772,7 @@ void args_lighting(struct GParams *params)
     params->light_pos->guisection = _("Lighting");
     params->light_pos->answer = "0.68,-0.68,0.80";
 
-    params->light_color = G_define_standard_option(G_OPT_C_FG);
+    params->light_color = G_define_standard_option(G_OPT_C);
     params->light_color->key = "light_color";
     params->light_color->label = _("Light color");
     params->light_color->guisection = _("Lighting");
@@ -872,7 +875,7 @@ void args_fringe(struct GParams *params)
     params->fringe->guisection = _("Fringe");
     params->fringe->multiple = YES;
 
-    params->fringe_color = G_define_standard_option(G_OPT_C_FG);
+    params->fringe_color = G_define_standard_option(G_OPT_C);
     params->fringe_color->key = "fringe_color";
     params->fringe_color->label = _("Fringe color");
     params->fringe_color->guisection = _("Fringe");
@@ -911,7 +914,7 @@ void args_arrow(struct GParams *params)
 	_("North arrow size (in map units)");
     params->north_arrow_size->guisection = _("Decoration");
 
-    params->north_arrow_color = G_define_standard_option(G_OPT_C_FG);
+    params->north_arrow_color = G_define_standard_option(G_OPT_C);
     params->north_arrow_color->key = "arrow_color";
     params->north_arrow_color->required = NO;
     params->north_arrow_color->multiple = NO;

@@ -156,7 +156,7 @@ int main(int argc, char **argv)
 	_("Use a subset of the map range for the legend (min,max)");
     opt_range->guisection = _("Subset");
 
-    opt_color = G_define_standard_option(G_OPT_C_FG);
+    opt_color = G_define_standard_option(G_OPT_C);
     opt_color->label = _("Text color");
     opt_color->guisection = _("Font settings");
 

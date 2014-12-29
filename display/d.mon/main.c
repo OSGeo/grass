@@ -85,7 +85,10 @@ int main(int argc, char *argv[])
     res_opt->key_desc = "value";
     res_opt->guisection = _("Settings");
 
-    bgcolor_opt = G_define_standard_option(G_OPT_C_BG);
+    bgcolor_opt = G_define_standard_option(G_OPT_CN);
+    bgcolor_opt->key = "bgcolor";
+    bgcolor_opt->label = _("Background color");
+    bgcolor_opt->answer = DEFAULT_BG_COLOR;
     bgcolor_opt->guisection = _("Settings");
 
     output_opt = G_define_standard_option(G_OPT_F_OUTPUT);

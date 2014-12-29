@@ -111,16 +111,15 @@ int main(int argc, char **argv)
     scale_opt->description = _("Scale for size (to get size in pixels)");
     scale_opt->guisection = _("Chart properties");
 
-    ocolor_opt = G_define_standard_option(G_OPT_C_FG);
+    ocolor_opt = G_define_standard_option(G_OPT_C);
     ocolor_opt->key = "outline_color";
     ocolor_opt->label = _("Outline color");
     ocolor_opt->guisection = _("Chart properties");
 
-    colors_opt = G_define_standard_option(G_OPT_C_FG);
+    colors_opt = G_define_standard_option(G_OPT_C);
     colors_opt->key = "colors";
     colors_opt->multiple = YES;
     colors_opt->label = _("Colors used to fill charts");
-    colors_opt->gisprompt = "old_color,color,color";
     colors_opt->guisection = _("Chart properties");
 
     y_center_flag = G_define_flag();

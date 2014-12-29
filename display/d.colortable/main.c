@@ -66,7 +66,7 @@ int main(int argc, char **argv)
     opt1->description =
 	_("Name of raster map whose color table is to be displayed");
 
-    opt2 = G_define_standard_option(G_OPT_C_FG);
+    opt2 = G_define_standard_option(G_OPT_C);
     opt2->answer = DEFAULT_BG_COLOR;
     opt2->label =
 	_("Color of lines separating the colors of the color table");
