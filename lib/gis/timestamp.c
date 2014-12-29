@@ -155,7 +155,7 @@ int G__read_timestamp(FILE * fd, struct TimeStamp *ts)
   \return 0 on success
   \return -1 on error
 */
-int G__write_timestamp(FILE * fd, const struct TimeStamp *ts)
+int G_write_timestamp(FILE * fd, const struct TimeStamp *ts)
 {
     char buf[1024];
 
@@ -294,7 +294,7 @@ static int write_timestamp(const char *maptype, const char *dir,
 	return -1;
     }
 
-    stat = G__write_timestamp(fd, ts);
+    stat = G_write_timestamp(fd, ts);
     fclose(fd);
     if (stat == 0)
 	return 1;
@@ -526,7 +526,7 @@ int G_write_vector_timestamp(const char *name, const char *layer, const struct T
 	return -1;
     }
 
-    stat = G__write_timestamp(fd, ts);
+    stat = G_write_timestamp(fd, ts);
     fclose(fd);
     if (stat == 0)
 	return 1;
