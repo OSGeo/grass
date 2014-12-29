@@ -99,7 +99,7 @@ static int G__open(const char *element,
 	G_file_name(path, element, name, mapset);
 
 	if (mode == 1 || access(path, 0) != 0) {
-	    G__make_mapset_element(element);
+	    G_make_mapset_element(element);
 	    close(open(path, O_WRONLY | O_CREAT | O_TRUNC, 0666));
 	}
 

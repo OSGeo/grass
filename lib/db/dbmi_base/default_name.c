@@ -108,7 +108,7 @@ int db_set_default_connection(void)
 	db_set_connection(&connection);
 
 	sprintf(buf, "%s/%s/dbf", G_location_path(), G_mapset());
-	G__make_mapset_element("dbf");
+	G_make_mapset_element("dbf");
     }
     else if (strcmp(DB_DEFAULT_DRIVER, "sqlite") == 0) {
 	/* Set default values and create sqlite db dir */
@@ -129,7 +129,7 @@ int db_set_default_connection(void)
 	  */
 	connection.databaseName =
 	    "$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db";
-	G__make_mapset_element("sqlite");
+	G_make_mapset_element("sqlite");
 	db_set_connection(&connection);
     }
     else

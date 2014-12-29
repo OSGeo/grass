@@ -54,7 +54,7 @@ int M_do_copy(int n, const char *old, const char *mapset, const char *new)
     }
     else {
 	for (i = 0; i < list[n].nelem; i++) {
-	    G__make_mapset_element(list[n].element[i]);
+	    G_make_mapset_element(list[n].element[i]);
 	    G_file_name(path, list[n].element[i], old, mapset);
 	    if (access(path, 0) != 0) {
 		G_remove(list[n].element[i], new);

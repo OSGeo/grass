@@ -603,7 +603,7 @@ static int open_raster_new(const char *name, int open_mode,
      * since we are bypassing the normal open logic
      * must create the cell element 
      */
-    G__make_mapset_element(cell_dir);
+    G_make_mapset_element(cell_dir);
 
     /* mark closed */
     fcb->map_type = map_type;

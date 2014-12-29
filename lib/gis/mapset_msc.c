@@ -32,7 +32,7 @@
    \return 0 ?
    \return ?
  */
-int G__make_mapset_element(const char *p_element)
+int G_make_mapset_element(const char *p_element)
 {
     char path[GPATH_MAX];
     char *p;
@@ -85,7 +85,7 @@ int G__make_mapset_element_misc(const char *dir, const char *name)
     char buf[GNAME_MAX * 2 + 1];
 
     sprintf(buf, "%s/%s", dir, name);
-    return G__make_mapset_element(buf);
+    return G_make_mapset_element(buf);
 }
 
 static int check_owner(const struct stat *info)
