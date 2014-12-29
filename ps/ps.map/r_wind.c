@@ -28,7 +28,7 @@ int read_wind(char *name, char *mapset)
 
     sprintf(fullname, "%s in %s", name, mapset);
 
-    G__get_window(&window, "windows", name, mapset);
+    G_get_element_window(&window, "windows", name, mapset);
 
     width = 1.;
     color_R = color_G = color_B = 0;
