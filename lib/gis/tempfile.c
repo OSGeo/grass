@@ -103,5 +103,5 @@ void G_temp_element(char *element)
 	strcat(element, "/");
 	strcat(element, machine);
     }
-    G__make_mapset_element(element);
+    G_make_mapset_element(element);
 }

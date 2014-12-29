@@ -11,5 +11,5 @@ void Rast3d_make_mapset_map_directory(const char *mapName)
     char buf[GNAME_MAX + sizeof(RASTER3D_DIRECTORY) + 2];
 
     sprintf(buf, "%s/%s", RASTER3D_DIRECTORY, mapName);
-    G__make_mapset_element(buf);
+    G_make_mapset_element(buf);
 }
