@@ -62,7 +62,7 @@ int check_mon(const char *name)
     
     env_name = NULL;
     G_asprintf(&env_name, "MONITOR_%s_ENVFILE", G_store_upper(name));
-    str = G__getenv(env_name);
+    str = G_getenv_nofatal(env_name);
     if (!str)
 	return FALSE;
     
@@ -79,7 +79,7 @@ void list_cmd(const char *name, FILE *fd_out)
 
     cmd_name = NULL;
     G_asprintf(&cmd_name, "MONITOR_%s_CMDFILE", G_store_upper(name));
-    cmd_value = G__getenv(cmd_name);
+    cmd_value = G_getenv_nofatal(cmd_name);
     if (!cmd_value)
 	G_fatal_error(_("Command file not found"));
     

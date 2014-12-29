@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
     if (selected_flag->answer || release_flag->answer || cmd_flag->answer) {
 	if (list_flag->answer)
 	    G_warning(_("Flag -%c ignored"), list_flag->key);
-	mon = G__getenv("MONITOR");
+	mon = G_getenv_nofatal("MONITOR");
 	if (mon) {
 	    if (selected_flag->answer) {
 		G_verbose_message(_("Currently selected monitor:"));

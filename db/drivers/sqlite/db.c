@@ -67,8 +67,8 @@ int db__driver_open_database(dbHandle * handle)
 	    if (tokens[n][0] == '$') {
 		G_strchg(tokens[n], '$', ' ');
 		G_chop(tokens[n]);
-		strcat(name2, G__getenv(tokens[n]));
-		G_debug(3, "   -> %s", G__getenv(tokens[n]));
+		strcat(name2, G_getenv_nofatal(tokens[n]));
+		G_debug(3, "   -> %s", G_getenv_nofatal(tokens[n]));
 	    }
 	    else {
 		strcat(name2, tokens[n]);

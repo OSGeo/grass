@@ -70,8 +70,8 @@ int main(int argc, char *argv[])
      */
     tempfile = G_tempfile();
 
-    G__setenv("LOCATION_NAME", argv[1]);
-    G__setenv("MAPSET", argv[2]);
+    G_setenv_nogisrc("LOCATION_NAME", argv[1]);
+    G_setenv_nogisrc("MAPSET", argv[2]);
 
     for (n = 3; n < argc; n += 2) {
 	FILE *fd;

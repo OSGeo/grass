@@ -122,11 +122,11 @@ int main(int argc, char *argv[])
 
 
     G_create_alt_env();
-    G__setenv("LOCATION_NAME", location);
+    G_setenv_nogisrc("LOCATION_NAME", location);
 
     stat = G__mapset_permissions(mapset);
     if (stat > 0) {
-	G__setenv("MAPSET", mapset);
+	G_setenv_nogisrc("MAPSET", mapset);
 	G_create_alt_search_path();
 	G_switch_env();
 	G_switch_search_path();
@@ -156,7 +156,7 @@ int main(int argc, char *argv[])
 	    }
 
 	    I_get_group_elev(group, elev_layer, mapset_elev, tl, math_exp, units, nd);
-	    overwrite = G__getenv("OVERWRITE") != NULL;
+	    overwrite = G_getenv_nofatal("OVERWRITE") != NULL;
 	    
 	    if (!overwrite && *elev_layer) {
 		G_warning(_("Elevation for group <%s> is already set to <%s>"),
