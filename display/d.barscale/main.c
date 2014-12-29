@@ -108,11 +108,13 @@ int main(int argc, char **argv)
 	_("Screen coordinates of the rectangle's top-left corner");
     coords->description = _("(0,0) is lower-left of the display frame");
 
-    fg_color_opt = G_define_standard_option(G_OPT_C_FG);
+    fg_color_opt = G_define_standard_option(G_OPT_C);
     fg_color_opt->label = _("Bar scale and text color");
     fg_color_opt->guisection = _("Colors");
 
-    bg_color_opt = G_define_standard_option(G_OPT_C_BG);
+    bg_color_opt = G_define_standard_option(G_OPT_CN);
+    bg_color_opt->key = "bgcolor";
+    bg_color_opt->answer = DEFAULT_BG_COLOR;
     bg_color_opt->label = _("Background color (drawn behind the bar)");
     bg_color_opt->guisection = _("Colors");
 

@@ -112,11 +112,11 @@ int main(int argc, char **argv)
 
 
     /* Colors */
-    color_opt = G_define_standard_option(G_OPT_C_FG);
+    color_opt = G_define_standard_option(G_OPT_CN);
     color_opt->label = _("Feature color");
     color_opt->guisection = _("Colors");
     
-    fcolor_opt = G_define_standard_option(G_OPT_C_BG);
+    fcolor_opt = G_define_standard_option(G_OPT_CN);
     fcolor_opt->key = "fill_color";
     fcolor_opt->answer = "200:200:200";
     fcolor_opt->label = _("Area fill color");
@@ -203,19 +203,19 @@ int main(int argc, char **argv)
     attrcol_opt->guisection = _("Labels");
     attrcol_opt->description = _("Name of column to be displayed as a label");
 
-    lcolor_opt = G_define_standard_option(G_OPT_C_FG);
+    lcolor_opt = G_define_standard_option(G_OPT_C);
     lcolor_opt->key = "label_color";
     lcolor_opt->answer = "red";
     lcolor_opt->label = _("Label color");
     lcolor_opt->guisection = _("Labels");
 
-    bgcolor_opt = G_define_standard_option(G_OPT_C_BG);
+    bgcolor_opt = G_define_standard_option(G_OPT_CN);
     bgcolor_opt->key = "label_bgcolor";
     bgcolor_opt->answer = "none";
     bgcolor_opt->guisection = _("Labels");
     bgcolor_opt->label = _("Label background color");
 
-    bcolor_opt = G_define_standard_option(G_OPT_C_BG);
+    bcolor_opt = G_define_standard_option(G_OPT_CN);
     bcolor_opt->key = "label_bcolor";
     bcolor_opt->type = TYPE_STRING;
     bcolor_opt->answer = "none";

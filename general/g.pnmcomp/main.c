@@ -320,7 +320,9 @@ int main(int argc, char *argv[])
     opt.height->required = YES;
     opt.height->description = _("Image height");
 
-    opt.bg = G_define_standard_option(G_OPT_C_BG);
+    opt.bg = G_define_standard_option(G_OPT_C);
+    opt.bg->key = "bgcolor";
+    opt.bg->label = _("Background color");
     opt.bg->answer = NULL;
     
     if (G_parser(argc, argv))

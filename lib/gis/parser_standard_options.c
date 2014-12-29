@@ -92,8 +92,8 @@
    - G_OPT_F_SEP
    
   - colors
-   - G_OPT_C_FG
-   - G_OPT_C_BG
+   - G_OPT_C
+   - G_OPT_CN
 
   - misc
    - G_OPT_M_DIR
@@ -590,7 +590,7 @@ struct Option *G_define_standard_option(int opt)
 	break;
 
 	/* colors */
-    case G_OPT_C_FG:
+    case G_OPT_C:
 	Opt->key = "color";
 	Opt->type = TYPE_STRING;
 	Opt->key_desc = "name";
@@ -599,16 +599,16 @@ struct Option *G_define_standard_option(int opt)
 	Opt->gisprompt = "old,color,color";
 	Opt->label = _("Color");
 	Opt->description =
-	    _("Either a standard color name, R:G:B triplet, or \"none\"");
+	    _("Either a standard color name or R:G:B triplet");
 	break;
-    case G_OPT_C_BG:
-	Opt->key = "bgcolor";
+    case G_OPT_CN:
+	Opt->key = "color";
 	Opt->type = TYPE_STRING;
 	Opt->key_desc = "name";
 	Opt->required = NO;
-	Opt->answer = DEFAULT_BG_COLOR;
+	Opt->answer = DEFAULT_FG_COLOR;
 	Opt->gisprompt = "old,color_none,color";
-	Opt->label = _("Background color");
+	Opt->label = _("Color");
 	Opt->description =
 	    _("Either a standard color name, R:G:B triplet, or \"none\"");
 	break;

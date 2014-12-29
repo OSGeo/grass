@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     parm.coor->required = YES;
     parm.coor->description = _("Starting and ending coordinates");
 
-    parm.lcolor = G_define_standard_option(G_OPT_C_FG);
+    parm.lcolor = G_define_standard_option(G_OPT_C);
     parm.lcolor->key = "line_color";
     parm.lcolor->label = _("Line color");
 
