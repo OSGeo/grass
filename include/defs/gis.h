@@ -305,8 +305,8 @@ struct Key_Value *G_get_projepsg(void);
 /* get_window.c */
 void G_get_window(struct Cell_head *);
 void G_get_default_window(struct Cell_head *);
-void G__get_window(struct Cell_head *, const char *, const char *,
-		   const char *);
+void G_get_element_window(struct Cell_head *, const char *, const char *,
+                          const char *);
 
 /* getl.c */
 int G_getl(char *, int, FILE *);
