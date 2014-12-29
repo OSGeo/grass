@@ -126,7 +126,7 @@ static int list_element(FILE *out, const char *element, const char *desc, const 
      * otherwise the ls must be forced into columnar form.
      */
 
-    list = G__ls(path, &count);
+    list = G_ls2(path, &count);
 
     if (count > 0) {
 	fprintf(out, _("%s files available in mapset <%s>:\n"), desc, mapset);
