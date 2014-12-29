@@ -175,7 +175,7 @@ int main(int argc, char *argv[])
 	elev_fd = 0, slope_fd = 0, aspect_fd = 0,
 	base_fd = 0, max_fd = 0, maxdir_fd = 0, spotdist_fd = 0;
 
-    char name_base[60], name_max[60], name_maxdir[60], name_spotdist[60];
+    char *name_base, *name_max, *name_maxdir, *name_spotdist;
 
     CELL *fuel,			/*cell buffer for fuel model map layer */
      *mois_1h,			/*cell buffer for 1-hour fuel moisture map layer */
@@ -198,7 +198,7 @@ int main(int argc, char *argv[])
     {
 	struct Option *model,
 	    *mois_1h, *mois_10h, *mois_100h, *mois_live,
-	    *vel, *dir, *elev, *slope, *aspect, *output;
+            *vel, *dir, *elev, *slope, *aspect, *base, *max, *maxdir, *spotdist;
     } parm;
 
     /* please, remove before GRASS 7 released */
@@ -314,26 +314,54 @@ int main(int argc, char *argv[])
     parm.elev = G_define_standard_option(G_OPT_R_ELEV);
     parm.elev->required = NO;
     parm.elev->label =
-	_("Raster map containing elevation (m, required with -s)");
+	_("Raster map containing elevation (m, required for spotting)");
     parm.elev->description =
 	_("Name of an existing raster map "
 	  "layer in the user's current mapset search path containing elevation (meters). "
 	  "Option is required from spotting distance computation "
-	  "(when -s flag is enabled)");
+	  "(when spotting_distance option is provided)");
 
-    parm.output = G_define_standard_option(G_OPT_R_OUTPUT);
-    parm.output->description =
-	_("Prefix for output raster maps (.base, .max, .maxdir, .spotdist)");
+    parm.base = G_define_standard_option(G_OPT_R_OUTPUT);
+    parm.base->key = "base_ros";
+    parm.base->required = YES;
+    parm.base->label =
+	_("Output raster map containing base ROS (cm/min)");
+    parm.base->description =
+	_("Base (perpendicular) rate of spread (ROS)");
 
-    flag_s = G_define_flag();
-    flag_s->key = 's';
-    flag_s->description = _("Also produce maximum spotting distance");
+    parm.max = G_define_standard_option(G_OPT_R_OUTPUT);
+    parm.max->key = "max_ros";
+    parm.max->required = YES;
+    parm.max->label =
+	_("Output raster map containing maximal ROS (cm/min)");
+    parm.max->description =
+	_("The maximum (forward) rate of spread (ROS)");
+
+    parm.maxdir = G_define_standard_option(G_OPT_R_OUTPUT);
+    parm.maxdir->key = "direction_ros";
+    parm.maxdir->required = YES;
+    parm.maxdir->label =
+	_("Output raster map containing directions of maximal ROS (degree)");
+    parm.maxdir->description =
+	_("The direction of the maximal (forward) rate of spread (ROS)");
+
+    parm.spotdist = G_define_standard_option(G_OPT_R_OUTPUT);
+    parm.spotdist->key = "spotting_distance";
+    parm.spotdist->required = NO;
+    parm.spotdist->label =
+	_("Output raster map containing maximal spotting distance (m)");
+    parm.spotdist->description =
+	_("The maximal potential spotting distance raster will be also generated"
+	  " (requires elevation raster map to be provided).");
 
     /*   Parse command line */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-    
-    spotting = flag_s->answer;
+
+    if (parm.spotdist->answer)
+	spotting = 1;
+    else
+	spotting = 0;
 
     /*  Check if input layers exists in data base  */
     if (G_find_raster2(parm.model->answer, "") == NULL)
@@ -417,9 +445,9 @@ int main(int argc, char *argv[])
     }
 
     /*assign names of the three output ROS layers */
-    sprintf(name_base, "%s.base", parm.output->answer);
-    sprintf(name_max, "%s.max", parm.output->answer);
-    sprintf(name_maxdir, "%s.maxdir", parm.output->answer);
+    name_base = parm.base->answer;
+    name_max = parm.max->answer;
+    name_maxdir = parm.maxdir->answer;
 
     /*check if the output layer names EXIST */
     if (G_check_overwrite(argc, argv) == 0) {
@@ -437,7 +465,7 @@ int main(int argc, char *argv[])
 	
 	/*assign a name to output SPOTTING distance layer */
 	if (spotting) {
-	    sprintf(name_spotdist, "%s.spotdist", parm.output->answer);
+	    name_spotdist = parm.spotdist->answer;
 	    if (G_find_raster2(name_spotdist, G_mapset()))
 		G_fatal_error(_("Raster map <%s> already exists in mapset <%s>"),
 			      name_spotdist, G_mapset());
