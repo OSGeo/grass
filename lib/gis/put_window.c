@@ -15,9 +15,9 @@
 #include <grass/gis.h>
 
 /*!
- * \brief Writes the database region (window)
+ * \brief Writes the region (window)
  *
- * Writes the database region file (WIND) in the user's current mapset
+ * Writes the region file (WIND) in the user's current mapset
  * or when environmental variable \c WIND_OVERRIDE is set,
  * it writes the region to file specified by \c WIND_OVERRIDE variable.
  *
@@ -26,7 +26,7 @@
  * Otherwise the whole GRASS session is affected.
  *
  * \warning When environmental variable \c WIND_OVERRIDE is not set,
- * this routine actually changes the database region.
+ * this routine actually changes the region.
  * So in this case it should only be called by modules which the user knows
  * will change the region. It is probably fair to say that only the
  * \gmod{g.region} should call this routine unless \c WIND_OVERRIDE is set.
@@ -45,17 +45,17 @@ int G_put_window(const struct Cell_head *window)
 {
     char *wind = getenv("WIND_OVERRIDE");
 
-    return wind ? G__put_window(window, "windows", wind)
-	: G__put_window(window, "", "WIND");
+    return wind ? G_put_element_window(window, "windows", wind)
+	: G_put_element_window(window, "", "WIND");
 }
 
 /*!
- * \brief Write the database region
+ * \brief Write the region
  *
- * Writes the database region file (WIND) in the user's current mapset
+ * Writes the region file (WIND) in the user's current mapset
  * from region. 
 
- * <b>Warning:</b> Since this routine actually changes the database
+ * <b>Warning:</b> Since this routine actually changes the 
  * region, it should only be called by modules which the user knows
  * will change the region. It is probably fair to say that only the
  * <tt>g.region</tt> should call this routine.
@@ -69,7 +69,7 @@ int G_put_window(const struct Cell_head *window)
  *
  * \sa G_put_window()
  */
-int G__put_window(const struct Cell_head *window, const char *dir, const char *name)
+int G_put_element_window(const struct Cell_head *window, const char *dir, const char *name)
 {
     FILE *fd;
 
