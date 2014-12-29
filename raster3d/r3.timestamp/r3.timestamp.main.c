@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 
     if (!modify) {
 	if (G_read_raster3d_timestamp(name, mapset, &ts) == 1) {
-	    G__write_timestamp(stdout, &ts);
+	    G_write_timestamp(stdout, &ts);
 	    exit(EXIT_SUCCESS);
 	}
 	else
