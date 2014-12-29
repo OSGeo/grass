@@ -148,7 +148,7 @@ class Gisdbase(object):
 
     # TODO remove or complete this function
     def new_location(self):
-        if libgis.G__make_location() != 0:
+        if libgis.G_make_location() != 0:
             raise GrassError("Cannot create new location")
 
     def locations(self):
@@ -240,7 +240,7 @@ class Location(object):
         mapsets = [mapset for mapset in self]
         if permissions:
             mapsets = [mapset for mapset in mapsets
-                       if libgis.G__mapset_permissions(mapset)]
+                       if libgis.G_mapset_permissions(mapset)]
         if pattern:
             return fnmatch.filter(mapsets, pattern)
         return mapsets

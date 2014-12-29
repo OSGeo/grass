@@ -120,7 +120,7 @@ def getenv(env):
     'user1'
 
     """
-    return libgis.G__getenv(env)
+    return libgis.G_getenv_nofatal(env)
 
 
 def get_mapset_raster(mapname, mapset=''):
