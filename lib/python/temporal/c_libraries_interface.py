@@ -156,7 +156,7 @@ def _available_mapsets(lock, conn, data):
     while mapsets[count]:
         char_list = ""
         mapset = mapsets[count]
-        if libgis.G__mapset_permissions(mapset) > 0:
+        if libgis.G_mapset_permissions(mapset) > 0:
             count += 1
             c = 0
             while mapset[c] != "\x00":
