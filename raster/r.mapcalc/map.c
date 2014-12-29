@@ -159,9 +159,9 @@ static void *cache_get_raw(struct row_cache *cache, int row, int data_type)
 	return sub->buf[0];
     }
 
-    tmp = G__alloca(cache->nrows * sizeof(void *));
+    tmp = G_alloca(cache->nrows * sizeof(void *));
     memcpy(tmp, sub->buf, cache->nrows * sizeof(void *));
-    vtmp = G__alloca(cache->nrows);
+    vtmp = G_alloca(cache->nrows);
     memcpy(vtmp, sub->valid, cache->nrows);
 
     i = (i < 0)
@@ -179,8 +179,8 @@ static void *cache_get_raw(struct row_cache *cache, int row, int data_type)
     }
 
     sub->row = newrow;
-    G__freea(tmp);
-    G__freea(vtmp);
+    G_freea(tmp);
+    G_freea(vtmp);
 
     Rast_get_row(cache->fd, sub->buf[i], row, data_type);
     sub->valid[i] = 1;
@@ -226,10 +226,10 @@ static void init_cats(struct map *m)
 static void translate_from_colors(struct map *m, DCELL *rast, CELL *cell,
 				  int ncols, int mod)
 {
-    unsigned char *red = G__alloca(columns);
-    unsigned char *grn = G__alloca(columns);
-    unsigned char *blu = G__alloca(columns);
-    unsigned char *set = G__alloca(columns);
+    unsigned char *red = G_alloca(columns);
+    unsigned char *grn = G_alloca(columns);
+    unsigned char *blu = G_alloca(columns);
+    unsigned char *set = G_alloca(columns);
     int i;
 
     Rast_lookup_d_colors(rast, red, grn, blu, set, ncols, &m->colors);
@@ -270,10 +270,10 @@ static void translate_from_colors(struct map *m, DCELL *rast, CELL *cell,
 	break;
     }
 
-    G__freea(red);
-    G__freea(grn);
-    G__freea(blu);
-    G__freea(set);
+    G_freea(red);
+    G_freea(grn);
+    G_freea(blu);
+    G_freea(set);
 }
 
 /* convert cell values to double based on the values in the
@@ -598,10 +598,10 @@ void get_map_row(int idx, int mod, int depth, int row, int col, void *buf,
 	read_map(m, buf, res_type, row, col);
 	break;
     case '@':
-	ibuf = G__alloca(columns * sizeof(CELL));
+	ibuf = G_alloca(columns * sizeof(CELL));
 	read_map(m, ibuf, CELL_TYPE, row, col);
 	translate_from_cats(m, ibuf, buf, columns);
-	G__freea(ibuf);
+	G_freea(ibuf);
 	break;
     case 'r':
     case 'g':
@@ -609,10 +609,10 @@ void get_map_row(int idx, int mod, int depth, int row, int col, void *buf,
     case '#':
     case 'y':
     case 'i':
-	fbuf = G__alloca(columns * sizeof(DCELL));
+	fbuf = G_alloca(columns * sizeof(DCELL));
 	read_map(m, fbuf, DCELL_TYPE, row, col);
 	translate_from_colors(m, fbuf, buf, columns, mod);
-	G__freea(fbuf);
+	G_freea(fbuf);
 	break;
     default:
 	G_fatal_error(_("Invalid map modifier: '%c'"), mod);
