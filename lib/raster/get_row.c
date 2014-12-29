@@ -135,10 +135,10 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
 	G_fatal_error(_("Error reading raster data for row %d of <%s>"),
 		      row, fcb->name);
 
-    cmp = G__alloca(readamount);
+    cmp = G_alloca(readamount);
 
     if (read(fcb->data_fd, cmp, readamount) != readamount) {
-	G__freea(cmp);
+	G_freea(cmp);
 	G_fatal_error(_("Error reading raster data for row %d of <%s>"),
 		      row, fcb->name);
     }
@@ -162,7 +162,7 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
     else
 	memcpy(data_buf, cmp, readamount);
 
-    G__freea(cmp);
+    G_freea(cmp);
 }
 
 static void read_data_uncompressed(int fd, int row, unsigned char *data_buf,
@@ -195,7 +195,7 @@ static void read_data_gdal(int fd, int row, unsigned char *data_buf,
     if (fcb->gdal->vflip)
 	row = fcb->cellhd.rows - 1 - row;
 
-    buf = fcb->gdal->hflip ? G__alloca(fcb->cellhd.cols * fcb->cur_nbytes)
+    buf = fcb->gdal->hflip ? G_alloca(fcb->cellhd.cols * fcb->cur_nbytes)
 	: data_buf;
 
     err =
@@ -210,7 +210,7 @@ static void read_data_gdal(int fd, int row, unsigned char *data_buf,
 	    memcpy(data_buf + i * fcb->cur_nbytes,
 		   buf + (fcb->cellhd.cols - 1 - i) * fcb->cur_nbytes,
 		   fcb->cur_nbytes);
-	G__freea(buf);
+	G_freea(buf);
     }
 
     if (err != CE_None)
@@ -454,7 +454,7 @@ static void transfer_to_cell_XX(int fd, void *cell)
 static void transfer_to_cell_fi(int fd, void *cell)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
-    FCELL *work_buf = G__alloca(R__.rd_window.cols * sizeof(FCELL));
+    FCELL *work_buf = G_alloca(R__.rd_window.cols * sizeof(FCELL));
     int i;
 
     transfer_to_cell_XX(fd, work_buf);
@@ -463,13 +463,13 @@ static void transfer_to_cell_fi(int fd, void *cell)
 	((CELL *) cell)[i] = (fcb->col_map[i] == 0)
 	    ? 0 : Rast_quant_get_cell_value(&fcb->quant, work_buf[i]);
 
-    G__freea(work_buf);
+    G_freea(work_buf);
 }
 
 static void transfer_to_cell_di(int fd, void *cell)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
-    DCELL *work_buf = G__alloca(R__.rd_window.cols * sizeof(DCELL));
+    DCELL *work_buf = G_alloca(R__.rd_window.cols * sizeof(DCELL));
     int i;
 
     transfer_to_cell_XX(fd, work_buf);
@@ -478,12 +478,12 @@ static void transfer_to_cell_di(int fd, void *cell)
 	((CELL *) cell)[i] = (fcb->col_map[i] == 0)
 	    ? 0 : Rast_quant_get_cell_value(&fcb->quant, work_buf[i]);
 
-    G__freea(work_buf);
+    G_freea(work_buf);
 }
 
 static void transfer_to_cell_if(int fd, void *cell)
 {
-    CELL *work_buf = G__alloca(R__.rd_window.cols * sizeof(CELL));
+    CELL *work_buf = G_alloca(R__.rd_window.cols * sizeof(CELL));
     int i;
 
     transfer_to_cell_XX(fd, work_buf);
@@ -491,12 +491,12 @@ static void transfer_to_cell_if(int fd, void *cell)
     for (i = 0; i < R__.rd_window.cols; i++)
 	((FCELL *) cell)[i] = work_buf[i];
 
-    G__freea(work_buf);
+    G_freea(work_buf);
 }
 
 static void transfer_to_cell_df(int fd, void *cell)
 {
-    DCELL *work_buf = G__alloca(R__.rd_window.cols * sizeof(DCELL));
+    DCELL *work_buf = G_alloca(R__.rd_window.cols * sizeof(DCELL));
     int i;
 
     transfer_to_cell_XX(fd, work_buf);
@@ -504,12 +504,12 @@ static void transfer_to_cell_df(int fd, void *cell)
     for (i = 0; i < R__.rd_window.cols; i++)
 	((FCELL *) cell)[i] = work_buf[i];
 
-    G__freea(work_buf);
+    G_freea(work_buf);
 }
 
 static void transfer_to_cell_id(int fd, void *cell)
 {
-    CELL *work_buf = G__alloca(R__.rd_window.cols * sizeof(CELL));
+    CELL *work_buf = G_alloca(R__.rd_window.cols * sizeof(CELL));
     int i;
 
     transfer_to_cell_XX(fd, work_buf);
@@ -517,12 +517,12 @@ static void transfer_to_cell_id(int fd, void *cell)
     for (i = 0; i < R__.rd_window.cols; i++)
 	((DCELL *) cell)[i] = work_buf[i];
 
-    G__freea(work_buf);
+    G_freea(work_buf);
 }
 
 static void transfer_to_cell_fd(int fd, void *cell)
 {
-    FCELL *work_buf = G__alloca(R__.rd_window.cols * sizeof(FCELL));
+    FCELL *work_buf = G_alloca(R__.rd_window.cols * sizeof(FCELL));
     int i;
 
     transfer_to_cell_XX(fd, work_buf);
@@ -530,7 +530,7 @@ static void transfer_to_cell_fd(int fd, void *cell)
     for (i = 0; i < R__.rd_window.cols; i++)
 	((DCELL *) cell)[i] = work_buf[i];
 
-    G__freea(work_buf);
+    G_freea(work_buf);
 }
 
 /*
@@ -588,7 +588,7 @@ static void get_map_row(int fd, void *rast, int row, RASTER_MAP_TYPE data_type,
     int i;
 
     if (fcb->reclass_flag && data_type != CELL_TYPE) {
-	temp_buf = G__alloca(R__.rd_window.cols * sizeof(CELL));
+	temp_buf = G_alloca(R__.rd_window.cols * sizeof(CELL));
 	buf = temp_buf;
 	type = CELL_TYPE;
     }
@@ -615,7 +615,7 @@ static void get_map_row(int fd, void *rast, int row, RASTER_MAP_TYPE data_type,
 	rast = G_incr_void_ptr(rast, size);
     }
 
-    G__freea(temp_buf);
+    G_freea(temp_buf);
 }
 
 /*!
@@ -854,13 +854,13 @@ static void get_null_value_row_nomask(int fd, char *flags, int row)
 	    fcb->null_cur_row = -1;
 	    if (fcb->map_type == CELL_TYPE) {
 		/* If can't read null row, assume  that all map 0's are nulls */
-		CELL *mask_buf = G__alloca(R__.rd_window.cols * sizeof(CELL));
+		CELL *mask_buf = G_alloca(R__.rd_window.cols * sizeof(CELL));
 
 		get_map_row_nomask(fd, mask_buf, row, CELL_TYPE);
 		for (j = 0; j < R__.rd_window.cols; j++)
 		    flags[j] = (mask_buf[j] == 0);
 
-		G__freea(mask_buf);
+		G_freea(mask_buf);
 	    }
 	    else {		/* fp map */
 		/* if can't read null row, assume  that all data is valid */
@@ -915,14 +915,14 @@ static void get_null_value_row_gdal(int fd, char *flags, int row)
 
 static void embed_mask(char *flags, int row)
 {
-    CELL *mask_buf = G__alloca(R__.rd_window.cols * sizeof(CELL));
+    CELL *mask_buf = G_alloca(R__.rd_window.cols * sizeof(CELL));
     int i;
 
     if (R__.auto_mask <= 0)
 	return;
 
     if (get_map_row_nomask(R__.mask_fd, mask_buf, row, CELL_TYPE) < 0) {
-	G__freea(mask_buf);
+	G_freea(mask_buf);
 	return;
     }
 
@@ -935,7 +935,7 @@ static void embed_mask(char *flags, int row)
 	if (mask_buf[i] == 0 || Rast_is_c_null_value(&mask_buf[i]))
 	    flags[i] = 1;
 
-    G__freea(mask_buf);
+    G_freea(mask_buf);
 }
 
 static void get_null_value_row(int fd, char *flags, int row, int with_mask)
@@ -967,7 +967,7 @@ static void embed_nulls(int fd, void *buf, int row, RASTER_MAP_TYPE map_type,
 	&& (R__.auto_mask <= 0 || !with_mask))
 	return;
 
-    null_buf = G__alloca(R__.rd_window.cols);
+    null_buf = G_alloca(R__.rd_window.cols);
 
     get_null_value_row(fd, null_buf, row, with_mask);
 
@@ -982,7 +982,7 @@ static void embed_nulls(int fd, void *buf, int row, RASTER_MAP_TYPE map_type,
 	buf = G_incr_void_ptr(buf, size);
     }
 
-    G__freea(null_buf);
+    G_freea(null_buf);
 }
 
 /*!
@@ -1009,13 +1009,13 @@ void Rast_get_null_value_row(int fd, char *flags, int row)
     if (!fcb->reclass_flag)
 	get_null_value_row(fd, flags, row, 1);
     else {
-	CELL *buf = G__alloca(R__.rd_window.cols * sizeof(CELL));
+	CELL *buf = G_alloca(R__.rd_window.cols * sizeof(CELL));
 	int i;
 
 	Rast_get_c_row(fd, buf, row);
 	for (i = 0; i < R__.rd_window.cols; i++)
 	    flags[i] = Rast_is_c_null_value(&buf[i]) ? 1 : 0;
 
-	G__freea(buf);
+	G_freea(buf);
     }
 }
