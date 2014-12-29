@@ -16,8 +16,8 @@
 
 #%module
 #% description: Snaps temporally the maps of a space time dataset.
-#% keywords: temporal
-#% keywords: snapping
+#% keyword: temporal
+#% keyword: snapping
 #%end
 
 #%option G_OPT_STDS_INPUT

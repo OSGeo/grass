@@ -16,9 +16,9 @@
 
 #%module
 #% description: Aggregates temporally the maps of a space time raster dataset by a user defined granularity.
-#% keywords: temporal
-#% keywords: aggregation
-#% keywords: raster
+#% keyword: temporal
+#% keyword: aggregation
+#% keyword: raster
 #%end
 
 #%option G_OPT_STRDS_INPUT

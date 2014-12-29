@@ -20,10 +20,10 @@
 
 #%module
 #% description: Configuration tool for r.li modules.
-#% keywords: general
-#% keywords: GUI
-#% keywords: raster
-#% keywords: landscape structure analysis
+#% keyword: general
+#% keyword: GUI
+#% keyword: raster
+#% keyword: landscape structure analysis
 #%end
 
 import os

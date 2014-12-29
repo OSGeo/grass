@@ -16,8 +16,8 @@
 
 #%module
 #% description: Shifts temporally the maps of a space time dataset.
-#% keywords: temporal
-#% keywords: shift
+#% keyword: temporal
+#% keyword: shift
 #%end
 
 #%option G_OPT_STDS_INPUT

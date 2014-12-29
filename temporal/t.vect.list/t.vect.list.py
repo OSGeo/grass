@@ -16,10 +16,10 @@
 
 #%module
 #% description: Lists registered maps of a space time vector dataset.
-#% keywords: temporal
-#% keywords: map management
-#% keywords: vector
-#% keywords: list
+#% keyword: temporal
+#% keyword: map management
+#% keyword: vector
+#% keyword: list
 #%end
 
 #%option G_OPT_STVDS_INPUT

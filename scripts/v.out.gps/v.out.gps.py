@@ -33,27 +33,27 @@
 #############################################################################
 
 #%Module
-#%  description: Exports a vector map to a GPS receiver or file format supported by GPSBabel.
-#%  keywords: vector
-#%  keywords: export
-#%  keywords: GPS
+#% description: Exports a vector map to a GPS receiver or file format supported by GPSBabel.
+#% keyword: vector
+#% keyword: export
+#% keyword: GPS
 #%End
 #%flag
-#%  key: w
-#%  description: Export as waypoints
+#% key: w
+#% description: Export as waypoints
 #%end
 #%flag
-#%  key: r
-#%  description: Export as routes
+#% key: r
+#% description: Export as routes
 #%end
 #%flag
-#%  key: t
-#%  description: Export as tracks
+#% key: t
+#% description: Export as tracks
 #%end
 ############ TODO:
 ##%flag
-##%  key: z
-##%  description: Export altitude from 3D vector's z-coordinate
+##% key: z
+##% description: Export altitude from 3D vector's z-coordinate
 ##%end
 ############
 #%option G_OPT_V_INPUT

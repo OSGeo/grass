@@ -14,9 +14,9 @@ This program is free software under the GNU General Public License
 
 #%module
 #% description: Downloads and imports data from WMS/WMTS/NASA OnEarth server.
-#% keywords: raster
-#% keywords: import
-#% keywords: OGC web services
+#% keyword: raster
+#% keyword: import
+#% keyword: OGC web services
 #%end
 
 #%option

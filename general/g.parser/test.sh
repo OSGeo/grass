@@ -1,14 +1,15 @@
 #!/bin/sh
 
-# g.parser demo script
+# g.parser demo script for shell programing
 
 #%Module
-#%  description: g.parser test script
-#%  keywords: keyword1, keyword2
+#% description: g.parser test script (shell)
+#% keyword: keyword1
+#% keyword: keyword2
 #%End
 #%flag
-#%  key: f
-#%  description: A flag
+#% key: f
+#% description: A flag
 #%end
 #%option
 #% key: raster
@@ -28,7 +29,7 @@
 #% key: option1
 #% type: string
 #% description: An option
-#% required : yes
+#% required : no
 #%end
 
 if [ -z "$GISBASE" ] ; then
@@ -52,4 +53,4 @@ echo "Value of GIS_OPT_option1: '$GIS_OPT_option1'"
 echo "Value of GIS_OPT_raster: '$GIS_OPT_raster'"
 echo "Value of GIS_OPT_vect: '$GIS_OPT_vector'"
 
-#add your code here
+#end of your code

@@ -18,9 +18,9 @@
 
 #%module
 #% description: Apply temporal and spatial operations on space time raster datasets using temporal raster algebra.
-#% keywords: temporal
-#% keywords: algebra
-#% keywords: raster
+#% keyword: temporal
+#% keyword: algebra
+#% keyword: raster
 #%end
 
 #%option

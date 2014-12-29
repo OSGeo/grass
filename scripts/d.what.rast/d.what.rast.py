@@ -15,8 +15,8 @@
 
 #%module
 #% description: Allows the user to interactively query raster map layers at user-selected locations.
-#% keywords: display
-#% keywords: vector
+#% keyword: display
+#% keyword: vector
 #%end
 #%option G_OPT_R_INPUTS
 #% key: map

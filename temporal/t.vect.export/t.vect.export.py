@@ -16,9 +16,9 @@
 
 #%module
 #% description: Exports a space time vector dataset as GRASS GIS specific archive file.
-#% keywords: temporal
-#% keywords: export
-#% keywords: vector
+#% keyword: temporal
+#% keyword: export
+#% keyword: vector
 #%end
 
 #%option G_OPT_STVDS_INPUT

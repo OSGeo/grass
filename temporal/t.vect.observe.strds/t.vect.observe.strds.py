@@ -16,9 +16,9 @@
 
 #%module
 #% description: Observes specific locations in a space time raster dataset over a period of time using vector points.
-#% keywords: temporal
-#% keywords: sampling
-#% keywords: vector
+#% keyword: temporal
+#% keyword: sampling
+#% keyword: vector
 #%end
 
 #%option G_OPT_V_INPUT

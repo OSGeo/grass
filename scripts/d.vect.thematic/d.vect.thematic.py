@@ -18,11 +18,11 @@
 
 #%module
 #% description: Displays thematic vector map
-#% keywords: display
-#% keywords: cartography
-#% keywords: vector
-#% keywords: thematic
-#% keywords: legend
+#% keyword: display
+#% keyword: cartography
+#% keyword: vector
+#% keyword: thematic
+#% keyword: legend
 #%end
 #%option G_OPT_V_MAP
 #%end

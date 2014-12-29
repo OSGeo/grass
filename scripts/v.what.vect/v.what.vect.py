@@ -15,12 +15,12 @@
 
 #%module
 #% description: Uploads vector values at positions of vector points to the table.
-#% keywords: vector
-#% keywords: sampling
-#% keywords: database
-#% keywords: position
-#% keywords: querying
-#% keywords: attribute table
+#% keyword: vector
+#% keyword: sampling
+#% keyword: database
+#% keyword: position
+#% keyword: querying
+#% keyword: attribute table
 #%end
 
 #%option G_OPT_V_MAP

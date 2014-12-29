@@ -16,8 +16,8 @@
 
 #%module
 #% description: Merges several space time datasets into a single space time dataset.
-#% keywords: temporal
-#% keywords: merge
+#% keyword: temporal
+#% keyword: merge
 #%end
 
 #%option G_OPT_STDS_INPUTS

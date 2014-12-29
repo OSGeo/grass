@@ -18,11 +18,11 @@
 
 #%module
 #% description: Converts vector polygons or points to lines.
-#% keywords: vector
-#% keywords: geometry
-#% keywords: area
-#% keywords: line
-#% keywords: point
+#% keyword: vector
+#% keyword: geometry
+#% keyword: area
+#% keyword: line
+#% keyword: point
 #%end
 
 #%option G_OPT_V_INPUT

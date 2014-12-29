@@ -16,9 +16,9 @@
 
 #%module
 #% description: Performs spatio-temporal mapcalc expressions on temporally sampled maps of space time raster datasets.
-#% keywords: temporal
-#% keywords: algebra
-#% keywords: raster
+#% keyword: temporal
+#% keyword: algebra
+#% keyword: raster
 #%end
 
 #%option G_OPT_STRDS_INPUTS

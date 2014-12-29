@@ -16,9 +16,9 @@
 
 #%module
 #% description: Displays the manual pages of GRASS modules.
-#% keywords: general
-#% keywords: manual
-#% keywords: help
+#% keyword: general
+#% keyword: manual
+#% keyword: help
 #%end
 #%flag
 #% key: i

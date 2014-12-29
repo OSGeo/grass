@@ -17,11 +17,11 @@
 
 #%module
 #% description: Drapes a color raster over an shaded relief or aspect map.
-#% keywords: raster
-#% keywords: elevation
-#% keywords: relief
-#% keywords: hillshade
-#% keywords: visualization
+#% keyword: raster
+#% keyword: elevation
+#% keyword: relief
+#% keyword: hillshade
+#% keyword: visualization
 #%end
 #%option G_OPT_R_INPUT
 #% key: shade

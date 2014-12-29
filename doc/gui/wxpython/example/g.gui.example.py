@@ -20,9 +20,9 @@
 
 #%module
 #% description: Example GUI application which displays raster map and further information
-#% keywords: example
-#% keywords: GUI
-#% keywords: raster
+#% keyword: example
+#% keyword: GUI
+#% keyword: raster
 #%end
 #%option G_OPT_R_INPUT
 #% description: Name of raster map to load

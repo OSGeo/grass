@@ -21,10 +21,10 @@
 #%module
 #% label: Graphical Modeler.
 #% description: Allows to interactively create, edit and manage models.
-#% keywords: general
-#% keywords: GUI
-#% keywords: graphical modeler
-#% keywords: workflow
+#% keyword: general
+#% keyword: GUI
+#% keyword: graphical modeler
+#% keyword: workflow
 #%end
 #%option G_OPT_F_INPUT
 #% key: file

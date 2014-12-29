@@ -15,9 +15,9 @@
 
 #%module
 #% description: Redraws the content of currently selected monitor.
-#% keywords: display
-#% keywords: graphics
-#% keywords: monitors
+#% keyword: display
+#% keyword: graphics
+#% keyword: monitors
 #%end
 
 import sys

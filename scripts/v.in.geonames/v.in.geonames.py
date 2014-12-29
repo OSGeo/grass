@@ -24,9 +24,9 @@
 
 #%module
 #% description: Imports geonames.org country files into a vector points map.
-#% keywords: vector
-#% keywords: import
-#% keywords: gazetteer
+#% keyword: vector
+#% keyword: import
+#% keyword: gazetteer
 #%end
 #%option G_OPT_F_INPUT
 #% description: Name of uncompressed geonames file (with .txt extension)
