@@ -401,7 +401,7 @@ int main(int argc, char *argv[])
 	mapset = G_find_file2("windows", name, "");
 	if (!mapset)
 	    G_fatal_error(_("Region <%s> not found"), name);
-	G__get_window(&window, "windows", name, mapset);
+	G_get_element_window(&window, "windows", name, mapset);
     }
 
     /* raster= */
