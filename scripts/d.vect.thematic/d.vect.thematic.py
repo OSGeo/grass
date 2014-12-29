@@ -7,7 +7,7 @@
 #               by Martin Landa, Jachym Cepicky, Daniel Calvelo Aros and Moritz Lennert
 # PURPOSE:	    Displays thematic vector map with graduated colors
 #               or graduated points and line thickneses
-# COPYRIGHT:	(C) 2006 by the GRASS Development Team
+# COPYRIGHT:	(C) 2006-2014 by the GRASS Development Team
 #
 #		This program is free software under the GNU General Public
 #		License (>=v2). Read the file COPYING that comes with GRASS
@@ -313,7 +313,7 @@ def main():
         if 'grassrgb' not in s.splitlines():
             msg(locals(), _("Creating column 'grassrgb' in table <$table>"))
             sql = "ALTER TABLE %s ADD COLUMN grassrgb varchar(11)" % table
-            grass.write_command('db.execute', database = database, driver = driver, stdin = sql)
+            grass.write_command('db.execute', database = database, driver = driver, input = '-', stdin = sql)
 
     # Group name
     if not group:
@@ -670,7 +670,7 @@ end
             # update color to database?
             if flag_u:
                 sql = subs(locals(), "UPDATE $table SET GRASSRGB = '$themecolor' WHERE $sqlwhere")
-                grass.write_command('db.execute', database = database, driver = driver, stdin = sql)
+                grass.write_command('db.execute', database = database, driver = driver, input = '-', stdin = sql)
 
             # Create group for GIS Manager
             if flag_g:
@@ -986,7 +986,7 @@ end
             # update color to database?
             if flag_u:
                 sql = subs(locals(), "UPDATE $table SET grassrgb = '$themecolor' WHERE $sqlwhere")
-                grass.write_command('db.execute', database = database, driver = driver, stdin = sql)
+                grass.write_command('db.execute', database = database, driver = driver, input = '-', stdin = sql)
 
             # Create group for GIS Manager
             if flag_g:
