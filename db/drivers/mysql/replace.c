@@ -49,8 +49,8 @@ int replace_variables(char *in, char **datadir, char **database)
 	    if (tokens[n][0] == '$') {
 		G_strchg(tokens[n], '$', ' ');
 		G_chop(tokens[n]);
-		strcat(tmp, G__getenv(tokens[n]));
-		G_debug(3, "   -> %s", G__getenv(tokens[n]));
+		strcat(tmp, G_getenv_nofatal(tokens[n]));
+		G_debug(3, "   -> %s", G_getenv_nofatal(tokens[n]));
 	    }
 	    else {
 		strcat(tmp, tokens[n]);

@@ -180,8 +180,8 @@ int main(int argc, char *argv[])
     /* Change the location here and then come back */
 
     select_target_env();
-    G__setenv("GISDBASE", gbase);
-    G__setenv("LOCATION_NAME", iloc_name);
+    G_setenv_nogisrc("GISDBASE", gbase);
+    G_setenv_nogisrc("LOCATION_NAME", iloc_name);
     stat = G__mapset_permissions(iset_name);
     
     if (stat >= 0) {		/* yes, we can access the mapset */
@@ -191,8 +191,8 @@ int main(int argc, char *argv[])
 	    char **list;
 	    G_verbose_message(_("Checking location <%s> mapset <%s>"),
 			      iloc_name, iset_name);
-	    list = G_list(G_ELEMENT_VECTOR, G__getenv("GISDBASE"),
-			  G__getenv("LOCATION_NAME"), iset_name);
+	    list = G_list(G_ELEMENT_VECTOR, G_getenv_nofatal("GISDBASE"),
+			  G_getenv_nofatal("LOCATION_NAME"), iset_name);
 	    if (list[0]) {
 		for (i = 0; list[i]; i++) {
 		    fprintf(stdout, "%s\n", list[i]);
@@ -209,7 +209,7 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Required parameter <%s> not set"), mapopt->key);
 	}
 
-	G__setenv("MAPSET", iset_name);
+	G_setenv_nogisrc("MAPSET", iset_name);
 	/* Make sure map is available */
 	mapset = G_find_vector2(map_name, iset_name);
 	if (mapset == NULL)

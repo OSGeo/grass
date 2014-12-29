@@ -32,7 +32,7 @@ int stop(const char *name)
     env_name = NULL;
     G_asprintf(&env_name, "MONITOR_%s_ENVFILE", G_store_upper(name));
     
-    env_file = G__getenv(env_name);
+    env_file = G_getenv_nofatal(env_name);
     if (!env_file)
 	G_warning(_("Env file not found"));
     
@@ -49,7 +49,7 @@ int stop_wx(const char *name)
     env_name = NULL;
     G_asprintf(&env_name, "MONITOR_%s_PID", G_store_upper(name));
     
-    pid = G__getenv(env_name);
+    pid = G_getenv_nofatal(env_name);
     if (!pid) {
 	clean_env(name);
 	G_fatal_error(_("PID file not found"));

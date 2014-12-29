@@ -579,7 +579,7 @@ Vect_line_intersection(struct line_pnts *APoints,
     struct bound_box box, abbox;
 
     if (debug_level == -1) {
-	const char *dstr = G__getenv("DEBUG");
+	const char *dstr = G_getenv_nofatal("DEBUG");
 
 	if (dstr != NULL)
 	    debug_level = atoi(dstr);

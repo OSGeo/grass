@@ -25,7 +25,7 @@ char *tgis_get_driver_name(void)
 {
     const char *drv;
     
-    if ((drv = G__getenv2("TGISDB_DRIVER", G_VAR_MAPSET)))
+    if ((drv = G_getenv_nofatal2("TGISDB_DRIVER", G_VAR_MAPSET)))
         return G_store(drv);
     
     return NULL;
@@ -41,7 +41,7 @@ char *tgis_get_database_name(void)
 {
     const char *drv;
     
-    if ((drv = G__getenv2("TGISDB_DATABASE", G_VAR_MAPSET)))
+    if ((drv = G_getenv_nofatal2("TGISDB_DATABASE", G_VAR_MAPSET)))
         return G_store(drv);
     
     return NULL;
@@ -78,8 +78,8 @@ int tgis_get_connection(dbConnection * connection)
 {
     G_zero(connection, sizeof(dbConnection));
     
-    connection->driverName = (char *)G__getenv2("TGISDB_DRIVER", G_VAR_MAPSET);
-    connection->databaseName = (char *)G__getenv2("TGISDB_DATABASE", G_VAR_MAPSET);
+    connection->driverName = (char *)G_getenv_nofatal2("TGISDB_DRIVER", G_VAR_MAPSET);
+    connection->databaseName = (char *)G_getenv_nofatal2("TGISDB_DATABASE", G_VAR_MAPSET);
 
     return DB_OK;
 }
@@ -91,8 +91,8 @@ static char *get_mapset_connection_name(const char *mapset, int contype)
 {
     const char *val = NULL;
     char *ret_val = NULL;;
-    const char *gisdbase = G__getenv("GISDBASE");
-    const char *location = G__getenv("LOCATION_NAME");
+    const char *gisdbase = G_getenv_nofatal("GISDBASE");
+    const char *location = G_getenv_nofatal("LOCATION_NAME");
     int ret;
 
     ret = G__mapset_permissions2(gisdbase, location, mapset);
@@ -110,16 +110,16 @@ static char *get_mapset_connection_name(const char *mapset, int contype)
     }    
 
     G_create_alt_env();
-    G__setenv("GISDBASE", gisdbase);
-    G__setenv("LOCATION_NAME", location);
-    G__setenv("MAPSET", mapset);
+    G_setenv_nogisrc("GISDBASE", gisdbase);
+    G_setenv_nogisrc("LOCATION_NAME", location);
+    G_setenv_nogisrc("MAPSET", mapset);
     G__read_mapset_env();
  
     if(contype == DATABASE_NAME) {
-        if ((val = G__getenv2("TGISDB_DATABASE", G_VAR_MAPSET)))
+        if ((val = G_getenv_nofatal2("TGISDB_DATABASE", G_VAR_MAPSET)))
             ret_val = G_store(val);
     } else if(contype == DRIVER_NAME) {
-        if ((val = G__getenv2("TGISDB_DRIVER", G_VAR_MAPSET)))
+        if ((val = G_getenv_nofatal2("TGISDB_DRIVER", G_VAR_MAPSET)))
             ret_val = G_store(val);
     }
 

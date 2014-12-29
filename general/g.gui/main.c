@@ -84,7 +84,7 @@ int main(int argc, char *argv[])
     if (nolaunch->answer && !update->answer)
 	update->answer = TRUE;
     
-    gui_type_env = G__getenv("GUI");
+    gui_type_env = G_getenv_nofatal("GUI");
 
     if (!type->answer) {
 	if (gui_type_env && strcmp(gui_type_env, "text")) {
