@@ -134,7 +134,7 @@ int main(int argc, char *argv[])
 	sscanf(argv[1], "%d", &ppid);
 
     /* Get the mapset temp directory */
-    G__temp_element(element);
+    G_temp_element(element);
     G_file_name(tmppath, element, "", mapset = G_mapset());
 
     /* get user id and current time in seconds */
