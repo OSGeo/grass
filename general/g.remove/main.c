@@ -236,7 +236,7 @@ int main(int argc, char *argv[])
 	    continue;
 
 	rast = !G_strcasecmp(elem->alias, "raster");
-	files = G__ls(path, &num_files);
+	files = G_ls2(path, &num_files);
 
 	for (j = 0; j < num_files; j++) {
 	    if (!flag.force->answer) {

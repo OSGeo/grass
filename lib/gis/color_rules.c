@@ -112,7 +112,7 @@ char **scan_rules(int *nrules)
 
     G_snprintf(path, GPATH_MAX, "%s/etc/colors", G_gisbase());
 
-    rules = G__ls(path, nrules);
+    rules = G_ls2(path, nrules);
 
     rules = G_realloc(rules, (*nrules + 3) * sizeof (const char *));
 
