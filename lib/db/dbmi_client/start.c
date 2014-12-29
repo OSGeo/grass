@@ -64,16 +64,16 @@ dbDriver *db_start_driver(const char *name)
 	sprintf(ebuf, "%d", G_GISRC_MODE_MEMORY);
 	G_putenv("GRASS_DB_DRIVER_GISRC_MODE", ebuf);	/* to tell driver that it must read variables */
 
-	if (G__getenv("DEBUG")) {
-	    G_putenv("DEBUG", G__getenv("DEBUG"));
+	if (G_getenv_nofatal("DEBUG")) {
+	    G_putenv("DEBUG", G_getenv_nofatal("DEBUG"));
 	}
 	else {
 	    G_putenv("DEBUG", "0");
 	}
 
-	G_putenv("GISDBASE", G__getenv("GISDBASE"));
-	G_putenv("LOCATION_NAME", G__getenv("LOCATION_NAME"));
-	G_putenv("MAPSET", G__getenv("MAPSET"));
+	G_putenv("GISDBASE", G_getenv_nofatal("GISDBASE"));
+	G_putenv("LOCATION_NAME", G_getenv_nofatal("LOCATION_NAME"));
+	G_putenv("MAPSET", G_getenv_nofatal("MAPSET"));
     }
     else {
 	/* Warning: GISRC_MODE_MEMORY _must_ be set to G_GISRC_MODE_FILE, because the module can be 

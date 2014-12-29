@@ -129,7 +129,7 @@ Vect_select_areas_by_box(struct Map_info *Map, const struct bound_box * Box,
     static int debug_level = -1;
 
     if (debug_level == -1) {
-	const char *dstr = G__getenv("DEBUG");
+	const char *dstr = G_getenv_nofatal("DEBUG");
 
 	if (dstr != NULL)
 	    debug_level = atoi(dstr);
