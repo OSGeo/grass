@@ -39,6 +39,14 @@ d.geodesic|tcolor:text_color
 # d.grid
 d.grid|bordercolor:border_color
 d.grid|textcolor:text_color
+# d.path
+d.path|hcolor:highlight_color
+d.path|type:arc_type
+d.path|alayer:arc_layer
+d.path|nlayer:node_layer
+d.path|afcolumn:arc_column
+d.path|abcolumn:arc_backward_column
+d.path|ncolumn:node_column
 # d.polar
 d.polar|eps:output
 # d.profile
@@ -65,6 +73,11 @@ d.thematic.area|bwidth:boundary_width
 d.vect.chart|ctype:chart_type
 d.vect.chart|ocolor:outline_color
 d.vect.chart|sizecol:size_column
+# d.vect.thematic
+d.vect.thematic|pointcolor:point_color
+d.vect.thematic|linecolor:line_color
+d.vect.thematic|startcolor:start_color
+d.vect.thematic|endcolor:end_color
 ######################################
 ### Database management module changes
 ######################################
@@ -564,8 +577,12 @@ v.what.vect|qlayer:query_layer
 v.what.vect|qcolumn:query_column
 # v.label
 v.label|background:bgcolor
+v.label|hcolor:highlight_color
+v.label|hwidth:highlight_width
 # v.lrs.label
 v.lrs.label|background:bgcolor
+v.lrs.label|hcolor:highlight_color
+v.lrs.label|hwidth:highlight_width
 # v.buffer
 v.buffer|bufcolumn:column
 # v.db.join
