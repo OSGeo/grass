@@ -218,15 +218,12 @@ void G_setenv_nogisrc(const char *, const char *);
 void G_setenv_nogisrc2(const char *, const char *, int);
 void G_unsetenv(const char *);
 void G_unsetenv2(const char *, int);
-void G__write_env(void);
 const char *G_get_env_name(int);
-void G__read_env(void);
 void G_set_gisrc_mode(int);
 int G_get_gisrc_mode(void);
 void G_create_alt_env(void);
 void G_switch_env(void);
 void G__read_mapset_env(void);
-void G__read_gisrc_env(void);
 
 /* error.c */
 jmp_buf *G_fatal_longjmp(int);
@@ -321,17 +318,14 @@ const char *G_gisdbase(void);
 /* gisinit.c */
 void G__gisinit(const char *, const char *);
 void G__no_gisinit(const char *);
-void G__check_gisinit(void);
 void G_init_all(void);
 
 /* handler.c */
 void G_add_error_handler(void (*)(void *), void *);
 void G_remove_error_handler(void (*)(void *), void *);
-void G__call_error_handlers(void);
 
 /* home.c */
 const char *G_home(void);
-const char *G__home(void);
 const char *G_config_path(void);
 
 /* ilist.c */
@@ -423,9 +417,6 @@ void *G_ls_glob_filter(const char *, int, int);
 void G_free_ls_filter(void *);
 #endif
 
-/* mach_name.c */
-const char *G__machine_name(void);
-
 /* make_loc.c */
 int G_make_location(const char *, struct Cell_head *, const struct Key_Value *,
 		    const struct Key_Value *);
@@ -451,7 +442,6 @@ int G_mapset_permissions2(const char *, const char *, const char *);
 
 /* mapset_nme.c */
 const char *G_get_mapset_name(int);
-void G__get_list_of_mapsets(void);
 void G_create_alt_search_path(void);
 void G_switch_search_path(void);
 void G_reset_mapsets(void);
@@ -669,7 +659,6 @@ void G_init_timestamp(struct TimeStamp *);
 void G_set_timestamp(struct TimeStamp *, const struct DateTime *);
 void G_set_timestamp_range(struct TimeStamp *, const struct DateTime *,
 			   const struct DateTime *);
-int G__read_timestamp(FILE *, struct TimeStamp *);
 int G_write_timestamp(FILE *, const struct TimeStamp *);
 void G_get_timestamps(const struct TimeStamp *, struct DateTime *, struct DateTime *, int *);
 int G_format_timestamp(const struct TimeStamp *, char *);

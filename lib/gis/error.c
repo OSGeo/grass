@@ -21,6 +21,9 @@
 #include <sys/types.h>
 #include <grass/glocale.h>
 #include <grass/gis.h>
+
+#include "local_proto.h"
+
 /*!
  * \def MSG
  *
