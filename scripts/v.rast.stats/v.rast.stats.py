@@ -19,11 +19,11 @@
 
 #%module
 #% description: Calculates univariate statistics from a raster map based on a vector map and uploads statistics to new attribute columns.
-#% keywords: vector
-#% keywords: statistics
-#% keywords: raster
-#% keywords: univariate statistics
-#% keywords: zonal statistics
+#% keyword: vector
+#% keyword: statistics
+#% keyword: raster
+#% keyword: univariate statistics
+#% keyword: zonal statistics
 #%end
 #%flag
 #% key: c

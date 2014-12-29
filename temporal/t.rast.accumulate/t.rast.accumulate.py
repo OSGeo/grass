@@ -16,9 +16,9 @@
 
 #%module
 #% description: Computes cyclic accumulations of a space time raster dataset.
-#% keywords: temporal
-#% keywords: accumulation
-#% keywords: raster
+#% keyword: temporal
+#% keyword: accumulation
+#% keyword: raster
 #%end
 
 #%option G_OPT_STRDS_INPUT

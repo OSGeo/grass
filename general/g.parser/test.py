@@ -2,32 +2,34 @@
 
 # g.parser demo script for python programing
 
-#%module
-#%  description: g.parser test script (python)
-#%end
+#%Module
+#% description: g.parser test script (python)
+#% keyword: keyword1
+#% keyword: keyword2
+#%End
 #%flag
-#%  key: f
-#%  description: A flag
+#% key: f
+#% description: A flag
 #%end
 #%option
-#%  key: raster
-#%  type: string
-#%  gisprompt: old,cell,raster
-#%  description: Raster input map
-#%  required : yes
+#% key: raster
+#% type: string
+#% gisprompt: old,cell,raster
+#% description: Raster input map
+#% required : yes
 #%end
 #%option
-#%  key: vector
-#%  type: string
-#%  gisprompt: old,vector,vector
-#%  description: Vector input map
-#%  required : yes
+#% key: vector
+#% type: string
+#% gisprompt: old,vector,vector
+#% description: Vector input map
+#% required : yes
 #%end
 #%option
-#%  key: option1
-#%  type: string
-#%  description: An option
-#%  required : no
+#% key: option1
+#% type: string
+#% description: An option
+#% required : no
 #%end
 
 import os

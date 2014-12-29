@@ -31,8 +31,8 @@
 
 #%module
 #% description: Imports SPOT VGT NDVI data into a raster map.
-#% keywords: imagery
-#% keywords: import
+#% keyword: imagery
+#% keyword: import
 #%end
 #%flag
 #% key: a

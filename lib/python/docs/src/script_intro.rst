@@ -97,9 +97,9 @@ Providing GRASS module interface to a script
 
     #%module
     #% description: Adds the values of two rasters (A + B)
-    #% keywords: raster
-    #% keywords: algebra
-    #% keywords: sum
+    #% keyword: raster
+    #% keyword: algebra
+    #% keyword: sum
     #%end
     #%option G_OPT_R_INPUT
     #% key: araster

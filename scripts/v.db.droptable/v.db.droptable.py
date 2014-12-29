@@ -17,9 +17,9 @@
 
 #%Module
 #% description: Removes existing attribute table of a vector map.
-#% keywords: vector
-#% keywords: attribute table
-#% keywords: database
+#% keyword: vector
+#% keyword: attribute table
+#% keyword: database
 #%End
 #%flag
 #% key: f

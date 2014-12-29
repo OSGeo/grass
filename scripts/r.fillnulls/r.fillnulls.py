@@ -25,9 +25,9 @@
 
 #%module
 #% description: Fills no-data areas in raster maps using spline interpolation.
-#% keywords: raster
-#% keywords: elevation
-#% keywords: interpolation
+#% keyword: raster
+#% keyword: elevation
+#% keyword: interpolation
 #%end
 #%option G_OPT_R_INPUT
 #%end

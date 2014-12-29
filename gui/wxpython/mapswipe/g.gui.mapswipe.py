@@ -21,9 +21,9 @@
 
 #%module
 #% description: Interactively compares two maps by swiping a visibility bar.
-#% keywords: general
-#% keywords: GUI
-#% keywords: display
+#% keyword: general
+#% keyword: GUI
+#% keyword: display
 #%end
 #%option G_OPT_R_INPUT
 #% key: first

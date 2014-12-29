@@ -36,48 +36,48 @@
 #############################################################################
 
 #%Module
-#%  description: Image fusion algorithms to sharpen multispectral with high-res panchromatic channels
-#%  keywords: imagery
-#%  keywords: fusion
-#%  keywords: sharpen
-#%  keywords: Brovey
-#%  keywords: IHS
-#%  keywords: HIS
-#%  keywords: PCA
-#%  overwrite: yes
+#% description: Image fusion algorithms to sharpen multispectral with high-res panchromatic channels
+#% keyword: imagery
+#% keyword: fusion
+#% keyword: sharpen
+#% keyword: Brovey
+#% keyword: IHS
+#% keyword: HIS
+#% keyword: PCA
+#% overwrite: yes
 #%End
 #%option G_OPT_R_INPUT
-#%  key: red
-#%  description: Name of raster map to be used for <red>
+#% key: red
+#% description: Name of raster map to be used for <red>
 #%end
 #%option G_OPT_R_INPUT
-#%  key: green
-#%  description: Name of raster map to be used for <green>
+#% key: green
+#% description: Name of raster map to be used for <green>
 #%end
 #%option G_OPT_R_INPUT
-#%  key: blue
-#%  description: Name of raster map to be used for <blue>
+#% key: blue
+#% description: Name of raster map to be used for <blue>
 #%end
-#%  option G_OPT_R_INPUT
-#%  key: pan
-#%  description: Name of raster map to be used for high resolution panchromatic channel
+#% option G_OPT_R_INPUT
+#% key: pan
+#% description: Name of raster map to be used for high resolution panchromatic channel
 #%end
 #%option G_OPT_R_BASENAME_OUTPUT
 #%end
 #%option
-#%  key: method
-#%  description: Method for pan sharpening
-#%  options: brovey,ihs,pca
-#%  answer: ihs
-#%  required: yes
+#% key: method
+#% description: Method for pan sharpening
+#% options: brovey,ihs,pca
+#% answer: ihs
+#% required: yes
 #%end
 #%flag
-#%  key: s
-#%  description: Serial processing rather than parallel processing
+#% key: s
+#% description: Serial processing rather than parallel processing
 #%end
 #%flag
-#%  key: l
-#%  description: Rebalance blue channel for LANDSAT
+#% key: l
+#% description: Rebalance blue channel for LANDSAT
 #%end
 
 import os

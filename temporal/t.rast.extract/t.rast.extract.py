@@ -16,9 +16,9 @@
 
 #%module
 #% description: Extracts a subset of a space time raster datasets.
-#% keywords: temporal
-#% keywords: extract
-#% keywords: raster
+#% keyword: temporal
+#% keyword: extract
+#% keyword: raster
 #%end
 
 #%option G_OPT_STRDS_INPUT

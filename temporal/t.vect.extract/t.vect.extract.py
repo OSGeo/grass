@@ -16,9 +16,9 @@
 
 #%module
 #% description: Extracts a subset of a space time vector dataset.
-#% keywords: temporal
-#% keywords: extract
-#% keywords: vector
+#% keyword: temporal
+#% keyword: extract
+#% keyword: vector
 #%end
 
 #%option G_OPT_STVDS_INPUT

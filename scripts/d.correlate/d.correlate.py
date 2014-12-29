@@ -17,11 +17,11 @@
 
 #%module
 #% description: Prints a graph of the correlation between raster maps (in pairs).
-#% keywords: display
-#% keywords: statistics
-#% keywords: raster
-#% keywords: diagram
-#% keywords: correlation
+#% keyword: display
+#% keyword: statistics
+#% keyword: raster
+#% keyword: diagram
+#% keyword: correlation
 #%end
 #%option G_OPT_R_MAPS
 #%end

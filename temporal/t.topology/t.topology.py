@@ -16,8 +16,8 @@
 
 #%module
 #% description: Lists temporal topology of a space time dataset.
-#% keywords: temporal
-#% keywords: topology
+#% keyword: temporal
+#% keyword: topology
 #%end
 
 #%option G_OPT_STDS_INPUT

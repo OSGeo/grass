@@ -16,8 +16,8 @@
 
 #%module
 #% description: Sets color rules based on stddev from a raster map's mean value.
-#% keywords: raster
-#% keywords: color table
+#% keyword: raster
+#% keyword: color table
 #%end
 #% option G_OPT_R_MAP
 #%end

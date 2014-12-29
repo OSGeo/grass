@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+#
 ############################################################################
 #
 # MODULE:       d.polar
@@ -19,9 +20,9 @@
 #############################################################################
 
 #%Module
-#%  description: Draws polar diagram of angle map such as aspect or flow directions
-#%  keywords: display
-#%  keywords: diagram
+#% description: Draws polar diagram of angle map such as aspect or flow directions
+#% keyword: display
+#% keyword: diagram
 #%End
 #%option G_OPT_R_MAP
 #% description: Name of raster angle map

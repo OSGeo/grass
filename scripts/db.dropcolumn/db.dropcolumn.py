@@ -18,8 +18,8 @@
 
 #%module
 #% description: Drops a column from selected attribute table.
-#% keywords: database
-#% keywords: attribute table
+#% keyword: database
+#% keyword: attribute table
 #%End
 
 #%flag

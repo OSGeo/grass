@@ -21,10 +21,10 @@
 
 #%module
 #% description: Georectifies a map and allows to manage Ground Control Points.
-#% keywords: general
-#% keywords: GUI
-#% keywords: georectification
-#% keywords: GCP
+#% keyword: general
+#% keyword: GUI
+#% keyword: georectification
+#% keyword: GCP
 #%end
 
 """

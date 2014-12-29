@@ -1,7 +1,12 @@
 #!/usr/bin/env python
-
-#import of SRTM hgt files into GRASS
-# written by Markus Neteler 11/2003 neteler AT itc it
+#
+############################################################################
+#
+# MODULE:    r_in_aster.py
+# AUTHOR(S): Markus Neteler 11/2003 neteler AT itc it
+#            Hamish Bowman
+#            Glynn Clements
+# PURPOSE:   import of SRTM hgt files into GRASS
 #
 # COPYRIGHT:	(C) 2004, 2006 by the GRASS Development Team
 #
@@ -44,9 +49,9 @@
 #########################
 
 #%Module
-#%  description: Imports SRTM HGT files into raster map.
-#%  keywords: raster
-#%  keywords: import
+#% description: Imports SRTM HGT files into raster map.
+#% keyword: raster
+#% keyword: import
 #%End
 #%option G_OPT_F_INPUT
 #% description: Name of SRTM input tile (file without .hgt.zip extension)
@@ -56,8 +61,8 @@
 #% required : no
 #%end
 #%flag
-#%  key: 1
-#%  description: Input is a 1-arcsec tile (default: 3-arcsec)
+#% key: 1
+#% description: Input is a 1-arcsec tile (default: 3-arcsec)
 #%end
 
 tmpl1sec = """BYTEORDER M

@@ -16,9 +16,9 @@
 
 #%module
 #% description: Reconnects attribute tables for all vector maps from the current mapset to a new database.
-#% keywords: vector
-#% keywords: attribute table
-#% keywords: database
+#% keyword: vector
+#% keyword: attribute table
+#% keyword: database
 #%end
 #%flag
 #% key: c

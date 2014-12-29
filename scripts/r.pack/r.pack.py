@@ -15,9 +15,9 @@
 
 #%module
 #% description: Packs up a raster map and support files for copying.
-#% keywords: raster
-#% keywords: export
-#% keywords: copying
+#% keyword: raster
+#% keyword: export
+#% keyword: copying
 #%end
 #%option G_OPT_R_INPUT
 #% description: Name of raster map to pack up

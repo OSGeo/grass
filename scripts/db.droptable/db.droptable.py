@@ -16,8 +16,8 @@
 
 #%module
 #% description: Drops an attribute table.
-#% keywords: database
-#% keywords: attribute table
+#% keyword: database
+#% keyword: attribute table
 #%end
 
 #%flag

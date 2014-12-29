@@ -25,8 +25,8 @@
 
 #%module
 #% description: Imports Mapgen or Matlab-ASCII vector maps into GRASS.
-#% keywords: vector
-#% keywords: import
+#% keyword: vector
+#% keyword: import
 #%end
 #%flag
 #% key: f

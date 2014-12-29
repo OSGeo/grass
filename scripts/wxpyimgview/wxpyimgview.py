@@ -20,9 +20,9 @@
 
 #%module
 #% description: Views BMP images from the PNG driver.
-#% keywords: display
-#% keywords: graphics
-#% keywords: raster
+#% keyword: display
+#% keyword: graphics
+#% keyword: raster
 #%end
 #%option G_OPT_F_INPUT
 #% key: image

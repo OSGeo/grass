@@ -18,8 +18,8 @@
 
 #%module
 #% description: Creates a MASK for limiting raster operation.
-#% keywords: raster
-#% keywords: mask
+#% keyword: raster
+#% keyword: mask
 #% overwrite: yes
 #%end
 #%option G_OPT_R_INPUT

@@ -21,9 +21,9 @@
 
 #% Module
 #% description: Calculates Optimum-Index-Factor table for spectral bands
-#% keywords: imagery
-#% keywords: multispectral
-#% keywords: statistics
+#% keyword: imagery
+#% keyword: multispectral
+#% keyword: statistics
 #% End
 #% option G_OPT_R_INPUTS
 #% end
