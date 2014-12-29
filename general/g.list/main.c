@@ -404,7 +404,7 @@ static void make_list(struct elist **el, int *lcount, int *lalloc,
     if (access(path, 0) != 0)
 	return;
 
-    if ((list = G__ls(path, &count)) == NULL)
+    if ((list = G_ls2(path, &count)) == NULL)
 	return;
 
     if (strcmp(alias, "raster") == 0)
