@@ -300,7 +300,7 @@ int main(int argc, char *argv[])
 	    }
 	    else if (strcmp(mapset, ".") == 0)
 		mapset = G_mapset();
-	    else if (G__mapset_permissions(mapset) == -1)
+	    else if (G_mapset_permissions(mapset) == -1)
 		G_fatal_error(_("Mapset <%s> does not exist"), mapset);
 	    G_add_mapset_to_search_path(mapset);
 	}

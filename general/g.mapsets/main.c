@@ -170,7 +170,7 @@ int main(int argc, char *argv[])
         cur_found = FALSE;
         for (ptr = opt.mapset->answers; *ptr != NULL; ptr++) {
             mapset = substitute_mapset(*ptr);
-            if (G__mapset_permissions(mapset) < 0)
+            if (G_mapset_permissions(mapset) < 0)
                 G_fatal_error(_("Mapset <%s> not found"), mapset);
             if (strcmp(mapset, cur_mapset) == 0)
                 cur_found = TRUE;
@@ -204,7 +204,7 @@ int main(int argc, char *argv[])
                 continue;
             }
             
-            if (G__mapset_permissions(mapset) < 0)
+            if (G_mapset_permissions(mapset) < 0)
                 G_fatal_error(_("Mapset <%s> not found"), mapset);
             else
                 G_verbose_message(_("Mapset <%s> added to search path"),

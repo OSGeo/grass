@@ -73,14 +73,14 @@ void G__get_list_of_mapsets(void)
 	while (fscanf(fp, "%s", name) == 1) {
 	    if (strcmp(name, cur) == 0)
 		continue;
-	    if (G__mapset_permissions(name) >= 0)
+	    if (G_mapset_permissions(name) >= 0)
 		new_mapset(name);
 	}
 	fclose(fp);
     }
     else {
 	static const char perm[] = "PERMANENT";
-	if (strcmp(perm, cur) != 0 && G__mapset_permissions(perm) >= 0)
+	if (strcmp(perm, cur) != 0 && G_mapset_permissions(perm) >= 0)
 	    new_mapset(perm);
     }
 }

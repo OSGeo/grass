@@ -22,7 +22,7 @@ int get_target(char *group)
     }
     select_target_env();
     G_setenv_nogisrc("LOCATION_NAME", location);
-    stat = G__mapset_permissions(mapset);
+    stat = G_mapset_permissions(mapset);
     if (stat > 0) {
 	G_setenv_nogisrc("MAPSET", mapset);
 	G_get_window(&target_window);
