@@ -106,7 +106,7 @@
 #% guisection: Color
 #%end
 #% option
-#% key: pointcolor
+#% key: point_color
 #% type: string
 #% label: Color for graduated points map
 #% description: GRASS named color or R:G:B triplet. Set color scheme to single color
@@ -115,7 +115,7 @@
 #% guisection: Color
 #%end
 #% option
-#% key: linecolor
+#% key: line_color
 #% type: string
 #% label: Color for graduated lines or point/area outlines
 #% description: GRASS named color or R:G:B triplet. Set color scheme to single color.
@@ -124,7 +124,7 @@
 #% guisection: Color
 #%end
 #% option
-#% key: startcolor
+#% key: start_color
 #% type: string
 #% label: Beginning color for custom color gradient
 #% description: Must be expressed as R:G:B triplet
@@ -133,7 +133,7 @@
 #% guisection: Color
 #%end
 #% option
-#% key: endcolor
+#% key: end_color
 #% type: string
 #% label: Ending color for custom color gradient
 #% description: Must be expressed as R:G:B triplet
