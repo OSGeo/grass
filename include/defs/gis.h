@@ -520,7 +520,7 @@ FILE *G_open_option_file(const struct Option *);
 void G_close_option_file(FILE *);
 
 /* parser_dependencies.c */
-void G__option_rule(int, int, void **);
+void G_option_rule(int, int, void **);
 void G_option_exclusive(void *, ...);
 void G_option_required(void *, ...);
 void G_option_requires(void *, ...);

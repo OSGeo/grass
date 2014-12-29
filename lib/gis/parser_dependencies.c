@@ -59,7 +59,7 @@ struct rule {
 
 static struct vector rules = {sizeof(struct rule), 50};
 
-void G__option_rule(int type, int nopts, void **opts)
+void G_option_rule(int type, int nopts, void **opts)
 {
     struct rule rule;
 
@@ -86,7 +86,7 @@ static void make_rule(int type, void *first, va_list ap)
 	vector_append(&opts, &opt);
     }
 
-    G__option_rule(type, opts.count, (void**) opts.data);
+    G_option_rule(type, opts.count, (void**) opts.data);
 }
 
 static int is_flag(const void *p)

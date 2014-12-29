@@ -51,7 +51,7 @@ static void add_rule(struct context *ctx, int type, const char *data)
 
     G_free_tokens(tokens);
 
-    G__option_rule(type, ntokens, opts);
+    G_option_rule(type, ntokens, opts);
 }
 
 void parse_rule(struct context *ctx, const char *cmd, const char *arg)
