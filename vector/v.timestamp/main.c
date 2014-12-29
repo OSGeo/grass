@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
 
     if (!modify) {
 	if (G_read_vector_timestamp(name, layer->answer, "", &ts) == 1) {
-	    G__write_timestamp(stdout, &ts);
+	    G_write_timestamp(stdout, &ts);
 	    exit(EXIT_SUCCESS);
 	}
 	else

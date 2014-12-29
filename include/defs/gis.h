@@ -670,7 +670,7 @@ void G_set_timestamp(struct TimeStamp *, const struct DateTime *);
 void G_set_timestamp_range(struct TimeStamp *, const struct DateTime *,
 			   const struct DateTime *);
 int G__read_timestamp(FILE *, struct TimeStamp *);
-int G__write_timestamp(FILE *, const struct TimeStamp *);
+int G_write_timestamp(FILE *, const struct TimeStamp *);
 void G_get_timestamps(const struct TimeStamp *, struct DateTime *, struct DateTime *, int *);
 int G_format_timestamp(const struct TimeStamp *, char *);
 int G_scan_timestamp(struct TimeStamp *, const char *);
