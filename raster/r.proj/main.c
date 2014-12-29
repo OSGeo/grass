@@ -278,8 +278,8 @@ int main(int argc, char **argv)
 
     /* Change the location           */
     G_create_alt_env();
-    G__setenv("GISDBASE", indbase->answer ? indbase->answer : G_gisdbase());
-    G__setenv("LOCATION_NAME", inlocation->answer);
+    G_setenv_nogisrc("GISDBASE", indbase->answer ? indbase->answer : G_gisdbase());
+    G_setenv_nogisrc("LOCATION_NAME", inlocation->answer);
 
     permissions = G__mapset_permissions(setname);
     if (permissions < 0)	/* can't access mapset       */
@@ -294,8 +294,8 @@ int main(int argc, char **argv)
 	char **list;
 	G_verbose_message(_("Checking location <%s> mapset <%s>"),
 			  inlocation->answer, setname);
-	list = G_list(G_ELEMENT_RASTER, G__getenv("GISDBASE"),
-		      G__getenv("LOCATION_NAME"), setname);
+	list = G_list(G_ELEMENT_RASTER, G_getenv_nofatal("GISDBASE"),
+		      G_getenv_nofatal("LOCATION_NAME"), setname);
 	for (i = 0; list[i]; i++) {
 	    fprintf(stdout, "%s\n", list[i]);
 	}

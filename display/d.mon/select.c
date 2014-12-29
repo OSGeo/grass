@@ -9,7 +9,7 @@ int select_mon(const char *name)
     char **list;
     int   i, n, found;
 
-    curr_mon = G__getenv("MONITOR");
+    curr_mon = G_getenv_nofatal("MONITOR");
     if (G_strcasecmp(name, curr_mon) == 0) {
 	G_warning(_("Monitor <%s> is already selected"), name);
 	return 0;
