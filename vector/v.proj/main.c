@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
     select_target_env();
     G_setenv_nogisrc("GISDBASE", gbase);
     G_setenv_nogisrc("LOCATION_NAME", iloc_name);
-    stat = G__mapset_permissions(iset_name);
+    stat = G_mapset_permissions(iset_name);
     
     if (stat >= 0) {		/* yes, we can access the mapset */
 	/* if requested, list the vector maps in source location - MN 5/2001 */

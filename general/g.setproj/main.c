@@ -96,7 +96,7 @@ int main(int argc, char *argv[])
 
     /* get the output projection parameters, if existing */
     /* Check for ownership here */
-    stat = G__mapset_permissions(set_name);
+    stat = G_mapset_permissions(set_name);
     if (stat == 0) {
 	G_fatal_error(_("PERMANENT: permission denied"));
     }
