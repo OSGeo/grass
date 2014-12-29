@@ -338,7 +338,7 @@ int main(int argc, char *argv[])
     parm.dmin1->guisection = _("Settings");
 
     parm.wmult = G_define_option();
-    parm.wmult->key = "wmultiplier";
+    parm.wmult->key = "wscale";
     parm.wmult->type = TYPE_DOUBLE;
     parm.wmult->answer = ZMULT;
     parm.wmult->required = NO;
