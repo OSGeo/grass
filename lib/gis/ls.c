@@ -52,10 +52,10 @@ static int cmp_names(const void *aa, const void *bb)
 }
 
 /**
- * \brief Sets a function and its complementary data for G__ls filtering.
+ * \brief Sets a function and its complementary data for G_ls2 filtering.
  *
- * Defines a filter function and its rule data that allow G__ls to filter out
- * unwanted file names.  Call this function before G__ls.
+ * Defines a filter function and its rule data that allow G_ls2 to filter out
+ * unwanted file names.  Call this function before G_ls2.
  *
  * \param func      Filter callback function to compare a file name and closure
  * 		    pattern (if NULL, no filter will be used).
@@ -92,7 +92,7 @@ void G_set_ls_exclude_filter(ls_filter_func *func, void *closure)
  * \return          Pointer to array of strings containing the listing
  **/
 
-char **G__ls(const char *dir, int *num_files)
+char **G_ls2(const char *dir, int *num_files)
 {
     struct dirent *dp;
     DIR *dfd;
@@ -136,7 +136,7 @@ char **G__ls(const char *dir, int *num_files)
 void G_ls(const char *dir, FILE * stream)
 {
     int i, n;
-    char **dir_listing = G__ls(dir, &n);
+    char **dir_listing = G_ls2(dir, &n);
 
     G_ls_format(dir_listing, n, 0, stream);
 

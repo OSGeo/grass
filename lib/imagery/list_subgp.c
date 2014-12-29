@@ -47,7 +47,7 @@ char **I_list_subgroups(const char *group, int *subgs_num)
     if (!G_lstat(path, &sb) == 0 || !S_ISDIR(sb.st_mode))
 	return NULL;
 
-    subgs = G__ls(path, subgs_num);
+    subgs = G_ls2(path, subgs_num);
     return subgs;
 }
 
