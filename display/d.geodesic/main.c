@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
 
     if (G_projection() != PROJECTION_LL)
 	G_fatal_error(_("Location is not %s"),
-		      G__projection_name(PROJECTION_LL));
+		      G_projection_name(PROJECTION_LL));
 
     /* get conversion factor and unit name */
     unit_id = G_units(parm.units->answer);

@@ -219,8 +219,8 @@ int Rast__open_old(const char *name, const char *mapset)
 	G_fatal_error(_("Raster map <%s> is in different projection than current region. "
 			"Found <%s>, should be <%s>."),
 		      G_fully_qualified_name(name, mapset),
-		      G__projection_name(cellhd.proj),
-		      G__projection_name(R__.rd_window.proj));
+		      G_projection_name(cellhd.proj),
+		      G_projection_name(R__.rd_window.proj));
 
     if (cellhd.zone != R__.rd_window.zone)
 	G_fatal_error(_("Raster map <%s> is in different zone (%d) than current region (%d)"),

@@ -52,7 +52,7 @@ const char *G_database_unit_name(int plural)
     int units;
     const char *name;
     
-    units = G__projection_units(G_projection());
+    units = G_projection_units(G_projection());
     
     if (units == U_UNDEFINED) {
 	name = lookup_units(plural ? "units" : "unit");
@@ -102,7 +102,7 @@ const char *G_database_projection_name(void)
     case PROJECTION_XY:
     case PROJECTION_UTM:
     case PROJECTION_LL:
-	return G__projection_name(n);
+	return G_projection_name(n);
     }
 
     name = lookup_proj("name");
