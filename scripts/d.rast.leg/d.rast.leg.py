@@ -30,9 +30,9 @@
 
 #%module
 #% description: Displays a raster map and its legend on a graphics window
-#% keywords: display
-#% keywords: cartography
-#% keywords: legend
+#% keyword: display
+#% keyword: cartography
+#% keyword: legend
 #%end
 #%flag
 #%  key: f

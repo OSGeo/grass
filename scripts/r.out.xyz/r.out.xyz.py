@@ -18,10 +18,10 @@
 
 #%module
 #% description: Exports a raster map to a text file as x,y,z values based on cell centers.
-#% keywords: raster
-#% keywords: export
-#% keywords: ASCII
-#% keywords: conversion
+#% keyword: raster
+#% keyword: export
+#% keyword: ASCII
+#% keyword: conversion
 #%end
 #%option G_OPT_R_INPUTS
 #% multiple: yes

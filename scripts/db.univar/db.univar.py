@@ -18,9 +18,9 @@
 
 #%module
 #% description: Calculates univariate statistics on selected table column.
-#% keywords: database
-#% keywords: statistics
-#% keywords: attribute table
+#% keyword: database
+#% keyword: statistics
+#% keyword: attribute table
 #%end
 #%option G_OPT_DB_TABLE
 #% key: table

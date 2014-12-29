@@ -1,14 +1,15 @@
 #!/usr/bin/perl -w
 use strict;
-# g.parser demo script
+# g.parser demo script for perl programing
 
 #%Module
-#%  description: g.parser test script (perl)
-#%  keywords: keyword1, keyword2
+#% description: g.parser test script (perl)
+#% keyword: keyword1
+#% keyword: keyword2
 #%End
 #%flag
-#%  key: f
-#%  description: A flag
+#% key: f
+#% description: A flag
 #%end
 #%option
 #% key: raster
@@ -28,7 +29,7 @@ use strict;
 #% key: option1
 #% type: string
 #% description: An option
-#% required : yes
+#% required : no
 #%end
 
 if ( !$ENV{'GISBASE'} ) {

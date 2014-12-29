@@ -20,9 +20,9 @@
 
 #%module
 #% description: Tool for creating hardcopy map outputs.
-#% keywords: general
-#% keywords: GUI
-#% keywords: printing
+#% keyword: general
+#% keyword: GUI
+#% keyword: printing
 #%end
 #%option G_OPT_F_INPUT
 #% key: file

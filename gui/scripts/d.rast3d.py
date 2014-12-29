@@ -17,8 +17,9 @@
 #############################################################################
 
 #%module
-#% description: Displays 3D raster map layer.
-#% keywords: display, raster3d
+#% description: Displays a 3D raster map layer.
+#% keyword: display
+#% keyword: raster3d
 #%end
 
 #%option

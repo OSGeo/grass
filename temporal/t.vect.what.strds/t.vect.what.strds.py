@@ -16,9 +16,9 @@
 
 #%module
 #% description: Stores raster map values at spatial and temporal positions of vector points as vector attributes.
-#% keywords: temporal
-#% keywords: sampling
-#% keywords: vector
+#% keyword: temporal
+#% keyword: sampling
+#% keyword: vector
 #%end
 
 #%option G_OPT_STVDS_INPUT

@@ -16,9 +16,9 @@
 
 #%module
 #% description: Calculates univariate statistics from the non-null cells for each registered raster map of a space time raster dataset.
-#% keywords: temporal
-#% keywords: statistics
-#% keywords: raster
+#% keyword: temporal
+#% keyword: statistics
+#% keyword: raster
 #%end
 
 #%option G_OPT_STRDS_INPUT

@@ -16,11 +16,11 @@
 
 #%module
 #% description: Lists registered maps of a space time raster3d dataset.
-#% keywords: temporal
-#% keywords: map management
-#% keywords: list
-#% keywords: raster3d
-#% keywords: voxel
+#% keyword: temporal
+#% keyword: map management
+#% keyword: list
+#% keyword: raster3d
+#% keyword: voxel
 #%end
 
 #%option G_OPT_STR3DS_INPUT

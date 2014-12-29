@@ -17,9 +17,9 @@
 
 #%module
 #% description: Removes a vector feature from a vector map through attribute selection.
-#% keywords: vector
-#% keywords: attribute table
-#% keywords: database
+#% keyword: vector
+#% keyword: attribute table
+#% keyword: database
 #%end
 
 #%option G_OPT_V_INPUT

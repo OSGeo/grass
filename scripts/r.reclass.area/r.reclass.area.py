@@ -25,9 +25,9 @@
 
 #%module
 #% description: Reclasses a raster map greater or less than user specified area size (in hectares).
-#% keywords: raster
-#% keywords: statistics
-#% keywords: aggregation
+#% keyword: raster
+#% keyword: statistics
+#% keyword: aggregation
 #%end
 
 #%option G_OPT_R_INPUT

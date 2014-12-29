@@ -26,7 +26,9 @@
 #%module
 #% label: Finds the distance between two or more points.
 #% description: If the projection is latitude-longitude, this distance is measured along the geodesic.
-#% keywords: miscellaneous, distance, measure
+#% keyword: miscellaneous
+#% keyword: distance
+#% keyword: measure
 #%end
 #%option
 #% key: coord

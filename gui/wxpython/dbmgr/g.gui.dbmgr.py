@@ -20,10 +20,10 @@
 
 #%module
 #% description: Launches graphical attribute table manager.
-#% keywords: general
-#% keywords: GUI
-#% keywords: attribute table
-#% keywords: database
+#% keyword: general
+#% keyword: GUI
+#% keyword: attribute table
+#% keyword: database
 #%end
 #%option G_OPT_V_MAP
 #%end

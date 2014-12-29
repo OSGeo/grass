@@ -22,10 +22,10 @@
 
 #%module
 #% description: Performs auto-balancing of colors for RGB images.
-#% keywords: imagery
-#% keywords: RGB
-#% keywords: satellite
-#% keywords: colors
+#% keyword: imagery
+#% keyword: RGB
+#% keyword: satellite
+#% keyword: colors
 #%end
 #%option G_OPT_R_INPUT
 #% key: red

@@ -16,9 +16,9 @@
 
 #%module
 #% description: Detects accumulation patterns in temporally accumulated space time raster datasets created by t.rast.accumulate.
-#% keywords: temporal
-#% keywords: accumulation
-#% keywords: raster
+#% keyword: temporal
+#% keyword: accumulation
+#% keyword: raster
 #%end
 
 #%option G_OPT_STRDS_INPUT

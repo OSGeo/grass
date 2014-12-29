@@ -19,9 +19,9 @@
 #%module
 #% label: Rebuilds or removes all locally installed GRASS Addons extensions.
 #% description: By default only extensions built against different GIS Library are rebuilt.
-#% keywords: general
-#% keywords: installation
-#% keywords: extensions
+#% keyword: general
+#% keyword: installation
+#% keyword: extensions
 #%end
 #%option
 #% key: operation

@@ -16,9 +16,9 @@
 
 #%module
 #% description: Exports space time raster dataset.
-#% keywords: temporal
-#% keywords: export
-#% keywords: raster
+#% keyword: temporal
+#% keyword: export
+#% keyword: raster
 #%end
 
 #%option G_OPT_STRDS_INPUT

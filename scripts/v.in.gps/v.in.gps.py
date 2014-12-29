@@ -34,30 +34,30 @@
 #############################################################################
 
 #%Module
-#%  description: Import waypoints, routes, and tracks from a GPS receiver or GPS download file into a vector map.
-#%  keywords: vector
-#%  keywords: import
-#%  keywords: GPS
+#% description: Import waypoints, routes, and tracks from a GPS receiver or GPS download file into a vector map.
+#% keyword: vector
+#% keyword: import
+#% keyword: GPS
 #%End
 #%flag
-#%  key: w
-#%  description: Import as waypoints
+#% key: w
+#% description: Import as waypoints
 #%end
 #%flag
-#%  key: r
-#%  description: Import as routes
+#% key: r
+#% description: Import as routes
 #%end
 #%flag
-#%  key: t
-#%  description: Import as tracks
+#% key: t
+#% description: Import as tracks
 #%end
 #%flag
-#%  key: p
-#%  description: Force vertices of track or route data as points
+#% key: p
+#% description: Force vertices of track or route data as points
 #%end
 #%flag
-#%  key: k
-#%  description: Do not attempt projection transform from WGS84
+#% key: k
+#% description: Do not attempt projection transform from WGS84
 #%end
 #%option G_OPT_F_INPUT
 #% description: Device or file used to import data

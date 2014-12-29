@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+#
 ############################################################################
 #
 # MODULE:    r_in_aster.py
@@ -21,32 +22,32 @@
 #   gdal compiled with HDF4 support
 
 #%Module
-#%  description: Georeference, rectify, and import Terra-ASTER imagery and relative DEMs using gdalwarp.
-#%  keywords: raster
-#%  keywords: import
-#%  keywords: imagery
-#%  keywords: Terra-ASTER
+#% description: Georeference, rectify, and import Terra-ASTER imagery and relative DEMs using gdalwarp.
+#% keyword: raster
+#% keyword: import
+#% keyword: imagery
+#% keyword: Terra-ASTER
 #%End
 #%option G_OPT_F_INPUT
-#%  description: Name of input ASTER image
+#% description: Name of input ASTER image
 #%end
 #%option
-#%  key: proctype
-#%  type: string
-#%  description: ASTER imagery processing type (Level 1A, Level 1B, or relative DEM)
-#%  options: L1A,L1B,DEM
-#%  answer: L1B
-#%  required: yes
+#% key: proctype
+#% type: string
+#% description: ASTER imagery processing type (Level 1A, Level 1B, or relative DEM)
+#% options: L1A,L1B,DEM
+#% answer: L1B
+#% required: yes
 #%end
 #%option
-#%  key: band
-#%  type: string
-#%  description: List L1A or L1B band to translate (1,2,3n,...), or enter 'all' to translate all bands
-#%  answer: all
-#%  required: yes
+#% key: band
+#% type: string
+#% description: List L1A or L1B band to translate (1,2,3n,...), or enter 'all' to translate all bands
+#% answer: all
+#% required: yes
 #%end
 #%option G_OPT_R_OUTPUT
-#%  description: Base name for output raster map (band number will be appended to base name)
+#% description: Base name for output raster map (band number will be appended to base name)
 #%end
 
 import sys

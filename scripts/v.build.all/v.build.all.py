@@ -14,8 +14,8 @@
 
 #%module
 #% description: Rebuilds topology on all vector maps in the current mapset.
-#% keywords: vector
-#% keywords: topology
+#% keyword: vector
+#% keyword: topology
 #%end
 
 import sys

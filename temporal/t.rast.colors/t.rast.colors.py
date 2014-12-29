@@ -16,9 +16,9 @@
 
 #%module
 #% description: Creates/modifies the color table associated with each raster map of the space time raster dataset.
-#% keywords: temporal
-#% keywords: color table
-#% keywords: raster
+#% keyword: temporal
+#% keyword: color table
+#% keyword: raster
 #%end
 
 #%option G_OPT_STRDS_INPUT

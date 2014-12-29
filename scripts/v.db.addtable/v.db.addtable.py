@@ -17,9 +17,9 @@
 
 #%module
 #% description: Creates and connects a new attribute table to a given layer of an existing vector map.
-#% keywords: vector
-#% keywords: attribute table
-#% keywords: database
+#% keyword: vector
+#% keyword: attribute table
+#% keyword: database
 #%end
 #%option G_OPT_V_MAP
 #%end

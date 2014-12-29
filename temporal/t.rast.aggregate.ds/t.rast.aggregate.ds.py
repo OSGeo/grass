@@ -16,9 +16,9 @@
 
 #%module
 #% description: Aggregates data of an existing space time raster dataset using the time intervals of a second space time dataset.
-#% keywords: temporal
-#% keywords: aggregation
-#% keywords: raster
+#% keyword: temporal
+#% keyword: aggregation
+#% keyword: raster
 #%end
 
 #%option G_OPT_STRDS_INPUT
