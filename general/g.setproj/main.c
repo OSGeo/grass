@@ -161,19 +161,19 @@ int main(int argc, char *argv[])
 	}
     case PROJECTION_UTM:
 	if (!exist) {
-	    sprintf(proj_name, "%s", G__projection_name(PROJECTION_UTM));
+	    sprintf(proj_name, "%s", G_projection_name(PROJECTION_UTM));
 	    sprintf(proj_out, "utm");
 	    break;
 	}
     case PROJECTION_SP:
 	if (!exist) {
-	    sprintf(proj_name, "%s", G__projection_name(PROJECTION_SP));
+	    sprintf(proj_name, "%s", G_projection_name(PROJECTION_SP));
 	    sprintf(proj_out, "stp");
 	    break;
 	}
     case PROJECTION_LL:
 	if (!exist) {
-	    sprintf(proj_name, "%s", G__projection_name(PROJECTION_LL));
+	    sprintf(proj_name, "%s", G_projection_name(PROJECTION_LL));
 	    sprintf(proj_out, "ll");
 	    break;
 	}
