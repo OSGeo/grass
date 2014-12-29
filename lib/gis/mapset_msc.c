@@ -113,7 +113,7 @@ static int check_owner(const struct stat *info)
    \return 0 mapset exists, BUT user denied permission
    \return -1 mapset does not exist
  */
-int G__mapset_permissions(const char *mapset)
+int G_mapset_permissions(const char *mapset)
 {
     char path[GPATH_MAX];
     struct stat info;
@@ -142,7 +142,7 @@ int G__mapset_permissions(const char *mapset)
    \return 0 mapset exists, BUT user denied permission
    \return -1 mapset does not exist
  */
-int G__mapset_permissions2(const char *gisdbase, const char *location,
+int G_mapset_permissions2(const char *gisdbase, const char *location,
 			   const char *mapset)
 {
     char path[GPATH_MAX];

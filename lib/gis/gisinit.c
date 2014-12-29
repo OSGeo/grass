@@ -57,7 +57,7 @@ void G__gisinit(const char *version, const char *pgm)
     /* Make sure location and mapset are set */
     G_location_path();
     mapset = G_mapset();
-    switch (G__mapset_permissions(mapset)) {
+    switch (G_mapset_permissions(mapset)) {
     case 1:
 	break;
     case 0:

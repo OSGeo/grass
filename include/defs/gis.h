@@ -446,8 +446,8 @@ char *G_mapset_path(void);
 /* mapset_msc.c */
 int G__make_mapset_element(const char *);
 int G__make_mapset_element_misc(const char *, const char *);
-int G__mapset_permissions(const char *);
-int G__mapset_permissions2(const char *, const char *, const char *);
+int G_mapset_permissions(const char *);
+int G_mapset_permissions2(const char *, const char *, const char *);
 
 /* mapset_nme.c */
 const char *G_get_mapset_name(int);
