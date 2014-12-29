@@ -16,9 +16,9 @@
 
 #%module
 #% description: Reports geometry statistics for vector maps.
-#% keywords: vector
-#% keywords: geometry
-#% keywords: statistics
+#% keyword: vector
+#% keyword: geometry
+#% keyword: statistics
 #%end
 #%option G_OPT_V_MAP
 #%end

@@ -15,8 +15,8 @@
 
 #%module
 #% description: Allows the user to interactively query vector map layers at user-selected locations.
-#% keywords: display
-#% keywords: vector
+#% keyword: display
+#% keyword: vector
 #%end
 #%option G_OPT_V_INPUTS
 #% key: map

@@ -22,10 +22,10 @@
 
 #%Module
 #% description: Create a 3D raster map from an assemblage of many coordinates using univariate statistics
-#% keywords: raster3d
-#% keywords: import
-#% keywords: voxel
-#% keywords: LIDAR
+#% keyword: raster3d
+#% keyword: import
+#% keyword: voxel
+#% keyword: LIDAR
 #%End
 #%Flag
 #% key: s

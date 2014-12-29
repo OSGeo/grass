@@ -16,9 +16,9 @@
 
 #%Module
 #% description: Imports attribute tables in various formats.
-#% keywords: database
-#% keywords: import
-#% keywords: attribute table
+#% keyword: database
+#% keyword: import
+#% keyword: attribute table
 #%End
 
 #%option G_OPT_F_BIN_INPUT

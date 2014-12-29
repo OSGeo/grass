@@ -27,10 +27,10 @@
 
 #%Module
 #% description: Displays spectral response at user specified locations in group or images.
-#% keywords: imagery
-#% keywords: querying
-#% keywords: raster
-#% keywords: multispectral
+#% keyword: imagery
+#% keyword: querying
+#% keyword: raster
+#% keyword: multispectral
 #%End
 #%option G_OPT_I_GROUP
 #% required : no

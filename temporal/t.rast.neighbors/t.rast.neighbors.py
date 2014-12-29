@@ -17,9 +17,9 @@
 
 #%module
 #% description: Performs a neighborhood analysis for each map in a space time raster dataset.
-#% keywords: temporal
-#% keywords: aggregation
-#% keywords: raster
+#% keyword: temporal
+#% keyword: aggregation
+#% keyword: raster
 #%end
 
 #%option G_OPT_STRDS_INPUT

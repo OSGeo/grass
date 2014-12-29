@@ -23,8 +23,8 @@
 
 #%module
 #% description: Imports E00 file into a vector map.
-#% keywords: vector
-#% keywords: import
+#% keyword: vector
+#% keyword: import
 #%end
 #%option G_OPT_F_INPUT
 #% description: Name of input E00 file

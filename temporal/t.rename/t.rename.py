@@ -16,9 +16,9 @@
 
 #%module
 #% description: Renames a space time dataset
-#% keywords: temporal
-#% keywords: map management
-#% keywords: rename
+#% keyword: temporal
+#% keyword: map management
+#% keyword: rename
 #%end
 
 #%option G_OPT_STDS_INPUT

@@ -16,10 +16,10 @@
 
 #%module
 #% description: Exports space time raster dataset as VTK time series.
-#% keywords: temporal
-#% keywords: export
-#% keywords: raster
-#% keywords: VTK
+#% keyword: temporal
+#% keyword: export
+#% keyword: raster
+#% keyword: VTK
 #%end
 
 #%option G_OPT_STRDS_INPUT

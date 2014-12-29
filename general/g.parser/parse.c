@@ -84,7 +84,8 @@ void parse_module(struct context *ctx, const char *cmd, const char *arg)
 	return;
     }
 
-    if (G_strcasecmp(cmd, "keywords") == 0) {
+    if (G_strcasecmp(cmd, "keyword") == 0 || G_strcasecmp(cmd, "keywords") == 0) {
+	/* (still) accept 'keywords' for backward compatibility */
 	G_add_keyword(translate(xstrdup(arg)));
 	return;
     }

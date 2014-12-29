@@ -16,9 +16,9 @@
 
 #%module
 #% description: Calculates univariate statistics of attributes for each registered vector map of a space time vector dataset
-#% keywords: temporal
-#% keywords: statistics
-#% keywords: vector
+#% keyword: temporal
+#% keyword: statistics
+#% keyword: vector
 #%end
 
 #%option G_OPT_STVDS_INPUT

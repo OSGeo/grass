@@ -17,10 +17,10 @@
 
 #%module
 #% description: Dissolves boundaries between adjacent areas sharing a common category number or attribute.
-#% keywords: vector
-#% keywords: dissolve
-#% keywords: area
-#% keywords: line
+#% keyword: vector
+#% keyword: dissolve
+#% keyword: area
+#% keyword: line
 #%end
 #%option G_OPT_V_INPUT
 #%end

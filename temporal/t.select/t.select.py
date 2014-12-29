@@ -17,8 +17,8 @@
 
 #%module
 #% description: Select maps from space time datasets by topological relationships to other space time datasets using temporal algebra.
-#% keywords: temporal
-#% keywords: metadata
+#% keyword: temporal
+#% keyword: metadata
 #%end
 
 #%option G_OPT_STDS_TYPE

@@ -16,9 +16,9 @@
 
 #%module
 #% description: Unpacks a vector map packed with v.pack.
-#% keywords: vector
-#% keywords: import
-#% keywords: copying
+#% keyword: vector
+#% keyword: import
+#% keyword: copying
 #%end
 #%option G_OPT_F_INPUT
 #% description: Name of input pack file

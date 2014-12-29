@@ -13,9 +13,9 @@
 
 #%Module
 #% description: Adds missing centroids to closed boundaries.
-#% keywords: vector
-#% keywords: centroid
-#% keywords: area
+#% keyword: vector
+#% keyword: centroid
+#% keyword: area
 #%End
 
 #%option G_OPT_V_INPUT

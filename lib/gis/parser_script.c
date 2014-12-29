@@ -62,7 +62,7 @@ void G__script(void)
     if (st->module_info.description)
 	fprintf(fp, "#%% description: %s\n", st->module_info.description);
     if (st->module_info.keywords) {
-	fprintf(fp, "#%% keywords: ");
+	fprintf(fp, "#%% keyword: ");
 	G__print_keywords(fp, NULL);
 	fprintf(fp, "\n");
     }

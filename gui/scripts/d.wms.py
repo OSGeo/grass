@@ -17,11 +17,11 @@
 
 #%module
 #% description: Downloads and displays data from WMS/WMTS/NASA OnEarth server.
-#% keywords: raster
-#% keywords: import
-#% keywords: WMS
-#% keywords: WMTS 
-#% keywords: OnEarth
+#% keyword: raster
+#% keyword: import
+#% keyword: WMS
+#% keyword: WMTS 
+#% keyword: OnEarth
 #%end
 
 #%option

@@ -18,10 +18,10 @@
 
 #%module
 #% description: Apply temporal and spatial operations on space time 3D raster datasets using temporal 3D raster algebra.
-#% keywords: temporal
-#% keywords: algebra
-#% keywords: raster3d
-#% keywords: voxel
+#% keyword: temporal
+#% keyword: algebra
+#% keyword: raster3d
+#% keyword: voxel
 #%end
 
 #%option

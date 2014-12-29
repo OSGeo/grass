@@ -16,9 +16,9 @@
 
 #%module
 #% description: Removes space time datasets from temporal database.
-#% keywords: temporal
-#% keywords: map management
-#% keywords: remove
+#% keyword: temporal
+#% keyword: map management
+#% keyword: remove
 #%end
 
 #%option G_OPT_STDS_INPUTS
