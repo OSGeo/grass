@@ -47,7 +47,7 @@ static const char *tmp_name(const char *fullname)
     const char *location = G_location_path();
     const char *el = element;
 
-    G__temp_element(element);
+    G_temp_element(element);
     while (*fullname++ == *location++) ;
     while (*fullname++ == *mapset++) ;
     while (*fullname++ == *el++) ;
@@ -140,7 +140,7 @@ static int open_segment_file(const char *name, layer l, int new)
     const char *mapset;
 
     if (new == TEMP)
-	G__temp_element(string);
+	G_temp_element(string);
     else
 	sprintf(string, "cell_misc/%s", parm.elevin);
 
