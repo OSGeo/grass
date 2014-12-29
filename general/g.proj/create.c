@@ -57,8 +57,8 @@ void modify_projinfo()
 	(old_cellhd.proj != cellhd.proj)) {
 	/* Recreate the default, and current window files if projection
 	 * number or zone have changed */
-	G__put_window(&cellhd, "", "DEFAULT_WIND");
-	G__put_window(&cellhd, "", "WIND");
+	G_put_element_window(&cellhd, "", "DEFAULT_WIND");
+	G_put_element_window(&cellhd, "", "WIND");
 	G_message(_("Default region was updated to the new projection, but if you have "
 		    "multiple mapsets `g.region -d` should be run in each to update the "
 		    "region from the default"));
