@@ -1,5 +1,5 @@
 /*!
- * \file raster/set_window.c
+ * \file lib/raster/set_window.c
  *
  * \brief Raster Library - Set window (map region)
  *

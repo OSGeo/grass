@@ -1,5 +1,5 @@
 /*!
-   \file raster/get_cellhd.c
+   \file lib/raster/get_cellhd.c
 
    \brief Raster library - Read raster map header
 

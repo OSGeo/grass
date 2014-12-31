@@ -1,5 +1,5 @@
 /*!
- * \file raster/cell_stats.c
+ * \file lib/raster/cell_stats.c
  *
  * \brief Raster Library - Raster cell statistics
  *

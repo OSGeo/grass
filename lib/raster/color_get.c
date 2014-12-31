@@ -1,5 +1,5 @@
 /*!
- * \file raster/color_get.c
+ * \file lib/raster/color_get.c
  *
  * \brief Raster Library - Get colors from a raster map.
  *

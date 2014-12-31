@@ -1,5 +1,5 @@
 /*!
- * \file raster/history.c
+ * \file lib/raster/history.c
  *
  * \brief Raster Library - History management
  *

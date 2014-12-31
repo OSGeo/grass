@@ -1,5 +1,5 @@
 /*!
- * \file raster/color_hist.c
+ * \file lib/raster/color_hist.c
  *
  * \brief Raster Library - histogram grey scale colors
  *

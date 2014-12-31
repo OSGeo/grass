@@ -1,5 +1,5 @@
 /*!
- * \file raster/get_row_colr.c
+ * \file lib/raster/get_row_colr.c
  * 
  * \brief Raster Library - Get raster row (colors)
  *

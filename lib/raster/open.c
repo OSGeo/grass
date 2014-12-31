@@ -1,5 +1,5 @@
 /*!
- * \file raster/open.c
+ * \file lib/raster/open.c
  * 
  * \brief Raster Library - Open raster file
  *

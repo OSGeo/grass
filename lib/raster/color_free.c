@@ -1,5 +1,5 @@
 /*!
- * \file raster/color_free.c
+ * \file lib/raster/color_free.c
  *
  * \brief Raster Library - Free Colors structure
  *

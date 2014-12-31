@@ -1,5 +1,5 @@
 /*!
- * \file raster/zero_cell.c
+ * \file lib/raster/zero_cell.c
  *
  * \brief Raster Library - Zero cell buffer functions.
  *

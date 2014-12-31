@@ -1,5 +1,5 @@
 /*!
-   \file raster/raster_metadata.c
+   \file lib/raster/raster_metadata.c
 
    \brief Raster library - Functions to read and write raster "units"
    and "vertical datum" meta-data info
