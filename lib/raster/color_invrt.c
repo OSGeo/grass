@@ -1,5 +1,5 @@
 /*!
-   \file raster/color_invrt.c
+   \file lib/raster/color_invrt.c
 
    \brief Raster library - Invert colors
 

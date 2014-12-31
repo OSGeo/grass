@@ -1,5 +1,5 @@
 /*!
- * \file raster/range.c
+ * \file lib/raster/range.c
  *
  * \brief Raster Library - Raster range file management
  *

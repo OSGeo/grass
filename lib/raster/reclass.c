@@ -1,5 +1,5 @@
 /*!
- * \file raster/reclass.c
+ * \file lib/raster/reclass.c
  *
  * \brief Raster Library - Check if raster map is reclassified
  *

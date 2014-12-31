@@ -1,5 +1,5 @@
 /*!
- * \file raster/color_shift.c
+ * \file lib/raster/color_shift.c
  *
  * \brief Raster Library - Shift colors
  *

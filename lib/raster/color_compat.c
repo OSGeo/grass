@@ -1,5 +1,5 @@
 /*!
- * \file raster/color_compat.c
+ * \file lib/raster/color_compat.c
  *
  * \brief Raster Library - Predefined color tables
  *

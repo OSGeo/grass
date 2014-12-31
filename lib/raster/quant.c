@@ -1,5 +1,5 @@
 /*!
- * \file raster/quant.c
+ * \file lib/raster/quant.c
  * 
  * \brief Raster Library - Quantization rules.
  *

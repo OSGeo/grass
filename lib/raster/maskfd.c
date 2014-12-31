@@ -1,5 +1,5 @@
 /*!
- * \file raster/maskfd.c
+ * \file lib/raster/maskfd.c
  *
  * \brief Raster Library - Mask functions.
  *

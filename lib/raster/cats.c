@@ -1,5 +1,5 @@
 /*!
- * \file raster/cats.c
+ * \file lib/raster/cats.c
  *
  * \brief Raster Library - Raster categories management
  *
