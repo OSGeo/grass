@@ -1,5 +1,5 @@
 /*!
-   \file raster/get_row.c
+   \file lib/raster/get_row.c
 
    \brief Raster library - Get raster row
 

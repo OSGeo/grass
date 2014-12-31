@@ -1,5 +1,5 @@
 /*!
-   \file raster/sample.c
+   \file lib/raster/sample.c
 
    \brief Raster library - Sampling methods (extract a cell value from
    raster map)

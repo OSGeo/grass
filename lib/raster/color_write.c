@@ -1,5 +1,5 @@
 /*!
- * \file raster/color_write.c
+ * \file lib/raster/color_write.c
  * 
  * \brief Raster Library - Write color table of raster map
  *

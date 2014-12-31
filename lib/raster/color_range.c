@@ -1,5 +1,5 @@
 /*!
- * \file raster/color_range.c
+ * \file lib/raster/color_range.c
  *
  * \brief Raster Library - Color range functions.
  *

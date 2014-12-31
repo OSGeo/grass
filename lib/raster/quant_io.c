@@ -1,5 +1,5 @@
 /*!
- * \file raster/quant_io.c
+ * \file lib/raster/quant_io.c
  * 
  * \brief Raster Library - Quantization rules (input / output)
  *
