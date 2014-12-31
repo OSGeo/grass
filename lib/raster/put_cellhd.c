@@ -1,5 +1,5 @@
 /*!
- * \file raster/put_cellhd.c
+ * \file lib/raster/put_cellhd.c
  *
  * \brief Raster Library - Write raster header.
  *

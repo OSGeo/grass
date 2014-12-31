@@ -1,5 +1,5 @@
 /*!
- * \file raster/alloc_cell.c
+ * \file lib/raster/alloc_cell.c
  *
  * \brief Raster Library - Raster allocation routines.
  *

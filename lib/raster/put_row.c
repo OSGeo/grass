@@ -1,5 +1,5 @@
 /*!
-   \file raster/put_row.c
+   \file lib/raster/put_row.c
 
    \brief Raster library - Put raster row
 

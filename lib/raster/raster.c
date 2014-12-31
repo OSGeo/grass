@@ -1,5 +1,5 @@
 /*!
- * \file raster/raster.c
+ * \file lib/raster/raster.c
  *
  * \brief Raster Library - Raster cell value routines.
  *

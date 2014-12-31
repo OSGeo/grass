@@ -1,5 +1,5 @@
 /*!
- * \file raster/color_xform.c
+ * \file lib/raster/color_xform.c
  *
  * \brief Raster Library - Colors management
  *

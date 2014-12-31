@@ -1,5 +1,5 @@
 /*!
- * \file raster/color_set.c
+ * \file lib/raster/color_set.c
  *
  * \brief Raster Library - Set colors for raster maps.
  *

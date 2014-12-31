@@ -1,5 +1,5 @@
 /*!
- * \file raster/color_rule_get.c
+ * \file lib/raster/color_rule_get.c
  *
  * \brief Raster Library - Get color rules.
  *
