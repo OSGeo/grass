@@ -167,6 +167,11 @@
     <description>Add multiple raster or vector map layers to current display</description>
     <shortcut>Ctrl+Shift+L</shortcut>
   </wxgui-item>
+  <wxgui-item name="AddWebServiceLayer">
+    <label>Add web service layer</label>
+    <handler>OnAddWS</handler>
+    <description>Add web service layer</description>
+  </wxgui-item>
   <wxgui-item name="NewMapDisplayWindow">
     <label>New map display window</label>
     <handler>OnNewDisplay</handler>
