@@ -266,6 +266,11 @@ def main():
     size = float(size)
     maxsize = float(maxsize)
 
+    if 'MONITOR' not in grass.gisenv().keys() and \
+       'GRASS_RENDER_IMMEDIATE' not in os.environ:
+       grass.fatal(_("Neither MONITOR (managed by d.mon command) nor GRASS_RENDER_IMMEDIATE "
+                     "(used for direct rendering) defined)"))
+            
     mapset = grass.find_file(map, element='vector')['mapset']
     if not mapset:
         grass.fatal(_("Vector map <%s> not found") % map)
