@@ -59,12 +59,12 @@ import sys
 import os
 import atexit
 import math
-from grass.script.utils import try_remove
-from grass.script import core as grass
+
+import grass.script as grass 
 
 def cleanup():
     for ext in ['', '.sort']:
-        try_remove(tmp + ext)
+        grass.try_remove(tmp + ext)
 
 def sortfile(infile, outfile):
     inf = file(infile, 'r')
@@ -100,8 +100,20 @@ def main():
 
     perc = [float(p) for p in perc.split(',')]
 
+    desc_table = grass.db_describe(table, database=database, driver=driver)
+    if not desc_table:
+        grass.fatal(_("Unable to describe table <%s>") % table)
+    found = False
+    for cname, ctype, cwidth in desc_table['cols']:
+        if cname == column:
+            found = True
+            if ctype not in ('INTEGER', 'DOUBLE PRECISION'):
+                grass.fatal(_("Column <%s> is not numeric") % cname)
+    if not found:
+        grass.fatal(_("Column <%s> not found in table <%s>") % (column, table))
+
     if not shellstyle:
-        grass.message(_("Calculation for column <%s> of table <%s>...") % (column, table))
+        grass.verbose(_("Calculation for column <%s> of table <%s>...") % (column, table))
         grass.message(_("Reading column values..."))
 
     sql = "SELECT %s FROM %s" % (column, table)
@@ -128,7 +140,7 @@ def main():
 
     # calculate statistics
     if not shellstyle:
-        grass.message(_("Calculating statistics..."))
+        grass.verbose(_("Calculating statistics..."))
 
     N = 0
     sum = 0.0
@@ -154,30 +166,27 @@ def main():
         grass.fatal(_("No non-null values found"))
 
     if not shellstyle:
-        print ""
-        print "Number of values: %d" % N
-        print "Minimum: %.15g" % minv
-        print "Maximum: %.15g" % maxv
-        print "Range: %.15g" % (maxv - minv)
-        print "-----"
-        print "Mean: %.15g" % (sum/N)
-        print "Arithmetic mean of absolute values: %.15g" % (sum3/N)
-        print "Variance: %.15g" % ((sum2 - sum*sum/N)/N)
-        print "Standard deviation: %.15g" % (math.sqrt((sum2 - sum*sum/N)/N))
-        print "Coefficient of variation: %.15g" % ((math.sqrt((sum2 - sum*sum/N)/N))/(math.sqrt(sum*sum)/N))
-        print "Sum: %.15g" % sum
-        print "-----"
+        sys.stdout.write("Number of values: %d\n"% N)
+        sys.stdout.write("Minimum: %.15g\n"% minv)
+        sys.stdout.write("Maximum: %.15g\n"% maxv)
+        sys.stdout.write("Range: %.15g\n"% (maxv - minv))
+        sys.stdout.write("Mean: %.15g\n"% (sum/N))
+        sys.stdout.write("Arithmetic mean of absolute values: %.15g\n"% (sum3/N))
+        sys.stdout.write("Variance: %.15g\n"% ((sum2 - sum*sum/N)/N))
+        sys.stdout.write("Standard deviation: %.15g\n"% (math.sqrt((sum2 - sum*sum/N)/N)))
+        sys.stdout.write("Coefficient of variation: %.15g\n"% ((math.sqrt((sum2 - sum*sum/N)/N))/(math.sqrt(sum*sum)/N)))
+        sys.stdout.write("Sum: %.15g\n"% sum)
     else:
-        print "n=%d" % N
-        print "min=%.15g" % minv
-        print "max=%.15g" % maxv
-        print "range=%.15g" % (maxv - minv)
-        print "mean=%.15g" % (sum/N)
-        print "mean_abs=%.15g" % (sum3/N)
-        print "variance=%.15g" % ((sum2 - sum*sum/N)/N)
-        print "stddev=%.15g" % (math.sqrt((sum2 - sum*sum/N)/N))
-        print "coeff_var=%.15g" % ((math.sqrt((sum2 - sum*sum/N)/N))/(math.sqrt(sum*sum)/N))
-        print "sum=%.15g" % sum
+        sys.stdout.write("n=%d\n"% N)
+        sys.stdout.write("min=%.15g\n"% minv)
+        sys.stdout.write("max=%.15g\n"% maxv)
+        sys.stdout.write("range=%.15g\n"% (maxv - minv))
+        sys.stdout.write("mean=%.15g\n"% (sum/N))
+        sys.stdout.write("mean_abs=%.15g\n"% (sum3/N))
+        sys.stdout.write("variance=%.15g\n"% ((sum2 - sum*sum/N)/N))
+        sys.stdout.write("stddev=%.15g\n"% (math.sqrt((sum2 - sum*sum/N)/N)))
+        sys.stdout.write("coeff_var=%.15g\n"% ((math.sqrt((sum2 - sum*sum/N)/N))/(math.sqrt(sum*sum)/N)))
+        sys.stdout.write("sum=%.15g\n"% sum)
 
     if not extend:
         return
@@ -227,29 +236,29 @@ def main():
     q50 = (q50a + q50b) / 2
 
     if not shellstyle:
-        print "1st Quartile: %.15g" % q25
-        print "Median (%s N): %.15g" % (eostr, q50)
-        print "3rd Quartile: %.15g" % q75
+        sys.stdout.write("1st Quartile: %.15g\n" % q25)
+        sys.stdout.write("Median (%s N): %.15g\n" % (eostr, q50))
+        sys.stdout.write("3rd Quartile: %.15g\n" % q75)
         for i in range(len(perc)):
             if perc[i] == int(perc[i]): # integer
                 if int(perc[i]) % 10 == 1 and int(perc[i]) != 11:
-                    print "%dst Percentile: %.15g" % (int(perc[i]), pval[i])
+                    sys.stdout.write("%dst Percentile: %.15g\n"% (int(perc[i]), pval[i]))
                 elif int(perc[i]) % 10 == 2 and int(perc[i]) != 12:
-                    print "%dnd Percentile: %.15g" % (int(perc[i]), pval[i])
+                    sys.stdout.write("%dnd Percentile: %.15g\n"% (int(perc[i]), pval[i]))
                 elif int(perc[i]) % 10 == 3 and int(perc[i]) != 13:
-                    print "%drd Percentile: %.15g" % (int(perc[i]), pval[i])
+                    sys.stdout.write("%drd Percentile: %.15g\n"% (int(perc[i]), pval[i]))
                 else:
-                    print "%dth Percentile: %.15g" % (int(perc[i]), pval[i])
+                    sys.stdout.write("%dth Percentile: %.15g\n"% (int(perc[i]), pval[i]))
             else:
-                print "%.15g Percentile: %.15g" % (perc[i], pval[i])
+                sys.stdout.write("%.15g Percentile: %.15g\n"% (perc[i], pval[i]))
     else:
-        print "first_quartile=%.15g" % q25
-        print "median=%.15g" % q50
-        print "third_quartile=%.15g" % q75
+        sys.stdout.write("first_quartile=%.15g\n"% q25)
+        sys.stdout.write("median=%.15g\n"% q50)
+        sys.stdout.write("third_quartile=%.15g\n"% q75)
         for i in range(len(perc)):
             percstr = "%.15g" % perc[i]
             percstr = percstr.replace('.','_')
-            print "percentile_%s=%.15g" % (percstr, pval[i])
+            sys.stdout.write("percentile_%s=%.15g\n"% (percstr, pval[i]))
 
 if __name__ == "__main__":
     options, flags = grass.parser()
