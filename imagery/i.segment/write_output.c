@@ -209,6 +209,9 @@ int write_output(struct globals *globals)
 	}
 	G_free(inbuf);
 	G_free(in_fd);
+	G_free(fp_range);
+	G_free(min);
+	G_free(max);
     }
 
     /* free memory */

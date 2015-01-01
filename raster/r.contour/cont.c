@@ -346,9 +346,9 @@ static void getpoint(struct cell *curr, double level,
     if (Rast_raster_cmp(&curr->z[p1], &curr->z[p2], DCELL_TYPE) == 0)
 	ratio = 1;
     else if (Rast_is_d_null_value(&curr->z[p1]))
-	ratio = 1 / 2;
+	ratio = 0.5;
     else if (Rast_is_d_null_value(&curr->z[p2]))
-	ratio = 1 / 2;
+	ratio = 0.5;
     else
 	ratio = (level - curr->z[p1]) / (curr->z[p2] - curr->z[p1]);
 

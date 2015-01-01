@@ -721,6 +721,8 @@ int main(int argc, char *argv[])
 	    Rast_write_units(band_out, "W/(m^2 sr um)");
 	else
 	    Rast_write_units(band_out, "unitless");
+
+	/*  set raster timestamp from acq date? (see r.timestamp module)  */
     }
     Rast_set_window(&orig_cellhd);
 
