@@ -59,6 +59,7 @@ spatiales, Paris, Espace géographique, VI, pp.49-58.
 
 \section listOfFunctios List of functions
 
+- AS_option_to_algorithm()
 - AS_class_apply_algorithm()
 - AS_class_interval()
 - AS_class_quant()
