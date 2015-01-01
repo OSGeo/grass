@@ -1,43 +1,52 @@
 <h2>DESCRIPTION</h2>
 
-<em>d.vect.thematic</em> creates thematic maps from vectors of
-all types and numeric attributes (stored in the data table connected to a vector
-map). Thematic maps can be displayed by either a graduated color scheme (for
-all vector types), as graduated icon sizes (for point and centroid types), or
-graduated line widths (for lines and boundaries with associated attributes).
-The user selects the vector map to be mapped and attribute column from which
-to derive mapping intervals, and (optionally) the layer for attribute data.
+<em>d.vect.thematic</em> creates thematic maps from vector features of
+all types and numeric attributes stored in the attribute table connected to a vector
+map.
 
-<p>In thematic maps, the color or point size changes for each range of attribute
-values. Value ranges for thematic mapping can be
-set at regular intervals, standard deviation units on either
-side of the mean, quartiles, or delimited by user-defined breakpoints.
-User-defined breakpoints also can  be entered, or piped into d.vect.thematic
-from standard input or other external source.
+<p>
+Thematic maps can be displayed by either a <i>graduated color
+scheme</i> (for all vector types), as <i>graduated icon sizes</i> (for
+point and centroid types), or <i>graduated line widths</i> (for lines
+and boundaries with associated attributes), see <b>themetype</b>
+option for details. The user selects the vector <b>map</b> to be
+mapped and attribute <b>column</b> from which to derive mapping
+intervals, and (optionally) the <b>layer</b> for attribute data.
 
-<p>There are options to define the color scheme (graduated
-colors) and range of point sizes (graduated points) for thematic maps. A
-simple text legend is printed. Optionally, a graphic legend can be drawn in
-the selected display monitor. Thematic colors can be uploaded to a GRASSRGB
-column for later display.
+<p>In thematic maps, the color or point size changes for each range of
+attribute values. Value ranges for thematic mapping can be set at
+<i>regular intervals</i>, <i>standard deviation</i> units on either side of the
+<i>mean</i>, <i>quartiles</i>, or delimited by <i>user-defined
+breakpoints</i>, see <b>themecalc</b> option.  User-defined
+breakpoints (<b>themecalc=custom_breaks</b>) can be entered
+via <b>breakpoints</b> option.
 
-<!-- outdated:
-,  and thematic map display commands can be saved to a
-group file (*.dm) that can be opened, edited, and displayed in
-the GIS Manager.
--->
+<h2>NOTES</h2>
 
-<p>When the psmap option is set to 'name', two psmap instruction files are
+<p>There is option <b>colorscheme</b> to define the color scheme
+(graduated colors) and range of point sizes (graduated points) for
+thematic maps.
+
+<p>
+Optionally, a simple text legend is printed when <b>-l</b> flag is
+given. A graphic legend can be drawn in the selected display monitor.
+
+<p>
+Thematic colors can be uploaded by <b>rgb_column</b> option
+to a specified attribute column (which is created automatically if
+doesn't exist in the table) for later display
+via <em><a href="d.vect.html">d.vect</a></em> and <b>rgb_column</b>
+option.
+
+<p>When the <b>psmap</b> option is set to 'name', two psmap instruction files are
 created (in the current directory if no path is given), one for the map
 ('name.psmap') and one for the legend ('name_legend.psmap'). The map file also
 contains 'label' commands which allow to create a legend directly in the map by
 adding a 'vlegend' command. See the <em><a href="ps.map">ps.map</a></em> manual
 page for more details.
-
-
-<h2>NOTES</h2>
-
-The algorithm currently uses the <em>v.univar</em> to calculate basic
+ 
+<p>
+The algorithm currently uses the <em><a href="v.univar.html">v.univar</a></em> to calculate basic
 descriptive statistics needed for thematic mapping (minimum, maximum, mean,
 standard deviation, and quartiles).
 
@@ -103,7 +112,13 @@ d.vect.thematic -l precip_30ynormals column=annual type=point
 
 <h2>AUTHORS</h2>
 
-Michael Barton, Arizona State University, Daniel Cavelo Aros,
-Martin Landa, and Jachym Cepicky.
+Michael Barton, Arizona State University
 
-<p><i>Last changed: $Date: 2008-08-15 08:16:42 +0200 (Fri, 15 Aug 2008)$</i>
+<p>
+Various updates by:<br>
+Daniel Cavelo Aros,<br>
+Martin Landa,<br>
+Jachym Cepicky.
+
+<p>
+  <i>Last changed: $Date: 2008-08-15 08:16:42 +0200 (Fri, 15 Aug 2008)$</i>
