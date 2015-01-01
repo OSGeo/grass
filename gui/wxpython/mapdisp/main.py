@@ -461,12 +461,13 @@ if __name__ == "__main__":
     # clean up GRASS env variables
     env = grass.gisenv()
     env_name = 'MONITOR_%s' % monName.upper()
+    unset = list()
     for key in env.keys():
-        if key.find(env_name) == 0:
-            RunCommand('g.gisenv',
-                       unset = '%s' % key)
-        if key == 'MONITOR' and env[key] == monName:
-            RunCommand('g.gisenv',
-                       unset = '%s' % key)
+        if key.find(env_name) == 0 or \
+           (key == 'MONITOR' and env[key] == monName):
+            unset.append(key)
+    if unset:
+        RunCommand('g.gisenv',
+                   unset = '%s' % ','.join(unset))
     
     sys.exit(0)
