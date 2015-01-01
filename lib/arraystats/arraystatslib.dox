@@ -1,0 +1,20 @@
+/*! \page arraystatslib GRASS array statistics Library
+
+by GRASS Development Team (http://grass.osgeo.org)
+
+\tableofcontents
+
+\section listOfFunctios List of functions
+
+- class_apply_algorithm()
+- class_interval()
+- class_quant()
+- class_discont()
+- class_stdev()
+- class_equiprob()
+- class_frequencies()
+- eqdrt()
+- basic_stats()
+
+*/
+
