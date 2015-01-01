@@ -546,7 +546,7 @@ end
         line2 = 76
         line3 = 75
 
-        i = 1
+        i = 0
         first = True
 
         while i < numint:
