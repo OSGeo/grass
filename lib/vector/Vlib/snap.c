@@ -173,7 +173,7 @@ Vect_snap_lines_list(struct Map_info *Map, const struct ilist *List_lines,
     if (getenv("GRASS_VECTOR_LOWMEM"))
 	Vect_snap_lines_list_rtree(Map, List_lines, thresh, Err);
     else
-	Vect_snap_lines_list_rtree(Map, List_lines, thresh, Err);
+	Vect_snap_lines_list_kdtree(Map, List_lines, thresh, Err);
 }
 
 static void
