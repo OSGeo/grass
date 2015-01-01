@@ -266,6 +266,14 @@ def main():
     size = float(size)
     maxsize = float(maxsize)
 
+    mapset = grass.find_file(map, element='vector')['mapset']
+    if not mapset:
+        grass.fatal(_("Vector map <%s> not found") % map)
+    if rgb_column and mapset != grass.gisenv()['MAPSET']:
+        grass.warning(_("Vector map <%s> not found in the current mapset. "
+                        "Updating RGB values <%s> skipped.") % (map, "rgb_column"))
+        rgb_column = None
+
     # check column type
     inf = grass.vector_columns(map, layer)
     if column not in inf:
@@ -539,8 +547,9 @@ text 14% 80% ============
 end
 """)
 
-        sys.stdout.write("Color(R:G:B)\tValue\n")
-        sys.stdout.write("============\t==========\n")
+        grass.message("")
+        grass.message(_("Color(R:G:B)\tValue"))
+        grass.message("============\t==========")
 
         line1 = 78
         line2 = 76
@@ -665,7 +674,7 @@ end
 
                 f_gisleg.write("text - - - {...}\n")
 
-            sys.stdout.write(subs(locals(), "$themecolor\t\t$openbracket$rangemin - $rangemax$closebracket $extranote\n"))
+            grass.message("%-15s %s%.3f - %.3f%s %s" % (themecolor, openbracket, rangemin, rangemax, closebracket, extranote))
             if not where:
                 sqlwhere = subs(locals(), "$column $mincomparison $rangemin AND $column <= $rangemax")
             else:
@@ -873,8 +882,9 @@ end
 """)
 
 
-        sys.stdout.write("Size/width\tValue\n")
-        sys.stdout.write("==========\t=====\n")
+        grass.message("")
+        grass.message(_("Size/width\tValue"))
+        grass.message("==========\t=====")
 
         themecolor = pointcolor
 
@@ -981,7 +991,8 @@ text 25% $xline1% ...
 end
 """)
 
-            sys.stdout.write(subs(locals(), "$ptsize\t\t$openbracket$rangemin - $rangemax$closebracket $extranote\n"))
+            grass.message("%-15d %s%.3f - %.3f%s %s" % \
+                          (ptsize, openbracket, rangemin, rangemax, closebracket, extranote))
 
             if not where:
                 sqlwhere = subs(locals(), "$column $mincomparison $rangemin AND $column <= $rangemax")
@@ -1043,17 +1054,16 @@ end
 
             #graduates line widths or point sizes
 
+            kwargs = {}
             if themetype == "graduated_lines":
-                grass.run_command('d.vect', map = map, type = type, layer = layer,
-                                  where = sqlwhere,
-                                  color = linecolor, fcolor = themecolor, icon = icon, size = ptsize,
-                                  width = ptsize)
-
-            else:
-                grass.run_command('d.vect', map = map, type = type, layer = layer,
-                                  where = sqlwhere,
-                                  color = linecolor, fcolor = themecolor, icon = icon, size = ptsize)
-
+                kwargs['width'] = ptsize
+                
+            grass.run_command('d.vect', map = map, type = type, layer = layer,
+                              where = sqlwhere,
+                              color = linecolor, fcolor = themecolor, icon = icon,
+                              size = ptsize, quiet = True, **kwargs)
+            
+            if themetype != "graduated_lines":
                 out(f_psmap, locals(), """\
 vpoints $map
   type $type
