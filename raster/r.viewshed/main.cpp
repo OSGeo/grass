@@ -175,9 +175,12 @@ int main(int argc, char *argv[])
        the algorithm will work correctly in theory. But this
        requires some changes. To do. */
     if (!(vp.row < hd->nrows && vp.col < hd->ncols)) {
-	G_warning(_("Viewpoint outside grid"));
-	G_warning(_("viewpont: (row=%d, col=%d)"), vp.row, vp.col);
-	G_fatal_error(_("grid: (rows=%d, cols=%d)"), hd->nrows, hd->ncols);
+	/* unfortunately, we don't know the point coordinates now */
+	G_warning(_("Region extent: north=%d, south=%d, east=%d, west=%d"),
+	    hd->window.north, hd->window.south, hd->window.east, hd->window.west);
+	G_warning(_("Region extent: rows=%d, cols=%d"), hd->nrows, hd->ncols);
+	G_warning(_("Viewpoint: row=%d, col=%d"), vp.row, vp.col);
+	G_fatal_error(_("Viewpoint outside of computational region"));
     }
 
 

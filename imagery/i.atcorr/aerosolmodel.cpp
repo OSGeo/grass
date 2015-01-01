@@ -385,7 +385,7 @@ void AerosolModel::exscphase(const double X, const double nr,
 
 	for(int k = 1; k <= mu; k++)
 	{
-	    double co_n = (2 * k + 1) / k / (k + 1);
+	    double co_n = (2.0 * k + 1) / k / (k + 1);
 	    RS1 += co_n * (RAn[k] * PIn[k] + RBn[k] * TAUn[k]);
 	    RS2 += co_n * (RAn[k] * TAUn[k] + RBn[k] * PIn[k]);
 	    IS1 += co_n * (IAn[k] * PIn[k] + IBn[k] * TAUn[k]);

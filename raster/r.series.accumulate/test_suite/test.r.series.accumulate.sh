@@ -51,7 +51,7 @@ r.series.accumulate basemap=basemap input=map_a, \
                     output=test_accu_9 range=6,9 method=mean --verbose
 
 # Test for correct results
-for map in `g.list type=rast pattern=test_accu_*` ; do
+for map in `g.list type=raster pattern=test_accu_*` ; do
     r.out.ascii input=${map} output=${map}.ref precision=2
 done
 
