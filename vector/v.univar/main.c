@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("attribute table"));
     G_add_keyword(_("geometry"));
     module->label =
-	_("Calculates univariate statistics for attribute.");
+	_("Calculates univariate statistics of vector map features.");
     module->description = _("Variance and standard "
 			    "deviation is calculated only for points if specified.");
 
