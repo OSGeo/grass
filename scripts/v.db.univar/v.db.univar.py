@@ -70,8 +70,12 @@ def main():
 
     if not grass.find_file(vector, element='vector')['file']:
         grass.fatal(_("Vector map <%s> not found") % vector)
-        
-    fi = grass.vector_db(vector, stderr = nuldev)[int(layer)]
+
+    try:
+        fi = grass.vector_db(vector, stderr = nuldev)[int(layer)]
+    except KeyError:
+        grass.fatal(_("No attribute table linked to layer <%s>") % layer)
+                
     table = fi['table']
     database = fi['database']
     driver = fi['driver']
