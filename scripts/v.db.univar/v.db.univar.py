@@ -54,6 +54,7 @@
 import sys
 import os
 import grass.script as grass
+from grass.exceptions import CalledModuleError
 
 def main():
     global tmp
@@ -67,7 +68,9 @@ def main():
     extend = flags['e']
     shellstyle = flags['g']
 
-    
+    if not grass.find_file(vector, element='vector')['file']:
+        grass.fatal(_("Vector map <%s> not found") % vector)
+        
     fi = grass.vector_db(vector, stderr = nuldev)[int(layer)]
     table = fi['table']
     database = fi['database']
@@ -81,12 +84,14 @@ def main():
 	    passflags = 'g'
 	else:
 	    passflags = passflags + 'g'
+
+    try:
+        grass.run_command('db.univar', table = table, column = column, 
+                          database = database, driver = driver,
+                          perc = perc, where = where, flags = passflags)
+    except CalledModuleError:
+        sys.exit(1)
     
-    grass.run_command('db.univar', table = table, column = column, 
-                      database = database, driver = driver,
-		      perc = perc, where = where, flags = passflags)
-
-
 if __name__ == "__main__":
     options, flags = grass.parser()
     nuldev = file(os.devnull, 'w')
