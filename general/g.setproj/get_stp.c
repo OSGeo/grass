@@ -40,7 +40,7 @@ void get_stp_proj(char string[])
 	    fprintf(stderr, "\nInvalid Co-ordinate System Specification\n");
     }
     if (get_stp_code(code, string, buff) == 0)
-	G_fatal_error(_("This should not happen see your system admin"));
+	G_fatal_error(_("This should not happen. See your system admin."));
 
     return;
 }
@@ -122,7 +122,7 @@ int get_stp_num(void)
 	if (icode != 0)
 	    break;
 	else {			/* no match */
-	    G_warning(_("No match of fips state %d county %d"), SFIPS, CFIPS);
+	    G_warning(_("No match of FIPS state %d county %d"), SFIPS, CFIPS);
 	    fclose(fipsfile);
 	}
     }

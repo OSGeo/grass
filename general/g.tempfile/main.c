@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *pid;
     struct Flag *dry_run;
-    char *tempfile, *G__tempfile();
+    char *tempfile;
     int p;
     
     G_gisinit(argv[0]);
