@@ -33,7 +33,7 @@
 #% required: yes
 #%end
 #%option G_OPT_V_TYPE
-#% answer: area
+#%answer: point,line,area
 #%end
 #%option G_OPT_DB_WHERE
 #% guisection: Theme
@@ -338,6 +338,7 @@ def main():
     else:
         stype = ["point", "centroid"]
 
+    grass.message(_("Calculating statistics..."))
     stats = grass.read_command('v.univar', flags = 'eg', map = map, type = stype, column = column, where = where, layer = layer)
     if not stats:
         grass.fatal(_("Unable to calculate statistics for vector map <%s>" % map))
@@ -441,7 +442,7 @@ end
 
     # open file for psmap instructions
     f_psmap = file(tmp_psmap, 'w')
-
+    
     # graduated color thematic mapping
     if themetype == "graduated_colors":
         if colorscheme in colorschemes:
@@ -546,7 +547,7 @@ text 14% 80% ============
   ref bottom left
 end
 """)
-
+        
         grass.message("")
         grass.message(_("Color(R:G:B)\tValue"))
         grass.message("============\t==========")
@@ -557,7 +558,6 @@ end
 
         i = 0
         first = True
-
         while i < numint:
             if flag_m:
                 # math notation
@@ -568,7 +568,7 @@ end
                     first = False
                 else:
                     closebracket = "]"
-                    openbracket = "]"
+                    openbracket = "["
                     mincomparison = ">"
             else:
                 closebracket = "" 
@@ -578,7 +578,7 @@ end
                     first = False
                 else:
                     mincomparison = ">"
-
+            
             themecolor = ":".join(__builtins__.map(str,color))
             if flag_f:
                 linecolor = "none"
@@ -588,9 +588,12 @@ end
                 else:
                     linecolor = linecolor
 
-            rangemin = __builtins__.min(breakpoints)
-            rangemax = __builtins__.max(breakpoints)
-
+            ### ???
+            ### rangemin = __builtins__.min(breakpoints)
+            ### rangemax = __builtins__.max(breakpoints)
+            rangemin = breakpoints[i]
+            rangemax = breakpoints[i+1]
+            
             if not annotations:
                 extranote = ""
             else:
@@ -784,7 +787,7 @@ end
             if i == numint:
                 color = endcolor
             else:
-                color = [a - b for a, b in zip(color, clrstep)]
+                color = [__builtins__.min(a - b, 255) for a, b in zip(color, clrstep)]
             line1 -= 4
             line2 -= 4
             line3 -= 4
@@ -918,8 +921,11 @@ end
             if flag_f:
                 linecolor = "none"
 
-            rangemin = __builtins__.min(breakpoints)
-            rangemax = __builtins__.max(breakpoints)
+            ### ???
+            ### rangemin = __builtins__.min(breakpoints)
+            ### rangemax = __builtins__.max(breakpoints)
+            rangemin = breakpoints[i-1]
+            rangemax = breakpoints[i]
 
             if not annotations:
                 extranote = ""
