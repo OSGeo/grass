@@ -349,17 +349,19 @@ void select_from_database(void)
 		      Fi->database, Fi->driver);
     db_set_error_handler_driver(Driver);
 
+    /* check if column exists */
+    ctype = db_column_Ctype(Driver, Fi->table, col_opt->answer);
+    if (ctype == -1)
+        G_fatal_error(_("Column <%s> not found in table <%s>"),
+                      col_opt->answer, Fi->table);
+    if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE)
+	G_fatal_error(_("Only numeric column type is supported"));
+    
     /* Note do not check if the column exists in the table because it may be an expression */
     db_CatValArray_init(&Cvarr);
-    nrec =
-	db_select_CatValArray(Driver, Fi->table, Fi->key, col_opt->answer,
-			      where_opt->answer, &Cvarr);
+    nrec = db_select_CatValArray(Driver, Fi->table, Fi->key, col_opt->answer,
+                                 where_opt->answer, &Cvarr);
     G_debug(2, "db_select_CatValArray() nrec = %d", nrec);
-
-    ctype = Cvarr.ctype;
-    if (ctype != DB_C_TYPE_INT && ctype != DB_C_TYPE_DOUBLE)
-	G_fatal_error(_("Column type not supported"));
-
     if (nrec < 0)
 	G_fatal_error(_("Unable to select data from table"));
 
