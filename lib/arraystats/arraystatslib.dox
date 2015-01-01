@@ -1,4 +1,4 @@
-/*! \page arraystatslib GRASS array statistics Library
+/*! \page arraystatslib GRASS Array Statistics Library
 
 by GRASS Development Team (http://grass.osgeo.org)
 
@@ -6,15 +6,15 @@ by GRASS Development Team (http://grass.osgeo.org)
 
 \section listOfFunctios List of functions
 
-- class_apply_algorithm()
-- class_interval()
-- class_quant()
-- class_discont()
-- class_stdev()
-- class_equiprob()
-- class_frequencies()
-- eqdrt()
-- basic_stats()
+- AS_class_apply_algorithm()
+- AS_class_interval()
+- AS_class_quant()
+- AS_class_discont()
+- AS_class_stdev()
+- AS_class_equiprob()
+- AS_class_frequencies()
+- AS_eqdrt()
+- AS_basic_stats()
 
 */
 

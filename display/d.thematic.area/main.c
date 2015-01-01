@@ -325,9 +325,9 @@ int main(int argc, char **argv)
 
 	    /* Get classbreaks for given algorithm and number of classbreaks.
 	     * class_info takes any info coming from the classification algorithms */
-	    class_info =
-		class_apply_algorithm(algo_opt->answer, data, nrec, &nbreaks,
-				      breakpoints);
+	    class_info = AS_class_apply_algorithm(AS_option_to_algorithm(algo_opt),
+                                                  data, nrec, &nbreaks,
+                                                  breakpoints);
 
 	}
 	else {
@@ -414,10 +414,10 @@ int main(int argc, char **argv)
     frequencies = (int *)G_malloc((nbreaks + 1) * sizeof(int));
     for (i = 0; i < nbreaks + 1; i++)
 	frequencies[i] = 0.0;
-    class_frequencies(data, nrec, nbreaks, breakpoints, frequencies);
+    AS_class_frequencies(data, nrec, nbreaks, breakpoints, frequencies);
 
     /*Get basic statistics about the data */
-    basic_stats(data, nrec, &stats);
+    AS_basic_stats(data, nrec, &stats);
 
     if (legend_flag->answer) {
 
