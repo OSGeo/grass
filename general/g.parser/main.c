@@ -29,11 +29,14 @@ int translate_output;
 
 int main(int argc, char *argv[])
 {
+    char *progname;
     struct context ctx;
     const char *filename;
     int standard_output;
     int separator_nul;
     
+    progname = argv[0];
+
     ctx.module = NULL;
     ctx.option = NULL;
     ctx.flag = NULL;
@@ -67,8 +70,8 @@ int main(int argc, char *argv[])
     if ((argc < 2) || ((strcmp(argv[1], "help") == 0) ||
 		       (strcmp(argv[1], "-help") == 0) ||
 		       (strcmp(argv[1], "--help") == 0))) {
-	fprintf(stderr, "%s: %s [-t] [-s] <filename> [<argument> ...]\n",
-		_("Usage"), argv[0]);
+	fprintf(stderr, "%s: %s [-t] [-s] [-n] <filename> [<argument> ...]\n",
+		_("Usage"), progname);
 	exit(EXIT_FAILURE);
     }
 
