@@ -164,9 +164,10 @@ int main(int argc, char *argv[])
      * finfo takes any info coming from the classification algorithms
      * equ algorithm can alter number of class breaks */
     finfo =
-	AS_class_apply_algorithm(algo_opt->answer, data, nrec, &nbreaks,
+        AS_class_apply_algorithm(AS_option_to_algorithm(algo_opt),
+                                 data, nrec, &nbreaks,
                                  classbreaks);
-
+    
 
     if (G_strcasecmp(algo_opt->answer, "dis") == 0 && finfo < 3.84148)
 	G_warning(_("The discontinuities algorithm indicates that some "

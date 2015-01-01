@@ -325,9 +325,9 @@ int main(int argc, char **argv)
 
 	    /* Get classbreaks for given algorithm and number of classbreaks.
 	     * class_info takes any info coming from the classification algorithms */
-	    class_info =
-		AS_class_apply_algorithm(algo_opt->answer, data, nrec, &nbreaks,
-                                         breakpoints);
+	    class_info = AS_class_apply_algorithm(AS_option_to_algorithm(algo_opt),
+                                                  data, nrec, &nbreaks,
+                                                  breakpoints);
 
 	}
 	else {

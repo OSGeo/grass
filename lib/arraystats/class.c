@@ -3,27 +3,50 @@
 #include <grass/glocale.h>
 #include <grass/arraystats.h>
 
-double AS_class_apply_algorithm(char *algo, double *data, int nrec, int *nbreaks,
+int AS_option_to_algorithm(const struct Option * option)
+{
+    if (G_strcasecmp(option->answer, "int") == 0)
+        return CLASS_INTERVAL;
+    if (G_strcasecmp(option->answer, "std") == 0)
+        return CLASS_STDEV;
+    if (G_strcasecmp(option->answer, "qua") == 0)
+        return CLASS_QUANT;
+    if (G_strcasecmp(option->answer, "equ") == 0)
+        return CLASS_EQUIPROB;
+    if (G_strcasecmp(option->answer, "dis") == 0)
+        return CLASS_DISCONT;
+
+    G_fatal_error(_("Unknown algorithm '%s'"), option->answer);
+}
+    
+double AS_class_apply_algorithm(int algo, double *data, int nrec, int *nbreaks,
                                 double *classbreaks)
 {
     double finfo = 0.0;
 
-    if (G_strcasecmp(algo, "int") == 0)
-	finfo = AS_class_interval(data, nrec, *nbreaks, classbreaks);
-    else if (G_strcasecmp(algo, "std") == 0)
-	finfo = AS_class_stdev(data, nrec, *nbreaks, classbreaks);
-    else if (G_strcasecmp(algo, "qua") == 0)
+    switch (algo) {
+    case CLASS_INTERVAL:
+        finfo = AS_class_interval(data, nrec, *nbreaks, classbreaks);
+        break;
+    case CLASS_STDEV:
+        finfo = AS_class_stdev(data, nrec, *nbreaks, classbreaks);
+        break;
+    case CLASS_QUANT:
         finfo = AS_class_quant(data, nrec, *nbreaks, classbreaks);
-    else if (G_strcasecmp(algo, "equ") == 0)
-	finfo = AS_class_equiprob(data, nrec, nbreaks, classbreaks);
-    else if (G_strcasecmp(algo, "dis") == 0)
-	    /*	finfo = class_discont(data, nrec, *nbreaks, classbreaks); disabled because of bugs */
+        break;
+    case CLASS_EQUIPROB:
+        finfo = AS_class_equiprob(data, nrec, nbreaks, classbreaks);
+        break;
+    case CLASS_DISCONT:
+        /*	finfo = class_discont(data, nrec, *nbreaks, classbreaks); disabled because of bugs */
         G_fatal_error(_("Discont algorithm currently not available because of bugs"));
-    else
-	G_fatal_error(_("%s: Unknown algorithm"), algo);
+        break;
+    default:
+        break;
+    }
 
     if (finfo == 0)
-	G_fatal_error(_("%s: Error in classification algorithm"), algo);
+	G_fatal_error(_("Classification algorithm failed"));
 
     return finfo;
 }
