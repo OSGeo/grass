@@ -17,7 +17,7 @@
 
 
 #%module
-#% description: Displays thematic vector map
+#% description: Displays thematic map created from vector features and numeric attributes.
 #% keyword: display
 #% keyword: cartography
 #% keyword: vector
@@ -33,7 +33,10 @@
 #% required: yes
 #%end
 #%option G_OPT_V_TYPE
-#% answer: area
+#%answer: point,line,area
+#%end
+#%option G_OPT_DB_WHERE
+#% guisection: Theme
 #%end
 #%option
 #% key: themetype
@@ -155,9 +158,6 @@
 #% key: g
 #%description: Save thematic map commands to group file for GIS Manager
 #%end
-#%option G_OPT_DB_WHERE
-#% guisection: Theme
-#%end
 #%option
 #% key: psmap
 #% type: string
@@ -171,6 +171,10 @@
 #% required: no
 #% guisection: Files
 #%end
+#%option G_OPT_DB_COLUMN
+#% key: rgb_column
+#% description: Name of color column to populate RGB values
+#%end
 #%flag 
 #% guisection: Theme
 #%key: l
@@ -180,11 +184,6 @@
 #% guisection: Color
 #% key: f
 #% description: Only draw fills (no outlines) for areas and points
-#%end
-#%flag
-#% guisection: Color
-#% key: u
-#% description: Update color values to GRASSRGB column in attribute table
 #%end
 #%flag 
 #% guisection: Misc
@@ -222,9 +221,12 @@ max_leg_items = 18
 def subs(vars, tmpl):
     return string.Template(tmpl).substitute(vars)
 
-def msg(vars, tmpl):
-    grass.message(subs(vars, tmpl))
-
+def msg(vars, tmpl, verbose=False):
+    if not verbose:
+        grass.message(subs(vars, tmpl))
+    else:
+        grass.verbose(subs(vars, tmpl))
+        
 def out(fh, vars, tmpl):
     fh.write(subs(vars, tmpl))
 
@@ -251,18 +253,31 @@ def main():
     type = options['type']
     where = options['where']
     icon = options['icon']
-
+    rgb_column = options['rgb_column']
+    
     flag_f = flags['f']
     flag_g = flags['g']
     flag_l = flags['l']
     flag_m = flags['m']
     flag_s = flags['s']
-    flag_u = flags['u']
 
     layer = int(layer)
     nint = int(nint)
     size = float(size)
     maxsize = float(maxsize)
+
+    if 'MONITOR' not in grass.gisenv().keys() and \
+       'GRASS_RENDER_IMMEDIATE' not in os.environ:
+       grass.fatal(_("Neither MONITOR (managed by d.mon command) nor GRASS_RENDER_IMMEDIATE "
+                     "(used for direct rendering) defined)"))
+            
+    mapset = grass.find_file(map, element='vector')['mapset']
+    if not mapset:
+        grass.fatal(_("Vector map <%s> not found") % map)
+    if rgb_column and mapset != grass.gisenv()['MAPSET']:
+        grass.warning(_("Vector map <%s> not found in the current mapset. "
+                        "Updating RGB values <%s> skipped.") % (map, "rgb_column"))
+        rgb_column = None
 
     # check column type
     inf = grass.vector_columns(map, layer)
@@ -307,12 +322,12 @@ def main():
     driver = db['driver']
 
     # update color values to the table?
-    if flag_u:
-        # test, if the column GRASSRGB is in the table
+    if rgb_column:
+        # test, if the rgb column is in the table
         s = grass.read_command('db.columns', table = table, database = database, driver = driver)
-        if 'grassrgb' not in s.splitlines():
-            msg(locals(), _("Creating column 'grassrgb' in table <$table>"))
-            sql = "ALTER TABLE %s ADD COLUMN grassrgb varchar(11)" % table
+        if rgb_column not in s.splitlines():
+            msg(locals(), _("Creating column <$rgb_column> in table <$table>"))
+            sql = "ALTER TABLE %s ADD COLUMN %s varchar(11)" % (table, rgb_column)
             grass.write_command('db.execute', database = database, driver = driver, input = '-', stdin = sql)
 
     # Group name
@@ -328,12 +343,15 @@ def main():
     else:
         stype = ["point", "centroid"]
 
-    if not where:
-        where = None
-
+    grass.message(_("Calculating statistics..."))
     stats = grass.read_command('v.univar', flags = 'eg', map = map, type = stype, column = column, where = where, layer = layer)
+    if not stats:
+        grass.fatal(_("Unable to calculate statistics for vector map <%s>" % map))
     stats = grass.parse_key_val(stats)
-
+    if 'min' not in stats:
+        grass.fatal(_("Unable to calculate statistics for vector map <%s> "
+                      "(missing minimum/maximum value)" % map))
+        
     min  = float(stats['min'])
     max  = float(stats['max'])
     mean = float(stats['mean'])
@@ -368,7 +386,7 @@ def main():
         annotations = " %f; %f; %f; %f" % (q1, q2, q3, q4)
     elif themecalc == "custom_breaks":
         if not breakpoints:
-            breakpoints = sys.stdin.read()
+            grass.fatal(_("Required parameter <%s> not set") % "breakpoints") 
         breakpoints = [int(x) for x in breakpoints.split()]
         numint = len(breakpoints) - 1
         annotations = ""
@@ -412,7 +430,7 @@ text 4% 90% Value range: $min - $max
 end
 """)
 
-    msg(locals(), _("Thematic map legend for column $column of map $map"))
+    msg(locals(), _("Thematic map legend for column <$column> of map <$map>"), verbose=True)
     msg(locals(), _("Value range: $min - $max"))
 
     colorschemes = {
@@ -429,7 +447,7 @@ end
 
     # open file for psmap instructions
     f_psmap = file(tmp_psmap, 'w')
-
+    
     # graduated color thematic mapping
     if themetype == "graduated_colors":
         if colorscheme in colorschemes:
@@ -534,17 +552,17 @@ text 14% 80% ============
   ref bottom left
 end
 """)
-
-        sys.stdout.write("Color(R:G:B)\tValue\n")
-        sys.stdout.write("============\t==========\n")
+        
+        grass.message("")
+        grass.message(_("Color(R:G:B)\tValue"))
+        grass.message("============\t==========")
 
         line1 = 78
         line2 = 76
         line3 = 75
 
-        i = 1
+        i = 0
         first = True
-
         while i < numint:
             if flag_m:
                 # math notation
@@ -555,7 +573,7 @@ end
                     first = False
                 else:
                     closebracket = "]"
-                    openbracket = "]"
+                    openbracket = "["
                     mincomparison = ">"
             else:
                 closebracket = "" 
@@ -565,7 +583,7 @@ end
                     first = False
                 else:
                     mincomparison = ">"
-
+            
             themecolor = ":".join(__builtins__.map(str,color))
             if flag_f:
                 linecolor = "none"
@@ -575,9 +593,12 @@ end
                 else:
                     linecolor = linecolor
 
-            rangemin = __builtins__.min(breakpoints)
-            rangemax = __builtins__.max(breakpoints)
-
+            ### ???
+            ### rangemin = __builtins__.min(breakpoints)
+            ### rangemax = __builtins__.max(breakpoints)
+            rangemin = breakpoints[i]
+            rangemax = breakpoints[i+1]
+            
             if not annotations:
                 extranote = ""
             else:
@@ -661,15 +682,15 @@ end
 
                 f_gisleg.write("text - - - {...}\n")
 
-            sys.stdout.write(subs(locals(), "$themecolor\t\t$openbracket$rangemin - $rangemax$closebracket $extranote\n"))
+            grass.message("%-15s %s%.3f - %.3f%s %s" % (themecolor, openbracket, rangemin, rangemax, closebracket, extranote))
             if not where:
                 sqlwhere = subs(locals(), "$column $mincomparison $rangemin AND $column <= $rangemax")
             else:
                 sqlwhere = subs(locals(), "$column $mincomparison $rangemin AND $column <= $rangemax AND $where")
 
             # update color to database?
-            if flag_u:
-                sql = subs(locals(), "UPDATE $table SET GRASSRGB = '$themecolor' WHERE $sqlwhere")
+            if rgb_column:
+                sql = subs(locals(), "UPDATE $table SET $rgb_column = '$themecolor' WHERE $sqlwhere")
                 grass.write_command('db.execute', database = database, driver = driver, input = '-', stdin = sql)
 
             # Create group for GIS Manager
@@ -730,7 +751,8 @@ end
 
             grass.run_command('d.vect', map = map, type = type, layer = layer,
                               where = sqlwhere,
-                              color = linecolor, fcolor = themecolor, icon = icon, size = ptsize)
+                              color = linecolor, fcolor = themecolor, icon = icon, size = ptsize,
+                              quiet = True)
 
             if type in ["line", "boundary"]:
                 out(f_psmap, locals(), """\
@@ -770,7 +792,7 @@ end
             if i == numint:
                 color = endcolor
             else:
-                color = [a - b for a, b in zip(color, clrstep)]
+                color = [__builtins__.min(a - b, 255) for a, b in zip(color, clrstep)]
             line1 -= 4
             line2 -= 4
             line3 -= 4
@@ -868,8 +890,9 @@ end
 """)
 
 
-        sys.stdout.write("Size/width\tValue\n")
-        sys.stdout.write("==========\t=====\n")
+        grass.message("")
+        grass.message(_("Size/width\tValue"))
+        grass.message("==========\t=====")
 
         themecolor = pointcolor
 
@@ -903,8 +926,11 @@ end
             if flag_f:
                 linecolor = "none"
 
-            rangemin = __builtins__.min(breakpoints)
-            rangemax = __builtins__.max(breakpoints)
+            ### ???
+            ### rangemin = __builtins__.min(breakpoints)
+            ### rangemax = __builtins__.max(breakpoints)
+            rangemin = breakpoints[i-1]
+            rangemax = breakpoints[i]
 
             if not annotations:
                 extranote = ""
@@ -976,7 +1002,8 @@ text 25% $xline1% ...
 end
 """)
 
-            sys.stdout.write(subs(locals(), "$ptsize\t\t$openbracket$rangemin - $rangemax$closebracket $extranote\n"))
+            grass.message("%-15d %s%.3f - %.3f%s %s" % \
+                          (ptsize, openbracket, rangemin, rangemax, closebracket, extranote))
 
             if not where:
                 sqlwhere = subs(locals(), "$column $mincomparison $rangemin AND $column <= $rangemax")
@@ -984,8 +1011,8 @@ end
                 sqlwhere = subs(locals(), "$column $mincomparison $rangemin AND $column <= $rangemax AND $where")
 
             # update color to database?
-            if flag_u:
-                sql = subs(locals(), "UPDATE $table SET grassrgb = '$themecolor' WHERE $sqlwhere")
+            if rgb_column:
+                sql = subs(locals(), "UPDATE $table SET $rgb_column = '$themecolor' WHERE $sqlwhere")
                 grass.write_command('db.execute', database = database, driver = driver, input = '-', stdin = sql)
 
             # Create group for GIS Manager
@@ -1038,17 +1065,16 @@ end
 
             #graduates line widths or point sizes
 
+            kwargs = {}
             if themetype == "graduated_lines":
-                grass.run_command('d.vect', map = map, type = type, layer = layer,
-                                  where = sqlwhere,
-                                  color = linecolor, fcolor = themecolor, icon = icon, size = ptsize,
-                                  width = ptsize)
-
-            else:
-                grass.run_command('d.vect', map = map, type = type, layer = layer,
-                                  where = sqlwhere,
-                                  color = linecolor, fcolor = themecolor, icon = icon, size = ptsize)
-
+                kwargs['width'] = ptsize
+                
+            grass.run_command('d.vect', map = map, type = type, layer = layer,
+                              where = sqlwhere,
+                              color = linecolor, fcolor = themecolor, icon = icon,
+                              size = ptsize, quiet = True, **kwargs)
+            
+            if themetype != "graduated_lines":
                 out(f_psmap, locals(), """\
 vpoints $map
   type $type
