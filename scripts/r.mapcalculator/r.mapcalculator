@@ -153,8 +153,8 @@ if [ -z "$GIS_OPT_OUTFILE" ]; then
 	g.message -e "Please enter a name for the resulting map and try again."
 	exit 1
 elif [ "$GIS_FLAG_O" = 1 ]; then
-	echo `g.list type=rast | grep -w "$GIS_OPT_OUTFILE" `
-	outtest=`g.list type=rast | grep -w $GIS_OPT_OUTFILE`
+	echo `g.list type=raster | grep -w "$GIS_OPT_OUTFILE" `
+	outtest=`g.list type=raster | grep -w $GIS_OPT_OUTFILE`
 	if [ -n "$outtest" ]; then
 		g.message -e "File $GIS_OPT_OUTFILE exists. Exiting."
 		exit 0
