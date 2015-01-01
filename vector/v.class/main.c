@@ -164,8 +164,8 @@ int main(int argc, char *argv[])
      * finfo takes any info coming from the classification algorithms
      * equ algorithm can alter number of class breaks */
     finfo =
-	class_apply_algorithm(algo_opt->answer, data, nrec, &nbreaks,
-			      classbreaks);
+	AS_class_apply_algorithm(algo_opt->answer, data, nrec, &nbreaks,
+                                 classbreaks);
 
 
     if (G_strcasecmp(algo_opt->answer, "dis") == 0 && finfo < 3.84148)
@@ -188,9 +188,8 @@ int main(int argc, char *argv[])
 	for (i = 0; i < nbreaks + 1; i++)
 	    frequencies[i] = 0;
 
-	ret =
-	    class_frequencies(data, nrec, nbreaks, classbreaks, frequencies);
-	basic_stats(data, nrec, &stats);
+	ret = AS_class_frequencies(data, nrec, nbreaks, classbreaks, frequencies);
+	AS_basic_stats(data, nrec, &stats);
 
 	min = data[0];
 	max = data[nrec - 1];

@@ -3,7 +3,7 @@
 
 
 /*provides basic univar stats */
-void basic_stats(double *data, int count, struct GASTATS *stats)
+void AS_basic_stats(double *data, int count, struct GASTATS *stats)
 {
     int i = 1;
     double sum = 0, sumsq = 0, sumabs = 0;
@@ -37,7 +37,7 @@ void basic_stats(double *data, int count, struct GASTATS *stats)
 }
 
 
-void eqdrt(double vectx[], double vecty[], int i1, int i2, double *vabc)
+void AS_eqdrt(double vectx[], double vecty[], int i1, int i2, double *vabc)
 {
     double bn = 0, bd = 0, x1 = 0, y1 = 0;
 

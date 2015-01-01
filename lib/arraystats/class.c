@@ -3,19 +3,19 @@
 #include <grass/glocale.h>
 #include <grass/arraystats.h>
 
-double class_apply_algorithm(char *algo, double *data, int nrec, int *nbreaks,
-			     double *classbreaks)
+double AS_class_apply_algorithm(char *algo, double *data, int nrec, int *nbreaks,
+                                double *classbreaks)
 {
     double finfo = 0.0;
 
     if (G_strcasecmp(algo, "int") == 0)
-	finfo = class_interval(data, nrec, *nbreaks, classbreaks);
+	finfo = AS_class_interval(data, nrec, *nbreaks, classbreaks);
     else if (G_strcasecmp(algo, "std") == 0)
-	finfo = class_stdev(data, nrec, *nbreaks, classbreaks);
+	finfo = AS_class_stdev(data, nrec, *nbreaks, classbreaks);
     else if (G_strcasecmp(algo, "qua") == 0)
-	finfo = class_quant(data, nrec, *nbreaks, classbreaks);
+        finfo = AS_class_quant(data, nrec, *nbreaks, classbreaks);
     else if (G_strcasecmp(algo, "equ") == 0)
-	finfo = class_equiprob(data, nrec, nbreaks, classbreaks);
+	finfo = AS_class_equiprob(data, nrec, nbreaks, classbreaks);
     else if (G_strcasecmp(algo, "dis") == 0)
 	    /*	finfo = class_discont(data, nrec, *nbreaks, classbreaks); disabled because of bugs */
         G_fatal_error(_("Discont algorithm currently not available because of bugs"));
@@ -28,7 +28,7 @@ double class_apply_algorithm(char *algo, double *data, int nrec, int *nbreaks,
     return finfo;
 }
 
-int class_interval(double *data, int count, int nbreaks, double *classbreaks)
+int AS_class_interval(double *data, int count, int nbreaks, double *classbreaks)
 {
     double min, max;
     double step;
@@ -45,14 +45,14 @@ int class_interval(double *data, int count, int nbreaks, double *classbreaks)
     return (1);
 }
 
-double class_stdev(double *data, int count, int nbreaks, double *classbreaks)
+double AS_class_stdev(double *data, int count, int nbreaks, double *classbreaks)
 {
     struct GASTATS stats;
     int i;
     int nbclass;
     double scale = 1.0;
 
-    basic_stats(data, count, &stats);
+    AS_basic_stats(data, count, &stats);
 
     nbclass = nbreaks + 1;
 
@@ -109,7 +109,7 @@ double class_stdev(double *data, int count, int nbreaks, double *classbreaks)
     return (scale);
 }
 
-int class_quant(double *data, int count, int nbreaks, double *classbreaks)
+int AS_class_quant(double *data, int count, int nbreaks, double *classbreaks)
 {
     int i, step;
 
@@ -122,7 +122,7 @@ int class_quant(double *data, int count, int nbreaks, double *classbreaks)
 }
 
 
-int class_equiprob(double *data, int count, int *nbreaks, double *classbreaks)
+int AS_class_equiprob(double *data, int count, int *nbreaks, double *classbreaks)
 {
     int i, j;
     double *lequi;		/*Vector of scale factors for probabilities of the normal distribution */
@@ -201,11 +201,10 @@ int class_equiprob(double *data, int count, int *nbreaks, double *classbreaks)
 	lequi[8] = 1.28155;
     }
     else {
-	G_fatal_error
-	    ("Equiprobable classbreaks currently limited to 10 classes");
+	G_fatal_error(_("Equiprobable classbreaks currently limited to 10 classes"));
     }
 
-    basic_stats(data, count, &stats);
+    AS_basic_stats(data, count, &stats);
 
     /* Check if any of the classbreaks would fall outside of the range min-max */
     j = 0;
@@ -242,7 +241,7 @@ int class_equiprob(double *data, int count, int *nbreaks, double *classbreaks)
 
 /* FIXME: there seems to a problem with array overflow, probably due to
    the fact that the code was ported from fortran which has 1-based arrays*/
-double class_discont(double *data, int count, int nbreaks,
+double AS_class_discont(double *data, int count, int nbreaks,
 		     double *classbreaks)
 {
     int *num, nbclass;
@@ -319,7 +318,7 @@ double class_discont(double *data, int count, int nbreaks,
 	    nd = nf;		/*Start number */
 	    nf = num[j];
 	    co[j] = 10e37;
-	    eqdrt(x, xn, nd, nf, abc);
+	    AS_eqdrt(x, xn, nd, nf, abc);
 	    den = sqrt(pow(abc[1], 2) + 1.0);
 	    nd++;
 	    /*              Loop through observations */
@@ -422,7 +421,7 @@ double class_discont(double *data, int count, int nbreaks,
     return (chi2);
 }
 
-int class_frequencies(double *data, int count, int nbreaks,
+int AS_class_frequencies(double *data, int count, int nbreaks,
 		      double *classbreaks, int *frequencies)
 {
     int i, j;
