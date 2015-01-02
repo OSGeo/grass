@@ -155,7 +155,8 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
 
     /* Open input */
     Vect_set_open_level(1);
-    Vect_open_old_head(&In, in, mapset);
+    if (Vect_open_old_head(&In, in, mapset) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), in);
 
     if (In.format != GV_FORMAT_NATIVE) {        /* Done */
         Vect_close(&In);
@@ -164,7 +165,8 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
 
     /* Open output */
     Vect_set_open_level(1);
-    Vect_open_update_head(&Out, out, G_mapset());
+    if (Vect_open_update_head(&Out, out, G_mapset()) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), out);
 
     /* Copy tables */
     n = Vect_get_num_dblinks(&In);
@@ -276,7 +278,8 @@ int Vect_rename(const char *in, const char *out)
 
     /* Rename all tables if the format is native */
     Vect_set_open_level(1);
-    Vect_open_update_head(&Map, out, G_mapset());
+    if (Vect_open_update_head(&Map, out, G_mapset()) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), out);
 
     if (Map.format != GV_FORMAT_NATIVE) {       /* Done */
         Vect_close(&Map);
@@ -440,8 +443,11 @@ int Vect__delete(const char *map, int is_tmp)
                 if (Fi == NULL) {
                     G_warning(_("Database connection not defined for layer %d"),
                               Map.dblnk->field[i].number);
-                    Vect_close(&Map);
-                    return -1;
+                    /* 
+                       Vect_close(&Map);
+                       return -1;
+                    */
+                    continue;
                 }
                 G_debug(3, "Delete drv:db:table '%s:%s:%s'", Fi->driver,
                         Fi->database, Fi->table);
@@ -450,8 +456,11 @@ int Vect__delete(const char *map, int is_tmp)
                 if (ret == -1) {
                     G_warning(_("Unable to find table <%s> linked to vector map <%s>"),
                               Fi->table, map);
-                    Vect_close(&Map);
-                    return -1;
+                    /* 
+                       Vect_close(&Map);
+                       return -1;
+                    */
+                    continue;
                 }
 
                 if (ret == 1) {
@@ -460,8 +469,11 @@ int Vect__delete(const char *map, int is_tmp)
                     if (ret == DB_FAILED) {
                         G_warning(_("Unable to delete table <%s>"),
                                   Fi->table);
-                        Vect_close(&Map);
-                        return -1;
+                        /*
+                          Vect_close(&Map);
+                          return -1;
+                        */
+                        continue;
                     }
                 }
                 else {
