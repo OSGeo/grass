@@ -130,7 +130,7 @@ int main(int argc, char *argv[])
     update_flag = G_define_flag();
     update_flag->key = 'u';
     update_flag->label = _("Open output file in update mode");
-    update_flag->description = _("Requires --overwrite flag. If not given the output file is overwritten.");
+    update_flag->description = _("Requires --overwrite flag");
     update_flag->guisection = _("Settings");
 
     if (G_parser(argc, argv))
@@ -197,7 +197,7 @@ int main(int argc, char *argv[])
 
 	ret = start_mon(start_opt->answer, output_opt->answer, !select_flag->answer,
 			width, height, bgcolor_opt->answer,
-			!truecolor_flag->answer);
+			!truecolor_flag->answer, update_flag->answer);
         if (output_opt->answer && !update_flag->answer) {
             D_open_driver();
             D_setup_unity(0);
