@@ -34,7 +34,6 @@
 
 #include <grass/gis.h>
 #include <grass/raster.h>
-#include <grass/site.h>
 #include <grass/vector.h>
 #include <grass/bitmap.h>
 #include <grass/dbmi.h>

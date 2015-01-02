@@ -29,7 +29,6 @@
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/dbmi.h>
-#include <grass/site.h>
 #include <grass/glocale.h>
 #include <grass/linkm.h>
 #include <grass/bitmap.h>
@@ -115,7 +114,7 @@ int main(int argc, char *argv[])
     double x_orig, y_orig, dnorm, deltx, delty, xm, ym;
     char dmaxchar[200];
     char dminchar[200];
-    Site_head inhead;
+
     struct quaddata *data;
     struct multfunc *functions;
     struct multtree *tree;
@@ -556,8 +555,6 @@ int main(int argc, char *argv[])
     /* If anyone is ever motivated to add it, the Plus_head struct has   */
     /*  'long coor_mtime' and dig_head has 'char *date; char *source_date;' */
     /*   which could be read in.                                         */
-    inhead.time = (struct TimeStamp *)NULL;
-    inhead.stime = NULL;
 
     if (devi != NULL || cvdev != NULL) {
 
@@ -609,7 +606,7 @@ int main(int argc, char *argv[])
 		      SCIK1, SCIK2, SCIK3, rsm, elev, slope, aspect, pcurv,
 		      tcurv, mcurv, dmin, x_orig, y_orig, deriv, theta,
 		      scalex, Tmp_fd_z, Tmp_fd_dx, Tmp_fd_dy, Tmp_fd_xx,
-		      Tmp_fd_yy, Tmp_fd_xy, devi, inhead.time, cv,
+		      Tmp_fd_yy, Tmp_fd_xy, devi, NULL, cv,
 		      parm.wheresql->answer);
 
     IL_init_func_2d(&params, IL_grid_calc_2d, IL_matrix_create,
