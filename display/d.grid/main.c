@@ -167,9 +167,9 @@ int main(int argc, char **argv)
     if (wgs84->answer)
 	geogrid->answer = 1;	/* -w implies -g */
     if (geogrid->answer && G_projection() == PROJECTION_LL)
-	G_fatal_error(_("Geo-Grid option is not available for LL projection"));
+	G_fatal_error(_("Geo-grid option not available for LL projection, use without -g/-w"));
     if (geogrid->answer && G_projection() == PROJECTION_XY)
-	G_fatal_error(_("Geo-Grid option is not available for XY projection"));
+	G_fatal_error(_("Geo-grid option not available for XY projection, use without -g/-w"));
 
     if (notext->answer)
 	do_text = FALSE;
@@ -179,7 +179,7 @@ int main(int argc, char **argv)
     if (lwidth->answer) {
 	line_width = atoi(lwidth->answer);
 	if(line_width < 0 || line_width > 1e3)
-	    G_fatal_error("Invalid line width.");
+	    G_fatal_error("Invalid line width");
     }
     else
 	line_width = 0;
