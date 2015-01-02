@@ -26,7 +26,6 @@
 #include <math.h>
 #include <unistd.h>
 #include <grass/gis.h>
-#include <grass/site.h>
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 
