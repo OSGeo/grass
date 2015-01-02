@@ -307,7 +307,7 @@ int plot_geogrid(double size, struct pj_info info_in, struct pj_info info_out,
 
     /* draw marks not grid lines */
     if (mark_type != MARK_GRID) {
-	G_warning("Geogrid marks not yet implemented");
+	G_warning(_("Geo-grid option only available for LL projection, use without -g/-w"));
 #ifdef TODO
 	e1 = combine above;
 	n1 = combine above;
