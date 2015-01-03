@@ -25,7 +25,7 @@ from core.utils import _
 
 class GraphicsSet:
 
-    def __init__(self, parentMapWin, graphicsType,
+    def __init__(self, parentMapWin, graphicsType, pdc,
                  setStatusFunc=None, drawFunc=None, mapCoords=True):
         """Class, which contains instances of GraphicsSetItem and
             draws them For description of parameters look at method
@@ -49,6 +49,7 @@ class GraphicsSet:
         self.parentMapWin = parentMapWin
         self.setStatusFunc = setStatusFunc
         self.mapCoords = mapCoords
+        self.pdc = pdc
 
         if drawFunc:
             self.drawFunc = drawFunc
@@ -74,14 +75,11 @@ class GraphicsSet:
         elif self.graphicsType == "polygon":
             self.drawFunc = self.parentMapWin.DrawPolygon
 
-    def Draw(self, pdc):
-        """Draws all containing items.
-
-        :param pdc: device context, where items are drawn
-        """
+    def Draw(self):
+        """Draws all containing items."""
         itemOrderNum = 0
         for item in self.itemsList:
-            self._clearId(pdc, item.GetId())
+            self._clearId(item.GetId())
             if self.setStatusFunc is not None:
                 self.setStatusFunc(item, itemOrderNum)
 
@@ -111,7 +109,7 @@ class GraphicsSet:
                     self.properties["text"]['color'] = self.parentMapWin.pen.GetColour()
                     self.properties["text"]['text'] = label
 
-                self.drawFunc(pdc=pdc, drawid=item.GetId(),
+                self.drawFunc(pdc=self.pdc, drawid=item.GetId(),
                               coords=coords,
                               text=self.properties["text"],
                               size=self.properties["size"])
@@ -127,7 +125,7 @@ class GraphicsSet:
                 else:
                     coords = item.GetCoords()
 
-                self.drawFunc(pdc=pdc, pen=pen,
+                self.drawFunc(pdc=self.pdc, pen=pen,
                               coords=coords, drawid=item.GetId())
 
             elif self.graphicsType == "rectangle":
@@ -144,7 +142,7 @@ class GraphicsSet:
                 else:
                     coords = item.GetCoords()
 
-                self.drawFunc(pdc=pdc, pen=pen, brush=brush, drawid=item.GetId(),
+                self.drawFunc(pdc=self.pdc, pen=pen, brush=brush, drawid=item.GetId(),
                               point1=coords[0],
                               point2=coords[1])
 
@@ -162,7 +160,7 @@ class GraphicsSet:
                 else:
                     coords = item.GetCoords()
 
-                self.drawFunc(pdc=pdc, pen=pen, brush=brush,
+                self.drawFunc(pdc=self.pdc, pen=pen, brush=brush,
                               coords=coords, drawid=item.GetId())
             itemOrderNum += 1
 
@@ -357,10 +355,10 @@ class GraphicsSet:
         except ValueError:
             return None
 
-    def _clearId(self, pdc, drawid):
+    def _clearId(self, drawid):
         """Clears old object before drawing new object."""
         try:
-            pdc.ClearId(drawid)
+            self.pdc.ClearId(drawid)
         except:
             pass
 
