@@ -157,9 +157,9 @@ class RDigitController(wx.EvtHandler):
             self._finish()
         # draw
         self._mapWindow.ClearLines()
-        self._lines.Draw(pdc=self._mapWindow.pdcTmp)
-        self._areas.Draw(pdc=self._mapWindow.pdcTmp)
-        self._points.Draw(pdc=self._mapWindow.pdcTmp)
+        self._lines.Draw()
+        self._areas.Draw()
+        self._points.Draw()
         self._mapWindow.Refresh()
 
     def _finish(self):
@@ -190,9 +190,9 @@ class RDigitController(wx.EvtHandler):
         self.newFeatureCreated.emit()
 
         self._mapWindow.ClearLines()
-        self._points.Draw(pdc=self._mapWindow.pdcTmp)
-        self._areas.Draw(pdc=self._mapWindow.pdcTmp)
-        self._lines.Draw(pdc=self._mapWindow.pdcTmp)
+        self._points.Draw()
+        self._areas.Draw()
+        self._lines.Draw()
 
         self._mapWindow.Refresh()
 
@@ -255,16 +255,19 @@ class RDigitController(wx.EvtHandler):
 
         color = self._drawColor[:3] + (self._drawTransparency,)
         self._areas = self._mapWindow.RegisterGraphicsToDraw(graphicsType='polygon',
+                                                             pdc=self._mapWindow.pdcTransparent,
                                                              mapCoords=True)
         self._areas.AddPen('pen1', wx.Pen(colour=color, width=2, style=wx.SOLID))
         self._areas.AddBrush('done', wx.Brush(colour=color, style=wx.SOLID))
 
         self._lines = self._mapWindow.RegisterGraphicsToDraw(graphicsType='line',
+                                                             pdc=self._mapWindow.pdcTransparent,
                                                              mapCoords=True)
         self._lines.AddPen('pen1', wx.Pen(colour=color, width=2, style=wx.SOLID))
         self._lines.AddBrush('done', wx.Brush(colour=color, style=wx.SOLID))
 
         self._points = self._mapWindow.RegisterGraphicsToDraw(graphicsType='point',
+                                                              pdc=self._mapWindow.pdcTransparent,
                                                               mapCoords=True)
         self._points.AddPen('pen1', wx.Pen(colour=color, width=2, style=wx.SOLID))
         self._points.AddBrush('done', wx.Brush(colour=color, style=wx.SOLID))

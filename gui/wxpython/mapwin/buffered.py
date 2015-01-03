@@ -209,8 +209,8 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         self.pdc = wx.PseudoDC()
         # used for digitization tool
         self.pdcVector = None
-        # decorations (region box, etc.)
-        self.pdcDec = wx.PseudoDC()
+        # transparent objects (region box, raster digitizer)
+        self.pdcTransparent = wx.PseudoDC()
         # pseudoDC for temporal objects (select box, measurement tool, etc.)
         self.pdcTmp = wx.PseudoDC()
 
@@ -555,21 +555,16 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
             self.pdc.DrawBitmap(self.bufferLast, 0, 0, False)
             self.pdc.DrawToDC(dc)
 
-        # draw decorations (e.g. region box)
+        # draw semitransparent objects (e.g. region box, raster digitizer objects)
         try:
             gcdc = wx.GCDC(dc)
-            self.pdcDec.DrawToDC(gcdc)
+            self.pdcTransparent.DrawToDC(gcdc)
         except NotImplementedError as e:
             print >> sys.stderr, e
-            self.pdcDec.DrawToDC(dc)
-        # draw temporary object on the foreground
-        try:
-            gcdc = wx.GCDC(dc)
-            self.pdcTmp.DrawToDC(gcdc)
-        except NotImplementedError as e:
-            print >> sys.stderr, e
-            self.pdcTmp.DrawToDC(dc)
+            self.pdcTransparent.DrawToDC(dc)
 
+        # draw temporary object on the foreground
+        self.pdcTmp.DrawToDC(dc)
 
         if switchDraw:
             self.redrawAll = False
@@ -854,7 +849,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         # clear pseudoDcs
         #
         for pdc in (self.pdc,
-                    self.pdcDec,
+                    self.pdcTransparent,
                     self.pdcTmp):
             pdc.Clear()
             pdc.RemoveAll()
@@ -905,7 +900,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
 
             for item in self.graphicsSetList:
                 try:
-                    item.Draw(self.pdcTmp)
+                    item.Draw()
                 except:
                     GError(parent = self,
                            message = _('Unable to draw registered graphics. '
@@ -950,7 +945,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
             regionCoords.append((reg['w'], reg['s']))
             regionCoords.append((reg['w'], reg['n']))
             # draw region extent
-            self.DrawLines(pdc=self.pdcDec, polycoords=regionCoords)
+            self.DrawLines(pdc=self.pdcTransparent, polycoords=regionCoords)
 
     def EraseMap(self):
         """Erase map canvas
@@ -960,7 +955,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         if hasattr(self, "digit"):
             self.Draw(self.pdcVector, pdctype = 'clear')
 
-        self.Draw(self.pdcDec, pdctype = 'clear')
+        self.Draw(self.pdcTransparent, pdctype='clear')
         self.Draw(self.pdcTmp, pdctype = 'clear')
 
         self.Map.AbortAllThreads()
@@ -2053,11 +2048,12 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         """Get render.Map() instance"""
         return self.Map
 
-    def RegisterGraphicsToDraw(self, graphicsType, setStatusFunc=None, drawFunc=None,
+    def RegisterGraphicsToDraw(self, graphicsType, pdc=None, setStatusFunc=None, drawFunc=None,
                                mapCoords=True):
         """This method registers graphics to draw.
 
         :param type: (string) - graphics type: "point", "line" or "rectangle"
+        :param pdc: PseudoDC object, default is pdcTmp
         :param setStatusFunc: function called before drawing each item
                               Status function should be in this form:
                               setStatusFunc(item, itemOrderNum)
@@ -2074,8 +2070,11 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
 
         :return: reference to GraphicsSet, which was added.
         """
+        if not pdc:
+            pdc = self.pdcTmp
         item = GraphicsSet(parentMapWin=self,
                            graphicsType=graphicsType,
+                           pdc=pdc,
                            setStatusFunc=setStatusFunc,
                            drawFunc=drawFunc,
                            mapCoords=mapCoords)

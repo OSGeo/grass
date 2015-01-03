@@ -76,7 +76,7 @@ class AnalysisControllerBase:
         item.SetCoords(coords)
         # draw
         self._mapWindow.ClearLines()
-        self._registeredGraphics.Draw(pdc=self._mapWindow.pdcTmp)
+        self._registeredGraphics.Draw()
         self._mapWindow.Refresh()
         wx.Yield()
 

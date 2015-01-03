@@ -182,7 +182,7 @@ class RLiSetupMapPanel(wx.Panel):
         item.SetCoords(coords)
         item.SetPropertyVal('hide', False)
         self.mapWindow.ClearLines()
-        self._registeredGraphics.Draw(self.mapWindow.pdcTmp)
+        self._registeredGraphics.Draw()
 
     def _mouseDbClick(self, x, y):
         item = self._registeredGraphics.GetItem(0)
@@ -191,7 +191,7 @@ class RLiSetupMapPanel(wx.Panel):
         item.SetCoords(coords)
         item.SetPropertyVal('hide', False)
         self.mapWindow.ClearLines()
-        self._registeredGraphics.Draw(self.mapWindow.pdc)
+        self._registeredGraphics.Draw()
         self.createRegion()
 
     def createRegion(self):
@@ -294,7 +294,7 @@ class RLiSetupMapPanel(wx.Panel):
         self.mapWindow.pdcTmp.SetPen(pen)
         self.mapWindow.pdcTmp.DrawCircle(circle.point[0], circle.point[1],
                                          circle.radius)
-        self._registeredGraphics.Draw(self.mapWindow.pdcTmp)
+        self._registeredGraphics.Draw()
         self.createCricle(circle)
 
     def createCricle(self, c):
@@ -352,7 +352,7 @@ class RLiSetupMapPanel(wx.Panel):
                   'e': max(p1[0], p2[0])}
         item.SetPropertyVal('hide', False)
         self.mapWindow.ClearLines()
-        self._registeredGraphics.Draw(self.mapWindow.pdcTmp)
+        self._registeredGraphics.Draw()
         if self.samplingtype in [SamplingType.MUNITSR, SamplingType.MMVWINR]:
             dlg = wx.MessageDialog(self, "Is this area ok?",
                                    "select sampling unit",
