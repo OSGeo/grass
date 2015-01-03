@@ -125,11 +125,13 @@ int main(int argc, char *argv[])
 	/* if number of tokes is right, print it */
 	if (G_number_of_tokens(rev_ver) == tokens_expected &&
 	    G_number_of_tokens(rev_time) == tokens_expected) {
+            char *p;
+            p = strstr(rev_ver[1], " ");
 	    if (shell->answer) {
 		fprintf(stdout, "libgis_revision=%s\n",
-			strstr(rev_ver[1], " ") + 1);
+			p ? p + 1 : "00000");
 		fprintf(stdout, "libgis_date=\"%s\"\n",
-			strstr(rev_time[1], " ") + 1);
+			p ? strstr(rev_time[1], " ") + 1 : "?");
 	    }
 	    else {
 		fprintf(stdout, "libgis %s\nlibgis %s\n", rev_ver[1],
