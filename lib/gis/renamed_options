@@ -260,11 +260,12 @@ r.sim.sediment|detin:detachment_coeff
 r.sim.sediment|tranin:transport_coeff
 r.sim.sediment|tauin:shear_stress
 r.sim.sediment|manin:man
+r.sim.sediment|flux:sediment_flux
 r.sim.sediment|maninval:man_value
 r.sim.sediment|outwalk:walkers_output
-r.sim.sediment|tc:sedflow_capacity
+r.sim.sediment|tc:transport_capacity
 r.sim.sediment|et:tlimit_erosion_deposition
-r.sim.sediment|conc:concentration
+r.sim.sediment|conc:sediment_concentration
 r.sim.sediment|erdep:erosion_deposition
 r.sim.sediment|nwalk:nwalkers
 r.sim.sediment|niter:niterations
