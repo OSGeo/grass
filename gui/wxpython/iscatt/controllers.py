@@ -1109,5 +1109,3 @@ class IClassConnection:
         if res.split('\n')[0]:
             bands = res.split('\n')
             self.scatt_mgr.SetBands(bands)
-
-

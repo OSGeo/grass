@@ -1063,13 +1063,8 @@ def GetGEventAttribsForHandler(method, event):
 
 def GuiModuleMain(mainfn):
     """Main function for g.gui.* modules
-    
-    Note: os.fork() is supported only on Unix platforms
-    
-    .. todo::
-        Replace os.fork() by multiprocessing (?)
-    
-    :param mainfn: main function
+
+    os.fork removed in r62649 as fragile
     """
     mainfn()
 
