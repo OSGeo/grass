@@ -198,7 +198,7 @@ def GetValidLayerName(name):
     .. todo::
         Better use directly Ctypes to reuse venerable libgis C fns...
     """
-    retName = str(name).strip()
+    retName = name.strip()
     
     # check if name is fully qualified
     if '@' in retName:
