@@ -269,17 +269,15 @@ class MapFrameBase(wx.Frame):
     def GetMapToolbar(self):
         """Returns toolbar with zooming tools"""
         raise NotImplementedError("GetMapToolbar")
-       
+
     def GetToolbar(self, name):
-        """Returns toolbar if exists else None.
-        
-        Toolbars dictionary contains currently used toolbars only.
+        """Returns toolbar if exists and is active, else None.
         """
-        if name in self.toolbars:
+        if name in self.toolbars and self.toolbars[name].IsShown():
             return self.toolbars[name]
-        
+
         return None
-       
+
     def StatusbarUpdate(self):
         """Update statusbar content"""
         if self.statusbarManager:

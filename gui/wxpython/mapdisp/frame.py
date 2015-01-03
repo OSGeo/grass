@@ -1506,5 +1506,5 @@ class MapFrame(SingleMapFrame):
         self.GetMap().layerRemoved.disconnect(self._updateRDigitLayers)
         self.GetMap().layerChanged.disconnect(self._updateRDigitLayers)
 
-        self.RemoveToolbar('rdigit')
+        self.RemoveToolbar('rdigit', destroy=True)
         self.rdigit = None
