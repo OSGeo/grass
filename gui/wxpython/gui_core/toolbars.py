@@ -324,6 +324,18 @@ class ToolSwitcher:
                 del self._groups[group][tb]
                 break
 
+    def IsToolInGroup(self, tool, group):
+        """Checks whether a tool is in a specified group.
+
+        :param tool: tool id
+        :param group: name of group (e.g. 'mouseUse')
+        """
+        for group in self._toolsGroups[tool]:
+            for tb in self._groups[group]:
+                if tb.FindById(tool):
+                    return True
+        return False
+
     def ToolChanged(self, tool):
         """When any tool/button is pressed, other tools from group must be unchecked.
         
