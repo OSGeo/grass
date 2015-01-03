@@ -13,7 +13,7 @@ Classes:
  - vnet_data::History
  - vnet_data::VNETGlobalTurnsData
 
-(C) 2013 by the GRASS Development Team
+(C) 2013-2014 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -141,7 +141,7 @@ class VNETData:
             :return: False if some of checked inputs is not ok
         """
 
-        if flags["t"] and  "tlayer" not in relevant_params:
+        if flags["t"] and  "turn_layer" not in relevant_params:
             GMessage(parent = self.guiparent, message = _("Module <%s> does not support turns costs." % analysis))
             return False
 
@@ -159,12 +159,12 @@ class VNETData:
             return False
 
         errLayerStr = ""
-        for layer, layerLabel in {'alayer' : _("arc layer"), 
-                                  'nlayer' : _("node layer"),
-                                  'tlayer' : _("turntable layer"),
-                                  'tuclayer' : _("unique categories layer")}.iteritems():
+        for layer, layerLabel in {'arc_layer' : _("arc layer"), 
+                                  'node_layer' : _("node layer"),
+                                  'turn_layer' : _("turntable layer"),
+                                  'turn_cat_layer' : _("unique categories layer")}.iteritems():
 
-            if layer in ["tlayer", "tuclayer"] and not flags["t"]:
+            if layer in ["turn_layer", "turn_cat_layer"] and not flags["t"]:
                 continue
             if layer in inv_params:
                 if params[layer]:
@@ -179,8 +179,8 @@ class VNETData:
             return False
 
         errColStr = ""
-        for col in ["afcol", "abcol", "ncol"]:
-            if col and col in inv_params and col in relevant_params:
+        for col in ["arc_column", "arc_backward_column", "node_column"]:
+            if params[col] and col in inv_params and col in relevant_params:
                 errColStr += _("Chosen column '%s' does not exist in attribute table of layer '%s' of vector map '%s'.\n") % \
                              (params[col], params[layer], params['input'])
 
@@ -543,13 +543,13 @@ class VNETAnalysisParameters:
 
         self.params = {"analysis"   : self.an_props.used_an[0],
                        "input"      : "",
-                       "alayer"     : "",
-                       "nlayer"     : "",
-                       "afcolumn"   : "",
-                       "abcolumn"   : "",
-                       "ncolumn"    : "",
-                       "tlayer"     : "",
-                       "tuclayer"   : "",
+                       "arc_layer"     : "",
+                       "node_layer"     : "",
+                       "arc_column"   : "",
+                       "arc_backward_column"   : "",
+                       "node_column"    : "",
+                       "turn_layer"     : "",
+                       "turn_cat_layer"   : "",
                        "iso_lines"  : "", #TODO check validity
                        "max_dist"   : 0} #TODO check validity
 
@@ -589,8 +589,8 @@ class VNETAnalysisParameters:
     def GetParam(self, param):
 
         invParams = []
-        if param in ["input", "alayer", "nlayer", "afcolumn", 
-                     "abcolumn", "ncolumn", "tlayer", "tuclayer"]:
+        if param in ["input", "arc_layer", "node_layer", "arc_column", 
+                     "arc_backward_column", "node_column", "turn_layer", "turn_cat_layer"]:
             invParams = self._getInvalidParams(self.params)
 
         if invParams: 
@@ -621,23 +621,23 @@ class VNETAnalysisParameters:
         # check arc/node layer
         layers = utils.GetVectorNumberOfLayers(params["input"])    
         
-        for l in ['alayer', 'nlayer', 'tlayer', 'tuclayer']:
+        for l in ['arc_layer', 'node_layer', 'turn_layer', 'turn_cat_layer']:
             if not layers or params[l] not in layers:
                 invParams.append(l)
 
         dbInfo = VectorDBInfo(params["input"])
 
         try:
-            table = dbInfo.GetTable(int(params["alayer"]))
+            table = dbInfo.GetTable(int(params["arc_layer"]))
             columnchoices = dbInfo.GetTableDesc(table)
         except (KeyError, ValueError):
             table = None
-
+        
         # check costs columns
-        for col in ["afcolumn", "abcolumn", "ncolumn"]:
-            if col == "ncolumn":
+        for col in ["arc_column", "arc_backward_column", "node_column"]:
+            if col == "node_column":
                 try:
-                    table = dbInfo.GetTable(int(params["nlayer"]))
+                    table = dbInfo.GetTable(int(params["node_layer"]))
                     columnchoices = dbInfo.GetTableDesc(table)
                 except (KeyError, ValueError):
                     table = None
@@ -645,7 +645,7 @@ class VNETAnalysisParameters:
             if not table or  not params[col]  in columnchoices.keys():
                 invParams.append(col)
                 continue
-
+            
             if not columnchoices[col].value['type'] not in ['integer', 'double precision']:
                 invParams.append(col)
                 continue
@@ -658,20 +658,20 @@ class VNETAnalysesProperties:
         # initialization of v.net.* analysis parameters (data which characterizes particular analysis)
 
         self.attrCols = {
-                          'afcolumn' : {
+                          'arc_column' : {
                                         "label" : _("Arc forward/both direction(s) cost column:"),
                                         "name" : _("arc forward/both")
                                        },
-                          'abcolumn' : {
+                          'arc_backward_column' : {
                                         "label" : _("Arc backward direction cost column:"),
                                         "name" : _("arc backward")
                                        },
                           'acolumn' : {
                                        "label" : _("Arcs' cost column (for both directions):"),
                                        "name" : _("arc"),
-                                       "inputField" : 'afcolumn',
+                                       "inputField" : 'arc_column',
                                       },
-                          'ncolumn' : {
+                          'node_column' : {
                                        "label" : _("Node cost column:"),
                                         "name" : _("node")                                      
                                       }
@@ -686,9 +686,9 @@ class VNETAnalysesProperties:
                                                                                     ["end_pt", _("End point")] 
                                                                                 ],
                                                                       "cols" :  [
-                                                                                 'afcolumn',
-                                                                                 'abcolumn',
-                                                                                 'ncolumn'
+                                                                                 'arc_column',
+                                                                                 'arc_backward_column',
+                                                                                 'node_column'
                                                                                 ],
                                                                    },
                                                      "resultProps" : {
@@ -701,10 +701,10 @@ class VNETAnalysesProperties:
                                     "v.net.salesman" : {
                                                         "label" : _("Traveling salesman %s") % "(v.net.salesman)",  
                                                         "cmdParams" : {
-                                                                        "cats" : [["ccats", None]],
+                                                                        "cats" : [["center_cats", None]],
                                                                         "cols" : [
-                                                                                  'afcolumn',
-                                                                                  'abcolumn'
+                                                                                  'arc_column',
+                                                                                  'arc_backward_column'
                                                                                  ],
                                                                       },
                                                         "resultProps" : {
@@ -722,9 +722,9 @@ class VNETAnalysesProperties:
                                                                                 ["sink_cats", _("Sink point")]
                                                                                ],                                                   
                                                                       "cols" : [
-                                                                                'afcolumn',
-                                                                                'abcolumn',
-                                                                                'ncolumn'
+                                                                                'arc_column',
+                                                                                'arc_backward_column',
+                                                                                'node_column'
                                                                                ]
                                                                   },
                                                      "resultProps" : {
@@ -736,11 +736,11 @@ class VNETAnalysesProperties:
                                     "v.net.alloc" : {
                                                      "label" : _("Subnets for nearest centers %s") % "(v.net.alloc)",  
                                                      "cmdParams" : {
-                                                                      "cats" : [["ccats", None]],                           
+                                                                      "cats" : [["center_cats", None]],                           
                                                                       "cols" : [
-                                                                                 'afcolumn',
-                                                                                 'abcolumn',
-                                                                                 'ncolumn'
+                                                                                 'arc_column',
+                                                                                 'arc_backward_column',
+                                                                                 'node_column'
                                                                                ]
                                                                   },
                                                      "resultProps" :  {
@@ -752,7 +752,7 @@ class VNETAnalysesProperties:
                                     "v.net.steiner" : {
                                                      "label" : _("Steiner tree for the network and given terminals %s") % "(v.net.steiner)",  
                                                      "cmdParams" : {
-                                                                      "cats" : [["tcats", None]],                           
+                                                                      "cats" : [["terminal_cats", None]],                           
                                                                       "cols" : [
                                                                                  'acolumn',
                                                                                ]
@@ -771,9 +771,9 @@ class VNETAnalysesProperties:
                                                                                   ["to_cats", "To point"]
                                                                                  ],
                                                                         "cols" : [
-                                                                                  'afcolumn',
-                                                                                  'abcolumn',
-                                                                                  'ncolumn'
+                                                                                  'arc_column',
+                                                                                  'arc_backward_column',
+                                                                                  'node_column'
                                                                                  ],
                                                                   },
                                                       "resultProps" : {
@@ -785,11 +785,11 @@ class VNETAnalysesProperties:
                                     "v.net.iso" :  {
                                                      "label" : _("Cost isolines %s") % "(v.net.iso)",  
                                                      "cmdParams" : {
-                                                                      "cats" : [["ccats", None]],                           
+                                                                      "cats" : [["center_cats", None]],                           
                                                                       "cols" : [
-                                                                                 'afcolumn',
-                                                                                 'abcolumn',
-                                                                                 'ncolumn'
+                                                                                 'arc_column',
+                                                                                 'arc_backward_column',
+                                                                                 'node_column'
                                                                                ]
                                                                   },
                                                      "resultProps" : {
@@ -830,10 +830,10 @@ class VNETAnalysesProperties:
         if not self.vnetProperties.has_key(analysis):
             return None
 
-        relevant_params = ["input", "alayer", "nlayer"]
+        relevant_params = ["input", "arc_layer", "node_layer"]
 
         if self.vnetProperties[analysis]["turns_support"]:
-            relevant_params += ["tlayer", "tuclayer"]
+            relevant_params += ["turn_layer", "turn_cat_layer"]
 
         cols = self.vnetProperties[analysis]["cmdParams"]["cols"]
 

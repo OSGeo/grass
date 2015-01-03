@@ -321,13 +321,13 @@ class VNETDialog(wx.Dialog):
         label = {}
         dataSelects = [
                         ['input', "Choose vector map for analysis:", Select],
-                        ['alayer', "Arc layer number or name:", LayerSelect],
-                        ['nlayer', "Node layer number or name:", LayerSelect],
-                        #['tlayer', "Layer with turntable:", LayerSelect],
-                        #['tuclayer', "Layer with unique categories for turntable:", LayerSelect],
-                        ['afcolumn', "", ColumnSelect],
-                        ['abcolumn', "", ColumnSelect],
-                        ['ncolumn',  "", ColumnSelect],
+                        ['arc_layer', "Arc layer number or name:", LayerSelect],
+                        ['node_layer', "Node layer number or name:", LayerSelect],
+                        #['turn_layer', "Layer with turntable:", LayerSelect],
+                        #['turn_cat_layer', "Layer with unique categories for turntable:", LayerSelect],
+                        ['arc_column', "", ColumnSelect],
+                        ['arc_backward_column', "", ColumnSelect],
+                        ['node_column',  "", ColumnSelect],
                       ]
 
         #self.useTurns = wx.CheckBox(parent = dataPanel, id=wx.ID_ANY,
@@ -351,7 +351,7 @@ class VNETDialog(wx.Dialog):
                 self.addToTreeBtn.Disable()
                 self.addToTreeBtn.Bind(wx.EVT_BUTTON, self.OnToTreeBtn)
             elif dataSel[0] != 'input':
-                #if dataSel[0] == "tlayer":
+                #if dataSel[0] == "turn_layer":
                 #    self.createTtbBtn = wx.Button(parent = selPanels[dataSel[0]], 
                 #                                 label = _("Create turntable")) 
                 #    self.createTtbBtn.Bind(wx.EVT_BUTTON, self.OnCreateTtbBtn)
@@ -363,10 +363,10 @@ class VNETDialog(wx.Dialog):
             label[dataSel[0]].SetLabel(dataSel[1])
 
         self.inputData['input'].Bind(wx.EVT_TEXT, self.OnVectSel) 
-        self.inputData['alayer'].Bind(wx.EVT_TEXT, self.OnALayerSel)
-        self.inputData['nlayer'].Bind(wx.EVT_TEXT, self.OnNLayerSel)
+        self.inputData['arc_layer'].Bind(wx.EVT_TEXT, self.OnALayerSel)
+        self.inputData['node_layer'].Bind(wx.EVT_TEXT, self.OnNLayerSel)
 
-        for params in ["afcolumn", "abcolumn", "ncolumn"]:#, "tlayer", "tuclayer"]:
+        for params in ["arc_column", "arc_backward_column", "node_column"]:#, "turn_layer", "turn_cat_layer"]:
             self.inputData[params].Bind(wx.EVT_TEXT, lambda event : self._setInputData())
 
         #self.useTurns.Bind(wx.EVT_CHECKBOX,
@@ -381,14 +381,14 @@ class VNETDialog(wx.Dialog):
         mainSizer.Add(item = bsizer, proportion = 0,
                       flag = wx.EXPAND  | wx.TOP | wx.LEFT | wx.RIGHT, border = 5) 
 
-        for sel in ['input', 'alayer', 'nlayer']:#, 'tlayer', 'tuclayer']:
+        for sel in ['input', 'arc_layer', 'node_layer']:#, 'turn_layer', 'turn_cat_layer']:
             if sel == 'input':
                 btn = self.addToTreeBtn
-            #elif sel == "tlayer":
+            #elif sel == "turn_layer":
             #    btn = self.createTtbBtn
             else:
                 btn = None
-            #if sel == 'tlayer':
+            #if sel == 'turn_layer':
             #    bsizer.Add(item = self.useTurns, proportion = 0,
             #                flag = wx.TOP | wx.LEFT | wx.RIGHT, border = 5)                       
 
@@ -404,7 +404,7 @@ class VNETDialog(wx.Dialog):
         mainSizer.Add(item = bsizer, proportion = 0,
                                  flag = wx.EXPAND  | wx.TOP | wx.LEFT | wx.RIGHT, border = 5)       
 
-        for sel in ['afcolumn', 'abcolumn', 'ncolumn']:
+        for sel in ['arc_column', 'arc_backward_column', 'node_column']:
             selPanels[sel].SetSizer(self._doSelLayout(title = label[sel], sel = self.inputData[sel]))
             bsizer.Add(item = selPanels[sel], proportion = 0,
                        flag = wx.EXPAND)
@@ -531,7 +531,7 @@ class VNETDialog(wx.Dialog):
             wx.BeginBusyCursor()
             self.inpDbMgrData['dbMgr'].ChangeVectorMap(vectorName = inpSel)
             self.inpDbMgrData['input'] = inpSel
-            for layerName in ['alayer', 'nlayer']:
+            for layerName in ['arc_layer', 'node_layer']:
                 try:
                     layer = int(self.inputData[layerName].GetValue())
                 except ValueError:
@@ -542,7 +542,7 @@ class VNETDialog(wx.Dialog):
         else:
             needLayers = []
             browseLayers = self.inpDbMgrData['browse'].GetAddedLayers()
-            for layerName in ['alayer', 'nlayer']:
+            for layerName in ['arc_layer', 'node_layer']:
                 try:                
                     inpLayer = int(self.inputData[layerName].GetValue())
                 except ValueError:
@@ -601,13 +601,13 @@ class VNETDialog(wx.Dialog):
 
     def UseTurns(self):
         if self.useTurns.IsChecked():
-            self.inputData["tlayer"].GetParent().Show()
-            self.inputData["tuclayer"].GetParent().Show()
+            self.inputData["turn_layer"].GetParent().Show()
+            self.inputData["turn_cat_layer"].GetParent().Show()
 
             self.vnet_mgr.SetParams(params = {}, flags = {"t" : True})
         else:
-            self.inputData["tlayer"].GetParent().Hide()
-            self.inputData["tuclayer"].GetParent().Hide()
+            self.inputData["turn_layer"].GetParent().Hide()
+            self.inputData["turn_cat_layer"].GetParent().Hide()
 
             self.vnet_mgr.SetParams(params = {}, flags = {"t" : False})
 
@@ -661,31 +661,31 @@ class VNETDialog(wx.Dialog):
         vectMapName, mapSet = self._parseMapStr(self.inputData['input'].GetValue())
         vectorMap = vectMapName + '@' + mapSet
 
-        for sel in ['alayer', 'nlayer']:#, 'tlayer', 'tuclayer']:
+        for sel in ['arc_layer', 'node_layer']:#, 'turn_layer', 'turn_cat_layer']:
             self.inputData[sel].Clear()
             self.inputData[sel].InsertLayers(vector = vectorMap)
 
-        items = self.inputData['alayer'].GetItems()
+        items = self.inputData['arc_layer'].GetItems()
         itemsLen = len(items)
         if itemsLen < 1:
             self.addToTreeBtn.Disable()
             if hasattr(self, 'inpDbMgrData'):
                 self._updateInputDbMgrPage(show = False)
-            self.inputData['alayer'].SetValue("")
-            self.inputData['nlayer'].SetValue("")
-            for sel in ['afcolumn', 'abcolumn', 'ncolumn']:
+            self.inputData['arc_layer'].SetValue("")
+            self.inputData['node_layer'].SetValue("")
+            for sel in ['arc_column', 'arc_backward_column', 'node_column']:
                 self.inputData[sel].SetValue("")
             return
         elif itemsLen == 1:
-            self.inputData['alayer'].SetSelection(0)
-            self.inputData['nlayer'].SetSelection(0)
+            self.inputData['arc_layer'].SetSelection(0)
+            self.inputData['node_layer'].SetSelection(0)
         elif itemsLen >= 1:
             if unicode("1") in items:
                 iItem = items.index(unicode("1")) 
-                self.inputData['alayer'].SetSelection(iItem)
+                self.inputData['arc_layer'].SetSelection(iItem)
             if unicode("2") in items:
                 iItem = items.index(unicode("2")) 
-                self.inputData['nlayer'].SetSelection(iItem)
+                self.inputData['node_layer'].SetSelection(iItem)
 
         self.addToTreeBtn.Enable()
         if hasattr(self, 'inpDbMgrData'):
@@ -699,17 +699,17 @@ class VNETDialog(wx.Dialog):
     def _updateParamsTab(self, params, flags):
         #TODO flag
 
-                #'tlayer', 'tuclayer', 
-        for k in ['input', 'alayer', 'nlayer', 'afcolumn', 'abcolumn', 'ncolumn']:
+                #'turn_layer', 'turn_cat_layer', 
+        for k in ['input', 'arc_layer', 'node_layer', 'arc_column', 'arc_backward_column', 'node_column']:
             self.inputData[k].SetValue(params[k])
 
     def OnALayerSel(self, event):
         """When arc layer from vector map is selected, populates corespondent columns selects"""
-        self.inputData['afcolumn'].InsertColumns(vector = self.inputData['input'].GetValue(), 
-                                                 layer = self.inputData['alayer'].GetValue(), 
+        self.inputData['arc_column'].InsertColumns(vector = self.inputData['input'].GetValue(), 
+                                                 layer = self.inputData['arc_layer'].GetValue(), 
                                                  type = self.columnTypes)
-        self.inputData['abcolumn'].InsertColumns(vector = self.inputData['input'].GetValue(), 
-                                                 layer = self.inputData['alayer'].GetValue(), 
+        self.inputData['arc_backward_column'].InsertColumns(vector = self.inputData['input'].GetValue(), 
+                                                 layer = self.inputData['arc_layer'].GetValue(), 
                                                  type = self.columnTypes)
 
         self._setInputData()
@@ -719,8 +719,8 @@ class VNETDialog(wx.Dialog):
         if self.vnet_mgr.IsSnappingActive():
             self.vnet_mgr.Snapping(activate = True)
 
-        self.inputData['ncolumn'].InsertColumns(vector = self.inputData['input'].GetValue(), 
-                                                layer = self.inputData['nlayer'].GetValue(), 
+        self.inputData['node_column'].InsertColumns(vector = self.inputData['input'].GetValue(), 
+                                                layer = self.inputData['node_layer'].GetValue(), 
                                                 type = self.columnTypes)
  
         self._setInputData()
@@ -794,16 +794,16 @@ class VNETDialog(wx.Dialog):
             GMessage(parent = self,
                      message = _("Input vector map does not exists."))
 
-        if ["tlayer", "tuclayer"] in err_params:
+        if ["turn_layer", "turn_cat_layer"] in err_params:
             GMessage(parent = self, message = "Please choose existing turntable layer and unique categories layer in Parameters tab.")
 
-        cat = GetNearestNodeCat(e, n, int(params['tuclayer']), snapTreshDist, params["input"])
+        cat = GetNearestNodeCat(e, n, int(params['turn_cat_layer']), snapTreshDist, params["input"])
 
         if not self.def_isec_turns:
             self.def_isec_turns = DefIntesectionTurnCostDialog(self, self.parent)
             self.def_isec_turns.SetSize((500, 400))
 
-        self.def_isec_turns.SetData(params["input"], params["tlayer"])
+        self.def_isec_turns.SetData(params["input"], params["turn_layer"])
         self.def_isec_turns.SetIntersection(cat)
         self.def_isec_turns.Show()
 
@@ -916,7 +916,7 @@ class VNETDialog(wx.Dialog):
                skip.append(colInptF)
             used_cols.append(colInptF)
 
-        for col in ["abcolumn", "afcolumn", "ncolumn"]:
+        for col in ["arc_backward_column", "arc_column", "node_column"]:
             if col not in used_cols:
                 inputPanel = self.inputData[colInptF].GetParent()
                 inputPanel.Hide()
@@ -1332,9 +1332,9 @@ class CreateTtbDialog(wx.Dialog):
         dataSelects = [
                         ['input', "Choose vector map for analysis:", Select],
                         ['output', "Name of vector map with turntable:", Select],
-                        ['alayer', "Arc layer which will be expanded by turntable:", LayerSelect],
-                        ['tlayer', "Layer with turntable:", LayerSelect],
-                        ['tuclayer', "Layer with unique categories for turntable:", LayerSelect],
+                        ['arc_layer', "Arc layer which will be expanded by turntable:", LayerSelect],
+                        ['turn_layer', "Layer with turntable:", LayerSelect],
+                        ['turn_cat_layer', "Layer with unique categories for turntable:", LayerSelect],
                       ]
 
         self.inputData = {}
@@ -1371,7 +1371,7 @@ class CreateTtbDialog(wx.Dialog):
                       flag = wx.EXPAND  | wx.TOP | wx.LEFT | wx.RIGHT, border = 5) 
 
         btn = None
-        for sel in ['input', 'output', 'alayer', 'tlayer', 'tuclayer']:                      
+        for sel in ['input', 'output', 'arc_layer', 'turn_layer', 'turn_cat_layer']:                      
 
             selPanels[sel].SetSizer(self._doSelLayout(title = label[sel], 
                                                       sel = self.inputData[sel], 
@@ -1431,24 +1431,24 @@ class CreateTtbDialog(wx.Dialog):
         vectMapName, mapSet = self._parseMapStr(self.inputData['input'].GetValue())
         vectorMap = vectMapName + '@' + mapSet
 
-        for sel in ['alayer', 'tlayer', 'tuclayer']:
+        for sel in ['arc_layer', 'turn_layer', 'turn_cat_layer']:
             self.inputData[sel].Clear()
             self.inputData[sel].InsertLayers(vector = vectorMap)
 
-        items = self.inputData['alayer'].GetItems()
+        items = self.inputData['arc_layer'].GetItems()
         itemsLen = len(items)
         if itemsLen < 1:
             self.addToTreeBtn.Disable()
             if hasattr(self, 'inpDbMgrData'):
                 self._updateInputDbMgrPage(show = False)
-            self.inputData['alayer'].SetValue("")
+            self.inputData['arc_layer'].SetValue("")
             return
         elif itemsLen == 1:
-            self.inputData['alayer'].SetSelection(0)
+            self.inputData['arc_layer'].SetSelection(0)
         elif itemsLen >= 1:
             if unicode("1") in items:
                 iItem = items.index(unicode("1")) 
-                self.inputData['alayer'].SetSelection(iItem)
+                self.inputData['arc_layer'].SetSelection(iItem)
         self.addToTreeBtn.Enable()
         if hasattr(self, 'inpDbMgrData'):
             self._updateInputDbMgrPage(show = True)
