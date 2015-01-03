@@ -167,7 +167,7 @@ int main(int argc, char *argv[])
     parm.observation->guisection = _("Input");
 
     parm.tc = G_define_standard_option(G_OPT_R_OUTPUT);
-    parm.tc->key = "sedflow_capacity";
+    parm.tc->key = "transport_capacity";
     parm.tc->required = NO;
     parm.tc->description = _("Name for output transport capacity raster map [kg/ms]");
     parm.tc->guisection = _("Output");
@@ -180,14 +180,14 @@ int main(int argc, char *argv[])
     parm.et->guisection = _("Output");
 
     parm.conc = G_define_standard_option(G_OPT_R_OUTPUT);
-    parm.conc->key = "concentration";
+    parm.conc->key = "sediment_concentration";
     parm.conc->required = NO;
     parm.conc->description =
 	_("Name for output sediment concentration raster map [particle/m3]");
     parm.conc->guisection = _("Output");
 
     parm.flux = G_define_standard_option(G_OPT_R_OUTPUT);
-    parm.flux->key = "flux";
+    parm.flux->key = "sediment_flux";
     parm.flux->required = NO;
     parm.flux->description = _("Name for output sediment flux raster map [kg/ms]");
     parm.flux->guisection = _("Output");
