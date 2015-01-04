@@ -35,6 +35,8 @@ static struct kdnode *kdtree_insert2(struct kdtree *, struct kdnode *,
                                  struct kdnode *, int, int);
 static int kdtree_replace(struct kdtree *, struct kdnode *);
 static int kdtree_balance(struct kdtree *, struct kdnode *);
+static int kdtree_first(struct kdtrav *, double *, int *);
+static int kdtree_next(struct kdtrav *, double *, int *);
 
 static int cmp(struct kdnode *a, struct kdnode *b, int p)
 {
@@ -417,14 +419,15 @@ int kdtree_knn(struct kdtree *t, double *c, int *uid, double *d, int k, int *ski
 	    n = s[top].n;
 
 	    if (n->uid != sn.uid) {
-		dist = 0;
-		for (i = 0; i < t->ndims; i++) {
-		    diff = sn.c[i] - n->c[i];
-		    dist += diff * diff;
-		    if (found == k && dist > maxdist)
-			break;
-		}
 		if (found < k) {
+		    dist = 0.0;
+		    i = t->ndims - 1;
+		    do {
+			diff = sn.c[i] - n->c[i];
+			dist += diff * diff;
+			
+		    } while (i--);
+
 		    i = found;
 		    while (i > 0 && d[i - 1] > dist) {
 			d[i] = d[i - 1];
@@ -438,19 +441,29 @@ int kdtree_knn(struct kdtree *t, double *c, int *uid, double *d, int k, int *ski
 		    maxdist = d[found];
 		    found++;
 		}
-		else if (dist < maxdist) {
-		    i = k - 1;
-		    while (i > 0 && d[i - 1] > dist) {
-			d[i] = d[i - 1];
-			uid[i] = uid[i - 1];
-			i--;
-		    }
-		    if (d[i] == dist && uid[i] == n->uid)
-			G_fatal_error("knn: inserting duplicate");
-		    d[i] = dist;
-		    uid[i] = n->uid;
+		else {
+		    dist = 0.0;
+		    i = t->ndims - 1;
+		    do {
+			diff = sn.c[i] - n->c[i];
+			dist += diff * diff;
+			
+		    } while (i-- && dist <= maxdist);
 
-		    maxdist = d[k - 1];
+		    if (dist < maxdist) {
+			i = k - 1;
+			while (i > 0 && d[i - 1] > dist) {
+			    d[i] = d[i - 1];
+			    uid[i] = uid[i - 1];
+			    i--;
+			}
+			if (d[i] == dist && uid[i] == n->uid)
+			    G_fatal_error("knn: inserting duplicate");
+			d[i] = dist;
+			uid[i] = n->uid;
+
+			maxdist = d[k - 1];
+		    }
 		}
 		if (found == k && maxdist == 0.0)
 		    break;
@@ -540,15 +553,16 @@ int kdtree_dnn(struct kdtree *t, double *c, int **puid, double **pd,
 
 	    if (n->uid != sn.uid) {
 		dist = 0;
-		for (i = 0; i < t->ndims; i++) {
+		i = t->ndims - 1;
+		do {
 		    diff = sn.c[i] - n->c[i];
 		    dist += diff * diff;
-		    if (dist > maxdistsq)
-			break;
-		}
+		    
+		} while (i-- && dist <= maxdistsq);
+
 		if (dist <= maxdistsq) {
 		    if (found + 1 >= k) {
-			k += 10;
+			k = found + 10;
 			uid = G_realloc(uid, k * sizeof(int));
 			d = G_realloc(d, k * sizeof(double));
 		    }
@@ -590,6 +604,44 @@ int kdtree_dnn(struct kdtree *t, double *c, int **puid, double **pd,
     *puid = uid;
 
     return found;
+}
+
+/* initialize tree traversal
+ * (re-)sets trav structure
+ * returns 0
+ */
+int kdtree_init_trav(struct kdtrav *trav, struct kdtree *tree)
+{
+    trav->tree = tree;
+    trav->curr_node = tree->root;
+    trav->first = 1;
+    trav->top = 0;
+
+    return 0;
+}
+
+/* traverse the tree
+ * useful to get all items in the tree non-recursively
+ * struct kdtrav *trav needs to be initialized first
+ * returns 1, 0 when finished
+ */
+int kdtree_traverse(struct kdtrav *trav, double *c, int *uid)
+{
+    if (trav->curr_node == NULL) {
+	if (trav->first)
+	    G_debug(1, "k-d tree: empty tree");
+	else
+	    G_debug(1, "k-d tree: finished traversing");
+
+	return 0;
+    }
+
+    if (trav->first) {
+	trav->first = 0;
+	return kdtree_first(trav, c, uid);
+    }
+
+    return kdtree_next(trav, c, uid);
 }
 
 
@@ -1037,4 +1089,61 @@ static struct kdnode *kdtree_insert2(struct kdtree *t, struct kdnode *r,
     }
 
     return r;
+}
+
+/* start traversing the tree
+ * returns pointer to first item
+ */
+static int kdtree_first(struct kdtrav *trav, double *c, int *uid)
+{
+    /* get smallest item */
+    while (trav->curr_node->child[0] != NULL) {
+	trav->up[trav->top++] = trav->curr_node;
+	trav->curr_node = trav->curr_node->child[0];
+    }
+
+    memcpy(c, trav->curr_node->c, trav->tree->csize);
+    *uid = trav->curr_node->uid;
+
+    return 1;
+}
+
+/* continue traversing the tree in ascending order
+ * returns pointer to data item, NULL when finished
+ */
+static int kdtree_next(struct kdtrav *trav, double *c, int *uid)
+{
+    if (trav->curr_node->child[1] != NULL) {
+	/* something on the right side: larger item */
+	trav->up[trav->top++] = trav->curr_node;
+	trav->curr_node = trav->curr_node->child[1];
+
+	/* go down, find smallest item in this branch */
+	while (trav->curr_node->child[0] != NULL) {
+	    trav->up[trav->top++] = trav->curr_node;
+	    trav->curr_node = trav->curr_node->child[0];
+	}
+    }
+    else {
+	/* at smallest item in this branch, go back up */
+	struct kdnode *last;
+
+	do {
+	    if (trav->top == 0) {
+		trav->curr_node = NULL;
+		break;
+	    }
+	    last = trav->curr_node;
+	    trav->curr_node = trav->up[--trav->top];
+	} while (last == trav->curr_node->child[1]);
+    }
+
+    if (trav->curr_node != NULL) {
+	memcpy(c, trav->curr_node->c, trav->tree->csize);
+	*uid = trav->curr_node->uid;
+
+	return 1;
+    }
+
+    return 0;		/* finished traversing */
 }
