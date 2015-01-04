@@ -1,0 +1,12 @@
+MODULE_TOPDIR = ../..
+
+PGM = v.cluster
+
+LIBES = $(VECTORLIB) $(BTREE2LIB) $(GISLIB)
+DEPENDENCIES = $(VECTORDEP) $(BTREE2DEP) $(GISDEP)
+EXTRA_INC = $(VECT_INC)
+EXTRA_CFLAGS = $(VECT_CFLAGS)
+
+include $(MODULE_TOPDIR)/include/Make/Module.make
+
+default: cmd

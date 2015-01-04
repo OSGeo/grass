@@ -1,0 +1,50 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.cluster</em> partitions a point cloud into clusters or clumps. 
+A point can only be in a cluster if the maximum distance to its <i>min</i> 
+neighbors is smaller than distance. This algoritm is known as 
+<a href="http://en.wikipedia.org/wiki/DBSCAN">DBSCAN</a>.
+
+<p>
+If the minimum number of points is not given with the <i>min</i> option, 
+the minimum number of points to consitute a cluster is <i>number of dimensions + 1</i>, 
+i.e. 3 for 2D points and 4 for 3d points.
+
+
+<h2>EXAMPLE</h2>
+
+Analysis of random points for areas in the vector <i>urbanarea</i> in the 
+North Carolina sample dataset:
+
+<div class="code"><pre>
+# pick a subregion of he vector urbanarea
+g.region -p n=272950 s=188330 w=574720 e=703090 res=10
+
+# create clustered points
+v.random output=rand_clust npoints=1000000 restrict=urbanarea@PERMANENT
+
+# identify clusters
+v.cluster in=rand_clust out=rand_clusters
+
+# create colors for clusters
+v.db.addtable map=rand_clusters layer=2 columns="cat integer,grassrgb varchar(11)"
+v.colors map=rand_clusters layer=2 use=cat color=random rgb_column=grassrgb
+
+# display with your preferred method
+</pre></div>
+
+<h2>TODO</h2>
+
+Implement <a href="http://en.wikipedia.org/wiki/OPTICS_algorithm">OPTICS</a>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.clump.html">r.clump</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+Markus Metz
+
+<p><i>Last changed: $Date$</i>
