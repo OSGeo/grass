@@ -632,9 +632,10 @@ class VNETAnalysisParameters:
             columnchoices = dbInfo.GetTableDesc(table)
         except (KeyError, ValueError):
             table = None
-        
+
         # check costs columns
         for col in ["arc_column", "arc_backward_column", "node_column"]:
+        
             if col == "node_column":
                 try:
                     table = dbInfo.GetTable(int(params["node_layer"]))
@@ -646,7 +647,7 @@ class VNETAnalysisParameters:
                 invParams.append(col)
                 continue
             
-            if not columnchoices[col].value['type'] not in ['integer', 'double precision']:
+            if columnchoices[params[col]]['type'] not in ['integer', 'double precision']:
                 invParams.append(col)
                 continue
      
