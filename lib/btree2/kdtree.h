@@ -68,6 +68,15 @@ struct kdtree
     struct kdnode *root;	/* tree root */
 };
 
+struct kdtrav
+{
+    struct kdtree *tree;	/* tree being traversed */
+    struct kdnode *curr_node;	/* current node */
+    struct kdnode *up[256];	/* stack of parent nodes */
+    int top;			/* index for stack */
+    int first;			/* little helper flag */
+};
+
 /* creae a new k-d tree */
 struct kdtree *kdtree_create(char ndims,	/* number of dimensions */
                              int *btol);	/* optional balancing tolerance */
@@ -119,3 +128,16 @@ int kdtree_dnn(struct kdtree *t,		/* k-d tree */
  * level 0 = a bit, 1 = more, 2 = a lot */
 void kdtree_optimize(struct kdtree *t,		/* k-d tree */
                      int level);		/* optimization level */
+
+/* initialize tree traversal
+ * (re-)sets trav structure
+ * returns 0
+ */
+int kdtree_init_trav(struct kdtrav *trav, struct kdtree *tree);
+
+/* traverse the tree
+ * useful to get all items in the tree non-recursively
+ * struct kdtrav *trav needs to be initialized first
+ * returns 1, 0 when finished
+ */
+int kdtree_traverse(struct kdtrav *trav, double *c, int *uid);
