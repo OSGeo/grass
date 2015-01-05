@@ -4,7 +4,6 @@
 /* env.c */
 void G__read_env(void);
 void G__write_env(void);
-void G__read_gisrc_env(void);
 
 /* gisinit.c */
 void G__check_gisinit(void);
