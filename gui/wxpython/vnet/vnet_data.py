@@ -1001,7 +1001,7 @@ class VectMap:
 
         self.renderLayer = self.mapWin.Map.AddLayer(ltype = "vector",     command = cmd,
                                                     name = self.fullName, active = True,
-                                                    opacity = 1.0,        render = True,       
+                                                    opacity = 1.0,        render = False,       
                                                     pos = -1)
         return True
 
