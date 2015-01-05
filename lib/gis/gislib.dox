@@ -264,7 +264,7 @@ above.</B>
 
  - G_getenv()
 
- - G__getenv()
+ - G_getenv_nofatal()
 
 These routines look up the variable <em>name</em> in the GRASS
 environment and return its value (which is a character string). If
