@@ -23,9 +23,9 @@ class GisLibraryTestEnv(TestCase):
         # In memory management
         libgis.G_setenv_nogisrc("TEST", "B");
 
-        value = libgis.G__getenv("TEST")
+        value = libgis.G_getenv_nofatal("TEST")
         self.assertEqual(value, "B")
-        value = libgis.G__getenv2("TEST", libgis.G_VAR_GISRC)
+        value = libgis.G_getenv_nofatal2("TEST", libgis.G_VAR_GISRC)
         self.assertEqual(value, "B")
         # Force reading
         libgis.G__read_gisrc_env()
@@ -59,7 +59,7 @@ class GisLibraryTestEnv(TestCase):
         self.assertEqual(value, "C")
  
         libgis.G_setenv_nogisrc2("TEST", "D", libgis.G_VAR_MAPSET);
-        value = libgis.G__getenv2("TEST", libgis.G_VAR_MAPSET)
+        value = libgis.G_getenv_nofatal2("TEST", libgis.G_VAR_MAPSET)
         self.assertEqual(value, "D")
         # Force reading
         libgis.G__read_mapset_env()
