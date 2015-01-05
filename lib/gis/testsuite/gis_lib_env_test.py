@@ -21,11 +21,11 @@ class GisLibraryTestEnv(TestCase):
         self.assertEqual(value, "A")
         
         # In memory management
-        libgis.G__setenv("TEST", "B");
+        libgis.G_setenv_nogisrc("TEST", "B");
 
-        value = libgis.G__getenv("TEST")
+        value = libgis.G_getenv_nofatal("TEST")
         self.assertEqual(value, "B")
-        value = libgis.G__getenv2("TEST", libgis.G_VAR_GISRC)
+        value = libgis.G_getenv_nofatal2("TEST", libgis.G_VAR_GISRC)
         self.assertEqual(value, "B")
         # Force reading
         libgis.G__read_gisrc_env()
@@ -35,12 +35,12 @@ class GisLibraryTestEnv(TestCase):
         self.assertEqual(value, "A")
 
     def test_switch_env(self):
-        libgis.G__setenv("TEST", "SWITCH");
-        libgis.G__setenv2("TEST", "SWITCH2", libgis.G_VAR_MAPSET);
+        libgis.G_setenv_nogisrc("TEST", "SWITCH");
+        libgis.G_setenv_nogisrc2("TEST", "SWITCH2", libgis.G_VAR_MAPSET);
         # Create alternative env
         libgis.G_create_alt_env()
-        libgis.G__setenv("TEST", "TARGET");
-        libgis.G__setenv2("TEST", "TARGET2", libgis.G_VAR_MAPSET);
+        libgis.G_setenv_nogisrc("TEST", "TARGET");
+        libgis.G_setenv_nogisrc2("TEST", "TARGET2", libgis.G_VAR_MAPSET);
         value = libgis.G_getenv("TEST")
         self.assertEqual(value, "TARGET")
         value = libgis.G_getenv2("TEST", libgis.G_VAR_MAPSET)
@@ -58,8 +58,8 @@ class GisLibraryTestEnv(TestCase):
         value = libgis.G_getenv2("TEST", libgis.G_VAR_MAPSET)
         self.assertEqual(value, "C")
  
-        libgis.G__setenv2("TEST", "D", libgis.G_VAR_MAPSET);
-        value = libgis.G__getenv2("TEST", libgis.G_VAR_MAPSET)
+        libgis.G_setenv_nogisrc2("TEST", "D", libgis.G_VAR_MAPSET);
+        value = libgis.G_getenv_nofatal2("TEST", libgis.G_VAR_MAPSET)
         self.assertEqual(value, "D")
         # Force reading
         libgis.G__read_mapset_env()
