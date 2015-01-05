@@ -47,7 +47,7 @@ import os
 
 def main():
     # Get the options
-    input = options["input"]
+    input = options["input"].split('@')[0]
     output = options["output"]
     method = options["method"]
     min_cat = None
