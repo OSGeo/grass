@@ -1273,7 +1273,9 @@ class CmdPanel(wx.Panel):
                                         flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
                                         border = 5)
                     elif prompt == 'group':
-                        selection.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
+                        win = self.FindWindowById(p['wxId'][0])
+                        win.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
+                        win.Bind(wx.EVT_TEXT, self.OnSetValue)
                         which_sizer.Add(item = selection, proportion = 0,
                                         flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
                                         border = 5)
