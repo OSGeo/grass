@@ -47,7 +47,8 @@ import os
 
 def main():
     # Get the options
-    input = options["input"].split('@')[0]
+    input = options["input"]
+    input_name = input.split('@')[0]
     output = options["output"]
     method = options["method"]
     min_cat = None
@@ -71,7 +72,7 @@ def main():
     if in_info['points'] > 0:
         point = True
         layer = 1  # hardcoded for now
-        out_temp = '{inp}_point_tmp_{pid}'.format(inp=input, pid=pid)
+        out_temp = '{inp}_point_tmp_{pid}'.format(inp=input_name, pid=pid)
         if method == 'delaunay':
             grass.message(_("Processing point data (%d points found)...") % in_info['points'])
             grass.run_command('v.delaunay', input=input, layer=layer,
@@ -85,8 +86,8 @@ def main():
     if in_info['areas'] == 0 and in_info['boundaries'] == 0:
         grass.fatal(_("The input vector map does not contain polygons"))
 
-    out_type = '{inp}_type_{pid}'.format(inp=input, pid=pid)
-    input_tmp = '{inp}_tmp_{pid}'.format(inp=input, pid=pid)
+    out_type = '{inp}_type_{pid}'.format(inp=input_name, pid=pid)
+    input_tmp = '{inp}_tmp_{pid}'.format(inp=input_name, pid=pid)
     remove_names = "%s,%s" % (out_type, input_tmp)
     grass.message(_("Processing area data (%d areas found)...") % in_info['areas'])
 
