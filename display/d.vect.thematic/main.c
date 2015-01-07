@@ -1,11 +1,13 @@
 /*
  ****************************************************************************
  *
- * MODULE:       d.area.thematic
+ * MODULE:       d.vect.thematic
  * AUTHOR(S):    Moritz Lennert, based on d.vect
  * PURPOSE:      display a thematic vector area map
  *               on top of the current image.
- * COPYRIGHT:    (C) 2007 by the GRASS Development Team
+ * TODO:         common part of code merge with d.vect (similarly as r.colors
+ *               and r3.colors)
+ * COPYRIGHT:    (C) 2007-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
