@@ -84,6 +84,11 @@ int main(int argc, char **argv)
 
     map_opt = G_define_standard_option(G_OPT_V_MAP);
 
+    field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    field_opt->description =
+	_("Layer number. If -1, all layers are displayed.");
+    field_opt->guisection = _("Selection");
+
     column_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     column_opt->required = YES;
     column_opt->description =
@@ -116,7 +121,7 @@ int main(int argc, char **argv)
     algo_opt->guisection = _("Classes");
 
     nbclass_opt = G_define_option();
-    nbclass_opt->key = "nbclasses";
+    nbclass_opt->key = "nclasses";
     nbclass_opt->type = TYPE_INTEGER;
     nbclass_opt->required = NO;
     nbclass_opt->multiple = NO;
@@ -130,11 +135,6 @@ int main(int argc, char **argv)
     colors_opt->multiple = YES;
     colors_opt->description = _("Colors (one per class)");
     colors_opt->gisprompt = "old_color,color,color";
-
-    field_opt = G_define_standard_option(G_OPT_V_FIELD);
-    field_opt->description =
-	_("Layer number. If -1, all layers are displayed.");
-    field_opt->guisection = _("Selection");
 
     where_opt = G_define_standard_option(G_OPT_DB_WHERE);
     where_opt->guisection = _("Selection");
