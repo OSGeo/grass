@@ -66,18 +66,13 @@ d.vect|lcolor:label_color
 d.vect|bgcolor:label_bgcolor
 d.vect|bcolor:label_boundary_color
 d.vect|lsize:label_size
-# d.thematic.area
-d.thematic.area|bcolor:boundary_color
-d.thematic.area|bwidth:boundary_width
+# d.vect.thematic
+d.vect.thematic|bcolor:boundary_color
+d.vect.thematic|bwidth:boundary_width
 # d.vect.chart
 d.vect.chart|ctype:chart_type
 d.vect.chart|ocolor:outline_color
 d.vect.chart|sizecol:size_column
-# d.vect.thematic
-d.vect.thematic|pointcolor:point_color
-d.vect.thematic|linecolor:line_color
-d.vect.thematic|startcolor:start_color
-d.vect.thematic|endcolor:end_color
 ######################################
 ### Database management module changes
 ######################################
