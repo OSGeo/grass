@@ -96,7 +96,8 @@ int main(int argc, char **argv)
     breaks_opt->required = NO;
     breaks_opt->multiple = YES;
     breaks_opt->description = _("Class breaks, without minimum and maximum");
-
+    breaks_opt->guisection = _("Classes");
+    
     algo_opt = G_define_option();
     algo_opt->key = "algorithm";
     algo_opt->type = TYPE_STRING;
@@ -113,6 +114,7 @@ int main(int argc, char **argv)
 	        _("equiprobable (normal distribution)"));
     algo_opt->descriptions = desc;
     /*currently disabled because of bugs       "dis;discontinuities"); */
+    algo_opt->guisection = _("Classes");
 
     nbclass_opt = G_define_option();
     nbclass_opt->key = "nbclasses";
@@ -120,6 +122,7 @@ int main(int argc, char **argv)
     nbclass_opt->required = NO;
     nbclass_opt->multiple = NO;
     nbclass_opt->description = _("Number of classes to define");
+    nbclass_opt->guisection = _("Classes");
 
     colors_opt = G_define_option();
     colors_opt->key = "colors";
@@ -154,21 +157,25 @@ int main(int argc, char **argv)
     legend_file_opt->description =
 	_("File in which to save d.graph instructions for legend display");
     legend_file_opt->required = NO;
+    legend_file_opt->guisection = _("Legend");
 
     legend_flag = G_define_flag();
     legend_flag->key = 'l';
     legend_flag->description =
 	_("Create legend information and send to stdout");
+    legend_flag->guisection = _("Legend");
 
     algoinfo_flag = G_define_flag();
     algoinfo_flag->key = 'e';
     algoinfo_flag->description =
 	_("When printing legend info, include extended statistical info from classification algorithm");
+    algoinfo_flag->guisection = _("Legend");
 
     nodraw_flag = G_define_flag();
     nodraw_flag->key = 'n';
     nodraw_flag->description = _("Do not draw map, only output the legend");
-
+    nodraw_flag->guisection = _("Legend");
+    
     /* Check command line */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
