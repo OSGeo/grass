@@ -2,24 +2,36 @@
 
 <em>d.vect.thematic</em> draws thematic choropleth vector maps based 
 on an attribute column or an expression involving several columns. 
-It takes a list of class breaks (excluding the minimum and maximum 
-values) and a list of colors to apply to the classes (has to be the 
+It takes a list of class <b>breaks</b> (excluding the minimum and maximum 
+values) and a list of <b>colors</b> to apply to the classes (has to be the 
 number of class breaks + 1).
 <p>
-Instead of a list of class breaks, the user can also chose a 
-classification algorithm and a number of classes. See the 
-<em>v.class </em> man page for more information on these different 
-algorithms.
+Instead of a list of class breaks, the user can also chose a
+classification <b>algorithm</b> and a number of classes
+(<b>nbclasses</b>). See the
+<em><a href="v.class.html">v.class</a></em> for more information on
+these different algorithms.
 
-The <em>-l</em> flag instructs the module to print legend 
-information (<i>class min | class max | number of observations in class 
-| color</i>) to standard output for futher use in graphical software. 
-When combined with the <em>-e</em> flag, the legend information will 
+<p>
+<b>Important note:</b> The module currently supports only <i>area</i>
+vector type. For displaying thematic choropleth vector maps of other
+types (points, lines) can be
+used <em><a href="http://grass.osgeo.org/grass70/manuals/addons/d.vect.thematic2.html">d.vect.thematic2</a></em>
+available in AddOns
+via <em><a href="g.extension.html">g.extension</a></em>.
+
+<h2>NOTES</h2>
+
+The <b>-l</b> flag instructs the module to print legend information
+(<i>class min | class max | number of observations in class |
+color</i>) to standard output for futher use in graphical software.
+When combined with the <b>-e</b> flag, the legend information will
 be extended with some additional statistical information. If the
-<em>-n</em> flag is set, the module will only print the legend 
+<b>-n</b> flag is set, the module will only print the legend 
 information without drawing the map. If the user gives a
-<em>legendfile</em>, the module will write <em>d.graph</em> instructions
-for painting a legend into that file.
+<b>legendfile</b>, the module will
+write <em><a href="d.graph.html">d.graph</a></em> instructions for
+painting a legend into that file.
 
 
 <h2>EXAMPLE</h2>
@@ -30,8 +42,8 @@ d.vect.thematic -l map=communes3 column=pop \
   colors=255:0:0,0:255:0,0:0:255,0,0,0
 </pre></div>
 
-The following example uses a calculated attribute (density = 
-pop/area) and the standard deviation algorithm to calculate class 
+The following example uses a calculated attribute (<tt>density = 
+pop/area</tt>) and the standard deviation algorithm to calculate class 
 breaks for 5 classes:
 
 <div class="code"><pre>
@@ -48,9 +60,13 @@ d.vect.thematic -l map=communes2 column=pop/area algorithm=std \
 <a href="v.univar.html">v.univar</a>
 </em>
 
+<p>
+Check also Python module from
+AddOns: <em><a href="http://grass.osgeo.org/grass70/manuals/addons/d.vect.thematic2.html">d.vect.thematic2</a></em>
 
 <h2>AUTHOR</h2>
 
 Moritz Lennert
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>

@@ -3,9 +3,8 @@
  *
  * MODULE:       d.vect.thematic
  * AUTHOR(S):    Moritz Lennert, based on d.vect
- * PURPOSE:      display a thematic vector area map
- *               on top of the current image.
- * TODO:         common part of code merge with d.vect (similarly as r.colors
+ * PURPOSE:      Display a thematic vector map
+ * TODO:         Common part of code merge with d.vect (similarly as r.colors
  *               and r3.colors)
  * COPYRIGHT:    (C) 2007-2014 by the GRASS Development Team
  *
@@ -80,8 +79,8 @@ int main(int argc, char **argv)
     G_add_keyword(_("cartography"));
     G_add_keyword(_("choropleth map"));
     module->description =
-	_("Displays a thematic vector area map in the active "
-	  "frame on the graphics monitor.");
+	_("Displays a thematic vector map "
+	  "in the active graphics frame.");
 
     map_opt = G_define_standard_option(G_OPT_V_MAP);
 
