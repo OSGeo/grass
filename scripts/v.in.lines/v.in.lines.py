@@ -19,10 +19,12 @@
 #% description: Imports ASCII x,y[,z] coordinates as a series of lines.
 #% keyword: vector
 #% keyword: import
+#% keyword: line
+#% keyword: point
 #%end
 #%flag
 #% key: z
-#% description: Create a 3D line from 3 column data 
+#% description: Create a 3D line from 3 column data
 #%end
 #%option G_OPT_F_INPUT
 #% description: Name of input file (or "-" to read from stdin)
