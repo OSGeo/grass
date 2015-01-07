@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<em>d.thematic.area</em> draws thematic choropleth vector maps based 
+<em>d.vect.thematic</em> draws thematic choropleth vector maps based 
 on an attribute column or an expression involving several columns. 
 It takes a list of class breaks (excluding the minimum and maximum 
 values) and a list of colors to apply to the classes (has to be the 
@@ -25,7 +25,7 @@ for painting a legend into that file.
 <h2>EXAMPLE</h2>
 
 <div class="code"><pre>
-d.thematic.area -l map=communes3 column=pop \
+d.vect.thematic -l map=communes3 column=pop \
   breaks=111393.250000,222785.500000,334177.750000 \
   colors=255:0:0,0:255:0,0:0:255,0,0,0
 </pre></div>
@@ -35,7 +35,7 @@ pop/area) and the standard deviation algorithm to calculate class
 breaks for 5 classes:
 
 <div class="code"><pre>
-d.thematic.area -l map=communes2 column=pop/area algorithm=std \
+d.vect.thematic -l map=communes2 column=pop/area algorithm=std \
   nbclasses=5 colors=0:0:255,50:100:255,255:100:50,255:0:0,156:0:0
 </pre></div>
 
