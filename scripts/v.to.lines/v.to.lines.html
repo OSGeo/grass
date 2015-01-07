@@ -8,8 +8,12 @@ as vector points to lines via triangulations.
 <em>v.to.lines</em> is able to convert point data (via triangulation)
 and areas to lines (via boundary to line conversion).
 
-This script is a wrapper script to <em>>v.category</em>,
+This script is a wrapper script to <em>v.category</em>,
 <em>v.delaunay</em>, and <em>v.edit</em>.
+
+<p>
+In order to convert an ordered list of coordinates (ASCII table with
+x,y[,z] coordinates) into vector lines, use <em>v.in.lines</em>.
 
 <h2>EXAMPLES</h2>
 
@@ -33,6 +37,7 @@ v.to.lines input=geodetic_pts output=geodetic_pts_lines
 <a href="v.category.html">v.category</a>,
 <a href="v.delaunay.html">v.delaunay</a>,
 <a href="v.edit.html">v.edit</a>,
+<a href="v.in.lines.html">v.in.lines</a>,
 <a href="v.to.points.html">v.to.points</a>,
 <a href="v.type.html">v.type</a>
 </em>
