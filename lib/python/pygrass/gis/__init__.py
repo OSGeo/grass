@@ -19,9 +19,7 @@ ETYPE = {'raster': libgis.G_ELEMENT_RASTER,
          'raster_3d': libgis.G_ELEMENT_RASTER3D,
          'vector': libgis.G_ELEMENT_VECTOR,
          'ascii_vector': libgis.G_ELEMENT_ASCIIVECTOR,
-         'icon': libgis.G_ELEMENT_ICON,
-         'labels': libgis.G_ELEMENT_LABEL,
-         'sites': libgis.G_ELEMENT_SITE,
+         'label': libgis.G_ELEMENT_LABEL,
          'region': libgis.G_ELEMENT_REGION,
          'group': libgis.G_ELEMENT_GROUP}
 
@@ -308,7 +306,7 @@ class Mapset(object):
 
             * 'ascii_vector',
             * 'group',
-            * 'labels',
+            * 'label',
             * 'raster',
             * 'raster_3d',
             * 'region',
