@@ -53,6 +53,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("vector"));
     G_add_keyword(_("geometry"));
     G_add_keyword("3D");
+    G_add_keyword(_("line"));
     G_add_keyword(_("node"));
     G_add_keyword(_("vertex"));
     module->description =
