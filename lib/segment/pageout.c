@@ -37,8 +37,14 @@
 int seg_pageout(SEGMENT * SEG, int i)
 {
     SEG->seek(SEG, SEG->scb[i].n, 0);
+    errno = 0;
     if (write(SEG->fd, SEG->scb[i].buf, SEG->size) != SEG->size) {
-	G_warning("Segment pageout: %s", strerror(errno));
+	int err = errno;
+
+	if (err)
+	    G_warning("Segment pageout: %s", strerror(err));
+	else
+	    G_warning("Segment pageout: insufficient disk space?");
 	return -1;
     }
     SEG->scb[i].dirty = 0;
