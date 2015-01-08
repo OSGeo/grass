@@ -220,6 +220,8 @@ int Nviz_set_attr(int id, int type, int desc, int src,
 	    else if (src == MAP_ATT) {
 		ret = GS_load_att_map(id, str_value, desc);
 	    }
+	    else
+		ret = -1;
 
 	    /* After we've loaded a constant map or a file,
 	     * may need to adjust resolution if we are resetting

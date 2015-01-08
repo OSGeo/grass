@@ -246,7 +246,7 @@ int Nviz_draw_all(nv_data * data)
     /* North Arrow */
     if (data->draw_arrow) {
 	gsd_north_arrow(data->arrow->where, data->arrow->size,
-			(GLuint)NULL, data->arrow->color, data->arrow->color);
+			0, data->arrow->color, data->arrow->color);
     }
 
     /* scale bar */
