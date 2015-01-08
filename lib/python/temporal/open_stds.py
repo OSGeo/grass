@@ -235,7 +235,7 @@ def open_new_map_dataset(name, layer=None, type="raster",
     mapset = get_current_mapset()
 
     dbif, connected = init_dbif(dbif)
-    new_map = check_new_map_dataset(name, layer, "raster", overwrite, dbif)
+    new_map = check_new_map_dataset(name, layer, type, overwrite, dbif)
 
     # Check if new map is in the temporal database
     if new_map.is_in_db(dbif):

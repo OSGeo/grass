@@ -117,7 +117,7 @@ def register_maps_in_space_time_dataset(
             row["id"] = mapid
             maplist[count] = row
 
-    # Read the raster map list from file
+    # Read the map list from file
     if file:
         fd = open(file, "r")
 
@@ -308,7 +308,7 @@ def register_maps_in_space_time_dataset(
     if name and map_object_list:
         count = 0
         num_maps = len(map_object_list)
-        msgr.message(_("Registering maps in the space time raster dataset..."))
+        msgr.message(_("Registering maps in the space time dataset..."))
         for map in map_object_list:
             if count % 50 == 0:
                 msgr.percent(count, num_maps, 1)
@@ -317,7 +317,7 @@ def register_maps_in_space_time_dataset(
 
     # Update the space time tables
     if name and map_object_list:
-        msgr.message(_("Updating space time raster dataset..."))
+        msgr.message(_("Updating space time dataset..."))
         sp.update_from_registered_maps(dbif)
         if update_cmd_list is True:
             sp.update_command_string(dbif=dbif)

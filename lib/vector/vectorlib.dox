@@ -293,8 +293,10 @@ Information about categories holds \ref line_cats data structure.
 
 \section vlibAttributes Attributes
 
-The old GRASS 4.x 'dig_cats' files are not used any more and vectors'
-attributes are stored in external database. Connection with the
+For a user-centric view about attribute management, see the explanations
+in the <a href="http://grasswiki.osgeo.org/wiki/Vector_Database_Management">GRASS GIS Wiki</a>.
+
+The attribute data are stored in external database. Connection with the
 database is done through drivers based on \ref dbmilib. Records in a
 table are linked to vector entities by layer and category number. The
 layer identifies table and the category identifies record.  I.e., for
@@ -313,6 +315,8 @@ driver+database+table+row
 The general DBMI settings are defined in the '$MAPSET/VAR' text file
 (maintained with <tt>db.connect</tt> command at user level).
 
+Note: vector boundaries are (typically) handled without category since adjacent
+parcels might have two different categories which prevents from a unique assignment.
 
 \section vlibGeometry Vector library feature geometry
 

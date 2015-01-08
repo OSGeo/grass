@@ -375,13 +375,14 @@ static int close_new(int fd, int ok)
 			  fcb->null_temp_name, path, strerror(errno));
 		stat = -1;
 	    }
+	    /* if rename() was successful what is left to remove() ? */
 	    else {
 		remove(fcb->null_temp_name);
 	    }
 	}
 	else {
 	    remove(fcb->null_temp_name);
-	    remove(path);
+	    remove(path); /* again ? */
 	}			/* null_cur_row > 0 */
 
 	if (fcb->open_mode == OPEN_NEW_COMPRESSED) {	/* auto compression */
@@ -440,6 +441,7 @@ static int close_new(int fd, int ok)
 		      fcb->temp_name, path, strerror(errno));
 	    stat = -1;
 	}
+	/* if rename() was successful what is left to remove() ? */
 	else {
 	    remove(fcb->temp_name);
 	}
