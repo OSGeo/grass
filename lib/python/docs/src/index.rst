@@ -28,7 +28,7 @@ Contents:
 .. toctree::
    :maxdepth: 3
 
-   script
+   script_intro
    pygrass_index
    temporal_framework
    exceptions
