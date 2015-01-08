@@ -856,7 +856,7 @@ class GMFrame(wx.Frame):
         except UnicodeEncodeError:
             GError(parent=self,
                    message = _("Due to the limitations of your operating system, "
-                               "the script path cannot contain non-ascii characters. "
+                               "the script path cannot contain certain non-ascii characters. "
                                "Please rename the script or move it to a different location."))
             return
         
