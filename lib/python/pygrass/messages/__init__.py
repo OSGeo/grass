@@ -76,7 +76,7 @@ def message_server(lock, conn):
             libgis.G_debug(1, "Stop messenger server")
             sys.exit()
 
-        message = data[1]            
+        message = data[1]
         # libgis limitation
         if isinstance(message,  type(" ")):
             if len(message) >= 2000:

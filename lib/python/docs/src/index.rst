@@ -12,17 +12,16 @@ and the GRASS GIS Temporal Framework are entirely written in Python.
 A set of packages is provided to the user in order to provide functionality
 at various levels:
 
-* **script package**: Python interface to launch GRASS GIS modules in scripts
-* **PyGRASS documentation**: PyGRASS is an object-oriented Python Application 
+* **script package** provides Python interface to launch GRASS GIS modules in scripts
+* **PyGRASS** is an object-oriented Python Application 
   Programming Interface (API) for GRASS GIS which uses the GRASS C API as 
   backend but additionally offers a convenient interface to the GRASS GIS 
   modules
-* **GRASS GIS Temporal Framework**: implements the temporal GIS functionality
+* **GRASS GIS Temporal Framework** implements the temporal GIS functionality
   of GRASS GIS and provides an API to implement spatio-temporal processing modules
-* **exceptions package**: FIXME
-* **imaging package**: library to create animated images and films
-* **Testing GRASS GIS source code and modules**: (gunittest package
-* **pydispatch package**: Multiple-producer-multiple-consumer signal-dispatching
+* **exceptions package** contains exceptions used by other packages
+* **imaging package** is a library to create animated images and films
+* **pydispatch package** is a library for signal-dispatching
 
 Contents:
 

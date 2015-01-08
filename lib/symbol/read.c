@@ -221,7 +221,7 @@ SYMBOL *err(FILE * fp, SYMBOL * s, char *msg)
 {
     fclose(fp);
     G_free(s);			/* TODO: free all */
-    G_warning("%s", msg);
+    G_warning(msg, "%s");
     return NULL;
 }
 

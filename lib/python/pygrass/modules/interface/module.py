@@ -67,7 +67,7 @@ class ParallelModuleQueue(object):
     number of parallel processes it will wait for all processes to finish,
     sets the stdout and stderr of the Module object and removes it
     from the queue when its finished.
-    
+
     To finish the queue before the maximum number of parallel
     processes was reached call wait() .
 
@@ -77,13 +77,13 @@ class ParallelModuleQueue(object):
     Usage:
 
     Check with a queue size of 3 and 5 processes
-    
+
     >>> import copy
     >>> from grass.pygrass.modules import Module, ParallelModuleQueue
     >>> mapcalc_list = []
-    
+
     Setting run_ to False is important, otherwise a parallel processing is not possible
-    
+
     >>> mapcalc = Module("r.mapcalc", overwrite=True, run_=False)
     >>> queue = ParallelModuleQueue(nprocs=3)
     >>> for i in xrange(5):
@@ -105,7 +105,7 @@ class ParallelModuleQueue(object):
     0
 
     Check with a queue size of 8 and 5 processes
-    
+
     >>> queue = ParallelModuleQueue(nprocs=8)
     >>> mapcalc_list = []
     >>> for i in xrange(5):
@@ -127,7 +127,7 @@ class ParallelModuleQueue(object):
     0
 
     Check with a queue size of 8 and 4 processes
-    
+
     >>> queue = ParallelModuleQueue(nprocs=8)
     >>> mapcalc_list = []
     >>> new_mapcalc = copy.deepcopy(mapcalc)
@@ -257,11 +257,11 @@ class ParallelModuleQueue(object):
 
         :returns: the number fo Module processes running/finished in the queue
         """
-        return self._proc_count 
+        return self._proc_count
 
     def get_max_num_procs(self):
         """Return the maximum number of parallel Module processes
-        
+
         :returns: the maximum number of parallel Module processes
         """
         return self._num_procs

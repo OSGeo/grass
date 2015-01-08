@@ -780,7 +780,6 @@ class Line(Geo):
             >>> line.distance(point)           #doctest: +NORMALIZE_WHITESPACE
             LineDist(point=Point(2.300000, 0.000000),
                      dist=0.5, spdist=0.2999999999999998, sldist=2.3)
-
         """
         # instantite outputs
         cx = ctypes.c_double(0)
@@ -925,6 +924,7 @@ class Line(Geo):
 
     def segment(self, start, end):
         """Create line segment. using the ``Vect_line_segment`` C function.
+
         :param start: distance from the begining of the line where
                       the segment start
         :type start: float
