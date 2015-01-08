@@ -63,7 +63,9 @@ int Segment_init(SEGMENT *SEG, int fd, int nseg)
     SEG->nseg = nseg;
 
     if (lseek(fd, 0L, SEEK_SET) < 0) {
-	G_warning("Segment_init: %s", strerror(errno));
+	int err = errno;
+
+	G_warning("Segment_init: %s", strerror(err));
 	return -1;
     }
 
