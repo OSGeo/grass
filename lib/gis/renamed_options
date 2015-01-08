@@ -66,18 +66,85 @@ d.vect|lcolor:label_color
 d.vect|bgcolor:label_bgcolor
 d.vect|bcolor:label_boundary_color
 d.vect|lsize:label_size
-# d.thematic.area
-d.thematic.area|bcolor:boundary_color
-d.thematic.area|bwidth:boundary_width
+# d.vect.thematic
+d.vect.thematic|bcolor:boundary_color
+d.vect.thematic|bwidth:boundary_width
+### Renamed options in GRASS 7.0
+################################
+### Global
+#########################
+fs:separator
+nv:null_value
+dt:dtime
+dp:precision
+##########################
+### Display module changes
+##########################
+# d.barscale
+d.barscale|background_color:bgcolor
+# d.correlate
+d.correlate|layers:map
+# d.erase
+d.erase|background:bgcolor
+# d.legend
+d.legend|map:rast
+# d.his
+d.his|h_map:hue
+d.his|i_map:intensity
+d.his|s_map:saturation
+# d.rast
+d.rast|catlist:values
+d.rast|vallist:values
+# d.rast.leg
+d.rast.leg|rast:raster
+# d.vect
+d.vect|wcolumn:width_column
+d.vect|wscale:width_scale
+d.vect|rot_column:rotation_column
+d.vect|attrcolumn:attribute_column
+# d.colortable
+d.colortable|cols:columns
+# d.geodesic
+d.geodesic|lcolor:line_color
+d.geodesic|tcolor:text_color
+# d.grid
+d.grid|bordercolor:border_color
+d.grid|textcolor:text_color
+# d.path
+d.path|hcolor:highlight_color
+d.path|type:arc_type
+d.path|alayer:arc_layer
+d.path|nlayer:node_layer
+d.path|afcolumn:arc_column
+d.path|abcolumn:arc_backward_column
+d.path|ncolumn:node_column
+# d.polar
+d.polar|eps:output
+# d.profile
+d.profile|input:map
+d.profile|profile:coordinates
+# d.rast.arrow
+d.rast.arrow|arrow_color:color
+d.rast.arrow|x_color:null_color
+# d.rhumbline
+d.rhumbline|coord:coordinates
+d.rhumbline|lcolor:line_color
+d.rhumbline|tcolor:text_color
+# d.vect
+d.vect|fcolor:fill_color
+d.vect|llayer:label_layer
+d.vect|lcolor:label_color
+d.vect|bgcolor:label_bgcolor
+d.vect|bcolor:label_boundary_color
+d.vect|lsize:label_size
+# d.vect.thematic
+d.vect.thematic|bcolor:boundary_color
+d.vect.thematic|bwidth:boundary_width
+d.vect.thematic|nbclasses:nclasses
 # d.vect.chart
 d.vect.chart|ctype:chart_type
 d.vect.chart|ocolor:outline_color
 d.vect.chart|sizecol:size_column
-# d.vect.thematic
-d.vect.thematic|pointcolor:point_color
-d.vect.thematic|linecolor:line_color
-d.vect.thematic|startcolor:start_color
-d.vect.thematic|endcolor:end_color
 ######################################
 ### Database management module changes
 ######################################

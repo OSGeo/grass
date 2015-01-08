@@ -12,7 +12,7 @@ algorithm developed by Jean-Pierre Grimmeau at the Free University of
 Brussels (ULB).
 
 It can be used to pipe class breaks into thematic mapping modules such
-as <em>d.thematic.area</em> (see example below);
+as <em>d.vect.thematic</em> (see example below);
 
 <h2>NOTES</h2>
 
@@ -71,9 +71,9 @@ v.class map=communes column=pop/area algo=std nbclasses=5
 
 
 The following example uses the output of d.class and feeds it directly
-into <em>d.thematic.area</em>:
+into <em>d.vect.thematic</em>:
 <div class="code"><pre>
-d.thematic.area -l map=communes2 data=pop/area \
+d.vect.thematic -l map=communes2 column=pop/area \
     breaks=`v.class -g map=communes2 column=pop/area algo=std nbcla=5` \
     colors=0:0:255,50:100:255,255:100:50,255:0:0,156:0:0
 </pre></div>
@@ -82,7 +82,7 @@ d.thematic.area -l map=communes2 data=pop/area \
 
 <em>
 <a href="v.univar.html">v.univar</a>,
-<a href="d.thematic.area.html">d.thematic.area</a>
+<a href="d.vect.thematic.html">d.vect.thematic</a>
 </em>
 
 

@@ -9,7 +9,6 @@ SUBDIRS = \
 	d.rast.leg \
 	d.redraw \
 	d.shade \
-	d.vect.thematic \
 	d.what.rast \
 	d.what.vect \
 	db.dropcolumn \
