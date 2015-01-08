@@ -32,7 +32,7 @@ SUBDIRS = \
 	d.title \
 	d.vect \
 	d.vect.chart \
-	d.thematic.area \
+	d.vect.thematic \
 	d.where
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make

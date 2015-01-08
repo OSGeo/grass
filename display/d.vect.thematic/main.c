@@ -1,11 +1,12 @@
 /*
  ****************************************************************************
  *
- * MODULE:       d.area.thematic
+ * MODULE:       d.vect.thematic
  * AUTHOR(S):    Moritz Lennert, based on d.vect
- * PURPOSE:      display a thematic vector area map
- *               on top of the current image.
- * COPYRIGHT:    (C) 2007 by the GRASS Development Team
+ * PURPOSE:      Display a thematic vector map
+ * TODO:         Common part of code merge with d.vect (similarly as r.colors
+ *               and r3.colors)
+ * COPYRIGHT:    (C) 2007-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -78,10 +79,15 @@ int main(int argc, char **argv)
     G_add_keyword(_("cartography"));
     G_add_keyword(_("choropleth map"));
     module->description =
-	_("Displays a thematic vector area map in the active "
-	  "frame on the graphics monitor.");
+	_("Displays a thematic vector map "
+	  "in the active graphics frame.");
 
     map_opt = G_define_standard_option(G_OPT_V_MAP);
+
+    field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    field_opt->description =
+	_("Layer number. If -1, all layers are displayed.");
+    field_opt->guisection = _("Selection");
 
     column_opt = G_define_standard_option(G_OPT_DB_COLUMN);
     column_opt->required = YES;
@@ -94,7 +100,8 @@ int main(int argc, char **argv)
     breaks_opt->required = NO;
     breaks_opt->multiple = YES;
     breaks_opt->description = _("Class breaks, without minimum and maximum");
-
+    breaks_opt->guisection = _("Classes");
+    
     algo_opt = G_define_option();
     algo_opt->key = "algorithm";
     algo_opt->type = TYPE_STRING;
@@ -111,13 +118,15 @@ int main(int argc, char **argv)
 	        _("equiprobable (normal distribution)"));
     algo_opt->descriptions = desc;
     /*currently disabled because of bugs       "dis;discontinuities"); */
+    algo_opt->guisection = _("Classes");
 
     nbclass_opt = G_define_option();
-    nbclass_opt->key = "nbclasses";
+    nbclass_opt->key = "nclasses";
     nbclass_opt->type = TYPE_INTEGER;
     nbclass_opt->required = NO;
     nbclass_opt->multiple = NO;
     nbclass_opt->description = _("Number of classes to define");
+    nbclass_opt->guisection = _("Classes");
 
     colors_opt = G_define_option();
     colors_opt->key = "colors";
@@ -126,11 +135,6 @@ int main(int argc, char **argv)
     colors_opt->multiple = YES;
     colors_opt->description = _("Colors (one per class)");
     colors_opt->gisprompt = "old_color,color,color";
-
-    field_opt = G_define_standard_option(G_OPT_V_FIELD);
-    field_opt->description =
-	_("Layer number. If -1, all layers are displayed.");
-    field_opt->guisection = _("Selection");
 
     where_opt = G_define_standard_option(G_OPT_DB_WHERE);
     where_opt->guisection = _("Selection");
@@ -152,21 +156,25 @@ int main(int argc, char **argv)
     legend_file_opt->description =
 	_("File in which to save d.graph instructions for legend display");
     legend_file_opt->required = NO;
+    legend_file_opt->guisection = _("Legend");
 
     legend_flag = G_define_flag();
     legend_flag->key = 'l';
     legend_flag->description =
 	_("Create legend information and send to stdout");
+    legend_flag->guisection = _("Legend");
 
     algoinfo_flag = G_define_flag();
     algoinfo_flag->key = 'e';
     algoinfo_flag->description =
 	_("When printing legend info, include extended statistical info from classification algorithm");
+    algoinfo_flag->guisection = _("Legend");
 
     nodraw_flag = G_define_flag();
     nodraw_flag->key = 'n';
     nodraw_flag->description = _("Do not draw map, only output the legend");
-
+    nodraw_flag->guisection = _("Legend");
+    
     /* Check command line */
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
