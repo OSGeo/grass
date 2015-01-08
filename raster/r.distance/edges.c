@@ -4,15 +4,16 @@
  * MODULE:       r.distance
  *
  * AUTHOR(S):    Michael Shapiro - CERL
+ *               Sort/reverse sort by distance by Huidae Cho
  *
- * PURPOSE:      Locates the closest points between objects in two
+ * PURPOSE:      Locates the closest points between objects in two 
  *               raster maps.
  *
- * COPYRIGHT:    (C) 2003 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2014 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
  ***************************************************************************/
 
@@ -33,7 +34,7 @@ void print_edge_info(struct Map *map)
     fprintf(stdout, "\n");
 }
 
-void find_edge_cells(struct Map *map)
+void find_edge_cells(struct Map *map, int null)
 {
     void init_edge_list();
     void add_edge_cell();
@@ -74,11 +75,12 @@ void find_edge_cells(struct Map *map)
 	Rast_get_c_row(fd, &buf1[1], row);
 
 	for (col = 1; col <= ncols; col++) {
-	    if (buf1[col]	/* is a valid category */
+	    if ((buf1[col]	/* is a valid category */
 		&&(buf1[col - 1] != buf1[col]	/* 4 neighbors not the same? */
 		   ||buf1[col + 1] != buf1[col]
 		   || buf0[col] != buf1[col]
-		   || buf2[col] != buf1[col]))
+		   || buf2[col] != buf1[col])) &&
+		(null || !Rast_is_c_null_value(&buf1[col])))
 		add_edge_cell(map, buf1[col], row, col - 1);
 	}
     }

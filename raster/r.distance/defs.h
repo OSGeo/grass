@@ -4,15 +4,16 @@
  * MODULE:       r.distance
  *
  * AUTHOR(S):    Michael Shapiro - CERL
+ *               Sort/reverse sort by distance by Huidae Cho
  *
- * PURPOSE:      Locates the closest points between objects in two
+ * PURPOSE:      Locates the closest points between objects in two 
  *               raster maps.
  *
- * COPYRIGHT:    (C) 2003 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2014 by the GRASS Development Team
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ *               This program is free software under the GNU General
+ *               Public License (>=v2). Read the file COPYING that
+ *               comes with GRASS for details.
  *
  ***************************************************************************/
 
@@ -51,6 +52,10 @@ struct Parms
     int labels;			/* boolean: report includes cat labels */
     char *fs;			/* report field separator     */
     int overlap;		/* checking for overlapping, than distance is 0 */
+    int null;			/* report null objects as * */
+    int sort;			/* 0: sort by cat1,cat2 (default)
+				   1: sort by distance in ascending order
+				   2: sort by distance in descending order */
 };
 
 /* distance.c */
@@ -61,7 +66,7 @@ int null_distance(const char *, const char *, int *, int *);
 
 /* edges.c */
 void print_edge_info(struct Map *);
-void find_edge_cells(struct Map *);
+void find_edge_cells(struct Map *, int);
 void add_edge_cell(struct Map *, CELL, int, int);
 void init_edge_list(struct Map *);
 void sort_edge_list(struct Map *);
