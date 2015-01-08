@@ -12,7 +12,6 @@ SUBDIRS = \
 	v.clean \
 	v.colors \
 	v.colors.out \
-	v.convert \
 	v.db.connect \
 	v.db.select \
 	v.delaunay \
