@@ -107,7 +107,7 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
 
 int ip, jp, ip100, jp100;
 int n, m, m100, n100;
-int degreeOutput = FALSE;
+int degreeOutput, compassOutput = FALSE;
 float **z, **z100, **horizon_raster;
 double stepx, stepy, stepxhalf, stepyhalf, stepxy, xp, yp, op, dp, xg0, xx0,
     yg0, yy0, deltx, delty;
@@ -171,7 +171,7 @@ int main(int argc, char *argv[])
 
     struct
     {
-	struct Flag *degreeOutput;
+	struct Flag *degreeOutput, *compassOutput;
     }
     flag;
 
@@ -308,6 +308,11 @@ int main(int argc, char *argv[])
     flag.degreeOutput->description =
 	_("Write output in degrees (default is radians)");
 
+    flag.compassOutput = G_define_flag();
+    flag.compassOutput->key = 'c';
+    flag.compassOutput->description =
+	_("Write output in compass orientation (default is CCW, East=0)");
+
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -343,6 +348,7 @@ int main(int argc, char *argv[])
     delty = fabs(cellhd.north - cellhd.south);
 
     degreeOutput = flag.degreeOutput->answer;
+    compassOutput = flag.compassOutput->answer;
 
     if (G_projection() == PROJECTION_LL)
         G_important_message(_("Note: In latitude-longitude coordinate system specify buffers in degree unit"));
@@ -865,7 +871,16 @@ void calculate_shadow()
 	else if (printangle >= 360.)
 	    printangle -= 360;
 
-	fprintf(fp, "%lf,%lf\n", printangle, shadow_angle);
+	if(compassOutput ){
+	    double tmpangle;
+	    
+	    tmpangle = 360. - printangle + 90.;
+	    if (tmpangle >= 360.)
+		tmpangle = tmpangle - 360.;
+	    fprintf(fp, "%lf,%lf\n", tmpangle, shadow_angle);
+	} else {
+	    fprintf(fp, "%lf,%lf\n", printangle, shadow_angle);
+	}
 
 	angle += dfr_rad;
 
