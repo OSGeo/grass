@@ -24,15 +24,11 @@ and columns of the raster map. This correction implies that the
 resulting cardinal directions represent true orientation towards the
 East, North, West and South. The only exception of this feature is
 LOCATION with x,y coordinate system, where this correction is
-not applied. 
+not applied.
 
-
-<h3>Flags:</h3>
-<dl>
-  <dt><b>-d</b>
-  <dd>Output horizon height in degrees (the default is radians)</dd>
-</dl>
-
+<p>
+Using the <b>-c</b> flag, the azimuthal angles will be printed in compass
+orientation (North=0, clockwise).
 
 <h3>Input parameters:</h3>
 <p>The <i>elevation</i> parameter is an input elevation raster map. If
@@ -46,7 +42,8 @@ horizon. Thus, a value of 5 for the <i>step</i> will give a total of
 360/5=72 directions (72 raster maps if used in the raster map mode). 
 
 <p>The <i>start</i> parameter gives the angle start (in degrees)
-for the calculation of the horizon. The default value is 0.
+for the calculation of the horizon. The default value is 0 (East with
+North being 90 etc.).
 
 <p>The <i>end</i> parameter gives the angle end (in degrees)
 for the calculation of the horizon. The end point is omitted!
