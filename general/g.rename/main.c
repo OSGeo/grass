@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
 		result = EXIT_FAILURE;
 	    }
 
-	    if (!renamed && strcmp(parm[n]->key, "rast") == 0 &&
+	    if (!renamed && strcmp(parm[n]->key, "raster") == 0 &&
 		Rast_is_reclassed_to(old, mapset, &nrmaps, &rmaps) > 0) {
 		int ptr, l;
 		char buf1[256], buf2[256], buf3[256], *str;
