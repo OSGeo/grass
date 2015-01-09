@@ -586,6 +586,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster3d"));
     G_add_keyword(_("export"));
     G_add_keyword(_("netCDF"));
+    G_add_keyword(_("voxel"));
     module->description = _("Export a 3D raster map as netCDF file.");
 
     /* Get parameters from user */
