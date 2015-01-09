@@ -137,18 +137,19 @@ static int convert_str(const char *from, const char *in, unsigned char **out)
     res = 2 * (len + 1);
 
     *out = G_calloc(1, res);
-    p1 = in;
+    p1 = (const unsigned char *)in;
     p2 = *out;
 
 #ifdef HAVE_ICONV_H
     {
-	size_t ret;
 	iconv_t cd;
 
 	i = res;
-	if ((cd = iconv_open("UCS-2BE", from)) < 0)
+        cd = iconv_open("UCS-2BE", from);
+	if (cd == (iconv_t) -1)
 	    return -1;
-	ret = iconv(cd, (char **)&p1, &len, (char **)&p2, &i);
+	if (iconv(cd, (char **)&p1, &len, (char **)&p2, &i) == (size_t) -1)
+            return -1;
 	iconv_close(cd);
 
 	res -= i;
