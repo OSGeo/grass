@@ -320,9 +320,7 @@ class TextLayerDialog(wx.Dialog):
 
         self.sizer = wx.BoxSizer(wx.VERTICAL)
         box = wx.GridBagSizer(vgap=5, hgap=5)
-        box.AddGrowableCol(1)
-        box.AddGrowableRow(1)
-        
+
         # show/hide
         self.chkbox = wx.CheckBox(parent=self, id=wx.ID_ANY,
                                   label=_('Show text object'))
@@ -370,6 +368,8 @@ class TextLayerDialog(wx.Dialog):
                 flag=wx.ALIGN_RIGHT,
                 pos=(3, 1))
 
+        box.AddGrowableCol(1)
+        box.AddGrowableRow(1)
         self.sizer.Add(item=box, proportion=1,
                        flag=wx.ALL | wx.EXPAND, border=10)
 
