@@ -198,7 +198,7 @@ int main(int argc, char *argv[])
 	}
 
 	if (G_asprintf(&line, "  Type of Map:  %-20.20s Number of Categories: %-9s",
-	     "3d cell", cats_ok ? tmp1 : "??") > 0)
+	     "raster_3d", cats_ok ? tmp1 : "??") > 0)
 	    printline(line);
 	else
 	    G_fatal_error(_("Cannot allocate memory for string"));
