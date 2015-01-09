@@ -550,7 +550,7 @@ int main(int argc, char *argv[])
 	    if (Points->n_points < 2) {
 		after = APoints->n_points;
 		n_oversimplified++;
-                if(error_out->answer)
+                if (error_out->answer)
 		    Vect_write_line(&Error, type, APoints, Cats);
 	    }
 	    /* check for topology corruption */
@@ -558,7 +558,7 @@ int main(int argc, char *argv[])
 		if (!check_topo(&Out, i, APoints, Points, Cats)) {
 		    after = APoints->n_points;
 		    not_modified_boundaries++;
-                    if(error_out->answer)
+                    if (error_out->answer)
 		        Vect_write_line(&Error, type, APoints, Cats);
 		}
 		else
@@ -582,17 +582,17 @@ int main(int argc, char *argv[])
 
 	/* make sure that clean topo is built at the end */
 	Vect_build_partial(&Out, GV_BUILD_NONE);
-        if(error_out->answer)
+        if (error_out->answer)
 	    Vect_build_partial(&Error, GV_BUILD_NONE);
     }
 
     Vect_build(&Out);
-    if(error_out->answer)
+    if (error_out->answer)
         Vect_build(&Error);
 
     Vect_close(&In);
     Vect_close(&Out);
-    if(error_out->answer)
+    if (error_out->answer)
         Vect_close(&Error);
 
     G_message("-----------------------------------------------------");

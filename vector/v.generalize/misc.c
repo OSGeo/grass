@@ -194,16 +194,21 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 {
     int i, j, intersect, newline, left_old, right_old,
 	left_new, right_new;
-    struct bound_box box;
+    struct bound_box box, abox;
     struct line_pnts **AXLines, **BXLines;
     int naxlines, nbxlines;
     static struct line_pnts *BPoints = NULL;
     static struct boxlist *List = NULL;
+    static struct line_pnts *BPoints2 = NULL;
+    static struct ilist *BList = NULL;
+    int area, isle, centr;
 
-    if (!BPoints)
+    if (!BPoints) {
 	BPoints = Vect_new_line_struct();
-    if (!List)
+	BPoints2 = Vect_new_line_struct();
 	List = Vect_new_boxlist(1);
+	BList = Vect_new_list();
+    }
 
     Vect_line_box(Points, &box);
 
@@ -273,16 +278,130 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
     if (intersect)
 	return 0;
 
-    /* Get centroids on the left and right side */
     Vect_get_line_areas(Out, line, &left_old, &right_old);
-    if (left_old < 0)
-	left_old = Vect_get_isle_area(Out, abs(left_old));
-    if (left_old > 0)
-	left_old = Vect_get_area_centroid(Out, left_old);
-    if (right_old < 0)
-	right_old = Vect_get_isle_area(Out, abs(right_old));
-    if (right_old > 0)
-	right_old = Vect_get_area_centroid(Out, right_old);
+
+    Vect_line_box(APoints, &abox);
+
+    /* centroid on the left side */
+    isle = centr = 0;
+    area = left_old;
+    if (area < 0) {
+	isle = -area;
+	area = Vect_get_isle_area(Out, isle);
+    }
+    if (area > 0)
+	centr = Vect_get_area_centroid(Out, area);
+    if (1) {
+
+    if (centr > 0) {
+	int ret;
+	double cx, cy, cz;
+
+	Vect_read_line(Out, BPoints, NULL, centr);
+	cx = BPoints->x[0];
+	cy = BPoints->y[0];
+	cz = BPoints->z[0];
+	
+	if (Vect_point_in_box(cx, cy, cz, &box) ||
+	    Vect_point_in_box(cx, cy, cz, &abox)) {
+
+	    if (isle)
+		Vect_get_isle_boundaries(Out, isle, BList);
+	    else
+		Vect_get_area_boundaries(Out, area, BList);
+
+	    Vect_reset_line(BPoints2);
+	    for (i = 0; i < BList->n_values; i++) {
+		int bline = BList->value[i];
+		int dir = bline > 0 ? GV_FORWARD : GV_BACKWARD;
+
+		if (abs(bline) != line) {
+		    Vect_read_line(Out, BPoints, NULL, abs(bline));
+		    Vect_append_points(BPoints2, BPoints, dir);
+		}
+		else
+		    Vect_append_points(BPoints2, Points, dir);
+
+		BPoints2->n_points--;    /* skip last point, avoids duplicates */
+	    }
+	    BPoints2->n_points++;        /* close polygon */
+
+	    ret = Vect_point_in_poly(cx, cy, BPoints2);
+	    /* see Vect_point_in_area() */
+	    if (!isle) {
+		/* area: centroid must be inside */
+		if (ret == 0)
+		    return 0;
+	    }
+	    else {
+		/* isle: centroid must be outside */
+		if (ret > 0)
+		    return 0;
+	    }
+	}
+    }
+    }
+    left_old = centr;
+
+    /* centroid on the right side */
+    isle = centr = 0;
+    area = right_old;
+    if (area < 0) {
+	isle = -area;
+	area = Vect_get_isle_area(Out, isle);
+    }
+    if (area > 0)
+	centr = Vect_get_area_centroid(Out, area);
+    if (1) {
+    if (centr > 0) {
+	int ret;
+	double cx, cy, cz;
+
+	Vect_read_line(Out, BPoints, NULL, centr);
+	cx = BPoints->x[0];
+	cy = BPoints->y[0];
+	cz = BPoints->z[0];
+	
+	if (Vect_point_in_box(cx, cy, cz, &box) ||
+	    Vect_point_in_box(cx, cy, cz, &abox)) {
+
+	    if (isle)
+		Vect_get_isle_boundaries(Out, isle, BList);
+	    else
+		Vect_get_area_boundaries(Out, area, BList);
+
+	    Vect_reset_line(BPoints2);
+	    for (i = 0; i < BList->n_values; i++) {
+		int bline = BList->value[i];
+		int dir = bline > 0 ? GV_FORWARD : GV_BACKWARD;
+
+		if (abs(bline) != line) {
+		    Vect_read_line(Out, BPoints, NULL, abs(bline));
+		    Vect_append_points(BPoints2, BPoints, dir);
+		}
+		else
+		    Vect_append_points(BPoints2, Points, dir);
+
+		BPoints2->n_points--;    /* skip last point, avoids duplicates */
+	    }
+	    BPoints2->n_points++;        /* close polygon */
+
+	    ret = Vect_point_in_poly(cx, cy, BPoints2);
+	    /* see Vect_point_in_area() */
+	    if (!isle) {
+		/* area: centroid must be inside */
+		if (ret == 0)
+		    return 0;
+	    }
+	    else {
+		/* isle: centroid must be outside */
+		if (ret > 0)
+		    return 0;
+	    }
+	}
+    }
+    }
+    right_old = centr;
 
     /* OK, rewrite modified boundary */
     newline = Vect_rewrite_line(Out, line, GV_BOUNDARY, Points, Cats);
