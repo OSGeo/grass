@@ -262,7 +262,7 @@ int main(int argc, char **argv)
 #endif
     G_get_window(&outcellhd);
 
-    if(gprint_bounds->answer && !print_bounds->answer)
+    if (gprint_bounds->answer && !print_bounds->answer)
 	print_bounds->answer = gprint_bounds->answer;
     curr_proj = G_projection();
 
@@ -362,7 +362,7 @@ int main(int argc, char **argv)
 	outcellhd.south =  1e9;
 	outcellhd.east  = -1e9;
 	outcellhd.west  =  1e9;
-	bordwalk2(&incellhd, &outcellhd, &iproj, &oproj);
+	bordwalk_edge(&incellhd, &outcellhd, &iproj, &oproj);
 	inorth = outcellhd.north;
 	isouth = outcellhd.south;
 	ieast  = outcellhd.east;
@@ -373,7 +373,7 @@ int main(int argc, char **argv)
 	G_format_easting(ieast, east_str, curr_proj);
 	G_format_easting(iwest, west_str, curr_proj);
 
-	if(gprint_bounds->answer) {
+	if (gprint_bounds->answer) {
 	    fprintf(stdout, "n=%s s=%s w=%s e=%s rows=%d cols=%d\n",
 		north_str, south_str, west_str, east_str, irows, icols);
 	}
@@ -385,8 +385,6 @@ int main(int argc, char **argv)
 	    fprintf(stdout, "Local west: %s\n", west_str);
 	    fprintf(stdout, "Local east: %s\n", east_str);
 	}
-
-	/* somehow approximate local ewres, nsres ?? (use 'g.region -m' on lat/lon side) */
 
 	exit(EXIT_SUCCESS);
     }
