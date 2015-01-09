@@ -558,8 +558,12 @@ static int segments_x_ray(double X, double Y, const struct line_pnts *Points)
 	x2 = Points->x[n];
 	y2 = Points->y[n];
 
+	/* G_debug() is slow, avoid it in loops over points,
+	 * activate when needed */
+	/*
 	G_debug(3, "X = %f Y = %f x1 = %f y1 = %f x2 = %f y2 = %f", X, Y, x1,
 		y1, x2, y2);
+	 */
 
 	/* I know, it should be possible to do that with less conditions,
 	 * but it should be enough readable also! */
@@ -692,7 +696,6 @@ Vect_point_in_area_outer_ring(double X, double Y, const struct Map_info *Map,
     int n_intersects, inter;
     int i, line;
     static struct line_pnts *Points;
-    struct bound_box lbox;
     const struct Plus_head *Plus;
     struct P_area *Area;
 
@@ -717,20 +720,20 @@ Vect_point_in_area_outer_ring(double X, double Y, const struct Map_info *Map,
 	line = abs(Area->lines[i]);
 	G_debug(3, "  line[%d] = %d", i, line);
 
-	/* this is slow, but the fastest of all alternatives */
-	Vect_get_line_box(Map, line, &lbox);
-
-	/* slower as long as the spatial index is in memory: */
-	/*
 	Vect_read_line(Map, Points, NULL, line);
-	Vect_line_box(Points, &lbox);
-	*/
-	
-	/* dont check lines that obviously do not intersect with test ray */
-	if ((lbox.N < Y) || (lbox.S > Y) || (lbox.E < X))
+
+	/* if the bbox of the line would be available, 
+	 * the bbox could be used for a first check: */
+
+	/* Vect_line_box(Points, &lbox);
+	 * do not check lines that obviously do not intersect with test ray */
+	/* if ((lbox.N < Y) || (lbox.S > Y) || (lbox.E < X))
 	    continue;
+	 */
 
-	Vect_read_line(Map, Points, NULL, line);
+	/* retrieving the bbox from the spatial index or 
+	 * calculating the box from the vertices is slower than
+	 * just feeding the line to segments_x_ray() */
 
 	inter = segments_x_ray(X, Y, Points);
 	G_debug(3, "  inter = %d", inter);
@@ -765,7 +768,6 @@ int Vect_point_in_island(double X, double Y, const struct Map_info *Map,
     int n_intersects, inter;
     int i, line;
     static struct line_pnts *Points;
-    struct bound_box lbox;
     const struct Plus_head *Plus;
     struct P_isle *Isle;
 
@@ -786,20 +788,20 @@ int Vect_point_in_island(double X, double Y, const struct Map_info *Map,
     for (i = 0; i < Isle->n_lines; i++) {
 	line = abs(Isle->lines[i]);
 
-	/* this is slow, but the fastest of all alternatives */
-	Vect_get_line_box(Map, line, &lbox);
-
-	/* slower as long as the spatial index is in memory: */
-	/*
 	Vect_read_line(Map, Points, NULL, line);
-	Vect_line_box(Points, &lbox);
-	*/
-	
-	/* dont check lines that obviously do not intersect with test ray */
-	if ((lbox.N < Y) || (lbox.S > Y) || (lbox.E < X))
+
+	/* if the bbox of the line would be available, 
+	 * the bbox could be used for a first check: */
+
+	/* Vect_line_box(Points, &lbox);
+	 * dont check lines that obviously do not intersect with test ray */
+	/* if ((lbox.N < Y) || (lbox.S > Y) || (lbox.E < X))
 	    continue;
+	 */
 
-	Vect_read_line(Map, Points, NULL, line);
+	/* retrieving the bbox from the spatial index or 
+	 * calculating the box from the vertices is slower than
+	 * just feeding the line to segments_x_ray() */
 
 	inter = segments_x_ray(X, Y, Points);
 	if (inter == -1)
