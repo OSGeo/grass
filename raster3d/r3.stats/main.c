@@ -47,6 +47,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster3d"));
     G_add_keyword(_("statistics"));
+    G_add_keyword(_("voxel"));
     module->description = _("Generates volume statistics for 3D raster maps.");
 
     /* Define the different options */

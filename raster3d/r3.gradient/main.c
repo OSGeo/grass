@@ -41,8 +41,8 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster3d"));
-    G_add_keyword(_("voxel"));
     G_add_keyword(_("gradient"));
+    G_add_keyword(_("voxel"));
     module->description =
 	_("Computes gradient of a 3D raster map "
 	  "and outputs gradient components as three 3D raster maps.");
