@@ -34,6 +34,7 @@
 #include <grass/raster3d.h>
 #include <grass/glocale.h>
 
+#undef MAX
 #define MAX(a,b) (a > b ? a : b)
 
 /*---------------------------------------------------------------------------*/
@@ -175,6 +176,7 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
     module = G_define_module();
     G_add_keyword(_("raster3d"));
+    G_add_keyword(_("import"));
     G_add_keyword(_("voxel"));
     module->description =
 	_("Import 3-dimensional Vis5D files.");

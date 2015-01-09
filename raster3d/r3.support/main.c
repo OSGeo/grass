@@ -48,8 +48,9 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster3d"));
     G_add_keyword(_("metadata"));
+    G_add_keyword(_("voxel"));
     module->description = _("Allows creation and/or modification of "
-			    "raster3d map layer support files.");
+			    "3D raster map layer support files.");
 
     raster = G_define_standard_option(G_OPT_R3_MAP);
 

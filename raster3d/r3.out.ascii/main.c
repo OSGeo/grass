@@ -23,6 +23,7 @@
 #include <grass/raster3d.h>
 #include <grass/glocale.h>
 
+#undef MAX
 #define MAX(a,b) (a > b ? a : b)
 
 /* structs */
@@ -299,8 +300,8 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
     module = G_define_module();
     G_add_keyword(_("raster3d"));
-    G_add_keyword(_("voxel"));
     G_add_keyword(_("export"));
+    G_add_keyword(_("voxel"));
     G_add_keyword(_("conversion"));
     G_add_keyword("ASCII");
     module->description =
