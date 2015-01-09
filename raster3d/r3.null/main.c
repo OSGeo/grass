@@ -24,6 +24,7 @@
 #include <grass/glocale.h>
 
 
+#undef MAX
 #define MAX(a,b) (a > b ? a : b)
 
 
@@ -183,6 +184,7 @@ int main(int argc, char **argv)
     G_gisinit(argv[0]);
     module = G_define_module();
     G_add_keyword(_("raster3d"));
+    G_add_keyword(_("null data"));
     G_add_keyword(_("voxel"));
     module->description =
 	_("Explicitly create the 3D NULL-value bitmap file.");

@@ -77,6 +77,7 @@ int main(int argc, char *argv[])
 
     module = G_define_module();
     G_add_keyword(_("raster3d"));
+    G_add_keyword(_("display"));
     G_add_keyword(_("voxel"));
     module->description =
 	_("Creates a display file from an existing 3D raster map according to specified threshold levels.");
