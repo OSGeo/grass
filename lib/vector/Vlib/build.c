@@ -174,7 +174,7 @@ static int sort_by_size(const void *a, const void *b)
  */
 int Vect_isle_find_area(struct Map_info *Map, int isle)
 {
-    int i, line, sel_area, area, poly;
+    int i, j, line, sel_area, area, poly;
     const struct Plus_head *plus;
     struct P_line *Line;
     struct P_node *Node;
@@ -226,7 +226,7 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
      * get the smallest area that contains the isle
      * using the bbox size is working because if 2 areas both contain
      * the isle, one of these areas must be inside the other area
-     * which means that the bbox of the outer area must be lager than
+     * which means that the bbox of the outer area must be larger than
      * the bbox of the inner area, and equal bbox sizes are not possible */
 
     if (alloc_size_list < List->n_values) {
@@ -234,12 +234,24 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
 	size_list = G_realloc(size_list, alloc_size_list * sizeof(BOX_SIZE));
     }
 
+    j = 0;
     for (i = 0; i < List->n_values; i++) {
-	size_list[i].i = List->id[i];
 	abox = &List->box[i];
-	size_list[i].box = List->box[i];
-	size_list[i].size = (abox->N - abox->S) * (abox->E - abox->W);
+
+	if (box.E > abox->E || box.W < abox->W || box.N > abox->N ||
+	    box.S < abox->S) {
+	    G_debug(3, "  isle not completely inside area box");
+	    continue;
+	}
+	
+	List->id[j] = List->id[i];
+	List->box[j] = List->box[i];
+	size_list[j].i = List->id[j];
+	size_list[j].box = List->box[j];
+	size_list[j].size = (abox->N - abox->S) * (abox->E - abox->W);
+	j++;
     }
+    List->n_values = j;
 
     if (List->n_values > 1) {
 	if (List->n_values == 2) {
@@ -832,8 +844,11 @@ int Vect_build_partial(struct Map_info *Map, int build)
         /* don't write support files for OGR direct and PostGIS Topology */
 	Map->support_updated = TRUE;
 
-    if (!Map->plus.Spidx_built)
-	Vect_open_sidx(Map, 2);
+    if (!Map->plus.Spidx_built) {
+	if (Vect_open_sidx(Map, 2) < 0)
+	    G_fatal_error(_("Unable to open spatial index file for vector map <%s>"),
+			    Vect_get_full_name(Map));
+    }
 
     plus = &(Map->plus);
     if (build > GV_BUILD_NONE && !Map->temporary) {
