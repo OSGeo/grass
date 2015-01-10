@@ -43,7 +43,13 @@ int time_lag;
 int x_out;
 int y_out;
 
-void collect_ori(int start_fd)
+/**
+ * \param start_fd start raster map
+ * \param start_is_time 1 if start map values should be used instead of init_time
+ *
+ * Other variables passed as global variables.
+ */
+void collect_ori(int start_fd, int start_is_time)
 {
     extern CELL *cell;
     extern CELL *map_base, *map_x_out, *map_y_out, *map_visit;
@@ -70,7 +76,11 @@ void collect_ori(int start_fd)
 		    continue;
 		}
 
-		DATA(map_out, row, col) = (float)init_time;
+		if (start_is_time)
+		    /* here we ignore the issue with null value if any */
+		    DATA(map_out, row, col) = cell[col];
+		else
+		    DATA(map_out, row, col) = (float)init_time;
 		insertHa((float)init_time, zero, row, col, heap, &heap_len);
 		/*mark it to avoid redundant computing */
 		DATA(map_visit, row, col) = 1;
