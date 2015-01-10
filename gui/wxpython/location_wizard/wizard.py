@@ -32,6 +32,7 @@ This program is free software under the GNU General Public License
 @author Hamish Bowman (planetary ellipsoids)
 """
 import os
+import sys
 import locale
 
 import wx
@@ -2060,7 +2061,7 @@ class LocationWizard(wx.Object):
             return None
         
         # current GISDbase or a new one?
-        current_gdb = grass.gisenv()['GISDBASE']
+        current_gdb = grass.gisenv()['GISDBASE'].decode(sys.stdin.encoding)
         if current_gdb != database:
             # change to new GISDbase or create new one
             if os.path.isdir(database) != True:
