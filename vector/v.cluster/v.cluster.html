@@ -119,17 +119,20 @@ subregion:
 # pick a subregion of the vector urbanarea
 g.region -p n=272950 s=188330 w=574720 e=703090 res=10
 
-# create clustered points
+# create 100 clustered points
 v.random output=rand_clust npoints=100 restrict=urbanarea@PERMANENT -a
 
 # identify clusters
-v.cluster in=rand_clust out=rand_clusters method=density
+v.cluster input=rand_clust output=rand_clusters method=density
 
 # create colors for clusters
-v.db.addtable map=rand_clusters layer=2 columns="cat integer,grassrgb varchar(11)"
-v.colors map=rand_clusters layer=2 use=cat color=random rgb_column=grassrgb
+v.db.addtable map=rand_clusters layer=2 columns="cat integer"
+v.colors map=rand_clusters layer=2 use=cat color=random
 
 # display with your preferred method
+d.mon wx0
+# show clusters by color
+d.vect rand_clusters layer=2
 </pre></div>
 
 
