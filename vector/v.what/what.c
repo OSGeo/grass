@@ -537,6 +537,7 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 	if (Cats->n_cats > 0) {
 	    int j;
 	    char *formbuf1;
+	    char *formbuf2;
 	    if (json) {
 		fprintf(stdout, ",\n\"Categories\": [");
 	    }
@@ -563,9 +564,12 @@ void what(struct Map_info *Map, int nvects, char **vect, double east, double nor
 				Fi->driver, Fi->database, Fi->table, Fi->key);
 		    }
 		    else if (json) {
+			/* escape backslash to create valid JSON */
+			formbuf2 = G_str_replace(Fi->database, "\\", "\\\\");
 			fprintf(stdout,
 				",\n\"Driver\": \"%s\",\n\"Database\": \"%s\",\n\"Table\": \"%s\",\n\"Key_column\": \"%s\"",
-				Fi->driver, Fi->database, Fi->table, Fi->key);
+				Fi->driver, formbuf2, Fi->table, Fi->key);
+			G_free(formbuf2);
 		    }
 		    else {
 			fprintf(stdout,
