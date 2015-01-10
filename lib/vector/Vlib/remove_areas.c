@@ -508,7 +508,6 @@ Vect_remove_small_areas_nat(struct Map_info *Map, double thresh,
 
 	    outer_area = Vect_get_isle_area(Map, -dissolve_neighbour);
 
-#ifdef DEGUG_RMAREA
 	    /* get isle boundaries */
 	    Vect_get_isle_boundaries(Map, -dissolve_neighbour, NList);
 
