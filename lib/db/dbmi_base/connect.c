@@ -64,24 +64,33 @@ int db_set_connection(dbConnection * connection)
   \param[out] connection pointer to dbConnection to be modified
 
   \return DB_OK
+  \return DB_FAILED
  */
 int db_get_connection(dbConnection * connection)
 {
-  /* TODO: add checks and return DB_* error code if needed */
-
     G_zero(connection, sizeof(dbConnection));
     
     connection->driverName = (char *)G_getenv_nofatal2("DB_DRIVER", G_VAR_MAPSET);
     connection->databaseName = (char *)G_getenv_nofatal2("DB_DATABASE", G_VAR_MAPSET);
+    
+    if (connection->driverName == NULL ||
+        connection->databaseName == NULL)
+        return DB_FAILED;
+    
     connection->schemaName = (char *)G_getenv_nofatal2("DB_SCHEMA", G_VAR_MAPSET);
     connection->group = (char *)G_getenv_nofatal2("DB_GROUP", G_VAR_MAPSET);
 
-    /* below commented due to new mechanism:
+    /* below commented due to new mechanism: see db_get_login()
        connection->hostName = G_getenv_nofatal("DB_HOST");
        connection->location = G_getenv_nofatal("DB_LOCATION");
        connection->user = G_getenv_nofatal("DB_USER");
        connection->password = G_getenv_nofatal("DB_PASSWORD");
      */
+
+    /* try to get user/password */
+    db_get_login(connection->driverName, connection->databaseName,
+                 (const char **) &(connection->user),
+                 (const char **) &(connection->password));
     
     return DB_OK;
 }
