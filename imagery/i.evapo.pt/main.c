@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
     input_PATM->description = _("Name of input atmospheric pressure raster map [millibars]");
 
     input_PT = G_define_option();
-    input_PT->key = "priestley_taylor_coef";
+    input_PT->key = "priestley_taylor_coeff";
     input_PT->type = TYPE_DOUBLE;
     input_PT->required = YES;
     input_PT->description = _("Priestley-Taylor coefficient");
