@@ -202,12 +202,81 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
     static struct line_pnts *BPoints2 = NULL;
     static struct ilist *BList = NULL;
     int area, isle, centr;
+    int node, node_n_lines;
+    float angle1, angle2;
+
+    /* order of tests:
+     * first: fast tests
+     * last: tests that can only be done after writing out the new line  */
 
     if (!BPoints) {
 	BPoints = Vect_new_line_struct();
 	BPoints2 = Vect_new_line_struct();
 	List = Vect_new_boxlist(1);
 	BList = Vect_new_list();
+    }
+
+    if (APoints->n_points == Points->n_points) {
+	int same = 1;
+	
+	for (i = 0; i < APoints->n_points; i++) {
+	    if (APoints->x[i] != Points->x[i] || APoints->y[i] != Points->y[i]) {
+		same = 0;
+		break;
+	    }
+	}
+	if (same)
+	    return 1;
+    }
+
+    /* test node angles
+     * same like dig_build_area_with_line() */
+    /* line start */
+    angle1 = dig_calc_begin_angle(Points, 0);
+    if (angle1 == -9)
+	return 0;
+
+    node = dig_find_node(&(Out->plus), Points->x[0], Points->y[0], Points->z[0]);
+    if (node) {
+	/* if another line exists with the same angle at this node,
+	 * an area can not be constructed -> error */
+	node_n_lines = Vect_get_node_n_lines(Out, node);
+	for (i = 0; i < node_n_lines; i++) {
+
+	    if (abs(Vect_get_node_line(Out, node, i)) == line)
+		continue;
+
+	    if (angle1 == Vect_get_node_line_angle(Out, node, i))
+		return 0;
+	}
+    }
+    
+    /* line end */
+    angle2 = dig_calc_end_angle(Points, 0);
+    if (angle2 == -9)
+	return 0;
+
+    i = Points->n_points - 1;
+    if (angle1 == angle2 && 
+        Points->x[0] == Points->x[i] && Points->y[0] == Points->y[i]) {
+	/* same angle, same start and end coordinates,
+	 * an area can not be constructed -> error */
+	return 0;
+    }
+
+    node = dig_find_node(&(Out->plus), Points->x[i], Points->y[i], Points->z[i]);
+    if (node) {
+	/* if another line exists with the same angle at this node,
+	 * an area can not be constructed -> error */
+	node_n_lines = Vect_get_node_n_lines(Out, node);
+	for (i = 0; i < node_n_lines; i++) {
+
+	    if (abs(Vect_get_node_line(Out, node, i)) == line)
+		continue;
+
+	    if (angle2 == Vect_get_node_line_angle(Out, node, i))
+		return 0;
+	}
     }
 
     Vect_line_box(Points, &box);
@@ -278,6 +347,7 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
     if (intersect)
 	return 0;
 
+    /* the point-in-poly tests are needed to avoid some cases up duplicate centroids */
     Vect_get_line_areas(Out, line, &left_old, &right_old);
 
     Vect_line_box(APoints, &abox);
@@ -291,8 +361,6 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
     }
     if (area > 0)
 	centr = Vect_get_area_centroid(Out, area);
-    if (1) {
-
     if (centr > 0) {
 	int ret;
 	double cx, cy, cz;
@@ -302,7 +370,7 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 	cy = BPoints->y[0];
 	cz = BPoints->z[0];
 	
-	if (Vect_point_in_box(cx, cy, cz, &box) ||
+	if (1 || Vect_point_in_box(cx, cy, cz, &box) ||
 	    Vect_point_in_box(cx, cy, cz, &abox)) {
 
 	    if (isle)
@@ -339,7 +407,6 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 		    return 0;
 	    }
 	}
-    }
     }
     left_old = centr;
 
@@ -352,7 +419,6 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
     }
     if (area > 0)
 	centr = Vect_get_area_centroid(Out, area);
-    if (1) {
     if (centr > 0) {
 	int ret;
 	double cx, cy, cz;
@@ -362,7 +428,7 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 	cy = BPoints->y[0];
 	cz = BPoints->z[0];
 	
-	if (Vect_point_in_box(cx, cy, cz, &box) ||
+	if (1 || Vect_point_in_box(cx, cy, cz, &box) ||
 	    Vect_point_in_box(cx, cy, cz, &abox)) {
 
 	    if (isle)
@@ -399,7 +465,6 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 		    return 0;
 	    }
 	}
-    }
     }
     right_old = centr;
 
@@ -420,6 +485,12 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
     if (left_new != left_old || right_new != right_old) {
 	G_debug(3,
 		"The modified boundary changes attachment of centroid -> not modified");
+
+	G_debug(1, "Left centroid old: %d, new: %d", left_old, left_new);
+	G_debug(1, "Right centroid old: %d, new: %d", right_old, right_new);
+	Vect_get_line_areas(Out, newline, &left_new, &right_new);
+	G_debug(1, "New areas left: %d, right: %d", left_new, right_new);
+
 	Vect_rewrite_line(Out, newline, GV_BOUNDARY, APoints, Cats);
 	return 0;
     }
