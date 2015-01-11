@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
     D_open_driver();
     
     if (rflag->answer || dflag->answer || fflag->answer)
-	D_get_window(&t, &b, &l, &r);
+	D_get_frame(&t, &b, &l, &r);
 
 
     if (rflag->answer)
