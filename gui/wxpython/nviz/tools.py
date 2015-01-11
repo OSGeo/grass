@@ -560,7 +560,7 @@ class NvizToolWindow(FN.FlatNotebook):
         self.EnablePage("vector", enabled = False)
         
         # volume page
-        volumePanel = self.foldpanelData.AddFoldPanel(_("Volume"), collapsed = True)
+        volumePanel = self.foldpanelData.AddFoldPanel(_("3D raster"), collapsed=True)
         self.foldpanelData.AddFoldPanelWindow(volumePanel,
             window = self._createVolumePage(parent = volumePanel), flags = fpb.FPB_ALIGN_WIDTH)
         self.EnablePage("volume", enabled = False)
