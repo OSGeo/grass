@@ -194,6 +194,9 @@ r.basins.fill|t_map:tnetwork
 r.basins.fill|result:output
 # r.blend
 r.blend|output_prefix:output
+# r.carve
+r.carve|rast:raster
+r.carve|vect:vector
 # r.category
 r.category|vals:values
 # r.circle
@@ -230,8 +233,8 @@ r.flow|elevin:elevation
 r.flow|aspin:aspect
 r.flow|barin:barrier
 r.flow|flout:flowline
-r.flow|lgout:flowpath
-r.flow|dsout:density
+r.flow|lgout:flowlength
+r.flow|dsout:flowaccumulation
 # r.his
 r.his|h_map:hue
 r.his|i_map:intensity
@@ -284,9 +287,13 @@ r.plane|name:output
 r.profile|null:null_value
 # r.random
 r.random|raster_output:raster
+r.random|n:npoints
 r.random|vector_output:vector
 # r.reclass.area
 r.reclass.area|lesser,greater:value, mode
+# r.regression.line
+r.regression.line|map1:mapx
+r.regression.line|map2:mapy
 # r.report
 r.report|pl:page_length
 r.report|pw:page_width
@@ -303,69 +310,70 @@ r.resamp.rst|zmult:zscale
 # r.rgb
 r.rgb:|output_prefix:output
 # r.sim.sediment
-r.sim.sediment|elevin:elevation
+r.sim.sediment|conc:sediment_concentration
+r.sim.sediment|detin:detachment_coeff
+r.sim.sediment|diffc:diffusion_coeff
 r.sim.sediment|dxin:dx
 r.sim.sediment|dyin:dy
-r.sim.sediment|wdepth:water_depth
-r.sim.sediment|detin:detachment_coeff
-r.sim.sediment|tranin:transport_coeff
-r.sim.sediment|tauin:shear_stress
-r.sim.sediment|manin:man
-r.sim.sediment|flux:sediment_flux
-r.sim.sediment|maninval:man_value
-r.sim.sediment|outwalk:walkers_output
-r.sim.sediment|tc:transport_capacity
-r.sim.sediment|et:tlimit_erosion_deposition
-r.sim.sediment|conc:sediment_concentration
+r.sim.sediment|elevin:elevation
 r.sim.sediment|erdep:erosion_deposition
+r.sim.sediment|et:tlimit_erosion_deposition
+r.sim.sediment|flux:sediment_flux
+r.sim.sediment|manin:man
+r.sim.sediment|maninval:man_value
 r.sim.sediment|nwalk:nwalkers
 r.sim.sediment|niter:niterations
 r.sim.sediment|outiter:output_step
-r.sim.sediment|diffc:diffusion_coeff
+r.sim.sediment|outwalk:walkers_output
+r.sim.sediment|tauin:shear_stress
+r.sim.sediment|tc:transport_capacity
+r.sim.sediment|tranin:transport_coeff
+r.sim.sediment|wdepth:water_depth
 # r.sim.water
-r.sim.water|elevin:elevation
+r.sim.water|diffc:diffusion_coeff
+r.sim.water|disch:discharge
 r.sim.water|dxin:dx
 r.sim.water|dyin:dy
-r.sim.water|rain_val:rain_value
+r.sim.water|elevin:elevation
+r.sim.water|err:error
 r.sim.water|infil:infil
 r.sim.water|infil_val:infil_value
 r.sim.water|manin:man
 r.sim.water|manin_val:man_value
-r.sim.water|traps:flow_control
-r.sim.water|disch:discharge
-r.sim.water|err:error
-r.sim.water|outwalk:walkers_output
-r.sim.water|nwalk:nwalkers
 r.sim.water|niter:niterations
+r.sim.water|nwalk:nwalkers
 r.sim.water|outiter:output_step
-r.sim.water|diffc:diffusion_coeff
+r.sim.water|outwalk:walkers_output
+r.sim.water|rain_val:rain_value
+r.sim.water|traps:flow_control
 # r.slope.aspect
+r.slope.aspect|min_slp_allowed:min_slope
 r.slope.aspect|pcurv:pcurvature
+r.slope.aspect|prec:precision
 r.slope.aspect|tcurv:tcurvature
 r.slope.aspect|zfactor:zscale
-r.slope.aspect|min_slp_allowed:min_slope
 # r.spreadpath
 r.spreadpath|coordinate:coordinates
 # r.stream.extract
 r.stream.extract|stream_rast:stream_raster
 r.stream.extract|stream_vect:stream_vector
 # r.sun
-r.sun|elevin:elevation
-r.sun|aspin:aspect
-r.sun|slopein:slope
-r.sun|linkein:linke
-r.sun|lin:linke_value
-r.sun|albin:albedo
 r.sun|alb:albedo_value
-r.sun|latin:lat
-r.sun|longin:long
+r.sun|albin:albedo
+r.sun|aspin:aspect
+r.sun|civiltime:civil_time
 r.sun|coefbh:coeff_bh
 r.sun|coefdh:coeff_dh
-r.sun|horizonstep:horizon_step
 r.sun|declin:declination
 r.sun|dist:distance_step
+r.sun|elevin:elevation
+r.sun|horizonstep:horizon_step
+r.sun|latin:lat
+r.sun|lin:linke_value
+r.sun|linkein:linke
+r.sun|longin:long
 r.sun|numpartitions:npartitions
-r.sun|civiltime:civil_time
+r.sun|slopein:slope
 # r.surf.area
 r.surf.area|input:map
 # r.terraflow
@@ -396,8 +404,8 @@ r.water.outlet|basin:output
 r.watershed|disturbed.land:disturbed_land
 r.watershed|half.basin:half_basin
 r.watershed|length.slope:length_slope
-r.watershed|slope.steepness:slope_steepness
 r.watershed|max.slope.length:max_slope_length
+r.watershed|slope.steepness:slope_steepness
 # r.what
 r.what|east_north:coordinates
 # r.viewshed
@@ -440,15 +448,17 @@ v.buffer|bufcolumn:column
 v.clean|thresh:threshold
 # v.colors
 v.colors|volume:raster_3d
-# v.drape
 # v.db.join
 v.db.join|otable:other_table
 v.db.join|ocolumn:other_column
 v.db.join|scolumns:subset_columns
 # v.db.select
-v.db.select|vs:vertical separator
+v.db.select|nv:null_value
+v.db.select|vs:vertical_separator
 # v.db.update
 v.db.update|qcolumn:query_column
+v.drape|rast:elevation
+# v.drape
 v.drape|rast:elevation
 # v.edit
 v.edit|measure:method
@@ -467,7 +477,9 @@ v.in.ogr|dsn:input
 v.in.ogr|cnames:columns
 # v.in.wfs
 v.in.wfs|wfs:url
-v.in.wfs|input:map
+# v.kcv
+v.kcv|input:map
+v.kcv|k:npartitions
 # v.label
 v.label|background:bgcolor
 v.label|hcolor:highlight_color
@@ -606,9 +618,12 @@ v.out.vtk|scale:zscale
 # v.outlier
 v.outlier|soe:ew_step
 v.outlier|son:ns_step
+v.outlier|thres_o:threshold
 # v.qcount
-v.qcount|n:nquadrants
+v.qcount|n:nquadrats
 v.qcount|r:radius
+# v.random
+v.random|n:npoints
 # v.rast.stats
 v.rast.stats|colprefix:column_prefix
 v.rast.stats|input:map
@@ -621,6 +636,8 @@ v.support|thresh:threshold
 # v.surf.bspline
 v.surf.bspline|sie:ew_step
 v.surf.bspline|sin:ns_step
+v.surf.bspline|raster:raster_output
+v.surf.bspline|sparse:sparse_input
 # v.surf.rst
 v.surf.rst|devi:deviations
 v.surf.rst|elev:elevation
