@@ -9,7 +9,7 @@
  *               Hamish Bowman <hamish_b yahoo com>
  *               Martin Landa <landa.martin gmail.com> ('d' flag)
  * PURPOSE:      set parameters for connection to database
- * COPYRIGHT:    (C) 2002-2013 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -23,12 +23,11 @@
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
 
-/* database for DBF can be written with variables:
- *   database=$GISDBASE/$LOCATION_NAME/$MAPSET/dbf
- */
+static char *substitute_variables(dbConnection *);
 
 int main(int argc, char *argv[])
 {
+    char *databaseName;
     dbConnection conn;
     struct Flag *print, *shell, *check_set_default, *def;
 
@@ -93,7 +92,7 @@ int main(int argc, char *argv[])
 			   "select privilege is granted");
     group->guisection = _("Set");
 
-    /* commented due to new mechanism:
+    /* commented due to new mechanism - see db.login
        user = G_define_option() ;
        user->key        = "user" ;
        user->type       = TYPE_STRING ;
@@ -125,54 +124,14 @@ int main(int argc, char *argv[])
                 fprintf(stdout, "group=%s\n", conn.group ? conn.group : "");
             }
             else {
-                char database[GPATH_MAX];
+                databaseName = substitute_variables(&conn);
                 
-                if (conn.databaseName) {
-                    char *c, buf[GPATH_MAX];
-                    
-                    strcpy(database, conn.databaseName);
-                    
-                    strcpy(buf, database);
-                    c = (char *)strstr(buf, "$GISDBASE");
-                    if (c != NULL) {
-                        *c = '\0';
-                        sprintf(database, "%s%s%s", buf, G_gisdbase(), c + 9);
-                    }
-                    
-                    strcpy(buf, database);
-                    c = (char *)strstr(buf, "$LOCATION_NAME");
-                    if (c != NULL) {
-                        *c = '\0';
-                        sprintf(database, "%s%s%s", buf, G_location(), c + 14);
-                    }
-
-                    strcpy(buf, database);
-                    c = (char *)strstr(buf, "$MAPSET");
-                    if (c != NULL) {
-                        *c = '\0';
-                        sprintf(database, "%s%s%s", buf, G_mapset(), c + 7);
-                    }
-#ifdef __MINGW32__
-                    if (strcmp(conn.driverName, "sqlite") == 0 ||
-                        strcmp(conn.driverName, "dbf") == 0) {
-                        char *p;
-                        p = database;
-                        while(*p) {
-                            if (*p == '/')
-                                *p = HOST_DIRSEP;
-                            p++;
-                        }
-                    }
-#endif
-                }
-                else {
-                    database[0] = '\0';
-                }
-                    
                 fprintf(stdout, "driver: %s\n",
                         conn.driverName ? conn.driverName : "");
                 /* substitute variables */
-                fprintf(stdout, "database: %s\n", database);
+                fprintf(stdout, "database: %s\n", databaseName);
+                G_free(database);
+                
                 fprintf(stdout, "schema: %s\n",
                         conn.schemaName ? conn.schemaName : "");
                 fprintf(stdout, "group: %s\n", conn.group ? conn.group : "");
@@ -198,16 +157,21 @@ int main(int argc, char *argv[])
 	    db_set_default_connection();
 	    db_get_connection(&conn);
 
+            databaseName = substitute_variables(&conn);
 	    G_important_message(_("Default driver / database set to:\n"
 				  "driver: %s\ndatabase: %s"), conn.driverName,
-				conn.databaseName);
+				databaseName);
 	}
+        else {
+            G_important_message(_("DB settings already defined, nothing to do"));
+        }
+        
 	/* they must be a matched pair, so if one is set but not the other
 	   then give up and let the user figure it out */
-	else if (!conn.driverName) {
+	if (!conn.driverName) {
 	    G_fatal_error(_("Default driver is not set"));
 	}
-	else if (!conn.databaseName) {
+	if (!conn.databaseName) {
 	    G_fatal_error(_("Default database is not set"));
 	}
 
@@ -220,9 +184,10 @@ int main(int argc, char *argv[])
 	db_set_default_connection();
 	db_get_connection(&conn);
 	
+        databaseName = substitute_variables(&conn);
 	G_important_message(_("Default driver / database set to:\n"
 			      "driver: %s\ndatabase: %s"), conn.driverName,
-			    conn.databaseName);
+			    databaseName);
 	exit(EXIT_SUCCESS);
     }
     
@@ -245,4 +210,50 @@ int main(int argc, char *argv[])
 
 
     exit(EXIT_SUCCESS);
+}
+
+char *substitute_variables(dbConnection *conn)
+{
+    char *database, *c, buf[GPATH_MAX];
+
+    if (!conn->databaseName)
+        return NULL;
+
+    database = (char *) G_malloc(GPATH_MAX);
+    strcpy(database, conn->databaseName);
+    
+    strcpy(buf, database);
+    c = (char *)strstr(buf, "$GISDBASE");
+    if (c != NULL) {
+        *c = '\0';
+        sprintf(database, "%s%s%s", buf, G_gisdbase(), c + 9);
+    }
+    
+    strcpy(buf, database);
+    c = (char *)strstr(buf, "$LOCATION_NAME");
+    if (c != NULL) {
+        *c = '\0';
+        sprintf(database, "%s%s%s", buf, G_location(), c + 14);
+    }
+    
+    strcpy(buf, database);
+    c = (char *)strstr(buf, "$MAPSET");
+    if (c != NULL) {
+        *c = '\0';
+        sprintf(database, "%s%s%s", buf, G_mapset(), c + 7);
+    }
+#ifdef __MINGW32__
+    if (strcmp(conn->driverName, "sqlite") == 0 ||
+        strcmp(conn->driverName, "dbf") == 0) {
+        char *p;
+        p = database;
+        while(*p) {
+            if (*p == '/')
+                *p = HOST_DIRSEP;
+            p++;
+        }
+    }
+#endif
+
+    return database;
 }
