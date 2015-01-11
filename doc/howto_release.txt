@@ -228,6 +228,7 @@ Contents
    http://groups.google.com/group/Remote-Sensing-GIS-for-a-New-World
    http://groups.google.com/group/comp.infosystems.gis
    http://www.heise.de/software/download/edit_7105 (update, MN)
+   https://joinup.ec.europa.eu/ --> Sharing content | Propose your...
 
    See also: http://grass.osgeo.org/wiki/Contact_Databases
    ... anywhere else? Please add here.
