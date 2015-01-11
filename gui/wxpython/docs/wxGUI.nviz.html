@@ -8,10 +8,10 @@ all planned functionality is already implemented.</b>
 <p>
 <b>wxNviz</b> is a <em><a href="wxGUI.html">wxGUI</a></em> <b>3D view
 mode</b> which allows users to realistically render multiple
-<em>surfaces</em> (raster data) in a 3D space, optionally using
-thematic coloring, draping 2D <em>vector</em> data over the surfaces,
-displaying 3D vector data in the space, and visualization
-of <em>volume</em> data (3D raster data).
+<em>surfaces</em> (2D raster maps) in a 3D space, optionally using
+thematic coloring, draping 2D <em>vector</em> data or different 2D raster data
+over the surfaces, displaying 3D vector data in the space, and visualization
+of <em>3D rasters</em>.
 
 <p>
 To start the wxGUI 3D view mode, choose '3D view' from the map
@@ -120,7 +120,7 @@ viewpoint is changed (not the direction).
 <h3>Data properties</h3> 
 This tab controls the parameters related to map layers. It consists
 of four collapsible panels - <em>Surface</em>, <em>Constant surface</em>, 
-<em>Vector</em> and <em>Volume</em>.
+<em>Vector</em> and <em>3D raster</em>.
 
 <h4>Surface</h4>
 
@@ -240,20 +240,21 @@ Thematic mapping can be used to determine marker color and size
   <br><img src="wxGUI_nviz_tools_vector.jpg" border="1" alt="toolbox"><br><br>
 </center>
 
-<h4>Volume</h4>
+<h4>3D rasters</h4>
 
-Volumes (3D raster maps) can be displayed either as isosurfaces or slices.
+3D raster maps (volumes, voxel models) can be displayed either as isosurfaces
+or slices.
 Similarly to surface panel you can define draw <b>shading</b> -
-<em>gouraud</em> (draws the volumes with a smooth shading to blend
-individual cell colors together) and <em>flat</em> (draws the volumes with
-flat shading with one color for every two cells. The volume appears
+<em>gouraud</em> (draws the 3D rasters with a smooth shading to blend
+individual cell colors together) and <em>flat</em> (draws the 3D rasters with
+flat shading with one color for every two cells. The 3D raster appears
 faceted). As mentioned above currently are supported two visualization
 modes:
 
 <ul>
   <li><b>isosurface</b> - the levels of values for drawing the
-  volume(s) as isosurfaces,</li>
-  <li>and <b>slice</b> -  drawing the volume
+  3D raster(s) as isosurfaces,</li>
+  <li>and <b>slice</b> -  drawing the 3D raster
   as cross-sections.</li>
 </ul>
 <p>
@@ -268,23 +269,23 @@ attributes:
   <li><b>isosurface value</b> - reference isosurface value (height in map
   units).</li>
   <li><b>color</b> - raster map or constant color to drape over the
-  current volume.</li>
+  current 3D raster.</li>
   <li><b>mask</b> - raster map that controls the areas displayed from
-    the current volume.</li>
+    the current 3D raster.</li>
   <li><b>transparency</b> - raster map or constant value that controls
-    the transparency of the current volume. The default is completely
+    the transparency of the current 3D raster. The default is completely
     opaque. Range from 0 (opaque) to 100 (transparent).</li>
   <li><b>shininess</b> - raster map or constant value that controls
-    the shininess (reflectivity) of the current volume. Range from 0 to
+    the shininess (reflectivity) of the current 3D raster. Range from 0 to
     100.</li>
 </ul>
 
-In case of volume slice the bottom part of the panel controls the slice 
+In case of 3D raster slice the bottom part of the panel controls the slice 
 attributes (which axis is slice parallel to, position of slice edges,
 transparency). Press button <em>Reset</em> to reset slice position
 attributes.
 <p>
-Volumes can be moved the same way like surfaces do.
+3D rasters can be moved the same way like surfaces do.
 
 <center>
   <br><img src="wxGUI_nviz_tools_volume.jpg" border="1" alt="toolbox"><br><br>
@@ -350,7 +351,7 @@ smooth motion.
 <h2>Settings</h2>
 
 This panel has controls which allows user to set default surface,
-vector and volume data attributes. You can also modify default view
+vector and 3D raster data attributes. You can also modify default view
 parameters, or to set the background color of the Map Display Window
 (the default color is white).
 
