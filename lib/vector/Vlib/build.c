@@ -475,7 +475,6 @@ int Vect_attach_centroids(struct Map_info *Map, const struct bound_box * box)
     int i, sel_area, centr;
     static int first = 1;
     static struct boxlist *List;
-    static struct line_pnts *Points;
     struct P_area *Area;
     struct P_line *Line;
     struct P_topo_c *topo;
@@ -486,15 +485,13 @@ int Vect_attach_centroids(struct Map_info *Map, const struct bound_box * box)
     plus = &(Map->plus);
 
     if (first) {
-	List = Vect_new_boxlist(0);
-	Points = Vect_new_line_struct();
+	List = Vect_new_boxlist(1);
 	first = 0;
     }
 
     Vect_select_lines_by_box(Map, box, GV_CENTROID, List);
     G_debug(3, "\tnumber of centroids to reattach = %d", List->n_values);
     for (i = 0; i < List->n_values; i++) {
-	int orig_area;
 
 	centr = List->id[i];
 	Line = plus->Line[centr];
@@ -508,26 +505,7 @@ int Vect_attach_centroids(struct Map_info *Map, const struct bound_box * box)
 	if (topo->area > 0)
 	    continue;
 
-	orig_area = topo->area;
-
-	Vect_read_line(Map, Points, NULL, centr);
-	if (Points->n_points < 1) {
-	    /* try to get centroid from spatial index (OGR layers) */
-	    int found;
-	    struct boxlist list;
-	    dig_init_boxlist(&list, TRUE);
-	    Vect_select_lines_by_box(Map, box, GV_CENTROID, &list);
-
-	    found = 0;
-	    for (i = 0; i < list.n_values; i++) {
-		if (list.id[i] == centr) {
-		    found = i;
-		    break;
-		}
-	    }
-	    Vect_append_point(Points, list.box[found].E, list.box[found].N, 0.0);
-	}
-	sel_area = Vect_find_area(Map, Points->x[0], Points->y[0]);
+	sel_area = Vect_find_area(Map, List->box[i].E, List->box[i].N);
 	G_debug(3, "\tcentroid %d is in area %d", centr, sel_area);
 	if (sel_area > 0) {
 	    Area = plus->Area[sel_area];
