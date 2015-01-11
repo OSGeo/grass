@@ -72,7 +72,7 @@
     <label>Raster map calculator</label>
     <handler>OnMapCalculator</handler>
     <related-module>r.mapcalc</related-module>
-    <description>Raster map calculator.</description>
+    <description>Raster map calculator</description>
     <keywords>raster,algebra</keywords>
   </wxgui-item>
   <wxgui-item name="Histogram">
@@ -81,10 +81,10 @@
     <description>Generate histogram of image</description>
   </wxgui-item>
   <wxgui-item name="VolumeCalculator">
-    <label>Volume calculator</label>
+    <label>3D raster map calculator</label>
     <handler>OnMapCalculator</handler>
     <related-module>r3.mapcalc</related-module>
-    <description>3D raster map calculator.</description>
+    <description>3D raster map calculator</description>
     <keywords>raster,algebra</keywords>
   </wxgui-item>
   <wxgui-item name="GRASSHelp">

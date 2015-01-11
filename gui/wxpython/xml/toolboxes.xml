@@ -154,7 +154,7 @@
     </items>
   </toolbox>
   <toolbox name="Volumes">
-    <label>V&amp;olumes</label>
+    <label>3D r&amp;asters</label>
     <items>
       <subtoolbox name="DevelopVolumes"/>
       <subtoolbox name="Raster3dMapTypeConversions"/>
@@ -167,7 +167,7 @@
       </module-item>
       <separator/>
       <module-item name="r3.mask">
-        <label>3D Mask</label>
+        <label>3D mask</label>
       </module-item>
       <wxgui-item name="VolumeCalculator"/>
       <module-item name="r3.cross.rast">
@@ -177,7 +177,7 @@
         <label>Groundwater modeling</label>
       </module-item>
       <module-item name="v.vol.rst">
-        <label>Interpolate volume from points</label>
+        <label>Interpolate 3D raster from points</label>
       </module-item>
       <separator/>
       <subtoolbox name="Raster3dReportsAndStatistics"/>
@@ -515,24 +515,24 @@
         <label>Raster to vector</label>
       </module-item>
       <module-item name="r.to.rast3">
-        <label>Raster series to volume</label>
+        <label>Raster series to 3D raster</label>
       </module-item>
       <module-item name="r.to.rast3elev">
-        <label>Raster 2.5D to volume</label>
+        <label>Raster 2.5D to 3D raster</label>
       </module-item>
       <separator/>
       <module-item name="v.to.rast">
         <label>Vector to raster</label>
       </module-item>
       <module-item name="v.to.rast3">
-        <label>Vector to volume</label>
+        <label>Vector to 3D raster</label>
       </module-item>
       <module-item name="v.to.3d">
         <label>2D vector to 3D vector</label>
       </module-item>
       <separator/>
       <module-item name="r3.to.rast">
-        <label>Volume to raster series</label>
+        <label>3D raster to raster series</label>
       </module-item>
     </items>
   </toolbox>
@@ -708,10 +708,10 @@
         <label>Raster to vector</label>
       </module-item>
       <module-item name="r.to.rast3">
-        <label>Raster series to volume</label>
+        <label>Raster series to 3D raster</label>
       </module-item>
       <module-item name="r.to.rast3elev">
-        <label>Raster 2.5D to volume</label>
+        <label>Raster 2.5D to 3D raster</label>
       </module-item>
     </items>
   </toolbox>
@@ -1228,7 +1228,7 @@
         <label>Vector to raster</label>
       </module-item>
       <module-item name="v.to.rast3">
-        <label>Vector to volume</label>
+        <label>Vector to 3D raster</label>
       </module-item>
       <module-item name="v.to.3d">
         <label>2D vector to 3D vector</label>
@@ -1620,7 +1620,7 @@
     </items>
   </toolbox>
   <toolbox name="DevelopVolumes">
-    <label>Develop volumes</label>
+    <label>Develop 3D rasters</label>
     <items>
       <module-item name="r3.null">
         <label>Manage 3D NULL values</label>
@@ -1634,7 +1634,7 @@
     <label>Map type conversions</label>
     <items>
       <module-item name="r3.to.rast">
-        <label>Volume to raster series</label>
+        <label>3D rasters to raster series</label>
       </module-item>
     </items>
   </toolbox>
@@ -1642,13 +1642,13 @@
     <label>Reports and Statistics</label>
     <items>
       <module-item name="r3.info">
-        <label>Basic volume metadata</label>
+        <label>Basic 3D raster metadata</label>
       </module-item>
       <module-item name="r3.stats">
-        <label>Voxel statistics</label>
+        <label>3D raster statistics</label>
       </module-item>
       <module-item name="r3.univar">
-        <label>Univariate statistics for volumes</label>
+        <label>Univariate statistics for 3D rasters</label>
       </module-item>
     </items>
   </toolbox>
@@ -1758,7 +1758,7 @@
     </items>
   </toolbox>
   <toolbox name="Temporal">
-    <label>Temporal</label>
+    <label>&amp;Temporal</label>
     <items>
       <subtoolbox name="TemporalManageDatasets"/>
       <subtoolbox name="TemporalManageMapsInDatasets"/>
@@ -1766,7 +1766,7 @@
       <subtoolbox name="TemporalImport"/>
       <subtoolbox name="TemporalExport"/>
       <module-item name="t.rast.to.rast3">
-        <label>Convert raster dataset to volume</label>
+        <label>Convert raster dataset to 3D raster</label>
       </module-item>
       <separator/>
       <subtoolbox name="TemporalExtraction"/>
