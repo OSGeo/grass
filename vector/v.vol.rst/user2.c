@@ -30,6 +30,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
 
 #include "oct.h"
 #include "surf.h"
@@ -116,12 +117,14 @@ int interp_call(struct octtree *root, struct octtree *tree)
 	    if (!
 		(points =
 		 (struct quadruple *)G_malloc(sizeof(struct quadruple) *
-					      (KMAX2 + 1))))
-		clean_fatal_error("Not enough memory for points");
+					      (KMAX2 + 1)))) {
+		clean();
+		G_fatal_error(_("Not enough memory for %s"), "points");
+	    }
 	}
 
 	/*           if(!(point=(struct point_3d*)G_malloc(sizeof(struct point_3d)*(KMAX2+1))))
-	   clean_fatal_error("Not enough memory for points"); */
+	   {clean(); G_fatal_error("Not enough memory for points");} */
 
 
 	distx = (((struct octdata *)(tree->data))->n_cols * ew_res) * 0.1;
@@ -206,23 +209,28 @@ int interp_call(struct octtree *root, struct octtree *tree)
 		    (A =
 		     (double *)G_malloc(sizeof(double) *
 					((KMAX2 + 1) * (KMAX2 + 2) + 1)))) {
-		    clean_fatal_error("Cannot allocate A");
+		    clean();
+		    G_fatal_error(_("Cannot allocate A"));
 		}
 		if (!(b = (double *)G_malloc(sizeof(double) * (KMAX2 + 2)))) {
-		    clean_fatal_error("Cannot allocate b");
+		    clean();
+		    G_fatal_error(_("Cannot allocate b"));
 		}
 		if (!(w = (double *)G_malloc(sizeof(double) * (KMAX2 + 1)))) {
-		    clean_fatal_error("Cannot allocate w");
+		    clean();
+		    G_fatal_error(_("Cannot allocate w"));
 		}
 	    }
 	}
 
 	/*      if(!(points=(struct quadruple*)G_malloc(sizeof(struct quadruple)*(npt))))
-	   clean_fatal_error("Not enough memory for points"); */
+	   {clean(); G_fatal_error("Not enough memory for points");} */
 	if (!
 	    (point =
-	     (struct point_3d *)G_malloc(sizeof(struct point_3d) * (npt))))
-	    clean_fatal_error("Not enough memory for points");
+	     (struct point_3d *)G_malloc(sizeof(struct point_3d) * (npt)))) {
+	    clean();
+	    G_fatal_error(_("Not enough memory for %s"), "point");
+	}
 
 	/* cv stuff */
 

@@ -35,6 +35,7 @@
 #include <grass/raster.h>
 #include <grass/vector.h>
 #include <grass/dbmi.h>
+#include <grass/glocale.h>
 
 #include "oct.h"
 #include "surf.h"
@@ -267,16 +268,22 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
     stepiz = tb_res / dnorm;
 
     if (!w2) {
-	if (!(w2 = (double *)G_malloc(sizeof(double) * (KMAX2 + 1))))
-	    clean_fatal_error("Cannot allocate w2");
+	if (!(w2 = (double *)G_malloc(sizeof(double) * (KMAX2 + 1)))) {
+	    clean();
+	    G_fatal_error(_("Not enough memory for %s"), "w2");
+	}
     }
     if (!wz2) {
-	if (!(wz2 = (double *)G_malloc(sizeof(double) * (KMAX2 + 1))))
-	    clean_fatal_error("Cannot allocate wz2");
+	if (!(wz2 = (double *)G_malloc(sizeof(double) * (KMAX2 + 1)))) {
+	    clean();
+	    G_fatal_error(_("Not enough memory for %s"), "wz2");
+	}
     }
     if (!wz1) {
-	if (!(wz1 = (double *)G_malloc(sizeof(double) * (KMAX2 + 1))))
-	    clean_fatal_error("Cannot allocate wz1");
+	if (!(wz1 = (double *)G_malloc(sizeof(double) * (KMAX2 + 1)))) {
+	    clean();
+	    G_fatal_error(_("Not enough memory for %s"), "wz1");
+	}
     }
 
     if (cell == NULL)
@@ -535,8 +542,10 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
 			(aspect2 != NULL)
 			|| (ncurv != NULL) || (gcurv != NULL) ||
 			(mcurv != NULL))
-			if (!(secpar_loop(ngstc, nszc, l)))
-			    clean_fatal_error("Secpar_loop failed");
+			if (!(secpar_loop(ngstc, nszc, l))) {
+			    clean();
+			    G_fatal_error(_("Secpar_loop failed"));
+			}
 		    if ((cellinp != NULL) && (cellout != NULL) &&
 			(i == ngstl)) {
 			zero_array_cell[l - 1] = (FCELL) (wwcell);
@@ -572,72 +581,88 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
 		    if (!
 			(fwrite
 			 (zero_array_cell + ind1, sizeof(FCELL),
-			  nszc - ngstc + 1, Tmp_fd_cell)))
-			clean_fatal_error
-			    ("Not enough disk space--cannot write files");
+			  nszc - ngstc + 1, Tmp_fd_cell))) {
+			clean();
+			G_fatal_error
+			    (_("Not enough disk space--cannot write files"));
+		    }
 		}
 		if (outz != NULL) {
 		    G_fseek(Tmp_fd_z, (off_t)(offset2 * sizeof(float)), 0);
 		    if (!
 			(fwrite
 			 (zero_array1 + ind1, sizeof(float), nszc - ngstc + 1,
-			  Tmp_fd_z)))
-			clean_fatal_error
-			    ("Not enough disk space--cannot write files");
+			  Tmp_fd_z))) {
+			clean();
+			G_fatal_error
+			    (_("Not enough disk space--cannot write files"));
+		    }
 		}
 		if (gradient != NULL) {
 		    G_fseek(Tmp_fd_dx, (off_t)(offset2 * sizeof(float)), 0);
 		    if (!
 			(fwrite
 			 (zero_array2 + ind1, sizeof(float), nszc - ngstc + 1,
-			  Tmp_fd_dx)))
-			clean_fatal_error
-			    ("Not enough disk space--cannot write files");
+			  Tmp_fd_dx))) {
+			clean();
+			G_fatal_error
+			    (_("Not enough disk space--cannot write files"));
+		    }
 		}
 		if (aspect1 != NULL) {
 		    G_fseek(Tmp_fd_dy, (off_t)(offset2 * sizeof(float)), 0);
 		    if (!
 			(fwrite
 			 (zero_array3 + ind1, sizeof(float), nszc - ngstc + 1,
-			  Tmp_fd_dy)))
-			clean_fatal_error
-			    ("Not enough disk space--cannot write files");
+			  Tmp_fd_dy))) {
+			clean();
+			G_fatal_error
+			    (_("Not enough disk space--cannot write files"));
+		    }
 		}
 		if (aspect2 != NULL) {
 		    G_fseek(Tmp_fd_dz, (off_t)(offset2 * sizeof(float)), 0);
 		    if (!
 			(fwrite
 			 (zero_array4 + ind1, sizeof(float), nszc - ngstc + 1,
-			  Tmp_fd_dz)))
-			clean_fatal_error
-			    ("Not enough disk space--cannot write files");
+			  Tmp_fd_dz))) {
+			clean();
+			G_fatal_error
+			    (_("Not enough disk space--cannot write files"));
+		    }
 		}
 		if (ncurv != NULL) {
 		    G_fseek(Tmp_fd_xx, (off_t)(offset2 * sizeof(float)), 0);
 		    if (!
 			(fwrite
 			 (zero_array5 + ind1, sizeof(float), nszc - ngstc + 1,
-			  Tmp_fd_xx)))
-			clean_fatal_error
-			    ("Not enough disk space--cannot write files");
+			  Tmp_fd_xx))) {
+			clean();
+			G_fatal_error
+			    (_("Not enough disk space--cannot write files"));
+		    }
 		}
 		if (gcurv != NULL) {
 		    G_fseek(Tmp_fd_yy, (off_t)(offset2 * sizeof(float)), 0);
 		    if (!
 			(fwrite
 			 (zero_array6 + ind1, sizeof(float), nszc - ngstc + 1,
-			  Tmp_fd_yy)))
-			clean_fatal_error
-			    ("Not enough disk space--cannot write files");
+			  Tmp_fd_yy))) {
+			clean();
+			G_fatal_error
+			    (_("Not enough disk space--cannot write files"));
+		    }
 		}
 		if (mcurv != NULL) {
 		    G_fseek(Tmp_fd_xy, (off_t)(offset2 * sizeof(float)), 0);
 		    if (!
 			(fwrite
 			 (zero_array7 + ind1, sizeof(float), nszc - ngstc + 1,
-			  Tmp_fd_xy)))
-			clean_fatal_error
-			    ("Not enough disk space--cannot write files");
+			  Tmp_fd_xy))) {
+			clean();
+			G_fatal_error
+			    (_("Not enough disk space--cannot write files"));
+		    }
 		}
 
 	    }
