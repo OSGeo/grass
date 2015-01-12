@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
     memory->required = NO;
     memory->multiple = NO;
     memory->answer = "300";
-    memory->label = _("Cache size (MiB)");
+    memory->label = _("Maximum memory to be used (in MB)");
     memory->description = _("Cache size for raster rows");
 
     dense_flag = G_define_flag();
@@ -164,7 +164,7 @@ int main(int argc, char *argv[])
     }
 
     value = atof(val_opt->answer);
-    value_type = (strchr(val_opt->answer, '.')) ? USE_DCELL : USE_CELL;
+    value_type = (strchr(val_opt->answer, '.')) ? DCELL_TYPE : CELL_TYPE;
 
     if (vect_to_rast(input->answer, output->answer, field_opt->answer,
 		     col->answer, cache_mb, use, value, value_type,
