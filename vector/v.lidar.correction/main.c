@@ -1,24 +1,24 @@
 
 /********************************************************************
- *								    *
- * MODULE:       v.lidar.correction				    *
- * 								    *
- * AUTHOR(S):    Roberto Antolin & Gonzalo Moreno                   *
- *               general update Markus Metz      		    *
- *               						    *
- * PURPOSE:      Correction of the v.growing output		    *
- *               						    *
- * COPYRIGHT:    (C) 2005 by Politecnico di Milano - 		    *
- *			     Polo Regionale di Como		    *
- *								    *
- *               This program is free software under the 	    *
- *               GNU General Public License (>=v2). 		    *
- *               Read the file COPYING that comes with GRASS	    *
- *               for details.					    *
- *								    *
- ********************************************************************/
+ *
+ * MODULE:       v.lidar.correction
+ *
+ * AUTHOR(S):    Roberto Antolin & Gonzalo Moreno
+ *               general update Markus Metz
+ *
+ * PURPOSE:      Correction of the v.growing output
+ *
+ * COPYRIGHT:    (C) 2005 by Politecnico di Milano -
+ *			     Polo Regionale di Como
+ *
+ *               This program is free software under the
+ *               GNU General Public License (>=v2).
+ *               Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ **********************************************************************/
 
- /*INCLUDES*/
+/* INCLUDES */
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
@@ -28,14 +28,14 @@
 int main(int argc, char *argv[])
 {
     /* Declarations */
-    int dim_vect, nparameters, BW, npoints, nrows, ncols;
+    int dim_vect, nparameters, BW, npoints;
     int nsply, nsplx, nsplx_adj, nsply_adj;
     int nsubregion_col, nsubregion_row;
     int subregion = 0, nsubregions = 0;
     const char *dvr, *db, *mapset;
     char table_name[GNAME_MAX];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
-    double lambda, ew_resol, ns_resol, mean, stepN, stepE, HighThresh,
+    double lambda, mean, stepN, stepE, HighThresh,
 	LowThresh;
     double N_extension, E_extension, edgeE, edgeN;
 
@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("LIDAR"));
     module->description =
-	_("Correction of the v.lidar.growing output. It is the last of the three algorithms for LIDAR filtering.");
+	_("Corrects the v.lidar.growing output. It is the last of the three algorithms for LIDAR filtering.");
 
     spline_step_flag = G_define_flag();
     spline_step_flag->key = 'e';
@@ -93,20 +93,22 @@ int main(int argc, char *argv[])
 	_("Only 'terrain' points output vector map");
 
     stepE_opt = G_define_option();
-    stepE_opt->key = "sce";
+    stepE_opt->key = "ew_step";
     stepE_opt->type = TYPE_DOUBLE;
     stepE_opt->required = NO;
     stepE_opt->answer = "25";
     stepE_opt->description =
-	_("Interpolation spline step value in east direction");
+	_("Length of each spline step in the east-west direction");
+    stepE_opt->guisection = _("Settings");
 
     stepN_opt = G_define_option();
-    stepN_opt->key = "scn";
+    stepN_opt->key = "ns_step";
     stepN_opt->type = TYPE_DOUBLE;
     stepN_opt->required = NO;
     stepN_opt->answer = "25";
     stepN_opt->description =
-	_("Interpolation spline step value in north direction");
+	_("Length of each spline step in the north-south direction");
+    stepN_opt->guisection = _("Settings");
 
     lambda_f_opt = G_define_option();
     lambda_f_opt->key = "lambda_c";
@@ -247,12 +249,6 @@ int main(int argc, char *argv[])
     G_get_set_window(&elaboration_reg);
     Vect_region_box(&elaboration_reg, &overlap_box);
     Vect_region_box(&elaboration_reg, &general_box);
-
-    nrows = Rast_window_rows();
-    ncols = Rast_window_cols();
-
-    ew_resol = original_reg.ew_res;
-    ns_resol = original_reg.ns_res;
 
     /*------------------------------------------------------------------
       | Subdividing and working with tiles: 									
