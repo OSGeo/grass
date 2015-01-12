@@ -150,7 +150,8 @@ int main(int argc, char **argv)
 
     Vect_set_open_level(1); /* no topology needed */
     if (print->answer || shell_print->answer || columns->answer) {
-	Vect_open_old2(&Map, inopt->answer, "", field_opt->answer);
+	if (Vect_open_old2(&Map, inopt->answer, "", field_opt->answer) < 0)
+	    G_fatal_error(_("Unable to open vector map <%s>"), inopt->answer);
     }
     else {
 	if (Vect_open_update_head(&Map, inopt->answer, G_mapset()) < 1)

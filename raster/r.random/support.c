@@ -1,6 +1,7 @@
 #include <grass/gis.h>
 #include <grass/raster.h>
 #include <grass/vector.h>
+#include <grass/glocale.h>
 #include "local_proto.h"
 
 
@@ -58,7 +59,9 @@ int make_support(struct rr_state *theState, int percent, double percentage)
     if (theState->outvector) {
 	struct Map_info map;
 
-	Vect_open_old(&map, theState->outvector, G_mapset());
+	if (Vect_open_old(&map, theState->outvector, G_mapset()) < 0)
+	    G_fatal_error(_("Unable to open vector map <%s>"),
+			    theState->outvector);
 	Vect_hist_command(&map);
 	Vect_close(&map);
     }

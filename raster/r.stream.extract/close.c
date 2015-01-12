@@ -33,7 +33,8 @@ int close_streamvect(char *stream_vect)
 
     G_message(_("Writing vector map <%s>..."), stream_vect);
 
-    Vect_open_new(&Out, stream_vect, 0);
+    if (Vect_open_new(&Out, stream_vect, 0) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"), stream_vect);
     
     nodestack = (struct sstack *)G_malloc(stack_step * sizeof(struct sstack));
 

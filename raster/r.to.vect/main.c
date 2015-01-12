@@ -145,10 +145,8 @@ int main(int argc, char *argv[])
 	G_warning(_("Categories will be unique sequence, raster values will be lost."));
     }
 
-    if (z_flg->answer)
-	Vect_open_new(&Map, out_opt->answer, 1);
-    else
-	Vect_open_new(&Map, out_opt->answer, 0);
+    if (Vect_open_new(&Map, out_opt->answer, z_flg->answer) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"), out_opt->answer);
 
     Vect_hist_command(&Map);
 

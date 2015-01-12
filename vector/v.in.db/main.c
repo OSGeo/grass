@@ -116,7 +116,41 @@ int main(int argc, char *argv[])
     Cats = Vect_new_cats_struct();
     db_init_string(&sql);
 
-    Vect_open_new(&Map, outvect->answer, with_z);
+    if (G_get_overwrite()) {
+	/* We don't want to delete the input table when overwriting the output
+	 * vector. */
+	char name[GNAME_MAX], mapset[GMAPSET_MAX];
+
+	if (!G_name_is_fully_qualified(outvect->answer, name, mapset)) {
+	    strcpy(name, outvect->answer);
+	    strcpy(mapset, G_mapset());
+	}
+
+	Vect_set_open_level(1); /* no topo needed */
+
+	if (strcmp(mapset, G_mapset()) == 0 && G_find_vector2(name, mapset) &&
+	    Vect_open_old(&Map, name, mapset) >= 0) {
+	    int num_dblinks;
+
+	    num_dblinks = Vect_get_num_dblinks(&Map);
+	    for (i = 0; i < num_dblinks; i++) {
+		if ((fi = Vect_get_dblink(&Map, i)) != NULL &&
+		    strcmp(fi->driver, driver_opt->answer) == 0 &&
+		    strcmp(fi->database, database_opt->answer) == 0 &&
+		    strcmp(fi->table, table_opt->answer) == 0)
+		    G_fatal_error(_("Vector map <%s> cannot be overwritten "
+				    "because input table <%s> is linked to "
+				    "this map."),
+				    outvect->answer, table_opt->answer);
+	    }
+	    Vect_close(&Map);
+	}
+    }
+
+    if (Vect_open_new(&Map, outvect->answer, with_z) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"),
+			outvect->answer);
+
     Vect_set_error_handler_io(NULL, &Map);
     
     Vect_hist_command(&Map);
@@ -137,7 +171,8 @@ int main(int argc, char *argv[])
 	    outvect->answer, db_get_default_driver_name(),
 	    db_get_default_database_name());
 
-    if (db_table_exists(db_get_default_driver_name(),
+    if (!same_table_flag->answer &&
+	db_table_exists(db_get_default_driver_name(),
 			db_get_default_database_name(), outvect->answer) == 1)
 	G_fatal_error(_("Output vector map, table <%s> (driver: <%s>, database: <%s>) "
 		       "already exists"), outvect->answer,

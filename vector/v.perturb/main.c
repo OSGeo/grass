@@ -143,12 +143,14 @@ int main(int argc, char **argv)
 
     /* Open input */
     Vect_set_open_level(2);
-    Vect_open_old_head2(&In, parm.in->answer, "", parm.field->answer);
+    if (Vect_open_old_head2(&In, parm.in->answer, "", parm.field->answer) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), parm.in->answer);
     
     field = Vect_get_field_number(&In, parm.field->answer);
     
     /* Open output */
-    Vect_open_new(&Out, parm.out->answer, WITHOUT_Z);	/* TODO add z support ? */
+    if (Vect_open_new(&Out, parm.out->answer, WITHOUT_Z) < 0)	/* TODO add z support ? */
+	G_fatal_error(_("Unable to create vector map <%s>"), parm.out->answer);
 
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
@@ -166,7 +168,8 @@ int main(int argc, char **argv)
     /* Close input, re-open on level 1 */
     Vect_close(&In);
     Vect_set_open_level(1);
-    Vect_open_old2(&In, parm.in->answer, "", parm.field->answer);
+    if (Vect_open_old2(&In, parm.in->answer, "", parm.field->answer) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), parm.in->answer);
 
     i = 0;
     line = 0;

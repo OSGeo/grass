@@ -479,49 +479,49 @@ int main(int argc, char *argv[])
 
     az = G_alloc_vector(n_cols + 1);
     if (!az) {
-	G_fatal_error(_("Not enough memory for az"));
+	G_fatal_error(_("Not enough memory for %s"), "az");
     }
     if (cond1) {
 	adx = G_alloc_vector(n_cols + 1);
 	if (!adx) {
-	    G_fatal_error(_("Not enough memory for adx"));
+	    G_fatal_error(_("Not enough memory for %s"), "adx");
 	}
 	ady = G_alloc_vector(n_cols + 1);
 	if (!ady) {
-	    G_fatal_error(_("Not enough memory for ady"));
+	    G_fatal_error(_("Not enough memory for %s"), "ady");
 	}
 	if (cond2) {
 	    adxx = G_alloc_vector(n_cols + 1);
 	    if (!adxx) {
-		G_fatal_error(_("Not enough memory for adxx"));
+		G_fatal_error(_("Not enough memory for %s"), "adxx");
 	    }
 	    adyy = G_alloc_vector(n_cols + 1);
 	    if (!adyy) {
-		G_fatal_error(_("Not enough memory for adyy"));
+		G_fatal_error(_("Not enough memory for %s"), "adyy");
 	    }
 	    adxy = G_alloc_vector(n_cols + 1);
 	    if (!adxy) {
-		G_fatal_error(_("Not enough memory for adxy"));
+		G_fatal_error(_("Not enough memory for %s"), "adxy");
 	    }
 	}
     }
     if ((data =
 	 quad_data_new(x_orig, y_orig, xm, ym, n_rows, n_cols, 0,
 		       KMAX)) == NULL)
-	G_fatal_error(_("Cannot create quaddata"));
+	G_fatal_error(_("Unable to create %s"), "quaddata");
     if ((functions =
 	 MT_functions_new(quad_compare, quad_divide_data, quad_add_data,
 			  quad_intersect, quad_division_check,
 			  quad_get_points)) == NULL)
 
-	G_fatal_error(_("Cannot create quadfunc"));
+	G_fatal_error(_("Unable to create %s"), "quadfunc");
 
     if ((tree = MT_tree_new(data, NULL, NULL, 0)) == NULL)
-	G_fatal_error(_("Cannot create tree"));
+	G_fatal_error(_("Unable to create %s"), "tree");
     root = tree;
 
     if ((info = MT_tree_info_new(root, functions, dmin, KMAX)) == NULL)
-	G_fatal_error(_("Cannot create tree info"));
+	G_fatal_error(_("Unable to create %s"), "tree info");
 
     open_check = Vect_open_old2(&Map, input, "", parm.field->answer);
     if (open_check < 1)
@@ -562,10 +562,13 @@ int main(int argc, char *argv[])
 	Cats2 = Vect_new_cats_struct();
 	db_init_string(&sql2);
 
-	if (devi != NULL)
-	    Vect_open_new(&Map2, devi, 1);
-	else
-	    Vect_open_new(&Map2, cvdev, 1);
+	if (devi != NULL) {
+	    if (Vect_open_new(&Map2, devi, 1) < 0)
+		G_fatal_error(_("Unable to create vector map <%s>"), devi);
+	} else {
+	    if (Vect_open_new(&Map2, cvdev, 1) < 0)
+		G_fatal_error(_("Unable to create vector map <%s>"), cvdev);
+	}
 	Vect_hist_command(&Map2);
 	ff = Vect_default_field_info(&Map2, 1, NULL, GV_1TABLE);
 	Vect_map_add_dblink(&Map2, 1, NULL, ff->table, GV_KEY_COLUMN, ff->database,
@@ -586,7 +589,7 @@ int main(int argc, char *argv[])
         db_set_error_handler_driver(driver2);
 
 	if (db_execute_immediate(driver2, &sql2) != DB_OK) {
-	    G_fatal_error(_("Unable to create table: '%s'"),
+	    G_fatal_error(_("Unable to create table '%s'"),
 			  db_get_string(&sql2));
 	}
 	db_begin_transaction(driver2);

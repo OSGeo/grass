@@ -59,10 +59,9 @@ int execute_random(struct rr_state *theState)
     }
 
     if (theState->outvector) {
-	if (theState->z_geometry)
-	    Vect_open_new(&Out, theState->outvector, 1);
-	else
-	    Vect_open_new(&Out, theState->outvector, 0);
+	if (Vect_open_new(&Out, theState->outvector, theState->z_geometry) < 0)
+	    G_fatal_error(_("Unable to create vector map <%s>"),
+			    theState->outvector);
 	Vect_hist_command(&Out);
 
 	fi = Vect_default_field_info(&Out, 1, NULL, GV_1TABLE);

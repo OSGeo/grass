@@ -110,7 +110,8 @@ int main(int argc, char *argv[])
 	Vect_check_input_output_name(in_name, new->answer, G_FATAL_EXIT);
 
 	Vect_set_open_level(2);
-	Vect_open_old_head(&InMap, in_name, "");
+	if (Vect_open_old_head(&InMap, in_name, "") < 0)
+	    G_fatal_error(_("Unable to open vector map <%s>"), in_name);
 
 	if (out_is_3d != WITH_Z && Vect_is_3d(&InMap))
 	    out_is_3d = WITH_Z;
@@ -123,7 +124,8 @@ int main(int argc, char *argv[])
     if (do_table) {
 	if (append->answer) {
 	    Vect_set_open_level(1);
-	    Vect_open_old_head(&OutMap, out_name, G_mapset());
+	    if (Vect_open_old_head(&OutMap, out_name, G_mapset()) < 0)
+		G_fatal_error(_("Unable to open vector map <%s>"), out_name);
 
 	    fi_out = Vect_get_field(&OutMap, 1);
 	    if (fi_out) {
@@ -152,7 +154,8 @@ int main(int argc, char *argv[])
 	while (old->answers[i]) {
 	    in_name = old->answers[i];
 	    Vect_set_open_level(1);
-	    Vect_open_old_head(&InMap, in_name, "");
+	    if (Vect_open_old_head(&InMap, in_name, "") < 0)
+		G_fatal_error(_("Unable to open vector map <%s>"), in_name);
 
 	    fi_in = Vect_get_field(&InMap, 1);
 	    table_in = NULL;
@@ -247,18 +250,23 @@ int main(int argc, char *argv[])
     if (append->answer) {
 	if (no_topo->answer)
 	    Vect_set_open_level(1);
-	Vect_open_update(&OutMap, out_name, G_mapset());
+
+	if (Vect_open_update(&OutMap, out_name, G_mapset()) < 0)
+	    G_fatal_error(_("Unable to open vector map <%s>"), out_name);
+
 	if (out_is_3d == WITH_Z && !Vect_is_3d(&OutMap)) {
 	    G_warning(_("The output map is not 3D"));
 	}
 	maxcat = max_cat(&OutMap, 1);
     }
     else {
-	Vect_open_new(&OutMap, out_name, out_is_3d);
+	if (Vect_open_new(&OutMap, out_name, out_is_3d) < 0)
+	    G_fatal_error(_("Unable to create vector map <%s>"), out_name);
     }
 
     if (bbox_name) {
-	Vect_open_new(&BBoxMap, bbox_name, out_is_3d);	/* TODO 3D */
+	if (Vect_open_new(&BBoxMap, bbox_name, out_is_3d) < 0)	/* TODO 3D */
+	    G_fatal_error(_("Unable to create vector map <%s>"), bbox_name);
 	Vect_hist_command(&BBoxMap);
     }
 
@@ -320,7 +328,8 @@ int main(int argc, char *argv[])
 	    Vect_set_open_level(2);	/* needed for Vect_map_box() */
 	else
 	    Vect_set_open_level(1);
-	Vect_open_old(&InMap, in_name, "");
+	if (Vect_open_old(&InMap, in_name, "") < 0)
+	    G_fatal_error(_("Unable to open vector map <%s>"), in_name);
 
 	/*first time around, copy first in head to out head */
 	if (i == 1)

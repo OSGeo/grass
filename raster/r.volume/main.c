@@ -150,7 +150,8 @@ int main(int argc, char *argv[])
     
     /* initialize vector map (for centroids) if needed */
     if (centroidsmap) {
-	Vect_open_new(fd_centroids, centroidsmap, WITHOUT_Z);
+	if (Vect_open_new(fd_centroids, centroidsmap, WITHOUT_Z) < 0)
+	    G_fatal_error(_("Unable to create vector map <%s>"), centroidsmap);
         
         Points = Vect_new_line_struct();
         Cats = Vect_new_cats_struct();

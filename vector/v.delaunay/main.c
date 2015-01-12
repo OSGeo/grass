@@ -116,7 +116,8 @@ int main(int argc, char *argv[])
     Cats = Vect_new_cats_struct();
     
     Vect_set_open_level(2);
-    Vect_open_old2(&In, in_opt->answer, "", field_opt->answer);
+    if (Vect_open_old2(&In, in_opt->answer, "", field_opt->answer) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), in_opt->answer);
 
     /* check if we have a 3D input points map */
     mode3d = Vect_is_3d(&In);

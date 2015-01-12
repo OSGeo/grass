@@ -124,7 +124,10 @@ int main(int argc, char *argv[])
     if (!flags.new->answer) {
 	/* open input vector (topology required) */
 	Vect_set_open_level(2);
-	Vect_open_old2(&In, options.input->answer, "", options.field->answer);
+	if (Vect_open_old2(&In, options.input->answer, "",
+				options.field->answer) < 0)
+	    G_fatal_error(_("Unable to open vector map <%s>"),
+			    options.input->answer);
 
 	if (strcmp(options.type->answer, "auto") == 0) {
 	    G_debug(2, "Automatic type determination.");

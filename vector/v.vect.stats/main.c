@@ -242,7 +242,8 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Vector map <%s> not found"), point_opt->answer);
 
     Vect_set_open_level(2);
-    Vect_open_old(&PIn, point_opt->answer, mapset);
+    if (Vect_open_old(&PIn, point_opt->answer, mapset) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), point_opt->answer);
 
     /* Open areas vector */
     if ((mapset = G_find_vector2(area_opt->answer, "")) == NULL)
@@ -252,7 +253,8 @@ int main(int argc, char *argv[])
 		      area_opt->answer);
 
     Vect_set_open_level(2);
-    Vect_open_old(&AIn, area_opt->answer, mapset);
+    if (Vect_open_old(&AIn, area_opt->answer, mapset) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), area_opt->answer);
 
     method = -1;
     use_catno = 0;

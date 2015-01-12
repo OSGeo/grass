@@ -183,7 +183,9 @@ int main(int argc, char **argv)
 
     /* Do initial read of input file */
     Vect_set_open_level(2); /* topology required */
-    Vect_open_old2(&In, input, "", opt.field->answer);
+
+    if (Vect_open_old2(&In, input, "", opt.field->answer) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), input);
     
     field = Vect_get_field_number(&In, opt.field->answer);
     
@@ -337,7 +339,9 @@ int main(int argc, char **argv)
 	qsort(cat_array, cat_count, sizeof(int), cmp);
     }
 
-    Vect_open_new(&Out, output, Vect_is_3d(&In));
+    if (Vect_open_new(&Out, output, Vect_is_3d(&In)) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"), output);
+
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
 

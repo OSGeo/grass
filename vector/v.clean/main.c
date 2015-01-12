@@ -279,16 +279,21 @@ int main(int argc, char *argv[])
      * virtual centroids (shapefile/OGR) and level 1 is better if input is too big 
      * and build in previous module (like v.in.ogr or other call to v.clean) would take 
      * a long time */
-    Vect_open_old2(&In, opt.in->answer, "", opt.field->answer);
+    if (Vect_open_old2(&In, opt.in->answer, "", opt.field->answer) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), opt.in->answer);
 
     with_z = Vect_is_3d(&In);
     
-    Vect_open_new(&Out, opt.out->answer, with_z);
+    if (Vect_open_new(&Out, opt.out->answer, with_z) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"), opt.out->answer);
+
     Vect_set_error_handler_io(&In, &Out);
 
     if (opt.err->answer) {
 	Vect_set_open_level(2);
-	Vect_open_new(&Err, opt.err->answer, with_z);
+	if (Vect_open_new(&Err, opt.err->answer, with_z) < 0)
+	    G_fatal_error(_("Unable to create vector map <%s>"),
+			    opt.err->answer);
         G_add_error_handler(error_handler_err, &Err);
 	pErr = &Err;
     }
