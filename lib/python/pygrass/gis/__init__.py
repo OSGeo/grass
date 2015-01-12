@@ -304,7 +304,7 @@ class Mapset(object):
         """Return a list of grass types like:
 
             * 'group',
-            * 'labels',
+            * 'label',
             * 'raster',
             * 'raster_3d',
             * 'region',
