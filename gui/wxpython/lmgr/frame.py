@@ -43,7 +43,7 @@ if os.path.join(globalvar.ETCDIR, "python") not in sys.path:
 
 from grass.script          import core as grass
 
-from core.gcmd             import RunCommand, GError, GMessage, GException
+from core.gcmd             import RunCommand, GError, GMessage, EncodeString
 from core.settings         import UserSettings, GetDisplayVectSettings
 from core.utils            import SetAddOnPath, GetLayerNameFromCmd, command2ltype, _
 from gui_core.preferences  import MapsetAccess, PreferencesDialog
@@ -843,6 +843,14 @@ class GMFrame(wx.Frame):
         
         if not filename:
             return False
+        try:
+            filename_encoded = EncodeString(filename)
+        except UnicodeEncodeError:
+            GError(parent=self,
+                   message = _("Due to the limitations of your operating system, "
+                               "the script path cannot contain certain non-ascii characters. "
+                               "Please rename the script or move it to a different location."))
+            return
         
         if not os.path.exists(filename):
             GError(parent = self,
@@ -874,7 +882,7 @@ class GMFrame(wx.Frame):
         addonPath = os.getenv('GRASS_ADDON_PATH', [])
         if addonPath:
             addonPath = addonPath.split(os.pathsep)
-        dirName = os.path.dirname(filename)
+        dirName = os.path.dirname(filename_encoded)
         if dirName not in addonPath:
             addonPath.append(dirName)
             dlg = wx.MessageDialog(self,
