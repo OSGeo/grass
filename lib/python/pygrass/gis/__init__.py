@@ -306,7 +306,7 @@ class Mapset(object):
 
             * 'ascii_vector',
             * 'group',
-            * 'labels',
+            * 'label',
             * 'raster',
             * 'raster_3d',
             * 'region',
