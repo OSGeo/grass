@@ -1,8 +1,8 @@
 
 /**************************************************************
- *									
- * MODULE:       v.lidar.edgedetection				
- * 								
+ *
+ * MODULE:       v.lidar.edgedetection
+ * 
  * AUTHOR(S):    Original version in GRASS 5.4 (s.edgedetection):
  * 		 Maria Antonia Brovelli, Massimiliano Cannata, 
  *		 Ulisse Longoni and Mirko Reguzzoni
@@ -12,17 +12,17 @@
  *               							
  * PURPOSE:      Detection of object's edges on a LIDAR data set	
  *               							
- * COPYRIGHT:    (C) 2006 by Politecnico di Milano - 			
- *			     Polo Regionale di Como			
- *									
- *               This program is free software under the 		
- *               GNU General Public License (>=v2). 			
- *               Read the file COPYING that comes with GRASS		
- *               for details.					
- *							
- **************************************************************/
+ * COPYRIGHT:    (C) 2006 by Politecnico di Milano -
+ *			     Polo Regionale di Como
+ *
+ *               This program is free software under the
+ *               GNU General Public License (>=v2).
+ *               Read the file COPYING that comes with GRASS
+ *               for details.
+ *
+ **********************************************************************/
 
- /*INCLUDES*/
+/* INCLUDES */
 #include <stdlib.h>
 #include <string.h>
 #include <math.h>
@@ -86,21 +86,21 @@ int main(int argc, char *argv[])
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
 
     stepE_opt = G_define_option();
-    stepE_opt->key = "see";
+    stepE_opt->key = "ew_step";
     stepE_opt->type = TYPE_DOUBLE;
     stepE_opt->required = NO;
     stepE_opt->answer = "4";
     stepE_opt->description =
-	_("Interpolation spline step value in east direction");
+	_("Length of each spline step in the east-west direction");
     stepE_opt->guisection = _("Settings");
 
     stepN_opt = G_define_option();
-    stepN_opt->key = "sen";
+    stepN_opt->key = "ns_step";
     stepN_opt->type = TYPE_DOUBLE;
     stepN_opt->required = NO;
     stepN_opt->answer = "4";
     stepN_opt->description =
-	_("Interpolation spline step value in north direction");
+	_("Length of each spline step in the north-south direction");
     stepN_opt->guisection = _("Settings");
 
     lambdaB_opt = G_define_option();
