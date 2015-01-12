@@ -101,10 +101,8 @@
 <!ELEMENT gisprompt    EMPTY>
 <!ATTLIST gisprompt    age            (any | old | new | mapset) #REQUIRED
                        element        (cell | fcell | cellhd | cats | colr |
-                                       colr2 | cell_misc | hist | dig | dig_ascii |
-                                       dig_att | dig_cats | dig_plus | reg | arc |
-                                       bldg | dlg | dxf | camera | icons | paint |
-                                       group | site_lists | windows | CDATA) #REQUIRED
+                                       colr2 | cell_misc | hist | paint |
+                                       group | vector | windows | CDATA) #REQUIRED
                        prompt         CDATA #REQUIRED>
 
 <!--    A flag must have a name and should have a description.
