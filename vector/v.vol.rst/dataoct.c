@@ -29,6 +29,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
 #include "dataoct.h"
 #include "externs.h"
 #include "user.h"
@@ -191,8 +192,8 @@ struct octdata **oct_divide_data(struct octdata *data)
     double dx, dy, dz, x_or, y_or, z_or;
 
     if ((data->n_cols <= 1) || (data->n_rows <= 1)) {
-	clean_fatal_error
-	    ("Points are too concentrated -- please increase DMIN");
+	clean();
+	G_fatal_error(_("Points are too concentrated -- please increase DMIN"));
     }
 
     if (data->n_cols % 2 == 0) {
@@ -240,7 +241,8 @@ struct octdata **oct_divide_data(struct octdata *data)
     for (i = 0; i < data->n_points; i++) {
 	comp = oct_compare(data->points + i, data);
 	if ((comp < 1) || (comp > NUMLEAFS)) {
-	    clean_fatal_error("Point out of range");
+	    clean();
+	    G_fatal_error(_("Point out of range"));
 	}
 	oct_add_data(data->points + i, datas[comp]);
     }

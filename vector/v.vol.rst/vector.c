@@ -34,6 +34,7 @@
 #include <grass/gis.h>
 #include <grass/vector.h>
 #include <grass/dbmi.h>
+#include <grass/glocale.h>
 
 #include "oct.h"
 #include "surf.h"
@@ -76,7 +77,7 @@ int point_save(double xmm, double ymm, double zmm, double err)
     if (db_execute_immediate(driver, &sql) != DB_OK) {
 	db_close_database(driver);
 	db_shutdown_driver(driver);
-	G_fatal_error("Cannot insert new row: %s", db_get_string(&sql));
+	G_fatal_error(_("Cannot insert new row: %s"), db_get_string(&sql));
     }
     count++;
 
