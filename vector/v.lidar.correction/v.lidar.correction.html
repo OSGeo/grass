@@ -34,9 +34,9 @@ as as TERRAIN SINGLE PULSE, TERRAIN DOUBLE PULSE, OBJECT SINGLE PULSE or
 OBJECT DOUBLE PULSE; and an vector map with only the points classified as 
 TERRAIN SINGLE PULSE or TERRAIN DOUBLE PULSE.
 
-The final result of the whole procedure (v.lidar.edgedetection,
-v.lidar.growing, v.lidar.correction) will be a point classification in
-four categories:
+The final result of the whole procedure (<em>v.lidar.edgedetection</em>,
+<em>v.lidar.growing</em>, <em>v.lidar.correction</em>) will be a point
+classification in four categories:
 <br>
 <br>
 TERRAIN SINGLE PULSE (cat = 1, layer = 2)
@@ -60,12 +60,18 @@ v.lidar.correction input=growing output=correction out_terrain=only_terrain
 v.lidar.correction input=correction output=correction_bis out_terrain=only_terrain_bis
 </pre></div>
 
+
 <h2>SEE ALSO</h2>
-<em><a href="v.lidar.edgedetection.html">v.lidar.edgedetection</a></em>,
-<em><a href="v.lidar.growing.html">v.lidar.growing</a></em>,
-<em><a href="v.surf.bspline.html">v.surf.bspline</a></em>
+
+<em>
+<a href="v.lidar.edgedetection.html">v.lidar.edgedetection</a>,
+<a href="v.lidar.growing.html">v.lidar.growing</a>,
+<a href="v.surf.bspline.html">v.surf.bspline</a>
+</em>
+
 
 <h2>AUTHORS</h2>
+
 Original version of program in GRASS 5.4:
 <br>
 Maria Antonia Brovelli, Massimiliano Cannata, Ulisse Longoni and Mirko Reguzzoni
@@ -92,7 +98,7 @@ for Pavia (Northern Italy). Computers and Geosciences 30 (2004) pp.325-331
 <br>
 <br>
 Brovelli M. A. and Longoni U.M., 2003. Software per il filtraggio di dati 
-LIDAR, Rivista dell?Agenzia del Territorio, n. 3-2003, pp. 11-22 (ISSN 1593-2192).
+LIDAR, Rivista dell'Agenzia del Territorio, n. 3-2003, pp. 11-22 (ISSN 1593-2192).
 <br>
 <br>
 Brovelli M. A., Cannata M. and Longoni U.M., 2002. DTM LIDAR in area urbana, 
