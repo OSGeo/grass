@@ -151,13 +151,16 @@ int main(int argc, char *argv[])
 			   region, type, field, clist, (const char *)where,
 			   (const char **)columns, header);
 
-    if (ret < 1) {
+    if (ret == 0) {
 	if (format == GV_ASCII_FORMAT_POINT) {
 	    G_warning(_("No points found, nothing to be exported"));
 	}
 	else {
 	    G_warning(_("No features found, nothing to be exported"));
 	}
+    }
+    else if (ret < 0) {
+	G_warning(_("An error occured, nothing to be exported"));
     }
     
     if (ascii != NULL)
