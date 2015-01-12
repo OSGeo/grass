@@ -35,9 +35,10 @@ static int (*dot) (int, int);
 
 int begin_rasterization(int cache_mb, int f, int do_dense)
 {
-    int i, size, nrows;
+    int i;
     double row_mb;
     int pages;
+    size_t size;
 
     dense = (do_dense != 0);
 
@@ -49,35 +50,23 @@ int begin_rasterization(int cache_mb, int f, int do_dense)
     G_get_set_window(&region);
     G_get_set_window(&page);
 
-    switch (format) {
-    case USE_CELL:
-	row_mb = (double) region.cols * (sizeof(char) + sizeof(CELL)) /
-		 (1 << 20);
-	break;
+    row_mb = (double) region.cols * (sizeof(char) + Rast_cell_size(f)) /
+	     (1 << 20);
 
-    case USE_DCELL:
-	row_mb = (double) region.cols * (sizeof(char) + sizeof(DCELL)) /
-	         (1 << 20);
-	dot = dcell_dot;
-	break;
-    }
-
-    nrows = cache_mb / row_mb;
-    if (nrows < 1)
-	nrows = 1;
-
-    max_rows = nrows;
-    if (max_rows <= 0)
-	max_rows = 512;
+    max_rows = cache_mb / row_mb;
+    if (max_rows < 1)
+	max_rows = 4;
 
     pages = (region.rows + max_rows - 1) / max_rows;
 
     if (max_rows > region.rows)
 	max_rows = region.rows;
 
-    size = max_rows * region.cols;
+    G_debug(1, "%d of %d rows are cached", max_rows, region.rows);
+
+    size = (size_t) max_rows * region.cols;
     switch (format) {
-    case USE_CELL:
+    case CELL_TYPE:
 	raster.cell =
 	    (CELL **) G_calloc(max_rows * sizeof(char), sizeof(CELL *));
 	raster.cell[0] = (CELL *) G_calloc(size * sizeof(char), sizeof(CELL));
@@ -86,7 +75,7 @@ int begin_rasterization(int cache_mb, int f, int do_dense)
 	dot = cell_dot;
 	break;
 
-    case USE_DCELL:
+    case DCELL_TYPE:
 	raster.dcell =
 	    (DCELL **) G_calloc(max_rows * sizeof(char), sizeof(DCELL *));
 	raster.dcell[0] =
@@ -126,12 +115,12 @@ static int configure_plot(void)
 
     /* zero the raster */
     switch (format) {
-    case USE_CELL:
+    case CELL_TYPE:
 	for (i = 0; i < nrows; i++)
 	    for (j = 0; j < ncols; j++)
 		raster.cell[i][j] = 0;
 	break;
-    case USE_DCELL:
+    case DCELL_TYPE:
 	for (i = 0; i < nrows; i++)
 	    for (j = 0; j < ncols; j++)
 		raster.dcell[i][j] = 0;
@@ -164,14 +153,14 @@ int output_raster(int fd)
     for (i = 0; i < page.rows; i++, at_row++) {
 	G_percent(i, page.rows, 2);
 	switch (format) {
-	case USE_CELL:
+	case CELL_TYPE:
 	    cell = raster.cell[i];
 
 	    /* insert the NULL values */
 	    Rast_insert_c_null_values(cell, null_flags[i], page.cols);
 	    Rast_put_c_row(fd, cell);
 	    break;
-	case USE_DCELL:
+	case DCELL_TYPE:
 	    dcell = raster.dcell[i];
 
 	    /* insert the NULL values */

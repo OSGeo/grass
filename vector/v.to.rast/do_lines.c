@@ -77,7 +77,7 @@ int do_lines(struct Map_info *Map, struct line_pnts *Points,
 	    set_cat(cat);
 	}
 	else if (use == USE_VAL) {
-	    if (value_type == USE_CELL)
+	    if (value_type == CELL_TYPE)
 		set_cat((int)value);
 	    else
 		set_dcat(value);
