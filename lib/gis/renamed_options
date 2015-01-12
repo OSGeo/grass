@@ -278,9 +278,10 @@ r.out.vrml|exag:exaggeration
 # r.out.vtk
 r.out.vtk|elevscale:zscale
 # r.param.scale
-r.param.scale|s_tol:slope_tolerance
 r.param.scale|c_tol:curvature_tolerance
 r.param.scale|exp:exponent
+r.param.scale|param:method
+r.param.scale|s_tol:slope_tolerance
 # r.plane
 r.plane|name:output
 # r.profile
@@ -396,6 +397,7 @@ r.topmodel|qobs:
 r.uslek|usle_k:output
 # r.walk
 r.walk|coordinate:start_coordinates
+r.walk|percent_memory:memory
 r.walk|start_rast:start_raster
 # r.water.outlet
 r.water.outlet|drainage:input

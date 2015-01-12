@@ -96,7 +96,7 @@ void interface(int argc, char **argv)
     win_size->options = G_store(buf);
     win_size->answer = "3";
 
-    parameter->key = "param";
+    parameter->key = "method";
     parameter->description =
 	_("Morphometric parameter in 'size' window to calculate");
     parameter->type = TYPE_STRING;
