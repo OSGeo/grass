@@ -484,6 +484,12 @@ v.kcv|k:npartitions
 v.label|background:bgcolor
 v.label|hcolor:highlight_color
 v.label|hwidth:highlight_width
+# v.lidar.correction
+v.lidar.correction|sce:ew_step
+v.lidar.correction|scn:ns_step
+# v.lidar.edgedetection
+v.lidar.edgedetection|see:ew_step
+v.lidar.edgedetection|sen:ns_step
 # v.lrs.create
 v.lrs.create|thresh:threshold
 # v.lrs.label
