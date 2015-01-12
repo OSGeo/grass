@@ -295,15 +295,17 @@ char *G_chop(char *line)
 	return (line);
     }
 
-    for (t = line; *t; t++)	/* go to end */
+    for (t = f; *t; t++)	/* go from first non white-space char to end */
 	;
     while (isspace(*--t)) ;
     *++t = '\0';		/* remove trailing white-spaces */
 
-    t = line;
-    while (*f)			/* copy */
-	*t++ = *f++;
-    *t = '\0';
+    if (f != line) {
+	t = line;
+	while (*f)		/* leading white spaces, shift */
+	    *t++ = *f++;
+	*t = '\0';
+    }
 
     return (line);
 }
