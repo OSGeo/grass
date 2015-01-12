@@ -142,7 +142,7 @@ void get_table_name(const char *table, char **table_name, char **schema_name)
 int list_layers_pg(FILE *fd, const char *conninfo, const char *table, int print_types)
 {
     int   row, ntables, ret, print_schema;
-    char *value_schema, *value_table;
+    char *value_schema, *value_table, *value_type, *value_column;
     char *schema_name, *table_name;
     
     PGconn   *conn;
@@ -159,7 +159,7 @@ int list_layers_pg(FILE *fd, const char *conninfo, const char *table, int print_
 		      PQerrorMessage(conn));
     
     db_init_string(&sql);
-    db_set_string(&sql, "SELECT f_table_schema, f_table_name, type "
+    db_set_string(&sql, "SELECT f_table_schema, f_table_name, f_geometry_column, type "
 		  "FROM geometry_columns ORDER BY "
 		  "f_table_schema, f_table_name");
     G_debug(2, "SQL: %s", db_get_string(&sql));
@@ -197,15 +197,16 @@ int list_layers_pg(FILE *fd, const char *conninfo, const char *table, int print_
     for (row = 0; row < ntables; row++) {	
 	value_schema = PQgetvalue(res, row, 0);
 	value_table = PQgetvalue(res, row, 1);
+        value_column = PQgetvalue(res, row, 2);
+        value_type = PQgetvalue(res, row, 3);
+        
 	if (fd) {
 	    if (print_types) {
 		if (print_schema && G_strcasecmp(value_schema, "public") != 0)
-		    fprintf(fd, "%s.%s,%s,0\n",
-			    value_schema, value_table,
-			    feature_type(PQgetvalue(res, row, 2)));
-		else 
-		    fprintf(fd, "%s,%s,0\n", value_table,
-			    feature_type(PQgetvalue(res, row, 2)));
+                    fprintf(fd, "%s.", value_schema);
+                
+                fprintf(fd, "%s,%s,0,%s\n", value_table,
+                        feature_type(value_type), value_column);
 	    }
 	    else {
 		if (print_schema && G_strcasecmp(value_schema, "public") != 0)
