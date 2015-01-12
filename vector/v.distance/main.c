@@ -242,6 +242,10 @@ int main(int argc, char *argv[])
 	do_all = TRUE;
 
     geodesic = G_projection() == PROJECTION_LL;
+    if (geodesic)
+	line_distance = Vect_line_geodesic_distance;
+    else
+	line_distance = Vect_line_distance;
 
     /* Read upload and column options */
     /* count */
@@ -711,7 +715,7 @@ int main(int argc, char *argv[])
 		    line2line(FPoints, ftype, TPoints, ttype,
 		              &tmp_fx, &tmp_fy, &tmp_fz, &tmp_falong, &tmp_fangle,
 		              &tmp_tx, &tmp_ty, &tmp_tz, &tmp_talong, &tmp_tangle,
-			      &tmp_dist, with_z, geodesic);
+			      &tmp_dist, with_z);
 
 		    if (tmp_dist > max || tmp_dist < min)
 			continue;	/* not in threshold */
@@ -785,7 +789,7 @@ int main(int argc, char *argv[])
 		    line2area(&To, FPoints, ftype, aList->id[i], &aList->box[i],
 		              &tmp_fx, &tmp_fy, &tmp_fz, &tmp_falong, &tmp_fangle,
 		              &tmp_tx, &tmp_ty, &tmp_tz, &tmp_talong, &tmp_tangle,
-			      &tmp_dist, with_z, geodesic);
+			      &tmp_dist, with_z);
 
 		    if (tmp_dist > max || tmp_dist < min)
 			continue;	/* not in threshold */
@@ -996,7 +1000,7 @@ int main(int argc, char *argv[])
 		    line2area(&From, TPoints, ttype, area, &fbox,
 		              &tmp_tx, &tmp_ty, &tmp_tz, &tmp_talong, &tmp_tangle,
 		              &tmp_fx, &tmp_fy, &tmp_fz, &tmp_falong, &tmp_fangle,
-			      &tmp_dist, with_z, geodesic);
+			      &tmp_dist, with_z);
 
 		    if (tmp_dist > max || tmp_dist < min)
 			continue;	/* not in threshold */
@@ -1082,7 +1086,7 @@ int main(int argc, char *argv[])
 		    poly = line2area(&From, TPoints, ttype, area, &fbox,
 		              &tmp_tx, &tmp_ty, &tmp_tz, &tmp_talong, &tmp_tangle,
 		              &tmp_fx, &tmp_fy, &tmp_fz, &tmp_falong, &tmp_fangle,
-			      &tmp_dist, with_z, geodesic);
+			      &tmp_dist, with_z);
 
 		    if (poly == 3) {
 			/* 'to' outer ring is outside 'from' area,
@@ -1106,7 +1110,7 @@ int main(int argc, char *argv[])
 			    poly = line2area(&To, FPoints, ttype, tarea, &aList->box[i],
 				      &tmp_fx, &tmp_fy, &tmp_fz, &tmp_falong, &tmp_fangle,
 				      &tmp_tx, &tmp_ty, &tmp_tz, &tmp_talong, &tmp_tangle,
-				      &tmp_dist, with_z, geodesic);
+				      &tmp_dist, with_z);
 
 			    /* inside isle ? */
 			    poly = poly == 2;
@@ -1126,7 +1130,7 @@ int main(int argc, char *argv[])
 				line2area(&From, TPoints, ttype, area, &fbox,
 					  &tmp2_tx, &tmp2_ty, &tmp2_tz, &tmp2_talong, &tmp2_tangle,
 					  &tmp2_fx, &tmp2_fy, &tmp2_fz, &tmp2_falong, &tmp2_fangle,
-					  &tmp2_dist, with_z, geodesic);
+					  &tmp2_dist, with_z);
 
 				if (tmp2_dist < tmp_dist) {
 				    tmp_dist = tmp2_dist;
