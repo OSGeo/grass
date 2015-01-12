@@ -18,7 +18,7 @@ from grass.pygrass.errors import GrassError
 ETYPE = {'raster': libgis.G_ELEMENT_RASTER,
          'raster_3d': libgis.G_ELEMENT_RASTER3D,
          'vector': libgis.G_ELEMENT_VECTOR,
-         'labels': libgis.G_ELEMENT_LABEL,
+         'label': libgis.G_ELEMENT_LABEL,
          'region': libgis.G_ELEMENT_REGION,
          'group': libgis.G_ELEMENT_GROUP}
 
