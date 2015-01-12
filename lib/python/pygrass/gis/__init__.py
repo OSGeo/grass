@@ -18,7 +18,6 @@ from grass.pygrass.errors import GrassError
 ETYPE = {'raster': libgis.G_ELEMENT_RASTER,
          'raster_3d': libgis.G_ELEMENT_RASTER3D,
          'vector': libgis.G_ELEMENT_VECTOR,
-         'ascii_vector': libgis.G_ELEMENT_ASCIIVECTOR,
          'label': libgis.G_ELEMENT_LABEL,
          'region': libgis.G_ELEMENT_REGION,
          'group': libgis.G_ELEMENT_GROUP}
@@ -304,7 +303,6 @@ class Mapset(object):
     def glist(self, type, pattern=None):
         """Return a list of grass types like:
 
-            * 'ascii_vector',
             * 'group',
             * 'label',
             * 'raster',
