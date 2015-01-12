@@ -332,7 +332,10 @@ int main(int argc, char *argv[])
     Vect_check_input_output_name(in_opt->answer, out_opt->answer, G_FATAL_EXIT);
 
     Vect_set_open_level(2); /* topology required */
-    Vect_open_old2(&In, in_opt->answer, "", field_opt->answer);
+
+    if (Vect_open_old2(&In, in_opt->answer, "", field_opt->answer) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), in_opt->answer);
+
     Vect_set_error_handler_io(&In, &Out);
 
     if (field_opt->answer)
@@ -383,7 +386,8 @@ int main(int argc, char *argv[])
 	G_verbose_message(_("The tolerance in map units = %g"), unit_tolerance);
     }
 
-    Vect_open_new(&Out, out_opt->answer, WITHOUT_Z);
+    if (Vect_open_new(&Out, out_opt->answer, WITHOUT_Z) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"), out_opt->answer);
     
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
@@ -391,9 +395,9 @@ int main(int argc, char *argv[])
     CCats = Vect_new_cats_struct();
     
     /* open tmp vector for buffers, needed for cleaning */
-    if (0 > Vect_open_tmp_new(&Buf, NULL, WITHOUT_Z)) {
-        G_fatal_error(_("Unable to create vector map"));
-    }
+    if (0 > Vect_open_tmp_new(&Buf, NULL, WITHOUT_Z))
+        G_fatal_error(_("Unable to create temporary vector map"));
+
     G_set_verbose(0);
     Vect_build_partial(&Buf, GV_BUILD_BASE); /* switch to level 2 */
     G_set_verbose(verbose);

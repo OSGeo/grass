@@ -174,7 +174,9 @@ int main(int argc, char *argv[])
 
     for (input = 0; input < 2; input++) {
         Vect_set_open_level(2);
-        Vect_open_old2(&(In[input]), in_opt[input]->answer, "", field_opt[input]->answer);
+        if (Vect_open_old2(&(In[input]), in_opt[input]->answer, "", field_opt[input]->answer) < 0)
+	    G_fatal_error(_("Unable to open vector map <%s>"),
+			    in_opt[input]->answer);
 	field[input] = Vect_get_field_number(&(In[input]), field_opt[input]->answer);
     }
     if (type[0] == 0) { /* atype=auto */
@@ -204,12 +206,15 @@ int main(int argc, char *argv[])
     Cats = Vect_new_cats_struct();
 
     /* Open output */
-    Vect_open_new(&Out, out_opt->answer, WITHOUT_Z);
+    if (Vect_open_new(&Out, out_opt->answer, WITHOUT_Z) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"), out_opt->answer);
+
     Vect_set_map_name(&Out, "Output from v.overlay");
     Vect_set_person(&Out, G_whoami());
     Vect_hist_command(&Out);
     
-    Vect_open_tmp_new(&Tmp, NULL, WITHOUT_Z);
+    if (Vect_open_tmp_new(&Tmp, NULL, WITHOUT_Z) < 0)
+	G_fatal_error(_("Unable to create temporary vector map"));
 
     /* Create dblinks */
     if (ofield[0] > 0) {

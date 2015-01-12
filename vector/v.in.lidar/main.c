@@ -496,7 +496,8 @@ int main(int argc, char *argv[])
     sprintf(buf, "%s", out_opt->answer);
     /* strip any @mapset from vector output name */
     G_find_vector(buf, G_mapset());
-    Vect_open_new(&Map, out_opt->answer, 1);
+    if (Vect_open_new(&Map, out_opt->answer, 1) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"), out_opt->answer);
 
     Vect_hist_command(&Map);
     

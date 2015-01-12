@@ -34,11 +34,14 @@ void output_walker_as_vector(int tt_minutes, int ndigit, struct TimeStamp *times
 	if (ts == 1) {
 	    G_snprintf(buf, sizeof(buf), "%s_%.*d", outwalk, ndigit, tt_minutes);
 	    outwalk_time = G_store(buf);
-	    Vect_open_new(&Out, outwalk_time, WITH_Z);
+	    if (Vect_open_new(&Out, outwalk_time, WITH_Z) < 0)
+		G_fatal_error(_("Unable to create vector map <%s>"),
+				outwalk_time);
 	    G_message("Writing %i walker into vector file %s", nstack, outwalk_time);
 	}
 	else {
-	    Vect_open_new(&Out, outwalk, WITH_Z);
+	    if (Vect_open_new(&Out, outwalk, WITH_Z) < 0)
+		G_fatal_error(_("Unable to create vector map <%s>"), outwalk);
 	    G_message("Writing %i walker into vector file %s", nstack, outwalk);
 	}
 

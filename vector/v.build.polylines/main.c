@@ -147,11 +147,13 @@ int main(int argc, char **argv)
 
     /* Open binary vector map at level 2 */
     Vect_set_open_level(2);
-    Vect_open_old(&map, input->answer, "");
+    if (Vect_open_old(&map, input->answer, "") < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), input->answer);
 
     /* Open new vector */
     G_find_vector2(output->answer, "");
-    Vect_open_new(&Out, output->answer, Vect_is_3d(&map));
+    if (Vect_open_new(&Out, output->answer, Vect_is_3d(&map)) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"), output->answer);
 
     /* Copy header info. */
     Vect_copy_head_data(&map, &Out);

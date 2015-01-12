@@ -127,7 +127,9 @@ int main(int argc, char *argv[])
 
     /* open input vector */
     Vect_set_open_level(1);
-    Vect_open_old2(&In, in_opt->answer, "", field_opt->answer);
+    if (Vect_open_old2(&In, in_opt->answer, "", field_opt->answer) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), in_opt->answer);
+
     field = Vect_get_field_number(&In, field_opt->answer);
     
     if (0 > Vect_open_new(&Out, out_opt->answer, Vect_is_3d(&In))) {

@@ -137,7 +137,10 @@ int main(int argc, char *argv[])
     
     /* open input vector map */
     Vect_set_open_level(2); /* topology required ? */
-    Vect_open_old2(&In, opt.input->answer, "", opt.layer->answer);
+
+    if (Vect_open_old2(&In, opt.input->answer, "", opt.layer->answer) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), opt.input->answer);
+
     Vect_set_error_handler_io(&In, &Out);
     
     /* get layer number */
@@ -150,7 +153,9 @@ int main(int argc, char *argv[])
     }
 
     /* create output */
-    Vect_open_new(&Out, opt.output->answer, WITH_Z);
+    if (Vect_open_new(&Out, opt.output->answer, WITH_Z) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"),
+			opt.output->answer);
 
     Vect_copy_head_data(&In, &Out);
     Vect_hist_copy(&In, &Out);

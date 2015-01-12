@@ -119,7 +119,10 @@ int main(int argc, char **argv)
 
     /* Open input */
     Vect_set_open_level(2);
-    Vect_open_old2(&In, parm.input->answer, "", parm.field->answer);
+
+    if (Vect_open_old2(&In, parm.input->answer, "", parm.field->answer) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), parm.input->answer);
+
     field = Vect_get_field_number(&In, parm.field->answer);
     
     fdrast = Rast_open_old(parm.rast->answer, "");
@@ -155,7 +158,10 @@ int main(int argc, char **argv)
     db_close_database_shutdown_driver(Driver);
 
     /* Open output */
-    Vect_open_new(&Out, parm.output->answer, 0);
+    if (Vect_open_new(&Out, parm.output->answer, 0) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"),
+			parm.output->answer);
+
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
 

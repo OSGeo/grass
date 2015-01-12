@@ -98,8 +98,13 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Vector map <%s> not found"), input->answer);
 
     Vect_set_open_level(2);
-    Vect_open_old(&In, input->answer, mapset);
-    Vect_open_new(&Out, output->answer, Vect_is_3d(&In));
+
+    if (Vect_open_old(&In, input->answer, mapset) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), input->answer);
+
+    if (Vect_open_new(&Out, output->answer, Vect_is_3d(&In)) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"), output->answer);
+
     Vect_copy_head_data(&In, &Out);
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);

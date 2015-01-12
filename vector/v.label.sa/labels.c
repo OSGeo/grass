@@ -54,7 +54,8 @@ label_t *labels_init(struct params *p, int *n_labels)
     legal_types = Vect_option_to_types(p->type);
 
     /* open vector for read only */
-    Vect_open_old(&Map, p->map->answer, "");
+    if (Vect_open_old(&Map, p->map->answer, "") < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), p->map->answer);
 
     label_sz = Vect_get_num_primitives(&Map, legal_types);
 

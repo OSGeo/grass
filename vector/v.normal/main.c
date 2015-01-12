@@ -106,7 +106,9 @@ int main(int argc, char **argv)
 
     /* Open input */
     Vect_set_open_level(2);
-    Vect_open_old2(&Map, parm.input->answer, "", parm.layer->answer);
+    if (Vect_open_old2(&Map, parm.input->answer, "", parm.layer->answer) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), parm.input->answer);
+
     field = Vect_get_field_number(&Map, parm.layer->answer);
     
     /* Read attributes */

@@ -101,7 +101,12 @@ int main(int argc, char *argv[])
 				     G_FATAL_EXIT);
 
 	Vect_set_open_level(2);
-	Vect_open_old2(&(In[iopt]), parm.input[iopt]->answer, "", parm.field[iopt]->answer);
+
+	if (Vect_open_old2(&(In[iopt]), parm.input[iopt]->answer, "",
+				parm.field[iopt]->answer) < 0)
+	    G_fatal_error(_("Unable to open vector map <%s>"),
+			    parm.input[iopt]->answer);
+
 	ifield[iopt] = Vect_get_field_number(&(In[iopt]), parm.field[iopt]->answer);
     }
 
@@ -112,7 +117,10 @@ int main(int argc, char *argv[])
     IFi = Vect_get_field(&(In[0]), ifield[0]);
 
     /* Open output */
-    Vect_open_new(&Out, parm.output->answer, Vect_is_3d(&(In[0])));
+    if (Vect_open_new(&Out, parm.output->answer, Vect_is_3d(&(In[0]))) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"),
+			parm.output->answer);
+
     Vect_set_map_name(&Out, _("Output from v.select"));
     Vect_set_person(&Out, G_whoami());
     Vect_copy_head_data(&(In[0]), &Out);

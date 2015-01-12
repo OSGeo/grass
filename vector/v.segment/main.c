@@ -103,11 +103,16 @@ int main(int argc, char **argv)
 
     /* Open input lines */
     Vect_set_open_level(2);
-    Vect_open_old2(&In, in_opt->answer, "", lfield_opt->answer);
+
+    if (Vect_open_old2(&In, in_opt->answer, "", lfield_opt->answer) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), in_opt->answer);
+
     lfield = Vect_get_field_number(&In, lfield_opt->answer);
 
     /* Open output segments */
-    Vect_open_new(&Out, out_opt->answer, Vect_is_3d(&In));
+    if (Vect_open_new(&Out, out_opt->answer, Vect_is_3d(&In)) < 0)
+	G_fatal_error(_("Unable to create vector map <%s>"), out_opt->answer);
+
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
 

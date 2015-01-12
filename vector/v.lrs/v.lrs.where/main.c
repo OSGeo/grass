@@ -127,7 +127,8 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Vector map <%s> not found"), lines_opt->answer);
 
     Vect_set_open_level(2);
-    Vect_open_old(&LMap, lines_opt->answer, mapset);
+    if (Vect_open_old(&LMap, lines_opt->answer, mapset) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), lines_opt->answer);
 
     /* Open input points */
     mapset = G_find_vector2(points_opt->answer, NULL);
@@ -135,7 +136,8 @@ int main(int argc, char **argv)
 	G_fatal_error(_("Vector map <%s> not found"), points_opt->answer);
 
     Vect_set_open_level(2);
-    Vect_open_old(&PMap, points_opt->answer, mapset);
+    if (Vect_open_old(&PMap, points_opt->answer, mapset) < 0)
+	G_fatal_error(_("Unable to open vector map <%s>"), points_opt->answer);
 
     db_init_handle(&rshandle);
     db_init_string(&rsstmt);
