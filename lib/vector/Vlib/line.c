@@ -636,15 +636,15 @@ double Vect_line_geodesic_length(const struct line_pnts *Points)
    - px, py - point on line,
    - dist   - distance to line,
    - spdist - distance to point on line from segment beginning,
-   - sldist - distance to point on line form line beginning along line
+   - lpdist - distance to point on line from line beginning along line
 
   \param points pointer to line_pnts structure
   \param ux,uy,uz point coordinates
   \param with_z flag if to use z coordinate (3D calculation)
   \param[out] px,py,pz point on line
-  \param[out] dist distance to line,
-  \param[out] spdist distance of point from segment beginning
-  \param[out] lpdist distance of point from line
+  \param[out] dist distance to line
+  \param[out] spdist distance to point on line from segment beginning
+  \param[out] lpdist distance to point on line from line beginning along line
 
   \return nearest segment (first is 1)
  */
@@ -770,16 +770,18 @@ int Vect_line_distance(const struct line_pnts *points,
   \return nearest segment (first is 1)
  */
 int Vect_line_geodesic_distance(const struct line_pnts *points,
-		       double ux, double uy, double uz,
-		       int with_z,
-		       double *px, double *py, double *pz,
-		       double *dist, double *spdist, double *lpdist)
+		                double ux, double uy, double uz,
+		                int with_z,
+		                double *px, double *py, double *pz,
+		                double *dist, double *spdist,
+				double *lpdist)
 {
     int i;
     double distance;
     double new_dist;
-    double tpx, tpy, tpz, tdist, tspdist, tlpdist = 0, tlpdistseg;
-    double dx, dy, dz;
+    double tpx, tpy, tpz, ttpx, ttpy, ttpz; 
+    double tdist, tspdist, tlpdist = 0, tlpdistseg;
+    double dz;
     int n_points;
     int segment;
 
@@ -824,28 +826,21 @@ int Vect_line_geodesic_distance(const struct line_pnts *points,
 						   points->x[i + 1],
 						   points->y[i + 1],
 						   points->z[i + 1], with_z,
-						   &tpx, &tpy, &tpz,
+						   &ttpx, &ttpy, &ttpz,
 						   NULL, NULL);
-	    new_dist = G_distance(ux, uy, tpx, tpy);
+
+	    new_dist = G_distance(ux, uy, ttpx, ttpy);
 	    if (with_z)
-		new_dist = hypot(new_dist, uz - tpz);
+		new_dist = hypot(new_dist, uz - ttpz);
 
 	    if (new_dist < distance) {
 		distance = new_dist;
 		segment = i + 1;
+		tpx = ttpx;
+		tpy = ttpy;
+		tpz = ttpz;
 	    }
 	}
-
-	/* we have segment and now we can recalculate other values (speed) */
-	new_dist = dig_distance2_point_to_line(ux, uy, uz,
-					       points->x[segment - 1],
-					       points->y[segment - 1],
-					       points->z[segment - 1],
-					       points->x[segment],
-					       points->y[segment],
-					       points->z[segment], with_z,
-					       &tpx, &tpy, &tpz, &tspdist,
-					       NULL);
 
 	/* calculate distance from beginning of segment */
 	tspdist = G_distance(points->x[segment - 1], points->y[segment - 1],
