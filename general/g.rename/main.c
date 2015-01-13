@@ -26,7 +26,7 @@
 #include <grass/manage.h>
 
 void update_reclass_maps(const char *, const char *);
-void update_basemap(const char *, const char *, const char *);
+void update_base_map(const char *, const char *, const char *);
 
 int main(int argc, char *argv[])
 {
@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
 
 	    if (!renamed && strcmp(parm[n]->key, "raster") == 0) {
 		update_reclass_maps(new, mapset);
-		update_basemap(old, new, mapset);
+		update_base_map(old, new, mapset);
 	    }
 	}
     }
@@ -158,7 +158,7 @@ void update_reclass_maps(const char *name, const char *mapset)
     }
 }
 
-void update_basemap(const char *old, const char *new, const char *mapset)
+void update_base_map(const char *old, const char *new, const char *mapset)
 {
     int i, nrmaps, found;
     char bname[GNAME_MAX], bmapset[GMAPSET_MAX], rpath[GPATH_MAX];
