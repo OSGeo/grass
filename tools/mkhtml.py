@@ -55,7 +55,7 @@ header_pgm_desc = """<h2>NAME</h2>
 
 footer_index = string.Template(\
 """<hr class="header">
-<p><a href="index.html">Main index</a> | <a href="${INDEXNAME}.html">${INDEXNAMECAP} index</a> | <a href="topics.html">Topics index</a> | <a href="keywords.html">Keywords Index</a> | <a href="full_index.html">Full index</a></p>
+<p><a href="index.html">Main index</a> | <a href="${INDEXNAME}.html">${INDEXNAMECAP} index</a> | <a href="topics.html">Topics index</a> | <a href="keywords.html">Keywords index</a> | <a href="full_index.html">Full index</a></p>
 <p>&copy; 2003-${YEAR} <a href="http://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS ${GRASS_VERSION} Reference Manual</p>
 </div>
 </body>
@@ -64,7 +64,7 @@ footer_index = string.Template(\
 
 footer_noindex = string.Template(\
 """<hr class="header">
-<p><a href="index.html">Main index</a> | <a href="topics.html">Topics index</a> | <a href="keywords.html">Keywords Index</a> | <a href="full_index.html">Full index</a></p>
+<p><a href="index.html">Main index</a> | <a href="topics.html">Topics index</a> | <a href="keywords.html">Keywords index</a> | <a href="full_index.html">Full index</a></p>
 <p>&copy; 2003-${YEAR} <a href="http://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS ${GRASS_VERSION} Reference Manual</p>
 </div>
 </body>
@@ -231,11 +231,22 @@ index_names = {
     'ps': 'postscript',
     'p' : 'paint',
     'r' : 'raster',
-    'r3': 'raster3D',
+    'r3': 'raster3d',
     's' : 'sites',
     't' : 'temporal',
     'v' : 'vector'
     }
+
+def to_title(name):
+    """Convert name of command class/family to form suitable for title"""
+    return name.capitalize()
+
+index_titles = {}
+for key, name in index_names.iteritems():
+    if key == 'r3':
+        index_titles[key] = '3D raster'
+    else:
+        index_titles[key] = to_title(name)
 
 # process footer
 index = re.search('(<!-- meta page index:)(.*)(-->)', src_data, re.IGNORECASE)
@@ -248,7 +259,7 @@ if index:
 else:
     mod_class = pgm.split('.', 1)[0]
     index_name = index_names.get(mod_class, '')
-    index_name_cap = index_name.title()
+    index_name_cap = index_titles.get(mod_class, '')
 
 grass_version = os.getenv("VERSION_NUMBER", "unknown")
 year = os.getenv("VERSION_DATE")
