@@ -62,7 +62,7 @@ indices = \
 	photo.html \
 	postscript.html \
 	raster.html \
-	raster3D.html \
+	raster3d.html \
 	vector.html
 
 html_pdf = \
