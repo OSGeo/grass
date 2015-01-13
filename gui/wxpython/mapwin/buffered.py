@@ -74,7 +74,8 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         """
         MapWindowBase.__init__(self, parent=parent, giface=giface, Map=Map)
         wx.Window.__init__(self, parent=parent, id=id, style=style, **kwargs)
-
+        self.SetBackgroundColour("white")
+        
         self._properties = properties
 
         # flags
