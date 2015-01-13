@@ -196,19 +196,19 @@ class GConsoleWindow(wx.SplitterWindow):
             outBtnSizer.AddStretchSpacer()
 
         outBtnSizer.Add(item = self.btnOutputClear, proportion = proportion,
-                        flag = wx.ALIGN_LEFT | wx.LEFT | wx.RIGHT, border = 5)
+                        flag = wx.ALIGN_LEFT | wx.LEFT | wx.RIGHT | wx.BOTTOM, border = 5)
 
         outBtnSizer.Add(item = self.btnOutputSave, proportion = proportion,
-                        flag = wx.ALIGN_RIGHT | wx.RIGHT, border = 5)
+                        flag = wx.ALIGN_RIGHT | wx.RIGHT | wx.BOTTOM, border = 5)
 
         cmdBtnSizer.Add(item = self.btnCmdProtocol, proportion = 1,
-                        flag = wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT, border = 5)
+                        flag = wx.ALIGN_CENTER | wx.ALIGN_CENTER_VERTICAL | wx.LEFT | wx.RIGHT | wx.BOTTOM, border = 5)
         cmdBtnSizer.Add(item = self.btnCmdClear, proportion = 1,
-                        flag = wx.ALIGN_CENTER | wx.RIGHT, border = 5)
+                        flag = wx.ALIGN_CENTER | wx.RIGHT | wx.BOTTOM, border = 5)
         progressSizer.Add(item = self.btnCmdAbort, proportion = 0,
                           flag = wx.ALL|wx.ALIGN_CENTER, border = 5)
         progressSizer.Add(item = self.progressbar, proportion = 1,
-                          flag = wx.ALIGN_CENTER|wx.RIGHT|wx.TOP|wx.BOTTOM, border = 5)
+                          flag = wx.ALIGN_CENTER | wx.RIGHT | wx.TOP | wx.BOTTOM, border = 5)
                           
         self.panelProgress.SetSizer(progressSizer)
         progressSizer.Fit(self.panelProgress)
