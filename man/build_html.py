@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # utilities for generating HTML indices
-# (c) 2003-2014 by the GRASS Development Team, Markus Neteler, Glynn Clements, Luca Delucchi
+# (c) 2003-2015 by the GRASS Development Team, Markus Neteler, Glynn Clements, Luca Delucchi
 
 import sys
 import os
