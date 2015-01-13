@@ -154,7 +154,7 @@
     </items>
   </toolbox>
   <toolbox name="Volumes">
-    <label>3D r&amp;asters</label>
+    <label>3D r&amp;aster</label>
     <items>
       <subtoolbox name="DevelopVolumes"/>
       <subtoolbox name="Raster3dMapTypeConversions"/>
@@ -1620,7 +1620,7 @@
     </items>
   </toolbox>
   <toolbox name="DevelopVolumes">
-    <label>Develop 3D rasters</label>
+    <label>Develop 3D raster map</label>
     <items>
       <module-item name="r3.null">
         <label>Manage 3D NULL values</label>
