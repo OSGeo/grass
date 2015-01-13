@@ -231,7 +231,12 @@ class MapFrame(SingleMapFrame):
         
         # create statusbar and its manager
         statusbar = self.CreateStatusBar(number = 4, style = 0)
-        statusbar.SetStatusWidths([-5, -2, -1, -1])
+        if globalvar.wxPython3:
+            statusbar.SetMinHeight(24)
+            prop = [-6, -2, -1, -2]
+        else:
+            prop = [-5, -2, -1, -1]
+        statusbar.SetStatusWidths(prop)
         self.statusbarManager = sb.SbManager(mapframe = self, statusbar = statusbar)
         
         # fill statusbar manager
