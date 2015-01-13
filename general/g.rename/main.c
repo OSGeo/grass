@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 		G_warning(_("%s <%s> not found"), M_get_list(n)->maindesc, old);
 		continue;
 	    }
-	    if (M_find(n, new, "") && !(module->overwrite)) {
+	    if (M_find(n, new, mapset) && !(module->overwrite)) {
 		G_warning(_("<%s> already exists in mapset <%s>"), new,
 			  M_find(n, new, ""));
 		continue;
