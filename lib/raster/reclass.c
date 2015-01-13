@@ -28,13 +28,13 @@ static int get_reclass_table(FILE *, struct Reclass *);
  *
  * This function determines if the raster map <i>name</i> in
  * <i>mapset</i> is a reclass file. If it is, then the name and mapset
- * of the referenced raster map are copied into the <i>r_name</i> and
- * <i>r_mapset</i> buffers.  
+ * of the referenced raster map are copied into the <i>rname</i> and
+ * <i>rmapset</i> buffers.  
  *
  * \param name map name
  * \param mapset mapset name
- * \param[out] r_name name of reference map
- * \param[out] r_mapset mapset where reference map lives
+ * \param[out] rname name of reference map
+ * \param[out] rmapset mapset where reference map lives
  *
  * \returns 1 if it is a reclass file
  * \return 0 if it is not
