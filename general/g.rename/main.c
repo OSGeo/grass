@@ -3,13 +3,13 @@
  *
  * MODULE:       g.rename
  * AUTHOR(S):    CERL (original contributor)
- *               Radim Blazek <radim.blazek gmail.com>, 
- *               Cedric Shock <cedricgrass shockfamily.net>, 
- *               Glynn Clements <glynn gclements.plus.com>, 
- *               Markus Neteler <neteler itc.it>, 
+ *               Radim Blazek <radim.blazek gmail.com>,
+ *               Cedric Shock <cedricgrass shockfamily.net>,
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Markus Neteler <neteler itc.it>,
  *               Martin Landa <landa.martin gmail.com>,
  *               Huidae Cho <grass4u gmail.com>
- * PURPOSE:      
+ * PURPOSE:      Rename map names
  * COPYRIGHT:    (C) 1994-2007, 2011-2014 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
@@ -30,10 +30,9 @@ void update_basemap(const char *, const char *, const char *);
 
 int main(int argc, char *argv[])
 {
-    int i, n;
+    int n;
     struct GModule *module;
     struct Option **parm;
-    char *old, *new;
     int nlist;
     const char *mapset;
     int result = EXIT_SUCCESS;
@@ -62,6 +61,9 @@ int main(int argc, char *argv[])
     mapset = G_mapset();
 
     for (n = 0; n < nlist; n++) {
+	int i;
+	char *old, *new;
+
 	if (parm[n]->answers == NULL)
 	    continue;
 	i = 0;
@@ -105,9 +107,8 @@ int main(int argc, char *argv[])
 
 void rename_child_reclass_maps(const char *name, const char *mapset)
 {
-    int nrmaps, ptr, l;
-    char **rmaps, buf1[256], buf2[256], buf3[256], *str;
-    FILE *fp;
+    int nrmaps;
+    char **rmaps;
 
     if (Rast_is_reclassed_to(name, mapset, &nrmaps, &rmaps) <= 0)
 	return;
@@ -115,6 +116,10 @@ void rename_child_reclass_maps(const char *name, const char *mapset)
     G_message(_("Renaming reclass maps"));
 
     for (; *rmaps; rmaps++) {
+	char buf1[256], buf2[256], buf3[256], *str;
+	FILE *fp;
+	int ptr, l;
+
 	G_message(" %s", *rmaps);
 	sprintf(buf3, "%s", *rmaps);
 	if ((str = strchr(buf3, '@'))) {
