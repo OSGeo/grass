@@ -49,8 +49,11 @@ def CheckWxVersion(version = [2, 8, 11, 0]):
 
     return True
 
-def CheckForWx():
-    """Try to import wx module and check its version"""
+def CheckForWx(forceVersion = None):
+    """Try to import wx module and check its version
+
+    :param forceVersion: force wxPython version, eg. '2.8'
+    """
     if 'wx' in sys.modules.keys():
         return
 
@@ -60,7 +63,8 @@ def CheckForWx():
             import wxversion
         except ImportError as e:
             raise ImportError(e)
-        # wxversion.select(str(minVersion[0]) + '.' + str(minVersion[1]))
+        if forceVersion:
+            wxversion.select(forceVersion)
         wxversion.ensureMinimal(str(minVersion[0]) + '.' + str(minVersion[1]))
         import wx
         version = wx.version().split(' ')[0]
