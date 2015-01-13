@@ -94,7 +94,7 @@ int write_output(struct globals *globals)
 
 	/* open input bands */
 	if (!I_get_group_ref(globals->image_group, &Ref))
-	    G_fatal_error(_("Unable to read REF file for group <%s>"),
+	    G_fatal_error(_("Group <%s> not found in the current mapset"),
 			  globals->image_group);
 	if (Ref.nfiles <= 0)
 	    G_fatal_error(_("Group <%s> contains no raster maps"),
