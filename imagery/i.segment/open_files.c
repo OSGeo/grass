@@ -319,7 +319,7 @@ static int load_seeds(struct globals *globals, int srows, int scols, int nseg)
 
     G_debug(1, "load_seeds()");
     
-    G_message(_("Loading seeds from '%s'"), globals->seeds);
+    G_message(_("Loading seeds from raster map <%s>..."), globals->seeds);
 
     if (Segment_open
 	(&seeds_seg, G_tempfile(), globals->nrows, globals->ncols,
