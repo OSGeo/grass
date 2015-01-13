@@ -25,15 +25,17 @@
 #include <grass/glocale.h>
 #include <grass/manage.h>
 
+void rename_child_reclass_maps(const char *, const char *);
+void update_basemap(const char *, const char *, const char *);
+
 int main(int argc, char *argv[])
 {
     int i, n;
     struct GModule *module;
     struct Option **parm;
     char *old, *new;
-    int nrmaps, nlist;
-    const char *mapset, *location_path;
-    char **rmaps;
+    int nlist;
+    const char *mapset;
     int result = EXIT_SUCCESS;
 
     G_gisinit(argv[0]);
@@ -57,7 +59,6 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    location_path = G_location_path();
     mapset = G_mapset();
 
     for (n = 0; n < nlist; n++) {
@@ -93,54 +94,113 @@ int main(int argc, char *argv[])
 		result = EXIT_FAILURE;
 	    }
 
-	    if (!renamed && strcmp(parm[n]->key, "raster") == 0 &&
-		Rast_is_reclassed_to(new, mapset, &nrmaps, &rmaps) > 0) {
-		int ptr, l;
-		char buf1[256], buf2[256], buf3[256], *str;
-		FILE *fp;
-
-		G_message(_("Renaming reclass maps"));
-
-		for (; *rmaps; rmaps++) {
-		    G_message(" %s", *rmaps);
-		    sprintf(buf3, "%s", *rmaps);
-		    if ((str = strchr(buf3, '@'))) {
-			*str = 0;
-			sprintf(buf2, "%s", str + 1);
-		    }
-		    else {
-			sprintf(buf2, "%s", mapset);
-		    }
-		    sprintf(buf1, "%s/%s/cellhd/%s", location_path, buf2,
-			    buf3);
-
-		    fp = fopen(buf1, "r");
-		    if (fp == NULL)
-			continue;
-
-		    fgets(buf2, 255, fp);
-		    fgets(buf2, 255, fp);
-		    fgets(buf2, 255, fp);
-
-		    ptr = G_ftell(fp);
-		    G_fseek(fp, 0L, SEEK_END);
-		    l = G_ftell(fp) - ptr;
-
-		    str = (char *)G_malloc(l);
-		    G_fseek(fp, ptr, SEEK_SET);
-		    fread(str, l, 1, fp);
-		    fclose(fp);
-
-		    fp = fopen(buf1, "w");
-		    fprintf(fp, "reclass\n");
-		    fprintf(fp, "name: %s\n", new);
-		    fprintf(fp, "mapset: %s\n", mapset);
-		    fwrite(str, l, 1, fp);
-		    G_free(str);
-		    fclose(fp);
-		}
+	    if (!renamed && strcmp(parm[n]->key, "raster") == 0) {
+		rename_child_reclass_maps(new, mapset);
+		update_basemap(old, new, mapset);
 	    }
 	}
     }
     exit(result);
+}
+
+void rename_child_reclass_maps(const char *name, const char *mapset)
+{
+    int nrmaps, ptr, l;
+    char **rmaps, buf1[256], buf2[256], buf3[256], *str;
+    FILE *fp;
+
+    if (Rast_is_reclassed_to(name, mapset, &nrmaps, &rmaps) <= 0)
+	return;
+
+    G_message(_("Renaming reclass maps"));
+
+    for (; *rmaps; rmaps++) {
+	G_message(" %s", *rmaps);
+	sprintf(buf3, "%s", *rmaps);
+	if ((str = strchr(buf3, '@'))) {
+	    *str = 0;
+	    sprintf(buf2, "%s", str + 1);
+	}
+	else {
+	    sprintf(buf2, "%s", mapset);
+	}
+	G_file_name(buf1, "cellhd", buf3, buf2);
+
+	fp = fopen(buf1, "r");
+	if (fp == NULL)
+	    continue;
+
+	fgets(buf2, 255, fp);
+	fgets(buf2, 255, fp);
+	fgets(buf2, 255, fp);
+
+	ptr = G_ftell(fp);
+	G_fseek(fp, 0L, SEEK_END);
+	l = G_ftell(fp) - ptr;
+
+	str = (char *)G_malloc(l);
+	G_fseek(fp, ptr, SEEK_SET);
+	fread(str, l, 1, fp);
+	fclose(fp);
+
+	fp = fopen(buf1, "w");
+	fprintf(fp, "reclass\n");
+	fprintf(fp, "name: %s\n", name);
+	fprintf(fp, "mapset: %s\n", mapset);
+	fwrite(str, l, 1, fp);
+	G_free(str);
+	fclose(fp);
+    }
+}
+
+void update_basemap(const char *old, const char *new, const char *mapset)
+{
+    int i, nrmaps, found;
+    char bname[GNAME_MAX], bmapset[GMAPSET_MAX], rpath[GPATH_MAX];
+    char *xold, *xnew, **rmaps;
+    FILE *fp;
+
+    if (Rast_is_reclass(new, mapset, bname, bmapset) <= 0)
+	return;
+
+    if (Rast_is_reclassed_to(bname, bmapset, &nrmaps, &rmaps) <= 0)
+	nrmaps = 0;
+
+    found = 0;
+    xold = G_fully_qualified_name(old, mapset);
+    for (i = 0; i < nrmaps; i++) {
+	if (strcmp(xold, rmaps[i]) == 0) {
+	    found = 1;
+	    break;
+	}
+    }
+
+    if (!found) {
+	G_fatal_error(_("Unable to find reclass information for <%s> in "
+			"base map <%s@%s>"), xold, bname, bmapset);
+    }
+
+    G_message(_("Updating base map <%s@%s>"), bname, bmapset);
+
+    G_file_name_misc(rpath, "cell_misc", "reclassed_to", bname, bmapset);
+
+    fp = fopen(rpath, "w");
+    if (fp == NULL) {
+	G_fatal_error(_("Unable to update dependency file in <%s@%s>"),
+		  bname, bmapset);
+    }
+
+    xnew = G_fully_qualified_name(new, mapset);
+    for (; *rmaps; rmaps++) {
+	if (strcmp(xold, *rmaps) == 0) {
+	    fprintf(fp, "%s\n", xnew);
+	}
+	else {
+	    fprintf(fp, "%s\n", *rmaps);
+	}
+    }
+
+    G_free(xold);
+    G_free(xnew);
+    fclose(fp);
 }
