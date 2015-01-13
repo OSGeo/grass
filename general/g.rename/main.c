@@ -25,7 +25,7 @@
 #include <grass/glocale.h>
 #include <grass/manage.h>
 
-void rename_child_reclass_maps(const char *, const char *);
+void update_reclass_maps(const char *, const char *);
 void update_basemap(const char *, const char *, const char *);
 
 int main(int argc, char *argv[])
@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
 	    }
 
 	    if (!renamed && strcmp(parm[n]->key, "raster") == 0) {
-		rename_child_reclass_maps(new, mapset);
+		update_reclass_maps(new, mapset);
 		update_basemap(old, new, mapset);
 	    }
 	}
@@ -105,7 +105,7 @@ int main(int argc, char *argv[])
     exit(result);
 }
 
-void rename_child_reclass_maps(const char *name, const char *mapset)
+void update_reclass_maps(const char *name, const char *mapset)
 {
     int nrmaps;
     char **rmaps;
@@ -113,7 +113,7 @@ void rename_child_reclass_maps(const char *name, const char *mapset)
     if (Rast_is_reclassed_to(name, mapset, &nrmaps, &rmaps) <= 0)
 	return;
 
-    G_message(_("Renaming reclass maps"));
+    G_message(_("Updating reclass maps"));
 
     for (; *rmaps; rmaps++) {
 	char buf1[256], buf2[256], buf3[256], *str;
