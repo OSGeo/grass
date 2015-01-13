@@ -159,6 +159,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         else:
             super(LayerTree, self).__init__(parent, id, style = ctstyle, **kwargs)
         self.SetName("LayerTree")
+        self.SetBackgroundColour("white")
         
         ### SetAutoLayout() causes that no vertical scrollbar is displayed
         ### when some layers are not visible in layer tree

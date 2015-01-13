@@ -138,6 +138,7 @@ class CTreeView(AbstractTreeViewMixin, CT.CustomTreeCtrl):
             kw[style] = CT.TR_HIDE_ROOT | CT.TR_FULL_ROW_HIGHLIGHT |\
                 CT.TR_HAS_BUTTONS | CT.TR_LINES_AT_ROOT | CT.TR_SINGLE
         super(CTreeView, self).__init__(parent=parent, model=model, **kw)
+        self.SetBackgroundColour("white")
         self.RefreshItems()
         
 class TreeListView(AbstractTreeViewMixin, ExpansionState, gizmos.TreeListCtrl):
