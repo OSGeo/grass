@@ -49,7 +49,7 @@ def CheckWxVersion(version):
 
     return True
 
-def CheckForWx(forceVersion = None):
+def CheckForWx(forceVersion = os.getenv('GRASS_WXVERSION', None)):
     """Try to import wx module and check its version
 
     :param forceVersion: force wxPython version, eg. '2.8'
