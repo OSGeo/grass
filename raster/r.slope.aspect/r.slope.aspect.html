@@ -5,15 +5,17 @@ first and second order partial derivatives from a raster map of true
 elevation values. The user must specify the input <b>elevation</b> raster map
 and at least one output raster maps. The user can also specify the
 <b>format</b> for slope (degrees, percent; default=degrees), and the 
-<b>zscale</b>: multiplicative factor to convert elevation units to meters;
+<b>zscale</b>: multiplicative factor to convert elevation units to horizontal units;
 (default 1.0).
 
 <p>
 The <b>elevation</b> input raster map specified by the user must contain true
 elevation values, <em>not</em> rescaled or categorized data. If the elevation
-values are in feet or other units than meters (with a conversion factor
-<i>meters:</i>, defined in PROJ_UNITS), they must be converted to meters using
-the parameter <b>zscale</b>.
+values are in other units than in the horizontal units,
+they must be converted to horizontal units using the parameter <b>zscale</b>.
+<em>In GRASS GIS 7, vertical units are not assumed to be meters any more.
+For example, if both your vertical and horizontal units are feet,
+parameter <b>zscale</b> must not be used</em>.
 
 <p>
 The <b>aspect</b> output raster map indicates the direction that slopes are

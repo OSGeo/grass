@@ -241,7 +241,7 @@ int main(int argc, char *argv[])
     parm.zfactor = G_define_option();
     parm.zfactor->key = "zscale";
     parm.zfactor->description =
-	_("Multiplicative factor to convert elevation units to meters");
+	_("Multiplicative factor to convert elevation units to horizontal units");
     parm.zfactor->type = TYPE_DOUBLE;
     parm.zfactor->required = NO;
     parm.zfactor->answer = "1.0";
@@ -382,10 +382,11 @@ int main(int argc, char *argv[])
     /* V = window.ns_res * 4 * 2/ zfactor; *//* vertical (north-south) run 
        times 4 for weighted difference */
 
-    /* give warning if location units are different from meters and zfactor=1 */
+    /* we don't assume vertical units to be meters any more */
     factor = G_database_units_to_meters_factor();
-    if (factor != 1.0)
-	G_warning(_("Converting units to meters, factor=%.6f"), factor);
+    if (factor != 1.0 && zfactor != 1.0)
+    	G_warning(_("r.slope.aspect does not convert horizontal units "
+                    "to meters in this version, see manual page."));
 
     G_begin_distance_calculations();
     north = Rast_row_to_northing(0.5, &window);
@@ -393,8 +394,8 @@ int main(int argc, char *argv[])
     south = Rast_row_to_northing(2.5, &window);
     east = Rast_col_to_easting(2.5, &window);
     west = Rast_col_to_easting(0.5, &window);
-    V = G_distance(east, north, east, south) * 4 / zfactor;
-    H = G_distance(east, ns_med, west, ns_med) * 4 / zfactor;
+    V = G_distance(east, north, east, south) * 4 / (factor * zfactor);
+    H = G_distance(east, ns_med, west, ns_med) * 4 / (factor * zfactor);
     /*    ____________________________
        |c1      |c2      |c3      |
        |        |        |        |
@@ -551,8 +552,8 @@ int main(int argc, char *argv[])
 	    south = Rast_row_to_northing((row + 0.5), &window);
 	    east = Rast_col_to_easting(2.5, &window);
 	    west = Rast_col_to_easting(0.5, &window);
-	    V = G_distance(east, north, east, south) * 4 / zfactor;
-	    H = G_distance(east, ns_med, west, ns_med) * 4 / zfactor;
+	    V = G_distance(east, north, east, south) * 4 / (factor * zfactor);
+	    H = G_distance(east, ns_med, west, ns_med) * 4 / (factor * zfactor);
 	    /*        ____________________________
 	       |c1      |c2      |c3      |
 	       |        |        |        |
