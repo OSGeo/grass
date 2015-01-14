@@ -57,11 +57,13 @@ Contents
 7
 0
 0RC1
-2014
+2015
       rm -f include/VERSION~
 
     - Update additionally the winGRASS version
       grass-addons/tools/wingrass-packager/grass_packager_release.bat
+      grass-addons/tools/wingrass-packager/grass_addons.sh
+      grass-addons/tools/wingrass-packager/grass_copy_wwwroot.sh
 
      #version:
      MAJOR=`cat include/VERSION | head -1 | tail -1`
