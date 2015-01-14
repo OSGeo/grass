@@ -795,6 +795,7 @@ class GRASSStartup(wx.Frame):
             if locationName:
                 # enable start button when location and mapset is selected
                 self.bstart.Enable()
+                self.bstart.SetFocus()
                 self.bmapset.Enable()
                 self.manageloc.Enable()
         else:
@@ -887,6 +888,7 @@ class GRASSStartup(wx.Frame):
             self.OnSelectLocation(None)
             self.lbmapsets.SetSelection(self.listOfMapsets.index(mapset))
             self.bstart.SetFocus()
+
             return True
         except StandardError as e:
             GError(parent = self,
