@@ -57,11 +57,13 @@ Contents
 7
 0
 0RC1
-2014
+2015
       rm -f include/VERSION~
 
     - Update additionally the winGRASS version
       grass-addons/tools/wingrass-packager/grass_packager_release.bat
+      grass-addons/tools/wingrass-packager/grass_addons.sh
+      grass-addons/tools/wingrass-packager/grass_copy_wwwroot.sh
 
      #version:
      MAJOR=`cat include/VERSION | head -1 | tail -1`
@@ -228,6 +230,7 @@ Contents
    http://groups.google.com/group/Remote-Sensing-GIS-for-a-New-World
    http://groups.google.com/group/comp.infosystems.gis
    http://www.heise.de/software/download/edit_7105 (update, MN)
+   https://joinup.ec.europa.eu/ --> Sharing content | Propose your...
 
    See also: http://grass.osgeo.org/wiki/Contact_Databases
    ... anywhere else? Please add here.
