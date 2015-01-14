@@ -41,7 +41,7 @@ except IOError:
 
 from grass.script.core import get_commands
 
-def CheckWxVersion(version = [2, 8, 11, 0]):
+def CheckWxVersion(version):
     """Check wx version"""
     ver = wx.version().split(' ')[0]
     if map(int, ver.split('.')) < version:
@@ -202,7 +202,8 @@ UpdateGRASSAddOnCommands()
 toolbarSize = (24, 24)
 
 """@Check version of wxPython, use agwStyle for 2.8.11+"""
-hasAgw = CheckWxVersion()
+hasAgw = CheckWxVersion([2, 8, 11, 0])
+wxPython3 = CheckWxVersion([3, 0, 0, 0])
 
 """@Add GUIDIR/scripts into path"""
 os.environ['PATH'] = os.path.join(GUIDIR, 'scripts') + os.pathsep + os.environ['PATH']
