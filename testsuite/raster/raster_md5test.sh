@@ -48,7 +48,7 @@ TMPNAME="`echo ${PID}_tmp_testmap | sed 's+\.+_+g'`"
 cleanup()
 {
  echo "Removing temporary map"
- g.remove -f type=rast name=$TMPNAME > /dev/null
+ g.remove -f type=raster name=$TMPNAME > /dev/null
 }
 
 # check if a MASK is already present:
@@ -68,7 +68,7 @@ finalcleanup()
  #restore user mask if present:
  if test -f $LOCATION/cell/$USERMASK ; then
   echo "Restoring user MASK"
-  g.remove -f type=rast name=MASK > /dev/null
+  g.remove -f type=raster name=MASK > /dev/null
   g.rename raster=$USERMASK,MASK > /dev/null
  fi
 }

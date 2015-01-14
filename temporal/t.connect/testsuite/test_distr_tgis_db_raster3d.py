@@ -161,7 +161,6 @@ class testRaster3dExtraction(TestCase):
         tinfo_string="""id=a1@test3d1
                                 name=a1
                                 mapset=test3d1
-                                creator=soeren
                                 temporal_type=absolute
                                 start_time=2001-01-01 00:00:00
                                 end_time=2001-02-01 00:00:00 """
@@ -172,7 +171,6 @@ class testRaster3dExtraction(TestCase):
         tinfo_string="""id=a1@test3d2
                                 name=a1
                                 mapset=test3d2
-                                creator=soeren
                                 temporal_type=absolute
                                 start_time=2001-01-01 00:00:00
                                 end_time=2001-03-01 00:00:00 """
@@ -183,7 +181,6 @@ class testRaster3dExtraction(TestCase):
         tinfo_string="""id=a1@test3d3
                                 name=a1
                                 mapset=test3d3
-                                creator=soeren
                                 temporal_type=absolute
                                 start_time=2001-01-01 00:00:00
                                 end_time=2001-04-01 00:00:00 """
@@ -194,7 +191,6 @@ class testRaster3dExtraction(TestCase):
         tinfo_string="""id=a1@test3d4
                                 name=a1
                                 mapset=test3d4
-                                creator=soeren
                                 temporal_type=absolute
                                 start_time=2001-01-01 00:00:00
                                 end_time=2001-05-01 00:00:00 """
