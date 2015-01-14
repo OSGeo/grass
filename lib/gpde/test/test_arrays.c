@@ -294,7 +294,7 @@ int io_bench_2d(void)
 
 
     sprintf(buff,
-	    "g.remove -f type=rast name=gpde_lib_test_raster_1,gpde_lib_test_raster_2,gpde_lib_test_raster_3");
+	    "g.remove -f type=raster name=gpde_lib_test_raster_1,gpde_lib_test_raster_2,gpde_lib_test_raster_3");
     system(buff);
 
     N_free_array_2d(data1);
@@ -588,7 +588,7 @@ int test_array_2d(void)
 
 
     sprintf(buff,
-	    "g.remove -f type=rast name=gpde_lib_test_raster_1,gpde_lib_test_raster_2,gpde_lib_test_raster_3");
+	    "g.remove -f type=raster name=gpde_lib_test_raster_1,gpde_lib_test_raster_2,gpde_lib_test_raster_3");
     system(buff);
 
 
