@@ -131,7 +131,7 @@ r"""<!-- the files grass${grass_version_major}.html & helptext.html file live in
       <td width="33%" valign="top" class="box"><h3>&nbsp;3D raster processing</h3>
        <ul>
         <li class="box"><a href="raster3dintro.html">Intro: 3D raster map (voxel) processing</a></li>
-        <li class="box"><a href="raster3D.html">3D raster (voxel) commands manual</a></li>
+        <li class="box"><a href="raster3d.html">3D raster (voxel) commands manual</a></li>
       </ul></td>
       <td width="33%" valign="top" class="box"><h3>&nbsp;Image processing</h3>
        <ul>
@@ -398,6 +398,10 @@ def get_desc(cmd):
                 return None
 
     return ""
+
+def to_title(name):
+    """Convert name of command class/family to form suitable for title"""
+    return name.capitalize()
 
 ############################################################################
 
