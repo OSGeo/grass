@@ -112,6 +112,15 @@ The syntax of the rules section is following:
 #%end
 </pre></div>
 
+The parser also allows to define "OR" conditions, e.g. requiring raster OR vector:
+
+<div class="code"><pre>
+#%rules
+#% requires: raster, vector
+#%end
+</pre></div>
+
+
 <h2>NOTES</h2>
 
 An option can be instructed to allow multiple inputs by adding the
