@@ -17,7 +17,7 @@ categories = \
 	m:misc \
 	ps:postscript \
 	r:raster \
-	r3:raster3D \
+	r3:raster3d \
 	t:temporal \
 	v:vector
 

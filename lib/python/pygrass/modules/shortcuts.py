@@ -56,7 +56,7 @@ class MetaModule(object):
 #  m.*	miscellaneous commands
 #  ps.*	postscript commands
 #  r.*	raster commands
-#  r3.*	raster3D commands
+#  r3.*	3D raster commands
 #  t.*	temporal commands
 #  v.*	vector commands
 
@@ -67,6 +67,6 @@ imagery = MetaModule('i')
 miscellaneous = MetaModule('m')
 postscript = MetaModule('ps')
 raster = MetaModule('r')
-raster3D = MetaModule('r3')
+raster3d = MetaModule('r3')
 temporal = MetaModule('t')
 vector = MetaModule('v')
