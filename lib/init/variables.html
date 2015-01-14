@@ -288,7 +288,16 @@ PERMANENT
     When set, the wxGUI will not check the wxPython version, as this
     function is incompatible with a bundled wxPython.  It is up to the
     packager to make sure that a compatible wxPython version is bundled.</dd>
-  
+
+  <dt>GRASS_WXVERSION</dt>
+  <dd>[wxGUI]<br>
+    
+    set to tell wxGUI which version of wxPython to use.<br>
+
+    When set, the wxGUI will select the given wxPython version. It's
+    useful when multiple versions of wxPython are installed and the
+    user wants to run wxGUI with non-default wxPython version.</dd>
+
   <dt>GRASS_XTERM</dt>
   <dd>[lib/init/grass-xterm-wrapper, lib/init/grass-xterm-mac]<br>
     set to any value (e.g. rxvt, aterm, gnome-terminal, konsole) to
