@@ -13,6 +13,8 @@ dp:precision
 ##########################
 # d.barscale
 d.barscale|background_color:bgcolor
+# d.colorlist 
+d.colorlist|fs:separator
 # d.colortable
 d.colortable|cols:columns
 # d.correlate
@@ -198,6 +200,7 @@ r.blend|output_prefix:output
 r.carve|rast:raster
 r.carve|vect:vector
 # r.category
+r.category|fs:separator
 r.category|vals:values
 # r.circle
 r.circle|coordinate:coordinates
@@ -427,8 +430,10 @@ r3.gwflow|vx:velocity_x
 r3.gwflow|vy:velocity_y
 r3.gwflow|vz:velocity_z
 # r3.out.ascii
+r3.out.ascii|dp:precision
 r3.out.ascii|null:null_value
 # r3.out.vtk
+r3.out.vtk|dp:precision
 r3.out.vtk|elevscale:zscale
 #########################
 ### Temporal module changes
