@@ -1,27 +1,26 @@
 # translation of grasswxpy_de.po to Deutsch
 # This file is distributed under the same license as the GRASS package.
-# Copyright (C) 2008-2014 GRASS Development Team
+# Copyright (C) 2008-2015 GRASS Development Team
 #
-# Markus Neteler <neteler cealp it>, 2008.
+# Markus Neteler <neteler osgeo.org>, 2008, 2015.
 # Georg Lösel <georg*de-schorsch.de>, 2008.
 # Markus Neteler <neteler osgeo.org>, 2008, 2009, 2010.
 # Robert Nuske <rnuske gwdg.de>, 2009, 2010.
 # Robert Nuske <robert.nuske nw-fva.de>, 2011, 2012, 2013, 2014.
-#: ../gui/wxpython/gis_set.py:122
 msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_de\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-01-13 10:55+0100\n"
-"PO-Revision-Date: 2014-08-10 14:04+0200\n"
-"Last-Translator: Robert Nuske <robert.nuske@nw-fva.de>\n"
+"PO-Revision-Date: 2015-01-14 15:50+0100\n"
+"Last-Translator: Markus Neteler <neteler@osgeo.org>\n"
 "Language-Team: German <grass-translations@lists.osgeo.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 1.5\n"
+"X-Generator: Poedit 1.5.4\n"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:47
 msgid "Data properties"
@@ -48,9 +47,8 @@ msgid "Type of element:"
 msgstr "Art des Elements:"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:141
-#, fuzzy
 msgid "Add GRASS command to the model"
-msgstr "Füge Aktion (GRASS Modul) zu Modell hinzu"
+msgstr "Füge GRASS Kommando zu Modell hinzu"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:160
 #: ../gui/wxpython/gmodeler/dialogs.py:437
@@ -66,16 +64,14 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/dialogs.py:198
 #: ../gui/wxpython/gmodeler/frame.py:1354
-#, fuzzy
 msgid "Label:"
-msgstr "Label"
+msgstr "Beschriftung:"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:202
 #: ../gui/wxpython/gmodeler/frame.py:743
 #: ../gui/wxpython/gmodeler/frame.py:1366
-#, fuzzy
 msgid "Comment:"
-msgstr "Befehl:"
+msgstr "Kommentar:"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:254
 msgid ""
@@ -336,9 +332,8 @@ msgid "Loop"
 msgstr "Schleife"
 
 #: ../gui/wxpython/gmodeler/preferences.py:408
-#, fuzzy
 msgid "Comment"
-msgstr "Befehle"
+msgstr "Kommentar"
 
 #: ../gui/wxpython/gmodeler/preferences.py:508
 #: ../gui/wxpython/menustrings.py:1973
@@ -638,9 +633,8 @@ msgid "Model exported to <%s>"
 msgstr "Modell exportiert in <%s>"
 
 #: ../gui/wxpython/gmodeler/frame.py:743 ../gui/wxpython/menustrings.py:1969
-#, fuzzy
 msgid "Add comment"
-msgstr "Befehlsebene hinzufügen"
+msgstr "Kommentar hinzufügen"
 
 #: ../gui/wxpython/gmodeler/frame.py:748
 msgid "Empty comment. Nothing to add to the model."
@@ -651,7 +645,7 @@ msgid "wxGUI Graphical Modeler"
 msgstr "wxGUI Grafischen Modellierer"
 
 #: ../gui/wxpython/gmodeler/frame.py:875
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Reading model file <%s> failed.\n"
 "Invalid file, unable to parse XML document.\n"
@@ -659,7 +653,9 @@ msgid ""
 "%s"
 msgstr ""
 "Lesen der Modell-Datei <%s> nicht erfolgreich.\n"
-"Ungültige Datei, Parsing der XML-Datei nicht möglich."
+"Ungültige Datei, Parsing der XML-Datei nicht möglich.\n"
+"\n"
+"%s"
 
 #: ../gui/wxpython/gmodeler/frame.py:884
 msgid "Please wait, loading model..."
@@ -716,15 +712,13 @@ msgstr "Aktiviere"
 
 #: ../gui/wxpython/gmodeler/frame.py:1304
 #: ../gui/wxpython/gmodeler/frame.py:1354
-#, fuzzy
 msgid "Set label"
-msgstr "Label editieren"
+msgstr "Beschriftung setzen"
 
 #: ../gui/wxpython/gmodeler/frame.py:1307
 #: ../gui/wxpython/gmodeler/frame.py:1366
-#, fuzzy
 msgid "Set comment"
-msgstr "Schrift"
+msgstr "Kommentar erstellen"
 
 #: ../gui/wxpython/gmodeler/frame.py:1312
 msgid "Add control point"
@@ -802,7 +796,6 @@ msgid "vector"
 msgstr "Vektor"
 
 #: ../gui/wxpython/gmodeler/frame.py:1456
-#, fuzzy
 msgid "region"
 msgstr "Region"
 
@@ -824,9 +817,8 @@ msgid "List of items - right-click to delete"
 msgstr "Liste von Elementen - Rechtsklick für Löschen"
 
 #: ../gui/wxpython/gmodeler/frame.py:1588
-#, fuzzy
 msgid "In loop"
-msgstr "Schleife"
+msgstr "In Schleife"
 
 #: ../gui/wxpython/gmodeler/frame.py:1637
 #, fuzzy
@@ -950,9 +942,8 @@ msgid "Select image group:"
 msgstr "Wählen Sie eine Gruppe:"
 
 #: ../gui/wxpython/wxplot/dialogs.py:415
-#, fuzzy
 msgid "Histogram type"
-msgstr "Histogramm"
+msgstr "Histogrammtyp"
 
 #: ../gui/wxpython/wxplot/dialogs.py:494
 #, fuzzy
@@ -1101,9 +1092,8 @@ msgid "Style"
 msgstr "Stil"
 
 #: ../gui/wxpython/wxplot/dialogs.py:962
-#, fuzzy
 msgid "Scatterplot points"
-msgstr "Vektorpunkte"
+msgstr "Scatterplot-Punkte"
 
 #: ../gui/wxpython/wxplot/dialogs.py:1013
 msgid "Axis settings"
@@ -1371,9 +1361,8 @@ msgstr "Histogramm von"
 
 #: ../gui/wxpython/wxplot/histogram.py:55
 #: ../gui/wxpython/wxplot/histogram.py:145
-#, fuzzy
 msgid "Cell counts"
-msgstr "Zellenwerte"
+msgstr "Zellenanzahl"
 
 #: ../gui/wxpython/wxplot/histogram.py:126
 #, fuzzy, python-format
@@ -1513,14 +1502,12 @@ msgid "Invert colors %s:"
 msgstr "Geben Sie Farbregeln ein"
 
 #: ../gui/wxpython/vnet/dialogs.py:1147
-#, fuzzy
 msgid "Line color:"
-msgstr "Linienfarbe"
+msgstr "Linienfarbe:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1148
-#, fuzzy
 msgid "Color for unused point:"
-msgstr "Farbe für nicht verwendete GCPs:"
+msgstr "Farbe für nicht verwendeten Punkt:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1149
 msgid "Color for Start/From/Source/Used point:"
@@ -1531,9 +1518,8 @@ msgid "Color for End/To/Sink point:"
 msgstr ""
 
 #: ../gui/wxpython/vnet/dialogs.py:1151
-#, fuzzy
 msgid "Color for selected point:"
-msgstr "Farbe für ausgewählte GCPs:"
+msgstr "Farbe für ausgewählten Punkt:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1164 ../gui/wxpython/psmap/dialogs.py:4900
 #: ../gui/wxpython/mapswipe/dialogs.py:270 ../gui/wxpython/gcp/manager.py:2564
@@ -1542,14 +1528,12 @@ msgid "Line width:"
 msgstr "Linienbreite:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1165
-#, fuzzy
 msgid "Point size:"
-msgstr "Schriftgröße:"
+msgstr "Punktgröße:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1166
-#, fuzzy
 msgid "Point width:"
-msgstr "Linienbreite:"
+msgstr "Punktbreite:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1167 ../gui/wxpython/iscatt/dialogs.py:338
 #, fuzzy
@@ -1574,9 +1558,8 @@ msgid "Analysis result style:"
 msgstr ""
 
 #: ../gui/wxpython/vnet/dialogs.py:1230
-#, fuzzy
 msgid "Point style:"
-msgstr "Liniestil"
+msgstr "Punktstil:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1252
 #, fuzzy
@@ -1769,15 +1752,13 @@ msgid "Start point"
 msgstr "Startpunkt"
 
 #: ../gui/wxpython/vnet/vnet_data.py:239
-#, fuzzy
 msgid "End Point"
 msgstr "Endpunkt"
 
 #: ../gui/wxpython/vnet/vnet_data.py:492 ../gui/wxpython/vnet/vnet_data.py:501
 #: ../gui/wxpython/vnet/vnet_data.py:504
-#, fuzzy
 msgid "new point"
-msgstr "Links: neuer Punkt"
+msgstr "neuer Punkt"
 
 #: ../gui/wxpython/vnet/vnet_data.py:662
 msgid "Arc forward/both direction(s) cost column:"
@@ -1832,9 +1813,8 @@ msgid "Maximum flow %s"
 msgstr "Maximaler Fluss"
 
 #: ../gui/wxpython/vnet/vnet_data.py:721
-#, fuzzy
 msgid "Source point"
-msgstr "Typ der Quelle"
+msgstr "Punkt der Quelle"
 
 #: ../gui/wxpython/vnet/vnet_data.py:722
 #, fuzzy
@@ -2846,11 +2826,13 @@ msgstr ""
 "Fehler: Unable to open '%(file)s'. Begründung: %(ret)s. wxGUI exited.\n"
 
 #: ../gui/wxpython/core/render.py:488
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "\n"
 "ERROR: Unable to read WIND file: %s\n"
-msgstr "Kann Datei %s nicht lesen."
+msgstr ""
+"\n"
+"FEHLER: Kann WIND Datei nicht lesen: %s\n"
 
 #: ../gui/wxpython/core/render.py:585
 #, python-format
@@ -2902,9 +2884,8 @@ msgid "Unable to render overlay <%s>."
 msgstr "Kann die Überlagerung <%s> nicht rendern."
 
 #: ../gui/wxpython/core/render.py:1377
-#, fuzzy
 msgid "Downloading data "
-msgstr "Lade Daten..."
+msgstr "Lade Daten herunter"
 
 #: ../gui/wxpython/core/render.py:1387
 #, fuzzy
@@ -3147,7 +3128,6 @@ msgid "cross"
 msgstr ""
 
 #: ../gui/wxpython/core/settings.py:919
-#, fuzzy
 msgid "circle"
 msgstr "Kreis"
 
@@ -4294,9 +4274,8 @@ msgid "Click and drag to resize object"
 msgstr "Anklicken und verschieben, um Größe zu verändern"
 
 #: ../gui/wxpython/psmap/frame.py:2171
-#, fuzzy
 msgid "labels: "
-msgstr "Beschriftungen hinzufügen"
+msgstr "Beschriftungen:"
 
 #: ../gui/wxpython/psmap/instructions.py:133
 #, python-format
@@ -13690,18 +13669,16 @@ msgid "Net radiation approximation (Bastiaanssen, 1995)."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:808 ../gui/wxpython/menustrings.py:1720
-#, fuzzy
 msgid "Soil heat flux"
-msgstr "SIMWE Sedimentbewegungsmodellierung"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:809 ../gui/wxpython/menustrings.py:1721
 msgid "Soil heat flux approximation (Bastiaanssen, 1995)."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:810 ../gui/wxpython/menustrings.py:1722
-#, fuzzy
 msgid "Sensible heat flux"
-msgstr "SIMWE Sedimentbewegungsmodellierung"
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:811 ../gui/wxpython/menustrings.py:1723
 msgid "Computes sensible heat flux iteration SEBAL 01."
@@ -13718,9 +13695,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:814 ../gui/wxpython/menustrings.py:1726
-#, fuzzy
 msgid "Actual Evapotranspiration"
-msgstr "Berechnung des Mittelwerts."
+msgstr ""
 
 #: ../gui/wxpython/menustrings.py:815 ../gui/wxpython/menustrings.py:1727
 msgid "Actual evapotranspiration for diurnal period (Bastiaanssen, 1995)."
@@ -14313,9 +14289,8 @@ msgid "Lists registered maps of a space time raster3d dataset."
 msgstr "Importiere Rasterdaten"
 
 #: ../gui/wxpython/menustrings.py:946 ../gui/wxpython/menustrings.py:1858
-#, fuzzy
 msgid "Import"
-msgstr "&Import"
+msgstr "Import"
 
 #: ../gui/wxpython/menustrings.py:947 ../gui/wxpython/menustrings.py:1859
 #, fuzzy
@@ -14379,9 +14354,8 @@ msgid "Converts a space time raster dataset into a 3D raster map."
 msgstr "Konvertiert eine Vektorkarte in eine Rasterkarte."
 
 #: ../gui/wxpython/menustrings.py:960 ../gui/wxpython/menustrings.py:1872
-#, fuzzy
 msgid "Extraction"
-msgstr "Textrotation"
+msgstr "Extraktion"
 
 #: ../gui/wxpython/menustrings.py:961 ../gui/wxpython/menustrings.py:1873
 #, fuzzy
@@ -14472,9 +14446,8 @@ msgid ""
 msgstr "Konvertiert eine Vektorkarte in eine Rasterkarte."
 
 #: ../gui/wxpython/menustrings.py:977 ../gui/wxpython/menustrings.py:1889
-#, fuzzy
 msgid "Aggregation"
-msgstr "Orientierung"
+msgstr "Aggregierung"
 
 #: ../gui/wxpython/menustrings.py:978 ../gui/wxpython/menustrings.py:1890
 #, fuzzy
@@ -14829,14 +14802,12 @@ msgid "Export instruction file"
 msgstr "Exportiere in Bild"
 
 #: ../gui/wxpython/menustrings.py:1995
-#, fuzzy
 msgid "Export to PostScript"
-msgstr "Exportiere Modell als Python-Skript"
+msgstr "Exportiere nach PostScript"
 
 #: ../gui/wxpython/menustrings.py:1997
-#, fuzzy
 msgid "Export to PDF"
-msgstr "Export nach:"
+msgstr "Export nach PDF"
 
 #: ../gui/wxpython/menustrings.py:1999 ../gui/wxpython/menustrings.py:2000
 #, fuzzy
@@ -19176,81 +19147,3 @@ msgstr "Baumstruktur (Doppelklick, um einen Befehl auszuführen)"
 #, fuzzy
 msgid "Run selected module from the tree"
 msgstr "Führe den ausgewählten Befehl aus"
-
-#~ msgid "Imports older versions of GRASS vector maps."
-#~ msgstr "Importiere ältere Versionen von GRASS Vektorkarten."
-
-#~ msgid "Vector to volume"
-#~ msgstr "Vektor zu Volumen"
-
-#~ msgid "Sites to vector"
-#~ msgstr "Sites zu Vektor"
-
-#, fuzzy
-#~ msgid "Raster map calculator."
-#~ msgstr "3D Rasterkartenrechner"
-
-#~ msgid "V&olumes"
-#~ msgstr "&Volumen"
-
-#~ msgid "Develop volumes"
-#~ msgstr "Volumen pflegen"
-
-#~ msgid "3D Mask"
-#~ msgstr "3D Maske"
-
-#~ msgid "Volume calculator"
-#~ msgstr "Volumenrechner"
-
-#~ msgid "Basic volume metadata"
-#~ msgstr "Grundlegende Volumen-Metadaten"
-
-#~ msgid "Voxel statistics"
-#~ msgstr "Voxel-Statistik"
-
-#~ msgid "Volume"
-#~ msgstr "Volumen"
-
-#~ msgid ""
-#~ "Imports US-NGA GEOnet Names Server (GNS) country files into a GRASS "
-#~ "vector points map."
-#~ msgstr ""
-#~ "Importiere US-NGA GEOnet Names Server (GNS) Länderdaten in eine GRASS "
-#~ "Vektorpunkte Karte."
-
-#, fuzzy
-#~ msgid ""
-#~ "Outputs a raster map showing the anisotropic cumulative cost. Computes "
-#~ "anisotropic cumulative cost of moving between different geographic "
-#~ "locations on an input elevation raster map whose cell category values "
-#~ "represent elevation combined with an input raster map layer whose cell "
-#~ "values represent friction cost."
-#~ msgstr ""
-#~ "Erzeugt eine Rasterkarte, die die anisotrophen kumulierten Kosten zeigt, "
-#~ "die beim Bewegen zwischen unterschiedlichen geographischen Orten "
-#~ "entstehen. Dabei werden als Eingabekarten einmal ein Höhenmodell und eine "
-#~ "Rasterkarte mit Reibungs-Kosten kombiniert."
-
-#~ msgid "Surface interpolation utility for raster map."
-#~ msgstr "Oberflächeinterpolation für Rasterkarten."
-
-#~ msgid "Surface generation program."
-#~ msgstr "Erzeugt Rasteroberflächen."
-
-#~ msgid "Compares bit patterns with a raster map."
-#~ msgstr "Vergleicht Bitmuster mit einer Rasterkarte."
-
-#, fuzzy
-#~ msgid ""
-#~ "Calculates univariate statistics from the non-null cells for each "
-#~ "registered raster3d map of a space time raster3d dataset."
-#~ msgstr ""
-#~ "Berechnet univariate Statistiken der nicht-NULL Zellen einer 3D-"
-#~ "Rasterkarte."
-
-#~ msgid "Digitize"
-#~ msgstr "Digitalisieren"
-
-#, fuzzy
-#~ msgid "Launches graphical attribute table manager."
-#~ msgstr "Attributtabellen Manager"
