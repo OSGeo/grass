@@ -112,7 +112,8 @@ The syntax of the rules section is following:
 #%end
 </pre></div>
 
-The parser also allows to define "OR" conditions, e.g. requiring raster OR vector:
+The parser also allows to define "OR" conditions, e.g. requiring raster
+OR vector (for details, see below):
 
 <div class="code"><pre>
 #%rules
@@ -165,6 +166,49 @@ should behave the same way regardless of whether they were set
 by <b>--o</b>, <b>--q</b> or <b>--v</b> being passed to the script or
 set by other means.
 
+<h2>Conditional parameters</h2>
+
+Marking an option as "required" will result in the parser raising a
+fatal error if the option is not given, with one exception: if a flag
+has the <tt>suppress_required</tt> option, and that flag is given, all
+requirements are ignored. This feature is intended for flags which
+abandon "normal operation" for the module; e.g. <em>r.in.gdal</em>'s
+<b>-f</b> flag (list supported formats) uses it.
+<br>
+But in general, an option cannot be marked as required if it is
+optional except for the special case of a <tt>suppress_required</tt> flag.
+The parser has the ability to specify option relationships.
+
+<p>
+For C, the relevant functions are those in
+<a href="http://grass.osgeo.org/programming7/parser__dependencies_8c.html">lib/gis/parser_dependencies.c</a>.
+
+<p>
+For scripts, relationships are specified using a "rules" section, e.g.
+
+<div class="code"><pre>
+	#%rules
+	#%required altitude,elevation
+	#%end
+</pre></div>
+
+specifies that at least one of those options must be given. Both
+options and flags can be specified (a leading "<b>-</b>" denotes a flag).
+
+The available rule types are:
+
+<ul>
+<li> <tt>exclusive</tt>: at most one of the options may be given</li>
+<li> <tt>required</tt>: at least one of the options must be given</li>
+<li> <tt>requires</tt>: if the first option is given, at least one of the
+      subsequent options must also be given</li>
+<li> <tt>requires_all</tt>: if the first option is given, all of the
+      subsequent options must also be given</li>
+<li> <tt>excludes</tt>: if the first option is given, none of the
+      subsequent options may be given</li>
+<li> <tt>collective</tt>: all or nothing; if any option is given, all
+      must be given</li>
+</ul>
 
 <h2>AUTOMATED SCRIPT CREATION</h2>
 
