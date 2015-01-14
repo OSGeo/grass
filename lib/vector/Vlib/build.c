@@ -374,7 +374,7 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
  */
 int Vect_attach_isle(struct Map_info *Map, int isle)
 {
-    int sel_area;
+    int area;
     struct P_isle *Isle;
     struct Plus_head *plus;
 
@@ -385,24 +385,24 @@ int Vect_attach_isle(struct Map_info *Map, int isle)
 
     plus = &(Map->plus);
 
-    sel_area = Vect_isle_find_area(Map, isle);
-    G_debug(3, "\tisle = %d -> area outside = %d", isle, sel_area);
-    if (sel_area > 0) {
+    area = Vect_isle_find_area(Map, isle);
+    G_debug(3, "\tisle = %d -> area outside = %d", isle, area);
+    if (area > 0) {
 	Isle = plus->Isle[isle];
 	if (Isle->area > 0) {
 	    G_debug(3, "Attempt to attach isle %d to more areas "
 		    "(=>topology is not clean)", isle);
 	}
 	else {
-	    Isle->area = sel_area;
-	    dig_area_add_isle(plus, sel_area, isle);
+	    Isle->area = area;
+	    dig_area_add_isle(plus, area, isle);
 	}
     }
     return 0;
 }
 
 /*!
-   \brief (Re)Attach isles to areas in given bounding box
+   \brief (Re)Attach isles in given bounding box to areas
 
    \param Map vector map
    \param box bounding box
@@ -411,7 +411,8 @@ int Vect_attach_isle(struct Map_info *Map, int isle)
  */
 int Vect_attach_isles(struct Map_info *Map, const struct bound_box *box)
 {
-    int i, isle;
+    int i, isle, area;
+    struct bound_box abox;
     static struct boxlist *List = NULL;
     struct Plus_head *plus;
 
@@ -427,15 +428,34 @@ int Vect_attach_isles(struct Map_info *Map, const struct bound_box *box)
 
     for (i = 0; i < List->n_values; i++) {
 	isle = List->id[i];
-	/* only attach isles that are not yet attached, see Vect_attach_isle() */
-	if (plus->Isle[isle]->area == 0)
+
+	area = plus->Isle[isle]->area;
+
+	if (area > 0) {
+	    /* if the area box is not fully inside the box, detach
+	     * this might detach more than needed, 
+	     * but all that need to be reattached and
+	     * is faster than reattaching all */
+	    Vect_get_area_box(Map, area, &abox);
+	    if (box->W < abox.W && box->E > abox.E &&
+	        box->S < abox.S && box->N > abox.N) {
+		G_debug(3, "Outer area is fully inside search box");
+	    }
+	    else {
+		dig_area_del_isle(plus, area, isle);
+		plus->Isle[isle]->area = 0;
+		area = 0;
+	    }
+	}
+
+	if (area == 0)
 	    Vect_attach_isle(Map, isle);
     }
     return 0;
 }
 
 /*!
-   \brief (Re)Attach centroids to areas in given bounding box
+   \brief (Re)Attach centroids in given bounding box to areas
 
     Warning: If map is updated on level2, it may happen that
     previously correct island becomes incorrect. In that case,
@@ -459,11 +479,8 @@ int Vect_attach_isles(struct Map_info *Map, const struct bound_box *box)
     Because of this, when the centroid is reattached to another area,
     it is always necessary to check if original area exist, unregister
     centroid from previous area.  To simplify code, this is
-    implemented so that centroid is always firs unregistered and if
+    implemented so that centroid is always first unregistered and if
     new area is found, it is registered again.
-      
-    This problem can be avoided altogether if properly attached
-    centroids are skipped MM 2009
 
    \param Map vector map
    \param box bounding box
@@ -472,8 +489,9 @@ int Vect_attach_isles(struct Map_info *Map, const struct bound_box *box)
  */
 int Vect_attach_centroids(struct Map_info *Map, const struct bound_box * box)
 {
-    int i, sel_area, centr;
+    int i, area, centr;
     static int first = 1;
+    struct bound_box abox;
     static struct boxlist *List;
     struct P_area *Area;
     struct P_line *Line;
@@ -497,28 +515,44 @@ int Vect_attach_centroids(struct Map_info *Map, const struct bound_box * box)
 	Line = plus->Line[centr];
 	topo = (struct P_topo_c *)Line->topo;
 
-	/* only attach unregistered and duplicate centroids because 
-	 * 1) all properly attached centroids are properly attached, really! Don't touch.
-	 * 2) Vect_find_area() below does not always return the correct area
-	 * 3) it's faster
-	 */
-	if (topo->area > 0)
-	    continue;
+	area = topo->area;
 
-	sel_area = Vect_find_area(Map, List->box[i].E, List->box[i].N);
-	G_debug(3, "\tcentroid %d is in area %d", centr, sel_area);
-	if (sel_area > 0) {
-	    Area = plus->Area[sel_area];
+	if (area > 0) {
+	    /* if the area box is not fully inside the box, detach
+	     * this might detach more than needed, 
+	     * but all that need to be reattached and
+	     * is faster than reattaching all */
+	    Vect_get_area_box(Map, area, &abox);
+	    if (box->W < abox.W && box->E > abox.E &&
+	        box->S < abox.S && box->N > abox.N) {
+		G_debug(3, "Centroid's area is fully inside search box");
+	    }
+	    else {
+		Area = plus->Area[area];
+		Area->centroid = 0;
+		topo->area = 0;
+		area = 0;
+	    }
+	}
+
+	if (area > 0) {
+	    continue;
+	}
+
+	area = Vect_find_area(Map, List->box[i].E, List->box[i].N);
+	G_debug(3, "\tcentroid %d is in area %d", centr, area);
+	if (area > 0) {
+	    Area = plus->Area[area];
 	    if (Area->centroid == 0) {	/* first centroid */
 		G_debug(3, "\tfirst centroid -> attach to area");
 		Area->centroid = centr;
-		topo->area = sel_area;
+		topo->area = area;
 	    }
 	    else if (Area->centroid != centr) {	/* duplicate centroid */
 		/* Note: it cannot happen that Area->centroid == centr, because the centroid
 		 * was not registered or a duplicate */
 		G_debug(3, "\tduplicate centroid -> do not attach to area");
-		topo->area = -sel_area;
+		topo->area = -area;
 	    }
 	}
     }
