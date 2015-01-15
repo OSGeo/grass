@@ -2,28 +2,21 @@
 
 # g.parser demo script for shell programing
 
-#%Module
+#%module
 #% description: g.parser test script (shell)
 #% keyword: keyword1
 #% keyword: keyword2
-#%End
+#%end
 #%flag
 #% key: f
 #% description: A flag
 #%end
-#%option
+#%option G_OPT_R_MAP
 #% key: raster
-#% type: string
-#% gisprompt: old,cell,raster
-#% description: Raster input map
 #% required : yes
 #%end
-#%option
+#%option G_OPT_V_MAP
 #% key: vector
-#% type: string
-#% gisprompt: old,vector,vector
-#% description: Vector input map
-#% required : yes
 #%end
 #%option
 #% key: option1
@@ -38,19 +31,27 @@ if [ -z "$GISBASE" ] ; then
 fi
 
 if [ "$1" != "@ARGS_PARSED@" ] ; then
-  exec $GISBASE/bin/g.parser "$0" "$@"
+    exec g.parser "$0" "$@"
 fi
 
-#add your code here
+#### add your code below ####
+
 echo ""
-if [ $GIS_FLAG_f -eq 1 ] ; then
-  echo "Flag -f set"
+
+if [ $GIS_FLAG_F -eq 1 ] ; then
+  g.message message="Flag -f set"
 else
-  echo "Flag -f not set"
+  g.message message="Flag -f not set"
 fi
 
-echo "Value of GIS_OPT_option1: '$GIS_OPT_option1'"
-echo "Value of GIS_OPT_raster: '$GIS_OPT_raster'"
-echo "Value of GIS_OPT_vect: '$GIS_OPT_vector'"
+# test if parameter present:
+if [ -n "$GIS_OPT_OPTION1" ] ; then
+    echo "Value of GIS_OPT_OPTION1: '$GIS_OPT_OPTION1'"
+fi
 
-#end of your code
+g.message message="Value of GIS_OPT_option1: '$GIS_OPT_option1'"
+g.message message="Value of GIS_OPT_raster: '$GIS_OPT_raster'"
+g.message message="Value of GIS_OPT_vect: '$GIS_OPT_vector'"
+
+#### end of your code ####
+

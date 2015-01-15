@@ -126,7 +126,10 @@ OR vector (for details, see below):
 
 An option can be instructed to allow multiple inputs by adding the
 following line:
-<pre>#% multiple : yes</pre>
+<div class="code"><pre>
+#% multiple: yes
+</pre></div>
+
 While this will only directly change the <i>Usage</i> section of the help
 screen, the option's environmental string may be easily parsed from within
 a script. For example, individual comma separated identities for an option 
@@ -143,13 +146,17 @@ A "<tt>guisection</tt>" field may be added to each option and flag to
 specify that the options should appear in multiple tabs in the
 auto-generated GUI.  Any options without a <tt>guisection</tt> field
 go into the "Required" or "Options" tab.  For example:
-<pre>#% guisection: tabname</pre>
+<div class="code"><pre>
+#% guisection: tabname
+</pre></div>
 would put that option in a tab named <i>tabname</i>.
 
 <p>
 A "<tt>key_desc</tt>" field may be added to each option to specify the text that
 appears in the module's usage help section. For example:
-<pre>#% key_desc: filename</pre>
+<div class="code"><pre>
+#% key_desc: filename
+</pre></div>
 added to an <b>input</b> option would create the usage summary
 <tt>[input=filename]</tt>.
 
@@ -187,9 +194,9 @@ For C, the relevant functions are those in
 For scripts, relationships are specified using a "rules" section, e.g.
 
 <div class="code"><pre>
-	#%rules
-	#%required altitude,elevation
-	#%end
+#%rules
+#% required: altitude,elevation
+#%end
 </pre></div>
 
 specifies that at least one of those options must be given. Both
@@ -327,23 +334,26 @@ Parameters:
 # g.parser demo script for python programing
 
 #%module
-#%  description: g.parser test script (python)
+#% description: g.parser test script (python)
+#% keyword: keyword1
+#% keyword: keyword2
 #%end
 #%flag
-#%  key: f
-#%  description: A flag
+#% key: f
+#% description: A flag
 #%end
 #%option G_OPT_R_MAP
 #% key: raster
+#% required : yes
 #%end
 #%option G_OPT_V_MAP
 #% key: vector
 #%end
 #%option
-#%  key: option1
-#%  type: string
-#%  description: An option
-#%  required : no
+#% key: option1
+#% type: string
+#% description: An option
+#% required : no
 #%end
 
 import os
@@ -388,14 +398,15 @@ if __name__ == "__main__":
 # g.parser demo script for shell programing
 
 #%module
-#%  description: g.parser test script   
+#% description: g.parser test script (shell) 
 #%end
 #%flag
-#%  key: f
-#%  description: A flag
+#% key: f
+#% description: A flag
 #%end
 #%option G_OPT_R_MAP
 #% key: raster
+#% required : yes
 #%end
 #%option G_OPT_V_MAP
 #% key: vector
@@ -417,12 +428,13 @@ if [ "$1" != "@ARGS_PARSED@" ] ; then
 fi
 
 #### add your code below ####
+
 echo ""
 
 if [ $GIS_FLAG_F -eq 1 ] ; then
-    echo "Flag -f set"
+  g.message message="Flag -f set"
 else
-    echo "Flag -f not set"
+  g.message message="Flag -f not set"
 fi
 
 # test if parameter present:
@@ -430,9 +442,11 @@ if [ -n "$GIS_OPT_OPTION1" ] ; then
     echo "Value of GIS_OPT_OPTION1: '$GIS_OPT_OPTION1'"
 fi
 
-echo "Value of GIS_OPT_RASTER: '$GIS_OPT_RASTER'"
-echo "Value of GIS_OPT_VECTOR: '$GIS_OPT_VECTOR'"
+g.message message="Value of GIS_OPT_option1: '$GIS_OPT_option1'"
+g.message message="Value of GIS_OPT_raster: '$GIS_OPT_raster'"
+g.message message="Value of GIS_OPT_vect: '$GIS_OPT_vector'"
 
+#### end of your code ####
 </pre></div>
 
 <h3>Example code for Perl</h3>
@@ -454,6 +468,7 @@ use strict;
 #%end
 #%option G_OPT_R_MAP
 #% key: raster
+#% required : yes
 #%end
 #%option G_OPT_V_MAP
 #% key: vector
@@ -509,7 +524,7 @@ printf ("Value of GIS_OPT_vect: '%s'\n", $ENV{'GIS_OPT_VECTOR'});
 
 <p>
 Related Wiki pages:
-<a href="http://grasswiki.osgeo.org/wiki/Category:Linking_to_other_languages">Using GRASS with other programming languages</a>
+<a href="http://grasswiki.osgeo.org/wiki/Category:Linking_to_other_languages">Using GRASS GIS with other programming languages</a>
 
 <h2>AUTHOR</h2>
 

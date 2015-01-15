@@ -2,28 +2,21 @@
 
 # g.parser demo script for python programing
 
-#%Module
+#%module
 #% description: g.parser test script (python)
 #% keyword: keyword1
 #% keyword: keyword2
-#%End
+#%end
 #%flag
 #% key: f
 #% description: A flag
 #%end
-#%option
+#%option G_OPT_R_MAP
 #% key: raster
-#% type: string
-#% gisprompt: old,cell,raster
-#% description: Raster input map
 #% required : yes
 #%end
-#%option
+#%option G_OPT_V_MAP
 #% key: vector
-#% type: string
-#% gisprompt: old,vector,vector
-#% description: Vector input map
-#% required : yes
 #%end
 #%option
 #% key: option1
@@ -32,30 +25,41 @@
 #% required : no
 #%end
 
-import os
 import sys
+import atexit
 
 import grass.script as grass
 
-def main():
-    #### add your code here ####
+def cleanup():
+    # add some cleanup code
+    grass.message(_("Inside cleanup function..."))
 
-    if flags['f']:
-        print "Flag -f set"
+def main():
+    flag_f = flags['f']
+    option1 = options['option1']
+    raster = options['raster']
+    vector = options['vector']
+
+    #### add your code here ####
+    exitcode = 0
+
+    if flag_f:
+        grass.message(_("Flag -f set"))
     else:
-        print "Flag -f not set"
+        grass.message(_("Flag -f not set"))
 
     # test if parameter present:
-    if options['option1']:
-        print "Value of GIS_OPT_OPTION1: '%s'" % options['option1']
+    if option1:
+        grass.message(_("Value of option1 option: '%s'" % option1))
 
-    print "Value of GIS_OPT_RASTER: '%s'" % options['raster']
-    print "Value of GIS_OPT_VECTOR: '%s'" % options['vector']
+    grass.message(_("Value of raster option: '%s'" % raster))
+    grass.message(_("Value of vector option: '%s'" % vector))
 
     #### end of your code ####
 
-    return 0
+    sys.exit(exitcode)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
-    sys.exit(main())
+    atexit.register(cleanup)
+    main()
