@@ -62,6 +62,26 @@ dig_test_for_intersection(double ax1, double ay1,
     register double d, d1, d2;
     double t;
 
+    if (ax1 > ax2 || (ax1 == ax2 && ay1 > ay2)) {
+	t = ax1;
+	ax1 = ax2;
+	ax2 = t;
+
+	t = ay1;
+	ay1 = ay2;
+	ay2 = t;
+    }
+
+    if (bx1 > bx2 || (bx1 == bx2 && by1 > by2)) {
+	t = bx1;
+	bx1 = bx2;
+	bx2 = t;
+
+	t = by1;
+	by1 = by2;
+	by2 = t;
+    }
+
     d = D;
     d1 = D1;
     d2 = D2;
