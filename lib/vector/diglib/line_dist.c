@@ -80,19 +80,28 @@ double dig_distance2_point_to_line(double x, double y, double z,	/* point */
 							       dy * dy +
 							       dz * dz);
 
-	if (t < 0.0) {		/* go to x1,y1,z1 */
-	    t = 0.0;
-	    st = -1;
+	if (t <= 0.0) {		/* go to x1,y1,z1 */
+	    if (t < 0.0) {
+		st = -1;
+	    }
+	    tpx = x1;
+	    tpy = y1;
+	    tpz = z1;
 	}
-	else if (t > 1.0) {	/* go to x2,y2,z2 */
-	    t = 1.0;
-	    st = 1;
+	else if (t >= 1.0) {	/* go to x2,y2,z2 */
+	    if (t > 1.0) {
+		st = 1;
+	    }
+	    tpx = x2;
+	    tpy = y2;
+	    tpz = z2;
 	}
-
-	/* go t from x1,y1,z1 towards x2,y2,z2 */
-	tpx = dx * t + x1;
-	tpy = dy * t + y1;
-	tpz = dz * t + z1;
+	else {
+	    /* go t from x1,y1,z1 towards x2,y2,z2 */
+	    tpx = dx * t + x1;
+	    tpy = dy * t + y1;
+	    tpz = dz * t + z1;
+	}
 	dx = tpx - x;
 	dy = tpy - y;
 	dz = tpz - z;
