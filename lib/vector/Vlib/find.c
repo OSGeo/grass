@@ -287,7 +287,13 @@ int Vect_find_area(struct Map_info *Map, double x, double y)
     Vect_select_areas_by_box(Map, &box, List);
     G_debug(3, "  %d areas selected by box", List->n_values);
 
-    /* sort areas by size, the smallest is likely to be the nearest */
+    /* sort areas by bbox size
+     * get the smallest area that contains the point
+     * using the bbox size is working because if 2 areas both contain
+     * the point, one of these areas must be inside the other area
+     * which means that the bbox of the outer area must be larger than
+     * the bbox of the inner area, and equal bbox sizes are not possible */
+
     if (alloc_size_list < List->n_values) {
 	alloc_size_list = List->n_values;
 	size_list = G_realloc(size_list, alloc_size_list * sizeof(BOX_SIZE));
@@ -314,7 +320,9 @@ int Vect_find_area(struct Map_info *Map, double x, double y)
 
     for (i = 0; i < List->n_values; i++) {
 	area = size_list[i].i;
-	ret = Vect_point_in_area(x, y, Map, area, &size_list[i].box);
+	/* testing only the outer ring is sufficient because 
+	 * inner rings have been tested earlier (sorted list) */
+	ret = Vect_point_in_area_outer_ring(x, y, Map, area, &size_list[i].box);
 
 	G_debug(3, "    area = %d Vect_point_in_area() = %d", area, ret);
 
@@ -341,6 +349,8 @@ int Vect_find_island(struct Map_info *Map, double x, double y)
     struct bound_box box;
     static struct boxlist *List;
     static struct line_pnts *Points;
+
+    /* TODO: sync to Vect_find_area() */
 
     G_debug(3, "Vect_find_island() x = %f y = %f", x, y);
 
