@@ -629,7 +629,7 @@ static int segments_x_ray(double X, double Y, const struct line_pnts *Points)
 	    x_inter = dig_x_intersect(x1, x2, y1, y2, Y);
 	    G_debug(3, "x_inter = %f", x_inter);
 	    if (x_inter == X)
-		return 1;	/* point on segment, but assume inside ? */
+		return -1;	/* point on segment, do not assume inside/outside */
 	    else if (x_inter > X)
 		n_intersects++;
 
