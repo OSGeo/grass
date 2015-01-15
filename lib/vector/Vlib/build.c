@@ -168,11 +168,12 @@ static int sort_by_size(const void *a, const void *b)
 
    \param Map vector map
    \param isle isle id
+   \param box isle bbox
 
    \return area id
    \return 0 if not found
  */
-int Vect_isle_find_area(struct Map_info *Map, int isle)
+int Vect_isle_find_area(struct Map_info *Map, int isle, const struct bound_box *box)
 {
     int i, j, line, sel_area, area, poly;
     const struct Plus_head *plus;
@@ -181,10 +182,12 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
     struct P_isle *Isle;
     struct P_area *Area;
     struct P_topo_b *topo;
-    struct bound_box box, *abox;
+    struct bound_box *abox, nbox;
     static struct boxlist *List = NULL;
     static BOX_SIZE *size_list;
     static int alloc_size_list = 0;
+
+    /* see also Vect_find_area() */
 
     /* Note: We should check all isle points (at least) because if topology is not clean
      * and two areas overlap, isle which is not completely within area may be attached,
@@ -211,16 +214,14 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
     Node = plus->Node[topo->N1];
 
     /* select areas by box */
-    box.E = Node->x;
-    box.W = Node->x;
-    box.N = Node->y;
-    box.S = Node->y;
-    box.T = PORT_DOUBLE_MAX;
-    box.B = -PORT_DOUBLE_MAX;
-    Vect_select_areas_by_box(Map, &box, List);
+    nbox.E = Node->x;
+    nbox.W = Node->x;
+    nbox.N = Node->y;
+    nbox.S = Node->y;
+    nbox.T = PORT_DOUBLE_MAX;
+    nbox.B = -PORT_DOUBLE_MAX;
+    Vect_select_areas_by_box(Map, &nbox, List);
     G_debug(3, "%d areas overlap island boundary point", List->n_values);
-
-    Vect_get_isle_box(Map, isle, &box);
 
     /* sort areas by bbox size
      * get the smallest area that contains the isle
@@ -238,8 +239,8 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
     for (i = 0; i < List->n_values; i++) {
 	abox = &List->box[i];
 
-	if (box.E > abox->E || box.W < abox->W || box.N > abox->N ||
-	    box.S < abox->S) {
+	if (box->E > abox->E || box->W < abox->W || box->N > abox->N ||
+	    box->S < abox->S) {
 	    G_debug(3, "  isle not completely inside area box");
 	    continue;
 	}
@@ -289,8 +290,8 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
 
 	abox = &size_list[i].box;
 
-	if (box.E > abox->E || box.W < abox->W || box.N > abox->N ||
-	    box.S < abox->S) {
+	if (box->E > abox->E || box->W < abox->W || box->N > abox->N ||
+	    box->S < abox->S) {
 	    G_debug(3, "  isle not completely inside area box");
 	    continue;
 	}
@@ -369,10 +370,11 @@ int Vect_isle_find_area(struct Map_info *Map, int isle)
 
    \param Map vector map
    \param isle isle id
+   \param box isle bbox
 
    \return 0
  */
-int Vect_attach_isle(struct Map_info *Map, int isle)
+int Vect_attach_isle(struct Map_info *Map, int isle, const struct bound_box *box)
 {
     int area;
     struct P_isle *Isle;
@@ -385,7 +387,7 @@ int Vect_attach_isle(struct Map_info *Map, int isle)
 
     plus = &(Map->plus);
 
-    area = Vect_isle_find_area(Map, isle);
+    area = Vect_isle_find_area(Map, isle, box);
     G_debug(3, "\tisle = %d -> area outside = %d", isle, area);
     if (area > 0) {
 	Isle = plus->Isle[isle];
@@ -403,6 +405,8 @@ int Vect_attach_isle(struct Map_info *Map, int isle)
 
 /*!
    \brief (Re)Attach isles in given bounding box to areas
+   
+   The warning for Vect_attach_centroids() applies here as well
 
    \param Map vector map
    \param box bounding box
@@ -421,7 +425,7 @@ int Vect_attach_isles(struct Map_info *Map, const struct bound_box *box)
     plus = &(Map->plus);
 
     if (!List)
-	List = Vect_new_boxlist(FALSE);
+	List = Vect_new_boxlist(TRUE);
 
     Vect_select_isles_by_box(Map, box, List);
     G_debug(3, "  number of isles to attach = %d", List->n_values);
@@ -449,7 +453,7 @@ int Vect_attach_isles(struct Map_info *Map, const struct bound_box *box)
 	}
 
 	if (area == 0)
-	    Vect_attach_isle(Map, isle);
+	    Vect_attach_isle(Map, isle, &List->box[i]);
     }
     return 0;
 }

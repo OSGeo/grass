@@ -127,6 +127,7 @@ int Vect_build_nat(struct Map_info *Map, int build)
 	/* Build areas */
 	/* Go through all bundaries and try to build area for both sides */
 	G_important_message(_("Building areas..."));
+	G_percent(0, plus->n_lines, 1);
 	for (line = 1; line <= plus->n_lines; line++) {
 	    G_percent(line, plus->n_lines, 1);
 
@@ -162,7 +163,8 @@ int Vect_build_nat(struct Map_info *Map, int build)
 	G_important_message(_("Attaching islands..."));
 	for (i = 1; i <= plus->n_isles; i++) {
 	    G_percent(i, plus->n_isles, 1);
-	    Vect_attach_isle(Map, i);
+	    Vect_get_isle_box(Map, i, &box);
+	    Vect_attach_isle(Map, i, &box);
 	}
 	plus->built = GV_BUILD_ATTACH_ISLES;
     }
