@@ -431,16 +431,20 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         curr_mapset = grass.gisenv()['MAPSET']
         
         # map element types to g.list types
-        elementdict = {'cell':'raster',
-                       'grid3':'raster_3d',
-                       'vector' : 'vector',
-                       'paint/labels':'label',
-                       'windows':'region',
-                       'group':'group',
-                       'stds':'stds',
-                       'strds':'strds',
-                       'str3ds':'str3ds',
-                       'stvds':'stvds'}
+        elementdict = {'cell': 'raster',
+                       'raster': 'raster',
+                       'grid3': 'raster_3d',
+                       'raster_3d': 'raster_3d',
+                       'vector': 'vector',
+                       'paint/labels': 'label',
+                       'label': 'label',
+                       'windows': 'region',
+                       'region': 'region',
+                       'group': 'group',
+                       'stds': 'stds',
+                       'strds': 'strds',
+                       'str3ds': 'str3ds',
+                       'stvds': 'stvds'}
 
         # to support multiple elements
         element_list = element.split(',')
