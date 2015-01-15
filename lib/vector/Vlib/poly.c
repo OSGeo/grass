@@ -657,7 +657,7 @@ static int segments_x_ray(double X, double Y, const struct line_pnts *Points)
 
    \return 0 - outside
    \return 1 - inside 
-   \return 2 - on the boundary (exactly may be said only for vertex of vertical/horizontal line)
+   \return 2 - on the boundary
  */
 int Vect_point_in_poly(double X, double Y, const struct line_pnts *Points)
 {
@@ -686,7 +686,7 @@ int Vect_point_in_poly(double X, double Y, const struct line_pnts *Points)
 
    \return 0 - outside
    \return 1 - inside 
-   \return 2 - on the boundary (exactly may be said only for vertex of vertical/horizontal line)
+   \return 2 - on the boundary
  */
 int
 Vect_point_in_area_outer_ring(double X, double Y, const struct Map_info *Map,
@@ -699,8 +699,10 @@ Vect_point_in_area_outer_ring(double X, double Y, const struct Map_info *Map,
     const struct Plus_head *Plus;
     struct P_area *Area;
 
-    G_debug(3, "Vect_point_in_area_outer_ring(): x = %f y = %f area = %d", X,
-	    Y, area);
+    /* keep in sync with Vect_point_in_island() */
+
+    G_debug(3, "Vect_point_in_area_outer_ring(): x = %f y = %f area = %d",
+            X, Y, area);
 
     if (first == 1) {
 	Points = Vect_new_line_struct();
@@ -715,10 +717,8 @@ Vect_point_in_area_outer_ring(double X, double Y, const struct Map_info *Map,
 	return 0;
 
     n_intersects = 0;
-
     for (i = 0; i < Area->n_lines; i++) {
 	line = abs(Area->lines[i]);
-	G_debug(3, "  line[%d] = %d", i, line);
 
 	Vect_read_line(Map, Points, NULL, line);
 
@@ -736,12 +736,9 @@ Vect_point_in_area_outer_ring(double X, double Y, const struct Map_info *Map,
 	 * just feeding the line to segments_x_ray() */
 
 	inter = segments_x_ray(X, Y, Points);
-	G_debug(3, "  inter = %d", inter);
-
 	if (inter == -1)
 	    return 2;
 	n_intersects += inter;
-	G_debug(3, "  n_intersects = %d", n_intersects);
     }
 
     /* odd number of intersections: inside, return 1 
@@ -759,7 +756,7 @@ Vect_point_in_area_outer_ring(double X, double Y, const struct Map_info *Map,
 
    \return 0 - outside
    \return 1 - inside 
-   \return 2 - on the boundary (exactly may be said only for vertex of vertical/horizontal line)
+   \return 2 - on the boundary
  */
 int Vect_point_in_island(double X, double Y, const struct Map_info *Map,
                          int isle, struct bound_box *box)
@@ -771,7 +768,10 @@ int Vect_point_in_island(double X, double Y, const struct Map_info *Map,
     const struct Plus_head *Plus;
     struct P_isle *Isle;
 
-    G_debug(3, "Vect_point_in_island(): x = %f y = %f isle = %d", X, Y, isle);
+    /* keep in sync with Vect_point_in_area_outer_ring() */
+
+    G_debug(3, "Vect_point_in_island(): x = %f y = %f isle = %d",
+            X, Y, isle);
 
     if (first == 1) {
 	Points = Vect_new_line_struct();
@@ -781,6 +781,7 @@ int Vect_point_in_island(double X, double Y, const struct Map_info *Map,
     Plus = &(Map->plus);
     Isle = Plus->Isle[isle];
 
+    /* First it must be in box */
     if (X < box->W || X > box->E || Y > box->N || Y < box->S)
 	return 0;
 
