@@ -22,7 +22,20 @@ dig_x_intersect(double beg_x,
 		double end_x, double beg_y, double end_y, double Y)
 {
     double b;
-    
+
+    /* assumes beg_y != end_y */
+
+    /* sort for numerical stability */
+    if (end_y < beg_y) {
+	b = end_x;
+	end_x = beg_x;
+	beg_x = b;
+
+	b = end_y;
+	end_y = beg_y;
+	beg_y = b;
+    }
+
     /* solve simple linear equation to get X = a + b * Y
      * with
      * b = (end_x - beg_x) / (end_y - beg_y)
