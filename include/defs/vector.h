@@ -587,8 +587,8 @@ int Vect__build_sfa(struct Map_info *, int);
 int Vect_build_ogr(struct Map_info *, int);
 int Vect_build_pg(struct Map_info *, int);
 int Vect_build_line_area(struct Map_info *, int, int);
-int Vect_isle_find_area(struct Map_info *, int);
-int Vect_attach_isle(struct Map_info *, int);
+int Vect_isle_find_area(struct Map_info *, int, const struct bound_box *);
+int Vect_attach_isle(struct Map_info *, int, const struct bound_box *);
 int Vect_attach_isles(struct Map_info *, const struct bound_box *);
 int Vect_attach_centroids(struct Map_info *, const struct bound_box *);
 
