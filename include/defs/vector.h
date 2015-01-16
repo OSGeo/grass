@@ -253,16 +253,16 @@ int Vect_read_next_line(const struct Map_info *, struct line_pnts *,
                         struct line_cats *);
 off_t Vect_write_line(struct Map_info *, int, const struct line_pnts *,
                       const struct line_cats *);
+off_t Vect_rewrite_line(struct Map_info *, off_t, int, const struct line_pnts *,
+                      const struct line_cats *);
+int Vect_delete_line(struct Map_info *, off_t);
+int Vect_restore_line(struct Map_info *, off_t);
 
 int Vect_get_num_dblinks(const struct Map_info *);
 
 /* Level 2 only */
 int Vect_read_line(const struct Map_info *, struct line_pnts *, struct line_cats *,
                    int);
-off_t Vect_rewrite_line(struct Map_info *, int, int, const struct line_pnts *,
-                      const struct line_cats *);
-int Vect_delete_line(struct Map_info *, int);
-int Vect_restore_line(struct Map_info *, int, off_t);
 
 int Vect_line_alive(const struct Map_info *, int);
 int Vect_node_alive(const struct Map_info *, int);
@@ -543,7 +543,7 @@ int V2_delete_line_nat(struct Map_info *, int);
 int V2_delete_line_sfa(struct Map_info *, int);
 int V2_delete_line_pg(struct Map_info *, int);
 int V1_restore_line_nat(struct Map_info *, off_t);
-int V2_restore_line_nat(struct Map_info *, int, off_t);
+int V2_restore_line_nat(struct Map_info *, int);
 off_t V1_write_line_nat(struct Map_info *, int, const struct line_pnts *,
                         const struct line_cats *);
 off_t V1_write_line_ogr(struct Map_info *, int, const struct line_pnts *,
@@ -556,17 +556,17 @@ off_t V2_write_line_sfa(struct Map_info *, int, const struct line_pnts *,
                         const struct line_cats *);
 off_t V2_write_line_pg(struct Map_info *, int, const struct line_pnts *,
                        const struct line_cats *);
-off_t V1_rewrite_line_nat(struct Map_info *, int, int, off_t,
+off_t V1_rewrite_line_nat(struct Map_info *, off_t, int,
                           const struct line_pnts *, const struct line_cats *);
-off_t V1_rewrite_line_ogr(struct Map_info *, int, int, off_t,
+off_t V1_rewrite_line_ogr(struct Map_info *, off_t, int,
                           const struct line_pnts *, const struct line_cats *);
-off_t V1_rewrite_line_pg(struct Map_info *, int, int, off_t,
+off_t V1_rewrite_line_pg(struct Map_info *, off_t, int,
                          const struct line_pnts *, const struct line_cats *);
-off_t V2_rewrite_line_nat(struct Map_info *, int, int, off_t,
+off_t V2_rewrite_line_nat(struct Map_info *, int, int,
                           const struct line_pnts *, const struct line_cats *);
-off_t V2_rewrite_line_sfa(struct Map_info *, int, int, off_t,
+off_t V2_rewrite_line_sfa(struct Map_info *, int, int,
                           const struct line_pnts *, const struct line_cats *);
-off_t V2_rewrite_line_pg(struct Map_info *, int, int, off_t,
+off_t V2_rewrite_line_pg(struct Map_info *, int, int,
                           const struct line_pnts *, const struct line_cats *);
 
     /* Build topology */

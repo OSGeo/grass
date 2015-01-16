@@ -72,7 +72,11 @@ off_t V2_write_line_sfa(struct Map_info *Map, int type,
     }
     if (offset < 0)
 	return -1;
-    
+
+    if (!(plus->update_cidx)) {
+	plus->cidx_up_to_date = FALSE; /* category index will be outdated */
+    }
+
     /* Update topology */
     if (plus->built >= GV_BUILD_BASE) {
 	dig_line_box(points, &box);
@@ -145,11 +149,11 @@ off_t V2_write_line_sfa(struct Map_info *Map, int type,
   \return offset where line was rewritten
   \return -1 on error
 */
-off_t V2_rewrite_line_sfa(struct Map_info *Map, int line, int type, off_t offset,
+off_t V2_rewrite_line_sfa(struct Map_info *Map, int line, int type,
 			  const struct line_pnts *points, const struct line_cats *cats)
 {
-    G_debug(3, "V2_rewrite_line_sfa(): line=%d type=%d offset=%"PRI_OFF_T,
-	    line, type, offset);
+    G_debug(3, "V2_rewrite_line_sfa(): line=%d type=%d",
+	    line, type);
 
     if (line < 1 || line > Map->plus.n_lines) {
         G_warning(_("Attempt to access feature with invalid id (%d)"), line);
@@ -203,6 +207,10 @@ int V2_delete_line_sfa(struct Map_info *Map, int line)
     if (line < 1 || line > Map->plus.n_lines) {
         G_warning(_("Attempt to access feature with invalid id (%d)"), line);
         return -1;
+    }
+
+    if (!(plus->update_cidx)) {
+	plus->cidx_up_to_date = FALSE; /* category index will be outdated */
     }
 
     if (plus->built >= GV_BUILD_BASE) {
