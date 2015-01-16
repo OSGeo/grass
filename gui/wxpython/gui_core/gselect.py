@@ -95,7 +95,11 @@ class Select(wx.combo.ComboCtrl):
         :param validator: validator for TextCtrl
         """
         wx.combo.ComboCtrl.__init__(self, parent=parent, id=id, size=size, validator=validator)
-        self.GetChildren()[0].SetName("Select")
+        if globalvar.CheckWxVersion([3]):
+            self.SetName("Select")
+        else:
+            self.GetChildren()[0].SetName("Select")
+            
         self.GetChildren()[0].type = type
 
         self.tcp = TreeCtrlComboPopup()
