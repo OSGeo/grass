@@ -113,14 +113,21 @@ The syntax of the rules section is following:
 </pre></div>
 
 The parser also allows to define "OR" conditions, e.g. requiring raster
-OR vector (for details, see below):
+OR vector (for details, see below), e.g.for options:
 
 <div class="code"><pre>
 #%rules
-#% requires: raster, vector
+#% required: raster, vector
 #%end
 </pre></div>
 
+and e.g., for flags:
+
+<div class="code"><pre>
+#%rules
+#% required: -i,-d,-c
+#%end
+</pre></div>
 
 <h2>NOTES</h2>
 
@@ -514,9 +521,9 @@ printf ("Value of GIS_OPT_vect: '%s'\n", $ENV{'GIS_OPT_VECTOR'});
 <h2>SEE ALSO</h2>
 
 <em>
-  <a href="g.filename.html">g.filename</a>,
-  <a href="g.findfile.html">g.findfile</a>,
-  <a href="g.tempfile.html">g.tempfile</a>
+<a href="g.filename.html">g.filename</a>,
+<a href="g.findfile.html">g.findfile</a>,
+<a href="g.tempfile.html">g.tempfile</a>
 </em>
 
 <p>
