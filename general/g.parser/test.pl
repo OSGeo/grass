@@ -13,7 +13,7 @@ use strict;
 #%end
 #%option G_OPT_R_MAP
 #% key: raster
-#% required : yes
+#% required: yes
 #%end
 #%option G_OPT_V_MAP
 #% key: vector
@@ -22,7 +22,7 @@ use strict;
 #% key: option1
 #% type: string
 #% description: An option
-#% required : no
+#% required: no
 #%end
 
 if ( !$ENV{'GISBASE'} ) {
