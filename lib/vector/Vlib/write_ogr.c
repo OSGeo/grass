@@ -86,11 +86,11 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
   \return -1 on error
 */
 off_t V1_rewrite_line_ogr(struct Map_info *Map,
-			  int line, int type, off_t offset,
+			  off_t offset, int type,
 			  const struct line_pnts *points, const struct line_cats *cats)
 {
-    G_debug(3, "V1_rewrite_line_ogr(): line=%d type=%d offset=%"PRI_OFF_T,
-	    line, type, offset);
+    G_debug(3, "V1_rewrite_line_ogr(): type=%d offset=%"PRI_OFF_T,
+	    type, offset);
 #ifdef HAVE_OGR
     if (type != V1_read_line_ogr(Map, NULL, NULL, offset)) {
 	G_warning(_("Unable to rewrite feature (incompatible feature types)"));

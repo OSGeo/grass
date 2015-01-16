@@ -67,7 +67,10 @@ off_t V2_write_line_nat(struct Map_info *Map, int type,
     off_t offset;
 
     G_debug(3, "V2_write_line_nat(): type=%d", type);
-    
+
+    if (!(Map->plus.update_cidx)) {
+	Map->plus.cidx_up_to_date = FALSE; /* category index will be outdated */
+    }
     /* write feature to 'coor' file */
     offset = V1_write_line_nat(Map, type, points, cats);
     if (offset < 0)
@@ -87,24 +90,23 @@ off_t V2_write_line_nat(struct Map_info *Map, int type,
   Old feature is deleted (marked as dead), and a new feature written.
   
   \param Map pointer to Map_info structure
-  \param line feature id to be rewritten
   \param offset feature offset
   \param type feature type (GV_POINT, GV_LINE, ...)
   \param points feature geometry
   \param cats feature categories
   
-  \return feature offset (rewriten feature)
+  \return feature offset (rewritten feature)
   \return -1 on error
 */
-off_t V1_rewrite_line_nat(struct Map_info *Map, int line, int type, off_t offset,
+off_t V1_rewrite_line_nat(struct Map_info *Map, off_t offset, int type,
 			  const struct line_pnts *points, const struct line_cats *cats)
 {
     int old_type;
     static struct line_pnts *old_points = NULL;
     static struct line_cats *old_cats = NULL;
-    
-    G_debug(3, "V1_rewrite_line_nat(): line = %d offset = %lu",
-	    line, (unsigned long) offset);
+
+    G_debug(3, "V1_rewrite_line_nat(): offset = %"PRI_OFF_T,
+	    offset);
 
     /* First compare numbers of points and cats with tha old one */
     if (!old_points) {
@@ -137,7 +139,7 @@ off_t V1_rewrite_line_nat(struct Map_info *Map, int line, int type, off_t offset
 /*!
   \brief Rewrites feature to 'coor' file at topological level (internal use only)
 
-  Note: Topology must be built at level >= GV_BUILD_BASE
+  Note: requires topology level >= GV_BUILD_BASE.
   
   Note: Function returns feature id, but is defined as off_t for
   compatibility with level 1 functions.
@@ -149,10 +151,10 @@ off_t V1_rewrite_line_nat(struct Map_info *Map, int line, int type, off_t offset
   \param points feature geometry
   \param cats feature categories
   
-  \return new feature id
+  \return new feature id or 0 (build level < GV_BUILD_BASE)
   \return -1 on error
 */
-off_t V2_rewrite_line_nat(struct Map_info *Map, int line, int type, off_t old_offset,
+off_t V2_rewrite_line_nat(struct Map_info *Map, int line, int type,
 			  const struct line_pnts *points, const struct line_cats *cats)
 {
     /* TODO: this is just quick shortcut because we have already V2_delete_nat()
@@ -162,7 +164,7 @@ off_t V2_rewrite_line_nat(struct Map_info *Map, int line, int type, off_t old_of
      *        angles not changed etc.) */
 
     int old_type;
-    off_t offset;
+    off_t offset, old_offset;
     struct Plus_head *plus;
     static struct line_cats *old_cats = NULL;
     static struct line_pnts *old_points = NULL;
@@ -176,6 +178,17 @@ off_t V2_rewrite_line_nat(struct Map_info *Map, int line, int type, off_t old_of
 
 	return V2_write_line_nat(Map, type, points, cats);
     }
+
+    if (line < 1 || line > plus->n_lines) {
+        G_warning(_("Attempt to access feature with invalid id (%d)"), line);
+        return -1;
+    }
+
+    if (!(plus->update_cidx)) {
+	plus->cidx_up_to_date = FALSE; /* category index will be outdated */
+    }
+
+    old_offset = plus->Line[line]->offset;
 
     /* read the line */
     if (!old_points) {
@@ -229,7 +242,7 @@ int V1_delete_line_nat(struct Map_info *Map, off_t offset)
     char rhead;
     struct gvfile *dig_fp;
 
-    G_debug(3, "V1_delete_line_nat(): offset = %lu", (unsigned long) offset);
+    G_debug(3, "V1_delete_line_nat(): offset = %"PRI_OFF_T, offset);
 
     dig_set_cur_port(&(Map->head.port));
     dig_fp = &(Map->dig_fp);
@@ -258,7 +271,7 @@ int V1_delete_line_nat(struct Map_info *Map, off_t offset)
 /*!
   \brief Deletes feature at topological level (internal use only)
 
-  Note: Topology must be built at level >= GV_BUILD_BASE  
+  Note: requires topology level >= GV_BUILD_BASE.
   
   \param pointer to Map_info structure
   \param line feature id
@@ -283,23 +296,26 @@ int V2_delete_line_nat(struct Map_info *Map, int line)
         G_warning(_("Attempt to access feature with invalid id (%d)"), line);
         return -1;
     }
-    
+
     Line = Map->plus.Line[line];
     if (Line == NULL) {
         G_warning(_("Attempt to access dead feature %d"), line);
         return -1;
     }
 
+    if (!(plus->update_cidx)) {
+	plus->cidx_up_to_date = FALSE; /* category index will be outdated */
+    }
+
     /* read the line */    
     if (!Points) {
 	Points = Vect_new_line_struct();
-    }
-    if (!Cats) {
 	Cats = Vect_new_cats_struct();
     }
+
     type = V2_read_line_nat(Map, Points, Cats, line);
-    if (type < 0)
-        return -1;
+    if (type <= 0)
+	return -1;
 
     /* delete feature from coor file */
     if (0 != V1_delete_line_nat(Map, Line->offset))
@@ -326,7 +342,7 @@ int V1_restore_line_nat(struct Map_info *Map, off_t offset)
     char rhead;
     struct gvfile *dig_fp;
     
-    G_debug(3, "V1_restore_line_nat(), offset = %lu", (unsigned long) offset);
+    G_debug(3, "V1_restore_line_nat(), offset = %"PRI_OFF_T, offset);
     
     dig_set_cur_port(&(Map->head.port));
     dig_fp = &(Map->dig_fp);
@@ -357,18 +373,18 @@ int V1_restore_line_nat(struct Map_info *Map, off_t offset)
 /*!
   \brief Restores feature at topological level (internal use only)
 
-  Note: This function requires build level >= GV_BUILD_BASE.
+  Note: requires topology level >= GV_BUILD_BASE.
   
   \param Map pointer to Map_info structure
   \param line feature id
-  \param offset feature offset
   
   \return 0 on success
   \return -1 on error
 */
-int V2_restore_line_nat(struct Map_info *Map, int line, off_t offset)
+int V2_restore_line_nat(struct Map_info *Map, int line)
 {
     int type;
+    off_t offset;
     struct Plus_head *plus;
     struct P_line *Line;
     static struct line_cats *Cats = NULL;
@@ -388,6 +404,12 @@ int V2_restore_line_nat(struct Map_info *Map, int line, off_t offset)
         G_warning(_("Attempt to access alive feature %d"), line);
         return -1;
     }
+
+    if (!(plus->update_cidx)) {
+	plus->cidx_up_to_date = 0;
+    }
+
+    offset = Line->offset;
     
     /* restore feature in 'coor' file */
     if (0 != V1_restore_line_nat(Map, offset))
