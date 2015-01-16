@@ -8,7 +8,7 @@ by the user.
 2) For a given minimum angle it calculates one or more raster map giving the mazimum
 distance to a point on the horizon.  
 
-This program was written in 2006 by Tfomas Huld and Tomas Cebecauer, 
+This program was written in 2006 by Thomas Huld and Tomas Cebecauer, 
 Joint Research Centre of the European Commission, based on bits of the r.sun module by Jaro Hofierka
 
 *******************************************************************************/
@@ -466,7 +466,13 @@ int main(int argc, char *argv[])
 	if (sscanf(parm.maxdistance->answer, "%lf", &fixedMaxLength) != 1)
 	    G_fatal_error(_("Could not read maximum distance. Aborting."));
     }
+    G_debug(1,"Using maxdistance %f", fixedMaxLength); /* predefined as BIG */
 
+/* TODO: fixing BIG, there is a bug with distant mountains not being seen: attempt to contrain to current region
+    
+    fixedMaxLength = (fixedMaxLength < AMAX1(deltx, delty)) ? fixedMaxLength : AMAX1(deltx, delty);
+    G_debug(1,"Using maxdistance %f", fixedMaxLength);
+*/
 
     sscanf(parm.dist->answer, "%lf", &dist);
     if (dist < 0.5 || dist > 1.5 ) G_fatal_error(_("The distance value must be 0.5-1.5. Aborting."));
@@ -505,7 +511,7 @@ int main(int argc, char *argv[])
 
 	n /* n_cols */ = new_cellhd.cols;
 	m /* n_rows */ = new_cellhd.rows;
-	/* G_debug(3,"%lf %lf %lf %lf \n",ymax, ymin, xmin,xmax); */
+	G_debug(1,"%lf %lf %lf %lf \n",ymax, ymin, xmin,xmax);
 	n100 = ceil(n / 100.);
 	m100 = ceil(m / 100.);
 
@@ -541,7 +547,7 @@ int main(int argc, char *argv[])
 
 
     INPUT();
-    G_debug(3, "calculate() starts...");
+    G_debug(1, "calculate() starts...");
     calculate(xcoord, ycoord, (int)(ebufferZone / stepx),
 	      (int)(wbufferZone / stepx), (int)(sbufferZone / stepy),
 	      (int)(nbufferZone / stepy));
@@ -606,7 +612,7 @@ int INPUT(void)
 		}
 	    }
 	    z100[i][j] = zmax;
-	    /* G_debug(3,"%d %d %lf\n", i, j, z100[i][j]); */
+	    G_debug(1,"%d %d %lf\n", i, j, z100[i][j]);
 	}
     }
 
@@ -948,14 +954,14 @@ int test_low_res()
     jp100 = floor(jp / 100.);
     /*test the new position with low resolution */
     if ((ip100 != iold100) || (jp100 != jold100)) {
-	/* G_debug(3,"%d %d %d %d\n",ip,jp, iold100,jold100); */
+	G_debug(1,"ip:%d jp:%d iold100:%d jold100:%d\n",ip,jp, iold100,jold100);
 	/*  replace with approximate version
 	   curvature_diff = EARTHRADIUS*(1.-cos(length/EARTHRADIUS));
 	 */
 	curvature_diff = 0.5 * length * length * invEarth;
 	z2 = z_orig + curvature_diff + length * tanh0;
 	zp100 = z100[jp100][ip100];
-	/*G_debug(3,"%d %d %lf %lf \n",ip,jp,z2,zp100); */
+	G_debug(1,"ip:%d jp:%d z2:%lf zp100:%lf \n",ip,jp,z2,zp100);
 
 	if (zp100 <= z2)
 	    /*skip to the next lowres cell */
@@ -988,11 +994,11 @@ int test_low_res()
 	    }
 
 	    mindel = min(delx, dely);
-	    /* G_debug(3,"%d %d %d %lf %lf\n",ip, jp, mindel,xg0, yg0);*/
+	    G_debug(1,"%d %d %d %lf %lf\n",ip, jp, mindel,xg0, yg0);
 
 	    yy0 = yy0 + (mindel * stepsinangle);
 	    xx0 = xx0 + (mindel * stepcosangle);
-	    /* G_debug(3,"  %lf %lf\n",xx0,yy0);*/
+	    G_debug(1,"  %lf %lf\n",xx0,yy0);
 
 	    return (3);
 	}
@@ -1108,8 +1114,8 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
 	    coslatsq = coslat * coslat;
 	}
 
-	G_debug(3, "yindex: %d, xindex %d", yindex, xindex);
 	z_orig = zp = z[yindex][xindex];
+	G_debug(1, "yindex: %d, xindex %d, z_orig %.2f", yindex, xindex, z_orig);
 
 	calculate_shadow();
         fclose(fp);
@@ -1241,12 +1247,11 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
 		    z_orig = zp = z[j][i];
 		    maxlength = (zmax - z_orig) / TANMINANGLE;
 		    maxlength =
-			(maxlength <
-			 fixedMaxLength) ? maxlength : fixedMaxLength;
+			(maxlength < fixedMaxLength) ? maxlength : fixedMaxLength;
 
 		    if (z_orig != UNDEFZ) {
 
-			/* G_debug(3,"**************new line %d %d\n", i, j); */
+			G_debug(1,"**************new line %d %d\n", i, j);
 			shadow_angle = horizon_height();
 
 			if (degreeOutput) {
@@ -1256,7 +1261,7 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
 			/*
 			   if((j==1400)&&(i==1400))
 			   {
-			   G_debug(3, "coordinates=%f,%f, raster no. %d, horizon=%f\n",
+			   G_debug(1, "coordinates=%f,%f, raster no. %d, horizon=%f\n",
 			   xp, yp, k, shadow_angle);
 			   }
 			 */
@@ -1267,7 +1272,7 @@ void calculate(double xcoord, double ycoord, int buffer_e, int buffer_w,
 		}
 	    }
 
-        G_debug(3, "OUTGR() starts...");
+        G_debug(1, "OUTGR() starts...");
 	    OUTGR(cellhd.rows, cellhd.cols);
 
 	    /* empty array */
