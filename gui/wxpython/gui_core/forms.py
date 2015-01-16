@@ -200,7 +200,10 @@ class UpdateThread(Thread):
                 else:
                     etype = type_param.get('value')
 
-                self.data[win.GetParent().SetElementList] = {'type': etype}
+                if globalvar.CheckWxVersion([3]):
+                    self.data[win.SetElementList] = {'type': etype}
+                else:
+                    self.data[win.GetParent().SetElementList] = {'type': etype}
 
                 # t.(un)register has one type for 'input', 'maps'
                 maps_param = self.task.get_param('maps', element='name', raiseError=False)
