@@ -4,6 +4,30 @@ The module <em>t.vect.observe.strds</em> is used to observe specific
 locations in a space time raster dataset over a period of time using
 vector points.
 
+The first input is a vector map layer with
+vector points. The second input is one or several space time raster
+datasets (STRDS) that should be sampled over time at the vector point
+positions. The space time raster dataset will be sampled over its
+whole temporal extent (from start to end). The range can be adjusted
+using the temporal where condition <em>t_where</em>. A
+column name must be specified for each input space time raster dataset.
+<p>
+As results  a new space time vector dataset is generated 
+that contains a single
+(new) vector map that links to as many time stamped attribute tables 
+as raster map layer are present in the input space time raster dataset.
+Hence, for each time step in the space time raster dataset a new
+attribute table is created. The GRASS GIS Temporal Framework allows to
+time stamp attribute tables that can be linked to a single vector map
+layer.
+<p>
+The module v.what.rast is used internally for sampling the time stamped raster
+map layers. All sampled values of a single time stamped raster map
+layer are written into a new time stamped attribute table.
+<p>
+Use  t.vect.db.select to print attribute values of the space
+time vector dataset to stdout.
+
 <h2>EXAMPLE</h2>
 
 The example show how to create a space time vector dataset and a vector
@@ -109,6 +133,8 @@ v.info precip_stations_monthly
 <h2>SEE ALSO</h2>
 
 <em>
+<a href="t.vect.db.select.html">t.vect.db.select</a>,
+<a href="t.vect.what.strds.html">t.vect.what.strds</a>,
 <a href="t.create.html">t.create</a>,
 <a href="t.info.html">t.info</a>
 </em>
