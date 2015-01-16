@@ -176,12 +176,12 @@ off_t V2_write_line_pg(struct Map_info *Map, int type,
    \return -1 on error
  */
 off_t V1_rewrite_line_pg(struct Map_info * Map,
-                         int line, int type, off_t offset,
+                         off_t offset, int type,
                          const struct line_pnts * points,
                          const struct line_cats * cats)
 {
-    G_debug(3, "V1_rewrite_line_pg(): line=%d type=%d offset=%"PRI_OFF_T,
-            line, type, offset);
+    G_debug(3, "V1_rewrite_line_pg(): type=%d offset=%"PRI_OFF_T,
+            type, offset);
 #ifdef HAVE_POSTGRES
     if (type != V1_read_line_pg(Map, NULL, NULL, offset)) {
         G_warning(_("Unable to rewrite feature (incompatible feature types)"));
@@ -215,18 +215,19 @@ off_t V1_rewrite_line_pg(struct Map_info * Map,
   \return offset where feature was rewritten
   \return -1 on error
 */
-off_t V2_rewrite_line_pg(struct Map_info *Map, int line, int type, off_t old_offset,
+off_t V2_rewrite_line_pg(struct Map_info *Map, int line, int type,
                          const struct line_pnts *points, const struct line_cats *cats)
 {
-    G_debug(3, "V2_rewrite_line_pg(): line=%d type=%d offset=%"PRI_OFF_T,
-            line, type, old_offset);
+    G_debug(3, "V2_rewrite_line_pg(): line=%d type=%d",
+            line, type);
 #ifdef HAVE_POSTGRES
     const char *schema_name, *table_name, *keycolumn;
     char *stmt, *geom_data;
     
     struct Format_info_pg *pg_info;
     struct P_line *Line;
-    
+    off_t offset;
+
     geom_data = NULL;
     stmt = NULL;
     pg_info = &(Map->fInfo.pg);
@@ -240,6 +241,11 @@ off_t V2_rewrite_line_pg(struct Map_info *Map, int line, int type, off_t old_off
     if (Line == NULL) {
         G_warning(_("Attempt to access dead feature %d"), line);
         return -1;
+    }
+    offset = Line->offset;
+
+    if (!(Map->plus.update_cidx)) {
+	Map->plus.cidx_up_to_date = FALSE; /* category index will be outdated */
     }
 
     if (!Points)
@@ -283,7 +289,7 @@ off_t V2_rewrite_line_pg(struct Map_info *Map, int line, int type, off_t old_off
 
     /* update topology
        note: offset is not changed */
-    return add_line_to_topo_pg(Map, old_offset, type, points);
+    return add_line_to_topo_pg(Map, offset, type, points);
 #else
     G_fatal_error(_("GRASS is not compiled with PostgreSQL support"));
     return -1;
@@ -396,7 +402,11 @@ int V2_delete_line_pg(struct Map_info *Map, int line)
             G_warning(_("Attempt to access dead feature %d"), line);
             return -1;
         }
-         
+
+	if (!(Map->plus.update_cidx)) {
+	    Map->plus.cidx_up_to_date = FALSE; /* category index will be outdated */
+	}
+
         Vect__execute_pg(pg_info->conn, "BEGIN");
    
         if (Line->type & GV_POINTS) {
@@ -1338,7 +1348,11 @@ off_t write_line_tp(struct Map_info *Map, int type, int is_node,
     
     pg_info = &(Map->fInfo.pg);
     plus = &(Map->plus);
-    
+
+    if (!(plus->update_cidx)) {
+	plus->cidx_up_to_date = FALSE; /* category index will be outdated */
+    }
+
     /* check type for nodes */
     if (is_node && type != GV_POINT) {
         G_warning(_("Invalid feature type (%d) for nodes"), type);
@@ -2732,7 +2746,7 @@ int update_topo_face(struct Map_info *Map, int line)
   \brief Add line to native and PostGIS topology
 
   \param Map vector map
-  \param line feature id to remove from topo
+  \param offset ???
   \param type feature type
   \param Points feature vertices
 

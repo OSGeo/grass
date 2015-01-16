@@ -24,10 +24,7 @@
 
 #include "local_proto.h"
 
-static struct line_cats *Cats;
-static struct line_pnts *Points;
-
-static off_t V1__rewrite_line_nat(struct Map_info *, off_t, int,
+static off_t V1__write_line_nat(struct Map_info *, off_t, int,
 				  const struct line_pnts *, const struct line_cats *);
 static void V2__delete_area_cats_from_cidx_nat(struct Map_info *, int);
 static void V2__add_area_cats_to_cidx_nat(struct Map_info *, int);
@@ -46,17 +43,7 @@ static void V2__add_area_cats_to_cidx_nat(struct Map_info *, int);
 off_t V1_write_line_nat(struct Map_info *Map, int type,
                         const struct line_pnts *points, const struct line_cats *cats)
 {
-    off_t offset;
-
-    if (dig_fseek(&(Map->dig_fp), 0L, SEEK_END) == -1)	/* set to end of file */
-	return -1;
-
-    offset = dig_ftell(&(Map->dig_fp));
-    G_debug(3, "V1_write_line_nat(): offset = %lu", offset);
-    if (offset == -1)
-	return -1;
-
-    return V1__rewrite_line_nat(Map, offset, type, points, cats);
+    return V1__write_line_nat(Map, -1, type, points, cats);
 }
 
 /*!
@@ -80,7 +67,10 @@ off_t V2_write_line_nat(struct Map_info *Map, int type,
     off_t offset;
 
     G_debug(3, "V2_write_line_nat(): type=%d", type);
-    
+
+    if (!(Map->plus.update_cidx)) {
+	Map->plus.cidx_up_to_date = FALSE; /* category index will be outdated */
+    }
     /* write feature to 'coor' file */
     offset = V1_write_line_nat(Map, type, points, cats);
     if (offset < 0)
@@ -100,27 +90,23 @@ off_t V2_write_line_nat(struct Map_info *Map, int type,
   Old feature is deleted (marked as dead), and a new feature written.
   
   \param Map pointer to Map_info structure
-  \param line feature id to be rewritten
   \param offset feature offset
   \param type feature type (GV_POINT, GV_LINE, ...)
   \param points feature geometry
   \param cats feature categories
   
-  \return feature offset (rewriten feature)
+  \return feature offset (rewritten feature)
   \return -1 on error
 */
-off_t V1_rewrite_line_nat(struct Map_info *Map, int line, int type, off_t offset,
+off_t V1_rewrite_line_nat(struct Map_info *Map, off_t offset, int type,
 			  const struct line_pnts *points, const struct line_cats *cats)
 {
     int old_type;
     static struct line_pnts *old_points = NULL;
     static struct line_cats *old_cats = NULL;
-    off_t new_offset;
-    
-    G_debug(3, "V1_rewrite_line_nat(): line = %d offset = %lu",
-	    line, (unsigned long) offset);
 
-    /* TODO: enable points and cats == NULL  */
+    G_debug(3, "V1_rewrite_line_nat(): offset = %"PRI_OFF_T,
+	    offset);
 
     /* First compare numbers of points and cats with tha old one */
     if (!old_points) {
@@ -139,29 +125,21 @@ off_t V1_rewrite_line_nat(struct Map_info *Map, int line, int type, off_t offset
 	    || ((type & GV_LINES) && (old_type & GV_LINES)))) {
 
 	/* equal -> overwrite the old */
-	return V1__rewrite_line_nat(Map, offset, type, points, cats);
+	return V1__write_line_nat(Map, offset, type, points, cats);
     }
     else {
 	/* differ -> delete the old and append new */
 	/* delete old */
 	V1_delete_line_nat(Map, offset);
 
-	/* write new */
-	if (dig_fseek(&(Map->dig_fp), 0L, SEEK_END) == -1)	/*  end of file */
-	    return -1;
-
-	new_offset = dig_ftell(&(Map->dig_fp));
-	if (new_offset == -1)
-	    return -1;
-
-	return V1__rewrite_line_nat(Map, new_offset, type, points, cats);
+	return V1__write_line_nat(Map, -1, type, points, cats);
     }
 }
 
 /*!
   \brief Rewrites feature to 'coor' file at topological level (internal use only)
 
-  Note: Topology must be built at level >= GV_BUILD_BASE
+  Note: requires topology level >= GV_BUILD_BASE.
   
   Note: Function returns feature id, but is defined as off_t for
   compatibility with level 1 functions.
@@ -173,10 +151,10 @@ off_t V1_rewrite_line_nat(struct Map_info *Map, int line, int type, off_t offset
   \param points feature geometry
   \param cats feature categories
   
-  \return new feature id
+  \return new feature id or 0 (build level < GV_BUILD_BASE)
   \return -1 on error
 */
-off_t V2_rewrite_line_nat(struct Map_info *Map, int line, int type, off_t old_offset,
+off_t V2_rewrite_line_nat(struct Map_info *Map, int line, int type,
 			  const struct line_pnts *points, const struct line_cats *cats)
 {
     /* TODO: this is just quick shortcut because we have already V2_delete_nat()
@@ -185,20 +163,69 @@ off_t V2_rewrite_line_nat(struct Map_info *Map, int line, int type, off_t old_of
      *        and cats was not changed or topology is not changed (nodes not moved,
      *        angles not changed etc.) */
 
-    off_t offset;
+    int old_type;
+    off_t offset, old_offset;
+    struct Plus_head *plus;
+    static struct line_cats *old_cats = NULL;
+    static struct line_pnts *old_points = NULL;
 
-    if (0 != V2_delete_line_nat(Map, line))
+    plus = &(Map->plus);
+
+    if (plus->uplist.do_uplist) {
+	/* list of updated lines: undo needs copy on write */
+	if (0 != V2_delete_line_nat(Map, line))
+	    return -1;
+
+	return V2_write_line_nat(Map, type, points, cats);
+    }
+
+    if (line < 1 || line > plus->n_lines) {
+        G_warning(_("Attempt to access feature with invalid id (%d)"), line);
         return -1;
-    
-    G_debug(3, "V2_write_line_nat(), line = %d", line);
+    }
 
-    /* rewrite feature in 'coor' file */
-    offset = V1_rewrite_line_nat(Map, line, type, old_offset, points, cats);
-    if (offset < 0)
-	return -1;
+    if (!(plus->update_cidx)) {
+	plus->cidx_up_to_date = FALSE; /* category index will be outdated */
+    }
 
-    /* update topology */
-    return V2__add_line_to_topo_nat(Map, offset, type, points, cats, -1, NULL);
+    old_offset = plus->Line[line]->offset;
+
+    /* read the line */
+    if (!old_points) {
+	old_points = Vect_new_line_struct();
+    }
+    if (!old_cats) {
+	old_cats = Vect_new_cats_struct();
+    }
+    old_type = V2_read_line_nat(Map, old_points, old_cats, line);
+    if (old_type == -1)
+        return -1;
+
+    /* rewrite feature in coor file */
+    if (old_type != -2		/* EOF -> write new line */
+	&& points->n_points == old_points->n_points
+	&& cats->n_cats == old_cats->n_cats
+	&& (((type & GV_POINTS) && (old_type & GV_POINTS))
+	    || ((type & GV_LINES) && (old_type & GV_LINES)))) {
+
+	/* equal -> overwrite the old */
+	offset = old_offset;
+    }
+    else {
+	/* differ -> delete the old and append new */
+	/* delete old */
+	V1_delete_line_nat(Map, old_offset);
+	offset = -1;
+    }
+
+    /* delete feature from topology */
+    if (0 != V2__delete_line_from_topo_nat(Map, line, type, old_points, old_cats))
+        return -1;
+
+    offset = V1__write_line_nat(Map, offset, type, points, cats);
+
+    /* update topology (build level >= GV_BUILD_BASE) */
+    return V2__add_line_to_topo_nat(Map, offset, type, points, cats, line, NULL);
 }
 
 /*!
@@ -215,7 +242,7 @@ int V1_delete_line_nat(struct Map_info *Map, off_t offset)
     char rhead;
     struct gvfile *dig_fp;
 
-    G_debug(3, "V1_delete_line_nat(): offset = %lu", (unsigned long) offset);
+    G_debug(3, "V1_delete_line_nat(): offset = %"PRI_OFF_T, offset);
 
     dig_set_cur_port(&(Map->head.port));
     dig_fp = &(Map->dig_fp);
@@ -244,7 +271,7 @@ int V1_delete_line_nat(struct Map_info *Map, off_t offset)
 /*!
   \brief Deletes feature at topological level (internal use only)
 
-  Note: Topology must be built at level >= GV_BUILD_BASE  
+  Note: requires topology level >= GV_BUILD_BASE.
   
   \param pointer to Map_info structure
   \param line feature id
@@ -257,6 +284,8 @@ int V2_delete_line_nat(struct Map_info *Map, int line)
     int type;
     struct P_line *Line;
     struct Plus_head *plus;
+    static struct line_cats *Cats = NULL;
+    static struct line_pnts *Points = NULL;
 
     G_debug(3, "V2_delete_line_nat(): line = %d", line);
 
@@ -267,23 +296,26 @@ int V2_delete_line_nat(struct Map_info *Map, int line)
         G_warning(_("Attempt to access feature with invalid id (%d)"), line);
         return -1;
     }
-    
+
     Line = Map->plus.Line[line];
     if (Line == NULL) {
         G_warning(_("Attempt to access dead feature %d"), line);
         return -1;
     }
 
+    if (!(plus->update_cidx)) {
+	plus->cidx_up_to_date = FALSE; /* category index will be outdated */
+    }
+
     /* read the line */    
     if (!Points) {
 	Points = Vect_new_line_struct();
-    }
-    if (!Cats) {
 	Cats = Vect_new_cats_struct();
     }
+
     type = V2_read_line_nat(Map, Points, Cats, line);
-    if (type < 0)
-        return -1;
+    if (type <= 0)
+	return -1;
 
     /* delete feature from coor file */
     if (0 != V1_delete_line_nat(Map, Line->offset))
@@ -310,7 +342,7 @@ int V1_restore_line_nat(struct Map_info *Map, off_t offset)
     char rhead;
     struct gvfile *dig_fp;
     
-    G_debug(3, "V1_restore_line_nat(), offset = %lu", (unsigned long) offset);
+    G_debug(3, "V1_restore_line_nat(), offset = %"PRI_OFF_T, offset);
     
     dig_set_cur_port(&(Map->head.port));
     dig_fp = &(Map->dig_fp);
@@ -341,20 +373,22 @@ int V1_restore_line_nat(struct Map_info *Map, off_t offset)
 /*!
   \brief Restores feature at topological level (internal use only)
 
-  Note: This function requires build level >= GV_BUILD_BASE.
+  Note: requires topology level >= GV_BUILD_BASE.
   
   \param Map pointer to Map_info structure
   \param line feature id
-  \param offset feature offset
   
   \return 0 on success
   \return -1 on error
 */
-int V2_restore_line_nat(struct Map_info *Map, int line, off_t offset)
+int V2_restore_line_nat(struct Map_info *Map, int line)
 {
     int type;
+    off_t offset;
     struct Plus_head *plus;
     struct P_line *Line;
+    static struct line_cats *Cats = NULL;
+    static struct line_pnts *Points = NULL;
     
     plus = &(Map->plus);
 
@@ -370,11 +404,16 @@ int V2_restore_line_nat(struct Map_info *Map, int line, off_t offset)
         G_warning(_("Attempt to access alive feature %d"), line);
         return -1;
     }
+
+    if (!(plus->update_cidx)) {
+	plus->cidx_up_to_date = 0;
+    }
+
+    offset = Line->offset;
     
     /* restore feature in 'coor' file */
     if (0 != V1_restore_line_nat(Map, offset))
 	return -1;
-
 
     /* read feature geometry */    
     if (!Points)
@@ -392,7 +431,9 @@ int V2_restore_line_nat(struct Map_info *Map, int line, off_t offset)
 /*** static or internal subroutines bellow ****/
 
 /*!
-  \brief Rewrites feature at the given offset 
+  \brief Writes feature at the given offset or at the end of the file
+  
+  Internal use only
   
   \param Map pointer to Map_info structure
   \param offset feature offset
@@ -403,9 +444,9 @@ int V2_restore_line_nat(struct Map_info *Map, int line, off_t offset)
   \return feature offset
   \return -1 on error
 */
-off_t V1__rewrite_line_nat(struct Map_info *Map,
-			   off_t offset, int type,
-			   const struct line_pnts *points, const struct line_cats *cats)
+off_t V1__write_line_nat(struct Map_info *Map, off_t offset, int type,
+			 const struct line_pnts *points, 
+			 const struct line_cats *cats)
 {
     int i, n_points;
     char rhead, nc;
@@ -415,8 +456,23 @@ off_t V1__rewrite_line_nat(struct Map_info *Map,
     dig_set_cur_port(&(Map->head.port));
     dig_fp = &(Map->dig_fp);
 
-    if (dig_fseek(dig_fp, offset, 0) == -1)
-	return -1;
+    /* if the given offset is smaller than the coor header size,
+     * append new feature to the end of the coor file,
+     * else overwrite whatever exists at offset */
+
+    if (offset < Map->head.head_size) {
+	if (dig_fseek(&(Map->dig_fp), 0L, SEEK_END) == -1)	/* set to end of file */
+	    return -1;
+
+	offset = dig_ftell(&(Map->dig_fp));
+	G_debug(3, "V1__rewrite_line_nat(): offset = %lu", offset);
+	if (offset == -1)
+	    return -1;
+    }
+    else {
+	if (dig_fseek(dig_fp, offset, 0) == -1)
+	    return -1;
+    }
 
     /* first byte:   0 bit: 1 - alive, 0 - dead
      *                1 bit: 1 - categories, 0 - no category
@@ -582,7 +638,7 @@ void V2__add_area_cats_to_cidx_nat(struct Map_info *Map, int area)
 int V2__delete_line_from_topo_nat(struct Map_info *Map, int line, int type,
                                   const struct line_pnts *points, const struct line_cats *cats)
 {
-    int i, first;
+    int i, first = 1;
     int adjacent[4], n_adjacent;
     
     struct bound_box box, abox;

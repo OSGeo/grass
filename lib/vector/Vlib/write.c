@@ -135,7 +135,7 @@ static int (*Vect_delete_line_array[][3]) () = {
 
 static int (*Vect_restore_line_array[][3]) () = {
     {
-    restore_dummy, restore_dummy, V2_restore_line_nat}
+    restore_dummy, V1_restore_line_nat, V2_restore_line_nat}
 #ifdef HAVE_OGR
     , {
 	restore_dummy, restore_dummy, restore_dummy}
@@ -183,21 +183,16 @@ off_t Vect_write_line(struct Map_info *Map, int type,
     G_debug(3, "Vect_write_line(): name = %s, format = %d, level = %d",
 	    Map->name, Map->format, Map->level);
 
-    if (!VECT_OPEN(Map)) {
-	G_warning(_("Vector map <%s> is not opened"), Vect_get_name(Map));
+    if (!check_map(Map))
         return -1;
-    }
-    
-    if (!(Map->plus.update_cidx)) {
-	Map->plus.cidx_up_to_date = FALSE; /* category index will be outdated */
-    }
 
     offset = 
-	(*Vect_write_line_array[Map->format][Map->level]) (Map, type, points,
-							   cats);
+	(*Vect_write_line_array[Map->format][Map->level]) (Map, type,
+							   points, cats);
     
     if (offset < 0)
-	G_warning(_("Unable to write feature in vector map <%s>"), Vect_get_name(Map));
+	G_warning(_("Unable to write feature in vector map <%s>"),
+	          Vect_get_name(Map));
     
     return offset;
 }
@@ -213,41 +208,31 @@ off_t Vect_write_line(struct Map_info *Map, int type,
    old feature is deleted and new is written.
 
    \param Map pointer to Map_info structure
-   \param line feature id
+   \param line feature id (level 2) or feature offset (level 1)
    \param type feature type (GV_POINT, GV_LINE, ...)
    \param points feature geometry
    \param cats feature categories
 
-   \return new feature offset
+   \return new feature id (on level 2) (or 0 when build level < GV_BUILD_BASE)
+   \return offset into file where the feature starts (on level 1)
    \return -1 on error
  */
-off_t Vect_rewrite_line(struct Map_info *Map, int line, int type,
+off_t Vect_rewrite_line(struct Map_info *Map, off_t line, int type,
 			const struct line_pnts *points, const struct line_cats *cats)
 {
-    off_t ret, offset;
-    
+    off_t ret;
+
+    G_debug(3, "Vect_rewrite_line(): name = %s, format = %d, level = %d, line/offset = %"PRI_OFF_T,
+	    Map->name, Map->format, Map->level, line);
+
     if (!check_map(Map))
         return -1;
 
-    if (line < 1 || line > Map->plus.n_lines) {
-        G_warning(_("Attempt to access feature with invalid id (%d)"), line);
-        return -1;
-    }
-    
-    if (!(Map->plus.update_cidx)) {
-	Map->plus.cidx_up_to_date = FALSE; /* category index will be outdated */
-    }
-
-    offset = Map->plus.Line[line]->offset;
-    
-    G_debug(3, "Vect_rewrite_line(): name = %s, line = %d, offset = %lu",
-	    Map->name, line, offset);
-    
     ret = (*Vect_rewrite_line_array[Map->format][Map->level]) (Map, line, type,
-							       offset,
 							       points, cats);
     if (ret == -1)
-        G_warning(_("Unable to rewrite feature %d in vector map <%s>"), line, Vect_get_name(Map));
+        G_warning(_("Unable to rewrite feature/offset %lu in vector map <%s>"),
+	          line, Vect_get_name(Map));
 
     return ret;
 }
@@ -260,33 +245,25 @@ off_t Vect_rewrite_line(struct Map_info *Map, int line, int type,
    A warning is printed on error.
 
    \param Map pointer to Map_info structure
-   \param line feature id
+   \param line feature id (level 2) or feature offset (level 1)
 
    \return 0 on success
    \return -1 on error
  */
-int Vect_delete_line(struct Map_info *Map, int line)
+int Vect_delete_line(struct Map_info *Map, off_t line)
 {
     int ret;
 
-    G_debug(3, "Vect_delete_line(): name = %s, line = %d", Map->name, line);
+    G_debug(3, "Vect_delete_line(): name = %s, line/offset = %"PRI_OFF_T,
+            Map->name, line);
 
     if (!check_map(Map))
         return -1;
-    
-    if (line < 1 || line > Map->plus.n_lines) {
-        G_warning(_("Attempt to access feature with invalid id (%d)"), line);
-        return -1;
-    }
-
-    if (!(Map->plus.update_cidx)) {
-	Map->plus.cidx_up_to_date = FALSE; /* category index will be outdated */
-    }
 
     ret = (*Vect_delete_line_array[Map->format][Map->level]) (Map, line);
 
     if (ret == -1)
-	G_warning(_("Unable to delete feature %d from vector map <%s>"),
+	G_warning(_("Unable to delete feature/offset %lu from vector map <%s>"),
                   line, Vect_get_name(Map));
 
     return ret;
@@ -306,28 +283,20 @@ int Vect_delete_line(struct Map_info *Map, int line)
    \return 0 on success
    \return -1 on error
  */
-int Vect_restore_line(struct Map_info *Map, int line, off_t offset)
+int Vect_restore_line(struct Map_info *Map, off_t line)
 {
     int ret;
 
-    G_debug(3, "Vect_restore_line(): name = %s, line = %d", Map->name, line);
+    G_debug(3, "Vect_restore_line(): name = %s,level = %d, line/offset = %"PRI_OFF_T,
+            Map->name, Map->level, line);
 
     if (!check_map(Map))
         return -1;
 
-    if (line < 1 || line > Map->plus.n_lines) {
-        G_warning(_("Attempt to access feature with invalid id (%d)"), line);
-        return -1;
-    }
-
-    if (!(Map->plus.update_cidx)) {
-	Map->plus.cidx_up_to_date = 0;
-    }
-
-    ret = (*Vect_restore_line_array[Map->format][Map->level]) (Map, line, offset);
+    ret = (*Vect_restore_line_array[Map->format][Map->level]) (Map, line);
 
     if (ret == -1)
-	G_warning(_("Unable to restore feature %d in vector map <%s>"),
+	G_warning(_("Unable to restore feature/offset %lu in vector map <%s>"),
                   line, Vect_get_name(Map));
 
     return ret;
@@ -337,12 +306,6 @@ int check_map(const struct Map_info *Map)
 {
     if (!VECT_OPEN(Map)) {
 	G_warning(_("Vector map <%s> is not opened"), Vect_get_name(Map));
-        return 0;
-    }
-    
-    if (Map->level < 2) {
-	G_warning(_("Vector map <%s> is not opened on topology level"),
-                  Vect_get_name(Map));
         return 0;
     }
 
