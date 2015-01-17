@@ -352,5 +352,7 @@ void G__usage_xml(void)
     fprintf(stdout, "\n\t\t</description>\n");
     fprintf(stdout, "\t</flag>\n");
 
+    G__describe_option_rules_xml(stdout);
+
     fprintf(stdout, "</task>\n");
 }
