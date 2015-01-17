@@ -59,6 +59,7 @@ void G__print_keywords(FILE *, void (*)(FILE *, const char *));
 void G__check_option_rules(void);
 void G__describe_option_rules(void);
 int G__has_required_rule(void);
+void G__describe_option_rules_xml(FILE *);
 
 #endif
 
