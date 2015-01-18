@@ -24,6 +24,16 @@
 #include <grass/glocale.h>
 #include "misc.h"
 
+static int topo_debug = 0;
+
+int set_topo_debug(void)
+{
+    if (getenv("GRASS_VECTOR_TOPO_DEBUG"))
+	topo_debug = 1;
+
+    return topo_debug;
+}
+
 int type_mask(struct Option *type_opt)
 {
     int res = 0;
@@ -187,14 +197,22 @@ int copy_tables_by_cats(struct Map_info *In, struct Map_info *Out)
     return 1;
 }
 
+static int cmp(const void *a, const void *b)
+{
+    int ai = *(int *)a;
+    int bi = *(int *)b;
+
+    return (ai - bi);
+}
+
 /* check topology corruption by boundary modification
  * return 0 on corruption, 1 if modification is ok */
 int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
                struct line_pnts *Points, struct line_cats *Cats)
 {
-    int i, j, intersect, newline, left_old, right_old,
-	left_new, right_new;
-    struct bound_box box, abox;
+    int i, j, k, intersect, newline;
+    struct bound_box box, abox, tbox;
+    struct bound_box lbox, rbox, areabox;
     struct line_pnts **AXLines, **BXLines;
     int naxlines, nbxlines;
     static struct line_pnts *BPoints = NULL;
@@ -202,12 +220,16 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
     static struct line_pnts *BPoints2 = NULL;
     static struct ilist *BList = NULL;
     int area, isle, centr;
+    int left_o, left_n, right_o, right_n;
     int node, node_n_lines;
     float angle1, angle2;
-
-    /* order of tests:
-     * first: fast tests
-     * last: tests that can only be done after writing out the new line  */
+    off_t offset;
+    /* topology debugging */
+    int area_l_o, area_r_o, area_l_n, area_r_n;
+    int centr_l_o, centr_r_o, centr_l_n, centr_r_n;
+    int *isles_l_o, nisles_l_o, *isles_l_n, nisles_l_n;
+    int *isles_r_o, nisles_r_o, *isles_r_n, nisles_r_n;
+    int found;
 
     if (!BPoints) {
 	BPoints = Vect_new_line_struct();
@@ -229,8 +251,18 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 	    return 1;
     }
 
+    i = APoints->n_points - 1;
+    if (APoints->x[0] == APoints->x[i] && APoints->y[0] == APoints->y[i]) {
+	i = Points->n_points - 1;
+	if (Points->x[0] != Points->x[i] || Points->y[0] != Points->y[i]) {
+	    /* input line forms a loop, output not */
+	    return 0;
+	}
+    }
+
     /* test node angles
-     * same like dig_build_area_with_line() */
+     * an area can be built only if there are no two lines with the same 
+     * angle at the same node */
     /* line start */
     angle1 = dig_calc_begin_angle(Points, 0);
     if (angle1 == -9)
@@ -257,14 +289,17 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 	return 0;
 
     i = Points->n_points - 1;
-    if (angle1 == angle2 && 
-        Points->x[0] == Points->x[i] && Points->y[0] == Points->y[i]) {
-	/* same angle, same start and end coordinates,
-	 * an area can not be constructed -> error */
-	return 0;
+    if (Points->x[0] == Points->x[i] && Points->y[0] == Points->y[i]) {
+	if (angle1 == angle2) {
+	    /* same angle, same start and end coordinates,
+	     * an area can not be constructed -> error */
+	    return 0;
+	}
+    }
+    else {
+	node = dig_find_node(&(Out->plus), Points->x[i], Points->y[i], Points->z[i]);
     }
 
-    node = dig_find_node(&(Out->plus), Points->x[i], Points->y[i], Points->z[i]);
     if (node) {
 	/* if another line exists with the same angle at this node,
 	 * an area can not be constructed -> error */
@@ -347,20 +382,47 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
     if (intersect)
 	return 0;
 
-    /* the point-in-poly tests are needed to avoid some cases up duplicate centroids */
-    Vect_get_line_areas(Out, line, &left_old, &right_old);
+    /* test centroid attachment (point-in-poly) */
+    Vect_get_line_areas(Out, line, &left_o, &right_o);
 
     Vect_line_box(APoints, &abox);
 
     /* centroid on the left side */
     isle = centr = 0;
-    area = left_old;
+    area = left_o;
     if (area < 0) {
 	isle = -area;
 	area = Vect_get_isle_area(Out, isle);
     }
     if (area > 0)
 	centr = Vect_get_area_centroid(Out, area);
+    centr_l_o = centr;
+    area_l_o = area;
+    lbox = box;
+
+    if (isle)
+	Vect_get_isle_boundaries(Out, isle, BList);
+    else
+	Vect_get_area_boundaries(Out, area, BList);
+
+    Vect_reset_line(BPoints2);
+    for (i = 0; i < BList->n_values; i++) {
+	int bline = BList->value[i];
+	int dir = bline > 0 ? GV_FORWARD : GV_BACKWARD;
+
+	if (abs(bline) != line) {
+	    Vect_read_line(Out, BPoints, NULL, abs(bline));
+	    Vect_line_box(BPoints, &tbox);
+	    Vect_box_extend(&lbox, &tbox);
+	    Vect_append_points(BPoints2, BPoints, dir);
+	}
+	else
+	    Vect_append_points(BPoints2, Points, dir);
+
+	BPoints2->n_points--;    /* skip last point, avoids duplicates */
+    }
+    BPoints2->n_points++;        /* close polygon */
+
     if (centr > 0) {
 	int ret;
 	double cx, cy, cz;
@@ -369,36 +431,14 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 	cx = BPoints->x[0];
 	cy = BPoints->y[0];
 	cz = BPoints->z[0];
-	
-	if (1 || Vect_point_in_box(cx, cy, cz, &box) ||
+
+	if (Vect_point_in_box(cx, cy, cz, &box) ||
 	    Vect_point_in_box(cx, cy, cz, &abox)) {
 
-	    if (isle)
-		Vect_get_isle_boundaries(Out, isle, BList);
-	    else
-		Vect_get_area_boundaries(Out, area, BList);
-
-	    Vect_reset_line(BPoints2);
-	    for (i = 0; i < BList->n_values; i++) {
-		int bline = BList->value[i];
-		int dir = bline > 0 ? GV_FORWARD : GV_BACKWARD;
-
-		if (abs(bline) != line) {
-		    Vect_read_line(Out, BPoints, NULL, abs(bline));
-		    Vect_append_points(BPoints2, BPoints, dir);
-		}
-		else
-		    Vect_append_points(BPoints2, Points, dir);
-
-		BPoints2->n_points--;    /* skip last point, avoids duplicates */
-	    }
-	    BPoints2->n_points++;        /* close polygon */
-
 	    ret = Vect_point_in_poly(cx, cy, BPoints2);
-	    /* see Vect_point_in_area() */
 	    if (!isle) {
 		/* area: centroid must be inside */
-		if (ret == 0)
+		if (ret != 1)
 		    return 0;
 	    }
 	    else {
@@ -408,17 +448,43 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 	    }
 	}
     }
-    left_old = centr;
 
     /* centroid on the right side */
     isle = centr = 0;
-    area = right_old;
+    area = right_o;
     if (area < 0) {
 	isle = -area;
 	area = Vect_get_isle_area(Out, isle);
     }
     if (area > 0)
 	centr = Vect_get_area_centroid(Out, area);
+    centr_r_o = centr;
+    area_r_o = area;
+    rbox = box;
+
+    if (isle)
+	Vect_get_isle_boundaries(Out, isle, BList);
+    else
+	Vect_get_area_boundaries(Out, area, BList);
+
+    Vect_reset_line(BPoints2);
+    for (i = 0; i < BList->n_values; i++) {
+	int bline = BList->value[i];
+	int dir = bline > 0 ? GV_FORWARD : GV_BACKWARD;
+
+	if (abs(bline) != line) {
+	    Vect_read_line(Out, BPoints, NULL, abs(bline));
+	    Vect_line_box(BPoints, &tbox);
+	    Vect_box_extend(&rbox, &tbox);
+	    Vect_append_points(BPoints2, BPoints, dir);
+	}
+	else
+	    Vect_append_points(BPoints2, Points, dir);
+
+	BPoints2->n_points--;    /* skip last point, avoids duplicates */
+    }
+    BPoints2->n_points++;        /* close polygon */
+
     if (centr > 0) {
 	int ret;
 	double cx, cy, cz;
@@ -427,36 +493,14 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 	cx = BPoints->x[0];
 	cy = BPoints->y[0];
 	cz = BPoints->z[0];
-	
-	if (1 || Vect_point_in_box(cx, cy, cz, &box) ||
+
+	if (Vect_point_in_box(cx, cy, cz, &box) ||
 	    Vect_point_in_box(cx, cy, cz, &abox)) {
 
-	    if (isle)
-		Vect_get_isle_boundaries(Out, isle, BList);
-	    else
-		Vect_get_area_boundaries(Out, area, BList);
-
-	    Vect_reset_line(BPoints2);
-	    for (i = 0; i < BList->n_values; i++) {
-		int bline = BList->value[i];
-		int dir = bline > 0 ? GV_FORWARD : GV_BACKWARD;
-
-		if (abs(bline) != line) {
-		    Vect_read_line(Out, BPoints, NULL, abs(bline));
-		    Vect_append_points(BPoints2, BPoints, dir);
-		}
-		else
-		    Vect_append_points(BPoints2, Points, dir);
-
-		BPoints2->n_points--;    /* skip last point, avoids duplicates */
-	    }
-	    BPoints2->n_points++;        /* close polygon */
-
 	    ret = Vect_point_in_poly(cx, cy, BPoints2);
-	    /* see Vect_point_in_area() */
 	    if (!isle) {
 		/* area: centroid must be inside */
-		if (ret == 0)
+		if (ret != 1)
 		    return 0;
 	    }
 	    else {
@@ -466,34 +510,346 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 	    }
 	}
     }
-    right_old = centr;
+
+    /* all fine:
+     * areas/isles can be built
+     * no intersection with another boundary, e.g. isle attachment will be preserved
+     * centroids are still on the correct side of the boundary */
+
+    if (!topo_debug) {
+	/* update only those parts of topology that actually get changed */
+	/* boundary:
+	 * node in case of loop support
+	 * node angles
+	 * bounding box */
+	
+	/* rewrite boundary on level 1 */
+	offset = Out->plus.Line[line]->offset;
+	Out->level = 1;
+	offset = Vect_rewrite_line(Out, offset, GV_BOUNDARY, Points, Cats);
+	Out->level = 2;
+	/* delete line from topo */
+	dig_del_line(&Out->plus, line, APoints->x[0], APoints->y[0], APoints->z[0]);
+	/* restore line in topo */
+	dig_restore_line(&Out->plus, line, GV_BOUNDARY, Points, &box, offset);
+
+	/* update area/isle box to the left */
+	if (left_o < 0) {
+	    dig_spidx_del_isle(&Out->plus, -left_o);
+	    dig_spidx_add_isle(&Out->plus, -left_o, &lbox);
+	}
+	else if (left_o > 0) {
+	    dig_spidx_del_area(&Out->plus, left_o);
+	    dig_spidx_add_area(&Out->plus, left_o, &lbox);
+	}
+	/* update area/isle box to the right */
+	if (right_o < 0) {
+	    dig_spidx_del_isle(&Out->plus, -right_o);
+	    dig_spidx_add_isle(&Out->plus, -right_o, &rbox);
+	}
+	else if (right_o > 0) {
+	    dig_spidx_del_area(&Out->plus, right_o);
+	    dig_spidx_add_area(&Out->plus, right_o, &rbox);
+	}
+	
+	/* done */
+	return 1;
+    }
+
+    /* debug topology */
+
+    /* record isles of the old areas to the left and right */
+    nisles_l_o = 0;
+    isles_l_o = NULL;
+    if (area_l_o) {
+	nisles_l_o = Out->plus.Area[area_l_o]->n_isles;
+	if (nisles_l_o) {
+	    isles_l_o = G_malloc(nisles_l_o * sizeof(int));
+	    for (i = 0; i < nisles_l_o; i++) {
+		isles_l_o[i] = Out->plus.Area[area_l_o]->isles[i];
+	    }
+	    qsort(isles_l_o, nisles_l_o, sizeof(int), cmp);
+	}
+    }
+    nisles_r_o = 0;
+    isles_r_o = NULL;
+    if (area_r_o) {
+	nisles_r_o = Out->plus.Area[area_r_o]->n_isles;
+	if (nisles_r_o) {
+	    isles_r_o = G_malloc(nisles_r_o * sizeof(int));
+	    for (i = 0; i < nisles_r_o; i++) {
+		isles_r_o[i] = Out->plus.Area[area_r_o]->isles[i];
+	    }
+	    qsort(isles_r_o, nisles_r_o, sizeof(int), cmp);
+	}
+    }
 
     /* OK, rewrite modified boundary */
     newline = Vect_rewrite_line(Out, line, GV_BOUNDARY, Points, Cats);
+    if (newline != line)
+	G_fatal_error("Vect_rewrite_line(): new line id %d != old line id %d",
+	              newline, line);
+
+    /* get new area and centroid ids to the left and right */
+    centr_l_n = centr_r_n = 0;
+    Vect_get_line_areas(Out, newline, &left_n, &right_n);
+    area = left_n;
+    if (area < 0)
+	area = Vect_get_isle_area(Out, -area);
+    if (area > 0)
+	centr_l_n = Vect_get_area_centroid(Out, area);
+    area_l_n = area;
+    
+    area = right_n;
+    if (area < 0)
+	area = Vect_get_isle_area(Out, -area);
+    if (area > 0)
+	centr_r_n = Vect_get_area_centroid(Out, area);
+    area_r_n = area;
+
+    /* record isles of the new areas to the left and right */
+    nisles_l_n = 0;
+    isles_l_n = NULL;
+    if (area_l_n) {
+	nisles_l_n = Out->plus.Area[area_l_n]->n_isles;
+	if (nisles_l_n) {
+	    isles_l_n = G_malloc(nisles_l_n * sizeof(int));
+	    for (i = 0; i < nisles_l_n; i++) {
+		isles_l_n[i] = Out->plus.Area[area_l_n]->isles[i];
+	    }
+	    qsort(isles_l_n, nisles_l_n, sizeof(int), cmp);
+	}
+    }
+    nisles_r_n = 0;
+    isles_r_n = NULL;
+    if (area_r_n) {
+	nisles_r_n = Out->plus.Area[area_r_n]->n_isles;
+	if (nisles_r_n) {
+	    isles_r_n = G_malloc(nisles_r_n * sizeof(int));
+	    for (i = 0; i < nisles_r_n; i++) {
+		isles_r_n[i] = Out->plus.Area[area_r_n]->isles[i];
+	    }
+	    qsort(isles_r_n, nisles_r_n, sizeof(int), cmp);
+	}
+    }
+
+    /* compare isle numbers and ids on the left and right */
+    /* left */
+    if (nisles_l_o != nisles_l_n)
+	G_fatal_error("Number of isles to the left differ: old %d, new %d",
+	              nisles_l_o, nisles_l_n);
+    found = 0;
+    k = 0;
+    for (i = 0; i < nisles_l_o; i++) {
+	if (isles_l_o[i] != isles_l_n[k]) {
+	    if (!found) {
+		found = 1;
+		k--;
+	    }
+	    else {
+		for (j = 0; j < nisles_l_o; j++) {
+		    G_message("old %d new %d", isles_l_o[j], isles_l_n[j]);
+		}
+		G_fatal_error("New isle to the left %d is wrong",
+			      isles_l_n[i]);
+	    }
+	}
+	k++;
+    }
+    /* right */
+    if (nisles_r_o != nisles_r_n)
+	G_fatal_error("Number of isles to the left differ: old %d, new %d",
+	              nisles_r_o, nisles_r_n);
+    found = 0;
+    k = 0;
+    for (i = 0; i < nisles_r_o; i++) {
+	if (isles_r_o[i] != isles_r_n[k]) {
+	    if (!found) {
+		found = 1;
+		k--;
+	    }
+	    else {
+		for (j = 0; j < nisles_r_o; j++) {
+		    G_message("old %d new %d", isles_r_o[j], isles_r_n[j]);
+		}
+		G_fatal_error("New isle to the right %d is wrong",
+			      isles_l_n[i]);
+	    }
+	}
+	k++;
+    }
 
     /* Check position of centroids */
-    Vect_get_line_areas(Out, newline, &left_new, &right_new);
-    if (left_new < 0)
-	left_new = Vect_get_isle_area(Out, abs(left_new));
-    if (left_new > 0)
-	left_new = Vect_get_area_centroid(Out, left_new);
-    if (right_new < 0)
-	right_new = Vect_get_isle_area(Out, abs(right_new));
-    if (right_new > 0)
-	right_new = Vect_get_area_centroid(Out, right_new);
+    if (centr_l_n != centr_l_o || centr_r_n != centr_r_o) {
+	G_debug(1, "The modified boundary changes attachment of centroid -> not modified");
 
-    if (left_new != left_old || right_new != right_old) {
-	G_debug(3,
-		"The modified boundary changes attachment of centroid -> not modified");
+	if (centr_l_n != centr_l_o) {
+	    G_debug(1, "*************************************");
+	    G_debug(1, "Left area/isle old: %d, new: %d", left_o, left_n);
+	    G_debug(1, "Left centroid old: %d, new: %d", centr_l_o, centr_l_n);
 
-	G_debug(1, "Left centroid old: %d, new: %d", left_old, left_new);
-	G_debug(1, "Right centroid old: %d, new: %d", right_old, right_new);
-	Vect_get_line_areas(Out, newline, &left_new, &right_new);
-	G_debug(1, "New areas left: %d, right: %d", left_new, right_new);
+	    if (centr_l_o) {
+		int ret1, ret2, ret3;
 
-	Vect_rewrite_line(Out, newline, GV_BOUNDARY, APoints, Cats);
+		Vect_read_line(Out, BPoints, NULL, centr_l_o);
+		Vect_get_area_box(Out, area_l_n, &abox);
+
+		ret1 = (BPoints->x[0] >= abox.W && BPoints->x[0] <= abox.E &&
+		       BPoints->y[0] >= abox.S && BPoints->y[0] <= abox.N);
+
+		ret2 = Vect_point_in_area_outer_ring(BPoints->x[0], BPoints->y[0], Out,
+		                                    area_l_n, &abox);
+
+		Vect_get_area_points(Out, area_l_n, BPoints2);
+		ret3 = Vect_point_in_poly(BPoints->x[0], BPoints->y[0], BPoints2);
+
+		if (ret2 != ret3) {
+		    G_warning("Left old centroid in new area box: %d", ret1);
+		    G_warning("Left old centroid in new area as poly: %d", ret2);
+		    G_warning("Left old centroid in new area outer ring: %d", ret3);
+		}
+	    }
+	}
+	if (centr_r_n != centr_r_o) {
+	    G_debug(1, "*************************************");
+	    G_debug(1, "Right area/isle old: %d, new: %d", right_o, right_n);
+	    G_debug(1, "Right centroid old: %d, new: %d", centr_r_o, centr_r_n);
+
+	    if (centr_r_o) {
+		int ret1, ret2, ret3;
+
+		Vect_read_line(Out, BPoints, NULL, centr_r_o);
+		Vect_get_area_box(Out, area_r_n, &abox);
+
+		ret1 = (BPoints->x[0] >= abox.W && BPoints->x[0] <= abox.E &&
+		       BPoints->y[0] >= abox.S && BPoints->y[0] <= abox.N);
+
+		ret2 = Vect_point_in_area_outer_ring(BPoints->x[0], BPoints->y[0], Out,
+		                                    area_r_n, &abox);
+
+		Vect_get_area_points(Out, area_r_n, BPoints2);
+		ret3 = Vect_point_in_poly(BPoints->x[0], BPoints->y[0], BPoints2);
+
+		if (ret2 != ret3) {
+		    G_warning("Right old centroid in new area box: %d", ret1);
+		    G_warning("Right old centroid in new area as poly: %d", ret2);
+		    G_warning("Right old centroid in new area outer ring: %d", ret3);
+		}
+	    }
+	}
+
+	/* rewrite old line */
+	newline = Vect_rewrite_line(Out, newline, GV_BOUNDARY, APoints, Cats);
+
+	centr_l_n = centr_r_n = 0;
+	Vect_get_line_areas(Out, newline, &area_l_n, &area_r_n);
+	area = area_l_n;
+	if (area < 0)
+	    area = Vect_get_isle_area(Out, -area);
+	if (area > 0)
+	    centr_l_n = Vect_get_area_centroid(Out, area);
+	area_l_n = area;
+	
+	area = area_r_n;
+	if (area < 0)
+	    area = Vect_get_isle_area(Out, -area);
+	if (area > 0)
+	    centr_r_n = Vect_get_area_centroid(Out, area);
+	area_r_n = area;
+
+	if (centr_l_n != centr_l_o) {
+	    Vect_get_area_box(Out, area_l_n, &areabox);
+	    
+	    if (centr_l_n > 0) {
+		Vect_read_line(Out, BPoints, NULL, centr_l_n);
+		if (Vect_point_in_area(BPoints->x[0], BPoints->y[0], Out,
+		    area_l_n, &areabox)) {
+
+		    G_warning("New left centroid is in new left area");
+
+		    G_warning("New left centroid on outer ring: %d",
+		    Vect_point_in_area_outer_ring(BPoints->x[0], BPoints->y[0], Out,
+		    area_l_n, &areabox));
+
+		    G_warning("Best area for new left centroid: %d",
+			      Vect_find_area(Out, BPoints->x[0], BPoints->y[0]));
+		}
+		else
+		    G_warning("New left centroid is not in new left area");
+	    }
+
+	    if (centr_l_o > 0) {
+		Vect_read_line(Out, BPoints, NULL, centr_l_o);
+		if (Vect_point_in_area(BPoints->x[0], BPoints->y[0], Out,
+		    area_l_n, &areabox)) {
+
+		    G_warning("Old left centroid is in new left area");
+
+		    G_warning("Old left centroid on outer ring: %d",
+		    Vect_point_in_area_outer_ring(BPoints->x[0], BPoints->y[0], Out,
+		    area_l_n, &areabox));
+
+		    G_warning("Best area for old left centroid: %d",
+			      Vect_find_area(Out, BPoints->x[0], BPoints->y[0]));
+		}
+		else
+		    G_warning("Old left centroid is not in new left area");
+	    }
+
+	    G_fatal_error("Left centroid old %d, restored %d", centr_l_o, centr_l_n);
+	}
+	if (centr_r_n != centr_r_o) {
+	    Vect_get_area_box(Out, area_r_n, &areabox);
+
+	    if (centr_r_n > 0) {
+		Vect_read_line(Out, BPoints, NULL, centr_r_n);
+		if (Vect_point_in_area(BPoints->x[0], BPoints->y[0], Out,
+		    area_r_n, &areabox)) {
+
+		    G_warning("New right centroid is in new right area");
+
+		    G_warning("New right centroid on outer ring: %d",
+		    Vect_point_in_area_outer_ring(BPoints->x[0], BPoints->y[0], Out,
+		    area_r_n, &areabox));
+
+		    G_warning("Best area for new right centroid: %d",
+			      Vect_find_area(Out, BPoints->x[0], BPoints->y[0]));
+		}
+		else
+		    G_warning("New right centroid is not in new right area");
+	    }
+
+	    if (centr_r_o > 0) {
+		Vect_read_line(Out, BPoints, NULL, centr_r_o);
+		if (Vect_point_in_area(BPoints->x[0], BPoints->y[0], Out,
+		    area_r_n, &areabox)) {
+
+		    G_warning("Old right centroid is in new right area");
+
+		    G_warning("Old right centroid on outer ring: %d",
+		    Vect_point_in_area_outer_ring(BPoints->x[0], BPoints->y[0], Out,
+		    area_r_n, &areabox));
+
+		    G_warning("Best area for old right centroid: %d",
+			      Vect_find_area(Out, BPoints->x[0], BPoints->y[0]));
+		}
+		else
+		    G_warning("Old right centroid is not in new right area");
+	    }
+
+	    G_fatal_error("Right centroid old %d, restored %d", centr_r_o, centr_r_n);
+	}
+
 	return 0;
     }
+    if (isles_l_o)
+	G_free(isles_l_o);
+    if (isles_r_o)
+	G_free(isles_r_o);
+    if (isles_l_n)
+	G_free(isles_l_n);
+    if (isles_r_n)
+	G_free(isles_r_n);
     
     return 1;
 }
