@@ -1124,9 +1124,9 @@ class SampleUnitsKeyPage(TitledPage):
                         flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.panelSizer.Add(item=self.heightTxt, pos=(2, 1),
                         flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
-        self.widthLabels = [_('Width size (in cells)? '),
-                            _('What radius size (in meters)? ')]
-        self.heightLabels = [_('Height size (in cells)? '),
+        self.widthLabels = [_('Width size (in cells)?'),
+                            _('What radius size (in meters)?')]
+        self.heightLabels = [_('Height size (in cells)?'),
                              _('Name of the circle mask')]
 
         self.distributionBox = wx.RadioBox(parent=self.scrollPanel,
@@ -1275,14 +1275,14 @@ class MovingKeyPage(TitledPage):
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
 
         self.widthLabel = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                        label=_('Width size (in cells) ?'))
+                                        label=_('Width size (in cells)?'))
         self.widthTxt = wx.TextCtrl(parent=self, id=wx.ID_ANY, size=(250, -1))
         self.sizer.Add(item=self.widthLabel, border=5, pos=(2, 1),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.sizer.Add(item=self.widthTxt, border=5, pos=(2, 2),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
         self.heightLabel = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                         label=_('Height size (in cells) ?'))
+                                         label=_('Height size (in cells)?'))
         self.heightTxt = wx.TextCtrl(parent=self, id=wx.ID_ANY, size=(250, -1))
         self.sizer.Add(item=self.heightLabel, border=5, pos=(3, 1),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
@@ -1290,9 +1290,9 @@ class MovingKeyPage(TitledPage):
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
 
         self.sizer.AddGrowableCol(2)
-        self.widthLabels = [_('Width size (in cells) ?'),
-                            _('What radius size (in meters) ?')]
-        self.heightLabels = [_('Height size (in cells) ?'),
+        self.widthLabels = [_('Width size (in cells)?'),
+                            _('What radius size (in meters)?')]
+        self.heightLabels = [_('Height size (in cells)?'),
                              _('Name of the circle mask')]
 
         self.widthTxt.Bind(wx.EVT_TEXT, self.OnWidth)
@@ -1778,7 +1778,7 @@ class SummaryPage(TitledPage):
                 self.shapeheightlabel.SetLabel(_("Name circle mask:"))
             else:
                 self.shapewidthlabel.SetLabel(_("Width size:"))
-                self.shapeheightlabel.SetLabel(_("Heigth size:"))
+                self.shapeheightlabel.SetLabel(_("Height size:"))
             self.shapewidthtxt.SetLabel(self.parent.units.width)
             self.shapeheighttxt.SetLabel(self.parent.units.height)
             self.unitslabel.SetLabel(_("Method of distribution:"))
@@ -1807,7 +1807,7 @@ class SummaryPage(TitledPage):
                 self.shapeheightlabel.SetLabel(_("Name circle mask:"))
             else:
                 self.shapewidthlabel.SetLabel(_("Width size:"))
-                self.shapeheightlabel.SetLabel(_("Heigth size:"))
+                self.shapeheightlabel.SetLabel(_("Height size:"))
             self.shapewidthtxt.SetLabel(self.parent.moving.width)
             self.shapeheighttxt.SetLabel(self.parent.moving.height)
         else:
