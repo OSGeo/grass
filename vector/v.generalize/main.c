@@ -334,12 +334,12 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to create vector map <%s>"), map_out->answer);
     }
 
-    if(error_out->answer)
+    if (error_out->answer) {
         if (0 > Vect_open_new(&Error, error_out->answer, with_z)) {
 	    Vect_close(&In);
 	    G_fatal_error(_("Unable to create error vector map <%s>"), error_out->answer);
         }
-
+    }
 
 
     Vect_copy_head_data(&In, &Out);
@@ -390,6 +390,8 @@ int main(int argc, char *argv[])
 	/* modifies only lines of selected type, all other features are preserved */
 	int not_modified_boundaries = 0, n_oversimplified = 0;
 	struct line_pnts *APoints;  /* original Points */
+
+	set_topo_debug();
 
 	Vect_copy_map_lines(&In, &Out);
 	Vect_build_partial(&Out, GV_BUILD_CENTROIDS);
