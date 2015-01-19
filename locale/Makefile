@@ -81,6 +81,7 @@ verify:
 		echo "----- $$po:" ; \
 		msgfmt -c $$po; \
 	done
+	@rm -f po/messages.mo
 
 statistics:
 	$(call po_stats)
