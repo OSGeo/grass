@@ -117,9 +117,14 @@ class LocationMapTree(wx.TreeCtrl):
             
             varloc = self.AppendItem(self.root, loc)
             # add all mapsets
-            for mapset in ListOfMapsets():
-                self.AppendItem(varloc, mapset)
-            
+            mapsets = ListOfMapsets()
+            if mapsets:
+                for mapset in mapsets:
+                    self.AppendItem(varloc, mapset)
+            else:
+                self.AppendItem(varloc, _("No mapsets readable"))
+                continue
+
             # get list of all maps in location
             maplist = RunCommand('g.list', flags='mt', type='raster,raster_3d,vector', mapset=','.join(mapsets),
                                  quiet=True, read=True)
