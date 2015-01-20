@@ -6,7 +6,7 @@
 
 #include "local_proto.h"
 
-void create_location(char *location)
+void create_location(const char *location, const char *epsg)
 {
     int ret;
 
@@ -23,6 +23,10 @@ void create_location(char *location)
 	/* Shouldn't happen */
       G_fatal_error(_("Unable to create location <%s>"), location);
 
+    /* create also PROJ_EPSG */
+    if (epsg)
+        create_epsg(location, epsg);
+        
     G_message(_("You can switch to the new location by\n`%s=%s`"),
 	      "g.mapset mapset=PERMANENT location", location);
 }
@@ -64,4 +68,30 @@ void modify_projinfo()
 		    "region from the default"));
     }
     G_important_message(_("Projection information updated"));
+}
+
+void create_epsg(const char *location, const char *epsg)
+{
+    FILE *fp;
+    char path[GPATH_MAX];
+    
+    /* if inputs were not clean it should of failed by now */
+    if (location) {
+        snprintf(path, sizeof(path), "%s%c%s%c%s%c%s", G_gisdbase(), HOST_DIRSEP, 
+                 location, HOST_DIRSEP,
+                 "PERMANENT", HOST_DIRSEP, "PROJ_EPSG");
+        path[sizeof(path)-1] = '\0';
+    }
+    else {
+        G_file_name(path, "", "PROJ_EPSG", "PERMANENT");
+    }
+    
+    fp = fopen(path, "w");
+    if (!fp)
+        G_fatal_error(_("Unable to create PROJ_EPSG file: %s"), strerror (errno));
+    
+#ifdef HAVE_OGR
+    fprintf(fp, "epsg: %s\n", epsg);
+#endif
+    fclose(fp);
 }

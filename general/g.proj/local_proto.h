@@ -25,5 +25,6 @@ int set_datum(char *);
 int set_datumtrans(int, int);
 
 /* create.c */
-void create_location(char *);
+void create_location(const char *, const char *);
 void modify_projinfo();
+void create_epsg(const char *, const char *);

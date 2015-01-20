@@ -299,7 +299,7 @@ int main(int argc, char *argv[])
 	print_wkt(esristyle->answer, dontprettify->answer);
 #endif
     else if (location->answer)
-	create_location(location->answer);
+	create_location(location->answer, inepsg->answer);
     else if (create->answer)
 	modify_projinfo();
     else
@@ -319,21 +319,7 @@ int main(int argc, char *argv[])
     if (create->answer){ 
 #endif
 	/* preserve epsg code for user records only (not used by grass's pj routines) */
-	FILE *fp;
-	char path[GPATH_MAX];
-	/* if inputs were not clean it should of failed by now */
-	if (location->answer) {
-            snprintf(path, sizeof(path), "%s/%s/%s/%s", G_gisdbase(),
-		     location->answer, "PERMANENT", "PROJ_EPSG");
-	    path[sizeof(path)-1] = '\0';
-	}
-	else
-	    G_file_name(path, "", "PROJ_EPSG", "PERMANENT");
-	fp = fopen(path, "w");
-#ifdef HAVE_OGR
-	fprintf(fp, "epsg: %s\n", inepsg->answer);
-#endif
-	fclose(fp);
+        create_epsg(location->answer, inepsg->answer);
     }
 
 
