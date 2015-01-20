@@ -681,12 +681,12 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 
     /* Check position of centroids */
     if (centr_l_n != centr_l_o || centr_r_n != centr_r_o) {
-	G_debug(1, "The modified boundary changes attachment of centroid -> not modified");
+	/* should not happen if the above topo checks work as expected */
+	G_warning("The modified boundary changes attachment of centroid -> topo checks failed");
 
 	if (centr_l_n != centr_l_o) {
-	    G_debug(1, "*************************************");
-	    G_debug(1, "Left area/isle old: %d, new: %d", left_o, left_n);
-	    G_debug(1, "Left centroid old: %d, new: %d", centr_l_o, centr_l_n);
+	    G_warning("Left area/isle old: %d, new: %d", left_o, left_n);
+	    G_warning("Left centroid old: %d, new: %d", centr_l_o, centr_l_n);
 
 	    if (centr_l_o) {
 		int ret1, ret2, ret3;
@@ -705,15 +705,14 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 
 		if (ret2 != ret3) {
 		    G_warning("Left old centroid in new area box: %d", ret1);
-		    G_warning("Left old centroid in new area as poly: %d", ret2);
-		    G_warning("Left old centroid in new area outer ring: %d", ret3);
+		    G_warning("Left old centroid in new area outer ring: %d", ret2);
+		    G_warning("Left old centroid in new area as poly: %d", ret3);
 		}
 	    }
 	}
 	if (centr_r_n != centr_r_o) {
-	    G_debug(1, "*************************************");
-	    G_debug(1, "Right area/isle old: %d, new: %d", right_o, right_n);
-	    G_debug(1, "Right centroid old: %d, new: %d", centr_r_o, centr_r_n);
+	    G_warning("Right area/isle old: %d, new: %d", right_o, right_n);
+	    G_warning("Right centroid old: %d, new: %d", centr_r_o, centr_r_n);
 
 	    if (centr_r_o) {
 		int ret1, ret2, ret3;
@@ -732,8 +731,8 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 
 		if (ret2 != ret3) {
 		    G_warning("Right old centroid in new area box: %d", ret1);
-		    G_warning("Right old centroid in new area as poly: %d", ret2);
-		    G_warning("Right old centroid in new area outer ring: %d", ret3);
+		    G_warning("Right old centroid in new area outer ring: %d", ret2);
+		    G_warning("Right old centroid in new area as poly: %d", ret3);
 		}
 	    }
 	}
@@ -765,7 +764,7 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 		if (Vect_point_in_area(BPoints->x[0], BPoints->y[0], Out,
 		    area_l_n, &areabox)) {
 
-		    G_warning("New left centroid is in new left area");
+		    G_warning("New left centroid is in new left area %d", area_l_n);
 
 		    G_warning("New left centroid on outer ring: %d",
 		    Vect_point_in_area_outer_ring(BPoints->x[0], BPoints->y[0], Out,
@@ -783,7 +782,7 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 		if (Vect_point_in_area(BPoints->x[0], BPoints->y[0], Out,
 		    area_l_n, &areabox)) {
 
-		    G_warning("Old left centroid is in new left area");
+		    G_warning("Old left centroid is in new left area %d", area_l_n);
 
 		    G_warning("Old left centroid on outer ring: %d",
 		    Vect_point_in_area_outer_ring(BPoints->x[0], BPoints->y[0], Out,
@@ -797,6 +796,7 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 	    }
 
 	    G_fatal_error("Left centroid old %d, restored %d", centr_l_o, centr_l_n);
+	    return 0;
 	}
 	if (centr_r_n != centr_r_o) {
 	    Vect_get_area_box(Out, area_r_n, &areabox);
@@ -806,7 +806,7 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 		if (Vect_point_in_area(BPoints->x[0], BPoints->y[0], Out,
 		    area_r_n, &areabox)) {
 
-		    G_warning("New right centroid is in new right area");
+		    G_warning("New right centroid is in new right area %d", area_r_n);
 
 		    G_warning("New right centroid on outer ring: %d",
 		    Vect_point_in_area_outer_ring(BPoints->x[0], BPoints->y[0], Out,
@@ -824,7 +824,7 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 		if (Vect_point_in_area(BPoints->x[0], BPoints->y[0], Out,
 		    area_r_n, &areabox)) {
 
-		    G_warning("Old right centroid is in new right area");
+		    G_warning("Old right centroid is in new right area %d", area_r_n);
 
 		    G_warning("Old right centroid on outer ring: %d",
 		    Vect_point_in_area_outer_ring(BPoints->x[0], BPoints->y[0], Out,
@@ -838,8 +838,10 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 	    }
 
 	    G_fatal_error("Right centroid old %d, restored %d", centr_r_o, centr_r_n);
+	    return 0;
 	}
 
+	G_fatal_error("Topology check failure");
 	return 0;
     }
     if (isles_l_o)
