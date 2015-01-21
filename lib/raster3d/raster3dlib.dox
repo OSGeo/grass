@@ -22,7 +22,7 @@ The size of the tile cache in memory can be set in bytes using the environmental
 Default size is 16777216 bytes.The number of tiles hold in memory can be specified with the environmental variable
 RASTER3D_DEFAULT_CACHE_SIZE. Default is 1000.
 
-\image html "r3_volume_layout.png" "The volume coordinate system and tile layout of the 3D Raster Library"
+\image html "raster3d_layout.png" "The volume coordinate system and tile layout of the 3D Raster Library"
 
 \section Directory_Structure Directory Structure
 
