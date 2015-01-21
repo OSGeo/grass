@@ -529,6 +529,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->type = TYPE_INTEGER;
 	Opt->required = NO;
 	Opt->description = _("Category value");
+        Opt->gisprompt = "old,cat,cats";
 	break;
     case G_OPT_V_CATS:
 	Opt->key = "cats";
@@ -537,6 +538,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->required = NO;
 	Opt->label = _("Category values");
 	Opt->description = _("Example: 1,3,7-9,13");
+        Opt->gisprompt = "old,cats,cats";
 	break;
     case G_OPT_V_ID:
 	Opt->key = "id";
