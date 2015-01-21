@@ -2501,7 +2501,7 @@ class LegendDialog(PsmapDialog):
         rasterType = getRasterType(map = self.currRaster)
 
         self.rasterCurrent = wx.StaticText(panel, id = wx.ID_ANY,
-                                label = _("%(rast)s: type %(type)s") % { 'raster' : self.currRaster,
+                                label = _("%(rast)s: type %(type)s") % { 'rast' : self.currRaster,
                                                                          'type' : rasterType })
         self.rasterSelect = Select(panel, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE,
                                     type = 'raster', multiple = False,
@@ -3188,7 +3188,7 @@ class LegendDialog(PsmapDialog):
             
         rasterType = getRasterType(map = currRaster)
         self.rasterCurrent.SetLabel(_("%(rast)s: type %(type)s") % \
-                                        { 'raster' : currRaster, 'type' : str(rasterType) })
+                                        { 'rast' : currRaster, 'type' : str(rasterType) })
         
         # vector legend       
         if 'rect' in self.vLegendDict:
