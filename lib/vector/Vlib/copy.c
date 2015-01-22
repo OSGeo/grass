@@ -577,16 +577,15 @@ int Vect__copy_areas(const struct Map_info *In, int field, struct Map_info *Out)
 int Vect_copy_tables(const struct Map_info *In, struct Map_info *Out,
                      int field)
 {
-    int i, n, ret, type;
-    struct field_info *Fi, *Fin;
-    dbDriver *driver;
+    int i, n, type;
+    struct field_info *Fi;
 
     n = Vect_get_num_dblinks(In);
 
     G_debug(2, "Vect_copy_tables(): copying %d tables", n);
 
     type = GV_1TABLE;
-    if (n > 1)
+    if (field < 1 && n > 1)
         type = GV_MTABLE;
 
     for (i = 0; i < n; i++) {
@@ -599,42 +598,13 @@ int Vect_copy_tables(const struct Map_info *In, struct Map_info *Out,
         if (field > 0 && Fi->number != field)
             continue;
 
-        Fin = Vect_default_field_info(Out, Fi->number, Fi->name, type);
-        G_debug(2, "Copy drv:db:table '%s:%s:%s' to '%s:%s:%s'",
-                Fi->driver, Fi->database, Fi->table, Fin->driver,
-                Fin->database, Fin->table);
+	if (Vect_copy_table(In, Out, Fi->number, Fi->number, Fi->name,
+	                    type) != 0) {
 
-        ret =
-            Vect_map_add_dblink(Out, Fi->number, Fi->name, Fin->table,
-                                Fi->key, Fin->database, Fin->driver);
-        if (ret == -1) {
-            G_warning(_("Unable to add database link for vector map <%s>"),
-                      Out->name);
-            return -1;
-        }
-
-        ret = db_copy_table(Fi->driver, Fi->database, Fi->table,
-                            Fin->driver, Vect_subst_var(Fin->database, Out),
-                            Fin->table);
-        if (ret == DB_FAILED) {
-            G_warning(_("Unable to copy table <%s>"), Fin->table);
-            return -1;
-        }
-
-        driver =
-            db_start_driver_open_database(Fin->driver,
-                                          Vect_subst_var(Fin->database, Out));
-        if (driver == NULL) {
-            G_warning(_("Unable to open database <%s> by driver <%s>"),
-                      Fin->database, Fin->driver);
-        }
-        else {
-            if (db_create_index2(driver, Fin->table, Fi->key) != DB_OK)
-                G_warning(_("Unable to create index for table <%s>, key <%s>"),
-                          Fin->table, Fin->key);
-
-            db_close_database_shutdown_driver(driver);
-        }
+            G_warning(_("Unable to copy table <%s> for layer %d from <%s> to <%s>"),
+	                Fi->table, Fi->number, Vect_get_full_name(In), Vect_get_name(Out));
+	    return -1;
+	}
     }
 
     return 0;
@@ -724,8 +694,9 @@ int Vect_copy_table_by_cats(const struct Map_info *In, struct Map_info *Out,
     int ret;
     struct field_info *Fi, *Fin;
     const char *name, *key;
+    dbDriver *driver;
 
-    G_debug(2, "Vect_copy_table(): field_in = %d field_out = %d", field_in,
+    G_debug(2, "Vect_copy_table_by_cats(): field_in = %d field_out = %d", field_in,
             field_out);
 
     Fi = Vect_get_field(In, field_in);
@@ -767,6 +738,31 @@ int Vect_copy_table_by_cats(const struct Map_info *In, struct Map_info *Out,
         G_warning(_("Unable to copy table <%s>"), Fin->table);
         return -1;
     }
+
+    driver = db_start_driver_open_database(Fin->driver,
+				           Vect_subst_var(Fin->database,
+                                                            Out));
+
+    if (!driver) {
+	G_warning(_("Unable to open database <%s> with driver <%s>"),
+		      Fin->database, Fin->driver);
+	return -1;
+    }
+
+    /* do not allow duplicate keys */
+    if (db_create_index2(driver, Fin->table, Fi->key) != DB_OK) {
+	G_warning(_("Unable to create index"));
+	return -1;
+    }
+
+    if (db_grant_on_table(driver, Fin->table, DB_PRIV_SELECT,
+	 DB_GROUP | DB_PUBLIC) != DB_OK) {
+	G_warning(_("Unable to grant privileges on table <%s>"),
+		      Fin->table);
+	return -1;
+    }
+
+    db_close_database_shutdown_driver(driver);
 
     return 0;
 }
