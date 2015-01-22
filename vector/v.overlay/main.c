@@ -237,8 +237,6 @@ int main(int argc, char *argv[])
 			  Fi->database, Fi->driver);
 	}
         db_set_error_handler_driver(driver);
-
-	db_begin_transaction(driver);
     }
     else {
 	driver = NULL;
@@ -392,11 +390,19 @@ int main(int argc, char *argv[])
 		continue;
 	    }
 
-	    in_driver =
-		db_start_driver_open_database(inFi->driver, inFi->database);
-	    if (in_driver == NULL) {
-		G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-			      inFi->database, inFi->driver);
+	    /* Open input driver and database */
+	    if (strcmp(inFi->driver, Fi->driver) == 0
+		&& strcmp(inFi->database, Vect_subst_var(Fi->database, &Out)) == 0) {
+		G_debug(3, "Use the same driver");
+		in_driver = driver;
+	    }
+	    else {
+		in_driver =
+		    db_start_driver_open_database(inFi->driver, inFi->database);
+		if (in_driver == NULL) {
+		    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+				  inFi->database, inFi->driver);
+		}
 	    }
 
 	    sprintf(buf, "select * from %s", inFi->table);
@@ -538,7 +544,8 @@ int main(int argc, char *argv[])
 
 	    db_table_to_sql(Table, &sql);
 
-	    db_close_database_shutdown_driver(in_driver);
+	    if (in_driver != driver)
+		db_close_database_shutdown_driver(in_driver);
 	}
     }
 
@@ -583,6 +590,8 @@ int main(int argc, char *argv[])
 	/* Table created, now we can write dblink */
 	Vect_map_add_dblink(&Out, ofield[0], NULL, Fi->table, GV_KEY_COLUMN,
 			    Fi->database, Fi->driver);
+
+	db_begin_transaction(driver);
     }
 
     /* AREA x AREA */
