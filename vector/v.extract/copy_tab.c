@@ -14,6 +14,7 @@ void copy_tabs(const struct Map_info *In, int field, int new_cat,
     
     struct field_info *IFi, *OFi;
     struct line_cats *Cats;
+    dbDriver *driver;
     
     ntabs = 0;
     
@@ -38,14 +39,17 @@ void copy_tabs(const struct Map_info *In, int field, int new_cat,
 	for (i = 0; i < Cats->n_cats; i++) {
 	    int f, j;
 	    
+	    f = -1;
 	    for (j = 0; j < nfields; j++) {	/* find field */
 		if (fields[j] == Cats->field[i]) {
 		    f = j;
 		    break;
 		}
 	    }
-	    ocats[f][nocats[f]] = Cats->cat[i];
-	    nocats[f]++;
+	    if (f >= 0) {
+		ocats[f][nocats[f]] = Cats->cat[i];
+		nocats[f]++;
+	    }
 	}
     }
     
@@ -104,6 +108,31 @@ void copy_tabs(const struct Map_info *In, int field, int new_cat,
 	    G_warning(_("Unable to copy table <%s>"), IFi->table);
 	}
 	else {
+
+	    driver = db_start_driver_open_database(OFi->driver,
+						   Vect_subst_var(OFi->database,
+								    Out));
+
+	    if (!driver) {
+		G_warning(_("Unable to open database <%s> with driver <%s>"),
+			      OFi->database, OFi->driver);
+	    }
+	    else {
+
+		/* do not allow duplicate keys */
+		if (db_create_index2(driver, OFi->table, IFi->key) != DB_OK) {
+		    G_warning(_("Unable to create index"));
+		}
+
+		if (db_grant_on_table(driver, OFi->table, DB_PRIV_SELECT,
+		     DB_GROUP | DB_PUBLIC) != DB_OK) {
+		    G_warning(_("Unable to grant privileges on table <%s>"),
+				  OFi->table);
+		}
+
+		db_close_database_shutdown_driver(driver);
+	    }
+
 	    Vect_map_add_dblink(Out, OFi->number, OFi->name, OFi->table,
 				IFi->key, OFi->database, OFi->driver);
 	}
