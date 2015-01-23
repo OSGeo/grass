@@ -87,17 +87,17 @@ void parse_args(int argc, char **argv,
     /* check options */
     if (options->dsn->answer && options->format->answer &&
         options->input->answer)
-        G_fatal_error(_("Options <%s/%s> and <%s> are mutually exclusive"),
-                      options->dsn->key, options->format->key,
-                      options->input->key);
+        G_fatal_error(_("%s= and %s=/%s= are mutually exclusive"),
+                      options->input->key,
+                      options->dsn->key, options->format->key);
     if (flags->f->answer || flags->p->answer || flags->r->answer || flags->g->answer ||
         options->output->answer)
         return;
 
     if (!options->dsn->answer && !options->input->answer)
-        G_fatal_error(_("One of options <%s> or <%s> must be specified"),
+        G_fatal_error(_("%s= or %s= must be specified"),
                       options->dsn->key, options->input->key);
     if (options->dsn->answer && !options->format->answer)
-        G_fatal_error(_("Option <%s> must be specified"),
+        G_fatal_error(_("%s= must be specified"),
                       options->format->key);
 }

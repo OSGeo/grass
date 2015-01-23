@@ -183,8 +183,8 @@ int display_shape(struct Map_info *Map, int type, struct cat_list *Clist, const 
 	    z_style = NULL;
 	}
         else if (rgb_column) {
-            G_warning(_("Options <%s> and <%s> are mutually exclusive. "
-                        "Option <%s> will be ignored."), "zcolor", "rgb_column", "zcolor");
+            G_warning(_("%s= and %s= are mutually exclusive. "
+                        "%s= will be ignored."), "zcolor", "rgb_column", "zcolor");
 	    z_style = NULL;
         }
 	else {

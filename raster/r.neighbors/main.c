@@ -259,10 +259,12 @@ int main(int argc, char *argv[])
     ncb.dist = ncb.nsize / 2;
 
     if (parm.weight->answer && flag.circle->answer)
-	G_fatal_error(_("weight= and -c are mutually exclusive"));
+	G_fatal_error(_("-%c and %s= are mutually exclusive"),
+			flag.circle->key, parm.weight->key);
 
     if (parm.weight->answer && parm.gauss->answer)
-	G_fatal_error(_("weight= and gauss= are mutually exclusive"));
+	G_fatal_error(_("%s= and %s= are mutually exclusive"),
+			parm.weight->key, parm.gauss->key);
 
     ncb.oldcell = parm.input->answer;
 
@@ -288,7 +290,8 @@ int main(int argc, char *argv[])
     for (i = 0; parm.method->answers[i]; i++)
 	;
     if (num_outputs != i)
-	G_fatal_error(_("output= and method= must have the same number of values"));
+	G_fatal_error(_("%s= and %s= must have the same number of values"),
+			parm.output->key, parm.method->key);
 
     outputs = G_calloc(num_outputs, sizeof(struct output));
 
