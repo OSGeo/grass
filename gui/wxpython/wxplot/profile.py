@@ -216,7 +216,7 @@ class ProfileFrame(BasePlotFrame):
 
                 # update ylabel to match units if they exist           
                 if self.raster[r]['units'] != '':
-                    self.ylabel += '%s (%d),' % (r['units'], i)
+                    self.ylabel += '%s (%d),' % (self.raster[r]['units'], i)
                 i += 1
 
                 # update title
