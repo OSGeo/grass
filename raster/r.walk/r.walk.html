@@ -110,6 +110,17 @@ the movement direction raster map when
 running <em><a href="r.drain.html">r.drain</a></em> to ensure the path
 is computed according to the proper movement directions.
 
+<p>
+<em>r.walk</em>, like most all GRASS raster programs, is also made to 
+be run on maps larger that can fit in available computer memory. As the 
+algorithm works through the dynamic list of cells it can move almost 
+randomly around the entire area. <em>r.walk</em> divides the entire 
+area into a number of pieces and swaps these pieces in and out of 
+memory (to and from disk) as needed. This provides a virtual memory 
+approach optimally designed for 2-D raster maps. The amount of memory 
+to be used by <em>r.walk</em> can be controlled with the <b>memory</b> 
+option, default is 300 MB. For systems with less memory this value will 
+have to be set to a lower value.
 
 <h2>REFERENCES</h2>
 
