@@ -383,7 +383,7 @@ int main(int argc, char *argv[])
     /* calculate disk space and memory requirements */
     /* (nrows + ncols) * 8. * 20.0 / 1048576. for Dijkstra search */
     pq_mb = ((double)nrows + ncols) * 8. * 20.0 / 1048576.;
-    G_debug(0, "pq MB: %g", pq_mb);
+    G_debug(1, "pq MB: %g", pq_mb);
     maxmem -= pq_mb;
     if (maxmem < 10)
 	maxmem = 10;
