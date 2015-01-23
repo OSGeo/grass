@@ -140,16 +140,16 @@ initially computed. <em>r.cost</em> uses a binary tree with an linked list
 at each node in the tree for efficiently holding cells with identical
 cumulative costs.
 <p>
-<em>r.cost</em>, like most all GRASS raster programs, is also made to be run on
-maps larger that can fit in available computer memory. As the
-algorithm works through the dynamic list of cells it can move almost
-randomly around the entire area. <em>r.cost</em> divides the entire area
-into a number of pieces and swaps these pieces in and out of memory (to
-and from disk) as needed. This provides a virtual memory approach
-optimally designed for 2-D raster maps.
-The amount of map to hold in memory at one time can be controlled with the
-<b>percent_memory</b> option. For large maps this value will have to be set
-to a lower value.
+<em>r.cost</em>, like most all GRASS raster programs, is also made to 
+be run on maps larger that can fit in available computer memory. As the 
+algorithm works through the dynamic list of cells it can move almost 
+randomly around the entire area. <em>r.cost</em> divides the entire 
+area into a number of pieces and swaps these pieces in and out of 
+memory (to and from disk) as needed. This provides a virtual memory 
+approach optimally designed for 2-D raster maps. The amount of memory 
+to be used by <em>r.cost</em> can be controlled with the <b>memory</b> 
+option, default is 300 MB. For systems with less memory this value will 
+have to be set to a lower value.
 
 
 <h2>EXAMPLES</h2>

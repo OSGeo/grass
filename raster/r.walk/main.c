@@ -30,7 +30,7 @@
  *               Updated for GRASS 7
  *                 Markus Metz
  * PURPOSE:      anisotropic movements on cost surfaces
- * COPYRIGHT:    (C) 1999-2014 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2015 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -167,7 +167,7 @@ int main(int argc, char *argv[])
     struct History history;
     double peak = 0.0;
     int dtm_dsize, cost_dsize;
-    double disk_mb, mem_mb;
+    double disk_mb, mem_mb, pq_mb;
 
     /* Definition for dimension and region check */
     struct Cell_head dtm_cellhd, cost_cellhd;
@@ -259,9 +259,8 @@ int main(int argc, char *argv[])
     opt10->key_desc = "value";
     opt10->required = NO;
     opt10->multiple = NO;
-    opt10->answer = "40";
-    opt10->options = "0-100";
-    opt10->description = _("Percent of map to keep in memory");
+    opt10->answer = "300";
+    opt10->description = _("Maximum memory to be used in MB");
 
     opt15 = G_define_option();
     opt15->key = "walk_coeff";
@@ -369,9 +368,8 @@ int main(int argc, char *argv[])
     if (sscanf(opt5->answer, "%d", &maxcost) != 1 || maxcost < 0)
 	G_fatal_error(_("Inappropriate maximum cost: %d"), maxcost);
 
-    if (sscanf(opt10->answer, "%d", &maxmem) != 1 || maxmem < 0 ||
-	maxmem > 100)
-	G_fatal_error(_("Inappropriate percent memory: %d"), maxmem);
+    if (sscanf(opt10->answer, "%d", &maxmem) != 1 || maxmem <= 0)
+	G_fatal_error(_("Inappropriate amount of memory: %d"), maxmem);
 
     /* Getting walking energy formula parameters */
     if ((par_number =
@@ -492,37 +490,44 @@ int main(int argc, char *argv[])
     else
 	srows = scols = SEGCOLSIZE;
 
-    if (maxmem == 100) {
-	srows = scols = 256;
-    }
-
     /* calculate total number of segments */
     nseg = ((nrows + srows - 1) / srows) * ((ncols + scols - 1) / scols);
-    if (maxmem > 0)
-	segments_in_memory = (maxmem * nseg) / 100;
-    /* maxmem = 0 */
-    else
-	segments_in_memory = 4 * (nrows / srows + ncols / scols + 2);
 
-    if (segments_in_memory == 0)
-	segments_in_memory = 1;
-
-    /* report disk space and memory requirements */
-    if (dir == 1) {
+    /* calculate disk space and memory requirements */
+    /* (nrows + ncols) * 8. * 20.0 / 1048576. for Dijkstra search */
+    pq_mb = ((double)nrows + ncols) * 8. * 20.0 / 1048576.;
+    G_debug(0, "pq MB: %g", pq_mb);
+    maxmem -= pq_mb;
+    if (maxmem < 10)
+	maxmem = 10;
+    if (dir == TRUE) {
 	disk_mb = (double) nrows * ncols * 28. / 1048576.;
-	mem_mb  = (double) srows * scols * 28. / 1048576. * segments_in_memory;
-	mem_mb += nrows * ncols * 0.05 * 20. / 1048576.;    /* for Dijkstra search */
+	segments_in_memory = maxmem / 
+	                     ((double) srows * scols * (28. / 1048576.));
+	if (segments_in_memory < 4)
+	    segments_in_memory = 4;
+	if (segments_in_memory > nseg)
+	    segments_in_memory = nseg;
+	mem_mb = (double) srows * scols * (28. / 1048576.) * segments_in_memory;
     }
     else {
 	disk_mb = (double) nrows * ncols * 24. / 1048576.;
-	mem_mb  = (double) srows * scols * 24. / 1048576. * segments_in_memory;
-	mem_mb += nrows * ncols * 0.05 * 20. / 1048576.;    /* for Dijkstra search */
+	segments_in_memory = maxmem / 
+	                     ((double) srows * scols * (24. / 1048576.));
+	if (segments_in_memory < 4)
+	    segments_in_memory = 4;
+	if (segments_in_memory > nseg)
+	    segments_in_memory = nseg;
+	mem_mb = (double) srows * scols * (24. / 1048576.) * segments_in_memory;
     }
 
     if (flag5->answer) {
 	fprintf(stdout, _("Will need at least %.2f MB of disk space"), disk_mb);
         fprintf(stdout, "\n");
 	fprintf(stdout, _("Will need at least %.2f MB of memory"), mem_mb);
+        fprintf(stdout, "\n");
+	fprintf(stdout, _("%d of %d segments are kept in memory"),
+	                segments_in_memory, nseg);
         fprintf(stdout, "\n");
 	Rast_close(cost_fd);
 	Rast_close(dtm_fd);
@@ -532,6 +537,8 @@ int main(int argc, char *argv[])
     G_verbose_message("--------------------------------------------");
     G_verbose_message(_("Will need at least %.2f MB of disk space"), disk_mb);
     G_verbose_message(_("Will need at least %.2f MB of memory"), mem_mb);
+    G_verbose_message(_("%d of %d segments are kept in memory"),
+	              segments_in_memory, nseg);
     G_verbose_message("--------------------------------------------");
 
     /* Create segmented format files for cost layer and output layer */
