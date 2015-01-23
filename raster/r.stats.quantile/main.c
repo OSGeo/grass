@@ -439,10 +439,12 @@ int main(int argc, char *argv[])
     print = flag.p->answer;
 
     if (!print && !opt.output->answers)
-	G_fatal_error(_("Either -p or output= must be given"));
+	G_fatal_error(_("Either -%c or %s= must be given"),
+			flag.p->key, opt.output->key);
 
     if (print && opt.output->answers)
-	G_fatal_error(_("-p and output= are mutually exclusive"));
+	G_fatal_error(_("-%c and %s= are mutually exclusive"),
+			flag.p->key, opt.output->key);
 
     num_slots = atoi(opt.slots->answer);
 

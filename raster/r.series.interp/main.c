@@ -115,28 +115,36 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     if (parm.output->answer && parm.outfile->answer)
-        G_fatal_error(_("output= and outfile= are mutually exclusive"));
+        G_fatal_error(_("%s= and %s= are mutually exclusive"),
+			parm.output->key, parm.outfile->key);
  
     if (parm.samplingpos->answer && parm.outfile->answer)
-        G_fatal_error(_("samplingpos= and outfile= are mutually exclusive"));
+        G_fatal_error(_("%s= and %s= are mutually exclusive"),
+			parm.samplingpos->key, parm.outfile->key);
  
     if (!parm.output->answer && !parm.outfile->answer)
-        G_fatal_error(_("Please specify output= or outfile="));
+        G_fatal_error(_("Please specify %s= or %s="),
+			parm.output->key, parm.outfile->key);
  
     if (parm.output->answer && !parm.samplingpos->answer)
-        G_fatal_error(_("Please specify output= and samplingpos="));
+        G_fatal_error(_("Please specify %s= and %s="),
+			parm.output->key, parm.samplingpos->key);
 
     if (parm.input->answer && parm.infile->answer)
-        G_fatal_error(_("input= and infile= are mutually exclusive"));
+        G_fatal_error(_("%s= and %s= are mutually exclusive"),
+			parm.input->key, parm.infile->key);
  
     if (parm.datapos->answer && parm.infile->answer)
-        G_fatal_error(_("datapos= and infile= are mutually exclusive"));
+        G_fatal_error(_("%s= and %s= are mutually exclusive"),
+			parm.datapos->key, parm.infile->key);
  
     if (!parm.input->answer && !parm.infile->answer)
-        G_fatal_error(_("Please specify input= or infile="));
+        G_fatal_error(_("Please specify %s= or %s="),
+			parm.input->key, parm.infile->key);
  
     if (parm.input->answer && !parm.datapos->answer)
-        G_fatal_error(_("Please specify input= and datapos="));
+        G_fatal_error(_("Please specify %s= and %s="),
+			parm.input->key, parm.datapos->key);
 
     if(G_strncasecmp(parm.method->answer, "linear", 6) == 0)
         interpol_method = LINEAR_INTERPOLATION;

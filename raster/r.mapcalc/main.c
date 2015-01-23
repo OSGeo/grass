@@ -156,7 +156,8 @@ int main(int argc, char **argv)
     overwrite_flag = module->overwrite;
 
     if (expr->answer && file->answer)
-	G_fatal_error(_("file= and expression= are mutually exclusive"));
+	G_fatal_error(_("%s= and %s= are mutually exclusive"),
+			expr->key, file->key);
 
     if (seed->answer && random->answer)
 	G_fatal_error(_("%s= and -%c are mutually exclusive"),
