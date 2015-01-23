@@ -14,6 +14,7 @@
 #define __STASH_H__
 
 #include <stdio.h>
+
 #define      CUM_COST_LAYER        1
 #define      COST_LAYER            2
 #define      START_PT              3
@@ -32,4 +33,4 @@ extern struct start_pt *head_end_pt;
 int process_answers(char **, struct start_pt **, struct start_pt **);
 int time_to_stop(int, int);
 
-#endif
+#endif /* __STASH_H__ */
