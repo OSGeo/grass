@@ -48,7 +48,7 @@
 #%end
 #%option G_OPT_F_OUTPUT
 #% key: output
-#% description: Name for output image
+#% description: Name for output image (or text file for -t)
 #% guisection: Output
 #% required : no
 #%end
@@ -69,6 +69,10 @@
 #% key: g
 #% description: Use gnuplot for display
 #%end
+#% flag
+#% key: t
+#% description: output to text file
+#%end
 
 import os
 import atexit
@@ -79,6 +83,13 @@ from grass.script import core as grass
 def cleanup():
     try_rmdir(tmp_dir)
 
+def write2textf(what, output):
+    outf = open(output, 'w')
+    i=0
+    for row in enumerate(what):
+        i=i+1
+        outf.write("%d, %s\n" % (i,row))
+    outf.close()
 
 def draw_gnuplot(what, xlabels, output, img_format, coord_legend):
     xrange = 0
@@ -187,7 +198,8 @@ def main():
     img_fmt = options['format']
     coord_legend = flags['c']
     gnuplot = flags['g']
-    
+    textfile = flags['t']
+
     global tmp_dir
     tmp_dir = grass.tempdir()
     
@@ -196,6 +208,10 @@ def main():
 
     if group and raster:
         grass.fatal(_("group= and raster= are mutually exclusive"))
+
+    # -t needs an output filename
+    if textfile and not output:
+        grass.fatal(_("Writing to text file requires output=filename"))
 
     # check if gnuplot is present
     if gnuplot and not grass.find_program('gnuplot', '-V'):
@@ -232,6 +248,8 @@ def main():
     # build data files
     if gnuplot:
         draw_gnuplot(what, xlabels, output, img_fmt, coord_legend)
+    elif textfile:
+        write2textf(what, output)
     else:
         draw_linegraph(what)
 
