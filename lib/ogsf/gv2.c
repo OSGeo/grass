@@ -220,12 +220,12 @@ int GV_get_vectname(int id, char **filename)
    \param mem non-zero for use memory
    \param color color value
    \param width line width
-   \param flat non-zero for flat mode
+   \param use_z non-zero for 3d mode
 
    \return -1 on error (invalid vector set id)
    \return 1 on success
  */
-int GV_set_style(int id, int mem, int color, int width, int flat)
+int GV_set_style(int id, int mem, int color, int width, int use_z)
 {
     geovect *gv;
 
@@ -234,7 +234,7 @@ int GV_set_style(int id, int mem, int color, int width, int flat)
     }
 
     gv->use_mem = mem;
-    gv->flat_val = flat;
+    gv->use_z = use_z;
     gv->style->color = color;
     gv->style->width = width;
 
@@ -249,12 +249,12 @@ int GV_set_style(int id, int mem, int color, int width, int flat)
    \param[out] mem non-zero for use memory
    \param[out] color color value
    \param[out] width line width
-   \param[out] flat non-zero for flat mode
+   \param[out] use_z non-zero for 3d mode
 
    \return -1 on error (invalid vector set id)
    \return 1 on success
  */
-int GV_get_style(int id, int *mem, int *color, int *width, int *flat)
+int GV_get_style(int id, int *mem, int *color, int *width, int *use_z)
 {
     geovect *gv;
 
@@ -265,7 +265,7 @@ int GV_get_style(int id, int *mem, int *color, int *width, int *flat)
     *mem = gv->use_mem;
     *color = gv->style->color;
     *width = gv->style->width;
-    *flat = gv->flat_val;
+    *use_z = gv->use_z;
 
     return 1;
 }

@@ -160,13 +160,22 @@ int gvd_vect(geovect * gv, geosurf * gs, int do_fast)
 	/* line */
 	if (gln->type == OGSF_LINE) {	
 	    /* 2D line */
-	    if (gln->dims == 2) {	
+	    if (gln->dims == 2 || !gv->use_z) {
 		G_debug(5, "gvd_vect(): 2D vector line");
 		for (k = 0; k < gln->npts - 1; k++) {
-		    bgn[X] = gln->p2[k][X] + gv->x_trans - gs->ox;
-		    bgn[Y] = gln->p2[k][Y] + gv->y_trans - gs->oy;
-		    end[X] = gln->p2[k + 1][X] + gv->x_trans - gs->ox;
-		    end[Y] = gln->p2[k + 1][Y] + gv->y_trans - gs->oy;
+		    if (gln->dims == 3)
+		    {
+			bgn[X] = gln->p3[k][X] + gv->x_trans - gs->ox;
+			bgn[Y] = gln->p3[k][Y] + gv->y_trans - gs->oy;
+			end[X] = gln->p3[k + 1][X] + gv->x_trans - gs->ox;
+			end[Y] = gln->p3[k + 1][Y] + gv->y_trans - gs->oy;
+		    }
+		    else {
+			bgn[X] = gln->p2[k][X] + gv->x_trans - gs->ox;
+			bgn[Y] = gln->p2[k][Y] + gv->y_trans - gs->oy;
+			end[X] = gln->p2[k + 1][X] + gv->x_trans - gs->ox;
+			end[Y] = gln->p2[k + 1][Y] + gv->y_trans - gs->oy;
+		    }
 
 		    if (src == MAP_ATT) {
 			points = gsdrape_get_segments(gs, bgn, end, &npts);
