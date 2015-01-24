@@ -1945,9 +1945,7 @@
     <items>
       <wxgui-item name="AnimationTool"/>
       <wxgui-item name="TimelineTool"/>
-      <module-item name="g.gui.tplot">
-        <label>Plot temporal values</label>
-      </module-item>
+      <wxgui-item name="TplotTool"/>
     </items>
   </toolbox>
   <toolbox name="GuiTools">
