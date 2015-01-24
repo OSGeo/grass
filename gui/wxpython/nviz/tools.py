@@ -1298,8 +1298,8 @@ class NvizToolWindow(FN.FlatNotebook):
         
         display = wx.Choice (parent = panel, id = wx.ID_ANY, size = (-1, -1),
                              choices = [_("on surface(s):"),
-                                        _("flat")])
-        self.win['vector']['lines']['flat'] = display.GetId()
+                                        _("as 3D")])
+        self.win['vector']['lines']['3d'] = display.GetId()
         display.Bind(wx.EVT_CHOICE, self.OnVectorLinesMode)
         
         gridSizer.Add(item = display, flag = wx.ALIGN_CENTER_VERTICAL | 
@@ -3435,12 +3435,12 @@ class NvizToolWindow(FN.FlatNotebook):
         event.Skip()
     
     def OnVectorLinesMode(self, event):
-        """Display vector lines on surface/flat"""
+        """Display vector lines on surface/3d"""
         rasters = self.mapWindow.GetLayerNames('raster')
         if event.GetSelection() == 0: # surface
             if len(rasters) < 1:
                 self.FindWindowById(self.win['vector']['lines']['surface']).Enable(False)
-                self.FindWindowById(self.win['vector']['lines']['flat']).SetSelection(1)
+                self.FindWindowById(self.win['vector']['lines']['3d']).SetSelection(1)
                 return
             
             self.FindWindowById(self.win['vector']['lines']['surface']).Enable(True)
@@ -3449,7 +3449,7 @@ class NvizToolWindow(FN.FlatNotebook):
             data['vector']['lines']['mode']['surface'] = rasters[0]
             self.FindWindowById(self.win['vector']['lines']['surface']).SetStringSelection( \
                 rasters[0])
-        else: # flat
+        else: # 3D
             self.FindWindowById(self.win['vector']['lines']['surface']).Enable(False)
         
         self.OnVectorLines(event)
@@ -3462,7 +3462,7 @@ class NvizToolWindow(FN.FlatNotebook):
         width = self.FindWindowById(self.win['vector']['lines']['width']).GetValue()
         
         mode = {}
-        if self.FindWindowById(self.win['vector']['lines']['flat']).GetSelection() == 0:
+        if self.FindWindowById(self.win['vector']['lines']['3d']).GetSelection() == 0:
             mode['type'] = 'surface'
             mode['surface'] = {}
             checklist = self.FindWindowById(self.win['vector']['lines']['surface'])
@@ -3475,7 +3475,7 @@ class NvizToolWindow(FN.FlatNotebook):
             mode['surface']['value'] = value
             mode['surface']['show'] = checked
         else:
-            mode['type'] = 'flat'
+            mode['type'] = '3d'
         
         for attrb in ('width', 'mode'):
             data['vector']['lines'][attrb]['update'] = None
@@ -3503,7 +3503,7 @@ class NvizToolWindow(FN.FlatNotebook):
         if event.GetSelection() == 0: # surface
             if len(rasters) < 1:
                 self.FindWindowById(self.win['vector']['points']['surface']).Enable(False)
-                self.FindWindowById(self.win['vector']['points']['flat']).SetSelection(1)
+                self.FindWindowById(self.win['vector']['points']['3d']).SetSelection(1)
                 return
 
             self.FindWindowById(self.win['vector']['points']['surface']).Enable(True)
@@ -4762,7 +4762,7 @@ class NvizToolWindow(FN.FlatNotebook):
             self.FindWindowById(self.win['vector']['map']).SetValue(layer.name)
         self.FindWindowById(self.win['vector']['desc']).SetLabel(desc)
         
-        self.FindWindowById(self.win['vector']['lines']['flat']).Enable(enable)
+        self.FindWindowById(self.win['vector']['lines']['3d']).Enable(enable)
         for v in ('lines', 'points'):
             self.FindWindowById(self.win['vector'][v]['surface']).Enable(enable)
             self.FindWindowById(self.win['vector'][v]['height']['slider']).Enable(enable)
@@ -4801,8 +4801,13 @@ class NvizToolWindow(FN.FlatNotebook):
         
         for vtype in ('lines', 'points'):
             if vtype == 'lines':
-                display = self.FindWindowById(self.win['vector']['lines']['flat'])
-                if data[vtype]['mode']['type'] == 'flat':
+                display = self.FindWindowById(self.win['vector']['lines']['3d'])
+                if vInfo['map3d']:
+                    items = [_("on surface(s):"), _("as 3D")]
+                else:
+                    items = [_("on surface")]
+                display.SetItems(items)               
+                if data[vtype]['mode']['type'] == '3d':
                     display.SetSelection(1)
                 else:
                     display.SetSelection(0)
