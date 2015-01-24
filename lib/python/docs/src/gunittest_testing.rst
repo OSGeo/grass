@@ -111,6 +111,10 @@ for a complete guide.
 Building blocks and terminology
 -------------------------------
 
+.. note::
+    Some parts of the terminology should be revised to ensure understanding and
+    acceptance.
+
 test function and test method
     A *test function* is a test of one particular feature or a test of
     one particular result.
@@ -211,6 +215,7 @@ test failure and test error
     i.e. when exception is risen for example preparation code or
     a test method itself.
 
+.. _test-general:
 
 Testing with gunittest package in general
 -----------------------------------------
@@ -495,8 +500,49 @@ However, do not use use doctest for tests of edge cases, for tests which require
 generate complex data first, etc. In these cases use `gunittest`.
 
 
+.. _test-as-scripts:
+
+Tests as general scripts
+------------------------
+
+GRASS testing framework supports also general Python or Shell scripts
+to be used as test files. This is strongly discouraged because it
+is not using standard ``gnunittest`` assert functions which only leads
+to reimplementing the functionality, relying on a person examining the data,
+or improper tests such as mere testing
+if the module executed without an error without looking at the actual results.
+Moreover, the testing framework does not have a control over what is
+executed and how which limits potential usage and features of testing
+framework. Doing this also prevents testing framework from creating a
+detailed report and thus better understanding of what is tested and what is
+failing. Shell scripts are also harder to execute on MS Windows where the
+interpreter might not be available or might not be on path.
+
+The testing framework uses Shell interpreter with ``-e`` flag when executing
+the tests, so the tests does not have to use ``set -e`` and can rely on it being
+set from outside. The flag ensures that if some command fails, i.e. ends with
+non-zero return code (exit status), the execution of the script ends too.
+The testing framework also uses ``-x`` flag to print the executed commands
+which usually makes examining of the test output easier.
+
+If multiple test files are executed using ``grass.gunittest.main`` module,
+the testing framework creates a temporary Mapset for the general Python and
+Shell scripts in the same way as it does for ``gunittest``-based test files.
+When the tests are executed separately, the clean up in current Mapset
+and current working directory must be ensured by the user or the script itself
+(which is generally true for all test files).
+
+.. warning::
+    This is a bad practice which prevents creation of detailed reports and
+    usage of advanced ``gunittest`` features, so you should avoid it
+    whenever possible.
+
+
 Data
 ----
+
+.. note::
+    Both the section and the practice itself are under development.
 
 Most of the tests requires some input data. However, it is good to write
 a test in the way that it is independent on the available data.

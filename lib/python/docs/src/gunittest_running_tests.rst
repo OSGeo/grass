@@ -2,7 +2,68 @@ Running the test framework of GRASS GIS
 =======================================
 
 This is an advanced guide to running tests of GRASS GIS using GRASS
-testing framework (`gunittest`).
+testing framework (`gunittest`). For introduction to this topic,
+go to :ref:`test-general`.
+
+
+Running tests and creating report
+---------------------------------
+
+To test before commit, run all tests using testing framework.
+First start GRASS GIS session and go to the root directory of your
+GRASS GIS source code copy::
+
+    cd my/grass/source/code/root
+
+Then execute::
+
+    python -m grass.gunittest.main --location locname --location-type nc
+
+where ``locname`` is a name of location in current GRASS GIS data(base) directory
+(GISDBASE) and ``nc`` is a location specified by individual test files
+(the later is not yet fully implemented, so just put there ``nc`` every time).
+
+``grass.gunittest.main`` writes a text summary to standard output and
+it creates an HTML report from all tests in all ``testsuite`` directories inside
+the directory tree. The report is placed in ``testreport`` by default.
+Open file ``testreport/index.html`` in you web browser to inspect it.
+
+To execute just part of the tests when fixing something, ``cd`` into some
+subdirectory, e.g. ``lib`` and execute the same command as above. 
+gain, it will execute all tests in all ``testsuite`` subdirectories and
+create a report.
+
+For changing GRASS GIS data(base) directory and for other parameters, see
+help for ``grass.gunittest.main`` module::
+
+    python -m grass.gunittest.main --help
+
+
+Running individual test files
+-----------------------------
+
+To run a single test file, start GRASS session in the Location and Mapset
+suitable for testing and go to the directory where the test file is.
+Then run the file as a Python script::
+
+    python test_something.py
+
+If the file is a ``gunittest``-based or ``unittest``-based test,
+you will receive a textual output with failed individual tests (test methods).
+If the file is a general Python scriptyou need to examine the output carefully
+as well as source code itself to see what is expected behavior.
+
+The same as for general Python scripts, applies also to Shell scripts,
+so you should examine the output carefully.
+You should execute scripts using::
+
+    sh -e -x test_topology_vgeneralize.sh
+
+The ``-x`` is just to see which commands are executed but the ``-e`` flag
+is crucial because this is how the GRASS testing framework runs the Shell
+scripts. The flag causes execution to stop once some command gives a non-zero
+return code.
+
 
 Example Bash script to run be used as a cron job
 ------------------------------------------------
