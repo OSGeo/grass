@@ -160,6 +160,8 @@ def GetLayerNameFromCmd(dcmd, fullyQualified = False, param = None,
                     try:
                         if layerType in ('raster', 'rgb', 'his'):
                             findType = 'cell'
+                        elif layerType == '3d-raster':
+                            findType = 'grid3'
                         else:
                             findType = layerType
                         mapset = grass.find_file(mapname, element = findType)['mapset']
