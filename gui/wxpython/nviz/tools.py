@@ -812,7 +812,10 @@ class NvizToolWindow(FN.FlatNotebook):
                          # size = globalvar.DIALOG_GSELECT_SIZE,
                          size = (-1, -1),
                          type = "raster")
-            self.win['surface'][code]['map'] = map.GetId() - 1 # FIXME
+            if globalvar.CheckWxVersion([3]):
+                self.win['surface'][code]['map'] = map.GetId()
+            else:
+                self.win['surface'][code]['map'] = map.GetTextCtrl().GetId()
             map.Bind(wx.EVT_TEXT, self.OnSurfaceMap)
             gridSizer.Add(item = map, flag = wx.ALIGN_CENTER_VERTICAL|wx.EXPAND,
                           pos = (row, 2))
@@ -1528,7 +1531,7 @@ class NvizToolWindow(FN.FlatNotebook):
         box = wx.StaticBox (parent = panel, id = wx.ID_ANY,
                             label = " %s " % (_("3D raster map")))
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-        rmaps = Select(parent = panel, type = '3d-raster',
+        rmaps = Select(parent = panel, type = 'raster_3d',
                        onPopup = self.GselectOnPopup)
         rmaps.GetChildren()[0].Bind(wx.EVT_TEXT, self.OnSetRaster3D)
         self.win['volume']['map'] = rmaps.GetId()
@@ -2432,7 +2435,10 @@ class NvizToolWindow(FN.FlatNotebook):
                              # size = globalvar.DIALOG_GSELECT_SIZE,
                              size = (200, -1),
                              type = "grid3")
-                self.win['volume'][code]['map'] = map.GetId() - 1 # FIXME
+                if globalvar.CheckWxVersion([3]):
+                    self.win['volume'][code]['map'] = map.GetId()
+                else:
+                    self.win['volume'][code]['map'] = map.GetTextCtrl().GetId()
                 map.Bind(wx.EVT_TEXT, self.OnVolumeIsosurfMap)
                 gridSizer.Add(item = map, flag = wx.ALIGN_CENTER_VERTICAL,
                               pos = (row, 2))
@@ -3059,18 +3065,18 @@ class NvizToolWindow(FN.FlatNotebook):
         if map is True: # map
             if attrb != 'topo': # changing map topography not allowed
                 # not sure why, but here must be disabled both ids, should be fixed!
-                self.FindWindowById(self.win[nvizType][attrb]['map'] + 1).Enable(True)
+                self.FindWindowById(self.win[nvizType][attrb]['map']).Enable(True)
             if self.win[nvizType][attrb]['const']:
                 self.FindWindowById(self.win[nvizType][attrb]['const']).Enable(False)
             self.FindWindowById(self.win[nvizType][attrb]['use']).SetSelection(1 + incSel)
         elif map is False: # const
-            self.FindWindowById(self.win[nvizType][attrb]['map'] + 1).Enable(False)
+            self.FindWindowById(self.win[nvizType][attrb]['map']).Enable(False)
             if self.win[nvizType][attrb]['const']:
                 self.FindWindowById(self.win[nvizType][attrb]['const']).Enable(True)
             self.FindWindowById(self.win[nvizType][attrb]['use']).SetSelection(2 + incSel)
         else: # unset
             self.FindWindowById(self.win[nvizType][attrb]['use']).SetSelection(0)
-            self.FindWindowById(self.win[nvizType][attrb]['map'] + 1).Enable(False)
+            self.FindWindowById(self.win[nvizType][attrb]['map']).Enable(False)
             if self.win[nvizType][attrb]['const']:
                 self.FindWindowById(self.win[nvizType][attrb]['const']).Enable(False)
             
