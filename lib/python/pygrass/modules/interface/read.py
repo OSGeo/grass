@@ -46,6 +46,7 @@ GETFROMTAG = {
     'suppress_required': get_None,
     'keywords': read_text,
     'guidependency': read_text,
+    'rules': get_None,
 }
 
 GETTYPE = {
