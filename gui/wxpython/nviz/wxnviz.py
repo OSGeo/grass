@@ -845,13 +845,13 @@ class Nviz(object):
         
         return 1
 
-    def SetVectorLineMode(self, id, color_str, width, flat):
+    def SetVectorLineMode(self, id, color_str, width, use_z):
         """Set mode of vector line overlay
         
         :param id: vector id
         :param color_str: color string
         :param width: line width
-        :param flat: display flat or on surface
+        :param use_z: display 3d or on surface
         
         :return: -1 vector set not found
         :return: -2 on failure
@@ -860,13 +860,13 @@ class Nviz(object):
         if not GV_vect_exists(id):
             return -1
         
-        Debug.msg(3, "Nviz::SetVectorMode(): id=%d, color=%s, width=%d, flat=%d",
-                  id, color_str, width, flat)
+        Debug.msg(3, "Nviz::SetVectorMode(): id=%d, color=%s, width=%d, use_z=%d",
+                  id, color_str, width, use_z)
         
         color = Nviz_color_from_str(color_str)
         
         # use memory by default
-        if GV_set_style(id, 1, color, width, flat) < 0:
+        if GV_set_style(id, 1, color, width, use_z) < 0:
             return -2
         
         return 1
