@@ -195,7 +195,7 @@ int gv_set_defaults(geovect * gv)
     gv->x_trans = gv->y_trans = gv->z_trans = 0.0;
     gv->lines = NULL;
     gv->fastlines = NULL;
-    gv->flat_val = 0;
+    gv->use_z = 0;
     gv->style->color = 0xF0F0F0;
     gv->style->width = 1;
     gv->style->next = NULL;
