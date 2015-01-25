@@ -1090,7 +1090,7 @@ class Table(object):
         """Insert a new row
 
         :param values: a tuple of values to insert, it is possible to insert
-                       more rows using a list of tuple and paramater `many`
+                       more rows using a list of tuple and parameter `many`
         :type values: tuple
         :param cursor: the cursor to connect, if None it use the cursor
                        of connection table object

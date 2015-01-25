@@ -226,7 +226,7 @@ array operations. ::
     >>> raster = reload(raster)
     >>> elev = raster.RasterNumpy('elevation', 'PERMANENT')
     >>> elev.open('r')
-    >>> # in this case RasterNumpy is an extention of the numpy class
+    >>> # in this case RasterNumpy is an extension of the numpy class
     >>> # therefore you may use all the fancy things of numpy.
     >>> elev[:5, :3]
     RasterNumpy([[ 141.99613953,  141.27848816,  141.37904358],

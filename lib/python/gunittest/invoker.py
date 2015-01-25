@@ -95,7 +95,7 @@ class GrassTestFilesInvoker(object):
             self._file_anonymizer = file_anonymizer
 
     def _create_mapset(self, gisdbase, location, module):
-        """Create mapset according to informations in module.
+        """Create mapset according to information in module.
 
         :param loader.GrassTestPythonModule module:
         """

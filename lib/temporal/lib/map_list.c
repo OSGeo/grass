@@ -112,9 +112,9 @@ void tgis_map_list_add(tgisMapList *list, tgisMap *map)
 }
 
 /** 
- * \brief Insert map informations into tgisMapList
+ * \brief Insert map information into tgisMapList
  *
- * This function alocates a tgisMap, fills it with the provided informations
+ * This function alocates a tgisMap, fills it with the provided information
  * and adds it to the list.
  * In case allocation fails, G_fatal_error() will be invoked by the
  * allocation function.

@@ -74,7 +74,7 @@ is to change always all mileposts.
 I don't have any documentation, as we use it only here. I have to write 
 something, but I don't have much time, let me know if you are interested.
 For now briefly:
-All the LRS is stored in one table, each record stores informations
+All the LRS is stored in one table, each record stores information
 about one segment between two mileposts:
  rsid        | integer | id of LRS segment (not so important)
  lcat        | integer | line id, unique id of the line
