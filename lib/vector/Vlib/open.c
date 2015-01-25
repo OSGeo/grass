@@ -1304,7 +1304,7 @@ int map_format(struct Map_info *Map)
         else {
             /* vector features are written to the temporary vector map
              * in the native format and when closing the map
-             * transfered to output OGR layer */
+             * transferred to output OGR layer */
             format = GV_FORMAT_NATIVE;
             Map->temporary = TRUE;
         }
@@ -1421,7 +1421,7 @@ int map_format(struct Map_info *Map)
             else {
                 /* vector features are written to the temporary vector map
                  * in the native format and when closing the map
-                 * transfered to output PostGIS layer */
+                 * transferred to output PostGIS layer */
                 format = GV_FORMAT_NATIVE;
                 Map->temporary = TRUE;
             }

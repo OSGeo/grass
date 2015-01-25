@@ -52,7 +52,7 @@ the SQL object serialization, all classes that represent table entries, datetime
 :mod:`~temporal.base`
 """""""""""""""""""""
 
-    Implements of basic dataset informations and SQL conversion of such information:
+    Implements of basic dataset information and SQL conversion of such information:
 
     - Definition of the SQL serialize class :class:`~temporal.base.DictSQLSerializer` 
       that converts the content of temporal
@@ -60,7 +60,7 @@ the SQL object serialization, all classes that represent table entries, datetime
     - Definition of :class:`~temporal.base.SQLDatabaseInterface` 
       that is the base class for all temporal datatype subclasses
     - Contains classes for all datasets [#allds]_ that contain
-      basic informations (id, name, mapset, creator, ...)
+      basic information (id, name, mapset, creator, ...)
 
 :mod:`~temporal.spatial_extent`
 """""""""""""""""""""""""""""""
@@ -101,7 +101,7 @@ the SQL object serialization, all classes that represent table entries, datetime
 :mod:`~temporal.c_libraries_interface`
 """"""""""""""""""""""""""""""""""""""
 
-    The RPC C-library interface for exit safe and fast access to raster, vector and 3D raster informations.
+    The RPC C-library interface for exit safe and fast access to raster, vector and 3D raster information.
 
 :mod:`~temporal.temporal_granularity`
 """""""""""""""""""""""""""""""""""""
@@ -133,14 +133,14 @@ temporal processing algorithms and temporal GRASS modules.
 
     - Implements the base class for all datasets [#allds]_ :class:`~temporal.abstract_dataset.AbstractDataset`.
     - Implements the the select, insert and update functionality as well as
-      convenient functions to access the base, extent and metadata informations
+      convenient functions to access the base, extent and metadata information
 
 :mod:`~temporal.abstract_map_dataset`
 """""""""""""""""""""""""""""""""""""
 
     - Implements the base class :class:`~temporal.abstract_map_dataset.AbstractMapDataset` 
       for all map layer specific classes
-    - Provides the interface to all map layer specific informations in the temporal database
+    - Provides the interface to all map layer specific information in the temporal database
 
 :mod:`~temporal.abstract_space_time_dataset`
 """"""""""""""""""""""""""""""""""""""""""""
@@ -149,7 +149,7 @@ temporal processing algorithms and temporal GRASS modules.
       for all Space Time Datasets classes
     - Contains the creation and deletion functionality, the map registration and un-registration,
       access methods to map layer objects and so on
-    - Provides the interface to all Space Time Dataset specific informations in the temporal database
+    - Provides the interface to all Space Time Dataset specific information in the temporal database
 
 :mod:`~temporal.space_time_datasets`
 """"""""""""""""""""""""""""""""""""
@@ -295,11 +295,11 @@ to access its registered maps.
     # Fill the object with the content from the temporal database
     strds.select(dbif=dbif)
 
-    # Print informations about the space time raster dataset to stdout
+    # Print information about the space time raster dataset to stdout
     strds.print_info()
 
     # Get all maps that are registered in the strds and print
-    # informations about the maps to stdout
+    # information about the maps to stdout
     maps = strds.get_registered_maps_as_objects(dbif=dbif)
 
     # We iterate over the temporal sorted map list

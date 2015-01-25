@@ -98,7 +98,7 @@ int G_matrix_zero(mat_struct * A)
 /*!
  * \fn int G_matrix_set(mat_struct *A, int rows, int cols, int ldim)
  *
- * \brief Set paramaters for an initialized matrix
+ * \brief Set parameters for an initialized matrix
  *
  * Set parameters for matrix <b>A</b> that is allocated,
  * but not yet fully initialized.  Is an alternative to G_matrix_init().

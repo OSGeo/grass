@@ -754,7 +754,7 @@ class GMFrame(wx.Frame):
         except:
             layer = None
 
-        if layer and len(cmdlist) == 1: # only if no paramaters given
+        if layer and len(cmdlist) == 1: # only if no parameters given
             if (type == 'raster' and cmdlist[0][0] == 'r' and cmdlist[0][1] != '3') or \
                     (type == 'vector' and cmdlist[0][0] == 'v'):
                 input = GUI().GetCommandInputMapParamKey(cmdlist[0])

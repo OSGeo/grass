@@ -557,7 +557,7 @@ class Module(object):
         self.__call__.__func__.__doc__ = self.__doc__
 
     def __call__(self, *args, **kargs):
-        """Set module paramters to the class and, if run_ is True execute the
+        """Set module parameters to the class and, if run_ is True execute the
         module, therefore valid parameters are all the module parameters
         plus some extra parameters that are: run_, stdin_, stdout_, stderr_,
         env_ and finish_.

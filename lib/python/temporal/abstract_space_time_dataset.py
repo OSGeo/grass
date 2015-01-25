@@ -1309,7 +1309,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                                                             order="start_time",
                                                             dbif=None):
         """Return all or a subset of the registered maps as ordered object
-           list with spatio-temporal topological relationship informations.
+           list with spatio-temporal topological relationship information.
 
            The objects are initialized with their id's' and the spatio-temporal
            extent (temporal type, start time, end time, west, east, south,
