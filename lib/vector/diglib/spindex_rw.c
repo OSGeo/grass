@@ -659,8 +659,8 @@ int rtree_dump_node_file(FILE * fp, off_t pos, int with_z, struct RTree *t)
  * all following methods to transfer spatial indices (rtrees) are based
  * on the same idea
  * do a postorder depth-first non-recursive traversal of the rtree
- * a leaf node is transfered first
- * the root node is transfered last
+ * a leaf node is transferred first
+ * the root node is transferred last
  * 
  * this applies to all four scenarios
  * - from intermediate file to sidx file
@@ -973,7 +973,7 @@ static void rtree_load_to_memory(struct gvfile *fp, off_t rootpos,
 	loadnode = 1;
 	/* this is an internal node in the RTree
 	 * all its children are read first,
-	 * before it is transfered to the RTree in memory */
+	 * before it is transferred to the RTree in memory */
 	if (s[top].sn.level > 0) {
 	    for (i = s[top].branch_id; i < t->nodecard; i++) {
 		if (s[top].pos[i] > 0) {
@@ -991,7 +991,7 @@ static void rtree_load_to_memory(struct gvfile *fp, off_t rootpos,
 			/* leaf node
 			 * vector object IDs are stored in file as
 			 * off_t but always fit into an int, see dig_structs.h
-			 * vector object IDs are transfered to child.id */
+			 * vector object IDs are transferred to child.id */
 			if (s[top].sn.level == 0) {
 			    s[top].sn.branch[j].child.id =
 				(int)s[top].pos[j];
@@ -1098,7 +1098,7 @@ static void rtree_load_to_file(struct gvfile *fp, off_t rootpos,
 	loadnode = 1;
 	/* this is an internal node in the RTree
 	 * all its children are read first,
-	 * before it is transfered to the RTree in memory */
+	 * before it is transferred to the RTree in memory */
 	if (s[top].sn.level > 0) {
 	    for (i = s[top].branch_id; i < t->nodecard; i++) {
 		if (s[top].pos[i] > 0) {
@@ -1116,7 +1116,7 @@ static void rtree_load_to_file(struct gvfile *fp, off_t rootpos,
 			/* leaf node
 			 * vector object IDs are stored in file as
 			 * off_t but always fit into an int, see dig_structs.h
-			 * vector object IDs are transfered to child.id */
+			 * vector object IDs are transferred to child.id */
 			if (s[top].sn.level == 0) {
 			    s[top].sn.branch[j].child.id =
 				    (int)s[top].pos[j];

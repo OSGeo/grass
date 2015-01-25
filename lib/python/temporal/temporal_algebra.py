@@ -1798,7 +1798,7 @@ class TemporalAlgebraParser(object):
             tfunc = gvar.tfunc.upper()
             # Get value for function name from dictionary.
             tfuncval = tfuncdict[tfunc]
-            # Check if value has to be transfered to datetime object for comparison.
+            # Check if value has to be transferred to datetime object for comparison.
             if tfunc in ["START_DATE", "END_DATE"]:
                 timeobj = datetime.strptime(value.replace("\"",""), '%Y-%m-%d')
                 value = timeobj.date()

@@ -75,7 +75,7 @@ The following GRASS 6 directories contain the source code:
 				parameters
 
 	./photo.2target:	computes photo to target location
-				transformation paramters
+				transformation parameters
 
 	./photo.rectify:	does the actual image rectification
 	

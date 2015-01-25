@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
         struct Flag *report;
     } flag;
 
-    /* define paramaters and flags */
+    /* define parameters and flags */
     G_gisinit(argv[0]);
 
     module = G_define_module();

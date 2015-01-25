@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 #############################################################################
 #
-# MODULE:       Languages informations and statistics (Python)
+# MODULE:       Languages information and statistics (Python)
 # AUTHOR(S):    Luca Delucchi <lucadeluge@gmail.com>
 #               Pietro Zambelli <peter.zamb@gmail.com>
 # PURPOSE:      Create a json file containing languages translations
-#               informations and statistics.
+#               information and statistics.
 # COPYRIGHT:    (C) 2012 by the GRASS Development Team
 #
 #               This program is free software under the GNU General
@@ -88,7 +88,7 @@ def get_stats(languages, directory):
     # TO DO TOTALS OF ENGLISH WORD FOR EACH FILE
     # all the total string in english
     output['totals'] = {}
-    # all the informations about each lang
+    # all the information about each lang
     output['langs'] = {}
     # for each language
     for lang, pofilelist in languages.iteritems():

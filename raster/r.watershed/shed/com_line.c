@@ -4,7 +4,7 @@
 #include "watershed.h"
 #include "string.h"
 
-/* make sure any useful info is transfered to the man page before ripping out the interactive help messages */
+/* make sure any useful info is transferred to the man page before ripping out the interactive help messages */
 /* in addition there seem to be some useful user options here which are not currently available from the main parser */
 int com_line_Gwater(INPUT * input, OUTPUT * output)
 {
