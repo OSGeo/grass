@@ -253,7 +253,7 @@ class TemporalOperatorParser(object):
     def parse(self, expression,  optype = 'relation'):
         self.optype = optype        
         self.parser.parse(expression)
-        # The paramter optype can be of type: select {:, during, r}, boolean{&&, contains, |}, 
+        # The parameter optype can be of type: select {:, during, r}, boolean{&&, contains, |}, 
         #                                                            raster{*, equal, |}, vector {|, starts, &},
         #                                                            hash{#, during, l} or relation {during}.
     

@@ -216,7 +216,7 @@ def get_enable_timestamp_write():
 
        ..warning::
 
-           Be aware that C-libraries can not access timestamp informations if
+           Be aware that C-libraries can not access timestamp information if
            they are not written as spatial database metadata, hence modules
            that make use of timestamps using the C-library interface will not
            work with maps that were created without writing the timestamps.

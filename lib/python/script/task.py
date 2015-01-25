@@ -245,7 +245,7 @@ class grassTask:
         return {'flags': self.flags, 'params': self.params}
 
     def has_required(self):
-        """Check if command has at least one required paramater
+        """Check if command has at least one required parameter
         """
         for p in self.params:
             if p.get('required', False):
