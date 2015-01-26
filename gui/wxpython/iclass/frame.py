@@ -86,7 +86,6 @@ class IClassMapFrame(DoubleMapFrame):
                                 firstMap = Map(), secondMap = Map(),
                                 **kwargs)
         self._giface = giface
-        self.tree = None
         self.mapWindowProperties = MapWindowProperties()
         self.mapWindowProperties.setValuesFromUserSettings()
         # show computation region by defaut
