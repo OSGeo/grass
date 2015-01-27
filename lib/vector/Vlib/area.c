@@ -328,8 +328,9 @@ double Vect_get_area_perimeter(const struct Map_info *Map, int area)
    \param area area id
    \param box area bounding box
 
-   \return 1 if point is in area
-   \return 0 if not 
+   \return 0 if point is outside area
+   \return 1 if point is inside area
+   \return 2 if point is on the area's outer ring
  */
 int Vect_point_in_area(double x, double y, const struct Map_info *Map,
                        int area, struct bound_box *box)
@@ -347,7 +348,10 @@ int Vect_point_in_area(double x, double y, const struct Map_info *Map,
 
     poly = Vect_point_in_area_outer_ring(x, y, Map, area, box);
     if (poly == 0)
-	return 0;		/* includes area boundary (poly == 2), OK? */
+	return 0;
+
+    if (poly == 2)		/* includes area boundary, OK? */
+	return 2;
 
     /* check if in islands */
     for (i = 0; i < Area->n_isles; i++) {
