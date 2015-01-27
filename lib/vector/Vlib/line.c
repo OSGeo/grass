@@ -801,10 +801,8 @@ int Vect_line_geodesic_distance(const struct line_pnts *points,
 	tspdist = 0;
 	tlpdist = 0;
 	segment = 0;
-
     }
     else {
-
 	distance =
 	    dig_distance2_point_to_line(ux, uy, uz, points->x[0],
 					points->y[0], points->z[0],
