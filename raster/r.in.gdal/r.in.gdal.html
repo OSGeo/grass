@@ -5,7 +5,6 @@ or imagery group, from any GDAL supported raster map format, with an optional
 title. The imported file may also be optionally used to create a new location.
 
 <!--
-
 Extended explanations:
 
 <dt><b>-e</b>
@@ -13,13 +12,17 @@ Extended explanations:
 the new map layer.  Old resolution is preserved, but the region, and rows/cols
 are updated.  This will fail if the user doesn't have write access to the
 PERMANENT mapset.
-</dl>-->
+</dl>
+-->
 
 <h3>GDAL supported raster formats</h3>
 
-Full details on GDAL supported formats are available at:<p>
-<a href="http://www.gdal.org/formats_list.html">http://www.gdal.org/formats_list.html</a><p>
+Full details on GDAL supported formats are available at:
+<p>
+<a href="http://www.gdal.org/formats_list.html">http://www.gdal.org/formats_list.html</a>
+<p>
 Selected formats of the more than 80 supported formats:
+
 <div class="code"><pre>
 
 Long Format Name                                        Code                    Creation        Georeferencing          Maximum File Size
@@ -84,7 +87,8 @@ report an error message (<tt>Projection of dataset does not appear to
 match current location</tt>) and then report the PROJ_INFO parameters of
 the source dataset.
 
-<p>If the user wishes to ignore the difference between the apparent coordinate
+<p>
+If the user wishes to ignore the difference between the apparent coordinate
 system of the source data and the current location, they may pass the 
 <b>-o</b> flag to override the projection check. 
 
@@ -100,11 +104,11 @@ imported with the indicated <b>output</b> name into the PERMANENT mapset.
 <h3>Support for GCPs</h3>
 In case the image contains GCPs they are written to a
 POINTS file within an imagery group. They can directly be used for 
-<a href=i.rectify.html>i.rectify</a>.
+<a href="i.rectify.html">i.rectify</a>.
 <p>
-The <b>target</b> option allows you to automatically re-project the GCPs 
-from their own projection into another projection read from the 
-PROJ_INFO file of the location name <b>target</b>. 
+The <b>target</b> option allows you to automatically re-project the GCPs
+from their own projection into another projection read from the
+PROJ_INFO file of the location name <b>target</b>.
 <p>
 If the <b>target</b> location does not exist, a new location will be 
 created matching the projection definition of the GCPs. The target of 
@@ -122,7 +126,8 @@ transformation is recommended, either before import with
 Import of large files can be significantly faster when setting <b>memory</b> to
 the size of the input file.
 
-<p>The <em>r.in.gdal</em> command does support the following features, as long as 
+<p>
+The <em>r.in.gdal</em> command does support the following features, as long as 
 the underlying format driver supports it:
 
 <p>
@@ -173,7 +178,8 @@ the points with i.rectify.<br>
 
 </dl>
 
-<p>Planned improvements to <em>r.in.gdal</em> in the future include support for
+<p>
+Planned improvements to <em>r.in.gdal</em> in the future include support for
 reporting everything known about a dataset if the <b>output</b> parameter is not set.
 
 <h3>Error Messages</h3>
@@ -189,7 +195,8 @@ resampling algorithm):
 gdalwarp rotated.tif northup.tif
 </pre></div>
 
-<p><i>"ERROR: Projection of dataset does not appear to match the current location."</i><br>
+<p>
+<i>"ERROR: Projection of dataset does not appear to match the current location."</i><br>
 
 You need to create a location whose projection matches the data you
 wish to import. Try using <b>location</b> parameter to create a new
@@ -197,7 +204,8 @@ location based upon the projection information in the file. If desired,
 you can then re-project it to another location with <em>r.proj</em>.
 Alternatively you can override this error by using the <b>-o</b> flag.
 
-<p><i>"WARNING: G_set_window(): Illegal latitude for North"</i><br>
+<p>
+<i>"WARNING: G_set_window(): Illegal latitude for North"</i><br>
 
 Latitude/Longitude locations in GRASS can not have regions which exceed
 90&deg; North or South. Non-georeferenced imagery will have coordinates
@@ -273,10 +281,11 @@ with <em>r.colors</em>.
 
 <h3>GLOBE DEM</h3>
 
-To import <a href="http://www.ngdc.noaa.gov/seg/topo/gltiles.shtml">GLOBE DEM tiles</a>
+To import <a href="http://www.ngdc.noaa.gov/mgg/topo/elev/">GLOBE DEM tiles</a>
 (approx 1km resolution, better than GTOPO30 DEM data), the user has to download
-additionally the related <a href="ftp://ftp.ngdc.noaa.gov/GLOBE_DEM/data/elev/esri/hdr/">HDR file(s)</a>.
+additionally the related <a href="http://www.ngdc.noaa.gov/mgg/topo/elev/esri/hdr/">HDR file(s)</a>.
 Finally, e.g. the 'terrain' color table can be assigned to the imported map with <em>r.colors</em>.
+See also their <a href="http://www.ngdc.noaa.gov/mgg/dem/demportal.html">DEM portal</a>.
 
 <h3>Worldclim.org</h3>
 To import <a href="http://www.worldclim.org">Worldclim</a> data, the following
@@ -306,7 +315,6 @@ r.in.gdal HDF4_EOS:EOS_GRID:"MOD15A2.A2003153.h18v04.004.2003171141042.hdf":MOD_
 # ... likewise for other HDF bands in the file.
 </pre></div>
 
-
 <h2>SEE ALSO</h2>
 <em>
 <a href="r.colors.html">r.colors</a>,
@@ -314,16 +322,17 @@ r.in.gdal HDF4_EOS:EOS_GRID:"MOD15A2.A2003153.h18v04.004.2003171141042.hdf":MOD_
 <a href="r.in.bin.html">r.in.bin</a>,
 <a href="r.null.html">r.null</a>
 </em>
-
+<p>
+GRASS GIS Wiki page: Import of <a href="http://grasswiki.osgeo.org/wiki/Global_datasets">Global datasets</a>
 
 <h2>REFERENCES</h2>
 
 GDAL Pages: <a href="http://www.gdal.org">http://www.gdal.org/</a><br>
-
 
 <h2>AUTHOR</h2>
 
 <a href="http://home.gdal.org/warmerda/">Frank Warmerdam</a>
  (<a href="mailto:warmerdam AT pobox dot com">email</a>).
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
