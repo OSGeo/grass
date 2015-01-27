@@ -636,15 +636,15 @@ double Vect_line_geodesic_length(const struct line_pnts *Points)
    - px, py - point on line,
    - dist   - distance to line,
    - spdist - distance to point on line from segment beginning,
-   - sldist - distance to point on line form line beginning along line
+   - lpdist - distance to point on line from line beginning along line
 
   \param points pointer to line_pnts structure
   \param ux,uy,uz point coordinates
   \param with_z flag if to use z coordinate (3D calculation)
   \param[out] px,py,pz point on line
-  \param[out] dist distance to line,
-  \param[out] spdist distance of point from segment beginning
-  \param[out] lpdist distance of point from line
+  \param[out] dist distance to line
+  \param[out] spdist distance to point on line from segment beginning
+  \param[out] lpdist distance to point on line from line beginning along line
 
   \return nearest segment (first is 1)
  */
@@ -757,15 +757,15 @@ int Vect_line_distance(const struct line_pnts *points,
    - px, py - point on line,
    - dist   - distance to line,
    - spdist - distance to point on line from segment beginning,
-   - sldist - distance to point on line form line beginning along line
+   - lpdist - distance to point on line from line beginning along line
 
   \param points pointer to line_pnts structure
   \param ux,uy,uz point coordinates
   \param with_z flag if to use z coordinate (3D calculation)
   \param[out] px,py,pz point on line
-  \param[out] dist distance to line,
-  \param[out] spdist distance of point from segment beginning
-  \param[out] lpdist distance of point from line
+  \param[out] dist distance to line
+  \param[out] spdist distance to point on line from segment beginning
+  \param[out] lpdist distance to point on line from line beginning along line
 
   \return nearest segment (first is 1)
  */
@@ -801,10 +801,8 @@ int Vect_line_geodesic_distance(const struct line_pnts *points,
 	tspdist = 0;
 	tlpdist = 0;
 	segment = 0;
-
     }
     else {
-
 	distance =
 	    dig_distance2_point_to_line(ux, uy, uz, points->x[0],
 					points->y[0], points->z[0],
@@ -828,6 +826,7 @@ int Vect_line_geodesic_distance(const struct line_pnts *points,
 						   points->z[i + 1], with_z,
 						   &ttpx, &ttpy, &ttpz,
 						   NULL, NULL);
+
 	    new_dist = G_distance(ux, uy, ttpx, ttpy);
 	    if (with_z)
 		new_dist = hypot(new_dist, uz - ttpz);
