@@ -70,6 +70,8 @@ create_new = None
 grass_gui = None
 exit_grass = None
 force_gislock_removal = None
+encoding = None
+
 
 def warning(text):
     sys.stderr.write(_("WARNING") + ': ' + text + os.linesep)
@@ -776,7 +778,7 @@ def set_language():
     import locale
     
     language = 'None' # Such string sometimes is present in wx file
-    encoding = None
+    global encoding
     
     # Override value is stored in wxGUI preferences file.
     # As it's the only thing required, we'll just grep it out.
@@ -1124,7 +1126,7 @@ def bash_startup():
     else:
         f.write("PS1='GRASS %s (%s):\w > '\n" % (grass_version, location_name))
     
-    f.write("""grass_prompt() {
+    f.write(("""grass_prompt() {
 	LOCATION="`g.gisenv get=GISDBASE,LOCATION_NAME,MAPSET separator='/'`"
 	if test -d "$LOCATION/grid3/G3D_MASK" && test -f "$LOCATION/cell/MASK" ; then
 		echo [%s]
@@ -1136,7 +1138,7 @@ def bash_startup():
 }
 PROMPT_COMMAND=grass_prompt\n""" % (_("2D and 3D raster MASKs present"),
                                     _("Raster MASK present"),
-                                    _("3D raster MASK present")))
+                                    _("3D raster MASK present"))).encode(encoding))
 
     # read environmental variables
     path = os.path.join(userhome, ".grass.bashrc") # left for backward compatibility
