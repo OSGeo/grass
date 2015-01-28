@@ -1,0 +1,102 @@
+<h2>DESCRIPTION</h2>
+
+<em>t.rast.what</em> is designed to sample space time raster datasets
+at specific coordinates using <a href="r.what.html">r.what</a> internally. 
+The output of <a href="r.what.html">r.what</a> 
+is transformed in different output layouts.
+The output layouts can be specified using the option <em>layout</em>.
+Please have a look at the output layout demonstration in the example.
+<p>
+This module is designed to run several instances of r.what to sample
+parts of a space time raster dataset in parallel. Several intermediate
+text files will be produces that are merged into a single file at the
+and of the processing.
+<p>
+Coordinates can be provided using the <em>coordinates</em> option
+or as vector map using the <em>points</em> option.
+<p>
+An output file must be provided with the <em>output</em> option.
+    
+<h2>EXAMPLE</h2>
+
+In this example we sample a space time raster dataset that contains
+4 raster map layer with 3 random vector points. The generated output
+of all layout options are demonstrated. 
+
+<div class="code"><pre>
+g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
+
+# Generate data
+r.mapcalc expr="a_1 = 1" -s
+r.mapcalc expr="a_2 = 2" -s
+r.mapcalc expr="a_3 = 3" -s
+r.mapcalc expr="a_4 = 4" -s
+
+v.random output=points n=3
+
+t.create type=strds output=A title="A test" descr="A test"
+
+t.register -i type=raster input=A maps=a_1,a_2,a_3,a_4 \
+    start='1990-01-01' increment="1 month"
+
+# Now we create 3 outputs of the same data using different layouts
+
+# Output in "row" order
+t.rast.what strds=A points=points output=result.txt layout=row -n
+
+cat result.txt
+
+x|y|start|end|value
+107.9761951|14.4780173|1990-01-01 00:00:00|1990-02-01 00:00:00|1
+107.9761951|14.4780173|1990-02-01 00:00:00|1990-03-01 00:00:00|2
+107.9761951|14.4780173|1990-03-01 00:00:00|1990-04-01 00:00:00|3
+107.9761951|14.4780173|1990-04-01 00:00:00|1990-05-01 00:00:00|4
+48.1672585|75.5186798|1990-01-01 00:00:00|1990-02-01 00:00:00|1
+48.1672585|75.5186798|1990-02-01 00:00:00|1990-03-01 00:00:00|2
+48.1672585|75.5186798|1990-03-01 00:00:00|1990-04-01 00:00:00|3
+48.1672585|75.5186798|1990-04-01 00:00:00|1990-05-01 00:00:00|4
+114.3944372|36.2390227|1990-01-01 00:00:00|1990-02-01 00:00:00|1
+114.3944372|36.2390227|1990-02-01 00:00:00|1990-03-01 00:00:00|2
+114.3944372|36.2390227|1990-03-01 00:00:00|1990-04-01 00:00:00|3
+114.3944372|36.2390227|1990-04-01 00:00:00|1990-05-01 00:00:00|4
+
+# Output in column order
+t.rast.what strds=A points=points output=result.txt layout=col -n
+
+cat result.txt
+
+star|end|107.9761951;14.4780173|107.9761951;14.4780173|107.9761951;14.4780173
+1990-01-01 00:00:00|1990-02-01 00:00:00|1|1|1
+1990-02-01 00:00:00|1990-03-01 00:00:00|2|2|2
+1990-03-01 00:00:00|1990-04-01 00:00:00|3|3|3
+1990-04-01 00:00:00|1990-05-01 00:00:00|4|4|4
+
+# Output in one time series per row order
+t.rast.what strds=A points=points output=result.txt layout=timerow -n
+
+cat result.txt
+
+x|y|1990-01-01 00:00:00;1990-02-01 00:00:00|1990-02-01 00:00:00;1990-03-01 00:00:00|1990-03-01 00:00:00;1990-04-01 00:00:00|1990-04-01 00:00:00;1990-05-01 00:00:00
+107.976195095579|14.4780172666265|1|2|3|4
+48.1672585088805|75.5186797967386|1|2|3|4
+114.394437197952|36.2390227089844|1|2|3|4
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r.what.html">r.what</a> ,
+<a href="r.neighbors.html">r.neighbors</a>,
+<a href="t.rast.aggregate.ds.html">t.rast.aggregate.ds</a>,
+<a href="t.rast.extract.html">t.rast.extract</a>,
+<a href="t.info.html">t.info</a>,
+<a href="g.region.html">g.region</a>,
+<a href="r.mask.html">r.mask</a>
+</em>
+
+
+<h2>AUTHOR</h2>
+
+S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
+
+<p><i>Last changed: $Date: 2014-12-03 20:39:26 +0100 (Mi, 03. Dez 2014) $</i>
