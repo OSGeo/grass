@@ -1,21 +1,29 @@
 <h2>DESCRIPTION</h2>
 
 <em>t.rast.what</em> is designed to sample space time raster datasets
-at specific coordinates using <a href="r.what.html">r.what</a> internally. 
+at specific point coordinates from a vector map layer 
+using <a href="r.what.html">r.what</a> internally. 
 The output of <a href="r.what.html">r.what</a> 
-is transformed in different output layouts.
-The output layouts can be specified using the option <em>layout</em>.
-Please have a look at the output layout demonstration in the example.
+is transformed to different output layouts.
+The output layouts can be specified using the <em>layout</em> option.
+<p>
+Three layouts can be specified:
+<ul>
+    <li><em>row</em> - Row order, one vector sample point value per row</li>
+    <li><em>col</em> - Column order, create a column for each vector sample point of a single time step/raster layer</li>
+    <li><em>timerow</em> - Time order, create a column for each time step, this order is the original r.what output, except that the column names are the time stamps</li>
+</ul>
+
+Please have a look at the example to see the supported layouts.
 <p>
 This module is designed to run several instances of r.what to sample
-parts of a space time raster dataset in parallel. Several intermediate
-text files will be produces that are merged into a single file at the
-and of the processing.
+subsets of a space time raster dataset in parallel. Several intermediate
+text files will be created that are merged into a single file at the
+end of the processing.
 <p>
-Coordinates can be provided using the <em>coordinates</em> option
-or as vector map using the <em>points</em> option.
+Coordinates must be provided as vector map using the <em>points</em> option.
 <p>
-An output file must be provided with the <em>output</em> option.
+An output file must be specified using the <em>output</em> option.
     
 <h2>EXAMPLE</h2>
 
@@ -24,7 +32,7 @@ In this example we sample a space time raster dataset that contains
 of all layout options are demonstrated. 
 
 <div class="code"><pre>
-g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10 res3=10 -p3
+g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10
 
 # Generate data
 r.mapcalc expr="a_1 = 1" -s
@@ -32,6 +40,7 @@ r.mapcalc expr="a_2 = 2" -s
 r.mapcalc expr="a_3 = 3" -s
 r.mapcalc expr="a_4 = 4" -s
 
+# Vector points for sampling
 v.random output=points n=3
 
 t.create type=strds output=A title="A test" descr="A test"
@@ -39,7 +48,7 @@ t.create type=strds output=A title="A test" descr="A test"
 t.register -i type=raster input=A maps=a_1,a_2,a_3,a_4 \
     start='1990-01-01' increment="1 month"
 
-# Now we create 3 outputs of the same data using different layouts
+# Create 3 output files of the same data using different layouts
 
 # Output in "row" order
 t.rast.what strds=A points=points output=result.txt layout=row -n
@@ -71,15 +80,17 @@ star|end|107.9761951;14.4780173|107.9761951;14.4780173|107.9761951;14.4780173
 1990-03-01 00:00:00|1990-04-01 00:00:00|3|3|3
 1990-04-01 00:00:00|1990-05-01 00:00:00|4|4|4
 
-# Output in one time series per row order
-t.rast.what strds=A points=points output=result.txt layout=timerow -n
+# Output in "timerow" order, one time series per row 
+# using the where statement to select a subset of the STRDS
+t.rast.what strds=A points=points output=result.txt \
+    where="start_time >= '1990-03-01'" layout=timerow -n
 
 cat result.txt
 
-x|y|1990-01-01 00:00:00;1990-02-01 00:00:00|1990-02-01 00:00:00;1990-03-01 00:00:00|1990-03-01 00:00:00;1990-04-01 00:00:00|1990-04-01 00:00:00;1990-05-01 00:00:00
-107.976195095579|14.4780172666265|1|2|3|4
-48.1672585088805|75.5186797967386|1|2|3|4
-114.394437197952|36.2390227089844|1|2|3|4
+x|y|1990-03-01 00:00:00;1990-04-01 00:00:00|1990-04-01 00:00:00;1990-05-01 00:00:00
+87.1990551431732|47.8023402837766|3|4
+111.822716201101|60.8478739587795|3|4
+33.1868681892585|14.4679757612965|3|4
 </pre></div>
 
 <h2>SEE ALSO</h2>
