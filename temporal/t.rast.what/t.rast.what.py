@@ -5,8 +5,9 @@
 # MODULE:       t.rast.what
 # AUTHOR(S):    Soeren Gebbert
 #
-# PURPOSE:      Sample a space time raster dataset at specific coordinates 
-#               and write the output to stdout using different layouts
+# PURPOSE:      Sample a space time raster dataset at specific vector point 
+#               coordinates and write the output to stdout using different 
+#               layouts
 #               
 # COPYRIGHT:    (C) 2015 by the GRASS Development Team
 #
@@ -17,7 +18,7 @@
 #############################################################################
 
 #%module
-#% description: Sample a space time raster dataset at specific coordinates and write the output to stdout using different layouts
+#% description: Sample a space time raster dataset at specific vector point coordinates and write the output to stdout using different layouts
 #% keyword: temporal
 #% keyword: raster
 #% keyword: sampling
@@ -77,6 +78,7 @@
 #% description: Output header row
 #%end
 
+## Temporary disabled the r.what flags due to test issues
 ##%flag
 ##% key: f
 ##% description: Show the category labels of the grid cell(s)
@@ -146,7 +148,7 @@ def main(options, flags):
     if separator == "newline":
         separator = "\n"
 
-    # Setup flags
+    # Setup flags are disabled due to test issues
     flags = ""
     #if output_cat_label is True:
     #    flags += "f"
@@ -375,7 +377,7 @@ def one_point_per_timerow_output(separator, output_files, output_time_list,
 
     out_file.write(header + "\n")
 
-    gscript.message(_("Writing the output file %s"%(output)))
+    gscript.message(_("Writing the output file <%s>"%(output)))
     for row in matrix:
         first = True
         for col in row:
