@@ -37,9 +37,6 @@
 #%option G_OPT_T_WHERE
 #%end
 
-#%option G_OPT_M_COORDS
-#%end
-
 #%option G_OPT_M_NULL_VALUE
 #%end
 
@@ -80,23 +77,23 @@
 #% description: Output header row
 #%end
 
-#%flag
-#% key: f
-#% description: Show the category labels of the grid cell(s)
-#%end
+##%flag
+##% key: f
+##% description: Show the category labels of the grid cell(s)
+##%end
 
-#%flag
-#% key: r
-#% description: Output color values as RRR:GGG:BBB
-#%end
+##%flag
+##% key: r
+##% description: Output color values as RRR:GGG:BBB
+##%end
 
-#%flag
-#% key: i
-#% description: Output integer category values, not cell values
-#%end
+##%flag
+##% key: i
+##% description: Output integer category values, not cell values
+##%end
 
 import copy
-import grass.script as grass
+import grass.script as gscript
 import grass.temporal as tgis
 import grass.pygrass.modules as pymod
 
@@ -112,20 +109,16 @@ def main(options, flags):
     where = options["where"]
     order = options["order"]
     layout = options["layout"]
-    coordinates = options["coordinates"]
     null_value = options["null_value"]
     separator = options["separator"]
     
     nprocs = int(options["nprocs"])
     write_header = flags["n"]
-    output_cat_label = flags["f"]
-    output_color = flags["r"]
-    output_cat = flags["i"]
+    #output_cat_label = flags["f"]
+    #output_color = flags["r"]
+    #output_cat = flags["i"]
     
-    overwrite = grass.overwrite()
-    
-    if coordinates and points:
-        grass.error(_("Options coordinates and points are mutually exclusive"))
+    overwrite = gscript.overwrite()
 
     # Make sure the temporal database exists
     tgis.init()
@@ -139,8 +132,7 @@ def main(options, flags):
     dbif.close()
 
     if not maps:
-        grass.warning(_("Space time raster dataset <%s> is empty") % sp.get_id())
-        return
+        gscript.fatal(_("Space time raster dataset <%s> is empty") % sp.get_id())
 
     # Setup separator
     if separator == "pipe":
@@ -156,29 +148,22 @@ def main(options, flags):
 
     # Setup flags
     flags = ""
-    if output_cat_label is True:
-        flags += "f"
-    if output_color is True:
-        flags += "r"
-    if output_cat is True:
-        flags += "f"
+    #if output_cat_label is True:
+    #    flags += "f"
+    #if output_color is True:
+    #    flags += "r"
+    #if output_cat is True:
+    #    flags += "i"
 
     # Configure the r.what module
-    if points:
-        r_what = pymod.Module("r.what", map="dummy",
-                              output="dummy", run_=False,
-                              separator=separator, points=points,
-                              overwrite=overwrite, flags=flags,
-                              quiet=True)
-    elif coordinates:
-        r_what = pymod.Module("r.what", map="dummy",
-                              output="dummy", run_=False,
-                              separator=separator, 
-                              coordinates=coordinates,
-                              overwrite=overwrite, flags=flags,
-                              quiet=True)
-    else:
-        grass.error(_("Please specify points or coordinates"))
+    r_what = pymod.Module("r.what", map="dummy",
+                          output="dummy", run_=False,
+                          separator=separator, points=points,
+                          overwrite=overwrite, flags=flags,
+                          quiet=True)
+
+    if len(maps) < nprocs:
+        nprocs = len(maps)
 
     # The module queue for parallel execution
     process_queue = pymod.ParallelModuleQueue(int(nprocs))
@@ -209,18 +194,17 @@ def main(options, flags):
 
     count = 0
     for loop in range(num_loops):
-        file_name = "out_%i"%(loop)
+        file_name = gscript.tempfile() + "_%i"%(loop)
         count = process_loop(nprocs, maps, file_name, count, maps_per_process, 
                              remaining_maps_per_loop, output_files, 
                              output_time_list, r_what, process_queue)
     
     process_queue.wait()
     
-    print "Remaining maps", remaining_maps, count, len(maps)
+    gscript.message("Number of raster map layers remaining for sampling %i"%(remaining_maps))
     if remaining_maps > 0:
         # Use a single process if less then 400 maps
         if remaining_maps <= 100:
-            print "Single remain process"
             mod = copy.deepcopy(r_what)
             mod(map=map_names, output=file_name)
             process_queue.put(mod)
@@ -262,8 +246,8 @@ def one_point_per_row_output(separator, output_files, output_time_list,
     
     for count in range(len(output_files)):
         file_name = output_files[count]
+        gscript.message(_("Transforming r.what output file %s"%(file_name)))
         map_list = output_time_list[count]
-        print "Transform", file_name
         in_file = open(file_name, "r")
         for line in in_file:
             line = line.split(separator)
@@ -273,7 +257,7 @@ def one_point_per_row_output(separator, output_files, output_time_list,
             values = line[3:]
             for i in range(len(values)):
                 start, end = map_list[i].get_temporal_extent_as_tuple()
-                coor_string = "%(x)10.7f%(sep)s%(y)10.7f%(sep)s"\
+                coor_string = "%(x)10.10f%(sep)s%(y)10.10f%(sep)s"\
                                %({"x":float(x),"y":float(y),"sep":separator})
                 time_string = "%(start)s%(sep)s%(end)s%(sep)s%(val)s\n"\
                                %({"start":str(start), "end":str(end),
@@ -300,8 +284,8 @@ def one_point_per_col_output(separator, output_files, output_time_list,
     first = True
     for count in range(len(output_files)):
         file_name = output_files[count]
+        gscript.message(_("Transforming r.what output file %s"%(file_name)))
         map_list = output_time_list[count]
-        print "Transform", file_name
         in_file = open(file_name, "r")
         lines = in_file.readlines()
         
@@ -317,7 +301,7 @@ def one_point_per_col_output(separator, output_files, output_time_list,
                 for line in lines:
                     x = matrix[0][0]
                     y = matrix[0][1]
-                    out_file.write("%(sep)s%(x)10.7f;%(y)10.7f"\
+                    out_file.write("%(sep)s%(x)10.10f;%(y)10.10f"\
                                    %({"sep":separator,
                                       "x":float(x), 
                                       "y":float(y)}))
@@ -361,8 +345,8 @@ def one_point_per_timerow_output(separator, output_files, output_time_list,
     first = True
     for count in range(len(output_files)):
         file_name = output_files[count]
+        gscript.message("Transforming r.what output file %s"%(file_name))
         map_list = output_time_list[count]
-        print "Transform orig", file_name
         in_file = open(file_name, "r")
 
         if write_header:
@@ -391,6 +375,7 @@ def one_point_per_timerow_output(separator, output_files, output_time_list,
 
     out_file.write(header + "\n")
 
+    gscript.message(_("Writing the output file %s"%(output)))
     for row in matrix:
         first = True
         for col in row:
@@ -434,7 +419,7 @@ def process_loop(nprocs, maps, file_name, count, maps_per_process,
 
         output_time_list.append(map_list)
 
-        print "Process", process, "Maps", len(map_names)
+        gscript.message(_("Process number %(proc)i samples %(num)i raster maps"%({"proc":process, "num":len(map_names)})))
         mod = copy.deepcopy(r_what)
         mod(map=map_names, output=final_file_name)
         #print(mod.get_bash())
@@ -445,5 +430,5 @@ def process_loop(nprocs, maps, file_name, count, maps_per_process,
 ############################################################################
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gscript.parser()
     main(options, flags)
