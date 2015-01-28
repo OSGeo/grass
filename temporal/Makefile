@@ -29,6 +29,7 @@ SUBDIRS = \
 	t.rast.import \
 	t.rast.gapfill \
 	t.rast.extract \
+	t.rast.what \
 	t.rast3d.list \
 	t.rast3d.extract \
 	t.rast3d.mapcalc \
