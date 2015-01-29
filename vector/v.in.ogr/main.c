@@ -310,12 +310,6 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    G_begin_polygon_area_calculations();	/* Used in geom() */
-
-    /* TODO: threshold might be recalculated with optional geodesic support to meters */
-    if (G_projection() == PROJECTION_LL)
-        G_important_message(_("Note: In latitude-longitude coordinate system specify threshold in degree unit"));
-
     OGRRegisterAll();
 
     /* list supported formats */
@@ -532,9 +526,154 @@ int main(int argc, char *argv[])
 
     /* Get first imported layer to use for extents and projection check */
     Ogr_layer = OGR_DS_GetLayer(Ogr_ds, layers[0]);
+    
+    /* projection check must come before extents check */
+    /* Fetch input map projection in GRASS form. */
+    proj_info = NULL;
+    proj_units = NULL;
+    Ogr_projection = OGR_L_GetSpatialRef(Ogr_layer);	/* should not be freed later */
+
+    /* Do we need to create a new location? */
+    G_get_window(&cellhd);
+    if (param.outloc->answer != NULL) {
+	/* Convert projection information non-interactively as we can't
+	 * assume the user has a terminal open */
+	if (GPJ_osr_to_grass(&cellhd, &proj_info,
+			     &proj_units, Ogr_projection, 0) < 0) {
+	    G_fatal_error(_("Unable to convert input map projection to GRASS "
+			    "format; cannot create new location."));
+	}
+	else {
+            if (0 != G_make_location(param.outloc->answer, &cellhd,
+                                     proj_info, proj_units)) {
+                G_fatal_error(_("Unable to create new location <%s>"),
+                              param.outloc->answer);
+            }
+	    G_message(_("Location <%s> created"), param.outloc->answer);
+
+	    G_unset_window();	/* new location, projection, and window */
+	    G_get_window(&cellhd);
+	}
+
+        /* If the i flag is set, clean up? and exit here */
+        if(flag.no_import->answer)
+        {
+	    OGR_DS_Destroy(Ogr_ds);
+            exit(EXIT_SUCCESS);
+        }
+    }
+    else {
+	int err = 0;
+
+	/* Projection only required for checking so convert non-interactively */
+	if (GPJ_osr_to_grass(&cellhd, &proj_info,
+			     &proj_units, Ogr_projection, 0) < 0)
+	    G_warning(_("Unable to convert input map projection information to "
+		       "GRASS format for checking"));
+
+	/* Does the projection of the current location match the dataset? */
+	/* G_get_window seems to be unreliable if the location has been changed */
+	G_get_default_window(&loc_wind);
+	/* fetch LOCATION PROJ info */
+	if (loc_wind.proj != PROJECTION_XY) {
+	    loc_proj_info = G_get_projinfo();
+	    loc_proj_units = G_get_projunits();
+	}
+
+	if (flag.over->answer) {
+	    cellhd.proj = loc_wind.proj;
+	    cellhd.zone = loc_wind.zone;
+	    G_message(_("Over-riding projection check"));
+	}
+	else if (loc_wind.proj != cellhd.proj
+		 || (err =
+		     G_compare_projections(loc_proj_info, loc_proj_units,
+					   proj_info, proj_units)) != TRUE) {
+	    int i_value;
+
+	    strcpy(error_msg,
+		   _("Projection of dataset does not"
+		     " appear to match current location.\n\n"));
+
+	    /* TODO: output this info sorted by key: */
+	    if (loc_wind.proj != cellhd.proj || err != -2) {
+		if (loc_proj_info != NULL) {
+		    strcat(error_msg, _("GRASS LOCATION PROJ_INFO is:\n"));
+		    for (i_value = 0; i_value < loc_proj_info->nitems;
+			 i_value++)
+			sprintf(error_msg + strlen(error_msg), "%s: %s\n",
+				loc_proj_info->key[i_value],
+				loc_proj_info->value[i_value]);
+		    strcat(error_msg, "\n");
+		}
+
+		if (proj_info != NULL) {
+		    strcat(error_msg, _("Import dataset PROJ_INFO is:\n"));
+		    for (i_value = 0; i_value < proj_info->nitems; i_value++)
+			sprintf(error_msg + strlen(error_msg), "%s: %s\n",
+				proj_info->key[i_value],
+				proj_info->value[i_value]);
+		}
+		else {
+		    strcat(error_msg, _("Import dataset PROJ_INFO is:\n"));
+		    if (cellhd.proj == PROJECTION_XY)
+			sprintf(error_msg + strlen(error_msg),
+				"Dataset proj = %d (unreferenced/unknown)\n",
+				cellhd.proj);
+		    else if (cellhd.proj == PROJECTION_LL)
+			sprintf(error_msg + strlen(error_msg),
+				"Dataset proj = %d (lat/long)\n",
+				cellhd.proj);
+		    else if (cellhd.proj == PROJECTION_UTM)
+			sprintf(error_msg + strlen(error_msg),
+				"Dataset proj = %d (UTM), zone = %d\n",
+				cellhd.proj, cellhd.zone);
+		    else
+			sprintf(error_msg + strlen(error_msg),
+				"Dataset proj = %d (unknown), zone = %d\n",
+				cellhd.proj, cellhd.zone);
+		}
+	    }
+	    else {
+		if (loc_proj_units != NULL) {
+		    strcat(error_msg, "GRASS LOCATION PROJ_UNITS is:\n");
+		    for (i_value = 0; i_value < loc_proj_units->nitems;
+			 i_value++)
+			sprintf(error_msg + strlen(error_msg), "%s: %s\n",
+				loc_proj_units->key[i_value],
+				loc_proj_units->value[i_value]);
+		    strcat(error_msg, "\n");
+		}
+
+		if (proj_units != NULL) {
+		    strcat(error_msg, "Import dataset PROJ_UNITS is:\n");
+		    for (i_value = 0; i_value < proj_units->nitems; i_value++)
+			sprintf(error_msg + strlen(error_msg), "%s: %s\n",
+				proj_units->key[i_value],
+				proj_units->value[i_value]);
+		}
+	    }
+	    sprintf(error_msg + strlen(error_msg),
+		    _("\nYou can use the -o flag to %s to override this projection check.\n"),
+		    G_program_name());
+	    strcat(error_msg,
+		   _("Consider generating a new location with 'location' parameter"
+		    " from input data set.\n"));
+	    G_fatal_error(error_msg);
+	}
+	else {
+	    G_verbose_message(_("Projection of input dataset and current location "
+				"appear to match"));
+	}
+    }
+
+    G_begin_polygon_area_calculations();	/* Used in geom() */
+
+    /* TODO: threshold might be recalculated with optional geodesic support to meters */
+    if (G_projection() == PROJECTION_LL)
+        G_important_message(_("Note: In latitude-longitude coordinate system specify threshold in degree unit"));
 
     /* fetch boundaries */
-    G_get_window(&cellhd);
     if ((OGR_L_GetExtent(Ogr_layer, &oExt, 1)) == OGRERR_NONE) {
 	cellhd.north = ymax = oExt.MaxY;
 	cellhd.south = ymin = oExt.MinY;
@@ -686,141 +825,6 @@ int main(int argc, char *argv[])
 	split_distance = 0.;
 	area_size =
 	    sqrt((cellhd.east - cellhd.west) * (cellhd.north - cellhd.south));
-    }
-
-    /* Fetch input map projection in GRASS form. */
-    proj_info = NULL;
-    proj_units = NULL;
-    Ogr_projection = OGR_L_GetSpatialRef(Ogr_layer);	/* should not be freed later */
-
-    /* Do we need to create a new location? */
-    if (param.outloc->answer != NULL) {
-	/* Convert projection information non-interactively as we can't
-	 * assume the user has a terminal open */
-	if (GPJ_osr_to_grass(&cellhd, &proj_info,
-			     &proj_units, Ogr_projection, 0) < 0) {
-	    G_fatal_error(_("Unable to convert input map projection to GRASS "
-			    "format; cannot create new location."));
-	}
-	else {
-            if (0 != G_make_location(param.outloc->answer, &cellhd,
-                                     proj_info, proj_units)) {
-                G_fatal_error(_("Unable to create new location <%s>"),
-                              param.outloc->answer);
-            }
-	    G_message(_("Location <%s> created"), param.outloc->answer);
-	}
-
-        /* If the i flag is set, clean up? and exit here */
-        if(flag.no_import->answer)
-        {
-	    OGR_DS_Destroy(Ogr_ds);
-            exit(EXIT_SUCCESS);
-        }
-    }
-    else {
-	int err = 0;
-
-	/* Projection only required for checking so convert non-interactively */
-	if (GPJ_osr_to_grass(&cellhd, &proj_info,
-			     &proj_units, Ogr_projection, 0) < 0)
-	    G_warning(_("Unable to convert input map projection information to "
-		       "GRASS format for checking"));
-
-	/* Does the projection of the current location match the dataset? */
-	/* G_get_window seems to be unreliable if the location has been changed */
-	G_get_default_window(&loc_wind);
-	/* fetch LOCATION PROJ info */
-	if (loc_wind.proj != PROJECTION_XY) {
-	    loc_proj_info = G_get_projinfo();
-	    loc_proj_units = G_get_projunits();
-	}
-
-	if (flag.over->answer) {
-	    cellhd.proj = loc_wind.proj;
-	    cellhd.zone = loc_wind.zone;
-	    G_message(_("Over-riding projection check"));
-	}
-	else if (loc_wind.proj != cellhd.proj
-		 || (err =
-		     G_compare_projections(loc_proj_info, loc_proj_units,
-					   proj_info, proj_units)) != TRUE) {
-	    int i_value;
-
-	    strcpy(error_msg,
-		   _("Projection of dataset does not"
-		     " appear to match current location.\n\n"));
-
-	    /* TODO: output this info sorted by key: */
-	    if (loc_wind.proj != cellhd.proj || err != -2) {
-		if (loc_proj_info != NULL) {
-		    strcat(error_msg, _("GRASS LOCATION PROJ_INFO is:\n"));
-		    for (i_value = 0; i_value < loc_proj_info->nitems;
-			 i_value++)
-			sprintf(error_msg + strlen(error_msg), "%s: %s\n",
-				loc_proj_info->key[i_value],
-				loc_proj_info->value[i_value]);
-		    strcat(error_msg, "\n");
-		}
-
-		if (proj_info != NULL) {
-		    strcat(error_msg, _("Import dataset PROJ_INFO is:\n"));
-		    for (i_value = 0; i_value < proj_info->nitems; i_value++)
-			sprintf(error_msg + strlen(error_msg), "%s: %s\n",
-				proj_info->key[i_value],
-				proj_info->value[i_value]);
-		}
-		else {
-		    strcat(error_msg, _("Import dataset PROJ_INFO is:\n"));
-		    if (cellhd.proj == PROJECTION_XY)
-			sprintf(error_msg + strlen(error_msg),
-				"Dataset proj = %d (unreferenced/unknown)\n",
-				cellhd.proj);
-		    else if (cellhd.proj == PROJECTION_LL)
-			sprintf(error_msg + strlen(error_msg),
-				"Dataset proj = %d (lat/long)\n",
-				cellhd.proj);
-		    else if (cellhd.proj == PROJECTION_UTM)
-			sprintf(error_msg + strlen(error_msg),
-				"Dataset proj = %d (UTM), zone = %d\n",
-				cellhd.proj, cellhd.zone);
-		    else
-			sprintf(error_msg + strlen(error_msg),
-				"Dataset proj = %d (unknown), zone = %d\n",
-				cellhd.proj, cellhd.zone);
-		}
-	    }
-	    else {
-		if (loc_proj_units != NULL) {
-		    strcat(error_msg, "GRASS LOCATION PROJ_UNITS is:\n");
-		    for (i_value = 0; i_value < loc_proj_units->nitems;
-			 i_value++)
-			sprintf(error_msg + strlen(error_msg), "%s: %s\n",
-				loc_proj_units->key[i_value],
-				loc_proj_units->value[i_value]);
-		    strcat(error_msg, "\n");
-		}
-
-		if (proj_units != NULL) {
-		    strcat(error_msg, "Import dataset PROJ_UNITS is:\n");
-		    for (i_value = 0; i_value < proj_units->nitems; i_value++)
-			sprintf(error_msg + strlen(error_msg), "%s: %s\n",
-				proj_units->key[i_value],
-				proj_units->value[i_value]);
-		}
-	    }
-	    sprintf(error_msg + strlen(error_msg),
-		    _("\nYou can use the -o flag to %s to override this projection check.\n"),
-		    G_program_name());
-	    strcat(error_msg,
-		   _("Consider generating a new location with 'location' parameter"
-		    " from input data set.\n"));
-	    G_fatal_error(error_msg);
-	}
-	else {
-	    G_verbose_message(_("Projection of input dataset and current location "
-				"appear to match"));
-	}
     }
 
     db_init_string(&sql);
