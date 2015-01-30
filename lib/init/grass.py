@@ -770,7 +770,6 @@ def load_env():
         isis3rdparty = os.getenv('ISIS_3RDPARTY')
         os.environ['LD_LIBRARY_PATH'] = libpath + os.pathsep + isislibpath + os.pathsep + isis3rdparty
 
-
 def set_language():
     # This function is used to override system default language and locale
     # Such override can be requested only from wxGUI
@@ -783,6 +782,7 @@ def set_language():
     import locale
     
     language = 'None' # Such string sometimes is present in wx file
+    encoding = None
     
     # Override value is stored in wxGUI preferences file.
     # As it's the only thing required, we'll just grep it out.
@@ -794,7 +794,7 @@ def set_language():
     else:
         for line in fd:
             if re.search('^language', line):
-                line = line.rstrip('%s' % os.linesep)
+                line = line.rstrip(' %s' % os.linesep)
                 language = ''.join(line.split(';')[-1:])
                 break
         fd.close()
@@ -803,51 +803,64 @@ def set_language():
         # Language override is disabled (system language specified)
         # As by default program runs with C locale, but users expect to
         # have their default locale, we'll just set default locale
-        locale.setlocale(locale.LC_ALL, '')
-        if windows and os.getenv('LANG') is None:
-            language, encoding = locale.getdefaultlocale()
-            os.environ['LANG'] = language
-            gettext.install('grasslibs', os.path.join(gisbase, 'locale'), codeset=encoding)
-        else:
-            gettext.install('grasslibs', os.path.join(gisbase, 'locale'), unicode=True)
-        return
-    
-    warning("A language override has been requested. Trying to switch GRASS into '%s'..." % language)
-    
-    # Even if setting locale will fail, let's set LANG in a hope,
-    # that UI will use it GRASS texts will be in selected language,
-    # system messages (i.e. OK, Cancel etc.) - in system default
-    # language
-    os.environ['LANGUAGE'] = language
-    os.environ['LANG'] = language
-    
-    try:
-        locale.setlocale(locale.LC_ALL, language)
-    except locale.Error as e:
         try:
-            # Locale lang.encoding might be missing. Let's try
-            # UTF-8 encoding before giving up as on Linux systems
-            # lang.UTF-8 locales are more common than legacy
-            # ISO-8859 ones.
-            language = locale.normalize('%s.UTF-8' % (language))
+            locale.setlocale(locale.LC_ALL, '')
+        except locale.Error as e:
+            # If we get here, system locale settings are terribly wrong
+            # There is no point to continue as GRASS/Python will fail
+            # in some other unpredictable way.
+            print "System locale is not usable. It indicates misconfigured environment."
+            print "Reported error message: %s" % e
+            sys.exit("Fix system locale settings and then try again.")
+        
+        language, encoding = locale.getdefaultlocale()
+        if not language:
+            warning("Default locale settings are missing. GRASS running with C locale.")
+            return
+    
+    else:
+        warning("A language override has been requested. Trying to switch GRASS into '%s'..." % language)
+        
+        try:
             locale.setlocale(locale.LC_ALL, language)
         except locale.Error as e:
-            # The last attempt...
             try:
-                language = locale.normalize('%s.%s' % (language, locale.getpreferredencoding()))
-                locale.setlocale(locale.LC_ALL, language)
+                # Locale lang.encoding might be missing. Let's try
+                # UTF-8 encoding before giving up as on Linux systems
+                # lang.UTF-8 locales are more common than legacy
+                # ISO-8859 ones.
+                encoding = 'UTF-8'
+                normalized = locale.normalize('%s.%s' % (language, encoding))
+                locale.setlocale(locale.LC_ALL, normalized)
             except locale.Error as e:
-                # If we got so far, attempts to set up language and locale have failed
-                # on this system
-                sys.stderr.write("Failed to enforce user specified language '%s' with error: '%s'\n" % (language, e))
-                sys.stderr.write("A LANGUAGE environmental variable has been set.\nPart of messages will be displayed in the requested language.\n")
-                return
-
+                # The last attempt...
+                try:
+                    encoding = locale.getpreferredencoding()
+                    normalized = locale.normalize('%s.%s' % (language, encoding))
+                    locale.setlocale(locale.LC_ALL, normalized)
+                except locale.Error as e:
+                    # If we got so far, attempts to set up language and locale have failed
+                    # on this system
+                    sys.stderr.write("Failed to enforce user specified language '%s' with error: '%s'\n" % (language, e))
+                    sys.stderr.write("A LANGUAGE environmental variable has been set.\nPart of messages will be displayed in the requested language.\n")
+                    # Even if setting locale will fail, let's set LANG in a hope,
+                    # that UI will use it GRASS texts will be in selected language,
+                    # system messages (i.e. OK, Cancel etc.) - in system default
+                    # language
+                    os.environ['LANGUAGE'] = language
+                    return
+    
     # Set up environment for subprocesses
+    os.environ['LANGUAGE'] = language
+    os.environ['LANG'] = language
+    if encoding:
+        normalized = locale.normalize('%s.%s' % (language, encoding))
+    else:
+        normalized = language
     for lc in ('LC_CTYPE', 'LC_MESSAGES', 'LC_TIME', 'LC_COLLATE',
                'LC_MONETARY', 'LC_PAPER', 'LC_NAME', 'LC_ADDRESS',
                'LC_TELEPHONE', 'LC_MEASUREMENT', 'LC_IDENTIFICATION'):
-        os.environ[lc] = language
+        os.environ[lc] = normalized
 
     # Some code in GRASS might not like other decimal separators than .
     # Other potential sources for problems are: LC_TIME LC_CTYPE
@@ -855,9 +868,12 @@ def set_language():
     os.environ['LC_NUMERIC'] = 'C'
     if os.getenv('LC_ALL'):
         del os.environ['LC_ALL']  # Remove LC_ALL to not override LC_NUMERIC
-
+    
     # From now on enforce the new language
-    gettext.install('grasslibs', os.path.join(gisbase, 'locale'))
+    if encoding: 
+        gettext.install('grasslibs', os.path.join(gisbase, 'locale'), codeset=encoding)
+    else:
+        gettext.install('grasslibs', os.path.join(gisbase, 'locale'))
 
 def check_lock():
     global lockfile
