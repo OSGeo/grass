@@ -17,7 +17,7 @@
 #               command line options for setting the GISDBASE, LOCATION,
 #               and/or MAPSET. Finally it starts GRASS with the appropriate
 #               user interface and cleans up after it is finished.
-# COPYRIGHT:    (C) 2000-2014 by the GRASS Development Team
+# COPYRIGHT:    (C) 2000-2015 by the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -1016,7 +1016,7 @@ def show_banner():
 
 
 def say_hello():
-    sys.stderr.write(_("Welcome to GRASS %s") % grass_version)
+    sys.stderr.write(_("Welcome to GRASS GIS %s") % grass_version)
     if grass_version.endswith('svn'):
         try:
             filerev = open(os.path.join(gisbase, 'etc', 'VERSIONNUMBER'))
@@ -1035,7 +1035,7 @@ r"""
 %-41s%s (%s)
 %-41sg.manual -i
 %-41sg.version -c
-""" % (_("GRASS homepage:"),
+""" % (_("GRASS GIS homepage:"),
        _("This version running through:"),
        shellname, os.getenv('SHELL'),
        _("Help is available with the command:"),
@@ -1070,7 +1070,7 @@ def csh_startup():
 
     f.write("set prompt = '\\\n")
     f.write("Mapset <%s> in Location <%s> \\\n" % (mapset, location_name))
-    f.write("GRASS %s > '\n" % grass_version)
+    f.write("GRASS GIS %s > '\n" % grass_version)
     f.write("set BOGUS=``;unset BOGUS\n")
 
     path = os.path.join(userhome, ".grass.cshrc") # left for backward compatibility
@@ -1261,6 +1261,7 @@ def parse_cmdline():
     for i in sys.argv[1:]:
         # Check if the user asked for the version
         if i in ["-v", "--version"]:
+            message("GRASS GIS %s" % grass_version)
             message('\n' + readfile(gfile("etc", "license")))
             sys.exit()
         # Check if the user asked for help
