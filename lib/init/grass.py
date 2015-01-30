@@ -867,7 +867,7 @@ def set_language():
     if encoding: 
         gettext.install('grasslibs', os.path.join(gisbase, 'locale'), codeset=encoding)
     else:
-        gettext.install('grasslibs', os.path.join(gisbase, 'locale'), unicode=True)
+        gettext.install('grasslibs', os.path.join(gisbase, 'locale'))
 
 def check_lock():
     global lockfile, force_gislock_removal
