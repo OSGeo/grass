@@ -26,6 +26,11 @@
 
 #%option G_OPT_V_INPUT
 #% key: points
+#% required: no
+#%end
+
+#%option G_OPT_M_COORDS
+#% required: no
 #%end
 
 #%option G_OPT_STRDS_INPUT
@@ -33,6 +38,9 @@
 #%end
 
 #%option G_OPT_F_OUTPUT
+#% required: no
+#% description: Name for the output file or "-" in case stdout should be used
+#% answer: -
 #%end
 
 #%option G_OPT_T_WHERE
@@ -67,7 +75,7 @@
 #%option
 #% key: nprocs
 #% type: integer
-#% description: Number of r.neighbor processes to run in parallel
+#% description: Number of r.what processes to run in parallel
 #% required: no
 #% multiple: no
 #% answer: 1
@@ -94,6 +102,7 @@
 ##% description: Output integer category values, not cell values
 ##%end
 
+import sys
 import copy
 import grass.script as gscript
 import grass.temporal as tgis
@@ -106,6 +115,7 @@ def main(options, flags):
 
     # Get the options
     points = options["points"]
+    coordinates = options["coordinates"] 
     strds = options["strds"]
     output = options["output"]
     where = options["where"]
@@ -121,6 +131,12 @@ def main(options, flags):
     #output_cat = flags["i"]
     
     overwrite = gscript.overwrite()
+    
+    if coordinates and points: 
+        gscript.fatal(_("Options coordinates and points are mutually exclusive"))
+
+    if not coordinates and not points: 
+        gscript.fatal(_("Please specify the coordinates or the points option, to provide the sampling coordinates"))
 
     # Make sure the temporal database exists
     tgis.init()
@@ -158,11 +174,23 @@ def main(options, flags):
     #    flags += "i"
 
     # Configure the r.what module
-    r_what = pymod.Module("r.what", map="dummy",
-                          output="dummy", run_=False,
-                          separator=separator, points=points,
-                          overwrite=overwrite, flags=flags,
-                          quiet=True)
+    if points: 
+        r_what = pymod.Module("r.what", map="dummy", 
+                                        output="dummy", run_=False, 
+                                        separator=separator, points=points, 
+                                        overwrite=overwrite, flags=flags, 
+                                        quiet=True) 
+    elif coordinates: 
+        # Create a list of values
+        coord_list = coordinates.split(",")
+        r_what = pymod.Module("r.what", map="dummy", 
+                                        output="dummy", run_=False, 
+                                        separator=separator,  
+                                        coordinates=coord_list, 
+                                        overwrite=overwrite, flags=flags, 
+                                        quiet=True) 
+    else: 
+        grass.error(_("Please specify points or coordinates"))
 
     if len(maps) < nprocs:
         nprocs = len(maps)
@@ -203,9 +231,9 @@ def main(options, flags):
     
     process_queue.wait()
     
-    gscript.message("Number of raster map layers remaining for sampling %i"%(remaining_maps))
+    gscript.verbose("Number of raster map layers remaining for sampling %i"%(remaining_maps))
     if remaining_maps > 0:
-        # Use a single process if less then 400 maps
+        # Use a single process if less then 100 maps
         if remaining_maps <= 100:
             mod = copy.deepcopy(r_what)
             mod(map=map_names, output=file_name)
@@ -241,14 +269,15 @@ def one_point_per_row_output(separator, output_files, output_time_list,
        output is of type: x,y,start,end,value
     """
     # open the output file for writing
-    out_file = open(output, "w")
+    out_file = open(output, 'w') if output != "-" else sys.stdout
+    
     if write_header is True:
         out_file.write("x%(sep)sy%(sep)sstart%(sep)send%(sep)svalue\n"\
                        %({"sep":separator}))
     
     for count in range(len(output_files)):
         file_name = output_files[count]
-        gscript.message(_("Transforming r.what output file %s"%(file_name)))
+        gscript.verbose(_("Transforming r.what output file %s"%(file_name)))
         map_list = output_time_list[count]
         in_file = open(file_name, "r")
         for line in in_file:
@@ -268,7 +297,9 @@ def one_point_per_row_output(separator, output_files, output_time_list,
                 out_file.write(coor_string + time_string)
         
         in_file.close()
-    out_file.close()
+    
+    if out_file is not sys.stdout:
+        out_file.close()
         
 ############################################################################
 
@@ -281,12 +312,12 @@ def one_point_per_col_output(separator, output_files, output_time_list,
        Each row represents a single raster map, hence a single time stamp
     """
     # open the output file for writing
-    out_file = open(output, "w")
+    out_file = open(output, 'w') if output != "-" else sys.stdout
         
     first = True
     for count in range(len(output_files)):
         file_name = output_files[count]
-        gscript.message(_("Transforming r.what output file %s"%(file_name)))
+        gscript.verbose(_("Transforming r.what output file %s"%(file_name)))
         map_list = output_time_list[count]
         in_file = open(file_name, "r")
         lines = in_file.readlines()
@@ -299,10 +330,10 @@ def one_point_per_col_output(separator, output_files, output_time_list,
         
         if first is True:
             if write_header is True:
-                out_file.write("star%(sep)send"%({"sep":separator}))
-                for line in lines:
-                    x = matrix[0][0]
-                    y = matrix[0][1]
+                out_file.write("start%(sep)send"%({"sep":separator}))
+                for row in matrix:
+                    x = row[0]
+                    y = row[1]
                     out_file.write("%(sep)s%(x)10.10f;%(y)10.10f"\
                                    %({"sep":separator,
                                       "x":float(x), 
@@ -325,7 +356,8 @@ def one_point_per_col_output(separator, output_files, output_time_list,
             out_file.write("\n")
 
         in_file.close()
-    out_file.close()
+    if out_file is not sys.stdout:
+        out_file.close()
 
 ############################################################################
 
@@ -339,7 +371,7 @@ def one_point_per_timerow_output(separator, output_files, output_time_list,
         3730731.49590371|5642483.51236521|6|8|7|7
         3581249.04638104|5634411.97526282|5|8|7|7
     """
-    out_file = open(output, "w")
+    out_file = open(output, 'w') if output != "-" else sys.stdout
 
     matrix = []
     header = ""
@@ -347,7 +379,7 @@ def one_point_per_timerow_output(separator, output_files, output_time_list,
     first = True
     for count in range(len(output_files)):
         file_name = output_files[count]
-        gscript.message("Transforming r.what output file %s"%(file_name))
+        gscript.verbose("Transforming r.what output file %s"%(file_name))
         map_list = output_time_list[count]
         in_file = open(file_name, "r")
 
@@ -377,7 +409,7 @@ def one_point_per_timerow_output(separator, output_files, output_time_list,
 
     out_file.write(header + "\n")
 
-    gscript.message(_("Writing the output file <%s>"%(output)))
+    gscript.verbose(_("Writing the output file <%s>"%(output)))
     for row in matrix:
         first = True
         for col in row:
@@ -390,8 +422,8 @@ def one_point_per_timerow_output(separator, output_files, output_time_list,
             first = False
 
         out_file.write("\n")
-
-    out_file.close()
+    if out_file is not sys.stdout:
+        out_file.close()
  
 ############################################################################
 
@@ -421,7 +453,9 @@ def process_loop(nprocs, maps, file_name, count, maps_per_process,
 
         output_time_list.append(map_list)
 
-        gscript.message(_("Process number %(proc)i samples %(num)i raster maps"%({"proc":process, "num":len(map_names)})))
+        gscript.verbose(_("Process maps %(samp_start)i to %(samp_end)i (of %(total)i)"\
+                                  %({"samp_start":count-len(map_names)+1, 
+                                  "samp_end":count, "total":len(maps)})))
         mod = copy.deepcopy(r_what)
         mod(map=map_names, output=final_file_name)
         #print(mod.get_bash())
