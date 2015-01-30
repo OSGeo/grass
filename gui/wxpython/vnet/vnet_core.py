@@ -282,15 +282,15 @@ class VNETManager:
 
         return True
 
-    def _createTtbDone(self, cmd, returncode):
+    def _createTtbDone(self, event):
 
-        if returncode != 0:
+        if event.returncode != 0:
             GMessage(parent = self.guiparent,
                      message = _("Creation of turntable failed."))
             return
         else:
             params = {}
-            for c in cmd:
+            for c in event.cmd:
                 spl_c = c.split("=")
                 if len(spl_c) != 2:
                     continue
@@ -302,7 +302,7 @@ class VNETManager:
 
             self.vnet_data.SetParams(params, {})
 
-        self.ttbCreated.emit(returncode = returncode)
+        self.ttbCreated.emit(returncode = event.returncode)
 
     def SaveTmpLayer(self, layer_name):
         """Permanently saves temporary map of analysis result"""
@@ -460,24 +460,24 @@ class VNETAnalyses:
         else:
             self.goutput.RunCmd(command = cmdParams, onDone = self._vnetPathRunAnDone)
 
-    def _vnetPathRunTurnsAnDone(self, cmd, returncode):
+    def _vnetPathRunTurnsAnDone(self, event):
         #TODO
         #self.tmp_maps.DeleteTmpMap(self.tmpTurnAn)
-        self._vnetPathRunAnDone(cmd, returncode)
+        self._vnetPathRunAnDone(event)
 
-    def _vnetPathRunAnDone(self, cmd, returncode):
+    def _vnetPathRunAnDone(self, event):
         """Called when v.net.path analysis is done"""
         try_remove(self.coordsTmpFile)
 
-        self._onDone(cmd, returncode)
+        self._onDone(event)
 
-    def _onDone(self, cmd, returncode):
-        for c in cmd:
+    def _onDone(self, event):
+        for c in event.cmd:
             if "output=" in c:
                 output = c.split("=")[1]
                 break  
 
-        self.onAnDone(cmd, returncode, output)
+        self.onAnDone(event.cmd, event.returncode, output)
 
     def _runTurnsAn(self, analysis, output, params, flags, catPts):
 
@@ -585,11 +585,11 @@ class VNETAnalyses:
 
         try_remove(sqlFile)
 
-    def _runTurnsAnDone(self, cmd, returncode):
+    def _runTurnsAnDone(self, event):
         """Called when analysis is done"""
         #self.tmp_maps.DeleteTmpMap(self.tmpTurnAn) #TODO remove earlier (OnDone lambda?)
  
-        self._onDone(cmd, returncode)
+        self._onDone(event)
 
 
     def _runAn(self, analysis, output, params, flags, catPts):
@@ -691,7 +691,7 @@ class VNETAnalyses:
         self._prepareCmd(cmdParams)
         self.goutput.RunCmd(command = cmdParams, onDone = self._runAnDone)
 
-    def _runAnDone(self, cmd, returncode):
+    def _runAnDone(self, event):
         """Called when analysis is done"""
         self.tmp_maps.DeleteTmpMap(self.tmpInPts) #TODO remove earlier (OnDone lambda?)
         self.tmp_maps.DeleteTmpMap(self.tmpInPtsConnected)
@@ -700,7 +700,7 @@ class VNETAnalyses:
         if cmd[0] == "v.net.flow":
             self.tmp_maps.DeleteTmpMap(self.vnetFlowTmpCut)
 
-        self._onDone(cmd, returncode)
+        self._onDone(event)
 
     def _setInputParams(self, analysis, params, flags):
         """Return list of chosen values (vector map, layers). 

@@ -457,7 +457,6 @@ class GConsole(wx.EvtHandler):
         if command[0] in globalvar.grassCmd:
             # send GRASS command without arguments to GUI command interface
             # except ignored commands (event is emitted)
-
             if self._ignoredCmdPattern and \
               re.compile(self._ignoredCmdPattern).search(' '.join(command)) and \
               '--help' not in command and '--ui' not in command:
@@ -628,7 +627,7 @@ class GConsole(wx.EvtHandler):
                          notification=event.notification)
 
         if event.onDone:
-            event.onDone(cmd=event.cmd, returncode=event.returncode)
+            event.onDone(event)
 
         self.cmdOutputTimer.Stop()
 
@@ -670,7 +669,8 @@ class GConsole(wx.EvtHandler):
                     for lname in lnames:
                         if '@' not in lname:
                             lname += '@' + grass.gisenv()['MAPSET']
-                        self.mapCreated.emit(name=lname, ltype=prompt)
+                        if grass.find_file(lname, element=p.get('element'))['fullname']:
+                            self.mapCreated.emit(name=lname, ltype=prompt)
         if name == 'r.mask':
             self.updateMap.emit()
         

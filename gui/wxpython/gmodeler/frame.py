@@ -503,7 +503,7 @@ class ModelFrame(wx.Frame):
         """Run entire model"""
         self.model.Run(self._gconsole, self.OnDone, parent = self)
         
-    def OnDone(self, cmd, returncode):
+    def OnDone(self, event):
         """Computation finished
 
         .. todo::
@@ -1728,7 +1728,7 @@ class PythonPanel(wx.Panel):
         
         event.Skip()
 
-    def OnDone(self, cmd, returncode):
+    def OnDone(self, event):
         """Python script finished"""
         try_remove(self.filename)
         self.filename = None
