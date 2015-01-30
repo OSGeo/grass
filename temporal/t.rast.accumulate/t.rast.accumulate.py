@@ -119,7 +119,7 @@
 #%option
 #% key: method
 #% type: string
-#% description: This method will be applied to compute the accumulative values from the input maps
+#% description: This method will be applied to compute the accumulative values from the input maps in a single granule
 #% options: mean,gdd,bedd,huglin
 #% answer: mean
 #% required: no

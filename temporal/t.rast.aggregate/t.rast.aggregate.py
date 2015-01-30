@@ -67,7 +67,7 @@
 #%option
 #% key: nprocs
 #% type: integer
-#% description: Number of r.mapcalc processes to run in parallel
+#% description: Number of r.series processes to run in parallel
 #% required: no
 #% multiple: no
 #% answer: 1
