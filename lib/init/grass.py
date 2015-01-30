@@ -60,7 +60,7 @@ gisbase = os.path.normpath(gisbase)
 
 # i18N
 import gettext
-gettext.install('grasslibs', os.path.join(gisbase, 'locale'), unicode=True)
+gettext.install('grasslibs', os.path.join(gisbase, 'locale'))
 
 tmpdir = None
 lockfile = None
