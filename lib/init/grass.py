@@ -60,7 +60,7 @@ gisbase = os.path.normpath(gisbase)
 
 # i18N
 import gettext
-gettext.install('grasslibs', os.path.join(gisbase, 'locale'), unicode=True)
+gettext.install('grasslibs', os.path.join(gisbase, 'locale'))
 
 tmpdir = None
 lockfile = None
@@ -857,8 +857,7 @@ def set_language():
         del os.environ['LC_ALL']  # Remove LC_ALL to not override LC_NUMERIC
 
     # From now on enforce the new language
-    gettext.install('grasslibs', os.path.join(gisbase, 'locale'), unicode=True)
-
+    gettext.install('grasslibs', os.path.join(gisbase, 'locale'))
 
 def check_lock():
     global lockfile
