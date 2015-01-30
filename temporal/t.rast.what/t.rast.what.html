@@ -1,8 +1,7 @@
 <h2>DESCRIPTION</h2>
 
 <em>t.rast.what</em> is designed to sample space time raster datasets
-at specific point coordinates from a vector map layer 
-using <a href="r.what.html">r.what</a> internally. 
+at specific point coordinates using <a href="r.what.html">r.what</a> internally. 
 The output of <a href="r.what.html">r.what</a> 
 is transformed to different output layouts.
 The output layouts can be specified using the <em>layout</em> option.
@@ -21,15 +20,18 @@ subsets of a space time raster dataset in parallel. Several intermediate
 text files will be created that are merged into a single file at the
 end of the processing.
 <p>
-Coordinates must be provided as vector map using the <em>points</em> option.
+Coordinates can be provided as vector map using the <em>points</em> option
+or as comma separated coordinate list with the <em>coordinates </em>option.
 <p>
-An output file must be specified using the <em>output</em> option.
+An output file can be specified using the <em>output</em> option. 
+Stdout will be used if no output is specified or if the 
+<em>output</em> option is set to "-".
     
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
 
-In this example we sample a space time raster dataset that contains
-4 raster map layer with 3 random vector points. The generated output
-of all layout options are demonstrated. 
+<h3>Data preparation</h3>
+In the following examples we sample a space time raster dataset that contains
+4 raster map layers. First we create the STRDS that will be sampled with t.rast.what.
 
 <div class="code"><pre>
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10
@@ -40,57 +42,75 @@ r.mapcalc expr="a_2 = 2" -s
 r.mapcalc expr="a_3 = 3" -s
 r.mapcalc expr="a_4 = 4" -s
 
-# Vector points for sampling
-v.random output=points n=3
-
 t.create type=strds output=A title="A test" descr="A test"
 
 t.register -i type=raster input=A maps=a_1,a_2,a_3,a_4 \
     start='1990-01-01' increment="1 month"
+</pre></div>
 
-# Create 3 output files of the same data using different layouts
+<h3>Example 1</h3>
 
-# Output in "row" order
+The first approach uses text coordinates as input and stdout as output,
+the layout is one coordinate(point per column:
+
+
+<div class="code"><pre>
+t.rast.what strds=A coordinates="115,36,79,45" layout=col -n
+
+start|end|115.0000000000;36.0000000000|79.0000000000;45.0000000000
+1990-01-01 00:00:00|1990-02-01 00:00:00|1|1
+1990-02-01 00:00:00|1990-03-01 00:00:00|2|2
+1990-03-01 00:00:00|1990-04-01 00:00:00|3|3
+1990-04-01 00:00:00|1990-05-01 00:00:00|4|4
+</pre></div>
+
+<h3>Example 2</h3>
+
+A vector map layer can be used as input to sample the STRDS. All
+three available layouts are demonstrated using the vector map for sampling.
+
+<div class="code"><pre>
+# First create the vector map layer based on random points
+v.random output=points n=3 seed=1
+
+# Row layout using a text file as output
 t.rast.what strds=A points=points output=result.txt layout=row -n
 
 cat result.txt
 
-x|y|start|end|value
-107.9761951|14.4780173|1990-01-01 00:00:00|1990-02-01 00:00:00|1
-107.9761951|14.4780173|1990-02-01 00:00:00|1990-03-01 00:00:00|2
-107.9761951|14.4780173|1990-03-01 00:00:00|1990-04-01 00:00:00|3
-107.9761951|14.4780173|1990-04-01 00:00:00|1990-05-01 00:00:00|4
-48.1672585|75.5186798|1990-01-01 00:00:00|1990-02-01 00:00:00|1
-48.1672585|75.5186798|1990-02-01 00:00:00|1990-03-01 00:00:00|2
-48.1672585|75.5186798|1990-03-01 00:00:00|1990-04-01 00:00:00|3
-48.1672585|75.5186798|1990-04-01 00:00:00|1990-05-01 00:00:00|4
-114.3944372|36.2390227|1990-01-01 00:00:00|1990-02-01 00:00:00|1
-114.3944372|36.2390227|1990-02-01 00:00:00|1990-03-01 00:00:00|2
-114.3944372|36.2390227|1990-03-01 00:00:00|1990-04-01 00:00:00|3
-114.3944372|36.2390227|1990-04-01 00:00:00|1990-05-01 00:00:00|4
+115.0043586274|36.3593955783|1990-01-01 00:00:00|1990-02-01 00:00:00|1
+115.0043586274|36.3593955783|1990-02-01 00:00:00|1990-03-01 00:00:00|2
+115.0043586274|36.3593955783|1990-03-01 00:00:00|1990-04-01 00:00:00|3
+115.0043586274|36.3593955783|1990-04-01 00:00:00|1990-05-01 00:00:00|4
+79.6816763826|45.2391522853|1990-01-01 00:00:00|1990-02-01 00:00:00|1
+79.6816763826|45.2391522853|1990-02-01 00:00:00|1990-03-01 00:00:00|2
+79.6816763826|45.2391522853|1990-03-01 00:00:00|1990-04-01 00:00:00|3
+79.6816763826|45.2391522853|1990-04-01 00:00:00|1990-05-01 00:00:00|4
+97.4892579600|79.2347263950|1990-01-01 00:00:00|1990-02-01 00:00:00|1
+97.4892579600|79.2347263950|1990-02-01 00:00:00|1990-03-01 00:00:00|2
+97.4892579600|79.2347263950|1990-03-01 00:00:00|1990-04-01 00:00:00|3
+97.4892579600|79.2347263950|1990-04-01 00:00:00|1990-05-01 00:00:00|4
 
-# Output in column order
-t.rast.what strds=A points=points output=result.txt layout=col -n
 
-cat result.txt
+# Column layout order using stdout as output
+t.rast.what strds=A points=points layout=col -n
 
-star|end|107.9761951;14.4780173|107.9761951;14.4780173|107.9761951;14.4780173
+start|end|115.0043586274;36.3593955783|79.6816763826;45.2391522853|97.4892579600;79.2347263950
 1990-01-01 00:00:00|1990-02-01 00:00:00|1|1|1
 1990-02-01 00:00:00|1990-03-01 00:00:00|2|2|2
 1990-03-01 00:00:00|1990-04-01 00:00:00|3|3|3
 1990-04-01 00:00:00|1990-05-01 00:00:00|4|4|4
 
-# Output in "timerow" order, one time series per row 
+# Timerow layout, one time series per row 
 # using the where statement to select a subset of the STRDS
-t.rast.what strds=A points=points output=result.txt \
+# and stdout as output
+t.rast.what strds=A points=points \
     where="start_time >= '1990-03-01'" layout=timerow -n
 
-cat result.txt
-
 x|y|1990-03-01 00:00:00;1990-04-01 00:00:00|1990-04-01 00:00:00;1990-05-01 00:00:00
-87.1990551431732|47.8023402837766|3|4
-111.822716201101|60.8478739587795|3|4
-33.1868681892585|14.4679757612965|3|4
+115.004358627375|36.3593955782903|3|4
+79.681676382576|45.2391522852909|3|4
+97.4892579600048|79.2347263950131|3|4
 </pre></div>
 
 <h2>SEE ALSO</h2>
