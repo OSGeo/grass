@@ -408,3 +408,40 @@ int G__has_required_rule(void)
     }
     return FALSE;
 }
+
+static const char * const rule_types[] = {
+    "exclusive",
+    "required",
+    "requires",
+    "requires-all",
+    "excludes",
+    "collective"
+};
+
+void G__describe_option_rules_xml(FILE *fp)
+{
+    unsigned int i, j;
+
+    if (!rules.count)
+	return;
+
+    fprintf(fp, "\t<rules>\n");
+    for (i = 0; i < rules.count; i++) {
+	const struct rule *rule = &((const struct rule *) rules.data)[i];
+	fprintf(fp, "\t\t<rule type=\"%s\">\n", rule_types[rule->type]);
+	for (j = 0; j < rule->count; j++) {
+	    void *p = rule->opts[j];
+	    if (is_flag(p)) {
+		const struct Flag *flag = (const struct Flag *) p;
+		fprintf(fp, "\t\t\t<rule-flag key=\"%c\"/>\n", flag->key);
+	    }
+	    else {
+		const struct Option *opt = (const struct Option *) p;
+		fprintf(fp, "\t\t\t<rule-option key=\"%s\"/>\n", opt->key);
+	    }
+	}
+	fprintf(fp, "\t\t</rule>\n");
+    }
+    fprintf(fp, "\t</rules>\n");
+}
+
