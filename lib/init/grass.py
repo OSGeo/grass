@@ -813,7 +813,7 @@ def set_language():
             return
     
     else:
-        warning("A language override has been requested. Trying to switch GRASS into '%s'..." % language)
+        message("A language override has been requested. Trying to switch GRASS into '%s'..." % language)
         
         try:
             locale.setlocale(locale.LC_ALL, language)
