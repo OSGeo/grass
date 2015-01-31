@@ -809,11 +809,11 @@ def set_language():
         
         language, encoding = locale.getdefaultlocale()
         if not language:
-            warning("Default locale settings are missing. GRASS running with C locale.")
+            warning(_("Default locale settings are missing. GRASS running with C locale."))
             return
     
     else:
-        message("A language override has been requested. Trying to switch GRASS into '%s'..." % language)
+        message(_("A language override has been requested. Trying to switch GRASS into '%s'...") % language)
         
         try:
             locale.setlocale(locale.LC_ALL, language)
