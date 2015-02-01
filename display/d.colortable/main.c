@@ -42,7 +42,7 @@ int main(int argc, char **argv)
     int cur_dot_row, cur_dot_col;
     int dots_per_line, dots_per_col;
     int atcat;
-    int white, black;
+    int black;
     int atcol, atline;
     int count, offset;
     double t, b, l, r;
@@ -59,6 +59,7 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("display"));
     G_add_keyword(_("raster"));
+    G_add_keyword(_("color table"));
     module->description =
 	_("Displays the color table associated with a raster map layer.");
 
@@ -175,7 +176,6 @@ int main(int argc, char **argv)
     x_box[3] = 0;			y_box[3] = (dots_per_line - 6);
     x_box[4] = (6 - dots_per_col);	y_box[4] = 0;
 
-    white = D_translate_color("white");
     black = D_translate_color("black");
     Rast_set_c_null_value(&atcat, 1);
 
