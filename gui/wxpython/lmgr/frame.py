@@ -1281,8 +1281,12 @@ class GMFrame(wx.Frame):
                 if display['pos']:
                     mapdisp.SetPosition(display['pos'])
                 if display['size']:
+                    if globalvar.wxPython3:
+                        # incorrect height
+                        # TODO: fix it in better way (...)
+                        display['size'] = (display['size'][0], display['size'][1] + 32)
                     mapdisp.SetSize(display['size'])
-                    
+            
             # set extent if defined
             if display['extent']:
                 w, s, e, n, b, t = display['extent']
