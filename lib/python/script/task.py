@@ -25,7 +25,7 @@ try:
 except ImportError:
     import elementtree.ElementTree as etree # Python <= 2.4
 
-from utils import decode
+from utils import decode, split
 from core import *
 
 
@@ -581,3 +581,68 @@ def command_info(cmd):
     cmdinfo['usage'] = usage
 
     return cmdinfo
+
+def cmdtuple_to_list(cmd):
+    """Convert command tuple to list.
+    
+    :param tuple cmd: GRASS command to be converted
+    
+    :return: command in list
+    """
+    cmdList = []
+    if not cmd:
+        return cmdList
+    
+    cmdList.append(cmd[0])
+    
+    if 'flags' in cmd[1]:
+        for flag in cmd[1]['flags']:
+            cmdList.append('-' + flag)
+    for flag in ('help', 'verbose', 'quiet', 'overwrite'):
+        if flag in cmd[1] and cmd[1][flag] is True:
+            cmdList.append('--' + flag)
+    
+    for k, v in cmd[1].iteritems():
+        if k in ('flags', 'help', 'verbose', 'quiet', 'overwrite'):
+            continue
+        cmdList.append('%s=%s' % (k, v))
+            
+    return cmdList
+
+def cmdlist_to_tuple(cmd):
+    """Convert command list to tuple for run_command() and others
+
+    :param list cmd: GRASS command to be converted
+
+    :return: command as tuple
+    """
+    if len(cmd) < 1:
+        return None
+    
+    dcmd = {}
+    for item in cmd[1:]:
+        if '=' in item: # params
+            key, value = item.split('=', 1)
+            dcmd[str(key)] = str(value).replace('"', '')
+        elif item[:2] == '--': # long flags
+            flag = item[2:]
+            if flag in ('help', 'verbose', 'quiet', 'overwrite'):
+                dcmd[str(flag)] = True
+        elif len(item) == 2 and item[0] == '-': # -> flags
+            if 'flags' not in dcmd:
+                dcmd['flags'] = ''
+            dcmd['flags'] += item[1]
+        else: # unnamed parameter
+            module = gtask.parse_interface(cmd[0])
+            dcmd[module.define_first()] = item
+    
+    return (cmd[0], dcmd)
+
+def cmdstring_to_tuple(cmd):
+    """Convert command string to tuple for run_command() and others
+
+    :param str cmd: command to be converted
+
+    :return: command as tuple
+    """
+    return cmdlist_to_tuple(split(cmd))
