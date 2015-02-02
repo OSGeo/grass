@@ -33,6 +33,7 @@ import wx.lib.scrolledpanel    as scrolled
 import wx.lib.filebrowsebutton as filebrowse
 
 import grass.script as grass
+from grass.script.task import cmdlist_to_tuple
 
 from core             import globalvar
 from core             import utils
@@ -692,7 +693,7 @@ class ColorTable(wx.Frame):
             if self.properties['sourceColumn'] and self.properties['sourceColumn'] != 'cat':
                 cmd.append('column=%s' % self.properties['sourceColumn'])
             
-        cmd = utils.CmdToTuple(cmd)
+        cmd = cmdlist_to_tuple(cmd)
         
         if self.inmap:
             ctable = RunCommand(cmd[0], **cmd[1])
@@ -739,7 +740,7 @@ class ColorTable(wx.Frame):
         if self.mapType == 'vector' and self.properties['sourceColumn'] \
                 and self.properties['sourceColumn'] != 'cat':
             cmd.append('column=%s' % self.properties['sourceColumn'])
-        cmd = utils.CmdToTuple(cmd)
+        cmd = cmdlist_to_tuple(cmd)
         ret = RunCommand(cmd[0], **cmd[1])               
         if ret != 0:
             return False
@@ -1371,7 +1372,7 @@ class VectorColorTable(ColorTable):
     def CreateAttrTable(self, dcmd, layer, params, propwin):
         """Create attribute table"""
         if dcmd:
-            cmd = utils.CmdToTuple(dcmd)
+            cmd = cmdlist_to_tuple(dcmd)
             ret = RunCommand(cmd[0], **cmd[1])
             if ret == 0:
                 self.OnSelectionInput(None)

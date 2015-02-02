@@ -22,6 +22,7 @@ This program is free software under the GNU General Public License
 import os
 from grass.script.utils import try_remove
 from grass.script     import core as grass
+from grass.script.task import cmdlist_to_tuple
 
 import wx
 
@@ -361,7 +362,7 @@ class VNETManager:
                                                 cmd=cmd,
                                                 checked=True)
             if cmd_colors:
-                layerStyleVnetColors = utils.CmdToTuple(cmd_colors)
+                layerStyleVnetColors = cmdlist_to_tuple(cmd_colors)
 
                 RunCommand(layerStyleVnetColors[0],
                         **layerStyleVnetColors[1])

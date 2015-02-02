@@ -44,6 +44,7 @@ from core.settings import UserSettings
 
 from grass.script.utils import try_remove
 from grass.script import core as grass
+from grass.script.task import cmdtuple_to_list
 from grass.pydispatch.signal import Signal
 
 # for standalone app
@@ -248,7 +249,7 @@ class Layer(object):
 
     def __getattr__(self, name):
         if name == 'cmd':
-            return utils.CmdTupleToList(self._maplayer.GetCmd())
+            return cmdtuple_to_list(self._maplayer.GetCmd())
         elif hasattr(self._maplayer, name):
             return getattr(self._maplayer, name)
         elif name == 'maplayer':

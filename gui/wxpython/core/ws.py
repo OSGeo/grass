@@ -23,6 +23,7 @@ import wx
 from wx.lib.newevent import NewEvent
 
 from grass.script.utils import try_remove
+from grass.script.task import cmdtuple_to_list
 from grass.script import core as grass
 
 from core          import utils
@@ -126,7 +127,7 @@ class RenderWMSMgr(wx.EvtHandler):
             self.downloading = True
 
             self.fetching_cmd = cmd
-            cmdList = utils.CmdTupleToList(cmd)
+            cmdList = cmdtuple_to_list(cmd)
 
             if Debug.GetLevel() < 3:
                 cmdList.append('--quiet')

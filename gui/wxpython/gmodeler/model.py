@@ -670,7 +670,7 @@ class Model(object):
                 vlist = list()
                 if condText[0] == '`' and condText[-1] == '`':
                     # run command
-                    cmd, dcmd = utils.CmdToTuple(condText[1:-1].split(' '))
+                    cmd, dcmd = gtask.cmdlist_to_tuple(condText[1:-1].split(' '))
                     ret = RunCommand(cmd,
                                      read = True,
                                      **dcmd)

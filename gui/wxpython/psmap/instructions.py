@@ -39,9 +39,10 @@ from time import strftime, localtime
 
 import wx
 import grass.script as grass
+from grass.script.task import cmdlist_to_tuple
 
 from core.gcmd          import RunCommand, GError, GMessage, GWarning
-from core.utils         import CmdToTuple, GetCmdString, _
+from core.utils         import GetCmdString, _
 from dbmgr.vinfo        import VectorDBInfo
 from psmap.utils        import *
 
@@ -439,7 +440,7 @@ class Instruction:
         map = MapFrame(wx.NewId())
         self.AddInstruction(map)
         if regionInstruction:
-            cmd = CmdToTuple(regionInstruction.strip('# ').split())
+            cmd = cmdlist_to_tuple(regionInstruction.strip('# ').split())
             
             # define scaleType
             if len(cmd[1]) <= 3:

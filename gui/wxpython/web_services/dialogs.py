@@ -27,11 +27,12 @@ import shutil
 from copy      import deepcopy
 
 import grass.script as grass
+from grass.script.task import cmdlist_to_tuple, cmdtuple_to_list
 
 from core             import globalvar
 from core.debug       import Debug
 from core.gcmd        import GMessage, GWarning, GError, RunCommand
-from core.utils       import GetSettingsPath, CmdToTuple, CmdTupleToList, _
+from core.utils       import GetSettingsPath, _
 from core.gconsole    import CmdThread, GStderr, EVT_CMD_DONE, EVT_CMD_OUTPUT
 
 from gui_core.gselect import Select
@@ -549,7 +550,7 @@ class AddWSDialog(WSDialogBase):
         ws_cap_files = self._getCapFiles()
         # create properties dialog
         cmd_list = ltree.GetLayerInfo(layer,'cmd')
-        cmd = CmdToTuple(cmd_list)
+        cmd = cmdlist_to_tuple(cmd_list)
 
         prop_win = WSPropertiesDialog(parent = self.parent,
                                       giface = self.giface,
@@ -705,7 +706,7 @@ class WSPropertiesDialog(WSDialogBase):
                                               propwin = self)
 
         #TODO use just list or tuple
-        cmd = CmdToTuple(lcmd)
+        cmd = cmdlist_to_tuple(lcmd)
         self.revert_cmd = cmd
         self._setRevertCapFiles(self._getCapFiles())
 
@@ -992,7 +993,7 @@ class SaveWMSLayerDialog(wx.Dialog):
             region = self._giface.GetMapWindow().GetMap().SetRegion()
             env['GRASS_REGION'] = region
 
-        cmdList = CmdTupleToList(cmd)
+        cmdList = cmdtuple_to_list(cmd)
         self.currentPid = self.thread.GetId()
 
         self.thread.RunCmd(cmdList, env=env, stderr=self.cmdStdErr)
