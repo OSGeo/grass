@@ -120,6 +120,8 @@ int main(int argc, char *argv[])
     }
 
     table_out = NULL;
+    fi_in = NULL;
+    fi_out = NULL;
     /* Check input table structures */
     if (do_table) {
 	if (append->answer) {
@@ -284,7 +286,8 @@ int main(int argc, char *argv[])
 	if (fi_out) {
 	    driver_out =
 		db_start_driver_open_database(fi_out->driver,
-					      fi_out->database);
+					      Vect_subst_var(fi_out->database,
+							     &OutMap));
 	    if (!driver_out) {
 		G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
 			      fi_out->database, fi_out->driver);
@@ -315,6 +318,9 @@ int main(int argc, char *argv[])
 
 	    Vect_map_add_dblink(&OutMap, 1, NULL, fi_out->table,
 				fi_in->key, fi_out->database, fi_out->driver);
+
+	    /* avoid Vect_subst_var() below */
+	    fi_out = Vect_get_field(&OutMap, 1);
 	}
     }
 
@@ -353,22 +359,31 @@ int main(int argc, char *argv[])
 	if (do_table) {
 	    fi_in = Vect_get_field(&InMap, 1);
 	    if (fi_in) {
-		driver_in =
-		    db_start_driver_open_database(fi_in->driver,
-						  fi_in->database);
-		if (!driver_in) {
-		    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
-				  fi_in->database, fi_in->driver);
+
+		/* SQLite does not like to have the same database opened twice */
+		if (strcmp(fi_in->driver, fi_out->driver) == 0
+		    && strcmp(fi_in->database, fi_out->database) == 0) {
+		    G_debug(3, "Use the same driver");
+		    driver_in = driver_out;
 		}
-                db_set_error_handler_driver(driver_in);
+		else {
+		    driver_in =
+			db_start_driver_open_database(fi_in->driver,
+						      fi_in->database);
+		    if (!driver_in) {
+			G_fatal_error(_("Unable to open database <%s> by driver <%s>"),
+				      fi_in->database, fi_in->driver);
+		    }
+		    db_set_error_handler_driver(driver_in);
+		}
 
 		db_set_string(&table_name_in, fi_in->table);
 		copy_records(driver_in, &table_name_in,
 			     driver_out, &table_name_out, keycol, add_cat);
 
-		db_close_database_shutdown_driver(driver_in);
+		if (driver_in != driver_out)
+		    db_close_database_shutdown_driver(driver_in);
 	    }
-
 	}
 
 	Vect_close(&InMap);

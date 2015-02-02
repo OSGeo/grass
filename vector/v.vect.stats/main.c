@@ -371,10 +371,19 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Database connection not defined for layer %d"),
 			  point_field);
 
-	Pdriver = db_start_driver_open_database(PFi->driver, PFi->database);
-	if (Pdriver == NULL)
-	    G_fatal_error(_("Unable to open database <%s> with driver <%s>"),
-			  PFi->database, PFi->driver);
+
+	/* Open points map driver and database */
+	if (Adriver && strcmp(AFi->driver, PFi->driver) == 0
+	    && strcmp(AFi->database, PFi->database) == 0) {
+	    G_debug(3, "Use the same driver");
+	    Pdriver = Adriver;
+	}
+	else {
+	    Pdriver = db_start_driver_open_database(PFi->driver, PFi->database);
+	    if (Pdriver == NULL)
+		G_fatal_error(_("Unable to open database <%s> with driver <%s>"),
+			      PFi->database, PFi->driver);
+	}
 
 	/* check if point column exists */
 	db_get_column(Pdriver, PFi->table, point_column_opt->answer, &column);
@@ -402,7 +411,9 @@ int main(int argc, char *argv[])
 	nrec = db_select_CatValArray(Pdriver, PFi->table, PFi->key,
 				     point_column_opt->answer, NULL, &cvarr);
 	G_debug(1, "selected values = %d", nrec);
-	db_close_database_shutdown_driver(Pdriver);
+
+	if (Pdriver != Adriver)
+	    db_close_database_shutdown_driver(Pdriver);
     }
 
     Points = Vect_new_line_struct();
