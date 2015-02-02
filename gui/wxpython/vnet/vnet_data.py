@@ -28,6 +28,7 @@ from copy import deepcopy
 
 from grass.script.utils import try_remove
 from grass.script     import core as grass
+from grass.script.task import cmdlist_to_tuple
 
 import wx
 
@@ -992,7 +993,7 @@ class VectMap:
 
         if colorsCmd:
             colorsCmd.append('map=%s' % self.fullName)
-            layerStyleVnetColors = utils.CmdToTuple(colorsCmd)
+            layerStyleVnetColors = cmdlist_to_tuple(colorsCmd)
 
             RunCommand(layerStyleVnetColors[0],
                         **layerStyleVnetColors[1])

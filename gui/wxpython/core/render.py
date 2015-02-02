@@ -39,6 +39,7 @@ import wx
 
 from grass.script import core as grass
 from grass.script.utils import try_remove
+from grass.script.task import cmdlist_to_tuple
 from grass.pydispatch.signal import Signal
 
 from core          import utils
@@ -104,9 +105,9 @@ class Layer(object):
         if self.type == 'command':
             self.cmd = list()
             for c in cmd:
-                self.cmd.append(utils.CmdToTuple(c))
+                self.cmd.append(cmdlist_to_tuple(c))
         else:
-            self.cmd = utils.CmdToTuple(cmd)
+            self.cmd = cmdlist_to_tuple(cmd)
 
         self.active  = active
         self.hidden  = hidden
@@ -302,9 +303,9 @@ class Layer(object):
         if self.type == 'command':
             self.cmd = []
             for c in cmd:
-                self.cmd.append(utils.CmdToTuple(c))
+                self.cmd.append(cmdlist_to_tuple(c))
         else:
-            self.cmd = utils.CmdToTuple(cmd)
+            self.cmd = cmdlist_to_tuple(cmd)
         Debug.msg(3, "Layer.SetCmd(): cmd='%s'" % self.GetCmd(string = True))
 
         # for re-rendering

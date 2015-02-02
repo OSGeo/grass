@@ -29,11 +29,12 @@ from multiprocessing import Process, Queue
 from core.gcmd import RunCommand, GException
 from core.settings import UserSettings
 from core.debug import Debug
-from core.utils import _, CmdToTuple, autoCropImageFromFile
+from core.utils import _, autoCropImageFromFile
 
 from animation.utils import HashCmd, HashCmds, GetFileFromCmd, GetFileFromCmds
 
 import grass.script.core as gcore
+from grass.script.task import cmdlist_to_tuple
 from grass.pydispatch.signal import Signal
 
 
@@ -269,7 +270,7 @@ class BitmapProvider:
                         transparent=True, bgcolor=(0, 0, 0))
 
         Debug.msg(1, "Render raster legend " + str(filename))
-        cmdTuple = CmdToTuple(cmd)
+        cmdTuple = cmdlist_to_tuple(cmd)
         returncode, stdout, messages = read2_command(cmdTuple[0], **cmdTuple[1])
 
         if returncode == 0:
@@ -490,7 +491,7 @@ def RenderProcess2D(imageWidth, imageHeight, tempDir, cmd, region, bgcolor, file
                     transparent=transparency, bgcolor=bgcolor)
     if region:
         os.environ['GRASS_REGION'] = gcore.region_env(**region)
-    cmdTuple = CmdToTuple(cmd)
+    cmdTuple = cmdlist_to_tuple(cmd)
     returncode, stdout, messages = read2_command(cmdTuple[0], **cmdTuple[1])
     if returncode != 0:
         gcore.warning("Rendering failed:\n" + messages)
@@ -523,7 +524,7 @@ def RenderProcess3D(imageWidth, imageHeight, tempDir, cmd, region, bgcolor, file
     os.environ['GRASS_REGION'] = gcore.region_env(region3d=True, **region)
     Debug.msg(1, "Render image to file " + str(filename))
 
-    cmdTuple = CmdToTuple(cmd)
+    cmdTuple = cmdlist_to_tuple(cmd)
     cmdTuple[1]['output'] = os.path.splitext(filename)[0]
     # set size
     cmdTuple[1]['size'] = '%d,%d' % (imageWidth, imageHeight)

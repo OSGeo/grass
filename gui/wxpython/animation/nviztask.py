@@ -22,7 +22,7 @@ except ImportError:
 
 from core.workspace import ProcessWorkspaceFile
 from core.gcmd import RunCommand, GException
-from core.utils import GetLayerNameFromCmd, CmdToTuple, _
+from core.utils import GetLayerNameFromCmd, _
 from grass.script import task as gtask
 from core.settings import UserSettings
 
@@ -284,7 +284,7 @@ class NvizTask:
         self.task.set_flag('overwrite', True)
         self.task.set_param('output', 'tobechanged')
         cmd = self.task.get_cmd(ignoreErrors=False, ignoreRequired=False, ignoreDefault=True)
-        return CmdToTuple(cmd)
+        return gtask.cmdlist_to_tuple(cmd)
 
     def GetRegion(self):
         return self.region
