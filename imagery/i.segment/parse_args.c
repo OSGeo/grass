@@ -150,7 +150,7 @@ int parse_args(int argc, char *argv[], struct globals *globals)
     globals->alpha = atof(threshold->answer);
 
     if (globals->alpha <= 0 || globals->alpha >= 1)
-	G_fatal_error(_("Threshold should be >= 0 and <= 1"));
+	G_fatal_error(_("Threshold should be > 0 and < 1"));
 
     /* segmentation methods:  1 = region growing */
     if (strcmp(method->answer, "region_growing") == 0)
