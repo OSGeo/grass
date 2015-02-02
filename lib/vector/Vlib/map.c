@@ -86,9 +86,8 @@ static int copy_file(const char *src, const char *dst)
  */
 int Vect_copy(const char *in, const char *mapset, const char *out)
 {
-    int i, n, ret, type;
+    int i, ret;
     struct Map_info In, Out;
-    struct field_info *Fi, *Fin;
     char old_path[GPATH_MAX], new_path[GPATH_MAX], buf[GPATH_MAX];
     const char *files[] = { GV_FRMT_ELEMENT, GV_COOR_ELEMENT,
         GV_HEAD_ELEMENT, GV_HIST_ELEMENT,
@@ -97,8 +96,6 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
     };
     const char *inmapset;
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
-
-    dbDriver *driver;
 
     G_debug(2, "Copy vector '%s' in '%s' to '%s'", in, mapset, out);
     /* check for [A-Za-z][A-Za-z0-9_]* in name */
@@ -169,52 +166,11 @@ int Vect_copy(const char *in, const char *mapset, const char *out)
 	G_fatal_error(_("Unable to open vector map <%s>"), out);
 
     /* Copy tables */
-    n = Vect_get_num_dblinks(&In);
-    type = GV_1TABLE;
-    if (n > 1)
-        type = GV_MTABLE;
-    for (i = 0; i < n; i++) {
-        Fi = Vect_get_dblink(&In, i);
-        if (Fi == NULL) {
-            G_warning(_("Database connection not defined for layer %d"),
-                      In.dblnk->field[i].number);
-            Vect_close(&In);
-            Vect_close(&Out);
-            return -1;
-        }
-        Fin = Vect_default_field_info(&Out, Fi->number, Fi->name, type);
-        G_debug(3, "Copy drv:db:table '%s:%s:%s' to '%s:%s:%s'",
-                Fi->driver, Fi->database, Fi->table, Fin->driver,
-                Fin->database, Fin->table);
+    if (Vect_copy_tables(&In, &Out, 0) != 0) {
+	Vect_close(&In);
+	Vect_close(&Out);
 
-        Vect_map_add_dblink(&Out, Fi->number, Fi->name, Fin->table, Fi->key,
-                            Fin->database, Fin->driver);
-
-        ret = db_copy_table(Fi->driver, Fi->database, Fi->table,
-                            Fin->driver, Vect_subst_var(Fin->database, &Out),
-                            Fin->table);
-        if (ret == DB_FAILED) {
-            G_warning(_("Unable to copy table <%s>"), Fin->table);
-            Vect_close(&In);
-            Vect_close(&Out);
-            return -1;
-        }
-
-        driver =
-            db_start_driver_open_database(Fin->driver,
-                                          Vect_subst_var(Fin->database,
-                                                         &Out));
-        if (driver == NULL) {
-            G_warning(_("Unable to open database <%s> by driver <%s>"),
-                      Fin->database, Fin->driver);
-        }
-        else {
-            if (db_create_index2(driver, Fin->table, Fi->key) != DB_OK)
-                G_warning(_("Unable to create index for table <%s>, key <%s>"),
-                          Fi->table, Fi->key);
-
-            db_close_database_shutdown_driver(driver);
-        }
+	return 1;
     }
 
     Vect_close(&In);
