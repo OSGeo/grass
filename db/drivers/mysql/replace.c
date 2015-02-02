@@ -42,6 +42,7 @@ int replace_variables(char *in, char **datadir, char **database)
 
 	tmp[0] = '\0';
 	for (n = 0; n < no_tokens - 1; n++) {
+	    G_chop(tokens[n]);
 	    if (n > 0)
 		strcat(tmp, "/");
 

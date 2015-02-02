@@ -60,6 +60,7 @@ int db__driver_open_database(dbHandle * handle)
 
 	name2[0] = '\0';
 	for (n = 0; n < no_tokens; n++) {
+	    G_chop(tokens[n]);
 	    if (n > 0)
 		strcat(name2, "/");
 

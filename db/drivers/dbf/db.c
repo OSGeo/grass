@@ -65,6 +65,7 @@ int db__driver_open_database(dbHandle * handle)
 	db.name[0] = '\0';	/* re-init */
 
 	for (n = 0; n < no_tokens; n++) {
+	    G_chop(tokens[n]);
 	    G_debug(3, "tokens[%d] = %s", n, tokens[n]);
 	    if (tokens[n][0] == '$') {
 		G_strchg(tokens[n], '$', ' ');
