@@ -15,6 +15,57 @@ running <em><a href="d.mon.html">d.mon</a></em> module.
   <li><a href="htmldriver.html">HTMLMAP driver</a>
 </ul>
 
+<h2>NOTES</h2>
+
+<h3>GRASS_RENDER_COMMAND</h3>
+
+If environmental variable GRASS_RENDER_COMMAND is defined,
+rendering is redirected by display library to the given external command
+defined by this variable. Currently only Python scrips are supported.
+
+<p>
+Lets start with simple example of Python script called <i>render.py</i>:
+
+<div class="code"><pre>
+#!/usr/bin/evn python
+
+import os
+import sys
+
+import grass.script as grass
+from grass.script import task as gtask
+
+os.environ['GRASS_RENDER_IMMEDIATE'] = 'default'
+os.environ['GRASS_RENDER_FILE'] = 'output.png'
+
+cmd, dcmd = gtask.cmdstring_to_tuple(sys.argv[1])
+
+grass.run_command('d.text', text="Test of GRASS_RENDER_COMMAND redirection")
+
+os.environ['GRASS_RENDER_FILE_READ'] = 'TRUE'
+grass.run_command(cmd, **dcmd)
+</pre></div>
+
+After defining GRASS_RENDER_COMMAND variable (example for Bash):
+
+<div class="code"><pre>
+export GRASS_RENDER_COMMAND=render.py
+</pre></div>
+
+Display GRASS modules like <em><a href="d.rast.html">d.rast</a></em>
+or <em><a href="d.vect.html">d.vect</a></em> will be executed
+by <i>render.py</i> program.
+
+For example the command
+
+<div class="code"><pre>
+d.vect roadsmajor
+</pre></div>
+
+produces output PNG file <i>output.png</i> which will contain rendered
+features from vector map <i>roadsmajor</i> and sample text <i>&quot;Test of
+GRASS_RENDER_COMMAND redirection&quot;</i>.
+
 <h2>SEE ALSO</h2>
 
 <em>

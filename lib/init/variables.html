@@ -378,15 +378,21 @@ PERMANENT
   <dt>GRASS_RENDER_TEXT_SIZE</dt>
   <dd>defines default text size.</dd>
 
+  <dt>GRASS_RENDER_COMMAND</dt>
+  <dd>external command called by display library to render data (see
+    example in <em><a href="displaydrivers.html">display
+    drivers</a></em> page for details).<br>Currently only Python scripts
+    are supported.</dd>
+
 </dl>
 
 For specific driver-related variables see:
 
 <ul>
-  <li><em><a href="cairodriver.html">Cairo driver</a></em></li>
-  <li><em><a href="pngdriver.html">PNG driver</a></em></li>
-  <li><em><a href="psdriver.html">PS (Postscript) driver</a></em></li>
-  <li><em><a href="htmldriver.html">HTML driver</a></em></li>
+  <li><em><a href="cairodriver.html">Cairo display driver</a></em></li>
+  <li><em><a href="pngdriver.html">PNG display driver</a></em></li>
+  <li><em><a href="psdriver.html">PS (Postscript) display driver</a></em></li>
+  <li><em><a href="htmldriver.html">HTML display driver</a></em></li>
 </ul>
 
 <h3>List of selected internal GRASS environment variables</h3>
