@@ -259,6 +259,9 @@ int save_table(int t)
 	case DBF_DOUBLE:
 	    dbftype = FTDouble;
 	    break;
+	default:
+	    G_warning("invalid/unsupported DBFFieldType");
+	    break;
 	}
 
 	width = db.tables[t].cols[i].width;

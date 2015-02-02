@@ -181,6 +181,7 @@ int parse_sql_update(const char *sql, char **table, column_info **cols, int *nco
     *cols = (column_info *)G_malloc(sizeof(column_info) * (*ncols));
     
     for (n = 0; n < (*ncols); n++) {
+	G_chop(token[n]);
 	itoken = G_tokenize(token[n], "=");
 	if (G_number_of_tokens(itoken) != 2)
 	    return FALSE;

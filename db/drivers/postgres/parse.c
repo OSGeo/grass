@@ -44,6 +44,7 @@ int parse_conn(const char *str, PGCONN * pgconn)
 	tokens = G_tokenize(str, delm);
 	i = 0;
 	while (tokens[i]) {
+	    G_chop(tokens[i]);
 	    G_debug(3, "token %d : %s", i, tokens[i]);
 	    if (strncmp(tokens[i], "host", 4) == 0)
 		pgconn->host = G_store(tokens[i] + 5);
