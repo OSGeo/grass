@@ -171,11 +171,21 @@ int main(int argc, char *argv[])
 	    Vect_map_add_dblink(&Out, field, NULL, NewFi->table, GV_KEY_COLUMN,
 				NewFi->database, NewFi->driver);
 
-	    Driver2 = db_start_driver_open_database(NewFi->driver,
-						    Vect_subst_var(NewFi->
-								   database,
-								   &Out));
-            db_set_error_handler_driver(Driver2);
+
+	    /* Open output driver and database */
+	    if (strcmp(Fi->driver, NewFi->driver) == 0
+		&& strcmp(Fi->database,
+		          Vect_subst_var(NewFi->database, &Out)) == 0) {
+		G_debug(3, "Use the same driver");
+		Driver2 = Driver;
+	    }
+	    else {
+		Driver2 = db_start_driver_open_database(NewFi->driver,
+							Vect_subst_var(NewFi->
+								       database,
+								       &Out));
+		db_set_error_handler_driver(Driver2);
+	    }
 
 	    /* get string column length */
 	    db_set_string(&stmt, Fi->table);
@@ -317,7 +327,8 @@ int main(int argc, char *argv[])
 		G_fatal_error(_("Unable to grant privileges on table <%s>"),
 			      NewFi->table);
 	    }
-	    db_close_database_shutdown_driver(Driver2);
+	    if (Driver2 != Driver)
+		db_close_database_shutdown_driver(Driver2);
 
 	    qsort((void *)cvarr.value, nrows, sizeof(dbCatVal), cmpcat);
 	}
