@@ -65,6 +65,9 @@ int describe_table(int tab, int *scols, int nscols, dbTable ** table)
 	else
 	    col = i;
 
+	precision = 0;
+	scale = 0;
+
 	dcol = &(db.tables[tab].cols[col]);
 	column = db_get_table_column(*table, i);
 
