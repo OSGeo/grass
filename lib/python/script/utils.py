@@ -18,9 +18,10 @@ for details.
 """
 
 import os
+import sys
 import shutil
 import locale
-
+import shlex
 
 def float_or_dms(s):
     """Convert DMS to float.
@@ -235,3 +236,12 @@ def get_num_suffix(number, max_number):
     """
     return '{number:0{width}d}'.format(width=len(str(max_number)),
                                        number=number)
+
+def split(s):
+    """!Platform specific shlex.split"""
+    if sys.version_info >= (2, 6):
+        return shlex.split(s, posix = (sys.platform != "win32"))
+    elif sys.platform == "win32":
+        return shlex.split(s.replace('\\', r'\\'))
+    else:
+        return shlex.split(s)
