@@ -4,7 +4,7 @@
  * MODULE:       d.info
  * AUTHOR(S):    Glynn Clements
  * PURPOSE:      Display information about the active display monitor
- * COPYRIGHT:    (C) 2004, 2012 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2004-2015 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -58,13 +58,10 @@ int main(int argc, char *argv[])
     gflag->description =
 	_("Display geographic coordinates and resolution of entire screen");
 
+    G_option_required(rflag, dflag, fflag, bflag, gflag, NULL);
+    
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-
-    if (!rflag->answer && !dflag->answer &&
-	!fflag->answer && !bflag->answer && !gflag->answer) {
-	G_fatal_error(_("No flag given"));
-    }
 
     D_open_driver();
     
