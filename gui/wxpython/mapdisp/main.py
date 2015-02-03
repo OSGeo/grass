@@ -29,6 +29,7 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import time
+import shutil
 
 from core          import globalvar
 import wx
@@ -477,30 +478,45 @@ if __name__ == "__main__":
         sys.exit(1)
     
     monName = sys.argv[1]
-    monFile = { 'map' : sys.argv[2],
-                'cmd' : sys.argv[3],
-                'env' : sys.argv[4],
-                }
-    if len(sys.argv) >= 6:
-        try:
-            monSize[0] = int(sys.argv[5])
-        except ValueError:
-            pass
+    dInfo = grass.parse_command('d.info', flags='s')
+    monPath = dInfo.get('path', None)
+    if not monPath:
+        grass.fatal(_("Unable to open monitor <%s>. No path defined") % monName)
     
-    if len(sys.argv) >= 7:
-        try:
-            monSize[1] = int(sys.argv[6])
-        except ValueError:
-            pass
+    monFile = { 'map' : os.path.join(monPath, 'map.ppm'),
+                'cmd' : dInfo.get('cmd', None),
+                'env' : dInfo.get('env', None) }
 
-    if len(sys.argv) == 8:
-        try:
-            monDecor = True if sys.argv[7] == "0" else False
-        except ValueError:
-            monDecor = True
+    # monitor size
+    monSize = (640, 480)
+    ret = grass.read_command('d.info', flags='d')
+    if not ret:
+        grass.warning(_("Unable to determine size of monitor. Using default %dx%d.") % \
+                      monSize[0], monSize[1])
+    else:
+        monSize = map(float, ret.rstrip('\n').split(' ', 1)[1].split(' '))
+
+    monDecor = True
+    # TODO
+    # if len(sys.argv) == 8:
+    #     try:
+    #         monDecor = True if sys.argv[7] == "0" else False
+    #     except ValueError:
+    #         monDecor = True
     
     grass.verbose(_("Starting map display <%s>...") % (monName))
 
+    # create pid file
+    monPath = grass.parse_command('d.info', flags='s').get('path', None)
+    if not monPath:
+        grass.fatal(_("No monitor path defined"))
+    pidFile = os.path.join(monPath, "pid")
+    fd = open(pidFile, 'w')
+    if not fd:
+        grass.fatal(_("Unable to create file <%s>") % pidFile)
+    fd.write("%s\n" % os.getpid())
+    fd.close()
+        
     RunCommand('g.gisenv',
                set = 'MONITOR_%s_PID=%d' % (monName.upper(), os.getpid()))
 
@@ -516,15 +532,12 @@ if __name__ == "__main__":
     grass.verbose(_("Stopping map display <%s>...") % (monName))
 
     # clean up GRASS env variables
-    env = grass.gisenv()
-    env_name = 'MONITOR_%s' % monName.upper()
-    unset = list()
-    for key in env.keys():
-        if key.find(env_name) == 0 or \
-           (key == 'MONITOR' and env[key] == monName):
-            unset.append(key)
-    if unset:
-        RunCommand('g.gisenv',
-                   unset = '%s' % ','.join(unset))
+    try:
+        shutil.rmtree(monPath)
+    except OSError:
+        pass
+    
+    RunCommand('g.gisenv',
+               unset = 'MONITOR')
     
     sys.exit(0)
