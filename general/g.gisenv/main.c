@@ -9,7 +9,7 @@
  *               Markus Neteler <neteler itc.it>
  *               Martin Landa <landa.martin gmail.com>
  * PURPOSE:      
- * COPYRIGHT:    (C) 2003-2014 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2015 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -165,6 +165,14 @@ int main(int argc, char *argv[])
         n = 0;
         while (unset_opt->answers[n]) {
             u_name = parse_variable(unset_opt->answers[n], &value);
+            if (G_strcasecmp(u_name, "GISDBASE") == 0 ||
+                G_strcasecmp(u_name, "LOCATION_NAME") == 0 ||
+                G_strcasecmp(u_name, "MAPSET") == 0) {
+              G_warning(_("Variable <%s> is mandatory. No operation performed."),
+                        u_name);
+              n++;
+              continue;
+            }
             if (value)
                 G_warning(_("Value '%s' ignored when unsetting the GRASS variable"),
                           value);
