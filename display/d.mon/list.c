@@ -1,39 +1,57 @@
 #include <string.h>
 #include <stdlib.h>
+#include <dirent.h>
+
 #include <grass/gis.h>
 #include <grass/glocale.h>
+
 #include "proto.h"
+
+/* get monitor path */
+char *get_path(const char *name, int fpath)
+{
+    char tmpdir[GPATH_MAX];
+    
+    G_temp_element(tmpdir);
+    strcat(tmpdir, "/");
+    strcat(tmpdir, "MONITORS");
+    if (name) {
+        strcat(tmpdir, "/");
+        strcat(tmpdir, name);
+    }
+
+    if (fpath) {
+        char ret[GPATH_MAX];
+        
+        G_file_name(ret, tmpdir, NULL, G_mapset());
+        return G_store(ret);
+    }
+    
+    return G_store(tmpdir);
+}
 
 /* get list of running monitors */
 void list_mon(char ***list, int *n)
 {
-    int i;
-    const char *name;
-    const char *env_prefix = "MONITOR_";
-    int env_prefix_len;
-    char **tokens;
-    
-    env_prefix_len = strlen(env_prefix);
-    
+    char *mon_path;
+    struct dirent *dp;
+    DIR *dirp;
+
+    mon_path = get_path(NULL, TRUE);
+    dirp = opendir(mon_path);
+
     *list = NULL;
     *n    = 0;
-    tokens = NULL;
-    for (i = 0; (name = G_get_env_name(i)); i++) {
-	if (strncmp(env_prefix, name, env_prefix_len) == 0) {
-	    tokens = G_tokenize(name, "_");
-	    if (G_number_of_tokens(tokens) != 3 ||
-		strcmp(tokens[2], "ENVFILE") != 0)
-		continue;
-	    *list = G_realloc(*list, (*n + 1) * sizeof(char *));
-	    /* GRASS variable names are upper case, but monitor names are lower
-	     * case. */
-	    (*list)[*n] = G_store_lower(tokens[1]);
-	    (*n)++;
-	    G_free_tokens(tokens);
-	    tokens = NULL;
-	}
+    while ((dp = readdir(dirp)) != NULL) {
+        *list = G_realloc(*list, (*n + 1) * sizeof(char *));
+        if (!dp->d_name || dp->d_name[0] == '.')
+            continue;
+        (*list)[*n] = dp->d_name;
+        (*n)++;
     }
+    closedir(dirp);
     
+    G_free(mon_path);
 }
 
 /* print list of running monitors */
@@ -57,39 +75,36 @@ void print_list(FILE *fd)
 /* check if monitor is running */
 int check_mon(const char *name)
 {
-    char *env_name;
-    const char *str;
+    char **list;
+    int   i, n;
+
+    list_mon(&list, &n);
     
-    env_name = NULL;
-    G_asprintf(&env_name, "MONITOR_%s_ENVFILE", G_store_upper(name));
-    str = G_getenv_nofatal(env_name);
-    if (!str)
-	return FALSE;
+    for (i = 0; i < n; i++)
+        if (G_strcasecmp(list[i], name) == 0)
+            return TRUE;
     
-    return TRUE;
+    return FALSE;
 }
 
 /* list related commands for given monitor */
 void list_cmd(const char *name, FILE *fd_out)
 {
-    char buf[1024];
-    char *cmd_name;
-    const char *cmd_value;
+    char *mon_path;
+    char cmd_file[GPATH_MAX], buf[4096];
     FILE *fd;
-
-    cmd_name = NULL;
-    G_asprintf(&cmd_name, "MONITOR_%s_CMDFILE", G_store_upper(name));
-    cmd_value = G_getenv_nofatal(cmd_name);
-    if (!cmd_value)
-	G_fatal_error(_("Command file not found"));
     
-    fd = fopen(cmd_value, "r");
+    mon_path = get_path(name, FALSE);
+    G_file_name(cmd_file, mon_path, "cmd", G_mapset());
+    fd = fopen(cmd_file, "r");
     if (!fd)
-	G_fatal_error(_("Unable to read command file"));
+	G_fatal_error(_("Unable to open file '%s'"), cmd_file);
 
     while (G_getl2(buf, sizeof(buf) - 1, fd) != 0) {
 	fprintf(fd_out, "%s\n", buf);
     }
     
     fclose(fd);
+
+    G_free(mon_path);
 }
