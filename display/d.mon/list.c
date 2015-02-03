@@ -37,11 +37,16 @@ void list_mon(char ***list, int *n)
     struct dirent *dp;
     DIR *dirp;
 
-    mon_path = get_path(NULL, TRUE);
-    dirp = opendir(mon_path);
-
     *list = NULL;
     *n    = 0;
+    
+    mon_path = get_path(NULL, TRUE);
+    dirp = opendir(mon_path);
+    G_free(mon_path);
+    
+    if (!dirp)
+        return;
+    
     while ((dp = readdir(dirp)) != NULL) {
         *list = G_realloc(*list, (*n + 1) * sizeof(char *));
         if (!dp->d_name || dp->d_name[0] == '.')
@@ -50,8 +55,6 @@ void list_mon(char ***list, int *n)
         (*n)++;
     }
     closedir(dirp);
-    
-    G_free(mon_path);
 }
 
 /* print list of running monitors */
