@@ -3,7 +3,7 @@
   
   \brief GIS Library - Argument parsing functions (dependencies between options)
   
-  (C) 2014 by the GRASS Development Team
+  (C) 2014-2015 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -59,6 +59,20 @@ struct rule {
 
 static struct vector rules = {sizeof(struct rule), 50};
 
+/*! \brief Set generic option rule
+
+   Supported rule types:
+    - RULE_EXCLUSIVE
+    - RULE_REQUIRED
+    - RULE_REQUIRES
+    - RULE_REQUIRES_ALL
+    - RULE_EXCLUDES
+    - RULE_COLLECTIVE
+   
+   \param type rule type
+   \param nopts number of options in the array
+   \param opts array of options
+*/
 void G_option_rule(int type, int nopts, void **opts)
 {
     struct rule rule;
@@ -180,6 +194,8 @@ static void append_error(const char *msg)
 
     When running the module, at most one option from a set can be
     provided.
+
+    \param first first given option
 */
 void G_option_exclusive(void *first, ...)
 {
@@ -199,7 +215,12 @@ static void check_exclusive(const struct rule *rule)
     }
 }
 
-/* at least one option from a set */
+/*! \brief Sets the options to be required.
+  
+    At least one option from a set must be given.
+
+    \param first first given option
+*/
 void G_option_required(void *first, ...)
 {
     va_list ap;
@@ -228,6 +249,8 @@ static void check_required(const struct rule *rule)
     function.
     If you want more than one option to be present but not all,
     call this function multiple times.
+
+    \param first first given option
 */
 void G_option_requires(void *first, ...)
 {
@@ -258,6 +281,8 @@ static void check_requires(const struct rule *rule)
     use G_option_requires() function.
 
     \see G_option_collective()
+
+    \param first first given option
 */
 void G_option_requires_all(void *first, ...)
 {
@@ -279,8 +304,13 @@ static void check_requires_all(const struct rule *rule)
     }
 }
 
-/* if the first option is present, none of the other options may also (should?)
-   be present. */
+/*! \brief Exclude selected options.
+
+    If the first option is present, none of the other options may also (should?)
+    be present.
+
+    \param first first given option
+*/
 void G_option_excludes(void *first, ...)
 {
     va_list ap;
@@ -301,8 +331,13 @@ static void check_excludes(const struct rule *rule)
     }
 }
 
-/* if any option is present, all the other options must also be present
-   all or nothing from a set */
+/*! \brief Sets the options to be collective.
+
+    If any option is present, all the other options must also be present
+    all or nothing from a set.
+
+    \param first first given option
+*/
 void G_option_collective(void *first, ...)
 {
     va_list ap;
@@ -322,6 +357,7 @@ static void check_collective(const struct rule *rule)
     }
 }
 
+/*! \brief Check for option rules (internal use only) */
 void G__check_option_rules(void)
 {
     unsigned int i;
@@ -355,6 +391,7 @@ void G__check_option_rules(void)
     }
 }
 
+/*! \brief Describe option rules (stderr) */
 void G__describe_option_rules(void)
 {
     unsigned int i;
@@ -392,7 +429,7 @@ void G__describe_option_rules(void)
 }
 
 /*!
-   \brief Checks if there is any rule RULE_REQUIRED.
+   \brief Checks if there is any rule RULE_REQUIRED (internal use only).
 
    \return 1 if there is such rule
    \return 0 if not
@@ -418,6 +455,10 @@ static const char * const rule_types[] = {
     "collective"
 };
 
+/*! \brief Describe option rules in XML format (internal use only)
+
+    \param fp file where to print XML info
+*/
 void G__describe_option_rules_xml(FILE *fp)
 {
     unsigned int i, j;
