@@ -113,7 +113,8 @@ int D_open_driver(void)
             strcat(element, m);
             G_file_name(progname, element, "render.py", G_mapset());
         }
-        
+
+        G_debug(1, "rendering redirected to %s", progname);
         /* assuming Python script here (could be extended in the future) */
         G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), progname,
                    cmd, NULL);
