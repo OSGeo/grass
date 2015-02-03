@@ -73,8 +73,7 @@ char *start(const char *name, const char *output, int update)
 }
 
 /* start wxGUI display monitor */
-char *start_wx(const char *name, const char *element,
-               int width, int height, int x_only)
+char *start_wx(const char *name, const char *element, int width, int height, int x_only)
 {
     char progname[GPATH_MAX];
     char str_width[1024], str_height[1024], *str_x_only;
@@ -191,10 +190,13 @@ int start_mon(const char *name, const char *output, int select,
     close(fd);
 
     /* start monitor */
-    if (strncmp(name, "wx", 2) == 0) 
-        out_file = start_wx(name, mon_path, width, height, x_only);
-    else
+    if (strncmp(name, "wx", 2) == 0) {
+        G_file_name(file_path, mon_path, NULL, G_mapset());
+        out_file = start_wx(name, file_path, width, height, x_only);
+    }
+    else {
         out_file = start(name, output, update);
+    }
     
     /* create env file (environmental variables used for rendering) */
     G_debug(1, "Monitor name=%s, envfile=%s", name, env_file);
