@@ -30,7 +30,9 @@ def main():
     options, flags = gcore.parser()
     gisenv = gcore.gisenv()
     if 'MONITOR' in gisenv:
-        cmd_file = gisenv['MONITOR_{monitor}_CMDFILE'.format(monitor=gisenv['MONITOR'].upper())]
+        cmd_file = gcore.parse_command('d.info', flags='s').get('cmd', None)
+        if not cmd_file:
+            gcore.fatal(_("Unable to open file '%s'") % cmd_file)
         dout_cmd = 'd.what.vect'
         for param, val in options.iteritems():
             if val:
