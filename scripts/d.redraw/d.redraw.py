@@ -27,12 +27,11 @@ from grass.script import core as grass
 from grass.script.utils import split
 
 def main():
-    env = grass.gisenv()
-    mon = env.get('MONITOR', None)
+    mon = grass.gisenv().get('MONITOR', None)
     if not mon:
         grass.fatal(_("No graphics device selected. Use d.mon to select graphics device."))
 
-    monCmd = os.sep.join(grass.tempfile().split(os.sep)[:-1] + ['MONITORS', mon, 'cmd'])
+    monCmd = grass.parse_command('d.info', flags='s').get('cmd', None)
     if not monCmd or not os.path.isfile(monCmd):
         grass.fatal(_("Unable to open file '%s'") % monCmd)
 
