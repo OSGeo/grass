@@ -6,7 +6,7 @@
 # AUTHOR(S):    Martin Landa <landa.martin gmail.com>
 #               Based on d.frame from GRASS 6
 # PURPOSE:      Manages display frames on the user's graphics monitor
-# COPYRIGHT:    (C) 2014 by Martin Landa, and the GRASS Development Team
+# COPYRIGHT:    (C) 2014-2015 by Martin Landa, and the GRASS Development Team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -68,13 +68,14 @@
 import os
 import sys
 
-from grass.script.core import parser, read_command, fatal, debug, run_command, gisenv, warning
+from grass.script.core import parser, read_command, fatal, debug, run_command, gisenv, warning, parse_command
 
 # check if monitor is running
 def check_monitor():
     return read_command('d.mon', flags='p', quiet=True).strip()
 
 # read monitor file and return list of lines
+# TODO: replace by d.info (see #2577)
 def read_monitor_file(monitor, ftype='env'):
     mfile = check_monitor_file(monitor, ftype)
     try:
@@ -92,8 +93,7 @@ def read_monitor_file(monitor, ftype='env'):
 
 # check if monitor file exists
 def check_monitor_file(monitor, ftype='env'):
-    var = 'MONITOR_%s_%sFILE' % (monitor.upper(), ftype.upper())
-    mfile = gisenv().get(var, None)
+    mfile = parse_command('d.info', flags='s').get(ftype, None)
     if mfile is None or not os.path.isfile(mfile):
         fatal(_("Unable to get monitor info (no %s found)") % var)
     
