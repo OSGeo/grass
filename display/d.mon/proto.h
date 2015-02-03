@@ -13,3 +13,4 @@ void list_mon();
 void print_list(FILE *);
 int check_mon(const char *);
 void list_cmd(const char *, FILE *);
+char *get_path(const char *, int);

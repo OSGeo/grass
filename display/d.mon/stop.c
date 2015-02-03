@@ -1,20 +1,20 @@
 #include <stdlib.h>
 #include <signal.h>
 #include <string.h>
+#include <unistd.h>
+#include <dirent.h>
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
 #include "proto.h"
 
-static void clean_env(const char *);
 static int stop_wx(const char *);
 static int stop(const char *);
 
 int stop_mon(const char *name)
 {
     if (!check_mon(name)) {
-	clean_env(name);
 	G_fatal_error(_("Monitor <%s> is not running"), name);
     }
     
@@ -26,17 +26,28 @@ int stop_mon(const char *name)
 
 int stop(const char *name)
 {
-    char *env_name;
-    const char *env_file;
+    char *mon_path, file_path[GPATH_MAX];
+    struct dirent *dp;
+    DIR *dirp;
 
-    env_name = NULL;
-    G_asprintf(&env_name, "MONITOR_%s_ENVFILE", G_store_upper(name));
+    mon_path = get_path(name, TRUE);
+    dirp = opendir(mon_path);
+
+    while ((dp = readdir(dirp)) != NULL) {
+        if (!dp->d_name || dp->d_name[0] == '.')
+            continue;
+        sprintf(file_path, "%s/%s", mon_path, dp->d_name);
+        if (unlink(file_path) == -1)
+            G_warning(_("Unable to delete file '%s'"), file_path);
+    }
+    closedir(dirp);
     
-    env_file = G_getenv_nofatal(env_name);
-    if (!env_file)
-	G_warning(_("Env file not found"));
-    
-    clean_env(name);
+    if (rmdir(mon_path) == -1)
+        G_warning(_("Unable to delete directory '%s'"), mon_path);
+
+    G_free(mon_path);
+
+    G_unsetenv("MONITOR");
 
     return 0;
 }
@@ -51,7 +62,6 @@ int stop_wx(const char *name)
     
     pid = G_getenv_nofatal(env_name);
     if (!pid) {
-	clean_env(name);
 	G_fatal_error(_("PID file not found"));
     }
     
@@ -63,37 +73,5 @@ int stop_wx(const char *name)
     }
 #endif
     
-    clean_env(name);
-
     return 0;
-}
-
-void clean_env(const char *name)
-{
-    int i;
-    char *u_name;
-    const char *env_prefix = "MONITOR_";
-    const char *env;
-    int env_prefix_len;
-    char **tokens;
-
-    u_name = G_store_upper(name);
-    env_prefix_len = strlen(env_prefix);
-    
-    tokens = NULL;
-    for (i = 0; (env = G_get_env_name(i)); i++) {
-	if (strncmp(env_prefix, env, env_prefix_len) != 0)
-	    continue;
-	
-	tokens = G_tokenize(env, "_");
-	if (G_number_of_tokens(tokens) != 3 ||
-	    strcmp(tokens[1], u_name) != 0)
-	    continue;
-	G_unsetenv(env);
-	i--; /* env has been removed for the list */
-	G_free_tokens(tokens);
-	tokens = NULL;
-    }
-
-    G_unsetenv("MONITOR");
 }
