@@ -152,7 +152,8 @@ int start_mon(const char *name, const char *output, int select,
                "cmd, dcmd = gtask.cmdstring_to_tuple(sys.argv[1])\n"
                "if not cmd or cmd == 'd.mon':\n"
                "    sys.exit(0)\n\n"
-               "mode = 'w' if cmd == 'd.erase' else 'a'\n"
+               "mode = 'w' if cmd == 'd.erase' else 'a'\n\n"
+               "# update cmd file\n"
                "fd = open('%s', mode)\n"
                "if fd is None:\n"
                "    grass.fatal(\"Unable to open file '%s'\")\n"
@@ -162,6 +163,7 @@ int start_mon(const char *name, const char *output, int select,
                "else:\n"
                "    fd.write('')\n"
                "fd.close()\n\n"
+               "# read env file\n"
                "fd = open('%s', 'r')\n"
                "if fd is None:\n"
                "    grass.fatal(\"Unable to open file '%s'\")\n"
@@ -170,7 +172,11 @@ int start_mon(const char *name, const char *output, int select,
                "    k, v = l.rstrip('\\n').split('=')\n"
                "    os.environ[k] = v\n"
                "fd.close()\n\n"
-               "grass.run_command(cmd, **dcmd)\n"
+               "# run display command\n"
+               "try:\n"
+               "    grass.run_command(cmd, **dcmd)\n"
+               "except:\n"
+               "    pass\n\n"
                "sys.exit(0)\n",
                cmd_file, cmd_file, env_file, env_file);
     write(fd, pycode, strlen(pycode));
