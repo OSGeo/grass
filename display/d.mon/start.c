@@ -33,7 +33,7 @@ char *start(const char *name, const char *output, int update)
             return NULL;
         if (!update && access(output_name, F_OK) == 0) {
             if (G_get_overwrite()) {
-                G_warning(_("File '%s' already exists and will be overwritten"), output_name);
+                G_warning(_("File <%s> already exists and will be overwritten"), output_name);
                 D_setup_unity(0);
                 D_erase("white");
             }
@@ -102,7 +102,7 @@ char *start_wx(const char *name, const char *element,
     G_spawn_ex(getenv("GRASS_PYTHON"), progname, progname,
 	       name, element, str_width, str_height, str_x_only, SF_BACKGROUND, NULL);
 
-    G_file_name(mapfile, element, "ppm", G_mapset());
+    G_file_name(mapfile, element, "map.ppm", G_mapset());
     
     return mapfile;
 }
@@ -200,9 +200,13 @@ int start_mon(const char *name, const char *output, int select,
     G_debug(1, "Monitor name=%s, envfile=%s", name, env_file);
     fd = creat(env_file, 0666);
     if (fd < 0)
-	G_fatal_error(_("Unable to create file '%s'"), env_file);
+	G_fatal_error(_("Unable to create file <%s>"), env_file);
+
+    if (G_strncasecmp(name, "wx", 2) == 0)
+        sprintf(buf, "GRASS_RENDER_IMMEDIATE=default\n"); /* TODO: read settings from wxGUI */
+    else
+        sprintf(buf, "GRASS_RENDER_IMMEDIATE=%s\n", name);
     
-    sprintf(buf, "GRASS_RENDER_IMMEDIATE=%s\n", name);
     write(fd, buf, strlen(buf));
     sprintf(buf, "GRASS_RENDER_FILE=%s\n", out_file);
     write(fd, buf, strlen(buf));
@@ -232,7 +236,7 @@ int start_mon(const char *name, const char *output, int select,
     /* create cmd file (list of GRASS display commands to render) */
     G_debug(1, "Monitor name=%s, cmdfile = %s", name, cmd_file);
     if (0 > creat(cmd_file, 0666))
-        G_fatal_error(_("Unable to create file '%s'"), cmd_file);
+        G_fatal_error(_("Unable to create file <%s>"), cmd_file);
 
     /* select monitor if requested */
     if (select)

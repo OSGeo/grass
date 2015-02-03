@@ -19,7 +19,7 @@ int stop_mon(const char *name)
     }
     
     if (strncmp(name, "wx", 2) == 0)
-	return stop_wx(name);
+	stop_wx(name);
 
     return stop(name);
 }
@@ -38,12 +38,12 @@ int stop(const char *name)
             continue;
         sprintf(file_path, "%s/%s", mon_path, dp->d_name);
         if (unlink(file_path) == -1)
-            G_warning(_("Unable to delete file '%s'"), file_path);
+            G_warning(_("Unable to delete file <%s>"), file_path);
     }
     closedir(dirp);
     
     if (rmdir(mon_path) == -1)
-        G_warning(_("Unable to delete directory '%s'"), mon_path);
+        G_warning(_("Unable to delete directory <%s>"), mon_path);
 
     G_free(mon_path);
 
@@ -54,15 +54,26 @@ int stop(const char *name)
 
 int stop_wx(const char *name)
 {
-    char *env_name;
-    const char *pid;
-
-    env_name = NULL;
-    G_asprintf(&env_name, "MONITOR_%s_PID", G_store_upper(name));
+    char *mon_path, *pid;
+    char pid_file[GPATH_MAX], buf[512];
+    FILE *fp;
     
-    pid = G_getenv_nofatal(env_name);
+    mon_path = get_path(name, FALSE);
+    G_file_name(pid_file, mon_path, "pid", G_mapset());
+    
+    fp = fopen(pid_file, "r");
+    if (!fp) {
+	G_warning(_("Unable to open file <%s>"), pid_file);
+        return 1;
+    }
+    pid = NULL;
+    if (G_getl2(buf, sizeof(buf) - 1, fp) != 0)
+        pid = G_store(buf);
+    fclose(fp);
+    
     if (!pid) {
-	G_fatal_error(_("PID file not found"));
+	G_warning(_("Unable to read file <%s>"), pid_file);
+        return 1;
     }
     
 #ifdef __MINGW32__
