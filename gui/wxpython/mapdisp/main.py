@@ -472,44 +472,24 @@ class MapApp(wx.App):
         return self.mapFrm
 
 if __name__ == "__main__":
-    # set command variable
-    if len(sys.argv) < 5:
+    if len(sys.argv) != 6:
         print __doc__
-        sys.exit(1)
+        sys.exit(0)
     
+    # set command variable
     monName = sys.argv[1]
-    dInfo = grass.parse_command('d.info', flags='s')
-    monPath = dInfo.get('path', None)
-    if not monPath:
-        grass.fatal(_("Unable to open monitor <%s>. No path defined") % monName)
-    
+    monPath = sys.argv[2]
     monFile = { 'map' : os.path.join(monPath, 'map.ppm'),
-                'cmd' : dInfo.get('cmd', None),
-                'env' : dInfo.get('env', None) }
+                'cmd' : os.path.join(monPath, 'cmd'),
+                'env' : os.path.join(monPath, 'env') }
 
     # monitor size
-    monSize = (640, 480)
-    ret = grass.read_command('d.info', flags='d')
-    if not ret:
-        grass.warning(_("Unable to determine size of monitor. Using default %dx%d.") % \
-                      monSize[0], monSize[1])
-    else:
-        monSize = map(float, ret.rstrip('\n').split(' ', 1)[1].split(' '))
-
-    monDecor = True
-    # TODO
-    # if len(sys.argv) == 8:
-    #     try:
-    #         monDecor = True if sys.argv[7] == "0" else False
-    #     except ValueError:
-    #         monDecor = True
+    monSize = (int(sys.argv[3]), int(sys.argv[4]))
     
+    monDecor = not bool(int(sys.argv[5]))
     grass.verbose(_("Starting map display <%s>...") % (monName))
 
     # create pid file
-    monPath = grass.parse_command('d.info', flags='s').get('path', None)
-    if not monPath:
-        grass.fatal(_("No monitor path defined"))
     pidFile = os.path.join(monPath, "pid")
     fd = open(pidFile, 'w')
     if not fd:
