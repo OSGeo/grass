@@ -134,7 +134,8 @@ int main(int argc, char *argv[])
             strcat(tmpdir, curr_mon);
 
             G_file_name(mon_path, tmpdir, NULL, G_mapset());
-
+            fprintf(stdout, "path=%s\n", mon_path);
+            
             dirp = opendir(mon_path);
             if (!dirp) {
                 G_warning(_("No support files found for monitor <%s>"), curr_mon);
