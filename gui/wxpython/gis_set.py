@@ -104,14 +104,14 @@ class GRASSStartup(wx.Frame):
             grassRevisionStr = ''
         
         self.gisdbase_box = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                                         label=" %s " % _("Select GRASS GIS data directory"))
-        
+                                         label=" %s " % _("1. Select GRASS GIS database directory"))
         self.location_box = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                                         label=" %s " % _("Select GRASS Location"))
+                                         label=" %s " % _("2. Select GRASS Location"))
         self.mapset_box = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
-                                         label=" %s " % _("Select GRASS Mapset"))
+                                         label=" %s " % _("3. Select GRASS Mapset"))
 
-        # no message at the beginning
+        # no message at the beginning but a dummy text is needed to do
+        # the layout right (the lenght should be similar to maximal message)
         self.lmessage = StaticWrapText(
             parent=self.panel, id=wx.ID_ANY,
             label=("This is a placeholer text to workaround layout issues."
@@ -137,7 +137,7 @@ class GRASSStartup(wx.Frame):
 
         self.ldbase = wx.StaticText(
             parent=self.gisdbase_panel, id=wx.ID_ANY,
-            label=_("GRASS GIS data directory contains Locations."))
+            label=_("GRASS GIS database directory contains Locations."))
 
         self.llocation = StaticWrapText(
             parent=self.location_panel, id=wx.ID_ANY,
@@ -173,6 +173,8 @@ class GRASSStartup(wx.Frame):
                                  label = _("&Browse"))
         self.bmapset = wx.Button(parent = self.mapset_panel, id = wx.ID_ANY,
                                  label = _("&New"))
+        self.bmapset.SetToolTipString(
+            _("Create a new Mapset in selected Location"))
         self.bwizard = wx.Button(parent = self.location_panel, id = wx.ID_ANY,
                                  label = _("N&ew"))
         self.bwizard.SetToolTipString(_("Create a new location using location wizard."
@@ -197,14 +199,14 @@ class GRASSStartup(wx.Frame):
 
         # Locations
         self.lblocations = GListBox(parent = self.location_panel,
-                                    id = wx.ID_ANY, size = (180, 200),
+                                    id=wx.ID_ANY, size=(180, 120),
                                     choices = self.listOfLocations)
         self.lblocations.SetColumnWidth(0, 180)
 
         # TODO: sort; but keep PERMANENT on top of list
         # Mapsets
         self.lbmapsets = GListBox(parent = self.mapset_panel,
-                                  id = wx.ID_ANY, size = (180, 200),
+                                  id=wx.ID_ANY, size=(180, 120),
                                   choices = self.listOfMapsets)
         self.lbmapsets.SetColumnWidth(0, 180)
 
@@ -460,21 +462,29 @@ class GRASSStartup(wx.Frame):
         return grassrc
 
     def _showWarning(self, text):
-        """Displays a warning message to the user.
+        """Displays a warning, hint or info message to the user.
 
-        There is no cleaning procedure. You should call _hideMessage when
-        you know that there is everything correct now.
+        This function can be used for all kinds of messages except for
+        error messages.
+
+        .. note::
+            There is no cleaning procedure. You should call _hideMessage when
+            you know that there is everything correct now.
         """
-        self.lmessage.SetLabel(_("Warning: ") + text)
+        self.lmessage.SetLabel(text)
         self.sizer.Layout()
 
     def _showError(self, text):
         """Displays a error message to the user.
 
-        There is no cleaning procedure. You should call _hideMessage when
-        you know that there is everything correct now.
+        This function should be used only when something serious and unexpected
+        happens, otherwise _showWarning should be used.
+
+        .. note::
+            There is no cleaning procedure. You should call _hideMessage when
+            you know that there is everything correct now.
         """
-        self.lmessage.SetLabel(_("Error: ") + text)
+        self.lmessage.SetLabel(_("Error: {text}").format(text=text))
         self.sizer.Layout()
 
     def _hideMessage(self):
@@ -744,7 +754,9 @@ class GRASSStartup(wx.Frame):
             self.lblocations.SetSelection(0)
         else:
             self.lblocations.SetSelection(wx.NOT_FOUND)
-            self._showWarning(_("No GRASS location found in '%s'.")
+            self._showWarning(_("No GRASS Location found in '%s'."
+                                " Create a new Location or choose different"
+                                " GRASS database directory.")
                               % self.gisdbase)
 
         return self.listOfLocations
@@ -1094,11 +1106,12 @@ class StartUp(wx.App):
             # where other checks are performed or it should use some public
             # API. There is no reason for not exposing it.
             # TODO: another question is what should be warning, hint or message
-            StartUp._showWarning(_('GRASS needs a directory in which to store its data. '
-                                    'Create one now if you have not already done so. '
-                                    'A popular choice is "grassdata", located in '
-                                    'your home directory. '
-                                    'Press Browse button to select the directory.'))
+            StartUp._showWarning(_('GRASS needs a directory (GRASS database) '
+                                   'in which to store its data. '
+                                   'Create one now if you have not already done so. '
+                                   'A popular choice is "grassdata", located in '
+                                   'your home directory. '
+                                   'Press Browse button to select the directory.'))
 
         return 1
 
