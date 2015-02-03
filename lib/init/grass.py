@@ -1377,11 +1377,11 @@ if os.getenv('HOSTTYPE') == 'arm':
 # First time user - GISRC is defined in the GRASS script
 if not os.access(gisrc, os.F_OK):
     if grass_gui == 'text' and len(args) == 0:
-        fatal(_("Unable to start GRASS. You can:\n"
-                " - Launch GRASS with '-gui' switch (`grass71 -gui`)\n"
-                " - Create manually GISRC file (%s)\n"
-                " - Launch GRASS with path to "
-                "the location/mapset as an argument (`grass71 /path/to/location/mapset`)") % gisrcrc)
+        fatal(_("Unable to start GRASS GIS. You have the choice to:\n"
+                " - Launch the GRASS GIS interface with the '-gui' switch (`%s -gui`)\n"
+                " - Launch GRASS GIS directly with path to "
+                "the location/mapset as an argument (`%s /path/to/location/mapset`)\n"
+                " - Create manually the GISRC file (%s)") % (cmd_name, cmd_name, gisrcrc))
     create_initial_gisrc()
 else:
     clean_temp()
