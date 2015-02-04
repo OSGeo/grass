@@ -103,7 +103,7 @@ class VectorSelectBase():
         self.onCloseDialog = None
         
         self.updateLayer = Signal('VectorSelectBase.updateLayer')
-                
+        
         self.painter = VectorSelectHighlighter(self.mapDisp, giface)
 
     def CreateDialog(self, createButton=True):
@@ -188,7 +188,8 @@ class VectorSelectBase():
         if 'Category' in vWhatDic:
             self.AddVecInfo(vWhatDic)
             self._draw()
-            self._dialog.Raise()
+            if self._dialog:
+                self._dialog.Raise()
 
     def AddVecInfo(self, vInfoDictTMP):
         """Update vector in list
@@ -272,9 +273,6 @@ class VectorSelectBase():
             return None
 
         return query[0]
-
-    def getSelectedFeatures(self):
-        return self.selectedFeatures
 
     def GetLineStringSelectedCats(self):
         """Return line of categories separated by comma"""
