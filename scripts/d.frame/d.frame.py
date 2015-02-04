@@ -93,7 +93,7 @@ def read_monitor_file(monitor, ftype='env'):
 
 # check if monitor file exists
 def check_monitor_file(monitor, ftype='env'):
-    mfile = parse_command('d.info', flags='s').get(ftype, None)
+    mfile = parse_command('d.mon', flags='g').get(ftype, None)
     if mfile is None or not os.path.isfile(mfile):
         fatal(_("Unable to get monitor info (no %s found)") % var)
     
