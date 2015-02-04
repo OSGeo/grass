@@ -113,7 +113,7 @@ int main(int argc, char *argv[])
     cmd_flag->guisection = _("Print");
 
     sfile_flag = G_define_flag();
-    sfile_flag->key = 's';
+    sfile_flag->key = 'g';
     sfile_flag->description =
 	_("Print path to support files of currently selected monitor and exit");
 
