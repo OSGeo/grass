@@ -797,12 +797,15 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         if ltype == 'raster':
             key = 'raster'
+            module = 'rast'
             label = _('Raster map')
         elif ltype == 'vector':
             key = 'vector'
+            module = 'vect'
             label = _('Vector map')
         elif ltype == '3d-raster':
             key = 'raster_3d'
+            module = 'rast3d'
             label = _('3D raster map')
         else:
             GError(_("Unsupported map type <%s>") % ltype, parent = self)
@@ -848,7 +851,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             
         lnameDst += '@' + currentMapset
         # add copied map to the layer tree
-        self.AddLayer(ltype, lname = lnameDst, lcmd = ['d.%s' % key, 'map=%s' % lnameDst])
+        self.AddLayer(ltype, lname = lnameDst, lcmd = ['d.%s' % module, 'map=%s' % lnameDst])
 
     def OnHistogram(self, event):
         """Plot histogram for given raster map layer
