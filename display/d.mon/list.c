@@ -111,3 +111,38 @@ void list_cmd(const char *name, FILE *fd_out)
 
     G_free(mon_path);
 }
+
+void list_files(const char *name, FILE *fd_out)
+{
+    char *p;
+    char tmpdir[GPATH_MAX], mon_path[GPATH_MAX];
+    struct dirent *dp;
+    DIR *dirp;
+    
+    G_temp_element(tmpdir);
+    strcat(tmpdir, "/");
+    strcat(tmpdir, "MONITORS");
+    strcat(tmpdir, "/");
+    strcat(tmpdir, name);
+    
+    G_file_name(mon_path, tmpdir, NULL, G_mapset());
+    fprintf(fd_out, "path=%s\n", mon_path);
+    
+    dirp = opendir(mon_path);
+    if (!dirp)
+        G_fatal_error(_("No support files found for monitor <%s>"), name);
+
+    while ((dp = readdir(dirp)) != NULL) {
+        if (!dp->d_name || dp->d_type != DT_REG)
+            continue;
+        
+        p = strrchr(dp->d_name, '.');
+        if (!p)
+            p = dp->d_name;
+        else
+            p++; /* skip '.' */
+        
+        fprintf(fd_out, "%s=%s%c%s\n", p,
+                mon_path, HOST_DIRSEP, dp->d_name);
+    }
+}

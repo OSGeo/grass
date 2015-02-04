@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     struct Option *start_opt, *select_opt, *stop_opt, *output_opt,
         *width_opt, *height_opt, *bgcolor_opt, *res_opt;
     struct Flag *list_flag, *selected_flag, *select_flag, *release_flag, 
-        *cmd_flag, *truecolor_flag, *update_flag, *x_flag;
+        *cmd_flag, *truecolor_flag, *update_flag, *x_flag, *sfile_flag;
     
     int nopts, ret;
     const char *mon;
@@ -112,6 +112,11 @@ int main(int argc, char *argv[])
     cmd_flag->description = _("Print commands for currently selected monitor and exit");
     cmd_flag->guisection = _("Print");
 
+    sfile_flag = G_define_flag();
+    sfile_flag->key = 's';
+    sfile_flag->description =
+	_("Print path to support files of currently selected monitor and exit");
+
     select_flag = G_define_flag();
     select_flag->key = 's';
     select_flag->description = _("Do not automatically select when starting");
@@ -138,7 +143,7 @@ int main(int argc, char *argv[])
     x_flag->label = _("Launch light-weight wx monitor without toolbars and statusbar");
     x_flag->description = _("Requires 'start=wx0-7'");
     x_flag->guisection = _("Settings");
-    
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -146,7 +151,8 @@ int main(int argc, char *argv[])
         G_warning(_("Flag -%c has effect only for wx monitors (%s=wx0-7)"),
                   x_flag->key, start_opt->key);
             
-    if (selected_flag->answer || release_flag->answer || cmd_flag->answer) {
+    if (selected_flag->answer || release_flag->answer ||
+        cmd_flag->answer || sfile_flag->answer) {
 	if (list_flag->answer)
 	    G_warning(_("Flag -%c ignored"), list_flag->key);
 	mon = G_getenv_nofatal("MONITOR");
@@ -159,6 +165,9 @@ int main(int argc, char *argv[])
 		G_message(_("List of commands for monitor <%s>:"), mon);
 		list_cmd(mon, stdout);
 	    }
+            else if (sfile_flag->answer) {
+                list_files(mon, stdout);
+            }
 	    else if (mon) { /* release */
 		G_unsetenv("MONITOR");
 		G_verbose_message(_("Monitor <%s> released"), mon); 
