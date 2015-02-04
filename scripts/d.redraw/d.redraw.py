@@ -31,7 +31,7 @@ def main():
     if not mon:
         grass.fatal(_("No graphics device selected. Use d.mon to select graphics device."))
 
-    monCmd = grass.parse_command('d.info', flags='s').get('cmd', None)
+    monCmd = grass.parse_command('d.mon', flags='g').get('cmd', None)
     if not monCmd or not os.path.isfile(monCmd):
         grass.fatal(_("Unable to open file '%s'") % monCmd)
 
