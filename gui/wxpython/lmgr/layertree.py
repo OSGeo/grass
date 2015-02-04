@@ -1391,7 +1391,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # redraw map if auto-rendering is enabled
         self.rerender = True
         self.Map.SetLayers(self.GetVisibleLayers())
-        
+
+        # if interactive vector feature selection is open -> reset
+        vselect = self._giface.GetMapDisplay().GetDialog('vselect')
+        if vselect:
+            vselect.Reset()
+
     def OnCmdChanged(self, event):
         """Change command string"""
         ctrl = event.GetEventObject().GetId()
@@ -1491,6 +1496,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 elif type == '3d-raster':
                     self.lmgr.nviz.UpdatePage('volume')
                     self.lmgr.nviz.SetPage('volume')
+
+        # if interactive vector feature selection is open -> reset
+        vselect = self._giface.GetMapDisplay().GetDialog('vselect')
+        if vselect:
+            vselect.Reset()
 
     def OnEndDrag(self, event):
         self.StopDragging()
