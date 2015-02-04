@@ -54,6 +54,7 @@ from mapwin.analysis import ProfileController, MeasureDistanceController, \
     MeasureAreaController
 from gui_core.forms import GUI
 from core.giface import Notification
+from gui_core.vselect import VectorSelectBase
 
 from mapdisp import statusbar as sb
 
@@ -198,6 +199,7 @@ class MapFrame(SingleMapFrame):
         self.dialogs['category'] = None
         self.dialogs['vnet'] = None
         self.dialogs['query'] = None
+        self.dialogs['vselect'] = None
 
         # initialize layers to query (d.what.vect/rast)
         self._vectQueryLayers = []
@@ -543,6 +545,10 @@ class MapFrame(SingleMapFrame):
             self.MapWindow.UpdateMap(render = True, renderVector = True)
         else:
             self.MapWindow.UpdateMap(render = True)
+
+        # reset dialog with selected features
+        if self.dialogs['vselect']:
+            self.dialogs['vselect'].Reset()
         
         # update statusbar
         self.StatusbarUpdate()
@@ -555,6 +561,23 @@ class MapFrame(SingleMapFrame):
         if self.GetToolbar('vdigit'):
             self.toolbars['vdigit'].action['id'] = -1
             self.toolbars['vdigit'].action['desc']=''
+
+    def OnSelect(self, event):
+        """Vector feature selection button clicked
+        """
+        layerList = self._giface.GetLayerList()
+        layerSelected = layerList.GetSelectedLayer()
+        if not self.dialogs['vselect']:
+            if layerSelected is None:
+                GMessage(_("No map layer selected. Operation canceled."))
+                return
+
+            self.dialogs['vselect'] = VectorSelectBase(self.parent, self._giface)
+            self.dialogs['vselect'].CreateDialog(createButton=True)
+            self.dialogs['vselect'].onCloseDialog.connect(self._onCloseVectorSelectDialog)
+            
+    def _onCloseVectorSelectDialog(self):
+        self.dialogs['vselect'] = None
 
     def OnRotate(self, event):
         """Rotate 3D view
@@ -986,13 +1009,19 @@ class MapFrame(SingleMapFrame):
         icon = ''
         size = 0
         # here we know that there is one selected layer and it is vector
-        vparam = self._giface.GetLayerList().GetSelectedLayers()[0].cmd
+        layerSelected = self._giface.GetLayerList().GetSelectedLayer()
+        if not layerSelected:
+            return None
+        
+        vparam = layerSelected.cmd
         for p in vparam:
             if '=' in p:
-                parg,pval = p.split('=', 1)
-                if parg == 'icon': icon = pval
-                elif parg == 'size': size = float(pval)
-
+                parg, pval = p.split('=', 1)
+                if parg == 'icon':
+                    icon = pval
+                elif parg == 'size':
+                    size = float(pval)
+        
         pattern = ["d.vect",
                    "map=%s" % name,
                    "color=%s" % colorStr,
@@ -1428,7 +1457,11 @@ class MapFrame(SingleMapFrame):
     def GetToolbarNames(self):
         """Return toolbar names"""
         return self.toolbars.keys()
-    
+
+    def GetDialog(self, name):
+        """Get selected dialog if exist"""
+        return self.dialogs.get(name, None)
+
     def OnVNet(self, event):
         """Dialog for v.net* modules 
         """

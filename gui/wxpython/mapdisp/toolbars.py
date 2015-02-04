@@ -28,6 +28,9 @@ MapIcons =  {
     'query'      : MetaIcon(img = 'info',
                             label = _('Query raster/vector map(s)'),
                             desc = _('Query selected raster/vector map(s)')),
+    'select'     : MetaIcon(img = 'select',
+                            label = _('Select vector feature(s)'),
+                            desc = _('Select features interactively from vector map')),
     'addBarscale': MetaIcon(img = 'scalebar-add',
                             label = _('Show/hide scale bar')),
     'addLegend'  : MetaIcon(img = 'legend-add',
@@ -131,7 +134,7 @@ class MapToolbar(BaseToolbar):
         self.combo.Hide()
         self.combo.Show()
         
-        for tool in (self.pointer, self.query, self.pan, self.zoomIn, self.zoomOut):
+        for tool in (self.pointer, self.select, self.query, self.pan, self.zoomIn, self.zoomOut):
             self.toolSwitcher.AddToolToGroup(group='mouseUse', toolbar=self, tool=tool)
         
         self.EnableTool(self.zoomBack, False)
@@ -149,6 +152,9 @@ class MapToolbar(BaseToolbar):
                                      (None, ),
                                      ('pointer', BaseIcons['pointer'],
                                       self.parent.OnPointer,
+                                      wx.ITEM_CHECK),
+                                     ('select', MapIcons['select'],
+                                      self.parent.OnSelect,
                                       wx.ITEM_CHECK),
                                      ('query', MapIcons['query'],
                                       self.parent.OnQuery,
