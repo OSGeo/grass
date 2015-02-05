@@ -148,33 +148,35 @@ def _available_mapsets(lock, conn, data):
 
        :returns: Names of available mapsets as list of strings
     """
-
-    mapsets = libgis.G_get_available_mapsets()
-
+    
     count = 0
     mapset_list = []
-    while mapsets[count]:
-        char_list = ""
-        mapset = mapsets[count]
-        if libgis.G_mapset_permissions(mapset) > 0:
+    try:
+        mapsets = libgis.G_get_available_mapsets()
+        while mapsets[count]:
+            char_list = ""
+            mapset = mapsets[count]
+            if libgis.G_mapset_permissions(mapset) > 0:
+                c = 0
+                while mapset[c] != "\x00":
+                    char_list += mapset[c]
+                    c += 1
+                mapset_list.append(char_list)
             count += 1
-            c = 0
-            while mapset[c] != "\x00":
-                char_list += mapset[c]
-                c += 1
 
-        mapset_list.append(char_list)
-
-    # We need to sort the mapset list, but the first one should be
-    # the current mapset
-    current_mapset = libgis.G_mapset()
-    mapset_list.remove(current_mapset)
-    mapset_list.sort()
-    mapset_list.reverse()
-    mapset_list.append(current_mapset)
-    mapset_list.reverse()
-
-    conn.send(mapset_list)
+        # We need to sort the mapset list, but the first one should be
+        # the current mapset
+        current_mapset = libgis.G_mapset()
+        if current_mapset in mapset_list:
+            mapset_list.remove(current_mapset)
+        mapset_list.sort()
+        mapset_list.reverse()
+        mapset_list.append(current_mapset)
+        mapset_list.reverse()
+    except:
+        raise
+    finally:
+        conn.send(mapset_list)
 
 
 def _has_timestamp(lock, conn, data):
