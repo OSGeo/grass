@@ -305,7 +305,6 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 	    return 0;
 	}
 
-	n_polygons++;
 	nr = OGR_G_GetGeometryCount(hGeom);
 
 	Vect_reset_line(Points);
@@ -326,6 +325,8 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 	    G_debug(2, "\tArea size %.1e, area not imported", size);
 	    return 0;
 	}
+
+	n_polygons++;
 
 	if (type & GV_LINE)
 	    otype = GV_LINE;
