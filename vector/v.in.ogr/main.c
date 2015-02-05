@@ -1576,19 +1576,45 @@ int main(int argc, char *argv[])
 	    max_snap = pow(10, max_snap);
 
 	    G_important_message("%s", separator);
-	    G_warning(_("Errors were encountered during the import"));
-	    G_important_message(_("Estimated range of snapping threshold: [%g, %g]"), min_snap, max_snap);
+	    if (n_overlaps) {
+		G_important_message(_("Some input polygons are overlapping each other."));
+		G_important_message(_("If overlapping is not desired, the data need to be cleaned."));
 
-	    if (snap < min_snap) {
-		G_important_message(_("Try to import again, snapping with at least %g: 'snap=%g'"), min_snap, min_snap);
+		if (snap < max_snap) {
+		    G_important_message(_("The input could be cleaned by snapping vertices to each other."));
+		    G_important_message(_("Estimated range of snapping threshold: [%g, %g]"), min_snap, max_snap);
+		}
+
+		if (snap < min_snap) {
+		    G_important_message(_("Try to import again, snapping with at least %g: 'snap=%g'"), min_snap, min_snap);
+		}
+		else if (snap < max_snap) {
+		    min_snap = snap * 10;
+		    G_important_message(_("Try to import again, snapping with %g: 'snap=%g'"), min_snap, min_snap);
+		}
+		else
+		    /* assume manual cleaning is required */
+		    G_important_message(_("Manual cleaning may be needed."));
 	    }
-	    else if (snap < max_snap) {
-		min_snap = snap * 10;
-		G_important_message(_("Try to import again, snapping with %g: 'snap=%g'"), min_snap, min_snap);
+	    else {
+		if (ncentr < n_polygons) {
+		    G_important_message(_("%d input polygons got lost during import."), n_polygons - ncentr);
+		}
+		if (ncentr > n_polygons) {
+		    G_important_message(_("%d additional areas where created during import."), ncentr - n_polygons);
+		}
+		if (snap > 0) {
+		    G_important_message(_("The snapping threshold %g might be too large."), snap);
+		    G_important_message(_("Estimated range of snapping threshold: [%g, %g]"), min_snap, max_snap);
+		    /* assume manual cleaning is required */
+		    G_important_message(_("Manual cleaning may be needed."));
+		}
+		else {
+		    G_important_message(_("The input could be cleaned by snapping vertices to each other."));
+		    G_important_message(_("Estimated range of snapping threshold: [%g, %g]"), min_snap, max_snap);
+		}
 	    }
-	    else
-		/* assume manual cleaning is required */
-		G_important_message(_("Manual cleaning may be needed"));
+
 	}
     }
 
