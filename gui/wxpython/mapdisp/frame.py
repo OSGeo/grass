@@ -102,6 +102,7 @@ class MapFrame(SingleMapFrame):
         # Emitted when starting (switching to) 3D mode.
         # Parameter firstTime specifies if 3D was already actived.
         self.starting3dMode = Signal("MapFrame.starting3dMode")
+        self.starting3dModeSetInitialMaps = Signal("MapFrame.starting3dMode")
 
         # Emitted when ending (switching from) 3D mode.
         self.ending3dMode = Signal("MapFrame.ending3dMode")
@@ -382,6 +383,7 @@ class MapFrame(SingleMapFrame):
             self.MapWindow3D.overlayActivated.connect(self._activateOverlay)
             self.MapWindow3D.overlayHidden.connect(self._hideOverlay)
             self.legend.overlayChanged.connect(self.MapWindow3D.UpdateOverlays)
+            self.starting3dModeSetInitialMaps.emit()
         else:
             self._switchMapWindow(self.MapWindow3D)
             os.environ['GRASS_REGION'] = self.Map.SetRegion(windres = True, windres3 = True)
@@ -396,6 +398,9 @@ class MapFrame(SingleMapFrame):
             self.starting3dMode.emit(firstTime=False)
 
             self.MapWindow3D.ResetViewHistory()
+            # explicitly load layers so that we can call SetInitialMaps after that
+            self.MapWindow3D.LoadDataLayers()
+            self.starting3dModeSetInitialMaps.emit()
 
         self._giface.updateMap.disconnect(self.MapWindow2D.UpdateMap)
         self._giface.updateMap.connect(self.MapWindow3D.UpdateMap)
