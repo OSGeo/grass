@@ -38,7 +38,7 @@ static int read_env_file(const char *);
 
 static struct {
     double t, b, l, r;
-} screen;
+} screen, frame;
 
 static void init(void)
 {
@@ -46,7 +46,7 @@ static void init(void)
     const char *font = getenv("GRASS_FONT");
     const char *line_width = getenv("GRASS_RENDER_LINE_WIDTH");
     const char *text_size = getenv("GRASS_RENDER_TEXT_SIZE");
-    const char *frame = getenv("GRASS_RENDER_FRAME");
+    const char *frame_str = getenv("GRASS_RENDER_FRAME");
 
     D_font(font ? font : "romans");
 
@@ -63,12 +63,13 @@ static void init(void)
 
     D_text_rotation(0);
 
-    if (frame) {
-	sscanf(frame, "%lf,%lf,%lf,%lf", &screen.t, &screen.b, &screen.l, &screen.r);
-	COM_Set_window(screen.t, screen.b, screen.l, screen.r);
+    COM_Get_window(&screen.t, &screen.b, &screen.l, &screen.r);
+    if (frame_str) {
+	sscanf(frame_str, "%lf,%lf,%lf,%lf", &frame.t, &frame.b, &frame.l, &frame.r);
+	COM_Set_window(frame.t, frame.b, frame.l, frame.r);
     }
     else
-	COM_Get_window(&screen.t, &screen.b, &screen.l, &screen.r);
+	frame = screen;
 }
 
 int read_env_file(const char *path)
@@ -362,10 +363,10 @@ void D_get_clip_window(double *t, double *b, double *l, double *r)
 
 void D_set_clip_window(double t, double b, double l, double r)
 {
-    if (t < screen.t) t = screen.t;
-    if (b > screen.b) b = screen.b;
-    if (l < screen.l) l = screen.l;
-    if (r > screen.r) r = screen.r;
+    if (t < frame.t) t = frame.t;
+    if (b > frame.b) b = frame.b;
+    if (l < frame.l) l = frame.l;
+    if (r > frame.r) r = frame.r;
 
     COM_Set_window(t, b, l, r);
 }
@@ -383,6 +384,26 @@ void D_set_clip_window(double t, double b, double l, double r)
  */
 
 void D_get_frame(double *t, double *b, double *l, double *r)
+{
+    *t = frame.t;
+    *b = frame.b;
+    *l = frame.l;
+    *r = frame.r;
+}
+
+/*!
+ * \brief get screen bounds
+ *
+ * Queries the screen bounds (origin is top right)
+ *
+ *  \param[out] t top edge of screen
+ *  \param[out] b bottom edge of screen
+ *  \param[out] l left edge of screen
+ *  \param[out] r right edge of screen
+ *  \return ~
+ */
+
+void D_get_screen(double *t, double *b, double *l, double *r)
 {
     *t = screen.t;
     *b = screen.b;
@@ -419,6 +440,6 @@ void D_set_clip_window_to_map_window(void)
 
 void D_set_clip_window_to_screen_window(void)
 {
-    COM_Set_window(screen.t, screen.b, screen.l, screen.r);
+    COM_Set_window(frame.t, frame.b, frame.l, frame.r);
 }
 

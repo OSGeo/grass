@@ -162,6 +162,7 @@ void D_font_info(char ***, int *);
 void D_get_clip_window(double *, double *, double *, double *);
 void D_set_clip_window(double, double, double, double);
 void D_get_frame(double *, double *, double *, double *);
+void D_get_screen(double *, double *, double *, double *);
 void D_set_clip_window_to_map_window(void);
 void D_set_clip_window_to_screen_window(void);
 

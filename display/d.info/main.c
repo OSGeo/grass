@@ -21,9 +21,9 @@
 int main(int argc, char *argv[])
 {
     struct GModule *module;
-    struct Flag *rflag, *dflag, *fflag, *bflag, *gflag;
-    double t, b, l, r;
-    double n, s, e, w;
+    struct Flag *rflag, *dflag, *fflag, *eflag, *bflag, *gflag;
+    double st, sb, sl, sr;
+    double ft, fb, fl, fr;
 
     G_gisinit(argv[0]);
 
@@ -49,6 +49,10 @@ int main(int argc, char *argv[])
     fflag->key = 'f';
     fflag->description = _("Display active frame rectangle");
 
+    eflag = G_define_flag();
+    eflag->key = 'e';
+    eflag->description = _("Display frame dimensions (width, height)");
+
     bflag = G_define_flag();
     bflag->key = 'b';
     bflag->description = _("Display screen rectangle of current region");
@@ -56,32 +60,36 @@ int main(int argc, char *argv[])
     gflag = G_define_flag();
     gflag->key = 'g';
     gflag->description =
-	_("Display geographic coordinates and resolution of entire screen");
+	_("Display geographic coordinates and resolution of entire frame");
+
+    G_option_required(rflag, dflag, fflag, eflag, bflag, gflag, NULL); 
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    if (!rflag->answer && !dflag->answer &&
-	!fflag->answer && !bflag->answer && !gflag->answer) {
-	G_fatal_error(_("No flag given"));
-    }
-
     D_open_driver();
     
-    if (rflag->answer || dflag->answer || fflag->answer)
-	D_get_frame(&t, &b, &l, &r);
+    if (rflag->answer || dflag->answer)
+	D_get_screen(&st, &sb, &sl, &sr);
+    
+    if (fflag->answer || eflag->answer || gflag->answer)
+	D_get_frame(&ft, &fb, &fl, &fr);
 
 
     if (rflag->answer)
-	fprintf(stdout, "rectangle: %f %f %f %f\n", l, r, t, b);
+	fprintf(stdout, "screen rectangle: %f %f %f %f\n", sl, sr, st, sb);
 
     if (dflag->answer)
-	fprintf(stdout, "dimensions: %f %f\n", r - l, b - t);
+	fprintf(stdout, "screen dimensions: %f %f\n", sr - sl, sb - st);
 
     if (fflag->answer)
-	fprintf(stdout, "frame: %f %f %f %f\n", l, r, t, b);
+	fprintf(stdout, "frame rectangle: %f %f %f %f\n", fl, fr, ft, fb);
+
+    if (eflag->answer)
+	fprintf(stdout, "frame dimensions: %f %f\n", fr - fl, fb - ft);
 
     if (bflag->answer) {
+	double t, b, l, r;
 	D_setup(0);
 
 	l = D_get_d_west();
@@ -94,19 +102,20 @@ int main(int argc, char *argv[])
 
     if (gflag->answer) {
 	/* outer bounds of the screen (including margins) */
+	double n, s, e, w;
 	D_setup(0);
 
-	n = D_get_u_north();
-	s = D_get_u_south();
-	w = D_get_u_west();
-	e = D_get_u_east();
+	n = D_d_to_u_row(ft);
+	s = D_d_to_u_row(fb);
+	w = D_d_to_u_col(fl);
+	e = D_d_to_u_col(fr);
 
 	fprintf(stdout, "n=%f\n", n );
 	fprintf(stdout, "s=%f\n", s );
 	fprintf(stdout, "w=%f\n", w );
 	fprintf(stdout, "e=%f\n", e );
-	fprintf(stdout, "ewres=%.15g\n", (e-w)/(r-l) );
-	fprintf(stdout, "nsres=%.15g\n", (n-s)/(b-t) );
+	fprintf(stdout, "ewres=%.15g\n",  D_get_d_to_u_xconv() );
+	fprintf(stdout, "nsres=%.15g\n", -D_get_d_to_u_yconv() );
     }
 
     
