@@ -512,6 +512,9 @@ int main(int argc, char *argv[])
 
 	/* create clusters */
 	G_message(_("Building clusters ..."));
+	clcnt = G_malloc((nlines + 1) * sizeof(int));
+	for (i = 0; i <= nlines; i++)
+	    clcnt[i] = 0;
 	nclusters = 0;
 	kdtree_init_trav(&trav, kdt);
 	c[2] = 0.0;
@@ -521,6 +524,7 @@ int main(int argc, char *argv[])
 	    G_percent(i++, npoints, 4);
 
 	    /* radius search */
+	    /* TODO: use knn search */
 	    kdfound = kdtree_dnn(kdt, c, &kduid, &kddist, eps, &uid);
 	    
 	    /* any neighbor within radius */
@@ -555,6 +559,7 @@ int main(int argc, char *argv[])
 			G_fatal_error(_("nlines: %d, nclusters: %d"), nlines, nclusters);
 		    idx[nclusters] = nclusters;
 		    cid[uid] = nclusters;
+		    clcnt[cat] = 1;
 		}
 
 		/* set or update cluster ids */
@@ -570,6 +575,7 @@ int main(int argc, char *argv[])
 		}
 		else {
 		    cid[uid] = cat;
+		    clcnt[cat]++;
 		}
 
 		for (j = 0; j < kdfound; j++) {
@@ -585,6 +591,7 @@ int main(int argc, char *argv[])
 		    }
 		    else {
 		        cid[kduid[j]] = cat;
+			clcnt[cat]++;
 		    }
 		}
 		G_free(kddist);
@@ -604,9 +611,6 @@ int main(int argc, char *argv[])
 	/* generate a renumbering scheme */
 	G_message(_("Generating renumbering scheme..."));
 	G_debug(1, "%d initial clusters", nclusters);
-	clcnt = G_malloc((nlines + 1) * sizeof(int));
-	for (i = 0; i <= nlines; i++)
-	    clcnt[i] = 0;
 	/* allocate final clump ID */
 	renumber = (int *) G_malloc((nclusters + 1) * sizeof(int));
 	renumber[0] = 0;
@@ -623,7 +627,7 @@ int main(int argc, char *argv[])
 		    NEW = idx[OLD];
 		}
 		idx[i] = NEW;
-		clcnt[NEW]++;
+		clcnt[NEW] += clcnt[i];
 	    }
 	}
 	for (i = 1; i <= nclusters; i++) {
