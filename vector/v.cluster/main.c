@@ -239,7 +239,8 @@ int main(int argc, char *argv[])
     noutliers = nclusters = 0;
     if (clmethod == CL_DBSCAN) {
 	/* DBSCAN 
-	 * the neighbors of each point with at least minpnts neighbors 
+	 * the neighbors of each point 
+	 * with at least minpnts neighbors within distance (epsilon)
 	 * are added to a cluster */
 
 	/* get epsilon */
@@ -315,17 +316,30 @@ int main(int argc, char *argv[])
 	    G_percent(i++, npoints, 4);
 
 	    /* radius search */
+	    /* TODO: use knn search */
 	    kdfound = kdtree_dnn(kdt, c, &kduid, &kddist, eps, &uid);
-	    
+
 	    /* must have min neighbors within radius */
 	    if (kdfound >= minpnts) {
 
-		cat = idx[cid[uid]];
+		OLD = cid[uid];
+		NEW = idx[OLD];
+		while (OLD != NEW) {
+		    OLD = NEW;
+		    NEW = idx[OLD];
+		}
+		cat = NEW;
 
 		/* find latest cluster */
 		for (j = 0; j < kdfound; j++) {
-		    if (cat < idx[cid[kduid[j]]]) {
-			cat = idx[cid[kduid[j]]];
+		    OLD = cid[kduid[j]];
+		    NEW = idx[OLD];
+		    while (OLD != NEW) {
+			OLD = NEW;
+			NEW = idx[OLD];
+		    }
+		    if (cat < NEW) {
+			cat = NEW;
 		    }
 		}
 
@@ -342,7 +356,13 @@ int main(int argc, char *argv[])
 		/* set or update cluster ids */
 		if (cid[uid] != 0) {
 		    /* relabel */
-		    idx[cid[uid]] = cat;
+		    OLD = cid[uid];
+		    NEW = idx[OLD];
+		    while (OLD != NEW) {
+			OLD = NEW;
+			NEW = idx[OLD];
+		    }
+		    idx[NEW] = cat;
 		}
 		else {
 		    cid[uid] = cat;
@@ -351,7 +371,13 @@ int main(int argc, char *argv[])
 		for (j = 0; j < kdfound; j++) {
 		    if (cid[kduid[j]] != 0) {
 			/* relabel */
-			idx[cid[kduid[j]]] = cat;
+			OLD = cid[kduid[j]];
+			NEW = idx[OLD];
+			while (OLD != NEW) {
+			    OLD = NEW;
+			    NEW = idx[OLD];
+			}
+			idx[NEW] = cat;
 		    }
 		    else {
 		       cid[kduid[j]] = cat;
@@ -486,9 +512,6 @@ int main(int argc, char *argv[])
 
 	/* create clusters */
 	G_message(_("Building clusters ..."));
-	clcnt = G_malloc((nlines + 1) * sizeof(int));
-	for (i = 0; i <= nlines; i++)
-	    clcnt[i] = 0;
 	nclusters = 0;
 	kdtree_init_trav(&trav, kdt);
 	c[2] = 0.0;
@@ -503,12 +526,24 @@ int main(int argc, char *argv[])
 	    /* any neighbor within radius */
 	    if (kdfound > 0) {
 
-		cat = idx[cid[uid]];
+		OLD = cid[uid];
+		NEW = idx[OLD];
+		while (OLD != NEW) {
+		    OLD = NEW;
+		    NEW = idx[OLD];
+		}
+		cat = NEW;
 
 		/* find latest cluster */
 		for (j = 0; j < kdfound; j++) {
-		    if (cat < idx[cid[kduid[j]]]) {
-			cat = idx[cid[kduid[j]]];
+		    OLD = cid[kduid[j]];
+		    NEW = idx[OLD];
+		    while (OLD != NEW) {
+			OLD = NEW;
+			NEW = idx[OLD];
+		    }
+		    if (cat < NEW) {
+			cat = NEW;
 		    }
 		}
 
@@ -520,27 +555,36 @@ int main(int argc, char *argv[])
 			G_fatal_error(_("nlines: %d, nclusters: %d"), nlines, nclusters);
 		    idx[nclusters] = nclusters;
 		    cid[uid] = nclusters;
-		    clcnt[cat] = 1;
 		}
 
 		/* set or update cluster ids */
 		if (cid[uid] != 0) {
 		    /* relabel */
-		    idx[cid[uid]] = cat;
+		    OLD = cid[uid];
+		    NEW = idx[OLD];
+		    while (OLD != NEW) {
+			OLD = NEW;
+			NEW = idx[OLD];
+		    }
+		    idx[NEW] = cat;
 		}
 		else {
 		    cid[uid] = cat;
-		    clcnt[cat]++;
 		}
 
 		for (j = 0; j < kdfound; j++) {
 		    if (cid[kduid[j]] != 0) {
+			OLD = cid[kduid[j]];
+			NEW = idx[OLD];
+			while (OLD != NEW) {
+			    OLD = NEW;
+			    NEW = idx[OLD];
+			}
 			/* relabel */
-			idx[cid[kduid[j]]] = cat;
+			idx[NEW] = cat;
 		    }
 		    else {
 		        cid[kduid[j]] = cat;
-			clcnt[cat]++;
 		    }
 		}
 		G_free(kddist);
@@ -560,6 +604,9 @@ int main(int argc, char *argv[])
 	/* generate a renumbering scheme */
 	G_message(_("Generating renumbering scheme..."));
 	G_debug(1, "%d initial clusters", nclusters);
+	clcnt = G_malloc((nlines + 1) * sizeof(int));
+	for (i = 0; i <= nlines; i++)
+	    clcnt[i] = 0;
 	/* allocate final clump ID */
 	renumber = (int *) G_malloc((nclusters + 1) * sizeof(int));
 	renumber[0] = 0;
@@ -576,7 +623,7 @@ int main(int argc, char *argv[])
 		    NEW = idx[OLD];
 		}
 		idx[i] = NEW;
-		clcnt[NEW] += clcnt[i];
+		clcnt[NEW]++;
 	    }
 	}
 	for (i = 1; i <= nclusters; i++) {
