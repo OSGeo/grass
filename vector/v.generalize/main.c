@@ -430,30 +430,19 @@ int main(int argc, char *argv[])
 			
 			/* check if any of the centroids is selected */
 			Vect_get_line_areas(&Out, i, &left, &right);
+			if (left < 0)
+			    left = Vect_get_isle_area(&Out, abs(left));
+			if (right < 0)
+			    right = Vect_get_isle_area(&Out, abs(right));
+
 			if (left > 0) {
 			    Vect_get_area_cats(&Out, left, Cats);
 			    do_line = Vect_cats_in_constraint(Cats, layer, cat_list);
 			}
-			else if (left < 0) {
-			    left = Vect_get_isle_area(&Out, abs(left));
-			    if (left > 0) {
-				Vect_get_area_cats(&Out, left, Cats);
-				do_line = Vect_cats_in_constraint(Cats, layer, cat_list);
-			    }
-			}
 			
-			if (!do_line) {
-			    if (right > 0) {
-				Vect_get_area_cats(&Out, right, Cats);
-				do_line = Vect_cats_in_constraint(Cats, layer, cat_list);
-			    }
-			    else if (right < 0) {
-				right = Vect_get_isle_area(&Out, abs(right));
-				if (right > 0) {
-				    Vect_get_area_cats(&Out, right, Cats);
-				    do_line = Vect_cats_in_constraint(Cats, layer, cat_list);
-				}
-			    }
+			if (!do_line && right > 0) {
+			    Vect_get_area_cats(&Out, right, Cats);
+			    do_line = Vect_cats_in_constraint(Cats, layer, cat_list);
 			}
 		    }
 		    if (!do_line)
