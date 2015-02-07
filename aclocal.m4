@@ -486,7 +486,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
     LD_LIBRARY_PATH_VAR="LD_LIBRARY_PATH"
 
     case $host in
-        *-linux-*)
+        *-linux-* | *-gnu* | *-kfreebsd*-gnu)
 	    SHLIB_CFLAGS="-fPIC"
             SHLIB_LD_FLAGS=""
 	    SHLIB_SUFFIX=".so"
