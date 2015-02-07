@@ -29,13 +29,8 @@ from grass.exceptions import Usage
 from grass.script.core import set_raise_on_error
 
 import wx
-try:
-    import wx.lib.agw.advancedsplash as SC
-except ImportError:
-    SC = None
 
 from lmgr.frame import GMFrame
-
 
 class GMApp(wx.App):
     def __init__(self, workspace = None):
