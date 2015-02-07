@@ -5,9 +5,9 @@
 
 Classes:
  - wxgui::GMApp
- - wxgui::Usage
+ - wxgui::GSplashScreen
 
-(C) 2006-2011 by the GRASS Development Team
+(C) 2006-2015 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -58,35 +58,37 @@ class GMApp(wx.App):
         if not globalvar.CheckWxVersion([2, 9]):
             wx.InitAllImageHandlers()
 
-        # create splash screen
-        introImagePath = os.path.join(globalvar.IMGDIR, "splash_screen.png")
-        introImage     = wx.Image(introImagePath, wx.BITMAP_TYPE_PNG)
-        introBmp       = introImage.ConvertToBitmap()
-        if SC and sys.platform != 'darwin':
-            # AdvancedSplash is buggy on the Mac as of 2.8.12.1
-            # and raises annoying (though seemingly harmless) errors everytime the GUI is started
-            splash = SC.AdvancedSplash(bitmap = introBmp,
-                                       timeout = 2000, parent = None, id = wx.ID_ANY)
-            splash.SetText(_('Starting GRASS GUI...'))
-            splash.SetTextColour(wx.Colour(45, 52, 27))
-            splash.SetTextFont(wx.Font(pointSize = 15, family = wx.DEFAULT, style = wx.NORMAL,
-                                       weight = wx.BOLD))
-            splash.SetTextPosition((150, 430))
-        else:
-            wx.SplashScreen (bitmap = introBmp, splashStyle = wx.SPLASH_CENTRE_ON_SCREEN | wx.SPLASH_TIMEOUT,
-                             milliseconds = 2000, parent = None, id = wx.ID_ANY)
+        splash = GSplashScreen(app=self, workspace=self.workspaceFile)
+        splash.Show()
+        
+        return True
+
+class GSplashScreen(wx.SplashScreen):
+    """Create a splash screen widget
+    """
+    def __init__(self, parent=None, app=None, workspace=None):
+        self.workspaceFile = workspace
+        self.parent = parent
+        self.app = app
+        
+        bitmap = wx.Image(name=os.path.join(globalvar.IMGDIR, "splash_screen.png")).ConvertToBitmap()
+        wx.SplashScreen.__init__(self, bitmap,
+                                 wx.SPLASH_CENTRE_ON_SCREEN | wx.SPLASH_TIMEOUT,
+                                 1000, parent)
+        self.Bind(wx.EVT_CLOSE, self.OnExit)
 
         wx.Yield()
 
+    def OnExit(self, event):
+        self.Hide()
+        
         # create and show main frame
-        mainframe = GMFrame(parent = None, id = wx.ID_ANY,
-                            workspace = self.workspaceFile)
-
-        mainframe.Show()
-        self.SetTopWindow(mainframe)
-
-        return True
-
+        frame = GMFrame(parent = None, id = wx.ID_ANY,
+                        workspace = self.workspaceFile)
+        self.app.SetTopWindow(frame)
+        frame.Show()
+        
+        event.Skip()  # make sure the default handler runs too
 
 def printHelp():
     """ Print program help"""
@@ -114,7 +116,6 @@ def process_opt(opts, args):
 
 
 def main(argv = None):
-
     if argv is None:
         argv = sys.argv
     try:
