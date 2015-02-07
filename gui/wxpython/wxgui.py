@@ -74,7 +74,7 @@ class GSplashScreen(wx.SplashScreen):
         bitmap = wx.Image(name=os.path.join(globalvar.IMGDIR, "splash_screen.png")).ConvertToBitmap()
         wx.SplashScreen.__init__(self, bitmap,
                                  wx.SPLASH_CENTRE_ON_SCREEN | wx.SPLASH_TIMEOUT,
-                                 1000, parent)
+                                 2000, parent)
         self.Bind(wx.EVT_CLOSE, self.OnExit)
 
         wx.Yield()
