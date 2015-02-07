@@ -69,18 +69,18 @@ class GSplashScreen(wx.SplashScreen):
         bitmap = wx.Image(name=os.path.join(globalvar.IMGDIR, "splash_screen.png")).ConvertToBitmap()
         wx.SplashScreen.__init__(self, bitmap=bitmap,
                                  splashStyle=wx.SPLASH_CENTRE_ON_SCREEN | wx.SPLASH_TIMEOUT,
-                                 milliseconds=2000, parent=parent)
+                                 milliseconds=1000, parent=parent)
         self.Bind(wx.EVT_CLOSE, self.OnExit)
 
         wx.Yield()
 
     def OnExit(self, event):
-        self.Hide()
-        
         # create and show main frame
         frame = GMFrame(parent = None, id = wx.ID_ANY,
                         workspace = self.workspaceFile)
         self.app.SetTopWindow(frame)
+        
+        self.Hide()
         frame.Show()
         
         event.Skip()  # make sure the default handler runs too
