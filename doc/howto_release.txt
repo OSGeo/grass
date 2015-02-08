@@ -18,8 +18,8 @@ Contents
 
    - svn up
    - check if
-        ( cd doc/raster/r.example/ ; make )
-        ( cd doc/vector/v.example/ ; make )
+        ( cd doc/raster/r.example/ ; make clean ; make )
+        ( cd doc/vector/v.example/ ; make clean ; make )
       still compile; fix otherwise
  
    - Check that autoconf scripts are up-to-date (to do only in RC cycle!):
