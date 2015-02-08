@@ -17536,19 +17536,16 @@ msgstr ""
 "%s"
 
 #: ../gui/wxpython/gis_set.py:107
-#, fuzzy
 msgid "1. Select GRASS GIS database directory"
-msgstr "Choisir le répertoire des données de GRASS :"
+msgstr "1. Choisir le répertoire des données de GRASS GIS"
 
 #: ../gui/wxpython/gis_set.py:109
-#, fuzzy
 msgid "2. Select GRASS Location"
-msgstr "Choisir le jeu de cartes dans le secteur GRASS"
+msgstr "2. Choisir un jeu de secteur GRASS"
 
 #: ../gui/wxpython/gis_set.py:111
-#, fuzzy
 msgid "3. Select GRASS Mapset"
-msgstr "Choisir un secteur GRASS et un jeu de cartes"
+msgstr "3. Choisir un jeu de cartes GRASS"
 
 #: ../gui/wxpython/gis_set.py:140
 msgid "GRASS GIS database directory contains Locations."
@@ -17567,9 +17564,8 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/gis_set.py:167
-#, fuzzy
 msgid "Start &GRASS session"
-msgstr "Démarrer une session GRASS"
+msgstr "Démarrer GRASS"
 
 #: ../gui/wxpython/gis_set.py:173
 msgid "&Browse"
@@ -17577,7 +17573,7 @@ msgstr "Parcourir"
 
 #: ../gui/wxpython/gis_set.py:175
 msgid "&New"
-msgstr ""
+msgstr "&Nouveau"
 
 #: ../gui/wxpython/gis_set.py:177
 #, fuzzy
@@ -17588,7 +17584,7 @@ msgstr ""
 
 #: ../gui/wxpython/gis_set.py:179
 msgid "N&ew"
-msgstr ""
+msgstr "N&ouveau"
 
 #: ../gui/wxpython/gis_set.py:180
 #, fuzzy
@@ -17601,16 +17597,15 @@ msgstr ""
 
 #: ../gui/wxpython/gis_set.py:184
 msgid "Ren&ame"
-msgstr ""
+msgstr "Ren&ommer"
 
 #: ../gui/wxpython/gis_set.py:185 ../gui/wxpython/gis_set.py:655
 msgid "Rename selected location"
 msgstr "Renommer le secteur sélectionné"
 
 #: ../gui/wxpython/gis_set.py:187
-#, fuzzy
 msgid "De&lete"
-msgstr "Supprimer"
+msgstr "Effacer"
 
 #: ../gui/wxpython/gis_set.py:188 ../gui/wxpython/gis_set.py:725
 msgid "Delete selected location"
@@ -17657,7 +17652,7 @@ msgstr "Ligne invalide dans le fichier GISRC (%s) : %s\n"
 #: ../gui/wxpython/gis_set.py:487
 #, fuzzy, python-brace-format
 msgid "Error: {text}"
-msgstr "Erreur :"
+msgstr "Erreur: {text}"
 
 #: ../gui/wxpython/gis_set.py:518
 #, fuzzy, python-format
@@ -17671,7 +17666,7 @@ msgstr ""
 #: ../gui/wxpython/gis_set.py:523
 #, fuzzy
 msgid "Import data?"
-msgstr "Importer des données"
+msgstr "Importer des données?"
 
 #: ../gui/wxpython/gis_set.py:535
 msgid "Do you want to create new mapset?"
