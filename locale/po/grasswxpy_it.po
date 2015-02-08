@@ -15653,7 +15653,7 @@ msgstr "&Naviga"
 
 #: ../gui/wxpython/gis_set.py:175
 msgid "&New"
-msgstr ""
+msgstr "&Nuovo"
 
 #: ../gui/wxpython/gis_set.py:177
 #, fuzzy
@@ -15664,7 +15664,7 @@ msgstr ""
 
 #: ../gui/wxpython/gis_set.py:179
 msgid "N&ew"
-msgstr ""
+msgstr "N&uovo"
 
 #: ../gui/wxpython/gis_set.py:180
 msgid "Create a new location using location wizard. After location is created successfully, GRASS session is started."
@@ -15672,16 +15672,15 @@ msgstr ""
 
 #: ../gui/wxpython/gis_set.py:184
 msgid "Ren&ame"
-msgstr ""
+msgstr "Ri&nomina"
 
 #: ../gui/wxpython/gis_set.py:185 ../gui/wxpython/gis_set.py:655
 msgid "Rename selected location"
 msgstr "Rinomina la location selezionata"
 
 #: ../gui/wxpython/gis_set.py:187
-#, fuzzy
 msgid "De&lete"
-msgstr "Elimina"
+msgstr "E&limina"
 
 #: ../gui/wxpython/gis_set.py:188 ../gui/wxpython/gis_set.py:725
 msgid "Delete selected location"
