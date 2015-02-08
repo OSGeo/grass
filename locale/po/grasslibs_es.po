@@ -1733,7 +1733,7 @@ msgstr "%s está ausente"
 #: ../lib/manage/do_rename.c:90 ../lib/manage/do_rename.c:110
 #, c-format
 msgid "%s renamed"
-msgstr "% renombrado"
+msgstr "%s renombrado"
 
 #: ../lib/manage/do_rename.c:119
 #, c-format
