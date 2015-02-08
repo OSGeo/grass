@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <dirent.h>
+#include <sys/stat.h>
 
 #include <grass/gis.h>
 #include <grass/glocale.h>
@@ -36,7 +37,8 @@ void list_mon(char ***list, int *n)
     char *mon_path;
     struct dirent *dp;
     DIR *dirp;
-
+    struct stat s;
+    
     *list = NULL;
     *n    = 0;
     
@@ -46,10 +48,11 @@ void list_mon(char ***list, int *n)
     
     if (!dirp)
         return;
-    
+
     while ((dp = readdir(dirp)) != NULL) {
         *list = G_realloc(*list, (*n + 1) * sizeof(char *));
-        if (!dp->d_name || dp->d_name[0] == '.' || dp->d_type != DT_DIR)
+        stat(dp->d_name, &s);
+        if (!dp->d_name || dp->d_name[0] == '.' || !S_ISDIR(s.st_mode))
             continue;
         (*list)[*n] = dp->d_name;
         (*n)++;
@@ -133,7 +136,7 @@ void list_files(const char *name, FILE *fd_out)
         G_fatal_error(_("No support files found for monitor <%s>"), name);
 
     while ((dp = readdir(dirp)) != NULL) {
-        if (!dp->d_name || dp->d_type != DT_REG)
+        if (!dp->d_name || dp->d_name[0] == '.')
             continue;
         
         p = strrchr(dp->d_name, '.');
