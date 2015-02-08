@@ -1,6 +1,6 @@
-# translation of grasswxpy_cs.po to
+# translation of grasswxpy_cs.po to Czech
 # This file is distributed under the same license as the GRASS package.
-# Copyright (C) 2008, GRASS Development Team
+# Copyright (C) 2008-2015, GRASS Development Team
 # Martin Landa <landa.martin gmail.com>, 2008.
 # Jan Trochta <j.trochta seznam.cz>, 2008.
 # Miroslav Hořejší <miroslav.horejsi@fsv.cvut.cz>, 2009/01.
@@ -8268,8 +8268,8 @@ msgstr "Vypíše statistiky pro rastrové vrstvy."
 #: ../gui/wxpython/wxplot/scatter.py:250
 #, python-format
 msgid ""
-"Regression equation for raster map <%(rast1)s> vs. <%(rast2)s>:\n"
-"\n"
+"Set the new name for %s \"                                            "
+"\"configuration file"
 msgstr ""
 
 #: ../gui/wxpython/wxplot/histogram.py:45
@@ -18626,7 +18626,7 @@ msgstr ""
 #: ../gui/wxpython/rlisetup/frame.py:241
 #, python-format
 msgid ""
-"Set te new name for %s \"                                            "
+"Set the new name for %s \"                                            "
 "\"configuration file"
 msgstr ""
 

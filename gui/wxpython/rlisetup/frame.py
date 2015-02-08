@@ -238,7 +238,7 @@ class RLiSetupFrame(wx.Frame):
                           message=_("You have to select a configuration file"))
             return
         dlg = wx.TextEntryDialog(parent=self.parent,
-                                 message=_('Set te new name for %s " \
+                                 message=_('Set the new name for %s " \
                                            "configuration file') % confile,
                                  caption=_('Rename configuration file'))
         if dlg.ShowModal() == wx.ID_OK:

@@ -5355,7 +5355,7 @@ msgstr "Vous avez sélectionné un fichier de configuration"
 
 #: ../gui/wxpython/rlisetup/frame.py:241
 #, python-format
-msgid "Set te new name for %s \"                                            \"configuration file"
+msgid "Set the new name for %s \"                                            \"configuration file"
 msgstr "Définir le nouveau nom pour le fichier de configuration %s \"                                            \""
 
 #: ../gui/wxpython/rlisetup/frame.py:243
