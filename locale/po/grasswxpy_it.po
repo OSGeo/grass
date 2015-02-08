@@ -5260,7 +5260,7 @@ msgstr "Bisogna selezionare un file di configurazione"
 
 #: ../gui/wxpython/rlisetup/frame.py:241
 #, python-format
-msgid "Set te new name for %s \"                                            \"configuration file"
+msgid "Set the new name for %s \"                                            \"configuration file"
 msgstr ""
 
 #: ../gui/wxpython/rlisetup/frame.py:243
