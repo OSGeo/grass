@@ -2830,7 +2830,7 @@ msgstr "Nach"
 
 #: ../gui/wxpython/dbmgr/base.py:2137 ../gui/wxpython/gis_set.py:190
 msgid "&Rename"
-msgstr "&Umbennen"
+msgstr "&Umbenennen"
 
 #: ../gui/wxpython/dbmgr/base.py:2230
 msgid "Unable to rename column. No column name defined."
@@ -15588,9 +15588,8 @@ msgid "Command console"
 msgstr "Befehlszeile"
 
 #: ../gui/wxpython/lmgr/frame.py:318
-#, fuzzy
 msgid "Search modules"
-msgstr "Suchmodul"
+msgstr "Suche Befehle"
 
 #: ../gui/wxpython/lmgr/frame.py:398
 #, python-format
@@ -16845,40 +16844,40 @@ msgstr ""
 "%s"
 
 #: ../gui/wxpython/gis_set.py:107
-#, fuzzy
 msgid "1. Select GRASS GIS database directory"
-msgstr "Wählen Sie das GRASS-Daten Verzeichnis:"
+msgstr "1. Wählen Sie das GRASS GIS Datenverzeichnis"
 
 #: ../gui/wxpython/gis_set.py:109
-#, fuzzy
 msgid "2. Select GRASS Location"
-msgstr "Wählen Sie ein Mapset der GRASS Location"
+msgstr "2. Wählen Sie die GRASS Location"
 
 #: ../gui/wxpython/gis_set.py:111
-#, fuzzy
 msgid "3. Select GRASS Mapset"
-msgstr "Wählen Sie GRASS-Location und Mapset"
+msgstr "3. Wählen Sie ein GRASS Mapset"
 
 #: ../gui/wxpython/gis_set.py:140
 msgid "GRASS GIS database directory contains Locations."
-msgstr ""
+msgstr "Das GRASS GIS Datenverzeichnis enthält Locations."
 
 #: ../gui/wxpython/gis_set.py:144
 msgid ""
 "All data in one Location is in the same  coordinate reference system "
 "(projection). One Location can be one project. Location contains Mapsets."
 msgstr ""
+"Alle Daten in einer Location sind im gleichen Koordinatensystem "
+"(Projektion). Eine Location kann ein Projekt sein. Eine Location enthält Mapsets."
 
 #: ../gui/wxpython/gis_set.py:152
 msgid ""
 "Mapset contains GIS data related to one project, task within one project, "
 "subregion or user."
 msgstr ""
+"Ein Mapset enthält GIS-Daten eines Projektes, einer Aufgabe in einem Projekt, "
+"einer Unterregion oder eines Nutzers."
 
 #: ../gui/wxpython/gis_set.py:167
-#, fuzzy
 msgid "Start &GRASS session"
-msgstr "Betrete GRASS Sitzung"
+msgstr "Starte &GRASS Sitzung"
 
 #: ../gui/wxpython/gis_set.py:173
 msgid "&Browse"
@@ -16886,7 +16885,7 @@ msgstr "&Blättern"
 
 #: ../gui/wxpython/gis_set.py:175
 msgid "&New"
-msgstr ""
+msgstr "&Neu"
 
 #: ../gui/wxpython/gis_set.py:177
 #, fuzzy
@@ -16897,7 +16896,7 @@ msgstr ""
 
 #: ../gui/wxpython/gis_set.py:179
 msgid "N&ew"
-msgstr ""
+msgstr "N&eu"
 
 #: ../gui/wxpython/gis_set.py:180
 #, fuzzy
@@ -16910,16 +16909,15 @@ msgstr ""
 
 #: ../gui/wxpython/gis_set.py:184
 msgid "Ren&ame"
-msgstr ""
+msgstr "Umbenennen"
 
 #: ../gui/wxpython/gis_set.py:185 ../gui/wxpython/gis_set.py:655
 msgid "Rename selected location"
 msgstr "Ausgewählte Location umbenennen"
 
 #: ../gui/wxpython/gis_set.py:187
-#, fuzzy
 msgid "De&lete"
-msgstr "Löschen"
+msgstr "&Löschen"
 
 #: ../gui/wxpython/gis_set.py:188 ../gui/wxpython/gis_set.py:725
 msgid "Delete selected location"
@@ -16930,7 +16928,6 @@ msgid "Rename selected mapset"
 msgstr "Ausgewähltes Mapset umbenennen"
 
 #: ../gui/wxpython/gis_set.py:193
-#, fuzzy
 msgid "&Delete"
 msgstr "Löschen"
 
