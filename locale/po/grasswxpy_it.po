@@ -16122,19 +16122,16 @@ msgid "Loading imagery lib failed"
 msgstr "Caricamento libreria delle immagini fallito"
 
 #: ../gui/wxpython/gis_set.py:107
-#, fuzzy
 msgid "1. Select GRASS GIS database directory"
-msgstr "Scegli la cartella dei dati GRASS:"
+msgstr "1. Scegli la cartella dei dati GRASS GIS"
 
 #: ../gui/wxpython/gis_set.py:109
-#, fuzzy
 msgid "2. Select GRASS Location"
-msgstr "Seleziona mapset nella GRASS location"
+msgstr "2. Seleziona GRASS location"
 
 #: ../gui/wxpython/gis_set.py:111
-#, fuzzy
 msgid "3. Select GRASS Mapset"
-msgstr "Seleziona location e mapset di GRASS"
+msgstr "3. Seleziona mapset di GRASS"
 
 #: ../gui/wxpython/gis_set.py:140
 msgid "GRASS GIS database directory contains Locations."
