@@ -5594,7 +5594,7 @@ msgstr ""
 #: ../gui/wxpython/rlisetup/frame.py:241
 #, python-format
 msgid ""
-"Set te new name for %s \"                                            "
+"Set the new name for %s \"                                            "
 "\"configuration file"
 msgstr ""
 

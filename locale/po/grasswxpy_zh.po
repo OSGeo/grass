@@ -5705,7 +5705,7 @@ msgstr "非法的输出文件名"
 
 #: ../gui/wxpython/rlisetup/frame.py:241
 #, python-format
-msgid "Set te new name for %s \"                                            \"configuration file"
+msgid "Set the new name for %s \"                                            \"configuration file"
 msgstr "为设置文件%s \"                                            \" 设定新名称"
 
 #: ../gui/wxpython/rlisetup/frame.py:243
