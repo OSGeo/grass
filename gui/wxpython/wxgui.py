@@ -21,9 +21,11 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import getopt
+import time
 
 from core import globalvar
 from core.utils import _
+from core.debug import Debug
 
 from grass.exceptions import Usage
 from grass.script.core import set_raise_on_error
@@ -126,12 +128,16 @@ def main(argv = None):
         printHelp()
 
     workspaceFile = process_opt(opts, args)[0]
-
+    
+    start = time.time()
+    
     app = GMApp(workspaceFile)
     # suppress wxPython logs
     q = wx.LogNull()
     set_raise_on_error(True)
 
+    Debug.msg(1, "wxGUI started in %.6f sec" % (time.time() - start))
+    
     app.MainLoop()
 
 if __name__ == "__main__":
