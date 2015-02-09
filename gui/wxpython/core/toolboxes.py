@@ -271,7 +271,13 @@ def expandAddons(tree):
     root = tree.getroot()
     _expandAddonsItem(root)
     # expanding and converting is done twice, so there is some overhead
-    _expandRuntimeModules(root)
+    # we don't load metadata by calling modules on Windows because when
+    # installed addons are not compatible, Windows show ugly crash dialog
+    # for every incompatible addon
+    if sys.platform == "win32":
+        _expandRuntimeModules(root, loadMetadata=False)
+    else:
+        _expandRuntimeModules(root, loadMetadata=True)
     _addHandlers(root)
     _convertTree(root)
 
@@ -487,9 +493,11 @@ def _expandItems(node, items, itemTag):
                 moduleItem.append(node)
 
 
-def _expandRuntimeModules(node):
+def _expandRuntimeModules(node, loadMetadata=True):
     """Add information to modules (desc, keywords)
     by running them with --interface-description.
+    If loadMetadata is False, modules are not called,
+    useful for incompatible addons.
 
     >>> tree = etree.fromstring('<items>'
     ...                         '<module-item name="g.region"></module-item>'
@@ -513,12 +521,15 @@ def _expandRuntimeModules(node):
             n.text = name
 
         if module.find('description') is None:
-            desc, keywords = _loadMetadata(name)
+            if loadMetadata:
+                desc, keywords = _loadMetadata(name)
+            else:
+                desc, keywords = '', ''
             n = etree.SubElement(parent=module, tag='description')
             n.text = _escapeXML(desc)
             n = etree.SubElement(parent=module, tag='keywords')
             n.text = _escapeXML(','.join(keywords))
-            if not desc:
+            if loadMetadata and not desc:
                 hasErrors = True
     
     if hasErrors:

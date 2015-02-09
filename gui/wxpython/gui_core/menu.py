@@ -237,7 +237,9 @@ class SearchModuleWindow(wx.Panel):
             return
         
         if data['command']:
-            label = data['command'] + ' -- ' + data['description']
+            label = data['command']
+            if data['description']:
+                label += ' -- ' + data['description']
         else:
             label = data['description']
         
