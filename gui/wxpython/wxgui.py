@@ -5,9 +5,8 @@
 
 Classes:
  - wxgui::GMApp
- - wxgui::Usage
 
-(C) 2006-2011 by the GRASS Development Team
+(C) 2006-2015 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -33,8 +32,6 @@ try:
     import wx.lib.agw.advancedsplash as SC
 except ImportError:
     SC = None
-
-from lmgr.frame import GMFrame
 
 
 class GMApp(wx.App):
@@ -79,6 +76,7 @@ class GMApp(wx.App):
         wx.Yield()
 
         # create and show main frame
+        from lmgr.frame import GMFrame
         mainframe = GMFrame(parent = None, id = wx.ID_ANY,
                             workspace = self.workspaceFile)
 
