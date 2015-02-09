@@ -783,6 +783,10 @@ def install_extension_other(name):
     os.chdir(os.path.join(TMPDIR, name))
 
     grass.message(_("Compiling..."))
+    if not os.path.exists(os.path.join(gisbase, 'include',
+                                       'Make', 'Module.make')):
+        grass.fatal(_("Please install GRASS development package"))
+
     if 0 != grass.call(makeCmd,
                        stdout = outdev):
         grass.fatal(_('Compilation failed, sorry. Please check above error messages.'))
