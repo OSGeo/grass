@@ -399,6 +399,7 @@ int main(int argc, char *argv[])
 
 	G_message("-----------------------------------------------------");
 	G_message(_("Generalization (%s)..."), method_opt->answer);
+	G_message(_("Using threshold: %g %s"), thresh, G_database_unit_name(1));
 	G_percent_reset();
 
 	APoints = Vect_new_line_struct();
@@ -597,7 +598,7 @@ int main(int argc, char *argv[])
 
     G_message("-----------------------------------------------------");
     if (total_input != 0 && total_input != total_output)
-	G_done_msg(_("Number of vertices for selected features %s from %d to %d (%d%%)."),
+	G_done_msg(_("Number of vertices for selected features %s from %d to %d (%d%% remaining)"),
                    simplification ? _("reduced") : _("changed"), 
                    total_input, total_output,
                    (total_output * 100) / total_input);

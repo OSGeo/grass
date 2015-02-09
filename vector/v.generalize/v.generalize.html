@@ -40,9 +40,10 @@ last point of each line is never translated and/or deleted.
 </ul>
 
 Different algorithms require different parameters, but all the algorithms 
-have one parameter in common: the <b>threshold</b> parameter. In general, 
-the degree of simplification increases with the increasing value of 
-<b>threshold</b>.<br>
+have one parameter in common: the <b>threshold</b> parameter, given in map
+units (for latitude-longitude locations: in decimal degree). In general,
+the degree of simplification increases with the increasing value of
+<b>threshold</b>.
 
 <h4>ALGORITHM DESCRIPTIONS</h4>
 
@@ -77,22 +78,28 @@ the degree of simplification increases with the increasing value of
 
 <i>Douglas-Peucker</i> and <i>Douglas-Peucker Reduction Algorithm</i> 
 use the same method to simplify the lines. Note that 
+
 <div class="code"><pre>
 v.generalize input=boundary_county output=boundary_county_dp20 method=douglas threshold=20
 </pre></div>
+
 is equivalent to
+
 <div class="code"><pre>
 v.generalize input=boundary_county output=boundary_county_dp_red20_100 \
              method=douglas_reduction threshold=20 reduction=100
 </pre></div>
+
 However, in this case, the first method is faster. Also observe that
 <i>douglas_reduction</i> never outputs more vertices than <i>douglas</i>,
 and that, in general, <i>douglas</i> is more efficient than 
 <i>douglas_reduction</i>. More importantly, the effect of
+
 <div class="code"><pre>
 v.generalize input=boundary_county output=boundary_county_dp_red0_30 \
              method=douglas_reduction threshold=0 reduction=30
 </pre></div>
+
 is that 'out' contains approximately only 30% of points of 'in'.
 
 
@@ -257,7 +264,8 @@ case, the algorithm selects only the lines which meet each criterion.
 <h2>EXAMPLES</h2>
 
 <h3>SIMPLIFICATION EXAMPLE</h3>
-Simplification of county boundaries with DP method (North Carolina sample dataset):
+Simplification of county boundaries with DP method (North Carolina sample dataset),
+threshold given in mapset units (here: meters):
 
 <div class="code"><pre>
 v.generalize input=boundary_county output=boundary_county_dp20 \
@@ -266,7 +274,8 @@ v.generalize input=boundary_county output=boundary_county_dp20 \
 
 <h3>SMOOTHING EXAMPLE</h3>
 
-Smoothing of road network with Chaiken method (North Carolina sample dataset):
+Smoothing of road network with Chaiken method (North Carolina sample dataset),
+threshold given in mapset units (here: meters):
 
 <div class="code"><pre>
 v.generalize input=roads output=roads_chaiken method=chaiken \
