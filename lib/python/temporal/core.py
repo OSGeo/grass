@@ -36,6 +36,7 @@ gettext.install('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale'))
 import grass.script as gscript
 from datetime import datetime
 from c_libraries_interface import *
+from grass.pygrass import messages
 # Import all supported database backends
 # Ignore import errors since they are checked later
 try:
@@ -238,8 +239,8 @@ def _init_tgis_message_interface(raise_on_error=False):
                               a fatal error, call sys.exit(1) otherwise
     """
     global message_interface
-    from grass.pygrass import messages
-    message_interface = messages.get_msgr(raise_on_error=raise_on_error)
+    if message_interface is None:
+        message_interface = messages.get_msgr(raise_on_error=raise_on_error)
 
 
 def get_tgis_message_interface():
@@ -266,7 +267,8 @@ def _init_tgis_c_library_interface():
        libraster, libraster3d and libvector functions
     """
     global c_library_interface
-    c_library_interface = CLibrariesInterface()
+    if c_library_interface is None:
+        c_library_interface = CLibrariesInterface()
 
 
 def get_tgis_c_library_interface():
