@@ -176,6 +176,12 @@ Contents
 
      copy_addon 700beta3 7.0.0beta3
 
+ o Launchpad notes:
+
+   Create milestone and release: https://launchpad.net/grass/+series
+
+   Upload tarball for created release
+
 2. Tell others about it:
 
  * If release candidate:
