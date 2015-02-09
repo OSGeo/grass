@@ -504,6 +504,7 @@ def _expandRuntimeModules(node):
     >>> etree.tostring(tree)
     '<items><module-item name="m.proj"><module>m.proj</module><description>Converts coordinates from one projection to another (cs2cs frontend).</description><keywords>miscellaneous,projection</keywords></module-item></items>'
     """
+    hasErrors = False
     modules = node.findall('.//module-item')
     for module in modules:
         name = module.get('name')
@@ -517,8 +518,13 @@ def _expandRuntimeModules(node):
             n.text = _escapeXML(desc)
             n = etree.SubElement(parent=module, tag='keywords')
             n.text = _escapeXML(','.join(keywords))
-
-
+            if not desc:
+                hasErrors = True
+    
+    if hasErrors:
+        sys.stderr.write(_("WARNING: Some addons failed when loading. "
+                           "Please consider to update your addons by running 'g.extension.all -f'.\n"))
+    
 def _escapeXML(text):
     """Helper function for correct escaping characters for XML.
 
