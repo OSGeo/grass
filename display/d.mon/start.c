@@ -25,7 +25,9 @@ char *start(const char *name, const char *output, int update)
     output_path[0] = '\0';
     
     if (!output) {
-        setenv("GRASS_RENDER_IMMEDIATE", name, 1);
+        char buff[512];
+        sprintf(buff, "GRASS_RENDER_IMMEDIATE=%s", name);
+        putenv(G_store(buff));
         D_open_driver();
         
         output_name = D_get_file();
@@ -45,7 +47,7 @@ char *start(const char *name, const char *output, int update)
         }
         D_close_driver(); /* must be called after check because this
                            * function produces default map file */
-        unsetenv("GRASS_RENDER_IMMEDIATE");
+        putenv("GRASS_RENDER_IMMEDIATE=");
     }
     else {
         output_name = output;
