@@ -477,6 +477,8 @@ class RDigitController(wx.EvtHandler):
                 return
             if not self._backgroundRaster:
                 table = UserSettings.Get(group='rasterLayer', key='colorTable', subkey='selection')
+                if not table:
+                    table = 'rainbow'
                 gcore.run_command('r.colors', color=table, map=self._editedRaster, quiet=True)
             else:
                 gcore.run_command('r.colors', map=self._editedRaster,
