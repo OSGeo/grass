@@ -498,27 +498,8 @@ def set_browser():
     os.environ['GRASS_HTML_BROWSER'] = browser
 
 
-def grass_intro():
-    intro = _(r"""
-WELCOME TO GRASS %s
-
-   1) Have at your side all available GRASS GIS tutorials
-
-   2) When working on your location, the following materials
-      are extremely useful:
-      - A topographic map of your area
-      - Current catalog of available computer maps
-
-   3) Check the GRASS GIS web pages for supporting mailing lists and more:
-      http://grass.osgeo.org
-""") % grass_version
-    sys.stderr.write(intro)
-
-    sys.stderr.write("\n")
-    sys.stderr.write(_("Hit RETURN to continue"))
-    sys.stdin.readline()
-
-    # for convenience, define pwd as GISDBASE:
+def create_initial_gisrc():
+    # for convenience, define GISDBASE as pwd:
     s = r"""GISDBASE: %s
 LOCATION_NAME: <UNKNOWN>
 MAPSET: <UNKNOWN>
@@ -1405,7 +1386,7 @@ if not os.access(gisrc, os.F_OK):
                 " - Create manually GISRC file (%s)\n"
                 " - Launch GRASS with path to "
                 "the location/mapset as an argument (`grass70 /path/to/location/mapset`)") % gisrcrc)
-    grass_intro()
+    create_initial_gisrc()
 else:
     clean_temp()
 
