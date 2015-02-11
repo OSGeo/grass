@@ -51,7 +51,7 @@ the degree of simplification increases with the increasing value of
 <li> <i>Douglas-Peucker</i> - "Quicksort" of line simplification, the 
      most widely used algorithm. Input parameters: <b>input</b>, 
      <b>threshold</b>. For more information, see: <br>
-     <a href="http://geometryalgorithms.com/Archive/algorithm_0205/algorithm_0205.htm">http://geometryalgorithms.com/Archive/algorithm_0205/algorithm_0205.htm</a>.</li>
+     <a href="http://geomalgorithms.com/a16-_decimate-1.html">http://geomalgorithms.com/a16-_decimate-1.html</a>.</li>
 <li> <i>Douglas-Peucker Reduction Algorithm</i> is essentially the same 
      algorithm as the algorithm above, the difference being that it takes 
      an additional <b>reduction</b> parameter which denotes the percentage 
@@ -61,7 +61,7 @@ the degree of simplification increases with the increasing value of
 <li> <i>Lang</i> - Another standard algorithm. Input parameters: 
      <b>input</b>, <b>threshold</b>, <b>look_ahead</b>. 
      For an excellent description, see:  <br>
-     <a href="http://www.sli.unimelb.edu.au/gisweb/LGmodule/LGLangVisualisation.htm">http://www.sli.unimelb.edu.au/gisweb/LGmodule/LGLangVisualisation.htm</a>.</li>
+     <a href="https://web.archive.org/web/20090823022009/http://www.sli.unimelb.edu.au/gisweb/LGmodule/LGLangVisualisation.htm">http://www.sli.unimelb.edu.au/gisweb/LGmodule/LGLangVisualisation.htm</a>.</li>
 <li> <i>Vertex Reduction</i> - Simplest among the algorithms. Input 
      parameters: <b>input</b>, <b>threshold</b>.
      Given a line, this algorithm removes the points of this line which 
@@ -69,11 +69,11 @@ the degree of simplification increases with the increasing value of
      p1 and p2 are two consecutive points, and the distance between p2 
      and p1 is less than <b>threshold</b>, it removes p2 and repeats the 
      same process on the remaining points.</li>
-<li> <i>Reuman-Witkam</i> - Input parameters: <b>input</b>, 
+<li> <i>Reumann-Witkam</i> - Input parameters: <b>input</b>, 
      <b>threshold</b>. 
      This algorithm quite reasonably preserves the global characteristics 
-     of the lines. For more information, see:  <br> 
-     <a href="http://www.ifp.uni-stuttgart.de/lehre/vorlesungen/GIS1/Lernmodule/Lg/LG_de_6.html">http://www.ifp.uni-stuttgart.de/lehre/vorlesungen/GIS1/Lernmodule/Lg/LG_de_6.html</a> (german).</li>
+     of the lines. For more information, see for example:<br> 
+     <a href="http://psimpl.sourceforge.net/reumann-witkam.html">http://psimpl.sourceforge.net/reumann-witkam.html</a>.</li>
 </ul>
 
 <i>Douglas-Peucker</i> and <i>Douglas-Peucker Reduction Algorithm</i> 
@@ -324,6 +324,6 @@ v.generalize input=xxx output=xxx_yyy method=... \
 
 Daniel Bundala, Google Summer of Code 2007, Student<br>
 Wolf Bergenheim, Mentor<br>
-Fixes: Markus Metz
+Partial rewrite: Markus Metz
 
 <p><i>Last changed: $Date$</i>
