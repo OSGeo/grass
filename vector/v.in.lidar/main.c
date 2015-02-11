@@ -741,13 +741,13 @@ int main(int argc, char *argv[])
 	    class_flag = LASPoint_GetClassification(LAS_point);
 	    /* classification type int or char ? */
 	    las_class_type = class_flag / 32;
-	    sprintf(buf, ", \"%s\"", class_type[las_class_type].name);
+	    sprintf(buf, ", \'%s\'", class_type[las_class_type].name);
 	    db_append_string(&sql, buf);
 	    /* classification class int or char ? */
 	    las_class = class_flag % 32;
 	    if (las_class > 13)
 		las_class = 13;
-	    sprintf(buf, ", \"%s\"", class_val[las_class].name);
+	    sprintf(buf, ", \'%s\'", class_val[las_class].name);
 	    db_append_string(&sql, buf);
 	    /* GPS time */
 	    if (have_time) {
