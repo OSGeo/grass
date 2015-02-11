@@ -449,27 +449,9 @@ int main(int argc, char *argv[])
     name_max = parm.max->answer;
     name_maxdir = parm.maxdir->answer;
 
-    /*check if the output layer names EXIST */
-    if (G_check_overwrite(argc, argv) == 0) {
-	if (G_find_raster2(name_base, G_mapset()))
-	    G_fatal_error(_("Raster map <%s> already exists in mapset <%s>"),
-			  name_base, G_mapset());
-	
-	if (G_find_raster2(name_max, G_mapset()))
-	    G_fatal_error(_("Raster map <%s> already exists in mapset <%s>"),
-			  name_max, G_mapset());
-	
-	if (G_find_raster2(name_maxdir, G_mapset()))
-	    G_fatal_error(_("Raster map <%s> already exists in mapset <%s>"),
-			  name_maxdir, G_mapset());
-	
-	/*assign a name to output SPOTTING distance layer */
-	if (spotting) {
-	    name_spotdist = parm.spotdist->answer;
-	    if (G_find_raster2(name_spotdist, G_mapset()))
-		G_fatal_error(_("Raster map <%s> already exists in mapset <%s>"),
-			      name_spotdist, G_mapset());
-	}
+    /*assign a name to output SPOTTING distance layer */
+    if (spotting) {
+        name_spotdist = parm.spotdist->answer;
     }
 
     /*  Get database window parameters  */
