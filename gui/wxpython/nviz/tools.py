@@ -114,7 +114,6 @@ class NvizToolWindow(FN.FlatNotebook):
         # bindings
         self.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.Bind(wx.EVT_SIZE, self.OnSize)
-        self.mapDisplay.starting3dModeSetInitialMaps.connect(self.SetInitialMaps)
         
         self.mapWindow.GetAnimation().animationFinished.connect(self.OnAnimationFinished)
         self.mapWindow.GetAnimation().animationUpdateIndex.connect(self.OnAnimationUpdateIndex)
@@ -125,6 +124,7 @@ class NvizToolWindow(FN.FlatNotebook):
         wx.CallAfter(self.SetPage, 'view')
         wx.CallAfter(self.UpdateScrolling, (self.foldpanelData, self.foldpanelAppear,
                                             self.foldpanelAnalysis))       
+        wx.CallAfter(self.SetInitialMaps)
         
     def SetInitialMaps(self):
         """Set initial raster and vector map"""
