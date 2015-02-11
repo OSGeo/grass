@@ -1151,6 +1151,8 @@ class CmdPanel(wx.Panel):
                 title_txt.SetLabel(title + ':')
                 # GIS element entry
                 if p.get('prompt','') not in ('color',
+                                              'cat',
+                                              'cats',
                                               'subgroup',
                                               'sigfile',
                                               'separator',
@@ -1643,6 +1645,16 @@ class CmdPanel(wx.Panel):
                     cb.GetTextCtrl().Bind(wx.EVT_TEXT, self.OnSetValue)
                     if p.get('guidependency', ''):
                         cb.Bind(wx.EVT_COMBOBOX, self.OnUpdateSelection)
+
+                elif prompt in ('cat', 'cats'):
+                    win = wx.TextCtrl(parent=which_panel)
+                    value = self._getValue(p)
+                    win.SetValue(value)
+                    p['wxId'] = [win.GetId()]
+                    win.Bind(wx.EVT_TEXT, self.OnSetValue)
+                    which_sizer.Add(item=win, proportion=0,
+                                    flag=wx.EXPAND | wx.BOTTOM | wx.LEFT | wx.RIGHT,
+                                    border=5)
 
             if self.parent.GetName() == 'MainFrame' and (self._giface and hasattr(self._giface, "_model")):
                 parChk = wx.CheckBox(parent = which_panel, id = wx.ID_ANY,
