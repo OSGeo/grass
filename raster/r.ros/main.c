@@ -202,7 +202,6 @@ int main(int argc, char *argv[])
     } parm;
 
     /* please, remove before GRASS 7 released */
-    struct Flag *flag_s;
     struct GModule *module;
 
     /* initialize access to database and create temporary files */
@@ -273,8 +272,8 @@ int main(int argc, char *argv[])
     parm.vel = G_define_standard_option(G_OPT_R_INPUT);
     parm.vel->key = "velocity";
     parm.vel->required = NO;
-    parm.vel->description =
-	_("Raster map containing midflame wind velocitys (ft/min)");
+    parm.vel->label =
+	_("Raster map containing midflame wind velocities (ft/min)");
     parm.vel->description =
 	_("Name of an existing raster map layer in the user's "
 	  "current mapset search path containing wind velocities at half of the average "
@@ -351,7 +350,7 @@ int main(int argc, char *argv[])
     parm.spotdist->label =
 	_("Output raster map containing maximal spotting distance (m)");
     parm.spotdist->description =
-	_("The maximal potential spotting distance raster will be also generated"
+	_("The maximal potential spotting distance"
 	  " (requires elevation raster map to be provided).");
 
     /*   Parse command line */
