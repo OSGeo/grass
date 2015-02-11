@@ -55,7 +55,7 @@
 #%option
 #% key: percentile
 #% type: integer
-#% description: Percentile to calculate (requires extended statistics flag)
+#% description: Percentile to calculate
 #% options: 0-100
 #% answer: 90
 #% required : no
