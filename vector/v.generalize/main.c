@@ -396,9 +396,6 @@ int main(int argc, char *argv[])
 	Vect_copy_map_lines(&In, &Out);
 	Vect_build_partial(&Out, GV_BUILD_CENTROIDS);
 
-	if ((mask_type & GV_AREA) && !(mask_type & GV_BOUNDARY))
-	    mask_type |= GV_BOUNDARY;
-
 	G_message("-----------------------------------------------------");
 	G_message(_("Generalization (%s)..."), method_opt->answer);
 	G_message(_("Using threshold: %g %s"), thresh, G_database_unit_name(1));
