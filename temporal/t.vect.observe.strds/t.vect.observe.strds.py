@@ -47,10 +47,6 @@
 #%option G_OPT_DB_WHERE
 #%end
 
-#%option G_OPT_T_WHERE
-#% key: t_where
-#%end
-
 import grass.script as grass
 import grass.temporal as tgis
 import grass.script.raster as raster
@@ -81,7 +77,6 @@ def main():
     strds = options["strds"]
     where = options["where"]
     columns = options["columns"]
-    tempwhere = options["t_where"]
 
     if where == "" or where == " " or where == "\n":
         where = None
@@ -112,7 +107,8 @@ def main():
     # Single space time raster dataset
     if len(strds_names) == 1:
         rows = first_strds.get_registered_maps(
-            "name,mapset,start_time,end_time", tempwhere, "start_time", dbif)
+            columns="name,mapset,start_time,end_time", 
+            order="start_time", dbif=dbif)
 
         if not rows:
             dbif.close()
