@@ -17,6 +17,7 @@ SUBDIRS = \
 	t.rast.aggregate \
 	t.rast.aggregate.ds \
 	t.rast.colors \
+	t.rast.contour \
 	t.rast.to.rast3 \
 	t.rast.univar \
 	t.rast.list \
