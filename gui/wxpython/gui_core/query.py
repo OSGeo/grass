@@ -49,7 +49,7 @@ class QueryDialog(wx.Dialog):
                                  wx.TR_FULL_ROW_HIGHLIGHT | wx.TR_MULTIPLE)
 
         self.tree.SetColumnWidth(0, 220)
-        self.tree.SetColumnWidth(1, 400)
+        self.tree.SetColumnWidth(1, 1000)
         self.tree.ExpandAll(self._model.root)
         self.tree.contextMenu.connect(self.ShowContextMenu)
         self.mainSizer.Add(item = self.tree, proportion = 1, flag = wx.EXPAND | wx.ALL, border = 5)
