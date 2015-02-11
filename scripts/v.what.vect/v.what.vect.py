@@ -62,13 +62,13 @@ def main():
     try:
         grass.run_command('v.distance',
                           from_=options['map'],
-                          to=options['qmap'],
+                          to=options['query_map'],
                           column=options['column'],
-                          to_column=options['qcolumn'],
+                          to_column=options['query_column'],
                           upload='to_attr',
                           dmax=options['dmax'],
                           from_layer=options['layer'],
-                          to_layer=options['qlayer'])
+                          to_layer=options['query_layer'])
     except CalledModuleError:
         return 1
     else:
