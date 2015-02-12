@@ -305,12 +305,6 @@
       <module-item name="v.in.lines">
         <label>ASCII points as a vector lines</label>
       </module-item>
-      <module-item name="v.convert">
-        <label>Historical GRASS vector import</label>
-      </module-item>
-      <module-item name="v.convert.all">
-        <label>Historical GRASS vector import (all maps)</label>
-      </module-item>
       <separator/>
       <wxgui-item name="DXFImport"/>
       <separator/>
@@ -321,14 +315,8 @@
       <module-item name="v.in.e00">
         <label>ESRI e00 import</label>
       </module-item>
-      <module-item name="v.in.gps">
-        <label>GPS data import</label>
-      </module-item>
       <module-item name="v.in.geonames">
         <label>Geonames import</label>
-      </module-item>
-      <module-item name="v.in.gns">
-        <label>GEOnet import</label>
       </module-item>
       <module-item name="v.in.mapgen">
         <label>Matlab array or Mapgen format import</label>
