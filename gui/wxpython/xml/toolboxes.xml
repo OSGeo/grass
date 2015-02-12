@@ -1019,9 +1019,6 @@
       <module-item name="r.surf.idw">
         <label>IDW from raster points</label>
       </module-item>
-      <module-item name="r.surf.idw2">
-        <label>IDW from raster points (alternate method for sparse points)</label>
-      </module-item>
       <module-item name="v.surf.idw">
         <label>IDW from vector points</label>
       </module-item>
@@ -1126,9 +1123,6 @@
       <separator/>
       <module-item name="v.label">
         <label>Create labels</label>
-      </module-item>
-      <module-item name="v.label.sa">
-        <label>Create optimally placed labels</label>
       </module-item>
       <separator/>
       <module-item name="v.transform">
@@ -1596,9 +1590,6 @@
   <toolbox name="ImageryReportsAndStatistics">
     <label>Reports and statistics</label>
     <items>
-      <module-item name="r.bitpattern">
-        <label>Bit pattern comparison </label>
-      </module-item>
       <module-item name="r.kappa">
         <label>Kappa analysis</label>
       </module-item>
