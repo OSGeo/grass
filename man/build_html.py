@@ -82,7 +82,7 @@ r"""<!-- the files grass${grass_version_major}.html & helptext.html file live in
     <tr>
       <td width="33%" valign="top" class="box"><h3>&nbsp;Quick Introduction</h3>
       <ul>
-       <li class="box"><a href="helptext.html">How to start with GRASS</a></li>
+       <li class="box"><a href="helptext.html">How to start with GRASS GIS</a></li>
        <li class="box"><span>Index of <a href="topics.html">topics</a> and <a href="keywords.html">keywords</a></span></li>
       </ul>
       <p>
@@ -306,6 +306,8 @@ r"""
 <hr class="header">
 
 <h2>Topic: ${keyword}</h2>
+<i>Note: see also the corresponding keyword <a href="keywords.html#${keyword}">${keyword}</a> for additional references.</i>
+<p>
 <table>
 """)
 #"

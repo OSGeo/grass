@@ -60,7 +60,11 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("general"));
     G_add_keyword(_("support"));
-    module->label = _("Displays GRASS version info.");
+    G_add_keyword(_("citing"));
+    G_add_keyword(_("copyright"));
+    G_add_keyword(_("version"));
+    G_add_keyword(_("license"));
+    module->label = _("Displays GRASS GIS version info.");
     module->description = _("Optionally also prints build or copyright information.");
 
     copyright = G_define_flag();
