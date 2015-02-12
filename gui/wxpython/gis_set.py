@@ -577,11 +577,11 @@ class GRASSStartup(wx.Frame):
         wx.Yield()
         if mapName in vectors:
             # vector detected
-            returncode, error = RunCommand('v.in.ogr', input = filePath, output = mapName,
-                                           getErrorMsg = True)
+            returncode, error = RunCommand('v.in.ogr', input=filePath, output=mapName, flags='e',
+                                           getErrorMsg=True)
         else:
-            returncode, error = RunCommand('r.in.gdal', input = filePath, output = mapName,
-                                           getErrorMsg = True)
+            returncode, error = RunCommand('r.in.gdal', input=filePath, output=mapName, flags='e',
+                                           getErrorMsg=True)
         wx.EndBusyCursor()
 
         if returncode != 0:
@@ -589,18 +589,10 @@ class GRASSStartup(wx.Frame):
                    message = _("Import of <%(name)s> failed.\n"
                                "Reason: %(msg)s") % ({'name': filePath, 'msg': error}))
         else:
-            GMessage(message = _("Data file <%(name)s> imported successfully.") % {'name': filePath},
-                     parent = self)
-            if not grass.find_file(element = 'cell', name = mapName)['fullname'] and \
-                    not grass.find_file(element = 'vector', name = mapName)['fullname']:
-                GError(parent = self,
-                       message = _("Map <%s> not found.") % mapName)
-            else:
-                if mapName in vectors:
-                    args = {'vector' : mapName}
-                else:
-                    args = {'raster' : mapName}
-                RunCommand('g.region', flags = 's', parent = self, **args)
+            GMessage(message=_("Data file <%(name)s> imported successfully. "
+                               "The location's default region was set from this imported map.") %
+                               {'name': filePath},
+                     parent=self)
 
     # the event can be refactored out by using lambda in bind
     def RenameMapset(self, event):
