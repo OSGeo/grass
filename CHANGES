@@ -1,58 +1,21 @@
-CHANGES IN GRASS 6 compared to GRASS 5
+CHANGES IN GRASS GIS 7 compared to GRASS GIS 6
 
-    * New Vector Engine (geometry):
-          o Support for 2D/3D vectors (see screenshot) (CAD drawings,
-            TINs), visualization supported in NVIZ
-          o multiformat - also virtual map supported from external
-            data sources (SHAPE-file, PostGIS) without the need of data
-            conversion (through OGR library with 'v.external');
-            Export/Import to PostGIS;
-          o spatial index build on the fly - 'v.build' (was:
-            v.support) significantly accelerated;
-          o category index to accelerate attribute queries;
+The graphical user interface based on wxPython (introduced in GRASS GIS 
+6.4) has been enriched with many new features in order to make complex 
+GIS operations available as simple as possible. The old Tcl/Tk based 
+GUI has been dropped. Relevant new features are available in the core 
+system, among the most important the  new Python interface to the C 
+library. This new feature permits Python developers to create new 
+modules in a simple way while at the same time creating powerful and 
+fast modules. Furthermore, the vector library was particularly improved 
+to make it faster and more efficient with support of  huge files. This 
+required a  easy to manage topology format update including a new 
+spatial index. Finally, there are a series of new modules to analyse 
+raster and vector data; some of the already existing modules were 
+improved and made faster (some even 1000 x faster). 
 
-    * Database Management Interface (attributes):
-          o Attribute storage in DBMS for compatibility with industry
-            standards (SQL based interface for PostgreSQL, mySQL, ODBC, dBase)
-          o multiattribute - attributes saved in dBase files (default)
-            or saved in external DBMS
-          o multilayer - features in one vector may represent one or
-            several layers and may be linked to one or many external
-            tables
-          o forms library implemented for user friendly query dialogs
-          o Linear reference systems supported (LRS, yet to integrate)
+In total, more than 10,000 changes have been implemented so far with 
+respect to GRASS GIS 6.4.
 
-    * Applications/Misc:
-          o SQL queries/selects/extractions supported by vector modules
-          o interactive attributes updating is supported through the
-            forms library (d.what.vect lets you modify directly the
-            attached attributes)
-          o Vector network analysis: Shortest path, Traveling salesman
-            (round trip), Allocation of sources (subnetworks), Minimum
-            Steiner trees (starlike connections), and isodistances (from
-            centers) (e.g. shortest path, see screenshot) - based on
-            DGLIB (Directed Graph Library), costs may be assigned both
-            to nodes and arcs (and also different in both directions of
-            a vector line)
-          o new v.digit with GUI (screenshot)
-          o import and export of any OGR supported vector format
-            (Shapefile, TIGER, MapInfo and GML2, PostGIS and DGN)
-          o GUI generated on runtime and display manager (screenshots)
-          o i18n: support for multiple languages (messages partially
-            indicated and translated)
-          o multiple GRASS sessions: a user can start more than one session at the time
-
-    * Interoperability
-          o Raster and vector data interoperability is granted through
-            the GDAL/OGR libraries which implement interfaces to OGC
-            standards and common GIS data formats
-
-    * Volume visualization
-          o NVIZ now supports volume (voxel) visualization
-          o VTK export
-
-    * Large File Support for raster maps (Experimental!)
-          o GRASS 6.0 experimentally supports reading and writing
-            large files (> 2GB, LFS support)
-
-    * Programmer's manual integrated into source code (doxygen)
+For details, please refer to this Web page:
+http://trac.osgeo.org/grass/wiki/Grass7/NewFeatures
