@@ -466,69 +466,7 @@ class SymbolButton(BitmapTextButton):
         dc.DrawRectangle(0, 0, 2 * size[0] / 5, size[1])
         dc.DrawRectangle(3 * size[0] / 5, 0, 2 * size[0] / 5, size[1])
 
-class AutoWrapStaticText(GenStaticText):
-    def __init__(self, parent, label):
-        GenStaticText.__init__(self, parent, -1, label)
-        self._label = label
-        self.init = False
-        self.Bind(wx.EVT_SIZE, self.OnSize)
 
-    def OnSize(self, event):
-        self.Wrap(event.GetSize()[0])
-        event.Skip()
-        
-    def DoGetBestSize(self):
-        """Overriden method which reports widget's best size."""
-        print 'do get best size'
-#        if not self.init:
-#            self._updateLabel()
-#            self.init = True
-        parent = self.GetParent()
-        newExtent = wx.ClientDC(parent).GetMultiLineTextExtent(self.GetLabel())
-        # when starting, width is very small and height is big which creates very high windows
-        if newExtent[0] < newExtent[1]:
-            return (0, 0)
-        return newExtent[:2]
-        
-    def Wrap(self, width):
-        if width < 0:
-            return
-
-        dc = wx.ClientDC(self)
-        dc.SetFont(self.GetFont())
-        text = wordwrap(self._label, width, dc)
-        GenStaticText.SetLabel(self, text)
-
-    def SetLabel(self, label, wrapped=False):
-        if not wrapped:
-            self._label = label
-
-        self.Wrap(self.GetSize()[0])
-        
-class StaticWrapText2(wx.PyControl):
-   def __init__(self, parent, id=wx.ID_ANY, label='', pos=wx.DefaultPosition,
-                size=wx.DefaultSize, style=wx.NO_BORDER,
-                validator=wx.DefaultValidator, name='StaticWrapText'):
-      wx.PyControl.__init__(self, parent, id, pos, size, style, validator, name)
-      self.statictext = wx.StaticText(self, wx.ID_ANY, label, style=style)
-      self.wraplabel = label
-      #self.wrap()
-   def wrap(self):
- 
-      self.statictext.SetLabel(self.wraplabel)
-      self.statictext.Wrap(self.GetParent().GetSize().width)#self.statictext.Wrap(self.GetSize().width)
-
-   def DoGetBestSize(self):
-      self.wrap()
-      #print self.statictext.GetSize()
-      self.SetSize(self.statictext.GetSize())
-      return self.GetSize()
-      
-   def SetLabel(self, label):
-       self.wraplabel = label
-       self.wrap()
-       
-      
 class StaticWrapText(GenStaticText):
     """A Static Text widget that wraps its text to fit parents width,
     enlarging its height if necessary."""
@@ -554,8 +492,7 @@ class StaticWrapText(GenStaticText):
 
     def OnSize(self, event):
         self._updateLabel()
-        print event.GetSize()
-        #event.Skip()
+        event.Skip()
 
     def _updateLabel(self):
         """Calculates size of wrapped label"""
@@ -563,15 +500,11 @@ class StaticWrapText(GenStaticText):
         newLabel = wordwrap(text=self._initialLabel, width=parent.GetSize()[0],
                             dc=wx.ClientDC(parent), breakLongWords=True,
                             margin=self._margin)
-        print parent.GetSize()[0], newLabel
-        print self.Unbind(wx.EVT_SIZE)
         GenStaticText.SetLabel(self, newLabel)
-        self.Bind(wx.EVT_SIZE, self.OnSize)
 
     def SetLabel(self, label):
         self._initialLabel = label
         self._updateLabel()
-        print 'setlabel'
 
 
 class BaseValidator(wx.PyValidator):
