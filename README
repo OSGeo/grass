@@ -1,18 +1,18 @@
-GRASS Development Subversion repository
+GRASS GIS Development Subversion repository
 
 ##########################################################
 How to get write access here?
 
 Write access is only granted to developers who agree to abide by
 RFC2 - Legal aspects of code contributions
-http://grass.osgeo.org/programming7/rfc/rfc2_psc.html
-and the code submission guidelines (file SUBMITTING in this 
-directory).
+ http://trac.osgeo.org/grass/wiki/RFC/2_LegalAspectsOfCodeContributions
+and the code submission guidelines
+ http://trac.osgeo.org/grass/wiki/Submitting
 
 This needs to be communicated to a GRASS developer. S/he will 
 then possibly propose you to the GRASS Project Steering committee
 after a period of evaluation. For details, see
-http://grass.osgeo.org/programming7/rfc/
+ http://trac.osgeo.org/grass/wiki/RFC
 
 Once write access is granted, you, the new developer need to
 obtain an "osgeo_id" at http://www.osgeo.org/osgeo_userid
@@ -41,7 +41,7 @@ which refers to further document repositories in
    lib/db/html/index.html
    lib/gis/html/index.html
 
-The master file is: ./grassrefman.dox where all sub-documents have to
+The master file is: ./grasslib.dox where all sub-documents have to
 be linked into.
 
 To generate the documents in PDF format, run
