@@ -9,7 +9,7 @@ Classes:
  - extensions::ManageExtensionWindow
  - extensions::CheckListExtension
 
-(C) 2008-2014 by the GRASS Development Team
+(C) 2008-2015 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -198,7 +198,8 @@ class InstallExtensionWindow(wx.Frame):
             
     def _fetchDone(self):
         self.tree.RefreshItems()
-        self.SetStatusText("", 0)
+        nitems = len(self.modelBuilder.GetModel().SearchNodes(key='command', value='*'))
+        self.SetStatusText(_("%d extensions loaded") % nitems, 0)
         wx.EndBusyCursor()
         
     def OnContextMenu(self, node):
