@@ -125,7 +125,7 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
-    Vect_set_open_level(2);
+    Vect_set_open_level(1);
     if (Vect_open_old(&Map, map->answer, "") < 1)
 	G_fatal_error(_("Unable to open vector map <%s>"), map->answer);
 
