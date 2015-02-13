@@ -585,7 +585,7 @@ class WMTSRequestMgr(BaseRequestMgr):
         return best_t_mat
 
     def _getMetersPerUnit(self):
-        """!Get coefficient which allows to convert units of request projection into meters.
+        """!Get coefficient which allows converting units of request projection into meters.
         """  
         if self.meters_per_unit:
             return self.meters_per_unit

@@ -22,7 +22,7 @@ HISTORY:
 including 3D topo parameters, and 2nd RST derivatives
 
 12/07/00 (MN) - added field selection parameter for sites lists
-                (allows to select column in site_lists)
+                (allows selecting column in site_lists)
 
 copied from Mark 15.may.1996,
 just a beta version, not fully tested
