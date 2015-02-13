@@ -854,7 +854,7 @@ class ExportDialog(wx.Dialog):
                                                   labelText=_("Image file:"),
                                                   dialogTitle=_('Choose image file'),
                                                   buttonText=_('Browse'),
-                                                  startDirectory=os.getcwd(), fileMode=wx.OPEN,
+                                                  startDirectory=os.getcwd(), fileMode=wx.FD_OPEN,
                                                   changeCallback=self.OnSetImage)
         self.imageBox.Add(self.browse, proportion=1, flag=wx.EXPAND)
         self.hidevbox.Add(self.imageBox, proportion=0, flag=wx.EXPAND | wx.BOTTOM, border=5)
@@ -948,7 +948,7 @@ class ExportDialog(wx.Dialog):
                                                      labelText=_("GIF file:"),
                                                      dialogTitle=_("Choose file to save animation"),
                                                      buttonText=_("Browse"),
-                                                     startDirectory=os.getcwd(), fileMode=wx.SAVE)
+                                                     startDirectory=os.getcwd(), fileMode=wx.FD_SAVE)
         gifGridSizer = wx.GridBagSizer(hgap=5, vgap=5)
         gifGridSizer.AddGrowableCol(0)
         gifGridSizer.Add(self.gifBrowse, pos=(0, 0), flag = wx.EXPAND)
@@ -965,7 +965,7 @@ class ExportDialog(wx.Dialog):
                                                      labelText=_("SWF file:"),
                                                      dialogTitle=_("Choose file to save animation"),
                                                      buttonText=_("Browse"),
-                                                     startDirectory=os.getcwd(), fileMode=wx.SAVE)
+                                                     startDirectory=os.getcwd(), fileMode=wx.FD_SAVE)
         swfGridSizer = wx.GridBagSizer(hgap=5, vgap=5)
         swfGridSizer.AddGrowableCol(0)
         swfGridSizer.Add(self.swfBrowse, pos=(0, 0), flag = wx.EXPAND)
@@ -988,7 +988,7 @@ class ExportDialog(wx.Dialog):
                                                      labelText=_("AVI file:"),
                                                      dialogTitle=_("Choose file to save animation"),
                                                      buttonText=_("Browse"),
-                                                     startDirectory=os.getcwd(), fileMode=wx.SAVE)
+                                                     startDirectory=os.getcwd(), fileMode=wx.FD_SAVE)
         encodingLabel = wx.StaticText(parent=aviPanel, id=wx.ID_ANY, label=_("Video codec:"))
         self.encodingText = wx.TextCtrl(parent=aviPanel, id=wx.ID_ANY, value='mpeg4')
         optionsLabel = wx.StaticText(parent=aviPanel, label=_("Additional options:"))

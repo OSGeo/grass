@@ -341,7 +341,7 @@ class ProfileFrame(BasePlotFrame):
         dlg = wx.FileDialog(parent = self,
                             message = _("Choose prefix for file(s) where to save profile values..."),
                             defaultDir = os.getcwd(), 
-                            wildcard = _("Comma separated value (*.csv)|*.csv"), style = wx.SAVE)
+                            wildcard = _("Comma separated value (*.csv)|*.csv"), style = wx.FD_SAVE)
         pfile = []
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()

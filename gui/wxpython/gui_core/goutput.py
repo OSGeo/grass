@@ -375,7 +375,7 @@ class GConsoleWindow(wx.SplitterWindow):
                             defaultFile = "grass_cmd_output.txt",
                             wildcard = _("%(txt)s (*.txt)|*.txt|%(files)s (*)|*") % 
                             {'txt': _("Text files"), 'files': _("Files")},
-                            style = wx.SAVE | wx.FD_OVERWRITE_PROMPT)
+                            style = wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
         
         # Show the dialog and retrieve the user response. If it is the OK response,
         # process the data.
@@ -462,7 +462,7 @@ class GConsoleWindow(wx.SplitterWindow):
                                 defaultFile = "grass_cmd_log.txt",
                                 wildcard = _("%(txt)s (*.txt)|*.txt|%(files)s (*)|*") % 
                                             {'txt': _("Text files"), 'files': _("Files")},
-                                style = wx.SAVE)
+                                style = wx.FD_SAVE)
             if dlg.ShowModal() == wx.ID_OK:
                 self.cmdFileProtocol = dlg.GetPath()
             else:
