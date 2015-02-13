@@ -615,7 +615,7 @@ class MapCalcFrame(wx.Frame):
         dlg = wx.FileDialog(parent = self,
                             message = _("Choose a file name to save the expression"),
                             wildcard = _("Expression file (*)|*"),
-                            style = wx.SAVE | wx.FD_OVERWRITE_PROMPT)
+                            style = wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
             if not path:
@@ -636,7 +636,7 @@ class MapCalcFrame(wx.Frame):
         dlg = wx.FileDialog(parent = self,
                             message = _("Choose a file name to load the expression"),
                             wildcard = _("Expression file (*)|*"),
-                            style = wx.OPEN)
+                            style = wx.FD_OPEN)
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
             if not path:
