@@ -230,9 +230,9 @@ class Signal(object):
 
     # TODO: remove args?
     def __call__(self, *args, **kwargs):
-        """Allows to emit signal with function call syntax.
+        """Allows emitting signal with function call syntax.
 
-        It allows to handle signal as a function or other callable object.
+        It allows handling signal as a function or other callable object.
         So, the signal can be in the list of fuctions or can be connected as
         a handler for another signal.
         However, it is strongly recommended to use emit method for direct

@@ -502,7 +502,7 @@ struct Format_info_cache {
     /*! 
       \brief Cache type
 
-      Currenly used only by PostGIS Topology which allows to cache the
+      Currenly used only by PostGIS Topology which allows caching the
       whole map (CACHE_MAP) */
     int ctype;
 };
