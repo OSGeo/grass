@@ -226,7 +226,7 @@ class MiscToolbar(BaseToolbar):
 
 class AnimSimpleLmgrToolbar(SimpleLmgrToolbar):
     """Simple layer manager toolbar for animation tool.
-    Allows to add space-time dataset or series of maps.
+    Allows adding space-time dataset or series of maps.
     """
     def __init__(self, parent, lmgrStyle):
         SimpleLmgrToolbar.__init__(self, parent, lmgrStyle)

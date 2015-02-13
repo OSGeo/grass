@@ -20,7 +20,7 @@
 
 #%module
 #% label: Graphical Modeler.
-#% description: Allows to interactively create, edit and manage models.
+#% description: Allows interactively creating, editing and managing models.
 #% keyword: general
 #% keyword: GUI
 #% keyword: graphical modeler
