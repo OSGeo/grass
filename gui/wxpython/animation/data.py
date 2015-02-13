@@ -270,7 +270,7 @@ class AnimationData(object):
 
 
 class AnimLayer(Layer):
-    """Animation layer allows to add either space-time dataset
+    """Animation layer allows adding either space-time dataset
     or series of maps."""
     def __init__(self):
         Layer.__init__(self)

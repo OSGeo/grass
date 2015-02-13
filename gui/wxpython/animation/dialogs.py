@@ -1204,7 +1204,7 @@ class ExportDialog(wx.Dialog):
 
 class AnimSimpleLayerManager(SimpleLayerManager):
     """Simple layer manager for animation tool.
-    Allows to add space-time dataset or series of maps.
+    Allows adding space-time dataset or series of maps.
     """
     def __init__(self, parent, layerList,
                  lmgrStyle=SIMPLE_LMGR_RASTER | SIMPLE_LMGR_VECTOR |

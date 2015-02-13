@@ -93,7 +93,7 @@ Multigeometries are not currently supported. Features with the same
 category are exported as multiple singe features.
 
 <p>
-<em>v.out.postgis</em> also allows to export vector features as
+<em>v.out.postgis</em> also allows exporting vector features as
 <em>topological elements</em>
 in <a href="http://postgis.refractions.net/docs/Topology.html">PostGIS
 Topology</a> schema. PostGIS Topology extension uses three tables to
@@ -218,7 +218,7 @@ by <em><a href="v.info.html">v.info</a></em>:
 
 <h3>Export data without attributes</h3>
 
-<em>v.out.postgis</em> allows to ignore attributes when exporting
+<em>v.out.postgis</em> allows ignoring attributes when exporting
 vector features by specifying <b>-t</b> flag.
 
 Command bellow exports vector features without attributes. The feature
@@ -231,7 +231,7 @@ v.out.postgis -t input=railroads output="PG:dbname=grass"
 <h3>Export topological data</h3>
 
 By default <em>v.out.postgis</em> exports data as simple
-features. Flag <b>-l</b> allows to export data as topological elements
+features. Flag <b>-l</b> allows exporting data as topological elements
 instead of simple features. Export topological elements is stored in
 <a href="http://postgis.refractions.net/docs/Topology.html">PostGIS
 Topology</a> schema.

@@ -30,7 +30,7 @@ The algorithm described above creates class breaks which each are
 identical to a specific observation. It is thus necessary to decide to
 which class these observations should be attributed. It seems logical to
 prefer the densest, i.e. the one with the strongest slope. The
-automatisation of this method allows to distinguish classes with high
+automatisation of this method allows distinguishing classes with high
 frequencies from those with low frequencies, but also to introduce
 subtleties and to delimit transition classes.
 
