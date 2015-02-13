@@ -50,3 +50,4 @@ Categories=Education;Science;Geoscience;Geography;
 Exec=grass7
 Icon=grass
 Terminal=true
+Keywords=wms;wfs;ogc;osgeo
