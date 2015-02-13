@@ -316,22 +316,22 @@ class GRASSStartup(wx.Frame):
         # gis data directory
         
         gisdbase_boxsizer.Add(item=self.gisdbase_panel, proportion=1,
-                         flag=wx.EXPAND | wx.ALL,
-                         border=3)
+                              flag=wx.EXPAND | wx.ALL,
+                              border=1)
         
         gisdbase_panel_sizer.Add(item=dbase_sizer, proportion=1,
-                         flag=wx.EXPAND | wx.ALL,
-                         border=3)
+                                 flag=wx.EXPAND | wx.ALL,
+                                 border=1)
         gisdbase_panel_sizer.Add(item=self.ldbase, proportion=0,
-                         flag=wx.EXPAND | wx.ALL,
-                         border=3)
+                                 flag=wx.EXPAND | wx.ALL,
+                                 border=1)
 
         dbase_sizer.Add(item = self.tgisdbase, proportion = 1,
                         flag = wx.ALIGN_CENTER_VERTICAL | wx.ALL,
-                        border = 3)
+                        border = 1)
         dbase_sizer.Add(item = self.bbrowse, proportion = 0,
                         flag = wx.ALIGN_CENTER_VERTICAL | wx.ALL,
-                        border = 3)
+                        border = 1)
 
         gisdbase_panel_sizer.Fit(self.gisdbase_panel)
 
@@ -348,23 +348,23 @@ class GRASSStartup(wx.Frame):
 
             main_sizer.Add(item=list_box, proportion=1,
                            flag=wx.EXPAND | wx.ALL,
-                           border=3)
+                           border=1)
             main_sizer.Add(item=buttons_sizer, proportion=0,
                            flag=wx.ALIGN_CENTER_HORIZONTAL | wx.ALL,
-                           border=3)
+                           border=1)
             for button in buttons:
                 buttons_sizer.Add(item=button, proportion=0,
-                                  flag=wx.EXPAND | wx.ALL,
+                                  flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.BOTTOM,
                                   border=3)
             box_sizer.Add(item=panel, proportion=1,
                           flag=wx.EXPAND | wx.ALL,
-                          border=3)
+                          border=1)
             panel_sizer.Add(item=main_sizer, proportion=1,
                             flag=wx.EXPAND | wx.ALL,
-                            border=3)
+                            border=1)
             panel_sizer.Add(item=description, proportion=0,
                             flag=wx.EXPAND | wx.ALL,
-                            border=3)
+                            border=1)
             return box_sizer
 
         location_boxsizer = layout_list_box(
@@ -417,7 +417,7 @@ class GRASSStartup(wx.Frame):
         sizer.Add(item=gisdbase_boxsizer, proportion=0,
                   flag = wx.ALIGN_CENTER_HORIZONTAL |
                   wx.RIGHT | wx.LEFT | wx.TOP | wx.EXPAND,
-                  border=3) # GISDBASE setting
+                  border = 3) # GISDBASE setting
 
         # warning/error message
         sizer.Add(item=self.lmessage,
@@ -431,7 +431,7 @@ class GRASSStartup(wx.Frame):
                   flag = wx.ALIGN_CENTER_VERTICAL |
                   wx.ALIGN_CENTER_HORIZONTAL |
                   wx.RIGHT | wx.LEFT,
-                  border = 1)
+                  border = 3)
 
         self.panel.SetAutoLayout(True)
         self.panel.SetSizer(sizer)
