@@ -578,7 +578,7 @@ class ModelFrame(wx.Frame):
                             defaultDir = "",
                             defaultFile = "",
                             wildcard = filetype,
-                            style=wx.SAVE | wx.FD_OVERWRITE_PROMPT)
+                            style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
         
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()

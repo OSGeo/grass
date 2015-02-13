@@ -1970,7 +1970,7 @@ class VPropertiesDialog(PsmapDialog):
         self.epsFileCtrl = filebrowse.FileBrowseButton(panel, id = wx.ID_ANY, labelText = '',
                                 buttonText =  _("Browse"), toolTip = _("Type filename or click browse to choose file"), 
                                 dialogTitle = _("Choose a file"), startDirectory = '', initialValue = '',
-                                fileMask = "Encapsulated PostScript (*.eps)|*.eps|All files (*.*)|*.*", fileMode = wx.OPEN)
+                                fileMask = "Encapsulated PostScript (*.eps)|*.eps|All files (*.*)|*.*", fileMode = wx.FD_OPEN)
         if not self.vPropertiesDict['eps']:
             self.epsFileCtrl.SetValue('')
         else: #eps chosen
@@ -2159,7 +2159,7 @@ class VPropertiesDialog(PsmapDialog):
         self.patFileCtrl = filebrowse.FileBrowseButton(panel, id = wx.ID_ANY, labelText = _("Choose pattern file:"),
                                 buttonText =  _("Browse"), toolTip = _("Type filename or click browse to choose file"), 
                                 dialogTitle = _("Choose a file"), startDirectory = self.patternPath, initialValue = '',
-                                fileMask = "Encapsulated PostScript (*.eps)|*.eps|All files (*.*)|*.*", fileMode = wx.OPEN)
+                                fileMask = "Encapsulated PostScript (*.eps)|*.eps|All files (*.*)|*.*", fileMode = wx.FD_OPEN)
         self.patWidthText = wx.StaticText(panel, id = wx.ID_ANY, label = _("pattern line width (pts):"))
         self.patWidthSpin = wx.SpinCtrl(panel, id = wx.ID_ANY, min = 1, max = 25, initial = 1)
         self.patScaleText = wx.StaticText(panel, id = wx.ID_ANY, label = _("pattern scale factor:"))
