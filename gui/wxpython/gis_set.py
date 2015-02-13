@@ -506,9 +506,8 @@ class GRASSStartup(wx.Frame):
             self.lbmapsets.SetSelection(0)
             self.SetLocation(self.gisdbase, gWizard.location, 'PERMANENT')
             if gWizard.georeffile:
-                message = _("Do you want to import <%(name)s> to the newly created location? "
-                            "The location's default region will be set from this imported "
-                            "map.") % {'name': gWizard.georeffile}
+                message = _("Do you want to import <%(name)s> to the newly created location?") % \
+                    {'name': gWizard.georeffile}
                 dlg = wx.MessageDialog(parent = self,
                                        message = message,
                                        caption = _("Import data?"),
