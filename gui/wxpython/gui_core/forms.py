@@ -1504,9 +1504,9 @@ class CmdPanel(wx.Panel):
                 # file selector
                 elif p.get('prompt','') !=  'color' and p.get('prompt', '') == 'file':
                     if p.get('age', 'new') == 'new':
-                        fmode = wx.SAVE
+                        fmode = wx.FD_SAVE
                     else:
-                        fmode = wx.OPEN
+                        fmode = wx.FD_OPEN
                     # check wildcard
                     try:
                         fExt = os.path.splitext(p.get('key_desc', ['*.*'])[0])[1]
@@ -1915,7 +1915,7 @@ class CmdPanel(wx.Panel):
         dlg = wx.FileDialog(parent = self,
                             message = _("Save input as..."),
                             defaultDir = os.getcwd(),
-                            style = wx.SAVE | wx.FD_OVERWRITE_PROMPT)
+                            style = wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
 
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()

@@ -383,7 +383,7 @@ class MapFrame(SingleMapFrame):
                             message = _("Choose a file name to save the image "
                                         "(no need to add extension)"),
                             wildcard = filetype,
-                            style=wx.SAVE | wx.FD_OVERWRITE_PROMPT)
+                            style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
         
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()

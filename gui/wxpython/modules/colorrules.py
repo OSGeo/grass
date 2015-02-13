@@ -408,7 +408,7 @@ class ColorTable(wx.Frame):
                                                      buttonText = _('Load'),
                                                      toolTip = _("Type filename or click to choose "
                                                                  "file and load color table"),
-                                                     startDirectory = os.getcwd(), fileMode = wx.OPEN,
+                                                     startDirectory = os.getcwd(), fileMode = wx.FD_OPEN,
                                                      changeCallback = self.OnLoadRulesFile)
         self.saveRules = filebrowse.FileBrowseButton(parent = parent, id = wx.ID_ANY, fileMask = '*',
                                                      labelText = '',
@@ -416,7 +416,7 @@ class ColorTable(wx.Frame):
                                                      toolTip = _("Type filename or click to choose "
                                                                  "file and save color table"),
                                                      buttonText = _('Save'),
-                                                     startDirectory = os.getcwd(), fileMode = wx.SAVE,
+                                                     startDirectory = os.getcwd(), fileMode = wx.FD_SAVE,
                                                      changeCallback = self.OnSaveRulesFile)
 
         colorTable = ColorTablesComboBox(parent = parent, size=globalvar.DIALOG_COMBOBOX_SIZE,
