@@ -479,7 +479,7 @@ def set_browser():
             browser = "explorer"
         else:
             # the usual suspects
-            browsers = ["xdg-open", "htmlview", "konqueror", "mozilla",
+            browsers = ["xdg-open", "x-www-browser", "htmlview", "konqueror", "mozilla",
                         "mozilla-firefox", "firefox", "iceweasel", "opera",
                         "netscape", "dillo", "lynx", "links", "w3c"]
             for b in browsers:
