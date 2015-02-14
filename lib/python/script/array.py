@@ -150,8 +150,7 @@ class array(numpy.memmap):
         self.filename = filename
         return self
 
-    def _close(self):
-        numpy.memmap._close(self)
+    def __del__(self):
         if isinstance(self, array):
             try_remove(self.filename)
 
@@ -273,10 +272,8 @@ class array3d(numpy.memmap):
 
         return self
 
-    def _close(self):
-
-        numpy.memmap._close(self)
-        if isinstance(self, array):
+    def __del__(self):
+        if isinstance(self, array3d):
             try_remove(self.filename)
 
     def read(self, mapname, null=None):
