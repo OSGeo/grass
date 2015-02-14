@@ -2891,8 +2891,12 @@ class LayerBook(wx.Notebook):
                       proportion = 2,
                       flag = wx.TOP | wx.BOTTOM | wx.RIGHT | wx.EXPAND,
                       border = 3)
-        
-        layerSizer.SetVirtualSizeHints(self.addPanel)
+
+        # SetVirtualSizeHints is deprecated and is
+        # exactly the same as FitInside() in wxWidgets 2.9 and later
+        getattr(layerSizer, 'FitInside',
+                layerSizer.SetVirtualSizeHints)(self.addPanel)
+
         self.addPanel.SetAutoLayout(True)
         self.addPanel.SetSizer(pageSizer)
         pageSizer.Fit(self.addPanel)
