@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-02-08 19:56+0100\n"
-"PO-Revision-Date: 2015-02-06 23:51+0100\n"
+"PO-Revision-Date: 2015-02-13 10:37+0100\n"
 "Last-Translator: Sylvain Maillard <sylvain.maillard@gmail.com>\n"
 "Language-Team: français <grass-translations@lists.osgeo.org>\n"
 "Language: fr\n"
@@ -35,7 +35,7 @@ msgstr "Zoomer sur l'étendue du nuage de points"
 #: ../gui/wxpython/iscatt/toolbars.py:43 ../gui/wxpython/iclass/toolbars.py:37
 #: ../gui/wxpython/iclass/dialogs.py:42
 msgid "Select imagery group"
-msgstr "Sélectionner un groupe d'images :"
+msgstr "Sélectionner un groupe d'images:"
 
 #: ../gui/wxpython/iscatt/toolbars.py:44
 #: ../gui/wxpython/iscatt/toolbars.py:135
@@ -57,15 +57,15 @@ msgstr "Ajouter un nuage de points"
 
 #: ../gui/wxpython/iscatt/toolbars.py:50
 msgid "Select area with polygon"
-msgstr "Sélectionner une zone avec un polygone"
+msgstr "Sélectionner une zone par un polygone"
 
 #: ../gui/wxpython/iscatt/toolbars.py:52
 msgid "Pan mode for scatter plots"
-msgstr ""
+msgstr "Mode déplacer"
 
 #: ../gui/wxpython/iscatt/toolbars.py:54
 msgid "Zoom mode for scatter plots (left mouse button, wheel)"
-msgstr "Mode zomme pour les nuages de points (bouton de souris gauche, molette)"
+msgstr "Mode zoom pour les nuages de points (bouton de souris gauche, molette)"
 
 #: ../gui/wxpython/iscatt/toolbars.py:56
 msgid "Zoom to scatter plot data extend mode (click on scatter plot for zooming to extend)"
@@ -103,21 +103,19 @@ msgstr "Ajouter un nouveau sommet entre le dernier et le premier point du contou
 
 #: ../gui/wxpython/iscatt/toolbars.py:174
 msgid "Move vertex"
-msgstr "Déplacer un vertex"
+msgstr "Déplacer un sommet"
 
 #: ../gui/wxpython/iscatt/toolbars.py:175
-#, fuzzy
 msgid "Move boundary vertex"
-msgstr "Déplacer un vertex"
+msgstr "Déplacer un sommet du contour"
 
 #: ../gui/wxpython/iscatt/toolbars.py:177
 msgid "Remove vertex"
-msgstr "Supprimer un vertex"
+msgstr "Supprimer un sommet"
 
 #: ../gui/wxpython/iscatt/toolbars.py:178
-#, fuzzy
 msgid "Remove boundary vertex"
-msgstr "Supprimer un vertex"
+msgstr "Supprimer un sommet du contour"
 
 #: ../gui/wxpython/iscatt/toolbars.py:180
 msgid "Remove polygon (click on scatter plot for removing it's polygon)"
@@ -133,10 +131,9 @@ msgstr "Supprimer la classe sélectionnée"
 
 #: ../gui/wxpython/iscatt/controllers.py:138 ../gui/wxpython/dbmgr/base.py:147
 msgid "Loading data..."
-msgstr "Chargement des données..."
+msgstr "Chargement des données ..."
 
 #: ../gui/wxpython/iscatt/controllers.py:203
-#, fuzzy
 msgid "No data set."
 msgstr "Pas de données définies."
 
@@ -182,24 +179,24 @@ msgid "Scatter plot cannot be added.\n"
 msgstr "Le nuage de point ne peut pas être ajouté.\n"
 
 #: ../gui/wxpython/iscatt/controllers.py:306
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Scatter plot cannot be added.\n"
 "Multiple of bands ranges <%s:%d * %s:%d = %d> is higher than maximum limit <%d>.\n"
 msgstr ""
 "Le nuage de point ne peut pas être ajouté.\n"
-"La multiplication des étendues de bandes <%s:%d * %s:%d = %d> est supérieure à la limite maximale <%d>.\n"
+"La multiplication des plages de bandes <%s:%d * %s:%d = %d> est supérieure à la limite maximale <%d>.\n"
 
 #: ../gui/wxpython/iscatt/controllers.py:314
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Multiple of bands ranges <%s:%d * %s:%d = %d> is higher than recommended limit <%d>.\n"
 "It is strongly advised to reduce range extend of bands(e. g. using r.rescale) bellow recommended threshold.\n"
 "\n"
 "Do you really want to add this scatter plot?"
 msgstr ""
-"La multiplication des étendues de bandes <%s:%d * %s:%d = %d> est supérieure à la limite maximale <%d>.\n"
-"Il est fortement conseillé de réduite l'étendue des bandes (ex : en utilisant r.rescale) en dessous du seuil recommandé.\n"
+"La multiplication des étendues de bandes <%s:%d * %s:%d = %d> est supérieure à la limite recommandée <%d>.\n"
+"Il est fortement conseillé de réduire la plage des bandes (ex : en utilisant r.rescale) en dessous du seuil recommandé.\n"
 "\n"
 "Voulez-vous vraiment ajouter ce nuage de poitns ?"
 
@@ -283,16 +280,16 @@ msgstr "Ajouter des nuages de points"
 
 #: ../gui/wxpython/iscatt/dialogs.py:56
 msgid "x axis:"
-msgstr "axe x :"
+msgstr "axe x:"
 
 #: ../gui/wxpython/iscatt/dialogs.py:62
 msgid "y axis:"
-msgstr "axe y :"
+msgstr "axe y:"
 
 #: ../gui/wxpython/iscatt/dialogs.py:97
 #, fuzzy
 msgid "Bands of scatter plots to be added (x y):"
-msgstr "Bandes à ajouter au nuage de points (x y) :"
+msgstr "Bandes à ajouter au nuage de points (x y):"
 
 #: ../gui/wxpython/iscatt/dialogs.py:135
 msgid "No scatter plots selected."
@@ -312,7 +309,7 @@ msgstr "Un nuage de points avec la même combinaison de bandes (indépendament d
 
 #: ../gui/wxpython/iscatt/dialogs.py:253 ../gui/wxpython/iclass/dialogs.py:710
 msgid "Enter name of new vector map:"
-msgstr "Nom de la nouvelle carte vecteur :"
+msgstr "Nom de la nouvelle carte vecteur:"
 
 #: ../gui/wxpython/iscatt/dialogs.py:292
 #, python-format
@@ -331,25 +328,24 @@ msgstr "Afficher les ellipses de confiance"
 
 #: ../gui/wxpython/iscatt/dialogs.py:323
 msgid "Selection polygon color:"
-msgstr "Couleur de polygone :"
+msgstr "Couleur de polygone:"
 
 #: ../gui/wxpython/iscatt/dialogs.py:324
-#, fuzzy
 msgid "Color of selection polygon vertex:"
-msgstr "Couleur pour les points de contrôle sélectionnés :"
+msgstr "Couleur des sommets du polygone de sélection:"
 
 #: ../gui/wxpython/iscatt/dialogs.py:325
 msgid "Selected area color:"
-msgstr "Couleur de la surface :"
+msgstr "Couleur de la surface:"
 
 #: ../gui/wxpython/iscatt/dialogs.py:338 ../gui/wxpython/vnet/dialogs.py:1167
 msgid "Snapping treshold in pixels:"
-msgstr "Seuil de magnétisme en pixels :"
+msgstr "Seuil de magnétisme en pixels:"
 
 #: ../gui/wxpython/iscatt/dialogs.py:339
 #, fuzzy
 msgid "Selected area opacity:"
-msgstr "Opacité :"
+msgstr "Opacité:"
 
 #: ../gui/wxpython/iscatt/dialogs.py:357 ../gui/wxpython/wxplot/dialogs.py:685
 #: ../gui/wxpython/wxplot/dialogs.py:1134 ../gui/wxpython/gcp/manager.py:2407
@@ -376,7 +372,7 @@ msgstr "Fermer la boîte de dialogue"
 
 #: ../gui/wxpython/iscatt/dialogs.py:371
 msgid "Selection style:"
-msgstr "Style de la sélection :"
+msgstr "Style de la sélection:"
 
 #: ../gui/wxpython/iscatt/dialogs.py:393
 #, fuzzy
@@ -583,7 +579,7 @@ msgstr "Fichiers TARGZ"
 
 #: ../gui/wxpython/gui_core/gselect.py:1387
 msgid "File:"
-msgstr "Fichier :"
+msgstr "Fichier:"
 
 #: ../gui/wxpython/gui_core/gselect.py:1388
 msgid "Choose file to import"
@@ -593,7 +589,7 @@ msgstr "Choisir un fichier à importer"
 #: ../gui/wxpython/gui_core/gselect.py:1462
 #: ../gui/wxpython/animation/dialogs.py:925
 msgid "Directory:"
-msgstr "Répertoire :"
+msgstr "Répertoire:"
 
 #: ../gui/wxpython/gui_core/gselect.py:1401
 #: ../gui/wxpython/gui_core/gselect.py:1463
@@ -602,7 +598,7 @@ msgstr "Choisir le répertoire d'entrée"
 
 #: ../gui/wxpython/gui_core/gselect.py:1415
 msgid "Extension:"
-msgstr "Extension :"
+msgstr "Extension:"
 
 #: ../gui/wxpython/gui_core/gselect.py:1439
 #: ../gui/wxpython/gui_core/gselect.py:1449
@@ -612,7 +608,7 @@ msgstr "Extension :"
 #: ../gui/wxpython/animation/dialogs.py:329
 #: ../gui/wxpython/vnet/dialogs.py:1476
 msgid "Name:"
-msgstr "Nom :"
+msgstr "Nom:"
 
 #: ../gui/wxpython/gui_core/gselect.py:1440
 msgid "Choose file"
@@ -639,17 +635,17 @@ msgstr "Reconstruire la topologie"
 #: ../gui/wxpython/gui_core/gselect.py:1641
 #: ../gui/wxpython/gui_core/gselect.py:1679
 msgid "Creation options:"
-msgstr "Options de création :"
+msgstr "Options de création:"
 
 #: ../gui/wxpython/gui_core/gselect.py:1573
 #: ../gui/wxpython/gui_core/gselect.py:1612
 #: ../gui/wxpython/gui_core/gselect.py:1664
 msgid "Format:"
-msgstr "Format :"
+msgstr "Format:"
 
 #: ../gui/wxpython/gui_core/gselect.py:1671
 msgid "Protocol:"
-msgstr "Protocole :"
+msgstr "Protocole:"
 
 #: ../gui/wxpython/gui_core/gselect.py:1694
 msgid "No settings available"
@@ -679,8 +675,9 @@ msgid "Point"
 msgstr "Point"
 
 #: ../gui/wxpython/gui_core/gselect.py:2113
+#, fuzzy
 msgid "LineString"
-msgstr ""
+msgstr "Ligne"
 
 #: ../gui/wxpython/gui_core/gselect.py:2113
 msgid "Polygon"
@@ -1036,7 +1033,7 @@ msgstr "Effacer le jeu de cartes sélectionné"
 
 #: ../gui/wxpython/gui_core/widgets.py:1053
 msgid "Load settings:"
-msgstr "charger les paramètres :"
+msgstr "charger les paramètres:"
 
 #: ../gui/wxpython/gui_core/widgets.py:1068
 #, python-format
@@ -1110,7 +1107,7 @@ msgstr "Copier la ligne"
 
 #: ../gui/wxpython/gui_core/query.py:142
 msgid "Query results:"
-msgstr "Résuluats de la requête :"
+msgstr "Résuluats de la requête:"
 
 #: ../gui/wxpython/gui_core/query.py:145
 msgid " "
@@ -1147,12 +1144,12 @@ msgstr "Le secteur ou le jeux de donnée ne sont pas définis."
 
 #: ../gui/wxpython/gui_core/dialogs.py:125
 msgid "Name of GRASS location:"
-msgstr "Nom du secteur GRASS :"
+msgstr "Nom du secteur GRASS:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:131
 #: ../gui/wxpython/gui_core/dialogs.py:178
 msgid "Name of mapset:"
-msgstr "Nom du jeu de cartes :"
+msgstr "Nom du jeu de cartes:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:156
 msgid "Select mapset in GRASS location"
@@ -1177,7 +1174,7 @@ msgstr "Nom de la carte vectorielle manquant."
 #: ../gui/wxpython/gmodeler/dialogs.py:78
 #: ../gui/wxpython/iclass/dialogs.py:241
 msgid "Name of vector map:"
-msgstr "Nom de la carte vecteur :"
+msgstr "Nom de la carte vecteur:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:234
 #: ../gui/wxpython/gui_core/dialogs.py:354 ../gui/wxpython/menustrings.py:542
@@ -1200,12 +1197,12 @@ msgstr "Nom de la nouvelle carte vectorielle manquant."
 
 #: ../gui/wxpython/gui_core/dialogs.py:289
 msgid "Name for new vector map:"
-msgstr "Nom pour la nouvelle carte vecteur :"
+msgstr "Nom pour la nouvelle carte vecteur:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:303
 #: ../gui/wxpython/gui_core/preferences.py:1165
 msgid "Key column:"
-msgstr "Colonne clé :"
+msgstr "Colonne clé:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:387
 #, python-format
@@ -1233,11 +1230,11 @@ msgstr "Écraser ?"
 
 #: ../gui/wxpython/gui_core/dialogs.py:503
 msgid "Load region:"
-msgstr "Charger une région :"
+msgstr "Charger une région:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:507
 msgid "Save region:"
-msgstr "Enregistrer une région :"
+msgstr "Enregistrer une région:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:544
 msgid "Name cannot begin with '.' and must not contain space, quotes, '/', ''', '@', ',', '=', '*', and all other non-alphanumeric characters."
@@ -1267,7 +1264,7 @@ msgstr "Mettez ici une expression régulière. Le caratère '.*' correspond à t
 
 #: ../gui/wxpython/gui_core/dialogs.py:642
 msgid "Select existing group or enter name of new group:"
-msgstr "Sélectionner un groupe existant ou entrez le nom d'un nouveau groupe :"
+msgstr "Sélectionner un groupe existant ou entrez le nom d'un nouveau groupe:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:653
 msgid "Edit/create subgroup"
@@ -1275,19 +1272,19 @@ msgstr "Modifier/créer un sous-groupe"
 
 #: ../gui/wxpython/gui_core/dialogs.py:662
 msgid "Select existing subgroup or enter name of new subgroup:"
-msgstr "Sélectionner un sous-groupe existant ou entrez le nom d'un nouveau sous-groupe :"
+msgstr "Sélectionner un sous-groupe existant ou entrez le nom d'un nouveau sous-groupe:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:690
 #: ../gui/wxpython/gui_core/dialogs.py:743
 #: ../gui/wxpython/gui_core/dialogs.py:1369
 msgid "Pattern:"
-msgstr "Modèle :"
+msgstr "Modèle:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:705
 #: ../gui/wxpython/gui_core/dialogs.py:757
 #: ../gui/wxpython/gui_core/dialogs.py:1388
 msgid "List of maps:"
-msgstr "Liste des cartes :"
+msgstr "Liste des cartes:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:715
 msgid "Select map layers and add them to the list."
@@ -1380,7 +1377,7 @@ msgstr "vecteur"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1337
 msgid "Map type:"
-msgstr "Type de carte :"
+msgstr "Type de carte:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1352
 msgid "Select toggle"
@@ -1388,7 +1385,7 @@ msgstr "Interrupteur de sélection"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1359
 msgid "Mapset:"
-msgstr "Jeu de cartes :"
+msgstr "Jeu de cartes:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1445
 msgid "Invert selection"
@@ -1575,7 +1572,7 @@ msgstr "Taille de l'image"
 #: ../gui/wxpython/gmodeler/preferences.py:448
 #: ../gui/wxpython/nviz/preferences.py:476
 msgid "Width:"
-msgstr "Largeur :"
+msgstr "Largeur:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2398
 #: ../gui/wxpython/psmap/dialogs.py:2735 ../gui/wxpython/psmap/dialogs.py:2873
@@ -1587,11 +1584,11 @@ msgstr "Largeur :"
 #: ../gui/wxpython/nviz/tools.py:284 ../gui/wxpython/nviz/tools.py:1043
 #: ../gui/wxpython/nviz/tools.py:1770
 msgid "Height:"
-msgstr "Hauteur :"
+msgstr "Hauteur:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2402
 msgid "Template:"
-msgstr "Gabarit :"
+msgstr "Gabarit:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2440
 #, fuzzy
@@ -1609,11 +1606,11 @@ msgstr "Symboles"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2523
 msgid "Symbol directory:"
-msgstr "Répertoire des symboles :"
+msgstr "Répertoire des symboles:"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2531
 msgid "Symbol name:"
-msgstr "Nom du symbole :"
+msgstr "Nom du symbole:"
 
 #: ../gui/wxpython/gui_core/preferences.py:57
 msgid "User settings"
@@ -1634,9 +1631,8 @@ msgid "Apply changes for the current session only and close"
 msgstr "Appliquer les changements pour la session courante et fermer la boite de dialogue"
 
 #: ../gui/wxpython/gui_core/preferences.py:91
-#, fuzzy
 msgid "Save for this session only"
-msgstr "Appliquer les modifications pour cette session"
+msgstr "Appliquer pour cette session uniquement"
 
 #: ../gui/wxpython/gui_core/preferences.py:96
 #: ../gui/wxpython/psmap/dialogs.py:355
@@ -1755,7 +1751,7 @@ msgstr "Paramètres de caractère"
 
 #: ../gui/wxpython/gui_core/preferences.py:389
 msgid "Font for command output:"
-msgstr "Police pour la sortie commandes :"
+msgstr "Police pour la sortie commandes:"
 
 #: ../gui/wxpython/gui_core/preferences.py:394
 #: ../gui/wxpython/gui_core/preferences.py:589
@@ -1770,7 +1766,7 @@ msgstr "Paramètres de langue"
 
 #: ../gui/wxpython/gui_core/preferences.py:412
 msgid "Choose language (requires to save and GRASS restart):"
-msgstr "Choisir une langue (validez et redémarrez GRASS) :"
+msgstr "Choisir une langue (validez et redémarrez GRASS):"
 
 #: ../gui/wxpython/gui_core/preferences.py:437
 msgid "Appearance settings"
@@ -1778,7 +1774,7 @@ msgstr "Paramètres d'apparence"
 
 #: ../gui/wxpython/gui_core/preferences.py:447
 msgid "Element list:"
-msgstr "Liste d'éléments :"
+msgstr "Liste d'éléments:"
 
 # Conserver le sigle GUI me semble plus clair pour l'utilisateur que sa traduction française (IGU) peu voire pas usitée.
 #: ../gui/wxpython/gui_core/preferences.py:469
@@ -1787,7 +1783,7 @@ msgstr "Style de menu (requiert le redémarrage de l'interface graphique)"
 
 #: ../gui/wxpython/gui_core/preferences.py:493
 msgid "Height of map selection popup window (in pixels):"
-msgstr "Hauteur de fenêtre popup de sélection de carte (en pixels) :"
+msgstr "Hauteur de fenêtre popup de sélection de carte (en pixels):"
 
 # Conserver le sigle GUI me semble plus clair pour l'utilisateur que sa traduction française (IGU) peu voire pas usitée.
 #: ../gui/wxpython/gui_core/preferences.py:517
@@ -1795,9 +1791,8 @@ msgid "Icon theme (requires GUI restart):"
 msgstr "Thème d'icônes (requiert le redémarrage du GUI)"
 
 #: ../gui/wxpython/gui_core/preferences.py:537
-#, fuzzy
 msgid "Module dialog style:"
-msgstr "Boîte de dialogue"
+msgstr "Style des boîtes de dialogue des modules"
 
 #: ../gui/wxpython/gui_core/preferences.py:570
 msgid "Map Display"
@@ -1805,7 +1800,7 @@ msgstr "Fenêtre de carte"
 
 #: ../gui/wxpython/gui_core/preferences.py:584
 msgid "Default font for GRASS displays:"
-msgstr "Police par défaut pour les affichages GRASS :"
+msgstr "Police par défaut pour les affichages GRASS:"
 
 #: ../gui/wxpython/gui_core/preferences.py:602
 msgid "Default display settings"
@@ -1813,18 +1808,18 @@ msgstr "Réglages d'affichage par défaut"
 
 #: ../gui/wxpython/gui_core/preferences.py:612
 msgid "Display driver:"
-msgstr "Pilote d'affichage :"
+msgstr "Pilote d'affichage:"
 
 #: ../gui/wxpython/gui_core/preferences.py:632
 msgid "Statusbar mode:"
-msgstr "Mode de la barre de statut :"
+msgstr "Mode de la barre de statut:"
 
 #: ../gui/wxpython/gui_core/preferences.py:652
 #: ../gui/wxpython/animation/dialogs.py:1495 ../gui/wxpython/nviz/tools.py:354
 #: ../gui/wxpython/nviz/preferences.py:178
 #: ../gui/wxpython/web_services/widgets.py:263
 msgid "Background color:"
-msgstr "Couleur d'arrière-plan :"
+msgstr "Couleur d'arrière-plan:"
 
 #: ../gui/wxpython/gui_core/preferences.py:671
 #: ../gui/wxpython/mapdisp/statusbar.py:496
@@ -1846,11 +1841,11 @@ msgstr "Activer le zoom automatique sur la carte sélectionnée"
 
 #: ../gui/wxpython/gui_core/preferences.py:723
 msgid "Mouse wheel action:"
-msgstr "Action de la molette de la souris :"
+msgstr "Action de la molette de la souris:"
 
 #: ../gui/wxpython/gui_core/preferences.py:738
 msgid "Mouse scrolling direction:"
-msgstr "Sens de défilement de la souris :"
+msgstr "Sens de défilement de la souris:"
 
 #: ../gui/wxpython/gui_core/preferences.py:764
 msgid "Advanced display settings"
@@ -1858,7 +1853,7 @@ msgstr "Paramètres d'affichage avancés"
 
 #: ../gui/wxpython/gui_core/preferences.py:770
 msgid "3D view depth buffer (possible values are 16, 24, 32):"
-msgstr "Taille du tampon d'affichage 3D (valeurs possibles 16, 24, 32) :"
+msgstr "Taille du tampon d'affichage 3D (valeurs possibles 16, 24, 32):"
 
 #: ../gui/wxpython/gui_core/preferences.py:802
 msgid "Modules"
@@ -1880,7 +1875,7 @@ msgstr "Autoriser les entrées interactives"
 
 #: ../gui/wxpython/gui_core/preferences.py:857
 msgid "Verbosity level:"
-msgstr "Niveau de verbosité :"
+msgstr "Niveau de verbosité:"
 
 #: ../gui/wxpython/gui_core/preferences.py:882
 msgid "Layers"
@@ -1906,33 +1901,33 @@ msgstr "Réglages vecteur"
 
 #: ../gui/wxpython/gui_core/preferences.py:942
 msgid "Display:"
-msgstr "Afficher :"
+msgstr "Afficher:"
 
 #: ../gui/wxpython/gui_core/preferences.py:961
 #, fuzzy
 msgid "Feature color:"
-msgstr "Couleur du treillis"
+msgstr "Couleur du treillis:"
 
 #: ../gui/wxpython/gui_core/preferences.py:983
 #, fuzzy
 msgid "Area fill color:"
-msgstr "remplir par la couleur"
+msgstr "remplir par la couleur:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1004
 #: ../gui/wxpython/psmap/dialogs.py:4900 ../gui/wxpython/gcp/manager.py:2564
 #: ../gui/wxpython/mapswipe/dialogs.py:270
 #: ../gui/wxpython/vnet/dialogs.py:1164
 msgid "Line width:"
-msgstr "Épaisseur de ligne :"
+msgstr "Épaisseur de ligne:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1016
 #: ../gui/wxpython/gcp/manager.py:2549
 msgid "Symbol size:"
-msgstr "Taille de symbole :"
+msgstr "Taille de symbole:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1026
 msgid "Symbol:"
-msgstr "Symbole :"
+msgstr "Symbole:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1053
 #: ../gui/wxpython/vdigit/preferences.py:363
@@ -1952,11 +1947,11 @@ msgstr "Surligner les objets sélectionnés"
 #: ../gui/wxpython/nviz/preferences.py:545 ../gui/wxpython/gcp/manager.py:2473
 #: ../gui/wxpython/mapswipe/dialogs.py:242
 msgid "Color:"
-msgstr "Couleur :"
+msgstr "Couleur:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1079
 msgid "Line width (in pixels):"
-msgstr "Largeur de ligne (en pixels) :"
+msgstr "Largeur de ligne (en pixels):"
 
 #: ../gui/wxpython/gui_core/preferences.py:1089
 msgid "Automatically hightlight selected features in map display"
@@ -1968,11 +1963,11 @@ msgstr "Navigateur de données"
 
 #: ../gui/wxpython/gui_core/preferences.py:1114
 msgid "Left mouse double click:"
-msgstr "Double clic gauche :"
+msgstr "Double clic gauche:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1126
 msgid "Encoding (e.g. utf-8, ascii, iso8859-1, koi8-r):"
-msgstr "Encodage (p. ex. utf-8, ascii, iso 8859-1, koi8-r) :"
+msgstr "Encodage (p. ex. utf-8, ascii, iso 8859-1, koi8-r):"
 
 #: ../gui/wxpython/gui_core/preferences.py:1137
 msgid "Ask when deleting data record(s) from table"
@@ -2008,15 +2003,15 @@ msgstr ""
 #: ../gui/wxpython/gui_core/preferences.py:1222
 #: ../gui/wxpython/location_wizard/wizard.py:1319
 msgid "EPSG code:"
-msgstr "Code EPSG : "
+msgstr "Code EPSG:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1239
 msgid "Proj.4 string (required):"
-msgstr "Chaîne Proj.4 (requise) :"
+msgstr "Chaîne Proj.4 (requise):"
 
 #: ../gui/wxpython/gui_core/preferences.py:1255
 msgid "EPSG file:"
-msgstr "Fichier EPSG :"
+msgstr "Fichier EPSG:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1270
 msgid "Load EPSG codes (be patient), enter EPSG code or insert Proj.4 string directly."
@@ -2036,7 +2031,7 @@ msgstr "Projections lat/long"
 
 #: ../gui/wxpython/gui_core/preferences.py:1317
 msgid "Precision:"
-msgstr "Précision :"
+msgstr "Précision:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1382
 #, python-format
@@ -2060,16 +2055,16 @@ msgstr "Impossible de définir la police de caractères par défaut. Essayez une
 
 #: ../gui/wxpython/gui_core/preferences.py:1549
 msgid "Select font:"
-msgstr "Sélectionner une police :"
+msgstr "Sélectionner une police:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1573
 msgid "Character encoding:"
-msgstr "Encodage de caractère :"
+msgstr "Encodage de caractère:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1591
 #: ../gui/wxpython/psmap/dialogs.py:292 ../gui/wxpython/psmap/dialogs.py:3555
 msgid "Font size:"
-msgstr "Taille du texte :"
+msgstr "Taille du texte:"
 
 #: ../gui/wxpython/gui_core/preferences.py:1686
 msgid "Manage access to mapsets"
@@ -2236,7 +2231,7 @@ msgstr "version inconnue"
 
 #: ../gui/wxpython/gui_core/ghelp.py:130
 msgid "Official GRASS site:"
-msgstr "Site officiel de GRASS :"
+msgstr "Site officiel de GRASS:"
 
 #: ../gui/wxpython/gui_core/ghelp.py:141
 #, fuzzy
@@ -2271,7 +2266,7 @@ msgstr "Erreur à la lecture du fichier '%s'."
 
 #: ../gui/wxpython/gui_core/ghelp.py:325 ../gui/wxpython/gui_core/ghelp.py:387
 msgid "Lines:"
-msgstr "Lignes :"
+msgstr "Lignes:"
 
 #: ../gui/wxpython/gui_core/ghelp.py:343 ../gui/wxpython/gui_core/ghelp.py:345
 #: ../gui/wxpython/gui_core/ghelp.py:408
@@ -2564,7 +2559,7 @@ msgstr "Exemple : %s"
 
 #: ../gui/wxpython/dbmgr/base.py:1111
 msgid "Builder"
-msgstr ""
+msgstr "Constructeur"
 
 #: ../gui/wxpython/dbmgr/base.py:1113
 msgid "SQL Builder"
@@ -3017,7 +3012,7 @@ msgstr "Obtenir les 256 premières valeurs unique comme échantillon"
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:223
 msgid "Go to:"
-msgstr "Aller à :"
+msgstr "Aller à:"
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:236
 msgid "Close dialog on apply"
@@ -3139,7 +3134,7 @@ msgstr "&Soumettre"
 
 #: ../gui/wxpython/dbmgr/dialogs.py:142 ../gui/wxpython/vdigit/dialogs.py:168
 msgid "Feature id:"
-msgstr "Id objet :"
+msgstr "Id objet:"
 
 #: ../gui/wxpython/dbmgr/dialogs.py:226
 #, python-format
@@ -3281,7 +3276,7 @@ msgstr "Définir la base de données de GRASS et le nom du secteur"
 
 #: ../gui/wxpython/location_wizard/wizard.py:111
 msgid "GIS Data Directory:"
-msgstr "Répertoire des données SIG :"
+msgstr "Répertoire des données SIG:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:127
 msgid "Project Location"
@@ -3310,7 +3305,7 @@ msgstr "Non de secteur invalide"
 
 #: ../gui/wxpython/location_wizard/wizard.py:178
 msgid "Choose GRASS data directory:"
-msgstr "Choisir le répertoire des données de GRASS :"
+msgstr "Choisir le répertoire des données de GRASS:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:189
 #: ../gui/wxpython/location_wizard/wizard.py:2059
@@ -3323,35 +3318,35 @@ msgstr "Impossible de créer le secteur"
 
 #: ../gui/wxpython/location_wizard/wizard.py:206
 msgid "Title of the location is limited only to one line and 256 characters. The rest of the text will be ignored."
-msgstr "Le titre de secteur est limité à une ligne et 256 caractères. Le reste du texte sera ignoré."
+msgstr "Le titre du secteur est limité à une ligne et 256 caractères. Le reste du texte sera ignoré."
 
 #: ../gui/wxpython/location_wizard/wizard.py:213
 msgid "Choose method for creating a new location"
-msgstr "Choisir la méthode de création du nouveau secteur"
+msgstr "Définir le nouveau système de coordonnées"
 
 #: ../gui/wxpython/location_wizard/wizard.py:220
 msgid "Select coordinate system parameters from a list"
-msgstr "Sélectionner les paramètres du système de coodonnées dans la liste"
+msgstr "Sélectionner les paramètres depuis une liste"
 
 #: ../gui/wxpython/location_wizard/wizard.py:223
 msgid "Select EPSG code of spatial reference system"
-msgstr "Sélectionner le code EPSG du système de coordonnées de référence"
+msgstr "Sélectionner le code EPSG"
 
 #: ../gui/wxpython/location_wizard/wizard.py:225
 msgid "Read projection and datum terms from a georeferenced data file"
-msgstr "Lire la projection et les termes du datum depuis un fichier de géréférencement"
+msgstr "Lire depuis un fichier géoréférencé"
 
 #: ../gui/wxpython/location_wizard/wizard.py:228
 msgid "Read projection and datum terms from a Well Known Text (WKT) .prj file"
-msgstr "Lire la projection et les termes du datum depuis un fichier WKT .prj"
+msgstr "Lire depuis un fichier WKT .prj"
 
 #: ../gui/wxpython/location_wizard/wizard.py:231
 msgid "Specify projection and datum terms using custom PROJ.4 parameters"
-msgstr "Spécifier la projection et les termes du datum en utilisant des paramètres PROJ.4 personnalisés"
+msgstr "Paramètres PROJ.4 personnalisés"
 
 #: ../gui/wxpython/location_wizard/wizard.py:234
 msgid "Create a generic Cartesian coordinate system (XY)"
-msgstr "Créer un système de coordonnées cartésiennes arbitraire (XY)"
+msgstr "Système de coordonnées cartésiennes (XY)"
 
 #: ../gui/wxpython/location_wizard/wizard.py:335
 msgid "Choose projection"
@@ -3375,13 +3370,13 @@ msgstr "Description"
 
 #: ../gui/wxpython/location_wizard/wizard.py:355
 msgid "Projection code:"
-msgstr "Code de la projection"
+msgstr "Code de la projection "
 
 #: ../gui/wxpython/location_wizard/wizard.py:363
 #: ../gui/wxpython/location_wizard/wizard.py:865
 #: ../gui/wxpython/location_wizard/wizard.py:1041
 msgid "Search in description:"
-msgstr "Rechercher dans la description :"
+msgstr "Rechercher dans la description:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:538
 #, python-format
@@ -3407,7 +3402,7 @@ msgstr "Ellipsoïde uniquement"
 #: ../gui/wxpython/location_wizard/wizard.py:722
 #, python-format
 msgid "You must enter a value for %s"
-msgstr "Il faut entrer une valeur pour %s"
+msgstr "Vous devez entrer une valeur pour %s"
 
 #: ../gui/wxpython/location_wizard/wizard.py:734
 #: ../gui/wxpython/location_wizard/wizard.py:753
@@ -3425,7 +3420,7 @@ msgstr "Ellipsoïde"
 
 #: ../gui/wxpython/location_wizard/wizard.py:856
 msgid "Datum code:"
-msgstr "Code des données :"
+msgstr "Code des données:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:995
 msgid "Specify ellipsoid"
@@ -3433,11 +3428,11 @@ msgstr "Spécifier l'ellipsoïde"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1012
 msgid "Earth based"
-msgstr ""
+msgstr "Coordonnées terrestres"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1015
 msgid "Planetary bodies"
-msgstr ""
+msgstr "Corps planétaire"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1029
 msgid "Ellipsoid code:"
@@ -3446,7 +3441,7 @@ msgstr "Code de l'ellipsoïde : "
 #: ../gui/wxpython/location_wizard/wizard.py:1161
 #: ../gui/wxpython/location_wizard/wizard.py:1221
 msgid "Select georeferenced file"
-msgstr "Choisir un fichier géo-référencé"
+msgstr "Sélectionner un fichier géo-référencé"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1166
 msgid "Georeferenced file:"
@@ -3459,7 +3454,7 @@ msgstr "Sélectionner le fichier Well Known Text (WKT) .prj"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1240
 msgid "WKT .prj file:"
-msgstr "Fichier WKT .prj :"
+msgstr "Fichier WKT .prj:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1309
 msgid "Choose EPSG Code"
@@ -3489,21 +3484,21 @@ msgstr "Choisir la méthode pour définir les paramètres de géo-référencemen
 
 #: ../gui/wxpython/location_wizard/wizard.py:1526
 msgid "Enter PROJ.4 parameters string:"
-msgstr "Entrer la chaîne de paramètres PROJ.4 :"
+msgstr "Entrer la chaîne de paramètres PROJ.4:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1582
 #: ../gui/wxpython/location_wizard/wizard.py:1586
 msgid "Datum transform is required."
-msgstr "Transformation par datum requise"
+msgstr "Transformation par datum requise."
 
 #: ../gui/wxpython/location_wizard/wizard.py:1621
 #: ../gui/wxpython/rlisetup/wizard.py:1643
 msgid "Summary"
-msgstr "Sommaire"
+msgstr "Résumé"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1662
 msgid "GRASS Database:"
-msgstr "Base de données GRASS :"
+msgstr "Base de données GRASS:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1668
 msgid "Location Name:"
@@ -3511,11 +3506,11 @@ msgstr "Nom du secteur : "
 
 #: ../gui/wxpython/location_wizard/wizard.py:1674
 msgid "Location Title:"
-msgstr "Titre du secteur :"
+msgstr "Titre du secteur:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1680
 msgid "Projection:"
-msgstr "Projection :"
+msgstr "Projection:"
 
 #: ../gui/wxpython/location_wizard/wizard.py:1686
 msgid ""
@@ -3584,7 +3579,7 @@ msgstr "Fichier <%s> non trouvé."
 #: ../gui/wxpython/rlisetup/functions.py:127
 #: ../gui/wxpython/rlisetup/wizard.py:1618
 msgid "The polygon seems to have 0 areas"
-msgstr "Le polygone semble avoir 0 zones"
+msgstr "Le polygone semble avoir 0 surface"
 
 #: ../gui/wxpython/rlisetup/functions.py:138
 #: ../gui/wxpython/rlisetup/wizard.py:1578
@@ -3864,7 +3859,7 @@ msgstr "Cette option n'est pas encore supportée"
 
 #: ../gui/wxpython/rlisetup/wizard.py:840
 msgid "Number of regions to draw:"
-msgstr "Nombre de régions à dessiner :"
+msgstr "Nombre de régions à dessiner:"
 
 #: ../gui/wxpython/rlisetup/wizard.py:854
 msgid "Do you want to overwrite existing temporal maps if they exist?"
@@ -4015,7 +4010,7 @@ msgstr "Dessiner les unités d'échantillonnage"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1367
 msgid "Number of sampling area to draw:"
-msgstr "Nombre de zones d'échantillonage à dessiner :"
+msgstr "Nombre de zones d'échantillonage à dessiner:"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1465
 msgid "Draw Sampling "
@@ -4039,11 +4034,11 @@ msgstr "Sélectionner la zone d'échantillon 1 de "
 
 #: ../gui/wxpython/rlisetup/wizard.py:1650
 msgid "Configuration file name:"
-msgstr "Nom du fichier de configuration :"
+msgstr "Nom du fichier de configuration:"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1659
 msgid "Raster name:"
-msgstr "Nom du raster :"
+msgstr "Nom du raster:"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1669
 msgid "Vector name:"
@@ -4051,59 +4046,59 @@ msgstr "Nom du vecteur"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1678
 msgid "Region type:"
-msgstr "Type de région :"
+msgstr "Type de région:"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1696
 msgid "Sampling area type:"
-msgstr "Type de zone d'échantillonage :"
+msgstr "Type de zone d'échantillonage:"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1760
 #, fuzzy
 msgid "Region keyboard values:"
-msgstr "Contours de région manuelle :"
+msgstr "Contours de région manuelle:"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1774
 #: ../gui/wxpython/rlisetup/wizard.py:1799
 #: ../gui/wxpython/rlisetup/wizard.py:1803
 msgid "Type of shape:"
-msgstr "Type de forme :"
+msgstr "Type de forme:"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1777
 #: ../gui/wxpython/rlisetup/wizard.py:1806
 msgid "Radius size:"
-msgstr "Taille du rayon :"
+msgstr "Taille du rayon:"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1778
 #: ../gui/wxpython/rlisetup/wizard.py:1807
 msgid "Name circle mask:"
-msgstr "Nom du cercle de masque :"
+msgstr "Nom du cercle de masque:"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1780
 #: ../gui/wxpython/rlisetup/wizard.py:1809
 msgid "Width size:"
-msgstr "Largeur :"
+msgstr "Largeur:"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1781
 #: ../gui/wxpython/rlisetup/wizard.py:1810
 #, fuzzy
 msgid "Height size:"
-msgstr "Hauteur :"
+msgstr "Hauteur:"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1784
 msgid "Method of distribution:"
-msgstr "Métode de distribution :"
+msgstr "Métode de distribution:"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1787
 msgid "Number sampling units:"
-msgstr "Nombre d'échantillons :"
+msgstr "Nombre d'échantillons:"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1790
 msgid "Distance between units:"
-msgstr "Distance entre les objets :"
+msgstr "Distance entre les objets:"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1793
 msgid "Number row strates:"
-msgstr "Nombre de lignes :"
+msgstr "Nombre de lignes:"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1795
 msgid "Number column strates:"
@@ -4332,7 +4327,7 @@ msgstr "Ajouter un graphique simple : rectangles"
 
 #: ../gui/wxpython/psmap/dialogs.py:198
 msgid "Units:"
-msgstr "Unités :"
+msgstr "Unités:"
 
 #: ../gui/wxpython/psmap/dialogs.py:207
 msgid ""
@@ -4345,16 +4340,16 @@ msgstr ""
 #: ../gui/wxpython/psmap/dialogs.py:208
 #: ../gui/wxpython/animation/dialogs.py:885
 msgid "X:"
-msgstr "X :"
+msgstr "X:"
 
 #: ../gui/wxpython/psmap/dialogs.py:209
 #: ../gui/wxpython/animation/dialogs.py:887
 msgid "Y:"
-msgstr "Y :"
+msgstr "Y:"
 
 #: ../gui/wxpython/psmap/dialogs.py:221
 msgid "Position is given:"
-msgstr "La position est données :"
+msgstr "La position est données:"
 
 #: ../gui/wxpython/psmap/dialogs.py:222
 msgid "relative to paper"
@@ -4375,11 +4370,11 @@ msgstr ""
 #: ../gui/wxpython/psmap/dialogs.py:291
 #: ../gui/wxpython/mapwin/decorations.py:363
 msgid "Font:"
-msgstr "Police :"
+msgstr "Police:"
 
 #: ../gui/wxpython/psmap/dialogs.py:305
 msgid "Choose color:"
-msgstr "Choisir la couleur :"
+msgstr "Choisir la couleur:"
 
 #: ../gui/wxpython/psmap/dialogs.py:353
 msgid "Close dialog and apply changes"
@@ -4458,19 +4453,19 @@ msgstr "Paramètres de cadre de carte"
 
 #: ../gui/wxpython/psmap/dialogs.py:680
 msgid "Map frame options:"
-msgstr "Options de cadre de carte :"
+msgstr "Options de cadre de carte:"
 
 #: ../gui/wxpython/psmap/dialogs.py:681
 msgid "fit frame to match selected map"
-msgstr "Zoomer sur la carte sélectionnée"
+msgstr "Ajuster le cadre sur la carte sélectionnée"
 
 #: ../gui/wxpython/psmap/dialogs.py:682
 msgid "fit frame to match saved region"
-msgstr "Zoom sur la région sauvegardée"
+msgstr "Ajuster le cadre sur la région enregistrée"
 
 #: ../gui/wxpython/psmap/dialogs.py:683
 msgid "fit frame to match current computational region"
-msgstr "calquer la trame sur la région courante calculée"
+msgstr "Ajuster le cadre sur la région de calcul"
 
 #: ../gui/wxpython/psmap/dialogs.py:684
 msgid "fixed scale and map center"
@@ -4482,11 +4477,11 @@ msgstr "Sélection de la carte"
 
 #: ../gui/wxpython/psmap/dialogs.py:700 ../gui/wxpython/psmap/dialogs.py:1284
 msgid "Map:"
-msgstr "Carte :"
+msgstr "Carte:"
 
 #: ../gui/wxpython/psmap/dialogs.py:700
 msgid "Region:"
-msgstr "Région :"
+msgstr "Région:"
 
 #: ../gui/wxpython/psmap/dialogs.py:719
 msgid "Map scale and center"
@@ -4494,15 +4489,15 @@ msgstr "Échelle de la carte et centre"
 
 #: ../gui/wxpython/psmap/dialogs.py:724
 msgid "Center:"
-msgstr "Centre :"
+msgstr "Centre:"
 
 #: ../gui/wxpython/psmap/dialogs.py:725
 msgid "E:"
-msgstr "E :"
+msgstr "E:"
 
 #: ../gui/wxpython/psmap/dialogs.py:726
 msgid "N:"
-msgstr "N :"
+msgstr "N:"
 
 #: ../gui/wxpython/psmap/dialogs.py:729 ../gui/wxpython/psmap/dialogs.py:4166
 msgid "Scale:"
@@ -4527,11 +4522,11 @@ msgstr "dessiner une limite autour de la trame de carte"
 
 #: ../gui/wxpython/psmap/dialogs.py:773
 msgid "border color:"
-msgstr "couleur de bordure :"
+msgstr "couleur de bordure:"
 
 #: ../gui/wxpython/psmap/dialogs.py:774
 msgid "border width (pts):"
-msgstr "largeur de limite (pts) :"
+msgstr "largeur de limite (pts):"
 
 #: ../gui/wxpython/psmap/dialogs.py:868
 msgid ""
@@ -4573,7 +4568,7 @@ msgstr "pas de carte raster"
 
 #: ../gui/wxpython/psmap/dialogs.py:1171
 msgid "raster:"
-msgstr "carte raster :"
+msgstr "carte raster:"
 
 #: ../gui/wxpython/psmap/dialogs.py:1211 ../gui/wxpython/psmap/frame.py:569
 #: ../gui/wxpython/psmap/frame.py:592
@@ -4668,7 +4663,7 @@ msgstr "La connexion à la base de données n'est pas définie dans le fichier D
 
 #: ../gui/wxpython/psmap/dialogs.py:1677
 msgid "Select layer:"
-msgstr "Sélectionner la couche :"
+msgstr "Sélectionner la couche:"
 
 #: ../gui/wxpython/psmap/dialogs.py:1700
 msgid "list of categories (e.g. 1,3,5-7)"
@@ -4699,7 +4694,7 @@ msgstr "dessiner le contour"
 #: ../gui/wxpython/psmap/dialogs.py:1759 ../gui/wxpython/psmap/dialogs.py:1864
 #: ../gui/wxpython/psmap/dialogs.py:3750 ../gui/wxpython/psmap/dialogs.py:3755
 msgid "Width (pts):"
-msgstr "Largeur (pts) :"
+msgstr "Largeur (pts):"
 
 #: ../gui/wxpython/psmap/dialogs.py:1796 ../gui/wxpython/psmap/dialogs.py:1900
 #: ../gui/wxpython/wxplot/dialogs.py:932 ../gui/wxpython/wxplot/dialogs.py:982
@@ -4712,11 +4707,11 @@ msgstr "remplir par la couleur"
 
 #: ../gui/wxpython/psmap/dialogs.py:1803 ../gui/wxpython/psmap/dialogs.py:1906
 msgid "choose color:"
-msgstr "choisir la couleur :"
+msgstr "choisir la couleur:"
 
 #: ../gui/wxpython/psmap/dialogs.py:1815 ../gui/wxpython/psmap/dialogs.py:1919
 msgid "color from map table column:"
-msgstr "couleur depuis la colonne :"
+msgstr "couleur depuis la colonne:"
 
 #: ../gui/wxpython/psmap/dialogs.py:1862
 msgid "No effect for fill color from table column"
@@ -4724,7 +4719,7 @@ msgstr "Pas d'effet de remplissage de couleur depuis la colonne"
 
 #: ../gui/wxpython/psmap/dialogs.py:1904
 msgid "Color of lines:"
-msgstr "Couleur des lignes :"
+msgstr "Couleur des lignes:"
 
 #: ../gui/wxpython/psmap/dialogs.py:1949 ../gui/wxpython/psmap/dialogs.py:2080
 #: ../gui/wxpython/psmap/dialogs.py:2149
@@ -4738,11 +4733,11 @@ msgstr "Symbologie"
 
 #: ../gui/wxpython/psmap/dialogs.py:1958 ../gui/wxpython/nviz/tools.py:1422
 msgid "symbol:"
-msgstr "symbole :"
+msgstr "symbole:"
 
 #: ../gui/wxpython/psmap/dialogs.py:1967
 msgid "eps file:"
-msgstr "fichier eps :"
+msgstr "fichier eps:"
 
 #: ../gui/wxpython/psmap/dialogs.py:1971 ../gui/wxpython/psmap/dialogs.py:2160
 msgid "Type filename or click browse to choose file"
@@ -4760,15 +4755,15 @@ msgstr "Taille"
 
 #: ../gui/wxpython/psmap/dialogs.py:2000 ../gui/wxpython/nviz/tools.py:1365
 msgid "size:"
-msgstr "taille :"
+msgstr "taille:"
 
 #: ../gui/wxpython/psmap/dialogs.py:2002
 msgid "size from map table column:"
-msgstr "taille depuis la colonne :"
+msgstr "taille depuis la colonne:"
 
 #: ../gui/wxpython/psmap/dialogs.py:2004
 msgid "scale:"
-msgstr "échelle :"
+msgstr "échelle:"
 
 #: ../gui/wxpython/psmap/dialogs.py:2037
 msgid "Rotation"
@@ -4776,19 +4771,19 @@ msgstr "Rotation"
 
 #: ../gui/wxpython/psmap/dialogs.py:2042
 msgid "rotate symbols:"
-msgstr "rotation des symboles :"
+msgstr "rotation des symboles:"
 
 #: ../gui/wxpython/psmap/dialogs.py:2043
 msgid "counterclockwise in degrees:"
-msgstr "sens anti-horaire en degrés :"
+msgstr "sens anti-horaire en degrés:"
 
 #: ../gui/wxpython/psmap/dialogs.py:2045
 msgid "from map table column:"
-msgstr "depuis un champ attributaire de la carte :"
+msgstr "depuis un champ attributaire de la carte:"
 
 #: ../gui/wxpython/psmap/dialogs.py:2089
 msgid "Set width (pts):"
-msgstr "Définir la largeur (pts) :"
+msgstr "Définir la largeur (pts):"
 
 #: ../gui/wxpython/psmap/dialogs.py:2098
 msgid "multiply width by category value"
@@ -4801,11 +4796,11 @@ msgstr "Style de ligne"
 
 #: ../gui/wxpython/psmap/dialogs.py:2119
 msgid "Choose line style:"
-msgstr "Choisir le style de ligne :"
+msgstr "Choisir le style de ligne:"
 
 #: ../gui/wxpython/psmap/dialogs.py:2129
 msgid "Choose linecap:"
-msgstr "Choisir les chapeaux de ligne :"
+msgstr "Choisir les chapeaux de ligne:"
 
 #: ../gui/wxpython/psmap/dialogs.py:2154
 msgid "Pattern"
@@ -4813,19 +4808,19 @@ msgstr "Modèle"
 
 #: ../gui/wxpython/psmap/dialogs.py:2158
 msgid "use pattern:"
-msgstr "utiliser le motif :"
+msgstr "utiliser le motif:"
 
 #: ../gui/wxpython/psmap/dialogs.py:2159
 msgid "Choose pattern file:"
-msgstr "Choisir un fichier de motif :"
+msgstr "Choisir un fichier de motif:"
 
 #: ../gui/wxpython/psmap/dialogs.py:2163
 msgid "pattern line width (pts):"
-msgstr "épaisseur de ligne du motif (pts) :"
+msgstr "épaisseur de ligne du motif (pts):"
 
 #: ../gui/wxpython/psmap/dialogs.py:2165
 msgid "pattern scale factor:"
-msgstr "facteur d'échelle du motif :"
+msgstr "facteur d'échelle du motif:"
 
 #: ../gui/wxpython/psmap/dialogs.py:2482
 msgid "Raster legend"
@@ -4882,7 +4877,7 @@ msgstr "afficher l'échelle de la table de couleur"
 #: ../gui/wxpython/modules/colorrules.py:1500
 #: ../gui/wxpython/modules/colorrules.py:1503
 msgid "range"
-msgstr "fourchette"
+msgstr "plage"
 
 #: ../gui/wxpython/psmap/dialogs.py:2599
 msgid "Vector legend"
@@ -4947,11 +4942,11 @@ msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:2757 ../gui/wxpython/psmap/dialogs.py:2862
 msgid "Columns:"
-msgstr "Colonnes :"
+msgstr "Colonnes:"
 
 #: ../gui/wxpython/psmap/dialogs.py:2761
 msgid "column span:"
-msgstr "largeur de colonne :"
+msgstr "largeur de colonne:"
 
 #: ../gui/wxpython/psmap/dialogs.py:2763
 msgid ""
@@ -4961,7 +4956,7 @@ msgstr "Espacement de colonne entre le limite"
 
 #: ../gui/wxpython/psmap/dialogs.py:2945
 msgid "Edit legend label:"
-msgstr "Éditer l'étiquette de légende :"
+msgstr "Éditer l'étiquette de légende:"
 
 #: ../gui/wxpython/psmap/dialogs.py:2986
 msgid "No raster map selected!"
@@ -4981,11 +4976,11 @@ msgstr "Paramètres de couleur"
 
 #: ../gui/wxpython/psmap/dialogs.py:3288
 msgid "use border color:"
-msgstr "utiliser la couleur de bordure :"
+msgstr "utiliser la couleur de bordure:"
 
 #: ../gui/wxpython/psmap/dialogs.py:3289
 msgid "use background color:"
-msgstr "utiliser la couleur d'arrière-plan :"
+msgstr "utiliser la couleur d'arrière-plan:"
 
 #: ../gui/wxpython/psmap/dialogs.py:3430
 msgid ""
@@ -5001,7 +4996,7 @@ msgstr "Unités non prises en charge"
 
 #: ../gui/wxpython/psmap/dialogs.py:3475
 msgid "Length:"
-msgstr "Longueur :"
+msgstr "Longueur:"
 
 #: ../gui/wxpython/psmap/dialogs.py:3479
 msgid "Scalebar length is given in map units"
@@ -5022,11 +5017,11 @@ msgstr "Style"
 
 #: ../gui/wxpython/psmap/dialogs.py:3529
 msgid "Type:"
-msgstr "Type :"
+msgstr "Type:"
 
 #: ../gui/wxpython/psmap/dialogs.py:3545
 msgid "Number of segments:"
-msgstr "Nombre de segments :"
+msgstr "Nombre de segments:"
 
 #: ../gui/wxpython/psmap/dialogs.py:3549
 msgid "Label every "
@@ -5046,7 +5041,7 @@ msgstr "La longueur de barre d'échelle n'est pas définie"
 
 #: ../gui/wxpython/psmap/dialogs.py:3713
 msgid "Enter text:"
-msgstr "Entrez le texte :"
+msgstr "Entrez le texte:"
 
 #: ../gui/wxpython/psmap/dialogs.py:3739
 msgid "Text effects"
@@ -5071,11 +5066,11 @@ msgstr "Offset"
 
 #: ../gui/wxpython/psmap/dialogs.py:3830
 msgid "horizontal (pts):"
-msgstr "horizontal (pts) :"
+msgstr "horizontal (pts):"
 
 #: ../gui/wxpython/psmap/dialogs.py:3831
 msgid "vertical (pts):"
-msgstr "vertical (pts) :"
+msgstr "vertical (pts):"
 
 #: ../gui/wxpython/psmap/dialogs.py:3844
 msgid " Reference point"
@@ -5095,7 +5090,7 @@ msgstr "Pas de texte saisi !"
 
 #: ../gui/wxpython/psmap/dialogs.py:4119 ../gui/wxpython/nviz/tools.py:481
 msgid "Choose a directory:"
-msgstr "Choisir un répertoire :"
+msgstr "Choisir un répertoire:"
 
 #: ../gui/wxpython/psmap/dialogs.py:4120
 msgid "Choose a directory with images"
@@ -5111,7 +5106,7 @@ msgstr "Échelle et rotation"
 
 #: ../gui/wxpython/psmap/dialogs.py:4192 ../gui/wxpython/psmap/dialogs.py:4654
 msgid "Rotation angle (deg):"
-msgstr "Angle de rotation (deg) :"
+msgstr "Angle de rotation (deg):"
 
 #: ../gui/wxpython/psmap/dialogs.py:4201 ../gui/wxpython/psmap/dialogs.py:4663
 msgid "Counterclockwise rotation in degrees"
@@ -5153,7 +5148,7 @@ msgstr "symbole"
 
 #: ../gui/wxpython/psmap/dialogs.py:4569
 msgid "Select symbol:"
-msgstr "Sélectionner le symbole :"
+msgstr "Sélectionner le symbole:"
 
 #: ../gui/wxpython/psmap/dialogs.py:4583
 msgid ""
@@ -5187,7 +5182,7 @@ msgstr "Taille et rotation"
 
 #: ../gui/wxpython/psmap/dialogs.py:4645
 msgid "Size (pt):"
-msgstr "Taille (pt) :"
+msgstr "Taille (pt):"
 
 #: ../gui/wxpython/psmap/dialogs.py:4647
 msgid "Symbol size in points"
@@ -5203,7 +5198,7 @@ msgstr "Paramètres de la ligne"
 
 #: ../gui/wxpython/psmap/dialogs.py:4909
 msgid "Line width in points"
-msgstr "Épaisseur de ligne en points :"
+msgstr "Épaisseur de ligne en points:"
 
 #: ../gui/wxpython/psmap/dialogs.py:4977
 msgid "Vector labels"
@@ -5211,7 +5206,7 @@ msgstr "Étiquettes vecteur"
 
 #: ../gui/wxpython/psmap/dialogs.py:4996
 msgid "Vector label files created beforehand by v.label module"
-msgstr ""
+msgstr "Fichier d'étiquettes créé auparavant par le module v.label"
 
 #: ../gui/wxpython/psmap/dialogs.py:5004
 msgid "You can select multiple label files."
@@ -5350,7 +5345,7 @@ msgstr "Cliquez-déposez pour redimensionner l'objet"
 
 #: ../gui/wxpython/psmap/frame.py:2171
 msgid "labels: "
-msgstr "étiquettes :"
+msgstr "étiquettes:"
 
 #: ../gui/wxpython/psmap/utils.py:93
 msgid "inch"
@@ -5406,7 +5401,7 @@ msgstr "Impossible d'exécuter `ps.map -b`"
 
 #: ../gui/wxpython/core/settings.py:485
 msgid "Segment break"
-msgstr "Fin de segement"
+msgstr "Fin de segment"
 
 #: ../gui/wxpython/core/settings.py:551
 #, fuzzy
@@ -5419,23 +5414,23 @@ msgstr "animation"
 
 #: ../gui/wxpython/core/settings.py:839
 msgid "Collapse all except PERMANENT and current"
-msgstr "Enrouler tout sauf PERMANENT et actuel"
+msgstr "Réduire tout sauf PERMANENT et actuel"
 
 #: ../gui/wxpython/core/settings.py:840
 msgid "Collapse all except PERMANENT"
-msgstr "Enrouler tout excepté PERMANENT"
+msgstr "Réduire tout sauf PERMANENT"
 
 #: ../gui/wxpython/core/settings.py:841
 msgid "Collapse all except current"
-msgstr "Enrouler tout excepté actuel"
+msgstr "Réduire tout sauf actuel"
 
 #: ../gui/wxpython/core/settings.py:842
 msgid "Collapse all"
-msgstr "Enrouler tout"
+msgstr "Réduire tout"
 
 #: ../gui/wxpython/core/settings.py:843
 msgid "Expand all"
-msgstr "Dérouler tout"
+msgstr "Étendre tout"
 
 #: ../gui/wxpython/core/settings.py:847
 msgid "Display selected"
@@ -5443,7 +5438,7 @@ msgstr "Afficher sélection"
 
 #: ../gui/wxpython/core/settings.py:855
 msgid "Classic (labels only)"
-msgstr "Classique ("
+msgstr "Classique (étiquettes uniquement)"
 
 #: ../gui/wxpython/core/settings.py:856
 msgid "Combined (labels and module names)"
@@ -5466,9 +5461,8 @@ msgid "Fancy green"
 msgstr ""
 
 #: ../gui/wxpython/core/settings.py:865
-#, fuzzy
 msgid "List left"
-msgstr "Lister les tables"
+msgstr ""
 
 #: ../gui/wxpython/core/settings.py:869
 msgid "Zoom and recenter"
@@ -5538,7 +5532,7 @@ msgid ""
 "\t\tDetails: %(detail)s\n"
 "\t\tLine: '%(line)s'\n"
 msgstr ""
-"Erreur : la lecture des paramètres depuis le fichier <%(file)s> a échoué.\n"
+"ERREUR: la lecture des paramètres depuis le fichier <%(file)s> a échoué.\n"
 "\t\tDétails: %(detail)s\n"
 "\t\tLigne: '%(line)s'\n"
 
@@ -5583,16 +5577,16 @@ msgstr "Message"
 
 #: ../gui/wxpython/core/gcmd.py:392
 msgid "Execution failed:"
-msgstr "L'exécution a échoué :"
+msgstr "L'exécution a échoué:"
 
 #: ../gui/wxpython/core/gcmd.py:395 ../gui/wxpython/core/render.py:662
 #: ../gui/wxpython/core/render.py:665 ../gui/wxpython/core/render.py:668
 msgid "Details:"
-msgstr "Détails :"
+msgstr "Détails:"
 
 #: ../gui/wxpython/core/gcmd.py:397 ../gui/wxpython/core/gcmd.py:401
 msgid "Error: "
-msgstr "Erreur :"
+msgstr "Erreur:"
 
 #: ../gui/wxpython/core/gcmd.py:476
 #, python-format
@@ -5685,7 +5679,7 @@ msgstr "Zoom sur la région par défaut"
 #: ../gui/wxpython/core/render.py:477
 #, python-format
 msgid "Error: Unable to open '%(file)s'. Reason: %(ret)s. wxGUI exited.\n"
-msgstr "Erreur : impossible d'ouvrir  '%(file)s'. Raison : %(ret)s. Sortie de wxGUI.\n"
+msgstr "ERREUR: impossible d'ouvrir  '%(file)s'. Raison : %(ret)s. Sortie de wxGUI.\n"
 
 #: ../gui/wxpython/core/render.py:485
 #, python-format
@@ -5694,7 +5688,7 @@ msgid ""
 "ERROR: Unable to read WIND file: %s\n"
 msgstr ""
 "\n"
-"ERREUR : Impossible de lire le fichier WIND : %s\n"
+"ERREUR: Impossible de lire le fichier WIND : %s\n"
 
 #: ../gui/wxpython/core/render.py:582
 #, python-format
@@ -5723,7 +5717,7 @@ msgstr "Impossible d'obtenir l’extension géographique courante. Sortie forcé
 #: ../gui/wxpython/core/render.py:981
 #, python-format
 msgid "ERROR: Rendering failed. Details: %s"
-msgstr "ERREUR : le rendu a échoué. Détails : %s"
+msgstr "ERREUR: le rendu a échoué. Détails : %s"
 
 #: ../gui/wxpython/core/render.py:1028 ../gui/wxpython/core/render.py:1123
 #, python-format
@@ -5768,7 +5762,7 @@ msgstr "Échec à l'ouverture de '%s'"
 #: ../gui/wxpython/core/utils.py:853
 #, python-format
 msgid "ERROR: Unable to determine GRASS version. Details: %s"
-msgstr "ERREUR : impossible de déterminer la version de GRASS. Détails : %s"
+msgstr "ERREUR: impossible de déterminer la version de GRASS. Détails : %s"
 
 #: ../gui/wxpython/core/utils.py:888
 #, python-format
@@ -5868,7 +5862,7 @@ msgstr "Exécuter le modèle ?"
 
 #: ../gui/wxpython/gmodeler/model.py:627
 msgid "Variables below not defined:"
-msgstr "Les variables suivantes ne sont pas définies :"
+msgstr "Les variables suivantes ne sont pas définies:"
 
 #: ../gui/wxpython/gmodeler/model.py:737
 msgid "Raster maps"
@@ -5884,7 +5878,7 @@ msgstr "<non défini>"
 
 #: ../gui/wxpython/gmodeler/model.py:1507
 msgid "Condition: "
-msgstr "Condition :"
+msgstr "Condition:"
 
 #: ../gui/wxpython/gmodeler/model.py:1509
 msgid "Condition: not defined"
@@ -5915,16 +5909,16 @@ msgstr "Propriétés des données"
 #: ../gui/wxpython/gmodeler/dialogs.py:76
 #: ../gui/wxpython/iclass/dialogs.py:239
 msgid "Name of raster map:"
-msgstr "Nom de la carte raster :"
+msgstr "Nom de la carte raster:"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:81
 #: ../gui/wxpython/gmodeler/dialogs.py:94
 msgid "Name of element:"
-msgstr "Nom de l'élément :"
+msgstr "Nom de l'élément:"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:89
 msgid "Type of element:"
-msgstr "Type d'élément :"
+msgstr "Type d'élément:"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:141
 msgid "Add GRASS command to the model"
@@ -5945,13 +5939,13 @@ msgstr "Étiquette et commentaire"
 #: ../gui/wxpython/gmodeler/dialogs.py:198
 #: ../gui/wxpython/gmodeler/frame.py:1354
 msgid "Label:"
-msgstr "Étiquette :"
+msgstr "Étiquette:"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:202
 #: ../gui/wxpython/gmodeler/frame.py:743
 #: ../gui/wxpython/gmodeler/frame.py:1366
 msgid "Comment:"
-msgstr "Commentaire :"
+msgstr "Commentaire:"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:254
 msgid ""
@@ -5989,11 +5983,11 @@ msgstr "Données : %s"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:359
 msgid "Command:"
-msgstr "Commande :"
+msgstr "Commande:"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:365
 msgid "Option:"
-msgstr "Option :"
+msgstr "Option:"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:380
 msgid ""
@@ -6090,21 +6084,21 @@ msgstr "Propriétés de l'objet"
 
 #: ../gui/wxpython/gmodeler/preferences.py:59
 msgid "Disabled:"
-msgstr "Désactivé :"
+msgstr "Désactivé:"
 
 #: ../gui/wxpython/gmodeler/preferences.py:97
 #: ../gui/wxpython/gmodeler/preferences.py:335
 #: ../gui/wxpython/gmodeler/preferences.py:420
 msgid "Valid:"
-msgstr "Valide :"
+msgstr "Valide:"
 
 #: ../gui/wxpython/gmodeler/preferences.py:114
 msgid "Invalid:"
-msgstr "Non valide :"
+msgstr "Non valide:"
 
 #: ../gui/wxpython/gmodeler/preferences.py:131
 msgid "Running:"
-msgstr "Exécution :"
+msgstr "Exécution:"
 
 #: ../gui/wxpython/gmodeler/preferences.py:152
 #: ../gui/wxpython/gmodeler/preferences.py:271
@@ -6120,15 +6114,15 @@ msgstr "Données"
 
 #: ../gui/wxpython/gmodeler/preferences.py:216
 msgid "Raster:"
-msgstr "Raster :"
+msgstr "Raster:"
 
 #: ../gui/wxpython/gmodeler/preferences.py:233
 msgid "3D raster:"
-msgstr "Carte raster 3D :"
+msgstr "Carte raster 3D:"
 
 #: ../gui/wxpython/gmodeler/preferences.py:250
 msgid "Vector:"
-msgstr "Carte vectorielle :"
+msgstr "Carte vectorielle:"
 
 #: ../gui/wxpython/gmodeler/preferences.py:323
 msgid "Loop"
@@ -6159,11 +6153,11 @@ msgstr "Appliquer les propriétés"
 
 #: ../gui/wxpython/gmodeler/preferences.py:558
 msgid "Description:"
-msgstr "Description :"
+msgstr "Description:"
 
 #: ../gui/wxpython/gmodeler/preferences.py:567
 msgid "Author(s):"
-msgstr "Auteur(s) :"
+msgstr "Auteur(s):"
 
 #: ../gui/wxpython/gmodeler/frame.py:63
 msgid "GRASS GIS Graphical Modeler"
@@ -7323,7 +7317,7 @@ msgstr "Lancer le Composeur cartographique"
 #: ../gui/wxpython/menustrings.py:204 ../gui/wxpython/menustrings.py:1926
 #, fuzzy
 msgid "Map Swipe"
-msgstr "Type de carte :"
+msgstr "Type de carte:"
 
 #: ../gui/wxpython/menustrings.py:205 ../gui/wxpython/menustrings.py:1927
 #, fuzzy
@@ -8359,7 +8353,7 @@ msgstr "Modifier les valeurs de catégories de manière interactive"
 #: ../gui/wxpython/menustrings.py:462 ../gui/wxpython/menustrings.py:1371
 #, fuzzy
 msgid "Edits cell values in a raster map."
-msgstr "Carte 'raster' recodée :"
+msgstr "Carte 'raster' recodée:"
 
 #: ../gui/wxpython/menustrings.py:463 ../gui/wxpython/menustrings.py:1372
 msgid "Reclassify by size"
@@ -8393,7 +8387,7 @@ msgstr "Recalculer l'échelle des valeurs"
 
 #: ../gui/wxpython/menustrings.py:470 ../gui/wxpython/menustrings.py:1379
 msgid "Rescales the range of category values in a raster map layer."
-msgstr "Redéfinir l'échelle des valeurs de catégories d'une carte raster."
+msgstr "Redéfinir la plage des valeurs de catégories d'une carte raster."
 
 #: ../gui/wxpython/menustrings.py:471 ../gui/wxpython/menustrings.py:1380
 msgid "Rescale with histogram"
@@ -8401,7 +8395,7 @@ msgstr "Recalculer l'échelle des valeurs par histogramme"
 
 #: ../gui/wxpython/menustrings.py:472 ../gui/wxpython/menustrings.py:1381
 msgid "Rescales histogram equalized the range of category values in a raster map layer."
-msgstr "Rééchelonne l'histogramme sur l'étendue des valeurs de catégories de la couche raster."
+msgstr "Rééchelonne l'histogramme sur la plage des valeurs de catégories de la couche raster."
 
 #: ../gui/wxpython/menustrings.py:473 ../gui/wxpython/menustrings.py:1382
 msgid "Generate random cells"
@@ -8468,9 +8462,8 @@ msgid "Random deviates surface"
 msgstr "Déviance aléatoire de surface"
 
 #: ../gui/wxpython/menustrings.py:488 ../gui/wxpython/menustrings.py:1397
-#, fuzzy
 msgid "Produces a raster surface map of uniform random deviates with defined range."
-msgstr "Produit une couche raster de données aléatoires uniformément réparties dans un gamme donnée par l'utilisateur."
+msgstr "Produit une couche raster de données aléatoires uniformément réparties dans une plage donnée par l'utilisateur."
 
 #: ../gui/wxpython/menustrings.py:489 ../gui/wxpython/menustrings.py:1398
 msgid "Random surface with spatial dependence"
@@ -8593,7 +8586,7 @@ msgstr "Calculer les quantiles en deux passes."
 
 #: ../gui/wxpython/menustrings.py:518 ../gui/wxpython/menustrings.py:1427
 msgid "Range of category values"
-msgstr "Étendue des valeurs de catégories"
+msgstr "Plage des valeurs de catégories"
 
 #: ../gui/wxpython/menustrings.py:519 ../gui/wxpython/menustrings.py:1428
 msgid "Prints terse list of category values found in a raster map layer."
@@ -8633,7 +8626,7 @@ msgstr "Statistiques raster univariées"
 
 #: ../gui/wxpython/menustrings.py:527 ../gui/wxpython/menustrings.py:1436
 msgid "Calculates univariate statistics from the non-null cells of a raster map. Statistics include number of cells counted, minimum and maximum cell values, range, arithmetic mean, population variance, standard deviation, coefficient of variation, and sum."
-msgstr "Calcule les statistiques univariées pour les cellules non nulles d'une carte raster. Les statistiques incluent le nombe de cellules, les valeurs minimales et maximales, l'étendue, la moyenne arithmétique, la variance, l'écart-type, le coefficient de variation, et la somme."
+msgstr "Calcule les statistiques univariées pour les cellules non nulles d'une carte raster. Les statistiques incluent le nombe de cellules, les valeurs minimales et maximales, la plage, la moyenne arithmétique, la variance, l'écart-type, le coefficient de variation, et la somme."
 
 #: ../gui/wxpython/menustrings.py:528 ../gui/wxpython/menustrings.py:1437
 msgid "Sample transects"
@@ -8904,7 +8897,7 @@ msgstr "Sélectionne les objets vecteurs depuis une carte vecteur existante et c
 #: ../gui/wxpython/menustrings.py:599 ../gui/wxpython/menustrings.py:1508
 #, fuzzy
 msgid "Select by another map"
-msgstr "Sélectionner une carte raster :"
+msgstr "Sélectionner une carte raster:"
 
 #: ../gui/wxpython/menustrings.py:600 ../gui/wxpython/menustrings.py:1509
 msgid "Selects features from vector map (A) by features from other vector map (B)."
@@ -9695,8 +9688,9 @@ msgid "Albedo"
 msgstr "Albedo"
 
 #: ../gui/wxpython/menustrings.py:798 ../gui/wxpython/menustrings.py:1707
+#, fuzzy
 msgid "Computes broad band albedo from surface reflectance."
-msgstr ""
+msgstr "Calculer l'albedo depuis la réflectance de surface."
 
 #: ../gui/wxpython/menustrings.py:799 ../gui/wxpython/menustrings.py:1708
 #, fuzzy
@@ -9873,7 +9867,7 @@ msgstr "Convertit un fichier 'raster' ASCII en une carte 'raster' binaire"
 
 #: ../gui/wxpython/menustrings.py:841 ../gui/wxpython/menustrings.py:1750
 msgid "3D mask"
-msgstr ""
+msgstr "masque 3D"
 
 #: ../gui/wxpython/menustrings.py:842 ../gui/wxpython/menustrings.py:1751
 msgid "Establishes the current working 3D raster mask."
@@ -9938,7 +9932,7 @@ msgstr "Statistiques univariées pour les volumes"
 
 #: ../gui/wxpython/menustrings.py:857 ../gui/wxpython/menustrings.py:1766
 msgid "Calculates univariate statistics from the non-null cells of a 3D raster map. Statistics include number of cells counted, minimum and maximum cell values, range, arithmetic mean, population variance, standard deviation, coefficient of variation, and sum."
-msgstr "Calcule les statistiques univariées pour les cellules non nulles d'une carte raster 3D. Les statiqtiques incluent le nombre de cellules, les valeurs minimales et maximales, l'étendue, la moyenne arithmétique, la variance, l'écart type, le coefficient de variation, et la somme."
+msgstr "Calcule les statistiques univariées pour les cellules non nulles d'une carte raster 3D. Les statiqtiques incluent le nombre de cellules, les valeurs minimales et maximales, la plage, la moyenne arithmétique, la variance, l'écart type, le coefficient de variation, et la somme."
 
 #: ../gui/wxpython/menustrings.py:858 ../gui/wxpython/menustrings.py:1767
 msgid "&Database"
@@ -10024,7 +10018,7 @@ msgstr "données."
 #: ../gui/wxpython/menustrings.py:877 ../gui/wxpython/menustrings.py:1786
 #, fuzzy
 msgid "Drop database"
-msgstr "Base de données GRASS :"
+msgstr "Base de données GRASS:"
 
 #: ../gui/wxpython/menustrings.py:878 ../gui/wxpython/menustrings.py:1787
 #, fuzzy
@@ -11032,7 +11026,7 @@ msgstr "Simple"
 #: ../gui/wxpython/animation/dialogs.py:100
 #, fuzzy
 msgid "Frame duration:"
-msgstr "Taux de rafraichissement (FPS) :"
+msgstr "Taux de rafraichissement (FPS):"
 
 #: ../gui/wxpython/animation/dialogs.py:101
 #: ../gui/wxpython/animation/dialogs.py:124
@@ -11052,7 +11046,7 @@ msgstr "Unités de carte"
 #: ../gui/wxpython/animation/dialogs.py:123
 #, fuzzy
 msgid "Duration of time unit:"
-msgstr "Options de création :"
+msgstr "Options de création:"
 
 #: ../gui/wxpython/animation/dialogs.py:175
 msgid "year"
@@ -11126,7 +11120,7 @@ msgstr "Taille et position"
 #: ../gui/wxpython/animation/dialogs.py:335
 #, fuzzy
 msgid "View mode:"
-msgstr "Mode fin :"
+msgstr "Mode fin:"
 
 #: ../gui/wxpython/animation/dialogs.py:341
 msgid ""
@@ -11168,17 +11162,17 @@ msgstr "Animer le changement de région (vue 2D uniquement)"
 #: ../gui/wxpython/animation/dialogs.py:427
 #, fuzzy
 msgid "Start region:"
-msgstr "Enregistrer une région :"
+msgstr "Enregistrer une région:"
 
 #: ../gui/wxpython/animation/dialogs.py:434
 #, fuzzy
 msgid "End region:"
-msgstr "Charger une région :"
+msgstr "Charger une région:"
 
 #: ../gui/wxpython/animation/dialogs.py:438
 #, fuzzy
 msgid "Zoom value:"
-msgstr "valeur :"
+msgstr "valeur:"
 
 #: ../gui/wxpython/animation/dialogs.py:439
 msgid "N-S/E-W distances in map units used to gradually reduce region."
@@ -11186,11 +11180,11 @@ msgstr "Distances N-S/E-O en unité de carte pour réduire graduellement la rég
 
 #: ../gui/wxpython/animation/dialogs.py:446
 msgid "N-S:"
-msgstr "N-S :"
+msgstr "N-S:"
 
 #: ../gui/wxpython/animation/dialogs.py:449
 msgid "E-W:"
-msgstr "E-O :"
+msgstr "E-O:"
 
 #: ../gui/wxpython/animation/dialogs.py:541
 msgid "Only one series or space-time dataset is accepted for 3D mode."
@@ -11269,7 +11263,7 @@ msgstr "Texte"
 
 #: ../gui/wxpython/animation/dialogs.py:876
 msgid "Placement as percentage of screen coordinates (X: 0, Y: 0 is top left):"
-msgstr "Positionnement en pourcentage des coordonnées de l'écran (X : 0, Y : 0 est en haut à gauche) :"
+msgstr "Positionnement en pourcentage des coordonnées de l'écran (X : 0, Y : 0 est en haut à gauche):"
 
 #: ../gui/wxpython/animation/dialogs.py:899
 #, fuzzy
@@ -11296,7 +11290,7 @@ msgstr "Exporter"
 
 #: ../gui/wxpython/animation/dialogs.py:918 ../gui/wxpython/nviz/tools.py:486
 msgid "File prefix:"
-msgstr "Préfix :"
+msgstr "Préfix:"
 
 #: ../gui/wxpython/animation/dialogs.py:919
 #, fuzzy
@@ -11305,7 +11299,7 @@ msgstr "animation"
 
 #: ../gui/wxpython/animation/dialogs.py:920 ../gui/wxpython/nviz/tools.py:491
 msgid "File format:"
-msgstr "Format de fichier :"
+msgstr "Format de fichier:"
 
 #: ../gui/wxpython/animation/dialogs.py:926
 #, fuzzy
@@ -11315,7 +11309,7 @@ msgstr "Choisir un répertoire pour les images"
 #: ../gui/wxpython/animation/dialogs.py:948
 #, fuzzy
 msgid "GIF file:"
-msgstr "Choisir le fichier DXF :"
+msgstr "Choisir le fichier DXF:"
 
 #: ../gui/wxpython/animation/dialogs.py:949
 #: ../gui/wxpython/animation/dialogs.py:966
@@ -11327,7 +11321,7 @@ msgstr "Choisir le fichier à enregistrer"
 #: ../gui/wxpython/animation/dialogs.py:965
 #, fuzzy
 msgid "SWF file:"
-msgstr "Choisir le fichier DXF :"
+msgstr "Choisir le fichier DXF:"
 
 #: ../gui/wxpython/animation/dialogs.py:982
 msgid ""
@@ -11341,16 +11335,16 @@ msgstr ""
 #: ../gui/wxpython/animation/dialogs.py:988
 #, fuzzy
 msgid "AVI file:"
-msgstr "fichier eps :"
+msgstr "fichier eps:"
 
 #: ../gui/wxpython/animation/dialogs.py:992
 msgid "Video codec:"
-msgstr "Codec vidéo :"
+msgstr "Codec vidéo:"
 
 #: ../gui/wxpython/animation/dialogs.py:994
 #, fuzzy
 msgid "Additional options:"
-msgstr "Options de création :"
+msgstr "Options de création:"
 
 #: ../gui/wxpython/animation/dialogs.py:996
 msgid "Consider adding '-sameq' or '-qscale 1' if not satisfied with video quality. Options depend on ffmpeg version."
@@ -11434,7 +11428,7 @@ msgstr "Données en entrée"
 #: ../gui/wxpython/animation/dialogs.py:1401
 #, fuzzy
 msgid "Select raster/vector maps."
-msgstr "Sélectionner une carte raster :"
+msgstr "Sélectionner une carte raster:"
 
 #: ../gui/wxpython/animation/dialogs.py:1428
 #, fuzzy
@@ -11479,7 +11473,7 @@ msgstr "Lorsque l'animation contient des données avec un pas de temps irréguli
 #: ../gui/wxpython/animation/dialogs.py:1576
 #, fuzzy
 msgid "Invalid"
-msgstr "Non valide :"
+msgstr "Non valide:"
 
 #: ../gui/wxpython/animation/provider.py:362
 #, fuzzy
@@ -11749,7 +11743,7 @@ msgstr "Générer des points aléatoires"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:237
 msgid "Seed:"
-msgstr "Graine :"
+msgstr "Graine:"
 
 #: ../gui/wxpython/modules/mcalc_builder.py:240
 #, fuzzy
@@ -11849,15 +11843,15 @@ msgstr "Choisir les outils de nettoyage et fixer les seuils"
 
 #: ../gui/wxpython/modules/vclean.py:119
 msgid "Select input vector map:"
-msgstr "Sélectionner la carte vecteur en entrée :"
+msgstr "Sélectionner la carte vecteur en entrée:"
 
 #: ../gui/wxpython/modules/vclean.py:125
 msgid " Feature type: "
-msgstr "Type de primitive :"
+msgstr "Type de primitive:"
 
 #: ../gui/wxpython/modules/vclean.py:129
 msgid "Select output vector map:"
-msgstr "Sélectionner la carte vecteur en sortie :"
+msgstr "Sélectionner la carte vecteur en sortie:"
 
 #: ../gui/wxpython/modules/vclean.py:161
 msgid "Copy the current command string to the clipboard (Ctrl+C)"
@@ -11989,15 +11983,15 @@ msgstr "Mauvais format de couleur. Utiliser le format '0:0:0'"
 #: ../gui/wxpython/modules/colorrules.py:383
 #: ../gui/wxpython/wxplot/dialogs.py:370
 msgid "Select raster map:"
-msgstr "Sélectionner une carte raster :"
+msgstr "Sélectionner une carte raster:"
 
 #: ../gui/wxpython/modules/colorrules.py:385
 msgid "Select vector map:"
-msgstr "Sélectionner une carte vecteur :"
+msgstr "Sélectionner une carte vecteur:"
 
 #: ../gui/wxpython/modules/colorrules.py:402
 msgid "Import or export color table:"
-msgstr "Importer ou exporter la table de couleurs :"
+msgstr "Importer ou exporter la table de couleurs:"
 
 #: ../gui/wxpython/modules/colorrules.py:407
 msgid "Choose file to load color table"
@@ -12027,15 +12021,15 @@ msgstr "Paramètres"
 #: ../gui/wxpython/modules/colorrules.py:431
 #, fuzzy
 msgid "Load color table:"
-msgstr "Charger la table de couleur depuis un fichier :"
+msgstr "Charger la table de couleur depuis un fichier:"
 
 #: ../gui/wxpython/modules/colorrules.py:435
 msgid "Load color table from file:"
-msgstr "Charger la table de couleur depuis un fichier :"
+msgstr "Charger la table de couleur depuis un fichier:"
 
 #: ../gui/wxpython/modules/colorrules.py:438
 msgid "Save color table to file:"
-msgstr "Enregistrer la table de couleur dans le fichier :"
+msgstr "Enregistrer la table de couleur dans le fichier:"
 
 #: ../gui/wxpython/modules/colorrules.py:467
 msgid "Reload default table"
@@ -12074,7 +12068,7 @@ msgstr "Entrer les valeurs de catégories ou les pourcentages"
 
 #: ../gui/wxpython/modules/colorrules.py:880
 msgid "fp range"
-msgstr "Plage de valeurs"
+msgstr "Plage de nombres flottants"
 
 #: ../gui/wxpython/modules/colorrules.py:881
 #, python-format
@@ -12088,12 +12082,12 @@ msgstr "Créer une nouvelle règle de couleur pour une carte vecteur"
 #: ../gui/wxpython/modules/colorrules.py:981
 #: ../gui/wxpython/modules/colorrules.py:1512
 msgid "Enter vector attribute values or percents:"
-msgstr "Entrer les valeurs d'attributs ou les pourcentages :"
+msgstr "Entrer les valeurs d'attributs ou les pourcentages:"
 
 #: ../gui/wxpython/modules/colorrules.py:983
 #: ../gui/wxpython/modules/colorrules.py:1514
 msgid "Enter vector attribute values:"
-msgstr "Entrer les valeurs d'attributs :"
+msgstr "Entrer les valeurs d'attributs:"
 
 #: ../gui/wxpython/modules/colorrules.py:994
 msgid "Select vector columns"
@@ -12105,35 +12099,35 @@ msgstr "Couche :"
 
 #: ../gui/wxpython/modules/colorrules.py:998
 msgid "Attribute column:"
-msgstr "Colonne d'attribut :"
+msgstr "Colonne d'attribut:"
 
 #: ../gui/wxpython/modules/colorrules.py:1001
 msgid "Load color from column:"
-msgstr "Charger les couleurs depuis la colonne :"
+msgstr "Charger les couleurs depuis la colonne:"
 
 #: ../gui/wxpython/modules/colorrules.py:1001
 msgid "Save color to column:"
-msgstr "Enregistrer les couleurs dans la colonne :"
+msgstr "Enregistrer les couleurs dans la colonne:"
 
 #: ../gui/wxpython/modules/colorrules.py:1003
 msgid "Load size from column:"
-msgstr "Charger la taille depuis la colonne :"
+msgstr "Charger la taille depuis la colonne:"
 
 #: ../gui/wxpython/modules/colorrules.py:1003
 msgid "Save size to column:"
-msgstr "Entregistrer la taille dans la colonne :"
+msgstr "Entregistrer la taille dans la colonne:"
 
 #: ../gui/wxpython/modules/colorrules.py:1005
 msgid "Load width from column:"
-msgstr "Charger l'épaisseur depuis la colonne :"
+msgstr "Charger l'épaisseur depuis la colonne:"
 
 #: ../gui/wxpython/modules/colorrules.py:1005
 msgid "Save width to column:"
-msgstr "Enregistrer l'épaisseur dans la colonne :"
+msgstr "Enregistrer l'épaisseur dans la colonne:"
 
 #: ../gui/wxpython/modules/colorrules.py:1009
 msgid "Use color column instead of color table:"
-msgstr "Utiliser la colonne de couleur à la place de la table de couleur :"
+msgstr "Utiliser la colonne de couleur à la place de la table de couleur:"
 
 #: ../gui/wxpython/modules/colorrules.py:1024
 msgid "Add GRASSRGB column to current attribute table."
@@ -12179,12 +12173,12 @@ msgstr "Trop d'enregistrements"
 #: ../gui/wxpython/modules/colorrules.py:1507
 #, python-format
 msgid "Enter vector attribute values or percents %s:"
-msgstr "Saisir les valeurs d'attributs ou les pourcentages %s :"
+msgstr "Saisir les valeurs d'attributs ou les pourcentages %s:"
 
 #: ../gui/wxpython/modules/colorrules.py:1509
 #, python-format
 msgid "Enter vector attribute values %s:"
-msgstr "Saisir les valeurs d'attributs %s :"
+msgstr "Saisir les valeurs d'attributs %s:"
 
 #: ../gui/wxpython/modules/colorrules.py:1651
 msgid "Please select column to save values to."
@@ -12319,7 +12313,7 @@ msgstr "Données en entrée"
 
 #: ../gui/wxpython/modules/vkrige.py:68
 msgid "Point dataset:"
-msgstr "Jeux de points :"
+msgstr "Jeux de points:"
 
 #: ../gui/wxpython/modules/vkrige.py:80
 msgid "Numeric column:"
@@ -12335,7 +12329,7 @@ msgstr "Nom pour la carte raster en sortie : "
 
 #: ../gui/wxpython/modules/vkrige.py:124
 msgid "Export variance map as well: "
-msgstr "Exporter également la carte de variance :"
+msgstr "Exporter également la carte de variance:"
 
 #: ../gui/wxpython/modules/vkrige.py:276
 msgid "Kriging Module"
@@ -12421,7 +12415,7 @@ msgstr "Montrer l'objet texte"
 #: ../gui/wxpython/mapwin/decorations.py:351
 #: ../gui/wxpython/nviz/tools.py:1011
 msgid "Rotation:"
-msgstr "Rotation :"
+msgstr "Rotation:"
 
 #: ../gui/wxpython/mapwin/decorations.py:379
 msgid ""
@@ -12537,7 +12531,7 @@ msgstr "Mesure de la distance"
 
 #: ../gui/wxpython/mapwin/analysis.py:242
 msgid "Measuring distance:"
-msgstr "Mesure de la distance :"
+msgstr "Mesure de la distance:"
 
 #: ../gui/wxpython/mapwin/analysis.py:250
 #, fuzzy, python-format
@@ -12569,7 +12563,7 @@ msgstr "degrés (sens horaire)"
 #: ../gui/wxpython/mapwin/analysis.py:346
 #, fuzzy
 msgid "Measuring area:"
-msgstr "Mesure de la distance :"
+msgstr "Mesure de la distance:"
 
 #: ../gui/wxpython/mapwin/analysis.py:359
 msgid "Units not recognized, measurement failed."
@@ -12971,7 +12965,7 @@ msgstr "Ajuster la distance et l'angle de perspective de l'image au point de vue
 
 #: ../gui/wxpython/nviz/tools.py:252 ../gui/wxpython/nviz/preferences.py:69
 msgid "Perspective:"
-msgstr "Perspective :"
+msgstr "Perspective:"
 
 #: ../gui/wxpython/nviz/tools.py:260
 msgid "Tilts the plane of the surface from the horizontal"
@@ -12979,7 +12973,7 @@ msgstr "Penche la surface par rapport à l'horizontale"
 
 #: ../gui/wxpython/nviz/tools.py:264 ../gui/wxpython/nviz/tools.py:1027
 msgid "Tilt:"
-msgstr "Inclinaison :"
+msgstr "Inclinaison:"
 
 #: ../gui/wxpython/nviz/tools.py:271
 msgid "Adjusts the viewing height above the surface (angle of view automatically adjusts to maintain the same center of view)"
@@ -12991,11 +12985,11 @@ msgstr "Ajuster la hauteur relative des objets au dessus de la surface"
 
 #: ../gui/wxpython/nviz/tools.py:290 ../gui/wxpython/nviz/preferences.py:150
 msgid "Z-exag:"
-msgstr "Exagération verticale :"
+msgstr "Exagération verticale:"
 
 #: ../gui/wxpython/nviz/tools.py:303
 msgid "Look:"
-msgstr "Orienter vers :"
+msgstr "Orienter vers:"
 
 #: ../gui/wxpython/nviz/tools.py:306
 msgid "here"
@@ -13051,7 +13045,7 @@ msgstr "Nombre total d'images :"
 
 #: ../gui/wxpython/nviz/tools.py:425
 msgid "Frame rate (FPS):"
-msgstr "Taux de rafraichissement (FPS) :"
+msgstr "Taux de rafraichissement (FPS):"
 
 #: ../gui/wxpython/nviz/tools.py:431
 msgid "Frames are recorded with given frequency (FPS). "
@@ -13103,7 +13097,7 @@ msgstr "Dessiner"
 #: ../gui/wxpython/nviz/tools.py:681 ../gui/wxpython/nviz/tools.py:1562
 #: ../gui/wxpython/nviz/preferences.py:374
 msgid "Mode:"
-msgstr "Mode :"
+msgstr "Mode:"
 
 #: ../gui/wxpython/nviz/tools.py:684 ../gui/wxpython/nviz/preferences.py:377
 msgid "coarse"
@@ -13120,7 +13114,7 @@ msgstr "les deux"
 #: ../gui/wxpython/nviz/tools.py:695 ../gui/wxpython/nviz/tools.py:960
 #: ../gui/wxpython/nviz/tools.py:1576
 msgid "Shading:"
-msgstr "Ombrage :"
+msgstr "Ombrage:"
 
 #: ../gui/wxpython/nviz/tools.py:698 ../gui/wxpython/nviz/tools.py:1579
 msgid "flat"
@@ -13140,17 +13134,17 @@ msgstr "Utiliser les paramètres de rendu pour toutes les surfaces chargées"
 
 #: ../gui/wxpython/nviz/tools.py:716 ../gui/wxpython/nviz/preferences.py:406
 msgid "Coarse mode:"
-msgstr "Mode grossier :"
+msgstr "Mode grossier:"
 
 #: ../gui/wxpython/nviz/tools.py:719 ../gui/wxpython/nviz/tools.py:759
 #: ../gui/wxpython/nviz/preferences.py:393
 #: ../gui/wxpython/nviz/preferences.py:410
 msgid "resolution:"
-msgstr "résolution :"
+msgstr "résolution:"
 
 #: ../gui/wxpython/nviz/tools.py:732 ../gui/wxpython/nviz/preferences.py:422
 msgid "style:"
-msgstr "style :"
+msgstr "style:"
 
 #: ../gui/wxpython/nviz/tools.py:735 ../gui/wxpython/nviz/preferences.py:425
 msgid "wire"
@@ -13166,7 +13160,7 @@ msgstr "Couleur du fil"
 
 #: ../gui/wxpython/nviz/tools.py:755 ../gui/wxpython/nviz/preferences.py:389
 msgid "Fine mode:"
-msgstr "Mode fin :"
+msgstr "Mode fin:"
 
 #: ../gui/wxpython/nviz/tools.py:781
 msgid "Surface attributes"
@@ -13207,7 +13201,7 @@ msgstr "Revenir à la position par défaut"
 
 #: ../gui/wxpython/nviz/tools.py:950
 msgid "Active cutting plane:"
-msgstr "Activer les plans de coupe :"
+msgstr "Activer les plans de coupe:"
 
 #: ../gui/wxpython/nviz/tools.py:962
 msgid "clear"
@@ -13231,7 +13225,7 @@ msgstr "ombré"
 
 #: ../gui/wxpython/nviz/tools.py:978
 msgid "Horizontal X:"
-msgstr "H horizontal :"
+msgstr "H horizontal:"
 
 #: ../gui/wxpython/nviz/tools.py:980
 msgid "Sets the X coordinate of the current cutting plane"
@@ -13239,7 +13233,7 @@ msgstr "Définir la coordonnée X du plan de coupe"
 
 #: ../gui/wxpython/nviz/tools.py:994
 msgid "Horizontal Y:"
-msgstr "Y horizontal :"
+msgstr "Y horizontal:"
 
 #: ../gui/wxpython/nviz/tools.py:996
 msgid "Sets the Y coordinate of the current cutting plane"
@@ -13259,15 +13253,15 @@ msgstr "Définit la coordonnée Z du plan de coupe actuel (n'a de sens que si l'
 
 #: ../gui/wxpython/nviz/tools.py:1114
 msgid "Fine resolution:"
-msgstr "Résolution fine :"
+msgstr "Résolution fine:"
 
 #: ../gui/wxpython/nviz/tools.py:1126
 msgid "Value:"
-msgstr "Valeur :"
+msgstr "Valeur:"
 
 #: ../gui/wxpython/nviz/tools.py:1138 ../gui/wxpython/nviz/tools.py:2578
 msgid "Transparency:"
-msgstr "Transparence :"
+msgstr "Transparence:"
 
 #: ../gui/wxpython/nviz/tools.py:1204
 msgid "Show vector lines"
@@ -13279,7 +13273,7 @@ msgstr "Lignes vectorielles"
 
 #: ../gui/wxpython/nviz/tools.py:1220
 msgid "Line:"
-msgstr "Ligne :"
+msgstr "Ligne:"
 
 #: ../gui/wxpython/nviz/tools.py:1223
 msgid "width:"
@@ -13287,7 +13281,7 @@ msgstr "largeur :"
 
 #: ../gui/wxpython/nviz/tools.py:1239 ../gui/wxpython/nviz/tools.py:1390
 msgid "color:"
-msgstr "couleur :"
+msgstr "couleur:"
 
 #: ../gui/wxpython/nviz/tools.py:1255 ../gui/wxpython/nviz/tools.py:1435
 msgid "use color for thematic mapping"
@@ -13311,7 +13305,7 @@ msgstr "Affichage"
 #: ../gui/wxpython/nviz/tools.py:1300 ../gui/wxpython/nviz/tools.py:4806
 #: ../gui/wxpython/nviz/tools.py:4859
 msgid "on surface(s):"
-msgstr "sur la surface :"
+msgstr "sur la surface:"
 
 #: ../gui/wxpython/nviz/tools.py:1301 ../gui/wxpython/nviz/tools.py:4806
 #: ../gui/wxpython/nviz/tools.py:4859
@@ -13320,7 +13314,7 @@ msgstr "en 3D"
 
 #: ../gui/wxpython/nviz/tools.py:1310 ../gui/wxpython/nviz/tools.py:1477
 msgid "Height above surface:"
-msgstr "Hauteur au-dessus de la surface :"
+msgstr "Hauteur au-dessus de la surface:"
 
 #: ../gui/wxpython/nviz/tools.py:1346
 msgid "Show vector points"
@@ -13332,7 +13326,7 @@ msgstr "Points vectoriels"
 
 #: ../gui/wxpython/nviz/tools.py:1362
 msgid "Icon:"
-msgstr "Icône :"
+msgstr "Icône:"
 
 #: ../gui/wxpython/nviz/tools.py:1437
 msgid "use size for thematic mapping"
@@ -13352,7 +13346,7 @@ msgstr "tranche"
 
 #: ../gui/wxpython/nviz/tools.py:1589
 msgid "Resolution:"
-msgstr "Résolution :"
+msgstr "Résolution:"
 
 #: ../gui/wxpython/nviz/tools.py:1603
 #, fuzzy
@@ -13381,7 +13375,7 @@ msgstr "Couleur et intensité de la lumière"
 
 #: ../gui/wxpython/nviz/tools.py:1802 ../gui/wxpython/nviz/preferences.py:307
 msgid "Brightness:"
-msgstr "Luminosité :"
+msgstr "Luminosité:"
 
 #: ../gui/wxpython/nviz/tools.py:1804
 msgid "Adjusts the brightness of the light"
@@ -13389,7 +13383,7 @@ msgstr "Ajuster la luminosité de la lumière"
 
 #: ../gui/wxpython/nviz/tools.py:1813 ../gui/wxpython/nviz/preferences.py:321
 msgid "Ambient:"
-msgstr "Ambiante :"
+msgstr "Ambiante:"
 
 #: ../gui/wxpython/nviz/tools.py:1815
 msgid "Adjusts the ambient light"
@@ -13417,15 +13411,15 @@ msgstr "S && E"
 
 #: ../gui/wxpython/nviz/tools.py:1901
 msgid "Elevation of fringe from bottom:"
-msgstr "Altitude de la frange depuis le fond :"
+msgstr "Altitude de la frange depuis le fond:"
 
 #: ../gui/wxpython/nviz/tools.py:1954
 msgid "Arrow length (in map units):"
-msgstr "Longueur de la flèche (en unité de carte) :"
+msgstr "Longueur de la flèche (en unité de carte):"
 
 #: ../gui/wxpython/nviz/tools.py:1964
 msgid "Arrow color:"
-msgstr "Couleur de la flèche :"
+msgstr "Couleur de la flèche:"
 
 #: ../gui/wxpython/nviz/tools.py:1973
 msgid "Place arrow"
@@ -13437,7 +13431,7 @@ msgstr "Longueur de la barre d'échelle (en unités de carte) : "
 
 #: ../gui/wxpython/nviz/tools.py:2009
 msgid "Scale bar color:"
-msgstr "Couleur de la barre d'échelle :"
+msgstr "Couleur de la barre d'échelle:"
 
 #: ../gui/wxpython/nviz/tools.py:2018
 #, fuzzy
@@ -13485,7 +13479,7 @@ msgstr "Attributs des tranches"
 
 #: ../gui/wxpython/nviz/tools.py:2513
 msgid "Slice parallel to axis:"
-msgstr "Tranches parallèles à l'axe :"
+msgstr "Tranches parallèles à l'axe:"
 
 #: ../gui/wxpython/nviz/tools.py:2646
 msgid "W"
@@ -13535,7 +13529,7 @@ msgstr "Niveau {level}"
 #: ../gui/wxpython/nviz/tools.py:3967 ../gui/wxpython/nviz/tools.py:3969
 #, fuzzy, python-brace-format
 msgid "Slice parallel to {axis}"
-msgstr "Tranches parallèles à l'axe :"
+msgstr "Tranches parallèles à l'axe:"
 
 #: ../gui/wxpython/nviz/tools.py:4246 ../gui/wxpython/nviz/tools.py:4929
 msgid "Slice parallel to"
@@ -13569,51 +13563,51 @@ msgstr "sur la surface"
 
 #: ../gui/wxpython/nviz/tools.py:4949
 msgid "range:"
-msgstr "intervalle:"
+msgstr "plage:"
 
 # Easting et Northing sont ici traduits resp. Abscisse et Ordonnée, désignant plutôt des valeurs numériques que des directions cardinales.
 #: ../gui/wxpython/nviz/tools.py:5017 ../gui/wxpython/nviz/tools.py:5028
 msgid "North edge:"
-msgstr "Limite nord :"
+msgstr "Limite nord:"
 
 #: ../gui/wxpython/nviz/tools.py:5018 ../gui/wxpython/nviz/tools.py:5029
 msgid "South edge:"
-msgstr "Limite sud :"
+msgstr "Limite sud:"
 
 #: ../gui/wxpython/nviz/tools.py:5019 ../gui/wxpython/nviz/tools.py:5026
 #: ../gui/wxpython/nviz/tools.py:5035
 msgid "West edge:"
-msgstr "Limite ouest :"
+msgstr "Limite ouest:"
 
 #: ../gui/wxpython/nviz/tools.py:5020 ../gui/wxpython/nviz/tools.py:5027
 #: ../gui/wxpython/nviz/tools.py:5036
 msgid "East edge:"
-msgstr "Limite est :"
+msgstr "Limite est:"
 
 # Easting et Northing sont ici traduits resp. Abscisse et Ordonnée, désignant plutôt des valeurs numériques que des directions cardinales.
 #: ../gui/wxpython/nviz/tools.py:5022 ../gui/wxpython/nviz/tools.py:5033
 #: ../gui/wxpython/nviz/tools.py:5041
 msgid "Northing (Y):"
-msgstr "Ordonnée (Y) :"
+msgstr "Ordonnée (Y):"
 
 #: ../gui/wxpython/nviz/tools.py:5023 ../gui/wxpython/nviz/tools.py:5032
 #: ../gui/wxpython/nviz/tools.py:5042
 msgid "Height (Z):"
-msgstr "Hauteur (Z) :"
+msgstr "Hauteur (Z):"
 
 # Easting et Northing sont ici traduits resp. Abscisse et Ordonnée, désignant plutôt des valeurs numériques que des directions cardinales.
 #: ../gui/wxpython/nviz/tools.py:5024 ../gui/wxpython/nviz/tools.py:5031
 #: ../gui/wxpython/nviz/tools.py:5040
 msgid "Easting (X):"
-msgstr "Abscisse (X) :"
+msgstr "Abscisse (X):"
 
 #: ../gui/wxpython/nviz/tools.py:5037
 msgid "Bottom edge:"
-msgstr "Limite basse :"
+msgstr "Limite basse:"
 
 #: ../gui/wxpython/nviz/tools.py:5038
 msgid "Top edge:"
-msgstr "Limite haute :"
+msgstr "Limite haute:"
 
 #: ../gui/wxpython/nviz/tools.py:5143
 msgid "Adjusts the distance and direction of the image viewpoint"
@@ -13636,25 +13630,25 @@ msgstr "Revenir aux réglages par défaut, les changements ne seront pas appliqu
 #: ../gui/wxpython/nviz/preferences.py:135
 #: ../gui/wxpython/nviz/preferences.py:153
 msgid "value:"
-msgstr "valeur :"
+msgstr "valeur:"
 
 #: ../gui/wxpython/nviz/preferences.py:84
 msgid "step:"
-msgstr "pas :"
+msgstr "pas:"
 
 #: ../gui/wxpython/nviz/preferences.py:99
 #: ../gui/wxpython/nviz/preferences.py:266
 msgid "Position:"
-msgstr "Position :"
+msgstr "Position:"
 
 #: ../gui/wxpython/nviz/preferences.py:102
 #: ../gui/wxpython/nviz/preferences.py:269
 msgid "x:"
-msgstr "x :"
+msgstr "x:"
 
 #: ../gui/wxpython/nviz/preferences.py:132
 msgid "Twist:"
-msgstr "Basculer :"
+msgstr "Basculer:"
 
 #: ../gui/wxpython/nviz/preferences.py:205
 msgid "Fly-through"
@@ -13678,16 +13672,16 @@ msgstr "z : "
 
 #: ../gui/wxpython/nviz/preferences.py:437
 msgid "wire color:"
-msgstr "couleur du fil :"
+msgstr "couleur du fil:"
 
 #: ../gui/wxpython/nviz/preferences.py:516
 #: ../gui/wxpython/mapswipe/dialogs.py:283
 msgid "Size:"
-msgstr "Taille :"
+msgstr "Taille:"
 
 #: ../gui/wxpython/nviz/preferences.py:531
 msgid "Marker:"
-msgstr "Marqueur :"
+msgstr "Marqueur:"
 
 #: ../gui/wxpython/nviz/preferences.py:629
 #, python-format
@@ -13853,7 +13847,7 @@ msgstr "Quitter l'outil de graphique"
 
 #: ../gui/wxpython/wxplot/base.py:439
 msgid "Left Mouse Down at Point:"
-msgstr "Clic gauche sur le point :"
+msgstr "Clic gauche sur le point:"
 
 #: ../gui/wxpython/wxplot/base.py:466 ../gui/wxpython/wxplot/base.py:532
 #: ../gui/wxpython/wxplot/dialogs.py:556
@@ -13955,7 +13949,7 @@ msgstr "Sélectionner la carte raster à profiler"
 
 #: ../gui/wxpython/wxplot/dialogs.py:64
 msgid "Select raster map(s) to profile:"
-msgstr "Sélectionner la(es) carte(s) raster à profiler :"
+msgstr "Sélectionner la(es) carte(s) raster à profiler:"
 
 #: ../gui/wxpython/wxplot/dialogs.py:106
 msgid "Select pairs of raster maps for scatterplots"
@@ -13963,7 +13957,7 @@ msgstr "Sélectionner les cartes raster pour les nuages de points"
 
 #: ../gui/wxpython/wxplot/dialogs.py:142
 msgid "Select pairs of raster maps for bivariate scatterplots:"
-msgstr "Sélectionner les cartes raster pour les nuages de points bivariés :"
+msgstr "Sélectionner les cartes raster pour les nuages de points bivariés:"
 
 #: ../gui/wxpython/wxplot/dialogs.py:157 ../gui/wxpython/wxplot/dialogs.py:404
 msgid "Number of bins (for FP maps)"
@@ -13995,7 +13989,7 @@ msgstr "Histogramme du groupe d'images"
 
 #: ../gui/wxpython/wxplot/dialogs.py:389
 msgid "Select image group:"
-msgstr "Choisir le groupe d'image :"
+msgstr "Choisir le groupe d'image:"
 
 #: ../gui/wxpython/wxplot/dialogs.py:415
 msgid "Histogram type"
@@ -14007,36 +14001,36 @@ msgstr "Le groupe sélectionné doit être dans le jeu de cartes courant"
 
 #: ../gui/wxpython/wxplot/dialogs.py:563
 msgid "Profile title:"
-msgstr "Titre du profil :"
+msgstr "Titre du profil:"
 
 #: ../gui/wxpython/wxplot/dialogs.py:573
 msgid "Title font size (pts):"
-msgstr "Taille de caractère du titre (pts) :"
+msgstr "Taille de caractère du titre (pts):"
 
 #: ../gui/wxpython/wxplot/dialogs.py:584
 msgid "X-axis label:"
-msgstr "Étiquette de l'axe d'abscisse :"
+msgstr "Étiquette de l'axe d'abscisse:"
 
 #: ../gui/wxpython/wxplot/dialogs.py:594
 msgid "Y-axis label:"
-msgstr "Étiquette de l'axe d'ordonnée :"
+msgstr "Étiquette de l'axe d'ordonnée:"
 
 #: ../gui/wxpython/wxplot/dialogs.py:604
 msgid "Label font size (pts):"
-msgstr "Taille de caractère d'étiquette (pts) :"
+msgstr "Taille de caractère d'étiquette (pts):"
 
 #: ../gui/wxpython/wxplot/dialogs.py:626
 msgid "Font family:"
-msgstr "Famille de caractère :"
+msgstr "Famille de caractère:"
 
 #: ../gui/wxpython/wxplot/dialogs.py:640
 msgid "Style:"
-msgstr "Style :"
+msgstr "Style:"
 
 #: ../gui/wxpython/wxplot/dialogs.py:654
 #, fuzzy
 msgid "Weight:"
-msgstr "Graisse :"
+msgstr "Graisse:"
 
 #: ../gui/wxpython/wxplot/dialogs.py:687
 #: ../gui/wxpython/wxplot/dialogs.py:1135
@@ -14095,7 +14089,7 @@ msgstr "Échelle"
 
 #: ../gui/wxpython/wxplot/dialogs.py:1033
 msgid "Automatic axis scaling, custom max and min, or scale matches data range (min)"
-msgstr "Échelle de l'axe automatique, min et max personnalisés, ou échelle correspondant aux données (min)"
+msgstr "Échelle de l'axe automatique, min et max personnalisés, ou échelle correspondant à la plage de données (min)"
 
 #: ../gui/wxpython/wxplot/dialogs.py:1038
 msgid "Custom min"
@@ -14403,7 +14397,7 @@ msgstr "Type de couche <%s> non pris en charge"
 #: ../gui/wxpython/lmgr/layertree.py:816
 #, fuzzy, python-format
 msgid "Enter name for the new %s in the current mapset:"
-msgstr "Entrer le nom du nouveau jeu de cartes :"
+msgstr "Entrer le nom du nouveau jeu de cartes:"
 
 #: ../gui/wxpython/lmgr/layertree.py:817
 #, fuzzy, python-format
@@ -14431,7 +14425,7 @@ msgstr "Impossible d'afficher l'histogramme de carte raster. Pas de nom de carte
 
 #: ../gui/wxpython/lmgr/layertree.py:1071
 msgid "Layer group:"
-msgstr "Groupe de couches :"
+msgstr "Groupe de couches:"
 
 #: ../gui/wxpython/lmgr/layertree.py:1076
 #: ../gui/wxpython/lmgr/layertree.py:1569
@@ -14448,7 +14442,7 @@ msgstr "Merci d'attendre, mise à jour des données..."
 
 #: ../gui/wxpython/lmgr/layertree.py:1644 ../gui/wxpython/lmgr/frame.py:2126
 msgid "opacity:"
-msgstr "opacité :"
+msgstr "opacité:"
 
 #: ../gui/wxpython/lmgr/menudata.py:42
 msgid "Unable to parse user toolboxes XML files. Default main menu will be loaded."
@@ -14755,7 +14749,7 @@ msgstr "Aucun secteur/jeux de carte sélectionné. Opération annulée."
 
 #: ../gui/wxpython/lmgr/frame.py:929 ../gui/wxpython/gis_set.py:903
 msgid "Enter name for new mapset:"
-msgstr "Entrer le nom du nouveau jeu de cartes :"
+msgstr "Entrer le nom du nouveau jeu de cartes:"
 
 #: ../gui/wxpython/lmgr/frame.py:936 ../gui/wxpython/lmgr/frame.py:957
 msgid "No mapset provided. Operation canceled."
@@ -14783,7 +14777,7 @@ msgstr "Modifier l'environnement de travail"
 #: ../gui/wxpython/lmgr/frame.py:995
 #, fuzzy
 msgid "Usage: cd [directory]"
-msgstr "Choisir un répertoire :"
+msgstr "Choisir un répertoire:"
 
 #: ../gui/wxpython/lmgr/frame.py:996
 msgid "Without parameters it opens a dialog."
@@ -14866,7 +14860,7 @@ msgstr "Échec d'écriture des paramètres de l'espace de travail courant."
 
 #: ../gui/wxpython/lmgr/frame.py:1488
 msgid "Enter new name:"
-msgstr "Entrer le nouveau nom :"
+msgstr "Entrer le nouveau nom:"
 
 #: ../gui/wxpython/lmgr/frame.py:1494
 #, fuzzy, python-brace-format
@@ -14957,7 +14951,7 @@ msgstr ""
 #: ../gui/wxpython/timeline/frame.py:139
 #, fuzzy
 msgid "Select space time dataset(s):"
-msgstr "Choisir le jeu de cartes source :"
+msgstr "Choisir le jeu de cartes source:"
 
 #: ../gui/wxpython/timeline/frame.py:162
 #, fuzzy, python-format
@@ -14985,12 +14979,12 @@ msgstr "Y [%s]"
 #: ../gui/wxpython/timeline/frame.py:267
 #, fuzzy
 msgid "X"
-msgstr "X :"
+msgstr "X:"
 
 #: ../gui/wxpython/timeline/frame.py:268
 #, fuzzy
 msgid "Y"
-msgstr "Y :"
+msgstr "Y:"
 
 #: ../gui/wxpython/timeline/frame.py:325
 #, fuzzy, python-format
@@ -15029,7 +15023,7 @@ msgstr "Importer une carte raster"
 #: ../gui/wxpython/timeline/frame.py:498
 #, fuzzy, python-format
 msgid "Mapset: %s"
-msgstr "Jeu de cartes :"
+msgstr "Jeu de cartes:"
 
 #: ../gui/wxpython/timeline/frame.py:499
 #, fuzzy, python-format
@@ -15113,7 +15107,7 @@ msgstr "Choisir le secteur source : "
 
 #: ../gui/wxpython/gcp/manager.py:345
 msgid "Select source mapset:"
-msgstr "Choisir le jeu de cartes source :"
+msgstr "Choisir le jeu de cartes source:"
 
 #: ../gui/wxpython/gcp/manager.py:399
 msgid "You must select a valid location before selecting a mapset"
@@ -15129,7 +15123,7 @@ msgstr "Choisir un groupe d'images/cartes à géo-rectifier"
 
 #: ../gui/wxpython/gcp/manager.py:449
 msgid "Select group:"
-msgstr "Choisir un groupe :"
+msgstr "Choisir un groupe:"
 
 #: ../gui/wxpython/gcp/manager.py:460
 msgid "Create group if none exists"
@@ -15145,7 +15139,7 @@ msgstr "Ajouter une carte vecteur au groupe ..."
 
 #: ../gui/wxpython/gcp/manager.py:477 ../gui/wxpython/gcp/manager.py:2666
 msgid "Extension for output maps:"
-msgstr "Suffixe pour les cartes en sortie :"
+msgstr "Suffixe pour les cartes en sortie:"
 
 #: ../gui/wxpython/gcp/manager.py:537
 msgid "You must select a valid image/map group in order to continue"
@@ -15161,17 +15155,17 @@ msgstr "Sélectionner les cartes à afficher pour la création des points de con
 
 #: ../gui/wxpython/gcp/manager.py:618 ../gui/wxpython/gcp/manager.py:2602
 msgid "Select source map to display:"
-msgstr "Sélectionner la carte source à afficher :"
+msgstr "Sélectionner la carte source à afficher:"
 
 #: ../gui/wxpython/gcp/manager.py:629 ../gui/wxpython/gcp/manager.py:2607
 #, fuzzy
 msgid "Select target raster map to display:"
-msgstr "Sélectionner la carte cible à afficher :"
+msgstr "Sélectionner la carte cible à afficher:"
 
 #: ../gui/wxpython/gcp/manager.py:640 ../gui/wxpython/gcp/manager.py:2612
 #, fuzzy
 msgid "Select target vector map to display:"
-msgstr "Sélectionner la carte cible à afficher :"
+msgstr "Sélectionner la carte cible à afficher:"
 
 #: ../gui/wxpython/gcp/manager.py:703
 msgid "You must select a source map in order to continue"
@@ -15348,7 +15342,7 @@ msgstr "Créer un nouveau groupe de cartes vectorielles"
 
 #: ../gui/wxpython/gcp/manager.py:2224
 msgid "Select vector map(s) to add to group:"
-msgstr "Sélectionner carte(s) vecteur à ajouter au groupe :"
+msgstr "Sélectionner carte(s) vecteur à ajouter au groupe:"
 
 #: ../gui/wxpython/gcp/manager.py:2271
 msgid "Edit GCP"
@@ -15360,15 +15354,15 @@ msgstr "Point de contrôle no."
 
 #: ../gui/wxpython/gcp/manager.py:2301
 msgid "source E:"
-msgstr "E source :"
+msgstr "E source:"
 
 #: ../gui/wxpython/gcp/manager.py:2302
 msgid "target E:"
-msgstr "E cible :"
+msgstr "E cible:"
 
 #: ../gui/wxpython/gcp/manager.py:2303
 msgid "source N:"
-msgstr "N cible :"
+msgstr "N cible:"
 
 #: ../gui/wxpython/gcp/manager.py:2304
 msgid "target N:"
@@ -15398,15 +15392,15 @@ msgstr "Paramètres des symboles"
 
 #: ../gui/wxpython/gcp/manager.py:2490
 msgid "Color for high RMS error:"
-msgstr "Couleur pour erreur RMS élevée :"
+msgstr "Couleur pour erreur RMS élevée:"
 
 #: ../gui/wxpython/gcp/manager.py:2507
 msgid "Color for selected GCP:"
-msgstr "Couleur pour les points de contrôle sélectionnés :"
+msgstr "Couleur pour les points de contrôle sélectionnés:"
 
 #: ../gui/wxpython/gcp/manager.py:2524
 msgid "Color for unused GCPs:"
-msgstr "Couleur pour les points de contrôle non utilisés :"
+msgstr "Couleur pour les points de contrôle non utilisés:"
 
 #: ../gui/wxpython/gcp/manager.py:2540
 msgid "Show unused GCPs"
@@ -15434,7 +15428,7 @@ msgstr "3ème ordre"
 
 #: ../gui/wxpython/gcp/manager.py:2648
 msgid "Select interpolation method:"
-msgstr "Sélectionner la méthode d'interpolation :"
+msgstr "Sélectionner la méthode d'interpolation:"
 
 #: ../gui/wxpython/gcp/manager.py:2660
 msgid "clip to computational region in target location"
@@ -15463,7 +15457,7 @@ msgstr "Aller au point d'amer no."
 
 #: ../gui/wxpython/gcp/statusbar.py:53
 msgid "Valid Range:"
-msgstr "Plage de validité :"
+msgstr "Plage de validité:"
 
 #: ../gui/wxpython/gcp/statusbar.py:118
 msgid "RMS error"
@@ -15603,17 +15597,17 @@ msgstr "Ajouter une carte raster"
 #: ../gui/wxpython/iclass/dialogs.py:78
 #, fuzzy
 msgid "Name of imagery group is missing."
-msgstr "Choisir un groupe :"
+msgstr "Choisir un groupe:"
 
 #: ../gui/wxpython/iclass/dialogs.py:85
 #, fuzzy
 msgid "Name of imagery group:"
-msgstr "Choisir un groupe :"
+msgstr "Choisir un groupe:"
 
 #: ../gui/wxpython/iclass/dialogs.py:97
 #, fuzzy
 msgid "Name of imagery subgroup:"
-msgstr "Choisir un groupe :"
+msgstr "Choisir un groupe:"
 
 #: ../gui/wxpython/iclass/dialogs.py:171
 msgid "Please choose a subgroup."
@@ -15643,7 +15637,7 @@ msgstr "Pas de modifications à appliquer au groupe <%s>."
 #: ../gui/wxpython/iclass/dialogs.py:232
 #, fuzzy
 msgid "Name of map is missing."
-msgstr "Nom du jeu de cartes :"
+msgstr "Nom du jeu de cartes:"
 
 #: ../gui/wxpython/iclass/dialogs.py:500
 #, fuzzy
@@ -15658,7 +15652,7 @@ msgstr "Sauvegarder l'expression  dans un fichier"
 #: ../gui/wxpython/iclass/dialogs.py:615
 #, fuzzy
 msgid "Enter name of signature file:"
-msgstr "Entrer le nom du nouveau jeu de cartes :"
+msgstr "Entrer le nom du nouveau jeu de cartes:"
 
 #: ../gui/wxpython/iclass/dialogs.py:624
 #, fuzzy
@@ -15878,15 +15872,15 @@ msgstr "3. Choisir un jeu de cartes GRASS"
 
 #: ../gui/wxpython/gis_set.py:140
 msgid "GRASS GIS database directory contains Locations."
-msgstr ""
+msgstr "La base de donnée GRASS contient les secteurs."
 
 #: ../gui/wxpython/gis_set.py:144
 msgid "All data in one Location is in the same  coordinate reference system (projection). One Location can be one project. Location contains Mapsets."
-msgstr ""
+msgstr "Toutes les données dans le même Secteur partagent le même système de coordonnées (projection). Un Secteur peut être un projet. Le Secteur contient des Jeux de données."
 
 #: ../gui/wxpython/gis_set.py:152
 msgid "Mapset contains GIS data related to one project, task within one project, subregion or user."
-msgstr ""
+msgstr "Les Jeux de données contiennent les données SIG relatives au projet, tâche dans un projet, sous-région ou utilisateur."
 
 #: ../gui/wxpython/gis_set.py:167
 msgid "Start &GRASS session"
@@ -15926,7 +15920,7 @@ msgstr "Renommer le secteur sélectionné"
 
 #: ../gui/wxpython/gis_set.py:187
 msgid "De&lete"
-msgstr "Effacer"
+msgstr "Eff&acer"
 
 #: ../gui/wxpython/gis_set.py:188 ../gui/wxpython/gis_set.py:725
 msgid "Delete selected location"
@@ -15937,9 +15931,8 @@ msgid "Rename selected mapset"
 msgstr "Renommer le jeu de cartes sélectionné"
 
 #: ../gui/wxpython/gis_set.py:193
-#, fuzzy
 msgid "&Delete"
-msgstr "Supprimer"
+msgstr "&Effacer"
 
 #: ../gui/wxpython/gis_set.py:194 ../gui/wxpython/gis_set.py:701
 msgid "Delete selected mapset"
@@ -15961,12 +15954,12 @@ msgstr "Impossible de déterminer la base de données GRASS. Vérifiez vos param
 #: ../gui/wxpython/gis_set.py:281
 #, fuzzy, python-format
 msgid "ERROR: Location <%s> not found\n"
-msgstr "ERREUR : Secteur <%s> non trouvé"
+msgstr "ERREUR: Secteur <%s> non trouvé"
 
 #: ../gui/wxpython/gis_set.py:298
 #, fuzzy, python-format
 msgid "ERROR: Mapset <%s> not found\n"
-msgstr "ERREUR : Jeu de cartes <%s> non trouvé"
+msgstr "ERREUR: Jeu de cartes <%s> non trouvé"
 
 #: ../gui/wxpython/gis_set.py:456
 #, python-format
@@ -16023,7 +16016,7 @@ msgid ""
 msgstr ""
 "Nom actuel : %s\n"
 "\n"
-"Entrer le nouveau nom :"
+"Entrer le nouveau nom:"
 
 #: ../gui/wxpython/gis_set.py:631
 #, python-format
@@ -16112,7 +16105,7 @@ msgstr "Impossible d'effacer le secteur"
 #: ../gui/wxpython/gis_set.py:757
 #, python-format
 msgid "No GRASS Location found in '%s'. Create a new Location or choose different GRASS database directory."
-msgstr ""
+msgstr "Pas de Secteur GRASS trouvé dans '%s'. Créez un nouveau Secteur ou choisissez un autre dossier de base de données GRASS."
 
 #: ../gui/wxpython/gis_set.py:875
 #, fuzzy, python-format
@@ -16205,18 +16198,18 @@ msgstr ""
 #: ../gui/wxpython/mapswipe/dialogs.py:42
 #, fuzzy
 msgid "Select raster maps"
-msgstr "Sélectionner une carte raster :"
+msgstr "Sélectionner une carte raster:"
 
 #: ../gui/wxpython/mapswipe/toolbars.py:111
 #, fuzzy
 msgid "Swipe mode"
-msgstr "Mode fin :"
+msgstr "Mode fin:"
 
 #: ../gui/wxpython/mapswipe/toolbars.py:111
 #: ../gui/wxpython/mapswipe/dialogs.py:233
 #, fuzzy
 msgid "Mirror mode"
-msgstr "Mode grossier :"
+msgstr "Mode grossier:"
 
 #: ../gui/wxpython/mapswipe/toolbars.py:120
 #, fuzzy
@@ -16236,12 +16229,12 @@ msgstr "Inverser les cartes"
 #: ../gui/wxpython/mapswipe/dialogs.py:119
 #, fuzzy
 msgid "Name of top/left raster map:"
-msgstr "Nom de la carte raster :"
+msgstr "Nom de la carte raster:"
 
 #: ../gui/wxpython/mapswipe/dialogs.py:123
 #, fuzzy
 msgid "Name of bottom/right raster map:"
-msgstr "Nom de la carte raster :"
+msgstr "Nom de la carte raster:"
 
 #: ../gui/wxpython/mapswipe/dialogs.py:156
 #, fuzzy
@@ -16274,7 +16267,7 @@ msgstr "Paramètres de la carte"
 #: ../gui/wxpython/mapswipe/dialogs.py:236
 #, fuzzy
 msgid "Mirrored cursor"
-msgstr "Mode grossier :"
+msgstr "Mode grossier:"
 
 #: ../gui/wxpython/mapswipe/dialogs.py:255
 #, fuzzy
@@ -16284,7 +16277,7 @@ msgstr "Taille de la forme"
 #: ../gui/wxpython/mapswipe/frame.py:42
 #, fuzzy
 msgid "GRASS GIS Map Swipe"
-msgstr "Affichage cartes GRASS :"
+msgstr "Affichage cartes GRASS:"
 
 #: ../gui/wxpython/mapswipe/frame.py:397
 #, fuzzy, python-format
@@ -17152,7 +17145,7 @@ msgstr "Barre d'outil d'analyse"
 
 #: ../gui/wxpython/vnet/dialogs.py:203
 msgid "Points for analysis:"
-msgstr "Points à analyser :"
+msgstr "Points à analyser:"
 
 #: ../gui/wxpython/vnet/dialogs.py:206
 msgid "Points"
@@ -17160,15 +17153,15 @@ msgstr "Points"
 
 #: ../gui/wxpython/vnet/dialogs.py:219
 msgid "Analysis settings:"
-msgstr "Paramètres d'analyses :"
+msgstr "Paramètres d'analyses:"
 
 #: ../gui/wxpython/vnet/dialogs.py:222
 msgid "Maximum distance of point to the network:"
-msgstr "Distance maximale d'un point du réseau :"
+msgstr "Distance maximale d'un point du réseau:"
 
 #: ../gui/wxpython/vnet/dialogs.py:234
 msgid "Iso lines:"
-msgstr "Isolignes :"
+msgstr "Isolignes:"
 
 #: ../gui/wxpython/vnet/dialogs.py:350
 msgid "Add vector map into layer tree"
@@ -17205,53 +17198,53 @@ msgstr "Analyse des noeuds en cours ..."
 #: ../gui/wxpython/vnet/dialogs.py:1131
 #, python-format
 msgid "Color table style %s:"
-msgstr "Style de table de couleurs %s :"
+msgstr "Style de table de couleurs %s:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1142
 #, python-format
 msgid "Invert colors %s:"
-msgstr "Inverser les couleurs %s :"
+msgstr "Inverser les couleurs %s:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1147
 msgid "Line color:"
-msgstr "Couleur de ligne :"
+msgstr "Couleur de ligne:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1148
 msgid "Color for unused point:"
-msgstr "Couleur pour les points non utilisés :"
+msgstr "Couleur pour les points non utilisés:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1149
 msgid "Color for Start/From/Source/Used point:"
-msgstr "Couleur des points de Départ/De/Source/Utilisés :"
+msgstr "Couleur des points de Départ/De/Source/Utilisés:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1150
 #, fuzzy
 msgid "Color for End/To/Sink point:"
-msgstr "Couleurs des points de Fin/Vers/Destination :"
+msgstr "Couleurs des points de Fin/Vers/Destination:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1151
 msgid "Color for selected point:"
-msgstr "Couleur pour les points sélectionnés :"
+msgstr "Couleur pour les points sélectionnés:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1165
 msgid "Point size:"
-msgstr "Taille du texte :"
+msgstr "Taille du texte:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1166
 msgid "Point width:"
-msgstr "Épaisseur du point :"
+msgstr "Épaisseur du point:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1168
 msgid "Maximum number of results in history:"
-msgstr "Nombre maximal de résulats dans l'historique :"
+msgstr "Nombre maximal de résulats dans l'historique:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1200
 msgid "Analysis result style:"
-msgstr "Style du résultat de l'analyse :"
+msgstr "Style du résultat de l'analyse:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1230
 msgid "Point style:"
-msgstr "Style de point :"
+msgstr "Style de point:"
 
 #: ../gui/wxpython/vnet/dialogs.py:1252
 msgid "Other settings"
@@ -17438,7 +17431,7 @@ msgstr "Liste des couches "
 
 #: ../gui/wxpython/web_services/widgets.py:170
 msgid "Source projection:"
-msgstr "Projection source :"
+msgstr "Projection source:"
 
 #: ../gui/wxpython/web_services/widgets.py:215
 msgid "Advanced request settings"
@@ -17450,7 +17443,7 @@ msgstr "Ordre des couches dans le raster"
 
 #: ../gui/wxpython/web_services/widgets.py:232
 msgid "Reprojection method:"
-msgstr "Méthode de reprojection :"
+msgstr "Méthode de reprojection:"
 
 #: ../gui/wxpython/web_services/widgets.py:236
 msgid "Nearest neighbor"
@@ -17470,11 +17463,11 @@ msgstr "Interpolation spline cubique"
 
 #: ../gui/wxpython/web_services/widgets.py:240
 msgid "Maximum columns to request from server at time:"
-msgstr "Nombre maximal de colonnes à demander au serveur en unse seule fois :"
+msgstr "Nombre maximal de colonnes à demander au serveur en unse seule fois:"
 
 #: ../gui/wxpython/web_services/widgets.py:244
 msgid "Maximum rows to request from server at time:"
-msgstr "Nombre maximal de ligne à demander au serveur en unse seule fois :"
+msgstr "Nombre maximal de ligne à demander au serveur en unse seule fois:"
 
 #: ../gui/wxpython/web_services/widgets.py:259
 msgid "Do not request transparent data"
@@ -17482,7 +17475,7 @@ msgstr "Ne pas demander les données transparentes"
 
 #: ../gui/wxpython/web_services/widgets.py:272
 msgid "Additional query parameters for server:"
-msgstr "Paramètres supplémentaires de requête pour le serveur :"
+msgstr "Paramètres supplémentaires de requête pour le serveur:"
 
 #: ../gui/wxpython/web_services/widgets.py:478
 #, python-format
@@ -17549,7 +17542,7 @@ msgstr "Paramètres du serveur "
 
 #: ../gui/wxpython/web_services/dialogs.py:93
 msgid "Server:"
-msgstr "Serveur :"
+msgstr "Serveur:"
 
 #: ../gui/wxpython/web_services/dialogs.py:97
 msgid "&Connect"
@@ -17573,11 +17566,11 @@ msgstr "Paramètres du gestionnaire de couches"
 
 #: ../gui/wxpython/web_services/dialogs.py:121
 msgid "Output layer name:"
-msgstr "Nom de la couche en sortie :"
+msgstr "Nom de la couche en sortie:"
 
 #: ../gui/wxpython/web_services/dialogs.py:236
 msgid "Username:"
-msgstr "Nom d'utilisateur :"
+msgstr "Nom d'utilisateur:"
 
 #: ../gui/wxpython/web_services/dialogs.py:240
 msgid "Password:"
@@ -17630,7 +17623,7 @@ msgstr "Définir la région"
 #: ../gui/wxpython/web_services/dialogs.py:806
 #, fuzzy
 msgid "Named region"
-msgstr "Charger une région :"
+msgstr "Charger une région:"
 
 #: ../gui/wxpython/web_services/dialogs.py:807
 msgid "Extent and resolution are based on Map Display geometry."
@@ -17652,7 +17645,7 @@ msgstr "Écraser la carte raster existante"
 
 #: ../gui/wxpython/web_services/dialogs.py:820
 msgid "Choose named region:"
-msgstr "Choisir une région :"
+msgstr "Choisir une région:"
 
 #: ../gui/wxpython/web_services/dialogs.py:829
 msgid "&Save layer"
