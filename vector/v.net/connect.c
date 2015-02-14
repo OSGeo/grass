@@ -141,6 +141,7 @@ int connect_arcs(struct Map_info *In, struct Map_info *Pnts,
     Vect_destroy_cats_struct(Cats);
     Vect_destroy_cats_struct(Cline);
     Vect_destroy_cats_struct(Cnew);
+    Vect_destroy_list(exclude_list);
 
     return narcs;
 }
