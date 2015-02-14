@@ -110,18 +110,7 @@ class GRASSStartup(wx.Frame):
         self.mapset_box = wx.StaticBox(parent=self.panel, id=wx.ID_ANY,
                                          label=" %s " % _("3. Select GRASS Mapset"))
 
-        # no message at the beginning but a dummy text is needed to do
-        # the layout right (the lenght should be similar to maximal message)
-        self.lmessage = StaticWrapText(
-            parent=self.panel, id=wx.ID_ANY,
-            label=("This is a placeholer text to workaround layout issues."
-                   " Without this (long) text the widgets will not align"
-                   " when a message is shown."
-                   " This text is not translatable and users should never"
-                   " see it because it will be replaced by nothing or a real"
-                   " message after initial checks. If you are an user"
-                   " and you see this text, it is probably some minor issue."
-                   " Please, contact GRASS developers to tell them about it."))
+        self.lmessage = wx.StaticText(parent=self.panel)
         # It is not clear if all wx versions supports color, so try-except.
         # The color itself may not be correct for all platforms/system settings
         # but in http://xoomer.virgilio.it/infinity77/wxPython/Widgets/wx.SystemSettings.html
@@ -199,14 +188,14 @@ class GRASSStartup(wx.Frame):
 
         # Locations
         self.lblocations = GListBox(parent = self.location_panel,
-                                    id=wx.ID_ANY, size=(180, 120),
+                                    id=wx.ID_ANY, size=(180, 200),
                                     choices = self.listOfLocations)
         self.lblocations.SetColumnWidth(0, 180)
 
         # TODO: sort; but keep PERMANENT on top of list
         # Mapsets
         self.lbmapsets = GListBox(parent = self.mapset_panel,
-                                  id=wx.ID_ANY, size=(180, 120),
+                                  id=wx.ID_ANY, size=(180, 200),
                                   choices = self.listOfMapsets)
         self.lbmapsets.SetColumnWidth(0, 180)
 
@@ -423,7 +412,7 @@ class GRASSStartup(wx.Frame):
         sizer.Add(item=self.lmessage,
                   proportion=0,
                   flag=wx.ALIGN_CENTER_VERTICAL |
-                  wx.ALIGN_LEFT | wx.ALL | wx.EXPAND, border=8)
+                  wx.ALIGN_LEFT | wx.ALL | wx.EXPAND, border=5)
         sizer.Add(item=location_mapset_sizer, proportion=1,
                   flag = wx.RIGHT | wx.LEFT | wx.EXPAND,
                   border = 1)
@@ -472,6 +461,7 @@ class GRASSStartup(wx.Frame):
             you know that there is everything correct now.
         """
         self.lmessage.SetLabel(text)
+        self.lmessage.Wrap(self.GetClientSize()[0])
         self.sizer.Layout()
 
     def _showError(self, text):
@@ -485,6 +475,7 @@ class GRASSStartup(wx.Frame):
             you know that there is everything correct now.
         """
         self.lmessage.SetLabel(_("Error: {text}").format(text=text))
+        self.lmessage.Wrap(self.GetClientSize()[0])
         self.sizer.Layout()
 
     def _hideMessage(self):
