@@ -808,7 +808,6 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         """
         :func:`UpdateMap` for arguments description.
         """
-        start = time.clock()
         self.resize = False
 
         # was if self.Map.cmdfile and ...
@@ -913,12 +912,10 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
 
         if len(self.polycoords) > 0:
             self.DrawLines(self.pdcTmp)
-
-        stop = time.clock()
-
-        Debug.msg (1, "BufferedWindow.UpdateMap(): render=%s, renderVector=%s -> time=%g" % \
-                   (render, renderVector, (stop-start)))
-
+        
+        Debug.msg (1, "BufferedWindow.UpdateMap(): render=%s, renderVector=%s" % \
+                   (render, renderVector))
+        
         return True
 
     def DrawCompRegionExtent(self):
