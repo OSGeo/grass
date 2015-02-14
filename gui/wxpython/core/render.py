@@ -34,6 +34,7 @@ import math
 import copy
 import tempfile
 import types
+import time
 
 import wx
 
@@ -947,7 +948,8 @@ class Map(object):
             env['GRASS_RENDER_IMMEDIATE'] = 'png'
         else:
             env['GRASS_RENDER_IMMEDIATE'] = 'cairo'
-
+        
+        start = time.time()
         maps, masks, opacities = self.GetMapsMasksAndOpacities(force, windres, env)
 
         # ugly hack for MSYS
@@ -967,7 +969,7 @@ class Map(object):
         # run g.pngcomp to get composite image
         bgcolor = ':'.join(map(str, UserSettings.Get(group = 'display', key = 'bgcolor',
                                                      subkey = 'color')))
-
+        startComp = time.time()
         if maps:
             ret, msg = RunCommand('g.pnmcomp',
                                   getErrorMsg = True,
@@ -986,8 +988,10 @@ class Map(object):
                 wx.EndBusyCursor()
                 return None
 
-        Debug.msg (3, "Map.Render() force=%s file=%s" % (force, self.mapfile))
-
+        stop = time.time()
+        Debug.msg (1, "Map.Render() force=%s -> time=%f (comp: %f)" % \
+                   (force, stop - start, stop - startComp))
+        
         wx.EndBusyCursor()
         if not maps:
             return None
