@@ -23,6 +23,7 @@ from .checkers import (check_text_ellipsis,
                        text_to_keyvalue, keyvalue_equals, diff_keyvalue,
                        file_md5, files_equal_md5)
 from .utils import safe_repr
+from .gutils import is_map_in_mapset
 
 
 class TestCase(unittest.TestCase):
@@ -189,7 +190,7 @@ class TestCase(unittest.TestCase):
             if mismatch:
                 stdMsg = "%s difference:\n" % module
                 stdMsg += "mismatch values"
-                stdMsg += "(key, reference, actual): %s\n" % mismatch
+                stdMsg += " (key, reference, actual): %s\n" % mismatch
                 stdMsg += 'command: %s %s' % (module, parameters)
             else:
                 # we can probably remove this once we have more tests
@@ -451,14 +452,45 @@ class TestCase(unittest.TestCase):
                           a=actual['max'], r=refmax, m=map, o=actual['min']))
             self.fail(self._formatMessage(msg, stdmsg))
 
+    def _get_detailed_message_about_no_map(self, name, type):
+        msg = ("There is no map <{n}> of type <{t}>"
+               " in the current mapset".format(n=name, t=type))
+        related = call_module('g.list', type='raster,raster3d,vector',
+                              flags='imt', pattern='*' + name + '*')
+        if related:
+            msg += "\nSee available maps:\n"
+            msg += related
+        else:
+            msg += "\nAnd there are no maps containing the name anywhere\n"
+        return msg
+
+    def assertRasterExists(self, name, msg=None):
+        """Checks if the raster map exists in current mapset"""
+        if not is_map_in_mapset(name, type='raster'):
+            stdmsg = self._get_detailed_message_about_no_map(name, 'raster')
+            self.fail(self._formatMessage(msg, stdmsg))
+
+    def assertRaster3dExists(self, name, msg=None):
+        """Checks if the 3D raster map exists in current mapset"""
+        if not is_map_in_mapset(name, type='raster3d'):
+            stdmsg = self._get_detailed_message_about_no_map(name, 'raster3d')
+            self.fail(self._formatMessage(msg, stdmsg))
+
+    def assertVectorExists(self, name, msg=None):
+        """Checks if the vector map exists in current mapset"""
+        if not is_map_in_mapset(name, type='vector'):
+            stdmsg = self._get_detailed_message_about_no_map(name, 'vector')
+            self.fail(self._formatMessage(msg, stdmsg))
+
     def assertFileExists(self, filename, msg=None,
                          skip_size_check=False, skip_access_check=False):
         """Test the existence of a file.
 
         .. note:
             By default this also checks if the file size is greater than 0
-            since we rarely want a file to be empty. And it also checks
-            if the file is access for reading.
+            since we rarely want a file to be empty. It also checks
+            if the file is accessible for reading since we expect that user
+            wants to look at created files.
         """
         if not os.path.isfile(filename):
             stdmsg = 'File %s does not exist' % filename
