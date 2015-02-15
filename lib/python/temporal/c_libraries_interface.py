@@ -733,12 +733,7 @@ def _stop(lock, conn, data):
     sys.exit()
 
 ###############################################################################
-# Global server connection
-server_connection = None
-server_lock = None
 
-#def error_handler(data):
-#    server_connection.close()
 
 def c_library_server(lock, conn):
     """The GRASS C-libraries server function designed to be a target for
@@ -747,16 +742,24 @@ def c_library_server(lock, conn):
        :param lock: A multiprocessing.Lock
        :param conn: A multiprocessing.Pipe
     """
-    #global server_connection
-    #server_connection = conn
- 
-    #CALLBACK = CFUNCTYPE(None, c_void_p)
-    #CALLBACK.restype = None
-    #CALLBACK.argtypes = c_void_p
 
-    #cerror_handler = CALLBACK(error_handler)
+    def error_handler(data):
+        """This function will be called in case of a fatal error in libgis"""
+        #sys.stderr.write("Error handler was called\n")
+        # We send an exeption that will be handled in
+        # the parent process, then close the pipe
+        # and release any possible lock
+        conn.send(FatalError())
+        conn.close()
+        lock.release()
+
+    CALLBACK = CFUNCTYPE(c_void_p, c_void_p)
+    CALLBACK.restype = c_void_p
+    CALLBACK.argtypes = c_void_p
+
+    cerror_handler = CALLBACK(error_handler)
     
-    #libgis.G_add_error_handler(cerror_handler, POINTER(None))
+    libgis.G_add_error_handler(cerror_handler, None)
 
     # Crerate the function array
     functions = [0]*15
@@ -917,10 +920,6 @@ class CLibrariesInterface(object):
                raise FatalError(message)
            FatalError: Fatal error
            
-           >>> mapset = ciface.get_mapset()
-           >>> location = ciface.get_location()
-           >>> gisdbase = ciface.get_gisdbase()
-           
            >>> ciface.fatal_error()
            Traceback (most recent call last):
                raise FatalError(message)
@@ -935,6 +934,8 @@ class CLibrariesInterface(object):
            Traceback (most recent call last):
                raise FatalError(message)
            FatalError: Fatal error
+
+           >>> ciface.stop()
 
            >>> gscript.del_temp_region()
 
@@ -993,7 +994,6 @@ class CLibrariesInterface(object):
         """Restart the server if it was terminated
         """
         self.threadLock.acquire()
-        
         if self.server.is_alive() is True:
             self.threadLock.release()
             return
@@ -1329,7 +1329,7 @@ class CLibrariesInterface(object):
         """
         self.check_server()
         self.client_conn.send([RPCDefs.G_MAPSET, ])
-        return self.safe_receive("get_mapsetn")
+        return self.safe_receive("get_mapset")
 
     def get_location(self):
         """Return the location
@@ -1350,11 +1350,9 @@ class CLibrariesInterface(object):
         return self.safe_receive("get_gisdbase")
 
     def fatal_error(self, mapset=None):
-        """Return the temporal database name of a specific mapset
-
-           :param mapset: Name of the mapset
-
-           :returns: Name of the database or None if no temporal database present
+        """Generate a fatal error in libgis.
+        
+            This function is only for testing purpose.
         """
         self.check_server()
         self.client_conn.send([RPCDefs.G_FATAL_ERROR])
@@ -1365,8 +1363,11 @@ class CLibrariesInterface(object):
         """Receive the data and throw an FatalError exception in case the server 
            process was killed and the pipe was closed by the checker thread"""
         try:
-            return self.client_conn.recv()
-        except EOFError:
+            ret = self.client_conn.recv()
+            if isinstance(ret,  FatalError):
+               raise FatalError()
+            return ret
+        except (EOFError,  IOError,  FatalError):
             # The pipe was closed by the checker thread because
             # the server process was killed
             raise FatalError(message)
