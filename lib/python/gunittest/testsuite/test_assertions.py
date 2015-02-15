@@ -189,6 +189,68 @@ class TestRasterMapAssertions(grass.gunittest.TestCase):
                           msg="The difference of different maps should have huge mean")
 
 
+class TestMapExistsAssertions(grass.gunittest.TestCase):
+    # pylint: disable=R0904
+
+    raster_cell = 'TestMapExistsAssertions_raster_cell'
+    raster_dcell = 'TestMapExistsAssertions_raster_dcell'
+    raster3d = 'TestMapExistsAssertions_raster3D'
+    vector = 'TestMapExistsAssertions_vector'
+
+    @classmethod
+    def setUpClass(cls):
+        cls.use_temp_region()
+        cls.runModule('g.region', n=10, e=10, s=0, w=0, t=10, b=0, res=1)
+        cls.runModule('r.mapcalc', expression=cls.raster_cell + ' = 1')
+        cls.runModule('r.mapcalc', expression=cls.raster_dcell + ' = 1.0')
+        cls.runModule('r3.mapcalc', expression=cls.raster3d + ' = 1.0')
+        cls.runModule('v.edit', map=cls.vector, tool='create')
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.runModule('g.remove', flags='f',
+                      type=['raster', 'raster3d', 'vector'],
+                      name=[cls.raster_cell, cls.raster_dcell,
+                            cls.raster3d, cls.vector])
+        cls.del_temp_region()
+
+    def test_rast_cell_exists(self):
+        self.assertRasterExists(self.raster_cell)
+
+    def test_rast_dcell_exists(self):
+        self.assertRasterExists(self.raster_dcell)
+
+    def test_rast_does_not_exist(self):
+        self.assertRaises(self.failureException,
+                          self.assertRasterExists,
+                          'does_not_exists')
+
+    def test_rast3d_exists(self):
+        self.assertRaster3dExists(self.raster3d)
+
+    def test_rast3d_does_not_exist(self):
+        self.assertRaises(self.failureException,
+                          self.assertRaster3dExists,
+                          'does_not_exists')
+
+    def test_vect_exists(self):
+        self.assertVectorExists(self.vector)
+
+    def test_vect_does_not_exist(self):
+        self.assertRaises(self.failureException,
+                          self.assertVectorExists,
+                          'does_not_exists')
+
+    def test_rast_does_not_exist_in_current_mapset(self):
+		# expecting that there is elevation in PERMANENT
+		# TODO: use skip decorator
+		# TODO: add the same tests but for vect and rast3d
+        self.assertRaises(self.failureException,
+                          self.assertRasterExists,
+                          'elevation',
+                          msg="Rasters from different mapsets should be ignored")
+
+
 class TestFileAssertions(grass.gunittest.TestCase):
     # pylint: disable=R0904
 
