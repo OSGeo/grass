@@ -46,6 +46,7 @@ pot:
 		echo "Build GRASS before running 'make pot'" >&2 ; \
 		exit 1 ; \
 	fi
+	@rm -f ./templates/*.pot
 	@echo "Generating $(LIBDOMAIN)..."
 	xgettext --keyword=_ --keyword=_n:1,2 -cGTC -o ./templates/$(LIBDOMAIN).pot `$(LIB_POTFILES)`
 	@echo "Generating $(MODDOMAIN)..."
