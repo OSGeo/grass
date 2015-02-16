@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-08 19:56+0100\n"
+"POT-Creation-Date: 2015-02-16 14:18+0100\n"
 "PO-Revision-Date: 2005-03-09 12:50+0100\n"
 "Last-Translator: Dr. Alaa Masoud <alaamasoud@hotmail.com>\n"
 "Language-Team: Arabic <grass-translations@lists.osgeo.org>\n"
@@ -1968,29 +1968,7 @@ msgstr "الشكل المطلوب غير متاح فى هذا الأصدار"
 msgid "Searched for a web browser, but none found"
 msgstr ""
 
-#: ../lib/init/grass.py:502
-#, python-format
-msgid ""
-"\n"
-"WELCOME TO GRASS %s\n"
-"\n"
-"   1) Have at your side all available GRASS GIS tutorials\n"
-"\n"
-"   2) When working on your location, the following materials\n"
-"      are extremely useful:\n"
-"      - A topographic map of your area\n"
-"      - Current catalog of available computer maps\n"
-"\n"
-"   3) Check the GRASS GIS web pages for supporting mailing lists and more:\n"
-"      http://grass.osgeo.org\n"
-msgstr ""
-
-#: ../lib/init/grass.py:518
-#, fuzzy
-msgid "Hit RETURN to continue"
-msgstr "RETURN أضغط   لألغاء الأمر\n"
-
-#: ../lib/init/grass.py:547
+#: ../lib/init/grass.py:528
 msgid ""
 "The python command does not work as expected!\n"
 "Please check your GRASS_PYTHON environment variable.\n"
@@ -2000,7 +1978,7 @@ msgid ""
 "Hit RETURN to continue.\n"
 msgstr ""
 
-#: ../lib/init/grass.py:559
+#: ../lib/init/grass.py:540
 msgid ""
 "It appears that the X Windows system is not active.\n"
 "A graphical based user interface is not supported.\n"
@@ -2009,46 +1987,46 @@ msgid ""
 "Hit RETURN to continue"
 msgstr ""
 
-#: ../lib/init/grass.py:606 ../lib/gis/make_mapset.c:66
+#: ../lib/init/grass.py:587 ../lib/gis/make_mapset.c:66
 #, fuzzy, c-format, python-format
 msgid "Location <%s> doesn't exist"
 msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
 
-#: ../lib/init/grass.py:611
+#: ../lib/init/grass.py:592
 #, fuzzy, python-format
 msgid "ERROR: <%s> is not a valid GRASS location"
 msgstr "أسفا<%s> ليس إختيار صحيح\n"
 
-#: ../lib/init/grass.py:614
+#: ../lib/init/grass.py:595
 #, python-format
 msgid ""
 "Mapset <%s> doesn't exist in GRASS location <%s>. A new mapset can be "
 "created by '-c' switch."
 msgstr ""
 
-#: ../lib/init/grass.py:633
+#: ../lib/init/grass.py:614
 #, python-format
 msgid "Failed to create new location. The location <%s> already exists."
 msgstr ""
 
-#: ../lib/init/grass.py:665
+#: ../lib/init/grass.py:646
 msgid "Missing WIND file fixed"
 msgstr ""
 
-#: ../lib/init/grass.py:677
+#: ../lib/init/grass.py:658
 msgid ""
 "GISDBASE, LOCATION_NAME and MAPSET variables not set properly.\n"
 "Interactive startup needed."
 msgstr ""
 
-#: ../lib/init/grass.py:692
+#: ../lib/init/grass.py:673
 #, python-format
 msgid ""
 "Invalid user interface specified - <%s>. Use the --help option to see valid "
 "interface names."
 msgstr ""
 
-#: ../lib/init/grass.py:705
+#: ../lib/init/grass.py:686
 msgid ""
 "Error in GUI startup. If necessary, please report this error to the GRASS "
 "developers.\n"
@@ -2057,19 +2035,19 @@ msgid ""
 "Hit RETURN to continue..."
 msgstr ""
 
-#: ../lib/init/grass.py:715
+#: ../lib/init/grass.py:696
 msgid ""
 "Received EXIT message from GUI.\n"
 "GRASS is not started. Bye."
 msgstr ""
 
-#: ../lib/init/grass.py:718
+#: ../lib/init/grass.py:699
 msgid ""
 "Invalid return code from GUI startup script.\n"
 "Please advise GRASS developers of this error."
 msgstr ""
 
-#: ../lib/init/grass.py:729
+#: ../lib/init/grass.py:710
 msgid ""
 "Error reading data path information from g.gisenv.\n"
 "GISDBASE=%(gisbase)s\n"
@@ -2079,56 +2057,56 @@ msgid ""
 "Check the <%s(file)> file."
 msgstr ""
 
-#: ../lib/init/grass.py:756
+#: ../lib/init/grass.py:737
 #, python-format
 msgid "Environmental variable '%s' already set, ignoring value '%s'"
 msgstr ""
 
-#: ../lib/init/grass.py:818
+#: ../lib/init/grass.py:799
 msgid "Default locale settings are missing. GRASS running with C locale."
 msgstr ""
 
-#: ../lib/init/grass.py:822
+#: ../lib/init/grass.py:803
 #, python-format
 msgid ""
 "A language override has been requested. Trying to switch GRASS into '%s'..."
 msgstr ""
 
-#: ../lib/init/grass.py:881
+#: ../lib/init/grass.py:862
 #, python-format
 msgid "Path '%s' doesn't exist"
 msgstr ""
 
-#: ../lib/init/grass.py:889
+#: ../lib/init/grass.py:870
 #, python-format
 msgid ""
 "%(user)s is currently running GRASS in selected mapset (file %(file)s "
 "found). Concurrent use not allowed."
 msgstr ""
 
-#: ../lib/init/grass.py:893
+#: ../lib/init/grass.py:874
 #, python-format
 msgid ""
 "Unable to properly access '%s'.\n"
 "Please notify system personel."
 msgstr ""
 
-#: ../lib/init/grass.py:908
+#: ../lib/init/grass.py:889
 #, fuzzy
 msgid "Building user fontcap..."
 msgstr "يتم الان بناء الطبولوجى ...\n"
 
-#: ../lib/init/grass.py:953
+#: ../lib/init/grass.py:934
 #, python-format
 msgid "Unsupported shell <%(sh)s>: %(env)s"
 msgstr ""
 
-#: ../lib/init/grass.py:958
+#: ../lib/init/grass.py:939
 #, fuzzy
 msgid "The SHELL variable is not set"
 msgstr "GISRC - المتغير لم يحدد بشكل صحيح"
 
-#: ../lib/init/grass.py:969
+#: ../lib/init/grass.py:950
 #, python-format
 msgid ""
 "Job file '%s' has been defined in the 'GRASS_BATCH_JOB' variable but not "
@@ -2137,105 +2115,105 @@ msgid ""
 "Use 'unset GRASS_BATCH_JOB' to disable batch job processing."
 msgstr ""
 
-#: ../lib/init/grass.py:974
+#: ../lib/init/grass.py:955
 #, python-format
 msgid "Change file permission to 'executable' for '%s'"
 msgstr ""
 
-#: ../lib/init/grass.py:976
+#: ../lib/init/grass.py:957
 #, python-format
 msgid "Executing '%s' ..."
 msgstr ""
 
-#: ../lib/init/grass.py:981
+#: ../lib/init/grass.py:962
 #, python-format
 msgid "Execution of '%s' finished."
 msgstr ""
 
-#: ../lib/init/grass.py:987
+#: ../lib/init/grass.py:968
 #, python-format
 msgid "GRASS GUI should be <%s>"
 msgstr ""
 
-#: ../lib/init/grass.py:1016
+#: ../lib/init/grass.py:997
 #, python-format
 msgid "Welcome to GRASS GIS %s"
 msgstr ""
 
-#: ../lib/init/grass.py:1035
+#: ../lib/init/grass.py:1016
 msgid "GRASS GIS homepage:"
 msgstr ""
 
-#: ../lib/init/grass.py:1036
+#: ../lib/init/grass.py:1017
 msgid "This version running through:"
 msgstr ""
 
-#: ../lib/init/grass.py:1038
+#: ../lib/init/grass.py:1019
 msgid "Help is available with the command:"
 msgstr ""
 
-#: ../lib/init/grass.py:1039
+#: ../lib/init/grass.py:1020
 msgid "See the licence terms with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1042
+#: ../lib/init/grass.py:1023
 msgid "If required, restart the GUI with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1044
+#: ../lib/init/grass.py:1025
 msgid "Start the GUI with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1046
+#: ../lib/init/grass.py:1027
 msgid "When ready to quit enter:"
 msgstr ""
 
-#: ../lib/init/grass.py:1136
+#: ../lib/init/grass.py:1117
 msgid "2D and 3D raster MASKs present"
 msgstr ""
 
-#: ../lib/init/grass.py:1137
+#: ../lib/init/grass.py:1118
 msgid "Raster MASK present"
 msgstr ""
 
-#: ../lib/init/grass.py:1138
+#: ../lib/init/grass.py:1119
 msgid "3D raster MASK present"
 msgstr ""
 
-#: ../lib/init/grass.py:1177
+#: ../lib/init/grass.py:1158
 #, fuzzy, python-format
 msgid "Failed to start shell '%s'"
 msgstr "لم يمكن فتحه %s فى %s"
 
-#: ../lib/init/grass.py:1182
+#: ../lib/init/grass.py:1163
 #, python-format
 msgid "Batch job '%s' (defined in GRASS_BATCH_JOB variable) was executed."
 msgstr ""
 
-#: ../lib/init/grass.py:1183 ../lib/init/grass.py:1188
+#: ../lib/init/grass.py:1164 ../lib/init/grass.py:1169
 msgid "Goodbye from GRASS GIS"
 msgstr ""
 
-#: ../lib/init/grass.py:1186
+#: ../lib/init/grass.py:1167
 #, fuzzy
 msgid "Done."
 msgstr "لاشىء"
 
-#: ../lib/init/grass.py:1193
+#: ../lib/init/grass.py:1174
 #, fuzzy
 msgid "Cleaning up temporary files..."
 msgstr "لم يمكن فتح ملف مؤقت"
 
-#: ../lib/init/grass.py:1237
+#: ../lib/init/grass.py:1218
 #, fuzzy, python-format
 msgid "Parameter <%s> not supported"
 msgstr "غير موجود'%s' الفيكتور"
 
-#: ../lib/init/grass.py:1360
+#: ../lib/init/grass.py:1341
 msgid "Flag -e required also flag -c"
 msgstr ""
 
-#: ../lib/init/grass.py:1403
+#: ../lib/init/grass.py:1384
 #, python-format
 msgid ""
 "Unable to start GRASS. You can:\n"
@@ -2245,15 +2223,15 @@ msgid ""
 "path/to/location/mapset`)"
 msgstr ""
 
-#: ../lib/init/grass.py:1413
+#: ../lib/init/grass.py:1394
 msgid "Creating new GRASS GIS location/mapset..."
 msgstr ""
 
-#: ../lib/init/grass.py:1415
+#: ../lib/init/grass.py:1396
 msgid "Starting GRASS GIS..."
 msgstr ""
 
-#: ../lib/init/grass.py:1473
+#: ../lib/init/grass.py:1454
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr ""
@@ -9180,6 +9158,10 @@ msgstr "غير موجود'%s' الفيكتور"
 #, fuzzy
 msgid "Unknown query tool"
 msgstr "مسقط غير معروف"
+
+#, fuzzy
+#~ msgid "Hit RETURN to continue"
+#~ msgstr "RETURN أضغط   لألغاء الأمر\n"
 
 #, fuzzy
 #~ msgid "Vector map <%s> is not opened on topology level"

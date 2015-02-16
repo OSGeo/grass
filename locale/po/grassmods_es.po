@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-08 19:56+0100\n"
+"POT-Creation-Date: 2015-02-16 14:18+0100\n"
 "PO-Revision-Date: 2015-01-23 20:45-0600\n"
 "Last-Translator: \n"
 "Language-Team: Español <grass-translations@lists.osgeo.org>\n"
@@ -38,7 +38,7 @@ msgstr ""
 #: ../raster/r.coin/main.c:66 ../raster/r.tile/main.c:43
 #: ../raster/r.in.xyz/main.c:159 ../raster/r.series/main.c:133
 #: ../raster/r.grow.distance/main.c:151 ../raster/r.out.ppm3/main.c:57
-#: ../raster/r.ros/main.c:213 ../raster/r.null/main.c:59
+#: ../raster/r.ros/main.c:212 ../raster/r.null/main.c:59
 #: ../raster/r.sunmask/main.c:116 ../raster/r.latlong/main.c:56
 #: ../raster/r.in.gridatb/main.c:45 ../raster/r.in.poly/main.c:34
 #: ../raster/r.what.color/main.c:88 ../raster/r.support.stats/main.c:38
@@ -1128,12 +1128,12 @@ msgstr "Asignando coste negativo a las celda nulas. Celdas nulas excluidas."
 #: ../raster/r.sim/simlib/output.c:583 ../raster/r.sim/simlib/output.c:755
 #: ../raster/r.category/main.c:119 ../raster/r.category/main.c:140
 #: ../raster/r.coin/main.c:121 ../raster/r.coin/main.c:123
-#: ../raster/r.tile/main.c:86 ../raster/r.ros/main.c:368
-#: ../raster/r.ros/main.c:379 ../raster/r.ros/main.c:384
-#: ../raster/r.ros/main.c:389 ../raster/r.ros/main.c:394
-#: ../raster/r.ros/main.c:408 ../raster/r.ros/main.c:412
-#: ../raster/r.ros/main.c:427 ../raster/r.ros/main.c:431
-#: ../raster/r.ros/main.c:442 ../raster/r.null/main.c:121
+#: ../raster/r.tile/main.c:86 ../raster/r.ros/main.c:367
+#: ../raster/r.ros/main.c:378 ../raster/r.ros/main.c:383
+#: ../raster/r.ros/main.c:388 ../raster/r.ros/main.c:393
+#: ../raster/r.ros/main.c:407 ../raster/r.ros/main.c:411
+#: ../raster/r.ros/main.c:426 ../raster/r.ros/main.c:430
+#: ../raster/r.ros/main.c:441 ../raster/r.null/main.c:121
 #: ../raster/r.colors/edit_colors.c:393 ../raster/r.info/main.c:103
 #: ../raster/r.buffer/main.c:112 ../raster/r.mapcalc/map.c:505
 #: ../raster/r.report/parse.c:280 ../raster/r.distance/parse.c:72
@@ -3562,7 +3562,6 @@ msgstr "No se puede leer la tabla de color para %s"
 #: ../raster/r.in.png/main.c:520 ../raster/r.in.lidar/main.c:171
 #: ../raster/r.external/main.c:56 ../raster/r.in.bin/main.c:258
 #: ../locale/scriptstrings/v.in.mapgen_to_translate.c:3
-#: ../locale/scriptstrings/v.convert.all_to_translate.c:3
 #: ../locale/scriptstrings/r.in.srtm_to_translate.c:3
 #: ../locale/scriptstrings/t.rast.import_to_translate.c:3
 #: ../locale/scriptstrings/v.in.geonames_to_translate.c:3
@@ -3588,7 +3587,6 @@ msgstr "importar"
 #: ../raster/r.in.xyz/main.c:161 ../raster/r.in.ascii/main.c:71
 #: ../raster/r.to.vect/main.c:71 ../raster/r.to.rast3/main.c:198
 #: ../raster/r.to.rast3elev/main.c:362
-#: ../locale/scriptstrings/v.convert.all_to_translate.c:4
 #: ../locale/scriptstrings/t.rast.to.rast3_to_translate.c:3
 #: ../locale/scriptstrings/r.out.xyz_to_translate.c:5
 #: ../raster3d/r3.in.ascii/main.c:316 ../raster3d/r3.out.ascii/main.c:305
@@ -4086,33 +4084,33 @@ msgstr "Archivo de color para <%s> no disponible"
 msgid "Converting ... "
 msgstr "Convirtiendo ... "
 
-#: ../raster/r.ros/main.c:214 ../raster/r.spread/main.c:106
+#: ../raster/r.ros/main.c:213 ../raster/r.spread/main.c:106
 #: ../raster/r.spreadpath/main.c:89
 #, fuzzy
 msgid "fire"
 msgstr "Líneas"
 
-#: ../raster/r.ros/main.c:215 ../raster/r.spread/main.c:107
+#: ../raster/r.ros/main.c:214 ../raster/r.spread/main.c:107
 #, fuzzy
 msgid "spread"
 msgstr "leer"
 
-#: ../raster/r.ros/main.c:216
+#: ../raster/r.ros/main.c:215
 #, fuzzy
 msgid "rate of spread"
 msgstr "Nombre del creador:  %s"
 
-#: ../raster/r.ros/main.c:217 ../raster/r.lake/main.c:152
+#: ../raster/r.ros/main.c:216 ../raster/r.lake/main.c:152
 #: ../raster/r.spread/main.c:108
 msgid "hazard"
 msgstr ""
 
-#: ../raster/r.ros/main.c:218
+#: ../raster/r.ros/main.c:217
 #, fuzzy
 msgid "Generates rate of spread raster maps."
 msgstr "Genera estadísticas de superficie para capas de mapa ráster."
 
-#: ../raster/r.ros/main.c:220
+#: ../raster/r.ros/main.c:219
 #, fuzzy
 msgid ""
 "Generates three, or four raster map layers showing the base (perpendicular) "
@@ -4125,12 +4123,12 @@ msgstr ""
 "3) la dirección de la máxima ROS y (opcional) 4) la distancia spotting "
 "potencial máxima."
 
-#: ../raster/r.ros/main.c:227
+#: ../raster/r.ros/main.c:226
 #, fuzzy
 msgid "Raster map containing fuel models"
 msgstr "Nombre del mapa ráster que contiene MODELOS de combustible"
 
-#: ../raster/r.ros/main.c:229
+#: ../raster/r.ros/main.c:228
 msgid ""
 "Name of an existing raster map layer in the user's current mapset search "
 "path containing the standard fuel models defined by the USDA Forest Service. "
@@ -4141,13 +4139,13 @@ msgstr ""
 "definidos por la USDA Forest Service. Los valores válidos son 1-13; otros "
 "números son reconocidos como barreras por r.ros."
 
-#: ../raster/r.ros/main.c:238
+#: ../raster/r.ros/main.c:237
 #, fuzzy
 msgid "Raster map containing the 1-hour fuel moisture (%)"
 msgstr ""
 "Nombre del mapa ráster que contiene la HUMEDAD de combustible a 1-HORA (%)"
 
-#: ../raster/r.ros/main.c:240 ../raster/r.spread/main.c:204
+#: ../raster/r.ros/main.c:239 ../raster/r.spread/main.c:204
 msgid ""
 "Name of an existing raster map layer in the user's current mapset search "
 "path containing the 1-hour (<.25\") fuel moisture (percentage content "
@@ -4157,13 +4155,13 @@ msgstr ""
 "mapas del usuario que contiene la humedad del combustible a 1 hora (<.25\") "
 "(procentaje de contenido multiplicado por 100)."
 
-#: ../raster/r.ros/main.c:248
+#: ../raster/r.ros/main.c:247
 #, fuzzy
 msgid "Raster map containing the 10-hour fuel moisture (%)"
 msgstr ""
 "Nombre del mapa ráster que contiene la HUMEDAD de combustible a 10-HORAS (%)"
 
-#: ../raster/r.ros/main.c:250
+#: ../raster/r.ros/main.c:249
 msgid ""
 "Name of an existing raster map layer in the user's current mapset search "
 "path containing the 10-hour (.25-1\") fuel moisture (percentage content "
@@ -4173,13 +4171,13 @@ msgstr ""
 "mapas del usuario que contiene la humedad del combustible a 10 horas "
 "(.25-1\") (procentaje de contenido multiplicado por 100)."
 
-#: ../raster/r.ros/main.c:258
+#: ../raster/r.ros/main.c:257
 #, fuzzy
 msgid "Raster map containing the 100-hour fuel moisture (%)"
 msgstr ""
 "Nombre del mapa ráster que contiene la HUMEDAD de combustible a 100-HORAS (%)"
 
-#: ../raster/r.ros/main.c:260
+#: ../raster/r.ros/main.c:259
 msgid ""
 "Name of an existing raster map layer in the user's current mapset search "
 "path containing the 100-hour (1-3\") fuel moisture (percentage content "
@@ -4189,13 +4187,13 @@ msgstr ""
 "mapas del usuario que contiene la humedad del combustible a 100 horas "
 "(1-3\") (procentaje de contenido multiplicado por 100)."
 
-#: ../raster/r.ros/main.c:267
+#: ../raster/r.ros/main.c:266
 #, fuzzy
 msgid "Raster map containing live fuel moisture (%)"
 msgstr ""
 "Mapa ráster que contiene los valores usados para la longitud de las flechas"
 
-#: ../raster/r.ros/main.c:269
+#: ../raster/r.ros/main.c:268
 msgid ""
 "Name of an existing raster map layer in the user's current mapset search "
 "path containing live (herbaceous) fuel moisture (percentage content "
@@ -4205,12 +4203,12 @@ msgstr ""
 "mapas del usuario que contiene la humedad del combustible vivo (herbáceo) "
 "(procentaje de contenido multiplicado por 100)."
 
-#: ../raster/r.ros/main.c:277
+#: ../raster/r.ros/main.c:276
 #, fuzzy
-msgid "Raster map containing midflame wind velocitys (ft/min)"
+msgid "Raster map containing midflame wind velocities (ft/min)"
 msgstr "Nombre ráster mínimo"
 
-#: ../raster/r.ros/main.c:279 ../raster/r.spread/main.c:192
+#: ../raster/r.ros/main.c:278 ../raster/r.spread/main.c:192
 msgid ""
 "Name of an existing raster map layer in the user's current mapset search "
 "path containing wind velocities at half of the average flame height (feet/"
@@ -4220,12 +4218,12 @@ msgstr ""
 "mapas del usuario que contiene la velocidad del viento a la mitad de la "
 "altura promedio de la flama (pies/minuto)."
 
-#: ../raster/r.ros/main.c:287
+#: ../raster/r.ros/main.c:286
 #, fuzzy
 msgid "Name of raster map containing wind directions (degree)"
 msgstr "Nombre del mapa ráster que contiene las DIRECCIONES de viento (grados)"
 
-#: ../raster/r.ros/main.c:289
+#: ../raster/r.ros/main.c:288
 msgid ""
 "Name of an existing raster map layer in the user's current mapset search "
 "path containing wind direction, clockwise from north (degree)."
@@ -4234,12 +4232,12 @@ msgstr ""
 "mapas del usuario que contiene la dirección del viento, en favor de las "
 "manecillas del reloj a partir del norte (grados)."
 
-#: ../raster/r.ros/main.c:297
+#: ../raster/r.ros/main.c:296
 #, fuzzy
 msgid "Name of raster map containing slope (degree)"
 msgstr "Nombre del mapa ráster que contiene la PENDIENTE (grados)"
 
-#: ../raster/r.ros/main.c:299
+#: ../raster/r.ros/main.c:298
 msgid ""
 "Name of an existing raster map layer in the user's current mapset search "
 "path containing topographic slope (degree)."
@@ -4247,14 +4245,14 @@ msgstr ""
 "Nombre de un mapa raster existente en la ruta de búsqueda del directorio de "
 "mapas del usuario que contiene la pendiente topográfica (grados)."
 
-#: ../raster/r.ros/main.c:307
+#: ../raster/r.ros/main.c:306
 #, fuzzy
 msgid "Raster map containing aspect (degree, CCW from E)"
 msgstr ""
 "Nombre del mapa ráster que contiene la ORIENTACIÓN (grados, en sentido "
 "antihorario desde el Este)"
 
-#: ../raster/r.ros/main.c:309
+#: ../raster/r.ros/main.c:308
 msgid ""
 "Name of an existing raster map layer in the user's current mapset search "
 "path containing topographic aspect, counterclockwise from east (GRASS "
@@ -4264,12 +4262,12 @@ msgstr ""
 "mapas del usuario que contiene el aspecto topográfico, en contra de las "
 "manecillas del reloj a partir del este (convención de GRASS) en grados."
 
-#: ../raster/r.ros/main.c:317
+#: ../raster/r.ros/main.c:316
 #, fuzzy
 msgid "Raster map containing elevation (m, required for spotting)"
 msgstr "Nombre del mapa ráster que contiene la ELEVACIÓN (m) (requerido w/ -s)"
 
-#: ../raster/r.ros/main.c:319
+#: ../raster/r.ros/main.c:318
 #, fuzzy
 msgid ""
 "Name of an existing raster map layer in the user's current mapset search "
@@ -4280,62 +4278,62 @@ msgstr ""
 "mapas del usuario actual que contiene los valores máximos de ROSes, en "
 "dirección de las agujas del reloj desde el norte (grado)."
 
-#: ../raster/r.ros/main.c:328
+#: ../raster/r.ros/main.c:327
 #, fuzzy
 msgid "Output raster map containing base ROS (cm/min)"
 msgstr "Nombre de mapa ráster que contenga Tasa de Propagación BASE /cm/min)"
 
-#: ../raster/r.ros/main.c:330
+#: ../raster/r.ros/main.c:329
 msgid "Base (perpendicular) rate of spread (ROS)"
 msgstr ""
 
-#: ../raster/r.ros/main.c:336
+#: ../raster/r.ros/main.c:335
 #, fuzzy
 msgid "Output raster map containing maximal ROS (cm/min)"
 msgstr "Nombre de mapa ráster que contenga Tasa de Propagación BASE /cm/min)"
 
-#: ../raster/r.ros/main.c:338
+#: ../raster/r.ros/main.c:337
 msgid "The maximum (forward) rate of spread (ROS)"
 msgstr ""
 
-#: ../raster/r.ros/main.c:344
+#: ../raster/r.ros/main.c:343
 #, fuzzy
 msgid "Output raster map containing directions of maximal ROS (degree)"
 msgstr ""
 "Nombre de mapa ráster que contenga Direcciones de máxima Tasa de Propagación "
 "ROS (grados)"
 
-#: ../raster/r.ros/main.c:346
+#: ../raster/r.ros/main.c:345
 msgid "The direction of the maximal (forward) rate of spread (ROS)"
 msgstr ""
 
-#: ../raster/r.ros/main.c:352
+#: ../raster/r.ros/main.c:351
 #, fuzzy
 msgid "Output raster map containing maximal spotting distance (m)"
 msgstr ""
 "Nombre del mapa raster que contienen la distancia máxima SPOTting (m) "
 "(necesaria w/ -s)"
 
-#: ../raster/r.ros/main.c:354
+#: ../raster/r.ros/main.c:353
 msgid ""
-"The maximal potential spotting distance raster will be also generated "
-"(requires elevation raster map to be provided)."
+"The maximal potential spotting distance (requires elevation raster map to be "
+"provided)."
 msgstr ""
 
-#: ../raster/r.ros/main.c:373
+#: ../raster/r.ros/main.c:372
 msgid ""
 "No dead fuel moisture is given. At least one of the 1-h, 10-h, 100-h "
 "moisture layers is required."
 msgstr ""
 
-#: ../raster/r.ros/main.c:397
+#: ../raster/r.ros/main.c:396
 #, c-format
 msgid ""
 "A wind direction layer should be given if the wind velocity layer <%s> has "
 "been given"
 msgstr ""
 
-#: ../raster/r.ros/main.c:402
+#: ../raster/r.ros/main.c:401
 #, c-format
 msgid ""
 "A wind velocity layer should be given if the wind direction layer <%s> has "
@@ -4344,27 +4342,21 @@ msgstr ""
 "Se debe dar una capa de velocidad del viento si se ha dado la capa de "
 "dirección del viento <%s>"
 
-#: ../raster/r.ros/main.c:416
+#: ../raster/r.ros/main.c:415
 #, c-format
 msgid "An aspect layer should be given if the slope layer <%s> has been given"
 msgstr ""
 
-#: ../raster/r.ros/main.c:421
+#: ../raster/r.ros/main.c:420
 #, c-format
 msgid "A slope layer should be given if the aspect layer <%s> has been given"
 msgstr ""
 
-#: ../raster/r.ros/main.c:437
+#: ../raster/r.ros/main.c:436
 msgid "An elevation layer should be given if considering spotting"
 msgstr ""
 
-#: ../raster/r.ros/main.c:455 ../raster/r.ros/main.c:459
-#: ../raster/r.ros/main.c:463 ../raster/r.ros/main.c:470
-#, c-format
-msgid "Raster map <%s> already exists in mapset <%s>"
-msgstr "El mapa ráster <%s> ya existe en el directorio de mapas<%s>"
-
-#: ../raster/r.ros/main.c:891
+#: ../raster/r.ros/main.c:872
 #, fuzzy, c-format
 msgid "Raster maps <%s>, <%s> and <%s> created."
 msgstr "El mapa ráster <%s> ya existe"
@@ -8540,7 +8532,6 @@ msgstr "No se pueden otorgar privilegios sobre la tabla <%s>"
 #: ../locale/scriptstrings/v.db.univar_to_translate.c:2
 #: ../locale/scriptstrings/v.db.join_to_translate.c:2
 #: ../locale/scriptstrings/v.db.dropcolumn_to_translate.c:2
-#: ../locale/scriptstrings/v.convert.all_to_translate.c:2
 #: ../locale/scriptstrings/v.in.geonames_to_translate.c:2
 #: ../locale/scriptstrings/t.vect.import_to_translate.c:4
 #: ../locale/scriptstrings/d.what.vect_to_translate.c:3
@@ -14368,7 +14359,6 @@ msgstr "El mapa raster 3D utilizado para zonificar tiene que ser del tipo CELL"
 #: ../raster/r.univar/r.univar_main.c:52
 #: ../locale/scriptstrings/v.db.univar_to_translate.c:6
 #: ../locale/scriptstrings/db.univar_to_translate.c:6
-#: ../locale/scriptstrings/v.rast.stats_to_translate.c:11
 #: ../vector/v.univar/main.c:122
 msgid "Percentile to calculate (requires extended statistics flag)"
 msgstr "Percentil a calcular (requiere la opción de estadísticas ampliadas)"
@@ -16158,85 +16148,104 @@ msgstr "Lanzando GUI <%s> en el fondo, por favor espere..."
 
 #: ../general/g.version/main.c:63
 #, fuzzy
-msgid "Displays GRASS version info."
-msgstr "Muestra información de versión y copyright."
+msgid "citing"
+msgstr "Configuraciones"
 
 #: ../general/g.version/main.c:64
+#, fuzzy
+msgid "copyright"
+msgstr "copiando"
+
+#: ../general/g.version/main.c:65
+#, fuzzy
+msgid "version"
+msgstr "Por posición"
+
+#: ../general/g.version/main.c:66
+msgid "license"
+msgstr ""
+
+#: ../general/g.version/main.c:67
+#, fuzzy
+msgid "Displays GRASS GIS version info."
+msgstr "Muestra información de versión y copyright."
+
+#: ../general/g.version/main.c:68
 #, fuzzy
 msgid "Optionally also prints build or copyright information."
 msgstr "Muestra información de versión y copyright."
 
-#: ../general/g.version/main.c:68
+#: ../general/g.version/main.c:72
 msgid "Print also the copyright message"
 msgstr "Imprimir también el mensaje de copyright"
 
-#: ../general/g.version/main.c:69 ../general/g.version/main.c:74
-#: ../general/g.version/main.c:80 ../general/g.version/main.c:86
+#: ../general/g.version/main.c:73 ../general/g.version/main.c:78
+#: ../general/g.version/main.c:84 ../general/g.version/main.c:90
 #, fuzzy
 msgid "Additional info"
 msgstr "Opciones adicionales para r.tileset"
 
-#: ../general/g.version/main.c:73
+#: ../general/g.version/main.c:77
 #, fuzzy
 msgid "Print also the build information"
 msgstr "Imprimir también la información de la instalación de GRASS"
 
-#: ../general/g.version/main.c:79
+#: ../general/g.version/main.c:83
 #, fuzzy
 msgid "Print also the GIS library revision number and date"
 msgstr "Imprimir también el número y fecha de la revisión de la librería SIG"
 
-#: ../general/g.version/main.c:84
+#: ../general/g.version/main.c:88
 #, fuzzy
 msgid "Print also extended info for additional libraries"
 msgstr "Imprimir sólo información de topología"
 
-#: ../general/g.version/main.c:85
+#: ../general/g.version/main.c:89
 msgid "GDAL/OGR, PROJ.4, GEOS"
 msgstr "GDAL/OGR, PROJ.4, GEOS"
 
-#: ../general/g.version/main.c:90
+#: ../general/g.version/main.c:94
 #, fuzzy
 msgid "Print info in shell script style (including SVN revision number)"
 msgstr ""
 "Imprimir información en el estilo de script de la consola de comandos de UNIX"
 
-#: ../general/g.version/main.c:91
+#: ../general/g.version/main.c:95
 msgid "Shell"
 msgstr "Consola de comandos"
 
-#: ../general/g.version/main.c:153
+#: ../general/g.version/main.c:157
 #, c-format
 msgid ""
 "Cannot determine GRASS libgis version and date number. The GRASS build might "
 "be broken. Report this to developers or packagers.\n"
 msgstr ""
 
-#: ../general/g.version/main.c:160
+#: ../general/g.version/main.c:164
 msgid ""
 "GRASS GIS libgis version and date number don't have the expected format. "
 "Trying to print the original strings..."
 msgstr ""
 
-#: ../general/g.version/main.c:162
+#: ../general/g.version/main.c:166
 #, c-format
 msgid "GIS_H_VERSION=\"%s\""
 msgstr "GIS_H_VERSION=\"%s\""
 
-#: ../general/g.version/main.c:163
+#: ../general/g.version/main.c:167
 #, c-format
 msgid "GIS_H_DATE=\"%s\""
 msgstr "GIS_H_DATE=\"%s\""
 
-#: ../general/g.version/main.c:193
+#: ../general/g.version/main.c:197
 msgid "GRASS not compiled with GDAL/OGR support"
 msgstr "GRASS no está compilado con soporte GDAL/OGR"
 
-#: ../general/g.version/main.c:204
+#: ../general/g.version/main.c:208
 msgid "GRASS not compiled with GEOS support"
 msgstr "GRASS no está compilado con soporte GEOS"
 
-#: ../general/g.version/main.c:215
+#: ../general/g.version/main.c:219
 msgid "GRASS not compiled with SQLite support"
 msgstr "GRASS no está compilado con soporte SQLite"
 
@@ -19725,15 +19734,6 @@ msgstr ""
 msgid "Name of attribute column(s) to drop"
 msgstr "Nombre de la columna"
 
-#: ../locale/scriptstrings/v.convert.all_to_translate.c:1
-#, fuzzy
-msgid ""
-"Converts all older versions of GRASS vector maps in current mapset to "
-"current format."
-msgstr ""
-"Convierte todos los mapas vectoriales del antiguo GRASS < Ver5.7 del "
-"directorio de mapas actual al formato actual."
-
 #: ../locale/scriptstrings/t.rast.univar_to_translate.c:1
 #, fuzzy
 msgid ""
@@ -21627,6 +21627,11 @@ msgstr "Prefijo de columna para las nuevas columnas de atributos"
 #, fuzzy
 msgid "The methods to use"
 msgstr "Método de reproyección a usar"
+
+#: ../locale/scriptstrings/v.rast.stats_to_translate.c:11
+#, fuzzy
+msgid "Percentile to calculate"
+msgstr "Valor a calcular"
 
 #: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:1
 msgid ""
@@ -41583,22 +41588,27 @@ msgstr ""
 msgid "Generalization (%s)..."
 msgstr "Generalización (%s)..."
 
-#: ../vector/v.generalize/main.c:532
+#: ../vector/v.generalize/main.c:402
+#, fuzzy, c-format
+msgid "Using threshold: %g %s"
+msgstr "Usando resolución [%g]"
+
+#: ../vector/v.generalize/main.c:533
 #, c-format
 msgid "Method '%s' did not preserve first point"
 msgstr "El método '%s' no preservó el primer punto"
 
-#: ../vector/v.generalize/main.c:537
+#: ../vector/v.generalize/main.c:538
 #, c-format
 msgid "Method '%s' did not preserve last point"
 msgstr ""
 
-#: ../vector/v.generalize/main.c:544
+#: ../vector/v.generalize/main.c:545
 #, c-format
 msgid "Method '%s' did not preserve loop"
 msgstr ""
 
-#: ../vector/v.generalize/main.c:576
+#: ../vector/v.generalize/main.c:577
 #, c-format
 msgid ""
 "%d boundaries were not modified because modification would damage topology"
@@ -41606,22 +41616,23 @@ msgstr ""
 "%d contornos no fueron modificados porque la modificación recorte dañaría la "
 "topología"
 
-#: ../vector/v.generalize/main.c:579
+#: ../vector/v.generalize/main.c:580
 #, c-format
 msgid "%d lines/boundaries were not modified due to over-simplification"
 msgstr ""
 
-#: ../vector/v.generalize/main.c:600
-#, c-format
-msgid "Number of vertices for selected features %s from %d to %d (%d%%)."
+#: ../vector/v.generalize/main.c:601
+#, fuzzy, c-format
+msgid ""
+"Number of vertices for selected features %s from %d to %d (%d%% remaining)"
 msgstr ""
 "Número de vértices de los elementos seleccionados %s de %d a %d (%d%%). "
 
-#: ../vector/v.generalize/main.c:601
+#: ../vector/v.generalize/main.c:602
 msgid "reduced"
 msgstr "reducido"
 
-#: ../vector/v.generalize/main.c:601
+#: ../vector/v.generalize/main.c:602
 msgid "changed"
 msgstr "cambiado"
 
@@ -41910,6 +41921,17 @@ msgstr ""
 #: ../vector/v.outlier/main.c:425
 msgid "Outlier detection"
 msgstr "Detección de valores extremos"
+
+#~ msgid "Raster map <%s> already exists in mapset <%s>"
+#~ msgstr "El mapa ráster <%s> ya existe en el directorio de mapas<%s>"
+
+#, fuzzy
+#~ msgid ""
+#~ "Converts all older versions of GRASS vector maps in current mapset to "
+#~ "current format."
+#~ msgstr ""
+#~ "Convierte todos los mapas vectoriales del antiguo GRASS < Ver5.7 del "
+#~ "directorio de mapas actual al formato actual."
 
 #~ msgid "No flag given"
 #~ msgstr "No se señaló ninguna opción"
