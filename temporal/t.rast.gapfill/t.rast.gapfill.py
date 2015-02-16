@@ -51,9 +51,14 @@
 #% description: Assign the space time raster dataset start and end time to the output map
 #%end
 
+import sys
+import copy
 from multiprocessing import Process
 import grass.script as grass
 import grass.temporal as tgis
+
+import grass.pygrass.modules as pymod
+from grass.exceptions import FatalError
 
 ############################################################################
 
@@ -81,6 +86,13 @@ def main():
 
     num = len(maps)
 
+    # Configure the r.to.vect module
+    gapfill_module = pymod.Module("r.series.interp",
+                             overwrite=grass.overwrite(), quiet=True, run_=False,
+                             finish_=False,)
+
+    process_queue = pymod.ParallelModuleQueue(int(nprocs))
+
     gap_list = []
     overwrite_flags = {}
 
@@ -91,15 +103,6 @@ def main():
             count += 1
             _id = "%s_%d@%s" % (base, num + count, mapset)
             _map.set_id(_id)
-            overwrite_flags[_id] = False
-            if _map.map_exists() or _map.is_in_db(dbif):
-                if not grass.overwrite:
-                        grass.fatal(_("Map with name <%s> already exists. "
-                                      "Please use another base name." % (_id)))
-                else:
-                    if _map.is_in_db(dbif):
-                        overwrite_flags[_id] = True
-
 
             gap_list.append(_map)
 
@@ -126,42 +129,57 @@ def main():
                             "Using the first found."))
 
     # Interpolate the maps using parallel processing
-    proc_list = []
-    proc_count = 0
-    num = len(gap_list)
+    result_list = []
 
     for _map in gap_list:
         predecessor = _map.get_follows()[0]
         successor = _map.get_precedes()[0]
 
-        # Build the module inputs strings
-        inputs = "%s,%s" % (predecessor.get_map_id(), successor.get_map_id())
-        dpos = "0,1"
-        output = "%s" % (_map.get_name())
-        outpos = "0.5"
+        gran = sp.get_granularity()
+        tmpval,  start = predecessor.get_temporal_extent_as_tuple()
+        end,  tmpval = successor.get_temporal_extent_as_tuple()
+        
+        # Now resample the gap
+        map_matrix = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity((_map, ),start, end,  gran)
+        
+        map_names = []
+        map_positions = []
+        
+        increment = 1.0/ (len(map_matrix) + 1.0)
+        position = increment
+        count = 0
+        for intp_list in map_matrix:
+            new_map = intp_list[0]
+            count += 1
+            new_id = "%s_%i@%s"%(_map.get_name(),  count,  tgis.get_current_mapset())
+            new_map.set_id(new_id)
+            
+            overwrite_flags[new_id] = False
+            if new_map.map_exists() or new_map.is_in_db(dbif):
+                if not grass.overwrite:
+                        grass.fatal(_("Map with name <%s> already exists. "
+                                      "Please use another base name." % (_id)))
+                else:
+                    if new_map.is_in_db(dbif):
+                        overwrite_flags[new_id] = True
 
-        # Start several processes in parallel
-        proc_list.append(Process(
-            target=run_interp, args=(inputs, dpos, output, outpos)))
-        proc_list[proc_count].start()
-        proc_count += 1
+            map_names.append(new_map.get_name())
+            map_positions.append(position)
+            position += increment
+            
+            result_list.append(new_map)
 
-        if proc_count == nprocs or proc_count == num:
-            proc_count = 0
-            exitcodes = 0
-            for proc in proc_list:
-                proc.join()
-                exitcodes += proc.exitcode
+        mod = copy.deepcopy(gapfill_module)
+        mod(input=(predecessor.get_map_id(), successor.get_map_id()),
+                datapos=(0, 1), output=map_names,  samplingpos=map_positions)
+        sys.stderr.write(mod.get_bash() + "\n")
+        process_queue.put(mod)
 
-            if exitcodes != 0:
-                dbif.close()
-                grass.fatal(_("Error while interpolation computation"))
-
-            # Empty process list
-            proc_list = []
+    # Wait for unfinished processes
+    process_queue.wait()
 
     # Insert new interpolated maps in temporal database and dataset
-    for _map in gap_list:
+    for _map in result_list:
         id = _map.get_id()
         if overwrite_flags[id] == True:
             if _map.is_time_absolute():
