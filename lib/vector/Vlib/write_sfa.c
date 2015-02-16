@@ -142,21 +142,20 @@ off_t V2_write_line_sfa(struct Map_info *Map, int type,
   \param Map pointer to Map_info structure
   \param line feature id to be rewritten
   \param type feature type (see V1_write_line_ogr() for supported types)
-  \param offset unused (kept for consistency)
   \param points pointer to line_pnts structure (feature geometry)
   \param cats pointer to line_cats structure feature categories
   
-  \return offset where line was rewritten
+  \return feature index in offset array (related to pseudo-topology)
   \return -1 on error
 */
-off_t V2_rewrite_line_sfa(struct Map_info *Map, int line, int type,
+off_t V2_rewrite_line_sfa(struct Map_info *Map, off_t line, int type,
 			  const struct line_pnts *points, const struct line_cats *cats)
 {
     G_debug(3, "V2_rewrite_line_sfa(): line=%d type=%d",
-	    line, type);
+	    (int)line, type);
 
     if (line < 1 || line > Map->plus.n_lines) {
-        G_warning(_("Attempt to access feature with invalid id (%d)"), line);
+        G_warning(_("Attempt to access feature with invalid id (%d)"), (int)line);
         return -1;
     }
 
@@ -189,7 +188,7 @@ off_t V2_rewrite_line_sfa(struct Map_info *Map, int line, int type,
   \return 0 on success
   \return -1 on error
 */
-int V2_delete_line_sfa(struct Map_info *Map, int line)
+int V2_delete_line_sfa(struct Map_info *Map, off_t line)
 {
 #if defined HAVE_OGR || defined HAVE_POSTGRES
     int ret, i, type, first;
@@ -198,14 +197,14 @@ int V2_delete_line_sfa(struct Map_info *Map, int line)
     static struct line_cats *Cats = NULL;
     static struct line_pnts *Points = NULL;
 
-    G_debug(3, "V2_delete_line_sfa(): line = %d", line);
+    G_debug(3, "V2_delete_line_sfa(): line = %d", (int)line);
 
     type = first = 0;
     Line = NULL;
     plus = &(Map->plus);
 
     if (line < 1 || line > Map->plus.n_lines) {
-        G_warning(_("Attempt to access feature with invalid id (%d)"), line);
+        G_warning(_("Attempt to access feature with invalid id (%d)"), (int)line);
         return -1;
     }
 

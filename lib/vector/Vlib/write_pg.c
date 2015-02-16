@@ -172,7 +172,7 @@ off_t V2_write_line_pg(struct Map_info *Map, int type,
    \param points feature geometry
    \param cats feature categories
 
-   \return feature offset (rewriten feature)
+   \return feature offset (rewritten feature)
    \return -1 on error
  */
 off_t V1_rewrite_line_pg(struct Map_info * Map,
@@ -207,19 +207,19 @@ off_t V1_rewrite_line_pg(struct Map_info * Map,
   \todo Store original geometry in tmp table for restore
   
   \param Map pointer to Map_info structure
-  \param type feature type  (GV_POINT, GV_LINE, ...)
   \param line feature id
+  \param type feature type  (GV_POINT, GV_LINE, ...)
   \param points feature geometry
   \param cats feature categories
   
   \return offset where feature was rewritten
   \return -1 on error
 */
-off_t V2_rewrite_line_pg(struct Map_info *Map, int line, int type,
+off_t V2_rewrite_line_pg(struct Map_info *Map, off_t line, int type,
                          const struct line_pnts *points, const struct line_cats *cats)
 {
     G_debug(3, "V2_rewrite_line_pg(): line=%d type=%d",
-            line, type);
+            (int)line, type);
 #ifdef HAVE_POSTGRES
     const char *schema_name, *table_name, *keycolumn;
     char *stmt, *geom_data;
@@ -233,13 +233,13 @@ off_t V2_rewrite_line_pg(struct Map_info *Map, int line, int type,
     pg_info = &(Map->fInfo.pg);
   
     if (line < 1 || line > Map->plus.n_lines) {
-        G_warning(_("Attempt to access feature with invalid id (%d)"), line);
+        G_warning(_("Attempt to access feature with invalid id (%d)"), (int)line);
         return -1;
     }
   
     Line = Map->plus.Line[line];
     if (Line == NULL) {
-        G_warning(_("Attempt to access dead feature %d"), line);
+        G_warning(_("Attempt to access dead feature %d"), (int)line);
         return -1;
     }
     offset = Line->offset;
@@ -282,7 +282,7 @@ off_t V2_rewrite_line_pg(struct Map_info *Map, int line, int type,
     G_free(geom_data);
 
     if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
-        G_warning(_("Unable to rewrite feature %d"), line);
+        G_warning(_("Unable to rewrite feature %d"), (int)line);
         Vect__execute_pg(pg_info->conn, "ROLLBACK");
         return -1;
     }
@@ -369,7 +369,7 @@ int V1_delete_line_pg(struct Map_info *Map, off_t offset)
   \return 0 on success
   \return -1 on error
 */
-int V2_delete_line_pg(struct Map_info *Map, int line)
+int V2_delete_line_pg(struct Map_info *Map, off_t line)
 {
 #ifdef HAVE_POSTGRES
     int ret;
@@ -378,7 +378,7 @@ int V2_delete_line_pg(struct Map_info *Map, int line)
     pg_info = &(Map->fInfo.pg);
 
     if (line < 1 || line > Map->plus.n_lines) {
-        G_warning(_("Attempt to access feature with invalid id (%d)"), line);
+        G_warning(_("Attempt to access feature with invalid id (%d)"), (int)line);
         return -1;
     }
     
@@ -393,13 +393,13 @@ int V2_delete_line_pg(struct Map_info *Map, int line)
         struct P_line *Line;
         
         if (line < 1 || line > Map->plus.n_lines) {
-            G_warning(_("Attempt to access feature with invalid id (%d)"), line);
+            G_warning(_("Attempt to access feature with invalid id (%d)"), (int)line);
             return -1;
         }
         
         Line = Map->plus.Line[line];
         if (!Line) {
-            G_warning(_("Attempt to access dead feature %d"), line);
+            G_warning(_("Attempt to access dead feature %d"), (int)line);
             return -1;
         }
 
@@ -450,7 +450,7 @@ int V2_delete_line_pg(struct Map_info *Map, int line)
                 pg_info->toposchema_name, table_name, keycolumn, (int)Line->offset);
         if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
             G_warning(_("Unable to delete feature (%s) %d"), keycolumn,
-                      line);
+                      (int)line);
             Vect__execute_pg(pg_info->conn, "ROLLBACK");
             return -1;
         }
