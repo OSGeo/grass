@@ -71,14 +71,7 @@
 #% description: Storage type for resultant raster map
 #% answer: float
 #%End
-#%Option
-#% key: separator
-#% type: string
-#% required: no
-#% multiple: no
-#% key_desc: character
-#% description: Field separator
-#% answer: |
+#%Option G_OPT_F_SEP
 #% guisection: Input
 #%End
 #%Option
