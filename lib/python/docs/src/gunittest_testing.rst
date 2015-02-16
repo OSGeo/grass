@@ -9,6 +9,7 @@ of GRASS testing framework, you might want to skip to one of:
 * :ref:`test-python` section
 * :ref:`test-doctest` section
 * :class:`~gunittest.case.TestCase` class
+* :ref:`running-tests-report` section
 
 
 Introduction
@@ -634,6 +635,26 @@ i.e. all data will be accessed using ``data/...``. This ``data`` directory
 might be used directly when running test file directly in the directory
 in the source code or might be copied to the test current working directory
 when running tests by the main test invoking tool.
+
+
+Tests creating separate Mapsets, Locations and GRASS Databases
+--------------------------------------------------------------
+
+If test is creating a custom Mapset or Mapsets, it can create them in
+the current Location or create a custom GRASS Database in the current
+directory. In any case, test has to take care of cleaning up (deleting)
+the created directories and it has to use names which will be unique
+enough (name of the test case class or the file is probably a good choice
+but completely unique identifier is probably much better).
+
+If test needs custom Location or it tests something related to GRASS Database,
+it must always create a new GRASS Database in the current directory.
+
+In any case, the author must try the tests cautiously and several times
+in the same Location to see if everything works as expected. Testing
+framework is using Mapsets to separate the tests and the functions
+does not explicitly check for the case where a test is using different
+Mapset then the one which has been given to it by the framework.
 
 
 Analyzing quality of source code

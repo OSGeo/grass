@@ -6,6 +6,8 @@ testing framework (`gunittest`). For introduction to this topic,
 go to :ref:`test-general`.
 
 
+.. _running-tests-report:
+
 Running tests and creating report
 ---------------------------------
 
