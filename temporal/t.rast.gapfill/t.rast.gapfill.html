@@ -10,14 +10,19 @@ map between them.
 This module uses <a href="r.series.interp.html">r.series.interp</a> to
 perform the interpolation for each gap independently. Hence several
 interpolation processes can be run in parallel.
+<p>
+Each gap is re-sampled by the space time raster dataset granularity. 
+Therefore several time stamped raster map layers will be interpolated 
+if the gap is larger than the STRDS granularity.
 
 <h2>Examples</h2>
 
 In this example we will create 3 raster maps and register them in the
 temporal database an then in the newly created space time raster dataset.
-There are gaps of one day size between the raster maps. The values of
+There are gaps of one and two day size between the raster maps. The values of
 the maps are chosen so that the interpolated values can be estimated.
-We expect two maps with values 2 and 4 after interpolation.
+We expect one map with a value of 2 for the first gap and
+two maps (values 3.666 and 4.333) for the second gap after interpolation.
 
 <div class="code"><pre>
 r.mapcalc expr="map1 = 1" 
@@ -26,7 +31,7 @@ r.mapcalc expr="map3 = 5"
 
 t.register type=raster maps=map1 start=2012-08-20 end=2012-08-21
 t.register type=raster maps=map2 start=2012-08-22 end=2012-08-23
-t.register type=raster maps=map3 start=2012-08-24 end=2012-08-25
+t.register type=raster maps=map3 start=2012-08-25 end=2012-08-26
 
 t.create type=strds temporaltype=absolute \
          output=precipitation_daily \
@@ -40,7 +45,7 @@ t.rast.list input=precipitation_daily columns=name,start_time,min,max
 name|start_time|min|max
 map1|2012-08-20 00:00:00|1.0|1.0
 map2|2012-08-22 00:00:00|3.0|3.0
-map3|2012-08-24 00:00:00|5.0|5.0
+map3|2012-08-25 00:00:00|5.0|5.0
 
 
 t.rast.list input=precipitation_daily method=deltagaps
@@ -58,10 +63,12 @@ t.rast.list input=precipitation_daily columns=name,start_time,min,max
 
 name|start_time|min|max
 map1|2012-08-20 00:00:00|1.0|1.0
-gap_6|2012-08-21 00:00:00|2.0|2.0
+gap_6_1|2012-08-21 00:00:00|2.0|2.0
 map2|2012-08-22 00:00:00|3.0|3.0
-gap_7|2012-08-23 00:00:00|4.0|4.0
-map3|2012-08-24 00:00:00|5.0|5.0
+gap_7_1|2012-08-23 00:00:00|3.666667|3.666667
+gap_7_2|2012-08-24 00:00:00|4.333333|4.333333
+map3|2012-08-25 00:00:00|5.0|5.0
+
 </pre></div>
 
 <h2>SEE ALSO</h2>
