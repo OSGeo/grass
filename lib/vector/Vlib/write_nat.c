@@ -145,16 +145,15 @@ off_t V1_rewrite_line_nat(struct Map_info *Map, off_t offset, int type,
   compatibility with level 1 functions.
   
   \param Map pointer to Map_info structure
-  \param type feature type (GV_POINT, GV_LINE, ...)
   \param line feature id to be rewritten
-  \param old_offset feature offset
+  \param type feature type (GV_POINT, GV_LINE, ...)
   \param points feature geometry
   \param cats feature categories
   
   \return new feature id or 0 (build level < GV_BUILD_BASE)
   \return -1 on error
 */
-off_t V2_rewrite_line_nat(struct Map_info *Map, int line, int type,
+off_t V2_rewrite_line_nat(struct Map_info *Map, off_t line, int type,
 			  const struct line_pnts *points, const struct line_cats *cats)
 {
     /* TODO: this is just quick shortcut because we have already V2_delete_nat()
@@ -180,7 +179,7 @@ off_t V2_rewrite_line_nat(struct Map_info *Map, int line, int type,
     }
 
     if (line < 1 || line > plus->n_lines) {
-        G_warning(_("Attempt to access feature with invalid id (%d)"), line);
+        G_warning(_("Attempt to access feature with invalid id (%d)"), (int)line);
         return -1;
     }
 
@@ -279,7 +278,7 @@ int V1_delete_line_nat(struct Map_info *Map, off_t offset)
   \return 0 on success
   \return -1 on error
 */
-int V2_delete_line_nat(struct Map_info *Map, int line)
+int V2_delete_line_nat(struct Map_info *Map, off_t line)
 {
     int type;
     struct P_line *Line;
@@ -287,19 +286,19 @@ int V2_delete_line_nat(struct Map_info *Map, int line)
     static struct line_cats *Cats = NULL;
     static struct line_pnts *Points = NULL;
 
-    G_debug(3, "V2_delete_line_nat(): line = %d", line);
+    G_debug(3, "V2_delete_line_nat(): line = %d", (int)line);
 
     Line = NULL;
     plus = &(Map->plus);
 
     if (line < 1 || line > plus->n_lines) {
-        G_warning(_("Attempt to access feature with invalid id (%d)"), line);
+        G_warning(_("Attempt to access feature with invalid id (%d)"), (int)line);
         return -1;
     }
 
     Line = Map->plus.Line[line];
     if (Line == NULL) {
-        G_warning(_("Attempt to access dead feature %d"), line);
+        G_warning(_("Attempt to access dead feature %d"), (int)line);
         return -1;
     }
 
@@ -381,7 +380,7 @@ int V1_restore_line_nat(struct Map_info *Map, off_t offset)
   \return 0 on success
   \return -1 on error
 */
-int V2_restore_line_nat(struct Map_info *Map, int line)
+int V2_restore_line_nat(struct Map_info *Map, off_t line)
 {
     int type;
     off_t offset;
@@ -392,16 +391,16 @@ int V2_restore_line_nat(struct Map_info *Map, int line)
     
     plus = &(Map->plus);
 
-    G_debug(3, "V2_restore_line_nat(), line = %d", line);
+    G_debug(3, "V2_restore_line_nat(), line = %d", (int)line);
 
     if (line < 1 || line > plus->n_lines) {
-        G_warning(_("Attempt to access feature with invalid id (%d)"), line);
+        G_warning(_("Attempt to access feature with invalid id (%d)"), (int)line);
         return -1;
     }
     
     Line = Map->plus.Line[line];
     if (Line != NULL) {
-        G_warning(_("Attempt to access alive feature %d"), line);
+        G_warning(_("Attempt to access alive feature %d"), (int)line);
         return -1;
     }
 
