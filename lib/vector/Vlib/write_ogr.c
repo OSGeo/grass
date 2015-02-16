@@ -82,7 +82,7 @@ off_t V1_write_line_ogr(struct Map_info *Map, int type,
   \param points pointer to line_pnts structure (feature geometry)
   \param cats pointer to line_cats structure (feature categories)
   
-  \return feature offset (rewriten feature)
+  \return feature offset (rewritten feature)
   \return -1 on error
 */
 off_t V1_rewrite_line_ogr(struct Map_info *Map,
