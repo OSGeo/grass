@@ -103,8 +103,8 @@ class TestRInPoly(grass.gunittest.TestCase):
         self.tmpFile.close()
         self.assertModule('r.in.poly', input=self.tmpFile.name, output=self.rinpoly, type='DCELL')
         category = read_command('r.category', map=self.rinpoly, values=[-8, 3, 10.01]).strip()
-        self.assertEqual(first="-8\t\n3\tlabel2\n10.01\tlabel1", second=category,
-                         msg="Labels do not match")
+        self.assertEqual(first="-8\t{newline}3\tlabel2{newline}10.01\tlabel1".format(newline=os.linesep),
+                         second=category, msg="Labels do not match")
 
 
 if __name__ == '__main__':
