@@ -53,6 +53,7 @@ int connect_arcs(struct Map_info *In, struct Map_info *Pnts,
     
 
     /* go thorough all points in point map and write a new arcs if missing */
+    pz = 0.0;
     while ((type = Vect_read_next_line(Pnts, Points, Cats)) >= 0) {
 	if (type != GV_POINT)
 	    continue;
@@ -141,6 +142,7 @@ int connect_arcs(struct Map_info *In, struct Map_info *Pnts,
     Vect_destroy_cats_struct(Cats);
     Vect_destroy_cats_struct(Cline);
     Vect_destroy_cats_struct(Cnew);
+    Vect_destroy_list(exclude_list);
 
     return narcs;
 }
