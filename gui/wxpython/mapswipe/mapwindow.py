@@ -115,7 +115,8 @@ class SwipeBufferedWindow(BufferedMapWindow):
         if not self.movingSash:
             super(SwipeBufferedWindow, self).OnSize(event)
 
-    def Draw(self, pdc, img = None, drawid = None, pdctype = 'image', coords = [0, 0, 0, 0], pen = None):
+    def Draw(self, pdc, img=None, drawid=None, pdctype='image',
+             coords=[0, 0, 0, 0], pen=None, brush=None):
         """Draws image (map) with translated coordinates.
         """
         Debug.msg(2, "SwipeBufferedWindow.Draw()")
@@ -123,7 +124,7 @@ class SwipeBufferedWindow(BufferedMapWindow):
         if pdctype == 'image':
             coords = self.GetImageCoords()
 
-        return super(SwipeBufferedWindow, self).Draw(pdc, img, drawid, pdctype, coords, pen)
+        return super(SwipeBufferedWindow, self).Draw(pdc, img, drawid, pdctype, coords, pen, brush)
         
     def OnLeftDown(self, event):
         """Left mouse button pressed.
