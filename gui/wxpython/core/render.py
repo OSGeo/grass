@@ -262,6 +262,12 @@ class Layer(object):
         """Check if layer is hidden"""
         return self.hidden
 
+    def IsRendered(self):
+        """!Check if layer was rendered (if the image file exists)"""
+        if os.path.exists(self.mapfile):
+            return True
+        return False
+
     def SetType(self, ltype):
         """Set layer type"""
         if ltype not in utils.command2ltype.values() + ['overlay', 'command']:
