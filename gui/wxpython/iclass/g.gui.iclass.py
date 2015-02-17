@@ -4,7 +4,7 @@
 # MODULE:    g.gui.iclass
 # AUTHOR(S): Anna Kratochvilova, Vaclav Petras
 # PURPOSE:   The Map Swipe is a wxGUI component which allows the user to
-#            interactively compare two maps  
+#            interactively compare two maps
 # COPYRIGHT: (C) 2012-2013 by Anna Kratochvilova, and the GRASS Development Team
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -50,59 +50,67 @@
 #%end
 
 import os
+import grass.script as gscript
 
-import  wx
-
-import grass.script as grass
-
-from core.settings import UserSettings
-from core.globalvar import CheckWxVersion
-from core.giface import StandaloneGrassInterface
-from core.utils import _, GuiModuleMain
-from iclass.frame import IClassMapFrame
 
 def main():
+    gscript.set_raise_on_error(False)
+    options, flags = gscript.parser()
+
+    import wx
+    from core.settings import UserSettings
+    from core.globalvar import CheckWxVersion
+    from core.giface import StandaloneGrassInterface
+    from core.utils import _
+    from iclass.frame import IClassMapFrame
+
     group_name = subgroup_name = map_name = trainingmap_name = None
 
     if options['group']:
         if not options['subgroup']:
-            grass.fatal(_("Name of subgroup required"))
-        group_name = grass.find_file(name = options['group'], element = 'group')['name']
+            gscript.fatal(_("Name of subgroup required"))
+        group_name = gscript.find_file(name=options['group'],
+                                       element='group')['name']
         if not group_name:
-            grass.fatal(_("Group <%s> not found") % options['group'])
-        if options['subgroup'] not in grass.read_command('i.group', group = group_name, flags = 'sg').splitlines():
-            grass.fatal(_("Subgroup <%s> not found") % options['subgroup'])
+            gscript.fatal(_("Group <%s> not found") % options['group'])
+        subgroups = gscript.read_command('i.group',
+                                         group=group_name,
+                                         flags='sg').splitlines()
+        if options['subgroup'] not in subgroups:
+            gscript.fatal(_("Subgroup <%s> not found") % options['subgroup'])
         subgroup_name = options['subgroup']
-    
+
     if options['map']:
-        map_name = grass.find_file(name = options['map'], element = 'cell')['fullname']
+        map_name = gscript.find_file(name=options['map'],
+                                     element='cell')['fullname']
         if not map_name:
-            grass.fatal(_("Raster map <%s> not found") % options['map'])
-    
+            gscript.fatal(_("Raster map <%s> not found") % options['map'])
+
     if options['trainingmap']:
-        trainingmap_name = grass.find_file(name = options['trainingmap'], element = 'vector')['fullname']
+        trainingmap_name = gscript.find_file(name=options['trainingmap'],
+                                             element='vector')['fullname']
         if not trainingmap_name:
-            grass.fatal(_("Vector map <%s> not found") % options['trainingmap'])
-    
+            gscript.fatal(_("Vector map <%s> not found") % options['trainingmap'])
+
     # define display driver
-    driver = UserSettings.Get(group = 'display', key = 'driver', subkey = 'type')
+    driver = UserSettings.Get(group='display', key='driver', subkey='type')
     if driver == 'png':
         os.environ['GRASS_RENDER_IMMEDIATE'] = 'png'
     else:
         os.environ['GRASS_RENDER_IMMEDIATE'] = 'cairo'
-    
+
     # launch application
     app = wx.App()
     if not CheckWxVersion([2, 9]):
         wx.InitAllImageHandlers()
-    
+
     # show main frame
     giface = StandaloneGrassInterface()
-    frame = IClassMapFrame(parent = None, giface = giface)
+    frame = IClassMapFrame(parent=None, giface=giface)
     if not flags['m']:
         frame.CenterOnScreen()
     if group_name:
-        frame.SetGroup(group_name, subgroup_name) 
+        frame.SetGroup(group_name, subgroup_name)
     if map_name:
         giface.WriteLog(_("Loading raster map <%s>...") % map_name)
         frame.trainingMapManager.AddLayer(map_name)
@@ -110,14 +118,10 @@ def main():
         giface.WriteLog(_("Loading training map <%s>...") % trainingmap_name)
         frame.ImportAreas(trainingmap_name)
 
-    frame.Show()    
+    frame.Show()
     if flags['m']:
         frame.Maximize()
-    
     app.MainLoop()
-    
+
 if __name__ == '__main__':
-    grass.set_raise_on_error(False)
-    options, flags = grass.parser()
-    
-    GuiModuleMain(main)
+    main()

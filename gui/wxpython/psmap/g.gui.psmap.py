@@ -32,22 +32,20 @@
 #% required: no
 #%end
 
-import os
+import grass.script as gscript
 
-import  wx
-
-import grass.script as grass
-
-from core.globalvar import CheckWxVersion
-from core.utils import _, GuiModuleMain
-from psmap.frame import PsMapFrame
-from psmap.instructions import Instruction
 
 def main():
+    options, flags = gscript.parser()
+
+    import wx
+    from core.globalvar import CheckWxVersion
+    from psmap.frame import PsMapFrame
+
     app = wx.App()
     if not CheckWxVersion([2, 9]):
         wx.InitAllImageHandlers()
-    frame = PsMapFrame(parent = None)
+    frame = PsMapFrame(parent=None)
     frame.Show()
 
     if options['file']:
@@ -56,6 +54,4 @@ def main():
     app.MainLoop()
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
-    
-    GuiModuleMain(main)
+    main()
