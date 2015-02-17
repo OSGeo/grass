@@ -128,7 +128,8 @@ def main():
     frame.CentreOnScreen()
     frame.Show()
     if len(layerList) >= 1:
-        frame.SetAnimations([layerList] + [None] * (MAX_COUNT - 1))
+        # CallAfter added since it was crashing with wxPython 3 gtk
+        wx.CallAfter(frame.SetAnimations, [layerList] + [None] * (MAX_COUNT - 1))
     app.MainLoop()
 
 if __name__ == '__main__':
