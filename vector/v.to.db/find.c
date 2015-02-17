@@ -6,7 +6,8 @@
 static int bsearch_cat(int cat)
 {
     int mid, lo, hi;
-    
+
+    /* tests */
     if (vstat.rcat < 1)
 	return -1;
 
@@ -22,6 +23,7 @@ static int bsearch_cat(int cat)
     if (Values[lo].cat == cat)
 	return lo;
 
+    /* bsearch */
     while (lo < hi) {
 	mid = (lo + hi) / 2;
 	
@@ -39,36 +41,15 @@ static int bsearch_cat(int cat)
     return -1;
 }
 
-/* returns index to array of values, inserts new if necessary */
-int find_cat(int cat, int add)
+/* returns index to array of values, mark as used if requested */
+int find_cat(int cat, int used)
 {
     int i;
 
-    if ((i = bsearch_cat(cat)) >= 0)
-	    return i;
+    i = bsearch_cat(cat);
 
-    if (!add)
-	return -1;
-
-    /* Not found -> add new */
-    for (i = vstat.rcat; i > 0; i--) {
-	if (Values[i - 1].cat < cat)
-	    break;
-
-	Values[i] = Values[i - 1];
-    }
-    Values[i].cat = cat;
-    Values[i].count1 = 0;
-    Values[i].count1 = 0;
-    Values[i].i1 = -1;
-    Values[i].i2 = -1;
-    Values[i].d1 = 0.0;
-    Values[i].d2 = 0.0;
-    Values[i].qcat = NULL;
-    Values[i].nqcats = 0;
-    Values[i].aqcats = 0;
-
-    vstat.rcat++;
+    if (i >= 0 && used)
+	Values[i].used = 1;
 
     return (i);
 }
