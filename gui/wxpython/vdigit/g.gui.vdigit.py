@@ -35,46 +35,68 @@
 #%end
 
 import os
-
 import grass.script as grass
 
-import wx
-
-from core.globalvar import CheckWxVersion
-from core.utils import _, GuiModuleMain
-from mapdisp.frame import MapFrame
-from mapdisp.main import DMonGrassInterface
-from core.settings import UserSettings
-from vdigit.main import haveVDigit, errorMsg
-from grass.exceptions import CalledModuleError
-
-
-class VDigitMapFrame(MapFrame):
-    def __init__(self, vectorMap):
-        MapFrame.__init__(self, parent = None, giface = DMonGrassInterface(None),
-                          title = _("GRASS GIS Vector Digitizer"), size = (850, 600))
-        # this giface issue not solved yet, we must set mapframe aferwards
-        self._giface._mapframe = self
-        # load vector map
-        mapLayer = self.GetMap().AddLayer(ltype = 'vector',
-                                          command = ['d.vect', 'map=%s' % vectorMap],
-                                          active = True, name = vectorMap, hidden = False, opacity = 1.0,
-                                          render = True)
-        
-        # switch toolbar
-        self.AddToolbar('vdigit', fixed = True)
-        
-        # start editing
-        self.toolbars['vdigit'].StartEditing(mapLayer)
 
 def main():
+    grass.set_raise_on_error(False)
+
+    options, flags = grass.parser()
+
+    # import wx only after running parser
+    # to avoid issues with complex imports when only interface is needed
+    import wx
+    from core.globalvar import CheckWxVersion
+    from core.utils import _
+    from mapdisp.frame import MapFrame
+    from mapdisp.main import DMonGrassInterface
+    from core.settings import UserSettings
+    from vdigit.main import haveVDigit, errorMsg
+    from grass.exceptions import CalledModuleError
+
+    # define classes which needs imports as local
+    # for longer definitions, a separate file would be a better option
+    class VDigitMapFrame(MapFrame):
+        def __init__(self, vectorMap):
+            MapFrame.__init__(
+                self, parent=None, giface=DMonGrassInterface(None),
+                title=_("GRASS GIS Vector Digitizer"), size=(850, 600))
+            # this giface issue not solved yet, we must set mapframe aferwards
+            self._giface._mapframe = self
+            # load vector map
+            mapLayer = self.GetMap().AddLayer(
+                ltype='vector', name=vectorMap,
+                command=['d.vect', 'map=%s' % vectorMap],
+                active=True, hidden=False, opacity=1.0, render=True)
+
+            # switch toolbar
+            self.AddToolbar('vdigit', fixed=True)
+
+            # start editing
+            self.toolbars['vdigit'].StartEditing(mapLayer)
+
+    if not haveVDigit:
+        grass.fatal(_("Vector digitizer not available. %s") % errorMsg)
+
+    if not grass.find_file(name=options['map'], element='vector',
+                           mapset=grass.gisenv()['MAPSET'])['fullname']:
+        if not flags['c']:
+            grass.fatal(_("Vector map <%s> not found in current mapset. "
+                          "New vector map can be created by providing '-c' flag.") % options['map'])
+        else:
+            grass.message(_("New vector map <%s> created") % options['map'])
+            try:
+                grass.run_command('v.edit', map=options['map'], tool='create')
+            except CalledModuleError:
+                grass.fatal(_("Unable to create new vector map <%s>") % options['map'])
+
     # allow immediate rendering
-    driver = UserSettings.Get(group = 'display', key = 'driver', subkey = 'type')
+    driver = UserSettings.Get(group='display', key='driver', subkey='type')
     if driver == 'png':
         os.environ['GRASS_RENDER_IMMEDIATE'] = 'png'
     else:
         os.environ['GRASS_RENDER_IMMEDIATE'] = 'cairo'
-    
+
     app = wx.App()
     if not CheckWxVersion([2, 9]):
         wx.InitAllImageHandlers()
@@ -82,25 +104,6 @@ def main():
     frame.Show()
 
     app.MainLoop()
-    
+
 if __name__ == "__main__":
-    grass.set_raise_on_error(False)
-    
-    options, flags = grass.parser()
-    
-    if not haveVDigit:
-        grass.fatal(_("Vector digitizer not available. %s") % errorMsg)
-    
-    if not grass.find_file(name = options['map'], element = 'vector',
-                           mapset = grass.gisenv()['MAPSET'])['fullname']:
-        if not flags['c']:
-            grass.fatal(_("Vector map <%s> not found in current mapset. "
-                          "New vector map can be created by providing '-c' flag.") % options['map'])
-        else:
-            grass.message(_("New vector map <%s> created") % options['map'])
-            try:
-                grass.run_command('v.edit', map = options['map'], tool = 'create')
-            except CalledModuleError:
-                grass.fatal(_("Unable to create new vector map <%s>") % options['map'])
-    
-    GuiModuleMain(main)
+    main()
