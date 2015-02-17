@@ -18,6 +18,7 @@ This program is free software under the GNU General Public License
 @author Anna Kratochvilova <kratochanna gmail.com>
 """
 
+import os
 from core.utils import _
 
 import wx
@@ -56,6 +57,8 @@ class OverlayController(object):
         for i in cmd:
             if i.startswith("at="):
                 hasAt = True
+                # reset coordinates, 'at' values will be used, see GetCoords
+                self._coords = None
                 break
         if not hasAt:
             cmd.append(self._defaultAt)
@@ -114,7 +117,7 @@ class OverlayController(object):
     dialog = property(fget=GetDialog, fset=SetDialog)
 
     def IsShown(self):
-        if self._overlay and self._overlay.IsActive():
+        if self._overlay and self._overlay.IsActive() and self._overlay.IsRendered():
             return True
         return False
 
