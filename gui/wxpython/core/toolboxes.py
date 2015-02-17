@@ -32,7 +32,7 @@ else:
 
 from core.globalvar import WXGUIDIR
 from core.utils import GetSettingsPath, _
-from core.gcmd import GError, RunCommand
+from core.gcmd import GError, RunCommand, EncodeString
 
 import grass.script.task as gtask
 import grass.script.core as gcore
@@ -556,8 +556,14 @@ def _loadMetadata(module):
     """
     try:
         task = gtask.parse_interface(module)
-    except (ScriptError, UnicodeDecodeError) as e:
-        sys.stderr.write("%s: %s\n" % (module, e))
+    except ScriptError as e:
+        e = EncodeString(e.value)
+        # for some reason this works well only if it is separate
+        sys.stderr.write("%s\n" % module)
+        sys.stderr.write("%s\n" % e)
+        return '', ''
+    except UnicodeDecodeError as e:
+        sys.stderr.write("%s\n%s\n" % (module, e))
         return '', ''
 
     return task.get_description(full=True), \
