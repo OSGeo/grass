@@ -44,6 +44,35 @@ class TestTextAssertions(grass.gunittest.TestCase):
                           "abc = 689.159589",
                           "abc = 689....")
 
+    def do_all_combidnations(self, first, second):
+        self.assertMultiLineEqual(first, first)
+        self.assertMultiLineEqual(first, second)
+        self.assertMultiLineEqual(second, first)
+        self.assertMultiLineEqual(second, second)
+
+    def test_assertMultiLineEqual(self):
+        unix_end = "aaa\nbbb\n"
+        mswindows_end = "aaa\r\nbbb\r\n"
+        self.do_all_combidnations(unix_end, mswindows_end)
+
+    def test_assertMultiLineEqual_raises(self):
+        """Test mixed line endings"""
+        self.assertRaises(self.failureException,
+                          self.assertMultiLineEqual,
+                          "aaa\n\rbbb\r",
+                          "aaa\nbbb\n")
+
+    def test_assertEqual(self):
+        """Test for strings (uses overwritten assertMultiLineEqual())"""
+        unix_end = "aaa\nbbb\n"
+        mswindows_end = "aaa\r\nbbb\r\n"
+        self.do_all_combidnations(unix_end, mswindows_end)
+
+        self.assertRaises(self.failureException,
+                          self.assertEqual,
+                          "aaa\n\rbbb\r",
+                          "aaa\nbbb\n")
+
 
 R_UNIVAR_ELEVATION_SUBSET = """n=2025000
 null_cells=0
