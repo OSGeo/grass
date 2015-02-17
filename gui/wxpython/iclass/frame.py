@@ -431,7 +431,7 @@ class IClassMapFrame(DoubleMapFrame):
 
     def GetMapToolbar(self):
         """Returns toolbar with zooming tools"""
-        return self.toolbars['iClassMap']
+        return self.toolbars['iClassMap'] if 'iClassMap' in self.toolbars else None
 
     def GetClassColor(self, cat):
         """Get class color as string
