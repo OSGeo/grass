@@ -186,7 +186,7 @@ int print_stat(void)
 {
     if (vstat.rcat > 0) {
 	int rcat_report;
-	if(find_cat(-1, 0) != -1)
+	if (find_cat(-1, 0) != -1)
 	    rcat_report = vstat.rcat - 1;
 	else
 	    rcat_report = vstat.rcat;

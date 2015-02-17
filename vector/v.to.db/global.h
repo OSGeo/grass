@@ -4,6 +4,7 @@
 struct value
 {
     int cat;			/* category */
+    char used;			/* update/report if used else not */
     int count1, count2;		/* Count of found values; i1: count, coor, sides; i2: sides */
     /* for sides set to 2, if more than 1 area category was found, */
     /* including no category (cat = -1)! */

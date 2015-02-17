@@ -76,6 +76,7 @@ int read_lines(struct Map_info *Map)
     
     /* Cycle through all lines */
     nlines = Vect_get_num_lines(Map);
+    G_percent(0, nlines, 2);
     for (line_num = 1; line_num <= nlines; line_num++) {
 	type = Vect_read_line(Map, Points, Cats, line_num);
 	if (!(type & options.type))
