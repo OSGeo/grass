@@ -45,17 +45,18 @@
 #% required: no
 #%end
 
-import  wx
-
-import grass.script as grass
-from core.utils import GuiModuleMain
+import grass.script as gscript
 
 
 def main():
+    options, flags = gscript.parser()
+
+    import wx
+    from core.utils import _
     try:
         from tplot.frame import TplotFrame
     except ImportError as e:
-        grass.fatal(e.message)
+        gscript.fatal(e.message)
 
     datasets = options['inputs'].strip().split(',')
     datasets = [data for data in datasets if data]
@@ -64,7 +65,8 @@ def main():
     dpi = options['dpi']
     dpi = int(dpi) if dpi else None
     if dpi and not output:
-        grass.warning(_("No output filename set, so DPI option will not used"))
+        gscript.warning(
+            _("No output filename set, so DPI option will not used"))
 
     app = wx.App()
     frame = TplotFrame(None)
@@ -77,6 +79,4 @@ def main():
 
 
 if __name__ == '__main__':
-    options, flags = grass.parser()
-
-    GuiModuleMain(main)
+    main()
