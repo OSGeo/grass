@@ -151,6 +151,11 @@ def main():
         sys.stderr.write("GISDBASE (grassdata directory) <%s>"
                          " does not exist\n" % gisdbase)
         sys.exit(1)
+    if not os.path.exists(os.path.join(gisdbase, location)):
+        sys.stderr.write("GRASS Location <{loc}>"
+                         " does not exist in GRASS Database <{db}>\n".format(
+                             location, gisdbase))
+        sys.exit(1)
     results_dir = args.output
     silent_rmtree(results_dir)  # TODO: too brute force?
 

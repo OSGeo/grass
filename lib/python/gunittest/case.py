@@ -12,7 +12,8 @@ for details.
 import os
 import subprocess
 import StringIO
-
+import hashlib
+import uuid
 import unittest
 
 from grass.pygrass.modules import Module
@@ -39,11 +40,16 @@ class TestCase(unittest.TestCase):
     maxDiff = None  # we can afford long diffs
     _temp_region = None  # to control the temporary region
     html_reports = False  # output additional HTML files with failure details
+    readable_names = False  # prefer shorter but unreadable map and file names
 
     def __init__(self, methodName):
         super(TestCase, self).__init__(methodName)
         self.grass_modules = []
         self.supplementary_files = []
+        # Python unittest doc is saying that strings use assertMultiLineEqual
+        # but only unicode type is registered
+        # TODO: report this as a bug? is this in Python 3.x?
+        self.addTypeEqualityFunc(str, 'assertMultiLineEqual')
 
     def _formatMessage(self, msg, standardMsg):
         """Honor the longMessage attribute when generating failure messages.
@@ -128,6 +134,28 @@ class TestCase(unittest.TestCase):
         # so perhaps some decorator which would use with statemet
         # but we have zero chance of infuencing another test class
         # since we use class-specific name for temporary region
+
+    def assertMultiLineEqual(self, first, second, msg=None):
+        r"""Test that the multiline string first is equal to the string second.
+
+        When not equal a diff of the two strings highlighting the differences
+        will be included in the error message. This method is used by default
+        when comparing strings with assertEqual().
+
+        This method replaces ``\r\n`` by ``\n`` in both parameters. This is
+        different from the same method implemented in Python ``unittest``
+        package which preserves the original line endings. This removes the
+        burden of getting the line endings right on each platfrom. You can
+        just use ``\n`` everywhere. However, note that ``\r`` is not supported.
+
+        .. warning::
+            If you need to test the actual line endings, use the standard
+            string comparison and functions such as ``find()``.
+        """
+        return super(TestCase, self).assertMultiLineEqual(
+            first=first.replace('\r\n', '\n'),
+            second=second.replace('\r\n', '\n'),
+            msg=None)
 
     def assertLooksLike(self, actual, reference, msg=None):
         """Test that ``actual`` text is the same as ``referece`` with ellipses.
@@ -548,6 +576,26 @@ class TestCase(unittest.TestCase):
                                                                         reference)
             self.fail(self._formatMessage(msg, stdmsg))
 
+    def _get_unique_name(self, name):
+        """Create standardized map or file name which is unique
+
+        If ``readable_names`` attribute is `True`, it uses the *name* string
+        to create the unique name. Otherwise, it creates a unique name.
+        Even if you expect ``readable_names`` to be `True`, provide *name*
+        which is unique
+
+        The *name* parameter should be valid raster name, vector name and file
+        name and should be always provided.
+        """
+        # TODO: possible improvement is to require some descriptive name
+        # and ensure uniqueness by add UUID 
+        if self.readable_names:
+            return 'tmp_' + self.id().replace('.', '_') + '_' + name
+        else:
+            # UUID might be overkill (and expensive) but it's safe and simple
+            # alternative is to create hash from the readable name
+            return 'tmp_' + str(uuid.uuid4()).replace('-', '')
+
     def _compute_difference_raster(self, first, second, name_part):
         """Compute difference of two rasters (first - second)
 
@@ -560,8 +608,8 @@ class TestCase(unittest.TestCase):
 
         :returns: name of a new raster
         """
-        diff = ('tmp_' + self.id() + '_compute_difference_raster_'
-                + name_part + '_' + first + '_minus_' + second)
+        diff = self._get_unique_name('compute_difference_raster_' + name_part
+                                     + '_' + first + '_minus_' + second)
         call_module('r.mapcalc',
                     stdin='"{d}" = "{f}" - "{s}"'.format(d=diff,
                                                          f=first,
@@ -582,8 +630,9 @@ class TestCase(unittest.TestCase):
 
         :returns: name of a new raster
         """
-        diff = ('tmp_' + self.id() + '_compute_difference_raster_'
-                + name_part + '_' + first + '_minus_' + second)
+        diff = self._get_unique_name('compute_difference_raster_' + name_part
+                                     + '_' + first + '_minus_' + second)
+
         call_module('r3.mapcalc',
                     stdin='"{d}" = "{f}" - "{s}"'.format(d=diff,
                                                          f=first,
@@ -595,9 +644,9 @@ class TestCase(unittest.TestCase):
 
         :returns: name of a new vector
         """
-        diff = ('tmp_' + self.id() + '_compute_difference_vector_'
-                + name_part + '_' + ainput + '_' + alayer
-                + '_minus_' + binput + '_' + blayer)
+        diff = self._get_unique_name('compute_difference_vector_' + name_part
+                                     + '_' + ainput + '_' + alayer + '_minus_'
+                                     + binput + '_' + blayer)
         call_module('v.overlay', operator='xor', ainput=ainput, binput=binput,
                     alayer=alayer, blayer=blayer,
                     output=diff, atype='area', btype='area', olayer='')
@@ -612,15 +661,13 @@ class TestCase(unittest.TestCase):
 
         :returns: name of a new vector
         """
-        import hashlib
         # hash is the easiest way how to get a valied vector name
         # TODO: introduce some function which will make file valid
         hasher = hashlib.md5()
         hasher.update(filename)
         namehash = hasher.hexdigest()
-        vector = ('tmp_' + self.id().replace('.', '_')
-                  + '_import_ascii_vector_'
-                  + name_part + '_' + namehash)
+        vector = self._get_unique_name('import_ascii_vector_' + name_part
+                                       + '_' + namehash)
         call_module('v.in.ascii', input=filename,
                     output=vector, format='standard')
         return vector
@@ -632,10 +679,11 @@ class TestCase(unittest.TestCase):
         :returns: name of a new vector
         """
         # TODO: perhaps we can afford just simple file name
-        filename = ('tmp_' + self.id() + '_export_ascii_vector_'
-                    + name_part + '_' + vector)
+        filename = self._get_unique_name('export_ascii_vector_'
+                                         + name_part + '_' + vector)
         call_module('v.out.ascii', input=vector,
-                    output=filename, format='standard', layer='-1', dp=digits)
+                    output=filename, format='standard', layer='-1',
+                    precision=digits)
         return filename
 
     def assertRastersNoDifference(self, actual, reference,
