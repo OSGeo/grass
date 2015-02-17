@@ -104,6 +104,7 @@ int query(struct Map_info *Map)
 
 	/* Skip if cat is zero and large number of query categories (many features without category).
 	 * It would cause problems on server side and take long time. Postgres limit is 10000 */
+	/* TODO: verify because no category is encoded as cat = -1, not cat = zero */
 	if (Values[i].cat == 0 && Values[i].nqcats > 1000) {
 	    G_warning(_("Query for category '0' (no category) was not executed because of too many "
 		       "(%d) query categories. All later reported values for cat 0 are not valid."),
