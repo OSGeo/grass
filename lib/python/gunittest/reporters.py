@@ -60,6 +60,7 @@ def replace_in_file(file_path, pattern, repl):
     # remove old file since it must not exist for rename/move
     os.remove(file_path)
     # replace old file by new file
+    # TODO: this can fail in some (random) cases on MS Windows
     os.rename(tmp_file_path, file_path)
 
 
@@ -137,6 +138,18 @@ def color_error_line(line):
     #if line.startswith('Traceback ('):
     #    line = '<span style="color: red">' + line + "</span>"
     return line
+
+
+def to_web_path(path):
+    """Replace OS dependent path separator with slash.
+
+    Path on MS Windows are not usable in links on web. For MS Windows,
+    this replaces backslash with (forward) slash.
+    """
+    if os.path.sep != '/':
+        return path.replace(os.path.sep, '/')
+    else:
+        return path
 
 
 def get_svn_revision():
@@ -648,7 +661,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             '<td>{ntests}</td><td>{stests}</td>'
             '<td>{ftests}</td><td>{ptests}</td>'
             '<tr>'.format(
-                d=module.tested_dir, m=module.name,
+                d=to_web_path(module.tested_dir), m=module.name,
                 status=returncode_to_html_text(returncode),
                 stests=successes, ftests=bad_ones, ntests=total,
                 ptests=pass_per))
@@ -993,6 +1006,8 @@ class TestsuiteDirReporter(object):
                 == os.path.abspath(root)):
             page_name = os.path.join(root, self.top_level_testsuite_page_name)
         page = open(page_name, 'w')
+        # TODO: should we use forward slashes also for the HTML because
+        # it is simpler are more consistent with the rest on MS Windows?
         head = (
             '<html><body>'
             '<h1>{name} testsuite results</h1>'
@@ -1105,7 +1120,8 @@ class TestsuiteDirReporter(object):
             '<td>{ftests}</td><td>{ptests}</td>'
             '<tr>'
             .format(
-                d=directory, page=self.testsuite_page_name, status=status,
+                d=to_web_path(directory), page=self.testsuite_page_name,
+                status=status,
                 nfiles=file_total, sfiles=file_successes, pfiles=file_pass_per,
                 stests=dir_successes, ftests=dir_failures + dir_errors,
                 ntests=dir_total, ptests=dir_pass_per))
