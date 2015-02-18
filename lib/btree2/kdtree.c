@@ -606,6 +606,104 @@ int kdtree_dnn(struct kdtree *t, double *c, int **puid, double **pd,
     return found;
 }
 
+/* find all nearest neighbors within range aka box search
+ * the range is specified with min and max for each dimension as
+ * (min1, min2, ..., minn, max1, max2, ..., maxn)
+ * results are stored in puid (uids)
+ * memory is allocated as needed, the calling fn must free the memory
+ * optionally an uid to be skipped can be given */
+int kdtree_rnn(struct kdtree *t, double *c, int **puid, int *skip)
+{
+    int i, k, found, inside;
+    struct kdnode sn, *n;
+    struct kdstack {
+	struct kdnode *n;
+	int dir;
+	char v;
+    } s[256];
+    int dir;
+    int top;
+    int *uid;
+
+    if (!t->root)
+	return 0;
+
+    sn.c = c;
+    sn.uid = (int)0x80000000;
+    if (skip)
+	sn.uid = *skip;
+
+    *puid = NULL;
+
+    k = 0;
+    uid = NULL;
+
+    found = 0;
+
+    /* go down */
+    top = 0;
+    s[top].n = t->root;
+    while (s[top].n) {
+	n = s[top].n;
+	dir = cmp(&sn, n, n->dim) > 0;
+	s[top].dir = dir;
+	s[top].v = 0;
+	top++;
+	s[top].n = n->child[dir];
+    }
+    
+    /* go back up */
+    while (top) {
+	top--;
+	
+	if (!s[top].v) {
+	    s[top].v = 1;
+	    n = s[top].n;
+
+	    if (n->uid != sn.uid) {
+		inside = 1;
+		for (i = 0; i < t->ndims; i++) {
+		    if (n->c[i] < sn.c[i] || n->c[i] > sn.c[i + t->ndims]) {
+			inside = 0;
+			break;
+		    }
+		}
+
+		if (inside) {
+		    if (found + 1 >= k) {
+			k = found + 10;
+			uid = G_realloc(uid, k * sizeof(int));
+		    }
+		    i = found;
+		    uid[i] = n->uid;
+		    found++;
+		}
+	    }
+
+	    /* look on the other side ? */
+	    dir = s[top].dir;
+	    if (n->c[(int)n->dim] >= sn.c[(int)n->dim] && 
+	        n->c[(int)n->dim] <= sn.c[(int)n->dim + t->ndims]) {
+		/* go down the other side */
+		top++;
+		s[top].n = n->child[!dir];
+		while (s[top].n) {
+		    n = s[top].n;
+		    dir = cmp(&sn, n, n->dim) > 0;
+		    s[top].dir = dir;
+		    s[top].v = 0;
+		    top++;
+		    s[top].n = n->child[dir];
+		}
+	    }
+	}
+    }
+
+    *puid = uid;
+
+    return found;
+}
+
 /* initialize tree traversal
  * (re-)sets trav structure
  * returns 0
