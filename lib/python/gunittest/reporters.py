@@ -718,7 +718,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
             file_index.write(
                 '<tr><td>Tested modules</td><td>{}</td></tr>'.format(
                     ', '.join(sorted(set(modules)))))
-        file_index.write('<tbody><table>')
+        file_index.write('</tbody></table>')
 
         # here we would have also links to coverage, profiling, ...
         #'<li><a href="testcodecoverage/index.html">code coverage</a></li>'
