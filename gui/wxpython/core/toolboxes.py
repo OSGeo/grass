@@ -71,6 +71,7 @@ if not os.path.exists(userMainMenuFile):
 
 
 def _(string):
+    """Get translated version of a string"""
     # is attribute initialized to actual value?
     if _.translate is None:
         try:
@@ -90,6 +91,7 @@ _.translate = None
 
 
 def _warning(message):
+    """Show warning"""
     # TODO: enable choice between GUI and script behavior
     # import only when really needed
     from core.gcmd import GError
@@ -97,20 +99,26 @@ def _warning(message):
 
 
 def _debug(level, message):
+    """Show debug message"""
     # this has interface as originally used GUI Debug but uses grass.script
     gcore.debug(message, level)
 
 
 def _encode_string(string):
+    """Encode a unicode *string* using the system encoding
+
+    If it is not possible to use system encoding, UTF-8 is used.
+    """
     try:
         from core.gcmd import EncodeString
         return EncodeString(string)
     except ImportError:
-        # this is the case when we have errors during compilation but
-        # the environment is bad and we cannot import wx correctly
-        # UTF-8 is pretty good guess for most cases (and shoudl work for
-        # Max OS X where wx 32 vs 64 bit issue is happaning)
-        return string.endode('utf-8')
+        # This is the case when we have errors during compilation but
+        # the environment is not complete (compilation, custom setups
+        # of GRASS environmet) and we cannot import wx correctly.
+        # UTF-8 is pretty good guess for most cases (and should work for
+        # Mac OS X where wx 32 vs 64 bit issue is happaning).
+        return string.encode('utf-8')
 
 
 def toolboxesOutdated():
