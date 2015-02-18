@@ -55,7 +55,7 @@
         <menuitem>
           <label>Manage projections</label>
           <command>g.proj</command>
-          <help>Prints and manipulates GRASS projection information files (in various co-ordinate system descriptions). Can also be used to create new GRASS locations.</help>
+          <help>Prints or modifies GRASS projection information files (in various co-ordinate system descriptions). Can also be used to create new GRASS locations.</help>
           <keywords>general,projection,create location</keywords>
           <handler>OnMenuCmd</handler>
         </menuitem>
