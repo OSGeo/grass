@@ -706,8 +706,8 @@ def module_test():
     directory and in files from distribution.
     """
     toolboxesFile   = os.path.join(WXGUIDIR, 'xml', 'toolboxes.xml')
-    userToolboxesFile = 'test.toolboxes_user_toolboxes.xml'
-    menuFile = 'test.toolboxes_menu.xml'
+    userToolboxesFile = 'data/test_toolboxes_user_toolboxes.xml'
+    menuFile = 'data/test_toolboxes_menu.xml'
     wxguiItemsFile  = os.path.join(WXGUIDIR, 'xml', 'wxgui_items.xml')
     moduleItemsFile = os.path.join(WXGUIDIR, 'xml', 'module_items.xml')
 
@@ -734,7 +734,7 @@ def module_test():
         sys.stdout.write(_getXMLString(root))
         return 0
 
-    menudataFile = 'test.toolboxes_menudata.xml'
+    menudataFile = 'data/test_toolboxes_menudata_ref.xml'
     with open(menudataFile) as correctMenudata:
         correct = str(correctMenudata.read())
 
