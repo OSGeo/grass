@@ -123,6 +123,17 @@ int kdtree_dnn(struct kdtree *t,		/* k-d tree */
 	       double maxdist,			/* radius to search around the given coordinates */
 	       int *skip);			/* unique id to skip */
 
+/* find all nearest neighbors within range aka box search
+ * the range is specified with min and max for each dimension as
+ * (min1, min2, ..., minn, max1, max2, ..., maxn)
+ * results are stored in puid (uids) and pd (squared distances)
+ * memory is allocated as needed, the calling fn must free the memory
+ * optionally an uid to be skipped can be given */
+int kdtree_rnn(struct kdtree *t,		/* k-d tree */
+               double *c,			/* coordinates for range */
+	       int **puid,			/* unique ids of the neighbors */
+	       int *skip);			/* unique id to skip */
+
 /* k-d tree optimization, only useful if the tree will be heavily used
  * (more searches than items in the tree)
  * level 0 = a bit, 1 = more, 2 = a lot */
