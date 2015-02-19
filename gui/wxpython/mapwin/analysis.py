@@ -78,7 +78,7 @@ class AnalysisControllerBase:
         self._mapWindow.ClearLines()
         self._registeredGraphics.Draw()
         self._mapWindow.Refresh()
-        wx.Yield()
+        wx.SafeYield()
 
         self._doAnalysis(coords)
 
