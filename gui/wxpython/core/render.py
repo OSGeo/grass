@@ -17,7 +17,7 @@ Classes:
  - render::Overlay
  - render::Map
 
-(C) 2006-2014 by the GRASS Development Team
+(C) 2006-2015 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -156,29 +156,24 @@ class Layer(object):
             if self.type == 'command':
                 read = False
                 for c in self.cmd:
-                    ret, msg = self._runCommand(c)
-                    if ret != 0:
-                        break
+                    self._runCommand(c)
                     if not read:
                         self.environ["GRASS_RENDER_FILE_READ"] = "TRUE"
 
                 self.environ["GRASS_RENDER_FILE_READ"] = "FALSE"
             else:
-                ret, msg = self._runCommand(self.cmd)
-            if ret != 0:
-                sys.stderr.write(_("Command '%s' failed\n") % self.GetCmd(string = True))
-                if msg:
-                    sys.stderr.write(_("Details: %s\n") % msg)
-                raise GException()
-
-        except GException:
+                self._runCommand(self.cmd)
+        except GException as e:
+            sys.stderr.write(_("Command '%s' failed\n") % self.GetCmd(string = True))
+            sys.stderr.write(_("Details: %s\n") % e)
+            
             # clean up after problems
             for f in [self.mapfile, self.maskfile]:
                 if not f:
                     continue
                 try_remove(f)
                 f = None
-
+        
         self.forceRender = False
 
         return self.mapfile
@@ -186,18 +181,7 @@ class Layer(object):
     def _runCommand(self, cmd):
         """Run command to render data
         """
-        if self.type == 'wms':
-            ret = 0
-            msg = ''
-            self.renderMgr.Render(cmd, env=self.environ)
-        else:
-            ret, msg = RunCommand(cmd[0],
-                                  getErrorMsg = True,
-                                  quiet = True,
-                                  env=self.environ,
-                                  **cmd[1])
-
-        return ret, msg
+        self.renderMgr.Render(cmd, env=self.environ)
 
     def GetCmd(self, string = False):
         """Get GRASS command as list of string.
@@ -275,13 +259,16 @@ class Layer(object):
         if ltype not in utils.command2ltype.values() + ['overlay', 'command']:
             raise GException(_("Unsupported map layer type '%s'") % ltype)
 
-        if ltype == 'wms' and not isinstance(self.renderMgr, RenderWMSMgr):
-            self.renderMgr = RenderWMSMgr(layer=self,
-                                          mapfile=self.mapfile,
-                                          maskfile=self.maskfile)
-        elif self.type == 'wms' and ltype != 'wms':
-            self.renderMgr = None
-
+        if not self.renderMgr:
+            if ltype == 'wms':
+                renderMgr = RenderWMSMgr
+            else:
+                renderMgr = RenderMgr
+                
+            self.renderMgr = renderMgr(layer=self,
+                                       mapfile=self.mapfile,
+                                       maskfile=self.maskfile)
+        
         self.type = ltype
 
     def SetName(self, name):
@@ -1402,3 +1389,21 @@ class Map(object):
         self.updateProgress.emit(range=self.progressInfo['range'],
                                  value=self.progressInfo['progresVal'],
                                  text=stText)
+
+class RenderMgr(wx.EvtHandler):
+    def __init__(self, layer, mapfile, maskfile):
+         self.layer = layer
+         
+         wx.EvtHandler.__init__(self)
+         self.thread = CmdThread(self)
+         self.cmdStdErr = GStderr(self)
+         
+         self.mapfile = mapfile
+         self.maskfile = maskfile
+
+    def Render(self, cmd, env):
+        self.thread.RunCmd(cmdList, env=env, stderr=self.cmdStdErr)
+
+    def Abort(self):
+        self.updateMap = False
+        self.thread.abort(abortall = True)        
