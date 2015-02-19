@@ -298,7 +298,11 @@ def read_gisrc():
         return kv
 
     for line in f:
-        k, v = line.split(':', 1)
+        try:
+            k, v = line.split(':', 1)
+        except ValueError as e:
+            sys.stderr.write(_("ERROR: Invalid line in RC file: '%s' (%s)\n") % (line, e))
+            continue
         kv[k.strip()] = v.strip()
     f.close()
 
