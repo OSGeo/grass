@@ -16,6 +16,10 @@ from grass.gunittest.gmodules import SimpleModule
 
 class TestTextAssertions(grass.gunittest.TestCase):
     # pylint: disable=R0904
+
+    std_newline = "aaa\nbbb\n"
+    platfrom_newline = "aaa{nl}bbb{nl}".format(nl=os.linesep)
+
     def test_assertLooksLike(self):
         self.assertLooksLike("Generated map is <elevation>",
                              "Generated map is <...>")
@@ -29,6 +33,10 @@ class TestTextAssertions(grass.gunittest.TestCase):
     def test_assertLooksLike_multiline(self):
         self.assertLooksLike("a=123\nb=456\nc=789",
                              "a=...\nb=...\nc=...")
+
+    def test_assertLooksLike_multiline_platform_dependent(self):
+        self.assertLooksLike("a=123\nb=456\nc=789",
+                             "a=...{nl}b=...{nl}c=...".format(nl=os.linesep))
 
     def test_assertLooksLike_numbers(self):
         self.assertLooksLike("abc = 125521",
@@ -44,16 +52,16 @@ class TestTextAssertions(grass.gunittest.TestCase):
                           "abc = 689.159589",
                           "abc = 689....")
 
-    def do_all_combidnations(self, first, second):
-        self.assertMultiLineEqual(first, first)
-        self.assertMultiLineEqual(first, second)
-        self.assertMultiLineEqual(second, first)
-        self.assertMultiLineEqual(second, second)
+    def do_all_combidnations(self, first, second, function):
+        function(first, first)
+        function(first, second)
+        function(second, first)
+        function(second, second)
 
     def test_assertMultiLineEqual(self):
-        unix_end = "aaa\nbbb\n"
-        mswindows_end = "aaa\r\nbbb\r\n"
-        self.do_all_combidnations(unix_end, mswindows_end)
+        r"""Test different combinations of ``\n`` and os.linesep"""
+        self.do_all_combidnations(self.std_newline, self.platfrom_newline,
+                                  function=self.assertMultiLineEqual)
 
     def test_assertMultiLineEqual_raises(self):
         """Test mixed line endings"""
@@ -63,11 +71,12 @@ class TestTextAssertions(grass.gunittest.TestCase):
                           "aaa\nbbb\n")
 
     def test_assertEqual(self):
-        """Test for strings (uses overwritten assertMultiLineEqual())"""
-        unix_end = "aaa\nbbb\n"
-        mswindows_end = "aaa\r\nbbb\r\n"
-        self.do_all_combidnations(unix_end, mswindows_end)
+        """Test for of newlines for strings (uses overwritten assertMultiLineEqual())"""
+        self.do_all_combidnations(self.std_newline, self.platfrom_newline,
+                                  function=self.assertEqual)
 
+    def test_assertEqual_raises(self):
+        """Test mixed line endings"""
         self.assertRaises(self.failureException,
                           self.assertEqual,
                           "aaa\n\rbbb\r",
