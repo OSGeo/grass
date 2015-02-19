@@ -907,10 +907,11 @@ def check_shell():
             sh = os.path.basename(os.getenv('SHELL'))
         except:
             sh = 'sh'
-            os.environ['SHELL'] = "sh" 
+            os.environ['SHELL'] = sh
+        
         if windows and sh:
             sh = os.path.splitext(sh)[0]
-
+        
         if sh == "ksh":
             shellname = "Korn Shell"
         elif sh == "csh":
