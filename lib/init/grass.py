@@ -900,10 +900,17 @@ def check_shell():
         os.environ['SHELL'] = "/usr/bin/bash.exe"
         os.environ['OSTYPE'] = "cygwin"
     else:
-        sh = os.path.basename(os.getenv('SHELL'))
+        # in docker the 'SHELL' variable may not be
+        # visible in a Python session
+        try:
+            sh = os.path.basename(os.getenv('SHELL'))
+        except:
+            sh = 'sh'
+            os.environ['SHELL'] = sh
+        
         if windows and sh:
             sh = os.path.splitext(sh)[0]
-
+        
         if sh == "ksh":
             shellname = "Korn Shell"
         elif sh == "csh":
