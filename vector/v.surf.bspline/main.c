@@ -221,8 +221,11 @@ int main(int argc, char *argv[])
     flag_auxiliar = FALSE;
 
     drv = db_get_default_driver_name();
-    if (!drv)
-        G_fatal_error(_("No default DB driver defined"));
+    if (!drv) {
+        if (db_set_default_connection() != DB_OK)
+            G_fatal_error(_("Unable to set default DB connection"));
+        drv = db_get_default_driver_name();
+    }
     db = db_get_default_database_name();
     if (!db)
         G_fatal_error(_("No default DB defined"));
