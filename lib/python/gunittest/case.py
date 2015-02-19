@@ -142,23 +142,34 @@ class TestCase(unittest.TestCase):
         will be included in the error message. This method is used by default
         when comparing strings with assertEqual().
 
-        This method replaces ``\r\n`` by ``\n`` in both parameters. This is
+        This method replaces platform dependent newline characters
+        by ``\n`` (LF) in both parameters. This is
         different from the same method implemented in Python ``unittest``
-        package which preserves the original line endings. This removes the
-        burden of getting the line endings right on each platfrom. You can
-        just use ``\n`` everywhere. However, note that ``\r`` is not supported.
+        package which preserves the original newline characters.
+
+        This function removes the burden of getting the newline characters
+        right on each platfrom. You can just use ``\n`` everywhere and this
+        function will ensure that it does not matter if for example,
+        a module generates (as expected) ``\r\n`` (CRLF) newline characters
+        on MS Windows.
 
         .. warning::
-            If you need to test the actual line endings, use the standard
+            If you need to test the actual newline characters, use the standard
             string comparison and functions such as ``find()``.
         """
+        if os.linesep != '\n':
+            if os.linesep in first:
+                first = first.replace(os.linesep, '\n')
+            if os.linesep in second:
+                second = second.replace(os.linesep, '\n')
         return super(TestCase, self).assertMultiLineEqual(
-            first=first.replace('\r\n', '\n'),
-            second=second.replace('\r\n', '\n'),
-            msg=None)
+            first=first, second=second, msg=msg)
 
     def assertLooksLike(self, actual, reference, msg=None):
-        """Test that ``actual`` text is the same as ``referece`` with ellipses.
+        r"""Test that ``actual`` text is the same as ``referece`` with ellipses.
+
+        If ``actual`` contains platform dependent newline characters,
+        these will replaced by ``\n`` which is expected to be in the test data.
 
         See :func:`check_text_ellipsis` for details of behavior.
         """
@@ -166,6 +177,8 @@ class TestCase(unittest.TestCase):
                         'actual argument is not a string'))
         self.assertTrue(isinstance(reference, basestring), (
                         'reference argument is not a string'))
+        if os.linesep != '\n' and os.linesep in actual:
+            actual = actual.replace(os.linesep, '\n')
         if not check_text_ellipsis(actual=actual, reference=reference):
             # TODO: add support for multiline (first line general, others with details)
             standardMsg = '"%s" does not correspond with "%s"' % (actual,
@@ -558,8 +571,12 @@ class TestCase(unittest.TestCase):
             hasher.hexdigest()
         """
         self.assertFileExists(filename, msg=msg)
-        if not file_md5(filename) == md5:
-            standardMsg = 'File %s does not have the right MD5 sum' % filename
+        actual = file_md5(filename)
+        if not actual == md5:
+            standardMsg = ('File <{name}> does not have the right MD5 sum.\n'
+                           'Expected is <{expected}>,'
+                           ' actual is <{actual}>'.format(
+                               name=filename, expected=md5, actual=actual))
             self.fail(self._formatMessage(msg, standardMsg))
 
     def assertFilesEqualMd5(self, filename, reference, msg=None):
