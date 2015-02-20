@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_vi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-16 14:18+0100\n"
+"POT-Creation-Date: 2015-02-20 20:37+0100\n"
 "PO-Revision-Date: 2010-08-27 16:40+0700\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -485,7 +485,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../gui/wxpython/gui_core/mapdisp.py:114 ../gui/wxpython/core/render.py:443
+#: ../gui/wxpython/gui_core/mapdisp.py:114 ../gui/wxpython/core/render.py:449
 #: ../gui/wxpython/mapdisp/test_mapdisp.py:88
 #, python-format
 msgid "GRASS module '%s' not found. Unable to start map display window."
@@ -1889,7 +1889,7 @@ msgstr "Đầu ra của lệnh"
 #: ../gui/wxpython/gui_core/preferences.py:394
 #: ../gui/wxpython/gui_core/preferences.py:589
 #: ../gui/wxpython/animation/dialogs.py:845
-#: ../gui/wxpython/mapwin/decorations.py:366
+#: ../gui/wxpython/mapwin/decorations.py:369
 msgid "Set font"
 msgstr "Đặt phông"
 
@@ -4683,7 +4683,7 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:291
-#: ../gui/wxpython/mapwin/decorations.py:363
+#: ../gui/wxpython/mapwin/decorations.py:366
 #, fuzzy
 msgid "Font:"
 msgstr "Định dạng:"
@@ -6023,8 +6023,8 @@ msgstr "Thông điệp"
 msgid "Execution failed:"
 msgstr "Thực thi lệnh thất bại:"
 
-#: ../gui/wxpython/core/gcmd.py:395 ../gui/wxpython/core/render.py:662
-#: ../gui/wxpython/core/render.py:665 ../gui/wxpython/core/render.py:668
+#: ../gui/wxpython/core/gcmd.py:395 ../gui/wxpython/core/render.py:668
+#: ../gui/wxpython/core/render.py:671 ../gui/wxpython/core/render.py:674
 msgid "Details:"
 msgstr "Chi tiết:"
 
@@ -6109,49 +6109,49 @@ msgstr "Lệnh đã kết thúc"
 msgid "Details: %s\n"
 msgstr "Chi tiết:"
 
-#: ../gui/wxpython/core/render.py:268
+#: ../gui/wxpython/core/render.py:274
 #, python-format
 msgid "Unsupported map layer type '%s'"
 msgstr "Kiểu lớp bản đồ '%s' chưa được hỗ trợ"
 
-#: ../gui/wxpython/core/render.py:412
+#: ../gui/wxpython/core/render.py:418
 #, fuzzy
 msgid "Trying to recover from default region..."
 msgstr "Phóng đến vùng mặc định"
 
-#: ../gui/wxpython/core/render.py:477
+#: ../gui/wxpython/core/render.py:483
 #, python-format
 msgid "Error: Unable to open '%(file)s'. Reason: %(ret)s. wxGUI exited.\n"
 msgstr ""
 
-#: ../gui/wxpython/core/render.py:485
+#: ../gui/wxpython/core/render.py:491
 #, fuzzy, python-format
 msgid ""
 "\n"
 "ERROR: Unable to read WIND file: %s\n"
 msgstr "Không thể đọc tập tin EPSG: '%s'"
 
-#: ../gui/wxpython/core/render.py:582
+#: ../gui/wxpython/core/render.py:588
 #, fuzzy, python-format
 msgid "Invalid map size %d,%d\n"
 msgstr "Giá trị không hợp lệ: %s"
 
-#: ../gui/wxpython/core/render.py:661
+#: ../gui/wxpython/core/render.py:667
 #, fuzzy, python-format
 msgid "Unable to zoom to raster map <%s>."
 msgstr "Không thể phóng đến bản đồ raster <%s>."
 
-#: ../gui/wxpython/core/render.py:664
+#: ../gui/wxpython/core/render.py:670
 #, fuzzy, python-format
 msgid "Unable to zoom to vector map <%s>."
 msgstr "Không thể tạo bản đồ véc tơ <%s>."
 
-#: ../gui/wxpython/core/render.py:667
+#: ../gui/wxpython/core/render.py:673
 #, fuzzy, python-format
 msgid "Unable to zoom to 3d raster map <%s>."
 msgstr "Không thể phóng đến bản đồ raster <%s>."
 
-#: ../gui/wxpython/core/render.py:670
+#: ../gui/wxpython/core/render.py:676
 #, fuzzy
 msgid ""
 "Unable to get current geographic extent. Force quiting wxGUI. Please "
@@ -6160,32 +6160,32 @@ msgstr ""
 "Không thể lấy phạm vi địa lý hiện tại. Buộc phải thoát wxGUI. Vui lòng chạy "
 "thủ công lệnh g.region để khắc phục lỗi này."
 
-#: ../gui/wxpython/core/render.py:981
+#: ../gui/wxpython/core/render.py:987
 #, python-format
 msgid "ERROR: Rendering failed. Details: %s"
 msgstr ""
 
-#: ../gui/wxpython/core/render.py:1028 ../gui/wxpython/core/render.py:1123
+#: ../gui/wxpython/core/render.py:1034 ../gui/wxpython/core/render.py:1129
 #, python-format
 msgid "Unable to render map layer <%s>."
 msgstr "Không thể vẽ lớp bản đồ <%s>."
 
-#: ../gui/wxpython/core/render.py:1234 ../gui/wxpython/core/render.py:1273
+#: ../gui/wxpython/core/render.py:1240 ../gui/wxpython/core/render.py:1279
 #, python-format
 msgid "Unable to render overlay <%s>."
 msgstr "Không thể vẽ chồng <%s>."
 
-#: ../gui/wxpython/core/render.py:1370
+#: ../gui/wxpython/core/render.py:1376
 #, fuzzy
 msgid "Downloading data "
 msgstr "Đang nạp dữ liệu..."
 
-#: ../gui/wxpython/core/render.py:1380
+#: ../gui/wxpython/core/render.py:1386
 #, fuzzy
 msgid "Rendering & "
 msgstr "Vẽ"
 
-#: ../gui/wxpython/core/render.py:1382
+#: ../gui/wxpython/core/render.py:1388
 #, fuzzy
 msgid "Rendering..."
 msgstr "Vẽ"
@@ -12428,7 +12428,7 @@ msgid "Choose image file"
 msgstr "Chọn tập tin"
 
 #: ../gui/wxpython/animation/dialogs.py:863
-#: ../gui/wxpython/mapwin/decorations.py:335
+#: ../gui/wxpython/mapwin/decorations.py:338
 #, fuzzy
 msgid "Text:"
 msgstr "Kiểm tra"
@@ -13658,24 +13658,24 @@ msgstr "Chọn phông chữ cho biểu đồ tần số"
 msgid "Print preview"
 msgstr "Xem trước khi in"
 
-#: ../gui/wxpython/mapwin/decorations.py:174
-#: ../gui/wxpython/mapwin/decorations.py:221
+#: ../gui/wxpython/mapwin/decorations.py:177
+#: ../gui/wxpython/mapwin/decorations.py:224
 msgid ""
 "Please install Python Imaging Library (PIL)\n"
 "for better control of legend and other decorations."
 msgstr ""
 
-#: ../gui/wxpython/mapwin/decorations.py:326
+#: ../gui/wxpython/mapwin/decorations.py:329
 #, fuzzy
 msgid "Show text object"
 msgstr "Hiển thị phạm vi tính toán"
 
-#: ../gui/wxpython/mapwin/decorations.py:351
+#: ../gui/wxpython/mapwin/decorations.py:354
 #: ../gui/wxpython/nviz/tools.py:1011
 msgid "Rotation:"
 msgstr "Xoay:"
 
-#: ../gui/wxpython/mapwin/decorations.py:379
+#: ../gui/wxpython/mapwin/decorations.py:382
 msgid ""
 "Drag text with mouse in pointer mode to position.\n"
 "Double-click to change options"

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-16 14:18+0100\n"
+"POT-Creation-Date: 2015-02-20 20:37+0100\n"
 "PO-Revision-Date: 2015-01-23 20:45-0600\n"
 "Last-Translator: \n"
 "Language-Team: Español <grass-translations@lists.osgeo.org>\n"
@@ -1491,11 +1491,11 @@ msgstr "Nombre del mapa ráster n de Mannings"
 #: ../locale/scriptstrings/i.spectral_to_translate.c:6
 #: ../locale/scriptstrings/i.spectral_to_translate.c:7
 #: ../locale/scriptstrings/i.spectral_to_translate.c:8
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:15
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:17
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:19
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:21
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:24
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:14
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:16
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:18
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:20
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:23
 #: ../locale/scriptstrings/t.register_to_translate.c:5
 #: ../locale/scriptstrings/t.register_to_translate.c:6
 #: ../locale/scriptstrings/t.register_to_translate.c:8
@@ -3638,8 +3638,8 @@ msgstr "Estadística a utilizar para los valores ráster"
 #: ../raster/r.in.xyz/main.c:299 ../raster/r.in.lidar/main.c:190
 #: ../raster/r.in.lidar/main.c:230 ../raster/r.in.lidar/main.c:239
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:12
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:29
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:31
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:28
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:30
 msgid "Statistic"
 msgstr "Estadístico"
 
@@ -3650,19 +3650,19 @@ msgid "Storage type for resultant raster map"
 msgstr "Tipo de almacenamiento para el mapa ráster resultante"
 
 #: ../raster/r.in.xyz/main.c:201
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:16
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:15
 msgid "Column number of x coordinates in input file (first column is 1)"
 msgstr ""
 "Número de columna de las coordenadas X en el archivo de entrada (la primera "
 "columna es 1)"
 
 #: ../raster/r.in.xyz/main.c:209
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:18
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:17
 msgid "Column number of y coordinates in input file"
 msgstr "Número de columna de las coordenadas Y en el archivo de entrada"
 
 #: ../raster/r.in.xyz/main.c:217
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:22
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:21
 msgid "Column number of data values in input file"
 msgstr "Número de columna de los valores de datos en el archivo de entrada"
 
@@ -3715,17 +3715,17 @@ msgid "Scale to apply to alternate value column data"
 msgstr "Escala a aplicar a los datos Z"
 
 #: ../raster/r.in.xyz/main.c:280 ../raster/r.in.lidar/main.c:220
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:27
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:26
 msgid "Percent of map to keep in memory"
 msgstr "Porcentaje de mapa a mantener en memoria"
 
 #: ../raster/r.in.xyz/main.c:289 ../raster/r.in.lidar/main.c:229
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:28
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:27
 msgid "pth percentile of the values"
 msgstr "pth percentil de los valores"
 
 #: ../raster/r.in.xyz/main.c:298 ../raster/r.in.lidar/main.c:238
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:30
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:29
 msgid ""
 "Discard <trim> percent of the smallest and <trim> percent of the largest "
 "observations"
@@ -20316,31 +20316,27 @@ msgid "ASCII file containing input data"
 msgstr ""
 "Archivo ASCII que contiene los datos de entrada (o \"-\" para leer de stdin)"
 
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:14
-msgid "Field separator"
-msgstr "Separador de campos"
-
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:20
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:19
 #, fuzzy
 msgid "Column number of z coordinates in input file"
 msgstr "Número de columna de las coordenadas Y en el archivo de entrada"
 
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:23
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:22
 #, fuzzy
 msgid "If not given or set to 0, the data points' z-values are used"
 msgstr "Si no se da se usa el nombre del mapa de entrada"
 
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:25
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:24
 #, fuzzy
 msgid "Filter range for value column data (min,max)"
 msgstr "Rango de filtrado para los datos Z (mínimo, máximo)"
 
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:26
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:25
 #, fuzzy
 msgid "Scaling factor to apply to value column data"
 msgstr "Factor de escala para valores de columna de atributos"
 
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:32
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:31
 #, fuzzy
 msgid "Number of parallel processes to launch"
 msgstr "Número de clases a definir"
@@ -33955,7 +33951,7 @@ msgstr "Ningún punto con categoría [%d]"
 msgid "More points with category %d found"
 msgstr "Ningún punto con categoría [%d]"
 
-#: ../vector/v.net/connect.c:77
+#: ../vector/v.net/connect.c:78
 #, fuzzy
 msgid "Failed to find intersection segment"
 msgstr "No se pudo interpretar la anchura como entero"
@@ -41921,6 +41917,9 @@ msgstr ""
 #: ../vector/v.outlier/main.c:425
 msgid "Outlier detection"
 msgstr "Detección de valores extremos"
+
+#~ msgid "Field separator"
+#~ msgstr "Separador de campos"
 
 #~ msgid "Raster map <%s> already exists in mapset <%s>"
 #~ msgstr "El mapa ráster <%s> ya existe en el directorio de mapas<%s>"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_pl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-16 14:18+0100\n"
+"POT-Creation-Date: 2015-02-20 20:37+0100\n"
 "PO-Revision-Date: 2014-12-22 14:52+0100\n"
 "Last-Translator: Milena Nowotarska <do.milenki * gmail.com>\n"
 "Language-Team: Polish <grass-translations@lists.osgeo.org>\n"
@@ -474,7 +474,7 @@ msgstr ""
 "\n"
 "'%s'"
 
-#: ../gui/wxpython/gui_core/mapdisp.py:114 ../gui/wxpython/core/render.py:443
+#: ../gui/wxpython/gui_core/mapdisp.py:114 ../gui/wxpython/core/render.py:449
 #: ../gui/wxpython/mapdisp/test_mapdisp.py:88
 #, python-format
 msgid "GRASS module '%s' not found. Unable to start map display window."
@@ -1792,7 +1792,7 @@ msgstr "Czcionka w wierszu poleceń:"
 #: ../gui/wxpython/gui_core/preferences.py:394
 #: ../gui/wxpython/gui_core/preferences.py:589
 #: ../gui/wxpython/animation/dialogs.py:845
-#: ../gui/wxpython/mapwin/decorations.py:366
+#: ../gui/wxpython/mapwin/decorations.py:369
 msgid "Set font"
 msgstr "Ustaw czcionkę"
 
@@ -4521,7 +4521,7 @@ msgstr ""
 "krawędzi papieru"
 
 #: ../gui/wxpython/psmap/dialogs.py:291
-#: ../gui/wxpython/mapwin/decorations.py:363
+#: ../gui/wxpython/mapwin/decorations.py:366
 msgid "Font:"
 msgstr "Czcionka:"
 
@@ -5727,8 +5727,8 @@ msgstr "Wiadomość"
 msgid "Execution failed:"
 msgstr "Wykonanie nie powiodło się:"
 
-#: ../gui/wxpython/core/gcmd.py:395 ../gui/wxpython/core/render.py:662
-#: ../gui/wxpython/core/render.py:665 ../gui/wxpython/core/render.py:668
+#: ../gui/wxpython/core/gcmd.py:395 ../gui/wxpython/core/render.py:668
+#: ../gui/wxpython/core/render.py:671 ../gui/wxpython/core/render.py:674
 msgid "Details:"
 msgstr "Szczegóły:"
 
@@ -5812,80 +5812,80 @@ msgstr "Błąd polecenia '%s'\n"
 msgid "Details: %s\n"
 msgstr "Szczegóły: %s\n"
 
-#: ../gui/wxpython/core/render.py:268
+#: ../gui/wxpython/core/render.py:274
 #, python-format
 msgid "Unsupported map layer type '%s'"
 msgstr "Nieobsługiwany typ warstwy '%s'"
 
-#: ../gui/wxpython/core/render.py:412
+#: ../gui/wxpython/core/render.py:418
 #, fuzzy
 msgid "Trying to recover from default region..."
 msgstr "Powiększ do domyślnego regionu"
 
-#: ../gui/wxpython/core/render.py:477
+#: ../gui/wxpython/core/render.py:483
 #, python-format
 msgid "Error: Unable to open '%(file)s'. Reason: %(ret)s. wxGUI exited.\n"
 msgstr ""
 "Błąd: Nie można otworzyć '%(file)s'. Powód: %(ret)s. wxGUI zostało "
 "zamknięte.\n"
 
-#: ../gui/wxpython/core/render.py:485
+#: ../gui/wxpython/core/render.py:491
 #, fuzzy, python-format
 msgid ""
 "\n"
 "ERROR: Unable to read WIND file: %s\n"
 msgstr "Nie można przeczytać pliku %s"
 
-#: ../gui/wxpython/core/render.py:582
+#: ../gui/wxpython/core/render.py:588
 #, fuzzy, python-format
 msgid "Invalid map size %d,%d\n"
 msgstr "Nieprawidłowa wartość: %s"
 
-#: ../gui/wxpython/core/render.py:661
+#: ../gui/wxpython/core/render.py:667
 #, python-format
 msgid "Unable to zoom to raster map <%s>."
 msgstr "Nie można powiększyć do mapy rastrowej <%s>."
 
-#: ../gui/wxpython/core/render.py:664
+#: ../gui/wxpython/core/render.py:670
 #, python-format
 msgid "Unable to zoom to vector map <%s>."
 msgstr "Nie można powiększyć do mapy wektorowej <%s>."
 
-#: ../gui/wxpython/core/render.py:667
+#: ../gui/wxpython/core/render.py:673
 #, fuzzy, python-format
 msgid "Unable to zoom to 3d raster map <%s>."
 msgstr "Nie można powiększyć do mapy rastrowej <%s>."
 
-#: ../gui/wxpython/core/render.py:670
+#: ../gui/wxpython/core/render.py:676
 msgid ""
 "Unable to get current geographic extent. Force quiting wxGUI. Please "
 "manually run g.region to fix the problem."
 msgstr ""
 
-#: ../gui/wxpython/core/render.py:981
+#: ../gui/wxpython/core/render.py:987
 #, python-format
 msgid "ERROR: Rendering failed. Details: %s"
 msgstr "BŁĄD: Renderowanie nie powiodło się. Szczegóły: %s"
 
-#: ../gui/wxpython/core/render.py:1028 ../gui/wxpython/core/render.py:1123
+#: ../gui/wxpython/core/render.py:1034 ../gui/wxpython/core/render.py:1129
 #, python-format
 msgid "Unable to render map layer <%s>."
 msgstr "Nie można wyświetlić warstwy mapy <%s>."
 
-#: ../gui/wxpython/core/render.py:1234 ../gui/wxpython/core/render.py:1273
+#: ../gui/wxpython/core/render.py:1240 ../gui/wxpython/core/render.py:1279
 #, python-format
 msgid "Unable to render overlay <%s>."
 msgstr "Nie można wyświetlić nakładki <%s>."
 
-#: ../gui/wxpython/core/render.py:1370
+#: ../gui/wxpython/core/render.py:1376
 msgid "Downloading data "
 msgstr "Wczytywanie danych"
 
-#: ../gui/wxpython/core/render.py:1380
+#: ../gui/wxpython/core/render.py:1386
 msgid "Rendering & "
 msgstr "Renderowanie &"
 
-#: ../gui/wxpython/core/render.py:1382
+#: ../gui/wxpython/core/render.py:1388
 msgid "Rendering..."
 msgstr "Renderowanie..."
 
@@ -11703,7 +11703,7 @@ msgid "Choose image file"
 msgstr "Wybierz plik"
 
 #: ../gui/wxpython/animation/dialogs.py:863
-#: ../gui/wxpython/mapwin/decorations.py:335
+#: ../gui/wxpython/mapwin/decorations.py:338
 msgid "Text:"
 msgstr "Tekst:"
 
@@ -12850,23 +12850,23 @@ msgstr "Wybierz czcionkę dla tekstu histogramu"
 msgid "Print preview"
 msgstr "Podgląd wydruku"
 
-#: ../gui/wxpython/mapwin/decorations.py:174
-#: ../gui/wxpython/mapwin/decorations.py:221
+#: ../gui/wxpython/mapwin/decorations.py:177
+#: ../gui/wxpython/mapwin/decorations.py:224
 msgid ""
 "Please install Python Imaging Library (PIL)\n"
 "for better control of legend and other decorations."
 msgstr ""
 
-#: ../gui/wxpython/mapwin/decorations.py:326
+#: ../gui/wxpython/mapwin/decorations.py:329
 msgid "Show text object"
 msgstr "Pokaż obiekt tekstowy"
 
-#: ../gui/wxpython/mapwin/decorations.py:351
+#: ../gui/wxpython/mapwin/decorations.py:354
 #: ../gui/wxpython/nviz/tools.py:1011
 msgid "Rotation:"
 msgstr "Rotacja:"
 
-#: ../gui/wxpython/mapwin/decorations.py:379
+#: ../gui/wxpython/mapwin/decorations.py:382
 msgid ""
 "Drag text with mouse in pointer mode to position.\n"
 "Double-click to change options"

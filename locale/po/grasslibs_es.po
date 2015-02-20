@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-16 14:18+0100\n"
+"POT-Creation-Date: 2015-02-20 20:37+0100\n"
 "PO-Revision-Date: 2014-12-10 20:31-0600\n"
 "Last-Translator: Daniel Torres <nobeeakon@gmail.com>\n"
 "Language-Team: Español <grass-translations@lists.osgeo.org>\n"
@@ -1271,7 +1271,7 @@ msgstr "No se puede abrir el archivo que contiene la tabla de elipsoides <%s>."
 
 #: ../lib/proj/convert.c:82 ../lib/vector/Vlib/field.c:660
 #: ../lib/vector/Vlib/read_ogr.c:56 ../lib/vector/Vlib/read_ogr.c:157
-#: ../lib/vector/Vlib/read_ogr.c:242 ../lib/vector/Vlib/write_sfa.c:299
+#: ../lib/vector/Vlib/read_ogr.c:242 ../lib/vector/Vlib/write_sfa.c:298
 #: ../lib/vector/Vlib/build_sfa.c:711 ../lib/vector/Vlib/build_ogr.c:94
 #: ../lib/vector/Vlib/build_ogr.c:169 ../lib/vector/Vlib/simple_features.c:310
 #: ../lib/vector/Vlib/close.c:284 ../lib/vector/Vlib/open_ogr.c:121
@@ -2207,17 +2207,17 @@ msgstr ""
 msgid "Building user fontcap..."
 msgstr "Construyendo grafica..."
 
-#: ../lib/init/grass.py:934
+#: ../lib/init/grass.py:941
 #, python-format
 msgid "Unsupported shell <%(sh)s>: %(env)s"
 msgstr ""
 
-#: ../lib/init/grass.py:939
+#: ../lib/init/grass.py:946
 #, fuzzy
 msgid "The SHELL variable is not set"
 msgstr "GISRC - variable no establecida."
 
-#: ../lib/init/grass.py:950
+#: ../lib/init/grass.py:957
 #, python-format
 msgid ""
 "Job file '%s' has been defined in the 'GRASS_BATCH_JOB' variable but not "
@@ -2226,107 +2226,107 @@ msgid ""
 "Use 'unset GRASS_BATCH_JOB' to disable batch job processing."
 msgstr ""
 
-#: ../lib/init/grass.py:955
+#: ../lib/init/grass.py:962
 #, python-format
 msgid "Change file permission to 'executable' for '%s'"
 msgstr ""
 
-#: ../lib/init/grass.py:957
+#: ../lib/init/grass.py:964
 #, python-format
 msgid "Executing '%s' ..."
 msgstr "Ejecutando '%s'..."
 
-#: ../lib/init/grass.py:962
+#: ../lib/init/grass.py:969
 #, python-format
 msgid "Execution of '%s' finished."
 msgstr "La ejecución de '%s' ha terminado."
 
-#: ../lib/init/grass.py:968
+#: ../lib/init/grass.py:975
 #, python-format
 msgid "GRASS GUI should be <%s>"
 msgstr "La GUI de GRASS debería ser <%s>"
 
-#: ../lib/init/grass.py:997
+#: ../lib/init/grass.py:1004
 #, fuzzy, python-format
 msgid "Welcome to GRASS GIS %s"
 msgstr "Bienvenido a GRASS %s"
 
-#: ../lib/init/grass.py:1016
+#: ../lib/init/grass.py:1023
 #, fuzzy
 msgid "GRASS GIS homepage:"
 msgstr "Página de inicio de GRASS:"
 
-#: ../lib/init/grass.py:1017
+#: ../lib/init/grass.py:1024
 msgid "This version running through:"
 msgstr "Esta versión corriendo a través de:"
 
-#: ../lib/init/grass.py:1019
+#: ../lib/init/grass.py:1026
 #, fuzzy
 msgid "Help is available with the command:"
 msgstr "No hay ayuda disponible para el comando [%s].\n"
 
-#: ../lib/init/grass.py:1020
+#: ../lib/init/grass.py:1027
 msgid "See the licence terms with:"
 msgstr "Vea los términos de la licencia con:"
 
-#: ../lib/init/grass.py:1023
+#: ../lib/init/grass.py:1030
 msgid "If required, restart the GUI with:"
 msgstr "Si lo necesita, reinicie la GUI con:"
 
-#: ../lib/init/grass.py:1025
+#: ../lib/init/grass.py:1032
 msgid "Start the GUI with:"
 msgstr "Iniciar GUI con:"
 
-#: ../lib/init/grass.py:1027
+#: ../lib/init/grass.py:1034
 msgid "When ready to quit enter:"
 msgstr "En cuanto esté listo para quitar escriba:"
 
-#: ../lib/init/grass.py:1117
+#: ../lib/init/grass.py:1124
 msgid "2D and 3D raster MASKs present"
 msgstr "MÁSCARAS ráster 2D y 3D presentes"
 
-#: ../lib/init/grass.py:1118
+#: ../lib/init/grass.py:1125
 msgid "Raster MASK present"
 msgstr "MÁSCARA ráster presente"
 
-#: ../lib/init/grass.py:1119
+#: ../lib/init/grass.py:1126
 msgid "3D raster MASK present"
 msgstr ""
 
-#: ../lib/init/grass.py:1158
+#: ../lib/init/grass.py:1165
 #, fuzzy, python-format
 msgid "Failed to start shell '%s'"
 msgstr "No ha sido posible iniciar el controlador <%s>."
 
-#: ../lib/init/grass.py:1163
+#: ../lib/init/grass.py:1170
 #, python-format
 msgid "Batch job '%s' (defined in GRASS_BATCH_JOB variable) was executed."
 msgstr ""
 
-#: ../lib/init/grass.py:1164 ../lib/init/grass.py:1169
+#: ../lib/init/grass.py:1171 ../lib/init/grass.py:1176
 msgid "Goodbye from GRASS GIS"
 msgstr "Adios de GRASS GIS"
 
-#: ../lib/init/grass.py:1167
+#: ../lib/init/grass.py:1174
 #, fuzzy
 msgid "Done."
 msgstr "Ninguno."
 
-#: ../lib/init/grass.py:1174
+#: ../lib/init/grass.py:1181
 #, fuzzy
 msgid "Cleaning up temporary files..."
 msgstr "No se puede abrir el archivo temporal."
 
-#: ../lib/init/grass.py:1218
+#: ../lib/init/grass.py:1225
 #, fuzzy, python-format
 msgid "Parameter <%s> not supported"
 msgstr "No se soportan objetos espaciales del tipo %d OGR"
 
-#: ../lib/init/grass.py:1341
+#: ../lib/init/grass.py:1348
 msgid "Flag -e required also flag -c"
 msgstr ""
 
-#: ../lib/init/grass.py:1384
+#: ../lib/init/grass.py:1391
 #, python-format
 msgid ""
 "Unable to start GRASS. You can:\n"
@@ -2341,15 +2341,15 @@ msgstr ""
 " - Lanzar GRASS con la ruta para localización/directorio de mapas (mapset) "
 "como un argumento (`grass70 /pruta/a/localización/directorio de mapas`)"
 
-#: ../lib/init/grass.py:1394
+#: ../lib/init/grass.py:1401
 msgid "Creating new GRASS GIS location/mapset..."
 msgstr "Creando nueva localización/directorio de mapas (mapset)..."
 
-#: ../lib/init/grass.py:1396
+#: ../lib/init/grass.py:1403
 msgid "Starting GRASS GIS..."
 msgstr "Iniciando GRASS GIS..."
 
-#: ../lib/init/grass.py:1454
+#: ../lib/init/grass.py:1461
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr ""
@@ -7321,19 +7321,19 @@ msgstr "No se puede cambiar el nombre del directorio de '%s' a '%s'."
 msgid "Unable to remove directory '%s'"
 msgstr "No se puede eliminar el directorio '%s'."
 
-#: ../lib/vector/Vlib/read_nat.c:144 ../lib/vector/Vlib/write_nat.c:183
-#: ../lib/vector/Vlib/write_nat.c:296 ../lib/vector/Vlib/write_nat.c:398
-#: ../lib/vector/Vlib/write_nat.c:653 ../lib/vector/Vlib/write_pg.c:236
+#: ../lib/vector/Vlib/read_nat.c:144 ../lib/vector/Vlib/write_nat.c:182
+#: ../lib/vector/Vlib/write_nat.c:295 ../lib/vector/Vlib/write_nat.c:397
+#: ../lib/vector/Vlib/write_nat.c:652 ../lib/vector/Vlib/write_pg.c:236
 #: ../lib/vector/Vlib/write_pg.c:381 ../lib/vector/Vlib/write_pg.c:396
 #: ../lib/vector/Vlib/box.c:213 ../lib/vector/Vlib/read.c:173
-#: ../lib/vector/Vlib/write_sfa.c:159 ../lib/vector/Vlib/write_sfa.c:208
+#: ../lib/vector/Vlib/write_sfa.c:158 ../lib/vector/Vlib/write_sfa.c:207
 #: ../lib/vector/Vlib/read_pg.c:331 ../lib/vector/Vlib/read_sfa.c:50
 #, fuzzy, c-format
 msgid "Attempt to access feature with invalid id (%d)"
 msgstr "Intento de borrar un razgo u objeto espacial inexistente."
 
-#: ../lib/vector/Vlib/read_nat.c:150 ../lib/vector/Vlib/write_nat.c:302
-#: ../lib/vector/Vlib/write_nat.c:659 ../lib/vector/Vlib/write_pg.c:242
+#: ../lib/vector/Vlib/read_nat.c:150 ../lib/vector/Vlib/write_nat.c:301
+#: ../lib/vector/Vlib/write_nat.c:658 ../lib/vector/Vlib/write_pg.c:242
 #: ../lib/vector/Vlib/write_pg.c:402 ../lib/vector/Vlib/write_pg.c:2584
 #: ../lib/vector/Vlib/write_pg.c:2681 ../lib/vector/Vlib/read_pg.c:337
 #: ../lib/vector/Vlib/read_sfa.c:56
@@ -7371,7 +7371,7 @@ msgstr ""
 #: ../lib/vector/Vlib/write_pg.c:196 ../lib/vector/Vlib/write_pg.c:294
 #: ../lib/vector/Vlib/write_pg.c:354 ../lib/vector/Vlib/write_pg.c:476
 #: ../lib/vector/Vlib/area.c:94 ../lib/vector/Vlib/area.c:499
-#: ../lib/vector/Vlib/write_sfa.c:307 ../lib/vector/Vlib/build_sfa.c:718
+#: ../lib/vector/Vlib/write_sfa.c:306 ../lib/vector/Vlib/build_sfa.c:718
 #: ../lib/vector/Vlib/simple_features.c:336 ../lib/vector/Vlib/close.c:275
 #: ../lib/vector/Vlib/header_finfo.c:47 ../lib/vector/Vlib/header_finfo.c:86
 #: ../lib/vector/Vlib/header_finfo.c:123 ../lib/vector/Vlib/header_finfo.c:171
@@ -7586,17 +7586,17 @@ msgstr "El nombre del mapa vectorial no se ajusta al estándar SQL."
 msgid "Output vector map <%s> is used as input"
 msgstr "El mapa vectorial de salida <%s> es usado como entrada."
 
-#: ../lib/vector/Vlib/write_nat.c:404
+#: ../lib/vector/Vlib/write_nat.c:403
 #, fuzzy, c-format
 msgid "Attempt to access alive feature %d"
 msgstr "Ha intentado restaurar una razgo u objeto espacial existente."
 
-#: ../lib/vector/Vlib/write_nat.c:568 ../lib/vector/Vlib/write_nat.c:604
+#: ../lib/vector/Vlib/write_nat.c:567 ../lib/vector/Vlib/write_nat.c:603
 #, c-format
 msgid "%s: Area %d does not exist"
 msgstr "%s: El área %d no existe."
 
-#: ../lib/vector/Vlib/write_nat.c:758
+#: ../lib/vector/Vlib/write_nat.c:757
 #, fuzzy, c-format
 msgid "Attempt to access dead area %d"
 msgstr "Intento de borrar un razgo u objeto espacial inexistente."
@@ -7698,7 +7698,7 @@ msgid "Wrong line direction in Vect_net_get_line_cost()"
 msgstr "Dirección de la línea incorrecta en Vect_net_get_line_cost()."
 
 #: ../lib/vector/Vlib/write_pg.c:187 ../lib/vector/Vlib/write_pg.c:255
-#: ../lib/vector/Vlib/write_sfa.c:165 ../lib/vector/Vlib/write_ogr.c:96
+#: ../lib/vector/Vlib/write_sfa.c:164 ../lib/vector/Vlib/write_ogr.c:96
 #, fuzzy
 msgid "Unable to rewrite feature (incompatible feature types)"
 msgstr "No se puede escribirel razgo (desplazamiento negativo)."
@@ -7731,7 +7731,7 @@ msgid "Unable to delete feature (%s) %d"
 msgstr "No se puede reescribir el el objeto espacial %d."
 
 #: ../lib/vector/Vlib/write_pg.c:554 ../lib/vector/Vlib/write_pg.c:1294
-#: ../lib/vector/Vlib/write_sfa.c:350
+#: ../lib/vector/Vlib/write_sfa.c:349
 msgid "Boundary is not closed. Skipping."
 msgstr ""
 
@@ -8368,16 +8368,16 @@ msgstr "Se ha intentado leer la topología de una isla no existente (%d)."
 msgid "Unable to calculate centroid for area"
 msgstr "No ha sido posible calcular el centróide del área %d."
 
-#: ../lib/vector/Vlib/write_sfa.c:131 ../lib/vector/Vlib/write_sfa.c:174
-#: ../lib/vector/Vlib/write_sfa.c:274 ../lib/vector/Vlib/read_sfa.c:124
+#: ../lib/vector/Vlib/write_sfa.c:131 ../lib/vector/Vlib/write_sfa.c:173
+#: ../lib/vector/Vlib/write_sfa.c:273 ../lib/vector/Vlib/read_sfa.c:124
 msgid "GRASS is not compiled with OGR/PostgreSQL support"
 msgstr ""
 
-#: ../lib/vector/Vlib/write_sfa.c:220
+#: ../lib/vector/Vlib/write_sfa.c:219
 msgid "Attempt to delete dead feature"
 msgstr "Intento de borrar un razgo u objeto espacial inexistente."
 
-#: ../lib/vector/Vlib/write_sfa.c:312
+#: ../lib/vector/Vlib/write_sfa.c:311
 #, fuzzy, c-format
 msgid "Unsupported vector map format (%d)"
 msgstr "operador desconocido"

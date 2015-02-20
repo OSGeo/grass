@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_vi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-16 14:18+0100\n"
+"POT-Creation-Date: 2015-02-20 20:37+0100\n"
 "PO-Revision-Date: 2010-08-27 14:37+0700\n"
 "Last-Translator: \n"
 "Language-Team: Vietnamese <grass-translations@lists.osgeo.org>\n"
@@ -1475,11 +1475,11 @@ msgstr "Tên của bản đồ raster Mannings n"
 #: ../locale/scriptstrings/i.spectral_to_translate.c:6
 #: ../locale/scriptstrings/i.spectral_to_translate.c:7
 #: ../locale/scriptstrings/i.spectral_to_translate.c:8
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:15
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:17
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:19
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:21
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:24
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:14
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:16
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:18
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:20
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:23
 #: ../locale/scriptstrings/t.register_to_translate.c:5
 #: ../locale/scriptstrings/t.register_to_translate.c:6
 #: ../locale/scriptstrings/t.register_to_translate.c:8
@@ -3621,8 +3621,8 @@ msgstr "Phép thống kê dùng cho các giá trị raster"
 #: ../raster/r.in.xyz/main.c:299 ../raster/r.in.lidar/main.c:190
 #: ../raster/r.in.lidar/main.c:230 ../raster/r.in.lidar/main.c:239
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:12
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:29
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:31
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:28
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:30
 msgid "Statistic"
 msgstr "Thống kê"
 
@@ -3633,17 +3633,17 @@ msgid "Storage type for resultant raster map"
 msgstr "Kiểu lưu trữ cho bản đồ raster kết quả"
 
 #: ../raster/r.in.xyz/main.c:201
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:16
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:15
 msgid "Column number of x coordinates in input file (first column is 1)"
 msgstr "Số thứ tự cột chứa tọa độ x trong tập tin đầu vào (cột đầu tiên là 1)"
 
 #: ../raster/r.in.xyz/main.c:209
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:18
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:17
 msgid "Column number of y coordinates in input file"
 msgstr "Số thứ tự cột chứa tọa độ y trong tập tin đầu vào"
 
 #: ../raster/r.in.xyz/main.c:217
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:22
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:21
 msgid "Column number of data values in input file"
 msgstr "Số thứ tự cột chứa giá trị dữ liệu trong tập tin đầu vào"
 
@@ -3695,17 +3695,17 @@ msgid "Scale to apply to alternate value column data"
 msgstr "Tỷ lệ áp dụng cho dữ liệu z"
 
 #: ../raster/r.in.xyz/main.c:280 ../raster/r.in.lidar/main.c:220
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:27
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:26
 msgid "Percent of map to keep in memory"
 msgstr "Phần trăm bản đồ được giữ trong bộ nhớ"
 
 #: ../raster/r.in.xyz/main.c:289 ../raster/r.in.lidar/main.c:229
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:28
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:27
 msgid "pth percentile of the values"
 msgstr "Số phần trăm pth của các giá trị"
 
 #: ../raster/r.in.xyz/main.c:298 ../raster/r.in.lidar/main.c:238
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:30
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:29
 msgid ""
 "Discard <trim> percent of the smallest and <trim> percent of the largest "
 "observations"
@@ -20202,32 +20202,27 @@ msgstr ""
 "Tập tin ASCII chứa dữ liệu đầu vào (hoặc nhập \"-\" để đọc từ đầu vào tiêu "
 "chuẩn)"
 
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:14
-#, fuzzy
-msgid "Field separator"
-msgstr "Dấu phân cách trường đầu ra"
-
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:20
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:19
 #, fuzzy
 msgid "Column number of z coordinates in input file"
 msgstr "Số thứ tự cột chứa tọa độ y trong tập tin đầu vào"
 
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:23
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:22
 #, fuzzy
 msgid "If not given or set to 0, the data points' z-values are used"
 msgstr "Nếu không được cung cấp, tên của bản đồ đầu vào được sử dụng"
 
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:25
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:24
 #, fuzzy
 msgid "Filter range for value column data (min,max)"
 msgstr "Miền giá trị lọc cho dữ liệu z (min,max)"
 
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:26
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:25
 #, fuzzy
 msgid "Scaling factor to apply to value column data"
 msgstr "Hệ số tỷ lệ dùng cho các giá trị của cột thuộc tính"
 
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:32
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:31
 #, fuzzy
 msgid "Number of parallel processes to launch"
 msgstr "Số lượng lớp cần định nghĩa"
@@ -33887,7 +33882,7 @@ msgstr "Không có điểm có phạm trù [%d]"
 msgid "More points with category %d found"
 msgstr "Không có điểm có phạm trù [%d]"
 
-#: ../vector/v.net/connect.c:77
+#: ../vector/v.net/connect.c:78
 #, fuzzy
 msgid "Failed to find intersection segment"
 msgstr "Thất bại trong việc diễn giải width (chiều rộng) ở dạng số nguyên"
@@ -41809,6 +41804,10 @@ msgstr ""
 #: ../vector/v.outlier/main.c:425
 msgid "Outlier detection"
 msgstr "Phát hiện giá trị ngoại biên"
+
+#, fuzzy
+#~ msgid "Field separator"
+#~ msgstr "Dấu phân cách trường đầu ra"
 
 #, fuzzy
 #~ msgid "Raster map <%s> already exists in mapset <%s>"

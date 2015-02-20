@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_sl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-16 14:18+0100\n"
+"POT-Creation-Date: 2015-02-20 20:37+0100\n"
 "PO-Revision-Date: 2005-06-10 11:15+0200\n"
 "Last-Translator: Miha Staut <mihastaut@yahoo.co.uk>\n"
 "Language-Team: Sloven¹èina <grass-translations@lists.osgeo.org>\n"
@@ -1485,11 +1485,11 @@ msgstr "Ime vhodnega rastrskega sloja"
 #: ../locale/scriptstrings/i.spectral_to_translate.c:6
 #: ../locale/scriptstrings/i.spectral_to_translate.c:7
 #: ../locale/scriptstrings/i.spectral_to_translate.c:8
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:15
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:17
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:19
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:21
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:24
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:14
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:16
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:18
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:20
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:23
 #: ../locale/scriptstrings/t.register_to_translate.c:5
 #: ../locale/scriptstrings/t.register_to_translate.c:6
 #: ../locale/scriptstrings/t.register_to_translate.c:8
@@ -3512,8 +3512,8 @@ msgstr "Izpi¹e osnovne statistike za rastrske sloje"
 #: ../raster/r.in.xyz/main.c:299 ../raster/r.in.lidar/main.c:190
 #: ../raster/r.in.lidar/main.c:230 ../raster/r.in.lidar/main.c:239
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:12
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:29
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:31
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:28
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:30
 msgid "Statistic"
 msgstr ""
 
@@ -3525,17 +3525,17 @@ msgid "Storage type for resultant raster map"
 msgstr "Tip zapisa izhodnega rastrskega sloja"
 
 #: ../raster/r.in.xyz/main.c:201
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:16
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:15
 msgid "Column number of x coordinates in input file (first column is 1)"
 msgstr ""
 
 #: ../raster/r.in.xyz/main.c:209
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:18
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:17
 msgid "Column number of y coordinates in input file"
 msgstr ""
 
 #: ../raster/r.in.xyz/main.c:217
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:22
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:21
 msgid "Column number of data values in input file"
 msgstr ""
 
@@ -3582,18 +3582,18 @@ msgid "Scale to apply to alternate value column data"
 msgstr ""
 
 #: ../raster/r.in.xyz/main.c:280 ../raster/r.in.lidar/main.c:220
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:27
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:26
 msgid "Percent of map to keep in memory"
 msgstr "Dele¾ sloja, ki ga ohranjati v spominu raèunalnika"
 
 #: ../raster/r.in.xyz/main.c:289 ../raster/r.in.lidar/main.c:229
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:28
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:27
 #, fuzzy
 msgid "pth percentile of the values"
 msgstr "Enote za naklon"
 
 #: ../raster/r.in.xyz/main.c:298 ../raster/r.in.lidar/main.c:238
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:30
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:29
 msgid ""
 "Discard <trim> percent of the smallest and <trim> percent of the largest "
 "observations"
@@ -20088,31 +20088,26 @@ msgstr ""
 msgid "ASCII file containing input data"
 msgstr "Ne najdem vhodne datoteke %s\n"
 
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:14
-#, fuzzy
-msgid "Field separator"
-msgstr "izpi¹i znak razmejitve med polji"
-
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:20
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:19
 #, fuzzy
 msgid "Column number of z coordinates in input file"
 msgstr "Y koordinata oziroma geografska ¹irina"
 
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:23
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:22
 #, fuzzy
 msgid "If not given or set to 0, the data points' z-values are used"
 msgstr "%-5d kategorij toèk prebranih\n"
 
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:25
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:24
 msgid "Filter range for value column data (min,max)"
 msgstr ""
 
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:26
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:25
 #, fuzzy
 msgid "Scaling factor to apply to value column data"
 msgstr "Uporabljam koordinate sredi¹èa sloja\n"
 
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:32
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:31
 #, fuzzy
 msgid "Number of parallel processes to launch"
 msgstr "©tevilo toèk najbli¾jih toèk, ki bodo upo¹tevane"
@@ -33574,7 +33569,7 @@ msgstr "%-5d mrtvih kategorij toèk preskoèenih\n"
 msgid "More points with category %d found"
 msgstr "%-5d mrtvih kategorij toèk preskoèenih\n"
 
-#: ../vector/v.net/connect.c:77
+#: ../vector/v.net/connect.c:78
 #, fuzzy
 msgid "Failed to find intersection segment"
 msgstr "Ne najdem vhodne datoteke %s\n"
@@ -41460,6 +41455,10 @@ msgstr ""
 #, fuzzy
 msgid "Outlier detection"
 msgstr " nv barva\n"
+
+#, fuzzy
+#~ msgid "Field separator"
+#~ msgstr "izpi¹i znak razmejitve med polji"
 
 #, fuzzy
 #~ msgid "Raster map <%s> already exists in mapset <%s>"

@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_ja\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-16 14:18+0100\n"
+"POT-Creation-Date: 2015-02-20 20:37+0100\n"
 "PO-Revision-Date: 2012-03-08 17:49+0900\n"
 "Last-Translator: taniguchi <taniguti@apptec.co.jp>\n"
 "Language-Team: Japanese <grass-translations@lists.osgeo.org>\n"
@@ -1469,11 +1469,11 @@ msgstr "マニングｎ値ラスターマップ名"
 #: ../locale/scriptstrings/i.spectral_to_translate.c:6
 #: ../locale/scriptstrings/i.spectral_to_translate.c:7
 #: ../locale/scriptstrings/i.spectral_to_translate.c:8
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:15
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:17
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:19
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:21
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:24
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:14
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:16
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:18
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:20
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:23
 #: ../locale/scriptstrings/t.register_to_translate.c:5
 #: ../locale/scriptstrings/t.register_to_translate.c:6
 #: ../locale/scriptstrings/t.register_to_translate.c:8
@@ -3530,8 +3530,8 @@ msgstr "ラスター値に使用する統計"
 #: ../raster/r.in.xyz/main.c:299 ../raster/r.in.lidar/main.c:190
 #: ../raster/r.in.lidar/main.c:230 ../raster/r.in.lidar/main.c:239
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:12
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:29
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:31
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:28
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:30
 msgid "Statistic"
 msgstr "統計量 "
 
@@ -3542,17 +3542,17 @@ msgid "Storage type for resultant raster map"
 msgstr "保存形式 "
 
 #: ../raster/r.in.xyz/main.c:201
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:16
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:15
 msgid "Column number of x coordinates in input file (first column is 1)"
 msgstr "入力ファイルの x 座標の列番号 (最初の列は 1)"
 
 #: ../raster/r.in.xyz/main.c:209
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:18
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:17
 msgid "Column number of y coordinates in input file"
 msgstr "入力ファイルの y 座標の列番号"
 
 #: ../raster/r.in.xyz/main.c:217
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:22
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:21
 msgid "Column number of data values in input file"
 msgstr "入力ファイルのデータ値の列番号"
 
@@ -3603,17 +3603,17 @@ msgid "Scale to apply to alternate value column data"
 msgstr "z データに指定する縮尺"
 
 #: ../raster/r.in.xyz/main.c:280 ../raster/r.in.lidar/main.c:220
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:27
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:26
 msgid "Percent of map to keep in memory"
 msgstr "メモリに残すマップの割合（％） "
 
 #: ../raster/r.in.xyz/main.c:289 ../raster/r.in.lidar/main.c:229
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:28
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:27
 msgid "pth percentile of the values"
 msgstr "pth の百分率値"
 
 #: ../raster/r.in.xyz/main.c:298 ../raster/r.in.lidar/main.c:238
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:30
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:29
 msgid ""
 "Discard <trim> percent of the smallest and <trim> percent of the largest "
 "observations"
@@ -19795,32 +19795,27 @@ msgstr "一変量の統計で，多くの座標の集合からラスタマップ
 msgid "ASCII file containing input data"
 msgstr "入力データを含む ASCII ファイル （または \"-\" で標準入力から）"
 
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:14
-#, fuzzy
-msgid "Field separator"
-msgstr "フィールドセパレーターの出力"
-
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:20
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:19
 #, fuzzy
 msgid "Column number of z coordinates in input file"
 msgstr "入力ファイルの y 座標の列番号"
 
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:23
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:22
 #, fuzzy
 msgid "If not given or set to 0, the data points' z-values are used"
 msgstr "指定しない場合，指定されたマップ名が使われます"
 
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:25
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:24
 #, fuzzy
 msgid "Filter range for value column data (min,max)"
 msgstr "z データのフィルターレンジ (min,max)  "
 
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:26
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:25
 #, fuzzy
 msgid "Scaling factor to apply to value column data"
 msgstr "高度列のスケールファクター値"
 
-#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:32
+#: ../locale/scriptstrings/r3.in.xyz_to_translate.c:31
 #, fuzzy
 msgid "Number of parallel processes to launch"
 msgstr "定義するクラスの数"
@@ -33216,7 +33211,7 @@ msgstr "出力ファイルの上書き"
 msgid "More points with category %d found"
 msgstr "出力ファイルの上書き"
 
-#: ../vector/v.net/connect.c:77
+#: ../vector/v.net/connect.c:78
 #, fuzzy
 msgid "Failed to find intersection segment"
 msgstr "幅を整数値として解釈できません  "
@@ -41031,6 +41026,10 @@ msgstr ""
 #: ../vector/v.outlier/main.c:425
 msgid "Outlier detection"
 msgstr "外れ値検出"
+
+#, fuzzy
+#~ msgid "Field separator"
+#~ msgstr "フィールドセパレーターの出力"
 
 #, fuzzy
 #~ msgid "Raster map <%s> already exists in mapset <%s>"
