@@ -421,9 +421,6 @@
       <module-item name="v.out.dxf">
         <label>DXF export</label>
       </module-item>
-      <module-item name="v.out.gps">
-        <label>Multiple GPS export formats using GPSBabel</label>
-      </module-item>
       <module-item name="v.out.postgis">
         <label>PostGIS export</label>
       </module-item>
