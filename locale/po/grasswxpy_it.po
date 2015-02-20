@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-16 14:18+0100\n"
+"POT-Creation-Date: 2015-02-20 20:37+0100\n"
 "PO-Revision-Date: 2015-01-14 14:10+0100\n"
 "Last-Translator: Luca Delucchi <lucadeluge@gmail.com>\n"
 "Language-Team: Italian <grass-translations@lists.osgeo.org>\n"
@@ -444,7 +444,7 @@ msgstr "È stato inserito un nome vuoto."
 msgid "Loading ctypes libs failed"
 msgstr "Caricamento librerie ctypes fallito"
 
-#: ../gui/wxpython/gui_core/mapdisp.py:114 ../gui/wxpython/core/render.py:443
+#: ../gui/wxpython/gui_core/mapdisp.py:114 ../gui/wxpython/core/render.py:449
 #: ../gui/wxpython/mapdisp/test_mapdisp.py:88
 #, python-format
 msgid "GRASS module '%s' not found. Unable to start map display window."
@@ -1743,7 +1743,7 @@ msgstr "Font per output del comando:"
 #: ../gui/wxpython/gui_core/preferences.py:394
 #: ../gui/wxpython/gui_core/preferences.py:589
 #: ../gui/wxpython/animation/dialogs.py:845
-#: ../gui/wxpython/mapwin/decorations.py:366
+#: ../gui/wxpython/mapwin/decorations.py:369
 msgid "Set font"
 msgstr "Imposta font"
 
@@ -4407,7 +4407,7 @@ msgstr ""
 "del foglio"
 
 #: ../gui/wxpython/psmap/dialogs.py:291
-#: ../gui/wxpython/mapwin/decorations.py:363
+#: ../gui/wxpython/mapwin/decorations.py:366
 msgid "Font:"
 msgstr "Font:"
 
@@ -5618,8 +5618,8 @@ msgstr "Messaggio"
 msgid "Execution failed:"
 msgstr "Esecuzione fallita:"
 
-#: ../gui/wxpython/core/gcmd.py:395 ../gui/wxpython/core/render.py:662
-#: ../gui/wxpython/core/render.py:665 ../gui/wxpython/core/render.py:668
+#: ../gui/wxpython/core/gcmd.py:395 ../gui/wxpython/core/render.py:668
+#: ../gui/wxpython/core/render.py:671 ../gui/wxpython/core/render.py:674
 msgid "Details:"
 msgstr "Dettagli:"
 
@@ -5708,23 +5708,23 @@ msgstr "Comando '%s' fallito\n"
 msgid "Details: %s\n"
 msgstr "Dettagli: %s\n"
 
-#: ../gui/wxpython/core/render.py:268
+#: ../gui/wxpython/core/render.py:274
 #, python-format
 msgid "Unsupported map layer type '%s'"
 msgstr "Layer '%s' non supportato"
 
-#: ../gui/wxpython/core/render.py:412
+#: ../gui/wxpython/core/render.py:418
 msgid "Trying to recover from default region..."
 msgstr ""
 
-#: ../gui/wxpython/core/render.py:477
+#: ../gui/wxpython/core/render.py:483
 #, python-format
 msgid "Error: Unable to open '%(file)s'. Reason: %(ret)s. wxGUI exited.\n"
 msgstr ""
 "Errore: Impossibile aprire '%(file)s'. Motivazione: %(ret)s. Usciti da "
 "wxGUI.\n"
 
-#: ../gui/wxpython/core/render.py:485
+#: ../gui/wxpython/core/render.py:491
 #, python-format
 msgid ""
 "\n"
@@ -5733,27 +5733,27 @@ msgstr ""
 "\n"
 "ERRORE: Impossibile leggere il file WIND: %s\n"
 
-#: ../gui/wxpython/core/render.py:582
+#: ../gui/wxpython/core/render.py:588
 #, python-format
 msgid "Invalid map size %d,%d\n"
 msgstr "Dimensione mappa non valida: %d,%d\n"
 
-#: ../gui/wxpython/core/render.py:661
+#: ../gui/wxpython/core/render.py:667
 #, python-format
 msgid "Unable to zoom to raster map <%s>."
 msgstr "Impossibile zoomare al raster <%s>."
 
-#: ../gui/wxpython/core/render.py:664
+#: ../gui/wxpython/core/render.py:670
 #, python-format
 msgid "Unable to zoom to vector map <%s>."
 msgstr "Impossibile zoomare al vettoriale <%s>."
 
-#: ../gui/wxpython/core/render.py:667
+#: ../gui/wxpython/core/render.py:673
 #, python-format
 msgid "Unable to zoom to 3d raster map <%s>."
 msgstr "Impossibile fare zoom al raster 3d <%s>."
 
-#: ../gui/wxpython/core/render.py:670
+#: ../gui/wxpython/core/render.py:676
 msgid ""
 "Unable to get current geographic extent. Force quiting wxGUI. Please "
 "manually run g.region to fix the problem."
@@ -5761,30 +5761,30 @@ msgstr ""
 "Impossibile ottenere l'estensione geografica attuale. Uscita forzata da "
 "wxGUI. Per favore eseguire manualmente g.region per risolvere il problema"
 
-#: ../gui/wxpython/core/render.py:981
+#: ../gui/wxpython/core/render.py:987
 #, python-format
 msgid "ERROR: Rendering failed. Details: %s"
 msgstr "ERRORE: Rendering fallito. Dettagli: %s"
 
-#: ../gui/wxpython/core/render.py:1028 ../gui/wxpython/core/render.py:1123
+#: ../gui/wxpython/core/render.py:1034 ../gui/wxpython/core/render.py:1129
 #, python-format
 msgid "Unable to render map layer <%s>."
 msgstr "Impossibile visualizzare layer <%s>."
 
-#: ../gui/wxpython/core/render.py:1234 ../gui/wxpython/core/render.py:1273
+#: ../gui/wxpython/core/render.py:1240 ../gui/wxpython/core/render.py:1279
 #, python-format
 msgid "Unable to render overlay <%s>."
 msgstr "Impossibile visualizzare <%s> sovrapposto"
 
-#: ../gui/wxpython/core/render.py:1370
+#: ../gui/wxpython/core/render.py:1376
 msgid "Downloading data "
 msgstr "Scaricamento dati"
 
-#: ../gui/wxpython/core/render.py:1380
+#: ../gui/wxpython/core/render.py:1386
 msgid "Rendering & "
 msgstr "Visualizzazione &"
 
-#: ../gui/wxpython/core/render.py:1382
+#: ../gui/wxpython/core/render.py:1388
 msgid "Rendering..."
 msgstr "Visualizzazione..."
 
@@ -11478,7 +11478,7 @@ msgid "Choose image file"
 msgstr "Scegli un file d'immagine"
 
 #: ../gui/wxpython/animation/dialogs.py:863
-#: ../gui/wxpython/mapwin/decorations.py:335
+#: ../gui/wxpython/mapwin/decorations.py:338
 msgid "Text:"
 msgstr "Testo:"
 
@@ -12606,23 +12606,23 @@ msgstr "Seleziona il tipo di carattere per il testo dell'istogramma"
 msgid "Print preview"
 msgstr "Anteprima di stampa"
 
-#: ../gui/wxpython/mapwin/decorations.py:174
-#: ../gui/wxpython/mapwin/decorations.py:221
+#: ../gui/wxpython/mapwin/decorations.py:177
+#: ../gui/wxpython/mapwin/decorations.py:224
 msgid ""
 "Please install Python Imaging Library (PIL)\n"
 "for better control of legend and other decorations."
 msgstr ""
 
-#: ../gui/wxpython/mapwin/decorations.py:326
+#: ../gui/wxpython/mapwin/decorations.py:329
 msgid "Show text object"
 msgstr "Mostra oggetto testuale"
 
-#: ../gui/wxpython/mapwin/decorations.py:351
+#: ../gui/wxpython/mapwin/decorations.py:354
 #: ../gui/wxpython/nviz/tools.py:1011
 msgid "Rotation:"
 msgstr "Rotazione:"
 
-#: ../gui/wxpython/mapwin/decorations.py:379
+#: ../gui/wxpython/mapwin/decorations.py:382
 msgid ""
 "Drag text with mouse in pointer mode to position.\n"
 "Double-click to change options"

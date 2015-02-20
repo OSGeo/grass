@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_ru\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-16 14:18+0100\n"
+"POT-Creation-Date: 2015-02-20 20:37+0100\n"
 "PO-Revision-Date: 2008-10-10 19:44-0600\n"
 "Last-Translator: Maxim Dubinin <sim@gis-lab.info>\n"
 "Language-Team: Russian <grass-translations@lists.osgeo.org>\n"
@@ -479,7 +479,7 @@ msgstr ""
 "\n"
 "%s"
 
-#: ../gui/wxpython/gui_core/mapdisp.py:114 ../gui/wxpython/core/render.py:443
+#: ../gui/wxpython/gui_core/mapdisp.py:114 ../gui/wxpython/core/render.py:449
 #: ../gui/wxpython/mapdisp/test_mapdisp.py:88
 #, python-format
 msgid "GRASS module '%s' not found. Unable to start map display window."
@@ -1891,7 +1891,7 @@ msgstr "Результат команды"
 #: ../gui/wxpython/gui_core/preferences.py:394
 #: ../gui/wxpython/gui_core/preferences.py:589
 #: ../gui/wxpython/animation/dialogs.py:845
-#: ../gui/wxpython/mapwin/decorations.py:366
+#: ../gui/wxpython/mapwin/decorations.py:369
 msgid "Set font"
 msgstr "Установите шрифт"
 
@@ -4697,7 +4697,7 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:291
-#: ../gui/wxpython/mapwin/decorations.py:363
+#: ../gui/wxpython/mapwin/decorations.py:366
 #, fuzzy
 msgid "Font:"
 msgstr "Размер иконки:"
@@ -6036,8 +6036,8 @@ msgstr "Сообщение"
 msgid "Execution failed:"
 msgstr "Выполнение прервано с ошибкой:"
 
-#: ../gui/wxpython/core/gcmd.py:395 ../gui/wxpython/core/render.py:662
-#: ../gui/wxpython/core/render.py:665 ../gui/wxpython/core/render.py:668
+#: ../gui/wxpython/core/gcmd.py:395 ../gui/wxpython/core/render.py:668
+#: ../gui/wxpython/core/render.py:671 ../gui/wxpython/core/render.py:674
 msgid "Details:"
 msgstr "Подробности:"
 
@@ -6123,80 +6123,80 @@ msgstr "Операция завершена"
 msgid "Details: %s\n"
 msgstr "Подробности:"
 
-#: ../gui/wxpython/core/render.py:268
+#: ../gui/wxpython/core/render.py:274
 #, python-format
 msgid "Unsupported map layer type '%s'"
 msgstr "Тип слоя '%s' не поддерживается"
 
-#: ../gui/wxpython/core/render.py:412
+#: ../gui/wxpython/core/render.py:418
 #, fuzzy
 msgid "Trying to recover from default region..."
 msgstr "Масштабировать до региона по умолчанию"
 
-#: ../gui/wxpython/core/render.py:477
+#: ../gui/wxpython/core/render.py:483
 #, python-format
 msgid "Error: Unable to open '%(file)s'. Reason: %(ret)s. wxGUI exited.\n"
 msgstr ""
 
-#: ../gui/wxpython/core/render.py:485
+#: ../gui/wxpython/core/render.py:491
 #, fuzzy, python-format
 msgid ""
 "\n"
 "ERROR: Unable to read WIND file: %s\n"
 msgstr "Невозможно прочитать коды EPSG: %s"
 
-#: ../gui/wxpython/core/render.py:582
+#: ../gui/wxpython/core/render.py:588
 #, fuzzy, python-format
 msgid "Invalid map size %d,%d\n"
 msgstr "Неправильное значение: %s "
 
-#: ../gui/wxpython/core/render.py:661
+#: ../gui/wxpython/core/render.py:667
 #, fuzzy, python-format
 msgid "Unable to zoom to raster map <%s>."
 msgstr "Невозможно масштабировать растровый слой <%s>."
 
-#: ../gui/wxpython/core/render.py:664
+#: ../gui/wxpython/core/render.py:670
 #, fuzzy, python-format
 msgid "Unable to zoom to vector map <%s>."
 msgstr "Не могу создать новый векторный слой <%s>."
 
-#: ../gui/wxpython/core/render.py:667
+#: ../gui/wxpython/core/render.py:673
 #, fuzzy, python-format
 msgid "Unable to zoom to 3d raster map <%s>."
 msgstr "Невозможно масштабировать растровый слой <%s>."
 
-#: ../gui/wxpython/core/render.py:670
+#: ../gui/wxpython/core/render.py:676
 msgid ""
 "Unable to get current geographic extent. Force quiting wxGUI. Please "
 "manually run g.region to fix the problem."
 msgstr ""
 
-#: ../gui/wxpython/core/render.py:981
+#: ../gui/wxpython/core/render.py:987
 #, python-format
 msgid "ERROR: Rendering failed. Details: %s"
 msgstr ""
 
-#: ../gui/wxpython/core/render.py:1028 ../gui/wxpython/core/render.py:1123
+#: ../gui/wxpython/core/render.py:1034 ../gui/wxpython/core/render.py:1129
 #, python-format
 msgid "Unable to render map layer <%s>."
 msgstr "Невозможно перерисовать слой <%s>."
 
-#: ../gui/wxpython/core/render.py:1234 ../gui/wxpython/core/render.py:1273
+#: ../gui/wxpython/core/render.py:1240 ../gui/wxpython/core/render.py:1279
 #, python-format
 msgid "Unable to render overlay <%s>."
 msgstr "Невозможно перерисовать оверлей <%s>."
 
-#: ../gui/wxpython/core/render.py:1370
+#: ../gui/wxpython/core/render.py:1376
 #, fuzzy
 msgid "Downloading data "
 msgstr "Загрузка данных..."
 
-#: ../gui/wxpython/core/render.py:1380
+#: ../gui/wxpython/core/render.py:1386
 #, fuzzy
 msgid "Rendering & "
 msgstr "Отрисовать"
 
-#: ../gui/wxpython/core/render.py:1382
+#: ../gui/wxpython/core/render.py:1388
 #, fuzzy
 msgid "Rendering..."
 msgstr "Отрисовать"
@@ -12365,7 +12365,7 @@ msgid "Choose image file"
 msgstr "Выбрать файл DXF:"
 
 #: ../gui/wxpython/animation/dialogs.py:863
-#: ../gui/wxpython/mapwin/decorations.py:335
+#: ../gui/wxpython/mapwin/decorations.py:338
 #, fuzzy
 msgid "Text:"
 msgstr "Тест"
@@ -13607,24 +13607,24 @@ msgstr ""
 msgid "Print preview"
 msgstr "Предварительный просмотр"
 
-#: ../gui/wxpython/mapwin/decorations.py:174
-#: ../gui/wxpython/mapwin/decorations.py:221
+#: ../gui/wxpython/mapwin/decorations.py:177
+#: ../gui/wxpython/mapwin/decorations.py:224
 msgid ""
 "Please install Python Imaging Library (PIL)\n"
 "for better control of legend and other decorations."
 msgstr ""
 
-#: ../gui/wxpython/mapwin/decorations.py:326
+#: ../gui/wxpython/mapwin/decorations.py:329
 #, fuzzy
 msgid "Show text object"
 msgstr "Показать расчетный охват"
 
-#: ../gui/wxpython/mapwin/decorations.py:351
+#: ../gui/wxpython/mapwin/decorations.py:354
 #: ../gui/wxpython/nviz/tools.py:1011
 msgid "Rotation:"
 msgstr "Поворот:"
 
-#: ../gui/wxpython/mapwin/decorations.py:379
+#: ../gui/wxpython/mapwin/decorations.py:382
 msgid ""
 "Drag text with mouse in pointer mode to position.\n"
 "Double-click to change options"

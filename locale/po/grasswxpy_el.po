@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasswxpy_el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-02-16 14:18+0100\n"
+"POT-Creation-Date: 2015-02-20 20:37+0100\n"
 "PO-Revision-Date: 2013-02-07 20:23+0200\n"
 "Last-Translator: Nikos Ves <vesnikos@gmail.com>\n"
 "Language-Team: Greek <grass-translations@lists.osgeo.org>\n"
@@ -457,7 +457,7 @@ msgstr ""
 msgid "Loading ctypes libs failed"
 msgstr "Η φορτωση του διανυσματικού χάρτη <%(name)s> (%(type)s) απέτυχε."
 
-#: ../gui/wxpython/gui_core/mapdisp.py:114 ../gui/wxpython/core/render.py:443
+#: ../gui/wxpython/gui_core/mapdisp.py:114 ../gui/wxpython/core/render.py:449
 #: ../gui/wxpython/mapdisp/test_mapdisp.py:88
 #, python-format
 msgid "GRASS module '%s' not found. Unable to start map display window."
@@ -1769,7 +1769,7 @@ msgstr ""
 #: ../gui/wxpython/gui_core/preferences.py:394
 #: ../gui/wxpython/gui_core/preferences.py:589
 #: ../gui/wxpython/animation/dialogs.py:845
-#: ../gui/wxpython/mapwin/decorations.py:366
+#: ../gui/wxpython/mapwin/decorations.py:369
 msgid "Set font"
 msgstr ""
 
@@ -4399,7 +4399,7 @@ msgid ""
 msgstr ""
 
 #: ../gui/wxpython/psmap/dialogs.py:291
-#: ../gui/wxpython/mapwin/decorations.py:363
+#: ../gui/wxpython/mapwin/decorations.py:366
 msgid "Font:"
 msgstr ""
 
@@ -5589,8 +5589,8 @@ msgstr "Μήνυμα"
 msgid "Execution failed:"
 msgstr "H εκτέλεση απέτυχε:"
 
-#: ../gui/wxpython/core/gcmd.py:395 ../gui/wxpython/core/render.py:662
-#: ../gui/wxpython/core/render.py:665 ../gui/wxpython/core/render.py:668
+#: ../gui/wxpython/core/gcmd.py:395 ../gui/wxpython/core/render.py:668
+#: ../gui/wxpython/core/render.py:671 ../gui/wxpython/core/render.py:674
 msgid "Details:"
 msgstr "Λεπτομέριες:"
 
@@ -5669,78 +5669,78 @@ msgstr ""
 msgid "Details: %s\n"
 msgstr "Λεπτομέριες %s\n"
 
-#: ../gui/wxpython/core/render.py:268
+#: ../gui/wxpython/core/render.py:274
 #, python-format
 msgid "Unsupported map layer type '%s'"
 msgstr ""
 
-#: ../gui/wxpython/core/render.py:412
+#: ../gui/wxpython/core/render.py:418
 msgid "Trying to recover from default region..."
 msgstr ""
 
-#: ../gui/wxpython/core/render.py:477
+#: ../gui/wxpython/core/render.py:483
 #, python-format
 msgid "Error: Unable to open '%(file)s'. Reason: %(ret)s. wxGUI exited.\n"
 msgstr ""
 
-#: ../gui/wxpython/core/render.py:485
+#: ../gui/wxpython/core/render.py:491
 #, fuzzy, python-format
 msgid ""
 "\n"
 "ERROR: Unable to read WIND file: %s\n"
 msgstr "Αδυναμία δημιουργίας αρχείου '%s'\n"
 
-#: ../gui/wxpython/core/render.py:582
+#: ../gui/wxpython/core/render.py:588
 #, python-format
 msgid "Invalid map size %d,%d\n"
 msgstr ""
 
-#: ../gui/wxpython/core/render.py:661
+#: ../gui/wxpython/core/render.py:667
 #, python-format
 msgid "Unable to zoom to raster map <%s>."
 msgstr ""
 
-#: ../gui/wxpython/core/render.py:664
+#: ../gui/wxpython/core/render.py:670
 #, python-format
 msgid "Unable to zoom to vector map <%s>."
 msgstr ""
 
-#: ../gui/wxpython/core/render.py:667
+#: ../gui/wxpython/core/render.py:673
 #, fuzzy, python-format
 msgid "Unable to zoom to 3d raster map <%s>."
 msgstr "Δεν ήταν δυνατή η δημιουργεία προφίλ για τον raster χάρτη."
 
-#: ../gui/wxpython/core/render.py:670
+#: ../gui/wxpython/core/render.py:676
 msgid ""
 "Unable to get current geographic extent. Force quiting wxGUI. Please "
 "manually run g.region to fix the problem."
 msgstr ""
 
-#: ../gui/wxpython/core/render.py:981
+#: ../gui/wxpython/core/render.py:987
 #, python-format
 msgid "ERROR: Rendering failed. Details: %s"
 msgstr ""
 
-#: ../gui/wxpython/core/render.py:1028 ../gui/wxpython/core/render.py:1123
+#: ../gui/wxpython/core/render.py:1034 ../gui/wxpython/core/render.py:1129
 #, python-format
 msgid "Unable to render map layer <%s>."
 msgstr ""
 
-#: ../gui/wxpython/core/render.py:1234 ../gui/wxpython/core/render.py:1273
+#: ../gui/wxpython/core/render.py:1240 ../gui/wxpython/core/render.py:1279
 #, python-format
 msgid "Unable to render overlay <%s>."
 msgstr ""
 
-#: ../gui/wxpython/core/render.py:1370
+#: ../gui/wxpython/core/render.py:1376
 #, fuzzy
 msgid "Downloading data "
 msgstr "Φόρτωση δεδομένων..."
 
-#: ../gui/wxpython/core/render.py:1380
+#: ../gui/wxpython/core/render.py:1386
 msgid "Rendering & "
 msgstr ""
 
-#: ../gui/wxpython/core/render.py:1382
+#: ../gui/wxpython/core/render.py:1388
 msgid "Rendering..."
 msgstr ""
 
@@ -11306,7 +11306,7 @@ msgid "Choose image file"
 msgstr "Επιλογή αρχείου"
 
 #: ../gui/wxpython/animation/dialogs.py:863
-#: ../gui/wxpython/mapwin/decorations.py:335
+#: ../gui/wxpython/mapwin/decorations.py:338
 msgid "Text:"
 msgstr ""
 
@@ -12447,23 +12447,23 @@ msgstr ""
 msgid "Print preview"
 msgstr ""
 
-#: ../gui/wxpython/mapwin/decorations.py:174
-#: ../gui/wxpython/mapwin/decorations.py:221
+#: ../gui/wxpython/mapwin/decorations.py:177
+#: ../gui/wxpython/mapwin/decorations.py:224
 msgid ""
 "Please install Python Imaging Library (PIL)\n"
 "for better control of legend and other decorations."
 msgstr ""
 
-#: ../gui/wxpython/mapwin/decorations.py:326
+#: ../gui/wxpython/mapwin/decorations.py:329
 msgid "Show text object"
 msgstr ""
 
-#: ../gui/wxpython/mapwin/decorations.py:351
+#: ../gui/wxpython/mapwin/decorations.py:354
 #: ../gui/wxpython/nviz/tools.py:1011
 msgid "Rotation:"
 msgstr "Περιστροφή:"
 
-#: ../gui/wxpython/mapwin/decorations.py:379
+#: ../gui/wxpython/mapwin/decorations.py:382
 msgid ""
 "Drag text with mouse in pointer mode to position.\n"
 "Double-click to change options"
