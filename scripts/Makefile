@@ -72,11 +72,7 @@ SUBDIRS = \
 	v.unpack \
 	v.what.vect \
 	wxpyimgview \
-	v.krige \
-
-#	r.mapcalculator \
-#	r3.mapcalculator \
-#	v.in.gps \
+	v.krige
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
