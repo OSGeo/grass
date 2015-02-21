@@ -182,6 +182,8 @@ Contents
 
    Upload tarball for created release
 
+   Update daily recipe contents: https://code.launchpad.net/~grass/+recipe/grass-trunk
+
 2. Tell others about it:
 
  * If release candidate:
