@@ -29,7 +29,7 @@ int f_rand(int argc, const int *argt, void **args)
 	    CELL *arg2 = args[2];
 
 	    for (i = 0; i < columns; i++) {
-		unsigned long x = (unsigned long)G_mrand48();
+		unsigned int x = (unsigned int)G_mrand48();
 		int lo = arg1[i];
 		int hi = arg2[i];
 
@@ -39,7 +39,7 @@ int f_rand(int argc, const int *argt, void **args)
 		    lo = hi;
 		    hi = tmp;
 		}
-		res[i] = (lo == hi) ? lo : lo + x % (unsigned long)(hi - lo);
+		res[i] = (lo == hi) ? lo : lo + x % (unsigned int)(hi - lo);
 	    }
 	    return 0;
 	}
