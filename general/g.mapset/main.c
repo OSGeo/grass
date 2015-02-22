@@ -66,9 +66,8 @@ int main(int argc, char *argv[])
     opt.location->description = _("Location name (not location path)");
     opt.location->guisection = _("Mapset");
 
-    opt.gisdbase = G_define_option();
+    opt.gisdbase = G_define_standard_option(G_OPT_M_DIR);
     opt.gisdbase->key = "dbase";
-    opt.gisdbase->type = TYPE_STRING;
     opt.gisdbase->required = NO;
     opt.gisdbase->multiple = NO;
     opt.gisdbase->key_desc = "path";
