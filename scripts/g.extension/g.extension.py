@@ -198,7 +198,7 @@ def get_installed_modules(force = False):
         if force:
             write_xml_modules(fXML)
         else:
-            grass.warning(_("No metadata file available"))
+            grass.warning(_("No addons metadata file available"))
         return []
 
     # read XML file
@@ -257,7 +257,7 @@ def list_available_toolboxes(url):
             for mnode in tnode.findall('task'):
                 mlist.append(mnode.get('name'))
     except HTTPError:
-        grass.fatal(_("Unable to fetch metadata file"))
+        grass.fatal(_("Unable to fetch addons metadata file"))
 
     return tdict
 
@@ -276,7 +276,7 @@ def get_toolbox_modules(url, name):
                     tlist.append(mnode.get('name'))
                 break
     except HTTPError:
-        grass.fatal(_("Unable to fetch metadata file"))
+        grass.fatal(_("Unable to fetch addons metadata file"))
 
     return tlist
 
@@ -335,9 +335,9 @@ def list_available_extensions_svn():
     pattern = re.compile(r'(<li><a href=".+">)(.+)(</a></li>)', re.IGNORECASE)
 
     if flags['c']:
-        grass.warning(_("Flag 'c' ignored, metadata file not available"))
+        grass.warning(_("Flag 'c' ignored, addons metadata file not available"))
     if flags['g']:
-        grass.warning(_("Flag 'g' ignored, metadata file not available"))
+        grass.warning(_("Flag 'g' ignored, addons metadata file not available"))
 
     prefix = ['d', 'db', 'g', 'i', 'm', 'ps',
               'p', 'r', 'r3', 's', 'v']
@@ -488,7 +488,7 @@ def install_extension(url):
     if ret != 0:
         grass.warning(_('Installation failed, sorry. Please check above error messages.'))
     else:
-        grass.message(_("Updating metadata file..."))
+        grass.message(_("Updating addons metadata file..."))
         blist = install_extension_xml(url, mlist)
         for module in blist:
             update_manual_page(module)
@@ -524,13 +524,13 @@ def install_toolbox_xml(url, name):
                 'modules'   : mlist,
                 }
     except HTTPError:
-        grass.error(_("Unable to read metadata file from the remote server"))
+        grass.error(_("Unable to read addons metadata file from the remote server"))
 
     if not data:
-        grass.warning(_("No metadata available"))
+        grass.warning(_("No addons metadata available"))
         return
     if name not in data:
-        grass.warning(_("No metadata available for <%s>") % name)
+        grass.warning(_("No addons metadata available for <%s>") % name)
         return
 
     fXML = os.path.join(options['prefix'], 'toolboxes.xml')
@@ -587,7 +587,7 @@ def install_extension_xml(url, mlist):
         try:
             tree = etree.fromstring(f.read())
         except:
-            grass.warning(_("Unable to parse '%s'. Metadata file not updated.") % url)
+            grass.warning(_("Unable to parse '%s'. Addons metadata file not updated.") % url)
             return bList
 
         for mnode in tree.findall('task'):
@@ -620,10 +620,10 @@ def install_extension_xml(url, mlist):
                 }
 
     except:
-        grass.error(_("Unable to read metadata file from the remote server"))
+        grass.error(_("Unable to read addons metadata file from the remote server"))
 
     if not data:
-        grass.warning(_("No metadata available"))
+        grass.warning(_("No addons metadata available"))
         return []
 
     fXML = os.path.join(options['prefix'], 'modules.xml')
@@ -645,7 +645,7 @@ def install_extension_xml(url, mlist):
                 break
 
         if name not in data:
-            grass.warning(_("No metadata found for <%s>") % name)
+            grass.warning(_("No addons metadata found for <%s>") % name)
             continue
 
         ndata = data[name]
@@ -814,7 +814,7 @@ def remove_extension(force = False):
     remove_modules(mlist, force)
 
     if force:
-        grass.message(_("Updating metadata file..."))
+        grass.message(_("Updating addons metadata file..."))
         remove_extension_xml(mlist)
         grass.message(_("Extension <%s> successfully uninstalled.") % options['extension'])
     else:
