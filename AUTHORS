@@ -50,7 +50,8 @@ GRASS 7.0 major project contributers
 
 LEAD ARCHITECT
  - Glynn Clements <glynn at gclements plus com>
-
+ - Markus Metz <markus.metz.giswork gmail.com>: Vector library lead
+ 
 GUI
  - Martin Landa <landa.martin gmail com>: wxPython GUI lead
 
