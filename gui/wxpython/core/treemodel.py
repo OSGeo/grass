@@ -195,7 +195,10 @@ class ModuleNode(DictNode):
         if not self.data:
             return False
         if key in ('command', 'keywords', 'description'):
-            return len(self.data[key]) and (value in self.data[key] or value == '*')
+            try:
+                return len(self.data[key]) and (value in self.data[key] or value == '*')
+            except KeyError:
+                return False
         
         return False
             
