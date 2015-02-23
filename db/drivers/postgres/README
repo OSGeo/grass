@@ -10,7 +10,7 @@ by G_warning().
 
 FIELD TYPES:
 Field type code may change. See for example
-http://developer.postgresql.org/cvsweb.cgi/pgsql-server/src/include/catalog/pg_type.h
+http://git.postgresql.org/gitweb/?p=postgresql.git;a=blob;f=src/include/catalog/pg_type.h;hb=refs/heads/master
 
 Because of this, type codes must be read from server when database is opened.
 
@@ -19,7 +19,8 @@ Check also for PostgreSQL data types for defining them in GRASS:
 
 
 Supported types in ./globals.h:
-(http://www.postgresql.org/docs/8.2/interactive/datatype.html)
+(See http://www.postgresql.org/docs/9.4/interactive/datatype.html)
+
 DB_C_TYPE_INT:
 bit, int2, smallint, int4, int, integer, int8, bigint, serial, oid
 
