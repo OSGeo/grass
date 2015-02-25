@@ -9,6 +9,7 @@ for details.
 :authors: Vaclav Petras, Soeren Gebbert
 """
 
+import os
 import sys
 import re
 import doctest
@@ -570,17 +571,43 @@ def file_md5(filename):
     return hasher.hexdigest()
 
 
-def text_file_md5(filename, exclude_lines=None,
+def text_file_md5(filename, exclude_lines=None, exclude_re=None,
                   prepend_lines=None, append_lines=None):
     """Get a MD5 (check) sum of a text file.
 
-    Works in the same way as `file_md5()` function but allows to
-    exclude lines from the file as well as prepend or append them.
+    Works in the same way as `file_md5()` function but ignores newlines
+    characters and excludes lines from the file as well as prepend or
+    append them if requested.
 
-    .. todo::
-        Implement this function.
+    :param exclude_lines: list of strings to be excluded
+        (newline characters should not be part of the strings)
+    :param exclude_re: regular expression string;
+        lines matching this regular expression will not be considered
+    :param prepend_lines: list of lines to be prepended to the file
+        before computing the sum
+    :param append_lines: list of lines  to be appended to the file
+        before computing the sum
     """
-    raise NotImplementedError("Implement, or use file_md5() function instead")
+    hasher = hashlib.md5()
+    if exclude_re:
+        regexp = re.compile(exclude_re)
+    if prepend_lines:
+        for line in prepend_lines:
+            hasher.update(line)
+    with open(filename, 'r') as f:
+        for line in f:
+            # replace platform newlines by standard newline
+            if os.linesep != '\n':
+                line = line.rstrip(os.linesep) + '\n'
+            if exclude_lines and line in exclude_lines:
+                continue
+            if exclude_re and regexp.match(line):
+                continue
+            hasher.update(line)
+    if append_lines:
+        for line in append_lines:
+            hasher.update(line)
+    return hasher.hexdigest()
 
 
 def files_equal_md5(filename_a, filename_b):

@@ -14,11 +14,14 @@ for details.
 """
 
 
-from grass.script.utils import parse_key_val
+from grass.script.utils import parse_key_val, try_remove
 
 import grass.gunittest
-from grass.gunittest.checkers import (values_equal, text_to_keyvalue,
-    keyvalue_equals, proj_info_equals, proj_units_equals)
+from grass.gunittest.checkers import (
+    values_equal, text_to_keyvalue,
+    keyvalue_equals, proj_info_equals, proj_units_equals,
+    file_md5, text_file_md5)
+
 
 
 class TestValuesEqual(grass.gunittest.TestCase):
@@ -307,6 +310,87 @@ class TestRasterMapComparisons(grass.gunittest.TestCase):
                                          text_to_keyvalue(R_UNIVAR_ELEVATION_ROUNDED,
                                                           sep='='),
                                          precision=0.001))
+
+CORRECT_LINES = [
+    "null_cells=57995100",
+    "cells=60020100",
+    "min=55.5787925720215",
+    "max=156.329864501953"
+]
+
+INCORRECT_LINES = [
+    "null_cells=579951",
+    "cells=60020100",
+    "min=5.5787925720215",
+    "max=156.329864501953"
+]
+
+
+class TestMd5Sums(grass.gunittest.TestCase):
+    r"""
+
+    To create MD5 which is used for testing use:
+
+    .. code: sh
+    $ cat > test.txt << EOF
+    null_cells=57995100
+    cells=60020100
+    min=55.5787925720215
+    max=156.329864501953
+    EOF
+    $ md5sum test.txt
+    9dd6c4bb9d2cf6051b12f4b5f9d70523  test.txt
+    """
+
+    correct_md5sum = '9dd6c4bb9d2cf6051b12f4b5f9d70523'
+    correct_file_name_platform_nl = 'md5_sum_correct_file_platform_nl'
+    correct_file_name_unix_nl = 'md5_sum_correct_file_unix_nl'
+    wrong_file_name = 'md5_sum_wrong_file'
+
+    @classmethod
+    def setUpClass(cls):
+        with open(cls.correct_file_name_platform_nl, 'w') as f:
+            for line in CORRECT_LINES:
+                # \n should be converted to platform newline
+                f.write(line + '\n')
+        with open(cls.correct_file_name_unix_nl, 'wb') as f:
+            for line in CORRECT_LINES:
+                # binary mode will write pure \n
+                f.write(line + '\n')
+        with open(cls.wrong_file_name, 'w') as f:
+            for line in INCORRECT_LINES:
+                # \n should be converted to platform newline
+                f.write(line + '\n')
+
+    @classmethod
+    def tearDownClass(cls):
+        try_remove(cls.correct_file_name_platform_nl)
+        try_remove(cls.correct_file_name_unix_nl)
+        try_remove(cls.wrong_file_name)
+
+    def test_text_file_binary(self):
+        r"""File with ``\n`` (LF) newlines as binary (MD5 has ``\n``)."""
+        self.assertEquals(file_md5(self.correct_file_name_unix_nl),
+                          self.correct_md5sum,
+                          msg="MD5 sums different")
+
+    def test_text_file_platfrom(self):
+        r"""Text file with platform dependent newlines"""
+        self.assertEquals(text_file_md5(self.correct_file_name_platform_nl),
+                          self.correct_md5sum,
+                          msg="MD5 sums different")
+
+    def test_text_file_unix(self):
+        r"""Text file with ``\n`` (LF) newlines"""
+        self.assertEquals(text_file_md5(self.correct_file_name_unix_nl),
+                          self.correct_md5sum,
+                          msg="MD5 sums different")
+
+    def test_text_file_different(self):
+        r"""Text file with ``\n`` (LF) newlines"""
+        self.assertNotEquals(text_file_md5(self.wrong_file_name),
+                             self.correct_md5sum,
+                             msg="MD5 sums must be different")
 
 
 if __name__ == '__main__':

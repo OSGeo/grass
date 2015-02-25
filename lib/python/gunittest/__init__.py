@@ -12,6 +12,8 @@ Initial version of `gunittest` was created during Google Summer of Code 2014
 by Vaclav Petras as a student and Soeren Gebbert as a mentor.
 """
 
+# TODO: consider removing all from here before the backport or release
+
 from __future__ import print_function
 
 try:
