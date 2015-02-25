@@ -77,27 +77,18 @@ int main(int argc, char *argv[])
     mapopt->description = NULL;
     mapopt->guisection = _("Source");
     
-    ilocopt = G_define_option();
-    ilocopt->key = "location";
-    ilocopt->type = TYPE_STRING;
+    ilocopt = G_define_standard_option(G_OPT_M_LOCATION);
     ilocopt->required = YES;
-    ilocopt->description = _("Location containing input vector map");
-    ilocopt->gisprompt = "old,location,location";
-    ilocopt->key_desc = "name";
+    ilocopt->label = _("Location containing input vector map");
+    ilocopt->guisection = _("Source");
     
     isetopt = G_define_standard_option(G_OPT_M_MAPSET);
     isetopt->label = _("Mapset containing input vector map");
     isetopt->description = _("Default: name of current mapset");
     isetopt->guisection = _("Source");
 
-    ibaseopt = G_define_option();
-    ibaseopt->key = "dbase";
-    ibaseopt->type = TYPE_STRING;
-    ibaseopt->required = NO;
+    ibaseopt = G_define_standard_option(G_OPT_M_DBASE);
     ibaseopt->label = _("Path to GRASS database of input location");
-    ibaseopt->description = _("Default: path to the current GRASS database");
-    ibaseopt->gisprompt = "old,dbase,dbase";
-    ibaseopt->key_desc = "path";
     ibaseopt->guisection = _("Source");
 
     smax = G_define_option();
