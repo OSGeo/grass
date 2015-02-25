@@ -152,26 +152,18 @@ int main(int argc, char **argv)
     inmap->required = NO;
     inmap->guisection = _("Source");
 
-    inlocation = G_define_option();
-    inlocation->key = "location";
-    inlocation->type = TYPE_STRING;
+    inlocation = G_define_standard_option(G_OPT_M_LOCATION);
     inlocation->required = YES;
-    inlocation->description = _("Location containing input raster map");
-    inlocation->gisprompt = "old,location,location";
-    inlocation->key_desc = "name";
+    inlocation->label = _("Location containing input raster map");
+    inlocation->guisection = _("Source");
 
     imapset = G_define_standard_option(G_OPT_M_MAPSET);
     imapset->label = _("Mapset containing input raster map");
     imapset->description = _("Default: name of current mapset");
     imapset->guisection = _("Source");
 
-    indbase = G_define_option();
-    indbase->key = "dbase";
-    indbase->type = TYPE_STRING;
-    indbase->required = NO;
-    indbase->description = _("Path to GRASS database of input location");
-    indbase->gisprompt = "old,dbase,dbase";
-    indbase->key_desc = "path";
+    indbase = G_define_standard_option(G_OPT_M_DBASE);
+    indbase->label = _("Path to GRASS database of input location");
     indbase->guisection = _("Source");
 
     outmap = G_define_standard_option(G_OPT_R_OUTPUT);

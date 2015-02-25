@@ -57,20 +57,10 @@ int main(int argc, char *argv[])
     opt.mapset->guisection = _("Mapset");
     opt.mapset->gisprompt = "new,mapset,mapset";
 
-    opt.location = G_define_option();
-    opt.location->key = "location";
-    opt.location->type = TYPE_STRING;
-    opt.location->required = NO;
-    opt.location->multiple = NO;
-    opt.location->key_desc = "name";
-    opt.location->description = _("Location name (not location path)");
+    opt.location = G_define_standard_option(G_OPT_M_LOCATION);
     opt.location->guisection = _("Mapset");
 
-    opt.gisdbase = G_define_standard_option(G_OPT_M_DIR);
-    opt.gisdbase->key = "dbase";
-    opt.gisdbase->required = NO;
-    opt.gisdbase->label = _("GIS data directory");
-    opt.gisdbase->description = _("Full path to the directory where the new location is");
+    opt.gisdbase = G_define_standard_option(G_OPT_M_DBASE);
     opt.gisdbase->guisection = _("Mapset");
 
     flag.add = G_define_flag();

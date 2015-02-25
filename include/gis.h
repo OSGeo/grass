@@ -264,6 +264,8 @@ typedef enum
     G_OPT_M_UNITS,              /*!< units */
     G_OPT_M_DATATYPE,           /*!< datatype */
     G_OPT_M_MAPSET,             /*!< mapset */
+    G_OPT_M_LOCATION,           /*!< location */
+    G_OPT_M_DBASE,              /*!< dbase */
     G_OPT_M_COORDS,             /*!< coordinates */
     G_OPT_M_COLR,               /*!< color rules */
     G_OPT_M_DIR,                /*!< directory input */    
