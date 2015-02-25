@@ -100,6 +100,8 @@
    - G_OPT_M_UNITS
    - G_OPT_M_DATATYPE
    - G_OPT_M_MAPSET
+   - G_OPT_M_LOCATION
+   - G_OPT_M_DBASE
    - G_OPT_M_COORDS
    - G_OPT_M_COLR
    - G_OPT_M_REGION
@@ -653,6 +655,28 @@ struct Option *G_define_standard_option(int opt)
 	Opt->label = _("Name of mapset (default: current search path)");
 	Opt->description = _("'.' for current mapset");
 	break;
+	
+    case G_OPT_M_LOCATION:
+    Opt->key = "location";
+    Opt->type = TYPE_STRING;
+    Opt->required = NO;
+    Opt->multiple = NO;
+    Opt->label = _("Location name");
+    Opt->description = _("Location name (not location path)");
+    Opt->gisprompt = "old,location,location";
+    Opt->key_desc = "name";
+    break;
+
+    case G_OPT_M_DBASE:
+    Opt->key = "dbase";
+    Opt->type = TYPE_STRING;
+    Opt->required = NO;
+    Opt->multiple = NO;
+    Opt->label = _("GRASS GIS database directory");
+    Opt->description = _("Default: path to the current GRASS GIS database");
+    Opt->gisprompt = "old,dbase,dbase";
+    Opt->key_desc = "path";
+    break;
 
     case G_OPT_M_COORDS:
 	Opt->key = "coordinates";
