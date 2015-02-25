@@ -22,7 +22,7 @@ from grass.exceptions import CalledModuleError
 from .gmodules import call_module, SimpleModule
 from .checkers import (check_text_ellipsis,
                        text_to_keyvalue, keyvalue_equals, diff_keyvalue,
-                       file_md5, files_equal_md5)
+                       file_md5, text_file_md5, files_equal_md5)
 from .utils import safe_repr
 from .gutils import is_map_in_mapset
 
@@ -35,6 +35,8 @@ class TestCase(unittest.TestCase):
 
     Always use keyword arguments for all parameters other than first two. For
     the first two, it is recommended to use keyword arguments but not required.
+    Be especially careful and always use keyword argument syntax for *msg*
+    parameter.
     """
     longMessage = True  # to get both standard and custom message
     maxDiff = None  # we can afford long diffs
@@ -543,35 +545,52 @@ class TestCase(unittest.TestCase):
             stdmsg = 'File %s is not accessible for reading' % filename
             self.fail(self._formatMessage(msg, stdmsg))
 
-    def assertFileMd5(self, filename, md5, msg=None):
-        """Test that file MD5 sum is equal to the provided sum.
+    def assertFileMd5(self, filename, md5, text=False, msg=None):
+        r"""Test that file MD5 sum is equal to the provided sum.
+
+        Usually, this function is used to test binary files or large text files
+        which cannot be tested in some other way. Text files can be usually
+        tested by some finer method.
+
+        To test text files with this function, you should always use parameter
+        *text* set to ``True``. Note that function ``checkers.text_file_md5()``
+        offers additional parameters which might be advantageous when testing
+        text files.
 
         The typical workflow is that you create a file in a way you
         trust (that you obtain the right file). Then you compute MD5
         sum of the file. And provide the sum in a test as a string::
 
-            self.assertFileMd5('result.txt', md5='807bba4ffa...')
+            self.assertFileMd5('result.png', md5='807bba4ffa...')
 
         Use `file_md5()` function from this package::
 
-            file_md5('original_result.txt')
+            file_md5('original_result.png')
 
         Or in command line, use ``md5sum`` command if available:
 
         .. code-block:: sh
 
-            md5sum some_file.txt
+            md5sum some_file.png
 
         Finaly, you can use Python ``hashlib`` to obtain MD5::
 
             import hashlib
             hasher = hashlib.md5()
             # expecting the file to fit into memory
-            hasher.update(open('original_result.txt', 'rb').read())
+            hasher.update(open('original_result.png', 'rb').read())
             hasher.hexdigest()
+
+        .. note:
+            For text files, always create MD5 sum using ``\n`` (LF)
+            as newline characters for consistency. Also use newline
+            at the end of file (as for example, Git or PEP8 requires).
         """
         self.assertFileExists(filename, msg=msg)
-        actual = file_md5(filename)
+        if text:
+            actual = text_file_md5(filename)
+        else:
+            actual = file_md5(filename)
         if not actual == md5:
             standardMsg = ('File <{name}> does not have the right MD5 sum.\n'
                            'Expected is <{expected}>,'
