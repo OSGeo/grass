@@ -9,10 +9,13 @@ labels.
 
 <em>v.to.rast</em> will only affect data in areas lying
 inside the boundaries of the current geographic region.
+A grid cell belongs to the area where the grid cell center falls into.
+<p>
 Before running <em>v.to.rast</em>, the user should
 therefore ensure that the current geographic region is
 correctly set and that the region resolution is at the
 desired level.
+
 <p>Either the <em><b>column</b></em> parameter or the <em><b>value</b></em>
 parameter must be specified.  The <em><b>use</b></em> option may be 
 specified alone when using the <em>dir</em> option.
@@ -51,6 +54,9 @@ resultant raster map.
 </ul>
 <p><p><b>Flow directions</b> are given in degrees counterclockwise from east.
 <p><p>Raster category labels are supported for all of <em>use=</em> except <em>use=z</em>.
+<p>
+The <b>-d</b> flag applies only to lines, the default is only those on the
+render path (thin line).
 
 <h2>EXAMPLES</h2>
 
