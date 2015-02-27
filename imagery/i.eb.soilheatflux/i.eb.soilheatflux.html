@@ -6,7 +6,35 @@ after Bastiaanssen (1995). The main reference for implementation is Alexandridis
 It takes input of Albedo, NDVI, Surface Skin temperature, Net Radiation (see 
 <em>r.sun</em>), time of satellite overpass, and a flag for the Roerink empirical modification from the HAPEX-Sahel experiment.
 
-Time of satellite overpass is a MODIS sub dataset, and for Landsat can be computed by using a two steps method, 1) overpasstime=$(i.landsat.toar metfile=yourmetfile -p lsatmet=time) ; 2) r.mapcalc expression="time=$overpasstime"; after that the <em>time</em> map is available for processing in this module.
+The "time of satellite overpass" map can be obtained as follows:
+<ul>
+<li>MODIS: a related sub dataset is included in each HDF file, and simply 
+    to be imported as a raster map;</li>
+<li>Landsat: to be generated as map from the overpass time stored in
+    the metadata file (given in Greenwich Mean Time - GMT), see below.</li>
+</ul> 
+
+For Landsat, the overpass map can be computed by using a two-step method:
+
+<div class="code"><pre>
+# 1) extract the overpass time in GMT from metadata file
+
+i.landsat.toar -p input=dummy output=dummy2 \
+   metfile=LC81250452013338LGN00_MTL.txt lsatmet=time
+# ... in this example approx. 03:12am GMT
+
+# 2) create map for computational region of Landsat scene
+g.region rast=LC81250452013338LGN00_B4 -p
+r.mapcalc "overpasstime = 3.211328"
+</pre></div>
+
+<!--
+<h2>EXAMPLE</h2>
+
+<div class="code"><pre>
+i.eb.soilheatflux ...
+</pre></div>
+-->
 
 <h2>SEE ALSO</h2>
 
