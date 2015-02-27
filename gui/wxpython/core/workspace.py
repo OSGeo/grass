@@ -20,6 +20,7 @@ import os
 
 import wx
 
+from core.globalvar import wxPython3
 from core.utils     import normalize_whitespace, _
 from core.settings  import UserSettings
 from core.gcmd      import EncodeString, GetDefaultEncoding
@@ -739,6 +740,8 @@ class WriteWorkspaceFile(object):
             
             displayPos = mapdisp.GetPosition()
             displaySize = mapdisp.GetSize()
+            if wxPython3:
+                displaySize[1] -= 32 # see related hack on line lmgr.frame.LoadWorkspaceFile()
             if mapdisp.toolbars['map'].combo.GetSelection() == 1:
                 viewmode = '3d'
             else:
