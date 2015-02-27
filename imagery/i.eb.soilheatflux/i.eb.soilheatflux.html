@@ -2,9 +2,11 @@
 
 <em>i.eb.soilheatflux</em> calculates the soil heat flux approximation (g0)
 after Bastiaanssen (1995). The main reference for implementation is Alexandridis, 2009.
+
 It takes input of Albedo, NDVI, Surface Skin temperature, Net Radiation (see 
-<em>r.sun</em>), time of satellite overpass, and a flag for the Roerink empirical
-modification from the HAPEX-Sahel experiment.
+<em>r.sun</em>), time of satellite overpass, and a flag for the Roerink empirical modification from the HAPEX-Sahel experiment.
+
+Time of satellite overpass is a MODIS sub dataset, and for Landsat can be computed by using a two steps method, 1) overpasstime=$(i.landsat.toar metfile=yourmetfile -p lsatmet=time) ; 2) r.mapcalc expression="time=$overpasstime"; after that the <em>time</em> map is available for processing in this module.
 
 <h2>SEE ALSO</h2>
 
@@ -14,6 +16,7 @@ modification from the HAPEX-Sahel experiment.
 <a href="i.emissivity.html">i.emissivity</a>,
 <a href="i.eb.hsebal01.html">i.eb.hsebal01</a>,
 <a href="i.eb.evapfr.html">i.eb.evapfr</a>
+<a href="i.landsat.toar.html">i.landsat.toar</a>
 </em>
 
 <h2>REFERENCES</h2>
