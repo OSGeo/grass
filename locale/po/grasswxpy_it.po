@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-02-20 20:37+0100\n"
-"PO-Revision-Date: 2015-01-14 14:10+0100\n"
+"PO-Revision-Date: 2015-02-19 17:31+0100\n"
 "Last-Translator: Luca Delucchi <lucadeluge@gmail.com>\n"
 "Language-Team: Italian <grass-translations@lists.osgeo.org>\n"
 "Language: it\n"
@@ -61,11 +61,12 @@ msgstr "Seleziona area con poligono"
 
 #: ../gui/wxpython/iscatt/toolbars.py:52
 msgid "Pan mode for scatter plots"
-msgstr ""
+msgstr "Modalità sposta per lo scatter plot"
 
 #: ../gui/wxpython/iscatt/toolbars.py:54
 msgid "Zoom mode for scatter plots (left mouse button, wheel)"
 msgstr ""
+"Modalità zoom per lo scatter plot (bottone sinistro del mouse, rotella)"
 
 #: ../gui/wxpython/iscatt/toolbars.py:56
 msgid ""
@@ -93,15 +94,15 @@ msgstr "Aggiungi nuovo vertice"
 
 #: ../gui/wxpython/iscatt/toolbars.py:169
 msgid "Add new vertex to polygon boundary scatter plot"
-msgstr ""
+msgstr "Aggiungi nuovo vertice al contorno del poligono per lo scatter plot"
 
 #: ../gui/wxpython/iscatt/toolbars.py:171
 msgid "Create selection polygon"
-msgstr ""
+msgstr "Crea poligono di selezione"
 
 #: ../gui/wxpython/iscatt/toolbars.py:172
 msgid "Add new vertex between last and first points of the boundary"
-msgstr ""
+msgstr "Aggiungi nuovo vertice tra il primo e l'ultimo punto del contorno"
 
 #: ../gui/wxpython/iscatt/toolbars.py:174
 msgid "Move vertex"
@@ -149,6 +150,12 @@ msgid ""
 "\n"
 "You can reduce number of cells in current region using <g.region> command."
 msgstr ""
+"Lo Scatter Plot interattivo non possono essere usati.\n"
+"Numero di celle (righe*colonne) <%d> nella regione corrente è più altro del "
+"limite massimo <%d>.\n"
+"\n"
+"È possibile ridurre il numero di celle nella regione corrente usando il "
+"comando <g.region>."
 
 #: ../gui/wxpython/iscatt/controllers.py:228
 #, python-format
@@ -161,6 +168,14 @@ msgid ""
 "\n"
 "Do you want to continue using Interactive Scatter Plot Tool with this region?"
 msgstr ""
+"Numero di celle (righe*colonne) <%d> nella regione corrente è più altro del "
+"limite massimo raccomandato <%d>.\n"
+"È altamente raccomandato di ridurre il numero di celle nella regione "
+"corrente sotto il limite raccomandato.\n"
+"È possibile farlo tramite il comando <g.region>.\n"
+"\n"
+"Si vuole continuare usando lo strumento Scatter Plot interattivo con questa "
+"regione?"
 
 #: ../gui/wxpython/iscatt/controllers.py:284
 msgid ""
@@ -202,6 +217,10 @@ msgid ""
 "\n"
 "There is no class yet, do you want to create one?"
 msgstr ""
+"Al fine di selezionare aree nello scatter plot, prima bisogna selezionare la "
+"classe.\n"
+"\n"
+"Non ci sono ancora classi, se ne vuole creare una?"
 
 #: ../gui/wxpython/iscatt/controllers.py:403
 #: ../gui/wxpython/iclass/digit.py:70
@@ -214,6 +233,9 @@ msgid ""
 "Error occured during computation of scatter plot category:\n"
 "%s"
 msgstr ""
+"Un errore è occorso durante la creazione della categoria dello scatter "
+"plot:\n"
+"%s"
 
 #: ../gui/wxpython/iscatt/controllers.py:742
 #, python-format
@@ -321,7 +343,7 @@ msgstr "Seleziona colore del poligono:"
 
 #: ../gui/wxpython/iscatt/dialogs.py:324
 msgid "Color of selection polygon vertex:"
-msgstr ""
+msgstr "Colore per i vertici del poligono selezionati:"
 
 #: ../gui/wxpython/iscatt/dialogs.py:325
 msgid "Selected area color:"
@@ -365,7 +387,7 @@ msgstr "Seleziona stile:"
 
 #: ../gui/wxpython/iscatt/dialogs.py:393
 msgid "Ellipses settings:"
-msgstr ""
+msgstr "Impostazioni delle ellissi:"
 
 #: ../gui/wxpython/iscatt/frame.py:129 ../gui/wxpython/iclass/dialogs.py:276
 msgid "Classes"
@@ -458,6 +480,8 @@ msgid ""
 "Unable to import pyGRASS: %s\n"
 "Some functionality will be not accessible"
 msgstr ""
+"Impossibile importare pyGRASS: %s\n"
+"Alcune funzionalità non sarà accessibile"
 
 #: ../gui/wxpython/gui_core/gselect.py:458
 msgid "Not selectable element"
@@ -866,6 +890,8 @@ msgstr "Modellizzatore Grafico"
 #: ../gui/wxpython/gui_core/forms.py:1301
 msgid "Show graphical representation of temporal extent of dataset(s) ."
 msgstr ""
+"Mostra la rappresentazione grafica dell'estensione temporale di uno o più "
+"dataset. "
 
 #: ../gui/wxpython/gui_core/forms.py:1459 ../gui/wxpython/core/utils.py:998
 msgid "Select Color"
@@ -895,7 +921,7 @@ msgstr "&Carica"
 
 #: ../gui/wxpython/gui_core/forms.py:1551
 msgid "Load and edit content of a file"
-msgstr ""
+msgstr "Carica e modifica contenuto di un file"
 
 #: ../gui/wxpython/gui_core/forms.py:1553
 msgid "&Save as"
@@ -969,7 +995,7 @@ msgstr "%(cmd)s: parametro '%(key)s' non disponibile"
 
 #: ../gui/wxpython/gui_core/forms.py:2476
 msgid "Try to set up GRASS_ADDON_PATH or GRASS_ADDON_BASE variable."
-msgstr ""
+msgstr "Prova di impostare la variabile GRASS_ADDON_PATH o GRASS_ADDON_BASE"
 
 #: ../gui/wxpython/gui_core/widgets.py:84
 msgid " (...)"
@@ -993,11 +1019,11 @@ msgstr "Ricerca testo completo"
 
 #: ../gui/wxpython/gui_core/widgets.py:882
 msgid "Type to search in all modules. Press Enter for next match."
-msgstr ""
+msgstr "Digita per cercare in tutti i moduli. Premere Enter per il prossimo."
 
 #: ../gui/wxpython/gui_core/widgets.py:946
 msgid "Searching, please type more characters."
-msgstr ""
+msgstr "Cercando, si prega di digitare più caratteri."
 
 #: ../gui/wxpython/gui_core/widgets.py:955
 #, python-format
@@ -1050,6 +1076,7 @@ msgstr "Risultato dell'interrogazione"
 #: ../gui/wxpython/gui_core/query.py:40
 msgid "Right click to copy selected values to clipboard."
 msgstr ""
+"Cliccare con il tasto destro per copiare i valori selezionati negli appunti. "
 
 #: ../gui/wxpython/gui_core/query.py:44
 msgid "Feature"
@@ -1223,6 +1250,8 @@ msgid ""
 "Name cannot begin with '.' and must not contain space, quotes, '/', ''', "
 "'@', ',', '=', '*', and all other non-alphanumeric characters."
 msgstr ""
+"Il nome non può iniziare con '.' e non deve contenere spazi, virgole, '/', "
+"''', '@', ',', '=', '*', e tutti i caratteri non alfanumerici."
 
 #: ../gui/wxpython/gui_core/dialogs.py:559
 msgid "Create or edit imagery groups"
@@ -1246,6 +1275,8 @@ msgid ""
 "Put here a regular expression. Characters '.*' stand for anything, character "
 "'^' stands for the beginning and '$' for the end."
 msgstr ""
+"Inserire qui un'espressione regolare. I caratteri '.*' stanno per tutto, il "
+"carattere '^' sta per inizio e '$' per fine."
 
 #: ../gui/wxpython/gui_core/dialogs.py:642
 msgid "Select existing group or enter name of new group:"
@@ -2921,7 +2952,7 @@ msgstr "Copia le statistiche negli appunti (Ctrl+C)"
 
 #: ../gui/wxpython/dbmgr/base.py:3470
 msgid "Statistics is not support for DBF tables."
-msgstr ""
+msgstr "Statistiche non è supportato per le tabelle DBF."
 
 #: ../gui/wxpython/dbmgr/base.py:3493
 msgid "Unable to calculte statistics."
@@ -2932,6 +2963,8 @@ msgstr "Impossibile calcolare le statistiche."
 msgid ""
 "Unable to calculte statistics. Invalid number of lines %d (should be %d)."
 msgstr ""
+"Impossibile calcolare le statistiche. Numero non valido di linee %d "
+"(dovrebbe essere %d)."
 
 #: ../gui/wxpython/dbmgr/base.py:3518
 msgid "Unable to calculte standard deviation."
@@ -2948,7 +2981,7 @@ msgstr "GRASS GIS Gestore Tabella degli Attributi -"
 
 #: ../gui/wxpython/dbmgr/manager.py:72
 msgid "READONLY - "
-msgstr ""
+msgstr "SOLA LETTURA -"
 
 #: ../gui/wxpython/dbmgr/manager.py:85
 #, python-format
@@ -3029,7 +3062,7 @@ msgstr "Ottieni un esempio"
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:207
 msgid "Get first 256 unique values as sample"
-msgstr ""
+msgstr "Ottiene i primi 256 valori unici come campioni"
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:223
 msgid "Go to:"
@@ -3107,7 +3140,7 @@ msgstr "Istruzione SQL applicata"
 
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:672
 msgid "Dbf driver does not support usage of SQL functions."
-msgstr ""
+msgstr "Il driver DBF non supporta l'utilizzo di funzioni SQL."
 
 #: ../gui/wxpython/dbmgr/dialogs.py:74
 #, python-format
@@ -3188,6 +3221,8 @@ msgstr "GRASS GIS Gestore Tabella degli Attributi"
 msgid ""
 "Failed to query vector map <{map}>. Check database settings and topology."
 msgstr ""
+"Interrogazione del vettoriale <{map}> fallita. Controllare le impostazioni "
+"del database e la topologia."
 
 #: ../gui/wxpython/location_wizard/dialogs.py:36
 msgid "Set default region extent and resolution"
@@ -3316,7 +3351,7 @@ msgstr "Nome della Location"
 
 #: ../gui/wxpython/location_wizard/wizard.py:142
 msgid "Optional location title, you can leave this field blank."
-msgstr ""
+msgstr "Titolo della location opzionale, si può lasciare questo campo bianco."
 
 #: ../gui/wxpython/location_wizard/wizard.py:162
 #, python-format
@@ -3324,6 +3359,8 @@ msgid ""
 "Name <%(name)s> is not a valid name for location. Please use only ASCII "
 "characters excluding %(chars)s and space."
 msgstr ""
+"Il nome <%(name)s> non è un nome valido per la location. Si prega di usare "
+"solo caratteri ASCII %(chars)s and spazi."
 
 #: ../gui/wxpython/location_wizard/wizard.py:165
 msgid "Invalid location name"
@@ -3696,7 +3733,7 @@ msgstr ""
 
 #: ../gui/wxpython/rlisetup/frame.py:88
 msgid "WARNING"
-msgstr ""
+msgstr "ATTENZIONE"
 
 #: ../gui/wxpython/rlisetup/frame.py:105
 msgid "GRASS GIS Setup for r.li modules"
@@ -3967,9 +4004,8 @@ msgstr "Cerchio"
 #: ../gui/wxpython/rlisetup/wizard.py:1127
 #: ../gui/wxpython/rlisetup/wizard.py:1278
 #: ../gui/wxpython/rlisetup/wizard.py:1293
-#, fuzzy
 msgid "Width size (in cells)?"
-msgstr "Dimensione larghezza:"
+msgstr "Dimensione larghezza (in celle)?:"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1128
 #: ../gui/wxpython/rlisetup/wizard.py:1294
@@ -4112,7 +4148,6 @@ msgstr "Dimensione larghezza:"
 
 #: ../gui/wxpython/rlisetup/wizard.py:1781
 #: ../gui/wxpython/rlisetup/wizard.py:1810
-#, fuzzy
 msgid "Height size:"
 msgstr "Dimensione altezza:"
 
@@ -10114,9 +10149,8 @@ msgid "3D r&aster"
 msgstr "Raster 3D"
 
 #: ../gui/wxpython/menustrings.py:821 ../gui/wxpython/menustrings.py:1722
-#, fuzzy
 msgid "Develop 3D raster map"
-msgstr "Sviluppa raster"
+msgstr "Sviluppa raster 3D"
 
 #: ../gui/wxpython/menustrings.py:822 ../gui/wxpython/menustrings.py:1723
 msgid "Manage 3D NULL values"
@@ -10200,7 +10234,6 @@ msgstr ""
 "regolarizzate con tensione (RST)."
 
 #: ../gui/wxpython/menustrings.py:843 ../gui/wxpython/menustrings.py:1744
-#, fuzzy
 msgid "Reports and Statistics"
 msgstr "Report e statistiche"
 
@@ -10468,9 +10501,8 @@ msgstr ""
 "degli attributi"
 
 #: ../gui/wxpython/menustrings.py:907 ../gui/wxpython/menustrings.py:1808
-#, fuzzy
 msgid "&Temporal"
-msgstr "Tipologia di categoria"
+msgstr "&Temporale"
 
 #: ../gui/wxpython/menustrings.py:908 ../gui/wxpython/menustrings.py:1809
 msgid "Manage datasets"
@@ -11601,19 +11633,16 @@ msgid "Add space-time dataset layer"
 msgstr "Aggiungi un dataset spazio temporale"
 
 #: ../gui/wxpython/animation/dialogs.py:1281
-#, fuzzy
 msgid "Multiple raster maps"
-msgstr "Mappe raster"
+msgstr "Molteplici mappe raster"
 
 #: ../gui/wxpython/animation/dialogs.py:1282
-#, fuzzy
 msgid "Multiple vector maps"
-msgstr "Mappe vettoriali"
+msgstr "Molteplici mappe vettoriali"
 
 #: ../gui/wxpython/animation/dialogs.py:1283
-#, fuzzy
 msgid "Multiple 3D raster maps"
-msgstr "Mappe raster 3D"
+msgstr "Molteplici mappe raster 3D"
 
 #: ../gui/wxpython/animation/dialogs.py:1284
 msgid "Space time raster dataset"
@@ -12690,9 +12719,8 @@ msgid "Zoom to saved region extents"
 msgstr "Zoom all'estensione della regione salvata"
 
 #: ../gui/wxpython/mapwin/buffered.py:1881
-#, fuzzy
 msgid "Set compulational region from named region"
-msgstr "Imposta la regione computazionale dal display"
+msgstr "Imposta la regione computazionale dalla regione salvata"
 
 #: ../gui/wxpython/mapwin/buffered.py:1893
 #, python-format
@@ -16207,9 +16235,9 @@ msgid "Invalid line in GISRC file (%s):%s\n"
 msgstr "Linea non valida nel file GISRC (%s): %s\n"
 
 #: ../gui/wxpython/gis_set.py:477
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Error: {text}"
-msgstr "Errore:"
+msgstr "Errore: {text}"
 
 #: ../gui/wxpython/gis_set.py:509
 #, python-format
@@ -17516,7 +17544,7 @@ msgstr "Nuova mappa vettoriale  con la tabelle delle svolte"
 
 #: ../gui/wxpython/vnet/dialogs.py:1466
 msgid "Save analysis result"
-msgstr ""
+msgstr "Salva il risultato dell'analisi"
 
 #: ../gui/wxpython/vnet/dialogs.py:1577
 msgid "Edit intersection turns costs"
@@ -17816,7 +17844,7 @@ msgstr "Mostra impostazioni avanzate della connessione"
 
 #: ../gui/wxpython/web_services/dialogs.py:103
 msgid "Hide advanced connection settings"
-msgstr ""
+msgstr "Nasconde le impostazioni avanzare della connessione"
 
 #: ../gui/wxpython/web_services/dialogs.py:118
 msgid " Layer Manager Settings "
@@ -17856,6 +17884,8 @@ msgstr "Impossibile connettersi a <%s>"
 #: ../gui/wxpython/web_services/dialogs.py:488
 msgid "Add selected web service layers as map layer into layer tree"
 msgstr ""
+"Aggiunge il layer selezionato del servizio web con layer nell'albero dei "
+"layer"
 
 #: ../gui/wxpython/web_services/dialogs.py:581
 msgid "Web service layer properties"
@@ -17895,7 +17925,7 @@ msgstr ""
 
 #: ../gui/wxpython/web_services/dialogs.py:816
 msgid "Overwrite existing raster map"
-msgstr ""
+msgstr "Sovrascrive il raster esistente"
 
 #: ../gui/wxpython/web_services/dialogs.py:820
 msgid "Choose named region:"
@@ -17907,11 +17937,11 @@ msgstr "&Save layer"
 
 #: ../gui/wxpython/web_services/dialogs.py:830
 msgid "Save web service layer as raster map"
-msgstr ""
+msgstr "Salva il layer del servizio web come raster"
 
 #: ../gui/wxpython/web_services/dialogs.py:944
 msgid "Missing output raster."
-msgstr ""
+msgstr "Raster di output mancante."
 
 #: ../gui/wxpython/web_services/dialogs.py:948
 msgid "Output map can be added only to current mapset."
