@@ -1098,6 +1098,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         sqlWhereCond = wx.Choice(parent = whereSimpleSqlPanel, id = wx.ID_ANY,
                                  size = (55,-1),
                                  choices = ['=', '!=', '<', '<=', '>', '>='])
+        sqlWhereCond.SetSelection(0)
         sqlWhereValue = wx.TextCtrl(parent = whereSimpleSqlPanel, id = wx.ID_ANY, value = "",
                                     style = wx.TE_PROCESS_ENTER)
         sqlWhereValue.SetToolTipString(_("Example: %s") % "MULTILANE = 'no' AND OBJECTID < 10")
