@@ -1833,7 +1833,18 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
             # simple sql statement
             whereCol = self.FindWindowById(self.layerPage[self.selLayer]['whereColumn']).GetStringSelection()
             whereOpe = self.FindWindowById(self.layerPage[self.selLayer]['whereOperator']).GetStringSelection()
-            whereVal = self.FindWindowById(self.layerPage[self.selLayer]['where']).GetValue().strip()
+            whereWin = self.FindWindowById(self.layerPage[self.selLayer]['where'])
+            whereVal = whereWin.GetValue().strip()
+            table    = self.dbMgrData['mapDBInfo'].layers[self.selLayer]["table"]
+            if self.dbMgrData['mapDBInfo'].tables[table][whereCol]['ctype'] == str:
+                # string attribute, check for quotes
+                whereVal = whereVal.replace('"', "'")
+                if not whereVal.startswith("'"):
+                    whereVal = "'" + whereVal
+                if not whereVal.endswith("'"):
+                    whereVal += "'"
+                whereWin.SetValue(whereVal)
+            
             try:
                 if len(whereVal) > 0:
                     showSelected = True
