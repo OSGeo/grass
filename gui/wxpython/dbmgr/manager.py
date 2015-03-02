@@ -120,11 +120,14 @@ class AttributeManager(wx.Frame, DbMgrBase):
         self.btnClose   = wx.Button(parent = self.panel, id = wx.ID_CLOSE)
         self.btnClose.SetToolTipString(_("Close Attribute Table Manager"))
         self.btnReload = wx.Button(parent = self.panel, id = wx.ID_REFRESH)
-        self.btnReload.SetToolTipString(_("Reload attribute data (selected layer only)"))
-
+        self.btnReload.SetToolTipString(_("Reload currently selected attribute data"))
+        self.btnReset = wx.Button(parent = self.panel, id = wx.ID_CLEAR)
+        self.btnReset.SetToolTipString(_("Reload all attribute data (drop current selection)"))
+        
         # events
         self.btnClose.Bind(wx.EVT_BUTTON,   self.OnCloseWindow)
-        self.btnReload.Bind(wx.EVT_BUTTON, self.OnReloadData)
+        self.btnReload.Bind(wx.EVT_BUTTON,  self.OnReloadData)
+        self.btnReset.Bind(wx.EVT_BUTTON,   self.OnReloadDataAll)
         self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
@@ -142,6 +145,8 @@ class AttributeManager(wx.Frame, DbMgrBase):
 
         # buttons
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
+        btnSizer.Add(item = self.btnReset, proportion = 1,
+                     flag = wx.ALL | wx.ALIGN_RIGHT, border = 5)
         btnSizer.Add(item = self.btnReload, proportion = 1,
                      flag = wx.ALL | wx.ALIGN_RIGHT, border = 5)
         btnSizer.Add(item = self.btnClose, proportion = 1,
@@ -170,7 +175,12 @@ class AttributeManager(wx.Frame, DbMgrBase):
         """Reload data"""
         if self.pages['browse']:
             self.pages['browse'].OnDataReload(event) # TODO replace by signal
-        
+
+    def OnReloadDataAll(self, event):
+        """Reload all data"""
+        if self.pages['browse']:
+            self.pages['browse'].ResetPage()
+
     def OnPageChanged(self, event):
         """On page in ATM is changed"""
         try:
@@ -189,9 +199,11 @@ class AttributeManager(wx.Frame, DbMgrBase):
             else:
                 self.log.write("")
             self.btnReload.Enable()
+            self.btnReset.Enable()
         else:
             self.log.write("")
             self.btnReload.Enable(False)
+            self.btnReset.Enable(False)
         
         event.Skip()   
 
