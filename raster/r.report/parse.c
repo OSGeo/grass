@@ -6,8 +6,6 @@
 
 int parse_command_line(int argc, char *argv[])
 {
-    char pl_desc[256];
-    char pw_desc[256];
     int i;
     char *desc;
     struct
@@ -74,18 +72,16 @@ int parse_command_line(int argc, char *argv[])
     parms.pl->key = "page_length";
     parms.pl->type = TYPE_INTEGER;
     parms.pl->required = NO;
-    sprintf(pl_desc, _("Page length (default: %d lines)"),
-	    DEFAULT_PAGE_LENGTH);
-    parms.pl->description = pl_desc;
+    parms.pl->description = _("Page length");
+    parms.pl->answer = DEFAULT_PAGE_LENGTH;
     parms.pl->guisection = _("Formatting");
 
     parms.pw = G_define_option();
     parms.pw->key = "page_width";
     parms.pw->type = TYPE_INTEGER;
     parms.pw->required = NO;
-    sprintf(pw_desc, _("Page width (default: %d characters)"),
-	    DEFAULT_PAGE_WIDTH);
-    parms.pw->description = pw_desc;
+    parms.pw->description = _("Page width");
+    parms.pw->answer = DEFAULT_PAGE_WIDTH;
     parms.pw->guisection = _("Formatting");
 
 		    parms.nsteps = G_define_option();
@@ -192,19 +188,16 @@ int parse_command_line(int argc, char *argv[])
 	nsteps = 255;
     }
 
-    if (parms.pl->answer) {
-	if (sscanf(parms.pl->answer, "%d", &page_length) != 1 ||
-	    page_length < 0) {
-	    G_fatal_error(_("Illegal page length"));
-	}
+    if (sscanf(parms.pl->answer, "%d", &page_length) != 1 ||
+        page_length < 0) {
+      G_fatal_error(_("Illegal page length"));
     }
 
-    if (parms.pw->answer) {
-	if (sscanf(parms.pw->answer, "%d", &page_width) != 1 ||
-	    page_width < 1) {
-	    G_fatal_error(_("Illegal page width"));
-	}
+    if (sscanf(parms.pw->answer, "%d", &page_width) != 1 ||
+        page_width < 1) {
+      G_fatal_error(_("Illegal page width"));
     }
+
     if (parms.outfile->answer) {
 	if (freopen(parms.outfile->answer, "w", stdout) == NULL) {
 	    perror(parms.outfile->answer);
