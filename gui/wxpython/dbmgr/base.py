@@ -1990,6 +1990,22 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
             tlist = self.FindWindowById(self.layerPage[layer]['data'])
             tlist.Update(self.dbMgrData['mapDBInfo'])
 
+    def ResetPage(self, layer=None):
+        if not layer:
+            layer = self.selLayer
+        if layer not in self.layerPage.keys():
+            return
+        win = self.FindWindowById(self.layerPage[self.selLayer]['sqlNtb'])
+        if win.GetSelection() == 0:
+            self.FindWindowById(self.layerPage[layer]['whereColumn']).SetSelection(0)
+            self.FindWindowById(self.layerPage[layer]['whereOperator']).SetSelection(0)
+            self.FindWindowById(self.layerPage[layer]['where']).SetValue('')
+        else:
+            sqlWin = self.FindWindowById(self.layerPage[self.selLayer]['statement'])
+            sqlWin.SetValue("SELECT * FROM %s" % self.dbMgrData['mapDBInfo'].layers[layer]['table'])
+            
+        self.UpdatePage(layer)
+        
 class DbMgrTablesPage(DbMgrNotebookBase):   
     def __init__(self, parent, parentDbMgrBase, onlyLayer = -1):
         """Page for managing tables
