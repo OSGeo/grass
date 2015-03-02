@@ -443,7 +443,9 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
 		    dyy = 0.;
 		    dyz = 0.;
 		    dzz = 0.;
-		    if (bmask == 1) {	/* compute everything for area which is not masked out */
+		    /* compute everything for area which is not masked out
+		       and where cross_input map doesn't have nulls */
+		    if (bmask == 1 && !(cell && Rast_is_f_null_value(&cell[l - 1]))) {
 			h = b[n1];
 			hcell = b[n1];
 			for (m = 1; m <= n_points; m++) {
