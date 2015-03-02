@@ -31,8 +31,8 @@ int nstats;
 UNITS unit[MAX_UNITS];
 int nunits;
 
-int page_width = DEFAULT_PAGE_WIDTH;
-int page_length = DEFAULT_PAGE_LENGTH;
+int page_width;
+int page_length;
 int masking = 1;
 int use_formfeed;
 int nlines;
