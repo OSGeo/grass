@@ -49,8 +49,8 @@ struct _units_
 extern UNITS unit[MAX_UNITS];
 extern int nunits;
 
-#define DEFAULT_PAGE_LENGTH 0
-#define DEFAULT_PAGE_WIDTH  79
+#define DEFAULT_PAGE_LENGTH "0"
+#define DEFAULT_PAGE_WIDTH  "79"
 
 extern int page_width;
 extern int page_length;
