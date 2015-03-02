@@ -1735,7 +1735,8 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
             if item == -1:
                 break
             tlist.SetItemState(item, 0, wx.LIST_STATE_SELECTED | wx.LIST_STATE_FOCUSED)
-
+        tlist.Focus(0)
+        
         event.Skip()
 
 
