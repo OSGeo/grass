@@ -166,15 +166,19 @@ int newline(void)
 int lcr(const char *left, const char *center, const char *right, char *buf, int n)
 {
     int ll, lc, lr;
+    int sc, sr;
 
     ll = strlen(left);
     lc = strlen(center);
     lr = strlen(right);
 
+    sc = (n - lc) / 2 - ll;
+    sr = n - lr - lc - (n - lc) / 2;
+    
     sprintf(buf, "%s%*s%s%*s%s",
 	    left,
-	    (n - lc) / 2 - ll, "", center,
-	    n - lr - lc - (n - lc) / 2, "", right);
+	    sc > 0 ? sc : 0, "", center,
+	    sc > 0 ? sr : sr + sc , "", right);
 
     return 0;
 }
