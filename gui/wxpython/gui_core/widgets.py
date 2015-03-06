@@ -1051,14 +1051,14 @@ class ManageSettingsWidget(wx.Panel):
         self.settingsSizer = wx.StaticBoxSizer(self.settingsBox, wx.HORIZONTAL)
         self.settingsSizer.Add(item=wx.StaticText(parent=self, id=wx.ID_ANY,
                                                   label=_("Load settings:")),
-                               flag=wx.ALIGN_CENTER_VERTICAL | wx.RIGHT,
+                               flag=wx.ALIGN_CENTER_VERTICAL | wx.RIGHT | wx.LEFT,
                                border=5)
         self.settingsSizer.Add(item=self.settingsChoice,
-                               proportion=1, flag=wx.EXPAND)
+                               proportion=1, flag=wx.EXPAND | wx.BOTTOM, border=3)
         self.settingsSizer.Add(item=self.btnSettingsSave,
-                               flag=wx.LEFT | wx.RIGHT, border=5)
+                               flag=wx.LEFT | wx.RIGHT | wx.BOTTOM, border=3)
         self.settingsSizer.Add(item=self.btnSettingsDel,
-                               flag=wx.RIGHT,border=5)
+                               flag=wx.RIGHT | wx.BOTTOM, border=3)
 
     def OnSettingsChanged(self, event):
         """Load named settings"""
