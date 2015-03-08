@@ -134,8 +134,8 @@ int main(int argc, char *argv[])
 
     opt17 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt17->key = "tci";
-    opt17->label =
-	_("Topographic index ln(a / tan(b))");
+    opt17->description =
+	_("Name for output topographic index ln(a / tan(b)) map");
     opt17->required = NO;
     opt17->guisection = _("Outputs");
 
@@ -147,7 +147,7 @@ int main(int argc, char *argv[])
 
     opt10 = G_define_standard_option(G_OPT_R_OUTPUT);
     opt10->key = "basin";
-    opt10->description = _("Name for basins raster map");
+    opt10->description = _("Name for output basins raster map");
     opt10->required = NO;
     opt10->guisection = _("Outputs");
 
