@@ -17,7 +17,6 @@ import os
 import wx
 
 from core.utils import _
-from core.gcmd import DecodeString
 from gui_core.treeview import TreeListView
 from core.treemodel import TreeModel, DictNode
 
@@ -182,16 +181,12 @@ def QueryTreeBuilder(data, column):
     """
     def addNode(parent, data, model):
         for k, v in data.iteritems():
-            if type(k) == str:
-                k = DecodeString(k)
             if isinstance(v, dict):
                 node = model.AppendNode(parent=parent, label=k)
                 addNode(parent=node, data=v, model=model)
             else:
                 if not isinstance(v, basestring):
                     v = str(v)
-                elif type(v) == str:
-                    v = DecodeString(v)
                 node = model.AppendNode(parent=parent, label=k,
                                         data={column: v})
 
