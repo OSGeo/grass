@@ -24,6 +24,7 @@ Classes:
  - :class:`ElementSelect`
  - :class:`OgrTypeSelect`
  - :class:`CoordinatesSelect`
+ - :class:`VectorCategorySelect`
  - :class:`SignatureSelect`
  - :class:`SeparatorSelect`
 
@@ -36,6 +37,7 @@ This program is free software under the GNU General Public License
 @author Martin Landa <landa.martin gmail.com>
 @author Vaclav Petras <wenzeslaus gmail.com> (menu customization)
 @author Stepan Turek <stepan.turek seznam.cz> (CoordinatesSelect, ListCtrlComboPopup)
+@author Matej Krejci <matejkrejci gmail.com> (VectorCategorySelect)
 """
 
 import os
@@ -61,15 +63,16 @@ except ImportError as e:
 
 from gui_core.widgets  import ManageSettingsWidget, CoordinatesValidator
 
-from core.gcmd     import RunCommand, GError, GMessage
+from core.gcmd     import RunCommand, GError, GMessage, GWarning
 from core.utils    import GetListOfLocations, GetListOfMapsets, \
                           GetFormats, rasterFormatExtension, vectorFormatExtension
 from core.utils    import GetSettingsPath, GetValidLayerName, ListSortLower
 from core.utils    import GetVectorNumberOfLayers, _
 from core.settings import UserSettings
 from core.debug    import Debug
-from grass.pydispatch.signal import Signal
+from gui_core.vselect import VectorSelectBase
 
+from grass.pydispatch.signal import Signal
 
 class Select(wx.combo.ComboCtrl):
     def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE,
@@ -2276,6 +2279,122 @@ class CoordinatesSelect(wx.Panel):
     def GetTextWin(self):
         """Get TextCtrl widget"""
         return self.coordsField
+
+class VectorCategorySelect(wx.Panel):
+    """Widget that allows interactive selection of vector features"""
+    def __init__(self, parent, giface, task):
+        super(VectorCategorySelect, self).__init__(parent=parent, id=wx.ID_ANY)
+        self.task=task
+        self.parent = parent
+        self.giface = giface
+        
+        self.selectedFeatures = None
+        self.registered = False
+        self._vectorSelect = None
+
+        self.mapdisp = self.giface.GetMapDisplay()
+        
+        self.catsField = wx.TextCtrl(parent=self, id=wx.ID_ANY,
+                                     size=globalvar.DIALOG_TEXTCTRL_SIZE)
+        
+        icon = wx.Bitmap(os.path.join(globalvar.ICONDIR, "grass", "select.png"))
+        self.buttonVecSelect = buttons.ThemedGenBitmapToggleButton(parent=self, id=wx.ID_ANY,
+                                                                   bitmap=icon,
+                                                                   size=globalvar.DIALOG_COLOR_SIZE)
+        self.buttonVecSelect.Bind(wx.EVT_BUTTON, self._onClick)
+
+        
+        if self.mapdisp:
+            switcher = self.mapdisp.GetToolSwitcher()
+            switcher.AddCustomToolToGroup(group='mouseUse',
+                                          btnId=self.buttonVecSelect.GetId(),
+                                          toggleHandler=self.buttonVecSelect.SetValue)
+        
+        self._layout()
+
+    def _isMapSelected(self):
+        """Check if layer list contains at least one selected map
+        """
+        layerList = self.giface.GetLayerList()
+        layerSelected = layerList.GetSelectedLayer()
+        if layerSelected is None:
+            GWarning(_("No vector map selected in layer manager. Operation canceled."))
+            return False
+        
+        return True
+
+    def _chckMap(self):
+        """Check if selected map in 'input' widget is the same as selected map in lmgr """
+        if self._isMapSelected():
+            layerList = self.giface.GetLayerList()
+            layerSelected = layerList.GetSelectedLayer()
+            inputName=self.task.get_param('input')
+            if inputName['value'] != str(layerSelected):
+                if inputName['value'] == '' or inputName['value'] is None:
+                    GWarning(_("Input vector map is not selected"))
+                    return False
+                GWarning(_("Input vector map <%s> and selected map <%s> in layer manager are different. "
+                           "Operation canceled.") % (inputName['value'], str(layerSelected)))
+                return False
+            return True
+
+    def _onClick(self, evt=None):
+        if not self._chckMap():
+            self.buttonVecSelect.SetValue(False)
+            return
+
+        if self._vectorSelect is None:
+
+            if self.mapdisp:
+                if self.buttonVecSelect.IsEnabled():
+                    switcher = self.mapdisp.GetToolSwitcher()
+                    switcher.ToolChanged(self.buttonVecSelect.GetId())
+
+                self._vectorSelect = VectorSelectBase(self.mapdisp, self.giface)
+                if self.mapdisp.GetWindow().RegisterMouseEventHandler(wx.EVT_LEFT_DOWN,
+                                                                      self._onMapClickHandler,
+                                                                      'cross') == False:
+                    return
+                self.registered = True
+                self.mapdisp.Raise()
+        else:
+            self.OnClose()
+
+    def OnClose(self, event=None):
+        switcher = self.mapdisp.GetToolSwitcher()
+        switcher.RemoveCustomToolFromGroup(self.buttonVecSelect.GetId())
+        if self._vectorSelect is not None:
+            tmp = self._vectorSelect.GetLineStringSelectedCats()
+            self._vectorSelect.OnClose()
+            self.catsField.SetValue(tmp)
+        self._vectorSelect = None
+
+    def _onMapClickHandler(self, event):
+        """Update category text input widget"""
+        if event == "unregistered":
+            return
+        if not self._chckMap():
+            self.OnClose()
+        else:
+            self.catsField.SetValue(self._vectorSelect.GetLineStringSelectedCats())
+
+    def GetTextWin(self):
+        return self.catsField
+
+    def GetValue(self):
+        return self.catsField.GetValue()
+
+    def SetValue(self, value):
+        self.catsField.SetValue(value)
+
+    def _layout(self):
+        self.dialogSizer = wx.BoxSizer(wx.HORIZONTAL)
+        self.dialogSizer.Add(item=self.catsField,
+                             proportion=1,
+                             flag=wx.EXPAND)
+
+        self.dialogSizer.Add(item=self.buttonVecSelect)
+        self.SetSizer(self.dialogSizer)
 
 class SignatureSelect(wx.ComboBox):
     """Widget for selecting signatures"""

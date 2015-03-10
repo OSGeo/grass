@@ -126,7 +126,7 @@ class VectorSelectBase():
         self._dialog.AddWidget(self.slist)
         
         self.onCloseDialog = Signal('VectorSelectBase.onCloseDialog')
-    
+        
     def OnDeleteRow(self, event=None):
         """Delete row in widget
         """
@@ -160,6 +160,11 @@ class VectorSelectBase():
                                                     self._onMapClickHandler)
         self.register=False
 
+    def OnClose(self):
+        self.selectedFeatures=[]
+        self._draw()
+        self.UnregisterMapEvtHandler()
+
     def OnCloseDialog(self,evt=None):
         if not self.onCloseDialog:
             return
@@ -177,7 +182,6 @@ class VectorSelectBase():
             self.slist.DeleteAllItems()
             self._dialog.Raise()
         self.RegisterMapEvtHandler()
-        self._draw()
 
     def _onMapClickHandler(self, event):
         """Registred handler for clicking on grass disp
@@ -312,17 +316,15 @@ class VectorSelectBase():
                 tree.AddLayer(ltype='vector', lname=outMap,
                               lcmd=['d.vect', 'map=%s' % outMap],
                               lchecked=True)
-                #colorize new map
-                ret, err =RunCommand('d.vect',
-                            map=outMap,
-                            color='red',getErrorMsg=True)
+
+                #TODO colorize new map
                 self.Reset()
             else:
                 GMessage(_('Vector map <%s> was created') % outMap)
                 self.Reset()
         else:
             GError(_("Unable to create a new vector map.\n\nReason: %s") % err)
-
+        
     """
     def SetSelectedCat(self, cats):
         # allows to set selected vector categories by list of cats (per line)
@@ -366,10 +368,8 @@ class VectorSelectHighlighter():
         self.data['Category'] = cats
 
     def Clear(self):
-        self.data['Category']=list()
-        self.data['Layer']=1
-        self.data['Map'] = None
-        self.giface.updateMap.emit(render=True, renderVector=True)
+        self.mapdisp.RemoveQueryLayer()
+        self.giface.GetMapWindow().UpdateMap(render = False)
 
     def DrawSelected(self):
         """Highlight selected features"""
