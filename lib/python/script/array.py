@@ -29,7 +29,6 @@ Usage:
 >>> # This will write the numpy array as GRASS raster map
 ... # with name map2d_1
 ... map2d_1.write(mapname="map2d_1", overwrite=True)
- 100%
 0
 >>>
 >>> # We create a new array and read map2d_1 to modify it
@@ -47,7 +46,6 @@ Usage:
  [ 0.  1.  2.  0.  1.  2.]]
 >>> # Write the result as new raster map with name map2d_2
 ... map2d_2.write(mapname="map2d_2", overwrite=True)
- 100%
 0
 >>>
 >>> # Here we create a 3D raster map numpy array
@@ -67,10 +65,12 @@ Usage:
   [  1.   2.   3.   4.   5.   6.]
   [  2.   3.   4.   5.   6.   7.]
   [  3.   4.   5.   6.   7.   8.]]
+<BLANKLINE> 
  [[  1.   2.   3.   4.   5.   6.]
   [  2.   3.   4.   5.   6.   7.]
   [  3.   4.   5.   6.   7.   8.]
   [  4.   5.   6.   7.   8.   9.]]
+<BLANKLINE> 
  [[  2.   3.   4.   5.   6.   7.]
   [  3.   4.   5.   6.   7.   8.]
   [  4.   5.   6.   7.   8.   9.]
@@ -78,8 +78,6 @@ Usage:
 >>> # This will write the numpy array as GRASS 3D raster map
 ... # with name map3d_1
 ... map3d_1.write(mapname="map3d_1", overwrite=True)
-Loading floating point data with 8 bytes ... (6x4x3)
- 100%
 0
 >>> # We create a new 3D array and read map3d_1 to modify it
 ... map3d_2 = garray.array3d()
@@ -94,18 +92,18 @@ Loading floating point data with 8 bytes ... (6x4x3)
   [ 1.  2.  0.  1.  2.  0.]
   [ 2.  0.  1.  2.  0.  1.]
   [ 0.  1.  2.  0.  1.  2.]]
+<BLANKLINE> 
  [[ 1.  2.  0.  1.  2.  0.]
   [ 2.  0.  1.  2.  0.  1.]
   [ 0.  1.  2.  0.  1.  2.]
   [ 1.  2.  0.  1.  2.  0.]]
+<BLANKLINE> 
  [[ 2.  0.  1.  2.  0.  1.]
   [ 0.  1.  2.  0.  1.  2.]
   [ 1.  2.  0.  1.  2.  0.]
   [ 2.  0.  1.  2.  0.  1.]]]
 >>> # Write the result as new 3D raster map with name map3d_2
 ... map3d_2.write(mapname="map3d_2", overwrite=True)
-Loading floating point data with 8 bytes ... (6x4x3)
- 100%
 0
 
 (C) 2010-2012 by Glynn Clements and the GRASS Development Team
