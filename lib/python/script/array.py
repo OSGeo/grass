@@ -126,6 +126,15 @@ from grass.exceptions import CalledModuleError
 
 ###############################################################################
 
+class _tempfile(object):
+    def __init__(self):
+        self.filename = grass.tempfile()
+
+    def __del__(self):
+        try_remove(self.filename)
+
+###############################################################################
+
 class array(numpy.memmap):
     def __new__(cls, dtype=numpy.double):
         """Define new numpy array
@@ -138,21 +147,18 @@ class array(numpy.memmap):
         c = reg['cols']
         shape = (r, c)
 
-        filename = grass.tempfile()
+        tempfile = _tempfile()
 
         self = numpy.memmap.__new__(
             cls,
-            filename=filename,
+            filename=tempfile.filename,
             dtype=dtype,
             mode='w+',
             shape=shape)
 
-        self.filename = filename
+        self.tempfile = tempfile
+        self.filename = tempfile.filename
         return self
-
-    def __del__(self):
-        if isinstance(self, array):
-            try_remove(self.filename)
 
     def read(self, mapname, null=None):
         """Read raster map into array
@@ -259,22 +265,19 @@ class array3d(numpy.memmap):
         d = reg['depths']
         shape = (d, r, c)
 
-        filename = grass.tempfile()
+        tempfile = _tempfile()
 
         self = numpy.memmap.__new__(
             cls,
-            filename=filename,
+            filename=tempfile.filename,
             dtype=dtype,
             mode='w+',
             shape=shape)
 
-        self.filename = filename
+        self.tempfile = tempfile
+        self.filename = tempfile.filename
 
         return self
-
-    def __del__(self):
-        if isinstance(self, array3d):
-            try_remove(self.filename)
 
     def read(self, mapname, null=None):
         """Read 3D raster map into array
