@@ -1621,6 +1621,30 @@ class CmdPanel(wx.Panel):
                                     proportion = 0,
                                     flag = wx.EXPAND | wx.BOTTOM | wx.LEFT | wx.RIGHT, 
                                     border = 5)
+
+                elif prompt in ('cat', 'cats'):
+                    # interactive selection of vector categories if layer manager is accessible
+                    if self._giface:
+                        win = gselect.VectorCategorySelect(parent = which_panel, giface = self._giface, task=self.task)
+                        
+                        p['wxId'] = [win.GetTextWin().GetId()]
+                        win.GetTextWin().Bind(wx.EVT_TEXT, self.OnSetValue)
+                        # bind closing event because destructor is not working properly
+                        if hasattr(self.parent, 'dialogClosing'):
+                            self.parent.dialogClosing.connect(win.OnClose)
+                    # normal text field
+                    else:
+                        win = wx.TextCtrl(parent = which_panel)
+                        value = self._getValue(p)
+                        win.SetValue(value)
+                        p['wxId'] = [win.GetId()]
+                        win.Bind(wx.EVT_TEXT, self.OnSetValue)
+                    
+                    which_sizer.Add(item = win,
+                                    proportion = 0,
+                                    flag = wx.EXPAND | wx.BOTTOM | wx.LEFT | wx.RIGHT,
+                                    border = 5)
+                    
                 elif prompt in ('colortable', 'barscale', 'northarrow'):
                     if prompt == 'colortable':
                         cb = ColorTablesComboBox(parent=which_panel, value=p.get('default',''),
@@ -1646,15 +1670,6 @@ class CmdPanel(wx.Panel):
                     if p.get('guidependency', ''):
                         cb.Bind(wx.EVT_COMBOBOX, self.OnUpdateSelection)
 
-                elif prompt in ('cat', 'cats'):
-                    win = wx.TextCtrl(parent=which_panel)
-                    value = self._getValue(p)
-                    win.SetValue(value)
-                    p['wxId'] = [win.GetId()]
-                    win.Bind(wx.EVT_TEXT, self.OnSetValue)
-                    which_sizer.Add(item=win, proportion=0,
-                                    flag=wx.EXPAND | wx.BOTTOM | wx.LEFT | wx.RIGHT,
-                                    border=5)
 
             if self.parent.GetName() == 'MainFrame' and (self._giface and hasattr(self._giface, "_model")):
                 parChk = wx.CheckBox(parent = which_panel, id = wx.ID_ANY,
