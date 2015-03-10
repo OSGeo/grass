@@ -312,9 +312,9 @@ class array3d(numpy.memmap):
                 quiet=True,
                 overwrite=True)
         except CalledModuleError:
-            exit(1)
+            return 1
         else:
-            exit(0)
+            return 0
 
     def write(self, mapname, null=None, overwrite=None):
         """Write array into 3D raster map
@@ -362,6 +362,6 @@ class array3d(numpy.memmap):
                 cols=reg['cols3'])
 
         except CalledModuleError:
-            exit(1)
+            return 1
         else:
-            exit(0)
+            return 0
