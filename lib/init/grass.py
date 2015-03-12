@@ -1196,6 +1196,8 @@ def grep(string,list):
 
 def print_params():
     plat = gfile(gisbase, 'include', 'Make', 'Platform.make')
+    if not os.path.exists(plat):
+        fatal(_("Please install GRASS development package"))
     fileplat = open(plat)
     linesplat = fileplat.readlines()
     fileplat.close()
