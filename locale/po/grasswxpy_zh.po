@@ -2876,7 +2876,7 @@ msgstr "到"
 #: ../gui/wxpython/dbmgr/base.py:2137 ../gui/wxpython/lmgr/datacatalog.py:539
 #: ../gui/wxpython/gis_set.py:190
 msgid "&Rename"
-msgstr ""
+msgstr "重命名(&R)"
 
 #: ../gui/wxpython/dbmgr/base.py:2230
 msgid "Unable to rename column. No column name defined."
@@ -3841,20 +3841,17 @@ msgid "Available sampling area configuration files"
 msgstr "非法的输出文件名"
 
 #: ../gui/wxpython/rlisetup/frame.py:131
-#, fuzzy
 msgid "Remove a configuration file"
-msgstr "非法的输出文件名"
+msgstr "删除配置文件"
 
 #: ../gui/wxpython/rlisetup/frame.py:133 ../gui/wxpython/menustrings.py:919
 #: ../gui/wxpython/menustrings.py:1832
-#, fuzzy
 msgid "Create"
-msgstr "相关性"
+msgstr "新建"
 
 #: ../gui/wxpython/rlisetup/frame.py:134
-#, fuzzy
 msgid "Create a new configuration file"
-msgstr "非法的输出文件名"
+msgstr "创建新配置文件"
 
 #: ../gui/wxpython/rlisetup/frame.py:136 ../gui/wxpython/menustrings.py:173
 #: ../gui/wxpython/menustrings.py:921 ../gui/wxpython/menustrings.py:1164
@@ -3863,9 +3860,8 @@ msgid "Rename"
 msgstr "重命名"
 
 #: ../gui/wxpython/rlisetup/frame.py:137
-#, fuzzy
 msgid "Rename a configuration file"
-msgstr "非法的输出文件名"
+msgstr "重命名配置文件"
 
 #: ../gui/wxpython/rlisetup/frame.py:139
 msgid "View/Edit"
@@ -7541,7 +7537,7 @@ msgstr "将栅格图转化为矢量图层。"
 #: ../gui/wxpython/menustrings.py:1223
 #, fuzzy
 msgid "Raster series to 3D raster"
-msgstr "插值点的数量"
+msgstr "栅格系列转换为体积"
 
 #: ../gui/wxpython/menustrings.py:181 ../gui/wxpython/menustrings.py:311
 #: ../gui/wxpython/menustrings.py:1224
@@ -7552,7 +7548,7 @@ msgstr "将 2D 栅格分块地图转化为一个 3D 栅格地图"
 #: ../gui/wxpython/menustrings.py:1225
 #, fuzzy
 msgid "Raster 2.5D to 3D raster"
-msgstr "将栅格转换为矢量格式"
+msgstr "2.5D栅格地图转换为体积"
 
 #: ../gui/wxpython/menustrings.py:183 ../gui/wxpython/menustrings.py:313
 #: ../gui/wxpython/menustrings.py:1226
@@ -7593,7 +7589,7 @@ msgstr "将二维向量要素转化为三维向量要素。"
 #: ../gui/wxpython/menustrings.py:190
 #, fuzzy
 msgid "3D raster to raster series"
-msgstr "将要导入的栅格文件"
+msgstr "体积转换为栅格系列"
 
 #: ../gui/wxpython/menustrings.py:191 ../gui/wxpython/menustrings.py:838
 #: ../gui/wxpython/menustrings.py:1751
@@ -10072,14 +10068,12 @@ msgid "Calculates Optimum-Index-Factor table for spectral bands"
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:830 ../gui/wxpython/menustrings.py:1743
-#, fuzzy
 msgid "3D r&aster"
-msgstr "基础栅格图"
+msgstr "三维栅格(&a)"
 
 #: ../gui/wxpython/menustrings.py:831 ../gui/wxpython/menustrings.py:1744
-#, fuzzy
 msgid "Develop 3D raster map"
-msgstr "栅格地图开发"
+msgstr "三维栅格地图开发"
 
 #: ../gui/wxpython/menustrings.py:832 ../gui/wxpython/menustrings.py:1745
 msgid "Manage 3D NULL values"
@@ -10094,14 +10088,12 @@ msgid "Manage timestamp"
 msgstr "管理时间戳"
 
 #: ../gui/wxpython/menustrings.py:835 ../gui/wxpython/menustrings.py:1748
-#, fuzzy
 msgid "Print/add/remove a timestamp for a 3D raster map"
-msgstr "为 3D 栅格地图 打印/添加/删除 时间戳"
+msgstr "三维栅格地图 打印/添加/删除 时间戳"
 
 #: ../gui/wxpython/menustrings.py:837 ../gui/wxpython/menustrings.py:1750
-#, fuzzy
 msgid "3D rasters to raster series"
-msgstr "将 3D 栅格图转化为 2D 栅格图"
+msgstr "三维栅格转换为栅格系列"
 
 #: ../gui/wxpython/menustrings.py:839 ../gui/wxpython/menustrings.py:1752
 msgid "3D color tables"
@@ -10123,17 +10115,16 @@ msgstr "根据栅格图层创建/修改色彩表。"
 
 #: ../gui/wxpython/menustrings.py:843 ../gui/wxpython/menustrings.py:1756
 msgid "3D mask"
-msgstr ""
+msgstr "栅格掩码"
 
 #: ../gui/wxpython/menustrings.py:844 ../gui/wxpython/menustrings.py:1757
 msgid "Establishes the current working 3D raster mask."
-msgstr ""
+msgstr "为当前三维栅格创建掩码"
 
 #: ../gui/wxpython/menustrings.py:845 ../gui/wxpython/menustrings.py:846
 #: ../gui/wxpython/menustrings.py:1758 ../gui/wxpython/menustrings.py:1759
-#, fuzzy
 msgid "3D raster map calculator"
-msgstr "栅格地图"
+msgstr "三维栅格地图计算器"
 
 #: ../gui/wxpython/menustrings.py:847 ../gui/wxpython/menustrings.py:1760
 msgid "Cross section"
@@ -10148,31 +10139,28 @@ msgid "Numerical calculation program for transient, confined groundwater flow in
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:851 ../gui/wxpython/menustrings.py:1764
-#, fuzzy
 msgid "Interpolate 3D raster from points"
-msgstr "导入栅格数据"
+msgstr "数据点三维栅格插值"
 
 #: ../gui/wxpython/menustrings.py:852 ../gui/wxpython/menustrings.py:1765
 msgid "Interpolates point data to a 3D raster map using regularized spline with tension (RST) algorithm."
-msgstr ""
+msgstr "使用规则张力样条(RST)算法将点数据插值为三维栅格。"
 
 #: ../gui/wxpython/menustrings.py:853 ../gui/wxpython/menustrings.py:1766
 msgid "Reports and Statistics"
 msgstr "报告与统计"
 
 #: ../gui/wxpython/menustrings.py:854 ../gui/wxpython/menustrings.py:1767
-#, fuzzy
 msgid "Basic 3D raster metadata"
-msgstr "导入三维栅格地图"
+msgstr "三维栅格基本元数据"
 
 #: ../gui/wxpython/menustrings.py:855 ../gui/wxpython/menustrings.py:1768
 msgid "Outputs basic information about a user-specified 3D raster map layer."
-msgstr "输出用户指定的 3D 栅格图层的基本信息"
+msgstr "输出用户指定的三维栅格图层的基本信息"
 
 #: ../gui/wxpython/menustrings.py:856 ../gui/wxpython/menustrings.py:1769
-#, fuzzy
 msgid "3D raster statistics"
-msgstr "包含结果的栅格图的名称"
+msgstr "三维的栅格统计"
 
 #: ../gui/wxpython/menustrings.py:857 ../gui/wxpython/menustrings.py:1770
 #, fuzzy
@@ -10180,9 +10168,8 @@ msgid "Generates volume statistics for 3D raster maps."
 msgstr "为栅格图层生成区域统计值。"
 
 #: ../gui/wxpython/menustrings.py:858 ../gui/wxpython/menustrings.py:1771
-#, fuzzy
 msgid "Univariate statistics for 3D rasters"
-msgstr "为栅格图层生成区域统计值。"
+msgstr "三维栅格一元统计量"
 
 #: ../gui/wxpython/menustrings.py:859 ../gui/wxpython/menustrings.py:1772
 msgid "Calculates univariate statistics from the non-null cells of a 3D raster map. Statistics include number of cells counted, minimum and maximum cell values, range, arithmetic mean, population variance, standard deviation, coefficient of variation, and sum."
@@ -10413,7 +10400,7 @@ msgstr "打印/设置矢量地图的 DB 连接"
 
 #: ../gui/wxpython/menustrings.py:917 ../gui/wxpython/menustrings.py:1830
 msgid "&Temporal"
-msgstr ""
+msgstr "时空数据(&T)"
 
 #: ../gui/wxpython/menustrings.py:918 ../gui/wxpython/menustrings.py:1831
 msgid "Manage datasets"
@@ -10424,14 +10411,12 @@ msgid "Creates a space time dataset."
 msgstr "创建一个时空数据集"
 
 #: ../gui/wxpython/menustrings.py:922 ../gui/wxpython/menustrings.py:1835
-#, fuzzy
 msgid "Renames a space time dataset"
-msgstr "导入栅格数据"
+msgstr "重命名时空数据集"
 
 #: ../gui/wxpython/menustrings.py:924 ../gui/wxpython/menustrings.py:1837
-#, fuzzy
 msgid "Removes space time datasets from temporal database."
-msgstr "从数据库中删除一个表。"
+msgstr "从时空数据库中删除时空数据集。"
 
 #: ../gui/wxpython/menustrings.py:925 ../gui/wxpython/menustrings.py:1838
 msgid "Update metadata"
@@ -10439,34 +10424,31 @@ msgstr "更新元数据"
 
 #: ../gui/wxpython/menustrings.py:926 ../gui/wxpython/menustrings.py:1839
 msgid "Modifies the metadata of a space time dataset."
-msgstr ""
+msgstr "更新时空数据集的元数据。"
 
 #: ../gui/wxpython/menustrings.py:927 ../gui/wxpython/menustrings.py:1840
 msgid "Merge"
 msgstr "合并"
 
 #: ../gui/wxpython/menustrings.py:928 ../gui/wxpython/menustrings.py:1841
-#, fuzzy
 msgid "Merges several space time datasets into a single space time dataset."
-msgstr "从数据库中删除一个表。"
+msgstr "时空数据集合并。"
 
 #: ../gui/wxpython/menustrings.py:929 ../gui/wxpython/menustrings.py:1842
 msgid "Temporally shift"
 msgstr "时间位移"
 
 #: ../gui/wxpython/menustrings.py:930 ../gui/wxpython/menustrings.py:1843
-#, fuzzy
 msgid "Shifts temporally the maps of a space time dataset."
-msgstr "列出指定数据库的所有表。"
+msgstr "时空数据集地图时相位移。"
 
 #: ../gui/wxpython/menustrings.py:931 ../gui/wxpython/menustrings.py:1844
 msgid "Snap maps of dataset"
-msgstr "数据集对齐地图"
+msgstr "数据集地图对齐"
 
 #: ../gui/wxpython/menustrings.py:932 ../gui/wxpython/menustrings.py:1845
-#, fuzzy
 msgid "Snaps temporally the maps of a space time dataset."
-msgstr "列出指定数据库的所有表。"
+msgstr "时空数据集地图时相对齐。"
 
 #: ../gui/wxpython/menustrings.py:934 ../gui/wxpython/menustrings.py:1847
 #, fuzzy
@@ -10576,14 +10558,12 @@ msgid "Exports a space time vector dataset as GRASS GIS specific archive file."
 msgstr "导出矢量数据"
 
 #: ../gui/wxpython/menustrings.py:958 ../gui/wxpython/menustrings.py:1871
-#, fuzzy
 msgid "Convert raster dataset to 3D raster"
-msgstr "将一组栅格文件转换为MPEG的程序。"
+msgstr "将栅格数据集转换为三维栅格图层"
 
 #: ../gui/wxpython/menustrings.py:959 ../gui/wxpython/menustrings.py:1872
-#, fuzzy
 msgid "Converts a space time raster dataset into a 3D raster map."
-msgstr "将GRASS二元矢量图层转化为GRASS栅格图层。"
+msgstr "将时空数据集转化为三维栅格图层。"
 
 #: ../gui/wxpython/menustrings.py:960 ../gui/wxpython/menustrings.py:1873
 msgid "Extraction"
@@ -15659,9 +15639,8 @@ msgid "&Paste"
 msgstr "栅格（&r）"
 
 #: ../gui/wxpython/lmgr/datacatalog.py:535 ../gui/wxpython/gis_set.py:193
-#, fuzzy
 msgid "&Delete"
-msgstr "删除"
+msgstr "删除(&D)"
 
 #: ../gui/wxpython/lmgr/datacatalog.py:543
 #, fuzzy
@@ -16532,35 +16511,32 @@ msgid "Loading imagery lib failed"
 msgstr ""
 
 #: ../gui/wxpython/gis_set.py:107
-#, fuzzy
 msgid "1. Select GRASS GIS database directory"
-msgstr "选择GRASS数据目录:"
+msgstr "1. 选择GRASS数据库目录"
 
 #: ../gui/wxpython/gis_set.py:109
-#, fuzzy
 msgid "2. Select GRASS Location"
-msgstr "在当前路径访问其他地图集"
+msgstr "2. 选择GRASS地点"
 
 #: ../gui/wxpython/gis_set.py:111
 msgid "3. Select GRASS Mapset"
-msgstr ""
+msgstr "3. 选择GRASS地图集"
 
 #: ../gui/wxpython/gis_set.py:140
 msgid "GRASS GIS database directory contains Locations."
-msgstr ""
+msgstr "包含GRASS地点的GRASS GIS数据库目录。"
 
 #: ../gui/wxpython/gis_set.py:144
 msgid "All data in one Location is in the same  coordinate reference system (projection). One Location can be one project. Location contains Mapsets."
-msgstr ""
+msgstr "一个地点下的所有数据具有相同的坐标参考系统(即投影)。可将地点定义为一个投影。地点下包含地图集。"
 
 #: ../gui/wxpython/gis_set.py:152
 msgid "Mapset contains GIS data related to one project, task within one project, subregion or user."
-msgstr ""
+msgstr "地图集包含某个投影、其相关操作、子区域或用户的GIS数据。"
 
 #: ../gui/wxpython/gis_set.py:167
-#, fuzzy
 msgid "Start &GRASS session"
-msgstr "开始GRASS会话"
+msgstr "启动&GRASS会话"
 
 #: ../gui/wxpython/gis_set.py:173
 msgid "&Browse"
@@ -16568,36 +16544,31 @@ msgstr "浏览(&B)"
 
 #: ../gui/wxpython/gis_set.py:175
 msgid "&New"
-msgstr ""
+msgstr "新建(&N)"
 
 #: ../gui/wxpython/gis_set.py:177
-#, fuzzy
 msgid "Create a new Mapset in selected Location"
-msgstr ""
-"在选定的地点\n"
-"创建新地图集"
+msgstr "在选定的地点创建新地图集"
 
 #: ../gui/wxpython/gis_set.py:179
 msgid "N&ew"
-msgstr ""
+msgstr "新建(&e)"
 
 #: ../gui/wxpython/gis_set.py:180
-#, fuzzy
 msgid "Create a new location using location wizard. After location is created successfully, GRASS session is started."
-msgstr "地点成功创建GRASS会话启动后，启动地点向导。"
+msgstr "使用地点向导创建新地点。之后启动GRASS会话。"
 
 #: ../gui/wxpython/gis_set.py:184
 msgid "Ren&ame"
-msgstr ""
+msgstr "重命名(&a)"
 
 #: ../gui/wxpython/gis_set.py:185 ../gui/wxpython/gis_set.py:655
 msgid "Rename selected location"
-msgstr ""
+msgstr "重命名选中的地点"
 
 #: ../gui/wxpython/gis_set.py:187
-#, fuzzy
 msgid "De&lete"
-msgstr "删除"
+msgstr "删除(&l)"
 
 #: ../gui/wxpython/gis_set.py:188 ../gui/wxpython/gis_set.py:725
 msgid "Delete selected location"
@@ -16605,16 +16576,16 @@ msgstr "删除选定地点"
 
 #: ../gui/wxpython/gis_set.py:191 ../gui/wxpython/gis_set.py:619
 msgid "Rename selected mapset"
-msgstr ""
+msgstr "重命名选中的地图集"
 
 #: ../gui/wxpython/gis_set.py:194 ../gui/wxpython/gis_set.py:701
 msgid "Delete selected mapset"
 msgstr "删除选中的地图集"
 
 #: ../gui/wxpython/gis_set.py:238
-#, fuzzy, python-format
+#, python-format
 msgid "GRASS GIS %s startup%s"
-msgstr "GRASS GIS层管理器"
+msgstr "GRASS GIS %s 启动 %s"
 
 #: ../gui/wxpython/gis_set.py:243
 msgid "Enter GRASS session"
@@ -16637,12 +16608,12 @@ msgstr "错误：无法找到地图集<%s>\n"
 #: ../gui/wxpython/gis_set.py:456
 #, python-format
 msgid "Invalid line in GISRC file (%s):%s\n"
-msgstr ""
+msgstr "GISRC文件(%s)含有无效行:%s\n"
 
 #: ../gui/wxpython/gis_set.py:487
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Error: {text}"
-msgstr "错误："
+msgstr "错误：{text}"
 
 #: ../gui/wxpython/gis_set.py:518
 #, python-format
@@ -16650,14 +16621,12 @@ msgid "Do you want to import <%(name)s> to the newly created location? The locat
 msgstr ""
 
 #: ../gui/wxpython/gis_set.py:523
-#, fuzzy
 msgid "Import data?"
-msgstr "导入地图 %d 的要素..."
+msgstr "导入数据？"
 
 #: ../gui/wxpython/gis_set.py:535
-#, fuzzy
 msgid "Do you want to create new mapset?"
-msgstr "创建GRASS地点<%s>?"
+msgstr "创建新地图集?"
 
 #: ../gui/wxpython/gis_set.py:589
 #, python-format
@@ -16834,7 +16803,7 @@ msgstr "需为GRASS设置数据存贮目录。若尚未设置，请新建一个�
 
 #: ../gui/wxpython/mapswipe/toolbars.py:27
 msgid "Quit Map Swipe"
-msgstr ""
+msgstr "退出地图比较器"
 
 #: ../gui/wxpython/mapswipe/toolbars.py:28
 #: ../gui/wxpython/mapswipe/dialogs.py:42
@@ -17043,13 +17012,12 @@ msgid "Digitization settings"
 msgstr ""
 
 #: ../gui/wxpython/vdigit/toolbars.py:165
-#, fuzzy
 msgid "Quit digitizer"
-msgstr "矢量地图 %s - 未发现"
+msgstr "退出地图数字化"
 
 #: ../gui/wxpython/vdigit/toolbars.py:166
 msgid "Quit digitizer and save changes"
-msgstr ""
+msgstr "退出地图数字化并保存结果"
 
 #: ../gui/wxpython/vdigit/toolbars.py:167
 #, fuzzy
@@ -18286,14 +18254,12 @@ msgid "Output layer name:"
 msgstr "输出图层的名称"
 
 #: ../gui/wxpython/web_services/dialogs.py:237
-#, fuzzy
 msgid "Username:"
-msgstr "用户名"
+msgstr "用户名："
 
 #: ../gui/wxpython/web_services/dialogs.py:241
-#, fuzzy
 msgid "Password:"
-msgstr "密码"
+msgstr "密码："
 
 #: ../gui/wxpython/web_services/dialogs.py:355
 #, fuzzy, python-format
@@ -18469,7 +18435,6 @@ msgstr "基础栅格图"
 #~ "重命名/删除选中的\n"
 #~ "地图集或地点"
 
-#, fuzzy
 #~ msgid "Start &GRASS"
 #~ msgstr "启动 &GRASS"
 
@@ -18494,9 +18459,8 @@ msgstr "基础栅格图"
 #~ msgid "Welcome to GRASS GIS"
 #~ msgstr "欢迎使用GRASS GIS"
 
-#, fuzzy
 #~ msgid "No GRASS location found in '%s'."
-#~ msgstr "将要创建的新区域的名称"
+#~ msgstr "在'%s'中没有发现GRASS地点。"
 
 #~ msgid "Starting GRASS for the first time"
 #~ msgstr "第一次运行GRASS"
@@ -18773,9 +18737,8 @@ msgstr "基础栅格图"
 #~ msgid "Creates watershed basins."
 #~ msgstr "生成一个栅格图层，显示一个流域的子流域"
 
-#, fuzzy
 #~ msgid "No data"
-#~ msgstr "栅格图的名称"
+#~ msgstr "无数据"
 
 #~ msgid "Add scalebar and north arrow"
 #~ msgstr "添加比例尺和指北针"
