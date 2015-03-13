@@ -30,15 +30,17 @@ if sys.version_info[0:2] > (2, 6):
 else:
     has_xpath = False
 
-from core.globalvar import WXGUIDIR
-from core.utils import GetSettingsPath, _
-from core.gcmd import GError, RunCommand
-
 import grass.script.task as gtask
 import grass.script.core as gcore
 from grass.script.utils import try_remove
-from grass.script.core import ScriptError
-from core.debug import Debug
+from grass.exceptions import ScriptError, CalledModuleError
+
+
+# duplicating code from core/globalvar.py
+# if this will become part of grass Python library or module, this should be
+# parametrized, so we will get rid of the definition here
+# (GUI will use its definition and build also its own)
+WXGUIDIR = os.path.join(os.getenv("GISBASE"), "gui", "wxpython")
 
 
 # this could be placed to functions
@@ -47,12 +49,76 @@ toolboxesFile   = os.path.join(WXGUIDIR, 'xml', 'toolboxes.xml')
 wxguiItemsFile  = os.path.join(WXGUIDIR, 'xml', 'wxgui_items.xml')
 moduleItemsFile = os.path.join(WXGUIDIR, 'xml', 'module_items.xml')
 
+
+def GetSettingsPath():
+    # this is for cases during compilation and it is not possible to import wx
+    # TODO: if the function would be in the grass Python library there would
+    # no need to do this
+    try:
+        from core.utils import GetSettingsPath as actualGetSettingsPath
+        return actualGetSettingsPath()
+    except ImportError:
+        # expecting that there will be no such path
+        # (these files are always check for existence here)
+        return ""
+
 userToolboxesFile = os.path.join(GetSettingsPath(), 'toolboxes', 'toolboxes.xml')
 userMainMenuFile = os.path.join(GetSettingsPath(), 'toolboxes', 'main_menu.xml')
 if not os.path.exists(userToolboxesFile):
     userToolboxesFile = None
 if not os.path.exists(userMainMenuFile):
     userMainMenuFile = None
+
+
+def _(string):
+    """Get translated version of a string"""
+    # is attribute initialized to actual value?
+    if _.translate is None:
+        try:
+            # if not get the translate function named _
+            from core.utils import _ as actual_translate
+            # assign the imported function to translade attribute
+            _.translate = actual_translate
+        except ImportError:
+            # speak English if there is a problem with import of wx
+            def noop_traslate(string):
+                return string
+            _.translate = noop_traslate
+    return _.translate(string)
+
+# attribute translate of function _
+_.translate = None
+
+
+def _warning(message):
+    """Show warning"""
+    # TODO: enable choice between GUI and script behavior
+    # import only when really needed
+    from core.gcmd import GError
+    GError(message)
+
+
+def _debug(level, message):
+    """Show debug message"""
+    # this has interface as originally used GUI Debug but uses grass.script
+    gcore.debug(message, level)
+
+
+def _encode_string(string):
+    """Encode a unicode *string* using the system encoding
+
+    If it is not possible to use system encoding, UTF-8 is used.
+    """
+    try:
+        from core.gcmd import EncodeString
+        return EncodeString(string)
+    except ImportError:
+        # This is the case when we have errors during compilation but
+        # the environment is not complete (compilation, custom setups
+        # of GRASS environmet) and we cannot import wx correctly.
+        # UTF-8 is pretty good guess for most cases (and should work for
+        # Mac OS X where wx 32 vs 64 bit issue is happaning).
+        return string.encode('utf-8')
 
 
 def toolboxesOutdated():
@@ -72,7 +138,7 @@ def getMenudataFile(userRootFile, newFile, fallback):
     If something goes wrong during building or user doesn't modify menu,
     default file (from distribution) is returned.
     """
-    Debug.msg(1, "toolboxes.getMenudataFile: {userRootFile}, {newFile}, {fallback}".format(**locals()))
+    _debug(1, "toolboxes.getMenudataFile: {userRootFile}, {newFile}, {fallback}".format(**locals()))
 
     distributionRootFile = os.path.join(WXGUIDIR, 'xml', userRootFile)
     userRootFile = os.path.join(GetSettingsPath(), 'toolboxes', userRootFile)
@@ -92,29 +158,29 @@ def getMenudataFile(userRootFile, newFile, fallback):
             # remove menu file when there is no main_menu and toolboxes
             if not userToolboxesFile and not userRootFile:
                 os.remove(menudataFile)
-                Debug.msg(2, "toolboxes.getMenudataFile: no user defined files, menudata deleted")
+                _debug(2, "toolboxes.getMenudataFile: no user defined files, menudata deleted")
                 return fallback
 
             if bool(userToolboxesFile) != bool(userRootFile):
                 # always generate new because we don't know if there has been any change
                 generateNew = True
-                Debug.msg(2, "toolboxes.getMenudataFile: only one of the user defined files")
+                _debug(2, "toolboxes.getMenudataFile: only one of the user defined files")
             else:
                 # if newer files -> generate new
                 menudataTime = os.path.getmtime(menudataFile)
                 if userToolboxesFile:
                     if os.path.getmtime(userToolboxesFile) > menudataTime:
-                        Debug.msg(2, "toolboxes.getMenudataFile: user toolboxes is newer than menudata")
+                        _debug(2, "toolboxes.getMenudataFile: user toolboxes is newer than menudata")
                         generateNew = True
                 if userRootFile:
                     if os.path.getmtime(userRootFile) > menudataTime:
-                        Debug.msg(2, "toolboxes.getMenudataFile: user root file is newer than menudata")
+                        _debug(2, "toolboxes.getMenudataFile: user root file is newer than menudata")
                         generateNew = True
         elif userToolboxesFile or userRootFile:
-            Debug.msg(2, "toolboxes.getMenudataFile: no menudata")
+            _debug(2, "toolboxes.getMenudataFile: no menudata")
             generateNew = True
         else:
-            Debug.msg(2, "toolboxes.getMenudataFile: no user defined files")
+            _debug(2, "toolboxes.getMenudataFile: no user defined files")
             return fallback
 
         if generateNew:
@@ -123,11 +189,11 @@ def getMenudataFile(userRootFile, newFile, fallback):
                 # file but has toolboxes requieres regeneration.
                 # Unfortunately, this is the case can be often: defined
                 # toolboxes but undefined module tree file.
-                Debug.msg(2, "toolboxes.getMenudataFile: creating a tree")
+                _debug(2, "toolboxes.getMenudataFile: creating a tree")
                 tree = createTree(distributionRootFile=distributionRootFile, userRootFile=userRootFile)
             except ETREE_EXCEPTIONS:
-                GError(_("Unable to parse user toolboxes XML files. "
-                         "Default files will be loaded."))
+                _warning(_("Unable to parse user toolboxes XML files. "
+                           "Default files will be loaded."))
                 return fallback
 
             try:
@@ -137,12 +203,12 @@ def getMenudataFile(userRootFile, newFile, fallback):
                 fh.close()
                 return menudataFile
             except:
-                Debug.msg(2, "toolboxes.getMenudataFile: writing menudata failed, returning fallback file")
+                _debug(2, "toolboxes.getMenudataFile: writing menudata failed, returning fallback file")
                 return fallback
         else:
             return menudataFile
     else:
-        Debug.msg(2, "toolboxes.getMenudataFile: returning menudata fallback file")
+        _debug(2, "toolboxes.getMenudataFile: returning menudata fallback file")
         return fallback
 
 
@@ -164,7 +230,7 @@ def _createPath(path):
         try:
             os.mkdir(path)
         except OSError as e:
-            # we cannot use GError or similar because the gui doesn''t start at all
+            # we cannot use GError or similar because the gui doesn't start at all
             gcore.warning('%(reason)s\n%(detail)s' % 
                     ({'reason':_('Unable to create toolboxes directory.'),
                       'detail': str(e)}))
@@ -407,8 +473,13 @@ def _removeUserToolboxesItem(root):
 
 
 def _getAddons():
-    return sorted(RunCommand('g.extension', quiet=True, read=True,
-                             flags='a').splitlines())
+    try:
+        output = gcore.read_command('g.extension', quiet=True, flags='a')
+    except CalledModuleError:
+        _warning(_("List of addons cannot be obtained"
+                   " because g.extension failed."))
+        return []
+    return sorted(output.splitlines())
 
 
 def _removeAddonsItem(node, addonsNodes):
