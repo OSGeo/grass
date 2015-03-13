@@ -127,6 +127,29 @@ to be used by <em>r.walk</em> can be controlled with the <b>memory</b>
 option, default is 300 MB. For systems with less memory this value will 
 have to be set to a lower value.
 
+<h2>EXAMPLES</h2>
+We compute a map showing how far a lost person could get from the
+point where he or she was last seen
+while taking into account the topography and landcover.
+<div class="code"><pre>
+g.region swwake_30m -p
+
+# create friction map based on land cover
+r.recode landclass96 out=friction &lt;&lt; EOF
+1:3:0.1:0.1
+4:5:10.:10.
+6:6:1000.0:1000.0
+7:7:0.3:0.3
+EOF
+
+r.walk -k elevation=elev_ned_30m friction=friction output=walkcost \
+    start_coordinates=635576,216485 lambda=0.5 max=10000
+
+# compute contours on the cost surface to better understand
+# how far the person can get in certain time (1000 is in seconds)
+r.contour walkcost output=walkcost step=1000
+</pre></div>
+
 <h2>REFERENCES</h2>
 
 <ul>
