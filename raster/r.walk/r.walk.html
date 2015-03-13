@@ -7,7 +7,7 @@ map layer whose cell values represent friction cost.
 
 <p>
 <em>r.walk</em> outputs 1) a raster map showing the lowest
-cumulative cost of moving between each cell and the user-specified
+cumulative cost (time) of moving between each cell and the user-specified
 starting points and 2) a second raster map showing the movement 
 direction to the next cell on the path back to the start point (see 
 <a href="#move">Movement Direction</a>). It uses an input elevation 
@@ -29,14 +29,14 @@ for walking times) has been used to estimate the cost parameters of
 specific slope intervals:
 
 <div class="code"><pre>
-T= [(a)*(Delta S)] + [(b)*(Delta H uphill)] + [(c)*(Delta H moderate downhill)] + [(d)*(Delta H steep downhill)]
+T = a*delta_S + b*delta_H_uphill + c*delta_H_moderate_downhill + d*delta_H_steep_downhill
 </pre></div>
 
 where:
 <ul>
   <li><tt>T</tt> is time of movement in seconds,</li>
-  <li><tt>Delta S</tt> is the distance covered in meters,</li>
-  <li><tt>Delta H</tt> is the altitude difference in meter.</li>
+  <li><tt>delta S</tt> is the horizontal distance covered in meters,</li>
+  <li><tt>delta H</tt> is the altitude difference in meters.</li>
 </ul>
 
 <p>
@@ -44,10 +44,13 @@ The a, b, c, d <b>walk_coeff</b> parameters take in account
 movement speed in the different conditions and are linked to:
 
 <ul>
-  <li>a: underfoot condition (a=1/walking_speed)</li>
-  <li>b: underfoot condition and cost associated to movement uphill</li>
-  <li>c: underfoot condition and cost associated to movement moderate downhill</li>
-  <li>d: underfoot condition and cost associated to movement steep downhill</li>
+  <li>a: time in seconds it takes to walk for 1 meter a flat surface (1/walking speed)</li>
+  <li>b: additional walking time in seconds, per meter of elevation gain
+      on uphill slopes</li>
+  <li>c: additional walking time in seconds, per meter of elevation loss
+      on moderate downhill slopes (use positive value for decreasing cost)</li>
+  <li>d: additional walking time in seconds, per meter of elevation loss
+      on steep downhill slopes (use negative value for increasing cost)</li>
 </ul>
 
 It has been proved that moving downhill is favourable up to a specific
@@ -59,12 +62,14 @@ for a, b, c, d <b>walk_coeff</b> parameters are those proposed by
 Langmuir (0.72, 6.0, 1.9998, -1.9998), based on man walking effort in
 standard conditions.
 
-<p>The <b>lambda</b> parameter of the linear equation
-combining movement and friction costs:<br>
+<p>The <b>friction</b> cost parameter represents a time penalty in seconds
+of additional walking time to cross 1 meter distance.
+<p>The <b>lambda</b> parameter is a dimensionless scaling factor of the friction cost:
+
 <div class="code"><pre>
-total cost = movement time cost + (lambda) * friction costs
+total cost = movement time cost + lambda * friction costs * delta_S
 </pre></div>
-must be set in the option section of <em>r.walk</em>.
+
 <p>
 For a more accurate result, the "knight's move" option can be used
 (although it is more time consuming). In the diagram below, the center
