@@ -4,7 +4,7 @@
 # MODULE:    Map Swipe
 # AUTHOR(S): Anna Kratochvilova
 # PURPOSE:   The Map Swipe is a wxGUI component which allows the user to
-#            interactively compare two maps  
+#            interactively compare two maps
 # COPYRIGHT: (C) 2012 by Anna Kratochvilova, and the GRASS Development Team
 #
 #  This program is free software; you can redistribute it and/or modify
@@ -44,43 +44,42 @@
 #% required: no
 #%end
 
-
 import os
-
-import  wx
-
-import grass.script as grass
-
-from core.settings import UserSettings
-from core.globalvar import CheckWxVersion
-from core.giface import StandaloneGrassInterface
-from core.utils import _, GuiModuleMain
-from mapswipe.frame import SwipeMapFrame
+import grass.script as gscript
 
 
 def main():
-    driver = UserSettings.Get(group = 'display', key = 'driver', subkey = 'type')
+    options, flags = gscript.parser()
+
+    import wx
+    from core.settings import UserSettings
+    from core.globalvar import CheckWxVersion
+    from core.giface import StandaloneGrassInterface
+    from core.utils import _
+    from mapswipe.frame import SwipeMapFrame
+
+    driver = UserSettings.Get(group='display', key='driver', subkey='type')
     if driver == 'png':
         os.environ['GRASS_RENDER_IMMEDIATE'] = 'png'
     else:
         os.environ['GRASS_RENDER_IMMEDIATE'] = 'cairo'
-    
+
     first = options['first']
     second = options['second']
     mode = options['mode']
 
-    for mapName in [first, second]:    
+    for mapName in [first, second]:
         if mapName:
-            gfile = grass.find_file(name = mapName)
+            gfile = gscript.find_file(name=mapName)
             if not gfile['name']:
-                grass.fatal(_("Raster map <%s> not found") % mapName)
+                gscript.fatal(_("Raster map <%s> not found") % mapName)
 
     app = wx.App()
     if not CheckWxVersion([2, 9]):
         wx.InitAllImageHandlers()
 
-    frame = SwipeMapFrame(parent = None, giface = StandaloneGrassInterface())
-    
+    frame = SwipeMapFrame(parent=None, giface=StandaloneGrassInterface())
+
     if first:
         frame.SetFirstRaster(first)
     if second:
@@ -93,7 +92,6 @@ def main():
 
     app.MainLoop()
 
+
 if __name__ == '__main__':
-    options, flags = grass.parser()
-    
-    GuiModuleMain(main)
+    main()

@@ -33,20 +33,20 @@
 #% description: Show also 3D plot of spatio-temporal extents
 #%end
 
-
-import os
-
-import  wx
-
-import grass.script as grass
-from core.utils import _, GuiModuleMain
+import grass.script as gscript
 
 
 def main():
+    options, flags = gscript.parser()
+
+    import wx
     try:
         from timeline.frame import TimelineFrame
     except ImportError as e:
-        grass.fatal(e.message)
+        # TODO: why do we need this special check here, the reason of error
+        # is wrong intallation or something, no need to report this to the
+        # user in a nice way
+        gscript.fatal(e.message)
 
     datasets = options['inputs'].strip().split(',')
     datasets = [data for data in datasets if data]
@@ -61,6 +61,4 @@ def main():
 
 
 if __name__ == '__main__':
-    options, flags = grass.parser()
-
-    GuiModuleMain(main)
+    main()

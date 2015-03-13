@@ -34,29 +34,26 @@
 #% guisection: Model
 #%end
 
-import os
+import grass.script as gscript
 
-import  wx
-
-import grass.script as grass
-
-from core.giface import StandaloneGrassInterface
-from core.globalvar import CheckWxVersion
-from core.utils import _, GuiModuleMain
-from gmodeler.frame import ModelFrame
 
 def main():
+    options, flags = gscript.parser()
+
+    import wx
+    from core.giface import StandaloneGrassInterface
+    from core.globalvar import CheckWxVersion
+    from gmodeler.frame import ModelFrame
+
     app = wx.App()
     if not CheckWxVersion([2, 9]):
         wx.InitAllImageHandlers()
-    frame = ModelFrame(parent = None, giface = StandaloneGrassInterface())
+    frame = ModelFrame(parent=None, giface=StandaloneGrassInterface())
     if options['file']:
         frame.LoadModelFile(options['file'])
     frame.Show()
-    
+
     app.MainLoop()
-    
+
 if __name__ == "__main__":
-    options, flags = grass.parser()
-    
-    GuiModuleMain(main)
+    main()
