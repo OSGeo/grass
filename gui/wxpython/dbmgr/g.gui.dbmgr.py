@@ -28,32 +28,30 @@
 #%option G_OPT_V_MAP
 #%end
 
-import os
+import grass.script as gscript
 
-import  wx
-
-import grass.script as grass
-
-from core.utils import _, GuiModuleMain
-from dbmgr.manager import AttributeManager
 
 def main():
-    mapName = grass.find_file(options['map'], element = 'vector')['fullname']
+    options, flags = gscript.parser()
+
+    import wx
+    from core.utils import _
+    from dbmgr.manager import AttributeManager
+
+    mapName = gscript.find_file(options['map'], element='vector')['fullname']
     if not mapName:
-        grass.set_raise_on_error(False)
-        grass.fatal(_("Vector map <%s> not found") % options['map'])
-    
+        gscript.set_raise_on_error(False)
+        gscript.fatal(_("Vector map <%s> not found") % options['map'])
+
     app = wx.App()
-    grass.message(_("Loading attribute data for vector map <%s>...") % mapName)
-    f = AttributeManager(parent = None, id = wx.ID_ANY,
-                         title = "%s - <%s>" % (_("GRASS GIS Attribute Table Manager"),
-                                                mapName),
-                         size = (900, 600), vectorName = mapName)
+    gscript.message(_("Loading attribute data for vector map <%s>...") % mapName)
+    f = AttributeManager(parent=None, id=wx.ID_ANY,
+                         title="%s - <%s>" % (_("GRASS GIS Attribute Table Manager"),
+                                              mapName),
+                         size=(900, 600), vectorName=mapName)
     f.Show()
-    
+
     app.MainLoop()
-    
+
 if __name__ == "__main__":
-    options, flags = grass.parser()
-    
-    GuiModuleMain(main)
+    main()

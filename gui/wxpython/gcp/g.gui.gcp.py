@@ -34,15 +34,9 @@ Module to run GCP management tool as stadalone application.
 """
 
 import os
-import  wx
 
-import grass.script as grass
+import grass.script as gscript
 
-from core.settings import UserSettings
-from core.globalvar import CheckWxVersion
-from core.giface import StandaloneGrassInterface
-from core.utils import GuiModuleMain
-from gcp.manager import GCPWizard
 
 def main():
     """Sets the GRASS display driver
@@ -50,12 +44,20 @@ def main():
     .. todo::
         use command line options as an alternative to wizard
     """
+    options, flags = gscript.parser()
+
+    import wx
+    from core.settings import UserSettings
+    from core.globalvar import CheckWxVersion
+    from core.giface import StandaloneGrassInterface
+    from gcp.manager import GCPWizard
+
     driver = UserSettings.Get(group='display', key='driver', subkey='type')
     if driver == 'png':
         os.environ['GRASS_RENDER_IMMEDIATE'] = 'png'
     else:
         os.environ['GRASS_RENDER_IMMEDIATE'] = 'cairo'
-    
+
     app = wx.App()
     if not CheckWxVersion([2, 9]):
         wx.InitAllImageHandlers()
@@ -65,6 +67,4 @@ def main():
     app.MainLoop()
 
 if __name__ == '__main__':
-    options, flags = grass.parser()
-    
-    GuiModuleMain(main)
+    main()

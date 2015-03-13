@@ -1063,13 +1063,6 @@ def GetGEventAttribsForHandler(method, event):
 
     return kwargs, missing_args
 
-def GuiModuleMain(mainfn):
-    """Main function for g.gui.* modules
-
-    os.fork removed in r62649 as fragile
-    """
-    mainfn()
-
 
 def PilImageToWxImage(pilImage, copyAlpha = True):
     """Convert PIL image to wx.Image

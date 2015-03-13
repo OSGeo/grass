@@ -51,22 +51,23 @@
 #% guisection: Input
 #%end
 
-import os
-
-import wx
-
-import grass.script as grass
-import grass.temporal as tgis
-
-from core.globalvar import CheckWxVersion
-from core.utils import _, GuiModuleMain
-from core.giface import StandaloneGrassInterface
-from core.layerlist import LayerList
-from animation.frame import AnimationFrame, MAX_COUNT
-from animation.data import AnimLayer
+import grass.script as gscript
 
 
 def main():
+    options, flags = gscript.parser()
+
+    # import wx only after running parser
+    # to avoid issues when only interface is needed
+    import grass.temporal as tgis
+    import wx
+    from core.globalvar import CheckWxVersion
+    from core.utils import _
+    from core.giface import StandaloneGrassInterface
+    from core.layerlist import LayerList
+    from animation.frame import AnimationFrame, MAX_COUNT
+    from animation.data import AnimLayer
+
     rast = options['raster']
     vect = options['vector']
     strds = options['strds']
@@ -82,12 +83,11 @@ def main():
         numInputs += 1
     if stvds:
         numInputs += 1
-        
 
     if numInputs > 1:
-        grass.fatal(_("%s=, %s=, %s= and %s= are mutually exclusive.") %
-                ("raster", "vector", "strds", "stvds"))
-        
+        gscript.fatal(_("%s=, %s=, %s= and %s= are mutually exclusive.") %
+                       ("raster", "vector", "strds", "stvds"))
+
     if numInputs > 0:
         # We need to initialize the temporal framework in case
         # a space time dataset was set on the command line so that
@@ -133,6 +133,4 @@ def main():
     app.MainLoop()
 
 if __name__ == '__main__':
-    options, flags = grass.parser()
-
-    GuiModuleMain(main)
+    main()

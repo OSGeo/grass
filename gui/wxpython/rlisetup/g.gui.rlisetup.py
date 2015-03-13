@@ -26,18 +26,17 @@
 #% keyword: landscape structure analysis
 #%end
 
-import os
-
-import wx
-import grass.script as grass
-
-from core.giface import StandaloneGrassInterface
-from core.globalvar import CheckWxVersion
-from core.utils import _, GuiModuleMain
-from rlisetup.frame import RLiSetupFrame
+import grass.script as gscript
 
 
 def main():
+    gscript.parser()
+
+    import wx
+    from core.giface import StandaloneGrassInterface
+    from core.globalvar import CheckWxVersion
+    from rlisetup.frame import RLiSetupFrame
+
     app = wx.App()
     if not CheckWxVersion([2, 9]):
         wx.InitAllImageHandlers()
@@ -48,6 +47,4 @@ def main():
     app.MainLoop()
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
-
-    GuiModuleMain(main)
+    main()
