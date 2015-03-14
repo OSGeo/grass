@@ -49,9 +49,11 @@ class LayerList(object):
 
     def __iter__(self):
         """Iterates over the contents of the list."""
-        for item in self._tree.GetSelectedLayer(multi=True):
+        item = self._tree.GetFirstChild(self._tree.root)[0]
+        while item and item.IsOk():
             yield Layer(self._tree.GetPyData(item))
-
+            item = self._tree.GetNextItem(item)
+        
     def __getitem__(self, index):
         """Select a layer from the LayerList using the index."""
         return [l for l in self][index]
