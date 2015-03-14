@@ -1206,7 +1206,7 @@ class CmdPanel(wx.Panel):
                                 extraItems = {_('Graphical Modeler') : self._giface.GetLayerList(p.get('prompt'))}
                             else:
                                 layers = self._giface.GetLayerList()
-                                if layers:
+                                if len(layers) > 0:
                                     mapList = []
                                     extraItems = {_('Map Display') : mapList}
                                     for layer in layers:
