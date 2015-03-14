@@ -260,8 +260,8 @@ class LMNvizToolbar(BaseToolbar):
         """Show 3D view mode help"""
         if not self.lmgr:
             RunCommand('g.manual',
-                       entry = 'wxGUI.Nviz')
+                       entry='wxGUI.nviz')
         else:
             log = self.lmgr.GetLogWindow()
             log.RunCmd(['g.manual',
-                        'entry=wxGUI.Nviz'])
+                        'entry=wxGUI.nviz'])
