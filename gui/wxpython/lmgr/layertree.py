@@ -1726,6 +1726,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
     def GetVisibleLayers(self, skipDigitized=False):
         # make a list of visible layers
         layers = []
+        if self.root is None:
+            return layers
 
         vislayer = self.GetFirstChild(self.root)[0]
 
