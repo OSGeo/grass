@@ -47,6 +47,9 @@ class LayerList(object):
     def __init__(self, tree):
         self._tree = tree
 
+    def __len__(self):
+        return len([layer for layer in self])
+        
     def __iter__(self):
         """Iterates over the contents of the list."""
         item = self._tree.GetFirstChild(self._tree.root)[0]
