@@ -2361,6 +2361,9 @@ class VectorCategorySelect(wx.Panel):
             self.OnClose()
 
     def OnClose(self, event=None):
+        if not self.mapdisp:
+            return
+        
         switcher = self.mapdisp.GetToolSwitcher()
         switcher.RemoveCustomToolFromGroup(self.buttonVecSelect.GetId())
         if self._vectorSelect is not None:
