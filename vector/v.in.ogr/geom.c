@@ -140,7 +140,7 @@ centroid(OGRGeometryH hGeom, CENTR * Centr, struct spatial_index *Sindex,
 		in = 1;
 		for (j = 0; j < valid_isles; j++) {
 		    ret = Vect_point_in_poly(x, y, IPoints[j]);
-		    if (ret == 1) {	/* centroid in inner ring */
+		    if (ret > 0) {	/* centroid in inner ring */
 			in = 0;
 			break;	/* inside isle */
 		    }
@@ -305,7 +305,6 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 	    return 0;
 	}
 
-	n_polygons++;
 	nr = OGR_G_GetGeometryCount(hGeom);
 
 	Vect_reset_line(Points);
@@ -326,6 +325,8 @@ geom(OGRGeometryH hGeom, struct Map_info *Map, int field, int cat,
 	    G_debug(2, "\tArea size %.1e, area not imported", size);
 	    return 0;
 	}
+
+	n_polygons++;
 
 	if (type & GV_LINE)
 	    otype = GV_LINE;
