@@ -189,7 +189,7 @@ int main(int argc, char **argv)
     colors = (COLOR *) G_malloc(ncols * sizeof(COLOR));
 
     /* Fill max_reference values */
-    max_reference = (double *)G_malloc(ncols * sizeof(double));
+    max_reference = NULL;
 
     /* default colors */
     j = 0;
@@ -247,6 +247,7 @@ int main(int argc, char **argv)
     
     /* should we plot the maximum reference on bar plots? */
     if (max_reference_opt->answer != NULL) {
+	max_reference = (double *)G_malloc(ncols * sizeof(double));
 
 	/* loop through the given values */
 	for (i = 0; i < ncols; i++) {
