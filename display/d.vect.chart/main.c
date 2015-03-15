@@ -43,7 +43,7 @@ int main(int argc, char **argv)
     struct Option *field_opt;
     struct Option *ocolor_opt, *colors_opt;
     struct Option *columns_opt, *sizecol_opt;
-    struct Flag *y_center_flag, *legend_flag;
+    struct Flag *y_center_flag, *legend_flag, *chart3d_flag;
 
     /*   struct Flag *horizontal_bar_flag; */
     struct Map_info Map;
@@ -141,6 +141,12 @@ int main(int argc, char **argv)
     legend_flag->description =
 	_("Create legend information and send to stdout");
 
+    chart3d_flag = G_define_flag();
+    chart3d_flag->key = '3';
+    chart3d_flag->description =
+	_("Create 3D charts");
+    chart3d_flag->guisection = _("Chart properties");
+
     /*
        horizontal_bar_flag = G_define_flag();
        horizontal_bar_flag->key = 'h';
@@ -189,7 +195,7 @@ int main(int argc, char **argv)
     colors = (COLOR *) G_malloc(ncols * sizeof(COLOR));
 
     /* Fill max_reference values */
-    max_reference = (double *)G_malloc(ncols * sizeof(double));
+    max_reference = NULL;
 
     /* default colors */
     j = 0;
@@ -247,6 +253,7 @@ int main(int argc, char **argv)
     
     /* should we plot the maximum reference on bar plots? */
     if (max_reference_opt->answer != NULL) {
+	max_reference = (double *)G_malloc(ncols * sizeof(double));
 
 	/* loop through the given values */
 	for (i = 0; i < ncols; i++) {
@@ -263,7 +270,8 @@ int main(int argc, char **argv)
     ret = plot(ctype, &Map, type, field,
 	       columns_opt->answer, ncols,
 	       sizecol_opt->answer, size, scale,
-	       &ocolor, colors, y_center, max_reference);
+	       &ocolor, colors, y_center, max_reference,
+	       chart3d_flag->answer);
 
     D_save_command(G_recreate_command());
     D_close_driver();

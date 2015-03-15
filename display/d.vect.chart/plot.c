@@ -11,7 +11,8 @@
 int
 plot(int ctype, struct Map_info *Map, int type, int field,
      char *columns, int ncols, char *sizecol, int size, double scale,
-     COLOR * ocolor, COLOR * colors, int y_center, double *max_reference)
+     COLOR * ocolor, COLOR * colors, int y_center, double *max_reference,
+     int do3d)
 {
     int ltype, nlines, line, col, more, coltype, nselcols;
     double x, y, csize, len;
@@ -126,11 +127,11 @@ plot(int ctype, struct Map_info *Map, int type, int field,
 		csize = val[ncols];
 		size = scale * csize;
 	    }
-	    pie(x, y, size, val, ncols, ocolor, colors);
+	    pie(x, y, size, val, ncols, ocolor, colors, do3d);
 	}
 	else {
 	    bar(x, y, size, scale, val, ncols, ocolor, colors, y_center,
-		max_reference);
+		max_reference, do3d);
 	}
     }
 
