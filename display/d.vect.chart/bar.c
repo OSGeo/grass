@@ -7,11 +7,12 @@
 
 int
 bar(double cx, double cy, int size, double scale, double *val, int ncols,
-    COLOR * ocolor, COLOR * colors, int y_center, double *max_reference)
+    COLOR * ocolor, COLOR * colors, int y_center, double *max_reference,
+    int do3d)
 {
     int i;
     double max;
-    double x0, y0;
+    double x0, y0, x1, y1, dx, dy;
     double bw;			/* bar width */
     double pixel;		/* pixel size */
     struct line_pnts *Points, *max_Points;
@@ -44,6 +45,8 @@ bar(double cx, double cy, int size, double scale, double *val, int ncols,
     x0 = cx - size * pixel / 2;
 
     bw = size * pixel / ncols;
+    dx = bw / 5.0;
+    dy = dx * 1.5;
 
     if (max_reference) {
 	/* Draw polygon outlining max value in dataset with no fill color */
@@ -81,6 +84,46 @@ bar(double cx, double cy, int size, double scale, double *val, int ncols,
 
 	D_RGB_color(ocolor->r, ocolor->g, ocolor->b);
 	D_polyline_abs(Points->x, Points->y, Points->n_points);
+	
+	if (do3d) {
+	    /* up */
+	    Vect_reset_line(Points);
+	    y1 = y0 + scale * val[i] * pixel;
+	    Vect_append_point(Points, x0 + i * bw, y1, 0);
+	    Vect_append_point(Points, x0 + i * bw + dx, y1 + dy, 0);
+	    Vect_append_point(Points, x0 + (i + 1) * bw + dx, y1 + dy, 0);
+	    Vect_append_point(Points, x0 + (i + 1) * bw, y1, 0);
+	    Vect_append_point(Points, x0 + i * bw, y1, 0);
+
+	    if (!colors[i].none) {
+		D_RGB_color(colors[i].r, colors[i].g, colors[i].b);
+		D_polygon_abs(Points->x, Points->y, Points->n_points);
+	    }
+
+	    D_RGB_color(ocolor->r, ocolor->g, ocolor->b);
+	    /* do not draw the same line twice */
+	    Points->n_points = 4;
+	    D_polyline_abs(Points->x, Points->y, Points->n_points);
+
+	    /* right */
+	    Vect_reset_line(Points);
+	    x1 = x0 + (i + 1) * bw;
+	    Vect_append_point(Points, x1 + dx + 0.5 * pixel, y1 + dy, 0);
+	    Vect_append_point(Points, x1 + dx + 0.5 * pixel, y0 + dy, 0);
+	    Vect_append_point(Points, x1, y0, 0);
+	    Vect_append_point(Points, x1, y1, 0);
+	    Vect_append_point(Points, x1 + dx + 0.5 * pixel, y1 + dy, 0);
+
+	    if (!colors[i].none && val[i] > 0) {
+		D_RGB_color(colors[i].r, colors[i].g, colors[i].b);
+		D_polygon_abs(Points->x, Points->y, Points->n_points);
+	    }
+
+	    D_RGB_color(ocolor->r, ocolor->g, ocolor->b);
+	    /* do not draw the same line twice */
+	    Points->n_points = 3;
+	    D_polyline_abs(Points->x, Points->y, Points->n_points);
+	}
     }
 
     /* tidy up */
