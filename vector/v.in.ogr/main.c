@@ -180,7 +180,7 @@ int main(int argc, char *argv[])
     param.min_area->required = NO;
     param.min_area->answer = "0.0001";
     param.min_area->label =
-	_("Minimum size of area to be imported (square units)");
+	_("Minimum size of area to be imported (square meters)");
     param.min_area->guisection = _("Selection");
     param.min_area->description = _("Smaller areas and "
 				  "islands are ignored. Should be greater than snap^2");
@@ -204,7 +204,7 @@ int main(int argc, char *argv[])
     param.snap->type = TYPE_DOUBLE;
     param.snap->required = NO;
     param.snap->answer = "-1";
-    param.snap->label = _("Snapping threshold for boundaries");
+    param.snap->label = _("Snapping threshold for boundaries (map units)");
     param.snap->description = _("'-1' for no snap");
 
     param.outloc = G_define_option();
@@ -533,8 +533,44 @@ int main(int argc, char *argv[])
     proj_units = NULL;
     Ogr_projection = OGR_L_GetSpatialRef(Ogr_layer);	/* should not be freed later */
 
-    /* Do we need to create a new location? */
+
+    /* fetch boundaries */
     G_get_window(&cellhd);
+    if ((OGR_L_GetExtent(Ogr_layer, &oExt, 1)) == OGRERR_NONE) {
+	cellhd.north = ymax = oExt.MaxY;
+	cellhd.south = ymin = oExt.MinY;
+	cellhd.west = xmin = oExt.MinX;
+	cellhd.east = xmax = oExt.MaxX;
+	cellhd.rows = 20;	/* TODO - calculate useful values */
+	cellhd.cols = 20;
+	cellhd.ns_res = (cellhd.north - cellhd.south) / cellhd.rows;
+	cellhd.ew_res = (cellhd.east - cellhd.west) / cellhd.cols;
+
+	/* use OGR extents if possible, needed to skip corrupted data
+	 * in OGR dsn/layer */
+	have_ogr_extent = 1;
+    }
+    
+    if (!have_ogr_extent) {
+	cellhd.north = 1.;
+	cellhd.south = 0.;
+	cellhd.west = 0.;
+	cellhd.east = 1.;
+	cellhd.top = 1.;
+	cellhd.bottom = 1.;
+	cellhd.rows = 1;
+	cellhd.rows3 = 1;
+	cellhd.cols = 1;
+	cellhd.cols3 = 1;
+	cellhd.depths = 1;
+	cellhd.ns_res = 1.;
+	cellhd.ns_res3 = 1.;
+	cellhd.ew_res = 1.;
+	cellhd.ew_res3 = 1.;
+	cellhd.tb_res = 1.;
+    }
+
+    /* Do we need to create a new location? */
     if (param.outloc->answer != NULL) {
 	/* Convert projection information non-interactively as we can't
 	 * assume the user has a terminal open */
@@ -555,9 +591,8 @@ int main(int argc, char *argv[])
 	    G_get_window(&cellhd);
 	}
 
-        /* If the i flag is set, clean up? and exit here */
-        if(flag.no_import->answer)
-        {
+        /* If the i flag is set, clean up and exit here */
+        if (flag.no_import->answer) {
 	    OGR_DS_Destroy(Ogr_ds);
             exit(EXIT_SUCCESS);
         }
@@ -667,46 +702,7 @@ int main(int argc, char *argv[])
 	}
     }
 
-    G_begin_polygon_area_calculations();	/* Used in geom() */
-
-    /* TODO: threshold might be recalculated with optional geodesic support to meters */
-    if (G_projection() == PROJECTION_LL)
-        G_important_message(_("Note: In latitude-longitude coordinate system specify threshold in degree unit"));
-
-    /* fetch boundaries */
-    if ((OGR_L_GetExtent(Ogr_layer, &oExt, 1)) == OGRERR_NONE) {
-	cellhd.north = ymax = oExt.MaxY;
-	cellhd.south = ymin = oExt.MinY;
-	cellhd.west = xmin = oExt.MinX;
-	cellhd.east = xmax = oExt.MaxX;
-	cellhd.rows = 20;	/* TODO - calculate useful values */
-	cellhd.cols = 20;
-	cellhd.ns_res = (cellhd.north - cellhd.south) / cellhd.rows;
-	cellhd.ew_res = (cellhd.east - cellhd.west) / cellhd.cols;
-
-	/* use OGR extents if possible, needed to skip corrupted data
-	 * in OGR dsn/layer */
-	have_ogr_extent = 1;
-    }
-    
-    if (!have_ogr_extent) {
-	cellhd.north = 1.;
-	cellhd.south = 0.;
-	cellhd.west = 0.;
-	cellhd.east = 1.;
-	cellhd.top = 1.;
-	cellhd.bottom = 1.;
-	cellhd.rows = 1;
-	cellhd.rows3 = 1;
-	cellhd.cols = 1;
-	cellhd.cols3 = 1;
-	cellhd.depths = 1;
-	cellhd.ns_res = 1.;
-	cellhd.ns_res3 = 1.;
-	cellhd.ew_res = 1.;
-	cellhd.ew_res3 = 1.;
-	cellhd.tb_res = 1.;
-    }
+    G_begin_polygon_area_calculations();	/* Used in geom() and centroid() */
 
     /* set spatial filter */
     if (flag.region->answer) {
@@ -715,6 +711,9 @@ int main(int argc, char *argv[])
 	if (nlayers > 1)
 	    G_warning(_("The region flag is applied only to the first OGR layer"));
 
+	/* TODO: does not make sense if a new location has been created:
+	 * the current window has been set from the extents of the first
+	 * OGR layer */
 	G_get_window(&cur_wind);
 	if (have_ogr_extent) {
 	    /* check for any overlap */

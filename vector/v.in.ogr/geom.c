@@ -140,7 +140,7 @@ centroid(OGRGeometryH hGeom, CENTR * Centr, struct spatial_index *Sindex,
 		in = 1;
 		for (j = 0; j < valid_isles; j++) {
 		    ret = Vect_point_in_poly(x, y, IPoints[j]);
-		    if (ret == 1) {	/* centroid in inner ring */
+		    if (ret > 0) {	/* centroid in inner ring */
 			in = 0;
 			break;	/* inside isle */
 		    }
