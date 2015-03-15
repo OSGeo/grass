@@ -32,14 +32,16 @@ pie(double cx, double cy, int size, double *val, int ncols, COLOR * ocolor,
     sum = 0;
     ang = 0;
     for (i = 0; i < ncols; i++) {
+	if (val[i] == 0)
+	    continue;
+
 	sum += val[i];
-	if (tot_sum > 0.0)
-           end_ang = 2 * PI * sum / tot_sum;
-        else
-           end_ang = 0;
+
+	end_ang = 2 * PI * sum / tot_sum;
+
 	Vect_reset_line(Points);
 
-	if (val[0] != tot_sum)	/* all in one slice, don't draw line to center */
+	if (val[i] != tot_sum)    /* all in one slice, don't draw line to center */
 	    Vect_append_point(Points, cx, cy, 0);
 
 	n = (int)ceil((end_ang - ang) / step);
@@ -52,7 +54,7 @@ pie(double cx, double cy, int size, double *val, int ncols, COLOR * ocolor,
 	}
 	ang = end_ang;
 
-	if (val[0] != tot_sum)
+	if (val[i] != tot_sum)    /* all in one slice, don't draw line to center */
 	    Vect_append_point(Points, cx, cy, 0);
 
 	if (!colors[i].none) {
