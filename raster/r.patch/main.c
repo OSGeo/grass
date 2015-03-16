@@ -34,6 +34,7 @@ int main(int argc, char *argv[])
     int colr_ok;
     int outfd;
     RASTER_MAP_TYPE out_type, map_type;
+    size_t out_cell_size;
     struct History history;
     void *presult, *patch;
     int nfiles;
@@ -114,6 +115,8 @@ int main(int argc, char *argv[])
 	Rast_get_cellhd(name, "", &cellhd[i]);
     }
 
+    out_cell_size = Rast_cell_size(out_type);
+
     rname = opt2->answer;
     outfd = Rast_open_new(new_name = rname, out_type);
 
@@ -146,7 +149,8 @@ int main(int argc, char *argv[])
 
 	    Rast_get_row(infd[i], patch, row, out_type);
 	    if (!do_patch
-		(presult, patch, &statf[i], ncols, out_type, use_zero))
+                (presult, patch, &statf[i], ncols, out_type, out_cell_size,
+                 use_zero))
 		break;
 	}
 	Rast_put_row(outfd, presult, out_type);
