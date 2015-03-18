@@ -8,8 +8,6 @@ for details.
 @author Soeren Gebbert
 """
 
-import grass.pygrass.modules as pymod
-import subprocess
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 
@@ -50,7 +48,7 @@ class TestRasterWhat(TestCase):
                           layout="row",
                           nprocs=1,  overwrite=True,  verbose=True)
 
-        self.assertFileMd5("out_row.txt", "55209718566d70e1427bd1fecf844d53")
+        self.assertFileMd5("out_row.txt", "55209718566d70e1427bd1fecf844d53", text=True)
 
 
     def test_row_output_coords(self):
@@ -59,7 +57,7 @@ class TestRasterWhat(TestCase):
                           layout="row",
                           nprocs=1,  overwrite=True,  verbose=True)
 
-        self.assertFileMd5("out_row_coords.txt", "cd917ac4848786f1b944512eed1da5bc")
+        self.assertFileMd5("out_row_coords.txt", "cd917ac4848786f1b944512eed1da5bc", text=True)
 
     def test_col_output(self):
         self.assertModule("t.rast.what",  strds="A",  output="out_col.txt", 
@@ -67,7 +65,7 @@ class TestRasterWhat(TestCase):
                           layout="col",
                           nprocs=1,  overwrite=True,  verbose=True)
 
-        self.assertFileMd5("out_col.txt", "8720cc237b46ddb18f11440469d0e13f")
+        self.assertFileMd5("out_col.txt", "8720cc237b46ddb18f11440469d0e13f", text=True)
 
     def test_col_output_coords(self):
         self.assertModule("t.rast.what",  strds="A",  output="out_col_coords.txt", 
@@ -75,7 +73,7 @@ class TestRasterWhat(TestCase):
                           layout="col",
                           nprocs=1,  overwrite=True,  verbose=True)
 
-        self.assertFileMd5("out_col_coords.txt", "ac44ebc5aa040d4ce2a5787e95f208ec")
+        self.assertFileMd5("out_col_coords.txt", "ac44ebc5aa040d4ce2a5787e95f208ec", text=True)
 
     def test_timerow_output(self):
         self.assertModule("t.rast.what",  strds="A",  output="out_timerow.txt", 
@@ -83,7 +81,7 @@ class TestRasterWhat(TestCase):
                           layout="timerow",
                           nprocs=1,  overwrite=True,  verbose=True)
 
-        self.assertFileMd5("out_timerow.txt", "129fe0b63019e505232efa20ad42c03a")
+        self.assertFileMd5("out_timerow.txt", "129fe0b63019e505232efa20ad42c03a", text=True)
 
     def test_timerow_output_coords(self):
         self.assertModule("t.rast.what",  strds="A",  output="out_timerow_coords.txt", 
@@ -91,7 +89,7 @@ class TestRasterWhat(TestCase):
                           layout="timerow",
                           nprocs=1,  overwrite=True,  verbose=True)
 
-        self.assertFileMd5("out_timerow_coords.txt", "ca4ee0e7e4aaca170d6034e0d57d292d")
+        self.assertFileMd5("out_timerow_coords.txt", "ca4ee0e7e4aaca170d6034e0d57d292d", text=True)
 
     def test_row_stdout_where_parallel(self):
         
@@ -142,7 +140,7 @@ class TestRasterWhat(TestCase):
                           where="start_time > '2001-03-01'",  
                           nprocs=4,  overwrite=True,  verbose=True)
 
-        self.assertFileMd5("out_where.txt", "af731bec01fedc262f4ac162fe420707")
+        self.assertFileMd5("out_where.txt", "af731bec01fedc262f4ac162fe420707", text=True)
 
     def test_empty_strds(self):
         self.assertModuleFail("t.rast.what",  strds="A",  output="out_error.txt", 
