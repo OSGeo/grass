@@ -135,7 +135,15 @@ class GrassTestFilesInvoker(object):
         env = os.environ.copy()
         mapset, mapset_dir = self._create_mapset(gisdbase, location, module)
         gisrc = gsetup.write_gisrc(gisdbase, location, mapset)
+
+        # here is special setting of environmental variables for running tests
+        # some of them might be set from outside in the future and if the list
+        # will be long they should be stored somewhere separately
+
+        # use custom gisrc, not current session gisrc
         env['GISRC'] = gisrc
+        # percentage in plain format is 0...10...20... ...100
+        env['GRASS_MESSAGE_FORMAT'] = 'plain'
 
         stdout_path = os.path.join(cwd, 'stdout.txt')
         stderr_path = os.path.join(cwd, 'stderr.txt')
