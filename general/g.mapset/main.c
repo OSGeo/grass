@@ -202,7 +202,7 @@ int main(int argc, char *argv[])
 
     G_free(mapset_old_path);
 
-    G_important_message(_("Your shell continues to use the history "
+    G_important_message(_("Mapset switched. Your shell continues to use the history "
 			  "for the old mapset"));
 
     if ((shell = getenv("SHELL"))) {
