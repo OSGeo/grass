@@ -137,8 +137,14 @@ typedef int rli_func(int fd, char **par, struct area_entry *ad, double *result);
  * \param file name of setup file
  * \param f the function that defines the index
  * \param raster the raster file to analyze
- * \return 0 error occurs in calculating index
- * \return 1  otherwise
+ * \return 1 error occurs in calculating index
+ * \return 0 otherwise
+ *
+ * \note
+ * Unlike other function in r.li, this function returns return code
+ * usable as process return code rather than using true/false (1/0)
+ * idiom for success/failure. The interface was designed to accommodate
+ * common usage of this function in r.li modules.
  */
 
 int calculateIndex(char *file, rli_func *f,
