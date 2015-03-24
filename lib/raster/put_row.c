@@ -21,6 +21,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <errno.h>
 
 #include <grass/config.h>
 #include <grass/raster.h>
@@ -117,8 +118,8 @@ static void write_data(int fd, int row, unsigned char *buf, int n)
     ssize_t nwrite = fcb->nbytes * n;
 
     if (write(fcb->data_fd, buf, nwrite) != nwrite)
-	G_fatal_error(_("Error writing uncompressed FP data for row %d of <%s>"),
-		      row, fcb->name);
+	G_fatal_error(_("Error writing uncompressed FP data for row %d of <%s>: %s"),
+		      row, fcb->name, strerror(errno));
 }
 
 static void write_data_compressed(int fd, int row, unsigned char *buf, int n)
@@ -127,8 +128,8 @@ static void write_data_compressed(int fd, int row, unsigned char *buf, int n)
     int nwrite = fcb->nbytes * n;
 
     if (G_zlib_write(fcb->data_fd, buf, nwrite) < 0)
-	G_fatal_error(_("Error writing compressed FP data for row %d of <%s>"),
-		      row, fcb->name);
+	G_fatal_error(_("Error writing compressed FP data for row %d of <%s>: %s"),
+		      row, fcb->name, strerror(errno));
 }
 
 static void set_file_pointer(int fd, int row)
