@@ -697,7 +697,8 @@ def install_extension_win(name):
     grass.debug("url=%s" % url, 1)
 
     try:
-        f = urlopen(url + '/' + name + '.zip', proxies=PROXIES)
+        zfile = url + name + '.zip'
+        f = urlopen(zfile, proxies=PROXIES)
 
         # create addons dir if not exists
         if not os.path.exists(options['prefix']):
@@ -706,7 +707,11 @@ def install_extension_win(name):
         # download data
         fo = tempfile.TemporaryFile()
         fo.write(f.read())
-        zfobj = zipfile.ZipFile(fo)
+        try:
+            zfobj = zipfile.ZipFile(fo)
+        except zipfile.BadZipfile as e:
+            grass.fatal('%s: %s' % (e, zfile))
+        
         for name in zfobj.namelist():
             if name.endswith('/'):
                 d = os.path.join(options['prefix'], name)
