@@ -50,7 +50,7 @@ from core.gcmd import GError, RunCommand, GMessage
 from gui_core.gselect import LocationSelect, MapsetSelect, Select, \
                              OgrTypeSelect, GdalSelect, MapsetSelect, \
                              SubGroupSelect
-from gui_core.widgets import SingleSymbolPanel, GListCtrl, SimpleValidator
+from gui_core.widgets import SingleSymbolPanel, GListCtrl, SimpleValidator, MapValidator
 from core.utils import GetValidLayerName, _
 from core.settings import UserSettings, GetDisplayVectSettings
 from core.debug import Debug
@@ -199,7 +199,7 @@ class VectorDialog(SimpleDialog):
         
         self.element = Select(parent = self.panel, id = wx.ID_ANY, size = globalvar.DIALOG_GSELECT_SIZE,
                               type = 'vector', layerTree = layerTree,
-                              validator = SimpleValidator(callback = self.ValidatorCallback))
+                              validator = MapValidator())
         self.element.SetFocus()
         
         self.warning = _("Name of vector map is missing.")
