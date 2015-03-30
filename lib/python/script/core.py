@@ -322,7 +322,6 @@ def start_command(prog, flags="", overwrite=False, quiet=False,
     GISDBASE='/opt/grass-data';
     LOCATION_NAME='spearfish60';
     MAPSET='glynn';
-    GRASS_DB_ENCODING='ascii';
     GUI='text';
     MONITOR='x0';
 
@@ -386,7 +385,6 @@ def pipe_command(*args, **kwargs):
     GISDBASE='/opt/grass-data';
     LOCATION_NAME='spearfish60';
     MAPSET='glynn';
-    GRASS_DB_ENCODING='ascii';
     GUI='text';
     MONITOR='x0';
 
