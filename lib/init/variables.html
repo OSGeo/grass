@@ -107,6 +107,10 @@ PERMANENT
   <dd>defines the name (path) of a shell script to be processed as
   batch job.</dd>
 
+  <dt>GRASS_DB_ENCODING</dt>
+  <dd>[various modules, wxGUI]<br>
+    encoding for vector attribute data (utf-8, ascii, iso8859-1, koi8-r)</dd>
+  
   <dt>GIS_ERROR_LOG</dt>
   <dd>If set, GIS_ERROR_LOG should be the absolute path to the log
    file (a relative path will be interpreted relative to the process'
@@ -456,10 +460,6 @@ g.gisenv set=DEBUG=0
   <dt>GIS_LOCK</dt>
   <dd>lock ID to prevent parallel GRASS use,
     <br>process id of the start-up shell script</dd>
-  
-  <dt>GRASS_DB_ENCODING</dt>
-  <dd>[d.what.vect/forms library]<br>
-    encoding of query form (utf-8, ascii, iso8859-1, koi8-r)</dd>
   
   <dt>GUI</dt>
   <dd>See <tt>GRASS_GUI</tt> environmental variable for details.</dd>
