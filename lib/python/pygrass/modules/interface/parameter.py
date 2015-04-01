@@ -138,11 +138,12 @@ class Parameter(object):
         if 'values' in diz:
             try:
                 # Check for integer ranges: "3-30" or float ranges: "0.0-1.0"
-                isrange = re.match("(?P<min>-*\d+.*\d*)-(?P<max>\d+.*\d*)",
+                isrange = re.match("(?P<min>-*\d+.*\d*)*-(?P<max>\d+.*\d*)*",
                                    diz['values'][0])
                 if isrange:
                     mn, mx = isrange.groups()
-                    self.min, self.max = float(mn), float(mx)
+                    self.min = None if mn is None else float(mn)
+                    self.max = None if mx is None else float(mx)
                     self.values = None
                     self.isrange = diz['values'][0]
                 # No range was found
