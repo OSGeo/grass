@@ -187,12 +187,12 @@ class VNETDialog(wx.Dialog):
         sizer.Add(item = self.notebook, proportion = 1,
                   flag = wx.EXPAND)
 
-        sizer.Add(item = self.stBar, proportion = 0)
+        sizer.Add(item = self.stBar, proportion = 0, flag = wx.EXPAND)
 
         self.mainPanel.SetSizer(sizer)
 
-        sizer.Fit(self)  
-        self.Layout()
+        sizer.Fit(self)
+        self.Layout() 
 
     def _createPointsPage(self):
         """Tab with points list and analysis settings"""
@@ -513,7 +513,10 @@ class VNETDialog(wx.Dialog):
             elif  self.notebook.GetSelection() == self.notebook.GetPageIndexByName('parameters'):
                 self.OnALayerSel(None) 
                 self.OnNLayerSel(None)
+ 
+        self.Layout()
 
+       
     def _updateDbMgrData(self):
             """Updates input/result tables page """
             if self.notebook.GetSelection() == self.notebook.GetPageIndexByName('inputDbMgr'):
