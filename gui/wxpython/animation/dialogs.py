@@ -49,7 +49,7 @@ import grass.script.core as gcore
 
 class SpeedDialog(wx.Dialog):
     def __init__(self, parent, title=_("Adjust speed of animation"),
-                 temporalMode=None, minimumDuration=20, timeGranularity=None,
+                 temporalMode=None, minimumDuration=0, timeGranularity=None,
                  initialSpeed=200):
         wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY, title=title,
                            style=wx.DEFAULT_DIALOG_STYLE)
@@ -179,10 +179,11 @@ class SpeedDialog(wx.Dialog):
 
         if self.temporalMode == TemporalMode.TEMPORAL:
             unit = self.timeGranularity[1]
-            try:
-                index = timeUnits.index(unit)
-            except ValueError:
-                index = 0
+            index = 0
+            for i, timeUnit in enumerate(timeUnits):
+                if timeUnit.startswith(unit):
+                    index = i
+                    break
             choiceWidget.SetSelection(index)
         else:
             choiceWidget.SetSelection(0)
@@ -233,6 +234,7 @@ class SpeedDialog(wx.Dialog):
 
             value = self.spinDurationTemp.GetValue()
             ms = value * seconds2 / float(seconds1)
+            # minimumDuration set to 0, too restrictive
             if ms < self.minimumDuration:
                 GMessage(parent=self, message=_("Animation speed is too high."))
                 return
