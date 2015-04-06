@@ -16,7 +16,7 @@ you contributed to GRASS at any point during its existence, please let
 us know your name and e-mail address so we can add your name.
 
 Active parts of the program have authors dating back to GRASS's
-inception in 1982. Please check the GRASS 1.x - 5.0 credits list at:
+inception in 1982. Please check the GRASS 1.x - 7.x credits list at:
  http://grass.osgeo.org/home/credits/
 
 
@@ -25,9 +25,9 @@ database management subsystems. The raster, display, and projection
 subsystems are largely directly inherited from GRASS 5.4 without change. 
 The core GIS, GUI, and build subsystems are a hybrid of old and new code.
 
-Thus we must also thank and credit the members of the 5.0 core
+Thus we must also thank and credit the members of the 5.0 + 6.x core
 development team, listed below, as many are still active in the
-project and GRASS 6 owes much of itself to the generosity of their
+project and GRASS GIS owes much of itself to the generosity of their
 bright minds.
 
 
@@ -48,20 +48,26 @@ https://svn.osgeo.org/grass/grass/trunk/translators.csv
 GRASS 7.0 major project contributers
 ------------------------------------
 
-LEAD ARCHITECT
- - Glynn Clements <glynn at gclements plus com>
+LEAD ARCHITECTS
+ - Glynn Clements <glynn at gclements plus com>: libraries
  - Markus Metz <markus.metz.giswork gmail.com>: Vector library lead
- 
+ - Soeren Gebbert: temporal framwork lead
+ - Pietro Zambelli: Python API lead
+
 GUI
  - Martin Landa <landa.martin gmail com>: wxPython GUI lead
+ - Anna Petrášová
+ - Václav Petráš
 
 PROJECT INTEGRATION
- - Markus Neteler <neteler osgeo org>: GRASS project coordination and chair
+ - Markus Neteler <neteler osgeo org>: GRASS GIS project coordination and PSC chair
  - M. Hamish Bowman <hamish.bowman otago ac nz>: General sanitation
 
 INSTITUTIONAL SUPPORT
  - The Open Source Geospatial Foundation (http://www.osgeo.org)
 
+CONTRIBUTORS
+ - See: http://grass.osgeo.org/home/credits/
 
 [please complete and correct as needed !]
 
@@ -372,9 +378,9 @@ Contact:
  GRASS Development Team
  c/o Markus Neteler
  Fondazione Edmund Mach (FEM)
- IASMA Research and Innovation Centre
+ Research and Innovation Centre
  38010 S. Michele all'Adige (Trento), Italy
- markus.neteler AT iasma.it
+ neteler AT osgeo.org
 
 Internet:  http://grass.osgeo.org/   (main site)
            http://grass.osgeo.org/mirrors/ (list of mirrors)
