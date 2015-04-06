@@ -67,7 +67,7 @@ void Nviz_init_data(nv_data * data)
 void Nviz_destroy_data(nv_data *data)
 {
     int i;
-    for (i = 0; data->num_fringes; i++) {
+    for (i = 0; i < data->num_fringes; i++) {
 	G_free(data->fringe[i]);
 	data->fringe[i] = NULL;
     }
@@ -80,7 +80,7 @@ void Nviz_destroy_data(nv_data *data)
 	data->draw_arrow = 0;
     }
 
-    for (i = 0; data->num_scalebars; i++) {
+    for (i = 0; i < data->num_scalebars; i++) {
 	G_free(data->scalebar[i]);
 	data->scalebar[i] = NULL;
     }
