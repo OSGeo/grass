@@ -350,10 +350,10 @@ class PsMapFrame(wx.Frame):
                     import types
                     im.load = types.MethodType(loadPSForWindows, im)
                 im.save(self.imgName, format = 'PNG')
-            except IOError as e:
+            except (IOError, OSError) as e:
                 del busy
                 dlg = HyperlinkDialog(self, title=_("Preview not available"),
-                                      message=_("Preview is not available probably due to missing Ghostscript."),
+                                      message=_("Preview is not available probably because Ghostscript is not installed or not on PATH."),
                                       hyperlink='http://trac.osgeo.org/grass/wiki/CompileOnWindows#Ghostscript',
                                       hyperlinkLabel=_("Please follow instructions on GRASS Trac Wiki."))
                 dlg.ShowModal()
