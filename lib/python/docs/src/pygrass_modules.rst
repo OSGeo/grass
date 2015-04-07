@@ -195,9 +195,9 @@ attributes of the class: ::
 
 Another example of use: ::
 
-    >>> info = Module("r.info", map="elevation", flags="r", finish_=True)
-    >>> from pygrass.modules import stdout2dict
-    >>> stdout2dict(info.stdout)
+    >>> info = Module("r.info", map="elevation", flags="r", stdout_=PIPE)
+    >>> from grass.script.utils import parse_key_val
+    >>> parse_key_val(info.outputs.stdout)
     {'max': '156.3299', 'min': '55.57879'}
     >>> info = Module("r.info", map="elevation", flags="r", finish_=False)
     >>> category = Module("r.category", map="elevation",
