@@ -22,13 +22,13 @@ respectively. Maps <b>aspect_horizontal</b> and <b>aspect_vertical</b> are in de
 
 <p>At first, data points are checked for identical positions and points
 that are closer to each other than given <b>dmin</b> are removed.
-Parameters <b>wmult</b> and <b>zmult</b> allow the user to re-scale 
+Parameters <b>wscale</b> and <b>zscale</b> allow the user to re-scale 
 the w-values and z-coordinates of the point data (useful e.g. for 
 transformation of elevations given in feet to meters, so that the 
 proper values of gradient and curvatures can be computed).
-Rescaling of z-coordinates (<b>zmult</b>) is also needed when the distances
+Rescaling of z-coordinates (<b>zscale</b>) is also needed when the distances
 in vertical direction are much smaller than the horizontal
-distances; if that is the case, the value of <b>zmult</b>
+distances; if that is the case, the value of <b>zscale</b>
 should be selected so that the vertical and horizontal distances
 have about the same magnitude.
 
@@ -69,7 +69,7 @@ only a subset of the input vectors.
 
 <div class="code"><pre>
 # preparation as in above example
-v.vol.rst elevrand_3d wcol=soilrange elevation=soilrange zmult=100 where="soilrange > 3"
+v.vol.rst elevrand_3d wcol=soilrange elevation=soilrange zscale=100 where="soilrange > 3"
 </pre></div>
 
 
@@ -91,7 +91,7 @@ representing the whole dataset.
 <p><div class="code"><pre>
 v.info -c precip3d
 g.region n=5530000 s=5275000 w=4186000 e=4631000 res=500 -p
-v.vol.rst -c input=precip3d wcolumn=precip zmult=50 segmax=700 cvdev=cvdevmap tension=10
+v.vol.rst -c input=precip3d wcolumn=precip zscale=50 segmax=700 cvdev=cvdevmap tension=10
 v.db.select cvdevmap
 v.univar cvdevmap col=flt1 type=point
 </pre></div>
@@ -100,11 +100,11 @@ Based on these results, the parameters will have to be optimized. It is
 recommended to plot the CV error as curve while modifying
 the parameters.
 <p>The best approach is to start with <b>tension</b>, <b>smooth</b>
-and <b>zmult</b> with rough steps, or to set <b>zmult</b> to a
+and <b>zscale</b> with rough steps, or to set <b>zscale</b> to a
 constant somewhere between 30-60. This helps to find minimal RMSE
 values while then finer steps can be used in all parameters. The
 reasonable range is <b>tension</b>=10...100,
-<b>smooth</b>=0.1...1.0, <b>zmult</b>=10...100.
+<b>smooth</b>=0.1...1.0, <b>zscale</b>=10...100.
 <p>In <em>v.vol.rst</em> the tension parameter is much more sensitive to
 changes than in <em>v.surf.rst</em>, 
 therefore the user should always check the
@@ -209,7 +209,7 @@ paraview --data=elevrand_3d.vtk
 
 ### Second part: 3D interpolation from 3D point data
 # interpolate volume to "soilrange" voxel map
-v.vol.rst input=elevrand_3d wcol=soilrange elevation=soilrange zmult=100
+v.vol.rst input=elevrand_3d wcol=soilrange elevation=soilrange zscale=100
 
 # visualize I: in GRASS GIS wxGUI
 g.gui
