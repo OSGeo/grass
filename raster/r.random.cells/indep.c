@@ -137,6 +137,8 @@ void Indep(void)
 	G_percent(R, Rs, 2);
 	for (C = 0; C < Cs; C++) {
 	    CellBuffer[C] = Out[R][C];
+	    if(CellBuffer[C] == 0)
+		Rast_set_null_value(&CellBuffer[C], 1, CELL_TYPE);
 	}
 	Rast_put_row(OutFD, CellBuffer, CELL_TYPE);
     }
