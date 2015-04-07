@@ -2,13 +2,13 @@
 <!-- meta page index: topic_gui|GUI -->
 <h2>DESCRIPTION</h2>
 
-<b>Vector digitizer</b> is a <em><a href="wxGUI.html">wxGUI</a></em>
+The <b>vector digitizer</b> is a <em><a href="wxGUI.html">wxGUI</a></em>
 component intended for interactive editing and digitizing vector maps
 (see <em><a href="v.edit.html">v.edit</a></em> for non-interactive
 vector editing GRASS capabilities).
 
 <p>
-Note that only vector maps from the current mapset is possible to open
+Note that only vector maps from the current mapset can be opened
 for editing.
 
 <p>
@@ -21,22 +21,22 @@ in <i>Settings&rarr;General&rarr;Select threshold</i>), or by query
 (eg. by line length, see <i>Settings&rarr;Query Tool</i>).
 
 <p>
-Vector digitizer can be launched from Map Display toolbar by selecting
+The vector digitizer can be launched from Map Display toolbar by selecting
 &quot;Digitize&quot; from <i>Tools</i> combobox. Vector map is
 selectable for editing from Digitizer toolbar (&quot;Select vector
 map&quot; combobox, note that only vector maps from the current layer
 tree in Layer Manager are listed).
 
-Vector digitizer can be alternatively also activated from contextual
-menu in Layer Manager by selecting "Start editing" on selected vector
-map in the layer tree, or directly from Layer Manager
+The vector digitizer can alternatively be activated from the contextual
+menu in the Layer Manager by selecting "Start editing" on selected vector
+map in the layer tree, or directly from the Layer Manager
 toolbar <img src="icons/edit.png" alt="icon">.
 
-Vector digitizer also can be launched from the command line as
+The vector digitizer also can also be launched from the command line as a
 stand-alone application <em>g.gui.vdigit</em>.
 
 <p>
-New vector map can be easily created from digitizer toolbar by
+New vector map can be easily created from the digitizer toolbar by
 selecting &quot;New vector map&quot; in &quot;Select vector map&quot;
 combobox. A new vector map is created, added to the current layer tree
 in Layer Manager and opened for editing. &quot;Select vector map&quot;
@@ -229,11 +229,11 @@ from the digitizer toolbar.
 </dl>
 
 <p>
-<i>Dead (deleted)</i> are internally only marked in the geometry file
-as 'dead' but it remains there and occupies space. Any vector module
+<i>Dead (deleted)</i> features are only marked as 'dead' in the geometry file
+but remain there and occupy space. Any vector module
 used afterwards on this vector map which really reads and writes
 vector geometry (so not <em><a href="g.copy.html">g.copy</a></em>)
-will writes only features which are 'alive'.
+will write only features which are 'alive'.
 
 <p>
 <i>Added or modified</i> vector features are <i>snapped</i> to
@@ -245,17 +245,26 @@ If the digitizer crashes for some reason, the changes are
 automatically saved. Broken topology can be repaired by running
 <em><a href="v.build.html">v.build</a></em>.
 
-<h2>REFERENCE</h2>
+<p>
+GRASS GIS uses a topological vector format, meaning that a common boundary of 
+two polygons is only stored once. When digitizing polygons it is thus important
+to be able to only draw each boundary once. When drawing a polygon adjacent to an
+existing polygon, one has to first split the existing boundary at the points where 
+the new boundary will be attached. Snapping should be set to ensure that the new 
+boundaries are automatically attached to the chosen points.
+
+<h2>REFERENCES</h2>
 
 <ul>
   <li><a href="http://grass.osgeo.org/programming7/veditlib.html">GRASS Vedit Library</a></li>
+  <li><a href="http://grasswiki.osgeo.org/wiki/Vector_Database_Management">Vector Database Management</a> (Wiki page)</li>
 </ul>
 
 <h2>SEE ALSO</h2>
 
 <em>
-  <a href="wxGUI.html">wxGUI</a><br>
-  <a href="wxGUI.components.html">wxGUI components</a>
+<a href="wxGUI.html">wxGUI</a><br>
+<a href="wxGUI.components.html">wxGUI components</a>
 </em>
 
 <p>
@@ -266,9 +275,7 @@ automatically saved. Broken topology can be repaired by running
 </em>
 
 <p>
-See also
-the <a href="http://grasswiki.osgeo.org/wiki/WxGUI_Vector_Digitizer">wiki
-page</a>
+See also the <a href="http://grasswiki.osgeo.org/wiki/WxGUI_Vector_Digitizer">wiki page</a>
 including <a href="http://grasswiki.osgeo.org/wiki/WxGUI_Vector_Digitizer#Vector_tutorials">video
 tutorials</a>.
 
