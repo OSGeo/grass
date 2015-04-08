@@ -45,7 +45,7 @@ from vdigit.main          import haveVDigit
 from core.gcmd            import GWarning, GError, RunCommand
 from icons.icon           import MetaIcon
 from web_services.dialogs import SaveWMSLayerDialog
-from gui_core.widgets import MapValidator
+from gui_core.widgets import GenericValidator
 from lmgr.giface import LayerManagerGrassInterfaceForMapDisplay
 from core.giface import Notification
 
@@ -783,6 +783,12 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         GUI(parent = self, centreOnParent = False).ParseCommand(['v.colors',
                                                                  'map=%s' % name])
         
+    def _mapNameValidationFailed(self, ctrl):
+        message = _("Name <%(name)s> is not a valid name for GRASS map. "
+                    "Please use only ASCII characters excluding %(chars)s "
+                    "and space.") % {'name': ctrl.GetValue(), 'chars': '/"\'@,=*~'}
+        GError(parent=self, message=message, caption=_("Invalid name"))
+
     def OnCopyMap(self, event):
         """Copy selected map into current mapset"""
         layer = self.GetSelectedLayer()
@@ -810,7 +816,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                               message = _('Enter name for the new %s in the current mapset:') % label.lower(),
                               caption = _('Make a copy of %s <%s>') % (label.lower(), lnameSrc),
                               defaultValue = lnameSrc.split('@')[0],
-                              validator = MapValidator(),
+                              validator = GenericValidator(grass.legal_name, self._mapNameValidationFailed),
                               size = (700, -1))
         if dlg.ShowModal() == wx.ID_OK:
             lnameDst = dlg.GetValue()
