@@ -1200,20 +1200,11 @@ class CmdPanel(wx.Panel):
                                 if maps_param and orig_elem == 'stds':
                                     element_dict = {'raster': 'strds', 'vector': 'stvds', 'raster_3d': 'str3ds'}
                                     elem = element_dict[type_param.get('default')]
-
-                        extraItems = None
-                        if self._giface:
-                            if hasattr(self._giface, "_model"):
-                                extraItems = {_('Graphical Modeler') : self._giface.GetLayerList(p.get('prompt'))}
-                            else:
-                                layers = self._giface.GetLayerList()
-                                if len(layers) > 0:
-                                    mapList = []
-                                    extraItems = {_('Map Display') : mapList}
-                                    for layer in layers:
-                                        if layer.type != p.get('prompt'):
-                                            continue
-                                        mapList.append(str(layer))
+                        
+                        if self._giface and hasattr(self._giface, "_model"):
+                            extraItems = {_('Graphical Modeler') : self._giface.GetLayerList(p.get('prompt'))}
+                        else:
+                            extraItems = None
                         selection = gselect.Select(parent = which_panel, id = wx.ID_ANY,
                                                    size = globalvar.DIALOG_GSELECT_SIZE,
                                                    type = elem, multiple = multiple, nmaps = len(p.get('key_desc', [])),

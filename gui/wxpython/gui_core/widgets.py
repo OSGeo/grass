@@ -14,10 +14,6 @@ Classes:
  - widgets::CoordinatesValidator
  - widgets::IntegerValidator
  - widgets::FloatValidator
- - widgets::MapValidator
- - widgets::NTCValidator
- - widgets::SimpleValidator
- - widgets::GenericValidator
  - widgets::GListCtrl
  - widgets::SearchModuleWidget
  - widgets::ManageSettingsWidget
@@ -59,8 +55,6 @@ try:
     import wx.lib.agw.customtreectrl as CT
 except ImportError:
     import wx.lib.customtreectrl as CT
-
-from grass.script import core as grass
 
 from grass.pydispatch.signal import Signal
 
@@ -722,22 +716,7 @@ class GenericValidator(wx.PyValidator):
         """
         return True # Prevent wxDialog from complaining.
 
-class MapValidator(GenericValidator):
-    """Validator for map name input
 
-    See G_legal_filename()
-    """
-    def __init__(self):
-        def _mapNameValidationFailed(ctrl):
-            message = _("Name <%(name)s> is not a valid name for GRASS map. "
-                        "Please use only ASCII characters excluding %(chars)s "
-                        "and space.") % {'name': ctrl.GetValue(), 'chars': '/"\'@,=*~'}
-            GError(message, caption=_("Invalid name"))
-        
-        GenericValidator.__init__(self,
-                                  grass.legal_name,
-                                  _mapNameValidationFailed)
-       
 class SingleSymbolPanel(wx.Panel):
     """Panel for displaying one symbol.
 
