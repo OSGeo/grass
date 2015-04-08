@@ -647,7 +647,7 @@ class VNETAnalysisParameters:
                 invParams.append(col)
                 continue
             
-            if not columnchoices[col].value['type'] not in ['integer', 'double precision']:
+            if columnchoices[params[col]]['type'] not in ['integer', 'double precision']: 
                 invParams.append(col)
                 continue
      
