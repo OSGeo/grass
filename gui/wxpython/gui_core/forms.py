@@ -1329,6 +1329,7 @@ class CmdPanel(wx.Panel):
                     selection = gselect.SignatureSelect(parent = which_panel, element = p.get('element', 'sig'))
                     p['wxId'] = [ selection.GetId() ]
                     selection.Bind(wx.EVT_TEXT, self.OnSetValue)
+                    selection.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
                     which_sizer.Add(item = selection, proportion = 0,
                                     flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
                                     border = 5)
@@ -1340,6 +1341,7 @@ class CmdPanel(wx.Panel):
                     win.SetValue(value)
                     p['wxId'] = [ win.GetId() ]
                     win.Bind(wx.EVT_TEXT, self.OnSetValue)
+                    win.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
                     which_sizer.Add(item = win, proportion = 0,
                                     flag = wx.ADJUST_MINSIZE | wx.BOTTOM | wx.LEFT | wx.RIGHT | wx.TOP | wx.ALIGN_CENTER_VERTICAL,
                                     border = 5)
