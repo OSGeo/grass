@@ -97,9 +97,9 @@ Providing GRASS module interface to a script
 
     #%module
     #% description: Adds the values of two rasters (A + B)
-    #% keywords: raster
-    #% keywords: algebra
-    #% keywords: sum
+    #% keyword: raster
+    #% keyword: algebra
+    #% keyword: sum
     #%end
     #%option G_OPT_R_INPUT
     #% key: araster
@@ -132,7 +132,28 @@ Providing GRASS module interface to a script
     if __name__ == "__main__":
         sys.exit(main())
 
+The options which has something like ``G_OPT_R_INPUT`` after the word
+``option`` are called standard options. Their list is accessible
+in GRASS GIS `C API documentation`_ of ``STD_OPT`` enum from ``gis.h`` file.
+Always use standard options if possible. They are not only easier to use
+but also ensure consistency across the modules and easier maintanenace
+in case of updates to the parameters parsing system.
+Typically, you change ``description`` (and/or ``label``), sometimes ``key``
+and ``answer``. There are also standard flags to be used
+with ``flag`` which work in the same way.
+
+The examples of syntax of options and flags (without the ``G_OPT...`` part)
+can be obtained from any GRASS module using special ``--script`` flag.
+Alternatively, you can use GRASS source code to look how different scripts
+actually define and use their parameters.
+
 Note that the previous code samples were missing some whitespace which
 Python PEP8 style guide requires but this last sample fulfills all the
 requirements. You should always use *pep8* tool to check your syntax and
-style or set your editor to do it for you.
+style or set your editor to do it for you. Note also that although
+a some mistakes in Python code can be discovered only when executing
+the code due to the dynamic nature of Python, there is a large number
+of tools such as *pep8* or *pylint* which can help you to identify problems
+in you Python code.
+
+.. _C API documentation: http://grass.osgeo.org/programming7/gis_8h.html
