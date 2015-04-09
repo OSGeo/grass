@@ -177,7 +177,9 @@ int calculateIndex(char *file, rli_func *f,
 	G_done_msg("Result written to text file <%s>", out);
     }
 
-    return 1;
+    /* This is only return in this function, so the documented 1 is
+       actually never returned. */
+    return 0;
 }
 
 
