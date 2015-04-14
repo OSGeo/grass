@@ -52,7 +52,6 @@ void list_mon(char ***list, int *n)
     while ((dp = readdir(dirp)) != NULL) {
 	int ret;
 
-        *list = G_realloc(*list, (*n + 1) * sizeof(char *));
         if (!dp->d_name || dp->d_name[0] == '.')
 	    continue;
 
@@ -63,6 +62,7 @@ void list_mon(char ***list, int *n)
         if (ret != 0 || !S_ISDIR(s.st_mode))
             continue;
 
+        *list = G_realloc(*list, (*n + 1) * sizeof(char *));
         (*list)[*n] = dp->d_name;
         (*n)++;
     }
