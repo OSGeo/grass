@@ -50,10 +50,19 @@ void list_mon(char ***list, int *n)
         return;
 
     while ((dp = readdir(dirp)) != NULL) {
+	int ret;
+
         *list = G_realloc(*list, (*n + 1) * sizeof(char *));
-        stat(dp->d_name, &s);
-        if (!dp->d_name || dp->d_name[0] == '.' || !S_ISDIR(s.st_mode))
+        if (!dp->d_name || dp->d_name[0] == '.')
+	    continue;
+
+	mon_path = get_path(dp->d_name, TRUE);
+        ret = G_stat(mon_path, &s);
+	G_free(mon_path);
+
+        if (ret != 0 || !S_ISDIR(s.st_mode))
             continue;
+
         (*list)[*n] = dp->d_name;
         (*n)++;
     }
