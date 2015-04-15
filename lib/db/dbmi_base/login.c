@@ -3,7 +3,7 @@
   
   \brief DBMI Library (base) - login settings
   
-  (C) 1999-2014 by the GRASS Development Team
+  (C) 1999-2015 by the GRASS Development Team
   
   This program is free software under the GNU General Public
   License (>=v2). Read the file COPYING that comes with GRASS
@@ -29,6 +29,8 @@ typedef struct
     char *database;
     char *user;
     char *password;
+    char *host;
+    char *port;
 } DATA;
 
 typedef struct
@@ -57,19 +59,28 @@ static void init_login(LOGIN * login)
 }
 
 static void add_login(LOGIN * login, const char *dr, const char *db, const char *usr,
-		      const char *pwd)
+		      const char *pwd, const char *host, const char *port, int idx)
 {
+    int login_idx;
+    
     if (login->n == login->a) {
 	login->a += 10;
 	login->data =
 	    (DATA *) realloc((void *)login->data, login->a * sizeof(DATA));
     }
-    login->data[login->n].driver = G_store(dr);
-    login->data[login->n].database = G_store(db);
-    login->data[login->n].user = G_store(usr ? usr : "");
-    login->data[login->n].password = G_store(pwd ? pwd : "");
-
-    login->n++;
+    if (idx > -1 && idx < login->n) {
+        login_idx = idx;
+    }
+    else {
+        login_idx = login->n;
+        login->n++;
+    }
+    login->data[login_idx].driver = G_store(dr);
+    login->data[login_idx].database = G_store(db);
+    login->data[login_idx].user = G_store(usr ? usr : "");
+    login->data[login_idx].password = G_store(pwd ? pwd : "");
+    login->data[login_idx].host = G_store(host ? host : "");
+    login->data[login_idx].port = G_store(port ? port : "");
 }
 
 /*
@@ -82,7 +93,7 @@ static int read_file(LOGIN * login)
     int ret;
     const char *file;
     FILE *fd;
-    char buf[2001], dr[500], db[500], usr[500], pwd[500];
+    char buf[2001], dr[500], db[500], usr[500], pwd[500], host[500], port[500];
 
     login->n = 0;
     file = login_filename();
@@ -103,18 +114,19 @@ static int read_file(LOGIN * login)
     while (G_getl2(buf, 2000, fd)) {
 	G_chop(buf);
 
-	usr[0] = pwd[0] = '\0';
-	ret = sscanf(buf, "%[^|]|%[^|]|%[^|]|%[^\n]", dr, db, usr, pwd);
+	usr[0] = pwd[0] = host[0] = port[0] = '\0';
+	ret = sscanf(buf, "%[^|]|%[^|]|%[^|]|%[^|]|%[^|]|%[^\n]",
+                     dr, db, usr, pwd, host, port);
 
-	G_debug(3, "ret = %d : drv=[%s] db=[%s] usr=[%s] pwd=[%s]",
-		ret, dr, db, usr, pwd);
+	G_debug(3, "ret = %d : drv=[%s] db=[%s] usr=[%s] pwd=[%s] host=[%s], port=[%s]",
+		ret, dr, db, usr, pwd, host, port);
 
 	if (ret < 2) {
 	    G_warning(_("Login file (%s) corrupted (line: %s)"), file, buf);
 	    continue;
 	}
 
-	add_login(login, dr, db, usr, pwd);
+	add_login(login, dr, db, usr, pwd, host, port, -1);
     }
 
     fclose(fd);
@@ -155,7 +167,12 @@ static int write_file(LOGIN * login)
 	    if (login->data[i].password)
 		fprintf(fd, "|%s", login->data[i].password);
 	}
-	fprintf(fd, "\n");
+        if (login->data[i].host)
+            fprintf(fd, "|%s", login->data[i].host);
+        if (login->data[i].port)
+            fprintf(fd, "|%s", login->data[i].port);
+
+        fprintf(fd, "\n");
     }
 
     fclose(fd);
@@ -163,32 +180,22 @@ static int write_file(LOGIN * login)
     return 0;
 }
 
-/*!
-  \brief Set user/password for driver/database
-  
-  \param driver driver name
-  \param database database name
-  \param user user name
-  \param password password string
-  
-  \return DB_OK on success
-  \return DB_FAILED on failure
- */
-int db_set_login(const char *driver, const char *database, const char *user,
-		 const char *password)
+static int set_login(const char *driver, const char *database, const char *user,
+                     const char *password, const char *host, const char *port,
+                     int overwrite)
 {
     int i, found;
     LOGIN login;
 
-    G_debug(3, "db_set_login(): drv=[%s] db=[%s] usr=[%s] pwd=[%s]",
-	    driver, database, user, password);
+    G_debug(3, "db_set_login(): drv=[%s] db=[%s] usr=[%s] pwd=[%s] host=[%s] port=[%s]",
+	    driver, database, user, password, host, port);
 
     init_login(&login);
 
     if (read_file(&login) == -1)
 	return DB_FAILED;
 
-    found = 0;
+    found = FALSE;
     for (i = 0; i < login.n; i++) {
 	if (strcmp(login.data[i].driver, driver) == 0 &&
 	    strcmp(login.data[i].database, database) == 0) {
@@ -202,13 +209,25 @@ int db_set_login(const char *driver, const char *database, const char *user,
 	    else
 		login.data[i].password = G_store("");
 
-	    found = 1;
+	    found = TRUE;
 	    break;
 	}
     }
 
+    if (found) {
+        if (overwrite)
+            G_warning(_("DB connection <%s/%s> already exists and will be overwritten"),
+                      driver, database ? database : "");
+        else
+            G_fatal_error(_("DB connection <%s/%s> already exists. "
+                            "Re-run '%s' with '--%s' flag to overwrite existing settings."),
+                          driver, database ? database : "", G_program_name(), "overwrite");
+    }
+    
     if (!found)
-	add_login(&login, driver, database, user, password);
+	add_login(&login, driver, database, user, password, host, port, -1);
+    else
+        add_login(&login, driver, database, user, password, host, port, i);
 
     if (write_file(&login) == -1)
 	return DB_FAILED;
@@ -216,20 +235,52 @@ int db_set_login(const char *driver, const char *database, const char *user,
     return DB_OK;
 }
 
-/*!  
-  \brief Get user/password for driver/database if driver/database
-  is not found, user/password are set to NULL
+/*!
+  \brief Set login parameters for driver/database
   
+  \deprecated Use db_set_login2() instead.
+  
+  \todo: GRASS 8: to be replaced by db_set_login2().
+
   \param driver driver name
-  \param database database name (can be NULL)
-  \param[out] user name
-  \param[out] password string
+  \param database database name
+  \param user user name
+  \param password password string
   
   \return DB_OK on success
   \return DB_FAILED on failure
-*/
-int db_get_login(const char *driver, const char *database, const char **user,
-		 const char **password)
+ */
+int db_set_login(const char *driver, const char *database, const char *user,
+                 const char *password)
+{
+    return set_login(driver, database, user,
+                     password, NULL, NULL, FALSE);
+}
+
+/*!
+  \brief Set login parameters for driver/database
+  
+  \param driver driver name
+  \param database database name
+  \param user user name
+  \param password password string
+  \param host host name
+  \param port
+  \param overwrite TRUE to overwrite exising connections
+  
+  \return DB_OK on success
+  \return DB_FAILED on failure
+ */
+int db_set_login2(const char *driver, const char *database, const char *user,
+		 const char *password, const char *host, const char *port,
+                 int overwrite)
+{
+    return set_login(driver, database, user,
+                     password, host, port, overwrite);
+}
+
+static int get_login(const char *driver, const char *database, const char **user,
+                     const char **password, const char **host, const char **port)
 {
     int i;
     LOGIN login;
@@ -257,11 +308,67 @@ int db_get_login(const char *driver, const char *database, const char **user,
 	    else
 		*password = NULL;
 
+            if (login.data[i].host && strlen(login.data[i].host) > 0 && host)
+		*host = G_store(login.data[i].host);
+	    else
+		*host = NULL;
+
+            if (login.data[i].port && strlen(login.data[i].port) > 0 && port)
+		*port = G_store(login.data[i].port);
+	    else
+		*port = NULL;
+
 	    break;
 	}
     }
 
     return DB_OK;
+}
+
+/*!  
+  \brief Get login parameters for driver/database
+
+  If driver/database is not found, output arguments are set to NULL.
+
+  \deprecated Use db_set_login2() instead.
+  
+  \todo: GRASS 8: to be replaced by db_set_login2().
+
+  \param driver driver name
+  \param database database name (can be NULL)
+  \param[out] user name
+  \param[out] password string
+
+  \return DB_OK on success
+  \return DB_FAILED on failure
+*/
+int db_get_login(const char *driver, const char *database, const char **user,
+		 const char **password)
+{
+    return get_login(driver, database, user,
+                     password, NULL, NULL);
+}
+
+/*!  
+  \brief Get login parameters for driver/database
+
+  If driver/database is not found, output arguments are set to NULL.
+  
+  \param driver driver name
+  \param database database name (can be NULL)
+  \param[out] user name
+  \param[out] password string
+  \param[out] host name
+  \param[out] port
+
+  \return DB_OK on success
+  \return DB_FAILED on failure
+*/
+int db_get_login2(const char *driver, const char *database, const char **user,
+                  const char **password, const char **host, const char **port)
+{
+    return get_login(driver, database, user,
+                     password, host, port);
 }
 
 /*!  
@@ -284,11 +391,13 @@ int db_get_login_dump(FILE *fd)
 	return DB_FAILED;
     
     for (i = 0; i < login.n; i++) {
-        fprintf(fd, "%s|%s|%s|%s\n",
+        fprintf(fd, "%s|%s|%s|%s|%s|%s\n",
                 login.data[i].driver,
                 login.data[i].database,
                 login.data[i].user,
-                login.data[i].password);
+                login.data[i].password,
+                login.data[i].host,
+                login.data[i].port);
     }
     
     return DB_OK;
