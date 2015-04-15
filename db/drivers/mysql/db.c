@@ -37,7 +37,7 @@ int db__driver_open_database(dbHandle * handle)
 
     {
 	/* Client version */
-	const char *user, *password;
+        const char *user, *password, *host, *port;
 	CONNPAR connpar;
 
 	if (parse_conn(name, &connpar) == DB_FAILED) {
@@ -50,11 +50,11 @@ int db__driver_open_database(dbHandle * handle)
 		connpar.host, connpar.port, connpar.dbname,
 		connpar.user, connpar.password);
 
-	db_get_login("mysql", name, &user, &password);
+	db_get_login2("mysql", name, &user, &password, &host, &port);
 
 	connection = mysql_init(NULL);
-	res = mysql_real_connect(connection, connpar.host, user, password,
-				 connpar.dbname, connpar.port, NULL, 0);
+	res = mysql_real_connect(connection, host, user, password,
+				 connpar.dbname, port, NULL, 0);
 
 	if (res == NULL) {
 	    db_d_append_error("%s\n%s",
