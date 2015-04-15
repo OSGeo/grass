@@ -80,17 +80,12 @@ int db_get_connection(dbConnection * connection)
     connection->schemaName = (char *)G_getenv_nofatal2("DB_SCHEMA", G_VAR_MAPSET);
     connection->group = (char *)G_getenv_nofatal2("DB_GROUP", G_VAR_MAPSET);
 
-    /* below commented due to new mechanism: see db_get_login()
-       connection->hostName = G_getenv_nofatal("DB_HOST");
-       connection->location = G_getenv_nofatal("DB_LOCATION");
-       connection->user = G_getenv_nofatal("DB_USER");
-       connection->password = G_getenv_nofatal("DB_PASSWORD");
-     */
-
     /* try to get user/password */
-    db_get_login(connection->driverName, connection->databaseName,
-                 (const char **) &(connection->user),
-                 (const char **) &(connection->password));
+    db_get_login2(connection->driverName, connection->databaseName,
+                  (const char **) &(connection->user),
+                  (const char **) &(connection->password),
+                  (const char **) &(connection->hostName),
+                  (const char **) &(connection->port));
     
     return DB_OK;
 }
