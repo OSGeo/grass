@@ -405,8 +405,10 @@ class Columns(object):
             :type col_type: str
             """
             valid_type = ('DOUBLE PRECISION', 'DOUBLE', 'INT', 'INTEGER',
-                          'DATE')
-            if 'VARCHAR' in col_type or col_type.upper() not in valid_type:
+                          'DATE', 'VARCHAR')
+            col = col_type.upper()
+            valid = [col.startswith(tp) for tp in valid_type]
+            if not any(valid):
                 str_err = ("Type: %r is not supported."
                            "\nSupported types are: %s")
                 raise TypeError(str_err % (col_type, ", ".join(valid_type)))
