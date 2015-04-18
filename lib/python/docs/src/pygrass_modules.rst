@@ -195,6 +195,7 @@ attributes of the class: ::
 
 Another example of use: ::
 
+    >>> from subprocess import PIPE
     >>> info = Module("r.info", map="elevation", flags="r", stdout_=PIPE)
     >>> from grass.script.utils import parse_key_val
     >>> parse_key_val(info.outputs.stdout)
