@@ -1548,7 +1548,7 @@ class Area(Geo):
                                          ilst.c_ilist)
         if ilist:
             return ilist
-        return [Boundary(v_id, c_mapinfo=self.c_mapinfo) for v_id in ilst]
+        return [Boundary(v_id=abs(v_id), c_mapinfo=self.c_mapinfo) for v_id in ilst]
 
     def cats(self, cats=None):
         """Get area categories.
