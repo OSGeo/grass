@@ -191,7 +191,7 @@ their attributes, and that a vector map's attribute table(s) should not be
 loaded unless explicitly specified, in case they are not needed.
 
 Accessing a vector map's table(s) requires finding any links to tables, then
-requesting the table from each of the returned links:
+requesting the table from each of the returned links: ::
 
     from grass.pygrass.vector import VectorTopo
     >>> municip = VectorTopo('census')
@@ -207,7 +207,7 @@ Here, ``DBlinks()`` is a class (:class:`~pygrass.vector.table.DBlinks`) that
 contains all the links of a vector map. Each link is also a class
 (:class:`~pygrass.vector.table.Link`) that contains a specific link's
 parameters. The ``table()`` method of the link class return the linked table as
-a table object (`class:`~pygrass.vector.table.Table`).
+a table object (:class:`~pygrass.vector.table.Table`).
 
 Geometry Classes
 ----------------
