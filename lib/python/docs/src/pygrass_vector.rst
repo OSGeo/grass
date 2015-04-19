@@ -193,7 +193,7 @@ loaded unless explicitly specified, in case they are not needed.
 Accessing a vector map's table(s) requires finding any links to tables, then
 requesting the table from each of the returned links: ::
 
-    from grass.pygrass.vector import VectorTopo
+    >>> from grass.pygrass.vector import VectorTopo
     >>> municip = VectorTopo('census')
     >>> municip.open(mode='r')
     >>> dblinks = DBlinks(municip.c_mapinfo)
