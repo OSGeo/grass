@@ -1,14 +1,14 @@
 <h2>DESCRIPTION</h2>
 
 <em>r.thin</em> scans the named <em>input</em> raster map layer and 
-thins non-zero cells that denote linear features into linear features 
+thins non-NULL cells that denote linear features into linear features 
 having a single cell width. Raster lines often need to be thinned 
 (skeletonizing raster features) to a single pixel width before they can 
 be transformed to vector data.
 
 <p>
-<em>r.thin</em> will thin only the non-zero cells of the
-named <em>input</em> raster map layer within the current
+<em>r.thin</em> will thin only the non-NULL (no data) raster cells
+of the named <em>input</em> raster map layer within the current
 geographic region settings.  The cell width of the thinned
 <em>output</em> raster map layer will be equal to the cell
 resolution of the currently set geographic region.  All of
@@ -19,8 +19,8 @@ cell.
 <em>r.thin</em> will create a new <em>output</em> raster
 data file containing the thinned linear features.
 <em>r.thin</em> assumes that linear features are encoded
-with positive values on a background of 0's in the
-<em>input</em> raster data file, hence it creates a 0/1
+with positive values on a background of NULL's in the
+<em>input</em> raster data file, hence it creates a NULL/1
 output map.
 
 <h2>NOTES</h2>
@@ -113,11 +113,11 @@ d.vect streams color=blue width=2
 <h2>SEE ALSO</h2>
 
 <em>
-  <a href="g.region.html">g.region</a>,
-  <a href="r.to.vect.html">r.to.vect</a>,
-  <a href="v.clean.html">v.clean</a>,
-  <a href="wxGUI.vdigit.html">wxGUI vector digitizer</a>,
-  <a href="v.build.html">v.build</a>
+<a href="g.region.html">g.region</a>,
+<a href="r.to.vect.html">r.to.vect</a>,
+<a href="v.clean.html">v.clean</a>,
+<a href="wxGUI.vdigit.html">wxGUI vector digitizer</a>,
+<a href="v.build.html">v.build</a>
 </em>
 
 <h2>AUTHOR</h2>
