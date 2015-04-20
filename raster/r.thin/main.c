@@ -40,7 +40,6 @@
 #include "local_proto.h"
 #include <grass/glocale.h>
 
-char *error_prefix;
 
 int main(int argc, char *argv[])
 {

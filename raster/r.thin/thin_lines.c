@@ -26,7 +26,6 @@
 #define false 0
 #define DELETED_PIX   9999
 
-extern char *error_prefix;
 static char *work_file_name;
 static int n_rows, n_cols, pad_size;
 static int box_right, box_left, box_top, box_bottom;
@@ -65,8 +64,7 @@ int thin_lines(int iterations)
     }				/* row-loop */
     if (box_right < box_left || box_bottom < box_top) {
 	unlink(work_file_name);
-	G_fatal_error(_("%s: Unable to find bounding box for lines"),
-		      error_prefix);
+	G_fatal_error(_("Unable to find bounding box for lines"));
     }
     G_message(_("Bounding box:  l = %d, r = %d, t = %d, b = %d"),
 	      box_left, box_right, box_top, box_bottom);

@@ -41,8 +41,6 @@
 #define PAD 2
 #define MAX_ROW 7
 
-		       /*extern int errno; *//* included #include <errno.h> instead 1/2000 */
-extern char *error_prefix;
 static int n_rows, n_cols;
 static int work_file;
 static char *work_file_name;
@@ -118,8 +116,8 @@ int open_file(char *name)
     close(creat(work_file_name, 0666));
     if ((work_file = open(work_file_name, 2)) < 0) {
 	unlink(work_file_name);
-	G_fatal_error(_("%s: Unable to create temporary file <%s> -- errno = %d"),
-		      error_prefix, work_file_name, errno);
+	G_fatal_error(_("Unable to create temporary file <%s> -- errno = %d"),
+		      work_file_name, errno);
     }
     buf_len = n_cols * sizeof(CELL);
     buf = (CELL *) G_malloc(buf_len);
@@ -127,16 +125,14 @@ int open_file(char *name)
     for (i = 0; i < PAD; i++) {
 	if (write(work_file, buf, buf_len) != buf_len) {
 	    unlink(work_file_name);
-	    G_fatal_error(_("%s: Error writing temporary file"),
-			  error_prefix);
+	    G_fatal_error(_("Error writing temporary file"));
 	}
     }
     for (row = 0; row < n_rows; row++) {
 	Rast_get_c_row(cell_file, buf + PAD, row);
 	if (write(work_file, buf, buf_len) != buf_len) {
 	    unlink(work_file_name);
-	    G_fatal_error(_("%s: Error writing temporary file"),
-			  error_prefix);
+	    G_fatal_error(_("Error writing temporary file"));
 	}
     }
 
@@ -145,8 +141,7 @@ int open_file(char *name)
     for (i = 0; i < PAD; i++) {
 	if (write(work_file, buf, buf_len) != buf_len) {
 	    unlink(work_file_name);
-	    G_fatal_error(_("%s: Error writing temporary file"),
-			  error_prefix);
+	    G_fatal_error(_("Error writing temporary file"));
 	}
     }
     n_rows += (PAD << 1);
