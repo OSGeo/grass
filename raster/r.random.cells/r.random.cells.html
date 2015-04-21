@@ -1,9 +1,9 @@
 <h2>DESCRIPTION</h2>
 
-<em>r.random.cells</em> generates a random sets of cells that are at
-least <b>distance</b> apart. The cells are numbered from 1 to the
-numbers of cells generated. Random cells will not be generated in
-areas masked off.
+<em>r.random.cells</em> generates a random sets of raster cells that are
+at least <b>distance</b> apart. The cells are numbered from 1 to the
+numbers of cells generated, all other cells are 0 (zero). Random
+cells will not be generated in areas masked off.
 
 <h3>Detailed parameter description</h3>
 
@@ -46,7 +46,7 @@ North Carolina sample dataset example:
 g.region n=228500 s=215000 w=630000 e=645000 res=100 -p
 r.random.cells output=random_500m distance=500
 
-# optionally set 0 to NULL
+# optionally set 0 to NULL (masked off areas)
 r.null random_500m setnull=0
 </pre></div>
 
