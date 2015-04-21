@@ -156,6 +156,17 @@ single byte preceding each row.
 Since GRASS GIS 7.0.0, the default compression method for
  Integer (CELL) maps is deflate and not any more the RLE compression.
 
+<h4>DEFLATE compression level</h4>
+
+If the environment variable <tt>GRASS_ZLIB_LEVEL</tt> exists and
+its value can be parsed as an integer, it determines the compression
+level used when newly generated raster maps are compressed using zlib
+compression. This applies to all raster map types (CELL, FCELL, DCELL).
+<p>
+If the variable does not exist, or the value cannot be parsed as an
+integer, zlib's default compression level will be used.
+
+
 <h2>EXAMPLES</h2>
 
 Printing of current compression state:
