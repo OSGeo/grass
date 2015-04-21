@@ -60,6 +60,21 @@ double B[14] = { 0, -1.21, -1.32, -1.19, -1.05, -0.92, -0.94,
     0.83, 0, -1.51, -0.89, -0.81, -0.78, -0.79
 };
 
+/**
+ * @brief Compute maximum spotting distance
+ *
+ * @param fuel fuel type used in Byram's equation from Rothermel (1991)
+ *        and in Chase (1984) equation for source z
+ * @param maxros maximal ROS used in Byram's equation
+ * @param speed wind speed used to compute mean windspeed at 6 meter
+ *        accoring to Chase (1984) influencing the target z
+ * @param angle direction of maximal ROS, i.e. the direction of spotting
+ *        (if you think that only direction of wind influences the spotting
+ *        then this should be the wind direction)
+ * @param row0 source cell row
+ * @param col0 source cell column
+ * @return maximum spotting distance
+ */
 int spot_dist(int fuel, float maxros, int speed, float angle, int row0,
 	      int col0)
 {
@@ -122,6 +137,7 @@ int spot_dist(int fuel, float maxros, int speed, float angle, int row0,
 	    + (col - col0) * (col - col0) * sqr_ew;
 	z = z0 - sqrd / (1.69 * U * U);
 
+	/* actual target elevation is higher then the potential one */
 	if (DATA(map_elev, row, col) > z) {
 #ifdef DEBUG
 	    printf
@@ -132,7 +148,7 @@ int spot_dist(int fuel, float maxros, int speed, float angle, int row0,
 #endif
 	    return (S);
 	}
-	/* advance a step */
+	/* advance a step, increase the spotting distance */
 	S = sqrt((double)sqrd);
 #ifdef DEBUG
 	printf

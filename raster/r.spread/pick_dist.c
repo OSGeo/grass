@@ -21,6 +21,11 @@
 #include <grass/gis.h>
 #include "local_proto.h"
 
+/**
+ * @brief Picks one possible distance value from range 0, u
+ * @param u maximum pontential distance
+ * @return value in range 0, u
+ */
 int pick_dist(int u)
 {
     int v;
