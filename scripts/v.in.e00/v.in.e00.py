@@ -31,24 +31,25 @@
 #%end
 #%option G_OPT_V_TYPE
 #% options: point,line,area
+#% answer: point
 #% required: yes
 #%end
 #%option G_OPT_V_OUTPUT
-#% required : no
 #%end
 
 import os
 import shutil
 import glob
 from grass.script.utils import try_rmdir, try_remove, basename
+from grass.script import vector as gvect
 from grass.script import core as grass
 from grass.exceptions import CalledModuleError
 
 
 def main():
-    filename = options['file']
+    filename = options['input']
     type = options['type']
-    vect = options['vect']
+    vect = options['output']
 
     e00tmp = str(os.getpid())
 
@@ -118,7 +119,6 @@ def main():
     else:
 	grass.message(_("E00 Compressed ASCII found. Will uncompress first..."))
 	try_remove(e00shortname)
-	try_remove(info)
 	grass.call(['e00conv', filename, e00tmp + '.e00'])
 	grass.message(_("...converted to Arc Coverage in current directory"))
 	grass.call(['avcimport', e00tmp + '.e00', e00shortname], stderr = nuldev)
@@ -157,7 +157,7 @@ def main():
     grass.message(_("Done."))
 
     # write cmd history:
-    grass.vector_history(name)
+    gvect.vector_history(name)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
