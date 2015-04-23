@@ -40,7 +40,6 @@
 #include "local_proto.h"
 #include <grass/glocale.h>
 
-char *error_prefix;
 
 int main(int argc, char *argv[])
 {
@@ -56,7 +55,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("geometry"));
     module->description =
-	_("Thins non-zero cells that denote linear "
+	_("Thins non-null cells that denote linear "
 	  "features in a raster map layer.");
 
     opt1 = G_define_standard_option(G_OPT_R_INPUT);
