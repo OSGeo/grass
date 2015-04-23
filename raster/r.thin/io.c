@@ -125,14 +125,14 @@ int open_file(char *name)
     for (i = 0; i < PAD; i++) {
 	if (write(work_file, buf, buf_len) != buf_len) {
 	    unlink(work_file_name);
-	    G_fatal_error(_("Error writing temporary file"));
+	    G_fatal_error(_("Error writing temporary file <%s>"), work_file_name);
 	}
     }
     for (row = 0; row < n_rows; row++) {
 	Rast_get_c_row(cell_file, buf + PAD, row);
 	if (write(work_file, buf, buf_len) != buf_len) {
 	    unlink(work_file_name);
-	    G_fatal_error(_("Error writing temporary file"));
+	    G_fatal_error(_("Error writing temporary file <%s>"), work_file_name);
 	}
     }
 
@@ -141,7 +141,7 @@ int open_file(char *name)
     for (i = 0; i < PAD; i++) {
 	if (write(work_file, buf, buf_len) != buf_len) {
 	    unlink(work_file_name);
-	    G_fatal_error(_("Error writing temporary file"));
+	    G_fatal_error(_("Error writing temporary file <%s>"), work_file_name);
 	}
     }
     n_rows += (PAD << 1);
