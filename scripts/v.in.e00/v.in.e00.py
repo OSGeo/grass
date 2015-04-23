@@ -31,10 +31,10 @@
 #%end
 #%option G_OPT_V_TYPE
 #% options: point,line,area
+#% answer: point
 #% required: yes
 #%end
 #%option G_OPT_V_OUTPUT
-#% required : no
 #%end
 
 import os
