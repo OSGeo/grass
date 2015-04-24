@@ -1030,14 +1030,14 @@ class GMFrame(wx.Frame):
                 self._giface.WriteError(str(error))
             write_end()
         else:
-            # style wx.DD_CHANGE_DIR changes the directory
             dlg = wx.DirDialog(parent=self,
                                message=_("Choose a working directory"),
-                               defaultPath=os.getcwd(), style=wx.DD_CHANGE_DIR)
+                               defaultPath=os.getcwd())
 
             if dlg.ShowModal() == wx.ID_OK:
                 self.cwdPath = dlg.GetPath()  # is saved in the workspace
                 write_beginning(parameter=self.cwdPath)
+                os.chdir(self.cwdPath)
                 write_changed()
                 write_end()
 
