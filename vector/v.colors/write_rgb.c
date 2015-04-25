@@ -77,8 +77,8 @@ void write_rgb_values(const struct Map_info *Map, int layer, const char *column_
 			     colors) == 0)
 	    G_warning(_("No color value defined for category %d"), pval[i]);
 
-	sprintf(buf, "UPDATE \"%s\" SET \"%s\"='%d:%d:%d' WHERE %s=%d", fi->table,
-		   column_name, red, grn, blu, fi->key, pval[i]);
+	sprintf(buf, "UPDATE %s SET \"%s\"='%d:%d:%d' WHERE %s=%d", fi->table,
+                column_name, red, grn, blu, fi->key, pval[i]);
 	G_debug(3, "\tSQL: %s", buf);
 
 	db_set_string(&stmt, buf);
