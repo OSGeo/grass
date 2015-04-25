@@ -131,7 +131,7 @@ int V1_delete_line_ogr(struct Map_info *Map, off_t offset)
     }
     
     if (offset >= ogr_info->offset.array_num) {
-	G_warning(_("Invalid offset (%d)"), offset);
+	G_warning(_("Invalid offset (%ld)"), offset);
 	return -1;
     }
     
@@ -608,13 +608,13 @@ int write_attributes(dbDriver *driver, int cat, const struct field_info *Fi,
 	value = db_get_column_value(column);
 	/* for debug only */
 	db_convert_column_value_to_string(column, &dbstring);	
-	G_debug(2, "col %d : val = %s", j,
+	G_debug(3, "col %d : val = %s", j,
 		db_get_string(&dbstring));
 	
 	sqltype = db_get_column_sqltype(column);
 	ctype = db_sqltype_to_Ctype(sqltype);
 	ogrtype = sqltype_to_ogrtype(sqltype);
-	G_debug(2, "  colctype = %d", ctype);
+	G_debug(3, "  colctype = %d", ctype);
 	
 	ogrfieldnum = OGR_F_GetFieldIndex(Ogr_feature, colname);
 	if (ogrfieldnum < 0) {

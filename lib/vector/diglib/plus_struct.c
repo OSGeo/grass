@@ -416,7 +416,7 @@ int dig_Rd_P_isle(struct Plus_head *Plus, int n, struct gvfile * fp)
     int cnt;
     struct P_isle *ptr;
 
-    G_debug(3, "dig_Rd_P_isle()");
+    G_debug(4, "dig_Rd_P_isle()");
 
     if (0 >= dig__fread_port_P(&cnt, 1, fp))
 	return (-1);

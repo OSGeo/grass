@@ -277,7 +277,7 @@ off_t V2_rewrite_line_pg(struct Map_info *Map, off_t line, int type,
     }
     
     geom_data = line_to_wkb(pg_info, &points, 1, type, Map->head.with_z);
-    G_asprintf(&stmt, "UPDATE \"%s\".\"%s\" SET geom = '%s'::GEOMETRY WHERE %s_id = %d",
+    G_asprintf(&stmt, "UPDATE \"%s\".\"%s\" SET geom = '%s'::GEOMETRY WHERE %s_id = %ld",
                schema_name, table_name, geom_data, keycolumn, line);
     G_free(geom_data);
 
@@ -341,7 +341,7 @@ int V1_delete_line_pg(struct Map_info *Map, off_t offset)
 
     sprintf(stmt, "DELETE FROM %s WHERE %s = %ld",
             pg_info->table_name, pg_info->fid_column, fid);
-    G_debug(2, "SQL: %s", stmt);
+    G_debug(3, "SQL: %s", stmt);
 
     if (Vect__execute_pg(pg_info->conn, stmt) == -1) {
         G_warning(_("Unable to delete feature"));
@@ -2026,7 +2026,7 @@ char *build_insert_stmt(const struct Format_info_pg *pg_info,
                     value = db_get_column_value(column);
                     /* for debug only */
                     db_convert_column_value_to_string(column, &dbstmt);
-                    G_debug(2, "col %d : val = %s", col,
+                    G_debug(3, "col %d : val = %s", col,
                             db_get_string(&dbstmt));
 
                     sqltype = db_get_column_sqltype(column);
