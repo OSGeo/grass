@@ -62,6 +62,9 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("geometry"));
     G_add_keyword(_("spatial query"));
+    G_add_keyword(_("intersection"));
+    G_add_keyword(_("union"));
+    G_add_keyword(_("clip"));
     module->description = _("Overlays two vector maps.");
 
     in_opt[0] = G_define_standard_option(G_OPT_V_INPUT);
