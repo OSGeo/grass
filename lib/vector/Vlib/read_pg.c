@@ -1505,9 +1505,14 @@ int Vect__execute_pg(PGconn * conn, const char *stmt)
     G_debug(3, "Vect__execute_pg(): %s", stmt);
     result = PQexec(conn, stmt);
     if (!result || PQresultStatus(result) != PGRES_COMMAND_OK) {
-        PQclear(result);
+        size_t stmt_len;
+        char stmt_prt[512];
         
-        G_warning(_("Execution failed: %s\nReason: %s"), stmt,
+        PQclear(result);
+        stmt_len = strlen(stmt);
+        strncpy(stmt_prt, stmt, stmt_len > 511 ? 511 : stmt_len);
+        stmt_prt[stmt_len > 511 ? 511 : stmt_len] = '\0';
+        G_warning(_("Execution failed: %s (...)\nReason: %s"), stmt_prt,
                   PQerrorMessage(conn));
         return -1;
     }
