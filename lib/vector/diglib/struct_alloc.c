@@ -71,7 +71,7 @@ int dig_node_alloc_line(struct P_node * node, int add)
     int num;
     char *p;
 
-    G_debug(3, "dig_node_alloc_line(): add = %d", add);
+    G_debug(5, "dig_node_alloc_line(): add = %d", add);
 
     num = node->n_lines + add;
 
@@ -242,7 +242,7 @@ int dig_alloc_isles(struct Plus_head *Plus, int add)
     int size;
     char *p;
 
-    G_debug(3, "dig_alloc_isle():");
+    G_debug(5, "dig_alloc_isle():");
     size = Plus->alloc_isles + 1 + add;
     p = G_realloc(Plus->Isle, size * sizeof(struct P_isle *));
     if (p == NULL)
@@ -470,7 +470,7 @@ int dig_isle_alloc_line(struct P_isle * isle, int add)
     int num;
     char *p;
 
-    G_debug(3, "dig_isle_alloc_line():");
+    G_debug(5, "dig_isle_alloc_line():");
     num = isle->alloc_lines + add;
 
     p = G_realloc(isle->lines, num * sizeof(plus_t));

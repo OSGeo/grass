@@ -477,7 +477,7 @@ int Vect__copy_areas(const struct Map_info *In, int field, struct Map_info *Out)
     if (nareas > 0)
         G_message(_("Exporting areas..."));
     for (area = 1; area <= nareas; area++) {
-        G_debug(3, "area = %d", area);
+        G_debug(2, "area = %d", area);
         G_percent(area, nareas, 3);
 
         /* get category */
