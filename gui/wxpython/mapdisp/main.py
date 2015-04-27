@@ -5,6 +5,7 @@
 
 Classes:
  - mapdisp::DMonMap
+ - mapdisp::DMonMapDirect
  - mapdisp::Layer
  - mapdisp::LayerList
  - mapdisp::DMonGrassInterface
@@ -14,7 +15,7 @@ Classes:
 Usage:
 python mapdisp/main.py monitor-identifier /path/to/map/file /path/to/command/file /path/to/env/file
 
-(C) 2006-2014 by the GRASS Development Team
+(C) 2006-2015 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -37,7 +38,7 @@ import wx
 from core          import utils
 from core.giface   import StandaloneGrassInterface
 from core.gcmd     import RunCommand
-from core.render   import Map, MapLayer
+from core.render   import Map, MapLayer, Overlay
 from core.utils import _
 from mapdisp.frame import MapFrame
 from core.debug    import Debug
@@ -64,7 +65,6 @@ class DMonMap(Map):
         :param cmdline: full path to the cmd file (defined by d.mon)
         :param mapfile: full path to the map file (defined by d.mon)
         """
-
         Map.__init__(self)
 
         self._giface = giface
@@ -93,21 +93,21 @@ class DMonMap(Map):
         # signal sent when d.what.rast/vect appears in cmd file, attribute is cmd
         self.query = Signal('DMonMap.query')
 
-    def GetLayersFromCmdFile(self):
+    def GetLayersFromCmdFile(self, mapfile=None):
         """Get list of map layers from cmdfile
         """
         if not self.cmdfile:
             return
 
         nlayers = 0
-
         try:
             fd = open(self.cmdfile, 'r')
             lines = fd.readlines()
             fd.close()
             # detect d.out.file, delete the line from the cmd file and export graphics
             if len(lines) > 0:
-                if lines[-1].startswith('d.out.file') or lines[-1].startswith('d.to.rast'):
+                if lines[-1].startswith('d.out.file') or \
+                   lines[-1].startswith('d.to.rast'):
                     dCmd = lines[-1].strip()
                     fd = open(self.cmdfile, 'w')
                     fd.writelines(lines[:-1])
@@ -128,38 +128,42 @@ class DMonMap(Map):
                         maps = utils.split(dWhatCmd)[1].split(',')
                     self.query.emit(ltype=utils.split(dWhatCmd)[0].split('.')[-1], maps=maps)
                     return
-
+            
             existingLayers = self.GetListOfLayers()
 
             # holds new rendreing order for every layer in existingLayers
-            layersOrder = [-1] * len(self.GetListOfLayers())
+            layersOrder = [-1] * len(existingLayers)
 
             # next number in rendering order
             next_layer = 0
-
             for line in lines:
                 cmd = utils.split(line.strip())
+                
                 ltype = None
-
                 try:
                     ltype = utils.command2ltype[cmd[0]]
                 except KeyError:
                     grass.warning(_("Unsupported command %s.") % cmd[0])
                     continue
-
+                
                 name = utils.GetLayerNameFromCmd(cmd, fullyQualified = True,
                                                  layerType = ltype)[0]
 
-                # creating temporary layer object to compare commands
-                # neccessary to get the same format
-                # supposing that there are no side effects
-                tmpMapLayer = MapLayer(ltype = ltype, name = name,
-                                       cmd = cmd, Map = None,
-                                       active = False, hidden = True,
-                                       opacity = 0)
+                args = {}
+                if ltype in ('barscale', 'legend', 'northarrow'):
+                    classLayer = Overlay
+                    args['id'] = 1
+                else:
+                    classLayer = MapLayer
+                    args['mapfile'] = mapfile
+                    args['ltype'] = ltype
+                
+                mapLayer = classLayer(name = name, cmd = cmd, Map = None,
+                                      hidden = True, **args)
+                
                 exists = False
                 for i, layer in enumerate(existingLayers):
-                    if layer.GetCmd(string=True) == tmpMapLayer.GetCmd(string=True):
+                    if layer.GetCmd(string=True) == mapLayer.GetCmd(string=True):
                         exists = True
 
                         if layersOrder[i] == -1: 
@@ -176,12 +180,12 @@ class DMonMap(Map):
                         break
                 if exists:
                     continue
-
-                newLayer = Map.AddLayer(self, ltype = ltype, command = cmd, active = True, name = name)
+                
+                newLayer = self._addLayer(mapLayer)
                 
                 existingLayers.append(newLayer)
                 self.ownedLayers.append(newLayer)
-
+                
                 layersOrder.append(next_layer)
                 next_layer += 1
 
@@ -202,27 +206,25 @@ class DMonMap(Map):
                 # owned layer found in cmd file is added into proper rendering position
                 else:
                     reorderedLayers[layersOrder[i]] = layer
-
+            
             self.SetLayers(reorderedLayers)
-
+            
         except IOError as e:
             grass.warning(_("Unable to read cmdfile '%(cmd)s'. Details: %(det)s") % \
                               { 'cmd' : self.cmdfile, 'det' : e })
             return
-
+        
+        Debug.msg(1, "Map.GetLayersFromCmdFile(): cmdfile=%s, nlayers=%d" % \
+                  (self.cmdfile, nlayers))
+        
         self._giface.updateMap.emit()
-
-        Debug.msg(1, "Map.GetLayersFromCmdFile(): cmdfile=%s" % self.cmdfile)
-        Debug.msg(1, "                            nlayers=%d" % nlayers)
-                
+        
     def Render(self, *args, **kwargs):
         """Render layer to image.
 
         For input params and returned data see overridden method in Map class.
         """
-        ret = Map.Render(self, *args, **kwargs)
-
-        return ret
+        return Map.Render(self, *args, **kwargs)
     
     def AddLayer(self, *args, **kwargs):
         """Adds generic map layer to list of layers.
@@ -236,13 +238,57 @@ class DMonMap(Map):
         else:
             os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
 
-        layer = Map.AddLayer(self, *args, **kwargs)
-
+        layer = Map.AddLayer(self, render = False, *args, **kwargs)
+        llayer.SetMapFile(self.mapfile)
+        
         del os.environ["GRASS_RENDER_IMMEDIATE"]
 
-        return layer
+        #return layer
 
+class DMonMapDirect(DMonMap):
+    def __init__(self, giface, cmdfile=None, mapfile=None):
+        """Map composition (stack of map layers and overlays)
 
+        :param cmdline: full path to the cmd file (defined by d.mon)
+        :param mapfile: full path to the map file (defined by d.mon)
+        """
+        DMonMap.__init__(self, giface, cmdfile, mapfile)
+        
+        self.render_env['GRASS_RENDER_BACKGROUNDCOLOR'] = 'FFFFFF'
+        self.render_env['GRASS_RENDER_TRANSPARENT'] = 'FALSE'
+        self.render_env['GRASS_RENDER_FILE_READ'] = 'TRUE'
+        
+    def Render(self, *args, **kwargs):
+        """Render layer to image.
+
+        For input params and returned data see overridden method in Map class.
+        """
+        wx.BeginBusyCursor()
+        env = os.environ.copy()
+        env.update(self.render_env)
+        # use external gisrc if defined
+        if self.gisrc:
+            env['GISRC'] = self.gisrc
+        env['GRASS_REGION'] = self.SetRegion(kwargs.get('windres', False))
+        env['GRASS_RENDER_WIDTH'] = str(self.width)
+        env['GRASS_RENDER_HEIGHT'] = str(self.height)
+        driver = UserSettings.Get(group = 'display', key = 'driver', subkey = 'type')
+        if driver == 'png':
+            env['GRASS_RENDER_IMMEDIATE'] = 'png'
+        else:
+            env['GRASS_RENDER_IMMEDIATE'] = 'cairo'
+
+        if os.path.exists(self.mapfile):
+            os.remove(self.mapfile)
+        
+        self.GetMapsMasksAndOpacities(kwargs['force'], kwargs.get('windres', False), env)
+        wx.EndBusyCursor()
+
+        return self.mapfile
+
+    def GetLayersFromCmdFile(self):
+        super(self.__class__, self).GetLayersFromCmdFile(self.mapfile)
+        
 class Layer(object):
     """@implements core::giface::Layer"""
     def __init__(self, maplayer):
@@ -264,8 +310,8 @@ class Layer(object):
 
 
 class LayerList(object):
+    """@implements core::giface::LayerList"""
     def __init__(self, map, giface):
-        """@implements core::giface::LayerList"""
         self._map = map
         self._giface = giface
 
@@ -389,10 +435,20 @@ class MapApp(wx.App):
         # actual use of StandaloneGrassInterface not yet tested
         # needed for adding functionality in future
         self._giface = DMonGrassInterface(None)
+        
+        return True
+    
+    def CreateMapFrame(self, name, decorations=True):
+        toolbars = []
+        if decorations:
+            toolbars.append('map')
 
         if __name__ == "__main__":
+            dmonMap = DMonMapDirect
+            # if decorations:
+            #    dmonMap = DMonMap
             self.cmdTimeStamp = os.path.getmtime(monFile['cmd'])
-            self.Map = DMonMap(giface=self._giface, cmdfile=monFile['cmd'],
+            self.Map = dmonMap(giface=self._giface, cmdfile=monFile['cmd'],
                                mapfile = monFile['map'])
             
             self.timer = wx.PyTimer(self.watcher)
@@ -403,19 +459,9 @@ class MapApp(wx.App):
         else:
             self.Map = None
         
-        return True
-    
-    def CreateMapFrame(self, name, decorations=True):
-        if decorations:
-            toolbars = ['map']
-            statusbar = True
-        else:
-            toolbars = []
-            statusbar = False
-        
         self.mapFrm = DMonFrame(parent=None, id=wx.ID_ANY, title=name, Map=self.Map,
                                 giface=self._giface, size=monSize,
-                                toolbars=toolbars, statusbar=statusbar)
+                                toolbars=toolbars, statusbar=decorations)
         
         # FIXME: hack to solve dependency
         self._giface._mapframe = self.mapFrm
