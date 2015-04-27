@@ -13,9 +13,9 @@
 # PURPOSE:      Displays a raster map and its legend on a graphics window.
 #
 # Description:  d.rast.leg clears the entire screen, divides it into a main
-#               (left) and a minor (right) frames, and then display a raster 
+#               (left) and a minor (right) frames, and then display a raster
 #               map in the main frame and the map legend in the minor frame.
-#               The user can run the program interactively or 
+#               The user can run the program interactively or
 #               non-interactively.
 #
 # See also:     d.rast, d.legend.
@@ -80,6 +80,7 @@ def make_frame(f, b, t, l, r):
     s = '%f,%f,%f,%f' % (rt, rb, rl, rr)
     os.environ['GRASS_RENDER_FRAME'] = s
 
+
 def main():
     map = options['map']
     nlines = options['lines']
@@ -88,7 +89,7 @@ def main():
     flip = flags['f']
     smooth = flags['s']
 
-    #for -n flag of d.legend
+    # for -n flag of d.legend
     if not grass.find_file(map)['file']:
         grass.fatal(_("Raster map <%s> not found") % map)
 
@@ -96,35 +97,38 @@ def main():
     if rast and not grass.find_file(rast)['file']:
         grass.fatal(_("Raster map <%s> not found") % rast)
 
-    s = grass.read_command('d.info', flags = 'f')
+    s = grass.read_command('d.info', flags='f')
     if not s:
         sys.exit(1)
-    
-    f = tuple([float(x) for x in s.split()[1:5]])
-    
+
+    # fixes trunk r64459
+    s = s.split(':')[1]
+    f = tuple([float(x) for x in s.split()])
+
     grass.run_command('d.erase')
     os.environ['GRASS_RENDER_FILE_READ'] = 'TRUE'
 
-    #draw title
-    
+    # draw title
+
     # set vertical divide at 65 instead of 80 if real labels in cats/ file??
     make_frame(f, 90, 100, 70, 100)
     # use map name without mapset suffix
     mapname = map.split('@')[0]
-    grass.run_command('d.text', color='black', size=5, at='5,97', align='cl', text=mapname)
+    grass.run_command('d.text', color='black', size=5, at='5,97', align='cl',
+                      text=mapname)
 
-    #draw legend
-    
+    # draw legend
+
     # set legend vertical position and size based on number of categories
-    cats = grass.read_command('r.describe', map=map, flags = '1n')
+    cats = grass.read_command('r.describe', map=map, flags='1n')
     ncats = len(cats.strip().split('\n'))
-    
+
     # Only need to adjust legend size if number of categories is between 1 and 10
     if ncats < 2: ncats = 2
     if ncats > 10: ncats = 10
-    
+
     VSpacing = (100 - (ncats * 10) + 10)
-    
+
     if not nlines:
         nlines = None
 
@@ -133,11 +137,11 @@ def main():
     else:
         lmap = map
 
-    kv = grass.raster_info(map = lmap)
+    kv = grass.raster_info(map=lmap)
     if kv['datatype'] is 'CELL':
         leg_at = None
     else:
-        leg_at = '%f,95,5,10' %VSpacing        
+        leg_at = '%f,95,5,10' % VSpacing
 
 # checking for histogram causes more problems than it solves
 #    histfiledir = grass.find_file(lmap, 'cell_misc')['file']
@@ -155,14 +159,14 @@ def main():
 #        lflags += 'n'
 
     make_frame(f, 0, 90, 70, 100)
-    grass.run_command('d.legend', flags = lflags, raster = lmap, lines = nlines, at = leg_at)
+    grass.run_command('d.legend', flags=lflags, raster=lmap, lines=nlines,
+                      at=leg_at)
 
-    #draw map
+    # draw map
     make_frame(f, 0, 100, 0, 70)
-    grass.run_command('d.rast', map = map)
+    grass.run_command('d.rast', map=map)
 
 
 if __name__ == "__main__":
     options, flags = grass.parser()
     main()
-
