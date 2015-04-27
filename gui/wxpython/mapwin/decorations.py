@@ -31,7 +31,11 @@ try:
 except ImportError:
     hasPIL = False
 
-
+class OverlayId:
+    legendId = 0
+    barscaleId = 1
+    arrowId = 2 
+    
 class OverlayController(object):
 
     """Base class for decorations (barscale, legend) controller."""
@@ -191,7 +195,7 @@ class BarscaleController(OverlayController):
 
     def __init__(self, renderer, giface):
         OverlayController.__init__(self, renderer, giface)
-        self._id = 1
+        self._id = OverlayId.barscaleId
         self._name = 'barscale'
         # different from default because the reference point is not in the middle
         self._defaultAt = 'at=0,98'
@@ -202,7 +206,7 @@ class ArrowController(OverlayController):
 
     def __init__(self, renderer, giface):
         OverlayController.__init__(self, renderer, giface)
-        self._id = 2
+        self._id = OverlayId.arrowId
         self._name = 'arrow'
         # different from default because the reference point is not in the middle
         self._defaultAt = 'at=85.0,25.0'
@@ -213,7 +217,7 @@ class LegendController(OverlayController):
 
     def __init__(self, renderer, giface):
         OverlayController.__init__(self, renderer, giface)
-        self._id = 0
+        self._id = OverlayId.legendId
         self._name = 'legend'
         # TODO: synchronize with d.legend?
         self._defaultAt = 'at=5,50,7,10'
