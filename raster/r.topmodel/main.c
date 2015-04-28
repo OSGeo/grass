@@ -140,7 +140,7 @@ int main(int argc, char **argv)
 	char *topidx;
 	int ntopidxclasses;
 	char *outtopidxstats;
-	
+
 	topidx = params.topidx->answer;
 	ntopidxclasses = atoi(params.ntopidxclasses->answer);
 	outtopidxstats = params.outtopidxstats->answer;
