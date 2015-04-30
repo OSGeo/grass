@@ -453,7 +453,7 @@ static void process_line_segment(const int npts, void *rbuf,
     prevrow = Rast_northing_to_row(pgxypts[0][1], &wind);
     prevcol = Rast_easting_to_col(pgxypts[0][0], &wind);
 
-    for (i = 1; i < (npts - 1); i++) {
+    for (i = 1; i < npts; i++) {
 	int c, r;
 
 	int row = Rast_northing_to_row(pgxypts[i][1], &wind);
@@ -465,10 +465,12 @@ static void process_line_segment(const int npts, void *rbuf,
 	col1 = MAX(0, MIN(col, prevcol) - coloff);
 	col2 = MIN(Rast_window_cols() - 1, MAX(col, prevcol) + coloff);
 
-	for (r = row1; r < row2; r++) {
+	for (r = row1; r <= row2; r++) {
 	    cy = Rast_row_to_northing(r + 0.5, &wind);
 
-	    for (c = col1; c < col2; c++) {
+	    for (c = col1; c <= col2; c++) {
+		double dist;
+
 		cellx = Rast_col_to_easting(c + 0.5, &wind);
 		celly = cy;	/* gets written over in distance2... */
 
@@ -479,12 +481,14 @@ static void process_line_segment(const int npts, void *rbuf,
 		 * Here we use a bitmap and only change cells once 
 		 * on the way down */
 
-		if (dig_distance2_point_to_line(cellx, celly, 0,
+		dist = sqrt(dig_distance2_point_to_line(cellx, celly, 0,
 						pgxypts[i - 1][0],
 						pgxypts[i - 1][1], 0,
 						pgxypts[i][0], pgxypts[i][1],
 						0, 0, &cellx, &celly, NULL,
-						NULL, NULL)) {
+						NULL, NULL));
+
+		if (dist <= parm->swidth) {
 		    if (!BM_get(bm, c, r)) {
 			double dist, elev;
 
