@@ -469,7 +469,7 @@ static void process_line_segment(const int npts, void *rbuf,
 	    cy = Rast_row_to_northing(r + 0.5, &wind);
 
 	    for (c = col1; c <= col2; c++) {
-		double dist;
+		double distance;
 
 		cellx = Rast_col_to_easting(c + 0.5, &wind);
 		celly = cy;	/* gets written over in distance2... */
@@ -481,40 +481,36 @@ static void process_line_segment(const int npts, void *rbuf,
 		 * Here we use a bitmap and only change cells once 
 		 * on the way down */
 
-		dist = sqrt(dig_distance2_point_to_line(cellx, celly, 0,
+		distance = sqrt(dig_distance2_point_to_line(cellx, celly, 0,
 						pgxypts[i - 1][0],
 						pgxypts[i - 1][1], 0,
 						pgxypts[i][0], pgxypts[i][1],
 						0, 0, &cellx, &celly, NULL,
 						NULL, NULL));
 
-		if (dist <= parm->swidth) {
-		    if (!BM_get(bm, c, r)) {
-			double dist, elev;
+		if (distance <= parm->swidth && !BM_get(bm, c, r)) {
+		    double dist, elev;
 
-			Vect_reset_line(points);
+		    Vect_reset_line(points);
 
-			dist = G_distance(pgxypts[i][0], pgxypts[i][1],
-					  cellx, celly);
+		    dist = G_distance(pgxypts[i][0], pgxypts[i][1],
+				      cellx, celly);
 
-			elev = LINTERP(pgpts[i][1], pgpts[i - 1][1],
-				       (dist /
-					(pgpts[i][0] - pgpts[i - 1][0])));
+		    elev = LINTERP(pgpts[i][1], pgpts[i - 1][1],
+				   (dist / (pgpts[i][0] - pgpts[i - 1][0])));
 
-			BM_set(bm, c, r, 1);
+		    BM_set(bm, c, r, 1);
 
-			/* TODO - may want to use a function for the 
-			 * cross section of stream */
-			set_min_point(rbuf, c, r, elev, parm->sdepth,
-				      parm->raster_type);
+		    /* TODO - may want to use a function for the 
+		     * cross section of stream */
+		    set_min_point(rbuf, c, r, elev, parm->sdepth,
+				  parm->raster_type);
 
-			/* Add point to output vector map */
-			if (parm->outvect->answer) {
-			    Vect_append_point(points, pgxypts[i][0],
-					      pgxypts[i][1],
-					      elev - parm->sdepth);
-			    Vect_write_line(outMap, GV_POINT, points, cats);
-			}
+		    /* Add point to output vector map */
+		    if (parm->outvect->answer) {
+			Vect_append_point(points, pgxypts[i][0], pgxypts[i][1],
+					  elev - parm->sdepth);
+			Vect_write_line(outMap, GV_POINT, points, cats);
 		    }
 		}
 	    }
