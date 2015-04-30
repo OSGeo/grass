@@ -508,7 +508,7 @@ static void process_line_segment(const int npts, void *rbuf,
 
 		    /* Add point to output vector map */
 		    if (parm->outvect->answer) {
-			Vect_append_point(points, pgxypts[i][0], pgxypts[i][1],
+			Vect_append_point(points, cellx, celly,
 					  elev - parm->sdepth);
 			Vect_write_line(outMap, GV_POINT, points, cats);
 		    }
