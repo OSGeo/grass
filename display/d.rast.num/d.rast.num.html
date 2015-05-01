@@ -23,15 +23,32 @@ otherwise, the individual cells being displayed will be small
 and the category value associated with each will be difficult to see.
 No data cells are indicated with "Null".
 
+<h2>EXAMPLE</h2>
+
+A) Distance from the streams network (North Carolina sample dataset):
+<div class="code"><pre>
+g.region raster=streams_derived -p
+r.grow.distance input=streams_derived distance=dist_from_streams
+d.rast.num dist_from_streams -a
+</pre></div>
+
+<div align="center" style="margin: 10px">
+<img src="d_rast_num_zoom.png" border=0><br>
+<i>Euclidean distance from the streams network in meters (detail, numbers shown
+   with d.rast.num)</i>
+</div>
+
 <h2>SEE ALSO</h2>
 
-<em><a href="d.frame.html">d.frame</a></em>,
-<em><a href="d.grid.html">d.grid</a></em>,
-<em><a href="d.rast.html">d.rast</a></em>,
-<em><a href="d.rast.arrow.html">d.rast.arrow</a></em>,
-<em><a href="d.rast.edit.html">d.rast.edit</a></em>,
-<em><a href="g.region.html">g.region</a></em>,
-<em><a href="r.slope.aspect.html">r.slope.aspect</a></em>
+<em>
+<a href="d.frame.html">d.frame</a>,
+<a href="d.grid.html">d.grid</a>,
+<a href="d.rast.html">d.rast</a>,
+<a href="d.rast.arrow.html">d.rast.arrow</a>,
+<a href="d.rast.edit.html">d.rast.edit</a>,
+<a href="g.region.html">g.region</a>,
+<a href="r.slope.aspect.html">r.slope.aspect</a>
+</em>
 
 
 <h2>AUTHORS</h2>
