@@ -204,8 +204,8 @@ int main(int argc, char *argv[])
     if (start_opt->answer) {
         int width, height;
 
-        width = width_opt->answer ? atoi(width_opt->answer) : 640;
-        height = height_opt->answer ? atoi(height_opt->answer) : 480;
+        width = width_opt->answer ? atoi(width_opt->answer) : 0;
+        height = height_opt->answer ? atoi(height_opt->answer) : 0;
         if (res_opt->answer) {
             int res;
             

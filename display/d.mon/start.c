@@ -214,12 +214,14 @@ int start_mon(const char *name, const char *output, int select,
     write(fd, buf, strlen(buf));
     sprintf(buf, "GRASS_RENDER_FILE_READ=TRUE\n");
     write(fd, buf, strlen(buf));
-    if (width) {
-	sprintf(buf, "GRASS_RENDER_WIDTH=%d\n", width);
+    if (width > 0 || getenv("GRASS_RENDER_WIDTH")) {
+	sprintf(buf, "GRASS_RENDER_WIDTH=%d\n",
+                width > 0 ? width : atoi(getenv("GRASS_RENDER_WIDTH")));
 	write(fd, buf, strlen(buf));
     }
-    if (height) {
-	sprintf(buf, "GRASS_RENDER_HEIGHT=%d\n", height);
+    if (height > 0 || getenv("GRASS_RENDER_HEIGHT")) {
+	sprintf(buf, "GRASS_RENDER_HEIGHT=%d\n",
+                height > 0? height : atoi(getenv("GRASS_RENDER_HEIGHT")));
 	write(fd, buf, strlen(buf));
     }
     if (bgcolor) {
