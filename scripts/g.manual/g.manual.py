@@ -56,7 +56,7 @@ from grass.script import core as grass
 
 def start_browser(entry):
     if browser and \
-       browser not in ('xdg-open', 'explorer') and \
+       browser not in ('xdg-open', 'start') and \
        not grass.find_program(browser):
         grass.fatal(_("Browser '%s' not found") % browser)
 
@@ -75,7 +75,7 @@ def start_browser(entry):
     
         url_path = 'file://' + path
     
-    if browser:
+    if browser and browser not in ('xdg-open', 'start'):
         webbrowser.register(browser_name, None)
     
     grass.verbose(_("Starting browser '%(browser)s' for manual"

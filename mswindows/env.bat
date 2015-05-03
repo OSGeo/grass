@@ -6,8 +6,6 @@ REM Default prompt: cmd.exe
 REM To enable bash prompt please uncomment the line bellow
 REM set GRASS_SH=%GISBASE%\msys\bin\sh.exe
 
-set GRASS_HTML_BROWSER=explorer
-
 set GRASS_PYTHON=%GISBASE%\extrabin\python.exe
 set PYTHONHOME=%GISBASE%\Python27
 
