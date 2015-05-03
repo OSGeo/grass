@@ -86,14 +86,8 @@ char *start_wx(const char *name, const char *element, int width, int height, int
     mapfile[0] = '\0';
 
     sprintf(progname, "%s/gui/wxpython/mapdisp/main.py", G_gisbase());
-    if (width > 0)
-        sprintf(str_width, "%d", width);
-    else
-        str_width[0] = '\0';
-    if (height > 0)
-        sprintf(str_height, "%d", height);
-    else
-        str_height[0] = '\0';
+    sprintf(str_width, "%d", width);
+    sprintf(str_height, "%d", height);
 
     if (x_only)
         str_x_only = "1";
@@ -215,13 +209,9 @@ int start_mon(const char *name, const char *output, int select,
     write(fd, buf, strlen(buf));
     sprintf(buf, "GRASS_RENDER_FILE_READ=TRUE\n");
     write(fd, buf, strlen(buf));
-    env_width = getenv("GRASS_RENDER_WIDTH");
-    sprintf(buf, "GRASS_RENDER_WIDTH=%d\n",
-            width > 0 ? width : (env_width ? atoi(env_width) : DEFAULT_WIDTH));
+    sprintf(buf, "GRASS_RENDER_WIDTH=%d\n", width);
     write(fd, buf, strlen(buf));
-    env_height = getenv("GRASS_RENDER_HEIGHT");
-    sprintf(buf, "GRASS_RENDER_HEIGHT=%d\n",
-            height > 0 ? height : (env_height ? atoi(env_height) : DEFAULT_HEIGHT));
+    sprintf(buf, "GRASS_RENDER_HEIGHT=%d\n", height);
     write(fd, buf, strlen(buf));
     if (bgcolor) {
 	if (strcmp(bgcolor, "none") == 0)
