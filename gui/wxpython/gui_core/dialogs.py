@@ -1902,8 +1902,9 @@ class GdalImportDialog(ImportDialog):
                     cmd = ['v.in.ogr',
                            'input=%s' % dsn,
                            'layer=%s' % layer,
-                           'output=%s' % output,
-                           'geometry=%s' % geometry]
+                           'output=%s' % output]
+                    if geometry:
+                        cmd.append('geometry=%s' % geometry)
             else: # gdal
                 if self.dsnInput.GetType() == 'dir':
                     idsn = os.path.join(dsn, layer)
