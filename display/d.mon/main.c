@@ -206,6 +206,21 @@ int main(int argc, char *argv[])
 
         width = width_opt->answer ? atoi(width_opt->answer) : 0;
         height = height_opt->answer ? atoi(height_opt->answer) : 0;
+        if (width < 1) {
+            char *env_width = getenv("GRASS_RENDER_WIDTH");
+            if (env_width)
+                width = atoi(env_width);
+        }
+        if (height < 1) {
+            char *env_height = getenv("GRASS_RENDER_HEIGHT");
+            if (env_height)
+                height = atoi(env_height);
+        }
+        if (width < 1)
+            width = DEFAULT_WIDTH;
+        if (height < 1)
+            height = DEFAULT_HEIGHT;
+        
         if (res_opt->answer) {
             int res;
             
@@ -213,6 +228,8 @@ int main(int argc, char *argv[])
             width *= res;
             height *= res;
         }
+
+        G_debug(1, "Monitor width/height = %d/%d", width, height);
 
 	ret = start_mon(start_opt->answer, output_opt->answer, !select_flag->answer,
 			width, height, bgcolor_opt->answer,
