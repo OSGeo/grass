@@ -478,8 +478,9 @@ def set_browser():
             browser = gfile('etc', "html_browser_mac.sh")
             os.environ['GRASS_HTML_BROWSER_MACOSX'] = "-b com.apple.helpviewer"
 
-        if windows or cygwin:
-            # MinGW startup moved to into init.bat
+        if windows:
+            browser = "start"
+        elif cygwin:
             browser = "explorer"
         else:
             # the usual suspects
