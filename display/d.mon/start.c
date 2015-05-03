@@ -109,7 +109,6 @@ int start_mon(const char *name, const char *output, int select,
 {
     char *mon_path;
     char *out_file, *env_file, *cmd_file;
-    char *env_width, *env_height;
     char  buf[1024];
     char file_path[GPATH_MAX];
     char *pycode;
