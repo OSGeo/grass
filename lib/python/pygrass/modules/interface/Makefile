@@ -9,7 +9,7 @@ GDIR = $(PYDIR)/grass
 PGDIR = $(GDIR)/pygrass
 DSTDIR= $(PGDIR)/modules/interface
 
-MODULES = read typedict flag parameter module
+MODULES = docstring read typedict flag parameter module
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)

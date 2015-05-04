@@ -12,7 +12,7 @@ try:
 except ImportError:
     from grass.pygrass.orderdict import OrderedDict
 
-from grass.pygrass.utils import docstring_property
+from grass.pygrass.modules.interface.docstring import docstring_property
 
 
 class TypeDict(OrderedDict):
