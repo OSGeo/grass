@@ -1,18 +1,17 @@
-
-/****************************************************************************
+/*!
+ * \file lib/gis/copy_dir.c
  *
- * MODULE:       GRASS GIS library - copy_dir.c
- * AUTHOR(S):    Huidae Cho
- * PURPOSE:      Function to recursively copy a directory
- * COPYRIGHT:    (C) 2008 by the GRASS Development Team
+ * \brief GIS Library - function to recursively copy a directory
  *
- * NOTE:         Extracted from general/manage/lib/do_copy.c
+ * Extracted from general/manage/lib/do_copy.c
  *
- *               This program is free software under the GNU General Public
- *               License (>=v2). Read the file COPYING that comes with GRASS
- *               for details.
+ * (C) 2008-2015 by the GRASS Development Team
  *
- *****************************************************************************/
+ * This program is free software under the GNU General Public License
+ * (>=v2). Read the file COPYING that comes with GRASS for details.
+ *
+ * \author Huidae Cho
+ */
 
 #include <stdio.h>
 #include <errno.h>
@@ -26,7 +25,10 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-/* RULE:
+/*!
+ * \brief Copy recursively source directory to destination directory
+ *
+ * RULE:
  * 1. If destination does not exist, copy source to destination as expected.
  * 2. If destination already exists and it's a file, destination will be
  *    deleted first and apply RULE 1.
@@ -38,6 +40,7 @@
  * This rule is designed according to general/manage/lib/copy.sh.
  *
  * POSSIBLE CASES:
+ * \verbatim
  * if src is a file:
  *      if dst does not exist:
  *              copy src to dst                         RULE 1
@@ -56,8 +59,12 @@
  *              do
  *                      recursive_copy(src/$i, dst/$i)
  *              done
+ * \endverbatim
  *
- * RETURN: 0 if successful, otherwise 1
+ * \param src source directory
+ * \param dst destination directory
+ *
+ * \return 0 if successful, otherwise 1
  */
 
 int G_recursive_copy(const char *src, const char *dst)
