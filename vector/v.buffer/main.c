@@ -296,6 +296,7 @@ int main(int argc, char *argv[])
     straight_flag->key = 's';
     straight_flag->description = _("Make outside corners straight");
 
+/* Superfluous flag: https://trac.osgeo.org/grass/ticket/2223 */
     nocaps_flag = G_define_flag();
     nocaps_flag->key = 'c';
     nocaps_flag->description = _("Do not make caps at the ends of polylines");
