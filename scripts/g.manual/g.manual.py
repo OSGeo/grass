@@ -6,7 +6,7 @@
 # AUTHOR(S):    Markus Neteler
 #               Converted to Python by Glynn Clements
 # PURPOSE:      Display the HTML/MAN pages
-# COPYRIGHT:    (C) 2003, 2008, 2010-2012 by the GRASS Development Team
+# COPYRIGHT:    (C) 2003-2015 by the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
@@ -49,12 +49,15 @@
 import sys
 import os
 import urllib
+import webbrowser
 
 from grass.script.utils import basename
 from grass.script import core as grass
 
 def start_browser(entry):
-    if browser != 'xdg-open' and not grass.find_program(browser):
+    if browser and \
+       browser not in ('xdg-open', 'start') and \
+       not grass.find_program(browser):
         grass.fatal(_("Browser '%s' not found") % browser)
 
     if flags['o']:
@@ -72,16 +75,19 @@ def start_browser(entry):
     
         url_path = 'file://' + path
     
+    if browser and browser not in ('xdg-open', 'start'):
+        webbrowser.register(browser_name, None)
+    
     grass.verbose(_("Starting browser '%(browser)s' for manual"
-                    " entry '%(entry)s'...")
-                  % dict(browser=browser_name, entry=entry))
-
+                    " entry '%(entry)s'...") % \
+                  dict(browser=browser_name, entry=entry))
+    
     try:
-        os.execlp(browser, browser_name, url_path)
-    except OSError:
+        webbrowser.open(url_path)
+    except:
         grass.fatal(_("Error starting browser '%(browser)s' for HTML file"
                       " '%(path)s'") % dict(browser=browser, path=path))
-
+    
 def start_man(entry):
     path = os.path.join(gisbase, 'docs', 'man', 'man1', entry + '.1')
     if not os.path.exists(path) and os.getenv('GRASS_ADDON_BASE'):
@@ -111,9 +117,7 @@ def main():
         start = start_browser
     
     entry  = options['entry']
-    
     gisbase = os.environ['GISBASE']
-    
     browser = os.getenv('GRASS_HTML_BROWSER', '')
     
     if sys.platform == 'darwin':
