@@ -16,7 +16,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
-#include "local_proto.h"
+#include "gis_local_proto.h"
 
 static int scan_item(const char *, char *, char *);
 static int scan_int(const char *, int *);

@@ -17,7 +17,7 @@
 #include <grass/glocale.h>
 
 #include "G.h"
-#include "local_proto.h"
+#include "gis_local_proto.h"
 
 static struct state {
     int initialized;
