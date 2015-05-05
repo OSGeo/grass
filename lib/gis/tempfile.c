@@ -16,7 +16,7 @@
 #include <sys/stat.h>
 #include <grass/gis.h>
 
-#include "local_proto.h"
+#include "gis_local_proto.h"
 
 static struct Counter unique;
 static int initialized;

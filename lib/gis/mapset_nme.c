@@ -17,7 +17,7 @@
 #include <unistd.h>
 #include <grass/gis.h>
 
-#include "local_proto.h"
+#include "gis_local_proto.h"
 
 static struct state {
     struct list {

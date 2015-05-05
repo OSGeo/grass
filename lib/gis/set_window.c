@@ -16,7 +16,7 @@
 
 #include "G.h"
 
-#include "local_proto.h"
+#include "gis_local_proto.h"
 
 /*!
   \brief Get the current working window (region)

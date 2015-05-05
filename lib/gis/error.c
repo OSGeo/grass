@@ -22,7 +22,7 @@
 #include <grass/glocale.h>
 #include <grass/gis.h>
 
-#include "local_proto.h"
+#include "gis_local_proto.h"
 
 /*!
  * \def MSG
