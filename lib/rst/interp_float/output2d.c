@@ -225,7 +225,7 @@ int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* curr
 	    break;
 	case 5:
 	    Rast_add_f_color_rule(&data1, 191, 127, 63,
-				      &data2, 20, 20, 20, &colors);
+				      &data2, 200, 200, 200, &colors);
 	    break;
 	}
     }
