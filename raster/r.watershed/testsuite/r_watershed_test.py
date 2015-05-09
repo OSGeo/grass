@@ -10,10 +10,11 @@ Licence:   This program is free software under the GNU General Public
            for details.
 """
 
-import grass.gunittest
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 
 
-class TestWatershed(grass.gunittest.TestCase):
+class TestWatershed(TestCase):
     """Test case for watershed module"""
 
     # Setup variables to be used for outputs
@@ -150,4 +151,4 @@ class TestWatershed(grass.gunittest.TestCase):
                                 msg='A basin value is less than 0 or greater than 1000000')
 
 if __name__ == '__main__':
-    grass.gunittest.test()
+    test()

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from grass.exceptions import OpenError
-from grass.gunittest import TestCase, test
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 from unittest import skip
 
 from grass.pygrass.raster import RasterRow

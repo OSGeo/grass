@@ -1,6 +1,7 @@
 import os
 import tempfile
-import grass.gunittest
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 from grass.script.core import read_command
 
 
@@ -24,7 +25,7 @@ L
 """
 
 
-class TestRInPoly(grass.gunittest.TestCase):
+class TestRInPoly(TestCase):
 
     rinpoly = 'test_rinpoly'
 
@@ -108,4 +109,4 @@ class TestRInPoly(grass.gunittest.TestCase):
 
 
 if __name__ == '__main__':
-    grass.gunittest.test()
+    test()

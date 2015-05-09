@@ -5,16 +5,18 @@ Temporal framework doctests
 
 import doctest
 import grass.temporal
-import grass.gunittest
+import grass.gunittest.case
+import grass.gunittest.main
 import grass.gunittest.utils
-import os
+
 
 doctest.DocFileCase = type('DocFileCase',
-                           (grass.gunittest.TestCase,),
+                           (grass.gunittest.case.TestCase,),
                            dict(doctest.DocFileCase.__dict__))
 doctest.SkipDocTestCase = type('SkipDocTestCase',
-                               (grass.gunittest.TestCase,),
+                               (grass.gunittest.case.TestCase,),
                                dict(doctest.SkipDocTestCase.__dict__))
+
 
 def load_tests(loader, tests, ignore):
     grass.gunittest.utils.do_doctest_gettext_workaround()
@@ -46,5 +48,6 @@ def load_tests(loader, tests, ignore):
     tests.addTests(doctest.DocTestSuite(grass.temporal.c_libraries_interface))
     return tests
 
+
 if __name__ == '__main__':
-    grass.gunittest.test()
+    grass.gunittest.main.test()

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
-from grass.gunittest import TestCase, test
+
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 from grass.exceptions import ScriptError
 
 

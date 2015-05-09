@@ -12,23 +12,5 @@ Initial version of `gunittest` was created during Google Summer of Code 2014
 by Vaclav Petras as a student and Soeren Gebbert as a mentor.
 """
 
-# TODO: consider removing all from here before the backport or release
-
-from __future__ import print_function
-
-try:
-    from .case import TestCase
-    from .main import test
-except ImportError, e:
-    print('WARNING: Cannot import ({e.message}).\n'
-          'Ignoring the failed import because it does not harm if you need'
-          ' something different'
-          ' from gunittest. Probably the environment is not set properly'
-          ' (e.g. dynamic libraries are not available and ctypes-based modules'
-          ' cannot work).'.format(e=e))
-    # we need to ignore import errors for the cases when we just need
-    # gunittest for reports and ctypes are not available (or the environment
-    # is not set properly)
-    # .main probably does not need to be checked but it imports a lot of
-    # things, so it might be hard to keep track in the future
-    # .case imports PyGRASS which imports ctypes modules in its __init__.py
+# Using an empty init file to minimize requirements when importing
+# and show clearly the issue when it occurs (before a try-except was used).

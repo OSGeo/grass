@@ -8,7 +8,8 @@ import sys
 import unittest
 import numpy as np
 
-from grass.gunittest import TestCase, test
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 
 import grass.lib.vector as libvect
 

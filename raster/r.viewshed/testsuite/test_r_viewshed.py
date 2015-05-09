@@ -1,8 +1,9 @@
-import grass.gunittest
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 from grass.gunittest.gmodules import call_module
 
 
-class TestViewshed(grass.gunittest.TestCase):
+class TestViewshed(TestCase):
 
     viewshed = 'test_viewshed_from_elevation'
 
@@ -60,7 +61,7 @@ class TestViewshed(grass.gunittest.TestCase):
             msg="Viewing angle above the ground must be between 0 and 180 deg")
 
 
-class TestViewshedAgainstReference(grass.gunittest.TestCase):
+class TestViewshedAgainstReference(TestCase):
     """
 
     Data created using NC data set::
@@ -120,4 +121,4 @@ class TestViewshedAgainstReference(grass.gunittest.TestCase):
 
 
 if __name__ == '__main__':
-    grass.gunittest.test()
+    test()

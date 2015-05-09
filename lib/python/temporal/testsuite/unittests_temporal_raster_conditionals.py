@@ -8,12 +8,12 @@ for details.
 """
 
 import datetime
-import os
-import grass.script
 import grass.temporal as tgis
-import grass.gunittest as gunittest
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 
-class TestTemporalRasterAlgebraConditionals(gunittest.TestCase):
+
+class TestTemporalRasterAlgebraConditionals(TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -494,5 +494,6 @@ class TestTemporalRasterAlgebraConditionals(gunittest.TestCase):
         self.assertEqual( R.check_temporal_topology(),  True)
         self.assertEqual(R.get_granularity(),  u'1 day')
 
+
 if __name__ == '__main__':
-    gunittest.test()
+    test()

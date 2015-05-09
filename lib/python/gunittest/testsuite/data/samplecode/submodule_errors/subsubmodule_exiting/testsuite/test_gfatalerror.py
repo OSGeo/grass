@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import grass.lib.gis as libgis
-from grass.gunittest import TestCase, test
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 
 
 class TestGFatalError(TestCase):

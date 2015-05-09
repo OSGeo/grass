@@ -6,11 +6,12 @@ import subprocess
 from grass.pygrass.modules import Module
 from grass.gunittest.gmodules import SimpleModule
 
-import grass.gunittest
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 from grass.gunittest.gmodules import CalledModuleError
 
 
-class TestModuleAssertions(grass.gunittest.TestCase):
+class TestModuleAssertions(TestCase):
     """Test assertions using PyGRASS Module"""
     # pylint: disable=R0904
 
@@ -43,7 +44,7 @@ class TestModuleAssertions(grass.gunittest.TestCase):
         self.assertRaises(self.failureException, self.assertModuleFail, self.rinfo)
 
 
-class TestSimpleModuleAssertions(grass.gunittest.TestCase):
+class TestSimpleModuleAssertions(TestCase):
     """Test assertions using SimpleModule"""
     # pylint: disable=R0904
 
@@ -77,4 +78,4 @@ class TestSimpleModuleAssertions(grass.gunittest.TestCase):
 
 
 if __name__ == '__main__':
-    grass.gunittest.test()
+    test()

@@ -1,10 +1,11 @@
-import grass.gunittest
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 
 
 # TODO: add more expressions
 # TODO: add tests with prepared data
 
-class TestBasicOperations(grass.gunittest.TestCase):
+class TestBasicOperations(TestCase):
 
     # TODO: replace by unified handing of maps
     to_remove = []
@@ -53,4 +54,4 @@ class TestBasicOperations(grass.gunittest.TestCase):
 
 
 if __name__ == '__main__':
-    grass.gunittest.test()
+    test()

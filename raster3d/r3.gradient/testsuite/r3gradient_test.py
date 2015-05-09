@@ -4,7 +4,8 @@ Test of r3.gradient
 
 @author Anna Petrasova
 """
-from grass.gunittest import TestCase, test
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 
 
 r3univar_test_grad_x = """

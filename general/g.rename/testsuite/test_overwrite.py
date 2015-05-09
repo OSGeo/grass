@@ -8,14 +8,15 @@ for details.
 :author: Vaclav Petras
 """
 
-import grass.gunittest
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
 from grass.gunittest.gutils import is_map_in_mapset
 from grass.gunittest.checkers import (text_to_keyvalue, keyvalue_equals,
                                       diff_keyvalue)
 
 
-class RasterRenameTestCase(grass.gunittest.TestCase):
+class RasterRenameTestCase(TestCase):
     """Test wrong input of parameters for g.list module"""
 
     def setUp(self):
@@ -116,4 +117,4 @@ class RasterRenameTestCase(grass.gunittest.TestCase):
 
 
 if __name__ == '__main__':
-    grass.gunittest.test()
+    test()

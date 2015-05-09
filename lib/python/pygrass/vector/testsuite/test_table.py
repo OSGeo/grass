@@ -11,7 +11,8 @@ from string import ascii_letters, digits
 from random import choice
 import numpy as np
 
-from grass.gunittest import TestCase, test
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 
 from grass.pygrass.vector.table import Table, get_path
 

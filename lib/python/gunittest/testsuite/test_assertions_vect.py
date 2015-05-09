@@ -5,7 +5,8 @@ Tests assertion methods for vectors.
 """
 
 from grass.exceptions import CalledModuleError
-import grass.gunittest as gunittest
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 
 
 V_UNIVAR_BRIDGES_WIDTH_SUBSET = """n=10938
@@ -54,7 +55,7 @@ V_UNIVAR_BRIDGES_EXTENDED = dict(
 )
 
 
-class TestVectorInfoAssertions(gunittest.TestCase):
+class TestVectorInfoAssertions(TestCase):
     """Test assertions of map meta and statistics"""
     # pylint: disable=R0904
     def test_assertVectorFitsUnivar(self):
@@ -121,7 +122,7 @@ class TestVectorInfoAssertions(gunittest.TestCase):
                           'bridges', 'does_not_exist', precision=0.00000001)
 
 
-class TestVectorGeometryAssertions(gunittest.TestCase):
+class TestVectorGeometryAssertions(TestCase):
     """Test assertions of map geometry"""
     # pylint: disable=R0904
     maps_to_remove = []
@@ -228,4 +229,4 @@ class TestVectorGeometryAssertions(gunittest.TestCase):
 
 
 if __name__ == '__main__':
-    gunittest.test()
+    test()

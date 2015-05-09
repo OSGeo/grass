@@ -3,7 +3,8 @@
 # TODO: rmapcalc probably fatals, replace or add raise on error?
 from grass.script.raster import mapcalc as rmapcalc
 
-import grass.gunittest
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 from grass.gunittest.gutils import get_current_mapset
 from grass.gunittest.gmodules import SimpleModule
 
@@ -35,7 +36,7 @@ Removing raster <test_two>
 """
 
 
-class GMRemoveTest(grass.gunittest.TestCase):
+class GMRemoveTest(TestCase):
     """Test removing with g.remove"""
 
     @classmethod
@@ -92,7 +93,7 @@ class GMRemoveTest(grass.gunittest.TestCase):
                                  msg="4 maps should be removed")
 
 
-class GMRemoveWrongInputTest(grass.gunittest.TestCase):
+class GMRemoveWrongInputTest(TestCase):
     """Test wrong input of parameters for g.remove module"""
 
     def test_re_flags(self):
@@ -106,4 +107,4 @@ class GMRemoveWrongInputTest(grass.gunittest.TestCase):
 
 
 if __name__ == '__main__':
-    grass.gunittest.test()
+    test()

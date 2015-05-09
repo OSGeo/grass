@@ -6,7 +6,8 @@ Created on Wed Jun 18 17:21:42 2014
 """
 import numpy as np
 
-from grass.gunittest import TestCase, test
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 
 from grass.script.core import run_command
 

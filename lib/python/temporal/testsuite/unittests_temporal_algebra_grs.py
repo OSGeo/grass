@@ -9,11 +9,12 @@ for details.
 
 import grass.script
 import grass.temporal as tgis
-import grass.gunittest
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 import datetime
 import os
 
-class TestTemporalAlgebraGranularity(grass.gunittest.TestCase):
+class TestTemporalAlgebraGranularity(TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -225,4 +226,4 @@ class TestTemporalAlgebraGranularity(grass.gunittest.TestCase):
 
 
 if __name__ == '__main__':
-    grass.gunittest.test()
+    test()

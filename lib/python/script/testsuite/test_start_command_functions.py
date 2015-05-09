@@ -1,11 +1,12 @@
 """Tests of start_command function family (location independent)"""
 
-import grass.gunittest
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 
 from grass.script.core import start_command, PIPE
 
 
-class TestPythonKeywordsInParameters(grass.gunittest.TestCase):
+class TestPythonKeywordsInParameters(TestCase):
     """Tests additional underscore syntax which helps to avoid Python keywords
 
     It works the same for keywords, buildins and any names.
@@ -38,4 +39,4 @@ class TestPythonKeywordsInParameters(grass.gunittest.TestCase):
         self.assertIn('raster', stderr)
 
 if __name__ == '__main__':
-    grass.gunittest.test()
+    test()
