@@ -110,8 +110,7 @@ int start_mon(const char *name, const char *output, int select,
     char *mon_path;
     char *out_file, *env_file, *cmd_file;
     char  buf[1024];
-    char file_path[GPATH_MAX];
-    char *pycode;
+    char file_path[GPATH_MAX], render_cmd_path[GPATH_MAX];
     int  fd;
 
     if (check_mon(name)) {
@@ -136,55 +135,11 @@ int start_mon(const char *name, const char *output, int select,
     cmd_file = G_store(file_path);
 
     /* create py file (renderer) */
+    sprintf(render_cmd_path, "%s/etc/d.mon/render_cmd.py", getenv("GISBASE"));
     G_file_name(file_path, mon_path, "render.py", G_mapset());
     G_debug(1, "Monitor name=%s, pyfile = %s", name, file_path);
-    fd = creat(file_path, 0666);
-    G_asprintf(&pycode,
-               "#!/usr/bin/env python\n\n"
-               "import os\n"
-               "import sys\n\n"
-               "from grass.script import core as grass\n"
-               "from grass.script import task as gtask\n\n"
-               "cmd, dcmd = gtask.cmdstring_to_tuple(sys.argv[1])\n"
-               "if not cmd or cmd == 'd.mon':\n"
-               "    sys.exit(0)\n\n"
-               "ignoredCmd = ('d.colorlist', 'd.font', 'd.fontlist',\n"
-               "              'd.frame', 'd.info', 'd.mon', 'd.out.file',\n"
-               "              'd.redraw', 'd.to.rast', 'd.what.rast',\n"
-               "              'd.what.vect', 'd.where')\n"
-               "if cmd not in ignoredCmd:\n"
-               "    mode = 'w' if cmd == 'd.erase' else 'a'\n\n"
-               "    # update cmd file\n"
-               "    fd = open('%s', mode)\n"
-               "    if fd is None:\n"
-               "        grass.fatal(\"Unable to open file '%s'\")\n"
-               "    if mode == 'a':\n"
-               "        fd.write(sys.argv[1])\n"
-               "        fd.write('\\n')\n"
-               "    else:\n"
-               "         fd.write('')\n"
-               "    fd.close()\n\n"
-               "# read env file\n"
-               "fd = open('%s', 'r')\n"
-               "if fd is None:\n"
-               "    grass.fatal(\"Unable to open file '%s'\")\n"
-               "lines = fd.readlines()\n"
-               "for l in lines:\n"
-               "    if l.startswith('#'):\n"
-               "         continue\n"
-               "    k, v = l.rstrip('\\n').split('#', 1)[0].strip().split('=', 1)\n"
-               "    os.environ[k] = v\n"
-               "fd.close()\n\n"
-               "# run display command\n"
-               "try:\n"
-               "    grass.run_command(cmd, **dcmd)\n"
-               "except:\n"
-               "    pass\n\n"
-               "sys.exit(0)\n",
-               cmd_file, cmd_file, env_file, env_file);
-    write(fd, pycode, strlen(pycode));
-    G_free(pycode);
-    close(fd);
+    if (1 != G_copy_file(render_cmd_path, file_path))
+        G_fatal_error(_("Unable to copy render command file"));
 
     /* start monitor */
     if (strncmp(name, "wx", 2) == 0)
