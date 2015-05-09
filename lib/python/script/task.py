@@ -24,6 +24,13 @@ try:
     import xml.etree.ElementTree as etree
 except ImportError:
     import elementtree.ElementTree as etree # Python <= 2.4
+from xml.parsers import expat  # TODO: works for any Python?
+# Get the XML parsing exceptions to catch. The behavior chnaged with Python 2.7
+# and ElementTree 1.3.
+if hasattr(etree, 'ParseError'):
+    ETREE_EXCEPTIONS = (etree.ParseError, expat.ExpatError)
+else:
+    ETREE_EXCEPTIONS = (expat.ExpatError)
 
 from utils import decode, split
 from core import *
@@ -506,7 +513,11 @@ def parse_interface(name, parser=processTask, blackList=None):
     :param parser:
     :param blackList:
     """
-    tree = etree.fromstring(get_interface_description(name))
+    try:
+        tree = etree.fromstring(get_interface_description(name))
+    except ETREE_EXCEPTIONS as error:
+        raise ScriptError(_("Cannot parse interface description of"
+            "<{name}> module: {error}").format(name=name, error=error))
     return parser(tree, blackList=blackList).get_task()
 
 
