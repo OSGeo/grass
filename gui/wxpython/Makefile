@@ -38,9 +38,11 @@ $(DSTDIR)/%: % | $(PYDSTDIRS) $(DSTDIRS)
 
 xml/menudata.xml: core/toolboxes.py
 	$(call run_grass,$(PYTHON) $< > $@)
+	$(call run_grass,$(PYTHON) $< "validate" $@)
 
 xml/module_tree_menudata.xml: core/toolboxes.py
 	$(call run_grass,$(PYTHON) $< "module_tree" > $@)
+	$(call run_grass,$(PYTHON) $< "validate" $@)
 
 menustrings.py: core/menutree.py $(DSTDIR)/xml/menudata.xml $(DSTDIR)/xml/module_tree_menudata.xml $(DSTDIR)/xml/menudata_modeler.xml $(DSTDIR)/xml/menudata_psmap.xml
 	@echo "# This is a generated file.\n" > $@
@@ -52,6 +54,7 @@ menustrings.py: core/menutree.py $(DSTDIR)/xml/menudata.xml $(DSTDIR)/xml/module
 $(DSTDIR)/xml/module_items.xml: tools/build_modules_xml.py
 	@echo "Generating interface description for all modules..."
 	$(call run_grass,$(PYTHON) $< > $@)
+	$(call run_grass,$(PYTHON) $< "validate" $@)
 
 $(PYDSTDIRS): %: | $(DSTDIR)
 	$(MKDIR) $@

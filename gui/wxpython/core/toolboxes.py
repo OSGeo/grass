@@ -827,6 +827,16 @@ def module_test():
         return 0
 
 
+def validate_file(filename):
+    try:
+        etree.parse(filename)
+    except ETREE_EXCEPTIONS as error:
+        print "XML file <{name}> is not well formed: {error}".format(
+            name=filename, error=error)
+        return 1
+    return 0
+
+
 def main():
     """Converts the toolboxes files on standard paths to the menudata file
 
@@ -852,4 +862,6 @@ if __name__ == '__main__':
             sys.exit(doc_test())
         elif sys.argv[1] == 'test':
             sys.exit(module_test())
+        elif sys.argv[1] == 'validate':
+            sys.exit(validate_file(sys.argv[2]))
     sys.exit(main())
