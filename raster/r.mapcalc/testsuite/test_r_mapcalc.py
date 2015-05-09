@@ -1,4 +1,5 @@
-import grass.gunittest
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
 
 cell_seed_500 = """\
@@ -59,7 +60,7 @@ cols: 10
 """
 
 
-class TestRandFunction(grass.gunittest.TestCase):
+class TestRandFunction(TestCase):
 
     # TODO: replace by unified handing of maps
     to_remove = []
@@ -164,7 +165,7 @@ class TestRandFunction(grass.gunittest.TestCase):
 # TODO: add more expressions
 # TODO: add tests with prepared data
 
-class TestBasicOperations(grass.gunittest.TestCase):
+class TestBasicOperations(TestCase):
 
     # TODO: replace by unified handing of maps
     to_remove = []
@@ -220,4 +221,4 @@ class TestBasicOperations(grass.gunittest.TestCase):
 
 
 if __name__ == '__main__':
-    grass.gunittest.test()
+    test()

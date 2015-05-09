@@ -7,13 +7,13 @@ for details.
 :authors: Soeren Gebbert and Thomas Leppelt
 """
 
-import datetime
 import os
-import grass.script
 import grass.temporal as tgis
-import grass.gunittest as gunittest
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 
-class TestTRastAlgebraGranularityFails(gunittest.TestCase):
+
+class TestTRastAlgebraGranularityFails(TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -59,5 +59,6 @@ class TestTRastAlgebraGranularityFails(gunittest.TestCase):
         # Invalid temporal topology
         self.assertModuleFail("t.rast.algebra", flags="g",  expression="R = A + A", basename="r")
 
+
 if __name__ == '__main__':
-    gunittest.test()
+    test()

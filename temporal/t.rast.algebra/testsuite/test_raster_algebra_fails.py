@@ -7,13 +7,11 @@ for details.
 :authors: Soeren Gebbert
 """
 
-import datetime
-import os
-import grass.script
-import grass.temporal as tgis
-import grass.gunittest as gunittest
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 
-class TestTRastAlgebraFails(gunittest.TestCase):
+
+class TestTRastAlgebraFails(TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -40,5 +38,6 @@ class TestTRastAlgebraFails(gunittest.TestCase):
         # Catch temporal algebra expressions that are prohibited in the raster algebra
         self.assertModuleFail("t.rast.algebra",  expression="R = strds(A) + strds(B)", basename="r")
 
+
 if __name__ == '__main__':
-    gunittest.test()
+    test()

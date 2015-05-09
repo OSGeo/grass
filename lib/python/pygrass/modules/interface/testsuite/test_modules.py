@@ -5,7 +5,8 @@ Created on Tue Jun 24 09:43:53 2014
 @author: pietro
 """
 from fnmatch import fnmatch
-from grass.gunittest import TestCase, test
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 
 from grass.script.core import get_commands
 from grass.pygrass.modules.interface import Module

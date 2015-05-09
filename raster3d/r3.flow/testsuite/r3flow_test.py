@@ -5,7 +5,8 @@ Test of r3.flow
 @author Anna Petrasova
 """
 import os
-from grass.gunittest import TestCase, test
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 
 seeds = """
 84.80609404|35.19733594|39.43321996

@@ -10,11 +10,12 @@ for details.
 
 import grass.script
 import grass.temporal as tgis
-import grass.gunittest as gunittest
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 import datetime
-import os
 
-class TestTemporalRaster3dAlgebra(gunittest.TestCase):
+
+class TestTemporalRaster3dAlgebra(TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -76,8 +77,6 @@ class TestTemporalRaster3dAlgebra(gunittest.TestCase):
         self.assertEqual(start, datetime.datetime(2001, 1, 2))
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
 
+
 if __name__ == '__main__':
-    grass.gunittest.test()
-
-
-
+    test()

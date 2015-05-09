@@ -4,7 +4,8 @@
 # (if it is imported before all tests start and everything would fail)
 #import this_module_or_package_does_not_exists__testing_import_error
 
-from grass.gunittest import TestCase, test
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 
 
 class TestNeverCalled(TestCase):

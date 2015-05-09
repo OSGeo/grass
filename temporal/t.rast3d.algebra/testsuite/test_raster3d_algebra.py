@@ -10,11 +10,13 @@ for details.
 
 import grass.script
 import grass.temporal as tgis
-import grass.gunittest as gunittest
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 import datetime
 import os
 
-class TestTRast3dAlgebra(gunittest.TestCase):
+
+class TestTRast3dAlgebra(TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -93,7 +95,7 @@ class TestTRast3dAlgebra(gunittest.TestCase):
         self.assertEqual(end, datetime.datetime(2001, 1, 4))
 
 
-class TestTRast3dAlgebraFails(gunittest.TestCase):
+class TestTRast3dAlgebraFails(TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -121,7 +123,4 @@ class TestTRast3dAlgebraFails(gunittest.TestCase):
 
 
 if __name__ == '__main__':
-    grass.gunittest.test()
-
-
-
+    test()

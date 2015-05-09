@@ -3,12 +3,13 @@
 Luca Delucchi
 """
 
-from grass.gunittest import TestCase, test
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 
 from grass.pygrass.gis.region import Region
 
 
-class RegionTestCate(TestCase):
+class RegionTestCase(TestCase):
 
     def test_bounds(self):
         reg1 = Region()

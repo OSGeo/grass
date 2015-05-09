@@ -5,7 +5,8 @@ Tests checkers
 
 import doctest
 
-import grass.gunittest
+import grass.gunittest.case
+import grass.gunittest.main
 import grass.gunittest.utils
 
 import grass.pygrass.raster as pgrass
@@ -17,10 +18,10 @@ import grass.pygrass.raster as pgrass
 # the alternative is to copy 500 from doctest and change what is needed
 # (this might be necessary anyway beacuse of the reports and stdout and stderr)
 doctest.DocFileCase = type('DocFileCase',
-                           (grass.gunittest.TestCase,),
+                           (grass.gunittest.case.TestCase,),
                            dict(doctest.DocFileCase.__dict__))
 doctest.SkipDocTestCase = type('SkipDocTestCase',
-                               (grass.gunittest.TestCase,),
+                               (grass.gunittest.case.TestCase,),
                                dict(doctest.SkipDocTestCase.__dict__))
 
 
@@ -38,4 +39,4 @@ def load_tests(loader, tests, ignore):
 
 
 if __name__ == '__main__':
-    grass.gunittest.test()
+    grass.gunittest.main.test()

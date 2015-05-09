@@ -5,7 +5,8 @@ Created on Mon Sep 15 17:09:40 2014
 @author: lucadelu
 """
 
-from grass.gunittest import TestCase, test
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 
 from grass.pygrass.raster import RasterRow
 from grass.pygrass.raster.history import History

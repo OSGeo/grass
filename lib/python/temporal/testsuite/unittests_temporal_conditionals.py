@@ -9,11 +9,12 @@ for details.
 
 import grass.script
 import grass.temporal as tgis
-import grass.gunittest
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 import datetime
 import os
 
-class TestTemporalConditionals(grass.gunittest.TestCase):
+class TestTemporalConditionals(TestCase):
 
     @classmethod
     def setUpClass(cls):
@@ -350,7 +351,7 @@ class TestTemporalConditionals(grass.gunittest.TestCase):
         self.assertEqual(D.get_granularity(),  u'2 days')
 
 if __name__ == '__main__':
-    grass.gunittest.test()
+    test()
 
 
 

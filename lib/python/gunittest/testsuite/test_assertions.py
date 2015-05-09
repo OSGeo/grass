@@ -10,11 +10,12 @@ import os
 import grass.script.core as gcore
 from grass.pygrass.modules import Module
 
-import grass.gunittest
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
 
 
-class TestTextAssertions(grass.gunittest.TestCase):
+class TestTextAssertions(TestCase):
     # pylint: disable=R0904
 
     std_newline = "aaa\nbbb\n"
@@ -112,7 +113,7 @@ max=156.329864501953
 ELEVATION_MINMAX_DICT = {'min': 55.58, 'max': 156.33}
 
 
-class TestAssertModuleKeyValue(grass.gunittest.TestCase):
+class TestAssertModuleKeyValue(TestCase):
     """Test usage of `assertModuleKeyValue` method."""
     # pylint: disable=R0904
 
@@ -154,7 +155,7 @@ class TestAssertModuleKeyValue(grass.gunittest.TestCase):
                                   precision=0.01, sep='=')
 
 
-class TestRasterMapAssertions(grass.gunittest.TestCase):
+class TestRasterMapAssertions(TestCase):
     # pylint: disable=R0904
 
     @classmethod
@@ -227,7 +228,7 @@ class TestRasterMapAssertions(grass.gunittest.TestCase):
                           msg="The difference of different maps should have huge mean")
 
 
-class TestMapExistsAssertions(grass.gunittest.TestCase):
+class TestMapExistsAssertions(TestCase):
     # pylint: disable=R0904
 
     raster_cell = 'TestMapExistsAssertions_raster_cell'
@@ -289,7 +290,7 @@ class TestMapExistsAssertions(grass.gunittest.TestCase):
                           msg="Rasters from different mapsets should be ignored")
 
 
-class TestFileAssertions(grass.gunittest.TestCase):
+class TestFileAssertions(TestCase):
     # pylint: disable=R0904
 
     @classmethod
@@ -353,4 +354,4 @@ class TestFileAssertions(grass.gunittest.TestCase):
 
 
 if __name__ == '__main__':
-    grass.gunittest.test()
+    test()

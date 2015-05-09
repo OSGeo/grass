@@ -4,13 +4,12 @@
 Tests assertion methods for 3D rasters.
 """
 
-
 from grass.exceptions import CalledModuleError
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 
-import grass.gunittest as gunittest
 
-
-class TestRaster3dMapAssertions(gunittest.TestCase):
+class TestRaster3dMapAssertions(TestCase):
     # pylint: disable=R0904
     constant_map = 'raster3d_assertions_constant'
     rcd_increasing_map = 'raster3d_assertions_rcd_increasing'
@@ -125,4 +124,4 @@ class TestRaster3dMapAssertions(gunittest.TestCase):
 
 
 if __name__ == '__main__':
-    gunittest.test()
+    test()

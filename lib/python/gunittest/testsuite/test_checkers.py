@@ -16,7 +16,8 @@ for details.
 
 from grass.script.utils import parse_key_val, try_remove
 
-import grass.gunittest
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 from grass.gunittest.checkers import (
     values_equal, text_to_keyvalue,
     keyvalue_equals, proj_info_equals, proj_units_equals,
@@ -24,7 +25,7 @@ from grass.gunittest.checkers import (
 
 
 
-class TestValuesEqual(grass.gunittest.TestCase):
+class TestValuesEqual(TestCase):
 
     def test_floats(self):
         self.assertTrue(values_equal(5.0, 5.0))
@@ -117,7 +118,7 @@ meters: 1
 # what about keys and lower/upper case letters
 
 
-class TestTextToKeyValue(grass.gunittest.TestCase):
+class TestTextToKeyValue(TestCase):
     def test_conversion(self):
         keyvals = text_to_keyvalue(KEYVAL_TEXT, sep=':', val_sep=',')
         expected = {'s': 'Hello',
@@ -219,14 +220,14 @@ R_UNIVAR_KEYVAL_INT_DICT = {'n': 2025000,
                             'null_cells': 57995100, 'cells': 60020100}
 
 
-class TestComapreProjections(grass.gunittest.TestCase):
+class TestComapreProjections(TestCase):
 
     def test_compare_proj_info(self):
         self.assertTrue(proj_info_equals(PROJ_INFO_TEXT_1, PROJ_INFO_TEXT_2))
         self.assertTrue(proj_units_equals(PROJ_UNITS_TEXT_1, PROJ_UNITS_TEXT_2))
 
 
-class TestParseKeyvalue(grass.gunittest.TestCase):
+class TestParseKeyvalue(TestCase):
 
     def test_shell_script_style(self):
 
@@ -278,7 +279,7 @@ max=156.329864501953
 """
 
 
-class TestRasterMapComparisons(grass.gunittest.TestCase):
+class TestRasterMapComparisons(TestCase):
 
     def test_compare_univars(self):
         self.assertTrue(keyvalue_equals(text_to_keyvalue(R_UNIVAR_ELEVATION,
@@ -326,7 +327,7 @@ INCORRECT_LINES = [
 ]
 
 
-class TestMd5Sums(grass.gunittest.TestCase):
+class TestMd5Sums(TestCase):
     r"""
 
     To create MD5 which is used for testing use:
@@ -394,4 +395,4 @@ class TestMd5Sums(grass.gunittest.TestCase):
 
 
 if __name__ == '__main__':
-    grass.gunittest.test()
+    test()

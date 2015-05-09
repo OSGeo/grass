@@ -44,7 +44,8 @@ it must be placed into a directory named ``testsuite``.
 
 .. code-block:: python
 
-    from grass.gunittest import TestCase, test
+    from grass.gunittest.case import TestCase
+    from grass.gunittest.main import test
 
 
     # test case class must be derived from grass.gunittest.TestCase
@@ -234,7 +235,8 @@ think using one or more assert methods.
 
 ::
 
-    from grass.gunittest import TestCase, test
+    from grass.gunittest.case import TestCase
+    from grass.gunittest.main import test
 
 
     class TestPython(TestCase):

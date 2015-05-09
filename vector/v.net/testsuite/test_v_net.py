@@ -1,8 +1,9 @@
-import grass.gunittest
+from grass.gunittest.case import TestCase
+from grass.gunittest.main import test
 from grass.script.core import read_command
 
 
-class TestVNet(grass.gunittest.TestCase):
+class TestVNet(TestCase):
 
     network = 'test_vnet'
 
@@ -46,4 +47,4 @@ class TestVNet(grass.gunittest.TestCase):
 
 
 if __name__ == '__main__':
-    grass.gunittest.test()
+    test()
