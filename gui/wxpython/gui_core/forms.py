@@ -517,22 +517,22 @@ class TaskFrame(wx.Frame):
             self.btn_run.SetDefault()
             self.btn_run.SetForegroundColour(wx.Colour(35, 142, 35))
             
-            # copy
-            self.btn_clipboard = wx.Button(parent = self.panel, id = wx.ID_COPY)
-            self.btn_clipboard.SetToolTipString(_("Copy the current command string to the clipboard"))
-            
             btnsizer.Add(item = self.btn_run, proportion = 0,
                          flag = wx.ALL | wx.ALIGN_CENTER,
                          border = 10)
-            
-            btnsizer.Add(item = self.btn_clipboard, proportion = 0,
-                         flag = wx.ALL | wx.ALIGN_CENTER,
-                         border = 10)
-            
+
             self.btn_run.Bind(wx.EVT_BUTTON, self.OnRun)
             self.Bind(wx.EVT_MENU, self.OnRun, id=wx.ID_OK)
             accelTableList.append((wx.ACCEL_CTRL, ord('R'), wx.ID_OK))
-            self.btn_clipboard.Bind(wx.EVT_BUTTON, self.OnCopy)
+
+        # copy
+        self.btn_clipboard = wx.Button(parent=self.panel, id=wx.ID_COPY)
+        self.btn_clipboard.SetToolTipString(_("Copy the current command string to the clipboard"))
+        btnsizer.Add(item=self.btn_clipboard, proportion=0,
+                         flag=wx.ALL | wx.ALIGN_CENTER,
+                         border=10)
+        self.btn_clipboard.Bind(wx.EVT_BUTTON, self.OnCopy)
+
         # help
         self.btn_help = wx.Button(parent = self.panel, id = wx.ID_HELP)
         self.btn_help.SetToolTipString(_("Show manual page of the command (Ctrl+H)"))
