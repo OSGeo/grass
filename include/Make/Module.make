@@ -10,10 +10,18 @@ include $(MODULE_TOPDIR)/include/Make/Rules.make
 include $(MODULE_TOPDIR)/include/Make/Html.make
 include $(MODULE_TOPDIR)/include/Make/Compile.make
 
-cmd: $(BIN)/$(PGM)$(EXE) html
+ETCFILES_DST := $(patsubst %,$(ETC)/$(PGM)/%,$(ETCFILES))
+
+cmd: $(BIN)/$(PGM)$(EXE) $(ETCFILES_DST) html
 
 $(BIN)/$(PGM)$(EXE): $(ARCH_OBJS) $(DEPENDENCIES)
 	$(call linker)
+
+$(ETC)/$(PGM)/%: % | $(ETC)/$(PGM)
+	$(INSTALL_DATA) $< $@
+
+$(ETC)/$(PGM):
+	$(MKDIR) $@
 
 install:
 	$(INSTALL) $(ARCH_DISTDIR)/bin/$(PGM)$(EXE) $(INST_DIR)/bin/
