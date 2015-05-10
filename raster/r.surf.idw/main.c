@@ -712,7 +712,7 @@ MELEMENT *row_lists(
 	Rast_get_c_row_nomask(fd, cell, row);
 
 	for (col = 0; col < cols; col++) {
-	    if (cell[col] != 0) {
+	    if (!Rast_is_c_null_value(&cell[col])) {
 		++(*npts);
 		Mptr = (MELEMENT *) G_malloc(sizeof(MELEMENT));
 		Mptr->x = col;
