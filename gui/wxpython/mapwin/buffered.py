@@ -180,8 +180,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         self.Bind(wx.EVT_ERASE_BACKGROUND, lambda x:None)
 
         # rerender when Map reports change
-        ### Not needed when using RenderMapMgr
-        # self.Map.layerChanged.connect(self.OnUpdateMap)
+        self.Map.layerChanged.connect(self.OnUpdateMap)
         self.Map.GetRenderMgr().renderDone.connect(self._updateMFinished)
         
         # vars for handling mouse clicks
@@ -198,15 +197,11 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
 
     def DisactivateWin(self):
         """Use when the class instance is hidden in MapFrame."""
-        ### Not needed when using RenderMapMgr
-        # self.Map.layerChanged.disconnect(self.OnUpdateMap)\
-        pass
+        self.Map.layerChanged.disconnect(self.OnUpdateMap)
     
     def ActivateWin(self):
         """Used when the class instance is activated in MapFrame."""
-        ### Not needed when using RenderMapMgr
-        # self.Map.layerChanged.connect(self.OnUpdateMap)
-        pass
+        self.Map.layerChanged.connect(self.OnUpdateMap)
         
     def _definePseudoDC(self):
         """Define PseudoDC objects to use
