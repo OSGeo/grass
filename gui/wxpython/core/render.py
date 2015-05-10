@@ -370,7 +370,8 @@ class RenderLayerMgr(wx.EvtHandler):
         
     def Abort(self):
         """Abort rendering process"""
-        self.thread.abort(abortall = True)        
+        Debug.msg(1, "RenderLayerMgr({}).Abort()".format(self.layer))
+        self.thread.abort(abortall = True)
 
     def IsDownloading(self):
         """Is downloading
@@ -538,8 +539,13 @@ class RenderMapMgr(wx.EvtHandler):
 
     def Abort(self):
         """Abort all rendering processes"""
+        Debug.msg(1, "RenderMapMgr.Abort()")
         for layer in self.layers:
             layer.GetRenderMgr().Abort()
+
+        self._init()
+        wx.EndBusyCursor()
+        self.updateProgress.emit(range=0, value=0, text=_("Rendering aborted"))
         
     def ReportProgress(self, layer=None):
         """Calculates progress in rendering/downloading
@@ -1418,5 +1424,4 @@ class Map(object):
 
     def AbortAllThreads(self):
         """Abort all layers threads e. g. donwloading data"""
-        for l in self.layers + self.overlays:
-            l.AbortThread()
+        self.renderMgr.Abort()
