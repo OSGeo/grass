@@ -149,7 +149,6 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         self.processMouse = True
 
         # render output objects
-        self.mapfile = None   # image file to be rendered
         self.img     = None   # wx.Image object (self.mapfile)
         # decoration overlays
         self.overlays = overlays
@@ -181,8 +180,9 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         self.Bind(wx.EVT_ERASE_BACKGROUND, lambda x:None)
 
         # rerender when Map reports change
-        self.Map.layerChanged.connect(self.OnUpdateMap)
-
+        ### self.Map.layerChanged.connect(self.OnUpdateMap)
+        self.Map.GetRenderMgr().renderDone.connect(self._updateMFinished)
+        
         # vars for handling mouse clicks
         self.dragid   = -1
         self.lastpos  = (0, 0)
@@ -704,7 +704,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         :return: wx.Image instance (map composition)
         """
         imgId = 99
-        if self.mapfile and self.Map.mapfile and os.path.isfile(self.Map.mapfile) and \
+        if self.Map.mapfile and os.path.isfile(self.Map.mapfile) and \
                 os.path.getsize(self.Map.mapfile):
             img = wx.Image(self.Map.mapfile, wx.BITMAP_TYPE_ANY)
         else:
@@ -808,43 +808,29 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         """
         :func:`UpdateMap` for arguments description.
         """
+        Debug.msg (1, "BufferedWindow.UpdateMap(): started "
+                   "(render=%s, renderVector=%s)" % (render, renderVector))
+
         self.resize = False
 
         # was if self.Map.cmdfile and ...
         if self.IsAlwaysRenderEnabled() and self.img is None:
             render = True
-
-
-        #
-        # render background image if needed
-        #
-
-        # here was the change of the layertree rerender variable
-        # but it is fully the problem of layertree
-        # and so it is handled there
-        # remove this comment when it is old enough
-
+        
         try:
             if render:
                 # update display size
                 self.Map.ChangeMapSize(self.GetClientSize())
-                if self._properties.resolution:
-                    # use computation region resolution for rendering
-                    windres = True
-                else:
-                    windres = False
-
-                self.mapfile = self.Map.Render(force = True,
-                                               windres = windres)
-            else:
-                self.mapfile = self.Map.Render(force = False)
-
+                
+            self.Map.Render(force=render,
+                            windres=self._properties.resolution)
         except GException as e:
-            GError(message = e.value)
-            self.mapfile = None
+                GError(message=e.value)
 
+    def _updateMFinished(self, renderVector=True):
+        Debug.msg (1, "BufferedWindow.UpdateMap(): finished")
         self.img = self.GetImage() # id=99
-
+        
         #
         # clear pseudoDcs
         #
@@ -853,7 +839,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
                     self.pdcTmp):
             pdc.Clear()
             pdc.RemoveAll()
-
+        
         #
         # draw background map image to PseudoDC
         #
@@ -862,9 +848,9 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         else:
             try:
                 id = self.imagedict[self.img]['id']
-            except:
+            except Exception as e:
+                Debug.mgs(1, "UpdateMap() failed: %s", e)
                 return False
-
             self.Draw(self.pdc, self.img, drawid = id)
 
         #
@@ -872,6 +858,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         #
         if renderVector and hasattr(self, "digit"):
             self._updateMap()
+        
         #
         # render overlays
         #
@@ -880,19 +867,20 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
             if self.imagedict[img]['layer'].IsActive():
                 id = self.imagedict[img]['id']
                 self.Draw(self.pdc, img = img, drawid = id,
-                          pdctype = self.overlays[id].pdcType, coords = self.overlays[id].coords)
-
+                          pdctype = self.overlays[id].pdcType,
+                          coords = self.overlays[id].coords)
+        
         for id in self.textdict.keys():
             self.Draw(self.pdc, img = self.textdict[id], drawid = id,
                       pdctype = 'text', coords = [10, 10, 10, 10])
-
+        
         # optionally draw computational extent box
         self.DrawCompRegionExtent()
-
+        
         #
         # redraw pdcTmp if needed
         #
-
+        
         # draw registered graphics
         if  len(self.graphicsSetList) > 0:
             penOrig = self.pen
@@ -912,12 +900,9 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
 
         if len(self.polycoords) > 0:
             self.DrawLines(self.pdcTmp)
-        
-        Debug.msg (1, "BufferedWindow.UpdateMap(): render=%s, renderVector=%s" % \
-                   (render, renderVector))
-        
-        return True
 
+        return True
+    
     def DrawCompRegionExtent(self):
         """Draw computational region extent in the display
 

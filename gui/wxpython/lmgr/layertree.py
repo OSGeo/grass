@@ -370,7 +370,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             # can cause another idle event
             self.rerender = False
             if self.mapdisplay.IsAutoRendered():
-                self.mapdisplay.GetMapWindow().UpdateMap(render=True)
+                self.mapdisplay.GetMapWindow().UpdateMap(render=False)
         
         event.Skip()
         
@@ -1103,7 +1103,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if lchecked is not None:
             checked = lchecked
         else:
-            checked = True
+            checked = False
         
         self.forceCheck = True
         
@@ -1143,7 +1143,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             else:
                 ctrlId = None
             
-            # add a data object to hold the layer's command (does not apply to generic command layers)
+            # add a data object to hold the layer's command (does not
+            # apply to generic command layers)
             self.SetPyData(layer, ({'cmd'      : cmd,
                                     'type'     : ltype,
                                     'ctrl'     : ctrlId,
@@ -1153,6 +1154,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                     'nviz'     : lnviz,
                                     'propwin'  : None}, 
                                    None))
+            
             # must be after SetPyData because it calls OnLayerChecked
             # which calls GetVisibleLayers which requires already set PyData
             self.CheckItem(layer, checked=checked)
@@ -1183,7 +1185,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.PropertiesDialog(layer, show = True)
             else:
                 self.first = False
-        
         else: # group
             self.SetPyData(layer, ({'cmd'      : None,
                                     'type'     : ltype,
@@ -1209,7 +1210,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             if ltype == 'group':
                 self.OnRenameLayer(None)
 
-        
         return layer
 
     def PropertiesDialog(self, layer, show = True):
@@ -1223,37 +1223,32 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 win.SetFocus()
             else:
                 win.Show()
-            
             return
         
         params = self.GetLayerParams(layer)
                 
         Debug.msg (3, "LayerTree.PropertiesDialog(): ltype=%s" % \
                    ltype)
-
+        
         cmd = None
         if self.GetLayerInfo(layer, key = 'cmd'):
-
             module = GUI(parent = self, show = show, centreOnParent = False)
             module.ParseCommand(self.GetLayerInfo(layer, key = 'cmd'),
-                                completed = (self.GetOptData,layer,params))
-            
+                                completed = (self.GetOptData, layer, params))
             self.SetLayerInfo(layer, key = 'cmd', value = module.GetCmd())
         elif self.GetLayerInfo(layer, key = 'type') != 'command':
             cmd = [ltype2command[ltype]]
-            if ltype == 'raster':
-                if UserSettings.Get(group = 'rasterLayer', key = 'opaque', subkey = 'enabled'):
-                    cmd.append('-n')
-            elif ltype == 'rgb':
+            if ltype in ('raster', 'rgb'):
                 if UserSettings.Get(group = 'rasterLayer', key = 'opaque', subkey = 'enabled'):
                     cmd.append('-n')
             elif ltype == 'vector':
                 cmd += GetDisplayVectSettings()
-            
-        if cmd:
-            GUI(parent = self, centreOnParent = False).ParseCommand(cmd,
-                                                                    completed = (self.GetOptData,layer,params))
         
+        if cmd:
+            module = GUI(parent = self, centreOnParent = False)
+            module.ParseCommand(cmd,
+                                completed = (self.GetOptData,layer,params))
+            
     def OnActivateLayer(self, event):
         """Double click on the layer item.
         Launch property dialog, or expand/collapse group of items, etc.
@@ -1666,25 +1661,32 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 GWarning(parent = self,
                          message = _("Map <%s> not found.") % mapName)
                 return
-        
+
+            if not mapLayer.IsActive():
+                self.forceCheck = True
+                self.CheckItem(layer, True)
+                mapLayer.SetActive(True)
+                
         # update layer data
         if params:
             self.SetPyData(layer, (self.GetLayerInfo(layer), params))
         self.SetLayerInfo(layer, key = 'propwin', value = propwin)
         
         # change parameters for item in layers list in render.Map
-        self.ChangeLayer(layer)
-        
+        if params:
+            self.ChangeLayer(layer)
+
         # set region if auto-zooming is enabled or layer tree contains
         # only one map layer
         if dcmd:
-            if not self.mapdisplay.IsPaneShown('3d') and (self.first or
-                    UserSettings.Get(group = 'display', key = 'autoZooming', subkey = 'enabled')):
+            if not self.mapdisplay.IsPaneShown('3d') and \
+               (self.first or \
+                UserSettings.Get(group = 'display', key = 'autoZooming', subkey = 'enabled')):
                 mapLayer = self.GetLayerInfo(layer, key = 'maplayer')
                 if mapLayer.GetType() in ('raster', 'vector'):
                     self.mapdisplay.MapWindow.ZoomToMap(layers = [mapLayer,],
                                                         render = False)
-            
+                    
             self.first = False # first layer has been already added to
                                # the layer tree
         
@@ -1716,7 +1718,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                                                          active = True))
                 if nlayers < 2:
                     mapWin.ResetView()
-
+        
     def GetVisibleLayers(self, skipDigitized=False):
         # make a list of visible layers
         layers = []
@@ -1775,18 +1777,19 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 layerName, found = GetLayerNameFromCmd(cmdlist, fullyQualified = True)
                 if not found:
                     layerName = self.GetItemText(item)
-        
-        maplayer = self.Map.ChangeLayer(layer = self.GetLayerInfo(item, key = 'maplayer'), type = type,
-                                        command = cmdlist, name = layerName,
-                                        active = chk, hidden = hidden, opacity = opac, render = False)
+
+        maplayer = self.Map.ChangeLayer(layer = self.GetLayerInfo(item, key = 'maplayer'),
+                                        type = type, command = cmdlist, name = layerName,
+                                        active = chk, hidden = hidden, opacity = opac)
         
         self.SetLayerInfo(item, key = 'maplayer', value = maplayer)
         
         # if digitization tool enabled -> update list of available vector map layers
         if self.mapdisplay.GetToolbar('vdigit'):
             self.mapdisplay.GetToolbar('vdigit').UpdateListOfLayers(updateTool = True)
-
+        
         self.Map.SetLayers(self.GetVisibleLayers())
+        
         # redraw map if auto-rendering is enabled
         self.rerender = True
 

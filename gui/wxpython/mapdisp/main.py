@@ -5,7 +5,6 @@
 
 Classes:
  - mapdisp::DMonMap
- - mapdisp::DMonMapDirect
  - mapdisp::Layer
  - mapdisp::LayerList
  - mapdisp::DMonGrassInterface
@@ -38,7 +37,7 @@ import wx
 from core          import utils
 from core.giface   import StandaloneGrassInterface
 from core.gcmd     import RunCommand
-from core.render   import Map, MapLayer, Overlay
+from core.render   import Map, MapLayer, Overlay, RenderMapMgr
 from core.utils import _
 from mapdisp.frame import MapFrame
 from core.debug    import Debug
@@ -66,7 +65,7 @@ class DMonMap(Map):
         :param mapfile: full path to the map file (defined by d.mon)
         """
         Map.__init__(self)
-
+        
         self._giface = giface
 
         # environment settings
@@ -93,7 +92,9 @@ class DMonMap(Map):
         # signal sent when d.what.rast/vect appears in cmd file, attribute is cmd
         self.query = Signal('DMonMap.query')
 
-    def GetLayersFromCmdFile(self, mapfile=None):
+        self.renderMgr = RenderMapMgr(self)
+        
+    def GetLayersFromCmdFile(self):
         """Get list of map layers from cmdfile
         """
         if not self.cmdfile:
@@ -155,12 +156,12 @@ class DMonMap(Map):
                     args['id'] = 1
                 else:
                     classLayer = MapLayer
-                    args['mapfile'] = mapfile
                     args['ltype'] = ltype
                 
                 mapLayer = classLayer(name = name, cmd = cmd, Map = None,
                                       hidden = True, **args)
-                
+                mapLayer.GetRenderMgr().updateProgress.connect(self.GetRenderMgr().ReportProgress)
+
                 exists = False
                 for i, layer in enumerate(existingLayers):
                     if layer.GetCmd(string=True) == mapLayer.GetCmd(string=True):
@@ -245,50 +246,6 @@ class DMonMap(Map):
 
         #return layer
 
-class DMonMapDirect(DMonMap):
-    def __init__(self, giface, cmdfile=None, mapfile=None):
-        """Map composition (stack of map layers and overlays)
-
-        :param cmdline: full path to the cmd file (defined by d.mon)
-        :param mapfile: full path to the map file (defined by d.mon)
-        """
-        DMonMap.__init__(self, giface, cmdfile, mapfile)
-        
-        self.render_env['GRASS_RENDER_BACKGROUNDCOLOR'] = 'FFFFFF'
-        self.render_env['GRASS_RENDER_TRANSPARENT'] = 'FALSE'
-        self.render_env['GRASS_RENDER_FILE_READ'] = 'TRUE'
-        
-    def Render(self, *args, **kwargs):
-        """Render layer to image.
-
-        For input params and returned data see overridden method in Map class.
-        """
-        wx.BeginBusyCursor()
-        env = os.environ.copy()
-        env.update(self.render_env)
-        # use external gisrc if defined
-        if self.gisrc:
-            env['GISRC'] = self.gisrc
-        env['GRASS_REGION'] = self.SetRegion(kwargs.get('windres', False))
-        env['GRASS_RENDER_WIDTH'] = str(self.width)
-        env['GRASS_RENDER_HEIGHT'] = str(self.height)
-        driver = UserSettings.Get(group = 'display', key = 'driver', subkey = 'type')
-        if driver == 'png':
-            env['GRASS_RENDER_IMMEDIATE'] = 'png'
-        else:
-            env['GRASS_RENDER_IMMEDIATE'] = 'cairo'
-
-        if os.path.exists(self.mapfile):
-            os.remove(self.mapfile)
-        
-        self.GetMapsMasksAndOpacities(kwargs['force'], kwargs.get('windres', False), env)
-        wx.EndBusyCursor()
-
-        return self.mapfile
-
-    def GetLayersFromCmdFile(self):
-        super(self.__class__, self).GetLayersFromCmdFile(self.mapfile)
-        
 class Layer(object):
     """@implements core::giface::Layer"""
     def __init__(self, maplayer):
@@ -444,11 +401,8 @@ class MapApp(wx.App):
             toolbars.append('map')
 
         if __name__ == "__main__":
-            dmonMap = DMonMapDirect
-            # if decorations:
-            #    dmonMap = DMonMap
             self.cmdTimeStamp = os.path.getmtime(monFile['cmd'])
-            self.Map = dmonMap(giface=self._giface, cmdfile=monFile['cmd'],
+            self.Map = DMonMap(giface=self._giface, cmdfile=monFile['cmd'],
                                mapfile = monFile['map'])
             
             self.timer = wx.PyTimer(self.watcher)
