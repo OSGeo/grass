@@ -45,13 +45,13 @@ from grass.pydispatch.signal import Signal
 class RenderWMSMgr(wx.EvtHandler):
     """Fetch and prepare WMS data for rendering.
     """
-    def __init__(self, layer, mapfile, maskfile):
+    def __init__(self, layer):
         if not haveGdal:
             sys.stderr.write(_("Unable to load GDAL Python bindings.\n"\
                                "WMS layers can not be displayed without the bindings.\n"))
 
         self.layer = layer
-
+        
         wx.EvtHandler.__init__(self)
 
         # thread for d.wms commands
@@ -65,8 +65,6 @@ class RenderWMSMgr(wx.EvtHandler):
 
         self.cmdStdErr = GStderr(self)
 
-        self.mapfile = mapfile
-        self.maskfile = maskfile
         self.tempMap = grass.tempfile()
         self.dstSize = {}
  
@@ -119,7 +117,7 @@ class RenderWMSMgr(wx.EvtHandler):
             self.fetched_data_cmd = None
             self.renderedRegion = region
 
-            try_remove(self.mapfile)
+            try_remove(self.layer.mapfile)
             try_remove(self.tempMap)
 
             self.currentPid = self.thread.GetId()
@@ -159,12 +157,13 @@ class RenderWMSMgr(wx.EvtHandler):
             self.fetched_data_cmd = None
             return
 
-        self.mapMerger = GDALRasterMerger(targetFile = self.mapfile, region = self.renderedRegion,
+        self.mapMerger = GDALRasterMerger(targetFile = self.layer.mapfile,
+                                          region = self.renderedRegion,
                                           bandsNum = 3, gdalDriver = 'PNM', fillValue = 0)
         self.mapMerger.AddRasterBands(self.tempMap, {1 : 1, 2 : 2, 3 : 3})
         del self.mapMerger
 
-        self.maskMerger = GDALRasterMerger(targetFile = self.maskfile, region = self.renderedRegion,
+        self.maskMerger = GDALRasterMerger(targetFile = self.layer.maskfile, region = self.renderedRegion,
                                            bandsNum = 1, gdalDriver = 'PNM', fillValue = 0)
         #{4 : 1} alpha channel (4) to first and only channel (1) in mask
         self.maskMerger.AddRasterBands(self.tempMap, {4 : 1}) 

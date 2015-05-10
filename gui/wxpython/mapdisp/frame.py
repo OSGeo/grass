@@ -247,7 +247,7 @@ class MapFrame(SingleMapFrame):
         self.statusbarManager.Update()
         
         #
-        self.Map.updateProgress.connect(self.statusbarManager.SetProgress)
+        self.Map.GetRenderMgr().updateProgress.connect(self.statusbarManager.SetProgress)
         
     def GetMapWindow(self):
         return self.MapWindow
