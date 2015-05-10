@@ -1126,7 +1126,7 @@ class ManageSettingsWidget(wx.Panel):
 
         self.settingsSizer = wx.StaticBoxSizer(self.settingsBox, wx.HORIZONTAL)
         self.settingsSizer.Add(item=wx.StaticText(parent=self, id=wx.ID_ANY,
-                                                  label=_("Load settings:")),
+                                                  label=_("Load:")),
                                flag=wx.ALIGN_CENTER_VERTICAL | wx.RIGHT | wx.LEFT,
                                border=5)
         self.settingsSizer.Add(item=self.settingsChoice,
