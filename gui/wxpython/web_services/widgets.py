@@ -1085,7 +1085,7 @@ class WSManageSettingsWidget(ManageSettingsWidget):
     def _layout(self):
 
         self.btnAddDefaultServers = wx.Button(parent=self, id=wx.ID_ANY,
-                                             label=_("Add default servers"))
+                                             label=_("Add default"))
         self.btnAddDefaultServers.Bind(wx.EVT_BUTTON, self.OnAddDefaultServers)
 
         ManageSettingsWidget._layout(self)
