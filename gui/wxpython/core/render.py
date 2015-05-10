@@ -1215,8 +1215,9 @@ class Map(object):
         if render and not layer.Render():
             raise GException(_("Unable to render map layer <%s>.") %
                              layer.GetName())
-        
-        self.layerChanged(layer=layer)
+
+        # not needed since there is self.forceRender
+        ### self.layerChanged(layer=layer)
         
         return layer
 
