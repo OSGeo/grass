@@ -86,6 +86,9 @@ class RenderWMSMgr(wx.EvtHandler):
         if not haveGdal:
             return
 
+        Debug.msg(1, "RenderWMSMgr.Render(%s): force=%d img=%s" % \
+                  (self.layer, self.layer.forceRender, self.layer.mapfile))
+
         env = copy.copy(env)
         self.dstSize['cols'] = int(env["GRASS_RENDER_WIDTH"])
         self.dstSize['rows'] = int(env["GRASS_RENDER_HEIGHT"])
@@ -134,7 +137,8 @@ class RenderWMSMgr(wx.EvtHandler):
             env["GRASS_REGION"] = self._createRegionStr(region)
 
             self.thread.RunCmd(cmdList, env=env, stderr=self.cmdStdErr)
-
+            self.updateProgress.emit(layer=self.layer)
+            
     def OnCmdOutput(self, event):
         """Print cmd output according to debug level.
         """
@@ -171,7 +175,7 @@ class RenderWMSMgr(wx.EvtHandler):
 
         self.fetched_data_cmd = self.fetching_cmd
 
-        self.dataFetched.emit()
+        self.dataFetched.emit(layer=self.layer)
 
     def _getRegionDict(self, env):
         """Parse string from GRASS_REGION env variable into dict.
