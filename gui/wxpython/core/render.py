@@ -189,9 +189,9 @@ class Layer(object):
             msg = ''
             self.renderMgr.Render(cmd, env=self.environ)
         else:
+            cmd[1]['quiet'] = True
             ret, msg = RunCommand(cmd[0],
                                   getErrorMsg = True,
-                                  quiet = True,
                                   env=self.environ,
                                   **cmd[1])
 
