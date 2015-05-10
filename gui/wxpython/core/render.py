@@ -570,7 +570,7 @@ class RenderMapMgr(wx.EvtHandler):
                 self.progressInfo['progresVal'] += 1
                 if layer in self.progressInfo['downloading']:
                     self.progressInfo['downloading'].remove(layer)
-
+        
         # for updating statusbar text
         stText = ''
         first = True
@@ -1124,9 +1124,10 @@ class Map(object):
         self._addLayer(layer, render, pos)
         
         renderMgr = layer.GetRenderMgr()
+        Debug.msg(1, "Map.AddLayer(): ltype={}, command={}".format(ltype, ' '.join(command)))
         if renderMgr:
             if layer.type == 'wms':
-                renderMgr.dataFetched.connect(self.layerChanged)
+                renderMgr.dataFetched.connect(self.renderMgr.ReportProgress)
             renderMgr.updateProgress.connect(self.renderMgr.ReportProgress)
         
         self.layerAdded.emit(layer=layer)
