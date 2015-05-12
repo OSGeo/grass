@@ -5,48 +5,98 @@ import sys
 from grass.script import core as grass
 from grass.script import task as gtask
 
-cmd, dcmd = gtask.cmdstring_to_tuple(sys.argv[1])
-if not cmd or cmd == 'd.mon':
-    sys.exit(0)
-
-path = os.path.dirname(os.path.abspath(__file__))
-cmd_file = os.path.join(path, 'cmd')
-env_file = os.path.join(path, 'env')
-
 # read environment variables from file
-fd = open(env_file, 'r')
-if fd is None:
-    grass.fatal("Unable to open file '%s'" % env_file)
-lines = fd.readlines()
-for l in lines:
-    if l.startswith('#'):
-         continue
-    k, v = l.rstrip('\n').split('#', 1)[0].strip().split('=', 1)
-    os.environ[k] = v
-fd.close()
+def read_env_file(env_file):
+    width = height = None
+    fd = open(env_file, 'r')
+    if fd is None:
+        grass.fatal("Unable to open file '{}'".format(env_file))
+    lines = fd.readlines()
+    for l in lines:
+        if l.startswith('#'):
+            continue
+        k, v = l.rstrip('\n').split('#', 1)[0].strip().split('=', 1)
+        os.environ[k] = v
+        if width is None and k == 'GRASS_RENDER_WIDTH':
+            width = int(v)
+        if height is None and k == 'GRASS_RENDER_HEIGHT':
+            height = int(v)
+    fd.close()
+    
+    if width is None or height is None:
+        grass.fatal("Unknown monitor size")
+    
+    return width, height
 
 # run display command
-try:
-    grass.run_command(cmd, **dcmd)
-except Exception as e:
-    sys.exit("ERROR: %s" % e)
+def render(cmd):
+    try:
+        grass.run_command(cmd[0], **cmd[1])
+    except Exception as e:
+        grass.fatal("Unable to render: {}".format(e))
 
 # update cmd file
-ignoredCmd = ('d.colorlist', 'd.font', 'd.fontlist',
-              'd.frame', 'd.info', 'd.mon', 'd.out.file',
-              'd.redraw', 'd.to.rast', 'd.what.rast',
-              'd.what.vect', 'd.where')
-if cmd not in ignoredCmd:
-    mode = 'w' if cmd == 'd.erase' else 'a'
+def update_cmd_file(cmd_file, cmd):
+    if cmd[0] in ('d.colorlist', 'd.font', 'd.fontlist',
+                  'd.frame', 'd.info', 'd.mon', 'd.out.file',
+                  'd.redraw', 'd.to.rast', 'd.what.rast',
+                  'd.what.vect', 'd.where'):
+        return
+    
+    mode = 'w' if cmd[0] == 'd.erase' else 'a'
     # update cmd file
     fd = open(cmd_file, mode)
     if fd is None:
-        grass.fatal("Unable to open file '%s'" % cmd_file)
+        grass.fatal("Unable to open file '{}'".format(cmd_file))
     if mode == 'a':
-        fd.write(sys.argv[1])
+        fd.write(' '.join(gtask.cmdtuple_to_list(cmd)))
         fd.write('\n')
     else:
          fd.write('')
     fd.close()
 
-sys.exit(0)
+# adjust region
+def adjust_region(width, height):
+    region = grass.region()
+    
+    mapwidth  = abs(region["e"] - region["w"])
+    mapheight = abs(region['n'] - region['s'])
+    
+    region["nsres"] =  mapheight / height
+    region["ewres"] =  mapwidth  / width
+    region['rows']  = int(round(mapheight / region["nsres"]))
+    region['cols']  = int(round(mapwidth / region["ewres"]))
+    region['cells'] = region['rows'] * region['cols']
+    
+    kwdata = [('proj',      'projection'),
+              ('zone',      'zone'),
+              ('north',     'n'),
+              ('south',     's'),
+              ('east',      'e'),
+              ('west',      'w'),
+              ('cols',      'cols'),
+              ('rows',      'rows'),
+              ('e-w resol', 'ewres'),
+              ('n-s resol', 'nsres')]
+    
+    grass_region = ''
+    for wkey, rkey in kwdata:
+        grass_region += '%s: %s;' % (wkey, region[rkey])
+    
+    os.environ['GRASS_REGION'] = grass_region
+    
+if __name__ == "__main__":
+    cmd = gtask.cmdstring_to_tuple(sys.argv[1])
+    if not cmd[0] or cmd[0] == 'd.mon':
+        sys.exit(0)
+    path = os.path.dirname(os.path.abspath(__file__))
+    mon = os.path.split(path)[-1]
+    
+    width, height = read_env_file(os.path.join(path, 'env'))
+    if not mon.startswith('wx'):
+        adjust_region(width, height)
+    
+    render(cmd)
+    update_cmd_file(os.path.join(path, 'cmd'), cmd)
+        
+    sys.exit(0)
