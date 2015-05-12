@@ -14,7 +14,7 @@
 #############################################################################
 
 #%module
-#% description: Unpacks a raster map packed with r.pack.
+#% description: Imports a raster map as GRASS GIS specific archive file (packed with r.pack)
 #% keyword: raster
 #% keyword: import
 #% keyword: copying
