@@ -944,7 +944,7 @@ def region(region3d=False, complete=False):
 
     s = read_command("g.region", flags=flgs)
     reg = parse_key_val(s, val_type=float)
-    for k in ['rows',  'cols',  'cells',
+    for k in ['projection', 'zone', 'rows',  'cols',  'cells',
               'rows3', 'cols3', 'cells3', 'depths']:
         if k not in reg:
             continue
