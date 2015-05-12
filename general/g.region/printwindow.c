@@ -83,23 +83,12 @@ void print_window(struct Cell_head *window, int print_flag)
 	prj = G_database_projection_name();
 	if (!prj)
 	    prj = "** unknown **";
-	/*
-	   please remove before GRASS 7 released
-	   backward compatibility issue
 
-	   if (print_flag & PRINT_SH)
-	   {
-	   fprintf(stdout, "projection=%d\n", window->proj);
-	   fprintf(stdout, "zone=%d\n", window->zone);
-	   }
-	   else
-	   {
-	   fprintf(stdout, "%-*s: %d (%s)\n", width, "projection", window->proj, prj);
-	   fprintf(stdout, "%-*s: %d\n", width, "zone", window->zone);
-	   }
-	 */
-
-	if (!(print_flag & PRINT_SH)) {
+	if (print_flag & PRINT_SH) {
+            fprintf(stdout, "projection=%d\n", window->proj);
+            fprintf(stdout, "zone=%d\n", window->zone);
+        }
+        else {
 	    fprintf(stdout, "%-*s %d (%s)\n", width, "projection:",
 		    window->proj, prj);
 	    fprintf(stdout, "%-*s %d\n", width, "zone:", window->zone);
