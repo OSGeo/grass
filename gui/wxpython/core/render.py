@@ -533,7 +533,8 @@ class RenderMapMgr(wx.EvtHandler):
                    (stop - self._startTime, stop - startCompTime))
         
         self._rendering = False
-        wx.EndBusyCursor()
+        if wx.IsBusy():
+            wx.EndBusyCursor()
         
         self.updateMap.emit()
 
@@ -544,7 +545,8 @@ class RenderMapMgr(wx.EvtHandler):
             layer.GetRenderMgr().Abort()
 
         self._init()
-        wx.EndBusyCursor()
+        if wx.IsBusy():
+            wx.EndBusyCursor()
         self.updateProgress.emit(range=0, value=0, text=_("Rendering aborted"))
         
     def ReportProgress(self, layer=None):
