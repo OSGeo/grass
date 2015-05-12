@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Unpacks a vector map packed with v.pack.
+#% description: Imports a vector map as GRASS GIS specific archive file (packed with v.pack)
 #% keyword: vector
 #% keyword: import
 #% keyword: copying
