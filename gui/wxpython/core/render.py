@@ -43,7 +43,7 @@ from core.ws       import RenderWMSMgr
 from core.gcmd     import GException, GError, RunCommand
 from core.debug    import Debug
 from core.settings import UserSettings
-from core.gconsole import CmdThread, GStderr, EVT_CMD_DONE
+from core.gthread import gThread
 
 class Layer(object):
     """Virtual class which stores information about layers (map layers and
@@ -341,11 +341,9 @@ class RenderLayerMgr(wx.EvtHandler):
         self.layer = layer
          
         wx.EvtHandler.__init__(self)
-        self.thread = CmdThread(self)
-        self.cmdStdErr = GStderr(self)
+        self.thread = gThread()
         
         self.updateProgress = Signal('RenderLayerMgr.updateProgress')
-        self.Bind(EVT_CMD_DONE, self.OnRenderDone)
         
         self._startTime = None
          
@@ -362,16 +360,21 @@ class RenderLayerMgr(wx.EvtHandler):
         env_cmd['GRASS_RENDER_FILE'] = self.layer.mapfile
         
         cmd[1]['quiet'] = True # be quiet
-        cmd_tuple = cmdtuple_to_list(cmd)
-        
+        # for k, v in env_cmd.iteritems():
+        #     if 'GRASS_' in k:
+        #         print 'export %s=%s' % (k, v)
         self._startTime = time.time()
-        self.thread.RunCmd(cmd_tuple, env=env_cmd, stderr=self.cmdStdErr)
+        self.thread.Run(callable=self._render, cmd=cmd, env=env_cmd,
+                        ondone=self.OnRenderDone)
         self.layer.forceRender = False
-        
+
+    def _render(self, cmd, env):
+        return grass.run_command(cmd[0], env=env, **cmd[1])
+    
     def Abort(self):
         """Abort rendering process"""
         Debug.msg(1, "RenderLayerMgr({}).Abort()".format(self.layer))
-        self.thread.abort(abortall = True)
+        self.thread.Terminate()
 
     def IsDownloading(self):
         """Is downloading
@@ -385,9 +388,8 @@ class RenderLayerMgr(wx.EvtHandler):
 
         Emits updateProcess
         """
-        stop = time.time()
         Debug.msg(1, "RenderLayerMgr.OnRenderDone(%s): ret=%d time=%f" % \
-                      (self.layer, event.returncode, stop - self._startTime))
+                      (self.layer, event.ret, time.time() - self._startTime))
         self.updateProgress.emit(layer=self.layer)
         
 class RenderMapMgr(wx.EvtHandler):
@@ -399,8 +401,6 @@ class RenderMapMgr(wx.EvtHandler):
         wx.EvtHandler.__init__(self)
 
         self.Map = Map
-        self.thread = CmdThread(self)
-        self.cmdStdErr = GStderr(self)
         
         self.updateMap = Signal('RenderMapMgr.updateMap')
         self.updateProgress = Signal('RenderMapMgr.updateProgress')
