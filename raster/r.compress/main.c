@@ -8,7 +8,7 @@
  *
  * PURPOSE:      Compress and decompress raster map files.
  *
- * COPYRIGHT:    (C) 2003 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2015 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -20,6 +20,7 @@
  * compress_cell converts straight grid_cell files into compressed grid_cell
  * files.  Compressed files have the following format:
  *
+ * RLE:
  *  - Array of addresses pointing to the internal start of each row
  *    First byte of each row is the nuber of bytes per cell for that row
  *    Remainder of the row is a series of byte groups that describe the data:
@@ -45,6 +46,7 @@
 
 static off_t newsize, oldsize;
 static int process(char *, int);
+static int pprint(char *, int);
 static int doit(char *, int, RASTER_MAP_TYPE);
 
 int main(int argc, char *argv[])
@@ -54,13 +56,14 @@ int main(int argc, char *argv[])
     char *name;
     struct GModule *module;
     struct Option *map;
-    struct Flag *uncompress;
+    struct Flag *uncompress, *pflag;
 
     G_gisinit(argv[0]);
 
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("map management"));
+    G_add_keyword(_("compression"));
     module->description = _("Compresses and decompresses raster maps.");
 
     map = G_define_option();
@@ -75,8 +78,18 @@ int main(int argc, char *argv[])
     uncompress->key = 'u';
     uncompress->description = _("Uncompress the map");
 
+    pflag = G_define_flag();
+    pflag->key = 'p';
+    pflag->description = _("Print compression information and data type of input map(s)");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+    if(pflag->answer) {
+        for (n = 0; (name = map->answers[n]); n++)
+            pprint(name, pflag->answer);
+        exit(EXIT_SUCCESS);
+    }
 
     stat = 0;
     for (n = 0; (name = map->answers[n]); n++)
@@ -95,26 +108,26 @@ static int process(char *name, int uncompress)
     int colr_ok;
     int hist_ok;
     int cats_ok;
-    int quant_ok;
+    int quant_ok=0;
     off_t diff;
     RASTER_MAP_TYPE map_type;
     char rname[GNAME_MAX], rmapset[GMAPSET_MAX];
 
     if (G_find_raster(name, G_mapset()) == NULL) {
-	G_warning(_("[%s] not found"), name);
+	G_warning(_("Raster map <%s> not found"), name);
 	return 1;
     }
     if (Rast_is_reclass(name, G_mapset(), rname, rmapset) > 0) {
 	G_warning(uncompress
 		  ?
-		  _("[%s] is a reclass file of map <%s> in mapset <%s> - can't uncompress")
+		  _("<%s> is a reclass file of map <%s> in mapset <%s> - can't uncompress")
 		  :
-		  _("[%s] is a reclass file of map <%s> in mapset <%s> - can't compress"),
+		  _("<%s> is a reclass file of map <%s> in mapset <%s> - can't compress"),
 		  name, rname, rmapset);
 	return 1;
     }
     if (G_find_file2_misc("cell_misc", "gdal", name, G_mapset())) {
-	G_warning(_("[%s] is a GDAL-linked map - can't (un)compress"), name);
+	G_warning(_("<%s> is a GDAL-linked map - can't (un)compress"), name);
 	return 1;
     }
 
@@ -180,15 +193,15 @@ static int doit(char *name, int uncompress, RASTER_MAP_TYPE map_type)
 
     /* check if already compressed/decompressed */
     if (uncompress && cellhd.compressed == 0) {
-	G_warning(_("[%s] already uncompressed"), name);
+	G_warning(_("<%s> already uncompressed"), name);
 	return 1;
     }
     else if (!uncompress && cellhd.compressed > 0) {
-	G_warning(_("[%s] already compressed"), name);
+	G_warning(_("<%s> already compressed"), name);
 	return 1;
     }
 
-    G_message(_("\n%sCOMPRESS [%s]"), uncompress ? "UN" : "", name);
+    G_message(_("\n%sCOMPRESS <%s>"), uncompress ? "UN" : "", name);
 
     Rast_set_window(&cellhd);
 
@@ -231,3 +244,59 @@ static int doit(char *name, int uncompress, RASTER_MAP_TYPE map_type)
     Rast_close(old);
     return 0;
 }
+
+
+static int pprint(char *name, int printstyle)
+{
+    struct Cell_head cellhd;
+    char rname[GNAME_MAX], rmapset[GMAPSET_MAX];
+    int done;
+    RASTER_MAP_TYPE map_type;
+
+    if (G_find_raster(name, G_mapset()) == NULL) {
+        G_warning(_("Raster map <%s> not found"), name);
+        return 1;
+    }
+    if (G_find_file2_misc("cell_misc", "gdal", name, G_mapset())) {
+        G_message(_("<%s> is a GDAL-linked map"), name);
+        return 1;
+    }
+
+    Rast_get_cellhd(name, G_mapset(), &cellhd);
+    map_type = Rast_map_type(name, G_mapset());
+
+    done = 0;
+    if (Rast_is_reclass(name, G_mapset(), rname, rmapset) > 0) {
+        G_message(_("<%s> is a reclass file of map <%s> in mapset <%s>"),
+                  name, rname, rmapset);
+        done = 1;
+    }
+
+    if (G_find_file2_misc("cell_misc", "gdal", name, G_mapset())) {
+        G_message(_("<%s> is a GDAL-linked map"), name);
+        done = 1;
+    }
+
+    /* Integer (CELL) compression:
+     *    cellhd.compressed == 0: uncompressed
+     *    cellhd.compressed == 1: RLE compressed
+     *    cellhd.compressed == 2: DEFLATE compressed
+     */
+    if (!done && cellhd.compressed == 0) {
+        G_message(_("<%s> is uncompressed (level %i: %s). Data type: <%s>"), name, cellhd.compressed,
+                    "NONE",
+                     (map_type == CELL_TYPE ? "CELL" :
+                       (map_type == DCELL_TYPE ? "DCELL" :
+                         (map_type == FCELL_TYPE ? "FCELL" : "??"))));
+    }
+    else if (!done && cellhd.compressed > 0) {
+        G_message(_("<%s> is compressed (level %i: %s). Data type: <%s>"), name, cellhd.compressed,
+                    cellhd.compressed == 1 ? "RLE" : "DEFLATE",
+                     (map_type == CELL_TYPE ? "CELL" :
+                       (map_type == DCELL_TYPE ? "DCELL" :
+                         (map_type == FCELL_TYPE ? "FCELL" : "??"))));
+    }
+
+    return 0;
+}
+
