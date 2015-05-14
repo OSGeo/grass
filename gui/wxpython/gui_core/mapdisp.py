@@ -55,9 +55,9 @@ class MapFrameBase(wx.Frame):
     
     AUI manager is stored in \c self._mgr.
     """
-    def __init__(self, parent = None, id = wx.ID_ANY, title = None,
+    def __init__(self, parent = None, id = wx.ID_ANY, title = '',
                  style = wx.DEFAULT_FRAME_STYLE,
-                 auimgr = None, name = None, **kwargs):
+                 auimgr = None, name = '', **kwargs):
         """
 
         .. warning::
@@ -394,10 +394,10 @@ class SingleMapFrame(MapFrameBase):
     @note To access maps use getters only
     (when using class or when writing class itself).
     """
-    def __init__(self, parent = None, giface = None, id = wx.ID_ANY, title = None,
+    def __init__(self, parent = None, giface = None, id = wx.ID_ANY, title = '',
                  style = wx.DEFAULT_FRAME_STYLE,
                  Map = None,
-                 auimgr = None, name = None, **kwargs):
+                 auimgr = None, name = '', **kwargs):
         """
         
         :param parent: gui parent
@@ -418,7 +418,8 @@ class SingleMapFrame(MapFrameBase):
         #
         # initialize region values
         #
-        self._initMap(Map = self.Map)
+        if self.Map:
+            self._initMap(Map = self.Map)
         
     def GetMap(self):
         """Returns map (renderer) instance"""
