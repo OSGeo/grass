@@ -164,6 +164,11 @@ def Popen(cmd, **kwargs):
 def gfile(*args):
     return os.path.join(gisbase, *args)
 
+
+def wxpath(*args):
+    return os.path.join(wxpython_base, *args)
+
+
 help_text = r"""GRASS GIS %s
 Geographic Resources Analysis Support System (GRASS GIS).
 
@@ -516,7 +521,7 @@ MAPSET: <UNKNOWN>
 
 
 def check_gui(expected_gui):
-    global grass_gui, wxpython_base
+    global wxpython_base
     grass_gui = expected_gui
     # Check if we are running X windows by checking the DISPLAY variable
     if os.getenv('DISPLAY') or windows or macosx:
@@ -688,7 +693,7 @@ def set_data(grass_gui):
 
 def gui_startup(grass_gui):
     if grass_gui in ('wxpython', 'gtext'):
-        ret = call([os.getenv('GRASS_PYTHON'), gfile(wxpython_base, "gis_set.py")])
+        ret = call([os.getenv('GRASS_PYTHON'), wxpath("gis_set.py")])
 
     if ret == 0:
         pass
@@ -887,7 +892,7 @@ def check_lock():
 
     if msg:
         if grass_gui == "wxpython":
-            call([os.getenv('GRASS_PYTHON'), gfile(wxpython_base, "gis_set_error.py"), msg])
+            call([os.getenv('GRASS_PYTHON'), wxpath("gis_set_error.py"), msg])
         else:
             global remove_lockfile
             remove_lockfile = False
@@ -987,7 +992,7 @@ def start_gui(grass_gui):
 
     # Check for gui interface
     if grass_gui == "wxpython":
-        Popen([os.getenv('GRASS_PYTHON'), gfile(wxpython_base, "wxgui.py")])
+        Popen([os.getenv('GRASS_PYTHON'), wxpath("wxgui.py")])
 
 
 def clear_screen():
