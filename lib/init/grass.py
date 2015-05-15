@@ -953,27 +953,27 @@ def check_shell():
         fatal(_("The SHELL variable is not set"))
 
 
-def check_batch_job():
-    global batch_job
+def get_batch_job():
     # hack to process batch jobs:
-    batch_job = os.getenv('GRASS_BATCH_JOB')
-    if batch_job:
-        # defined, but ...
-        if not os.access(batch_job, os.F_OK):
-          # wrong file
-          fatal(_("Job file '%s' has been defined in "
-                  "the 'GRASS_BATCH_JOB' variable but not found. Exiting.\n\n"
-                  "Use 'unset GRASS_BATCH_JOB' to disable batch job processing.") % batch_job)
-        elif not os.access(batch_job, os.X_OK):
-            # right file, but ...
-            fatal(_("Change file permission to 'executable' for '%s'") % batch_job)
-        else:
-            message(_("Executing '%s' ...") % batch_job)
-            grass_gui = "text"
-            shell = batch_job
-            bj = Popen(shell, shell=True)
-            bj.wait()
-            message(_("Execution of '%s' finished.") % batch_job)
+    return os.getenv('GRASS_BATCH_JOB')
+
+
+def run_batch_job(batch_job):
+    # defined, but ...
+    if not os.access(batch_job, os.F_OK):
+        # wrong file
+        fatal(_("Job file '%s' has been defined in "
+                "the 'GRASS_BATCH_JOB' variable but not found. Exiting.\n\n"
+                "Use 'unset GRASS_BATCH_JOB' to disable batch job processing.") % batch_job)
+    elif not os.access(batch_job, os.X_OK):
+        # right file, but ...
+        fatal(_("Change file permission to 'executable' for '%s'") % batch_job)
+    else:
+        message(_("Executing '%s' ...") % batch_job)
+        shell = batch_job
+        bj = Popen(shell, shell=True)
+        bj.wait()
+        message(_("Execution of '%s' finished.") % batch_job)
 
 
 def start_gui():
@@ -987,12 +987,13 @@ def start_gui():
 
 
 def clear_screen():
+    global windows, grass_debug
     if windows:
         pass
     # TODO: uncomment when PDCurses works.
     #   cls
     else:
-        if not os.getenv('GRASS_BATCH_JOB') and not grass_debug and not exit_grass:
+        if not grass_debug:
             call(["tput", "clear"])
 
 
@@ -1166,15 +1167,11 @@ def default_startup():
 
 
 def done_message():
-    if batch_job and os.access(batch_job, os.X_OK):
-        message(_("Batch job '%s' (defined in GRASS_BATCH_JOB variable) was executed.") % batch_job)
-        message(_("Goodbye from GRASS GIS"))
-        sys.exit(exit_val)
-    else:
-        message(_("Done."))
-        message("")
-        message(_("Goodbye from GRASS GIS"))
-        message("")
+    # here was something for batch job but it was never called
+    message(_("Done."))
+    message("")
+    message(_("Goodbye from GRASS GIS"))
+    message("")
 
 
 def clean_temp():
@@ -1333,8 +1330,9 @@ os.environ['GIS_LOCK'] = gis_lock
 if not os.path.exists(grass_config_dir):
     os.mkdir(grass_config_dir)
 
+batch_job = get_batch_job()
+
 # Set the global grassrc file
-batch_job = os.getenv('GRASS_BATCH_JOB')
 if batch_job:
     gisrcrc = os.path.join(grass_config_dir, "rc.%s" % platform.node())
     if not os.access(gisrcrc, os.R_OK):
@@ -1369,7 +1367,10 @@ check_shell()
 load_env()
 
 # Ensure GUI is set
-read_gui()
+if batch_job:
+    grass_gui = 'text'
+else:
+    read_gui()
 
 # Set PATH, PYTHONPATH
 set_paths()
@@ -1439,17 +1440,10 @@ make_fontcap()
 if not os.access(os.path.join(location, "VAR"), os.F_OK):
     call(['db.connect', '-c', '--quiet'])
 
-check_batch_job()
-
-if not batch_job and not exit_grass:       
-    start_gui()
-
-clear_screen()
-
 # Display the version and license info
+# only non-error, interactive version continues from here
 if batch_job:
-    grass_gui = 'text'
-    clear_screen()
+    run_batch_job(batch_job)
     clean_temp()
     try_remove(lockfile)
     sys.exit(0)
@@ -1458,6 +1452,8 @@ elif exit_grass:
     try_remove(lockfile)
     sys.exit(0)
 else:
+    start_gui()
+    clear_screen()
     show_banner()
     say_hello()
     show_info()
@@ -1471,6 +1467,7 @@ elif sh in ['bash', 'msh', 'cygwin']:
 else:
     default_startup()
 
+# at the end
 clear_screen()
 
 clean_env()
