@@ -125,7 +125,8 @@ void calculate_atanb(void)
 			sum += route[0];
 			nroute++;
 		    }
-		    if (!is_cv_null(i - 1, j) && cv(i, j) - cv(i - 1, j) > ZERO) {
+		    if (!is_cv_null(i - 1, j) &&
+			cv(i, j) - cv(i - 1, j) > ZERO) {
 			tanB[1] = (cv(i, j) - cv(i - 1, j)) * dx1;
 			route[1] = 0.5 * dx * tanB[1];
 			sum += route[1];
@@ -148,7 +149,8 @@ void calculate_atanb(void)
 		    nroute++;
 		}
 		if (j + 1 < window.cols) {
-		    if (!is_cv_null(i, j + 1) && cv(i, j) - cv(i, j + 1) > ZERO) {
+		    if (!is_cv_null(i, j + 1) &&
+			cv(i, j) - cv(i, j + 1) > ZERO) {
 			tanB[5] = (cv(i, j) - cv(i, j + 1)) * dx1;
 			route[5] = 0.5 * dx * tanB[5];
 			sum += route[5];
@@ -164,7 +166,8 @@ void calculate_atanb(void)
 			sum += route[6];
 			nroute++;
 		    }
-		    if (!is_cv_null(i + 1, j) && cv(i, j) - cv(i + 1, j) > ZERO) {
+		    if (!is_cv_null(i + 1, j) &&
+			cv(i, j) - cv(i + 1, j) > ZERO) {
 			tanB[7] = (cv(i, j) - cv(i + 1, j)) * dx1;
 			route[7] = 0.5 * dx * tanB[7];
 			sum += route[7];
@@ -187,46 +190,38 @@ void calculate_atanb(void)
 		    nslp = 0;
 		    if (i > 0) {
 			if (j > 0 && !is_cv_null(i - 1, j - 1)) {
-			    sumtb += (cv(i - 1, j - 1)
-				      - cv(i, j)) * dx2;
+			    sumtb += (cv(i - 1, j - 1) - cv(i, j)) * dx2;
 			    nslp++;
 			}
 			if (!is_cv_null(i - 1, j)) {
-			    sumtb += (cv(i - 1, j)
-				      - cv(i, j)) * dx1;
+			    sumtb += (cv(i - 1, j) - cv(i, j)) * dx1;
 			    nslp++;
 			}
 			if (j + 1 < window.cols && !is_cv_null(i - 1, j + 1)) {
-			    sumtb += (cv(i - 1, j + 1)
-				      - cv(i, j)) * dx2;
+			    sumtb += (cv(i - 1, j + 1) - cv(i, j)) * dx2;
 			    nslp++;
 			}
 		    }
 
 		    if (j > 0 && !is_cv_null(i, j - 1)) {
-			sumtb += (cv(i, j - 1)
-				  - cv(i, j)) * dx1;
+			sumtb += (cv(i, j - 1) - cv(i, j)) * dx1;
 			nslp++;
 		    }
 		    if (j + 1 < window.cols && !is_cv_null(i, j + 1)) {
-			sumtb += (cv(i, j + 1)
-				  - cv(i, j)) * dx1;
+			sumtb += (cv(i, j + 1) - cv(i, j)) * dx1;
 			nslp++;
 		    }
 		    if (i + 1 < window.rows) {
 			if (j > 0 && !is_cv_null(i + 1, j - 1)) {
-			    sumtb += (cv(i + 1, j - 1)
-				      - cv(i, j)) * dx2;
+			    sumtb += (cv(i + 1, j - 1) - cv(i, j)) * dx2;
 			    nslp++;
 			}
 			if (!is_cv_null(i + 1, j)) {
-			    sumtb += (cv(i + 1, j)
-				      - cv(i, j)) * dx1;
+			    sumtb += (cv(i + 1, j) - cv(i, j)) * dx1;
 			    nslp++;
 			}
 			if (j + 1 < window.cols && !is_cv_null(i + 1, j + 1)) {
-			    sumtb += (cv(i + 1, j + 1)
-				      - cv(i, j)) * dx2;
+			    sumtb += (cv(i + 1, j + 1) - cv(i, j)) * dx2;
 			    nslp++;
 			}
 		    }
