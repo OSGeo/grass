@@ -302,9 +302,10 @@ def create_tmp():
             if tmp:
                 break
     if not tmp:
-        fatal(_("Unable to create temporary directory <grass7-%(user)s-" \
+        fatal(_("Unable to create temporary directory <grass7-%(user)s-"
                 "%(lock)s>! Exiting.") % {'user': user, 'lock': gis_lock})
     return tmpdir
+
 
 def create_gisrc(tmpdir, gisrcrc):
     # Set the session grassrc file
@@ -337,7 +338,9 @@ def read_gisrc(filename):
         try:
             k, v = line.split(':', 1)
         except ValueError as e:
-            sys.stderr.write(_("ERROR: Invalid line in RC file: '%s' (%s)\n") % (line, e))
+            warning(_("Invalid line in RC file ({file}):"
+                      " '{line}' ({error})\n").format(
+                          line=line, error=e, file=filename))
             continue
         kv[k.strip()] = v.strip()
     f.close()
@@ -387,7 +390,7 @@ def read_gui(default_gui):
     if grass_gui == 'gui':
         grass_gui = default_gui
 
-    # FIXME oldtcltk, gis.m, d.m no longer exist
+    # FIXME oldtcltk, gis.m, d.m no longer exist (remove this around 7.2)
     if grass_gui in ['d.m', 'gis.m', 'oldtcltk', 'tcltk']:
         warning(_("GUI <%s> not supported in this version") % grass_gui)
         grass_gui = default_gui
@@ -538,6 +541,7 @@ def set_browser():
     if not browser:
         warning(_("Searched for a web browser, but none found"))
         # even so we set konqueror to make lib/gis/parser.c happy:
+        # TODO: perhaps something more probable would be better, e.g. xdg-open
         browser = "konqueror"
 
     os.environ['GRASS_HTML_BROWSER'] = browser
@@ -639,8 +643,8 @@ def non_interactive(arg, geofile=None):
                         not os.path.isdir(os.path.join(gisdbase, location_name, 'PERMANENT')) or \
                         not os.path.isfile((os.path.join(gisdbase, location_name, 'PERMANENT',
                                                          'DEFAULT_WIND'))):
-                        fatal(_("ERROR: <%s> is not a valid GRASS location") % \
-                                  os.path.join(gisdbase, location_name))
+                    fatal(_("<%s> is not a valid GRASS location") %
+                          os.path.join(gisdbase, location_name))
                 else:
                     fatal(_("Mapset <%s> doesn't exist in GRASS location <%s>. "
                             "A new mapset can be created by '-c' switch.") % (mapset, location_name))
@@ -760,7 +764,7 @@ def load_gisrc(gisrc):
                 "GISDBASE=%(gisbase)s\n"
                 "LOCATION_NAME=%(location)s\n"
                 "MAPSET=%(mapset)s\n\n"
-                "Check the <%s(file)> file." % \
+                "Check the <%(file)s> file." % \
                     {'gisbase': gisdbase, 'location': location_name,
                      'mapset': mapset, 'file': gisrcrc}))
 
@@ -1295,7 +1299,7 @@ def parse_cmdline(argv):
             message('\n' + readfile(gpath("etc", "license")))
             sys.exit()
         # Check if the user asked for help
-        elif i in ["help", "-h", "-help", "--help"]:
+        elif i in ["help", "-h", "-help", "--help", "--h"]:
             help_message()
             sys.exit()
         # Check if the -text flag was given
@@ -1335,6 +1339,7 @@ macosx = "darwin" in sys.platform
 # if 'GISBASE' in os.environ:
 #     sys.exit(_("ERROR: GRASS GIS is already running "
 #                "(environmental variable GISBASE found)"))
+# this is not really an issue, we should be able to overpower another session
 
 # Set GISBASE
 os.environ['GISBASE'] = gisbase
@@ -1378,12 +1383,12 @@ batch_job = get_batch_job()
 if batch_job:
     if not os.access(batch_job, os.F_OK):
         # wrong file
-        fatal(_("Job file '%s' has been defined in "
+        fatal(_("Job file <%s> has been defined in "
                 "the 'GRASS_BATCH_JOB' variable but not found. Exiting.\n\n"
                 "Use 'unset GRASS_BATCH_JOB' to disable batch job processing.") % batch_job)
     elif not os.access(batch_job, os.X_OK):
         # right file, but ...
-        fatal(_("Change file permission to 'executable' for '%s'") % batch_job)
+        fatal(_("Change file permission to 'executable' for <%s>") % batch_job)
 
 
 # Set the global grassrc file
@@ -1407,9 +1412,9 @@ except ValueError:
     parse_cmdline(sys.argv[1:])
 
 if exit_grass and not create_new:
-    fatal(_("Flag -e required also flag -c"))
+    fatal(_("Flag -e requires also flag -c"))
 
-# Set the username and working directory
+# Set the username
 get_username()
 
 # Set language
