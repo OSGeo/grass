@@ -439,10 +439,9 @@ class RenderMapMgr(wx.EvtHandler):
 
         :return: number of layers to be rendered
         """
-        if overlaysOnly:
-            self.layers = self.Map.GetListOfLayers(ltype='overlay', active=True)
-        else:
-            self.layers = self.Map.GetListOfLayers(active=True)
+        self.layers = self.Map.GetListOfLayers(ltype='overlay', active=True)
+        if not overlaysOnly:
+            self.layers += self.Map.GetListOfLayers(active=True)
         
         # reset progress
         self.ReportProgress()
@@ -505,9 +504,10 @@ class RenderMapMgr(wx.EvtHandler):
         opacities = list()
         
         for layer in self.layers:
-            maps.append(layer.mapfile)
-            masks.append(layer.maskfile)
-            opacities.append(str(layer.opacity))
+            if layer.GetType() != 'overlay':
+                maps.append(layer.mapfile)
+                masks.append(layer.maskfile)
+                opacities.append(str(layer.opacity))
         
         # run g.pngcomp to get composite image
         bgcolor = ':'.join(map(str, UserSettings.Get(group = 'display', key = 'bgcolor',
@@ -1326,12 +1326,18 @@ class Map(object):
         :return: new layer on success
         :return: None on failure
         """
-        Debug.msg (2, "Map.AddOverlay(): cmd=%s, render=%d" % (command, render))
+        Debug.msg (1, "Map.AddOverlay(): cmd={}".format(command))
         overlay = Overlay(id = id, name = ltype, cmd = command, Map = self,
                           active = active, hidden = hidden, opacity = opacity)
         
-        return self._addLayer(overlay, render)
-
+        self._addLayer(overlay, render)
+                   
+        renderMgr = overlay.GetRenderMgr()
+        if renderMgr:
+            renderMgr.updateProgress.connect(self.renderMgr.ReportProgress)
+        
+        return overlay
+    
     def ChangeOverlay(self, id, render = False, **kargs):
         """Change overlay properities
 
