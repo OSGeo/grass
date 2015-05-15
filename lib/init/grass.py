@@ -193,7 +193,7 @@ def Popen(cmd, **kwargs):
     return subprocess.Popen(cmd, **kwargs)
 
 
-def gfile(*args):
+def gpath(*args):
     return os.path.join(gisbase, *args)
 
 
@@ -431,17 +431,17 @@ def set_paths():
     
     # standard installation
     if not windows:
-        path_prepend(gfile('scripts'), 'PATH')
-    path_prepend(gfile('bin'), 'PATH')
+        path_prepend(gpath('scripts'), 'PATH')
+    path_prepend(gpath('bin'), 'PATH')
 
     # Set PYTHONPATH to find GRASS Python modules
-    if os.path.exists(gfile('gui', 'wxpython')):
-        path_prepend(gfile('gui', 'wxpython'), 'PYTHONPATH')
-    if os.path.exists(gfile('etc', 'python')):
-        path_prepend(gfile('etc', 'python'), 'PYTHONPATH')
+    if os.path.exists(gpath('gui', 'wxpython')):
+        path_prepend(gpath('gui', 'wxpython'), 'PYTHONPATH')
+    if os.path.exists(gpath('etc', 'python')):
+        path_prepend(gpath('etc', 'python'), 'PYTHONPATH')
 
     # set path for the GRASS man pages
-    grass_man_path = os.path.join(gisbase, 'docs', 'man')
+    grass_man_path = gpath('docs', 'man')
     addons_man_path = os.path.join(addon_base, 'docs', 'man')
     man_path = os.getenv('MANPATH')
     sys_man_path = None
@@ -512,7 +512,7 @@ def set_browser():
         if macosx:
             # OSX doesn't execute browsers from the shell PATH - route thru a
             # script
-            browser = gfile('etc', "html_browser_mac.sh")
+            browser = gpath('etc', "html_browser_mac.sh")
             os.environ['GRASS_HTML_BROWSER_MACOSX'] = "-b com.apple.helpviewer"
 
         if windows:
@@ -533,7 +533,7 @@ def set_browser():
         # OSX doesn't execute browsers from the shell PATH - route thru a
         # script
         os.environ['GRASS_HTML_BROWSER_MACOSX'] = "-b %s" % browser
-        browser = gfile('etc', "html_browser_mac.sh")
+        browser = gpath('etc', "html_browser_mac.sh")
 
     if not browser:
         warning(_("Searched for a web browser, but none found"))
@@ -568,7 +568,7 @@ def check_gui(expected_gui):
             p.wait()
             if p.returncode == 0:
                 # Set the wxpython base directory
-                wxpython_base = gfile("gui", "wxpython")
+                wxpython_base = gpath("gui", "wxpython")
             else:
                 # Python was not found - switch to text interface mode
                 warning(_("The python command does not work as expected!\n"
@@ -664,8 +664,8 @@ def non_interactive(arg, geofile=None):
                         fatal(_("Failed to create new location. "
                                 "The location <%s> already exists." % location_name))
                         
-                    if gfile('etc', 'python') not in sys.path:
-                        sys.path.append(gfile('etc', 'python'))
+                    if gpath('etc', 'python') not in sys.path:
+                        sys.path.append(gpath('etc', 'python'))
                     from grass.script import core as grass
                     
                     try:
@@ -892,9 +892,9 @@ def set_language():
     
     # From now on enforce the new language
     if encoding: 
-        gettext.install('grasslibs', os.path.join(gisbase, 'locale'), codeset=encoding)
+        gettext.install('grasslibs', gpath('locale'), codeset=encoding)
     else:
-        gettext.install('grasslibs', os.path.join(gisbase, 'locale'))
+        gettext.install('grasslibs', gpath('locale'))
 
 def check_lock():
     global lockfile, force_gislock_removal
@@ -903,7 +903,7 @@ def check_lock():
 
     # Check for concurrent use
     lockfile = os.path.join(location, ".gislock")
-    ret = call([gfile("etc", "lock"), lockfile, "%d" % os.getpid()])
+    ret = call([gpath("etc", "lock"), lockfile, "%d" % os.getpid()])
     msg = None
     if ret == 2:
         if not force_gislock_removal:
@@ -1051,7 +1051,7 @@ def say_hello():
     sys.stderr.write(_("Welcome to GRASS GIS %s") % grass_version)
     if grass_version.endswith('svn'):
         try:
-            filerev = open(os.path.join(gisbase, 'etc', 'VERSIONNUMBER'))
+            filerev = open(gpath('etc', 'VERSIONNUMBER'))
             linerev = filerev.readline().rstrip('\n')
             filerev.close()
             
@@ -1128,7 +1128,7 @@ def csh_startup():
     f.close()
     writefile(tcshrc, readfile(cshrc))
 
-    exit_val = call([gfile("etc", "run"), os.getenv('SHELL')])
+    exit_val = call([gpath("etc", "run"), os.getenv('SHELL')])
 
     os.environ['HOME'] = userhome
 
@@ -1184,7 +1184,7 @@ PROMPT_COMMAND=grass_prompt\n""" % (_("2D and 3D raster MASKs present"),
 
     f.close()
 
-    exit_val = call([gfile("etc", "run"), os.getenv('SHELL')])
+    exit_val = call([gpath("etc", "run"), os.getenv('SHELL')])
 
     os.environ['HOME'] = userhome
 
@@ -1199,7 +1199,7 @@ def default_startup():
         cleanup_dir(os.path.join(location, ".tmp"))  # remove GUI session files from .tmp
     else:
         os.environ['PS1'] = "GRASS %s (%s):\w > " % (grass_version, location_name)
-        exit_val = call([gfile("etc", "run"), os.getenv('SHELL')])
+        exit_val = call([gpath("etc", "run"), os.getenv('SHELL')])
 
     if exit_val != 0:
         fatal(_("Failed to start shell '%s'") % os.getenv('SHELL'))
@@ -1216,7 +1216,7 @@ def done_message():
 def clean_temp():
     message(_("Cleaning up temporary files..."))
     nul = open(os.devnull, 'w')
-    call([gfile("etc", "clean_temp")], stdout=nul, stderr=nul)
+    call([gpath("etc", "clean_temp")], stdout=nul, stderr=nul)
     nul.close()
 
 
@@ -1226,7 +1226,7 @@ def grep(string,list):
 
 
 def print_params():
-    plat = gfile(gisbase, 'include', 'Make', 'Platform.make')
+    plat = gpath('include', 'Make', 'Platform.make')
     if not os.path.exists(plat):
         fatal(_("Please install the GRASS GIS development package"))
     fileplat = open(plat)
@@ -1244,7 +1244,7 @@ def print_params():
             val = grep('ARCH',linesplat)
             sys.stdout.write("%s\n" % val[0].split('=')[1].strip())
         elif arg == 'build':
-            build = os.path.join(gisbase,'include','grass','confparms.h')
+            build = gpath('include', 'grass', 'confparms.h')
             filebuild = open(build)
             val = filebuild.readline()
             filebuild.close()
@@ -1253,7 +1253,7 @@ def print_params():
             val = grep('CC',linesplat)
             sys.stdout.write("%s\n" % val[0].split('=')[1].strip())
         elif arg == 'revision':
-            rev = os.path.join(gisbase,'include','grass','gis.h')
+            rev = gpath('include', 'grass', 'gis.h')
             filerev = open(rev)
             linesrev = filerev.readlines()
             val = grep('#define GIS_H_VERSION', linesrev)
@@ -1292,7 +1292,7 @@ def parse_cmdline():
         # Check if the user asked for the version
         if i in ["-v", "--version"]:
             message("GRASS GIS %s" % grass_version)
-            message('\n' + readfile(gfile("etc", "license")))
+            message('\n' + readfile(gpath("etc", "license")))
             sys.exit()
         # Check if the user asked for help
         elif i in ["help", "-h", "-help", "--help"]:
@@ -1419,7 +1419,7 @@ elif not grass_gui:
 set_paths()
 
 # Set LD_LIBRARY_PATH (etc) to find GRASS shared libraries
-path_prepend(gfile("lib"), ld_library_path_var)
+path_prepend(gpath("lib"), ld_library_path_var)
 
 # Set GRASS_PAGER, GRASS_PYTHON, GRASS_GNUPLOT, GRASS_PROJSHARE
 set_defaults()
