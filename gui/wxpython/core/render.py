@@ -1247,6 +1247,8 @@ class Map(object):
         :param active: to be rendered (True)
         """
         layer.active = active
+        if active:
+            layer.forceRender = True
 
         Debug.msg (3, "Map.ChangeLayerActive(): name='%s' -> active=%d" % \
                    (layer.name, layer.active))
