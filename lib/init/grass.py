@@ -999,21 +999,21 @@ def get_batch_job():
 
 
 def run_batch_job(batch_job):
-    # defined, but ...
-    if not os.access(batch_job, os.F_OK):
-        # wrong file
-        fatal(_("Job file '%s' has been defined in "
-                "the 'GRASS_BATCH_JOB' variable but not found. Exiting.\n\n"
-                "Use 'unset GRASS_BATCH_JOB' to disable batch job processing.") % batch_job)
-    elif not os.access(batch_job, os.X_OK):
-        # right file, but ...
-        fatal(_("Change file permission to 'executable' for '%s'") % batch_job)
+    batch_job_string = batch_job
+    if not isinstance(batch_job, basestring):
+        batch_job_string = ' '.join(batch_job)
+    message(_("Executing <%s> ...") % batch_job_string)
+    if isinstance(batch_job, basestring):
+        proc = Popen(batch_job, shell=True)
     else:
-        message(_("Executing '%s' ...") % batch_job)
-        shell = batch_job
-        bj = Popen(shell, shell=True)
-        bj.wait()
-        message(_("Execution of '%s' finished.") % batch_job)
+        try:
+            proc = Popen(batch_job, shell=False)
+        except OSError as error:
+            fatal(_("Execution of <{cmd}> failed:\n"
+                    "{error}").format(cmd=batch_job_string, error=error))
+    returncode = proc.wait()
+    message(_("Execution of <%s> finished.") % batch_job_string)
+    return returncode
 
 
 def start_gui(grass_gui):
@@ -1285,10 +1285,10 @@ def get_username():
             user = "user_%d" % os.getuid()
 
 
-def parse_cmdline():
+def parse_cmdline(argv):
     global args, grass_gui, create_new, exit_grass, force_gislock_removal
     args = []
-    for i in sys.argv[1:]:
+    for i in argv:
         # Check if the user asked for the version
         if i in ["-v", "--version"]:
             message("GRASS GIS %s" % grass_version)
@@ -1322,6 +1322,7 @@ def parse_cmdline():
             sys.exit()
         else:
             args.append(i)
+
 
 ### MAIN script starts here
 
@@ -1373,6 +1374,18 @@ if not os.path.exists(grass_config_dir):
 
 batch_job = get_batch_job()
 
+# variable defined, but user might not have been careful enough
+if batch_job:
+    if not os.access(batch_job, os.F_OK):
+        # wrong file
+        fatal(_("Job file '%s' has been defined in "
+                "the 'GRASS_BATCH_JOB' variable but not found. Exiting.\n\n"
+                "Use 'unset GRASS_BATCH_JOB' to disable batch job processing.") % batch_job)
+    elif not os.access(batch_job, os.X_OK):
+        # right file, but ...
+        fatal(_("Change file permission to 'executable' for '%s'") % batch_job)
+
+
 # Set the global grassrc file
 if batch_job:
     gisrcrc = os.path.join(grass_config_dir, "rc.%s" % platform.node())
@@ -1381,14 +1394,24 @@ if batch_job:
 else:
     gisrcrc = os.path.join(grass_config_dir, "rc")
 
-# Set the username and working directory
-get_username()
+# Parse the command-line options and set several global variables
+BATCH_EXEC_SUBCOMMAND = 'exec'
 
-# Parse the command-line options
-parse_cmdline()
+try:
+    # raises ValueError when not found
+    index = sys.argv.index(BATCH_EXEC_SUBCOMMAND)
+    batch_job = sys.argv[index + 1:]
+    clean_argv = sys.argv[1:index]
+    parse_cmdline(clean_argv)
+except ValueError:
+    parse_cmdline(sys.argv[1:])
 
 if exit_grass and not create_new:
     fatal(_("Flag -e required also flag -c"))
+
+# Set the username and working directory
+get_username()
+
 # Set language
 # This has to be called before any _() function call!
 # Subsequent functions are using _() calls and
@@ -1489,10 +1512,10 @@ if not os.access(os.path.join(location, "VAR"), os.F_OK):
 # Display the version and license info
 # only non-error, interactive version continues from here
 if batch_job:
-    run_batch_job(batch_job)
+    returncode = run_batch_job(batch_job)
     clean_temp()
     try_remove(lockfile)
-    sys.exit(0)
+    sys.exit(returncode)
 elif exit_grass:
     clean_temp()
     try_remove(lockfile)
