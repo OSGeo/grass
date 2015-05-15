@@ -280,7 +280,6 @@ class RDigitController(wx.EvtHandler):
         dlg = wx.MessageDialog(self._mapWindow, _("Do you want to save changes?"),
                                _("Save raster map changes"), wx.YES_NO)
         if dlg.ShowModal() == wx.ID_YES:
-            self._running = True
             self._thread.Run(callable=self._exportRaster,
                              ondone=lambda event: self._updateAndQuit())
         else:
@@ -425,51 +424,57 @@ class RDigitController(wx.EvtHandler):
         """
         if not self._editedRaster or self._running:
             return
+        self._running = True
 
         if self._drawing:
             self._finish()
 
         if len(self._all) < 1:
-            return
-        tempRaster = 'tmp_rdigit_rast_' + str(os.getpid())
-        text = []
-        rastersToPatch = []
-        i = 0
-        lastCellValue = lastWidthValue = None
-        evt = updateProgress(range=len(self._all), value=0, text=_("Rasterizing..."))
-        wx.PostEvent(self, evt)
-        lastCellValue = self._all[0].GetPropertyVal('cellValue')
-        lastWidthValue = self._all[0].GetPropertyVal('widthValue')
-        for item in self._all:
-            if item.GetPropertyVal('widthValue') and \
-                (lastCellValue != item.GetPropertyVal('cellValue') or
-                lastWidthValue != item.GetPropertyVal('widthValue')):
-                if text:
-                    out = self._rasterize(text, lastWidthValue, self._mapType, tempRaster)
+            new = self._editedRaster
+            if '@' in self._editedRaster:
+                new = self._editedRaster.split('@')[0]
+            gcore.run_command('g.copy', raster=[self._backupRasterName, new],
+                              overwrite=True, quiet=True)
+        else:
+            tempRaster = 'tmp_rdigit_rast_' + str(os.getpid())
+            text = []
+            rastersToPatch = []
+            i = 0
+            lastCellValue = lastWidthValue = None
+            evt = updateProgress(range=len(self._all), value=0, text=_("Rasterizing..."))
+            wx.PostEvent(self, evt)
+            lastCellValue = self._all[0].GetPropertyVal('cellValue')
+            lastWidthValue = self._all[0].GetPropertyVal('widthValue')
+            for item in self._all:
+                if item.GetPropertyVal('widthValue') and \
+                    (lastCellValue != item.GetPropertyVal('cellValue') or
+                    lastWidthValue != item.GetPropertyVal('widthValue')):
+                    if text:
+                        out = self._rasterize(text, lastWidthValue, self._mapType, tempRaster)
+                        rastersToPatch.append(out)
+                        text = []
+                    self._writeItem(item, text)
+                    out = self._rasterize(text, item.GetPropertyVal('widthValue'),
+                                          self._mapType, tempRaster)
                     rastersToPatch.append(out)
                     text = []
-                self._writeItem(item, text)
+                else:
+                    self._writeItem(item, text)
+    
+                lastCellValue = item.GetPropertyVal('cellValue')
+                lastWidthValue = item.GetPropertyVal('widthValue')
+    
+                i += 1
+                evt = updateProgress(range=len(self._all), value=i, text=_("Rasterizing..."))
+                wx.PostEvent(self, evt)
+            if text:
                 out = self._rasterize(text, item.GetPropertyVal('widthValue'),
                                       self._mapType, tempRaster)
                 rastersToPatch.append(out)
-                text = []
-            else:
-                self._writeItem(item, text)
-
-            lastCellValue = item.GetPropertyVal('cellValue')
-            lastWidthValue = item.GetPropertyVal('widthValue')
-
-            i += 1
-            evt = updateProgress(range=len(self._all), value=i, text=_("Rasterizing..."))
-            wx.PostEvent(self, evt)
-        if text:
-            out = self._rasterize(text, item.GetPropertyVal('widthValue'),
-                                  self._mapType, tempRaster)
-            rastersToPatch.append(out)
-
-        gcore.run_command('r.patch', input=rastersToPatch[::-1] + [self._backupRasterName],
-                          output=self._editedRaster, overwrite=True, quiet=True)
-        gcore.run_command('g.remove', type='raster', flags='f', name=rastersToPatch + [tempRaster],
+    
+            gcore.run_command('r.patch', input=rastersToPatch[::-1] + [self._backupRasterName],
+                              output=self._editedRaster, overwrite=True, quiet=True)
+            gcore.run_command('g.remove', type='raster', flags='f', name=rastersToPatch + [tempRaster],
                           quiet=True)
         try:
             # setting the right color table
@@ -484,6 +489,7 @@ class RDigitController(wx.EvtHandler):
                 gcore.run_command('r.colors', map=self._editedRaster,
                                   raster=self._backgroundRaster, quiet=True)
         except CalledModuleError:
+            self._running = False
             GError(parent=self._mapWindow,
                    message=_("Failed to set default color table for edited raster map"))
 
