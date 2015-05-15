@@ -136,6 +136,38 @@ def message(msg):
     sys.stderr.flush()
 
 
+# mechanism meant for debugging this script (only)
+# private global to store if we are debugging
+_DEBUG = None
+
+
+def is_debug():
+    """Returns True if we are in debug mode
+
+    For debug messages use ``debug()``.
+    """
+    global _DEBUG
+    if _DEBUG is not None:
+        return _DEBUG
+    _DEBUG = os.getenv('GRASS_DEBUG')
+    # translate to bool (no or empty variable means false)
+    if _DEBUG:
+        _DEBUG = True
+    else:
+        _DEBUG = False
+    return _DEBUG
+
+
+def debug(msg):
+    """Print a debug message if in debug mode
+
+    Do not use translatable strings for debug messages.
+    """
+    if is_debug():
+        sys.stderr.write("DEBUG: %s\n" % msg)
+        sys.stderr.flush()
+
+
 def readfile(path):
     f = open(path, 'r')
     s = f.read()
@@ -808,9 +840,8 @@ def set_language():
             return
     
     else:
-        if grass_debug:
-            message(_("A language override has been requested. Trying to switch GRASS into '%s'...") % language)
-        
+        debug("A language override has been requested."
+              " Trying to switch GRASS into '%s'..." % language)
         try:
             locale.setlocale(locale.LC_ALL, language)
         except locale.Error as e:
@@ -987,8 +1018,7 @@ def run_batch_job(batch_job):
 
 def start_gui(grass_gui):
     # Start the chosen GUI but ignore text
-    if grass_debug:
-        message(_("GRASS GUI should be <%s>") % grass_gui)
+    debug("GRASS GUI should be <%s>" % grass_gui)
 
     # Check for gui interface
     if grass_gui == "wxpython":
@@ -996,13 +1026,13 @@ def start_gui(grass_gui):
 
 
 def clear_screen():
-    global windows, grass_debug
+    global windows
     if windows:
         pass
     # TODO: uncomment when PDCurses works.
     #   cls
     else:
-        if not grass_debug:
+        if not is_debug():
             call(["tput", "clear"])
 
 
@@ -1325,9 +1355,11 @@ atexit.register(cleanup, tmpdir)
 # Set default GUI
 default_gui = "wxpython"
 
-# the following is only meant to be an internal variable for debugging this
-# script. use 'g.gisenv set="DEBUG=[0-5]"' to turn GRASS debug mode on properly
-grass_debug = os.getenv('GRASS_DEBUG')
+# explain what is happening in debug mode
+debug("GRASS_DEBUG environmental variable is set. It is meant to be"
+      " an internal variable for debugging only this script.\n"
+      " Use 'g.gisenv set=\"DEBUG=[0-5]\"'"
+      " to turn GRASS GIS debug mode on if you wish to do so.")
 
 # Set GRASS version number for R interface etc (must be an env_var for MS-Windows)
 os.environ['GRASS_VERSION'] = grass_version
