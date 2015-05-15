@@ -672,22 +672,21 @@ def non_interactive(arg, geofile=None):
                 "Interactive startup needed."))
 
 
-def set_data():
-    # User selects LOCATION and MAPSET if not set
-    if not location:
-        # Check for text interface
-        if grass_gui == 'text':
-            pass
-        # Check for GUI
-        elif grass_gui in ('gtext', 'wxpython'):
-            gui_startup(grass_gui == 'gtext')
-        else:
-            # Shouldn't need this but you never know
-            fatal(_("Invalid user interface specified - <%s>. " 
-                    "Use the --help option to see valid interface names.") % grass_gui)
+def set_data(grass_gui):
+    # User selects LOCATION and MAPSET
+    # Check for text interface
+    if grass_gui == 'text':
+        pass
+    # Check for GUI
+    elif grass_gui in ('gtext', 'wxpython'):
+        gui_startup(grass_gui)
+    else:
+        # Shouldn't need this but you never know
+        fatal(_("Invalid user interface specified - <%s>. " 
+                "Use the --help option to see valid interface names.") % grass_gui)
 
 
-def gui_startup(wscreen_only = False):
+def gui_startup(grass_gui):
     if grass_gui in ('wxpython', 'gtext'):
         ret = call([os.getenv('GRASS_PYTHON'), gfile(wxpython_base, "gis_set.py")])
 
@@ -1433,7 +1432,8 @@ else:
         non_interactive(args[0])
 
 # User selects LOCATION and MAPSET if not set
-set_data()
+if not location:
+    set_data(grass_gui)
 
 # Set GISDBASE, LOCATION_NAME, MAPSET, LOCATION from $GISRC
 load_gisrc(gisrc)
