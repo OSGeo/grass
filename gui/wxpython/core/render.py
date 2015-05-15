@@ -526,6 +526,9 @@ class RenderMapMgr(wx.EvtHandler):
                                   output = self.Map.mapfile,
                                   env=self._env)
             if ret != 0:
+                self._rendering = False
+                if wx.IsBusy():
+                    wx.EndBusyCursor()
                 raise GException(_("Rendering failed: %s" % msg))
         
         stop = time.time()
