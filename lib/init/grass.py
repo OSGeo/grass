@@ -325,25 +325,24 @@ def write_gisrc(kv, filename):
     f.close()
 
 
-def read_gui():
-    global grass_gui
+def read_gui(default_gui):
+    grass_gui = None
     # At this point the GRASS user interface variable has been set from the
     # command line, been set from an external environment variable, or is 
     # not set. So we check if it is not set
-    if not grass_gui:
-        # Check for a reference to the GRASS user interface in the grassrc file
-        if os.access(gisrc, os.R_OK):
-            kv = read_gisrc(gisrc)
-            if 'GRASS_GUI' in os.environ:
-                grass_gui = os.environ['GRASS_GUI']
-            elif 'GUI' in kv:
-                grass_gui = kv['GUI']
-            elif 'GRASS_GUI' in kv:
-                # For backward compatibility (GRASS_GUI renamed to GUI)
-                grass_gui = kv['GRASS_GUI']
-            else:
-                # Set the GRASS user interface to the default if needed
-                grass_gui = default_gui
+    # Check for a reference to the GRASS user interface in the grassrc file
+    if os.access(gisrc, os.R_OK):
+        kv = read_gisrc(gisrc)
+        if 'GRASS_GUI' in os.environ:
+            grass_gui = os.environ['GRASS_GUI']
+        elif 'GUI' in kv:
+            grass_gui = kv['GUI']
+        elif 'GRASS_GUI' in kv:
+            # For backward compatibility (GRASS_GUI renamed to GUI)
+            grass_gui = kv['GRASS_GUI']
+        else:
+            # Set the GRASS user interface to the default if needed
+            grass_gui = default_gui
 
     if not grass_gui:
         grass_gui = default_gui
@@ -355,6 +354,8 @@ def read_gui():
     if grass_gui in ['d.m', 'gis.m', 'oldtcltk', 'tcltk']:
         warning(_("GUI <%s> not supported in this version") % grass_gui)
         grass_gui = default_gui
+
+    return grass_gui
 
 
 def path_prepend(dir, var):
@@ -505,21 +506,22 @@ def set_browser():
     os.environ['GRASS_HTML_BROWSER'] = browser
 
 
-def create_initial_gisrc():
+def create_initial_gisrc(filename):
     # for convenience, define GISDBASE as pwd:
     s = r"""GISDBASE: %s
 LOCATION_NAME: <UNKNOWN>
 MAPSET: <UNKNOWN>
 """ % os.getcwd()
-    writefile(gisrc, s)
+    writefile(filename, s)
 
 
-def check_gui():
+def check_gui(expected_gui):
     global grass_gui, wxpython_base
+    grass_gui = expected_gui
     # Check if we are running X windows by checking the DISPLAY variable
     if os.getenv('DISPLAY') or windows or macosx:
         # Check if python is working properly
-        if grass_gui in ('wxpython', 'gtext'):
+        if expected_gui in ('wxpython', 'gtext'):
             nul = open(os.devnull, 'w')
             p = Popen([os.environ['GRASS_PYTHON']], stdin=subprocess.PIPE,
                       stdout=nul, stderr=nul)
@@ -542,15 +544,19 @@ def check_gui():
 
     else:
         # Display a message if a graphical interface was expected
-        if grass_gui != 'text':
+        if expected_gui != 'text':
             # Set the interface mode to text
             warning(_("It appears that the X Windows system is not active.\n"
                       "A graphical based user interface is not supported.\n"
+                      "(DISPLAY variable is not set.)\n"
                       "Switching to text based interface mode.\n\n"
-                      "Hit RETURN to continue"""))
+                      "Hit RETURN to continue.\n"))
             sys.stdin.readline()
             grass_gui = 'text'
+    return grass_gui
 
+
+def save_gui(gisrc, grass_gui):
     # Save the user interface variable in the grassrc file - choose a temporary
     # file name that should not match another file
     if os.access(gisrc, os.F_OK):
@@ -975,7 +981,7 @@ def run_batch_job(batch_job):
         message(_("Execution of '%s' finished.") % batch_job)
 
 
-def start_gui():
+def start_gui(grass_gui):
     # Start the chosen GUI but ignore text
     if grass_debug:
         message(_("GRASS GUI should be <%s>") % grass_gui)
@@ -1368,8 +1374,10 @@ load_env()
 # Ensure GUI is set
 if batch_job:
     grass_gui = 'text'
-else:
-    read_gui()
+elif not grass_gui:
+    # if GUI was not set previously (e.g. command line),
+    # get it from rc file or env variable
+    grass_gui = read_gui(default_gui)
 
 # Set PATH, PYTHONPATH
 set_paths()
@@ -1397,7 +1405,7 @@ if not os.access(gisrc, os.F_OK):
                 " - Launch GRASS GIS directly with path to "
                 "the location/mapset as an argument (`%s /path/to/location/mapset`)\n"
                 " - Create manually the GISRC file (%s)") % (cmd_name, cmd_name, gisrcrc))
-    create_initial_gisrc()
+    create_initial_gisrc(gisrc)
 else:
     clean_temp()
 
@@ -1406,8 +1414,10 @@ if create_new:
 else:
     message(_("Starting GRASS GIS..."))
 
-# Check that the GUI works
-check_gui()
+# check that the GUI works but only if not doing a batch job
+if not batch_job:
+    grass_gui = check_gui(expected_gui=grass_gui)
+    save_gui(gisrc, grass_gui)
 
 # Parsing argument to get LOCATION
 if not args:
@@ -1451,7 +1461,7 @@ elif exit_grass:
     try_remove(lockfile)
     sys.exit(0)
 else:
-    start_gui()
+    start_gui(grass_gui)
     clear_screen()
     show_banner()
     say_hello()
