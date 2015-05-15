@@ -404,7 +404,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.popupID = dict()
             for key in ('remove', 'rename', 'opacity', 'nviz', 'zoom',
                         'region', 'export', 'attr', 'edit', 'save_ws',
-                        'bgmap', 'topo', 'meta', 'null', 'zoom1', 'region1',
+                        'bgmap', 'topo', 'meta', 'null', 'zoom1',
                         'color', 'hist', 'univar', 'prof', 'properties', 'sql', 'copy',
                         'report', 'export-pg', 'pack'):
                 self.popupID[key] = wx.NewId()
@@ -577,8 +577,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             if same:
                 self.popupMenu.Append(self.popupID['zoom1'], text=_("Zoom to selected map(s) (ignore NULLs)"))
                 self.Bind(wx.EVT_MENU, self.mapdisplay.OnZoomToRaster, id=self.popupID['zoom1'])
-                self.popupMenu.Append(self.popupID['region1'], text=_("Set computational region from selected map(s) (ignore NULLs)"))
-                self.Bind(wx.EVT_MENU, self.OnSetCompRegFromRaster, id=self.popupID['region1'])
             
             self.popupMenu.AppendSeparator()
             
@@ -699,12 +697,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         self._giface.RunCmd(cmd)
 
     def OnSetCompRegFromRaster(self, event):
-        """Set computational region from selected raster map (ignore NULLs)"""
+        """Set computational region from selected raster map (ignore NULLs).
+        Unused, removed item from layer context menu"""
         mapLayer = self.GetLayerInfo(self.layer_selected, key = 'maplayer')
-        
-        cmd = ['g.region',
+
+        cmd = ['g.region', 'raster=%s' % mapLayer.GetName(),
                'zoom=%s' % mapLayer.GetName()]
-        
+
         # print output to command log area
         self._giface.RunCmd(cmd, notification=Notification.NO_NOTIFICATION)
         
