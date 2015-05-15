@@ -89,14 +89,14 @@ def try_rmdir(path):
         pass
 
 
-def clean_env():
-    env_curr = read_gisrc()
+def clean_env(gisrc):
+    env_curr = read_gisrc(gisrc)
     env_new = {}
     for k,v in env_curr.iteritems():
         if 'MONITOR' not in k:
             env_new[k] = v
 
-    write_gisrc(env_new)
+    write_gisrc(env_new, gisrc)
 
 
 def cleanup_dir(path):
@@ -110,8 +110,8 @@ def cleanup_dir(path):
             try_rmdir(os.path.join(root, name))
 
 
-def cleanup():
-    tmpdir, lockfile, remove_lockfile
+def cleanup(tmpdir):
+    global lockfile, remove_lockfile
     # all exits after setting up tmp dirs (system/location) should
     # also tidy it up
     cleanup_dir(tmpdir)
@@ -238,7 +238,6 @@ def help_message():
 
 
 def create_tmp():
-    global tmpdir
     ## use $TMPDIR if it exists, then $TEMP, otherwise /tmp
     tmp = os.getenv('TMPDIR')
     if not tmp:
@@ -268,10 +267,9 @@ def create_tmp():
     if not tmp:
         fatal(_("Unable to create temporary directory <grass7-%(user)s-" \
                 "%(lock)s>! Exiting.") % {'user': user, 'lock': gis_lock})
+    return tmpdir
 
-
-def create_gisrc():
-    global gisrc, gisrcrc
+def create_gisrc(tmpdir, gisrcrc):
     # Set the session grassrc file
     gisrc = os.path.join(tmpdir, "gisrc")
     os.environ['GISRC'] = gisrc
@@ -288,12 +286,13 @@ def create_gisrc():
     # Copy the global grassrc file to the session grassrc file
     if s:
         writefile(gisrc, s)
+    return gisrc
 
 
-def read_gisrc():
+def read_gisrc(filename):
     kv = {}
     try:
-        f = open(gisrc, 'r')
+        f = open(filename, 'r')
     except IOError:
         return kv
 
@@ -319,8 +318,8 @@ def read_env_file(path):
     return kv
 
 
-def write_gisrc(kv):
-    f = open(gisrc, 'w')
+def write_gisrc(kv, filename):
+    f = open(filename, 'w')
     for k, v in kv.iteritems():
         f.write("%s: %s\n" % (k, v))
     f.close()
@@ -334,7 +333,7 @@ def read_gui():
     if not grass_gui:
         # Check for a reference to the GRASS user interface in the grassrc file
         if os.access(gisrc, os.R_OK):
-            kv = read_gisrc()
+            kv = read_gisrc(gisrc)
             if 'GRASS_GUI' in os.environ:
                 grass_gui = os.environ['GRASS_GUI']
             elif 'GUI' in kv:
@@ -555,9 +554,9 @@ def check_gui():
     # Save the user interface variable in the grassrc file - choose a temporary
     # file name that should not match another file
     if os.access(gisrc, os.F_OK):
-        kv = read_gisrc()
+        kv = read_gisrc(gisrc)
         kv['GUI'] = grass_gui
-        write_gisrc(kv)
+        write_gisrc(kv, gisrc)
 
 
 def non_interactive(arg, geofile=None):
@@ -654,14 +653,14 @@ def non_interactive(arg, geofile=None):
                     message(_("Missing WIND file fixed"))
 
         if os.access(gisrc, os.R_OK):
-            kv = read_gisrc()
+            kv = read_gisrc(gisrc)
         else:
             kv = {}
 
         kv['GISDBASE'] = gisdbase
         kv['LOCATION_NAME'] = location_name
         kv['MAPSET'] = mapset
-        write_gisrc(kv)
+        write_gisrc(kv, gisrc)
     else:
         fatal(_("GISDBASE, LOCATION_NAME and MAPSET variables not set properly.\n"
                 "Interactive startup needed."))
@@ -708,9 +707,9 @@ def gui_startup(wscreen_only = False):
                 "Please advise GRASS developers of this error."))
 
 
-def load_gisrc():
+def load_gisrc(gisrc):
     global gisdbase, location_name, mapset, location
-    kv = read_gisrc()
+    kv = read_gisrc(gisrc)
     gisdbase = kv.get('GISDBASE')
     location_name = kv.get('LOCATION_NAME')
     mapset = kv.get('MAPSET')
@@ -1311,7 +1310,7 @@ if windows:
     if not os.getenv('SHELL'):
         os.environ['SHELL'] = os.getenv('COMSPEC', 'cmd.exe')
 
-atexit.register(cleanup)
+atexit.register(cleanup, tmpdir)
 
 # Set default GUI
 default_gui = "wxpython"
@@ -1355,10 +1354,10 @@ if exit_grass and not create_new:
 set_language()
 
 # Create the temporary directory and session grassrc file
-create_tmp()
+tmpdir = create_tmp()
 
 # Create the session grassrc file
-create_gisrc()
+gisrc = create_gisrc(tmpdir, gisrcrc)
 
 # Set shell (needs to be called before load_env())
 check_shell()
@@ -1427,7 +1426,7 @@ else:
 set_data()
 
 # Set GISDBASE, LOCATION_NAME, MAPSET, LOCATION from $GISRC
-load_gisrc()
+load_gisrc(gisrc)
 
 # Check .gislock file
 check_lock()
@@ -1467,19 +1466,19 @@ elif sh in ['bash', 'msh', 'cygwin']:
 else:
     default_startup()
 
-# at the end
+# here we are at the end of grass session
+
 clear_screen()
 
-clean_env()
 clean_temp()
 
 try_remove(lockfile)
 
-# Save GISRC
-s = readfile(gisrc)
-writefile(gisrcrc, s)
+# save 'last used' GISRC after removing variables which shouldn't be saved
+clean_env(gisrc)
+writefile(gisrcrc, readfile(gisrc))
 
-cleanup()
+# here was cleanup function call but it is already registered at exit
 
 # After this point no more grass modules may be called
 
