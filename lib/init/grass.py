@@ -283,6 +283,7 @@ def create_tmp():
         tmp = os.getenv('TMP')
     if not tmp:
         tmp = tempfile.gettempdir()
+    
     if tmp:
         tmpdir = os.path.join(tmp, "grass7-%(user)s-%(lock)s" % {'user': user,
                                                              'lock': gis_lock})
@@ -290,6 +291,7 @@ def create_tmp():
             os.mkdir(tmpdir, 0700)
         except:
             tmp = None
+    
     if not tmp:
         for ttmp in ("/tmp", "/var/tmp", "/usr/tmp"):
             tmp = ttmp
@@ -301,9 +303,13 @@ def create_tmp():
                 tmp = None
             if tmp:
                 break
+    
     if not tmp:
         fatal(_("Unable to create temporary directory <grass7-%(user)s-"
                 "%(lock)s>! Exiting.") % {'user': user, 'lock': gis_lock})
+    
+    os.environ['TMPDIR'] = tmpdir
+    
     return tmpdir
 
 
