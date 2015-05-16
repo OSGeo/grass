@@ -122,7 +122,7 @@ class Layer(object):
     def __repr__(self):
         return self.__str__()
     
-    def Render(self, env):
+    def Render(self, env=None):
         """Render layer to image
 
         :return: rendered image filename
@@ -144,9 +144,13 @@ class Layer(object):
         if self.type not in layertypes:
             raise GException(_("<%(name)s>: layer type <%(type)s> is not supported") % \
                                  {'type' : self.type, 'name' : self.name})
-
+        
+        if env:
+            env.update(self.render_env)
+        else:
+            env = self.render_env.copy()
+        
         # render layers
-        env.update(self.render_env)
         try:
             if self.type == 'command':
                 first = True
