@@ -145,10 +145,9 @@ class Layer(object):
             raise GException(_("<%(name)s>: layer type <%(type)s> is not supported") % \
                                  {'type' : self.type, 'name' : self.name})
         
-        if env:
-            env.update(self.render_env)
-        else:
-            env = self.render_env.copy()
+        if not env:
+            env = os.environ.copy()
+        env.update(self.render_env)
         
         # render layers
         try:
@@ -464,6 +463,22 @@ class RenderMapMgr(wx.EvtHandler):
                                                            len(self.layers)))
         
         return nlayers
+
+    def GetRenderEnv(self, windres=False):
+        env = os.environ.copy()
+        env.update(self._render_env)
+        # use external gisrc if defined
+        if self.Map.gisrc:
+            env['GISRC'] = self.Map.gisrc
+        env['GRASS_REGION'] = self.Map.SetRegion(windres)
+        env['GRASS_RENDER_WIDTH'] = str(self.Map.width)
+        env['GRASS_RENDER_HEIGHT'] = str(self.Map.height)
+        if UserSettings.Get(group = 'display', key = 'driver', subkey = 'type') == 'png':
+            env['GRASS_RENDER_IMMEDIATE'] = 'png'
+        else:
+            env['GRASS_RENDER_IMMEDIATE'] = 'cairo'
+
+        return env
     
     def Render(self, force = False, windres = False):
         """Render map composition
@@ -478,20 +493,7 @@ class RenderMapMgr(wx.EvtHandler):
         wx.BeginBusyCursor()
         self._rendering = True
         
-        env = os.environ.copy()
-        env.update(self._render_env)
-        # use external gisrc if defined
-        if self.Map.gisrc:
-            env['GISRC'] = self.Map.gisrc
-        env['GRASS_REGION'] = self.Map.SetRegion(windres)
-        env['GRASS_RENDER_WIDTH'] = str(self.Map.width)
-        env['GRASS_RENDER_HEIGHT'] = str(self.Map.height)
-        driver = UserSettings.Get(group = 'display', key = 'driver', subkey = 'type')
-        if driver == 'png':
-            env['GRASS_RENDER_IMMEDIATE'] = 'png'
-        else:
-            env['GRASS_RENDER_IMMEDIATE'] = 'cairo'
-        
+        env = self.GetRenderEnv(windres)
         self._init(env)
         if self._renderLayers(env, force, windres) == 0:
             self.renderDone.emit()
@@ -1087,7 +1089,7 @@ class Map(object):
         """
         self.renderMgr.Render(force, windres)
         
-    def _addLayer(self, layer, render=False, pos=-1):
+    def _addLayer(self, layer, pos=-1):
         if layer.type == 'overlay':
             llist = self.overlays
         else:
@@ -1100,8 +1102,6 @@ class Map(object):
             llist.append(layer)
         
         Debug.msg (3, "Map._addLayer(): layer=%s type=%s" % (layer.name, layer.type))
-        if render and not layer.Render():
-            raise GException(_("Unable to render map layer <%s>.") % name)
         
         return layer
 
@@ -1130,7 +1130,7 @@ class Map(object):
         layer = MapLayer(ltype = ltype, name = name, cmd = command, Map = self,
                          active = active, hidden = hidden, opacity = opacity)
         
-        self._addLayer(layer, render, pos)
+        self._addLayer(layer, pos)
         
         renderMgr = layer.GetRenderMgr()
         Debug.msg(1, "Map.AddLayer(): ltype={}, command={}".format(ltype, ' '.join(command)))
@@ -1138,6 +1138,7 @@ class Map(object):
             if layer.type == 'wms':
                 renderMgr.dataFetched.connect(self.renderMgr.ReportProgress)
             renderMgr.updateProgress.connect(self.renderMgr.ReportProgress)
+        layer.forceRender = render
         
         self.layerAdded.emit(layer=layer)
         
@@ -1219,12 +1220,9 @@ class Map(object):
 
         if 'opacity' in kargs:
             layer.SetOpacity(kargs['opacity'])
-
-
-        if render and not layer.Render():
-            raise GException(_("Unable to render map layer <%s>.") %
-                             layer.GetName())
-
+        
+        self.forceRender = render
+        
         # not needed since there is self.forceRender
         ### self.layerChanged(layer=layer)
         
@@ -1374,11 +1372,9 @@ class Map(object):
 
         if 'opacity' in kargs:
             overlay.SetOpacity(kargs['opacity'])
-
-        if render and overlay.GetCmd() != [] and not overlay.Render():
-            raise GException(_("Unable to render overlay <%s>.") %
-                             overlay.GetType())
-
+        
+        overlay.forceRender = render
+        
         return overlay
 
     def GetOverlay(self, id, list=False):
