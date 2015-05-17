@@ -1226,7 +1226,7 @@ def done_message():
 def clean_temp():
     message(_("Cleaning up temporary files..."))
     nul = open(os.devnull, 'w')
-    call([gpath("etc", "clean_temp")], stdout=nul, stderr=nul)
+    call([gpath("etc", "clean_temp")], stdout=nul)
     nul.close()
 
 
