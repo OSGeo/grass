@@ -78,6 +78,27 @@ the input raster map to analyze the distribution of interpolation error.
 This procedure may be helpful in choosing the number of nearest neighbors
 considered for surface generation.
 
+<!-- requires https://trac.osgeo.org/grass/ticket/2672 to be fixed:
+
+<h2>EXAMPLE</h2>
+
+Interpolation of raster surface from randomly sampled vector elevation
+points (North Carolina sample dataset region):
+
+<div class="code"><pre>
+g.region vector=elev_lid792_randpts res=1 -p
+# rasterize points
+v.to.rast input=elev_lid792_randpts use=attr attribute_column=value \
+          output=elev_lid792_randpts_1m
+# interpolation DEM
+r.surf.idw input=elev_lid792_randpts_1m output=elev_surf_1m_idw
+
+# validate: differences to original DEM
+r.mapcalc "elev_diff = elev_lid792_1m - elev_surf_1m_idw"
+r.colors map=elev_diff color=differences
+</pre></div>
+-->
+
 <h2>KNOWN ISSUES</h2>
 Module <em>r.surf.idw</em> works only for integer (CELL) raster maps.
 
