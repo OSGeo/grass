@@ -95,6 +95,7 @@ int main(int argc, char **argv)
 	struct Flag *e;
     } flag;
     int n, fd, maskfd;
+    int cell_type;
 
     /* Initialize the GIS calls                                     */
     G_gisinit(argv[0]);
@@ -157,6 +158,10 @@ int main(int argc, char **argv)
 
     /*  Open input cell layer for reading                           */
     fd = Rast_open_old(input, "");
+
+    cell_type = Rast_get_map_type(fd);
+    if (cell_type != CELL_TYPE)
+        G_fatal_error(_("This module currently only works for integer (CELL) maps"));
 
     /* Store input data in array-indexed doubly-linked lists and close input file */
     rowlist = row_lists(nrows, ncols, &datarows, &n, fd, cell);
