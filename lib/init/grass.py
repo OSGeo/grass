@@ -1362,8 +1362,6 @@ if windows:
     if not os.getenv('SHELL'):
         os.environ['SHELL'] = os.getenv('COMSPEC', 'cmd.exe')
 
-atexit.register(cleanup, tmpdir)
-
 # Set default GUI
 default_gui = "wxpython"
 
@@ -1431,6 +1429,7 @@ set_language()
 
 # Create the temporary directory and session grassrc file
 tmpdir = create_tmp()
+atexit.register(cleanup, tmpdir)
 
 # Create the session grassrc file
 gisrc = create_gisrc(tmpdir, gisrcrc)
