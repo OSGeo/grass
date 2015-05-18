@@ -66,10 +66,8 @@ tmpdir = None
 lockfile = None
 remove_lockfile = True
 location = None
-create_new = None
 grass_gui = None
-exit_grass = None
-force_gislock_removal = None
+
 
 def warning(text):
     sys.stderr.write(_("WARNING") + ': ' + text + os.linesep)
@@ -647,7 +645,7 @@ def save_gui(gisrc, grass_gui):
         write_gisrc(kv, gisrc)
 
 
-def non_interactive(arg, geofile=None):
+def non_interactive(arg, geofile=None, create_new=False):
     global gisdbase, location_name, mapset, location
     # Try non-interactive startup
     l = None
@@ -941,8 +939,8 @@ def set_language():
     else:
         gettext.install('grasslibs', gpath('locale'))
 
-def check_lock():
-    global lockfile, force_gislock_removal
+def check_lock(force_gislock_removal):
+    global lockfile
     if not os.path.exists(location):
         fatal(_("Path '%s' doesn't exist") % location)
 
@@ -1331,8 +1329,18 @@ def get_username():
     return user
 
 
+class Parameters:
+    def __init__(self):
+        self.grass_gui = None
+        self.create_new = None
+        self.exit_grass = None
+        self.force_gislock_removal = None
+        self.mapset = None
+        self.geofile = None
+
+
 def parse_cmdline(argv):
-    global args, grass_gui, create_new, exit_grass, force_gislock_removal
+    params = Parameters()
     args = []
     for i in argv:
         # Check if the user asked for the version
@@ -1346,28 +1354,34 @@ def parse_cmdline(argv):
             sys.exit()
         # Check if the -text flag was given
         elif i in ["-text", "--text"]:
-            grass_gui = 'text'
+            params.grass_gui = 'text'
         # Check if the -gtext flag was given
         elif i in ["-gtext", "--gtext"]:
-            grass_gui = 'gtext'
+            params.grass_gui = 'gtext'
         # Check if the -gui flag was given
         elif i in ["-gui", "--gui"]:
-            grass_gui = default_gui
+            params.grass_gui = default_gui
         # Check if the -wxpython flag was given
         elif i in ["-wxpython", "-wx", "--wxpython", "--wx"]:
-            grass_gui = 'wxpython'
+            params.grass_gui = 'wxpython'
         # Check if the user wants to create a new mapset
         elif i == "-c":
-            create_new = True
+            params.create_new = True
         elif i == "-e":
-            exit_grass = True
+            params.exit_grass = True
         elif i == "-f":
-            force_gislock_removal = True
+            params.force_gislock_removal = True
         elif i == "--config":
             print_params()
             sys.exit()
         else:
             args.append(i)
+    if len(args) > 1:
+        params.mapset = args[1]
+        params.geofile = args[0]
+    else:
+        params.mapset = args[0]
+    return params
 
 
 ### MAIN script starts here
@@ -1447,11 +1461,13 @@ try:
     index = sys.argv.index(BATCH_EXEC_SUBCOMMAND)
     batch_job = sys.argv[index + 1:]
     clean_argv = sys.argv[1:index]
-    parse_cmdline(clean_argv)
+    params = parse_cmdline(clean_argv)
 except ValueError:
-    parse_cmdline(sys.argv[1:])
+    params = parse_cmdline(sys.argv[1:])
 
-if exit_grass and not create_new:
+grass_gui = params.grass_gui
+
+if params.exit_grass and not params.create_new:
     fatal(_("Flag -e requires also flag -c"))
 
 # Set the username
@@ -1504,7 +1520,7 @@ if os.getenv('HOSTTYPE') == 'arm':
 
 # First time user - GISRC is defined in the GRASS script
 if not os.access(gisrc, os.F_OK):
-    if grass_gui == 'text' and len(args) == 0:
+    if grass_gui == 'text' and not params.mapset:
         fatal(_("Unable to start GRASS GIS. You have the choice to:\n"
                 " - Launch the GRASS GIS interface with the '-gui' switch (`%s -gui`)\n"
                 " - Launch GRASS GIS directly with path to "
@@ -1514,7 +1530,7 @@ if not os.access(gisrc, os.F_OK):
 else:
     clean_temp()
 
-if create_new:
+if params.create_new:
     message(_("Creating new GRASS GIS location/mapset..."))
 else:
     message(_("Starting GRASS GIS..."))
@@ -1525,17 +1541,14 @@ if not batch_job:
     save_gui(gisrc, grass_gui)
 
 # Parsing argument to get LOCATION
-if not args:
+if not params.mapset:
     # Try interactive startup
     location = None
 else:
-    if create_new:
-        if len(args) > 1:
-            non_interactive(args[1], args[0])
-        else:
-            non_interactive(args[0])
+    if params.create_new and params.geofile:
+        non_interactive(params.mapset, params.geofile, create_new=True)
     else:
-        non_interactive(args[0])
+        non_interactive(params.mapset, create_new=params.create_new)
 
 # User selects LOCATION and MAPSET if not set
 if not location:
@@ -1545,7 +1558,7 @@ if not location:
 load_gisrc(gisrc)
 
 # Check .gislock file
-check_lock()
+check_lock(params.force_gislock_removal)
 
 # build user fontcap if specified but not present
 make_fontcap()
@@ -1562,7 +1575,7 @@ if batch_job:
     clean_temp()
     try_remove(lockfile)
     sys.exit(returncode)
-elif exit_grass:
+elif params.exit_grass:
     clean_temp()
     try_remove(lockfile)
     sys.exit(0)
