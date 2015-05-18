@@ -722,7 +722,11 @@ def get_mapset_invalid_reason(gisdbase, location, mapset):
                      mapset=mapset, loc=location)
 
 
-def non_interactive(arg, geofile=None, create_new=False):
+def set_mapset(arg, geofile=None, create_new=False):
+    """Selected Location and Mapset are checked and created if requested
+
+    The gisrc (GRASS environment file) is written at the end.
+    """
     global gisdbase, location_name, mapset, location
     # Try non-interactive startup
     l = None
@@ -791,8 +795,11 @@ def non_interactive(arg, geofile=None, create_new=False):
                 "Interactive startup needed."))
 
 
-def set_data(grass_gui):
-    # User selects LOCATION and MAPSET
+def set_mapset_interactive(grass_gui):
+    """User selects Location and Mapset in an interative way
+
+    The gisrc (GRASS environment file) is written at the end.
+    """
     # Check for text interface
     if grass_gui == 'text':
         pass
@@ -1420,8 +1427,10 @@ def parse_cmdline(argv):
     if len(args) > 1:
         params.mapset = args[1]
         params.geofile = args[0]
-    else:
+    elif len(args) == 1:
         params.mapset = args[0]
+    else:
+        params.mapset = None
     return params
 
 
@@ -1584,18 +1593,18 @@ if not batch_job:
 # Parsing argument to get LOCATION
 if not params.mapset:
     # Try interactive startup
-    location = None
+    # User selects LOCATION and MAPSET if not set
+    set_mapset_interactive(grass_gui)
 else:
     if params.create_new and params.geofile:
-        non_interactive(params.mapset, params.geofile, create_new=True)
+        set_mapset(params.mapset, params.geofile, create_new=True)
     else:
-        non_interactive(params.mapset, create_new=params.create_new)
-
-# User selects LOCATION and MAPSET if not set
-if not location:
-    set_data(grass_gui)
+        set_mapset(params.mapset, create_new=params.create_new)
 
 # Set GISDBASE, LOCATION_NAME, MAPSET, LOCATION from $GISRC
+# e.g. wxGUI startup screen writes to the gisrc file,
+# so loading it is the only universal way to obtain the values
+# this suppose that both programs share the right path to gisrc file
 load_gisrc(gisrc)
 
 # Check .gislock file
