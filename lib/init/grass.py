@@ -220,76 +220,80 @@ def wxpath(*args):
     return os.path.join(_WXPYTHON_BASE, *args)
 
 
-help_text = r"""GRASS GIS %s
+# using format for most but leaving usage of template for the dynamic ones
+# two different methods are easy way to implement two phase construction
+help_text = r"""GRASS GIS $VERSION_NUMBER
 Geographic Resources Analysis Support System (GRASS GIS).
 
-%s:
+{usage}:
   $CMD_NAME [-h | -help | --help] [-v | --version] [-c | -c geofile | -c EPSG:code[:datum_trans]]
           [-e] [-f] [-text | -gui] [--config param]
           [[[<GISDBASE>/]<LOCATION_NAME>/]<MAPSET>]
 
-%s:
-  -h or -help or --help          %s
-  -v or --version                %s
-  -c                             %s
-  -e                             %s
-  -f                             %s
-  -text                          %s
-                                   %s
-  -gtext                         %s
-                                   %s
-  -gui                           %s
-                                   %s
-  --config                       %s
-                                   %s
+{flags}:
+  -h or -help or --help          {help_flag}
+  -v or --version                {version_flag}
+  -c                             {create}
+  -e                             {exit_after}
+  -f                             {force_removal}
+  -text                          {text}
+                                   {text_detail}
+  -gtext                         {gtext}
+                                   {gtext_detail}
+  -gui                           {gui}
+                                   {gui_detail}
+  --config                       {config}
+                                   {config_detail}
 
-%s:
-  GISDBASE                       %s
-  LOCATION_NAME                  %s
-  MAPSET                         %s
+{params}:
+  GISDBASE                       {gisdbase}
+  LOCATION_NAME                  {location}
+  MAPSET                         {mapset}
 
-  GISDBASE/LOCATION_NAME/MAPSET  %s
+  GISDBASE/LOCATION_NAME/MAPSET  {full_mapset}
 
-%s:
-  GRASS_GUI                      %s
-  GRASS_HTML_BROWSER             %s
-  GRASS_ADDON_PATH               %s
-  GRASS_ADDON_BASE               %s
-  GRASS_BATCH_JOB                %s
-  GRASS_PYTHON                   %s
-""" % (grass_version,
-       _("Usage"),
-       _("Flags"),
-       _("print this help message"),
-       _("show version information and exit"),
-       _("create given database, location or mapset if it doesn't exist"),
-       _("exit after creation of location or mapset. Only with -c flag"),
-       _("force removal of .gislock if exists (use with care!). Only with -text flag"),
-       _("use text based interface (skip welcome screen)"),
-       _("and set as default"),
-       _("use text based interface (show welcome screen)"),
-       _("and set as default"),
-       _("use $DEFAULT_GUI graphical user interface"),
-       _("and set as default"),
-       _("print GRASS configuration parameters"),
-       _("options: arch,build,compiler,path,revision"),
-       _("Parameters"),
-       _("initial database (path to GIS data)"),
-       _("initial location"),
-       _("initial mapset"),
-       _("fully qualified initial mapset directory"),
-       _("Environment variables relevant for startup"),
-       _("select GUI (text, gui)"),
-       _("set html web browser for help pages"),
-       _("set additional path(s) to local GRASS modules or user scripts"),
-       _("set additional GISBASE for locally installed GRASS Addons"),
-       _("shell script to be processed as batch job"),
-       _("set python shell name to override 'python'"))
+{env_vars}:
+  GRASS_GUI                      {gui_var}
+  GRASS_HTML_BROWSER             {html_var}
+  GRASS_ADDON_PATH               {addon_path_var}
+  GRASS_ADDON_BASE               {addon_base_var}
+  GRASS_BATCH_JOB                {batch_var}
+  GRASS_PYTHON                   {python_var}
+""".format(
+    usage=_("Usage"),
+    flags=_("Flags"),
+    help_flag=_("print this help message"),
+    version_flag=_("show version information and exit"),
+    create=_("create given database, location or mapset if it doesn't exist"),
+    exit_after=_("exit after creation of location or mapset. Only with -c flag"),
+    force_removal=_("force removal of .gislock if exists (use with care!). Only with -text flag"),
+    text=_("use text based interface (skip welcome screen)"),
+    text_detail=_("and set as default"),
+    gtext=_("use text based interface (show welcome screen)"),
+    gtext_detail=_("and set as default"),
+    gui=_("use $DEFAULT_GUI graphical user interface"),
+    gui_detail=_("and set as default"),
+    config=_("print GRASS configuration parameters"),
+    config_detail=_("options: arch,build,compiler,path,revision"),
+    params=_("Parameters"),
+    gisdbase=_("initial database (path to GIS data)"),
+    location=_("initial location"),
+    mapset=_("initial mapset"),
+    full_mapset=_("fully qualified initial mapset directory"),
+    env_vars=_("Environment variables relevant for startup"),
+    gui_var=_("select GUI (text, gui)"),
+    html_var=_("set html web browser for help pages"),
+    addon_path_var=_("set additional path(s) to local GRASS modules or user scripts"),
+    addon_base_var=_("set additional GISBASE for locally installed GRASS Addons"),
+    batch_var=_("shell script to be processed as batch job"),
+    python_var=_("set python shell name to override 'python'")
+    )
 
 
 def help_message():
     t = string.Template(help_text)
-    s = t.substitute(CMD_NAME=cmd_name, DEFAULT_GUI=default_gui)
+    s = t.substitute(CMD_NAME=cmd_name, DEFAULT_GUI=default_gui,
+                     VERSION_NUMBER=grass_version)
     sys.stderr.write(s)
 
 
