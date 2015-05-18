@@ -838,22 +838,55 @@ def gui_startup(grass_gui):
                 "Please advise GRASS developers of this error."))
 
 
-def load_gisrc(gisrc):
-    global gisdbase, location_name, mapset, location
-    kv = read_gisrc(gisrc)
-    gisdbase = kv.get('GISDBASE')
-    location_name = kv.get('LOCATION_NAME')
-    mapset = kv.get('MAPSET')
-    if not gisdbase or not location_name or not mapset:
-        fatal(_("Error reading data path information from g.gisenv.\n"
-                "GISDBASE=%(gisbase)s\n"
-                "LOCATION_NAME=%(location)s\n"
-                "MAPSET=%(mapset)s\n\n"
-                "Check the <%(file)s> file." % \
-                    {'gisbase': gisdbase, 'location': location_name,
-                     'mapset': mapset, 'file': gisrcrc}))
+# we don't follow the LOCATION_NAME legacy naming here but we have to still
+# translate to it, so always double check
+class MapsetSettings(object):
+    """Holds GRASS GIS database directory, Location and Mapset
 
-    location = os.path.join(gisdbase, location_name, mapset)
+    Provides few convenient functions.
+    """
+    def __init__(self):
+        self.gisdbase = None
+        self.location = None
+        self.mapset = None
+        self._full_mapset = None
+
+    # TODO: perhaps full_mapset would be better as mapset_path
+    # TODO: works only when set for the first time
+    # this follows the current usage but we must invalidate when
+    # the others are changed (use properties for that)
+    @property
+    def full_mapset(self):
+        if self._full_mapset is None:
+            self._full_mapset = os.path.join(self.gisdbase, self.location,
+                                             self.mapset)
+        return self._full_mapset
+
+    def is_valid(self):
+        return self.gisdbase and self.location and self.mapset
+
+
+def load_gisrc(gisrc):
+    """Get the settings of Location and Mapset from the gisrc file
+
+    :returns: MapsetSettings object
+    """
+    mapset_settings = MapsetSettings()
+    kv = read_gisrc(gisrc)
+    mapset_settings.gisdbase = kv.get('GISDBASE')
+    mapset_settings.location = kv.get('LOCATION_NAME')
+    mapset_settings.mapset = kv.get('MAPSET')
+    if not mapset_settings.is_valid():
+        fatal(_("Error reading data path information from g.gisenv.\n"
+                "GISDBASE={gisbase}\n"
+                "LOCATION_NAME={location}\n"
+                "MAPSET={mapset}\n\n"
+                "Check the <{file}> file.").format(
+                    gisbase=mapset_settings.gisdbase,
+                    location=mapset_settings.location,
+                    mapset=mapset_settings.mapset,
+                    file=gisrcrc))
+    return mapset_settings
 
 
 # load environmental variables from grass_env_file
@@ -1605,7 +1638,12 @@ else:
 # e.g. wxGUI startup screen writes to the gisrc file,
 # so loading it is the only universal way to obtain the values
 # this suppose that both programs share the right path to gisrc file
-load_gisrc(gisrc)
+mapset_settings = load_gisrc(gisrc)
+
+gisdbase = mapset_settings.gisdbase
+location_name = mapset_settings.location
+mapset = mapset_settings.mapset
+location = mapset_settings.full_mapset
 
 # Check .gislock file
 check_lock(params.force_gislock_removal)
