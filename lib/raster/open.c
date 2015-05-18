@@ -338,18 +338,19 @@ int Rast__open_old(const char *name, const char *mapset)
 	}
 	else {
 	    /* First, check for compressed null file */
-	    fcb->null_fd = G_open_old_misc("cell_misc", NULL2_FILE, r_name, r_mapset);
-	    if (fcb->null_fd >= 0) {
-		fcb->null_row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
-		if (Rast__read_null_row_ptrs(fd, fcb->null_fd) < 0) {
-		    close(fcb->null_fd);
-		    fcb->null_fd = -1;
-		    G_free(fcb->null_row_ptr);
-		    fcb->null_row_ptr = NULL;
+	    fcb->null_fd = G_open_old_misc("cell_misc", NULL_FILE, r_name, r_mapset);
+	    if (fcb->null_fd < 0) {
+		fcb->null_fd = G_open_old_misc("cell_misc", NULL2_FILE, r_name, r_mapset);
+		if (fcb->null_fd >= 0) {
+		    fcb->null_row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
+		    if (Rast__read_null_row_ptrs(fd, fcb->null_fd) < 0) {
+			close(fcb->null_fd);
+			fcb->null_fd = -1;
+			G_free(fcb->null_row_ptr);
+			fcb->null_row_ptr = NULL;
+		    }
 		}
 	    }
-	    if (fcb->null_fd < 0)
-		fcb->null_fd = G_open_old_misc("cell_misc", NULL_FILE, r_name, r_mapset);
 	    fcb->null_file_exists = fcb->null_fd >= 0;
 	}
     }
