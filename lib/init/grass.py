@@ -226,12 +226,14 @@ help_text = r"""GRASS GIS $VERSION_NUMBER
 Geographic Resources Analysis Support System (GRASS GIS).
 
 {usage}:
-  $CMD_NAME [-h | -help | --help] [-v | --version] [-c | -c geofile | -c EPSG:code[:datum_trans]]
-          [-e] [-f] [-text | -gui] [--config param]
-          [[[<GISDBASE>/]<LOCATION_NAME>/]<MAPSET>]
+  $CMD_NAME [-h | -help | --help | --h] [-v | --version]
+          [-c | -c geofile | -c EPSG:code[:datum_trans]]
+          [-e] [-f] [-text | -gtext | -gui] [--config param]
+          [[[GISDBASE/]LOCATION_NAME/]MAPSET]
+  $CMD_NAME [FLAG]... GISDBASE/LOCATION_NAME/MAPSET exec MODULE [PARAM]...
 
 {flags}:
-  -h or -help or --help          {help_flag}
+  -h or -help or --help or --h   {help_flag}
   -v or --version                {version_flag}
   -c                             {create}
   -e                             {exit_after}
@@ -244,10 +246,14 @@ Geographic Resources Analysis Support System (GRASS GIS).
                                    {gui_detail}
   --config                       {config}
                                    {config_detail}
+  exec MODULE                    {exec_}
+                                   {exec_detail}
 
 {params}:
   GISDBASE                       {gisdbase}
+                                   {gisdbase_detail}
   LOCATION_NAME                  {location}
+                                   {location_detail}
   MAPSET                         {mapset}
 
   GISDBASE/LOCATION_NAME/MAPSET  {full_mapset}
@@ -276,17 +282,21 @@ Geographic Resources Analysis Support System (GRASS GIS).
     config=_("print GRASS configuration parameters"),
     config_detail=_("options: arch,build,compiler,path,revision"),
     params=_("Parameters"),
-    gisdbase=_("initial database (path to GIS data)"),
-    location=_("initial location"),
-    mapset=_("initial mapset"),
-    full_mapset=_("fully qualified initial mapset directory"),
+    gisdbase=_("initial GRASS GIS database directory"),
+    gisdbase_detail=_("directory containing Locations"),
+    location=_("initial GRASS Location"),
+    location_detail=_("directory containing Mapsets with one common coordinate system (projection)"),
+    mapset=_("initial GRASS Mapset"),
+    full_mapset=_("fully qualified initial Mapset directory"),
     env_vars=_("Environment variables relevant for startup"),
-    gui_var=_("select GUI (text, gui)"),
+    gui_var=_("select GUI (text, gui, gtext)"),
     html_var=_("set html web browser for help pages"),
     addon_path_var=_("set additional path(s) to local GRASS modules or user scripts"),
     addon_base_var=_("set additional GISBASE for locally installed GRASS Addons"),
     batch_var=_("shell script to be processed as batch job"),
-    python_var=_("set python shell name to override 'python'")
+    python_var=_("set python shell name to override 'python'"),
+    exec_=_("execute GRASS module or script"),
+    exec_detail=_("any executable will be executed in GRASS session"),
     )
 
 
