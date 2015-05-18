@@ -253,6 +253,41 @@ examples bellow) otherwise taken from the last GRASS session.</dd>
 <dd> Creates new GRASS location based on georeferenced GeoTIFF file
 </dl>
 
+<h3>exec interface example</h3>
+
+<!--
+Data created with:
+r.out.gdal input=elevation output=elevation.tiff
+r.out.gdal input=basin_50K output=basins.tiff
+Region issues ignored.
+-->
+
+Create a new Location based on a projection of a file:
+
+<div class="code"><pre>
+grass71 -c elevation.tiff -e .../grassdata/test1/
+</pre></div>
+
+Link external raster data to PERMANENT Mapset:
+
+<div class="code"><pre>
+grass71 .../grassdata/test1/PERMANENT/ exec r.external input=basins.tiff output=basins
+grass71 .../grassdata/test1/PERMANENT/ exec r.external input=elevation.tiff output=elevation
+</pre></div>
+
+Get statistics for one raster map:
+
+<div class="code"><pre>
+grass71 .../grassdata/test1/PERMANENT/ exec r.univar map=elevation
+</pre></div>
+
+Compare the rasters visually:
+
+<div class="code"><pre>
+grass71 .../grassdata/test1/PERMANENT/ exec g.gui.mapswipe first=elevation second=basins
+</pre></div>
+
+
 <h3>Other examples</h3>
 
 There are a variety of ways in which the <i>location environment
