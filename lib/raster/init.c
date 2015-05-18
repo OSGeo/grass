@@ -77,7 +77,7 @@ void Rast__error_handler(void *p)
 
 static int init(void)
 {
-    char *zlib;
+    char *zlib, *nulls;
 
     Rast__init_window();
 
@@ -95,6 +95,9 @@ static int init(void)
 
     zlib = getenv("GRASS_INT_ZLIB");
     R__.compression_type = (!zlib || atoi(zlib)) ? 2 : 1;
+
+    nulls = getenv("GRASS_COMPRESS_NULLS");
+    R__.compress_nulls = (nulls && atoi(nulls)) ? 1 : 0;
 
     G_add_error_handler(Rast__error_handler, NULL);
 

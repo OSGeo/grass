@@ -266,7 +266,9 @@ void Rast_abs_log_colors(struct Colors *, struct Colors *, int);
 /* format.c */
 int Rast__check_format(int);
 int Rast__read_row_ptrs(int);
+int Rast__read_null_row_ptrs(int, int);
 int Rast__write_row_ptrs(int);
+int Rast__write_null_row_ptrs(int, int);
 
 /* fpreclass.c */
 void Rast_fpreclass_clear(struct FPReclass *);

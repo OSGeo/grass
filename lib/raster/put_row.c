@@ -531,6 +531,33 @@ int Rast__open_null_write(int fd)
     return null_fd;
 }
 
+static void write_null_bits_compressed(int null_fd, const unsigned char *flags,
+				int row, size_t size, int fd)
+{
+    struct fileinfo *fcb = &R__.fileinfo[fd];
+    unsigned char *compressed_buf;
+    ssize_t nwrite;
+
+    fcb->null_row_ptr[row] = lseek(null_fd, 0L, SEEK_CUR);
+
+    compressed_buf = G_alloca(size + 1);
+
+    nwrite = G_zlib_compress(flags, size, compressed_buf, size);
+
+    if (nwrite < size) {
+	if (write(null_fd, compressed_buf, nwrite) != nwrite)
+	    G_fatal_error(_("Error writing compressed null data for row %d of <%s>"),
+			  row, fcb->name);
+    }
+    else {
+	if (write(null_fd, flags, size) != size)
+	    G_fatal_error(_("Error writing compressed null data for row %d of <%s>"),
+			  row, fcb->name);
+    }
+
+    G_freea(compressed_buf);
+}
+
 /*!
    \brief Write null data
 
@@ -550,6 +577,12 @@ void Rast__write_null_bits(int null_fd, const unsigned char *flags, int row,
     size_t size;
 
     size = Rast__null_bitstream_size(cols);
+
+    if (fcb->null_row_ptr) {
+	write_null_bits_compressed(null_fd, flags, row, size, fd);
+	return;
+    }
+
     offset = (off_t) size *row;
 
     if (lseek(null_fd, offset, SEEK_SET) < 0)

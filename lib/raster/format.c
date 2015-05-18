@@ -91,10 +91,8 @@ int Rast__check_format(int fd)
     return Rast__read_row_ptrs(fd);
 }
 
-int Rast__read_row_ptrs(int fd)
+static int read_row_ptrs(int nrows, int old, off_t *row_ptr, int fd)
 {
-    struct fileinfo *fcb = &R__.fileinfo[fd];
-    int nrows = fcb->cellhd.rows;
     unsigned char nbytes;
     unsigned char *buf, *b;
     int n;
@@ -105,9 +103,9 @@ int Rast__read_row_ptrs(int fd)
      * (this makes them machine dependent)
      */
 
-    if (fcb->cellhd.compressed < 0) {
+    if (old) {
 	n = (nrows + 1) * sizeof(off_t);
-	if (read(fcb->data_fd, fcb->row_ptr, n) != n)
+	if (read(fd, row_ptr, n) != n)
 	    goto badread;
 	return 1;
     }
@@ -119,14 +117,14 @@ int Rast__read_row_ptrs(int fd)
      *  actual values do not exceed the capability of the off_t)
      */
 
-    if (read(fcb->data_fd, &nbytes, 1) != 1)
+    if (read(fd, &nbytes, 1) != 1)
 	goto badread;
     if (nbytes == 0)
 	goto badread;
 
     n = (nrows + 1) * nbytes;
     buf = G_malloc(n);
-    if (read(fcb->data_fd, buf, n) != n)
+    if (read(fd, buf, n) != n)
 	goto badread;
 
     for (row = 0, b = buf; row <= nrows; row++) {
@@ -143,7 +141,7 @@ int Rast__read_row_ptrs(int fd)
 	    v += c;
 	}
 
-	fcb->row_ptr[row] = v;
+	row_ptr[row] = v;
     }
 
     G_free(buf);
@@ -151,27 +149,52 @@ int Rast__read_row_ptrs(int fd)
     return 1;
 
   badread:
-    G_warning(_("Fail of initial read of compressed file [%s in %s]"),
-	      fcb->name, fcb->mapset);
     return -1;
 }
 
-int Rast__write_row_ptrs(int fd)
+int Rast__read_row_ptrs(int fd)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
     int nrows = fcb->cellhd.rows;
+    int old = fcb->cellhd.compressed < 0;
+
+    if (read_row_ptrs(nrows, old, fcb->row_ptr, fcb->data_fd) < 0) {
+	G_warning(_("Fail of initial read of compressed file [%s in %s]"),
+		  fcb->name, fcb->mapset);
+	return -1;
+    }
+
+    return 1;
+}
+
+int Rast__read_null_row_ptrs(int fd, int null_fd)
+{
+    struct fileinfo *fcb = &R__.fileinfo[fd];
+    int nrows = fcb->cellhd.rows;
+
+    if (read_row_ptrs(nrows, 0, fcb->null_row_ptr, null_fd) < 0) {
+	G_warning(_("Fail of initial read of compressed null file [%s in %s]"),
+		  fcb->name, fcb->mapset);
+	return -1;
+    }
+
+    return 1;
+}
+
+static int write_row_ptrs(int nrows, off_t *row_ptr, int fd)
+{
     int nbytes = sizeof(off_t);
     unsigned char *buf, *b;
     int len, row, result;
 
-    lseek(fcb->data_fd, 0L, SEEK_SET);
+    lseek(fd, 0L, SEEK_SET);
 
     len = (nrows + 1) * nbytes + 1;
     b = buf = G_malloc(len);
     *b++ = nbytes;
 
     for (row = 0; row <= nrows; row++) {
-	off_t v = fcb->row_ptr[row];
+	off_t v = row_ptr[row];
 	int i;
 
 	for (i = nbytes - 1; i >= 0; i--) {
@@ -182,8 +205,24 @@ int Rast__write_row_ptrs(int fd)
 	b += nbytes;
     }
 
-    result = (write(fcb->data_fd, buf, len) == len);
+    result = (write(fd, buf, len) == len);
     G_free(buf);
 
     return result;
+}
+
+int Rast__write_row_ptrs(int fd)
+{
+    struct fileinfo *fcb = &R__.fileinfo[fd];
+    int nrows = fcb->cellhd.rows;
+
+    return write_row_ptrs(nrows, fcb->row_ptr, fcb->data_fd);
+}
+
+int Rast__write_null_row_ptrs(int fd, int null_fd)
+{
+    struct fileinfo *fcb = &R__.fileinfo[fd];
+    int nrows = fcb->cellhd.rows;
+
+    return write_row_ptrs(nrows, fcb->null_row_ptr, null_fd);
 }
