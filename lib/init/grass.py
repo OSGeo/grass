@@ -194,11 +194,30 @@ def Popen(cmd, **kwargs):
 
 
 def gpath(*args):
+    """Costruct path to file or directory in GRASS GIS installation
+
+    Can be called only after gisbase was set.
+    """
     return os.path.join(gisbase, *args)
 
 
+# for wxpath
+_WXPYTHON_BASE = None
+
+
 def wxpath(*args):
-    return os.path.join(wxpython_base, *args)
+    """Costruct path to file or directory in GRASS wxGUI
+
+    Can be called only after gisbase was set.
+
+    This function does not check if the directories exist or if GUI works
+    this must be done by the caller if needed.
+    """
+    global _WXPYTHON_BASE
+    if not _WXPYTHON_BASE:
+        # this can be called only after gisbase was set
+        _WXPYTHON_BASE = gpath("gui", "wxpython")
+    return os.path.join(_WXPYTHON_BASE, *args)
 
 
 help_text = r"""GRASS GIS %s
@@ -274,8 +293,13 @@ def help_message():
     sys.stderr.write(s)
 
 
-def create_tmp():
-    ## use $TMPDIR if it exists, then $TEMP, otherwise /tmp
+def create_tmp(user, gis_lock):
+    """Create temporary directory
+
+    :param user: user name to be used in the directory name
+    :param gis_lock: session lock filename to be used in the directory name
+    """
+    # use $TMPDIR if it exists, then $TEMP, otherwise /tmp
     tmp = os.getenv('TMPDIR')
     if not tmp:
         tmp = os.getenv('TEMP')
@@ -283,7 +307,7 @@ def create_tmp():
         tmp = os.getenv('TMP')
     if not tmp:
         tmp = tempfile.gettempdir()
-    
+
     if tmp:
         tmpdir = os.path.join(tmp, "grass7-%(user)s-%(lock)s" % {'user': user,
                                                              'lock': gis_lock})
@@ -291,7 +315,7 @@ def create_tmp():
             os.mkdir(tmpdir, 0700)
         except:
             tmp = None
-    
+
     if not tmp:
         for ttmp in ("/tmp", "/var/tmp", "/usr/tmp"):
             tmp = ttmp
@@ -303,13 +327,14 @@ def create_tmp():
                 tmp = None
             if tmp:
                 break
-    
+
     if not tmp:
         fatal(_("Unable to create temporary directory <grass7-%(user)s-"
                 "%(lock)s>! Exiting.") % {'user': user, 'lock': gis_lock})
-    
+
+    # promoting the variable even if it was not defined before
     os.environ['TMPDIR'] = tmpdir
-    
+
     return tmpdir
 
 
@@ -563,7 +588,6 @@ MAPSET: <UNKNOWN>
 
 
 def check_gui(expected_gui):
-    global wxpython_base
     grass_gui = expected_gui
     # Check if we are running X windows by checking the DISPLAY variable
     if os.getenv('DISPLAY') or windows or macosx:
@@ -576,10 +600,7 @@ def check_gui(expected_gui):
             p.stdin.write("variable=True")
             p.stdin.close()
             p.wait()
-            if p.returncode == 0:
-                # Set the wxpython base directory
-                wxpython_base = gpath("gui", "wxpython")
-            else:
+            if p.returncode != 0:
                 # Python was not found - switch to text interface mode
                 warning(_("The python command does not work as expected!\n"
                           "Please check your GRASS_PYTHON environment variable.\n"
@@ -1274,7 +1295,7 @@ def print_params():
 
 
 def get_username():
-    global user
+    """Get name of the current user"""
     if windows:
         user = os.getenv('USERNAME')
         if not user:
@@ -1293,6 +1314,7 @@ def get_username():
                 pass
         if not user:
             user = "user_%d" % os.getuid()
+    return user
 
 
 def parse_cmdline(argv):
@@ -1419,7 +1441,7 @@ if exit_grass and not create_new:
     fatal(_("Flag -e requires also flag -c"))
 
 # Set the username
-get_username()
+user = get_username()
 
 # Set language
 # This has to be called before any _() function call!
@@ -1428,7 +1450,7 @@ get_username()
 set_language()
 
 # Create the temporary directory and session grassrc file
-tmpdir = create_tmp()
+tmpdir = create_tmp(user, gis_lock)
 atexit.register(cleanup, tmpdir)
 
 # Create the session grassrc file
