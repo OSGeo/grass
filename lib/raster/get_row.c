@@ -804,6 +804,40 @@ void Rast_get_d_row(int fd, DCELL * buf, int row)
     Rast_get_row(fd, buf, row, DCELL_TYPE);
 }
 
+static int read_null_bits_compressed(int null_fd, unsigned char *flags,
+				     int row, size_t size, int fd)
+{
+    struct fileinfo *fcb = &R__.fileinfo[fd];
+    off_t t1 = fcb->null_row_ptr[row];
+    off_t t2 = fcb->null_row_ptr[row + 1];
+    size_t readamount = t2 - t1;
+    unsigned char *compressed_buf;
+
+    if (lseek(null_fd, t1, SEEK_SET) < 0)
+	G_fatal_error(_("Error reading null data for row %d of <%s>"),
+		      row, fcb->name);
+
+    if (readamount == size) {
+	if (read(null_fd, flags, size) != size)
+	    G_fatal_error(_("Error reading null data for row %d of <%s>"),
+			  row, fcb->name);
+    }
+
+    compressed_buf = G_alloca(readamount);
+
+    if (read(null_fd, compressed_buf, readamount) != readamount) {
+	G_freea(compressed_buf);
+	G_fatal_error(_("Error reading null data for row %d of <%s>"),
+		      row, fcb->name);
+    }
+
+    G_zlib_expand(compressed_buf, readamount, flags, size);
+
+    G_freea(compressed_buf);
+
+    return 1;
+}
+
 static int read_null_bits(int fd, int row)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
@@ -823,6 +857,10 @@ static int read_null_bits(int fd, int row)
 	return 0;
 
     size = Rast__null_bitstream_size(cols);
+
+    if (fcb->null_row_ptr)
+	return read_null_bits_compressed(null_fd, flags, R, size, fd);
+
     offset = (off_t) size * R;
 
     if (lseek(null_fd, offset, SEEK_SET) < 0)

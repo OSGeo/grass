@@ -67,6 +67,7 @@ struct fileinfo			/* Information for opened cell files */
     struct Quant quant;
     struct GDAL_link *gdal;
     int data_fd;		/* Raster data fd               */
+    off_t *null_row_ptr;	/* Null file row addresses      */
 };
 
 struct R__			/*  Structure of library globals */
@@ -77,6 +78,7 @@ struct R__			/*  Structure of library globals */
     int want_histogram;
     int nbytes;
     int compression_type;
+    int compress_nulls;
     int window_set;		/* Flag: window set?                    */
     int split_window;           /* Separate windows for input and output */
     struct Cell_head rd_window;	/* Window used for input        */

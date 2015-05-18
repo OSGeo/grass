@@ -28,6 +28,7 @@
 #include "R.h"
 #define FORMAT_FILE "f_format"
 #define NULL_FILE   "null"
+#define NULL2_FILE  "null2"
 
 static int new_fileinfo(void)
 {
@@ -328,6 +329,7 @@ int Rast__open_old(const char *name, const char *mapset)
     fcb->io_error = 0;
     fcb->map_type = MAP_TYPE;
     fcb->nbytes = MAP_NBYTES;
+    fcb->null_row_ptr = NULL;
 
     if (!gdal) {
 	if (!G_find_file2_misc("cell_misc", NULL_FILE, r_name, r_mapset)) {
@@ -335,7 +337,19 @@ int Rast__open_old(const char *name, const char *mapset)
 	    fcb->null_file_exists = 0;
 	}
 	else {
-	    fcb->null_fd = G_open_old_misc("cell_misc", NULL_FILE, r_name, r_mapset);
+	    /* First, check for compressed null file */
+	    fcb->null_fd = G_open_old_misc("cell_misc", NULL2_FILE, r_name, r_mapset);
+	    if (fcb->null_fd >= 0) {
+		fcb->null_row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
+		if (Rast__read_null_row_ptrs(fd, fcb->null_fd) < 0) {
+		    close(fcb->null_fd);
+		    fcb->null_fd = -1;
+		    G_free(fcb->null_row_ptr);
+		    fcb->null_row_ptr = NULL;
+		}
+	    }
+	    if (fcb->null_fd < 0)
+		fcb->null_fd = G_open_old_misc("cell_misc", NULL_FILE, r_name, r_mapset);
 	    fcb->null_file_exists = fcb->null_fd >= 0;
 	}
     }
@@ -514,6 +528,7 @@ static int open_raster_new_gdal(char *map, char *mapset,
     fcb->null_cur_row = 0;
     fcb->null_bits = NULL;
     fcb->null_fd = -1;
+    fcb->null_row_ptr = NULL;
 
     if (fcb->map_type != CELL_TYPE)
 	Rast_quant_init(&(fcb->quant));
@@ -668,6 +683,12 @@ static int open_raster_new(const char *name, int open_mode,
     }
 
     fcb->null_temp_name = tempname;
+
+    if (R__.compress_nulls) {
+	fcb->null_row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
+	G_zero(fcb->row_ptr, (fcb->cellhd.rows + 1) * sizeof(off_t));
+	Rast__write_null_row_ptrs(fd, fcb->null_fd);
+    }
 
     /* next row to be written (in order) is zero */
     fcb->null_cur_row = 0;

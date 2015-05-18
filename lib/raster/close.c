@@ -33,6 +33,7 @@
 #define FORMAT_FILE "f_format"
 #define QUANT_FILE  "f_quant"
 #define NULL_FILE   "null"
+#define NULL2_FILE  "null2"
 
 static int close_old(int);
 static int close_new(int, int);
@@ -278,6 +279,9 @@ static int close_new_gdal(int fd, int ok)
 	G_file_name_misc(path, "cell_misc", NULL_FILE, fcb->name,
 			  G_mapset());
 	remove(path);
+	G_file_name_misc(path, "cell_misc", NULL2_FILE, fcb->name,
+			  G_mapset());
+	remove(path);
 
 	/* write 0-length cell file */
 	G_make_mapset_element("cell");
@@ -364,9 +368,14 @@ static int close_new(int fd, int ok)
 
 	/* create path : full null file name */
 	G__make_mapset_element_misc("cell_misc", fcb->name);
-	G_file_name_misc(path, "cell_misc", NULL_FILE, fcb->name,
-			  G_mapset());
+	G_file_name_misc(path, "cell_misc", NULL_FILE, fcb->name, G_mapset());
 	remove(path);
+	G_file_name_misc(path, "cell_misc", NULL2_FILE, fcb->name, G_mapset());
+	remove(path);
+
+	G_file_name_misc(path, "cell_misc",
+			 fcb->null_row_ptr ? NULL2_FILE : NULL_FILE,
+			 fcb->name, G_mapset());
 
 	if (fcb->null_cur_row > 0) {
 	    /* if temporary NULL file exists, write it into cell_misc/name/null */
@@ -388,6 +397,11 @@ static int close_new(int fd, int ok)
 	if (fcb->open_mode == OPEN_NEW_COMPRESSED) {	/* auto compression */
 	    fcb->row_ptr[fcb->cellhd.rows] = lseek(fcb->data_fd, 0L, SEEK_CUR);
 	    Rast__write_row_ptrs(fd);
+	}
+
+	if (fcb->null_row_ptr) {			/* compressed nulls */
+	    fcb->null_row_ptr[fcb->cellhd.rows] = lseek(fcb->null_fd, 0L, SEEK_CUR);
+	    Rast__write_null_row_ptrs(fd, fcb->null_fd);
 	}
 
 	if (fcb->map_type != CELL_TYPE) {	/* floating point map */
