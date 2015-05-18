@@ -645,6 +645,83 @@ def save_gui(gisrc, grass_gui):
         write_gisrc(kv, gisrc)
 
 
+def create_location(gisdbase, location, geostring):
+    """Create GRASS Location using georeferenced file or EPSG
+
+    EPSG code format is ``EPSG:code`` or ``EPSG:code:datum_trans``.
+
+    :param gisdbase: Path to GRASS GIS database directory
+    :param location: name of new Location
+    :param geostring: path to a georeferenced file or EPSG code
+    """
+    if gpath('etc', 'python') not in sys.path:
+        sys.path.append(gpath('etc', 'python'))
+    from grass.script import core as gcore  # pylint: disable=E0611
+
+    try:
+        if geostring and geostring.upper().find('EPSG:') > -1:
+            # create location using EPSG code
+            epsg = geostring.split(':', 1)[1]
+            if ':' in epsg:
+                epsg, datum_trans = epsg.split(':', 1)
+            else:
+                datum_trans = None
+            gcore.create_location(gisdbase, location,
+                                  epsg=epsg, datum_trans=datum_trans)
+        else:
+            # create location using georeferenced file
+            gcore.create_location(gisdbase, location,
+                                  filename=geostring)
+    except gcore.ScriptError as e:
+        fatal(e.value.strip('"').strip("'").replace('\\n', os.linesep))
+
+
+# interface created according to the current usage
+def is_mapset_valid(full_mapset):
+    """Return True if GRASS Mapset is valid"""
+    return os.access(os.path.join(full_mapset, "WIND"), os.R_OK)
+
+
+def is_location_valid(gisdbase, location):
+    """Return True if GRASS Location is valid
+
+    :param gisdbase: Path to GRASS GIS database directory
+    :param location: name of a Location
+    """
+    return os.access(os.path.join(gisdbase, location,
+                     "PERMANENT", "DEFAULT_WIND"), os.F_OK)
+
+
+# basically checking location, possibly split into two functions
+# (mapset one can call location one)
+def get_mapset_invalid_reason(gisdbase, location, mapset):
+    """Returns a message describing what is wrong with the Mapset
+
+    :param gisdbase: Path to GRASS GIS database directory
+    :param location: name of a Location
+    :param mapset: name of a Mapset
+    :returns: translated message
+    """
+    full_location = os.path.join(gisdbase, location)
+    if not os.path.exists(full_location):
+        return _("Location <%s> doesn't exist") % full_location
+    elif 'PERMANENT' not in os.listdir(full_location):
+        return _("<%s> is not a valid GRASS Location"
+                 " because PERMANENT Mapset is missing") % full_location
+    elif not os.path.isdir(os.path.join(full_location, 'PERMANENT')):
+        return _("<%s> is not a valid GRASS Location"
+                 " because PERMANENT is not a directory") % full_location
+    elif not os.path.isfile((os.path.join(full_location,
+                                          'PERMANENT', 'DEFAULT_WIND'))):
+        return _("<%s> is not a valid GRASS Location"
+                 " because PERMANENT Mapset does not have a DEFAULT_WIND file"
+                 " (default computational region)") % full_location
+    else:
+        return _("Mapset <{mapset}> doesn't exist in GRASS Location <{loc}>. "
+                 "A new mapset can be created by '-c' switch.").format(
+                     mapset=mapset, loc=location)
+
+
 def non_interactive(arg, geofile=None, create_new=False):
     global gisdbase, location_name, mapset, location
     # Try non-interactive startup
@@ -672,62 +749,24 @@ def non_interactive(arg, geofile=None, create_new=False):
         location = os.path.join(gisdbase, location_name, mapset)
 
         # check if 'location' is a valid GRASS location/mapset
-        if not os.access(os.path.join(location, "WIND"), os.R_OK):
+        if not is_mapset_valid(location):
             if not create_new:
                 # 'location' is not valid, check if 'location_name' is
                 # a valid GRASS location
-                if not os.path.exists(os.path.join(gisdbase, location_name)):
-                    fatal(_("Location <%s> doesn't exist") % os.path.join(gisdbase, location_name))
-                elif 'PERMANENT' not in os.listdir(os.path.join(gisdbase, location_name)) or \
-                        not os.path.isdir(os.path.join(gisdbase, location_name, 'PERMANENT')) or \
-                        not os.path.isfile((os.path.join(gisdbase, location_name, 'PERMANENT',
-                                                         'DEFAULT_WIND'))):
-                    fatal(_("<%s> is not a valid GRASS location") %
-                          os.path.join(gisdbase, location_name))
-                else:
-                    fatal(_("Mapset <%s> doesn't exist in GRASS location <%s>. "
-                            "A new mapset can be created by '-c' switch.") % (mapset, location_name))
-
+                fatal(get_mapset_invalid_reason(gisdbase, location_name, mapset))
             else:
                 # 'location' is not valid, the user wants to create
                 # mapset on the fly
-                if not os.access(os.path.join(gisdbase, location_name,
-                                              "PERMANENT",
-                                              "DEFAULT_WIND"), os.F_OK):
+                if not is_location_valid(gisdbase, location_name):
                     # 'location_name' is not a valid GRASS location,
                     # create new location and 'PERMANENT' mapset
                     gisdbase = os.path.join(gisdbase, location_name)
                     location_name = mapset
                     mapset = "PERMANENT"
-                    if os.access(os.path.join(os.path.join(gisdbase,
-                                                           location_name,
-                                                           "PERMANENT",
-                                                           "DEFAULT_WIND")),
-                                 os.F_OK):
+                    if is_location_valid(gisdbase, location_name):
                         fatal(_("Failed to create new location. "
                                 "The location <%s> already exists." % location_name))
-                        
-                    if gpath('etc', 'python') not in sys.path:
-                        sys.path.append(gpath('etc', 'python'))
-                    from grass.script import core as grass
-                    
-                    try:
-                        if geofile and geofile.upper().find('EPSG:') > -1:
-                            # create location using EPSG code
-                            epsg = geofile.split(':', 1)[1]
-                            if ':' in epsg:
-                                epsg, datum_trans = epsg.split(':', 1)
-                            else:
-                                datum_trans = None
-                            grass.create_location(gisdbase, location_name,
-                                                  epsg=epsg, datum_trans=datum_trans)
-                        else:
-                            # create location using georeferenced file
-                            grass.create_location(gisdbase, location_name,
-                                                  filename=geofile)
-                    except grass.ScriptError as e:
-                        fatal(e.value.strip('"').strip("'").replace('\\n',
-                                                                   os.linesep))
+                    create_location(gisdbase, location_name, geofile)
                 else:
                     # 'location_name' is a valid GRASS location,
                     # create new mapset
@@ -1330,6 +1369,8 @@ def get_username():
 
 
 class Parameters:
+    # we don't need to define any methods
+    # pylint: disable=R0903
     def __init__(self):
         self.grass_gui = None
         self.create_new = None
