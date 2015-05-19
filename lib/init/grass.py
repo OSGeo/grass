@@ -47,8 +47,7 @@ if 'GRASS_PROJSHARE' in os.environ:
 else:
     config_projshare = "@CONFIG_PROJSHARE@"
 
-# configuration directory
-grass_env_file = None  # see check_shell()
+# configuration directory, used also for grass env file
 if sys.platform == 'win32':
     grass_config_dirname = "GRASS7"
     grass_config_dir = os.path.join(os.getenv('APPDATA'), grass_config_dirname)
@@ -515,6 +514,10 @@ def set_paths():
             os.environ['MANPATH'] = addons_man_path
             path_prepend(grass_man_path, 'MANPATH')
 
+    # Set LD_LIBRARY_PATH (etc) to find GRASS shared libraries
+    # this works for subprocesses but won't affect the current process
+    path_prepend(gpath("lib"), ld_library_path_var)
+
 
 def find_exe(pgm):
     for dir in os.getenv('PATH').split(os.pathsep):
@@ -895,7 +898,7 @@ def load_gisrc(gisrc):
 
 
 # load environmental variables from grass_env_file
-def load_env():
+def load_env(grass_env_file):
     if not os.access(grass_env_file, os.R_OK):
         return
 
@@ -1077,8 +1080,7 @@ def ensure_db_connected(mapset):
         call(['db.connect', '-c', '--quiet'])
 
 
-def check_shell():
-    global sh, shellname, grass_env_file
+def get_shell():
     # cygwin has many problems with the shell setup
     # below, so i hardcoded everything here.
     if sys.platform == 'cygwin':
@@ -1114,7 +1116,13 @@ def check_shell():
             shellname = "Command Shell"
         else:
             shellname = "shell"
+    # check for SHELL
+    if not os.getenv('SHELL'):
+        fatal(_("The SHELL variable is not set"))
+    return sh, shellname
 
+
+def get_grass_env_file(sh, grass_config_dir):
     if sh in ['csh', 'tcsh']:
         grass_env_file = os.path.join(grass_config_dir, 'cshrc')
     elif sh in ['bash', 'msh', 'cygwin', 'sh']:
@@ -1125,17 +1133,28 @@ def check_shell():
         grass_env_file = os.path.join(grass_config_dir, 'env.bat')
     else:
         grass_env_file = os.path.join(grass_config_dir, 'bashrc')
-        warning(_("Unsupported shell <%(sh)s>: %(env)s") % {'sh': sh,
-                                                       'env': grass_env_file})
-
-    # check for SHELL
-    if not os.getenv('SHELL'):
-        fatal(_("The SHELL variable is not set"))
+        warning(_("Unsupported shell <{sh}>: {env_file}").format(
+            sh=sh, env_file=grass_env_file))
+    return grass_env_file
 
 
-def get_batch_job():
+def get_batch_job_from_env_variable():
     # hack to process batch jobs:
-    return os.getenv('GRASS_BATCH_JOB')
+    batch_job = os.getenv('GRASS_BATCH_JOB')
+    # variable defined, but user might not have been careful enough
+    if batch_job:
+        if not os.access(batch_job, os.F_OK):
+            # wrong file
+            fatal(_("Job file <%s> has been defined in "
+                    "the 'GRASS_BATCH_JOB' variable but not found. Exiting."
+                    "\n\n"
+                    "Use 'unset GRASS_BATCH_JOB' to disable "
+                    "batch job processing.") % batch_job)
+        elif not os.access(batch_job, os.X_OK):
+            # right file, but ...
+            fatal(_("Change file permission to 'executable' for <%s>")
+                  % batch_job)
+    return batch_job
 
 
 def run_batch_job(batch_job):
@@ -1222,7 +1241,7 @@ r"""
     message("")
 
 
-def csh_startup():
+def csh_startup(location, location_name, mapset, grass_env_file):
     userhome = os.getenv('HOME')      # save original home
     home = location
     os.environ['HOME'] = home
@@ -1272,7 +1291,7 @@ def csh_startup():
     return exit_val
 
 
-def bash_startup():
+def bash_startup(location, location_name, grass_env_file):
     # save command history in mapset dir and remember more
     os.environ['HISTFILE'] = os.path.join(location, ".bash_history")
     if not os.getenv('HISTSIZE') and not os.getenv('HISTFILESIZE'):
@@ -1327,7 +1346,7 @@ PROMPT_COMMAND=grass_prompt\n""" % (_("2D and 3D raster MASKs present"),
     return exit_val
 
 
-def default_startup():
+def default_startup(location, location_name):
     if windows:
         os.environ['PS1'] = "GRASS %s> " % (grass_version)
         # "$ETC/run" doesn't work at all???
@@ -1532,19 +1551,7 @@ os.environ['GIS_LOCK'] = gis_lock
 if not os.path.exists(grass_config_dir):
     os.mkdir(grass_config_dir)
 
-batch_job = get_batch_job()
-
-# variable defined, but user might not have been careful enough
-if batch_job:
-    if not os.access(batch_job, os.F_OK):
-        # wrong file
-        fatal(_("Job file <%s> has been defined in "
-                "the 'GRASS_BATCH_JOB' variable but not found. Exiting.\n\n"
-                "Use 'unset GRASS_BATCH_JOB' to disable batch job processing.") % batch_job)
-    elif not os.access(batch_job, os.X_OK):
-        # right file, but ...
-        fatal(_("Change file permission to 'executable' for <%s>") % batch_job)
-
+batch_job = get_batch_job_from_env_variable()
 
 # Set the global grassrc file
 if batch_job:
@@ -1580,7 +1587,6 @@ user = get_username()
 # thus must be called only after Language has been set.
 set_language()
 
-
 # Create the temporary directory and session grassrc file
 tmpdir = create_tmp(user, gis_lock)
 
@@ -1593,10 +1599,11 @@ atexit.register(cleaner.cleanup)
 gisrc = create_gisrc(tmpdir, gisrcrc)
 
 # Set shell (needs to be called before load_env())
-check_shell()
+sh, shellname = get_shell()
+grass_env_file = get_grass_env_file(sh, grass_config_dirname)
 
 # Load environmental variables from the file
-load_env()
+load_env(grass_env_file)
 
 # Ensure GUI is set
 if batch_job:
@@ -1606,11 +1613,8 @@ elif not grass_gui:
     # get it from rc file or env variable
     grass_gui = read_gui(default_gui)
 
-# Set PATH, PYTHONPATH
+# Set PATH, PYTHONPATH, ...
 set_paths()
-
-# Set LD_LIBRARY_PATH (etc) to find GRASS shared libraries
-path_prepend(gpath("lib"), ld_library_path_var)
 
 # Set GRASS_PAGER, GRASS_PYTHON, GRASS_GNUPLOT, GRASS_PROJSHARE
 set_defaults()
@@ -1699,28 +1703,21 @@ else:
     show_info()
     if grass_gui == "wxpython":
         message(_("Launching <%s> GUI in the background, please wait...") % grass_gui)
-
-if sh in ['csh', 'tcsh']:
-    csh_startup()
-elif sh in ['bash', 'msh', 'cygwin']:
-    bash_startup()
-else:
-    default_startup()
-
-# here we are at the end of grass session
-
-clear_screen()
-
-# TODO: can we just register this atexit?
-# TODO: and what is difference to deleting .tmp which we do?
-clean_temp()
-
-# save 'last used' GISRC after removing variables which shouldn't be saved
-clean_env(gisrc)
-writefile(gisrcrc, readfile(gisrc))
-
-# here was cleanup function call but it is already registered at exit
-
-# After this point no more grass modules may be called
-
-done_message()
+    if sh in ['csh', 'tcsh']:
+        csh_startup(mapset_settings.full_mapset, mapset_settings.location,
+                    mapset_settings.mapset, grass_env_file)
+    elif sh in ['bash', 'msh', 'cygwin']:
+        bash_startup(mapset_settings.full_mapset, mapset_settings.location,
+                     grass_env_file)
+    else:
+        default_startup(mapset_settings.full_mapset, mapset_settings.location)
+    # here we are at the end of grass session
+    clear_screen()
+    # TODO: can we just register this atexit?
+    # TODO: and what is difference to deleting .tmp which we do?
+    clean_temp()
+    # save 'last used' GISRC after removing variables which shouldn't be saved
+    clean_env(gisrc)
+    writefile(gisrcrc, readfile(gisrc))
+    # After this point no more grass modules may be called
+    done_message()
