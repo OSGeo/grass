@@ -13,6 +13,7 @@
 #               script from GRASS 6) by Glynn Clements
 #               Martin Landa <landa.martin gmail.com>
 #               Luca Delucchi <lucadeluge gmail.com>
+#               Vaclav Petras <wenzeslaus gmail.com> (refactoring and exec)
 # PURPOSE:      Sets up environment variables, parses any remaining
 #               command line options for setting the GISDBASE, LOCATION,
 #               and/or MAPSET. Finally it starts GRASS with the appropriate
@@ -47,18 +48,11 @@ if 'GRASS_PROJSHARE' in os.environ:
 else:
     config_projshare = "@CONFIG_PROJSHARE@"
 
-# configuration directory, used also for grass env file
-if sys.platform == 'win32':
-    grass_config_dirname = "GRASS7"
-    grass_config_dir = os.path.join(os.getenv('APPDATA'), grass_config_dirname)
-else:
-    grass_config_dirname = ".grass7"
-    grass_config_dir = os.path.join(os.getenv('HOME'), grass_config_dirname)
-
 gisbase = os.path.normpath(gisbase)
 
 # i18N
 import gettext
+# TODO: is this needed or even desirable when we have set_language()?
 gettext.install('grasslibs', os.path.join(gisbase, 'locale'))
 
 location = None
@@ -103,13 +97,18 @@ def cleanup_dir(path):
         for name in dirs:
             try_rmdir(os.path.join(root, name))
 
-class Cleaner(object):
+
+class Cleaner(object):  # pylint: disable=R0903
+    """Holds directories and files which needs to be cleaned or deleted"""
     def __init__(self):
         self.mapset_path = None
         self.lockfile = None
         self.tmpdir = None
 
     def cleanup(self):
+        """This can be registered with atexit
+
+        Object can then still change and add or remove directories to clean"""
         # all exits after setting up tmp dirs (system/location) should
         # also tidy it up
         cleanup_dir(self.tmpdir)
@@ -297,11 +296,24 @@ Geographic Resources Analysis Support System (GRASS GIS).
     )
 
 
-def help_message():
+def help_message(default_gui):
     t = string.Template(help_text)
     s = t.substitute(CMD_NAME=cmd_name, DEFAULT_GUI=default_gui,
                      VERSION_NUMBER=grass_version)
     sys.stderr.write(s)
+
+
+def get_grass_config_dir():
+    """Get configuration directory
+
+    Used also for grass env file (the non-session one)
+    """
+    if sys.platform == 'win32':
+        grass_config_dirname = "GRASS7"
+        return os.path.join(os.getenv('APPDATA'), grass_config_dirname)
+    else:
+        grass_config_dirname = ".grass7"
+        return os.path.join(os.getenv('HOME'), grass_config_dirname)
 
 
 def create_tmp(user, gis_lock):
@@ -349,6 +361,17 @@ def create_tmp(user, gis_lock):
     debug("Tmp directory '{tmpdir}' created for user '{user}'".format(
         tmpdir=tmpdir, user=user))
     return tmpdir
+
+
+def get_gisrc_from_config_dir(grass_config_dir, batch_job):
+    """Set the global grassrc file (aka grassrcrc)"""
+    if batch_job:
+        # use individual GISRCRC files when in batch mode (r33174)
+        filename = os.path.join(grass_config_dir, "rc.%s" % platform.node())
+        if os.access(filename, os.R_OK):
+            return filename
+    # use standard file if in normal mode or the special file is not available
+    return os.path.join(grass_config_dir, "rc")
 
 
 def create_gisrc(tmpdir, gisrcrc):
@@ -409,7 +432,7 @@ def write_gisrc(kv, filename):
     f.close()
 
 
-def read_gui(default_gui):
+def read_gui(gisrc, default_gui):
     grass_gui = None
     # At this point the GRASS user interface variable has been set from the
     # command line, been set from an external environment variable, or is 
@@ -460,7 +483,7 @@ def path_append(dir, var):
     os.environ[var] = path
 
 
-def set_paths():
+def set_paths(grass_config_dir):
     # addons (path)
     addon_path = os.getenv('GRASS_ADDON_PATH')
     if addon_path:
@@ -555,7 +578,15 @@ def set_defaults():
     if not os.getenv('GRASS_PROJSHARE'):
         os.environ['GRASS_PROJSHARE'] = config_projshare
 
-    
+
+def set_display_defaults():
+    """ Predefine monitor size for certain architectures"""
+    if os.getenv('HOSTTYPE') == 'arm':
+        # small monitor on ARM (iPAQ, zaurus... etc)
+        os.environ['GRASS_RENDER_HEIGHT'] = "320"
+        os.environ['GRASS_RENDER_WIDTH'] = "240"
+
+
 def set_browser():
     # GRASS_HTML_BROWSER
     browser = os.getenv('GRASS_HTML_BROWSER')
@@ -594,6 +625,12 @@ def set_browser():
 
     os.environ['GRASS_HTML_BROWSER'] = browser
 
+
+def ensure_home():
+    """Set HOME if not set on MS Windows"""
+    if windows and not os.getenv('HOME'):
+        os.environ['HOME'] = os.path.join(os.getenv('HOMEDRIVE'),
+                                          os.getenv('HOMEPATH'))
 
 def create_initial_gisrc(filename):
     # for convenience, define GISDBASE as pwd:
@@ -727,7 +764,7 @@ def get_mapset_invalid_reason(gisdbase, location, mapset):
                      mapset=mapset, loc=location)
 
 
-def set_mapset(arg, geofile=None, create_new=False):
+def set_mapset(gisrc, arg, geofile=None, create_new=False):
     """Selected Location and Mapset are checked and created if requested
 
     The gisrc (GRASS environment file) is written at the end.
@@ -874,7 +911,10 @@ class MapsetSettings(object):
         return self.gisdbase and self.location and self.mapset
 
 
-def load_gisrc(gisrc):
+# TODO: does it really makes sense to tell user about gisrcrc?
+# anything could have happened in between loading from gisrcrc and now
+# (we do e.g. GUI or creating loctation)
+def load_gisrc(gisrc, gisrcrc):
     """Get the settings of Location and Mapset from the gisrc file
 
     :returns: MapsetSettings object
@@ -921,7 +961,7 @@ def load_env(grass_env_file):
         os.environ['LD_LIBRARY_PATH'] = libpath + os.pathsep + isislibpath + os.pathsep + isis3rdparty
 
 
-def set_language():
+def set_language(grass_config_dir):
     # This function is used to override system default language and locale
     # Such override can be requested only from wxGUI
     # An override if user has provided correct environmental variables as
@@ -1027,11 +1067,11 @@ def set_language():
         gettext.install('grasslibs', gpath('locale'))
 
 
-def lock_mapset(mapset_path, force_gislock_removal):
+def lock_mapset(mapset_path, force_gislock_removal, user):
     if not os.path.exists(mapset_path):
-        fatal(_("Path '%s' doesn't exist") % location)
+        fatal(_("Path '%s' doesn't exist") % mapset_path)
     # Check for concurrent use
-    lockfile = os.path.join(location, ".gislock")
+    lockfile = os.path.join(mapset_path, ".gislock")
     ret = call([gpath("etc", "lock"), lockfile, "%d" % os.getpid()])
     msg = None
     if ret == 2:
@@ -1081,6 +1121,14 @@ def ensure_db_connected(mapset):
 
 
 def get_shell():
+    # set SHELL on ms windowns
+    # this was at the very beginning of the script but it can be anywhere
+    if windows:
+        if os.getenv('GRASS_SH'):
+            os.environ['SHELL'] = os.getenv('GRASS_SH')
+        if not os.getenv('SHELL'):
+            os.environ['SHELL'] = os.getenv('COMSPEC', 'cmd.exe')
+
     # cygwin has many problems with the shell setup
     # below, so i hardcoded everything here.
     if sys.platform == 'cygwin':
@@ -1219,7 +1267,7 @@ def say_hello():
         except:
             pass
     
-def show_info():
+def show_info(shellname, grass_gui, default_gui):
     sys.stderr.write(
 r"""
 %-41shttp://grass.osgeo.org
@@ -1457,7 +1505,7 @@ class Parameters:
         self.geofile = None
 
 
-def parse_cmdline(argv):
+def parse_cmdline(argv, default_gui):
     params = Parameters()
     args = []
     for i in argv:
@@ -1468,7 +1516,7 @@ def parse_cmdline(argv):
             sys.exit()
         # Check if the user asked for help
         elif i in ["help", "-h", "-help", "--help", "--h"]:
-            help_message()
+            help_message(default_gui=default_gui)
             sys.exit()
         # Check if the -text flag was given
         elif i in ["-text", "--text"]:
@@ -1511,6 +1559,9 @@ windows = sys.platform == 'win32'
 cygwin = "cygwin" in sys.platform
 macosx = "darwin" in sys.platform
 
+# TODO: it is OK to remove this?
+# at the beginning of this file were are happily getting GISBASE
+# from the environment and we don't care about inconsistencies it might cause
 ### commented-out: broken winGRASS 
 # if 'GISBASE' in os.environ:
 #     sys.exit(_("ERROR: GRASS GIS is already running "
@@ -1519,18 +1570,6 @@ macosx = "darwin" in sys.platform
 
 # Set GISBASE
 os.environ['GISBASE'] = gisbase
-
-# set HOME
-if windows and not os.getenv('HOME'):
-    os.environ['HOME'] = os.path.join(os.getenv('HOMEDRIVE'),
-                                      os.getenv('HOMEPATH'))
-
-# set SHELL
-if windows:
-    if os.getenv('GRASS_SH'):
-        os.environ['SHELL'] = os.getenv('GRASS_SH')
-    if not os.getenv('SHELL'):
-        os.environ['SHELL'] = os.getenv('COMSPEC', 'cmd.exe')
 
 # Set default GUI
 default_gui = "wxpython"
@@ -1548,18 +1587,11 @@ os.environ['GRASS_VERSION'] = grass_version
 gis_lock = str(os.getpid())
 os.environ['GIS_LOCK'] = gis_lock
 
+grass_config_dir = get_grass_config_dir()
 if not os.path.exists(grass_config_dir):
     os.mkdir(grass_config_dir)
 
 batch_job = get_batch_job_from_env_variable()
-
-# Set the global grassrc file
-if batch_job:
-    gisrcrc = os.path.join(grass_config_dir, "rc.%s" % platform.node())
-    if not os.access(gisrcrc, os.R_OK):
-        gisrcrc = os.path.join(grass_config_dir, "rc")
-else:
-    gisrcrc = os.path.join(grass_config_dir, "rc")
 
 # Parse the command-line options and set several global variables
 BATCH_EXEC_SUBCOMMAND = 'exec'
@@ -1569,23 +1601,26 @@ try:
     index = sys.argv.index(BATCH_EXEC_SUBCOMMAND)
     batch_job = sys.argv[index + 1:]
     clean_argv = sys.argv[1:index]
-    params = parse_cmdline(clean_argv)
+    params = parse_cmdline(clean_argv, default_gui=default_gui)
 except ValueError:
-    params = parse_cmdline(sys.argv[1:])
-
-grass_gui = params.grass_gui
+    params = parse_cmdline(sys.argv[1:], default_gui=default_gui)
 
 if params.exit_grass and not params.create_new:
     fatal(_("Flag -e requires also flag -c"))
 
+grass_gui = params.grass_gui
+
+gisrcrc = get_gisrc_from_config_dir(grass_config_dir, batch_job)
+
 # Set the username
 user = get_username()
 
+# TODO: this might need to be moved before processing of parameters and getting batch job
 # Set language
 # This has to be called before any _() function call!
 # Subsequent functions are using _() calls and
 # thus must be called only after Language has been set.
-set_language()
+set_language(grass_config_dir)
 
 # Create the temporary directory and session grassrc file
 tmpdir = create_tmp(user, gis_lock)
@@ -1600,33 +1635,19 @@ gisrc = create_gisrc(tmpdir, gisrcrc)
 
 # Set shell (needs to be called before load_env())
 sh, shellname = get_shell()
-grass_env_file = get_grass_env_file(sh, grass_config_dirname)
+grass_env_file = get_grass_env_file(sh, grass_config_dir)
 
 # Load environmental variables from the file
 load_env(grass_env_file)
 
-# Ensure GUI is set
-if batch_job:
-    grass_gui = 'text'
-elif not grass_gui:
-    # if GUI was not set previously (e.g. command line),
-    # get it from rc file or env variable
-    grass_gui = read_gui(default_gui)
-
+ensure_home()
 # Set PATH, PYTHONPATH, ...
-set_paths()
-
+set_paths(grass_config_dir=grass_config_dir)
 # Set GRASS_PAGER, GRASS_PYTHON, GRASS_GNUPLOT, GRASS_PROJSHARE
 set_defaults()
-
+set_display_defaults()
 # Set GRASS_HTML_BROWSER
 set_browser()
-
-#predefine monitor size for certain architectures
-if os.getenv('HOSTTYPE') == 'arm':
-    # small monitor on ARM (iPAQ, zaurus... etc)
-    os.environ['GRASS_RENDER_HEIGHT'] = "320"
-    os.environ['GRASS_RENDER_WIDTH'] = "240"
 
 # First time user - GISRC is defined in the GRASS script
 if not os.access(gisrc, os.F_OK):
@@ -1638,6 +1659,8 @@ if not os.access(gisrc, os.F_OK):
                 " - Create manually the GISRC file (%s)") % (cmd_name, cmd_name, gisrcrc))
     create_initial_gisrc(gisrc)
 else:
+    # clean only for user who is no first time
+    # (measured by presence of rc file)
     clean_temp()
 
 if params.create_new:
@@ -1645,9 +1668,17 @@ if params.create_new:
 else:
     message(_("Starting GRASS GIS..."))
 
-# check that the GUI works but only if not doing a batch job
-if not batch_job:
+# Ensure GUI is set
+if batch_job:
+    grass_gui = 'text'
+else:
+    if not grass_gui:
+        # if GUI was not set previously (e.g. command line),
+        # get it from rc file or env variable
+        grass_gui = read_gui(gisrc, default_gui)
+    # check that the GUI works but only if not doing a batch job
     grass_gui = check_gui(expected_gui=grass_gui)
+    # save GUI only if we are not doibg batch job
     save_gui(gisrc, grass_gui)
 
 # Parsing argument to get LOCATION
@@ -1657,15 +1688,20 @@ if not params.mapset:
     set_mapset_interactive(grass_gui)
 else:
     if params.create_new and params.geofile:
-        set_mapset(params.mapset, params.geofile, create_new=True)
+        set_mapset(gisrc=gisrc, arg=params.mapset,
+                   geofile=params.geofile, create_new=True)
     else:
-        set_mapset(params.mapset, create_new=params.create_new)
+        set_mapset(gisrc=gisrc, arg=params.mapset,
+                   create_new=params.create_new)
 
 # Set GISDBASE, LOCATION_NAME, MAPSET, LOCATION from $GISRC
 # e.g. wxGUI startup screen writes to the gisrc file,
 # so loading it is the only universal way to obtain the values
 # this suppose that both programs share the right path to gisrc file
-mapset_settings = load_gisrc(gisrc)
+# TODO: perhaps gisrcrc should be removed from here
+# alternatively, we can check validity here with all the info we have
+# about what was used to create gisrc
+mapset_settings = load_gisrc(gisrc, gisrcrc=gisrcrc)
 
 gisdbase = mapset_settings.gisdbase
 location_name = mapset_settings.location
@@ -1677,8 +1713,9 @@ location = mapset_settings.full_mapset
 cleaner.mapset_path = mapset_settings.full_mapset
 
 # check and create .gislock file
-cleaner.lockfile = lock_mapset(mapset_settings.full_mapset,
-                               params.force_gislock_removal)
+cleaner.lockfile = lock_mapset(
+    mapset_settings.full_mapset, user=user,
+    force_gislock_removal=params.force_gislock_removal)
 
 # build user fontcap if specified but not present
 make_fontcap()
@@ -1700,7 +1737,8 @@ else:
     clear_screen()
     show_banner()
     say_hello()
-    show_info()
+    show_info(shellname=shellname,
+              grass_gui=grass_gui, default_gui=default_gui)
     if grass_gui == "wxpython":
         message(_("Launching <%s> GUI in the background, please wait...") % grass_gui)
     if sh in ['csh', 'tcsh']:
