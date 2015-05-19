@@ -62,9 +62,6 @@ gisbase = os.path.normpath(gisbase)
 import gettext
 gettext.install('grasslibs', os.path.join(gisbase, 'locale'))
 
-tmpdir = None
-lockfile = None
-remove_lockfile = True
 location = None
 grass_gui = None
 
@@ -107,21 +104,24 @@ def cleanup_dir(path):
         for name in dirs:
             try_rmdir(os.path.join(root, name))
 
+class Cleaner(object):
+    def __init__(self):
+        self.mapset_path = None
+        self.lockfile = None
+        self.tmpdir = None
 
-def cleanup(tmpdir):
-    global lockfile, remove_lockfile
-    # all exits after setting up tmp dirs (system/location) should
-    # also tidy it up
-    cleanup_dir(tmpdir)
-    try_rmdir(tmpdir)
-    if location:
-        tmpdir_loc = os.path.join(location, ".tmp")
-        cleanup_dir(tmpdir_loc)
-        try_rmdir(tmpdir_loc)
-
-    # remove lock-file if requested
-    if lockfile and remove_lockfile:
-        try_remove(lockfile)
+    def cleanup(self):
+        # all exits after setting up tmp dirs (system/location) should
+        # also tidy it up
+        cleanup_dir(self.tmpdir)
+        try_rmdir(self.tmpdir)
+        if self.mapset_path:
+            tmpdir_mapset = os.path.join(self.mapset_path, ".tmp")
+            cleanup_dir(tmpdir_mapset)
+            try_rmdir(tmpdir_mapset)
+        # remove lock-file if requested
+        if self.lockfile:
+            try_remove(self.lockfile)
 
 
 def fatal(msg):
@@ -347,6 +347,8 @@ def create_tmp(user, gis_lock):
     # promoting the variable even if it was not defined before
     os.environ['TMPDIR'] = tmpdir
 
+    debug("Tmp directory '{tmpdir}' created for user '{user}'".format(
+        tmpdir=tmpdir, user=user))
     return tmpdir
 
 
@@ -727,6 +729,9 @@ def set_mapset(arg, geofile=None, create_new=False):
 
     The gisrc (GRASS environment file) is written at the end.
     """
+    # TODO: it does not seem that these would be ever set before calling this
+    # function, so we may just delete them here (the globals are set from
+    # the gisrc later on). But where is setting from environmental variables?
     global gisdbase, location_name, mapset, location
     # Try non-interactive startup
     l = None
@@ -1018,11 +1023,10 @@ def set_language():
     else:
         gettext.install('grasslibs', gpath('locale'))
 
-def check_lock(force_gislock_removal):
-    global lockfile
-    if not os.path.exists(location):
-        fatal(_("Path '%s' doesn't exist") % location)
 
+def lock_mapset(mapset_path, force_gislock_removal):
+    if not os.path.exists(mapset_path):
+        fatal(_("Path '%s' doesn't exist") % location)
     # Check for concurrent use
     lockfile = os.path.join(location, ".gislock")
     ret = call([gpath("etc", "lock"), lockfile, "%d" % os.getpid()])
@@ -1043,13 +1047,18 @@ def check_lock(force_gislock_removal):
         msg = _("Unable to properly access '%s'.\n"
                 "Please notify system personel.") % lockfile
 
+    # TODO: the gui decision should be done by the caller
+    # this needs some change to the function interafce, return tupple or
+    # use exceptions (better option)
     if msg:
         if grass_gui == "wxpython":
             call([os.getenv('GRASS_PYTHON'), wxpath("gis_set_error.py"), msg])
+            # TODO: here we probably miss fatal or exit, needs to be added
         else:
-            global remove_lockfile
-            remove_lockfile = False
             fatal(msg)
+    debug("Mapset <{mapset}> locked using '{lockfile}'".format(
+        mapset=mapset_path, lockfile=lockfile))
+    return lockfile
 
 
 def make_fontcap():
@@ -1057,6 +1066,15 @@ def make_fontcap():
     if fc and not os.access(fc, os.R_OK):
         message(_("Building user fontcap..."))
         call(["g.mkfontcap"])
+
+
+def ensure_db_connected(mapset):
+    """Predefine default driver if DB connection not defined
+
+    :param mapset: full path to the mapset
+    """
+    if not os.access(os.path.join(mapset, "VAR"), os.F_OK):
+        call(['db.connect', '-c', '--quiet'])
 
 
 def check_shell():
@@ -1205,8 +1223,6 @@ r"""
 
 
 def csh_startup():
-    global exit_val
-
     userhome = os.getenv('HOME')      # save original home
     home = location
     os.environ['HOME'] = home
@@ -1253,11 +1269,10 @@ def csh_startup():
     exit_val = call([gpath("etc", "run"), os.getenv('SHELL')])
 
     os.environ['HOME'] = userhome
+    return exit_val
 
 
 def bash_startup():
-    global exit_val
-
     # save command history in mapset dir and remember more
     os.environ['HISTFILE'] = os.path.join(location, ".bash_history")
     if not os.getenv('HISTSIZE') and not os.getenv('HISTFILESIZE'):
@@ -1309,22 +1324,25 @@ PROMPT_COMMAND=grass_prompt\n""" % (_("2D and 3D raster MASKs present"),
     exit_val = call([gpath("etc", "run"), os.getenv('SHELL')])
 
     os.environ['HOME'] = userhome
+    return exit_val
 
 
 def default_startup():
-    global exit_val
-
     if windows:
         os.environ['PS1'] = "GRASS %s> " % (grass_version)
         # "$ETC/run" doesn't work at all???
         exit_val = subprocess.call([os.getenv('SHELL')])
+        # TODO: is there a difference between this and clean_temp?
+        # TODO: why this is missing in the other startups?
         cleanup_dir(os.path.join(location, ".tmp"))  # remove GUI session files from .tmp
     else:
         os.environ['PS1'] = "GRASS %s (%s):\w > " % (grass_version, location_name)
         exit_val = call([gpath("etc", "run"), os.getenv('SHELL')])
 
+    # TODO: this seems to be inconsistent, the other two are no fataling
     if exit_val != 0:
         fatal(_("Failed to start shell '%s'") % os.getenv('SHELL'))
+    return exit_val
 
 
 def done_message():
@@ -1562,9 +1580,14 @@ user = get_username()
 # thus must be called only after Language has been set.
 set_language()
 
+
 # Create the temporary directory and session grassrc file
 tmpdir = create_tmp(user, gis_lock)
-atexit.register(cleanup, tmpdir)
+
+cleaner = Cleaner()
+cleaner.tmpdir = tmpdir
+# object is not destroyed when its method is registered
+atexit.register(cleaner.cleanup)
 
 # Create the session grassrc file
 gisrc = create_gisrc(tmpdir, gisrcrc)
@@ -1645,27 +1668,28 @@ location_name = mapset_settings.location
 mapset = mapset_settings.mapset
 location = mapset_settings.full_mapset
 
-# Check .gislock file
-check_lock(params.force_gislock_removal)
+# TODO: it seems that we are claiming mapset's tmp before locking
+# (this is what the original code did but it is probably wrong)
+cleaner.mapset_path = mapset_settings.full_mapset
+
+# check and create .gislock file
+cleaner.lockfile = lock_mapset(mapset_settings.full_mapset,
+                               params.force_gislock_removal)
 
 # build user fontcap if specified but not present
 make_fontcap()
 
-# predefine default driver if DB connection not defined
-#  is this really needed?? Modules should call this when/if required.
-if not os.access(os.path.join(location, "VAR"), os.F_OK):
-    call(['db.connect', '-c', '--quiet'])
+# TODO: is this really needed? Modules should call this when/if required.
+ensure_db_connected(location)
 
 # Display the version and license info
 # only non-error, interactive version continues from here
 if batch_job:
     returncode = run_batch_job(batch_job)
     clean_temp()
-    try_remove(lockfile)
     sys.exit(returncode)
 elif params.exit_grass:
     clean_temp()
-    try_remove(lockfile)
     sys.exit(0)
 else:
     start_gui(grass_gui)
@@ -1687,9 +1711,9 @@ else:
 
 clear_screen()
 
+# TODO: can we just register this atexit?
+# TODO: and what is difference to deleting .tmp which we do?
 clean_temp()
-
-try_remove(lockfile)
 
 # save 'last used' GISRC after removing variables which shouldn't be saved
 clean_env(gisrc)
