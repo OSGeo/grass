@@ -10,7 +10,7 @@ import wx
 import wx.lib.mixins.listctrl as listmix
 
 from core.gcmd import RunCommand 
-from core.utils import _, GuiModuleMain
+from core.utils import _
 from gui_core.preferences import MapsetAccess
 
 def main():
@@ -29,5 +29,5 @@ def main():
     app.MainLoop()
 
 if __name__ == "__main__":
-    GuiModuleMain(main)
+    main()
 
