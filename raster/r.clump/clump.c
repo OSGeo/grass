@@ -95,7 +95,7 @@ CELL clump(int in_fd, int out_fd, int diag, int print)
     for (row = 0; row < nrows; row++) {
 	Rast_get_c_row(in_fd, cur_in + 1, row);
 
-	G_percent(row, nrows, 4);
+	G_percent(row, nrows, 2);
 	Rast_set_c_null_value(&X, 1);
 	for (col = 1; col <= ncols; col++) {
 	    LEFT = X;
@@ -265,7 +265,7 @@ CELL clump(int in_fd, int out_fd, int diag, int print)
 	G_message(_("Pass 2 of 2..."));
 	for (row = 0; row < nrows; row++) {
 
-	    G_percent(row, nrows, 4);
+	    G_percent(row, nrows, 2);
 	
 	    if (read(cfd, cur_clump, csize) != csize)
 		G_fatal_error(_("Unable to read from temp file"));
