@@ -271,20 +271,20 @@ grass71 -c elevation.tiff -e .../grassdata/test1/
 Link external raster data to PERMANENT Mapset:
 
 <div class="code"><pre>
-grass71 .../grassdata/test1/PERMANENT/ exec r.external input=basins.tiff output=basins
-grass71 .../grassdata/test1/PERMANENT/ exec r.external input=elevation.tiff output=elevation
+grass71 .../grassdata/test1/PERMANENT/ --exec r.external input=basins.tiff output=basins
+grass71 .../grassdata/test1/PERMANENT/ --exec r.external input=elevation.tiff output=elevation
 </pre></div>
 
 Get statistics for one raster map:
 
 <div class="code"><pre>
-grass71 .../grassdata/test1/PERMANENT/ exec r.univar map=elevation
+grass71 .../grassdata/test1/PERMANENT/ --exec r.univar map=elevation
 </pre></div>
 
 Compare the rasters visually:
 
 <div class="code"><pre>
-grass71 .../grassdata/test1/PERMANENT/ exec g.gui.mapswipe first=elevation second=basins
+grass71 .../grassdata/test1/PERMANENT/ --exec g.gui.mapswipe first=elevation second=basins
 </pre></div>
 
 
