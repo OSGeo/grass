@@ -23,37 +23,6 @@ from grass.pygrass.modules.interface.read import GETFROMTAG, DOC
 from grass.pygrass.messages import get_msgr
 
 
-def mdebug(level, msg='', extra=None):
-    """Debug decorators for class methods.
-
-    :param level: the debug level
-    :type level: int
-    :param msg: Debug message
-    :type msg: str
-    :param extra: Function that return a string
-    :type msg: func
-    """
-    msgr = get_msgr()
-
-    def decorator(method):
-
-        @wraps(method)
-        def wrapper(self, *args, **kargs):
-            sargs = ', ' + ' , '.join([repr(a) for a in args]) if args else ''
-            skargs = (' , '.join(['%s=%r' % (k, v) for k, v in kargs.items()])
-                      if kargs else '')
-            opts = "%s%s%s" % (sargs, ',' if sargs and skargs else '', skargs)
-            dmsg = "%s.%s(self%s): %s %s" % (self.__class__.__name__,
-                                             method.__name__,
-                                             opts, msg,
-                                             extra(self, *args, **kargs)
-                                             if extra else '')
-            msgr.debug(level, dmsg)
-            return method(self, *args, **kargs)
-        return wrapper
-    return decorator
-
-
 def _get_bash(self, *args, **kargs):
     return self.get_bash()
 
@@ -697,7 +666,6 @@ class Module(object):
                 args.append(str(self.flags[flg]))
         return args
 
-    # @mdebug(1, extra=_get_bash)
     def run(self):
         """Run the module
 
