@@ -236,7 +236,7 @@ Geographic Resources Analysis Support System (GRASS GIS).
           [-c | -c geofile | -c EPSG:code[:datum_trans]]
           [-e] [-f] [-text | -gtext | -gui] [--config param]
           [[[GISDBASE/]LOCATION_NAME/]MAPSET]
-  $CMD_NAME [FLAG]... GISDBASE/LOCATION_NAME/MAPSET exec MODULE [PARAM]...
+  $CMD_NAME [FLAG]... GISDBASE/LOCATION_NAME/MAPSET --exec EXECUTABLE [EPARAM]...
 
 {flags}:
   -h or -help or --help or --h   {help_flag}
@@ -252,7 +252,7 @@ Geographic Resources Analysis Support System (GRASS GIS).
                                    {gui_detail}
   --config                       {config}
                                    {config_detail}
-  exec MODULE                    {exec_}
+  --exec EXECUTABLE              {exec_}
                                    {exec_detail}
 
 {params}:
@@ -263,6 +263,10 @@ Geographic Resources Analysis Support System (GRASS GIS).
   MAPSET                         {mapset}
 
   GISDBASE/LOCATION_NAME/MAPSET  {full_mapset}
+
+  EXECUTABLE                     {executable}
+  EPARAM                         {executable_params}
+  FLAG                           {standard_flags}
 
 {env_vars}:
   GRASS_GUI                      {gui_var}
@@ -302,7 +306,10 @@ Geographic Resources Analysis Support System (GRASS GIS).
     batch_var=_("shell script to be processed as batch job"),
     python_var=_("set python shell name to override 'python'"),
     exec_=_("execute GRASS module or script"),
-    exec_detail=_("any executable will be executed in GRASS session"),
+    exec_detail=_("provided executable will be executed in GRASS session"),
+    executable=_("GRASS module, script or any other executable"),
+    executable_params=_("parameters of the executable"),
+    standard_flags=_("standard flags"),
     )
 
 
@@ -1663,10 +1670,10 @@ def main():
     batch_job = get_batch_job_from_env_variable()
 
     # Parse the command-line options and set several global variables
-    batch_exec_subcommand = 'exec'
+    batch_exec_param = '--exec'
     try:
         # raises ValueError when not found
-        index = sys.argv.index(batch_exec_subcommand)
+        index = sys.argv.index(batch_exec_param)
         batch_job = sys.argv[index + 1:]
         clean_argv = sys.argv[1:index]
         params = parse_cmdline(clean_argv, default_gui=default_gui)
