@@ -295,7 +295,7 @@ int points_analyse(FILE * ascii_in, FILE * ascii, char *fs, char *td,
     G_free(ytoken);
 
     if (region_flag)
-	G_message(_n("Skipping %d of %d row falling outside of current region",
+	G_message(n_("Skipping %d of %d row falling outside of current region",
                      "Skipping %d of %d rows falling outside of current region",
                      row - 1),
 		  skipped, row - 1);

@@ -214,7 +214,7 @@ int main(int argc, char *argv[])
 	Clist->field = atoi(field_opt->answer);
 	ret = Vect_str_to_cat_list(id_opt->answer, Clist);
 	if (ret > 0) {
-	    G_warning(_n("%d error in id option",
+	    G_warning(n_("%d error in id option",
                          "%d errors in id option",
                          ret), ret);
 	}
@@ -375,7 +375,7 @@ int main(int argc, char *argv[])
 		new_centr++;
 	    }
 	    if (new_centr > 0) 
-		G_message(_n("%d new centroid placed in output map",
+		G_message(n_("%d new centroid placed in output map",
                              "%d new centroids placed in output map",
                              new_centr), new_centr);
 	}
@@ -770,7 +770,7 @@ int main(int argc, char *argv[])
 		                  fields[0], fields[i]);
 
     if (option != O_REP && option != O_PRN) 
-        G_done_msg(_n("%d feature modified.",
+        G_done_msg(n_("%d feature modified.",
                       "%d features modified.",
                       nmodified), nmodified);
     

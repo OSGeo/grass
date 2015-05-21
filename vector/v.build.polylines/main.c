@@ -227,11 +227,11 @@ int main(int argc, char **argv)
 	polyline++;
     }
 
-    G_verbose_message(_n("%d line or boundaries found in input vector map",
+    G_verbose_message(n_("%d line or boundaries found in input vector map",
                          "%d lines or boundaries found in input vector map",
                          nlines),
 		      nlines, Vect_get_name(&map), Vect_get_mapset(&map));
-    G_verbose_message(_n("%d polyline stored in output vector map",
+    G_verbose_message(n_("%d polyline stored in output vector map",
                          "%d polylines stored in output vector map",
                          polyline),
 		      polyline, Vect_get_name(&Out), Vect_get_mapset(&Out));

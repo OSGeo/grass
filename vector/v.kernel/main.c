@@ -296,8 +296,8 @@ int main(int argc, char **argv)
     G_get_window(&window);
 
     G_verbose_message(_("Standard deviation: %f"), sigma);
-    G_asprintf(&tmpstr1, _n("%d row", "%d rows", window.rows), window.rows);
-    G_asprintf(&tmpstr2, _n("%d column", "%d columns", window.cols), window.cols);
+    G_asprintf(&tmpstr1, n_("%d row", "%d rows", window.rows), window.rows);
+    G_asprintf(&tmpstr2, n_("%d column", "%d columns", window.cols), window.cols);
     /* GTC First argument is resolution, second - number of rows as a text, third - number of columns as a text. */
     G_verbose_message(_("Output raster map: resolution: %f\t%s\t%s"),
                       window.ew_res, tmpstr1, tmpstr2);
@@ -346,7 +346,7 @@ int main(int argc, char **argv)
 	}
 
 	if (notreachable > 0)
-	    G_warning(_n("%d point outside threshold",
+	    G_warning(n_("%d point outside threshold",
                          "%d points outside threshold",
                          notreachable), notreachable);
     }
@@ -391,7 +391,7 @@ int main(int argc, char **argv)
 	}
 
 	G_message(_("Number of input points: %d."), npoints);
-	G_message(_n("%d distance read from the map.",
+	G_message(n_("%d distance read from the map.",
                      "%d distances read from the map.",
                      ndists), ndists);
 

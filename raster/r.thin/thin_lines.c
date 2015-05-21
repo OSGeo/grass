@@ -164,7 +164,7 @@ int thin_lines(int iterations)
 	    }			/* end row loop */
 	}			/* j-loop */
 
-	G_message(_n("Deleted %d pixel", "Deleted %d pixels", deleted), deleted);
+	G_message(n_("Deleted %d pixel", "Deleted %d pixels", deleted), deleted);
     }				/* while delete >0 */
 
     if ((deleted == 0) && (i <= iterations))
