@@ -53,7 +53,7 @@ class Layer(object):
     - For overlays use Overlay class.
     """
     def __init__(self, ltype, cmd, Map, name=None,
-                 active=True, hidden=False, opacity=1.0, mapfile=None):
+                 active=True, hidden=False, opacity=1.0, mapfile=None, render=True):
         """Create new instance
 
         .. todo::
@@ -103,7 +103,7 @@ class Layer(object):
         self.hidden  = hidden
         self.opacity = opacity
 
-        self.forceRender = True
+        self.forceRender = render
 
         self.render_env = { "GRASS_RENDER_FILE": self.mapfile }
         
