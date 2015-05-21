@@ -153,15 +153,22 @@ int start_mon(const char *name, const char *output, int select,
     if (fd < 0)
 	G_fatal_error(_("Unable to create file <%s>"), env_file);
 
-    if (G_strncasecmp(name, "wx", 2) == 0)
+    if (G_strncasecmp(name, "wx", 2) == 0) {
         sprintf(buf, "GRASS_RENDER_IMMEDIATE=default\n"); /* TODO: read settings from wxGUI */
-    else
+        write(fd, buf, strlen(buf));
+        sprintf(buf, "GRASS_RENDER_FILE_READ=FALSE\n");
+        write(fd, buf, strlen(buf));
+        sprintf(buf, "GRASS_RENDER_TRANSPARENT=TRUE\n");
+        write(fd, buf, strlen(buf));
+    }
+    else {
         sprintf(buf, "GRASS_RENDER_IMMEDIATE=%s\n", name);
-    
-    write(fd, buf, strlen(buf));
+        write(fd, buf, strlen(buf));
+        sprintf(buf, "GRASS_RENDER_FILE_READ=TRUE\n");
+        write(fd, buf, strlen(buf));
+
+    }
     sprintf(buf, "GRASS_RENDER_FILE=%s\n", out_file);
-    write(fd, buf, strlen(buf));
-    sprintf(buf, "GRASS_RENDER_FILE_READ=TRUE\n");
     write(fd, buf, strlen(buf));
     sprintf(buf, "GRASS_RENDER_WIDTH=%d\n", width);
     write(fd, buf, strlen(buf));

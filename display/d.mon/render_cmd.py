@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import sys
+import tempfile
 
 from grass.script import core as grass
 from grass.script import task as gtask
@@ -29,14 +30,16 @@ def read_env_file(env_file):
     return width, height
 
 # run display command
-def render(cmd):
+def render(cmd, mapfile):
+    env = os.environ.copy()
+    env['GRASS_RENDER_FILE'] = mapfile
     try:
-        grass.run_command(cmd[0], **cmd[1])
+        grass.run_command(cmd[0], env=env, **cmd[1])
     except Exception as e:
         grass.fatal("Unable to render: {}".format(e))
 
 # update cmd file
-def update_cmd_file(cmd_file, cmd):
+def update_cmd_file(cmd_file, cmd, mapfile):
     if cmd[0] in ('d.colorlist', 'd.font', 'd.fontlist',
                   'd.frame', 'd.info', 'd.mon', 'd.out.file',
                   'd.redraw', 'd.to.rast', 'd.what.rast',
@@ -49,6 +52,7 @@ def update_cmd_file(cmd_file, cmd):
     if fd is None:
         grass.fatal("Unable to open file '{}'".format(cmd_file))
     if mode == 'a':
+        fd.write('# GRASS_RENDER_FILE={}\n'.format(mapfile))
         fd.write(' '.join(gtask.cmdtuple_to_list(cmd)))
         fd.write('\n')
     else:
@@ -95,8 +99,9 @@ if __name__ == "__main__":
     width, height = read_env_file(os.path.join(path, 'env'))
     if not mon.startswith('wx'):
         adjust_region(width, height)
-    
-    render(cmd)
-    update_cmd_file(os.path.join(path, 'cmd'), cmd)
+
+    mapfile = tempfile.NamedTemporaryFile(dir=path).name + '.ppm'
+    render(cmd, mapfile)
+    update_cmd_file(os.path.join(path, 'cmd'), cmd, mapfile)
         
     sys.exit(0)
