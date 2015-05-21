@@ -32,7 +32,8 @@ def read_env_file(env_file):
 # run display command
 def render(cmd, mapfile):
     env = os.environ.copy()
-    env['GRASS_RENDER_FILE'] = mapfile
+    if mapfile:
+        env['GRASS_RENDER_FILE'] = mapfile
     try:
         grass.run_command(cmd[0], env=env, **cmd[1])
     except Exception as e:
@@ -52,7 +53,8 @@ def update_cmd_file(cmd_file, cmd, mapfile):
     if fd is None:
         grass.fatal("Unable to open file '{}'".format(cmd_file))
     if mode == 'a':
-        fd.write('# GRASS_RENDER_FILE={}\n'.format(mapfile))
+        if mapfile:
+            fd.write('# GRASS_RENDER_FILE={}\n'.format(mapfile))
         fd.write(' '.join(gtask.cmdtuple_to_list(cmd)))
         fd.write('\n')
     else:
@@ -97,10 +99,13 @@ if __name__ == "__main__":
     mon = os.path.split(path)[-1]
     
     width, height = read_env_file(os.path.join(path, 'env'))
-    if not mon.startswith('wx'):
+    if mon.startswith('wx'):
+        mapfile = tempfile.NamedTemporaryFile(dir=path).name + '.ppm'
+    else:
+        mapfile = None
         adjust_region(width, height)
+        
 
-    mapfile = tempfile.NamedTemporaryFile(dir=path).name + '.ppm'
     render(cmd, mapfile)
     update_cmd_file(os.path.join(path, 'cmd'), cmd, mapfile)
         
