@@ -185,7 +185,7 @@ int readsites(void)
     if (nsites < 2) {
 	const char *name = Vect_get_full_name(&In);
 	Vect_close(&In);
-	G_fatal_error(_n("Found %d point/centroid in <%s>, but at least 2 are needed",
+	G_fatal_error(n_("Found %d point/centroid in <%s>, but at least 2 are needed",
                          "Found %d points/centroids in <%s>, but at least 2 are needed",
                          nsites),
 	              nsites, name);
@@ -465,7 +465,7 @@ int readbounds(void)
     if (nsites < 2) {
 	const char *name = Vect_get_full_name(&In);
 	Vect_close(&In);
-	G_fatal_error(_n("Found %d vertex in <%s>, but at least 2 are needed",
+	G_fatal_error(n_("Found %d vertex in <%s>, but at least 2 are needed",
                          "Found %d vertices in <%s>, but at least 2 are needed",
                          nsites),
 	              nsites, name);

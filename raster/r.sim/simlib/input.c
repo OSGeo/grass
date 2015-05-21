@@ -252,7 +252,7 @@ int grad_check(void)
 
     deltap = amin1(deltap, deltaw);
 
-    G_message(_n("Number of iterations \t= %d cell\n", 
+    G_message(n_("Number of iterations \t= %d cell\n", 
         "Number of iterations \t= %d cells\n", miter), miter);
     G_message(_("Time step \t= %.2f s\n"), deltap);
     if (wdepth) {

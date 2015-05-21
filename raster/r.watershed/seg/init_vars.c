@@ -129,7 +129,7 @@ int init_vars(int argc, char *argv[])
     if (seg_flag || bas_flag || haf_flag)
 	tot_parts++;
 
-    G_message(_n("SECTION 1 beginning: Initiating Variables. %d section total.", 
+    G_message(n_("SECTION 1 beginning: Initiating Variables. %d section total.", 
         "SECTION 1 beginning: Initiating Variables. %d sections total.", 
         tot_parts),
 	      tot_parts);

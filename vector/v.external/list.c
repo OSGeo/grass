@@ -176,7 +176,7 @@ int list_layers_pg(FILE *fd, const char *conninfo, const char *table, int print_
     ntables = PQntuples(res);
     G_debug(3, "   nrows = %d", ntables);
     if (fd)
-	G_message(_n("PostGIS database <%s> contains %d feature table:",
+	G_message(n_("PostGIS database <%s> contains %d feature table:",
                      "PostGIS database <%s> contains %d feature tables:",
                      ntables),
 		  PQdb(conn), ntables);
@@ -264,7 +264,7 @@ int list_layers_ogr(FILE *fd, const char *dsn, const char *layer, int print_type
     nlayers = OGR_DS_GetLayerCount(Ogr_ds);
 
     if (fd)
-	G_message(_n("Data source <%s> (format '%s') contains %d layer:",
+	G_message(n_("Data source <%s> (format '%s') contains %d layer:",
                      "Data source <%s> (format '%s') contains %d layers:",
                      nlayers),
 		  dsn, OGR_Dr_GetName(OGR_DS_GetDriver(Ogr_ds)), nlayers);

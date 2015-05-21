@@ -256,9 +256,9 @@ int main(int argc, char *argv[])
     fd = Rast_open_new(parm.output->answer, DCELL_TYPE);
 
     /* GTC Count of window rows */
-    G_asprintf(&tmpstr1, _n("%d row", "%d rows", window.rows), window.rows);
+    G_asprintf(&tmpstr1, n_("%d row", "%d rows", window.rows), window.rows);
     /* GTC Count of window columns */
-    G_asprintf(&tmpstr2, _n("%d column", "%d columns", window.cols), window.cols);
+    G_asprintf(&tmpstr2, n_("%d column", "%d columns", window.cols), window.cols);
     /* GTC First argument is map name, second - message about number of rows, third - columns. */
     G_important_message(_("Interpolating raster map <%s> (%s, %s)..."),
 			parm.output->answer, tmpstr1, tmpstr2);

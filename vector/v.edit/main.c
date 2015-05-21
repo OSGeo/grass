@@ -271,7 +271,7 @@ int main(int argc, char *argv[])
 	    int iline;
 	    struct ilist *List_added;
 	    
-	    G_message(_n("%d feature added",
+	    G_message(n_("%d feature added",
                          "%d features added",
                          ret), ret);
 	    
@@ -291,7 +291,7 @@ int main(int argc, char *argv[])
 		int nclosed;
 
 		nclosed = close_lines(&Map, GV_BOUNDARY, thresh[THRESH_SNAP]);
-		G_message(_n("%d boundary closed",
+		G_message(n_("%d boundary closed",
                              "%d boundaries closed",
                              nclosed), nclosed);
 	    }
@@ -300,7 +300,7 @@ int main(int argc, char *argv[])
 	break;
     case MODE_DEL:
 	ret = Vedit_delete_lines(&Map, List);
-	G_message(_n("%d feature deleted",
+	G_message(n_("%d feature deleted",
                      "%d features deleted",
                      ret), ret);
 	break;
@@ -311,7 +311,7 @@ int main(int argc, char *argv[])
 	G_verbose_message(_("Threshold value for snapping is %.2f"),
 			  thresh[THRESH_SNAP]);
 	ret = Vedit_move_lines(&Map, BgMap, nbgmaps, List, move_x, move_y, move_z, snap, thresh[THRESH_SNAP]);
-	G_message(_n("%d feature moved",
+	G_message(n_("%d feature moved",
                      "%d features moved",
                      ret), ret);
 	break;
@@ -322,19 +322,19 @@ int main(int argc, char *argv[])
 	G_verbose_message(_("Threshold value for snapping is %.2f"),
 			  thresh[THRESH_SNAP]);
 	ret = Vedit_move_vertex(&Map, BgMap, nbgmaps, List, coord, thresh[THRESH_COORDS], thresh[THRESH_SNAP], move_x, move_y, move_z, move_first, snap);
-	G_message(_n("%d vertex moved",
+	G_message(n_("%d vertex moved",
                      "%d vertices moved",
                      ret), ret);
 	break;
     case MODE_VERTEX_ADD:
 	ret = Vedit_add_vertex(&Map, List, coord, thresh[THRESH_COORDS]);
-	G_message(_n("%d vertex added",
+	G_message(n_("%d vertex added",
                      "%d vertices added",
                      ret), ret);
 	break;
     case MODE_VERTEX_DELETE:
 	ret = Vedit_remove_vertex(&Map, List, coord, thresh[THRESH_COORDS]);
-	G_message(_n("%d vertex removed",
+	G_message(n_("%d vertex removed",
                      "%d vertices removed",
                      ret), ret);
 	break;
@@ -346,7 +346,7 @@ int main(int argc, char *argv[])
 	else {
 	    ret = Vect_break_lines_list(&Map, List, NULL, GV_LINES, NULL);
 	}
-	G_message(_n("%d line broken",
+	G_message(n_("%d line broken",
                      "%d lines broken",
                      ret), ret);
 	break;
@@ -354,13 +354,13 @@ int main(int argc, char *argv[])
 	G_verbose_message(_("Threshold value for snapping is %.2f"),
 			  thresh[THRESH_SNAP]);
 	ret = Vedit_connect_lines(&Map, List, thresh[THRESH_SNAP]);
-	G_message(_n("%d line connected",
+	G_message(n_("%d line connected",
                      "%d lines connected",
                      ret), ret);
 	break;
     case MODE_MERGE:
 	ret = Vedit_merge_lines(&Map, List);
-	G_message(_n("%d line merged",
+	G_message(n_("%d line merged",
                      "%d lines merged",
                      ret), ret);
 	break;
@@ -369,13 +369,13 @@ int main(int argc, char *argv[])
 	break;
     case MODE_CATADD:
 	ret = Vedit_modify_cats(&Map, List, layer, 0, Clist);
-	G_message(_n("%d feature modified",
+	G_message(n_("%d feature modified",
                      "%d features modified",
                      ret), ret);
 	break;
     case MODE_CATDEL:
 	ret = Vedit_modify_cats(&Map, List, layer, 1, Clist);
-	G_message(_n("%d feature modified",
+	G_message(n_("%d feature modified",
                      "%d features modified",
                      ret), ret);
 	break;
@@ -392,7 +392,7 @@ int main(int argc, char *argv[])
 	else {
 	    ret = Vedit_copy_lines(&Map, NULL, List);
 	}
-	G_message(_n("%d feature copied",
+	G_message(n_("%d feature copied",
                      "%d features copied",
                      ret), ret);
 	break;
@@ -403,7 +403,7 @@ int main(int argc, char *argv[])
 	break;
     case MODE_FLIP:
 	ret = Vedit_flip_lines(&Map, List);
-	G_message(_n("%d line flipped",
+	G_message(n_("%d line flipped",
                      "%d lines flipped",
                      ret), ret);
 	break;
@@ -424,7 +424,7 @@ int main(int argc, char *argv[])
 	ret = Vedit_bulk_labeling(&Map, List,
 				  x1, y1, x2, y2, start, step);
 	
-	G_message(_n("%d line labeled",
+	G_message(n_("%d line labeled",
                      "%d lines labeled",
                      ret), ret);
 	break;
@@ -433,7 +433,7 @@ int main(int argc, char *argv[])
 	ret = Vedit_chtype_lines(&Map, List);
 	
 	if (ret > 0) {
-	    G_message(_n("%d feature converted",
+	    G_message(n_("%d feature converted",
                          "%d features converted",
                          ret), ret);
 	}
@@ -452,7 +452,7 @@ int main(int argc, char *argv[])
 	    
 	    ret += Vedit_delete_area_centroid(&Map, List->value[i]);
 	}
-	G_message(_n("%d area removed",
+	G_message(n_("%d area removed",
                      "%d areas removed",
                      ret), ret);
 	break;

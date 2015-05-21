@@ -222,7 +222,7 @@ int main(int argc, char **argv)
     plot = 0;
     debug = 0;
 
-    G_message(_n("Voronoi triangulation for %d point...",
+    G_message(n_("Voronoi triangulation for %d point...",
                  "Voronoi triangulation for %d points...",
                  nsites), nsites);
     voronoi(nextone);

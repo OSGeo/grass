@@ -211,12 +211,12 @@ int main(int argc, char *argv[])
 
     /* Report number of points not used */
     if (outside_cnt)
-	G_warning(_n("%d point outside current region was skipped",
+	G_warning(n_("%d point outside current region was skipped",
                      "%d points outside current region were skipped",
                      outside_cnt), outside_cnt);
 
     if (nocat_cnt)
-	G_warning(_n("%d point without category was skipped", 
+	G_warning(n_("%d point without category was skipped", 
                      "%d points without category were skipped",
                      nocat_cnt), nocat_cnt);
 
@@ -325,25 +325,25 @@ int main(int argc, char *argv[])
     db_free_string(&stmt);
 
     /* Report */
-    G_verbose_message(_n("%d category loaded from table",
+    G_verbose_message(n_("%d category loaded from table",
                          "%d categories loaded from table",
                          select), select);
-    G_verbose_message(_n("%d category loaded from vector",
+    G_verbose_message(n_("%d category loaded from vector",
                          "%d categories loaded from vector",
                          point_cnt), point_cnt);
-    G_verbose_message(_n("%d category from vector missing in table",
+    G_verbose_message(n_("%d category from vector missing in table",
                          "%d categories from vector missing in table",
                          norec_cnt), norec_cnt);
     if (dupl_cnt > 0)
-	G_message(_n("%d duplicate category in vector",
+	G_message(n_("%d duplicate category in vector",
                      "%d duplicate categories in vector",
                      dupl_cnt), dupl_cnt);
     if (upderr_cnt > 0)
-	G_warning(_n("%d update error",
+	G_warning(n_("%d update error",
                      "%d update errors",
                      upderr_cnt), upderr_cnt);
 
-    G_done_msg(_n("%d record updated.",
+    G_done_msg(n_("%d record updated.",
                   "%d records updated.",
                   update_cnt), update_cnt);
         

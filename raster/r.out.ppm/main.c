@@ -98,8 +98,8 @@ int main(int argc, char *argv[])
     /*G_get_set_window (&w); *//* 10/99 MN: check for current region */
     G_get_window(&w);
 
-    G_asprintf(&tmpstr1, _n("row = %d", "rows = %d", w.rows), w.rows);
-    G_asprintf(&tmpstr2, _n("column = %d", "columns = %d", w.cols), w.cols);
+    G_asprintf(&tmpstr1, n_("row = %d", "rows = %d", w.rows), w.rows);
+    G_asprintf(&tmpstr2, n_("column = %d", "columns = %d", w.cols), w.cols);
     G_message("%s, %s", tmpstr1, tmpstr2);
     G_free(tmpstr1);
     G_free(tmpstr2); 

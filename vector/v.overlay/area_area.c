@@ -96,7 +96,7 @@ int area_area(struct Map_info *In, int *field, struct Map_info *Tmp,
 	Vect_destroy_boxlist(boxlist);
 	Vect_destroy_list(reflist);
 
-	G_verbose_message(_n("%d boundary snapped",
+	G_verbose_message(n_("%d boundary snapped",
                              "%d boundaries snapped",
                              snapped_lines), snapped_lines);
     }

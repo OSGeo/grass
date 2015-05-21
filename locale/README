@@ -61,8 +61,8 @@ NOTE3: Notices to translators can be added by placing
 
 NOTE4:  Any string containing a number that requires a correct plural form of
         a noun, has to pass trough ngettext function implemented in GRASS
-        as a _n() macro.
-        _n("Message in English for singular case", "Message in English for
+        as a n_() macro.
+        n_("Message in English for singular case", "Message in English for
         plural case", number) 
 
 Examples of messages with plural forms.
@@ -75,20 +75,20 @@ Wrong:
     G_message( n == 1 ? _("Remove map") : _("Remove maps"));
 
 Correct:
-    G_message( _n("%d map from mapset <%s> removed", 
+    G_message( n_("%d map from mapset <%s> removed", 
         "%d maps from mapset <%s> removed", n), n, ms);
     /* Notice double use of number "n" - as an argument for 
-    both functions - _n() and G_message() */
-    G_message( _n("One file removed", "%d files removed", n) n);
+    both functions - n_() and G_message() */
+    G_message( n_("One file removed", "%d files removed", n) n);
     /* Both of forms of singular case "%d file" or "One file" are correct. 
     The choice between them is purely stylistic one. */
-    G_warning( _n("One feature without geometry skipped", 
+    G_warning( n_("One feature without geometry skipped", 
         "%d features without geometry skipped", n), n);
-    G_message( _n("%d map selected", "%d maps selected", n), n);
+    G_message( n_("%d map selected", "%d maps selected", n), n);
     /* Altough in English it is not necessary to provide a separate
     text if "n" always is >1, in other languages is a difference if "n"
     is i.e. 2-4, or n==10 etc. */
-    G_message( _n("Remove map", "Remove maps", n));
+    G_message( n_("Remove map", "Remove maps", n));
     /* Number it self doesn't have to be used in the output text */
         
         

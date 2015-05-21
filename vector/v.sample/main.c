@@ -151,7 +151,7 @@ int main(int argc, char **argv)
     if (nrecords < 0)
 	G_fatal_error(_("Unable to select data from table"));
 
-    G_verbose_message(_n("%d record selected from table",
+    G_verbose_message(n_("%d record selected from table",
                          "%d records selected from table",
                          nrecords), nrecords);
 

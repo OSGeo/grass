@@ -270,10 +270,10 @@ int main(int argc, char *argv[])
     P_get_edge(P_BILINEAR, &dims, stepE, stepN);
     P_set_dim(&dims, stepE, stepN, &nsplx_adj, &nsply_adj);
 
-    G_verbose_message(_n("adjusted EW spline %d",
+    G_verbose_message(n_("adjusted EW spline %d",
                          "adjusted EW splines %d",
                          nsplx_adj), nsplx_adj);
-    G_verbose_message(_n("adjusted NS spline %d",
+    G_verbose_message(n_("adjusted NS spline %d",
                          "adjusted NS splines %d",
                          nsply_adj), nsply_adj);
 

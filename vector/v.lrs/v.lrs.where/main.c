@@ -219,22 +219,22 @@ int main(int argc, char **argv)
     Vect_close(&LMap);
     Vect_close(&PMap);
 
-    G_message(_n("[%d] point read from input",
+    G_message(n_("[%d] point read from input",
                  "[%d] points read from input",
                  n_points), n_points);
-    G_message(_n("[%d] position found",
+    G_message(n_("[%d] position found",
                  "[%d] positions found",
                  n_found), n_found);
     if (n_outside)
-	G_message(_n("[%d] point outside threshold",
+	G_message(n_("[%d] point outside threshold",
                      "[%d] points outside threshold",
                      n_outside), n_outside);
     if (n_no_record)
-	G_message(_n("[%d] point - no record found",
+	G_message(n_("[%d] point - no record found",
                      "[%d] points - no record found",
                      n_no_record), n_no_record);
     if (n_many_records)
-	G_message(_n("[%d] point - too many records found",
+	G_message(n_("[%d] point - too many records found",
                      "[%d] points - too many records found",
                      n_many_records), n_many_records);
 

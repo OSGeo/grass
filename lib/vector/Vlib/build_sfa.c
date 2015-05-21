@@ -382,8 +382,8 @@ void build_pg(struct Map_info *Map, int build)
     }
     G_progress(1, 1);
 
-    G_message(_n("One primitive registered", "%d primitives registered", Map->plus.n_lines), Map->plus.n_lines);
-    G_message(_n("One vertex registered", "%d vertices registered", npoints), npoints);
+    G_message(n_("One primitive registered", "%d primitives registered", Map->plus.n_lines), Map->plus.n_lines);
+    G_message(n_("One vertex registered", "%d vertices registered", npoints), npoints);
 
     Map->plus.built = GV_BUILD_BASE;
 
@@ -658,11 +658,11 @@ void build_ogr(struct Map_info *Map, int build)
     } /* while */
     G_progress(1, 1);
     
-    G_message(_n("One primitive registered", "%d primitives registered", Map->plus.n_lines), Map->plus.n_lines);
-    G_message(_n("One vertex registered", "%d vertices registered", npoints), npoints);
+    G_message(n_("One primitive registered", "%d primitives registered", Map->plus.n_lines), Map->plus.n_lines);
+    G_message(n_("One vertex registered", "%d vertices registered", npoints), npoints);
     
     if (nskipped > 0)
-        G_warning(_n("One feature without geometry skipped", "%d features without geometry skipped", nskipped), nskipped);
+        G_warning(n_("One feature without geometry skipped", "%d features without geometry skipped", nskipped), nskipped);
         
     Map->plus.built = GV_BUILD_BASE;
     
