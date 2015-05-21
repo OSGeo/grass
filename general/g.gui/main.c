@@ -25,7 +25,7 @@
 int main(int argc, char *argv[])
 {
     struct Option *type, *rc_file;
-    struct Flag *update_ui, *nolaunch;
+    struct Flag *update_ui, *fglaunch, *nolaunch;
     struct GModule *module;
     const char *gui_type_env;
     char progname[GPATH_MAX];
@@ -61,7 +61,15 @@ int main(int argc, char *argv[])
     rc_file->key = "workspace";
     rc_file->required = NO;
     rc_file->key_desc = "name.gxw";
-    rc_file->description = _("Name of workspace file to load on start-up (valid only for wxGUI)");
+    rc_file->label = _("Name of workspace file to load on start-up");
+    rc_file->description = _("This is valid only for wxGUI (wxpython)");
+
+    fglaunch = G_define_flag();
+    fglaunch->key = 'f';
+    fglaunch->label = _("Start GUI in the foreground");
+    fglaunch->description = _("By default the GUI starts in the background"
+        " and control is immediately returned to the caller."
+        " When GUI runs in foregreound, it blocks the command line");
 
     update_ui = G_define_flag();
     update_ui->key = 'd';
@@ -93,20 +101,32 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
     }
 
-    G_message(_("Launching <%s> GUI in the background, please wait..."), type->answer);
     sprintf(progname, "%s/gui/wxpython/wxgui.py", G_gisbase());
-    if (rc_file->answer) {
-        G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), progname,
-                   "--workspace", rc_file->answer, SF_BACKGROUND, NULL);
+    if (fglaunch->answer) {
+        G_message(_("Launching <%s> GUI, please wait..."), type->answer);
+        if (rc_file->answer) {
+            G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), progname,
+                       "--workspace", rc_file->answer, NULL);
+        }
+        else {
+            G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), progname,
+                       NULL);
+        }
     }
     else {
-        G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), progname,
-                   SF_BACKGROUND, NULL);
+        G_message(_("Launching <%s> GUI in the background, please wait..."), type->answer);
+        if (rc_file->answer) {
+            G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), progname,
+                       "--workspace", rc_file->answer, SF_BACKGROUND, NULL);
+        }
+        else {
+            G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), progname,
+                       SF_BACKGROUND, NULL);
+        }
+        /* stop the impatient from starting it again
+           before the splash screen comes up */
+        G_sleep(3);
     }
-    
-    /* stop the impatient from starting it again
-       before the splash screen comes up */
-    G_sleep(3);
 
     exit(EXIT_SUCCESS);
 }
