@@ -361,13 +361,14 @@ class RenderLayerMgr(wx.EvtHandler):
         
         env_cmd = env.copy()
         env_cmd['GRASS_RENDER_FILE'] = self.layer.mapfile
-        
-        cmd[1]['quiet'] = True # be quiet
+
+        cmd_render = copy.deepcopy(cmd)
+        cmd_render[1]['quiet'] = True # be quiet
         # for k, v in env_cmd.iteritems():
         #     if 'GRASS_' in k:
         #         print 'export %s=%s' % (k, v)
         self._startTime = time.time()
-        self.thread.Run(callable=self._render, cmd=cmd, env=env_cmd,
+        self.thread.Run(callable=self._render, cmd=cmd_render, env=env_cmd,
                         ondone=self.OnRenderDone)
         self.layer.forceRender = False
 
