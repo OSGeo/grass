@@ -644,7 +644,7 @@ def cmdlist_to_tuple(cmd):
                 dcmd['flags'] = ''
             dcmd['flags'] += item[1]
         else: # unnamed parameter
-            module = gtask.parse_interface(cmd[0])
+            module = parse_interface(cmd[0])
             dcmd[module.define_first()] = item
     
     return (cmd[0], dcmd)
