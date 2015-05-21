@@ -213,8 +213,6 @@ def main():
     monitor = check_monitor()
     if not monitor:
         fatal(_("No graphics device selected. Use d.mon to select graphics device."))
-    if monitor not in ('png', 'cairo'):
-        fatal(_("Only Cairo or PNG monitors are currently supported"))
     
     if flags['e']:
         # remove frames and erase monitor and exit
