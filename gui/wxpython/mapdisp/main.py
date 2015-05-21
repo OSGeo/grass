@@ -30,6 +30,7 @@ import os
 import sys
 import time
 import shutil
+import fileinput
 
 from core          import globalvar
 import wx
@@ -387,7 +388,19 @@ class DMonFrame(MapFrame):
         layers = self.MapWindow.GetMap().GetListOfLayers()
         self.MapWindow.ZoomToMap(layers = layers)
         
+    def OnSize(self, event):
+        super(DMonFrame, self).OnSize(event)
 
+        # update env file
+        width, height = self.MapWindow.GetClientSize()
+        for line in fileinput.input(monFile['env'], inplace=True):
+            if 'GRASS_RENDER_WIDTH' in line:
+                print 'GRASS_RENDER_WIDTH={}'.format(width)
+            elif 'GRASS_RENDER_HEIGHT' in line:
+                print 'GRASS_RENDER_HEIGHT={}'.format(height)
+            else:
+                print line.rstrip('\n')
+    
 class MapApp(wx.App):
     def OnInit(self):
         if not globalvar.CheckWxVersion([2, 9]):
