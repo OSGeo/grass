@@ -137,7 +137,12 @@ class DMonMap(Map):
 
             # next number in rendering order
             next_layer = 0
+            mapFile = None
             for line in lines:
+                if line.startswith('#') and 'GRASS_RENDER_FILE' in line:
+                    mapFile = line.split('=', 1)[1].strip()
+                    continue
+            
                 cmd = utils.split(line.strip())
                 
                 ltype = None
@@ -159,7 +164,7 @@ class DMonMap(Map):
                     args['ltype'] = ltype
                 
                 mapLayer = classLayer(name = name, cmd = cmd, Map = None,
-                                      hidden = True, **args)
+                                      hidden = True, render = False, mapfile = mapFile, **args)
                 mapLayer.GetRenderMgr().updateProgress.connect(self.GetRenderMgr().ReportProgress)
 
                 exists = False
@@ -183,7 +188,7 @@ class DMonMap(Map):
                     continue
                 
                 newLayer = self._addLayer(mapLayer)
-                
+                                
                 existingLayers.append(newLayer)
                 self.ownedLayers.append(newLayer)
                 
@@ -218,7 +223,7 @@ class DMonMap(Map):
         Debug.msg(1, "Map.GetLayersFromCmdFile(): cmdfile=%s, nlayers=%d" % \
                   (self.cmdfile, nlayers))
         
-        self._giface.updateMap.emit()
+        self._giface.updateMap.emit(render=False)
         
     def Render(self, *args, **kwargs):
         """Render layer to image.
@@ -420,8 +425,8 @@ class MapApp(wx.App):
         # FIXME: hack to solve dependency
         self._giface._mapframe = self.mapFrm
         
-        self.mapFrm.GetMapWindow().SetAlwaysRenderEnabled(True)
-        
+        self.mapFrm.GetMapWindow().SetAlwaysRenderEnabled(False)
+
         self.Map.saveToFile.connect(lambda cmd: self.mapFrm.DOutFile(cmd))
         self.Map.dToRast.connect(lambda cmd: self.mapFrm.DToRast(cmd))
         self.Map.query.connect(lambda ltype, maps: \
