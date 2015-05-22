@@ -45,7 +45,7 @@ from grass.pydispatch.signal import Signal
 class RenderWMSMgr(wx.EvtHandler):
     """Fetch and prepare WMS data for rendering.
     """
-    def __init__(self, layer):
+    def __init__(self, layer, env={}):
         if not haveGdal:
             sys.stderr.write(_("Unable to load GDAL Python bindings.\n"\
                                "WMS layers can not be displayed without the bindings.\n"))

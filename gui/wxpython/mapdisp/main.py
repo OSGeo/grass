@@ -139,11 +139,18 @@ class DMonMap(Map):
             # next number in rendering order
             next_layer = 0
             mapFile = None
+            render_env = dict()
             for line in lines:
-                if line.startswith('#') and 'GRASS_RENDER_FILE' in line:
-                    mapFile = line.split('=', 1)[1].strip()
+                if line.startswith('#'):
+                    if 'GRASS_RENDER_FILE' in line:
+                        mapFile = line.split('=', 1)[1].strip()
+                    try:
+                        k, v = line[2:].strip().split('=', 1)
+                    except:
+                        pass
+                    render_env[k] = v
                     continue
-            
+                
                 cmd = utils.split(line.strip())
                 
                 ltype = None
@@ -167,7 +174,10 @@ class DMonMap(Map):
                 mapLayer = classLayer(name = name, cmd = cmd, Map = None,
                                       hidden = True, render = False, mapfile = mapFile, **args)
                 mapLayer.GetRenderMgr().updateProgress.connect(self.GetRenderMgr().ReportProgress)
-
+                if render_env:
+                    mapLayer.GetRenderMgr().UpdateRenderEnv(render_env)
+                    render_env = dict()
+                    
                 exists = False
                 for i, layer in enumerate(existingLayers):
                     if layer.GetCmd(string=True) == mapLayer.GetCmd(string=True):
