@@ -105,8 +105,6 @@ class Layer(object):
 
         self.forceRender = render
 
-        self.render_env = { "GRASS_RENDER_FILE": self.mapfile }
-        
         Debug.msg (3, "Layer.__init__(): type=%s, cmd='%s', name=%s, " \
                        "active=%d, opacity=%d, hidden=%d" % \
                        (self.type, self.GetCmd(string=True), self.name,
@@ -147,7 +145,6 @@ class Layer(object):
         
         if not env:
             env = os.environ.copy()
-        env.update(self.render_env)
         
         # render layers
         try:
@@ -250,11 +247,16 @@ class Layer(object):
             raise GException(_("Unsupported map layer type '%s'") % ltype)
 
         if not self.renderMgr:
+            env = {}
             if ltype == 'wms':
                 renderMgr = RenderWMSMgr
             else:
                 renderMgr = RenderLayerMgr
-            self.renderMgr = renderMgr(self)
+                env['GRASS_RENDER_FILE'] = self.mapfile
+                if ltype == 'overlay':
+                    env['GRASS_RENDER_FILE_READ'] = 'FALSE'
+                    env['GRASS_RENDER_TRANSPARENT'] = 'TRUE'
+            self.renderMgr = renderMgr(self, env)
         
         self.type = ltype
 
@@ -332,11 +334,9 @@ class Overlay(Layer):
         """
         Layer.__init__(self, ltype='overlay', *args, **kwargs)
         self.id = id
-        self.render_env["GRASS_RENDER_FILE_READ"] = "FALSE"
-        self.render_env["GRASS_RENDER_TRANSPARENT"] = "TRUE"
         
 class RenderLayerMgr(wx.EvtHandler):
-    def __init__(self, layer):
+    def __init__(self, layer, env):
         """Render layer into image
 
         :param layer: Layer to be rendered
@@ -349,7 +349,11 @@ class RenderLayerMgr(wx.EvtHandler):
         self.updateProgress = Signal('RenderLayerMgr.updateProgress')
         
         self._startTime = None
-         
+        self._render_env = env
+
+    def UpdateRenderEnv(self, env):
+        self._render_env.update(env)
+        
     def Render(self, cmd, env):
         """Render layer
 
@@ -360,6 +364,7 @@ class RenderLayerMgr(wx.EvtHandler):
                   (self.layer, self.layer.forceRender, self.layer.mapfile))
         
         env_cmd = env.copy()
+        env_cmd.update(self._render_env)
         env_cmd['GRASS_RENDER_FILE'] = self.layer.mapfile
 
         cmd_render = copy.deepcopy(cmd)
