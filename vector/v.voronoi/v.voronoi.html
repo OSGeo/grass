@@ -32,11 +32,11 @@ Douglas-Peucker algorithm:
 
 <h2>EXAMPLE</h2>
 
-<h4>Voronoi diagram for points</h4>
+<h3>Voronoi diagram for points</h3>
 This example uses the hospitals in the North Carolina dataset.
 <div class="code"><pre>
-  g.region -p raster=elev_state_500m
-  v.voronoi in=hospitals out=hospitals_voronoi
+g.region -p raster=elev_state_500m
+v.voronoi input=hospitals output=hospitals_voronoi
 </pre></div>
 
 Result:
@@ -45,11 +45,11 @@ Result:
 <i>Voronoi diagram for hospitals in North Carolina</i>
 </center>
 
-<h4>Voronoi diagram for areas</h4>
+<h3>Voronoi diagram for areas</h3>
 This example uses urban areas in the North Carolina dataset.
 <div class="code"><pre>
-  g.region -p n=162500 s=80000 w=727000 e=846000 res=500
-  v.voronoi in=urbanarea out=urbanarea_voronoi -a
+g.region -p n=162500 s=80000 w=727000 e=846000 res=500
+v.voronoi input=urbanarea output=urbanarea_voronoi -a
 </pre></div>
 
 Result:
@@ -58,12 +58,12 @@ Result:
 <i>Voronoi diagram for urban areas in North Carolina</i>
 </center>
 
-<h4>Skeletons and center lines of areas</h4>
+<h3>Skeletons and center lines of areas</h3>
 This example uses urban areas in the North Carolina dataset.
 <div class="code"><pre>
-  g.region -p n=161000 s=135500 w=768500 e=805500 res=500
-  v.voronoi in=urbanarea out=urbanarea_centerline -s
-  v.voronoi in=urbanarea out=urbanarea_skeleton -s thin=2000
+g.region -p n=161000 s=135500 w=768500 e=805500 res=500
+v.voronoi input=urbanarea output=urbanarea_centerline -s
+v.voronoi input=urbanarea output=urbanarea_skeleton -s thin=2000
 </pre></div>
 
 Result:
@@ -74,7 +74,8 @@ Result:
 
 <h2>REFERENCES</h2>
 <em>Steve J. Fortune,  (1987).  A Sweepline Algorithm for
-    Voronoi Diagrams, Algorithmica 2, 153-174.</em>
+    Voronoi Diagrams, Algorithmica 2, 153-174
+    (<a href="http://dx.doi.org/10.1007/BF01840357">DOI</a>).</em>
 
 
 <h2>SEE ALSO</h2>
