@@ -53,6 +53,9 @@ def update_cmd_file(cmd_file, cmd, mapfile):
     if fd is None:
         grass.fatal("Unable to open file '{}'".format(cmd_file))
     if mode == 'a':
+        frame = os.getenv('GRASS_RENDER_FRAME', None)
+        if frame:
+            fd.write('# GRASS_RENDER_FRAME={}\n'.format(frame))
         if mapfile:
             fd.write('# GRASS_RENDER_FILE={}\n'.format(mapfile))
         fd.write(' '.join(gtask.cmdtuple_to_list(cmd)))
