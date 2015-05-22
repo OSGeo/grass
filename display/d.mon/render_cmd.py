@@ -103,7 +103,11 @@ if __name__ == "__main__":
     
     width, height = read_env_file(os.path.join(path, 'env'))
     if mon.startswith('wx'):
-        mapfile = tempfile.NamedTemporaryFile(dir=path).name + '.ppm'
+        mapfile = tempfile.NamedTemporaryFile(dir=path).name
+        if cmd[0] in ('d.barscale', 'd.legend', 'd.northarrow'):
+            mapfile += '.png'
+        else:
+            mapfile += '.ppm'
     else:
         mapfile = None
         adjust_region(width, height)
