@@ -123,6 +123,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("vector"));
     G_add_keyword(_("geometry"));
     G_add_keyword(_("triangulation"));
+    G_add_keyword(_("skeleton"));
     module->description = _("Creates a Voronoi diagram in current region from "
 			    "an input vector map containing points or centroids.");
 
