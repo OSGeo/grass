@@ -164,9 +164,14 @@ class DMonMap(Map):
                                                  layerType = ltype)[0]
 
                 args = {}
-                if ltype in ('barscale', 'legend', 'northarrow'):
+                if ltype in ('barscale', 'rastleg', 'northarrow'):
                     classLayer = Overlay
-                    args['id'] = 1
+                    if ltype == 'rastleg':
+                        args['id'] = 0
+                    elif ltype == 'barscale':
+                        args['id'] = 1
+                    else:
+                        args['id'] = 2
                 else:
                     classLayer = MapLayer
                     args['ltype'] = ltype
