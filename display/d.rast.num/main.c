@@ -173,8 +173,8 @@ int main(int argc, char **argv)
     /* number of rows and cols in window */
 
     if ((nrows > 75) || (ncols > 75)) {
-        G_asprintf(&tmpstr1, _n("%d row", "%d rows", nrows), nrows);
-        G_asprintf(&tmpstr2, _n("%d col", "%d cols", ncols), ncols);
+        G_asprintf(&tmpstr1, n_("%d row", "%d rows", nrows), nrows);
+        G_asprintf(&tmpstr2, n_("%d col", "%d cols", ncols), ncols);
         /* GTC %s will be replaced by strings "X rows" and "Y cols" */
         G_warning(_("Current region size: %s X %s\n"
 		    "Your current region setting may be too large. "

@@ -351,7 +351,7 @@ int main(int argc, char *argv[])
     G_free(prev);
 
     if (from_nr)
-	G_warning(_n("%d 'from' feature was not reachable",
+	G_warning(n_("%d 'from' feature was not reachable",
                      "%d 'from' features were not reachable",
                      from_nr), from_nr);
 

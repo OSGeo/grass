@@ -166,21 +166,21 @@ int display_lines(struct Map_info *Map, int type, struct cat_list *Clist,
     }
     
     if ((colors || cvarr_rgb) && get_num_color_rules_skipped() > 0)
-        G_warning(_n("%d invalid color rule for lines skipped", 
+        G_warning(n_("%d invalid color rule for lines skipped", 
                 "%d invalid color rules for lines skipped", 
                 get_num_color_rules_skipped()), 
                 get_num_color_rules_skipped());
 
     if (n_points > 0) 
-	G_verbose_message(_n("%d point plotted", "%d points plotted", n_points), n_points);
+	G_verbose_message(n_("%d point plotted", "%d points plotted", n_points), n_points);
     if (n_lines > 0) 
-	G_verbose_message(_n("%d line plotted", "%d lines plotted", n_lines), n_lines);
+	G_verbose_message(n_("%d line plotted", "%d lines plotted", n_lines), n_lines);
     if (n_centroids > 0) 
-	G_verbose_message(_n("%d centroid plotted", "%d centroids plotted", n_centroids), n_centroids);
+	G_verbose_message(n_("%d centroid plotted", "%d centroids plotted", n_centroids), n_centroids);
     if (n_boundaries > 0) 
-	G_verbose_message(_n("%d boundary plotted", "%d boundaries plotted", n_boundaries), n_boundaries);
+	G_verbose_message(n_("%d boundary plotted", "%d boundaries plotted", n_boundaries), n_boundaries);
     if (n_faces > 0) 
-	G_verbose_message(_n("%d face plotted", "%d faces plotted", n_faces), n_faces);
+	G_verbose_message(n_("%d face plotted", "%d faces plotted", n_faces), n_faces);
     
     Vect_destroy_line_struct(Points);
     Vect_destroy_cats_struct(Cats);

@@ -99,9 +99,9 @@ int open_file(char *name)
     n_cols = Rast_window_cols();
     
     /* GTC Count of raster rows */
-    G_asprintf(&tmpstr1, _n("%d row", "%d rows", n_rows), n_rows);
+    G_asprintf(&tmpstr1, n_("%d row", "%d rows", n_rows), n_rows);
     /* GTC Count of raster columns */
-    G_asprintf(&tmpstr2, _n("%d column", "%d columns", n_cols), n_cols);
+    G_asprintf(&tmpstr2, n_("%d column", "%d columns", n_cols), n_cols);
     /* GTC First argument is the raster map name, second and third - a string representing number of rows and cols */
     G_message(_("Raster map <%s> - %s X %s"), name, tmpstr1, tmpstr2);
     G_free(tmpstr1);
@@ -166,18 +166,18 @@ int close_file(char *name)
     col_count = n_cols - (PAD << 1);
     
     /* GTC Count of raster rows */
-    G_asprintf(&tmpstr1, _n("%d row", "%d rows", row_count), row_count);
+    G_asprintf(&tmpstr1, n_("%d row", "%d rows", row_count), row_count);
     /* GTC Count of raster columns */
-    G_asprintf(&tmpstr2, _n("%d column", "%d columns", col_count), col_count);
+    G_asprintf(&tmpstr2, n_("%d column", "%d columns", col_count), col_count);
     /* GTC %s will be replaced with number of rows and columns */
     G_message(_("Output map %s X %s"), tmpstr1, tmpstr2);
     G_free(tmpstr1);
     G_free(tmpstr2); 
     
     /* GTC Count of window rows */
-    G_asprintf(&tmpstr1, _n("%d row", "%d rows", Rast_window_rows()), Rast_window_rows());
+    G_asprintf(&tmpstr1, n_("%d row", "%d rows", Rast_window_rows()), Rast_window_rows());
     /* GTC Count of window columns */
-    G_asprintf(&tmpstr2, _n("%d column", "%d columns", Rast_window_cols()), Rast_window_cols());
+    G_asprintf(&tmpstr2, n_("%d column", "%d columns", Rast_window_cols()), Rast_window_cols());
     /* GTC %s will be replaced with number of rows and columns */
     G_message(_("Window %s X %s"), tmpstr1, tmpstr2);
     G_free(tmpstr1);

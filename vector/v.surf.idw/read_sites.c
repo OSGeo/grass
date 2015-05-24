@@ -67,7 +67,7 @@ void read_sites(const char *name, const char *field_name, const char *col, int n
 	if (nrec < 0)
 	    G_fatal_error(_("Unable to select data from table"));
 
-	G_verbose_message(_n("One record selected from table", "%d records selected from table", nrec), nrec);
+	G_verbose_message(n_("One record selected from table", "%d records selected from table", nrec), nrec);
 
 	db_close_database_shutdown_driver(Driver);
     }
@@ -120,5 +120,5 @@ void read_sites(const char *name, const char *field_name, const char *col, int n
     Vect_set_release_support(&Map);
     Vect_close(&Map);
 
-    G_message(_n("%ld point loaded", "%ld points loaded", npoints), npoints);
+    G_message(n_("%ld point loaded", "%ld points loaded", npoints), npoints);
 }

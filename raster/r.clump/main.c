@@ -119,7 +119,7 @@ int main(int argc, char *argv[])
 	Rast_write_history(OUTPUT, &hist);
 
 	n_clumps = range_return == 2 ? 0 : range.max;
-	G_done_msg(_n("%d clump.", "%d clumps.", n_clumps), n_clumps);
+	G_done_msg(n_("%d clump.", "%d clumps.", n_clumps), n_clumps);
     }
 
     exit(EXIT_SUCCESS);

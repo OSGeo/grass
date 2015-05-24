@@ -31,9 +31,9 @@ MODDOMAIN = grassmods
 WXPYDOMAIN = grasswxpy
 DOMAINS = $(LIBDOMAIN) $(MODDOMAIN) $(WXPYDOMAIN)
 
-LIB_POTFILES = find ../lib \( -name "*.c" -o -name "*.py" \) | xargs grep -l "_(\"\|_n(\""
-MOD_POTFILES = find ../ -name '*.c' | grep -v '../lib' | xargs grep -l "_(\"\|_n(\""
-WXPY_POTFILES = find ../gui/wxpython -name '*.py' | xargs grep -l "_(\"\|_n(\""
+LIB_POTFILES = find ../lib \( -name "*.c" -o -name "*.py" \) | xargs grep -l "_(\"\|n_(\""
+MOD_POTFILES = find ../ -name '*.c' | grep -v '../lib' | xargs grep -l "_(\"\|n_(\""
+WXPY_POTFILES = find ../gui/wxpython -name '*.py' | xargs grep -l "_(\"\|n_(\""
 
 define po_stats
 GISBASE="$(RUN_GISBASE)" $(PYTHON) ./grass_po_stats.py
@@ -48,11 +48,11 @@ pot:
 	fi
 	@rm -f ./templates/*.pot
 	@echo "Generating $(LIBDOMAIN)..."
-	xgettext --keyword=_ --keyword=_n:1,2 -cGTC -o ./templates/$(LIBDOMAIN).pot `$(LIB_POTFILES)`
+	xgettext --keyword=_ --keyword=n_:1,2 -cGTC -o ./templates/$(LIBDOMAIN).pot `$(LIB_POTFILES)`
 	@echo "Generating $(MODDOMAIN)..."
-	xgettext --keyword=_ --keyword=_n:1,2 -cGTC -o ./templates/$(MODDOMAIN).pot `$(MOD_POTFILES)`
+	xgettext --keyword=_ --keyword=n_:1,2 -cGTC -o ./templates/$(MODDOMAIN).pot `$(MOD_POTFILES)`
 	@echo "Generating $(WXPYDOMAIN)..."
-	xgettext --keyword=_ --keyword=_n:1,2 -cGTC -o ./templates/$(WXPYDOMAIN).pot `$(WXPY_POTFILES)` 
+	xgettext --keyword=_ --keyword=n_:1,2 -cGTC -o ./templates/$(WXPYDOMAIN).pot `$(WXPY_POTFILES)` 
 
 #merge already existing translations with new messages in POT template file and create new po files:
 update-po:

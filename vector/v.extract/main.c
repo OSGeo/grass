@@ -265,7 +265,7 @@ int main(int argc, char **argv)
 	if (ncats == -1)
 		G_fatal_error(_("Unable select records from table <%s>"),
 			      Fi->table);
-	G_verbose_message(_n("%d category loaded",
+	G_verbose_message(n_("%d category loaded",
                              "%d categories loaded",
                              ncats), ncats);
 	    

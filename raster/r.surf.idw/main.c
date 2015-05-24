@@ -257,7 +257,7 @@ interpolate(MELEMENT rowlist[], SHORT nrows, SHORT ncols, SHORT datarows,
     nbr_head->searchptr = &(nbr_head->Mptr);	/* see replace_neighbor */
 #endif
 
-    G_message(_n("Interpolating raster map <%s> (%d row)...", 
+    G_message(n_("Interpolating raster map <%s> (%d row)...", 
         "Interpolating raster map <%s> (%d rows)...", nrows),
         output, nrows);
 

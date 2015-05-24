@@ -397,7 +397,7 @@ int main(int argc, char *argv[])
 	    G_message(_("%.2f KB of disk space for temp files."), sdisk / 1024.);
     }
     else
-	G_message(_n("%d byte of disk space for temp files.", 
+	G_message(n_("%d byte of disk space for temp files.", 
         "%d bytes of disk space for temp files.", (int)sdisk), (int)sdisk);
 
 
