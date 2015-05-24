@@ -79,7 +79,7 @@ void contour(double levels[],
 
     ncrossing = 0;
 
-    G_message(_n("Writing vector contour (one level)...", 
+    G_message(n_("Writing vector contour (one level)...", 
         "Writing vector contours (total levels %d)...", nlevels), nlevels);
 
     for (n = 0; n < nlevels; n++) {
@@ -210,7 +210,7 @@ void contour(double levels[],
     }				/* for levels */
 
     if (ncrossing > 0) {
-	G_warning(_n("%d crossing found", 
+	G_warning(n_("%d crossing found", 
         "%d crossings found", 
         ncrossing), ncrossing);
     }

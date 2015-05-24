@@ -314,7 +314,7 @@ int main(int argc, char **argv)
         }
         
 	    if (in[i].num_pnts > in[0].num_pnts)
-		G_message(_n("The last point will be ignored", 
+		G_message(n_("The last point will be ignored", 
                      "The last %d points will be ignored",
                      (in[i].num_pnts - in[0].num_pnts)),
 			  (in[i].num_pnts - in[0].num_pnts));

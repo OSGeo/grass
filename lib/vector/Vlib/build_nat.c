@@ -114,8 +114,8 @@ int Vect_build_nat(struct Map_info *Map, int build)
 	}
 	G_progress(1, 1);
 
-	G_message(_n("One primitive registered", "%d primitives registered", plus->n_lines), plus->n_lines);
-	G_message(_n("One vertex registered", "%d vertices registered", npoints), npoints);
+	G_message(n_("One primitive registered", "%d primitives registered", plus->n_lines), plus->n_lines);
+	G_message(n_("One vertex registered", "%d vertices registered", npoints), npoints);
 
 	plus->built = GV_BUILD_BASE;
     }
@@ -150,8 +150,8 @@ int Vect_build_nat(struct Map_info *Map, int build)
 		Vect_build_line_area(Map, line, side);
 	    }
 	}
-	G_message(_n("One area built", "%d areas built", plus->n_areas), plus->n_areas);
-	G_message(_n("One isle built", "%d isles built", plus->n_isles), plus->n_isles);
+	G_message(n_("One area built", "%d areas built", plus->n_areas), plus->n_areas);
+	G_message(n_("One isle built", "%d isles built", plus->n_isles), plus->n_isles);
 	plus->built = GV_BUILD_AREAS;
     }
 

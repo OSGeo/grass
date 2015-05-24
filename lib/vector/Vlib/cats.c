@@ -602,7 +602,7 @@ struct cat_list *Vect_cats_set_constraint(struct Map_info *Map, int layer,
 	if (ncats == -1)
 		G_fatal_error(_("Unable select records from table <%s>"),
 			      Fi->table);
-	G_verbose_message(_n("One category loaded", "%d categories loaded", ncats), ncats);
+	G_verbose_message(n_("One category loaded", "%d categories loaded", ncats), ncats);
 	    
 	db_close_database_shutdown_driver(driver);
 

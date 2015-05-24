@@ -364,7 +364,7 @@ int main(int argc, char **argv)
 	chcat = 1;
 	ret = Vect_str_to_cat_list(cat_opt->answer, Clist);
 	if (ret > 0)
-	    G_warning(_n("%d error in cat option", "%d errors in cat option", ret), ret);
+	    G_warning(n_("%d error in cat option", "%d errors in cat option", ret), ret);
     }
     
     type = Vect_option_to_types(type_opt);
