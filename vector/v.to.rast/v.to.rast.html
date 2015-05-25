@@ -60,7 +60,8 @@ render path (thin line).
 
 <h2>EXAMPLES</h2>
 
-<em>1. Convert a vector map and use column SPEED from attribute table</em><br>
+<h3>Convert a vector map and use column SPEED from attribute table</h3>
+
 <div class="code"><pre>
 db.describe -c table=vect_map
 
@@ -71,17 +72,19 @@ Column 3: WIDTH
 </pre></div>
 
 <div class="code"><pre>
-v.to.rast in=vect_map out=raster_map col=SPEED
+v.to.rast input=vect_map output=raster_map attribute_column=SPEED
 </pre></div>
 
-<p><p><em>2. Calculate stream directions from a river vector map (Spearfish)</em><br>
+<h3>Calculate stream directions from a river vector map (Spearfish)</h3>
+
 <div class="code"><pre>
-v.to.rast in=streams out=streamsdir use=dir
+v.to.rast input=streams output=streamsdir use=dir
 </pre></div>
 
-<p><p><em>3. Convert a vector polygon map to raster including descriptive labels (Spearfish)</em><br>
+<h3>Convert a vector polygon map to raster including descriptive labels (Spearfish)</h3>
+
 <div class="code"><pre>
-v.to.rast in=fields out=myfields use=attr col=cat labelcol=label
+v.to.rast input=fields output=myfields use=attr attribute_column=cat label_column=label
 r.category myfields
 </pre></div>
 
@@ -90,7 +93,6 @@ r.category myfields
 <a href="db.describe.html">db.describe</a>,
 <a href="v.category.html">v.category</a>
 </em>
-<br>
 
 <h2>AUTHORS</h2>
 
