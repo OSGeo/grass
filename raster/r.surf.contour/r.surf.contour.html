@@ -81,7 +81,7 @@ r.contour input=elevation output=contours_5m step=5 minlevel=50
 
 # rasterize contour lines
 v.info -c contours_5m
-v.to.rast input=contours_5m output=contours_5m use=attr column=level
+v.to.rast input=contours_5m output=contours_5m use=attr attribute_column=level
 
 # generate DEM from rasterized contour lines
 r.surf.contour input=contours_5m output=elevation_from_cont5m

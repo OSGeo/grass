@@ -48,30 +48,30 @@ v.to.db map=soils type=centroid option=cat
 
 <p>Upload polygon areas to corresponding centroid record in the attribute table:<br>
 <div class="code"><pre>
-v.to.db map=soils type=centroid option=area col=area_size unit=h
+v.to.db map=soils type=centroid option=area columns=area_size unit=h
 </pre></div>
 
 <p>Upload line lengths (in meters) of each vector line to attribute table
 (use <em>v.category</em> in case of missing categories):<br>
 <div class="code"><pre>
-v.to.db map=roads option=length type=line col=linelength units=me
+v.to.db map=roads option=length type=line columns=linelength units=me
 </pre></div>
 
 <p>Upload x and y coordinates from vector geometry to attribute table:<br>
 <div class="code"><pre>
-v.to.db map=pointsmap option=coor col=x,y
+v.to.db map=pointsmap option=coor columns=x,y
 </pre></div>
 
 <p>Upload x, y and z coordinates from vector geometry to attribute table:<br>
 <div class="code"><pre>
-v.to.db map=pointsmap option=coor col=x,y,z
+v.to.db map=pointsmap option=coor columns=x,y,z
 </pre></div>
 
 <p>Transfer attributes from a character column (with numeric contents) to a new
 integer column:<br>
 <div class="code"><pre>
 v.db.addcolumn usa_income_employment2002 col="FIPS_NUM integer"
-v.to.db usa_income_employment2002 option=query col=FIPS_NUM qcol=STATE_FIPS
+v.to.db usa_income_employment2002 option=query columns=FIPS_NUM query_column=STATE_FIPS
 </pre></div>
 
 <p>Upload category numbers of left and right area, to an attribute table of
@@ -81,14 +81,15 @@ boundaries common for the areas:<br>
 v.category soils out=mysoils layer=2 type=boundary option=add
 # add a table with columns named "left" and "right" to layer 2 of the input
 # vector map:
-v.db.addtable mysoils layer=2 col="left integer,right integer"
+v.db.addtable mysoils layer=2 columns="left integer,right integer"
 # upload categories of left and right areas:
-v.to.db mysoils option=sides col=left,right layer=2
+v.to.db mysoils option=sides columns=left,right layer=2
 # display the result:
 v.db.select mysoils layer=2
 </pre></div>
 
-<p>Compute D<sub>L</sub>, the Fractal Dimension (Mandelbrot, 1982), of the boundary defining a polygon based on the formula:
+<p>Compute D<sub>L</sub>, the Fractal Dimension (Mandelbrot, 1982), of the
+boundary defining a polygon based on the formula:
 <br><tt>
 D = 2 * (log perimeter) / (log area):<br>
 </tt>
@@ -98,10 +99,10 @@ v.db.addcolumn mysoils col="d double precision"
 v.to.db mysoils option=fd column="d"
 
 g.region vector=mysoils res=50
-v.to.rast in=mysoils out=soils_fd type=area use=attr column=d
+v.to.rast input=mysoils output=soils_fd type=area use=attr attribute_column=d
 r.colors map=soils_fd color=gyr
 
-d.mon x0
+d.mon wx0
 d.rast.leg soils_fd
 d.vect mysoils type=boundary
 </pre></div>
