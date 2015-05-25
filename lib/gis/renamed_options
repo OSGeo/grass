@@ -655,6 +655,10 @@ v.to.db|qlayer:query_layer
 v.to.db|qcolumn:query_column
 # v.to.points
 v.to.points|llayer:layer
+# v.to.rast
+v.to.rast|column:attribute_column
+v.to.rast|rgbcolumn:rgb_column
+v.to.rast|labelcolumn:label_column 
 # v.transform
 v.transform|attrcolumn:attribute_column
 v.transform|labelcolumn:label_column
