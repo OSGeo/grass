@@ -161,7 +161,7 @@ class Settings:
             'display': {
                 'font' : {
                     'type' : '',
-                    'encoding': 'ISO-8859-1',
+                    'encoding': 'UTF-8',
                     },
                 'driver': {
                     'type': 'cairo'
