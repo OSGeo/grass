@@ -166,7 +166,7 @@ static int copy_table(const char *from_drvname, const char *from_dbname,
 	    if (G_get_overwrite()) {
 		G_warning(_("Table <%s> already exists in database and will be overwritten"),
 			  to_tblname);
-		ret = db_drop_table(from_driver, &tblnames[i]);
+		ret = db_drop_table(to_driver, &tblnames[i]);
 	    }
 	    else {
 		G_warning(_("Table <%s> already exists in database <%s>"),
