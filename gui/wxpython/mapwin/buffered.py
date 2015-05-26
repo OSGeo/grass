@@ -623,20 +623,34 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         :param width: image width
         :param height: image height
         """
-        busy = wx.BusyInfo(message = _("Please wait, exporting image..."),
-                           parent = self)
+        Debug.msg(1, "MapWindow.SaveToFile(): %s (%dx%d)", FileName, width, height)
+        
+        self._fileName = FileName
+        self._fileType = FileType
+        
+        self._busy = wx.BusyInfo(message = _("Please wait, exporting image..."),
+                                 parent = self)
         wx.Yield()
 
         self.Map.ChangeMapSize((width, height))
-        ibuffer = wx.EmptyBitmap(max(1, width), max(1, height))
         self.Map.Render(force = True, windres = self._properties.resolution)
+        renderMgr = self.Map.GetRenderMgr()
+        renderMgr.renderDone.disconnect(self._updateMFinished)
+        renderMgr.renderDone.connect(self._saveToFileDone)
+
+    def _saveToFileDone(self):
+        renderMgr = self.Map.GetRenderMgr()
+        renderMgr.renderDone.disconnect(self._saveToFileDone)
+        
+        ibuffer = wx.EmptyBitmap(max(1, self.Map.width), max(1, self.Map.height))
+        
         img = self.GetImage()
         self.pdc.RemoveAll()
         self.Draw(self.pdc, img, drawid = 99)
 
         # compute size ratio to move overlay accordingly
         cSize = self.GetClientSizeTuple()
-        ratio = float(width) / cSize[0], float(height) / cSize[1]
+        ratio = float(self.Map.width) / cSize[0], float(self.Map.height) / cSize[1]
 
         # redraw legend, scalebar
         for img in self.GetOverlay():
@@ -666,13 +680,18 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         self.pdc.DrawToDC(dc)
         if self.pdcVector:
             self.pdcVector.DrawToDC(dc)
-        ibuffer.SaveFile(FileName, FileType)
-
-        busy.Destroy()
-
+        ibuffer.SaveFile(self._fileName, self._fileType)
+        
+        self._busy.Destroy()
+        del self._busy
+        del self._fileName
+        del self._fileType
+        
+        renderMgr.renderDone.connect(self._updateMFinished)
+        
         self.UpdateMap(render = True)
         self.Refresh()
-
+        
     def GetOverlay(self):
         """Converts rendered overlay files to wx.Image
 
