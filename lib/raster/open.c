@@ -332,27 +332,21 @@ int Rast__open_old(const char *name, const char *mapset)
     fcb->null_row_ptr = NULL;
 
     if (!gdal) {
-	if (!G_find_file2_misc("cell_misc", NULL_FILE, r_name, r_mapset)) {
-	    /* G_warning("unable to find [%s]",path); */
-	    fcb->null_file_exists = 0;
-	}
-	else {
-	    /* First, check for compressed null file */
-	    fcb->null_fd = G_open_old_misc("cell_misc", NULL_FILE, r_name, r_mapset);
-	    if (fcb->null_fd < 0) {
-		fcb->null_fd = G_open_old_misc("cell_misc", NULL2_FILE, r_name, r_mapset);
-		if (fcb->null_fd >= 0) {
-		    fcb->null_row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
-		    if (Rast__read_null_row_ptrs(fd, fcb->null_fd) < 0) {
-			close(fcb->null_fd);
-			fcb->null_fd = -1;
-			G_free(fcb->null_row_ptr);
-			fcb->null_row_ptr = NULL;
-		    }
+	/* First, check for compressed null file */
+	fcb->null_fd = G_open_old_misc("cell_misc", NULL_FILE, r_name, r_mapset);
+	if (fcb->null_fd < 0) {
+	    fcb->null_fd = G_open_old_misc("cell_misc", NULL2_FILE, r_name, r_mapset);
+	    if (fcb->null_fd >= 0) {
+		fcb->null_row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
+		if (Rast__read_null_row_ptrs(fd, fcb->null_fd) < 0) {
+		    close(fcb->null_fd);
+		    fcb->null_fd = -1;
+		    G_free(fcb->null_row_ptr);
+		    fcb->null_row_ptr = NULL;
 		}
 	    }
-	    fcb->null_file_exists = fcb->null_fd >= 0;
 	}
+	fcb->null_file_exists = fcb->null_fd >= 0;
     }
 
     return fd;
@@ -712,6 +706,60 @@ static int open_raster_new(const char *name, int open_mode,
     /* mark file as open for write */
     fcb->open_mode = open_mode;
     fcb->io_error = 0;
+
+    return fd;
+}
+
+int Rast__open_null_write(const char *name)
+{
+    char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
+    struct fileinfo *fcb;
+    int fd;
+    char *tempname;
+    char *map;
+    char *mapset;
+
+    Rast__init();
+
+    if (!G_find_raster2(name, G_mapset()))
+	G_fatal_error(_("Raster map <%s> does not exist in the current mapset (%s)"),
+		      name, G_mapset());
+
+    if (G_unqualified_name(name, G_mapset(), xname, xmapset) < 0)
+	G_fatal_error(_("Raster map <%s> is not in the current mapset (%s)"),
+		      name, G_mapset());
+    map = G_store(xname);
+    mapset = G_store(xmapset);
+
+    fd = new_fileinfo();
+    fcb = &R__.fileinfo[fd];
+
+    G_zero(fcb, sizeof(*fcb));
+
+    fcb->name = map;
+    fcb->mapset = mapset;
+
+    Rast_get_cellhd(map, mapset, &fcb->cellhd);
+
+    /* open a null tempfile name */
+    tempname = G_tempfile();
+    fcb->null_fd = creat(tempname, 0666);
+    if (fcb->null_fd < 0) {
+	G_free(tempname);
+	G_free(fcb->name);
+	G_free(fcb->mapset);
+	G_fatal_error(_("No temp files available: %s"), strerror(errno));
+    }
+    fcb->null_temp_name = tempname;
+
+    if (R__.compress_nulls) {
+	fcb->null_row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
+	G_zero(fcb->row_ptr, (fcb->cellhd.rows + 1) * sizeof(off_t));
+	Rast__write_null_row_ptrs(fd, fcb->null_fd);
+    }
+
+    /* allocate null bitstream buffer for writing */
+    fcb->null_bits = Rast__allocate_null_bits(fcb->cellhd.cols);
 
     return fd;
 }

@@ -100,6 +100,7 @@ int Rast_cell_stats_histo_eq(struct Cell_stats *, CELL, CELL, CELL, CELL, int,
 void Rast_close(int);
 void Rast_unopen(int);
 void Rast__unopen_all(void);
+void Rast__close_null(int);
 
 /* color_compat.c */
 void Rast_make_ryg_colors(struct Colors *, CELL, CELL);
@@ -454,6 +455,7 @@ RASTER_MAP_TYPE Rast_get_map_type(int);
 int Rast_open_new(const char *, RASTER_MAP_TYPE);
 int Rast_open_new_uncompressed(const char *, RASTER_MAP_TYPE);
 void Rast_set_quant_rules(int, struct Quant *);
+int Rast__open_null_write(const char *);
 
 /* put_cellhd.c */
 void Rast_put_cellhd(const char *, struct Cell_head *);
@@ -463,7 +465,6 @@ void Rast_put_row(int, const void *, RASTER_MAP_TYPE);
 void Rast_put_c_row(int, const CELL *);
 void Rast_put_f_row(int, const FCELL *);
 void Rast_put_d_row(int, const DCELL *);
-int Rast__open_null_write(int);
 void Rast__write_null_bits(int, const unsigned char *, int, int, int);
 
 /* put_title.c */
