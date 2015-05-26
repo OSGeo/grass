@@ -289,7 +289,9 @@ static int get_login(const char *driver, const char *database, const char **user
 
     user[0] = '\0';
     password[0] = '\0';
-
+    host[0] = '\0';
+    port[0] = '\0';
+    
     init_login(&login);
 
     if (read_file(&login) == -1)
