@@ -507,30 +507,6 @@ static void put_null_value_row(int fd, const char *buf)
     fcb->null_cur_row++;
 }
 
-/*!
-   \brief Open null file for write
-
-   \param fd file descriptor of raster cell data file
-
-   \return field descriptor of null data file
- */
-int Rast__open_null_write(int fd)
-{
-    struct fileinfo *fcb = &R__.fileinfo[fd];
-    int null_fd;
-
-    if (access(fcb->null_temp_name, 0) != 0)
-	G_fatal_error(_("Unable to find a temporary null file <%s>"),
-		      fcb->null_temp_name);
-
-    null_fd = open(fcb->null_temp_name, O_WRONLY);
-    if (null_fd < 0)
-	G_fatal_error(_("Unable to open null file <%s>"),
-		      fcb->null_temp_name);
-
-    return null_fd;
-}
-
 static void write_null_bits_compressed(int null_fd, const unsigned char *flags,
 				int row, size_t size, int fd)
 {
