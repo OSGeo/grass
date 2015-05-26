@@ -344,10 +344,6 @@ static int close_new(int fd, int ok)
     if (fcb->gdal)
 	return close_new_gdal(fd, ok);
 
-    if (fcb->null_fd >= 0)
-	close(fcb->null_fd);
-    fcb->null_fd = -1;
-
     if (ok) {
 	switch (fcb->open_mode) {
 	case OPEN_NEW_COMPRESSED:
@@ -433,6 +429,10 @@ static int close_new(int fd, int ok)
     close(fcb->data_fd);
     fcb->open_mode = -1;
 
+    if (fcb->null_fd >= 0)
+	close(fcb->null_fd);
+    fcb->null_fd = -1;
+
     if (fcb->data != NULL)
 	G_free(fcb->data);
 
@@ -477,6 +477,47 @@ static int close_new(int fd, int ok)
 	Rast_quant_free(&fcb->quant);
 
     return stat;
+}
+
+void Rast__close_null(int fd)
+{
+    struct fileinfo *fcb = &R__.fileinfo[fd];
+    char path[GPATH_MAX];
+
+    if (fcb->null_row_ptr) {			/* compressed nulls */
+	fcb->null_row_ptr[fcb->cellhd.rows] = lseek(fcb->null_fd, 0L, SEEK_CUR);
+	Rast__write_null_row_ptrs(fd, fcb->null_fd);
+	G_free(fcb->null_row_ptr);
+    }
+
+    if (fcb->null_fd >= 0)
+	close(fcb->null_fd);
+    fcb->null_fd = -1;
+
+    /* create path : full null file name */
+    G__make_mapset_element_misc("cell_misc", fcb->name);
+    G_file_name_misc(path, "cell_misc", NULL_FILE, fcb->name, G_mapset());
+    remove(path);
+    G_file_name_misc(path, "cell_misc", NULL2_FILE, fcb->name, G_mapset());
+    remove(path);
+
+    G_file_name_misc(path, "cell_misc",
+		     fcb->null_row_ptr ? NULL2_FILE : NULL_FILE,
+		     fcb->name, G_mapset());
+
+    if (rename(fcb->null_temp_name, path))
+	G_warning(_("Unable to rename null file '%s' to '%s': %s"),
+		  fcb->null_temp_name, path, strerror(errno));
+    remove(fcb->null_temp_name);
+
+    G_free(fcb->null_temp_name);
+
+    G_free(fcb->name);
+    G_free(fcb->mapset);
+
+    G_free(fcb->null_bits);
+
+    fcb->open_mode = -1;
 }
 
 /* returns 0 on success, 1 on failure */
