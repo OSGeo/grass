@@ -388,7 +388,11 @@ class RenderLayerMgr(wx.EvtHandler):
         """Abort rendering process"""
         Debug.msg(1, "RenderLayerMgr({}).Abort()".format(self.layer))
         self.thread.Terminate()
-
+        
+        # force rendering layer next time
+        self.layer.forceRender = True
+        self.thread.Terminate(False)
+        
     def IsDownloading(self):
         """Is downloading
 
