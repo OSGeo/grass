@@ -1047,10 +1047,10 @@ class MapFrame(SingleMapFrame):
         if addLayer:
             if useId:
                 return self.Map.AddLayer(ltype = 'vector', name = globalvar.QUERYLAYER, command = cmd,
-                                         active = True, hidden = True, opacity = 1.0)
+                                         active = True, hidden = True, opacity = 1.0, render = True)
             else:
                 return self.Map.AddLayer(ltype = 'command', name = globalvar.QUERYLAYER, command = cmd,
-                                         active = True, hidden = True, opacity = 1.0)
+                                         active = True, hidden = True, opacity = 1.0, render = True)
         else:
             return cmd
 
