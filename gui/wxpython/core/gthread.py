@@ -115,6 +115,6 @@ class gThread(threading.Thread, wx.EvtHandler):
         if event.ondone:
             event.ondone(event)
 
-    def Terminate(self):
+    def Terminate(self, terminate=True):
         """Abort command(s)"""
-        self.terminate = True
+        self.terminate = terminate
