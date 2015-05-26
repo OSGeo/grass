@@ -158,11 +158,33 @@ static int copy_table(const char *from_drvname, const char *from_dbname,
     }
 
     for (i = 0; i < count; i++) {
-	const char *tblname = db_get_string(&tblnames[i]);
 	int ret;
-	
+        char *tblname_i;
+
+        tblname_i = NULL;
+        if (strcmp(to_drvname, "pg") == 0) {
+            char *p, *tbl;
+            dbConnection connection;
+
+            tbl = db_get_string(&tblnames[i]);
+            db_get_connection(&connection);
+            p = strstr(tbl, ".");
+
+            if (p) {
+                char buf[GNAME_MAX];
+
+                sprintf(buf, "%s.%s", connection.schemaName ? connection.schemaName : "public",
+                        to_tblname);
+                if (strcmp(buf, tbl) == 0)
+                    tblname_i = G_store(p + 1); /* skip dot */
+            }
+        }
+        if (!tblname_i) {
+            tblname_i = G_store(db_get_string(&tblnames[i]));
+        }
+        
 	ret = DB_FAILED;
-	if (strcmp(to_tblname, tblname) == 0) {
+	if (strcmp(to_tblname, tblname_i) == 0) {
 	    if (G_get_overwrite()) {
 		G_warning(_("Table <%s> already exists in database and will be overwritten"),
 			  to_tblname);
@@ -181,6 +203,8 @@ static int copy_table(const char *from_drvname, const char *from_dbname,
 		return DB_FAILED;
 	    }
 	}
+
+        G_free(tblname_i);
     }
 
     /* Create new table */
