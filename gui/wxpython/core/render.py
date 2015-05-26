@@ -36,6 +36,7 @@ from grass.script import core as grass
 from grass.script.utils import try_remove
 from grass.script.task import cmdlist_to_tuple, cmdtuple_to_list
 from grass.pydispatch.signal import Signal
+from grass.exceptions import CalledModuleError
 
 from core          import utils
 from core.utils import _
@@ -378,7 +379,10 @@ class RenderLayerMgr(wx.EvtHandler):
         self.layer.forceRender = False
 
     def _render(self, cmd, env):
-        return grass.run_command(cmd[0], env=env, **cmd[1])
+        try:
+            return grass.run_command(cmd[0], env=env, **cmd[1])
+        except CalledModuleError as e:
+            return 1
     
     def Abort(self):
         """Abort rendering process"""
@@ -399,6 +403,12 @@ class RenderLayerMgr(wx.EvtHandler):
         """
         Debug.msg(1, "RenderLayerMgr.OnRenderDone(%s): ret=%d time=%f" % \
                       (self.layer, event.ret, time.time() - self._startTime))
+        if event.ret != 0:
+            try:
+                os.remove(self.layer.mapfile)
+            except:
+                pass
+        
         self.updateProgress.emit(layer=self.layer)
         
 class RenderMapMgr(wx.EvtHandler):
@@ -516,7 +526,10 @@ class RenderMapMgr(wx.EvtHandler):
         opacities = list()
         
         for layer in self.layers:
-            if layer.GetType() != 'overlay':
+            if layer.GetType() == 'overlay':
+                continue
+
+            if os.path.isfile(layer.mapfile):
                 maps.append(layer.mapfile)
                 masks.append(layer.maskfile)
                 opacities.append(str(layer.opacity))
