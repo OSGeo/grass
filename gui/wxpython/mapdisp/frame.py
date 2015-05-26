@@ -1045,12 +1045,15 @@ class MapFrame(SingleMapFrame):
                 cmd[-1].append("cats=%s" % ListOfCatsToRange(lcats))
 
         if addLayer:
+            args = {}
             if useId:
-                return self.Map.AddLayer(ltype = 'vector', name = globalvar.QUERYLAYER, command = cmd,
-                                         active = True, hidden = True, opacity = 1.0, render = True)
+                args['ltype'] = 'vector'
             else:
-                return self.Map.AddLayer(ltype = 'command', name = globalvar.QUERYLAYER, command = cmd,
-                                         active = True, hidden = True, opacity = 1.0, render = True)
+                args['ltype'] = 'command'
+                
+            return self.Map.AddLayer(name = globalvar.QUERYLAYER, command = cmd,
+                                     active = True, hidden = True, opacity = 1.0,
+                                     render = True, **args)
         else:
             return cmd
 
