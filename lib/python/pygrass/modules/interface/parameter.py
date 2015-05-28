@@ -22,9 +22,9 @@ def _check_value(param, value):
     def raiseexcpet(exc, param, ptype, value):
         """Function to modifa the error message"""
         msg = req % (param.name, param.typedesc, ptype, value, exc.message)
-        if exc is ValueError:
+        if isinstance(exc, ValueError):
             raise ValueError(msg)
-        elif exc is TypeError:
+        elif isinstance(exc, TypeError):
             raise TypeError(msg)
         else:
             exc.message = msg
