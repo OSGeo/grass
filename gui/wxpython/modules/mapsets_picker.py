@@ -3,7 +3,7 @@
 import wx
 
 from core.gcmd import RunCommand
-from core.utils import _, GuiModuleMain
+from core.utils import _
 from gui_core.preferences import MapsetAccess
 
 
@@ -24,4 +24,4 @@ def main():
 
 
 if __name__ == "__main__":
-    GuiModuleMain(main)
+    main()
