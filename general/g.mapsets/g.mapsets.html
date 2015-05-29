@@ -56,18 +56,17 @@ make explicit the mapset from which the file is to be drawn; e.g., the
 command:
 
 <div class="code"><pre>
-g.copy rast=soils.file@PERMANENT,my.soils
+g.copy raster=soils@PERMANENT,my_soils
 </pre></div>
 
-ensures that a new file named <tt>my.soils</tt> is to be a copy of
-the file <tt>soils.file</tt> from the mapset PERMANENT.
+ensures that a new file named <tt>my_soils</tt> is to be a copy of
+the file <tt>soils</tt> from the mapset PERMANENT.
 
 <p>
-It is common for a user to have the special mapset
-<b>PERMANENT</b> included in his mapset search path, as this mapset
-typically contains finished base maps relevant to many
-applications. Often, other mapsets which contain sets of interpreted
-maps will be likewise included in the user's mapset search path.
+In each location there is the special mapset <b>PERMANENT</b> included
+in the mapset search path, as this mapset typically contains base maps
+relevant to many applications. Often, other mapsets which contain sets
+of interpreted maps will be likewise included in the user's mapset search path.
 Suppose, for example, that the mapset <em>Soil_Maps</em> contains
 interpreted soils map layers to which the user wants access. The
 mapset <em>Soil_Maps</em> should then be included in the user's
@@ -95,6 +94,22 @@ path; however, access to these mapsets will remain restricted.
 
 <h2>EXAMPLES</h2>
 
+<h3>Selecting mapsets with the graphical mapset manager</h3>
+
+Using the <b>-s</b> flag, a convenient graphical mapset manager can
+be opened to select and deselect other mapsets (the actual mapset and
+the PERMANENT mapset are always selected):
+
+<div class="code"><pre>
+g.mapsets -s
+</pre></div>
+
+<center>
+<img src="g_mapsets_gui.png"><br>
+</center>
+
+
+<h3>Print available mapsets</h3>
 All available mapsets in the current location can be printed out by
 
 <div class="code"><pre>
@@ -103,6 +118,8 @@ g.mapsets -l
 Available mapsets:
 PERMANENT user1 user2
 </pre></div>
+
+<h3>Add new mapset</h3>
 
 Add mapset 'user2' to the current mapset search path
 
@@ -119,13 +136,17 @@ Accessible mapsets:
 user1 user2
 </pre></div>
 
+<h3>Overwrite current search path</h3>
+
 Overwrite current search path
 
 <div class="code"><pre>
 g.mapsets mapset=user1,PERMANENT operation=set
 </pre></div>
 
-Alternatively the current mapset can be defined by a shortcut &quot;.&quot;
+<h3>Using shortcuts for search path</h3>
+
+The current mapset can be defined by a shortcut &quot;.&quot; (dot)
 
 <div class="code"><pre>
 g.mapsets mapset=.,PERMANENT operation=set
