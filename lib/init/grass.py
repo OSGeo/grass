@@ -1427,9 +1427,9 @@ def bash_startup(location, location_name, grass_env_file):
     f = open(bashrc, 'w')
     f.write("test -r ~/.alias && . ~/.alias\n")
     if os.getenv('ISISROOT'):
-        f.write("PS1='ISIS-GRASS %s (%s):\w > '\n" % (grass_version, location_name))
+        f.write("PS1='ISIS-GRASS %s (%s):\\w > '\n" % (grass_version, location_name))
     else:
-        f.write("PS1='GRASS %s (%s):\w > '\n" % (grass_version, location_name))
+        f.write("PS1='GRASS %s (%s):\\w > '\n" % (grass_version, location_name))
 
     f.write("""grass_prompt() {
 	LOCATION="`g.gisenv get=GISDBASE,LOCATION_NAME,MAPSET separator='/'`"
@@ -1470,7 +1470,7 @@ def default_startup(location, location_name):
         # TODO: why this is missing in the other startups?
         cleanup_dir(os.path.join(location, ".tmp"))  # remove GUI session files from .tmp
     else:
-        os.environ['PS1'] = "GRASS %s (%s):\w > " % (grass_version, location_name)
+        os.environ['PS1'] = "GRASS %s (%s):\\w > " % (grass_version, location_name)
         exit_val = call([gpath("etc", "run"), os.getenv('SHELL')])
 
     # TODO: this seems to be inconsistent, the other two are no fataling
