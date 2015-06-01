@@ -127,8 +127,7 @@ int V2_close_pg(struct Map_info *Map)
         
         /* delete old support files if available */
         sprintf(buf, "%s/%s", GV_DIRECTORY, Map->name);
-        
-        G_file_name(file_path, buf, GV_TOPO_ELEMENT, G_mapset());
+        Vect__get_element_path(file_path, Map, GV_TOPO_ELEMENT);
         if (access(file_path, F_OK) == 0) /* file exists? */
             unlink(file_path);
         

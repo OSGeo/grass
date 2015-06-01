@@ -3,28 +3,32 @@
 
    \brief GIS library - Determine GRASS data base file name
 
-   (C) 2001-2008, 2013 by the GRASS Development Team
+   (C) 2001-2015 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
-   (>=v2).  Read the file COPYING that comes with GRASS for details.
+   (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Original author CERL
  */
 
 #include <string.h>
+#include <stdlib.h>
 #include <grass/gis.h>
 
 #include "gis_local_proto.h"
 
+char *file_name(char *, const char *, const char *,
+                const char *, const char *, const char *);
+
 /*!
   \brief Builds full path names to GIS data files
 
-  If name is of the form "nnn@ppp" then path is set as if name had
-  been nnn and mapset had been ppp (mapset parameter itself is ignored
-  in this case).
+  If <i>name</i> is of the form "nnn@ppp" then path is set as if name
+  had been "nnn" and mapset had been "ppp" (mapset parameter itself is
+  ignored in this case).
   
   \param[out] path buffer to hold resultant full path to file
-  \param element database element (eg, "cell", "cellhd", etc)
+  \param element database element (eg, "cell", "cellhd", "vector", etc)
   \param name name of file to build path to (fully qualified names allowed)
   \param mapset mapset name
 
@@ -33,85 +37,116 @@
 char *G_file_name(char *path,
 		   const char *element, const char *name, const char *mapset)
 {
-    char xname[GNAME_MAX];
-    char xmapset[GMAPSET_MAX];
-    const char *pname = name;
-    char *location = G__location_path();
-
-    /*
-     * if a name is given, build a file name
-     * must split the name into name, mapset if it is
-     * in the name@mapset format
-     */
-    if (name && *name && G_name_is_fully_qualified(name, xname, xmapset)) {
-	pname = xname;
-	sprintf(path, "%s/%s", location, xmapset);
-    }
-    else if (mapset && *mapset)
-	sprintf(path, "%s/%s", location, mapset);
-    else
-	sprintf(path, "%s/%s", location, G_mapset());
-
-    G_free(location);
-
-    if (!element && !pname)
-        return path;
-    
-    if (element && *element) {
-	strcat(path, "/");
-	strcat(path, element);
-    }
-
-    if (pname && *pname) {
-	strcat(path, "/");
-	strcat(path, pname);
-    }
-
-    G_debug(2, "G_file_name(): path = %s", path);
-    
-    return path;
+    return file_name(path, NULL, element, name, mapset, NULL);
 }
 
+/*!
+  \brief Builds full path names to GIS misc data files
+
+  \param[out] path buffer to hold resultant full path to file
+  \param dir misc directory
+  \param element database element (eg, "cell", "cellhd", "vector", etc)
+  \param name name of file to build path to (fully qualified names allowed)
+  \param mapset mapset name
+
+  \return pointer to <i>path</i> buffer
+*/
 char *G_file_name_misc(char *path,
 			const char *dir,
 			const char *element,
 			const char *name, const char *mapset)
 {
-    char xname[GNAME_MAX];
-    char xmapset[GMAPSET_MAX];
-    const char *pname = name;
-    char *location = G__location_path();
+    return file_name(path, dir, element, name, mapset, NULL);
+}
 
-    /*
-     * if a name is given, build a file name
-     * must split the name into name, mapset if it is
-     * in the name@mapset format
-     */
-    if (name && *name && G_name_is_fully_qualified(name, xname, xmapset)) {
-	pname = xname;
-	sprintf(path, "%s/%s", location, xmapset);
+/*!
+  \brief Builds full path names to GIS data files in temporary directory
+
+  By default temporary directory is located
+  $LOCATION/$MAPSET/.tmp/$HOSTNAME. If GRASS_TMPDIR_MAPSET is set to
+  "0", the temporary directory is located in TMPDIR (environmental
+  variable defined by the user or GRASS initialization script if not
+  given).
+
+  \param[out] path buffer to hold resultant full path to file
+  \param element database element (eg, "cell", "cellhd", "vector", etc)
+  \param name name of file to build path to (fully qualified names allowed)
+  \param mapset mapset name
+
+  \return pointer to <i>path</i> buffer
+*/
+char *G_file_name_tmp(char *path,
+                      const char *element,
+                      const char *name, const char *mapset)
+{
+    const char *env, *tmp_path;
+
+    tmp_path = NULL;
+    env = getenv("GRASS_TMPDIR_MAPSET");
+    if (env && strcmp(env, "0") == 0) {
+        tmp_path = getenv("TMPDIR");
     }
-    else if (mapset && *mapset)
-	sprintf(path, "%s/%s", location, mapset);
-    else
-	sprintf(path, "%s/%s", location, G_mapset());
+    
+    return file_name(path, NULL, element, name, mapset, tmp_path);
+}
 
-    G_free(location);
+char *file_name(char *path,
+                const char *dir, const char *element, const char *name,
+                const char *mapset, const char *base)
+{
+    const char *pname = name;
+    
+    if (base && *base) {
+        sprintf(path, "%s", base);
+    }
+    else {
+        char xname[GNAME_MAX];
+        char xmapset[GMAPSET_MAX];
+        char *location = G__location_path();
+        
+        /*
+         * if a name is given, build a file name
+         * must split the name into name, mapset if it is
+         * in the name@mapset format
+         */
+        if (name && *name && G_name_is_fully_qualified(name, xname, xmapset)) {
+            pname = xname;
+            sprintf(path, "%s/%s", location, xmapset);
+        }
+        else if (mapset && *mapset)
+            sprintf(path, "%s/%s", location, mapset);
+        else
+            sprintf(path, "%s/%s", location, G_mapset());
+        G_free(location);
+    }
 
-    if (dir && *dir) {
+    if (dir && *dir) { /* misc element */
 	strcat(path, "/");
 	strcat(path, dir);
+
+        if (pname && *pname) {
+            strcat(path, "/");
+            strcat(path, pname);
+        }
+
+        if (element && *element) {
+            strcat(path, "/");
+            strcat(path, element);
+        }
+    }
+    else {
+        if (element && *element) {
+            strcat(path, "/");
+            strcat(path, element);
+        }
+        
+        if (pname && *pname) {
+            strcat(path, "/");
+            strcat(path, pname);
+        }
     }
 
-    if (pname && *pname) {
-	strcat(path, "/");
-	strcat(path, pname);
-    }
-
-    if (element && *element) {
-	strcat(path, "/");
-	strcat(path, element);
-    }
-
+    G_debug(2, "G_file_name(): path = %s", path);
+    
     return path;
 }

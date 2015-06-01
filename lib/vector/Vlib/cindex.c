@@ -472,7 +472,7 @@ int Vect_cidx_dump(const struct Map_info *Map, FILE * out)
 int Vect_cidx_save(struct Map_info *Map)
 {
     struct Plus_head *plus;
-    char *path;
+    char path[GPATH_MAX];
     struct gvfile fp;
 
     G_debug(2, "Vect_cidx_save()");
@@ -482,9 +482,8 @@ int Vect_cidx_save(struct Map_info *Map)
     
     dig_file_init(&fp);
     
-    path = Vect__get_path(Map);
+    Vect__get_path(path, Map);
     fp.file = G_fopen_new(path, GV_CIDX_ELEMENT);
-    G_free(path);
     if (fp.file == NULL) {
 	G_warning(_("Unable to create category index file for vector map <%s>"),
                   Vect_get_name(Map));
@@ -517,7 +516,7 @@ int Vect_cidx_save(struct Map_info *Map)
 int Vect_cidx_open(struct Map_info *Map, int head_only)
 {
     int ret;
-    char file_path[GPATH_MAX], *path;
+    char file_path[GPATH_MAX], path[GPATH_MAX];
     struct gvfile fp;
     struct Plus_head *Plus;
 
@@ -526,17 +525,15 @@ int Vect_cidx_open(struct Map_info *Map, int head_only)
 
     Plus = &(Map->plus);
 
-    path = Vect__get_path(Map);
-    G_file_name(file_path, path, GV_CIDX_ELEMENT, Map->mapset);
-
+    Vect__get_path(path, Map);
+    Vect__get_element_path(file_path, Map, GV_CIDX_ELEMENT);
+    
     if (access(file_path, F_OK) != 0) {	/* does not exist */
-        G_free(path);
 	return 1;
     }
 
     dig_file_init(&fp);
     fp.file = G_fopen_old(path, GV_CIDX_ELEMENT, Map->mapset);
-    G_free(path);
     
     if (fp.file == NULL) {	/* category index file is not available */
 	G_warning(_("Unable to open category index file for vector map <%s>"),

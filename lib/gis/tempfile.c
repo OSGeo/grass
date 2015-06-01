@@ -3,7 +3,7 @@
  *
  * \brief GIS Library - Temporary file functions.
  *
- * (C) 2001-2009 by the GRASS Development Team
+ * (C) 2001-2015 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -14,6 +14,8 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <stdlib.h>
+
 #include <grass/gis.h>
 
 #include "gis_local_proto.h"
@@ -83,10 +85,12 @@ char *G_tempfile_pid(int pid)
     do {
 	int uniq = G_counter_next(&unique);
 	sprintf(name, "%d.%d", pid, uniq);
-	G_file_name(path, element, name, G_mapset());
+	G_file_name_tmp(path, element, name, G_mapset());
     }
     while (access(path, F_OK) == 0);
 
+    G_debug(2, "G_tempfile_pid(): %s", path);
+    
     return G_store(path);
 }
 
@@ -97,7 +101,7 @@ char *G_tempfile_pid(int pid)
  */
 void G_temp_element(char *element)
 {
-    const char *machine;
+    const char *machine, *env;
 
     strcpy(element, ".tmp");
     machine = G__machine_name();
@@ -105,5 +109,13 @@ void G_temp_element(char *element)
 	strcat(element, "/");
 	strcat(element, machine);
     }
-    G_make_mapset_element(element);
+    
+    env = getenv("GRASS_TMPDIR_MAPSET");
+    if (!env || strcmp(env, "0") != 0)
+        G_make_mapset_element(element);
+    else
+        G_make_mapset_element_tmp(element);
+    
+    G_debug(2, "G_temp_element(): %s (GRASS_TMPDIR_MAPSET=%s)",
+            element, env ? env : "");
 }

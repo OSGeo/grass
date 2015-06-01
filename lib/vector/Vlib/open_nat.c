@@ -38,20 +38,19 @@ static int check_coor(struct Map_info *Map);
 */
 int V1_open_old_nat(struct Map_info *Map, int update)
 {
-    char *path;
+    char path[GPATH_MAX];
     struct Coor_info CInfo;
 
     G_debug(1, "V1_open_old_nat(): name = %s mapset = %s", Map->name,
 	    Map->mapset);
 
-    path = Vect__get_path(Map);
+    Vect__get_path(path, Map);
     dig_file_init(&(Map->dig_fp));
     if (update)
 	Map->dig_fp.file = G_fopen_modify(path, GV_COOR_ELEMENT);
     else
 	Map->dig_fp.file =
 	    G_fopen_old(path, GV_COOR_ELEMENT, Map->mapset);
-    G_free(path);
     
     if (Map->dig_fp.file == NULL) {
         G_warning(_("Unable to open coor file for vector map <%s>"),
@@ -95,19 +94,19 @@ int V1_open_old_nat(struct Map_info *Map, int update)
 */
 int V1_open_new_nat(struct Map_info *Map, const char *name, int with_z)
 {
-    char *path, file_path[GPATH_MAX];
+    char path[GPATH_MAX];
 
     G_debug(1, "V1_open_new_nat(): name = %s with_z = %d is_tmp = %d",
             name, with_z, Map->temporary);
-
-    path = Vect__get_path(Map);
 
     /* Set the 'coor' file version */
     Map->head.coor_version.major = GV_COOR_VER_MAJOR;
     Map->head.coor_version.minor = GV_COOR_VER_MINOR;
     Map->head.coor_version.back_major = GV_COOR_EARLIEST_MAJOR;
     Map->head.coor_version.back_minor = GV_COOR_EARLIEST_MINOR;
-
+    
+    Vect__get_path(path, Map);
+    
     /* TODO: open better */
     dig_file_init(&(Map->dig_fp));
     Map->dig_fp.file = G_fopen_new(path, GV_COOR_ELEMENT);
@@ -119,14 +118,13 @@ int V1_open_new_nat(struct Map_info *Map, const char *name, int with_z)
     Map->dig_fp.file = G_fopen_modify(path, GV_COOR_ELEMENT);
     if (Map->dig_fp.file == NULL)
 	return -1;
-
+    
     /* if overwrite OK, any existing files have already been deleted by
      * Vect_open_new(): remove this check ? */
     /* check to see if dig_plus file exists and if so, remove it */
-    G_file_name(file_path, path, GV_TOPO_ELEMENT, G_mapset());
-    G_free(path);
-    if (access(file_path, F_OK) == 0)
-        unlink(file_path); /* remove topo file if exists */
+    Vect__get_element_path(path, Map, GV_TOPO_ELEMENT);
+    if (access(path, F_OK) == 0)
+        unlink(path); /* remove topo file if exists */
     
     /* set conversion matrices */
     dig_init_portable(&(Map->head.port), dig__byte_order_out());

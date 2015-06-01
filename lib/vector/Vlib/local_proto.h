@@ -7,6 +7,9 @@
 #define CACHE_FEATURE 0
 #define CACHE_MAP     1
 
+/*! Attributes of temporary maps */
+/* #define TEMPORARY_MAP_DB */
+
 /* Internal vector library subroutines which are not part of public
    API*/
 
@@ -27,8 +30,8 @@ int Vect__delete(const char *, int);
 /* open.c */
 int Vect__open_old(struct Map_info *, const char *, const char *,
                    const char *, int, int, int);
-char *Vect__get_path(const struct Map_info *);
-char *Vect__get_element_path(const struct Map_info *, const char *);
+char *Vect__get_path(char *, const struct Map_info *);
+char *Vect__get_element_path(char *, const struct Map_info *, const char *);
 
 /* write_nat.c */
 int V2__add_line_to_topo_nat(struct Map_info *, off_t, int,

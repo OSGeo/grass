@@ -3,7 +3,7 @@
  *
  * \brief GIS Library - Rename file functions.
  *
- * (C) 2001-2009 by the GRASS Development Team
+ * (C) 2001-2015 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -19,7 +19,7 @@
 
 
 /*!
-  \brief Rename a file in the filesystem.
+  \brief Rename a file or a directory in the filesystem.
   
   The file or directory <i>oldname</i> is renamed to <i>newname</i>.
 
@@ -31,12 +31,23 @@
 */
 int G_rename_file(const char *oldname, const char *newname)
 {
+    int ret;
 
 #ifdef __MINGW32__
     remove(newname);
 #endif
+    
+    ret = rename(oldname, newname);
 
-    return rename(oldname, newname);
+    if (ret == -1) {
+	/* if fails, try to copy file and then remove */
+	if (1 == G_copy_file(oldname, newname)) {
+	    if (remove(oldname) != -1)
+		ret = 0;
+	}
+    }
+
+    return ret;
 }
 
 /*!

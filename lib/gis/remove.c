@@ -21,7 +21,6 @@
 #include <dirent.h>
 #include <grass/gis.h>
 
-static int recursive_remove(const char *path);
 static int G__remove(int misc, const char *dir, const char *element,
 		     const char *name);
 
@@ -95,14 +94,23 @@ static int G__remove(int misc, const char *dir, const char *element,
     if (access(path, 0) != 0)
 	return 0;
 
-    if (recursive_remove(path) == 0)
+    if (G_recursive_remove(path) == 0)
 	return 1;
 
     return -1;
 }
 
-/* equivalent to rm -rf path */
-static int recursive_remove(const char *path)
+/*!
+  \brief Recursively remove all files in given directory
+
+  Equivalent to rm -rf path.
+
+  \param path path to the directory which should be removed
+
+  \return 0 on success
+  \return -1 on error
+*/
+int G_recursive_remove(const char *path)
 {
     DIR *dirp;
     struct dirent *dp;
@@ -110,21 +118,21 @@ static int recursive_remove(const char *path)
     char path2[GPATH_MAX];
 
     if (G_lstat(path, &sb))
-	return 1;
+	return -1;
     if (!S_ISDIR(sb.st_mode))
-	return remove(path) == 0 ? 0 : 1;
+	return remove(path) == 0 ? 0 : -1;
 
     if ((dirp = opendir(path)) == NULL)
-	return 1;
+	return -1;
     while ((dp = readdir(dirp)) != NULL) {
 	if (dp->d_name[0] == '.')
 	    continue;
 	if (strlen(path) + strlen(dp->d_name) + 2 > sizeof(path2))
 	    continue;
 	sprintf(path2, "%s/%s", path, dp->d_name);
-	recursive_remove(path2);
+	G_recursive_remove(path2);
     }
     closedir(dirp);
 
-    return rmdir(path) == 0 ? 0 : 1;
+    return rmdir(path) == 0 ? 0 : -1;
 }
