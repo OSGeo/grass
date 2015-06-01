@@ -18,10 +18,12 @@ $(DSTDIR):
 $(DSTDIR)/%: % | $(DSTDIR)
 	$(INSTALL_DATA) $< $@
 
-$(DSTDIR)/setup.py: $(OBJDIR)/setup.py | $(DSTDIR)
+EXTRA_CLEAN_FILES = setup.tmp.py
+
+$(DSTDIR)/setup.py: setup.tmp.py | $(DSTDIR)
 	$(INSTALL_DATA) $< $@
 
-$(OBJDIR)/setup.py: setup.py.sed | $(OBJDIR)
+setup.tmp.py: setup.py
 	sed \
 	-e 's#@LD_LIBRARY_PATH_VAR@#$(LD_LIBRARY_PATH_VAR)#' \
 	$< > $@
