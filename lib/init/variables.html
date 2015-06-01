@@ -276,15 +276,27 @@ PERMANENT
 
   <dt>GRASS_VECTOR_TEMPORARY</dt>
   <dd>[vectorlib]<br> If the environment variable
-    GRASS_VECTOR_TEMPORARY exists, vector library will operate with
-    temporary vector maps. New vector maps will be created
-    in <tt>$MAPSET/.tmp/$HOSTNAME/vector</tt>, existing vector maps
-    will be read also from this directory. Note that temporary vector
-    maps are not visible to the user
-    via <em><a href="g.list.html">g.list</a></em>. They are used
-    internally by the GRASS modules and deleted automatically when the
-    map is closed or GRASS session quited. Note that this variable is
-    dedicated for internal use only.</dd>
+    GRASS_VECTOR_TEMPORARY exists, GRASS vector library will operate
+    on temporary vector maps. New vector maps will be created in
+    temporary directory (see GRASS_TMPDIR_MAPSET variable), existing
+    vector maps will be read (if found) also from this directory. It
+    may be set to either:
+    <ul>
+      <li><tt>keep</tt> - the temporary vector map is not deleted when
+      closing the map.
+      <li><tt>move</tt> - the temporary vector map is moved to the
+      current mapset when closing the map.</li>
+      <li><tt>delete</tt> - the temporary vector map is deleted when
+      closing the map.
+      </li>
+    </ul>    
+    Default value is <tt>keep</tt>.
+
+    Note that temporary vector maps are not visible to the user
+    via <em><a href="g.list.html">g.list</a></em>
+    or <em><a href="wxGUI.html">wxGUI</a></em>. They are used
+    internally by the GRASS modules and deleted automatically when
+    GRASS session is quited.</dd>
   
   <dt>GRASS_VECTOR_TOPO_DEBUG</dt>
   <dd>[vectorlib, v.generalize]<br> If the environment variable
@@ -334,7 +346,14 @@ PERMANENT
     If OpenMP support is enabled this limits the number of threads.
     The default is set to the number of CPUs on the system.
     Setting to '1' effectively disables parallel processing.</dd>
-    
+
+  <dt>GRASS_TMPDIR_MAPSET</dt>
+  <dd> By default GRASS temporary directory is located in
+  <tt>$LOCATION/$MAPSET/.tmp/$HOSTNAME</tt>. If GRASS_TMPDIR_MAPSET is
+  set to '0', the temporary directory is located in TMPDIR
+  (environmental variable defined by the user or GRASS initialization
+  script if not given).</dd>
+  
   <dt>TMPDIR, TEMP, TMP</dt>
   <dd>[Various GRASS GIS commands and wxGUI]<br>
   <!-- what about Windows %TEMP% and http://trac.osgeo.org/grass/ticket/560#comment:21 ? -->

@@ -3,7 +3,7 @@
  * 
  * \brief GIS Library - Open file functions
  *
- * (C) 1999-2009 by the GRASS Development Team
+ * (C) 1999-2015 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public
  * License (>=v2). Read the file COPYING that comes with GRASS
@@ -53,11 +53,18 @@ static int G__open(const char *element,
 		   const char *name, const char *mapset, int mode)
 {
     int fd;
+    int is_tmp;
     char path[GPATH_MAX];
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
-
-
+    
     G__check_gisinit();
+
+    is_tmp = (element && strncmp(element, ".tmp", 3) == 0);
+
+    if (is_tmp)
+        G_file_name_tmp(path, element, name, mapset);
+    else
+        G_file_name(path, element, name, mapset);
 
     /* READ */
     if (mode == 0) {
@@ -71,13 +78,13 @@ static int G__open(const char *element,
 	    mapset = xmapset;
 	}
 
-	mapset = G_find_file2(element, name, mapset);
-
-	if (!mapset)
-	    return -1;
-
-	G_file_name(path, element, name, mapset);
-
+        if (!is_tmp) {
+            mapset = G_find_file2(element, name, mapset);
+            
+            if (!mapset)
+                return -1;
+        }
+        
 	if ((fd = open(path, 0)) < 0)
 	    G_warning(_("G__open(read): Unable to open '%s': %s"),
 	              path, strerror(errno));
@@ -98,10 +105,11 @@ static int G__open(const char *element,
 	if (*name && G_legal_filename(name) == -1)
 	    return -1;
 
-	G_file_name(path, element, name, mapset);
-
 	if (mode == 1 || access(path, 0) != 0) {
-	    G_make_mapset_element(element);
+            if (is_tmp)
+                G_make_mapset_element_tmp(element);
+            else
+                G_make_mapset_element(element);
 	    close(open(path, O_WRONLY | O_CREAT | O_TRUNC, 0666));
 	}
 

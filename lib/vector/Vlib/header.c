@@ -77,12 +77,11 @@ int Vect_write_header(const struct Map_info *Map)
  */
 int Vect__write_head(const struct Map_info *Map)
 {
-    char *path;
+    char path[GPATH_MAX];
     FILE *head_fp;
 
-    path = Vect__get_path(Map);
+    Vect__get_path(path, Map);
     head_fp = G_fopen_new(path, GV_HEAD_ELEMENT);
-    G_free(path);
     if (head_fp == NULL) {
 	G_warning(_("Unable to create header file for vector map <%s>"),
 		  Vect_get_full_name(Map));
@@ -118,15 +117,14 @@ int Vect__read_head(struct Map_info *Map)
 {
     FILE *head_fp;
     char buff[2000];
-    char *path, *ptr;
+    char path[GPATH_MAX], *ptr;
 
     /* Reset / init */
     Vect__init_head(Map);
     
     G_debug(1, "Vect__read_head(): vector = %s@%s", Map->name, Map->mapset);
-    path = Vect__get_path(Map);
+    Vect__get_path(path, Map);
     head_fp = G_fopen_old(path, GV_HEAD_ELEMENT, Map->mapset);
-    G_free(path);
     if (head_fp == NULL) {
 	G_warning(_("Unable to open header file of vector <%s>"),
 		  Vect_get_full_name(Map));

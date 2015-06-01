@@ -19,30 +19,59 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
+static int make_mapset_element(const char *, const char *);
+
 /*!
    \brief Create element in the current mapset.
 
-   Make the specified element in the current mapset
-   will check for the existence of the element and
-   do nothing if it is found so this routine
-   can be called even if the element already exists.
+   Make the specified element in the current mapset will check for the
+   existence of the element and do nothing if it is found so this
+   routine can be called even if the element already exists.
+   
+   Calls G_fatal_error() on failure.
+   
+   \param p_element element to be created in mapset
 
-   \param element element to be created in mapset
-
-   \return 0 ?
-   \return ?
+   \return 0 no element defined
+   \return 1 on success
  */
 int G_make_mapset_element(const char *p_element)
 {
     char path[GPATH_MAX];
-    char *p;
+    
+    G_file_name(path, NULL, NULL, G_mapset());
+    return make_mapset_element(path, p_element);
+}
+
+/*!
+   \brief Create element in the temporary directory.
+
+   See G_file_name_tmp() for details.
+
+   \param p_element element to be created in mapset
+
+   \return 0 no element defined
+   \return 1 on success
+ */
+int G_make_mapset_element_tmp(const char *p_element)
+{
+    char path[GPATH_MAX];
+    
+    G_file_name_tmp(path, NULL, NULL, G_mapset());
+    return make_mapset_element(path, p_element);
+}
+
+int make_mapset_element(const char *p_path, const char *p_element)
+{
+    char path[GPATH_MAX], *p;
     const char *element;
 
     element = p_element;
     if (*element == 0)
 	return 0;
 
-    G_file_name(p = path, NULL, NULL, G_mapset());
+    strncpy(path, p_path, GPATH_MAX);
+    p = path;
     while (*p)
 	p++;
     /* add trailing slash if missing */
@@ -75,10 +104,10 @@ int G_make_mapset_element(const char *p_element)
    \brief Create misc element in the current mapset.
 
    \param dir directory path
-   \param name element name
+   \param name element to be created in mapset
 
-   \return 0 ?
-   \return ?
+   \return 0 no element defined
+   \return 1 on success
  */
 int G__make_mapset_element_misc(const char *dir, const char *name)
 {

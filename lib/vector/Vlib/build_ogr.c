@@ -27,6 +27,8 @@
 #include <ogr_api.h>
 #endif
 
+#include "local_proto.h"
+
 /*!
    \brief Build pseudo-topology (simple features) for OGR layer
 
@@ -124,7 +126,7 @@ int Vect_save_fidx(struct Map_info *Map,
     length = 9;
 
     sprintf(elem, "%s/%s", GV_DIRECTORY, Map->name);
-    G_file_name(fname, elem, GV_FIDX_ELEMENT, Map->mapset);
+    Vect__get_element_path(fname, Map, GV_FIDX_ELEMENT);
     G_debug(4, "Open fidx: %s", fname);
     dig_file_init(&fp);
     fp.file = fopen(fname, "w");

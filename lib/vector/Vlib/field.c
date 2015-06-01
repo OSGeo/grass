@@ -385,9 +385,25 @@ struct field_info *Vect_default_field_info(struct Map_info *Map,
 	fi->name = G_store(buf);
 
     fi->key = G_store(GV_KEY_COLUMN);	/* Should be: id/fid/gfid/... ? */
+#ifdef TEMPORARY_MAP_DB
+    if (Map->temporary) {
+        Vect__get_element_path(buf, Map, NULL);
+        if (strcmp(DB_DEFAULT_DRIVER, "sqlite") == 0)
+            strcat(buf, "/sqlite.db");
+        else
+            strcat(buf, "/db.dbf");
+        fi->database = G_store(buf);
+        fi->driver = DB_DEFAULT_DRIVER;
+    }
+    else {
+        fi->database = G_store(connection.databaseName);
+        fi->driver = G_store(connection.driverName);
+    }
+#else
     fi->database = G_store(connection.databaseName);
     fi->driver = G_store(connection.driverName);
-
+#endif
+    
     return fi;
 }
 
@@ -560,7 +576,7 @@ static int read_dblinks_nat(struct Map_info *Map)
     char file[1024], buf[2001];
     char tab[1024], col[1024], db[1024], drv[1024], fldstr[1024], *fldname;
     int fld;
-    char *c, *path;
+    char *c, path[GPATH_MAX];
     int row, rule;
     struct dblinks *dbl;
     char **tokens;
@@ -569,9 +585,8 @@ static int read_dblinks_nat(struct Map_info *Map)
     dbl = Map->dblnk;
 
     /* Read dblink for native format */
-    path = Vect__get_path(Map);
+    Vect__get_path(path, Map);
     fd = G_fopen_old(path, GV_DBLN_ELEMENT, Map->mapset);
-    G_free(path);
     if (fd == NULL) {		/* This may be correct, no tables defined */
 	G_debug(1, "Cannot open vector database definition file");
 	return -1;
@@ -892,7 +907,7 @@ int Vect_write_dblinks(struct Map_info *Map)
 {
     int i;
     FILE *fd;
-    char *path, buf[1024];
+    char path[GPATH_MAX], buf[1024];
     struct dblinks *dbl;
 
     if (Map->format != GV_FORMAT_NATIVE)
@@ -904,9 +919,8 @@ int Vect_write_dblinks(struct Map_info *Map)
 
     dbl = Map->dblnk;
 
-    path = Vect__get_path(Map);
+    Vect__get_path(path, Map);
     fd = G_fopen_new(path, GV_DBLN_ELEMENT);
-    G_free(path);
     if (fd == NULL) {		/* This may be correct, no tables defined */
 	G_warning(_("Unable to create database definition file for vector map <%s>"),
 		  Vect_get_name(Map));

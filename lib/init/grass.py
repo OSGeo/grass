@@ -985,9 +985,6 @@ def load_env(grass_env_file):
         except:
             continue
         
-        if k in ('TMPDIR', 'TEMP', 'TMP'):
-            continue # don't overwrite TMPDIR set by create_tmp()
-        
         debug("Environmental variable set {}={}".format(k, v))
         os.environ[k] = v
         
@@ -1700,6 +1697,14 @@ def main():
     # thus must be called only after Language has been set.
     set_language(grass_config_dir)
 
+    # Set shell (needs to be called before load_env())
+    sh, shellname = get_shell()
+    grass_env_file = get_grass_env_file(sh, grass_config_dir)
+
+    # Load environmental variables from the file (needs to be called
+    # before create_tmp())
+    load_env(grass_env_file)
+
     # Create the temporary directory and session grassrc file
     tmpdir = create_tmp(user, gis_lock)
 
@@ -1710,13 +1715,6 @@ def main():
 
     # Create the session grassrc file
     gisrc = create_gisrc(tmpdir, gisrcrc)
-
-    # Set shell (needs to be called before load_env())
-    sh, shellname = get_shell()
-    grass_env_file = get_grass_env_file(sh, grass_config_dir)
-
-    # Load environmental variables from the file
-    load_env(grass_env_file)
 
     ensure_home()
     # Set PATH, PYTHONPATH, ...

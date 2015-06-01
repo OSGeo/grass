@@ -163,7 +163,7 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
                    const char *layer, int update, int head_only, int is_tmp)
 {
     char xname[GNAME_MAX], xmapset[GMAPSET_MAX];
-    char *path;
+    char path[GPATH_MAX];
     FILE *fp;
     int level, level_request;
     int format, ret;
@@ -174,7 +174,7 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
             "head_only = %d, is_tmp = %d", name, mapset, layer ? layer : "NULL", update, head_only,
             is_tmp);
     
-    if (!is_tmp) {
+    if (update && !is_tmp) {
         is_tmp = getenv("GRASS_VECTOR_TEMPORARY") ? TRUE : FALSE;
         G_debug(1, "Vect__open_old(): is_tmp = %d (check GRASS_VECTOR_TEMPORARY)", is_tmp);
     }
@@ -221,7 +221,7 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
             Map->mapset = G_store("");
     }
 
-    path = Vect__get_path(Map);
+    Vect__get_path(path, Map);
 
     if (!ogr_mapset) {
         /* try to find vector map (not for OGR mapset) */
@@ -253,7 +253,8 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
                     return -1;
                 }
             }
-            G_file_name(file_path, path, GV_HEAD_ELEMENT, Map->mapset);
+
+            Vect__get_element_path(file_path, Map, GV_HEAD_ELEMENT);
             if (access(file_path, F_OK) != 0)
                 return -1;
         }
@@ -521,26 +522,24 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
     if (update && !head_only) {
         char file_path[GPATH_MAX];
 
-        G_file_name(file_path, path, GV_TOPO_ELEMENT, G_mapset());
+        Vect__get_element_path(file_path, Map, GV_TOPO_ELEMENT);
         if (access(file_path, F_OK) == 0)       /* topo file exists? */
             unlink(file_path);
 
-        G_file_name(file_path, path, GV_SIDX_ELEMENT, G_mapset());
+        Vect__get_element_path(file_path, Map, GV_SIDX_ELEMENT);
         if (access(file_path, F_OK) == 0)       /* sidx file exists? */
             unlink(file_path);
 
-        G_file_name(file_path, path, GV_CIDX_ELEMENT, G_mapset());
+        Vect__get_element_path(file_path, Map, GV_CIDX_ELEMENT);
         if (access(file_path, F_OK) == 0)       /* cidx file exists? */
             unlink(file_path);
 
         if (format == GV_FORMAT_OGR || format == GV_FORMAT_POSTGIS) {
-            G_file_name(file_path, path, GV_FIDX_ELEMENT, G_mapset());
+            Vect__get_element_path(file_path, Map, GV_FIDX_ELEMENT);
             if (access(file_path, F_OK) == 0)   /* fidx file exists? */
                 unlink(file_path);
         }
     }
-
-    G_free(path);
     
     return level;
 }
@@ -791,7 +790,8 @@ int open_new(struct Map_info *Map, const char *name, int with_z, int is_tmp)
     
     if (Map->format != GV_FORMAT_OGR_DIRECT &&
         getenv("GRASS_VECTOR_PGFILE") == NULL) { /* GRASS_VECTOR_PGFILE defined by v.out.postgis */
-        char *path;
+        char *env;
+        char path[GPATH_MAX];
         
         G_debug(2, " using non-direct format");
 
@@ -804,7 +804,9 @@ int open_new(struct Map_info *Map, const char *name, int with_z, int is_tmp)
                 return -1;
             }
         }
-        else {
+
+        env = getenv("GRASS_VECTOR_TEMPORARY");
+        if (!Map->temporary || (env && strcmp(env, "move") == 0)) {
             if (G_find_vector2(name, G_mapset()) != NULL) {
                 G_warning(_("Vector map <%s> already exists and will be overwritten"),
                           name);
@@ -828,9 +830,8 @@ int open_new(struct Map_info *Map, const char *name, int with_z, int is_tmp)
         Vect__write_head(Map);
 
         /* create history file */
-        path = Vect__get_path(Map);
+        Vect__get_path(path, Map);
         Map->hist_fp = G_fopen_new(path, GV_HIST_ELEMENT);
-        G_free(path);
         if (Map->hist_fp == NULL) {
             G_warning(_("Unable to open history file of vector map <%s>"),
                       name);
@@ -963,14 +964,12 @@ int Vect_open_tmp_new(struct Map_info *Map, const char *name, int with_z)
 */
 int Vect_coor_info(const struct Map_info *Map, struct Coor_info *Info)
 {
-    char *path, file_path[GPATH_MAX];
+    char file_path[GPATH_MAX];
     struct stat stat_buf;
     
     switch (Map->format) {
     case GV_FORMAT_NATIVE:
-        path = Vect__get_path(Map);
-        G_file_name(file_path, path, GV_COOR_ELEMENT, Map->mapset);
-        G_free(path);
+        Vect__get_element_path(file_path, Map, GV_COOR_ELEMENT);
         G_debug(1, "get coor info: %s", file_path);
         if (0 != stat(file_path, &stat_buf)) {
             G_warning(_("Unable to stat file <%s>"), file_path);
@@ -1087,7 +1086,7 @@ int Vect_maptype(const struct Map_info *Map)
 int Vect_open_topo(struct Map_info *Map, int head_only)
 {
     int err, ret;
-    char file_path[GPATH_MAX], *path;
+    char file_path[GPATH_MAX], path[GPATH_MAX];
     struct gvfile fp;
     struct Coor_info CInfo;
     struct Plus_head *Plus;
@@ -1097,17 +1096,14 @@ int Vect_open_topo(struct Map_info *Map, int head_only)
 
     Plus = &(Map->plus);
 
-    path = Vect__get_path(Map);
-    G_file_name(file_path, path, GV_TOPO_ELEMENT, Map->mapset);
-    
+    Vect__get_path(path, Map);
+    Vect__get_element_path(file_path, Map, GV_TOPO_ELEMENT);
     if (access(file_path, F_OK) != 0) {  /* does not exist */
-        G_free(path);
         return 1;
     }
 
     dig_file_init(&fp);
     fp.file = G_fopen_old(path, GV_TOPO_ELEMENT, Map->mapset);
-    G_free(path);
 
     if (fp.file == NULL) {      /* topo file is not available */
         G_debug(1, "Cannot open topo file for vector '%s@%s'.",
@@ -1186,16 +1182,14 @@ int Vect_open_sidx(struct Map_info *Map, int mode)
     dig_file_init(&(Plus->spidx_fp));
 
     if (mode < 2) {
-        char *path, file_path[GPATH_MAX];
+        char path[GPATH_MAX], file_path[GPATH_MAX];
         
-        path = Vect__get_path(Map);
-        G_file_name(file_path, path, GV_SIDX_ELEMENT, Map->mapset);
-
+        Vect__get_path(path, Map);
+        Vect__get_element_path(file_path, Map, GV_SIDX_ELEMENT);
         if (access(file_path, F_OK) != 0)       /* does not exist */
             return 1;
 
         Plus->spidx_fp.file = G_fopen_old(path, GV_SIDX_ELEMENT, Map->mapset);
-        G_free(path);
         
         if (Plus->spidx_fp.file == NULL) {  /* sidx file is not available */
             G_debug(1, "Cannot open spatial index file for vector '%s@%s'.",
@@ -1435,16 +1429,13 @@ int map_format(struct Map_info *Map)
 /*!
   \brief Get map directory name (internal use only)
 
-  Allocate string should be freed by G_free().
-
+  \param file_path path string buffer
   \param Map pointer to Map_info struct
 
-  \return allocated buffer containing path
+  \return buffer containing path
 */
-char *Vect__get_path(const struct Map_info *Map)
+char *Vect__get_path(char *path, const struct Map_info *Map)
 {
-    char path[GPATH_MAX];
-    
     if (Map->temporary) {
         char path_tmp[GPATH_MAX];
         G_temp_element(path_tmp);
@@ -1454,7 +1445,7 @@ char *Vect__get_path(const struct Map_info *Map)
         sprintf(path, "%s/%s", GV_DIRECTORY, Map->name);
     }
     
-    return G_store(path);
+    return path;
 }
 
 /*!
@@ -1467,13 +1458,17 @@ char *Vect__get_path(const struct Map_info *Map)
 
   \return allocated buffer containing path
 */
-char *Vect__get_element_path(const struct Map_info *Map, const char *element)
+char *Vect__get_element_path(char *file_path,
+                             const struct Map_info *Map, const char *element)
 {
-    char file_path[GPATH_MAX], *path;
+    char path[GPATH_MAX];
     
-    path = Vect__get_path(Map);
-    G_file_name(file_path, path, element, Map->mapset);
-    G_free(path);
+    Vect__get_path(path, Map);
+    if (Map->temporary)
+        G_file_name_tmp(file_path, path, element, Map->mapset);
+    else
+        G_file_name(file_path, path, element, Map->mapset);
 
-    return G_store(file_path);
+    return file_path;
 }
+

@@ -375,15 +375,15 @@ static int close_new(int fd, int ok)
 
 	if (fcb->null_cur_row > 0) {
 	    /* if temporary NULL file exists, write it into cell_misc/name/null */
-	    if (rename(fcb->null_temp_name, path)) {
-		G_warning(_("Unable to rename null file '%s' to '%s': %s"),
+	    if (0 != G_rename_file(fcb->null_temp_name, path)) {
+		G_warning(_("Unable to rename file <%s> to <%s>: %s"),
 			  fcb->null_temp_name, path, strerror(errno));
 		stat = -1;
 	    }
-	    /* if rename() was successful what is left to remove() ? */
+            /* if rename() was successful what is left to remove() ? */
 	    else {
 		remove(fcb->null_temp_name);
-	    }
+            }
 	}
 	else {
 	    remove(fcb->null_temp_name);
@@ -450,8 +450,9 @@ static int close_new(int fd, int ok)
     if (ok && (fcb->temp_name != NULL)) {
 	G_file_name(path, CELL_DIR, fcb->name, fcb->mapset);
 	remove(path);
-	if (rename(fcb->temp_name, path)) {
-	    G_warning(_("Unable to rename cell file '%s' to '%s': %s"),
+
+	if (G_rename_file(fcb->temp_name, path)) {
+	    G_warning(_("Unable to rename file <%s> to <%s>: %s"),
 		      fcb->temp_name, path, strerror(errno));
 	    stat = -1;
 	}

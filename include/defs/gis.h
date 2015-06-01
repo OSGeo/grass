@@ -247,6 +247,7 @@ void G_init_logging(void);
 char *G_file_name(char *, const char *, const char *, const char *);
 char *G_file_name_misc(char *, const char *, const char *, const char *,
 		       const char *);
+char *G_file_name_tmp(char *, const char *, const char *, const char *);
 
 /* find_file.c */
 const char *G_find_file(const char *, char *, const char *);
@@ -437,6 +438,7 @@ char *G_mapset_path(void);
 
 /* mapset_msc.c */
 int G_make_mapset_element(const char *);
+int G_make_mapset_element_tmp(const char *);
 int G__make_mapset_element_misc(const char *, const char *);
 int G_mapset_permissions(const char *);
 int G_mapset_permissions2(const char *, const char *, const char *);
@@ -596,6 +598,7 @@ void G__read_Cell_head_array(char **, struct Cell_head *, int);
 /* remove.c */
 int G_remove(const char *, const char *);
 int G_remove_misc(const char *, const char *, const char *);
+int G_recursive_remove(const char *);
 
 /* rename.c */
 int G_rename_file(const char *, const char *);
