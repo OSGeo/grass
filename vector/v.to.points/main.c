@@ -56,6 +56,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("line"));
     G_add_keyword(_("node"));
     G_add_keyword(_("vertex"));
+    G_add_keyword(_("point"));
     module->description =
 	_("Creates points along input lines in new vector map with 2 layers.");
 
