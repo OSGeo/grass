@@ -49,6 +49,8 @@ run on the resampled DEM.
 
 <h2>EXAMPLES</h2>
 
+<h3>Shaded relief map</h3>
+
 In this example, the aspect map in the North Carolina sample
 dataset location is used to hillshade the elevation map:
 
@@ -63,18 +65,55 @@ r.relief input=elevation output=elevation_shade
 <i>r.relief: shaded elevation map (subset)</i>
 </center>
 
+<h3>Colorizing a shaded relief map</h3>
+
 Color can be added later using <em><a href="r.shade.html">r.shade</a></em>:
 <div class="code"><pre>
 r.shade shade=elevation_shade color=elevation output=elevation_shaded
 </pre></div>
 
-<p>In Latitude-Longitude locations (or other non-metric locations), the
+<h3>Using the scale factor in Latitude-Longitude</h3>
+
+In Latitude-Longitude locations (or other non-metric locations), the
 <em>scale</em> factor has to be used:
 
 <div class="code"><pre>
 # Latitude-Longitude example
+g.region raster=srtm -p
 r.relief input=srtm output=srtm_shaded scale=111120
 </pre></div>
+
+<h3>Exporting shaded relief maps to GeoTIFF</h3>
+
+The data range of shaded relief maps usually does not permit to export the
+map to GeoTIFF format along with its associated color table due to limitations
+in the GeoTIFF format.
+<p>
+The most simple way to export it while even reducing the file size is to
+export as palette byte map. This requires a conversion done in <tt>r.mapcalc</tt>,
+using the # operator to convert map category values to their grey scale
+equivalents:
+
+<div class="code"><pre>
+# using the map created above
+
+# create new map from map category values
+r.mapcalc "elevation_shade_byte = #elevation_shade"
+
+# verify data range
+r.info elevation_shade_byte
+
+# assign grey color table
+r.colors elevation_shade_byte color=grey
+
+# export (optionally: createopt="COMPRESS=DEFLATE,BIGTIFF=YES")
+r.out.gdal input=elevation_shade_byte createopt="COMPRESS=DEFLATE" \
+           output=elevation_shade.tif
+
+# add overview images in GeoTIFF file for faster zooming
+gdaladdo --config GDAL_CACHEMAX 2000 elevation_shade.tif 2 4 8 16
+</pre></div>
+
 
 <h2>SEE ALSO</h2>
 
