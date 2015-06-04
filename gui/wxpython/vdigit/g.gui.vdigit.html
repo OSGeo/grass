@@ -8,19 +8,21 @@ component intended for interactive editing and digitizing vector maps
 vector editing GRASS capabilities).
 
 <p>
-Note that only vector maps from the current mapset can be opened
-for editing.
+Note that only vector maps stored or generated in the <i>current</i>
+mapset can be opened for editing.
 
 <p>
-The digitizer allows editing 2D vector features only (points, lines,
+The digitizer allows editing of 2D vector features (points, lines,
 centroids, boundaries, and areas).
 
+<p>
 Vector features can be selected by mouse (bounding box or simply by
 mouse click, see select threshold
 in <i>Settings&rarr;General&rarr;Select threshold</i>), or by query
 (eg. by line length, see <i>Settings&rarr;Query Tool</i>).
 
-<p>
+<h3>STARTING THE DIGITIZER</h3>
+
 The vector digitizer can be launched from Map Display toolbar by selecting
 &quot;Digitize&quot; from <i>Tools</i> combobox. Vector map is
 selectable for editing from Digitizer toolbar (&quot;Select vector
@@ -35,15 +37,35 @@ toolbar <img src="icons/edit.png" alt="icon">.
 The vector digitizer also can also be launched from the command line as a
 stand-alone application <em>g.gui.vdigit</em>.
 
-<p>
-New vector map can be easily created from the digitizer toolbar by
+<h3>CREATING A NEW VECTOR MAP</h3>
+
+A new vector map can be easily created from the digitizer toolbar by
 selecting &quot;New vector map&quot; in &quot;Select vector map&quot;
 combobox. A new vector map is created, added to the current layer tree
 in Layer Manager and opened for editing. &quot;Select vector map&quot;
-combobox in digitizer toolbar also allows switching easily between
+combobox in the digitizer toolbar also allows to easily switch between
 vector maps to be edited.
-<p>
-The vector digitizer allows you to define a &quot;background&quot; vector map.
+
+<h3>EDITING AN EXISTING VECTOR MAP</h3>
+
+An existing vector map selected in the digitizer toolbar in the
+&quot;Select vector map&quot; combobox. This map is then opened for editing
+and added to the current layer tree in the <em>Layer Manager</em>. This
+&quot;Select vector map&quot; combobox in the digitizer toolbar also allows
+to easily switch between vector maps to be edited.
+
+<h3>USING A RASTER BACKGROUND MAP</h3>
+
+In order to digitize from a raster map, simply load the map into the
+<em>Map Display</em> using the <em>Layer Manager</em>. Then start digitizing,
+see below for details.
+
+<h3>USING A VECTOR BACKGROUND MAP</h3>
+
+The vector digitizer allows you to select a &quot;background&quot; vector map.
+Loading it within the digitizer is different from simply loading it via 
+<em>Layer Manager</em> since direct interaction with single vector features
+then becomes possible.<br>
 A background map can be selected from the map layer contextual menu, in
 <em>Layer Manager</em> (&quot;Use as Background Map&quot;). Newly digitized vector
 features are snapped in the given threshold to the features from the
@@ -275,7 +297,7 @@ boundaries are automatically attached to the chosen points.
 </em>
 
 <p>
-See also the <a href="http://grasswiki.osgeo.org/wiki/WxGUI_Vector_Digitizer">wiki page</a>
+See also the <a href="http://grasswiki.osgeo.org/wiki/WxGUI_Vector_Digitizer">WxGUI Vector Digitizer Wiki page</a>
 including <a href="http://grasswiki.osgeo.org/wiki/WxGUI_Vector_Digitizer#Vector_tutorials">video
 tutorials</a>.
 
