@@ -3,7 +3,7 @@
 set -e
 
 PROGRAMFILES="/c/Program Files (x86)"
-VSDIR="$PROGRAMFILES/Microsoft Visual Studio 9.0"
+VSDIR="$PROGRAMFILES/Microsoft Visual Studio 12.0"
 PATH="$VSDIR/Common7/IDE:$PATH"
 PATH="$VSDIR/VC/bin:$PATH"
 PATH="$VSDIR/Common7/Tools:$PATH"
