@@ -3,7 +3,6 @@ from __future__ import (nested_scopes, generators, division, absolute_import,
                         with_statement, print_function, unicode_literals)
 import sys
 from multiprocessing import cpu_count
-from functools import wraps
 
 if sys.version_info[0] == 2:
     from itertools import izip_longest as zip_longest
@@ -12,14 +11,13 @@ else:
 from xml.etree.ElementTree import fromstring
 import time
 
-from grass.exceptions import CalledModuleError
+from grass.exceptions import CalledModuleError, GrassError, ParameterError
 from grass.script.core import Popen, PIPE
-from grass.exceptions import GrassError, ParameterError
-from grass.pygrass.modules.interface.docstring import docstring_property
-from grass.pygrass.modules.interface.parameter import Parameter
-from grass.pygrass.modules.interface.flag import Flag
-from grass.pygrass.modules.interface.typedict import TypeDict
-from grass.pygrass.modules.interface.read import GETFROMTAG, DOC
+from .docstring import docstring_property
+from .parameter import Parameter
+from .flag import Flag
+from .typedict import TypeDict
+from .read import GETFROMTAG, DOC
 from grass.pygrass.messages import get_msgr
 
 
