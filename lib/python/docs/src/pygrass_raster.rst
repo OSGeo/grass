@@ -6,16 +6,16 @@ Introduction to Raster classes
 Details about the GRASS GIS raster architecture can be found in the
 `GRASS GIS 7 Programmer's Manual: GRASS Raster Library <http://grass.osgeo.org/programming7/rasterlib.html>`_
 
-PyGRASS uses 4 different Raster classes, that respect the 4 different approaches
+PyGRASS uses 3 different Raster classes, that respect the 3 different approaches
 of GRASS-C API. The classes use a standardized interface to keep methods
 consistent between them. The read access is row wise for :ref:`RasterRow-label`
 and :ref:`RasterRowIO-label` and additionally
 cached in the RowIO class. Both classes write sequentially.
-RowIO is row cached, :ref:`RasterSegment-label` and :ref:`RasterNumpy-label`
-are tile cached for reading and writing; therefore, random access is possible.
+RowIO is row cached, :ref:`RasterSegment-label` 
+is tile cached for reading and writing; therefore, random access is possible.
 Hence RasterRow and RasterRowIO should be used for fast (cached)
 row read access and RasterRow for fast sequential writing.
-RasterSegment and RasterNumpy should be used for random access.
+RasterSegment should be used for random access.
 
 
 ==========================  =======================  ========  ============
@@ -24,7 +24,6 @@ Class Name                  C library                Read      Write
 :ref:`RasterRow-label`      `Raster library`_        randomly  sequentially
 :ref:`RasterRowIO-label`    `RowIO library`_         cached    no
 :ref:`RasterSegment-label`  `Segmentation library`_  cached    randomly
-:ref:`RasterNumpy-label`    `numpy.memmap`_          cached    randomly
 ==========================  =======================  ========  ============
 
 
@@ -68,7 +67,7 @@ RasterRow
 The PyGrass :class:`~pygrass.raster.RasterRow` class allow user to open maps row
 by row in either read or write mode using the `Raster library`_. Reading and writing
 to the same map at the same time is not supported. For this functionality,
-please see the :ref:`RasterSegment-label` and :ref:`RasterNumpy-label` classes.
+please see the :ref:`RasterSegment-label` class.
 The RasterRow class allows map rows to be read in any order, but map rows can
 only be written in sequential order. Therefore, each now row written to a map is
 added to the file as the last row. ::
@@ -211,49 +210,6 @@ Similarly, writing to a map uses two methods: ``put_row`` to write a row and
     >>> elev.remove()
 
 
-.. _RasterNumpy-label:
-
-RasterNumpy
------------
-
-The :class:`~pygrass.raster.RasterNumpy` class, is based on the `numpy.memmap`_ class
-(refer to the linked documentation for details). If an existing map is opened,
-small sections will be loaded into memory as accessed, but GRASS does not need to
-load the whole file into memory. Memmap is a subclass of the `numpy.ndarray`
-class, so RasterNumpy will behave like a numpy array and can be used with numpy
-array operations. ::
-
-    >>> raster = reload(raster)
-    >>> elev = raster.RasterNumpy('elevation', 'PERMANENT')
-    >>> elev.open('r')
-    >>> # in this case RasterNumpy is an extension of the numpy class
-    >>> # therefore you may use all the fancy things of numpy.
-    >>> elev[:5, :3]
-    RasterNumpy([[ 141.99613953,  141.27848816,  141.37904358],
-           [ 142.90461731,  142.39450073,  142.68611145],
-           [ 143.81854248,  143.54707336,  143.83972168],
-           [ 144.56524658,  144.58493042,  144.86477661],
-           [ 144.99488831,  145.22894287,  145.57142639]], dtype=float32)
-    >>> el = elev < 144
-    >>> el[:5, :3]
-    RasterNumpy([[1, 1, 1],
-           [1, 1, 1],
-           [1, 1, 1],
-           [0, 0, 0],
-           [0, 0, 0]], dtype=int32)
-    >>> el.name == None
-    True
-    >>> # give a name to the new map
-    >>> el.name = 'new'
-    >>> el.exist()
-    False
-    >>> el.close()
-    >>> el.exist()
-    True
-    >>> el.remove()
-
-
 .. _Raster library: http://grass.osgeo.org/programming7/rasterlib.html
 .. _RowIO library: http://grass.osgeo.org/programming7/rowiolib.html
 .. _Segmentation library: http://grass.osgeo.org/programming7/segmentlib.html
-.. _numpy.memmap: http://docs.scipy.org/doc/numpy/reference/generated/numpy.memmap.html
