@@ -39,6 +39,7 @@
 #% key_desc : name
 #% description: Name for output table
 #% required : no
+#% guisection: Output
 #%end
 
 #%option
@@ -46,6 +47,7 @@
 #% type: string
 #% description: Name for auto-generated unique key column
 #% required : no
+#% guisection: Output
 #%end
 
 import os
