@@ -73,10 +73,10 @@ class SQLBuilder(wx.Frame):
         self.statusbar = self.CreateStatusBar(number=1)
         
         self._doLayout(modeChoices)
-        self.SetMinSize((400, 600))
+        self.SetMinSize((425, 600))
         self.SetClientSize(self.panel.GetSize())
         self.CenterOnParent()
-
+                
     def _doLayout(self, modeChoices):
         """Do dialog layout"""
         
