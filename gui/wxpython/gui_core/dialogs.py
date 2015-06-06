@@ -1661,11 +1661,11 @@ class ImportDialog(wx.Dialog):
             self.options[name] = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
                                              label = desc)
         
-        for f in task.get_options()['params']:
-            name = f.get('name', '')
-            desc = f.get('label', '')
+        for p in task.get_options()['params']:
+            name = p.get('name', '')
+            desc = p.get('label', '')
             if not desc:
-                desc = f.get('description', '')
+                desc = p.get('description', '')
             if not name and not desc:
                 continue
             if cmd == 'v.in.ogr' and name == 'encoding':
