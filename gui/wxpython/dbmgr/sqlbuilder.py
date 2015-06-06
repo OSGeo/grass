@@ -74,6 +74,14 @@ class SQLBuilder(wx.Frame):
         
         self._doLayout(modeChoices)
 
+        self.panel.SetAutoLayout(True)
+        self.panel.SetSizer(self.pagesizer)
+        self.pagesizer.Fit(self.panel)
+        
+        self.SetMinSize((400, 600))
+        self.SetClientSize(self.panel.GetSize())
+        self.CenterOnParent()
+                
     def _doLayout(self, modeChoices):
         """Do dialog layout"""
         
@@ -274,15 +282,6 @@ class SQLBuilder(wx.Frame):
         self.goto.Bind(wx.EVT_TEXT,              self.OnGoTo)
         self.goto.Bind(wx.EVT_TEXT_ENTER,        self.OnAddValue)
 
-        self.panel.SetAutoLayout(True)
-        self.panel.SetSizer(self.pagesizer)
-        self.pagesizer.Fit(self.panel)
-        
-        self.Layout()
-        self.SetMinSize((400, 600))
-        self.SetClientSize(self.panel.GetSize())
-        self.CenterOnParent()
-   
     def OnUniqueValues(self, event, justsample = False):
         """Get unique values"""
         vals = []
@@ -422,7 +421,7 @@ class SQLBuilderSelect(SQLBuilder):
         self.btn_verify.SetToolTipString(_("Verify SQL statement"))
 
         self.buttonsizer.Insert(item = self.btn_verify, before = 1)
-
+        
         self.text_sql.Bind(wx.EVT_TEXT, self.OnText)
         self.btn_verify.Bind(wx.EVT_BUTTON,      self.OnVerify)
 
