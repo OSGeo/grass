@@ -352,7 +352,7 @@
     <label>Import database table</label>
     <items>
       <module-item name="db.in.ogr">
-        <label>Multiple import formats using OGR</label>
+        <label>Common import formats</label>
       </module-item>
     </items>
   </toolbox>
@@ -460,7 +460,7 @@
     <label>Export database table</label>
     <items>
       <module-item name="db.out.ogr">
-        <label>Common export formats using OGR</label>
+        <label>Common export formats</label>
       </module-item>
     </items>
   </toolbox>
