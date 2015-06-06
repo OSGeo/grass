@@ -1607,6 +1607,7 @@ class ImportDialog(wx.Dialog):
         self._giface = giface  # used to add layers
         self.importType = itype
         self.options = dict()   # list of options
+        self.options_par = dict()
         
         self.commandId = -1  # id of running command
         
@@ -1660,6 +1661,16 @@ class ImportDialog(wx.Dialog):
             self.options[name] = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
                                              label = desc)
         
+        for p in task.get_options()['params']:
+            name = p.get('name', '')
+            desc = p.get('label', '')
+            if not desc:
+                desc = p.get('description', '')
+            if not name and not desc:
+                continue
+            if cmd == 'v.in.ogr' and name == 'encoding':
+                self.options_par[name] = (_('Encoding'),
+                                          wx.TextCtrl(parent = self.panel, id = wx.ID_ANY))
         
         self.overwrite = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
                                      label = _("Allow output files to overwrite existing files"))
@@ -1708,7 +1719,20 @@ class ImportDialog(wx.Dialog):
         optionSizer = wx.StaticBoxSizer(self.optionBox, wx.VERTICAL)
         for key in self.options.keys():
             optionSizer.Add(item = self.options[key], proportion = 0)
+        if self.options_par:
+            gridBox = wx.GridBagSizer(vgap = 5, hgap = 5)
+            row = 0
+            for label, win in self.options_par.itervalues():
+                gridBox.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
+                                                 label = label + ':'),
+                            pos = (row, 0), flag = wx.ALIGN_CENTER_VERTICAL)
+                gridBox.Add(item = win, pos = (row, 1), flag = wx.EXPAND)
+                row += 1
             
+            gridBox.AddGrowableCol(1)
+            optionSizer.Add(item = gridBox, proportion = 0,
+                            flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 5)
+        
         dialogSizer.Add(item = optionSizer, proportion = 0,
                         flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 5)
         
@@ -1926,6 +1950,10 @@ class GdalImportDialog(ImportDialog):
             for key in self.options.keys():
                 if self.options[key].IsChecked():
                     cmd.append('-%s' % key)
+            for key in self.options_par.keys():
+                value = self.options_par[key][1].GetValue()
+                if value:
+                    cmd.append('%s=%s' % (key, value))
             
             if UserSettings.Get(group = 'cmd', key = 'overwrite', subkey = 'enabled') and \
                     '--overwrite' not in cmd:
