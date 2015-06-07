@@ -452,11 +452,11 @@ main(int argc, char *argv[]) {
   module = G_define_module();
 #ifdef ELEV_SHORT
   module->label = _("Performs flow computation for massive grids.");
-  module->description = _("Integer version");
+  module->description = _("Integer version.");
 #endif
 #ifdef ELEV_FLOAT
   module->label = _("Performs flow computation for massive grids.");
-  module->description = _("Float version");
+  module->description = _("Float version.");
 #endif
   G_add_keyword(_("raster"));
   G_add_keyword(_("hydrology"));
