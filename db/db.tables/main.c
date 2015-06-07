@@ -37,6 +37,9 @@ int main(int argc, char **argv)
 
     parse_command_line(argc, argv);
 
+    if (!parms.driver)
+        G_fatal_error(_("Database connection not defined. Run db.connect."));
+      
     driver = db_start_driver(parms.driver);
     if (driver == NULL)
 	G_fatal_error(_("Unable to start driver <%s>"), parms.driver);
