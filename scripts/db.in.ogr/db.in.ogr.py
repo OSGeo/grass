@@ -71,7 +71,7 @@ def main():
 	output = grass.basename(tmpname)
 
     if not grass.overwrite():
-	s = grass.read_command('db.tables', flags = 'p')
+	s = grass.read_command('db.tables', flags = 'p', quiet=True)
 	for l in s.splitlines():
 	    if l == output:
 		grass.fatal(_("Table <%s> already exists") % output)
