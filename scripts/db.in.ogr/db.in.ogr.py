@@ -75,7 +75,7 @@ def main():
     for l in s.splitlines():
         if l == output:
             if grass.overwrite():
-                grass.warning(_("Table <%s> already exists and will be and will be overwritten") % output)
+                grass.warning(_("Table <%s> already exists and will be overwritten") % output)
                 grass.write_command('db.execute', input = '-', stdin = "DROP TABLE %s" % output)
                 break
             else:
