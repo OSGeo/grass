@@ -70,14 +70,17 @@ def main():
 	tmpname = input.replace('.', '_')
 	output = grass.basename(tmpname)
 
-    if not grass.overwrite():
-	s = grass.read_command('db.tables', flags = 'p', quiet=True)
-	for l in s.splitlines():
-	    if l == output:
-		grass.fatal(_("Table <%s> already exists") % output)
-    else:
-	grass.write_command('db.execute', input = '-', stdin = "DROP TABLE %s" % output)
-
+    # check if table exists
+    s = grass.read_command('db.tables', flags = 'p', quiet=True)
+    for l in s.splitlines():
+        if l == output:
+            if grass.overwrite():
+                grass.warning(_("Table <%s> already exists and will be and will be overwritten") % output)
+                grass.write_command('db.execute', input = '-', stdin = "DROP TABLE %s" % output)
+                break
+            else:
+                grass.fatal(_("Table <%s> already exists") % output)
+                
     # treat DB as real vector map...
     if db_table:
 	layer = db_table
