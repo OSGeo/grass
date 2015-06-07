@@ -14,7 +14,7 @@
 #############################################################################
 
 #%module
-#% description: Unpacks a raster map packed with r.pack.
+#% description: Imports a raster map as GRASS GIS specific archive file (packed with r.pack)
 #% keyword: raster
 #% keyword: import
 #% keyword: copying
@@ -30,7 +30,7 @@
 #%end
 #%flag
 #% key: o
-#% description: Override projection check (use current location's projection)
+#% description: Override projection check (use location's projection)
 #% guisection: Output settings
 #%end
 
@@ -53,10 +53,10 @@ def main():
 
     global tmp_dir
     tmp_dir = grass.tempdir()
-    grass.debug('tmp_dir = %s' % tmp_dir)
+    grass.debug('tmp_dir = {tmpdir}'.format(tmpdir=tmp_dir))
 
     if not os.path.exists(infile):
-        grass.fatal(_("File <%s> not found") % infile)
+        grass.fatal(_('File {name} not found.'.format(name=infile)))
 
     gisenv = grass.gisenv()
     mset_dir = os.path.join(gisenv['GISDBASE'],
@@ -79,9 +79,9 @@ def main():
     gfile = grass.find_file(name=map_name, element='cell', mapset='.')
     if gfile['file']:
         if os.environ.get('GRASS_OVERWRITE', '0') != '1':
-            grass.fatal(_("Raster map <%s> already exists") % map_name)
+            grass.fatal(_('Raster map <{name}> already exists'.format(name=map_name)))
         else:
-            grass.warning(_("Raster map <%s> already exists and will be overwritten") % map_name)
+            grass.warning(_('Raster map <{name}> already exists and will be overwritten'.format(name=map_name)))
 
     # extract data
     tar.extractall()
@@ -90,31 +90,38 @@ def main():
     if os.path.exists('cell'):
         pass
     elif os.path.exists('coor'):
-        grass.fatal(_("This GRASS GIS pack file contains vector data. Use "
-                      "v.unpack to unpack <%s>" % map_name))
+        grass.fatal(_('This GRASS GIS pack file contains vector data. Use '
+                      'v.unpack to unpack <{name}>'.format(name=map_name)))
     else:
         grass.fatal(_("Pack file unreadable"))
 
     # check projection compatibility in a rather crappy way
-    diff_result_1 = diff_result_2 = None
-    proj_info_file_1 = 'PROJ_INFO'
-    proj_info_file_2 = os.path.join(mset_dir, '..', 'PERMANENT', 'PROJ_INFO')
-    if not grass.compare_key_value_text_files(filename_a=proj_info_file_1,
-                                              filename_b=proj_info_file_2,
-                                              proj=True):
-        diff_result_1 = diff_files(proj_info_file_1, proj_info_file_2)
 
-    proj_units_file_1 = 'PROJ_UNITS'
-    proj_units_file_2 = os.path.join(mset_dir, '..', 'PERMANENT', 'PROJ_UNITS')
-    if not grass.compare_key_value_text_files(filename_a=proj_units_file_1,
-                                              filename_b=proj_units_file_2,
-                                              units=True):
-        diff_result_2 = diff_files(proj_units_file_1, proj_units_file_2)
-
-    if diff_result_1 or diff_result_2:
-        if flags['o']:
-            grass.warning(_("Projection information does not match. Proceeding..."))
-        else:
+    if flags['o']:
+        grass.warning(_("Overriding projection check (using current location's projection)."))
+        
+    else:
+        
+        diff_result_1 = diff_result_2 = None
+        
+        proj_info_file_1 = 'PROJ_INFO'
+        proj_info_file_2 = os.path.join(mset_dir, '..', 'PERMANENT', 'PROJ_INFO')    
+    
+        if not grass.compare_key_value_text_files(filename_a=proj_info_file_1,
+                                                  filename_b=proj_info_file_2,
+                                                  proj=True):                                                      
+            diff_result_1 = diff_files(proj_info_file_1, proj_info_file_2)
+    
+        proj_units_file_1 = 'PROJ_UNITS'
+        proj_units_file_2 = os.path.join(mset_dir, '..', 'PERMANENT', 'PROJ_UNITS')
+    
+        if not grass.compare_key_value_text_files(filename_a=proj_units_file_1,
+                                                  filename_b=proj_units_file_2,
+                                                  units=True):                                                      
+            diff_result_2 = diff_files(proj_units_file_1, proj_units_file_2)
+    
+        if diff_result_1 or diff_result_2:
+            
             if diff_result_1:
                 grass.warning(_("Difference between PROJ_INFO file of packed map "
                                 "and of current location:\n{diff}").format(diff=''.join(diff_result_1)))
@@ -138,7 +145,7 @@ def main():
         else:
             shutil.copyfile(element, os.path.join(mset_dir, element, map_name))
 
-    grass.message(_("Raster map <%s> unpacked") % map_name)
+    grass.message(_('Raster map <{name}> unpacked'.format(name=map_name)))
 
 if __name__ == "__main__":
     options, flags = grass.parser()
