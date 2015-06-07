@@ -9,7 +9,7 @@
  * PURPOSE:      Imports many GIS/image formats into GRASS utilizing the GDAL
  *               library.
  *
- * COPYRIGHT:    (C) 2001-2011 by Frank Warmerdam, and the GRASS Development Team
+ * COPYRIGHT:    (C) 2001-2015 by Frank Warmerdam, and the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -42,6 +42,7 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 static void SetupReprojector(const char *pszSrcWKT, const char *pszDstLoc,
 			     struct pj_info *iproj, struct pj_info *oproj);
 static int dump_rat(GDALRasterBandH hBand, char *outrat, int nBand);
+static void error_handler_ds(void *p);
 static int l1bdriver;
 
 /************************************************************************/
@@ -74,7 +75,7 @@ int main(int argc, char *argv[])
 	struct Option *input, *output, *target, *title, *outloc, *band,
 	              *memory, *offset, *rat;
     } parm;
-    struct Flag *flag_o, *flag_e, *flag_k, *flag_f, *flag_l, *flag_c;
+    struct Flag *flag_o, *flag_e, *flag_k, *flag_f, *flag_l, *flag_c, *flag_p;
 
     /* -------------------------------------------------------------------- */
     /*      Initialize.                                                     */
@@ -184,6 +185,13 @@ int main(int argc, char *argv[])
 	_("Create the location specified by the \"location\" parameter and exit."
           " Do not import the raster file.");
 
+    flag_p = G_define_flag();
+    flag_p->key = 'p';
+    flag_p->description = _("Print number of bands and exit");
+    flag_p->suppress_required = YES;
+
+    G_option_requires(flag_p, parm.input, NULL);
+    
     /* The parser checks if the map already exists in current mapset, this is
      * wrong if location options is used, so we switch out the check and do it
      * in the module after the parser */
@@ -261,22 +269,14 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
     }
 
-    if (!parm.outloc->answer) {	/* Check if the map exists */
-	if (G_find_raster2(output, G_mapset())) {
-	    if (overwrite)
-		G_warning(_("Raster map <%s> already exists and will be overwritten"),
-			  output);
-	    else
-		G_fatal_error(_("Raster map <%s> already exists"), output);
-	}
-    }
-
     /* -------------------------------------------------------------------- */
     /*      Open the file.                                                  */
     /* -------------------------------------------------------------------- */
     hDS = GDALOpen(input, GA_ReadOnly);
     if (hDS == NULL)
-	exit(EXIT_FAILURE);
+        G_fatal_error(_("Unable to open datasource <%s>"), input);
+    G_add_error_handler(error_handler_ds, hDS);
+    
     hDriver = GDALGetDatasetDriver(hDS);	/* needed for AVHRR data */
     /* L1B - NOAA/AVHRR data must be treated differently */
     /* for hDriver names see gdal/frmts/gdalallregister.cpp */
@@ -288,6 +288,24 @@ int main(int argc, char *argv[])
 	G_warning(_("Input seems to be NOAA/AVHRR data which needs to be "
 	            "georeferenced with thin plate spline transformation "
 		    "(%s or %s)."), "i.rectify -t", "gdalwarp -tps");
+    }
+
+    if (flag_p->answer) {
+        /* print number of bands */
+        fprintf(stdout, "%d\n", GDALGetRasterCount(hDS));
+        GDALClose(hDS);
+        exit(EXIT_SUCCESS);
+    }
+
+    if (!parm.outloc->answer &&
+        GDALGetRasterCount(hDS) == 1) {	/* Check if the map exists */
+	if (G_find_raster2(output, G_mapset())) {
+	    if (overwrite)
+		G_warning(_("Raster map <%s> already exists and will be overwritten"),
+			  output);
+	    else
+		G_fatal_error(_("Raster map <%s> already exists"), output);
+	}
     }
 
     /* zero cell header */
@@ -498,7 +516,8 @@ int main(int argc, char *argv[])
 	}
     }
 
-    G_verbose_message(_("Proceeding with import..."));
+    G_message(_("Proceeding with import of %d raster bands..."),
+              GDALGetRasterCount(hDS));
 
     /* -------------------------------------------------------------------- */
     /*      Set the active window to match the available data.              */
@@ -594,6 +613,16 @@ int main(int argc, char *argv[])
 	    }
 	    else
 		sprintf(szBandName, "%s.%d", output, nBand + offset);
+
+            if (!parm.outloc->answer) {	/* Check if the map exists */
+              if (G_find_raster2(szBandName, G_mapset())) {
+                if (overwrite)
+                  G_warning(_("Raster map <%s> already exists and will be overwritten"),
+                            szBandName);
+                else
+                  G_fatal_error(_("Raster map <%s> already exists"), szBandName);
+              }
+            }
 
 	    ImportBand(hBand, szBandName, &ref);
 
@@ -873,6 +902,8 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
     int have_colors = 0;
     GDALRasterAttributeTableH gdal_rat;
 
+    G_message(_("Importing raster map <%s>..."), output);
+    
     /* -------------------------------------------------------------------- */
     /*      Select a cell type for the new cell.                            */
     /* -------------------------------------------------------------------- */
@@ -1468,8 +1499,6 @@ static void ImportBand(GDALRasterBandH hBand, const char *output,
 	}
     }
 
-    G_message(_("Raster map <%s> created."), output);
-
     return;
 }
 
@@ -1576,4 +1605,10 @@ static int dump_rat(GDALRasterBandH hBand, char *outrat, int nBand)
     fclose(fp);
 
     return 1;
+}
+
+void error_handler_ds(void *p)
+{
+    GDALDatasetH hDS = (GDALDatasetH) p;
+    GDALClose(hDS);
 }
