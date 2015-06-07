@@ -1034,6 +1034,7 @@ def main():
     # define path
     if flags['s']:
         options['prefix'] = os.environ['GISBASE']
+    
     if options['prefix'] == '$GRASS_ADDON_BASE':
         if not os.getenv('GRASS_ADDON_BASE'):
             grass.warning(_("GRASS_ADDON_BASE is not defined, "
@@ -1041,6 +1042,12 @@ def main():
             options['prefix'] = os.path.join(os.environ['HOME'], '.grass%s' % version[0], 'addons')
         else:
             options['prefix'] = os.environ['GRASS_ADDON_BASE']
+
+    if not os.access(options['prefix'], os.W_OK):
+        grass.fatal(_("You don't have permission to install extension to <{}>. "
+                      "Try to run {} with administrator rights"
+                      "(su or sudo).").format(options['prefix'], 'g.extension'))
+
     if 'svn.osgeo.org/grass/grass-addons/grass7' in options['svnurl']:
         # use pregenerated modules XML file
         xmlurl = "http://grass.osgeo.org/addons/grass%s" % version[0]
