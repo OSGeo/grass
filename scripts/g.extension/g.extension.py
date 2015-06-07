@@ -1045,8 +1045,8 @@ def main():
 
     if not os.access(options['prefix'], os.W_OK):
         grass.fatal(_("You don't have permission to install extension to <{}>. "
-                      "Try to run {} as administrator "
-                      "(or as sudo).").format(options['prefix'], 'g.extension'))
+                      "Try to run {} with administrator rights"
+                      "(su or sudo).").format(options['prefix'], 'g.extension'))
 
     if 'svn.osgeo.org/grass/grass-addons/grass7' in options['svnurl']:
         # use pregenerated modules XML file
