@@ -112,7 +112,7 @@ d.where | r.profile elevation.dem
 
 <h3>Extraction of values along profile defined by coordinates (variant 2)</h3>
 
-Coordinate pairs can also being "piped" into <em>r.profile</em>:
+Coordinate pairs can also being "piped" into <em>r.profile</em> (variant 2a):
 
 <div class="code"><pre>
 r.profile elevation resolution=1000 file=- &lt;&lt; EOF
@@ -123,7 +123,19 @@ r.profile elevation resolution=1000 file=- &lt;&lt; EOF
 EOF
 </pre></div>
 
-The output is the following:
+<p>
+Coordinate pairs can also being "piped" into <em>r.profile</em> (variant 2b):
+
+<div class="code"><pre>
+echo "641712,226095
+641546,224138
+641546,222048
+641049,221186" > coors.txt
+cat coors.txt | r.profile elevation resolution=1000 file=-
+</pre></div>
+
+The output is printed into the terminal (unless the <em>output</em> parameter
+is used) and looks as follows:
 
 <div class="code"><pre>
 Using resolution: 1000 [meters]
