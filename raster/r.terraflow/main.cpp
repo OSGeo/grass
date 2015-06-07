@@ -451,14 +451,19 @@ main(int argc, char *argv[]) {
  
   module = G_define_module();
 #ifdef ELEV_SHORT
-  module->description = _("Flow computation for massive grids (integer version).");
+  module->label = _("Performs flow computation for massive grids.");
+  module->description = _("Integer version.");
 #endif
 #ifdef ELEV_FLOAT
-  module->description = _("Flow computation for massive grids (float version).");
+  module->label = _("Performs flow computation for massive grids.");
+  module->description = _("Float version.");
 #endif
   G_add_keyword(_("raster"));
   G_add_keyword(_("hydrology"));
-
+  G_add_keyword(_("flow"));
+  G_add_keyword(_("accumulation"));
+  G_add_keyword(_("sink"));
+  
   /* read user options; fill in global <opt> */  
   opt = (userOptions*)malloc(sizeof(userOptions));
   assert(opt);
