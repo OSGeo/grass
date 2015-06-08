@@ -435,9 +435,16 @@ int Vect_line_intersection(struct line_pnts *, struct line_pnts *,
                            struct bound_box *, struct bound_box *,
                            struct line_pnts ***, struct line_pnts ***, int *,
                            int *, int);
+int Vect_line_intersection2(struct line_pnts *, struct line_pnts *,
+                            struct bound_box *, struct bound_box *,
+                            struct line_pnts ***, struct line_pnts ***, int *,
+                            int *, int);
 int Vect_line_check_intersection(struct line_pnts *, struct line_pnts *, int);
+int Vect_line_check_intersection2(struct line_pnts *, struct line_pnts *, int);
 int Vect_line_get_intersections(struct line_pnts *, struct line_pnts *,
                                 struct line_pnts *, int);
+int Vect_line_get_intersections2(struct line_pnts *, struct line_pnts *,
+                                 struct line_pnts *, int);
 char *Vect_subst_var(const char *, const struct Map_info *);
 
 /* Custom spatial index */

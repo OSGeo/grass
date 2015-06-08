@@ -38,28 +38,55 @@ void add_aarea(struct Map_info *In, int aarea, int *ALines)
 
 /* Returns 1 if line1 from Map1 overlaps area2 from Map2,
  *         0 otherwise */
-int line_overlap_area(struct Map_info *LMap, int line, struct Map_info *AMap,
-		      int area, struct bound_box box)
+int line_overlap_area(struct line_pnts *LPoints, struct Map_info *AMap,
+		      int area)
 {
     int i, nisles, isle;
-    static struct line_pnts *LPoints = NULL;
     static struct line_pnts *APoints = NULL;
+    static struct line_pnts **IPoints = NULL;
+    static int isles_alloc = 0;
 
-    G_debug(4, "line_overlap_area line = %d area = %d", line, area);
+    G_debug(4, "line_overlap_area area = %d", area);
 
-    if (!LPoints) {
-	LPoints = Vect_new_line_struct();
+    if (!APoints) {
 	APoints = Vect_new_line_struct();
+	isles_alloc = 10;
+	IPoints = G_malloc(isles_alloc * sizeof(struct line_pnts *));
+	for (i = 0; i < isles_alloc; i++)
+	    IPoints[i] = Vect_new_line_struct();
     }
 
-    /* Read line coordinates */
-    Vect_read_line(LMap, LPoints, NULL, line);
+    Vect_get_area_points(AMap, area, APoints);
+    nisles = Vect_get_area_num_isles(AMap, area);
+
+    if (nisles >= isles_alloc) {
+	IPoints = G_realloc(IPoints, (nisles + 10) * sizeof(struct line_pnts *));
+	for (i = isles_alloc; i < nisles + 10; i++)
+	    IPoints[i] = Vect_new_line_struct();
+	isles_alloc = nisles + 10;
+    }
+
+    for (i = 0; i < nisles; i++) {
+	isle = Vect_get_area_isle(AMap, area, i);
+	Vect_get_isle_points(AMap, isle, IPoints[i]);
+    }
 
     /* Try if any of line vertices is within area */
     for (i = 0; i < LPoints->n_points; i++) {
-	if (Vect_point_in_area(LPoints->x[i], LPoints->y[i], AMap, area, &box)) {
-	    G_debug(4, "  -> line vertex inside area");
-	    return 1;
+
+	if (Vect_point_in_poly(LPoints->x[i], LPoints->y[i], APoints)) {
+	    int inside = 1;
+	    
+	    for (isle = 0; isle < nisles; isle++) {
+		if (Vect_point_in_poly(LPoints->x[i], LPoints->y[i], IPoints[isle])) {
+		    inside = 0;
+		    break;
+		}
+	    }
+	    if (inside) {
+		G_debug(4, "  -> line vertex inside area");
+		return 1;
+	    }
 	}
     }
 
@@ -69,20 +96,15 @@ int line_overlap_area(struct Map_info *LMap, int line, struct Map_info *AMap,
 
     /* Try intersections of line with area/isles boundary */
     /* Outer boundary */
-    Vect_get_area_points(AMap, area, APoints);
 
-    if (Vect_line_check_intersection(LPoints, APoints, 0)) {
+    if (Vect_line_check_intersection2(LPoints, APoints, 0)) {
 	G_debug(4, "  -> line intersects outer area boundary");
 	return 1;
     }
 
-    nisles = Vect_get_area_num_isles(AMap, area);
-
     for (i = 0; i < nisles; i++) {
-	isle = Vect_get_area_isle(AMap, area, i);
-	Vect_get_isle_points(AMap, isle, APoints);
 
-	if (Vect_line_check_intersection(LPoints, APoints, 0)) {
+	if (Vect_line_check_intersection2(LPoints, IPoints[i], 0)) {
 	    G_debug(4, "  -> line intersects area island boundary");
 	    return 1;
 	}
