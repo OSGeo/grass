@@ -1008,7 +1008,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                                operator_cmd = True, compop = function)
             # Set temporal extent based on topological relationships.
             resultlist = self.set_temporal_extent_list(complist, topolist = relations, 
-                                temporal = temporal)            
+                                temporal = temporal)
         
         t[0] = resultlist
   
