@@ -27,6 +27,7 @@ double G_matrix_get_element(mat_struct *, int, int);
 
 vec_struct *G_matvect_get_column(mat_struct *, int);
 vec_struct *G_matvect_get_row(mat_struct *, int);
+vec_struct *G_matvect_product(mat_struct *, vec_struct *, vec_struct *);
 int G_matvect_extract_vector(mat_struct *, vtype, int);
 int G_matvect_retrieve_matrix(vec_struct *);
 
@@ -38,6 +39,7 @@ int G_vector_set(vec_struct *, int, int, vtype, int);
 double G_vector_norm_euclid(vec_struct *);
 double G_vector_norm_maxval(vec_struct *, int);
 vec_struct *G_vector_copy(const vec_struct *, int);
+vec_struct *G_vector_product (vec_struct *, vec_struct *, vec_struct *);
 
 /* Matrix and vector routines corresponding to ?? */
 
@@ -47,5 +49,7 @@ double G_vector_norm1(vec_struct *);
 int G_matrix_read(FILE *, mat_struct *);
 int G_matrix_stdin(mat_struct *);
 int G_matrix_eigen_sort(vec_struct *, mat_struct *);
+mat_struct *G_matrix_scalar_mul(double, mat_struct *, mat_struct *);
+mat_struct *G_matrix_resize(mat_struct *, int, int);
 
 #endif /* GRASS_LADEFS_H */
