@@ -241,14 +241,11 @@ int main(int argc, char *argv[])
 	db_begin_transaction(driver);
 
 	db_init_string(&sql);
+
+        /* Create table */
 	sprintf(buf, "create table %s (%s integer, %s %s)", Fi->table, GV_KEY_COLUMN,
 		parm.zcol->answer, parm.ztype->answer);
 	db_set_string(&sql, buf);
-	Vect_map_add_dblink(&Out, 1, NULL, Fi->table, GV_KEY_COLUMN, Fi->database,
-			    Fi->driver);
-
-	/* Create table */
-	G_debug(3, db_get_string(&sql));
 	if (db_execute_immediate(driver, &sql) != DB_OK) {
 	    G_fatal_error(_("Unable to create table: %s"),
 			  db_get_string(&sql));
@@ -285,6 +282,9 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("You have created unsupported column type. This module supports only INTEGER"
 			   " and DOUBLE PRECISION column types."));
 	}
+
+        Vect_map_add_dblink(&Out, 1, NULL, Fi->table, GV_KEY_COLUMN, Fi->database,
+			    Fi->driver);
     }
 
     Vect_hist_command(&Out);
