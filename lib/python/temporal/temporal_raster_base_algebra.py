@@ -395,6 +395,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             # Generate an intermediate map for the result map list.
             map_new = self.generate_new_map(base_map=map_i, bool_op = 'and', 
                                                                         copy = True,  rename = True)
+            
             # Combine temporal and spatial extents of intermediate map with related maps.
             for topo in topolist:
                 if topo in tbrelations.keys():
@@ -406,6 +407,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                         # Create overlayed map extent.
                         returncode = self.overlay_map_extent(map_new, map_j, 'and', \
                                                                 temp_op = temporal)
+                        
                         # Stop the loop if no temporal or spatial relationship exist.
                         if returncode == 0:
                             break
@@ -1461,8 +1463,7 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
             elif t[7] == 'null':
                 theninput = self.check_stds(t[5])
                 elseinput = str(t[7] + t[8] + t[9])
-        print(theninput)
-        print(elseinput)
+
         # Create conditional command map list.
         resultlist = self.build_condition_cmd_list(ifmaplist, theninput,  elseinput,  
                                                         condition_topolist = ["EQUAL"], 
