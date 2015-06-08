@@ -119,8 +119,11 @@ the SQL object serialization, all classes that represent table entries, datetime
 Spatio-temporal algebra classes for space time raster and vector datasets are defined in:
 
 - :mod:`~temporal.temporal_algebra`
+- :mod:`~temporal.temporal_operator`
+- :mod:`~temporal.temporal_raster_base_algebra`
+- :mod:`~temporal.temporal_raster_algebra`
+- :mod:`~temporal.temporal_raster3d_algebra`
 - :mod:`~temporal.temporal_vector_algebra`
-- :mod:`~temporal.temporal_vector_operator`
 
 High level API
 ^^^^^^^^^^^^^^
