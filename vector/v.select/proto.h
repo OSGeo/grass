@@ -42,7 +42,7 @@ void select_lines(struct Map_info *, int, int,
 
 /* overlap.c */
 void add_aarea(struct Map_info *, int, int *);
-int line_overlap_area(struct Map_info *, int, struct Map_info *, int, struct bound_box);
+int line_overlap_area(struct line_pnts *, struct Map_info *, int);
 
 /* write.c */
 void write_lines(struct Map_info *, struct field_info *, int *,

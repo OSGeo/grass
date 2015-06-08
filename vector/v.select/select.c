@@ -34,15 +34,12 @@ void select_lines(struct Map_info *aIn, int atype, int afield,
     LList = Vect_new_list();
 
     nalines = Vect_get_num_lines(aIn);
-    if (operator == OP_OVERLAP)
-	G_message("Using GRASS GIS operator...");
-    else
-	G_message("Using GEOS operator...");
     
     /* Lines in A. Go through all lines and mark those that meets condition */
     if (atype & (GV_POINTS | GV_LINES)) {
 	G_message(_("Processing features..."));
 	
+	G_percent(0, nalines, 2);
 	for (aline = 1; aline <= nalines; aline++) {
 	    struct bound_box abox;
 
@@ -109,7 +106,7 @@ void select_lines(struct Map_info *aIn, int atype, int afield,
 		    else {
 			Vect_read_line(bIn, BPoints, NULL, bline);
 
-			if (Vect_line_check_intersection(APoints, BPoints, 0)) {
+			if (Vect_line_check_intersection2(APoints, BPoints, 0)) {
 			    found = 1;
 			    break;
 			}
@@ -147,7 +144,7 @@ void select_lines(struct Map_info *aIn, int atype, int afield,
 #endif
 		    }
 		    else {
-			if (line_overlap_area(aIn, aline, bIn, barea, List->box[i])) {
+			if (line_overlap_area(APoints, bIn, barea)) {
 			    ALines[aline] = 1;
 			    break;
 			}
@@ -171,10 +168,11 @@ void select_lines(struct Map_info *aIn, int atype, int afield,
 	
 	naareas = Vect_get_num_areas(aIn);
 
+	G_percent(0, naareas, 2);
 	for (aarea = 1; aarea <= naareas; aarea++) {
 	    struct bound_box abox;
 
-	    G_percent(aarea, naareas, 2);	/* must be before any continue */
+	    G_percent(aarea, naareas, 1);
 
 	    if (Vect_get_area_cat(aIn, aarea, afield) < 0) {
 		nskipped[0]++;
@@ -219,7 +217,9 @@ void select_lines(struct Map_info *aIn, int atype, int afield,
 #endif
 		    }
 		    else {
-			if (line_overlap_area(bIn, bline, aIn, aarea, abox)) {
+			Vect_read_line(bIn, BPoints, NULL, bline);
+
+			if (line_overlap_area(BPoints, aIn, aarea)) {
 			    add_aarea(aIn, aarea, ALines);
 			    continue;
 			}
@@ -261,6 +261,7 @@ void select_lines(struct Map_info *aIn, int atype, int afield,
 		    int j;
 
 		    aline = abs(LList->value[i]);
+		    Vect_read_line(aIn, APoints, NULL, aline);
 
 		    for (j = 0; j < TmpList->n_values; j++) {
 			int barea, bcentroid;
@@ -302,8 +303,7 @@ void select_lines(struct Map_info *aIn, int atype, int afield,
 			    }
 			    
 			    /* Check intersectin of lines from List with area B */
-			    if (line_overlap_area(aIn, aline,
-						  bIn, barea, TmpList->box[j])) {
+			    if (line_overlap_area(APoints, bIn, barea)) {
 				found = 1;
 				break;
 			    }
