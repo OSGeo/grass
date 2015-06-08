@@ -1185,6 +1185,32 @@ class AbstractSpaceTimeDataset(AbstractDataset):
                 None (12, 14)
                 None (14, 16)
 
+                >>> maps = []
+                >>> map1 = tgis.RasterDataset("map1@PERMANENT")
+                >>> check = map1.set_absolute_time(datetime(2000, 4,1), datetime(2000, 6, 1))
+                >>> maps.append(map1)
+                >>> map2 = tgis.RasterDataset("map2@PERMANENT")
+                >>> check = map2.set_absolute_time(datetime(2000, 8,1), datetime(2000, 12, 1))
+                >>> maps.append(map2)
+                >>> grans = tgis.AbstractSpaceTimeDataset.resample_maplist_by_granularity(maps,datetime(2000,1,1),datetime(2001,4,1),"1 month")
+                >>> for map_list in grans:
+                ...    print map_list[0].get_id(), map_list[0].get_temporal_extent_as_tuple()
+                None (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2000, 2, 1, 0, 0))
+                None (datetime.datetime(2000, 2, 1, 0, 0), datetime.datetime(2000, 3, 1, 0, 0))
+                None (datetime.datetime(2000, 3, 1, 0, 0), datetime.datetime(2000, 4, 1, 0, 0))
+                map1@PERMANENT (datetime.datetime(2000, 4, 1, 0, 0), datetime.datetime(2000, 5, 1, 0, 0))
+                map1@PERMANENT (datetime.datetime(2000, 5, 1, 0, 0), datetime.datetime(2000, 6, 1, 0, 0))
+                None (datetime.datetime(2000, 6, 1, 0, 0), datetime.datetime(2000, 7, 1, 0, 0))
+                None (datetime.datetime(2000, 7, 1, 0, 0), datetime.datetime(2000, 8, 1, 0, 0))
+                map2@PERMANENT (datetime.datetime(2000, 8, 1, 0, 0), datetime.datetime(2000, 9, 1, 0, 0))
+                map2@PERMANENT (datetime.datetime(2000, 9, 1, 0, 0), datetime.datetime(2000, 10, 1, 0, 0))
+                map2@PERMANENT (datetime.datetime(2000, 10, 1, 0, 0), datetime.datetime(2000, 11, 1, 0, 0))
+                map2@PERMANENT (datetime.datetime(2000, 11, 1, 0, 0), datetime.datetime(2000, 12, 1, 0, 0))
+                None (datetime.datetime(2000, 12, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0))
+                None (datetime.datetime(2001, 1, 1, 0, 0), datetime.datetime(2001, 2, 1, 0, 0))
+                None (datetime.datetime(2001, 2, 1, 0, 0), datetime.datetime(2001, 3, 1, 0, 0))
+                None (datetime.datetime(2001, 3, 1, 0, 0), datetime.datetime(2001, 4, 1, 0, 0))
+
         """
 
         if not maps:
