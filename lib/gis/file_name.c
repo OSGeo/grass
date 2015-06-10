@@ -60,7 +60,7 @@ char *G_file_name_misc(char *path,
 }
 
 /*!
-  \brief Builds full path names to GIS data files in temporary directory
+  \brief Builds full path names to GIS data files in temporary directory (for internal use only)
 
   By default temporary directory is located
   $LOCATION/$MAPSET/.tmp/$HOSTNAME. If GRASS_TMPDIR_MAPSET is set to

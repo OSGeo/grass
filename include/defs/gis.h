@@ -652,6 +652,7 @@ void G_init_tempfile(void);
 char *G_tempfile(void);
 char *G_tempfile_pid(int);
 void G_temp_element(char *);
+void G__temp_element(char *, int);
 
 /* mkstemp.c */
 char *G_mktemp(char *);
