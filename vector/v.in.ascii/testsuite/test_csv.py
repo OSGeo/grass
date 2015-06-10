@@ -10,7 +10,7 @@ from grass.script.core import read_command
 
 
 INPUT_NOQUOTES = """Id,POINT_X,POINT_Y,Category,ED field estimate
-100,437343.6704,4061363.41525,High Erosion,Low Depostion
+100,437343.6704,4061363.41525,High Erosion,Low Deposition
 101,453643.127906,4050070.29852,High Erosion,Low Erosion
 102,454903.605427,4049480.80568,High Erosion,High Erosion
 105,437734.838807,4060493.98315,High Erosion,Low Erosion
@@ -18,7 +18,7 @@ INPUT_NOQUOTES = """Id,POINT_X,POINT_Y,Category,ED field estimate
 """
 
 INPUT_DOUBLEQUOTES = """Id,POINT_X,POINT_Y,Category,"ED field estimate"
-100,437343.6704,4061363.41525,"High Erosion","Low Depostion"
+100,437343.6704,4061363.41525,"High Erosion","Low Deposition"
 101,453643.127906,4050070.29852,"High Erosion","Low Erosion"
 102,454903.605427,4049480.80568,"High Erosion","High Erosion"
 105,437734.838807,4060493.98315,"High Erosion","Low Erosion"
