@@ -47,9 +47,9 @@ Usage::
                  " {cmd}: {error}".format(cmd=startcmd[0], error=error))
     if p.returncode != 0:
         sys.exit("ERROR: Issues running GRASS GIS start script"
-                 " {cmd}:\n{error}"
+                 " {cmd}: {error}"
                  .format(cmd=' '.join(startcmd), error=err))
-    gisbase = out.strip('\n\r')
+    gisbase = out.strip(os.linesep)
 
     # set GISBASE environment variable
     os.environ['GISBASE'] = gisbase
@@ -109,6 +109,8 @@ def write_gisrc(dbase, location, mapset):
     return gisrc
 
 
+# TODO: there should be a function to do the clean up
+# (unset the GISRC and delete the file)
 def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
     """Initialize system variables to run GRASS modules
 
@@ -126,12 +128,13 @@ def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
 
     Basic usage::
 
-        # ... setup GISBASE and PYTHON path
-        grass.script as gscript
+        # ... setup GISBASE and PYTHON path before import
+        import grass.script as gscript
         gisrc = gscript.setup.init("/usr/lib/grass64",
                                    "/home/john/grassdata",
                                    "nc_spm_08", "user1")
-        # ... use GRASS modules
+        # ... use GRASS modules here
+        # remove the session's gisrc file to end the session
         os.remove(gisrc)
 
     :param gisbase: path to GRASS installation
