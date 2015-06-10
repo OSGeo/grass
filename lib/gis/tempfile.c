@@ -85,7 +85,7 @@ char *G_tempfile_pid(int pid)
     do {
 	int uniq = G_counter_next(&unique);
 	sprintf(name, "%d.%d", pid, uniq);
-	G_file_name_tmp(path, element, name, G_mapset());
+	G_file_name(path, element, name, G_mapset());
     }
     while (access(path, F_OK) == 0);
 
@@ -101,7 +101,18 @@ char *G_tempfile_pid(int pid)
  */
 void G_temp_element(char *element)
 {
-    const char *machine, *env;
+    G__temp_element(element, FALSE);
+}
+
+/*!
+ * \brief Populates element with a path string (internal use only!)
+ *
+ * \param[out] element element name
+ * \param tmp TRUE to use G_make_mapset_element_tmp() instead of G_make_mapset_element()
+ */
+void G__temp_element(char *element, int tmp)
+{
+    const char *machine;
 
     strcpy(element, ".tmp");
     machine = G__machine_name();
@@ -110,12 +121,10 @@ void G_temp_element(char *element)
 	strcat(element, machine);
     }
     
-    env = getenv("GRASS_TMPDIR_MAPSET");
-    if (!env || strcmp(env, "0") != 0)
+    if (!tmp)
         G_make_mapset_element(element);
     else
         G_make_mapset_element_tmp(element);
     
-    G_debug(2, "G_temp_element(): %s (GRASS_TMPDIR_MAPSET=%s)",
-            element, env ? env : "");
+    G_debug(2, "G__temp_element(): %s (tmp=%d)", element, tmp);
 }

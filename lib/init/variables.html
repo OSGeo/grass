@@ -352,7 +352,13 @@ PERMANENT
   <tt>$LOCATION/$MAPSET/.tmp/$HOSTNAME</tt>. If GRASS_TMPDIR_MAPSET is
   set to '0', the temporary directory is located in TMPDIR
   (environmental variable defined by the user or GRASS initialization
-  script if not given).</dd>
+  script if not given).
+
+  <p>
+  Important note: This variable is currently used only in vector
+  library. In other words the variable is ignored by raster or
+  raster3d library.
+  </dd>
   
   <dt>TMPDIR, TEMP, TMP</dt>
   <dd>[Various GRASS GIS commands and wxGUI]<br>
