@@ -198,7 +198,7 @@ def get_installed_modules(force = False):
         if force:
             write_xml_modules(fXML)
         else:
-            grass.warning(_("No addons metadata file available"))
+            grass.debug(1, "No addons metadata file available")
         return []
 
     # read XML file
@@ -702,8 +702,11 @@ def install_extension_win(name):
 
         # create addons dir if not exists
         if not os.path.exists(options['prefix']):
-            os.mkdir(options['prefix'])
-
+            try:
+                os.mkdir(options['prefix'])
+            except OSError as e:
+                grass.fatal(_("Unable to create <{}>. {}").format(options['prefix'], e))
+        
         # download data
         fo = tempfile.TemporaryFile()
         fo.write(f.read())
@@ -1043,9 +1046,10 @@ def main():
         else:
             options['prefix'] = os.environ['GRASS_ADDON_BASE']
 
-    if not os.access(options['prefix'], os.W_OK):
+    if os.path.exists(options['prefix']) and \
+       not os.access(options['prefix'], os.W_OK):
         grass.fatal(_("You don't have permission to install extension to <{}>. "
-                      "Try to run {} with administrator rights"
+                      "Try to run {} with administrator rights "
                       "(su or sudo).").format(options['prefix'], 'g.extension'))
 
     if 'svn.osgeo.org/grass/grass-addons/grass7' in options['svnurl']:
