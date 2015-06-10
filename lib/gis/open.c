@@ -83,6 +83,8 @@ static int G__open(const char *element,
             
             if (!mapset)
                 return -1;
+
+            G_file_name(path, element, name, mapset);
         }
         
 	if ((fd = open(path, 0)) < 0)
