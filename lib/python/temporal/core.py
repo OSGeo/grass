@@ -437,6 +437,7 @@ def get_available_temporal_mapsets():
                   database) are the values
     """
     global c_library_interface
+    global message_interface
 
     mapsets = c_library_interface.available_mapsets()
 
@@ -447,7 +448,17 @@ def get_available_temporal_mapsets():
         database = c_library_interface.get_database_name(mapset)
 
         if driver and database:
-            tgis_mapsets[mapset] = (driver,  database)
+            # Check if the temporal sqlite database exists
+            # We need to set non-existing databases in case the mapset is the current mapset
+            # to create it
+            if (driver == "sqlite" and os.path.exists(database)) or mapset == get_current_mapset() :
+                tgis_mapsets[mapset] = (driver,  database)
+
+            # We need to warn if the connection is defined but the database does not
+            # exists
+            if driver == "sqlite" and not os.path.exists(database):
+                message_interface.warning("Temporal database connection defined as:\n" + \
+                                          database + "\nBut database file does not exists.")
 
     return tgis_mapsets
 
@@ -769,7 +780,7 @@ def create_temporal_database(dbif):
                                         "postgresql_indexes.sql"), 'r').read()
 
     # Connect now to the database
-    if not dbif.connected:
+    if dbif.connected is not True:
         dbif.connect()
 
     # Execute the SQL statements for sqlite
@@ -879,7 +890,7 @@ class SQLDatabaseInterfaceConnection(object):
             driver,  dbstring = self.tgis_mapsets[mapset]
             conn = self.connections[mapset]
             if conn.is_connected() is False:
-                conn .connect(dbstring)
+                conn.connect(dbstring)
 
         self.connected = True
 
