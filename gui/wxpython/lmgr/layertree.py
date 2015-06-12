@@ -1101,8 +1101,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         # use predefined value if given
         if lchecked is not None:
             checked = lchecked
+            render = True if checked else False
         else:
             checked = False
+            render = False
         
         self.forceCheck = True
         
@@ -1126,7 +1128,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if ltype != 'group':
             if lcmd and len(lcmd) > 1:
                 cmd = lcmd
-                render = False
                 name, found = GetLayerNameFromCmd(lcmd)
             else:
                 cmd = []
@@ -1134,7 +1135,6 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     for c in lname.split(';'):
                         cmd.append(c.split(' '))
                 
-                render = False
                 name = None
             
             if ctrl:
