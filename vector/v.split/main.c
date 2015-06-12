@@ -36,13 +36,13 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *in_opt, *layer_opt, *out_opt, *length_opt,
                   *units_opt, *vertices_opt;
-    struct Flag *nosplit_flag;
+    struct Flag *nosplit_flag, *fixedlength_flag;
     
     struct Map_info In, Out;
     struct line_pnts *Points, *Points2, *Points3;
     struct line_cats *Cats;
 
-    int line, nlines, layer, nosplit;
+    int line, nlines, layer, nosplit, fixedlength;
     double length = -1;
     int vertices = 0;
     double (*line_length) ();
@@ -92,6 +92,13 @@ int main(int argc, char *argv[])
     nosplit_flag->key = 'n';
     nosplit_flag->label = _("Add new vertices, but do not split");
     nosplit_flag->description = _("Applies only to 'length' option");
+
+    fixedlength_flag = G_define_flag();
+    fixedlength_flag->key = 'f';
+    fixedlength_flag->label = _("Force segments to be exactly of given length, except for last one");
+    fixedlength_flag->description = _("Applies only to 'length' option");
+
+
     
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -157,6 +164,7 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Number of vertices must be at least 2"));
     }
     nosplit = nosplit_flag->answer;
+    fixedlength = fixedlength_flag->answer;
     
     Vect_set_open_level(2);
 
@@ -208,10 +216,17 @@ int main(int argc, char *argv[])
 		    G_debug(3, "l: %f, length: %f", l, length);
 
 		    n = ceil(l / length);
+
 		    if (geodesic)
 			l = Vect_line_length(Points);
 
-		    step = l / n;
+		    if (fixedlength) {
+			    step = length;
+		    }
+		    else {
+			    step = l / n;
+		    }
+
 		    from = 0.;
 		    
 		    G_debug(3, "n: %ld, step: %f", n, step);
