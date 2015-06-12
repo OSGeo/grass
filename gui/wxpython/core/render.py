@@ -464,7 +464,9 @@ class RenderMapMgr(wx.EvtHandler):
         """
         self.layers = self.Map.GetListOfLayers(ltype='overlay', active=True)
         if not overlaysOnly:
-            self.layers += self.Map.GetListOfLayers(active=True)
+            self.layers += self.Map.GetListOfLayers(active=True,
+                                                    ltype='3d-raster',
+                                                    except_ltype=True)
         
         # reset progress
         self.ReportProgress()
@@ -1033,7 +1035,7 @@ class Map(object):
             return None
 
     def GetListOfLayers(self, ltype = None, mapset = None, name = None,
-                        active = None, hidden = None):
+                        active = None, hidden = None, except_ltype=False):
         """Returns list of layers of selected properties or list of
         all layers.
 
@@ -1042,6 +1044,7 @@ class Map(object):
         :param name: all layers with given name
         :param active: only layers with 'active' attribute set to True or False
         :param hidden: only layers with 'hidden' attribute set to True or False
+        :param except_ltype: True to return all layers with type not in ltype
 
         :return: list of selected layers
         """
@@ -1061,11 +1064,15 @@ class Map(object):
         for layer in llist:
             # specified type only
             if ltype != None:
-                if one_type and layer.type != ltype:
-                    continue
-                elif not one_type and layer.type not in ltype:
-                    continue
-
+                if one_type:
+                    if (not except_ltype and layer.type != ltype) or \
+                        (except_ltype and layer.type == ltype):
+                        continue
+                elif not one_type:
+                    if (not except_ltype and layer.type not in ltype) or \
+                       (except_ltype and layer.type in ltype):
+                        continue
+            
             # mapset
             if (mapset != None and ltype != 'overlay') and \
                     layer.GetMapset() != mapset:
