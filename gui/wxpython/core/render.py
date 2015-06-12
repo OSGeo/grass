@@ -83,6 +83,8 @@ class Layer(object):
             # we don't want it open, we just need the name
             self.mapfile = mapfile.name
             mapfile.close()
+            os.remove(self.mapfile) # remove empty file
+            
         self.maskfile = self.mapfile.rsplit(".",1)[0] + ".pgm"
         
         # stores class which manages rendering instead of simple command - e.g. WMS
