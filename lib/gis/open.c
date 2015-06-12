@@ -61,11 +61,6 @@ static int G__open(const char *element,
 
     is_tmp = (element && strncmp(element, ".tmp", 3) == 0);
 
-    if (is_tmp)
-        G_file_name_tmp(path, element, name, mapset);
-    else
-        G_file_name(path, element, name, mapset);
-
     /* READ */
     if (mode == 0) {
 	if (G_name_is_fully_qualified(name, xname, xmapset)) {
@@ -85,6 +80,9 @@ static int G__open(const char *element,
                 return -1;
 
             G_file_name(path, element, name, mapset);
+        }
+        else {
+            G_file_name_tmp(path, element, name, mapset);
         }
         
 	if ((fd = open(path, 0)) < 0)
@@ -107,6 +105,11 @@ static int G__open(const char *element,
 	if (*name && G_legal_filename(name) == -1)
 	    return -1;
 
+        if (!is_tmp)
+            G_file_name(path, element, name, mapset);
+        else
+            G_file_name_tmp(path, element, name, mapset);
+        
 	if (mode == 1 || access(path, 0) != 0) {
             if (is_tmp)
                 G_make_mapset_element_tmp(element);
