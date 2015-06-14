@@ -210,8 +210,8 @@ Contents
    OSGeo.org:          <news_item@osgeo.org>
 
  Email:
+   info@osgeo.org
    http://www.gis-news.de/  (franz-josef.behr@gismngt.de)
-   http://www.gisdevelopment.net (news@gisdevelopment.net)
    http://spatialnews.geocomm.com/submitnews.html (not free any more, convince editor@geocomm.com)
    redazione@geoforus.it
    mfeilner@linuxnewmedia.de
@@ -222,7 +222,7 @@ Contents
 
  Web:
    https://plus.google.com/u/0/communities/111147786674687562495 (G+ GRASS GIS community)
-   http://slashgeo.org/submit.pl
+   http://slashgeo.org/submit-geonews-press-release/ (MN login)
    http://freshmeat.net/projects/grass/?highlight=GRASS (update, MN)
    http://linuxtoday.com/contribute.php3
    https://joinup.ec.europa.eu/software/grassgis/home (submit news, MN)
@@ -230,14 +230,11 @@ Contents
    http://www10.giscafe.com/submit_material/submit_options.php#Press (MN)
    http://www.freegis.org   (update, MN)
    http://www.directionsmag.com/pressreleases/ (News -> Post Press Release)
-   http://www.gnu.org/directory/science/geography/grass.html
+   http://directory.fsf.org/wiki/GRASS_%28Geographic_Resources_Analysis_Support_System%29
    http://www.kde-apps.org/content/show.php?content=19776
    http://www.opendesktop.org/content/show.php?content=19776
-   http://news.eoportal.org/share_news.html (MN) 
+   https://news.eoportal.org/web/eoportal/share-your-news (MN)
             -> Share your news with the EO community
-   http://www.osdir.com/Downloads+index-req-viewsdownload-sid-206.phtml
-   http://groups.google.com/group/Remote-Sensing-GIS-for-a-New-World
-   http://groups.google.com/group/comp.infosystems.gis
    http://www.heise.de/software/download/edit_7105 (update, MN)
    https://joinup.ec.europa.eu/ --> Sharing content | Propose your...
 
