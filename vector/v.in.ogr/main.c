@@ -122,7 +122,7 @@ int main(int argc, char *argv[])
     xmin = ymin = xmax = ymax = 0.0;
     loc_proj_info = loc_proj_units = NULL;
     Ogr_ds = Ogr_oRing = poSpatialFilter = NULL;
-    OFTIntegerListlength = 40;	/* hack due to limitation in OGR */
+    OFTIntegerListlength = 255;	/* hack due to limitation in OGR */
     area_size = 0.0;
     use_tmp_vect = FALSE;
     key_column = GV_KEY_COLUMN;
