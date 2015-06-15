@@ -194,6 +194,9 @@ int extract_line(int num_index, int *num_array, struct Map_info *In,
 		 struct Map_info *Out, int new, int select_type, int dissolve,
 		 int field, int type_only, int reverse)
 {
+    G_debug(2, "extract_line(num_index=%d, new=%d, select_type=%d,"
+               " dissolve=%d, field=%d, type_only=%d, reverse=%d)",
+        num_index, new, select_type, dissolve, field, type_only, reverse);
     int line, nlines, native;
     struct line_pnts *Points;
     struct line_cats *Line_Cats_Old, *CCats;
