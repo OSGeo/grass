@@ -481,9 +481,12 @@ static void put_raster_data(int fd, char *null_buf, const void *rast,
 	put_fp_data(fd, null_buf, rast, row, n, map_type);
 }
 
-static void put_null_data(int fd, const char *flags, int row)
+static void put_null_value_row(int fd, const char *flags)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
+
+    if (fcb->gdal)
+	G_fatal_error(_("GDAL output doesn't support writing null rows separately"));
 
     if (fcb->null_fd < 0)
 	G_fatal_error(_("No null file for <%s>"), fcb->name);
@@ -491,42 +494,29 @@ static void put_null_data(int fd, const char *flags, int row)
     Rast__convert_01_flags(flags, fcb->null_bits,
 			   fcb->cellhd.cols);
 
-    Rast__write_null_bits(fcb->null_fd, fcb->null_bits, row,
-			  fcb->cellhd.cols, fd);
+    Rast__write_null_bits(fd, fcb->null_bits);
 }
 
-static void put_null_value_row(int fd, const char *buf)
-{
-    struct fileinfo *fcb = &R__.fileinfo[fd];
-
-    if (fcb->gdal)
-	G_fatal_error(_("GDAL output doesn't support writing null rows separately"));
-
-    put_null_data(fd, buf, fcb->null_cur_row);
-
-    fcb->null_cur_row++;
-}
-
-static void write_null_bits_compressed(int null_fd, const unsigned char *flags,
-				int row, size_t size, int fd)
+static void write_null_bits_compressed(const unsigned char *flags,
+				       int row, size_t size, int fd)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
     unsigned char *compressed_buf;
     ssize_t nwrite;
 
-    fcb->null_row_ptr[row] = lseek(null_fd, 0L, SEEK_CUR);
+    fcb->null_row_ptr[row] = lseek(fcb->null_fd, 0L, SEEK_CUR);
 
     compressed_buf = G_alloca(size + 1);
 
     nwrite = G_zlib_compress(flags, size, compressed_buf, size);
 
     if (nwrite < size) {
-	if (write(null_fd, compressed_buf, nwrite) != nwrite)
+	if (write(fcb->null_fd, compressed_buf, nwrite) != nwrite)
 	    G_fatal_error(_("Error writing compressed null data for row %d of <%s>"),
 			  row, fcb->name);
     }
     else {
-	if (write(null_fd, flags, size) != size)
+	if (write(fcb->null_fd, flags, size) != size)
 	    G_fatal_error(_("Error writing compressed null data for row %d of <%s>"),
 			  row, fcb->name);
     }
@@ -537,7 +527,6 @@ static void write_null_bits_compressed(int null_fd, const unsigned char *flags,
 /*!
    \brief Write null data
 
-   \param null_fd file descriptor of null file where data is to be written
    \param flags ?
    \param row row number
    \param col col number
@@ -545,26 +534,26 @@ static void write_null_bits_compressed(int null_fd, const unsigned char *flags,
 
    \return void
  */
-void Rast__write_null_bits(int null_fd, const unsigned char *flags, int row,
-			   int cols, int fd)
+void Rast__write_null_bits(int fd, const unsigned char *flags)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
+    int row = fcb->null_cur_row++;
     off_t offset;
     size_t size;
 
-    size = Rast__null_bitstream_size(cols);
+    size = Rast__null_bitstream_size(fcb->cellhd.cols);
 
     if (fcb->null_row_ptr) {
-	write_null_bits_compressed(null_fd, flags, row, size, fd);
+	write_null_bits_compressed(flags, row, size, fd);
 	return;
     }
 
-    offset = (off_t) size *row;
+    offset = (off_t) size * row;
 
-    if (lseek(null_fd, offset, SEEK_SET) < 0)
+    if (lseek(fcb->null_fd, offset, SEEK_SET) < 0)
 	G_fatal_error(_("Error writing null row %d of <%s>"), row, fcb->name);
 
-    if (write(null_fd, flags, size) != size)
+    if (write(fcb->null_fd, flags, size) != size)
 	G_fatal_error(_("Error writing null row %d of <%s>"), row, fcb->name);
 }
 
