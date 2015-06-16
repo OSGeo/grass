@@ -283,6 +283,7 @@ int main(int argc, char *argv[])
 	    null_bits[col] = 0;
 
 	/* Open null file for writing */
+	Rast_set_window(&cellhd);
 	fd = Rast__open_null_write(raster->answer);
 
 	G_message(_("Writing new null file for [%s]... "), raster->answer);

@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
     int row, col, fd;
     unsigned char *null_bits;
     RASTER_MAP_TYPE map_type;
-    int change_null = 0, create, remove, only_int, only_fp, only_null;
+    int change_null = 0, create, remove, only_int, only_fp, only_null, recreate;
     int is_reclass;
 
     struct GModule *module;
@@ -51,6 +51,7 @@ int main(int argc, char *argv[])
 	struct Flag *i;
 	struct Flag *c;
 	struct Flag *r;
+	struct Flag *z;
     } flags;
 
     G_gisinit(argv[0]);
@@ -106,6 +107,11 @@ int main(int argc, char *argv[])
     flags.r->description = _("Remove NULL-value bitmap file");
     flags.r->guisection = _("Remove");
 
+    flags.z = G_define_flag();
+    flags.z->key = 'z';
+    flags.z->description =
+	_("Re-create NULL-value bitmap file (to compress or uncompress)");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -114,6 +120,7 @@ int main(int argc, char *argv[])
     only_null = flags.n->answer;
     create = flags.c->answer;
     remove = flags.r->answer;
+    recreate = flags.z->answer;
 
     name = parms.map->answer;
     mapset = G_find_raster2(name, "");
@@ -165,11 +172,12 @@ int main(int argc, char *argv[])
 
     if (create) {
 	/* write a file of no-nulls */
-	null_bits = (unsigned char *)Rast__allocate_null_bits(cellhd.cols);
+	null_bits = Rast__allocate_null_bits(cellhd.cols);
 	/* init all cells to 0's */
 	for (col = 0; col < Rast__null_bitstream_size(cellhd.cols); col++)
 	    null_bits[col] = 0;
 
+	Rast_set_window(&cellhd);
 	fd = Rast__open_null_write(name);
 
 	G_verbose_message(_("Writing new null file for raster map <%s>..."),
@@ -181,6 +189,32 @@ int main(int argc, char *argv[])
 	}
 	G_percent(row, cellhd.rows, 1);
 	Rast__close_null(fd);
+
+	G_done_msg(_("Raster map <%s> modified."), name);
+
+	exit(EXIT_SUCCESS);
+    }
+
+    if (recreate) {
+	int in_fd;
+	/* write a file of no-nulls */
+	null_bits = Rast__allocate_null_bits(cellhd.cols);
+
+	Rast_set_window(&cellhd);
+	in_fd = Rast_open_old(name, mapset);
+	fd = Rast__open_null_write(name);
+
+	G_verbose_message(_("Writing new null file for raster map <%s>..."),
+			  name);
+
+	for (row = 0; row < cellhd.rows; row++) {
+	    G_percent(row, cellhd.rows, 1);
+	    Rast_get_null_value_row(in_fd, (char*) null_bits, row);
+	    Rast__write_null_bits(fd, null_bits);
+	}
+	G_percent(row, cellhd.rows, 1);
+	Rast__close_null(fd);
+	Rast_close(in_fd);
 
 	G_done_msg(_("Raster map <%s> modified."), name);
 
