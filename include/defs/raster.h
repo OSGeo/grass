@@ -329,6 +329,7 @@ void Rast_get_c_row(int, CELL *, int);
 void Rast_get_f_row(int, FCELL *, int);
 void Rast_get_d_row(int, DCELL *, int);
 void Rast_get_null_value_row(int, char *, int);
+int Rast__read_null_bits(int, int, unsigned char *);
 
 /* get_row_colr.c */
 void Rast_get_row_colors(int, int, struct Colors *,
