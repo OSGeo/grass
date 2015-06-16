@@ -838,11 +838,10 @@ static int read_null_bits_compressed(int null_fd, unsigned char *flags,
     return 1;
 }
 
-static int read_null_bits(int fd, int row)
+int Rast__read_null_bits(int fd, int row, unsigned char *flags)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
     int null_fd = fcb->null_fd;
-    unsigned char *flags = fcb->null_bits;
     int cols = fcb->cellhd.cols;
     off_t offset;
     ssize_t size;
@@ -888,7 +887,7 @@ static void get_null_value_row_nomask(int fd, char *flags, int row)
     }
 
     if (row != fcb->null_cur_row) {
-	if (!read_null_bits(fd, row)) {
+	if (!Rast__read_null_bits(fd, row, fcb->null_bits)) {
 	    fcb->null_cur_row = -1;
 	    if (fcb->map_type == CELL_TYPE) {
 		/* If can't read null row, assume  that all map 0's are nulls */

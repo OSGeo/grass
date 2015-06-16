@@ -199,6 +199,7 @@ int main(int argc, char *argv[])
 	int in_fd;
 	/* write a file of no-nulls */
 	null_bits = Rast__allocate_null_bits(cellhd.cols);
+	Rast__init_null_bits(null_bits, cellhd.cols);
 
 	Rast_set_window(&cellhd);
 	in_fd = Rast_open_old(name, mapset);
@@ -209,7 +210,7 @@ int main(int argc, char *argv[])
 
 	for (row = 0; row < cellhd.rows; row++) {
 	    G_percent(row, cellhd.rows, 1);
-	    Rast_get_null_value_row(in_fd, (char*) null_bits, row);
+	    Rast__read_null_bits(in_fd, row, null_bits);
 	    Rast__write_null_bits(fd, null_bits);
 	}
 	G_percent(row, cellhd.rows, 1);
