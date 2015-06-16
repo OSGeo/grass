@@ -13,14 +13,14 @@ v.edit map=vcategory_test_1 layer=1 tool=catadd ids=${fid} cats=2
 v.category option=transfer layer=1,2 input=vcategory_test_1 output=vcategory_test_2
 
 expected="1/2"
-out=$(v.category option=print layer=1 input=test2)
+out=$(v.category option=print layer=1 input=vcategory_test_2)
 
 if [[ ${out} != ${expected} ]]; then
     echo "FAIL: Expected '${expected}' not equals to output ${out}"
     exit 1
 fi
 
-out=$(v.category option=print layer=2 input=test2)
+out=$(v.category option=print layer=2 input=vcategory_test_2)
 
 if [[ ${out} != ${expected} ]]; then
     echo "FAIL: Expected '${expected}' not equals to output ${out}"
