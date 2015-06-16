@@ -271,7 +271,7 @@ int main(int argc, char *argv[])
     if (null_flag->answer) {
 	unsigned char *null_bits;
 	int row, col;
-	int null_fd;
+	int fd;
 
 	if (is_reclass)
 	    G_fatal_error(_("[%s] is a reclass of another map. Exiting."),
@@ -283,22 +283,21 @@ int main(int argc, char *argv[])
 	    null_bits[col] = 0;
 
 	/* Open null file for writing */
-	null_fd = G_open_new_misc("cell_misc", "null", raster->answer);
+	fd = Rast__open_null_write(raster->answer);
 
 	G_message(_("Writing new null file for [%s]... "), raster->answer);
 	for (row = 0; row < cellhd.rows; row++) {
 	    G_percent(row, cellhd.rows, 1);
-	    Rast__write_null_bits(null_fd, null_bits, row, cellhd.cols, 0);
+	    Rast__write_null_bits(fd, null_bits);
 	}
 	G_percent(row, cellhd.rows, 1);
 
 	/* Cleanup */
-	close(null_fd);
+	Rast__close_null(fd);
 	G_free(null_bits);
     }
 
     if (del_flag->answer) {
-	int null_fd;
 	char path[GPATH_MAX];
 
 	if (is_reclass)
@@ -308,10 +307,10 @@ int main(int argc, char *argv[])
 	/* Write a file of no-nulls */
 	G_message(_("Removing null file for [%s]...\n"), raster->answer);
 
-	null_fd = G_open_new_misc("cell_misc", "null", raster->answer);
 	G_file_name_misc(path, "cell_misc", "null", raster->answer, G_mapset());
 	unlink(path);
-	close(null_fd);
+	G_file_name_misc(path, "cell_misc", "null2", raster->answer, G_mapset());
+	unlink(path);
 
 	G_done_msg(_("Done."));
     }

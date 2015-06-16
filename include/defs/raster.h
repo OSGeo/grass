@@ -465,7 +465,7 @@ void Rast_put_row(int, const void *, RASTER_MAP_TYPE);
 void Rast_put_c_row(int, const CELL *);
 void Rast_put_f_row(int, const FCELL *);
 void Rast_put_d_row(int, const DCELL *);
-void Rast__write_null_bits(int, const unsigned char *, int, int, int);
+void Rast__write_null_bits(int, const unsigned char *);
 
 /* put_title.c */
 int Rast_put_cell_title(const char *, const char *);

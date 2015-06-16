@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     const char *name, *mapset;
     char rname[GNAME_MAX], rmapset[GMAPSET_MAX];
     char path[GPATH_MAX];
-    int row, col, null_fd;
+    int row, col, fd;
     unsigned char *null_bits;
     RASTER_MAP_TYPE map_type;
     int change_null = 0, create, remove, only_int, only_fp, only_null;
@@ -170,17 +170,17 @@ int main(int argc, char *argv[])
 	for (col = 0; col < Rast__null_bitstream_size(cellhd.cols); col++)
 	    null_bits[col] = 0;
 
-	null_fd = G_open_new_misc("cell_misc", "null", name);
+	fd = Rast__open_null_write(name);
 
 	G_verbose_message(_("Writing new null file for raster map <%s>..."),
 			  name);
 
 	for (row = 0; row < cellhd.rows; row++) {
 	    G_percent(row, cellhd.rows, 1);
-	    Rast__write_null_bits(null_fd, null_bits, row, cellhd.cols, 0);
+	    Rast__write_null_bits(fd, null_bits);
 	}
 	G_percent(row, cellhd.rows, 1);
-	close(null_fd);
+	Rast__close_null(fd);
 
 	G_done_msg(_("Raster map <%s> modified."), name);
 
@@ -191,8 +191,9 @@ int main(int argc, char *argv[])
 	/* write a file of no-nulls */
 	G_verbose_message(_("Removing null file for raster map <%s>..."),
 			   name);
-	null_fd = G_open_new_misc("cell_misc", "null", name);
 	G_file_name_misc(path, "cell_misc", "null", name, mapset);
+	unlink(path);
+	G_file_name_misc(path, "cell_misc", "null2", name, mapset);
 	unlink(path);
 
 	G_done_msg(_("Raster map <%s> modified."), name);
