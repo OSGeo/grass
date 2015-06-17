@@ -1909,7 +1909,7 @@ msgstr "ATTENTION : "
 #: ../lib/init/grass.py:130 ../lib/gis/parser.c:599
 #, fuzzy
 msgid "ERROR"
-msgstr "ERREUR :"
+msgstr "ERREUR: "
 
 #: ../lib/init/grass.py:131
 #, fuzzy
@@ -3373,7 +3373,7 @@ msgstr "ATTENTION: "
 
 #: ../lib/gis/error.c:362
 msgid "ERROR: "
-msgstr "ERREUR :"
+msgstr "ERREUR: "
 
 #: ../lib/gis/parser_standard_options.c:144
 msgid "SQL select statement"
