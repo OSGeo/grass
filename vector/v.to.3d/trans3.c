@@ -105,7 +105,7 @@ void trans3d(struct Map_info *In, struct Map_info *Out, int type,
 			"Using category %d."), line, cat);
 	}
 
-	if (zcolumn && ltype == GV_POINT && cat > -1) {
+	if (zcolumn && ltype & (GV_POINT | GV_LINE) && cat > -1) {
 	    /* category exist in table ? */
 	    cex = (int *)bsearch((void *)&cat, cats, ncats, sizeof(int),
 				 srch);
