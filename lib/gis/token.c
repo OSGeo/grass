@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <grass/gis.h>
+#include <grass/glocale.h>
 
 static char **tokenize(const char *, const char *, const char *);
 
@@ -89,42 +90,88 @@ char **tokenize(const char *buf, const char *delim, const char *inchar)
 {
     int i;
     char **tokens;
-    char *p;
+    const char *p;
+    char *q;
+    enum {
+	S_START,
+	S_IN_QUOTE,
+	S_AFTER_QUOTE,
+    };
+    enum {
+	A_NO_OP,
+	A_ADD_CHAR,
+	A_NEW_FIELD,
+	A_END_RECORD,
+	A_ERROR
+    };
+    int state;
+    int quo = inchar ? *inchar : -1;
 
     /* do not modify buf, make a copy */
-    p = G_store(buf);
+    p = q = G_store(buf);
 
     i = 0;
     tokens = (char **)G_malloc(2 * sizeof(char *));
 
     /* always one token */
-    tokens[i++] = p;
+    tokens[i++] = q;
 
-    while (TRUE) {
-	/* find next delimiter */
-	while (!strchr(delim, *p)) {
-	    /* opening border ? */
-	    if (inchar && *p == *inchar) {
-		p++;
-		/* find closing border */
-		while (*p != *inchar && *p != 0)
-		    p++;
-		if (*p == 0)
-		    break;
-	    }
-	    p++;
-	}
-	if (*p == 0)
+    for (state = S_START; ; p++) {
+	int c = *p;
+	int action = A_NO_OP;
+	switch (state) {
+	case S_START:
+	    if (c == quo)
+		state = S_IN_QUOTE;
+	    else if (c == '\0')
+		action = A_END_RECORD;
+	    else if (strchr(delim, c))
+		action = A_NEW_FIELD;
+	    else
+		action = A_ADD_CHAR;
 	    break;
-	/* replace delim with '\0' */
-	*p++ = 0;
-	/* set next token */
-	tokens[i++] = p;
-	tokens = (char **)G_realloc((char *)tokens, (i + 1) * sizeof(char *));
-    }
-    tokens[i] = NULL;
+	case S_IN_QUOTE:
+	    if (c == quo)
+		state = S_AFTER_QUOTE;
+	    else if (c == '\0')
+		action = A_ERROR;
+	    else
+		action = A_ADD_CHAR;
+	    break;
+	case S_AFTER_QUOTE:
+	    if (c == quo)
+		state = S_IN_QUOTE, action = A_ADD_CHAR;
+	    else if (c == '\0')
+		action = A_END_RECORD;
+	    else if (strchr(delim, c))
+		state = S_START, action = A_NEW_FIELD;
+	    else
+		action = A_ERROR;
+	    break;
+	}
 
-    return tokens;
+	switch (action) {
+	case A_NO_OP:
+	    break;
+	case A_ADD_CHAR:
+	    *q++ = *p;
+	    break;
+	case A_NEW_FIELD:
+	    *q++ = '\0';
+	    tokens[i++] = q;
+	    tokens = G_realloc(tokens, (i + 2) * sizeof(char *));
+	    break;
+	case A_END_RECORD:
+	    *q++ = '\0';
+	    tokens[i++] = NULL;
+	    return tokens;
+	case A_ERROR:
+	    G_warning(_("parse error"));
+	    *q++ = '\0';
+	    tokens[i++] = NULL;
+	    return tokens;
+	}
+    }
 }
 
 /*!
