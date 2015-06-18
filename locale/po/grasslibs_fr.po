@@ -1909,7 +1909,7 @@ msgstr "ATTENTION : "
 #: ../lib/init/grass.py:130 ../lib/gis/parser.c:599
 #, fuzzy
 msgid "ERROR"
-msgstr "ERREUR: "
+msgstr "ERREUR"
 
 #: ../lib/init/grass.py:131
 #, fuzzy
