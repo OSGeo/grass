@@ -155,7 +155,7 @@ def _regionToCellHead(region):
                     'ewres' : 'ew_res'}
 
     for k, v in region.iteritems():
-        if k in ["rows", "cols", "cells"]:
+        if k in ["rows", "cols", "cells", "zone"]:  # zone added in r65224
             v = int(v)
         else:
             v = float(v)
