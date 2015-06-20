@@ -831,7 +831,7 @@ def GetRasterInfo(rast):
     if  ret != 0:
         raise GException("r.info failed:\n%s" % msg)
 
-    out = out.split("\n")
+    out = out.splitlines()
     raster_info = {} 
 
     for b in out:
