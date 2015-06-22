@@ -1106,6 +1106,6 @@ class IClassConnection:
                          group = group,
                          read = True, **kwargs).strip()
 
-        if res.split('\n')[0]:
-            bands = res.split('\n')
+        if res.splitlines()[0]:
+            bands = res.splitlines()
             self.scatt_mgr.SetBands(bands)
