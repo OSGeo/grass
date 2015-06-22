@@ -675,7 +675,7 @@ class IClassMapFrame(DoubleMapFrame):
                                  layer = 1,
                                  columns = ','.join(columns),
                                  read = True)
-            records = ret.strip().split('\n')
+            records = ret.strip().splitlines()
             for record in records:
                 record = record.split('|')
                 listCtrl.AddCategory(cat = int(record[0]), name = record[1], color = record[2])
@@ -744,8 +744,8 @@ class IClassMapFrame(DoubleMapFrame):
         except KeyError:
             wx.EndBusyCursor()
             return False
-        
-        dbFile = tempfile.NamedTemporaryFile(mode = 'w')
+
+        dbFile = tempfile.NamedTemporaryFile(mode='w', delete=False)
         if dbInfo['driver'] != 'dbf':
             dbFile.write("BEGIN\n")
         # populate table
@@ -767,15 +767,15 @@ class IClassMapFrame(DoubleMapFrame):
                 
         if dbInfo['driver'] != 'dbf':
             dbFile.write("COMMIT\n")
-        dbFile.file.flush()
-        
-        if 0 != RunCommand('db.execute', input=dbFile.name, driver=dbInfo['driver'], database=dbInfo['database']):
-            wx.EndBusyCursor()
-            return False
+        dbFile.file.close()
 
+        ret = RunCommand('db.execute', input=dbFile.name, driver=dbInfo['driver'], database=dbInfo['database'])
         wx.EndBusyCursor()
+        os.remove(dbFile.name)
+        if ret != 0:
+            return False
         return True
-    
+
     def _runDBUpdate(self, tmpFile, table, column, value, cat):
         """Helper function for UPDATE statement
         
@@ -1120,8 +1120,8 @@ class IClassMapFrame(DoubleMapFrame):
                          flags = 'g',
                          group = group,
                          read = True, **kwargs).strip()
-        if res.split('\n')[0]:
-            return sorted(res.split('\n'))
+        if res.splitlines()[0]:
+            return sorted(res.splitlines())
         
         return []
     
