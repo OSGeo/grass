@@ -153,9 +153,9 @@ class ProfileFrame(BasePlotFrame):
                     insideRegion = False
                 # build string of coordinate points for r.profile
                 if self.coordstr == '':
-                    self.coordstr = '%d,%d' % (point[0], point[1])
+                    self.coordstr = '%f,%f' % (point[0], point[1])
                 else:
-                    self.coordstr = '%s,%d,%d' % (self.coordstr, point[0], point[1])
+                    self.coordstr = '%s,%f,%f' % (self.coordstr, point[0], point[1])
         
         if not insideRegion:
             GWarning(message = _("Not all points of profile lie inside computational region."),
@@ -176,7 +176,7 @@ class ProfileFrame(BasePlotFrame):
                                  parent = self,
                                  read = True,
                                  map = self.rasterList[0],
-                                 coordinates = '%d,%d' % (point[0],point[1]))
+                                 coordinates = '%f,%f' % (point[0], point[1]))
                 
                 val = ret.splitlines()[0].split('|')[3]
                 if val == None or val == '*':
@@ -368,7 +368,7 @@ class ProfileFrame(BasePlotFrame):
                     return
                 
                 for datapair in self.raster[r]['datalist']:
-                    fd.write('%d,%d\n' % (float(datapair[0]),float(datapair[1])))
+                    fd.write('%.6f,%.6f\n' % (float(datapair[0]),float(datapair[1])))
                 
                 fd.close()
         
