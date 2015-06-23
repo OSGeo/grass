@@ -62,8 +62,10 @@
 /*         16      worldview2        * enter month,day,hh.ddd,long.,lat.c */
 /*                                                                      c */
 /*         17      quickbird        * enter month,day,hh.ddd,long.,lat. c */
-/*																		c */
+/*                                                                      c */
 /*         18      Landsat 8        * enter month,day,hh.ddd,long.,lat. c */
+/*                                                                      c */
+/*         19      geoeye1          * enter month,day,hh.ddd,long.,lat. c */
 /*                                                                      c */
 /*     note:       for hrv and tm experiments long. and lat. are the    c */
 /*                 coordinates of the scene center.                     c */

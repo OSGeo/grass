@@ -144,7 +144,12 @@ c        119 Pan      "               ( 0.488-0.692 )                  c
 c        120 NIR      "               ( 0.829-0.900 )                  c 
 c        121 Cirrus   "               ( 1.340-1.409 )                  c  
 c        122 SWIR1    "               ( 1.515-1.697 )                  c 
-c        123 SWIR2    "               ( 2.037-2.037 )                  c 
+c        123 SWIR2    "               ( 2.037-2.037 )                  c
+c        124 Pan band of GeoEye 1     ( 0.450-0.800 )                  c
+c        125 Blue     "               ( 0.450-0.510 )                  c
+c        126 Green    "               ( 0.510-0.580 )                  c
+c        127 Red      "               ( 0.655-0.690 )                  c
+c        128 NIR      "               ( 0.780-0.920 )                  c
 c                                                                      c
 c  note: wl has to be in micrometer                                    c
 c**********************************************************************/
@@ -190,6 +195,7 @@ private:
 	void worldview2(int iwa);
 	void quickbird2(int iwa);
 	void landsat_8(int iwa);
+	void geoeye1(int iwa);
 
 public:
 	/* To compute the equivalent wavelength needed for the calculation of the

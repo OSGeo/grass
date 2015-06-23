@@ -369,9 +369,10 @@ void GeomCond::parse()
     case 13: /* rapideye         * enter month,day,hh.ddd,long.,lat. */
     case 14: /* vgt1_spot4       * enter month,day,hh.ddd,long.,lat. */
     case 15: /* vgt2_spot5       * enter month,day,hh.ddd,long.,lat. */
-	case 16: /* worldview2       * enter month,day,hh.ddd,long.,lat. */
-	case 17: /* quickbird2       * enter month,day,hh.ddd,long.,lat. */
+    case 16: /* worldview2       * enter month,day,hh.ddd,long.,lat. */
+    case 17: /* quickbird2       * enter month,day,hh.ddd,long.,lat. */
     case 18: /* Landsat 8        * enter month,day,hh.ddd,long.,lat. */
+    case 19: /* geoeye1          * enter month,day,hh.ddd,long.,lat. */
     {
 	cin >> month;
 	cin >> jday;
@@ -436,7 +437,8 @@ void GeomCond::print()
 	string(" VGT2-SPOT5 observation      "),
 	string(" Worldview2 observation      "),
 	string(" Quickbird2 observation      "),
-    string(" Landsat 8 observation       ")
+	string(" Landsat 8 observation       "),
+	string(" geoeye1  observation        ")
 	};
 
     static const string head(" geometrical conditions identity  ");
