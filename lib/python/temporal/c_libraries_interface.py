@@ -136,7 +136,7 @@ def _get_database_name(lock, conn, data):
         # This behavior is in conjunction with db.connect
         dbstring = dbstring.replace("$GISDBASE", libgis.G_gisdbase())
         dbstring = dbstring.replace("$LOCATION_NAME", libgis.G_location())
-        dbstring = dbstring.replace("$MAPSET", libgis.G_mapset())
+        dbstring = dbstring.replace("$MAPSET", mapset)
     conn.send(dbstring)
 
 ###############################################################################
