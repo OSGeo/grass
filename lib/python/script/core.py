@@ -362,14 +362,28 @@ def start_command(prog, flags="", overwrite=False, quiet=False,
 
 
 def run_command(*args, **kwargs):
-    """Passes all arguments to start_command(), then waits for the process to
-    complete, returning its exit code. Similar to subprocess.check_call(), but
-    with the make_command() interface.
+    """Execute a module synchronously
 
-    :param list args: list of unnamed arguments (see start_command() for details)
-    :param list kwargs: list of named arguments (see start_command() for details)
+    This function passes all arguments to ``start_command()``,
+    then waits for the process to complete. It is similar to
+    ``subprocess.check_call()``, but with the ``make_command()``
+    interface.
 
-    :return: exit code (0 for success)
+    For backward compatibility, the function returns exit code
+    by default but only if it is equal to zero. An exception is raised
+    in case of an non-zero return code.
+
+    >>> run_command('g.region', raster='elevation')
+    0
+
+    See ``start_command()`` for details about parameters and usage.
+
+    :param *args: unnamed arguments passed to ``start_command()``
+    :param **kwargs: named arguments passed to ``start_command()``
+
+    :returns: 0 with default parameters for backward compatibility only
+
+    :raises: ``CalledModuleError`` when module returns non-zero return code
     """
     ps = start_command(*args, **kwargs)
     returncode = ps.wait()
@@ -470,14 +484,27 @@ def parse_command(*args, **kwargs):
 
 
 def write_command(*args, **kwargs):
-    """Passes all arguments to feed_command, with the string specified
-    by the 'stdin' argument fed to the process' stdin.
+    """Execute a module with standard input given by *stdin* parameter.
 
-    :param list args: list of unnamed arguments (see start_command() for details)
-    :param list kwargs: list of named arguments (see start_command() for details)
+    Passes all arguments to ``feed_command()``, with the string specified
+    by the *stdin* argument fed to the process' standard input.
 
-    :return: return code
+    >>> gscript.write_command(
+    ...    'v.in.ascii', input='-',
+    ...    stdin='%s|%s' % (635818.8, 221342.4),
+    ...    output='view_point')
+    0
+
+    See ``start_command()`` for details about parameters and usage.
+
+    :param *args: unnamed arguments passed to ``start_command()``
+    :param **kwargs: named arguments passed to ``start_command()``
+
+    :returns: 0 with default parameters for backward compatibility only
+
+    :raises: ``CalledModuleError`` when module returns non-zero return code
     """
+    # TODO: should we delete it from kwargs?
     stdin = kwargs['stdin']
     process = feed_command(*args, **kwargs)
     process.communicate(stdin)
@@ -523,6 +550,7 @@ def debug(msg, debug=1):
     :param str debug: debug level (0-5)
     """
     if debug_level() >= debug:
+        # TODO: quite a random hack here, do we need it somewhere else too?
         if sys.platform == "win32":
             msg = msg.replace('&', '^&')
 
