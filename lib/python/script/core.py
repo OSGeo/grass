@@ -34,6 +34,8 @@ from grass.exceptions import ScriptError, CalledModuleError
 # i18N
 import gettext
 gettext.install('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale'))
+import __builtin__
+__builtin__.__dict__['_'] = __builtin__.__dict__['_'].im_self.lgettext
 
 # subprocess wrapper that uses shell on Windows
 
