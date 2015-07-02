@@ -6,8 +6,7 @@ Optionally statistics on point attributes in <em>points</em> are
 calculated for each area. The results are either uploaded to the
 attribute table of the vector map <em>areas</em> or printed to stdout.
 
-<h3>OPTIONS</h3>
-
+<p>
 <em>Statistical Methods:</em>
 Using numeric attribute values of all points falling into a given area,
 a new value is detmined with the selected method.
@@ -65,17 +64,87 @@ If no points are falling into a given area, the point count is set to 0
 existing. If they do already exist, the <em>count_column</em> must be of
 type integer and the <em>stats_column</em> of type double precision.
 
-<!-- TODO
+<h2>EXAMPLES</h2>
 
-<h2>EXAMPLE</h2>
+<h3>Preparation for examples</h3>
 
-...
+The subsequent examples are based on randomly sampled
+elevation data (North Carolina sample database):
 
 <div class="code"><pre>
-...
+# work on map copy for attribute editing
+g.copy vector=zipcodes_wake,myzipcodes_wake
+
+# set computational region: extent of ZIP code map, raster pixels
+# aligned to raster map
+g.region vector=myzipcodes_wake align=elev_state_500m -p
+#  generate random elevation points
+r.random elev_state_500m vector=rand5000 n=5000
+v.colors rand5000 color=elevation
+
+# visualization
+d.mon wx0
+d.vect myzipcodes_wake -c
+d.vect rand5000
 </pre></div>
 
--->
+These vector maps are used for the examples below.
+
+<h3>Count points per polygon with printed output</h3>
+
+<i>See above for the creation of the input maps.</i>
+<p>
+Counting points per polygon, print results to terminal:
+
+<div class="code"><pre>
+v.vect.stats points=rand5000 area=myzipcodes_wake -p
+</pre></div>
+
+<h3>Count points per polygon with column update</h3>
+
+<i>See above for the creation of the input maps.</i>
+<p>
+Counting of points per polygon, with update of "num_points" column
+(will be automatically created):
+
+<div class="code"><pre>
+v.vect.stats points=rand5000 area=myzipcodes_wake count_column=num_points
+# verify result
+v.db.select myzipcodes_wake column=ZIPCODE_,ZIPNAME,num_points
+</pre></div>
+
+<h3>Average values of points in polygon with printed output</h3>
+
+<i>See above for the creation of the input maps.</i>
+<p>
+Calculation of average point elevation per ZIP code
+polygon, printed to terminal in comma separated style:
+
+<div class="code"><pre>
+# check name of point map column:
+v.info -c rand5000
+v.vect.stats points=rand5000 area=myzipcodes_wake \
+  method=average points_column=value separator=comma -p
+</pre></div>
+
+<h3>Average values of points in polygon with column update</h3>
+
+<i>See above for the creation of the input maps.</i>
+<p>
+Calculation of average point elevation per ZIP code polygon,
+with update of "avg_elev" column and counting of points per polygon,
+with update of "num_points" column (new columns will be automatically
+created):
+
+<div class="code"><pre>
+# check name of point map column:
+v.info -c rand5000
+v.vect.stats points=rand5000 area=myzipcodes_wake count_column=num_points \
+  method=average points_column=value stats_column=avg_elev
+# verify result
+v.db.select myzipcodes_wake column=ZIPCODE_,ZIPNAME,avg_elev
+</pre></div>
+
 
 <h2>SEE ALSO</h2>
 
@@ -91,4 +160,5 @@ type integer and the <em>stats_column</em> of type double precision.
 
 Markus Metz
 
-<p><i>Last changed: $Date: 2008-08-13 21:52:37 +0200 (Wed, 13 Aug 2008) $</i>
+<p>
+<i>Last changed: $Date: 2015-01-01 13:07:46 +0100 (Thu, 01 Jan 2015) $</i>
