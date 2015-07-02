@@ -227,14 +227,14 @@ int main(int argc, char *argv[])
 	    G_fatal_error("Method but no point column selected");
 	}
 	if (!print_flag->answer && !stats_column_opt->answer)
-	    G_fatal_error("Name for stats column is missing");
+	    G_fatal_error("Name for stats_column is missing");
     }
 
     if (point_column_opt->answer) {
 	if (!method_opt->answer)
 	    G_fatal_error("No method for statistics selected");
 	if (!print_flag->answer && !stats_column_opt->answer)
-	    G_fatal_error("Name for stats column is missing");
+	    G_fatal_error("Name for stats_column is missing");
     }
     
     /* Open points vector */
@@ -301,7 +301,7 @@ int main(int argc, char *argv[])
 			  AFi->database, AFi->driver);
 
 	if (!count_column_opt->answer)
-	    G_fatal_error(_("ccolumn is required to upload point counts"));
+	    G_fatal_error(_("count_column is required to upload point counts"));
 
 	/* check if count column exists */
 	G_debug(1, "check if count column exists");
@@ -310,7 +310,7 @@ int main(int argc, char *argv[])
 	    /* check count column type */
 	    if (db_column_Ctype(Adriver, AFi->table, count_column_opt->answer)
 		!= DB_C_TYPE_INT)
-		G_fatal_error(_("ccolumn must be of type integer"));
+		G_fatal_error(_("count_column must be of type integer"));
 
 	    db_free_column(column);
 	    column = NULL;
@@ -329,7 +329,7 @@ int main(int argc, char *argv[])
 
 	if (method_opt->answer) {
 	    if (!stats_column_opt->answer)
-		G_fatal_error(_("scolumn is required to upload point stats"));
+		G_fatal_error(_("stats_column is required to upload point stats"));
 
 	    /* check if stats column exists */
 	    G_debug(1, "check if stats column exists");
@@ -340,7 +340,7 @@ int main(int argc, char *argv[])
 		if (db_column_Ctype
 		    (Adriver, AFi->table,
 		     stats_column_opt->answer) != DB_C_TYPE_DOUBLE)
-		    G_fatal_error(_("scolumn must be of type double"));
+		    G_fatal_error(_("stats_column must be of type double precision"));
 
 		db_free_column(column);
 		column = NULL;
