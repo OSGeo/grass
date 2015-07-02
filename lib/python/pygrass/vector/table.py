@@ -99,15 +99,13 @@ class Filters(object):
         self._where = 'WHERE {condition}'.format(condition=condition)
         return self
 
-    def order_by(self, orderby):
+    def order_by(self, *orderby):
         """Create the order by condition
 
         :param orderby: the name of column/s to order the result
         :type orderby: str
         """
-        if not isinstance(orderby, unicode):
-            orderby = ', '.join(orderby)
-        self._orderby = 'ORDER BY {orderby}'.format(orderby=orderby)
+        self._orderby = 'ORDER BY {orderby}'.format(orderby=', '.join(orderby))
         return self
 
     def limit(self, number):
@@ -122,15 +120,13 @@ class Filters(object):
             self._limit = 'LIMIT {number}'.format(number=number)
         return self
 
-    def group_by(self, groupby):
+    def group_by(self, *groupby):
         """Create the group by condition
 
         :param groupby: the name of column/s to group the result
         :type groupby: str, list
         """
-        if not isinstance(groupby, unicode):
-            groupby = ', '.join(groupby)
-        self._groupby = 'GROUP BY {groupby}'.format(groupby=groupby)
+        self._groupby = 'GROUP BY {groupby}'.format(groupby=', '.join(groupby))
         return self
 
     def get_sql(self):
