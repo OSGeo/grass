@@ -175,6 +175,7 @@ r"""<!-- the files grass${grass_version_major}.html & helptext.html file live in
       </td>
       <td width="33%" valign="top" class="box"><h3>&nbsp;Python</h3>
        <ul>
+        <li class="box"><a href="http://grass.osgeo.org/grass${grass_version_major}${grass_version_minor}/manuals/libpython/index.html">GRASS GIS Python library documentation</a></li>
         <li class="box"><a href="http://grass.osgeo.org/grass${grass_version_major}${grass_version_minor}/manuals/libpython/pygrass_index.html">PyGRASS documentation</a></li>
        </ul>
       </td>
