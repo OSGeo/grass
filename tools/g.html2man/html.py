@@ -1,3 +1,5 @@
+from __future__ import (absolute_import, division, generators, nested_scopes,
+                        print_function, unicode_literals, with_statement)
 import sys
 import HTMLParser as base
 import htmlentitydefs
@@ -9,38 +11,40 @@ __all__ = ["HTMLParser", "HTMLParseError"]
 omit_start = ["body", "tbody", "head", "html"]
 
 single = ["area", "base", "basefont", "br", "col", "frame",
-	  "hr", "img", "input", "isindex", "link", "meta", "param"]
+          "hr", "img", "input", "isindex", "link", "meta", "param"]
 single = frozenset(single)
 
 heading = ["h1", "h2", "h3", "h4", "h5", "h6"]
 fontstyle = ["tt", "i", "b", "u", "s", "strike", "big", "small"]
-phrase = [ "em", "strong", "dfn", "code", "samp", "kbd", "var", "cite", "abbr",
-	   "acronym"]
-special = [ "a", "img", "applet", "object", "font", "basefont", "br", "script",
-	    "map", "q", "sub", "sup", "span", "bdo", "iframe"]
-formctrl = [ "input", "select", "textarea", "label", "button"]
-lists = [ "ul", "ol", " dir", "menu"]
-head_misc = [ "script", "style", "meta", "link", "object"]
-pre_exclusion = [ "img", "object", "applet", "big", "small", "sub", "sup",
-		  "font", "basefont"]
-block = [ "p", "pre", "dl", "div", "center", "noscript", "noframes",
-	  "blockquote", "form", "isindex", "hr", "table", "fieldset",
-	  "address"] + heading + lists
+phrase = ["em", "strong", "dfn", "code", "samp", "kbd", "var", "cite", "abbr",
+          "acronym"]
+special = ["a", "img", "applet", "object", "font", "basefont", "br", "script",
+           "map", "q", "sub", "sup", "span", "bdo", "iframe"]
+formctrl = ["input", "select", "textarea", "label", "button"]
+lists = ["ul", "ol", " dir", "menu"]
+head_misc = ["script", "style", "meta", "link", "object"]
+pre_exclusion = ["img", "object", "applet", "big", "small", "sub", "sup",
+                 "font", "basefont"]
+block = ["p", "pre", "dl", "div", "center", "noscript", "noframes",
+         "blockquote", "form", "isindex", "hr", "table", "fieldset",
+         "address"] + heading + lists
 inline = fontstyle + phrase + special + formctrl
 flow = block + inline
 html_content = ["head", "body"]
 head_content = ["title", "isindex", "base"]
 
+
 def setify(d):
     return dict([(key, frozenset(val)) for key, val in d.iteritems()])
+
 
 def omit(allowed, tags):
     result = {}
     for k, v in allowed.iteritems():
-	for t in tags:
-	    if t in v:
-		v = v.union(allowed[t])
-	result[k] = v
+        for t in tags:
+            if t in v:
+                v = v.union(allowed[t])
+        result[k] = v
     return result
 
 allowed = {
@@ -122,7 +126,7 @@ allowed = {
     "u": inline,
     "ul": ["li"],
     "var": inline
-    }
+}
 
 allowed = setify(allowed)
 allowed = omit(allowed, omit_start)
@@ -135,18 +139,20 @@ excluded = {
     "label": ["label"],
     "menu": block,
     "pre": pre_exclusion
-    }
+}
 
 excluded = setify(excluded)
 
+
 class HTMLParser(base.HTMLParser):
-    def __init__(self, entities = None):
-	base.HTMLParser.__init__(self)
-	self.tag_stack = []
-	self.excluded = frozenset()
-	self.excluded_stack = []
-	self.data = []
-	self.data_stack = []
+
+    def __init__(self, entities=None):
+        base.HTMLParser.__init__(self)
+        self.tag_stack = []
+        self.excluded = frozenset()
+        self.excluded_stack = []
+        self.data = []
+        self.data_stack = []
         self.decls = []
         if entities:
             self.entities = entities
@@ -154,61 +160,60 @@ class HTMLParser(base.HTMLParser):
             self.entities = {}
 
     def top(self):
-	if self.tag_stack == []:
-	    return None
-	else:
-	    return self.tag_stack[-1][0]
+        if self.tag_stack == []:
+            return None
+        else:
+            return self.tag_stack[-1][0]
 
     def pop(self):
-	self.excluded = self.excluded_stack.pop()
-	data = self.data
-	self.data = self.data_stack.pop()
-	(tag, attrs) = self.tag_stack.pop()
-	self.append((tag, attrs, data))
-	return tag
+        self.excluded = self.excluded_stack.pop()
+        data = self.data
+        self.data = self.data_stack.pop()
+        (tag, attrs) = self.tag_stack.pop()
+        self.append((tag, attrs, data))
+        return tag
 
     def push(self, tag, attrs):
-	self.tag_stack.append((tag, attrs))
-	self.excluded_stack.append(self.excluded)
-	if tag in excluded:
-	    self.excluded = self.excluded.union(excluded[tag])
-	self.data_stack.append(self.data)
-	self.data = []
+        self.tag_stack.append((tag, attrs))
+        self.excluded_stack.append(self.excluded)
+        if tag in excluded:
+            self.excluded = self.excluded.union(excluded[tag])
+        self.data_stack.append(self.data)
+        self.data = []
 
     def append(self, item):
-	self.data.append(item)
+        self.data.append(item)
 
     def is_allowed(self, tag):
-	return tag not in self.excluded and tag in allowed[self.top()]
+        return tag not in self.excluded and tag in allowed[self.top()]
 
     def handle_starttag(self, tag, attrs):
-	if self.tag_stack != []:
-	    while not self.is_allowed(tag):
-		self.pop()
-	if tag not in single:
-	    self.push(tag, attrs)
-	else:
-	    self.append((tag, attrs, None))
+        if self.tag_stack != []:
+            while not self.is_allowed(tag):
+                self.pop()
+        if tag not in single:
+            self.push(tag, attrs)
+        else:
+            self.append((tag, attrs, None))
 
     def handle_entityref(self, name):
-	if name in self.entities:
-	    self.handle_data(self.entities[name])
-	elif name in htmlentitydefs.entitydefs:
-	    self.handle_data(htmlentitydefs.entitydefs[name])
-	else:
-	    sys.stderr.write("unrecognized entity: %s\n" % name)
+        if name in self.entities:
+            self.handle_data(self.entities[name])
+        elif name in htmlentitydefs.entitydefs:
+            self.handle_data(htmlentitydefs.entitydefs[name])
+        else:
+            sys.stderr.write("unrecognized entity: %s\n" % name)
 
     def handle_charref(self, name):
-	sys.stderr.write('unsupported character reference <%s>' % name);
+        sys.stderr.write('unsupported character reference <%s>' % name)
 
     def handle_data(self, data):
-	self.append(data)
+        self.append(data)
 
     def handle_endtag(self, tag):
-	while True:
-	    if self.pop() == tag:
-		break
+        while True:
+            if self.pop() == tag:
+                break
 
     def handle_decl(self, decl):
         self.decls.append(decl)
-

@@ -8,9 +8,11 @@ from StringIO import StringIO
 entities = {
     'nbsp': " ",
     'bull': "*"
-    }
+}
 
 # Remove ToC
+
+
 def fix(content):
     if isinstance(content, tuple):
         tag, attrs, body = content
@@ -26,20 +28,25 @@ def fix(content):
     else:
         return content
 
+
 def main():
     # parse HTML
     infile = sys.argv[1]
     inf = file(infile)
     p = HTMLParser(entities)
     for n, line in enumerate(inf):
-	try:
-	    p.feed(line)
-	except HTMLParseError as err:
-	    sys.stderr.write('%s:%d:%d: Parse error: %s\n' % (infile, err.lineno, err.offset, err.msg))
-	    sys.exit(1)
-	except Exception as err:
-	    sys.stderr.write('%s:%d:0: Error (%s): %s\n' % (infile, n + 1, repr(err), line))
-	    sys.exit(1)
+        try:
+            p.feed(line)
+        except HTMLParseError as err:
+            sys.stderr.write(
+                '%s:%d:%d: Parse error: %s\n' %
+                (infile, err.lineno, err.offset, err.msg))
+            sys.exit(1)
+        except Exception as err:
+            sys.stderr.write(
+                '%s:%d:0: Error (%s): %s\n' %
+                (infile, n + 1, repr(err), line))
+            sys.exit(1)
     p.close()
     inf.close()
 
