@@ -1,5 +1,6 @@
 import sys
 
+
 def match(node, tag, attr=None, val=None):
     if not isinstance(node, tuple):
         return False
@@ -13,6 +14,7 @@ def match(node, tag, attr=None, val=None):
             return False
     return True
 
+
 def find(node, tag, attr=None, val=None):
     if isinstance(node, tuple):
         node = node[2]
@@ -23,22 +25,26 @@ def find(node, tag, attr=None, val=None):
             return child
     raise ValueError('child not found')
 
+
 def children(node):
     return node[2]
+
 
 def text(node):
     return children(node)[0]
 
+
 def _(s):
     return s        # TODO
 
-def rest(root, f = sys.stdout):
+
+def rest(root, f=sys.stdout):
     def write(text):
         f.write(text)
 
     def show(item, italic=False, bold=False):
         if isinstance(item, str):
-            spc = '' # if item[-1] == '\n' else ' '
+            spc = ''  # if item[-1] == '\n' else ' '
             fmt = '**' if bold else ('*' if italic else '')
             write('%s%s%s%s' % (fmt, item, fmt, spc))
         elif match(item, 'b'):
