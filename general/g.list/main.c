@@ -17,7 +17,6 @@
  *
  *****************************************************************************/
 
-#define _MAIN_C_
 #include "global.h"
 #include <stdlib.h>
 #include <unistd.h>
