@@ -151,26 +151,14 @@ int main(int argc, char *argv[])
     flag.full->description = _("Verbose listing (also list map titles)");
     flag.full->guisection = _("Print");
 
+    G_option_excludes(opt.region, flag.pretty, flag.full, NULL);
+    G_option_excludes(flag.pretty, flag.mapset, flag.type, NULL);
+    G_option_excludes(flag.full, flag.mapset, flag.type, NULL);
+    G_option_exclusive(flag.pretty, flag.full, NULL);
+    G_option_exclusive(flag.regex, flag.extended, NULL);
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
-
-    if ((flag.pretty->answer || flag.full->answer) && opt.region->answer)
-        G_fatal_error(_("-%c/-%c and %s= are mutually exclusive"),
-		      flag.pretty->key, flag.full->key, opt.region->key);
-
-    if ((flag.pretty->answer || flag.full->answer) &&
-	(flag.mapset->answer || flag.type->answer))
-	G_fatal_error(_("-%c/-%c and -%c/-%c are mutually exclusive"),
-		      flag.pretty->key, flag.full->key,
-		      flag.mapset->key, flag.type->key);
-
-    if (flag.pretty->answer && flag.full->answer)
-	G_fatal_error(_("-%c and -%c are mutually exclusive"),
-		      flag.pretty->key, flag.full->key);
-
-    if (flag.regex->answer && flag.extended->answer)
-	G_fatal_error(_("-%c and -%c are mutually exclusive"),
-		      flag.regex->key, flag.extended->key);
 
     if (opt.pattern->answer) {
 	if (flag.regex->answer || flag.extended->answer)
