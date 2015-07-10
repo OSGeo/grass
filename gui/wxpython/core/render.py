@@ -372,9 +372,7 @@ class RenderLayerMgr(wx.EvtHandler):
 
         cmd_render = copy.deepcopy(cmd)
         cmd_render[1]['quiet'] = True # be quiet
-        # for k, v in env_cmd.iteritems():
-        #     if 'GRASS_' in k:
-        #         print 'export %s=%s' % (k, v)
+        
         self._startTime = time.time()
         self.thread.Run(callable=self._render, cmd=cmd_render, env=env_cmd,
                         ondone=self.OnRenderDone)
@@ -1360,19 +1358,20 @@ class Map(object):
         :return: new layer on success
         :return: None on failure
         """
-        Debug.msg (1, "Map.AddOverlay(): cmd={}".format(command))
         overlay = Overlay(id = id, name = ltype, cmd = command, Map = self,
                           active = active, hidden = hidden, opacity = opacity)
         
-        self._addLayer(overlay, render)
-                   
+        self._addLayer(overlay)
+        
         renderMgr = overlay.GetRenderMgr()
+        Debug.msg (1, "Map.AddOverlay(): cmd={}".format(overlay.GetCmd(string=True)))
         if renderMgr:
             renderMgr.updateProgress.connect(self.renderMgr.ReportProgress)
+        overlay.forceRender = render
         
         return overlay
     
-    def ChangeOverlay(self, id, render = False, **kargs):
+    def ChangeOverlay(self, id, **kargs):
         """Change overlay properities
 
         Add new overlay if overlay with 'id' doesn't exist.
@@ -1405,8 +1404,9 @@ class Map(object):
         if 'opacity' in kargs:
             overlay.SetOpacity(kargs['opacity'])
         
-        overlay.forceRender = render
-        
+        if 'render' in kargs:
+            overlay.forceRender = kargs['render']
+            
         return overlay
 
     def GetOverlay(self, id, list=False):
