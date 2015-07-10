@@ -161,13 +161,12 @@ class OverlayController(object):
     def _add(self):
         self._overlay = self._renderer.AddOverlay(id=self._id, ltype=self._name,
                                                   command=self.cmd, active=False,
-                                                  render=False, hidden=True)
+                                                  render=True, hidden=True)
         # check if successful
 
     def _update(self):
-        self._renderer.ChangeOverlay(id=self._id, command=self._cmd,
-                                     render=False)
-
+        self._renderer.ChangeOverlay(id=self._id, command=self._cmd)
+        
     def CmdIsValid(self):
         """If command is valid"""
         return True
