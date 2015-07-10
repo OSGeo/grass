@@ -296,7 +296,7 @@ class Settings:
                         'enabled' : False
                         },
                     'boundary' : {
-                        'enabled' : True
+                        'enabled' : False
                         },
                     'area' : {
                         'enabled' : True
