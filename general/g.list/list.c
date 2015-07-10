@@ -10,6 +10,7 @@
 
 static int region_overlaps(const struct Cell_head *, const char *, const char *,
 			   int);
+static int compare_elist(const void *, const void *);
 
 void make_list(struct elist **el, int *lcount, int *lalloc,
 	       const struct list *elem, const char *mapset,
@@ -69,20 +70,6 @@ void make_list(struct elist **el, int *lcount, int *lalloc,
     G_free(list);
 }
 
-int cmp(const void *a, const void *b)
-{
-    struct elist *al = (struct elist *)a;
-    struct elist *bl = (struct elist *)b;
-    int ret;
-
-    if (!(ret = strcmp(al->type, bl->type))) {
-	if (!(ret = strcmp(al->name, bl->name)))
-	    ret = strcmp(al->mapset, bl->mapset);
-    }
-
-    return ret;
-}
-
 void print_list(FILE *fp, struct elist *el, int count, const char *separator,
 		int add_type, int add_mapset)
 {
@@ -91,7 +78,7 @@ void print_list(FILE *fp, struct elist *el, int count, const char *separator,
     if (!count)
 	return;
 
-    qsort(el, count, sizeof(struct elist), cmp);
+    qsort(el, count, sizeof(struct elist), compare_elist);
 
     for (i = 0; i < count; i++) {
 	int need_mapset = 0;
@@ -168,4 +155,18 @@ static int region_overlaps(const struct Cell_head *window, const char *name,
 	     window->south >= map_window.north ||
 	     window->west >= map_window.east ||
 	     window->east <= map_window.west);
+}
+
+static int compare_elist(const void *a, const void *b)
+{
+    struct elist *al = (struct elist *)a;
+    struct elist *bl = (struct elist *)b;
+    int ret;
+
+    if (!(ret = strcmp(al->type, bl->type))) {
+	if (!(ret = strcmp(al->name, bl->name)))
+	    ret = strcmp(al->mapset, bl->mapset);
+    }
+
+    return ret;
 }
