@@ -237,7 +237,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         if not hasattr(self, "popupShowAllToolbars"):
             self.popupShowAllToolbars = wx.NewId()
             self.Bind(wx.EVT_MENU, self.OnShowAllToolbars, id = self.popupShowAllToolbars)
-        menu.Append(self.popupShowAllToolbars, _("Hide all toolbars") if self._giface.AreAllToolbarsShown() else _("Show all toolbars"))
+        menu.Append(self.popupShowAllToolbars, _("Hide toolbars") if self._giface.AreAllToolbarsShown() else _("Show toolbars"))
         if not hasattr(self, "popupShowStatusbar"):
             self.popupShowStatusbar = wx.NewId()
             self.Bind(wx.EVT_MENU, self.OnShowStatusbar, id = self.popupShowStatusbar)
