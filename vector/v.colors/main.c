@@ -280,7 +280,7 @@ int main(int argc, char *argv[])
 
     Rast_init_colors(&colors);
     if (is_from_stdin) {
-        G_fatal_error(_("Reading color rules from standard input is not currently supported"));
+        G_fatal_error(_("Reading color rules from standard input is currently not supported"));
 	/*
         if (!read_color_rules(stdin, &colors, min, max, fp))
             exit(EXIT_FAILURE);
