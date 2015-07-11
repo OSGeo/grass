@@ -311,7 +311,7 @@ class Category(list):
                 elif len(cat) == 3:
                     label, min_cat, max_cat = cat
                 else:
-                    raise TypeError("Row lenght is greater than 3")
+                    raise TypeError("Row length is greater than 3")
                 #import pdb; pdb.set_trace()
                 self.append((label, min_cat, max_cat))
 

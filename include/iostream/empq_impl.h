@@ -556,7 +556,7 @@ long em_pqueue<T,Key>::maxlen() {
 //return the total nb of elements in the structure 
 template<class T, class Key>
 unsigned long em_pqueue<T,Key>::size() {
-  //sum up the lenghts(nb of elements) of the external buffers 
+  //sum up the lengths(nb of elements) of the external buffers 
   unsigned long elen = 0;
   for (unsigned short i=0; i < crt_buf; i++) {
     elen += buff[i]->get_buf_len();
@@ -1538,7 +1538,7 @@ em_pqueue<T,Key>::print() {
 //************************************************************/
 template<class T, class Key>
 void em_pqueue<T,Key>::print_size() {
-  //sum up the lenghts(nb of elements) of the external buffers 
+  //sum up the lengths(nb of elements) of the external buffers 
   long elen = 0;
   cout << "EMPQ: pq=" << pq->size() <<",B0=" << buff_0->get_buf_len() << endl;
   cout.flush();

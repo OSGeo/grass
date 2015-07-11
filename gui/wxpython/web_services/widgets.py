@@ -964,7 +964,7 @@ class LayersList(TreeListCtrl, listmix.ListCtrlAutoWidthMixin):
         return sel_layers_dict
 
     def OnListSelChanging(self, event):
-        """Do not allow to select items, which cannot be requested from server.
+        """Do not allow selecting items, which cannot be requested from server.
         """
         def _emitSelected(layer):
             title = layer.GetLayerData('title')
