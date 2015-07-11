@@ -22,9 +22,12 @@ The <b>aspect</b> output raster map indicates the direction that slopes are
 facing. The aspect categories represent the number degrees of east. Category
 and color table files are also generated for the aspect raster map. The aspect
 categories represent the number degrees of east and they increase
-counterclockwise: 90 degrees is North, 180 is West, 270 is South 360 is East.
-These values can be transformed to azimuth (0 is North, 90 is East, etc) values using <a href="r.mapcalc.html">r.mapcalc</a>:
+counterclockwise: 90 degrees is North, 180 is West, 270 is South 360 is East.<br>
+Note: These values can be transformed to azimuth (0 is North, 90 is East, etc)
+values using <a href="r.mapcalc.html">r.mapcalc</a>:
+
 <div class="code"><pre>
+# convert angles from CCW to north up
 r.mapcalc "azimuth_aspect = (450 - ccw_aspect) % 360"
 </pre></div>
 
