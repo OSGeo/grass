@@ -64,7 +64,7 @@ Import:
 Export:
 *  input=name file=name for all raster, sites and vector modules
 *  export modules should *all* have an output= parameter, however they
-   should allow to specify "-" to write to stdout (for unix piping)
+   should allow specifying "-" to write to stdout (for unix piping)
 
 -> file is external file. Should be read from current directory, not
    within mapset!

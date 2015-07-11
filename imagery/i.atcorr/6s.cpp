@@ -75,7 +75,7 @@ int init_6S(char* icnd_name)
     iwave = IWave::Parse();
    
     /**********************************************************************c
-	c here, we first compute an equivalent wavelenght which is the input   c
+	c here, we first compute an equivalent wavelength which is the input   c
 	c value for monochromatic conditions or the integrated value for a     c
 	c filter function (call equivwl) then, the atmospheric properties are  c
 	c computed for that wavelength (call discom then call specinterp)      c

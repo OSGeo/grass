@@ -1007,7 +1007,7 @@ class GMFrame(wx.Frame):
             # can be relaxed in future
             # but keep it strict unless needed otherwise
             raise ValueError("OnChangeCWD cmd parameter must be list of"
-                             " lenght 1 or 2 and 'cd' as a first item")
+                             " length 1 or 2 and 'cd' as a first item")
         if cmd and len(cmd) > 2:
             # this might be a user error
             write_beginning(command=cmd)

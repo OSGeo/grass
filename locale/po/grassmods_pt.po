@@ -37836,7 +37836,7 @@ msgstr "Camada número"
 #, fuzzy
 msgid "For coor valid point/centroid, for length valid line/boundary"
 msgstr ""
-"Tipo dos elementos (coor para ponto/centróide válido, lenght para linha/"
+"Tipo dos elementos (coor para ponto/centróide válido, length para linha/"
 "contorno válido)"
 
 #: ../vector/v.to.db/parse.c:54

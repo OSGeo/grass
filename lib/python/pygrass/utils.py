@@ -302,7 +302,7 @@ def set_path(modulename, dirname, path='.'):
         sys.path.append(path)
 
 
-def split_in_chunk(iterable, lenght=10):
+def split_in_chunk(iterable, length=10):
     """Split a list in chunk.
 
     >>> for chunk in split_in_chunk(range(25)): print chunk
@@ -322,7 +322,7 @@ def split_in_chunk(iterable, lenght=10):
     """
     it = iter(iterable)
     while True:
-        chunk = tuple(itertools.islice(it, lenght))
+        chunk = tuple(itertools.islice(it, length))
         if not chunk:
             return
         yield chunk

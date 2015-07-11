@@ -223,8 +223,8 @@ void worker_end(void);
   * \brief adapts the mask at current raster file
   * \param mask name of mask raster file
   * \param raster the name of current raster file
-  * \param rl the lenght in rows of sample area
-  * \param cl the lenght in cols of sample area
+  * \param rl the length in rows of sample area
+  * \param cl the length in cols of sample area
   * \return the name of mask raster file to use
   */
 char *mask_preprocessing(char *mask, char *raster, struct area_entry *ad);

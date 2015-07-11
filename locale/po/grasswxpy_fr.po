@@ -3778,7 +3778,7 @@ msgstr "Ligne du coin en haut à gauche"
 
 #: ../gui/wxpython/rlisetup/wizard.py:676
 #: ../gui/wxpython/rlisetup/wizard.py:688
-msgid "Row lenght of sampling frame"
+msgid "Row length of sampling frame"
 msgstr "Nombre de lignes du cadre d'échantillonage"
 
 #: ../gui/wxpython/rlisetup/wizard.py:802
