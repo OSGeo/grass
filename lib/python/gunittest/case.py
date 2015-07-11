@@ -1170,7 +1170,7 @@ def _module_from_parameters(module, **kwargs):
         if isinstance(module, Module):
             raise ValueError('module can be only string if other'
                              ' parameters are given')
-            # allow to pass all parameters in one dictionary called parameters
+            # allow passing all parameters in one dictionary called parameters
         if kwargs.keys() == ['parameters']:
             kwargs = kwargs['parameters']
         module = SimpleModule(module, **kwargs)

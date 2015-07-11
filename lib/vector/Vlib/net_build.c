@@ -22,7 +22,7 @@
    \brief Build network graph with turntable.
 
    Internal format for edge costs is integer, costs are multiplied
-   before conversion to int by 1000 and for lenghts LL without geo flag by 1000000.
+   before conversion to int by 1000 and for lengths LL without geo flag by 1000000.
    The same multiplication factor is used for nodes.
    Costs in database column may be 'integer' or 'double precision' number >= 0
    or -1 for infinity i.e. arc or node is closed and cannot be traversed
@@ -672,7 +672,7 @@ Vect_net_ttb_build_graph(struct Map_info *Map,
    \brief Build network graph.
 
    Internal format for edge costs is integer, costs are multiplied
-   before conversion to int by 1000 and for lenghts LL without geo flag by 1000000.
+   before conversion to int by 1000 and for lengths LL without geo flag by 1000000.
    The same multiplication factor is used for nodes.
    Costs in database column may be 'integer' or 'double precision' number >= 0
    or -1 for infinity i.e. arc or node is closed and cannot be traversed

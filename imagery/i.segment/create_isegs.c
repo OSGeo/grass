@@ -945,7 +945,7 @@ double calculate_shape(struct reg_stats *rsi, struct reg_stats *rsk,
      Wb is the weigh given to band B
      SigmaB is the std dev of the object for band b
      Ws is a user-defined weight giving the importance of compactedness vs smoothness
-     PL is the perimeter lenght of the object
+     PL is the perimeter length of the object
      Npx the number of pixels within the object
      Pbbox the perimeter of the bounding box of the object.
      */

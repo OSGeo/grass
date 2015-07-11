@@ -760,7 +760,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
 
 
 # TODO: document info: additional information to be stored type: dict
-# allows to overwrite what was collected
+# allows overwriting what was collected
 class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
 
     def __init__(self, info=None):
