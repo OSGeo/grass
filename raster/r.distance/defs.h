@@ -30,7 +30,7 @@ struct EdgeList			/* keep track of edge cells */
 	CELL cat;		/* category number */
 	int *row, *col;		/* arrays of pixels indexes */
 	int ncells;		/* count of edges cells with this cat */
-	int nalloc;		/* lenght of allocation for row,col */
+	int nalloc;		/* length of allocation for row,col */
     } *catlist;			/* array of cat:edgelists */
     int ncats;			/* number of cats */
     int nalloc;			/* length of allocation for catlist */

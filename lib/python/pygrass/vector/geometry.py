@@ -617,7 +617,7 @@ class Line(Geo):
             >>> line.get_pnt(5)      #doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
             Traceback (most recent call last):
                 ...
-            ValueError: The distance exceed the lenght of the line,
+            ValueError: The distance exceed the length of the line,
             that is: 1.414214
             >>> line.get_pnt(1)
             Point(0.707107, 0.707107)
@@ -627,7 +627,7 @@ class Line(Geo):
         # instantiate an empty Point object
         maxdist = self.length()
         if distance > maxdist:
-            str_err = "The distance exceed the lenght of the line, that is: %f"
+            str_err = "The distance exceed the length of the line, that is: %f"
             raise ValueError(str_err % maxdist)
         pnt = Point(0, 0, -9999)
         if not libvect.Vect_point_on_line(self.c_points, distance,

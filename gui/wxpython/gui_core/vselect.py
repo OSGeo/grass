@@ -2,7 +2,7 @@
 @package gui_core.vselect
 
 @brief wxGUI classes for interactive selection of vector
-features. Allows to create a new vector map from selected vector
+features. Allows creating a new vector map from selected vector
 features or return their categories
 
 Classes:
@@ -81,8 +81,8 @@ class VectorSelectDialog(wx.Dialog):
 class VectorSelectBase():
     """@brief Main class of vector selection function
 
-    It allows to select vector features from map display and to export
-    them as a new vector map. Current version allows to select
+    It allows selecting vector features from map display and to export
+    them as a new vector map. Current version allows selecting
     features one-by-one by single click in map display.
 
     This class can be initialized with (see CreateDialog()) or without
@@ -327,7 +327,7 @@ class VectorSelectBase():
         
     """
     def SetSelectedCat(self, cats):
-        # allows to set selected vector categories by list of cats (per line)
+        # allows setting selected vector categories by list of cats (per line)
         info = self.QuerySelectedMap()
         if 'Category' not in info:
             return

@@ -3998,7 +3998,7 @@ msgstr "左上角行"
 
 #: ../gui/wxpython/rlisetup/wizard.py:676
 #: ../gui/wxpython/rlisetup/wizard.py:688
-msgid "Row lenght of sampling frame"
+msgid "Row length of sampling frame"
 msgstr "取样框架行长度"
 
 #: ../gui/wxpython/rlisetup/wizard.py:802

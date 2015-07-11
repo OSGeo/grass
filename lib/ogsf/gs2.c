@@ -1711,7 +1711,7 @@ int GS_load_att_map(int id, const char *filename, int att)
 	tbuff = gs_get_att_typbuff(gs, att, 1);
 
 	/* TODO: Provide mechanism for loading certain attributes at
-	   specified sizes, allow to scale or cap, or scale non-zero */
+	   specified sizes, allow scaling or capping, or scale non-zero */
 	if (ATT_MASK == att) {
 	    atty = ATTY_MASK;
 	}
@@ -3343,7 +3343,7 @@ int GS_load_3dview(const char *vname, int surfid)
 /*!
    \brief Init viewpoint
 
-   \todo allow to set center?
+   \todo allow setting center?
  */
 void GS_init_view(void)
 {

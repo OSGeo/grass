@@ -671,9 +671,9 @@ class KeyboardPage(TitledPage):
         self.sizer.Add(item=self.RowUpLefttxt, border=5, pos=(2, 2),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
 
-        #row lenght
+        #row length
         self.RowLenlabel = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                         label=_('Row lenght of sampling frame'))
+                                         label=_('Row length of sampling frame'))
 
         self.RowLentxt = wx.TextCtrl(parent=self, id=wx.ID_ANY, size=(250, -1))
         wx.CallAfter(self.RowLenlabel.SetFocus)
@@ -683,9 +683,9 @@ class KeyboardPage(TitledPage):
         self.sizer.Add(item=self.RowLentxt, border=5, pos=(3, 2),
                        flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.ALL)
 
-        #column lenght
+        #column length
         self.ColLenlabel = wx.StaticText(parent=self, id=wx.ID_ANY,
-                                         label=_('Row lenght of sampling frame'))
+                                         label=_('Row length of sampling frame'))
 
         self.ColLentxt = wx.TextCtrl(parent=self, id=wx.ID_ANY, size=(250, -1))
         wx.CallAfter(self.ColLenlabel.SetFocus)
