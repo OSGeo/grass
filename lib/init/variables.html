@@ -278,7 +278,7 @@ PERMANENT
   <dd>[vectorlib]<br> If the environment variable
     GRASS_VECTOR_TEMPORARY exists, GRASS vector library will operate
     on temporary vector maps. New vector maps will be created in
-    temporary directory (see GRASS_TMPDIR_MAPSET variable), existing
+    temporary directory (see GRASS_VECTOR_TMPDIR_MAPSET variable), existing
     vector maps will be read (if found) also from this directory. It
     may be set to either:
     <ul>
@@ -297,7 +297,20 @@ PERMANENT
     or <em><a href="wxGUI.html">wxGUI</a></em>. They are used
     internally by the GRASS modules and deleted automatically when
     GRASS session is quited.</dd>
-  
+
+  <dt>GRASS_VECTOR_TMPDIR_MAPSET</dt>
+  <dd> By default GRASS temporary directory is located in
+  <tt>$LOCATION/$MAPSET/.tmp/$HOSTNAME</tt>. If GRASS_VECTOR_TMPDIR_MAPSET is
+  set to '0', the temporary directory is located in TMPDIR
+  (environmental variable defined by the user or GRASS initialization
+  script if not given).
+
+  <p>
+  Important note: This variable is currently used only in vector
+  library. In other words the variable is ignored by raster or
+  raster3d library.
+  </dd>
+
   <dt>GRASS_VECTOR_TOPO_DEBUG</dt>
   <dd>[vectorlib, v.generalize]<br> If the environment variable
   GRASS_VECTOR_TOPO_DEBUG
@@ -347,19 +360,6 @@ PERMANENT
     The default is set to the number of CPUs on the system.
     Setting to '1' effectively disables parallel processing.</dd>
 
-  <dt>GRASS_TMPDIR_MAPSET</dt>
-  <dd> By default GRASS temporary directory is located in
-  <tt>$LOCATION/$MAPSET/.tmp/$HOSTNAME</tt>. If GRASS_TMPDIR_MAPSET is
-  set to '0', the temporary directory is located in TMPDIR
-  (environmental variable defined by the user or GRASS initialization
-  script if not given).
-
-  <p>
-  Important note: This variable is currently used only in vector
-  library. In other words the variable is ignored by raster or
-  raster3d library.
-  </dd>
-  
   <dt>TMPDIR, TEMP, TMP</dt>
   <dd>[Various GRASS GIS commands and wxGUI]<br>
   <!-- what about Windows %TEMP% and http://trac.osgeo.org/grass/ticket/560#comment:21 ? -->
