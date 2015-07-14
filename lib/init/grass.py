@@ -1443,11 +1443,13 @@ PROMPT_COMMAND=grass_prompt\n""" % (_("2D and 3D raster MASKs present"),
                                     _("3D raster MASK present")))
 
     # read environmental variables
-    path = os.path.join(userhome, ".grass.bashrc") # left for backward compatibility
-    if os.access(path, os.R_OK):
-        f.write(readfile(path) + '\n')
-    if os.access(grass_env_file, os.R_OK):
-        f.write(readfile(grass_env_file) + '\n')
+    for env_file in [os.path.join(userhome, ".grass.bashrc"),
+                      grass_env_file]:
+        if not os.access(env_file, os.R_OK):
+            continue
+        for line in readfile(env_file).splitlines():
+            if not line.startswith('export'):
+                f.write(line + '\n')
     
     f.write("export PATH=\"%s\"\n" % os.getenv('PATH'))
     f.write("export HOME=\"%s\"\n" % userhome) # restore user home path
