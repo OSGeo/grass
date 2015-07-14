@@ -63,10 +63,11 @@ char *G_file_name_misc(char *path,
   \brief Builds full path names to GIS data files in temporary directory (for internal use only)
 
   By default temporary directory is located
-  $LOCATION/$MAPSET/.tmp/$HOSTNAME. If GRASS_TMPDIR_MAPSET is set to
-  "0", the temporary directory is located in TMPDIR (environmental
-  variable defined by the user or GRASS initialization script if not
-  given).
+  $LOCATION/$MAPSET/.tmp/$HOSTNAME. If GRASS_VECTOR_TMPDIR_MAPSET is
+  set to "0", the temporary directory is located in TMPDIR
+  (environmental variable defined by the user or GRASS initialization
+  script if not given). Note that GRASS_VECTOR_TMPDIR_MAPSET variable
+  is currently used only by vector library.
 
   \param[out] path buffer to hold resultant full path to file
   \param element database element (eg, "cell", "cellhd", "vector", etc)
@@ -82,7 +83,7 @@ char *G_file_name_tmp(char *path,
     const char *env, *tmp_path;
 
     tmp_path = NULL;
-    env = getenv("GRASS_TMPDIR_MAPSET");
+    env = getenv("GRASS_VECTOR_TMPDIR_MAPSET");
     if (env && strcmp(env, "0") == 0) {
         tmp_path = getenv("TMPDIR");
     }

@@ -468,7 +468,7 @@ int Vect__delete(const char *map, int is_tmp)
     }
     closedir(dir);
     
-    env = getenv("GRASS_TMPDIR_MAPSET");
+    env = getenv("GRASS_VECTOR_TMPDIR_MAPSET");
     if (env && strcmp(env, "0") == 0) {
 	tmp = path;
     }
