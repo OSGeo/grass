@@ -492,6 +492,7 @@ class AnimationController(wx.EvtHandler):
         images = []
         busy = wx.BusyInfo(message=_("Preparing export, please wait..."), parent=self.frame)
         wx.Yield()
+        lastBitmaps = {}
         for frameIndex in range(frameCount):
             image = wx.EmptyImage(*size)
             image.Replace(0, 0, 0, 255, 255, 255)
@@ -502,9 +503,15 @@ class AnimationController(wx.EvtHandler):
                                         subkey=['nodata', 'enable']):
                     if frameId is not None:
                         bitmap = self.bitmapProvider.GetBitmap(frameId)
+                        lastBitmaps[i] = bitmap
+                    else:
+                        if i not in lastBitmaps:
+                            lastBitmaps[i] = wx.NullBitmap()
                 else:
                     bitmap = self.bitmapProvider.GetBitmap(frameId)
-                im = wx.ImageFromBitmap(bitmap)
+                    lastBitmaps[i] = bitmap
+                
+                im = wx.ImageFromBitmap(lastBitmaps[i])
 
                 # add legend if used
                 legend = legends[i]
