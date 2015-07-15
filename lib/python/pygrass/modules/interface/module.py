@@ -20,6 +20,7 @@ if sys.version_info[0] == 2:
     from itertools import izip_longest as zip_longest
 else:
     from itertools import zip_longest
+    unicode = str
 
 
 def _get_bash(self, *args, **kargs):
