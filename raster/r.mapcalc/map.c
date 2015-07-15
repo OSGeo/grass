@@ -71,6 +71,7 @@ struct map
 static struct map *maps;
 static int num_maps;
 static int max_maps;
+static int masking;
 
 static int min_row = INT_MAX;
 static int max_row = -INT_MAX;
@@ -81,9 +82,23 @@ static int max_rows_in_memory = 8;
 
 #ifdef HAVE_PTHREAD_H
 static pthread_mutex_t cats_mutex;
+static pthread_mutex_t mask_mutex;
 #endif
 
 /****************************************************************************/
+
+static void read_row(int fd, void *buf, int row, int res_type)
+{
+#ifdef HAVE_PTHREAD_H
+    if (masking)
+	pthread_mutex_lock(&mask_mutex);
+#endif
+    Rast_get_row(fd, buf, row, res_type);
+#ifdef HAVE_PTHREAD_H
+    if (masking)
+	pthread_mutex_unlock(&mask_mutex);
+#endif
+}
 
 static void cache_sub_init(struct row_cache *cache, int data_type)
 {
@@ -145,7 +160,7 @@ static void *cache_get_raw(struct row_cache *cache, int row, int data_type)
 
     if (i >= 0 && i < cache->nrows) {
 	if (!sub->valid[i]) {
-	    Rast_get_row(cache->fd, sub->buf[i], row + i, data_type);
+	    read_row(cache->fd, sub->buf[i], row + i, data_type);
 	    sub->valid[i] = 1;
 	}
 	return sub->buf[i];
@@ -154,7 +169,7 @@ static void *cache_get_raw(struct row_cache *cache, int row, int data_type)
     if (i <= -cache->nrows || i >= cache->nrows * 2 - 1) {
 	memset(sub->valid, 0, cache->nrows);
 	sub->row = i;
-	Rast_get_row(cache->fd, sub->buf[0], row, data_type);
+	read_row(cache->fd, sub->buf[0], row, data_type);
 	sub->valid[0] = 1;
 	return sub->buf[0];
     }
@@ -182,7 +197,7 @@ static void *cache_get_raw(struct row_cache *cache, int row, int data_type)
     G_freea(tmp);
     G_freea(vtmp);
 
-    Rast_get_row(cache->fd, sub->buf[i], row, data_type);
+    read_row(cache->fd, sub->buf[i], row, data_type);
     sub->valid[i] = 1;
 
     return sub->buf[i];
@@ -363,11 +378,6 @@ static void translate_from_cats(struct map *m, CELL * cell, DCELL * xcell,
 #ifdef HAVE_PTHREAD_H
     pthread_mutex_unlock(&cats_mutex);
 #endif
-}
-
-static void read_row(int fd, void *buf, int row, int res_type)
-{
-    Rast_get_row(fd, buf, row, res_type);
 }
 
 static void setup_map(struct map *m)
@@ -576,6 +586,8 @@ void setup_maps(void)
 
 #ifdef HAVE_PTHREAD_H
     pthread_mutex_init(&cats_mutex, NULL);
+    pthread_mutex_init(&mask_mutex, NULL);
+    masking = Rast_maskfd() >= 0;
 #endif
 
     for (i = 0; i < num_maps; i++)
@@ -635,6 +647,7 @@ void close_maps(void)
 
 #ifdef HAVE_PTHREAD_H
     pthread_mutex_destroy(&cats_mutex);
+    pthread_mutex_destroy(&mask_mutex);
 #endif
 }
 
