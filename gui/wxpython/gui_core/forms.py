@@ -1177,12 +1177,8 @@ class CmdPanel(wx.Panel):
                         mapsets = None
                     if self.task.name in ('r.proj', 'v.proj') \
                             and p.get('name', '') == 'input':
-                        if self.task.name == 'r.proj':
-                            isRaster = True
-                        else:
-                            isRaster = False
                         selection = gselect.ProjSelect(parent = which_panel,
-                                                       isRaster = isRaster)
+                                                       isRaster = self.task.name == 'r.proj')
                         p['wxId'] = [ selection.GetId(), ]
                         selection.Bind(wx.EVT_COMBOBOX, self.OnSetValue)
                         selection.Bind(wx.EVT_TEXT, self.OnUpdateSelection)
@@ -1817,8 +1813,9 @@ class CmdPanel(wx.Panel):
             pLocation['wxId-bind'] = pMapset['wxId']
         
         if pLocation and pMapset and pMap:
-            pLocation['wxId-bind'] +=  pMap['wxId']
+            # pLocation['wxId-bind'] +=  pMap['wxId']
             pMapset['wxId-bind'] = pMap['wxId']
+        
         #
         # determine panel size
         #
