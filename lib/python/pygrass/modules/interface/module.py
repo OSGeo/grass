@@ -505,6 +505,7 @@ class Module(object):
         #
         self.run_ = True
         self.finish_ = True
+        self.check_ = True
         self.env_ = None
         self.stdin_ = None
         self.stdin = None
@@ -544,7 +545,7 @@ class Module(object):
             del(kargs['flags'])
 
         # set attributs
-        for key in ('run_', 'env_', 'finish_', 'stdout_', 'stderr_'):
+        for key in ('run_', 'env_', 'finish_', 'stdout_', 'stderr_', 'check_'):
             if key in kargs:
                 setattr(self, key, kargs.pop(key))
 
@@ -554,7 +555,7 @@ class Module(object):
                 self.inputs[key[:-1]].value = kargs.pop(key)
 
         #
-        # check args
+        # set/update args
         #
         for param, arg in zip(self.params_list, args):
             param.value = arg
@@ -577,11 +578,8 @@ class Module(object):
             #
             # check reqire parameters
             #
-            for k in self.required:
-                if ((k in self.inputs and self.inputs[k].value is None) or
-                        (k in self.outputs and self.outputs[k].value is None)):
-                    msg = "Required parameter <%s> not set."
-                    raise ParameterError(msg % k)
+            if self.check_:
+                self.check()
             return self.run()
         return self
 
@@ -634,6 +632,19 @@ class Module(object):
         params = '\n'.join([par.__doc__ for par in self.params_list])
         flags = self.flags.__doc__
         return '\n'.join([head, params, DOC['flag_head'], flags, DOC['foot']])
+
+    def check(self):
+        """Check the correctness of the provide parameters"""
+        required = True
+        for flg in self.flags.values():
+            if flg and flg.suppress_required:
+                required = False
+        if required:
+            for k in self.required:
+                if ((k in self.inputs and self.inputs[k].value is None) or
+                        (k in self.outputs and self.outputs[k].value is None)):
+                    msg = "Required parameter <%s> not set."
+                    raise ParameterError(msg % k)
 
     def get_dict(self):
         """Return a dictionary that includes the name, all valid
