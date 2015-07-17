@@ -537,7 +537,7 @@ int dig_Rd_Plus_head(struct gvfile * fp, struct Plus_head *ptr)
 
 	/* This version of GRASS lib can not read this old format */
 	G_warning(_("Old topology format version %d.%d is not supported by this release."
-		    " Try to rebuild topology."),
+		    " Try to rebuild topology using v.build or v.build.all module."),
 		  ptr->version.topo.major, ptr->version.topo.minor);
 	return (-1);
     }
