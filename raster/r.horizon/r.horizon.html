@@ -177,7 +177,7 @@ Raster map mode (output maps "horangle*" become input for <em>r.sun</em>):
 # we put a bufferzone of 10% of maxdistance around the study area
 # compute only direction between 90 and 270 degrees
 r.horizon elevation=elevation step=30 start=90 end=300 \
-    bufferzone=200 file=horangle maxdistance=5000
+    bufferzone=200 output=horangle maxdistance=5000
 </pre></div>
 
 
