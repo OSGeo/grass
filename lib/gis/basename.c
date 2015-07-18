@@ -88,12 +88,12 @@ char *G_double_to_basename_format(double number,
     char *result;
 
     if (ndigits != 0){
-        sprintf(intfmt, "%%0%zud", ndigits);
+        sprintf(intfmt, "%%0%ud", ndigits);
     }
     sprintf(intstr, intfmt, (int)integer);
 
     if (ndecimals != 0){
-        sprintf(decfmt, "_%%0%zud", ndecimals);
+        sprintf(decfmt, "_%%0%ud", ndecimals);
         decimal = ((number - integer) * pow(10., (double)ndecimals));
         sprintf(decstr, decfmt, (int)decimal);
     }
