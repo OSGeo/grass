@@ -625,7 +625,7 @@ class TaskFrame(wx.Frame):
         
     def updateValuesHook(self, event = None):
         """Update status bar data"""
-        self.SetStatusText(' '.join(self.notebookpanel.createCmd(ignoreErrors = True)))
+        self.SetStatusText(' '.join(map(gcmd.DecodeString, self.notebookpanel.createCmd(ignoreErrors = True))))
         if event:
             event.Skip()
 
@@ -2509,7 +2509,7 @@ if __name__ == "__main__":
         cmd = utils.split(sys.argv[1])
         task = gtask.grassTask(cmd[0])
         task.set_options(cmd[1:])
-        Debug.msg(1, "forms.py opening form for: %s" % task.get_cmd(ignoreErrors=True))
+        Debug.msg(1, "forms.py opening form for: %s" % task.get_cmd(ignoreErrors=True, ignoreRequired=True))
         app = GrassGUIApp(task)
         app.MainLoop()
     else: #Test
