@@ -1,0 +1,87 @@
+# Author: Ivan Mincik, ivan.mincik@gmail.com
+
+language: c
+
+compiler:
+        - gcc
+        - clang
+
+cache: apt
+
+before_install:
+        # build dependencies
+        - sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable -y
+        - sudo apt-get update -qq
+
+        # test dataset
+        - wget http://grass.osgeo.org/sampledata/north_carolina/nc_basic_spm_grass7.tar.gz
+        - tar xzf ./nc_basic_spm_grass7.tar.gz
+
+install:
+        - sudo apt-get install --no-install-recommends
+                autoconf2.13
+                autotools-dev
+                debhelper
+                fakeroot
+                flex
+                bison
+                libcairo2-dev
+                libfftw3-dev
+                libfreetype6-dev
+                libgdal-dev
+                libgeos-dev
+                libglu1-mesa-dev
+                libjpeg-dev
+                libpng-dev
+                libtiff-dev
+                libmysqlclient-dev
+                libncurses5-dev
+                libpq-dev
+                libproj-dev
+                proj-bin
+                libreadline-dev
+                libsqlite3-dev
+                libwxgtk2.8-dev
+                libxmu-dev
+                python
+                python-wxgtk2.8
+                python-dev
+                unixodbc-dev
+                libnetcdf-dev  
+                netcdf-bin
+                dpatch
+                libblas-dev
+                liblapack-dev
+                python-numpy
+
+script:
+        - ./configure --host=x86_64-linux-gnu --build=x86_64-linux-gnu
+                --prefix=/usr/lib
+                --sysconfdir=/etc
+                --sharedstatedir=/var
+                --enable-shared
+                --with-postgres
+                --with-cxx
+                --with-gdal
+                --with-freetype
+                --with-readline
+                --with-nls
+                --with-odbc
+                --with-geos
+                --with-lapack
+                --with-netcdf
+                --with-blas
+                --with-sqlite
+                --enable-largefile
+                --with-freetype-includes=/usr/include/freetype2/
+                --with-postgres-includes=/usr/include/postgresql/
+                --with-proj-share=/usr/share/proj
+                --with-wxwidgets=/usr/bin/wx-config
+                --with-python
+                --with-cairo
+        - make -j2
+
+notifications:
+        email:
+                - landa.martin@gmail.com
+                - wenzeslaus@gmail.com
