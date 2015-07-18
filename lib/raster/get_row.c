@@ -902,7 +902,8 @@ static void get_null_value_row_gdal(int fd, char *flags, int row)
     for (i = 0; i < R__.rd_window.cols; i++)
 	/* note: using == won't work if the null value is NaN */
 	flags[i] = !fcb->col_map[i] ||
-	    memcmp(&tmp_buf[i], &fcb->gdal->null_val, sizeof(DCELL)) == 0;
+	    tmp_buf[i] == fcb->gdal->null_val ||
+	    tmp_buf[i] != tmp_buf[i];
 
     G_free(tmp_buf);
 }
