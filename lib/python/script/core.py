@@ -376,7 +376,11 @@ def run_command(*args, **kwargs):
     >>> run_command('g.region', raster='elevation')
     0
 
-    See ``start_command()`` for details about parameters and usage.
+    See :func:`start_command()` for details about parameters and usage.
+
+    ..note::
+        You should ignore the return value of this function unless, you
+        change the default behavior using *errors* parameter.
 
     :param *args: unnamed arguments passed to ``start_command()``
     :param **kwargs: named arguments passed to ``start_command()``
@@ -603,7 +607,7 @@ def error(msg):
 
     This function does not end the execution of the program.
     The right action after the error is up to the caller.
-    For error handling using the standard mechanism use :func:`fatal`.
+    For error handling using the standard mechanism use :func:`fatal()`.
 
     :param str msg: error message to be displayed
     """
@@ -615,7 +619,7 @@ def fatal(msg):
 
     Raises exception when module global raise_on_error is 'True', abort
     (calls exit) otherwise.
-    Use func:`set_raise_on_error` to set the behavior.
+    Use :func:`set_raise_on_error()` to set the behavior.
 
     :param str msg: error message to be displayed
     """
@@ -988,7 +992,7 @@ def region_env(region3d=False, **kwargs):
     If no 'kwargs' are given then the current region is used. Note
     that this function doesn't modify the current region!
 
-    See also use_temp_region() for alternative method how to define
+    See also :func:`use_temp_region()` for alternative method how to define
     temporary region used for raster-based computation.
 
     :param bool region3d: True to get 3D region
@@ -1517,11 +1521,12 @@ def debug_level():
 def legal_name(s):
     """Checks if the string contains only allowed characters.
 
-    This is the Python implementation of G_legal_filename() function.
+    This is the Python implementation of :func:`G_legal_filename()` function.
 
     ..note::
 
-        It is not clear when to use this function.
+        It is not clear when exactly use this function, but it might be
+        useful anyway for checking map names and column names.
     """
     if not s or s[0] == '.':
         warning(_("Illegal filename <%s>. Cannot be 'NULL' or start with " \
