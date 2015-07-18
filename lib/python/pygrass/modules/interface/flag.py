@@ -33,6 +33,7 @@ class Flag(object):
         self.description = diz.get('description', None)
         self.default = diz.get('default', None)
         self.guisection = diz.get('guisection', None)
+        self.suppress_required = True if 'suppress_required' in diz else False
 
     def get_bash(self):
         """Return the BASH representation of a flag.
@@ -88,11 +89,18 @@ class Flag(object):
         """Return a string with the python representation of the instance."""
         return "Flag <%s> (%s)" % (self.name, self.description)
 
+    def __bool__(self):
+        """Return a boolean value"""
+        return self.value
+
+    def __nonzero__(self):
+        return self.__bool__()
+
     @docstring_property(__doc__)
     def __doc__(self):
         """Return a documentation string, something like:
 
-        {name}: {default}
+        {name}: {default}, suppress required {supress}
             {description}
 
         >>>  flag = Flag(diz=dict(name='a', description='Flag description',
@@ -109,4 +117,7 @@ class Flag(object):
         """
         return read.DOC['flag'].format(name=self.name,
                                        default=repr(self.default),
-                                       description=self.description)
+                                       description=self.description,
+                                       supress=('suppress required'
+                                                if self.suppress_required
+                                                else ''))
