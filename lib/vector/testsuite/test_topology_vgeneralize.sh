@@ -26,15 +26,15 @@
 # (equivalent of set -e in a script)
 
 # prepare
-g.region rast=landuse96_28m
-r.to.vect input=landuse96_28m output=landuse96_28m type=area
+g.region rast=landuse
+r.to.vect input=landuse output=landuse type=area
 
 # use the v.generalize debug mode
 export GRASS_VECTOR_TOPO_DEBUG=1
 
 # test will fail if this (and any other) command fails
-v.generalize input=landuse96_28m output=landuse96_28m_dp method=douglas threshold=21
+v.generalize input=landuse output=landuse_dp method=douglas threshold=21
 
 # clean up (executed if successful)
-g.remove -f type=vector name=landuse96_28m
-g.remove -f type=raster name=landuse96_28m_dp
+g.remove -f type=vector name=landuse
+g.remove -f type=raster name=landuse_dp

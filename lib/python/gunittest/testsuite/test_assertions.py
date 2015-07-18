@@ -173,7 +173,7 @@ class TestRasterMapAssertions(TestCase):
                                     precision=0.01)
         self.assertRaises(self.failureException,
                           self.assertRasterFitsUnivar,
-                          'aspect', R_UNIVAR_ELEVATION_SUBSET, precision=0.01)
+                          'geology', R_UNIVAR_ELEVATION_SUBSET, precision=0.01)
         self.assertRaises(ValueError,
                           self.assertRasterFitsUnivar,
                           'elevation', RANDOM_KEYVALUES)
@@ -182,7 +182,7 @@ class TestRasterMapAssertions(TestCase):
         self.assertRasterFitsInfo('elevation', R_INFO_ELEVATION_SUBSET)
         self.assertRaises(self.failureException,
                           self.assertRasterFitsInfo,
-                          'elev_lid792_1m', R_INFO_ELEVATION_SUBSET)
+                          'geology', R_INFO_ELEVATION_SUBSET)
         self.assertRaises(ValueError,
                           self.assertRasterFitsInfo,
                           'elevation', RANDOM_KEYVALUES)
@@ -208,7 +208,7 @@ class TestRasterMapAssertions(TestCase):
         self.assertRaises(self.failureException,
                           self.assertRastersNoDifference,
                           actual='elevation',
-                          reference='aspect',
+                          reference='geology',
                           precision=1,
                           msg="Different maps should have difference")
 
@@ -222,7 +222,7 @@ class TestRasterMapAssertions(TestCase):
         self.assertRaises(self.failureException,
                           self.assertRastersNoDifference,
                           actual='elevation',
-                          reference='aspect',
+                          reference='geology',
                           precision=1,
                           statistics=dict(mean=0),
                           msg="The difference of different maps should have huge mean")
