@@ -9,14 +9,15 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
 
-V_UNIVAR_BRIDGES_WIDTH_SUBSET = """n=10938
+V_UNIVAR_SCHOOLS_WIDTH_SUBSET = """n=144
 nmissing=0
-nnull=0
+nnull=23
 min=0
-max=1451
-range=1451
-sum=2.6299e+06
-mean=240.437
+max=2294
+range=2294
+sum=109978
+mean=763.736
+mean_abs=763.736
 """
 
 RANDOM_KEYVALUES = """abc=2025000
@@ -24,32 +25,32 @@ aaa=55.5787925720215
 bbb=156.329864501953
 """
 
-# v.info bridges -t
-V_UNIVAR_BRIDGES_TOPO = dict(
+# v.info schools -t
+V_UNIVAR_SCHOOLS_TOPO = dict(
     nodes=0,
-    points=10938,
+    points=167,
     lines=0,
     boundaries=0,
     centroids=0,
     areas=0,
     islands=0,
-    primitives=10938,
+    primitives=167,
     map3d=0,
 )
 
-# v.info bridges -g and rounded
-V_UNIVAR_BRIDGES_REGION = dict(
-    north=317757,
-    south=14691,
-    east=915045,
-    west=125794,
+# v.info schools -g and rounded
+V_UNIVAR_SCHOOLS_REGION = dict(
+    north=248160,
+    south=203560,
+    east=671715,
+    west=619215,
     top=0,
     bottom=0,
 )
 
-# v.info bridges -g and reduced to minumum
-V_UNIVAR_BRIDGES_EXTENDED = dict(
-    name='bridges',
+# v.info schools -g and reduced to minumum
+V_UNIVAR_SCHOOLS_EXTENDED = dict(
+    name='schools',
     level=2,
     num_dblinks=1,
 )
@@ -59,67 +60,67 @@ class TestVectorInfoAssertions(TestCase):
     """Test assertions of map meta and statistics"""
     # pylint: disable=R0904
     def test_assertVectorFitsUnivar(self):
-        self.assertVectorFitsUnivar(map='bridges', column='WIDTH',
-                                    reference=V_UNIVAR_BRIDGES_WIDTH_SUBSET,
+        self.assertVectorFitsUnivar(map='schools', column='CORECAPACI',
+                                    reference=V_UNIVAR_SCHOOLS_WIDTH_SUBSET,
                                     precision=0.01)
         self.assertRaises(self.failureException,
                           self.assertVectorFitsUnivar,
-                          map='bridges', column='YEAR_BUILT',
-                          reference=V_UNIVAR_BRIDGES_WIDTH_SUBSET,
+                          map='schools', column='GLEVEL',
+                          reference=V_UNIVAR_SCHOOLS_WIDTH_SUBSET,
                           precision=0.01)
         self.assertRaises(ValueError,
                           self.assertVectorFitsUnivar,
-                          map='bridges', column='WIDTH',
+                          map='schools', column='CORECAPACI',
                           reference=RANDOM_KEYVALUES)
 
     def test_assertVectorFitsTopoInfo(self):
-        self.assertVectorFitsTopoInfo('bridges', V_UNIVAR_BRIDGES_TOPO)
+        self.assertVectorFitsTopoInfo('schools', V_UNIVAR_SCHOOLS_TOPO)
         self.assertRaises(self.failureException,
                           self.assertVectorFitsTopoInfo,
-                          'lakes',
-                          V_UNIVAR_BRIDGES_TOPO)
+                          'hospitals',
+                          V_UNIVAR_SCHOOLS_TOPO)
         self.assertRaises(ValueError,
                           self.assertVectorFitsTopoInfo,
-                          'bridges', RANDOM_KEYVALUES)
+                          'schools', RANDOM_KEYVALUES)
         self.assertRaises(ValueError,
                           self.assertVectorFitsTopoInfo,
-                          'bridges', V_UNIVAR_BRIDGES_REGION)
+                          'schools', V_UNIVAR_SCHOOLS_REGION)
 
     def test_assertVectorFitsRegionInfo(self):
-        self.assertVectorFitsRegionInfo('bridges', V_UNIVAR_BRIDGES_REGION, precision=1.0)
+        self.assertVectorFitsRegionInfo('schools', V_UNIVAR_SCHOOLS_REGION, precision=1.0)
         self.assertRaises(self.failureException,
                           self.assertVectorFitsRegionInfo,
-                          'lakes', V_UNIVAR_BRIDGES_REGION, precision=1.0)
+                          'hospitals', V_UNIVAR_SCHOOLS_REGION, precision=1.0)
         self.assertRaises(ValueError,
                           self.assertVectorFitsRegionInfo,
-                          'bridges', RANDOM_KEYVALUES, precision=1.0)
+                          'schools', RANDOM_KEYVALUES, precision=1.0)
         self.assertRaises(ValueError,
                           self.assertVectorFitsRegionInfo,
-                          'bridges', V_UNIVAR_BRIDGES_TOPO, precision=1.0)
+                          'schools', V_UNIVAR_SCHOOLS_TOPO, precision=1.0)
 
     def test_assertVectorFitsExtendedInfo(self):
-        self.assertVectorFitsExtendedInfo('bridges', V_UNIVAR_BRIDGES_EXTENDED)
+        self.assertVectorFitsExtendedInfo('schools', V_UNIVAR_SCHOOLS_EXTENDED)
         self.assertRaises(self.failureException,
                           self.assertVectorFitsExtendedInfo,
-                          'lakes',
-                          V_UNIVAR_BRIDGES_EXTENDED)
+                          'hospitals',
+                          V_UNIVAR_SCHOOLS_EXTENDED)
         self.assertRaises(ValueError,
                           self.assertVectorFitsExtendedInfo,
-                          'bridges',
+                          'schools',
                           RANDOM_KEYVALUES)
         self.assertRaises(ValueError,
                           self.assertVectorFitsExtendedInfo,
-                          'bridges',
-                          V_UNIVAR_BRIDGES_TOPO)
+                          'schools',
+                          V_UNIVAR_SCHOOLS_TOPO)
 
     def test_assertVectorInfoEqualsVectorInfo(self):
-        self.assertVectorInfoEqualsVectorInfo('bridges', 'bridges', precision=0.00000001)
+        self.assertVectorInfoEqualsVectorInfo('schools', 'schools', precision=0.00000001)
         self.assertRaises(self.failureException,
                           self.assertVectorInfoEqualsVectorInfo,
-                          'lakes', 'bridges', precision=0.00000001)
+                          'hospitals', 'schools', precision=0.00000001)
         self.assertRaises(CalledModuleError,
                           self.assertVectorInfoEqualsVectorInfo,
-                          'bridges', 'does_not_exist', precision=0.00000001)
+                          'schools', 'does_not_exist', precision=0.00000001)
 
 
 class TestVectorGeometryAssertions(TestCase):
@@ -144,15 +145,15 @@ class TestVectorGeometryAssertions(TestCase):
 
     def test_assertVectorEqualsVector_basic(self):
         """Check completely different maps."""
-        self.assertVectorEqualsVector(actual='bridges', reference='bridges',
+        self.assertVectorEqualsVector(actual='schools', reference='schools',
                                       precision=0.01, digits=15)
         self.assertRaises(self.failureException,
                           self.assertVectorEqualsVector,
-                          actual='bridges', reference='lakes',
+                          actual='schools', reference='hospitals',
                           precision=0.01, digits=7)
         self.assertRaises(CalledModuleError,
                           self.assertVectorEqualsVector,
-                          actual='does_not_exist', reference='lakes',
+                          actual='does_not_exist', reference='hospitals',
                           precision=0.01, digits=7)
 
     def test_assertVectorEqualsVector_geometry_same_header(self):

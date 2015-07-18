@@ -15,7 +15,7 @@ class TestVNet(TestCase):
 
     def test_nodes(self):
         """Test"""
-        self.assertModule('v.net', input='streets_wake', output=self.network, operation='nodes')
+        self.assertModule('v.net', input='streets', output=self.network, operation='nodes')
         topology = dict(points=41813, nodes=41813, lines=49746)
         self.assertVectorFitsTopoInfo(vector=self.network, reference=topology)
         layers = read_command('v.category', input=self.network, option='layers').strip()
@@ -23,7 +23,7 @@ class TestVNet(TestCase):
 
     def test_nodes_layers(self):
         """Test"""
-        self.assertModule('v.net', input='streets_wake', output=self.network, operation='nodes', flags='c')
+        self.assertModule('v.net', input='streets', output=self.network, operation='nodes', flags='c')
         topology = dict(points=41813, nodes=41813, lines=49746)
         self.assertVectorFitsTopoInfo(vector=self.network, reference=topology)
         layers = read_command('v.category', input=self.network, option='layers').strip()
@@ -31,7 +31,7 @@ class TestVNet(TestCase):
 
     def test_connect(self):
         """Test"""
-        self.assertModule('v.net', input='streets_wake', points='schools_wake',
+        self.assertModule('v.net', input='streets', points='schools',
                           output=self.network, operation='connect', threshold=1000)
         topology = dict(points=167, nodes=42136, lines=50069)
         self.assertVectorFitsTopoInfo(vector=self.network, reference=topology)
@@ -40,7 +40,7 @@ class TestVNet(TestCase):
 
     def test_connect_snap(self):
         """Test"""
-        self.assertModule('v.net', input='streets_wake', points='schools_wake', flags='s',
+        self.assertModule('v.net', input='streets', points='schools', flags='s',
                           output=self.network, operation='connect', threshold=1000)
         topology = dict(points=167, nodes=41969, lines=49902)
         self.assertVectorFitsTopoInfo(vector=self.network, reference=topology)

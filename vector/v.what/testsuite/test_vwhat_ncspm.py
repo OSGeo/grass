@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
+# Author: Anna Petrasova
+
 from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 from grass.gunittest.gmodules import SimpleModule
 
 
+# v.what map=schools,roadsmajor,elev_points,geology layer=-1,-1,-1,-1 coordinates=636661,226489 distance=1000
 out1 = """East: 636661
 North: 226489
 ------------------------------------------------------------------
-Map: bridges 
+Map: schools 
 Mapset: PERMANENT
 Nothing found.
 ------------------------------------------------------------------
@@ -19,29 +22,26 @@ Length: 2321.407296
 Layer: 1
 Category: 231
 ------------------------------------------------------------------
-Map: precip_30ynormals_3d 
+Map: elev_points 
 Mapset: PERMANENT
-Type: Point
-Id: 96
-Point height: 121.920000
-Layer: 1
-Category: 96
+Nothing found.
 ------------------------------------------------------------------
-Map: lakes 
+Map: geology 
 Mapset: PERMANENT
 Type: Area
-Sq Meters: 9397.338
-Hectares: 0.940
-Acres: 2.322
-Sq Miles: 0.0036
+Sq Meters: 261215323.454
+Hectares: 26121.532
+Acres: 64547.712
+Sq Miles: 100.8558
 Layer: 1
-Category: 7168
+Category: 217
 """
 
+# v.what map=schools,roadsmajor,elev_points,geology layer=-1,-1,-1,-1 coordinates=636661,226489 distance=1000 -ag
 out2 = """East: 636661
 North: 226489
 ------------------------------------------------------------------
-Map: bridges 
+Map: schools 
 Mapset: PERMANENT
 Nothing found.
 ------------------------------------------------------------------
@@ -65,65 +65,39 @@ PROPYEAR : 2015
 OBJECTID : 231
 SHAPE_LEN : 7616.150435
 ------------------------------------------------------------------
-Map: precip_30ynormals_3d 
+Map: elev_points 
 Mapset: PERMANENT
-Type: Point
-Id: 96
-Point height: 121.920000
-Layer: 1
-Category: 96
-
-Driver: ...
-Database: ...
-Table: precip_30ynormals_3d
-Key column: cat
-cat : 96
-station : 317079
-lat : 35.79444
-long : -78.69889
-elev : 121.92
-jan : 113.284
-feb : 89.662
-mar : 113.284
-apr : 75.692
-may : 102.362
-jun : 103.124
-jul : 110.49
-aug : 109.22
-sep : 108.458
-oct : 96.012
-nov : 77.724
-dec : 81.534
-annual : 1178.56
+Nothing found.
 ------------------------------------------------------------------
-Map: lakes 
+Map: geology 
 Mapset: PERMANENT
 Type: Area
-Sq Meters: 9397.338
-Hectares: 0.940
-Acres: 2.322
-Sq Miles: 0.0036
+Sq Meters: 261215323.454
+Hectares: 26121.532
+Acres: 64547.712
+Sq Miles: 100.8558
 Layer: 1
-Category: 7168
+Category: 217
 
 Driver: ...
 Database: ...
-Table: lakes
+Table: geology
 Key column: cat
-cat : 7168
-AREA : 101151.70356
-PERIMETER : 1549.92239
-FULL_HYDRO : 7169
-FULL_HYDR2 : 157379
-FTYPE : LAKE/POND
-FCODE : 39000
-NAME : 
+cat : 217
+onemap_pro : 261215328
+PERIMETER : 198808.71875
+GEOL250_ : 218
+GEOL250_ID : 217
+GEO_NAME : CZfg
+SHAPE_area : 261215323.454
+SHAPE_len : 198808.723525
 """
 
+# v.what map=schools,roadsmajor,elev_points,geology layer=-1,-1,-1,-1 coordinates=636661,226489 distance=1000 -ag
 out3 = """East=636661
 North=226489
 
-Map=bridges
+Map=schools
 Mapset=PERMANENT
 
 Map=roadsmajor
@@ -145,63 +119,37 @@ PROPYEAR=2015
 OBJECTID=231
 SHAPE_LEN=7616.150435
 
-Map=precip_30ynormals_3d
+Map=elev_points
 Mapset=PERMANENT
-Type=Point
-Id=96
-Point_height=121.920000
-Layer=1
-Category=96
-Driver=...
-Database=...
-Table=precip_30ynormals_3d
-Key_column=cat
-cat=96
-station=317079
-lat=35.79444
-long=-78.69889
-elev=121.92
-jan=113.284
-feb=89.662
-mar=113.284
-apr=75.692
-may=102.362
-jun=103.124
-jul=110.49
-aug=109.22
-sep=108.458
-oct=96.012
-nov=77.724
-dec=81.534
-annual=1178.56
 
-Map=lakes
+Map=geology
 Mapset=PERMANENT
 Type=Area
-Sq_Meters=9397.338
-Hectares=0.940
-Acres=2.322
-Sq_Miles=0.0036
+Sq_Meters=261215323.454
+Hectares=26121.532
+Acres=64547.712
+Sq_Miles=100.8558
 Layer=1
-Category=7168
+Category=217
 Driver=...
 Database=...
-Table=lakes
+Table=geology
 Key_column=cat
-cat=7168
-AREA=101151.70356
-PERIMETER=1549.92239
-FULL_HYDRO=7169
-FULL_HYDR2=157379
-FTYPE=LAKE/POND
-FCODE=39000
-NAME=
+cat=217
+onemap_pro=261215328
+PERIMETER=198808.71875
+GEOL250_=218
+GEOL250_ID=217
+GEO_NAME=CZfg
+SHAPE_area=261215323.454
+SHAPE_len=198808.723525
 """
 
+# v.what map=schools,roadsmajor,elev_points,geology layer=-1,-1,-1,-1 coordinates=636661,226489 distance=100
 out4 = """East: 636661
 North: 226489
 ------------------------------------------------------------------
-Map: bridges 
+Map: schools 
 Mapset: PERMANENT
 Nothing found.
 ------------------------------------------------------------------
@@ -209,26 +157,26 @@ Map: roadsmajor
 Mapset: PERMANENT
 Nothing found.
 ------------------------------------------------------------------
-Map: precip_30ynormals_3d 
+Map: elev_points 
 Mapset: PERMANENT
 Nothing found.
 ------------------------------------------------------------------
-Map: lakes 
+Map: geology 
 Mapset: PERMANENT
 Type: Area
-Sq Meters: 9397.338
-Hectares: 0.940
-Acres: 2.322
-Sq Miles: 0.0036
+Sq Meters: 261215323.454
+Hectares: 26121.532
+Acres: 64547.712
+Sq Miles: 100.8558
 Layer: 1
-Category: 7168
+Category: 217
 """
 
 
 class TestNCMaps(TestCase):
 
     def setUp(self):
-        self.vwhat = SimpleModule('v.what', map=['bridges', 'roadsmajor', 'precip_30ynormals_3d', 'lakes'],
+        self.vwhat = SimpleModule('v.what', map=['schools', 'roadsmajor', 'elev_points', 'geology'],
                                   layer=['-1', '-1', '-1', '-1'], coordinates=[636661, 226489],
                                   distance=1000)
 
