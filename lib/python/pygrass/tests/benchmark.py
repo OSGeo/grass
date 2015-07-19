@@ -21,7 +21,7 @@ sys.path.append("%s/.."%(os.getcwd()))
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
 import grass.script as core
-import pygrass
+import grass.pygrass
 import ctypes
 
 

@@ -5,7 +5,7 @@ In "modules", GRASS GIS modules are represented as objects. These objects
 are generated based on the XML module description that is used also for
 the generation of the graphical user interface (GUI). ::
 
-    >>> from pygrass.modules import Module
+    >>> from grass.pygrass.modules import Module
     >>> slope_aspect = Module("r.slope.aspect", elevation='elevation',
     ...                        slope='slp',  aspect='asp',
     ...                        format='percent', overwrite=True)

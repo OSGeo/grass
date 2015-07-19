@@ -309,7 +309,7 @@ Or can list only the areas containing isles: ::
 
 Of course is still possible work only with a specific area, with: ::
 
-    >>> from pygrass.vector.geometry import Area
+    >>> from grass.pygrass.vector.geometry import Area
     >>> area = Area(v_id=1859, c_mapinfo=municip.c_mapinfo)
     >>> area.area()
     39486.05401495844
