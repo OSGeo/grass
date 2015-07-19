@@ -97,9 +97,9 @@ int M_do_remove(int n, const char *old)
     }
 
     if (G_strcasecmp(list[n].element[0], "cell") == 0) {
-	char colr2[50];
+	char colr2[GPATH_MAX];
 
-	sprintf(colr2, "colr2/%s", G_mapset());
+	G_snprintf(colr2, GPATH_MAX, "colr2/%s", G_mapset());
 	switch (G_remove(colr2, old)) {
 	case -1:
 	    G_warning(_("Unable to remove %s"), colr2);
