@@ -93,6 +93,7 @@ from core.utils import _
 from core.settings    import UserSettings
 from gui_core.widgets import FloatValidator, GNotebook, FormNotebook, FormListbook
 from core.giface import Notification
+from gui_core.dialogs import LayersList
 
 wxUpdateDialog, EVT_DIALOG_UPDATE = NewEvent()
 
@@ -1104,46 +1105,47 @@ class CmdPanel(wx.Panel):
                 and p.get('prompt','') !=  'color'):
 
                 title_txt.SetLabel(title + ':')
+                
                 if p.get('multiple', False) or \
                         p.get('type', 'string') == 'string' or \
                         len(p.get('key_desc', [])) > 1:
-                    txt3 = wx.TextCtrl(parent = which_panel, value = p.get('default',''))
+                    win = wx.TextCtrl(parent = which_panel, value = p.get('default',''))
                     
                     value = self._getValue(p)
                     if value:
                         # parameter previously set
-                        txt3.SetValue(str(value))
-                    
-                    txt3.Bind(wx.EVT_TEXT, self.OnSetValue)
+                        win.SetValue(str(value))
+                        
+                    win.Bind(wx.EVT_TEXT, self.OnSetValue)
                     style = wx.EXPAND | wx.BOTTOM | wx.LEFT | wx.RIGHT
                 elif p.get('type', '') == 'integer':
                     minValue = -1e9
                     maxValue = 1e9
                     value = self._getValue(p)
                     
-                    txt3 = wx.SpinCtrl(parent = which_panel, value = p.get('default', ''),
+                    win = wx.SpinCtrl(parent = which_panel, value = p.get('default', ''),
                                        size = globalvar.DIALOG_SPIN_SIZE,
                                        min = minValue, max = maxValue)
                     if value:
-                        txt3.SetValue(int(value)) # parameter previously set
-                        txt3.Bind(wx.EVT_SPINCTRL, self.OnSetValue)
+                        win.SetValue(int(value)) # parameter previously set
+                        win.Bind(wx.EVT_SPINCTRL, self.OnSetValue)
 
                     style = wx.BOTTOM | wx.LEFT | wx.RIGHT
                 else: # float
-                    txt3 = wx.TextCtrl(parent = which_panel, value = p.get('default',''),
+                    win = wx.TextCtrl(parent = which_panel, value = p.get('default',''),
                                        validator = FloatValidator())
                     style = wx.EXPAND | wx.BOTTOM | wx.LEFT | wx.RIGHT
                     
                     value = self._getValue(p)
                     if value:
-                        txt3.SetValue(str(value)) # parameter previously set
+                        win.SetValue(str(value)) # parameter previously set
                 
-                txt3.Bind(wx.EVT_TEXT, self.OnSetValue)
+                win.Bind(wx.EVT_TEXT, self.OnSetValue)
                 
-                which_sizer.Add(item = txt3, proportion = 0,
+                which_sizer.Add(item = win, proportion = 0,
                                 flag = style, border = 5)
-                p['wxId'] = [ txt3.GetId(), ]
-
+                p['wxId'] = [win.GetId()]
+            
             #
             # element selection tree combobox (maps, icons, regions, etc.)
             #
@@ -1169,7 +1171,9 @@ class CmdPanel(wx.Panel):
                                               'dir',
                                               'colortable',
                                               'barscale',
-                                              'northarrow'):
+                                              'northarrow',
+                                              'datasource',
+                                              'datasource_layer'):
                     multiple = p.get('multiple', False)
                     if p.get('age', '') == 'new':
                         mapsets = [grass.gisenv()['MAPSET'],]
@@ -1677,7 +1681,39 @@ class CmdPanel(wx.Panel):
                     if p.get('guidependency', ''):
                         cb.Bind(wx.EVT_COMBOBOX, self.OnUpdateSelection)
 
+                elif prompt == 'datasource':
+                    win = gselect.GdalSelect(parent = parent, panel = which_panel,
+                                             ogr = True)
+                    win.Bind(wx.EVT_TEXT, self.OnSetValue)
+                    win.Bind(wx.EVT_CHOICE, self.OnSetValue)
+                    p['wxId'] = [win.GetId(),
+                                 win.fileWidgets['browse'].GetChildren()[1].GetId(),
+                                 win.dirWidgets['browse'].GetChildren()[1].GetId(),
+                                 win.dbWidgets['choice'].GetId()]
+                    which_sizer.Add(item = win, proportion = 0,
+                                    flag = wx.EXPAND)
 
+                elif prompt == 'datasource_layer':
+                    self.win1 = LayersList(parent = which_panel, columns = [_('Layer id'),
+                                                                            _('Layer name'),
+                                                                            _('Feature type'),
+                                                                            _('Projection match')])
+                    which_sizer.Add(item = self.win1, proportion = 0,
+                                    flag = wx.EXPAND | wx.ALL, border = 3)
+                    porf = self.task.get_param('input', element = 'name', raiseError = False)
+                    winDataSource = self.FindWindowById(porf['wxId'][0])
+                    winDataSource.reloadDataRequired.connect(lambda data: self.win1.LoadData(data))
+                    p['wxId'] = [self.win1.GetId()]
+                    def OnCheckItem(index, flag):
+                        layers = list()
+                        for layer, match in self.win1.GetLayers():
+                            layers.append(layer)
+                        porf = self.task.get_param('layer', element = 'name', raiseError = False)
+                        porf['value'] = ','.join(layers)
+                        self.OnUpdateValues() # TODO: replace by signal
+                    
+                    self.win1.OnCheckItem = OnCheckItem
+                          
             if self.parent.GetName() == 'MainFrame' and (self._giface and hasattr(self._giface, "_model")):
                 parChk = wx.CheckBox(parent = which_panel, id = wx.ID_ANY,
                                      label = _("Parameterized in model"))
@@ -2198,6 +2234,7 @@ class CmdPanel(wx.Panel):
         for porf in self.task.params + self.task.flags:
             if 'wxId' not in porf:
                 continue
+            
             if myId in porf['wxId']:
                 found = True
                 break
@@ -2209,9 +2246,16 @@ class CmdPanel(wx.Panel):
             porf['value'] = event.dsn
         elif name == 'ModelParam':
             porf['parameterized'] = me.IsChecked()
+        elif name == 'GdalSelectDataSource':
+            win = self.FindWindowById(porf['wxId'][0])
+            porf['value'] = win.GetDsn()
+            pLayer = self.task.get_param('layer', element = 'name', raiseError = False)
+            pLayer['value'] = ''
         else:
             if isinstance(me, wx.SpinCtrl):
                 porf['value'] = str(me.GetValue())
+            elif isinstance(me, wx.Choice):
+                porf['value'] = me.GetStringSelection()                    
             else:
                 porf['value'] = me.GetValue()
         

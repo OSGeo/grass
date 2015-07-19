@@ -1257,12 +1257,9 @@ class FormatSelect(wx.Choice):
 
         return formatToExt.get(name, '')
 
-# unused code since r47938
-# wxGdalSelect, EVT_GDALSELECT = NewEvent()
-
 class GdalSelect(wx.Panel):
     def __init__(self, parent, panel, ogr=False, link=False, dest=False,
-                 exclude=None):
+                 exclude=None, settings=True):
         """Widget for selecting GDAL/OGR datasource, format
 
         .. todo::
@@ -1281,19 +1278,10 @@ class GdalSelect(wx.Panel):
         self.dest = dest
         self._sourceType = None
 
-        wx.Panel.__init__(self, parent=panel)
+        wx.Panel.__init__(self, parent=panel, name='GdalSelect')
 
         self.reloadDataRequired = Signal('GdalSelect.reloadDataRequired')
 
-        if self.ogr:
-            settingsFile = os.path.join(GetSettingsPath(), 'wxOGR')
-        else:
-            settingsFile = os.path.join(GetSettingsPath(), 'wxGDAL')
-
-        self.settsManager = ManageSettingsWidget(parent=self,
-                                                 settingsFile=settingsFile)
-        self.settsManager.settingsChanged.connect(self.OnSettingsChanged)
-        self.settsManager.settingsSaving.connect(self.OnSettingsSaving)
 
         self.inputBox = wx.StaticBox(parent=self)
         if dest:
@@ -1393,6 +1381,7 @@ class GdalSelect(wx.Panel):
                                              startDirectory=os.getcwd(),
                                              changeCallback=self.OnUpdate,
                                              fileMask=fileMask)
+        browse.GetChildren()[1].SetName('GdalSelectDataSource')
         self.fileWidgets['browse'] = browse
         self.fileWidgets['options'] = wx.TextCtrl(parent=self.filePanel)
 
@@ -1405,6 +1394,7 @@ class GdalSelect(wx.Panel):
                                             buttonText=_('Browse'),
                                             startDirectory=os.getcwd(),
                                             changeCallback=self.OnUpdate)
+        browse.GetChildren()[1].SetName('GdalSelectDataSource')
 
         self.dirWidgets['browse'] = browse
         formatSelect = wx.Choice(parent=self.dirPanel, size=(300, -1))
@@ -1444,10 +1434,12 @@ class GdalSelect(wx.Panel):
                                              buttonText=_('Browse'),
                                              startDirectory=os.getcwd(),
                                              changeCallback=self.OnUpdate)
+        browse.GetChildren()[1].SetName('GdalSelectDataSource')
+        
         self.dbWidgets['browse'] = browse
-        self.dbWidgets['choice'] = wx.Choice(parent=self.dbPanel)
+        self.dbWidgets['choice'] = wx.Choice(parent=self.dbPanel, name='GdalSelectDataSource')
         self.dbWidgets['choice'].Bind(wx.EVT_CHOICE, self.OnUpdate)
-        self.dbWidgets['text'] = wx.TextCtrl(parent=self.dbPanel)
+        self.dbWidgets['text'] = wx.TextCtrl(parent=self.dbPanel, name='GdalSelectDataSource')
         self.dbWidgets['text'].Bind(wx.EVT_TEXT, self.OnUpdate)
         self.dbWidgets['textLabel1'] = wx.StaticText(parent=self.dbPanel, label=_("Name:"))
         self.dbWidgets['textLabel2'] = wx.StaticText(parent=self.dbPanel, label=_("Name:"))
@@ -1545,7 +1537,7 @@ class GdalSelect(wx.Panel):
 
     def _layout(self):
         """Layout"""
-        mainSizer = wx.BoxSizer(wx.VERTICAL)
+        self.mainSizer = wx.BoxSizer(wx.VERTICAL)
 
         self.changingSizer = wx.StaticBoxSizer(self.inputBox, wx.VERTICAL)
 
@@ -1705,15 +1697,12 @@ class GdalSelect(wx.Panel):
             self.changingSizer.Add(item=panel, proportion=1,
                                    flag=wx.EXPAND)
 
-        mainSizer.Add(item=self.settsManager, proportion=0,
-                      flag=wx.ALL | wx.EXPAND, border=5)
-        mainSizer.Add(item=self.source, proportion=0,
+        self.mainSizer.Add(item=self.source, proportion=0,
                       flag=wx.LEFT | wx.RIGHT | wx.EXPAND, border=5)
-        mainSizer.Add(item=self.changingSizer, proportion=1,
+        self.mainSizer.Add(item=self.changingSizer, proportion=1,
                       flag=wx.ALL | wx.EXPAND, border=5)
-        self.mainSizer = mainSizer
-        self.SetSizer(mainSizer)
-        mainSizer.Fit(self)
+        self.SetSizer(self.mainSizer)
+        self.mainSizer.Fit(self)
 
     def _getExtension(self, name):
         """Get file extension by format name"""
@@ -1791,6 +1780,21 @@ class GdalSelect(wx.Panel):
         if not self.dest:
             self.reloadDataRequired.emit(data=None)
             self._reloadLayers()
+
+    def AttachSettings(self):
+        if self.ogr:
+            settingsFile = os.path.join(GetSettingsPath(), 'wxOGR')
+        else:
+            settingsFile = os.path.join(GetSettingsPath(), 'wxGDAL')
+            
+        self.settsManager = ManageSettingsWidget(parent=self,
+                                                 settingsFile=settingsFile)
+        self.settsManager.settingsChanged.connect(self.OnSettingsChanged)
+        self.settsManager.settingsSaving.connect(self.OnSettingsSaving)
+
+        # do layout
+        self.mainSizer.Insert(0, item=self.settsManager,
+                              flag=wx.ALL | wx.EXPAND, border=5)
 
     def OnSettingsSaving(self, name):
         """Saving data"""
@@ -1947,19 +1951,13 @@ class GdalSelect(wx.Panel):
                 ext = self.dirWidgets['extension'].GetValue()
                 for filename in glob.glob(os.path.join(dsn, "%s") % self._getExtPatternGlob(ext)):
                     baseName = os.path.basename(filename)
+
                     grassName = GetValidLayerName(baseName.split('.', -1)[0])
                     data.append((layerId, baseName, grassName))
                     layerId += 1
-# unused code since r47938
-#        if self.ogr:
-#            dsn += '@OGR'
-#
-#        evt = wxGdalSelect(dsn = dsn)
-#        evt.SetId(self.input[self.dsnType][1].GetId())
-#        wx.PostEvent(self.parent, evt)
-
-        if self.parent.GetName() == 'MultiImportDialog':
-            self.reloadDataRequired.emit(data=data)
+        
+        # emit signal
+        self.reloadDataRequired.emit(data=data)
 
     def ExtensionChanged(self, event):
         if not self.dest:
