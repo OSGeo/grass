@@ -81,7 +81,7 @@ char *G__location_path(void)
     const char *base = G_gisdbase();
     char *location = G_malloc(strlen(base) + strlen(name) + 2);
 
-    sprintf(location, "%s/%s", base, name);
+    sprintf(location, "%s%c%s", base, HOST_DIRSEP, name);
 
     return location;
 }
