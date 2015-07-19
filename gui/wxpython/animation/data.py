@@ -223,6 +223,10 @@ class AnimationData(object):
         del currRegion['cells']
         del currRegion['cols']
         del currRegion['rows']
+        if 'projection' in currRegion:
+            del currRegion['projection']
+        if 'zone' in currRegion:
+            del currRegion['zone']
         regions = []
         for i in range(self._mapCount):
             if endRegion or zoomValue:
