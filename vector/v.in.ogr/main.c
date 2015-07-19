@@ -139,7 +139,7 @@ int main(int argc, char *argv[])
     param.dsn->key = "input";
     param.dsn->type = TYPE_STRING;
     param.dsn->required =YES;
-    param.dsn->label = _("OGR datasource name");
+    param.dsn->label = _("Name of OGR datasource to be imported");
     param.dsn->description = _("Examples:\n"
 				   "\t\tESRI Shapefile: directory containing shapefiles\n"
 				   "\t\tMapInfo File: directory containing mapinfo files");
@@ -155,7 +155,7 @@ int main(int argc, char *argv[])
     param.layer->description =
 	_("Examples:\n" "\t\tESRI Shapefile: shapefile name\n"
 	  "\t\tMapInfo File: mapinfo file name");
-    param.layer->guisection = _("Layer");
+    param.layer->guisection = _("Input");
     param.layer->gisprompt = "old,datasource_layer,datasource_layer";
 
     param.out = G_define_standard_option(G_OPT_V_OUTPUT);
@@ -215,6 +215,7 @@ int main(int argc, char *argv[])
     param.outloc->required = NO;
     param.outloc->description = _("Name for new location to create");
     param.outloc->key_desc = "name";
+    param.outloc->guisection = _("Output");
     
     param.cnames = G_define_standard_option(G_OPT_DB_COLUMNS);
     param.cnames->description =
@@ -303,6 +304,7 @@ int main(int argc, char *argv[])
     flag.no_import->description =
 	_("Create the location specified by the \"location\" parameter and exit."
           " Do not import the vector data.");
+    flag.no_import->guisection = _("Output");
     
     /* The parser checks if the map already exists in current mapset, this is
      * wrong if location options is used, so we switch out the check and do it
