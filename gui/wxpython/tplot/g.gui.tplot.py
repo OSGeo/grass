@@ -21,31 +21,58 @@
 ############################################################################
 
 #%module
-#% description: Allows the user to see in a plot the values of one or more temporal datasets for a queried point defined by a coordinate pair.
-#% keyword: general
-#% keyword: GUI
-#% keyword: temporal
+#% description: Allows the user to see in a plot the values of one or more temporal raser datasets for a queried point defined by a coordinate pair. Also allows to plot data of vector dataset for a defined categories and attribut.
+#% keywords: general
+#% keywords: GUI
+#% keywords: temporal
 #%end
-#%option G_OPT_STDS_INPUTS
+
+#%option G_OPT_STVDS_INPUTS
+#% key: stvds
 #% required: no
 #%end
+
+#%option G_OPT_STRDS_INPUTS
+#% key: strds
+#% required: no
+#%end
+
 #%option G_OPT_M_COORDS
 #% required: no
 #%end
+
+#TODO use option G_OPT_V_CATS
+#%option
+#% key: cats
+#% label: Categories of vectores features
+#% description: To use only with stvds
+#% required: no
+#%end
+
+
+#%option
+#% key: attr
+#% label: Name of attribute
+#% description: Name of attribute which represent data for plotting
+#% required: no
+#%end
+
 #%option G_OPT_F_OUTPUT
 #% required: no
 #% label: Name for output file
 #% description: Add extension to specify format (.png, .pdf, .svg)
 #%end
+
 #%option
-#% key: dpi
-#% type: integer
-#% label: The DPI for output image
-#% description: To use only with output parameter
+#% key: size
+#% type: string
+#% label: The size for output image
+#% description: It works only with output parameter
 #% required: no
 #%end
 
 import grass.script as gscript
+from core.giface import StandaloneGrassInterface
 
 
 def main():
@@ -57,26 +84,38 @@ def main():
         from tplot.frame import TplotFrame
     except ImportError as e:
         gscript.fatal(e.message)
-
-    datasets = options['inputs'].strip().split(',')
-    datasets = [data for data in datasets if data]
+    rasters = None
+    if options['strds']:
+        rasters = options['strds'].strip().split(',')
+    vectors = None
+    attr = None
+    if options['stvds']:
+        vectors = options['stvds'].strip().split(',')
+        if not options['attr']:
+            gscript.fatal(_("With stvds you have to use also 'attr' option"))
+        else:
+            attr = options['attr']
     coords = options['coordinates'].strip().split(',')
     output = options['output']
-    dpi = options['dpi']
-    dpi = int(dpi) if dpi else None
-    if dpi and not output:
-        gscript.warning(
-            _("No output filename set, so DPI option will not used"))
 
     app = wx.App()
-    frame = TplotFrame(None)
-    frame.SetDatasets(datasets, coords, output, dpi)
+    frame = TplotFrame(parent=None, giface=StandaloneGrassInterface())
+    frame.SetDatasets(rasters, vectors, coords, None, attr)
     if output:
-        return
-
-    frame.Show()
-    app.MainLoop()
-
+        frame.OnRedraw()
+        if options['size']:
+            sizes = options['size'].strip().split(',')
+            sizes = [int(s) for s in sizes]
+            frame.canvas.SetSize(sizes)
+        if output.split('.')[-1].lower() == 'png':
+            frame.canvas.print_png(output)
+        if output.split('.')[-1].lower() in ['jpg', 'jpeg']:
+            frame.canvas.print_jpg(output)
+        if output.split('.')[-1].lower() in ['tif', 'tiff']:
+            frame.canvas.print_tif(output)
+    else:
+        frame.Show()
+        app.MainLoop()
 
 if __name__ == '__main__':
     main()
