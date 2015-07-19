@@ -14,7 +14,7 @@
 #############################################################################
 
 #%module
-#% description: Packs up a raster map and support files for copying.
+#% description: Exports a raster map as GRASS GIS specific archive file
 #% keyword: raster
 #% keyword: export
 #% keyword: copying

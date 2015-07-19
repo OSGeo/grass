@@ -2,7 +2,7 @@
 
 This module exports a space time raster dataset as a tar archive. The
 archive contains the raster maps either as GeoTIFF files or as GRASS
-binary files exported using <em>r.out.bin</em>. The map specific color tables
+binary files exported using <em>r.pack</em>. The map specific color tables
 are exported in case of GeoTIFF files. In addition several metadata files
 are created in the archive that describe the temporal layout.
 All time stamps are stored in the file "list.txt". For each map
@@ -122,7 +122,10 @@ Files:
 <em>
 <a href="t.rast.import.html">t.rast.import</a>,
 <a href="t.create.html">t.create</a>,
-<a href="t.info.html">t.info</a>
+<a href="t.info.html">t.info</a>,
+<a href="r.out.gdal.html">r.out.gdal</a>,
+<a href="r.pack.html">r.pack</a>,
+<a href="t.vect.export.html">t.vect.export</a>
 </em>
 
 <h2>AUTHOR</h2>
@@ -130,4 +133,3 @@ Files:
 S&ouml;ren Gebbert, Th&uuml;nen Institute of Climate-Smart Agriculture
 
 <p><i>Last changed: $Date$</i>
-
