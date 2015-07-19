@@ -104,6 +104,7 @@ def tlist(type, dbif=None):
 
             # Create the sql selection statement
             sql = "SELECT id FROM " + table
+            sql += " WHERE mapset = '%s'" % (mapset)
             sql += " ORDER BY id"
 
             dbif.execute(sql,  mapset=mapset)
