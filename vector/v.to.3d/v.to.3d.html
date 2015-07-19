@@ -14,6 +14,11 @@ features can be optionally stored in <b>column</b>.
 
 When transforming 2D vector features to 3D based on attribute, all
 NULL values are silently converted to height 0.0.
+<p>
+Reverse transformation is possible for points and lines.
+In case of lines, the reverse transformation should be used
+only when all vertices of a line have the same z-coordinate
+(for example contours).
 
 <h2>EXAMPLES</h2>
 
