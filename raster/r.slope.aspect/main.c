@@ -148,7 +148,7 @@ int main(int argc, char *argv[])
     G_gisinit(argv[0]);
 
     module = G_define_module();
-    G_add_keyword(_("raster"))
+    G_add_keyword(_("raster"));
     G_add_keyword(_("terrain"));
     G_add_keyword(_("aspect"));
     G_add_keyword(_("slope"));
