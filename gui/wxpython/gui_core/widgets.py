@@ -1473,7 +1473,7 @@ class LayersList(GListCtrl, listmix.TextEditMixin):
         for i in range(len(width)):
             self.SetColumnWidth(col = i, width = width[i])
         
-    def LoadData(self, data = None):
+    def LoadData(self, data = None, selectOne = True):
         """Load data into list"""
         self.DeleteAllItems()
         if data is None:
@@ -1485,7 +1485,7 @@ class LayersList(GListCtrl, listmix.TextEditMixin):
                 self.SetStringItem(index, i, item[i])
         
         # check by default only on one item
-        if len(data) == 1:
+        if len(data) == 1 and selectOne:
             self.CheckItem(index, True)
         
     def OnLeftDown(self, event):
