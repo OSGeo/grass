@@ -129,7 +129,7 @@ from urllib import urlopen
 try:
     import xml.etree.ElementTree as etree
 except ImportError:
-    import elementtree.ElementTree as etree # Python <= 2.4
+    import elementtree.ElementTree as etree  # Python <= 2.4
 
 from grass.script.utils import try_rmdir
 from grass.script import core as grass
@@ -139,38 +139,45 @@ REMOVE_TMPDIR = True
 PROXIES = {}
 
 # check requirements
+
+
 def check_progs():
     for prog in ('svn', 'make', 'gcc'):
         if not grass.find_program(prog, '--help'):
-            grass.fatal(_("'%s' required. Please install '%s' first.") % (prog, prog))
+            grass.fatal(_("'%s' required. Please install '%s' first.")
+                        % (prog, prog))
 
 # expand prefix to class name
+
+
 def expand_module_class_name(c):
-    name = { 'd'   : 'display',
-             'db'  : 'database',
-             'g'   : 'general',
-             'i'   : 'imagery',
-             'm'   : 'misc',
-             'ps'  : 'postscript',
-             'p'   : 'paint',
-             'r'   : 'raster',
-             'r3'  : 'raster3d',
-             's'   : 'sites',
-             'v'   : 'vector',
-             'wx'  : 'gui/wxpython'
-             }
+    name = {'d': 'display',
+            'db': 'database',
+            'g': 'general',
+            'i': 'imagery',
+            'm': 'misc',
+            'ps': 'postscript',
+            'p': 'paint',
+            'r': 'raster',
+            'r3': 'raster3d',
+            's': 'sites',
+            'v': 'vector',
+            'wx': 'gui/wxpython'
+            }
 
     return name.get(c, c)
 
 # list installed extensions
-def get_installed_extensions(force = False):
+
+
+def get_installed_extensions(force=False):
     if flags['t']:
         return get_installed_toolboxes(force)
 
     return get_installed_modules(force)
 
 
-def get_installed_toolboxes(force = False):
+def get_installed_toolboxes(force=False):
     fXML = os.path.join(options['prefix'], 'toolboxes.xml')
     if not os.path.exists(fXML):
         write_xml_toolboxes(fXML)
@@ -192,7 +199,7 @@ def get_installed_toolboxes(force = False):
     return ret
 
 
-def get_installed_modules(force = False):
+def get_installed_modules(force=False):
     fXML = os.path.join(options['prefix'], 'modules.xml')
     if not os.path.exists(fXML):
         if force:
@@ -218,6 +225,8 @@ def get_installed_modules(force = False):
     return ret
 
 # list extensions (read XML file from grass.osgeo.org/addons)
+
+
 def list_available_extensions(url):
     if flags['t']:
         grass.message(_("List of available extensions (toolboxes):"))
@@ -232,7 +241,8 @@ def list_available_extensions(url):
                 list_available_modules(url, toolbox_data['modules'])
             else:
                 if toolbox_data['modules']:
-                    print os.linesep.join(map(lambda x: '* ' + x, toolbox_data['modules']))
+                    print os.linesep.join(map(lambda x: '* ' + x,
+                                              toolbox_data['modules']))
     else:
         grass.message(_("List of available extensions (modules):"))
         list_available_modules(url)
@@ -247,9 +257,9 @@ def list_available_toolboxes(url):
         for tnode in tree.findall('toolbox'):
             mlist = list()
             clist = list()
-            tdict[tnode.get('code')] = { 'name' : tnode.get('name'),
-                                         'correlate' : clist,
-                                         'modules' : mlist }
+            tdict[tnode.get('code')] = {'name': tnode.get('name'),
+                                        'correlate': clist,
+                                        'modules': mlist}
 
             for cnode in tnode.findall('correlate'):
                 clist.append(cnode.get('name'))
@@ -280,6 +290,7 @@ def get_toolbox_modules(url, name):
 
     return tlist
 
+
 def get_optional_params(mnode):
     try:
         desc = mnode.find('description').text
@@ -296,7 +307,8 @@ def get_optional_params(mnode):
 
     return desc, keyw
 
-def list_available_modules(url, mlist = None):
+
+def list_available_modules(url, mlist=None):
     # try to download XML metadata file first
     url = url + "modules.xml"
     grass.debug("url=%s" % url, 1)
@@ -305,7 +317,8 @@ def list_available_modules(url, mlist = None):
         try:
             tree = etree.fromstring(f.read())
         except:
-            grass.warning(_("Unable to parse '%s'. Trying to scan SVN repository (may take some time)...") % url)
+            grass.warning(_("Unable to parse '%s'. Trying to scan"
+                            " SVN repository (may take some time)...") % url)
             list_available_extensions_svn()
             return
 
@@ -330,14 +343,19 @@ def list_available_modules(url, mlist = None):
         list_available_extensions_svn()
 
 # list extensions (scan SVN repo)
+
+
 def list_available_extensions_svn():
-    grass.message(_('Fetching list of extensions from GRASS-Addons SVN repository (be patient)...'))
+    grass.message(_('Fetching list of extensions from'
+                    ' GRASS-Addons SVN repository (be patient)...'))
     pattern = re.compile(r'(<li><a href=".+">)(.+)(</a></li>)', re.IGNORECASE)
 
     if flags['c']:
-        grass.warning(_("Flag 'c' ignored, addons metadata file not available"))
+        grass.warning(
+            _("Flag 'c' ignored, addons metadata file not available"))
     if flags['g']:
-        grass.warning(_("Flag 'g' ignored, addons metadata file not available"))
+        grass.warning(
+            _("Flag 'g' ignored, addons metadata file not available"))
 
     prefix = ['d', 'db', 'g', 'i', 'm', 'ps',
               'p', 'r', 'r3', 's', 'v']
@@ -346,11 +364,11 @@ def list_available_extensions_svn():
         grass.verbose(_("Checking for '%s' modules...") % modclass)
 
         url = '%s/%s' % (options['svnurl'], modclass)
-        grass.debug("url = %s" % url, debug = 2)
+        grass.debug("url = %s" % url, debug=2)
         try:
             f = urlopen(url, proxies=PROXIES)
         except HTTPError:
-            grass.debug(_("Unable to fetch '%s'") % url, debug = 1)
+            grass.debug(_("Unable to fetch '%s'") % url, debug=1)
             continue
 
         for line in f.readlines():
@@ -365,14 +383,17 @@ def list_available_extensions_svn():
     # get_wxgui_extensions()
 
 # list wxGUI extensions
+
+
 def get_wxgui_extensions():
     mlist = list()
-    grass.debug('Fetching list of wxGUI extensions from GRASS-Addons SVN repository (be patient)...')
+    grass.debug('Fetching list of wxGUI extensions from '
+                'GRASS-Addons SVN repository (be patient)...')
     pattern = re.compile(r'(<li><a href=".+">)(.+)(</a></li>)', re.IGNORECASE)
     grass.verbose(_("Checking for '%s' modules...") % 'gui/wxpython')
 
     url = '%s/%s' % (options['svnurl'], 'gui/wxpython')
-    grass.debug("url = %s" % url, debug = 2)
+    grass.debug("url = %s" % url, debug=2)
     f = urlopen(url, proxies=PROXIES)
     if not f:
         grass.warning(_("Unable to fetch '%s'") % url)
@@ -398,7 +419,9 @@ def cleanup():
         sys.stderr.write('%s\n' % os.path.join(TMPDIR, options['extension']))
 
 # write out meta-file
-def write_xml_modules(name, tree = None):
+
+
+def write_xml_modules(name, tree=None):
     fo = open(name, 'w')
     fo.write('<?xml version="1.0" encoding="UTF-8"?>\n')
     fo.write('<!DOCTYPE task SYSTEM "grass-addons.dtd">\n')
@@ -408,23 +431,25 @@ def write_xml_modules(name, tree = None):
     if tree is not None:
         for tnode in tree.findall('task'):
             indent = 4
-            fo.write('%s<task name="%s">\n' % (' ' * indent, tnode.get('name')))
+            fo.write('%s<task name="%s">\n' %
+                     (' ' * indent, tnode.get('name')))
             indent += 4
-            fo.write('%s<description>%s</description>\n' % \
-                         (' ' * indent, tnode.find('description').text))
-            fo.write('%s<keywords>%s</keywords>\n' % \
-                         (' ' * indent, tnode.find('keywords').text))
+            fo.write('%s<description>%s</description>\n' %
+                     (' ' * indent, tnode.find('description').text))
+            fo.write('%s<keywords>%s</keywords>\n' %
+                     (' ' * indent, tnode.find('keywords').text))
             bnode = tnode.find('binary')
             if bnode is not None:
                 fo.write('%s<binary>\n' % (' ' * indent))
                 indent += 4
                 for fnode in bnode.findall('file'):
-                    fo.write('%s<file>%s</file>\n' % \
-                                 (' ' * indent, os.path.join(options['prefix'], fnode.text)))
+                    fo.write('%s<file>%s</file>\n' %
+                             (' ' * indent, os.path.join(options['prefix'],
+                                                         fnode.text)))
                 indent -= 4
                 fo.write('%s</binary>\n' % (' ' * indent))
-            fo.write('%s<libgis revision="%s" />\n' % \
-                         (' ' * indent, libgisRev))
+            fo.write('%s<libgis revision="%s" />\n' %
+                     (' ' * indent, libgisRev))
             indent -= 4
             fo.write('%s</task>\n' % (' ' * indent))
 
@@ -432,7 +457,7 @@ def write_xml_modules(name, tree = None):
     fo.close()
 
 
-def write_xml_toolboxes(name, tree = None):
+def write_xml_toolboxes(name, tree=None):
     fo = open(name, 'w')
     fo.write('<?xml version="1.0" encoding="UTF-8"?>\n')
     fo.write('<!DOCTYPE toolbox SYSTEM "grass-addons.dtd">\n')
@@ -440,14 +465,14 @@ def write_xml_toolboxes(name, tree = None):
     if tree is not None:
         for tnode in tree.findall('toolbox'):
             indent = 4
-            fo.write('%s<toolbox name="%s" code="%s">\n' % \
-                         (' ' * indent, tnode.get('name'), tnode.get('code')))
+            fo.write('%s<toolbox name="%s" code="%s">\n' %
+                     (' ' * indent, tnode.get('name'), tnode.get('code')))
             indent += 4
             for cnode in tnode.findall('correlate'):
-                fo.write('%s<correlate code="%s" />\n' % \
+                fo.write('%s<correlate code="%s" />\n' %
                          (' ' * indent, tnode.get('code')))
             for mnode in tnode.findall('task'):
-                fo.write('%s<task name="%s" />\n' % \
+                fo.write('%s<task name="%s" />\n' %
                          (' ' * indent, mnode.get('name')))
             indent -= 4
             fo.write('%s</toolbox>\n' % (' ' * indent))
@@ -456,13 +481,16 @@ def write_xml_toolboxes(name, tree = None):
     fo.close()
 
 # install extension - toolbox or module
+
+
 def install_extension(url):
     gisbase = os.getenv('GISBASE')
     if not gisbase:
         grass.fatal(_('$GISBASE not defined'))
 
-    if options['extension'] in get_installed_extensions(force = True):
-        grass.warning(_("Extension <%s> already installed. Re-installing...") % options['extension'])
+    if options['extension'] in get_installed_extensions(force=True):
+        grass.warning(_("Extension <%s> already installed. Re-installing...") %
+                      options['extension'])
 
     if flags['t']:
         grass.message(_("Installing toolbox <%s>...") % options['extension'])
@@ -486,20 +514,25 @@ def install_extension(url):
         return
 
     if ret != 0:
-        grass.warning(_('Installation failed, sorry. Please check above error messages.'))
+        grass.warning(_('Installation failed, sorry.'
+                        ' Please check above error messages.'))
     else:
         grass.message(_("Updating addons metadata file..."))
         blist = install_extension_xml(url, mlist)
         for module in blist:
             update_manual_page(module)
 
-        grass.message(_("Installation of <%s> successfully finished") % options['extension'])
+        grass.message(_("Installation of <%s> successfully finished") %
+                      options['extension'])
 
     if not os.getenv('GRASS_ADDON_BASE'):
-        grass.warning(_('This add-on module will not function until you set the '
-                        'GRASS_ADDON_BASE environment variable (see "g.manual variables")'))
+        grass.warning(_('This add-on module will not function until'
+                        ' you set the GRASS_ADDON_BASE environment'
+                        ' variable (see "g.manual variables")'))
 
 # update local meta-file when installing new extension (toolbox / modules)
+
+
 def install_toolbox_xml(url, name):
     # read metadata from remote server (toolboxes)
     url = url + "toolboxes.xml"
@@ -519,12 +552,13 @@ def install_toolbox_xml(url, name):
 
             code = tnode.get('code')
             data[code] = {
-                'name'      : tnode.get('name'),
-                'correlate' : clist,
-                'modules'   : mlist,
-                }
+                'name': tnode.get('name'),
+                'correlate': clist,
+                'modules': mlist,
+            }
     except HTTPError:
-        grass.error(_("Unable to read addons metadata file from the remote server"))
+        grass.error(_("Unable to read addons metadata file "
+                      "from the remote server"))
 
     if not data:
         grass.warning(_("No addons metadata available"))
@@ -559,19 +593,22 @@ def install_toolbox_xml(url, name):
             tnode.remove(mnode)
     else:
         # create new node for task
-        tnode = etree.Element('toolbox', attrib = { 'name' : tdata['name'], 'code' : name })
+        tnode = etree.Element(
+            'toolbox', attrib={'name': tdata['name'], 'code': name})
         tree.append(tnode)
 
     for cname in tdata['correlate']:
-        cnode = etree.Element('correlate', attrib = { 'code' : cname })
+        cnode = etree.Element('correlate', attrib={'code': cname})
         tnode.append(cnode)
     for tname in tdata['modules']:
-        mnode = etree.Element('task', attrib = { 'name' : tname })
+        mnode = etree.Element('task', attrib={'name': tname})
         tnode.append(mnode)
 
     write_xml_toolboxes(fXML, tree)
 
 # return list of executables for update_manual_page()
+
+
 def install_extension_xml(url, mlist):
     if len(mlist) > 1:
         # read metadata from remote server (toolboxes)
@@ -587,7 +624,8 @@ def install_extension_xml(url, mlist):
         try:
             tree = etree.fromstring(f.read())
         except:
-            grass.warning(_("Unable to parse '%s'. Addons metadata file not updated.") % url)
+            grass.warning(_("Unable to parse '%s'."
+                            " Addons metadata file not updated.") % url)
             return bList
 
         for mnode in tree.findall('task'):
@@ -614,13 +652,14 @@ def install_extension_xml(url, mlist):
             desc, keyw = get_optional_params(mnode)
 
             data[name] = {
-                'desc'  : desc,
-                'keyw'  : keyw,
-                'files' : fList,
-                }
+                'desc': desc,
+                'keyw': keyw,
+                'files': fList,
+            }
 
     except:
-        grass.error(_("Unable to read addons metadata file from the remote server"))
+        grass.error(
+            _("Unable to read addons metadata file from the remote server"))
 
     if not data:
         grass.warning(_("No addons metadata available"))
@@ -668,7 +707,7 @@ def install_extension_xml(url, mlist):
             tnode.append(bnode)
         else:
             # create new node for task
-            tnode = etree.Element('task', attrib = { 'name' : name })
+            tnode = etree.Element('task', attrib={'name': name})
             dnode = etree.Element('description')
             dnode.text = ndata['desc']
             tnode.append(dnode)
@@ -688,12 +727,18 @@ def install_extension_xml(url, mlist):
     return bList
 
 # install extension on MS Windows
+
+
 def install_extension_win(name):
-    ### do not use hardcoded url - http://wingrass.fsv.cvut.cz/grassXX/addonsX.X.X
-    grass.message(_("Downloading precompiled GRASS Addons <%s>...") % options['extension'])
-    url = "http://wingrass.fsv.cvut.cz/grass%(major)s%(minor)s/addons/grass-%(major)s.%(minor)s.%(patch)s/" % \
-        { 'major' : version[0], 'minor' : version[1], 'patch' : version[2]}
-    
+    # do not use hardcoded url -
+    # http://wingrass.fsv.cvut.cz/grassXX/addonsX.X.X
+    grass.message(_("Downloading precompiled GRASS Addons <%s>...") %
+                  options['extension'])
+    url = "http://wingrass.fsv.cvut.cz/" \
+          "grass%(major)s%(minor)s/addons/" \
+          "grass-%(major)s.%(minor)s.%(patch)s/" % \
+        {'major': version[0], 'minor': version[1], 'patch': version[2]}
+
     grass.debug("url=%s" % url, 1)
 
     try:
@@ -705,8 +750,9 @@ def install_extension_win(name):
             try:
                 os.mkdir(options['prefix'])
             except OSError as e:
-                grass.fatal(_("Unable to create <{}>. {}").format(options['prefix'], e))
-        
+                grass.fatal(_("Unable to create <{}>. {}")
+                            .format(options['prefix'], e))
+
         # download data
         fo = tempfile.TemporaryFile()
         fo.write(f.read())
@@ -714,7 +760,7 @@ def install_extension_win(name):
             zfobj = zipfile.ZipFile(fo)
         except zipfile.BadZipfile as e:
             grass.fatal('%s: %s' % (e, zfile))
-        
+
         for name in zfobj.namelist():
             if name.endswith('/'):
                 d = os.path.join(options['prefix'], name)
@@ -732,13 +778,16 @@ def install_extension_win(name):
     return 0
 
 # install extension on other plaforms
+
+
 def install_extension_other(name):
     gisbase = os.getenv('GISBASE')
     classchar = name.split('.', 1)[0]
     moduleclass = expand_module_class_name(classchar)
     url = options['svnurl'] + '/' + moduleclass + '/' + name
-    
-    grass.message(_("Fetching <%s> from GRASS-Addons SVN repository (be patient)...") % name)
+
+    grass.message(_("Fetching <%s> from"
+                    " GRASS-Addons SVN repository (be patient)...") % name)
 
     os.chdir(TMPDIR)
     if grass.verbosity() <= 2:
@@ -747,20 +796,20 @@ def install_extension_other(name):
         outdev = sys.stdout
 
     if grass.call(['svn', 'checkout',
-                   url], stdout = outdev) != 0:
+                   url], stdout=outdev) != 0:
         grass.fatal(_("GRASS Addons <%s> not found") % name)
 
-    dirs = { 'bin'     : os.path.join(TMPDIR, name, 'bin'),
-             'docs'    : os.path.join(TMPDIR, name, 'docs'),
-             'html'    : os.path.join(TMPDIR, name, 'docs', 'html'),
-             'rest'    : os.path.join(TMPDIR, name, 'docs', 'rest'),
-             'man'     : os.path.join(TMPDIR, name, 'docs', 'man'),
-             'script'  : os.path.join(TMPDIR, name, 'scripts'),
-### TODO: handle locales also for addons
-#             'string'  : os.path.join(TMPDIR, name, 'locale'),
-             'string'  : os.path.join(TMPDIR, name),
-             'etc'     : os.path.join(TMPDIR, name, 'etc'),
-             }
+    dirs = {'bin': os.path.join(TMPDIR, name, 'bin'),
+            'docs': os.path.join(TMPDIR, name, 'docs'),
+            'html': os.path.join(TMPDIR, name, 'docs', 'html'),
+            'rest': os.path.join(TMPDIR, name, 'docs', 'rest'),
+            'man': os.path.join(TMPDIR, name, 'docs', 'man'),
+            'script': os.path.join(TMPDIR, name, 'scripts'),
+            # TODO: handle locales also for addons
+            #             'string'  : os.path.join(TMPDIR, name, 'locale'),
+            'string': os.path.join(TMPDIR, name),
+            'etc': os.path.join(TMPDIR, name, 'etc'),
+            }
 
     makeCmd = ['make',
                'MODULE_TOPDIR=%s' % gisbase.replace(' ', '\ '),
@@ -772,8 +821,8 @@ def install_extension_other(name):
                'SCRIPTDIR=%s' % dirs['script'],
                'STRINGDIR=%s' % dirs['string'],
                'ETC=%s' % os.path.join(dirs['etc'])
-    ]
-    
+               ]
+
     installCmd = ['make',
                   'MODULE_TOPDIR=%s' % gisbase,
                   'ARCH_DISTDIR=%s' % os.path.join(TMPDIR, name),
@@ -796,8 +845,9 @@ def install_extension_other(name):
         grass.fatal(_("Please install GRASS development package"))
 
     if 0 != grass.call(makeCmd,
-                       stdout = outdev):
-        grass.fatal(_('Compilation failed, sorry. Please check above error messages.'))
+                       stdout=outdev):
+        grass.fatal(_('Compilation failed, sorry.'
+                      ' Please check above error messages.'))
 
     if flags['i']:
         return 0
@@ -805,10 +855,12 @@ def install_extension_other(name):
     grass.message(_("Installing..."))
 
     return grass.call(installCmd,
-                      stdout = outdev)
+                      stdout=outdev)
 
 # remove existing extension - toolbox or module
-def remove_extension(force = False):
+
+
+def remove_extension(force=False):
     if flags['t']:
         mlist = get_toolbox_modules(options['extension'])
     else:
@@ -824,13 +876,17 @@ def remove_extension(force = False):
     if force:
         grass.message(_("Updating addons metadata file..."))
         remove_extension_xml(mlist)
-        grass.message(_("Extension <%s> successfully uninstalled.") % options['extension'])
+        grass.message(_("Extension <%s> successfully uninstalled.") %
+                      options['extension'])
     else:
         grass.warning(_("Extension <%s> not removed. "
-                        "Re-run '%s' with '-f' flag to force removal") % (options['extension'], 'g.extension'))
+                        "Re-run '%s' with '-f' flag to force removal")
+                      % (options['extension'], 'g.extension'))
 
 # remove existing extension(s) (reading XML file)
-def remove_modules(mlist, force = False):
+
+
+def remove_modules(mlist, force=False):
     # try to read XML metadata file first
     fXML = os.path.join(options['prefix'], 'modules.xml')
     installed = get_installed_modules()
@@ -882,12 +938,17 @@ def remove_modules(mlist, force = False):
             remove_extension_std(name, force)
 
 # remove exising extension (using standard files layout)
-def remove_extension_std(name, force = False):
+
+
+def remove_extension_std(name, force=False):
     for fpath in [os.path.join(options['prefix'], 'bin', name),
                   os.path.join(options['prefix'], 'scripts', name),
-                  os.path.join(options['prefix'], 'docs', 'html', name + '.html'),
-                  os.path.join(options['prefix'], 'docs', 'rest', name + '.txt'),
-                  os.path.join(options['prefix'], 'docs', 'man', 'man1', name + '.1')]:
+                  os.path.join(
+                      options['prefix'], 'docs', 'html', name + '.html'),
+                  os.path.join(
+                      options['prefix'], 'docs', 'rest', name + '.txt'),
+                  os.path.join(options['prefix'], 'docs', 'man', 'man1',
+                               name + '.1')]:
         if os.path.isfile(fpath):
             if force:
                 grass.verbose(fpath)
@@ -896,6 +957,8 @@ def remove_extension_std(name, force = False):
                 print fpath
 
 # update local meta-file when removing existing extension
+
+
 def remove_toolbox_xml(name):
     fXML = os.path.join(options['prefix'], 'toolboxes.xml')
     if not os.path.exists(fXML):
@@ -912,6 +975,7 @@ def remove_toolbox_xml(name):
         tree.remove(node)
 
     write_xml_toolboxes(fXML, tree)
+
 
 def remove_extension_xml(modules):
     if len(modules) > 1:
@@ -936,8 +1000,10 @@ def remove_extension_xml(modules):
     write_xml_modules(fXML, tree)
 
 # check links in CSS
+
+
 def check_style_files(fil):
-    dist_file   = os.path.join(os.getenv('GISBASE'), 'docs', 'html', fil)
+    dist_file = os.path.join(os.getenv('GISBASE'), 'docs', 'html', fil)
     addons_file = os.path.join(options['prefix'], 'docs', 'html', fil)
 
     if os.path.isfile(addons_file):
@@ -947,6 +1013,7 @@ def check_style_files(fil):
         shutil.copyfile(dist_file, addons_file)
     except OSError as e:
         grass.fatal(_("Unable to create '%s': %s") % (addons_file, e))
+
 
 def create_dir(path):
     if os.path.isdir(path):
@@ -959,6 +1026,7 @@ def create_dir(path):
 
     grass.debug("'%s' created" % path)
 
+
 def check_dirs():
     create_dir(os.path.join(options['prefix'], 'bin'))
     create_dir(os.path.join(options['prefix'], 'docs', 'html'))
@@ -970,13 +1038,16 @@ def check_dirs():
     create_dir(os.path.join(options['prefix'], 'scripts'))
 
 # fix file URI in manual page
+
+
 def update_manual_page(module):
     if module.split('.', 1)[0] == 'wx':
-        return # skip for GUI modules
+        return  # skip for GUI modules
 
     grass.verbose(_("Manual page for <%s> updated") % module)
     # read original html file
-    htmlfile = os.path.join(options['prefix'], 'docs', 'html', module + '.html')
+    htmlfile = os.path.join(
+        options['prefix'], 'docs', 'html', module + '.html')
     try:
         f = open(htmlfile)
         shtml = f.read()
@@ -986,15 +1057,15 @@ def update_manual_page(module):
         f.close()
 
     pos = []
-    
+
     # fix logo URL
     pattern = r'''<a href="([^"]+)"><img src="grass_logo.png"'''
     for match in re.finditer(pattern, shtml):
         pos.append(match.start(1))
-    
+
     # find URIs
     pattern = r'''<a href="([^"]+)">([^>]+)</a>'''
-    addons = get_installed_extensions(force = True)
+    addons = get_installed_extensions(force=True)
     for match in re.finditer(pattern, shtml):
         if match.group(1)[:4] == 'http':
             continue
@@ -1003,13 +1074,13 @@ def update_manual_page(module):
         pos.append(match.start(1))
 
     if not pos:
-        return # no match
+        return  # no match
 
     # replace file URIs
     prefix = 'file://' + '/'.join([os.getenv('GISBASE'), 'docs', 'html'])
     ohtml = shtml[:pos[0]]
     for i in range(1, len(pos)):
-        ohtml += prefix + '/' + shtml[pos[i-1]:pos[i]]
+        ohtml += prefix + '/' + shtml[pos[i - 1]:pos[i]]
     ohtml += prefix + '/' + shtml[pos[-1]:]
 
     # write updated html file
@@ -1037,20 +1108,22 @@ def main():
     # define path
     if flags['s']:
         options['prefix'] = os.environ['GISBASE']
-    
+
     if options['prefix'] == '$GRASS_ADDON_BASE':
         if not os.getenv('GRASS_ADDON_BASE'):
             grass.warning(_("GRASS_ADDON_BASE is not defined, "
                             "installing to ~/.grass%s/addons") % version[0])
-            options['prefix'] = os.path.join(os.environ['HOME'], '.grass%s' % version[0], 'addons')
+            options['prefix'] = os.path.join(
+                os.environ['HOME'], '.grass%s' % version[0], 'addons')
         else:
             options['prefix'] = os.environ['GRASS_ADDON_BASE']
 
     if os.path.exists(options['prefix']) and \
        not os.access(options['prefix'], os.W_OK):
-        grass.fatal(_("You don't have permission to install extension to <{}>. "
-                      "Try to run {} with administrator rights "
-                      "(su or sudo).").format(options['prefix'], 'g.extension'))
+        grass.fatal(_("You don't have permission to install extension to <{}>."
+                      " Try to run {} with administrator rights"
+                      " (su or sudo).")
+                    .format(options['prefix'], 'g.extension'))
 
     if 'svn.osgeo.org/grass/grass-addons/grass7' in options['svnurl']:
         # use pregenerated modules XML file
@@ -1083,11 +1156,13 @@ def main():
         return 0
     else:
         if not options['extension']:
-            grass.fatal(_('You need to define an extension name or use -l/c/g/a'))
+            grass.fatal(
+                _('You need to define an extension name or use -l/c/g/a'))
 
     if flags['d']:
         if options['operation'] != 'add':
-            grass.warning(_("Flag 'd' is relevant only to 'operation=add'. Ignoring this flag."))
+            grass.warning(_("Flag 'd' is relevant only to"
+                            " 'operation=add'. Ignoring this flag."))
         else:
             global REMOVE_TMPDIR
             REMOVE_TMPDIR = False
@@ -1095,7 +1170,7 @@ def main():
     if options['operation'] == 'add':
         check_dirs()
         install_extension(xmlurl)
-    else: # remove
+    else:  # remove
         remove_extension(flags['f'])
 
     return 0
