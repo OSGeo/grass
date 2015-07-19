@@ -143,6 +143,7 @@ int main(int argc, char *argv[])
     param.dsn->description = _("Examples:\n"
 				   "\t\tESRI Shapefile: directory containing shapefiles\n"
 				   "\t\tMapInfo File: directory containing mapinfo files");
+    param.dsn->gisprompt = "old,datasource,datasource";
     
     param.layer = G_define_option();
     param.layer->key = "layer";
@@ -154,7 +155,8 @@ int main(int argc, char *argv[])
     param.layer->description =
 	_("Examples:\n" "\t\tESRI Shapefile: shapefile name\n"
 	  "\t\tMapInfo File: mapinfo file name");
-    param.layer->guisection = _("Selection");
+    param.layer->guisection = _("Layer");
+    param.layer->gisprompt = "old,datasource_layer,datasource_layer";
 
     param.out = G_define_standard_option(G_OPT_V_OUTPUT);
     param.out->required = NO;
