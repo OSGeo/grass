@@ -88,7 +88,7 @@ class TestHorizon(TestCase):
     def test_point_mode_one_direction(self):
         """Test mode with 1 point and 1 direction"""
         module = SimpleModule('r.horizon', elevation='elevation',
-                              coordinates=(634720, 216180), output=self.horizon, direction=180)
+                              coordinates=(634720, 216180), output=self.horizon, direction=180, step=0)
         self.assertModule(module)
         stdout = module.outputs.stdout
         self.assertMultiLineEqual(first=ref1, second=stdout)
