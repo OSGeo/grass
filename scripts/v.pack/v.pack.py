@@ -15,7 +15,7 @@
 #############################################################################
 
 #%module
-#% description: Packs up a vector map and support files for copying.
+#% description: Exports a vector map as GRASS GIS specific archive file
 #% keyword: vector
 #% keyword: export
 #% keyword: copying
