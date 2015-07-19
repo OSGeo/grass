@@ -17,8 +17,9 @@
 
 #include "gis_local_proto.h"
 
-char *file_name(char *, const char *, const char *,
-                const char *, const char *, const char *);
+static char *file_name(char *, const char *, const char *,
+                       const char *, const char *, const char *);
+static void append_char(char*, char);
 
 /*!
   \brief Builds full path names to GIS data files
@@ -112,37 +113,37 @@ char *file_name(char *path,
          */
         if (name && *name && G_name_is_fully_qualified(name, xname, xmapset)) {
             pname = xname;
-            sprintf(path, "%s/%s", location, xmapset);
+            sprintf(path, "%s%c%s", location, HOST_DIRSEP, xmapset);
         }
         else if (mapset && *mapset)
-            sprintf(path, "%s/%s", location, mapset);
+            sprintf(path, "%s%c%s", location, HOST_DIRSEP, mapset);
         else
-            sprintf(path, "%s/%s", location, G_mapset());
+            sprintf(path, "%s%c%s", location, HOST_DIRSEP, G_mapset());
         G_free(location);
     }
 
     if (dir && *dir) { /* misc element */
-	strcat(path, "/");
+	append_char(path, HOST_DIRSEP);
 	strcat(path, dir);
 
         if (pname && *pname) {
-            strcat(path, "/");
+            append_char(path, HOST_DIRSEP);
             strcat(path, pname);
         }
 
         if (element && *element) {
-            strcat(path, "/");
+            append_char(path, HOST_DIRSEP);
             strcat(path, element);
         }
     }
     else {
         if (element && *element) {
-            strcat(path, "/");
+            append_char(path, HOST_DIRSEP);
             strcat(path, element);
         }
         
         if (pname && *pname) {
-            strcat(path, "/");
+            append_char(path, HOST_DIRSEP);
             strcat(path, pname);
         }
     }
@@ -150,4 +151,11 @@ char *file_name(char *path,
     G_debug(2, "G_file_name(): path = %s", path);
     
     return path;
+}
+
+void append_char(char* s, char c)
+{
+        int len = strlen(s);
+        s[len] = c;
+        s[len+1] = '\0';
 }
