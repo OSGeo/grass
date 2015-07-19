@@ -130,7 +130,7 @@ def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
 
         # ... setup GISBASE and PYTHON path before import
         import grass.script as gscript
-        gisrc = gscript.setup.init("/usr/lib/grass64",
+        gisrc = gscript.setup.init("/usr/bin/grass7",
                                    "/home/john/grassdata",
                                    "nc_spm_08", "user1")
         # ... use GRASS modules here
