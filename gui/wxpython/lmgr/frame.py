@@ -56,8 +56,8 @@ from core.workspace        import ProcessWorkspaceFile, ProcessGrcFile, WriteWor
 from core.gconsole         import GConsole, EVT_IGNORED_CMD_RUN
 from core.giface           import Notification
 from gui_core.goutput      import GConsoleWindow, GC_SEARCH, GC_PROMPT
-from gui_core.dialogs      import GdalOutputDialog, DxfImportDialog, GdalImportDialog, MapLayersDialog
-from gui_core.dialogs      import LocationDialog, MapsetDialog, CreateNewVector, GroupDialog
+from modules.import_export import GdalOutputDialog, DxfImportDialog, GdalImportDialog
+from gui_core.dialogs      import LocationDialog, MapsetDialog, CreateNewVector, GroupDialog, MapLayersDialog
 from modules.colorrules    import RasterColorTable, VectorColorTable
 from gui_core.menu         import Menu, SearchModuleWindow
 from gmodeler.model        import Model
