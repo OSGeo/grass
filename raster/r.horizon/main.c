@@ -207,6 +207,7 @@ int main(int argc, char *argv[])
     parm.step->key = "step";
     parm.step->type = TYPE_DOUBLE;
     parm.step->required = NO;
+    parm.step->answer = "0";
     parm.step->description =
 	_("Angle step size for multidirectional horizon [degrees]");
     parm.step->guisection = _("Input options");
