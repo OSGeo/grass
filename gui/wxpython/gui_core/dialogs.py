@@ -16,7 +16,6 @@ List of classes:
  - :class:`GdalImportDialog`
  - :class:`GdalOutputDialog`
  - :class:`DxfImportDialog`
- - :class:`LayersList` (used by MultiImport)
  - :class:`SetOpacityDialog`
  - :class:`ImageSizeDialog`
  - :class:`SqlQueryFrame`
@@ -34,7 +33,6 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import re
-from bisect import bisect
 
 import wx
 import wx.lib.filebrowsebutton as filebrowse
@@ -50,7 +48,8 @@ from core.gcmd import GError, RunCommand, GMessage, GWarning
 from gui_core.gselect import LocationSelect, MapsetSelect, Select, \
                              OgrTypeSelect, GdalSelect, MapsetSelect, \
                              SubGroupSelect
-from gui_core.widgets import SingleSymbolPanel, GListCtrl, SimpleValidator, MapValidator
+from gui_core.widgets import SingleSymbolPanel, GListCtrl, SimpleValidator, \
+    MapValidator, LayersList
 from core.utils import GetValidLayerName, _
 from core.settings import UserSettings, GetDisplayVectSettings
 from core.debug import Debug
@@ -1885,6 +1884,7 @@ class GdalImportDialog(ImportDialog):
         
         self.dsnInput = GdalSelect(parent = self, panel = self.panel,
                                    ogr = ogr, link = link)
+        self.dsnInput.AttachSettings()
         self.dsnInput.reloadDataRequired.connect(lambda data: self.list.LoadData(data))
 
         if link:
@@ -2058,6 +2058,7 @@ class GdalOutputDialog(wx.Dialog):
         self.dsnInput = GdalSelect(parent = self, panel = self.panel,
                                    ogr = ogr,
                                    exclude = ['file', 'protocol'], dest = True)
+        self.dsnInput.AttachSettings()
         
         self.Bind(wx.EVT_BUTTON, self.OnCancel, self.btnCancel)
         self.Bind(wx.EVT_BUTTON, self.OnOK, self.btnOk)
@@ -2200,83 +2201,6 @@ class DxfImportDialog(ImportDialog):
             data.append((layerId, layerName.strip(), grassName.strip()))
         
         self.list.LoadData(data)
-
-
-class LayersList(GListCtrl, listmix.TextEditMixin):
-    """List of layers to be imported (dxf, shp...)"""
-    def __init__(self, parent, columns, log = None):
-        GListCtrl.__init__(self, parent)
-        
-        self.log = log
-        
-        # setup mixins
-        listmix.TextEditMixin.__init__(self)
-        
-        for i in range(len(columns)):
-            self.InsertColumn(i, columns[i])
-        
-        if len(columns) == 3:
-            width = (65, 200)
-        else:
-            width = (65, 180, 90, 70)
-        
-        for i in range(len(width)):
-            self.SetColumnWidth(col = i, width = width[i])
-        
-    def LoadData(self, data = None):
-        """Load data into list"""
-        self.DeleteAllItems()
-        if data is None:
-            return
-        
-        for item in data:
-            index = self.InsertStringItem(sys.maxint, str(item[0]))
-            for i in range(1, len(item)):
-                self.SetStringItem(index, i, item[i])
-        
-        # check by default only on one item
-        if len(data) == 1:
-            self.CheckItem(index, True)
-        
-    def OnLeftDown(self, event):
-        """Allow editing only output name
-        
-        Code taken from TextEditMixin class.
-        """
-        x, y = event.GetPosition()
-        
-        colLocs = [0]
-        loc = 0
-        for n in range(self.GetColumnCount()):
-            loc = loc + self.GetColumnWidth(n)
-            colLocs.append(loc)
-        
-        col = bisect(colLocs, x + self.GetScrollPos(wx.HORIZONTAL)) - 1
-        
-        if col == self.GetColumnCount() - 1:
-            listmix.TextEditMixin.OnLeftDown(self, event)
-        else:
-            event.Skip()
-        
-    def GetLayers(self):
-        """Get list of layers (layer name, output name)"""
-        data = []
-        item = -1
-        while True:
-            item = self.GetNextItem(item)
-            if item == -1:
-                break
-            if not self.IsChecked(item):
-                continue
-            # layer / output name
-            layer = self.GetItem(item, 1).GetText()
-            ftype = self.GetItem(item, 2).GetText()
-            if '/' in ftype:
-                layer += '|%s' % ftype.split('/', 1)[0]
-            output = self.GetItem(item, self.GetColumnCount() - 1).GetText()
-            data.append((layer, output))
-        
-        return data
 
 class SetOpacityDialog(wx.Dialog):
     """Set opacity of map layers.
