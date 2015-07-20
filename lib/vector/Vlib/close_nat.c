@@ -59,7 +59,7 @@ int V1_close_nat(struct Map_info *Map)
         char *env = getenv("GRASS_VECTOR_TEMPORARY");
 
         delete = TRUE;
-        if (env) {
+        if (Map->temporary == TEMPORARY_MAP_ENV && env) {
             if (G_strcasecmp(env, "move") == 0) {
                 /* copy temporary vector map to the current mapset */
                 char path_tmp[GPATH_MAX], path_map[GPATH_MAX];
@@ -82,6 +82,7 @@ int V1_close_nat(struct Map_info *Map)
 
 #ifdef TEMPORARY_MAP_DB
                 int i, ndblinks;
+                int tmp;
                 
                 struct field_info *fi;
                 dbConnection connection;
@@ -109,9 +110,10 @@ int V1_close_nat(struct Map_info *Map)
                 }
                 G_free(Map->dblnk);
                 Map->dblnk = dblinks;
-                Map->temporary = FALSE;
+                tmp = Map->temporary;
+                Map->temporary = TEMPORARY_MAP_DISABLED;
                 Vect_write_dblinks(Map);
-                Map->temporary = TRUE;
+                Map->temporary = tmp;
 #endif
             }
             else if (G_strcasecmp(env, "delete") == 0) {
@@ -125,7 +127,11 @@ int V1_close_nat(struct Map_info *Map)
                 delete = FALSE;
             }
         }
-
+        else if (Map->temporary == TEMPORARY_MAP) {
+            G_debug(1, "V1_close_nat(): temporary map <%s> TO BE DELETED", Map->name);
+            delete = TRUE;
+        }
+        
         if (delete) {
             char path_tmp[GPATH_MAX];
 
