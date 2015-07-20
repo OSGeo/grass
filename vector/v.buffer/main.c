@@ -543,7 +543,8 @@ int main(int argc, char *argv[])
 #ifdef HAVE_GEOS
 	    if (use_geos)
 		geos_buffer(&In, &Out, &Buf, area, GV_AREA, da,
-			    &si, CCats, &arr_bc, &buffers_count, &arr_bc_alloc);
+			    &si, CCats, &arr_bc, &buffers_count, &arr_bc_alloc,
+                            straight_flag->answer, nocaps_flag->answer);
 #endif
 	    if (!use_geos) {
 		Vect_area_buffer2(&In, area, da, db, dalpha,
@@ -667,7 +668,8 @@ int main(int argc, char *argv[])
 #ifdef HAVE_GEOS
 		if (use_geos)
 		    geos_buffer(&In, &Out, &Buf, line, type, da,
-				&si, CCats, &arr_bc, &buffers_count, &arr_bc_alloc);
+				&si, CCats, &arr_bc, &buffers_count, &arr_bc_alloc,
+                                straight_flag->answer, nocaps_flag->answer);
 #endif
 		if (!use_geos) {
 		    Vect_line_buffer2(Points, da, db, dalpha,
