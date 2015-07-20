@@ -144,7 +144,7 @@ class Settings:
                     'type' : 'grass'
                     },
                 'commandNotebook' : {
-                    'selection' : 0
+                    'selection' : 0 if sys.platform in ('win32', 'darwin') else 1
                     },
                 },
             #
