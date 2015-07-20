@@ -146,6 +146,7 @@ PROXIES = {}
 
 
 def check_progs():
+    """Check if the necessary programs are available"""
     for prog in ('svn', 'make', 'gcc'):
         if not grass.find_program(prog, '--help'):
             grass.fatal(_("'%s' required. Please install '%s' first.")
@@ -154,7 +155,17 @@ def check_progs():
 # expand prefix to class name
 
 
-def expand_module_class_name(c):
+def expand_module_class_name(class_letters):
+    """Convert module class (family) letter or letters to class (family) name
+
+    The letter or letters are used in module names, e.g. r.slope.aspect.
+    The names are used in directories in Addons but also in the source code.
+
+    >>> expand_module_class_name('r')
+    raster
+    >>> expand_module_class_name('v')
+    vector
+    """
     name = {'d': 'display',
             'db': 'database',
             'g': 'general',
@@ -169,12 +180,13 @@ def expand_module_class_name(c):
             'wx': 'gui/wxpython'
             }
 
-    return name.get(c, c)
+    return name.get(class_letters, class_letters)
 
 # list installed extensions
 
 
 def get_installed_extensions(force=False):
+    """Get list of installed extensions or toolboxes (if -t is set)"""
     if flags['t']:
         return get_installed_toolboxes(force)
 
@@ -182,17 +194,23 @@ def get_installed_extensions(force=False):
 
 
 def get_installed_toolboxes(force=False):
-    fXML = os.path.join(options['prefix'], 'toolboxes.xml')
-    if not os.path.exists(fXML):
-        write_xml_toolboxes(fXML)
+    """Get list of installed toolboxes
+
+    Writes toolboxes file if it does not exist.
+    Creates a new toolboxes file if it is not possible
+    to read the current one.
+    """
+    xml_file = os.path.join(options['prefix'], 'toolboxes.xml')
+    if not os.path.exists(xml_file):
+        write_xml_toolboxes(xml_file)
 
     # read XML file
-    fo = open(fXML, 'r')
+    fo = open(xml_file, 'r')
     try:
         tree = etree.fromstring(fo.read())
     except:
-        os.remove(fXML)
-        write_xml_toolboxes(fXML)
+        os.remove(xml_file)
+        write_xml_toolboxes(xml_file)
         return []
     fo.close()
 
@@ -204,21 +222,27 @@ def get_installed_toolboxes(force=False):
 
 
 def get_installed_modules(force=False):
-    fXML = os.path.join(options['prefix'], 'modules.xml')
-    if not os.path.exists(fXML):
+    """Get list of installed modules.
+
+    Writes modules file if it does not exist and *force* is set to ``True``.
+    Creates a new modules file if it is not possible
+    to read the current one.
+    """
+    xml_file = os.path.join(options['prefix'], 'modules.xml')
+    if not os.path.exists(xml_file):
         if force:
-            write_xml_modules(fXML)
+            write_xml_modules(xml_file)
         else:
             grass.debug(1, "No addons metadata file available")
         return []
 
     # read XML file
-    fo = open(fXML, 'r')
+    fo = open(xml_file, 'r')
     try:
         tree = etree.fromstring(fo.read())
     except:
-        os.remove(fXML)
-        write_xml_modules(fXML)
+        os.remove(xml_file)
+        write_xml_modules(xml_file)
         return []
     fo.close()
 
@@ -232,9 +256,13 @@ def get_installed_modules(force=False):
 
 
 def list_available_extensions(url):
+    """List available extensions/modules or toolboxes (if -t is given)
+
+    For toolboxes it lists also all modules.
+    """
     if flags['t']:
         grass.message(_("List of available extensions (toolboxes):"))
-        tlist = list_available_toolboxes(url)
+        tlist = get_available_toolboxes(url)
         for toolbox_code, toolbox_data in tlist.iteritems():
             if flags['g']:
                 print('toolbox_name=' + toolbox_data['name'])
@@ -251,7 +279,8 @@ def list_available_extensions(url):
         list_available_modules(url)
 
 
-def list_available_toolboxes(url):
+def get_available_toolboxes(url):
+    """Return toolboxes available in the repository"""
     tdict = dict()
     url = url + "toolboxes.xml"
     try:
@@ -276,6 +305,11 @@ def list_available_toolboxes(url):
 
 
 def get_toolbox_modules(url, name):
+    """Get modules inside a toolbox in toolbox file at given URL
+
+    :param url: URL of the directory (file name will be attached)
+    :param name: toolbox name
+    """
     tlist = list()
 
     url = url + "toolboxes.xml"
@@ -295,6 +329,10 @@ def get_toolbox_modules(url, name):
 
 
 def get_optional_params(mnode):
+    """Return description and keywords as a tuple
+
+    :param mnode: XML node for a module
+    """
     try:
         desc = mnode.find('description').text
     except AttributeError:
@@ -312,7 +350,10 @@ def get_optional_params(mnode):
 
 
 def list_available_modules(url, mlist=None):
-    # try to download XML metadata file first
+    """List modules available in the repository
+
+    Tries to use XML metadata file first. Fallbacks to HTML page with a list.
+    """
     url = url + "modules.xml"
     grass.debug("url=%s" % url, 1)
     try:
@@ -349,6 +390,10 @@ def list_available_modules(url, mlist=None):
 
 
 def list_available_extensions_svn():
+    """List available extensions from HTML given by URL
+
+    ``<li><a href=...`` is parsed to find module names.
+    """
     grass.message(_('Fetching list of extensions from'
                     ' GRASS-Addons SVN repository (be patient)...'))
     pattern = re.compile(r'(<li><a href=".+">)(.+)(</a></li>)', re.IGNORECASE)
@@ -360,10 +405,10 @@ def list_available_extensions_svn():
         grass.warning(
             _("Flag 'g' ignored, addons metadata file not available"))
 
-    prefix = ['d', 'db', 'g', 'i', 'm', 'ps',
-              'p', 'r', 'r3', 's', 'v']
-    for d in prefix:
-        modclass = expand_module_class_name(d)
+    prefixes = ['d', 'db', 'g', 'i', 'm', 'ps',
+                'p', 'r', 'r3', 's', 'v']
+    for prefix in prefixes:
+        modclass = expand_module_class_name(prefix)
         grass.verbose(_("Checking for '%s' modules...") % modclass)
 
         url = '%s/%s' % (options['svnurl'], modclass)
@@ -380,15 +425,14 @@ def list_available_extensions_svn():
             if not sline:
                 continue
             name = sline.group(2).rstrip('/')
-            if name.split('.', 1)[0] == d:
+            if name.split('.', 1)[0] == prefix:
                 print(name)
 
     # get_wxgui_extensions()
 
-# list wxGUI extensions
-
 
 def get_wxgui_extensions():
+    """Return list of extensions/addons in wxGUI directory at given URL"""
     mlist = list()
     grass.debug('Fetching list of wxGUI extensions from '
                 'GRASS-Addons SVN repository (be patient)...')
@@ -415,22 +459,28 @@ def get_wxgui_extensions():
 
 
 def cleanup():
+    """Cleanup after the downloads and copilation"""
     if REMOVE_TMPDIR:
         try_rmdir(TMPDIR)
     else:
         grass.message("\n%s\n" % _("Path to the source code:"))
         sys.stderr.write('%s\n' % os.path.join(TMPDIR, options['extension']))
 
-# write out meta-file
-
 
 def write_xml_modules(name, tree=None):
+    """Write element tree as a modules matadata file
+
+    If the *tree* is not given, an empty file is created.
+
+    :param name: file name
+    :param tree: XML element tree
+    """
     fo = open(name, 'w')
     fo.write('<?xml version="1.0" encoding="UTF-8"?>\n')
     fo.write('<!DOCTYPE task SYSTEM "grass-addons.dtd">\n')
     fo.write('<addons version="%s">\n' % version[0])
 
-    libgisRev = grass.version()['libgis_revision']
+    libgis_revison = grass.version()['libgis_revision']
     if tree is not None:
         for tnode in tree.findall('task'):
             indent = 4
@@ -452,7 +502,7 @@ def write_xml_modules(name, tree=None):
                 indent -= 4
                 fo.write('%s</binary>\n' % (' ' * indent))
             fo.write('%s<libgis revision="%s" />\n' %
-                     (' ' * indent, libgisRev))
+                     (' ' * indent, libgis_revison))
             indent -= 4
             fo.write('%s</task>\n' % (' ' * indent))
 
@@ -461,6 +511,13 @@ def write_xml_modules(name, tree=None):
 
 
 def write_xml_toolboxes(name, tree=None):
+    """Write element tree as a toolboxes matadata file
+
+    If the *tree* is not given, an empty file is created.
+
+    :param name: file name
+    :param tree: XML element tree
+    """
     fo = open(name, 'w')
     fo.write('<?xml version="1.0" encoding="UTF-8"?>\n')
     fo.write('<!DOCTYPE toolbox SYSTEM "grass-addons.dtd">\n')
@@ -483,10 +540,9 @@ def write_xml_toolboxes(name, tree=None):
     fo.write('</addons>\n')
     fo.close()
 
-# install extension - toolbox or module
-
 
 def install_extension(url):
+    """Install extension (e.g. one module) or a toolbox (list of modules)"""
     gisbase = os.getenv('GISBASE')
     if not gisbase:
         grass.fatal(_('$GISBASE not defined'))
@@ -509,7 +565,7 @@ def install_extension(url):
         if sys.platform == "win32":
             ret += install_extension_win(module)
         else:
-            ret += install_extension_other(module)
+            ret += install_extension_std_platforms(module)
         if len(mlist) > 1:
             print('-' * 60)
 
@@ -533,10 +589,9 @@ def install_extension(url):
                         ' you set the GRASS_ADDON_BASE environment'
                         ' variable (see "g.manual variables")'))
 
-# update local meta-file when installing new extension (toolbox / modules)
-
 
 def install_toolbox_xml(url, name):
+    """Update local toolboxes metadata file"""
     # read metadata from remote server (toolboxes)
     url = url + "toolboxes.xml"
 
@@ -570,15 +625,14 @@ def install_toolbox_xml(url, name):
         grass.warning(_("No addons metadata available for <%s>") % name)
         return
 
-    fXML = os.path.join(options['prefix'], 'toolboxes.xml')
+    xml_file = os.path.join(options['prefix'], 'toolboxes.xml')
     # create an empty file if not exists
-    if not os.path.exists(fXML):
-        write_xml_modules(fXML)
+    if not os.path.exists(xml_file):
+        write_xml_modules(xml_file)
 
     # read XML file
-    fo = open(fXML, 'r')
-    tree = etree.fromstring(fo.read())
-    fo.close()
+    with open(xml_file, 'r') as xml:
+        tree = etree.fromstring(xml.read())
 
     # update tree
     tnode = None
@@ -607,12 +661,16 @@ def install_toolbox_xml(url, name):
         mnode = etree.Element('task', attrib={'name': tname})
         tnode.append(mnode)
 
-    write_xml_toolboxes(fXML, tree)
-
-# return list of executables for update_manual_page()
+    write_xml_toolboxes(xml_file, tree)
 
 
 def install_extension_xml(url, mlist):
+    """Update XML files with metadata about installed modules and toolbox
+
+    Uses the remote/repository XML files for modules to obtain the metadata.
+
+    :returns: list of executables (useable for ``update_manual_page()``)
+    """
     if len(mlist) > 1:
         # read metadata from remote server (toolboxes)
         install_toolbox_xml(url, options['extension'])
@@ -621,7 +679,7 @@ def install_extension_xml(url, mlist):
     url = url + "modules.xml"
 
     data = {}
-    bList = []
+    bin_list = []
     try:
         f = urlopen(url, proxies=PROXIES)
         try:
@@ -629,35 +687,35 @@ def install_extension_xml(url, mlist):
         except:
             grass.warning(_("Unable to parse '%s'."
                             " Addons metadata file not updated.") % url)
-            return bList
+            return bin_list
 
         for mnode in tree.findall('task'):
             name = mnode.get('name')
             if name not in mlist:
                 continue
 
-            fList = list()
+            file_list = list()
             bnode = mnode.find('binary')
             windows = sys.platform == 'win32'
             if bnode is not None:
                 for fnode in bnode.findall('file'):
                     path = fnode.text.split('/')
                     if path[0] == 'bin':
-                        bList.append(path[-1])
+                        bin_list.append(path[-1])
                         if windows:
                             path[-1] += '.exe'
                     elif path[0] == 'scripts':
-                        bList.append(path[-1])
+                        bin_list.append(path[-1])
                         if windows:
                             path[-1] += '.py'
-                    fList.append(os.path.sep.join(path))
+                    file_list.append(os.path.sep.join(path))
 
             desc, keyw = get_optional_params(mnode)
 
             data[name] = {
                 'desc': desc,
                 'keyw': keyw,
-                'files': fList,
+                'files': file_list,
             }
 
     except:
@@ -668,13 +726,13 @@ def install_extension_xml(url, mlist):
         grass.warning(_("No addons metadata available"))
         return []
 
-    fXML = os.path.join(options['prefix'], 'modules.xml')
+    xml_file = os.path.join(options['prefix'], 'modules.xml')
     # create an empty file if not exists
-    if not os.path.exists(fXML):
-        write_xml_modules(fXML)
+    if not os.path.exists(xml_file):
+        write_xml_modules(xml_file)
 
     # read XML file
-    fo = open(fXML, 'r')
+    fo = open(xml_file, 'r')
     tree = etree.fromstring(fo.read())
     fo.close()
 
@@ -703,9 +761,9 @@ def install_extension_xml(url, mlist):
             if bnode is not None:
                 tnode.remove(bnode)
             bnode = etree.Element('binary')
-            for f in ndata['files']:
+            for file_name in ndata['files']:
                 fnode = etree.Element('file')
-                fnode.text = f
+                fnode.text = file_name
                 bnode.append(fnode)
             tnode.append(bnode)
         else:
@@ -718,21 +776,20 @@ def install_extension_xml(url, mlist):
             knode.text = ndata['keyw']
             tnode.append(knode)
             bnode = etree.Element('binary')
-            for f in ndata['files']:
+            for file_name in ndata['files']:
                 fnode = etree.Element('file')
-                fnode.text = f
+                fnode.text = file_name
                 bnode.append(fnode)
             tnode.append(bnode)
             tree.append(tnode)
 
-    write_xml_modules(fXML, tree)
+    write_xml_modules(xml_file, tree)
 
-    return bList
-
-# install extension on MS Windows
+    return bin_list
 
 
 def install_extension_win(name):
+    """Install extension on MS Windows"""
     # do not use hardcoded url -
     # http://wingrass.fsv.cvut.cz/grassXX/addonsX.X.X
     grass.message(_("Downloading precompiled GRASS Addons <%s>...") %
@@ -752,23 +809,23 @@ def install_extension_win(name):
         if not os.path.exists(options['prefix']):
             try:
                 os.mkdir(options['prefix'])
-            except OSError as e:
+            except OSError as error:
                 grass.fatal(_("Unable to create <{}>. {}")
-                            .format(options['prefix'], e))
+                            .format(options['prefix'], error))
 
         # download data
         fo = tempfile.TemporaryFile()
         fo.write(f.read())
         try:
             zfobj = zipfile.ZipFile(fo)
-        except zipfile.BadZipfile as e:
-            grass.fatal('%s: %s' % (e, zfile))
+        except zipfile.BadZipfile as error:
+            grass.fatal('%s: %s' % (error, zfile))
 
         for name in zfobj.namelist():
             if name.endswith('/'):
-                d = os.path.join(options['prefix'], name)
-                if not os.path.exists(d):
-                    os.mkdir(d)
+                directory = os.path.join(options['prefix'], name)
+                if not os.path.exists(directory):
+                    os.mkdir(directory)
             else:
                 outfile = open(os.path.join(options['prefix'], name), 'wb')
                 outfile.write(zfobj.read(name))
@@ -780,10 +837,9 @@ def install_extension_win(name):
 
     return 0
 
-# install extension on other plaforms
 
-
-def install_extension_other(name):
+def install_extension_std_platforms(name):
+    """Install extension on standard plaforms"""
     gisbase = os.getenv('GISBASE')
     classchar = name.split('.', 1)[0]
     moduleclass = expand_module_class_name(classchar)
@@ -814,30 +870,30 @@ def install_extension_other(name):
             'etc': os.path.join(TMPDIR, name, 'etc'),
             }
 
-    makeCmd = ['make',
-               'MODULE_TOPDIR=%s' % gisbase.replace(' ', '\ '),
-               'RUN_GISRC=%s' % os.environ['GISRC'],
-               'BIN=%s' % dirs['bin'],
-               'HTMLDIR=%s' % dirs['html'],
-               'RESTDIR=%s' % dirs['rest'],
-               'MANBASEDIR=%s' % dirs['man'],
-               'SCRIPTDIR=%s' % dirs['script'],
-               'STRINGDIR=%s' % dirs['string'],
-               'ETC=%s' % os.path.join(dirs['etc'])
-               ]
+    make_cmd = ['make',
+                'MODULE_TOPDIR=%s' % gisbase.replace(' ', r'\ '),
+                'RUN_GISRC=%s' % os.environ['GISRC'],
+                'BIN=%s' % dirs['bin'],
+                'HTMLDIR=%s' % dirs['html'],
+                'RESTDIR=%s' % dirs['rest'],
+                'MANBASEDIR=%s' % dirs['man'],
+                'SCRIPTDIR=%s' % dirs['script'],
+                'STRINGDIR=%s' % dirs['string'],
+                'ETC=%s' % os.path.join(dirs['etc'])
+                ]
 
-    installCmd = ['make',
-                  'MODULE_TOPDIR=%s' % gisbase,
-                  'ARCH_DISTDIR=%s' % os.path.join(TMPDIR, name),
-                  'INST_DIR=%s' % options['prefix'],
-                  'install'
-                  ]
+    install_cmd = ['make',
+                   'MODULE_TOPDIR=%s' % gisbase,
+                   'ARCH_DISTDIR=%s' % os.path.join(TMPDIR, name),
+                   'INST_DIR=%s' % options['prefix'],
+                   'install'
+                   ]
 
     if flags['d']:
         grass.message("\n%s\n" % _("To compile run:"))
-        sys.stderr.write(' '.join(makeCmd) + '\n')
+        sys.stderr.write(' '.join(make_cmd) + '\n')
         grass.message("\n%s\n" % _("To install run:"))
-        sys.stderr.write(' '.join(installCmd) + '\n')
+        sys.stderr.write(' '.join(install_cmd) + '\n')
         return 0
 
     os.chdir(os.path.join(TMPDIR, name))
@@ -847,7 +903,7 @@ def install_extension_other(name):
                                        'Make', 'Module.make')):
         grass.fatal(_("Please install GRASS development package"))
 
-    if 0 != grass.call(makeCmd,
+    if 0 != grass.call(make_cmd,
                        stdout=outdev):
         grass.fatal(_('Compilation failed, sorry.'
                       ' Please check above error messages.'))
@@ -857,13 +913,12 @@ def install_extension_other(name):
 
     grass.message(_("Installing..."))
 
-    return grass.call(installCmd,
+    return grass.call(install_cmd,
                       stdout=outdev)
-
-# remove existing extension - toolbox or module
 
 
 def remove_extension(force=False):
+    """Remove existing extension (module or toolbox if -t is given)"""
     if flags['t']:
         mlist = get_toolbox_modules(options['extension'])
     else:
@@ -890,12 +945,17 @@ def remove_extension(force=False):
 
 
 def remove_modules(mlist, force=False):
+    """Remove extensions/modules specified in a list
+
+    Collects the file names from the file with metadata and fallbacks
+    to standard layout of files on prefix path on error.
+    """
     # try to read XML metadata file first
-    fXML = os.path.join(options['prefix'], 'modules.xml')
+    xml_file = os.path.join(options['prefix'], 'modules.xml')
     installed = get_installed_modules()
 
-    if os.path.exists(fXML):
-        f = open(fXML, 'r')
+    if os.path.exists(xml_file):
+        f = open(xml_file, 'r')
         tree = etree.fromstring(f.read())
         f.close()
     else:
@@ -912,8 +972,8 @@ def remove_modules(mlist, force=False):
             for task in tree.findall('task'):
                 if name == task.get('name') and \
                         task.find('binary') is not None:
-                    for f in task.find('binary').findall('file'):
-                        flist.append(f.text)
+                    for file_node in task.find('binary').findall('file'):
+                        flist.append(file_node.text)
                     break
 
             if flist:
@@ -933,17 +993,16 @@ def remove_modules(mlist, force=False):
                     grass.fatal(_("Extension <%s> not found") % name)
 
                 if err:
-                    for e in err:
-                        grass.error(e)
+                    for error_line in err:
+                        grass.error(error_line)
             else:
                 remove_extension_std(name, force)
         else:
             remove_extension_std(name, force)
 
-# remove exising extension (using standard files layout)
-
 
 def remove_extension_std(name, force=False):
+    """Remove extension/module expecting the standard layout"""
     for fpath in [os.path.join(options['prefix'], 'bin', name),
                   os.path.join(options['prefix'], 'scripts', name),
                   os.path.join(
@@ -959,16 +1018,15 @@ def remove_extension_std(name, force=False):
             else:
                 print(fpath)
 
-# update local meta-file when removing existing extension
 
-
-def remove_toolbox_xml(name):
-    fXML = os.path.join(options['prefix'], 'toolboxes.xml')
-    if not os.path.exists(fXML):
+def remove_from_toolbox_xml(name):
+    """Update local meta-file when removing existing toolbox"""
+    xml_file = os.path.join(options['prefix'], 'toolboxes.xml')
+    if not os.path.exists(xml_file):
         return
 
     # read XML file
-    fo = open(fXML, 'r')
+    fo = open(xml_file, 'r')
     tree = etree.fromstring(fo.read())
     fo.close()
 
@@ -977,20 +1035,21 @@ def remove_toolbox_xml(name):
             continue
         tree.remove(node)
 
-    write_xml_toolboxes(fXML, tree)
+    write_xml_toolboxes(xml_file, tree)
 
 
 def remove_extension_xml(modules):
+    """Update local meta-file when removing existing extension"""
     if len(modules) > 1:
         # update also toolboxes metadata
-        remove_toolbox_xml(options['extension'])
+        remove_from_toolbox_xml(options['extension'])
 
-    fXML = os.path.join(options['prefix'], 'modules.xml')
-    if not os.path.exists(fXML):
+    xml_file = os.path.join(options['prefix'], 'modules.xml')
+    if not os.path.exists(xml_file):
         return
 
     # read XML file
-    fo = open(fXML, 'r')
+    fo = open(xml_file, 'r')
     tree = etree.fromstring(fo.read())
     fo.close()
 
@@ -1000,12 +1059,17 @@ def remove_extension_xml(modules):
                 continue
             tree.remove(node)
 
-    write_xml_modules(fXML, tree)
+    write_xml_modules(xml_file, tree)
 
 # check links in CSS
 
 
 def check_style_files(fil):
+    """Ensures that a specified HTML documentation support file exists
+
+    If the file, e.g. a CSS file does not exist, the file is copied from
+    the distribution.
+    """
     dist_file = os.path.join(os.getenv('GISBASE'), 'docs', 'html', fil)
     addons_file = os.path.join(options['prefix'], 'docs', 'html', fil)
 
@@ -1014,23 +1078,28 @@ def check_style_files(fil):
 
     try:
         shutil.copyfile(dist_file, addons_file)
-    except OSError as e:
-        grass.fatal(_("Unable to create '%s': %s") % (addons_file, e))
+    except OSError as error:
+        grass.fatal(_("Unable to create '%s': %s") % (addons_file, error))
 
 
 def create_dir(path):
+    """Creates the specified directory (with all dirs in between)
+
+    NOOP for existing directory.
+    """
     if os.path.isdir(path):
         return
 
     try:
         os.makedirs(path)
-    except OSError as e:
-        grass.fatal(_("Unable to create '%s': %s") % (path, e))
+    except OSError as error:
+        grass.fatal(_("Unable to create '%s': %s") % (path, error))
 
     grass.debug("'%s' created" % path)
 
 
 def check_dirs():
+    """Ensure that the necessary directories in prefix path exist"""
     create_dir(os.path.join(options['prefix'], 'bin'))
     create_dir(os.path.join(options['prefix'], 'docs', 'html'))
     create_dir(os.path.join(options['prefix'], 'docs', 'rest'))
@@ -1044,6 +1113,7 @@ def check_dirs():
 
 
 def update_manual_page(module):
+    """Fix manual page for addons which are at different directory then rest"""
     if module.split('.', 1)[0] == 'wx':
         return  # skip for GUI modules
 
@@ -1054,8 +1124,8 @@ def update_manual_page(module):
     try:
         f = open(htmlfile)
         shtml = f.read()
-    except IOError as e:
-        grass.fatal(_("Unable to read manual page: %s") % e)
+    except IOError as error:
+        grass.fatal(_("Unable to read manual page: %s") % error)
     else:
         f.close()
 
@@ -1090,8 +1160,8 @@ def update_manual_page(module):
     try:
         f = open(htmlfile, 'w')
         f.write(ohtml)
-    except IOError as e:
-        grass.fatal(_("Unable for write manual page: %s") % e)
+    except IOError as error:
+        grass.fatal(_("Unable for write manual page: %s") % error)
     else:
         f.close()
 
