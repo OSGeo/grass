@@ -371,7 +371,8 @@ class AnimationController(wx.EvtHandler):
                 self._load3DData(animData)
             self._loadLegend(animData)
         color = UserSettings.Get(group='animation', key='bgcolor', subkey='color')
-        self.bitmapProvider.Load(nprocs=getCpuCount(), bgcolor=color)
+        cpus = UserSettings.Get(group='animation', key='nprocs', subkey='value')
+        self.bitmapProvider.Load(nprocs=cpus, bgcolor=color)
         # clear pools
         self.bitmapPool.Clear()
         self.mapFilesPool.Clear()
@@ -449,7 +450,8 @@ class AnimationController(wx.EvtHandler):
         self.EndAnimation()
 
         color = UserSettings.Get(group='animation', key='bgcolor', subkey='color')
-        self.bitmapProvider.Load(nprocs=getCpuCount(), bgcolor=color, force=True)
+        cpus = UserSettings.Get(group='animation', key='nprocs', subkey='value')
+        self.bitmapProvider.Load(nprocs=cpus, bgcolor=color, force=True)
 
         self.EndAnimation()
 
