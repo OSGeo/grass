@@ -132,9 +132,9 @@ import tempfile
 
 try:
     from urllib2 import HTTPError
-    from urllib import urlopen
+    from urllib import urlopen, urlretrieve
 except ImportError:
-    from urllib.request import HTTPError, urlopen
+    from urllib.request import HTTPError, urlopen, urlretrieve
 
 try:
     import xml.etree.ElementTree as etree
@@ -561,7 +561,7 @@ def write_xml_toolboxes(name, tree=None):
     fo.close()
 
 
-def install_extension(url):
+def install_extension(source, url, xmlurl):
     """Install extension (e.g. one module) or a toolbox (list of modules)"""
     gisbase = os.getenv('GISBASE')
     if not gisbase:
@@ -573,7 +573,7 @@ def install_extension(url):
 
     if flags['t']:
         grass.message(_("Installing toolbox <%s>...") % options['extension'])
-        mlist = get_toolbox_modules(url, options['extension'])
+        mlist = get_toolbox_modules(xmlurl, options['extension'])
     else:
         mlist = [options['extension']]
     if not mlist:
@@ -585,7 +585,8 @@ def install_extension(url):
         if sys.platform == "win32":
             ret += install_extension_win(module)
         else:
-            ret += install_extension_std_platforms(module)
+            ret += install_extension_std_platforms(module,
+                                                   source=source, url=url)
         if len(mlist) > 1:
             print('-' * 60)
 
@@ -597,7 +598,7 @@ def install_extension(url):
                         ' Please check above error messages.'))
     else:
         grass.message(_("Updating addons metadata file..."))
-        blist = install_extension_xml(url, mlist)
+        blist = install_extension_xml(xmlurl, mlist)
         for module in blist:
             update_manual_page(module)
 
@@ -903,7 +904,83 @@ def download_source_code_svn(url, name, outdev, directory=None):
     return directory
 
 
-def install_extension_std_platforms(name):
+def move_extracted_files(extract_dir, target_dir, files):
+    """Fix state of extracted file by moving them to different diretcory
+
+    When extracting, it is not clear what will be the root directory
+    or if there will be one at all. So this function moves the files to
+    a different directory in the way that if there was one direcory extracted,
+    the contained files are moved.
+    """
+    if len(files) == 1:
+        shutil.copytree(os.path.join(extract_dir, files[0]), target_dir)
+        print("copytree:", os.path.join(extract_dir, files[0]), target_dir)
+    else:
+        for file_name in files:
+            actual_file = os.path.join(extract_dir, file_name)
+            if os.path.isdir(actual_file):
+                shutil.copytree(actual_file, os.path.join(target_dir, file_name))
+            else:
+                shutil.copy(actual_file, target_dir)
+
+
+def extract_zip(name, directory, tmpdir):
+    """Extract a ZIP file into a directory"""
+    zip_file = zipfile.ZipFile(name, mode='r')
+    file_list = zip_file.namelist()
+    # we suppose we can write to parent of the given dir (supposing a tmp dir)
+    extract_dir = os.path.join(tmpdir, 'extract_dir')
+    os.mkdir(extract_dir)
+    for subfile in file_list:
+        # this should be safe in Python 2.7.4
+        zip_file.extract(subfile, extract_dir)
+    files = os.listdir(extract_dir)
+    move_extracted_files(extract_dir=extract_dir,
+                         target_dir=directory, files=files)
+
+
+# TODO: solve the other related formats
+def extract_tar(name, directory, tmpdir):
+    """Extract a TAR or a similar file into a directory"""
+    import tarfile
+    tar = tarfile.open(name, "r:gz")
+    tar.extractall()
+    files = os.listdir(tmpdir)
+    move_extracted_files(extract_dir=tmpdir,
+                         target_dir=directory, files=files)
+
+
+def download_source_code(source, url, name, outdev,
+                         directory=None, tmpdir=None):
+    """Get source code to a local directory for compilation"""
+    if source == 'svn':
+        download_source_code_svn(url, name, outdev, directory)
+    elif source == 'remote_zip':
+        # we expect that the module.zip file is not by chance in the archive
+        zip_name = os.path.join(tmpdir, 'module.zip')
+        urlretrieve(url, zip_name)
+        extract_zip(name=zip_name, directory=directory, tmpdir=tmpdir)
+    elif source == 'remote_tar.gz':
+        # we expect that the module.tar.gz file is not by chance in the archive
+        archive_name = os.path.join(tmpdir, 'module.tar.gz')
+        urlretrieve(url, archive_name)
+        extract_tar(name=archive_name, directory=directory, tmpdir=tmpdir)
+    elif source == 'zip':
+        os.mkdir(directory)
+        extract_zip(name=url, directory=directory)
+    elif source == 'tar':
+        os.mkdir(directory)
+        extract_tar(name=url, directory=directory)
+    elif source == 'dir':
+        shutil.copytree(url, directory)
+    else:
+        # probably programmer error
+        grass.fatal(_("Unknown extension (addon) source '{}'."
+                      " Please report this to grass-user mailing list.")
+                    .format(source))
+
+
+def install_extension_std_platforms(name, source, url):
     """Install extension on standard plaforms"""
     gisbase = os.getenv('GISBASE')
     grass.message(_("Fetching <%s> from"
@@ -915,9 +992,10 @@ def install_extension_std_platforms(name):
     else:
         outdev = sys.stdout
 
+    os.chdir(TMPDIR)  # this is just to not leave something behind
     srcdir = os.path.join(TMPDIR, name)
-    download_source_code_svn(url=options['svnurl'], name=name,
-                             outdev=outdev, directory=srcdir)
+    download_source_code(source=source, url=url, name=name,
+                         outdev=outdev, directory=srcdir, tmpdir=TMPDIR)
     os.chdir(srcdir)
 
     dirs = {'bin': os.path.join(TMPDIR, name, 'bin'),
@@ -1266,6 +1344,30 @@ def resolve_xmlurl_prefix(url):
     return url
 
 
+def resolve_source_code(url):
+    if os.path.isdir(url):
+        return 'dir', url
+    elif os.path.exists(url):
+        for suffix in ['.zip', '.tar.gz']:
+            if url.endswith(suffix):
+                return suffix.lstrip('.'), url
+    # https://trac.osgeo.org/grass/browser/grass-addons/grass7/raster/r.modis?format=zip
+    # return 'remote_zip', url
+    # https://github.com/user/module
+    # https://github.com/user/module/archive/master.zip
+    elif url.startswith('github.com') and \
+            not (url.endswith('.zip') or url.endswith('.tar.gz')):
+        url = 'https://{}/archive/master.zip'.format(url)
+        return 'remote_zip', url
+    else:
+        for suffix in ['zip', 'tar.gz']:
+            if url.endswith(suffix):
+                print(suffix)
+                return 'remote_' + suffix, url
+        # fallback to classic behavior
+        return 'svn', url
+
+
 def main():
     # check dependecies
     if sys.platform != "win32":
@@ -1301,8 +1403,9 @@ def main():
 
     if options['operation'] == 'add':
         check_dirs()
+        source, url = resolve_source_code(options['svnurl'])
         xmlurl = resolve_xmlurl_prefix(options['svnurl'])
-        install_extension(xmlurl)
+        install_extension(source=source, url=url, xmlurl=xmlurl)
     else:  # remove
         remove_extension(force=flags['f'])
 
