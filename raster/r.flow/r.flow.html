@@ -156,6 +156,29 @@ The difference in length between the two axes of a grid cell is so
 great that quantization error is larger than one of the
 dimensions. Resample the map and try again.
 
+<h2>EXAMPLES</h2>
+
+User can compute flow line vector map, flow path length raster map and flow accumulation raster map from an elevation raster map:
+
+<div class="code"><pre>
+g.region raster=elevation
+r.flow elevation=elevation skip=3 flowline=flowline flowlength=flowlength flowaccumulation=flowaccumulation
+</pre></div>
+
+<center>
+<img src="r_flow_line.png" alt="flow line">
+<img src="r_flow_length.png" alt="flow path length">
+<img src="r_flow_accumulation.png" alt="flow accumulation map">
+<p>
+Figure: Flow lines underlaid with an elevation map, flow lines underlaid with flow path lengths and flow accumulation map (North Carolina dataset)
+</center>
+
+<!--
+d.vect map=flowline
+d.rast map=flowlength
+d.rastmap=flowaccumulation
+-->
+
 <h2>REFERENCES</h2>
 
 <ul>
