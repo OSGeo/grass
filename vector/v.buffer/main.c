@@ -474,6 +474,12 @@ int main(int argc, char *argv[])
 
 #ifdef HAVE_GEOS
     initGEOS(G_message, G_fatal_error);
+
+    /* check required version for -s/-c flag */
+#ifndef GEOS_3_3
+        G_warning(_("Flags -%c/%c ignored by this version, GEOS >= 3.3 is required"),
+                  's', 'c');
+#endif
 #endif
     if(!use_geos && (da < 0. || db < 0.)) {
 	G_warning(_("Negative distances for internal buffers are not supported "
