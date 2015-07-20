@@ -104,8 +104,9 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int override)
 			    cellhd->proj, cellhd->zone);
 	    }
 	    strcat(error_msg,
-		   _("\nYou can use the -o flag to r.external to override this check and "
-		     "use the location definition for the dataset.\n"));
+		   _("\nIn case of no significant differences in the projection definitions,"
+		     " use the -o flag to ignore them and use"
+		     " current location definition.\n"));
 	    strcat(error_msg,
 		   _("Consider generating a new location from the input dataset using "
 		     "the 'location' parameter.\n"));
