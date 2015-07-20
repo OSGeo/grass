@@ -115,6 +115,12 @@
 #% suppress_required: yes
 #%end
 
+#%rules
+#% required: extension, -l, -c, -g, -a
+#% exclusive: extension, -l, -c, -g, -a
+#%end
+
+
 from __future__ import print_function
 import os
 import sys
@@ -869,25 +875,50 @@ def install_extension_win(name):
     return 0
 
 
+def download_source_code_svn(url, name, outdev, directory=None):
+    """Download source code from a Subversion reporsitory
+
+    .. note:
+        Stdout is passed to to *outdev* while stderr is will be just printed.
+
+    :param url: URL of the repository
+        (module class/family and name are attached)
+    :param name: module name
+    :param outdev: output devide for the standard output of the svn command
+    :param directory: directory where the source code will be downloaded
+        (default is the current directory with name attached)
+
+    :returns: full path to the directory with the source code
+        (useful when you not specify directory, if *directory* is specified
+        the return value is equal to it)
+    """
+    if not directory:
+        directory = os.path.join(os.getcwd, name)
+    classchar = name.split('.', 1)[0]
+    moduleclass = expand_module_class_name(classchar)
+    url = url + '/' + moduleclass + '/' + name
+    if grass.call(['svn', 'checkout',
+                   url, directory], stdout=outdev) != 0:
+        grass.fatal(_("GRASS Addons <%s> not found") % name)
+    return directory
+
+
 def install_extension_std_platforms(name):
     """Install extension on standard plaforms"""
     gisbase = os.getenv('GISBASE')
-    classchar = name.split('.', 1)[0]
-    moduleclass = expand_module_class_name(classchar)
-    url = options['svnurl'] + '/' + moduleclass + '/' + name
-
     grass.message(_("Fetching <%s> from"
                     " GRASS-Addons SVN repository (be patient)...") % name)
 
-    os.chdir(TMPDIR)
+    # to hide non-error messages from subprocesses
     if grass.verbosity() <= 2:
         outdev = open(os.devnull, 'w')
     else:
         outdev = sys.stdout
 
-    if grass.call(['svn', 'checkout',
-                   url], stdout=outdev) != 0:
-        grass.fatal(_("GRASS Addons <%s> not found") % name)
+    srcdir = os.path.join(TMPDIR, name)
+    download_source_code_svn(url=options['svnurl'], name=name,
+                             outdev=outdev, directory=srcdir)
+    os.chdir(srcdir)
 
     dirs = {'bin': os.path.join(TMPDIR, name, 'bin'),
             'docs': os.path.join(TMPDIR, name, 'docs'),
@@ -951,7 +982,7 @@ def install_extension_std_platforms(name):
 def remove_extension(force=False):
     """Remove existing extension (module or toolbox if -t is given)"""
     if flags['t']:
-        mlist = get_toolbox_modules(options['extension'])
+        mlist = get_toolbox_modules(options['prefix'], options['extension'])
     else:
         mlist = [options['extension']]
 
@@ -1215,7 +1246,24 @@ def resolve_install_prefix(path, to_system):
                       " Try to run {} with administrator rights"
                       " (su or sudo).")
                     .format(path, 'g.extension'))
+    # ensure dir sep at the end for cases where path is used as URL and pasted
+    # together with file names
+    if not path.endswith(os.path.sep):
+        path = path + os.path.sep
     return path
+
+
+def resolve_xmlurl_prefix(url):
+    """Determine and check the URL where the XML metadata files are stored"""
+    if 'svn.osgeo.org/grass/grass-addons/grass7' in url:
+        # use pregenerated modules XML file
+        url = "http://grass.osgeo.org/addons/grass%s" % version[0]
+    # else try to get modules XMl from SVN repository (provided URL)
+    # the exact action depends on subsequent code (somewhere)
+
+    if not url.endswith('/'):
+        url = url + "/"
+    return url
 
 
 def main():
@@ -1234,26 +1282,14 @@ def main():
     options['prefix'] = resolve_install_prefix(path=options['prefix'],
                                                to_system=flags['s'])
 
-    if 'svn.osgeo.org/grass/grass-addons/grass7' in options['svnurl']:
-        # use pregenerated modules XML file
-        xmlurl = "http://grass.osgeo.org/addons/grass%s" % version[0]
-    else:
-        # try to get modules XMl from SVN repository
-        xmlurl = options['svnurl']
-
-    if not xmlurl.endswith('/'):
-        xmlurl = xmlurl + "/"
-
     # list available extensions
     if flags['l'] or flags['c'] or flags['g']:
+        xmlurl = resolve_xmlurl_prefix(options['svnurl'])
         list_available_extensions(xmlurl)
         return 0
     elif flags['a']:
         list_installed_extensions(toolboxes=flags['t'])
         return 0
-    elif not options['extension']:
-        grass.fatal(_('You need to define an extension name'
-                      ' or use -l/c/g/a'))
 
     if flags['d']:
         if options['operation'] != 'add':
@@ -1265,9 +1301,10 @@ def main():
 
     if options['operation'] == 'add':
         check_dirs()
+        xmlurl = resolve_xmlurl_prefix(options['svnurl'])
         install_extension(xmlurl)
     else:  # remove
-        remove_extension(flags['f'])
+        remove_extension(force=flags['f'])
 
     return 0
 
