@@ -182,8 +182,6 @@ def expand_module_class_name(class_letters):
 
     return name.get(class_letters, class_letters)
 
-# list installed extensions
-
 
 def get_installed_extensions(force=False):
     """Get list of installed extensions or toolboxes (if -t is set)"""
@@ -191,6 +189,22 @@ def get_installed_extensions(force=False):
         return get_installed_toolboxes(force)
 
     return get_installed_modules(force)
+
+def list_installed_extensions(toolboxes=False):
+    """List installed extensions"""
+    elist = get_installed_extensions()
+    if elist:
+        if toolboxes:
+            grass.message(_("List of installed extensions (toolboxes):"))
+        else:
+            grass.message(_("List of installed extensions (modules):"))
+        sys.stdout.write('\n'.join(elist))
+        sys.stdout.write('\n')
+    else:
+        if toolboxes:
+            grass.info(_("No extension (toolbox) installed"))
+        else:
+            grass.info(_("No extension (module) installed"))
 
 
 def get_installed_toolboxes(force=False):
@@ -590,11 +604,15 @@ def install_extension(url):
                         ' variable (see "g.manual variables")'))
 
 
-def install_toolbox_xml(url, name):
-    """Update local toolboxes metadata file"""
-    # read metadata from remote server (toolboxes)
-    url = url + "toolboxes.xml"
+def get_toolboxes_metadata(url):
+    """Return metadata for all toolboxes from given URL
 
+    :param url: URL of a modules matadata file
+    :param mlist: list of modules to get metadata for
+    :returns: tuple where first item is dictionary with module names as keys
+        and dictionary with dest, keyw, files keys as value, the second item
+        is list of 'binary' files (installation files)
+    """
     data = dict()
     try:
         f = urlopen(url, proxies=PROXIES)
@@ -617,7 +635,14 @@ def install_toolbox_xml(url, name):
     except HTTPError:
         grass.error(_("Unable to read addons metadata file "
                       "from the remote server"))
+    return data
 
+
+def install_toolbox_xml(url, name):
+    """Update local toolboxes metadata file"""
+    # read metadata from remote server (toolboxes)
+    url = url + "toolboxes.xml"
+    data = get_toolboxes_metadata(url)
     if not data:
         grass.warning(_("No addons metadata available"))
         return
@@ -664,20 +689,15 @@ def install_toolbox_xml(url, name):
     write_xml_toolboxes(xml_file, tree)
 
 
-def install_extension_xml(url, mlist):
-    """Update XML files with metadata about installed modules and toolbox
+def get_addons_metadata(url, mlist):
+    """Return metadata for list of modules from given URL
 
-    Uses the remote/repository XML files for modules to obtain the metadata.
-
-    :returns: list of executables (useable for ``update_manual_page()``)
+    :param url: URL of a modules matadata file
+    :param mlist: list of modules to get metadata for
+    :returns: tuple where first item is dictionary with module names as keys
+        and dictionary with dest, keyw, files keys as value, the second item
+        is list of 'binary' files (installation files)
     """
-    if len(mlist) > 1:
-        # read metadata from remote server (toolboxes)
-        install_toolbox_xml(url, options['extension'])
-
-    # read metadata from remote server (modules)
-    url = url + "modules.xml"
-
     data = {}
     bin_list = []
     try:
@@ -685,15 +705,12 @@ def install_extension_xml(url, mlist):
         try:
             tree = etree.fromstring(f.read())
         except:
-            grass.warning(_("Unable to parse '%s'."
-                            " Addons metadata file not updated.") % url)
-            return bin_list
-
+            grass.warning(_("Unable to parse '%s'.") % url)
+            return data, bin_list
         for mnode in tree.findall('task'):
             name = mnode.get('name')
             if name not in mlist:
                 continue
-
             file_list = list()
             bnode = mnode.find('binary')
             windows = sys.platform == 'win32'
@@ -709,21 +726,35 @@ def install_extension_xml(url, mlist):
                         if windows:
                             path[-1] += '.py'
                     file_list.append(os.path.sep.join(path))
-
             desc, keyw = get_optional_params(mnode)
-
             data[name] = {
                 'desc': desc,
                 'keyw': keyw,
                 'files': file_list,
             }
-
     except:
         grass.error(
             _("Unable to read addons metadata file from the remote server"))
+    return data, bin_list
 
+
+def install_extension_xml(url, mlist):
+    """Update XML files with metadata about installed modules and toolbox
+
+    Uses the remote/repository XML files for modules to obtain the metadata.
+
+    :returns: list of executables (useable for ``update_manual_page()``)
+    """
+    if len(mlist) > 1:
+        # read metadata from remote server (toolboxes)
+        install_toolbox_xml(url, options['extension'])
+
+    # read metadata from remote server (modules)
+    url = url + "modules.xml"
+    data, bin_list = get_addons_metadata(url, mlist)
     if not data:
-        grass.warning(_("No addons metadata available"))
+        grass.warning(_("No addons metadata available."
+                        " Addons metadata file not updated."))
         return []
 
     xml_file = os.path.join(options['prefix'], 'modules.xml')
@@ -1166,6 +1197,27 @@ def update_manual_page(module):
         f.close()
 
 
+def resolve_install_prefix(path, to_system):
+    """Determine and check the path for installation"""
+    if to_system:
+        path = os.environ['GISBASE']
+    if path == '$GRASS_ADDON_BASE':
+        if not os.getenv('GRASS_ADDON_BASE'):
+            grass.warning(_("GRASS_ADDON_BASE is not defined, "
+                            "installing to ~/.grass%s/addons") % version[0])
+            path = os.path.join(
+                os.environ['HOME'], '.grass%s' % version[0], 'addons')
+        else:
+            path = os.environ['GRASS_ADDON_BASE']
+    if os.path.exists(path) and \
+       not os.access(path, os.W_OK):
+        grass.fatal(_("You don't have permission to install extension to <{}>."
+                      " Try to run {} with administrator rights"
+                      " (su or sudo).")
+                    .format(path, 'g.extension'))
+    return path
+
+
 def main():
     # check dependecies
     if sys.platform != "win32":
@@ -1179,24 +1231,8 @@ def main():
             PROXIES[ptype] = purl
 
     # define path
-    if flags['s']:
-        options['prefix'] = os.environ['GISBASE']
-
-    if options['prefix'] == '$GRASS_ADDON_BASE':
-        if not os.getenv('GRASS_ADDON_BASE'):
-            grass.warning(_("GRASS_ADDON_BASE is not defined, "
-                            "installing to ~/.grass%s/addons") % version[0])
-            options['prefix'] = os.path.join(
-                os.environ['HOME'], '.grass%s' % version[0], 'addons')
-        else:
-            options['prefix'] = os.environ['GRASS_ADDON_BASE']
-
-    if os.path.exists(options['prefix']) and \
-       not os.access(options['prefix'], os.W_OK):
-        grass.fatal(_("You don't have permission to install extension to <{}>."
-                      " Try to run {} with administrator rights"
-                      " (su or sudo).")
-                    .format(options['prefix'], 'g.extension'))
+    options['prefix'] = resolve_install_prefix(path=options['prefix'],
+                                               to_system=flags['s'])
 
     if 'svn.osgeo.org/grass/grass-addons/grass7' in options['svnurl']:
         # use pregenerated modules XML file
@@ -1213,24 +1249,11 @@ def main():
         list_available_extensions(xmlurl)
         return 0
     elif flags['a']:
-        elist = get_installed_extensions()
-        if elist:
-            if flags['t']:
-                grass.message(_("List of installed extensions (toolboxes):"))
-            else:
-                grass.message(_("List of installed extensions (modules):"))
-            sys.stdout.write('\n'.join(elist))
-            sys.stdout.write('\n')
-        else:
-            if flags['t']:
-                grass.info(_("No extension (toolbox) installed"))
-            else:
-                grass.info(_("No extension (module) installed"))
+        list_installed_extensions(toolboxes=flags['t'])
         return 0
-    else:
-        if not options['extension']:
-            grass.fatal(
-                _('You need to define an extension name or use -l/c/g/a'))
+    elif not options['extension']:
+        grass.fatal(_('You need to define an extension name'
+                      ' or use -l/c/g/a'))
 
     if flags['d']:
         if options['operation'] != 'add':
