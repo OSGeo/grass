@@ -465,7 +465,9 @@ int main(int argc, char *argv[])
 		}
 	    }
 	    sprintf(error_msg + strlen(error_msg),
-		    _("\nYou can use the -o flag to %s to override this projection check.\n"),
+		    _("\nIn case of no significant differences in the projection definitions,"
+		      " use the -o flag to ignore them and use"
+		      " current location definition.\n"),
 		    G_program_name());
 	    strcat(error_msg,
 		   _("Consider generating a new location with 'location' parameter"
