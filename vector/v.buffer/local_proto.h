@@ -1,3 +1,6 @@
+#if (GEOS_VERSION_MAJOR >= 3 && GEOS_VERSION_MINOR >= 3)
+#define GEOS_3_3
+#endif
 
 struct buf_contours
 {

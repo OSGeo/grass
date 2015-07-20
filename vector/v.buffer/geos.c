@@ -158,6 +158,7 @@ int geos_buffer(struct Map_info *In, struct Map_info *Out,
      * A value of 8 gives less than 2% max error in the buffer distance.
      * For a max error of < 1%, use QS = 12.
      * For a max error of < 0.1%, use QS = 18. */
+#ifdef GEOS_3_3
     if (flat || no_caps) {
         GEOSBufferParams* geos_params = GEOSBufferParams_create();
         GEOSBufferParams_setEndCapStyle(geos_params,
@@ -166,9 +167,10 @@ int geos_buffer(struct Map_info *In, struct Map_info *Out,
         OGeom = GEOSBufferWithParams(IGeom, geos_params, da);
         GEOSBufferParams_destroy(geos_params);
     }
-    else {
+    else
+#else
         OGeom = GEOSBuffer(IGeom, da, 12);
-    }
+#endif
     
     if (!OGeom) {
 	G_fatal_error(_("Buffering failed"));
