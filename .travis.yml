@@ -83,5 +83,8 @@ script:
 
 notifications:
         email:
+            recipients:
                 - landa.martin@gmail.com
                 - wenzeslaus@gmail.com
+            on_success: change
+            on_failure: always
