@@ -412,8 +412,8 @@ class RasterSegment(RasterAbstractBase):
                 self.segment.open(self)
                 self.map2segment()
                 self.segment.flush()
-                self.cats.read(self)
-                self.hist.read(self.name)
+                self.cats.read()
+                self.hist.read()
 
                 if self.mode == "rw":
                     warning(_(WARN_OVERWRITE.format(self)))
