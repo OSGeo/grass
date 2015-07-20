@@ -13,9 +13,9 @@ and/or an input <b>barrier</b> raster map.
 There are three possible output raster maps which can be produced in any
 combination simultaneously: a vector map <b>flowline</b> of flowlines,
 a raster map
-<b>flowlength</b> of flowpath lengths, and a raster map <b>flowaccumulation</b> of flowline
-densities (which are equal upslope contributed areas per unit width, when
-multiplied by resolution).
+<b>flowlength</b> of flowpath lengths, and a raster map
+<b>flowaccumulation</b> of flowline densities (which are equal upslope
+contributed areas per unit width, when multiplied by resolution).
 
 <h2>NOTES</h2>
 
@@ -43,14 +43,14 @@ flowline generated from that cell. If the flag <b>-3</b> is given, elevation
 is taken into account in calculating the length of each segment.
 
 <p>Flowline density downhill or uphill output is given in a raster map
-<b>flowaccumulation.</b> The value in each grid cell is the number of flowlines which
-pass through that grid cell, that means the number of flowlines from the
-entire map which have segment endpoints within that cell.
+<b>flowaccumulation.</b> The value in each grid cell is the number of
+flowlines which pass through that grid cell, that means the number of
+flowlines from thec entire map which have segment endpoints within that cell.
 
 
-With the <b>-m</b> flag less memory is used as aspect at each cell is computed
-on the fly. This option incurs a severe performance penalty. If this flag is given,
-the <b>aspect</b> input map (if any) will be ignored.
+With the <b>-m</b> flag less memory is used as aspect at each cell is
+computed on the fly. This option incurs a severe performance penalty. If
+this flag is given, the <b>aspect</b> input map (if any) will be ignored.
 
 <!-- doesn't exist
 <p><b>-M</b> Use a fixed size memory and utilize page-swapping to handle
@@ -156,13 +156,16 @@ The difference in length between the two axes of a grid cell is so
 great that quantization error is larger than one of the
 dimensions. Resample the map and try again.
 
-<h2>EXAMPLES</h2>
+<h2>EXAMPLE</h2>
 
-User can compute flow line vector map, flow path length raster map and flow accumulation raster map from an elevation raster map:
+In this example a flow line vector map, a flow path length raster map and
+a flow accumulation raster map are computed from an elevation raster map
+(North Carolina sample dataset):
 
 <div class="code"><pre>
-g.region raster=elevation
-r.flow elevation=elevation skip=3 flowline=flowline flowlength=flowlength flowaccumulation=flowaccumulation
+g.region raster=elevation -p
+r.flow elevation=elevation skip=3 flowline=flowline flowlength=flowlength \
+       flowaccumulation=flowaccumulation
 </pre></div>
 
 <center>
@@ -170,7 +173,9 @@ r.flow elevation=elevation skip=3 flowline=flowline flowlength=flowlength flowac
 <img src="r_flow_length.png" alt="flow path length">
 <img src="r_flow_accumulation.png" alt="flow accumulation map">
 <p>
-Figure: Flow lines underlaid with an elevation map, flow lines underlaid with flow path lengths and flow accumulation map (North Carolina dataset)
+Figure: Flow lines with underlying elevation map;
+flow lines with underlying flow path lengths (in map units: meters);
+flow accumulation map (zoomed view)
 </center>
 
 <!--
@@ -188,7 +193,8 @@ tension : I. Theory and implementation. Mathematical Geology 25, p. 641-655.
 
 <li>Mitasova and Hofierka 1993 : Interpolation by Regularized Spline with
 Tension: II. Application to Terrain Modeling and Surface Geometry Analysis.
-Mathematical Geology 25(6), 657-669. (<a href="http://www4.ncsu.edu/~hmitaso/gmslab/papers/hmg.rev1.ps">online</a>)
+Mathematical Geology 25(6), 657-669
+(<a href="http://www4.ncsu.edu/~hmitaso/gmslab/papers/hmg.rev1.ps">online</a>).
 
 <li>Mitasova, H., Mitas, L., Brown, W.M., Gerdes, D.P., Kosinovsky, I.,
 Baker, T., 1995: Modeling spatially and temporally distributed phenomena:
@@ -225,8 +231,9 @@ Hofierka, Comenius University, Bratislava, Slovakia
 <p>
 <i>The current version of the program (adapted for GRASS 5.0)</i>:
 Joshua Caplan, Mark Ruesink, Helena Mitasova, University of Illinois
-at Urbana-Champaign with support from USA CERL. <a href="http://www4.ncsu.edu/~hmitaso/gmslab/">GMSL/University of Illinois at 
-Urbana-Champaign</a>
+at Urbana-Champaign with support from USA CERL.
+<a href="http://www4.ncsu.edu/~hmitaso/gmslab/">GMSL/University of Illinois
+at Urbana-Champaign</a>
 
 <p>
 <i>Last changed: $Date$</i>
