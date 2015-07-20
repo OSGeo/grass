@@ -36,13 +36,13 @@ Y="($RADIUS - row())"
 r="sqrt($X^2 + $Y^2)"
 
 #Mask out unwanted parts (check for <= ??):
-r.mapcalc "$TMP=if($r<$RADIUS,$r,null())"
+r.mapcalc "$TMP = if($r<$RADIUS,$r,null())"
 
 ALPHA="acos ($TMP/$RADIUS)"
 HEIGHT="$RADIUS * sin($ALPHA)"
 
 
-r.mapcalc "hemisphere=$HEIGHT"
+r.mapcalc "hemisphere = $HEIGHT"
 cleanup
 g.message "Generated raster map <hemisphere>"
 #echo "Now generate aspect + slope on <hemisphere>"
