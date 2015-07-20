@@ -15,18 +15,16 @@ msgstr ""
 "Project-Id-Version: grassmods_it\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-02-20 20:37+0100\n"
-"PO-Revision-Date: 2013-11-20 18:19+0100\n"
-"Last-Translator: az\n"
+"PO-Revision-Date: 2015-03-29 13:25+0100\n"
+"Last-Translator: Luca Delucchi <lucadeluge@gmail.com>\n"
 "Language-Team: Italian <grass-translations@lists.osgeo.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.4\n"
+"X-Generator: Poedit 1.6.10\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-Bookmarks: 2364,2381,2449,2554,2623,3551,3587,-1,-1,6460\n"
-"X-Poedit-Language: Italian\n"
-"X-Poedit-Country: ITALY\n"
 "X-Poedit-SourceCharset: utf-8\n"
 
 #: ../raster/r.out.pov/main.c:121 ../raster/r.out.vrml/main.c:47
@@ -180,14 +178,12 @@ msgstr "raster"
 #: ../vector/v.out.svg/main.c:78 ../vector/v.external.out/main.c:44
 #: ../vector/v.out.pov/main.c:47 ../vector/v.colors.out/main.c:51
 #: ../vector/v.out.vtk/main.c:48 ../vector/v.out.postgis/main.c:45
-#, fuzzy
 msgid "export"
-msgstr "Importa"
+msgstr "esporta"
 
 #: ../raster/r.out.pov/main.c:124
-#, fuzzy
 msgid "Converts a raster map layer into a height-field file for POV-Ray."
-msgstr "Converte un raster in un file di testo ASCII"
+msgstr "Converte un raster in un file per POV-Ray."
 
 #: ../raster/r.out.pov/main.c:131
 msgid "Name of output povray file (TGA height field file)"
@@ -234,33 +230,30 @@ msgid "VRML"
 msgstr ""
 
 #: ../raster/r.out.vrml/main.c:51
-#, fuzzy
 msgid "Exports a raster map to the Virtual Reality Modeling Language (VRML)."
 msgstr "Esporta raster in Virtual Reality Modeling Language (VRML)"
 
 #: ../raster/r.out.vrml/main.c:58
-#, fuzzy
 msgid "Name of input color map"
-msgstr "Nome della mappa vettoriale"
+msgstr "Nome della mappa dei colori di input"
 
 #: ../raster/r.out.vrml/main.c:65 ../misc/m.nviz.image/args.c:575
 msgid "Vertical exaggeration"
 msgstr "Esagerazione verticale"
 
 #: ../raster/r.out.vrml/main.c:69
-#, fuzzy
 msgid "Name for output VRML file"
-msgstr "Nome del file in output"
+msgstr "Nome per il file VRML di output"
 
 #: ../raster/r.out.vrml/main.c:88
-#, fuzzy, c-format
+#, c-format
 msgid "Range info for [%s] not available (run r.support)"
-msgstr "Informazioni sul range non disponibile (esegui r.support)."
+msgstr "Informazioni sul range per [%s] non disponibile (esegui r.support)."
 
 #: ../raster/r.out.vrml/main.c:97
-#, fuzzy, c-format
+#, c-format
 msgid "Range info for <%s> not available (run r.support)"
-msgstr "Informazioni sul range non disponibile (esegui r.support)."
+msgstr "Informazioni sul range per <%s> non disponibile (esegui r.support)."
 
 #: ../raster/r.out.vrml/main.c:129
 #, c-format
@@ -307,14 +300,12 @@ msgstr ""
 #: ../vector/v.kcv/main.c:56 ../vector/v.perturb/main.c:64
 #: ../vector/v.random/main.c:98 ../vector/v.neighbors/main.c:52
 #: ../vector/v.outlier/main.c:70
-#, fuzzy
 msgid "statistics"
-msgstr "Nome della mappa raster da utilizzare per <%s>"
+msgstr "statistiche"
 
 #: ../raster/r.regression.multi/main.c:131
-#, fuzzy
 msgid "Calculates multiple linear regression from raster maps."
-msgstr "Calcola la regressione lineare per due mappe raster: y = a + b*x"
+msgstr "Calcola la regressione lineare per mappe raster."
 
 #: ../raster/r.regression.multi/main.c:136
 #: ../raster/r.regression.line/main.c:54
@@ -360,14 +351,12 @@ msgid "Unable to open file <%s> for writing"
 msgstr "Impossibile aprire il file per <%s> per la scrittura"
 
 #: ../raster/r.regression.multi/main.c:248
-#, fuzzy
 msgid "First pass..."
-msgstr "Eseguendo il primo passaggio..."
+msgstr "Primo passaggio..."
 
 #: ../raster/r.regression.multi/main.c:321
-#, fuzzy
 msgid "Not enough valid cells available"
-msgstr "Pixel insufficienti nella classe %d"
+msgstr "Non abbastanza celle valide disponibili"
 
 #: ../raster/r.regression.multi/main.c:335
 msgid "Multiple regression failed"
@@ -375,16 +364,15 @@ msgstr ""
 
 #: ../raster/r.regression.multi/main.c:340
 msgid "Second pass..."
-msgstr ""
+msgstr "Secondo passo..."
 
 #: ../raster/r.clump/main.c:53
 msgid "reclass"
 msgstr ""
 
 #: ../raster/r.clump/main.c:54 ../raster/r.volume/main.c:77
-#, fuzzy
 msgid "clumps"
-msgstr "%d raggruppato."
+msgstr ""
 
 #: ../raster/r.clump/main.c:56
 msgid ""
@@ -408,46 +396,39 @@ msgid "Clumps are also traced along diagonal neighboring cells"
 msgstr ""
 
 #: ../raster/r.clump/main.c:77
-#, fuzzy
 msgid "Print only the number of clumps in shell script style"
-msgstr "Stampa a video le statistiche con lo stile shell script"
+msgstr ""
 
 #: ../raster/r.clump/main.c:122
-#, fuzzy, c-format
+#, c-format
 msgid "%d clump."
 msgid_plural "%d clumps."
-msgstr[0] "%d raggruppato."
-msgstr[1] "%d raggruppato."
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../raster/r.clump/clump.c:72
-#, fuzzy
 msgid "Unable to open temp file"
-msgstr "Impossibile aprire il file temp"
+msgstr "Impossibile aprire il file temporaneo"
 
 #: ../raster/r.clump/clump.c:94
-#, fuzzy
 msgid "Pass 1 of 2..."
-msgstr "Processato %d..."
+msgstr "Passaggio 1 di 2..."
 
 #: ../raster/r.clump/clump.c:207 ../raster/r.clump/clump.c:221
-#, fuzzy
 msgid "Unable to write to temp file"
-msgstr "Non è possibile scrivere il file temporaneo"
+msgstr "Impossibile scrivere in un file temporaneo"
 
 #: ../raster/r.clump/clump.c:225
-#, fuzzy
 msgid "Generating renumbering scheme..."
-msgstr "Sto generando punti..."
+msgstr ""
 
 #: ../raster/r.clump/clump.c:265
-#, fuzzy
 msgid "Pass 2 of 2..."
-msgstr "Processato %d..."
+msgstr "Passaggio 2 di 2..."
 
 #: ../raster/r.clump/clump.c:271
-#, fuzzy
 msgid "Unable to read from temp file"
-msgstr "Impossibile leggere il file dei colori"
+msgstr "Impossibile leggere dal file temporaneo"
 
 #: ../raster/r.sunhours/main.c:73 ../raster/r.sunmask/main.c:117
 #: ../raster/r.horizon/main.c:181 ../raster/r.sun/main.c:240
@@ -466,28 +447,24 @@ msgid ""
 msgstr ""
 
 #: ../raster/r.sunhours/main.c:81
-#, fuzzy
 msgid "Output raster map with solar elevation angle"
-msgstr "Nome del prefisso per il raster di output"
+msgstr "Raster di output con l'angolo dell'altezza solare"
 
 #: ../raster/r.sunhours/main.c:86
-#, fuzzy
 msgid "Output raster map with solar azimuth angle"
-msgstr "Mostra il titolo del file raster"
+msgstr ""
 
 #: ../raster/r.sunhours/main.c:91
-#, fuzzy
 msgid "Output raster map with sunshine hours"
-msgstr "Mostra il titolo del file raster"
+msgstr ""
 
 #: ../raster/r.sunhours/main.c:92
 msgid "Sunshine hours require SOLPOS use and Greenwich standard time"
 msgstr ""
 
 #: ../raster/r.sunhours/main.c:99
-#, fuzzy
 msgid "Year"
-msgstr "Anno (B)"
+msgstr "Anno"
 
 #: ../raster/r.sunhours/main.c:101 ../raster/r.sunhours/main.c:110
 #: ../raster/r.sunhours/main.c:118 ../raster/r.sunhours/main.c:127
@@ -502,33 +479,28 @@ msgid "Time"
 msgstr "Orario"
 
 #: ../raster/r.sunhours/main.c:107
-#, fuzzy
 msgid "Month"
-msgstr "Mese (B)"
+msgstr "Mese"
 
 #: ../raster/r.sunhours/main.c:108
 msgid "If not given, day is interpreted as day of the year"
 msgstr ""
 
 #: ../raster/r.sunhours/main.c:116
-#, fuzzy
 msgid "Day"
-msgstr "Giorno (B)"
+msgstr "Giorno"
 
 #: ../raster/r.sunhours/main.c:124
-#, fuzzy
 msgid "Hour"
-msgstr "Ore (B)"
+msgstr "Ora"
 
 #: ../raster/r.sunhours/main.c:133
-#, fuzzy
 msgid "Minutes"
-msgstr "Minuti (B)"
+msgstr "Minuti"
 
 #: ../raster/r.sunhours/main.c:142
-#, fuzzy
 msgid "Seconds"
-msgstr "Secondi (B)"
+msgstr "Secondi"
 
 #: ../raster/r.sunhours/main.c:149
 msgid "Time is local sidereal time, not Greenwich standard time"
@@ -559,29 +531,25 @@ msgid "Sunshine hours require NREL SOLPOS."
 msgstr ""
 
 #: ../raster/r.sunhours/main.c:208
-#, fuzzy
 msgid "Current projection is x,y (undefined)."
-msgstr "La proiezione corrente non è longitudine-latitudine"
+msgstr "La proiezione corrente è x-y (non definita)."
 
 #: ../raster/r.sunhours/main.c:214
-#, fuzzy
 msgid "Cannot get projection info of current location"
 msgstr ""
 "Non è possibile ottenere le informazioni sulla proiezione della location "
 "corrente"
 
 #: ../raster/r.sunhours/main.c:217
-#, fuzzy
 msgid "Cannot get projection units of current location"
 msgstr ""
-"Non è possibile ottenere le unità  della proiezione della location attuale"
+"Non è possibile ottenere le unità  della proiezione della location corrente"
 
 #: ../raster/r.sunhours/main.c:220
-#, fuzzy
 msgid "Cannot get projection key values of current location"
 msgstr ""
 "Non è possibile ottenere i valori chiave della proiezione della location "
-"attuale"
+"corrente"
 
 #: ../raster/r.sunhours/main.c:230 ../general/g.region/printwindow.c:263
 #: ../general/g.region/printwindow.c:516 ../general/g.region/printwindow.c:647
@@ -612,19 +580,16 @@ msgid "Unable to create raster map <%s>"
 msgstr "Impossibile creare la mappa raster <%s>"
 
 #: ../raster/r.sunhours/main.c:354
-#, fuzzy
 msgid "Calculating solar elevation and azimuth..."
-msgstr "Calcolo della matrice di covarianza in corso..."
+msgstr "Calcolando l'altezza solare e azimuth..."
 
 #: ../raster/r.sunhours/main.c:357
-#, fuzzy
 msgid "Calculating solar elevation..."
-msgstr "Calcolo delle direzioni di flusso in corso..."
+msgstr "Calcolando l'altezza solare"
 
 #: ../raster/r.sunhours/main.c:360
-#, fuzzy
 msgid "Calculating solar azimuth..."
-msgstr "Calcolo della matrice di covarianza in corso..."
+msgstr "Calcolando l'azimuth solare"
 
 #: ../raster/r.sunhours/solpos00.c:994 ../raster/r.sunmask/solpos00.c:949
 #, c-format
@@ -722,14 +687,13 @@ msgid "Supported Formats:\n"
 msgstr "Formati supportati:\n"
 
 #: ../raster/r.external.out/main.c:132
-#, fuzzy
 msgid "Unable to open GDAL file"
-msgstr "Non riesco ad aprire il cellfile per [%s]"
+msgstr "Impossibile aprire il file di GDAL"
 
 #: ../raster/r.external.out/main.c:156 ../vector/v.external.out/format.c:48
-#, fuzzy, c-format
+#, c-format
 msgid "Format <%s> not supported"
-msgstr "Tipo di colonna (%s) non supportata"
+msgstr "Formato <%s> non supportato"
 
 #: ../raster/r.external.out/main.c:162
 #, c-format
@@ -737,24 +701,21 @@ msgid "Format <%s> does not support direct write"
 msgstr ""
 
 #: ../raster/r.external.out/main.c:166 ../vector/v.external.out/format.c:51
-#, fuzzy, c-format
+#, c-format
 msgid "Format <%s> does not support writing"
-msgstr "Gruppo <%s> non esiste ancora. Sto creandolo..."
+msgstr "Formato <%s> non supportato per la scrittura"
 
 #: ../raster/r.external.out/main.c:214
-#, fuzzy
 msgid "Unable to create GDAL file"
-msgstr "Non riesco ad aprire il cellfile per [%s]"
+msgstr "Impossibile creare il file di GDAL"
 
 #: ../raster/r.external.out/main.c:217
-#, fuzzy
 msgid "Error writing GDAL file"
-msgstr "Errore nella lettura del file dbmscap\n"
+msgstr "Errore scrivendo il file di GDAL"
 
 #: ../raster/r.external.out/main.c:237 ../vector/v.external.out/main.c:45
-#, fuzzy
 msgid "output"
-msgstr "Output"
+msgstr "output"
 
 #: ../raster/r.external.out/main.c:238 ../raster/r.external/main.c:57
 #: ../vector/v.external.out/main.c:46 ../vector/v.external/main.c:50
@@ -766,25 +727,21 @@ msgid "Defines raster output format utilizing GDAL library."
 msgstr ""
 
 #: ../raster/r.external.out/main.c:244
-#, fuzzy
 msgid "Name of output directory"
-msgstr "Nome del file di output"
+msgstr "Nome della directory di output"
 
 #: ../raster/r.external.out/main.c:251
-#, fuzzy
 msgid "Extension for output files"
-msgstr "Nome del file in output"
+msgstr "Estensione per i file in output"
 
 #: ../raster/r.external.out/main.c:257
-#, fuzzy
 msgid "Format of output files"
-msgstr "Nome del file di output"
+msgstr "Formato dei file di output"
 
 #: ../raster/r.external.out/main.c:264 ../vector/v.external.out/args.c:39
 #: ../vector/v.out.postgis/args.c:52
-#, fuzzy
 msgid "Creation options"
-msgstr "Campo separatore in output"
+msgstr "Creazione delle opzioni"
 
 #: ../raster/r.external.out/main.c:271 ../raster/r.in.gdal/main.c:167
 #: ../raster/r.external/main.c:93 ../vector/v.external.out/args.c:62
@@ -847,9 +804,8 @@ msgid "Cease using GDAL and revert to native output"
 msgstr ""
 
 #: ../raster/r.external.out/main.c:282 ../vector/v.external.out/args.c:74
-#, fuzzy
 msgid "Print current status"
-msgstr "mostra i parametri della connessione in uso ed esce"
+msgstr ""
 
 #: ../raster/r.usler/main.c:53 ../raster/r.sim/r.sim.sediment/main.c:110
 #: ../raster/r.sim/r.sim.water/main.c:110
@@ -875,18 +831,16 @@ msgstr ""
 
 #: ../raster/r.usler/main.c:56 ../raster/r.sim/r.sim.sediment/main.c:113
 #: ../raster/r.uslek/main.c:56
-#, fuzzy
 msgid "erosion"
-msgstr "Nome del raster"
+msgstr "erosione"
 
 #: ../raster/r.usler/main.c:57
 msgid "Computes USLE R factor, Rainfall erosivity index."
 msgstr ""
 
 #: ../raster/r.usler/main.c:60
-#, fuzzy
 msgid "Name of annual precipitation raster map [mm/year]"
-msgstr "Nome del file raster in input"
+msgstr ""
 
 #: ../raster/r.usler/main.c:63
 #, fuzzy
@@ -2863,9 +2817,8 @@ msgstr ""
 
 #: ../raster/r.watershed/front/main.c:74 ../raster/r.water.outlet/main.c:69
 #: ../raster/r.basins.fill/main.c:56
-#, fuzzy
 msgid "watershed"
-msgstr "raster, intervisibilità"
+msgstr ""
 
 #: ../raster/r.watershed/front/main.c:75
 msgid "Calculates hydrological parameters and RUSLE factors."
@@ -2876,9 +2829,8 @@ msgstr ""
 #: ../raster/r.watershed/front/main.c:107
 #: ../raster/r.watershed/front/main.c:115
 #: ../raster/r.watershed/front/main.c:124
-#, fuzzy
 msgid "Inputs"
-msgstr "Mappa di input"
+msgstr "Inputs"
 
 #: ../raster/r.watershed/front/main.c:82
 #, fuzzy
@@ -11814,24 +11766,20 @@ msgid "Could not read %s bufferzone size. Aborting."
 msgstr "Non riesco a trovare il file raster %s"
 
 #: ../raster/r.horizon/main.c:442
-#, fuzzy
 msgid "east"
-msgstr "est=%f"
+msgstr "est"
 
 #: ../raster/r.horizon/main.c:448
-#, fuzzy
 msgid "west"
-msgstr "ovest=%f"
+msgstr "ovest"
 
 #: ../raster/r.horizon/main.c:455
-#, fuzzy
 msgid "south"
-msgstr "sud=%f"
+msgstr "sud"
 
 #: ../raster/r.horizon/main.c:462
-#, fuzzy
 msgid "north"
-msgstr "nord=%f"
+msgstr "nord"
 
 #: ../raster/r.horizon/main.c:467
 msgid "Could not read maximum distance. Aborting."
@@ -11867,9 +11815,9 @@ msgstr ""
 "attuale"
 
 #: ../raster/r.horizon/main.c:1162
-#, fuzzy, c-format
+#, c-format
 msgid "Calculating map %01d of %01d (angle %.2f, raster map <%s>)"
-msgstr "Non riesco a trovare il file raster %s"
+msgstr ""
 
 #: ../raster/r.compress/main.c:63 ../general/g.list/main.c:90
 #: ../general/g.dirseps/main.c:35 ../general/g.rename/main.c:46
@@ -12885,9 +12833,8 @@ msgstr ""
 
 # layer/tematismo
 #: ../raster/r.slope.aspect/main.c:262
-#, fuzzy
 msgid "Do not align the current region to the raster elevation map"
-msgstr "Non allinea la regione corrente al layer elevazione"
+msgstr "Non allinea la regione corrente al raster dell'elevazione"
 
 #: ../raster/r.slope.aspect/main.c:337
 #, c-format
@@ -12986,9 +12933,8 @@ msgid "Invalid method: %s"
 msgstr "Metodo non valido: %s"
 
 #: ../raster/r.contour/main.c:89
-#, fuzzy
 msgid "contours"
-msgstr "Contrasto"
+msgstr "isoipse"
 
 #: ../raster/r.contour/main.c:91
 msgid "Produces a vector map of specified contours from a raster map."
@@ -13002,9 +12948,8 @@ msgstr "Incremento fra le isoipse (equidistanza)"
 
 #: ../raster/r.contour/main.c:102 ../raster/r.contour/main.c:110
 #: ../raster/r.contour/main.c:117 ../raster/r.contour/main.c:124
-#, fuzzy
 msgid "Contour levels"
-msgstr "Lista delle isoipse"
+msgstr "Livelli delle isoipse"
 
 #: ../raster/r.contour/main.c:109
 msgid "List of contour levels"
@@ -13023,9 +12968,9 @@ msgid "Minimum number of points for a contour line (0 -> no limit)"
 msgstr "Numero minimo di punti per una curva di livello (0 -> nessun limite)"
 
 #: ../raster/r.contour/main.c:140
-#, fuzzy, c-format
+#, c-format
 msgid "Neither <%s> nor <%s> option must be specified"
-msgstr "file vettoriale da creare"
+msgstr ""
 
 #: ../raster/r.contour/main.c:188 ../vector/v.in.dxf/write_vect.c:241
 #: ../vector/v.in.ascii/main.c:517 ../vector/v.to.points/main.c:186
@@ -13074,18 +13019,18 @@ msgid "Displacing data..."
 msgstr ""
 
 #: ../raster/r.contour/cont.c:82
-#, fuzzy, c-format
+#, c-format
 msgid "Writing vector contour (one level)..."
 msgid_plural "Writing vector contours (total levels %d)..."
-msgstr[0] "Scrittura delle isoipse vettoriali in corso (isoipse totali %d)..."
+msgstr[0] ""
 msgstr[1] "Scrittura delle isoipse vettoriali in corso (isoipse totali %d)..."
 
 #: ../raster/r.contour/cont.c:213
-#, fuzzy, c-format
+#, c-format
 msgid "%d crossing found"
 msgid_plural "%d crossings found"
-msgstr[0] "trovati %d incroci"
-msgstr[1] "trovati %d incroci"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../raster/r.contour/cont.c:266
 msgid "Illegal edge number"
@@ -20725,7 +20670,6 @@ msgid "Get the server capabilities then exit"
 msgstr ""
 
 #: ../locale/scriptstrings/r.in.wms_to_translate.c:39
-#, fuzzy
 msgid "Do not request transparent data"
 msgstr "Non richiedere dati trasparenti"
 
@@ -20741,9 +20685,8 @@ msgid ""
 msgstr ""
 
 #: ../locale/scriptstrings/t.vect.extract_to_translate.c:8
-#, fuzzy
 msgid "Register empty maps"
-msgstr "Mappe raster in input"
+msgstr "Registra mappe vuote"
 
 #: ../locale/scriptstrings/i.colors.enhance_to_translate.c:1
 #, fuzzy
@@ -20761,24 +20704,20 @@ msgstr ""
 
 #: ../locale/scriptstrings/i.colors.enhance_to_translate.c:5
 #: ../display/d.colorlist/main.c:37
-#, fuzzy
 msgid "colors"
-msgstr "Colore"
+msgstr "colori"
 
 #: ../locale/scriptstrings/i.colors.enhance_to_translate.c:6
-#, fuzzy
 msgid "Name of red channel"
-msgstr "raster di input (LANDSAT canale 1)"
+msgstr "Nome del canale rosso"
 
 #: ../locale/scriptstrings/i.colors.enhance_to_translate.c:7
-#, fuzzy
 msgid "Name of green channel"
-msgstr "raster di input (LANDSAT canale 1)"
+msgstr "Nome del canale verde"
 
 #: ../locale/scriptstrings/i.colors.enhance_to_translate.c:8
-#, fuzzy
 msgid "Name of blue channel"
-msgstr "raster di input (LANDSAT canale 1)"
+msgstr "Nome del canale blu"
 
 #: ../locale/scriptstrings/i.colors.enhance_to_translate.c:9
 msgid "Cropping intensity (upper brightness level)"
