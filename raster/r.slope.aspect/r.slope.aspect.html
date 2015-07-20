@@ -168,7 +168,33 @@ of aspect categories is very uneven, with peaks at 0, 45,..., 360 categories.
 When working with floating point elevation models, no such aspect bias occurs.
 
 
-<h2>REFERENCE</h2>
+<h2>EXAMPLES</h2>
+
+In this example a slope, aspect, profile and tangential curvature map
+are computed from an elevation raster map (North Carolina sample
+dataset):
+
+<div class="code"><pre>
+g.region raster=elevation
+r.slope.aspect elevation=elevation slope=slope aspect=aspect pcurvature=pcurv tcurvature=tcurv
+
+# set nice color tables for output raster maps
+r.colors -n map=slope color=sepia
+r.colors map=aspect color=aspectcolr
+r.colors map=pcurv color=curvature
+r.colors map=tcurv color=curvature
+</pre></div>
+
+<center>
+  <img src="r_slope_aspect_slope.png" border="0">
+  <img src="r_slope_aspect_aspect.png" border="0">
+  <img src="r_slope_aspect_pcurv.png" border="0">
+  <img src="r_slope_aspect_tcurv.png" border="0">
+  <p>
+Figure: Slope, aspect, profile and tangential curvature raster map (North Carolina dataset)
+</center>
+
+<h2>REFERENCES</h2>
 
 <ul>
 <li> Horn, B. K. P. (1981). <i>Hill Shading and the Reflectance Map</i>, Proceedings
