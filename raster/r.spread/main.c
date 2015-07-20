@@ -544,7 +544,7 @@ int main(int argc, char *argv[])
     /* values lower then zero does not make sense for time */
     if (start_is_time && start_range_min < 0)
 	G_fatal_error(_("Minimum of start raster map is less than zero"
-			" (%d < 0)"), start_range_min, init_time);
+			" (%d < 0)"), start_range_min);
 
     /*  Initialize the heap  */
     heap =
