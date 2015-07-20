@@ -10,6 +10,11 @@
 /*! Attributes of temporary maps */
 /* #define TEMPORARY_MAP_DB */
 
+/*! Temporary mode */
+#define TEMPORARY_MAP_DISABLED 0
+#define TEMPORARY_MAP_ENV      1
+#define TEMPORARY_MAP          2
+
 /* Internal vector library subroutines which are not part of public
    API*/
 

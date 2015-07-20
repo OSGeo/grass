@@ -6,7 +6,7 @@
   
   Higher level functions for reading/writing/manipulating vectors.
   
-  (C) 2001-2009, 2012-2013 by the GRASS Development Team
+  (C) 2001-2015 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2).  Read the file COPYING that comes with GRASS for details.
@@ -154,7 +154,7 @@ int Vect_set_open_level(int level)
  \param update non-zero to open for update otherwise read-only mode
  \param head_only read only header info from 'head', 'dbln', 'topo',
  'cidx' is not opened. The header may be opened on level 2 only.
- \param is_tmp TRUE for temporary maps
+ \param is_tmp non-zero code for temporary maps
 
  \return level of openness (1, 2)
  \return -1 in error
@@ -175,7 +175,7 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
             is_tmp);
     
     if (update && !is_tmp) {
-        is_tmp = getenv("GRASS_VECTOR_TEMPORARY") ? TRUE : FALSE;
+        is_tmp = getenv("GRASS_VECTOR_TEMPORARY") ? TEMPORARY_MAP_ENV : TEMPORARY_MAP_DISABLED;
         G_debug(1, "Vect__open_old(): is_tmp = %d (check GRASS_VECTOR_TEMPORARY)", is_tmp);
     }
 
@@ -912,7 +912,7 @@ int Vect_open_new(struct Map_info *Map, const char *name, int with_z)
 {
     int is_tmp;
     
-    is_tmp = getenv("GRASS_VECTOR_TEMPORARY") ? TRUE : FALSE;
+    is_tmp = getenv("GRASS_VECTOR_TEMPORARY") ? TEMPORARY_MAP_ENV : TEMPORARY_MAP_DISABLED;
     G_debug(1, "Vect_open_new(): is_tmp = %d", is_tmp);
     
     return open_new(Map, name, with_z, is_tmp);
@@ -950,7 +950,7 @@ int Vect_open_tmp_new(struct Map_info *Map, const char *name, int with_z)
     }
     G_debug(1, "Vect_open_tmp_new(): name = '%s' with_z = %d", name, with_z);
 
-    return open_new(Map, tmp_name, with_z, TRUE); /* temporary map */
+    return open_new(Map, tmp_name, with_z, TEMPORARY_MAP); /* temporary map */
 }
 
 /*!
@@ -1300,7 +1300,7 @@ int map_format(struct Map_info *Map)
              * in the native format and when closing the map
              * transferred to output OGR layer */
             format = GV_FORMAT_NATIVE;
-            Map->temporary = TRUE;
+            Map->temporary = TEMPORARY_MAP;
         }
         fp = G_fopen_old("", "OGR", G_mapset());
         if (!fp) {
@@ -1417,7 +1417,7 @@ int map_format(struct Map_info *Map)
                  * in the native format and when closing the map
                  * transferred to output PostGIS layer */
                 format = GV_FORMAT_NATIVE;
-                Map->temporary = TRUE;
+                Map->temporary = TEMPORARY_MAP;
             }
         }
     }
