@@ -19,6 +19,8 @@ keywords = {}
 
 htmlfiles = glob.glob1(path, '*.html')
 
+char_list = {}
+
 for fname in htmlfiles:
     fil = open(os.path.join(path, fname))
     # TODO maybe move to Python re (regex)
@@ -40,7 +42,6 @@ for fname in htmlfiles:
             key = key.split('>')[1].split('<')[0]
         except:
             pass
-        #key = "%s%s" % (key[0].upper(), key[1:])
         if key not in keywords.keys():
             keywords[key] = []
             keywords[key].append(fname)
@@ -51,22 +52,57 @@ for black in blacklist:
     try:
         del keywords[black]
     except:
-        continue
+        try:
+            del keywords[black.lower()]
+        except:
+            continue
+
+for key in sorted(keywords.keys()):
+    # this list it is useful to create the TOC using only the first
+    # character for keyword
+    firstchar = key[0].lower()
+    if firstchar not in char_list.keys():
+        char_list[str(firstchar)] = key
+    elif firstchar in char_list.keys():
+        if key.lower() < char_list[str(firstchar)].lower():
+            char_list[str(firstchar.lower())] = key
 
 keywordsfile = open(os.path.join(path, 'keywords.html'), 'w')
-keywordsfile.write(header1_tmpl.substitute(title = "GRASS GIS " \
-                        "%s Reference Manual: Keywords index" % grass_version))
+keywordsfile.write(header1_tmpl.substitute(title="GRASS GIS %s Reference "
+                                           "Manual: Keywords index" % grass_version))
 keywordsfile.write(headerkeywords_tmpl)
 keywordsfile.write('<dl>')
-for key, values in sorted(keywords.iteritems()):
-    keyword_line = '<dt><b><a name="%s" class="urlblack">%s</a></b></dt><dd>' % (key, key)
-    for value in sorted(values):
-        keyword_line += ' <a href="%s">%s</a>,' % (value, value.replace('.html',
-                                                                        ''))
+
+sortedKeys = keywords.keys()
+sortedKeys.sort(key=lambda s: s.lower())
+
+for key in sortedKeys:
+    keyword_line = '<dt><b><a name="%s" class="urlblack">%s</a></b></dt>' \
+                   '<dd>' % (key, key)
+    for value in sorted(keywords[key]):
+        keyword_line += ' <a href="%s">%s</a>,' % (value,
+                                                   value.replace('.html', ''))
     keyword_line = keyword_line.rstrip(',')
     keyword_line += '</dd>\n'
     keywordsfile.write(keyword_line)
-
 keywordsfile.write("</dl>\n")
+# create toc
+toc = '<div class="toc">\n<h4 class="toc">Table of contents</h4><p class="toc">'
+test_lenght = 0
+all_keys = len(char_list.keys())
+for k in sorted(char_list.keys()):
+    test_lenght += 1
+#    toc += '<li><a href="#%s" class="toc">%s</a></li>' % (char_list[k], k)
+    if test_lenght % 4 == 0 and not test_lenght == all_keys:
+        toc += '\n<a href="#%s" class="toc">%s</a>, ' % (char_list[k], k)
+    elif test_lenght % 4 == 0 and test_lenght == all_keys:
+        toc += '\n<a href="#%s" class="toc">%s</a>' % (char_list[k], k)
+    elif test_lenght == all_keys:
+        toc += '<a href="#%s" class="toc">%s</a>' % (char_list[k], k)
+    else:
+        toc += '<a href="#%s" class="toc">%s</a>, ' % (char_list[k], k)
+toc += '</p></div>\n'
+keywordsfile.write(toc)
+
 write_html_footer(keywordsfile, "index.html", year)
 keywordsfile.close()
