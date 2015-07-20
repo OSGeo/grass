@@ -288,6 +288,7 @@ class TplotFrame(wx.Frame):
             sp = tgis.dataset_factory(etype, fullname)
             sp.select(dbif=self.dbif)
 
+            minmin = sp.metadata.get_min_min()
             self.plotNameListR.append(series)
             self.timeDataR[name] = OrderedDict()
             if not sp.is_in_db(dbif=self.dbif):
@@ -331,7 +332,11 @@ class TplotFrame(wx.Frame):
                 r.open()
                 val = r.get_value(self.poi)
                 r.close()
-                self.timeDataR[name][row[0]]['value'] = val
+                if val == -2147483648 and val < minmin:
+                    self.timeDataR[name][row[0]]['value'] = None
+                else:
+                    self.timeDataR[name][row[0]]['value'] = val
+
         self.unit = unit
         self.temporalType = mode
         return
@@ -583,11 +588,11 @@ class TplotFrame(wx.Frame):
             try:
                 coordx, coordy = self.coorval.coordsField.GetValue().split(',')
                 coordx, coordy = float(coordx), float(coordy)
-            except ValueError:
+            except (ValueError, AttributeError):
                 try:
                     coordx, coordy = self.coorval.GetValue().split(',')
                     coordx, coordy = float(coordx), float(coordy)
-                except ValueError:
+                except (ValueError, AttributeError):
                     GMessage(_("Incorrect format of coordinates, should be: x,y"))
             coors = [coordx, coordy]
 
