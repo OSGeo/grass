@@ -115,6 +115,7 @@
 #% suppress_required: yes
 #%end
 
+from __future__ import print_function
 import os
 import sys
 import re
@@ -123,8 +124,11 @@ import shutil
 import zipfile
 import tempfile
 
-from urllib2 import HTTPError
-from urllib import urlopen
+try:
+    from urllib2 import HTTPError
+    from urllib import urlopen
+except ImportError:
+    from urllib.request import HTTPError, urlopen
 
 try:
     import xml.etree.ElementTree as etree
@@ -233,16 +237,15 @@ def list_available_extensions(url):
         tlist = list_available_toolboxes(url)
         for toolbox_code, toolbox_data in tlist.iteritems():
             if flags['g']:
-                print 'toolbox_name=' + toolbox_data['name']
-                print 'toolbox_code=' + toolbox_code
+                print('toolbox_name=' + toolbox_data['name'])
+                print('toolbox_code=' + toolbox_code)
             else:
-                print '%s (%s)' % (toolbox_data['name'], toolbox_code)
+                print('%s (%s)' % (toolbox_data['name'], toolbox_code))
             if flags['c'] or flags['g']:
                 list_available_modules(url, toolbox_data['modules'])
             else:
                 if toolbox_data['modules']:
-                    print os.linesep.join(map(lambda x: '* ' + x,
-                                              toolbox_data['modules']))
+                    print(os.linesep.join(map(lambda x: '* ' + x, toolbox_data['modules'])))
     else:
         grass.message(_("List of available extensions (modules):"))
         list_available_modules(url)
@@ -330,15 +333,15 @@ def list_available_modules(url, mlist=None):
                 desc, keyw = get_optional_params(mnode)
 
             if flags['g']:
-                print 'name=' + name
-                print 'description=' + desc
-                print 'keywords=' + keyw
+                print('name=' + name)
+                print('description=' + desc)
+                print('keywords=' + keyw)
             elif flags['c']:
                 if mlist:
-                    print '*',
-                print name + ' - ' + desc
+                    print('*', end='')
+                print(name + ' - ' + desc)
             else:
-                print name
+                print(name)
     except HTTPError:
         list_available_extensions_svn()
 
@@ -378,7 +381,7 @@ def list_available_extensions_svn():
                 continue
             name = sline.group(2).rstrip('/')
             if name.split('.', 1)[0] == d:
-                print name
+                print(name)
 
     # get_wxgui_extensions()
 
@@ -508,7 +511,7 @@ def install_extension(url):
         else:
             ret += install_extension_other(module)
         if len(mlist) > 1:
-            print '-' * 60
+            print('-' * 60)
 
     if flags['d']:
         return
@@ -923,7 +926,7 @@ def remove_modules(mlist, force=False):
                             removed = True
                             os.remove(fpath)
                         else:
-                            print fpath
+                            print(fpath)
                     except OSError:
                         err.append((_("Unable to remove file '%s'") % fpath))
                 if force and not removed:
@@ -954,7 +957,7 @@ def remove_extension_std(name, force=False):
                 grass.verbose(fpath)
                 os.remove(fpath)
             else:
-                print fpath
+                print(fpath)
 
 # update local meta-file when removing existing extension
 
