@@ -46,7 +46,6 @@
 #% type: string
 #% key_desc: url
 #% description: SVN Addons repository URL
-#% answer: http://svn.osgeo.org/grass/grass-addons/grass7
 #%end
 #%option
 #% key: prefix
@@ -173,7 +172,7 @@ def etree_fromurl(url, proxies=None):
 
 def check_progs():
     """Check if the necessary programs are available"""
-    for prog in ('svn', 'make', 'gcc'):
+    for prog in ('make', 'gcc'):
         if not grass.find_program(prog, '--help'):
             grass.fatal(_("'%s' required. Please install '%s' first.")
                         % (prog, prog))
@@ -208,6 +207,20 @@ def expand_module_class_name(class_letters):
     }
 
     return name.get(class_letters, class_letters)
+
+
+def get_module_class_name(module_name):
+    """Return class (family) name for a module
+
+    The names are used in directories in Addons but also in the source code.
+
+    >>> get_module_class_name('r.slope.aspect')
+    'raster'
+    >>> get_module_class_name('v.to.rast')
+    'vector'
+    """
+    classchar = module_name.split('.', 1)[0]
+    return expand_module_class_name(classchar)
 
 
 def get_installed_extensions(force=False):
@@ -999,7 +1012,7 @@ def download_source_code(source, url, name, outdev,
     """Get source code to a local directory for compilation"""
     if source == 'svn':
         download_source_code_svn(url, name, outdev, directory)
-    elif source == 'remote_zip':
+    elif source in ['remote_zip', 'official']:
         # we expect that the module.zip file is not by chance in the archive
         zip_name = os.path.join(tmpdir, 'extension.zip')
         urlretrieve(url, zip_name)
@@ -1372,7 +1385,7 @@ def resolve_install_prefix(path, to_system):
     return os.path.abspath(path)  # make likes absolute paths
 
 
-def resolve_xmlurl_prefix(url):
+def resolve_xmlurl_prefix(url, source=None):
     """Determine and check the URL where the XML metadata files are stored
 
     It ensures that there is a single slash at the end of URL, so we can attach
@@ -1383,9 +1396,9 @@ def resolve_xmlurl_prefix(url):
     >>> resolve_xmlurl_prefix('http://grass.osgeo.org/addons/')
     'http://grass.osgeo.org/addons/'
     """
-    if 'svn.osgeo.org/grass/grass-addons/grass7' in url:
+    if source == 'official':
         # use pregenerated modules XML file
-        url = 'http://grass.osgeo.org/addons/grass%s' % version[0]
+        url = 'http://grass.osgeo.org/addons/grass%s/' % version[0]
     # else try to get modules XMl from SVN repository (provided URL)
     # the exact action depends on subsequent code (somewhere)
 
@@ -1466,7 +1479,7 @@ def resolve_known_host_service(url):
         return None, None
 
 
-def resolve_source_code(url):
+def resolve_source_code(url=None, name=None):
     """Return type and URL or path of the source code
 
     Local paths are not presented as URLs to be usable in standard functions.
@@ -1478,6 +1491,11 @@ def resolve_source_code(url):
     GitHub does not provide the deafult branch in the URL (July 2015).
 
     :returns: tuple with type of source and full URL or path
+
+    Official repository:
+
+    >>> resolve_source_code(name='g.example') # doctest: +SKIP
+    ('official', 'https://trac.osgeo.org/.../general/g.example')
 
     Subversion:
 
@@ -1528,6 +1546,13 @@ def resolve_source_code(url):
     >>> resolve_source_code('https://bitbucket.org/joe-user/grass-module')
     ('remote_zip', 'https://bitbucket.org/joe-user/grass-module/get/default.zip')
     """
+    if not url and name:
+        module_class = get_module_class_name(name)
+        trac_url = 'https://trac.osgeo.org/grass/browser/grass-addons/' \
+                   'grass{version}/{module_class}/{module_name}?format=zip' \
+                   .format(version=version[0],
+                           module_class=module_class, module_name=name)
+        return 'official', trac_url
     if os.path.isdir(url):
         return 'dir', os.path.abspath(url)
     elif os.path.exists(url):
@@ -1587,8 +1612,9 @@ def main():
 
     if options['operation'] == 'add':
         check_dirs()
-        source, url = resolve_source_code(options['svnurl'])
-        xmlurl = resolve_xmlurl_prefix(options['svnurl'])
+        source, url = resolve_source_code(name=options['extension'],
+                                          url=options['svnurl'])
+        xmlurl = resolve_xmlurl_prefix(options['svnurl'], source=source)
         install_extension(source=source, url=url, xmlurl=xmlurl)
     else:  # remove
         remove_extension(force=flags['f'])
