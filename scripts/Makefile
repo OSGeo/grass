@@ -69,6 +69,7 @@ SUBDIRS = \
 	v.pack \
 	v.to.lines \
 	v.unpack \
+	v.what.strds \
 	v.what.vect \
 	wxpyimgview \
 	v.krige
