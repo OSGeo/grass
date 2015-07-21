@@ -1636,7 +1636,7 @@ class GMFrame(wx.Frame):
         except ImportError:
             GError(parent=self, message=_("Unable to start Temporal Plot Tool."))
             return
-        frame = TplotFrame(None)
+        frame = TplotFrame(parent=self, giface=self._giface)
         frame.Show()
           
     def OnHistogram(self, event):
