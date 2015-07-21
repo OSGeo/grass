@@ -1462,7 +1462,8 @@ class CmdPanel(wx.Panel):
                     if p.get('default','') !=  '':
                         default_color, label_color = utils.color_resolve(p['default'])
                     if p.get('value','') !=  '' and p.get('value','') != 'none': # parameter previously set
-                        default_color, label_color = utils.color_resolve(p['value'])
+                        if not p.get('multiple', False):
+                            default_color, label_color = utils.color_resolve(p['value'])
                     if p.get('element', '') == 'color_none' or p.get('multiple', False):
                         this_sizer = wx.BoxSizer(orient = wx.HORIZONTAL)
                     else:
@@ -1477,6 +1478,8 @@ class CmdPanel(wx.Panel):
                         this_sizer.Add(item = txt, proportion = 1,
                                        flag = wx.ADJUST_MINSIZE | wx.LEFT | wx.TOP, border = 5)
                         txt.Bind(wx.EVT_TEXT, self.OnSetValue)
+                        if p.get('value', ''):
+                            txt.SetValue(p['value'])
                         colorSize = 40
                         label_color = ''
                         p['wxId'][1] = txt.GetId()
