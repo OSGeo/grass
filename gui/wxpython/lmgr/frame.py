@@ -685,7 +685,7 @@ class GMFrame(wx.Frame):
             # add layer into layer tree
             lname, found = GetLayerNameFromCmd(command, fullyQualified = True,
                                                layerType = layertype)
-            self.GetLayerTree().AddLayer(ltype = layertype, lchecked=True,
+            self.GetLayerTree().AddLayer(ltype = layertype, lchecked = False,
                                          lname = lname,
                                          lcmd = command)
 
