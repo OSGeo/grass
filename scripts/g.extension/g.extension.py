@@ -924,6 +924,31 @@ def move_extracted_files(extract_dir, target_dir, files):
                 shutil.copy(actual_file, target_dir)
 
 
+# Original copyright and license of the original version of the CRLF function
+# Copyright (c) 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010
+# Python Software Foundation; All Rights Reserved
+# Python Software Foundation License Version 2
+# http://svn.python.org/projects/python/trunk/Tools/scripts/crlf.py
+def fix_newlines(directory):
+    """Replace CRLF with LF in all files in the directory
+
+    Binary files are ignored. Recurses into subdirectories.
+    """
+    for root, unused, files in os.walk(directory):
+        for name in files:
+            filename = os.path.join(root, name)
+            data = open(filename, 'rb').read()
+            if '\0' in data:
+                continue  # ignore binary files
+            # we don't expect there would be CRLF file by purpose
+            # if we want to allow CRLF files we would have to whitelite .py etc
+            newdata = data.replace('\r\n', '\n')
+            if newdata != data:
+                f = open(filename, 'wb')
+                f.write(newdata)
+                f.close()
+
+
 def extract_zip(name, directory, tmpdir):
     """Extract a ZIP file into a directory"""
     zip_file = zipfile.ZipFile(name, mode='r')
@@ -960,19 +985,24 @@ def download_source_code(source, url, name, outdev,
         zip_name = os.path.join(tmpdir, 'module.zip')
         urlretrieve(url, zip_name)
         extract_zip(name=zip_name, directory=directory, tmpdir=tmpdir)
+        fix_newlines(directory)
     elif source == 'remote_tar.gz':
         # we expect that the module.tar.gz file is not by chance in the archive
         archive_name = os.path.join(tmpdir, 'module.tar.gz')
         urlretrieve(url, archive_name)
         extract_tar(name=archive_name, directory=directory, tmpdir=tmpdir)
+        fix_newlines(directory)
     elif source == 'zip':
         os.mkdir(directory)
         extract_zip(name=url, directory=directory)
+        fix_newlines(directory)
     elif source == 'tar':
         os.mkdir(directory)
         extract_tar(name=url, directory=directory)
+        fix_newlines(directory)
     elif source == 'dir':
         shutil.copytree(url, directory)
+        fix_newlines(directory)
     else:
         # probably programmer error
         grass.fatal(_("Unknown extension (addon) source '{}'."
