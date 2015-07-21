@@ -168,9 +168,9 @@ def expand_module_class_name(class_letters):
     The names are used in directories in Addons but also in the source code.
 
     >>> expand_module_class_name('r')
-    raster
+    'raster'
     >>> expand_module_class_name('v')
-    vector
+    'vector'
     """
     name = {'d': 'display',
             'db': 'database',
@@ -195,6 +195,7 @@ def get_installed_extensions(force=False):
         return get_installed_toolboxes(force)
 
     return get_installed_modules(force)
+
 
 def list_installed_extensions(toolboxes=False):
     """List installed extensions"""
@@ -293,7 +294,8 @@ def list_available_extensions(url):
                 list_available_modules(url, toolbox_data['modules'])
             else:
                 if toolbox_data['modules']:
-                    print(os.linesep.join(map(lambda x: '* ' + x, toolbox_data['modules'])))
+                    print(os.linesep.join(map(lambda x: '* ' + x,
+                                              toolbox_data['modules'])))
     else:
         grass.message(_("List of available extensions (modules):"))
         list_available_modules(url)
@@ -919,7 +921,8 @@ def move_extracted_files(extract_dir, target_dir, files):
         for file_name in files:
             actual_file = os.path.join(extract_dir, file_name)
             if os.path.isdir(actual_file):
-                shutil.copytree(actual_file, os.path.join(target_dir, file_name))
+                shutil.copytree(actual_file,
+                                os.path.join(target_dir, file_name))
             else:
                 shutil.copy(actual_file, target_dir)
 
@@ -982,23 +985,21 @@ def download_source_code(source, url, name, outdev,
         download_source_code_svn(url, name, outdev, directory)
     elif source == 'remote_zip':
         # we expect that the module.zip file is not by chance in the archive
-        zip_name = os.path.join(tmpdir, 'module.zip')
+        zip_name = os.path.join(tmpdir, 'extension.zip')
         urlretrieve(url, zip_name)
         extract_zip(name=zip_name, directory=directory, tmpdir=tmpdir)
         fix_newlines(directory)
     elif source == 'remote_tar.gz':
         # we expect that the module.tar.gz file is not by chance in the archive
-        archive_name = os.path.join(tmpdir, 'module.tar.gz')
+        archive_name = os.path.join(tmpdir, 'extension.tar.gz')
         urlretrieve(url, archive_name)
         extract_tar(name=archive_name, directory=directory, tmpdir=tmpdir)
         fix_newlines(directory)
     elif source == 'zip':
-        os.mkdir(directory)
-        extract_zip(name=url, directory=directory)
+        extract_zip(name=url, directory=directory, tmpdir=tmpdir)
         fix_newlines(directory)
     elif source == 'tar':
-        os.mkdir(directory)
-        extract_tar(name=url, directory=directory)
+        extract_tar(name=url, directory=directory, tmpdir=tmpdir)
         fix_newlines(directory)
     elif source == 'dir':
         shutil.copytree(url, directory)
@@ -1362,39 +1363,71 @@ def resolve_install_prefix(path, to_system):
 
 
 def resolve_xmlurl_prefix(url):
-    """Determine and check the URL where the XML metadata files are stored"""
+    """Determine and check the URL where the XML metadata files are stored
+
+    It ensures that there is a single slash at the end of URL, so we can attach
+     file name easily:
+
+    >>> resolve_xmlurl_prefix('http://grass.osgeo.org/addons')
+    'http://grass.osgeo.org/addons/'
+    >>> resolve_xmlurl_prefix('http://grass.osgeo.org/addons/')
+    'http://grass.osgeo.org/addons/'
+    """
     if 'svn.osgeo.org/grass/grass-addons/grass7' in url:
         # use pregenerated modules XML file
-        url = "http://grass.osgeo.org/addons/grass%s" % version[0]
+        url = 'http://grass.osgeo.org/addons/grass%s' % version[0]
     # else try to get modules XMl from SVN repository (provided URL)
     # the exact action depends on subsequent code (somewhere)
 
     if not url.endswith('/'):
-        url = url + "/"
+        url = url + '/'
     return url
 
 
 def resolve_source_code(url):
+    """Return type and URL or path of the source code
+
+    Local paths are not presented as URLs to be usable in standard functions.
+    Path is identified as local path if the directory of file exists which
+    has the unfortunate consequence that the not existing files are evaluated
+    as remote URLs. When path is not evaluated, Subversion is assumed for
+    backwards compatibility. When GitHub repository is specified, ZIP file
+    link is returned. The ZIP is for master branch, not the default one because
+    GitHub does not provide the deafult branch in the URL (July 2015).
+
+    :returns: tuple with type of source and full URL or path
+
+    >>> resolve_source_code('http://svn.osgeo.org/grass/grass-addons/grass7')
+    ('svn', 'http://svn.osgeo.org/grass/grass-addons/grass7')
+    >>> resolve_source_code('https://trac.osgeo.org/.../r.modis?format=zip')
+    ('remote_zip', 'https://trac.osgeo.org/.../r.modis?format=zip')
+    >>> resolve_source_code(os.path.expanduser("~")) # doctest: +ELLIPSIS
+    ('dir', '...')
+    >>> resolve_source_code('/local/directory/downloaded.zip') # doctest: +SKIP
+    ('zip', '/local/directory/downloaded.zip')
+    >>> resolve_source_code('github.com/user/g.example')
+    ('remote_zip', 'https://github.com/user/g.example/archive/master.zip')
+    >>> resolve_source_code('github.com/user/g.example/')
+    ('remote_zip', 'https://github.com/user/g.example/archive/master.zip')
+    """
     if os.path.isdir(url):
-        return 'dir', url
+        return 'dir', os.path.abspath(url)
     elif os.path.exists(url):
         for suffix in ['.zip', '.tar.gz']:
             if url.endswith(suffix):
-                return suffix.lstrip('.'), url
-    # https://trac.osgeo.org/grass/browser/grass-addons/grass7/raster/r.modis?format=zip
-    # return 'remote_zip', url
-    # https://github.com/user/module
-    # https://github.com/user/module/archive/master.zip
+                return suffix.lstrip('.'), os.path.abspath(url)
     elif url.startswith('github.com') and \
             not (url.endswith('.zip') or url.endswith('.tar.gz')):
-        url = 'https://{}/archive/master.zip'.format(url)
+        url = 'https://{}/archive/master.zip'.format(url.rstrip('/'))
         return 'remote_zip', url
     else:
+        # we allow URL to end with =zip or ?zip and not only .zip
+        # unfortunately format=zip&version=89612 would require something else
+        # special option to force the source type would solve it
         for suffix in ['zip', 'tar.gz']:
             if url.endswith(suffix):
-                print(suffix)
                 return 'remote_' + suffix, url
-        # fallback to classic behavior
+        # fallback to the classic behavior
         return 'svn', url
 
 
@@ -1441,7 +1474,11 @@ def main():
 
     return 0
 
+
 if __name__ == "__main__":
+    if len(sys.argv) == 2 and sys.argv[1] == '--doctest':
+        import doctest
+        sys.exit(doctest.testmod().failed)
     options, flags = grass.parser()
     global TMPDIR
     TMPDIR = tempfile.mkdtemp()
