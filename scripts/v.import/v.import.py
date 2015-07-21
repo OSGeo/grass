@@ -51,6 +51,13 @@
 #% descriptions: input;extents of input map;region;extents of current region
 #% guisection: Output
 #%end
+#%option
+#% key: encoding
+#% type: string
+#% label: Encoding value for attribute data
+#% descriptions: Overrides encoding interpretation, useful when importing ESRI Shapefile
+#% guisection: Output
+#%end
 #%flag
 #% key: f
 #% description: List supported OGR formats and exit
@@ -103,7 +110,10 @@ def main():
     vflags = None
     if options['extents'] == 'region':
         vflags = 'r'
-
+    vopts = {}
+    if options['encoding']:
+        vopts['encoding'] = options['encoding']
+    
     grassenv = grass.gisenv()
     tgtloc = grassenv['LOCATION_NAME']
     tgtmapset = grassenv['MAPSET']
@@ -124,13 +134,12 @@ def main():
 
     # create temp location from input without import
     grass.message(_("Creating temporary location for <%s>...") % OGRdatasource)
-    v_in_kwargs = dict()
     if layers:
-        v_in_kwargs['layer'] = layers
+        vopts['layer'] = layers
     if output:
-        v_in_kwargs['output'] = output
+        vopts['output'] = output
     returncode = grass.run_command('v.in.ogr', input = OGRdatasource,
-                                   location = tmploc, flags = 'i', quiet = True, **v_in_kwargs)
+                                   location = tmploc, flags = 'i', quiet = True, **vopts)
     # if it fails, return
     if returncode != 0:
         grass.fatal(_("Unable to create location from OGR datasource <%s>") % OGRdatasource)
@@ -148,7 +157,7 @@ def main():
         # try v.in.ogr directly
         grass.message(_("Importing <%s>...") % OGRdatasource) 
         returncode = grass.run_command('v.in.ogr', input = OGRdatasource,
-                                       flags = vflags, **v_in_kwargs)
+                                       flags = vflags, **vopts)
         # if it succeeds, return
         if returncode == 0:
             grass.message(_("Input <%s> successfully imported without reprojection") % OGRdatasource) 
@@ -192,7 +201,7 @@ def main():
     # import into temp location
     grass.message(_("Importing <%s> ...") % OGRdatasource)
     returncode = grass.run_command('v.in.ogr', input = OGRdatasource,
-                                   flags = vflags, **v_in_kwargs)
+                                   flags = vflags, **vopts)
     
     # if it fails, return
     if returncode != 0:
