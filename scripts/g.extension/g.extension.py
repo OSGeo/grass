@@ -919,13 +919,14 @@ def move_extracted_files(extract_dir, target_dir, files):
     if len(files) == 1:
         shutil.copytree(os.path.join(extract_dir, files[0]), target_dir)
     else:
+        os.mkdir(target_dir)
         for file_name in files:
             actual_file = os.path.join(extract_dir, file_name)
             if os.path.isdir(actual_file):
                 shutil.copytree(actual_file,
                                 os.path.join(target_dir, file_name))
             else:
-                shutil.copy(actual_file, target_dir)
+                shutil.copy(actual_file, os.path.join(target_dir, file_name))
 
 
 # Original copyright and license of the original version of the CRLF function
@@ -1022,6 +1023,7 @@ def download_source_code(source, url, name, outdev,
         grass.fatal(_("Unknown extension (addon) source type '{}'."
                       " Please report this to the grass-user mailing list.")
                     .format(source))
+    assert os.path.isdir(directory)
 
 
 def install_extension_std_platforms(name, source, url):
@@ -1372,7 +1374,7 @@ def resolve_install_prefix(path, to_system):
     # together with file names
     if not path.endswith(os.path.sep):
         path = path + os.path.sep
-    return path
+    return os.path.abspath(path)  # make likes absolute paths
 
 
 def resolve_xmlurl_prefix(url):
@@ -1447,7 +1449,7 @@ def resolve_known_host_service(url):
                             _("Not using {service} as known hosting service"
                               " because the URL ends with '{suffix}'")
                                 .format(service=key, suffix=suffix))
-                        return None
+                        return None, None
     if match:
         if not actual_start:
             actual_start = match['url_start']
@@ -1460,7 +1462,7 @@ def resolve_known_host_service(url):
                         .format(url))
         return 'remote_zip', url
     else:
-        return None
+        return None, None
 
 
 def resolve_source_code(url):
@@ -1529,14 +1531,14 @@ def resolve_source_code(url):
         return 'dir', os.path.abspath(url)
     elif os.path.exists(url):
         if url.endswith('.zip'):
-                return 'zip', os.path.abspath(url)
+            return 'zip', os.path.abspath(url)
         for suffix in extract_tar.supported_formats:
             if url.endswith('.' + suffix):
                 return suffix, os.path.abspath(url)
     else:
-        result = resolve_known_host_service(url)
-        if result:
-            return result
+        source, url = resolve_known_host_service(url)
+        if source:
+            return source, url
         # we allow URL to end with =zip or ?zip and not only .zip
         # unfortunately format=zip&version=89612 would require something else
         # special option to force the source type would solve it

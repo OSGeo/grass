@@ -40,7 +40,7 @@ class TestToolboxesMetadata(TestCase):
 
     url = 'file://' + os.path.abspath('data')
 
-    def test_limits(self):
+    def test_listing(self):
         """Test if results is in expected limits"""
         module = SimpleModule('g.extension', flags='lt', svnurl=self.url)
         self.assertModule(module)
