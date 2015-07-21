@@ -131,15 +131,24 @@ import zipfile
 import tempfile
 
 try:
-    from urllib2 import HTTPError
+    from urllib2 import HTTPError, URLError
     from urllib import urlopen, urlretrieve
 except ImportError:
-    from urllib.request import HTTPError, urlopen, urlretrieve
+    # there is also HTTPException, perhaps change to list
+    from urllib.request import HTTPError, URLError, \
+        urlopen, urlretrieve  # pylint: disable=E0611
 
 try:
     import xml.etree.ElementTree as etree
 except ImportError:
     import elementtree.ElementTree as etree  # Python <= 2.4
+# Get the XML parsing exceptions to catch. The behavior chnaged with Python 2.7
+# and ElementTree 1.3.
+from xml.parsers import expat  # TODO: works for any Python?
+if hasattr(etree, 'ParseError'):
+    ETREE_EXCEPTIONS = (etree.ParseError, expat.ExpatError)
+else:
+    ETREE_EXCEPTIONS = (expat.ExpatError)
 
 import grass.script as gscript
 from grass.script.utils import try_rmdir
@@ -149,7 +158,17 @@ from grass.script import core as grass
 REMOVE_TMPDIR = True
 PROXIES = {}
 
-# check requirements
+
+def etree_fromfile(filename):
+    """Create XML element tree from a given file name"""
+    with open(filename, 'r') as file_:
+        return etree.fromstring(file_.read())
+
+
+def etree_fromurl(url, proxies=None):
+    """Create XML element tree from a given URL"""
+    file_ = urlopen(url, proxies=proxies)
+    return etree.fromstring(file_.read())
 
 
 def check_progs():
@@ -173,19 +192,20 @@ def expand_module_class_name(class_letters):
     >>> expand_module_class_name('v')
     'vector'
     """
-    name = {'d': 'display',
-            'db': 'database',
-            'g': 'general',
-            'i': 'imagery',
-            'm': 'misc',
-            'ps': 'postscript',
-            'p': 'paint',
-            'r': 'raster',
-            'r3': 'raster3d',
-            's': 'sites',
-            'v': 'vector',
-            'wx': 'gui/wxpython'
-            }
+    name = {
+        'd': 'display',
+        'db': 'database',
+        'g': 'general',
+        'i': 'imagery',
+        'm': 'misc',
+        'ps': 'postscript',
+        'p': 'paint',
+        'r': 'raster',
+        'r3': 'raster3d',
+        's': 'sites',
+        'v': 'vector',
+        'wx': 'gui/wxpython'
+    }
 
     return name.get(class_letters, class_letters)
 
@@ -225,21 +245,16 @@ def get_installed_toolboxes(force=False):
     xml_file = os.path.join(options['prefix'], 'toolboxes.xml')
     if not os.path.exists(xml_file):
         write_xml_toolboxes(xml_file)
-
     # read XML file
-    fo = open(xml_file, 'r')
     try:
-        tree = etree.fromstring(fo.read())
-    except:
+        tree = etree_fromfile(xml_file)
+    except ETREE_EXCEPTIONS + (OSError, IOError):
         os.remove(xml_file)
         write_xml_toolboxes(xml_file)
         return []
-    fo.close()
-
     ret = list()
     for tnode in tree.findall('toolbox'):
         ret.append(tnode.get('code'))
-
     return ret
 
 
@@ -257,21 +272,16 @@ def get_installed_modules(force=False):
         else:
             grass.debug(1, "No addons metadata file available")
         return []
-
     # read XML file
-    fo = open(xml_file, 'r')
     try:
-        tree = etree.fromstring(fo.read())
-    except:
+        tree = etree_fromfile(xml_file)
+    except ETREE_EXCEPTIONS + (OSError, IOError):
         os.remove(xml_file)
         write_xml_modules(xml_file)
         return []
-    fo.close()
-
     ret = list()
     for tnode in tree.findall('task'):
         ret.append(tnode.get('name').strip())
-
     return ret
 
 # list extensions (read XML file from grass.osgeo.org/addons)
@@ -307,8 +317,7 @@ def get_available_toolboxes(url):
     tdict = dict()
     url = url + "toolboxes.xml"
     try:
-        f = urlopen(url, proxies=PROXIES)
-        tree = etree.fromstring(f.read())
+        tree = etree_fromurl(url, proxies=PROXIES)
         for tnode in tree.findall('toolbox'):
             mlist = list()
             clist = list()
@@ -321,7 +330,7 @@ def get_available_toolboxes(url):
 
             for mnode in tnode.findall('task'):
                 mlist.append(mnode.get('name'))
-    except HTTPError:
+    except (HTTPError, IOError, OSError):
         grass.fatal(_("Unable to fetch addons metadata file"))
 
     return tdict
@@ -338,14 +347,13 @@ def get_toolbox_modules(url, name):
     url = url + "toolboxes.xml"
 
     try:
-        f = urlopen(url, proxies=PROXIES)
-        tree = etree.fromstring(f.read())
+        tree = etree_fromurl(url, proxies=PROXIES)
         for tnode in tree.findall('toolbox'):
             if name == tnode.get('code'):
                 for mnode in tnode.findall('task'):
                     tlist.append(mnode.get('name'))
                 break
-    except HTTPError:
+    except (HTTPError, IOError, OSError):
         grass.fatal(_("Unable to fetch addons metadata file"))
 
     return tlist
@@ -380,34 +388,33 @@ def list_available_modules(url, mlist=None):
     url = url + "modules.xml"
     grass.debug("url=%s" % url, 1)
     try:
-        f = urlopen(url, proxies=PROXIES)
-        try:
-            tree = etree.fromstring(f.read())
-        except:
-            grass.warning(_("Unable to parse '%s'. Trying to scan"
-                            " SVN repository (may take some time)...") % url)
-            list_available_extensions_svn()
-            return
-
-        for mnode in tree.findall('task'):
-            name = mnode.get('name').strip()
-            if mlist and name not in mlist:
-                continue
-            if flags['c'] or flags['g']:
-                desc, keyw = get_optional_params(mnode)
-
-            if flags['g']:
-                print('name=' + name)
-                print('description=' + desc)
-                print('keywords=' + keyw)
-            elif flags['c']:
-                if mlist:
-                    print('*', end='')
-                print(name + ' - ' + desc)
-            else:
-                print(name)
-    except HTTPError:
+        tree = etree_fromurl(url, proxies=PROXIES)
+    except ETREE_EXCEPTIONS:
+        grass.warning(_("Unable to parse '%s'. Trying to scan"
+                        " SVN repository (may take some time)...") % url)
         list_available_extensions_svn()
+        return
+    except (HTTPError, URLError, IOError, OSError):
+        list_available_extensions_svn()
+        return
+
+    for mnode in tree.findall('task'):
+        name = mnode.get('name').strip()
+        if mlist and name not in mlist:
+            continue
+        if flags['c'] or flags['g']:
+            desc, keyw = get_optional_params(mnode)
+
+        if flags['g']:
+            print('name=' + name)
+            print('description=' + desc)
+            print('keywords=' + keyw)
+        elif flags['c']:
+            if mlist:
+                print('*', end='')
+            print(name + ' - ' + desc)
+        else:
+            print(name)
 
 # list extensions (scan SVN repo)
 
@@ -437,12 +444,12 @@ def list_available_extensions_svn():
         url = '%s/%s' % (options['svnurl'], modclass)
         grass.debug("url = %s" % url, debug=2)
         try:
-            f = urlopen(url, proxies=PROXIES)
-        except HTTPError:
+            file_ = urlopen(url, proxies=PROXIES)
+        except (HTTPError, IOError, OSError):
             grass.debug(_("Unable to fetch '%s'") % url, debug=1)
             continue
 
-        for line in f.readlines():
+        for line in file_.readlines():
             # list extensions
             sline = pattern.search(line)
             if not sline:
@@ -464,12 +471,12 @@ def get_wxgui_extensions():
 
     url = '%s/%s' % (options['svnurl'], 'gui/wxpython')
     grass.debug("url = %s" % url, debug=2)
-    f = urlopen(url, proxies=PROXIES)
-    if not f:
+    file_ = urlopen(url, proxies=PROXIES)
+    if not file_:
         grass.warning(_("Unable to fetch '%s'") % url)
         return
 
-    for line in f.readlines():
+    for line in file.readlines():
         # list extensions
         sline = pattern.search(line)
         if not sline:
@@ -498,39 +505,39 @@ def write_xml_modules(name, tree=None):
     :param name: file name
     :param tree: XML element tree
     """
-    fo = open(name, 'w')
-    fo.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-    fo.write('<!DOCTYPE task SYSTEM "grass-addons.dtd">\n')
-    fo.write('<addons version="%s">\n' % version[0])
+    file_ = open(name, 'w')
+    file_.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+    file_.write('<!DOCTYPE task SYSTEM "grass-addons.dtd">\n')
+    file_.write('<addons version="%s">\n' % version[0])
 
     libgis_revison = grass.version()['libgis_revision']
     if tree is not None:
         for tnode in tree.findall('task'):
             indent = 4
-            fo.write('%s<task name="%s">\n' %
-                     (' ' * indent, tnode.get('name')))
+            file_.write('%s<task name="%s">\n' %
+                        (' ' * indent, tnode.get('name')))
             indent += 4
-            fo.write('%s<description>%s</description>\n' %
-                     (' ' * indent, tnode.find('description').text))
-            fo.write('%s<keywords>%s</keywords>\n' %
-                     (' ' * indent, tnode.find('keywords').text))
+            file_.write('%s<description>%s</description>\n' %
+                        (' ' * indent, tnode.find('description').text))
+            file_.write('%s<keywords>%s</keywords>\n' %
+                        (' ' * indent, tnode.find('keywords').text))
             bnode = tnode.find('binary')
             if bnode is not None:
-                fo.write('%s<binary>\n' % (' ' * indent))
+                file_.write('%s<binary>\n' % (' ' * indent))
                 indent += 4
                 for fnode in bnode.findall('file'):
-                    fo.write('%s<file>%s</file>\n' %
-                             (' ' * indent, os.path.join(options['prefix'],
-                                                         fnode.text)))
+                    file_.write('%s<file>%s</file>\n' %
+                                (' ' * indent, os.path.join(options['prefix'],
+                                                            fnode.text)))
                 indent -= 4
-                fo.write('%s</binary>\n' % (' ' * indent))
-            fo.write('%s<libgis revision="%s" />\n' %
-                     (' ' * indent, libgis_revison))
+                file_.write('%s</binary>\n' % (' ' * indent))
+            file_.write('%s<libgis revision="%s" />\n' %
+                        (' ' * indent, libgis_revison))
             indent -= 4
-            fo.write('%s</task>\n' % (' ' * indent))
+            file_.write('%s</task>\n' % (' ' * indent))
 
-    fo.write('</addons>\n')
-    fo.close()
+    file_.write('</addons>\n')
+    file_.close()
 
 
 def write_xml_toolboxes(name, tree=None):
@@ -541,27 +548,27 @@ def write_xml_toolboxes(name, tree=None):
     :param name: file name
     :param tree: XML element tree
     """
-    fo = open(name, 'w')
-    fo.write('<?xml version="1.0" encoding="UTF-8"?>\n')
-    fo.write('<!DOCTYPE toolbox SYSTEM "grass-addons.dtd">\n')
-    fo.write('<addons version="%s">\n' % version[0])
+    file_ = open(name, 'w')
+    file_.write('<?xml version="1.0" encoding="UTF-8"?>\n')
+    file_.write('<!DOCTYPE toolbox SYSTEM "grass-addons.dtd">\n')
+    file_.write('<addons version="%s">\n' % version[0])
     if tree is not None:
         for tnode in tree.findall('toolbox'):
             indent = 4
-            fo.write('%s<toolbox name="%s" code="%s">\n' %
-                     (' ' * indent, tnode.get('name'), tnode.get('code')))
+            file_.write('%s<toolbox name="%s" code="%s">\n' %
+                        (' ' * indent, tnode.get('name'), tnode.get('code')))
             indent += 4
             for cnode in tnode.findall('correlate'):
-                fo.write('%s<correlate code="%s" />\n' %
-                         (' ' * indent, tnode.get('code')))
+                file_.write('%s<correlate code="%s" />\n' %
+                            (' ' * indent, tnode.get('code')))
             for mnode in tnode.findall('task'):
-                fo.write('%s<task name="%s" />\n' %
-                         (' ' * indent, mnode.get('name')))
+                file_.write('%s<task name="%s" />\n' %
+                            (' ' * indent, mnode.get('name')))
             indent -= 4
-            fo.write('%s</toolbox>\n' % (' ' * indent))
+            file_.write('%s</toolbox>\n' % (' ' * indent))
 
-    fo.write('</addons>\n')
-    fo.close()
+    file_.write('</addons>\n')
+    file_.close()
 
 
 def install_extension(source, url, xmlurl):
@@ -625,8 +632,7 @@ def get_toolboxes_metadata(url):
     """
     data = dict()
     try:
-        f = urlopen(url, proxies=PROXIES)
-        tree = etree.fromstring(f.read())
+        tree = etree_fromurl(url, proxies=PROXIES)
         for tnode in tree.findall('toolbox'):
             clist = list()
             for cnode in tnode.findall('correlate'):
@@ -642,7 +648,7 @@ def get_toolboxes_metadata(url):
                 'correlate': clist,
                 'modules': mlist,
             }
-    except HTTPError:
+    except (HTTPError, IOError, OSError):
         grass.error(_("Unable to read addons metadata file "
                       "from the remote server"))
     return data
@@ -711,40 +717,39 @@ def get_addons_metadata(url, mlist):
     data = {}
     bin_list = []
     try:
-        f = urlopen(url, proxies=PROXIES)
-        try:
-            tree = etree.fromstring(f.read())
-        except:
-            grass.warning(_("Unable to parse '%s'.") % url)
-            return data, bin_list
-        for mnode in tree.findall('task'):
-            name = mnode.get('name')
-            if name not in mlist:
-                continue
-            file_list = list()
-            bnode = mnode.find('binary')
-            windows = sys.platform == 'win32'
-            if bnode is not None:
-                for fnode in bnode.findall('file'):
-                    path = fnode.text.split('/')
-                    if path[0] == 'bin':
-                        bin_list.append(path[-1])
-                        if windows:
-                            path[-1] += '.exe'
-                    elif path[0] == 'scripts':
-                        bin_list.append(path[-1])
-                        if windows:
-                            path[-1] += '.py'
-                    file_list.append(os.path.sep.join(path))
-            desc, keyw = get_optional_params(mnode)
-            data[name] = {
-                'desc': desc,
-                'keyw': keyw,
-                'files': file_list,
-            }
-    except:
-        grass.error(
-            _("Unable to read addons metadata file from the remote server"))
+        tree = etree_fromurl(url, proxies=PROXIES)
+    except (HTTPError, URLError, IOError, OSError) as error:
+        grass.error(_("Unable to read addons metadata file"
+                      " from the remote server: {}").format(error))
+        return data, bin_list
+    except ETREE_EXCEPTIONS as error:
+        grass.warning(_("Unable to parse '%s': {}").format(error) % url)
+        return data, bin_list
+    for mnode in tree.findall('task'):
+        name = mnode.get('name')
+        if name not in mlist:
+            continue
+        file_list = list()
+        bnode = mnode.find('binary')
+        windows = sys.platform == 'win32'
+        if bnode is not None:
+            for fnode in bnode.findall('file'):
+                path = fnode.text.split('/')
+                if path[0] == 'bin':
+                    bin_list.append(path[-1])
+                    if windows:
+                        path[-1] += '.exe'
+                elif path[0] == 'scripts':
+                    bin_list.append(path[-1])
+                    if windows:
+                        path[-1] += '.py'
+                file_list.append(os.path.sep.join(path))
+        desc, keyw = get_optional_params(mnode)
+        data[name] = {
+            'desc': desc,
+            'keyw': keyw,
+            'files': file_list,
+        }
     return data, bin_list
 
 
@@ -773,9 +778,7 @@ def install_extension_xml(url, mlist):
         write_xml_modules(xml_file)
 
     # read XML file
-    fo = open(xml_file, 'r')
-    tree = etree.fromstring(fo.read())
-    fo.close()
+    tree = etree_fromfile(xml_file)
 
     # update tree
     for name in mlist:
@@ -844,7 +847,7 @@ def install_extension_win(name):
 
     try:
         zfile = url + name + '.zip'
-        f = urlopen(zfile, proxies=PROXIES)
+        url_file = urlopen(zfile, proxies=PROXIES)
 
         # create addons dir if not exists
         if not os.path.exists(options['prefix']):
@@ -855,10 +858,10 @@ def install_extension_win(name):
                             .format(options['prefix'], error))
 
         # download data
-        fo = tempfile.TemporaryFile()
-        fo.write(f.read())
+        tmp_file = tempfile.TemporaryFile()
+        tmp_file.write(url_file.read())
         try:
-            zfobj = zipfile.ZipFile(fo)
+            zfobj = zipfile.ZipFile(tmp_file)
         except zipfile.BadZipfile as error:
             grass.fatal('%s: %s' % (error, zfile))
 
@@ -872,7 +875,7 @@ def install_extension_win(name):
                 outfile.write(zfobj.read(name))
                 outfile.close()
 
-        fo.close()
+        tmp_file.close()
     except HTTPError:
         grass.fatal(_("GRASS Addons <%s> not found") % name)
 
@@ -949,9 +952,9 @@ def fix_newlines(directory):
             # if we want to allow CRLF files we would have to whitelite .py etc
             newdata = data.replace('\r\n', '\n')
             if newdata != data:
-                f = open(filename, 'wb')
-                f.write(newdata)
-                f.close()
+                newfile = open(filename, 'wb')
+                newfile.write(newdata)
+                newfile.close()
 
 
 def extract_zip(name, directory, tmpdir):
@@ -959,7 +962,8 @@ def extract_zip(name, directory, tmpdir):
     try:
         zip_file = zipfile.ZipFile(name, mode='r')
         file_list = zip_file.namelist()
-        # we suppose we can write to parent of the given dir (supposing a tmp dir)
+        # we suppose we can write to parent of the given dir
+        # (supposing a tmp dir)
         extract_dir = os.path.join(tmpdir, 'extract_dir')
         os.mkdir(extract_dir)
         for subfile in file_list:
@@ -987,7 +991,7 @@ def extract_tar(name, directory, tmpdir):
     except tarfile.TarError as error:
         gscript.fatal(_("Archive file is unreadable: {}").format(error))
 
-extract_tar.supported_formats = ['tar.gz', 'gz', 'bz2', 'tar', 'gzip','targz']
+extract_tar.supported_formats = ['tar.gz', 'gz', 'bz2', 'tar', 'gzip', 'targz']
 
 
 def download_source_code(source, url, name, outdev,
@@ -1044,36 +1048,39 @@ def install_extension_std_platforms(name, source, url):
                          outdev=outdev, directory=srcdir, tmpdir=TMPDIR)
     os.chdir(srcdir)
 
-    dirs = {'bin': os.path.join(TMPDIR, name, 'bin'),
-            'docs': os.path.join(TMPDIR, name, 'docs'),
-            'html': os.path.join(TMPDIR, name, 'docs', 'html'),
-            'rest': os.path.join(TMPDIR, name, 'docs', 'rest'),
-            'man': os.path.join(TMPDIR, name, 'docs', 'man'),
-            'script': os.path.join(TMPDIR, name, 'scripts'),
-            # TODO: handle locales also for addons
-            #             'string'  : os.path.join(TMPDIR, name, 'locale'),
-            'string': os.path.join(TMPDIR, name),
-            'etc': os.path.join(TMPDIR, name, 'etc'),
-            }
+    dirs = {
+        'bin': os.path.join(TMPDIR, name, 'bin'),
+        'docs': os.path.join(TMPDIR, name, 'docs'),
+        'html': os.path.join(TMPDIR, name, 'docs', 'html'),
+        'rest': os.path.join(TMPDIR, name, 'docs', 'rest'),
+        'man': os.path.join(TMPDIR, name, 'docs', 'man'),
+        'script': os.path.join(TMPDIR, name, 'scripts'),
+        # TODO: handle locales also for addons
+        #             'string'  : os.path.join(TMPDIR, name, 'locale'),
+        'string': os.path.join(TMPDIR, name),
+        'etc': os.path.join(TMPDIR, name, 'etc'),
+    }
 
-    make_cmd = ['make',
-                'MODULE_TOPDIR=%s' % gisbase.replace(' ', r'\ '),
-                'RUN_GISRC=%s' % os.environ['GISRC'],
-                'BIN=%s' % dirs['bin'],
-                'HTMLDIR=%s' % dirs['html'],
-                'RESTDIR=%s' % dirs['rest'],
-                'MANBASEDIR=%s' % dirs['man'],
-                'SCRIPTDIR=%s' % dirs['script'],
-                'STRINGDIR=%s' % dirs['string'],
-                'ETC=%s' % os.path.join(dirs['etc'])
-                ]
+    make_cmd = [
+        'make',
+        'MODULE_TOPDIR=%s' % gisbase.replace(' ', r'\ '),
+        'RUN_GISRC=%s' % os.environ['GISRC'],
+        'BIN=%s' % dirs['bin'],
+        'HTMLDIR=%s' % dirs['html'],
+        'RESTDIR=%s' % dirs['rest'],
+        'MANBASEDIR=%s' % dirs['man'],
+        'SCRIPTDIR=%s' % dirs['script'],
+        'STRINGDIR=%s' % dirs['string'],
+        'ETC=%s' % os.path.join(dirs['etc'])
+    ]
 
-    install_cmd = ['make',
-                   'MODULE_TOPDIR=%s' % gisbase,
-                   'ARCH_DISTDIR=%s' % os.path.join(TMPDIR, name),
-                   'INST_DIR=%s' % options['prefix'],
-                   'install'
-                   ]
+    install_cmd = [
+        'make',
+        'MODULE_TOPDIR=%s' % gisbase,
+        'ARCH_DISTDIR=%s' % os.path.join(TMPDIR, name),
+        'INST_DIR=%s' % options['prefix'],
+        'install'
+    ]
 
     if flags['d']:
         grass.message("\n%s\n" % _("To compile run:"))
@@ -1141,9 +1148,7 @@ def remove_modules(mlist, force=False):
     installed = get_installed_modules()
 
     if os.path.exists(xml_file):
-        f = open(xml_file, 'r')
-        tree = etree.fromstring(f.read())
-        f.close()
+        tree = etree_fromfile(xml_file)
     else:
         tree = None
 
@@ -1210,12 +1215,8 @@ def remove_from_toolbox_xml(name):
     xml_file = os.path.join(options['prefix'], 'toolboxes.xml')
     if not os.path.exists(xml_file):
         return
-
     # read XML file
-    fo = open(xml_file, 'r')
-    tree = etree.fromstring(fo.read())
-    fo.close()
-
+    tree = etree_fromfile(xml_file)
     for node in tree.findall('toolbox'):
         if node.get('code') != name:
             continue
@@ -1229,22 +1230,16 @@ def remove_extension_xml(modules):
     if len(modules) > 1:
         # update also toolboxes metadata
         remove_from_toolbox_xml(options['extension'])
-
     xml_file = os.path.join(options['prefix'], 'modules.xml')
     if not os.path.exists(xml_file):
         return
-
     # read XML file
-    fo = open(xml_file, 'r')
-    tree = etree.fromstring(fo.read())
-    fo.close()
-
+    tree = etree_fromfile(xml_file)
     for name in modules:
         for node in tree.findall('task'):
             if node.get('name') != name:
                 continue
             tree.remove(node)
-
     write_xml_modules(xml_file, tree)
 
 # check links in CSS
@@ -1308,12 +1303,12 @@ def update_manual_page(module):
     htmlfile = os.path.join(
         options['prefix'], 'docs', 'html', module + '.html')
     try:
-        f = open(htmlfile)
-        shtml = f.read()
+        oldfile = open(htmlfile)
+        shtml = oldfile.read()
     except IOError as error:
-        grass.fatal(_("Unable to read manual page: %s") % error)
+        gscript.fatal(_("Unable to read manual page: %s") % error)
     else:
-        f.close()
+        oldfile.close()
 
     pos = []
 
@@ -1344,12 +1339,12 @@ def update_manual_page(module):
 
     # write updated html file
     try:
-        f = open(htmlfile, 'w')
-        f.write(ohtml)
+        newfile = open(htmlfile, 'w')
+        newfile.write(ohtml)
     except IOError as error:
-        grass.fatal(_("Unable for write manual page: %s") % error)
+        gscript.fatal(_("Unable for write manual page: %s") % error)
     else:
-        f.close()
+        newfile.close()
 
 
 def resolve_install_prefix(path, to_system):
@@ -1433,7 +1428,13 @@ KNOWN_HOST_SERVICES_INFO = {
 # TODO: support ZIP URLs which don't end with zip
 # https://gitlab.com/user/reponame/repository/archive.zip?ref=b%C3%A9po
 
+
 def resolve_known_host_service(url):
+    """Determine source type and full URL for known hosting service
+
+    If the service is not determined from the provided URL, tuple with
+    is two ``None`` values is returned.
+    """
     match = None
     actual_start = None
     for key, value in KNOWN_HOST_SERVICES_INFO.iteritems():
@@ -1448,7 +1449,7 @@ def resolve_known_host_service(url):
                         gscript.verbose(
                             _("Not using {service} as known hosting service"
                               " because the URL ends with '{suffix}'")
-                                .format(service=key, suffix=suffix))
+                            .format(service=key, suffix=suffix))
                         return None, None
     if match:
         if not actual_start:
@@ -1536,9 +1537,9 @@ def resolve_source_code(url):
             if url.endswith('.' + suffix):
                 return suffix, os.path.abspath(url)
     else:
-        source, url = resolve_known_host_service(url)
+        source, resolved_url = resolve_known_host_service(url)
         if source:
-            return source, url
+            return source, resolved_url
         # we allow URL to end with =zip or ?zip and not only .zip
         # unfortunately format=zip&version=89612 would require something else
         # special option to force the source type would solve it
