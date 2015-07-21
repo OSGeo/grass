@@ -87,6 +87,13 @@ def main():
     rasters = None
     if options['strds']:
         rasters = options['strds'].strip().split(',')
+    coords = None
+    if options['coordinates']:
+        coords = options['coordinates'].strip().split(',')
+    cats = None
+    if options['cats']:
+        cats = options['cats']
+    output = options['output']
     vectors = None
     attr = None
     if options['stvds']:
@@ -95,12 +102,16 @@ def main():
             gscript.fatal(_("With stvds you have to use also 'attr' option"))
         else:
             attr = options['attr']
-    coords = options['coordinates'].strip().split(',')
-    output = options['output']
+        if coords and cats:
+            gscript.fatal(_("With stvds it is not possible use 'coordinates' "
+                            "and 'cats' options together"))
+        elif not coords and not cats:
+            gscript.warning(_("With stvds you have to use 'coordinates' or "
+                              "'cats' option"))
 
     app = wx.App()
     frame = TplotFrame(parent=None, giface=StandaloneGrassInterface())
-    frame.SetDatasets(rasters, vectors, coords, None, attr)
+    frame.SetDatasets(rasters, vectors, coords, cats, attr)
     if output:
         frame.OnRedraw()
         if options['size']:

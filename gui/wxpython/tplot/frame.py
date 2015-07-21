@@ -117,13 +117,14 @@ class TplotFrame(wx.Frame):
         self.dbif.connect()
 
     def init(self):
-        self.timeDataR = {}
-        self.timeDataV = {}
+        self.timeDataR = OrderedDict()
+        self.timeDataV = OrderedDict()
         self.temporalType = None
         self.unit = None
         self.listWhereConditions = []
         self.plotNameListR = []
         self.plotNameListV = []
+        self.poi = None
 
     def __del__(self):
         """Close the database interface and stop the messenger and C-interface
@@ -220,8 +221,8 @@ class TplotFrame(wx.Frame):
                                              id=wx.ID_ANY,
                                              size=globalvar.DIALOG_GSELECT_SIZE,
                                              type='stvds', multiple=True)
-        self.datasetSelectV.Bind(wx.EVT_COMBOBOX_CLOSEUP,
-                                 self.OnVectorSelected)
+        self.datasetSelectV.Bind(wx.EVT_TEXT, self.OnVectorSelected)
+
         self.attribute = gselect.ColumnSelect(parent=self.controlPanelVector)
         self.attributeLabel = wx.StaticText(parent=self.controlPanelVector,
                                             id=wx.ID_ANY,
@@ -277,7 +278,6 @@ class TplotFrame(wx.Frame):
         """Load data and read properties
         :param list timeseries: a list of timeseries
         """
-        self.timeDataR = OrderedDict()
         mode = None
         unit = None
         columns = ','.join(['name', 'start_time', 'end_time'])
@@ -286,15 +286,16 @@ class TplotFrame(wx.Frame):
             fullname = name + '@' + series[1]
             etype = series[2]
             sp = tgis.dataset_factory(etype, fullname)
-            sp.select(dbif=self.dbif)
-
-            minmin = sp.metadata.get_min_min()
-            self.plotNameListR.append(series)
-            self.timeDataR[name] = OrderedDict()
             if not sp.is_in_db(dbif=self.dbif):
                 GError(self, message=_("Dataset <%s> not found in temporal "
                                        "database") % (fullname))
                 return
+            sp.select(dbif=self.dbif)
+
+            minmin = sp.metadata.get_min_min()
+            self.plotNameListR.append(name)
+            self.timeDataR[name] = OrderedDict()
+
 
             self.timeDataR[name]['temporalDataType'] = etype
             self.timeDataR[name]['temporalType'] = sp.get_temporal_type()
@@ -357,11 +358,6 @@ class TplotFrame(wx.Frame):
         """Load data and read properties
         :param list timeseries: a list of timeseries
         """
-        try:
-            len(self.timeDataV)
-        except:
-            self.timeDataV = OrderedDict()
-
         # TODO parse categories to where condition
         # cats = self.cats.GetValue()
         cats = [str(i) for i in range(1,137)]
@@ -371,99 +367,123 @@ class TplotFrame(wx.Frame):
 
         mode = None
         unit = None
-        attributes = self.attribute.GetValue()
+        attribute = self.attribute.GetValue()
         columns = ','.join(['name', 'start_time', 'end_time', 'id', 'layer'])
         for series in timeseries:
             name = series[0]
             fullname = name + '@' + series[1]
             etype = series[2]
             sp = tgis.dataset_factory(etype, fullname)
+            if not sp.is_in_db(dbif=self.dbif):
+                GError(self, message=_("Dataset <%s> not found in "
+                                       "temporal database") % (fullname))
+                return
             sp.select(dbif=self.dbif)
+
             rows = sp.get_registered_maps(dbif=self.dbif, order="start_time",
                                           columns=columns, where=None)
-            for attr in attributes.split(','):
-                for x, cat in enumerate(cats.split(',')):
-                    # TODO chck
-                    idKye = self.parseVDbConn(rows[x]['name'],
-                                              rows[x]['layer'])
-                    conditionWhere = idKye + '=' + cat
-                    self.listWhereConditions.append(conditionWhere)
+            self.plotNameListV.append(name)
 
-                    name = str(series) + str(conditionWhere)
-                    self.plotNameListV.append(name)
+            self.timeDataV[name] = OrderedDict()
+            self.timeDataV[name]['temporalDataType'] = etype
+            self.timeDataV[name]['temporalType'] = sp.get_temporal_type()
+            self.timeDataV[name]['granularity'] = sp.get_granularity()
 
-                    self.timeDataV[name] = OrderedDict()
-                    if not sp.is_in_db(dbif=self.dbif):
-                        GError(self, message=_("Dataset <%s> not found in "
-                                               "temporal database") % (fullname))
-                        return
+            if mode is None:
+                mode = self.timeDataV[name]['temporalType']
+            elif self.timeDataV[name]['temporalType'] != mode:
+                GError(parent=self, message=_("Datasets have different "
+                                              "temporal type (absolute x "
+                                              "relative), which is not allowed."))
+                return
+            self.timeDataV[name]['unit'] = None  # only with relative
+            if self.timeDataV[name]['temporalType'] == 'relative':
+                start, end, self.timeDataV[name]['unit'] = sp.get_relative_time()
+                if unit is None:
+                    unit = self.timeDataV[name]['unit']
+                elif self.timeDataV[name]['unit'] != unit:
+                    GError(self, _("Datasets have different time unit"
+                                   " which is not allowed."))
+                    return
+            ipdb.set_trace()
+            if self.poi:
+                # TODO set an appropriate distance, right now a big one is set
+                # to return the closer point to the selected one
+                out = grass.vector_what(map='pois_srvds',
+                                        coord=self.poi.coords(),
+                                        distance=10000000000000000)
+                if len(out) != len(rows):
+                    GError(parent=self, message=_("Difference number of vector"
+                                                  " layers and maps in the "
+                                                  "vector temporal dataset"))
+                for i in range(len(rows)):
+                    row = rows[i]
+                    values = out[i]
+                    if str(row['layer']) == str(values['Layer']):
+                        lay = "{map}_{layer}".format(map=row['name'],
+                                                     layer=values['Layer'])
+                        self.timeDataV[name][lay] = {}
+                        self.timeDataV[name][lay]['start_datetime'] = row['start_time']
+                        self.timeDataV[name][lay]['end_datetime'] = row['start_time']
+                        self.timeDataV[name][lay]['value'] = values['Attributes'][attribute]
+            else:
+                print "NotImplementeYet"
+                return
 
-                    self.timeDataV[name]['temporalDataType'] = etype
-                    self.timeDataV[name]['temporalType'] = sp.get_temporal_type()
-                    self.timeDataV[name]['granularity'] = sp.get_granularity()
+                for attr in attributes.split(','):
+                    for x, cat in enumerate(cats.split(',')):
+                        # TODO chck
+                        idKye = self.parseVDbConn(rows[x]['name'],
+                                                  rows[x]['layer'])
+                        conditionWhere = idKye + '=' + cat
+                        self.listWhereConditions.append(conditionWhere)
 
-                    if mode is None:
-                        mode = self.timeDataV[name]['temporalType']
-                    elif self.timeDataV[name]['temporalType'] != mode:
-                        GError(parent=self, message=_("Datasets have different temporal"
-                                                      " type (absolute x relative), "
-                                                      "which is not allowed."))
-                        return
+                        name = str(series) + str(conditionWhere)
 
-                    # check topology
-                    maps = sp.get_registered_maps_as_objects(dbif=self.dbif)
+                        # check topology
+                        maps = sp.get_registered_maps_as_objects(dbif=self.dbif)
 
-                    self.timeDataV[name]['validTopology'] = sp.check_temporal_topology(maps=maps, dbif=self.dbif)
+                        self.timeDataV[name]['validTopology'] = sp.check_temporal_topology(maps=maps, dbif=self.dbif)
 
-                    self.timeDataV[name]['unit'] = None  # only with relative
-                    if self.timeDataV[name]['temporalType'] == 'relative':
-                        start, end, self.timeDataV[name]['unit'] = sp.get_relative_time()
-                        if unit is None:
-                            unit = self.timeDataV[name]['unit']
-                        elif self.timeDataV[name]['unit'] != unit:
-                            GError(self, _("Datasets have different time unit"
-                                           " which is not allowed."))
-                            return
 
-                    workers = multi.cpu_count()
-                    # Check if workers are already being used
-                    # run all bands in parallel
-                    if "WORKERS" in os.environ:
-                        workers = int(os.environ["WORKERS"])
-                    else:
-                        workers = len(rows)
-                    # Initialize process dictionary
-                    proc = {}
-                    pout = {}
+                        workers = multi.cpu_count()
+                        # Check if workers are already being used
+                        # run all bands in parallel
+                        if "WORKERS" in os.environ:
+                            workers = int(os.environ["WORKERS"])
+                        else:
+                            workers = len(rows)
+                        # Initialize process dictionary
+                        proc = {}
+                        pout = {}
 
-                    for j, row in enumerate(rows):
-                        self.timeDataV[name][row[3]] = {}
-                        self.timeDataV[name][row[3]]['start_datetime'] = row[1]
-                        self.timeDataV[name][row[3]]['end_datetime'] = row[2]
-                        if self.timeDataV[name][row[3]]['end_datetime'] is None:
-                            self.timeDataV[name][row[3]]['end_datetime'] = row[1]
-                        proc[j] = grass.pipe_command('v.db.select',
-                                                     map=row['name'],
-                                                     layer=row['layer'],
-                                                     where=conditionWhere,
-                                                     columns=attr,
-                                                     flags='c')
-                        if j % workers is 0:
-                            # wait for the ones launched so far to finish
-                            for jj in range(j):
-                                if not proc[jj].stdout.closed:
-                                    pout[jj] = proc[jj].communicate()[0]
-                                proc[jj].wait()
+                        for j, row in enumerate(rows):
+                            self.timeDataV[name][row[3]] = {}
+                            self.timeDataV[name][row[3]]['start_datetime'] = row[1]
+                            self.timeDataV[name][row[3]]['end_datetime'] = row[2]
+                            if self.timeDataV[name][row[3]]['end_datetime'] is None:
+                                self.timeDataV[name][row[3]]['end_datetime'] = row[1]
+                            proc[j] = grass.pipe_command('v.db.select',
+                                                         map=row['name'],
+                                                         layer=row['layer'],
+                                                         where=conditionWhere,
+                                                         columns=attr,
+                                                         flags='c')
+                            if j % workers is 0:
+                                # wait for the ones launched so far to finish
+                                for jj in range(j):
+                                    if not proc[jj].stdout.closed:
+                                        pout[jj] = proc[jj].communicate()[0]
+                                    proc[jj].wait()
 
-                    for row in range(len(proc)):
-                        if not proc[row].stdout.closed:
-                            pout[row] = proc[row].communicate()[0]
-                        proc[row].wait()
+                        for row in range(len(proc)):
+                            if not proc[row].stdout.closed:
+                                pout[row] = proc[row].communicate()[0]
+                            proc[row].wait()
 
-                    for i, row in enumerate(rows):
-                        self.timeDataV[name][row[3]]['value'] = pout[i]
+                        for i, row in enumerate(rows):
+                            self.timeDataV[name][row[3]]['value'] = pout[i]
 
-                    ipdb.set_trace()
         self.unit = unit
         self.temporalType = mode
         return
@@ -574,6 +594,23 @@ class TplotFrame(wx.Frame):
 
         if not datasetsR and not datasetsV:
             return
+        try:
+            coordx, coordy = self.coorval.coordsField.GetValue().split(',')
+            coordx, coordy = float(coordx), float(coordy)
+        except (ValueError, AttributeError):
+            try:
+                coordx, coordy = self.coorval.GetValue().split(',')
+                coordx, coordy = float(coordx), float(coordy)
+            except (ValueError, AttributeError):
+                GMessage(_("Incorrect format of coordinates, should be: x,y"))
+        coors = [coordx, coordy]
+
+        if coors:
+            try:
+                self.poi = Point(float(coors[0]), float(coors[1]))
+            except GException:
+                GError(parent=self, message=_("Invalid input coordinates"))
+                return
         # check raster dataset
         if datasetsR:
             datasetsR = datasetsR.split(',')
@@ -585,23 +622,6 @@ class TplotFrame(wx.Frame):
                 GError(parent=self, message=_("Invalid input raster dataset"))
                 return
 
-            try:
-                coordx, coordy = self.coorval.coordsField.GetValue().split(',')
-                coordx, coordy = float(coordx), float(coordy)
-            except (ValueError, AttributeError):
-                try:
-                    coordx, coordy = self.coorval.GetValue().split(',')
-                    coordx, coordy = float(coordx), float(coordy)
-                except (ValueError, AttributeError):
-                    GMessage(_("Incorrect format of coordinates, should be: x,y"))
-            coors = [coordx, coordy]
-
-            if coors:
-                try:
-                    self.poi = Point(float(coors[0]), float(coors[1]))
-                except GException:
-                    GError(parent=self, message=_("Invalid input coordinates"))
-                    return
             self.datasetsR = datasetsR
 
         # check vector dataset
@@ -628,6 +648,7 @@ class TplotFrame(wx.Frame):
 
         if self.datasetsV:
             self._getSTVDData(self.datasetsV)
+        ipdb.set_trace()
 
         # axes3d are physically removed
         if not self.axes2d:
