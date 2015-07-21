@@ -344,7 +344,7 @@ class TplotFrame(wx.Frame):
         for line in vdb.splitlines():
             lsplit = line.split('|')
             layer = lsplit[0].split('/')[0]
-            if layer == layerInp:
+            if str(layer) == str(layerInp):
                 return lsplit[2]
         return None
 
@@ -435,12 +435,14 @@ class TplotFrame(wx.Frame):
                 totcat = len(cats)
                 ncat = 1
                 for cat in cats:
-                    if ncat == 1:
-                        wherequery += 'cat={c} or'.format(c=cat)
+                    if ncat == 1 and totcat != 1:
+                        wherequery += '{k}={c} or'.format(c=cat, k="{key}")
+                    elif ncat == 1 and totcat == 1:
+                        wherequery += '{k}={c}'.format(c=cat, k="{key}")
                     elif ncat == totcat:
-                        wherequery += ' cat={c}'.format(c=cat)
+                        wherequery += ' {k}={c}'.format(c=cat, k="{key}")
                     else:
-                        wherequery += ' cat={c} or'.format(c=cat)
+                        wherequery += ' {k}={c} or'.format(c=cat, k="{key}")
                     catn = "cat{num}".format(num=cat)
                     self.plotNameListV.append("{na}+{cat}".format(na=name,
                                                                   cat=catn))
@@ -448,8 +450,15 @@ class TplotFrame(wx.Frame):
                     ncat += 1
                 for row in rows:
                     lay = int(row['layer'])
+                    catkey = self.parseVDbConn(row['name'], lay)
+                    if not catkey:
+                        GError(parent=self, showTraceback=False,
+                           message=_("No connection between vector map {vmap} "
+                                     "and layer {la}".format(vmap=row['name'],
+                                                              la=lay)))
+                        return
                     vals = grass.vector_db_select(map=row['name'], layer=lay,
-                                                  where=wherequery,
+                                                  where=wherequery.format(key=catkey),
                                                   columns=attribute)
                     layn = "lay{num}".format(num=lay)
                     for cat in cats:
