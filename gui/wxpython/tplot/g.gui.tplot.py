@@ -99,7 +99,7 @@ def main():
     if options['stvds']:
         vectors = options['stvds'].strip().split(',')
         if not options['attr']:
-            gscript.fatal(_("With stvds you have to use also 'attr' option"))
+            gscript.fatal(_("With stvds you have to set 'attr' option"))
         else:
             attr = options['attr']
         if coords and cats:
@@ -108,7 +108,6 @@ def main():
         elif not coords and not cats:
             gscript.warning(_("With stvds you have to use 'coordinates' or "
                               "'cats' option"))
-
     app = wx.App()
     frame = TplotFrame(parent=None, giface=StandaloneGrassInterface())
     frame.SetDatasets(rasters, vectors, coords, cats, attr)
