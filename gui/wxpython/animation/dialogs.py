@@ -1519,6 +1519,32 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         gridSizer.Add(item=nprocs, pos=(row, 1), flag=wx.ALIGN_RIGHT)
 
+        row += 1
+        gridSizer.Add(item=wx.StaticText(parent=panel,
+                                         label=_("Text foreground color:")),
+                      flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
+        color = csel.ColourSelect(parent=panel,
+                                  colour=UserSettings.Get(group='animation',
+                                                          key='font', subkey='fgcolor'),
+                                  size=globalvar.DIALOG_COLOR_SIZE)
+        color.SetName('GetColour')
+        self.winId['animation:font:fgcolor'] = color.GetId()
+
+        gridSizer.Add(item=color, pos=(row, 1), flag=wx.ALIGN_RIGHT)
+
+        row += 1
+        gridSizer.Add(item=wx.StaticText(parent=panel,
+                                         label=_("Text background color:")),
+                      flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
+        color = csel.ColourSelect(parent=panel,
+                                  colour=UserSettings.Get(group='animation',
+                                                          key='font', subkey='bgcolor'),
+                                  size=globalvar.DIALOG_COLOR_SIZE)
+        color.SetName('GetColour')
+        self.winId['animation:font:bgcolor'] = color.GetId()
+
+        gridSizer.Add(item=color, pos=(row, 1), flag=wx.ALIGN_RIGHT)
+
         gridSizer.AddGrowableCol(1)
         sizer.Add(item=gridSizer, proportion=1, flag=wx.ALL | wx.EXPAND, border=3)
         border.Add(item=sizer, proportion=0, flag=wx.ALL | wx.EXPAND, border=3)
