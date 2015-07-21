@@ -45,7 +45,7 @@ int max_cat(struct Map_info *Map, int layer);
 
 int main(int argc, char *argv[])
 {
-    int i, ret;
+    int i, ret
     char *in_name, *out_name, *bbox_name;
     struct GModule *module;
     struct Option *old, *new, *bbox;
