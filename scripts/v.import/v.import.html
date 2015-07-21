@@ -1,0 +1,41 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.import</em> imports selected layers from a OGR vector datasource
+into the current location and mapset. If the projection of the input
+does not match the projection of the location, the input is reprojected
+into the current location. If the projection of the input does match
+the projection of the location, the input is imported directly with
+<a href="v.in.ogr.html">v.in.ogr</a>.
+
+<h4>Topology cleaning</h4>
+
+When importing polygons, non-topological polygons are converted to
+topological areas. If the original polygons contain errors (unexpected
+overlapping areas or small gaps between polygons), the import might
+need to be repeated using the <em>snap</em> option for
+<a href="v.in.ogr.html">v.in.ogr</a>. In this case, automated import and
+reprojection does not work, and the data need to be manually imported
+first with appropriate settings and optionally cleaned afterwards with
+<a href="v.clean.html">v.clean</a>. The cleaned import can then be
+manually reprojected to the target location.
+
+<h2>EXAMPLE</h2>
+
+<div class="code"><pre>
+# import SHAPE file at full extent and reproject to current location projection
+v.import input=research_area.shp output=research_area extents=input
+</pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="v.in.ogr.html">v.in.ogr</a>,
+<a href="v.proj.html">v.proj</a>
+</em>
+
+<h2>AUTHOR</h2>
+
+Markus Metz
+
+<p>
+<i>Last changed: $Date: 2015-01-20 20:52:27 +0100 (Tue, 20 Jan 2015) $</i>
