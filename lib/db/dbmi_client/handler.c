@@ -19,7 +19,6 @@ static void error_handler_driver(void *p)
     dbDriver *driver;
 
     driver = (dbDriver *) p;
-    
     db_close_database(driver);
     db_shutdown_driver(driver);
 }
@@ -39,4 +38,14 @@ static void error_handler_driver(void *p)
 void db_set_error_handler_driver(dbDriver *driver)
 {
     G_add_error_handler(error_handler_driver, driver);
+}
+
+/*!
+  \brief Remove error handler before closing the driver
+
+  \param driver DB driver
+*/
+void db_unset_error_handler_driver(dbDriver *driver)
+{
+    G_remove_error_handler(error_handler_driver, driver);
 }
