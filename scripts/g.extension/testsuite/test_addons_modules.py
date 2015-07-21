@@ -72,7 +72,7 @@ class TestModulesFromDifferentSources(TestCase):
     # zip r.plus.example.zip r.plus.example/*
     # tar czvf r.plus.example.tar.gz r.plus.example
     # cd r.plus.example/
-    # tar czvf ../r.plus.example_sep.tar.gz *    
+    # tar czvf ../r.plus.example_sep.tar.gz *
 
     def setUp(self):
         """Make sure we are not dealing with some old files"""
