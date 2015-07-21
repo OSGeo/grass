@@ -24,10 +24,6 @@ import numpy as np
 import wx
 from grass.pygrass.modules import Module
 
-import re
-import wx.lib.flatnotebook as FN
-from mapdisp.main import DMonGrassInterface
-from core.giface import StandaloneGrassInterface
 import grass.script as grass
 from core.utils import _
 
@@ -50,23 +46,18 @@ from core.utils import _
 
 import grass.temporal as tgis
 from core.gcmd import GMessage, GError, GException, RunCommand
-from gui_core.widgets  import CoordinatesValidator
+from gui_core.widgets import CoordinatesValidator
 from gui_core import gselect
 from core import globalvar
 from grass.pygrass.vector.geometry import Point
 from grass.pygrass.raster import RasterRow
 from collections import OrderedDict
 from subprocess import PIPE
-import os
-import multiprocessing as multi
 try:
     import wx.lib.agw.flatnotebook as FN
 except ImportError:
     import wx.lib.flatnotebook as FN
-from core import globalvar
 from gui_core.widgets import GNotebook
-
-import ipdb
 
 ALPHA = 0.5
 COLORS = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
@@ -226,10 +217,12 @@ class TplotFrame(wx.Frame):
         self.attribute = gselect.ColumnSelect(parent=self.controlPanelVector)
         self.attributeLabel = wx.StaticText(parent=self.controlPanelVector,
                                             id=wx.ID_ANY,
-                                            label=_('Select attribute '))
-        # TODO fix the select
+                                            label=_('Select attribute column'))
+        # TODO fix the category selection as done for coordinates
         #self.cats = gselect.VectorCategorySelect(parent=self.controlPanelVector,
         #                                         giface=self._giface)
+        self.cats = wx.TextCtrl(parent=self.controlPanelVector, id=wx.ID_ANY,
+                                size=globalvar.DIALOG_TEXTCTRL_SIZE)
         self.catsLabel = wx.StaticText(parent=self.controlPanelVector,
                                        id=wx.ID_ANY,
                                        label=_('Select category of vector(s)'))
@@ -246,8 +239,7 @@ class TplotFrame(wx.Frame):
         self.controlPanelSizerVector.Add(self.attribute, flag=wx.EXPAND)
 
         self.controlPanelSizerVector.Add(self.catsLabel, flag=wx.EXPAND)
-        # TODO fix the select
-        #self.controlPanelSizerVector.Add(self.cats, flag=wx.EXPAND)
+        self.controlPanelSizerVector.Add(self.cats, flag=wx.EXPAND)
 
         self.controlPanelVector.SetSizer(self.controlPanelSizerVector)
         self.controlPanelSizerVector.Fit(self)
@@ -273,6 +265,7 @@ class TplotFrame(wx.Frame):
         self.vbox.Add(self.ntb, flag=wx.EXPAND)
         self.vbox.Add(self.vButtPanel, flag=wx.EXPAND)
         self.vbox.Fit(self)
+        self.mainPanel.Fit()
 
     def _getSTRDdata(self, timeseries):
         """Load data and read properties
@@ -287,8 +280,8 @@ class TplotFrame(wx.Frame):
             etype = series[2]
             sp = tgis.dataset_factory(etype, fullname)
             if not sp.is_in_db(dbif=self.dbif):
-                GError(self, message=_("Dataset <%s> not found in temporal "
-                                       "database") % (fullname))
+                GError(message=_("Dataset <%s> not found in temporal "
+                                 "database") % (fullname), parent=self)
                 return
             sp.select(dbif=self.dbif)
 
@@ -319,8 +312,9 @@ class TplotFrame(wx.Frame):
                 if unit is None:
                     unit = self.timeDataR[name]['unit']
                 elif self.timeDataR[name]['unit'] != unit:
-                    GError(self, _("Datasets have different time unit which "
-                                   "is not allowed."))
+                    GError(parent=self, message=_("Datasets have different "
+                                                  "time unit which is not "
+                                                  "allowed."))
                     return
 
             rows = sp.get_registered_maps(columns=columns, where=None,
@@ -358,16 +352,24 @@ class TplotFrame(wx.Frame):
         """Load data and read properties
         :param list timeseries: a list of timeseries
         """
-        # TODO parse categories to where condition
-        # cats = self.cats.GetValue()
-        cats = [str(i) for i in range(1,137)]
-        cats = ','.join(cats)
 
         # idKye = 'linkid'  #TODO
 
         mode = None
         unit = None
+        cats = None
         attribute = self.attribute.GetValue()
+        if self.cats.GetValue() != '':
+            cats = self.cats.GetValue().split(',')
+        if cats and self.poi:
+            GMessage(message=_("Both coordinates and categories are set, "
+                               "coordinates will be used. The use categories"
+                               "remove text from coordinate form"))
+        if not attribute or attribute == '':
+            GError(parent=self, showTraceback=False,
+                   message=_("With Vector temporal dataset you have to select"
+                             " an attribute column"))
+            return
         columns = ','.join(['name', 'start_time', 'end_time', 'id', 'layer'])
         for series in timeseries:
             name = series[0]
@@ -375,14 +377,14 @@ class TplotFrame(wx.Frame):
             etype = series[2]
             sp = tgis.dataset_factory(etype, fullname)
             if not sp.is_in_db(dbif=self.dbif):
-                GError(self, message=_("Dataset <%s> not found in "
-                                       "temporal database") % (fullname))
+                GError(message=_("Dataset <%s> not found in temporal "
+                                 "database") % (fullname), parent=self,
+                                 showTraceback=False)
                 return
             sp.select(dbif=self.dbif)
 
             rows = sp.get_registered_maps(dbif=self.dbif, order="start_time",
                                           columns=columns, where=None)
-            self.plotNameListV.append(name)
 
             self.timeDataV[name] = OrderedDict()
             self.timeDataV[name]['temporalDataType'] = etype
@@ -392,9 +394,9 @@ class TplotFrame(wx.Frame):
             if mode is None:
                 mode = self.timeDataV[name]['temporalType']
             elif self.timeDataV[name]['temporalType'] != mode:
-                GError(parent=self, message=_("Datasets have different "
-                                              "temporal type (absolute x "
-                                              "relative), which is not allowed."))
+                GError(parent=self, showTraceback=False,
+                       message=_("Datasets have different temporal type ("
+                                 "absolute x relative), which is not allowed."))
                 return
             self.timeDataV[name]['unit'] = None  # only with relative
             if self.timeDataV[name]['temporalType'] == 'relative':
@@ -402,20 +404,22 @@ class TplotFrame(wx.Frame):
                 if unit is None:
                     unit = self.timeDataV[name]['unit']
                 elif self.timeDataV[name]['unit'] != unit:
-                    GError(self, _("Datasets have different time unit"
-                                   " which is not allowed."))
+                    GError(message=_("Datasets have different time unit which"
+                                     " is not allowed."), parent=self,
+                           showTraceback=False)
                     return
-            ipdb.set_trace()
             if self.poi:
+                self.plotNameListV.append(name)
                 # TODO set an appropriate distance, right now a big one is set
                 # to return the closer point to the selected one
                 out = grass.vector_what(map='pois_srvds',
                                         coord=self.poi.coords(),
                                         distance=10000000000000000)
                 if len(out) != len(rows):
-                    GError(parent=self, message=_("Difference number of vector"
-                                                  " layers and maps in the "
-                                                  "vector temporal dataset"))
+                    GError(parent=self, showTraceback=False,
+                           message=_("Difference number of vector layers and "
+                                     "maps in the vector temporal dataset"))
+                    return
                 for i in range(len(rows)):
                     row = rows[i]
                     values = out[i]
@@ -427,63 +431,34 @@ class TplotFrame(wx.Frame):
                         self.timeDataV[name][lay]['end_datetime'] = row['start_time']
                         self.timeDataV[name][lay]['value'] = values['Attributes'][attribute]
             else:
-                print "NotImplementeYet"
-                return
-
-                for attr in attributes.split(','):
-                    for x, cat in enumerate(cats.split(',')):
-                        # TODO chck
-                        idKye = self.parseVDbConn(rows[x]['name'],
-                                                  rows[x]['layer'])
-                        conditionWhere = idKye + '=' + cat
-                        self.listWhereConditions.append(conditionWhere)
-
-                        name = str(series) + str(conditionWhere)
-
-                        # check topology
-                        maps = sp.get_registered_maps_as_objects(dbif=self.dbif)
-
-                        self.timeDataV[name]['validTopology'] = sp.check_temporal_topology(maps=maps, dbif=self.dbif)
-
-
-                        workers = multi.cpu_count()
-                        # Check if workers are already being used
-                        # run all bands in parallel
-                        if "WORKERS" in os.environ:
-                            workers = int(os.environ["WORKERS"])
-                        else:
-                            workers = len(rows)
-                        # Initialize process dictionary
-                        proc = {}
-                        pout = {}
-
-                        for j, row in enumerate(rows):
-                            self.timeDataV[name][row[3]] = {}
-                            self.timeDataV[name][row[3]]['start_datetime'] = row[1]
-                            self.timeDataV[name][row[3]]['end_datetime'] = row[2]
-                            if self.timeDataV[name][row[3]]['end_datetime'] is None:
-                                self.timeDataV[name][row[3]]['end_datetime'] = row[1]
-                            proc[j] = grass.pipe_command('v.db.select',
-                                                         map=row['name'],
-                                                         layer=row['layer'],
-                                                         where=conditionWhere,
-                                                         columns=attr,
-                                                         flags='c')
-                            if j % workers is 0:
-                                # wait for the ones launched so far to finish
-                                for jj in range(j):
-                                    if not proc[jj].stdout.closed:
-                                        pout[jj] = proc[jj].communicate()[0]
-                                    proc[jj].wait()
-
-                        for row in range(len(proc)):
-                            if not proc[row].stdout.closed:
-                                pout[row] = proc[row].communicate()[0]
-                            proc[row].wait()
-
-                        for i, row in enumerate(rows):
-                            self.timeDataV[name][row[3]]['value'] = pout[i]
-
+                wherequery = ''
+                totcat = len(cats)
+                ncat = 1
+                for cat in cats:
+                    if ncat == 1:
+                        wherequery += 'cat={c} or'.format(c=cat)
+                    elif ncat == totcat:
+                        wherequery += ' cat={c}'.format(c=cat)
+                    else:
+                        wherequery += ' cat={c} or'.format(c=cat)
+                    catn = "cat{num}".format(num=cat)
+                    self.plotNameListV.append("{na}+{cat}".format(na=name,
+                                                                  cat=catn))
+                    self.timeDataV[name][catn] = OrderedDict()
+                    ncat += 1
+                for row in rows:
+                    lay = int(row['layer'])
+                    vals = grass.vector_db_select(map=row['name'], layer=lay,
+                                                  where=wherequery,
+                                                  columns=attribute)
+                    layn = "lay{num}".format(num=lay)
+                    for cat in cats:
+                        catn = "cat{num}".format(num=cat)
+                        if layn not in self.timeDataV[name][catn].keys():
+                            self.timeDataV[name][catn][layn] = {}
+                        self.timeDataV[name][catn][layn]['start_datetime'] = row['start_time']
+                        self.timeDataV[name][catn][layn]['end_datetime'] = row['end_time']
+                        self.timeDataV[name][catn][layn]['value'] = vals['values'][int(cat)]
         self.unit = unit
         self.temporalType = mode
         return
@@ -515,7 +490,10 @@ class TplotFrame(wx.Frame):
         if self.datasetsR:
             self.drawR()
         if self.datasetsV:
-            self.drawV()
+            if self.poi:
+                self.drawV()
+            elif self.cats:
+                self.drawVCats()
 
         self.canvas.draw()
         DataCursor(self.plots, self.lookUp, InfoFormat, self.convert)
@@ -523,7 +501,7 @@ class TplotFrame(wx.Frame):
     def drawR(self):
         for i, name in enumerate(self.datasetsR):
             name = name[0]
-             # just name; with mapset it would be long
+            # just name; with mapset it would be long
             self.yticksNames.append(name)
             self.yticksPos.append(1)  # TODO
             xdata = []
@@ -552,9 +530,44 @@ class TplotFrame(wx.Frame):
         handles, labels = self.axes2d.get_legend_handles_labels()
         self.axes2d.legend(loc=0)
 
+    def drawVCats(self):
+        for i, name in enumerate(self.plotNameListV):
+            # just name; with mapset it would be long
+            labelname = name.replace('+', ' ')
+            self.yticksNames.append(labelname)
+            name_cat = name.split('+')
+            name = name_cat[0]
+            self.yticksPos.append(1)  # TODO
+            xdata = []
+            ydata = []
+            for keys, values in self.timeDataV[name_cat[0]][name_cat[1]].iteritems():
+                if keys in ['temporalType', 'granularity', 'validTopology',
+                            'unit', 'temporalDataType']:
+                    continue
+                xdata.append(self.convert(values['start_datetime']))
+                ydata.append(values['value'])
+
+            self.lookUp.AddDataset(yranges=ydata, xranges=xdata,
+                                   datasetName=name)
+            color = self.colors.next()
+
+            self.plots.append(self.axes2d.plot(xdata, ydata, marker='o',
+                                               color=color, label=labelname)[0])
+        # ============================
+        if self.temporalType == 'absolute':
+            self.axes2d.set_xlabel(_("Temporal resolution: %s" % self.timeDataV[name]['granularity']))
+        else:
+            self.axes2d.set_xlabel(_("Time [%s]") % self.unit)
+        self.axes2d.set_ylabel(', '.join(self.yticksNames))
+
+        # legend
+        handles, labels = self.axes2d.get_legend_handles_labels()
+        self.axes2d.legend(loc=0)
+        self.listWhereConditions = []
+
     def drawV(self):
         for i, name in enumerate(self.plotNameListV):
-             # just name; with mapset it would be long
+            # just name; with mapset it would be long
             self.yticksNames.append(self.attribute.GetValue())
             self.yticksPos.append(0)  # TODO
             xdata = []
@@ -569,8 +582,6 @@ class TplotFrame(wx.Frame):
             self.lookUp.AddDataset(yranges=ydata, xranges=xdata,
                                    datasetName=name)
             color = self.colors.next()
-            #print xdata
-            #print ydata
 
             self.plots.append(self.axes2d.plot(xdata, ydata, marker='o',
                                                color=color, label=name)[0])
@@ -594,32 +605,43 @@ class TplotFrame(wx.Frame):
 
         if not datasetsR and not datasetsV:
             return
+
         try:
-            coordx, coordy = self.coorval.coordsField.GetValue().split(',')
-            coordx, coordy = float(coordx), float(coordy)
-        except (ValueError, AttributeError):
+            getcoors = self.coorval.coordsField.GetValue()
+        except:
             try:
-                coordx, coordy = self.coorval.GetValue().split(',')
+                getcoors = self.coorval.GetValue()
+            except:
+                getcoors = None
+        if getcoors and getcoors != '':
+            try:
+                coordx, coordy = getcoors.split(',')
                 coordx, coordy = float(coordx), float(coordy)
             except (ValueError, AttributeError):
-                GMessage(_("Incorrect format of coordinates, should be: x,y"))
-        coors = [coordx, coordy]
-
-        if coors:
-            try:
-                self.poi = Point(float(coors[0]), float(coors[1]))
-            except GException:
-                GError(parent=self, message=_("Invalid input coordinates"))
-                return
+                try:
+                    coordx, coordy = self.coorval.GetValue().split(',')
+                    coordx, coordy = float(coordx), float(coordy)
+                except (ValueError, AttributeError):
+                    GMessage(message=_("Incorrect coordinates format, should "
+                                       "be: x,y"), parent=self)
+            coors = [coordx, coordy]
+            if coors:
+                try:
+                    self.poi = Point(float(coors[0]), float(coors[1]))
+                except GException:
+                    GError(parent=self, message=_("Invalid input coordinates"),
+                           showTraceback=False)
+                    return
         # check raster dataset
         if datasetsR:
             datasetsR = datasetsR.split(',')
             try:
-                datasetsR = self._checkDatasets(datasetsR)
+                datasetsR = self._checkDatasets(datasetsR, 'strds')
                 if not datasetsR:
                     return
             except GException:
-                GError(parent=self, message=_("Invalid input raster dataset"))
+                GError(parent=self, message=_("Invalid input raster dataset"),
+                       showTraceback=False)
                 return
 
             self.datasetsR = datasetsR
@@ -628,14 +650,14 @@ class TplotFrame(wx.Frame):
         if datasetsV:
             datasetsV = datasetsV.split(',')
             try:
-                datasetsV = self._checkDatasets(datasetsV)
+                datasetsV = self._checkDatasets(datasetsV, 'stvds')
                 if not datasetsV:
                     return
             except GException:
-                GError(parent=self, message=_("Invalid input vector dataset"))
+                GError(parent=self, message=_("Invalid input vector dataset"),
+                       showTraceback=False)
                 return
             self.datasetsV = datasetsV
-
         self._redraw()
 
     def _redraw(self):
@@ -648,14 +670,13 @@ class TplotFrame(wx.Frame):
 
         if self.datasetsV:
             self._getSTVDData(self.datasetsV)
-        ipdb.set_trace()
 
         # axes3d are physically removed
         if not self.axes2d:
             self.axes2d = self.fig.add_subplot(1, 1, 1)
         self._drawFigure()
 
-    def _checkDatasets(self, datasets):
+    def _checkDatasets(self, datasets, typ):
         """Checks and validates datasets.
 
         Reports also type of dataset (e.g. 'strds').
@@ -664,7 +685,7 @@ class TplotFrame(wx.Frame):
         :return: (mapName, mapset, type)
         """
         validated = []
-        tDict = tgis.tlist_grouped('stds', group_type=True, dbif=self.dbif)
+        tDict = tgis.tlist_grouped(type=typ, group_type=True, dbif=self.dbif)
         # nested list with '(map, mapset, etype)' items
         allDatasets = [[[(map, mapset, etype) for map in maps]
                         for etype, maps in etypesDict.iteritems()]
@@ -713,7 +734,7 @@ class TplotFrame(wx.Frame):
 
     def OnHelp(self, event):
         """Function to show help"""
-        RunCommand('g.manual', quiet=True, entry='g.gui.tplot')
+        RunCommand(prog='g.manual', quiet=True, entry='g.gui.tplot')
 
     def SetDatasets(self, rasters, vectors, coors, cats, attr):
         """Set the data
@@ -724,34 +745,40 @@ class TplotFrame(wx.Frame):
         :param list cats: a list with incld. categories of vector
         :param str attr:  name of atribute of vectror data
         """
-        if not (rasters or vectors) or not coors:
+        if not (rasters or vectors) or not (coors or cats):
             return
         try:
             if rasters:
-                self.datasetsR = self._checkDatasets(rasters)
+                self.datasetsR = self._checkDatasets(rasters, 'strds')
             if vectors:
-                self.datasetsV = self._checkDatasets(vectors)
+                self.datasetsV = self._checkDatasets(vectors, 'stvds')
             if not (self.datasetsR or self.datasetsV):
                 return
         except GException:
-            GError(parent=self, message=_("Invalid input temporal dataset"))
+            GError(parent=self, message=_("Invalid input temporal dataset"),
+                   showTraceback=False)
             return
-        try:
-            self.poi = Point(float(coors[0]), float(coors[1]))
-        except GException:
-            GError(parent=self, message=_("Invalid input coordinates"))
-            return
+        if coors:
+            try:
+                self.poi = Point(float(coors[0]), float(coors[1]))
+            except GException:
+                GError(parent=self, message=_("Invalid input coordinates"),
+                       showTraceback=False)
+                return
+            try:
+                self.coorval.coordsField.SetValue(','.join(coors))
+            except:
+                self.coorval.SetValue(','.join(coors))
         if self.datasetsV:
-            self.datasetSelectV.SetValue(','.join(map(lambda x: x[0] + '@' + x[1],
-                                                      self.datasetsV)))
-            self.attribute.SetValue(attr)
+            vdatas = ','.join(map(lambda x: x[0] + '@' + x[1], self.datasetsV))
+            self.datasetSelectV.SetValue(vdatas)
+            if attr:
+                self.attribute.SetValue(attr)
+            if cats:
+                self.cats.SetValue(cats)
         if self.datasetsR:
             self.datasetSelectR.SetValue(','.join(map(lambda x: x[0] + '@' + x[1],
                                                       self.datasetsR)))
-        try:
-            self.coorval.coordsField.SetValue(','.join(coors))
-        except:
-            self.coorval.SetValue(','.join(coors))
         self._redraw()
 
     def OnVectorSelected(self, event):
@@ -774,8 +801,9 @@ class LookUp:
 
     def AddDataset(self, yranges, xranges, datasetName):
         if len(yranges) != len(xranges):
-            GError(parent=self, message=_("Datasets have different number of"
-                                          "values"))
+            GError(parent=self, showTraceback=False,
+                   message=_("Datasets have different number of values"))
+            return
         self.data[datasetName] = {}
         for i in range(len(xranges)):
             self.data[datasetName][xranges[i]] = yranges[i]
