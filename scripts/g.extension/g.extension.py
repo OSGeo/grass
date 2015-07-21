@@ -141,6 +141,7 @@ try:
 except ImportError:
     import elementtree.ElementTree as etree  # Python <= 2.4
 
+import grass.script as gscript
 from grass.script.utils import try_rmdir
 from grass.script import core as grass
 
@@ -916,7 +917,6 @@ def move_extracted_files(extract_dir, target_dir, files):
     """
     if len(files) == 1:
         shutil.copytree(os.path.join(extract_dir, files[0]), target_dir)
-        print("copytree:", os.path.join(extract_dir, files[0]), target_dir)
     else:
         for file_name in files:
             actual_file = os.path.join(extract_dir, file_name)
@@ -1384,6 +1384,72 @@ def resolve_xmlurl_prefix(url):
     return url
 
 
+KNOWN_HOST_SERVICES_INFO = {
+    'OSGeo Trac': {
+        'domain': 'trac.osgeo.org',
+        'ignored_suffixes': ['format=zip'],
+        'possible_starts': ['', 'https://', 'http://'],
+        'url_start': 'https://',
+        'url_end': '?format=zip',
+    },
+    'GitHub': {
+        'domain': 'github.com',
+        'ignored_suffixes': ['.zip', '.tar.gz'],
+        'possible_starts': ['', 'https://', 'http://'],
+        'url_start': 'https://',
+        'url_end': '/archive/master.zip',
+    },
+    'GitLab': {
+        'domain': 'gitlab.com',
+        'ignored_suffixes': ['.zip', '.tar.gz', '.tar.bz2', '.tar'],
+        'possible_starts': ['', 'https://', 'http://'],
+        'url_start': 'https://',
+        'url_end': '/repository/archive.zip',
+    },
+    'Bitbucket': {
+        'domain': 'bitbucket.org',
+        'ignored_suffixes': ['.zip', '.tar.gz', '.gz', '.bz2'],
+        'possible_starts': ['', 'https://', 'http://'],
+        'url_start': 'https://',
+        'url_end': '/get/default.zip',
+    },
+}
+
+# TODO: support ZIP URLs which don't end with zip
+# https://gitlab.com/user/reponame/repository/archive.zip?ref=b%C3%A9po
+
+def resolve_known_host_service(url):
+    match = None
+    actual_start = None
+    for key, value in KNOWN_HOST_SERVICES_INFO.iteritems():
+        for start in value['possible_starts']:
+            if url.startswith(start + value['domain']):
+                match = value
+                actual_start = start
+                gscript.verbose(_("Indentified {} as known hosting service")
+                                .format(key))
+                for suffix in value['ignored_suffixes']:
+                    if url.endswith(suffix):
+                        gscript.verbose(
+                            _("Not using {service} as known hosting service"
+                              " because the URL ends with '{suffix}'")
+                                .format(service=key, suffix=suffix))
+                        return None
+    if match:
+        if not actual_start:
+            actual_start = match['url_start']
+        else:
+            actual_start = ''
+        url = '{prefix}{base}{suffix}'.format(prefix=actual_start,
+                                              base=url.rstrip('/'),
+                                              suffix=match['url_end'])
+        gscript.verbose(_("Will use the following URL for download: {}")
+                        .format(url))
+        return 'remote_zip', url
+    else:
+        return None
+
+
 def resolve_source_code(url):
     """Return type and URL or path of the source code
 
@@ -1397,18 +1463,54 @@ def resolve_source_code(url):
 
     :returns: tuple with type of source and full URL or path
 
+    Subversion:
+
     >>> resolve_source_code('http://svn.osgeo.org/grass/grass-addons/grass7')
     ('svn', 'http://svn.osgeo.org/grass/grass-addons/grass7')
+
+    ZIP files online:
+
     >>> resolve_source_code('https://trac.osgeo.org/.../r.modis?format=zip')
     ('remote_zip', 'https://trac.osgeo.org/.../r.modis?format=zip')
+
+    Local directories and ZIP files:
+
     >>> resolve_source_code(os.path.expanduser("~")) # doctest: +ELLIPSIS
     ('dir', '...')
     >>> resolve_source_code('/local/directory/downloaded.zip') # doctest: +SKIP
     ('zip', '/local/directory/downloaded.zip')
+
+    OSGeo Trac:
+
+    >>> resolve_source_code('trac.osgeo.org/.../r.agent.aco')
+    ('remote_zip', 'https://trac.osgeo.org/.../r.agent.aco?format=zip')
+    >>> resolve_source_code('https://trac.osgeo.org/.../r.agent.aco')
+    ('remote_zip', 'https://trac.osgeo.org/.../r.agent.aco?format=zip')
+
+    GitHub:
+
     >>> resolve_source_code('github.com/user/g.example')
     ('remote_zip', 'https://github.com/user/g.example/archive/master.zip')
     >>> resolve_source_code('github.com/user/g.example/')
     ('remote_zip', 'https://github.com/user/g.example/archive/master.zip')
+    >>> resolve_source_code('https://github.com/user/g.example')
+    ('remote_zip', 'https://github.com/user/g.example/archive/master.zip')
+    >>> resolve_source_code('https://github.com/user/g.example/')
+    ('remote_zip', 'https://github.com/user/g.example/archive/master.zip')
+
+    GitLab:
+
+    >>> resolve_source_code('gitlab.com/JoeUser/GrassModule')
+    ('remote_zip', 'https://gitlab.com/JoeUser/GrassModule/repository/archive.zip')
+    >>> resolve_source_code('https://gitlab.com/JoeUser/GrassModule')
+    ('remote_zip', 'https://gitlab.com/JoeUser/GrassModule/repository/archive.zip')
+
+    Bitbucket:
+
+    >>> resolve_source_code('bitbucket.org/joe-user/grass-module')
+    ('remote_zip', 'https://bitbucket.org/joe-user/grass-module/get/default.zip')
+    >>> resolve_source_code('https://bitbucket.org/joe-user/grass-module')
+    ('remote_zip', 'https://bitbucket.org/joe-user/grass-module/get/default.zip')
     """
     if os.path.isdir(url):
         return 'dir', os.path.abspath(url)
@@ -1416,11 +1518,10 @@ def resolve_source_code(url):
         for suffix in ['.zip', '.tar.gz']:
             if url.endswith(suffix):
                 return suffix.lstrip('.'), os.path.abspath(url)
-    elif url.startswith('github.com') and \
-            not (url.endswith('.zip') or url.endswith('.tar.gz')):
-        url = 'https://{}/archive/master.zip'.format(url.rstrip('/'))
-        return 'remote_zip', url
     else:
+        result = resolve_known_host_service(url)
+        if result:
+            return result
         # we allow URL to end with =zip or ?zip and not only .zip
         # unfortunately format=zip&version=89612 would require something else
         # special option to force the source type would solve it
@@ -1478,6 +1579,7 @@ def main():
 if __name__ == "__main__":
     if len(sys.argv) == 2 and sys.argv[1] == '--doctest':
         import doctest
+        _ = str  # doctest gettext workaround
         sys.exit(doctest.testmod().failed)
     options, flags = grass.parser()
     global TMPDIR
