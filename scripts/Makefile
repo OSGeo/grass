@@ -60,6 +60,7 @@ SUBDIRS = \
 	v.db.univar \
 	v.db.update \
 	v.dissolve \
+	v.import \
 	v.in.e00 \
 	v.in.geonames \
 	v.in.lines \

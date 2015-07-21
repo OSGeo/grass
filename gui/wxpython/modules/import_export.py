@@ -87,7 +87,7 @@ class ImportDialog(wx.Dialog):
                 continue
             elif cmd == 'r.external' and name not in ('o', 'e', 'r', 'h', 'v'):
                 continue
-            elif cmd == 'v.in.ogr' and name not in ('c', 'z', 't', 'o', 'r', 'e', 'w'):
+            elif cmd == 'v.import':
                 continue
             elif cmd == 'v.external' and name not in ('b'):
                 continue
@@ -103,7 +103,7 @@ class ImportDialog(wx.Dialog):
                 desc = p.get('description', '')
             if not name and not desc:
                 continue
-            if cmd == 'v.in.ogr' and name == 'encoding':
+            if cmd == 'v.import' and name == 'encoding':
                 self.options_par[name] = (_('Encoding'),
                                           wx.TextCtrl(parent = self.panel, id = wx.ID_ANY))
         
@@ -375,7 +375,7 @@ class GdalImportDialog(ImportDialog):
                            'output=%s' % output,
                            'layer=%s' % layer]
                 else:
-                    cmd = ['v.in.ogr',
+                    cmd = ['v.import',
                            'input=%s' % dsn,
                            'layer=%s' % layer,
                            'output=%s' % output]
@@ -454,7 +454,7 @@ class GdalImportDialog(ImportDialog):
                 return 'r.external'
         else:
             if self.ogr:
-                return 'v.in.ogr'
+                return 'v.import'
             else:
                 return 'r.in.gdal'
         
