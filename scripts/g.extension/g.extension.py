@@ -915,6 +915,7 @@ def move_extracted_files(extract_dir, target_dir, files):
     a different directory in the way that if there was one direcory extracted,
     the contained files are moved.
     """
+    gscript.debug("move_extracted_files({})".format(locals()))
     if len(files) == 1:
         shutil.copytree(os.path.join(extract_dir, files[0]), target_dir)
     else:
@@ -954,28 +955,38 @@ def fix_newlines(directory):
 
 def extract_zip(name, directory, tmpdir):
     """Extract a ZIP file into a directory"""
-    zip_file = zipfile.ZipFile(name, mode='r')
-    file_list = zip_file.namelist()
-    # we suppose we can write to parent of the given dir (supposing a tmp dir)
-    extract_dir = os.path.join(tmpdir, 'extract_dir')
-    os.mkdir(extract_dir)
-    for subfile in file_list:
-        # this should be safe in Python 2.7.4
-        zip_file.extract(subfile, extract_dir)
-    files = os.listdir(extract_dir)
-    move_extracted_files(extract_dir=extract_dir,
-                         target_dir=directory, files=files)
+    try:
+        zip_file = zipfile.ZipFile(name, mode='r')
+        file_list = zip_file.namelist()
+        # we suppose we can write to parent of the given dir (supposing a tmp dir)
+        extract_dir = os.path.join(tmpdir, 'extract_dir')
+        os.mkdir(extract_dir)
+        for subfile in file_list:
+            # this should be safe in Python 2.7.4
+            zip_file.extract(subfile, extract_dir)
+        files = os.listdir(extract_dir)
+        move_extracted_files(extract_dir=extract_dir,
+                             target_dir=directory, files=files)
+    except zipfile.BadZipfile as error:
+        gscript.fatal(_("ZIP file is unreadable: {}").format(error))
 
 
 # TODO: solve the other related formats
 def extract_tar(name, directory, tmpdir):
     """Extract a TAR or a similar file into a directory"""
-    import tarfile
-    tar = tarfile.open(name, "r:gz")
-    tar.extractall()
-    files = os.listdir(tmpdir)
-    move_extracted_files(extract_dir=tmpdir,
-                         target_dir=directory, files=files)
+    try:
+        import tarfile  # we don't need it anywhere else
+        tar = tarfile.open(name)
+        extract_dir = os.path.join(tmpdir, 'extract_dir')
+        os.mkdir(extract_dir)
+        tar.extractall(path=extract_dir)
+        files = os.listdir(extract_dir)
+        move_extracted_files(extract_dir=extract_dir,
+                             target_dir=directory, files=files)
+    except tarfile.TarError as error:
+        gscript.fatal(_("Archive file is unreadable: {}").format(error))
+
+extract_tar.supported_formats = ['tar.gz', 'gz', 'bz2', 'tar', 'gzip','targz']
 
 
 def download_source_code(source, url, name, outdev,
@@ -989,16 +1000,18 @@ def download_source_code(source, url, name, outdev,
         urlretrieve(url, zip_name)
         extract_zip(name=zip_name, directory=directory, tmpdir=tmpdir)
         fix_newlines(directory)
-    elif source == 'remote_tar.gz':
+    elif source.startswith('remote_') and \
+            source.split('_')[1] in extract_tar.supported_formats:
         # we expect that the module.tar.gz file is not by chance in the archive
-        archive_name = os.path.join(tmpdir, 'extension.tar.gz')
+        archive_name = os.path.join(tmpdir,
+                                    'extension.' + source.split('_')[1])
         urlretrieve(url, archive_name)
         extract_tar(name=archive_name, directory=directory, tmpdir=tmpdir)
         fix_newlines(directory)
     elif source == 'zip':
         extract_zip(name=url, directory=directory, tmpdir=tmpdir)
         fix_newlines(directory)
-    elif source == 'tar':
+    elif source in extract_tar.supported_formats:
         extract_tar(name=url, directory=directory, tmpdir=tmpdir)
         fix_newlines(directory)
     elif source == 'dir':
@@ -1006,8 +1019,8 @@ def download_source_code(source, url, name, outdev,
         fix_newlines(directory)
     else:
         # probably programmer error
-        grass.fatal(_("Unknown extension (addon) source '{}'."
-                      " Please report this to grass-user mailing list.")
+        grass.fatal(_("Unknown extension (addon) source type '{}'."
+                      " Please report this to the grass-user mailing list.")
                     .format(source))
 
 
@@ -1515,9 +1528,11 @@ def resolve_source_code(url):
     if os.path.isdir(url):
         return 'dir', os.path.abspath(url)
     elif os.path.exists(url):
-        for suffix in ['.zip', '.tar.gz']:
-            if url.endswith(suffix):
-                return suffix.lstrip('.'), os.path.abspath(url)
+        if url.endswith('.zip'):
+                return 'zip', os.path.abspath(url)
+        for suffix in extract_tar.supported_formats:
+            if url.endswith('.' + suffix):
+                return suffix, os.path.abspath(url)
     else:
         result = resolve_known_host_service(url)
         if result:
@@ -1525,7 +1540,9 @@ def resolve_source_code(url):
         # we allow URL to end with =zip or ?zip and not only .zip
         # unfortunately format=zip&version=89612 would require something else
         # special option to force the source type would solve it
-        for suffix in ['zip', 'tar.gz']:
+        if url.endswith('zip'):
+            return 'remote_zip', url
+        for suffix in extract_tar.supported_formats:
             if url.endswith(suffix):
                 return 'remote_' + suffix, url
         # fallback to the classic behavior

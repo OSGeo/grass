@@ -3,4 +3,4 @@
 set -e
 set -x
 
-$GRASS_PYTHON g.extension.py --doctest
+g.extension --doctest
