@@ -147,7 +147,7 @@ int geos_buffer(struct Map_info *In, struct Map_info *Out,
     GEOSGeometry *IGeom = NULL;
     GEOSGeometry *OGeom = NULL;
     
-    G_debug(3, "geos_buffer()");
+    G_debug(3, "geos_buffer(): id=%d", id);
 
     if (type == GV_AREA)
 	IGeom = Vect_read_area_geos(In, id);
@@ -167,13 +167,15 @@ int geos_buffer(struct Map_info *In, struct Map_info *Out,
         OGeom = GEOSBufferWithParams(IGeom, geos_params, da);
         GEOSBufferParams_destroy(geos_params);
     }
-    else
-#else
+    else {
         OGeom = GEOSBuffer(IGeom, da, 12);
+    }
+#else
+    OGeom = GEOSBuffer(IGeom, da, 12);
 #endif
     
     if (!OGeom) {
-	G_fatal_error(_("Buffering failed"));
+        G_fatal_error(_("Buffering failed (feature %d)"), id);
     }
     
     geom2ring(OGeom, Out, Buf, si, Cats, arr_bc, buffers_count, arr_bc_alloc);
