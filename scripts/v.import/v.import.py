@@ -39,16 +39,26 @@
 #%end
 #%option G_OPT_V_OUTPUT
 #% description: Name for output vector map (default: input)
+#% required: no
 #% guisection: Output
 #%end
 #%option
 #% key: extents
 #% type: string
-#% required: yes
 #% options: input,region
+#% answer: input
 #% description: Ouput vector map extents
-#% descriptions: region;extents of current region;input;extents of input map
+#% descriptions: input;extents of input map;region;extents of current region
 #% guisection: Output
+#%end
+#%flag
+#% key: f
+#% description: List supported OGR formats and exit
+#% suppress_required: yes
+#%end
+#%flag
+#% key: l
+#% description: List available OGR layers in data source and exit
 #%end
 
 
@@ -71,15 +81,25 @@ def cleanup():
 def main():
     global tmploc, srcgisrc, gisdbase
 
-    OGRdatasource = options['input']
-    output = options['output']
-    layers = options['layer']
-    
     # initialize global vars
     tmploc = None
     srcgisrc = None
     gisdbase = None
 
+    # list formats and exit
+    if flags['f']:
+        grass.run_command('v.in.ogr', flags='f')
+        return 0
+
+    # list layers and exit
+    if flags['l']:
+        grass.run_command('v.in.ogr', flags='l', input=options['input'])
+        return 0
+    
+    OGRdatasource = options['input']
+    output = options['output']
+    layers = options['layer']
+    
     vflags = None
     if options['extents'] == 'region':
         vflags = 'r'
@@ -103,10 +123,14 @@ def main():
     tgtsrs = grass.read_command('g.proj', flags = 'j', quiet = True)
 
     # create temp location from input without import
-    grass.message(_("Creating temporary location for <%s>...") % OGRdatasource) 
+    grass.message(_("Creating temporary location for <%s>...") % OGRdatasource)
+    v_in_kwargs = dict()
+    if layers:
+        v_in_kwargs['layer'] = layers
+    if output:
+        v_in_kwargs['output'] = output
     returncode = grass.run_command('v.in.ogr', input = OGRdatasource,
-                                   layer = layers, output = output,
-                                   location = tmploc, flags = 'i', quiet = True)
+                                   location = tmploc, flags = 'i', quiet = True, **v_in_kwargs)
     # if it fails, return
     if returncode != 0:
         grass.fatal(_("Unable to create location from OGR datasource <%s>") % OGRdatasource)
@@ -124,8 +148,7 @@ def main():
         # try v.in.ogr directly
         grass.message(_("Importing <%s>...") % OGRdatasource) 
         returncode = grass.run_command('v.in.ogr', input = OGRdatasource,
-                                       layer = layers, output = output,
-                                       flags = vflags)
+                                       flags = vflags, **v_in_kwargs)
         # if it succeeds, return
         if returncode == 0:
             grass.message(_("Input <%s> successfully imported without reprojection") % OGRdatasource) 
@@ -169,16 +192,24 @@ def main():
     # import into temp location
     grass.message(_("Importing <%s> ...") % OGRdatasource)
     returncode = grass.run_command('v.in.ogr', input = OGRdatasource,
-                                   layer = layers, output = output,
-                                   flags = vflags, verbose = True)
+                                   flags = vflags, **v_in_kwargs)
     
     # if it fails, return
     if returncode != 0:
         grass.fatal(_("Unable to import OGR datasource <%s>") % OGRdatasource)
+
+    # if output is not define check source mapset
+    if not output:
+        output = grass.list_grouped('vector')['PERMANENT'][0]
     
     # switch to target location
     os.environ['GISRC'] = str(tgtgisrc)
 
+    # check if map exists
+    if not grass.overwrite() and \
+       grass.find_file(output, element='vector', mapset='.')['mapset']:
+        grass.fatal(_("option <%s>: <%s> exists.") % ('output', output))
+    
     if options['extents'] == 'region':
         grass.run_command('g.remove', type = 'vector', name = vreg,
                           flags = 'f', quiet = True)
