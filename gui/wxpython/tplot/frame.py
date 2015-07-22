@@ -351,6 +351,19 @@ class TplotFrame(wx.Frame):
                 return lsplit[2]
         return None
 
+    def _getExistingCategories(self, mapp, cats):
+        """Get a list of categories for a vector map"""
+        vdb = grass.read_command('v.category', input=mapp, option='print')
+        categories = vdb.splitlines()
+        for cat in cats:
+            if str(cat) not in categories:
+                GMessage(message=_("Category {ca} is not on vector map"
+                                   " {ma} and it will be used").format(ma=mapp,
+                                                                       ca=cat),
+                         parent=self)
+                cats.remove(cat)
+        return cats
+
     def _getSTVDData(self, timeseries):
         """Load data and read properties
         :param list timeseries: a list of timeseries
@@ -433,9 +446,9 @@ class TplotFrame(wx.Frame):
                         self.timeDataV[name][lay]['value'] = values['Attributes'][attribute]
             else:
                 wherequery = ''
+                cats = self._getExistingCategories(rows[0]['name'], cats)
                 totcat = len(cats)
                 ncat = 1
-                categories = self._getCategories(row[0]['name'])
                 for cat in cats:
                     if ncat == 1 and totcat != 1:
                         wherequery += '{k}={c} or'.format(c=cat, k="{key}")
@@ -445,6 +458,7 @@ class TplotFrame(wx.Frame):
                         wherequery += ' {k}={c}'.format(c=cat, k="{key}")
                     else:
                         wherequery += ' {k}={c} or'.format(c=cat, k="{key}")
+
                     catn = "cat{num}".format(num=cat)
                     self.plotNameListV.append("{na}+{cat}".format(na=name,
                                                                   cat=catn))
