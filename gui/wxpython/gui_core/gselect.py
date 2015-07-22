@@ -2280,7 +2280,7 @@ class CoordinatesSelect(wx.Panel):
 
 class VectorCategorySelect(wx.Panel):
     """Widget that allows interactive selection of vector features"""
-    def __init__(self, parent, giface, task):
+    def __init__(self, parent, giface, task=None):
         super(VectorCategorySelect, self).__init__(parent=parent, id=wx.ID_ANY)
         self.task=task
         self.parent = parent
@@ -2335,12 +2335,17 @@ class VectorCategorySelect(wx.Panel):
                            "Operation canceled.") % (inputName['value'], str(layerSelected)))
                 return False
             return True
+        return False
 
     def _onClick(self, evt=None):
-        if not self._chckMap():
-            self.buttonVecSelect.SetValue(False)
-            return
-
+        if self.task is not None:
+            if not self._chckMap():
+                self.buttonVecSelect.SetValue(False)
+                return
+        else:
+            if not self._isMapSelected():
+                self.buttonVecSelect.SetValue(False)
+                return
         if self._vectorSelect is None:
 
             if self.mapdisp:
@@ -2374,10 +2379,17 @@ class VectorCategorySelect(wx.Panel):
         """Update category text input widget"""
         if event == "unregistered":
             return
-        if not self._chckMap():
-            self.OnClose()
+
+        if self.task is None:
+            if not self._isMapSelected():
+                self.OnClose()
+            else:
+                self.catsField.SetValue(self._vectorSelect.GetLineStringSelectedCats())
         else:
-            self.catsField.SetValue(self._vectorSelect.GetLineStringSelectedCats())
+            if not self._chckMap():
+                self.OnClose()
+            else:
+                self.catsField.SetValue(self._vectorSelect.GetLineStringSelectedCats())
 
     def GetTextWin(self):
         return self.catsField

@@ -16,7 +16,7 @@ This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
 @author Luca Delucchi
-@author add stvds support-Matej Krejci
+@author start stvds support Matej Krejci
 """
 from itertools import cycle
 import numpy as np
@@ -219,10 +219,13 @@ class TplotFrame(wx.Frame):
                                             id=wx.ID_ANY,
                                             label=_('Select attribute column'))
         # TODO fix the category selection as done for coordinates
-        #self.cats = gselect.VectorCategorySelect(parent=self.controlPanelVector,
-        #                                         giface=self._giface)
-        self.cats = wx.TextCtrl(parent=self.controlPanelVector, id=wx.ID_ANY,
-                                size=globalvar.DIALOG_TEXTCTRL_SIZE)
+        try:
+            self._giface.GetMapWindow()
+            self.cats = gselect.VectorCategorySelect(parent=self.controlPanelVector,
+                                                     giface=self._giface)
+        except:
+            self.cats = wx.TextCtrl(parent=self.controlPanelVector, id=wx.ID_ANY,
+                                    size=globalvar.DIALOG_TEXTCTRL_SIZE)
         self.catsLabel = wx.StaticText(parent=self.controlPanelVector,
                                        id=wx.ID_ANY,
                                        label=_('Select category of vector(s)'))
@@ -336,9 +339,9 @@ class TplotFrame(wx.Frame):
         self.temporalType = mode
         return
 
-    def parseVDbConn(self, map, layerInp):
+    def _parseVDbConn(self, mapp, layerInp):
         '''find attribute key according to layer of input map'''
-        vdb = Module('v.db.connect', map=map, flags='g', stdout_=PIPE)
+        vdb = Module('v.db.connect', map=mapp, flags='g', stdout_=PIPE)
 
         vdb = vdb.outputs.stdout
         for line in vdb.splitlines():
@@ -353,8 +356,6 @@ class TplotFrame(wx.Frame):
         :param list timeseries: a list of timeseries
         """
 
-        # idKye = 'linkid'  #TODO
-
         mode = None
         unit = None
         cats = None
@@ -363,7 +364,7 @@ class TplotFrame(wx.Frame):
             cats = self.cats.GetValue().split(',')
         if cats and self.poi:
             GMessage(message=_("Both coordinates and categories are set, "
-                               "coordinates will be used. The use categories"
+                               "coordinates will be used. The use categories "
                                "remove text from coordinate form"))
         if not attribute or attribute == '':
             GError(parent=self, showTraceback=False,
@@ -434,6 +435,7 @@ class TplotFrame(wx.Frame):
                 wherequery = ''
                 totcat = len(cats)
                 ncat = 1
+                categories = self._getCategories(row[0]['name'])
                 for cat in cats:
                     if ncat == 1 and totcat != 1:
                         wherequery += '{k}={c} or'.format(c=cat, k="{key}")
@@ -450,7 +452,7 @@ class TplotFrame(wx.Frame):
                     ncat += 1
                 for row in rows:
                     lay = int(row['layer'])
-                    catkey = self.parseVDbConn(row['name'], lay)
+                    catkey = self._parseVDbConn(row['name'], lay)
                     if not catkey:
                         GError(parent=self, showTraceback=False,
                            message=_("No connection between vector map {vmap} "

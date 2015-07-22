@@ -241,6 +241,9 @@ class VectorSelectBase():
         """Return name of selected map in layer tree"""
         layerList = self._giface.GetLayerList()
         layerSelected = layerList.GetSelectedLayer()
+        if layerSelected is None:
+            return None
+
         if not layerSelected.maplayer.IsActive():
             GWarning(_("Selected map <%s> has been disabled for rendering. "
                        "Operation canceled.") % str(layerSelected), parent=self.mapWin)
