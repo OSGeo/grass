@@ -483,7 +483,7 @@ class TplotFrame(wx.Frame):
                             self.timeDataV[name][catn][layn] = {}
                         self.timeDataV[name][catn][layn]['start_datetime'] = row['start_time']
                         self.timeDataV[name][catn][layn]['end_datetime'] = row['end_time']
-                        self.timeDataV[name][catn][layn]['value'] = vals['values'][int(cat)]
+                        self.timeDataV[name][catn][layn]['value'] = vals['values'][int(cat)][0]
         self.unit = unit
         self.temporalType = mode
         return
