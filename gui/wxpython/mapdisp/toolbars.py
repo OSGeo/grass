@@ -6,7 +6,7 @@
 Classes:
  - toolbars::MapToolbar
 
-(C) 2007-2011 by the GRASS Development Team
+(C) 2007-2015 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -143,52 +143,53 @@ class MapToolbar(BaseToolbar):
         
     def _toolbarData(self):
         """Toolbar data"""
-        return self._getToolbarData((('displayMap', BaseIcons['display'],
-                                      self.parent.OnDraw),
-                                     ('renderMap', BaseIcons['render'],
-                                      self.parent.OnRender),
-                                     ('erase', BaseIcons['erase'],
-                                      self.parent.OnErase),
-                                     (None, ),
-                                     ('pointer', BaseIcons['pointer'],
-                                      self.parent.OnPointer,
-                                      wx.ITEM_CHECK),
-                                     ('select', MapIcons['select'],
-                                      self.parent.OnSelect,
-                                      wx.ITEM_CHECK),
-                                     ('query', MapIcons['query'],
-                                      self.parent.OnQuery,
-                                      wx.ITEM_CHECK),
-                                     ('pan', BaseIcons['pan'],
-                                      self.parent.OnPan,
-                                      wx.ITEM_CHECK),
-                                     ('zoomIn', BaseIcons['zoomIn'],
-                                      self.parent.OnZoomIn,
-                                      wx.ITEM_CHECK),
-                                     ('zoomOut', BaseIcons['zoomOut'],
-                                      self.parent.OnZoomOut,
-                                      wx.ITEM_CHECK),
-                                     ('zoomExtent', BaseIcons['zoomExtent'],
-                                      self.parent.OnZoomToMap),
-                                     ('zoomRegion', BaseIcons['zoomRegion'],
-                                      self.parent.OnZoomToWind),
-                                     ('zoomBack', BaseIcons['zoomBack'],
-                                      self.parent.OnZoomBack),
-                                     ('zoomMenu', BaseIcons['zoomMenu'],
-                                      self.parent.OnZoomMenu),
-                                     (None, ),
-                                     ('analyze', MapIcons['analyze'],
-                                      self.OnAnalyze),
-                                     (None, ),
-                                     ('overlay', BaseIcons['overlay'],
-                                      self.OnDecoration),
-                                     (None, ),
-                                     ('saveFile', BaseIcons['saveFile'],
-                                      self.parent.SaveToFile),
-                                     ('printMap', BaseIcons['print'],
-                                      self.parent.PrintMenu),
-                                     (None, ))
-                                    )
+        return self._getToolbarData((
+            #('displayMap', BaseIcons['display'],
+            #self.parent.OnDraw),
+            ('renderMap', BaseIcons['render'],
+             self.parent.OnRender),
+            ('erase', BaseIcons['erase'],
+             self.parent.OnErase),
+            (None, ),
+            ('pointer', BaseIcons['pointer'],
+             self.parent.OnPointer,
+             wx.ITEM_CHECK),
+            ('select', MapIcons['select'],
+             self.parent.OnSelect,
+             wx.ITEM_CHECK),
+            ('query', MapIcons['query'],
+             self.parent.OnQuery,
+             wx.ITEM_CHECK),
+            ('pan', BaseIcons['pan'],
+             self.parent.OnPan,
+             wx.ITEM_CHECK),
+            ('zoomIn', BaseIcons['zoomIn'],
+             self.parent.OnZoomIn,
+             wx.ITEM_CHECK),
+            ('zoomOut', BaseIcons['zoomOut'],
+             self.parent.OnZoomOut,
+             wx.ITEM_CHECK),
+            ('zoomExtent', BaseIcons['zoomExtent'],
+             self.parent.OnZoomToMap),
+            ('zoomRegion', BaseIcons['zoomRegion'],
+             self.parent.OnZoomToWind),
+            ('zoomBack', BaseIcons['zoomBack'],
+             self.parent.OnZoomBack),
+            ('zoomMenu', BaseIcons['zoomMenu'],
+             self.parent.OnZoomMenu),
+            (None, ),
+            ('analyze', MapIcons['analyze'],
+             self.OnAnalyze),
+            (None, ),
+            ('overlay', BaseIcons['overlay'],
+             self.OnDecoration),
+            (None, ),
+            ('saveFile', BaseIcons['saveFile'],
+             self.parent.SaveToFile),
+            ('printMap', BaseIcons['print'],
+            self.parent.PrintMenu),
+            (None, ))
+        )
     def InsertTool(self, data):
         """Insert tool to toolbar
         
