@@ -1232,12 +1232,23 @@ double, i.e. an all-ones exponent, the top-bit of the mantissa set,
 and either sign).
 
 So far as arithmetic is concerned, any value with an all-ones exponent
-and a non-zero mantissa is treated as NaN. But the GRASS
-Rast_is_[fd]_null_value() functions only consider the all-ones bit
-pattern to be null. I intend to change this in 7.x so that all FP NaN
-values are treated as null. This will mean that code which can
-generate NaNs doesn't have to explicitly convert them to the GRASS
-null value.
+and a non-zero mantissa is treated as NaN.
+Rast_set_d_null_value() and Rast_set_f_null_value() use the all-ones
+bit pattern. This is one of the many NaN values (anything with an
+all-ones exponent and a non-zero mantissa is NaN). As the topmost bit
+(i.e. the sign bit) is set, it is possible that some code would
+consider that to be "-NaN". E.g. code which writes a leading "-" based
+upon the sign bit before considering the other components would do so.
+
+Rast_is_d_null_value() and Rast_is_f_null_value() treat any NaN as
+null (specifically, they test whether the value is unequal to itself).
+
+At one time, these functions (or rather, their predecessors) checked
+explicitly for the all-ones pattern, but this was changed (in r33717
+and r33752) to improve robustness. Apart from code explicitly setting
+a value to "null", NaNs can arise from calculations (0.0/0.0, sqrt(x)
+or log(x) for x<0, asin(x) or acos(x) for abs(x)>1, etc), and there's
+no guarantee as to exactly which NaN representation will result.
 
 <b>Presence or absence of <tt>null</tt> file:</b>
 
