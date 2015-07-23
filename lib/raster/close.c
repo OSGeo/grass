@@ -362,6 +362,15 @@ static int close_new(int fd, int ok)
 	    fcb->data = NULL;
 	}
 
+	if (fcb->null_row_ptr) {			/* compressed nulls */
+	    fcb->null_row_ptr[fcb->cellhd.rows] = lseek(fcb->null_fd, 0L, SEEK_CUR);
+	    Rast__write_null_row_ptrs(fd, fcb->null_fd);
+	}
+
+	if (fcb->null_fd >= 0)
+	    close(fcb->null_fd);
+	fcb->null_fd = -1;
+
 	/* create path : full null file name */
 	G__make_mapset_element_misc("cell_misc", fcb->name);
 	G_file_name_misc(path, "cell_misc", NULL_FILE, fcb->name, G_mapset());
@@ -393,11 +402,6 @@ static int close_new(int fd, int ok)
 	if (fcb->open_mode == OPEN_NEW_COMPRESSED) {	/* auto compression */
 	    fcb->row_ptr[fcb->cellhd.rows] = lseek(fcb->data_fd, 0L, SEEK_CUR);
 	    Rast__write_row_ptrs(fd);
-	}
-
-	if (fcb->null_row_ptr) {			/* compressed nulls */
-	    fcb->null_row_ptr[fcb->cellhd.rows] = lseek(fcb->null_fd, 0L, SEEK_CUR);
-	    Rast__write_null_row_ptrs(fd, fcb->null_fd);
 	}
 
 	if (fcb->map_type != CELL_TYPE) {	/* floating point map */
