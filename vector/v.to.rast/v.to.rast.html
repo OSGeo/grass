@@ -88,6 +88,41 @@ v.to.rast input=fields output=myfields use=attr attribute_column=cat label_colum
 r.category myfields
 </pre></div>
 
+
+<h3>Convert vector points to raster with raster cell binning</h3>
+
+In this example, the number of schools per raster cell are counted
+(North Carolina sample dataset):
+
+<div class="code"><pre>
+g.copy vector=schools_wake,myschools_wake
+
+# set computation region for raster binning
+g.region vector=myschools_wake res=5000 -p -a
+
+# add new column for counting
+v.db.addcolumn myschools_wake column="value integer"
+v.db.update myschools_wake column=value value=1
+
+# verify attributes
+v.db.select myschools_wake column=cat,value
+v.out.ascii input=myschools_wake output=- column=value
+
+# export and import on the fly, use 4th column (value) as input
+v.out.ascii input=myschools_wake output=- column=value | r.in.xyz input=- \
+            z=4 output=schools_wake_aggreg method=sum
+
+d.mon wx0
+d.rast schools_wake_aggreg
+d.vect schools_wake 
+d.grid 5000
+</pre></div>
+
+<center>
+<img src="v_to_rast_binning.png" alt="Number of schools per raster cell" border=1><br>
+Number of schools per raster cell
+</center>
+
 <h2>SEE ALSO</h2>
 <em>
 <a href="db.describe.html">db.describe</a>,
