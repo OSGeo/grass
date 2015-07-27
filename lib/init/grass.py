@@ -37,6 +37,7 @@ is not safe, i.e. it has side effects (this should be changed in the future).
 # (this makes it more stable since we have to set up paths first)
 # pylint: disable=too-many-lines
 
+from __future__ import print_function
 import sys
 import os
 import atexit
@@ -45,6 +46,49 @@ import subprocess
 import re
 import platform
 import tempfile
+import locale
+
+
+# ----+- Python 3 compatibility start -+----
+PY2 = sys.version[0] == '2'
+ENCODING = locale.getdefaultlocale()[1]
+
+
+def to_text_string(obj, encoding=ENCODING):
+    """Convert `obj` to (unicode) text string"""
+    if PY2:
+        # Python 2
+        if encoding is None:
+            return unicode(obj)
+        else:
+            return unicode(obj, encoding)
+    else:
+        # Python 3
+        if encoding is None:
+            return str(obj)
+        elif isinstance(obj, str):
+            # In case this function is not used properly, this could happen
+            return obj
+        else:
+            return str(obj, encoding)
+
+
+if PY2:
+    import types
+    string_types = basestring,
+    integer_types = (int, long)
+    class_types = (type, types.ClassType)
+    text_type = unicode
+    binary_type = str
+else:
+    string_types = str,
+    integer_types = int,
+    class_types = type,
+    text_type = str
+    binary_type = bytes
+    MAXSIZE = sys.maxsize
+
+# ----+- Python 3 compatibility end -+----
 
 # Variables substituted during build process
 if 'GISBASE' in os.environ:
@@ -88,7 +132,7 @@ def try_rmdir(path):
 def clean_env(gisrc):
     env_curr = read_gisrc(gisrc)
     env_new = {}
-    for k,v in env_curr.iteritems():
+    for k,v in env_curr.items():
         if 'MONITOR' not in k:
             env_new[k] = v
 
@@ -359,7 +403,7 @@ def create_tmp(user, gis_lock):
         tmpdir = os.path.join(tmp, "grass7-%(user)s-%(lock)s" % {'user': user,
                                                              'lock': gis_lock})
         try:
-            os.mkdir(tmpdir, 0700)
+            os.mkdir(tmpdir, 0o700)
         except:
             tmp = None
 
@@ -369,7 +413,7 @@ def create_tmp(user, gis_lock):
             tmpdir = os.path.join(tmp, "grass7-%(user)s-%(lock)s" % {
                                               'user': user, 'lock': gis_lock})
             try:
-                os.mkdir(tmpdir, 0700)
+                os.mkdir(tmpdir, 0o700)
             except:
                 tmp = None
             if tmp:
@@ -451,7 +495,7 @@ def read_env_file(path):
 
 def write_gisrc(kv, filename):
     f = open(filename, 'w')
-    for k, v in kv.iteritems():
+    for k, v in kv.items():
         f.write("%s: %s\n" % (k, v))
     f.close()
 
@@ -554,11 +598,11 @@ def set_paths(grass_config_dir):
             pass
 
         if sys_man_path:
-            os.environ['MANPATH'] = sys_man_path
+            os.environ['MANPATH'] = to_text_string(sys_man_path)
             path_prepend(addons_man_path, 'MANPATH')
             path_prepend(grass_man_path, 'MANPATH')
         else:
-            os.environ['MANPATH'] = addons_man_path
+            os.environ['MANPATH'] = to_text_string(addons_man_path)
             path_prepend(grass_man_path, 'MANPATH')
 
     # Set LD_LIBRARY_PATH (etc) to find GRASS shared libraries
@@ -675,7 +719,7 @@ def check_gui(expected_gui):
             p = Popen([os.environ['GRASS_PYTHON']], stdin=subprocess.PIPE,
                       stdout=nul, stderr=nul)
             nul.close()
-            p.stdin.write("variable=True")
+            p.stdin.write("variable=True".encode(ENCODING))
             p.stdin.close()
             p.wait()
             if p.returncode != 0:
@@ -888,7 +932,7 @@ def set_mapset_interactive(grass_gui):
         gui_startup(grass_gui)
     else:
         # Shouldn't need this but you never know
-        fatal(_("Invalid user interface specified - <%s>. " 
+        fatal(_("Invalid user interface specified - <%s>. "
                 "Use the --help option to see valid interface names.") % grass_gui)
 
 
@@ -984,10 +1028,10 @@ def load_env(grass_env_file):
             k, v = map(lambda x: x.strip(), line.strip().split(' ', 1)[1].split('=', 1))
         except:
             continue
-        
+
         debug("Environmental variable set {}={}".format(k, v))
         os.environ[k] = v
-        
+
     # Allow for mixed ISIS-GRASS Environment
     if os.getenv('ISISROOT'):
         isis = os.getenv('ISISROOT')
@@ -1010,8 +1054,6 @@ def set_language(grass_config_dir):
     # thus it always on Vista and XP will print an error.
     # See discussion for Windows not following its own documentation and
     # not accepting ISO codes as valid locale identifiers http://bugs.python.org/issue10466
-    import locale
-
     language = 'None' # Such string sometimes is present in wx file
     encoding = None
 
@@ -1029,7 +1071,7 @@ def set_language(grass_config_dir):
                 language = ''.join(line.split(';')[-1:])
                 break
         fd.close()
-    
+
     if language == 'None' or language == '' or not language:
         # Language override is disabled (system language specified)
         # As by default program runs with C locale, but users expect to
@@ -1040,8 +1082,9 @@ def set_language(grass_config_dir):
             # If we get here, system locale settings are terribly wrong
             # There is no point to continue as GRASS/Python will fail
             # in some other unpredictable way.
-            print "System locale is not usable. It indicates misconfigured environment."
-            print "Reported error message: %s" % e
+            print("System locale is not usable. "
+                  "It indicates misconfigured environment.")
+            print("Reported error message: %s" % e)
             sys.exit("Fix system locale settings and then try again.")
 
         language, encoding = locale.getdefaultlocale()
@@ -1101,7 +1144,7 @@ def set_language(grass_config_dir):
         del os.environ['LC_ALL']  # Remove LC_ALL to not override LC_NUMERIC
 
     # From now on enforce the new language
-    if encoding: 
+    if encoding:
         gettext.install('grasslibs', gpath('locale'), codeset=encoding)
     else:
         gettext.install('grasslibs', gpath('locale'))
@@ -1310,9 +1353,9 @@ def show_banner():
     sys.stderr.write(r"""
           __________  ___   __________    _______________
          / ____/ __ \/   | / ___/ ___/   / ____/  _/ ___/
-        / / __/ /_/ / /| | \__ \\_  \   / / __ / / \__ \ 
-       / /_/ / _, _/ ___ |___/ /__/ /  / /_/ // / ___/ / 
-       \____/_/ |_/_/  |_/____/____/   \____/___//____/  
+        / / __/ /_/ / /| | \__ \\_  \   / / __ / / \__ \
+       / /_/ / _, _/ ___ |___/ /__/ /  / /_/ // / ___/ /
+       \____/_/ |_/_/  |_/____/____/   \____/___//____/
 
 """)
 
@@ -1450,7 +1493,7 @@ PROMPT_COMMAND=grass_prompt\n""" % (_("2D and 3D raster MASKs present"),
         for line in readfile(env_file).splitlines():
             if not line.startswith('export'):
                 f.write(line + '\n')
-    
+
     f.write("export PATH=\"%s\"\n" % os.getenv('PATH'))
     f.write("export HOME=\"%s\"\n" % userhome) # restore user home path
 
@@ -1638,7 +1681,7 @@ macosx = "darwin" in sys.platform
 # TODO: it is OK to remove this?
 # at the beginning of this file were are happily getting GISBASE
 # from the environment and we don't care about inconsistencies it might cause
-### commented-out: broken winGRASS 
+### commented-out: broken winGRASS
 # if 'GISBASE' in os.environ:
 #     sys.exit(_("ERROR: GRASS GIS is already running "
 #                "(environmental variable GISBASE found)"))
