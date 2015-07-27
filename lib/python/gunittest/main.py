@@ -15,6 +15,7 @@ import argparse
 
 from unittest.main import TestProgram
 
+
 from .loader import GrassTestLoader
 from .runner import (GrassTestRunner, MultiTestResult,
                      TextTestResult, KeyValueTestResult)
@@ -55,16 +56,15 @@ class GrassTestProgram(TestProgram):
                                        failfast=failfast,
                                        buffer=buffer_stdout_stderr,
                                        result=result)
-
         super(GrassTestProgram, self).__init__(module=module,
-                                               argv=unittest_argv,
-                                               testLoader=grass_loader,
-                                               testRunner=grass_runner,
-                                               exit=exit_at_end,
-                                               verbosity=verbosity,
-                                               failfast=failfast,
-                                               catchbreak=catchbreak,
-                                               buffer=buffer_stdout_stderr)
+                                                   argv=unittest_argv,
+                                                   testLoader=grass_loader,
+                                                   testRunner=grass_runner,
+                                                   exit=exit_at_end,
+                                                   verbosity=verbosity,
+                                                   failfast=failfast,
+                                                   catchbreak=catchbreak,
+                                                   buffer=buffer_stdout_stderr)
         keyval_file.close()
 
 

@@ -54,7 +54,10 @@ def do_doctest_gettext_workaround():
 
     sys.displayhook = new_displayhook
 
-    import __builtin__
+    try:
+        import __builtin__
+    except ImportError:
+        import builtins as __builtin__
     __builtin__._ = new_translator
 
 

@@ -14,13 +14,19 @@ import datetime
 import xml.sax.saxutils as saxutils
 import xml.etree.ElementTree as et
 import subprocess
-import StringIO
+import sys
 import collections
-import types
 import re
 
 from .utils import ensure_dir
 from .checkers import text_to_keyvalue
+
+
+if sys.version_info[0] == 2:
+    from StringIO import StringIO
+else:
+    from io import StringIO
+    basestring = str
 
 
 # TODO: change text_to_keyvalue to same sep as here
@@ -30,9 +36,9 @@ def keyvalue_to_text(keyvalue, sep='=', vsep='\n', isep=',',
     if not last_vertical:
         last_vertical = vsep == '\n'
     items = []
-    for key, value in keyvalue.iteritems():
+    for key, value in keyvalue.items():
         # TODO: use isep for iterables other than strings
-        if (not isinstance(value, types.StringTypes)
+        if (not isinstance(value, basestring)
                 and isinstance(value, collections.Iterable)):
             # TODO: this does not work for list of non-strings
             value = isep.join(value)
@@ -444,7 +450,7 @@ def html_file_preview(filename):
     if not size:
         return '<p style="color: red>File %s is empty<p>' % filename
     max_size = 10000
-    html = StringIO.StringIO()
+    html = StringIO()
     html.write(before)
     if size < max_size:
         with open(filename) as text:
@@ -582,7 +588,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
                      st=self.successes, ft=self.failures + self.errors,
                      total=self.total, pt=pass_per
                      ))
-        
+
         # this is the second place with this function
         # TODO: provide one implementation
         def format_percentage(percentage):
@@ -835,7 +841,7 @@ class GrassTestFilesKeyValueReporter(GrassTestFilesCountingReporter):
         # TODO: add some general metadata here (passed in constructor)
 
         # add additional information
-        for key, value in self._info.iteritems():
+        for key, value in self._info.items():
             summary[key] = value
 
         summary_filename = os.path.join(self.result_dir,
@@ -1150,7 +1156,7 @@ class TestsuiteDirReporter(object):
         page.write(head)
         page.write(tests_table_head)
 
-        for directory, test_files in directories.iteritems():
+        for directory, test_files in directories.items():
             row = self.report_for_dir(root=root, directory=directory,
                                       test_files=test_files)
             page.write(row)
