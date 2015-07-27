@@ -295,7 +295,6 @@ def set_path(modulename, dirname, path='.'):
         sys.path.append(os.path.abspath(path))
     else:
         # running from GRASS GIS session
-        from grass.pygrass.utils import get_lib_path
         path = get_lib_path(modulename, dirname)
         if path is None:
             raise ImportError("Not able to find the path %s directory." % path)
