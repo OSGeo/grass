@@ -12,7 +12,6 @@ for details.
 import os
 import sys
 import shutil
-import string
 import subprocess
 
 from .checkers import text_to_keyvalue
@@ -24,6 +23,11 @@ from .reporters import (GrassTestFilesMultiReporter,
                         get_svn_path_authors,
                         NoopFileAnonymizer, keyvalue_to_text)
 from .utils import silent_rmtree, ensure_dir
+
+try:
+    from string import maketrans
+except ImportError:
+    maketrans = str.maketrans
 
 # needed for write_gisrc
 # TODO: it would be good to find some way of writing rc without the need to
@@ -104,7 +108,7 @@ class GrassTestFilesInvoker(object):
         # replace . to get rid of unclean path
         # TODO: clean paths
         # note that backslash cannot be at the end of raw string
-        dir_as_name = module.tested_dir.translate(string.maketrans(r'/\.', '___'))
+        dir_as_name = module.tested_dir.translate(maketrans(r'/\.', '___'))
         mapset = dir_as_name + '_' + module.name
         # TODO: use grass module to do this? but we are not in the right gisdbase
         mapset_dir = os.path.join(gisdbase, location, mapset)

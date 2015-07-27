@@ -43,8 +43,9 @@ class TestResult(unittest.TestResult):
     # where are also unused, so perhaps we can remove them
     # stream set to None and not included in interface, it would not make sense
     def __init__(self, stream=None, descriptions=None, verbosity=None):
-        super(TestResult, self).__init__(
-            stream=stream, descriptions=descriptions, verbosity=verbosity)
+        super(TestResult, self).__init__(stream=stream,
+                                         descriptions=descriptions,
+                                         verbosity=verbosity)
         self.successes = []
 
     def addSuccess(self, test):

@@ -8,10 +8,11 @@ for details.
 
 :authors: Vaclav Petras
 """
+from __future__ import print_function
 
 import os
 import subprocess
-import StringIO
+import sys
 import hashlib
 import uuid
 import unittest
@@ -25,6 +26,12 @@ from .checkers import (check_text_ellipsis,
                        file_md5, text_file_md5, files_equal_md5)
 from .utils import safe_repr
 from .gutils import is_map_in_mapset
+
+
+if sys.version_info[0] == 2:
+    import StringIO
+else:
+    from io import StringIO
 
 
 class TestCase(unittest.TestCase):
@@ -624,7 +631,7 @@ class TestCase(unittest.TestCase):
         name and should be always provided.
         """
         # TODO: possible improvement is to require some descriptive name
-        # and ensure uniqueness by add UUID 
+        # and ensure uniqueness by add UUID
         if self.readable_names:
             return 'tmp_' + self.id().replace('.', '_') + '_' + name
         else:
@@ -1117,8 +1124,8 @@ class TestCase(unittest.TestCase):
             module.run()
             self.grass_modules.append(module.name)
         except CalledModuleError:
-            print module.outputs.stdout
-            print module.outputs.stderr
+            print(module.outputs.stdout)
+            print(module.outputs.stderr)
             # TODO: message format
             # TODO: stderr?
             stdmsg = ('Running <{m.name}> module ended'
@@ -1130,8 +1137,8 @@ class TestCase(unittest.TestCase):
                           errors=module.outputs.stderr
                       ))
             self.fail(self._formatMessage(msg, stdmsg))
-        print module.outputs.stdout
-        print module.outputs.stderr
+        print(module.outputs.stdout)
+        print(module.outputs.stderr)
         # log these to final report
         # TODO: always or only if the calling test method failed?
         # in any case, this must be done before self.fail()
@@ -1151,11 +1158,11 @@ class TestCase(unittest.TestCase):
             module.run()
             self.grass_modules.append(module.name)
         except CalledModuleError:
-            print module.outputs.stdout
-            print module.outputs.stderr
+            print(module.outputs.stdout)
+            print(module.outputs.stderr)
         else:
-            print module.outputs.stdout
-            print module.outputs.stderr
+            print(module.outputs.stdout)
+            print(module.outputs.stderr)
             stdmsg = ('Running <%s> ended with zero (successful) return code'
                       ' when expecting module to fail' % module.get_python())
             self.fail(self._formatMessage(msg, stdmsg))
