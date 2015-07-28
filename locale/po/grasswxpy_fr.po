@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-02-08 19:52+0100\n"
-"PO-Revision-Date: 2015-04-19 21:51+0100\n"
+"PO-Revision-Date: 2015-06-07 13:56+0100\n"
 "Last-Translator: Sylvain Maillard <sylvain.maillard@gmail.com>\n"
 "Language-Team: français <grass-translations@lists.osgeo.org>\n"
 "Language: fr\n"
@@ -382,14 +382,13 @@ msgid "Classes"
 msgstr "Classes"
 
 #: ../gui/wxpython/iscatt/frame.py:146
-#, fuzzy
 msgid "GRASS GIS Interactive Scatter Plot Tool"
-msgstr "Barre d'outils de nuages de points"
+msgstr "Barre d'outils interactive de nuages de points"
 
 #: ../gui/wxpython/iscatt/frame.py:361
 #, fuzzy
 msgid "scatter plot"
-msgstr "Points vectoriels"
+msgstr "nuage de points"
 
 #: ../gui/wxpython/iscatt/frame.py:375 ../gui/wxpython/iclass/dialogs.py:357
 msgid "Class name"
@@ -1108,9 +1107,8 @@ msgid "Nothing found"
 msgstr "Aucun résultat"
 
 #: ../gui/wxpython/gui_core/vselect.py:42
-#, fuzzy
 msgid "category"
-msgstr "Catégorie"
+msgstr "catégorie"
 
 #: ../gui/wxpython/gui_core/vselect.py:43
 #: ../gui/wxpython/vnet/vnet_data.py:239
@@ -1118,19 +1116,17 @@ msgid "type"
 msgstr "type"
 
 #: ../gui/wxpython/gui_core/vselect.py:65
-#, fuzzy
 msgid "Select features"
-msgstr "Sélectionner des objets vectoriels"
+msgstr "Sélectionner des objets"
 
 #: ../gui/wxpython/gui_core/vselect.py:120
-#, fuzzy
 msgid "Create a new map"
-msgstr "Créer un nouveau jeu de cartes"
+msgstr "Créer une nouvelle carte"
 
 #: ../gui/wxpython/gui_core/vselect.py:241
-#, fuzzy, python-format
+#, python-format
 msgid "Selected map <%s> has been disabled for rendering. Operation canceled."
-msgstr "La carte vecteur n'est pas 3D.  Opération annulée."
+msgstr "L'affichage de la carte sélectionnée <%s> a été désactivé. Opération annulée."
 
 #: ../gui/wxpython/gui_core/vselect.py:253
 #: ../gui/wxpython/mapdisp/frame.py:577 ../gui/wxpython/lmgr/frame.py:2259
@@ -1140,25 +1136,27 @@ msgstr "Aucune ccouche sélectionnée. Opération annulée."
 #: ../gui/wxpython/gui_core/vselect.py:272
 #, fuzzy, python-format
 msgid "Failed to query vector map(s) <%s>."
-msgstr "Impossible d'ouvrir la carte vecteur <%s>."
+msgstr "Échec d'interrogation de la carte vecteur <%s>."
 
 #: ../gui/wxpython/gui_core/vselect.py:296
-#, fuzzy
 msgid "No features selected"
-msgstr "Pas de source de données sélectionnée."
+msgstr "Pas d'objets sélectionnée."
 
 #: ../gui/wxpython/gui_core/vselect.py:321
-#, fuzzy, python-format
+#, python-format
 msgid "Vector map <%s> was created"
-msgstr "Nouvelle carte vecteur <%s> créée"
+msgstr "La carte vecteur <%s> a créée"
 
 #: ../gui/wxpython/gui_core/vselect.py:324
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Unable to create a new vector map.\n"
 "\n"
 "Reason: %s"
-msgstr "Impossible de créer la carte vecteur <%s>."
+msgstr ""
+"Impossible de créer la nouvelle carte vecteur.\n"
+"\n"
+"Raison: %s"
 
 #: ../gui/wxpython/gui_core/menu.py:141
 msgid "Double-click or Ctrl-Enter to run selected module"
@@ -1520,9 +1518,8 @@ msgid "Import raster data"
 msgstr "Importer une carte raster"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1867
-#, fuzzy
 msgid "Add linked layers into layer tree"
-msgstr "Ajouter les couches importées dans l'arborescence des couches"
+msgstr "Ajouter les couches liées dans l'arborescence des couches"
 
 #: ../gui/wxpython/gui_core/dialogs.py:1869
 #: ../gui/wxpython/gui_core/dialogs.py:2101
@@ -1542,9 +1539,8 @@ msgid "No layers selected. Operation canceled."
 msgstr "Aucune couche sélectionnée. Opération annulée."
 
 #: ../gui/wxpython/gui_core/dialogs.py:1940
-#, fuzzy
 msgid "Unable to determine number of raster bands"
-msgstr "Impossible de créer le profil de carte raster."
+msgstr "Impossible de déterminer le nombre de bandes du raster"
 
 #: ../gui/wxpython/gui_core/dialogs.py:2016
 msgid "Define output format for vector data"
@@ -6680,9 +6676,8 @@ msgid "LAS LiDAR points import"
 msgstr "Importer des popints LiDAR LAS"
 
 #: ../gui/wxpython/menustrings.py:56 ../gui/wxpython/menustrings.py:1047
-#, fuzzy
 msgid "Creates a raster map from LAS LiDAR points using univariate statistics."
-msgstr "Créer une carte raster à partir d'un assemblage d'un lot de coordonnées en utilisant des statistiques univariées."
+msgstr "Créer une carte raster à partir de points LiDAR LAS en utilisant des statistiques univariées."
 
 #: ../gui/wxpython/menustrings.py:57 ../gui/wxpython/menustrings.py:1048
 #: ../gui/wxpython/lmgr/layertree.py:60
@@ -6788,9 +6783,8 @@ msgid "Imports Mapgen or Matlab-ASCII vector maps into GRASS."
 msgstr "Importer des cartes vectorielles Mapgen ou Matlab-ASCII."
 
 #: ../gui/wxpython/menustrings.py:84 ../gui/wxpython/menustrings.py:1075
-#, fuzzy
 msgid "Converts LAS LiDAR point clouds to a GRASS vector map with libLAS."
-msgstr "Convertir des couches vectorielles OGR en carte vectorielle GRASS."
+msgstr "Convertir un nuage de points LiDAR LAS vers une carte vecteur GRASS avec libLAS."
 
 #: ../gui/wxpython/menustrings.py:85 ../gui/wxpython/menustrings.py:1076
 #: ../gui/wxpython/lmgr/layertree.py:68
@@ -9621,8 +9615,9 @@ msgid "Actual evapotranspiration for diurnal period (Bastiaanssen, 1995)."
 msgstr "Évapotranspiration réelle pour la période diurne (Bastiaanssen, 1995)."
 
 #: ../gui/wxpython/menustrings.py:816 ../gui/wxpython/menustrings.py:1729
+#, fuzzy
 msgid "Temporal integration of ETa"
-msgstr ""
+msgstr "Intégration temporelle de ETa"
 
 #: ../gui/wxpython/menustrings.py:817 ../gui/wxpython/menustrings.py:1730
 msgid "Computes temporal integration of satellite ET actual (ETa) following the daily ET reference (ETo) from meteorological station(s)."
@@ -10037,12 +10032,14 @@ msgid "Merges several space time datasets into a single space time dataset."
 msgstr "Fusionner plusieurs jeux de données temporels vers un seul jeu de données temporel."
 
 #: ../gui/wxpython/menustrings.py:929 ../gui/wxpython/menustrings.py:1842
+#, fuzzy
 msgid "Temporally shift"
-msgstr ""
+msgstr "Déplacement temporel"
 
 #: ../gui/wxpython/menustrings.py:930 ../gui/wxpython/menustrings.py:1843
+#, fuzzy
 msgid "Shifts temporally the maps of a space time dataset."
-msgstr ""
+msgstr "Déplacer temporellement les cartes d'un jeu de données temporel."
 
 #: ../gui/wxpython/menustrings.py:931 ../gui/wxpython/menustrings.py:1844
 msgid "Snap maps of dataset"
@@ -10053,16 +10050,19 @@ msgid "Snaps temporally the maps of a space time dataset."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:934 ../gui/wxpython/menustrings.py:1847
+#, fuzzy
 msgid "Lists space time datasets and maps registered in the temporal database."
-msgstr ""
+msgstr "Lister les jeux de données temporels et cartes enregistrées dans la base de données temporelle."
 
 #: ../gui/wxpython/menustrings.py:935 ../gui/wxpython/menustrings.py:1848
+#, fuzzy
 msgid "Manage maps in datasets"
-msgstr ""
+msgstr "Gérer les cartes dans le jeu de données"
 
 #: ../gui/wxpython/menustrings.py:936 ../gui/wxpython/menustrings.py:1849
+#, fuzzy
 msgid "Register maps in datasets"
-msgstr ""
+msgstr "Enregistrer des cartes dans les jeux de données"
 
 #: ../gui/wxpython/menustrings.py:937 ../gui/wxpython/menustrings.py:1850
 msgid "Registers raster, vector and raster3d maps in a space time datasets."
@@ -10077,20 +10077,24 @@ msgid "Unregisters raster, vector and raster3d maps from the temporal database o
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:940 ../gui/wxpython/menustrings.py:1853
+#, fuzzy
 msgid "List raster dataset maps"
-msgstr ""
+msgstr "Lister les rasters du jeu de données"
 
 #: ../gui/wxpython/menustrings.py:941 ../gui/wxpython/menustrings.py:1854
+#, fuzzy
 msgid "Lists registered maps of a space time raster dataset."
-msgstr ""
+msgstr "Lister les cartes enregistrées dans le jeu de données raster temporel."
 
 #: ../gui/wxpython/menustrings.py:942 ../gui/wxpython/menustrings.py:1855
+#, fuzzy
 msgid "List vector dataset maps"
-msgstr ""
+msgstr "Lister les vecteurs du jeu de données"
 
 #: ../gui/wxpython/menustrings.py:943 ../gui/wxpython/menustrings.py:1856
+#, fuzzy
 msgid "Lists registered maps of a space time vector dataset."
-msgstr ""
+msgstr "Lister les cartes enregistrées dans le jeux de données vecteur temporel."
 
 #: ../gui/wxpython/menustrings.py:944 ../gui/wxpython/menustrings.py:1857
 msgid "List raster3D dataset maps"
@@ -10180,12 +10184,14 @@ msgid "Extracts a subset of a space time vector dataset."
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:965 ../gui/wxpython/menustrings.py:1878
+#, fuzzy
 msgid "Extract subset of raster3D dataset"
-msgstr ""
+msgstr "Extraire une sous-partie du jeu de données raster3D"
 
 #: ../gui/wxpython/menustrings.py:966 ../gui/wxpython/menustrings.py:1879
+#, fuzzy
 msgid "Extracts a subset of a space time 3D raster dataset."
-msgstr ""
+msgstr "Extraire une sous-partie du jeu de données raster 3D temporel."
 
 #: ../gui/wxpython/menustrings.py:967 ../gui/wxpython/menustrings.py:1880
 #, fuzzy
@@ -12213,7 +12219,7 @@ msgstr "Tour copier dans le presse-papier"
 
 #: ../gui/wxpython/mapwin/buffered.py:244
 msgid "Hide statusbar"
-msgstr ""
+msgstr "Cacher la barre de status"
 
 #: ../gui/wxpython/mapwin/buffered.py:244
 #, fuzzy
@@ -13595,11 +13601,11 @@ msgstr "Merci de créer d'abord le cadre de carte."
 
 #: ../gui/wxpython/rdigit/controller.py:148
 msgid "Right click to finish area"
-msgstr ""
+msgstr "Clic droit pour terminer la surface"
 
 #: ../gui/wxpython/rdigit/controller.py:153
 msgid "Right click to finish line"
-msgstr ""
+msgstr "Clic droit pour terminer la ligne"
 
 #: ../gui/wxpython/rdigit/controller.py:280
 #, fuzzy
@@ -13669,7 +13675,7 @@ msgstr "Sélectionner une carte raster:"
 
 #: ../gui/wxpython/rdigit/toolbars.py:60
 msgid "Set drawing color (not raster cell color)"
-msgstr ""
+msgstr "Définir la couleur de dessin (pas la couleur des cellules du raster)"
 
 #: ../gui/wxpython/rdigit/toolbars.py:73
 #, fuzzy
@@ -14128,17 +14134,16 @@ msgid "The Temporal Plot Tool needs the \"matplotlib\" (python-matplotlib) packa
 msgstr ""
 
 #: ../gui/wxpython/tplot/frame.py:70
-#, fuzzy
 msgid "GRASS GIS Temporal Plot Tool"
-msgstr "Histogramme GRASS"
+msgstr "Outil d'affichage "
 
 #: ../gui/wxpython/tplot/frame.py:133
 msgid "X and Y coordinates separated by comma:"
-msgstr ""
+msgstr "coordonnées X et Y séparées par des virgules :"
 
 #: ../gui/wxpython/tplot/frame.py:136
 msgid "Coordinates can be obtained for example by right-clicking on Map Display."
-msgstr ""
+msgstr "Les coordonnées peuvent être obtenues par exemple par un clic-droit dans la fenêtre de cartes."
 
 #: ../gui/wxpython/tplot/frame.py:140
 #, fuzzy
@@ -14148,7 +14153,7 @@ msgstr "Choisir le jeu de cartes source:"
 #: ../gui/wxpython/tplot/frame.py:174 ../gui/wxpython/timeline/frame.py:162
 #, fuzzy, python-format
 msgid "Dataset <%s> not found in temporal database"
-msgstr "Carte vectorielle <%s> non trouvée"
+msgstr "Jeux de données <%s> non trouvé dans la base temporelle"
 
 #: ../gui/wxpython/tplot/frame.py:184 ../gui/wxpython/timeline/frame.py:174
 msgid "Datasets have different temporal type (absolute x relative), which is not allowed."
@@ -14159,9 +14164,9 @@ msgid "Datasets have different time unit which is not allowed."
 msgstr "Les jeux de données ont des unités de temps différentes, ce qui n'est pas permis."
 
 #: ../gui/wxpython/tplot/frame.py:256
-#, fuzzy, python-format
+#, python-format
 msgid "Temporal resolution: %s"
-msgstr "Mode catégorie"
+msgstr "Résolution temporelle : %s"
 
 #: ../gui/wxpython/tplot/frame.py:258 ../gui/wxpython/timeline/frame.py:325
 #, fuzzy, python-format
@@ -14175,7 +14180,7 @@ msgstr "Données d'entrée non valides"
 
 #: ../gui/wxpython/tplot/frame.py:289
 msgid "Incorrect format of coordinates, should be: x,y"
-msgstr ""
+msgstr "Format de coordonnées incorrect , devrait être : x,y"
 
 #: ../gui/wxpython/tplot/frame.py:295 ../gui/wxpython/tplot/frame.py:390
 #, fuzzy
@@ -14198,7 +14203,7 @@ msgstr "Entrée non valide"
 
 #: ../gui/wxpython/tplot/frame.py:410
 msgid "Datasets have different number ofvalues"
-msgstr ""
+msgstr "Les jeux de données ont des nombres de valeurs différents"
 
 #: ../gui/wxpython/tplot/frame.py:434 ../gui/wxpython/timeline/frame.py:500
 #, fuzzy, python-format
@@ -14218,11 +14223,11 @@ msgstr "Importer une carte raster"
 #: ../gui/wxpython/tplot/frame.py:440
 #, python-brace-format
 msgid "Value for {date} is {val}"
-msgstr ""
+msgstr "La valeur pour {date} est {val}"
 
 #: ../gui/wxpython/tplot/frame.py:442
 msgid "Press Del to dismiss."
-msgstr ""
+msgstr "Appuyer sur Suppr pour annuler."
 
 #: ../gui/wxpython/lmgr/layertree.py:62
 msgid "Set raster output format"
@@ -14285,7 +14290,6 @@ msgid "Add WMS layer."
 msgstr "Ajouter une couche WMS."
 
 #: ../gui/wxpython/lmgr/layertree.py:111
-#, fuzzy
 msgid "Editing mode"
 msgstr "Mode édition"
 
@@ -14387,9 +14391,9 @@ msgid "Unsupported map type <%s>"
 msgstr "Type de couche <%s> non pris en charge"
 
 #: ../gui/wxpython/lmgr/layertree.py:816
-#, fuzzy, python-format
+#, python-format
 msgid "Enter name for the new %s in the current mapset:"
-msgstr "Entrer le nom du nouveau jeu de cartes :"
+msgstr "Entrer le nom pour le nouveau %s dans le jeux de cartes courant :"
 
 #: ../gui/wxpython/lmgr/layertree.py:817
 #, python-format
@@ -14510,7 +14514,6 @@ msgid "Georectifier"
 msgstr "Géorectifier"
 
 #: ../gui/wxpython/lmgr/toolbars.py:146
-#, fuzzy
 msgid "Launch user-defined script"
 msgstr "Lancer un script"
 
@@ -14622,14 +14625,12 @@ msgid "Command console"
 msgstr "Console de commande"
 
 #: ../gui/wxpython/lmgr/frame.py:319
-#, fuzzy
 msgid "Search modules"
 msgstr "Rechercher un module"
 
 #: ../gui/wxpython/lmgr/frame.py:326 ../gui/wxpython/lmgr/datacatalog.py:41
-#, fuzzy
 msgid "Data catalog"
-msgstr "Sélection des données"
+msgstr "Catalogue de données"
 
 #: ../gui/wxpython/lmgr/frame.py:404
 #, python-format
@@ -14767,7 +14768,7 @@ msgstr ""
 #: ../gui/wxpython/lmgr/frame.py:1001
 #, fuzzy
 msgid "Changes current working directory for this GUI."
-msgstr "Modifier l'environnement de travail"
+msgstr "Modifier le dossier de travail pour cette Interface Graphique"
 
 #: ../gui/wxpython/lmgr/frame.py:1003
 msgid "Usage: cd [directory]"
@@ -14798,19 +14799,16 @@ msgid "GRASS version"
 msgstr "Version de GRASS"
 
 #: ../gui/wxpython/lmgr/frame.py:1103
-#, fuzzy
 msgid "GRASS SVN revision"
 msgstr "Version SVN:"
 
 #: ../gui/wxpython/lmgr/frame.py:1104
-#, fuzzy
 msgid "Build date"
 msgstr "Date de compilation"
 
 #: ../gui/wxpython/lmgr/frame.py:1105
-#, fuzzy
 msgid "Build platform"
-msgstr "Plateforme"
+msgstr "Plateforme de compilation"
 
 #: ../gui/wxpython/lmgr/frame.py:1110
 msgid "Platform"
@@ -14872,7 +14870,10 @@ msgid ""
 "Unable to launch \"Supervised Classification Tool\".\n"
 "\n"
 "Reason: %s"
-msgstr "Impossible de charger les icônes d'un thème. Raison : %s"
+msgstr ""
+"Impossible de lancer l' « Outil de classification supervisée ».\n"
+"\n"
+"Raison: %s"
 
 #: ../gui/wxpython/lmgr/frame.py:1626
 #, fuzzy
@@ -14935,18 +14936,16 @@ msgstr "Restreindre la carte aux limites de la région ?"
 #: ../gui/wxpython/lmgr/datacatalog.py:125
 #, fuzzy
 msgid "No mapsets readable"
-msgstr "Pas de paramètres disponibles"
+msgstr "Pas de jeux de cartes accessible"
 
 #: ../gui/wxpython/lmgr/datacatalog.py:326
 #: ../gui/wxpython/lmgr/datacatalog.py:382
-#, fuzzy
 msgid "New name"
-msgstr "Renommer"
+msgstr "Nouveau nom"
 
 #: ../gui/wxpython/lmgr/datacatalog.py:326
-#, fuzzy
 msgid "Rename map"
-msgstr "Renommer le jeu de cartes"
+msgstr "Renommer la carte"
 
 #: ../gui/wxpython/lmgr/datacatalog.py:334
 #, fuzzy
@@ -14959,37 +14958,34 @@ msgid "Renaming"
 msgstr "Renommer"
 
 #: ../gui/wxpython/lmgr/datacatalog.py:380
-#, fuzzy
 msgid "Failed to copy layer: invalid type."
-msgstr "Impossible de lire le fichier %s."
+msgstr "Échec de copie de la couche : type invalide."
 
 #: ../gui/wxpython/lmgr/datacatalog.py:382
-#, fuzzy
 msgid "Copy map"
-msgstr "Copier la table"
+msgstr "Copier la carte"
 
 #: ../gui/wxpython/lmgr/datacatalog.py:387
 msgid "Layer was not copied: new layer has the same name"
-msgstr ""
+msgstr "Couche non copiée : la nouvelle couche a le même nom"
 
 #: ../gui/wxpython/lmgr/datacatalog.py:393
 #, fuzzy
 msgid "Copying"
-msgstr "Copier la ligne"
+msgstr "Copie"
 
 #: ../gui/wxpython/lmgr/datacatalog.py:416
 msgid "Failed to copy layer: action is allowed only within the same location."
-msgstr ""
+msgstr "Échec de copie de la couche : cette action est autorisée uniquement dans le même secteur."
 
 #: ../gui/wxpython/lmgr/datacatalog.py:433
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Do you really want to delete map <{m}>?"
-msgstr "Voulez-vous créer un nouveau jeux de données ?"
+msgstr "Voulez-vous vraiment supprimer la carte <{m}> ?"
 
 #: ../gui/wxpython/lmgr/datacatalog.py:434
-#, fuzzy
 msgid "Delete map"
-msgstr "Supprimer le jeu de cartes"
+msgstr "Supprimer la carte"
 
 #: ../gui/wxpython/lmgr/datacatalog.py:435
 msgid "Deleting"
@@ -15002,18 +14998,17 @@ msgstr "Affichage"
 
 #: ../gui/wxpython/lmgr/datacatalog.py:472
 msgid "Failed to display layer: not in current mapset or invalid layer"
-msgstr ""
+msgstr "Échec d'affichage de la couche : pas dans le jeu de données courant ou couche invalide"
 
 #: ../gui/wxpython/lmgr/datacatalog.py:527
-#, fuzzy
 msgid "&Copy"
-msgstr "Copier"
+msgstr "&Copier"
 
 #: ../gui/wxpython/lmgr/datacatalog.py:531
 #: ../gui/wxpython/lmgr/datacatalog.py:554
 #, fuzzy
 msgid "&Paste"
-msgstr "&Raster"
+msgstr "&Coller"
 
 #: ../gui/wxpython/lmgr/datacatalog.py:535 ../gui/wxpython/gis_set.py:193
 msgid "&Delete"
@@ -15604,16 +15599,14 @@ msgid "Import training areas from vector map"
 msgstr "Importer les zones d'entrainement depuis une carte vecteur"
 
 #: ../gui/wxpython/iclass/toolbars.py:66
-#, fuzzy
 msgid "Training"
-msgstr "Attention"
+msgstr "Training"
 
 #: ../gui/wxpython/iclass/toolbars.py:70
 msgid "Set map canvas for "
 msgstr "Définir la trame de carte pour"
 
 #: ../gui/wxpython/iclass/toolbars.py:72
-#, fuzzy
 msgid "/ Zoom to map"
 msgstr "/ Zoomer sur la carte"
 
@@ -15722,7 +15715,7 @@ msgstr "SIG GRASS Outil de classification supervisée"
 
 #: ../gui/wxpython/iclass/frame.py:307
 msgid "IClass Toolbar"
-msgstr ""
+msgstr "Barre d'outils IClass"
 
 #: ../gui/wxpython/iclass/frame.py:319
 msgid "IClass Misc Toolbar"
@@ -15966,9 +15959,9 @@ msgid "Error: {text}"
 msgstr "Erreur : {text}"
 
 #: ../gui/wxpython/gis_set.py:518
-#, fuzzy, python-format
+#, python-format
 msgid "Do you want to import <%(name)s> to the newly created location? The location's default region will be set from this imported map."
-msgstr "Voulez-vous importer la source de données <%(name)s> pour créer le secteur ? la région par défaut sera alignée sur la carte importée."
+msgstr "Voulez-vous importer <%(name)s> dans le nouveau secteur ? La région par défaut sera alignée sur la carte importée."
 
 #: ../gui/wxpython/gis_set.py:523
 msgid "Import data?"
@@ -15988,9 +15981,9 @@ msgstr ""
 "Raison : %(msg)s"
 
 #: ../gui/wxpython/gis_set.py:592
-#, fuzzy, python-format
+#, python-format
 msgid "Data file <%(name)s> imported successfully."
-msgstr "Déchargement de la carte vecteur <%(name)s> réussit."
+msgstr "L'import du fichier <%(name)s> a réussit."
 
 #: ../gui/wxpython/gis_set.py:613
 msgid ""
@@ -16249,7 +16242,7 @@ msgstr ""
 #: ../gui/wxpython/mapswipe/dialogs.py:236
 #, fuzzy
 msgid "Mirrored cursor"
-msgstr "Mode grossier :"
+msgstr "Curseur miroir"
 
 #: ../gui/wxpython/mapswipe/dialogs.py:255
 msgid "Shape:"
@@ -17665,3 +17658,6 @@ msgstr "Impossible de récupérer les données.\n"
 
 #~ msgid "Data file <%(name)s> imported successfully. The location's default region was set from this imported map."
 #~ msgstr "Fichier de données <%(name)s> correctement importé. La région par défaut a été définie à partir de la carte importée."
+
+#~ msgid "Row lenght of sampling frame"
+#~ msgstr "Nombre de lignes du cadre d'échantillonage"
