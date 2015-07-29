@@ -18,9 +18,9 @@ for details.
 .. sectionauthor:: Glynn Clements
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
-
-from core import *
-from utils import try_remove
+from __future__ import absolute_import
+from .core import *
+from .utils import try_remove
 from grass.exceptions import CalledModuleError
 
 
@@ -110,7 +110,7 @@ def db_connection(force=False):
     if not conn and force:
         run_command('db.connect', flags='c')
         conn = parse_command('db.connect', flags='g')
-    
+
     return conn
 
 def db_select(sql=None, filename=None, table=None, **args):
