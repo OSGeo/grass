@@ -17,15 +17,16 @@ for details.
 .. sectionauthor:: Glynn Clements
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
+from __future__ import absolute_import
 
 import os
 import string
 import types
 import time
 
-from core import *
+from .core import *
 from grass.exceptions import CalledModuleError
-from utils import float_or_dms, parse_key_val
+from .utils import float_or_dms, parse_key_val
 
 
 def raster_history(map):
