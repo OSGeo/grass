@@ -16,14 +16,17 @@ for details.
 .. sectionauthor:: Glynn Clements
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 """
-
+from __future__ import absolute_import
 import os
 import types
-import copy
-import __builtin__
 
-from utils import parse_key_val
-from core import *
+try:
+    import __builtin__
+except ImportError:
+    import builtins as __builtin__
+
+from .utils import parse_key_val
+from .core import *
 from grass.exceptions import CalledModuleError
 
 
@@ -352,7 +355,7 @@ def vector_what(map, coord, distance=0.0, ttype=None, encoding=None):
     try:
         ret = read_command('v.what',
                            **cmdParams).strip()
-    except CalledModuleError, e:
+    except CalledModuleError as e:
         raise ScriptError(e.msg)
 
     if "LC_ALL" in os.environ:
