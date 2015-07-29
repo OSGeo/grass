@@ -19,7 +19,7 @@ class TestPythonKeywordsInParameters(TestCase):
     # fresh region for each test function
     def setUp(self):
         self.use_temp_region()
-        
+
     def tearDown(self):
         self.del_temp_region()
 
@@ -30,7 +30,7 @@ class TestPythonKeywordsInParameters(TestCase):
         returncode = proc.poll()
         self.assertEquals(returncode, 0,
             msg="Underscore as prefix was not accepted")
-        self.assertNotIn('_raster', stderr)
+        self.assertNotIn(b'_raster', stderr)
 
     def test_suffixed_underscore(self):
         proc = start_command(
@@ -39,7 +39,7 @@ class TestPythonKeywordsInParameters(TestCase):
         returncode = proc.poll()
         self.assertEquals(returncode, 0,
             msg="Underscore as suffix was not accepted, stderr is:\n%s" % stderr)
-        self.assertNotIn('raster_', stderr)
+        self.assertNotIn(b'raster_', stderr)
 
     def test_multiple_underscores(self):
         proc = start_command(
@@ -48,7 +48,7 @@ class TestPythonKeywordsInParameters(TestCase):
         returncode = proc.poll()
         self.assertEquals(returncode, 1,
             msg="Underscore at both sides was accepted")
-        self.assertIn('raster', stderr)
+        self.assertIn(b'raster', stderr)
 
 if __name__ == '__main__':
     test()

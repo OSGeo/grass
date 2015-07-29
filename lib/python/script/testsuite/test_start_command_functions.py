@@ -12,13 +12,13 @@ class TestPythonKeywordsInParameters(TestCase):
     It works the same for keywords, buildins and any names.
     """
 
-    raster = 'does_not_exist'
+    raster = b'does_not_exist'
 
     def test_prefixed_underscore(self):
         proc = start_command(
             'g.region', _raster=self.raster, stderr=PIPE)
         stderr = proc.communicate()[1]
-        self.assertNotIn('_raster', stderr)
+        self.assertNotIn(b'_raster', stderr)
         self.assertIn(self.raster, stderr,
             msg="Raster map name should appear in the error output")
 
@@ -26,7 +26,7 @@ class TestPythonKeywordsInParameters(TestCase):
         proc = start_command(
             'g.region', raster_=self.raster, stderr=PIPE)
         stderr = proc.communicate()[1]
-        self.assertNotIn('raster_', stderr)
+        self.assertNotIn(b'raster_', stderr)
         self.assertIn(self.raster, stderr,
             msg="Raster map name should appear in the error output")
 
@@ -36,7 +36,7 @@ class TestPythonKeywordsInParameters(TestCase):
         stderr = proc.communicate()[1]
         returncode = proc.poll()
         self.assertEquals(returncode, 1)
-        self.assertIn('raster', stderr)
+        self.assertIn(b'raster', stderr)
 
 if __name__ == '__main__':
     test()
