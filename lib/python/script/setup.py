@@ -101,11 +101,11 @@ import tempfile as tmpfile
 
 def write_gisrc(dbase, location, mapset):
     """Write the ``gisrc`` file and return its path."""
-    fd, gisrc = tmpfile.mkstemp()
-    os.write(fd, "GISDBASE: %s\n" % dbase)
-    os.write(fd, "LOCATION_NAME: %s\n" % location)
-    os.write(fd, "MAPSET: %s\n" % mapset)
-    os.close(fd)
+    gisrc = tmpfile.mktemp()
+    with open(gisrc, 'w') as rc:
+        rc.write("GISDBASE: %s\n" % dbase)
+        rc.write("LOCATION_NAME: %s\n" % location)
+        rc.write("MAPSET: %s\n" % mapset)
     return gisrc
 
 
