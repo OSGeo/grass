@@ -18,11 +18,12 @@ for details.
 .. sectionauthor:: Martin Landa <landa.martin gmail.com>
 .. sectionauthor:: Soeren Gebbert <soeren.gebbert gmail.com>
 """
+from __future__ import absolute_import
 
 import string
 
-from core import *
-from utils import float_or_dms, parse_key_val
+from .core import *
+from .utils import float_or_dms, parse_key_val
 from grass.exceptions import CalledModuleError
 
 
