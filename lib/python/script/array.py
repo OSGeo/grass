@@ -3,12 +3,13 @@ Functions to use GRASS 2D and 3D rasters with NumPy.
 
 Usage:
 
->>> import grass.script as grass
+>>> from __future__ import print_function
+>>> import grass.script as gscript
 >>> from grass.script import array as garray
 >>>
 >>> # We create a temporary region that is only valid in this python session
-... grass.use_temp_region()
->>> grass.run_command("g.region", n=80, e=120, t=60, s=0, w=0, b=0, res=20, res3=20)
+... gscript.use_temp_region()
+>>> gscript.run_command("g.region", n=80, e=120, t=60, s=0, w=0, b=0, res=20, res3=20)
 0
 >>>
 >>> # Lets create a raster map numpy array
@@ -21,7 +22,7 @@ Usage:
 ...         map2d_1[y,x] = y + x
 ...
 >>> # Lets have a look at the array
-... print map2d_1
+... print(map2d_1)
 [[ 0.  1.  2.  3.  4.  5.]
  [ 1.  2.  3.  4.  5.  6.]
  [ 2.  3.  4.  5.  6.  7.]
@@ -39,7 +40,7 @@ Usage:
 0
 >>> map2d_2 %= 3
 >>> # Show the result
-... print map2d_2
+... print(map2d_2)
 [[ 0.  1.  2.  0.  1.  2.]
  [ 1.  2.  0.  1.  2.  0.]
  [ 2.  0.  1.  2.  0.  1.]
@@ -60,7 +61,7 @@ Usage:
 ...             map3d_1[z,y,x] = z + y + x
 ...
 >>> # Lets have a look at the 3D array
-... print map3d_1
+... print(map3d_1)
 [[[  0.   1.   2.   3.   4.   5.]
   [  1.   2.   3.   4.   5.   6.]
   [  2.   3.   4.   5.   6.   7.]
@@ -87,7 +88,7 @@ Usage:
 0
 >>> map3d_2 %= 3
 >>> # Show the result
-... print map3d_2
+... print(map3d_2)
 [[[ 0.  1.  2.  0.  1.  2.]
   [ 1.  2.  0.  1.  2.  0.]
   [ 2.  0.  1.  2.  0.  1.]
@@ -113,12 +114,12 @@ for details.
 
 .. sectionauthor:: Glynn Clements
 """
+from __future__ import absolute_import
 
-import os
 import numpy
 
-from utils import try_remove
-import core as grass
+from .utils import try_remove
+from . import core as gcore
 from grass.exceptions import CalledModuleError
 
 
@@ -126,7 +127,7 @@ from grass.exceptions import CalledModuleError
 
 class _tempfile(object):
     def __init__(self):
-        self.filename = grass.tempfile()
+        self.filename = gcore.tempfile()
 
     def __del__(self):
         try_remove(self.filename)
@@ -140,7 +141,7 @@ class array(numpy.memmap):
         :param cls:
         :param dtype: data type (default: numpy.double)
         """
-        reg = grass.region()
+        reg = gcore.region()
         r = reg['rows']
         c = reg['cols']
         shape = (r, c)
@@ -181,7 +182,7 @@ class array(numpy.memmap):
             raise ValueError(_('Invalid size <%d>') % size)
 
         try:
-            grass.run_command(
+            gcore.run_command(
                 'r.out.bin',
                 flags=flags,
                 input=mapname,
@@ -224,10 +225,10 @@ class array(numpy.memmap):
         else:
             raise ValueError(_('Invalid kind <%s>') % kind)
 
-        reg = grass.region()
+        reg = gcore.region()
 
         try:
-            grass.run_command(
+            gcore.run_command(
                 'r.in.bin',
                 flags=flags,
                 input=self.filename,
@@ -257,7 +258,7 @@ class array3d(numpy.memmap):
         :param cls:
         :param dtype: data type (default: numpy.double)
         """
-        reg = grass.region(True)
+        reg = gcore.region(True)
         r = reg['rows3']
         c = reg['cols3']
         d = reg['depths']
@@ -300,7 +301,7 @@ class array3d(numpy.memmap):
             raise ValueError(_('Invalid size <%d>') % size)
 
         try:
-            grass.run_command(
+            gcore.run_command(
                 'r3.out.bin',
                 flags=flags,
                 input=mapname,
@@ -338,10 +339,10 @@ class array3d(numpy.memmap):
         else:
             raise ValueError(_('Invalid kind <%s>') % kind)
 
-        reg = grass.region(True)
+        reg = gcore.region(True)
 
         try:
-            grass.run_command(
+            gcore.run_command(
                 'r3.in.bin',
                 flags=flags,
                 input=self.filename,
