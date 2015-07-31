@@ -479,3 +479,32 @@ def random_map(mapname, mtype, overwrite=True, factor=100):
         random_map.put_row(row_buf)
     random_map.close()
     return random_map
+
+
+def raster2numpy(rastname, mapset=''):
+    """Return a numpy array from a raster map
+
+    :param str rastname: the name of raster map
+    :parar str mapser: the name of mapset containig raster map
+    """
+    with RasterRow(rastname, mapset=mapset, mode='r') as rast:
+        return np.array(rast)
+
+
+def numpy2raster(array, mtype, rastname, overwrite=False):
+    """Save a numpy array to a raster map
+
+    :param obj array: a numpy array
+    :param obj mtype: the datatype of array
+    :param str rastername: the name of output map
+    :param bool overwrite: True to overwrite existing map
+    """
+    reg = Region()
+    if (reg.rows, reg.cols) != array.shape:
+        msg = "Region and array are different: %r != %r"
+        raise TypeError(msg % ((reg.rows, reg.cols), array.shape))
+    with RasterRow(rastname, mode='w', mtype=mtype, overwrite=overwrite) as new:
+        newrow = Buffer((array.shape[1],), mtype=mtype)
+        for row in array:
+            newrow[:] = row[:]
+            new.put_row(newrow)
