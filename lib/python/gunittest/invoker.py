@@ -191,7 +191,7 @@ class GrassTestFilesInvoker(object):
         self._file_anonymizer.anonymize([stdout_path, stderr_path])
 
         test_summary = update_keyval_file(
-            os.path.join(cwd, 'test_keyvalue_result.txt'),
+            os.path.join(os.path.abspath(cwd), 'test_keyvalue_result.txt'),
             module=module, returncode=returncode)
         self.reporter.end_file_test(module=module, cwd=cwd,
                                     returncode=returncode,
