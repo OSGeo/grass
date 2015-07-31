@@ -37,9 +37,11 @@ gettext.install('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale'))
 try:
     # python2
     import __builtin__
+    from os import environ
 except ImportError:
     # python3
     import builtins as __builtin__
+    from os import environb as environ
     unicode = str
 __builtin__.__dict__['_'] = __builtin__.__dict__['_'].__self__.lgettext
 
@@ -675,15 +677,15 @@ def _parse_opts(lines):
         if not line:
             break
         try:
-            [var, val] = line.split('=', 1)
+            [var, val] = line.split(b'=', 1)
         except:
             raise SyntaxError("invalid output from g.parser: %s" % line)
 
-        if var.startswith('flag_'):
+        if var.startswith(b'flag_'):
             flags[var[5:]] = bool(int(val))
-        elif var.startswith('opt_'):
+        elif var.startswith(b'opt_'):
             options[var[4:]] = val
-        elif var in ['GRASS_OVERWRITE', 'GRASS_VERBOSE']:
+        elif var in [b'GRASS_OVERWRITE', b'GRASS_VERBOSE']:
             os.environ[var] = val
         else:
             raise SyntaxError("invalid output from g.parser: %s" % line)
@@ -709,9 +711,9 @@ def parser():
         print("You must be in GRASS GIS to run this program.", file=sys.stderr)
         sys.exit(1)
 
-    cmdline = [basename(sys.argv[0])]
-    cmdline += ['"' + arg + '"' for arg in sys.argv[1:]]
-    os.environ['CMDLINE'] = ' '.join(cmdline)
+    cmdline = [basename(encode(sys.argv[0]))]
+    cmdline += [b'"' + encode(arg) + b'"' for arg in sys.argv[1:]]
+    environ[b'CMDLINE'] = b' '.join(cmdline)
 
     argv = sys.argv[:]
     name = argv[0]
@@ -723,10 +725,10 @@ def parser():
 
     prog = "g.parser.exe" if sys.platform == "win32" else "g.parser"
     p = subprocess.Popen([prog, '-n'] + argv, stdout=subprocess.PIPE)
-    s = p.communicate()[0].decode()
-    lines = s.split('\0')
+    s = p.communicate()[0]
+    lines = s.split(b'\0')
 
-    if not lines or lines[0] != "@ARGS_PARSED@":
+    if not lines or lines[0] != b"@ARGS_PARSED@":
         sys.stdout.write(s)
         sys.exit(p.returncode)
     return _parse_opts(lines[1:])
