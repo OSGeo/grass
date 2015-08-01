@@ -201,6 +201,34 @@ set of coregistered input maps such as multitemporal satellite
 data. The common univariate statistics and also linear regression can
 be calculated.
 
+<h3>Evapotranspiration modeling</h3>
+
+In GRASS, several types of evapotranspiration (ET) modeling methods
+are available:
+
+<ul>
+<li> Reference ET: Hargreaves (<a href="i.evapo.mh.html">i.evapo.mh</a>),
+                   Penman-Monteith (<a href="i.evapo.pm.html">i.evapo.pm</a>);</li>
+<li> Potential ET: Priestley-Taylor (<a href="i.evapo.pt.html">i.evapo.pt</a>);</li>
+<li> Actual ET: <a href="i.evapo.time.html">i.evapo.time</a>.</li>
+</ul>
+
+Evaporative fraction: <a href="i.eb.evapfr.html">i.eb.evapfr</a>,
+<a href="i.eb.hsebal01.html">i.eb.hsebal01</a>.
+
+<h3>Energy balance</h3>
+
+Emissivity can be calculated with <a href="i.emissivity.html">i.emissivity</a>.
+
+Several modules support the calculation of the energy balance:
+<ul>
+<li> Actual evapotranspiration for diurnal period  (<a href="i.eb.eta.html">i.eb.eta</a>);</li>
+<li> Evaporative fraction and root zone soil moisture (<a href="i.eb.evapfr.html">i.eb.evapfr</a>);</li>
+<li> Sensible heat flux iteration (<a href="i.eb.hsebal01.html">i.eb.hsebal01</a>);</li>
+<li> Net radiation approximation (<a href="i.eb.netrad.html">i.eb.netrad</a>);</li>
+<li> Soil heat flux approximation (<a href="i.eb.soilheatflux.html">i.eb.soilheatflux</a>).</li>
+</ul>
+
 <h3>See also</h3>
 
 <ul>
