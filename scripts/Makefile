@@ -34,6 +34,7 @@ SUBDIRS = \
 	r.colors.stddev \
 	r.fillnulls \
 	r.grow \
+    r.import \
 	r.in.aster \
 	r.in.srtm \
 	r.in.wms \
