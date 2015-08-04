@@ -520,15 +520,33 @@ class TestCase(unittest.TestCase):
             stdmsg = self._get_detailed_message_about_no_map(name, 'raster')
             self.fail(self._formatMessage(msg, stdmsg))
 
+    def assertRasterDoesNotExist(self, name, msg=None):
+        """Checks if the raster map does not exist in current mapset"""
+        if is_map_in_mapset(name, type='raster'):
+            stdmsg = self._get_detailed_message_about_no_map(name, 'raster')
+            self.fail(self._formatMessage(msg, stdmsg))
+
     def assertRaster3dExists(self, name, msg=None):
         """Checks if the 3D raster map exists in current mapset"""
         if not is_map_in_mapset(name, type='raster3d'):
             stdmsg = self._get_detailed_message_about_no_map(name, 'raster3d')
             self.fail(self._formatMessage(msg, stdmsg))
 
+    def assertRaster3dDoesNotExist(self, name, msg=None):
+        """Checks if the 3D raster map does not exist in current mapset"""
+        if is_map_in_mapset(name, type='raster3d'):
+            stdmsg = self._get_detailed_message_about_no_map(name, 'raster3d')
+            self.fail(self._formatMessage(msg, stdmsg))
+
     def assertVectorExists(self, name, msg=None):
         """Checks if the vector map exists in current mapset"""
         if not is_map_in_mapset(name, type='vector'):
+            stdmsg = self._get_detailed_message_about_no_map(name, 'vector')
+            self.fail(self._formatMessage(msg, stdmsg))
+
+    def assertVectorDoesNotExist(self, name, msg=None):
+        """Checks if the vector map does not exist in current mapset"""
+        if is_map_in_mapset(name, type='vector'):
             stdmsg = self._get_detailed_message_about_no_map(name, 'vector')
             self.fail(self._formatMessage(msg, stdmsg))
 
