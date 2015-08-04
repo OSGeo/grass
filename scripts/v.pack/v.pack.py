@@ -108,7 +108,7 @@ def main():
     
     # add to the tar file the PROJ files to check when unpack file    
     gisenv = grass.gisenv()
-    for support in ['INFO', 'UNITS']:
+    for support in ['INFO', 'UNITS', 'EPSG']:
         path = os.path.join(gisenv['GISDBASE'], gisenv['LOCATION_NAME'],
                             'PERMANENT', 'PROJ_' + support)
         if os.path.exists(path):
