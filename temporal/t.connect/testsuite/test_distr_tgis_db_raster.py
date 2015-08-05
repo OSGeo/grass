@@ -55,6 +55,8 @@ class TestRasterExtraction(TestCase):
         for i in range(5, 7):
             mapset_name = "test%i" % i
             cls.runModule("g.mapset", mapset=mapset_name)
+            cls.runModule("g.region", s=0, n=80,
+                          w=0, e=120, b=0, t=50, res=10, res3=10)
             cls.mapsets_to_remove.append(mapset_name)
             cls.runModule("r.mapcalc", expression="a1 = 100")
             cls.runModule("r.mapcalc", expression="a2 = 200")
