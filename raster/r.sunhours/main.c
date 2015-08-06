@@ -71,6 +71,8 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("solar"));
+    G_add_keyword(_("sun energy"));
+    G_add_keyword(_("sun position"));
     module->label = _("Calculates solar elevation, solar azimuth, and sun hours.");
     module->description = _("Solar elevation: the angle between the direction of the geometric center "
 			    "of the sun's apparent disk and the (idealized) horizon. "
