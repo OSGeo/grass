@@ -944,16 +944,11 @@ def gui_startup(grass_gui):
     if ret == 0:
         pass
     elif ret == 1:
-        # The startup script printed an error message so wait
-        # for user to read it
-        message(_("Error in GUI startup. If necessary, please "
-                  "report this error to the GRASS developers.\n"
-                  "Switching to text mode now.\n\n"
-                  "Hit RETURN to continue..."))
-        sys.stdin.readline()
-
-        os.execlp(cmd_name, "-text")
-        sys.exit(1)
+        # formerly we were starting in text mode instead, now we just fail
+        # which is more straightforward for everybody
+        fatal(_("Error in GUI startup. If necessary, please "
+                "report this error to the GRASS developers.\n"
+                "To run GRASS GIS in text mode use -text parameter."))
     elif ret == 2:
         # User wants to exit from GRASS
         message(_("Received EXIT message from GUI.\nGRASS is not started. Bye."))
