@@ -948,7 +948,7 @@ def gui_startup(grass_gui):
         # which is more straightforward for everybody
         fatal(_("Error in GUI startup. If necessary, please "
                 "report this error to the GRASS developers.\n"
-                "To run GRASS GIS in text mode use -text parameter."))
+                "To run GRASS GIS in text mode use the -text flag."))
     elif ret == 2:
         # User wants to exit from GRASS
         message(_("Received EXIT message from GUI.\nGRASS is not started. Bye."))
