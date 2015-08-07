@@ -214,6 +214,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("spread"));
     G_add_keyword(_("rate of spread"));
     G_add_keyword(_("hazard"));
+    G_add_keyword(_("model"));
     module->label = _("Generates rate of spread raster maps.");
     module->description =
 	_("Generates three, or four raster map layers showing the base "
