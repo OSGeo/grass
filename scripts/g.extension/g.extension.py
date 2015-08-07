@@ -305,6 +305,7 @@ def list_available_extensions(url):
 
     For toolboxes it lists also all modules.
     """
+    gscript.debug("list_available_extensions(url={})".format(url))
     if flags['t']:
         grass.message(_("List of available extensions (toolboxes):"))
         tlist = get_available_toolboxes(url)
@@ -1396,6 +1397,7 @@ def resolve_xmlurl_prefix(url, source=None):
     >>> resolve_xmlurl_prefix('http://grass.osgeo.org/addons/')
     'http://grass.osgeo.org/addons/'
     """
+    gscript.debug("resolve_xmlurl_prefix(url={}, source={})".format(url, source))
     if source == 'official':
         # use pregenerated modules XML file
         url = 'http://grass.osgeo.org/addons/grass%s/' % version[0]
@@ -1595,7 +1597,12 @@ def main():
 
     # list available extensions
     if flags['l'] or flags['c'] or flags['g']:
-        xmlurl = resolve_xmlurl_prefix(options['svnurl'])
+        # using dummy module, we don't need any module URL now,
+        # but will work only as long as the function does not check
+        # if the URL is actually valid or something
+        source, url = resolve_source_code(name='r.dummy',
+                                          url=options['svnurl'])
+        xmlurl = resolve_xmlurl_prefix(options['svnurl'], source=source)
         list_available_extensions(xmlurl)
         return 0
     elif flags['a']:
