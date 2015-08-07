@@ -144,6 +144,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("raster"));
     G_add_keyword(_("projection"));
     G_add_keyword(_("transformation"));
+    G_add_keyword(_("import"));
     module->description =
 	_("Re-projects a raster map from given location to the current location.");
 

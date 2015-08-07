@@ -38,8 +38,9 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("hydrology"));
+    G_add_keyword(_("wetness"));
     module->description =
-	_("Creates a topographic index raster map from an elevation raster map.");
+	_("Creates a topographic index (wetness index) raster map from an elevation raster map.");
 
     params.input = G_define_standard_option(G_OPT_R_ELEV);
     params.input->key = "input";

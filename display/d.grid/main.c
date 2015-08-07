@@ -50,6 +50,7 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("display"));
     G_add_keyword(_("cartography"));
+    G_add_keyword(_("graticule"));
     module->description =
 	_("Overlays a user-specified grid "
 	  "in the active display frame on the graphics monitor.");

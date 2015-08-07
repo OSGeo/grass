@@ -17,6 +17,8 @@
 #%Module
 #% description: Generates a raster map layer with contiguous areas grown by one cell.
 #% keyword: raster
+#% keyword: distance
+#% keyword: proximity
 #%end
 #%flag
 #% key: m
