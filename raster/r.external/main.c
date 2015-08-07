@@ -96,9 +96,9 @@ int main(int argc, char *argv[])
 
     flag.o = G_define_flag();
     flag.o->key = 'o';
-    flag_o->label =
+    flag.o->label =
 	_("Override projection check (use current location's projection)");
-    flag_o->description =
+    flag.o->description =
 	_("Assume that the dataset has same projection as the current location");
 
     flag.e = G_define_flag();
