@@ -150,6 +150,7 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("distance"));
+    G_add_keyword(_("proximity"));
     module->description =
 	_("Generates a raster map containing distances to nearest raster features.");
 

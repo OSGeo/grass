@@ -115,6 +115,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("viewshed"));
     G_add_keyword(_("line of sight"));
+    G_add_keyword(_("LOS"));
     module->label = _("Computes the viewshed of a point on an elevation raster map.");
     module->description = _("Default format: NULL (invisible), vertical angle wrt viewpoint (visible).");
 
