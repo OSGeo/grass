@@ -68,6 +68,9 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("statistics"));
+    G_add_keyword(_("extract"));
+    G_add_keyword(_("select"));
+    G_add_keyword(_("filter"));
     module->description = _("Removes outliers from vector point data.");
 
     spline_step_flag = G_define_flag();
