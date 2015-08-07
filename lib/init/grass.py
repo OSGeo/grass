@@ -941,17 +941,24 @@ def gui_startup(grass_gui):
     if grass_gui in ('wxpython', 'gtext'):
         ret = call([os.getenv('GRASS_PYTHON'), wxpath("gis_set.py")])
 
+    # this if could be simplified to three branches (0, 5, rest)
+    # if there is no need to handle unknown code separately
     if ret == 0:
         pass
-    elif ret == 1:
+    elif ret in [1, 2]:
+        # 1 probably error comming from gis_set.py
+        # 2 probably file not found from python interpreter
         # formerly we were starting in text mode instead, now we just fail
         # which is more straightforward for everybody
-        fatal(_("Error in GUI startup. If necessary, please "
-                "report this error to the GRASS developers.\n"
+        fatal(_("Error in GUI startup. See messages above (if any)"
+                " and if necessary, please"
+                " report this error to the GRASS developers.\n"
+                "On systems with package manager, make sure you have the right"
+                " GUI package, probably named grass-gui, installed.\n"
                 "To run GRASS GIS in text mode use the -text flag."))
-    elif ret == 2:
+    elif ret == 5:  # defined in gui/wxpython/gis_set.py
         # User wants to exit from GRASS
-        message(_("Received EXIT message from GUI.\nGRASS is not started. Bye."))
+        message(_("Exit was requested in GUI.\nGRASS GIS will not start. Bye."))
         sys.exit(0)
     else:
         fatal(_("Invalid return code from GUI startup script.\n"
