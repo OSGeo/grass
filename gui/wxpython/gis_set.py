@@ -45,6 +45,10 @@ sys.stderr = codecs.getwriter('utf8')(sys.stderr)
 
 
 class GRASSStartup(wx.Frame):
+    exit_success = 0
+    # 2 is file not found from python interpreter
+    exit_user_requested = 5
+
     """GRASS start-up screen"""
     def __init__(self, parent = None, id = wx.ID_ANY, style = wx.DEFAULT_FRAME_STYLE):
 
@@ -998,12 +1002,12 @@ class GRASSStartup(wx.Frame):
 
     def ExitSuccessfully(self):
         self.Destroy()
-        sys.exit(0)
+        sys.exit(self.exit_success)
 
     def OnExit(self, event):
         """'Exit' button clicked"""
         self.Destroy()
-        sys.exit(2)
+        sys.exit(self.exit_user_requested)
 
     def OnHelp(self, event):
         """'Help' button clicked"""
@@ -1014,7 +1018,7 @@ class GRASSStartup(wx.Frame):
     def OnCloseWindow(self, event):
         """Close window event"""
         event.Skip()
-        sys.exit(2)
+        sys.exit(self.exit_user_requested)
 
     def _nameValidationFailed(self, ctrl):
         message = _("Name <%(name)s> is not a valid name for location or mapset. "
