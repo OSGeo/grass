@@ -1469,14 +1469,18 @@ int check_overwrite(void)
 			if (!st->overwrite && !over) {
                             if (G_verbose() > -1) {
                                 if (G_info_format() != G_INFO_FORMAT_GUI) {
+                                    fprintf(stderr, _("ERROR: "));
                                     fprintf(stderr,
-                                            _("ERROR: option <%s>: <%s> exists.\n"),
+                                            _("option <%s>: <%s> exists. To overwrite, use the --overwrite flag"),
                                             opt->key, opt->answers[i]);
+                                    fprintf(stderr, "\n");
                                 }
                                 else {
+                                    fprintf(stderr, _("GRASS_INFO_ERROR(%d,1): "));
                                     fprintf(stderr,
-                                            "GRASS_INFO_ERROR(%d,1): option <%s>: <%s> exists.\n",
+                                            "option <%s>: <%s> exists. To overwrite, use the --overwrite flag",
                                             getpid(), opt->key, opt->answers[i]);
+                                    fprintf(stderr, "\n");
                                     fprintf(stderr, "GRASS_INFO_END(%d,1)\n",
                                             getpid());
                                 }
