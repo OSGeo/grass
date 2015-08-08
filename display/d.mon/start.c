@@ -35,7 +35,7 @@ void start(const char *name, const char *output, int update)
             }
             else {
                 D_close_driver();
-                G_fatal_error(_("option <%s>: <%s> exists."),
+                G_fatal_error(_("option <%s>: <%s> exists. To overwrite, use the --overwrite flag"),
                               "output", output_name);
             }
         }

@@ -242,7 +242,8 @@ int main(int argc, char **argv)
     if (mapname && !list->answer && !overwrite &&
 	!print_bounds->answer && !gprint_bounds->answer &&
 	G_find_raster(mapname, G_mapset()))
-	G_fatal_error(_("option <%s>: <%s> exists."), "output", mapname);
+	G_fatal_error(_("option <%s>: <%s> exists. To overwrite, use the --overwrite flag"),
+                      "output", mapname);
 
     setname = imapset->answer ? imapset->answer : G_store(G_mapset());
     if (strcmp(inlocation->answer, G_location()) == 0 &&
