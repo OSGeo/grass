@@ -279,7 +279,7 @@ void execute(expr_list * ee)
 	var = e->data.bind.var;
 
 	if (!overwrite_flag && check_output_map(var))
-	    G_fatal_error(_("output map <%s> exists"), var);
+	    G_fatal_error(_("output map <%s> exists. To overwrite, use the --overwrite flag"), var);
     }
 
     for (l = ee; l; l = l->next) {

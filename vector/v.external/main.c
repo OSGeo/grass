@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
     G_debug(2, "layer '%s' was found", options.layer->answer);
 
     if (G_find_vector2(output, G_mapset()) && !G_check_overwrite(argc, argv)) {
-        G_fatal_error(_("option <%s>: <%s> exists."),
+        G_fatal_error(_("option <%s>: <%s> exists. To overwrite, use the --overwrite flag"),
                       options.output->key, output);
     }
     
