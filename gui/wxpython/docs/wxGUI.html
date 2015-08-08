@@ -78,8 +78,10 @@ top of the screen.
 <center>
 <br>
 <img src="wxGUI_layer_manager.jpg" border="1" alt="screenshot"><br><br>
+Figure: Layer Manager screenshot on Ubuntu
 </center>
 
+<p>
 The top left button of the toolbar opens a new <em>Map Display
 Window</em>. Each map display has a unique set of layers to display
 and region settings. Other toolbar buttons add layers of different
@@ -359,8 +361,10 @@ the maps displayed.
 
 <center>
   <br><img src="wxGUI_map_display.jpg" alt="Map Display Window"><br><br>
+Figure: Map Display screenshot on Ubuntu
 </center>
 
+<p>
 Each Map Display Window has a unique layer tree (in the layer manager) 
 and geographic <em>region</em> setting. At the top of the window is a 
 toolbar with buttons to manage the map in the display (render, erase, zoom 
@@ -411,19 +415,11 @@ the computational region extents.
   
   <dt><img src="icons/info.png" alt="icon">&nbsp;
     <em>Query raster/vector maps</em></dt>
-  <dd>Opens a dropdown menu that allows user to select to:
-    <dl>
-      <dt><em>Display mode</em></dt>
-      <dd>Query selected raster, RGB raster (all three map channels will be
+    <dd>Query selected raster, RGB raster (all three map channels will be
 	queried), or vector map(s) using the mouse. Map(s) must be selected
 	before query.  Vector charts and thematic vector maps cannot be
-	queried. The results of the query will be displayed in the console window,
-	see <em><a href="r.what.html">r.what</a>, <a href="v.what.html">v.what</a></em>.</dd>
-      <dt><em>Edit mode</em></dt>
-      <dd>Query selected vector map in edit mode. The results of the query 
-	will be displayed in a form that permits editing of the queried vector
-	attributes.</dd>
-    </dl>
+	queried. The results of the query will be displayed in a dialog.
+	See <em><a href="r.what.html">r.what</a>, <a href="v.what.html">v.what</a></em>.
   </dd>
   
   <dt><img src="icons/pan.png" alt="icon">&nbsp;
@@ -468,23 +464,34 @@ the computational region extents.
     for other GIS processes,
     see <em><a href="g.region.html">g.region</a></em>.</dd>
 
+  <dt><img src="icons/zoom-region.png" alt="icon">&nbsp;
+    <em>Zoom to computational region extent</em></dt>
+  <dd>Set zoom extent based on the current computational region extent,
+    see <em><a href="g.region.html">g.region</a></em>.</dd>
+
   <dt><img src="icons/zoom-last.png" alt="icon">&nbsp;
     <em>Return to previous zoom</em></dt>
   <dd>Returns to the previous zoom extent. Up to 10 levels of zoom back are
     maintained, see <em><a href="g.region.html">g.region</a></em>.</dd>
   
   <dt><img src="icons/zoom-more.png" alt="icon">&nbsp;
-    <em>Zoom options</em></dt>
+    <em>Various zoom options</em></dt>
   <dd>Opens a dropdown menu that allows user to:
     <ul>
-      <li>Zoom to match the extents of a selected map</li>
-      <li>Zoom to match the computational region (set with <em>g.region</em>)</li>
-      <li>Zoom to match the extents of the default region</li> 
-      <li>Zoom to match the extents of a saved region</li> 
-      <li>Set computational region (the mapset's <tt>WIND</tt> file) to match the
-        current display extents (does not change the resolution),
-        see <em><a href="g.region.html">g.region</a></em>.
-      <li>Save display geometry (current extents) to a named region file</li>
+      <li><em>Zoom to default region</em></li>
+      <li><em>Zoom to saved region</em>. Zooms to previously
+      saved named region.</li>
+      <li><em>Set computational region extent from display.</em>
+      The computational region (the mapset's <tt>WIND</tt> file)
+      is set to match the current display extent (does not change
+      the resolution), see <em><a href="g.region.html">g.region</a></em>.</li>
+      <li><em>Set computational region extent interactively.</em>
+      The computational region is set simply by drawing a box with
+      the left mouse button on Map Display.</li>
+      <li><em>Set computational region from named region</em>.
+      This option doesn't affect display zoom.</li>
+      <li><em>Save display geometry to named region</em></li>
+      <li><em>Save computational region to named region</em></li>
     </ul>
   </dd>
   
@@ -493,34 +500,43 @@ the computational region extents.
   <dd>Opens a dropdown menu with:
     <dl>
       <dt><img src="icons/measure-length.png" alt="icon">&nbsp;
-        <em>Distance measurement tool</em></dt>
+        <em>Measure distance</em></dt>
       <dd>Interactive measurement of lengths defined with the mouse. The
         length of each segment and the cumulative length of all segments
         measuered is displayed in the command output window frame. Lengths are
-        measured in the current measurement unit.</dd>
+        measured in the current measurement unit. Double-click to switch off measuring.</dd>
       
+      <dt><img src="icons/area-measure.png" alt="icon">&nbsp;
+        <em>Measure area</em></dt>
+      <dd>Interactive measurement of area defined with the mouse. Area is
+        measured in the current measurement unit. Double-click to switch off measuring.</dd>
+
       <dt><img src="icons/layer-raster-profile.png" alt="icon">&nbsp;
-        <em>Profile tool</em></dt>
+        <em>Profile surface map</em></dt>
       <dd>Interactively create profile of a raster map. Profile transect is
 	drawn with the mouse in map display. The profile may be of the
 	displayed map or a different map. Up to three maps can be profiled 
 	simultaneously.</dd>
 
       <dt><img src="icons/layer-raster-profile.png" alt="icon">&nbsp;
-        <em>Bivariate scatterplot</em></dt>
-      <dd>Interactively create pbivariate scatterplot of raster
+        <em>Create bivariate scatterplot of raster maps</em></dt>
+      <dd>Interactively create bivariate scatterplot of raster
       maps.</dd>
 
       <dt><img src="icons/layer-raster-histogram.png" alt="icon">&nbsp;
-        <em>Histogrammig tool</em></dt>
+        <em>Create histogram of raster map</em></dt>
       <dd>Displays histogram of selected raster map or image in new
       window.</dd>
 
       <dt><img src="icons/layer-raster-histogram.png" alt="icon">&nbsp;
-        <em>Histogramming tool (d.histogram)</em></dt>
+        <em>Create histogram with d.histogram</em></dt>
       <dd>Displays histogram of selected raster map or image in new
         window,
         see <em><a href="d.histogram.html">d.histogram</a></em>.</dd>
+
+      <dt><img src="icons/vector-tools.png" alt="icon">&nbsp;
+        <em>Vector network analysis tool</em></dt>
+      <dd>See tool's <a href="wxGUI.vnet.html">manual page</a>.</dd>
     </dl>
   </dd>
   
@@ -529,17 +545,24 @@ the computational region extents.
   <dd>opens a dropdown menu that allows user to
     
     <dl>
-    <dt><img src="icons/scalebar-add.png" alt="icon">&nbsp;
-      <em>Add scalebar and north arrow</em></dt>
-    <dd>Adds layer to display a combined scalebar and north arrow. Options
-      include scalebar placement (using screen coordinates or a mouse),
-      scalebar format, and scalebar colors,
-      see <em><a href="d.barscale.html">d.barscale</a></em>.</dd>
-    
     <dt><img src="icons/legend-add.png" alt="icon">&nbsp;
       <em>Add raster map legend</em></dt>
     <dd>Adds layer to display with legend of selected raster map,
       see <em><a href="d.legend.html">d.legend</a></em>.</dd>
+
+    <dt><img src="icons/scalebar-add.png" alt="icon">&nbsp;
+      <em>Add scalebar</em></dt>
+    <dd>Adds layer to display a scalebar. Options
+      include scalebar placement (using screen coordinates or a mouse),
+      scalebar format, and scalebar colors,
+      see <em><a href="d.barscale.html">d.barscale</a></em>.</dd>
+
+    <dt><img src="icons/north-arrow-add.png" alt="icon">&nbsp;
+      <em>Add north arrow</em></dt>
+    <dd>Adds layer to display a north arrow. Options
+      include north arrow placement (using screen coordinates or a mouse),
+      north arrow style and color,
+      see <em><a href="d.northarrow.html">d.northarrow</a></em>.</dd>
     
     <dt><img src="icons/text-add.png" alt="icon">&nbsp;
       <em>Add text layer</em></dt>
@@ -577,7 +600,7 @@ the computational region extents.
       <dt><em>Digitize mode</em></dt>
       <dd>Puts display into vector digitizing mode and opens a new digitizing 
 	toolbar. The user can digitize a new map or edit an existing
-	map. Not yet functional for Windows platforms</dd>
+	map.</dd>
     </dl>
   </dd>
 
