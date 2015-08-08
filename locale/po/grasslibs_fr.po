@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: grasslibs_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-07-20 21:44+0200\n"
-"PO-Revision-Date: 2015-06-07 15:53+0100\n"
+"PO-Revision-Date: 2015-08-06 21:32+0100\n"
 "Last-Translator: Sylvain Maillard <sylvain.maillard@gmail.com>\n"
 "Language-Team: French <grass-translations@lists.osgeo.org>\n"
 "Language: fr\n"
@@ -24,7 +24,7 @@ msgstr ""
 #: ../lib/db/dbmi_driver/d_error.c:35
 #, c-format
 msgid "DBMI-%s driver error:"
-msgstr ""
+msgstr "DBMI-%s erreur de pilote :"
 
 #: ../lib/db/dbmi_client/copy_tab.c:91
 #, c-format
@@ -134,11 +134,11 @@ msgstr "La colonne clef n'est pas de type entier"
 
 #: ../lib/db/dbmi_base/index.c:180
 msgid "db_set_index_column_name(): invalid column number"
-msgstr ""
+msgstr "db_set_index_column_name() : numéro de colonne invalide"
 
 #: ../lib/db/dbmi_base/index.c:197
 msgid "db_get_index_column_name(): invalid column number"
-msgstr ""
+msgstr "db_get_index_column_name() : numéro de colonne invalide"
 
 #: ../lib/db/dbmi_base/login.c:99
 #, fuzzy, c-format
@@ -162,7 +162,7 @@ msgstr "Message d'erreur : %s"
 
 #: ../lib/db/dbmi_base/error.c:91
 msgid "dbmi: Protocol error"
-msgstr ""
+msgstr "dbmi : erreur de protocole"
 
 #: ../lib/db/dbmi_base/error.c:136
 #, fuzzy
@@ -172,12 +172,12 @@ msgstr "G_malloc : dépassement de mémoire"
 #: ../lib/db/dbmi_base/error.c:149
 #, c-format
 msgid "dbmi: %s() not implemented"
-msgstr ""
+msgstr "dbmi : %s() non implémenté"
 
 #: ../lib/db/dbmi_base/error.c:163
 #, c-format
 msgid "dbmi: Invalid procedure %d"
-msgstr ""
+msgstr "dbmi : procédure %d invalide"
 
 #: ../lib/db/dbmi_base/legal_dbname.c:38
 #, fuzzy, c-format
@@ -196,15 +196,15 @@ msgstr "Nom de couche table illégal <%s>. Le caractère <%c> n'est pas autoris�
 
 #: ../lib/db/dbmi_base/valuefmt.c:52
 msgid "db_convert_Cstring_to_value(): unrecognized sqltype"
-msgstr ""
+msgstr "db_convert_Cstring_to_value() : sqltype non reconnu"
 
 #: ../lib/db/dbmi_base/valuefmt.c:91
 msgid "db_convert_value_into_string(): unrecongized sqltype-type"
-msgstr ""
+msgstr "db_convert_value_into_string() : type sqltype non reconnu"
 
 #: ../lib/db/dbmi_base/xdrtable.c:109
 msgid "fetch: table has wrong number of columns"
-msgstr ""
+msgstr "chargement : la table a le mauvais nombre de colonnes"
 
 #: ../lib/db/dbmi_base/default_name.c:136
 msgid "Programmer error"
@@ -269,12 +269,16 @@ msgid ""
 "\n"
 "++ Run test copy column ++"
 msgstr ""
+"\n"
+"++ lancer le test de copie de colonne ++"
 
 #: ../lib/db/dbmi_base/test/test_columns.c:150
 msgid ""
 "\n"
 "++ Test copy column finished ++"
 msgstr ""
+"\n"
+"++ Test de copie de colonne terminé ++"
 
 #: ../lib/db/dbmi_base/test/test_table.c:38
 #, fuzzy
@@ -305,7 +309,7 @@ msgstr ""
 
 #: ../lib/db/dbmi_base/xdrvalue.c:82
 msgid "send data: invalid C-type"
-msgstr ""
+msgstr "envoi de données : type C invalide"
 
 #: ../lib/cairodriver/read_xid.c:14
 #, fuzzy, c-format
@@ -335,7 +339,7 @@ msgstr "Impossible d'ouvrir %s"
 #: ../lib/cairodriver/graph.c:160
 #, c-format
 msgid "Unknown file extension: %s"
-msgstr ""
+msgstr "Extention de fichier invalide : %s"
 
 #: ../lib/cairodriver/graph.c:190
 #, fuzzy, c-format
@@ -345,7 +349,7 @@ msgstr "Erreur à la fermeture du fichier g3d"
 #: ../lib/cairodriver/graph.c:192
 #, c-format
 msgid "cairo: image size %dx%d"
-msgstr ""
+msgstr "cairo : taille d'image %dx%d"
 
 #: ../lib/cairodriver/graph.c:371
 #, fuzzy
@@ -364,7 +368,7 @@ msgstr "Impossible de créer un nouveau processus"
 
 #: ../lib/cairodriver/draw_bitmap.c:47
 msgid "Cairo_Bitmap: Failed to create source"
-msgstr ""
+msgstr "Cairo_Bitmap : Échec de création de la source"
 
 #: ../lib/cairodriver/read_ppm.c:28 ../lib/cairodriver/read_bmp.c:88
 #, fuzzy, c-format
@@ -379,7 +383,7 @@ msgstr "Impossible de trouver la couche d'entrée '%s'"
 #: ../lib/cairodriver/read_ppm.c:38
 #, c-format
 msgid "Cairo: input file has incorrect dimensions: expected: %dx%d got: %dx%d"
-msgstr ""
+msgstr "Cairo : le fichier d'entrée a des dimensions incorrectes : attendu : %dx%d reçu : %dx%d"
 
 #: ../lib/cairodriver/read_ppm.c:46
 #, fuzzy, c-format
@@ -394,7 +398,7 @@ msgstr "Impossible de trouver la couche d'entrée '%s'"
 #: ../lib/cairodriver/read_ppm.c:56
 #, c-format
 msgid "Cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d"
-msgstr ""
+msgstr "Cairo : le fichier de masque a des dimensions incorrects : attendu : %dx%d reçu : %dx%d"
 
 #: ../lib/cairodriver/write_xid.c:14
 #, fuzzy, c-format
@@ -409,7 +413,7 @@ msgstr "Impossible d'ouvrir le fichier statistique <%s>"
 #: ../lib/cairodriver/read_bmp.c:96
 #, c-format
 msgid "Cairo: Invalid BMP header for <%s>"
-msgstr ""
+msgstr "Cairo : en-tête BMP invalide pour <%s>"
 
 #: ../lib/cairodriver/text.c:46
 #, fuzzy, c-format
@@ -418,7 +422,7 @@ msgstr "Impossible de copier la couche vectorielle <%s> vers <%s>"
 
 #: ../lib/cairodriver/text.c:56
 msgid "Some characters could not be converted to UTF-8"
-msgstr ""
+msgstr "Certains caractères ne peuvent pas être convertis en UTF-8"
 
 #: ../lib/cairodriver/write_ppm.c:27 ../lib/cairodriver/write_bmp.c:72
 #, fuzzy, c-format
@@ -1251,7 +1255,7 @@ msgstr "Tentative de lire la topologie d'une île morte (%d)"
 #: ../lib/vector/Vlib/header_finfo.c:113 ../lib/vector/Vlib/header_finfo.c:153
 #: ../lib/vector/Vlib/header_finfo.c:254 ../lib/proj/convert.c:82
 msgid "GRASS is not compiled with OGR support"
-msgstr ""
+msgstr "GRASS n'est pas compilé avec le support de OGR"
 
 #: ../lib/vector/Vlib/close_ogr.c:104 ../lib/vector/Vlib/close_pg.c:140
 #, c-format
@@ -3176,7 +3180,7 @@ msgstr ""
 
 #: ../lib/segment/format.c:144
 msgid "Please recompile with Large File Support (LFS)"
-msgstr ""
+msgstr "Merci de recompiler avec le support de grands fichiers (LFS)"
 
 #: ../lib/segment/open.c:53
 msgid "Segment file name is NULL"
@@ -3312,21 +3316,21 @@ msgstr ""
 
 #: ../lib/pngdriver/graph_set.c:102 ../lib/psdriver/graph_set.c:200
 msgid "enabled"
-msgstr ""
+msgstr "activé"
 
 #: ../lib/pngdriver/graph_set.c:102 ../lib/psdriver/graph_set.c:200
 msgid "disabled"
-msgstr ""
+msgstr "désactivé"
 
 #: ../lib/pngdriver/graph_set.c:149
 #, c-format
 msgid "png: collecting to file '%s'"
-msgstr ""
+msgstr "png : enregistrement vers le fichier '%s'"
 
 #: ../lib/pngdriver/graph_set.c:150
 #, c-format
 msgid "png: image size %dx%d"
-msgstr ""
+msgstr "png : taille d'image %dx%d"
 
 #: ../lib/python/exceptions/__init__.py:68
 #, python-format
@@ -4691,11 +4695,11 @@ msgstr "Coordonnées invalides"
 #: ../lib/ogsf/gp3.c:288
 #, c-format
 msgid "%d points without category. Unable to determine color rules for features without category."
-msgstr ""
+msgstr "%d points sans catégorie. Impossible de déterminer les règles de couleurs pour les points sans catégorie."
 
 #: ../lib/ogsf/gp2.c:705
 msgid "Unknown icon marker, using \"sphere\""
-msgstr ""
+msgstr "Icône inconnue, utilisation de « sphère »"
 
 #: ../lib/ogsf/gsd_img_tif.c:64 ../lib/ogsf/gk2.c:216
 #: ../lib/ogsf/gsd_img_ppm.c:52 ../lib/ogsf/gsd_img_ppm.c:95
@@ -4785,7 +4789,7 @@ msgstr "Lecture des couches matricielles <%s> en mémoire"
 #: ../lib/ogsf/gv3.c:414
 #, c-format
 msgid "%d features without category. Unable to determine color rules for features without category."
-msgstr ""
+msgstr "%d entités sans catégories. Impossible de déterminer les règles de couleurs pour les entités sans catégorie."
 
 #: ../lib/ogsf/gsd_label.c:58
 msgid "Max. number of labels reached!"
@@ -4893,12 +4897,12 @@ msgstr "Impossible de traiter la carte vecteur - mémoire saturée"
 #: ../lib/cluster/c_begin.c:57
 #, c-format
 msgid "produced by i.cluster"
-msgstr ""
+msgstr "produit par i.cluster"
 
 #: ../lib/cluster/c_exec.c:44
 #, c-format
 msgid "Not enough data points (%d) in cluster"
-msgstr ""
+msgstr "Pas assez de points (%d) dans le groupe"
 
 #: ../lib/lidar/raster.c:74 ../lib/lidar/raster.c:89 ../lib/lidar/raster.c:102
 #: ../lib/lidar/raster.c:119 ../lib/lidar/raster.c:134
@@ -5169,7 +5173,7 @@ msgstr "qui est manquant"
 #: ../lib/manage/do_remove.c:92 ../lib/manage/do_remove.c:112
 #, c-format
 msgid "%s removed"
-msgstr ""
+msgstr "%s supprimé"
 
 #: ../lib/manage/do_remove.c:105
 #, fuzzy, c-format
@@ -5179,7 +5183,7 @@ msgstr "Impossible d'ouvrir %s"
 #: ../lib/manage/do_remove.c:121
 #, c-format
 msgid "<%s> nothing removed"
-msgstr ""
+msgstr "<%s> rien de supprimé"
 
 #: ../lib/manage/option.c:47
 #, fuzzy, c-format
@@ -5188,19 +5192,19 @@ msgstr "%s terminé. %s"
 
 #: ../lib/manage/option.c:51
 msgid "Raster"
-msgstr ""
+msgstr "Raster"
 
 #: ../lib/manage/option.c:53
 msgid "Vector"
-msgstr ""
+msgstr "Vecteur"
 
 #: ../lib/manage/option.c:55
 msgid "Region"
-msgstr ""
+msgstr "Région"
 
 #: ../lib/manage/option.c:57
 msgid "Group"
-msgstr ""
+msgstr "Groupe"
 
 #: ../lib/manage/do_rename.c:42
 #, fuzzy, c-format
@@ -5220,12 +5224,12 @@ msgstr "Impossible d'ouvrir %s"
 #: ../lib/manage/do_rename.c:90 ../lib/manage/do_rename.c:110
 #, c-format
 msgid "%s renamed"
-msgstr ""
+msgstr "%s renommé"
 
 #: ../lib/manage/do_rename.c:119
 #, c-format
 msgid "<%s> nothing renamed"
-msgstr ""
+msgstr "<%s> rien de renommé"
 
 #: ../lib/manage/do_copy.c:43
 #, fuzzy, c-format
@@ -5240,7 +5244,7 @@ msgstr "<%s> dans le jeu de données (mapset) <%s>"
 #: ../lib/manage/do_copy.c:70
 #, c-format
 msgid "%s copied"
-msgstr ""
+msgstr "%s copié"
 
 #: ../lib/manage/read_list.c:73
 #, fuzzy, c-format
@@ -5250,7 +5254,7 @@ msgstr "impossible d'ouvrir le fichier de datums : %s"
 #: ../lib/manage/read_list.c:134
 #, c-format
 msgid "Format error: file ('%s') line (%d) - %s"
-msgstr ""
+msgstr "Erreur de format : fichier ('%s') ligne (%d) - %s"
 
 #: ../lib/manage/do_list.c:30
 #, fuzzy, c-format
@@ -7893,7 +7897,7 @@ msgstr "[%s] dans [%s] - octets par cellule (%d) trop grand"
 #: ../lib/raster/open.c:256
 #, c-format
 msgid "Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
-msgstr ""
+msgstr "La carte raster <%s@%s> est un lien GDAL mais GRASS est compilé sans le support de GDAL"
 
 #: ../lib/raster/open.c:264
 #, fuzzy, c-format
@@ -7932,7 +7936,7 @@ msgstr "aucun fichier %s disponible\n"
 
 #: ../lib/raster/open.c:720
 msgid "Rast_set_fp_type(): can only be called with FCELL_TYPE or DCELL_TYPE"
-msgstr ""
+msgstr "Rast_set_fp_type() : ne peut être appelé qu'avec FCELL_TYPE ou DCELL_TYPE"
 
 #: ../lib/raster/open.c:778
 #, c-format
@@ -7961,7 +7965,7 @@ msgstr "La carte raster <%s> n'est pas xdr: byte_order: %s"
 
 #: ../lib/raster/open.c:929
 msgid "Rast_set_quant_rules() can be called only for raster maps opened for reading"
-msgstr ""
+msgstr "Rast_set_quant_rules() ne peut être appelé que sur une carte raster ouverte en lecture"
 
 #: ../lib/raster/cats.c:109
 #, fuzzy, c-format
@@ -7996,7 +8000,7 @@ msgstr ""
 #: ../lib/raster/color_rand.c:33
 #, c-format
 msgid "Rast_make_random_colors: min (%d) > max (%d)"
-msgstr ""
+msgstr "Rast_make_random_colors : min (%d) > max (%d)"
 
 #: ../lib/raster/get_row.c:36 ../lib/raster/get_row.c:845
 #, c-format
@@ -8118,7 +8122,7 @@ msgstr "impossible d'écrire l'historique pour [%s]"
 #: ../lib/raster/history.c:235
 #, c-format
 msgid "generated by %s"
-msgstr ""
+msgstr "généré par %s"
 
 #: ../lib/raster/auto_mask.c:69
 msgid "Unable to open automatic MASK file"
@@ -8185,7 +8189,7 @@ msgstr "Impossible d'ouvrir la base de données <%s> avec le driver <%s>"
 #: ../lib/raster/gdal.c:498
 #, c-format
 msgid "Driver <%s> does not support direct writing. Using MEM driver for intermediate dataset."
-msgstr ""
+msgstr "Le pilote <%s> ne gère pas l'écriture directe. Utiliser le pilote MEM pour les données intermédiaires."
 
 #: ../lib/raster/gdal.c:504
 #, fuzzy
@@ -8200,7 +8204,7 @@ msgstr "Impossible d'ouvrir la base de données <%s> avec le driver <%s>"
 #: ../lib/raster/gdal.c:515
 #, c-format
 msgid "Driver <%s> does not support creating rasters"
-msgstr ""
+msgstr "Le pilote <%s> ne gère pas la création de raster"
 
 #: ../lib/raster/gdal.c:531
 #, fuzzy
@@ -8365,23 +8369,23 @@ msgstr ""
 
 #: ../lib/init/grass.py:205
 msgid "print this help message"
-msgstr ""
+msgstr "afficher ce message d'aide"
 
 #: ../lib/init/grass.py:206
 msgid "show version information and exit"
-msgstr ""
+msgstr "afficher les informations de version et quitter"
 
 #: ../lib/init/grass.py:207
 msgid "create given database, location or mapset if it doesn't exist"
-msgstr ""
+msgstr "créer la base de données, secteur ou jeu de cartes si non existants"
 
 #: ../lib/init/grass.py:208
 msgid "exit after creation of location or mapset. Only with -c flag"
-msgstr ""
+msgstr "quitter après la création du secteur ou du jeu de cartes. Uniquement avec l'argument -c"
 
 #: ../lib/init/grass.py:209
 msgid "use text based interface (skip welcome screen)"
-msgstr ""
+msgstr "utiliser l'interface texte (sauter l'écran de bienvenue)"
 
 #: ../lib/init/grass.py:210 ../lib/init/grass.py:212 ../lib/init/grass.py:214
 #, fuzzy
@@ -8390,15 +8394,15 @@ msgstr "pour accepter le choix par défaut"
 
 #: ../lib/init/grass.py:211
 msgid "use text based interface (show welcome screen)"
-msgstr ""
+msgstr "utiliser l'interface texte (afficher l'écran de bienvenue)"
 
 #: ../lib/init/grass.py:213
 msgid "use $DEFAULT_GUI graphical user interface"
-msgstr ""
+msgstr "utiliser l'interface utilisateur graphique $DEFAULT_GUI"
 
 #: ../lib/init/grass.py:215
 msgid "print GRASS configuration parameters"
-msgstr ""
+msgstr "afficher les paramètres de configuration GRASS"
 
 #: ../lib/init/grass.py:216
 msgid "options: arch,build,compiler,path,revision"
@@ -8406,7 +8410,7 @@ msgstr ""
 
 #: ../lib/init/grass.py:218
 msgid "initial database (path to GIS data)"
-msgstr ""
+msgstr "base de données initiale (chemin vers les données SIG)"
 
 #: ../lib/init/grass.py:219
 #, fuzzy
@@ -8417,7 +8421,7 @@ msgstr ""
 
 #: ../lib/init/grass.py:220
 msgid "initial mapset"
-msgstr ""
+msgstr "jeu de cartes initial"
 
 #: ../lib/init/grass.py:221
 msgid "fully qualified initial mapset directory"
@@ -8425,7 +8429,7 @@ msgstr ""
 
 #: ../lib/init/grass.py:222
 msgid "Environment variables relevant for startup"
-msgstr ""
+msgstr "Variables d'environnement pour le démarrage"
 
 #: ../lib/init/grass.py:223
 msgid "select GUI (text, gui)"
@@ -8433,23 +8437,24 @@ msgstr ""
 
 #: ../lib/init/grass.py:224
 msgid "set html web browser for help pages"
-msgstr ""
+msgstr "définir le navigateur web pour les pages d'aide"
 
 #: ../lib/init/grass.py:225
 msgid "set additional path(s) to local GRASS modules or user scripts"
-msgstr ""
+msgstr "définir des chemins supplémentaires pour les modules GRASS locaux ou les scripts utilisateurs"
 
 #: ../lib/init/grass.py:226
 msgid "set additional GISBASE for locally installed GRASS Addons"
-msgstr ""
+msgstr "définir un GISBASE supplémentaire pour les extentions GRASS installées localement"
 
 #: ../lib/init/grass.py:227
+#, fuzzy
 msgid "shell script to be processed as batch job"
-msgstr ""
+msgstr "script shell à exécuter par lot"
 
 #: ../lib/init/grass.py:228
 msgid "set python shell name to override 'python'"
-msgstr ""
+msgstr "définir le nom du shell python pour supplanter 'python'"
 
 #: ../lib/init/grass.py:266
 #, fuzzy, python-format
@@ -8468,9 +8473,10 @@ msgstr "Le format demandé n'est pas compatible avec cette version"
 
 #: ../lib/init/grass.py:499
 msgid "Searched for a web browser, but none found"
-msgstr ""
+msgstr "Aucun navigateur web trouvé"
 
 #: ../lib/init/grass.py:533
+#, fuzzy
 msgid ""
 "The python command does not work as expected!\n"
 "Please check your GRASS_PYTHON environment variable.\n"
@@ -8479,6 +8485,12 @@ msgid ""
 "\n"
 "Hit RETURN to continue.\n"
 msgstr ""
+"La commande python ne fonctionne pas comme prévu !\n"
+"Merci de vérifier vos variables d'environnement GRASS_PYTHON.\n"
+"Utilisez l'option -help pour les détails.\n"
+"Bascule vers l'interface en mode texte.\n"
+"\n"
+"Appuyez sur ENTRÉE pour continuer.\n"
 
 #: ../lib/init/grass.py:545
 msgid ""
@@ -8497,12 +8509,12 @@ msgstr "Désolé, <%s> n'est pas une option valide\n"
 #: ../lib/init/grass.py:600
 #, python-format
 msgid "Mapset <%s> doesn't exist in GRASS location <%s>. A new mapset can be created by '-c' switch."
-msgstr ""
+msgstr "Le jeu de cartes <%s> n'existepas dans le secteur GRASS <%s>. Il est possible de créer un nouveau jeu de cartes avec l'option '-c'."
 
 #: ../lib/init/grass.py:619
 #, python-format
 msgid "Failed to create new location. The location <%s> already exists."
-msgstr ""
+msgstr "Échec de création du nouveau secteur. Le secteur <%s> existe déjà."
 
 #: ../lib/init/grass.py:651
 msgid "Missing WIND file fixed"
@@ -8513,19 +8525,26 @@ msgid ""
 "GISDBASE, LOCATION_NAME and MAPSET variables not set properly.\n"
 "Interactive startup needed."
 msgstr ""
+"Les variables GISDBASE, LOCATION_NAME et MAPSET ne sont aps définies correctement.\n"
+"Démarrage interactif nécessaire."
 
 #: ../lib/init/grass.py:678
 #, python-format
 msgid "Invalid user interface specified - <%s>. Use the --help option to see valid interface names."
-msgstr ""
+msgstr "Interface utilisateur spécifiée invalide - <%s>. Utilisez l'option --help pour voir les noms d'interfaces valides."
 
 #: ../lib/init/grass.py:691
+#, fuzzy
 msgid ""
 "Error in GUI startup. If necessary, please report this error to the GRASS developers.\n"
 "Switching to text mode now.\n"
 "\n"
 "Hit RETURN to continue..."
 msgstr ""
+"Erreur dans le démarrage de l'interface graphique. Si nécessaire, merci de rapporter cette erreur aux développeurs GRASS.\n"
+"Bascule vers le mode texte.\n"
+"\n"
+"Appuyez sur ENTRÉE pour continuer ..."
 
 #: ../lib/init/grass.py:701
 msgid ""
@@ -8549,6 +8568,12 @@ msgid ""
 "\n"
 "Check the <%s(file)> file."
 msgstr ""
+"Erreur de lecture des informations de chemin des données depuis g.gisenv.\n"
+"GISDBASE=%(gisbase)s\n"
+"LOCATION_NAME=%(location)s\n"
+"MAPSET=%(mapset)s\n"
+"\n"
+"Vérifier le fichier <%s(file)>."
 
 #: ../lib/init/grass.py:742
 #, python-format
@@ -8556,18 +8581,19 @@ msgid "Environmental variable '%s' already set, ignoring value '%s'"
 msgstr ""
 
 #: ../lib/init/grass.py:804
+#, fuzzy
 msgid "Default locale settings are missing. GRASS running with C locale."
-msgstr ""
+msgstr "Les paramètres de locale par défaut sont manquants. Lancement de GRASS avec la locale C."
 
 #: ../lib/init/grass.py:809
 #, python-format
 msgid "A language override has been requested. Trying to switch GRASS into '%s'..."
-msgstr ""
+msgstr "Un forçage de langage a été demandé. Essai de basculer GRASS en '%s' ..."
 
 #: ../lib/init/grass.py:868
 #, python-format
 msgid "Path '%s' doesn't exist"
-msgstr ""
+msgstr "Le chemin '%s' n'existe pas"
 
 #: ../lib/init/grass.py:876
 #, python-format
@@ -8575,11 +8601,13 @@ msgid "%(user)s is currently running GRASS in selected mapset (file %(file)s fou
 msgstr ""
 
 #: ../lib/init/grass.py:880
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "Unable to properly access '%s'.\n"
 "Please notify system personel."
 msgstr ""
+"Impossible d'accéder correctement à '%s'.\n"
+"Merci d'en notifier votre administrateur système."
 
 #: ../lib/init/grass.py:895
 #, fuzzy
@@ -8589,7 +8617,7 @@ msgstr "Construction du graphique ..."
 #: ../lib/init/grass.py:947
 #, python-format
 msgid "Unsupported shell <%(sh)s>: %(env)s"
-msgstr ""
+msgstr "Shell <%(sh)s> non supporté : %(env)s"
 
 #: ../lib/init/grass.py:952
 #, fuzzy
@@ -9071,3 +9099,16 @@ msgstr "Dépassement de mémoire"
 #, fuzzy
 #~ msgid "Database record for line %d (cat = %d, backword direction) not found(cost was set to 0)"
 #~ msgstr "L'enregistrement de la base de données de la ligne %d (cat = %d, direction arrière) introuvable (direction de la ligne sautée)"
+
+#~ msgid "force removal of .gislock if exists (use with care!). Only with -text flag"
+#~ msgstr "force la suppression de .gislock si il existe (utiliser avec précausion). Uniquement avec l'argument -text"
+
+#~ msgid ""
+#~ "%(user)s is currently running GRASS in selected mapset (file %(file)s found). Concurrent use not allowed.\n"
+#~ "You can force launching GRASS using -f flag (note that you need permission for this operation). Have another look in the processor manager just to be sure..."
+#~ msgstr ""
+#~ "%(user)s utilise GRASS dans le jeu de cartes sélectionné (fichier %(file)s trouvé). Les utilisations simultanées ne sont pas permises.\n"
+#~ "Vous pouvez forcer le démarrage de GRASS avec l'option -f (vous devez avoir les permissions pour cette opération). Vérifiez le gestionnaire de processus pour être sûr ..."
+
+#~ msgid "%(user)s is currently running GRASS in selected mapset (file %(file)s found). Forcing to launch GRASS..."
+#~ msgstr "%(user)s utilise GRASS dans le jeu de cartes sélectionné (fichier %(file)s trouvé). Lancement de GRASS forcé ..."
