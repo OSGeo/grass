@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: grasswxpy_fr\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-02-08 19:52+0100\n"
-"PO-Revision-Date: 2015-06-07 13:56+0100\n"
+"PO-Revision-Date: 2015-08-06 10:16+0100\n"
 "Last-Translator: Sylvain Maillard <sylvain.maillard@gmail.com>\n"
 "Language-Team: français <grass-translations@lists.osgeo.org>\n"
 "Language: fr\n"
@@ -18,6 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 1.5.5\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 
 #: ../gui/wxpython/iscatt/plots.py:42
 #, python-format
@@ -9189,9 +9190,8 @@ msgid "Basic vector metadata"
 msgstr "Métadonnées élémentaires d'une carte vecteur"
 
 #: ../gui/wxpython/menustrings.py:716 ../gui/wxpython/menustrings.py:1629
-#, fuzzy
 msgid "Outputs basic information about a vector map."
-msgstr "Sortie."
+msgstr "Affiche les métadonnées d'une carte vecteur."
 
 #: ../gui/wxpython/menustrings.py:717 ../gui/wxpython/menustrings.py:1630
 msgid "Classify attribute data"
@@ -9206,9 +9206,8 @@ msgid "Report topology by category"
 msgstr "Rendre compte de la topologie par catégorie"
 
 #: ../gui/wxpython/menustrings.py:720 ../gui/wxpython/menustrings.py:1633
-#, fuzzy
 msgid "Reports geometry statistics for vector maps."
-msgstr "Convertit un fichier 'raster' ASCII en une carte 'raster' binaire"
+msgstr "Compte-rendu des statistiques de géométrie pour les cartes vecteur."
 
 #: ../gui/wxpython/menustrings.py:721 ../gui/wxpython/menustrings.py:1634
 msgid "Univariate attribute statistics for points"
@@ -9231,18 +9230,16 @@ msgid "Quadrat indices"
 msgstr "Indices des quadrats"
 
 #: ../gui/wxpython/menustrings.py:726 ../gui/wxpython/menustrings.py:1639
-#, fuzzy
 msgid "Indices for quadrat counts of vector point lists."
-msgstr "Indice de compte par quadrat."
+msgstr "Indice de quadrat pour la liste de points vecteurs."
 
 #: ../gui/wxpython/menustrings.py:727 ../gui/wxpython/menustrings.py:1640
 msgid "Test normality"
 msgstr "Test de normalité"
 
 #: ../gui/wxpython/menustrings.py:728 ../gui/wxpython/menustrings.py:1641
-#, fuzzy
 msgid "Tests for normality for vector points."
-msgstr "IDW de points vecteur"
+msgstr "Test de normalité pour les points vecteur."
 
 #: ../gui/wxpython/menustrings.py:729 ../gui/wxpython/menustrings.py:1642
 msgid "&Imagery"
@@ -9274,9 +9271,8 @@ msgid "Mosaic images"
 msgstr "Mosaïquage d'images"
 
 #: ../gui/wxpython/menustrings.py:736 ../gui/wxpython/menustrings.py:1649
-#, fuzzy
 msgid "Mosaics several images and extends colormap."
-msgstr "Créer une mosaïque jusqu'à 4 images et étend la table de couleurs; créer une carte *.mosaic"
+msgstr "Créer une mosaïque d'images et étendre la table de couleurs."
 
 #: ../gui/wxpython/menustrings.py:737 ../gui/wxpython/menustrings.py:1650
 msgid "Manage image colors"
@@ -9287,9 +9283,8 @@ msgid "Color balance for RGB"
 msgstr "Balance des couleurs pour RVB"
 
 #: ../gui/wxpython/menustrings.py:739 ../gui/wxpython/menustrings.py:1652
-#, fuzzy
 msgid "Performs auto-balancing of colors for RGB images."
-msgstr "Applique une balance automatique des couleurs pour les images LANDSAT."
+msgstr "Effectuer une balance automatique des couleurs pour les images RVB."
 
 #: ../gui/wxpython/menustrings.py:740 ../gui/wxpython/menustrings.py:1653
 msgid "HIS to RGB"
@@ -9336,7 +9331,7 @@ msgstr "Transformée de Brovey"
 #: ../gui/wxpython/menustrings.py:751 ../gui/wxpython/menustrings.py:1664
 #, fuzzy
 msgid "Image fusion algorithms to sharpen multispectral with high-res panchromatic channels"
-msgstr "Transformation de Brovey pour fusionner des canaux multispectraux et panchromatique haute résolution."
+msgstr "Algorithme de fusion d'image pour améliorer la netteté des canaux multispectraux avec un canal panchromatique haute résolution."
 
 #: ../gui/wxpython/menustrings.py:752 ../gui/wxpython/menustrings.py:1665
 msgid "Classify image"
@@ -9347,9 +9342,8 @@ msgid "Clustering input for unsupervised classification"
 msgstr "Regroupement pour classification non-supervisée"
 
 #: ../gui/wxpython/menustrings.py:754 ../gui/wxpython/menustrings.py:1667
-#, fuzzy
 msgid "Generates spectral signatures for land cover types in an image using a clustering algorithm. The resulting signature file is used as input for i.maxlik, to generate an unsupervised image classification."
-msgstr "Générer les signatures spectrales pour l'occupation des sols dans une image, à l'aide d'un algorithme de regroupement."
+msgstr "Générer les signatures spectrales pour les types d'occupation des sols dans une image avec un algorithme de regroupement. Le fichier de signature résultant est utilisé en entrée pour i.maxlik, pour générer une classification non supervisée de l'image."
 
 #: ../gui/wxpython/menustrings.py:755 ../gui/wxpython/menustrings.py:1668
 msgid "Input for supervised MLC"
@@ -9369,15 +9363,13 @@ msgstr "Classifie les réflectances spectrales des cellules de donénes d'imager
 
 #: ../gui/wxpython/menustrings.py:759 ../gui/wxpython/menustrings.py:1672
 #: ../gui/wxpython/menustrings.py:1933
-#, fuzzy
 msgid "Interactive input for supervised classification"
-msgstr "Regroupement pour classification non-supervisée"
+msgstr "Entrée interactive pour la  classification supervisée"
 
 #: ../gui/wxpython/menustrings.py:760 ../gui/wxpython/menustrings.py:1673
 #: ../gui/wxpython/menustrings.py:1934
-#, fuzzy
 msgid "Generates spectral signatures by allowing the user to outline training areas."
-msgstr "Générer les signatures spectrales en autorisant l'utilisateur à définir les zones d'entrainement."
+msgstr "Générer les signatures spectrales en permettant à l'utilisateur à définir les zones d'entrainement."
 
 #: ../gui/wxpython/menustrings.py:761 ../gui/wxpython/menustrings.py:1674
 msgid "Input for supervised SMAP"
@@ -9396,9 +9388,8 @@ msgid "Performs contextual image classification using sequential maximum a poste
 msgstr "Effectue une classification d'image contextuelle, en utilisant l'estimation du maximum séquentiel à postériori (SMAP)."
 
 #: ../gui/wxpython/menustrings.py:765 ../gui/wxpython/menustrings.py:1678
-#, fuzzy
 msgid "Object segmentation"
-msgstr "Orientation"
+msgstr "Segmentation orientée objet"
 
 #: ../gui/wxpython/menustrings.py:766 ../gui/wxpython/menustrings.py:1679
 msgid "Identifies segments (objects) from imagery data."
@@ -9433,9 +9424,8 @@ msgid "Canonical correlation"
 msgstr "Corrélation canonique"
 
 #: ../gui/wxpython/menustrings.py:774 ../gui/wxpython/menustrings.py:1687
-#, fuzzy
 msgid "Canonical components analysis (CCA) program for image processing."
-msgstr "Analyse d'image par composante canonique (cca)."
+msgstr "Analyse d'image par composante canonique (CCA)."
 
 #: ../gui/wxpython/menustrings.py:775 ../gui/wxpython/menustrings.py:1688
 msgid "Principal components"
@@ -9496,9 +9486,8 @@ msgid "Modis quality control"
 msgstr "Contrôle de qualité MODIS"
 
 #: ../gui/wxpython/menustrings.py:789 ../gui/wxpython/menustrings.py:1702
-#, fuzzy
 msgid "Extracts quality control parameters from MODIS QC layers."
-msgstr "Extraire le sparamètres de contrôle de qualité d'une couche MODIS QC."
+msgstr "Extraire les paramètres de contrôle de qualité d'une couche MODIS QC."
 
 #: ../gui/wxpython/menustrings.py:790 ../gui/wxpython/menustrings.py:1703
 msgid "Atmospheric correction"
@@ -9507,12 +9496,11 @@ msgstr "Corrections atmosphériques"
 #: ../gui/wxpython/menustrings.py:791 ../gui/wxpython/menustrings.py:1704
 #, fuzzy
 msgid "Performs atmospheric correction using the 6S algorithm. 6S - Second Simulation of Satellite Signal in the Solar Spectrum."
-msgstr "Effectue une correction atmosphérique par l'algorithme 6S."
+msgstr "Effectue une correction atmosphérique par l'algorithme 6S. 6S - Seconde Simulation du Signal d'un Satellite dans le Spectre Solaire."
 
 #: ../gui/wxpython/menustrings.py:792 ../gui/wxpython/menustrings.py:1705
-#, fuzzy
 msgid "Topographic correction"
-msgstr "Corrections atmosphériques"
+msgstr "Corrections topographiques"
 
 #: ../gui/wxpython/menustrings.py:793 ../gui/wxpython/menustrings.py:1706
 msgid "Computes topographic correction of reflectance."
@@ -9523,9 +9511,8 @@ msgid "Satellite images products"
 msgstr "Produits d'imagerie satellitale"
 
 #: ../gui/wxpython/menustrings.py:795 ../gui/wxpython/menustrings.py:1708
-#, fuzzy
 msgid "Vegetation indices"
-msgstr "Indices des quadrats"
+msgstr "Indices de végétation"
 
 #: ../gui/wxpython/menustrings.py:796 ../gui/wxpython/menustrings.py:1709
 msgid "Calculates different types of vegetation indices. Uses red and nir bands mostly, and some indices require additional bands."
@@ -9538,7 +9525,7 @@ msgstr "Index de végétation de Tessel"
 #: ../gui/wxpython/menustrings.py:798 ../gui/wxpython/menustrings.py:1711
 #, fuzzy
 msgid "Performs Tasseled Cap (Kauth Thomas) transformation."
-msgstr "Transformation de Tasseled cap (Kauth Thomas) pour les données LANDSAT-TM"
+msgstr "Transformation de Tasseled cap (Kauth Thomas)."
 
 #: ../gui/wxpython/menustrings.py:799 ../gui/wxpython/menustrings.py:1712
 msgid "Albedo"
@@ -9552,7 +9539,7 @@ msgstr "Calculer l'albedo depuis la réflectance de surface."
 #: ../gui/wxpython/menustrings.py:801 ../gui/wxpython/menustrings.py:1714
 #, fuzzy
 msgid "Emissivity"
-msgstr "Emission"
+msgstr " Emissivité"
 
 #: ../gui/wxpython/menustrings.py:802 ../gui/wxpython/menustrings.py:1715
 msgid "Computes emissivity from NDVI, generic method for sparse land."
@@ -9700,12 +9687,11 @@ msgstr "Afficher/ajouter/supprimer une date/heure d'une carte raster 3D"
 #: ../gui/wxpython/menustrings.py:837 ../gui/wxpython/menustrings.py:1750
 #, fuzzy
 msgid "3D rasters to raster series"
-msgstr "Volume vers série raster"
+msgstr "Rasters 3D vers séris raster"
 
 #: ../gui/wxpython/menustrings.py:839 ../gui/wxpython/menustrings.py:1752
-#, fuzzy
 msgid "3D color tables"
-msgstr "Tables de couleurs"
+msgstr "Tables de couleurs 3D"
 
 #: ../gui/wxpython/menustrings.py:840 ../gui/wxpython/menustrings.py:1753
 #, fuzzy
@@ -9713,14 +9699,12 @@ msgid "Creates/modifies the color table associated with a 3D raster map."
 msgstr "Convertit un fichier 'raster' ASCII en une carte 'raster' binaire"
 
 #: ../gui/wxpython/menustrings.py:841 ../gui/wxpython/menustrings.py:1754
-#, fuzzy
 msgid "Export 3D color table"
-msgstr "Choisir une couleur"
+msgstr "Exporter une table de couleur 3D"
 
 #: ../gui/wxpython/menustrings.py:842 ../gui/wxpython/menustrings.py:1755
-#, fuzzy
 msgid "Exports the color table associated with a 3D raster map."
-msgstr "Convertit un fichier 'raster' ASCII en une carte 'raster' binaire"
+msgstr "Exporter la table de couleur associée à une carte raster 3D."
 
 #: ../gui/wxpython/menustrings.py:843 ../gui/wxpython/menustrings.py:1756
 msgid "3D mask"
@@ -9741,7 +9725,6 @@ msgid "Cross section"
 msgstr "Coupe transversale"
 
 #: ../gui/wxpython/menustrings.py:848 ../gui/wxpython/menustrings.py:1761
-#, fuzzy
 msgid "Creates cross section 2D raster map from 3D raster map based on 2D elevation map"
 msgstr "Créer une section de coupe 2D depuis une carte raster 3D et une carte d'altitude 2D"
 
@@ -10055,9 +10038,8 @@ msgid "Lists space time datasets and maps registered in the temporal database."
 msgstr "Lister les jeux de données temporels et cartes enregistrées dans la base de données temporelle."
 
 #: ../gui/wxpython/menustrings.py:935 ../gui/wxpython/menustrings.py:1848
-#, fuzzy
 msgid "Manage maps in datasets"
-msgstr "Gérer les cartes dans le jeu de données"
+msgstr "Gérer les cartes du jeu de données"
 
 #: ../gui/wxpython/menustrings.py:936 ../gui/wxpython/menustrings.py:1849
 #, fuzzy
@@ -10077,7 +10059,6 @@ msgid "Unregisters raster, vector and raster3d maps from the temporal database o
 msgstr ""
 
 #: ../gui/wxpython/menustrings.py:940 ../gui/wxpython/menustrings.py:1853
-#, fuzzy
 msgid "List raster dataset maps"
 msgstr "Lister les rasters du jeu de données"
 
@@ -10087,7 +10068,6 @@ msgid "Lists registered maps of a space time raster dataset."
 msgstr "Lister les cartes enregistrées dans le jeu de données raster temporel."
 
 #: ../gui/wxpython/menustrings.py:942 ../gui/wxpython/menustrings.py:1855
-#, fuzzy
 msgid "List vector dataset maps"
 msgstr "Lister les vecteurs du jeu de données"
 
@@ -10123,7 +10103,7 @@ msgstr "Importer un jeu de données vecteur"
 #: ../gui/wxpython/menustrings.py:950 ../gui/wxpython/menustrings.py:1863
 #, fuzzy
 msgid "Imports a space time vector dataset from a GRASS GIS specific archive file."
-msgstr "Importer des données vectorielles"
+msgstr "Importer un jeu de données vectoriel temporel depuis un fichier d'archive GRASS GIS."
 
 #: ../gui/wxpython/menustrings.py:951 ../gui/wxpython/menustrings.py:1864
 #: ../gui/wxpython/animation/dialogs.py:763
@@ -10186,17 +10166,17 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:965 ../gui/wxpython/menustrings.py:1878
 #, fuzzy
 msgid "Extract subset of raster3D dataset"
-msgstr "Extraire une sous-partie du jeu de données raster3D"
+msgstr "Extraire une partie du jeu de données raster3D"
 
 #: ../gui/wxpython/menustrings.py:966 ../gui/wxpython/menustrings.py:1879
 #, fuzzy
 msgid "Extracts a subset of a space time 3D raster dataset."
-msgstr "Extraire une sous-partie du jeu de données raster 3D temporel."
+msgstr "Extraire une partie du jeu de données raster 3D temporel."
 
 #: ../gui/wxpython/menustrings.py:967 ../gui/wxpython/menustrings.py:1880
 #, fuzzy
 msgid "Query vector dataset attribute data"
-msgstr "Interroger la carte vecteur depuis la table d'attributs"
+msgstr "Interroger la table d'attributs d'une carte vectorielle"
 
 #: ../gui/wxpython/menustrings.py:968 ../gui/wxpython/menustrings.py:1881
 msgid "Prints attributes of vector maps registered in a space time vector dataset."
@@ -10205,12 +10185,12 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:969 ../gui/wxpython/menustrings.py:1882
 #, fuzzy
 msgid "Raster dataset color table"
-msgstr "Définir une table de couleur"
+msgstr "Table de couleur du jeu de données raster"
 
 #: ../gui/wxpython/menustrings.py:970 ../gui/wxpython/menustrings.py:1883
 #, fuzzy
 msgid "Creates/modifies the color table associated with each raster map of the space time raster dataset."
-msgstr "Crée/modifie la table de couleur associée à une carte raster."
+msgstr "Crée/modifie la table de couleur associée à chaque carte raster d'un jeu de données temporel"
 
 #: ../gui/wxpython/menustrings.py:971 ../gui/wxpython/menustrings.py:1884
 msgid "Raster calculations"
@@ -10219,7 +10199,7 @@ msgstr "Calculatrice raster"
 #: ../gui/wxpython/menustrings.py:972 ../gui/wxpython/menustrings.py:1885
 #, fuzzy
 msgid "Performs spatio-temporal mapcalc expressions on temporally sampled maps of space time raster datasets."
-msgstr "Importer une carte raster"
+msgstr "Applique les expressions mapcalc temporelles sur un échantillon temporel de cartes d'un jeu de données raster temporel."
 
 #: ../gui/wxpython/menustrings.py:973 ../gui/wxpython/menustrings.py:1886
 msgid "Raster3D calculations"
@@ -10228,51 +10208,48 @@ msgstr "Calculatrice raster 3D"
 #: ../gui/wxpython/menustrings.py:974 ../gui/wxpython/menustrings.py:1887
 #, fuzzy
 msgid "Performs r3.mapcalc expressions on maps of sampled space time 3D raster datasets."
-msgstr "Importer une carte raster"
+msgstr "Applique des expressions r3.mapcalc sur les cartes d'échantillonnage d'un jeu de donénes raster3D temporel."
 
 #: ../gui/wxpython/menustrings.py:975 ../gui/wxpython/menustrings.py:1888
 #, fuzzy
 msgid "Interpolate gaps in raster datasets"
-msgstr "Importer une carte raster"
+msgstr "Interpoler les trous dans un jeu de données raster"
 
 #: ../gui/wxpython/menustrings.py:976 ../gui/wxpython/menustrings.py:1889
 #, fuzzy
 msgid "Replaces gaps in a space time raster dataset with interpolated raster maps."
-msgstr "Convertir une carte vecteur en carte raster."
+msgstr "Remplir les trous dans un jeu de données raster temporel par des cartes raster interpolées."
 
 #: ../gui/wxpython/menustrings.py:977 ../gui/wxpython/menustrings.py:1890
-#, fuzzy
 msgid "Aggregation"
-msgstr "Orientation"
+msgstr "Agrégation"
 
 #: ../gui/wxpython/menustrings.py:978 ../gui/wxpython/menustrings.py:1891
-#, fuzzy
 msgid "Neighborhood analysis in raster dataset"
-msgstr "Analyse de voisinage"
+msgstr "Analyse de voisinage dans un jeu de donnée raster"
 
 #: ../gui/wxpython/menustrings.py:979 ../gui/wxpython/menustrings.py:1892
 msgid "Performs a neighborhood analysis for each map in a space time raster dataset."
 msgstr "Effectuer une analyse de voisinage pour chaque carte d'un jeu de données temporel."
 
 #: ../gui/wxpython/menustrings.py:980 ../gui/wxpython/menustrings.py:1893
-#, fuzzy
 msgid "Aggregation in raster datasets"
-msgstr "Importer une carte raster"
+msgstr "Agrégation dans un jeu  de données raster"
 
 #: ../gui/wxpython/menustrings.py:981 ../gui/wxpython/menustrings.py:1894
 #, fuzzy
 msgid "Performs different aggregation algorithms from r.series on all or a subset of raster maps in a space time raster dataset."
-msgstr "Effectue différents algorithmes d'aggrégation depuis r.series ou a sous-jeu de cartes raster dans un jeu de données raster temporels."
+msgstr "Applique différents algorithmes d'aggrégation de r.series sur tout ou partie des cartes raster d'un jeu de données raster temporel."
 
 #: ../gui/wxpython/menustrings.py:982 ../gui/wxpython/menustrings.py:1895
 #, fuzzy
 msgid "Temporal aggregation"
-msgstr "Mode catégorie"
+msgstr "Aggrégation temporelle"
 
 #: ../gui/wxpython/menustrings.py:983 ../gui/wxpython/menustrings.py:1896
 #, fuzzy
 msgid "Aggregates temporally the maps of a space time raster dataset by a user defined granularity."
-msgstr "Importer une carte raster"
+msgstr "Aggrège temporelement les cartes d'un jeux de données raster temporel selon une granularité définie par l'utilisateur."
 
 #: ../gui/wxpython/menustrings.py:984 ../gui/wxpython/menustrings.py:1897
 #, fuzzy
@@ -10282,17 +10259,16 @@ msgstr "Aggrégation temporelle par jeu de données"
 #: ../gui/wxpython/menustrings.py:985 ../gui/wxpython/menustrings.py:1898
 #, fuzzy
 msgid "Aggregates data of an existing space time raster dataset using the time intervals of a second space time dataset."
-msgstr "Aggrégation de données d'un jeu de données raster temporel en utilisant le temps d'intervale d'un second jeu de données temporel."
+msgstr "Aggrège les données d'un jeu de données raster temporel en utilisant le temps d'intervale d'un second jeu de données temporel."
 
 #: ../gui/wxpython/menustrings.py:986 ../gui/wxpython/menustrings.py:1899
-#, fuzzy
 msgid "Sampling"
-msgstr "Unités de carte"
+msgstr "Échantillonnage"
 
 #: ../gui/wxpython/menustrings.py:987 ../gui/wxpython/menustrings.py:1900
 #, fuzzy
 msgid "Temporal sampling"
-msgstr "Mode catégorie"
+msgstr "Échantillonnage temporel"
 
 #: ../gui/wxpython/menustrings.py:988 ../gui/wxpython/menustrings.py:1901
 #, fuzzy
@@ -10302,12 +10278,12 @@ msgstr "Échantillone un jeu de données temporel d'entrée avec un échantillon
 #: ../gui/wxpython/menustrings.py:989 ../gui/wxpython/menustrings.py:1902
 #, fuzzy
 msgid "Query raster dataset by vector points dataset"
-msgstr "Échantillonne une carte raster au droit des points d'une carte vecteur."
+msgstr "Échantillonne une carte raster par des points vectoriels"
 
 #: ../gui/wxpython/menustrings.py:990 ../gui/wxpython/menustrings.py:1903
 #, fuzzy
 msgid "Stores raster map values at spatial and temporal positions of vector points as vector attributes."
-msgstr "Ajouter dans la table les valeurs de raster à la position des points du vecteur."
+msgstr "Stocker les valeurs raster aux positions spatiales et temporelles de points vectoriels, en tant que données attributaire."
 
 #: ../gui/wxpython/menustrings.py:991 ../gui/wxpython/menustrings.py:1904
 msgid "Observe specific locations in raster dataset"
@@ -10320,78 +10296,75 @@ msgstr "Observer un jeu de données spécifique dans un jeu de données raster t
 #: ../gui/wxpython/menustrings.py:994 ../gui/wxpython/menustrings.py:1907
 #, fuzzy
 msgid "Space time datasets metadata"
-msgstr "Importer une carte raster"
+msgstr "Méta-données de jeux de données temporels"
 
 #: ../gui/wxpython/menustrings.py:995 ../gui/wxpython/menustrings.py:1908
 #, fuzzy
 msgid "Lists information about space time datasets and maps."
-msgstr "Afficher les informations élémentaire d'une carte raster."
+msgstr "Afficher les informations sur les jeux de données et cartes temporelles."
 
 #: ../gui/wxpython/menustrings.py:996 ../gui/wxpython/menustrings.py:1909
-#, fuzzy
 msgid "Univariate raster dataset statistics"
 msgstr "Statistiques raster univariées"
 
 #: ../gui/wxpython/menustrings.py:997 ../gui/wxpython/menustrings.py:1910
 #, fuzzy
 msgid "Calculates univariate statistics from the non-null cells for each registered raster map of a space time raster dataset."
-msgstr "Calculer les statistiques univariées pour les cellules non nulles de la carte raster."
+msgstr "Calculer les statistiques univariées pour les cellules non nulles de chaque carte raster enregistrée dans un jeux de données temporel."
 
 #: ../gui/wxpython/menustrings.py:998 ../gui/wxpython/menustrings.py:1911
-#, fuzzy
 msgid "Univariate vector dataset statistics"
-msgstr "Statistiques raster univariées"
+msgstr "Statistiques univariées vectorielles"
 
 #: ../gui/wxpython/menustrings.py:999 ../gui/wxpython/menustrings.py:1912
 #, fuzzy
 msgid "Calculates univariate statistics of attributes for each registered vector map of a space time vector dataset"
-msgstr "Calcule les statistiques univariées sur la colonne sélectionnée."
+msgstr "Calcule les statistiques univariées des attributs de chaque carte vectorielle enregistrée dans un jeux de données vectorielles temporel"
 
 #: ../gui/wxpython/menustrings.py:1000 ../gui/wxpython/menustrings.py:1913
-#, fuzzy
 msgid "Univariate raster3D dataset statistics"
-msgstr "Statistiques raster univariées"
+msgstr "Statistiques univariées raster3D"
 
 #: ../gui/wxpython/menustrings.py:1001 ../gui/wxpython/menustrings.py:1914
 #, fuzzy
 msgid "Calculates univariate statistics from the non-null cells for each registered 3D raster map of a space time 3D raster dataset."
-msgstr "Calculer les statistiques univariées pour les cellules non nulles de la carte raster."
+msgstr "Calculer les statistiques univariées pour les cellules non nulles de chaque carte raster3D enregistrée dans un jeux de données raster3D temporel."
 
 #: ../gui/wxpython/menustrings.py:1002 ../gui/wxpython/menustrings.py:1915
 #, fuzzy
 msgid "Report temporal topology"
-msgstr "Envoyer ou charger la topologie"
+msgstr "Compte-rendu de topologie temporelle"
 
 #: ../gui/wxpython/menustrings.py:1003 ../gui/wxpython/menustrings.py:1916
 #, fuzzy
 msgid "Lists temporal topology of a space time dataset."
-msgstr "Lister toutes les tables d'une base de données"
+msgstr "Lister la topologie temporelle d'un jeu de données temporel"
 
 #: ../gui/wxpython/menustrings.py:1004 ../gui/wxpython/menustrings.py:1917
 #: ../gui/wxpython/menustrings.py:1924
 #, fuzzy
 msgid "GUI tools"
-msgstr "Interface graphique"
+msgstr "Outils d'interface graphique"
 
 #: ../gui/wxpython/menustrings.py:1007 ../gui/wxpython/menustrings.py:1920
 #, fuzzy
 msgid "Timeline tool"
-msgstr "Barre d'outils pour les cartes"
+msgstr "Barre d'outils temporelle"
 
 #: ../gui/wxpython/menustrings.py:1008 ../gui/wxpython/menustrings.py:1921
 #, fuzzy
 msgid "Plot temporal extents."
-msgstr "Afficher les limites de calculs"
+msgstr "Afficher l'emprise temporelle."
 
 #: ../gui/wxpython/menustrings.py:1009 ../gui/wxpython/menustrings.py:1922
 #, fuzzy
 msgid "Temporal plot tool"
-msgstr "Histogramme GRASS"
+msgstr "Outil d'affichage temporel"
 
 #: ../gui/wxpython/menustrings.py:1010 ../gui/wxpython/menustrings.py:1923
 #, fuzzy
 msgid "Plot temporal values."
-msgstr "Afficher les limites de calculs"
+msgstr "Afficher les valeurs temporelles."
 
 #: ../gui/wxpython/menustrings.py:1011 ../gui/wxpython/menustrings.py:1984
 #: ../gui/wxpython/menustrings.py:2027
@@ -10420,19 +10393,16 @@ msgid "Prints system information"
 msgstr "Afficher les informations système"
 
 #: ../gui/wxpython/menustrings.py:1022
-#, fuzzy
 msgid "Import, export and link data"
-msgstr "Importer des données vectorielles"
+msgstr "Importer, exporter et lier les données"
 
 #: ../gui/wxpython/menustrings.py:1927
-#, fuzzy
 msgid "Attribute table manager"
 msgstr "Gestionnaire de table attributaire"
 
 #: ../gui/wxpython/menustrings.py:1928
-#, fuzzy
 msgid "Launches graphical attribute table manager."
-msgstr "Gestionnaire de table attributaire"
+msgstr "Lances le gestionnaire graphique de table attributaire"
 
 #: ../gui/wxpython/menustrings.py:1943
 msgid "Create new model"
@@ -10519,9 +10489,8 @@ msgid "Adds condition (if/else) to model"
 msgstr "Ajouter une condition (if/else) au modèle"
 
 #: ../gui/wxpython/menustrings.py:1973
-#, fuzzy
 msgid "Adds comment to model"
-msgstr "Ajouter une condition (if/else) au modèle"
+msgstr "Ajouter un commentaire au modèle"
 
 #: ../gui/wxpython/menustrings.py:1974
 msgid "Remove item"
@@ -10573,28 +10542,24 @@ msgid "Display information about Graphical Modeler"
 msgstr "Afficher les informations concernant le Modeleur Graphique"
 
 #: ../gui/wxpython/menustrings.py:1994
-#, fuzzy
 msgid "Load instruction file"
-msgstr "Impossible de lire les instructions %s"
+msgstr "Charger un fichier d'instructions"
 
 #: ../gui/wxpython/menustrings.py:1996
-#, fuzzy
 msgid "Export instruction file"
-msgstr "Exporter en image"
+msgstr "Exporter un fichier d'instructions"
 
 #: ../gui/wxpython/menustrings.py:1998
-#, fuzzy
 msgid "Export to PostScript"
-msgstr "Exporter le modèle dans un script Python"
+msgstr "Exporter en PostScript"
 
 #: ../gui/wxpython/menustrings.py:2000
 msgid "Export to PDF"
 msgstr "Exporter en PDF"
 
 #: ../gui/wxpython/menustrings.py:2002 ../gui/wxpython/menustrings.py:2003
-#, fuzzy
 msgid "Launch ps.map dialog"
-msgstr "Lancer un script"
+msgstr "Lancer la boite de dialogue ps.map"
 
 #: ../gui/wxpython/menustrings.py:2005
 msgid "Close Cartographic Composer"
@@ -10754,7 +10719,7 @@ msgstr "Exporter l'animation"
 #: ../gui/wxpython/animation/toolbars.py:49
 #, fuzzy
 msgid "Add space-time dataset or series of map layers"
-msgstr "Ajouter une carte en relief ombré"
+msgstr "Ajouter un jeu de données temporel ou une série de cartes"
 
 #: ../gui/wxpython/animation/toolbars.py:50
 msgid "Add space-time dataset or series of map layers for animation"
@@ -10770,9 +10735,9 @@ msgstr ""
 "Fichier non valide, impossible d'analyser le document XML."
 
 #: ../gui/wxpython/animation/nviztask.py:51
-#, fuzzy, python-format
+#, python-format
 msgid "No 3d view information in workspace file <%s>."
-msgstr "Paramètres de vue 3D enregistrés dans le fichier %s."
+msgstr "Pas d'information de vue 3D dans le fichier d'espace de travail <%s>."
 
 #: ../gui/wxpython/animation/nviztask.py:259
 msgid "Please add only one layer in the list."
@@ -10781,7 +10746,7 @@ msgstr "Merci de n'ajouter qu'une seule couche dans la liste."
 #: ../gui/wxpython/animation/nviztask.py:265
 #, fuzzy
 msgid "No map series nor space-time dataset is added."
-msgstr "données."
+msgstr "Pas de séries de carte ou de jeux de données temporels ajoutés."
 
 #: ../gui/wxpython/animation/data.py:44 ../gui/wxpython/mapdisp/toolbars.py:86
 #: ../gui/wxpython/mapdisp/toolbars.py:288
@@ -10798,7 +10763,7 @@ msgstr "Vue 3D"
 #: ../gui/wxpython/animation/data.py:65
 #, fuzzy
 msgid "No animation name selected."
-msgstr "Pas d'image sélectionnée."
+msgstr "Pas de nom défini pour l'animation."
 
 #: ../gui/wxpython/animation/data.py:131
 msgid "No workspace file selected."
@@ -10825,7 +10790,7 @@ msgstr "Mode simple"
 #: ../gui/wxpython/animation/dialogs.py:100
 #, fuzzy
 msgid "Frame duration:"
-msgstr "Taux de rafraichissement (FPS) :"
+msgstr "Durée d'une frame :"
 
 #: ../gui/wxpython/animation/dialogs.py:101
 #: ../gui/wxpython/animation/dialogs.py:124
@@ -10835,7 +10800,7 @@ msgstr "ms"
 #: ../gui/wxpython/animation/dialogs.py:118
 #, fuzzy
 msgid "Temporal mode"
-msgstr "Mode catégorie"
+msgstr "Mode temporel"
 
 #: ../gui/wxpython/animation/dialogs.py:122
 msgid "Time unit:"
@@ -10973,7 +10938,7 @@ msgstr "Seulement une série ou jeu de données temporel est accepté dans le mo
 #: ../gui/wxpython/animation/dialogs.py:549
 #, fuzzy
 msgid "No map series or space-time dataset added."
-msgstr "données."
+msgstr "Pas de séries de carte ou de jeux de données temporels ajoutés."
 
 #: ../gui/wxpython/animation/dialogs.py:577
 msgid "Region information is not complete"
@@ -11206,7 +11171,7 @@ msgstr "Date et heure"
 #: ../gui/wxpython/animation/dialogs.py:1525
 #, fuzzy
 msgid "Absolute time format:"
-msgstr "Format des coordonnées"
+msgstr "Format de date absolue :"
 
 #: ../gui/wxpython/animation/dialogs.py:1535
 #, fuzzy
@@ -11766,7 +11731,7 @@ msgstr "Entrer un nom de fichier ou cliquer sur Parcourir pour enregistrer une t
 #: ../gui/wxpython/modules/colorrules.py:425
 #, fuzzy
 msgid "&Set"
-msgstr "Paramètres"
+msgstr "Définir"
 
 #: ../gui/wxpython/modules/colorrules.py:432
 msgid "Load color table:"
@@ -12208,23 +12173,20 @@ msgid "Copy coordinates to clipboard"
 msgstr "'Copier les coordonnées dans le presse-papier"
 
 #: ../gui/wxpython/mapwin/buffered.py:240
-#, fuzzy
 msgid "Hide all toolbars"
-msgstr "Barre d'outil des points"
+msgstr "Cacher toutes les barres d'outils"
 
 #: ../gui/wxpython/mapwin/buffered.py:240
-#, fuzzy
 msgid "Show all toolbars"
-msgstr "Tour copier dans le presse-papier"
+msgstr "Afficher toutes les barres d'outils"
 
 #: ../gui/wxpython/mapwin/buffered.py:244
 msgid "Hide statusbar"
 msgstr "Cacher la barre de status"
 
 #: ../gui/wxpython/mapwin/buffered.py:244
-#, fuzzy
 msgid "Show statusbar"
-msgstr "Montrer les paramètres"
+msgstr "Afficher la barre de status"
 
 #: ../gui/wxpython/mapwin/buffered.py:258
 #, python-brace-format
@@ -12477,9 +12439,8 @@ msgid "Note that the wxGUI's vector digitizer is currently disabled (hopefully t
 msgstr "Notez que le module de digitalisation de wxGUI est actuellement indisponible (en espérant que cela soit prochainement résolu). Merci de garder un œil sur les mises à jour de GRASS. En attendant, vous pouvez utiliser le module \"v.digit\", accessible depuis le menu Vecteur."
 
 #: ../gui/wxpython/mapdisp/toolbars.py:119
-#, fuzzy
 msgid "Raster digitizer"
-msgstr "Quitter l'outil d'édition"
+msgstr "Numérisation de raster"
 
 #: ../gui/wxpython/mapdisp/gprint.py:150
 msgid ""
@@ -12495,9 +12456,9 @@ msgid "Unsupported command %s."
 msgstr "Commande %s non prise en charge."
 
 #: ../gui/wxpython/mapdisp/main.py:209
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to read cmdfile '%(cmd)s'. Details: %(det)s"
-msgstr "Impossible de lire le fichier de commandes '%(cmd)s'. Détails: %(det)s"
+msgstr "Impossible de lire le fichier de commandes '%(cmd)s'. Détails : %(det)s"
 
 #: ../gui/wxpython/mapdisp/main.py:490
 #, python-format
@@ -12505,9 +12466,9 @@ msgid "Starting map display <%s>..."
 msgstr "Lancement d'un nouvel affichage <%s>..."
 
 #: ../gui/wxpython/mapdisp/main.py:496
-#, fuzzy, python-format
+#, python-format
 msgid "Unable to create file <%s>"
-msgstr "Impossible de créer le fichier '%s'\n"
+msgstr "Impossible de créer le fichier <%s>"
 
 #: ../gui/wxpython/mapdisp/main.py:512
 #, python-format
@@ -12714,9 +12675,8 @@ msgid "Save computational region to named region"
 msgstr "Enregistrer la région calculée vers un nom de région"
 
 #: ../gui/wxpython/mapdisp/frame.py:1525
-#, fuzzy
 msgid "Raster Digitizer Toolbar"
-msgstr "Barre d'outils de numérisation de vecteur"
+msgstr "Barre d'outils de numérisation de raster"
 
 #: ../gui/wxpython/nviz/tools.py:88 ../gui/wxpython/nviz/preferences.py:56
 #: ../gui/wxpython/nviz/preferences.py:61
@@ -13595,9 +13555,8 @@ msgid "3d raster map <%s> not found"
 msgstr "carte raster 3d <%s> non trouvée"
 
 #: ../gui/wxpython/rdigit/controller.py:116
-#, fuzzy
 msgid "Please select first the raster map"
-msgstr "Merci de créer d'abord le cadre de carte."
+msgstr "Merci de commencer par sélectionner la carte raster"
 
 #: ../gui/wxpython/rdigit/controller.py:148
 msgid "Right click to finish area"
@@ -13608,24 +13567,20 @@ msgid "Right click to finish line"
 msgstr "Clic droit pour terminer la ligne"
 
 #: ../gui/wxpython/rdigit/controller.py:280
-#, fuzzy
 msgid "Do you want to save changes?"
-msgstr "Voulez-vous enregistrer les modifications du modèle ?"
+msgstr "Voulez-vous enregistrer les modifications ?"
 
 #: ../gui/wxpython/rdigit/controller.py:281
-#, fuzzy
 msgid "Save raster map changes"
-msgstr "Sauvegarder les modifications"
+msgstr "Enregistrer les modifications de la carte raster"
 
 #: ../gui/wxpython/rdigit/controller.py:347
-#, fuzzy
 msgid "Failed to create backup copy of edited raster map."
-msgstr "Impossible de créer le profil de carte raster."
+msgstr "Échec de création de la copie de sauvegarde de la carte raster en modification."
 
 #: ../gui/wxpython/rdigit/controller.py:365
-#, fuzzy
 msgid "Failed to create new raster map."
-msgstr "Impossible de créer la carte vecteur <%s>."
+msgstr "Échec de création de la nouvelle carte raster."
 
 #: ../gui/wxpython/rdigit/controller.py:439
 #: ../gui/wxpython/rdigit/controller.py:463
@@ -13634,29 +13589,24 @@ msgid "Rasterizing..."
 msgstr "Générer (l'affichage)"
 
 #: ../gui/wxpython/rdigit/controller.py:486
-#, fuzzy
 msgid "Failed to set default color table for edited raster map"
-msgstr "Créer une nouvelle table de couleur pour une carte raster"
+msgstr "Échec de définition de la table de couleur par défaut pour la carte raster modifiée"
 
 #: ../gui/wxpython/rdigit/toolbars.py:27
-#, fuzzy
 msgid "Digitize area"
-msgstr "Digitaliser une nouvelle ligne"
+msgstr "Numériser une surface"
 
 #: ../gui/wxpython/rdigit/toolbars.py:29
-#, fuzzy
 msgid "Digitize line"
-msgstr "Numériser une nouvelle ligne"
+msgstr "Numériser une ligne"
 
 #: ../gui/wxpython/rdigit/toolbars.py:31
-#, fuzzy
 msgid "Digitize point"
-msgstr "Numériser un nouveau point"
+msgstr "Numériser un point"
 
 #: ../gui/wxpython/rdigit/toolbars.py:32
-#, fuzzy
 msgid "Save raster map"
-msgstr "Empaqueter des cartes raster"
+msgstr "Enregistrer la carte raster"
 
 #: ../gui/wxpython/rdigit/toolbars.py:33
 #: ../gui/wxpython/vdigit/toolbars.py:174
@@ -13664,42 +13614,36 @@ msgid "Undo"
 msgstr "Annuler"
 
 #: ../gui/wxpython/rdigit/toolbars.py:34
-#, fuzzy
 msgid "Quit raster digitizer"
-msgstr "Quitter l'outil d'édition"
+msgstr "Quitter l'outil d'édition raster"
 
 #: ../gui/wxpython/rdigit/toolbars.py:49
-#, fuzzy
 msgid "Select raster map"
-msgstr "Sélectionner une carte raster:"
+msgstr "Sélectionner une carte raster"
 
 #: ../gui/wxpython/rdigit/toolbars.py:60
 msgid "Set drawing color (not raster cell color)"
 msgstr "Définir la couleur de dessin (pas la couleur des cellules du raster)"
 
 #: ../gui/wxpython/rdigit/toolbars.py:73
-#, fuzzy
 msgid "Cell value:"
-msgstr "Valeurs de cellule"
+msgstr "Valeurs de cellule :"
 
 #: ../gui/wxpython/rdigit/toolbars.py:83
 msgid "Width of currently digitized line or diameter of a digitized point in map units."
 msgstr ""
 
 #: ../gui/wxpython/rdigit/toolbars.py:120
-#, fuzzy
 msgid "New raster map"
-msgstr "pas de carte raster"
+msgstr "Nouvelle carte raster"
 
 #: ../gui/wxpython/rdigit/dialogs.py:33
-#, fuzzy
 msgid "Create new raster map"
-msgstr "Créer un nouvelle carte vecteur"
+msgstr "Créer un nouvelle carte raster"
 
 #: ../gui/wxpython/rdigit/dialogs.py:52
-#, fuzzy
 msgid "Name for new raster map:"
-msgstr "Nom de la carte raster:"
+msgstr "Nom de la nouvelle carte raster :"
 
 #: ../gui/wxpython/rdigit/dialogs.py:55
 #, fuzzy
@@ -13707,19 +13651,17 @@ msgid "Optionally select background raster map:"
 msgstr "Sélectionner une carte vecteur"
 
 #: ../gui/wxpython/rdigit/dialogs.py:58
-#, fuzzy
 msgid "New raster map type:"
-msgstr "Nom de la carte raster:"
+msgstr "Type de la nouvelle carte raster :"
 
 #: ../gui/wxpython/rdigit/dialogs.py:87
-#, fuzzy
 msgid "Please specify name for a new raster map"
-msgstr "Calcule l'indice de forme sur une carte raster"
+msgstr "Merci d'indiquer un nom pour la nouvelle carte raster"
 
 #: ../gui/wxpython/rdigit/dialogs.py:92
-#, fuzzy, python-format
+#, python-format
 msgid "Raster map <%s> already exists in the current mapset. Do you want to overwrite it?"
-msgstr "La carte vecteur <%s> existe déjà dans le jeu de cartes courant.  Voulez-vous l'écraser ?"
+msgstr "La carte raster <%s> existe déjà dans le jeu de cartes courant.  Voulez-vous l'écraser ?"
 
 #: ../gui/wxpython/wxplot/base.py:39
 msgid "Draw/re-draw plot"
@@ -14148,7 +14090,7 @@ msgstr "Les coordonnées peuvent être obtenues par exemple par un clic-droit da
 #: ../gui/wxpython/tplot/frame.py:140
 #, fuzzy
 msgid "Select space time raster dataset(s):"
-msgstr "Choisir le jeu de cartes source:"
+msgstr "Choisir le jeu de données temporel :"
 
 #: ../gui/wxpython/tplot/frame.py:174 ../gui/wxpython/timeline/frame.py:162
 #, fuzzy, python-format
@@ -14171,7 +14113,7 @@ msgstr "Résolution temporelle : %s"
 #: ../gui/wxpython/tplot/frame.py:258 ../gui/wxpython/timeline/frame.py:325
 #, fuzzy, python-format
 msgid "Time [%s]"
-msgstr "Date et heure"
+msgstr "Date [%s]"
 
 #: ../gui/wxpython/tplot/frame.py:281 ../gui/wxpython/timeline/frame.py:350
 #: ../gui/wxpython/timeline/frame.py:448
@@ -14185,7 +14127,7 @@ msgstr "Format de coordonnées incorrect , devrait être : x,y"
 #: ../gui/wxpython/tplot/frame.py:295 ../gui/wxpython/tplot/frame.py:390
 #, fuzzy
 msgid "Invalid input coordinates"
-msgstr "Entrée non valide"
+msgstr "Coordonnées en entrée non valides"
 
 #: ../gui/wxpython/tplot/frame.py:346 ../gui/wxpython/timeline/frame.py:417
 #, python-format
@@ -14199,7 +14141,7 @@ msgstr "Nom de jeu de données ambigü"
 #: ../gui/wxpython/tplot/frame.py:385
 #, fuzzy
 msgid "Invalid input temporal dataset"
-msgstr "Entrée non valide"
+msgstr "Jeux de données temporel en entrée non valide"
 
 #: ../gui/wxpython/tplot/frame.py:410
 msgid "Datasets have different number ofvalues"
@@ -14208,17 +14150,17 @@ msgstr "Les jeux de données ont des nombres de valeurs différents"
 #: ../gui/wxpython/tplot/frame.py:434 ../gui/wxpython/timeline/frame.py:500
 #, fuzzy, python-format
 msgid "Space time raster dataset: %s"
-msgstr "Importer une carte raster"
+msgstr "Jeux de données raster temporel : %s"
 
 #: ../gui/wxpython/tplot/frame.py:436 ../gui/wxpython/timeline/frame.py:502
 #, fuzzy, python-format
 msgid "Space time vector dataset: %s"
-msgstr "Importer des données vectorielles"
+msgstr "Jeux de données vecteur temporel : %s"
 
 #: ../gui/wxpython/tplot/frame.py:438 ../gui/wxpython/timeline/frame.py:504
 #, fuzzy, python-format
 msgid "Space time 3D raster dataset: %s"
-msgstr "Importer une carte raster"
+msgstr "Jeux de données raster 3D temporel : %s"
 
 #: ../gui/wxpython/tplot/frame.py:440
 #, python-brace-format
@@ -14362,7 +14304,7 @@ msgstr "Définir la région de calcul à partir de la(des) carte(s) sélectionn�
 #: ../gui/wxpython/lmgr/layertree.py:619
 #, fuzzy
 msgid "Report raster statistics"
-msgstr "Compte-rendu et statistiques"
+msgstr "Compt-rendu de statistiques raster"
 
 #: ../gui/wxpython/lmgr/layertree.py:625
 msgid "Profile"
@@ -14766,9 +14708,8 @@ msgstr ""
 "\"%s\""
 
 #: ../gui/wxpython/lmgr/frame.py:1001
-#, fuzzy
 msgid "Changes current working directory for this GUI."
-msgstr "Modifier le dossier de travail pour cette Interface Graphique"
+msgstr "Modifier le dossier de travail pour cette Interface Graphique."
 
 #: ../gui/wxpython/lmgr/frame.py:1003
 msgid "Usage: cd [directory]"
@@ -14865,7 +14806,7 @@ msgid "GRASS GIS {version} Map Display: {name} - Location: {loc}"
 msgstr "GRASS GIS {version} - Fenêtre de carte : {name} - Secteur : {loc}"
 
 #: ../gui/wxpython/lmgr/frame.py:1586
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Unable to launch \"Supervised Classification Tool\".\n"
 "\n"
@@ -14873,21 +14814,17 @@ msgid ""
 msgstr ""
 "Impossible de lancer l' « Outil de classification supervisée ».\n"
 "\n"
-"Raison: %s"
+"Raison : %s"
 
 #: ../gui/wxpython/lmgr/frame.py:1626
 #, fuzzy
 msgid "Unable to start Timeline Tool."
-msgstr ""
-"Impossible d'insérer le nouvel enregistrement.\n"
-"%s"
+msgstr "Impossible de démarrer l'outil Temporel"
 
 #: ../gui/wxpython/lmgr/frame.py:1636
 #, fuzzy
 msgid "Unable to start Temporal Plot Tool."
-msgstr ""
-"Impossible d'insérer le nouvel enregistrement.\n"
-"%s"
+msgstr "Impossible de démarrer l'outil d'affichage temporel"
 
 #: ../gui/wxpython/lmgr/frame.py:1864
 msgid "Add selected map layers into layer tree"
@@ -14950,7 +14887,7 @@ msgstr "Renommer la carte"
 #: ../gui/wxpython/lmgr/datacatalog.py:334
 #, fuzzy
 msgid "Editing"
-msgstr "Validation du modèle ..."
+msgstr "Modification"
 
 #: ../gui/wxpython/lmgr/datacatalog.py:357
 #, fuzzy
@@ -15040,7 +14977,7 @@ msgstr ""
 #: ../gui/wxpython/timeline/frame.py:139
 #, fuzzy
 msgid "Select space time dataset(s):"
-msgstr "Choisir le jeu de cartes source :"
+msgstr "Choisir le jeux de données temporel :"
 
 #: ../gui/wxpython/timeline/frame.py:264
 #, python-format
