@@ -51,6 +51,29 @@ d.vect.thematic -l map=communes2 column=pop/area algorithm=std \
   nbclasses=5 colors=0:0:255,50:100:255,255:100:50,255:0:0,156:0:0
 </pre></div>
 
+To actually draw the legend for the polygons in the graphical
+display, the procedure is:
+
+<div class="code"><pre>
+# first save legend instructions to a file	
+d.vect.thematic -n map=communes2 column=pop/area algorithm=std \
+  nbclasses=5 colors=0:0:255,50:100:255,255:100:50,255:0:0,156:0:0 \
+  legendfile=legend_pop_dens  
+
+# open a monitor
+d.mon wx0
+
+# draw the map
+d.vect.thematic map=communes2 column=pop/area algorithm=std \
+  nbclasses=5 colors=0:0:255,50:100:255,255:100:50,255:0:0,156:0:0
+
+# draw the legend
+d.graph input=legend_pop_dens
+</pre></div>
+
+If you are not pleased with the legend, you can edit the legend file
+as you wish and run the process again. 
+
 <h2>SEE ALSO</h2>
 
 <em>
