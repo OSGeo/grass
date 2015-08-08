@@ -45,7 +45,7 @@ from core.render       import Map
 from core.utils import _
 from gui_core.gselect  import Select, LocationSelect, MapsetSelect
 from gui_core.dialogs  import GroupDialog
-from core.gcmd         import RunCommand, GMessage, GError, GWarning
+from core.gcmd         import RunCommand, GMessage, GError, GWarning, EncodeString
 from core.settings     import UserSettings
 from gcp.mapdisplay    import MapFrame
 from core.giface import Notification
@@ -260,7 +260,7 @@ class GCPWizard(object):
         self.gisrc_dict['LOCATION_NAME'] = location
         self.gisrc_dict['MAPSET'] = mapset
         
-        self.source_gisrc = utils.GetTempfile()
+        self.source_gisrc = EncodeString(utils.GetTempfile())
 
         try:
             f = open(self.source_gisrc, mode='w')        
