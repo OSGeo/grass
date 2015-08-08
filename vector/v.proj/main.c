@@ -141,7 +141,7 @@ int main(int argc, char *argv[])
 	omap_name = map_name;
     if (omap_name && !flag.list->answer && !overwrite &&
 	G_find_vector2(omap_name, G_mapset()))
-	G_fatal_error(_("option <%s>: <%s> exists."), omapopt->key,
+	G_fatal_error(_("option <%s>: <%s> exists. To overwrite, use the --overwrite flag"), omapopt->key,
 		      omap_name);
     if (isetopt->answer)
 	iset_name = isetopt->answer;
