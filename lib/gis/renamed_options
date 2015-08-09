@@ -87,6 +87,8 @@ db.select|vs:vertical_separator
 #########################################
 ### General map management module changes
 #########################################
+# g.extension
+g.extension|svnurl:url
 # g.mapset
 g.mapset|gisdbase:dbase
 # g.mapsets

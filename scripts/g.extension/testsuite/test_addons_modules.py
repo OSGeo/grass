@@ -51,8 +51,8 @@ class TestModulesMetadata(TestCase):
     url = 'file://' + os.path.abspath('data')
 
     def test_listing(self):
-        """Test if results is in expected limits"""
-        module = SimpleModule('g.extension', flags='l', svnurl=self.url)
+        """List individual extensions/modules/addons"""
+        module = SimpleModule('g.extension', flags='l', url=self.url)
         self.assertModule(module)
         stdout = module.outputs.stdout
         self.assertMultiLineEqual(stdout, MODULES_OUTPUT)
@@ -87,35 +87,35 @@ class TestModulesFromDifferentSources(TestCase):
         silent_rmtree(self.install_prefix)
 
     def test_directory_install(self):
-        """Test if results is in expected limits"""
+        """Test installing extension from directory"""
         self.assertModule('g.extension', extension='r.plus.example',
-                          svnurl=os.path.join(self.path, 'r.plus.example'),
+                          url=os.path.join(self.path, 'r.plus.example'),
                           prefix=self.install_prefix)
         # TODO: this is wrong for MS Win
         for file in self.files:
             self.assertFileExists(file)
 
     def test_targz_install(self):
-        """Test if results is in expected limits"""
+        """Test installing extension from local .tar.gz"""
         self.assertModule('g.extension', extension='r.plus.example',
-                          svnurl=os.path.join(self.path,
+                          url=os.path.join(self.path,
                                               'r.plus.example.tar.gz'),
                           prefix=self.install_prefix)
         for file in self.files:
             self.assertFileExists(file)
 
     def test_remote_targz_without_dir_install(self):
-        """Test if results is in expected limits"""
+        """Test installing extension from (remote) .tar.gz without main dir"""
         self.assertModule('g.extension', extension='r.plus.example',
-                          svnurl=self.url + '/' + 'r.plus.example_sep.tar.gz',
+                          url=self.url + '/' + 'r.plus.example_sep.tar.gz',
                           prefix=self.install_prefix, verbose=True)
         for file in self.files:
             self.assertFileExists(file)
 
     def test_remote_zip_install(self):
-        """Test if results is in expected limits"""
+        """Test installing extension from .zip specified by URL (local)"""
         self.assertModule('g.extension', extension='r.plus.example',
-                          svnurl=self.url + '/' + 'r.plus.example.zip',
+                          url=self.url + '/' + 'r.plus.example.zip',
                           prefix=self.install_prefix)
         for file in self.files:
             self.assertFileExists(os.path.join(file))
