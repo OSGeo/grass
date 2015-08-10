@@ -15,13 +15,6 @@ Commands used with the North Carolina dataset to create the above figure (subset
 <div class="code"><pre>
 g.region n=220750 s=219950 w=638300 e=639000 -p
 v.delaunay input=elev_lid792_randpts output=elev_lid792_randpts_delaunay
-
-
-  696  v.delaunay input=elev_lid792_bepts output=elev_lid792_bepts_tin 
-  697  v.colors elev_lid792_bepts_tin color=srtm_plus
-  698  d.erase 
-  699  d.vect elev_lid792_bepts_tin
-
 </pre></div>
 
 
