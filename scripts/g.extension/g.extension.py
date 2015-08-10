@@ -3,11 +3,11 @@
 ############################################################################
 #
 # MODULE:       g.extension
-# AUTHOR(S):    Markus Neteler
+# AUTHOR(S):    Markus Neteler (original shell script)
 #               Martin Landa <landa.martin gmail com> (Pythonized & upgraded for GRASS 7)
 #               Vaclav Petras <wenzeslaus gmail com> (support for general sources)
 # PURPOSE:      Tool to download and install extensions into local installation
-#               
+#
 # COPYRIGHT:    (C) 2009-2014 by Markus Neteler, and the GRASS Development Team
 #
 #               This program is free software under the GNU General
@@ -48,7 +48,7 @@
 #% key: url
 #% type: string
 #% key_desc: url
-#% label: URL or directory to get the extension from
+#% label: URL or directory to get the extension from (supported only on Linux and Mac)
 #% description: The official repository is used by default. User can specify a ZIP file, directory or a repository on common hosting services. If not identified, Subversion repository is assumed. See manual for all options.
 #%end
 #%option
@@ -70,19 +70,19 @@
 
 #%flag
 #% key: l
-#% description: List available extensions in the GRASS Addons SVN repository
+#% description: List available extensions in the official GRASS GIS Addons repository
 #% guisection: Print
 #% suppress_required: yes
 #%end
 #%flag
 #% key: c
-#% description: List available extensions in the GRASS Addons SVN repository including module description
+#% description: List available extensions in the official GRASS GIS Addons repository including module description
 #% guisection: Print
 #% suppress_required: yes
 #%end
 #%flag
 #% key: g
-#% description: List available extensions in the GRASS Addons SVN repository (shell script style)
+#% description: List available extensions in the official GRASS GIS Addons repository (shell script style)
 #% guisection: Print
 #% suppress_required: yes
 #%end
@@ -123,6 +123,8 @@
 #% exclusive: extension, -l, -c, -g, -a
 #%end
 
+# TODO: solve addon-extension(-module) confusion
+
 
 from __future__ import print_function
 import os
@@ -145,7 +147,7 @@ try:
     import xml.etree.ElementTree as etree
 except ImportError:
     import elementtree.ElementTree as etree  # Python <= 2.4
-# Get the XML parsing exceptions to catch. The behavior chnaged with Python 2.7
+# Get the XML parsing exceptions to catch. The behavior changed with Python 2.7
 # and ElementTree 1.3.
 from xml.parsers import expat  # TODO: works for any Python?
 if hasattr(etree, 'ParseError'):
@@ -644,9 +646,13 @@ def install_extension(source, url, xmlurl):
         grass.warning(_('Installation failed, sorry.'
                         ' Please check above error messages.'))
     else:
-        grass.message(_("Updating addons metadata file..."))
-        blist = install_extension_xml(xmlurl, mlist)
-        for module in blist:
+        # for now it is reasonable to assume that only official source
+        # will provide the metadata file
+        if source == 'official':
+            grass.message(_("Updating addons metadata file..."))
+            blist = install_extension_xml(xmlurl, mlist)
+        # the blist was used here, but it seems that it is the same as mlist
+        for module in mlist:
             update_manual_page(module)
 
         grass.message(_("Installation of <%s> successfully finished") %
@@ -996,6 +1002,9 @@ def fix_newlines(directory):
 
 def extract_zip(name, directory, tmpdir):
     """Extract a ZIP file into a directory"""
+    gscript.debug("extract_zip(name={name}, directory={directory},"
+                  " tmpdir={tmpdir})".format(name=name, directory=directory,
+                                             tmpdir=tmpdir), 3)
     try:
         zip_file = zipfile.ZipFile(name, mode='r')
         file_list = zip_file.namelist()
@@ -1016,6 +1025,9 @@ def extract_zip(name, directory, tmpdir):
 # TODO: solve the other related formats
 def extract_tar(name, directory, tmpdir):
     """Extract a TAR or a similar file into a directory"""
+    gscript.debug("extract_tar(name={name}, directory={directory},"
+                  " tmpdir={tmpdir})".format(name=name, directory=directory,
+                                             tmpdir=tmpdir), 3)
     try:
         import tarfile  # we don't need it anywhere else
         tar = tarfile.open(name)
@@ -1034,6 +1046,9 @@ extract_tar.supported_formats = ['tar.gz', 'gz', 'bz2', 'tar', 'gzip', 'targz']
 def download_source_code(source, url, name, outdev,
                          directory=None, tmpdir=None):
     """Get source code to a local directory for compilation"""
+    gscript.verbose("Downloading source code for <{name}> from <{url}>"
+                    " which is identified as '{source}' type of source..."
+                    .format(source=source, url=url, name=name))
     if source == 'svn':
         download_source_code_svn(url, name, outdev, directory)
     elif source in ['remote_zip', 'official']:
@@ -1070,8 +1085,12 @@ def download_source_code(source, url, name, outdev,
 def install_extension_std_platforms(name, source, url):
     """Install extension on standard plaforms"""
     gisbase = os.getenv('GISBASE')
-    grass.message(_("Fetching <%s> from"
-                    " GRASS-Addons SVN repository (be patient)...") % name)
+    if source == 'official':
+        gscript.message(_("Fetching <%s> from "
+                          "GRASS GIS Addons repository (be patient)...") % name)
+    else:
+        gscript.message(_("Fetching <{name}> from "
+                          "<{url}> (be patient)...").format(name=name, url=url))
 
     # to hide non-error messages from subprocesses
     if grass.verbosity() <= 2:

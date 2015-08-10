@@ -3,61 +3,192 @@
 <!-- TODO: the use of Addon and extension is not coherent -->
 
 <em>g.extension</em> downloads and installs, removes or updates
-extensions (Addons) from the
-<a href="http://svn.osgeo.org/grass/grass-addons/grass7/">GRASS GIS Addons repository</a>
+extensions (addons) from the official
+<a href="http://grass.osgeo.org/grass70/manuals/addons/">GRASS GIS Addons repository</a>
+or user-specified source
 into the local GRASS GIS installation.
+
+<h3>Managing installed extensions</h3>
 
 <p>Re-running <em>g.extension</em> on an installed GRASS GIS Addon
 extension re-installs the requested extension which may include
 updates.
 <p>
-In order to bulk-update all locally installed GRASS GIS extensions, they can
-be re-installed altogether by the
-<em><a href="g.extension.all.html">g.extension.all</a></em> module.
+To bulk-update all locally installed GRASS GIS extensions, 
+<em><a href="g.extension.all.html">g.extension.all</a></em> module
+is available.
 
-<h2>NOTES</h2>
-    
-GRASS GIS extensions are installed by <tt>g.extension</tt> into a dedicated 
-directory (GRASS_ADDON_BASE). The default on GNU/Linux is
-<tt>$HOME/.grass7/addons</tt>, on MS-Windows it is
-<tt>$APPDATA\GRASS7\addons</tt>.
+
+<h3>Where the extensions are installed</h3>
+
+GRASS GIS extensions are installed by <em>g.extension</em> into a dedicated
+directory.
+The default is a directory for application data and settings inside
+the user's home directory. 
+On GNU/Linux it is <tt>$HOME/.grass7/addons</tt>,
+on MS Windows it is <tt>$APPDATA\GRASS7\addons</tt>.
+The directory is stored in <tt>GRASS_ADDON_BASE</tt> environmental variable.
+
 <p>
 The flag <b>-s</b> changes this install target directory to the GRASS GIS
-installation directory (GISBASE, e.g. <tt>/usr/</tt>) rather than the
-default GRASS_ADDON_BASE directory (see also <a href="variables.html">variables</a>).
+installation directory
+(determined by <tt>GISBASE</tt> environmental variable, e.g. <tt>/usr/</tt>)
+rather than the
+default GRASS_ADDON_BASE directory
+(see also documentation for <a href="variables.html">variables</a>).
 <em>g.extension</em> checks if the user has permission to write to
 GISBASE or GRASS_ADDON_BASE.
+
 <p>
-On MS-Windows systems, <em>g.extension</em> downloads an executable from
-the GRASS GIS project server. On all other operating systems, it downloads the
-source code of the requested Addon and compiles it locally.
+The place where the extensions are installed can be customized by
+the option <b>prefix</b>. Ensuring that these extensions will be accessible
+in GRASS GIS is then responsibility of the user.
+
+
+<h3>Source code sources and repositories</h3>
+
+By default, <em>g.extension</em> installs extensions from the official
+GRASS GIS Addons repository. However, different source can be specified
+using the <b>url</b> option.
+
+<p>
+New extension can be also installed from a source code placed
+in a local directory on disk. This is advantageous when developing
+a new module.
+To keep the directory clean, the directory content is copied
+to a temporary directory and the compilation happens there.
+
+<p>
+New extension can be also installed from a ZIP file
+or an archive file from the TAR family (e.g., <tt>.tar.gz</tt> or <tt>.bz2</tt>).
+The file can be a file on disk (specified a path), which was probably downloaded
+at some point, or a file on web (specified by an URL).
+
+<p>
+For well known general hosting services, namely GitHub, GitLab and Bitbucket,
+<em>g.extension</em> supports download of a repository as a ZIP file
+when user needs to provide only a basic URL to the repository web page
+(with or without the <tt>https://</tt> part).
+For GitLab and Bitbucket, the latest source code in the default branch is downloaded,
+for GitHub, the latest source code in the master branch is downloaded.
+Of course, user can still specify full URL of a ZIP file
+and install a specific branch or release in this way (ZIP file mechanism will be applied).
+
+<p>
+Individual extensions can be also installed by providing a URL to
+source code on OSGeo Trac. This, however, works only for certain directories
+where download of a downloads a ZIP file was enabled by project administrators.
+
+<p>
+When none of the above sources is identified, <em>g.extension</em> assumes
+that the source is a Subversion repository and uses <em>svn</em> command line tool
+to obtain the source code. The expected structure of the repository
+should be the same as the one of the official repository.
+
+<p>
+For the official repository, <em>g.extension</em> supports listing available
+extensions (addons) and few other metadata-related operations which
+depend on a specific infrastructure.
+For other sources and repositories, this is not supported because it is assumed
+that other sources contain only one extension, typically a module or group of modules.
+
+<p>
+Non-official sources are supported on all operating systems except for MS Windows.
+
+
+<h3>Compilation and installation</h3>
+
+On MS Windows systems, where compilation tools not readily available,
+<em>g.extension</em> downloads a compiled executable
+from the GRASS GIS project server. On all other operating systems
+where it is not difficult to install compilation tools,
+<em>g.extension</em> downloads the source code of the requested
+extension (addon) and compiles it locally.
+This applies for both C and Python modules
+as well as any other extensions. The reason is that more things such
+as manual page are compiled, not only the source code (which is really
+necessary to compile just in case of C).
+
 
 <h2>EXAMPLES</h2>
 
 <h3>Download and install of an extension</h3>
+
 Download and install <em>r.stream.distance</em> into current GRASS installation
 
 <div class="code"><pre>
 g.extension extension=r.stream.distance
 </pre></div>
 
-<h3>Removal of a locally installed extension</h3>
+This installs the extension from the official repository.
+For convenience, a shorter syntax can be used:
 
 <div class="code"><pre>
-g.extension extension=r.stream.distance operation=remove
+g.extension r.stream.distance
 </pre></div>
 
-<h3>List all available extensions from GRASS Addons SVN repository</h3>
+
+<h3>Managing the extensions</h3>
+
+List all available extensions in the official GRASS GIS Addons repository:
 
 <div class="code"><pre>
 g.extension -l
 </pre></div>
 
-<h3>List all locally installed extensions</h3>
+List all locally installed extensions:
 
 <div class="code"><pre>
 g.extension -a
 </pre></div>
+
+Removal of a locally installed extension:
+
+<div class="code"><pre>
+g.extension extension=r.stream.distance operation=remove
+</pre></div>
+
+<h3>Installing from various repositories online</h3>
+
+Simple URL to GitHub, GitLab, Bitbucket repositories:
+
+<div class="code"><pre>
+g.extension r.example url=github.com/johnsmith/r.example
+</pre></div>
+
+Simple URL to OSGeo Trac (downloads a ZIP file, requires download to be enabled in Trac):
+
+<div class="code"><pre>
+g.extension r.example url=trac.osgeo.org/.../r.example
+</pre></div>
+
+In general, when a ZIP file or other archive is provided, the full URL can be used:
+
+<div class="code"><pre>
+g.extension r.example url=http://example.com/.../r.example?format=zip
+</pre></div>
+
+Note that because of MS Windows operating system architecture,
+only official repository is supported on this platform.
+
+
+<h3>Installing when writing a module</h3>
+
+Having source code of a GRASS module in a directory on disk
+one can install it using:
+
+<div class="code"><pre>
+g.extension r.example url=/local/directory/r.example/
+</pre></div>
+
+
+<h2>KNOWN ISSUES</h2>
+
+Toolboxes in the official repository cannot be downloaded.
+On MS Windows, only the official repository is working
+because there is no way of compiling the modules
+(a Python replacement for Python scripts should be implemented).
+
 
 <h2>SEE ALSO</h2>
 
@@ -73,7 +204,8 @@ g.extension -a
 <h2>AUTHORS</h2>
 
 Markus Neteler (original shell script)<br>
-Martin Landa, Czech Technical University in Prague, Czech Republic (Python rewrite)
+Martin Landa, Czech Technical University in Prague, Czech Republic (Python rewrite)<br>
+Vaclav Petras, <a href="http://gis.ncsu.edu/osgeorel/">NCSU OSGeoREL</a> (support for general sources, partial refactoring)
 
 <p>
 <i>Last changed: $Date$</i>
