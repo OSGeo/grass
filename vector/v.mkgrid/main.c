@@ -323,7 +323,9 @@ int main(int argc, char *argv[])
 	if (grid_info.north - grid_info.south < 3 * grid_info.rstep) {
 	    G_fatal_error(_("Please use a higher resolution or a larger region"));
 	}
-
+G_debug(0,"grid_info.num_vect_rows %d", grid_info.num_vect_rows);
+G_debug(0,"grid_info.num_rows %d", grid_info.num_rows);
+G_debug(0,"grid_info.num_vect_rows / 2.0 + 0.5: %f (int) %d", (grid_info.num_vect_rows / 2.0 + 0.5), (int)(grid_info.num_vect_rows / 2.0 + 0.5));
 	if ((int)(grid_info.num_vect_rows / 2.0 + 0.5) != grid_info.num_rows)
 	    G_message(_("The number of rows has been adjusted from %d to %d"),
 	              grid_info.num_rows, (int)(grid_info.num_vect_rows / 2.0 + 0.5));
@@ -366,7 +368,7 @@ int main(int argc, char *argv[])
 	    }
 	}
     }
-    else {
+    else { /* squares and rectangles */
 	if (grid_info.width != grid_info.height) {
 	    G_important_message(_("The rectangles will be asymmetrical."));
 	}
