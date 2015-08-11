@@ -81,8 +81,7 @@ import grass.script as grass
 
 try:
     import wxversion
-    wxversion.select(['2.8','2.6'])
-    # wxversion.select(['2.6','2.8'])
+    wxversion.select(['3.0', '2.8','2.6'])
     import wx
 except Exception:
     # ensure that --help, --interface-description etc work even without wx
