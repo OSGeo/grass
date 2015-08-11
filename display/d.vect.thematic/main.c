@@ -353,7 +353,7 @@ int main(int argc, char **argv)
     if (colors_opt->answers != NULL) {
 	for (i = 0; i < nclass; i++) {
 	    if (colors_opt->answers[i] == NULL)
-		G_fatal_error(_("Not enough colors or error in color specifications.\nNeed %i colors."),
+		G_fatal_error(_("Not enough colors or error in color specifications.\nNeed %i entries for 'colors' parameter"),
 			      nclass);
 
 	    ret = G_str_to_color(colors_opt->answers[i], &r, &g, &b);
