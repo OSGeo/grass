@@ -79,6 +79,82 @@ connect the copied tables to the output map.-->
 
 <h2>EXAMPLES</h2>
 
+
+Preparation of example data (North Carolina sample dataset):
+
+<div class="code"><pre>
+# Create an empty box for overlaying to ZIP code vector map
+v.mkgrid map=box grid=1,1 position=coor \
+         coordinates=584037.093198,201970.387191 box=50000,50000
+
+# set region to ZIP codes and box vector maps
+g.region vector=zipcodes_wake,box -p res=100 -a
+# enlarge region a bit for "white border" around map in monitor
+g.region n=n+1000 s=s-1000 w=w-1000 e=e+1000 -p
+d.mon wx0
+</pre></div>
+
+
+<h3>AND operator</h3>
+
+<div class="code"><pre>
+d.vect map=zipcodes_wake fill_color=0:128:0
+d.vect map=box fill_color=85:130:176
+v.overlay -t ainput=box binput=zipcodes_wake operator=and output=v_overlay_AND
+d.vect map=v_overlay_AND
+</pre></div>
+
+<center>
+<img src="v_overlay_op_and.png" alt="v.overlay with AND operator"><br>
+v.overlay with AND operator
+</center>
+
+
+<h3>OR operator</h3>
+
+<div class="code"><pre>
+d.vect map=zipcodes_wake fill_color=0:128:0
+d.vect map=box fill_color=85:130:176
+v.overlay -t ainput=box binput=zipcodes_wake operator=or output=v_overlay_OR
+d.vect map=v_overlay_OR
+</pre></div>
+
+<center>
+<img src="v_overlay_op_or.png" alt="v.overlay with OR operator"><br>
+v.overlay with OR operator
+</center>
+
+
+<h3>XOR operator</h3>
+
+<div class="code"><pre>
+d.vect map=zipcodes_wake fill_color=0:128:0
+d.vect map=box fill_color=85:130:176
+v.overlay -t ainput=box binput=zipcodes_wake operator=xor output=v_overlay_XOR
+d.vect map=v_overlay_XOR
+</pre></div>
+
+<center>
+<img src="v_overlay_op_xor.png" alt="v.overlay with XOR operator"><br>
+v.overlay with XOR operator
+</center>
+
+
+<h3>NOT operator</h3>
+
+<div class="code"><pre>
+d.vect map=zipcodes_wake fill_color=0:128:0
+d.vect map=box fill_color=85:130:176
+v.overlay -t ainput=box binput=zipcodes_wake operator=not output=v_overlay_NOT
+d.vect map=v_overlay_NOT
+</pre></div>
+
+<center>
+<img src="v_overlay_op_not.png" alt="v.overlay with NOT operator"><br>
+v.overlay with NOT operator
+</center>
+
+
 <h3>Overlay operations: AND, OR, NOT, XOR</h3>
 
 Examples based on North Carolina sample dataset:
