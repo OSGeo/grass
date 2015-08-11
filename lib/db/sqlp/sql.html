@@ -55,7 +55,7 @@ distributions of GRASS GIS:
 <h3>Database table name restrictions</h3>
 
 <ul>
-<li> No dots allowed as SQL does not support '.' (dots) in table names.</li>
+<li> No dots are allowed as SQL does not support '.' (dots) in table names.</li>
 <li> Supported table name characters are only: <br>
 <div class="code"><pre>
 [A-Za-z][A-Za-z0-9_]*
@@ -136,13 +136,16 @@ Examples of complex expressions in updates (using <tt>v.db.*</tt>
 modules):
 
 <div class="code"><pre>
-v.db.addcolumn map=roads col="exprtest double precision"
-v.db.update map=roads col=exprtest value=cat/nulltest
-v.db.update map=roads col=exprtest value=cat/nulltest+cat where=cat=1
+v.db.addcolumn map=roads column="exprtest double precision"
+v.db.update map=roads column=exprtest value="cat/nulltest"
+v.db.update map=roads column=exprtest value="cat/nulltest+cat" where="cat=1"
+
+# using data from another column
+v.db.update map=roads column=exprtest qcolumn="(cat*100.)/SHAPE_LEN."
 </pre></div>
 
 <p>
-Examples of complex expressions in updates (using <tt>db.*</tt>
+Examples of more complex expressions in updates (using <tt>db.*</tt>
 modules):
 
 <div class="code"><pre>
@@ -179,7 +182,7 @@ v.db.update mygeodetic_pts col=zval \
             where="z_value &lt;&gt; 'N/A'"
 </pre></div>
 
-<h3>Example of concatenating fields</h3>
+<h3>Example of concatenation of fields</h3>
 
 <i>Note: not supported for DBF driver.</i>
 
