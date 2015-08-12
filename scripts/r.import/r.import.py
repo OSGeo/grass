@@ -59,6 +59,7 @@
 #% options: nearest,bilinear,bicubic,lanczos,bilinear_f,bicubic_f,lanczos_f
 #% description: Resampling method to use for reprojection
 #% descriptions: nearest;nearest neighbor;bilinear;bilinear interpolation;bicubic;bicubic interpolation;lanczos;lanczos filter;bilinear_f;bilinear interpolation with fallback;bicubic_f;bicubic interpolation with fallback;lanczos_f;lanczos filter with fallback
+#% answer: nearest
 #% guisection: Output
 #%end
 #%option
@@ -162,7 +163,7 @@ def main():
     tgtsrs = grass.read_command('g.proj', flags='j', quiet=True)
 
     # create temp location from input without import
-    grass.message(_("Creating temporary location for <%s>...") % GDALdatasource)
+    grass.verbose(_("Creating temporary location for <%s>...") % GDALdatasource)
     parameters = dict(input=GDALdatasource, output=output,
                       memory=memory, flags='c',
                       location=TMPLOC, quiet=True)
@@ -176,26 +177,23 @@ def main():
     # switch to temp location
     os.environ['GISRC'] = str(SRCGISRC)
 
-    # compare source and target srs
-    insrs = grass.read_command('g.proj', flags='j', quiet=True)
-
     # switch to target location
     os.environ['GISRC'] = str(tgtgisrc)
 
-    if insrs == tgtsrs:
-        # try r.in.gdal directly
+    # try r.in.gdal directly first
+    if grass.run_command('r.in.gdal', input=GDALdatasource, flags='j',
+                         errors='status', quiet=True) == 0:
         parameters = dict(input=GDALdatasource, output=output,
                           memory=memory, flags='k')
         if bands:
             parameters['band'] = bands
-        grass.message(_("Importing <%s>...") % GDALdatasource)
         try:
             grass.run_command('r.in.gdal', **parameters)
-        except CalledModuleError:
+            grass.verbose(_("Input <%s> successfully imported without reprojection") % GDALdatasource)
+            return 0
+        except CalledModuleError as e:
             grass.fatal(_("Unable to import GDAL dataset <%s>") % GDALdatasource)
-        grass.message(_("Input <%s> successfully imported without reprojection") % GDALdatasource)
-        return 0
-
+    
     # make sure target is not xy
     if grass.parse_command('g.proj', flags='g')['name'] == 'xy_location_unprojected':
         grass.fatal(_("Coordinate reference system not available for current location <%s>") % tgtloc)
@@ -208,7 +206,7 @@ def main():
         grass.fatal(_("Coordinate reference system not available for input <%s>") % GDALdatasource)
 
     # import into temp location
-    grass.message(_("Importing <%s> to temporary location...") % GDALdatasource)
+    grass.verbose(_("Importing <%s> to temporary location...") % GDALdatasource)
     parameters = dict(input=GDALdatasource, output=output,
                       memory=memory, flags='k')
     if bands:
