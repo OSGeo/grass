@@ -5,7 +5,7 @@
 # MODULE: d.out.file
 # AUTHOR(S): Anna Petrasova <kratochanna gmail.com>
 # PURPOSE:	Script for exporting content of monitor to graphic file
-# COPYRIGHT: (C) 2014 by the GRASS Development Team
+# COPYRIGHT: (C) 2014-2015 by the GRASS Development Team
 #
 #		This program is free software under the GNU General
 #		Public License (>=v2). Read the file COPYING that
@@ -45,7 +45,7 @@ def main():
     options, flags = gcore.parser()
     gisenv = gcore.gisenv()
     if 'MONITOR' in gisenv:
-        cmd_file = gisenv['MONITOR_{monitor}_CMDFILE'.format(monitor=gisenv['MONITOR'].upper())]
+        cmd_file = gcore.parse_command('d.mon', flags='g')['cmd']
         dout_cmd = 'd.out.file'
         for param, val in options.iteritems():
             if val:
