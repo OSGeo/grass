@@ -9,7 +9,7 @@
  *
  * PURPOSE:      Import OGR vectors
  *
- * COPYRIGHT:    (C) 2003-2014 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2015 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2).  Read the file COPYING that
@@ -56,8 +56,8 @@ int main(int argc, char *argv[])
     } param;
     struct _flag {
 	struct Flag *list, *no_clean, *force2d, *notab,
-	    *region;
-	struct Flag *over, *extend, *formats, *tolower, *no_import;
+	    *region, *over, *extend, *formats, *tolower, *no_import,
+            *proj;
     } flag;
 
     char *desc;
@@ -283,6 +283,13 @@ int main(int argc, char *argv[])
     flag.over->description =
 	_("Assume that the dataset has same projection as the current location");
 
+    flag.proj = G_define_flag();
+    flag.proj->key = 'j';
+    flag.proj->description =
+	_("Perform projection check only and exit");
+    flag.proj->suppress_required = YES;
+    G_option_requires(flag.proj, param.dsn, NULL)
+;
     flag.region = G_define_flag();
     flag.region->key = 'r';
     flag.region->guisection = _("Selection");
@@ -605,7 +612,8 @@ int main(int argc, char *argv[])
     }
     else {
 	int err = 0;
-
+        void (*msg_fn)(const char *, ...);
+            
 	/* Projection only required for checking so convert non-interactively */
 	if (GPJ_osr_to_grass(&cellhd, &proj_info,
 			     &proj_units, Ogr_projection, 0) < 0)
@@ -631,7 +639,7 @@ int main(int argc, char *argv[])
 		     G_compare_projections(loc_proj_info, loc_proj_units,
 					   proj_info, proj_units)) != TRUE) {
 	    int i_value;
-
+            
 	    strcpy(error_msg,
 		   _("Projection of dataset does not"
 		     " appear to match current location.\n\n"));
@@ -697,16 +705,27 @@ int main(int argc, char *argv[])
 	    sprintf(error_msg + strlen(error_msg),
 		    _("\nIn case of no significant differences in the projection definitions,"
 		      " use the -o flag to ignore them and use"
-		      " current location definition.\n"),
-		    G_program_name());
+		      " current location definition.\n"));
 	    strcat(error_msg,
 		   _("Consider generating a new location with 'location' parameter"
 		    " from input data set.\n"));
-	    G_fatal_error(error_msg);
+            if (flag.proj->answer)
+                msg_fn = G_message;
+            else
+                msg_fn = G_fatal_error;
+            msg_fn(error_msg);
+            if (flag.proj->answer)
+                exit(EXIT_FAILURE);
 	}
 	else {
-	    G_verbose_message(_("Projection of input dataset and current location "
-				"appear to match"));
+	    if (flag.proj->answer)
+                    msg_fn = G_message;
+                else
+                    msg_fn = G_verbose_message;            
+                msg_fn(_("Projection of input dataset and current location "
+                         "appear to match"));
+                if (flag.proj->answer)
+                    exit(EXIT_SUCCESS);
 	}
     }
 
