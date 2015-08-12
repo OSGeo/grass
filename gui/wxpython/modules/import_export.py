@@ -83,7 +83,7 @@ class ImportDialog(wx.Dialog):
                 desc = f.get('description', '')
             if not name and not desc:
                 continue
-            if cmd == 'r.in.gdal' and name not in ('o', 'e', 'l', 'k'):
+            if cmd == 'r.import':
                 continue
             elif cmd == 'r.external' and name not in ('o', 'e', 'r', 'h', 'v'):
                 continue
@@ -408,7 +408,7 @@ class GdalImportDialog(ImportDialog):
                            'input=%s' % idsn,
                            'output=%s' % output]
                 else:
-                    cmd = ['r.in.gdal',
+                    cmd = ['r.import',
                            'input=%s' % idsn,
                            'output=%s' % output]
                     if nBands > 1:
@@ -456,7 +456,7 @@ class GdalImportDialog(ImportDialog):
             if self.ogr:
                 return 'v.import'
             else:
-                return 'r.in.gdal'
+                return 'r.import'
         
         return ''
 
