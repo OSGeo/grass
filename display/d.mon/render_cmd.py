@@ -37,7 +37,7 @@ def render(cmd, mapfile):
     try:
         grass.run_command(cmd[0], env=env, **cmd[1])
     except Exception as e:
-        grass.fatal("Unable to render: {}".format(e))
+        grass.debug(1, "Unable to render: {}".format(e))
 
 # update cmd file
 def update_cmd_file(cmd_file, cmd, mapfile):
