@@ -119,7 +119,8 @@
 #%option
 #% key: method
 #% type: string
-#% description: This method will be applied to compute the accumulative values from the input maps in a single granule
+#% label: This method will be applied to compute the accumulative values from the input maps in a single granule
+#% description: Growing Degree Days or Winkler indices; Mean: sum(input maps)/(number of input maps); Biologically Effective Degree Days; Huglin Heliothermal index
 #% options: mean,gdd,bedd,huglin
 #% answer: mean
 #% required: no
