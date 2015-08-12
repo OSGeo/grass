@@ -470,9 +470,10 @@ int main(int argc, char *argv[])
 	}
 	if (retval == -1) {
 	    if (flag_f->answer)
-		G_warning(_("Forcing raster export."));
+		G_warning(_("Forcing raster export"));
 	    else
-		G_fatal_error(_("Raster export aborted."));
+                G_fatal_error(_("Raster export aborted. "
+                                "To override data loss check, use the -%c flag"), flag_f->key);
 	}
     }
 
