@@ -411,8 +411,6 @@ class GdalImportDialog(ImportDialog):
                     cmd = ['r.import',
                            'input=%s' % idsn,
                            'output=%s' % output]
-                    if nBands > 1:
-                        cmd.append('-k')
             
             if self.overwrite.IsChecked():
                 cmd.append('--overwrite')
