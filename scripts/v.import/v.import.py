@@ -76,7 +76,7 @@ import atexit
 import math
 
 import grass.script as grass
-
+from grass.exceptions import CalledModuleError
     
 def cleanup():
     # remove temp location
@@ -133,36 +133,32 @@ def main():
     tgtsrs = grass.read_command('g.proj', flags = 'j', quiet = True)
 
     # create temp location from input without import
-    grass.message(_("Creating temporary location for <%s>...") % OGRdatasource)
+    grass.verbose(_("Creating temporary location for <%s>...") % OGRdatasource)
     if layers:
         vopts['layer'] = layers
     if output:
         vopts['output'] = output
-    returncode = grass.run_command('v.in.ogr', input = OGRdatasource,
-                                   location = tmploc, flags = 'i', quiet = True, **vopts)
-    # if it fails, return
-    if returncode != 0:
+    try:
+        grass.run_command('v.in.ogr', input = OGRdatasource,
+                          location = tmploc, flags = 'i', quiet = True, **vopts)
+    except CalledModuleError:
         grass.fatal(_("Unable to create location from OGR datasource <%s>") % OGRdatasource)
 
     # switch to temp location
     os.environ['GISRC'] = str(srcgisrc)
 
-    # compare source and target srs
-    insrs = grass.read_command('g.proj', flags = 'j', quiet = True)
-
     # switch to target location
     os.environ['GISRC'] = str(tgtgisrc)
 
-    if insrs == tgtsrs:
-        # try v.in.ogr directly
-        grass.message(_("Importing <%s>...") % OGRdatasource) 
-        returncode = grass.run_command('v.in.ogr', input = OGRdatasource,
-                                       flags = vflags, **vopts)
-        # if it succeeds, return
-        if returncode == 0:
+    # try v.in.ogr directly
+    if grass.run_command('v.in.ogr', input=OGRdatasource, flags='j',
+                         errors='status', quiet=True) == 0:
+        try:
+            grass.run_command('v.in.ogr', input = OGRdatasource,
+                              flags = vflags, **vopts)
             grass.message(_("Input <%s> successfully imported without reprojection") % OGRdatasource) 
             return 0
-        else:
+        except CalledModuleError as e:
             grass.fatal(_("Unable to import <%s>") % OGRdatasource)
     
     # make sure target is not xy
@@ -187,10 +183,10 @@ def main():
         # reproject to src
         # switch to temp location
         os.environ['GISRC'] = str(srcgisrc)
-        returncode = grass.run_command('v.proj', input = vreg, output = vreg, 
-                                       location = tgtloc, mapset = tgtmapset, quiet = True)
-        
-        if returncode != 0:
+        try:
+            grass.run_command('v.proj', input = vreg, output = vreg, 
+                              location = tgtloc, mapset = tgtmapset, quiet = True)
+        except CalledModuleError:
             grass.fatal(_("Unable to reproject to source location"))
         
         # set region from region vector
@@ -200,11 +196,10 @@ def main():
 
     # import into temp location
     grass.message(_("Importing <%s> ...") % OGRdatasource)
-    returncode = grass.run_command('v.in.ogr', input = OGRdatasource,
-                                   flags = vflags, **vopts)
-    
-    # if it fails, return
-    if returncode != 0:
+    try:
+        grass.run_command('v.in.ogr', input = OGRdatasource,
+                          flags = vflags, **vopts)
+    except CalledModuleError:
         grass.fatal(_("Unable to import OGR datasource <%s>") % OGRdatasource)
 
     # if output is not define check source mapset
@@ -225,10 +220,11 @@ def main():
 
     # v.proj
     grass.message(_("Reprojecting <%s>...") % output)
-    returncode = grass.run_command('v.proj', location = tmploc,
-                                   mapset = 'PERMANENT', input = output,
-                                   quiet = True)
-    if returncode != 0:
+    try:
+        grass.run_command('v.proj', location = tmploc,
+                          mapset = 'PERMANENT', input = output,
+                          quiet = True)
+    except CalledModuleError:
         grass.fatal(_("Unable to to reproject vector <%s>") % output)
     
     return 0
