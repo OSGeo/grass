@@ -534,7 +534,7 @@ int main(int argc, char *argv[])
                 else
                     msg_fn = G_verbose_message;            
                 msg_fn(_("Projection of input dataset and current location "
-                            "appear to match"));
+                         "appear to match"));
                 if (flag_j->answer)
                     exit(EXIT_SUCCESS);
 	    }
