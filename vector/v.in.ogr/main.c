@@ -531,7 +531,7 @@ int main(int argc, char *argv[])
 	    G_warning(_("All available OGR layers will be imported into vector map <%s>"), output);
     }
     
-    if (!param.outloc->answer) {	/* Check if the map exists */
+    if (!param.outloc->answer && !flag.proj->answer) {	/* Check if the map exists */
 	if (G_find_vector2(output, G_mapset()) && !overwrite)
 	    G_fatal_error(_("Vector map <%s> already exists"),
 			  output);
