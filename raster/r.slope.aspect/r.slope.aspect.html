@@ -170,6 +170,8 @@ When working with floating point elevation models, no such aspect bias occurs.
 
 <h2>EXAMPLES</h2>
 
+<h3>Calculation of slope, aspect, profile and tangential curvature</h3>
+
 In this example a slope, aspect, profile and tangential curvature map
 are computed from an elevation raster map (North Carolina sample
 dataset):
@@ -192,6 +194,51 @@ r.colors map=tcurv color=curvature
   <img src="r_slope_aspect_tcurv.png" border="0">
   <p>
 Figure: Slope, aspect, profile and tangential curvature raster map (North Carolina dataset)
+</center>
+
+<h3>Classification of major aspect directions in compass orientation</h3>
+
+In the following example (based on the North Carolina sample dataset)
+we first generate the standard aspect map (oriented CCW from East), then
+convert it to compass orientation, and finally classify four major aspect
+directions (N, E, S, W):
+ 
+<div class="code"><pre>
+g.region raster=elevation -p
+
+# generate aspect map with CCW orientation
+r.slope.aspect elevation=elevation aspect=myaspect
+
+# generate compass orientation and classify four major directions (N, E, S, W)
+r.mapcalc "aspect_4_directions = eval( \\
+   compass=(450 - myaspect ) % 360, \\
+     if(compass >=0. && compass < 45., 1)  \\
+   + if(compass >=45. && compass < 135., 2) \\
+   + if(compass >=135. && compass < 225., 3) \\
+   + if(compass >=225. && compass < 315., 4) \\
+   + if(compass >=315., 1) \\
+)"
+
+# assign text labels
+r.category aspect_4_directions separator=comma rules=- << EOF
+1,north
+2,east
+3,south
+4,west
+EOF
+
+# assign color table
+r.colors aspect_4_directions rules=- << EOF
+1 253,184,99
+2 178,171,210
+3 230,97,1
+4 94,60,153
+EOF
+</pre></div>
+
+<center>
+<img src="r_slope_aspect_4_directions.png" alt="Aspect map classified to four major compass directions"><br>
+Aspect map classified to four major compass directions (zoomed subset shown)
 </center>
 
 <h2>REFERENCES</h2>
