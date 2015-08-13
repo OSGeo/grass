@@ -198,12 +198,12 @@ int main(int argc, char **argv)
     flag_o = G_define_flag();
     flag_o->key = 'o';
     flag_o->description =
-	_("Try to calculate an optimal standard deviation with 'stddeviation' taken as maximum (experimental)");
+	_("Try to calculate an optimal radius with given 'radius' taken as maximum (experimental)");
 
     flag_q = G_define_flag();
     flag_q->key = 'q';
     flag_q->description =
-	_("Only calculate optimal standard deviation and exit (no map is written)");
+	_("Only calculate optimal radius and exit (no map is written)");
 
     flag_normalize = G_define_flag();
     flag_normalize->key = 'n';
@@ -372,8 +372,8 @@ int main(int argc, char **argv)
     /* valutazione distanza ottimale */
     if (flag_o->answer) {
 	/* Note: sigmaOptimal calculates using ALL points (also those outside the region) */
-	G_message(_("Automatic choice of smoothing parameter (standard deviation), maximum possible "
-		   "value of standard deviation is set to %f"), sigma);
+	G_message(_("Automatic choice of smoothing parameter (radius), maximum possible "
+		   "value of radius is set to %f"), sigma);
 
 	/* maximum distance 4*sigma (3.9*sigma ~ 1.0000), keep it small, otherwise it takes 
 	 * too much points and calculation on network becomes slow */
