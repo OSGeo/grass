@@ -14,7 +14,7 @@ import numpy as np
 import grass.lib.gis as libgis
 import grass.lib.vector as libvect
 
-from grass.pygrass.errors import GrassError
+from grass.pygrass.errors import GrassError, mapinfo_must_be_set
 
 from grass.pygrass.vector.basic import Ilist, Bbox, Cats
 from grass.pygrass.vector import sql
@@ -297,6 +297,7 @@ class Geo(object):
         else:
             return False
 
+    @mapinfo_must_be_set
     def read(self):
         """Read and set the coordinates of the centroid from the vector map,
         using the centroid_id and calling the Vect_read_line C function"""
@@ -639,6 +640,13 @@ class Line(Geo):
         pnt.is2D = self.is2D
         return pnt
 
+    @mapinfo_must_be_set
+    def alive(self):
+        """Return True if this line is alive or False if this line is
+           dead or its index is out of range.
+        """
+        return(bool(libvect.Vect_line_alive(self.c_mapinfo, self.id)))
+
     def append(self, pnt):
         """Appends one point to the end of a line, using the
         ``Vect_append_point`` C function.
@@ -802,6 +810,7 @@ class Line(Geo):
         point.is2D = self.is2D
         return LineDist(point, dist.value, sp_dist.value, lp_dist.value)
 
+    @mapinfo_must_be_set
     def get_first_cat(self):
         """Fetches FIRST category number for given vector line and field, using
         the ``Vect_get_line_cat`` C function.
@@ -811,7 +820,7 @@ class Line(Geo):
             Not implemented yet.
         """
         # TODO: add this method.
-        libvect.Vect_get_line_cat(self.map, self.id, self.field)
+        # libvect.Vect_get_line_cat(self.c_mapinfo, self.id, self.field)
         pass
 
     def pop(self, indx):
@@ -1086,8 +1095,15 @@ class Line(Geo):
         """
         libvect.Vect_reset_line(self.c_points)
 
+    @mapinfo_must_be_set
     def nodes(self):
-        """Return the nodes in the line"""
+        """Return the start and end nodes of the line
+
+           This method requires topology build.
+
+           return: A tuple of Node objects that represent the
+                   start and end point of this line.
+        """
         if self.is_with_topology():
             n1 = ctypes.c_int()
             n2 = ctypes.c_int()
@@ -1099,9 +1115,29 @@ class Line(Geo):
 
 
 class Node(object):
+    """Node class for topological analysis of line neighbors.
+
+       Objects of this class will be returned by the node() function
+       of a Line object.
+
+       All methods in this class require a proper setup of the Node
+       objects. Hence, the correct id and a valid pointer to a mapinfo
+       object must be provided in the constructions. Otherwise a segfault
+       may happen.
+
+    """
     def __init__(self, v_id, c_mapinfo):
+        """Construct a Node object
+
+           param v_id: The unique node id
+           param c_mapinfo: A valid pointer to the mapinfo object
+        """
         self.id = v_id  # vector id
         self.c_mapinfo = c_mapinfo
+        self._setup()
+
+    @mapinfo_must_be_set
+    def _setup(self):
         self.is2D = bool(libvect.Vect_is_3d(self.c_mapinfo) != 1)
         self.nlines = libvect.Vect_get_node_n_lines(self.c_mapinfo, self.id)
 
@@ -1114,6 +1150,14 @@ class Node(object):
     def __repr__(self):
         return "Node(%d)" % self.id
 
+    @mapinfo_must_be_set
+    def alive(self):
+        """Return True if this node is alive or False if this node is
+           dead or its index is out of range.
+        """
+        return(bool(libvect.Vect_node_alive(self.c_mapinfo, self.id)))
+
+    @mapinfo_must_be_set
     def coords(self):
         """Return a tuple with the node coordinates."""
         x = ctypes.c_double()
@@ -1138,6 +1182,7 @@ class Node(object):
             if (not only_in and lid > 0) or (not only_out and lid < 0):
                 yield lid
 
+    @mapinfo_must_be_set
     def lines(self, only_in=False, only_out=False):
         """Return a generator with all lines connected to a node.
 
@@ -1149,6 +1194,7 @@ class Node(object):
         for iline in self.ilines(only_in, only_out):
             yield Line(v_id=abs(iline), c_mapinfo=self.c_mapinfo)
 
+    @mapinfo_must_be_set
     def angles(self):
         """Return a generator with all lines angles in a node."""
         for iline in range(self.nlines):
@@ -1182,6 +1228,7 @@ class Boundary(Line):
     def __repr__(self):
         return "Boundary(v_id=%r)" % self.id
 
+    @mapinfo_must_be_set
     def _get_centroid(self, side, idonly=False):
         if side > 0:
             v_id = libvect.Vect_get_area_centroid(self.c_mapinfo, side)
@@ -1208,6 +1255,7 @@ class Boundary(Line):
         """
         return self._get_centroid(self.left_id, idonly)
 
+    @mapinfo_must_be_set
     def get_left_right(self):
         """Return left and right value"""
 
@@ -1265,6 +1313,7 @@ class Centroid(Point):
     def __repr__(self):
         return "Centoid(%s)" % ', '.join(['%f' % co for co in self.coords()])
 
+    @mapinfo_must_be_set
     def get_centroid_id(self):
         """Return the centroid_id, using the c_mapinfo and an area_id
         attributes of the class, and calling the Vect_get_area_centroid
@@ -1273,6 +1322,7 @@ class Centroid(Point):
                                                      self.area_id)
         return centroid_id if centroid_id != 0 else None
 
+    @mapinfo_must_be_set
     def get_area_id(self):
         """Return the area_id, using the c_mapinfo and an centroid_id
         attributes of the class, and calling the Vect_get_centroid_area
@@ -1292,6 +1342,7 @@ class Isle(Geo):
     def __repr__(self):
         return "Isle(%d)" % (self.id)
 
+    @mapinfo_must_be_set
     def boundaries(self):
         """Return a list of boundaries"""
         ilist = Ilist()
@@ -1299,31 +1350,37 @@ class Isle(Geo):
                                          ilist.c_ilist)
         return ilist
 
+    @mapinfo_must_be_set
     def bbox(self, bbox=None):
         """Return bounding box of Isle"""
         bbox = bbox if bbox else Bbox()
         libvect.Vect_get_isle_box(self.c_mapinfo, self.id, bbox.c_bbox)
         return bbox
 
+    @mapinfo_must_be_set
     def points(self):
         """Return a Line object with the outer ring points"""
         line = Line()
         libvect.Vect_get_isle_points(self.c_mapinfo, self.id, line.c_points)
         return line
 
+    @mapinfo_must_be_set
     def points_geos(self):
         """Return a Line object with the outer ring points
         """
         return libvect.Vect_get_isle_points_geos(self.c_mapinfo, self.id)
 
+    @mapinfo_must_be_set
     def area_id(self):
         """Returns area id for isle."""
         return libvect.Vect_get_isle_area(self.c_mapinfo, self.id)
 
+    @mapinfo_must_be_set
     def alive(self):
         """Check if isle is alive or dead (topology required)"""
         return bool(libvect.Vect_isle_alive(self.c_mapinfo, self.id))
 
+    @mapinfo_must_be_set
     def contain_pnt(self, pnt):
         """Check if point is in area.
 
@@ -1359,6 +1416,7 @@ class Isles(object):
             self._isles_id = self.get_isles_id()
             self._isles = self.get_isles()
 
+    @mapinfo_must_be_set
     def __len__(self):
         return libvect.Vect_get_area_num_isles(self.c_mapinfo, self.area_id)
 
@@ -1370,11 +1428,13 @@ class Isles(object):
             self.get_isles()
         return self._isles[key]
 
+    @mapinfo_must_be_set
     def get_isles_id(self):
         """Return the id of isles"""
         return [libvect.Vect_get_area_isle(self.c_mapinfo, self.area_id, i)
                 for i in range(self.__len__())]
 
+    @mapinfo_must_be_set
     def get_isles(self):
         """Return isles"""
         return [Isle(v_id=isle_id, c_mapinfo=self.c_mapinfo)
@@ -1442,6 +1502,7 @@ class Area(Geo):
         # get isles
         self.get_isles()
 
+    @mapinfo_must_be_set
     def get_points(self, line=None):
         """Return a Line object with the outer ring
 
@@ -1452,6 +1513,7 @@ class Area(Geo):
         libvect.Vect_get_area_points(self.c_mapinfo, self.id, line.c_points)
         return line
 
+    @mapinfo_must_be_set
     def get_centroid(self, centroid=None):
         """Return the centroid
 
@@ -1467,9 +1529,11 @@ class Area(Geo):
             return Centroid(v_id=centroid_id, c_mapinfo=self.c_mapinfo,
                             area_id=self.id)
 
+    @mapinfo_must_be_set
     def num_isles(self):
         return libvect.Vect_get_area_num_isles(self.c_mapinfo, self.id)
 
+    @mapinfo_must_be_set
     def get_isles(self, isles=None):
         """Instantiate the boundary attribute reading area_id"""
         if isles is not None:
@@ -1477,17 +1541,20 @@ class Area(Geo):
             return isles
         return Isles(self.c_mapinfo, self.id)
 
+    @mapinfo_must_be_set
     def area(self):
         """Returns area of area without areas of isles.
         double Vect_get_area_area (const struct Map_info \*Map, int area)
         """
         return libvect.Vect_get_area_area(self.c_mapinfo, self.id)
 
+    @mapinfo_must_be_set
     def alive(self):
         """Check if area is alive or dead (topology required)
         """
         return bool(libvect.Vect_area_alive(self.c_mapinfo, self.id))
 
+    @mapinfo_must_be_set
     def bbox(self, bbox=None):
         """Return the Bbox of area
 
@@ -1498,6 +1565,7 @@ class Area(Geo):
         libvect.Vect_get_area_box(self.c_mapinfo, self.id, bbox.c_bbox)
         return bbox
 
+    @mapinfo_must_be_set
     def buffer(self, dist=None, dist_x=None, dist_y=None,
                angle=0, round_=True, caps=True, tol=0.1):
         """Return the buffer area around the area, using the
@@ -1537,6 +1605,7 @@ class Area(Geo):
                     isles=[Line(c_points=pp_isle[i].contents)
                            for i in range(n_isles.contents.value)])
 
+    @mapinfo_must_be_set
     def boundaries(self, ilist=False):
         """Creates list of boundaries for given area.
 
@@ -1550,6 +1619,7 @@ class Area(Geo):
             return ilist
         return [Boundary(v_id=abs(v_id), c_mapinfo=self.c_mapinfo) for v_id in ilst]
 
+    @mapinfo_must_be_set
     def cats(self, cats=None):
         """Get area categories.
 
@@ -1564,9 +1634,12 @@ class Area(Geo):
         """Find FIRST category of given field and area.
 
         int Vect_get_area_cat(const struct Map_info \*Map, int area, int field)
+
+        ..warning: Not implemented
         """
         pass
 
+    @mapinfo_must_be_set
     def contain_pnt(self, pnt, bbox=None):
         """Check if point is in area.
 
@@ -1580,6 +1653,7 @@ class Area(Geo):
                                                self.c_mapinfo, self.id,
                                                bbox.c_bbox))
 
+    @mapinfo_must_be_set
     def perimeter(self):
         """Calculate area perimeter.
 
