@@ -21,11 +21,12 @@ class MetaModule(object):
        >>> g_list.required
        ['type']
        >>> g_list.inputs.type = 'raster'
+       >>> g_list.inputs.mapset = 'PERMANENT'
        >>> g_list.stdout_ = -1
        >>> g_list.run()
        Module('g.list')
        >>> g_list.outputs.stdout                         # doctest: +ELLIPSIS
-       '...basins...soils...'
+       '...basin...soils...'
        >>> r = MetaModule('r')
        >>> what = r.what
        >>> what.description
