@@ -69,20 +69,22 @@ def copy_mapset(mapset, path):
     :returns: the instance of the new Mapset.
 
 
+    >>> from grass.script.core import gisenv
+    >>> mname = gisenv()['MAPSET']
     >>> mset = Mapset()
-    >>> mset.name
-    'user1'
+    >>> mset.name == mname
+    True
     >>> import tempfile as tmp
     >>> import os
     >>> path = os.path.join(tmp.gettempdir(), 'my_loc', 'my_mset')
-    >>> copy_mapset(mset, path)
-    Mapset('user1')
-    >>> sorted(os.listdir(path))
-    [u'PERMANENT', u'user1']
+    >>> copy_mapset(mset, path)                           # doctest: +ELLIPSIS
+    Mapset(...)
+    >>> sorted(os.listdir(path))                          # doctest: +ELLIPSIS
+    [...'PERMANENT'...]
     >>> sorted(os.listdir(os.path.join(path, 'PERMANENT')))
     [u'DEFAULT_WIND', u'PROJ_INFO', u'PROJ_UNITS', u'VAR', u'WIND']
-    >>> sorted(os.listdir(os.path.join(path, 'user1'))) # doctest: +ELLIPSIS
-    [...u'SEARCH_PATH', u'VAR', u'WIND']
+    >>> sorted(os.listdir(os.path.join(path, mname)))   # doctest: +ELLIPSIS
+    [...u'SEARCH_PATH',...u'WIND']
     >>> import shutil
     >>> shutil.rmtree(path)
 
@@ -110,8 +112,12 @@ def read_gisrc(gisrc):
     :returns: a tuple with the mapset, location and gisdbase
 
     >>> import os
-    >>> read_gisrc(os.environ['GISRC'])  # doctest: +ELLIPSIS
-    (u'user1', ...)
+    >>> from grass.script.core import gisenv
+    >>> genv = gisenv()
+    >>> (read_gisrc(os.environ['GISRC']) == (genv['MAPSET'],
+    ...                                      genv['LOCATION_NAME'],
+    ...                                      genv['GISDBASE']))
+    True
     """
     with open(gisrc, 'r') as gfile:
         gis = dict([(k.strip(), v.strip())
