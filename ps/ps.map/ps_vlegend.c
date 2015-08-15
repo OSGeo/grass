@@ -30,7 +30,7 @@ int PS_vlegend(void)
      * If position is not used by any vector it is used for next not used vector without
      * lpos or lpos > vector.count */
 
-    nopos = -1;			/* last used without position in script or position > count */
+    nopos = -1;		/* last used without position in script or position > count */
 
     for (l = 0; l < vector.count; l++) {
 	nvec[l] = 0;
@@ -55,7 +55,7 @@ int PS_vlegend(void)
     }
 
     /* find last used row */
-    lcount = 0;			/* number of used rows in legend */
+    lcount = 0;		/* number of used rows in legend */
     for (i = vector.count - 1; i >= 0; i--) {
 	if (nvec[i] > 0) {
 	    lcount = i + 1;
@@ -254,8 +254,10 @@ int PS_vlegend(void)
 		}
 		else if (vector.layer[i].type == VPOINTS) {
 		    /* TODO */
-		    yo = y + 0.5 * fontsize - vector.layer[i].offset;
+		    /* yo = y + 0.5 * fontsize - vector.layer[i].offset; */
+		    yo = y + 0.5 * fontsize;
 		    xo = x + width / 2;
+
 		    symbol_draw(vector.layer[i].symbol_ps, xo, yo,
 				vector.layer[i].size, vector.layer[i].rotate,
 				vector.layer[i].width);
