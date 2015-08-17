@@ -181,7 +181,7 @@ def db_table_in_vector(table):
 
     :param str table: name of table to query
     """
-    from vector import vector_db
+    from .vector import vector_db
     nuldev = file(os.devnull, 'w')
     used = []
     vects = list_strings('vect')
