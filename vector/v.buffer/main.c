@@ -475,6 +475,12 @@ int main(int argc, char *argv[])
 
 #ifdef HAVE_GEOS
     initGEOS(G_message, G_fatal_error);
+
+    /* check required version for -s/-c flag */
+#ifndef GEOS_3_3
+        G_warning(_("Flags -%c/%c ignored by this version, GEOS >= 3.3 is required"),
+                  's', 'c');
+#endif
 #endif
     if(!use_geos && (da < 0. || db < 0.)) {
 	G_warning(_("Negative distances for internal buffers are not supported "
@@ -544,7 +550,8 @@ int main(int argc, char *argv[])
 #ifdef HAVE_GEOS
 	    if (use_geos)
 		geos_buffer(&In, &Out, &Buf, area, GV_AREA, da,
-			    &si, CCats, &arr_bc, &buffers_count, &arr_bc_alloc);
+			    &si, CCats, &arr_bc, &buffers_count, &arr_bc_alloc,
+                            straight_flag->answer, nocaps_flag->answer);
 #endif
 	    if (!use_geos) {
 		Vect_area_buffer2(&In, area, da, db, dalpha,
@@ -668,7 +675,8 @@ int main(int argc, char *argv[])
 #ifdef HAVE_GEOS
 		if (use_geos)
 		    geos_buffer(&In, &Out, &Buf, line, type, da,
-				&si, CCats, &arr_bc, &buffers_count, &arr_bc_alloc);
+				&si, CCats, &arr_bc, &buffers_count, &arr_bc_alloc,
+                                straight_flag->answer, nocaps_flag->answer);
 #endif
 		if (!use_geos) {
 		    Vect_line_buffer2(Points, da, db, dalpha,

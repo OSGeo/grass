@@ -21,11 +21,47 @@ areas with category X (see example below).
 Buffers for lines and areas are generated using the algorithms from
 the GEOS library.
 
-<!-- built-in buffer algorithm no longer desired, we use GEOS:
-If GRASS is not compiled with GEOS support or environmental
-variable <tt>GRASS_VECTOR_BUFFER</tt> is defined, then GRASS generates
-buffers using built-in buffering algorithm (which is still buggy for
-some input data).
+<p>
+<i>For advanced users:</i> built-in buffer algorithm no longer
+desired, we use GEOS: If GRASS is not compiled with GEOS support
+or <a href="variables.html">environmental
+variable</a> <tt>GRASS_VECTOR_BUFFER</tt> is defined, then GRASS
+generates buffers using built-in buffering algorithm (which is still
+buggy for some input data).
+
+<h3>Corner settings</h3>
+
+The following corners (also called "cap") exist:
+<ul>
+<li>no cap: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <img src="v_buffer_no_cap.png" valign="middle" alt="line buffer: no cap"></li>
+<li>rounded cap: <img src="v_buffer_rounded_cap.png" valign="middle" alt="line buffer: rounded cap"></li>
+<li>square cap: <img src="v_buffer_square_cap.png" valign="middle" alt="line buffer: square cap"></li>
+</ul>
+
+By default <em>v.buffer</em> creates rounded buffers (blue color on
+figure below): 
+
+<center>
+  <img src="v_buffer_line.png">
+</center>
+
+Straight corners with caps are created by <b>-s</b> flag (red color on
+the figure below), while <b>-c</b> flag doesn't make caps at the ends of
+polylines (green color on the figure below):
+
+<center>
+  <img src="v_buffer_line_s.png">
+  <img src="v_buffer_line_c.png">
+</center>
+
+<!-- Only support by GRASS buffer 
+Flag <b>-s</b> also influences corners around polygons (see red color
+on the figure below):
+
+<center>
+  <img src="v_buffer_area.png">
+  <img src="v_buffer_area_s.png">
+</center>
 -->
 
 <h2>EXAMPLES</h2>

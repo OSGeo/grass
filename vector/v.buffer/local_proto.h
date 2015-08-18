@@ -1,3 +1,6 @@
+#if (GEOS_VERSION_MAJOR >= 3 && GEOS_VERSION_MINOR >= 3)
+#define GEOS_3_3
+#endif
 
 struct buf_contours
 {
@@ -19,6 +22,6 @@ int geos_buffer(struct Map_info *, struct Map_info *,
 		struct spatial_index *,
 		struct line_cats *,
 		struct buf_contours **,
-		int *, int *);
+		int *, int *, int, int);
 #endif
 
