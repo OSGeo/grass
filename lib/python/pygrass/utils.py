@@ -104,9 +104,9 @@ def rename(oldname, newname, maptype, **kwargs):
 def copy(existingmap, newmap, maptype, **kwargs):
     """Copy a map
 
-    >>> copy('census', 'mycensus', 'vect')
-    >>> rename('mycensus', 'mynewcensus', 'vect')
-    >>> remove('mynewcensus', 'vect')
+    >>> copy('census', 'mycensus', 'vector')
+    >>> rename('mycensus', 'mynewcensus', 'vector')
+    >>> remove('mynewcensus', 'vector')
 
     """
     kwargs.update({maptype: '{old},{new}'.format(old=existingmap, new=newmap)})
@@ -116,8 +116,9 @@ def copy(existingmap, newmap, maptype, **kwargs):
 def getenv(env):
     """Return the current grass environment variables
 
-    >>> getenv("MAPSET")
-    'user1'
+    >>> from grass.script.core import gisenv
+    >>> getenv("MAPSET") == gisenv()["MAPSET"]
+    True
 
     """
     return libgis.G_getenv_nofatal(env)
@@ -151,7 +152,7 @@ def is_clean_name(name):
     >>> is_clean_name('0census')
     True
     >>> is_clean_name('census?')
-    False
+    True
     >>> is_clean_name('cénsus')
     False
 
@@ -164,6 +165,7 @@ def is_clean_name(name):
 def coor2pixel(coord, region):
     """Convert coordinates into a pixel row and col
 
+    >>> from grass.pygrass.gis.region import Region
     >>> reg = Region()
     >>> coor2pixel((reg.west, reg.north), reg)
     (0.0, 0.0)
@@ -179,6 +181,7 @@ def coor2pixel(coord, region):
 def pixel2coor(pixel, region):
     """Convert row and col of a pixel into a coordinates
 
+    >>> from grass.pygrass.gis.region import Region
     >>> reg = Region()
     >>> pixel2coor((0, 0), reg) == (reg.north, reg.west)
     True
@@ -199,21 +202,21 @@ def get_raster_for_points(poi_vector, raster, column=None, region=None):
     >>> from grass.pygrass.vector import VectorTopo
     >>> from grass.pygrass.raster import RasterRow
     >>> ele = RasterRow('elevation')
-    >>> copy('schools','myschools','vect')
+    >>> copy('schools','myschools','vector')
     >>> sch = VectorTopo('myschools')
     >>> sch.open(mode='r')
     >>> get_raster_for_points(sch, ele)               # doctest: +ELLIPSIS
-    [(1, 633649.2856743174, 221412.94434781274, 145.06602)...
+    [(1, 633649.2856743174, 221412.94434781274, 141.01506), ...]
     >>> sch.table.columns.add('elevation','double precision')
     >>> 'elevation' in sch.table.columns
     True
-    >>> get_raster_for_points(sch, ele, 'elevation')
+    >>> get_raster_for_points(sch, ele, column='elevation')
     True
     >>> sch.table.filters.select('NAMESHORT','elevation')
     Filters(u'SELECT NAMESHORT, elevation FROM myschools;')
     >>> cur = sch.table.execute()
     >>> cur.fetchall()                                # doctest: +ELLIPSIS
-    [(u'SWIFT CREEK', 145.06602), ... (u'9TH GRADE CTR', None)]
+    [(u'SWIFT CREEK', 141.01506), ... (u'9TH GRADE CTR', None)]
     >>> remove('myschools','vect')
 
 
@@ -234,6 +237,7 @@ def get_raster_for_points(poi_vector, raster, column=None, region=None):
         raster.open()
     if poi_vector.num_primitive_of('point') == 0:
         raise GrassError(_("Vector doesn't contain points"))
+
     for poi in poi_vector.viter('points'):
         val = raster.get_value(poi, region)
         if column:
