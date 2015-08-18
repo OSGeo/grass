@@ -440,7 +440,7 @@ class VectorCleaningFrame(wx.Frame):
         else:
             self.selected = -1
 
-    def OnDone(self, cmd, returncode):
+    def OnDone(self, event):
         """Command done"""
         self.SetStatusText('')
 
