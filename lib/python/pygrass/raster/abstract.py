@@ -57,7 +57,7 @@ class Info(object):
             cols: 1500
             north: 228500.0 south: 215000.0 nsres:10.0
             east:  645000.0 west: 630000.0 ewres:10.0
-            range: 56, 156
+            range: 55.578792572, 156.329864502
             proj: 99
             <BLANKLINE>
 
