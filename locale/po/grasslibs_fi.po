@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_fi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-20 21:44+0200\n"
+"POT-Creation-Date: 2015-08-18 12:56+0200\n"
 "PO-Revision-Date: 2015-08-17 16:24+0300\n"
 "Last-Translator: Kari Salovaara <kari.salovaara@pp1.inet.fi>\n"
 "Language-Team: Finnish <grass-translations@lists.osgeo.org>\n"
@@ -5466,7 +5466,8 @@ msgstr ""
 msgid "WARNING: "
 msgstr ""
 
-#: ../lib/gis/error.c:362
+#: ../lib/gis/error.c:362 ../lib/gis/parser.c:1472
+#, c-format
 msgid "ERROR: "
 msgstr ""
 
@@ -6553,37 +6554,42 @@ msgid ""
 "\tYou provided %d item(s): %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1473
+#: ../lib/gis/parser.c:1474
 #, c-format
-msgid "ERROR: option <%s>: <%s> exists.\n"
+msgid "option <%s>: <%s> exists. To overwrite, use the --overwrite flag"
 msgstr ""
 
-#: ../lib/gis/parser.c:1587
+#: ../lib/gis/parser.c:1479
+#, c-format
+msgid "GRASS_INFO_ERROR(%d,1): "
+msgstr ""
+
+#: ../lib/gis/parser.c:1591
 #, c-format
 msgid "%s= is not a separator option"
 msgstr ""
 
-#: ../lib/gis/parser.c:1590
+#: ../lib/gis/parser.c:1594
 #, c-format
 msgid "No separator given for %s="
 msgstr ""
 
-#: ../lib/gis/parser.c:1652 ../lib/gis/parser.c:1669
+#: ../lib/gis/parser.c:1656 ../lib/gis/parser.c:1673
 #, c-format
 msgid "%s= is not a file option"
 msgstr ""
 
-#: ../lib/gis/parser.c:1654
+#: ../lib/gis/parser.c:1658
 #, c-format
 msgid "Opening multiple files not supported for %s="
 msgstr ""
 
-#: ../lib/gis/parser.c:1660
+#: ../lib/gis/parser.c:1664
 #, c-format
 msgid "Unable to open %s file <%s>"
 msgstr ""
 
-#: ../lib/gis/parser.c:1666
+#: ../lib/gis/parser.c:1670
 #, c-format
 msgid "Unable to create %s file <%s>"
 msgstr ""
@@ -8845,5 +8851,3 @@ msgstr ""
 #, c-format
 msgid "%s: out of memory"
 msgstr ""
-
-
