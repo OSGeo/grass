@@ -24,6 +24,7 @@ _NUMOF = {"areas": libvect.Vect_get_num_areas,
           "holes": libvect.Vect_get_num_holes,
           "islands": libvect.Vect_get_num_islands,
           "kernels": libvect.Vect_get_num_kernels,
+          "points": libvect.Vect_get_num_lines,
           "lines": libvect.Vect_get_num_lines,
           "nodes": libvect.Vect_get_num_nodes,
           "updated_lines": libvect.Vect_get_num_updated_lines,
@@ -239,7 +240,7 @@ class VectorTopo(Vector):
     Open a vector map using the *with statement*: ::
 
         >>> with VectorTopo('schools', mode='r') as schools:
-        ...     for school in schools[:3]:
+        ...     for school in schools[:4]:
         ...         print school.attrs['NAMESHORT']
         ...
         SWIFT CREEK
@@ -263,7 +264,7 @@ class VectorTopo(Vector):
 
             >>> cens = VectorTopo('census')
             >>> cens.open(mode='r')
-            >>> cens[:3]
+            >>> cens[:4]
             [Boundary(v_id=1), Boundary(v_id=2), Boundary(v_id=3)]
             >>> cens.close()
 
