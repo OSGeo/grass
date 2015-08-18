@@ -629,13 +629,10 @@ class TaskFrame(wx.Frame):
         if event:
             event.Skip()
 
-    def OnDone(self, cmd, returncode):
+    def OnDone(self, event):
         """This function is launched from OnRun() when command is
         finished
-
-        :param returncode: command's return code (0 for success)
         """
-
         if hasattr(self, "btn_cancel"):
             self.btn_cancel.Enable(True)
 
@@ -652,7 +649,7 @@ class TaskFrame(wx.Frame):
                     self.get_dcmd is None and \
                     hasattr(self, "closebox") and \
                     self.closebox.IsChecked() and \
-                    (returncode == 0):
+                    (event.returncode == 0):
             # was closed also when aborted but better is leave it open
             wx.FutureCall(2000, self.Close)
 

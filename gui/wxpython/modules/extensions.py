@@ -231,8 +231,8 @@ class InstallExtensionWindow(wx.Frame):
         if cmd:
             log.RunCmd(cmd, onDone = self.OnDone)
         
-    def OnDone(self, cmd, returncode):
-        if returncode == 0:
+    def OnDone(self, event):
+        if event.returncode == 0:
             if not os.getenv('GRASS_ADDON_BASE'):
                 SetAddOnPath(key = 'BASE')
             

@@ -593,12 +593,12 @@ class MapCalcFrame(wx.Frame):
             RunCommand(self.cmd,
                        **params)
 
-    def OnDone(self, cmd, returncode):
+    def OnDone(self, event):
         """Add create map to the layer tree
 
         Sends the mapCreated signal from the grass interface.
         """
-        if returncode != 0:
+        if event.returncode != 0:
             return
         name = self.newmaptxt.GetValue().strip(' "') + '@' + grass.gisenv()['MAPSET']
         ltype = 'raster'
