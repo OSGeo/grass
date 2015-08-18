@@ -147,11 +147,6 @@ int main(int argc, char **argv)
     module->description =
 	_("Re-projects a raster map from given location to the current location.");
 
-    inmap = G_define_standard_option(G_OPT_R_INPUT);
-    inmap->description = _("Name of input raster map to re-project");
-    inmap->required = NO;
-    inmap->guisection = _("Source");
-
     inlocation = G_define_standard_option(G_OPT_M_LOCATION);
     inlocation->required = YES;
     inlocation->label = _("Location containing input raster map");
@@ -162,9 +157,13 @@ int main(int argc, char **argv)
     imapset->description = _("Default: name of current mapset");
     imapset->guisection = _("Source");
 
+    inmap = G_define_standard_option(G_OPT_R_INPUT);
+    inmap->description = _("Name of input raster map to re-project");
+    inmap->required = NO;
+    inmap->guisection = _("Source");
+    
     indbase = G_define_standard_option(G_OPT_M_DBASE);
     indbase->label = _("Path to GRASS database of input location");
-    indbase->guisection = _("Source");
 
     outmap = G_define_standard_option(G_OPT_R_OUTPUT);
     outmap->required = NO;
