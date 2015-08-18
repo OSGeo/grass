@@ -31,7 +31,7 @@
 
 #%option G_OPT_M_COORDS
 #% required: no
-#% description: Comma separated list of coordinates or "-" in case stdin should be used
+#% description: Comma separated list of coordinates
 #%end
 
 #%option G_OPT_STRDS_INPUT
