@@ -278,13 +278,13 @@ class Geo(object):
         else:
             self.c_cats = c_cats
 
-        # set the attributes
-        self.attrs = None
-        if table is not None:
-            self.attrs = Attrs(self.cat, table, writable)
-
         if self.id and self.c_mapinfo is not None and read:
             self.read()
+
+        # set the attributes as last thing to do
+        self.attrs = None
+        if table is not None and self.cat is not None:
+            self.attrs = Attrs(self.cat, table, writable)
 
     @property
     def cat(self):
