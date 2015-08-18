@@ -118,6 +118,10 @@ void G_get_element_window(struct Cell_head *window,
 	G_fatal_error(_("Unable to open element file <%s> for <%s@%s>"),
 			element, name, mapset);
 
+    G_fseek(fp, 0, SEEK_END);
+    if (!G_ftell(fp))
+        G_fatal_error(_("Region file %s/%s/%s is empty"), mapset, element, name);
+    G_fseek(fp, 0, SEEK_SET);
     G__read_Cell_head(fp, window, 0);
     fclose(fp);
 }
