@@ -229,8 +229,8 @@ class Location(object):
         ::
 
             >>> location = Location()
-            >>> sorted(location.mapsets())
-            ['PERMANENT', 'user1']
+            >>> sorted(location.mapsets())                # doctest: +ELLIPSIS
+            [...]
 
         """
         mapsets = [mapset for mapset in self]
@@ -249,15 +249,17 @@ class Location(object):
 class Mapset(object):
     """Mapset ::
 
+        >>> from grass.script.core import gisenv
+        >>> genv = gisenv()
         >>> mapset = Mapset()
-        >>> mapset
-        Mapset('user1')
-        >>> mapset.gisdbase                               # doctest: +ELLIPSIS
-        '/home/...'
-        >>> mapset.location
-        'nc_basic_spm_grass7'
-        >>> mapset.name
-        'user1'
+        >>> mapset                                        # doctest: +ELLIPSIS
+        Mapset(...)
+        >>> mapset.gisdbase == genv['GISDBASE']
+        True
+        >>> mapset.location == genv['LOCATION_NAME']
+        True
+        >>> mapset.name == genv['MAPSET']
+        True
 
     ..
     """
@@ -318,11 +320,11 @@ class Mapset(object):
         ::
 
             >>> mapset = Mapset('PERMANENT')
-            >>> rast = mapset.glist('rast')
+            >>> rast = mapset.glist('raster')
             >>> rast.sort()
             >>> rast                                      # doctest: +ELLIPSIS
             ['basins', 'elevation', ...]
-            >>> sorted(mapset.glist('rast', pattern='el*'))
+            >>> sorted(mapset.glist('raster', pattern='el*'))
             ['elevation', 'elevation_shade']
 
         ..
@@ -367,8 +369,8 @@ class VisibleMapset(object):
     """VisibleMapset object::
 
         >>> mapset = VisibleMapset('user1')
-        >>> mapset
-        ['user1', 'PERMANENT']
+        >>> mapset                                       # doctest: +ELLIPSIS
+        [...]
 
     ..
     """
