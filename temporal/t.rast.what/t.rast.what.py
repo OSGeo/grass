@@ -31,6 +31,7 @@
 
 #%option G_OPT_M_COORDS
 #% required: no
+#% description: Comma separated list of coordinates or "-" in case stdin should be used
 #%end
 
 #%option G_OPT_STRDS_INPUT
@@ -86,6 +87,11 @@
 #% description: Output header row
 #%end
 
+#%flag
+#% key: i
+#% description: Use stdin as input and ignore coordinates and point option
+#%end
+
 ## Temporary disabled the r.what flags due to test issues
 ##%flag
 ##% key: f
@@ -126,6 +132,8 @@ def main(options, flags):
     
     nprocs = int(options["nprocs"])
     write_header = flags["n"]
+    use_stdin = flags["i"]
+
     #output_cat_label = flags["f"]
     #output_color = flags["r"]
     #output_cat = flags["i"]
@@ -135,8 +143,19 @@ def main(options, flags):
     if coordinates and points: 
         gscript.fatal(_("Options coordinates and points are mutually exclusive"))
 
-    if not coordinates and not points: 
-        gscript.fatal(_("Please specify the coordinates or the points option, to provide the sampling coordinates"))
+    if not coordinates and not points and not use_stdin: 
+        gscript.fatal(_("Please specify the coordinates, the points option or use the 's' option to pipe coordinate positions to t.rast.what from stdin, to provide the sampling coordinates"))
+
+    if use_stdin:
+        coordinates_stdin = str(sys.__stdin__.read())
+        # Check if coordinates are given with site names or IDs
+        stdin_length = len(coordinates_stdin.split('\n')[0].split())
+        if stdin_length <= 2:
+            site_input = False
+        elif stdin_length >= 3:
+            site_input = True
+    else:
+        site_input = False
 
     # Make sure the temporal database exists
     tgis.init()
@@ -173,6 +192,8 @@ def main(options, flags):
     #if output_cat is True:
     #    flags += "i"
 
+
+
     # Configure the r.what module
     if points: 
         r_what = pymod.Module("r.what", map="dummy", 
@@ -188,7 +209,14 @@ def main(options, flags):
                                         separator=separator,  
                                         coordinates=coord_list, 
                                         overwrite=overwrite, flags=flags, 
-                                        quiet=True) 
+                                        quiet=True)
+    elif use_stdin:
+        r_what = pymod.Module("r.what", map="dummy", 
+                                        output="dummy", run_=False, 
+                                        separator=separator,  
+                                        stdin_=coordinates_stdin, 
+                                        overwrite=overwrite, flags=flags, 
+                                        quiet=True)
     else: 
         grass.error(_("Please specify points or coordinates"))
 
@@ -253,18 +281,18 @@ def main(options, flags):
     # Out the output files in the correct order together
     if layout == "row":
         one_point_per_row_output(separator, output_files, output_time_list,
-                                 output, write_header)
+                                 output, write_header, site_input)
     elif layout == "col":
         one_point_per_col_output(separator, output_files, output_time_list,
-                                 output, write_header)
+                                 output, write_header, site_input)
     else:
         one_point_per_timerow_output(separator, output_files, output_time_list,
-                                     output, write_header)
+                                     output, write_header, site_input)
 
 ############################################################################
 
 def one_point_per_row_output(separator, output_files, output_time_list,
-                             output, write_header):
+                             output, write_header, site_input):
     """Write one point per row
        output is of type: x,y,start,end,value
     """
@@ -272,8 +300,13 @@ def one_point_per_row_output(separator, output_files, output_time_list,
     out_file = open(output, 'w') if output != "-" else sys.stdout
     
     if write_header is True:
-        out_file.write("x%(sep)sy%(sep)sstart%(sep)send%(sep)svalue\n"\
+        if site_input:
+            out_file.write("x%(sep)sy%(sep)ssite%(sep)sstart%(sep)send%(sep)svalue\n"\
                        %({"sep":separator}))
+        else:
+            out_file.write("x%(sep)sy%(sep)sstart%(sep)send%(sep)svalue\n"\
+                       %({"sep":separator}))
+
     
     for count in range(len(output_files)):
         file_name = output_files[count]
@@ -284,11 +317,18 @@ def one_point_per_row_output(separator, output_files, output_time_list,
             line = line.split(separator)
             x = line[0]
             y = line[1]
+            if site_input:
+                site = line[2]
+
             # We ignore the site name
             values = line[3:]
             for i in range(len(values)):
                 start, end = map_list[i].get_temporal_extent_as_tuple()
-                coor_string = "%(x)10.10f%(sep)s%(y)10.10f%(sep)s"\
+                if site_input:
+                    coor_string = "%(x)10.10f%(sep)s%(y)10.10f%(sep)s%(site_name)s%(sep)s"\
+                               %({"x":float(x),"y":float(y),"site_name":str(site),"sep":separator})
+                else:
+                    coor_string = "%(x)10.10f%(sep)s%(y)10.10f%(sep)s"\
                                %({"x":float(x),"y":float(y),"sep":separator})
                 time_string = "%(start)s%(sep)s%(end)s%(sep)s%(val)s\n"\
                                %({"start":str(start), "end":str(end),
@@ -304,7 +344,7 @@ def one_point_per_row_output(separator, output_files, output_time_list,
 ############################################################################
 
 def one_point_per_col_output(separator, output_files, output_time_list,
-                             output, write_header):
+                             output, write_header, site_input):
     """Write one point per col
        output is of type: 
        start,end,point_1 value,point_2 value,...,point_n value
@@ -331,13 +371,25 @@ def one_point_per_col_output(separator, output_files, output_time_list,
         if first is True:
             if write_header is True:
                 out_file.write("start%(sep)send"%({"sep":separator}))
-                for row in matrix:
-                    x = row[0]
-                    y = row[1]
-                    out_file.write("%(sep)s%(x)10.10f;%(y)10.10f"\
+                if site_input:
+                    for row in matrix:
+                        x = row[0]
+                        y = row[1]
+                        site = row[2]
+                        out_file.write("%(sep)s%(x)10.10f;%(y)10.10f;%(site_name)s"\
+                                   %({"sep":separator,
+                                      "x":float(x), 
+                                      "y":float(y),
+                                      "site_name":str(site)}))
+                else:
+                    for row in matrix:
+                        x = row[0]
+                        y = row[1]
+                        out_file.write("%(sep)s%(x)10.10f;%(y)10.10f"\
                                    %({"sep":separator,
                                       "x":float(x), 
                                       "y":float(y)}))
+
                 out_file.write("\n")
 
         first = False
@@ -362,7 +414,7 @@ def one_point_per_col_output(separator, output_files, output_time_list,
 ############################################################################
 
 def one_point_per_timerow_output(separator, output_files, output_time_list,
-                             output, write_header):
+                             output, write_header, site_input):
     """Use the original layout of the r.waht output and print instead of 
        the raster names, the time stamps as header
        
@@ -385,7 +437,10 @@ def one_point_per_timerow_output(separator, output_files, output_time_list,
 
         if write_header:
             if first is True:
-                header = "x%(sep)sy"%({"sep":separator})
+                if site_input:
+                    header = "x%(sep)sy%(sep)ssite"%({"sep":separator})
+                else:
+                    header = "x%(sep)sy"%({"sep":separator})
             for map in map_list:
                 start, end = map.get_temporal_extent_as_tuple()
                 time_string = "%(sep)s%(start)s;%(end)s"\
@@ -399,7 +454,10 @@ def one_point_per_timerow_output(separator, output_files, output_time_list,
             cols = lines[i].split(separator)
 
             if first is True:
-                matrix.append(cols[:2])
+                if site_input:
+                    matrix.append(cols[:3])
+                else:
+                    matrix.append(cols[:2])
 
             matrix[i] = matrix[i] + cols[3:]
 

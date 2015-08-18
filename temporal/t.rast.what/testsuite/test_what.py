@@ -59,6 +59,15 @@ class TestRasterWhat(TestCase):
 
         self.assertFileMd5("out_row_coords.txt", "cd917ac4848786f1b944512eed1da5bc", text=True)
 
+
+    def test_row_output_coords_stdin(self):
+        self.assertModule("t.rast.what",  strds="A",  output="out_row_coords.txt", 
+                          flags="ni",
+                          layout="row", stdin_="30 30\n45 45",
+                          nprocs=1,  overwrite=True,  verbose=True)
+
+        self.assertFileMd5("out_row_coords.txt", "cd917ac4848786f1b944512eed1da5bc", text=True)
+
     def test_col_output(self):
         self.assertModule("t.rast.what",  strds="A",  output="out_col.txt", 
                           points="points", flags="n",
