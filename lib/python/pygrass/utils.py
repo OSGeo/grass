@@ -206,7 +206,7 @@ def get_raster_for_points(poi_vector, raster, column=None, region=None):
     >>> sch = VectorTopo('myschools')
     >>> sch.open(mode='r')
     >>> get_raster_for_points(sch, ele)               # doctest: +ELLIPSIS
-    [(1, 633649.2856743174, 221412.94434781274, 141.01506), ...]
+    [(1, 633649.2856743174, 221412.94434781274, 145.06602), ...]
     >>> sch.table.columns.add('elevation','double precision')
     >>> 'elevation' in sch.table.columns
     True
@@ -216,7 +216,7 @@ def get_raster_for_points(poi_vector, raster, column=None, region=None):
     Filters(u'SELECT NAMESHORT, elevation FROM myschools;')
     >>> cur = sch.table.execute()
     >>> cur.fetchall()                                # doctest: +ELLIPSIS
-    [(u'SWIFT CREEK', 141.01506), ... (u'9TH GRADE CTR', None)]
+    [(u'SWIFT CREEK', 145.06602), ... (u'9TH GRADE CTR', None)]
     >>> remove('myschools','vect')
 
 
