@@ -142,12 +142,12 @@ int geos_buffer(struct Map_info *In, struct Map_info *Out,
 		struct spatial_index *si,
 		struct line_cats *Cats,
 		struct buf_contours **arr_bc,
-		int *buffers_count, int *arr_bc_alloc)
+		int *buffers_count, int *arr_bc_alloc, int flat, int no_caps)
 {
     GEOSGeometry *IGeom = NULL;
     GEOSGeometry *OGeom = NULL;
     
-    G_debug(3, "geos_buffer()");
+    G_debug(3, "geos_buffer(): id=%d", id);
 
     if (type == GV_AREA)
 	IGeom = Vect_read_area_geos(In, id);
@@ -158,10 +158,25 @@ int geos_buffer(struct Map_info *In, struct Map_info *Out,
      * A value of 8 gives less than 2% max error in the buffer distance.
      * For a max error of < 1%, use QS = 12.
      * For a max error of < 0.1%, use QS = 18. */
-    OGeom = GEOSBuffer(IGeom, da, 12);
+#ifdef GEOS_3_3
+    if (flat || no_caps) {
+        GEOSBufferParams* geos_params = GEOSBufferParams_create();
+        GEOSBufferParams_setEndCapStyle(geos_params,
+                                        no_caps ? GEOSBUF_CAP_FLAT : GEOSBUF_CAP_SQUARE);
 
-    if (!OGeom)
-	G_warning(_("Buffering failed"));
+        OGeom = GEOSBufferWithParams(IGeom, geos_params, da);
+        GEOSBufferParams_destroy(geos_params);
+    }
+    else {
+        OGeom = GEOSBuffer(IGeom, da, 12);
+    }
+#else
+    OGeom = GEOSBuffer(IGeom, da, 12);
+#endif
+    
+    if (!OGeom) {
+        G_fatal_error(_("Buffering failed (feature %d)"), id);
+    }
     
     geom2ring(OGeom, Out, Buf, si, Cats, arr_bc, buffers_count, arr_bc_alloc);
 
