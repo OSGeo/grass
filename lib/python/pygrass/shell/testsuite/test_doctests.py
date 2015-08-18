@@ -9,7 +9,7 @@ import grass.gunittest.case
 import grass.gunittest.main
 import grass.gunittest.utils
 
-import grass.pygrass.shell as gshell
+from grass.pygrass.shell import conversion, show
 
 
 # doctest does not allow changing the base classes of test case, skip test case
@@ -31,8 +31,8 @@ def load_tests(loader, tests, ignore):
     # for now it is the only place where it works
     grass.gunittest.utils.do_doctest_gettext_workaround()
     # this should be called at some top level
-    tests.addTests(doctest.DocTestSuite(gshell.conversion))
-    tests.addTests(doctest.DocTestSuite(gshell.show))
+    tests.addTests(doctest.DocTestSuite(conversion))
+    tests.addTests(doctest.DocTestSuite(show))
     return tests
 
 
