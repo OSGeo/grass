@@ -208,9 +208,9 @@ class ConditionalExpressionNode(ExpressionNode):
             return self.no.evaluate(context)
 
     def py_string(self, can_be_ctype):
-        return "%s and %s or %s" % \
-            (self.cond.py_string(True),
-             self.yes.py_string(can_be_ctype),
+        return "(%s if %s else %s)" % \
+            (self.yes.py_string(can_be_ctype),
+             self.cond.py_string(True),
              self.no.py_string(can_be_ctype))
 
 class AttributeExpressionNode(ExpressionNode):
