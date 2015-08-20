@@ -30,6 +30,11 @@ plot if <b>chart_type</b> is <em>bar</em> (See Example 2).
 
 Pie-charts of monthly winter precipitation (North Carolina sample dataset):
 
+<!-- might be good to add this to example:
+v.voronoi input=precip_30ynormals output=precip_stations_voronoi
+d.vect precip_stations_voronoi type=boundary
+-->
+
 <div class="code"><pre>
 g.region vector=nc_state -p
 d.vect nc_state
