@@ -31,34 +31,23 @@
 #include "basin.h"
 #include "outletP.h"
 
-SHORT drain[3][3]	= {{ 7,6,5 },{ 8,-17,4 },{ 1,2,3 }};
-SHORT updrain[3][3]	= {{ 3,2,1 },{ 4,-17,8 },{ 5,6,7 }};
-char dr_mod[9]	= {0,1,1,1,0,-1,-1,-1,0};
-char dc_mod[9]	= {0,1,0,-1,-1,-1,0,1,1};
-char basin_name[GNAME_MAX], swale_name[GNAME_MAX],
-  half_name[GNAME_MAX], elev_name[GNAME_MAX], armsed_name[GNAME_MAX];
-int nrows, ncols, done, total;
-int array_size, high_index, do_index;
-char *drain_ptrs, ha_f, el_f, ar_f;
-RAMSEG ba_seg, pt_seg, sl_seg;
-int ncols_less_one, nrows_less_one;
-NODE *to_do;
-FILE *arm_fd, *fp;
-FLAG *doner, *swale, *left;
+SHORT drain[3][3] = {{ 7,6,5 },{ 8,-17,4 },{ 1,2,3 }};
+int nrows, ncols;
+char *drain_ptrs;
+RAMSEG ba_seg, pt_seg;
 CELL *bas;
-double half_res, diag, max_length, dep_slope;
-struct Cell_head window;
 
 int main(int argc, char *argv[])
 {
-    double N, E;
-    int row, col, basin_fd, drain_fd;
-    CELL *cell_buf;
-    char drain_name[GNAME_MAX];
     struct GModule *module;
     struct {
       struct Option *input, *output, *coords;
     } opt;
+    double N, E;
+    int row, col, basin_fd, drain_fd;
+    CELL *cell_buf;
+    char drain_name[GNAME_MAX], basin_name[GNAME_MAX];
+    struct Cell_head window;
 
     G_gisinit(argv[0]);
 
@@ -103,9 +92,6 @@ int main(int argc, char *argv[])
 
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
-    total = nrows * ncols;
-    nrows_less_one = nrows - 1;
-    ncols_less_one = ncols - 1;
     drain_fd = Rast_open_old(drain_name, "");
 
     drain_ptrs =
@@ -116,8 +102,6 @@ int main(int argc, char *argv[])
     for (row = 0; row < nrows; row++) {
 	Rast_get_c_row(drain_fd, cell_buf, row);
 	for (col = 0; col < ncols; col++) {
-	    if (cell_buf[col] == 0) 
-		total--;
 	    drain_ptrs[SEG_INDEX(pt_seg, row, col)] = cell_buf[col];
 	}
     }
