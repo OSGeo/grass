@@ -60,6 +60,7 @@ footer_index = string.Template(\
 <a href="${INDEXNAME}.html">${INDEXNAMECAP} index</a> |
 <a href="topics.html">Topics index</a> |
 <a href="keywords.html">Keywords index</a> |
+<a href="graphical_index.html">Graphical index</a> |
 <a href="full_index.html">Full index</a>
 </p>
 <p>
@@ -79,6 +80,7 @@ footer_noindex = string.Template(\
 <a href="index.html">Main index</a> |
 <a href="topics.html">Topics index</a> |
 <a href="keywords.html">Keywords index</a> |
+<a href="graphical_index.html">Graphical index</a> |
 <a href="full_index.html">Full index</a>
 </p>
 <p>
