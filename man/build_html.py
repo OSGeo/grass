@@ -187,8 +187,17 @@ r"""<!-- the files grass${grass_version_major}.html & helptext.html file live in
 
 footer_tmpl = string.Template(\
 r"""<hr class="header">
-<p><a href="${index_url}">Manual main page</a> | <a href="topics.html">Topics Index</a> | <a href="keywords.html">Keywords Index</a> | <a href="full_index.html">Full Index</a></p>
-<p>&copy; 2003-${year} <a href="http://grass.osgeo.org">GRASS Development Team</a>, GRASS GIS ${grass_version} Reference Manual</p>
+<p>
+<a href="${index_url}">Main index</a> |
+<a href="topics.html">Topics index</a> |
+<a href="keywords.html">Keywords index</a> |
+<a href="full_index.html">Full index</a>
+</p>
+<p>
+&copy; 2003-${year}
+<a href="http://grass.osgeo.org">GRASS Development Team</a>,
+GRASS GIS ${grass_version} Reference Manual
+</p>
 
 </div>
 </body>
