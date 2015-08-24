@@ -1619,6 +1619,20 @@ class Area(Geo):
             return ilist
         return [Boundary(v_id=abs(v_id), c_mapinfo=self.c_mapinfo) for v_id in ilst]
 
+
+    def get_wkt(self):
+        """Return a Well Known Text string of the Area. ::
+
+            For now the outer ring is returned
+
+            TODO: Implement inner rings detected from isles
+        """
+        line = self.get_points()
+
+        return "Polygon((%s))" % ', '.join([
+               ' '.join(['%f' % coord for coord in pnt])
+               for pnt in line.tolist()])
+
     @mapinfo_must_be_set
     def cats(self, cats=None):
         """Get area categories.
