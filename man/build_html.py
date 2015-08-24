@@ -191,6 +191,7 @@ r"""<hr class="header">
 <a href="${index_url}">Main index</a> |
 <a href="topics.html">Topics index</a> |
 <a href="keywords.html">Keywords index</a> |
+<a href="graphical_index.html">Graphical index</a> |
 <a href="full_index.html">Full index</a>
 </p>
 <p>
