@@ -750,7 +750,7 @@ def create_temporal_database(dbif):
     stvds_tables_sql = stds_tables_template_sql.replace("STDS", "stvds")
     str3ds_tables_sql = stds_tables_template_sql.replace("STDS", "str3ds")
 
-    msgr.message(_("Creating temporal database: %s" % (tgis_database_string)))
+    msgr.message(_("Creating temporal database: %s" % (str(tgis_database_string))))
 
     if tgis_backend == "sqlite":
         # We need to create the sqlite3 database path if it does not exists
@@ -860,7 +860,7 @@ class SQLDatabaseInterfaceConnection(object):
             driver,  dbstring = self.tgis_mapsets[mapset]
 
             if dbstring not in self.unique_connections.keys():
-                self.unique_connections[dbstring] = DBConnection(backend=driver, 
+                self.unique_connections[dbstring] = DBConnection(backend=driver,
                                                                  dbstring=dbstring)
 
             self.connections[mapset] = self.unique_connections[dbstring]
@@ -1025,7 +1025,7 @@ class DBConnection(object):
 
     def __init__(self, backend=None, dbstring=None):
         """ Constructor of a database connection
-        
+
             param backend:The database backend sqlite or pg
             param dbstring: The database connection string
         """
@@ -1071,7 +1071,7 @@ class DBConnection(object):
         """Connect to the DBMI to execute SQL statements
 
             Supported backends are sqlite3 and postgresql
-            
+
             param dbstring: The database connection string
         """
         # Connection in the current mapset

@@ -151,15 +151,17 @@ def _available_mapsets(lock, conn, data):
 
        :returns: Names of available mapsets as list of strings
     """
-    
+
     count = 0
     mapset_list = []
     try:
+        # Initilaize the accessable mapset list, this is bad C design!!!
+        libgis.G_get_mapset_name(0)
         mapsets = libgis.G_get_available_mapsets()
         while mapsets[count]:
             char_list = ""
             mapset = mapsets[count]
-            if libgis.G_mapset_permissions(mapset) > 0:
+            if libgis.G_mapset_permissions(mapset) == 1 and libgis.G_is_mapset_in_search_path(mapset) == 1:
                 c = 0
                 while mapset[c] != "\x00":
                     char_list += mapset[c]
@@ -758,7 +760,7 @@ def c_library_server(lock, conn):
     CALLBACK.argtypes = c_void_p
 
     cerror_handler = CALLBACK(error_handler)
-    
+
     libgis.G_add_error_handler(cerror_handler, None)
 
     # Crerate the function array
@@ -914,17 +916,17 @@ class CLibrariesInterface(object):
            >>> mapset = ciface.get_mapset()
            >>> location = ciface.get_location()
            >>> gisdbase = ciface.get_gisdbase()
-           
+
            >>> ciface.fatal_error()
            Traceback (most recent call last):
                raise FatalError(message)
            FatalError: Fatal error
-           
+
            >>> ciface.fatal_error()
            Traceback (most recent call last):
                raise FatalError(message)
            FatalError: Fatal error
-           
+
            >>> ciface.fatal_error()
            Traceback (most recent call last):
                raise FatalError(message)
@@ -950,7 +952,7 @@ class CLibrariesInterface(object):
         self.start_server()
         self.start_checker_thread()
         self.stopThread = False
-        
+
     def start_checker_thread(self):
         if self.checkThread is not None and self.checkThread.is_alive():
             self.stop_checker_thread()
@@ -959,13 +961,13 @@ class CLibrariesInterface(object):
         self.checkThread.daemon = True
         self.stopThread = False
         self.checkThread.start()
-    
+
     def stop_checker_thread(self):
         self.threadLock.acquire()
         self.stopThread = True
         self.threadLock.release()
         self.checkThread.join(None)
-        
+
     def thread_checker(self):
         """Check every 200 micro seconds if the server process is alive"""
         while True:
@@ -989,7 +991,7 @@ class CLibrariesInterface(object):
 
     def check_server(self):
         self._check_restart_server()
-    
+
     def _check_restart_server(self):
         """Restart the server if it was terminated
         """
@@ -1351,7 +1353,7 @@ class CLibrariesInterface(object):
 
     def fatal_error(self, mapset=None):
         """Generate a fatal error in libgis.
-        
+
             This function is only for testing purpose.
         """
         self.check_server()
@@ -1360,7 +1362,7 @@ class CLibrariesInterface(object):
         return self.safe_receive("Fatal error")
 
     def safe_receive(self, message):
-        """Receive the data and throw an FatalError exception in case the server 
+        """Receive the data and throw an FatalError exception in case the server
            process was killed and the pipe was closed by the checker thread"""
         try:
             ret = self.client_conn.recv()
