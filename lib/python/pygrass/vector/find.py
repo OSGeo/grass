@@ -13,7 +13,7 @@ from grass.pygrass.vector.geometry import read_line, Isle, Area, Point, Node
 
 
 class AbstractFinder(object):
-    def __init__(self, c_mapinfo, table=None, writable=False):
+    def __init__(self, c_mapinfo, table=None, writeable=False):
         """AbstractFinder
         -----------------
 
@@ -21,7 +21,7 @@ class AbstractFinder(object):
         """
         self.c_mapinfo = c_mapinfo
         self.table = table
-        self.writable = writable
+        self.writeable = writeable
         self.vtype = {'point':    libvect.GV_POINT,  # 1
                       'line':     libvect.GV_LINE,   # 2
                       'boundary': libvect.GV_BOUNDARY,  # 3
@@ -70,10 +70,10 @@ class PointFinder(AbstractFinder):
     >>> schools.close()
     >>> zipcodes.close()
     """
-    def __init__(self, c_mapinfo, table=None, writable=False):
+    def __init__(self, c_mapinfo, table=None, writeable=False):
         """Find geometry feature around a point.
         """
-        super(PointFinder, self).__init__(c_mapinfo, table, writable)
+        super(PointFinder, self).__init__(c_mapinfo, table, writeable)
 
 # TODO: add the Node class and enable this method
 #    def node(self, point, maxdist):
@@ -95,7 +95,7 @@ class PointFinder(AbstractFinder):
                                             int(not point.is2D), exclude)
         if feature_id:
             return read_line(feature_id, self.c_mapinfo,
-                             self.table, self.writable)
+                             self.table, self.writeable)
 
     @must_be_open
     def geos(self, point, maxdist, type='all', exclude=None):
@@ -111,7 +111,7 @@ class PointFinder(AbstractFinder):
                                        self.vtype[type], float(maxdist),
                                        int(not point.is2D),
                                        excl.c_ilist, found.c_ilist):
-            return [read_line(f_id, self.c_mapinfo, self.table, self.writable)
+            return [read_line(f_id, self.c_mapinfo, self.table, self.writeable)
                     for f_id in found]
         else:
             return []
@@ -122,7 +122,7 @@ class PointFinder(AbstractFinder):
         area_id = libvect.Vect_find_area(self.c_mapinfo, point.x, point.y)
         if area_id:
             return Area(v_id=area_id, c_mapinfo=self.c_mapinfo,
-                        table=self.table, writable=self.writable)
+                        table=self.table, writeable=self.writeable)
 
     @must_be_open
     def island(self, point):
@@ -130,12 +130,12 @@ class PointFinder(AbstractFinder):
         isle_id = libvect.Vect_find_island(self.c_mapinfo, point.x, point.y)
         if isle_id:
             return Isle(v_id=isle_id, c_mapinfo=self.c_mapinfo,
-                        table=self.table, writable=self.writable)
+                        table=self.table, writeable=self.writeable)
 
 
 class BboxFinder(AbstractFinder):
-    def __init__(self, c_mapinfo, table=None, writable=False):
-        super(BboxFinder, self).__init__(c_mapinfo, table, writable)
+    def __init__(self, c_mapinfo, table=None, writeable=False):
+        super(BboxFinder, self).__init__(c_mapinfo, table, writeable)
 
     @must_be_open
     def geos(self, bbox, type='all', bbox_list=False):
@@ -151,7 +151,7 @@ class BboxFinder(AbstractFinder):
                 return found
             else:
                 return (read_line(f_id, self.c_mapinfo, self.table,
-                                  self.writable) for f_id in found.ids)
+                                  self.writeable) for f_id in found.ids)
 
     @must_be_open
     def nodes(self, bbox):
@@ -161,7 +161,7 @@ class BboxFinder(AbstractFinder):
                                             found.c_ilist):
             for n_id in found:
                 yield Node(v_id=n_id, c_mapinfo=self.c_mapinfo,
-                           table=self.table, writable=self.writable)
+                           table=self.table, writeable=self.writeable)
 
     @must_be_open
     def areas(self, bbox, boxlist=None, bboxlist_only=False):
@@ -173,7 +173,7 @@ class BboxFinder(AbstractFinder):
                 return boxlist
             else:
                 return (Area(v_id=a_id, c_mapinfo=self.c_mapinfo,
-                             table=self.table, writable=self.writable)
+                             table=self.table, writeable=self.writeable)
                         for a_id in boxlist.ids)
         return []
 
@@ -187,14 +187,14 @@ class BboxFinder(AbstractFinder):
                 return found
             else:
                 return (Isle(v_id=i_id, c_mapinfo=self.c_mapinfo,
-                             table=self.table, writable=self.writable)
+                             table=self.table, writeable=self.writeable)
                         for i_id in found.ids)
         return []
 
 
 class PolygonFinder(AbstractFinder):
-    def __init__(self, c_mapinfo, table=None, writable=False):
-        super(PolygonFinder, self).__init__(c_mapinfo, table, writable)
+    def __init__(self, c_mapinfo, table=None, writeable=False):
+        super(PolygonFinder, self).__init__(c_mapinfo, table, writeable)
 
     def lines(self, polygon, isles=None):
         pass

@@ -347,3 +347,66 @@ def table_exist(cursor, table_name):
             return False
     one = cursor.fetchone() if cursor else None
     return True if one and one[0] else False
+
+
+def create_test_vector_map(map_name="test_vector"):
+    """This functions creates a vector map layer with points, lines, boundaries,
+       centroids, areas, isles and attributes for testing purposes
+
+       This should be used in doc and unit tests to create location/mapset
+       independent vector map layer. This map includes 3 points, 3 lines,
+       11 boundaries and 4 centroids. The attribute table contains cat and name
+       columns.
+
+        param map_name: The vector map name that should be used
+    """
+
+    from grass.pygrass.vector import VectorTopo
+    from grass.pygrass.vector.geometry import Point, Line, Centroid, Boundary, Area
+
+    cols = [(u'cat', 'INTEGER PRIMARY KEY'),
+            (u'name','varchar(50)'),
+            (u'value', 'double precision')]
+    with VectorTopo(map_name, mode='w', tab_name=map_name,
+                    tab_cols=cols) as vect:
+
+        # Write 3 points, 3 lines and 11 boundaries with one nested isle and 4 centroids
+        #
+        #
+        #  ______ ___ ___   *  *  *
+        # |1 __ *|3 *|4 *|  |  |  |
+        # | |2*| |   |   |  |  |  |
+        # | |__| |   |   |  |  |  |
+        # |______|___|___|  |  |  |
+        #
+        # Write 3 points
+        vect.write(Point(10, 6), cat=1, attrs=("point", 1))
+        vect.write(Point(12, 6), cat=1)
+        vect.write(Point(14, 6), cat=1)
+        # Write 3 lines
+        vect.write(Line([(10, 4), (10, 2), (10,0)]), cat=2, attrs=("line", 2))
+        vect.write(Line([(12, 4), (12, 2), (12,0)]), cat=2)
+        vect.write(Line([(14, 4), (14, 2), (14,0)]), cat=2)
+        # boundaries 1 - 4
+        vect.write(Boundary(points=[(0, 0), (0,4)]))
+        vect.write(Boundary(points=[(0, 4), (4,4)]))
+        vect.write(Boundary(points=[(4, 4), (4,0)]))
+        vect.write(Boundary(points=[(4, 0), (0,0)]))
+        # 5. boundary (Isle)
+        vect.write(Boundary(points=[(1, 1), (1,3), (3, 3), (3,1), (1,1)]))
+        # boundaries 6 - 8
+        vect.write(Boundary(points=[(4, 4), (6,4)]))
+        vect.write(Boundary(points=[(6, 4), (6,0)]))
+        vect.write(Boundary(points=[(6, 0), (4,0)]))
+        # boundaries 9 - 11
+        vect.write(Boundary(points=[(6, 4), (8,4)]))
+        vect.write(Boundary(points=[(8, 4), (8,0)]))
+        vect.write(Boundary(points=[(8, 0), (6,0)]))
+        # Centroids, all have the same cat and attribute
+        vect.write(Centroid(x=3.5, y=3.5), cat=3, attrs=("centroid", 3))
+        vect.write(Centroid(x=2.5, y=2.5), cat=3)
+        vect.write(Centroid(x=5.5, y=3.5), cat=3)
+        vect.write(Centroid(x=7.5, y=3.5), cat=3)
+
+        vect.table.conn.commit()
+        vect.close()
