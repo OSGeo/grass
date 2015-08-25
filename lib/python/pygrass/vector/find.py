@@ -11,6 +11,8 @@ from grass.pygrass.errors import must_be_open
 from grass.pygrass.vector.basic import Ilist, BoxList
 from grass.pygrass.vector.geometry import read_line, Isle, Area, Point, Node
 
+# For test purposes
+test_vector_name = "find_doctest_map"
 
 class AbstractFinder(object):
     def __init__(self, c_mapinfo, table=None, writeable=False):
@@ -37,7 +39,7 @@ class AbstractFinder(object):
 class PointFinder(AbstractFinder):
     """PointFinder
 
-    Find the geomtry features of a vector map that are close to a point.
+    Find the geometry features of a vector map that are close to a point.
 
     >>> from grass.pygrass.vector import VectorTopo
     >>> zipcodes = VectorTopo('zipcodes', 'PERMANENT')
@@ -201,3 +203,17 @@ class PolygonFinder(AbstractFinder):
 
     def areas(self, polygon, isles=None):
         pass
+
+
+if __name__ == "__main__":
+    import doctest
+    from grass.pygrass import utils
+    utils.create_test_vector_map(test_vector_name)
+    doctest.testmod()
+
+    """Remove the generated vector map, if exist"""
+    from grass.pygrass.utils import get_mapset_vector
+    from grass.script.core import run_command
+    mset = get_mapset_vector(test_vector_name, mapset='')
+    if mset:
+        run_command("g.remove", flags='f', type='vector', name=test_vector_name)

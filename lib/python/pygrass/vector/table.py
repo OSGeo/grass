@@ -31,6 +31,9 @@ from grass.script.core import warning
 
 from grass.pygrass.vector import sql
 
+# For test purposes
+test_vector_name = "table_doctest_map"
+
 DRIVERS = ('sqlite', 'pg')
 
 
@@ -164,7 +167,7 @@ class Columns(object):
     For a sqlite table:
 
     >>> import sqlite3
-    >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
+    >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
     >>> cols_sqlite = Columns('census',
     ...                       sqlite3.connect(get_path(path)))
     >>> cols_sqlite.tname
@@ -1152,3 +1155,18 @@ class Table(object):
                 print("The table: %s already exist." % self.name)
         cur.close()
         self.columns.update_odict()
+
+
+if __name__ == "__main__":
+    import doctest
+    from grass.pygrass import utils
+    utils.create_test_vector_map(test_vector_name)
+    doctest.testmod()
+
+
+    """Remove the generated vector map, if exist"""
+    from grass.pygrass.utils import get_mapset_vector
+    from grass.script.core import run_command
+    mset = get_mapset_vector(test_vector_name, mapset='')
+    if mset:
+        run_command("g.remove", flags='f', type='vector', name=test_vector_name)

@@ -12,6 +12,7 @@ from grass.gunittest.case import TestCase
 from grass.gunittest.main import test
 
 import grass.lib.vector as libvect
+from grass.script.core import run_command
 
 from grass.pygrass.vector import VectorTopo
 from grass.pygrass.vector.geometry import Point, Line, Node
@@ -51,10 +52,10 @@ class PointTestCase(TestCase):
         self.assertEqual(Point(1, 2).coords(), (1, 2))
         self.assertEqual(Point(1, 2, 3).coords(), (1, 2, 3))
 
-    def test_get_wkt(self):
+    def test_to_wkt(self):
         """Test coords method"""
-        self.assertEqual(Point(1, 2).get_wkt(), 'POINT(1.000000 2.000000)')
-        self.assertEqual(Point(1, 2, 3).get_wkt(),
+        self.assertEqual(Point(1, 2).to_wkt(), 'POINT(1.000000 2.000000)')
+        self.assertEqual(Point(1, 2, 3).to_wkt(),
                          'POINT(1.000000 2.000000 3.000000)')
 
     def test_distance(self):
@@ -89,6 +90,31 @@ class PointTestCase(TestCase):
 
 class LineTestCase(TestCase):
 
+    tmpname = "LineTestCase_map"
+
+    @classmethod
+    def setUpClass(cls):
+        
+        from grass.pygrass import utils
+        utils.create_test_vector_map(cls.tmpname)
+        
+        cls.vect = None
+        cls.vect = VectorTopo(cls.tmpname)
+        cls.vect.open('r')
+        cls.c_mapinfo = cls.vect.c_mapinfo
+
+    @classmethod
+    def tearDownClass(cls):
+        if cls.vect is not None:
+            cls.vect.close()
+            cls.c_mapinfo = None
+
+        """Remove the generated vector map, if exist"""
+        from grass.pygrass.utils import get_mapset_vector
+        mset = get_mapset_vector(cls.tmpname, mapset='')
+        if mset:
+            run_command("g.remove", flags='f', type='vector', name=cls.tmpname)
+
     def test_len(self):
         """Test __len__ magic method"""
         self.assertEqual(len(Line()), 0)
@@ -121,9 +147,9 @@ class LineTestCase(TestCase):
         """Test get_pnt method"""
         line = Line([(0, 0), (1, 1)])
         with self.assertRaises(ValueError):
-            line.get_pnt(5)
+            line.point_on_line(5)
         vals = (0.7071067811865475, 0.7071067811865475)
-        self.assertTupleEqual(line.get_pnt(1).coords(), vals)
+        self.assertTupleEqual(line.point_on_line(1).coords(), vals)
 
     def test_bbox(self):
         """Test bbox method"""
@@ -135,24 +161,28 @@ class LineTestCase(TestCase):
         self.assertEqual(0, bbox.west)
 
     def test_nodes(self):
-        """Test inodes method"""
+        """Test nodes method"""
         def nodes2tuple(nodes):
             """Convert an iterable of nodes to a tuple of nodes id"""
             return tuple(n.id for n in nodes)
 
-        with VectorTopo("roadsmajor", mode='r') as vect:
-            self.assertTupleEqual((206, 172), nodes2tuple(vect[284].nodes()))
-            self.assertTupleEqual((208, 206), nodes2tuple(vect[287].nodes()))
-            self.assertTupleEqual((206, 209), nodes2tuple(vect[288].nodes()))
-            self.assertTupleEqual((218, 206), nodes2tuple(vect[301].nodes()))
-
-
+        with VectorTopo("LineTestCase_map", mode='r') as vect:
+            self.assertTupleEqual((1, 2), nodes2tuple(vect[4].nodes()))
+            self.assertTupleEqual((3, 4), nodes2tuple(vect[5].nodes()))
+            self.assertTupleEqual((5, 6), nodes2tuple(vect[6].nodes()))
 
 class NodeTestCase(TestCase):
+    
+    tmpname = "NodeTestCase_map"
+
     @classmethod
     def setUpClass(cls):
+        
+        from grass.pygrass import utils
+        utils.create_test_vector_map(cls.tmpname)
+        
         cls.vect = None
-        cls.vect = VectorTopo("roadsmajor")
+        cls.vect = VectorTopo(cls.tmpname)
         cls.vect.open('r')
         cls.c_mapinfo = cls.vect.c_mapinfo
 
@@ -162,31 +192,37 @@ class NodeTestCase(TestCase):
             cls.vect.close()
             cls.c_mapinfo = None
 
+        """Remove the generated vector map, if exist"""
+        from grass.pygrass.utils import get_mapset_vector
+        mset = get_mapset_vector(cls.tmpname, mapset='')
+        if mset:
+            run_command("g.remove", flags='f', type='vector', name=cls.tmpname)
+
     def test_init(self):
         """Test Node __init__"""
-        node = Node(v_id=206, c_mapinfo=self.c_mapinfo)
-        self.assertEqual(206, node.id)
+        node = Node(v_id=4, c_mapinfo=self.c_mapinfo)
+        self.assertEqual(4, node.id)
         self.assertTrue(node.is2D)
-        self.assertEqual(4, node.nlines)
+        self.assertEqual(1, node.nlines)
 
     def test_coords(self):
         """Test Node coordinates"""
-        node = Node(v_id=206, c_mapinfo=self.c_mapinfo)
-        self.assertTupleEqual((620906.5786131569, 221685.65913128198),
+        node = Node(v_id=4, c_mapinfo=self.c_mapinfo)
+        self.assertTupleEqual((12.0, 0.0),
                               node.coords())
 
     def test_ilines(self):
         """Test Node coordinates"""
-        node = Node(v_id=206, c_mapinfo=self.c_mapinfo)
-        self.assertTupleEqual((288, -301, -287, 284), tuple(node.ilines()))
-        self.assertTupleEqual((-301, -287), tuple(node.ilines(only_in=True)))
-        self.assertTupleEqual((288, 284), tuple(node.ilines(only_out=True)))
+        node = Node(v_id=4, c_mapinfo=self.c_mapinfo) # Line 5 ends in this node
+        self.assertTupleEqual((-5,), tuple(node.ilines())) 
+        self.assertTupleEqual((-5,), tuple(node.ilines(only_in=True)))
+        node = Node(v_id=3, c_mapinfo=self.c_mapinfo) # Line 5 starts at this node
+        self.assertTupleEqual((5,), tuple(node.ilines(only_out=True)))
 
     def test_angles(self):
         """Test Node angles"""
-        node = Node(v_id=206, c_mapinfo=self.c_mapinfo)
-        angles = (-3.044905185699463, -1.026218056678772,
-                  0.10362745821475983, 2.2236430644989014)
+        node = Node(v_id=4, c_mapinfo=self.c_mapinfo)
+        angles = (1.5707963705062866,) # 90°
         self.assertTupleEqual(angles, tuple(node.angles()))
 
 if __name__ == '__main__':

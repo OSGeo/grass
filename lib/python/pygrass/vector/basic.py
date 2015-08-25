@@ -572,3 +572,7 @@ class CatsList(object):
         :type cat: int
         """
         return bool(libvect.Vect_cat_in_cat_list(cat, self.c_cat_list))
+
+if __name__ == "__main__":
+    import doctest
+    doctest.testmod()

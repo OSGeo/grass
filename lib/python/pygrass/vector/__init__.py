@@ -326,7 +326,7 @@ class VectorTopo(Vector):
 
         :param vtype: the name of type to query; the supported values are:
                       *areas*, *dblinks*, *faces*, *holes*, *islands*,
-                      *kernels*, *line_points*, *lines*, *nodes*,
+                      *kernels*, *line_points*, *lines*, *nodes*, *points*,
                       *update_lines*, *update_nodes*, *volumes*
         :type vtype: str
 
@@ -579,8 +579,16 @@ class VectorTopo(Vector):
             libvect.Vect_set_release_support(self.c_mapinfo)
         super(VectorTopo, self).close(build=build)
 
+
 if __name__ == "__main__":
     import doctest
     from grass.pygrass import utils
     utils.create_test_vector_map(test_vector_name)
     doctest.testmod()
+
+    """Remove the generated vector map, if exist"""
+    from grass.pygrass.utils import get_mapset_vector
+    from grass.script.core import run_command
+    mset = get_mapset_vector(test_vector_name, mapset='')
+    if mset:
+        run_command("g.remove", flags='f', type='vector', name=test_vector_name)
