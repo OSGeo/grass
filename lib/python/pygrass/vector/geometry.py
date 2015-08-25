@@ -1128,11 +1128,12 @@ class Node(object):
        may happen.
 
     """
-    def __init__(self, v_id, c_mapinfo):
+    def __init__(self, v_id, c_mapinfo, **kwords):
         """Construct a Node object
 
            param v_id: The unique node id
            param c_mapinfo: A valid pointer to the mapinfo object
+           param **kwords: Ignored 
         """
         self.id = v_id  # vector id
         self.c_mapinfo = c_mapinfo
@@ -1365,6 +1366,19 @@ class Isle(Geo):
         line = Line()
         libvect.Vect_get_isle_points(self.c_mapinfo, self.id, line.c_points)
         return line
+
+    def to_wkt(self):
+        """Return a Well Known Text string of the isle. ::
+
+            For now the outer ring is returned
+
+            TODO: Implement inner rings detected from isles
+        """
+        line = self.points()
+
+        return "Polygon((%s))" % ', '.join([
+               ' '.join(['%f' % coord for coord in pnt])
+               for pnt in line.to_list()])
 
     @mapinfo_must_be_set
     def points_geos(self):
@@ -1695,6 +1709,7 @@ GEOOBJ = {"areas": Area,
           "dblinks": None,
           "faces": None,
           "holes": None,
+          "boundaries": Boundary,
           "islands": Isle,
           "kernels": None,
           "line_points": None,
@@ -1759,4 +1774,12 @@ if __name__ == "__main__":
     from grass.pygrass import utils
     utils.create_test_vector_map(test_vector_name)
     doctest.testmod()
+
+
+    """Remove the generated vector map, if exist"""
+    from grass.pygrass.utils import get_mapset_vector
+    from grass.script.core import run_command
+    mset = get_mapset_vector(test_vector_name, mapset='')
+    if mset:
+        run_command("g.remove", flags='f', type='vector', name=test_vector_name)
 

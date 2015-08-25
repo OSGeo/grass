@@ -14,6 +14,7 @@ from grass.pygrass.errors import GrassError, OpenError, must_be_open
 from grass.pygrass.vector.table import DBlinks, Link
 from grass.pygrass.vector.find import PointFinder, BboxFinder, PolygonFinder
 
+test_vector_name="abstract_doctest_map"
 
 def is_open(c_mapinfo):
     """Return if the Vector is open"""
@@ -30,51 +31,39 @@ class Info(object):
     """Basic vector info.
     To get access to the vector info the map must be opened. ::
 
-        >>> cens = Info('census')
-        >>> cens.open(mode='r')
+        >>> test_vect = Info(test_vector_name)
+        >>> test_vect.open(mode='r')
 
     Then it is possible to read and write the following map attributes: ::
 
-        >>> cens.organization
-        'NC OneMap'
-        >>> cens.person
-        'hmitaso'
-        >>> cens.title
-        'Wake County census blocks with attributes, clipped (polygon map)'
-        >>> cens.map_date
-        datetime.datetime(2007, 3, 19, 22, 1, 37)
-        >>> cens.date
-        ''
-        >>> cens.scale
+        >>> test_vect.organization
+        'Thuenen Institut'
+        >>> test_vect.person
+        'Soeren Gebbert'
+        >>> test_vect.title
+        'Test dataset'
+        >>> test_vect.scale
         1
-        >>> cens.comment
-        ''
-        >>> cens.comment = "One useful comment!"
-        >>> cens.comment
+        >>> test_vect.comment
+        'This is a comment'
+        >>> test_vect.comment = "One useful comment!"
+        >>> test_vect.comment
         'One useful comment!'
-        >>> cens.zone
-        0
-        >>> cens.proj
-        99
 
     There are some read only attributes: ::
 
-        >>> cens.full_name
-        'census@PERMANENT'
-        >>> cens.proj_name
-        'Lambert Conformal Conic'
-        >>> cens.maptype
+        >>> test_vect.maptype
         'native'
 
     And some basic methods: ::
 
-        >>> cens.is_3D()
+        >>> test_vect.is_3D()
         False
-        >>> cens.exist()
+        >>> test_vect.exist()
         True
-        >>> cens.is_open()
+        >>> test_vect.is_open()
         True
-        >>> cens.close()
+        >>> test_vect.close()
 
     """
     def __init__(self, name, mapset='', *aopen, **kwopen):
@@ -432,3 +421,9 @@ class Info(object):
             str_err = 'Error when trying build topology with Vect_build'
             raise GrassError(str_err)
         libvect.Vect_close(self.c_mapinfo)
+
+if __name__ == "__main__":
+    import doctest
+    from grass.pygrass import utils
+    utils.create_test_vector_map(test_vector_name)
+    doctest.testmod()
