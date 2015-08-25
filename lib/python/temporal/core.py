@@ -924,9 +924,8 @@ class SQLDatabaseInterfaceConnection(object):
             mapset = self.current_mapset
 
         if mapset not in self.tgis_mapsets.keys():
-            self.msgr.fatal(_("Unable to mogrify sql statement. There is no "
-                              "temporal database connection defined for "
-                              "mapset <%(mapset)s>" % {"mapset": mapset}))
+            self.msgr.fatal(_("Unable to mogrify sql statement. " +
+                              self._create_mapset_error_message(mapset)))
 
         return self.connections[mapset].mogrify_sql_statement(content)
 
@@ -947,9 +946,8 @@ class SQLDatabaseInterfaceConnection(object):
             mapset = self.current_mapset
 
         if mapset not in self.tgis_mapsets.keys():
-            self.msgr.fatal(_("Unable to check table. There is no temporal "
-                              "database connection defined for mapset "
-                              "<%(mapset)s>" % {"mapset": mapset}))
+            self.msgr.fatal(_("Unable to check table. " +
+                              self._create_mapset_error_message(mapset)))
 
         return self.connections[mapset].check_table(table_name)
 
@@ -964,9 +962,8 @@ class SQLDatabaseInterfaceConnection(object):
             mapset = self.current_mapset
 
         if mapset not in self.tgis_mapsets.keys():
-            self.msgr.fatal(_("Unable to execute sql statement. There is no "
-                              "temporal database connection defined for "
-                              "mapset <%(mapset)s>" % {"mapset": mapset}))
+            self.msgr.fatal(_("Unable to execute sql statement. " +
+                              self._create_mapset_error_message(mapset)))
 
         return self.connections[mapset].execute(statement,  args)
 
@@ -975,9 +972,8 @@ class SQLDatabaseInterfaceConnection(object):
             mapset = self.current_mapset
 
         if mapset not in self.tgis_mapsets.keys():
-            self.msgr.fatal(_("Unable to fetch one. There is no temporal "
-                              "database connection defined for mapset "
-                              "<%(mapset)s>" % {"mapset": mapset}))
+            self.msgr.fatal(_("Unable to fetch one. " +
+                              self._create_mapset_error_message(mapset)))
 
         return self.connections[mapset].fetchone()
 
@@ -986,9 +982,8 @@ class SQLDatabaseInterfaceConnection(object):
             mapset = self.current_mapset
 
         if mapset not in self.tgis_mapsets.keys():
-            self.msgr.fatal(_("Unable to fetch all. There is no temporal "
-                              "database connection defined for mapset "
-                              "<%(mapset)s>" % {"mapset": mapset}))
+            self.msgr.fatal(_("Unable to fetch all. " +
+                              self._create_mapset_error_message(mapset)))
 
         return self.connections[mapset].fetchall()
 
@@ -1004,11 +999,19 @@ class SQLDatabaseInterfaceConnection(object):
             mapset = self.current_mapset
 
         if mapset not in self.tgis_mapsets.keys():
-            self.msgr.fatal(_("Unable to execute transaction. There is no "
-                              "temporal database connection defined for "
-                              "mapset <%(mapset)s>" % {"mapset": mapset}))
+            self.msgr.fatal(_("Unable to execute transaction. " +
+                              self._create_mapset_error_message(mapset)))
 
         return self.connections[mapset].execute_transaction(statement)
+
+    def _create_mapset_error_message(self, mapset):
+
+          return("You have no permission to "
+                 "access mapset <%(mapset)s>, or "
+                 "mapset <%(mapset)s> has no temporal database. "
+                 "Accessable mapsets are: <%(mapsets)s>" % \
+                 {"mapset": mapset,
+                  "mapsets":','.join(self.tgis_mapsets.keys())})
 
 ###############################################################################
 
