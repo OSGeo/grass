@@ -1133,7 +1133,7 @@ class Node(object):
 
            param v_id: The unique node id
            param c_mapinfo: A valid pointer to the mapinfo object
-           param **kwords: Ignored 
+           param **kwords: Ignored
         """
         self.id = v_id  # vector id
         self.c_mapinfo = c_mapinfo
@@ -1169,6 +1169,12 @@ class Node(object):
         libvect.Vect_get_node_coor(self.c_mapinfo, self.id, ctypes.byref(x),
                                    ctypes.byref(y), ctypes.byref(z))
         return (x.value, y.value) if self.is2D else (x.value, y.value, z.value)
+
+    def to_wkt(self):
+        """Return a "well know text" (WKT) geometry string. ::
+        """
+        return "POINT(%s)" % ' '.join(['%f' % coord
+                                      for coord in self.coords()])
 
     def ilines(self, only_in=False, only_out=False):
         """Return a generator with all lines id connected to a node.
