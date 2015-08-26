@@ -115,6 +115,12 @@
 #% suppress_required: yes
 #%end
 
+#%rules
+#% required: extension, -l, -c, -g, -a
+#% exclusive: extension, -l, -c, -g, -a
+#%end
+
+
 import os
 import sys
 import re
@@ -1024,7 +1030,7 @@ def update_manual_page(module):
 
 def main():
     # check dependecies
-    if sys.platform != "win32":
+    if not flags['a'] and sys.platform != "win32":
         check_progs()
 
     # manage proxies
