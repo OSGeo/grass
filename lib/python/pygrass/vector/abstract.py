@@ -377,13 +377,18 @@ class Info(object):
             self.layer = self.dblinks.by_layer(layer).layer
             self.table = self.dblinks.by_layer(layer).table()
             self.n_lines = self.table.n_rows()
-        self.writeable = self.mapset == utils.getenv("MAPSET")
+        self.writeable = False
+        self.mapset == utils.getenv("MAPSET")
+        # Initialize the finder
         self.find = {'by_point': PointFinder(self.c_mapinfo, self.table,
                                              self.writeable),
-                     'by_box': BboxFinder(self.c_mapinfo, self.table,
+                     'by_bbox': BboxFinder(self.c_mapinfo, self.table,
                                           self.writeable),
                      'by_polygon': PolygonFinder(self.c_mapinfo, self.table,
                                                  self.writeable), }
+        self.find_by_point = self.find["by_point"]
+        self.find_by_bbox  = self.find["by_bbox"]
+        self.find_by_polygon = self.find["by_polygon"]
 
     def close(self, build=False):
         """Method to close the Vector

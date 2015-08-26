@@ -562,16 +562,6 @@ class VectorTopo(Vector):
             raise GrassError("I can not find the Bbox.")
         return bbox
 
-    @must_be_open
-    def select_by_bbox(self, bbox):
-        """Return the BBox of the vector map
-        """
-        # TODO replace with bbox if bbox else Bbox() ??
-        bbox = Bbox()
-        if libvect.Vect_get_map_box(self.c_mapinfo, bbox.c_bbox) == 0:
-            raise GrassError("I can not find the Bbox.")
-        return bbox
-
     def close(self, build=True, release=True):
         """Close the VectorTopo map, if release is True, the memory
         occupied by spatial index is released"""
