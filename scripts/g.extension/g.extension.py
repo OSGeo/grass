@@ -178,6 +178,8 @@ def etree_fromurl(url, proxies=None):
 
 def check_progs():
     """Check if the necessary programs are available"""
+    # TODO: we need svn for the Subversion repo downloads
+    # also git would be tested once supported
     for prog in ('make', 'gcc'):
         if not grass.find_program(prog, '--help'):
             grass.fatal(_("'%s' required. Please install '%s' first.")
@@ -1624,7 +1626,7 @@ def resolve_source_code(url=None, name=None):
 
 def main():
     # check dependecies
-    if sys.platform != "win32":
+    if not flags['a'] and sys.platform != "win32":
         check_progs()
 
     original_url = options['url']
