@@ -98,11 +98,11 @@ def main():
 
     # extract data
     tar.extractall()
-    if os.path.exists(os.path.join(map_name, 'coor')):
+    if os.path.exists(os.path.join(data_name, 'coor')):
         pass
-    elif os.path.exists(os.path.join(map_name, 'cell')):
+    elif os.path.exists(os.path.join(data_name, 'cell')):
         grass.fatal(_("This GRASS GIS pack file contains raster data. Use "
-                      "r.unpack to unpack <%s>" % map_name))
+                      "v.unpack to unpack <%s>" % map_name))
     else:
         grass.fatal(_("Pack file unreadable"))
 
