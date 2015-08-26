@@ -493,7 +493,7 @@ def get_interface_description(cmd):
 
         if p.returncode != 0:
             raise ScriptError, _("Unable to fetch interface description for command '%(cmd)s'."
-                                 "\n\nDetails: %(det)s") % {'cmd': cmd, 'det': decode(cmderr)}
+                                 "\n\nDetails: %(det)s") % {'cmd': cmd, 'det': cmderr}
 
     except OSError as e:
         raise ScriptError, _("Unable to fetch interface description for command '%(cmd)s'."

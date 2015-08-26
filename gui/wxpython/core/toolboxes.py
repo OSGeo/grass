@@ -628,12 +628,6 @@ def _loadMetadata(module):
     try:
         task = gtask.parse_interface(module)
     except ScriptError as e:
-        e = _encode_string(e.value)
-        # for some reason this works well only if it is separate
-        sys.stderr.write("%s\n" % module)
-        sys.stderr.write("%s\n" % e)
-        return '', ''
-    except UnicodeDecodeError as e:
         sys.stderr.write("%s\n%s\n" % (module, e))
         return '', ''
 
