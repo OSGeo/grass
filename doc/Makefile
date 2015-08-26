@@ -1,8 +1,7 @@
 MODULE_TOPDIR = ..
 
-PGM = projectionintro
+include $(MODULE_TOPDIR)/include/Make/Other.make
 
-include $(MODULE_TOPDIR)/include/Make/Dir.make
+FILES := $(wildcard *.html)
 
-default: htmldir
-
+default: $(patsubst %,$(HTMLDIR)/%,$(FILES))
