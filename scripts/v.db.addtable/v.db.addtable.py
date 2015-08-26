@@ -125,8 +125,8 @@ def main():
             grass.fatal(_("Unable to create table <%s>") % table)
 
     # connect the map to the DB:
-    if schema is not '':
-        table = '%s.%s' (schema, table)
+    if schema:
+        table = '{schema}.{table}'.format(schema=schema, table=table)
     grass.run_command('v.db.connect', quiet = True,
                       map = map_name, database = database, driver = driver,
                       layer = layer, table = table, key = key)
