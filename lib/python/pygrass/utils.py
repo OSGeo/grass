@@ -355,14 +355,28 @@ def create_test_vector_map(map_name="test_vector"):
 
        This should be used in doc and unit tests to create location/mapset
        independent vector map layer. This map includes 3 points, 3 lines,
-       11 boundaries and 4 centroids. The attribute table contains cat and name
-       columns.
+       11 boundaries and 4 centroids. The attribute table contains cat, name
+       and value columns.
 
         param map_name: The vector map name that should be used
+
+
+
+                                  P1 P2 P3
+           6                       *  *  *
+           5
+           4    _______ ___ ___   L1 L2 L3
+        Y  3   |A1___ *|  *|  *|   |  |  |
+           2   | |A2*| |   |   |   |  |  |
+           1   | |___| |A3 |A4 |   |  |  |
+           0   |_______|___|___|   |  |  |
+          -1
+            -1 0 1 2 3 4 5 6 7 8 9 10 12 14
+                           X
     """
 
     from grass.pygrass.vector import VectorTopo
-    from grass.pygrass.vector.geometry import Point, Line, Centroid, Boundary, Area
+    from grass.pygrass.vector.geometry import Point, Line, Centroid, Boundary
 
     cols = [(u'cat', 'INTEGER PRIMARY KEY'),
             (u'name','varchar(50)'),
@@ -370,15 +384,6 @@ def create_test_vector_map(map_name="test_vector"):
     with VectorTopo(map_name, mode='w', tab_name=map_name,
                     tab_cols=cols) as vect:
 
-        # Write 3 points, 3 lines and 11 boundaries with one nested isle and 4 centroids
-        #
-        #
-        #  ______ ___ ___   *  *  *
-        # |1 __ *|3 *|4 *|  |  |  |
-        # | |2*| |   |   |  |  |  |
-        # | |__| |   |   |  |  |  |
-        # |______|___|___|  |  |  |
-        #
         # Write 3 points
         vect.write(Point(10, 6), cat=1, attrs=("point", 1))
         vect.write(Point(12, 6), cat=1)
@@ -408,5 +413,85 @@ def create_test_vector_map(map_name="test_vector"):
         vect.write(Centroid(x=5.5, y=3.5), cat=3)
         vect.write(Centroid(x=7.5, y=3.5), cat=3)
 
+        vect.organization = 'Thuenen Institut'
+        vect.person = 'Soeren Gebbert'
+        vect.title = 'Test dataset'
+        vect.comment = 'This is a comment'
+
         vect.table.conn.commit()
         vect.close()
+
+def create_test_stream_network_map(map_name="streams"):
+    """
+       This functions creates a vector map layer with lines that represent
+       a stream network with two different graphs. The first graph
+       contains a loop, the second can be used as directed graph.
+
+       This should be used in doc and unit tests to create location/mapset
+       independent vector map layer.
+
+        param map_name: The vector map name that should be used
+
+       1(0,2)  3(2,2)
+        \     /
+       1 \   / 2
+          \ /
+           2(1,1)
+    6(0,1) ||  5(2,1)
+       5 \ || / 4
+          \||/
+           4(1,0)
+           |
+           | 6
+           |7(1,-1)
+
+       7(0,-1) 8(2,-1)
+        \     /
+       8 \   / 9
+          \ /
+           9(1, -2)
+           |
+           | 10
+           |
+          10(1,-3)
+    """
+
+    from grass.pygrass.vector import VectorTopo
+    from grass.pygrass.vector.geometry import Line
+
+    cols = [(u'cat', 'INTEGER PRIMARY KEY'), (u'id', 'INTEGER')]
+    with VectorTopo(map_name, mode='w', tab_name=map_name,
+                    tab_cols=cols) as streams:
+
+        # First flow graph
+        l = Line([(0,2), (0.22, 1.75), (0.55, 1.5), (1,1)])
+        streams.write(l, cat=1, attrs=(1,))
+        l = Line([(2,2),(1,1)])
+        streams.write(l, cat=2, attrs=(2,))
+        l = Line([(1,1), (0.85, 0.5), (1,0)])
+        streams.write(l, cat=3, attrs=(3,))
+        l = Line([(2,1),(1,0)])
+        streams.write(l, cat=4, attrs=(4,))
+        l = Line([(0,1),(1,0)])
+        streams.write(l, cat=5, attrs=(5,))
+        l = Line([(1,0),(1,-1)])
+        streams.write(l, cat=6, attrs=(6,))
+        # Reverse line 3
+        l = Line([(1,0), (1.15, 0.5),(1,1)])
+        streams.write(l, cat=7, attrs=(7,))
+
+        # second flow graph
+        l = Line([(0,-1),(1,-2)])
+        streams.write(l, cat=8, attrs=(8,))
+        l = Line([(2,-1),(1,-2)])
+        streams.write(l, cat=9, attrs=(9,))
+        l = Line([(1,-2),(1,-3)])
+        streams.write(l, cat=10, attrs=(10,))
+
+        streams.organization = 'Thuenen Institut'
+        streams.person = 'Soeren Gebbert'
+        streams.title = 'Test dataset for stream networks'
+        streams.comment = 'This is a comment'
+
+        streams.table.conn.commit()
+        streams.close()

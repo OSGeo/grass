@@ -94,10 +94,10 @@ class LineTestCase(TestCase):
 
     @classmethod
     def setUpClass(cls):
-        
+
         from grass.pygrass import utils
         utils.create_test_vector_map(cls.tmpname)
-        
+
         cls.vect = None
         cls.vect = VectorTopo(cls.tmpname)
         cls.vect.open('r')
@@ -172,15 +172,16 @@ class LineTestCase(TestCase):
             self.assertTupleEqual((5, 6), nodes2tuple(vect[6].nodes()))
 
 class NodeTestCase(TestCase):
-    
+
     tmpname = "NodeTestCase_map"
 
     @classmethod
     def setUpClass(cls):
-        
+
+        # Tests are based on a stream network
         from grass.pygrass import utils
-        utils.create_test_vector_map(cls.tmpname)
-        
+        utils.create_test_stream_network_map(cls.tmpname)
+
         cls.vect = None
         cls.vect = VectorTopo(cls.tmpname)
         cls.vect.open('r')
@@ -203,26 +204,27 @@ class NodeTestCase(TestCase):
         node = Node(v_id=4, c_mapinfo=self.c_mapinfo)
         self.assertEqual(4, node.id)
         self.assertTrue(node.is2D)
-        self.assertEqual(1, node.nlines)
+        self.assertEqual(5, node.nlines)
 
     def test_coords(self):
         """Test Node coordinates"""
         node = Node(v_id=4, c_mapinfo=self.c_mapinfo)
-        self.assertTupleEqual((12.0, 0.0),
-                              node.coords())
+        self.assertTupleEqual((1.0, 0.0), node.coords())
 
     def test_ilines(self):
-        """Test Node coordinates"""
-        node = Node(v_id=4, c_mapinfo=self.c_mapinfo) # Line 5 ends in this node
-        self.assertTupleEqual((-5,), tuple(node.ilines())) 
-        self.assertTupleEqual((-5,), tuple(node.ilines(only_in=True)))
-        node = Node(v_id=3, c_mapinfo=self.c_mapinfo) # Line 5 starts at this node
-        self.assertTupleEqual((5,), tuple(node.ilines(only_out=True)))
+        """Test Node neighbors"""
+        node = Node(v_id=4, c_mapinfo=self.c_mapinfo)
+        self.assertTupleEqual((6, -4, 7, -3, -5), tuple(node.ilines()))
+        self.assertTupleEqual((-4, -3, -5), tuple(node.ilines(only_in=True)))
+        node = Node(v_id=4, c_mapinfo=self.c_mapinfo)
+        self.assertTupleEqual((6, 7), tuple(node.ilines(only_out=True)))
 
     def test_angles(self):
         """Test Node angles"""
         node = Node(v_id=4, c_mapinfo=self.c_mapinfo)
-        angles = (1.5707963705062866,) # 90°
+        angles = (-1.5707963705062866, 0.7853981852531433,
+                   1.2793395519256592, 1.8622530698776245,
+                   2.356194496154785)
         self.assertTupleEqual(angles, tuple(node.angles()))
 
 if __name__ == '__main__':
