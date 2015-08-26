@@ -84,6 +84,12 @@ def get_files(directory, patterns, exclude_name):
                 files.append(filename)
     return files
 
+def remove_module_name(string, module):
+    string = string.replace(module.replace('wxGUI.', 'g.gui.'), '')
+    string = string.replace(module.replace('.', '_'), '')  # using _
+    string = string.replace(module.replace('.', ''), '')  # using nothing
+    string = string.replace(module, '')  # using original dots
+    return string
 
 def title_form_names(html_name, img_name):
     # we ignore the possibility of having extension at the end of image
@@ -92,9 +98,7 @@ def title_form_names(html_name, img_name):
     module_name = html_name.replace('.html', '')
     for extension in img_extensions:
         img_name = img_name.replace('.' + extension, '')
-    img_name = img_name.replace(module_name.replace('.', '_'), '')  # using _
-    img_name = img_name.replace(module_name.replace('.', ''), '')  # using nothing
-    img_name = img_name.replace(module_name, '')  # using original dots
+    img_name = remove_module_name(img_name, module_name)
     img_name = img_name.replace('_', ' ')
     img_name = img_name.strip()
     if img_name:
