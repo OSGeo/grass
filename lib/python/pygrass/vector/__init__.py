@@ -373,7 +373,7 @@ class VectorTopo(Vector):
 
         :param vtype: the name of type to query; the supported values are:
                       *areas*, *dblinks*, *faces*, *holes*, *islands*,
-                      *kernels*, *line_points*, *lines*, *nodes*,
+                      *kernels*, *line_points*, *lines*, *nodes*, *points*,
                       *update_lines*, *update_nodes*, *volumes*
         :type vtype: str
         :param idonly: variable to return only the id of features instead of
