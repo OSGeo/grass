@@ -32,6 +32,41 @@
 #include "local_proto.h"
 
 /*!
+   \brief Creates and initializes Map_info structure
+
+  To free allocated memory call Vect_destroy_map_struct().
+
+   \return pointer to Map_info 
+ */
+struct Map_info *Vect_new_map_struct(void)
+{
+    struct Map_info *p;
+
+    p = (struct Map_info *)malloc(sizeof(struct Map_info)); 
+
+    if (NULL == p)
+      G_fatal_error("Vect_new_map_struct(): %s", _("Out of memory"));
+
+    G_zero(p, sizeof(struct Map_info));
+
+    return p;
+}
+
+/*!
+   \brief Frees all memory associated with a Map_info structure,
+   including the structure itself
+
+   \param p pointer to Map_info structure
+ */
+void Vect_destroy_map_struct(struct Map_info *p)
+{
+   /* We should free all allocated member structures, but they may be already 
+      freed by other functions (e.g. Vect_close()) without resetting member pointers to zero */
+
+   G_free((char *)p);
+}
+
+/*!
    \brief Copy file
 
    \param src source file
