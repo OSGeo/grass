@@ -317,8 +317,7 @@ r"""
 <hr class="header">
 
 <h2>Topic: ${keyword}</h2>
-<i>Note: see also the corresponding keyword <a href="keywords.html#${keyword}">${keyword}</a> for additional references.</i>
-<p>
+
 <table>
 """)
 #"
