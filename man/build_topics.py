@@ -12,6 +12,8 @@ from build_html import *
 path = sys.argv[1]
 year = os.getenv("VERSION_DATE")
 
+min_num_modules_for_topic = 3
+
 keywords = {}
 
 htmlfiles = glob.glob1(path, '*.html')
@@ -46,16 +48,19 @@ topicsfile.write(header1_tmpl.substitute(title = "GRASS GIS " \
 topicsfile.write(headertopics_tmpl)
 
 for key, values in sorted(keywords.iteritems()):
-    topicsfile.writelines([moduletopics_tmpl.substitute(key=key.lower(),
-                                                        name=key.replace('_', ' '))])
     keyfile = open(os.path.join(path, 'topic_%s.html' % key.lower()), 'w')
     keyfile.write(header1_tmpl.substitute(title = "GRASS GIS " \
                         "%s Reference Manual: Topic %s" % (grass_version,
                                                     key.replace('_', ' '))))
     keyfile.write(headerkey_tmpl.substitute(keyword=key.replace('_', ' ')))
+    num_modules = 0
     for mod, desc in sorted(values.iteritems()):
+        num_modules += 1
         keyfile.write(desc1_tmpl.substitute(cmd=mod, desc=desc,
                                             basename=mod.replace('.html', '')))
+    if num_modules >= min_num_modules_for_topic:
+        topicsfile.writelines([moduletopics_tmpl.substitute(
+            key=key.lower(), name=key.replace('_', ' '))])
     keyfile.write("</table>\n")
     write_html_footer(keyfile, "index.html", year)
 topicsfile.write("</ul>\n")
