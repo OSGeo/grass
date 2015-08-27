@@ -16,7 +16,7 @@ test_vector_name = "find_doctest_map"
 
 class AbstractFinder(object):
     def __init__(self, c_mapinfo, table=None, writeable=False):
-        """AbstractFinder
+        """Abstract finder
         -----------------
 
         Find geometry feature around a point.
@@ -136,7 +136,7 @@ class PointFinder(AbstractFinder):
             ...     if f:
             ...         result.append(f)
             >>> for f in result:
-            ...     print(f.to_wkt())    #doctest: +NORMALIZE_WHITESPACE
+            ...     print(f.to_wkt_p())    #doctest: +NORMALIZE_WHITESPACE
             LINESTRING(10.000000 4.000000,
                        10.000000 2.000000,
                        10.000000 0.000000)
@@ -274,12 +274,35 @@ class PointFinder(AbstractFinder):
             [Area(1), Area(2), Area(4)]
             >>> for area in result:
             ...     print(area.to_wkt())         #doctest: +NORMALIZE_WHITESPACE
-            Polygon((0.000000 0.000000, 0.000000 4.000000, 4.000000 4.000000,
-                     4.000000 0.000000, 0.000000 0.000000))
-            Polygon((4.000000 0.000000, 4.000000 4.000000, 6.000000 4.000000,
-                     6.000000 0.000000, 4.000000 0.000000))
-            Polygon((6.000000 0.000000, 6.000000 4.000000, 8.000000 4.000000,
-                     8.000000 0.000000, 6.000000 0.000000))
+            POLYGON ((0.0000000000000000 0.0000000000000000,
+                      0.0000000000000000 4.0000000000000000,
+                      0.0000000000000000 4.0000000000000000,
+                      4.0000000000000000 4.0000000000000000,
+                      4.0000000000000000 4.0000000000000000,
+                      4.0000000000000000 0.0000000000000000,
+                      4.0000000000000000 0.0000000000000000,
+                      0.0000000000000000 0.0000000000000000),
+                     (1.0000000000000000 1.0000000000000000,
+                      3.0000000000000000 1.0000000000000000,
+                      3.0000000000000000 3.0000000000000000,
+                      1.0000000000000000 3.0000000000000000,
+                      1.0000000000000000 1.0000000000000000))
+            POLYGON ((4.0000000000000000 0.0000000000000000,
+                      4.0000000000000000 4.0000000000000000,
+                      4.0000000000000000 4.0000000000000000,
+                      6.0000000000000000 4.0000000000000000,
+                      6.0000000000000000 4.0000000000000000,
+                      6.0000000000000000 0.0000000000000000,
+                      6.0000000000000000 0.0000000000000000,
+                      4.0000000000000000 0.0000000000000000))
+            POLYGON ((6.0000000000000000 0.0000000000000000,
+                      6.0000000000000000 4.0000000000000000,
+                      6.0000000000000000 4.0000000000000000,
+                      8.0000000000000000 4.0000000000000000,
+                      8.0000000000000000 4.0000000000000000,
+                      8.0000000000000000 0.0000000000000000,
+                      8.0000000000000000 0.0000000000000000,
+                      6.0000000000000000 0.0000000000000000))
 
             >>> test_vect.find_by_point.area(Point(20,20))
 
@@ -339,8 +362,7 @@ class BboxFinder(AbstractFinder):
 
     This class provides an interface to search geometry features
     of a vector map that are inside or intersect a boundingbox.
-    The BboxFinder class
-    is part of a topological vector map object.
+    The BboxFinder class is part of a topological vector map object.
 
     """
     def __init__(self, c_mapinfo, table=None, writeable=False):
@@ -360,7 +382,7 @@ class BboxFinder(AbstractFinder):
 
     @must_be_open
     def geos(self, bbox, type='all', bboxlist_only=False):
-        """Find the nearest vector features around a specific point.
+        """Find vector features inside a boundingbox.
 
             :param bbox: The boundingbox to search in
             :type bbox: grass.pygrass.vector.basic.Bbox
@@ -441,7 +463,7 @@ class BboxFinder(AbstractFinder):
 
     @must_be_open
     def nodes(self, bbox):
-        """Find the nodes inside a boundingbox.
+        """Find nodes inside a boundingbox.
 
             :param bbox: The boundingbox to search in
             :type bbox: grass.pygrass.vector.basic.Bbox
@@ -478,7 +500,7 @@ class BboxFinder(AbstractFinder):
 
     @must_be_open
     def areas(self, bbox, boxlist=None, bboxlist_only=False):
-        """Find the areas inside a boundingbox.
+        """Find areas inside a boundingbox.
 
             :param bbox: The boundingbox to search in
             :type bbox: grass.pygrass.vector.basic.Bbox
@@ -536,7 +558,7 @@ class BboxFinder(AbstractFinder):
 
     @must_be_open
     def islands(self, bbox, bboxlist_only=False):
-        """Find the isles inside a boundingbox.
+        """Find isles inside a boundingbox.
 
             :param bbox: The boundingbox to search in
             :type bbox: grass.pygrass.vector.basic.Bbox
