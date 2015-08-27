@@ -159,6 +159,9 @@ int Vect_cidx_dump(const struct Map_info *, FILE *);
 int Vect_cidx_save(struct Map_info *);
 int Vect_cidx_open(struct Map_info *, int);
 
+/* Create/destroy Map_info */
+struct Map_info *Vect_new_map_struct(void);
+void Vect_destroy_map_struct(struct Map_info *);
 
 /* Set/get map header info */
 int Vect_read_header(struct Map_info *);
