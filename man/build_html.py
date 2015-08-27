@@ -359,14 +359,14 @@ def replace_file(name):
 def copy_file(src, dst):
     write_file(dst, read_file(src))
 
-def html_files(cls = None):
+def html_files(cls=None, ignore_gui=True):
     for cmd in sorted(os.listdir(html_dir)):
         if cmd.endswith(".html") and \
            (cls in [None, '*'] or cmd.startswith(cls + ".")) and \
            (cls != '*' or len(cmd.split('.')) >= 3) and \
            cmd not in ["full_index.html", "index.html"] and \
            cmd not in exclude_mods and \
-           not cmd.startswith("wxGUI."):
+           (ignore_gui and not cmd.startswith("wxGUI.") or not ignore_gui):
             yield cmd
 
 def write_html_header(f, title, ismain = False, body_width = "99%"):
