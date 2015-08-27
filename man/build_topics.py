@@ -62,6 +62,13 @@ for key, values in sorted(keywords.iteritems()):
         topicsfile.writelines([moduletopics_tmpl.substitute(
             key=key.lower(), name=key.replace('_', ' '))])
     keyfile.write("</table>\n")
+    # link to the keywords index
+    # TODO: the labels in keywords index are with spaces and capitals
+    # this should be probably changed to lowercase with underscores
+    keyfile.write(
+        '<p><em>See also the corresponding keyword'
+        ' <a href="keywords.html#{key}">{key}</a>'
+        ' for additional references.</em>'.format(key=key.replace('_', ' ')))
     write_html_footer(keyfile, "index.html", year)
 topicsfile.write("</ul>\n")
 write_html_footer(topicsfile, "index.html", year)
