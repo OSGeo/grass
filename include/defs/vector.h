@@ -313,7 +313,7 @@ int Vect_select_lines_by_box(struct Map_info *, const struct bound_box *,
 int Vect_select_areas_by_box(struct Map_info *, const struct bound_box *,
                              struct boxlist *);
 int Vect_select_isles_by_box(struct Map_info *, const struct bound_box *,
-			     struct boxlist *);
+                 struct boxlist *);
 int Vect_select_nodes_by_box(struct Map_info *, const struct bound_box *,
                              struct ilist *);
 int Vect_find_node(struct Map_info *, double, double, double, double, int);
@@ -595,10 +595,15 @@ int Vect_attach_centroids(struct Map_info *, const struct bound_box *);
     /* GEOS support */
 #ifdef HAVE_GEOS
 GEOSGeometry *Vect_read_line_geos(struct Map_info *, int, int*);
-GEOSGeometry *Vect_line_to_geos(struct Map_info *, const struct line_pnts*, int);
+GEOSGeometry *Vect_line_to_geos(const struct line_pnts*, int, int);
 GEOSGeometry *Vect_read_area_geos(struct Map_info *, int);
 GEOSCoordSequence *Vect_get_area_points_geos(struct Map_info *, int);
 GEOSCoordSequence *Vect_get_isle_points_geos(struct Map_info *, int);
+char *Vect_line_to_wkt(const struct line_pnts *, int, int);
+unsigned char *Vect_line_to_wkb(const struct line_pnts *,
+                                int, int, size_t *);
+char *Vect_read_area_to_wkt(struct Map_info *, int);
+unsigned char *Vect_read_area_to_wkb(struct Map_info *, int, size_t *);
 #endif
 
     /* Raster color tables */
