@@ -33,6 +33,7 @@ from grass.pygrass.raster.buffer import Buffer
 from grass.pygrass.raster.segment import Segment
 from grass.pygrass.raster.rowio import RowIO
 
+test_raster_name="Raster_test_map"
 
 class RasterRow(RasterAbstractBase):
     """Raster_row_access": Inherits: "Raster_abstract_base" and implements
@@ -51,57 +52,60 @@ class RasterRow(RasterAbstractBase):
           object (only for rows), since r.mapcalc is more sophisticated and
           faster
 
-    Examples:
+        Examples:
 
-    >>> elev = RasterRow('elevation')
-    >>> elev.exist()
-    True
-    >>> elev.is_open()
-    False
-    >>> elev.open()
-    >>> elev.is_open()
-    True
-    >>> elev.has_cats()
-    False
-    >>> elev.mode
-    u'r'
-    >>> elev.mtype
-    'FCELL'
-    >>> elev.num_cats()
-    0
-    >>> elev.info.range
-    (55.578792572021484, 156.32986450195312)
-    >>> elev.info
-    elevation@
-    rows: 1350
-    cols: 1500
-    north: 228500.0 south: 215000.0 nsres:10.0
-    east:  645000.0 west: 630000.0 ewres:10.0
-    range: 55.578792572, 156.329864502
-    proj: 99
-    <BLANKLINE>
+        >>> elev = RasterRow(test_raster_name)
+        >>> elev.exist()
+        True
+        >>> elev.is_open()
+        False
+        >>> elev.open()
+        >>> elev.is_open()
+        True
+        >>> elev.has_cats()
+        True
+        >>> elev.mode
+        u'r'
+        >>> elev.mtype
+        'CELL'
+        >>> elev.num_cats()
+        16
+        >>> elev.info.range
+        (11, 44)
+        >>> elev.info.cols
+        4
+        >>> elev.info.rows
+        4
 
-    Each Raster map have an attribute call ``cats`` that allow user
-    to interact with the raster categories.
+        >>> elev.hist.read()
+        >>> elev.hist.title = "A test map"
+        >>> elev.hist.write()
+        >>> elev.hist.title
+        'A test map'
+        >>> elev.hist.keyword
+        'This is a test map'
 
-    >>> land = RasterRow('geology')
-    >>> land.open()
-    >>> land.cats               # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
-    [('Zml', 1, None),
-     ...
-     ('Tpyw', 1832, None)]
+        Each Raster map have an attribute call ``cats`` that allow user
+        to interact with the raster categories.
 
-    Open a raster map using the *with statement*:
+        >>> elev.cats             # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+        [('A', 11, None),
+         ('B', 12, None),
+        ...
+         ('P', 44, None)]
 
-    >>> with RasterRow('elevation') as elev:
-    ...     for row in elev[:3]:
-    ...         row[:4]
-    ...
-    Buffer([ 141.99613953,  141.27848816,  141.37904358,  142.29821777], dtype=float32)
-    Buffer([ 142.90461731,  142.39450073,  142.68611145,  143.59086609], dtype=float32)
-    Buffer([ 143.81854248,  143.54707336,  143.83972168,  144.59527588], dtype=float32)
-    >>> elev.is_open()
-    False
+        Open a raster map using the *with statement*:
+
+        >>> with RasterRow(test_raster_name) as elev:
+        ...     for row in elev:
+        ...         row
+        Buffer([11, 21, 31, 41], dtype=int32)
+        Buffer([12, 22, 32, 42], dtype=int32)
+        Buffer([13, 23, 33, 43], dtype=int32)
+        Buffer([14, 24, 34, 44], dtype=int32)
+
+        >>> elev.is_open()
+        False
 
     """
     def __init__(self, name, mapset='', *args, **kargs):
@@ -111,21 +115,19 @@ class RasterRow(RasterAbstractBase):
     @must_be_open
     def get_row(self, row, row_buffer=None):
         """Private method that return the row using the read mode
-        call the `Rast_get_row` C function.
+            call the `Rast_get_row` C function.
 
-        :param row: the number of row to obtain
-        :type row: int
-        :param row_buffer: Buffer object instance with the right dim and type
-        :type row_buffer: Buffer
+            :param row: the number of row to obtain
+            :type row: int
+            :param row_buffer: Buffer object instance with the right dim and type
+            :type row_buffer: Buffer
 
-        >>> elev = RasterRow('elevation')
-        >>> elev.open()
-        >>> elev[0]                 # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
-        Buffer([ 141.99613953, 141.27848816,  141.37904358, ..., 58.40825272,
-                 58.30711365,  58.18310547], dtype=float32)
-        >>> elev.get_row(0)         # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
-        Buffer([ 141.99613953, 141.27848816, 141.37904358, ..., 58.40825272,
-                 58.30711365, 58.18310547], dtype=float32)
+            >>> elev = RasterRow(test_raster_name)
+            >>> elev.open()
+            >>> elev[0]
+            Buffer([11, 21, 31, 41], dtype=int32)
+            >>> elev.get_row(0)
+            Buffer([11, 21, 31, 41], dtype=int32)
 
         """
         if row_buffer is None:
@@ -241,6 +243,16 @@ class RasterRowIO(RasterRow):
         :type row: int
         :param row_buffer: Specify the Buffer object that will be instantiate
         :type row_buffer: Buffer object
+
+
+            >>> with RasterRowIO(test_raster_name) as elev:
+            ...     for row in elev:
+            ...         row
+            Buffer([11, 21, 31, 41], dtype=int32)
+            Buffer([12, 22, 32, 42], dtype=int32)
+            Buffer([13, 23, 33, 43], dtype=int32)
+            Buffer([14, 24, 34, 44], dtype=int32)
+
         """
         if row_buffer is None:
             row_buffer = Buffer((self._cols,), self.mtype)
@@ -329,6 +341,15 @@ class RasterSegment(RasterAbstractBase):
         :type row: int
         :param row_buffer: specify the Buffer object that will be instantiate
         :type row_buffer: Buffer object
+
+            >>> with RasterSegment(test_raster_name) as elev:
+            ...     for row in elev:
+            ...         row
+            Buffer([11, 21, 31, 41], dtype=int32)
+            Buffer([12, 22, 32, 42], dtype=int32)
+            Buffer([13, 23, 33, 43], dtype=int32)
+            Buffer([14, 24, 34, 44], dtype=int32)
+
         """
         if row_buffer is None:
             row_buffer = Buffer((self._cols), self.mtype)
@@ -351,6 +372,18 @@ class RasterSegment(RasterAbstractBase):
         :type row: int
         :param col: Specify the column number
         :type col: int
+
+
+            >>> with RasterSegment(test_raster_name) as elev:
+            ...     elev.get(0,0)
+            ...     elev.get(1,1)
+            ...     elev.get(2,2)
+            ...     elev.get(3,3)
+            11
+            22
+            33
+            44
+
         """
         return self.segment.get(row, col)
 
@@ -485,7 +518,7 @@ def raster2numpy(rastname, mapset=''):
     """Return a numpy array from a raster map
 
     :param str rastname: the name of raster map
-    :parar str mapser: the name of mapset containig raster map
+    :parar str mapset: the name of mapset containig raster map
     """
     with RasterRow(rastname, mapset=mapset, mode='r') as rast:
         return np.array(rast)
@@ -508,3 +541,41 @@ def numpy2raster(array, mtype, rastname, overwrite=False):
         for row in array:
             newrow[:] = row[:]
             new.put_row(newrow)
+
+if __name__ == "__main__":
+
+    import doctest
+    from grass.pygrass import utils
+    from grass.pygrass.modules import Module
+    Module("g.region", n=40, s=0, e=40, w=0, res=10)
+    Module("r.mapcalc", expression="%s = row() + (10 * col())"%(test_raster_name),
+                             overwrite=True)
+    Module("r.support", map=test_raster_name,
+                        title="A test map",
+                        history="Generated by r.mapcalc",
+                        description="This is a test map")
+    cats="""11:A
+            12:B
+            13:C
+            14:D
+            21:E
+            22:F
+            23:G
+            24:H
+            31:I
+            32:J
+            33:K
+            34:L
+            41:M
+            42:n
+            43:O
+            44:P"""
+    Module("r.category", rules="-", map=test_raster_name,
+           stdin_=cats, separator=":")
+
+    doctest.testmod()
+
+    """Remove the generated vector map, if exist"""
+    mset = utils.get_mapset_raster(test_raster_name, mapset='')
+    if mset:
+        Module("g.remove", flags='f', type='raster', name=test_raster_name)

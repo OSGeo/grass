@@ -31,6 +31,7 @@ from grass.pygrass.raster.raster_type import TYPE as RTYPE, RTYPE_STR
 from grass.pygrass.raster.category import Category
 from grass.pygrass.raster.history import History
 
+test_raster_name="abstract_test_map"
 
 ## Define global variables to not exceed the 80 columns
 WARN_OVERWRITE = "Raster map <{0}> already exists and will be overwritten"
@@ -49,16 +50,16 @@ class Info(object):
     def __init__(self, name, mapset=''):
         """Read the information for a raster map. ::
 
-            >>> info = Info('elevation')
+            >>> info = Info(test_raster_name)
             >>> info.read()
-            >>> info
-            elevation@
-            rows: 1350
-            cols: 1500
-            north: 228500.0 south: 215000.0 nsres:10.0
-            east:  645000.0 west: 630000.0 ewres:10.0
-            range: 55.578792572, 156.329864502
-            proj: 99
+            >>> info          # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+            abstract_test_map@
+            rows: 4
+            cols: 4
+            north: 40.0 south: 0.0 nsres:10.0
+            east:  40.0 west: 0.0 ewres:10.0
+            range: 11, 44
+            ...
             <BLANKLINE>
 
         """
@@ -212,13 +213,11 @@ class RasterAbstractBase(object):
         """The constructor need at least the name of the map
         *optional* field is the `mapset`.
 
-        >>> ele = RasterAbstractBase('elevation')
+        >>> ele = RasterAbstractBase(test_raster_name)
         >>> ele.name
-        u'elevation'
+        u'abstract_test_map'
         >>> ele.exist()
         True
-        >>> ele.mapset
-        'PERMANENT'
 
         ..
         """
@@ -355,7 +354,7 @@ class RasterAbstractBase(object):
 
         call the C function `G_find_raster`.
 
-        >>> ele = RasterAbstractBase('elevation')
+        >>> ele = RasterAbstractBase(test_raster_name)
         >>> ele.exist()
         True
         """
@@ -371,7 +370,7 @@ class RasterAbstractBase(object):
     def is_open(self):
         """Return True if the map is open False otherwise.
 
-        >>> ele = RasterAbstractBase('elevation')
+        >>> ele = RasterAbstractBase(test_raster_name)
         >>> ele.is_open()
         False
 
@@ -400,9 +399,10 @@ class RasterAbstractBase(object):
     def name_mapset(self, name=None, mapset=None):
         """Return the full name of the Raster.
 
-        >>> ele = RasterAbstractBase('elevation')
-        >>> ele.name_mapset()
-        u'elevation@PERMANENT'
+        >>> ele = RasterAbstractBase(test_raster_name)
+        >>> name = ele.name_mapset().split("@")
+        >>> name
+        [u'abstract_test_map']
 
         """
         if name is None:
@@ -424,11 +424,17 @@ class RasterAbstractBase(object):
             utils.rename(self.name, newname, 'rast')
         self._name = newname
 
-    def set_from_rast(self, rastname='', mapset=''):
-        """Set the region that will use from a map, if rastername and mapset
-        is not specify, use itself.
+    def set_region_from_rast(self, rastname='', mapset=''):
+        """Set the computational region from a map,
+           if rastername and mapset is not specify, use itself.
+           This region will be used by all
+           raster map layers that are opened in the same process.
 
-        call C function `Rast_get_cellhd`"""
+           The GRASS region settings will not be modified.
+
+           call C function `Rast_get_cellhd`, `Rast_set_window`
+
+           """
         if self.is_open():
             fatal("You cannot change the region if map is open")
             raise
@@ -439,7 +445,23 @@ class RasterAbstractBase(object):
             mapset = self.mapset
 
         libraster.Rast_get_cellhd(rastname, mapset,
-                                  ctypes.byref(region._region))
+                                  region.byref())
+        self._set_raster_window(region)
+
+    def set_region(self, region):
+        """Set the computational region that can be different from the
+           current region settings. This region will be used by all
+           raster map layers that are opened in the same process.
+
+           The GRASS region settings will not be modified.
+        """
+        if self.is_open():
+            fatal("You cannot change the region if map is open")
+            raise
+        self._set_raster_window(region)
+
+    def _set_raster_window(self, region):
+        libraster.Rast_set_window(region.byref())
         # update rows and cols attributes
         self._rows = libraster.Rast_window_rows()
         self._cols = libraster.Rast_window_cols()
@@ -523,3 +545,19 @@ class RasterAbstractBase(object):
     def set_cat(self, label, min_cat, max_cat=None, index=None):
         """Set or update a category"""
         self.cats.set_cat(index, (label, min_cat, max_cat))
+
+if __name__ == "__main__":
+
+    import doctest
+    from grass.pygrass import utils
+    from grass.pygrass.modules import Module
+    Module("g.region", n=40, s=0, e=40, w=0, res=10)
+    Module("r.mapcalc", expression="%s = row() + (10 * col())"%(test_raster_name),
+                             overwrite=True)
+
+    doctest.testmod()
+
+    """Remove the generated vector map, if exist"""
+    mset = utils.get_mapset_raster(test_raster_name, mapset='')
+    if mset:
+        Module("g.remove", flags='f', type='raster', name=test_raster_name)
