@@ -20,14 +20,14 @@
 #ifdef HAVE_GEOS
 
 /*!
-   \brief Read vector area and stores it as WKB unsigned char array
+   \brief Read vector area and return it as Well Known Binary (WKB)
+          unsigned char array
 
    \param Map pointer to Map_info structure
-   \param area area idmetry instance
-   \param size The size of the returned byte array
-   \return NULL on error
+   \param area area id
+   \param size The size of the returned unsigned char array
 
-   \return pointer to char array
+   \return pointer to unsigned char array
    \return NULL on error
  */
 unsigned char *Vect_read_area_to_wkb(struct Map_info * Map, int area, size_t *size)
@@ -59,13 +59,14 @@ unsigned char *Vect_read_area_to_wkb(struct Map_info * Map, int area, size_t *si
 }
 
 /*!
-   \brief Read vector area and stores it as WKT char array
+   \brief Read vector area and return it as Well Known Text (WKT)
+          unsigned char array
 
    \param Map pointer to Map_info structure
-   \param area area idmetry instance
-   \return NULL on error
+   \param area area id
+   \param size The size of the returned unsigned char array
 
-   \return pointer to char array
+   \return pointer to unsigned char array
    \return NULL on error
  */
 char *Vect_read_area_to_wkt(struct Map_info * Map, int area)
@@ -97,11 +98,12 @@ char *Vect_read_area_to_wkt(struct Map_info * Map, int area)
 }
 
 /*!
-   \brief Create a WKB representation of given type from feature points.
+   \brief Create a Well Known Binary (WKB) representation of
+          given feature type from points.
 
    This function is not thread safe, it uses static variables for speedup.
 
-   Supported types:
+   Supported feature types:
    - GV_POINT    -> POINT
    - GV_CENTROID -> POINT
    - GV_LINE     -> LINESTRING
@@ -145,7 +147,8 @@ unsigned char *Vect_line_to_wkb(const struct line_pnts *points,
 }
 
 /*!
-   \brief Create a WKT representation of given type from feature points.
+   \brief Create a Well Known Text (WKT) representation of
+          given feature type from points.
 
    This function is not thread safe, it uses static variables for speedup.
 
@@ -157,7 +160,6 @@ unsigned char *Vect_line_to_wkb(const struct line_pnts *points,
 
    \param points pointer to line_pnts structure
    \param type feature type (see supported types)
-   \param with_z Set to 1 if the feature is 3d, 0 otherwise
    \param with_z Set to 1 if the feature is 3d, 0 otherwise
 
    \return pointer to char array
