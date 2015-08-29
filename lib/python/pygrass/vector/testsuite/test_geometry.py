@@ -121,10 +121,8 @@ class LineTestCase(TestCase):
             cls.c_mapinfo = None
 
         """Remove the generated vector map, if exist"""
-        from grass.pygrass.utils import get_mapset_vector
-        mset = get_mapset_vector(cls.tmpname, mapset='')
-        if mset:
-            run_command("g.remove", flags='f', type='vector', name=cls.tmpname)
+        cls.runModule("g.remove", flags='f', type='vector', 
+                      name=cls.tmpname)
 
     def test_len(self):
         """Test __len__ magic method"""
@@ -214,10 +212,8 @@ class NodeTestCase(TestCase):
             cls.c_mapinfo = None
 
         """Remove the generated vector map, if exist"""
-        from grass.pygrass.utils import get_mapset_vector
-        mset = get_mapset_vector(cls.tmpname, mapset='')
-        if mset:
-            run_command("g.remove", flags='f', type='vector', name=cls.tmpname)
+        cls.runModule("g.remove", flags='f', type='vector', 
+                      name=cls.tmpname)
 
     def test_init(self):
         """Test Node __init__"""
@@ -270,10 +266,8 @@ class AreaTestCase(TestCase):
             cls.c_mapinfo = None
 
         """Remove the generated vector map, if exist"""
-        from grass.pygrass.utils import get_mapset_vector
-        mset = get_mapset_vector(cls.tmpname, mapset='')
-        if mset:
-            run_command("g.remove", flags='f', type='vector', name=cls.tmpname)
+        cls.runModule("g.remove", flags='f', type='vector', 
+                      name=cls.tmpname)
 
     def test_init(self):
         """Test area __init__ and basic functions"""

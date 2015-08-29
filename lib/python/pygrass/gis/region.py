@@ -305,7 +305,8 @@ class Region(object):
         ..
         """
         attrs = ['north', 'south', 'west', 'east', 'top', 'bottom',
-                 'nsres', 'ewres', 'tbres']
+                 'nsres', 'ewres', 'tbres', 'rows', 'cols', 'cells',
+                 'zone', 'proj']
         for attr in attrs:
             if getattr(self, attr) != getattr(reg, attr):
                 return False
@@ -421,6 +422,17 @@ class Region(object):
         if mapset:
             libraster.Rast_get_cellhd(raster_name, mapset,
                                       self.byref())
+
+    def set_raster_region(self):
+        """Set the computational region (window) for all raster maps in the current process.
+           
+           Attention: All raster objects must be closed or the
+                      process will be terminated.
+                      
+           The Raster library C function Rast_set_window() is called.
+        
+        """
+        libraster.Rast_set_window(self.byref())
 
     def get_current(self):
         """Get the current working region of this process
