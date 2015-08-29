@@ -30,11 +30,10 @@ class VectorTopoTestCase(TestCase):
     def tearDownClass(cls):
         if cls.vect.is_open():
             cls.vect.close()
+
         """Remove the generated vector map, if exist"""
-        from grass.pygrass.utils import get_mapset_vector
-        mset = get_mapset_vector(cls.tmpname, mapset='')
-        if mset:
-            run_command("g.remove", flags='f', type='vector', name=cls.tmpname)
+        cls.runModule("g.remove", flags='f', type='vector', 
+                      name=cls.tmpname)
 
     def test_getitem_slice(self):
         """Test that getitem handle correctly the slice starting from 1"""

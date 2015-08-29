@@ -419,6 +419,11 @@ def create_test_vector_map(map_name="test_vector"):
         vect.comment = 'This is a comment'
 
         vect.table.conn.commit()
+        
+        vect.organization = "Thuenen Institut"
+        vect.person = "Soeren Gebbert"
+        vect.title = "Test dataset"
+        vect.comment = "This is a comment"
         vect.close()
 
 def create_test_stream_network_map(map_name="streams"):

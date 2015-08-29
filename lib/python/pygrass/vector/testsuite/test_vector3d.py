@@ -60,9 +60,8 @@ class VectorTopo3DTestCase(TestCase):
     @classmethod
     def tearDownClass(cls):
         """Remove the generated vector map, if exist"""
-        mset = get_mapset_vector(cls.tmpname, mapset='')
-        if mset:
-            run_command("g.remove", flags='f', type='vector', name=cls.tmpname)
+        cls.runModule("g.remove", flags='f', type='vector', 
+                      name=cls.tmpname)
 
 
 if __name__ == '__main__':
