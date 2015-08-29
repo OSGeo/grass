@@ -50,18 +50,6 @@ class Category(list):
     Rast_copy_cats() <- This should be wrapped so that categories from an
     existing Python category class are copied.
 
-
-    >>> import grass.lib.raster as libraster
-    >>> import ctypes
-    >>> from grass.pygrass.raster.category import Category
-    >>> cats = Category('landuse')
-    >>> cats.read()
-    >>> cats.labels()                                     # doctest: +ELLIPSIS
-    ['undefined', 'developed', 'agriculture', ..., 'water', 'sediment']
-    >>> cats[0]
-    ('undefined', 0, None)
-    >>> cats[1]
-    ('developed', 1, None)
     """
     def __init__(self, name, mapset='', mtype='CELL', *args, **kargs):
         self.name = name
