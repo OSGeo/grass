@@ -37,6 +37,14 @@ class History(object):
     def __del__(self):
         """Rast_free_history"""
         pass
+        
+    def __eq__(self, hist):
+        attrs = ['name', 'mapset', 'mtype', 'creator', 'src1', 'src2',
+                 'keyword', 'date', 'title']
+        for attr in attrs:
+           if getattr(self, attr) != getattr(hist, attr):
+                return False
+        return True
 
     def __len__(self):
         return self.length()

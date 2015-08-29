@@ -7,27 +7,29 @@ from unittest import skip
 from grass.pygrass.raster import RasterRow
 
 
-class RasterRowTestCate(TestCase):
+class RasterRowTestCase(TestCase):
+
+    name = "RasterRowTestCase_map"
 
     @classmethod
     def setUpClass(cls):
-        """Create a not empty table instance"""
-        from grass.pygrass.modules.shortcuts import general as g
-
-        cls.name = 'elevation'
-        cls.tmp = 'tmp' + cls.name
-        g.copy(raster=[cls.name, cls.tmp], overwrite=True)
+        """Create test raster map and region"""
+        cls.use_temp_region()
+        cls.runModule("g.region", n=40, s=0, e=40, w=0, res=10)
+        cls.runModule("r.mapcalc", expression="%s = row() + (10.0 * col())"%(cls.name),
+                                   overwrite=True)
 
     @classmethod
     def tearDownClass(cls):
         """Remove the generated vector map, if exist"""
-        from grass.pygrass.modules.shortcuts import general as g
-        g.remove(type='raster', name=cls.tmp, flags='f')
+        cls.runModule("g.remove", flags='f', type='raster', 
+                      name=cls.name)
+        cls.del_temp_region()
 
     def test_type(self):
         r = RasterRow(self.name)
         r.open(mode='r')
-        self.assertTrue(r.mtype,'FCELL')
+        self.assertTrue(r.mtype,'DCELL')
         r.close()
 
     def test_isopen(self):
@@ -53,18 +55,18 @@ class RasterRowTestCate(TestCase):
         self.assertTrue(exist.exist())
 
     def test_open_r(self):
-        notexist = RasterRow(self.tmp + 'notexist')
+        notexist = RasterRow(self.name + 'notexist')
         with self.assertRaises(OpenError):
             # raster does not exist
             notexist.open(mode='r')
         r = RasterRow(self.name)
-        r.open(mode='r', mtype='DCELL')
+        r.open(mode='r', mtype='FCELL')
         # ignore the mtype if is open in read mode
-        self.assertEqual(r.mtype, 'FCELL')
+        self.assertEqual(r.mtype, 'DCELL')
         r.close()
 
     def test_open_w(self):
-        r = RasterRow(self.tmp)
+        r = RasterRow(self.name)
         with self.assertRaises(OpenError):
             # raster type is not defined!
             r.open(mode='w')
@@ -74,6 +76,7 @@ class RasterRowTestCate(TestCase):
         # open in write mode and overwrite
         r.open(mode='w', mtype='DCELL', overwrite=True)
         self.assertTrue(r.mtype, 'DCELL')
+        r.close()
 
 
 if __name__ == '__main__':
