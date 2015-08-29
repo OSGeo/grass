@@ -34,7 +34,6 @@ from grass.pygrass.raster.history import History
 test_raster_name="abstract_test_map"
 
 ## Define global variables to not exceed the 80 columns
-WARN_OVERWRITE = "Raster map <{0}> already exists and will be overwritten"
 INDXOUTRANGE = "The index (%d) is out of range, have you open the map?."
 INFO = """{name}@{mapset}
 rows: {rows}
