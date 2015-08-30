@@ -23,7 +23,7 @@ categories = \
 
 IDXCATS := $(foreach cat,$(categories),$(lastword $(subst :, ,$(cat))))
 
-IDXSRC = full_index index topics keywords graphical_index class_graphical $(IDXCATS)
+IDXSRC = full_index index topics keywords graphical_index manual_gallery class_graphical $(IDXCATS)
 
 INDICES := $(patsubst %,$(HTMLDIR)/%.html,$(IDXSRC))
 
@@ -73,6 +73,12 @@ GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
 	$(PYTHON) ./build_graphical_index.py $(HTMLDIR)
 endef
 
+define build_manual_gallery
+GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
+	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
+	$(PYTHON) ./build_manual_gallery.py $(HTMLDIR)
+endef
+
 define build_class_graphical
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
@@ -97,6 +103,10 @@ $(HTMLDIR)/keywords.html: $(ALL_HTML)
 
 $(HTMLDIR)/graphical_index.html: $(ALL_HTML)
 	$(call build_graphical_index)
+	touch $@
+
+$(HTMLDIR)/manual_gallery.html: $(ALL_HTML)
+	$(call build_manual_gallery)
 	touch $@
 
 # TODO: this should be done in the same way as category_rule
