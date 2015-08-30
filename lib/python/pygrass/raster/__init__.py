@@ -614,6 +614,67 @@ def raster2numpy(rastname, mapset=''):
         return np.array(rast)
 
 
+def raster2numpy_img(rastname, region, color="ARGB", array=None):
+    """Convert a raster map layer into a string with
+       32Bit ARGB or 8Bit Gray little endian encoding.
+    
+        Return a numpy array from a raster map of type uint8
+        that contains the colored map data as 32 bit ARGB or 8 bit image
+
+       :param rastname: The name of raster map
+       :type rastname: string
+       
+       :param region: The region to be used for raster map reading
+       :type region: grass.pygrass.gis.region.Region
+       
+       :param color: "ARGB", "GRAY1", "GRAY2"
+                     ARGB  -> 32Bit RGB with alpha channel
+                     GRAY1 -> grey scale formular: .33R+ .5G+ .17B
+                     GRAY2 -> grey scale formular: .30R+ .59G+ .11B
+       :type color: String
+
+       :param array: A numpy array (optional) to store the image, 
+                     the array needs to setup as follows:
+                     
+                     array = np.ndarray((region.rows*region.cols*scale), np.uint8)
+                     
+                     scale is 4 in case of ARGB or 1 in case of Gray scale
+       :type array: numpy.ndarray
+       
+       :return: A numpy array of size rows*cols*4 in case of ARGB and
+                rows*cols*1 in case of gray scale
+    
+       Attention: This function will change the computational raster region
+       of the current process while running.
+    """
+    from copy import deepcopy
+    region_orig = deepcopy(region)
+    # Set the raster region
+    region.set_raster_region()
+    
+    scale = 1
+    color_mode = 1
+    if color.upper() == "ARGB":
+        scale = 4
+        color_mode = 1
+    elif color.upper() == "GRAY1":
+        scale = 1
+        color_mode = 2
+    elif color.upper() == "GRAY2":
+        scale = 1
+        color_mode = 3
+        
+    if array is None:
+        array = np.ndarray((region.rows*region.cols*scale), np.uint8)
+
+    libraster.Rast_map_to_img_str(rastname, color_mode, 
+                                  array.ctypes.data_as(ctypes.POINTER(ctypes.c_uint8)))
+    # Restore the raster region
+    region_orig.set_raster_region()
+    
+    return array
+
+
 def numpy2raster(array, mtype, rastname, overwrite=False):
     """Save a numpy array to a raster map
 
