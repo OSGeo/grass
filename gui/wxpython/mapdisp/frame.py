@@ -31,7 +31,6 @@ import wx
 import wx.aui
 
 from core.render        import Map
-from vdigit.toolbars    import VDigitToolbar
 from mapdisp.toolbars   import MapToolbar, NvizIcons
 from mapdisp.gprint     import PrintOptions
 from core.gcmd          import GError, GMessage, RunCommand
@@ -263,6 +262,7 @@ class MapFrame(SingleMapFrame):
         """Add vector digitizer toolbar
         """
         from vdigit.main import haveVDigit, VDigit
+        from vdigit.toolbars import VDigitToolbar
         
         if not haveVDigit:
             from vdigit import errorMsg
