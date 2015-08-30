@@ -544,6 +544,9 @@ char *Rast_read_vdatum(const char *, const char *);
 void Rast_write_units(const char *, const char *);
 void Rast_write_vdatum(const char *, const char *);
 
+/* rast_to_img_string.c */
+int Rast_map_to_img_str(char *, int, unsigned char*);
+
 /* reclass.c */
 int Rast_is_reclass(const char *, const char *, char *, char *);
 int Rast_is_reclassed_to(const char *, const char *, int *, char ***);
