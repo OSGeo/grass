@@ -168,18 +168,18 @@ class Columns(object):
 
     >>> import sqlite3
     >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
-    >>> cols_sqlite = Columns('census',
+    >>> cols_sqlite = Columns(test_vector_name,
     ...                       sqlite3.connect(get_path(path)))
     >>> cols_sqlite.tname
-    u'census'
+    u'table_doctest_map'
 
     For a postgreSQL table:
 
     >>> import psycopg2 as pg                              #doctest: +SKIP
-    >>> cols_pg = Columns('boundary_municp_pg',
+    >>> cols_pg = Columns(test_vector_name,
     ...                   pg.connect('host=localhost dbname=grassdb')) #doctest: +SKIP
     >>> cols_pg.tname #doctest: +SKIP
-    'boundary_municp_pg'                                   #doctest: +SKIP
+    'table_doctest_map'                                   #doctest: +SKIP
 
     """
     def __init__(self, tname, connection, key='cat'):
@@ -212,15 +212,12 @@ class Columns(object):
         """Return True if two table have the same columns.
 
         >>> import sqlite3
-        >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
+        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
         >>> connection = sqlite3.connect(get_path(path))
-        >>> cols0 = Columns('census', connection)
-        >>> cols1 = Columns('census', connection)
-        >>> cols2 = Columns('hospitals', connection)
+        >>> cols0 = Columns(test_vector_name, connection)
+        >>> cols1 = Columns(test_vector_name, connection)
         >>> cols0 == cols1
         True
-        >>> cols1 == cols2
-        False
         """
         return obj.tname == self.tname and obj.odict == self.odict
 
@@ -234,13 +231,13 @@ class Columns(object):
         """Return True if is a psycopg connection.
 
         >>> import sqlite3
-        >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
-        >>> cols_sqlite = Columns('census',
+        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+        >>> cols_sqlite = Columns(test_vector_name,
         ...                       sqlite3.connect(get_path(path)))
         >>> cols_sqlite.is_pg()
         False
         >>> import psycopg2 as pg #doctest: +SKIP
-        >>> cols_pg = Columns('boundary_municp_pg',
+        >>> cols_pg = Columns(test_vector_name,
         ...                   pg.connect('host=localhost dbname=grassdb')) #doctest: +SKIP
         >>> cols_pg.is_pg() #doctest: +SKIP
         True
@@ -290,16 +287,16 @@ class Columns(object):
         Remove it is used to remove a columns.
 
         >>> import sqlite3
-        >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
-        >>> cols_sqlite = Columns('census',
+        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+        >>> cols_sqlite = Columns(test_vector_name,
         ...                       sqlite3.connect(get_path(path)))
         >>> cols_sqlite.sql_descr()                   # doctest: +ELLIPSIS
-        u'cat integer, OBJECTID integer, AREA double precision, ...'
+        u'cat INTEGER, name varchar(50), value double precision'
         >>> import psycopg2 as pg                         # doctest: +SKIP
-        >>> cols_pg = Columns('boundary_municp_pg',
+        >>> cols_pg = Columns(test_vector_name,
         ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
         >>> cols_pg.sql_descr()                 # doctest: +ELLIPSIS +SKIP
-        'cat int4, objectid int4, area float8, perimeter float8, ...'
+        u'cat INTEGER, name varchar(50), value double precision'
         """
         if remove:
             return ', '.join(['%s %s' % (key, val) for key, val in self.items()
@@ -312,16 +309,16 @@ class Columns(object):
         """Return a list with the column types.
 
         >>> import sqlite3
-        >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
-        >>> cols_sqlite = Columns('census',
+        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+        >>> cols_sqlite = Columns(test_vector_name,
         ...                       sqlite3.connect(get_path(path)))
         >>> cols_sqlite.types()                       # doctest: +ELLIPSIS
-        [u'integer', u'integer', ...]
+        [u'INTEGER', u'varchar(50)', u'double precision']
         >>> import psycopg2 as pg                         # doctest: +SKIP
-        >>> cols_pg = Columns('boundary_municp_pg',
+        >>> cols_pg = Columns(test_vector_name,
         ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
         >>> cols_pg.types()                     # doctest: +ELLIPSIS +SKIP
-        ['int4', 'int4', 'float8', 'float8', 'float8', ...]
+        [u'INTEGER', u'varchar(50)', u'double precision']
 
         """
         return self.odict.values()
@@ -331,16 +328,16 @@ class Columns(object):
         Remove it is used to remove a columns.
 
         >>> import sqlite3
-        >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
-        >>> cols_sqlite = Columns('census',
+        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+        >>> cols_sqlite = Columns(test_vector_name,
         ...                       sqlite3.connect(get_path(path)))
         >>> cols_sqlite.names()                      # doctest: +ELLIPSIS
-        [u'cat', u'OBJECTID', u'AREA', u'PERIMETER', ...]
+        [u'cat', u'name', u'value']
         >>> import psycopg2 as pg                         # doctest: +SKIP
-        >>> cols_pg = Columns('boundary_municp_pg',       # doctest: +SKIP
+        >>> cols_pg = Columns(test_vector_name,       # doctest: +SKIP
         ...                   pg.connect('host=localhost dbname=grassdb'))
         >>> cols_pg.names()                     # doctest: +ELLIPSIS +SKIP
-        ['cat', 'objectid', 'area', 'perimeter', ...]
+        [u'cat', u'name', u'value']
 
         """
         if remove:
@@ -357,16 +354,16 @@ class Columns(object):
         """Return a list of tuple with column name and column type.
 
         >>> import sqlite3
-        >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
-        >>> cols_sqlite = Columns('census',
+        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+        >>> cols_sqlite = Columns(test_vector_name,
         ...                       sqlite3.connect(get_path(path)))
         >>> cols_sqlite.items()                       # doctest: +ELLIPSIS
-        [(u'cat', u'integer'), ...]
+        [(u'cat', u'INTEGER'), (u'name', u'varchar(50)'), (u'value', u'double precision')]
         >>> import psycopg2 as pg                         # doctest: +SKIP
-        >>> cols_pg = Columns('boundary_municp_pg',
+        >>> cols_pg = Columns(test_vector_name,
         ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
         >>> cols_pg.items()                     # doctest: +ELLIPSIS +SKIP
-        [('cat', 'int4'), ('objectid', 'int4'), ('area', 'float8'), ...]
+        [(u'cat', u'INTEGER'), (u'name', u'varchar(50)'), (u'value', u'double precision')]
 
         """
         return self.odict.items()
@@ -382,7 +379,7 @@ class Columns(object):
         >>> import sqlite3
         >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
         >>> from grass.pygrass.utils import copy, remove
-        >>> copy('census','mycensus','vect')
+        >>> copy(test_vector_name,'mycensus','vect')
         >>> cols_sqlite = Columns('mycensus',
         ...                       sqlite3.connect(get_path(path)))
         >>> cols_sqlite.add(['n_pizza'], ['INT'])
@@ -436,7 +433,7 @@ class Columns(object):
         >>> import sqlite3
         >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
         >>> from grass.pygrass.utils import copy, remove
-        >>> copy('census','mycensus','vect')
+        >>> copy(test_vector_name,'mycensus','vect')
         >>> cols_sqlite = Columns('mycensus',
         ...                       sqlite3.connect(get_path(path)))
         >>> cols_sqlite.add(['n_pizza'], ['INT'])
@@ -449,7 +446,7 @@ class Columns(object):
         True
 
         >>> import psycopg2 as pg                         # doctest: +SKIP
-        >>> cols_pg = Columns('boundary_municp_pg',
+        >>> cols_pg = Columns(test_vector_name,
         ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
         >>> cols_pg.rename('n_pizza', 'n_pizzas')         # doctest: +SKIP
         >>> 'n_pizza' in cols_pg                          # doctest: +SKIP
@@ -490,7 +487,7 @@ class Columns(object):
         >>> import sqlite3
         >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
         >>> from grass.pygrass.utils import copy, remove
-        >>> copy('census','mycensus','vect')
+        >>> copy(test_vector_name,'mycensus','vect')
         >>> cols_sqlite = Columns('mycensus',
         ...                       sqlite3.connect(get_path(path)))
         >>> cols_sqlite.add(['n_pizzas'], ['INT'])
@@ -499,7 +496,7 @@ class Columns(object):
           ...
         DBError: SQLite does not support to cast columns.
         >>> import psycopg2 as pg                         # doctest: +SKIP
-        >>> cols_pg = Columns('boundary_municp_pg',
+        >>> cols_pg = Columns(test_vector_name,
         ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
         >>> cols_pg.cast('n_pizzas', 'float8')            # doctest: +SKIP
         >>> cols_pg['n_pizzas']                           # doctest: +SKIP
@@ -531,18 +528,18 @@ class Columns(object):
         >>> import sqlite3
         >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
         >>> from grass.pygrass.utils import copy, remove
-        >>> copy('census','mycensus','vect')
+        >>> copy(test_vector_name,'mycensus','vect')
         >>> cols_sqlite = Columns('mycensus',
         ...                       sqlite3.connect(get_path(path)))
-        >>> cols_sqlite.drop('CHILD')                 # doctest: +ELLIPSIS
-        >>> 'CHILD' in cols_sqlite
+        >>> cols_sqlite.drop('name')                 # doctest: +ELLIPSIS
+        >>> 'name' in cols_sqlite
         False
 
         >>> import psycopg2 as pg                         # doctest: +SKIP
-        >>> cols_pg = Columns('boundary_municp_pg',
+        >>> cols_pg = Columns(test_vector_name,
         ...                   pg.connect('host=localhost dbname=grassdb')) # doctest: +SKIP
-        >>> cols_pg.drop('CHILD') # doctest: +SKIP
-        >>> 'CHILD' in cols_pg # doctest: +SKIP
+        >>> cols_pg.drop('name') # doctest: +SKIP
+        >>> 'name' in cols_pg # doctest: +SKIP
         False
         >>> remove('mycensus','vect')
 
@@ -571,18 +568,18 @@ class Link(object):
     It is possible to define a Link object or given all the information
     (layer, name, table name, key, database, driver):
 
-    >>> link = Link(1, 'link0', 'census', 'cat',
-    ...             '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db', 'sqlite')
+    >>> link = Link(1, 'link0', test_vector_name, 'cat',
+    ...             '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db', 'sqlite')
     >>> link.layer
     1
     >>> link.name
     'link0'
     >>> link.table_name
-    'census'
+    'table_doctest_map'
     >>> link.key
     'cat'
     >>> link.database
-    '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
+    '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
     >>> link.driver
     'sqlite'
     >>> link
@@ -693,11 +690,11 @@ class Link(object):
     def __eq__(self, link):
         """Return True if two Link instance have the same parameters.
 
-        >>> l0 = Link(1, 'link0', 'census', 'cat',
-        ...           '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db', 'sqlite')
-        >>> l1 = Link(1, 'link0', 'census', 'cat',
-        ...           '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db', 'sqlite')
-        >>> l2 = Link(2, 'link0', 'census', 'cat',
+        >>> l0 = Link(1, 'link0', test_vector_name, 'cat',
+        ...           '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db', 'sqlite')
+        >>> l1 = Link(1, 'link0', test_vector_name, 'cat',
+        ...           '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db', 'sqlite')
+        >>> l2 = Link(2, 'link0', test_vector_name, 'cat',
         ...           '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db', 'sqlite')
         >>> l0 == l1
         True
@@ -719,16 +716,18 @@ class Link(object):
     def connection(self):
         """Return a connection object.
 
-        >>> link = Link(1, 'link0', 'census', 'cat',
-        ...             '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db',
+        >>> link = Link(1, 'link0', test_vector_name, 'cat',
+        ...             '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db',
         ...             'sqlite')
         >>> conn = link.connection()
         >>> cur = conn.cursor()
-        >>> cur.execute("SELECT cat,TOTAL_POP,PERIMETER FROM %s" %
+        >>> link.table_name
+        'table_doctest_map'
+        >>> cur.execute("SELECT cat, name, value from %s" %
         ...             link.table_name)              # doctest: +ELLIPSIS
         <sqlite3.Cursor object at ...>
-        >>> cur.fetchone()
-        (1, 44, 757.669)
+        >>> cur.fetchone()     #doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+        (1, u'point', 1.0)
         >>> cur.close()
         >>> conn.close()
 
@@ -762,15 +761,15 @@ class Link(object):
     def table(self):
         """Return a Table object.
 
-        >>> link = Link(1, 'link0', 'census', 'cat',
-        ...             '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db',
+        >>> link = Link(1, 'link0', test_vector_name, 'cat',
+        ...             '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db',
         ...             'sqlite')
         >>> table = link.table()
-        >>> table.filters.select('cat', 'TOTAL_POP', 'PERIMETER')
-        Filters(u'SELECT cat, TOTAL_POP, PERIMETER FROM census;')
+        >>> table.filters.select('cat', 'name', 'value')
+        Filters(u'SELECT cat, name, value FROM table_doctest_map;')
         >>> cur = table.execute()
         >>> cur.fetchone()
-        (1, 44, 757.669)
+        (1, u'point', 1.0)
         >>> cur.close()
 
         """
@@ -779,15 +778,15 @@ class Link(object):
     def info(self):
         """Print information of the link.
 
-        >>> link = Link(1, 'link0', 'census', 'cat',
-        ...             '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db',
+        >>> link = Link(1, 'link0', test_vector_name, 'cat',
+        ...             '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db',
         ...             'sqlite')
         >>> link.info()
         layer:     1
         name:      link0
-        table:     census
+        table:     table_doctest_map
         key:       cat
-        database:  $GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db
+        database:  $GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db
         driver:    sqlite
 
         """
@@ -803,15 +802,15 @@ class DBlinks(object):
     """Interface containing link to the table DB.
 
     >>> from grass.pygrass.vector import VectorTopo
-    >>> cens = VectorTopo('census')
+    >>> cens = VectorTopo(test_vector_name)
     >>> cens.open(mode='r')
     >>> dblinks = DBlinks(cens.c_mapinfo)
     >>> dblinks
-    DBlinks([Link(1, census, sqlite)])
+    DBlinks([Link(1, table_doctest_map, sqlite)])
     >>> dblinks[0]
-    Link(1, census, sqlite)
-    >>> dblinks['census']
-    Link(1, census, sqlite)
+    Link(1, table_doctest_map, sqlite)
+    >>> dblinks[test_vector_name]
+    Link(1, table_doctest_map, sqlite)
     >>> cens.close()
 
     """
@@ -882,16 +881,16 @@ class DBlinks(object):
        :type link: a Link object
 
         >>> from grass.pygrass.vector import VectorTopo
-        >>> municip = VectorTopo('census')
-        >>> municip.open(mode='r')
-        >>> dblinks = DBlinks(municip.c_mapinfo)
+        >>> test_vect = VectorTopo(test_vector_name)
+        >>> test_vect.open(mode='r')
+        >>> dblinks = DBlinks(test_vect.c_mapinfo)
         >>> dblinks
-        DBlinks([Link(1, census, sqlite)])
-        >>> link = Link(2, 'pg_link', 'boundary_municp_pg', 'cat',
+        DBlinks([Link(1, table_doctest_map, sqlite)])
+        >>> link = Link(2, 'pg_link', test_vector_name, 'cat',
         ...             'host=localhost dbname=grassdb', 'pg') # doctest: +SKIP
         >>> dblinks.add(link)                             # doctest: +SKIP
         >>> dblinks                                       # doctest: +SKIP
-        DBlinks([Link(1, boundary_municp, sqlite)])
+        DBlinks([Link(1, table_doctest_map, sqlite)])
 
         """
         #TODO: check if open in write mode or not.
@@ -909,14 +908,14 @@ class DBlinks(object):
         :type force: boole
 
         >>> from grass.pygrass.vector import VectorTopo
-        >>> municip = VectorTopo('census')
-        >>> municip.open(mode='r')
-        >>> dblinks = DBlinks(municip.c_mapinfo)
+        >>> test_vect = VectorTopo(test_vector_name)
+        >>> test_vect.open(mode='r')
+        >>> dblinks = DBlinks(test_vect.c_mapinfo)
         >>> dblinks
-        DBlinks([Link(1, census, sqlite)])
+        DBlinks([Link(1, table_doctest_map, sqlite)])
         >>> dblinks.remove('pg_link')                     # doctest: +SKIP
         >>> dblinks  # need to open vector map in write mode
-        DBlinks([Link(1, census, sqlite)])
+        DBlinks([Link(1, table_doctest_map, sqlite)])
 
 
         """
@@ -940,12 +939,12 @@ class Table(object):
 
     >>> import sqlite3
     >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
-    >>> tab_sqlite = Table(name='census',
+    >>> tab_sqlite = Table(name=test_vector_name,
     ...                    connection=sqlite3.connect(get_path(path)))
     >>> tab_sqlite.name
-    u'census'
+    u'table_doctest_map'
     >>> import psycopg2                                   # doctest: +SKIP
-    >>> tab_pg = Table('boundary_municp_pg',
+    >>> tab_pg = Table(test_vector_name,
     ...                psycopg2.connect('host=localhost dbname=grassdb',
     ...                                 'pg'))            # doctest: +SKIP
     >>> tab_pg.columns                          # doctest: +ELLIPSIS +SKIP
@@ -986,10 +985,10 @@ class Table(object):
 
         >>> import sqlite3
         >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
-        >>> tab_sqlite = Table(name='census',
+        >>> tab_sqlite = Table(name=test_vector_name,
         ...                    connection=sqlite3.connect(get_path(path)))
         >>> tab_sqlite
-        Table(u'census')
+        Table(u'table_doctest_map')
 
         """
         return "Table(%r)" % (self.name)
@@ -1030,11 +1029,11 @@ class Table(object):
         """Return the number of rows
 
         >>> import sqlite3
-        >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
-        >>> tab_sqlite = Table(name='census',
+        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+        >>> tab_sqlite = Table(name=test_vector_name,
         ...                    connection=sqlite3.connect(get_path(path)))
         >>> tab_sqlite.n_rows()
-        2537
+        3
         """
         cur = self.conn.cursor()
         cur.execute(sql.SELECT.format(cols='Count(*)', tname=self.name))
@@ -1058,14 +1057,14 @@ class Table(object):
         :type values: list of tuple
 
         >>> import sqlite3
-        >>> path = '$GISDBASE/$LOCATION_NAME/PERMANENT/sqlite/sqlite.db'
-        >>> tab_sqlite = Table(name='census',
+        >>> path = '$GISDBASE/$LOCATION_NAME/$MAPSET/sqlite/sqlite.db'
+        >>> tab_sqlite = Table(name=test_vector_name,
         ...                    connection=sqlite3.connect(get_path(path)))
-        >>> tab_sqlite.filters.select('cat', 'TOTAL_POP').order_by('AREA')
-        Filters(u'SELECT cat, TOTAL_POP FROM census ORDER BY AREA;')
+        >>> tab_sqlite.filters.select('cat', 'name').order_by('value')
+        Filters(u'SELECT cat, name FROM table_doctest_map ORDER BY value;')
         >>> cur = tab_sqlite.execute()
-        >>> cur.fetchone()
-        (1856, 0)
+        >>> cur.fetchone()     #doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
+         (1, u'point')
 
         """
         try:
@@ -1074,9 +1073,9 @@ class Table(object):
             if many and values:
                 return cur.executemany(sqlc, values)
             return cur.execute(sqlc)
-        except:
+        except Exception, e:
             #import ipdb; ipdb.set_trace()
-            raise ValueError("The SQL is not correct:\n%r" % sqlc)
+            raise ValueError("The SQL is not correct:\n%r, SQL error: %s" % (sqlc, str(e)))
 
     def exist(self, cursor=None):
         """Return True if the table already exist in the DB, False otherwise
@@ -1167,6 +1166,6 @@ if __name__ == "__main__":
     """Remove the generated vector map, if exist"""
     from grass.pygrass.utils import get_mapset_vector
     from grass.script.core import run_command
-    mset = get_mapset_vector(test_vector_name, mapset='')
-    if mset:
-        run_command("g.remove", flags='f', type='vector', name=test_vector_name)
+    #mset = get_mapset_vector(test_vector_name, mapset='')
+    #if mset:
+    #    run_command("g.remove", flags='f', type='vector', name=test_vector_name)

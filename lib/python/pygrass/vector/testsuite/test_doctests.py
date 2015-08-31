@@ -37,6 +37,7 @@ def load_tests(loader, tests, ignore):
     utils.create_test_vector_map(gvector.abstract.test_vector_name)
     utils.create_test_vector_map(gvector.geometry.test_vector_name)
     utils.create_test_vector_map(gvector.find.test_vector_name)
+    utils.create_test_vector_map(gvector.table.test_vector_name)
 
     # this should be called at some top level
     tests.addTests(doctest.DocTestSuite(gvector))
@@ -45,7 +46,7 @@ def load_tests(loader, tests, ignore):
     tests.addTests(doctest.DocTestSuite(gvector.find))
     tests.addTests(doctest.DocTestSuite(gvector.geometry))
     tests.addTests(doctest.DocTestSuite(gvector.sql))
-    #tests.addTests(doctest.DocTestSuite(gvector.table))
+    tests.addTests(doctest.DocTestSuite(gvector.table))
     return tests
 
 
