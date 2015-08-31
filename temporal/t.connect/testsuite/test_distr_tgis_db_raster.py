@@ -22,51 +22,28 @@ class TestRasterExtraction(TestCase):
     @classmethod
     def setUpClass(cls):
         os.putenv("GRASS_OVERWRITE", "1")
-        for i in range(1, 5):
+        for i in range(1, 7):
             mapset_name = "test%i" % i
             cls.runModule("g.mapset", flags="c", mapset=mapset_name)
             cls.mapsets_to_remove.append(mapset_name)
             cls.runModule("g.region", s=0, n=80,
                           w=0, e=120, b=0, t=50, res=10, res3=10)
+            cls.runModule("t.connect", flags="d")
             cls.runModule("t.info", flags="s")
             cls.runModule("r.mapcalc", expression="a1 = 100")
             cls.runModule("r.mapcalc", expression="a2 = 200")
             cls.runModule("r.mapcalc", expression="a3 = 300")
-
             cls.runModule("t.create", type="strds", temporaltype="absolute",
                           output="A", title="A test", description="A test")
             cls.runModule("t.register", flags="i", type="raster", input="A",
                           maps="a1,a2,a3",
                           start="2001-01-01", increment="%i months" % i)
 
-        # Here we reuse two mapset to share a temporal databse between mapsets
-        tgis.init()
-        ciface = tgis.get_tgis_c_library_interface()
-        cls.runModule("g.mapset", flags="c", mapset="test5")
-        driver = ciface.get_driver_name("test1")
-        database = ciface.get_database_name("test1")
-        cls.runModule("t.connect", driver=driver, database=database)
+        # Add the new mapsets to the search path
+        for mapset in cls.mapsets_to_remove:
+            cls.runModule("g.mapset", mapset=mapset)
+            cls.runModule("g.mapsets", operation="add", mapset=','.join(cls.mapsets_to_remove))
 
-        cls.runModule("g.mapset", flags="c", mapset="test6")
-        driver = ciface.get_driver_name("test2")
-        database = ciface.get_database_name("test2")
-        cls.runModule("t.connect", driver=driver, database=database)
-
-        for i in range(5, 7):
-            mapset_name = "test%i" % i
-            cls.runModule("g.mapset", mapset=mapset_name)
-            cls.runModule("g.region", s=0, n=80,
-                          w=0, e=120, b=0, t=50, res=10, res3=10)
-            cls.mapsets_to_remove.append(mapset_name)
-            cls.runModule("r.mapcalc", expression="a1 = 100")
-            cls.runModule("r.mapcalc", expression="a2 = 200")
-            cls.runModule("r.mapcalc", expression="a3 = 300")
-
-            cls.runModule("t.create", type="strds", temporaltype="absolute",
-                          output="A", title="A test", description="A test")
-            cls.runModule("t.register", flags="i", type="raster", input="A",
-                          maps="a1,a2,a3",
-                          start="2001-01-01", increment="%i months" % i)
 
     @classmethod
     def tearDownClass(cls):

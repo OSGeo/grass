@@ -31,12 +31,19 @@ class TestRasterExtraction(TestCase):
             cls.runModule("v.random", output="a1", npoints=20)
             cls.runModule("v.random", output="a2", npoints=20)
             cls.runModule("v.random", output="a3", npoints=20)
-
+            # Create the temporal database
+            cls.runModule("t.connect", flags="d")
+            cls.runModule("t.info", flags="s")
             cls.runModule("t.create", type="stvds", temporaltype="absolute",
                           output="A", title="A testvect", description="A testvect")
             cls.runModule("t.register", flags="i", type="vector", input="A",
                           maps="a1,a2,a3",
                           start="2001-01-01", increment="%i months" % i)
+
+        # Add the new mapsets to the search path
+        for mapset in cls.mapsets_to_remove:
+            cls.runModule("g.mapset", mapset=mapset)
+            cls.runModule("g.mapsets", operation="add", mapset=','.join(cls.mapsets_to_remove))
 
     @classmethod
     def tearDownClass(cls):
