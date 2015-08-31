@@ -31,13 +31,20 @@ class testRaster3dExtraction(TestCase):
             cls.runModule("r3.mapcalc", expression="a1 = 100")
             cls.runModule("r3.mapcalc", expression="a2 = 200")
             cls.runModule("r3.mapcalc", expression="a3 = 300")
-
+            # Create the temporal database
+            cls.runModule("t.connect", flags="d")
+            cls.runModule("t.info", flags="s")
             cls.runModule("t.create", type="str3ds", temporaltype="absolute",
                           output="A", title="A test3d", description="A test3d")
             cls.runModule(
                 "t.register", flags="i", type="raster_3d", input="A",
                 maps="a1,a2,a3",
                 start="2001-01-01", increment="%i months" % i)
+
+        # Add the new mapsets to the search path
+        for mapset in cls.mapsets_to_remove:
+            cls.runModule("g.mapset", mapset=mapset)
+            cls.runModule("g.mapsets", operation="add", mapset=','.join(cls.mapsets_to_remove))
 
     @classmethod
     def tearDownClass(cls):
