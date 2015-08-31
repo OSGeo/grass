@@ -104,7 +104,7 @@ def rename(oldname, newname, maptype, **kwargs):
 def copy(existingmap, newmap, maptype, **kwargs):
     """Copy a map
 
-    >>> copy('census', 'mycensus', 'vector')
+    >>> copy('census_wake2000', 'mycensus', 'vector')
     >>> rename('mycensus', 'mynewcensus', 'vector')
     >>> remove('mynewcensus', 'vector')
 
@@ -137,7 +137,7 @@ def get_mapset_raster(mapname, mapset=''):
 def get_mapset_vector(mapname, mapset=''):
     """Return the mapset of the vector map
 
-    >>> get_mapset_vector('census')
+    >>> get_mapset_vector('census_wake2000')
     'PERMANENT'
 
     """
@@ -174,8 +174,8 @@ def coor2pixel(coord, region):
 
     """
     (east, north) = coord
-    return (libraster.Rast_northing_to_row(north, region.c_region),
-            libraster.Rast_easting_to_col(east, region.c_region))
+    return (libraster.Rast_northing_to_row(north, region.byref()),
+            libraster.Rast_easting_to_col(east, region.byref()))
 
 
 def pixel2coor(pixel, region):
@@ -190,8 +190,8 @@ def pixel2coor(pixel, region):
 
     """
     (col, row) = pixel
-    return (libraster.Rast_row_to_northing(row, region.c_region),
-            libraster.Rast_col_to_easting(col, region.c_region))
+    return (libraster.Rast_row_to_northing(row, region.byref()),
+            libraster.Rast_col_to_easting(col, region.byref()))
 
 
 def get_raster_for_points(poi_vector, raster, column=None, region=None):
@@ -201,23 +201,33 @@ def get_raster_for_points(poi_vector, raster, column=None, region=None):
 
     >>> from grass.pygrass.vector import VectorTopo
     >>> from grass.pygrass.raster import RasterRow
-    >>> ele = RasterRow('elevation')
-    >>> copy('schools','myschools','vector')
-    >>> sch = VectorTopo('myschools')
-    >>> sch.open(mode='r')
-    >>> get_raster_for_points(sch, ele)               # doctest: +ELLIPSIS
-    [(1, 633649.2856743174, 221412.94434781274, 145.06602), ...]
-    >>> sch.table.columns.add('elevation','double precision')
-    >>> 'elevation' in sch.table.columns
+    >>> from grass.pygrass.gis.region import Region
+    >>> region = Region()
+    >>> region.from_rast('elev_state_500m')
+    >>> region.set_raster_region()
+    >>> ele = RasterRow('elev_state_500m')
+    >>> copy('firestations','myfirestations','vector')
+    >>> fire = VectorTopo('myfirestations')
+    >>> fire.open(mode='r')
+    >>> l = get_raster_for_points(fire, ele, region=region)
+    >>> l[0]                                        # doctest: +ELLIPSIS
+    (1, 620856.9585876337, 230066.3831321055, 111.2153883384)
+    >>> l[1]                                        # doctest: +ELLIPSIS
+    (2, 625331.9185974908, 229990.82160762616, 89.978796115200012)
+    >>> fire.table.columns.add('elev_state_500m','double precision')
+    >>> 'elev_state_500m' in fire.table.columns
     True
-    >>> get_raster_for_points(sch, ele, column='elevation')
+    >>> get_raster_for_points(fire, ele, column='elev_state_500m', region=region)
     True
-    >>> sch.table.filters.select('NAMESHORT','elevation')
-    Filters(u'SELECT NAMESHORT, elevation FROM myschools;')
-    >>> cur = sch.table.execute()
-    >>> cur.fetchall()                                # doctest: +ELLIPSIS
-    [(u'SWIFT CREEK', 145.06602), ... (u'9TH GRADE CTR', None)]
-    >>> remove('myschools','vect')
+    >>> fire.table.filters.select('LABEL', 'elev_state_500m')
+    Filters(u'SELECT LABEL, elev_state_500m FROM myfirestations;')
+    >>> cur = fire.table.execute()
+    >>> r = cur.fetchall()
+    >>> r[0]                                        # doctest: +ELLIPSIS
+    (u'Morrisville #3', 111.2153883384)
+    >>> r[1]                                        # doctest: +ELLIPSIS
+    (u'Morrisville #1', 89.97879611520001)
+    >>> remove('myfirestations','vect')
 
 
     :param point: point vector object
@@ -419,7 +429,7 @@ def create_test_vector_map(map_name="test_vector"):
         vect.comment = 'This is a comment'
 
         vect.table.conn.commit()
-        
+
         vect.organization = "Thuenen Institut"
         vect.person = "Soeren Gebbert"
         vect.title = "Test dataset"
