@@ -66,7 +66,7 @@ unsigned char *Vect_read_area_to_wkb(struct Map_info * Map, int area, size_t *si
    \param area area id
    \param size The size of the returned unsigned char array
 
-   \return pointer to unsigned char array
+   \return pointer to char array
    \return NULL on error
  */
 char *Vect_read_area_to_wkt(struct Map_info * Map, int area)
