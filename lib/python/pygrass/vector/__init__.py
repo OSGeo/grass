@@ -396,8 +396,16 @@ class VectorTopo(Vector):
             Area(1) 12.0
             Area(2) 8.0
             Area(4) 8.0
-            >>> test_vect.close()
 
+            >>> areas = [area for area in test_vect.viter('areas')]
+            >>> for area in areas:
+            ...     print(area.centroid().cat)
+            3
+            3
+            3
+            3
+
+            >>> test_vect.close()
         """
         if vtype in _GEOOBJ.keys():
             if _GEOOBJ[vtype] is not None:
