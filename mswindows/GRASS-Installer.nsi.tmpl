@@ -528,6 +528,9 @@ Section "GRASS" SecGRASS
 	SetOutPath "$INSTALL_DIR"
 	File /r ${PACKAGE_FOLDER}\*.*
 
+	;grant modifying/overwriting fontcap file
+	AccessControl::SetOnFile "$INSTDIR\etc\fontcap" "(BU)" "GenericRead + GenericWrite + Delete"
+	
 	;create run_gmkfontcap.bat
 	ClearErrors
 	FileOpen $0 $INSTALL_DIR\etc\run_gmkfontcap.bat w
