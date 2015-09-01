@@ -31,7 +31,7 @@
 #define DEF_BLU 255
 
 /* \brief Convert a raster map layer into a string with
- *        32Bit ARGB or 8Bit Gray little endian encoding.
+ *        32Bit ARGB, 24Bit RGB or 8Bit Gray little endian encoding.
  * 
  * The raster color table is used for coloring the image. Null values are 
  * marked as transparent. Only little endian encoding is supported.
@@ -41,16 +41,18 @@
  * region for raster access.
  * 
  * \param name The name of the raster map layer to convert
- * \param color_mode The color mode to use (1 -> 32Bit ARGB, 2 or 3 -> 8Bit Gray)
- *          
- *                  Color mode 2 -> grey scale formular: .33R+ .5G+ .17B
- *                  Color mode 3 -> grey scale formular: .30R+ .59G+ .11B
+ * \param color_mode The color modes to use:
+ *                  Color mode 1 -> 32Bit ARGB (0xAARRGGBB)
+ *                  Color mode 2 -> 32Bit RGB  (0xffRRGGBB)
+ *                  Color mode 3 -> grey scale formular: .33R+ .5G+ .17B
+ *                  Color mode 4 -> grey scale formular: .30R+ .59G+ .11B
  * 
  * \param result: An unsigned char pointer to store the result. 
  *                It must have size 4*cols*rows in case of
- *                ARGB and rows*cols in case of gray scale.
+ *                ARGB and RGB, 
+ *                rows*cols in case of gray scale.
  * 
- * \return: 0 in case map not found, 1 on success
+ * \return: 0 in case map not found, -1 in case the color mode is incorrect, 1 on success
  * 
  */
 int Rast_map_to_img_str(char *name, int color_mode, unsigned char* result)
@@ -70,6 +72,9 @@ int Rast_map_to_img_str(char *name, int color_mode, unsigned char* result)
     struct Colors colors;
     int rows = Rast_window_rows();
     int cols = Rast_window_cols();
+
+    if(color_mode > 3 || color_mode < 1)
+        return(-1);
 
     mapset = G_find_raster2(name, "");
     
@@ -99,14 +104,14 @@ int Rast_map_to_img_str(char *name, int color_mode, unsigned char* result)
 
     i = 0;
     
-    if(color_mode == 1) {/* 32BIT ARGB COLOR IMAGE with transparency */
+    if(color_mode == 1 || color_mode == 2) {/* 32BIT ARGB COLOR IMAGE with transparency */
         for (row = 0; row < rows; row++) {
             Rast_get_row(map, (void *)voidc, row, rtype);
             Rast_lookup_colors((void *)voidc, red, green, blue, set,
                                cols, &colors, rtype);
                                
             alpha = (unsigned char)255;
-            if ( Rast_is_null_value( voidc, rtype ) )
+            if ( color_mode == 1 && Rast_is_null_value( voidc, rtype ) )
             {
                 alpha = (unsigned char)0;
             }
@@ -133,7 +138,7 @@ int Rast_map_to_img_str(char *name, int color_mode, unsigned char* result)
             Rast_lookup_colors((void *)voidc, red, green, blue, set,
                                cols, &colors, rtype);
             
-            if(color_mode == 2) {
+            if(color_mode == 3) {
                 for (col = 0; col < cols; col++) {
                     /*.33R+ .5G+ .17B */
                     result[i++] = ((red[col])   * 11 + 
