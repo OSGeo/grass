@@ -99,8 +99,8 @@ class RasterRow(RasterAbstractBase):
          ('P', 44, None)]
 
         >>> elev.cats.labels() # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
-        ['A', 'B', 'C', 'D', 'E', 
-         'F', 'G', 'H', 'I', 'J', 
+        ['A', 'B', 'C', 'D', 'E',
+         'F', 'G', 'H', 'I', 'J',
          'K', 'L', 'M', 'n', 'O', 'P']
         >>> elev.cats[0]
         ('A', 11, None)
@@ -273,7 +273,7 @@ class RasterRowIO(RasterRow):
             Buffer([12, 22, 32, 42], dtype=int32)
             Buffer([13, 23, 33, 43], dtype=int32)
             Buffer([14, 24, 34, 44], dtype=int32)
-        
+
             >>> elev.close()
 
         """
@@ -373,7 +373,7 @@ class RasterSegment(RasterAbstractBase):
             Buffer([12, 22, 32, 42], dtype=int32)
             Buffer([13, 23, 33, 43], dtype=int32)
             Buffer([14, 24, 34, 44], dtype=int32)
-        
+
             >>> elev.close()
 
 
@@ -616,34 +616,37 @@ def raster2numpy(rastname, mapset=''):
 
 def raster2numpy_img(rastname, region, color="ARGB", array=None):
     """Convert a raster map layer into a string with
-       32Bit ARGB or 8Bit Gray little endian encoding.
-    
+       32Bit ARGB, 24Bit RGB or 8Bit Gray little endian encoding.
+
         Return a numpy array from a raster map of type uint8
-        that contains the colored map data as 32 bit ARGB or 8 bit image
+        that contains the colored map data as 32 bit ARGB, 32Bit RGB
+        or 8 bit image
 
        :param rastname: The name of raster map
        :type rastname: string
-       
+
        :param region: The region to be used for raster map reading
        :type region: grass.pygrass.gis.region.Region
-       
-       :param color: "ARGB", "GRAY1", "GRAY2"
-                     ARGB  -> 32Bit RGB with alpha channel
+
+       :param color: "ARGB", "RGB", "GRAY1", "GRAY2"
+                     ARGB  -> 32Bit RGB with alpha channel (0xAARRGGBB)
+                     RGB   -> 32Bit RGB (0xffRRGGBB)
                      GRAY1 -> grey scale formular: .33R+ .5G+ .17B
                      GRAY2 -> grey scale formular: .30R+ .59G+ .11B
        :type color: String
 
-       :param array: A numpy array (optional) to store the image, 
+       :param array: A numpy array (optional) to store the image,
                      the array needs to setup as follows:
-                     
+
                      array = np.ndarray((region.rows*region.cols*scale), np.uint8)
-                     
-                     scale is 4 in case of ARGB or 1 in case of Gray scale
+
+                     scale = 4 in case of ARGB and RGB or scale = 1
+                     in case of Gray scale
        :type array: numpy.ndarray
-       
-       :return: A numpy array of size rows*cols*4 in case of ARGB and
+
+       :return: A numpy array of size rows*cols*4 in case of ARGB, RGB and
                 rows*cols*1 in case of gray scale
-    
+
        Attention: This function will change the computational raster region
        of the current process while running.
     """
@@ -651,27 +654,30 @@ def raster2numpy_img(rastname, region, color="ARGB", array=None):
     region_orig = deepcopy(region)
     # Set the raster region
     region.set_raster_region()
-    
+
     scale = 1
     color_mode = 1
     if color.upper() == "ARGB":
         scale = 4
         color_mode = 1
+    elif color.upper() == "RGB":
+        scale = 4
+        color_mode = 2
     elif color.upper() == "GRAY1":
         scale = 1
-        color_mode = 2
+        color_mode = 3
     elif color.upper() == "GRAY2":
         scale = 1
-        color_mode = 3
-        
+        color_mode = 4
+
     if array is None:
         array = np.ndarray((region.rows*region.cols*scale), np.uint8)
 
-    libraster.Rast_map_to_img_str(rastname, color_mode, 
+    libraster.Rast_map_to_img_str(rastname, color_mode,
                                   array.ctypes.data_as(ctypes.POINTER(ctypes.c_uint8)))
     # Restore the raster region
     region_orig.set_raster_region()
-    
+
     return array
 
 
@@ -730,8 +736,8 @@ if __name__ == "__main__":
     mset = utils.get_mapset_raster(test_raster_name, mapset='')
     if mset:
         Module("g.remove", flags='f', type='raster', name=test_raster_name)
-    mset = utils.get_mapset_raster(test_raster_name + "_segment", 
+    mset = utils.get_mapset_raster(test_raster_name + "_segment",
                                    mapset='')
     if mset:
-        Module("g.remove", flags='f', type='raster', 
+        Module("g.remove", flags='f', type='raster',
                name=test_raster_name + "_segment")
