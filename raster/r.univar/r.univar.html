@@ -13,6 +13,7 @@ If the <b>-t</b> flag is given the results are presented in tabular format
 with the given field separator. The table can immediately be converted to a
 vector attribute table which can then be linked to a vector, e.g. the vector
 that was rasterized to create the <b>zones</b> input raster.
+
 <p>
 When multiple input maps are given to <em>r.univar</em>, the overall statistics
 are calculated. This is useful for a time series of the same variable, as well as
@@ -25,6 +26,7 @@ specified saves the user from using a temporary raster map for the result of
 As with most GRASS raster modules, <em>r.univar</em> operates on the raster
 array defined by the current region settings, not the original extent and
 resolution of the input map. See <em><a href="g.region.html">g.region</a></em>.
+
 <p>
 This module can use large amounts of system memory when the <b>-e</b>
 extended statistics flag is used with a very large region setting. If the
@@ -33,6 +35,7 @@ error. Basic statistics can be calculated using any size input region.
 <p>
 Without a <b>zones</b> input raster, the <em>r.quantile</em> module will
 be significantly more efficient for calculating percentiles with large maps.
+
 <p>
 For calculating univariate statistics from a raster map based on vector polygon
 map and uploads statistics to new attribute columns, see
@@ -40,24 +43,124 @@ map and uploads statistics to new attribute columns, see
 
 <h2>EXAMPLE</h2>
 
-Calculate the raster statistics for zones within a raster polygon map 
-coverage (basins, North Carolina sample dataset):
+In this example, the raster polygon map <tt>basins</tt> in the North 
+Carolina sample dataset is used to calculate raster statistics for zones
+for <tt>elevation</tt> raster map: 
 
 <div class="code"><pre>
-# set computational region
-g.region raster=basin -p
+g.region raster=basins -p
+</pre></div>
 
-# check basin IDs
-r.category basin
+This will set and print computational region in the format:
 
-#### perform analysis with elevation map (extent and res. match)
-r.univar -t map=elevation zones=basin separator=comma \
+<div class="code"><pre>
+projection: 99 (Lambert Conformal Conic)
+zone:       0
+datum:      nad83
+ellipsoid:  a=6378137 es=0.006694380022900787
+north:      228500
+south:      215000
+west:       630000
+east:       645000
+nsres:      10
+ewres:      10
+rows:       1350
+cols:       1500
+cells:      2025000
+</pre></div>
+
+Check basin's IDs using:
+
+<div class="code"><pre>
+r.category basins
+</pre></div>
+
+This will print them in the format:
+
+<div class="code"><pre>
+2	
+4	
+6	
+8	
+10	
+12	
+14	
+16	
+18	
+20	
+22	
+24	
+26	
+28	
+30	
+</pre></div>
+
+Visualization of them underlying elevation map can be created as:
+
+<div class="code"><pre>
+d.mon wx0
+d.rast map=elevation
+r.colors map=elevation color=grey 
+d.rast map=basins
+r.colors map=basins color=bgyr 
+d.legend raster=basins use=2,4,6,8,10,12,14,16,18,20,22,24,26,28,30
+d.barscale 
+</pre></div>
+
+<!--
+g.region -a n=227228 s=220895 w=631362 e=641170
+d.out.file runivar_basins.png 
+optipng -o5 runivar_basins.png width=200px
+-->
+
+<center>
+<img src="runivar_basins.png" alt="Basins and their IDs" align="middle"
+width="600">
+<p>
+Figure: Zones (basins, opacity: 60%) with underlying elevation map 
+for North Carolina sample dataset.
+</center>
+
+<p>
+Then statistics for elevation can be calculated separately for every
+zone, i.e. basin found in the <b>zones</b> parameter:
+
+<div class="code"><pre>
+r.univar -t map=elevation zones=basins separator=comma \
          output=basin_elev_zonal.csv
 </pre></div>
 
+This will print information in the format:
+
+<div class="code"><pre>
+zone,label,non_null_cells,null_cells,min,max,range,mean,mean_of_abs,
+stddev,variance,coeff_var,sum,sum_abs2,,116975,0,55.5787925720215,
+133.147018432617,77.5682258605957,92.1196971445722,92.1196971445722,
+15.1475301152556,229.447668592576,16.4433129773355,10775701.5734863,
+10775701.57348634,,75480,0,61.7890930175781,110.348838806152,
+48.5597457885742,83.7808205765268,83.7808205765268,11.6451777476995,
+135.610164775515,13.8995747088232,6323776.33711624,6323776.33711624
+6,,1137,0,66.9641571044922,83.2070922851562,16.2429351806641,
+73.1900814395257,73.1900814395257,4.15733292896409,17.2834170822492,
+5.68018623179036,83217.1225967407,83217.12259674078,,80506,
+0,67.4670791625977,147.161514282227, ...
+</pre></div>
+
+Comma Separated Values (CSV) file is best viewed through a spreadsheet 
+program such as Microsoft Excel, Libre/Open Office Calc or Google Docs:
+
+<p>
+<center>
+<img src="runivar_basins_elev_zonal.png" alt="TABLE" align="middle"
+width="900">
+<p>
+Figure: Raster statistics for zones (basins, North Carolina sample 
+dataset) viewed through Libre/Open Office Calc
+</center>
+
 <h2>TODO</h2>
 
-<i>mode, skewness, kurtosis</i>
+To be implemented <i>mode, skewness, kurtosis</i>.
 
 <h2>SEE ALSO</h2>
 
