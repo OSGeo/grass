@@ -78,6 +78,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("extract"));
     G_add_keyword(_("select"));
     G_add_keyword(_("dissolve"));
+    G_add_keyword(_("random"));
     module->description =
 	_("Selects vector features from an existing vector map and "
 	  "creates a new vector map containing only the selected features.");
