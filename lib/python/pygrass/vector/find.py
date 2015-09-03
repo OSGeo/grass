@@ -412,7 +412,7 @@ class BboxFinder(AbstractFinder):
 
             >>> bbox = Bbox(north=5, south=-1, east=3, west=-1)
             >>> result = test_vect.find_by_bbox.geos(bbox=bbox)
-            >>> result                   #doctest: +NORMALIZE_WHITESPACE
+            >>> [bbox for bbox in result] #doctest: +NORMALIZE_WHITESPACE
             [Boundary([Point(4.000000, 0.000000), Point(0.000000, 0.000000)]),
              Boundary([Point(0.000000, 0.000000), Point(0.000000, 4.000000)]),
              Boundary([Point(0.000000, 4.000000), Point(4.000000, 4.000000)]),
@@ -433,7 +433,7 @@ class BboxFinder(AbstractFinder):
 
             >>> bbox = Bbox(north=7, south=-1, east=15, west=9)
             >>> result = test_vect.find_by_bbox.geos(bbox=bbox)
-            >>> result                   #doctest: +NORMALIZE_WHITESPACE
+            >>> [bbox for bbox in result] #doctest: +NORMALIZE_WHITESPACE
             [Line([Point(10.000000, 4.000000), Point(10.000000, 2.000000),
                    Point(10.000000, 0.000000)]),
              Point(10.000000, 6.000000),
@@ -458,8 +458,8 @@ class BboxFinder(AbstractFinder):
             if bboxlist_only:
                 return found
             else:
-                return [read_line(f_id, self.c_mapinfo, self.table,
-                                  self.writeable) for f_id in found.ids]
+                return (read_line(f_id, self.c_mapinfo, self.table,
+                                  self.writeable) for f_id in found.ids)
 
     @must_be_open
     def nodes(self, bbox):
@@ -482,7 +482,7 @@ class BboxFinder(AbstractFinder):
             # Find nodes in box
             >>> bbox = Bbox(north=5, south=-1, east=15, west=9)
             >>> result = test_vect.find_by_bbox.nodes(bbox=bbox)
-            >>> result
+            >>> [node for node in result]
             [Node(2), Node(1), Node(4), Node(3), Node(5), Node(6)]
 
             >>> bbox = Bbox(north=20, south=18, east=20, west=18)
@@ -494,9 +494,9 @@ class BboxFinder(AbstractFinder):
         if libvect.Vect_select_nodes_by_box(self.c_mapinfo, bbox.c_bbox,
                                             found.c_ilist):
             if len(found) > 0:
-                return [Node(v_id=n_id, c_mapinfo=self.c_mapinfo,
+                return (Node(v_id=n_id, c_mapinfo=self.c_mapinfo,
                              table=self.table, writeable=self.writeable)
-                        for n_id in found]
+                        for n_id in found)
 
     @must_be_open
     def areas(self, bbox, boxlist=None, bboxlist_only=False):
@@ -526,7 +526,7 @@ class BboxFinder(AbstractFinder):
             # Find areas in box
             >>> bbox = Bbox(north=5, south=-1, east=9, west=-1)
             >>> result = test_vect.find_by_bbox.areas(bbox=bbox)
-            >>> result
+            >>> [area for area in result]
             [Area(1), Area(2), Area(3), Area(4)]
 
             >>> bbox = Bbox(north=5, south=-1, east=9, west=-1)
@@ -552,9 +552,9 @@ class BboxFinder(AbstractFinder):
             if bboxlist_only:
                 return boxlist
             else:
-                return [Area(v_id=a_id, c_mapinfo=self.c_mapinfo,
+                return (Area(v_id=a_id, c_mapinfo=self.c_mapinfo,
                              table=self.table, writeable=self.writeable)
-                        for a_id in boxlist.ids]
+                        for a_id in boxlist.ids)
 
     @must_be_open
     def islands(self, bbox, bboxlist_only=False):
@@ -581,7 +581,7 @@ class BboxFinder(AbstractFinder):
             # Find isles in box
             >>> bbox = Bbox(north=5, south=-1, east=9, west=-1)
             >>> result = test_vect.find_by_bbox.islands(bbox=bbox)
-            >>> result
+            >>> [isle for isle in result]
             [Isle(1), Isle(2)]
 
             >>> bbox = Bbox(north=5, south=-1, east=9, west=-1)
@@ -605,9 +605,9 @@ class BboxFinder(AbstractFinder):
             if bboxlist_only:
                 return found
             else:
-                return [Isle(v_id=i_id, c_mapinfo=self.c_mapinfo,
+                return (Isle(v_id=i_id, c_mapinfo=self.c_mapinfo,
                              table=self.table, writeable=self.writeable)
-                        for i_id in found.ids]
+                        for i_id in found.ids)
 
 
 class PolygonFinder(AbstractFinder):
