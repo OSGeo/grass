@@ -1166,6 +1166,6 @@ if __name__ == "__main__":
     """Remove the generated vector map, if exist"""
     from grass.pygrass.utils import get_mapset_vector
     from grass.script.core import run_command
-    #mset = get_mapset_vector(test_vector_name, mapset='')
-    #if mset:
-    #    run_command("g.remove", flags='f', type='vector', name=test_vector_name)
+    mset = get_mapset_vector(test_vector_name, mapset='')
+    if mset:
+        run_command("g.remove", flags='f', type='vector', name=test_vector_name)
