@@ -12,6 +12,9 @@ from grass.script import core as grasscore
 from grass.pygrass.errors import GrassError
 
 
+test_vector_name="Utils_test_vector"
+test_raster_name="Utils_test_raster"
+
 def looking(obj, filter_string):
     """
     >>> import grass.lib.vector as libvect
@@ -104,7 +107,7 @@ def rename(oldname, newname, maptype, **kwargs):
 def copy(existingmap, newmap, maptype, **kwargs):
     """Copy a map
 
-    >>> copy('census_wake2000', 'mycensus', 'vector')
+    >>> copy(test_vector_name, 'mycensus', 'vector')
     >>> rename('mycensus', 'mynewcensus', 'vector')
     >>> remove('mynewcensus', 'vector')
 
@@ -127,8 +130,8 @@ def getenv(env):
 def get_mapset_raster(mapname, mapset=''):
     """Return the mapset of the raster map
 
-    >>> get_mapset_raster('elevation')
-    'PERMANENT'
+    >>> get_mapset_raster(test_raster_name) == getenv("MAPSET")
+    True
 
     """
     return libgis.G_find_raster2(mapname, mapset)
@@ -137,8 +140,8 @@ def get_mapset_raster(mapname, mapset=''):
 def get_mapset_vector(mapname, mapset=''):
     """Return the mapset of the vector map
 
-    >>> get_mapset_vector('census_wake2000')
-    'PERMANENT'
+    >>> get_mapset_vector(test_vector_name) == getenv("MAPSET")
+    True
 
     """
     return libgis.G_find_vector2(mapname, mapset)
@@ -197,37 +200,40 @@ def pixel2coor(pixel, region):
 def get_raster_for_points(poi_vector, raster, column=None, region=None):
     """Query a raster map for each point feature of a vector
 
+    test_vector_name="Utils_test_vector"
+    test_raster_name="Utils_test_raster"
+
     Example
 
     >>> from grass.pygrass.vector import VectorTopo
     >>> from grass.pygrass.raster import RasterRow
     >>> from grass.pygrass.gis.region import Region
     >>> region = Region()
-    >>> region.from_rast('elev_state_500m')
+    >>> region.from_rast(test_raster_name)
     >>> region.set_raster_region()
-    >>> ele = RasterRow('elev_state_500m')
-    >>> copy('firestations','myfirestations','vector')
-    >>> fire = VectorTopo('myfirestations')
+    >>> ele = RasterRow(test_raster_name)
+    >>> copy(test_vector_name,'test_vect_2','vector')
+    >>> fire = VectorTopo('test_vect_2')
     >>> fire.open(mode='r')
     >>> l = get_raster_for_points(fire, ele, region=region)
     >>> l[0]                                        # doctest: +ELLIPSIS
     (1, 620856.9585876337, 230066.3831321055, 111.2153883384)
     >>> l[1]                                        # doctest: +ELLIPSIS
     (2, 625331.9185974908, 229990.82160762616, 89.978796115200012)
-    >>> fire.table.columns.add('elev_state_500m','double precision')
-    >>> 'elev_state_500m' in fire.table.columns
+    >>> fire.table.columns.add(test_raster_name,'double precision')
+    >>> test_raster_name in fire.table.columns
     True
-    >>> get_raster_for_points(fire, ele, column='elev_state_500m', region=region)
+    >>> get_raster_for_points(fire, ele, column=test_raster_name, region=region)
     True
-    >>> fire.table.filters.select('LABEL', 'elev_state_500m')
-    Filters(u'SELECT LABEL, elev_state_500m FROM myfirestations;')
+    >>> fire.table.filters.select('LABEL', test_raster_name)
+    Filters(u'SELECT LABEL, Utils_test_raster FROM test_vect_2;')
     >>> cur = fire.table.execute()
     >>> r = cur.fetchall()
     >>> r[0]                                        # doctest: +ELLIPSIS
     (u'Morrisville #3', 111.2153883384)
     >>> r[1]                                        # doctest: +ELLIPSIS
     (u'Morrisville #1', 89.97879611520001)
-    >>> remove('myfirestations','vect')
+    >>> remove('test_vect_2','vect')
 
 
     :param point: point vector object
@@ -510,3 +516,24 @@ def create_test_stream_network_map(map_name="streams"):
 
         streams.table.conn.commit()
         streams.close()
+
+if __name__ == "__main__":
+
+    import doctest
+    from grass.pygrass import utils
+    from grass.script.core import run_command
+
+    utils.create_test_vector_map(test_vector_name)
+    run_command("g.region", n=50, s=0, e=60, w=0, res=1)
+    run_command("r.mapcalc", expression="%s = 1"%(test_raster_name),
+                             overwrite=True)
+
+    doctest.testmod()
+
+    """Remove the generated vector map, if exist"""
+    mset = utils.get_mapset_vector(test_vector_name, mapset='')
+    if mset:
+        run_command("g.remove", flags='f', type='vector', name=test_vector_name)
+    mset = utils.get_mapset_raster(test_raster_name, mapset='')
+    if mset:
+        run_command("g.remove", flags='f', type='raster', name=test_raster_name)
