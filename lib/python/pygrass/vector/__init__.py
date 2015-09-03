@@ -662,7 +662,7 @@ class VectorTopo(Vector):
             >>> test_vect = VectorTopo(test_vector_name)
             >>> test_vect.open('r')
 
-            >>> bbox = Bbox(north=20, south=-1, east=203, west=-1)
+            >>> bbox = Bbox(north=20, south=-1, east=20, west=-1)
             >>> result = test_vect.features_to_wkb_list(bbox=bbox, 
             ...                                         feature_type="point")
             >>> len(result)
@@ -727,7 +727,7 @@ class VectorTopo(Vector):
         bboxlist = self.find_by_bbox.geos(bbox, type=feature_type, 
                                           bboxlist_only = True)
         
-        if bboxlist is not None:
+        if bboxlist is not None and len(bboxlist) > 0:
             
             l = []
             line_p = libvect.line_pnts()
@@ -751,6 +751,94 @@ class VectorTopo(Vector):
                     pcat = cat.value
 
                 l.append((f_id, pcat, ctypes.string_at(barray, size.value)))
+
+            return l
+        return None
+        
+    @must_be_open
+    def areas_to_wkb_list(self, bbox=None, field=1):
+        """Return all features of type point, line, boundary or centroid 
+           as a list of Well Known Binary representations (WKB)
+           (id, cat, wkb) triplets located in a specific 
+           bounding box.
+           
+           :param bbox: The boundingbox to search for features, 
+                       if bbox=None the boundingbox of the whole
+                       vector map layer is used
+                        
+           :type bbox: grass.pygrass.vector.basic.Bbox
+            
+           :param field: The centroid category field
+           :type field: integer
+            
+           :return: A list of triplets, or None if nothing was found 
+           
+           The well known binary are stored in byte arrays.
+           
+            Examples:
+           
+            >>> from grass.pygrass.vector import VectorTopo
+            >>> from grass.pygrass.vector.basic import Bbox
+            >>> test_vect = VectorTopo(test_vector_name)
+            >>> test_vect.open('r')
+
+            >>> bbox = Bbox(north=20, south=-1, east=20, west=-1)
+            >>> result = test_vect.areas_to_wkb_list(bbox=bbox)
+            >>> len(result)
+            4
+            >>> for entry in result:
+            ...     a_id, cat, wkb = entry
+            ...     print(a_id, cat, len(wkb))
+            (1, 3, 225)
+            (2, 3, 141)
+            (3, 3, 93)
+            (4, 3, 141)
+
+            >>> result = test_vect.areas_to_wkb_list()
+            >>> len(result)
+            4
+            >>> for entry in result:
+            ...     a_id, cat, wkb = entry
+            ...     print(a_id, cat, len(wkb))
+            (1, 3, 225)
+            (2, 3, 141)
+            (3, 3, 93)
+            (4, 3, 141)
+
+            >>> test_vect.close()
+            
+            
+        """
+        if bbox is None:
+            bbox = self.bbox()
+        
+        bboxlist = self.find_by_bbox.areas(bbox, bboxlist_only = True)
+        
+        if bboxlist is not None and len(bboxlist) > 0:
+            
+            l = []
+            line_c = libvect.line_cats()
+            size = ctypes.c_size_t()
+            cat = ctypes.c_int()
+
+            for a_id in bboxlist.ids:
+                barray = libvect.Vect_read_area_to_wkb(self.c_mapinfo, 
+                                                       a_id, 
+                                                       ctypes.byref(size))
+                if not barray:
+                    raise GrassError(_("Unable to read area with id %i"%(a_id)))
+
+                pcat = None
+                c_ok = libvect.Vect_get_area_cats(self.c_mapinfo, a_id, 
+                                                  ctypes.byref(line_c))
+                if c_ok == 0: # Centroid found
+                
+                    ok = libvect.Vect_cat_get(ctypes.byref(line_c), field, 
+                                              ctypes.byref(cat))
+                    if ok > 0:
+                        pcat = cat.value
+
+                l.append((a_id, pcat, ctypes.string_at(barray, size.value)))
 
             return l
         return None
