@@ -98,6 +98,84 @@ char *Vect_read_area_to_wkt(struct Map_info * Map, int area)
 }
 
 /*!
+   \brief Read a Well Known Binary (WKB) representation of
+          a given feature id.
+           
+   This function reads a specific feature and converts it into a 
+   WKB representation. line_pnts and line_cats structures can be provided
+   to store the result of the read operation. That is meaningful in case
+   the category values of the feature are needed.
+   This function is not thread safe, it uses static variables for speedup.
+
+   Supported feature types:
+   - GV_POINT    -> POINT
+   - GV_CENTROID -> POINT
+   - GV_LINE     -> LINESTRING
+   - GV_BOUNDARY -> LINEARRING
+
+   \param Map pointer to Map_info structure
+   \param line_p pointer to line_pnts structure to use, or NULL
+   \param line_c pointer to line_cats structure to use, or NULL
+   \param line The id of the feature to read
+   \param size The size of the returned unsigned char array
+
+   \return pointer to unsigned char array
+   \return NULL on error
+ */
+unsigned char *Vect_read_line_to_wkb(const struct Map_info *Map, 
+                                     struct line_pnts *line_p, 
+                                     struct line_cats *line_c, 
+                                     int line, size_t *size)
+{    
+    static int init = 0;
+    /* The writer is static for performance reasons */
+    static GEOSWKBWriter *writer = NULL;
+    unsigned char *wkb = NULL;
+    int destroy_line = 0, destroy_cats = 0;
+
+    if(init == 0) {
+        initGEOS(NULL, NULL);
+        writer = GEOSWKBWriter_create();
+        init += 1;
+    }
+
+    if(line_p == NULL) {
+        destroy_line = 1;
+        line_p = Vect_new_line_struct();
+    }
+    
+    if(line_c == NULL) {
+        destroy_cats = 1;
+        line_c = Vect_new_cats_struct();
+    }
+    
+    int f_type = Vect_read_line(Map, line_p, line_c, line);
+    
+    if(f_type < 0)
+        return(NULL);
+    
+    GEOSWKBWriter_setOutputDimension(writer, Vect_is_3d(Map) ? 3 : 2);
+
+    GEOSGeometry *geom = Vect_line_to_geos(line_p, f_type, Vect_is_3d(Map));
+
+    if(!geom) {
+        return(NULL);
+    }
+
+    wkb = GEOSWKBWriter_write(writer, geom, size);
+
+    GEOSGeom_destroy(geom);
+    
+    if(destroy_cats == 1)
+        Vect_destroy_cats_struct(line_c);
+
+    if(destroy_line == 1)
+        Vect_destroy_line_struct(line_p);
+
+    return(wkb);
+}
+
+/*!
    \brief Create a Well Known Binary (WKB) representation of
           given feature type from points.
 

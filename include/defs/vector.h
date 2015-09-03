@@ -607,6 +607,10 @@ unsigned char *Vect_line_to_wkb(const struct line_pnts *,
                                 int, int, size_t *);
 char *Vect_read_area_to_wkt(struct Map_info *, int);
 unsigned char *Vect_read_area_to_wkb(struct Map_info *, int, size_t *);
+unsigned char *Vect_read_line_to_wkb(const struct Map_info *, 
+                                     struct line_pnts *, 
+                                     struct line_cats *, 
+                                     int line, size_t *);
 #endif
 
     /* Raster color tables */
