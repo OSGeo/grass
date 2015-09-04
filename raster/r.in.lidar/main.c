@@ -99,7 +99,7 @@ int add_node(int head, double z)
 
 int main(int argc, char *argv[])
 {
-    int out_fd;
+    int out_fd, base_raster;
     char *infile, *outmap;
     int percent;
     int method = -1;
@@ -107,11 +107,11 @@ int main(int argc, char *argv[])
     double zrange_min, zrange_max, d_tmp;
     unsigned long estimated_lines;
 
-    RASTER_MAP_TYPE rtype;
+    RASTER_MAP_TYPE rtype, base_raster_data_type;
     struct History history;
     char title[64];
     void *n_array, *min_array, *max_array, *sum_array, *sumsq_array,
-	*index_array;
+        *index_array, *base_array;
     void *raster_row, *ptr;
     struct Cell_head region;
     int rows, cols;		/* scan box size */
@@ -146,7 +146,7 @@ int main(int argc, char *argv[])
 
     struct GModule *module;
     struct Option *input_opt, *output_opt, *percent_opt, *type_opt, *filter_opt, *class_opt;
-    struct Option *method_opt, *zrange_opt, *zscale_opt;
+    struct Option *method_opt, *base_raster_opt, *zrange_opt, *zscale_opt;
     struct Option *trim_opt, *pth_opt, *res_opt;
     struct Flag *print_flag, *scan_flag, *shell_style, *over_flag, *extents_flag, *intens_flag;
 
@@ -196,6 +196,12 @@ int main(int argc, char *argv[])
     type_opt->options = "CELL,FCELL,DCELL";
     type_opt->answer = "FCELL";
     type_opt->description = _("Storage type for resultant raster map");
+
+    base_raster_opt = G_define_standard_option(G_OPT_R_INPUT);
+    base_raster_opt->key = "base_raster";
+    base_raster_opt->required = NO;
+    base_raster_opt->label = _("Subtract raster values from the z coordinates");
+    base_raster_opt->description = _("The scale for z is applied beforehand, the filter afterwards");
 
     zrange_opt = G_define_option();
     zrange_opt->key = "zrange";
@@ -507,6 +513,7 @@ int main(int argc, char *argv[])
     sum_array = NULL;
     sumsq_array = NULL;
     index_array = NULL;
+    base_array = NULL;
     
     if (strcmp(method_opt->answer, "n") == 0) {
 	method = METHOD_N;
@@ -641,6 +648,12 @@ int main(int argc, char *argv[])
 
     npasses = (int)ceil(1.0 * region.rows / rows);
 
+    if (base_raster_opt->answer) {
+        /* TODO: do we need to test existence first? mapset? */
+        base_raster = Rast_open_old(base_raster_opt->answer, "");
+        base_raster_data_type = Rast_get_map_type(base_raster);
+    }
+
     if (!scan_flag->answer) {
 	/* check if rows * (cols + 1) go into a size_t */
 	if (sizeof(size_t) < 8) {
@@ -665,6 +678,10 @@ int main(int argc, char *argv[])
 	if (bin_index)
 	    index_array =
 		G_calloc((size_t)rows * (cols + 1), Rast_cell_size(CELL_TYPE));
+	if (base_raster_opt->answer)
+	    base_array = G_calloc((size_t)rows * (cols + 1), Rast_cell_size(base_raster_data_type));
+	/* we don't free the raster, we just use it again */
+	/* TODO: perhaps none of them needs to be freed */
 
 	/* and then free it again */
 	if (bin_n)
@@ -718,6 +735,13 @@ int main(int argc, char *argv[])
 	    rows = region.rows - (pass - 1) * rows;
 	    pass_south = region.south; /* exact copy to avoid fp errors */
 	}
+
+        if (base_array) {
+            G_debug(2, "filling base raster array");
+            for (row = 0; row < rows; row++) {
+                Rast_get_row(base_raster, base_array + (row * cols * Rast_cell_size(base_raster_data_type)), row, base_raster_data_type);
+            }
+        }
 
 	G_debug(2, "pass=%d/%d  pass_n=%f  pass_s=%f  rows=%d",
 		pass, npasses, pass_north, pass_south, rows);
@@ -832,18 +856,40 @@ int main(int argc, char *argv[])
 
 	    z = z * zscale;
 
-	    if (zrange_opt->answer) {
-		if (z < zrange_min || z > zrange_max) {
-		    continue;
-		}
-	    }
+            /* find the bin in the current array box */
+            arr_row = (int)((pass_north - y) / region.ns_res);
+            arr_col = (int)((x - region.west) / region.ew_res);
+
+            if (base_array) {
+                ptr = base_array;
+                ptr =
+                    G_incr_void_ptr(ptr,
+                                    ((arr_row * cols) +
+                                     arr_col) * Rast_cell_size(base_raster_data_type));
+
+                double base_z;
+                if (Rast_is_null_value(ptr, base_raster_data_type)) {
+                    continue;
+                }
+                else {
+                    if (base_raster_data_type == DCELL_TYPE)
+                        base_z = *(DCELL *) ptr;
+                    else if (base_raster_data_type == FCELL_TYPE)
+                        base_z = (double) *(FCELL *) ptr;
+                    else
+                        base_z = (double) *(CELL *) ptr;
+                }
+                z -= base_z;
+            }
+
+            if (zrange_opt->answer) {
+                if (z < zrange_min || z > zrange_max) {
+                    continue;
+                }
+            }
 
 	    count++;
 	    /*          G_debug(5, "x: %f, y: %f, z: %f", x, y, z); */
-
-	    /* find the bin in the current array box */
-	    arr_row = (int)((pass_north - y) / region.ns_res);
-	    arr_col = (int)((x - region.west) / region.ew_res);
 
 	    if (bin_n)
 		update_n(n_array, cols, arr_row, arr_col);
@@ -1207,7 +1253,8 @@ int main(int argc, char *argv[])
 	    max_nodes = 0;
 	    nodes = NULL;
 	}
-
+	if (base_array)
+	    Rast_close(base_raster);
     }				/* passes loop */
 
     G_percent(1, 1, 1);		/* flush */
