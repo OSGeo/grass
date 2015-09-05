@@ -64,7 +64,7 @@ END
 
 ARC X Y R A1 A2 [C]
  Arc specified by center (X Y), radius (R), start/end angle in degrees (A1/A2)
- and optionaly direction (C for clockwise, default counter clockwise)
+ and optionally direction (C for clockwise, default counter clockwise)
  Note degrees are polar theta not navigational, i.e. 0 is east and 
  values increase counter-clockwise from there. Reducing the angle
  from a full circle does not make it draw like a pacman but rather

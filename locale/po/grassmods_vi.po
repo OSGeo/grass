@@ -6757,7 +6757,7 @@ msgid "Creates topology for vector map."
 msgstr "Tạo tôpô cho bản đồ vector của GRASS."
 
 #: ../vector/v.build/main.c:40
-msgid "Optionaly also checks for topological errors."
+msgid "Optionally also checks for topological errors."
 msgstr ""
 
 #: ../vector/v.build/main.c:44

@@ -7039,7 +7039,7 @@ msgid "Creates topology for vector map."
 msgstr "Créer des icones pour le fichier vecteur GRASS et les attributs liés"
 
 #: ../vector/v.build/main.c:40
-msgid "Optionaly also checks for topological errors."
+msgid "Optionally also checks for topological errors."
 msgstr ""
 
 #: ../vector/v.build/main.c:44
