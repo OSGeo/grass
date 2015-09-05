@@ -11574,7 +11574,7 @@ msgstr "Crea o ricrea topologia"
 
 #: ../gui/wxpython/menustrings.py:560 ../gui/wxpython/menustrings.py:1461
 msgid ""
-"Creates topology for vector map. Optionaly also checks for topological "
+"Creates topology for vector map. Optionally also checks for topological "
 "errors."
 msgstr ""
 

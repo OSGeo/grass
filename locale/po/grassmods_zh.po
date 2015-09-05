@@ -6856,7 +6856,7 @@ msgid "Creates topology for vector map."
 msgstr "为 GRASS 矢量文件和附加属性创建标签。"
 
 #: ../vector/v.build/main.c:40
-msgid "Optionaly also checks for topological errors."
+msgid "Optionally also checks for topological errors."
 msgstr ""
 
 #: ../vector/v.build/main.c:44

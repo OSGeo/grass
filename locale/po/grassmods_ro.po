@@ -6394,7 +6394,7 @@ msgid "Creates topology for vector map."
 msgstr ""
 
 #: ../vector/v.build/main.c:40
-msgid "Optionaly also checks for topological errors."
+msgid "Optionally also checks for topological errors."
 msgstr ""
 
 #: ../vector/v.build/main.c:44
