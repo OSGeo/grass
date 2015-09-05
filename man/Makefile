@@ -67,7 +67,7 @@ GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
 	$(PYTHON) ./build_keywords.py $(HTMLDIR)
 endef
 
-$(HTMLDIR)/topics.html: $(ALL_HTML)
+$(HTMLDIR)/topics.html: $(ALL_HTML) build_topics.py
 	$(call build_topics)
 	touch $@
 
