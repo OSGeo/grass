@@ -16,7 +16,7 @@ def get_env():
         raise RuntimeError('You are not in a GRASS session, GISRC not found.')
     with open(gisrc, mode='r') as grc:
         env = dict([(k.strip(), v.strip())
-                    for k, v in [row.split(':') for row in grc if row]])
+                    for k, v in [row.split(':',1) for row in grc if row]])
     return env
 
 
