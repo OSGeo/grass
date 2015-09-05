@@ -88,6 +88,16 @@ class RasterRow(RasterAbstractBase):
         'A test map'
         >>> elev.hist.keyword
         'This is a test map'
+        
+        >>> attrs = list(elev.hist)
+        >>> attrs[0]
+        ('name', u'Raster_test_map')
+        >>> attrs[1]
+        ('mapset', 'user1')
+        >>> attrs[2]
+        ('mtype', '')
+        >>> attrs[3]
+        ('creator', 'soeren')
 
         Each Raster map have an attribute call ``cats`` that allow user
         to interact with the raster categories.
