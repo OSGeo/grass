@@ -225,8 +225,8 @@ def get_raster_for_points(poi_vector, raster, column=None, region=None):
     True
     >>> get_raster_for_points(fire, ele, column=test_raster_name, region=region)
     True
-    >>> fire.table.filters.select('LABEL', test_raster_name)
-    Filters(u'SELECT LABEL, Utils_test_raster FROM test_vect_2;')
+    >>> fire.table.filters.select('name', test_raster_name)
+    Filters(u'SELECT name, Utils_test_raster FROM test_vect_2;')
     >>> cur = fire.table.execute()
     >>> r = cur.fetchall()
     >>> r[0]                                        # doctest: +ELLIPSIS
@@ -285,8 +285,6 @@ def r_export(rast, output='', fmt='png', **kargs):
 
 def get_lib_path(modname, libname):
     """Return the path of the libname contained in the module.
-
-    >>> get_lib_path(modname='r.modis', libname='libmodis')
     """
     from os.path import isdir, join
     from os import getenv

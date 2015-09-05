@@ -716,7 +716,7 @@ class VectorTopo(Vector):
         
         supported = ['point', 'line', 'boundary', 'centroid']
         
-        if feature_type not in supported:
+        if feature_type.lower() not in supported:
             raise GrassError("Unsupported feature type <%s>, "\
                              "supported are <%s>"%(feature_type, 
                                                    ",".join(supported)))
@@ -724,7 +724,7 @@ class VectorTopo(Vector):
         if bbox is None:
             bbox = self.bbox()
         
-        bboxlist = self.find_by_bbox.geos(bbox, type=feature_type, 
+        bboxlist = self.find_by_bbox.geos(bbox, type=feature_type.lower(), 
                                           bboxlist_only = True)
         
         if bboxlist is not None and len(bboxlist) > 0:

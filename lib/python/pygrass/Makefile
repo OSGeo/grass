@@ -9,7 +9,7 @@ DSTDIR = $(GDIR)/pygrass
 
 MODULES = errors utils orderdict
 
-CLEAN_SUBDIRS = messages modules raster vector gis shell tests
+CLEAN_SUBDIRS = messages modules raster vector gis shell tests rpc
 
 PYFILES := $(patsubst %,$(DSTDIR)/%.py,$(MODULES) __init__)
 PYCFILES := $(patsubst %,$(DSTDIR)/%.pyc,$(MODULES) __init__)
@@ -22,6 +22,7 @@ default: $(PYFILES) $(PYCFILES) $(GDIR)/__init__.py $(GDIR)/__init__.pyc
 	-$(MAKE) -C gis || echo $(CURDIR)/gis >> $(ERRORLOG)
 	-$(MAKE) -C shell || echo $(CURDIR)/shell >> $(ERRORLOG)
 	-$(MAKE) -C tests || echo $(CURDIR)/tests >> $(ERRORLOG)
+	-$(MAKE) -C rpc || echo $(CURDIR)/gis >> $(ERRORLOG)
 
 $(PYDIR):
 	$(MKDIR) $@
