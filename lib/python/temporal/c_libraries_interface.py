@@ -25,6 +25,7 @@ import grass.lib.vector as libvector
 import grass.lib.date as libdate
 import grass.lib.raster3d as libraster3d
 import grass.lib.temporal as libtgis
+from grass.pygrass.rpc.base import RPCServerBase
 
 ###############################################################################
 
@@ -791,7 +792,7 @@ def c_library_server(lock, conn):
         functions[data[0]](lock, conn, data)
         lock.release()
 
-class CLibrariesInterface(object):
+class CLibrariesInterface(RPCServerBase):
     """Fast and exit-safe interface to GRASS C-libraries functions
 
        This class implements a fast and exit-safe interface to the GRASS
@@ -943,43 +944,7 @@ class CLibrariesInterface(object):
 
     """
     def __init__(self):
-        self.client_conn = None
-        self.server_conn = None
-        self.queue = None
-        self.server = None
-        self.checkThread = None
-        self.threadLock = threading.Lock()
-        self.start_server()
-        self.start_checker_thread()
-        self.stopThread = False
-
-    def start_checker_thread(self):
-        if self.checkThread is not None and self.checkThread.is_alive():
-            self.stop_checker_thread()
-
-        self.checkThread = threading.Thread(target=self.thread_checker)
-        self.checkThread.daemon = True
-        self.stopThread = False
-        self.checkThread.start()
-
-    def stop_checker_thread(self):
-        self.threadLock.acquire()
-        self.stopThread = True
-        self.threadLock.release()
-        self.checkThread.join(None)
-
-    def thread_checker(self):
-        """Check every 200 micro seconds if the server process is alive"""
-        while True:
-            time.sleep(0.2)
-            #sys.stderr.write("Check server process\n")
-            self._check_restart_server()
-            self.threadLock.acquire()
-            if self.stopThread == True:
-                #sys.stderr.write("Stop thread\n")
-                self.threadLock.release()
-                return
-            self.threadLock.release()
+        RPCServerBase.__init__(self)
 
     def start_server(self):
         self.client_conn, self.server_conn = Pipe(True)
@@ -988,24 +953,6 @@ class CLibrariesInterface(object):
                                                              self.server_conn))
         self.server.daemon = True
         self.server.start()
-
-    def check_server(self):
-        self._check_restart_server()
-
-    def _check_restart_server(self):
-        """Restart the server if it was terminated
-        """
-        self.threadLock.acquire()
-        if self.server.is_alive() is True:
-            self.threadLock.release()
-            return
-        self.client_conn.close()
-        self.server_conn.close()
-        self.start_server()
-
-        logging.warning("Needed to restart the libgis server")
-
-        self.threadLock.release()
 
     def raster_map_exists(self, name, mapset):
         """Check if a raster map exists in the spatial database
@@ -1360,32 +1307,6 @@ class CLibrariesInterface(object):
         self.client_conn.send([RPCDefs.G_FATAL_ERROR])
         # The pipe should be closed in the checker thread
         return self.safe_receive("Fatal error")
-
-    def safe_receive(self, message):
-        """Receive the data and throw an FatalError exception in case the server
-           process was killed and the pipe was closed by the checker thread"""
-        try:
-            ret = self.client_conn.recv()
-            if isinstance(ret,  FatalError):
-               raise FatalError()
-            return ret
-        except (EOFError,  IOError,  FatalError):
-            # The pipe was closed by the checker thread because
-            # the server process was killed
-            raise FatalError(message)
-
-    def stop(self):
-        """Stop the check thread, the libgis server and close the pipe
-
-           This method should be called at exit using the package atexit
-        """
-        #sys.stderr.write("###### Stop was called\n")
-        self.stop_checker_thread()
-        if self.server is not None and self.server.is_alive():
-            self.client_conn.send([0, ])
-            self.server.join()
-        if self.client_conn is not None:
-            self.client_conn.close()
 
 if __name__ == "__main__":
     import doctest
