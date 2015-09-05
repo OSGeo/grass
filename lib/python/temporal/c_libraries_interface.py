@@ -133,7 +133,7 @@ def _get_database_name(lock, conn, data):
         # This behavior is in conjunction with db.connect
         dbstring = dbstring.replace("$GISDBASE", libgis.G_gisdbase())
         dbstring = dbstring.replace("$LOCATION_NAME", libgis.G_location())
-        dbstring = dbstring.replace("$MAPSET", libgis.G_mapset())
+        dbstring = dbstring.replace("$MAPSET", mapset)
     conn.send(dbstring)
 
 ###############################################################################
@@ -148,15 +148,17 @@ def _available_mapsets(lock, conn, data):
 
        :returns: Names of available mapsets as list of strings
     """
-    
+
     count = 0
     mapset_list = []
     try:
+        # Initilaize the accessable mapset list, this is bad C design!!!
+        libgis.G_get_mapset_name(0)
         mapsets = libgis.G_get_available_mapsets()
         while mapsets[count]:
             char_list = ""
             mapset = mapsets[count]
-            if libgis.G_mapset_permissions(mapset) > 0:
+            if libgis.G_mapset_permissions(mapset) == 1 and libgis.G_is_mapset_in_search_path(mapset) == 1:
                 c = 0
                 while mapset[c] != "\x00":
                     char_list += mapset[c]
