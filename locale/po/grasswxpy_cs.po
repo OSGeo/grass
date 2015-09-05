@@ -11733,7 +11733,7 @@ msgstr "Vytvořit nebo přebudovat topologii"
 
 #: ../gui/wxpython/menustrings.py:560 ../gui/wxpython/menustrings.py:1459
 msgid ""
-"Creates topology for vector map. Optionaly also checks for topological "
+"Creates topology for vector map. Optionally also checks for topological "
 "errors."
 msgstr ""
 "Vytvoří topologii vektorové vrstvy. Volitelně také zkontroluje topologické "
