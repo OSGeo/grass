@@ -690,7 +690,7 @@ class GrassTestFilesHtmlReporter(GrassTestFilesCountingReporter):
                 status=returncode_to_success_html_par(returncode),
                 ))
 
-        # TODO: include optionaly hyper link to test suite
+        # TODO: include optionally hyper link to test suite
         # TODO: file_path is reconstucted in a naive way
         # file_path should be stored in the module/test file object and just used here
         summary_section = (

@@ -6892,7 +6892,7 @@ msgid "Creates topology for vector map."
 msgstr "Ime vhodnega rastrskega sloja"
 
 #: ../vector/v.build/main.c:40
-msgid "Optionaly also checks for topological errors."
+msgid "Optionally also checks for topological errors."
 msgstr ""
 
 #: ../vector/v.build/main.c:44

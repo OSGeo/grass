@@ -1041,7 +1041,7 @@ msgid ""
 "Either 'from_table' (optionally with 'where') can be used or 'select' "
 "option, but not 'from_table' and 'select' at the same time."
 msgstr ""
-"คัดลอกตาราง. โดยใช้คำสั่ง 'from_table' (optionaly with 'where') หรือ 'select' "
+"คัดลอกตาราง. โดยใช้คำสั่ง 'from_table' (optionally with 'where') หรือ 'select' "
 "option, แต่ไม่ใช่  'from_table' และ 'select' พร้อมกัน"
 
 #: ../db/db.copy/main.c:46
@@ -6853,7 +6853,7 @@ msgid "Creates topology for vector map."
 msgstr "สร้าง topology สำหรับ แผนที่เชิงเส้น GRASS."
 
 #: ../vector/v.build/main.c:40
-msgid "Optionaly also checks for topological errors."
+msgid "Optionally also checks for topological errors."
 msgstr ""
 
 #: ../vector/v.build/main.c:44
