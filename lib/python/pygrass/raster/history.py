@@ -27,27 +27,28 @@ class History(object):
         self.keyword = keyword
         self.date = date
         self.title = title
+        self.attrs = ['name', 'mapset', 'mtype', 'creator', 'src1', 'src2',
+                      'keyword', 'date', 'title']
 
     def __repr__(self):
-        attrs = ['name', 'mapset', 'mtype', 'creator', 'src1', 'src2',
-                 'keyword', 'date', 'title']
-        return "History(%s)" % ', '.join(["%s=%r" % (attr, getattr(self, attr))
-                                          for attr in attrs])
+        return "History(%s)" % ', '.join(["%s=%r" % (self.attr, getattr(self, attr))
+                                          for attr in self.attrs])
 
     def __del__(self):
         """Rast_free_history"""
         pass
         
     def __eq__(self, hist):
-        attrs = ['name', 'mapset', 'mtype', 'creator', 'src1', 'src2',
-                 'keyword', 'date', 'title']
-        for attr in attrs:
+        for attr in self.attrs:
            if getattr(self, attr) != getattr(hist, attr):
                 return False
         return True
 
     def __len__(self):
         return self.length()
+
+    def __iter__(self):
+        return ((attr, getattr(self, attr)) for attr in self.attrs)
 
     #----------------------------------------------------------------------
     #libraster.HIST_CREATOR
