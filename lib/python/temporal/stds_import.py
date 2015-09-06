@@ -211,12 +211,14 @@ def import_stds(input, output, directory, title=None, descr=None, location=None,
 
     # Check for important files
     members = tar.getnames()
+    # Make sure that the basenames of the files are used for comparison
+    member_basenames = [os.path.basename(name) for name in members]
 
-    if init_file_name not in members:
+    if init_file_name not in member_basenames:
         gscript.fatal(_("Unable to find init file <%s>") % init_file_name)
-    if list_file_name not in members:
+    if list_file_name not in member_basenames:
         gscript.fatal(_("Unable to find list file <%s>") % list_file_name)
-    if proj_file_name not in members:
+    if proj_file_name not in member_basenames:
         gscript.fatal(_("Unable to find projection file <%s>") % proj_file_name)
 
     tar.extractall(path=directory)
@@ -236,11 +238,26 @@ def import_stds(input, output, directory, title=None, descr=None, location=None,
         temp_file = open(temp_name, "w")
         proj_name = os.path.abspath(proj_file_name)
 
+        # We need to convert projection strings generated 
+        # from other programms than g.proj into
+        # new line format so that the grass file comparison function
+        # can be used to compare the projections
+        proj_name_tmp = temp_name + "_in_projection"
+        proj_file = open(proj_name, "r")
+        proj_content = proj_file.read()
+        proj_content = proj_content.replace(" +", "\n+")
+        proj_content = proj_content.replace("\t+", "\n+")
+        proj_file.close()
+
+        proj_file = open(proj_name_tmp, "w")
+        proj_file.write(proj_content)
+        proj_file.close()
+
         p = gscript.start_command("g.proj", flags="j", stdout=temp_file)
         p.communicate()
         temp_file.close()
 
-        if not gscript.compare_key_value_text_files(temp_name, proj_name,
+        if not gscript.compare_key_value_text_files(temp_name, proj_name_tmp,
                                                     sep="="):
             if overr:
                 gscript.warning(_("Projection information does not match. "
