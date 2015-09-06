@@ -162,7 +162,10 @@ class Info(object):
     def _get_map_date(self):
         """Private method to obtain the Vector map date"""
         date_str = libvect.Vect_get_map_date(self.c_mapinfo)
-        return datetime.datetime.strptime(date_str, self.date_fmt)
+        try:
+            return datetime.datetime.strptime(date_str, self.date_fmt)
+        except:
+            return date_str
 
     def _set_map_date(self, datetimeobj):
         """Private method to change the Vector map date"""
