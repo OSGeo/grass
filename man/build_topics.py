@@ -28,7 +28,7 @@ for fname in htmlfiles:
     except:
         continue
     try:
-        key = lines[index_keys].split(',')[1].strip().capitalize().replace(' ', '_')
+        key = lines[index_keys].split(',')[1].strip().replace(' ', '_')
         key = key.split('>')[1].split('<')[0]
     except:
         continue
@@ -47,8 +47,8 @@ topicsfile.write(header1_tmpl.substitute(title = "GRASS GIS " \
                         "%s Reference Manual: Topics index" % grass_version))
 topicsfile.write(headertopics_tmpl)
 
-for key, values in sorted(keywords.iteritems()):
-    keyfile = open(os.path.join(path, 'topic_%s.html' % key.lower()), 'w')
+for key, values in sorted(keywords.iteritems(), key=lambda s: s[0].lower()):
+    keyfile = open(os.path.join(path, 'topic_%s.html' % key), 'w')
     keyfile.write(header1_tmpl.substitute(title = "GRASS GIS " \
                         "%s Reference Manual: Topic %s" % (grass_version,
                                                     key.replace('_', ' '))))
@@ -60,7 +60,7 @@ for key, values in sorted(keywords.iteritems()):
                                             basename=mod.replace('.html', '')))
     if num_modules >= min_num_modules_for_topic:
         topicsfile.writelines([moduletopics_tmpl.substitute(
-            key=key.lower(), name=key.replace('_', ' '))])
+            key=key, name=key.replace('_', ' '))])
     keyfile.write("</table>\n")
     # link to the keywords index
     # TODO: the labels in keywords index are with spaces and capitals
