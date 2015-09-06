@@ -70,7 +70,7 @@ from lmgr.toolbars         import LMWorkspaceToolbar, LMDataToolbar, LMToolsTool
 from lmgr.toolbars         import LMMiscToolbar, LMVectorToolbar, LMNvizToolbar
 from lmgr.pyshell          import PyShellWindow
 from lmgr.giface           import LayerManagerGrassInterface
-from lmgr.datacatalog      import DataCatalog
+from datacatalog.catalog   import DataCatalog
 from gui_core.forms        import GUI
 from gcp.manager           import GCPWizard
 from nviz.main             import haveNviz
