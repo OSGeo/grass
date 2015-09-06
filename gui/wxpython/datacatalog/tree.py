@@ -1,17 +1,16 @@
 """
-@package lmgr::datacatalog
+@package datacatalog::tree
 
-@brief Data catalog
+@brief Data catalog tree classes
 
 Classes:
- - datacatalog::DataCatalog
  - datacatalog::LocationMapTree
  - datacatalog::DataCatalogTree
 
 @todo:
  - use gui_core/treeview.py
 
-(C) 2014 by Tereza Fiedlerova, and the GRASS Development Team
+(C) 2014-2015 by Tereza Fiedlerova, and the GRASS Development Team
 
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -20,70 +19,21 @@ for details.
 @author Tereza Fiedlerova
 """
 
-import os
-import sys
-
 import wx
-import wx.gizmos as gizmos
 
 from core.gcmd import RunCommand, GError, GMessage
 from core.utils import GetListOfLocations, ListOfMapsets
-from core.gthread import gThread
 from core.debug import Debug
 from gui_core.dialogs import TextEntryDialog
+from core.giface import StandaloneGrassInterface
 
 from grass.pydispatch.signal import Signal
 
 import grass.script as grass
 
-class DataCatalog(wx.Panel):
-    """Data catalog panel"""
-    def __init__(self, parent, giface=None, id = wx.ID_ANY, title=_("Data catalog"),
-                 name='catalog', **kwargs):
-        """Panel constructor  """
-        self.showNotification = Signal('DataCatalog.showNotification')
-        self.parent = parent
-        self.baseTitle = title
-        wx.Panel.__init__(self, parent = parent, id = id, **kwargs)
-        self.SetName("DataCatalog")
-        
-        Debug.msg(1, "DataCatalog.__init__()")
-        
-        # tree with layers
-        self.tree = DataCatalogTree(self)
-        self.thread = gThread()
-        self._loaded = False
-        self.tree.showNotification.connect(self.showNotification)
-
-        # some layout
-        self._layout()
-        
-    def _layout(self):
-        """Do layout"""
-        sizer = wx.BoxSizer(wx.VERTICAL)
-
-        sizer.Add(item = self.tree.GetControl(), proportion = 1,
-                  flag = wx.EXPAND)          
-        
-        self.SetAutoLayout(True)
-        self.SetSizer(sizer)
-        
-        self.Layout()
-
-    def LoadItems(self):
-        if self._loaded:
-            return
-        
-        self.thread.Run(callable=self.tree.InitTreeItems,
-                        ondone=lambda event: self.LoadItemsDone())
-
-    def LoadItemsDone(self):
-        self._loaded = True
-        self.tree.ExpandCurrentLocation()
-
 class LocationMapTree(wx.TreeCtrl):
     def __init__(self, parent, style=wx.TR_HIDE_ROOT | wx.TR_EDIT_LABELS | 
-                 wx.TR_HAS_BUTTONS | wx.TR_FULL_ROW_HIGHLIGHT | wx.TR_COLUMN_LINES | wx.TR_SINGLE):
+                 wx.TR_HAS_BUTTONS | wx.TR_FULL_ROW_HIGHLIGHT | wx.TR_SINGLE):
         """Location Map Tree constructor."""
         super(LocationMapTree, self).__init__(parent, id=wx.ID_ANY, style=style)
         self.showNotification = Signal('Tree.showNotification')
@@ -287,9 +237,10 @@ class LocationMapTree(wx.TreeCtrl):
             Debug.msg(1, "Location <%s> not found" % location)
 
 class DataCatalogTree(LocationMapTree):
-    def __init__(self, parent):
+    def __init__(self, parent, giface=None):
         """Data Catalog Tree constructor."""
         super(DataCatalogTree, self).__init__(parent)
+        self._giface = giface
         
         self._initVariablesCatalog()
 
@@ -460,11 +411,11 @@ class DataCatalogTree(LocationMapTree):
             self.showNotification.emit(message=label)
             label = "d."+self.GetItemText(self.selected_type)+" --q map="+string+"    -- completed. Go to Map layers for further operations."
             if (self.GetItemText(self.selected_type)=='vector'):
-                self.parent.parent.AddMaps(layerName, 'vector', True)
+                self._giface.lmgr.AddMaps(layerName, 'vector', True)
             elif (self.GetItemText(self.selected_type)=='raster'):
-                self.parent.parent.AddMaps(layerName, 'raster', True)     
+                self._giface.lmgr.AddMaps(layerName, 'raster', True)     
             else:
-                self.parent.parent.AddMaps(layerName, 'raster_3d', True)
+                self._giface.lmgr.AddMaps(layerName, 'raster_3d', True)
                 label = "d.rast --q map="+string+"    -- completed. Go to 'Map layers' for further operations." # generate this message (command) automatically?
             self.showNotification.emit(message=label)
             Debug.msg(1,"LAYER "+self.GetItemText(self.selected_layer)+" DISPLAYED")
@@ -539,10 +490,11 @@ class DataCatalogTree(LocationMapTree):
         item = wx.MenuItem(menu, wx.NewId(), _("&Rename"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRename, item)
-        
-        item = wx.MenuItem(menu, wx.NewId(), _("&Display layer"))
-        menu.AppendItem(item)
-        self.Bind(wx.EVT_MENU, self.OnDisplayLayer, item)
+
+        if not isinstance(self._giface, StandaloneGrassInterface):
+            item = wx.MenuItem(menu, wx.NewId(), _("&Display layer"))
+            menu.AppendItem(item)
+            self.Bind(wx.EVT_MENU, self.OnDisplayLayer, item)
         
         self.PopupMenu(menu)
         menu.Destroy()
@@ -557,53 +509,3 @@ class DataCatalogTree(LocationMapTree):
         
         self.PopupMenu(menu)
         menu.Destroy()
-
-# testing...
-if __name__ == "__main__":
-    class TestTree(LocationMapTree):
-        def __init__(self, parent):
-            """Test Tree constructor."""
-            super(TestTree, self).__init__(parent, style=wx.TR_HIDE_ROOT | wx.TR_EDIT_LABELS | 
-                                           wx.TR_HAS_BUTTONS | wx.TR_FULL_ROW_HIGHLIGHT | wx.TR_COLUMN_LINES |
-                                           wx.TR_MULTIPLE)
-            
-        def InitTreeItems(self):
-            """Add locations, mapsets and layers to the tree."""
-            gisenv = grass.gisenv()
-            location = gisenv['LOCATION_NAME']
-            mapset = gisenv['MAPSET']
-            self._initTreeItems(locations=[location],
-                                mapsets=[mapset])
-            
-            self.ExpandAll()
-        
-        def _popupMenuLayer(self):
-            """Create popup menu for layers"""
-            pass
-
-        def _popupMenuMapset(self):
-            """Create popup menu for mapsets"""
-            pass
-
-    class TestFrame(wx.Frame):
-        """Frame for testing purposes only."""
-        def __init__(self, model=None):
-            wx.Frame.__init__(self, None, title='Test tree')
-
-            panel = wx.Panel(self)
-            self.tree = TestTree(parent=self)
-            self.tree.SetMinSize((300, 500))
-            self.tree.InitTreeItems()
-
-            szr = wx.BoxSizer(wx.VERTICAL)
-            szr.Add(self.tree, 1, wx.ALIGN_CENTER)
-            panel.SetSizerAndFit(szr)
-            szr.SetSizeHints(self)
-
-    def main():
-        app = wx.App()
-        frame = TestFrame()
-        frame.Show()
-        app.MainLoop()
-    
-    main()

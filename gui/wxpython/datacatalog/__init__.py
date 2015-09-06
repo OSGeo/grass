@@ -1,0 +1,5 @@
+all = [
+    'catalog',
+    'frame',
+    'tree',
+]
