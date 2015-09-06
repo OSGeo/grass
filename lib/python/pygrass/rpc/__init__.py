@@ -45,67 +45,70 @@ def _get_raster_image_as_np(lock, conn, data):
        :param conn: A multiprocessing.Pipe instance used to send True or False
        :param data: The list of data entries [function_id, raster_name, extent, color]
     """
-    raster_name = data[1]
-    extent = data[2]
-    color = data[3]
-
-    rast = RasterRow(raster_name)
     array = None
-    
-    if rast.exist():
-        
-        reg = Region()
-        reg.from_rast(raster_name)
-        
-        if extent is not None:
-            if "north" in extent:
-                reg.north = extent["north"]
-            if "south" in extent:
-                reg.south = extent["south"]
-            if "east" in extent:
-                reg.east =  extent["east"]
-            if "west" in extent:
-                reg.west =  extent["west"]
-            if "rows" in extent:
-                reg.rows =  extent["rows"]
-            if "cols" in extent:
-                reg.cols =  extent["cols"]
-            reg.adjust()
+    try:
+        raster_name = data[1]
+        extent = data[2]
+        color = data[3]
 
-        array = raster2numpy_img(raster_name, reg, color)
+        rast = RasterRow(raster_name)
+        
+        if rast.exist():
+            
+            reg = Region()
+            reg.from_rast(raster_name)
+            
+            if extent is not None:
+                if "north" in extent:
+                    reg.north = extent["north"]
+                if "south" in extent:
+                    reg.south = extent["south"]
+                if "east" in extent:
+                    reg.east =  extent["east"]
+                if "west" in extent:
+                    reg.west =  extent["west"]
+                if "rows" in extent:
+                    reg.rows =  extent["rows"]
+                if "cols" in extent:
+                    reg.cols =  extent["cols"]
+                reg.adjust()
 
-    conn.send(array)
+            array = raster2numpy_img(raster_name, reg, color)
+    except:
+        raise
+    finally:
+        conn.send(array)
     
 def _get_vector_table_as_dict(lock, conn, data):
     """Get the table of a vector map layer as dictionary
-
-       The value to be send via pipe is True in case the map exists and False
-       if not.
 
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
        :param data: The list of data entries [function_id, name, where]
 
     """
-    name = data[1]
-    where = data[2]
-    layer = VectorTopo(name)
     ret = None
-    
-    if layer.exist() is True:        
-        layer.open("r")
-        columns = None
-        table = None
-        if layer.table is not None:
-            columns = layer.table.columns
-            table = layer.table_to_dict(where=where)
-        layer.close()
+    try:
+        name = data[1]
+        where = data[2]
+        layer = VectorTopo(name)
         
-        ret = {}
-        ret["table"] = table
-        ret["columns"] = columns
-
-    conn.send(ret)
+        if layer.exist() is True:        
+            layer.open("r")
+            columns = None
+            table = None
+            if layer.table is not None:
+                columns = layer.table.columns
+                table = layer.table_to_dict(where=where)
+            layer.close()
+            
+            ret = {}
+            ret["table"] = table
+            ret["columns"] = columns
+    except:
+        raise
+    finally:
+        conn.send(ret)
 
 def _get_vector_features_as_wkb_list(lock, conn, data):
     """Return vector layer features as wkb list
@@ -113,33 +116,29 @@ def _get_vector_features_as_wkb_list(lock, conn, data):
        supported feature types:
        point, centroid, line, boundary, area
 
-       The value to be send via pipe is True in case the map exists and False
-       if not.
-
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
        :param data: The list of data entries [function_id,name,extent,
                                               feature_type, field]
 
     """
-    name = data[1]
-    extent = data[2]
-    feature_type = data[3]
-    field = data[4]
-    
     wkb_list = None
-    bbox = None
-    
-    layer = VectorTopo(name)
-    
     try:
+        name = data[1]
+        extent = data[2]
+        feature_type = data[3]
+        field = data[4]
+        bbox = None
+        
+        layer = VectorTopo(name)
+    
         if layer.exist() is True:
             if extent is not None:
                 bbox = basic.Bbox(north=extent["north"],
                                   south=extent["south"],
                                   east=extent["east"],
                                   west=extent["west"])
-                logging.warning(str(bbox))
+
             layer.open("r")
             if feature_type.lower() == "area":
                 wkb_list = layer.areas_to_wkb_list(bbox=bbox, field=field)
@@ -148,10 +147,10 @@ def _get_vector_features_as_wkb_list(lock, conn, data):
                                                       feature_type=feature_type, 
                                                       field=field)
             layer.close()
-    except Exception, e:
-        print(e)
-    
-    conn.send(wkb_list)
+    except:
+        raise
+    finally:
+        conn.send(wkb_list)
 
 ###############################################################################
 

@@ -112,7 +112,10 @@ class History(object):
         date_str = libraster.Rast_get_history(self.c_hist,
                                               libraster.HIST_MAPID)
         if date_str:
-            return datetime.datetime.strptime(date_str, self.date_fmt)
+            try:
+                return datetime.datetime.strptime(date_str, self.date_fmt)
+            except:
+                return date_str
 
     def _set_date(self, datetimeobj):
         if datetimeobj:
