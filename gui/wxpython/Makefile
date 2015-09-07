@@ -54,7 +54,6 @@ menustrings.py: core/menutree.py $(DSTDIR)/xml/menudata.xml $(DSTDIR)/xml/module
 $(DSTDIR)/xml/module_items.xml: tools/build_modules_xml.py
 	@echo "Generating interface description for all modules..."
 	$(call run_grass,$(PYTHON) $< > $@)
-	$(call run_grass,$(PYTHON) $< "validate" $@)
 
 $(PYDSTDIRS): %: | $(DSTDIR)
 	$(MKDIR) $@
