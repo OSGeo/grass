@@ -13349,7 +13349,7 @@ msgstr "Escribiendo salida..."
 #: ../vector/v.lrs/v.lrs.create/main.c:122
 #: ../vector/v.lrs/v.lrs.label/main.c:103
 #, fuzzy
-msgid "Linear Reference System"
+msgid "linear reference system"
 msgstr "Crear Sistema de Referencia Lineal (LRS)"
 
 #: ../vector/v.lrs/v.lrs.segment/main.c:75
