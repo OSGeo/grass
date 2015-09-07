@@ -1,7 +1,19 @@
-/*
- **  Written by H. Mitasova, I. Kosinovsky, D. Gerdes Fall 1993 
- **  Copyright  H. Mitasova, I. Kosinovsky, D.Gerdes  
+/*!
+ * \file segmen2d.c
+ *
+ * \author H. Mitasova, I. Kosinovsky, D. Gerdes
+ *
+ * \copyright
+ * (C) 1993 by Helena Mitasova and the GRASS Development Team
+ *
+ * \copyright
+ * This program is free software under the
+ * GNU General Public License (>=v2).
+ * Read the file COPYING that comes with GRASS
+ * for details.
+ *
  */
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -14,34 +26,39 @@
 static double smallest_segment(struct multtree *, int);
 
 
-/*
+/*!
+ * Interpolate recursively a tree of segments
  *
  *  Recursively processes each segment in a tree by:
- *
- *  a) finding points from neighbouring segments so that the total number of
- *  points is between KMIN and KMAX2 by calling tree function MT_get_region().
- *
- *  b) creating and solving the system of linear equations using these points
- *  and interp() by calling matrix_create() and G_ludcmp().
- *
- *  c) checking the interpolating function values at points by calling
- *  check_points().
- *
- *  d) computing grid for this segment using points and interp() by calling
- *  grid_calc().
- *
+ *  - finding points from neighbouring segments so that the total number of
+ *    points is between KMIN and KMAX2 by calling tree function MT_get_region().
+ *  - creating and solving the system of linear equations using these points
+ *    and interp() by calling matrix_create() and G_ludcmp().
+ *  - checking the interpolating function values at points by calling
+ *    check_points().
+ *  - computing grid for this segment using points and interp() by calling
+ *    grid_calc().
+ * 
+ * \todo
+ * Isn't this in fact the updated version of the function (IL_interp_segments_new_2d)?
+ * The function IL_interp_segments_new_2d has the following, better behavior:
+ * The difference between this function and IL_interp_segments_2d() is making
+ * sure that additional points are taken from all directions, i.e. it finds
+ * equal number of points from neighboring segments in each of 8 neighborhoods.
  */
-int IL_interp_segments_2d(struct interp_params *params, struct tree_info *info,	/* info for the quad tree */
-			  struct multtree *tree,	/* current leaf of the quad tree */
-			  struct BM *bitmask,	/* bitmask */
-			  double zmin, double zmax,	/* min and max input z-values */
-			  double *zminac, double *zmaxac,	/* min and max interp. z-values */
-			  double *gmin, double *gmax,	/* min and max inperp. slope val. */
-			  double *c1min, double *c1max, double *c2min, double *c2max,	/* min and max interp. curv. val. */
-			  double *ertot,	/* total interplating func. error */
-			  int totsegm,		/* total number of segments */
-			  off_t offset1,	/* offset for temp file writing */
-			  double dnorm)
+int IL_interp_segments_2d(struct interp_params *params,
+                          struct tree_info *info,  /*!< info for the quad tree */
+                          struct multtree *tree,  /*!< current leaf of the quad tree */
+                          struct BM *bitmask,  /*!< bitmask */
+                          double zmin, double zmax,  /*!< min and max input z-values */
+                          double *zminac, double *zmaxac,  /*!< min and max interp. z-values */
+                          double *gmin, double *gmax,  /*!< min and max inperp. slope val. */
+                          double *c1min, double *c1max,  /*!< min and max interp. curv. val. */
+                          double *c2min, double *c2max,  /*!< min and max interp. curv. val. */
+                          double *ertot,  /*!< total interplating func. error */
+                          int totsegm,  /*!< total number of segments */
+                          off_t offset1,  /*!< offset for temp file writing */
+                          double dnorm)
 {
     double xmn, xmx, ymn, ymx, distx, disty, distxp, distyp, temp1, temp2;
     int i, npt, nptprev, MAXENC;

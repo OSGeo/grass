@@ -1,18 +1,22 @@
-
-/*-
- * Written by H. Mitasova, I. Kosinovsky, D. Gerdes Summer 1992
- * Copyright 1992, H. Mitasova 
- * I. Kosinovsky,  and D.Gerdes    
+/*!
+ * \file output2d.c
  *
- * modified by McCauley in August 1995
- * modified by Mitasova in August 1995  
- * modified by Mitasova in August 1999 (fix for elev color)
- * modified by Brown in September 1999 (fix for Timestamps)
- * Modified by Mitasova in Nov. 1999 (write given tension into hist)
- * Last modification: 2006-12-13
+ * \author H. Mitasova, I. Kosinovsky, D. Gerdesm, Summer 1992 (original authors)
+ * \author modified by McCauley in August 1995
+ * \author modified by Mitasova in August 1995  
+ * \author modified by Mitasova in August 1999 (fix for elev color)
+ * \author modified by Brown in September 1999 (fix for Timestamps)
+ * \author modified by Mitasova in Nov. 1999 (write given tension into hist)
  *
+ * \copyright
+ * (C) 1992-2006 by Helena Mitasova and the GRASS Development Team
+ *
+ * \copyright
+ * This program is free software under the
+ * GNU General Public License (>=v2).
+ * Read the file COPYING that comes with GRASS for details.
  */
-
+ 
 #include <stdio.h>
 #include <math.h>
 
@@ -46,17 +50,24 @@ static void do_history(const char *name, int vect, const char *input,
     Rast_free_history(&hist);
 }
 
-int IL_output_2d(struct interp_params *params, struct Cell_head *cellhd,	/* current region */
-		 double zmin, double zmax,	/* min,max input z-values */
-		 double zminac, double zmaxac, double c1min, double c1max,	/* min,max interpolated values */
-		 double c2min, double c2max, double gmin, double gmax, double ertot,	/* total interplating func. error */
-		 char *input,	/* input file name */
-		 double dnorm, int dtens, int vect, int n_points)
 
-/*
- * Creates output files as well as history files  and color tables for
- * them.
+/*!
+ * Creates output files as well as history files and color tables for them.
+ * 
+ * *ertot* can be also called *RMS deviation of the interpolated surface*.
  */
+int IL_output_2d(struct interp_params *params,
+                 struct Cell_head *cellhd,  /*!< current region */
+                 double zmin, double zmax,  /*!< min,max input z-values */
+                 double zminac, double zmaxac,
+                 double c1min, double c1max,  /*!< min,max interpolated values */
+                 double c2min, double c2max,
+                 double gmin, double gmax,
+                 double ertot,  /*!< total interpolating func. error */
+                 char *input,  /*!< input file name */
+                 double dnorm,  /*!< normalization factor */
+                 int dtens, int vect, int n_points
+                 )
 {
     FCELL *cell1;
     int cf1 = -1, cf2 = -1, cf3 = -1, cf4 = -1, cf5 = -1, cf6 = -1;
