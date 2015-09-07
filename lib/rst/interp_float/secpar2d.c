@@ -1,16 +1,26 @@
 
-/*-
- * Written by H. Mitasova, L. Mitas, I. Kosinovsky, D. Gerdes Fall 1994
- * University of Illinois
- * US Army Construction Engineering Research Lab  
- * Copyright 1994, H. Mitasova (University of Illinois),
- * L. Mitas (University of Illinois),
- * I. Kosinovsky, (USA-CERL), and D.Gerdes (USA-CERL)   
+/*!
+ * \file secpar2d.c
  *
- * modified by McCauley in August 1995
- * modified by Mitasova in August 1995  
+ * \author H. Mitasova, L. Mitas, I. Kosinovsky, D. Gerdes Fall 1994 (original authors)
+ * \author modified by McCauley in August 1995
+ * \author modified by Mitasova in August 1995
+ * \author H. Mitasova (University of Illinois)
+ * \author L. Mitas (University of Illinois)
+ * \author I. Kosinovsky, (USA-CERL)
+ * \author D.Gerdes (USA-CERL)   
+ *
+ * \copyright
+ * (C) 1994-1995 by Helena Mitasova and the GRASS Development Team
+ *
+ * \copyright
+ * This program is free software under the
+ * GNU General Public License (>=v2).
+ * Read the file COPYING that comes with GRASS
+ * for details.
  *
  */
+
 
 #include <stdio.h>
 #include <math.h>
@@ -19,19 +29,24 @@
 #include <grass/bitmap.h>
 #include <grass/interpf.h>
 
-int IL_secpar_loop_2d(struct interp_params *params, int ngstc,	/* starting column */
-		      int nszc,	/* ending column */
-		      int k,	/* current row */
-		      struct BM *bitmask, double *gmin, double *gmax, double *c1min, double *c1max, double *c2min, double *c2max,	/* min,max interp.
-																	 * values */
-		      int cond1, int cond2	/* determine if particular values need to
-						 * be computed */
-    )
 
-/*
+/*!
+ * Compute slope aspect and curvatures
+ *
  * Computes slope, aspect and curvatures (depending on cond1, cond2) for
  * derivative arrays adx,...,adxy between columns ngstc and nszc.
  */
+int IL_secpar_loop_2d(struct interp_params *params,
+                      int ngstc,  /*!< starting column */
+                      int nszc,  /*!< ending column */
+                      int k,  /*!< current row */
+                      struct BM *bitmask,
+                      double *gmin, double *gmax,
+                      double *c1min, double *c1max,
+                      double *c2min, double *c2max,  /*!< min,max interp. values */
+                      int cond1,
+                      int cond2  /*!< determine if particular values need to be computed */
+    )
 {
     double dnorm1, ro,		/* rad to deg conv */
       dx2 = 0, dy2 = 0, grad2 = 0,	/* gradient squared */

@@ -67,41 +67,41 @@ typedef int wr_temp_fn(struct interp_params *, int, int, off_t);
 
 struct interp_params
 {
-    double zmult;		/* multiplier for z-values */
-    FILE *fdinp;		/* input stream */
-    int elatt;			/* which floating point attr to use? first = 1, second = 2, etc */
-    int smatt;			/* which floating point attr to use for smoothing? first = 1, second = 2, etc */
-    int kmin;			/* min number of points per segment for interpolation */
-    int kmax;			/* max number of points per segment */
-    char *maskmap;		/* name of mask */
-    int nsizr, nsizc;		/* number of rows and columns */
+    double zmult;		/**< multiplier for z-values */
+    FILE *fdinp;		/**< input stream */
+    int elatt;			/**< which floating point attr to use? first = 1, second = 2, etc */
+    int smatt;			/**< which floating point attr to use for smoothing? first = 1, second = 2, etc */
+    int kmin;			/**< min number of points per segment for interpolation */
+    int kmax;			/**< max number of points per segment */
+    char *maskmap;		/**< name of mask */
+    int nsizr, nsizc;		/**< number of rows and columns */
     DCELL *az, *adx, *ady,
-	*adxx, *adyy, *adxy;	/* array for interpolated values */
-    double fi;			/* tension */
-    int KMAX2;			/* max num. of points for interp. */
-    int scik1, scik2, scik3;	/* multipliers for interp. values */
-    double rsm;			/* smoothing */
+	*adxx, *adyy, *adxy;	/**< array for interpolated values */
+    double fi;			/**< tension */
+    int KMAX2;			/**< max num. of points for interp. */
+    int scik1, scik2, scik3;	/**< multipliers for interp. values */
+    double rsm;			/**< smoothing */
     char *elev, *slope, *aspect,
-	*pcurv, *tcurv, *mcurv;	/* output files */
-    double dmin;		/* min distance between points */
-    double x_orig, y_orig;	/* origin */
-    int deriv, cv;		/* 1 if compute partial derivs */
-    double theta;		/* anisotropy angle, 0=East,counter-clockwise */
-    double scalex;		/* anisotropy scaling factor */
-    struct TimeStamp *ts;	/* timestamp for raster files */
+	*pcurv, *tcurv, *mcurv;	/**< output files */
+    double dmin;		/**< min distance between points */
+    double x_orig, y_orig;	/**< origin */
+    int deriv, cv;		/**< 1 if compute partial derivs */
+    double theta;		/**< anisotropy angle, 0=East,counter-clockwise */
+    double scalex;		/**< anisotropy scaling factor */
+    struct TimeStamp *ts;	/**< timestamp for raster files */
     FILE *Tmp_fd_z, *Tmp_fd_dx,
 	*Tmp_fd_dy, *Tmp_fd_xx,
-	*Tmp_fd_yy, *Tmp_fd_xy;	/* temp files for writing interp. values */
-    FILE *fddevi;		/* pointer to deviations file */
+	*Tmp_fd_yy, *Tmp_fd_xy;	/**< temp files for writing interp. values */
+    FILE *fddevi;		/**< pointer to deviations file */
 
-    grid_calc_fn *grid_calc;	/*calculates grid for given segm */
-    matrix_create_fn *matrix_create;	/*creates matrix for a given segm */
-    check_points_fn *check_points;	/*checks interp. func. at points */
-    secpar_fn *secpar;		/* calculates aspect,slope,curv. */
-    interp_fn *interp;		/* radial  based interp. function */
-    interpder_fn *interpder;	/* interp. func. for derivatives */
-    wr_temp_fn *wr_temp;	/* writes temp files */
-    const char *wheresql;	/* SQL statement to select input points */
+    grid_calc_fn *grid_calc;	/**< calculates grid for given segm */
+    matrix_create_fn *matrix_create;	/**< creates matrix for a given segm */
+    check_points_fn *check_points;	/**< checks interp. func. at points */
+    secpar_fn *secpar;		/**< calculates aspect,slope,curv. */
+    interp_fn *interp;		/**< radial  based interp. function */
+    interpder_fn *interpder;	/**< interp. func. for derivatives */
+    wr_temp_fn *wr_temp;	/**< writes temp files */
+    const char *wheresql;	/**< SQL statement to select input points */
 };
 
 /* distance.c */
