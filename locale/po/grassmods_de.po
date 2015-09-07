@@ -13676,9 +13676,8 @@ msgstr "Schreibe sites in die Ausgabe..."
 #: ../vector/v.lrs/v.lrs.where/main.c:58
 #: ../vector/v.lrs/v.lrs.create/main.c:122
 #: ../vector/v.lrs/v.lrs.label/main.c:103
-#, fuzzy
-msgid "Linear Reference System"
-msgstr "Erzeuge Linearesreferenzsystem"
+msgid "linear reference system"
+msgstr "Lineares Referenzsystem"
 
 #: ../vector/v.lrs/v.lrs.segment/main.c:75
 msgid ""

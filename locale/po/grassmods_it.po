@@ -13504,7 +13504,7 @@ msgstr "Scrittura dell'output in corso ..."
 #: ../vector/v.lrs/v.lrs.create/main.c:122
 #: ../vector/v.lrs/v.lrs.label/main.c:103
 #, fuzzy
-msgid "Linear Reference System"
+msgid "linear reference system"
 msgstr "Crea sistema di riferimento lineare"
 
 #: ../vector/v.lrs/v.lrs.segment/main.c:75
