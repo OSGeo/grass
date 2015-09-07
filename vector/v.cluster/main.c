@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("point cloud"));
     G_add_keyword(_("cluster"));
     G_add_keyword(_("clump"));
-    module->description = _("Cluster identification");
+    module->description = _("Performs cluster identification.");
 
     /* Define the different options as defined in gis.h */
     input = G_define_standard_option(G_OPT_V_INPUT);
