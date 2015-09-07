@@ -12672,7 +12672,7 @@ msgstr "Εγγραφή %s από %s..."
 #: ../vector/v.lrs/v.lrs.where/main.c:58
 #: ../vector/v.lrs/v.lrs.create/main.c:122
 #: ../vector/v.lrs/v.lrs.label/main.c:103
-msgid "Linear Reference System"
+msgid "linear reference system"
 msgstr ""
 
 #: ../vector/v.lrs/v.lrs.segment/main.c:75
