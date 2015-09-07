@@ -3,21 +3,21 @@
 <em>v.cluster</em> partitions a point cloud into clusters or clumps. 
 
 <p>
-If the minimum number of points is not specified with the <i>min</i> 
+If the minimum number of points is not specified with the <b>min</b> 
 option, the minimum number of points to constitute a cluster is 
 <i>number of dimensions + 1</i>, i.e. 3 for 2D points and 4 for 3D 
 points.
 
 <p>
-If the maximum distance is not specified with the <i>distance</i> 
+If the maximum distance is not specified with the <b>distance</b> 
 option, the maximum distance is estimated from the observed distances 
 to the neighbors using the upper 99% confidence interval.
 
 <p>
 <em>v.cluster</em> supports different methods for clustering. The 
-recommended methods are <i>method=dbscan</i> if all clusters should 
+recommended methods are <b>method=dbscan</b> if all clusters should 
 have a density (maximum distance between points) not larger than 
-<i>distance</i> or <i>method=density</i> if clusters should be created 
+<b>distance</b> or <b>method=density</b> if clusters should be created 
 separately for each observed density (distance to the farthest neighbor).
 
 <h4>dbscan</h4>
@@ -31,14 +31,14 @@ point already in the cluster.
 
 <h4>dbscan2</h4>
 Similar to <i>dbscan</i>, but here it is sufficient if the resultant 
-cluster consists of at least <i>min</i> points, even if no point in the 
-cluster has at least <i>min</i> -1 neighbors within <i>distance</i>.
+cluster consists of at least <b>min</b> points, even if no point in the 
+cluster has at least <i>min - 1</i> neighbors within <b>distance</b>.
 
 <h4>density</h4>
 This method creates clusters according to their point density. The 
 maximum distance is not used. Instead, the points are sorted ascending 
 by the distance to their farthest neighbor (core distance), inspecting 
-<i>min</i> - 1 neighbors. The densest cluster is created first, using 
+<i>min - 1</i> neighbors. The densest cluster is created first, using 
 as threshold the core distance of the seed point. The cluster is 
 expanded as for DBSCAN, with the difference that each cluster has its 
 own maximum distance. This method can identify clusters with different 
