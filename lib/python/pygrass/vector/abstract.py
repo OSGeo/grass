@@ -96,8 +96,6 @@ class Info(object):
         if not utils.is_clean_name(newname):
             str_err = _("Map name {0} not valid")
             raise ValueError(str_err.format(newname))
-        if self.exist():
-            self.rename(newname)
         self._name = newname
 
     name = property(fget=_get_name, fset=_set_name,

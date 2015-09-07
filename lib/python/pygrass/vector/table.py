@@ -47,8 +47,9 @@ def get_path(path):
     >>> import os
     >>> new_path2 = os.path.join(gisenv()['GISDBASE'], gisenv()['LOCATION_NAME'],
     ...                          gisenv()['MAPSET'], 'sqlite', 'sqlite.db')
-    >>> new_path == new_path2
+    >>> new_path.replace("//","/") == new_path2.replace("//","/")
     True
+
     """
     if "$" not in path:
         return path

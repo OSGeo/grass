@@ -23,6 +23,7 @@ from grass.pygrass.raster import *
 import grass.lib.gis as libgis
 from base import RPCServerBase
 from grass.pygrass.gis.region import Region
+import grass.pygrass.utils as utils
 import logging
 
 ###############################################################################
@@ -38,26 +39,32 @@ class RPCDefs(object):
 
 
 def _get_raster_image_as_np(lock, conn, data):
-    """Convert a raster map into an image and return 
+    """Convert a raster map into an image and return
        a numpy array with RGB or Gray values.
-       
+
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
        :param data: The list of data entries [function_id, raster_name, extent, color]
     """
     array = None
     try:
-        raster_name = data[1]
-        extent = data[2]
-        color = data[3]
+        name = data[1]
+        mapset = data[2]
+        extent = data[3]
+        color = data[4]
 
-        rast = RasterRow(raster_name)
-        
+        mapset = utils.get_mapset_raster(name, mapset)
+
+        if not mapset:
+            raise ValueError("Unable to find raster map <%s>"%(name))
+
+        rast = RasterRow(name, mapset)
+
         if rast.exist():
-            
+
             reg = Region()
-            reg.from_rast(raster_name)
-            
+            reg.from_rast(name)
+
             if extent is not None:
                 if "north" in extent:
                     reg.north = extent["north"]
@@ -73,27 +80,34 @@ def _get_raster_image_as_np(lock, conn, data):
                     reg.cols =  extent["cols"]
                 reg.adjust()
 
-            array = raster2numpy_img(raster_name, reg, color)
+            array = raster2numpy_img(name, reg, color)
     except:
         raise
     finally:
         conn.send(array)
-    
+
 def _get_vector_table_as_dict(lock, conn, data):
     """Get the table of a vector map layer as dictionary
 
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
-       :param data: The list of data entries [function_id, name, where]
+       :param data: The list of data entries [function_id, name, mapset, where]
 
     """
     ret = None
     try:
         name = data[1]
-        where = data[2]
-        layer = VectorTopo(name)
-        
-        if layer.exist() is True:        
+        mapset = data[2]
+        where = data[3]
+
+        mapset = utils.get_mapset_vector(name, mapset)
+
+        if not mapset:
+            raise ValueError("Unable to find vector map <%s>"%(name))
+
+        layer = VectorTopo(name, mapset)
+
+        if layer.exist() is True:
             layer.open("r")
             columns = None
             table = None
@@ -101,7 +115,7 @@ def _get_vector_table_as_dict(lock, conn, data):
                 columns = layer.table.columns
                 table = layer.table_to_dict(where=where)
             layer.close()
-            
+
             ret = {}
             ret["table"] = table
             ret["columns"] = columns
@@ -112,26 +126,32 @@ def _get_vector_table_as_dict(lock, conn, data):
 
 def _get_vector_features_as_wkb_list(lock, conn, data):
     """Return vector layer features as wkb list
-    
+
        supported feature types:
        point, centroid, line, boundary, area
 
        :param lock: A multiprocessing.Lock instance
        :param conn: A multiprocessing.Pipe instance used to send True or False
-       :param data: The list of data entries [function_id,name,extent,
+       :param data: The list of data entries [function_id,name,mapset,extent,
                                               feature_type, field]
 
     """
     wkb_list = None
     try:
         name = data[1]
-        extent = data[2]
-        feature_type = data[3]
-        field = data[4]
+        mapset = data[2]
+        extent = data[3]
+        feature_type = data[4]
+        field = data[5]
         bbox = None
-        
-        layer = VectorTopo(name)
-    
+
+        mapset = utils.get_mapset_vector(name, mapset)
+
+        if not mapset:
+            raise ValueError("Unable to find vector map <%s>"%(name))
+
+        layer = VectorTopo(name, mapset)
+
         if layer.exist() is True:
             if extent is not None:
                 bbox = basic.Bbox(north=extent["north"],
@@ -144,7 +164,7 @@ def _get_vector_features_as_wkb_list(lock, conn, data):
                 wkb_list = layer.areas_to_wkb_list(bbox=bbox, field=field)
             else:
                 wkb_list = layer.features_to_wkb_list(bbox=bbox,
-                                                      feature_type=feature_type, 
+                                                      feature_type=feature_type,
                                                       field=field)
             layer.close()
     except:
@@ -219,7 +239,7 @@ class DataProvider(RPCServerBase):
     """
     def __init__(self):
         RPCServerBase.__init__(self)
-        
+
     def start_server(self):
         """This function must be re-implemented in the subclasses
         """
@@ -229,12 +249,12 @@ class DataProvider(RPCServerBase):
                                                              self.server_conn))
         self.server.daemon = True
         self.server.start()
-        
-    def get_raster_image_as_np(self, name, extent=None, color="RGB"):
+
+    def get_raster_image_as_np(self, name, mapset=None, extent=None, color="RGB"):
         """Return the attribute table of a vector map as dictionary.
-        
+
            See documentation of: pygrass.raster.raster2numpy_img
-                      
+
            Usage:
 
            .. code-block:: python
@@ -244,39 +264,34 @@ class DataProvider(RPCServerBase):
             >>> ret = provider.get_raster_image_as_np(name=test_raster_name)
             >>> len(ret)
             64
-            
-            >>> extent = {"north":30, "south":10, "east":30, "west":10, 
+
+            >>> extent = {"north":30, "south":10, "east":30, "west":10,
             ...           "rows":2, "cols":2}
-            >>> ret = provider.get_raster_image_as_np(name=test_raster_name, 
+            >>> ret = provider.get_raster_image_as_np(name=test_raster_name,
             ...                                       extent=extent)
             >>> len(ret)
             16
-            >>> ret           # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
-            array([169, 255,   0, 255, 255,   0,  46, 255, 208, 255,   
-                   0, 255, 255, 0,  84, 255], dtype=uint8)
-                   
+
             >>> extent = {"rows":3, "cols":1}
-            >>> ret = provider.get_raster_image_as_np(name=test_raster_name, 
+            >>> ret = provider.get_raster_image_as_np(name=test_raster_name,
             ...                                       extent=extent)
             >>> len(ret)
             12
-            >>> ret           # doctest: +ELLIPSIS +NORMALIZE_WHITESPACE
-            array([255,   0,   7, 255, 255,   0,  84, 255, 255,   
-                   0, 123, 255], dtype=uint8)
+
             >>> provider.stop()
-        
+
             ..
         """
         self.check_server()
         self.client_conn.send([RPCDefs.GET_RASTER_IMAGE_AS_NP,
-                               name, extent, color])
+                               name, mapset, extent, color])
         return self.safe_receive("get_raster_image_as_np")
-        
-    def get_vector_table_as_dict(self, name, where=None):
+
+    def get_vector_table_as_dict(self, name, mapset=None, where=None):
         """Return the attribute table of a vector map as dictionary.
-        
+
            See documentation of: pygrass.vector.VectorTopo::table_to_dict
-                      
+
            Usage:
 
            .. code-block:: python
@@ -297,25 +312,25 @@ class DataProvider(RPCServerBase):
             >>> provider.get_vector_table_as_dict(name="no_map",
             ...                                   where="value > 1")
             >>> provider.stop()
-        
+
             ..
         """
         self.check_server()
         self.client_conn.send([RPCDefs.GET_VECTOR_TABLE_AS_DICT,
-                               name, where])
+                               name, mapset, where])
         return self.safe_receive("get_vector_table_as_dict")
 
-    def get_vector_features_as_wkb_list(self, name, extent=None,
+    def get_vector_features_as_wkb_list(self, name, mapset=None, extent=None,
                                         feature_type="point", field=1):
         """Return the features of a vector map as wkb list.
-        
+
            :param extent: A dictionary of {"north":double, "south":double,
                                            "east":double, "west":double}
            :param feature_type: point, centroid, line, boundary or area
-        
+
            See documentation: pygrass.vector.VectorTopo::features_to_wkb_list
                               pygrass.vector.VectorTopo::areas_to_wkb_list
-                              
+
 
            Usage:
 
@@ -392,14 +407,14 @@ class DataProvider(RPCServerBase):
             17 None 41
             15 None 41
             16 None 41
-               
+
             >>> provider.stop()
-            
+
             ..
         """
         self.check_server()
         self.client_conn.send([RPCDefs.GET_VECTOR_FEATURES_AS_WKB,
-                               name, extent, feature_type, field])
+                               name, mapset, extent, feature_type, field])
         return self.safe_receive("get_vector_features_as_wkb_list")
 
 
@@ -411,7 +426,7 @@ if __name__ == "__main__":
     Module("r.mapcalc", expression="%s = row() + (10 * col())"%(test_raster_name),
                              overwrite=True)
     utils.create_test_vector_map(test_vector_name)
-    
+
     doctest.testmod()
 
     """Remove the generated maps, if exist"""
