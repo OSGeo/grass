@@ -13721,7 +13721,7 @@ msgstr "Запись слоя..."
 #: ../vector/v.lrs/v.lrs.create/main.c:122
 #: ../vector/v.lrs/v.lrs.label/main.c:103
 #, fuzzy
-msgid "Linear Reference System"
+msgid "linear reference system"
 msgstr "Создать линейную систему координат"
 
 #: ../vector/v.lrs/v.lrs.segment/main.c:75
