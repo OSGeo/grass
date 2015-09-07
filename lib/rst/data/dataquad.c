@@ -1,22 +1,41 @@
-
-/*-
- * Written by H. Mitasova, I. Kosinovsky, D. Gerdes Fall 1993
- * University of Illinois
- * US Army Construction Engineering Research Lab  
- * Copyright 1993, H. Mitasova (University of Illinois),
- * I. Kosinovsky, (USA-CERL), and D.Gerdes (USA-CERL)   
+/*!
+ * \file qtree.c
  *
- * Modified by H.Mitasova November 1996 to include variable smoothing
- * 
+ * \author
+ * H. Mitasova, I. Kosinovsky, D. Gerdes, Fall 1993,
+ * University of Illinois and
+ * US Army Construction Engineering Research Lab
+ *
+ * \author H. Mitasova (University of Illinois),
+ * \author I. Kosinovsky, (USA-CERL)
+ * \author D.Gerdes (USA-CERL)
+ *
+ * \author modified by H. Mitasova, November 1996 (include variable smoothing)
+ *
+ * \copyright
+ * (C) 1993-1996 by Helena Mitasova and the GRASS Development Team
+ *
+ * \copyright
+ * This program is free software under the
+ * GNU General Public License (>=v2).
+ * Read the file COPYING that comes with GRASS for details.
  */
+
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <grass/dataquad.h>
 
-/* sm added to point structure */
+
+/*!
+ * Initialize point structure with given arguments
+ *
+ * This is a constructor of the point structure and it allocates memory.
+ *
+ * \note
+ * Smoothing is part of the point structure
+ */
 struct triple *quad_point_new(double x, double y, double z, double sm)
-/* Initializes POINT structure with given arguments */
 {
     struct triple *point;
 
@@ -33,10 +52,16 @@ struct triple *quad_point_new(double x, double y, double z, double sm)
 }
 
 
+/*!
+ * Initialize quaddata structure with given arguments
+ * 
+ * This is a constructor of the quaddata structure and it allocates memory.
+ * It also creates (and allocates memory for) the given number of points
+ * (given by *kmax*). The point attributes are set to zero.
+ */
 struct quaddata *quad_data_new(double x_or, double y_or, double xmax,
 			       double ymax, int rows, int cols, int n_points,
 			       int kmax)
-/* Initializes QUADDATA structure with given arguments */
 {
     struct quaddata *data;
     int i;
@@ -67,12 +92,10 @@ struct quaddata *quad_data_new(double x_or, double y_or, double xmax,
 }
 
 
-
-
-
+/*!
+ * Return the quadrant the point should be inserted in
+ */
 int quad_compare(struct triple *point, struct quaddata *data)
-/* returns the quadrant the point should be inserted in */
-/* called by divide() */
 {
     int cond1, cond2, cond3, cond4, rows, cols;
     double ew_res, ns_res;
@@ -114,9 +137,10 @@ int quad_compare(struct triple *point, struct quaddata *data)
 }
 
 
+/*!
+ * Add point to a given *data*.
+ */
 int quad_add_data(struct triple *point, struct quaddata *data, double dmin)
-/* Adds POINT to a given DATA . Called by tree function insert_quad() */
-/* and by data function quad_divide_data() */
 {
     int n, i, cond;
     double xx, yy, r;
@@ -147,11 +171,13 @@ int quad_add_data(struct triple *point, struct quaddata *data, double dmin)
 }
 
 
-
-
+/*!
+ * Check intersection of two quaddata structures
+ * 
+ * Checks if region defined by *data* intersects the region defined
+ * by *data_inter*.
+ */
 int quad_intersect(struct quaddata *data_inter, struct quaddata *data)
-/* Checks if region defined by DATA intersects the region defined
-   by data_inter. Called by tree function MT_region_data() */
 {
     double xmin, xmax, ymin, ymax;
 
@@ -178,13 +204,19 @@ int quad_intersect(struct quaddata *data_inter, struct quaddata *data)
 }
 
 
-
-
+/*!
+ * Check if *data* needs to be divided
+ * 
+ * Checks if *data* needs to be divided. If `data->points` is empty,
+ * returns -1; if its not empty but there aren't enough points
+ * in *data* for division returns 0. Otherwise (if its not empty and
+ * there are too many points) returns 1.
+ * 
+ * \returns 1 if division is needed
+ * \returns 0 if division is not needed
+ * \returns -1 if there are no points
+ */
 int quad_division_check(struct quaddata *data, int kmax)
-/* Checks if DATA needs to be divided. If data->points is empty,
-   returns -1; if its not empty but there aren't enough points
-   in DATA for division returns 0. Othervise (if its not empty and
-   there are too many points) returns 1. Called by MT_insert() */
 {
     if (data->points == NULL)
 	return -1;
@@ -195,12 +227,15 @@ int quad_division_check(struct quaddata *data, int kmax)
 }
 
 
-
+/*!
+ * Divide *data* into four new ones
+ *
+ * Divides *data* into 4 new datas reinserting `data->points` in
+ * them by calling data function `quad_compare()` to determine
+ * were to insert. Returns array of 4 new datas (allocates memory).
+ */
 struct quaddata **quad_divide_data(struct quaddata *data, int kmax,
 				   double dmin)
-/* Divides DATA into 4 new datas reinserting data->points in
-   them by calling data function quad_compare() to detrmine
-   were to insert. Called by MT_divide(). Returns array of 4 new datas */
 {
     struct quaddata **datas;
     int cols1, cols2, rows1, rows2, i;	/*j1, j2, jmin = 0; */
@@ -280,12 +315,12 @@ struct quaddata **quad_divide_data(struct quaddata *data, int kmax,
 }
 
 
-
-
+/*!
+ * Gets such points from *data* that lie within region determined by
+ * *data_inter*. Called by tree function `region_data()`.
+ */
 int
 quad_get_points(struct quaddata *data_inter, struct quaddata *data, int MAX)
-/* Gets such points from DATA that lie within region determined by
-   data_inter. Called by tree function region_data(). */
 {
     int i, ind;
     int n = 0;

@@ -1,12 +1,24 @@
-
-/*-
- * Written by H. Mitasova, I. Kosinovsky, D. Gerdes Fall 1993
- * University of Illinois
- * US Army Construction Engineering Research Lab  
- * Copyright 1993, H. Mitasova (University of Illinois),
- * I. Kosinovsky, (USA-CERL), and D.Gerdes (USA-CERL)   
+/*!
+ * \file qtree.c
  *
- *  updated by Mitasova Nov. 96, no changes necessary 
+ * \author
+ * H. Mitasova, I. Kosinovsky, D. Gerdes, Fall 1993,
+ * University of Illinois and
+ * US Army Construction Engineering Research Lab
+ *
+ * \author H. Mitasova (University of Illinois),
+ * \author I. Kosinovsky, (USA-CERL)
+ * \author D.Gerdes (USA-CERL)
+ *
+ * \author updated/checked by Mitasova Nov. 96 (no changes necessary)
+ *
+ * \copyright
+ * (C) 1993-1996 by Helena Mitasova and the GRASS Development Team
+ *
+ * \copyright
+ * This program is free software under the
+ * GNU General Public License (>=v2).
+ * Read the file COPYING that comes with GRASS for details.
  */
 
 #include <stdio.h>
@@ -16,6 +28,7 @@
 #include <grass/dataquad.h>
 #include <grass/qtree.h>
 
+/*! Initializes multfunc structure with given arguments */
 struct multfunc
     *MT_functions_new(int (*compare) (struct triple *, struct quaddata *),
 		      struct quaddata **(*divide_data) (struct quaddata *,
@@ -26,7 +39,6 @@ struct multfunc
 		      int (*division_check) (struct quaddata *, int),
 		      int (*get_points) (struct quaddata *, struct quaddata *,
 					 int))
-/* Initializes FUNCTIONS structure with given arguments */
 {
     struct multfunc *functions;
     if (!(functions = (struct multfunc *)malloc(sizeof(struct multfunc)))) {
@@ -41,10 +53,10 @@ struct multfunc
     return functions;
 }
 
+/*! Initializes tree_info using given arguments */
 struct tree_info *MT_tree_info_new(struct multtree *root,
 				   struct multfunc *functions, double dmin,
 				   int kmax)
-/*Initializes TREE_INFO using given arguments */
 {
     struct tree_info *info;
     if (!(info = (struct tree_info *)malloc(sizeof(struct tree_info)))) {
@@ -57,10 +69,10 @@ struct tree_info *MT_tree_info_new(struct multtree *root,
     return info;
 }
 
+/** Initializes multtree using given arguments */
 struct multtree *MT_tree_new(struct quaddata *data,
 			     struct multtree **leafs, struct multtree *parent,
 			     int multant)
-/*Initializes TREE using given arguments */
 {
     struct multtree *tree;
     if (!(tree = (struct multtree *)malloc(sizeof(struct multtree)))) {
@@ -74,21 +86,24 @@ struct multtree *MT_tree_new(struct quaddata *data,
 }
 
 
-
+/*!
+ * First checks for dividing cond. (if n_points>=KMAX) and tree
+ * is a leaf by calling one of tree's functions (`division_check()`).
+ * If tree is not a leaf (is a node) uses function compare to determine
+ * into which "son" we need to insert the point and calls MT_insert()
+ * with this son as a n argument.
+ *
+ * If TREE is a leaf but we don't need to divide it (n_points<KMAX) then
+ * calls function `add_data(point, ...)` to add point to the data of tree
+ * and returns the result of `add_data()` (which returns 1 if the point is
+ * inserted and 0 if its ignored (when its too dense)).
+ *
+ * If `division_check()` returns true, calls MT_divide() and then calls
+ * MT_insert() to insert the point into divided tree and returns the
+ * result of MT_divide().
+ */
 int MT_insert(struct triple *point,
 	      struct tree_info *info, struct multtree *tree, int n_leafs)
-/*First checks for dividing cond. (if n_points>=KMAX) and TREE is a leaf
-   by calling one of tree's functions (division_check()).
-   If TREE is not a leaf (is a node) uses function compare to determine
-   into which "son" we need to insert the point and calls MT_insert()
-   with this son as a n argument.
-   If TREE is a leaf but we don't need to divide it (n_points<KMAX) then
-   calls function add_data(POINT) to add POINT to the data of TREE and
-   returns the result of add_data() (which returns 1 if the point is
-   inserted and 0 if its ignored (when its too dense)).
-   If Division_check returns true, calls MT_divide(TREE) and then calls
-   insert_quad() to insert the POINT into divided TREE and returns the
-   result of MT_divide(). */
 {
     int j = 0, i, k, comp;
 
@@ -134,9 +149,13 @@ int MT_insert(struct triple *point,
 }
 
 
+/*!
+ * Divide a tree
+ * 
+ * Divides the tree by calling one of tree's functions (divide_data())
+ * and returns the result of divide_data()
+ */
 int MT_divide(struct tree_info *info, struct multtree *tree, int n_leafs)
-/* Divides the tree by calling one of tree's functions (divide_data())
-   and returns the result of divide_data() */
 {
     int i;
     struct quaddata **datas;
@@ -161,15 +180,22 @@ int MT_divide(struct tree_info *info, struct multtree *tree, int n_leafs)
 
 
 
-
-int MT_region_data(struct tree_info *info, struct multtree *tree, struct quaddata *data, int MAX,	/* max number of points we can add (KMAX2) */
-		   int n_leafs)
- /* Gets points inside the region defined by DATA from TREE and
-    adds them to DATA. If the number of eligible
-    point is more than MAX returns MAX+1 othervise returns number of points added
-    to DATA.
-    Uses tree's functions intersect() to find leafs that intersect given region
-    and get_points() to get points from such leafs. */
+/*!
+ * Get points inside a region from a tree
+ *
+ * Gets points inside the region defined by DATA from TREE and
+ * adds them to DATA. If the number of eligible
+ * point is more than MAX returns MAX+1 otherwise returns number of points added
+ * to DATA.
+ *
+ * Uses tree's functions intersect() to find leafs that intersect given region
+ * and get_points() to get points from such leafs.
+ */
+int MT_region_data(struct tree_info *info, struct multtree *tree,
+                   struct quaddata *data,
+                   int MAX,  /*!< max number of points we can add (KMAX2) */
+                   int n_leafs
+                   )
 {
     int n = 0, j;
 
