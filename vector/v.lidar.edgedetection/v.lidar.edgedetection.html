@@ -33,6 +33,7 @@ TERRAIN, EDGE or UNKNOWN. This vector map should be the input of
 <em>v.lidar.growing</em> module.
 
 
+<!-- TODO: review how it is with layers and cats -->
 <h2>NOTES</h2>
 
 In this module, an external table will be created which will be useful for 
@@ -68,13 +69,69 @@ OBJECT DOUBLE PULSE (cat = 4, layer = 2)
 v.lidar.edgedetection input=vector_last output=edge ew_step=8 ns_step=8 lambda_g=0.5
 </pre></div>
 
+<h3>Complete workflow</h3>
+
+<div class="code"><pre>
+# region settings (using an existing raster)
+g.region raster=elev_lid792_1m
+
+# import
+v.in.lidar -tr input=points.las output=points
+v.in.lidar -tr input=points.las output=points_first return_filter=first
+
+# detection
+v.lidar.edgedetection input=points output=edge ew_step=8 ns_step=8 lambda_g=0.5
+v.lidar.growing input=edge output=growing first=points_first
+v.lidar.correction input=growing output=correction terrain=only_terrain
+
+# visualization of selected points
+# zoom somewhere first, to make it faster
+d.rast map=orthophoto
+d.vect map=correction layer=2 cats=2,3,4 color=red size=0.25
+d.vect map=correction layer=2 cats=1 color=0:128:0 size=0.5
+
+# interpolation (this may take some time)
+v.surf.rst input=only_terrain elevation=terrain
+
+# get object points for 3D visualization
+v.extract input=correction layer=2 cats=2,3,4 output=objects
+</pre></div>
+<!-- TODO: the selection of layer and cats might be not completely correct -->
+<!--
+las: http://ncsu-osgeorel.github.io/uav-lidar-analytics-course/
+orthophoto: USGS WMS
+mogrify -resize 600x v_lidar_edgedetection.png
+optipng -o5 v_lidar_edgedetection.png
+
+m.nviz.image elevation_map=terrain -a mode=fine resolution_fine=1 color=191:191:191 \
+    vpoint=objects vpoint_width=2 vpoint_color=255:0:0 vpoint_size=0 \
+    vpoint_marker=sphere vpoint_position=0,0,0 vpoint_layer=1,1 \
+    position=0.66,0.51 height=139 perspective=20 twist=0 zexag=2.000000 focus=146,96,123 \
+    output=nviz_output format=ppm size=796,528
+-->
+<center>
+    <img src="v_lidar_edgedetection.png">
+    <p><em>Figure 1: Example output from complete workflow (red: objects, green: terrain)</em></p>
+</center>
+
+<center>
+    <img src="v_lidar_edgedetection_objects.png">
+    <p><em>
+        Figure 2: 3D visualization of filtered object points (red)
+        and terrain created from terrain points (gray)
+    </em></p>
+</center>
+
 
 <h2>SEE ALSO</h2>
 
 <em>
 <a href="v.lidar.growing.html">v.lidar.growing</a>,
 <a href="v.lidar.correction.html">v.lidar.correction</a>,
-<a href="v.surf.bspline.html">v.surf.bspline</a>
+<a href="v.surf.bspline.html">v.surf.bspline</a>,
+<a href="v.surf.rst.html">v.surf.rst</a>,
+<a href="v.in.lidar.html">v.in.lidar</a>,
+<a href="v.in.ascii.html">v.in.ascii</a>
 </em>
 
 
