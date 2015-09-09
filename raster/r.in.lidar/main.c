@@ -24,6 +24,7 @@
 #include <sys/types.h>
 #include <grass/gis.h>
 #include <grass/raster.h>
+#include <grass/segment.h>
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 #include <liblas/capi/liblas.h>
@@ -110,10 +111,12 @@ int main(int argc, char *argv[])
     RASTER_MAP_TYPE rtype, base_raster_data_type;
     struct History history;
     char title[64];
+    SEGMENT base_segment;
     void *n_array, *min_array, *max_array, *sum_array, *sumsq_array,
         *index_array, *base_array;
     void *raster_row, *ptr;
     struct Cell_head region;
+    struct Cell_head input_region;
     int rows, cols;		/* scan box size */
     int row, col;		/* counters */
 
@@ -648,10 +651,33 @@ int main(int argc, char *argv[])
 
     npasses = (int)ceil(1.0 * region.rows / rows);
 
+    /* using row-based chunks (used for output) when input and output
+     * region matches and using segment library when they don't */
+    int use_segment = 0;
+    if (base_raster_opt->answer && res_opt->answer)
+        use_segment = 1;
     if (base_raster_opt->answer) {
         /* TODO: do we need to test existence first? mapset? */
         base_raster = Rast_open_old(base_raster_opt->answer, "");
         base_raster_data_type = Rast_get_map_type(base_raster);
+    }
+    if (base_raster_opt->answer && use_segment) {
+        Rast_get_input_window(&input_region);  /* we have split window */
+        /* TODO: these numbers does not fit with what we promise about percentage */
+        int segment_rows = 64;
+        /* writing goes row by row, so we use long segments as well */
+        int segment_cols = cols;
+        int segments_in_memory = 4;
+        if (Segment_open(&base_segment, G_tempfile(), input_region.rows, input_region.cols,
+                segment_rows, segment_cols,
+                Rast_cell_size(base_raster_data_type), segments_in_memory) != 1)
+            G_fatal_error(_("Cannot create temporary file with segments of a raster map"));
+        for (row = 0; row < input_region.rows; row++) {
+            raster_row = Rast_allocate_input_buf(base_raster_data_type);
+            Rast_get_row(base_raster, raster_row, row, base_raster_data_type);
+            Segment_put_row(&base_segment, raster_row, row);
+        }
+        Rast_close(base_raster);  /* we won't need the raster again */
     }
 
     if (!scan_flag->answer) {
@@ -678,7 +704,7 @@ int main(int argc, char *argv[])
 	if (bin_index)
 	    index_array =
 		G_calloc((size_t)rows * (cols + 1), Rast_cell_size(CELL_TYPE));
-	if (base_raster_opt->answer)
+	if (base_raster_opt->answer && !use_segment)
 	    base_array = G_calloc((size_t)rows * (cols + 1), Rast_cell_size(base_raster_data_type));
 	/* we don't free the raster, we just use it again */
 	/* TODO: perhaps none of them needs to be freed */
@@ -878,6 +904,41 @@ int main(int argc, char *argv[])
                         base_z = (double) *(FCELL *) ptr;
                     else
                         base_z = (double) *(CELL *) ptr;
+                }
+                z -= base_z;
+            }
+            else if (use_segment) {
+                double base_z;
+                off_t base_row = Rast_northing_to_row(y, &input_region);
+                off_t base_col = Rast_easting_to_col(x, &input_region);
+                /* skip points which are outside the base raster
+                 * (null propagation) */
+                if (base_row < 0 || base_col < 0 ||
+                        base_row >= input_region.rows ||
+                        base_col >= input_region.cols)
+                    continue;
+                if (base_raster_data_type == DCELL_TYPE) {
+                    DCELL value;
+                    Segment_get(&base_segment, &value, base_row, base_col);
+                    if (Rast_is_null_value(&value, base_raster_data_type))
+                        continue;
+                    base_z = value;
+                }
+                else if (base_raster_data_type == FCELL_TYPE) {
+                    
+                    
+                    FCELL value;
+                    Segment_get(&base_segment, &value, base_row, base_col);
+                    if (Rast_is_null_value(&value, base_raster_data_type))
+                        continue;
+                    base_z = value;
+                }
+                else {
+                    CELL value;
+                    Segment_get(&base_segment, &value, base_row, base_col);
+                    if (Rast_is_null_value(&value, base_raster_data_type))
+                        continue;
+                    base_z = value;
                 }
                 z -= base_z;
             }
@@ -1255,6 +1316,8 @@ int main(int argc, char *argv[])
 	}
 	if (base_array)
 	    Rast_close(base_raster);
+        if (use_segment)
+            Segment_close(&base_segment);
     }				/* passes loop */
 
     G_percent(1, 1, 1);		/* flush */
