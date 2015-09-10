@@ -528,7 +528,9 @@ Section "GRASS" SecGRASS
 	SetOutPath "$INSTALL_DIR"
 	File /r ${PACKAGE_FOLDER}\*.*
 
-	;grant modifying/overwriting fontcap file
+	;grant $INSTDIR\etc read write accessible
+	AccessControl::GrantOnFile "$INSTDIR\etc" "(S-1-5-32-545)" "GenericRead + GenericWrite"	
+	;grant modifying/overwriting fontcap file	
 	AccessControl::GrantOnFile "$INSTDIR\etc\fontcap" "(S-1-5-32-545)" "GenericRead + GenericWrite + Delete"
 	
 	;create run_gmkfontcap.bat
@@ -590,6 +592,9 @@ Section "GRASS" SecGRASS
 	
 	;Run g.mkfontcap outside a grass session during installation to catch all fonts
 	ExecWait '"$INSTALL_DIR\etc\run_gmkfontcap.bat"'
+
+	;set $INSTDIR\etc back to read accessible
+	AccessControl::SetOnFile "$INSTDIR\etc" "(S-1-5-32-545)" "GenericRead + GenericExecute"	
 	
 	;Install demolocation into the GIS_DATABASE directory
 	SetOutPath "$GIS_DATABASE\demolocation"
