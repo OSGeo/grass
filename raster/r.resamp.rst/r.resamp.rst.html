@@ -6,6 +6,13 @@ This module is intended for reinterpolation of continuous data
 to a different resolution rather than for interpolation from scattered data
 (use the <em>v.surf.*</em> modules for that purpose).
 
+<p>
+The extent of all resulting raster maps is taken from the settings of the
+actual computational region (which may differ from the extent of the input
+raster map). The resolution of the computational region however has to be
+aligned to the resolution of the input map to avoid artefacts.
+
+<p>
 Reinterpolation (resampling) is done to higher, same or lower resolution 
 specified by the <i>ew_res</i> and <i>ns_res</i> parameters.
 <p>All resulting raster maps are created using the settings of the current
