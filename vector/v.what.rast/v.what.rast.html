@@ -43,37 +43,52 @@ be used in the weighted average.
 
 <h2>EXAMPLES</h2>
 
-A) Reading values from raster map at position of vector points,
-   writing these values into a column of the attribute table
-   connected to the vector map:
-<br>
+<h3>Transferring raster values into existing attribute table of vector points map</h3>
+
+Reading values from raster map at position of vector points,
+writing these values into a column of the attribute table
+connected to the vector map:
+<p>
 
 <div class="code"><pre>
-v.what.rast map=pnts raster=elevation column=heights
+# work on copy of original geodetic points map
+g.copy vector=geodetic_pts,mygeodetic_pts
+
+# set computational region to raster map to be queried
+g.region raster=elev_state_500m -p
+
+# add new column to existing table
+v.db.addcolumn map=mygeodetic_pts column="height double precision"
+v.what.rast map=mygeodetic_pts raster=elev_state_500m column=height
+
+# compare official geodetic heights to those of elevation model
+v.db.select map=mygeodetic_pts columns=Z_VALUE,height separator=comma
 </pre></div>
 
+<h3>Transferring raster values into new vector points map</h3>
+
+In case of a vector map without attached attribute table, first add
+a new attribute table. This table is then populated with values
+queried from the raster map:
 <p>
-B) In case of a vector map without attached attribute table, first add
-   a new attribute table. This table is then populated with values
-   queried from the raster map:
-<br>
 
 <div class="code"><pre>
 # create new random vector points map
 v.random pnts n=100
 
 # add new table, link to map
-v.db.addtable pnts column="heights double precision"
+v.db.addtable map=pnts column="height double precision"
 
-# query raster map and upload values to vector table into specified column
+# set computational region to raster map to be queried
 g.region raster=elevation -p
-v.what.rast map=pnts raster=elevation column=heights
+# query raster map and upload values to vector table into specified column
+v.what.rast map=pnts raster=elevation column=height
 
 # verify new attribute table:
 v.db.select pnts
 
 # verify statistics of uploaded values:
-v.univar map=pnts column=heights type=point
+v.univar map=pnts column=height type=point
 </pre></div>
 
 
