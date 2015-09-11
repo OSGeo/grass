@@ -314,7 +314,9 @@ int main(int argc, char *argv[])
     new_argv[new_argc++] = NULL;
 
     G_debug(1, "Mode: %s", flag_seg->answer ? "Segmented" : "All in RAM");
-
+/*    if (flag_seg->answer)
+       G_message(_("Using memory cache size: %.1f MB"), atof(opt16->answer));
+*/
     ret = G_vspawn_ex(new_argv[0], new_argv);
 
     if (ret != EXIT_SUCCESS)
