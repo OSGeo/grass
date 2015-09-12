@@ -112,6 +112,7 @@ int main(int argc, char *argv[])
     float xmin = 0., ymin = 0., xmax = 0., ymax = 0.;
     struct GModule *module;
     struct Option *in_opt, *out_opt, *spat_opt, *filter_opt, *class_opt;
+    struct Option *skip_opt, *preserve_opt, *offset_opt, *limit_opt;
     struct Option *outloc_opt;
     struct Flag *print_flag, *notab_flag, *region_flag, *notopo_flag;
     struct Flag *over_flag, *extend_flag, *no_import_flag;
@@ -171,17 +172,10 @@ int main(int argc, char *argv[])
     spat_opt->required = NO;
     spat_opt->key_desc = "xmin,ymin,xmax,ymax";
     spat_opt->label = _("Import subregion only");
-    spat_opt->guisection = _("Subregion");
+    spat_opt->guisection = _("Selection");
     spat_opt->description =
 	_("Format: xmin,ymin,xmax,ymax - usually W,S,E,N");
 
-    outloc_opt = G_define_option();
-    outloc_opt->key = "location";
-    outloc_opt->type = TYPE_STRING;
-    outloc_opt->required = NO;
-    outloc_opt->description = _("Name for new location to create");
-    outloc_opt->key_desc = "name";
-    
     filter_opt = G_define_option();
     filter_opt->key = "return_filter";
     filter_opt->type = TYPE_STRING;
@@ -189,6 +183,7 @@ int main(int argc, char *argv[])
     filter_opt->label = _("Only import points of selected return type");
     filter_opt->description = _("If not specified, all points are imported");
     filter_opt->options = "first,last,mid";
+    filter_opt->guisection = _("Selection");
 
     class_opt = G_define_option();
     class_opt->key = "class_filter";
@@ -198,32 +193,81 @@ int main(int argc, char *argv[])
     class_opt->label = _("Only import points of selected class(es)");
     class_opt->description = _("Input is comma separated integers. "
                                "If not specified, all points are imported.");
+    class_opt->guisection = _("Selection");
+
+    skip_opt = G_define_option();
+    skip_opt->key = "skip";
+    skip_opt->type = TYPE_INTEGER;
+    skip_opt->multiple = NO;
+    skip_opt->required = NO;
+    skip_opt->label = _("Do not import every n-th point");
+    skip_opt->description = _("For example, 5 will import 80 percent of points. "
+                              "If not specified, all points are imported");
+    skip_opt->guisection = _("Decimation");
+
+    preserve_opt = G_define_option();
+    preserve_opt->key = "preserve";
+    preserve_opt->type = TYPE_INTEGER;
+    preserve_opt->multiple = NO;
+    preserve_opt->required = NO;
+    preserve_opt->label = _("Import only every n-th point");
+    preserve_opt->description = _("For example, 4 will import 25 percent of points. "
+                                  "If not specified, all points are imported");
+    preserve_opt->guisection = _("Decimation");
+
+    offset_opt = G_define_option();
+    offset_opt->key = "offset";
+    offset_opt->type = TYPE_INTEGER;
+    offset_opt->multiple = NO;
+    offset_opt->required = NO;
+    offset_opt->label = _("Skip first n points");
+    offset_opt->description = _("Skips the given number of points at the beginning.");
+    offset_opt->guisection = _("Decimation");
+
+    limit_opt = G_define_option();
+    limit_opt->key = "limit";
+    limit_opt->type = TYPE_INTEGER;
+    limit_opt->multiple = NO;
+    limit_opt->required = NO;
+    limit_opt->label = _("Import only n points");
+    limit_opt->description = _("Imports only the given number of points");
+    limit_opt->guisection = _("Decimation");
+
+    outloc_opt = G_define_option();
+    outloc_opt->key = "location";
+    outloc_opt->type = TYPE_STRING;
+    outloc_opt->required = NO;
+    outloc_opt->description = _("Name for new location to create");
+    outloc_opt->key_desc = "name";
 
     print_flag = G_define_flag();
     print_flag->key = 'p';
     print_flag->description =
 	_("Print LAS file info and exit");
     print_flag->suppress_required = YES;
-    
-    notab_flag = G_define_standard_flag(G_FLG_V_TABLE);
-    notab_flag->guisection = _("Attributes");
-
-    over_flag = G_define_flag();
-    over_flag->key = 'o';
-    over_flag->label =
-	_("Override projection check (use current location's projection)");
-    over_flag->description =
-	_("Assume that the dataset has same projection as the current location");
 
     region_flag = G_define_flag();
     region_flag->key = 'r';
-    region_flag->guisection = _("Subregion");
+    region_flag->guisection = _("Selection");
     region_flag->description = _("Limit import to the current region");
 
     extend_flag = G_define_flag();
     extend_flag->key = 'e';
     extend_flag->description =
-	_("Extend region extents based on new dataset");
+        _("Extend region extents based on new dataset");
+
+    notab_flag = G_define_standard_flag(G_FLG_V_TABLE);
+    notab_flag->guisection = _("Speed");
+
+    notopo_flag = G_define_standard_flag(G_FLG_V_TOPO);
+    notopo_flag->guisection = _("Speed");
+
+    over_flag = G_define_flag();
+    over_flag->key = 'o';
+    over_flag->label =
+        _("Override projection check (use current location's projection)");
+    over_flag->description =
+        _("Assume that the dataset has same projection as the current location");
 
     no_import_flag = G_define_flag();
     no_import_flag->key = 'i';
@@ -232,7 +276,7 @@ int main(int argc, char *argv[])
           " Do not import the vector data.");
     no_import_flag->suppress_required = YES;
 
-    notopo_flag = G_define_standard_flag(G_FLG_V_TOPO);
+    G_option_exclusive(skip_opt, preserve_opt, NULL);
 
     /* The parser checks if the map already exists in current mapset, this is
      * wrong if location options is used, so we switch out the check and do it
@@ -638,7 +682,26 @@ int main(int argc, char *argv[])
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
-    
+
+    /* counters used by both but that's ok, the filters are exclusive */
+    int skip_every = 0;
+    int preserve_every = 0;
+    int every_counter = 0;
+    int n_count_filtered = 0;
+    int offset_n = 0;
+    int offset_n_counter = 0;
+    int limit_n = 0;
+    /* we are not counting it elsewhere except for cat */
+    int limit_n_counter = 0;
+    if (skip_opt->answer)
+        skip_every = atoi(skip_opt->answer);
+    if (preserve_opt->answer)
+        preserve_every = atoi(preserve_opt->answer);
+    if (offset_opt->answer)
+        offset_n = atoi(offset_opt->answer);
+    if (limit_opt->answer)
+        limit_n = atoi(limit_opt->answer);
+
     G_important_message(_("Scanning %d points..."), n_features);
     while ((LAS_point = LASReader_GetNextPoint(LAS_reader)) != NULL) {
 	double x, y, z;
@@ -704,6 +767,31 @@ int main(int argc, char *argv[])
 		continue;
 	    }
 	}
+        if (offset_n) {
+            offset_n_counter++;
+            if (offset_n_counter < offset_n)
+                continue;
+            else
+                offset_n = 0;  /* disable offset check */
+        }
+        if (skip_every) {
+            every_counter++;
+            if (every_counter == skip_every) {
+                n_count_filtered++;
+                every_counter = 0;
+                continue;
+            }
+        }
+        else if (preserve_every) {
+            every_counter++;
+            if (every_counter == preserve_every) {
+                every_counter = 0;
+            }
+            else {
+                n_count_filtered++;
+                continue;
+            }
+        }
 
 	Vect_append_point(Points, x, y, z);
 	Vect_cat_set(Cats, 1, cat);
@@ -788,6 +876,12 @@ int main(int argc, char *argv[])
 	    }
 	}
 
+        if (limit_n) {
+            limit_n_counter++;
+            /* this matches the last successfully imported point */
+            if (limit_n_counter == limit_n)
+                break;
+        }
 	cat++;
     }
     G_percent(n_features, n_features, 1);	/* finish it */
@@ -805,9 +899,13 @@ int main(int argc, char *argv[])
     if (!notopo_flag->answer)
 	Vect_build(&Map);
     Vect_close(&Map);
-    
-    G_message(_("%d points imported"),
-              n_features - not_valid - n_outside - n_filtered - n_class_filtered);
+
+    if (limit_n)
+        G_message(_("%d points imported (limit was %d)"), limit_n_counter, limit_n);
+    else
+        G_message(_("%d points imported"),
+            n_features - not_valid - n_outside - n_filtered - n_class_filtered
+            - offset_n_counter - n_count_filtered);
     if (not_valid)
 	G_message(_("%d input points were not valid"), not_valid);
     if (n_outside)
@@ -816,6 +914,12 @@ int main(int argc, char *argv[])
 	G_message(_("%d input points were filtered out by return number"), n_filtered);
     if (n_class_filtered)
         G_message(_("%d input points were filtered out by class number"), n_class_filtered);
+    if (offset_n_counter)
+        G_message(_("%d input points were skipped at the begging using offset"), offset_n_counter);
+    if (n_count_filtered)
+        G_message(_("%d input points were skipped by count-based decimation"), n_count_filtered);
+    if (limit_n)
+        G_message(_("The rest of points was ignored"));
 
     /* -------------------------------------------------------------------- */
     /*      Extend current window based on dataset.                         */
