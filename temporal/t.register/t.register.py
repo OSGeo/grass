@@ -87,7 +87,7 @@
 #%end
 
 #%option G_OPT_F_SEP
-#% description: Field separator character of the input file
+#% label: Field separator character of the input file
 #% guisection: Input
 #%end
 
