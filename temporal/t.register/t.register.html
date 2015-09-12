@@ -12,10 +12,15 @@ with these modules can be read and used by <em>t.register</em>. This
 works only for maps that are not already registered in the temporal
 database.
 <p>
-This module supports absolute and relative time. Maps can be registered
-by command line argument (a list of comma separated map names) or using
-an input file. The start time, the end time and a temporal increment
-can be provided by command line or in the input file. End time and
+This module supports absolute and relative time. The absolute temporal type
+refers to a fixed date while the relative temporal type refers to data
+without fixed time stamps (e.g., sequential maps used to calculate
+multi-decadal averages).
+
+<p>
+Maps can be registered by command line argument (a list of comma separated map
+names) or using an input file. The start time, the end time and a temporal
+increment can be provided by command line or in the input file. End time and
 increment are mutual exclusive. The user can register single maps or a
 list of maps at once. Maps can be registered in several space time
 datasets using the same timestamp.
@@ -26,7 +31,7 @@ only the date <b>yyyy-mm-dd</b>. In case of relative time the temporal
 unit (years, months, days, hours, minutes or seconds) must be provided.
 The relative start time, end time and the increment are integers.
 
-<h2>Note</h2>
+<h2>NOTES</h2>
 
 The timestamps of registered maps will be stored in the temporal
 database and in the metadata of the grass maps in the spatial database.
@@ -48,7 +53,8 @@ prec_5
 prec_6
 </pre></div>
 
-Specification of map names and the absolute start time (date) of the time instances:
+Specification of map names and the absolute start time (date) of the
+time instances:
 <div class="code"><pre>
 prec_1|2001-01-01
 prec_2|2001-02-01
@@ -67,7 +73,8 @@ terra_lst_day20020116|2002-01-16 10:30
 terra_lst_day20020117|2002-01-17 10:30
 </pre></div>
 
-Specification of the map name and the absolute time interval with start and end time:
+Specification of the map name and the absolute time interval with start
+and end time:
 <div class="code"><pre>
 prec_1|2001-01-01|2001-04-01
 prec_2|2001-04-01|2001-07-01
@@ -91,7 +98,12 @@ t.register -i type=raster input=precipitation_monthly \
 
 <h3>Synthetic maps</h3>
 
-In this example we create 6 raster maps that will be registered in a single space time raster dataset named precip_abs using a monthly temporal granularity. The -i flag generates interval time. The generated timestamps will be inspected using r.timestamp and t.rast.list. We will register an additional map with a timetsamp that was set with r.timestamp.
+In this example we create 6 raster maps that will be registered in a
+single space time raster dataset named precip_abs using a monthly
+temporal granularity. The <b>-i</b> flag generates interval time. The
+generated timestamps will be inspected using <em>r.timestamp</em> and
+<em>t.rast.list</em>. We will register an additional map with a timestamp
+that was set with <em>r.timestamp</em>.
 
 <div class="code"><pre>
 r.mapcalc expr="prec_1 = 100"
