@@ -41,7 +41,7 @@ static void F_generate(const char *drvname, const char *dbname,
     G_debug(2, "Open driver");
     driver = db_start_driver(drvname);
     if (!driver)
-	G_fatal_error("Cannot open driver");
+	G_fatal_error(_("Cannot open driver"));
 
     G_debug(2, "Driver opened");
 
@@ -49,7 +49,7 @@ static void F_generate(const char *drvname, const char *dbname,
     db_set_handle(&handle, dbname, NULL);
     G_debug(2, "Open database");
     if (db_open_database(driver, &handle) != DB_OK)
-	G_fatal_error("Cannot open database");
+	G_fatal_error(_("Cannot open database"));
     db_set_error_handler_driver(driver);
 
     G_debug(2, "Database opened");
@@ -62,17 +62,17 @@ static void F_generate(const char *drvname, const char *dbname,
     G_debug(2, "%s", buf);
     db_set_string(&sql, buf);
     if (db_open_select_cursor(driver, &sql, &cursor, DB_SEQUENTIAL) != DB_OK)
-	G_fatal_error("Cannot open select cursor");
+	G_fatal_error(_("Cannot open select cursor"));
 
     G_debug(2, "Select Cursor opened");
 
     table = db_get_cursor_table(&cursor);
 
     if (db_fetch(&cursor, DB_NEXT, &more) != DB_OK)
-	G_fatal_error("Cannot fetch next record");
+	G_fatal_error(_("Cannot fetch next record"));
 
     if (!more) {
-	G_warning("No database record");
+	G_warning(_("No database record"));
 	*form = G_store("No record selected.");
     }
     else {
