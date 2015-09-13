@@ -531,8 +531,24 @@ int main(int argc, char *argv[])
     /* Fetch input map projection in GRASS form. */
     proj_info = NULL;
     proj_units = NULL;
+#if GDAL_VERSION_NUM >= 1110000
+    if (param.geom->answer) {
+        OGRGeomFieldDefnH Ogr_geomdefn;
+        
+        Ogr_featuredefn = OGR_L_GetLayerDefn(Ogr_layer);
+        igeom = OGR_FD_GetGeomFieldIndex(Ogr_featuredefn, param.geom->answer);
+        if (igeom < 0)
+            G_fatal_error(_("Geometry column <%s> not found in OGR layer <%s>"),
+                          param.geom->answer, OGR_L_GetName(Ogr_layer));
+        Ogr_geomdefn = OGR_FD_GetGeomFieldDefn(Ogr_featuredefn, igeom);
+        Ogr_projection = OGR_GFld_GetSpatialRef(Ogr_geomdefn);
+    }
+    else {
+        Ogr_projection = OGR_L_GetSpatialRef(Ogr_layer);
+    }
+#else
     Ogr_projection = OGR_L_GetSpatialRef(Ogr_layer);	/* should not be freed later */
-
+#endif
 
     /* fetch boundaries */
     G_get_window(&cellhd);
