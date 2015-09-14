@@ -221,11 +221,12 @@ a LANDSAT subscene in North Carolina:
 <div class="code"><pre>
 g.region raster=lsat7_2002_10 -p
 
-# store VIZ, NIR, MIR into group/subgroup
+# store VIZ, NIR, MIR into group/subgroup (leaving out TIR)
 i.group group=lsat7_2002 subgroup=lsat7_2002 \
   input=lsat7_2002_10,lsat7_2002_20,lsat7_2002_30,lsat7_2002_40,lsat7_2002_50,lsat7_2002_70
 
-i.cluster group=my_lsat7_2002 subgroup=my_lsat7_2002 \
+# generate signature file and report
+i.cluster group=lsat7_2002 subgroup=lsat7_2002 \
   signaturefile=sig_cluster_lsat2002 \
   classes=10 report=rep_clust_lsat2002.txt
 </pre></div>
