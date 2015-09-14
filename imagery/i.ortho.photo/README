@@ -35,13 +35,22 @@ frontend:
 
 internal:
  libes/         -> lib/
- menu/          -> TODO (wxGUI)
+ menu/          -> TODO (wxGUI, use g.gui.gcp classes)
  photo.elev/    -> i.ortho.elev/
- photo.2target/ -> ? i.ortho.transform/
+ photo.2target/ -> ? i.ortho.transform/ 
  photo.camera/  -> i.ortho.camera/
- photo.2image/  -> ?
+ photo.2image/  -> ? (wxGUI, use g.gui.gcp classes: fiducial marks)
  photo.init/    -> i.ortho.init/
  photo.rectify/ -> ? i.ortho.rectify/
+
+
+Workflow description:
+
+Open Source GIS: A GRASS GIS Approach, Second Edition, 2004
+by Markus Neteler and Helena Mitasova, 
+Chapter 10 – PROCESSING OF AERIAL PHOTOS
+http://grassbook.org/extra/sample-chapter/
+--> PDF
 
 ######################################################################
 GRASS GIS 4 to 6
