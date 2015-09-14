@@ -78,11 +78,13 @@ index) of being assigned to the correct class.
 
 <h2>EXAMPLE</h2>
 
-Completion of the unsupervised classification of
-a LANDSAT subscene (VIZ, NIR, MIR channels) in North Carolina
-(see <em><a href="i.cluster.html">i.cluster</a></em> manual page for the first part):
+Second part of the unsupervised classification of a LANDSAT subscene
+(VIZ, NIR, MIR channels) in North Carolina (see
+<em><a href="i.cluster.html">i.cluster</a></em> manual page for the first
+part of the example):
 
 <div class="code"><pre>
+# using here the signaturefile created by i.cluster
 i.maxlik group=lsat7_2002 subgroup=lsat7_2002 \
   signaturefile=sig_cluster_lsat2002 \
   output=lsat7_2002_cluster_classes reject=lsat7_2002_cluster_reject
@@ -96,8 +98,9 @@ d.rast.leg lsat7_2002_cluster_reject
 r.report lsat7_2002_cluster_reject units=k,p
 
 # optionally, filter out pixels with high level of rejection
-# here we select 90% which is category 12
-r.mapcalc "lsat7_2002_cluster_classes_filtered = if(lsat7_2002_cluster_reject &lt; 12, lsat7_2002_cluster_classes, null())"
+# here we remove pixels of at least 90% of rejection probability, i.e. categories 12-16
+r.mapcalc "lsat7_2002_cluster_classes_filtered = \
+           if(lsat7_2002_cluster_reject &lt;= 12, lsat7_2002_cluster_classes, null())"
 </pre></div>
 
 <!--
@@ -106,8 +109,14 @@ then trimmed using mogrify -trim *.png
 -->
 <p>
 <center>
+<img src="i_maxlik_rgb.png"><br>
+RGB composite of input data
+<p>
 <img src="i_maxlik_classes.png"><br>
-Resulting raster with classified pixels
+Output raster map with pixels classified (10 classes)
+<p>
+<img src="i_maxlik_rejection.png"><br>
+Output raster map with rejection probability values (pixel classification confidence levels)
 </center>
 
 
