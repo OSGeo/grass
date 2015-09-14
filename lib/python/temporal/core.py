@@ -28,6 +28,7 @@ for details.
 
 :author: Soeren Gebbert
 """
+#import traceback
 import os
 # i18N
 import gettext
@@ -446,6 +447,10 @@ def get_available_temporal_mapsets():
     for mapset in mapsets:
         driver = c_library_interface.get_driver_name(mapset)
         database = c_library_interface.get_database_name(mapset)
+        
+        message_interface.debug(1, "get_available_temporal_mapsets: "\
+                                   "\n  mapset %s\n  driver %s\n  database %s"%(mapset,
+                                   driver, database))
 
         if driver and database:
             # Check if the temporal sqlite database exists
@@ -548,6 +553,7 @@ def init(raise_fatal_error=False):
     _init_tgis_c_library_interface()
     msgr = get_tgis_message_interface()
     msgr.debug(1, "Initiate the temporal database")
+                  #"\n  traceback:%s"%(str("  \n".join(traceback.format_stack()))))
 
     ciface = get_tgis_c_library_interface()
     driver_string = ciface.get_driver_name()
@@ -1048,9 +1054,15 @@ class DBConnection(object):
         if dbstring is None:
             global tgis_database_string
             self.dbstring = tgis_database_string
+        
+        self.dbstring = dbstring
 
         self.msgr = get_tgis_message_interface()
-        self.msgr.debug(1, "SQLDatabaseInterfaceConnection constructor")
+        self.msgr.debug(1, "DBConnection constructor:"\
+                           "\n  backend: %s"\
+                           "\n  dbstring: %s"%(backend, self.dbstring))
+                           #"\n  traceback:%s"%(backend, self.dbstring, 
+                           #str("  \n".join(traceback.format_stack()))))
 
     def __del__(self):
         if self.connected is True:

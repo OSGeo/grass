@@ -26,7 +26,7 @@ from open_stds import *
 
 
 def get_dataset_list(type, temporal_type, columns=None, where=None,
-                     order=None):
+                     order=None, dbif=None):
     """ Return a list of time stamped maps or space time datasets of a specific
         temporal type that are registred in the temporal database
 
@@ -41,6 +41,7 @@ def get_dataset_list(type, temporal_type, columns=None, where=None,
         :param where: A where statement for selected listing without "WHERE"
         :param order: A comma separated list of columns to order the
                       datasets by category
+        :param dbif: The database interface to be used
 
         :return: A dictionary with the rows of the SQL query for each
                  available mapset
@@ -71,8 +72,7 @@ def get_dataset_list(type, temporal_type, columns=None, where=None,
     id = None
     sp = dataset_factory(type, id)
 
-    dbif = SQLDatabaseInterfaceConnection()
-    dbif.connect()
+    dbif, connected = init_dbif(dbif)
 
     mapsets = get_available_temporal_mapsets()
 
@@ -105,13 +105,16 @@ def get_dataset_list(type, temporal_type, columns=None, where=None,
         if rows:
             result[mapset] = rows
 
+    if connected:
+        dbif.close()
+
     return result
 
 ###############################################################################
 
 
 def list_maps_of_stds(type, input, columns, order, where, separator,
-                      method, no_header=False, gran=None):
+                      method, no_header=False, gran=None, dbif=None):
     """ List the maps of a space time dataset using diffetent methods
 
         :param type: The type of the maps raster, raster3d or vector
@@ -124,6 +127,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
         :param separator: The field separator character between the columns
         :param method: String identifier to select a method out of cols,
                        comma,delta or deltagaps
+        :param dbif: The database interface to be used
 
             - "cols" Print preselected columns specified by columns
             - "comma" Print the map ids ("name@mapset") as comma separated string
@@ -141,7 +145,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
                      dataset is used
     """
 
-    dbif, connected = init_dbif(None)
+    dbif, connected = init_dbif(dbif)
     msgr = get_tgis_message_interface()
 
     sp = open_old_stds(input, type, dbif)
