@@ -287,18 +287,27 @@ def _available_mapsets(lock, conn, data):
     count = 0
     mapset_list = []
     try:
-        # Initilaize the accessable mapset list, this is bad C design!!!
+        # Initialize the accessable mapset list, this is bad C design!!!
         libgis.G_get_mapset_name(0)
         mapsets = libgis.G_get_available_mapsets()
         while mapsets[count]:
             char_list = ""
             mapset = mapsets[count]
-            if libgis.G_mapset_permissions(mapset) == 1 and libgis.G_is_mapset_in_search_path(mapset) == 1:
-                c = 0
-                while mapset[c] != "\x00":
-                    char_list += mapset[c]
-                    c += 1
+            
+            permission = libgis.G_mapset_permissions(mapset)
+            in_search_path = libgis.G_is_mapset_in_search_path(mapset)
+            
+            c = 0
+            while mapset[c] != "\x00":
+                char_list += mapset[c]
+                c += 1
+            
+            if permission == 1 and permission == 1:
                 mapset_list.append(char_list)
+
+            libgis.G_debug(1, "c_library_server._available_mapsets: \n  mapset:  %s\n"\
+                              "  has permission %i\n  in search path: %i"%(char_list,
+                              permission, in_search_path))
             count += 1
 
         # We need to sort the mapset list, but the first one should be
