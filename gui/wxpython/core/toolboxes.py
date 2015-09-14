@@ -62,12 +62,18 @@ def GetSettingsPath():
         # (these files are always check for existence here)
         return ""
 
-userToolboxesFile = os.path.join(GetSettingsPath(), 'toolboxes', 'toolboxes.xml')
-userMainMenuFile = os.path.join(GetSettingsPath(), 'toolboxes', 'main_menu.xml')
-if not os.path.exists(userToolboxesFile):
-    userToolboxesFile = None
-if not os.path.exists(userMainMenuFile):
-    userMainMenuFile = None
+def _getUserToolboxesFile():
+    userToolboxesFile = os.path.join(GetSettingsPath(), 'toolboxes', 'toolboxes.xml')
+    if not os.path.exists(userToolboxesFile):
+        userToolboxesFile = None
+    return userToolboxesFile
+
+
+def _getUserMainMenuFile():
+    userMainMenuFile = os.path.join(GetSettingsPath(), 'toolboxes', 'main_menu.xml')
+    if not os.path.exists(userMainMenuFile):
+        userMainMenuFile = None
+    return userMainMenuFile
 
 
 def _(string):
@@ -156,27 +162,27 @@ def getMenudataFile(userRootFile, newFile, fallback):
 
         if os.path.exists(menudataFile):
             # remove menu file when there is no main_menu and toolboxes
-            if not userToolboxesFile and not userRootFile:
+            if not _getUserToolboxesFile() and not userRootFile:
                 os.remove(menudataFile)
                 _debug(2, "toolboxes.getMenudataFile: no user defined files, menudata deleted")
                 return fallback
 
-            if bool(userToolboxesFile) != bool(userRootFile):
+            if bool(_getUserToolboxesFile()) != bool(userRootFile):
                 # always generate new because we don't know if there has been any change
                 generateNew = True
                 _debug(2, "toolboxes.getMenudataFile: only one of the user defined files")
             else:
                 # if newer files -> generate new
                 menudataTime = os.path.getmtime(menudataFile)
-                if userToolboxesFile:
-                    if os.path.getmtime(userToolboxesFile) > menudataTime:
+                if _getUserToolboxesFile():
+                    if os.path.getmtime(_getUserToolboxesFile()) > menudataTime:
                         _debug(2, "toolboxes.getMenudataFile: user toolboxes is newer than menudata")
                         generateNew = True
                 if userRootFile:
                     if os.path.getmtime(userRootFile) > menudataTime:
                         _debug(2, "toolboxes.getMenudataFile: user root file is newer than menudata")
                         generateNew = True
-        elif userToolboxesFile or userRootFile:
+        elif _getUserToolboxesFile() or userRootFile:
             _debug(2, "toolboxes.getMenudataFile: no menudata")
             generateNew = True
         else:
@@ -256,8 +262,8 @@ def createTree(distributionRootFile, userRootFile, userDefined=True):
 
     toolboxes = etree.parse(toolboxesFile)
 
-    if userDefined and userToolboxesFile:
-        userToolboxes = etree.parse(userToolboxesFile)
+    if userDefined and _getUserToolboxesFile():
+        userToolboxes = etree.parse(_getUserToolboxesFile())
     else:
         userToolboxes = None
 
@@ -604,9 +610,11 @@ def _expandRuntimeModules(node, loadMetadata=True):
                 hasErrors = True
     
     if hasErrors:
-        sys.stderr.write(_("WARNING: Some addons failed when loading. "
-                           "Please consider to update your addons by running 'g.extension.all -f'.\n"))
-    
+        # not translatable until toolboxes compilation on Mac is fixed
+        # translating causes importing globalvar, where sys.exit is called
+        sys.stderr.write("WARNING: Some addons failed when loading. "
+                         "Please consider to update your addons by running 'g.extension.all -f'.\n")
+
 def _escapeXML(text):
     """Helper function for correct escaping characters for XML.
 

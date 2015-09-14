@@ -72,7 +72,6 @@
 #%end
 
 import grass.script as gscript
-from core.giface import StandaloneGrassInterface
 
 
 def main():
@@ -80,6 +79,7 @@ def main():
 
     import wx
     from core.utils import _
+    from core.giface import StandaloneGrassInterface
     try:
         from tplot.frame import TplotFrame
     except ImportError as e:
