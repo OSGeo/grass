@@ -1,21 +1,19 @@
 <h2>DESCRIPTION</h2>
 
-<em>i.cluster</em>
-performs the first pass in the GRASS two-pass unsupervised 
-classification of imagery, while the GRASS program <em>
-<a href="i.maxlik.html">i.maxlik</a></em> executes 
-the second pass. Both programs must be run to complete the unsupervised 
-classification.
+<em>i.cluster</em> performs the first pass in the two-pass
+unsupervised classification of imagery, while the GRASS module <em>
+<a href="i.maxlik.html">i.maxlik</a></em> executes the second pass.
+Both commands must be run to complete the unsupervised classification.
 
 <p>
-<em>i.cluster</em> is a clustering algorithm that reads
-through the (raster) imagery data and builds pixel clusters
-based on the spectral reflectances of the pixels (see Figure).
+<em>i.cluster</em> is a clustering algorithm (a modification of the
+<i>k</i>-means clustering algorithm) that reads through the (raster) imagery
+data and builds pixel clusters based on the spectral reflectances of the
+pixels (see Figure).
 The pixel clusters are imagery categories that can be related
-to land cover types on the ground.  The spectral
-distributions of the clusters (which will be the land cover
-spectral signatures) are influenced by six parameters set
-by the user.  The first parameter set by the user is the
+to land cover types on the ground. The spectral distributions of the
+clusters (e.g., land cover spectral signatures) are influenced by six
+parameters set by the user. A relevant parameter set by the user is the
 initial number of clusters to be discriminated.
 
 <p>
@@ -208,10 +206,53 @@ achieve the convergence, and the separability matrix.
 
 <h2>NOTES</h2>
 
+<!-- No longer true
 Running in command line mode, <em>i.cluster</em> will
 overwrite the output signature file and reportfile (if
 required by the user) without prompting if the files
 existed.
+-->
+
+<h3>Sampling method</h3>
+
+<em>i.cluster</em> does not cluster all pixels, but only a sample (see
+parameter <b>sample</b>). The result of that clustering is not that all
+pixels are assigned to a given cluster; essentially, only signatures which are
+representative of a given cluster are generated. When running <em>i.cluster</em>
+on the same data asking for the same number of classes, but with different
+sample sizes, likely slightly different signatures for each cluster are
+obtained at each run.
+
+<h3>Algorithm used for i.cluster</h3>
+
+<!-- cited after Harini Nagendra, "algorithm used for i.cluster"
+     http://lists.osgeo.org/pipermail/grass-user/1997-December/000912.html
+-->
+
+The algorithm uses input parameters set by the user on the
+initial number of clusters, the minimum distance between clusters, and the
+correspondence between iterations which is desired, and minimum size for
+each cluster. It also asks if all pixels to be clustered, or every "x"th row
+and "y"th column (sampling), the correspondence between iterations
+desired, and the maximum number of iterations to be carried out.
+<p>
+In the 1st pass, initial cluster means for each band are defined by giving
+the first cluster a value equal to the band mean minus its standard
+deviation, and the last cluster a value equal to the band mean plus its
+standard deviation, with all other cluster means distributed equally
+spaced in between these. Each pixel is then assigned to the class which it
+is closest to, distance being measured as Euclidean distance. All clusters
+less than the user-specified minimum distance are then merged. If a
+cluster has less than the user-specified minimum number of pixels, all those
+pixels are again reassigned to the next nearest cluster. New cluster means
+are calculated for each band as the average of raster pixel values in that
+band for all pixels present in that cluster.
+<p>
+In the 2nd pass, pixels are then again reassigned to clusters based on new
+cluster means. The cluster means are then again recalculated.  This
+process is repeated until the correspondence between iterations reaches a
+user-specified level, or till the maximum number of iterations specified is
+over, whichever comes first.
 
 <h2>EXAMPLE</h2>
 
@@ -236,16 +277,15 @@ See example in its manual page.
 
 <h2>SEE ALSO</h2>
 
-<a href="http://grasswiki.osgeo.org/wiki/Image_processing">Image processing</a>
-and
-<a href="http://grasswiki.osgeo.org/wiki/Image_classification">Image classification</a>
-wiki pages and for historical reference also
-the GRASS GIS 4<em>
-<a href="http://grass.osgeo.org/gdp/imagery/grass4_image_processing.pdf">Image
-Processing manual</a></em>
+<ul>
+<li> <a href="http://grasswiki.osgeo.org/wiki/Image_classification">Image classification</a> wiki page</li>
+<li> Historical reference also the GRASS GIS 4 
+     <a href="http://grass.osgeo.org/gdp/imagery/grass4_image_processing.pdf">Image Processing manual</a> (PDF)</li>
+<li> <a href="https://en.wikipedia.org/wiki/K-means_clustering">Wikipedia article on <i>k</i>-means clustering</a>
+     (note that <em>i.cluster</em> uses a modification of the <i>k</i>-means clustering algorithm)</li>
+</ul>
 
 <p>
-
 <em>
 <a href="g.gui.iclass.html">g.gui.iclass</a>,
 <a href="i.group.html">i.group</a>,
@@ -259,12 +299,10 @@ Processing manual</a></em>
 <h2>AUTHORS</h2>
 
 Michael Shapiro,
-U.S.Army Construction Engineering 
-Research Laboratory
+U.S. Army Construction Engineering Research Laboratory
 
 <br>
 Tao Wen, 
-University of Illinois at 
-Urbana-Champaign, 
-Illinois
+University of Illinois at Urbana-Champaign, Illinois
+
 <p><i>Last changed: $Date$</i>
