@@ -32,7 +32,7 @@ from grass.pydispatch.signal import Signal
 import grass.script as grass
 
 class LocationMapTree(wx.TreeCtrl):
-    def __init__(self, parent, style=wx.TR_HIDE_ROOT | wx.TR_EDIT_LABELS | 
+    def __init__(self, parent, style=wx.TR_HIDE_ROOT | wx.TR_EDIT_LABELS | wx.TR_LINES_AT_ROOT |
                  wx.TR_HAS_BUTTONS | wx.TR_FULL_ROW_HIGHLIGHT | wx.TR_SINGLE):
         """Location Map Tree constructor."""
         super(LocationMapTree, self).__init__(parent, id=wx.ID_ANY, style=style)
