@@ -1,24 +1,26 @@
-
-/*-
+/*!
+ * \file point2d.c
  *
- * Original program and various modifications:
- * Lubos Mitas 
+ * \author
+ * Lubos Mitas (original program and various modifications)
  *
- * GRASS4.1 version of the program and GRASS4.2 modifications:
- * H. Mitasova
- * I. Kosinovsky, D. Gerdes
- * D. McCauley 
- *
- * Copyright 1993, 1995:
- * L. Mitas ,
- * H. Mitasova ,
- * I. Kosinovsky, ,
- * D.Gerdes 
+ * \author
+ * H. Mitasova,
+ * I. Kosinovsky,
+ * D. Gerdes,
  * D. McCauley
+ * (GRASS4.1 version of the program and GRASS4.2 modifications)
  *
- * modified by McCauley in August 1995
- * modified by Mitasova in August 1995, Nov. 1996
+ * \author modified by McCauley in August 1995
+ * \author modified by Mitasova in August 1995, Nov. 1996
  *
+ * \copyright
+ * (C) 1993-2006 by Helena Mitasova and the GRASS Development Team
+ *
+ * \copyright
+ * This program is free software under the
+ * GNU General Public License (>=v2).
+ * Read the file COPYING that comes with GRASS for details.
  */
 
 
@@ -37,17 +39,25 @@
 #undef hz
 #endif
 
-int IL_check_at_points_2d(struct interp_params *params, struct quaddata *data,	/* current region */
-			  double *b,	/* solution of linear equations */
-			  double *ertot,	/* total error */
-			  double zmin,	/* min z-value */
-			  double dnorm, struct triple skip_point)
-
-/*
+/*!
  * Checks if interpolating function interp() evaluates correct z-values at
  * given points. If smoothing is used calculate the maximum error caused
  * by smoothing.
+ * 
+ * *ertot* is a RMS deviation of the interpolated surface.
+ * 
+ * \todo
+ * Alternative description:
+ * ...calculate the maximum and RMS deviation caused by smoothing.
  */
+int IL_check_at_points_2d(struct interp_params *params,
+                          struct quaddata *data,  /*!< current region */
+                          double *b,  /*!< solution of linear equations */
+                          double *ertot,  /*!< total error */
+                          double zmin,  /*!< min z-value */
+                          double dnorm,
+                          struct triple skip_point
+                          )
 {
     int n_points = data->n_points;	/* number of points */
     struct triple *points = data->points;	/* points for interpolation */

@@ -64,24 +64,24 @@ href="http://grass.osgeo.org">http://grass.osgeo.org</a>
 
 \subsection displaylibs Display Libraries and Drivers
 
- - display:	\ref displaylib (general displaylibrary)
- - cairodriver: \ref cairodriver (cairo graphics driver)
+ - display:	\ref displaylib (general display library)
+ - cairodriver: \ref cairodriver
  - %driver:     Graphics monitor driver
  - htmldriver:  \ref htmldriverlib (HTML graphics driver)
- - pngdriver:   \ref pngdriverlib (PNG graphics driver)
- - psdriver:    \ref psdriverlib (Postscript graphics driver)
+ - pngdriver:   \ref pngdriverlib
+ - psdriver:    \ref psdriverlib
 
-\subsection statslibs Math and Statisctics Libraries
+\subsection statslibs Math and Statistics Libraries
 
  - arraystats:  \ref arraystatslib (library of statistics for arrays of doubles)
- - cdhc:	\ref cdhclib (library for testing normality and exponentiality)
+ - cdhc:	\ref cdhclib
  - gmath: 	\ref gmathlib (generic mathematical functions and BLAS/LAPACK library wrapper)
- - gpde:        \ref gpdelib (partial differential equations library)
+ - gpde:        \ref gpdelib
 
 \subsection rasteribs Raster Libraries
 
  - raster:	\ref rasterlib (2D raster library)
- - raster3d:	\ref raster3dlib (3D raster library - voxels)
+ - raster3d:	\ref raster3dlib (3D raster aka voxels or volumes)
  - rowio:	\ref rowiolib (library for reading/writing raster rows)
  - rst:	        \ref rstlib (library for interpolation with regularized splines with tension)
  - segment:	\ref segmentlib (segment library for segmented raster reading)
@@ -95,10 +95,16 @@ href="http://grass.osgeo.org">http://grass.osgeo.org</a>
 \subsection vectoribs Vector Libraries
 
  - %vector: \ref vectorlib (architecture description)
-  - dglib:  \ref dglib (directed graph library)
+  - dglib:  \ref dglib
   - vedit:  \ref veditlib (vector editing library)
-  - neta:   \ref netalib (network analysis library)
-  - rtree:  \ref rtree (R search tree library)
+  - neta:   \ref netalib
+  - rtree:  \ref rtree.h (R search tree library)
+
+\subsection treelibs Search tree libraries
+
+ - btree: \ref btree.h
+ - btree2: \ref btree2
+ - rtree:  \ref rtree.h (R search tree library)
 
 \subsection dblibs Database Management Libraries
 
@@ -117,14 +123,14 @@ href="http://grass.osgeo.org">http://grass.osgeo.org</a>
 
  - proj:	\ref projlib (wrapper to PROJ4 projection library)
 
-\subsection misclibs Misc Libraries
+\subsection misclibs Miscellaneous Libraries
 
  - datetime:	\ref datetime (DateTime library) 
  - external:	\ref external (External libraries from other projects such as shapelib and \ref ccmathlib)
  - fonts:	\ref fonts (GRASS fonts library)
  - init:	\ref init (GRASS initialization code + scripts)
  - iostream:	\ref iostream (fast I/O library)
- - lidar:	\ref lidar (LiDAR data related library)
+ - lidar:	\ref lidar.h (LiDAR data related library)
  - linkm:	\ref linkm (linked list memory manager)
  - manage:      \ref managelib
  - symbol:	\ref symbol (Drawing symbols for %point %vector data library)

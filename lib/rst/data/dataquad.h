@@ -1,12 +1,24 @@
-
-/*-
- * Written by H. Mitasova, I. Kosinovsky, D. Gerdes Fall 1992
- * University of Illinois
- * US Army Construction Engineering Research Lab  
- * Copyright 1992, H. Mitasova (University of Illinois),
- * I. Kosinovsky, (USA-CERL), and D.Gerdes (USA-CERL)   
+/*!
+ * \file qtree.c
  *
- * Modified by H.Mitasova November 1996 to include variable smoothing
+ * \author
+ * H. Mitasova, I. Kosinovsky, D. Gerdes, Fall 1993,
+ * University of Illinois and
+ * US Army Construction Engineering Research Lab
+ *
+ * \author H. Mitasova (University of Illinois),
+ * \author I. Kosinovsky, (USA-CERL)
+ * \author D.Gerdes (USA-CERL)
+ *
+ * \author modified by H. Mitasova, November 1996 (include variable smoothing)
+ *
+ * \copyright
+ * (C) 1993-1996 by Helena Mitasova and the GRASS Development Team
+ *
+ * \copyright
+ * This program is free software under the
+ * GNU General Public License (>=v2).
+ * Read the file COPYING that comes with GRASS for details.
  */
 
 
@@ -19,12 +31,18 @@
 #define SW   3
 #define SE   4
 
+
+/*!
+ * Point structure to keep coordinates
+ *
+ * It also contains smoothing for the given point.
+ */
 struct triple
 {
     double x;
     double y;
     double z;
-    double sm;			/* structure extended to incl. variable smoothing */
+    double sm;  /*!< variable smoothing */
 };
 
 struct quaddata

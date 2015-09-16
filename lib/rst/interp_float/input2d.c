@@ -1,16 +1,20 @@
 
-/*-
- * Written by H. Mitasova, I. Kosinovsky, D. Gerdes Fall 1993
- * University of Illinois
- * US Army Construction Engineering Research Lab  
- * Copyright 1993, H. Mitasova (University of Illinois),
- * I. Kosinovsky, (USA-CERL), and D.Gerdes (USA-CERL)   
+/*!
+ * \file input2d.c
  *
- * modified by McCauley in August 1995
- * modified by Mitasova in August 1995  
- * modified by Mitasova in November 1996 to include variable smoothing
- * modified by Brown in June 1999 - added elatt & smatt
+ * \author H. Mitasova, I. Kosinovsky, D. Gerdes Fall 1993 (original authors)
+ * \author modified by McCauley in August 1995
+ * \author modified by Mitasova in August 1995
+ * \author modified by Brown in June 1999 - added elatt & smatt
  *
+ * \copyright
+ * (C) 1993-1999 by Helena Mitasova and the GRASS Development Team
+ *
+ * \copyright
+ * This program is free software under the
+ * GNU General Public License (>=v2).
+ * Read the file COPYING that comes with GRASS
+ * for details.
  */
 
 
@@ -25,9 +29,15 @@
 #include <grass/interpf.h>
 #include <grass/glocale.h>
 
-struct BM *IL_create_bitmask(struct interp_params *params)
 
-/** Creates a bitmap mask from given raster map **/
+/*!
+ * Creates a bitmap mask from given raster map
+ *
+ * Creates a bitmap mask from maskmap raster file and/or current MASK if
+ * present and returns a pointer to the bitmask. If no mask is in force
+ * returns NULL.
+ */
+struct BM *IL_create_bitmask(struct interp_params *params)
 {
     int i, j, cfmask = -1, irev, MASKfd;
     const char *mapsetm;

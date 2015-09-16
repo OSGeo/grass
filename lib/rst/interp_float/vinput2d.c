@@ -1,15 +1,28 @@
 
-/*-
+/*!
+ * \file vinput2d.c
+ *
+ * \author
  * Written by H. Mitasova, I. Kosinovsky, D. Gerdes Fall 1993
  * University of Illinois
- * US Army Construction Engineering Research Lab  
- * Copyright 1993, H. Mitasova (University of Illinois),
- * I. Kosinovsky, (USA-CERL), and D.Gerdes (USA-CERL)   
+ * US Army Construction Engineering Research Lab
+ * 
+ * \author
+ * Mitasova (University of Illinois),
+ * I. Kosinovsky, (USA-CERL), and D.Gerdes (USA-CERL)
  *
- * modified by McCauley in August 1995
- * modified by Mitasova in August 1995  
- * modofied by Mitasova in Nov 1999 (dmax fix)
+ * \author modified by McCauley in August 1995
+ * \author modified by Mitasova in August 1995
+ * \author modofied by Mitasova in Nov 1999 (dmax fix)
  *
+ * \copyright
+ * (C) 1993-1999 by Helena Mitasova and the GRASS Development Team
+ *
+ * \copyright
+ * This program is free software under the
+ * GNU General Public License (>=v2).
+ * Read the file COPYING that comes with GRASS
+ * for details.
  */
 
 #include <stdio.h>
@@ -24,21 +37,29 @@
 
 #include <grass/interpf.h>
 
-int IL_vector_input_data_2d(struct interp_params *params, struct Map_info *Map,	/* input vector map */
-			    /* as z values may be used: 1) z coordinates in 3D file -> field = 0
-			     *                          2) categories -> field > 0, zcol = NULL
-			     *                          3) attributes -> field > 0, zcol != NULL */
-			    int field,	/* category field number */
-			    char *zcol,	/* name of the column containing z values */
-			    char *scol,	/* name of the column containing smooth values */
-			    struct tree_info *info,	/* quadtree info */
-			    double *xmin, double *xmax, double *ymin, double *ymax, double *zmin, double *zmax, int *n_points,	/* number of points used for interpolation */
-			    double *dmax)
-
-/*
+/*!
+ * Insert into a quad tree
+ *
  * Inserts input data inside the region into a quad tree. Also translates
  * data. Returns number of segments in the quad tree.
+ *
+ * As z values may be used (in *Map*):
+ * - z coordinates in 3D file -> field = 0
+ * - categories -> field > 0, zcol = NULL
+ * - attributes -> field > 0, zcol != NULL
  */
+int IL_vector_input_data_2d(struct interp_params *params, /*!< interpolation parameters */
+                            struct Map_info *Map,  /*!< input vector map */
+                            int field,  /*!< category field number */
+                            char *zcol,  /*!< name of the column containing z values */
+                            char *scol,  /*!< name of the column containing smooth values */
+                            struct tree_info *info,  /*!< quadtree info */
+                            double *xmin, double *xmax,
+                            double *ymin, double *ymax,
+                            double *zmin, double *zmax,
+                            int *n_points,  /*!< number of points used for interpolation */
+                            double *dmax  /*!< max distance between points */
+                            )
 {
     double dmax2;		/* max distance between points squared */
     double c1, c2, c3, c4;

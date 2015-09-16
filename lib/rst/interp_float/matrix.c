@@ -1,22 +1,32 @@
-/*
- * Original program and various modifications:
- * Lubos Mitas 
+/*!
+ * \author
+ * Lubos Mitas (original program and various modifications)
  *
- * GRASS4.1 version of the program and GRASS4.2 modifications:
+ * \author
  * H. Mitasova,
- * I. Kosinovsky, D. Gerdes
- * D. McCauley 
+ * I. Kosinovsky, D. Gerdes,
+ * D. McCauley
+ * (GRASS4.1 version of the program and GRASS4.2 modifications)
  *
- * Copyright 1993, 1995:
- * L. Mitas ,
- * H. Mitasova ,
+ * \author
+ * L. Mitas,
+ * H. Mitasova,
  * I. Kosinovsky,
- * D.Gerdes 
- * D. McCauley 
+ * D.Gerdes,
+ * D. McCauley
+ * (1993, 1995)
  *
- * modified by McCauley in August 1995
- * modified by Mitasova in August 1995, Nov. 1996
+ * \author modified by McCauley in August 1995
+ * \author modified by Mitasova in August 1995, Nov. 1996
+ * 
+ * \copyright
+ * (C) 1993-1996 by Lubos Mitas and the GRASS Development Team
+ *
+ * \copyright
+ * This program is free software under the  GNU General Public License (>=v2).
+ * Read the file COPYING that comes with GRASS for details.
  */
+
 
 #include <stdio.h>
 #include <math.h>
@@ -25,6 +35,7 @@
 #include <grass/interpf.h>
 #include <grass/gmath.h>
 
+
 /*!
  * \brief Creates system of linear equations from interpolated points
  *
@@ -32,9 +43,10 @@
  * points and interpolating function interp()
  *
  * \param params struct interp_params *
- * \param points struct triple * :  points for interpolation
- * \param n_points int :  number of points
- * \param matrix double **
+ * \param points points for interpolation as struct triple
+ * \param n_points number of points
+ * \param[out] matrix the matrix
+ * \param indx
  *
  * \return -1 on failure, 1 on success
  */
@@ -43,10 +55,6 @@ int IL_matrix_create(struct interp_params *params,
 		     int n_points,	/* number of points */
 		     double **matrix,	/* matrix */
 		     int *indx)
-/*
-   Creates system of linear equations represented by matrix using given points
-   and interpolating function interp()
- */
 {
     double xx, yy;
     double rfsta2, r;
