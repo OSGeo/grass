@@ -619,6 +619,7 @@ v.out.vtk|scale:zscale
 # v.outlier
 v.outlier|soe:ew_step
 v.outlier|son:ns_step
+v.outlier|lambda_i:lambda
 v.outlier|thres_o:threshold
 # v.qcount
 v.qcount|n:nquadrats
