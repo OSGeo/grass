@@ -54,6 +54,14 @@
 #% multiple: no
 #%end
 
+#%option
+#% key:  aggr_type
+#% type: string
+#% description: Aggregation type of the space time raster or 3D raster dataset
+#% required: no
+#% multiple: no
+#%end
+
 #%flag
 #% key: m
 #% label: Update the metadata information and spatial extent of registered maps from the GRASS spatial database
@@ -62,7 +70,7 @@
 
 #%flag
 #% key: u
-#% description: Update metadata information, temporal and spatial extent from registered maps
+#% description: Update metadata information, temporal and spatial extent from registered maps based on database entries.
 #%end
 
 
@@ -77,6 +85,7 @@ def main():
     name = options["input"]
     type = options["type"]
     title = options["title"]
+    aggr_type = options["aggr_type"]
     description = options["description"]
     semantic = options["semantictype"]
     update = flags["u"]
@@ -91,6 +100,12 @@ def main():
     stds = tgis.open_old_stds(name, type, dbif)
 
     update = False
+    if aggr_type and type == "stvds":
+        return()
+    
+    if aggr_type and type != "stvds":
+        stds.metadata.set_aggregation_type(aggregation_type=aggr_type)
+        update = True
     if title:
         stds.metadata.set_title(title=title)
         update = True
