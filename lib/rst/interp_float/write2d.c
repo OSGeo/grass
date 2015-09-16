@@ -1,15 +1,22 @@
-
-/*-
- * Written by H. Mitasova, I. Kosinovsky, D. Gerdes Fall 1993
- * University of Illinois
- * US Army Construction Engineering Research Lab  
- * Copyright 1993, H. Mitasova (University of Illinois),
- * I. Kosinovsky, (USA-CERL), and D.Gerdes (USA-CERL)   
+/*!
+ * \file secpar2d.c
  *
- * modified by McCauley in August 1995
- * modified by Mitasova in August 1995  
+ * \author H. Mitasova, I. Kosinovsky, D. Gerdes Fall 1993 (original authors)
+ * \author modified by McCauley in August 1995
+ * \author modified by Mitasova in August 1995
+ * \author H. Mitasova (University of Illinois)
+ * \author I. Kosinovsky, (USA-CERL)
+ * \author D.Gerdes (USA-CERL)   
  *
+ * \copyright
+ * (C) 1993-1995 by Helena Mitasova and the GRASS Development Team
+ *
+ * \copyright
+ * This program is free software under the
+ * GNU General Public License (>=v2).
+ * Read the file COPYING that comes with GRASS for details.
  */
+
 
 #include <grass/config.h>
 #include <stdio.h>
@@ -20,11 +27,17 @@
 #include <grass/glocale.h>
 #include <grass/interpf.h>
 
-/*
+
+/* parameter descriptions takes from a strange comment */
+/*!
  * Writes az,adx,...,adxy into appropriate place (depending on ngstc, nszc
  * and offset) in corresponding temp file
  */
-int IL_write_temp_2d(struct interp_params *params, int ngstc, int nszc, off_t offset2)	/* begin. and end. column, offset */
+int IL_write_temp_2d(struct interp_params *params,
+                     int ngstc,  /*!< begin. column */
+                     int nszc,  /*!<  end. column */
+                     off_t offset2  /*!< offset */
+                     )
 {
     int j;
     static FCELL *array_cell = NULL;

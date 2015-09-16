@@ -1,25 +1,38 @@
 
-/*-
+/*!
+ * \file interp2d.c
  *
- * Original program and various modifications:
- * Lubos Mitas 
+ * \author
+ * Lubos Mitas (original program and various modifications)
  *
- * GRASS4.1 version of the program and GRASS4.2 modifications:
+ * \author
  * H. Mitasova,
- * I. Kosinovsky, D. Gerdes
- * D. McCauley 
+ * I. Kosinovsky, D. Gerdes,
+ * D. McCauley
+ * (GRASS4.1 version of the program and GRASS4.2 modifications)
  *
- * Copyright 1993, 1995:
- * L. Mitas ,
+ * \author
+ * L. Mitas,
  * H. Mitasova,
  * I. Kosinovsky,
- * D.Gerdes 
+ * D.Gerdes,
  * D. McCauley
+ * (1993, 1995)
  *
- * modified by McCauley in August 1995
- * modified by Mitasova in August 1995, Nov. 1996
- * bug fixes(mask) and modif. for variable smoothing Mitasova Jan 1997
+ * \author modified by McCauley in August 1995
+ * \author modified by Mitasova in August 1995, Nov. 1996
+ * \author
+ * bug fixes(mask) and modification for variable smoothing
+ * Mitasova (Jan 1997)
  *
+ * \copyright
+ * (C) 1993-1999 by Lubos Mitas and the GRASS Development Team
+ *
+ * \copyright
+ * This program is free software under the
+ * GNU General Public License (>=v2).
+ * Read the file COPYING that comes with GRASS
+ * for details.
  */
 
 
@@ -38,24 +51,29 @@
 #define CEULER .57721566
 
 
-int IL_grid_calc_2d(struct interp_params *params, struct quaddata *data,	/* given segment */
-		    struct BM *bitmask,	/* bitmask */
-		    double zmin, double zmax,	/* min and max input z-values */
-		    double *zminac, double *zmaxac,	/* min and max interp. z-values */
-		    double *gmin, double *gmax,	/* min and max inperp. slope val. */
-		    double *c1min, double *c1max, double *c2min, double *c2max,	/* min and max interp. curv. val. */
-		    double *ertot,	/* total interplating func. error */
-		    double *b,	/* solutions of linear equations */
-		    off_t offset1,	/* offset for temp file writing */
-		    double dnorm)
-
-/*
+/*!
+ * Calculates grid values for a given segment
+ *
  * Calculates grid for the given segment represented by data (contains
  * n_rows, n_cols, ew_res,ns_res, and all points inside + overlap) using
- * solutions of system of lin. equations and interpolating functions
+ * solutions of system of linear equations and interpolating functions
  * interp() and interpder(). Also calls secpar() to compute slope, aspect
  * and curvatures if required.
+ * 
+ * *ertot* can be also called *RMS deviation of the interpolated surface*
  */
+int IL_grid_calc_2d(struct interp_params *params,
+                    struct quaddata *data,  /*!< given segment */
+                    struct BM *bitmask,  /*!< bitmask */
+                    double zmin, double zmax,  /*!< min and max input z-values */
+                    double *zminac, double *zmaxac,  /*!< min and max interp. z-values */
+                    double *gmin, double *gmax,  /*!< min and max interp. slope val. */
+                    double *c1min, double *c1max,  /*!< min and max interp. curv. val. */
+                    double *c2min, double *c2max,  /*!< min and max interp. curv. val. */
+                    double *ertot,  /*!< total interpolating func. error */
+                    double *b,  /*!< solutions of linear equations */
+                    off_t offset1,  /*!< offset for temp file writing */
+                    double dnorm)
 {
 
     /*

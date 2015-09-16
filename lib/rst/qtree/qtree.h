@@ -1,12 +1,24 @@
-
-/*-
- * Written by H. Mitasova, I. Kosinovsky, D. Gerdes Fall 1993
- * University of Illinois
- * US Army Construction Engineering Research Lab  
- * Copyright 1993, H. Mitasova (University of Illinois),
- * I. Kosinovsky, (USA-CERL), and D.Gerdes (USA-CERL)   
+/*!
+ * \file qtree.c
  *
- * updated by Mitasova Nov. 96, no changes necessary 
+ * \author
+ * H. Mitasova, I. Kosinovsky, D. Gerdes, Fall 1993,
+ * University of Illinois and
+ * US Army Construction Engineering Research Lab
+ *
+ * \author H. Mitasova (University of Illinois),
+ * \author I. Kosinovsky, (USA-CERL)
+ * \author D.Gerdes (USA-CERL)
+ *
+ * \author updated/checked by Mitasova Nov. 96 (no changes necessary)
+ *
+ * \copyright
+ * (C) 1993-1996 by Helena Mitasova and the GRASS Development Team
+ *
+ * \copyright
+ * This program is free software under the
+ * GNU General Public License (>=v2).
+ * Read the file COPYING that comes with GRASS for details.
  */
 
 
@@ -17,6 +29,12 @@
 #define VOID_T char
 
 
+/*!
+ * Function table for a tree
+ *
+ * From object oriented point of view, this structure represents
+ * a class or a virtual table of functions/methods for a class.
+ */
 struct multfunc
 {
     int (*compare) ();

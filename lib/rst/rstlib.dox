@@ -1,0 +1,66 @@
+/*! \page rstlib GRASS Library for interpolation with regularized splines with tension
+
+\tableofcontents
+
+
+Including and linking
+=====================
+
+Include interpf.h, qtree.h and dataquad.h header files according
+to which you need:
+
+    #include <grass/interpf.h>
+    #include <grass/qtree.h>
+    #include <grass/dataquad.h>
+
+Extend `LIBES` and `DEPENDENCIES` in your `Makefile` by the following:
+
+    LIBES = $(INTERPFLLIB) $(GMATHLIB)
+    DEPENDENCIES = $(INTERPFLDEP) $(GMATHDEP)
+
+
+Main functions and structures
+=============================
+
+Main functions include:
+- IL_init_params_2d()
+- IL_init_func_2d()
+- IL_vector_input_data_2d()
+- IL_create_bitmask()
+- IL_resample_interp_segments_2d()
+- IL_resample_output_2d()
+- IL_output_2d()
+
+Main data structures include:
+- interp_params
+- tree_info
+- \ref multtree
+
+
+Example usages
+==============
+
+- \gmod{v.surf.rst}
+- \gmod{r.resamp.rst}
+
+
+References
+==========
+
+The methods are described in the following papers.
+Please, use these papers as references in your publications when you
+used the library or derived modules.
+
+- Mitasova, H., and  Mitas, L., 1993,
+    Interpolation by Regularized Spline with Tension:
+    I. Theory  and  implementation.  Mathematical Geology, 25, 641-55.
+- Mitasova, H., and Hofierka, L., 1993
+    Interpolation by Regularized Spline with Tension: 
+    II. Application to terrain modeling and surface geometry  analysis.
+    Mathematical Geology, 25, 657-69.
+- Mitasova, H., Mitas, L., Brown, W.M., Gerdes, D.P., Kosinovsky, I.,
+    Baker, T., 1995, Modeling spatially and temporally
+    distributed phenomena: New methods and tools for GRASS GIS. 
+    International Journal of Geographic Information Systems,9(4), 433-46.
+
+*/
