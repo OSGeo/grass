@@ -528,10 +528,14 @@ Section "GRASS" SecGRASS
 	SetOutPath "$INSTALL_DIR"
 	File /r ${PACKAGE_FOLDER}\*.*
 
-	;grant $INSTDIR\etc read write accessible
-	AccessControl::GrantOnFile "$INSTDIR\etc" "(S-1-5-32-545)" "GenericRead + GenericWrite"	
-	;grant modifying/overwriting fontcap file	
-	AccessControl::GrantOnFile "$INSTDIR\etc\fontcap" "(S-1-5-32-545)" "GenericRead + GenericWrite + Delete"
+	;grant $INSTDIR\etc read write accessible and show if succeeded: error if it failed
+	AccessControl::GrantOnFile "$INSTDIR\etc" "(S-1-5-32-545)" "GenericRead + GenericWrite + GenericExecute"
+	Pop $R0
+	DetailPrint $R0	
+	;grant modifying/overwriting fontcap file and show if succeeded: error if it failed	
+	AccessControl::GrantOnFile "$INSTDIR\etc\fontcap" "(S-1-5-32-545)" "GenericRead + GenericWrite + Delete + GenericExecute"
+	Pop $R0
+	DetailPrint $R0	
 	
 	;create run_gmkfontcap.bat
 	ClearErrors
@@ -581,7 +585,7 @@ Section "GRASS" SecGRASS
 	FileWrite $0 '    <security>$\r$\n'
 	FileWrite $0 '      <requestedPrivileges>$\r$\n'
 	FileWrite $0 '        <requestedExecutionLevel$\r$\n'
-	FileWrite $0 '          level="asInvoker"$\r$\n'
+	FileWrite $0 '          level="requireAdministrator"$\r$\n'
 	FileWrite $0 '          uiAccess="false"/>$\r$\n'
 	FileWrite $0 '        </requestedPrivileges>$\r$\n'
 	FileWrite $0 '       </security>$\r$\n'
