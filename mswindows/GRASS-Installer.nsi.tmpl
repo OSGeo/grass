@@ -529,11 +529,11 @@ Section "GRASS" SecGRASS
 	File /r ${PACKAGE_FOLDER}\*.*
 
 	;grant $INSTDIR\etc read write accessible and show if succeeded: error if it failed
-	AccessControl::GrantOnFile "$INSTDIR\etc" "(S-1-5-32-545)" "GenericRead + GenericWrite + GenericExecute"
+	AccessControl::GrantOnFile "$INSTDIR\etc" "(S-1-5-32-545)" "FullAccess"
 	Pop $R0
 	DetailPrint $R0	
 	;grant modifying/overwriting fontcap file and show if succeeded: error if it failed	
-	AccessControl::GrantOnFile "$INSTDIR\etc\fontcap" "(S-1-5-32-545)" "GenericRead + GenericWrite + Delete + GenericExecute"
+	AccessControl::GrantOnFile "$INSTDIR\etc\fontcap" "(S-1-5-32-545)" "FullAccess"
 	Pop $R0
 	DetailPrint $R0	
 	
