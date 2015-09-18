@@ -24,7 +24,7 @@ granularity of the space time raster dataset is used for sampling.
 The output column separator can be specified with the <b>separator</b>
 option.
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
 
 This example shows several options that are available for map layers listing.
 
@@ -32,6 +32,7 @@ This example shows several options that are available for map layers listing.
 
 The following command is the default one, returning standard information
 like name, mapset, start_time, end_time of each map in the space time dataset
+<p>
 
 <div class="code"><pre>
 t.rast.list tempmean_monthly
@@ -46,6 +47,7 @@ name|mapset|start_time|end_time
 <h3>Add more info</h3>
 
 The following command let the user to choose the columns to show
+<p>
 
 <div class="code"><pre>
 t.rast.list tempmean_monthly columns=name,start_time,min,max
@@ -57,13 +59,33 @@ name|start_time|min|max
 2009_02_tempmean|2009-02-01 00:00:00|-1.820261|8.006386
 </pre></div>
 
-<h3>Filtering the result</h3>
+<h3>Filtering the result by value</h3>
 
 In this example the result is filtered showing only the maps with max
 value major than 24
+<p>
 
 <div class="code"><pre>
 t.rast.list tempmean_monthly columns=name,start_time,min,max where="max > 24"
+name|start_time|min|max
+2009_06_tempmean|2009-06-01 00:00:00|15.962669|25.819681
+2009_07_tempmean|2009-07-01 00:00:00|15.32852|26.103664
+2009_08_tempmean|2009-08-01 00:00:00|16.37995|27.293282
+....
+2012_06_tempmean|2012-06-01 00:00:00|14.929379|24.000651
+2012_07_tempmean|2012-07-01 00:00:00|18.455802|28.794653
+2012_08_tempmean|2012-08-01 00:00:00|15.718526|26.151115
+</pre></div>
+
+<h3>Filtering the result by time range</h3>
+
+In this example the result is filtered showing only the maps which
+fall into a specified time range
+<p>
+
+<div class="code"><pre>
+t.rast.list tempmean_monthly columns=name,start_time,min,max \
+  where="start_time &gt; '2009-06-01 00:00:00' and start_time &lt; '2012-08-01 00:00:00'"
 name|start_time|min|max
 2009_06_tempmean|2009-06-01 00:00:00|15.962669|25.819681
 2009_07_tempmean|2009-07-01 00:00:00|15.32852|26.103664
@@ -78,7 +100,8 @@ name|start_time|min|max
 
 Method option is able to show raster in different way. By default <em>cols</em>
 value is used, the value <em>comma</em> will print only the list of maps
-inside the space time dataset
+inside the space time dataset:
+<p>
 
 <div class="code"><pre>
 t.rast.list method=comma input=tempmean_monthly
@@ -101,7 +124,8 @@ t.rast.list method=comma input=tempmean_monthly
 </pre></div>
 
 The <em>delta</em> value calculate the interval between maps and the
-distance from the first map.
+distance from the first map:
+<p>
 
 <div class="code"><pre>
 t.rast.list method=delta input=tempmean_monthly
@@ -118,6 +142,7 @@ id|name|mapset|start_time|end_time|interval_length|distance_from_begin
 The <em>gran</em> value it is used to return data sampled by a user
 defined granule. As default the granularity of the space time raster
 dataset is used for sampling.
+<p>
 
 <div class="code"><pre>
 t.rast.list  method=gran input=tempmean_monthly
@@ -132,6 +157,7 @@ id|name|mapset|start_time|end_time|interval_length|distance_from_begin
 2012_11_tempmean@climate_2009_2012|2012_11_tempmean|climate_2009_2012|2012-11-01 00:00:00|2012-12-01 00:00:00|30.0|1400.0
 2012_12_tempmean@climate_2009_2012|2012_12_tempmean|climate_2009_2012|2012-12-01 00:00:00|2013-01-01 00:00:00|31.0|1430.0
 </pre></div>
+<p>
 
 <div class="code"><pre>
 t.rast.list  method=gran input=tempmean_monthly gran="2 months"
