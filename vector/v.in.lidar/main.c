@@ -143,12 +143,18 @@ int main(int argc, char *argv[])
     int return_filter;
     int skipme;
     int point_class;
-    unsigned int not_valid;	
 
     struct line_pnts *Points;
     struct line_cats *Cats;
 
-    unsigned int n_features, feature_count, n_outside, n_filtered, n_class_filtered;
+#ifdef HAVE_LONG_LONG_INT
+    unsigned long long n_features, feature_count, n_outside,
+        n_filtered, n_class_filtered, not_valid;
+#else
+    unsigned long n_features, feature_count, n_outside,
+        n_filtered, n_class_filtered, not_valid;
+#endif
+
     int overwrite;
 
     G_gisinit(argv[0]);
@@ -687,12 +693,19 @@ int main(int argc, char *argv[])
     int skip_every = 0;
     int preserve_every = 0;
     int every_counter = 0;
-    int n_count_filtered = 0;
-    int offset_n = 0;
-    int offset_n_counter = 0;
-    int limit_n = 0;
-    /* we are not counting it elsewhere except for cat */
-    int limit_n_counter = 0;
+#ifdef HAVE_LONG_LONG_INT
+    unsigned long long n_count_filtered = 0;
+    unsigned long long offset_n = 0;
+    unsigned long long offset_n_counter = 0;
+    unsigned long long limit_n = 0;
+    unsigned long long limit_n_counter = 0;
+#else
+    unsigned long n_count_filtered = 0;
+    unsigned long offset_n = 0;
+    unsigned long offset_n_counter = 0;
+    unsigned long limit_n = 0;
+    unsigned long limit_n_counter = 0;
+#endif
     if (skip_opt->answer)
         skip_every = atoi(skip_opt->answer);
     if (preserve_opt->answer)
@@ -701,8 +714,11 @@ int main(int argc, char *argv[])
         offset_n = atoi(offset_opt->answer);
     if (limit_opt->answer)
         limit_n = atoi(limit_opt->answer);
-
-    G_important_message(_("Scanning %d points..."), n_features);
+#ifdef HAVE_LONG_LONG_INT
+    G_important_message(_("Scanning %llu points..."), n_features);
+#else
+    G_important_message(_("Scanning %lu points..."), n_features);
+#endif
     while ((LAS_point = LASReader_GetNextPoint(LAS_reader)) != NULL) {
 	double x, y, z;
 
@@ -900,6 +916,26 @@ int main(int argc, char *argv[])
 	Vect_build(&Map);
     Vect_close(&Map);
 
+#ifdef HAVE_LONG_LONG_INT
+    if (limit_n)
+        G_message(_("%llu points imported (limit was %llu)"), limit_n_counter, limit_n);
+    else
+        G_message(_("%llu points imported"),
+            n_features - not_valid - n_outside - n_filtered - n_class_filtered
+            - offset_n_counter - n_count_filtered);
+    if (not_valid)
+	G_message(_("%llu input points were not valid"), not_valid);
+    if (n_outside)
+	G_message(_("%llu input points were outside of the selected area"), n_outside);
+    if (n_filtered)
+	G_message(_("%llu input points were filtered out by return number"), n_filtered);
+    if (n_class_filtered)
+        G_message(_("%llu input points were filtered out by class number"), n_class_filtered);
+    if (offset_n_counter)
+        G_message(_("%llu input points were skipped at the begging using offset"), offset_n_counter);
+    if (n_count_filtered)
+        G_message(_("%llu input points were skipped by count-based decimation"), n_count_filtered);
+#else
     if (limit_n)
         G_message(_("%d points imported (limit was %d)"), limit_n_counter, limit_n);
     else
@@ -907,17 +943,19 @@ int main(int argc, char *argv[])
             n_features - not_valid - n_outside - n_filtered - n_class_filtered
             - offset_n_counter - n_count_filtered);
     if (not_valid)
-	G_message(_("%d input points were not valid"), not_valid);
+	G_message(_("%lu input points were not valid"), not_valid);
     if (n_outside)
-	G_message(_("%d input points were outside of the selected area"), n_outside);
+	G_message(_("%lu input points were outside of the selected area"), n_outside);
     if (n_filtered)
-	G_message(_("%d input points were filtered out by return number"), n_filtered);
+	G_message(_("%lu input points were filtered out by return number"), n_filtered);
     if (n_class_filtered)
-        G_message(_("%d input points were filtered out by class number"), n_class_filtered);
+        G_message(_("%lu input points were filtered out by class number"), n_class_filtered);
     if (offset_n_counter)
-        G_message(_("%d input points were skipped at the begging using offset"), offset_n_counter);
+        G_message(_("%lu input points were skipped at the begging using offset"), offset_n_counter);
     if (n_count_filtered)
-        G_message(_("%d input points were skipped by count-based decimation"), n_count_filtered);
+        G_message(_("%lu input points were skipped by count-based decimation"), n_count_filtered);
+    G_message(_("Accuracy of the printed point counts might be limited by your computer architecture."));
+#endif
     if (limit_n)
         G_message(_("The rest of points was ignored"));
 
