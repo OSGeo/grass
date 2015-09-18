@@ -8,7 +8,7 @@
 *               Extended info by Martin Landa <landa.martin gmail.com>
 * PURPOSE: 	Output GRASS version number, date and copyright message.
 *             
-* COPYRIGHT:  	(C) 2000-2013 by the GRASS Development Team
+* COPYRIGHT:  	(C) 2000-2015 by the GRASS Development Team
 *
 *   	    	This program is free software under the GPL (>=v2)
 *   	    	Read the file COPYING that comes with GRASS for details.
@@ -103,6 +103,7 @@ int main(int argc, char *argv[])
 	fprintf(stdout, "revision=%s\n", GRASS_VERSION_SVN);
 	fprintf(stdout, "build_date=%d-%02d-%02d\n", YEAR, MONTH, DAY);
 	fprintf(stdout, "build_platform=%s\n", ARCH);
+        fprintf(stdout, "build_off_t_size=%lu\n", sizeof(off_t));
     }
     else {
 	fprintf(stdout, "GRASS %s (%s)\n",
