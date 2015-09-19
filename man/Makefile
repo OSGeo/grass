@@ -119,7 +119,7 @@ $(HTMLDIR)/graphical_index.html: $(ALL_HTML)
 	touch $@
 
 $(HTMLDIR)/manual_gallery.html: $(ALL_HTML)
-       $(call build_manual_gallery)
+	$(call build_manual_gallery)
 
 $(HTMLDIR)/parser_standard_options.html: $(ALL_HTML)
 	$(call build_pso)
