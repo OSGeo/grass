@@ -13,9 +13,13 @@ specified to select a subset of the requested datasets.
 
 <h2>NOTES</h2>
 
-The SQL where and sort expression will be applied for each temporal
-database that was found in accessible mapsets. Hence sorting works only
-on mapset basis.
+The SQL <em>where</em> and <em>sort</em> expression will be applied for
+each temporal database that was found in accessible mapsets. Hence
+sorting works only on mapset basis.
+<p>
+Temporal databases stored in other mapsets can be used as long as they
+are in the user's current mapset search path (managed with
+<a href="g.mapsets.html">g.mapsets</a>).
 
 <h2>EXAMPLES</h2>
 
