@@ -6,10 +6,9 @@ Created on Fri Jun 26 19:10:58 2015
 """
 from __future__ import print_function
 import argparse
-from pprint import pprint
 import sys
 from urllib import urlopen
-
+from build_html import *
 
 def parse_options(lines, startswith='Opt'):
     def split_in_groups(lines):
@@ -108,13 +107,16 @@ class OptTable(object):
 
     def html(self, endline='\n', indent='  ', toptions='border=1'):
         """Return a HTML table with the options"""
-        html = ["<table{}>".format(' ' + toptions if toptions else '')]
+        html = ['<table{}>'.format(' ' + toptions if toptions else '')]
         # write headers
+        html.append(indent + "<thead>")
         html.append(indent + "<tr>")
-        html.append(indent * 2 + "<td>{0}</td>".format('option'))
+        html.append(indent * 2 + "<th>{0}</th>".format('option'))
         for col in self.columns:
-            html.append(indent * 2 + "<td>{0}</td>".format(col))
+            html.append(indent * 2 + "<th>{0}</th>".format(col))
         html.append(indent + "</tr>")
+        html.append(indent + "</thead>")
+        html.append(indent + "<tbody>")
         for optname, options in self.options:
             html.append(indent + "<tr>")
             html.append(indent * 2 + "<td>{0}</td>".format(optname))
@@ -122,6 +124,7 @@ class OptTable(object):
                 html.append(indent * 2 +
                             "<td>{0}</td>".format(options.get(col, '')))
             html.append(indent + "</tr>")
+        html.append(indent + "</tbody>")
         html.append("</table>")
         return endline.join(html)
 
@@ -136,7 +139,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Extract GRASS default '
                                                  'options from link.')
     parser.add_argument('-f', '--format', default='html', dest='format',
-                        choices=['html', 'csv'],
+                        choices=['html', 'csv', 'grass'],
                         help='Define the output format')
     parser.add_argument('-l', '--link', default=URL, dest='url', type=str,
                         help='Provide the url with the file to parse')
@@ -149,11 +152,26 @@ if __name__ == "__main__":
     parser.add_argument('-s', '--starts-with', default='Opt',
                         dest='startswith', type=str,
                         help='Extract only the options that starts with this')
+    parser.add_argument('-p', '--html_params', default='border=1', type=str,
+                        dest='htmlparmas', help="Options for the HTML table")
     args = parser.parse_args()
 
     cfile = args.text if args.text else urlopen(args.url, proxies=None)
 
     options = OptTable(parse_options(cfile.readlines(),
                                      startswith=args.startswith))
-    print(getattr(options, args.format)(), file=args.output)
-    args.output.close()
+    outform = args.format
+    if outform in ['csv', 'html']:
+        print(getattr(options, outform)(), file=args.output)
+        args.output.close()
+    else:
+        year = os.getenv("VERSION_DATE")
+        name = args.output.name
+        args.output.close()
+        topicsfile = open(name, 'w')
+        topicsfile.write(header1_tmpl.substitute(title="GRASS GIS " \
+                        "%s Reference Manual: Parser standard options index" % grass_version))
+        topicsfile.write(headerpso_tmpl)
+        topicsfile.write(options.html(toptions=args.htmlparmas))
+        write_html_footer(topicsfile, "index.html", year)
+        topicsfile.close()
