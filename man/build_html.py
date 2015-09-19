@@ -322,6 +322,24 @@ r"""
 """)
 #"
 
+headerpso_tmpl = \
+r"""
+<link rel="stylesheet" href="grassdocs.css" type="text/css">
+<link rel="stylesheet" href="parser_standard_options.css" type="text/css">
+<script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script type="text/javascript" src="jquery.fixedheadertable.min.js"></script>
+<script type="text/javascript" src="parser_standard_options.js"></script>
+</head>
+<body style="width: 99%">
+<div id="container">
+
+<a href="index.html"><img src="grass_logo.png" alt="GRASS logo"></a>
+<hr class="header">
+<h2>Parser standard options</h2>
+<ul>
+"""
+#"
+
 ############################################################################
 
 def check_for_desc_override(basename):
