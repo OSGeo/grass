@@ -95,9 +95,10 @@ static char *get_mapset_connection_name(const char *mapset, int contype)
     const char *location = G_getenv_nofatal("LOCATION_NAME");
     int ret;
 
+    G_debug(1,"Checking mapset <%s>", mapset);
     ret = G_mapset_permissions2(gisdbase, location, mapset);
     switch (ret) {
-    case 0:
+    case 0: /* Check if the mapset exists and user is owner */
         G_warning(_("You don't have permission to access the mapset <%s>"),
                       mapset);
         break;
