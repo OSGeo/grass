@@ -91,8 +91,8 @@ equal time stamps if the month of the start time is May or June,
 otherwise we multiply the maps. The command will look as follows:
 <p>
 <div class="code"><pre>
-t.rast.mapcalc input=A,B output=C base=c method=equal \
-    expr="if(start_month() == 5 || start_month() == 6, (A + B), (A * B))"
+t.rast.mapcalc input=A,B output=C basename=c method=equal \
+    expression="if(start_month() == 5 || start_month() == 6, (A + B), (A * B))"
 </pre></div>
 <p>
 The resulting raster maps in dataset C can be listed with <em>t.rast.list</em>:
@@ -114,12 +114,12 @@ datasets will be replaced by the corresponding raster maps. The final
 expression will be passed to <em>r.mapcalc</em>, resulting in 6 runs:
 <p>
 <div class="code"><pre>
-r.mapcalc expr="c_1 = if(3 == 5 || 3 == 6, (a3 + b3), (a3 * b3))"
-r.mapcalc expr="c_2 = if(4 == 5 || 4 == 6, (a4 + b4), (a4 * b4))"
-r.mapcalc expr="c_3 = if(5 == 5 || 5 == 6, (a5 + b5), (a5 * b5))"
-r.mapcalc expr="c_4 = if(6 == 5 || 6 == 6, (a6 + b6), (a6 * b6))"
-r.mapcalc expr="c_5 = if(7 == 5 || 7 == 6, (a7 + b7), (a7 * b7))"
-r.mapcalc expr="c_6 = if(8 == 5 || 8 == 6, (a8 + b8), (a8 * b8))"
+r.mapcalc expression="c_1 = if(3 == 5 || 3 == 6, (a3 + b3), (a3 * b3))"
+r.mapcalc expression="c_2 = if(4 == 5 || 4 == 6, (a4 + b4), (a4 * b4))"
+r.mapcalc expression="c_3 = if(5 == 5 || 5 == 6, (a5 + b5), (a5 * b5))"
+r.mapcalc expression="c_4 = if(6 == 5 || 6 == 6, (a6 + b6), (a6 * b6))"
+r.mapcalc expression="c_5 = if(7 == 5 || 7 == 6, (a7 + b7), (a7 * b7))"
+r.mapcalc expression="c_6 = if(8 == 5 || 8 == 6, (a8 + b8), (a8 * b8))"
 </pre></div>
 <p>
 
@@ -131,8 +131,8 @@ null otherwise it set the original value. The other months are copied as
 the original one.
 
 <div class="code"><pre>
-t.rast.mapcalc input=tempmean_monthly output=january_under_0 base=january_under_0 \
-    expr="if(start_month() == 1 && tempmean_monthly > 0, null(), tempmean_monthly)"
+t.rast.mapcalc input=tempmean_monthly output=january_under_0 basename=january_under_0 \
+    expression="if(start_month() == 1 && tempmean_monthly > 0, null(), tempmean_monthly)"
 
 # printing the minimum or maximum values only for January
 t.rast.list january_under_0 columns=name,start_time,min,max | grep 01-01

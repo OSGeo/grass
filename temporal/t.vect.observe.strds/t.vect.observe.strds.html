@@ -34,8 +34,8 @@ The example show how to create a space time vector dataset and a vector
 layer starting from a point vector and a space time raster dataset:
 
 <div class="code"><pre>
-t.vect.observe.strds in=precip_30ynormals_3d strds=tempmean_monthly \
-                     out=precip_stations vect=precip_stations_monthly \
+t.vect.observe.strds input=precip_30ynormals_3d strds=tempmean_monthly \
+                     output=precip_stations vect=precip_stations_monthly \
                      columns=month
 
 t.info precip_stations type=stvds
@@ -84,8 +84,8 @@ t.info precip_stations type=stvds
  | Observation of space time raster dataset(s) tempmean_monthly with vector map precip_30ynormals_3d
  | Command history:
  | # 2014-12-02 00:42:39
- | t.vect.observe.strds in="precip_30ynormals_3d"
- |     strds="tempmean_monthly" out="precip_stations"
+ | t.vect.observe.strds input="precip_30ynormals_3d"
+ |     strds="tempmean_monthly" output="precip_stations"
  |     vect="precip_stations_monthly" columns="month"
  |
  +----------------------------------------------------------------------------+

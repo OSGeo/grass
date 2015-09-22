@@ -13,7 +13,7 @@ default values.
 
 <h2>NOTES</h2>
 
-Setting the connection with t.connect will not test the connection for validity.
+Setting the connection with <em>t.connect</em> will not test the connection for validity.
 Hence a database connection will not be established.
 <p>
 The connection values are stored in the mapset's <tt>VAR</tt> file.
@@ -37,6 +37,7 @@ PostgreSQL and SQLite databases can not be mixed in a location.
 <h3>SQLite</h3>
 The SQLite database is created automatically when used the first time.
 <div class="code"><pre>
+# use single quotes here
 t.connect driver=sqlite database='$GISDBASE/$LOCATION_NAME/PERMANENT/tgis/sqlite.db'
 t.connect -p
 t.info -s
