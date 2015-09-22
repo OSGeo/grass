@@ -3527,7 +3527,7 @@ msgstr "알려지지 않은 벡터타입입니다"
 
 #: ../lib/python/temporal/open_stds.py:66
 #, fuzzy, python-format
-msgid "Space time %(sp)s dataset <%(name)s> no found"
+msgid "Space time %(sp)s dataset <%(name)s> not found"
 msgstr "'%s' 디버그파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/open_stds.py:105

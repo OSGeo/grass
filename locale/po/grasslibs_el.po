@@ -3610,7 +3610,7 @@ msgstr "Άγνωστο τύπος διανύσματος"
 
 #: ../lib/python/temporal/open_stds.py:66
 #, fuzzy, python-format
-msgid "Space time %(sp)s dataset <%(name)s> no found"
+msgid "Space time %(sp)s dataset <%(name)s> not found"
 msgstr "Ο χάρτης raster  <%s> δεν βρέθηκε"
 
 #: ../lib/python/temporal/open_stds.py:105

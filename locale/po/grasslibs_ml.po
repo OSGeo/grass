@@ -3496,7 +3496,7 @@ msgstr "വെക്റ്റർ മാപ്പ് വായിക്കാൻ 
 
 #: ../lib/python/temporal/open_stds.py:66
 #, fuzzy, python-format
-msgid "Space time %(sp)s dataset <%(name)s> no found"
+msgid "Space time %(sp)s dataset <%(name)s> not found"
 msgstr "റാസ്റ്റെർ മാപ്പ് <%s> കണ്മാനില്ല"
 
 #: ../lib/python/temporal/open_stds.py:105
