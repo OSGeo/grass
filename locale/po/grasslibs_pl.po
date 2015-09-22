@@ -3577,7 +3577,7 @@ msgstr "nieznany typ interpolacjinieznany typ interpolacji"
 
 #: ../lib/python/temporal/open_stds.py:66
 #, fuzzy, python-format
-msgid "Space time %(sp)s dataset <%(name)s> no found"
+msgid "Space time %(sp)s dataset <%(name)s> not found"
 msgstr "Mapa rastrowa <%s> nie została znaleziona"
 
 #: ../lib/python/temporal/open_stds.py:105
