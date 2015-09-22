@@ -3699,7 +3699,7 @@ msgstr "مسقط غير معروف"
 
 #: ../lib/python/temporal/open_stds.py:66
 #, fuzzy, python-format
-msgid "Space time %(sp)s dataset <%(name)s> no found"
+msgid "Space time %(sp)s dataset <%(name)s> not found"
 msgstr "غير موجود'%s' الفيكتور"
 
 #: ../lib/python/temporal/open_stds.py:105
