@@ -91,6 +91,8 @@ def register_maps_in_space_time_dataset(
 
     # The name of the space time dataset is optional
     if name:
+        if name.find("@") <= 0:
+            name = name + "@" + mapset
         sp = open_old_stds(name, type, dbif)
 
         if sp.is_time_relative() and (start or end) and not unit:
