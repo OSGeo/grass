@@ -23,7 +23,7 @@ To smooth the maps contained into a space time dataset run:
 
 <div class="code"><pre>
 t.rast.neighbors input=tempmean_monthly output=smooth_tempmean_monthly \
-                 base=tmean_smooth size=5 method=average nprocs=4
+                 basename=tmean_smooth size=5 method=average nprocs=4
 
 # show some info about the new space time dataset
 t.info smooth_tempmean_monthly
@@ -70,7 +70,7 @@ t.info smooth_tempmean_monthly
  | Command history:
  | # 2014-11-27 11:41:36
  | t.rast.neighbors input="tempmean_monthly"
- |     output="smooth_tempmean_monthly" base="tmean_smooth" size="5"
+ |     output="smooth_tempmean_monthly" basename="tmean_smooth" size="5"
  |     method="average" nprocs="4"
  |
  +----------------------------------------------------------------------------+

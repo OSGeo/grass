@@ -10,8 +10,8 @@ In the following example a new space time vector dataset will be create
 with all the data later than 2000:
 
 <div class="code"><pre>
-t.vect.extract inp=shoreline where="start_time > 2000" \
-               out=shoreline_later_2000 basename=new_shoreline
+t.vect.extract input=shoreline where="start_time > 2000" \
+               output=shoreline_later_2000 basename=new_shoreline
 
 t.info shoreline_later_2000@shoreline type=stvds
  +-------------------- Space Time Vector Dataset -----------------------------+
@@ -60,12 +60,12 @@ t.info shoreline_later_2000@shoreline type=stvds
  | North Caroline shoreline from 2000 to 2009
  | Command history:
  | # 2014-11-29 08:43:50 
- | t.vect.extract inp="shoreline"
- |     where="start_time > 2000" out="shoreline_later_2000"
+ | t.vect.extract input="shoreline"
+ |     where="start_time > 2000" output="shoreline_later_2000"
  |     basename="new_shoreline"
  | # 2014-11-29 08:44:14 
  | t.support type="stvds"
- |     in="shoreline_later_2000@shoreline"
+ |     input="shoreline_later_2000@shoreline"
  |     descr="North Caroline shoreline from 2000 to 2009"
  +----------------------------------------------------------------------------+
 

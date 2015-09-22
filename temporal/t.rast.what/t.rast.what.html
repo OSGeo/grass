@@ -37,10 +37,10 @@ In the following examples we sample a space time raster dataset that contains
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10
 
 # Generate data
-r.mapcalc expr="a_1 = 1" -s
-r.mapcalc expr="a_2 = 2" -s
-r.mapcalc expr="a_3 = 3" -s
-r.mapcalc expr="a_4 = 4" -s
+r.mapcalc expression="a_1 = 1" -s
+r.mapcalc expression="a_2 = 2" -s
+r.mapcalc expression="a_3 = 3" -s
+r.mapcalc expression="a_4 = 4" -s
 
 t.create type=strds output=A title="A test" descr="A test"
 
