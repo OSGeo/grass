@@ -12,7 +12,7 @@ In below example the command fills the new column "new_temp" with values
 extracted from the "tempmean_monthly" space time raster dataset:
 
 <div class="code"><pre>
-t.vect.what.strds in=precip_stations@climate_2009_2012 \
+t.vect.what.strds input=precip_stations@climate_2009_2012 \
                   strds=tempmean_monthly@climate_2009_2012 \
                   column=new_temp method=average
 </pre></div>

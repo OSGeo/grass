@@ -38,7 +38,7 @@ the raster map layers):
 MAPS="map_1 map_2 map_3 map_4 map_5 map_6 map_7"
 
 for map in ${MAPS} ; do
-    r.mapcalc --o expr="${map} = 1" 
+    r.mapcalc --o expression="${map} = 1" 
     echo ${map} >> map_list.txt 
 done
 
@@ -178,7 +178,7 @@ t.info type=stvds input=points
 t.rast.aggregate.ds input=precipitation_daily \
                     output=precipitation_agg \
                     sample=points type=stvds \
-                    base=prec_agg \
+                    basename=prec_agg \
                     method=sum sampling=contains
 
 t.support input=precipitation_agg \
@@ -230,7 +230,7 @@ t.info type=strds input=precipitation_agg
  | Command history:
  | # 2014-11-23 16:53:23 
  | t.rast.aggregate.ds input="precipitation_daily"
- |     output="precipitation_agg" sample="points" type="stvds" base="prec_agg"
+ |     output="precipitation_agg" sample="points" type="stvds" basename="prec_agg"
  |     method="sum" sampling="contains"
  | # 2014-11-23 16:53:28 
  | t.support input="precipitation_agg"

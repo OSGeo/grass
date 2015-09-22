@@ -44,7 +44,7 @@ t.info -s
 In order to obtain information about a space time dataset, run:
 
 <div class="code"><pre>
-t.info in=tempmean_monthly
+t.info input=tempmean_monthly
  +-------------------- Space Time Raster Dataset -----------------------------+
  |                                                                            |
  +-------------------- Basic information -------------------------------------+
@@ -91,7 +91,7 @@ t.info in=tempmean_monthly
  |     output="tempmean_monthly" title="Monthly precipitation"
  |     description="Dataset with monthly precipitation"
  | # 2014-11-27 09:44:32
- | t.register -i type="rast" inp="tempmean_monthly" maps="2009_01_tempmean,...,2012_12_tempmean" start="2009-01-01" increment="1 months"
+ | t.register -i type="rast" input="tempmean_monthly" maps="2009_01_tempmean,...,2012_12_tempmean" start="2009-01-01" increment="1 months"
  |
  +----------------------------------------------------------------------------+
 </pre></div>
@@ -104,7 +104,7 @@ it the greatest common divisor between all gaps in the time series.
 In order to obtain information about a map in a space time dataset, run:
 
 <div class="code"><pre>
-t.info in=2009_01_tempmean type=rast
+t.info input=2009_01_tempmean type=raster
  +-------------------- Raster Dataset ----------------------------------------+
  |                                                                            |
  +-------------------- Basic information -------------------------------------+
