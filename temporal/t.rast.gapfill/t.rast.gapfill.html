@@ -20,9 +20,9 @@ the maps are chosen so that the interpolated values can be estimated.
 We expect two maps with values 2 and 4 after interpolation.
 
 <div class="code"><pre>
-r.mapcalc expr="map1 = 1" 
-r.mapcalc expr="map2 = 3" 
-r.mapcalc expr="map3 = 5" 
+r.mapcalc expression="map1 = 1" 
+r.mapcalc expression="map2 = 3" 
+r.mapcalc expression="map3 = 5" 
 
 t.register type=raster maps=map1 start=2012-08-20 end=2012-08-21
 t.register type=raster maps=map2 start=2012-08-22 end=2012-08-23
@@ -52,7 +52,7 @@ map2@PERMANENT|map2|PERMANENT|2012-08-22 00:00:00|2012-08-23 00:00:00|1.0|2.0
 None|None|None|2012-08-23 00:00:00|2012-08-24 00:00:00|1.0|3.0
 map3@PERMANENT|map3|PERMANENT|2012-08-24 00:00:00|2012-08-25 00:00:00|1.0|4.0
 
-t.rast.gapfill input=precipitation_daily base=gap
+t.rast.gapfill input=precipitation_daily basename=gap
 
 t.rast.list input=precipitation_daily columns=name,start_time,min,max
 

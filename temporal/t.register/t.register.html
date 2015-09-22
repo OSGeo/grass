@@ -128,12 +128,12 @@ generated timestamps will be inspected using <em>r.timestamp</em> and
 that was set with <em>r.timestamp</em>.
 
 <div class="code"><pre>
-r.mapcalc expr="prec_1 = 100"
-r.mapcalc expr="prec_2 = 200"
-r.mapcalc expr="prec_3 = 300"
-r.mapcalc expr="prec_4 = 400"
-r.mapcalc expr="prec_5 = 500"
-r.mapcalc expr="prec_6 = 600"
+r.mapcalc expression="prec_1 = 100"
+r.mapcalc expression="prec_2 = 200"
+r.mapcalc expression="prec_3 = 300"
+r.mapcalc expression="prec_4 = 400"
+r.mapcalc expression="prec_5 = 500"
+r.mapcalc expression="prec_6 = 600"
 
 t.create type=strds temporaltype=absolute \
     output=precip_abs title="Example" \
@@ -159,7 +159,7 @@ prec_4|PERMANENT|2001-04-01 00:00:00|2001-05-01 00:00:00
 prec_5|PERMANENT|2001-05-01 00:00:00|2001-06-01 00:00:00
 prec_6|PERMANENT|2001-06-01 00:00:00|2001-07-01 00:00:00
 
-r.mapcalc expr="prec_7 = 700"
+r.mapcalc expression="prec_7 = 700"
 r.timestamp map=prec_7 date="1 jul 2001 / 1 aug 2001"
 
 t.register type=raster input=precip_abs maps=prec_7

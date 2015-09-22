@@ -59,7 +59,7 @@ In this example the user is going to aggregate monthly data into yearly
 data, running:
 
 <div class="code"><pre>
-t.rast.aggregate in=tempmean_monthly out=tempmean_yearly basename=tempmean_year \
+t.rast.aggregate input=tempmean_monthly output=tempmean_yearly basename=tempmean_year \
                  granularity="1 years" method=average
 
 t.support input=tempmean_yearly \
@@ -109,8 +109,8 @@ t.info tempmean_yearly
  | Dataset with monthly precipitation
  | Command history:
  | # 2014-11-27 10:25:21
- | t.rast.aggregate in="tempmean_monthly"
- |     out="tempmean_yearly" basename="tempmean_year" granularity="1 years"
+ | t.rast.aggregate input="tempmean_monthly"
+ |     output="tempmean_yearly" basename="tempmean_year" granularity="1 years"
  |     method="average"
  |
  | # 2014-11-27 10:26:21

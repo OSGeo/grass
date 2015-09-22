@@ -28,7 +28,7 @@ side, eg.:
 
 <div class="code"><pre>
 t.rast.extract input=tempmean_monthly where="start_time > '2010-01-05'" \
-               output=selected_tempmean_monthly base=new_tmean_month \
+               output=selected_tempmean_monthly basename=new_tmean_month \
                expression="if(tempmean_monthly < 0, null(), tempmean_monthly)"
 </div>
 
