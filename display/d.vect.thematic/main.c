@@ -78,6 +78,7 @@ int main(int argc, char **argv)
     G_add_keyword(_("display"));
     G_add_keyword(_("cartography"));
     G_add_keyword(_("choropleth map"));
+    G_add_keyword(_("legend"));
     module->description =
 	_("Displays a thematic vector map "
 	  "in the active graphics frame.");
