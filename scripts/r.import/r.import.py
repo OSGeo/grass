@@ -254,12 +254,22 @@ def main():
                                                 memory=memory, quiet=True)
             except CalledModuleError:
                 grass.fatal(_("Unable to get reprojected map extent"))
-
-            srcregion = grass.parse_key_val(tgtextents, val_type=float, vsep=' ')
-            n = srcregion['n']
-            s = srcregion['s']
-            e = srcregion['e']
-            w = srcregion['w']
+            try:
+                srcregion = grass.parse_key_val(tgtextents, val_type=float, vsep=' ')
+                n = srcregion['n']
+                s = srcregion['s']
+                e = srcregion['e']
+                w = srcregion['w']
+            except ValueError:  # import into latlong, expect 53:39:06.894826N
+                srcregion = grass.parse_key_val(tgtextents, vsep=' ')
+                n = grass.float_or_dms(srcregion['n'][:-1]) * \
+                    (-1 if srcregion['n'][-1] == 'S' else 1)
+                s = grass.float_or_dms(srcregion['s'][:-1]) * \
+                    (-1 if srcregion['s'][-1] == 'S' else 1)
+                e = grass.float_or_dms(srcregion['e'][:-1]) * \
+                    (-1 if srcregion['e'][-1] == 'W' else 1)
+                w = grass.float_or_dms(srcregion['w'][:-1]) * \
+                    (-1 if srcregion['w'][-1] == 'W' else 1)
 
             grass.run_command('g.region', n=n, s=s, e=e, w=w)
 
