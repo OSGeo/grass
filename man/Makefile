@@ -85,7 +85,7 @@ endef
 define build_pso
 GISBASE="$(RUN_GISBASE)" ARCH="$(ARCH)" ARCH_DISTDIR="$(ARCH_DISTDIR)" \
 	VERSION_NUMBER=$(GRASS_VERSION_NUMBER) VERSION_DATE=$(GRASS_VERSION_DATE) \
-	$(PYTHON) ./parser_standard_options.py -t $(GRASS_HOME)/lib/gis/parser_standard_options.c \
+	$(PYTHON) $(GRASS_HOME)/man/parser_standard_options.py -t $(GRASS_HOME)/lib/gis/parser_standard_options.c \
 	-f grass -o $(HTMLDIR)/parser_standard_options.html -p 'id="opts_table" class="scroolTable"'
 endef
 
