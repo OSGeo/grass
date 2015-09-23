@@ -91,10 +91,11 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
 
                 # We need to modify the r(3).mapcalc expression
                 if type != "vector":
-                    expr = "%s = %s" % (map_name, expression)
-
+                    expr = expression
                     expr = expr.replace(sp.base.get_map_id(), row["id"])
                     expr = expr.replace(sp.base.get_name(), row["id"])
+
+                    expr = "%s = %s" % (map_name, expr)
 
                     # We need to build the id
                     map_id = AbstractMapDataset.build_id(map_name, mapset)
