@@ -98,7 +98,9 @@ def main():
 
         file.close()
 
-        flag = "z"
+        flag = ""
+        if len(rows) > 1000:
+            flag += "z"
         if nulls:
             flag += "n"
 
