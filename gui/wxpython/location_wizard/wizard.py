@@ -1149,7 +1149,7 @@ class EllipsePage(TitledPage):
             self.scope = 'earth'
             for key in self.parent.ellipsoids.keys():
                 data.append([key, self.parent.ellipsoids[key][0]])
-        elif event.GetId() == self.radioEpsgx.GetId():
+        elif event.GetId() == self.radioEpsg.GetId():
             self.scope = 'planetary'
             for key in self.parent.planetary_ellipsoids.keys():
                 data.append([key, self.parent.planetary_ellipsoids[key][0]])
