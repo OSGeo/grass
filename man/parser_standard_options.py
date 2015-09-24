@@ -143,7 +143,7 @@ if __name__ == "__main__":
                         help='Define the output format')
     parser.add_argument('-l', '--link', default=URL, dest='url', type=str,
                         help='Provide the url with the file to parse')
-    parser.add_argument('-t', '--text', default='', dest='text',
+    parser.add_argument('-t', '--text', dest='text',
                         type=argparse.FileType('r'),
                         help='Provide the file to parse')
     parser.add_argument('-o', '--output', default=sys.stdout, dest='output',
