@@ -42,6 +42,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster3d"));
     G_add_keyword(_("timestamp"));
+    G_add_keyword(_("time"));
     G_add_keyword(_("voxel"));
     module->description =
 	_("Print/add/remove a timestamp for a 3D raster map");

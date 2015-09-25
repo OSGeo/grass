@@ -19,6 +19,7 @@
 #% keyword: temporal
 #% keyword: map management
 #% keyword: create
+#% keyword: time
 #%end
 
 #%option G_OPT_STDS_OUTPUT

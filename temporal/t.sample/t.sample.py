@@ -18,6 +18,7 @@
 #% description: Samples the input space time dataset(s) with a sample space time dataset and print the result to stdout.
 #% keyword: temporal
 #% keyword: sampling
+#% keyword: time
 #%end
 
 #%option G_OPT_STDS_INPUTS

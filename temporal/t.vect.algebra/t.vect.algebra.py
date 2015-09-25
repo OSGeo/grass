@@ -21,6 +21,7 @@
 #% keyword: temporal
 #% keyword: algebra
 #% keyword: vector
+#% keyword: time
 #%end
 
 #%option

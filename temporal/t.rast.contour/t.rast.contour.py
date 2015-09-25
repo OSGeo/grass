@@ -21,6 +21,7 @@
 #% keyword: contour
 #% keyword: raster
 #% keyword: vector
+#% keyword: time
 #%end
 
 #%option G_OPT_STRDS_INPUT

@@ -21,6 +21,7 @@
 #% keyword: vector
 #% keyword: database
 #% keyword: select
+#% keyword: time
 #%end
 
 #%option G_OPT_STVDS_INPUT

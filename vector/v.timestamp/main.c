@@ -35,6 +35,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("metadata"));
     G_add_keyword(_("timestamp"));
+    G_add_keyword(_("time"));
     module->label = _("Modifies a timestamp for a vector map.");
     module->description = _("Print/add/remove a timestamp for a vector map.");
 
