@@ -19,6 +19,7 @@
 #% keyword: temporal
 #% keyword: interpolation
 #% keyword: raster
+#% keyword: time
 #%end
 
 #%option G_OPT_STRDS_INPUT

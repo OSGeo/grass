@@ -21,6 +21,7 @@
 #% keyword: temporal
 #% keyword: algebra
 #% keyword: raster
+#% keyword: time
 #%end
 
 #%option

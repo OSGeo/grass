@@ -20,6 +20,7 @@
 #% keyword: map management
 #% keyword: vector
 #% keyword: list
+#% keyword: time
 #%end
 
 #%option G_OPT_STVDS_INPUT

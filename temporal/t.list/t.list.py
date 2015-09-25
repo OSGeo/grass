@@ -19,6 +19,7 @@
 #% keyword: temporal
 #% keyword: map management
 #% keyword: list
+#% keyword: time
 #%end
 
 #%option

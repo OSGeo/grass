@@ -22,6 +22,7 @@
 #% keyword: temporal
 #% keyword: raster
 #% keyword: sampling
+#% keyword: time
 #%end
 
 #%option G_OPT_V_INPUT
