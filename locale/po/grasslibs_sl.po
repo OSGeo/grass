@@ -3663,7 +3663,7 @@ msgstr "Vektor '%s' ¾e obstaja in bo prepisan."
 
 #: ../lib/python/pygrass/raster/__init__.py:432
 #, fuzzy, python-brace-format
-msgid "Raster map <{0}> does not exists"
+msgid "Raster map <{0}> does not exist"
 msgstr "Ne morem odpreti datoteke z zgodovino za vektor '%s'"
 
 #: ../lib/python/pygrass/raster/abstract.py:274

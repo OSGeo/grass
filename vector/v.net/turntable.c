@@ -667,17 +667,17 @@ void turntable(struct opt *opt)
     tucfield = Vect_get_field_number(&InMap, opt->tucfield->answer);
 
     if (!Vect_get_field(&InMap, afield))
-	G_fatal_error(_("Arc layer <%s> does not exists in map <%s>."),
+	G_fatal_error(_("Arc layer <%s> does not exist in map <%s>."),
 		      opt->afield_opt->answer, opt->output->answer);
 
     if (Vect_get_field(&InMap, tfield))
 	G_warning(_
-		  ("Layer <%s> already exists in map <%s>.\nIt will be overwritten by tlayer data."),
+		  ("Layer <%s> already exist in map <%s>.\nIt will be overwritten by tlayer data."),
 		  opt->tfield->answer, opt->output->answer);
 
     if (Vect_get_field(&InMap, tucfield))
 	G_warning(_
-		  ("Layer <%s> already exists in map <%s>.\nIt will be overwritten by tuclayer data."),
+		  ("Layer <%s> already exist in map <%s>.\nIt will be overwritten by tuclayer data."),
 		  opt->tucfield->answer, opt->output->answer);
 
     ttb_name = NULL;

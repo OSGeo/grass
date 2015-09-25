@@ -10530,7 +10530,7 @@ msgstr "Nie można otworzyć mapy wektorowej <%s>"
 # kolejność %s ma chyba znaczenie -> zmiana wypacza sens
 #: ../vector/v.net/turntable.c:670
 #, fuzzy, c-format
-msgid "Arc layer <%s> does not exists in map <%s>."
+msgid "Arc layer <%s> does not exist in map <%s>."
 msgstr "Tabela <%s> nie istnieje w bazie danych <%s>"
 
 #: ../vector/v.net/turntable.c:675

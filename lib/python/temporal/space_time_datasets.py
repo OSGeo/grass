@@ -171,7 +171,7 @@ class RasterDataset(AbstractMapDataset):
            the map will be exported using r.out.bin to a temporary location
            and assigned to the memmap object that is returned by this function.
 
-           In case the raster map does not exists, an empty temporary
+           In case the raster map does not exist, an empty temporary
            binary file will be created and assigned to the memap object.
 
            You need to call the write function to write the memmap
@@ -505,7 +505,7 @@ class Raster3DDataset(AbstractMapDataset):
            the map will be exported using r3.out.bin to a temporary location
            and assigned to the memmap object that is returned by this function.
 
-           In case the 3D raster map does not exists, an empty temporary
+           In case the 3D raster map does not exist, an empty temporary
            binary file will be created and assigned to the memap object.
 
            You need to call the write function to write the memmap

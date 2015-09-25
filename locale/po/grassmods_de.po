@@ -10557,7 +10557,7 @@ msgstr "Kann die Vektorkarte <%s> nicht öffnen."
 
 #: ../vector/v.net/turntable.c:670
 #, fuzzy, c-format
-msgid "Arc layer <%s> does not exists in map <%s>."
+msgid "Arc layer <%s> does not exist in map <%s>."
 msgstr "Die Tabelle <%s> existiert nicht in der Datenbank <%s>."
 
 #: ../vector/v.net/turntable.c:675

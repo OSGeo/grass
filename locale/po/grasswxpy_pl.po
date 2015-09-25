@@ -6650,7 +6650,7 @@ msgstr "Wczytywanie danych..."
 
 #: ../gui/wxpython/vnet/dialogs.py:798
 #, fuzzy
-msgid "Input vector map does not exists."
+msgid "Input vector map does not exist."
 msgstr "Katalog %s nie istnieje."
 
 #: ../gui/wxpython/vnet/dialogs.py:816

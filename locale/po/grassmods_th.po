@@ -10609,7 +10609,7 @@ msgstr "ไม่สามารถ เปิด แผนที่เชิง�
 
 #: ../vector/v.net/turntable.c:670
 #, fuzzy, c-format
-msgid "Arc layer <%s> does not exists in map <%s>."
+msgid "Arc layer <%s> does not exist in map <%s>."
 msgstr "ตาราง <%s> ไม่มีอยู่ในฐานข้อมูล <%s>"
 
 #: ../vector/v.net/turntable.c:675

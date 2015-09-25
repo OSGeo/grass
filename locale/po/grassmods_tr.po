@@ -10471,7 +10471,7 @@ msgstr "<%s> vektör haritası açılamıyor"
 
 #: ../vector/v.net/turntable.c:670
 #, fuzzy, c-format
-msgid "Arc layer <%s> does not exists in map <%s>."
+msgid "Arc layer <%s> does not exist in map <%s>."
 msgstr "<%s>  tablosu <%s> veritabanında yok"
 
 #: ../vector/v.net/turntable.c:675

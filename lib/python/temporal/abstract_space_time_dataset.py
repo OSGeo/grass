@@ -327,7 +327,7 @@ class AbstractSpaceTimeDataset(AbstractDataset):
 
         dbif, connected = init_dbif(dbif)
 
-        # We need to create the register table if it does not exists
+        # We need to create the register table if it does not exist
         stds_register_table = self.get_map_register()
 
         # Create the map register table

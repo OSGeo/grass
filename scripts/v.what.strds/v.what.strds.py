@@ -22,6 +22,7 @@
 #% keyword: position
 #% keyword: querying
 #% keyword: attribute table
+#% keyword: time
 #%end
 
 #%option G_OPT_V_INPUT

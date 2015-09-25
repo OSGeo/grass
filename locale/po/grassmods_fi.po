@@ -9805,7 +9805,7 @@ msgstr "Kursoria ei voida avata"
 
 #: ../vector/v.net/turntable.c:670
 #, c-format
-msgid "Arc layer <%s> does not exists in map <%s>."
+msgid "Arc layer <%s> does not exist in map <%s>."
 msgstr ""
 
 #: ../vector/v.net/turntable.c:675

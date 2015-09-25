@@ -795,7 +795,7 @@ class VNETDialog(wx.Dialog):
 
         if "input" in err_params:
             GMessage(parent = self,
-                     message = _("Input vector map does not exists."))
+                     message = _("Input vector map does not exist."))
 
         if ["turn_layer", "turn_cat_layer"] in err_params:
             GMessage(parent = self, message = "Please choose existing turntable layer and unique categories layer in Parameters tab.")

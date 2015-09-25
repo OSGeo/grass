@@ -6683,7 +6683,7 @@ msgstr "กำลังอ่านข้อมูล ..."
 
 #: ../gui/wxpython/vnet/dialogs.py:798
 #, fuzzy
-msgid "Input vector map does not exists."
+msgid "Input vector map does not exist."
 msgstr "แผนที่เชิงภาพไม่ใช่ 3มิติ"
 
 #: ../gui/wxpython/vnet/dialogs.py:816
