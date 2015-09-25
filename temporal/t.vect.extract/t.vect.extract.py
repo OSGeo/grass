@@ -19,6 +19,7 @@
 #% keyword: temporal
 #% keyword: extract
 #% keyword: vector
+#% keyword: time
 #%end
 
 #%option G_OPT_STVDS_INPUT

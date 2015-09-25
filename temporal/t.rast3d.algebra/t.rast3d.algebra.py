@@ -22,6 +22,7 @@
 #% keyword: algebra
 #% keyword: raster3d
 #% keyword: voxel
+#% keyword: time
 #%end
 
 #%option

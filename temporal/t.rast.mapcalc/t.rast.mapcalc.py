@@ -19,6 +19,7 @@
 #% keyword: temporal
 #% keyword: algebra
 #% keyword: raster
+#% keyword: time
 #%end
 
 #%option G_OPT_STRDS_INPUTS

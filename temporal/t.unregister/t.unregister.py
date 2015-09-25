@@ -19,6 +19,7 @@
 #% keyword: temporal
 #% keyword: map management
 #% keyword: unregister
+#% keyword: time
 #%end
 
 #%option G_OPT_STDS_INPUT

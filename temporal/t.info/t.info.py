@@ -19,6 +19,7 @@
 #% keyword: temporal
 #% keyword: metadata
 #% keyword: extent
+#% keyword: time
 #%end
 
 #%option G_OPT_STDS_INPUT

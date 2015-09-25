@@ -20,6 +20,7 @@
 #% keyword: extract
 #% keyword: raster3d
 #% keyword: voxel
+#% keyword: time
 #%end
 
 #%option G_OPT_STR3DS_INPUT

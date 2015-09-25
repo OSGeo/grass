@@ -19,6 +19,7 @@
 #% keyword: temporal
 #% keyword: sampling
 #% keyword: vector
+#% keyword: time
 #%end
 
 #%option G_OPT_V_INPUT

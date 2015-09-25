@@ -20,6 +20,7 @@
 #% keyword: export
 #% keyword: raster
 #% keyword: VTK
+#% keyword: time
 #%end
 
 #%option G_OPT_STRDS_INPUT
