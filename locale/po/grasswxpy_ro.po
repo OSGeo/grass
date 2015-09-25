@@ -6624,7 +6624,7 @@ msgstr "Crează tabel"
 
 #: ../gui/wxpython/vnet/dialogs.py:798
 #, fuzzy
-msgid "Input vector map does not exists."
+msgid "Input vector map does not exist."
 msgstr "Directorul %s nu există."
 
 #: ../gui/wxpython/vnet/dialogs.py:816
