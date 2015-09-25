@@ -44,8 +44,8 @@
 
 #%flag
 #% key: u
-#% label: Update input vector
-#% description: Instead create a new vector update the input vector with the values
+#% label: Update attribute table of input vector map
+#% description: Instead of creating a new vector map update the attribute table with value(s)
 #%end
 
 import grass.script as grass
@@ -99,7 +99,7 @@ def main():
     elif not output and not flags['u']:
         grass.fatal(_("'output' option or 'u' flag must be given"))
     elif not output and flags['u']:
-        grass.warning(_("Vector {name} will be update...").format(name=input))
+        grass.warning(_("Attribute table of vector {name} will be updated...").format(name=input))
 
     if where == "" or where == " " or where == "\n":
         where = None
@@ -187,7 +187,7 @@ def main():
 
     # Get the layer and database connections of the input vector
     if output:
-        gcopy(input, output, 'vect')
+        gcopy(input, output, 'vector')
     else:
         output = input
 
