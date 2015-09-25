@@ -73,6 +73,15 @@
 #% answer: 1
 #%end
 
+#%option
+#% key: file_limit
+#% type: integer
+#% description: The maximum number of open files allowed for each r.series process
+#% required: no
+#% multiple: no
+#% answer: 1000
+#%end
+
 #%option G_OPT_T_SAMPLE
 #% options: equal,overlaps,overlapped,starts,started,finishes,finished,during,contains
 #% answer: contains
@@ -109,12 +118,13 @@ def main():
     sampling = options["sampling"]
     offset = options["offset"]
     nprocs = options["nprocs"]
+    file_limit = options["file_limit"]
     time_suffix = flags["s"]
-    
+
     topo_list = sampling.split(",")
 
     tgis.init()
-    
+
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
 
@@ -128,7 +138,7 @@ def main():
 
     # We will create the strds later, but need to check here
     tgis.check_new_stds(output, "strds",   dbif,  gcore.overwrite())
-    
+
     start_time = map_list[0].temporal_extent.get_start_time()
 
     if sp.is_time_absolute():
@@ -163,26 +173,26 @@ def main():
             end = start_time + int(gran)
             granule.set_relative_time(start, end,  sp.get_relative_time_unit())
         start_time = end
-        
+
         granularity_list.append(granule)
 
-    output_list = tgis.aggregate_by_topology(granularity_list=granularity_list,  granularity=gran,  
-                                                                       map_list=map_list,  
+    output_list = tgis.aggregate_by_topology(granularity_list=granularity_list,  granularity=gran,
+                                                                       map_list=map_list,
                                                                        topo_list=topo_list,  basename=base, time_suffix=time_suffix,
-                                                                       offset=offset,  method=method,  nprocs=nprocs,  spatial=None, 
-                                                                       overwrite=gcore.overwrite())
+                                                                       offset=offset,  method=method,  nprocs=nprocs,  spatial=None,
+                                                                       overwrite=gcore.overwrite(), file_limit=file_limit)
 
     if output_list:
         temporal_type, semantic_type, title, description = sp.get_initial_values()
         output_strds = tgis.open_new_stds(output, "strds", temporal_type,
                                                                  title, description, semantic_type,
                                                                  dbif, gcore.overwrite())
-        if register_null: 
-            register_null=False 
-        else: 
+        if register_null:
+            register_null=False
+        else:
             register_null=True
-        
-        tgis.register_map_object_list("rast", output_list,  output_strds, register_null,  
+
+        tgis.register_map_object_list("rast", output_list,  output_strds, register_null,
                                                        sp.get_relative_time_unit(),  dbif)
 
         # Update the raster metadata table entries with aggregation type
