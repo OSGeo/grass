@@ -10757,7 +10757,7 @@ msgstr "Não consegui abrir mapa raster [%s]."
 
 #: ../vector/v.net/turntable.c:670
 #, fuzzy, c-format
-msgid "Arc layer <%s> does not exists in map <%s>."
+msgid "Arc layer <%s> does not exist in map <%s>."
 msgstr "Tabela <%s> não existe no banco de dados <%s>"
 
 #: ../vector/v.net/turntable.c:675

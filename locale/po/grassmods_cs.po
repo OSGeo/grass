@@ -10620,7 +10620,7 @@ msgstr "Nelze otevřít vektorovou mapu <%s>"
 
 #: ../vector/v.net/turntable.c:670
 #, fuzzy, c-format
-msgid "Arc layer <%s> does not exists in map <%s>."
+msgid "Arc layer <%s> does not exist in map <%s>."
 msgstr "Tabulka <%s> v databázi <%s> neexistuje"
 
 #: ../vector/v.net/turntable.c:675

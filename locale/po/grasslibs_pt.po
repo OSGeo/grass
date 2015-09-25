@@ -3678,7 +3678,7 @@ msgstr "O vetor '%s' já existe e será sobrescrito."
 
 #: ../lib/python/pygrass/raster/__init__.py:432
 #, fuzzy, python-brace-format
-msgid "Raster map <{0}> does not exists"
+msgid "Raster map <{0}> does not exist"
 msgstr "Impossível abrir topologia para mapa vetorial <%s>"
 
 #: ../lib/python/pygrass/raster/abstract.py:274

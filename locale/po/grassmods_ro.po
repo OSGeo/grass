@@ -9902,7 +9902,7 @@ msgstr "Imposibil de deschis harta vectorială <%s>"
 
 #: ../vector/v.net/turntable.c:670
 #, fuzzy, c-format
-msgid "Arc layer <%s> does not exists in map <%s>."
+msgid "Arc layer <%s> does not exist in map <%s>."
 msgstr "<%s> deja există în mapset <%s>"
 
 #: ../vector/v.net/turntable.c:675

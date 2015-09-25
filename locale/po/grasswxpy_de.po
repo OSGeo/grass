@@ -6755,7 +6755,7 @@ msgstr "Lade Tabellen..."
 
 #: ../gui/wxpython/vnet/dialogs.py:798
 #, fuzzy
-msgid "Input vector map does not exists."
+msgid "Input vector map does not exist."
 msgstr "Verzeichnis %s existiert nicht."
 
 #: ../gui/wxpython/vnet/dialogs.py:816

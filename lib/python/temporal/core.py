@@ -463,7 +463,7 @@ def get_available_temporal_mapsets():
             # exists
             if driver == "sqlite" and not os.path.exists(database):
                 message_interface.warning("Temporal database connection defined as:\n" + \
-                                          database + "\nBut database file does not exists.")
+                                          database + "\nBut database file does not exist.")
 
     return tgis_mapsets
 
@@ -474,7 +474,7 @@ def init(raise_fatal_error=False):
     """This function set the correct database backend from GRASS environmental
        variables and creates the grass temporal database structure for raster,
        vector and raster3d maps as well as for the space-time datasets strds,
-       str3ds and stvds in case it does not exists.
+       str3ds and stvds in case it does not exist.
 
        Several global variables are initiated and the messenger and C-library
        interface subprocesses are spawned.
@@ -759,7 +759,7 @@ def create_temporal_database(dbif):
     msgr.message(_("Creating temporal database: %s" % (str(tgis_database_string))))
 
     if tgis_backend == "sqlite":
-        # We need to create the sqlite3 database path if it does not exists
+        # We need to create the sqlite3 database path if it does not exist
         tgis_dir = os.path.dirname(tgis_database_string)
         if not os.path.exists(tgis_dir):
             try:

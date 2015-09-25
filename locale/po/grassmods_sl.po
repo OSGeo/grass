@@ -10674,7 +10674,7 @@ msgstr "Ime izhodnega rastrskega sloja"
 
 #: ../vector/v.net/turntable.c:670
 #, fuzzy, c-format
-msgid "Arc layer <%s> does not exists in map <%s>."
+msgid "Arc layer <%s> does not exist in map <%s>."
 msgstr "Rastrski sloj kateremu naj se regija prilagodi"
 
 #: ../vector/v.net/turntable.c:675
