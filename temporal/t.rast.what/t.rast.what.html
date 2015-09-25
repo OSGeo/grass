@@ -1,21 +1,24 @@
 <h2>DESCRIPTION</h2>
 
 <em>t.rast.what</em> is designed to sample space time raster datasets
-at specific point coordinates using <a href="r.what.html">r.what</a> internally. 
-The output of <a href="r.what.html">r.what</a> 
-is transformed to different output layouts.
+at specific point coordinates using <a href="r.what.html">r.what</a>
+internally. The output of <a href="r.what.html">r.what</a> is transformed
+to different output layouts.
 The output layouts can be specified using the <em>layout</em> option.
 <p>
 Three layouts can be specified:
 <ul>
     <li><em>row</em> - Row order, one vector sample point value per row</li>
-    <li><em>col</em> - Column order, create a column for each vector sample point of a single time step/raster layer</li>
-    <li><em>timerow</em> - Time order, create a column for each time step, this order is the original r.what output, except that the column names are the time stamps</li>
+    <li><em>col</em> - Column order, create a column for each vector sample
+     point of a single time step/raster layer</li>
+    <li><em>timerow</em> - Time order, create a column for each time step, 
+     this order is the original <em>r.what</em> output, except that the column
+     names are the timestamps</li>
 </ul>
 
 Please have a look at the example to see the supported layouts.
 <p>
-This module is designed to run several instances of r.what to sample
+This module is designed to run several instances of <em>r.what</em> to sample
 subsets of a space time raster dataset in parallel. Several intermediate
 text files will be created that are merged into a single file at the
 end of the processing.
@@ -31,7 +34,8 @@ Stdout will be used if no output is specified or if the
 
 <h3>Data preparation</h3>
 In the following examples we sample a space time raster dataset that contains
-4 raster map layers. First we create the STRDS that will be sampled with t.rast.what.
+4 raster map layers. First we create the STRDS that will be sampled with
+<em>t.rast.what</em>.
 
 <div class="code"><pre>
 g.region s=0 n=80 w=0 e=120 b=0 t=50 res=10
@@ -116,13 +120,14 @@ x|y|1990-03-01 00:00:00;1990-04-01 00:00:00|1990-04-01 00:00:00;1990-05-01 00:00
 <h2>SEE ALSO</h2>
 
 <em>
-<a href="r.what.html">r.what</a> ,
-<a href="r.neighbors.html">r.neighbors</a>,
-<a href="t.rast.aggregate.ds.html">t.rast.aggregate.ds</a>,
-<a href="t.rast.extract.html">t.rast.extract</a>,
-<a href="t.info.html">t.info</a>,
 <a href="g.region.html">g.region</a>,
 <a href="r.mask.html">r.mask</a>
+<a href="r.neighbors.html">r.neighbors</a>,
+<a href="r.what.html">r.what</a>,
+<a href="t.info.html">t.info</a>,
+<a href="t.rast.aggregate.ds.html">t.rast.aggregate.ds</a>,
+<a href="t.rast.extract.html">t.rast.extract</a>,
+<a href="v.what.strds.html">v.what.strds</a>
 </em>
 
 
