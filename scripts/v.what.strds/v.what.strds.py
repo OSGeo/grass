@@ -32,6 +32,7 @@
 #%end
 
 #%option G_OPT_V_OUTPUT
+#% required: no
 #%end
 
 #%option G_OPT_DB_WHERE
@@ -39,6 +40,12 @@
 
 #%option G_OPT_T_WHERE
 #% key: t_where
+#%end
+
+#%flag
+#% key: u
+#% label: Update input vector
+#% description: Instead create a new vector update the input vector with the values
 #%end
 
 import grass.script as grass
@@ -86,6 +93,13 @@ def main():
     strds = options["strds"]
     where = options["where"]
     tempwhere = options["t_where"]
+
+    if output and flags['u']:
+        grass.fatal(_("Cannot combine 'output' option and 'u' flag"))
+    elif not output and not flags['u']:
+        grass.fatal(_("'output' option or 'u' flag must be given"))
+    elif not output and flags['u']:
+        grass.warning(_("Vector {name} will be update...").format(name=input))
 
     if where == "" or where == " " or where == "\n":
         where = None
@@ -172,7 +186,10 @@ def main():
                 samples.append(s)
 
     # Get the layer and database connections of the input vector
-    gcopy(input, output, 'vect')
+    if output:
+        gcopy(input, output, 'vect')
+    else:
+        output = input
 
     msgr = Messenger()
     perc_curr = 0
