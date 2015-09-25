@@ -18,6 +18,7 @@
 #% description: Modifies the metadata of a space time dataset.
 #% keyword: temporal
 #% keyword: metadata
+#% keyword: time
 #%end
 
 #%option G_OPT_STDS_INPUT

@@ -20,6 +20,7 @@
 #% keyword: temporal
 #% keyword: series
 #% keyword: raster
+#% keyword: time
 #%end
 
 #%option G_OPT_STRDS_INPUT

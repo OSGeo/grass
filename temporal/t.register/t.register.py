@@ -19,6 +19,7 @@
 #% keyword: temporal
 #% keyword: map management
 #% keyword: register
+#% keyword: time
 #% overwrite: yes
 #%end
 

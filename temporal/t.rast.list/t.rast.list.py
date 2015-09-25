@@ -20,6 +20,7 @@
 #% keyword: map management
 #% keyword: raster
 #% keyword: list
+#% keyword: time
 #%end
 
 #%option G_OPT_STRDS_INPUT

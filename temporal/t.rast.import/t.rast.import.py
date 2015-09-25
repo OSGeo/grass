@@ -19,6 +19,7 @@
 #% keyword: temporal
 #% keyword: import
 #% keyword: raster
+#% keyword: time
 #%end
 
 #%option G_OPT_F_INPUT
