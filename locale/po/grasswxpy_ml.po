@@ -6541,7 +6541,7 @@ msgstr "മാപ്പ്സെറ്റ് ഉണ്ടാക്കുക"
 
 #: ../gui/wxpython/vnet/dialogs.py:798
 #, fuzzy
-msgid "Input vector map does not exists."
+msgid "Input vector map does not exist."
 msgstr "മാപ്പ് <%s> കണ്മനില്ല"
 
 #: ../gui/wxpython/vnet/dialogs.py:816

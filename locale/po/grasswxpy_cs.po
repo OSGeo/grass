@@ -6698,7 +6698,7 @@ msgstr "Načítám data..."
 
 #: ../gui/wxpython/vnet/dialogs.py:798
 #, fuzzy
-msgid "Input vector map does not exists."
+msgid "Input vector map does not exist."
 msgstr "Vektorová mapa <%s> nebyla nalezena."
 
 #: ../gui/wxpython/vnet/dialogs.py:816

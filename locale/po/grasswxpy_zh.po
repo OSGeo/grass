@@ -6667,7 +6667,7 @@ msgstr "为 %s 创建支持文件"
 
 #: ../gui/wxpython/vnet/dialogs.py:798
 #, fuzzy
-msgid "Input vector map does not exists."
+msgid "Input vector map does not exist."
 msgstr "栅格地图 [%s] 未发现"
 
 #: ../gui/wxpython/vnet/dialogs.py:816

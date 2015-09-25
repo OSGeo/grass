@@ -6774,7 +6774,7 @@ msgstr "Veri yükleniyor..."
 
 #: ../gui/wxpython/vnet/dialogs.py:798
 #, fuzzy
-msgid "Input vector map does not exists."
+msgid "Input vector map does not exist."
 msgstr "<%s>haritası bulunamadı."
 
 #: ../gui/wxpython/vnet/dialogs.py:816

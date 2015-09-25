@@ -6801,7 +6801,7 @@ msgstr "Menampilkan data..."
 
 #: ../gui/wxpython/vnet/dialogs.py:798
 #, fuzzy
-msgid "Input vector map does not exists."
+msgid "Input vector map does not exist."
 msgstr "ERROR: Mapset <%s> tidak ada"
 
 #: ../gui/wxpython/vnet/dialogs.py:816

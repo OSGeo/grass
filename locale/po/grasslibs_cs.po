@@ -3560,7 +3560,7 @@ msgstr "Vektorová mapa <%s> již existuje a bude přepsána."
 
 #: ../lib/python/pygrass/raster/__init__.py:432
 #, fuzzy, python-brace-format
-msgid "Raster map <{0}> does not exists"
+msgid "Raster map <{0}> does not exist"
 msgstr "Tabulka <%s> připojená k vektorové mapě <%s> neexistuje"
 
 #: ../lib/python/pygrass/raster/abstract.py:274

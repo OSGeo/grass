@@ -6662,7 +6662,7 @@ msgid "Creating turntable..."
 msgstr "Cargando datos."
 
 #: ../gui/wxpython/vnet/dialogs.py:798
-msgid "Input vector map does not exists."
+msgid "Input vector map does not exist."
 msgstr "Mapa vectorial de entrada no existe."
 
 #: ../gui/wxpython/vnet/dialogs.py:816

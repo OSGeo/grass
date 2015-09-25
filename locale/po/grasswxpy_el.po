@@ -6294,7 +6294,7 @@ msgstr "Φόρτωση δεδομένων..."
 
 #: ../gui/wxpython/vnet/dialogs.py:798
 #, fuzzy
-msgid "Input vector map does not exists."
+msgid "Input vector map does not exist."
 msgstr "Ο φάκελος %s δεν υπάρχει,"
 
 #: ../gui/wxpython/vnet/dialogs.py:816

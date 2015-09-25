@@ -429,7 +429,7 @@ class RasterSegment(RasterAbstractBase):
                 self._fd = libraster.Rast_open_new(self.name, self._gtype)
         else:
             if self.mode == "r":
-                str_err = _("Raster map <{0}> does not exists")
+                str_err = _("Raster map <{0}> does not exist")
                 raise OpenError(str_err.format(self.name))
 
             self._gtype = RTYPE[self.mtype]['grass type']

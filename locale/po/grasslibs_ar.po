@@ -3513,7 +3513,7 @@ msgstr "موجود ولايمكن تغييره '%s' الفيكتور"
 
 #: ../lib/python/pygrass/raster/__init__.py:432
 #, fuzzy, python-brace-format
-msgid "Raster map <{0}> does not exists"
+msgid "Raster map <{0}> does not exist"
 msgstr "'%s' لم يمكن فتح ملف التاريخ للفيكتور"
 
 #: ../lib/python/pygrass/raster/abstract.py:274

@@ -43330,7 +43330,7 @@ msgstr "Nombre para el mapa ráster de salida (saturación)"
 #~ msgstr "No se puede abrir el mapa vectorial <%s>"
 
 #, fuzzy
-#~ msgid "Arc layer <%s> does not exists in map <%s>."
+#~ msgid "Arc layer <%s> does not exist in map <%s>."
 #~ msgstr "La tabla <%s> no existe en la base de datos <%s>"
 
 #, fuzzy
