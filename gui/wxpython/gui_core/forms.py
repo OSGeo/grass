@@ -93,7 +93,7 @@ from core.utils import _
 from core.settings    import UserSettings
 from gui_core.widgets import FloatValidator, GNotebook, FormNotebook, FormListbook
 from core.giface import Notification
-from gui_core.dialogs import LayersList
+from gui_core.widgets import LayersList
 
 wxUpdateDialog, EVT_DIALOG_UPDATE = NewEvent()
 
