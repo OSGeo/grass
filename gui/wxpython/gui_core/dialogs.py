@@ -40,8 +40,7 @@ from core import globalvar
 from core.gcmd import GError, RunCommand, GMessage
 from gui_core.gselect import LocationSelect, MapsetSelect, Select, \
                              OgrTypeSelect, SubGroupSelect
-from gui_core.widgets import SingleSymbolPanel, GListCtrl, SimpleValidator, \
-    MapValidator, LayersList
+from gui_core.widgets import SingleSymbolPanel, GListCtrl, SimpleValidator, MapValidator
 from core.utils import _
 from core.settings import UserSettings
 from core.debug import Debug
