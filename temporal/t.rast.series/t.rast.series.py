@@ -101,6 +101,7 @@ def main():
 
         flag = ""
         if len(rows) > 1000:
+            grass.warning(_("Processing over 1000 maps: activating -z flag of r.series which slows down processing"))
             flag += "z"
         if nulls:
             flag += "n"
