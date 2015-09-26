@@ -210,6 +210,9 @@ def import_stds(input, output, directory, title=None, descr=None, location=None,
     tar = tarfile.open(name=input, mode='r')
 
     # Check for important files
+    msgr = get_tgis_message_interface()
+    msgr.message(_("Checking validity of input file (size: %0.1f MB). Make take a while..."
+        % (os.path.getsize(input)/(1024*1024.0))))
     members = tar.getnames()
     # Make sure that the basenames of the files are used for comparison
     member_basenames = [os.path.basename(name) for name in members]
@@ -221,6 +224,7 @@ def import_stds(input, output, directory, title=None, descr=None, location=None,
     if proj_file_name not in member_basenames:
         gscript.fatal(_("Unable to find projection file <%s>") % proj_file_name)
 
+    msgr.message(_("Extracting data..."))
     tar.extractall(path=directory)
     tar.close()
 
