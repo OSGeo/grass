@@ -17,6 +17,7 @@ This program is free software under the GNU General Public License
 
 import wx
 from core.debug import Debug
+from utils import ComputeScaledRect
 
 
 class BufferedWindow(wx.Window):
@@ -107,6 +108,8 @@ class AnimationWindow(BufferedWindow):
         self._pdc = wx.PseudoDC()
         self._overlay = None
         self._tmpMousePos = None
+        self.x = self.y = 0
+        self.bitmap_overlay = None
 
         BufferedWindow.__init__(self, parent=parent, id=id, style=style)
         self.SetBackgroundColour(wx.BLACK)
@@ -119,21 +122,40 @@ class AnimationWindow(BufferedWindow):
         Debug.msg(5, "AnimationWindow.Draw()")
 
         dc.Clear()  # make sure you clear the bitmap!
-        dc.DrawBitmap(self.bitmap, x=0, y=0)
+        dc.DrawBitmap(self.bitmap, x=self.x, y=self.y)
 
     def OnSize(self, event):
         Debug.msg(5, "AnimationWindow.OnSize()")
-
-        self.DrawBitmap(self.bitmap)
 
         BufferedWindow.OnSize(self, event)
         if event:
             event.Skip()
 
+    def _rescaleIfNeeded(self, bitmap):
+        """!If the bitmap has different size than the window, rescale it."""
+        bW, bH = bitmap.GetSize()
+        wW, wH = self.GetClientSize()
+        if abs(bW - wW) > 5 or abs(bH - wH) > 5:
+            params = ComputeScaledRect((bW, bH), (wW, wH))
+            im = wx.ImageFromBitmap(bitmap)
+            im.Rescale(params['width'], params['height'])
+            self.x = params['x']
+            self.y = params['y']
+            bitmap = wx.BitmapFromImage(im)
+            if self._overlay:
+                im = wx.ImageFromBitmap(self.bitmap_overlay)
+                im.Rescale(im.GetWidth() * params['scale'], im.GetHeight() * params['scale'])
+                self._setOverlay(wx.BitmapFromImage(im), xperc=self.perc[0], yperc=self.perc[1])
+        else:
+            self.x = 0
+            self.y = 0
+        return bitmap
+
     def DrawBitmap(self, bitmap):
         """Draws bitmap.
         Does not draw the bitmap if it is the same one as last time.
         """
+        bitmap = self._rescaleIfNeeded(bitmap)
         if self.bitmap == bitmap:
             return
 
@@ -148,6 +170,15 @@ class AnimationWindow(BufferedWindow):
                                          self._overlay.GetHeight()))
         self._pdc.EndDrawing()
 
+    def _setOverlay(self, bitmap, xperc, yperc):
+        if self._overlay:
+            self._pdc.RemoveAll()
+        self._overlay = bitmap
+        size = self.GetClientSize()
+        x = xperc * size[0]
+        y = yperc * size[1]
+        self.DrawOverlay(x, y)
+
     def SetOverlay(self, bitmap, xperc, yperc):
         """Sets overlay bitmap (legend)
 
@@ -157,22 +188,20 @@ class AnimationWindow(BufferedWindow):
         """
         Debug.msg(3, "AnimationWindow.SetOverlay()")
         if bitmap:
-            if self._overlay:
-                self._pdc.RemoveAll()
-            self._overlay = bitmap
-            size = self.GetClientSize()
-            x = xperc * size[0]
-            y = yperc * size[1]
-            self.DrawOverlay(x, y)
+            self._setOverlay(bitmap, xperc, yperc)
+            self.bitmap_overlay = bitmap
+            self.perc = (xperc, yperc)
         else:
             self._overlay = None
             self._pdc.RemoveAll()
+            self.bitmap_overlay = None
         self.UpdateDrawing()
 
     def ClearOverlay(self):
         """Clear overlay (legend) """
         Debug.msg(3, "AnimationWindow.ClearOverlay()")
         self._overlay = None
+        self.bitmap_overlay = None
         self._pdc.RemoveAll()
         self.UpdateDrawing()
 

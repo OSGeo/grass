@@ -371,7 +371,8 @@ class AnimationController(wx.EvtHandler):
                 self._load3DData(animData)
             self._loadLegend(animData)
         color = UserSettings.Get(group='animation', key='bgcolor', subkey='color')
-        self.bitmapProvider.Load(nprocs=getCpuCount(), bgcolor=color)
+        cpus = UserSettings.Get(group='animation', key='nprocs', subkey='value')
+        self.bitmapProvider.Load(nprocs=cpus, bgcolor=color)
         # clear pools
         self.bitmapPool.Clear()
         self.mapFilesPool.Clear()
@@ -449,7 +450,8 @@ class AnimationController(wx.EvtHandler):
         self.EndAnimation()
 
         color = UserSettings.Get(group='animation', key='bgcolor', subkey='color')
-        self.bitmapProvider.Load(nprocs=getCpuCount(), bgcolor=color, force=True)
+        cpus = UserSettings.Get(group='animation', key='nprocs', subkey='value')
+        self.bitmapProvider.Load(nprocs=cpus, bgcolor=color, force=True)
 
         self.EndAnimation()
 
@@ -493,6 +495,8 @@ class AnimationController(wx.EvtHandler):
         busy = wx.BusyInfo(message=_("Preparing export, please wait..."), parent=self.frame)
         wx.Yield()
         lastBitmaps = {}
+        fgcolor = UserSettings.Get(group='animation', key='font', subkey='fgcolor')
+        bgcolor = UserSettings.Get(group='animation', key='font', subkey='bgcolor')
         for frameIndex in range(frameCount):
             image = wx.EmptyImage(*size)
             image.Replace(0, 0, 0, 255, 255, 255)
@@ -545,10 +549,10 @@ class AnimationController(wx.EvtHandler):
                             text = _("%(start)s %(unit)s") % \
                                     {'start': timeLabel[0], 'unit': timeLabel[2]}
 
-                    decImage = RenderText(text, decoration['font']).ConvertToImage()
+                    decImage = RenderText(text, decoration['font'], bgcolor, fgcolor).ConvertToImage()
                 elif decoration['name'] == 'text':
                     text = decoration['text']
-                    decImage = RenderText(text, decoration['font']).ConvertToImage()
+                    decImage = RenderText(text, decoration['font'], bgcolor, fgcolor).ConvertToImage()
 
                 image.Paste(decImage, x, y)
 

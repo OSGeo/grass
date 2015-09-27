@@ -811,6 +811,13 @@ class Settings:
                 'bgcolor': {
                     'color': (255, 255, 255, 255),
                     },
+                'nprocs': {
+                    'value': -1,
+                    },
+                'font': {
+                    'bgcolor': (255, 255, 255, 255),
+                    'fgcolor': (0, 0, 0, 255),
+                    },
                 'temporal': {
                     'format': '%Y-%m-%d %H:%M:%S',
                     'nodata': {

@@ -37,7 +37,7 @@ from core.utils import _
 from gui_core.gselect import Select
 from gui_core.widgets import FloatValidator
 
-from animation.utils import TemporalMode, getRegisteredMaps, getNameAndLayer
+from animation.utils import TemporalMode, getRegisteredMaps, getNameAndLayer, getCpuCount
 from animation.data import AnimationData, AnimLayer
 from animation.toolbars import AnimSimpleLmgrToolbar, SIMPLE_LMGR_STDS
 from gui_core.simplelmgr import SimpleLayerManager, \
@@ -1502,6 +1502,46 @@ class PreferencesDialog(PreferencesBaseDialog):
                                   size=globalvar.DIALOG_COLOR_SIZE)
         color.SetName('GetColour')
         self.winId['animation:bgcolor:color'] = color.GetId()
+
+        gridSizer.Add(item=color, pos=(row, 1), flag=wx.ALIGN_RIGHT)
+
+        row += 1
+        gridSizer.Add(item=wx.StaticText(parent=panel,
+                                         label=_("Number of parallel processes:")),
+                      flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
+        # when running for the first time, set nprocs based on the number of processes
+        if UserSettings.Get(group='animation', key='nprocs', subkey='value') == -1:
+            UserSettings.Set(group='animation', key='nprocs', subkey='value', value=getCpuCount())
+        nprocs = wx.SpinCtrl(parent=panel,
+                             initial=UserSettings.Get(group='animation', key='nprocs', subkey='value'))
+        nprocs.SetName('GetValue')
+        self.winId['animation:nprocs:value'] = nprocs.GetId()
+
+        gridSizer.Add(item=nprocs, pos=(row, 1), flag=wx.ALIGN_RIGHT)
+
+        row += 1
+        gridSizer.Add(item=wx.StaticText(parent=panel,
+                                         label=_("Text foreground color:")),
+                      flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
+        color = csel.ColourSelect(parent=panel,
+                                  colour=UserSettings.Get(group='animation',
+                                                          key='font', subkey='fgcolor'),
+                                  size=globalvar.DIALOG_COLOR_SIZE)
+        color.SetName('GetColour')
+        self.winId['animation:font:fgcolor'] = color.GetId()
+
+        gridSizer.Add(item=color, pos=(row, 1), flag=wx.ALIGN_RIGHT)
+
+        row += 1
+        gridSizer.Add(item=wx.StaticText(parent=panel,
+                                         label=_("Text background color:")),
+                      flag=wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL, pos=(row, 0))
+        color = csel.ColourSelect(parent=panel,
+                                  colour=UserSettings.Get(group='animation',
+                                                          key='font', subkey='bgcolor'),
+                                  size=globalvar.DIALOG_COLOR_SIZE)
+        color.SetName('GetColour')
+        self.winId['animation:font:bgcolor'] = color.GetId()
 
         gridSizer.Add(item=color, pos=(row, 1), flag=wx.ALIGN_RIGHT)
 
