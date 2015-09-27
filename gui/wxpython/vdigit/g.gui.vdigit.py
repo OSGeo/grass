@@ -48,6 +48,7 @@ def main():
     import wx
     from core.globalvar import CheckWxVersion
     from core.utils import _
+    from core.render import Map
     from mapdisp.frame import MapFrame
     from mapdisp.main import DMonGrassInterface
     from core.settings import UserSettings
@@ -59,7 +60,7 @@ def main():
     class VDigitMapFrame(MapFrame):
         def __init__(self, vectorMap):
             MapFrame.__init__(
-                self, parent=None, giface=DMonGrassInterface(None),
+                self, parent=None, Map=Map(), giface=DMonGrassInterface(None),
                 title=_("GRASS GIS Vector Digitizer"), size=(850, 600))
             # this giface issue not solved yet, we must set mapframe aferwards
             self._giface._mapframe = self
