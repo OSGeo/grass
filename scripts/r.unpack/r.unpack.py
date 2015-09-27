@@ -105,33 +105,40 @@ def main():
         diff_result_1 = diff_result_2 = None
         
         proj_info_file_1 = 'PROJ_INFO'
-        proj_info_file_2 = os.path.join(mset_dir, '..', 'PERMANENT', 'PROJ_INFO')    
-    
-        if not grass.compare_key_value_text_files(filename_a=proj_info_file_1,
-                                                  filename_b=proj_info_file_2,
-                                                  proj=True):                                                      
-            diff_result_1 = diff_files(proj_info_file_1, proj_info_file_2)
-    
-        proj_units_file_1 = 'PROJ_UNITS'
-        proj_units_file_2 = os.path.join(mset_dir, '..', 'PERMANENT', 'PROJ_UNITS')
-    
-        if not grass.compare_key_value_text_files(filename_a=proj_units_file_1,
-                                                  filename_b=proj_units_file_2,
-                                                  units=True):                                                      
-            diff_result_2 = diff_files(proj_units_file_1, proj_units_file_2)
-    
-        if diff_result_1 or diff_result_2:
-            
-            if diff_result_1:
-                grass.warning(_("Difference between PROJ_INFO file of packed map "
-                                "and of current location:\n{diff}").format(diff=''.join(diff_result_1)))
-            if diff_result_2:
-                grass.warning(_("Difference between PROJ_UNITS file of packed map "
-                                "and of current location:\n{diff}").format(diff=''.join(diff_result_2)))
-            grass.fatal(_("Projection of dataset does not appear to match current location."
-                          " In case of no significant differences in the projection definitions,"
-                          " use the -o flag to ignore them and use"
-                          " current location definition."))
+        proj_info_file_2 = os.path.join(mset_dir, '..', 'PERMANENT', 'PROJ_INFO')
+
+        skip_projection_check = False
+        if not os.path.exists(proj_info_file_1):
+            if os.path.exists(proj_info_file_2):
+                grass.fatal(_("PROJ_INFO file is missing, unpack raster map in XY (unprojected) location."))
+            skip_projection_check = True  # XY location
+
+        if not skip_projection_check:
+            if not grass.compare_key_value_text_files(filename_a=proj_info_file_1,
+                                                      filename_b=proj_info_file_2,
+                                                      proj=True):                                                      
+                diff_result_1 = diff_files(proj_info_file_1, proj_info_file_2)
+        
+            proj_units_file_1 = 'PROJ_UNITS'
+            proj_units_file_2 = os.path.join(mset_dir, '..', 'PERMANENT', 'PROJ_UNITS')
+        
+            if not grass.compare_key_value_text_files(filename_a=proj_units_file_1,
+                                                      filename_b=proj_units_file_2,
+                                                      units=True):                                                      
+                diff_result_2 = diff_files(proj_units_file_1, proj_units_file_2)
+        
+            if diff_result_1 or diff_result_2:
+                
+                if diff_result_1:
+                    grass.warning(_("Difference between PROJ_INFO file of packed map "
+                                    "and of current location:\n{diff}").format(diff=''.join(diff_result_1)))
+                if diff_result_2:
+                    grass.warning(_("Difference between PROJ_UNITS file of packed map "
+                                    "and of current location:\n{diff}").format(diff=''.join(diff_result_2)))
+                grass.fatal(_("Projection of dataset does not appear to match current location."
+                              " In case of no significant differences in the projection definitions,"
+                              " use the -o flag to ignore them and use"
+                              " current location definition."))
 
     # install in $MAPSET
     for element in ['cats', 'cell', 'cellhd', 'cell_misc', 'colr', 'fcell', 'hist']:
