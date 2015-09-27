@@ -47,7 +47,7 @@
 
 #%flag
 #% key: r
-#% description: Remove all registered maps from the temporal and spatial database
+#% description: Remove all registered maps from the temporal and also from the spatial database
 #%end
 
 #%flag
@@ -115,7 +115,7 @@ def main():
         sp = tgis.open_old_stds(name, type, dbif)
 
         if recursive and force:
-            grass.message(_("Removing registered maps"))
+            grass.message(_("Removing registered maps and %s" % type))
             maps = sp.get_registered_maps_as_objects(dbif=dbif)
             map_statement = ""
             count = 1
@@ -151,6 +151,8 @@ def main():
                     remove(type="vector", name=name_list, run_=True)
                 if type == "str3ds":
                     remove(type="raster_3d", name=name_list, run_=True)
+        else:
+            grass.message(_("Note: registered maps themselves have not been removed, only the %s" % type))
 
         statement += sp.delete(dbif=dbif, execute=False)
 
