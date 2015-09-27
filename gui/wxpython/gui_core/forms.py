@@ -2360,6 +2360,8 @@ class GUI:
             cmd_validated = [cmd[0]]
             for option in cmd[1:]:
                 if option[0] == '-': # flag
+                    if len(option) == 1:  # catch typo like 'g.proj - w'
+                        raise gcmd.GException, _("Unable to parse command '%s'") % ' '.join(cmd)
                     if option[1] == '-':
                         self.grass_task.set_flag(option[2:], True)
                     else:
