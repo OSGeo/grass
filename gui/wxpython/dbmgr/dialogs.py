@@ -310,8 +310,10 @@ class DisplayAttributesDialog(wx.Dialog):
         elif frame.IsAutoRendered():
             frame.RemoveQueryLayer()
             self.parent.UpdateMap(render = True)
-
-        self.Destroy()
+        if self.IsModal():
+            self.EndModal(wx.ID_OK)
+        else:
+            self.Destroy()
 
     def OnSubmit(self, event):
         """Submit records"""
