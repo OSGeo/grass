@@ -112,9 +112,11 @@ int main(int argc, char *argv[])
     float xmin = 0., ymin = 0., xmax = 0., ymax = 0.;
     struct GModule *module;
     struct Option *in_opt, *out_opt, *spat_opt, *filter_opt, *class_opt;
+    struct Option *id_layer_opt, *return_layer_opt, *class_layer_opt;
     struct Option *skip_opt, *preserve_opt, *offset_opt, *limit_opt;
     struct Option *outloc_opt;
     struct Flag *print_flag, *notab_flag, *region_flag, *notopo_flag;
+    struct Flag *nocats_flag;
     struct Flag *over_flag, *extend_flag, *no_import_flag;
     char buf[2000];
     struct Key_Value *loc_proj_info = NULL, *loc_proj_units = NULL;
@@ -170,7 +172,25 @@ int main(int argc, char *argv[])
     in_opt->description = _("LiDAR input files in LAS format (*.las or *.laz)");
 
     out_opt = G_define_standard_option(G_OPT_V_OUTPUT);
-    
+
+    id_layer_opt = G_define_standard_option(G_OPT_V_FIELD);
+    id_layer_opt->key = "id_layer";
+    id_layer_opt->label = _("Layer number to store generated point ID as category");
+    id_layer_opt->answer = NULL;
+    id_layer_opt->guisection = _("Categories");
+
+    return_layer_opt = G_define_standard_option(G_OPT_V_FIELD);
+    return_layer_opt->key = "return_layer";
+    return_layer_opt->label = _("Layer number to store return number as category");
+    return_layer_opt->answer = NULL;
+    return_layer_opt->guisection = _("Categories");
+
+    class_layer_opt = G_define_standard_option(G_OPT_V_FIELD);
+    class_layer_opt->key = "class_layer";
+    class_layer_opt->label = _("Layer number to store class number as category");
+    class_layer_opt->answer = NULL;
+    class_layer_opt->guisection = _("Categories");
+
     spat_opt = G_define_option();
     spat_opt->key = "spatial";
     spat_opt->type = TYPE_DOUBLE;
@@ -265,6 +285,14 @@ int main(int argc, char *argv[])
     notab_flag = G_define_standard_flag(G_FLG_V_TABLE);
     notab_flag->guisection = _("Speed");
 
+    nocats_flag = G_define_flag();
+    nocats_flag->key = 'c';
+    nocats_flag->label =
+        _("Store only the coordinates");
+    nocats_flag->description =
+        _("Do not add categories to points and do not create attribute table");
+    nocats_flag->guisection = _("Speed");
+
     notopo_flag = G_define_standard_flag(G_FLG_V_TOPO);
     notopo_flag->guisection = _("Speed");
 
@@ -283,6 +311,7 @@ int main(int argc, char *argv[])
     no_import_flag->suppress_required = YES;
 
     G_option_exclusive(skip_opt, preserve_opt, NULL);
+    G_option_excludes(nocats_flag, id_layer_opt, return_layer_opt, class_layer_opt, NULL);
 
     /* The parser checks if the map already exists in current mapset, this is
      * wrong if location options is used, so we switch out the check and do it
@@ -291,6 +320,10 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+    /* no cats implies no table */
+    if (nocats_flag->answer)
+        notab_flag->answer = 1;
 
     /* Don't crash on cmd line if file not found */
     if (access(in_opt->answer, F_OK) != 0) {
@@ -342,6 +375,36 @@ int main(int argc, char *argv[])
 	    return_filter = LAS_MID;
 	else
 	    G_fatal_error(_("Unknown filter option <%s>"), filter_opt->answer);
+    }
+
+    int id_layer = 0;
+    int return_layer = 0;
+    int class_layer = 0;
+    if (id_layer_opt->answer)
+        id_layer = atoi(id_layer_opt->answer);
+    if (return_layer_opt->answer)
+        return_layer = atoi(return_layer_opt->answer);
+    if (class_layer_opt->answer)
+        class_layer = atoi(class_layer_opt->answer);
+    /* If no layer specified by user, force 1 to be used for ids.
+     * If id_layer not specified by the attributes table was, find a layer.
+     * nocats implies notab and we don't add any layers.
+     * Also when layers are set to zero by user, we consider it as if
+     * the nocats flag would be specified. We use !id_layer_opt->answer
+     * to see that user was the one not setting the id_layer which are
+     * are about to turn on.
+     * Later on, layer set to 0 is considered as no layer set.
+     */
+    if (!nocats_flag->answer && !id_layer_opt->answer && !return_layer && !class_layer) {
+        id_layer = 1;
+    }
+    if (!notab_flag->answer && !id_layer) {
+        /* get the first free layer number */
+        for (i = 1; i <= MAX(return_layer, class_layer) + 1; i++) {
+            if (i != return_layer && i != class_layer)
+                break;
+        }
+        id_layer = i;
     }
 
     if (region_flag->answer) {
@@ -568,9 +631,9 @@ int main(int argc, char *argv[])
     if (!notab_flag->answer) {
 	char *cat_col_name = GV_KEY_COLUMN;
 
-	Fi = Vect_default_field_info(&Map, 1, NULL, GV_1TABLE);
+	Fi = Vect_default_field_info(&Map, id_layer, NULL, GV_1TABLE);
 
-	Vect_map_add_dblink(&Map, 1, out_opt->answer, Fi->table,
+	Vect_map_add_dblink(&Map, id_layer, out_opt->answer, Fi->table,
 			    cat_col_name, Fi->database, Fi->driver);
 
 	/* check available LAS info, depends on POINT DATA RECORD FORMAT [0-5] */
@@ -810,7 +873,12 @@ int main(int argc, char *argv[])
         }
 
 	Vect_append_point(Points, x, y, z);
-	Vect_cat_set(Cats, 1, cat);
+        if (id_layer)
+            Vect_cat_set(Cats, id_layer, cat);
+        if (return_layer)
+            Vect_cat_set(Cats, return_layer, LASPoint_GetReturnNumber(LAS_point));
+        if (class_layer)
+            Vect_cat_set(Cats, class_layer, LASPoint_GetClassification(LAS_point));
 	Vect_write_line(&Map, GV_POINT, Points, Cats);
 
 	/* Attributes */
