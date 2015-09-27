@@ -98,7 +98,7 @@
 
 #%flag
 #% key: s
-#% description: Use start time - truncated accoring to granularity - as suffix. This flag overrides the offset option.
+#% description: Use start time - truncated according to granularity - as suffix (overrides offset option)
 #%end
 
 import grass.script as gcore
