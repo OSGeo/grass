@@ -194,22 +194,11 @@ class VDigitWindow(BufferedMapWindow):
                     for fid in fids:
                         self._geomAttrb(fid, addRecordDlg, 'area')
                         self._geomAttrb(fid, addRecordDlg, 'perimeter')
-                
-                if addRecordDlg.IsFound() and \
-                        addRecordDlg.ShowModal() == wx.ID_OK:
-                    sqlfile = tempfile.NamedTemporaryFile(mode = "w")
-                    for sql in addRecordDlg.GetSQLString():
-                        sqlfile.file.write(sql + ";\n")
-                    sqlfile.file.flush()
-                    
-                    RunCommand('db.execute',
-                               parent = self,
-                               quiet = True, 
-                               input = sqlfile.name)
-                
-                if addRecordDlg.mapDBInfo:
-                    self._updateATM()
-        
+
+                if addRecordDlg.IsFound():
+                    addRecordDlg.ShowModal()
+                addRecordDlg.Destroy()
+
         elif self.toolbar.GetAction('type') in ["line", "boundary", "area"]:
             # add new point to the line
             self.polycoords.append(self.Pixel2Cell(event.GetPositionTuple()[:]))
@@ -945,21 +934,10 @@ class VDigitWindow(BufferedMapWindow):
                         self._geomAttrb(fid, addRecordDlg, 'area')
                         self._geomAttrb(fid, addRecordDlg, 'perimeter')
 
-                    
-                    if addRecordDlg.mapDBInfo and \
-                            addRecordDlg.ShowModal() == wx.ID_OK:
-                        sqlfile = tempfile.NamedTemporaryFile(mode = "w")
-                        for sql in addRecordDlg.GetSQLString():
-                            sqlfile.file.write(sql + ";\n")
-                        sqlfile.file.flush()
-                        RunCommand('db.execute',
-                                   parent = True,
-                                   quiet = True,
-                                   input = sqlfile.name)
-                        
-                    if addRecordDlg.mapDBInfo:
-                        self._updateATM()
-            
+                    if addRecordDlg.IsFound():
+                        addRecordDlg.ShowModal()
+                    addRecordDlg.Destroy()
+
         elif action == "deleteLine":
             # -> delete selected vector features
             if self.digit.DeleteSelectedLines() < 0:
