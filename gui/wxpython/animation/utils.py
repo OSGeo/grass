@@ -238,19 +238,19 @@ def ComputeScaledRect(sourceSize, destSize):
     return {'width': width, 'height': height, 'x': x, 'y': y, 'scale': scale}
 
 
-def RenderText(text, font):
+def RenderText(text, font, bgcolor, fgcolor):
     """Renderes text with given font to bitmap."""
     dc = wx.MemoryDC()
     dc.SetFont(font)
     w, h = dc.GetTextExtent(text)
     bmp = wx.EmptyBitmap(w + 2, h + 2)
     dc.SelectObject(bmp)
-    dc.SetBrush(wx.TRANSPARENT_BRUSH)
-    dc.SetBackgroundMode(wx.TRANSPARENT)
+    dc.SetBackgroundMode(wx.SOLID)
+    dc.SetTextBackground(wx.Colour(*bgcolor))
+    dc.SetTextForeground(wx.Colour(*fgcolor))
     dc.Clear()
     dc.DrawText(text, 1, 1)
     dc.SelectObject(wx.NullBitmap)
-    bmp.SetMaskColour(wx.WHITE)
 
     return bmp
 
