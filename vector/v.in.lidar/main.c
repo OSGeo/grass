@@ -978,8 +978,7 @@ int main(int argc, char *argv[])
             if (limit_n_counter == limit_n)
                 break;
         }
-        
-        if (cat == GV_CAT_MAX) {
+        if (id_layer && cat == GV_CAT_MAX) {
             cat_max_reached = TRUE;
             break;
         }
@@ -1002,9 +1001,10 @@ int main(int argc, char *argv[])
 	Vect_build(&Map);
     Vect_close(&Map);
 
-    /* can be easily determined only when not having count limit */
-    if (!limit_n && points_imported != n_features - not_valid - n_outside
-            - n_filtered - n_class_filtered - offset_n_counter - n_count_filtered)
+    /* can be easily determined only when iterated over all points */
+    if (!limit_n && !cat_max_reached && points_imported != n_features
+            - not_valid - n_outside - n_filtered - n_class_filtered
+            - offset_n_counter - n_count_filtered)
         G_warning(_("The underlying libLAS library is at its limits."
                     " Previously reported counts might have been distorted."
                     " However, the import itself should be unaffected."));
