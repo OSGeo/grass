@@ -152,10 +152,14 @@ int main(int argc, char *argv[])
     int cat_max_reached = FALSE;
 
 #ifdef HAVE_LONG_LONG_INT
-    unsigned long long n_features, feature_count, n_outside,
+    unsigned long long n_features; /* what libLAS reports as point count */
+    unsigned long long points_imported; /* counter how much we have imported */
+    unsigned long long feature_count, n_outside,
         n_filtered, n_class_filtered, not_valid;
 #else
-    unsigned long n_features, feature_count, n_outside,
+    unsigned long n_features;
+    unsigned long points_imported;
+    unsigned long feature_count, n_outside,
         n_filtered, n_class_filtered, not_valid;
 #endif
 
@@ -619,7 +623,12 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to create vector map <%s>"), out_opt->answer);
 
     Vect_hist_command(&Map);
-    
+
+    /* libLAS uses uint32_t according to the source code
+     * or unsigned int according to the online doc,
+     * so just storing in long doesn't help.
+     * Thus, we use this just for the messages and percents.
+     */
     n_features = LASHeader_GetPointRecordsCount(LAS_header);
     las_point_format = LASHeader_GetDataFormatId(LAS_header);
 
@@ -744,6 +753,7 @@ int main(int argc, char *argv[])
     }
 
     /* Import feature */
+    points_imported = 0;
     cat = 1;
     not_valid = 0;
     feature_count = 0;
@@ -974,6 +984,7 @@ int main(int argc, char *argv[])
             break;
         }
 	cat++;
+        points_imported++;
     }
     G_percent(n_features, n_features, 1);	/* finish it */
 
@@ -991,15 +1002,12 @@ int main(int argc, char *argv[])
 	Vect_build(&Map);
     Vect_close(&Map);
 
-    /* compute how much we have imported */
-#ifdef HAVE_LONG_LONG_INT
-    unsigned long long points_imported;
-#else
-    unsigned long points_imported;
-#endif
-    /* valid only when not having count limit */
-    points_imported = n_features - not_valid - n_outside - n_filtered
-        - n_class_filtered - offset_n_counter - n_count_filtered;
+    /* can be easily determined only when not having count limit */
+    if (!limit_n && points_imported != n_features - not_valid - n_outside
+            - n_filtered - n_class_filtered - offset_n_counter - n_count_filtered)
+        G_warning(_("The underlying libLAS library is at its limits."
+                    " Previously reported counts might have been distorted."
+                    " However, the import itself should be unaffected."));
 
 #ifdef HAVE_LONG_LONG_INT
     if (limit_n)
