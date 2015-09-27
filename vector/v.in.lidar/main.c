@@ -149,6 +149,8 @@ int main(int argc, char *argv[])
     struct line_pnts *Points;
     struct line_cats *Cats;
 
+    int cat_max_reached = FALSE;
+
 #ifdef HAVE_LONG_LONG_INT
     unsigned long long n_features, feature_count, n_outside,
         n_filtered, n_class_filtered, not_valid;
@@ -966,6 +968,11 @@ int main(int argc, char *argv[])
             if (limit_n_counter == limit_n)
                 break;
         }
+        
+        if (cat == GV_CAT_MAX) {
+            cat_max_reached = TRUE;
+            break;
+        }
 	cat++;
     }
     G_percent(n_features, n_features, 1);	/* finish it */
@@ -984,13 +991,21 @@ int main(int argc, char *argv[])
 	Vect_build(&Map);
     Vect_close(&Map);
 
+    /* compute how much we have imported */
+#ifdef HAVE_LONG_LONG_INT
+    unsigned long long points_imported;
+#else
+    unsigned long points_imported;
+#endif
+    /* valid only when not having count limit */
+    points_imported = n_features - not_valid - n_outside - n_filtered
+        - n_class_filtered - offset_n_counter - n_count_filtered;
+
 #ifdef HAVE_LONG_LONG_INT
     if (limit_n)
         G_message(_("%llu points imported (limit was %llu)"), limit_n_counter, limit_n);
     else
-        G_message(_("%llu points imported"),
-            n_features - not_valid - n_outside - n_filtered - n_class_filtered
-            - offset_n_counter - n_count_filtered);
+        G_message(_("%llu points imported"), points_imported);
     if (not_valid)
 	G_message(_("%llu input points were not valid"), not_valid);
     if (n_outside)
@@ -1005,11 +1020,9 @@ int main(int argc, char *argv[])
         G_message(_("%llu input points were skipped by count-based decimation"), n_count_filtered);
 #else
     if (limit_n)
-        G_message(_("%d points imported (limit was %d)"), limit_n_counter, limit_n);
+        G_message(_("%lu points imported (limit was %d)"), limit_n_counter, limit_n);
     else
-        G_message(_("%d points imported"),
-            n_features - not_valid - n_outside - n_filtered - n_class_filtered
-            - offset_n_counter - n_count_filtered);
+        G_message(_("%lu points imported"), points_imported);
     if (not_valid)
 	G_message(_("%lu input points were not valid"), not_valid);
     if (n_outside)
@@ -1026,6 +1039,10 @@ int main(int argc, char *argv[])
 #endif
     if (limit_n)
         G_message(_("The rest of points was ignored"));
+
+    if (cat_max_reached)
+        G_warning(_("Maximum number of categories reached (%d). Import ended prematurely."
+                    " Try to import without using category as an ID."), GV_CAT_MAX);
 
     /* -------------------------------------------------------------------- */
     /*      Extend current window based on dataset.                         */
