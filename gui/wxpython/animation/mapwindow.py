@@ -122,7 +122,7 @@ class AnimationWindow(BufferedWindow):
         Debug.msg(5, "AnimationWindow.Draw()")
 
         dc.Clear()  # make sure you clear the bitmap!
-        if self.bitmap.IsOk():
+        if self.bitmap.GetWidth() > 1:
             dc.DrawBitmap(self.bitmap, x=self.x, y=self.y)
 
     def OnSize(self, event):
