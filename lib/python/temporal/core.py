@@ -847,7 +847,8 @@ class SQLDatabaseInterfaceConnection(object):
             driver,  dbstring = self.tgis_mapsets[mapset]
 
             if dbstring not in self.unique_connections.keys():
-                self.unique_connections[dbstring] = DBConnection(driver)
+                self.unique_connections[dbstring] = DBConnection(backend=driver, 
+                                                                 dbstring=dbstring)
 
             self.connections[mapset] = self.unique_connections[dbstring]
 
@@ -891,7 +892,7 @@ class SQLDatabaseInterfaceConnection(object):
            close all temporal databases that have been opened.
         """
         for key in self.unique_connections.keys():
-            self.unique_connections[key] .close()
+            self.unique_connections[key].close()
 
         self.connected = False
 
@@ -1001,16 +1002,20 @@ class SQLDatabaseInterfaceConnection(object):
 
 class DBConnection(object):
     """This class represents the database interface connection
-       and provides access to the chisen backend modules.
+       and provides access to the chosen backend modules.
 
        The following DBMS are supported:
 
          - sqlite via the sqlite3 standard library
          - postgresql via psycopg2
-
     """
 
-    def __init__(self, backend=None):
+    def __init__(self, backend=None, dbstring=None):
+        """ Constructor of a database connection
+        
+            param backend:The database backend sqlite or pg
+            param dbstring: The database connection string
+        """
         self.connected = False
         if backend is None:
             global tgis_backend
@@ -1023,6 +1028,10 @@ class DBConnection(object):
                 self.dbmi = sqlite3
             else:
                 self.dbmi = psycopg2
+
+        if dbstring is None:
+            global tgis_database_string
+            self.dbstring = tgis_database_string
 
         self.msgr = get_tgis_message_interface()
         self.msgr.debug(1, "SQLDatabaseInterfaceConnection constructor")
@@ -1048,13 +1057,13 @@ class DBConnection(object):
     def connect(self,  dbstring=None):
         """Connect to the DBMI to execute SQL statements
 
-           Supported backends are sqlite3 and postgresql
+            Supported backends are sqlite3 and postgresql
+            
+            param dbstring: The database connection string
         """
         # Connection in the current mapset
         if dbstring is None:
-            global tgis_database_string
-            dbstring = tgis_database_string
-
+            dbstring = self.dbstring
         try:
             if self.dbmi.__name__ == "sqlite3":
                 self.connection = self.dbmi.connect(dbstring,
