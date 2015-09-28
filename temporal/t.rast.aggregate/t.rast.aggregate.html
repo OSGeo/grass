@@ -52,14 +52,20 @@ available for aggregation computation. Internally several
 <em>r.series</em> modules will be started, depending on the number of
 specified parallel processes (<em>nprocs</em>) and the number of
 intervals to aggregate.
+<p>
+The flag <b>-s</b> allows to store a date as map name suffix rather than
+using consecutive numbering. See the examples below for details.
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
+
+<h3>Aggregation of monthly data into yearly data</h3>
 
 In this example the user is going to aggregate monthly data into yearly
 data, running:
 
 <div class="code"><pre>
-t.rast.aggregate input=tempmean_monthly output=tempmean_yearly basename=tempmean_year \
+t.rast.aggregate input=tempmean_monthly output=tempmean_yearly \
+                 basename=tempmean_year \
                  granularity="1 years" method=average
 
 t.support input=tempmean_yearly \
@@ -118,6 +124,121 @@ t.info tempmean_yearly
  |        title="Yearly precipitation" \
  |        description="Aggregated precipitation dataset with yearly resolution"
  +----------------------------------------------------------------------------+
+</pre></div>
+
+<h3>Different aggregations and map name suffix variants</h3>
+
+Examples of resulting naming schemes for different aggregations when
+using the <b>-s</b> flag:
+
+<h4>Weekly aggregation</h4>
+
+<div class="code"><pre>
+t.rast.aggregate input=daily_temp output=weekly_avg_temp \
+  basename=weekly_avg_temp method=average granularity="1 weeks"
+
+t.rast.list weekly_avg_temp
+name|mapset|start_time|end_time
+weekly_avg_temp_2003_01|climate|2003-01-03 00:00:00|2003-01-10 00:00:00
+weekly_avg_temp_2003_02|climate|2003-01-10 00:00:00|2003-01-17 00:00:00
+weekly_avg_temp_2003_03|climate|2003-01-17 00:00:00|2003-01-24 00:00:00
+weekly_avg_temp_2003_04|climate|2003-01-24 00:00:00|2003-01-31 00:00:00
+weekly_avg_temp_2003_05|climate|2003-01-31 00:00:00|2003-02-07 00:00:00
+weekly_avg_temp_2003_06|climate|2003-02-07 00:00:00|2003-02-14 00:00:00
+weekly_avg_temp_2003_07|climate|2003-02-14 00:00:00|2003-02-21 00:00:00
+</pre></div>
+
+Variant with <b>-s</b> flag:
+<div class="code"><pre>
+t.rast.aggregate -s input=daily_temp output=weekly_avg_temp \
+  basename=weekly_avg_temp method=average granularity="1 weeks"
+
+t.rast.list weekly_avg_temp
+name|mapset|start_time|end_time
+weekly_avg_temp_2003_01_03|climate|2003-01-03 00:00:00|2003-01-10 00:00:00
+weekly_avg_temp_2003_01_10|climate|2003-01-10 00:00:00|2003-01-17 00:00:00
+weekly_avg_temp_2003_01_17|climate|2003-01-17 00:00:00|2003-01-24 00:00:00
+weekly_avg_temp_2003_01_24|climate|2003-01-24 00:00:00|2003-01-31 00:00:00
+weekly_avg_temp_2003_01_31|climate|2003-01-31 00:00:00|2003-02-07 00:00:00
+weekly_avg_temp_2003_02_07|climate|2003-02-07 00:00:00|2003-02-14 00:00:00
+weekly_avg_temp_2003_02_14|climate|2003-02-14 00:00:00|2003-02-21 00:00:00
+</pre></div>
+
+
+<h4>8-day aggregation</h4>
+
+This "eight-day week" is used for some MODIS satellite sensor products:
+
+<div class="code"><pre>
+t.rast.aggregate -s input=daily_temp output=8day_avg_temp \
+  basename=8day_avg_temp method=average granularity="8 days"
+
+t.rast.list 8day_avg_temp
+name|mapset|start_time|end_time
+8day_avg_temp_2003_01_01|climate|2003-01-01 00:00:00|2003-01-09 00:00:00
+8day_avg_temp_2003_01_09|climate|2003-01-09 00:00:00|2003-01-17 00:00:00
+8day_avg_temp_2003_01_17|climate|2003-01-17 00:00:00|2003-01-25 00:00:00
+8day_avg_temp_2003_01_25|climate|2003-01-25 00:00:00|2003-02-02 00:00:00
+8day_avg_temp_2003_02_02|climate|2003-02-02 00:00:00|2003-02-10 00:00:00
+8day_avg_temp_2003_02_10|climate|2003-02-10 00:00:00|2003-02-18 00:00:00
+
+# Note that to make this aggregation comparable with 8day MODIS products,
+# for example, you should loop over years, and maybe merge resulting strds
+# afterwards
+
+for YEAR in "2003 2004" "2004 2005" "2005 2006"; do
+    set -- $YEAR ; echo $1 $2
+    t.rast.aggregate -s input=daily_temp output=8day_avg_temp_${1} \
+      basename=8day_avg_temp method=average granularity="8 days" \
+      where="start_time &gt;='${1}-01-01' and end_time &lt; '${2}-01-01'"
+done
+
+t.list
+----------------------------------------------
+Space time raster datasets with absolute time available in mapset &lt;climate&gt;:
+8day_avg_temp_2003@climate
+8day_avg_temp_2004@climate
+daily_temp@climate
+
+t.rast.list 8day_avg_temp_2003
+name|mapset|start_time|end_time
+8day_avg_temp_2003_01_01|climate|2003-01-01 00:00:00|2003-01-09 00:00:00
+8day_avg_temp_2003_01_09|climate|2003-01-09 00:00:00|2003-01-17 00:00:00
+8day_avg_temp_2003_01_17|climate|2003-01-17 00:00:00|2003-01-25 00:00:00
+8day_avg_temp_2003_01_25|climate|2003-01-25 00:00:00|2003-02-02 00:00:00
+...
+8day_avg_temp_2003_12_03|climate|2003-12-03 00:00:00|2003-12-11 00:00:00
+8day_avg_temp_2003_12_11|climate|2003-12-11 00:00:00|2003-12-19 00:00:00
+8day_avg_temp_2003_12_19|climate|2003-12-19 00:00:00|2003-12-27 00:00:00
+8day_avg_temp_2003_12_27|climate|2003-12-27 00:00:00|2004-01-04 00:00:00
+</pre></div>
+
+<h4>Monthly aggregation</h4>
+
+<div class="code"><pre>
+t.rast.aggregate -s input=daily_temp output=monthly_avg_temp \
+basename=monthly_avg_temp method=average granularity="1 months"
+
+t.rast.list monthly_avg_temp
+name|mapset|start_time|end_time
+monthly_avg_temp_2003_01|climate|2003-01-01 00:00:00|2003-02-01 00:00:00
+monthly_avg_temp_2003_02|climate|2003-02-01 00:00:00|2003-03-01 00:00:00
+monthly_avg_temp_2003_03|climate|2003-03-01 00:00:00|2003-04-01 00:00:00
+monthly_avg_temp_2003_04|climate|2003-04-01 00:00:00|2003-05-01 00:00:00
+monthly_avg_temp_2003_05|climate|2003-05-01 00:00:00|2003-06-01 00:00:00
+monthly_avg_temp_2003_06|climate|2003-06-01 00:00:00|2003-07-01 00:00:00
+</pre></div>
+
+<h4>Yearly aggregation</h4>
+
+<div class="code"><pre>
+t.rast.aggregate -s input=daily_temp output=yearly_avg_temp \
+  basename=yearly_avg_temp method=average granularity="1 years"
+
+t.rast.list yearly_avg_temp
+name|mapset|start_time|end_time
+yearly_avg_temp_2003|climate|2003-01-01 00:00:00|2004-01-01 00:00:00
+yearly_avg_temp_2004|climate|2004-01-01 00:00:00|2005-01-01 00:00:00
 </pre></div>
 
 
