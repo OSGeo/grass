@@ -111,7 +111,10 @@ with the selected <b>similarity</b> method. A value of 1 means
 identical values, perfect fit, and a value of 0 means maximum possible 
 distance, worst possible fit.
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
+
+<h3>Segmentation of RGB orthophoto</h3>
+
 This example uses the ortho photograph included in the NC Sample 
 Dataset. Set up an imagery group:
 <div class="code"><pre>
@@ -131,7 +134,7 @@ i.segment group=ortho_group output=ortho_segs_l1 threshold=0.02
 </pre></div>
 
 <center>
-<img src="ortho_segs_l1.jpg">
+<img src="i_segment_ortho_segs_l1.jpg">
 </center>
 
 <p>
@@ -149,7 +152,7 @@ i.segment group=ortho_group output=ortho_segs_l5 threshold=0.3 seeds=ortho_segs_
 </pre></div>
 
 <center>
-<img src="ortho_segs_l2_l5.jpg">
+<img src="i_segment_ortho_segs_l2_l5.jpg">
 </center>
 
 <p>
@@ -173,12 +176,50 @@ i.segment group=ortho_group output=ortho_segs_final threshold=0.25 min=10
 </pre></div>
 
 <center>
-<img src="ortho_segs_final.jpg">
+<img src="i_segment_ortho_segs_final.jpg">
 </center>
 
 <p>
 Processing the entire ortho image with nearly 10 million pixels took
 about 450 times more then for the final run.
+
+<h3>Segmentation of panchromatic channel</h3>
+
+This example uses the panchromatic channel of the Landsat7 scene included
+in the North Carolina sample dataset:
+
+<div class="code"><pre>
+# create group with single channel
+i.group group=singleband input=lsat7_2002_80
+
+# set computational region to Landsat7 PAN band
+g.region raster=lsat7_2002_80 -p
+
+# perform segmentation with minsize=5
+i.segment group=singleband threshold=0.05 minsize=5 \
+  output=lsat7_2002_80_segmented_min5 goodness=lsat7_2002_80_goodness_min5
+
+# perform segmentation with minsize=100
+i.segment group=singleband threshold=0.05 minsize=100
+  output=lsat7_2002_80_segmented_min100 goodness=lsat7_2002_80_goodness_min100
+</pre></div>
+
+<p>
+<center>
+<img src="i_segment_lsat7_pan.png"><br>
+Original panchromatic channel of the Landsat7 scene
+</center>
+
+<p>
+<center>
+<img src="i_segment_lsat7_seg_min5.png"><br>
+Segmented panchromatic channel, minsize=5
+</center>
+<p>
+<center>
+<img src="i_segment_lsat7_seg_min100.png"><br>
+Segmented panchromatic channel, minsize=100
+</center>
 
 <h2>TODO</h2>
 <h3>Functionality</h3>
