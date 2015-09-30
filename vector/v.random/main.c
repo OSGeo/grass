@@ -64,7 +64,8 @@ int main(int argc, char *argv[])
     double (*rng)(void) = G_drand48;
     double zmin, zmax;
     int seed;
-    int i, j, k, n, type, usefloat;
+    unsigned long i, n;
+    int j, k, type, usefloat;
     int area, nareas, field;
     struct boxlist *List = NULL;
     BOX_SIZE *size_list = NULL;
@@ -179,8 +180,8 @@ int main(int argc, char *argv[])
 	exit(EXIT_FAILURE);
 
     output = parm.output->answer;
-    n = atoi(parm.nsites->answer);
-    
+    n = strtoul(parm.nsites->answer, NULL, 10);
+
     if(parm.seed->answer)
         seed = atoi(parm.seed->answer);
 
