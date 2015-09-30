@@ -205,6 +205,7 @@ int main(int argc, char *argv[])
     base_raster_opt->required = NO;
     base_raster_opt->label = _("Subtract raster values from the z coordinates");
     base_raster_opt->description = _("The scale for z is applied beforehand, the filter afterwards");
+    base_raster_opt->guisection = _("Transform");
 
     zrange_opt = G_define_option();
     zrange_opt->key = "zrange";
@@ -212,6 +213,7 @@ int main(int argc, char *argv[])
     zrange_opt->required = NO;
     zrange_opt->key_desc = "min,max";
     zrange_opt->description = _("Filter range for z data (min,max)");
+    zrange_opt->guisection = _("Selection");
 
     zscale_opt = G_define_option();
     zscale_opt->key = "zscale";
@@ -219,6 +221,7 @@ int main(int argc, char *argv[])
     zscale_opt->required = NO;
     zscale_opt->answer = "1.0";
     zscale_opt->description = _("Scale to apply to z data");
+    zscale_opt->guisection = _("Transform");
 
     percent_opt = G_define_option();
     percent_opt->key = "percent";
@@ -243,6 +246,7 @@ int main(int argc, char *argv[])
     trim_opt->type = TYPE_DOUBLE;
     trim_opt->required = NO;
     trim_opt->options = "0-50";
+    trim_opt->label = _("Discard given percentage of the smallest and largest values");
     trim_opt->description =
 	_("Discard <trim> percent of the smallest and <trim> percent of the largest observations");
     trim_opt->guisection = _("Statistic");
@@ -261,6 +265,7 @@ int main(int argc, char *argv[])
     filter_opt->label = _("Only import points of selected return type");
     filter_opt->description = _("If not specified, all points are imported");
     filter_opt->options = "first,last,mid";
+    filter_opt->guisection = _("Selection");
 
     class_opt = G_define_option();
     class_opt->key = "class_filter";
@@ -270,6 +275,7 @@ int main(int argc, char *argv[])
     class_opt->label = _("Only import points of selected class(es)");
     class_opt->description = _("Input is comma separated integers. "
                                "If not specified, all points are imported.");
+    class_opt->guisection = _("Selection");
 
     print_flag = G_define_flag();
     print_flag->key = 'p';
