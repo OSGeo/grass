@@ -6,7 +6,7 @@ AUTHOR(S): Anne Ghisla <a.ghisla AT gmail.com>
 
 PURPOSE:   Performs ordinary or block kriging
 
-DEPENDS:   R 2.x, packages gstat, maptools and spgrass6, optional: automap
+DEPENDS:   R 2.x, packages gstat, maptools and rgrass7, optional: automap
 
 COPYRIGHT: (C) 2009-2014 the GRASS Development Team
 
@@ -140,7 +140,7 @@ class Controller:
         Checks for NULL values in the provided column and exits if they are present."""
 
         #@NOTE: new way with R - as it doesn't alter original data
-        Rpointmap = robjects.r.readVECT6(map, type =  'point')
+        Rpointmap = robjects.r.readVECT(map, type =  'point')
         # checks if x,y columns are present in dataframe. If they do are present, but with different names,
         # they'll be duplicated.
         if "x" not in robjects.r.names(Rpointmap): 
@@ -232,7 +232,7 @@ class Controller:
  
     def ExportMap(self, map, column, name, overwrite, command, variograms):
         # add kriging parameters to raster map history
-        robjects.r.writeRAST6(map, vname = name, zcol = column, overwrite = overwrite)
+        robjects.r.writeRAST(map, vname = name, zcol = column, overwrite = overwrite)
         grass.run_command('r.support',
                           map = name,
                           title = 'Kriging output',
@@ -408,7 +408,7 @@ def importR():
         
     # R packages check. Will create one error message after check of all packages.
     missingPackagesList = []
-    for each in ["rgeos", "gstat", "spgrass6", "maptools"]:
+    for each in ["rgeos", "gstat", "rgrass7", "maptools"]:
         if not robjects.r.require(each, quietly = True)[0]:
             missingPackagesList.append(each)
     if missingPackagesList:
