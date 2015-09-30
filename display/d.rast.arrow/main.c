@@ -15,6 +15,8 @@
 /* some minor cleanup done by Andreas Lange, andreas.lange@rhein-main.de
  * Update to handle NULLs and floating point aspect maps: Hamish Bowman, Aug 2004
  * Update for 360 degree arrows and magnitude scaling:  Hamish Bowman, Oct 2005
+ * Align grids with raster cells: Huidae Cho, Apr 2009
+ * Drainage aspect type: Huidae Cho, Sep 2015
  */
 
 /*
@@ -107,7 +109,7 @@ int main(int argc, char **argv)
     opt2->type = TYPE_STRING;
     opt2->required = NO;
     opt2->answer = "grass";
-    opt2->options = "grass,compass,agnps,answers";
+    opt2->options = "grass,compass,drainage,agnps,answers";
     opt2->description = _("Type of existing raster aspect map");
 
     opt3 = G_define_standard_option(G_OPT_C);
@@ -199,6 +201,8 @@ int main(int argc, char **argv)
 	map_type = 3;
     else if (strcmp("compass", opt2->answer) == 0)
 	map_type = 4;
+    else if (strcmp("drainage", opt2->answer) == 0)
+	map_type = 5;
 
 
     scale = atof(opt8->answer);
@@ -373,7 +377,7 @@ int main(int argc, char **argv)
 
 	    /* treat AGNPS and ANSWERS data like old zero-as-null CELL */
 	    /*   TODO: update models */
-	    if (map_type == 2 || map_type == 3) {
+	    if (map_type == 2 || map_type == 3 || map_type == 5) {
 		if (Rast_is_null_value(ptr, raster_type))
 		    aspect_c = 0;
 		else
@@ -504,6 +508,53 @@ int main(int argc, char **argv)
 		    D_use_color(unknown_color);
 		    unknown_();
 		    D_use_color(arrow_color);
+		}
+	    }
+
+	    /* case switch for r.watershed drainage type aspect map */
+	    else if (map_type == 5) {
+		D_use_color(arrow_color);
+		switch (aspect_c >= 0 ? aspect_c : -aspect_c) {
+		case 0:
+		    /* only draw if x_color is not none (transparent) */
+		    if (x_color > 0) {
+			D_use_color(x_color);
+			draw_x();
+			D_use_color(arrow_color);
+		    }
+		    break;
+		case 1:
+		    arrow_ne();
+		    break;
+		case 2:
+		    arrow_n();
+		    break;
+		case 3:
+		    arrow_nw();
+		    break;
+		case 4:
+		    arrow_w();
+		    break;
+		case 5:
+		    arrow_sw();
+		    break;
+		case 6:
+		    arrow_s();
+		    break;
+		case 7:
+		    arrow_se();
+		    break;
+		case 8:
+		    arrow_e();
+		    break;
+		default:
+		    /* only draw if unknown_color is not none */
+		    if (unknown_color > 0) {
+			D_use_color(unknown_color);
+			unknown_();
+			D_use_color(arrow_color);
+		    }
+		    break;
 		}
 	    }
 

@@ -25,9 +25,9 @@ map. In this case the tail of the arrow will be centered on the source cell.
 You may adjust the overall scale using the <em>scale</em> option.
 <em>d.rast.arrow</em> will ignore NULL and negative magnitudes, and will
 warn you if the debug level is set at 5 or higher. Be aware. If your application
-uses negative values for magnitude, you can use <em>r.mapcalc</em> to prepare
-the magnitude map to suit your needs (absolute value, inverted direction and 
-so on). 
+uses negative values for magnitude, you can use
+<em><a href="r.mapcalc.html">r.mapcalc</a></em> to prepare the magnitude map to
+suit your needs (absolute value, inverted direction and so on). 
 
 <p><h2>NOTES</h2>
 By default, arrows are drawn at the size of a cell and cannot be seen if 
@@ -36,11 +36,14 @@ option to draw arrows every n-th cell in both directions if you are working
 with relatively high resolutions. It may be useful to disable the grid in
 this case, which is accomplished by setting its color to "<tt>none</tt>".
 <p>For GRASS and Compass type aspect maps, the cell values of the aspect map
-will determine the corresponding direction in 360 degrees. ANSWERS type
-aspect maps will be plotted in multiples of 15 degrees, and AGNPS type
-aspect maps will be displayed in D8 representation, i.e. the eight multiples 
-of 45 degrees.
-<p>GRASS aspect maps are measured using Cartesian conventions, i.e. in degrees 
+will determine the corresponding direction in 360 degrees. ANSWERS type aspect
+maps will be plotted in multiples of 15 degrees counterclockwise from east, and
+AGNPS and Drainage type aspect maps will be displayed in D8 representation,
+i.e. the eight multiples of 45 degrees. Cell values are 1 to 8 clockwise from
+north for AGNPS and 1 to 8 counterclockwise from north east for Drainage. See
+<em><a href="r.watershed.html">r.watershed</a></em> for more details about the
+Drainage aspect.
+<p>GRASS aspect maps are measured using Cartesian conventions, i.e. in degrees
 counterclockwise from east. e.g.:
 
 <div class="code"><pre>
@@ -50,7 +53,8 @@ counterclockwise from east. e.g.:
 0,360 East
 </pre></div>
 
-They can be created from a raster elevation map with <em>r.slope.aspect</em>.
+They can be created from a raster elevation map with
+<em><a href="r.slope.aspect.html">r.slope.aspect</a></em>.
 <p>Compass type aspect maps are measured in degrees clockwise from north.
 <p>This module uses oceanographic conventions, i.e. arrows point downslope or 
 direction "to", as opposed to atmospheric conventions (direction "from").
@@ -75,6 +79,7 @@ d.rast.arrow map=direction type=grass magnitude_map=magnitude skip=3 grid=none
 <em><a href="d.rast.num.html">d.rast.num</a></em><br>
 <em><a href="g.region.html">g.region</a></em><br>
 <em><a href="r.slope.aspect.html">r.slope.aspect</a></em><br>
+<em><a href="r.watershed.html">r.watershed</a></em><br>
 <br>
 
 <h2>AUTHORS</h2>
@@ -86,6 +91,8 @@ Purdue University</em><br><br>
 <u>Magnitude and 360 arrow code</u><br>
 Hamish Bowman<br>
 <em>Department of Marine Science, <br>
-University of Otago, New Zealand</em>
+University of Otago, New Zealand</em><br><br>
+<u>Align grids with raster cells and Drainage aspect type</u><br>
+Huidae Cho<br>
 
 <p><i>Last changed: $Date$</i>
