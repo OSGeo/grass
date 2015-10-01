@@ -7,15 +7,19 @@ the selected <b>database</b> through the DB <b>driver</b>.
 <h2>NOTE</h2>
 
 Options <b>host</b> and <b>port</b> are related to only SQL database
-backends
-like <a href="grass-pg.html">PostgreSQL</a>, <a href="grass-mysql.html">MySQL</a>
-or <a href="grass-odbc.html">ODBC</a>.
+backends like <a href="grass-pg.html">PostgreSQL</a>,
+<a href="grass-mysql.html">MySQL</a> or <a href="grass-odbc.html">ODBC</a>.
 
 <p>
 Note that the passwords are stored in a hidden, <i>unencrypted</i>
-file in the user account ('home' directory)
-called <em>.grass7/dblogin</em>. Only the file owner can access this
-file.
+file in the user account, specifically
+
+<ul>
+<li> in the 'home' directory, i.e. <tt>$HOME/.grass7/dblogin</tt> (Unix-like systems)</li>
+<li> <tt>%APPDATA%/GRASS7/dblogin</tt> (MS-Windows)</li>
+</ul>
+
+Only the file owner can access this file.
 
 <h2>EXAMPLES</h2>
 
@@ -31,7 +35,7 @@ Username, password and hostname specified (note that the command lines
 history will store the password in this way):
 
 <div class="code"><pre>
-db.login driver=pg database=mydb user=bacava password=secret host=db.server.com
+db.login driver=pg database=mydb user=bacava password=secret host=db.example.com
 </pre></div>
 
 <p>
