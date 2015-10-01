@@ -1,6 +1,6 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.krige</em> allows performing kriging operations in GRASS
+<em>v.krige</em> allows performing Kriging operations in GRASS GIS
 environment, using R software functions in background.
 
 
@@ -27,7 +27,7 @@ exhaustive and clear even if a bit outdated.
 <dt><b>rpy2</b></dt>
 <dd>Python binding to R. Note! <tt>rpy</tt> version 1 is not supported.</dd>
 
-<dt><b>R packages automap, gstat, spgrass6 and rgeos. </b></dt>
+<dt><b>R packages automap, gstat, rgrass7 and rgeos. </b></dt>
 <dd>automap is optional (provides automatic variogram fit).</dd>
 </dl>
 
@@ -35,7 +35,7 @@ Install the packages via R command line (or your preferred GUI):
 <div class="code"><pre>
   install.packages("rgeos", dep=T)
   install.packages("gstat", dep=T)
-  install.packages("spgrass6", dep=T)
+  install.packages("rgrass7", dep=T)
   install.packages("automap", dep=T)
 </pre></div>
 
@@ -60,12 +60,14 @@ for 32bit or 64bit (pick up the suitable line):
 and get the packages via aptitude:
 
 <div class="code"><pre>
-  aptitude install r-cran-gstat r-cran-spgrass6
+  aptitude install r-cran-gstat r-cran-rgrass7
 </pre></div>
 
 <h4>Notes for Windows</h4>
 
-Compile GRASS following this
+<!-- this is probably the wrong place -->
+
+Compile GRASS GIS following this
 <a href="http://trac.osgeo.org/grass/wiki/CompileOnWindows">guide</a>.
 You could also use Linux in a virtual machine. Or install Linux in a
 separate partition of the HD. This is not as painful as it appears,
@@ -73,9 +75,9 @@ there are lots of guides over the Internet to help you.
 
 <h3>Computation time issues</h3>
 
-Please note that kriging calculation is slown down both by high number
-of input data points and/or high region resolution, even if they both
-contribute to a better output.
+Please note that although high number of input data points and/or high 
+region resolution contribute to a better output, both will also slow down
+the kriging calculation.
 
 <h2>EXAMPLES</h2>
 
@@ -88,9 +90,9 @@ elevation raster, as if it came from a point survey.
 <div class="code"><pre>
 # reduce resolution for this example
 g.region raster=elevation -p res=100
-v.random output=rand2k_elev n=2000
-v.db.addtable map=rand2k_elev column="elevation double precision"
-v.what.rast map=rand2k_elev rast=elevation column=elevation
+v.random output=rand2k_elev npoints=2000
+v.db.addtable map=rand2k_elev columns="elevation double precision"
+v.what.rast map=rand2k_elev raster=elevation column=elevation
 </pre></div>
 
 <b>Part 2: remove points lacking elevation attributes</b>. Points
@@ -102,26 +104,26 @@ mean...). In the following line of code, points with no data are
 removed from the map.
 
 <div class="code"><pre>
-v.extract rand2k_elev output=rand2k_elev_filt where="elevation not NULL"
+v.extract input=rand2k_elev output=rand2k_elev_filt where="elevation not NULL"
 </pre></div>
 
 Check the result of previous line ("number of NULL attributes" must be
 0):
 
 <div class="code"><pre>
-v.univar rand2k_elev_filt type=point column=elevation
+v.univar map=rand2k_elev_filt type=point column=elevation
 </pre></div>
 
-<b>Part 3: reconstruct DEM through kriging</b>. Using automatic
-variogram fit is the simplest way to run <em>v.krige</em> from CLI (note:
+<b>Part 3: reconstruct DEM through kriging</b>. The simplest way to run 
+<em>v.krige</em> from CLI is using automatic variogram fit (note:
 requires R's automap package). Output map name is optional, the
-modules creates it automatically appending "_kriging" the the input
+modules creates it automatically appending "_kriging" to the input
 map name and also checks for overwrite. If output_var is specified,
 the variance map is also created. Automatic variogram fit is provided
-by R package automap, the variogram models tested by the fitting
+by R package automap. The variogram models tested by the fitting
 functions are: exponential, spherical, Gaussian, Matern, M.Stein's
 parametrisation. A wider range of models is available from gstat
-package and can be tested on the GUI via the variogram plotting. If
+package and can be tested on the GUI via the variogram plotting. If a
 model is specified in the CLI, also sill, nugget and range values are
 to be provided, otherwise an error is raised (see second example of
 <em>v.krige</em> command).
@@ -147,9 +149,9 @@ v.krige
 
 <div class="code"><pre>
 r.mapcalc "rand2k_elev_kriging_pe = sqrt(rand2k_elev_kriging_var)"
-r.univar elevation
-r.univar rand2k_elev_kriging
-r.univar rand2k_elev_kriging_pe
+r.univar map=elevation
+r.univar map=rand2k_elev_kriging
+r.univar map=rand2k_elev_kriging_pe
 </pre></div>
 
 The results show high errors, as the kriging techniques (ordinary and
@@ -157,7 +159,7 @@ block kriging) are unable to handle a dataset with a trend, like the
 one used in this example: elevation is higher in the southwest corner
 and lower on northeast corner. Universal kriging can give far better
 results in these cases as it can handle the trend. It is available in
-R package gstat and will be part of a future v.krige release.
+R package gstat and will be part in a future v.krige release.
 
 
 <h2>SEE ALSO</h2>
@@ -167,14 +169,14 @@ maintained by Edzer J. Pebesma and others
 <br>
 
 R
-package <a href="http://cran.r-project.org/web/packages/spgrass6/index.html">spgrass6</a>,
+package <a href="http://cran.r-project.org/web/packages/rgrass7/index.html">rgrass7</a>,
 maintained by Roger Bivand
 <br>
 
 The <a href="http://grasswiki.osgeo.org/wiki/R_statistics">Short
 Introduction to Geostatistical and Spatial Data Analysis with GRASS GIS
 and R statistical data language</a> at the GRASS Wiki (includes
-installation tips).
+installation tips). It contains a subsection about <b>rgrass7</b>.
 
 <br><br>
 
