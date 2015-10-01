@@ -49,20 +49,36 @@ driver</a> page for details.
 <p>Alternatively a vector point map can be imported from PostGIS
 database using <em><a href="v.in.ogr.html">v.in.ogr</a></em>.
 
+
+<h3>Creating a map from Open Document spreadsheet (ODS) file</h3>
+
+A new vector point map is created from given sheet in ODS file. The
+<b>database</b> option points to the ODS file. Option <b>table</b> is the
+name of selected spreadsheet list, the <b>key</b> option is the identifier
+column:
+
+<div class="code"><pre>
+# preview table structure with OGR tool:
+ogrinfo -so meteodata.ods mysheet
+
+# import from ODS into map
+v.in.db key=ID table=mysheet x=long y=lat z=height output=meteodata \
+         driver=ogr datatabase=meteodata.ods
+</pre></div>
+
 <h3>Creating a map from MS Excel file</h3>
 
-A new vector point map is created from given list in MS Excel file
-file. The
+A new vector point map is created from given sheet in MS Excel file. The
 <b>database</b> option points to the file in MS Excel
-format. Option <b>table</b> is name of selected spreadsheet list.
+format. Option <b>table</b> is name of the selected spreadsheet list:
 
 <div class="code"><pre>
 v.in.db table=List1 x=long y=lat z=height output=meteodata \
          driver=ogr datatabase=meteodata.xls
 </pre></div>
 
-Note that <b>key</b> option is omitted. In this case <em>v.in.db</em>
-tries to add key column automatically. This
+Note that in this example the <b>key</b> option is omitted. In this case
+<em>v.in.db</em> tries to add key column automatically. This
 requires <a href="grass-sqlite.html">SQLite</a> to be a default DB
 driver. 
 
