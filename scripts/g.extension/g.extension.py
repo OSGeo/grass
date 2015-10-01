@@ -1056,7 +1056,10 @@ def download_source_code(source, url, name, outdev,
     elif source in ['remote_zip', 'official']:
         # we expect that the module.zip file is not by chance in the archive
         zip_name = os.path.join(tmpdir, 'extension.zip')
-        urlretrieve(url, zip_name)
+        f, h = urlretrieve(url, zip_name)
+        if h.get('content-type', '') != 'application/zip':
+            grass.fatal(_("Extension <%s> not found") % name)
+            
         extract_zip(name=zip_name, directory=directory, tmpdir=tmpdir)
         fix_newlines(directory)
     elif source.startswith('remote_') and \
