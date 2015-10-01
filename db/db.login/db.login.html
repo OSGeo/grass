@@ -1,28 +1,38 @@
 <h2>DESCRIPTION</h2>
 
-<em>db.login</em> sets the user name and optionally also a password for
-the connection to the selected <b>database</b> through the DB <b>driver</b>.
+<em>db.login</em> sets login parameters such an user name and
+optionally also a password for the connection to
+the selected <b>database</b> through the DB <b>driver</b>.
 
 <h2>NOTE</h2>
 
-This is only related to SQL database backends
-like <a href="grass-pg.html">PostgreSQL</a>, <a href="grass-mysql.html">MySQL</a>
-or <a href="grass-odbc.html">ODBC</a>. The passwords are stored in a
-hidden, unencrypted file in the user account ('home' directory)
-called <em>.grass7/dblogin</em>. Only the file owner can access this
-file.
+This command is only related to SQL database
+backends like <a href="grass-pg.html">PostgreSQL</a>,
+<a href="grass-mysql.html">MySQL</a> or <a href="grass-odbc.html">ODBC</a>.
+
+<p>
+Note that the passwords are stored in a hidden, <i>unencrypted</i>
+file in the user account, specifically
+
+<ul>
+<li> in the 'home' directory, i.e. <tt>$HOME/.grass7/dblogin</tt> (Unix-like systems)</li>
+<li> <tt>%APPDATA%/GRASS7/dblogin</tt> (MS-Windows)</li>
+</ul>
+
+Only the file owner can access this file.
 
 <h2>EXAMPLES</h2>
 
-Only username specified:
+Only username specified (assuming locally accessible PostgreSQL DB
+without password):
 
 <div class="code"><pre>
-db.login user=bacava
+db.login driver=pg database=mydb
 </pre></div>
 
 <p>
-Username and password specified (note that the command
-lines history will store the password in this way):
+Username and password specified (note that the command lines
+history will store the password in this way):
 
 <div class="code"><pre>
 db.login user=bacava password=secret
@@ -33,14 +43,16 @@ Username and empty password specified (note that the command
 lines history will store the password in this way):
 
 <div class="code"><pre>
-db.login user=bacava password=""
+db.login driver=pg database=mydb user=bacava password=""
 </pre></div>
+
 
 <h2>SEE ALSO</h2>
 
 <em>
 <a href="db.connect.html">db.connect</a>,
-<a href="db.test.html">db.test</a>
+<a href="db.test.html">db.test</a>,
+<a href="db.tables.html">db.tables</a>
 </em>
 
 <p>
