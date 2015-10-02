@@ -7,7 +7,7 @@
  * PURPOSE:      Provides a means of reporting the contents of GRASS
  *               projection information files and creating
  *               new projection information files.
- * COPYRIGHT:    (C) 2003-2014 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2015 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -53,6 +53,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     
     int formats;
+    const char *epsg = NULL;
 
     G_set_program_name(argv[0]);
     G_no_gisinit();		/* We don't call G_gisinit() here because it validates the
@@ -231,6 +232,8 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
     }
 
+    epsg = inepsg->answer;
+
     /* Input */
     /* We can only have one input source, hence if..else construct */
 
@@ -245,9 +248,9 @@ int main(int argc, char *argv[])
     else if (inproj4->answer)
 	/* Input in PROJ.4 format */
 	input_proj4(inproj4->answer);
-    else if (inepsg->answer)
+    else if (epsg)
 	/* Input from EPSG code */
-	input_epsg(atoi(inepsg->answer));
+	input_epsg(atoi(epsg));
     else
 	/* Input from georeferenced file */
 	input_georef(ingeo->answer);
@@ -299,7 +302,7 @@ int main(int argc, char *argv[])
 	print_wkt(esristyle->answer, dontprettify->answer);
 #endif
     else if (location->answer)
-	create_location(location->answer, inepsg->answer);
+	create_location(location->answer, epsg);
     else if (create->answer)
 	modify_projinfo();
     else
@@ -314,12 +317,12 @@ int main(int argc, char *argv[])
 #endif
 
 #ifdef HAVE_OGR
-    if (create->answer && inepsg->answer) {
+    if (create->answer && epsg) {
 #else
     if (create->answer){ 
 #endif
 	/* preserve epsg code for user records only (not used by grass's pj routines) */
-        create_epsg(location->answer, inepsg->answer);
+        create_epsg(location->answer, epsg);
     }
 
 
