@@ -88,7 +88,6 @@ int open_file(char *name)
     char *tmpstr1, *tmpstr2;
     char rname[GNAME_MAX];
     char rmapset[GMAPSET_MAX];
-    int is_reclass;
 
     /* open raster map */
     cell_file = Rast_open_old(name, "");
