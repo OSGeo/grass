@@ -292,6 +292,9 @@ def get_lib_path(modname, libname):
     if isdir(join(getenv('GISBASE'), 'etc', modname)):
         path = join(os.getenv('GISBASE'), 'etc', modname)
     elif getenv('GRASS_ADDON_BASE') and \
+            isdir(join(getenv('GRASS_ADDON_BASE'), 'etc', modname, libname)):
+        path = join(getenv('GRASS_ADDON_BASE'), 'etc', modname, libname)
+    elif getenv('GRASS_ADDON_BASE') and \
             isdir(join(getenv('GRASS_ADDON_BASE'), 'etc', modname)):
         path = join(getenv('GRASS_ADDON_BASE'), 'etc', modname)
     elif getenv('GRASS_ADDON_BASE') and \
