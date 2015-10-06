@@ -124,7 +124,7 @@ def main():
         grass.fatal(_("Raster map <%s> not found") % raster)
 
     # check presence of raster MASK, put it aside
-    mask_found = bool(grass.find_file('MASK', 'cell')['file'])
+    mask_found = bool(grass.find_file('MASK', 'cell', mapset)['file'])
     if mask_found:
         grass.message(_("Raster MASK found, temporarily disabled"))
         grass.run_command('g.rename', raster=('MASK', tmpname + "_origmask"),
