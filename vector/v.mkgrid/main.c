@@ -413,7 +413,7 @@ int main(int argc, char *argv[])
 	}
 
 	/* Create a grid of label points at the centres of the grid cells */
-	G_verbose_message(_("Creating centroids..."));
+	G_message(_("Creating centroids..."));
 
 	/* Write out centroids and attributes */
 	/* If the output id is lines it skips to add centroids and attributes
@@ -423,6 +423,7 @@ int main(int argc, char *argv[])
             db_begin_transaction(Driver);
 	    attCount = 0;
 	    for (i = 0; i < grid_info.num_rows; ++i) {
+                G_percent(i, grid_info.num_rows, 2);
 	        for (j = 0; j < grid_info.num_cols; ++j) {
 		    double x, y;
 
@@ -464,6 +465,7 @@ int main(int argc, char *argv[])
 		    attCount++;
 	        }
 	    }
+            G_percent(1, 1, 1);
 	}
     }
     db_commit_transaction(Driver);
