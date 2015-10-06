@@ -66,7 +66,7 @@ value major than 24
 <p>
 
 <div class="code"><pre>
-t.rast.list tempmean_monthly columns=name,start_time,min,max where="max > 24"
+t.rast.list tempmean_monthly columns=name,start_time,min,max where="max &gt; 24"
 name|start_time|min|max
 2009_06_tempmean|2009-06-01 00:00:00|15.962669|25.819681
 2009_07_tempmean|2009-07-01 00:00:00|15.32852|26.103664
@@ -80,7 +80,7 @@ name|start_time|min|max
 <h3>Filtering the result by time range</h3>
 
 In this example the result is filtered showing only the maps which
-fall into a specified time range
+fall into a specified time range (from .. to):
 <p>
 
 <div class="code"><pre>
@@ -94,6 +94,16 @@ name|start_time|min|max
 2012_06_tempmean|2012-06-01 00:00:00|14.929379|24.000651
 2012_07_tempmean|2012-07-01 00:00:00|18.455802|28.794653
 2012_08_tempmean|2012-08-01 00:00:00|15.718526|26.151115
+</pre></div>
+
+
+<h3>Filtering the result by selecting recurring timestamps</h3>
+
+In this example the result is filtered showing only the maps which
+fall into a specified recurring time range (here one month per year):
+
+<div class="code"><pre>
+t.rast.list Tseasonal_fieldata_garda where="strftime('%m', start_time)='06'"
 </pre></div>
 
 <h3>Using method option</h3>
