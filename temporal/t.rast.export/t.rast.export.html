@@ -1,7 +1,7 @@
 <h2>DESCRIPTION</h2>
 
-This module exports a space time raster dataset as a tar archive. The
-archive contains the raster maps either as GeoTIFF files or as GRASS
+<em>t.rast.export</em> exports a space time raster dataset (strds) as a tar
+archive. The archive contains the raster maps either as GeoTIFF files or as GRASS
 binary files exported using <em>r.pack</em>. The map specific color tables
 are exported in case of GeoTIFF files. In addition several metadata files
 are created in the archive that describe the temporal layout.
@@ -15,18 +15,19 @@ the space time raster dataset was exported from. The file "readme.txt"
 describes the file format. The output of <em>r.info</em> is stored in
 "metadata.txt".
 <p>
-The tar archive can be compressed using the <b>compress</b> option.
-Gzip and bzip2 are available. A <b>where</b> option can be specified,
+The tar archive can be compressed using the <b>compress</b> option. Gzip
+and bzip2 (default) are available. A <b>where</b> option can be specified,
 to export only a subset of the space time dataset. Archives exported
-with <em>t.rast.export</em> can be importet with <em>t.rast.import</em>.
+with <em>t.rast.export</em> can be imported with
+<em><a href="t.vect.import.html">t.rast.import</a></em>.
 
 <h2>EXAMPLE</h2>
 
-In this example all the maps of 2012 of tempmean_monthly will be exported
+In this example, all the maps of 2012 of "tempmean_monthly" will be exported:
 
 <div class="code"><pre>
 t.rast.export input=tempmean_monthly output=tempmean_monthly.tar.bzip2 \
-              where="start_time >= '2012-01-01' and start_time < '2013-01-01'"
+              where="start_time &gt;= '2012-01-01' and start_time &lt; '2013-01-01'"
 
 tar xvf precipitation_daily.tar
 
