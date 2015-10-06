@@ -65,7 +65,7 @@ int write_grid(struct grid_description *grid_info, struct Map_info *Map, int nbr
      y_len = height / (1. * nbreaks + 1);
 
     /* write out all the vector lengths (x vectors) of the entire grid  */
-    G_verbose_message(_("Writing out vector rows..."));
+    G_message(_("Writing out vector rows..."));
     y = grid_info->south;
     for (i = 0; i < num_v_rows; ++i) {
 	double startx;
@@ -101,9 +101,10 @@ int write_grid(struct grid_description *grid_info, struct Map_info *Map, int nbr
 	}
 	y += height;
     }
-
+    G_percent(1, 1, 1);
+    
     /* write out all the vector widths (y vectors) of the entire grid  */
-    G_verbose_message(_("Writing out vector columns..."));
+    G_message(_("Writing out vector columns..."));
     x = grid_info->west;
     for (i = 0; i < num_v_cols; ++i) {
         double starty;
@@ -138,7 +139,8 @@ int write_grid(struct grid_description *grid_info, struct Map_info *Map, int nbr
 	}
 	x += width;
     }
-
+    G_percent(1, 1, 1);
+    
     /* new with Vlib */
     Vect_destroy_line_struct(Points);
 
