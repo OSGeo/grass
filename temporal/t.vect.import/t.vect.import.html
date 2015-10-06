@@ -1,16 +1,23 @@
 <h2>DESCRIPTION</h2>
 
-<em>t.vect.import</em> imports a space time vector dataset archive that was 
-created with <a href="t.vect.export.html">t.vect.export</a>.
-Optionally a base map name can be provided to avoid overwriting vector maps  
-used in the space-time vector dataset archive.
+<em>t.vect.import</em> imports a space time vector dataset archive that
+was exported with <a href="t.vect.export.html">t.vect.export</a>.
 
+<h2>NOTES</h2>
+
+Optionally a base map name can be provided to avoid that existing
+vector maps are overwritten by the map names that are used in the STRDS
+archive.
+<p>
+The <b>directory</b> is used as work directory in case of import but
+can also be used as a data directory when using GML for the data
+exchange.
 
 <h2>EXAMPLE</h2>
 
-In this example 5 vector maps are created and registered in a single space time 
-vector dataset named <em>random_locations</em>. Each vector map represents 
-random locations within the boundary of the state taken at 1 month intervals. 
+In this example, five vector maps are created and registered in a single space time 
+vector dataset named <em>random_locations</em>. Each vector map represents
+random locations within the boundary of the state taken at 1 month intervals.
 The space time dataset is then exported and re-imported.
 
 <div class="code"><pre>
@@ -18,7 +25,7 @@ db.connect -d
 
 for i in `seq 1 5` ; do
     v.random output=map_$i n=500 input=boundary_state@PERMANENT
-    echo map_$i >> map_list.txt
+    echo map_$i &gt;&gt; map_list.txt
 done
 
 t.create type=stvds temporaltype=absolute \
@@ -52,7 +59,7 @@ new_map_5@user1|new_map_5|None|user1|2012-05-01 00:00:00|2012-06-01 00:00:00
 <a href="t.vect.export.html">t.vect.export</a>,
 <a href="t.create.html">t.create</a>,
 <a href="t.info.html">t.info</a>,
-<a href="v.out.ogr.html">v.out.ogr</a>,
+<a href="v.in.ogr.html">v.in.ogr</a>,
 <a href="v.pack.html">v.pack</a>,
 <a href="t.rast.import.html">t.rast.import</a>
 </em>
