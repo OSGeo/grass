@@ -308,6 +308,10 @@ class VNETPointsData:
             idx = self.cols["name"].index(col)
             self.data[pt_id][idx] = v
 
+        # if type is changed checked columns must be recalculated by _usePoint
+        if data.has_key('type') and not data.has_key('use'):
+            data["use"] = self.GetPointData(pt_id)['use']
+
         if data.has_key('use'):
             if self._usePoint(pt_id, data["use"]) == -1:
                 data["use"] =  False
@@ -374,6 +378,9 @@ class VNETPointsData:
         if "analysis" in kwargs["changed_params"].keys():
             self._updateTypeCol()
 
+            if self.an_params.GetParam("analysis")[0] == "v.net.path":
+                self._vnetPathUpdateUsePoints(None)
+
     def _updateTypeCol(self):
         """Rename category values when module is changed. Expample: Start point -> Sink point"""
         colValues = [""]
@@ -415,21 +422,28 @@ class VNETPointsData:
         if len(cats) <= 1:
             return 0
 
-        type_idx = self.cols["name"].index("type")
         use_idx = self.cols["name"].index("use")
         checkedVal = self.data[pt_id][1]
 
+        # point without given type cannot be selected
         if checkedVal == 0:
             self.data[pt_id][use_idx] = False
             self.pointsChanged.emit(method = "SetPointData", kwargs = {"pt_id" : pt_id, "data" : {"use" : False}})
             return -1
 
         if analysis == "v.net.path" and use:
+            self._vnetPathUpdateUsePoints(pt_id)
+
+    def _vnetPathUpdateUsePoints(self, checked_pt_id):
+
             alreadyChecked = []
 
-            if pt_id:
-                checkedKey = pt_id
-                alreadyChecked.append(self.data[pt_id][type_idx])
+            type_idx = self.cols["name"].index("type")
+            use_idx = self.cols["name"].index("use")
+
+            if checked_pt_id is not None:
+                checkedKey = checked_pt_id
+                alreadyChecked.append(self.data[checked_pt_id][type_idx])
             else:
                 checkedKey = -1
 
@@ -633,9 +647,10 @@ class VNETAnalysisParameters:
             columnchoices = dbInfo.GetTableDesc(table)
         except (KeyError, ValueError):
             table = None
-        
+
         # check costs columns
         for col in ["arc_column", "arc_backward_column", "node_column"]:
+        
             if col == "node_column":
                 try:
                     table = dbInfo.GetTable(int(params["node_layer"]))
@@ -647,7 +662,7 @@ class VNETAnalysisParameters:
                 invParams.append(col)
                 continue
             
-            if columnchoices[params[col]]['type'] not in ['integer', 'double precision']: 
+            if columnchoices[params[col]]['type'] not in ['integer', 'double precision']:
                 invParams.append(col)
                 continue
      
@@ -997,6 +1012,7 @@ class VectMap:
 
             RunCommand(layerStyleVnetColors[0],
                         **layerStyleVnetColors[1])
+
 
         self.renderLayer = self.mapWin.Map.AddLayer(ltype = "vector",     command = cmd,
                                                     name = self.fullName, active = True,
