@@ -310,6 +310,9 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("Unable to open vector map <%s>"), opt.from->answer);
 
     from_field = Vect_get_field_number(&From, opt.from_field->answer);
+    /* in 3D features may not be found */
+    if (Vect_is_3d(&From))
+        G_warning(_("Input vector map <%s> is 3D"), opt.from->answer);
 
     nfromlines = Vect_get_num_primitives(&From, from_type);
     nfromareas = 0;
@@ -327,6 +330,9 @@ int main(int argc, char *argv[])
     Vect_set_open_level(2);
     if (Vect_open_old2(&To, opt.to->answer, "", opt.to_field->answer) < 0)
 	G_fatal_error(_("Unable to open vector map <%s>"), opt.to->answer);
+    /* in 3D features may not be found */
+    if (Vect_is_3d(&To))
+        G_warning(_("Input vector map <%s> is 3D"), opt.to->answer);
 
     ntolines = Vect_get_num_primitives(&To, to_type);
     ntoareas = 0;
