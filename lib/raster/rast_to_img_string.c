@@ -31,7 +31,7 @@
 #define DEF_BLU 255
 
 /* \brief Convert a raster map layer into a string with
- *        32Bit ARGB, 24Bit RGB or 8Bit Gray little endian encoding.
+ *        32Bit ARGB, 32Bit RGB or 8Bit Gray little endian encoding.
  * 
  * The raster color table is used for coloring the image. Null values are 
  * marked as transparent. Only little endian encoding is supported.
