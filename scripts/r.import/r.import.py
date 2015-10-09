@@ -17,7 +17,7 @@
 #############################################################################
 
 #%module
-#% description: Imports raster data into a GRASS raster map using GDAL library and reproject on the fly.
+#% description: Imports raster data into a GRASS raster map using GDAL library and reprojects on the fly.
 #% keyword: raster
 #% keyword: import
 #% keyword: projection

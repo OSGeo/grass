@@ -17,7 +17,7 @@
 #############################################################################
 
 #%module
-#% description: Imports vector data into a GRASS vector map using OGR library and reproject on the fly.
+#% description: Imports vector data into a GRASS vector map using OGR library and reprojects on the fly.
 #% keyword: vector
 #% keyword: import
 #% keyword: projection
