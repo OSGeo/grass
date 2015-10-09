@@ -21,11 +21,14 @@ in the current region. The second through last input <em>name</em>
 maps will be used, in order, to supply data values for for the remaining
 "no data" cells.
 
-<h2>EXAMPLE</h2>
+<h3>Example of filling areas</h3>
 
-Below, the raster map layer on the far left is <b>patched</b> 
-with the middle (<em>patching</em>) raster map layer, 
-to produce the <em>composite</em> raster map layer on the right. 
+<!-- this example is also used in the tests -->
+
+Below, the raster map layer on the far left is <b>patched</b>
+with the middle (<em>patching</em>) raster map layer,
+to produce the <em>composite</em> raster map layer on the right.
+The example assumes zero values to be treated as NULLs (<b>-z</b> flag).
 
 <div class="code"><pre>
   1 1 1 0 2 2 0 0    0 0 1 1 0 0 0 0    1 1 1 1 2 2 0 0
@@ -47,6 +50,7 @@ produces the following results:
   4 4 4 4 4 4 4 4    3 3 3 0 0 0 0 0    4 4 4 4 4 4 4 4
   4 4 4 4 4 4 4 4    0 0 0 0 0 0 0 0    4 4 4 4 4 4 4 4
 </pre></div>
+
 
 <h2>NOTES</h2>
 

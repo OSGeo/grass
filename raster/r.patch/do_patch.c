@@ -21,7 +21,7 @@ int is_zero_value(void *rast, RASTER_MAP_TYPE data_type)
 
 int do_patch(void *result, void *patch,
 	     struct Cell_stats *statf, int ncols,
-	     RASTER_MAP_TYPE out_type, int use_zero)
+             RASTER_MAP_TYPE out_type, size_t out_cell_size, int use_zero)
 {
     int more;
 
@@ -56,8 +56,8 @@ int do_patch(void *result, void *patch,
 		}
 	    }			/* NULL support */
 	}
-	result = G_incr_void_ptr(result, Rast_cell_size(out_type));
-	patch = G_incr_void_ptr(patch, Rast_cell_size(out_type));
+        result = G_incr_void_ptr(result, out_cell_size);
+        patch = G_incr_void_ptr(patch, out_cell_size);
     }
     return more;
 }
