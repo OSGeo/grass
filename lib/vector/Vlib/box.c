@@ -5,7 +5,7 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2009 by the GRASS Development Team
+   (C) 2001-2015 by the GRASS Development Team
 
    This program is free software under the 
    GNU General Public License (>=v2). 
@@ -20,13 +20,30 @@
 #include <grass/glocale.h>
 
 /*!
-   \brief Tests for point in box
+    \brief Tests if point is in 3D box
 
-   \param x,y,z coordinates
-   \param Box boundary box
+    This function considers 3D point and 3D bounding box.
 
-   \return 1 point is in box
-   \return 0 point is not in box
+    \par Example
+
+    \verbatim
+    struct bound_box bbox;
+    bbox.N = 135;
+    bbox.S = 125;
+    bbox.E = 220;
+    bbox.W = 215;
+    bbox.T = 340;
+    bbox.B = 330;
+    Vect_point_in_box(217, 130, 335, &bbox);
+    \endverbatim
+
+    \param x coordinate (W-E direction)
+    \param y coordinate (S-N direction)
+    \param z coordinate (B-T direction)
+    \param Box boundary box
+
+    \returns 1 if point is in box
+    \returns 0 if point is not in box
  */
 int Vect_point_in_box(double x, double y, double z, const struct bound_box *Box)
 {
@@ -34,6 +51,25 @@ int Vect_point_in_box(double x, double y, double z, const struct bound_box *Box)
     return (x >= Box->W && x <= Box->E &&
 	    y >= Box->S && y <= Box->N && 
 	    z >= Box->B && z <= Box->T);
+}
+
+/*!
+    \brief Tests if point is in 2D box
+
+    Only x and y are tested. Top and bottom of the bounding box are ignored.
+
+    \param x coordinate (W-E direction)
+    \param y coordinate (S-N direction)
+    \param Box boundary box (only W, E, S, N are used)
+
+    \returns 1 if point is in box
+    \returns 0 if point is not in box
+ */
+int Vect_point_in_box_2d(double x, double y, const struct bound_box *Box)
+{
+
+    return (x >= Box->W && x <= Box->E &&
+            y >= Box->S && y <= Box->N);
 }
 
 /*!
