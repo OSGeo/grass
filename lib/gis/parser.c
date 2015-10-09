@@ -1476,10 +1476,10 @@ int check_overwrite(void)
                                     fprintf(stderr, "\n");
                                 }
                                 else {
-                                    fprintf(stderr, _("GRASS_INFO_ERROR(%d,1): "));
+                                    fprintf(stderr, "GRASS_INFO_ERROR(%d,1): ", getpid());
                                     fprintf(stderr,
-                                            "option <%s>: <%s> exists. To overwrite, use the --overwrite flag",
-                                            getpid(), opt->key, opt->answers[i]);
+                                            _("option <%s>: <%s> exists. To overwrite, use the --overwrite flag"),
+                                            opt->key, opt->answers[i]);
                                     fprintf(stderr, "\n");
                                     fprintf(stderr, "GRASS_INFO_END(%d,1)\n",
                                             getpid());
