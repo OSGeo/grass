@@ -117,6 +117,7 @@ from grass.exceptions import CalledModuleError
 TMPLOC = None
 SRCGISRC = None
 GISDBASE = None
+TMP_REG_NAME = None
 
 
 def cleanup():
@@ -125,9 +126,13 @@ def cleanup():
         grass.try_rmdir(os.path.join(GISDBASE, TMPLOC))
     if SRCGISRC:
         grass.try_remove(SRCGISRC)
+    if TMP_REG_NAME:
+        grass.run_command('g.remove', type='vector', name=TMP_REG_NAME,
+                          flags='f', quiet=True)
+
 
 def main():
-    global TMPLOC, SRCGISRC, GISDBASE
+    global TMPLOC, SRCGISRC, GISDBASE, TMP_REG_NAME
 
     GDALdatasource = options['input']
     output = options['output']
@@ -274,7 +279,7 @@ def main():
             grass.run_command('g.region', n=n, s=s, e=e, w=w)
 
         # v.in.region in tgt
-        vreg = 'vreg_' + str(os.getpid())
+        vreg = TMP_REG_NAME = 'vreg_tmp_' + str(os.getpid())
         grass.run_command('v.in.region', output=vreg, quiet=True)
 
         grass.del_temp_region()
@@ -297,14 +302,17 @@ def main():
         cells = grass.region()['cells']
 
         estres = math.sqrt((n - s) * (e - w) / cells)
+        # remove from source location for multi bands import
+        grass.run_command('g.remove', type='vector', name=vreg,
+                          flags='f', quiet=True)
 
         os.environ['GISRC'] = str(tgtgisrc)
         grass.run_command('g.remove', type='vector', name=vreg,
                           flags='f', quiet=True)
 
-        grass.message(_("Estimated target resolution for input band <%s>: %g") % (outfile, estres))
+        grass.message(_("Estimated target resolution for input band <{out}>: {res}").format(out=outfile, res=estres))
         if flags['e']:
-            return 0
+            continue
 
         if options['extent'] == 'input':
             grass.use_temp_region()
@@ -315,6 +323,12 @@ def main():
             res = estres
         elif tgtres == 'value':
             res = tgtres_value
+            grass.message(_("Using given resolution for input band <{out}>: {res}").format(out=outfile, res=res))
+        else:
+            curr_reg = grass.region()
+            grass.message(_("Using current region resolution for input band "
+                            "<{out}>: nsres={ns}, ewres={ew}").format(out=outfile, ns=curr_reg['nsres'],
+                                                                      ew=curr_reg['ewres']))
 
         # r.proj
         grass.message(_("Reprojecting <%s>...") % outfile)
@@ -331,6 +345,9 @@ def main():
 
         if options['extent'] == 'input':
             grass.del_temp_region()
+
+    if flags['e']:
+        return 0
 
     if group:
         grass.run_command('i.group', group=output, input=','.join(outfiles))
