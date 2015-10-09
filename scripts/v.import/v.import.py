@@ -28,6 +28,7 @@
 #% required: yes
 #% description: Name of OGR datasource to be imported
 #% gisprompt: old,datasource,datasource
+#% guisection: Input
 #%end
 #%option
 #% key: layer
