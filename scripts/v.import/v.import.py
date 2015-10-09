@@ -43,12 +43,12 @@
 #% guisection: Output
 #%end
 #%option
-#% key: extents
+#% key: extent
 #% type: string
 #% options: input,region
 #% answer: input
-#% description: Ouput vector map extents
-#% descriptions: input;extents of input map;region;extents of current region
+#% description: Ouput vector map extent
+#% descriptions: input;extent of input map;region;extent of current region
 #% guisection: Output
 #%end
 #%option
@@ -108,7 +108,7 @@ def main():
     layers = options['layer']
     
     vflags = None
-    if options['extents'] == 'region':
+    if options['extent'] == 'region':
         vflags = 'r'
     vopts = {}
     if options['encoding']:
@@ -172,7 +172,7 @@ def main():
     if grass.parse_command('g.proj', flags = 'g')['name'] == 'xy_location_unprojected':
         grass.fatal(_("Coordinate reference system not available for input <%s>") % GDALdatasource)
     
-    if options['extents'] == 'region':
+    if options['extent'] == 'region':
         # switch to target location
         os.environ['GISRC'] = str(tgtgisrc)
 
@@ -214,7 +214,7 @@ def main():
        grass.find_file(output, element='vector', mapset='.')['mapset']:
         grass.fatal(_("option <%s>: <%s> exists.") % ('output', output))
     
-    if options['extents'] == 'region':
+    if options['extent'] == 'region':
         grass.run_command('g.remove', type = 'vector', name = vreg,
                           flags = 'f', quiet = True)
 
