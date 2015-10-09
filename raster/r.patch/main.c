@@ -58,6 +58,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("raster"));
     G_add_keyword(_("geometry"));
     G_add_keyword(_("mosaicking"));
+    G_add_keyword(_("merge"));
+    G_add_keyword(_("patching"));
     module->description =
 	_("Creates a composite raster map layer by using "
 	  "known category values from one (or more) map layer(s) "
