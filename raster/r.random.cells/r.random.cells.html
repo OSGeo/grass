@@ -40,12 +40,84 @@ number of non-masked cells in the study region. -->
 
 <h2>EXAMPLE</h2>
 
+<h3>Random cells in given distances</h3>
+
 North Carolina sample dataset example:
 
 <div class="code"><pre>
 g.region n=228500 s=215000 w=630000 e=645000 res=100 -p
 r.random.cells output=random_500m distance=500
 </pre></div>
+
+<h3>Limited number of random points</h3>
+
+Here is another example where we will create given number of vector points
+with the given minimal distances.
+Let's star with setting the region (we use large cells here):
+
+<div class="code"><pre>
+g.region raster=elevation
+g.region rows=20 cols=20 -p
+</pre></div>
+
+Then we generate random cells and we limit their count to 20:
+
+<div class="code"><pre>
+r.random.cells output=random_cells distance=1500 ncells=20 seed=200
+</pre></div>
+
+Finally, we convert the raster cells to points using
+<em><a href="r.to.vect.html">r.to.vect</a></em> module:
+
+<div class="code"><pre>
+r.to.vect input=random_cells output=random_points type=point
+</pre></div>
+
+An example of the result is at the Figure below on the left
+in comparison with the result without the cell limit on the right.
+
+<p>
+Additionally, we can use <em><a href="v.perturb.html">v.perturb</a></em> module
+to add random spatial deviation to their position so that they are not
+perfectly aligned with the grid. We cannot perturb the points too much,
+otherwise we might seriously break the minimal distance we set earlier.
+
+<div class="code"><pre>
+v.perturb input=random_points output=random_points_moved parameters=50 seed=200
+</pre></div>
+
+In the above examples, we were using fixed seed. This is advantageous when
+we want to generate (pseudo) random data, but we want to get reproducible
+results at the same time.
+
+<center>
+<img src="r_random_cells.png" alt="Cells and points filling the space">
+<p><em>
+    Figure: Generated cells with limited number of cells (upper left),
+    derived vector points (lower left), cells without a count limit
+    (upper right) and corresponding vector points (lower right)
+</em></p>
+</center>
+
+<!--
+r.random.cells output=random_cells_all distance=1500 seed=200
+r.random.cells output=random_cells distance=1500 ncells=20 seed=200
+r.to.vect input=random_cells_all output=random_points_all type=point
+r.to.vect input=random_cells output=random_points type=point
+
+d.mon cairo out=r_random_cells.png
+d.frame frame=a at=50,100,0,50 -c
+d.rast random_cells
+d.frame frame=b at=50,100,50,100 -c
+d.rast random_cells_all
+d.frame frame=c at=0,50,0,50 -c
+d.vect random_points color=0:53:106 fill_color=30:144:255 width=1 icon=basic/point size=20
+d.frame frame=d at=0,50,50,100 -c
+d.vect random_points_all color=0:53:106 fill_color=30:144:255 width=1 icon=basic/point size=20
+d.mon stop=cairo
+mogrify -trim r_random_cells.png
+-->
+
 
 <h2>REFERENCES</h2>
 Random Field Software for GRASS GIS by Chuck Ehlschlaeger
@@ -87,8 +159,12 @@ Goodchild. Proceedings, GIS/LIS'94, pp. 246-253, Phoenix AZ,
 r.2Dcorrelogram, 
 r.2Dto1D, -->
 <a href="r.random.surface.html">r.random.surface</a>,
-<a href="r.random.html">r.random</a>
-</em> 
+<a href="r.random.html">r.random</a>,
+<a href="v.random.html">v.random</a>,
+<a href="r.to.vect.html">r.to.vect</a>,
+<a href="v.perturb.html">v.perturb</a>
+</em>
+
 
 <h2>AUTHOR</h2>
 

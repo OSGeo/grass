@@ -65,6 +65,13 @@ void Init()
 	CellCount = Rs * Cs;
     }
 
+    /* cut down num of cells if requested */
+    if (MaxCells->answer)
+        sscanf(MaxCells->answer, "%d", &MaxCellsNum);
+    else
+        MaxCellsNum = CellCount;
+    G_debug(1, "(CellCount):%d", CellCount);
+
     sscanf(Distance->answer, "%lf", &MaxDist);
     if (MaxDist < 0.0)
 	G_fatal_error(_("Distance must be >= 0.0"));
