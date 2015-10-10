@@ -13,7 +13,7 @@
  *               
  * PURPOSE:      Calculates distance from a point to nearest feature in vector layer. 
  *               
- * COPYRIGHT:    (C) 2002-2012 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2002-2015 by the GRASS Development Team
  *
  *               This program is free software under the 
  *               GNU General Public License (>=v2). 
