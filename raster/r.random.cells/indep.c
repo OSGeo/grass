@@ -21,6 +21,11 @@ void Indep(void)
 	G_debug(3, "(CellCount):%d", CellCount);
 	G_debug(3, "(Count):%d", Count);
 
+        if (Found >= MaxCellsNum) {
+            G_debug(1, "Hit maximum number of cells");
+            break;
+        }
+
 	DRow = DoNext[Count].R;
 	DCol = DoNext[Count++].C;
 

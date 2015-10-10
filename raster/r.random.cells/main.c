@@ -30,10 +30,12 @@ FLAG *Cells;
 CELLSORTER *DoNext;
 CELL **Out, *CellBuffer;
 int Seed, OutFD;
+int MaxCellsNum;
 struct Flag *Verbose;
 struct Option *Distance;
 struct Option *Output;
 struct Option *SeedStuff;
+struct Option *MaxCells;
 
 int main(int argc, char *argv[])
 {
@@ -58,6 +60,14 @@ int main(int argc, char *argv[])
     Distance->multiple = NO;
     Distance->description =
 	_("Maximum distance of spatial correlation (value >= 0.0)");
+
+    MaxCells = G_define_option();
+    MaxCells->key = "ncells";
+    MaxCells->type = TYPE_INTEGER;
+    MaxCells->required = NO;
+    MaxCells->options = "1-";
+    MaxCells->description =
+        _("Maximum number of cells to be created");
 
     SeedStuff = G_define_option();
     SeedStuff->key = "seed";
