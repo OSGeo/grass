@@ -33,6 +33,7 @@ SUBDIRS = \
 	r.colors.stddev \
 	r.fillnulls \
 	r.grow \
+	r.import \
 	r.in.aster \
 	r.in.srtm \
 	r.in.wms \
@@ -59,6 +60,7 @@ SUBDIRS = \
 	v.db.univar \
 	v.db.update \
 	v.dissolve \
+	v.import \
 	v.in.e00 \
 	v.in.geonames \
 	v.in.lines \
