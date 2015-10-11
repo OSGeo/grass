@@ -152,6 +152,7 @@ int main(int argc, char *argv[])
     struct Option *method_opt, *base_raster_opt, *zrange_opt, *zscale_opt;
     struct Option *trim_opt, *pth_opt, *res_opt;
     struct Flag *print_flag, *scan_flag, *shell_style, *over_flag, *extents_flag, *intens_flag;
+    struct Flag *base_rast_res_flag;
 
     /* LAS */
     LASReaderH LAS_reader;
@@ -309,6 +310,11 @@ int main(int argc, char *argv[])
     intens_flag->key = 'i';
     intens_flag->description =
         _("Import intensity values rather than z values");
+
+    base_rast_res_flag = G_define_flag();
+    base_rast_res_flag->key = 'd';
+    base_rast_res_flag->description =
+        _("Use base raster actual resolution instead of computational region");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -660,15 +666,25 @@ int main(int argc, char *argv[])
     /* using row-based chunks (used for output) when input and output
      * region matches and using segment library when they don't */
     int use_segment = 0;
-    if (base_raster_opt->answer && res_opt->answer)
+    int use_base_raster_res = 0;
+    if (base_rast_res_flag->answer)
+        use_base_raster_res = 1;
+    if (base_raster_opt->answer && (res_opt->answer || use_base_raster_res))
         use_segment = 1;
     if (base_raster_opt->answer) {
+        if (use_base_raster_res) {
+            /* TODO: how to get cellhd already stored in the open map? */
+            Rast_get_cellhd(base_raster_opt->answer, "", &input_region);
+            /* TODO: make it only as small as the output is or points are */
+            Rast_set_input_window(&input_region);  /* we have split window */
+        }
         /* TODO: do we need to test existence first? mapset? */
         base_raster = Rast_open_old(base_raster_opt->answer, "");
         base_raster_data_type = Rast_get_map_type(base_raster);
     }
     if (base_raster_opt->answer && use_segment) {
-        Rast_get_input_window(&input_region);  /* we have split window */
+        if (!use_base_raster_res)
+            Rast_get_input_window(&input_region);  /* we have split window */
         /* TODO: these numbers does not fit with what we promise about percentage */
         int segment_rows = 64;
         /* writing goes row by row, so we use long segments as well */
@@ -915,6 +931,7 @@ int main(int argc, char *argv[])
             }
             else if (use_segment) {
                 double base_z;
+                /* Rast gives double, Segment needs off_t */
                 off_t base_row = Rast_northing_to_row(y, &input_region);
                 off_t base_col = Rast_easting_to_col(x, &input_region);
                 /* skip points which are outside the base raster
