@@ -1,8 +1,7 @@
 MODULE_TOPDIR = ..
 
 SUBDIRS = \
-	ximgview \
-	wximgview
+	ximgview
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 
