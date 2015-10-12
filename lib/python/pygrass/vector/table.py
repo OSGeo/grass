@@ -1074,9 +1074,10 @@ class Table(object):
             if many and values:
                 return cur.executemany(sqlc, values)
             return cur.execute(sqlc)
-        except Exception, e:
-            #import ipdb; ipdb.set_trace()
-            raise ValueError("The SQL is not correct:\n%r, SQL error: %s" % (sqlc, str(e)))
+        except Exception as exc:
+            raise ValueError("The SQL is not correct:\n%r,\n"
+                             "values: %r,\n"
+                             "SQL error: %s" % (sqlc, values, str(exc)))
 
     def exist(self, cursor=None):
         """Return True if the table already exist in the DB, False otherwise
