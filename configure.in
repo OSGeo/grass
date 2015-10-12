@@ -277,12 +277,6 @@ AC_ARG_WITH(liblas,
                           e.g. '--with-liblas=/usr/local/bin/liblas-config',
                           default: no)],, with_liblas="no")
 
-AC_ARG_WITH(wxwidgets,
-[  --with-wxwidgets[=path/wx-config]
-                          enable wxWidgets support (wx-config with path,
-                          e.g. '--with-wxwidgets=/usr/local/bin/wx-config',
-                          default: no)],, with_wxwidgets="no")
-
 AC_ARG_WITH(netcdf,
 [  --with-netcdf[=path/nc-config]
                           enable NetCDF support (nc-config with path,
@@ -1768,100 +1762,6 @@ AC_HAVE_LARGEFILES
 CFLAGS=${ac_save_cflags}
 # Done large file support
 
-# Enable wxWidgets support (for wxGUI)
-
-AC_MSG_CHECKING(whether to use wxWidgets)
-
-WXVERSION=
-WXWIDGETSCXXFLAGS= 
-WXWIDGETSCPPFLAGS=  
-WXWIDGETSLIB=  
-USE_WXWIDGETS=
-MACOSX_ARCHS_WXPYTHON=
-
-if test "$with_wxwidgets" = "no" ; then
-  AC_MSG_RESULT(no)
-else
-  AC_MSG_RESULT(yes)
-  USE_WXWIDGETS="1"
-  if test "$with_wxwidgets" != "yes" ; then
-    WX_CONFIG="$with_wxwidgets"
-  fi
-
-  AC_PATH_PROG(WX_CONFIG, wx-config, no)
-
-  if test "$WX_CONFIG" = "no" ; then
-    AC_MSG_ERROR([*** couldn't find wx-config
-
-  	  	  wxWidgets must be installed on your system.
-  
-                  Please check that wx-config is in path, the directory
-                  where wxWidgets libraries are installed (returned by
-                  'wx-config --libs' or 'wx-config --static --libs' command)
-                  is in LD_LIBRARY_PATH or equivalent variable and
-                  wxWidgets version is 2.8.1 or above.])
- fi
-
- # Check wxWidgets version
-
- REQWX="2.8.1"
-
- AC_MSG_CHECKING([wxWidgets version])
- if WXVERSION=`"$WX_CONFIG" --version`; then
-   AC_MSG_RESULT([$WXVERSION])
- else
-   AC_MSG_RESULT([not found])
-   AC_MSG_ERROR([wxWidgets is required.])
- fi
- if test `expr "$WXVERSION" \< "$REQWX"` = 1 ; then
-   AC_MSG_ERROR([*** wxWidgets "$REQWX" or later is required.])
- fi
-
- # With wxWidgets includes directory 
-
- WXWIDGETSCXXFLAGS=`"$WX_CONFIG" --cxxflags`
- WXWIDGETSCPPFLAGS=`"$WX_CONFIG" --cppflags`
-
- LOC_CHECK_INCLUDES(wx/wxprec.h,wxWidgets,$WXWIDGETSCPPFLAGS) 
-
- # With wxWidgets library directory 
-
- WXWIDGETSLIB=`"$WX_CONFIG" --libs`
-
- # shouldn't have arch flags in C/LD flags on OSX
- for a in i386 ppc x86_64 ppc64
- do
-   WXWIDGETSCXXFLAGS=`echo "$WXWIDGETSCXXFLAGS" | sed "s/-arch  *$a//g"`
-   WXWIDGETSCPPFLAGS=`echo "$WXWIDGETSCPPFLAGS" | sed "s/-arch  *$a//g"`
-   WXWIDGETSLIB=`echo "$WXWIDGETSLIB" | sed "s/-arch  *$a//g"`
- done
-
-  # check for available OSX archs in wxPython
-  if test -n "$MACOSX_ARCHS" ; then
-    wxver=`"$WX_CONFIG" --version`
-    wxlib=`"$WX_CONFIG" --prefix`/lib/lib`"$WX_CONFIG" --basename`-`echo "$wxver" | cut -d . -f1,2`.dylib
-    wxlibinfo=`file "$wxlib"`
-    for a in i386 ppc x86_64 ppc64
-    do
-      # add only if in MACOSX_ARCHS
-      if test -n "`echo \"$wxlibinfo\" | grep \"library $a\"`" ; then
-        if test -n "`echo \"$MACOSX_ARCHS\" | grep $a`" ; then
-          MACOSX_ARCHS_WXPYTHON="$MACOSX_ARCHS_WXPYTHON -arch $a"
-        fi
-      fi
-    done
-  fi
-fi # $USE_WXWIDGETS
-
-AC_SUBST(WXVERSION) 
-AC_SUBST(WXWIDGETSCXXFLAGS)
-AC_SUBST(WXWIDGETSCPPFLAGS) 
-AC_SUBST(WXWIDGETSLIB) 
-AC_SUBST(USE_WXWIDGETS) 
-AC_SUBST(MACOSX_ARCHS_WXPYTHON)
-
-# Done checking wxWidgets
-
 USE_TERMIO=
 AC_SUBST(USE_TERMIO)
 
@@ -1920,6 +1820,5 @@ LOC_MSG_USE(Readline support,USE_READLINE)
 LOC_MSG_USE(Regex support,USE_REGEX)
 LOC_MSG_USE(SQLite support,USE_SQLITE)
 LOC_MSG_USE(TIFF support,USE_TIFF)
-LOC_MSG_USE(wxWidgets support,USE_WXWIDGETS)
 LOC_MSG_USE(X11 support,USE_X11)
 LOC_MSG()
