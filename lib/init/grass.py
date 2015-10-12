@@ -866,6 +866,13 @@ def check_lock():
     global lockfile
     if not os.path.exists(location):
         fatal(_("Path '%s' doesn't exist") % location)
+    if not os.access(location, os.W_OK):
+        error = "Path '%s' not accessible.\n" % location
+        stat_info = os.stat(location)
+        mapset_uid = stat_info.st_uid
+        if mapset_uid != os.getuid():
+            error += "You are not the owner of '%s'" % location
+        fatal(_(error))
 
     # Check for concurrent use
     lockfile = os.path.join(location, ".gislock")
