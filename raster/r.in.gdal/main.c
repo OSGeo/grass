@@ -75,7 +75,8 @@ int main(int argc, char *argv[])
 	struct Option *input, *output, *target, *title, *outloc, *band,
 	              *memory, *offset, *rat;
     } parm;
-    struct Flag *flag_o, *flag_e, *flag_k, *flag_f, *flag_l, *flag_c, *flag_p;
+    struct Flag *flag_o, *flag_e, *flag_k, *flag_f, *flag_l, *flag_c, *flag_p,
+        *flag_j;
 
     /* -------------------------------------------------------------------- */
     /*      Initialize.                                                     */
@@ -157,6 +158,13 @@ int main(int argc, char *argv[])
     flag_o->description =
 	_("Override projection (use location's projection)");
 
+    flag_j = G_define_flag();
+    flag_j->key = 'j';
+    flag_j->description =
+	_("Perform projection check only and exit");
+    flag_j->suppress_required = YES;
+    G_option_requires(flag_j, parm.input, NULL);
+    
     flag_e = G_define_flag();
     flag_e->key = 'e';
     flag_e->label = _("Extend region extents based on new dataset");
@@ -189,7 +197,6 @@ int main(int argc, char *argv[])
     flag_p->key = 'p';
     flag_p->description = _("Print number of bands and exit");
     flag_p->suppress_required = YES;
-
     G_option_requires(flag_p, parm.input, NULL);
     
     /* The parser checks if the map already exists in current mapset, this is
@@ -297,7 +304,7 @@ int main(int argc, char *argv[])
         exit(EXIT_SUCCESS);
     }
 
-    if (!parm.outloc->answer &&
+    if (output && !parm.outloc->answer &&
         GDALGetRasterCount(hDS) == 1) {	/* Check if the map exists */
 	if (G_find_raster2(output, G_mapset())) {
 	    if (overwrite)
@@ -409,6 +416,8 @@ int main(int argc, char *argv[])
 	    G_warning(_("Unable to convert input raster map projection information to "
 		       "GRASS format for checking"));
 	else {
+            void (*msg_fn)(const char *, ...);
+
 	    /* -------------------------------------------------------------------- */
 	    /*      Does the projection of the current location match the           */
 	    /*      dataset?                                                        */
@@ -508,11 +517,24 @@ int main(int argc, char *argv[])
 		strcat(error_msg,
 		       _("Consider generating a new location from the input dataset using "
 			"the 'location' parameter.\n"));
-		G_fatal_error(error_msg);
+
+                if (flag_j->answer)
+                    msg_fn = G_message;
+                else
+                    msg_fn = G_fatal_error;
+                msg_fn(error_msg);
+                if (flag_j->answer)
+                    exit(EXIT_FAILURE);
 	    }
 	    else {
-		G_verbose_message(_("Projection of input dataset and current location "
-                                    "appear to match"));
+                if (flag_j->answer)
+                    msg_fn = G_message;
+                else
+                    msg_fn = G_verbose_message;            
+                msg_fn(_("Projection of input dataset and current location "
+                            "appear to match"));
+                if (flag_j->answer)
+                    exit(EXIT_SUCCESS);
 	    }
 	}
     }
@@ -816,8 +838,6 @@ int main(int argc, char *argv[])
 	G_put_window(&cur_wind);
 	G_message(_("Region for the current mapset updated"));
     }
-
-    G_done_msg(" ");
 
     exit(EXIT_SUCCESS);
 }
