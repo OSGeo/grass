@@ -154,7 +154,7 @@ class Attrs(object):
     cat = property(fget=_get_cat, fset=_set_cat,
                    doc="Set and obtain cat value")
 
-    def __getitem__(self, key):
+    def __getitem__(self, keys):
         """Return the value stored in the attribute table.
 
         >>> from grass.pygrass.vector import VectorTopo
@@ -163,21 +163,21 @@ class Attrs(object):
         >>> v1 = test_vect[1]
         >>> v1.attrs['name']
         u'point'
+        >>> v1.attrs['name', 'value']
+        (u'point', 1.0)
         >>> test_vect.close()
 
         """
-        #SELECT {cols} FROM {tname} WHERE {condition};
-        try:
-            cur = self.table.execute(sql.SELECT_WHERE.format(cols=key,
-                                                         tname=self.table.name,
-                                                         condition=self.cond))
-        except:
-            import ipdb; ipdb.set_trace()
+        sqlcode = sql.SELECT_WHERE.format(cols=(keys if np.isscalar(keys)
+                                                else ', '.join(keys)),
+                                          tname=self.table.name,
+                                          condition=self.cond)
+        cur = self.table.execute(sqlcode)
         results = cur.fetchone()
         if results is not None:
             return results[0] if len(results) == 1 else results
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, keys, values):
         """Set value of a given column of a table attribute.
 
         >>> from grass.pygrass.vector import VectorTopo
@@ -187,22 +187,28 @@ class Attrs(object):
         >>> v1.attrs['name']
         u'point'
 
-        #>>> v1.attrs['name'] = "new_point"
-        #>>> v1.attrs['name']
-        #u'new_point'
-        #>>> v1.attrs['name'] = "point"
-        #>>> v1.attrs['name']
-        #u'point'
-        #>>> v.table.conn.commit()
+        >>> v1.attrs['name'] = "new_point_1"
+        >>> v1.attrs['name']
+        u'new_point_1'
+
+        >>> v1.attrs['name', 'value'] = "new_point_2", 100.
+        >>> v1.attrs['name', 'value']
+        (u'new_point_2', 100.0)
+        >>> v1.attrs['name', 'value'] = "point", 1.
+        >>> v1.attrs.table.conn.commit()
         >>> test_vect.close()
 
         """
         if self.writeable:
-            #UPDATE {tname} SET {new_col} = {old_col} WHERE {condition}
-            values = '%s=%r' % (key, value)
-            self.table.execute(sql.UPDATE_WHERE.format(tname=self.table.name,
-                                                       values=values,
-                                                       condition=self.cond))
+            if np.isscalar(keys):
+                keys, values = (keys, ), (values, )
+
+            vals = ','.join(['%s=%r' % (k, v) for k, v in zip(keys, values)])
+            # "UPDATE {tname} SET {values} WHERE {condition};"
+            sqlcode = sql.UPDATE_WHERE.format(tname=self.table.name,
+                                              values=vals,
+                                              condition=self.cond)
+            self.table.execute(sqlcode)
             #self.table.conn.commit()
         else:
             str_err = "You can only read the attributes if the map is in another mapset"
@@ -262,29 +268,29 @@ class Geo(object):
                  table=None, writeable=False, is2D=True, free_points=False,
                  free_cats=False):
         """Constructor of a geometry object
-        
+
             :param v_id:      The vector feature id
             :param c_mapinfo: A pointer to the vector mapinfo structure
             :param c_points:  A pointer to a libvect.line_pnts structure, this
-                              is optional, if not set an internal structure will 
+                              is optional, if not set an internal structure will
                               be allocated and free'd at object destruction
             :param c_cats:    A pointer to a libvect.line_cats structure, this
-                              is optional, if not set an internal structure will 
+                              is optional, if not set an internal structure will
                               be allocated and free'd at object destruction
             :param table:     The attribute table to select attributes for
                               this feature
             :param writeable: Not sure what this is for?
             :param is2D:      If True this feature has two dimensions, False if
                               this feature has three dimensions
-            :param free_points: Set this True if the provided c_points structure 
+            :param free_points: Set this True if the provided c_points structure
                                 should be free'd at object destruction, be aware
                                 that no other object should free them, otherwise
                                 you can expect a double free corruption segfault
-            :param free_cats:   Set this True if the provided c_cats structure 
+            :param free_cats:   Set this True if the provided c_cats structure
                                 should be free'd at object destruction, be aware
                                 that no other object should free them, otherwise
                                 you can expect a double free corruption segfault
-        
+
         """
         self.id = v_id  # vector id
         self.c_mapinfo = c_mapinfo
@@ -295,7 +301,7 @@ class Geo(object):
         # to free the cats and points structures on destruction
         self._free_points = False
         self._free_cats = False
-        
+
         read = False
         # set c_points
         if c_points is None:
@@ -319,10 +325,10 @@ class Geo(object):
             self.read()
 
         # set the attributes as last thing to do
-        self.attrs = None 
+        self.attrs = None
         if table is not None and self.cat is not None:
             self.attrs = Attrs(self.cat, table, writeable)
-    
+
     def __del__(self):
         """Take care of the allocated line_pnts and line_cats allocation
         """
@@ -410,8 +416,8 @@ class Point(Geo):
         >>> c_cats = ctypes.pointer(libvect.line_cats())
         >>> p = Point(c_points = c_points, c_cats=c_cats)
         >>> del p
-        
-        
+
+
         >>> c_points = ctypes.pointer(libvect.line_pnts())
         >>> c_cats = ctypes.pointer(libvect.line_cats())
         >>> p = Point(c_points=c_points, c_cats=c_cats, free_points=True,
@@ -1794,16 +1800,16 @@ def c_read_next_line(c_mapinfo, c_points, c_cats):
 def read_next_line(c_mapinfo, table=None, writeable=False,
                    c_points=None, c_cats=None, is2D=True):
     """Return the next geometry feature of a vector map."""
-    
+
     # Take care of good memory management
     free_points = False
     if c_points == None:
         free_points = True
-        
+
     free_cats = False
     if c_cats == None:
         free_cats = True
-    
+
     c_points = c_points if c_points else ctypes.pointer(libvect.line_pnts())
     c_cats = c_cats if c_cats else ctypes.pointer(libvect.line_cats())
     ftype, v_id, c_points, c_cats = c_read_next_line(c_mapinfo, c_points,
@@ -1835,7 +1841,7 @@ def read_line(feature_id, c_mapinfo, table=None, writeable=False,
     free_points = False
     if c_points == None:
         free_points = True
-        
+
     free_cats = False
     if c_cats == None:
         free_cats = True
@@ -1848,7 +1854,7 @@ def read_line(feature_id, c_mapinfo, table=None, writeable=False,
         return GV_TYPE[ftype]['obj'](v_id=feature_id, c_mapinfo=c_mapinfo,
                                      c_points=c_points, c_cats=c_cats,
                                      table=table, writeable=writeable, is2D=is2D,
-                                     free_points=free_points, 
+                                     free_points=free_points,
                                      free_cats=free_cats)
 
 if __name__ == "__main__":
