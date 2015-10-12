@@ -1075,7 +1075,7 @@ class Table(object):
                 return cur.executemany(sqlc, values)
             return cur.execute(sqlc)
         except Exception as exc:
-            raise ValueError("The SQL is not correct:\n%r,\n"
+            raise ValueError("The SQL statement is not correct:\n%r,\n"
                              "values: %r,\n"
                              "SQL error: %s" % (sqlc, values, str(exc)))
 
