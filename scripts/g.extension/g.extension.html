@@ -3,60 +3,111 @@
 <!-- TODO: the use of Addon and extension is not coherent -->
 
 <em>g.extension</em> downloads and installs, removes or updates
-extensions (Addons) from the
-<a href="http://svn.osgeo.org/grass/grass-addons/grass7/">GRASS GIS Addons repository</a>
+extensions (addons) from the official
+<a href="http://grass.osgeo.org/grass70/manuals/addons/">GRASS GIS Addons repository</a>
+or user-specified source
 into the local GRASS GIS installation.
+
+<h3>Managing installed extensions</h3>
 
 <p>Re-running <em>g.extension</em> on an installed GRASS GIS Addon
 extension re-installs the requested extension which may include
 updates.
 <p>
-In order to bulk-update all locally installed GRASS GIS extensions, they can
-be re-installed altogether by the
-<em><a href="g.extension.all.html">g.extension.all</a></em> module.
+To bulk-update all locally installed GRASS GIS extensions, 
+<em><a href="g.extension.all.html">g.extension.all</a></em> module
+is available.
 
-<h2>NOTES</h2>
-    
-GRASS GIS extensions are installed by <tt>g.extension</tt> into a dedicated 
-directory (GRASS_ADDON_BASE). The default on GNU/Linux is
-<tt>$HOME/.grass7/addons</tt>, on MS-Windows it is
-<tt>$APPDATA\GRASS7\addons</tt>.
+
+<h3>Where the extensions are installed</h3>
+
+GRASS GIS extensions are installed by <em>g.extension</em> into a dedicated
+directory.
+The default is a directory for application data and settings inside
+the user's home directory. 
+On GNU/Linux it is <tt>$HOME/.grass7/addons</tt>,
+on MS Windows it is <tt>$APPDATA\GRASS7\addons</tt>.
+The directory is stored in <tt>GRASS_ADDON_BASE</tt> environmental variable.
+
 <p>
 The flag <b>-s</b> changes this install target directory to the GRASS GIS
-installation directory (GISBASE, e.g. <tt>/usr/</tt>) rather than the
-default GRASS_ADDON_BASE directory (see also <a href="variables.html">variables</a>).
+installation directory
+(determined by <tt>GISBASE</tt> environmental variable, e.g. <tt>/usr/</tt>)
+rather than the
+default GRASS_ADDON_BASE directory
+(see also documentation for <a href="variables.html">variables</a>).
 <em>g.extension</em> checks if the user has permission to write to
 GISBASE or GRASS_ADDON_BASE.
+
 <p>
-On MS-Windows systems, <em>g.extension</em> downloads an executable from
-the GRASS GIS project server. On all other operating systems, it downloads the
-source code of the requested Addon and compiles it locally.
+The place where the extensions are installed can be customized by
+the option <b>prefix</b>. Ensuring that these extensions will be accessible
+in GRASS GIS is then responsibility of the user.
+
+<h3>Compilation and installation</h3>
+
+On MS Windows systems, where compilation tools not readily available,
+<em>g.extension</em> downloads a compiled executable
+from the GRASS GIS project server. On all other operating systems
+where it is not difficult to install compilation tools,
+<em>g.extension</em> downloads the source code of the requested
+extension (addon) and compiles it locally.
+This applies for both C and Python modules
+as well as any other extensions. The reason is that more things such
+as manual page are compiled, not only the source code (which is really
+necessary to compile just in case of C).
+
 
 <h2>EXAMPLES</h2>
 
 <h3>Download and install of an extension</h3>
+
 Download and install <em>r.stream.distance</em> into current GRASS installation
 
 <div class="code"><pre>
 g.extension extension=r.stream.distance
 </pre></div>
 
-<h3>Removal of a locally installed extension</h3>
+This installs the extension from the official repository.
+For convenience, a shorter syntax can be used:
 
 <div class="code"><pre>
-g.extension extension=r.stream.distance operation=remove
+g.extension r.stream.distance
 </pre></div>
 
-<h3>List all available extensions from GRASS Addons SVN repository</h3>
+<h3>Download and install of an extension when behind a proxy</h3>
+
+Example for an open http proxy:
+<div class="code"><pre>
+# syntax: http://proxyurl:proxyport
+g.extension extension=r.stream.distance proxy="http://proxy.example.com:8080"
+</pre></div>
+
+<p>
+Example for a proxy with proxy authentication:
+<div class="code"><pre>
+# syntax: http://username:password@proxyurl:proxyport
+g.extension extension=r.stream.distance proxy="http://username:password@proxy.example.com:8080"
+</pre></div>
+
+<h3>Managing the extensions</h3>
+
+List all available extensions in the official GRASS GIS Addons repository:
 
 <div class="code"><pre>
 g.extension -l
 </pre></div>
 
-<h3>List all locally installed extensions</h3>
+List all locally installed extensions:
 
 <div class="code"><pre>
 g.extension -a
+</pre></div>
+
+Removal of a locally installed extension:
+
+<div class="code"><pre>
+g.extension extension=r.stream.distance operation=remove
 </pre></div>
 
 <h2>SEE ALSO</h2>
