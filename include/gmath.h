@@ -24,10 +24,6 @@
 #define GRASS_GMATH_H
 
 #include <grass/config.h>
-#if defined(HAVE_LIBLAPACK) && defined(HAVE_LIBBLAS)
- /* only include if available */
-#include <grass/la.h>
-#endif
 #include <stddef.h>
 
 /*solver names */
