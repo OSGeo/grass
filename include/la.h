@@ -13,6 +13,14 @@
  * \date 2000-2007
  */
 
+#ifndef HAVE_LIBBLAS
+#error GRASS GIS is not configured with BLAS (la.h cannot be included)
+#endif
+
+#ifndef HAVE_LIBLAPACK
+#error GRASS GIS is not configured with LAPACK (la.h cannot be included)
+#endif
+
 #ifndef GRASS_LA_H
 #define GRASS_LA_H
 
