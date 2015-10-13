@@ -102,6 +102,10 @@
 #% description: Do not perform region cropping optimization
 #% guisection: Optional
 #%end
+#%flag
+#% key: l
+#% description: Force Lat/Lon maps to fit into geographic coordinates (90N,S; 180E,W)
+#%end
 
 
 import sys
@@ -186,10 +190,11 @@ def main():
     os.environ['GISRC'] = str(tgtgisrc)
 
     # try r.in.gdal directly first
+    additional_flags = 'l' if flags['l'] else ''
     if grass.run_command('r.in.gdal', input=GDALdatasource, flags='j',
                          errors='status', quiet=True) == 0:
         parameters = dict(input=GDALdatasource, output=output,
-                          memory=memory, flags='k')
+                          memory=memory, flags='k' + additional_flags)
         if bands:
             parameters['band'] = bands
         try:
@@ -213,7 +218,7 @@ def main():
     # import into temp location
     grass.verbose(_("Importing <%s> to temporary location...") % GDALdatasource)
     parameters = dict(input=GDALdatasource, output=output,
-                      memory=memory, flags='k')
+                      memory=memory, flags='k' + additional_flags)
     if bands:
         parameters['band'] = bands
     try:
