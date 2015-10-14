@@ -44,7 +44,7 @@ class DataCatalog(wx.Panel):
 
         # some layout
         self._layout()
-        
+
     def _layout(self):
         """Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)

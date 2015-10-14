@@ -78,10 +78,11 @@ class TreeModel(object):
         node.parent = parent
         return node
 
-    def SearchNodes(self, **kwargs):
+    def SearchNodes(self, parent=None, **kwargs):
         """Search nodes according to specified attributes."""
         nodes = []
-        self._searchNodes(node=self.root, foundNodes=nodes, **kwargs)
+        parent = parent if parent else self.root
+        self._searchNodes(node=parent, foundNodes=nodes, **kwargs)
         return nodes
         
     def _searchNodes(self, node, foundNodes, **kwargs):
@@ -131,6 +132,11 @@ class TreeModel(object):
         """Removes node."""
         if node.parent:
             node.parent.children.remove(node)
+
+    def SortChildren(self, node):
+        """Sorts children alphabetically based on label."""
+        if node.children:
+            node.children.sort(key=lambda node: node.label)
 
     def __str__(self):
         """Print tree."""
