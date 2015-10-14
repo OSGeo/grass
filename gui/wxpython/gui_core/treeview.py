@@ -107,7 +107,41 @@ class AbstractTreeViewMixin(VirtualTree):
         item = self.GetItemByIndex(index)
         self.SelectItem(item, select)
 
-    def _emitSignal(self, item, signal):
+    def ExpandNode(self, node, recursive=True):
+        """Expand items.
+
+        :param node: node representing item
+        :param recursive: True/False to expand all children
+        """
+        index = self._model.GetIndexOfNode(node)
+        item = self.GetItemByIndex(index)
+        if recursive:
+            self.ExpandAllChildren(item)
+        else:
+            self.Expand(item)
+        self.EnsureVisible(item)
+
+    def CollapseNode(self, node, recursive=True):
+        """Collapse items.
+
+        :param node: node representing item
+        :param recursive: True/False to collapse all children
+        """
+        index = self._model.GetIndexOfNode(node)
+        item = self.GetItemByIndex(index)
+        if recursive:
+            self.CollapseAllChildren(item)
+        else:
+            self.Collapse(item)
+
+    def RefreshNode(self, node, recursive=False):
+        """Refreshes node."""
+        index = self._model.GetIndexOfNode(node)
+        self.RefreshItem(index)
+        if recursive:
+            self.RefreshChildrenRecursively(self.GetItemByIndex(index))
+
+    def _emitSignal(self, item, signal, **kwargs):
         """Helper method for emitting signals.
 
         :param item: tree item
@@ -117,7 +151,7 @@ class AbstractTreeViewMixin(VirtualTree):
             return
         index = self.GetIndexOfItem(item)
         node = self._model.GetNodeByIndex(index)
-        signal.emit(node = node)
+        signal.emit(node=node, **kwargs)
 
 
 class TreeView(AbstractTreeViewMixin, wx.TreeCtrl):
