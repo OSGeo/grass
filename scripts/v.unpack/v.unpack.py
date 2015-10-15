@@ -20,18 +20,21 @@
 #% keyword: import
 #% keyword: copying
 #%end
-#%option G_OPT_F_INPUT
+#%option G_OPT_F_BIN_INPUT
 #% description: Name of input pack file
+#% key_desc: name.pack
 #%end
 #%option G_OPT_V_OUTPUT
 #% label: Name for output vector map
 #% description: Default: taken from input file internals
 #% required : no
+#% guisection: Output settings
 #%end
 #%flag
 #% key: o
 #% label: Override projection check (use current location's projection)
 #% description: Assume that the dataset has same projection as the current location
+#% guisection: Output settings
 #%end
 
 import os
