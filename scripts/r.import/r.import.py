@@ -22,10 +22,7 @@
 #% keyword: import
 #% keyword: projection
 #%end
-#%option
-#% key: input
-#% type: string
-#% required: yes
+#%option G_OPT_F_INPUT
 #% description: Name of GDAL dataset to be imported
 #% guisection: Input
 #%end
@@ -54,7 +51,7 @@
 #%option
 #% key: resample
 #% type: string
-#% required: yes
+#% required: no
 #% multiple: no
 #% options: nearest,bilinear,bicubic,lanczos,bilinear_f,bicubic_f,lanczos_f
 #% description: Resampling method to use for reprojection
@@ -301,7 +298,7 @@ def main():
         # set region from region vector
         grass.run_command('g.region', raster=outfile)
         grass.run_command('g.region', vector=vreg)
-        # align to fist band
+        # align to first band
         grass.run_command('g.region', align=outfile)
         # get number of cells
         cells = grass.region()['cells']
@@ -329,6 +326,8 @@ def main():
         elif tgtres == 'value':
             res = tgtres_value
             grass.message(_("Using given resolution for input band <{out}>: {res}").format(out=outfile, res=res))
+            # align to requested resolution
+            grass.run_command('g.region', res=res, flags='a')
         else:
             curr_reg = grass.region()
             grass.message(_("Using current region resolution for input band "
