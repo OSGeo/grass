@@ -59,6 +59,14 @@
 #% descriptions: Overrides encoding interpretation, useful when importing ESRI Shapefile
 #% guisection: Output
 #%end
+#%option
+#% key: snap
+#% type: double
+#% label: Snapping threshold for boundaries (map units)
+#% description: '-1' for no snap
+#% answer: 1e-13
+#% guisection: Output
+#%end
 #%flag
 #% key: f
 #% description: List supported OGR formats and exit
@@ -139,6 +147,7 @@ def main():
         vopts['layer'] = layers
     if output:
         vopts['output'] = output
+    vopts['snap'] = options['snap']
     try:
         grass.run_command('v.in.ogr', input=OGRdatasource,
                           location=TMPLOC, flags='i', quiet=True, **vopts)
