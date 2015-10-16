@@ -197,10 +197,16 @@ class VNETDialog(wx.Dialog):
     def _createPointsPage(self):
         """Tab with points list and analysis settings"""
         pointsPanel = wx.Panel(parent = self)
+        anSettingsPanel = wx.Panel(parent = pointsPanel)
+        maxDistPanel =  wx.Panel(parent = anSettingsPanel)
         maxValue = 1e8
 
         listBox = wx.StaticBox(parent = pointsPanel, id = wx.ID_ANY,
                                 label =" %s " % _("Points for analysis:"))
+        listSizer = wx.StaticBoxSizer(listBox, wx.VERTICAL)
+        anSettingsBox = wx.StaticBox(parent = anSettingsPanel, id = wx.ID_ANY,
+                                label =" %s " % _("Analysis settings:"))
+        anSettingsSizer = wx.StaticBoxSizer(anSettingsBox, wx.VERTICAL)
 
         self.notebook.AddPage(page = pointsPanel, 
                               text=_('Points'), 
@@ -213,12 +219,6 @@ class VNETDialog(wx.Dialog):
                                                        dialog=self, 
                                                        vnet_mgr=self.vnet_mgr)
 
-        anSettingsPanel = wx.Panel(parent = pointsPanel)
-
-        anSettingsBox = wx.StaticBox(parent = anSettingsPanel, id = wx.ID_ANY,
-                                label =" %s " % _("Analysis settings:"))
-
-        maxDistPanel =  wx.Panel(parent = anSettingsPanel)
         maxDistLabel = wx.StaticText(parent = maxDistPanel, id = wx.ID_ANY, label = _("Maximum distance of point to the network:"))
         self.anSettings["max_dist"] = wx.SpinCtrl(parent = maxDistPanel, id = wx.ID_ANY, min = 0, max = maxValue)
         self.anSettings["max_dist"].Bind(wx.EVT_SPINCTRL, lambda event : self.MaxDist())
@@ -240,12 +240,10 @@ class VNETDialog(wx.Dialog):
         # Layout
         AnalysisSizer = wx.BoxSizer(wx.VERTICAL)
 
-        listSizer = wx.StaticBoxSizer(listBox, wx.VERTICAL)
 
         listSizer.Add(item = self.toolbars['pointsList'], proportion = 0)
         listSizer.Add(item = self.list, proportion = 1, flag = wx.EXPAND)
 
-        anSettingsSizer = wx.StaticBoxSizer(anSettingsBox, wx.VERTICAL)
 
         maxDistSizer = wx.BoxSizer(wx.HORIZONTAL)
         maxDistSizer.Add(item = maxDistLabel, flag = wx.ALIGN_CENTER_VERTICAL, proportion = 1)
@@ -333,6 +331,10 @@ class VNETDialog(wx.Dialog):
         #self.useTurns = wx.CheckBox(parent = dataPanel, id=wx.ID_ANY,
         #                            label = _('Use turns'))
         
+        box = wx.StaticBox(dataPanel, -1, "Vector map and layers for analysis")
+        bsizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        box2 = wx.StaticBox(dataPanel, -1, "Costs")    
+        bsizer2 = wx.StaticBoxSizer(box2, wx.VERTICAL)
         selPanels = {}
 
         for dataSel in dataSelects:
@@ -375,8 +377,6 @@ class VNETDialog(wx.Dialog):
 
         # Layout
         mainSizer = wx.BoxSizer(wx.VERTICAL)
-        box = wx.StaticBox(dataPanel, -1, "Vector map and layers for analysis")
-        bsizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         mainSizer.Add(item = bsizer, proportion = 0,
                       flag = wx.EXPAND  | wx.TOP | wx.LEFT | wx.RIGHT, border = 5) 
@@ -398,15 +398,13 @@ class VNETDialog(wx.Dialog):
             bsizer.Add(item = selPanels[sel], proportion = 0,
                        flag = wx.EXPAND)
 
-        box = wx.StaticBox(dataPanel, -1, "Costs")    
-        bsizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
-        mainSizer.Add(item = bsizer, proportion = 0,
+        mainSizer.Add(item = bsizer2, proportion = 0,
                                  flag = wx.EXPAND  | wx.TOP | wx.LEFT | wx.RIGHT, border = 5)       
 
         for sel in ['arc_column', 'arc_backward_column', 'node_column']:
             selPanels[sel].SetSizer(self._doSelLayout(title = label[sel], sel = self.inputData[sel]))
-            bsizer.Add(item = selPanels[sel], proportion = 0,
+            bsizer2.Add(item = selPanels[sel], proportion = 0,
                        flag = wx.EXPAND)
 
 
@@ -1124,6 +1122,17 @@ class SettingsDialog(wx.Dialog):
         self.parent = parent
         self.settings = {}
 
+        # create all staticboxes before creating widgets, needed for Mac
+        otherBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
+                                label =" %s " % _("Other settings"))
+        otherBoxSizer = wx.StaticBoxSizer(otherBox, wx.VERTICAL)
+        ptsStyleBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
+                                   label =" %s " % _("Point style:"))
+        ptsStyleBoxSizer = wx.StaticBoxSizer(ptsStyleBox, wx.VERTICAL)
+        styleBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
+                                label =" %s " % _("Analysis result style:"))
+        styleBoxSizer = wx.StaticBoxSizer(styleBox, wx.VERTICAL)
+
         rules = RunCommand('v.colors', 
                            read = True,
                            flags = 'l')
@@ -1199,9 +1208,6 @@ class SettingsDialog(wx.Dialog):
 
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        styleBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
-                                label =" %s " % _("Analysis result style:"))
-        styleBoxSizer = wx.StaticBoxSizer(styleBox, wx.VERTICAL)
 
         gridSizer = wx.GridBagSizer(vgap = 1, hgap = 1)
 
@@ -1229,10 +1235,6 @@ class SettingsDialog(wx.Dialog):
         styleBoxSizer.Add(item = gridSizer, flag = wx.EXPAND)
 
         # Point style layout
-        ptsStyleBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
-                                   label =" %s " % _("Point style:"))
-        ptsStyleBoxSizer = wx.StaticBoxSizer(ptsStyleBox, wx.VERTICAL)
-
         gridSizer = wx.GridBagSizer(vgap = 1, hgap = 1)
 
         row = 0
@@ -1251,10 +1253,6 @@ class SettingsDialog(wx.Dialog):
         ptsStyleBoxSizer.Add(item = gridSizer, flag = wx.EXPAND)
 
         # Other settings layout
-        otherBox = wx.StaticBox(parent = self, id = wx.ID_ANY,
-                                label =" %s " % _("Other settings"))
-        otherBoxSizer = wx.StaticBoxSizer(otherBox, wx.VERTICAL)
-
         gridSizer = wx.GridBagSizer(vgap = 1, hgap = 1)
 
         row = 0 
@@ -1331,6 +1329,8 @@ class CreateTtbDialog(wx.Dialog):
         """Create turntable dialog."""
         wx.Dialog.__init__(self, parent, id, title = _(title), style = style)
 
+        box = wx.StaticBox(self, -1, "Vector map and layers for analysis")
+        bsizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         label = {}
         dataSelects = [
                         ['input', "Choose vector map for analysis:", Select],
@@ -1367,8 +1367,6 @@ class CreateTtbDialog(wx.Dialog):
 
         # Layout
         mainSizer = wx.BoxSizer(wx.VERTICAL)
-        box = wx.StaticBox(self, -1, "Vector map and layers for analysis")
-        bsizer = wx.StaticBoxSizer(box, wx.VERTICAL)
 
         mainSizer.Add(item = bsizer, proportion = 0,
                       flag = wx.EXPAND  | wx.TOP | wx.LEFT | wx.RIGHT, border = 5) 
@@ -1471,6 +1469,10 @@ class OutputVectorDialog(wx.Dialog):
         wx.Dialog.__init__(self, parent, id, title = _(title), style = style)
 
         self.panel = wx.Panel(parent = self)
+        box = wx.StaticBox (parent = self.panel, id = wx.ID_ANY,
+                            label = "Vector map")
+
+        self.boxSizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
        
         # text fields and it's captions
         self.vectSel = Select(parent = self.panel, type = 'vector', 
@@ -1490,19 +1492,15 @@ class OutputVectorDialog(wx.Dialog):
 
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        box = wx.StaticBox (parent = self.panel, id = wx.ID_ANY,
-                            label = "Vector map")
 
-        boxSizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
-
-        boxSizer.Add(item = self.vectSellabel, 
+        self.boxSizer.Add(item = self.vectSellabel, 
                      flag = wx.ALIGN_CENTER_VERTICAL,
                      proportion = 0)
 
-        boxSizer.Add(item = self.vectSel, proportion = 1,
+        self.boxSizer.Add(item = self.vectSel, proportion = 1,
                      flag = wx.EXPAND | wx.ALL, border = 5)
 
-        sizer.Add(item = boxSizer, proportion = 1,
+        sizer.Add(item = self.boxSizer, proportion = 1,
                   flag = wx.EXPAND | wx.ALL, border = 5)
 
         btnSizer = wx.StdDialogButtonSizer()
