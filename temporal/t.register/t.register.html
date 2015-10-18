@@ -25,11 +25,21 @@ increment are mutual exclusive. The user can register single maps or a
 list of maps at once. Maps can be registered in several space time
 datasets using the same timestamp.
 <p>
+    The <i>increment</i> option and the <i>-i</i> flag (to create time intervals)
+    work only in conjunction with the <i>start</i> option.
+    If an input file with time stamps is used, then the <i>increment</i> option
+    and the <i>-i</i> flag are not supported.
+</p>
+<p>
 Start time and end time with absolute time must be provided using the
 format <b>yyyy-mm-dd HH:MM:SS +HHMM</b>. It is supported to specify
 only the date <b>yyyy-mm-dd</b>. In case of relative time the temporal
 unit (years, months, days, hours, minutes or seconds) must be provided.
 The relative start time, end time and the increment are integers.
+<p>
+
+
+</p>
 
 <h2>NOTES</h2>
 
@@ -46,32 +56,31 @@ database.
 The input file consists of a list of map names, optionally along with time stamps.
 Each map name is to be stored in a row in this file.
 <p>
-There are several options to register maps:
+There are several options to register maps, <i>increment</i> option and the <i>-i</i> flag are supported:
 <p>
 Specification of map names:
 <div class="code"><pre>
-prec_1
-prec_2
-prec_3
-prec_4
-prec_5
-prec_6
+terra_lst_day20020113
+terra_lst_day20020114
+terra_lst_day20020115
+terra_lst_day20020116
+terra_lst_day20020117
 </pre></div>
 
 <p>
-Specification of map names and the absolute start time (date) of the
-time instances:
+Specification of map names and the absolute start time (date) of the time instances,
+not support for <i>increment</i> option and the <i>-i</i> flag:
 <div class="code"><pre>
-prec_1|2001-01-01
-prec_2|2001-02-01
-prec_3|2001-03-01
-prec_4|2001-04-01
-prec_5|2001-05-01
-prec_6|2001-06-01
+terra_lst_day20020113|2002-01-13
+terra_lst_day20020114|2002-01-14
+terra_lst_day20020115|2002-01-15
+terra_lst_day20020116|2002-01-16
+terra_lst_day20020117|2002-01-17
 </pre></div>
 
 <p>
-Specification of map names and the absolute time stamp (datetime):
+Specification of map names and the absolute time stamp (datetime),
+not support for <i>increment</i> option and the <i>-i</i> flag:
 <div class="code"><pre>
 terra_lst_day20020113|2002-01-13 10:30
 terra_lst_day20020114|2002-01-14 10:30
@@ -81,7 +90,8 @@ terra_lst_day20020117|2002-01-17 10:30
 </pre></div>
 
 <p>
-Specification of the map name and the absolute time interval with start
+Specification of the map name and the absolute time interval with start,
+not support for <i>increment</i> option and the <i>-i</i> flag:
 and end time:
 <div class="code"><pre>
 prec_1|2001-01-01|2001-04-01
