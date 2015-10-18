@@ -122,23 +122,25 @@ GRASS GIS.
 
 <h2>EXAMPLES</h2>
 
-The examples are <a href="http://www.grassbook.org/data_menu3rd.php">North Carolina dataset</a> based.
+The examples are <a href="http://www.grassbook.org/datasets/datasets-3rd-edition/">North Carolina dataset</a> based.
 
-<p>Create nodes globally for all line ends and intersections:
+<h3>Create nodes globally for all line ends and intersections</h3>
 
 <div class="code"><pre>
 v.net input=streets_wake output=streets_node operation=nodes
 </pre></div>
 
-Merge in nodes from a separate map within given threshold:
+<h3>Merge in nodes from a separate map within given threshold</h3>
 
 <div class="code"><pre>
 v.net input=streets_wake points=firestations out=streets_net \
       operation=connect threshold=500
 </pre></div>
 
-For generating network for given vector point map is required input 
-file in format:
+<h3>Generating network for vector point map</h3>
+
+For generating network for given vector point map an input file in the
+following format is required:
 
 <div class="code"><pre>
 [category of edge] [category of start node] [category of end node]
