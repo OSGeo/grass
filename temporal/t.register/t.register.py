@@ -80,7 +80,7 @@
 #%option
 #% key: increment
 #% type: string
-#% label: Time increment
+#% label: Time increment, works only in conjunction with start option
 #% description: Time increment between maps for valid time interval creation (format absolute: NNN seconds, minutes, hours, days, weeks, months, years; format relative is integer: 5)
 #% required: no
 #% multiple: no
@@ -94,7 +94,7 @@
 
 #%flag
 #% key: i
-#% description: Create an interval (start and end time) in case an increment is provided
+#% description: Create an interval (start and end time) in case an increment and the start time are provided
 #% guisection: Time & Date
 #%end
 
