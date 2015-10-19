@@ -279,13 +279,11 @@ red
 
 The functions currently supported are listed in the table below.
 The type of the result is indicated in the last column.
-<em>F</em>
-means that the functions always results in a floating point value,
-<em>I</em>
-means that the function gives an integer result, and
-<em>*</em>
-indicates that the result is float if any of the arguments to the function
-are floating point values and integer if all arguments are integer.
+<em>F</em> means that the functions always results in a floating point value,
+<em>I</em> means that the function gives an integer result, and
+<em>*</em> indicates that the result is float if any of the arguments to the
+function are floating point values and integer if all arguments are integer.
+
 <p><div class="code"><pre>
 function                description                                     type
 ---------------------------------------------------------------------------
@@ -331,6 +329,7 @@ sqrt(x)                 square root of x                                F
 tan(x)                  tangent of x (x is in degrees)                  F
 xor(x,y)                exclusive-or (XOR) of x and y                   I
 </pre></div>
+
 <div class="code"><pre>
 Internal variables:
  row()                  current row of moving window
@@ -682,8 +681,7 @@ X (map) values supplied and y (newmap) values returned:
 <h2>KNOWN ISSUES</h2>
 
 Continuation lines must end with a <tt>\</tt> and have <em>no</em> trailing
-white space (blanks or tabs).
-If the user does leave white space at the end of
+white space (blanks or tabs). If the user does leave white space at the end of
 continuation lines, the error messages produced by <em>r.mapcalc</em> will
 be meaningless and the equation will not work as the user intended.
 This is particularly important for the <tt>eval()</tt> function.
@@ -701,7 +699,7 @@ NULL cells. It is left to the user to utilize the <tt>isnull()</tt> function.
 
 <h2>SEE ALSO</h2>
 
-<p><em>
+<em>
 <a href="g.region.html">g.region</a>,
 <a href="r.bitpattern.html">r.bitpattern</a>,
 <a href="r.blend.html">r.blend</a>,

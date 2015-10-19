@@ -4,7 +4,8 @@ New raster map layers can be created which are arithmetic expressions
 involving existing raster map layers, integer or floating point constants,
 and functions.
 
-<h3>PROGRAM USE</h3>
+
+<h3>Program use</h3>
 
 <em>r3.mapcalc</em> expression have the form:
 <p><b>result =</b><em> expression</em>
@@ -38,7 +39,8 @@ r3.mapcalc 'foo=1'
 Sorry, &lt;foo&gt; is not a valid parameter
 </pre></div>
 
-If no options are given, it manufactures "input=-" (which reads from
+<!-- sync to r.mapcalc? -->
+If no options are given, it manufactures "file=-" (which reads from
 stdin), so you can continue to use e.g.:
 
 <div class="code"><pre>
@@ -50,15 +52,15 @@ r3.mapcalc &lt;&lt;EOF
 foo = 1
 EOF
 </pre></div>
-But unless you need compatibility with previous versions, use input=
+But unless you need compatibility with previous versions, use file=
 explicitly, e.g.:
 
 <div class="code"><pre>
-r3.mapcalc input=file
+r3.mapcalc file=file
 </pre></div>
 or:
 <div class="code"><pre>
-r3.mapcalc input=- &lt;&lt;EOF
+r3.mapcalc file=- &lt;&lt;EOF
 foo = 1
 EOF
 </pre></div>
@@ -71,7 +73,8 @@ is entering input to <em>r3.mapcalc</em> on the command line, expressions
 should be enclosed within single quotes.  See NOTES, below.
 
 
-<h3>OPERATORS AND ORDER OF PRECEDENCE</h3>
+<h3>Operators and order of precedence</h3>
+
 The following operators are supported:
 <div class="code"><pre>
      Operator   Meaning                    Type        Precedence
@@ -112,7 +115,9 @@ Division by 0 and modulus by 0 are acceptable and give a NULL result.
 The logical operators give a 1 result if the comparison is true, 0 otherwise.
 <p><p>
 
-<h3>3D GRID NAMES</h3>
+
+<h3>3D Grid names</h3>
+
 Anything in the expression which is not a number, operator, or function name
 is taken to be a 3D grid name.
 Examples:
@@ -131,7 +136,7 @@ x = a-b
 <p><div class="code"><pre>
 x = "a-b"
 </pre></div>
-<p>would be interpreted as: x equals the 3D grid named <em>a-b</em>
+<p>would be interpreted as:  x equals the 3D grid named <em>a-b</em>
 <p>Also
 <p><div class="code"><pre>
 x = 3107
@@ -156,12 +161,13 @@ name@mapset
 <p><div class="code"><pre>
 result = x@PERMANENT / y@SOILS
 </pre></div>
-<p>The mapset specified does not have to be in the mapset search path. (This
-method of overriding the mapset search path is common to all GRASS commands,
-not just <em>r3.mapcalc</em>.)
+<p>The mapset specified does not have to be in the mapset search path.
+(This method of overriding the mapset search path is common to all
+GRASS commands, not just <em>r3.mapcalc</em>.)
 <p>
 
-<h3>THE NEIGHBORHOOD MODIFIER</h3>
+<h3>The neighborhood modifier</h3>
+
 3D grids are data base files stored in voxel format, i.e., three-dimensional
 matrices of float/double values. In <em>r3.mapcalc</em>, 3D grids may be
 followed by a <em>neighborhood</em> modifier that specifies a relative offset
@@ -176,18 +182,16 @@ refers to the cell one column to the right of the current cell. This syntax
 permits the development of neighborhood-type filters within a single 3D
 grid or across multiple 3D grids.
 
-<p>
 
-<h3>FUNCTIONS</h3>
+<h3>Functions</h3>
+
 The functions currently supported are listed in the table below.
 The type of the result is indicated in the last column.
-<em>F</em>
-means that the functions always results in a floating point value,
-<em>I</em>
-means that the function gives an integer result, and
-<em>*</em>
-indicates that the result is float if any of the arguments to the function
-are floating point values and integer if all arguments are integer.
+<em>F</em> means that the functions always results in a floating point value,
+<em>I</em> means that the function gives an integer result, and
+<em>*</em> indicates that the result is float if any of the arguments to the
+function are floating point values and integer if all arguments are integer.
+
 <p><div class="code"><pre>
 function                description                                     type
 ---------------------------------------------------------------------------
@@ -233,6 +237,7 @@ sqrt(x)                 square root of x                                F
 tan(x)                  tangent of x (x is in degrees)                  F
 xor(x,y)                exclusive-or (XOR) of x and y                   I
 </pre></div>
+
 <div class="code"><pre>
 Internal variables:
  row()                  current row of moving window
@@ -249,7 +254,8 @@ Internal variables:
 Note, that the row(), col() and depth() indexing starts with 1. 
 
 
-<h3>FLOATING POINT VALUES IN THE EXPRESSION</h3>
+<h3>Floating point values in the expression</h3>
+
 Floating point numbers are allowed in the expression. A floating point
 number is a number which contains a decimal point:
 <div class="code"><pre>
@@ -274,6 +280,7 @@ produce a floating-point result, as will using float():
 
 
 <h3>NULL support</h3>
+
 <ul>
 <li>Division by zero should result in NULL. 
 <li>Modulus by zero should result in NULL. 
@@ -381,7 +388,9 @@ values, the user doesn't know whether or not they both have the same value.
 Extra care must be taken if the expression is given on the command line.
 Some characters have special meaning to the UNIX shell.
 These include, among others:
-<p>* ( ) &gt; &amp; |
+<div class="code"><pre>
+* ( ) &gt; &amp; |
+</pre></div>
 <p>It is advisable to put single quotes around the expression; e.g.:
 <div class="code"><pre>
 'result = volume * 2'
@@ -541,25 +550,36 @@ X (map) values supplied and y (newmap) values returned:
 
 
 <h2>KNOWN ISSUES</h2>
-Continuation lines must end with a \ and have NO trailing white space
-(blanks or tabs).  If the user does leave white space at the end of
+
+Continuation lines must end with a <tt>\</tt> and have <em>no</em> trailing
+white space (blanks or tabs). If the user does leave white space at the end of
 continuation lines, the error messages produced by <em>r3.mapcalc</em> will
 be meaningless and the equation will not work as the user intended.
-This is important for the eval() function.
+This is particularly important for the <tt>eval()</tt> function.
 <p><!-- STILL TRUE ??-->
-Currently, there is no comment mechanism in <em>r3.mapcalc</em>. Perhaps
-adding a capability that would cause the entire line to be ignored when
-the user inserted a # at the start of a line as if it were not present,
-would do the trick.
+Currently, there is no comment mechanism in <em>r3.mapcalc</em>.
+Perhaps adding a capability that would cause the entire line to be
+ignored when the user inserted a # at the start of a line
+as if it were not present, would do the trick.
 <p>The function should require the user to type "end" or "exit" instead
 of simply a blank line. This would make separation of multiple scripts
 separable by white space.
-<p>r3.mapcalc does not print a warning in case of operations on NULL cells.
-It is left to the user to utilize the isnull() function.
+<p><em>r3.mapcalc</em> does not print a warning in case of operations on
+NULL cells. It is left to the user to utilize the <tt>isnull()</tt> function.
 
 
 <h2>SEE ALSO</h2>
-<b><a href="http://grass.osgeo.org/uploads/grass/history_docs/mapcalc-algebra.pdf">r3.mapcalc: An Algebra for GIS and Image
+
+<em>
+<a href="g.region.html">g.region</a>,
+<a href="r3.colors.html">r3.colors</a>,
+<a href="r.mapcalc.html">r.mapcalc</a>
+</em>
+
+
+<h2>REFERENCES</h2>
+
+<b><a href="http://grass.osgeo.org/uploads/grass/history_docs/mapcalc-algebra.pdf">r.mapcalc: An Algebra for GIS and Image
 Processing</a></b>, by Michael Shapiro and Jim Westervelt, U.S. Army
 Construction Engineering Research Laboratory (March/1991).
 <p> 
@@ -572,13 +592,12 @@ Neteler, M. (2001): Volume modelling of soils using GRASS GIS 3D tools. - in:
 Brovelli, M. (ed.)(2001): The Geomatics Workbook N. 2. Politecnico di Milano,
 Italy (ISSN 1591-092X) (<a href="http://geomatica.como.polimi.it/workbooks/n2/articoli/mn2.pdf">PDF</a>)
 
-<p><em><a href="r.mapcalc.html">r.mapcalc</a></em>
-
 
 <h2>AUTHORS</h2>
 Tomas Paudits &amp; Jaro Hofierka, funded by GeoModel s.r.o., Slovakia
 <br><a href="mailto:tpaudits@mailbox.sk">tpaudits@mailbox.sk</a>,
 <a href="MAILTO:hofierka@geomodel.sk">hofierka@geomodel.sk</a>
+<p>Glynn Clements
 
 <p>
 <i>Last changed: $Date$</i>
