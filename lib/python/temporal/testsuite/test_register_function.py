@@ -300,5 +300,39 @@ class TestRegisterFunctions(grass.gunittest.TestCase):
         self.assertEqual(end, 2000000)
         self.assertEqual(unit, "seconds")
 
+
+class TestRegisterFails(TestCase):
+
+    def test_error_handling_1(self):
+        # start option is missing
+        self.assertModuleFail("t.register", input="test", end='2001-01-01', maps=("a", "b"))
+
+    def test_error_handling_2(self):
+        # No input definition
+        self.assertModuleFail("t.register", input="test", start='2001-01-01')
+
+    def test_error_handling_3(self):
+        # File and maps are mutually exclusive
+        self.assertModuleFail("t.register", input="test", start='2001-01-01', maps=("a", "b"), file="maps.txt")
+
+    def test_error_handling_4(self):
+        # Increment needs start
+        self.assertModuleFail("t.register", input="test", increment="1 day", maps=("a", "b"))
+
+    def test_error_handling_5(self):
+        # Interval needs start
+        self.assertModuleFail("t.register", flags="i", input="test", maps=("a", "b"))
+
+    def test_error_handling_6(self):
+        # Increment and end are mutually exclusive
+        self.assertModuleFail("t.register", input="test", start='2001-01-01', end='2001-01-01',
+                              increment="1 day", maps=("a", "b"))
+
+    def test_error_handling_7(self):
+        # Interval and end are mutually exclusive
+        self.assertModuleFail("t.register", flags="i", input="test", start='2001-01-01', end='2001-01-01',
+                              maps=("a", "b"))
+
+
 if __name__ == '__main__':
     grass.gunittest.test()
