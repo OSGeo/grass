@@ -79,6 +79,16 @@ def register_maps_in_space_time_dataset(
         msgr.fatal(_("%s= and %s= are mutually exclusive") % ("end",
                                                               "increment"))
 
+    if end and interval:
+        msgr.fatal(_("%s= and the %s flag are mutually exclusive") % ("end",
+                                                                      "interval"))
+
+    if increment and not start:
+        msgr.fatal(_("The increment option requires the start option"))
+
+    if interval and not start:
+        msgr.fatal(_("The interval flag requires the start option"))
+
     if end and not start:
         msgr.fatal(_("Please specify %s= and %s=") % ("start_time",
                                                       "end_time"))
@@ -153,6 +163,14 @@ def register_maps_in_space_time_dataset(
             row["id"] = AbstractMapDataset.build_id(mapname, mapset)
 
             maplist.append(row)
+
+        if start_time_in_file is True and increment:
+            increment = None
+            msgr.warning(_("The increment option will be ignored because of time stamps in input file"))
+
+        if start_time_in_file is True and interval:
+            increment = None
+            msgr.warning(_("The interval flag will be ignored because of time stamps in input file"))
 
     num_maps = len(maplist)
     map_object_list = []
