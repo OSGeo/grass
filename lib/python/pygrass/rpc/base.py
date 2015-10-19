@@ -115,8 +115,8 @@ class RPCServerBase(object):
         """Check every 200 micro seconds if the server process is alive"""
         while True:
             time.sleep(0.2)
-            #sys.stderr.write("Check server process\n")
-            self._check_restart_server()
+            # sys.stderr.write("Check server process\n")
+            self._check_restart_server(caller="Server check thread")
             self.threadLock.acquire()
             if self.stopThread == True:
                 #sys.stderr.write("Stop thread\n")
@@ -137,7 +137,7 @@ class RPCServerBase(object):
     def check_server(self):
         self._check_restart_server()
 
-    def _check_restart_server(self):
+    def _check_restart_server(self, caller="main thread"):
         """Restart the server if it was terminated
         """
         self.threadLock.acquire()
@@ -148,22 +148,22 @@ class RPCServerBase(object):
         self.server_conn.close()
         self.start_server()
 
-        logging.warning("Needed to restart the libgis server")
+        logging.warning("Needed to restart the libgis server, caller: %s"%(caller))
 
         self.threadLock.release()
 
     def safe_receive(self, message):
-        """Receive the data and throw an FatalError exception in case the server
+        """Receive the data and throw a FatalError exception in case the server
            process was killed and the pipe was closed by the checker thread"""
         try:
             ret = self.client_conn.recv()
             if isinstance(ret,  FatalError):
-               raise FatalError()
+               raise ret
             return ret
-        except (EOFError,  IOError,  FatalError):
+        except (EOFError,  IOError,  FatalError), e:
             # The pipe was closed by the checker thread because
             # the server process was killed
-            raise FatalError(message)
+            raise FatalError(message + "\n  " + str(e))
 
     def stop(self):
         """Stop the check thread, the libgis server and close the pipe
