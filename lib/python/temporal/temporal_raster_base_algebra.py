@@ -1509,10 +1509,10 @@ class TemporalRasterBaseAlgebraParser(TemporalAlgebraParser):
                 theninput = self.check_stds(t[7])
                 elseinput = str(t[9])
         elif len(t) == 13:
-            if isinstance(t[7],  int):
+            if t[7] == 'null':
                 theninput = str(t[7] + t[8] + t[9])
                 elseinput = self.check_stds(t[11])
-            elif isinstance(t[9],  int):
+            elif t[9] == 'null':
                 theninput = self.check_stds(t[7])
                 elseinput = str(t[9] + t[10] + t[11])
 
