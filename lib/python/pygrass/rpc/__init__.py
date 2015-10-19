@@ -198,11 +198,11 @@ def data_provider_server(lock, conn):
 
     def error_handler(data):
         """This function will be called in case of a fatal error in libgis"""
-        #sys.stderr.write("Error handler was called\n")
+        # sys.stderr.write("Error handler was called\n")
         # We send an exeption that will be handled in
         # the parent process, then close the pipe
         # and release any possible lock
-        conn.send(FatalError())
+        conn.send(FatalError("G_fatal_error() was called in the server process"))
         conn.close()
         lock.release()
 
@@ -278,7 +278,19 @@ class DataProvider(RPCServerBase):
             >>> len(ret)
             12
 
+            >>> extent = {"north":100, "south":10, "east":30, "west":10,
+            ...           "rows":2, "cols":2}
+            >>> ret = provider.get_raster_image_as_np(name=test_raster_name,
+            ...                                       extent=extent)
+
             >>> provider.stop()
+
+            >>> extent = {"rows":3, "cols":1}
+            >>> ret = provider.get_raster_image_as_np(name=test_raster_name,
+            ...                                       extent=extent)
+            >>> len(ret)
+            12
+
 
             ..
         """
