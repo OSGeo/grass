@@ -356,6 +356,8 @@ def main():
     if group:
         grass.run_command('i.group', group=output, input=','.join(outfiles))
 
+    # TODO: write metadata with r.support
+
     return 0
 
 if __name__ == "__main__":

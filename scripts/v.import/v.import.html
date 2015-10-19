@@ -7,17 +7,17 @@ into the current location. If the projection of the input does match
 the projection of the location, the input is imported directly with
 <a href="v.in.ogr.html">v.in.ogr</a>.
 
-<h4>Topology cleaning</h4>
+<h2>NOTES</h2>
+
+<h3>Topology cleaning</h3>
 
 When importing polygons, non-topological polygons are converted to
-topological areas. If the original polygons contain errors (unexpected
+topological areas. By default, a very small snapping threshold is applied
+(1e-13 map units) to avoid topological errors caused by numerical inaccuracy
+of the input data format. If the original polygons contain errors (unexpected
 overlapping areas or small gaps between polygons), the import might
-need to be repeated using the <em>snap</em> option for
-<a href="v.in.ogr.html">v.in.ogr</a>. In this case, automated import and
-reprojection does not work, and the data need to be manually imported
-first with appropriate settings and optionally cleaned afterwards with
-<a href="v.clean.html">v.clean</a>. The cleaned import can then be
-manually reprojected to the target location.
+need to be repeated using a larger <em>snap</em> value.
+
 
 <h2>EXAMPLE</h2>
 
@@ -33,9 +33,10 @@ v.import input=research_area.shp output=research_area extent=input
 <a href="v.proj.html">v.proj</a>
 </em>
 
-<h2>AUTHOR</h2>
+<h2>AUTHORS</h2>
 
-Markus Metz
+Markus Metz<br>
+Improvements: Martin Landa, Anna Petrasova
 
 <p>
 <i>Last changed: $Date: 2015-01-20 20:52:27 +0100 (Tue, 20 Jan 2015) $</i>
