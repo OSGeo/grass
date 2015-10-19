@@ -125,7 +125,7 @@ Contents
 
 
  o Store the source tarball (twice) in (use scp -p FILES grass:):
-    SERVER1=grass.osgeo.org:/osgeo/grass/grass-cms/grass$MAJOR$MINOR/source/
+    SERVER1=grass.osgeo.org:/var/www/grass/grass-cms/grass$MAJOR$MINOR/source/
     SERVER2=download.osgeo.org:/osgeo/download/grass/grass$MAJOR$MINOR/source/
     echo $SERVER1
     echo $SERVER2
@@ -261,7 +261,7 @@ Contents
            svn switch https://svn.osgeo.org/grass/grass/branches/releasebranch_7_0 .
 
 ----------
-GRASS GIS 7.0 release branch creation
+Example: GRASS GIS 7.0 release branch creation
 
 svn copy https://svn.osgeo.org/grass/grass/trunk/ \
     https://svn.osgeo.org/grass/grass/branches/releasebranch_7_0 \
