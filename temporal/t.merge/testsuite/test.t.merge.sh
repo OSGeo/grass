@@ -22,7 +22,7 @@ t.register -i --o maps=prec_1,prec_2,prec_3,prec_4,prec_5,prec_6 \
 # in several space time datasets
 t.create --o type=strds temporaltype=absolute output=precip_abs1 \
 	title="Test" descr="This is the 1 test strds" semantictype=sum
-t.register -i --o input=precip_abs1 maps=prec_1,prec_2,prec_3 
+t.register --o input=precip_abs1 maps=prec_1,prec_2,prec_3 
 
 t.create --o type=strds temporaltype=absolute output=precip_abs2 \
 	title="Test" descr="This is the 2 test strds" semantictype=sum

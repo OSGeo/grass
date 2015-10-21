@@ -87,31 +87,31 @@ t.create type=stvds temporaltype=absolute output=soils_abs4 title="A test with i
 t.create type=stvds temporaltype=absolute output=soils_abs5 title="A test with input files" descr="A test with input files"
 
 # The first @test
-t.register type=vector   input=soils_abs1 file="${n1}" start="2001-01-01" increment="1 months"
+t.register type=vector input=soils_abs1 file="${n1}" start="2001-01-01" increment="1 months"
 t.vect.list    separator=" | " method=comma     input=soils_abs1
 t.vect.list input=soils_abs1
 t.vect.list separator=" | " method=cols      input=soils_abs1
 t.vect.list separator=" | " method=delta     input=soils_abs1
 t.vect.list separator=" | " method=deltagaps input=soils_abs1
 
-t.register type=vector -i input=soils_abs2 file="${n2}"
+t.register type=vector input=soils_abs2 file="${n2}"
 t.vect.list    separator=" | " method=comma     input=soils_abs2
 t.vect.list input=soils_abs2
 t.vect.list separator=" | " method=cols      input=soils_abs2
 t.vect.list separator=" | " method=delta     input=soils_abs2
 t.vect.list separator=" | " method=deltagaps input=soils_abs2
 
-t.register type=vector -i input=soils_abs3 file="${n3}"
+t.register type=vector input=soils_abs3 file="${n3}"
 t.vect.list    separator=" | " method=comma     input=soils_abs3
 t.vect.list separator=" | " method=delta     input=soils_abs3
 t.vect.list separator=" | " method=deltagaps input=soils_abs3
 
-t.register type=vector -i input=soils_abs4 file="${n4}"
+t.register type=vector input=soils_abs4 file="${n4}"
 t.vect.list    separator=" | " method=comma     input=soils_abs4
 t.vect.list separator=" | " method=delta     input=soils_abs4
 t.vect.list separator=" | " method=deltagaps input=soils_abs4
 
-t.register type=vector -i input=soils_abs5 file="${n5}"
+t.register type=vector input=soils_abs5 file="${n5}"
 t.vect.list    separator=" | " method=comma     input=soils_abs5
 t.vect.list input=soils_abs5
 t.vect.list separator=" | " method=cols      input=soils_abs5
