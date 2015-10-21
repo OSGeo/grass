@@ -133,7 +133,7 @@ v.out.postgis input=urbanarea output="PG:dbname=grass"
 </pre></div>
 
 GRASS areas are converted into polygons, isles into holes. We can
-check the number or created polygons by simple SQL query bellow.
+check the number or created polygons by simple SQL query below.
 
 <div class="code"><pre>
 db.select driver=pg database=grass \
@@ -175,7 +175,7 @@ v.out.postgis input=bridges output="PG:dbname=grass" output_layer=grassout.bridg
 
 <h3>Export data with creation options</h3>
 
-Example bellow demonstrates how to define name for geometry column and
+Example below demonstrates how to define name for geometry column and
 disable building spatial index. Spatial reference system is defined
 by <tt>srid</tt> identifier which corresponds in this case with EPSG
 3358 (North Carolina dataset).
@@ -221,7 +221,7 @@ by <em><a href="v.info.html">v.info</a></em>:
 <em>v.out.postgis</em> allows ignoring attributes when exporting
 vector features by specifying <b>-t</b> flag.
 
-Command bellow exports vector features without attributes. The feature
+Command below exports vector features without attributes. The feature
 will contain only two columns, the fid and geometry column.
 
 <div class="code"><pre>

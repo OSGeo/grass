@@ -21,7 +21,7 @@
 ############################################################################
 
 #%module
-#% description: Allows the user to see in a plot the values of one or more temporal raser datasets for a queried point defined by a coordinate pair. Also allows to plot data of vector dataset for a defined categories and attribut.
+#% description: Allows the user to see in a plot the values of one or more temporal raser datasets for a queried point defined by a coordinate pair. Also allows plotting data of vector dataset for a defined categories and attribute.
 #% keywords: general
 #% keywords: GUI
 #% keywords: temporal

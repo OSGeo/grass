@@ -7,7 +7,7 @@ by GRASS Development Team (http://grass.osgeo.org)
 \section vlibStructures List of vector library data structures
 
 All data structure used by the vector library are defined in
-include/vect/dig_structs.h. See the lists bellow.
+include/vect/dig_structs.h. See the lists below.
 
 \subsection vlibStructuresMajor Major
 
