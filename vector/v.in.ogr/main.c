@@ -1087,12 +1087,14 @@ int main(int argc, char *argv[])
 		/**                                          OFTDate = 9           **/
 		/**                                          OFTTime = 10          **/
 		/**                                          OFTDateTime = 11      **/
+                /** GDAL 2.0+                                                      **/
                 /** Simple 64bit integer                     OFTInteger64 = 12     **/
                 /** List of 64bit integers                   OFTInteger64List = 13 **/
 
 		if (Ogr_ftype == OFTInteger) {
 		    sprintf(buf, ", %s integer", Ogr_fieldname);
 		}
+#if GDAL_VERSION_NUM >= 2000000
 		else if (Ogr_ftype == OFTInteger64) {
                     if (strcmp(Fi->driver, "pg") == 0) 
                         sprintf(buf, ", %s bigint", Ogr_fieldname);
@@ -1103,8 +1105,12 @@ int main(int argc, char *argv[])
                                       Ogr_fieldname);
                     }
                 }
-		else if (Ogr_ftype == OFTIntegerList ||
-                         Ogr_ftype == OFTInteger64List) {
+#endif
+		else if (Ogr_ftype == OFTIntegerList
+#if GDAL_VERSION_NUM >= 2000000
+                         || Ogr_ftype == OFTInteger64List
+#endif
+                         ) {
 		    /* hack: treat as string */
 		    sprintf(buf, ", %s varchar ( %d )", Ogr_fieldname,
 			    OFTIntegerListlength);
@@ -1233,7 +1239,9 @@ int main(int argc, char *argv[])
 		    Ogr_ftype = OGR_Fld_GetType(Ogr_field);
 		    if (OGR_F_IsFieldSet(Ogr_feature, i)) {
 			if (Ogr_ftype == OFTInteger ||
+#if GDAL_VERSION_NUM >= 2000000
                             Ogr_ftype == OFTInteger64 ||
+#endif
                             Ogr_ftype == OFTReal) {
 			    sprintf(buf, ", %s",
 				    OGR_F_GetFieldAsString(Ogr_feature, i));
@@ -1255,8 +1263,11 @@ int main(int argc, char *argv[])
 #endif
 			else if (Ogr_ftype == OFTString ||
 			         Ogr_ftype == OFTStringList ||
-				 Ogr_ftype == OFTIntegerList ||
-                                 Ogr_ftype == OFTInteger64List) {
+				 Ogr_ftype == OFTIntegerList 
+#if GDAL_VERSION_NUM >= 2000000
+                                 || Ogr_ftype == OFTInteger64List
+#endif
+                                 ) {
 			    db_set_string(&strval, (char *)
 					  OGR_F_GetFieldAsString(Ogr_feature,
 								 i));
@@ -1282,8 +1293,11 @@ int main(int argc, char *argv[])
 #endif
 			else if (Ogr_ftype == OFTString ||
 			         Ogr_ftype == OFTStringList ||
-				 Ogr_ftype == OFTIntegerList ||
-                                 Ogr_ftype == OFTInteger64List) {
+				 Ogr_ftype == OFTIntegerList
+#if GDAL_VERSION_NUM >= 2000000
+                                 || Ogr_ftype == OFTInteger64List
+#endif
+                                 ) {
 			    sprintf(buf, ", ''");
 			}
 			else {
