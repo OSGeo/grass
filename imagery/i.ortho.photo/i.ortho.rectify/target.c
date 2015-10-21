@@ -31,5 +31,5 @@ int get_target(char *group)
     sprintf(buf, _("Mapset <%s> in target location <%s> - "), mapset, location);
     strcat(buf, stat == 0 ? _("permission denied") : _("not found"));
   error:
-    G_fatal_error(buf);
+    G_fatal_error("%s", buf);
 }

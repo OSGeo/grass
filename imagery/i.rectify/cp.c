@@ -67,7 +67,7 @@ int get_control_points(char *group, int order	/* THIS HAS BEEN ADDED WITH THE CR
 	    return 1;
 	}
     }
-    G_fatal_error(msg);
+    G_fatal_error("%s", msg);
 
     return 0; /* G_fatal_error() calls exit() */
 }

@@ -50,7 +50,7 @@ static int camera_error(char *camera, char *file, char *msga, char *msgb)
 
     sprintf(buf, "%sfile [%s] of group [%s in %s]%s",
 	    msga, file, camera, G_mapset(), msgb);
-    G_warning(buf);
+    G_warning("%s", buf);
 
     return 0;
 }

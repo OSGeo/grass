@@ -110,7 +110,7 @@ void check_projection(struct Cell_head *cellhd, GDALDatasetH hDS, int override)
 	    strcat(error_msg,
 		   _("Consider generating a new location from the input dataset using "
 		     "the 'location' parameter.\n"));
-	    G_fatal_error(error_msg);
+	    G_fatal_error("%s", error_msg);
 	}
 	else {
 	    G_message(_("Projection of input dataset and current location "

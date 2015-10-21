@@ -62,7 +62,7 @@ void fatal_error(void *map, int elevfd, int outfd, char *errorMsg)
     if (elevfd != -1)
         close_output_map(elevfd);
 
-    Rast3d_fatal_error(errorMsg);
+    Rast3d_fatal_error("%s", errorMsg);
     exit(EXIT_FAILURE);
 
 }

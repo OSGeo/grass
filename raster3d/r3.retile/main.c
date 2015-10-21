@@ -54,7 +54,7 @@ void fatal_error(void *map, int *fd, int depths, char *errorMsg)
             Rast_unopen(fd[i]);
     }
 
-    Rast3d_fatal_error(errorMsg);
+    Rast3d_fatal_error("%s", errorMsg);
     exit(EXIT_FAILURE);
 
 }

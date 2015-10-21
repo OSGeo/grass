@@ -96,7 +96,7 @@ void init_database(struct Map_info *Out, dbDriver ** driver,
     sprintf(buf, "create table %s (%s)", (*Fi)->table, columns);
 
     db_set_string(&sql, buf);
-    G_debug(2, db_get_string(&sql));
+    G_debug(2, "%s", db_get_string(&sql));
 
     if (db_execute_immediate(*driver, &sql) != DB_OK) {
 	db_close_database_shutdown_driver(*driver);
@@ -128,7 +128,7 @@ void insert_point(dbDriver * driver, char *table, int cat, int path,
     sprintf(buf, "insert into %s values (%d, %d, %d, %d, %d, %d)", table, cat,
 	    path, stop_id, index, arrival_time, departure_time);
     db_set_string(&sql, buf);
-    G_debug(3, db_get_string(&sql));
+    G_debug(3, "%s", db_get_string(&sql));
     if (db_execute_immediate(driver, &sql) != DB_OK) {
 	db_close_database_shutdown_driver(driver);
 	G_fatal_error(_("Cannot insert new record: %s"), db_get_string(&sql));
@@ -150,7 +150,7 @@ void insert_line(dbDriver * driver, char *table, int cat, int path,
 	    table, cat, path, from_id, to_id, route_id, index, from_time,
 	    to_time);
     db_set_string(&sql, buf);
-    G_debug(3, db_get_string(&sql));
+    G_debug(3, "%s", db_get_string(&sql));
     if (db_execute_immediate(driver, &sql) != DB_OK) {
 	db_close_database_shutdown_driver(driver);
 	G_fatal_error(_("Cannot insert new record: %s"), db_get_string(&sql));

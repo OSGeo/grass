@@ -142,7 +142,7 @@ void fatal_error(Database db, char *errorMsg)
     if (db.elev)
         close_input_raster_map(db.elev);
 
-    Rast3d_fatal_error(errorMsg);
+    Rast3d_fatal_error("%s", errorMsg);
     exit(EXIT_FAILURE);
 }
 
