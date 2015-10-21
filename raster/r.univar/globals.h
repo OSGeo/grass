@@ -56,7 +56,7 @@ typedef struct
 typedef struct
 {
     struct Option *inputfile, *zonefile, *percentile, *output_file, *separator;
-    struct Flag *shell_style, *extended, *table;
+    struct Flag *shell_style, *extended, *table, *use_rast_region;
 } param_type;
 
 extern param_type param;

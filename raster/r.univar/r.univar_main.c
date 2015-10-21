@@ -71,6 +71,10 @@ void set_params()
     param.table->description = _("Table output format instead of standard output format");
     param.table->guisection = _("Formatting");
 
+    param.use_rast_region = G_define_flag();
+    param.use_rast_region->key = 'r';
+    param.use_rast_region->description = _("Use the native resolution and extent of the raster map, instead of the current region");
+
     return;
 }
 
@@ -115,14 +119,16 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+    if (param.zonefile->answer && param.use_rast_region->answer) {
+    	G_fatal_error(_("zones option and region flag -r are mutually exclusive"));
+    }
+
     name = param.output_file->answer;
     if (name != NULL && strcmp(name, "-") != 0) {
 	if (NULL == freopen(name, "w", stdout)) {
 	    G_fatal_error(_("Unable to open file <%s> for writing"), name);
 	}
     }
-
-    G_get_window(&region);
     
     /* table field separator */
     zone_info.sep = G_option_to_separator(param.separator);
@@ -166,6 +172,18 @@ int main(int argc, char *argv[])
 	     : 0);
 
     for (p = param.inputfile->answers; *p; p++) {
+
+	/* Check if the native extent and resolution
+	   of the input map should be used */
+	if(param.use_rast_region->answer) {
+    	    mapset = G_find_raster2(*p, "");
+	    Rast_get_cellhd(*p, mapset, &region);
+        } else {
+    	    G_get_window(&region);
+        }
+	/* Set the computational region */
+	Rast_set_window(&region);
+
 	fd = open_raster(*p);
 
 	if (map_type != -1) {
@@ -255,7 +273,7 @@ process_raster(univar_stat * stats, int fd, int fdz, const struct Cell_head *reg
     const size_t value_sz = Rast_cell_size(map_type);
     unsigned int row;
     void *raster_row;
-    CELL *zoneraster_row;
+    CELL *zoneraster_row = NULL;
     int n_zones = zone_info.n_zones;
     
     raster_row = Rast_allocate_buf(map_type);
@@ -264,7 +282,7 @@ process_raster(univar_stat * stats, int fd, int fdz, const struct Cell_head *reg
 
     for (row = 0; row < rows; row++) {
 	void *ptr;
-	CELL *zptr;
+	CELL *zptr = NULL;
 	unsigned int col;
 
 	Rast_get_row(fd, raster_row, row, map_type);
