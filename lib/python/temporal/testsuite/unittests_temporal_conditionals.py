@@ -63,7 +63,7 @@ class TestTemporalConditionals(TestCase):
         tgis.register_maps_in_space_time_dataset(type="raster", name="E", maps="e1,e2,e3",
                                                  start="2000-12-31", increment="2 day", interval=True)
         tgis.register_maps_in_space_time_dataset(type="raster", name=None,  maps="singletmap", 
-                                                start="2001-01-03", end="2001-01-04", interval=True)
+                                                start="2001-01-03", end="2001-01-04")
 
     def tearDown(self):
         self.runModule("t.remove", inputs="R", quiet=True)
