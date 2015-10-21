@@ -67,7 +67,7 @@
 #%option
 #% key: layout
 #% type: string
-#% description: The layout of the ouput. One point per row (row), one point per column (col), all timsteps in one row (timerow)
+#% description: The layout of the output. One point per row (row), one point per column (col), all timsteps in one row (timerow)
 #% required: no
 #% multiple: no
 #% options: row, col, timerow

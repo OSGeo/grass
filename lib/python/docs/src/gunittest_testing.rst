@@ -30,7 +30,7 @@ Basic example
 -------------
 
 If you are writing a test of a GRASS module, 
-create a Python script with the content derived from the example bellow.
+create a Python script with the content derived from the example below.
 When using existing existing maps, suppose you are in North Carolina SPM
 GRASS sample location.
 

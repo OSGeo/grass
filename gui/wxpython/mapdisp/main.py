@@ -477,7 +477,7 @@ class MapApp(wx.App):
         ###
         ### TODO: find a better solution
         ###
-        ### the check bellow disabled, it's too much invasive to call
+        ### the check below disabled, it's too much invasive to call
         ### g.gisenv in the watcher...
         # try:
             # GISBASE and other system enviromental variables can not be used

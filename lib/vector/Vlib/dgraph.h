@@ -16,7 +16,7 @@ struct pg_vertex {
     double x; /* coordinates */
     double y;
     int ecount; /* number of neighbours */
-    int eallocated; /* size of the array bellow */
+    int eallocated; /* size of the array below */
     struct pg_edge **edges; /* array of pointers */
     double *angles; /* precalculated angles with Ox */
 };
