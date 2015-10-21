@@ -572,7 +572,7 @@ int main(int argc, char *argv[])
 
 	db_append_string(&stmt, " )");
 
-	G_debug(3, db_get_string(&stmt));
+	G_debug(3, "%s", db_get_string(&stmt));
 
 	if (db_execute_immediate(driver, &stmt) != DB_OK) {
 	    Vect_close(&Out);

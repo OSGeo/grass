@@ -20,13 +20,13 @@ int read_range(void)
     for (i = 0; i < noi; i++) {
 	if (Rast_read_fp_range(name[i], G_mapset(), &drange) <= 0) {
 	    sprintf(buff, "Can't read f_range for map %s", name[i]);
-	    G_fatal_error(buff);
+	    G_fatal_error("%s", buff);
 	}
 	Rast_get_fp_range_min_max(&drange, &tmp_dmin, &tmp_dmax);
 
 	if (Rast_read_range(name[i], G_mapset(), &range) <= 0) {
 	    sprintf(buff, "Can't read range for map %s", name[i]);
-	    G_fatal_error(buff);
+	    G_fatal_error("%s", buff);
 	}
 	Rast_get_range_min_max(&range, &tmp_min, &tmp_max);
 	if (!i || tmp_max > old_max || Rast_is_c_null_value(&old_max))

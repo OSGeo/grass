@@ -77,9 +77,9 @@ char *create_pgfile(const char *dsn, const char *schema, const char *olink,
 	    G_set_key_value(tokens[0], tokens[1], key_val);
 	    
 	    if (strcmp(tokens[0], "fid") == 0)
-		G_asprintf(fid_column, tokens[1]);
+                G_asprintf(fid_column, "%s", tokens[1]);
 	    if (strcmp(tokens[0], "geometry_name") == 0)
-		G_asprintf(geom_column, tokens[1]);
+		G_asprintf(geom_column, "%s", tokens[1]);
 
 	    G_free_tokens(tokens);
 	}

@@ -373,7 +373,7 @@ int get_control_points(char *group, char *pfile, int order, int use3d,
 	break;
     }
     if (ret != 1)
-	G_fatal_error(msg);
+        G_fatal_error("%s", msg);
 	
     if (rms) {
 	compute_rms(&cp, &cp3, order, use3d, orthorot, sep, fpr);

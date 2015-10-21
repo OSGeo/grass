@@ -36,7 +36,7 @@ int I_get_group_camera(char *group, char *camera)
 	sprintf(buf,
 		_("Unable to open camera file for group <%s> in mapset <%s>"),
 		group, G_mapset());
-	G_warning(buf);
+	G_warning("%s", buf);
 	return 0;
     }
     G_getl2(buf, sizeof(buf), fd);

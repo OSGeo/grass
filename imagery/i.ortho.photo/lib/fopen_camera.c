@@ -46,7 +46,7 @@ static int error(char *camera, char *msga, char *msgb)
 
     sprintf(buf, "%s camera file [%s] in [%s %s] %s",
 	    msga, camera, G_location(), G_mapset(), msgb);
-    G_warning(buf);
+    G_warning("%s", buf);
 
     return 0;
 }

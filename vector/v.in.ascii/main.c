@@ -404,7 +404,7 @@ int main(int argc, char *argv[])
 				Fi->driver);
 
 	    /* Create table */
-	    G_debug(3, db_get_string(&sql));
+	    G_debug(3, "%s", db_get_string(&sql));
 	    if (db_execute_immediate(driver, &sql) != DB_OK) {
 		G_fatal_error(_("Unable to create table: %s"),
 			      db_get_string(&sql));

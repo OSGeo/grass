@@ -216,7 +216,7 @@ int main(int argc, char *argv[])
 
 	db_append_string(&sql, ")");
 
-	G_debug(3, db_get_string(&sql));
+	G_debug(3, "%s", db_get_string(&sql));
 
 	if (db_execute_immediate(driver, &sql) != DB_OK)
 	    G_fatal_error(_("Unable to create table: %s"),
@@ -296,7 +296,7 @@ int main(int argc, char *argv[])
 		sprintf(buf, "insert into %s values ( %d, '%s')", Fi->table,
 			cat, db_get_string(&label));
 		db_set_string(&sql, buf);
-		G_debug(3, db_get_string(&sql));
+		G_debug(3, "%s", db_get_string(&sql));
 
 		if (db_execute_immediate(driver, &sql) != DB_OK)
 		    G_fatal_error(_("Unable to insert into table: %s"),

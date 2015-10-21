@@ -121,7 +121,7 @@ int main(int argc, char *argv[])
 	    }
 	    else {
 		strcat(buf, _(" - invalid reclass rule"));
-		G_fatal_error(buf);
+		G_fatal_error("%s", buf);
 	    }
 	    break;
 
