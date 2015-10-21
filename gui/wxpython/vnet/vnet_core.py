@@ -697,7 +697,7 @@ class VNETAnalyses:
         self.tmp_maps.DeleteTmpMap(self.tmpInPtsConnected)
         try_remove(self.tmpPtsAsciiFile)
 
-        if cmd[0] == "v.net.flow":
+        if event.cmd[0] == "v.net.flow":
             self.tmp_maps.DeleteTmpMap(self.vnetFlowTmpCut)
 
         self._onDone(event)
