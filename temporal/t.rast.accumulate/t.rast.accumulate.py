@@ -96,13 +96,13 @@
 #% key: limits
 #% type: double
 #% key_desc: lower,upper
-#% description: Use these limits in case lower and/or upper input  space time raster datasets are not defined
-#% required: no
+#% description: Use these limits in case lower and/or upper input  space time raster datasets are not defined or contain NULL values
+#% required: yes
 #% multiple: no
 #%end
 
 #%option
-#% key: shift
+#% key: scale
 #% type: double
 #% description: Scale factor for input space time raster dataset
 #% required: no
@@ -110,7 +110,7 @@
 #%end
 
 #%option
-#% key: scale
+#% key: shift
 #% type: double
 #% description: Shift factor for input space time raster dataset
 #% required: no
