@@ -91,6 +91,8 @@ libpythonepub:
 	@echo
 	@echo "Build finished. The epub file is in $(BUILDDIR)/epub/"
 
+# requires: 
+#  texlive-titlesec texlive-framed texlive-threeparttable texlive-wrapfig texlive-upquote texlive-multirow
 libpythonlatex:
 	@echo "SPHINXBUILD: Using <$(SPHINXBUILD)>"
 	$(call run_grass,$(SPHINXBUILD) -b latex $(ALLSPHINXOPTS) $(BUILDDIR)/latex)
