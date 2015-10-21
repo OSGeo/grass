@@ -322,7 +322,7 @@ parcels might have two different categories which prevents from a unique assignm
 
 \subsection vlibFeatureTypes Feature types
 
-Feature types are defined in include/vect_dig_defines.h, see the list bellow:
+Feature types are defined in include/vect_dig_defines.h, see the list below:
 
 - GV_POINT
 - GV_LINE
