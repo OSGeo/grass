@@ -62,7 +62,7 @@ class TestTemporalAlgebraGranularity(TestCase):
         tgis.register_maps_in_space_time_dataset(type="raster", name="D", maps="d3",
                                                  start="2001-05-01", increment="31 days", interval=True)
         tgis.register_maps_in_space_time_dataset(type="raster", name=None,  maps="singletmap", 
-                                                start="2001-01-03", end="2001-01-04", interval=True)
+                                                start="2001-01-03", end="2001-01-04")
 
     def tearDown(self):
         pass
