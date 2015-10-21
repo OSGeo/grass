@@ -22,7 +22,7 @@ page</a> for more info.
 
 \section vlibFn List of functions
 
-Note that the functions listed bellow are lower level subroutines, in
+Note that the functions listed below are lower level subroutines, in
 other word these functions are not considered to be part of public
 API. They are internally used by the vector library when accessing
 PostGIS data. The programmer should use higher level functions

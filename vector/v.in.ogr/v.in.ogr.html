@@ -134,7 +134,7 @@ LDID/codepage setting from the .dbf file and use it to translate
 string fields to UTF-8. LDID &quot;87 / 0x57&quot; is treated as
 ISO8859_1 which may not be appropriate for many
 languages. Unfortunately it is not clear what other values may be
-appropriate (see example bellow). To change encoding the user can set
+appropriate (see example below). To change encoding the user can set
 up <tt>SHAPE_ENCODING</tt> environmental variable or simply to define
 encoding value using <b>encoding</b> parameter. Note that recoding
 support is new for GDAL/OGR 1.9.0.
@@ -154,7 +154,7 @@ Starting with GDAL 1.11 the library supports multiple geometry columns
 in OGR. By default <em>v.in.ogr</em> reads all geometry columns from
 given layer. The user can choose desired geometry column
 by <b>geometry</b> option,
-see <a href="#multiple-geometry-columns">example bellow</a>.
+see <a href="#multiple-geometry-columns">example below</a>.
 
 <h2>EXAMPLES</h2>
 
@@ -297,7 +297,7 @@ In our example layer &quot;Okresy&quot; has three geometry columns:
 &quot;GeneralizovanaHranice&quot;. By default <em>v.in.ogr</em> reads data from
 all three geometry columns. The user can specify desired geometry
 column by <b>geometry</b> option, in this case the module will read
-geometry only from the specified geometry column. In the example bellow,
+geometry only from the specified geometry column. In the example below,
 the output vector map will contain only geometry saved in
 &quot;OriginalniHranice&quot; geometry column.
 

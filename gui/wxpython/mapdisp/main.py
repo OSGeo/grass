@@ -397,7 +397,7 @@ class MapApp(wx.App):
         cmdfile)
         """
         try:
-            # GISBASE and other sytem enviromental variables can not be used
+            # GISBASE and other system enviromental variables can not be used
             # since the process inherited them from GRASS
             # raises exception when vaiable does not exists
             grass.gisenv()['GISDBASE']

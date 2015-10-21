@@ -3,7 +3,7 @@ REM Environmental variables for GRASS stand-alone installer
 REM
 
 REM Default prompt: cmd.exe
-REM To enable bash prompt please uncomment the line bellow
+REM To enable bash prompt please uncomment the line below
 REM set GRASS_SH=%GISBASE%\msys\bin\sh.exe
 
 set GRASS_PYTHON=%GISBASE%\extrabin\python.exe

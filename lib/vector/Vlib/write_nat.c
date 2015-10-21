@@ -427,7 +427,7 @@ int V2_restore_line_nat(struct Map_info *Map, off_t line)
     return V2__add_line_to_topo_nat(Map, offset, type, Points, Cats, line, NULL) > 0 ? 0 : -1;
 }
 
-/*** static or internal subroutines bellow ****/
+/*** static or internal subroutines below ****/
 
 /*!
   \brief Writes feature at the given offset or at the end of the file

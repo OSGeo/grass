@@ -9,7 +9,7 @@ List of classes:
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
-@author Stepan Turek <stepan.turek seznam.cz> (Based on code from OWSLib - Copyright bellow)
+@author Stepan Turek <stepan.turek seznam.cz> (Based on code from OWSLib - Copyright below)
 """
 # -*- coding: ISO-8859-15 -*-
 # =============================================================================

@@ -25,7 +25,7 @@
   parameter <i>opt</i>.
 
   Valid parameters are defined by the STD_OPT enum in the file gis.h.
-  A list of valid parameter values sorted to groups is bellow.
+  A list of valid parameter values sorted to groups is below.
 
   This function allocates memory for the Option structure and returns a
   pointer to this memory.
@@ -889,7 +889,7 @@ struct Option *G_define_standard_option(int opt)
   \brief Create standardised Flag structure.
   
   This function will create a standardised Flag structure defined by
-  parameter <i>flag</i>. A list of valid parameters bellow. It
+  parameter <i>flag</i>. A list of valid parameters below. It
   allocates memory for the Flag structure and returns a pointer to
   this memory.
   

@@ -45,7 +45,7 @@
 #% type: string
 #% options: input,region
 #% answer: input
-#% description: Ouput vector map extent
+#% description: Output vector map extent
 #% descriptions: input;extent of input map;region;extent of current region
 #% guisection: Output
 #%end

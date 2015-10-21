@@ -228,7 +228,7 @@ class ScattsManager:
                      message=_("Number of cells (rows*cols) <%d> in current region is "
                                "higher than recommended threshold <%d>.\n"
                                "It is strongly advised to reduce number of cells "
-                               "in current region bellow recommend threshold.\n "
+                               "in current region below recommend threshold.\n "
                                "It can be done by <g.region> command.\n\n" 
                                "Do you want to continue using "
                                "Interactive Scatter Plot Tool with this region?" 
@@ -314,7 +314,7 @@ class ScattsManager:
                      message=_("Multiple of bands ranges <%s:%d * %s:%d = %d> " 
                                "is higher than recommended limit <%d>.\n" 
                                "It is strongly advised to reduce range extend of bands" 
-                               "(e. g. using r.rescale) bellow recommended threshold.\n\n"
+                               "(e. g. using r.rescale) below recommended threshold.\n\n"
                                "Do you really want to add this scatter plot?" 
                                 % (b_1_name, b_1_i['range'], b_1_name, b_2_i['range'], 
                                    mrange, WARN_SCATT_SIZE)), 
