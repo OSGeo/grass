@@ -135,6 +135,12 @@ class TestRasterUnivar(TestCase):
         self.assertModuleKeyValue(module="r.univar", map=["map_a","map_b"], flags="rg",
                                   reference=univar_string, precision=3, sep='=')
 
+class TestAccumulateFails(TestCase):
+
+    def test_error_handling(self):
+        # No vector map, no strds, no coordinates
+        self.assertModuleFail("r.univar",  flags="r", map="map_a", zones="map_b")
+
 if __name__ == '__main__':
     from grass.gunittest.main import test
     test()
