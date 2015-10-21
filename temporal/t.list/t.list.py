@@ -99,6 +99,8 @@ def main():
     tgis.init()
 
     sp = tgis.dataset_factory(type, None)
+    dbif = tgis.SQLDatabaseInterfaceConnection()
+    dbif.connect()
     first = True
     
     if  gscript.verbosity() > 0:
@@ -110,7 +112,7 @@ def main():
         else:
             time = "relative time"
 
-        stds_list = tgis.get_dataset_list(type,  ttype,  columns,  where,  order)
+        stds_list = tgis.get_dataset_list(type,  ttype,  columns,  where,  order, dbif=dbif)
 
         # Use the correct order of the mapsets, hence first the current mapset, then
         # alphabetic ordering
@@ -154,6 +156,8 @@ def main():
                             count += 1
             
                         print output
+
+    dbif.close()
 
 if __name__ == "__main__":
     options, flags = gscript.parser()

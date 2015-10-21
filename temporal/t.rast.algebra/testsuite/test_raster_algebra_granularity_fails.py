@@ -33,9 +33,9 @@ class TestTRastAlgebraGranularityFails(TestCase):
                                          title="A", descr="A", semantic="field", overwrite=True)
 
         tgis.register_maps_in_space_time_dataset(type="raster", name="A",  maps="a1", 
-                                                start="2001-02-01", end="2001-04-01", interval=True)
+                                                start="2001-02-01", end="2001-04-01")
         tgis.register_maps_in_space_time_dataset(type="raster", name="A",  maps="a2", 
-                                                start="2001-03-01", end="2001-05-01", interval=True)
+                                                start="2001-03-01", end="2001-05-01")
         
     @classmethod
     def tearDownClass(cls):
