@@ -27,6 +27,10 @@
 #%option G_OPT_STR3DS_INPUT
 #%end
 
+#%option G_OPT_F_OUTPUT
+#% required: no
+#%end
+
 #%option G_OPT_T_WHERE
 #% guisection: Selection
 #%end
@@ -57,6 +61,7 @@ def main():
 
     # Get the options
     input = options["input"]
+    output = options["output"]
     where = options["where"]
     extended = flags["e"]
     no_header = flags["s"]
@@ -65,8 +70,13 @@ def main():
     # Make sure the temporal database exists
     tgis.init()
 
+    if not output:
+        output = None
+    if output == "-":
+        output = None
+
     tgis.print_gridded_dataset_univar_statistics(
-        "str3ds", input, where, extended, no_header, separator)
+        "str3ds", input, output, where, extended, no_header, separator)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
