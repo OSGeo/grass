@@ -38082,7 +38082,7 @@ msgstr "Fattore di scala per l'elevazione"
 #: ../imagery/i.landsat.toar/main.c:221
 msgid "Output at-sensor radiance instead of reflectance for all bands"
 msgstr ""
-"Dà in ouput la radianza al sensore invece che la riflettanza, per tutte le "
+"Dà in output la radianza al sensore invece che la riflettanza, per tutte le "
 "bande"
 
 #: ../imagery/i.landsat.toar/main.c:226
