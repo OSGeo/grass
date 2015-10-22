@@ -18504,7 +18504,7 @@ msgstr "Tạo một CSDL rỗng."
 
 #: ../locale/scriptstrings/t.rast.what_to_translate.c:7
 msgid ""
-"The layout of the ouput. One point per row (row), one point per column "
+"The layout of the output. One point per row (row), one point per column "
 "(col), all timsteps in one row (timerow)"
 msgstr ""
 
@@ -19404,7 +19404,7 @@ msgstr "Đổi các lớp vec-tơ OGR thành bản đồ vec-tơ GRASS."
 
 #: ../locale/scriptstrings/v.import_to_translate.c:10
 #, fuzzy
-msgid "Ouput vector map extents"
+msgid "Output vector map extents"
 msgstr "Bản đồ vec-tơ đầu ra dùng để lưu lỗi"
 
 #: ../locale/scriptstrings/v.import_to_translate.c:11
