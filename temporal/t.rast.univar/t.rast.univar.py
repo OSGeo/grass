@@ -25,11 +25,9 @@
 #%option G_OPT_STRDS_INPUT
 #%end
 
-
 #%option G_OPT_F_OUTPUT
 #% required: no
 #%end
-
 
 #%option G_OPT_T_WHERE
 #% guisection: Selection
