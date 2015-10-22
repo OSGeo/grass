@@ -89,6 +89,18 @@ class PointListToolbar(BaseToolbar):
         pt_id = self.vnet_pts_mgr.GetSelected()
         self.vnet_pts_mgr.DeletePoint(pt_id)
 
+    def OnTool(self, event):
+        """Tool selected - overriden BaseToolbar method to avoid calling UnregisterAllHandlers 
+            through toggleToolChanged signal for certain buttons in the toolbar
+            It is temporary HACK before r66434 will be backported.
+        """
+        id = event.GetId()
+        if self.toolSwitcher:
+            
+            if  self.toolSwitcher.IsToolInGroup(id, 'mouseUse'):
+                self.toolSwitcher.ToolChanged(event.GetId())
+        
+        event.Skip()
 
 class MainToolbar(BaseToolbar):
     """Main toolbar
