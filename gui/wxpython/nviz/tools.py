@@ -1514,6 +1514,8 @@ class NvizToolWindow(FN.FlatNotebook):
     def GselectOnPopup(self, ltype, exclude = False):
         """Update gselect.Select() items"""
         maps = list()
+        # TODO: sync the element names
+        ltype = '3d-raster' if ltype == 'raster_3d' else ltype
         for layer in self.mapWindow.Map.GetListOfLayers(ltype = ltype, active = True):
             maps.append(layer.GetName())
         return maps, exclude
