@@ -2035,7 +2035,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                             continue
                         if map and not grass.find_file(value, element='grid3')['fullname']:
                             continue
-                    elif attrb ==  'color':
+                    if attrb ==  'color':
                         self._display.SetIsosurfaceColor(id, isosurfId, map, str(value))
                     elif attrb ==  'mask':
                         # TODO: invert mask
