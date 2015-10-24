@@ -16,6 +16,7 @@
 *****************************************************************************/
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include "test_raster3d_lib.h"
 #include "grass/interpf.h"
 
