@@ -1,4 +1,4 @@
-/****************************************************************************
+ /****************************************************************************
  *
  * MODULE:       r.in.Lidar
  *               
@@ -1337,11 +1337,11 @@ int main(int argc, char *argv[])
 	    max_nodes = 0;
 	    nodes = NULL;
 	}
-	if (base_array)
-	    Rast_close(base_raster);
-        if (use_segment)
-            Segment_close(&base_segment);
     }				/* passes loop */
+    if (base_array)
+        Rast_close(base_raster);
+    if (use_segment)
+        Segment_close(&base_segment);
 
     G_percent(1, 1, 1);		/* flush */
     G_free(raster_row);
