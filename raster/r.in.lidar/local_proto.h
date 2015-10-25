@@ -41,6 +41,12 @@
 #define METHOD_SKEWNESS   12
 #define METHOD_TRIMMEAN   13
 
+#define LAS_ALL 0
+#define LAS_FIRST 1
+#define LAS_LAST 2
+#define LAS_MID 3
+
+
 /* info.c */
 void print_lasinfo(LASHeaderH, LASSRSH);
 int scan_bounds(LASReaderH, int, int, double, struct Cell_head *);
