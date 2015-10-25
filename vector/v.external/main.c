@@ -24,7 +24,9 @@
 #include <grass/vector.h>
 #include <grass/glocale.h>
 
+#ifdef HAVE_OGR
 #include <ogr_api.h>
+#endif
 
 #include "local_proto.h"
 
