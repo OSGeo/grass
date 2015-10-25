@@ -33,11 +33,8 @@
 #include "local_proto.h"
 #include "rast_segment.h"
 #include "point_binning.h"
+#include "filters.h"
 
-#define LAS_ALL 0
-#define LAS_FIRST 1
-#define LAS_LAST 2
-#define LAS_MID 3
 
 int main(int argc, char *argv[])
 {
@@ -67,7 +64,6 @@ int main(int argc, char *argv[])
     double pass_north, pass_south;
     int arr_row, arr_col;
     unsigned long count, count_total;
-    int skipme, i;
     int point_class;
 
     double zscale = 1.0;
@@ -298,6 +294,10 @@ int main(int argc, char *argv[])
 	else
 	    G_fatal_error(_("Unknown filter option <%s>"), filter_opt->answer);
     }
+    struct ReturnFilter return_filter_struct;
+    return_filter_struct.filter = return_filter;
+    struct ClassFilter class_filter;
+    class_filter_create_from_strings(&class_filter, class_opt->answers);
 
     /* Fetch input map projection in GRASS form. */
     projstr = LASSRS_GetWKT_CompoundOK(LAS_srs);
@@ -498,46 +498,15 @@ int main(int argc, char *argv[])
 	    else
 		z = LASPoint_GetZ(LAS_point);
 
-	if (return_filter != LAS_ALL) {
-	    int return_no = LASPoint_GetReturnNumber(LAS_point);
-	    int n_returns = LASPoint_GetNumberOfReturns(LAS_point);
-	    skipme = 1;
-
-	    switch (return_filter) {
-	    case LAS_FIRST:
-		if (return_no == 1)
-		    skipme = 0;
-		break;
-	    case LAS_MID:
-		if (return_no > 1 && return_no < n_returns)
-		    skipme = 0;
-		break;
-	    case LAS_LAST:
-		if (n_returns > 1 && return_no == n_returns)
-		    skipme = 0;
-		break;
-	    }
-
-	    if (skipme) {
-		n_filtered++;
-		continue;
-	    }
-	}
-	if (class_opt->answer) {
-	    point_class = (int) LASPoint_GetClassification(LAS_point);
-	    i = 0;
-	    skipme = TRUE;
-	    while (class_opt->answers[i]) {
-		if (point_class == atoi(class_opt->answers[i])) {
-		    skipme = FALSE;
-		    break;
-		}
-		i++;
-	    }
-	    if (skipme) {
-		continue;
-	    }
-	}
+        int return_n = LASPoint_GetReturnNumber(LAS_point);
+        int n_returns = LASPoint_GetNumberOfReturns(LAS_point);
+        if (return_filter_is_out(&return_filter_struct, return_n, n_returns)) {
+            n_filtered++;
+            continue;
+        }
+        point_class = (int) LASPoint_GetClassification(LAS_point);
+        if (class_filter_is_out(&class_filter, point_class))
+            continue;
 
 	    if (y <= pass_south || y > pass_north) {
 		continue;
