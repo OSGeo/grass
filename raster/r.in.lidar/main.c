@@ -28,7 +28,9 @@
 #include <grass/gprojects.h>
 #include <grass/glocale.h>
 #include <liblas/capi/liblas.h>
+
 #include "local_proto.h"
+#include "rast_segment.h"
 
 struct node
 {
@@ -671,35 +673,20 @@ int main(int argc, char *argv[])
         use_base_raster_res = 1;
     if (base_raster_opt->answer && (res_opt->answer || use_base_raster_res))
         use_segment = 1;
-    if (base_raster_opt->answer) {
+    if (base_raster_opt->answer && !use_segment) {
+        /* TODO: do we need to test existence first? mapset? */
+        base_raster = Rast_open_old(base_raster_opt->answer, "");
+        base_raster_data_type = Rast_get_map_type(base_raster);
+        base_array = G_calloc((size_t)rows * (cols + 1), Rast_cell_size(base_raster_data_type));
+    }
+    if (base_raster_opt->answer && use_segment) {
         if (use_base_raster_res) {
             /* TODO: how to get cellhd already stored in the open map? */
             Rast_get_cellhd(base_raster_opt->answer, "", &input_region);
             /* TODO: make it only as small as the output is or points are */
             Rast_set_input_window(&input_region);  /* we have split window */
         }
-        /* TODO: do we need to test existence first? mapset? */
-        base_raster = Rast_open_old(base_raster_opt->answer, "");
-        base_raster_data_type = Rast_get_map_type(base_raster);
-    }
-    if (base_raster_opt->answer && use_segment) {
-        if (!use_base_raster_res)
-            Rast_get_input_window(&input_region);  /* we have split window */
-        /* TODO: these numbers does not fit with what we promise about percentage */
-        int segment_rows = 64;
-        /* writing goes row by row, so we use long segments as well */
-        int segment_cols = cols;
-        int segments_in_memory = 4;
-        if (Segment_open(&base_segment, G_tempfile(), input_region.rows, input_region.cols,
-                segment_rows, segment_cols,
-                Rast_cell_size(base_raster_data_type), segments_in_memory) != 1)
-            G_fatal_error(_("Cannot create temporary file with segments of a raster map"));
-        for (row = 0; row < input_region.rows; row++) {
-            raster_row = Rast_allocate_input_buf(base_raster_data_type);
-            Rast_get_row(base_raster, raster_row, row, base_raster_data_type);
-            Segment_put_row(&base_segment, raster_row, row);
-        }
-        Rast_close(base_raster);  /* we won't need the raster again */
+        rast_segment_open(&base_segment, base_raster_opt->answer, &base_raster_data_type);
     }
 
     if (!scan_flag->answer) {
@@ -726,9 +713,6 @@ int main(int argc, char *argv[])
 	if (bin_index)
 	    index_array =
 		G_calloc((size_t)rows * (cols + 1), Rast_cell_size(CELL_TYPE));
-	if (base_raster_opt->answer && !use_segment)
-	    base_array = G_calloc((size_t)rows * (cols + 1), Rast_cell_size(base_raster_data_type));
-	/* we don't free the raster, we just use it again */
 	/* TODO: perhaps none of them needs to be freed */
 
 	/* and then free it again */
@@ -909,61 +893,22 @@ int main(int argc, char *argv[])
             arr_col = (int)((x - region.west) / region.ew_res);
 
             if (base_array) {
-                ptr = base_array;
-                ptr =
-                    G_incr_void_ptr(ptr,
-                                    ((arr_row * cols) +
-                                     arr_col) * Rast_cell_size(base_raster_data_type));
-
                 double base_z;
-                if (Rast_is_null_value(ptr, base_raster_data_type)) {
+                if (row_array_get_value_row_col(base_array, arr_row, arr_col,
+                                                cols, base_raster_data_type,
+                                                &base_z))
+                    z -= base_z;
+                else
                     continue;
-                }
-                else {
-                    if (base_raster_data_type == DCELL_TYPE)
-                        base_z = *(DCELL *) ptr;
-                    else if (base_raster_data_type == FCELL_TYPE)
-                        base_z = (double) *(FCELL *) ptr;
-                    else
-                        base_z = (double) *(CELL *) ptr;
-                }
-                z -= base_z;
             }
             else if (use_segment) {
                 double base_z;
-                /* Rast gives double, Segment needs off_t */
-                off_t base_row = Rast_northing_to_row(y, &input_region);
-                off_t base_col = Rast_easting_to_col(x, &input_region);
-                /* skip points which are outside the base raster
-                 * (null propagation) */
-                if (base_row < 0 || base_col < 0 ||
-                        base_row >= input_region.rows ||
-                        base_col >= input_region.cols)
+                if (rast_segment_get_value_xy(&base_segment, &input_region,
+                                              base_raster_data_type, x, y,
+                                              &base_z))
+                    z -= base_z;
+                else
                     continue;
-                if (base_raster_data_type == DCELL_TYPE) {
-                    DCELL value;
-                    Segment_get(&base_segment, &value, base_row, base_col);
-                    if (Rast_is_null_value(&value, base_raster_data_type))
-                        continue;
-                    base_z = value;
-                }
-                else if (base_raster_data_type == FCELL_TYPE) {
-                    
-                    
-                    FCELL value;
-                    Segment_get(&base_segment, &value, base_row, base_col);
-                    if (Rast_is_null_value(&value, base_raster_data_type))
-                        continue;
-                    base_z = value;
-                }
-                else {
-                    CELL value;
-                    Segment_get(&base_segment, &value, base_row, base_col);
-                    if (Rast_is_null_value(&value, base_raster_data_type))
-                        continue;
-                    base_z = value;
-                }
-                z -= base_z;
             }
 
             if (zrange_opt->answer) {
