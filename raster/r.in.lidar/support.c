@@ -128,3 +128,23 @@ int update_sumsq(void *array, int cols, int row, int col,
 
     return 0;
 }
+
+/* 0 on NULL, 1 on success */
+int row_array_get_value_row_col(void *array, int arr_row, int arr_col,
+                                int cols, RASTER_MAP_TYPE rtype, double *value)
+{
+    void *ptr = array;
+    ptr =
+        G_incr_void_ptr(ptr,
+                        ((arr_row * cols) +
+                         arr_col) * Rast_cell_size(rtype));
+    if (Rast_is_null_value(ptr, rtype))
+        return 0;
+    if (rtype == DCELL_TYPE)
+        *value = (double) *(DCELL *) ptr;
+    else if (rtype == FCELL_TYPE)
+        *value = (double) *(FCELL *) ptr;
+    else
+        *value = (double) *(CELL *) ptr;
+    return 1;
+}

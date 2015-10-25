@@ -52,5 +52,8 @@ int update_max(void *, int, int, int, RASTER_MAP_TYPE, double);
 int update_sum(void *, int, int, int, RASTER_MAP_TYPE, double);
 int update_sumsq(void *, int, int, int, RASTER_MAP_TYPE, double);
 
+/* raster reading */
+int row_array_get_value_row_col(void *array, int arr_row, int arr_col,
+                                int cols, RASTER_MAP_TYPE rtype, double *value);
 
 #endif /* __LOCAL_PROTO_H__ */
