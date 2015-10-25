@@ -3,12 +3,13 @@
  * MODULE:       r.in.Lidar
  *               
  * AUTHOR(S):    Markus Metz
+ *               Vaclav Petras (base raster addition and refactoring)
  *               Based on r.in.xyz by Hamish Bowman, Volker Wichmann
  *
  * PURPOSE:      Imports LAS LiDAR point clouds to a raster map using 
  *               aggregate statistics.
  *
- * COPYRIGHT:    (C) 2011 Markus Metz and the The GRASS Development Team
+ * COPYRIGHT:    (C) 2011-2015 Markus Metz and the The GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
@@ -163,8 +164,6 @@ int main(int argc, char *argv[])
     LASPointH LAS_point;
     int return_filter;
 
-    struct Key_Value *loc_proj_info = NULL, *loc_proj_units = NULL;
-    struct Key_Value *proj_info, *proj_units;
     const char *projstr;
     struct Cell_head cellhd, loc_wind;
 
@@ -373,115 +372,10 @@ int main(int argc, char *argv[])
     }
 
     /* Fetch input map projection in GRASS form. */
-    proj_info = NULL;
-    proj_units = NULL;
     projstr = LASSRS_GetWKT_CompoundOK(LAS_srs);
 
     if (TRUE) {
-	int err = 0;
-	char error_msg[8192];
-
-	/* Projection only required for checking so convert non-interactively */
-	if (GPJ_wkt_to_grass(&cellhd, &proj_info,
-			     &proj_units, projstr, 0) < 0)
-	    G_warning(_("Unable to convert input map projection information to "
-		       "GRASS format for checking"));
-	
-	/* Does the projection of the current location match the dataset? */
-	/* G_get_window seems to be unreliable if the location has been changed */
-	G_get_set_window(&loc_wind); /* TODO: v.in.lidar uses G_get_default_window() */
-	/* fetch LOCATION PROJ info */
-	if (loc_wind.proj != PROJECTION_XY) {
-	    loc_proj_info = G_get_projinfo();
-	    loc_proj_units = G_get_projunits();
-	}
-
-	if (over_flag->answer) {
-	    cellhd.proj = loc_wind.proj;
-	    cellhd.zone = loc_wind.zone;
-	    G_message(_("Over-riding projection check"));
-	}
-	else if (loc_wind.proj != cellhd.proj
-		 || (err =
-		     G_compare_projections(loc_proj_info, loc_proj_units,
-					   proj_info, proj_units)) != TRUE) {
-	    int i_value;
-
-	    strcpy(error_msg,
-		   _("Projection of dataset does not"
-		     " appear to match current location.\n\n"));
-
-	    /* TODO: output this info sorted by key: */
-	    if (loc_wind.proj != cellhd.proj || err != -2) {
-		if (loc_proj_info != NULL) {
-		    strcat(error_msg, _("GRASS LOCATION PROJ_INFO is:\n"));
-		    for (i_value = 0; i_value < loc_proj_info->nitems;
-			 i_value++)
-			sprintf(error_msg + strlen(error_msg), "%s: %s\n",
-				loc_proj_info->key[i_value],
-				loc_proj_info->value[i_value]);
-		    strcat(error_msg, "\n");
-		}
-
-		if (proj_info != NULL) {
-		    strcat(error_msg, _("Import dataset PROJ_INFO is:\n"));
-		    for (i_value = 0; i_value < proj_info->nitems; i_value++)
-			sprintf(error_msg + strlen(error_msg), "%s: %s\n",
-				proj_info->key[i_value],
-				proj_info->value[i_value]);
-		}
-		else {
-		    strcat(error_msg, _("Import dataset PROJ_INFO is:\n"));
-		    if (cellhd.proj == PROJECTION_XY)
-			sprintf(error_msg + strlen(error_msg),
-				"Dataset proj = %d (unreferenced/unknown)\n",
-				cellhd.proj);
-		    else if (cellhd.proj == PROJECTION_LL)
-			sprintf(error_msg + strlen(error_msg),
-				"Dataset proj = %d (lat/long)\n",
-				cellhd.proj);
-		    else if (cellhd.proj == PROJECTION_UTM)
-			sprintf(error_msg + strlen(error_msg),
-				"Dataset proj = %d (UTM), zone = %d\n",
-				cellhd.proj, cellhd.zone);
-		    else
-			sprintf(error_msg + strlen(error_msg),
-				"Dataset proj = %d (unknown), zone = %d\n",
-				cellhd.proj, cellhd.zone);
-		}
-	    }
-	    else {
-		if (loc_proj_units != NULL) {
-		    strcat(error_msg, "GRASS LOCATION PROJ_UNITS is:\n");
-		    for (i_value = 0; i_value < loc_proj_units->nitems;
-			 i_value++)
-			sprintf(error_msg + strlen(error_msg), "%s: %s\n",
-				loc_proj_units->key[i_value],
-				loc_proj_units->value[i_value]);
-		    strcat(error_msg, "\n");
-		}
-
-		if (proj_units != NULL) {
-		    strcat(error_msg, "Import dataset PROJ_UNITS is:\n");
-		    for (i_value = 0; i_value < proj_units->nitems; i_value++)
-			sprintf(error_msg + strlen(error_msg), "%s: %s\n",
-				proj_units->key[i_value],
-				proj_units->value[i_value]);
-		}
-	    }
-	    sprintf(error_msg + strlen(error_msg),
-		    _("\nIn case of no significant differences in the projection definitions,"
-		      " use the -o flag to ignore them and use"
-		      " current location definition.\n"));
-	    strcat(error_msg,
-		   _("Consider generating a new location with 'location' parameter"
-		    " from input data set.\n"));
-	    G_fatal_error("%s", error_msg);
-	}
-	else if (!shell_style->answer) {
-	    G_message(_("Projection of input dataset and current location "
-			"appear to match"));
-	}
+        projection_check_wkt(cellhd, loc_wind, projstr, over_flag->answer, shell_style->answer);
     }
 
     percent = atoi(percent_opt->answer);
@@ -1314,153 +1208,4 @@ int main(int argc, char *argv[])
 
     exit(EXIT_SUCCESS);
 
-}
-
-void print_lasinfo(LASHeaderH LAS_header, LASSRSH LAS_srs)
-{
-    char *las_srs_proj4 = LASSRS_GetProj4(LAS_srs);
-    int las_point_format = LASHeader_GetDataFormatId(LAS_header);
-
-    fprintf(stdout, "\nUsing LAS Library Version '%s'\n\n",
-                    LAS_GetFullVersion());
-    fprintf(stdout, "LAS File Version:                  %d.%d\n",
-                    LASHeader_GetVersionMajor(LAS_header),
-                    LASHeader_GetVersionMinor(LAS_header));
-    fprintf(stdout, "System ID:                         '%s'\n",
-                    LASHeader_GetSystemId(LAS_header));
-    fprintf(stdout, "Generating Software:               '%s'\n",
-                    LASHeader_GetSoftwareId(LAS_header));
-    fprintf(stdout, "File Creation Day/Year:            %d/%d\n",
-                    LASHeader_GetCreationDOY(LAS_header),
-		    LASHeader_GetCreationYear(LAS_header));
-    fprintf(stdout, "Point Data Format:                 %d\n",
-                    las_point_format);
-    fprintf(stdout, "Number of Point Records:           %d\n",
-                    LASHeader_GetPointRecordsCount(LAS_header));
-    fprintf(stdout, "Number of Points by Return:        %d %d %d %d %d\n",
-                    LASHeader_GetPointRecordsByReturnCount(LAS_header, 0),
-                    LASHeader_GetPointRecordsByReturnCount(LAS_header, 1),
-                    LASHeader_GetPointRecordsByReturnCount(LAS_header, 2),
-                    LASHeader_GetPointRecordsByReturnCount(LAS_header, 3),
-                    LASHeader_GetPointRecordsByReturnCount(LAS_header, 4));
-    fprintf(stdout, "Scale Factor X Y Z:                %g %g %g\n",
-                    LASHeader_GetScaleX(LAS_header),
-                    LASHeader_GetScaleY(LAS_header),
-                    LASHeader_GetScaleZ(LAS_header));
-    fprintf(stdout, "Offset X Y Z:                      %g %g %g\n",
-                    LASHeader_GetOffsetX(LAS_header),
-                    LASHeader_GetOffsetY(LAS_header),
-                    LASHeader_GetOffsetZ(LAS_header));
-    fprintf(stdout, "Min X Y Z:                         %g %g %g\n",
-                    LASHeader_GetMinX(LAS_header),
-                    LASHeader_GetMinY(LAS_header),
-                    LASHeader_GetMinZ(LAS_header));
-    fprintf(stdout, "Max X Y Z:                         %g %g %g\n",
-                    LASHeader_GetMaxX(LAS_header),
-                    LASHeader_GetMaxY(LAS_header),
-                    LASHeader_GetMaxZ(LAS_header));
-    if (las_srs_proj4 && strlen(las_srs_proj4) > 0) {
-	fprintf(stdout, "Spatial Reference:\n");
-	fprintf(stdout, "%s\n", las_srs_proj4);
-    }
-    else {
-	fprintf(stdout, "Spatial Reference:                 None\n");
-    }
-    
-    fprintf(stdout, "\nData Fields:\n");
-    fprintf(stdout, "  'X'\n  'Y'\n  'Z'\n  'Intensity'\n  'Return Number'\n");
-    fprintf(stdout, "  'Number of Returns'\n  'Scan Direction'\n");
-    fprintf(stdout, "  'Flighline Edge'\n  'Classification'\n  'Scan Angle Rank'\n");
-    fprintf(stdout, "  'User Data'\n  'Point Source ID'\n");
-    if (las_point_format == 1 || las_point_format == 3 || las_point_format == 4 || las_point_format == 5) {
-	fprintf(stdout, "  'GPS Time'\n");
-    }
-    if (las_point_format == 2 || las_point_format == 3 || las_point_format == 5) {
-	fprintf(stdout, "  'Red'\n  'Green'\n  'Blue'\n");
-    }
-    fprintf(stdout, "\n");
-    fflush(stdout);
-
-    return;
-}
-
-
-int scan_bounds(LASReaderH LAS_reader, int shell_style, int extents,
-		double zscale, struct Cell_head *region)
-{
-    unsigned long line;
-    int first;
-    double min_x, max_x, min_y, max_y, min_z, max_z;
-    double x, y, z;
-    LASPointH LAS_point;
-
-    line = 0;
-    first = TRUE;
-    
-    /* init to nan in case no points are found */
-    min_x = max_x = min_y = max_y = min_z = max_z = 0.0 / 0.0;
-
-    G_verbose_message(_("Scanning data ..."));
-    
-    LASReader_Seek(LAS_reader, 0);
-
-    while ((LAS_point = LASReader_GetNextPoint(LAS_reader)) != NULL) {
-	line++;
-
-	if (!LASPoint_IsValid(LAS_point)) {
-	    continue;
-	}
-
-	x = LASPoint_GetX(LAS_point);
-	y = LASPoint_GetY(LAS_point);
-	z = LASPoint_GetZ(LAS_point);
-
-	if (first) {
-	    min_x = x;
-	    max_x = x;
-	    min_y = y;
-	    max_y = y;
-	    min_z = z;
-	    max_z = z;
-	    first = FALSE;
-	}
-	else {
-	    if (x < min_x)
-		min_x = x;
-	    if (x > max_x)
-		max_x = x;
-	    if (y < min_y)
-		min_y = y;
-	    if (y > max_y)
-		max_y = y;
-	    if (z < min_z)
-		min_z = z;
-	    if (z > max_z)
-		max_z = z;
-	}
-    }
-
-    if (!extents) {
-	if (!shell_style) {
-	    fprintf(stderr, _("Range:     min         max\n"));
-	    fprintf(stdout, "x: %11f %11f\n", min_x, max_x);
-	    fprintf(stdout, "y: %11f %11f\n", min_y, max_y);
-	    fprintf(stdout, "z: %11f %11f\n", min_z * zscale, max_z * zscale);
-	}
-	else
-	    fprintf(stdout, "n=%f s=%f e=%f w=%f b=%f t=%f\n",
-		    max_y, min_y, max_x, min_x, min_z * zscale, max_z * zscale);
-
-	G_debug(1, "Processed %lu points.", line);
-	G_debug(1, "region template: g.region n=%f s=%f e=%f w=%f",
-		max_y, min_y, max_x, min_x);
-    }
-    else {
-	region->east = max_x;
-	region->west = min_x;
-	region->north = max_y;
-	region->south = min_y;
-    }
-
-    return 0;
 }
