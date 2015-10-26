@@ -49,7 +49,7 @@
 
 /* info.c */
 void print_lasinfo(LASHeaderH, LASSRSH);
-int scan_bounds(LASReaderH, int, int, double, struct Cell_head *);
+int scan_bounds(LASReaderH, int, int, int, double, struct Cell_head *);
 
 /* support.c */
 int blank_array(void *, int, int, RASTER_MAP_TYPE, int);
@@ -71,9 +71,22 @@ void projection_check_wkt(struct Cell_head cellhd,
                           struct Cell_head loc_wind,
                           const char *projstr,
                           int override,
-                          int shellstyle);
+                          int verbose);
 /* raster reading */
 int row_array_get_value_row_col(void *array, int arr_row, int arr_col,
                                 int cols, RASTER_MAP_TYPE rtype, double *value);
+
+/* multiple files */
+
+struct StringList
+{
+    int num_items;
+    int max_items;
+    char **items;
+};
+
+void string_list_from_file(struct StringList *string_list, char *filename);
+void string_list_from_one_item(struct StringList *string_list, char *item);
+void string_list_free(struct StringList *string_list);
 
 #endif /* __LOCAL_PROTO_H__ */

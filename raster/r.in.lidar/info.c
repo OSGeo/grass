@@ -90,7 +90,7 @@ void print_lasinfo(LASHeaderH LAS_header, LASSRSH LAS_srs)
 }
 
 
-int scan_bounds(LASReaderH LAS_reader, int shell_style, int extents,
+int scan_bounds(LASReaderH LAS_reader, int shell_style, int extents, int update,
                 double zscale, struct Cell_head *region)
 {
     unsigned long line;
@@ -160,6 +160,16 @@ int scan_bounds(LASReaderH LAS_reader, int shell_style, int extents,
         G_debug(1, "Processed %lu points.", line);
         G_debug(1, "region template: g.region n=%f s=%f e=%f w=%f",
                 max_y, min_y, max_x, min_x);
+    }
+    else if (update) {
+        if (min_x < region->west)
+            region->west = min_x;
+        if (max_x > region->east)
+            region->east = max_x;
+        if (min_y < region->south)
+            region->south = min_y;
+        if (max_y > region->north)
+            region->north = max_y;
     }
     else {
         region->east = max_x;

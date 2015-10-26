@@ -99,7 +99,7 @@ void projection_mismatch_report(struct Cell_head cellhd,
 
 void projection_check_wkt(struct Cell_head cellhd,
                           struct Cell_head loc_wind,
-                          const char *projstr, int override, int shellstyle)
+                          const char *projstr, int override, int verbose)
 {
     struct Key_Value *loc_proj_info = NULL, *loc_proj_units = NULL;
     struct Key_Value *proj_info, *proj_units;
@@ -114,8 +114,7 @@ void projection_check_wkt(struct Cell_head cellhd,
                     "GRASS format for checking"));
 
     /* Does the projection of the current location match the dataset? */
-    /* G_get_window seems to be unreliable if the location has been changed */
-    G_get_set_window(&loc_wind);        /* TODO: v.in.lidar uses G_get_default_window() */
+
     /* fetch LOCATION PROJ info */
     if (loc_wind.proj != PROJECTION_XY) {
         loc_proj_info = G_get_projinfo();
@@ -125,7 +124,8 @@ void projection_check_wkt(struct Cell_head cellhd,
     if (override) {
         cellhd.proj = loc_wind.proj;
         cellhd.zone = loc_wind.zone;
-        G_message(_("Over-riding projection check"));
+        if (verbose)
+            G_message(_("Over-riding projection check"));
     }
     else if (loc_wind.proj != cellhd.proj
              || (err =
@@ -135,7 +135,7 @@ void projection_check_wkt(struct Cell_head cellhd,
                                    loc_proj_units,
                                    proj_info, proj_units, err);
     }
-    else if (!shellstyle) {
+    else if (verbose) {
         G_message(_("Projection of input dataset and current location "
                     "appear to match"));
     }
