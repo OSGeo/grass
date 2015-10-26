@@ -245,7 +245,7 @@ def main():
     f = file(sqltmp, 'w')
 
     # do the stats
-    p = grass.pipe_command('r.univar', flags='t' + 'g' + extstat, map=raster,
+    p = grass.pipe_command('r.univar', flags='t' + extstat, map=raster,
                            zones=rastertmp, percentile=percentile, sep=';')
 
     first_line = 1
