@@ -18,8 +18,10 @@ class TestRasterUnivar(TestCase):
         cls.del_temp_region()
 
     def tearDown(self):
+    	pass
         self.runModule("g.remove", type="raster", name="map_a")
         self.runModule("g.remove", type="raster", name="map_b")
+        self.runModule("g.remove", type="raster", name="zone_map")
 
     def setUp(self):
         """Create input data
@@ -28,6 +30,8 @@ class TestRasterUnivar(TestCase):
         self.runModule("r.mapcalc", expression="map_a = 100 + row() + col()",
                        overwrite=True)
         self.runModule("r.mapcalc", expression="map_b = 200 + row() + col()",
+                       overwrite=True)
+        self.runModule("r.mapcalc", expression="zone_map = if(row() < 20, 1,2)",
                        overwrite=True)
 
     def test_1(self):
@@ -133,6 +137,40 @@ class TestRasterUnivar(TestCase):
 
         self.runModule("g.region", res=10)
         self.assertModuleKeyValue(module="r.univar", map=["map_a","map_b"], flags="rg",
+                                  reference=univar_string, precision=3, sep='=')
+
+
+    def test_1_zone(self):
+        """
+        multiple maps and zone
+        :return:
+        """
+
+        # Output of r.univar
+        univar_string="""zone=1;
+			n=1710
+			null_cells=0
+			cells=1710
+			min=102
+			max=209
+			range=107
+			mean=155.5
+			mean_of_abs=155.5
+			sum=265905
+			zone=2;
+			n=6390
+			null_cells=0
+			cells=1710
+			min=121
+			max=280
+			range=159
+			mean=200.5
+			mean_of_abs=200.5
+			sum=1281195"""
+
+        self.runModule("g.region", res=1)
+        self.assertModuleKeyValue(module="r.univar", map=["map_a"], 
+                                  zones="zone_map",flags="g",
                                   reference=univar_string, precision=3, sep='=')
 
 class TestAccumulateFails(TestCase):

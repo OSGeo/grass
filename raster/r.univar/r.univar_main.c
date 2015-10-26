@@ -178,11 +178,11 @@ int main(int argc, char *argv[])
 	if(param.use_rast_region->answer) {
     	    mapset = G_find_raster2(*p, "");
 	    Rast_get_cellhd(*p, mapset, &region);
+	    /* Set the computational region */
+	    Rast_set_window(&region);
         } else {
     	    G_get_window(&region);
         }
-	/* Set the computational region */
-	Rast_set_window(&region);
 
 	fd = open_raster(*p);
 
