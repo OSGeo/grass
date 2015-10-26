@@ -134,19 +134,22 @@ int print_stats(univar_stat * stats)
 	sprintf(sum_str, "%.15g", stats[z].sum);
 	G_trim_decimal(sum_str);
 
-	if (zone_info.n_zones) {
-	    int z_cat = z + zone_info.min;
-	    
-	    fprintf(stdout, "\nzone %d %s\n\n", z_cat, Rast_get_c_cat(&z_cat, &(zone_info.cats)));
-	}
 
 	if (!param.shell_style->answer) {
+	    if (zone_info.n_zones) {
+	    	int z_cat = z + zone_info.min;
+	    	fprintf(stdout, "\nzone %d %s\n\n", z_cat, Rast_get_c_cat(&z_cat, &(zone_info.cats)));
+	    }
 	    fprintf(stdout, "total null and non-null cells: %lu\n", stats[z].size);
 	    fprintf(stdout, "total null cells: %lu\n\n", stats[z].size - stats[z].n);
 	    fprintf(stdout, "Of the non-null cells:\n----------------------\n");
 	}
 
 	if (param.shell_style->answer) {
+	    if (zone_info.n_zones) {
+	    	int z_cat = z + zone_info.min;
+	    	fprintf(stdout, "zone=%d;%s\n", z_cat, Rast_get_c_cat(&z_cat, &(zone_info.cats)));
+	    }
 	    fprintf(stdout, "n=%lu\n", stats[z].n);
 	    fprintf(stdout, "null_cells=%lu\n", stats[z].size - stats[z].n);
 	    fprintf(stdout, "cells=%lu\n", stats->size);
