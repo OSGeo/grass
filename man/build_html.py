@@ -102,7 +102,7 @@ r"""<!-- the files grass${grass_version_major}.html & helptext.html file live in
        </ul>
 
        <ul>
-        <li class="box"><a href="topic_gui.html">GUI commands</a></li>
+        <li class="box"><a href="topic_GUI.html">GUI commands</a></li>
        </ul>
        <h3>&nbsp;Display</h3>
        <ul>
