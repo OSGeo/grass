@@ -46,10 +46,7 @@ void string_list_from_one_item(struct StringList *string_list, char *item)
     string_list->num_items = 0;
     string_list->max_items = 0;
     string_list->items = NULL;
-    char *new_item = G_malloc(strlen(item) * sizeof(char));
-
-    strcpy(new_item, item);
-    string_list_add_item(string_list, new_item);
+    string_list_add_item(string_list, strdup(item));
 }
 
 void string_list_free(struct StringList *string_list)
