@@ -127,6 +127,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("statistics"));
+    G_add_keyword(_("regression"));
     module->description =
 	_("Calculates multiple linear regression from raster maps.");
 
