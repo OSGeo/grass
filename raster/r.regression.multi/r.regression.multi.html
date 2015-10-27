@@ -69,13 +69,24 @@ available through the R-function stepAIC.
 
 <h2>EXAMPLE</h2>
 
+<!-- replace with better example -->
+
 Multiple regression with soil K-factor and elevation, aspect, and slope
 (North Carolina dataset). Output maps are the residuals and estimates:
+
 <div class="code"><pre>
 g.region raster=soils_Kfactor -p
 r.regression.multi mapx=elevation,aspect,slope mapy=soils_Kfactor \
   residuals=soils_Kfactor.resid estimates=soils_Kfactor.estim
 </pre></div>
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="d.correlate.html">d.correlate</a>,
+<a href="r.regression.line.html">r.regression.line</a>,
+<a href="r.stats.html">r.stats</a>
+</em>
 
 <h2>AUTHOR</h2>
 
