@@ -13,8 +13,8 @@ A GIS network consists of topologically correct lines (arcs). That is,
 the lines must be connected by shared vertices where real connections exist.
 In GRASS GIS you also can add nodes to the network. These are specially 
 designated vertices used for analyzing network properties or computing 
-cost/distance measures. That is, not all vertices are treated as nodes by
-default. Only <em><a href="v.net.path.html">v.net.path</a></em> can use a 
+cost/distance measures. That is, <b>not all vertices are treated as nodes by
+default</b>. Only <em><a href="v.net.path.html">v.net.path</a></em> can use a 
 network without nodes, they are required  for all the other network modules.
 In GRASS, network arcs are stored in one data layer (normally layer 1) and
 nodes are stored in a different data layer (normally layer 2). 
@@ -36,9 +36,12 @@ to the closest line of the network. If you use the <em>-s</em> flag,
 however, the new nodes will be added on the closest line of the 
 network at the point closest to the point you wish to add. When using 
 the <em>connect</em> operation, some lines will share the same 
-category. In Order to assign unique costs to each line, a new layer 
-needs to be created with <em>v.category op=add cat=1 step=1 layer=3</em>, 
-followed by <em>v.db.addtable layer=3.</em></li>
+category. In order to assign unique costs to each line, a new layer 
+needs to be created with<br>
+<!-- like this it is rather useless, still to be improved (eg as a full example below!) -->
+<tt>v.category map=yourmap operation=add cat=1 step=1 layer=3</tt><br>
+followed by<br>
+<tt>v.db.addtable map=yourmap layer=3 table=tablename</tt>.</li>
 
 <li>Create nodes and arcs from a vector line/boundary file using the 
 <em>node</em> operation. This is useful if you are mostly interested 
@@ -128,6 +131,8 @@ The examples are <a href="http://www.grassbook.org/datasets/datasets-3rd-edition
 
 <div class="code"><pre>
 v.net input=streets_wake output=streets_node operation=nodes
+# verify result
+v.category streets_node operation=report
 </pre></div>
 
 <h3>Merge in nodes from a separate map within given threshold</h3>
@@ -135,7 +140,11 @@ v.net input=streets_wake output=streets_node operation=nodes
 <div class="code"><pre>
 v.net input=streets_wake points=firestations out=streets_net \
       operation=connect threshold=500
+# verify result
+v.category streets_net operation=report
 </pre></div>
+
+The nodes are stored in layer 2 unless <tt>node_layer=1</tt> is used.
 
 <h3>Generating network for vector point map</h3>
 
@@ -146,13 +155,27 @@ following format is required:
 [category of edge] [category of start node] [category of end node]
 </pre></div>
 
+<p>
+Option 1: Save the file (e.g. "points.txt") and generate the map:
+<div class="code"><pre>
+v.net points=geodetic_swwake_pts output=geodetic_swwake_pts_net \
+      operation=arcs file=points.txt
+# verify result
+v.category geodetic_swwake_pts_net operation=report
+</pre></div>
+
+<p>
+Option 2: Read in from command line:
 <div class="code"><pre>
 v.net points=geodetic_swwake_pts output=geodetic_swwake_pts_net \
       operation=arcs file=- &lt;&lt; EOF
-> 1 28000 28005
-> 2 27945 27958
-> 3 27886 27897
-> EOF
+1 28000 28005
+2 27945 27958
+3 27886 27897
+EOF
+
+# verify result
+v.category geodetic_swwake_pts_net operation=report
 </pre></div>
 
 <h2>SEE ALSO</h2>
