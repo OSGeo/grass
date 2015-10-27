@@ -384,14 +384,14 @@ void lsat_metadata(char *metafile, lsat_data * lsat)
 	    sprintf(key, "Band%dGainSetting", lsat->band[i].code);
 	    get_mtldata(mtldata, key, value);
 	    if (value[0] == '\0') {
-		G_warning(key);
+                G_warning("%s", key);
 		continue;
 	    }
 	    lsat->band[i].gain = atof(value);
 	    sprintf(key, "Band%dBiasSetting", lsat->band[i].code);
 	    get_mtldata(mtldata, key, value);
 	    if (value[0] == '\0') {
-		G_warning(key);
+		G_warning("%s", key);
 		continue;
 	    }
 	    lsat->band[i].bias = atof(value);

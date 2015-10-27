@@ -64,7 +64,7 @@ void fatalError(char *errorMsg)
 
     }
 
-    Rast3d_fatal_error(errorMsg);
+    Rast3d_fatal_error("%s", errorMsg);
 }
 
 /*---------------------------------------------------------------------------*/

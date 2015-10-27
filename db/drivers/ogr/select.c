@@ -48,7 +48,7 @@ int db__driver_open_select_cursor(dbString * sel, dbCursor * dbc, int mode)
 
     if (c->hLayer == NULL) {
 	db_d_append_error(_("Unable to select: \n"));
-	db_d_append_error(db_get_string(sel));
+	db_d_append_error("%s", db_get_string(sel));
 	db_d_append_error("\n");
 	db_d_report_error();
 	return DB_FAILED;

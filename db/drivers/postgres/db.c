@@ -248,7 +248,7 @@ int create_delete_db(dbHandle *handle, int create)
     if (PQstatus(pg_conn) == CONNECTION_BAD) {
 	db_d_append_error(_("Connection failed."));
 	db_d_append_error("\n");
-	db_d_append_error(PQerrorMessage(pg_conn));
+	db_d_append_error("%s", PQerrorMessage(pg_conn));
 	db_d_report_error();
 	PQfinish(pg_conn);
 	return DB_FAILED;
@@ -269,7 +269,7 @@ int create_delete_db(dbHandle *handle, int create)
 	else
 	    db_d_append_error(_("Unable to drop database <%s>"), name);
 	db_d_append_error("\n");
-	db_d_append_error(PQerrorMessage(pg_conn));
+	db_d_append_error("%s", PQerrorMessage(pg_conn));
 	db_d_report_error();
 	
 	PQclear(res);	

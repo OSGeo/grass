@@ -451,7 +451,7 @@ int main(int argc, char *argv[])
 	    strcat(error_msg,
 		   _("Consider generating a new location with 'location' parameter"
 		    " from input data set.\n"));
-	    G_fatal_error(error_msg);
+	    G_fatal_error("%s", error_msg);
 	}
 	else if (!shell_style->answer) {
 	    G_message(_("Projection of input dataset and current location "
@@ -1229,7 +1229,7 @@ int main(int argc, char *argv[])
 
 
     sprintf(buff, _("%lu points found in region."), count_total);
-    G_done_msg(buff);
+    G_done_msg("%s", buff);
     G_debug(1, "Processed %lu points.", line_total);
 
     exit(EXIT_SUCCESS);

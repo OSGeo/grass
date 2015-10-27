@@ -103,7 +103,7 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
 	    Fi->table);
 
     db_set_string(&sql, buf);
-    G_debug(2, db_get_string(&sql));
+    G_debug(2, "%s", db_get_string(&sql));
 
     if (db_execute_immediate(driver, &sql) != DB_OK) {
 	G_fatal_error(_("Unable to create table: '%s'"), db_get_string(&sql));
@@ -306,7 +306,7 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
 		"insert into %s values ( %d, %d, %d, %d, %d, %f, %f, %f)",
 		Fi->table, cat, id, fcat, tcat, sp, cost, fdist, tdist);
 	db_set_string(&sql, buf);
-	G_debug(3, db_get_string(&sql));
+	G_debug(3, "%s", db_get_string(&sql));
 
 	if (db_execute_immediate(driver, &sql) != DB_OK) {
 	    G_fatal_error(_("Cannot insert new record: %s"),

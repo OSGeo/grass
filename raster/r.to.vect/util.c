@@ -151,7 +151,7 @@ void insert_value(int cat, int val, double dval)
 
     db_append_string(&sql, ")");
 
-    G_debug(3, db_get_string(&sql));
+    G_debug(3, "%s", db_get_string(&sql));
 
     if (db_execute_immediate(driver, &sql) != DB_OK)
 	G_fatal_error(_("Cannot insert new row: %s"), db_get_string(&sql));

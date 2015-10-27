@@ -101,7 +101,7 @@ int I_get_init_info(char *group, struct Ortho_Camera_Exp_Init *init_info)
     if (fd == NULL) {
 	sprintf(msg, "unable to open camera initial file %s in %s",
 		group, G_mapset());
-	G_warning(msg);
+	G_warning("%s", msg);
 	return 0;
     }
 
@@ -110,7 +110,7 @@ int I_get_init_info(char *group, struct Ortho_Camera_Exp_Init *init_info)
     if (stat < 0) {
 	sprintf(msg, "bad format in camera initial file %s in %s",
 		group, G_mapset());
-	G_warning(msg);
+	G_warning("%s", msg);
 	return 0;
     }
     return 1;
@@ -125,7 +125,7 @@ int I_put_init_info(char *group, struct Ortho_Camera_Exp_Init *init_info)
     if (fd == NULL) {
 	sprintf(msg, "unable to open camera initial file %s in %s",
 		group, G_mapset());
-	G_warning(msg);
+	G_warning("%s", msg);
 	return 0;
     }
 

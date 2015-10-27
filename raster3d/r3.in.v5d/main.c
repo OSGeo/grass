@@ -48,7 +48,7 @@ static void fatalError(char *errorMsg)
 	/* should unopen map here! */
     }
 
-    Rast3d_fatal_error(errorMsg);
+    Rast3d_fatal_error("%s", errorMsg);
 }
 
 /*---------------------------------------------------------------------------*/
