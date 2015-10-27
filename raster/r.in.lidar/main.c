@@ -611,7 +611,6 @@ int main(int argc, char *argv[])
 
 	/* free memory */
 	point_binning_free(&point_binning, &bin_index_nodes);
-    string_list_free(&infiles);
     }				/* passes loop */
     if (base_array)
         Rast_close(base_raster);
@@ -633,10 +632,21 @@ int main(int argc, char *argv[])
     Rast_set_history(&history, HIST_DATSRC_1, infile);
     Rast_write_history(outmap, &history);
 
+    if (infiles.num_items > 1) {
+        sprintf(buff, _("Raster map <%s> created."
+                        " %lu points from %d files found in region."),
+                outmap, count_total, infiles.num_items);
+    }
+    else {
+        sprintf(buff, _("Raster map <%s> created."
+                        " %lu points found in region."),
+                outmap, count_total);
+    }
 
-    sprintf(buff, _("%lu points found in region."), count_total);
     G_done_msg("%s", buff);
     G_debug(1, "Processed %lu points.", line_total);
+
+    string_list_free(&infiles);
 
     exit(EXIT_SUCCESS);
 
