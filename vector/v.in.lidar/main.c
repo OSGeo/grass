@@ -472,7 +472,7 @@ int main(int argc, char *argv[])
 	    strcat(error_msg,
 		   _("Consider generating a new location with 'location' parameter"
 		    " from input data set.\n"));
-	    G_fatal_error(error_msg);
+	    G_fatal_error("%s", error_msg);
 	}
 	else {
 	    G_verbose_message(_("Projection of input dataset and current "
@@ -596,7 +596,7 @@ int main(int argc, char *argv[])
 	}
 
 	db_append_string(&sql, ")");
-	G_debug(3, db_get_string(&sql));
+	G_debug(3, "%s", db_get_string(&sql));
 
 	driver =
 	    db_start_driver_open_database(Fi->driver,
@@ -778,7 +778,7 @@ int main(int argc, char *argv[])
 		db_append_string(&sql, buf);
 	    }
 	    db_append_string(&sql, " )");
-	    G_debug(3, db_get_string(&sql));
+	    G_debug(3, "%s", db_get_string(&sql));
 
 	    if (db_execute_immediate(driver, &sql) != DB_OK) {
 		G_fatal_error(_("Cannot insert new row: %s"),

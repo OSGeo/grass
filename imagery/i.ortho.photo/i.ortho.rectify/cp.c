@@ -31,7 +31,7 @@ int get_conz_points(void)
     default:
 	return 1;
     }
-    G_fatal_error(msg);
+    G_fatal_error("%s", msg);
 }
 
 int get_ref_points(void)
@@ -61,6 +61,6 @@ int get_ref_points(void)
     default:
 	return 1;
     }
-    G_fatal_error(msg);
+    G_fatal_error("%s", msg);
     /* exit(1);   shouldn't get here */
 }

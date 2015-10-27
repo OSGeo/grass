@@ -40,7 +40,7 @@ int add_column(int tab, int type, char *name, int width, int decimals)
 	sprintf(buf, "DBMI-DBF driver: column name '%s'", name);
 	name[DBF_COL_NAME - 1] = '\0';
 	sprintf(buf + strlen(buf), " truncated to '%s'", name);
-	G_warning(buf);
+	G_warning("%s", buf);
     }
 
     /* Check if the column exists */

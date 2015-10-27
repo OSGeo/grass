@@ -31,7 +31,7 @@ int insert_new_record(dbDriver * driver, struct field_info *Fi,
 
     sprintf(buf, "insert into %s values (%d, %d)", Fi->table, cat, comp);
     db_set_string(sql, buf);
-    G_debug(3, db_get_string(sql));
+    G_debug(3, "%s", db_get_string(sql));
 
     if (db_execute_immediate(driver, sql) != DB_OK) {
 	db_close_database_shutdown_driver(driver);
@@ -182,7 +182,7 @@ int main(int argc, char *argv[])
     sprintf(buf, "create table %s ( cat integer, comp integer)", Fi->table);
 
     db_set_string(&sql, buf);
-    G_debug(2, db_get_string(&sql));
+    G_debug(2, "%s", db_get_string(&sql));
 
     if (db_execute_immediate(driver, &sql) != DB_OK) {
 	db_close_database_shutdown_driver(driver);

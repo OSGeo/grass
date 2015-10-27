@@ -581,7 +581,7 @@ int main(int argc, char *argv[])
 	db_append_string(&sql2, "cat integer");
 	db_append_string(&sql2, ", flt1 double precision");
 	db_append_string(&sql2, ")");
-	G_debug(1, db_get_string(&sql2));
+	G_debug(1, "%s", db_get_string(&sql2));
 	driver2 = db_start_driver_open_database(ff->driver, ff->database);
 	if (driver2 == NULL)
 	    G_fatal_error(_("Unable to open database <%s> by driver <%s>"),

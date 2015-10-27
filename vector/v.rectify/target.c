@@ -42,6 +42,6 @@ int get_target(char *group)
   error:
     strcat(buf, _("Please run i.target for group."));
     strcat(buf, group);
-    G_fatal_error(buf);
+    G_fatal_error("%s", buf);
     return 1;			/* never reached */
 }

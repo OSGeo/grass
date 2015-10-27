@@ -171,7 +171,7 @@ int main(int argc, char **argv)
     if (file_arcs)
 	fclose(file_arcs);
 
-    G_done_msg(message);
+    G_done_msg("%s", message);
 
     return (EXIT_SUCCESS);
 }

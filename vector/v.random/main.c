@@ -462,7 +462,7 @@ int main(int argc, char *argv[])
 			sprintf(buf, "%.0f )", z);
 		    db_append_string(&sql, buf);
 
-		    G_debug(3, db_get_string(&sql));
+		    G_debug(3, "%s", db_get_string(&sql));
 		    if (db_execute_immediate(driver, &sql) != DB_OK) {
 			G_fatal_error(_("Cannot insert new row: %s"),
 				      db_get_string(&sql));
@@ -582,7 +582,7 @@ int main(int argc, char *argv[])
 		    sprintf(buf, "%.0f )", z);
 		db_append_string(&sql, buf);
 
-		G_debug(3, db_get_string(&sql));
+		G_debug(3, "%s", db_get_string(&sql));
 		if (db_execute_immediate(driver, &sql) != DB_OK) {
 		    G_fatal_error(_("Cannot insert new row: %s"),
 				  db_get_string(&sql));

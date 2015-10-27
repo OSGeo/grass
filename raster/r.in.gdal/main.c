@@ -892,7 +892,7 @@ static void SetupReprojector(const char *pszSrcWKT, const char *pszDstLoc,
 		target_mapset, pszDstLoc);
 	strcat(errbuf, permissions == 0 ? _("permission denied")
 	       : _("not found"));
-	G_fatal_error(errbuf);
+	G_fatal_error("%s", errbuf);
     }				/* permission check */
 
     /* And switch back to original location */
