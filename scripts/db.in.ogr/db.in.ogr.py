@@ -71,7 +71,13 @@ def main():
 	output = grass.basename(tmpname)
 
     # check if table exists
-    s = grass.read_command('db.tables', flags = 'p', quiet=True)
+    try:
+        s = grass.read_command('db.tables', flags = 'p', quiet=True)
+    except CalledModuleError:
+        # check connection parameters, set if uninitialized
+        grass.read_command('db.connect', flags='c')
+        s = grass.read_command('db.tables', flags = 'p', quiet=True)
+    
     for l in s.splitlines():
         if l == output:
             if grass.overwrite():
