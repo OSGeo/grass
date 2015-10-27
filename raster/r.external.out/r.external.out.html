@@ -20,22 +20,26 @@ The module <em>r.external.out</em> can be used along with
 while writing out the results directly in GeoTIFF:
 
 <div class="code"><pre>
-# register GeoTIFF file in GRASS database:
-r.external terra_lst1km20030314.LST_Day.tif out=modis_celsius
+# register GeoTIFF file to be used in current mapset:
+r.external input=terra_lst1km20030314.LST_Day.tif output=modis_celsius
 
 # define output directory for files resulting from GRASS calculation:
 r.external.out directory=$HOME/gisoutput/ format="GTiff"
 
 # perform GRASS calculation (here: extract pixels &gt; 20 deg C)
-# write output directly as GeoTIFF:
-r.mapcalc "warm.tif = if(modis_celsius &gt; 20, modis_celsius, null() )"
+# this stores the output map directly as GeoTIFF:
+r.mapcalc "warm.tif = if(modis_celsius &gt; 20.0, modis_celsius, null() )"
 
 # cease GDAL output connection and turn back to write GRASS raster files:
 r.external.out -r
 
-# use the result elsewhere
-qgis $HOME/gisoutput/warm.tif
+# now use the resulting file elsewhere
+gdalinfo $HOME/gisoutput/warm.tif
 </pre></div>
+
+<h2>REFERENCES</h2>
+
+GDAL Pages: <a href="http://www.gdal.org">http://www.gdal.org/</a><br>
 
 <h2>SEE ALSO</h2>
 
@@ -45,12 +49,9 @@ qgis $HOME/gisoutput/warm.tif
 <a href="r.external.html">r.external</a>
 </em>
 
-<h2>REFERENCES</h2>
-
-GDAL Pages: <a href="http://www.gdal.org">http://www.gdal.org/</a><br>
-
 <h2>AUTHOR</h2>
 
 Glynn Clements
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
