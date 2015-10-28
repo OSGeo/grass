@@ -334,8 +334,8 @@ int main(int argc, char *argv[])
     result = output->answer;
 
     /*mod09Q1*/
-    if ((strcmp(qcflag, "cloud") && !(strcmp(product, "mod09Q1"))) || 
-	(strcmp(qcflag, "diff_orbit_from_500m") && !(strcmp(product, "mod09Q1"))))
+    if ((strcmp(qcflag, "cloud") && strcmp(product, "mod09Q1")) || 
+	(strcmp(qcflag, "diff_orbit_from_500m") && strcmp(product, "mod09Q1")))
 	G_fatal_error(_("This bit flag is only available for MOD09Q1 @ 250m products"));
 
     if (!strcmp(qcflag, "data_quality")) {
@@ -376,33 +376,33 @@ int main(int argc, char *argv[])
 */
 
     /*mod09CMG*/
-    if ((strcmp(qcflag, "icm_cloudy") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "icm_clear") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "icm_high_clouds") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "icm_low_clouds") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "icm_snow") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "icm_fire") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "icm_sun_glint") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "icm_dust") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "icm_cloud_shadow") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "icm_pixel_is_adjacent_to_cloud") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "icm_cirrus") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "icm_pan_flag") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "icm_criteria_for_aerosol_retrieval") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "icm_aot_has_clim_val") && !(strcmp(product, "mod09CMGi"))))
+    if ((strcmp(qcflag, "icm_cloudy") && strcmp(product, "mod09CMGi")) ||
+	(strcmp(qcflag, "icm_clear") && strcmp(product, "mod09CMGi")) ||
+	(strcmp(qcflag, "icm_high_clouds") && strcmp(product, "mod09CMGi")) ||
+	(strcmp(qcflag, "icm_low_clouds") && strcmp(product, "mod09CMGi")) ||
+	(strcmp(qcflag, "icm_snow") && strcmp(product, "mod09CMGi")) ||
+	(strcmp(qcflag, "icm_fire") && strcmp(product, "mod09CMGi")) ||
+	(strcmp(qcflag, "icm_sun_glint") && strcmp(product, "mod09CMGi")) ||
+	(strcmp(qcflag, "icm_dust") && strcmp(product, "mod09CMGi")) ||
+	(strcmp(qcflag, "icm_cloud_shadow") && strcmp(product, "mod09CMGi")) ||
+	(strcmp(qcflag, "icm_pixel_is_adjacent_to_cloud") && strcmp(product, "mod09CMGi")) ||
+	(strcmp(qcflag, "icm_cirrus") && strcmp(product, "mod09CMGi")) ||
+	(strcmp(qcflag, "icm_pan_flag") && strcmp(product, "mod09CMGi")) ||
+	(strcmp(qcflag, "icm_criteria_for_aerosol_retrieval") && strcmp(product, "mod09CMGi")) ||
+	(strcmp(qcflag, "icm_aot_has_clim_val") && strcmp(product, "mod09CMGi")))
 	G_fatal_error(_("This bit flag is only available for mod09CMGi @ 5000m products"));
 
     /*mod13A2*/
-    if ((strcmp(qcflag, "vi_usefulness") && !(strcmp(product, "mod13A2"))) ||
-        (strcmp(qcflag, "mixed_clouds") && !(strcmp(product, "mod13A2"))) ||
-        (strcmp(qcflag, "possible_snow_ice") && !(strcmp(product, "mod13A2"))) ||
-        (strcmp(qcflag, "possible_shadow") && !(strcmp(product, "mod13A2"))))
+    if ((strcmp(qcflag, "vi_usefulness") && strcmp(product, "mod13A2")) ||
+        (strcmp(qcflag, "mixed_clouds") && strcmp(product, "mod13A2")) ||
+        (strcmp(qcflag, "possible_snow_ice") && strcmp(product, "mod13A2")) ||
+        (strcmp(qcflag, "possible_shadow") && strcmp(product, "mod13A2")))
         G_fatal_error(_("This bit flag is only available for MOD13A2 @ 1km products"));
 
     /*mcd43B2*/
-    if ((strcmp(qcflag, "platform") && !(strcmp(product, "mcd43B2"))) ||
-        (strcmp(qcflag, "land_water") && !(strcmp(product, "mcd43B2"))) ||
-        (strcmp(qcflag, "sun_z_angle_at_local_noon") && !(strcmp(product, "mcd43B2"))))
+    if ((strcmp(qcflag, "platform") && strcmp(product, "mcd43B2")) ||
+        (strcmp(qcflag, "land_water") && strcmp(product, "mcd43B2")) ||
+        (strcmp(qcflag, "sun_z_angle_at_local_noon") && strcmp(product, "mcd43B2")))
         G_fatal_error(_("This bit flag is only available for MCD43B2 @ 1km products"));
 
      /*mcd43B2q*/
