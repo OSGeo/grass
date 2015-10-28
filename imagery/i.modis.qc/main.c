@@ -339,7 +339,12 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("This bit flag is only available for MOD09Q1 @ 250m products"));
 
     if (!strcmp(qcflag, "data_quality")) {
-	if (bandno < 1 || bandno > 7)
+	if ((bandno < 1 || bandno > 7) 
+        && (!(strcmp(product, "mod09Q1")) 
+        || !(strcmp(product, "mod09A1"))
+        || !(strcmp(product, "mod09CMG"))
+        || !(strcmp(product, "myd09CMG"))
+        || !(strcmp(product, "mcd43B2q"))))
 	    G_fatal_error(_("Band number out of allowed range [1-7]"));
 	if (!strcmp(product, "mod09Q1") && bandno > 2)
 	    G_fatal_error(_("mod09Q1 product only has 2 bands"));
