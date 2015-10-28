@@ -789,8 +789,9 @@ class ItemListCtrl(ModelListCtrl):
         
         self.SetColumnWidth(0, 100)
         self.SetColumnWidth(1, 75)
-        self.SetColumnWidth(2, 65)
-        
+        if len(self.columns) >= 3:
+            self.SetColumnWidth(2, 65)
+
     def GetData(self):
         """Get list data"""
         return self.itemDataMap
