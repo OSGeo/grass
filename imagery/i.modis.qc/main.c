@@ -423,6 +423,8 @@ int main(int argc, char *argv[])
     /* Create New raster files */ 
     outfd = Rast_open_new(result, data_type_output);
 
+    G_debug(3, "Product is %s and QC flag is %s", product, qcflag);
+
     /* Process pixels */ 
     for (row = 0; row < nrows; row++)
     {
