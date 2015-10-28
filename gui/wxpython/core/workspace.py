@@ -124,6 +124,11 @@ class ProcessWorkspaceFile:
                 except:
                     pos  = None
                     size = None
+                # this happens on Windows when mapwindow is minimized when saving workspace
+                else:
+                    if posVal[0] == -32000:
+                        pos = None
+                        size = None
             else:
                 pos  = None
                 size = None
