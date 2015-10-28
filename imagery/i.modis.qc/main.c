@@ -492,31 +492,31 @@ int main(int argc, char *argv[])
 	    }
             else if (!strcmp(product, "mod11A1"))
             {
-                if (!strcmp(qcflag, "mandatory_qa"))
+                if (!strcmp(qcflag, "mandatory_qa_11A1"))
                 /*calculate mod11A1 mandatory qa flags  */
                     c = mod11A1a(c);
-                if (!strcmp(qcflag, "data_quality_flag"))
+                if (!strcmp(qcflag, "data_quality_flag_11A1"))
                 /*calculate mod11A1 data quality flag  */
                     c = mod11A1b(c);
-                if (!strcmp(qcflag, "emis_error"))
+                if (!strcmp(qcflag, "emis_error_11A1"))
                 /*calculate mod11A1 emissivity error flag  */
                     c = mod11A1c(c);
-                if (!strcmp(qcflag, "lst_error"))
+                if (!strcmp(qcflag, "lst_error_11A1"))
                 /*calculate mod11A1 lst error flag  */
                     c = mod11A1d(c);
             }
             else if (!strcmp(product, "mod11A2"))
             {
-                if (!strcmp(qcflag, "mandatory_qa")) 
+                if (!strcmp(qcflag, "mandatory_qa_11A2")) 
 		/*calculate mod11A2 mandatory qa flags  */ 
                     c = mod11A2a(c);
-	        if (!strcmp(qcflag, "data_quality_flag"))
+	        if (!strcmp(qcflag, "data_quality_flag_11A2"))
 		/*calculate mod11A2 data quality flag  */ 
                     c = mod11A2b(c);
-                if (!strcmp(qcflag, "emis_error")) 
+                if (!strcmp(qcflag, "emis_error_11A2")) 
 		/*calculate mod11A2 emissivity error flag  */ 
                     c = mod11A2c(c);
-	        if (!strcmp(qcflag, "lst_error")) 
+	        if (!strcmp(qcflag, "lst_error_11A2")) 
 		/*calculate mod11A2 lst error flag  */ 
                     c = mod11A2d(c);
             }
