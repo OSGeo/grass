@@ -84,9 +84,12 @@ class HistogramPlotFrame(BasePlotFrame):
             pass
         
         self.SetGraphStyle()
+        wx.BeginBusyCursor()
+        wx.SafeYield()
         self.SetupHistogram()
         p = self.CreatePlotList()
         self.DrawPlot(p)
+        wx.EndBusyCursor()
 
     def OnSelectRaster(self, event):
         """Select raster map(s) to profile
