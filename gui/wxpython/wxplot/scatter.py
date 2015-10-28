@@ -79,11 +79,15 @@ class ScatterFrame(BasePlotFrame):
         """
         self.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
         self.SetGraphStyle()
+        wx.BeginBusyCursor()
+        wx.SafeYield()
         self.SetupScatterplot()
         p = self.CreatePlotList()
         if p:
             self.DrawPlot(p)
+            wx.EndBusyCursor()
         else:
+            wx.EndBusyCursor()
             GMessage(_("Nothing to plot."), parent = self)
 
     def OnSelectRaster(self, event):
