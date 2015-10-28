@@ -292,7 +292,7 @@ def set_path(modulename, dirname, path='.'):
     pathlib = os.path.join(path, dirname)
     if os.path.exists(pathlib):
         # we are running the script from the script directory
-        sys.path.append(os.path.abspath(path))
+        sys.path.append(os.path.abspath(pathlib))
     else:
         # running from GRASS GIS session
         from grass.pygrass.utils import get_lib_path
