@@ -284,12 +284,10 @@ class ProfileFrame(BasePlotFrame):
             return
 
         self.SetCursor(wx.StockCursor(wx.CURSOR_ARROW))
-        wx.BeginBusyCursor()
-        wx.SafeYield()
+
         self.SetupProfile()
         p = self.CreatePlotList()
         self.DrawPlot(p)
-        wx.EndBusyCursor()
 
     def CreatePlotList(self):
         """Create a plot data list from transect datalist and
