@@ -339,12 +339,19 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("This bit flag is only available for MOD09Q1 @ 250m products"));
 
     if (!strcmp(qcflag, "data_quality")) {
-	if ((bandno < 1 || bandno > 7) 
-        && (!(strcmp(product, "mod09Q1")) 
-        || !(strcmp(product, "mod09A1"))
-        || !(strcmp(product, "mod09CMG"))
-        || !(strcmp(product, "myd09CMG"))
-        || !(strcmp(product, "mcd43B2q"))))
+	if (!strcmp(product, "mod09Q1") && (bandno < 1 || bandno > 2)) 
+	    G_fatal_error(_("Band number out of allowed range [1-2]"));
+	if (!strcmp(product, "mod09A1") && (bandno < 1 || bandno > 7)) 
+	    G_fatal_error(_("Band number out of allowed range [1-7]"));
+	if (!strcmp(product, "mod09CMG") && (bandno < 1 || bandno > 7)) 
+	    G_fatal_error(_("Band number out of allowed range [1-7]"));
+	if (!strcmp(product, "mod09CMGs") && (bandno < 1 || bandno > 7)) 
+	    G_fatal_error(_("Band number out of allowed range [1-7]"));
+	if (!strcmp(product, "mod09CMGi") && (bandno < 1 || bandno > 7)) 
+	    G_fatal_error(_("Band number out of allowed range [1-7]"));
+	if (!strcmp(product, "mod43B2") && (bandno < 1 || bandno > 7))
+	    G_fatal_error(_("Band number out of allowed range [1-7]"));
+	if (!strcmp(product, "mod43B2q") && (bandno < 1 || bandno > 7)) 
 	    G_fatal_error(_("Band number out of allowed range [1-7]"));
 	if (!strcmp(product, "mod09Q1") && bandno > 2)
 	    G_fatal_error(_("mod09Q1 product only has 2 bands"));
@@ -399,7 +406,7 @@ int main(int argc, char *argv[])
         G_fatal_error(_("This bit flag is only available for MCD43B2 @ 1km products"));
 
      /*mcd43B2q*/
-    if (strcmp(product, "mcd43B2q") && (bandno < 1 || bandno > 7))
+    if (!strcmp(product, "mcd43B2q") && (bandno < 1 || bandno > 7))
 	    G_fatal_error(_("Band number out of allowed range [1-7]"));
 
     infd = Rast_open_old(qcchan, "");
