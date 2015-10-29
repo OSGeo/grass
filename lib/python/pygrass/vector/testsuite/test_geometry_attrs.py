@@ -54,13 +54,7 @@ class GeometryAttrsTestCase(TestCase):
         with self.assertRaises(ValueError) as cm:
             self.attrs['not_existing_column_name']
 
-        self.assertEqual(cm.exception.message,
-                         u"The SQL is not correct:\n"
-                         u"'SELECT not_existing_column_name FROM "
-                         u"GeometryAttrsCase_map WHERE cat=1;',"
-                         u"\nvalues: None,\n"
-                         u"SQL error: no such column: "
-                         u"not_existing_column_name")
+        self.assertTrue(u"not_existing_column_name" in cm.exception.message)
 
 
     def test_setitem(self):
