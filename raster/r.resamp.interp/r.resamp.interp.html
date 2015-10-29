@@ -46,16 +46,27 @@ North Carolina sample dataset):
 <div class="code"><pre>
 g.region raster=elev_state_500m -p
 g.region res=250 -ap
-r.resamp.interp input=elev_state_500m output=elev_state_250m
+r.resamp.interp input=elev_state_500m output=elev_state_250m \
+                method=bilinear
 </pre></div>
 
+<center>
+<img src="r_resamp_interp_orig_500m.png" alt="Original 500m resolution elevation map"><br>
+Original 500m resolution elevation map
+<p>
+<img src="r_resamp_interp_new_250m.png" alt="Resampled 250m resolution elevation map"><br>
+Resampled (bilinear) 250m resolution elevation map
+</center>
 
 <h2>SEE ALSO</h2>
 
-<em><a href="g.region.html">g.region</a></em>,
-<em><a href="r.resample.html">r.resample</a></em>,
-<em><a href="r.resamp.rst.html">r.resamp.rst</a></em>
-<em><a href="r.resamp.stats.html">r.resamp.stats</a></em>
+<em>
+<a href="g.region.html">g.region</a>,
+<a href="r.resample.html">r.resample</a>,
+<a href="r.resamp.filter.html">r.resamp.filter</a>,
+<a href="r.resamp.rst.html">r.resamp.rst</a>,
+<a href="r.resamp.stats.html">r.resamp.stats</a>
+</em>
 
 <h2>AUTHOR</h2>
 
