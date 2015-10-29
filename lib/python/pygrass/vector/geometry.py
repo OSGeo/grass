@@ -1147,10 +1147,10 @@ class Line(Geo):
                                   dist_x, dist_y, angle,
                                   int(round_), int(caps), tol,
                                   p_bound, pp_isle, n_isles)
-        return(Line(c_points=p_bound.contents),
-                    self[0],
-                    [Line(c_points=pp_isle[i].contents)
-                           for i in range(n_isles.contents.value)])
+        boundary = Line(c_points=p_bound.contents)
+        isles = [Line(c_points=pp_isle[i].contents)
+                 for i in range(n_isles.contents.value) if pp_isle[i]]
+        return(boundary, self[0], isles)
 
     def reset(self):
         """Reset line, using `Vect_reset_line` C function. ::
@@ -1576,11 +1576,16 @@ class Area(Geo):
         super(Area, self).__init__(**kargs)
 
         # set the attributes
-        if self.attrs and self.cat:
-            self.attrs.cat = self.cat
+        #if self.attrs and self.cat:
+        #    self.attrs.cat = self.cat
 
     def __repr__(self):
         return "Area(%d)" % self.id if self.id else "Area( )"
+
+    @property
+    def cat(self):
+        centroid = self.centroid()
+        return centroid.cat if centroid else None
 
     @mapinfo_must_be_set
     def points(self, line=None):
