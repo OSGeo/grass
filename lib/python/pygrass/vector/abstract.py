@@ -352,18 +352,19 @@ class Info(object):
         if mode == 'w':
             openvect = libvect.Vect_open_new(self.c_mapinfo, self.name, with_z)
             self.dblinks = DBlinks(self.c_mapinfo)
-            if tab_cols:
-                # create a link
-                link = Link(layer,
-                            link_name if link_name else self.name,
-                            tab_name if tab_name else self.name,
-                            link_key, link_db, link_driver)
-                # add the new link
-                self.dblinks.add(link)
-                # create the table
-                table = link.table()
-                table.create(tab_cols)
-                table.conn.commit()
+
+        if mode in ('w', 'rw') and tab_cols:
+            # create a link
+            link = Link(layer,
+                        link_name if link_name else self.name,
+                        tab_name if tab_name else self.name,
+                        link_key, link_db, link_driver)
+            # add the new link
+            self.dblinks.add(link)
+            # create the table
+            table = link.table()
+            table.create(tab_cols)
+            table.conn.commit()
 
         # check the C function result.
         if openvect == -1:
