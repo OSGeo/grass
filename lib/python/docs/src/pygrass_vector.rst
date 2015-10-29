@@ -69,7 +69,12 @@ To begin using a vector map, it must first be opened: ::
 
 The ``open()`` method supports a number of option arguments (see the :class:`~pygrass.vector.abstract.Info`
 documentation for a complete list). In particular, the mode argument can take a
-a value of ``r`` for reading, ``w`` for writing, or ``rw`` for reading/writing.
+a value of:
+
+'r': read-only mode, vector features are read-only (attribute table is modifiable since are handle by a database);
+'w': write-only mode, write a new vector map in case of an old vector map all the previous features will be removed/overwritten;
+'rw': read-write mode, add new/update vector features without removing the existing ones. Add/remove vector layers.
+
 
 The geometry of a vector map can be read sequentially using the ``next()`` method.
 To return to the beginning, use the ``rewind()`` method.
