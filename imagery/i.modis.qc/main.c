@@ -334,8 +334,8 @@ int main(int argc, char *argv[])
     result = output->answer;
 
     /*mod09Q1*/
-    if (!strcmp(qcflag, "cloud") && strcmp(product, "mod09Q1") || 
-	!strcmp(qcflag, "diff_orbit_from_500m") && strcmp(product, "mod09Q1"))
+    if ((!strcmp(qcflag, "cloud") && strcmp(product, "mod09Q1")) || 
+	(!strcmp(qcflag, "diff_orbit_from_500m") && strcmp(product, "mod09Q1")))
 	G_fatal_error(_("This bit flag is only available for MOD09Q1 @ 250m products"));
 
     if (!strcmp(qcflag, "data_quality")) {
