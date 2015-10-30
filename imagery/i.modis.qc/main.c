@@ -334,12 +334,24 @@ int main(int argc, char *argv[])
     result = output->answer;
 
     /*mod09Q1*/
-    if ((strcmp(qcflag, "cloud") && !(strcmp(product, "mod09Q1"))) || 
-	(strcmp(qcflag, "diff_orbit_from_500m") && !(strcmp(product, "mod09Q1"))))
+    if ((!strcmp(qcflag, "cloud") && strcmp(product, "mod09Q1")) || 
+	(!strcmp(qcflag, "diff_orbit_from_500m") && strcmp(product, "mod09Q1")))
 	G_fatal_error(_("This bit flag is only available for MOD09Q1 @ 250m products"));
 
     if (!strcmp(qcflag, "data_quality")) {
-	if (bandno < 1 || bandno > 7)
+	if (!strcmp(product, "mod09Q1") && (bandno < 1 || bandno > 2)) 
+	    G_fatal_error(_("Band number out of allowed range [1-2]"));
+	if (!strcmp(product, "mod09A1") && (bandno < 1 || bandno > 7)) 
+	    G_fatal_error(_("Band number out of allowed range [1-7]"));
+	if (!strcmp(product, "mod09CMG") && (bandno < 1 || bandno > 7)) 
+	    G_fatal_error(_("Band number out of allowed range [1-7]"));
+	if (!strcmp(product, "mod09CMGs") && (bandno < 1 || bandno > 7)) 
+	    G_fatal_error(_("Band number out of allowed range [1-7]"));
+	if (!strcmp(product, "mod09CMGi") && (bandno < 1 || bandno > 7)) 
+	    G_fatal_error(_("Band number out of allowed range [1-7]"));
+	if (!strcmp(product, "mod43B2") && (bandno < 1 || bandno > 7))
+	    G_fatal_error(_("Band number out of allowed range [1-7]"));
+	if (!strcmp(product, "mod43B2q") && (bandno < 1 || bandno > 7)) 
 	    G_fatal_error(_("Band number out of allowed range [1-7]"));
 	if (!strcmp(product, "mod09Q1") && bandno > 2)
 	    G_fatal_error(_("mod09Q1 product only has 2 bands"));
@@ -364,37 +376,37 @@ int main(int argc, char *argv[])
 */
 
     /*mod09CMG*/
-    if ((strcmp(qcflag, "icm_cloudy") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "icm_clear") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "icm_high_clouds") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "icm_low_clouds") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "icm_snow") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "icm_fire") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "icm_sun_glint") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "icm_dust") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "icm_cloud_shadow") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "icm_pixel_is_adjacent_to_cloud") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "icm_cirrus") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "icm_pan_flag") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "icm_criteria_for_aerosol_retrieval") && !(strcmp(product, "mod09CMGi"))) ||
-	(strcmp(qcflag, "icm_aot_has_clim_val") && !(strcmp(product, "mod09CMGi"))))
+    if ((!strcmp(qcflag, "icm_cloudy") && strcmp(product, "mod09CMGi")) ||
+	(!strcmp(qcflag, "icm_clear") && strcmp(product, "mod09CMGi")) ||
+	(!strcmp(qcflag, "icm_high_clouds") && strcmp(product, "mod09CMGi")) ||
+	(!strcmp(qcflag, "icm_low_clouds") && strcmp(product, "mod09CMGi")) ||
+	(!strcmp(qcflag, "icm_snow") && strcmp(product, "mod09CMGi")) ||
+	(!strcmp(qcflag, "icm_fire") && strcmp(product, "mod09CMGi")) ||
+	(!strcmp(qcflag, "icm_sun_glint") && strcmp(product, "mod09CMGi")) ||
+	(!strcmp(qcflag, "icm_dust") && strcmp(product, "mod09CMGi")) ||
+	(!strcmp(qcflag, "icm_cloud_shadow") && strcmp(product, "mod09CMGi")) ||
+	(!strcmp(qcflag, "icm_pixel_is_adjacent_to_cloud") && strcmp(product, "mod09CMGi")) ||
+	(!strcmp(qcflag, "icm_cirrus") && strcmp(product, "mod09CMGi")) ||
+	(!strcmp(qcflag, "icm_pan_flag") && strcmp(product, "mod09CMGi")) ||
+	(!strcmp(qcflag, "icm_criteria_for_aerosol_retrieval") && strcmp(product, "mod09CMGi")) ||
+	(!strcmp(qcflag, "icm_aot_has_clim_val") && strcmp(product, "mod09CMGi")))
 	G_fatal_error(_("This bit flag is only available for mod09CMGi @ 5000m products"));
 
     /*mod13A2*/
-    if ((strcmp(qcflag, "vi_usefulness") && !(strcmp(product, "mod13A2"))) ||
-        (strcmp(qcflag, "mixed_clouds") && !(strcmp(product, "mod13A2"))) ||
-        (strcmp(qcflag, "possible_snow_ice") && !(strcmp(product, "mod13A2"))) ||
-        (strcmp(qcflag, "possible_shadow") && !(strcmp(product, "mod13A2"))))
+    if ((!strcmp(qcflag, "vi_usefulness") && strcmp(product, "mod13A2")) ||
+        (!strcmp(qcflag, "mixed_clouds") && strcmp(product, "mod13A2")) ||
+        (!strcmp(qcflag, "possible_snow_ice") && strcmp(product, "mod13A2")) ||
+        (!strcmp(qcflag, "possible_shadow") && strcmp(product, "mod13A2")))
         G_fatal_error(_("This bit flag is only available for MOD13A2 @ 1km products"));
 
     /*mcd43B2*/
-    if ((strcmp(qcflag, "platform") && !(strcmp(product, "mcd43B2"))) ||
-        (strcmp(qcflag, "land_water") && !(strcmp(product, "mcd43B2"))) ||
-        (strcmp(qcflag, "sun_z_angle_at_local_noon") && !(strcmp(product, "mcd43B2"))))
+    if ((!strcmp(qcflag, "platform") && !strcmp(product, "mcd43B2")) ||
+        (!strcmp(qcflag, "land_water") && !strcmp(product, "mcd43B2")) ||
+        (!strcmp(qcflag, "sun_z_angle_at_local_noon") && !strcmp(product, "mcd43B2")))
         G_fatal_error(_("This bit flag is only available for MCD43B2 @ 1km products"));
 
      /*mcd43B2q*/
-    if (strcmp(product, "mcd43B2q") && (bandno < 1 || bandno > 7))
+    if (!strcmp(product, "mcd43B2q") && (bandno < 1 || bandno > 7))
 	    G_fatal_error(_("Band number out of allowed range [1-7]"));
 
     infd = Rast_open_old(qcchan, "");
@@ -410,6 +422,8 @@ int main(int argc, char *argv[])
 
     /* Create New raster files */ 
     outfd = Rast_open_new(result, data_type_output);
+
+    G_debug(3, "Product is %s and QC flag is %s", product, qcflag);
 
     /* Process pixels */ 
     for (row = 0; row < nrows; row++)
@@ -478,31 +492,31 @@ int main(int argc, char *argv[])
 	    }
             else if (!strcmp(product, "mod11A1"))
             {
-                if (!strcmp(qcflag, "mandatory_qa"))
+                if (!strcmp(qcflag, "mandatory_qa_11A1"))
                 /*calculate mod11A1 mandatory qa flags  */
                     c = mod11A1a(c);
-                if (!strcmp(qcflag, "data_quality_flag"))
+                if (!strcmp(qcflag, "data_quality_flag_11A1"))
                 /*calculate mod11A1 data quality flag  */
                     c = mod11A1b(c);
-                if (!strcmp(qcflag, "emis_error"))
+                if (!strcmp(qcflag, "emis_error_11A1"))
                 /*calculate mod11A1 emissivity error flag  */
                     c = mod11A1c(c);
-                if (!strcmp(qcflag, "lst_error"))
+                if (!strcmp(qcflag, "lst_error_11A1"))
                 /*calculate mod11A1 lst error flag  */
                     c = mod11A1d(c);
             }
             else if (!strcmp(product, "mod11A2"))
             {
-                if (!strcmp(qcflag, "mandatory_qa")) 
+                if (!strcmp(qcflag, "mandatory_qa_11A2")) 
 		/*calculate mod11A2 mandatory qa flags  */ 
                     c = mod11A2a(c);
-	        if (!strcmp(qcflag, "data_quality_flag"))
+	        if (!strcmp(qcflag, "data_quality_flag_11A2"))
 		/*calculate mod11A2 data quality flag  */ 
                     c = mod11A2b(c);
-                if (!strcmp(qcflag, "emis_error")) 
+                if (!strcmp(qcflag, "emis_error_11A2")) 
 		/*calculate mod11A2 emissivity error flag  */ 
                     c = mod11A2c(c);
-	        if (!strcmp(qcflag, "lst_error")) 
+	        if (!strcmp(qcflag, "lst_error_11A2")) 
 		/*calculate mod11A2 lst error flag  */ 
                     c = mod11A2d(c);
             }
