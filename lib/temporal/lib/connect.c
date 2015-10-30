@@ -99,8 +99,9 @@ static char *get_mapset_connection_name(const char *mapset, int contype)
     ret = G_mapset_permissions2(gisdbase, location, mapset);
     switch (ret) {
     case 0: /* Check if the mapset exists and user is owner */
-        /* We usppress this warning, since G_mapset_permission does not
-         * check the access privilegs to the mapset of a stranger.
+        /* We suppress this warning, since G_mapset_permission2() does not
+         * properly check the access privileges to the mapset of a different user.
+         * TODO: develop a dedicated G_mapset_permission3() for that
         G_warning(_("You are not the owner of mapset <%s>"),
                       mapset);
         */
