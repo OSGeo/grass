@@ -54,7 +54,11 @@ a_2@testing|2001-04-01 00:00:00|2001-07-01 00:00:00|200|200|200|200|0|0|0|192000
 a_3@testing|2001-07-01 00:00:00|2001-10-01 00:00:00|300|300|300|300|0|0|0|2880000|0|9600
 a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|3840000|0|9600
 """
-        self.assertLooksLike(univar_text,  t_rast_univar.outputs.stdout)
+        for ref, res in zip(univar_text.split("\n"), t_rast_univar.outputs.stdout.split("\n")):
+            if ref and res:
+                ref_line = ref.split("|", 1)[1]
+                res_line = res.split("|", 1)[1]
+                self.assertLooksLike(ref_line,  res_line)
 
     def test_2(self):
 
@@ -69,7 +73,11 @@ a_2@testing|2001-04-01 00:00:00|2001-07-01 00:00:00|200|200|200|200|0|0|0|192000
 a_3@testing|2001-07-01 00:00:00|2001-10-01 00:00:00|300|300|300|300|0|0|0|2880000|0|9600
 a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|3840000|0|9600
 """
-        self.assertLooksLike(univar_text,  t_rast_univar.outputs.stdout)
+        for ref, res in zip(univar_text.split("\n"), t_rast_univar.outputs.stdout.split("\n")):
+            if ref and res:
+                ref_line = ref.split("|", 1)[1]
+                res_line = res.split("|", 1)[1]
+                self.assertLooksLike(ref_line,  res_line)
 
     def test_3(self):
 
@@ -84,7 +92,11 @@ a_2@testing|2001-04-01 00:00:00|2001-07-01 00:00:00|200|200|200|200|0|0|0|19200|
 a_3@testing|2001-07-01 00:00:00|2001-10-01 00:00:00|300|300|300|300|0|0|0|28800|0|96
 a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|38400|0|96
 """
-        self.assertLooksLike(univar_text,  t_rast_univar.outputs.stdout)
+        for ref, res in zip(univar_text.split("\n"), t_rast_univar.outputs.stdout.split("\n")):
+            if ref and res:
+                ref_line = ref.split("|", 1)[1]
+                res_line = res.split("|", 1)[1]
+                self.assertLooksLike(ref_line,  res_line)
 
     def test_4(self):
 
@@ -101,7 +113,11 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|384000
 """
         univar_output = open("univar_output.txt", "r").read()
 
-        self.assertLooksLike(univar_text, univar_output)
+        for ref, res in zip(univar_text.split("\n"), univar_output.split("\n")):
+            if ref and res:
+                ref_line = ref.split("|", 1)[1]
+                res_line = res.split("|", 1)[1]
+                self.assertLooksLike(ref_line,  res_line)
 
     def test_5(self):
 
@@ -117,7 +133,11 @@ a_4@testing|2001-10-01 00:00:00|2002-01-01 00:00:00|400|400|400|400|0|0|0|384000
 """
         univar_output = open("univar_output.txt", "r").read()
 
-        self.assertLooksLike(univar_text, univar_output)
+        for ref, res in zip(univar_text.split("\n"), univar_output.split("\n")):
+            if ref and res:
+                ref_line = ref.split("|", 1)[1]
+                res_line = res.split("|", 1)[1]
+                self.assertLooksLike(ref_line,  res_line)
 
     def test_6_error_handling_empty_strds(self):
         # Empty strds
