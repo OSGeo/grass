@@ -106,6 +106,7 @@ class TplotFrame(wx.Frame):
         # We create a database interface here to speedup the GUI
         self.dbif = tgis.SQLDatabaseInterfaceConnection()
         self.dbif.connect()
+        self.Bind(wx.EVT_CLOSE, self.onClose)
 
     def init(self):
         self.timeDataR = OrderedDict()
@@ -124,6 +125,11 @@ class TplotFrame(wx.Frame):
         if self.dbif.connected is True:
             self.dbif.close()
         tgis.stop_subprocesses()
+
+    def onClose(self,evt):
+        self.coorval.OnClose()
+        self.cats.OnClose()
+        self.Destroy()
 
     def _layout(self):
         """Creates the main panel with all the controls on it:
