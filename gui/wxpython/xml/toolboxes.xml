@@ -249,6 +249,9 @@
     <label>Import raster data</label>
     <items>
       <wxgui-item name="CommonFormatsImport"/>
+      <module-item name="r.import">
+        <label>Import of common formats with reprojection</label>
+      </module-item>
       <separator/>
       <module-item name="r.in.xyz">
         <label>ASCII x,y,z point import and gridding</label>
@@ -298,6 +301,9 @@
     <label>Import vector data</label>
     <items>
       <wxgui-item name="CommonImportFormats"/>
+      <module-item name="v.import">
+        <label>Import of common formats with reprojection</label>
+      </module-item>
       <separator/>
       <module-item name="v.in.ascii">
         <label>ASCII points or GRASS ASCII format</label>
