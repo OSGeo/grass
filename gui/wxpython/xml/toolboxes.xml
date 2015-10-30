@@ -250,7 +250,7 @@
     <items>
       <wxgui-item name="CommonFormatsImport"/>
       <module-item name="r.import">
-        <label>Common formats import with reprojection</label>
+        <label>Import of common formats with reprojection</label>
       </module-item>
       <separator/>
       <module-item name="r.in.xyz">
@@ -302,7 +302,7 @@
     <items>
       <wxgui-item name="CommonImportFormats"/>
       <module-item name="v.import">
-        <label>Common formats import with reprojection</label>
+        <label>Import of common formats with reprojection</label>
       </module-item>
       <separator/>
       <module-item name="v.in.ascii">
