@@ -68,12 +68,15 @@ int main(int argc, char *argv[])
     int projcomp_error = 0;
     int overwrite;
     int offset = 0;
+    char *suffix;
+    int num_digits = 0;
 
     struct GModule *module;
     struct
     {
 	struct Option *input, *output, *target, *title, *outloc, *band,
-	              *memory, *offset, *rat;
+	              *memory, *offset, *num_digits, *map_names_file,
+	              *rat;
     } parm;
     struct Flag *flag_o, *flag_e, *flag_k, *flag_f, *flag_l, *flag_c, *flag_p,
         *flag_j;
@@ -137,7 +140,21 @@ int main(int argc, char *argv[])
     parm.offset->answer = "0";
     parm.offset->description = _("The offset will be added to the band number while output raster map name creation");
     parm.offset->guisection = _("Metadata");
-    
+
+    parm.num_digits = G_define_option();
+    parm.num_digits->key = "num_digits";
+    parm.num_digits->type = TYPE_INTEGER;
+    parm.num_digits->required = NO;
+    parm.num_digits->answer = "0";
+    parm.num_digits->description = _("Number of digits for the generated band number with leading 0's. If 0 the length will adjust to the band number.");
+    parm.num_digits->guisection = _("Metadata");
+
+    parm.map_names_file = G_define_standard_option(G_OPT_F_OUTPUT);
+    parm.map_names_file->key = "map_names_file";
+    parm.map_names_file->required = NO;
+    parm.map_names_file->description = _("Name of the output file that contains the imported map names");
+    parm.map_names_file->guisection = _("Metadata");
+
     parm.outloc = G_define_option();
     parm.outloc->key = "location";
     parm.outloc->type = TYPE_STRING;
@@ -212,8 +229,10 @@ int main(int argc, char *argv[])
     input = parm.input->answer;
 
     output = parm.output->answer;
-    
+
     offset = atoi(parm.offset->answer);
+
+    num_digits = atoi(parm.num_digits->answer);
     
     if ((title = parm.title->answer))
 	G_strip(title);
@@ -232,6 +251,18 @@ int main(int argc, char *argv[])
 
     if (flag_l->answer && G_projection() != PROJECTION_LL)
 	G_fatal_error(_("The '-l' flag only works in Lat/Lon locations"));
+
+    if(num_digits < 0)
+        G_fatal_error(_("The number of digits for band numbering must be equal or greater than 0"));
+
+    /* Allocate the suffix string */
+    if(num_digits > 0) {
+        suffix = G_calloc( num_digits + 1, sizeof(char));
+    } else {
+        /* Band number length should not exceed 64 digits */
+        suffix = G_calloc(65, sizeof(char));
+    }
+
 
     /* -------------------------------------------------------------------- */
     /*      Fire up the engines.                                            */
@@ -593,6 +624,14 @@ int main(int argc, char *argv[])
 	char szBandName[512];
 	int nBand = 0;
 	char colornamebuf[512], colornamebuf2[512];
+	FILE *map_names_file = NULL;
+
+	if(parm.map_names_file->answer) {
+	    map_names_file = fopen(parm.map_names_file->answer, "w");
+	    if(map_names_file == NULL) {
+	        G_fatal_error(_("Unable to open the map names output text file"));
+	    }
+	}
 
 	I_init_group_ref(&ref);
 
@@ -611,6 +650,13 @@ int main(int argc, char *argv[])
 		nBand++;
 	    }
 
+            /* Generate the suffix */
+            if(num_digits > 0) {
+                G_snprintf(suffix, num_digits + 1, "%0*d", num_digits, nBand + offset);
+            } else {
+                G_snprintf(suffix, 65, "%d", nBand + offset);
+            }
+
 	    G_debug(3, "Import raster band %d", nBand);
 	    hBand = GDALGetRasterBand(hDS, nBand);
 	    if (!hBand)
@@ -623,21 +669,21 @@ int main(int argc, char *argv[])
 
 		/* check: two channels with identical name ? */
 		if (strcmp(colornamebuf, colornamebuf2) == 0)
-		    sprintf(colornamebuf, "%d", nBand + offset);
+		    sprintf(colornamebuf, "%s", suffix);
 		else
 		    strcpy(colornamebuf2, colornamebuf);
 
 		/* avoid bad color names; in case of 'Gray' often all channels are named 'Gray' */
 		if (strcmp(colornamebuf, "Undefined") == 0 ||
 		    strcmp(colornamebuf, "Gray") == 0)
-		    sprintf(szBandName, "%s.%d", output, nBand + offset);
+		    sprintf(szBandName, "%s.%s", output, suffix);
 		else {
 		    G_tolcase(colornamebuf);
 		    sprintf(szBandName, "%s.%s", output, colornamebuf);
 		}
 	    }
 	    else
-		sprintf(szBandName, "%s.%d", output, nBand + offset);
+		sprintf(szBandName, "%s.%s", output, suffix);
 
             if (!parm.outloc->answer) {	/* Check if the map exists */
               if (G_find_raster2(szBandName, G_mapset())) {
@@ -651,9 +697,15 @@ int main(int argc, char *argv[])
 
 	    ImportBand(hBand, szBandName, &ref);
 
+	    if(map_names_file)
+	        fprintf(map_names_file, "%s\n", szBandName);
+
 	    if (title)
 		Rast_put_cell_title(szBandName, title);
 	}
+
+	if(map_names_file)
+	    fclose(map_names_file);
 
 	I_put_group_ref(output, &ref);
 	I_free_group_ref(&ref);
