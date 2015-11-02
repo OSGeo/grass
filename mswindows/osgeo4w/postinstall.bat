@@ -15,10 +15,10 @@ rem run g.mkfontcap outside a GRASS session during
 rem an OSGeo4W installation for updating paths to fonts
 
 rem set gisbase
-set GISBASE=%OSGEO4W_ROOT%apps\grass\grass-@VERSION@\
+set GISBASE=%OSGEO4W_ROOT%\apps\grass\grass-@VERSION@
 
 rem set path to freetype dll and its dependencies
-set FREETYPEBASE=%OSGEO4W_ROOT%bin;%OSGEO4W_ROOT%apps\msys\bin;%GISBASE%lib
+set FREETYPEBASE=%OSGEO4W_ROOT%\bin;%OSGEO4W_ROOT%\apps\msys\bin;%GISBASE%\lib
 
 rem set dependencies to path
 set PATH=%FREETYPEBASE%;%PATH%
