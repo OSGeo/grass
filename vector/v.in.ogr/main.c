@@ -1006,8 +1006,9 @@ int main(int argc, char *argv[])
                 /* check if the field is integer */
                 Ogr_field = OGR_FD_GetFieldDefn(Ogr_featuredefn, key_idx);
                 Ogr_ftype = OGR_Fld_GetType(Ogr_field);
-                if (Ogr_ftype != OFTInteger)
+                if (!(Ogr_ftype == OFTInteger || Ogr_ftype == OFTInteger64)) {
                     G_fatal_error(_("Key column '%s' is not integer"), param.key->answer);
+                }
                 key_column = G_store(OGR_Fld_GetNameRef(Ogr_field));
             }
         }
@@ -1281,7 +1282,7 @@ int main(int argc, char *argv[])
 		    }
 		    else {
 			/* G_warning (_("Column value not set" )); */
-			if (Ogr_ftype == OFTInteger || Ogr_ftype == OFTReal) {
+			if (Ogr_ftype == OFTInteger || Ogr_ftype == OFTInteger64 ||Ogr_ftype == OFTReal) {
 			    sprintf(buf, ", NULL");
 			}
 #if GDAL_VERSION_NUM >= 1320
