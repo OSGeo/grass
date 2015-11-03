@@ -192,14 +192,14 @@
     <label>Common formats import</label>
     <handler>OnImportGdalLayers</handler>
     <related-module>r.in.gdal</related-module>
-    <description>Import raster data into a GRASS map layer using GDAL.</description>
+    <description>Imports raster data into a GRASS raster map using GDAL library.</description>
     <keywords>raster,import</keywords>
   </wxgui-item>
   <wxgui-item name="CommonImportFormats">
     <label>Common import formats</label>
     <handler>OnImportOgrLayers</handler>
     <related-module>v.in.ogr</related-module>
-    <description>Converts vector layers into a GRASS vector map using OGR.</description>
+    <description>Imports vector data into a GRASS vector map using OGR library.</description>
     <keywords>vector,import</keywords>
   </wxgui-item>
   <wxgui-item name="DXFImport">
