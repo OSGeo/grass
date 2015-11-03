@@ -113,6 +113,7 @@ char **G_ls2(const char *dir, int *num_files)
 	dir_listing[n] = G_store(dp->d_name);
 	n++;
     }
+    closedir(dfd);
 
     /* Sort list of filenames alphabetically */
     qsort(dir_listing, n, sizeof(char *), cmp_names);
