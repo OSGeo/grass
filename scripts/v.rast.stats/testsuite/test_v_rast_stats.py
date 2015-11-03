@@ -20,9 +20,9 @@ class TestRastStats(TestCase):
 
     def tearDown(self):
     	pass
-        self.runModule("g.remove", type="raster", name="map_a")
-        self.runModule("g.remove", type="raster", name="map_b")
-        self.runModule("g.remove", type="raster", name="zone_map")
+        self.runModule("g.remove", flags='f', type="raster", name="map_a")
+        self.runModule("g.remove", flags='f', type="raster", name="map_b")
+        self.runModule("g.remove", flags='f', type="raster", name="zone_map")
 
     def setUp(self):
         """Create input data
