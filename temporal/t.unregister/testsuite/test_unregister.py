@@ -59,7 +59,7 @@ class TestUnregister(TestCase):
 
     def tearDown(self):
         """Remove generated data"""
-        self.runModule("g.remove", type="raster",  
+        self.runModule("g.remove", flags='f', type="raster",  
                                    name="a1,a2,a3,a4,a5,a6")
 
     def test_1(self):
@@ -117,7 +117,7 @@ class TestUnregister(TestCase):
         self.assertEqual(a456, lister.outputs.stdout)
 
 
-        # Remove STRDS A and B and chceck if maps a4, a5 and a6 are still in the temporal database
+        # Remove STRDS A and B and check if maps a4, a5 and a6 are still in the temporal database
         self.assertModule("t.remove",  type="strds", inputs="A,B")
 
         lister = SimpleModule("t.list", type="raster", columns="name", 
