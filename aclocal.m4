@@ -488,7 +488,7 @@ AC_DEFUN([SC_CONFIG_CFLAGS], [
     case $host in
         *-linux-* | *-gnu* | *-kfreebsd*-gnu)
 	    SHLIB_CFLAGS="-fPIC"
-            SHLIB_LD_FLAGS=""
+            SHLIB_LD_FLAGS="-Wl,-soname,\$(notdir \$[@])"
 	    SHLIB_SUFFIX=".so"
 	    SHLIB_LD="${CC} -shared"
             LDFLAGS="-Wl,--export-dynamic"
