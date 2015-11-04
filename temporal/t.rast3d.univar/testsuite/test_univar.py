@@ -11,6 +11,7 @@ for details.
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 
+
 class TestRasterUnivar(TestCase):
 
     @classmethod

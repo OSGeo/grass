@@ -161,22 +161,6 @@ class TestSTRDSToRast3(TestCase):
         self.assertModule("t.rast.to.rast3",  input="precip_f",  output="precip_f")
         self.assertModule("t.rast.to.rast3",  input="precip_d",  output="precip_d")
 
-        univar_string="""n=480
-                        null_cells=96
-                        cells=576
-                        min=100
-                        max=600
-                        range=500
-                        mean=360
-                        mean_of_abs=360
-                        stddev=185.472369909914
-                        variance=34400
-                        coeff_var=51.5201027527539
-                        sum=172800"""
-
-        univar = SimpleModule("r3.univar", flags="g", map="precip_i")
-        self.assertModuleKeyValue(module=univar, reference=univar_string, precision=2, sep="=")
-
         tinfo_string="""north=80
                         south=0
                         east=120
