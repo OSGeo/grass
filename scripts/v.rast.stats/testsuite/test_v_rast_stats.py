@@ -19,7 +19,7 @@ class TestRastStats(TestCase):
         cls.del_temp_region()
 
     def tearDown(self):
-    	pass
+        pass
         self.runModule("g.remove", flags='f', type="raster", name="map_a")
         self.runModule("g.remove", flags='f', type="raster", name="map_b")
         self.runModule("g.remove", flags='f', type="raster", name="zone_map")
@@ -46,9 +46,9 @@ class TestRastStats(TestCase):
                           method=["minimum","maximum","sum"], flags="c",
                           column_prefix="a")
         v_db_select = SimpleModule("v.db.select", map="zone_map")
-	self.runModule(v_db_select)
-	
-	self.assertLooksLike(univar_string, v_db_select.outputs.stdout)
+        
+        self.runModule(v_db_select)        
+        self.assertLooksLike(univar_string, v_db_select.outputs.stdout)
 
 class TestRastStatsFails(TestCase):
 
