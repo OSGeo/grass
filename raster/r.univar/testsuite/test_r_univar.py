@@ -18,7 +18,6 @@ class TestRasterUnivar(TestCase):
         cls.del_temp_region()
 
     def tearDown(self):
-    	pass
         self.runModule("g.remove", flags='f', type="raster", name="map_a")
         self.runModule("g.remove", flags='f', type="raster", name="map_b")
         self.runModule("g.remove", flags='f', type="raster", name="zone_map")
@@ -148,25 +147,25 @@ class TestRasterUnivar(TestCase):
 
         # Output of r.univar
         univar_string="""zone=1;
-			n=1710
-			null_cells=0
-			cells=1710
-			min=102
-			max=209
-			range=107
-			mean=155.5
-			mean_of_abs=155.5
-			sum=265905
-			zone=2;
-			n=6390
-			null_cells=0
-			cells=1710
-			min=121
-			max=280
-			range=159
-			mean=200.5
-			mean_of_abs=200.5
-			sum=1281195"""
+                        n=1710
+                        null_cells=0
+                        cells=1710
+                        min=102
+                        max=209
+                        range=107
+                        mean=155.5
+                        mean_of_abs=155.5
+                        sum=265905
+                        zone=2;
+                        n=6390
+                        null_cells=0
+                        cells=1710
+                        min=121
+                        max=280
+                        range=159
+                        mean=200.5
+                        mean_of_abs=200.5
+                        sum=1281195"""
 
         self.runModule("g.region", res=1)
         self.assertModuleKeyValue(module="r.univar", map=["map_a"], 
