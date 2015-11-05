@@ -19,7 +19,6 @@ class TestRastStats(TestCase):
         cls.del_temp_region()
 
     def tearDown(self):
-        pass
         self.runModule("g.remove", flags='f', type="raster", name="map_a")
         self.runModule("g.remove", flags='f', type="raster", name="map_b")
         self.runModule("g.remove", flags='f', type="raster", name="zone_map")
