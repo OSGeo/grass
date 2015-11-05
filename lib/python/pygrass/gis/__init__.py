@@ -392,7 +392,7 @@ class VisibleMapset(object):
             if lines:
                 return [l.strip() for l in lines]
         lns = ['PERMANENT', ]
-        self.write(lns)
+        self._write(lns)
         return lns
 
     def _write(self, mapsets):
