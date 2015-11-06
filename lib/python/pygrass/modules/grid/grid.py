@@ -121,7 +121,7 @@ def read_gisrc(gisrc):
     """
     with open(gisrc, 'r') as gfile:
         gis = dict([(k.strip(), v.strip())
-                    for k, v in [row.split(':') for row in gfile]])
+                    for k, v in [row.split(':', 1) for row in gfile]])
     return gis['MAPSET'], gis['LOCATION_NAME'], gis['GISDBASE']
 
 
