@@ -1368,7 +1368,7 @@ vec_struct *G_vector_product (vec_struct *v1, vec_struct *v2, vec_struct *out)
     }
 
     if (v1->type != out->type) {
-        G_warning (_("Output vector is of incorrect type"));
+        G_warning (_("Output vector is not the same type as others"));
         return NULL;
     }
 
