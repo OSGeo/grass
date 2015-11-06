@@ -2,6 +2,7 @@
 from __future__ import (nested_scopes, generators, division, absolute_import,
                         with_statement, print_function, unicode_literals)
 import os
+import sys
 import multiprocessing as mltp
 import subprocess as sub
 import shutil as sht
@@ -115,7 +116,7 @@ def read_gisrc(gisrc):
     """
     with open(gisrc, 'r') as gfile:
         gis = dict([(k.strip(), v.strip())
-                    for k, v in [row.split(':') for row in gfile]])
+                    for k, v in [row.split(':', 1) for row in gfile]])
     return gis['MAPSET'], gis['LOCATION_NAME'], gis['GISDBASE']
 
 
@@ -346,6 +347,7 @@ def cmd_exe(args):
     src, dst = get_mapset(gisrc_src, gisrc_dst)
     env = os.environ.copy()
     env['GISRC'] = gisrc_dst
+    shell = True if sys.platform == 'win32' else False
     if mapnames:
         inputs = dict(cmd['inputs'])
         # reset the inputs to
@@ -353,16 +355,16 @@ def cmd_exe(args):
             inputs[key] = mapnames[key]
         cmd['inputs'] = inputs.items()
         # set the region to the tile
-        sub.Popen(['g,region', 'raster=%s' % key], env=env).wait()
+        sub.Popen(['g.region', 'raster=%s' % key], shell=shell, env=env).wait()
     else:
         # set the computational region
         lcmd = ['g.region', ]
         lcmd.extend(["%s=%s" % (k, v) for k, v in bbox.items()])
-        sub.Popen(lcmd, env=env).wait()
+        sub.Popen(lcmd, shell=shell, env=env).wait()
     if groups:
         copy_groups(groups, gisrc_src, gisrc_dst)
     # run the grass command
-    sub.Popen(get_cmd(cmd), env=env).wait()
+    sub.Popen(get_cmd(cmd), shell=shell, env=env).wait()
     # remove temp GISRC
     os.remove(gisrc_dst)
 
