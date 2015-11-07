@@ -5,8 +5,19 @@
 <em>g.extension</em> downloads and installs, removes or updates
 extensions (addons) from the official
 <a href="http://grass.osgeo.org/grass70/manuals/addons/">GRASS GIS Addons repository</a>
-or user-specified source
-into the local GRASS GIS installation.
+or user-specified source into the local GRASS GIS installation.
+<p>
+Two types of extensions are supported:
+<ul>
+<li>Python scripts: they are installed without the need of compilation or (usually)
+    the need of special dependencies.</li>
+<li>Source code (mostly written in C programming language; may also be written
+    in C++, Fortran or other languages): while on MS-Windows systems the requested
+    GRASS GIS extension is downloaded pre-compiled from the GRASS GIS site, on Unix
+    based systems the installation is preceeded by the automated download of the
+    extension's source code along with subsequent compilation and installation.
+    This requires a compiler environment to be present on the user's computer.</li>
+</ul>
 
 <h3>Managing installed extensions</h3>
 
@@ -109,6 +120,19 @@ Removal of a locally installed extension:
 <div class="code"><pre>
 g.extension extension=r.stream.distance operation=remove
 </pre></div>
+
+<h2>TROUBLESHOOTING</h2>
+
+Since extensions have to be compiled on Unix based systems (Linux, Mac OSX etc.)
+unless a Python extension is installed, a full compiler environment must be
+present on the user's computer.
+
+<h3>ERROR: Please install GRASS development package</h3>
+
+While GRASS GIS is available on the user's computer, the respective development
+package is lacking. If GRASS was installed from a (Linux) repository, also the
+grass-dev* package (commonly named "grass-dev" or "grass-devel", sometimes along
+with the version number) must be installed.
 
 <h2>SEE ALSO</h2>
 
