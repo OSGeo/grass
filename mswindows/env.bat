@@ -18,3 +18,8 @@ set GEOTIFF_CSV=%GISBASE%\share\epsg_csv
 set PATH=%GISBASE%\msys\bin;%PATH%
 set PATH=%GISBASE%\extrabin;%PATH%
 set PATH=%GISBASE%\bin;%PATH%
+
+REM set R temporarily to %PATH%
+
+cd %GISBASE%\extrabin
+R path
