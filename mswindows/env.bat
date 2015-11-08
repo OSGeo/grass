@@ -19,7 +19,7 @@ set PATH=%GISBASE%\msys\bin;%PATH%
 set PATH=%GISBASE%\extrabin;%PATH%
 set PATH=%GISBASE%\bin;%PATH%
 
-REM set RStudio temporarily to %PATH% if it exist
+REM set RStudio temporarily to %PATH% if it exists
 
 IF EXIST "%ProgramFiles%\RStudio\bin\rstudio.exe" set PATH=%PATH%;%ProgramFiles%\RStudio\bin
 
