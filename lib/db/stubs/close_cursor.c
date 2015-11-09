@@ -1,4 +1,5 @@
 #include <grass/dbmi.h>
+#include <grass/dbstubs.h>
 
 /*!
    This function calls db_procedure_not_implemented().

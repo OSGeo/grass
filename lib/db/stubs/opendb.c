@@ -1,4 +1,5 @@
 #include <grass/dbmi.h>
+#include <grass/dbstubs.h>
 
 int db__driver_open_database(dbHandle * handle)
 {
