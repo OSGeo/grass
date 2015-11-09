@@ -1,4 +1,5 @@
 #include <grass/dbmi.h>
+#include <grass/dbstubs.h>
 
 int db__driver_delete_database(dbHandle * handle)
 {

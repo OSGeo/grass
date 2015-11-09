@@ -1,4 +1,5 @@
 #include <grass/dbmi.h>
+#include <grass/dbstubs.h>
 
 /*!
    \fn int db__driver_bind_update (cursor)

@@ -1,4 +1,5 @@
 #include <grass/dbmi.h>
+#include <grass/dbstubs.h>
 
 int
 db__driver_open_update_cursor(dbString * name, dbString * select,
