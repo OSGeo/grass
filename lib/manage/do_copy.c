@@ -64,6 +64,8 @@ int M_do_copy(int n, const char *old, const char *mapset, const char *new)
 	    }
 	    G_file_name(path2, list[n].element[i], new, G_mapset());
 	    if (G_recursive_copy(path, path2) == 1) {
+		G_warning(_("Unable to copy <%s> to current mapset as <%s>"),
+			  G_fully_qualified_name(old, mapset), new);
 		result = 1;
 	    }
 	    else {
