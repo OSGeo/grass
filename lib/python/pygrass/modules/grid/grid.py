@@ -317,7 +317,7 @@ def get_cmd(cmdd):
                 if not isinstance(v, list)))
     cmd.extend(("%s=%s" % (k, ','.join([repr(v) for v in vals]))
                 for k, vals in cmdd['outputs'] if isinstance(vals, list)))
-    cmd.extend(("%s" % (flg) for flg in cmdd['flags'] if len(flg) == 1))
+    cmd.extend(("-%s" % (flg) for flg in cmdd['flags'] if len(flg) == 1))
     cmd.extend(("--%s" % (flg[0]) for flg in cmdd['flags'] if len(flg) > 1))
     return cmd
 
