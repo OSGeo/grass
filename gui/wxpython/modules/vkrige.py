@@ -233,7 +233,7 @@ class KrigingPanel(wx.Panel):
         if not hasattr(SelectedPanel, 'VariogramCheckBox') or not SelectedPanel.VariogramCheckBox.IsChecked():
             command.append("model=" + '%s' % SelectedPanel.ModelChoicebox.GetStringSelection().split(" ")[0])
             
-        for i in ['Sill', 'Nugget', 'Range']:
+        for i in ['Sill', 'Nugget', 'Range', 'Kappa']:
             if getattr(SelectedPanel, i+"ChextBox").IsChecked():
                 command.append(i.lower() + "=" + '%s' % getattr(SelectedPanel, i+'Ctrl').GetValue())
         
@@ -317,13 +317,22 @@ class RBookPanel(wx.Panel):
         self.LeftSizer.Add(self.PlotButton, proportion = 0, flag =  wx.ALL, border = parent.border)
         self.LeftSizer.Add(self.ParametersSizer, proportion = 0, flag = wx.EXPAND | wx.ALL, border = parent.border)
         
-        self.ParametersList = ["Sill", "Nugget", "Range"]
-        MinValues = [0,0,1]
+        self.ParametersList = ["Sill", "Nugget", "Range", "Kappa"]
+        MinValues = [0,0,1,0.1]
         for n in self.ParametersList:
             setattr(self, n+"ChextBox", wx.CheckBox(self,
                                                     id = self.ParametersList.index(n),
                                                     label = _(n + ":")))
-            setattr(self, n+"Ctrl", (wx.SpinCtrl(self,
+            # Kappa must be float
+            if n == "Kappa":
+                setattr(self, n+"Ctrl", (wx.SpinCtrlDouble(self,
+                                                 id = wx.ID_ANY,
+                                                 min = MinValues[self.ParametersList.index(n)],
+                                                 max = maxint,
+                                                 inc = 0.1,
+                                                 initial = 0.5)))
+            else:
+                setattr(self, n+"Ctrl", (wx.SpinCtrl(self,
                                                  id = wx.ID_ANY,
                                                  min = MinValues[self.ParametersList.index(n)],
                                                  max = maxint)))
@@ -404,14 +413,16 @@ class RBookgstatPanel(RBookPanel):
             self.VariogramCheckBox.Bind(wx.EVT_CHECKBOX, self.HideOptions)
             self.VariogramCheckBox.SetValue(state = True) # check it by default
         
-        ModelFactor = robjects.r.vgm().rx('long')
-        ModelList = robjects.r.levels(ModelFactor[0])
+        # Get list of available models. Show long name but use short one
+        ModelFactor = robjects.r.vgm()
+        ModelList = robjects.r.levels(ModelFactor[1])
+        self.ModelListShort = robjects.r.levels(ModelFactor[0])
         #@FIXME: no other way to let the Python pick it up..
         # and this is te wrong place where to load this list. should be at the very beginning.
         self.ModelChoicebox = wx.Choice(self, id = wx.ID_ANY, choices = ModelList)
         
         # disable model parameters' widgets by default
-        for n in ["Sill", "Nugget", "Range"]:
+        for n in ["Sill", "Nugget", "Range", "Kappa"]:
             getattr(self, n+"Ctrl").Enable(False)
         self.ModelChoicebox.Enable(False)
         
@@ -431,7 +442,7 @@ class RBookgstatPanel(RBookPanel):
     
     def HideOptions(self, event):
         self.ModelChoicebox.Enable(not event.IsChecked())
-        for n in ["Sill", "Nugget", "Range"]:
+        for n in ["Sill", "Nugget", "Range", "Kappa"]:
             if not event.IsChecked():
                 getattr(self, n+"Ctrl").Enable(True)
                 getattr(self, n+ "ChextBox").SetValue(True)
@@ -459,14 +470,15 @@ class RBookgstatPanel(RBookPanel):
                                             #~ isblock = self.KrigingRadioBox.GetStringSelection() == "Block kriging")
         if hasattr(self, 'VariogramCheckBox') and self.VariogramCheckBox.IsChecked():
             self.model = ''
-            for each in ("Sill","Nugget","Range"):
+            for each in ("Sill","Nugget","Range","Kappa"):
                 if getattr(self, each+'ChextBox').IsChecked():
                     setattr(self, each.lower(), getattr(self, each+"Ctrl").GetValue())
                 else:
                     setattr(self, each.lower(), robjects.r('''NA'''))
+                    
         else:
-            self.model = self.ModelChoicebox.GetStringSelection().split(" ")[0]
-            for each in ("Sill","Nugget","Range"):
+            self.model = self.ModelListShort[self.ModelChoicebox.GetSelection()]
+            for each in ("Sill","Nugget","Range","Kappa"):
                 if getattr(self, each+'ChextBox').IsChecked(): #@FIXME will be removed when chextboxes will be frozen
                     setattr(self, each.lower(), getattr(self, each+"Ctrl").GetValue())
                     
@@ -481,8 +493,28 @@ class RBookgstatPanel(RBookPanel):
                                                          model = self.model,
                                                          sill = self.sill,
                                                          nugget = self.nugget,
-                                                         range = self.range)
+                                                         range = self.range,
+                                                         kappa = self.kappa)
 
+        ''' Fill parameters with autofitted values '''
+        if hasattr(self, 'VariogramCheckBox') and self.VariogramCheckBox.IsChecked():
+            for i in range(len(self.ModelListShort)):
+                if self.ModelListShort[i] == self.controller.Variogram['model']:
+                    self.ModelChoicebox.SetSelection(i)
+                    break
+            if not getattr(self, 'SillChextBox').IsChecked():
+                self.sill = self.controller.Variogram['variogrammodel'][1][1]
+                self.SillCtrl.SetValue(self.sill)
+            if not getattr(self, 'NuggetChextBox').IsChecked():
+                self.nugget = self.controller.Variogram['variogrammodel'][1][0]
+                self.NuggetCtrl.SetValue(self.nugget)
+            if not getattr(self, 'RangeChextBox').IsChecked():
+                self.range = self.controller.Variogram['variogrammodel'][2][1]
+                self.RangeCtrl.SetValue(self.range)
+            if not getattr(self, 'KappaChextBox').IsChecked():
+                self.kappa = self.controller.Variogram['variogrammodel'][3][1]
+                self.KappaCtrl.SetValue(self.kappa)
+            
         # use R plot function, in a separate window.
         thread.start_new_thread(self.plot, ())
         
