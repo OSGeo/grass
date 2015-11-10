@@ -83,6 +83,13 @@ for details.
 #% description: Automatically fixed if not set
 #% required : no
 #%end
+#%option
+#% key: kappa
+#% type: double
+#% label: Kappa value
+#% description: Automatically fixed if not set
+#% required : no
+#%end
 #%option G_OPT_R_OUTPUT
 #% key: output_var
 #% label: Name for output variance raster map
@@ -190,7 +197,7 @@ class Controller:
         Formula = robjects.Formula(column + "~" + predictor)
         return Formula
     
-    def FitVariogram(self, formula, inputdata, sill, nugget, range, model = ''):
+    def FitVariogram(self, formula, inputdata, sill, nugget, range, kappa, model = ''):
         """ Fits variogram either automagically either specifying all parameters.
         Returns a list containing data and model variograms. """
         
@@ -202,7 +209,11 @@ class Controller:
             #print (nugget.r_repr(), sill, range)
             DottedParams['fix.values'] = robjects.r.c(nugget, range, sill)
             
-            VariogramModel = robjects.r.autofitVariogram(formula, inputdata, **DottedParams)
+            if not type(kappa) == float:
+                # autofit gives strange results if kappa is NA
+                VariogramModel = robjects.r.autofitVariogram(formula, inputdata, **DottedParams)
+            else:
+                VariogramModel = robjects.r.autofitVariogram(formula, inputdata, kappa=kappa, **DottedParams)
             #print robjects.r.warnings()
             Variograms['datavariogram'] = VariogramModel.rx('exp_var')[0]
             Variograms['variogrammodel'] = VariogramModel.rx('var_model')[0]
@@ -216,7 +227,8 @@ class Controller:
                                                          model = robjects.r.vgm(psill = sill,
                                                                                 model = model,
                                                                                 nugget = nugget,
-                                                                                range = range))
+                                                                                range = range,
+                                                                                kappa = kappa))
             Variograms['datavariogram'] = DataVariogram
             Variograms['variogrammodel'] = VariogramModel
             Variograms['model'] = model
@@ -242,7 +254,7 @@ class Controller:
                                       map = name,
                                       history = 'Model chosen by automatic fitting: ' + variograms['model'])
         
-    def Run(self, input, column, output, package, sill, nugget, range, logger, \
+    def Run(self, input, column, output, package, sill, nugget, range, kappa, logger, \
             overwrite, model, block, output_var, command, **kwargs):
         """ Wrapper for all functions above. """
 
@@ -270,7 +282,8 @@ class Controller:
                                           model = model,
                                           sill = sill,
                                           nugget = nugget,
-                                          range = range)
+                                          range = range,
+                                          kappa = kappa)
         logger.message(_("Variogram fitting complete."))
         
         logger.message(_("Kriging..."))
@@ -365,9 +378,12 @@ def main(argv = None):
         command = command.join("%s=%s " % (k, v) for k, v in notnulloptions.items())
         
         # re-cast integers from strings, as parser() cast everything to string.
-        for each in ("sill","nugget","range"):
+        for each in ("sill","nugget","range","kappa"):
             if options[each] is not '':
-                options[each] = int(options[each])
+                if each == "kappa":
+                    options[each] = float(options[each])
+                else:
+                    options[each] = int(options[each])
             else:
                 options[each] = robjects.r('''NA''')
         
@@ -382,6 +398,7 @@ def main(argv = None):
                        sill = options['sill'],
                        nugget = options['nugget'],
                        range = options['range'],
+                       kappa = options['kappa'],
                        output_var = options['output_var'],
                        command = command,
                        logger = grass)
