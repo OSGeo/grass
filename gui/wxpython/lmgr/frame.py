@@ -1067,8 +1067,8 @@ class GMFrame(wx.Frame):
         if name and dlg.IsChecked('add'):
             # add layer to map layer tree
             self.GetLayerTree().AddLayer(ltype = 'vector',
-                                            lname = name,
-                                            lcmd = ['d.vect', 'map=%s' % name])
+                                         lname = name, lchecked=True,
+                                         lcmd = ['d.vect', 'map=%s' % name])
         dlg.Destroy()
         
     def OnSystemInfo(self, event):
