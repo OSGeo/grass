@@ -6,7 +6,7 @@
 Classes:
  - layertree::LayerTree
 
-(C) 2007-2014 by the GRASS Development Team
+(C) 2007-2015 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -562,10 +562,10 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 vdigitLayer = digitToolbar.GetLayer()
                 if vdigitLayer is layer:
                     self.popupMenu.Enable(self.popupID['remove'], False)
-                    self.popupMenu.Enable(self.popupID['bgmap'],  False)
+                    # self.popupMenu.Enable(self.popupID['bgmap'],  False)
                     self.popupMenu.Enable(self.popupID['topo'],   False)
-                else:
-                    self.popupMenu.Enable(self.popupID['bgmap'], True)
+                # else:
+                ###    self.popupMenu.Enable(self.popupID['bgmap'], True)
             
             item = wx.MenuItem(self.popupMenu, id = self.popupID['meta'], text = _("Metadata"))
             item.SetBitmap(MetaIcon(img = 'layer-info').GetBitmap(self.bmpsize))
