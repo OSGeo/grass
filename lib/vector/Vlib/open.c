@@ -255,8 +255,18 @@ int Vect__open_old(struct Map_info *Map, const char *name, const char *mapset,
             }
 
             Vect__get_element_path(file_path, Map, GV_HEAD_ELEMENT);
-            if (access(file_path, F_OK) != 0)
-                return -1;
+            if (access(file_path, F_OK) != 0) {
+                /* unable to find header file for temporary map, try
+                 * to switch to normal mode, useful when updating
+                 * existing map */
+                Map->temporary = FALSE;
+                Vect__get_path(path, Map); /* path must be updated for
+                                            * subsequent operations */
+                Vect__get_element_path(file_path, Map, GV_HEAD_ELEMENT);
+                if (access(file_path, F_OK) != 0)
+                    return -1;
+
+            }
         }
     }
     
