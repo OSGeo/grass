@@ -299,17 +299,14 @@ PERMANENT
     GRASS session is quited.</dd>
 
   <dt>GRASS_VECTOR_TMPDIR_MAPSET</dt>
-  <dd> By default GRASS temporary directory is located in
+  <dd>[vectorlib]<br> By default GRASS temporary directory is located in
   <tt>$LOCATION/$MAPSET/.tmp/$HOSTNAME</tt>. If GRASS_VECTOR_TMPDIR_MAPSET is
   set to '0', the temporary directory is located in TMPDIR
   (environmental variable defined by the user or GRASS initialization
-  script if not given).
-
-  <p>
+  script if not given).<br>
   Important note: This variable is currently used only in vector
   library. In other words the variable is ignored by raster or
-  raster3d library.
-  </dd>
+  raster3d library.</dd>
 
   <dt>GRASS_VECTOR_TOPO_DEBUG</dt>
   <dd>[vectorlib, v.generalize]<br> If the environment variable
