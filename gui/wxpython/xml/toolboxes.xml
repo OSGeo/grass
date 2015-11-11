@@ -1764,7 +1764,7 @@
         <label>Raster calculations</label>
       </module-item>
       <module-item name="t.rast3d.mapcalc">
-        <label>Raster3D calculations</label>
+        <label>3D raster calculations</label>
       </module-item>
       <separator/>
       <module-item name="t.rast.gapfill">
@@ -1824,7 +1824,7 @@
         <label>List vector dataset maps</label>
       </module-item>
       <module-item name="t.rast3d.list">
-        <label>List raster3D dataset maps</label>
+        <label>List 3D raster dataset maps</label>
       </module-item>
     </items>
   </toolbox>
@@ -1842,7 +1842,7 @@
         <label>Univariate vector dataset statistics</label>
       </module-item>
       <module-item name="t.rast3d.univar">
-        <label>Univariate raster3D dataset statistics</label>
+        <label>Univariate 3D raster dataset statistics</label>
       </module-item>
       <separator/>
       <module-item name="t.topology">
@@ -1886,7 +1886,7 @@
         <label>Extract subset of vector dataset</label>
       </module-item>
       <module-item name="t.rast3d.extract">
-        <label>Extract subset of raster3D dataset</label>
+        <label>Extract subset of 3D raster dataset</label>
       </module-item>
     </items>
   </toolbox>
