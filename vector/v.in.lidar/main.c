@@ -113,11 +113,13 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *in_opt, *out_opt, *spat_opt, *filter_opt, *class_opt;
     struct Option *id_layer_opt, *return_layer_opt, *class_layer_opt;
+    struct Option *vector_mask_opt, *vector_mask_field_opt;
     struct Option *skip_opt, *preserve_opt, *offset_opt, *limit_opt;
     struct Option *outloc_opt;
     struct Flag *print_flag, *notab_flag, *region_flag, *notopo_flag;
     struct Flag *nocats_flag;
     struct Flag *over_flag, *extend_flag, *no_import_flag;
+    struct Flag *invert_mask_flag;
     char buf[2000];
     struct Key_Value *loc_proj_info = NULL, *loc_proj_units = NULL;
     struct Key_Value *proj_info, *proj_units;
@@ -155,12 +157,12 @@ int main(int argc, char *argv[])
     unsigned long long n_features; /* what libLAS reports as point count */
     unsigned long long points_imported; /* counter how much we have imported */
     unsigned long long feature_count, n_outside,
-        n_filtered, n_class_filtered, not_valid;
+        n_outside_mask, n_filtered, n_class_filtered, not_valid;
 #else
     unsigned long n_features;
     unsigned long points_imported;
     unsigned long feature_count, n_outside,
-        n_filtered, n_class_filtered, not_valid;
+        n_outside_mask, n_filtered, n_class_filtered, not_valid;
 #endif
 
     int overwrite;
@@ -227,6 +229,18 @@ int main(int argc, char *argv[])
                                "If not specified, all points are imported.");
     class_opt->guisection = _("Selection");
 
+    vector_mask_opt = G_define_standard_option(G_OPT_V_INPUT);
+    vector_mask_opt->key = "mask";
+    vector_mask_opt->required = NO;
+    vector_mask_opt->label = _("Areas where to import points");
+    vector_mask_opt->description = _("Name of vector map with areas where the points should be imported");
+    vector_mask_opt->guisection = _("Selection");
+
+    vector_mask_field_opt = G_define_standard_option(G_OPT_V_FIELD);
+    vector_mask_field_opt->key = "mask_layer";
+    vector_mask_field_opt->label = _("Layer number or name for mask option");
+    vector_mask_field_opt->guisection = _("Selection");
+
     skip_opt = G_define_option();
     skip_opt->key = "skip";
     skip_opt->type = TYPE_INTEGER;
@@ -282,6 +296,11 @@ int main(int argc, char *argv[])
     region_flag->key = 'r';
     region_flag->guisection = _("Selection");
     region_flag->description = _("Limit import to the current region");
+
+    invert_mask_flag = G_define_flag();
+    invert_mask_flag->key = 'i';
+    invert_mask_flag->description = _("Invert mask when selecting points");
+    invert_mask_flag->guisection = _("Selection");
 
     extend_flag = G_define_flag();
     extend_flag->key = 'e';
@@ -752,6 +771,23 @@ int main(int argc, char *argv[])
 	db_begin_transaction(driver);
     }
 
+    struct Map_info vector_mask;
+    int naareas;
+    int aarea;
+    struct bound_box *mask_area_boxes;
+    int invert_mask = 0;
+    if (vector_mask_opt->answer) {
+        if (Vect_open_old2(&vector_mask, vector_mask_opt->answer, "", vector_mask_field_opt->answer) < 2)
+            G_fatal_error(_("Failed to open vector <%s>"), vector_mask_opt->answer);
+        naareas = Vect_get_num_areas(&vector_mask);
+        mask_area_boxes = G_malloc(naareas * sizeof(struct bound_box));
+        for (aarea = 1; aarea <= naareas; aarea++) {
+            Vect_get_area_box(&vector_mask, aarea, &mask_area_boxes[aarea - 1]);
+        }
+        if (invert_mask_flag->answer)
+            invert_mask = 1;
+    }
+
     /* Import feature */
     points_imported = 0;
     cat = 1;
@@ -760,6 +796,7 @@ int main(int argc, char *argv[])
     n_outside = 0;
     n_filtered = 0;
     n_class_filtered = 0;
+    n_outside_mask = 0;
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
@@ -817,6 +854,19 @@ int main(int argc, char *argv[])
 		continue;
 	    }
 	}
+    if (vector_mask_opt->answer) {
+        skipme = TRUE;
+        for (aarea = 1; aarea <= naareas; aarea++) {
+            if (Vect_point_in_area(x, y, &vector_mask, aarea, &mask_area_boxes[aarea - 1])) {
+                skipme = FALSE;
+                break;
+            }
+        }
+        if (invert_mask ^ skipme) {
+            n_outside_mask++;
+            continue;
+        }
+    }
 	if (return_filter != LAS_ALL) {
 	    int return_no = LASPoint_GetReturnNumber(LAS_point);
 	    int n_returns = LASPoint_GetNumberOfReturns(LAS_point);
@@ -992,6 +1042,11 @@ int main(int argc, char *argv[])
 	db_close_database_shutdown_driver(driver);
     }
     
+    if (vector_mask_opt->answer) {
+        Vect_close(&vector_mask);
+        G_free(mask_area_boxes);
+    }
+    
     LASSRS_Destroy(LAS_srs);
     LASHeader_Destroy(LAS_header);
     LASReader_Destroy(LAS_reader);
@@ -1004,7 +1059,7 @@ int main(int argc, char *argv[])
     /* can be easily determined only when iterated over all points */
     if (!limit_n && !cat_max_reached && points_imported != n_features
             - not_valid - n_outside - n_filtered - n_class_filtered
-            - offset_n_counter - n_count_filtered)
+            - n_outside_mask - offset_n_counter - n_count_filtered)
         G_warning(_("The underlying libLAS library is at its limits."
                     " Previously reported counts might have been distorted."
                     " However, the import itself should be unaffected."));
@@ -1018,6 +1073,8 @@ int main(int argc, char *argv[])
 	G_message(_("%llu input points were not valid"), not_valid);
     if (n_outside)
 	G_message(_("%llu input points were outside of the selected area"), n_outside);
+    if (n_outside_mask)
+        G_message(_("%llu input points were outside of the area specified by mask"), n_outside_mask);
     if (n_filtered)
 	G_message(_("%llu input points were filtered out by return number"), n_filtered);
     if (n_class_filtered)
@@ -1035,6 +1092,8 @@ int main(int argc, char *argv[])
 	G_message(_("%lu input points were not valid"), not_valid);
     if (n_outside)
 	G_message(_("%lu input points were outside of the selected area"), n_outside);
+    if (n_outside_mask)
+        G_message(_("%lu input points were outside of the area specified by mask"), n_outside_mask);
     if (n_filtered)
 	G_message(_("%lu input points were filtered out by return number"), n_filtered);
     if (n_class_filtered)
