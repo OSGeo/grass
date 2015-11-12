@@ -50,6 +50,7 @@ int main(int argc, char *argv[])
     struct GModule *module;
     struct Option *old, *new, *bbox;
     struct Flag *append, *table_flag, *no_topo;
+    struct Flag *no_input_topo_flag, *force_z_flag;
     struct Map_info InMap, OutMap, BBoxMap;
     int n_files;
     int do_table;
@@ -80,10 +81,17 @@ int main(int argc, char *argv[])
     bbox->description =
 	_("Name for output vector map where bounding boxes of input vector maps are written to");
 
-    append = G_define_flag();
-    append->key = 'a';
-    append->description = _("Append files to existing file "
-			    "(overwriting existing files must be activated)");
+    no_input_topo_flag = G_define_flag();
+    no_input_topo_flag->key = 'n';
+    no_input_topo_flag->label = _("Do not expect input with topology");
+    no_input_topo_flag->description =
+        _("Applicable when input is points without topology");
+
+    force_z_flag = G_define_flag();
+    force_z_flag->key = 'z';
+    force_z_flag->label = _("Expect z coordinate even when not using topology");
+    force_z_flag->description =
+        _("Applicable when input is points with z coordinate but without topology");
 
     table_flag = G_define_flag();
     table_flag->key = 'e';
@@ -91,7 +99,13 @@ int main(int argc, char *argv[])
     table_flag->description =
 	_("Only the table of layer 1 is currently supported");
 
+    append = G_define_flag();
+    append->key = 'a';
+    append->description = _("Append files to existing file "
+			    "(overwriting existing files must be activated)");
+
     no_topo = G_define_standard_flag(G_FLG_V_TOPO);
+    no_topo->description = _("Advantageous when handling a large number of points");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
@@ -109,7 +123,7 @@ int main(int argc, char *argv[])
 	in_name = old->answers[i++];
 	Vect_check_input_output_name(in_name, new->answer, G_FATAL_EXIT);
 
-	Vect_set_open_level(2);
+	Vect_set_open_level(no_input_topo_flag->answer ? 1 : 2);
 	if (Vect_open_old_head(&InMap, in_name, "") < 0)
 	    G_fatal_error(_("Unable to open vector map <%s>"), in_name);
 
@@ -118,6 +132,8 @@ int main(int argc, char *argv[])
 
 	Vect_close(&InMap);
     }
+    if (force_z_flag->answer)
+        out_is_3d = WITH_Z;
 
     table_out = NULL;
     fi_in = NULL;
