@@ -6,7 +6,7 @@ LIB = DBMIBASE
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 
-default: lib
+default: lib $(ARCH_INCDIR)/dbstubs.h
 
 
 
