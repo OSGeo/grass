@@ -11,10 +11,7 @@ Reflectance Science Computing Facility website</a>.
 to cover the input raster map before the atmospheric correction is
 performed. The previous settings are restored afterwards.
 
-<p>Because using a <b>elevation</b> and/or <b>visibility</b>
-raster map makes execution time much longer, it is advised to use
-the optimization flag <b>-o</b>.
-This flag tells <em>i.atcorr</em> to try and speedup calculations. 
+This flag tells <em>i.atcorr</em> to try and speedup calculations.
 However, this option will increase memory requirements.
 
 <p>If flag <b>-r</b> is used, the input raster data are treated as
@@ -38,7 +35,7 @@ Mean Time (GMT).
 64                           - 4th band of ETM+ Landsat 7
 </pre></div>
 
-If the position is not available in longitude-latitude (WGS84), the 
+If the position is not available in longitude-latitude (WGS84), the
 <em><a href="m.proj.html">m.proj</a></em> conversion module can be
 used to reproject from a different projection.
 
@@ -712,10 +709,9 @@ we need to define decimal hours:<br>
 64                           - 4th band of ETM+ Landsat 7
 </pre></div>
 
-Finally, run the atmospheric correction (-r for reflectance input map; -a for date &gt;July 2000;
--o to use cache acceleration):
+Finally, run the atmospheric correction (-r for reflectance input map; -a for date &gt;July 2000):
 <div class="code"><pre>
-i.atcorr -r -a -o lsat7_2002_40_rad elev=elevation parameters=icnd_lsat4.txt output=lsat7_2002_40_atcorr
+i.atcorr -r -a lsat7_2002_40_rad elev=elevation parameters=icnd_lsat4.txt output=lsat7_2002_40_atcorr
 </pre></div>
 
 Note that the altitude value from 'icnd_lsat4.txt' file is read at the beginning
@@ -726,13 +722,13 @@ the raster elevation values are used from the map.
 Note also, that <em>i.atcorr</em> reports solar elevation angle above horizon rather than solar zenith angle.
 
 <h2>REMAINING DOCUMENTATION ISSUES</h2>
-1. The influence and importance of the visibility value or map should be 
-explained, also how to obtain an estimate for either visibility or aerosol 
+1. The influence and importance of the visibility value or map should be
+explained, also how to obtain an estimate for either visibility or aerosol
 optical depth at 550nm.
 
 <h2>SEE ALSO</h2>
 
-GRASS Wiki page about 
+GRASS Wiki page about
   <a href="http://grasswiki.osgeo.org/wiki/Atmospheric_correction">Atmospheric correction</a>
 <p><em>
 <a href="r.info.html">r.info</a>,
@@ -747,13 +743,13 @@ GRASS Wiki page about
 Second simulation of the satellite signal in the solar spectrum, 6S: An
 overview., IEEE Trans. Geosc. and Remote Sens. 35(3):675-686.
 <!-- too new:
-<li> <a href="http://6s.ltdri.org/6S_code2_thinner_stuff/6S_ltdri_org_manual.htm">6S manual 
+<li> <a href="http://6s.ltdri.org/6S_code2_thinner_stuff/6S_ltdri_org_manual.htm">6S manual
    (new vector version; i.atcorr is based on the older scalar version)</a>
    at the <a href="http://6s.ltdri.org">6S homepage</a> of the Land Surface Reflectance
    Science Computing Facility
 -->
-<li> 6S Manual: <a href="http://www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P1.pdf">PDF1</a>, 
-     <a href="http://www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P2.pdf">PDF2</a>, 
+<li> 6S Manual: <a href="http://www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P1.pdf">PDF1</a>,
+     <a href="http://www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P2.pdf">PDF2</a>,
      and <a href="http://www.rsgis.ait.ac.th/~honda/textbooks/advrs/6smanv2.0_P3.pdf">PDF3</a>
 <li>RapidEye sensors have been provided by <a href="http://www.rapideye.com/">RapidEye AG, Germany</a>
 <li> Julia A. Barsi, Brian L. Markham and Jeffrey A. Pedelty  "The operational land imager: spectral response and spectral uniformity", Proc. SPIE 8153, 81530G (2011); doi:10.1117/12.895438
@@ -788,7 +784,7 @@ overview., IEEE Trans. Geosc. and Remote Sens. 35(3):675-686.
 
 <p><em>Geoeye1 addition 7/2015:</em>
 <br>Marco Vizzari
- 
+
 <p>
 <i>Last changed: $Date$</i>
 
