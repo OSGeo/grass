@@ -1149,7 +1149,7 @@ class TestCase(unittest.TestCase):
             stdmsg = ('Running <{m.name}> module ended'
                       ' with non-zero return code ({m.popen.returncode})\n'
                       'Called: {code}\n'
-                      'See the folowing errors:\n'
+                      'See the following errors:\n'
                       '{errors}'.format(
                           m=module, code=module.get_python(),
                           errors=module.outputs.stderr
