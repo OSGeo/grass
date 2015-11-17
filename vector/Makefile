@@ -57,6 +57,7 @@ SUBDIRS = \
 	v.normal \
 	v.out.ascii \
 	v.out.dxf \
+	v.out.lidar \
 	v.out.postgis \
 	v.out.pov \
 	v.out.svg \
