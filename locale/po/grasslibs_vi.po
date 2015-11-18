@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_vi\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-18 12:56+0200\n"
+"POT-Creation-Date: 2015-11-18 12:26+0100\n"
 "PO-Revision-Date: 2010-08-27 11:18+0700\n"
 "Last-Translator: \n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
@@ -43,7 +43,7 @@ msgstr "Không thể khởi động trình điều khiển <%s>"
 #: ../lib/vector/Vlib/cats.c:597 ../lib/vector/Vlib/net.c:181
 #: ../lib/vector/Vlib/net.c:358 ../lib/vector/Vlib/write_ogr.c:197
 #: ../lib/vector/Vlib/map.c:305 ../lib/ogsf/gp3.c:208 ../lib/ogsf/gv3.c:350
-#: ../lib/rst/interp_float/vinput2d.c:88
+#: ../lib/rst/interp_float/vinput2d.c:109
 #, c-format
 msgid "Unable to open database <%s> by driver <%s>"
 msgstr "Không thể mở CSDL <%s> bằng trình điều khiển <%s>"
@@ -74,8 +74,8 @@ msgstr "Không thể mở con trỏ chọn: '%s'"
 msgid "Column <%s> is not integer"
 msgstr "Cột <%s> không phải kiểu số nguyên"
 
-#: ../lib/db/dbmi_client/copy_tab.c:267 ../lib/rst/interp_float/vinput2d.c:94
-#: ../lib/rst/interp_float/vinput2d.c:108
+#: ../lib/db/dbmi_client/copy_tab.c:267 ../lib/rst/interp_float/vinput2d.c:115
+#: ../lib/rst/interp_float/vinput2d.c:129
 #, c-format
 msgid "Column <%s> not found"
 msgstr "Không tìm thấy cột <%s>"
@@ -804,12 +804,12 @@ msgstr ""
 #: ../lib/vector/neta/path.c:136 ../lib/vector/neta/bridge.c:58
 #: ../lib/vector/Vlib/line.c:50 ../lib/vector/Vlib/line.c:154
 #: ../lib/segment/open.c:98 ../lib/rowio/setup.c:61 ../lib/rowio/setup.c:67
-#: ../lib/rst/interp_float/segmen2d.c:182
-#: ../lib/rst/interp_float/segmen2d.c:188
-#: ../lib/rst/interp_float/segmen2d.c:194
-#: ../lib/rst/interp_float/segmen2d.c:204
-#: ../lib/rst/interp_float/interp2d.c:121
-#: ../lib/rst/interp_float/interp2d.c:127
+#: ../lib/rst/interp_float/segmen2d.c:199
+#: ../lib/rst/interp_float/segmen2d.c:205
+#: ../lib/rst/interp_float/segmen2d.c:211
+#: ../lib/rst/interp_float/segmen2d.c:221
+#: ../lib/rst/interp_float/interp2d.c:139
+#: ../lib/rst/interp_float/interp2d.c:145
 msgid "Out of memory"
 msgstr "Hết bộ nhớ "
 
@@ -1140,7 +1140,7 @@ msgstr "Không hiểu từ khoá %s trong tiêu đề vec-tơ"
 #: ../lib/vector/Vlib/cats.c:589 ../lib/vector/Vlib/net.c:175
 #: ../lib/vector/Vlib/net.c:353 ../lib/vector/Vlib/map.c:264
 #: ../lib/vector/Vlib/map.c:400 ../lib/ogsf/gp3.c:202 ../lib/ogsf/gv3.c:344
-#: ../lib/rst/interp_float/vinput2d.c:79
+#: ../lib/rst/interp_float/vinput2d.c:100
 #, c-format
 msgid "Database connection not defined for layer %d"
 msgstr "Kết nối CSDL không được định nghĩa cho lớp %d"
@@ -2228,7 +2228,7 @@ msgstr ""
 #: ../lib/vector/Vlib/open.c:290 ../lib/vector/Vlib/open.c:426
 #: ../lib/vector/Vlib/map.c:156 ../lib/vector/Vlib/map.c:166
 #: ../lib/vector/Vlib/map.c:238
-#: ../lib/python/temporal/c_libraries_interface.py:578 ../lib/ogsf/gp3.c:62
+#: ../lib/python/temporal/c_libraries_interface.py:589 ../lib/ogsf/gp3.c:62
 #: ../lib/ogsf/gp3.c:196 ../lib/ogsf/gv3.c:66 ../lib/ogsf/gv3.c:338
 #, c-format, python-format
 msgid "Unable to open vector map <%s>"
@@ -3354,12 +3354,7 @@ msgstr ""
 msgid "html: type '%s'"
 msgstr ""
 
-#: ../lib/temporal/lib/connect.c:101
-#, c-format
-msgid "You don't have permission to access the mapset <%s>"
-msgstr ""
-
-#: ../lib/temporal/lib/connect.c:105
+#: ../lib/temporal/lib/connect.c:110
 #, fuzzy, c-format
 msgid "Mapset <%s> does not exist."
 msgstr "%s: Vùng %d không tồn tại"
@@ -3394,7 +3389,7 @@ msgid "3D raster map <%s> not found"
 msgstr "Không tìm thấy bản đồ raster 3D <%s>"
 
 #: ../lib/gpde/n_arrays_io.c:281
-#: ../lib/python/temporal/c_libraries_interface.py:507
+#: ../lib/python/temporal/c_libraries_interface.py:518
 #: ../lib/ogsf/gvl_file.c:436
 #, c-format, python-format
 msgid "Unable to open 3D raster map <%s>"
@@ -3500,7 +3495,7 @@ msgstr ""
 msgid "Map name {0} not valid"
 msgstr ""
 
-#: ../lib/python/pygrass/modules/grid/grid.py:538
+#: ../lib/python/pygrass/modules/grid/grid.py:540
 msgid "Execution of subprocesses was not successful"
 msgstr ""
 
@@ -3636,7 +3631,7 @@ msgid "Creating a new space time %s dataset"
 msgstr "Không tìm thấy bản đồ raster <%s> trong bộ bản đồ <%s>"
 
 #: ../lib/python/temporal/open_stds.py:208
-#: ../lib/python/temporal/extract.py:114 ../lib/python/temporal/mapcalc.py:236
+#: ../lib/python/temporal/extract.py:115 ../lib/python/temporal/mapcalc.py:236
 #, fuzzy, python-format
 msgid ""
 "Map <%s> is already in temporal database, use overwrite flag to overwrite"
@@ -3690,87 +3685,87 @@ msgstr "Kiểu vec-tơ không biết."
 msgid "You need to specify the base name of new created maps"
 msgstr ""
 
-#: ../lib/python/temporal/extract.py:121
+#: ../lib/python/temporal/extract.py:122
 #, python-format
 msgid "Applying r.mapcalc expression: \"%s\""
 msgstr ""
 
-#: ../lib/python/temporal/extract.py:126
+#: ../lib/python/temporal/extract.py:127
 #, python-format
 msgid "Applying r3.mapcalc expression: \"%s\""
 msgstr ""
 
-#: ../lib/python/temporal/extract.py:131
+#: ../lib/python/temporal/extract.py:132
 #, python-format
 msgid "Applying v.extract where statement: \"%s\""
 msgstr ""
 
-#: ../lib/python/temporal/extract.py:159
+#: ../lib/python/temporal/extract.py:160
 #, fuzzy
 msgid "Error in computation process"
 msgstr "  định dạng: %s\n"
 
-#: ../lib/python/temporal/space_time_datasets.py:220
+#: ../lib/python/temporal/space_time_datasets.py:221
 #, fuzzy, python-format
 msgid "Unable to read timestamp file for raster map <%s>"
 msgstr "Không thể đọc tập tin header cho bản đồ raster <%s@%s>."
 
-#: ../lib/python/temporal/space_time_datasets.py:244
+#: ../lib/python/temporal/space_time_datasets.py:245
 #, fuzzy, python-format
 msgid "Unable to create timestamp file for raster map <%s>"
 msgstr "Không thể đọc tập tin header cho bản đồ raster <%s@%s>."
 
-#: ../lib/python/temporal/space_time_datasets.py:249
+#: ../lib/python/temporal/space_time_datasets.py:250
 #, fuzzy, python-format
 msgid "Invalid datetime in timestamp for raster map <%s>"
 msgstr ""
 "Tập tin đánh dấu thời gian không hợp lệ cho %s bản đồ %s trong bộ bản đồ %s"
 
-#: ../lib/python/temporal/space_time_datasets.py:254
-#: ../lib/python/temporal/space_time_datasets.py:588
+#: ../lib/python/temporal/space_time_datasets.py:255
+#: ../lib/python/temporal/space_time_datasets.py:589
 #, fuzzy
 msgid "Internal error"
 msgstr "lỗi cú pháp"
 
-#: ../lib/python/temporal/space_time_datasets.py:271
-#: ../lib/python/temporal/space_time_datasets.py:602
+#: ../lib/python/temporal/space_time_datasets.py:272
+#: ../lib/python/temporal/space_time_datasets.py:603
 #, fuzzy, python-format
 msgid "Unable to remove timestamp for raster map <%s>"
 msgstr "Không thể đọc tập tin header cho bản đồ raster <%s@%s>."
 
-#: ../lib/python/temporal/space_time_datasets.py:554
+#: ../lib/python/temporal/space_time_datasets.py:555
 #, fuzzy, python-format
 msgid "Unable to read timestamp file for 3D raster map <%s>"
 msgstr "Không thể đọc tập tin header cho bản đồ raster <%s@%s>."
 
-#: ../lib/python/temporal/space_time_datasets.py:578
+#: ../lib/python/temporal/space_time_datasets.py:579
 #, fuzzy, python-format
 msgid "Unable to create timestamp file for 3D raster map <%s>"
 msgstr "Không thể đọc tập tin header cho bản đồ raster <%s@%s>."
 
-#: ../lib/python/temporal/space_time_datasets.py:583
+#: ../lib/python/temporal/space_time_datasets.py:584
 #, fuzzy, python-format
 msgid "Invalid datetime in timestamp for 3D raster map <%s>"
 msgstr ""
 "Tập tin đánh dấu thời gian không hợp lệ cho %s bản đồ %s trong bộ bản đồ %s"
 
-#: ../lib/python/temporal/space_time_datasets.py:847
+#: ../lib/python/temporal/space_time_datasets.py:848
 #, fuzzy, python-format
 msgid "Unable to read timestamp file for vector map <%s>"
 msgstr "Không thể đọc tập tin header cho bản đồ raster <%s@%s>."
 
-#: ../lib/python/temporal/space_time_datasets.py:870
+#: ../lib/python/temporal/space_time_datasets.py:871
 #, fuzzy, python-format
 msgid "Unable to create timestamp file for vector map <%s>"
 msgstr "Không thể đọc tập tin header cho bản đồ raster <%s@%s>."
 
-#: ../lib/python/temporal/space_time_datasets.py:875
+#: ../lib/python/temporal/space_time_datasets.py:876
 #, fuzzy, python-format
 msgid "Invalid datetime in timestamp for vector map <%s>"
 msgstr ""
 "Tập tin đánh dấu thời gian không hợp lệ cho %s bản đồ %s trong bộ bản đồ %s"
 
-#: ../lib/python/temporal/space_time_datasets.py:891
+#: ../lib/python/temporal/space_time_datasets.py:892
 #, fuzzy, python-format
 msgid "Unable to remove timestamp for vector map <%s>"
 msgstr "Không thể đọc tập tin header cho bản đồ raster <%s@%s>."
@@ -3810,112 +3805,122 @@ msgstr "Không tìm thấy bản đồ raster <%s>"
 msgid "Extraction directory <%s> not found"
 msgstr "Không tìm thấy bản đồ vec-tơ <%s>"
 
-#: ../lib/python/temporal/stds_import.py:216
+#: ../lib/python/temporal/stds_import.py:214
+#, python-format
+msgid "Checking validity of input file (size: %0.1f MB). Make take a while..."
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:221
 #, fuzzy, python-format
 msgid "Unable to find init file <%s>"
 msgstr "Không thể mở tập tin %s trong %s"
 
-#: ../lib/python/temporal/stds_import.py:218
+#: ../lib/python/temporal/stds_import.py:223
 #, fuzzy, python-format
 msgid "Unable to find list file <%s>"
 msgstr "Không thể khởi động tập tin <%s>"
 
-#: ../lib/python/temporal/stds_import.py:220
+#: ../lib/python/temporal/stds_import.py:225
 #, fuzzy, python-format
 msgid "Unable to find projection file <%s>"
 msgstr "Không thể mở tập tin %s trong %s"
 
-#: ../lib/python/temporal/stds_import.py:246
+#: ../lib/python/temporal/stds_import.py:227
+#, fuzzy
+msgid "Extracting data..."
+msgstr "Đang xây dựng các vùng..."
+
+#: ../lib/python/temporal/stds_import.py:267
 msgid "Projection information does not match. Proceeding..."
 msgstr ""
 
-#: ../lib/python/temporal/stds_import.py:250
+#: ../lib/python/temporal/stds_import.py:271
 #, python-brace-format
 msgid ""
 "Difference between PROJ_INFO file of imported map and of current location:\n"
 "{diff}"
 msgstr ""
 
-#: ../lib/python/temporal/stds_import.py:253
+#: ../lib/python/temporal/stds_import.py:274
 msgid "Projection information does not match. Aborting."
 msgstr ""
 
-#: ../lib/python/temporal/stds_import.py:270
+#: ../lib/python/temporal/stds_import.py:291
 #, fuzzy, python-format
 msgid "Unable to create location %(l)s. Reason: %(e)s"
 msgstr "Không thể loại bỏ thư mục '%s'"
 
-#: ../lib/python/temporal/stds_import.py:278
+#: ../lib/python/temporal/stds_import.py:299
 #, fuzzy, python-format
 msgid "Unable to switch to location %s"
 msgstr "không thể ghi thông tin lịch sử cho [%s]"
 
-#: ../lib/python/temporal/stds_import.py:283
+#: ../lib/python/temporal/stds_import.py:304
 #, fuzzy, python-format
 msgid "Unable to create default temporal database in new location %s"
 msgstr "Không thể mở tập tin định nghĩa csdl vec-tơ: '%s'"
 
-#: ../lib/python/temporal/stds_import.py:356
+#: ../lib/python/temporal/stds_import.py:377
 #, python-format
 msgid "Key words %(t)s, %(s)s or %(n)s not found in init file."
 msgstr ""
 
-#: ../lib/python/temporal/stds_import.py:362
+#: ../lib/python/temporal/stds_import.py:383
 msgid "Number of maps mismatch in init and list file."
 msgstr ""
 
-#: ../lib/python/temporal/stds_import.py:373
+#: ../lib/python/temporal/stds_import.py:394
 msgid "The archive file is of wrong space time dataset type"
 msgstr ""
 
-#: ../lib/python/temporal/stds_import.py:381
+#: ../lib/python/temporal/stds_import.py:402
 #, fuzzy, python-format
 msgid "Unable to find GeoTIFF raster file <%s> in archive."
 msgstr "không thể tìm thấy một tập tin null tạm %s"
 
-#: ../lib/python/temporal/stds_import.py:387
+#: ../lib/python/temporal/stds_import.py:408
 #, fuzzy, python-format
 msgid "Unable to find AAIGrid raster file <%s> in archive."
 msgstr "không thể tìm thấy một tập tin null tạm %s"
 
-#: ../lib/python/temporal/stds_import.py:393
+#: ../lib/python/temporal/stds_import.py:414
 #, fuzzy, python-format
 msgid "Unable to find GML vector file <%s> in archive."
 msgstr "Không thể tìm thấy bản đồ vec-tơ <%s> trongg <%s>"
 
-#: ../lib/python/temporal/stds_import.py:402
+#: ../lib/python/temporal/stds_import.py:423
 #, fuzzy, python-format
 msgid "Unable to find GRASS package file <%s> in archive."
 msgstr "Không thể mở tập tin cidx <%s> để ghi"
 
-#: ../lib/python/temporal/stds_import.py:405
+#: ../lib/python/temporal/stds_import.py:426
 #, fuzzy
 msgid "Unsupported input format"
 msgstr "Kiểu đối tượng"
 
-#: ../lib/python/temporal/stds_import.py:411
+#: ../lib/python/temporal/stds_import.py:432
 #, fuzzy, python-format
 msgid ""
 "Space time %(t)s dataset <%(sp)s> is already in the database. Use the "
 "overwrite flag."
 msgstr "Bản đồ vec-tơ <%s> đã có và sẽ bị ghi đè"
 
-#: ../lib/python/temporal/stds_import.py:431
+#: ../lib/python/temporal/stds_import.py:452
 #, fuzzy, python-format
 msgid "Overwrite space time %(sp)s dataset <%(id)s> and unregister all maps."
 msgstr "Không thể tạo ra tập tin header cho [%s]"
 
-#: ../lib/python/temporal/stds_import.py:443
+#: ../lib/python/temporal/stds_import.py:464
 #, fuzzy, python-format
 msgid "Key word %s not found in init file."
 msgstr "'Bọ': cố gắng cập nhật bản đồ không ở trong bộ bản đồ hiện tại."
 
-#: ../lib/python/temporal/stds_import.py:448
+#: ../lib/python/temporal/stds_import.py:469
 #, fuzzy, python-format
 msgid "Create space time %s dataset."
 msgstr "Không tìm thấy bản đồ raster <%s> trong bộ bản đồ <%s>"
 
-#: ../lib/python/temporal/stds_import.py:477
+#: ../lib/python/temporal/stds_import.py:498
 msgid "Switching to original location failed"
 msgstr ""
 
@@ -3983,49 +3988,49 @@ msgid ""
 "Please use t.connect to set a read- and writable temporal database path"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:913
+#: ../lib/python/temporal/core.py:914
 #, python-format
 msgid ""
 "Unable to mogrify sql statement. There is no temporal database connection "
 "defined for mapset <%(mapset)s>"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:936
+#: ../lib/python/temporal/core.py:937
 #, fuzzy, python-format
 msgid ""
 "Unable to check table. There is no temporal database connection defined for "
 "mapset <%(mapset)s>"
 msgstr "Không thể mở tập tin định nghĩa csdl vec-tơ: '%s'"
 
-#: ../lib/python/temporal/core.py:953
+#: ../lib/python/temporal/core.py:954
 #, python-format
 msgid ""
 "Unable to execute sql statement. There is no temporal database connection "
 "defined for mapset <%(mapset)s>"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:964
+#: ../lib/python/temporal/core.py:965
 #, fuzzy, python-format
 msgid ""
 "Unable to fetch one. There is no temporal database connection defined for "
 "mapset <%(mapset)s>"
 msgstr "Không thể mở tập tin header của bản đồ vec-tơ <%s>"
 
-#: ../lib/python/temporal/core.py:975
+#: ../lib/python/temporal/core.py:976
 #, fuzzy, python-format
 msgid ""
 "Unable to fetch all. There is no temporal database connection defined for "
 "mapset <%(mapset)s>"
 msgstr "Không thể mở tập tin header của bản đồ vec-tơ <%s>"
 
-#: ../lib/python/temporal/core.py:993
+#: ../lib/python/temporal/core.py:994
 #, python-format
 msgid ""
 "Unable to execute transaction. There is no temporal database connection "
 "defined for mapset <%(mapset)s>"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:1074
+#: ../lib/python/temporal/core.py:1083
 #, python-format
 msgid ""
 "Unable to connect to %(db)s database: %(string)s\n"
@@ -4033,14 +4038,14 @@ msgid ""
 "Please use t.connect to set a read- and writable temporal database backend"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:1231
+#: ../lib/python/temporal/core.py:1240
 #, fuzzy, python-format
 msgid ""
 "Unable to execute :\n"
 " %(sql)s"
 msgstr "Không thể thực thi lệnh"
 
-#: ../lib/python/temporal/core.py:1275
+#: ../lib/python/temporal/core.py:1284
 #, fuzzy, python-format
 msgid ""
 "Unable to execute transaction:\n"
@@ -4289,18 +4294,18 @@ msgstr "Không thể tìm thấy bản đồ vec-tơ <%s> trongg <%s>"
 msgid "The temporal operators <%s> support only absolute time."
 msgstr ""
 
-#: ../lib/python/temporal/c_libraries_interface.py:427
-#: ../lib/python/temporal/c_libraries_interface.py:444
+#: ../lib/python/temporal/c_libraries_interface.py:438
+#: ../lib/python/temporal/c_libraries_interface.py:455
 #, fuzzy
 msgid "Unable to read range file"
 msgstr "Không thể đọc tập tin đề mục"
 
-#: ../lib/python/temporal/c_libraries_interface.py:522
+#: ../lib/python/temporal/c_libraries_interface.py:533
 #, fuzzy, python-format
 msgid "Unable to load range of 3D raster map <%s>"
 msgstr "Không thể đọc miền của bản đồ raster 3D <%s>"
 
-#: ../lib/python/temporal/c_libraries_interface.py:537
+#: ../lib/python/temporal/c_libraries_interface.py:548
 #: ../lib/ogsf/gvl_file.c:470 ../lib/raster3d/close.c:120
 #: ../lib/raster3d/close.c:130 ../lib/raster3d/close.c:159
 #, c-format, python-format
@@ -4347,131 +4352,153 @@ msgid "%s= and %s= are mutually exclusive"
 msgstr ""
 
 #: ../lib/python/temporal/register.py:83
+#, python-format
+msgid "%s= and the %s flag are mutually exclusive"
+msgstr ""
+
+#: ../lib/python/temporal/register.py:87
+msgid "The increment option requires the start option"
+msgstr ""
+
+#: ../lib/python/temporal/register.py:90
+msgid "The interval flag requires the start option"
+msgstr ""
+
+#: ../lib/python/temporal/register.py:93
 #, fuzzy, python-format
 msgid "Please specify %s= and %s="
 msgstr ""
 "\n"
 "Vui lòng chỉ định tên mốc tọa độ chuẩn\n"
 
-#: ../lib/python/temporal/register.py:87
+#: ../lib/python/temporal/register.py:97
 #, fuzzy, python-format
 msgid "Please specify %s= or %s="
 msgstr ""
 "\n"
 "Vui lòng chỉ định tên ellipsoid\n"
 
-#: ../lib/python/temporal/register.py:98
+#: ../lib/python/temporal/register.py:108
 #, python-format
 msgid ""
 "Space time %(sp)s dataset <%(name)s> with relative time found, but no "
 "relative unit set for %(sp)s maps"
 msgstr ""
 
-#: ../lib/python/temporal/register.py:163
-msgid "Gathering map information..."
+#: ../lib/python/temporal/register.py:169
+msgid ""
+"The increment option will be ignored because of time stamps in input file"
 msgstr ""
 
 #: ../lib/python/temporal/register.py:173
+msgid "The interval flag will be ignored because of time stamps in input file"
+msgstr ""
+
+#: ../lib/python/temporal/register.py:181
+msgid "Gathering map information..."
+msgstr ""
+
+#: ../lib/python/temporal/register.py:191
 #, fuzzy, python-format
 msgid "Unable to update %(t)s map <%(id)s>. The map does not exist."
 msgstr "Không thể tìm thấy bản đồ vec-tơ <%s> trongg <%s>"
 
-#: ../lib/python/temporal/register.py:191
+#: ../lib/python/temporal/register.py:209
 #, fuzzy, python-format
 msgid ""
 "Unable to register %(t)s map <%(id)s> with layer %(l)s. The map has "
 "timestamp and the start time is not set."
 msgstr "Không tìm thấy bản đồ raster <%s> trong bộ bản đồ <%s>"
 
-#: ../lib/python/temporal/register.py:197
+#: ../lib/python/temporal/register.py:215
 #, fuzzy, python-format
 msgid ""
 "Unable to register %(t)s map <%(id)s>. The map has no timestamp and the "
 "start time is not set."
 msgstr "Không tìm thấy bản đồ raster <%s> trong bộ bản đồ <%s>"
 
-#: ../lib/python/temporal/register.py:205
+#: ../lib/python/temporal/register.py:223
 #, python-format
 msgid "%(u)s= can only be set for relative time"
 msgstr ""
 
-#: ../lib/python/temporal/register.py:208
+#: ../lib/python/temporal/register.py:226
 #, python-format
 msgid "%(u)s= must be set in case of relative time stamps"
 msgstr ""
 
-#: ../lib/python/temporal/register.py:221
+#: ../lib/python/temporal/register.py:239
 #, fuzzy, python-format
 msgid ""
 "Map is already registered in temporal database. Unable to update %(t)s map <"
 "%(id)s> with layer %(l)s. Overwrite flag is not set."
 msgstr "Bản đồ vec-tơ <%s> đã có và sẽ bị ghi đè"
 
-#: ../lib/python/temporal/register.py:228
+#: ../lib/python/temporal/register.py:246
 #, fuzzy, python-format
 msgid ""
 "Map is already registered in temporal database. Unable to update %(t)s map <"
 "%(id)s>. Overwrite flag is not set."
 msgstr "Bản đồ vec-tơ <%s> đã có và sẽ bị ghi đè"
 
-#: ../lib/python/temporal/register.py:252
+#: ../lib/python/temporal/register.py:270
 #, fuzzy, python-format
 msgid ""
 "Unable to update %(t)s map <%(id)s> with layer %(l)s. The temporal types are "
 "different."
 msgstr "Không thể tìm thấy bản đồ vec-tơ <%s> trongg <%s>"
 
-#: ../lib/python/temporal/register.py:258
+#: ../lib/python/temporal/register.py:276
 #, fuzzy, python-format
 msgid "Unable to update %(t)s map <%(id)s>. The temporal types are different."
 msgstr "Không thể tìm thấy bản đồ vec-tơ <%s> trongg <%s>"
 
-#: ../lib/python/temporal/register.py:304
+#: ../lib/python/temporal/register.py:322
 #, fuzzy
 msgid "Registering maps in the temporal database..."
 msgstr "Không thể tìm thấy bản đồ vec-tơ <%s> trongg <%s>"
 
-#: ../lib/python/temporal/register.py:311
+#: ../lib/python/temporal/register.py:329
 #, fuzzy
 msgid "Registering maps in the space time dataset..."
 msgstr "Không tìm thấy bản đồ raster <%s> trong bộ bản đồ <%s>"
 
-#: ../lib/python/temporal/register.py:320
+#: ../lib/python/temporal/register.py:338
 #, fuzzy
 msgid "Updating space time dataset..."
 msgstr "Tên của bản đồ raster độ cao"
 
-#: ../lib/python/temporal/register.py:373
-#: ../lib/python/temporal/register.py:380
+#: ../lib/python/temporal/register.py:391
+#: ../lib/python/temporal/register.py:398
 #, python-format
 msgid "Unable to convert string \"%s\"into a datetime object"
 msgstr ""
 
-#: ../lib/python/temporal/register.py:388
-#: ../lib/python/temporal/register.py:393
+#: ../lib/python/temporal/register.py:406
+#: ../lib/python/temporal/register.py:411
 #, fuzzy
 msgid "Error occurred in increment computation"
 msgstr "  định dạng: %s\n"
 
-#: ../lib/python/temporal/register.py:396
+#: ../lib/python/temporal/register.py:414
 #, fuzzy, python-format
 msgid ""
 "Set absolute valid time for map <%(id)s> with layer %(layer)s to %(start)s - "
 "%(end)s"
 msgstr "Không thể sao chép bản đồ vec-tơ <%s> vào <%s>"
 
-#: ../lib/python/temporal/register.py:401
+#: ../lib/python/temporal/register.py:419
 #, fuzzy, python-format
 msgid "Set absolute valid time for map <%s> to %s - %s"
 msgstr "Không thể sao chép bản đồ vec-tơ <%s> vào <%s>"
 
-#: ../lib/python/temporal/register.py:418
+#: ../lib/python/temporal/register.py:436
 #, fuzzy, python-format
 msgid ""
 "Set relative valid time for map <%s> with layer %s to %i - %s with unit %s"
 msgstr "Không thể sao chép bản đồ vec-tơ <%s> vào <%s>"
 
-#: ../lib/python/temporal/register.py:423
+#: ../lib/python/temporal/register.py:441
 #, fuzzy, python-format
 msgid "Set relative valid time for map <%s> to %i - %s with unit %s"
 msgstr "Không thể sao chép bản đồ vec-tơ <%s> vào <%s>"
@@ -4960,13 +4987,13 @@ msgstr "Không thể mở tập tin <%s> để ghi"
 #: ../lib/ogsf/gs3.c:786 ../lib/ogsf/gsd_legend.c:239
 #: ../lib/manage/do_remove.c:73 ../lib/manage/do_rename.c:71
 #: ../lib/gis/legal_name.c:94 ../lib/gis/legal_name.c:97
-#: ../lib/rst/interp_float/output2d.c:236
-#: ../lib/rst/interp_float/output2d.c:317
-#: ../lib/rst/interp_float/output2d.c:386
-#: ../lib/rst/interp_float/output2d.c:436
-#: ../lib/rst/interp_float/output2d.c:450
-#: ../lib/rst/interp_float/output2d.c:464
-#: ../lib/rst/interp_float/output2d.c:480
+#: ../lib/rst/interp_float/output2d.c:247
+#: ../lib/rst/interp_float/output2d.c:328
+#: ../lib/rst/interp_float/output2d.c:397
+#: ../lib/rst/interp_float/output2d.c:447
+#: ../lib/rst/interp_float/output2d.c:461
+#: ../lib/rst/interp_float/output2d.c:475
+#: ../lib/rst/interp_float/output2d.c:491
 #: ../lib/rst/interp_float/resout2d.c:205
 #: ../lib/rst/interp_float/resout2d.c:253
 #: ../lib/rst/interp_float/resout2d.c:296
@@ -4974,8 +5001,8 @@ msgstr "Không thể mở tập tin <%s> để ghi"
 #: ../lib/rst/interp_float/resout2d.c:377
 #: ../lib/rst/interp_float/resout2d.c:395
 #: ../lib/rst/interp_float/resout2d.c:410
-#: ../lib/rst/interp_float/resout2d.c:426 ../lib/raster/open.c:175
-#: ../lib/raster/open.c:744 ../lib/raster/open.c:781 ../lib/raster/open.c:833
+#: ../lib/rst/interp_float/resout2d.c:426 ../lib/raster/open.c:176
+#: ../lib/raster/open.c:745 ../lib/raster/open.c:782 ../lib/raster/open.c:834
 #, c-format
 msgid "Raster map <%s> not found"
 msgstr "Không tìm thấy bản đồ raster <%s>"
@@ -6022,6 +6049,11 @@ msgstr "Không thể loại bỏ thư mục '%s'"
 msgid "Unable to open element file <%s> for <%s@%s>"
 msgstr "Không thể mở tập tin lịch sử của vector '%s'"
 
+#: ../lib/gis/get_window.c:123
+#, c-format
+msgid "Region file %s/%s/%s is empty"
+msgstr ""
+
 #: ../lib/gis/get_projinfo.c:37 ../lib/gis/get_projinfo.c:66
 #, c-format
 msgid "<%s> file not found for location <%s>"
@@ -6940,14 +6972,9 @@ msgstr ""
 "\n"
 " LỖI: tùy chọn <%s> phải được cung cấp ở dạng bội số của %d\n"
 
-#: ../lib/gis/parser.c:1474
+#: ../lib/gis/parser.c:1474 ../lib/gis/parser.c:1481
 #, c-format
 msgid "option <%s>: <%s> exists. To overwrite, use the --overwrite flag"
-msgstr ""
-
-#: ../lib/gis/parser.c:1479
-#, c-format
-msgid "GRASS_INFO_ERROR(%d,1): "
 msgstr ""
 
 #: ../lib/gis/parser.c:1591
@@ -7195,51 +7222,51 @@ msgstr "Vĩ độ - Kinh độ"
 msgid "Other Projection"
 msgstr "Phép chiếu khác"
 
-#: ../lib/rst/interp_float/vinput2d.c:73
+#: ../lib/rst/interp_float/vinput2d.c:94
 #, fuzzy, c-format
 msgid "Vector map <%s> is not 3D"
 msgstr "Không tìm thấy bản đồ vec-tơ <%s>"
 
-#: ../lib/rst/interp_float/vinput2d.c:76
+#: ../lib/rst/interp_float/vinput2d.c:97
 msgid "Loading data from attribute table ..."
 msgstr "Đang nạp dữ liệu từ bảng thuộc tính..."
 
-#: ../lib/rst/interp_float/vinput2d.c:97
-#: ../lib/rst/interp_float/vinput2d.c:110
+#: ../lib/rst/interp_float/vinput2d.c:118
+#: ../lib/rst/interp_float/vinput2d.c:131
 #, fuzzy, c-format
 msgid "Data type of column <%s> must be numeric"
 msgstr "Kiểu dữ liệu của cột <%s> không được hỗ trợ (phải là kiểu số)"
 
-#: ../lib/rst/interp_float/vinput2d.c:121
+#: ../lib/rst/interp_float/vinput2d.c:142
 #, fuzzy
 msgid "Reading features from vector map ..."
 msgstr "Đang đọc các đường từ bản đồ vec-tơ..."
 
-#: ../lib/rst/interp_float/vinput2d.c:153
+#: ../lib/rst/interp_float/vinput2d.c:174
 #, c-format
 msgid "Database record for cat %d not found"
 msgstr "Không tìm thấy bản ghi CSDL cho phạm trù %d"
 
-#: ../lib/rst/interp_float/vinput2d.c:171
+#: ../lib/rst/interp_float/vinput2d.c:192
 msgid "Negative value of smoothing detected: sm must be >= 0"
 msgstr ""
 
-#: ../lib/rst/interp_float/vinput2d.c:235
+#: ../lib/rst/interp_float/vinput2d.c:256
 #, fuzzy
 msgid "Strip exists with insufficient data"
 msgstr "việc cắt bỏ xảy ra với dữ liệu không đầy đủ"
 
-#: ../lib/rst/interp_float/vinput2d.c:249
+#: ../lib/rst/interp_float/vinput2d.c:270
 #, fuzzy, c-format
 msgid "There are points outside specified 2D/3D region - %d points ignored"
 msgstr "có các điểm nằm ngoài vùng 2D/3D đã chỉ định--bỏ qua %d điểm"
 
-#: ../lib/rst/interp_float/vinput2d.c:252
+#: ../lib/rst/interp_float/vinput2d.c:273
 #, fuzzy, c-format
 msgid "Ignoring %d points (too dense)"
 msgstr "bỏ qua %d điểm--quá dày"
 
-#: ../lib/rst/interp_float/vinput2d.c:256
+#: ../lib/rst/interp_float/vinput2d.c:277
 #, c-format
 msgid ""
 "%d points given for interpolation (after thinning) is less than given NPMIN="
@@ -7248,18 +7275,18 @@ msgstr ""
 "%d điểm được cung cấp để nội suy (sau khi làm mảnh) ít hơn NPMIN=%d được "
 "cung cấp"
 
-#: ../lib/rst/interp_float/vinput2d.c:261
+#: ../lib/rst/interp_float/vinput2d.c:282
 msgid "Zero points in the given region"
 msgstr ""
 
-#: ../lib/rst/interp_float/vinput2d.c:266
+#: ../lib/rst/interp_float/vinput2d.c:287
 #, c-format
 msgid ""
 "Segmentation parameters set to invalid values: npmin= %d, segmax= %d for "
 "smooth connection of segments, npmin > segmax (see manual)"
 msgstr ""
 
-#: ../lib/rst/interp_float/vinput2d.c:272
+#: ../lib/rst/interp_float/vinput2d.c:293
 #, c-format
 msgid ""
 "There are less than %d points for interpolation. No segmentation is "
@@ -7268,44 +7295,44 @@ msgstr ""
 "Có ít hơn %d điểm dùng cho nội suy. Sự phân đoạn không cần thiết, để chạy "
 "chương trình nhanh hơn, thiết lập segmax=%d (xem hướng dẫn sử dụng)"
 
-#: ../lib/rst/interp_float/vinput2d.c:276
+#: ../lib/rst/interp_float/vinput2d.c:297
 #, fuzzy, c-format
 msgid "Number of points from vector map %d"
 msgstr "Tên của bản đồ vec-tơ đầu vào"
 
-#: ../lib/rst/interp_float/vinput2d.c:277
+#: ../lib/rst/interp_float/vinput2d.c:298
 #, fuzzy, c-format
 msgid "Number of points outside of 2D/3D region %d"
 msgstr "Số trọng tâm ngoài vùng: %d"
 
-#: ../lib/rst/interp_float/vinput2d.c:279
+#: ../lib/rst/interp_float/vinput2d.c:300
 #, fuzzy, c-format
 msgid "Number of points being used %d"
 msgstr "Số điểm: %d"
 
-#: ../lib/rst/interp_float/vinput2d.c:312
+#: ../lib/rst/interp_float/vinput2d.c:333
 #, fuzzy
 msgid "Some points outside of region (ignored)"
 msgstr "một số điểm nằm ngoài vùng -- sẽ bỏ qua ..."
 
-#: ../lib/rst/interp_float/vinput2d.c:318
+#: ../lib/rst/interp_float/vinput2d.c:339
 #, fuzzy
 msgid "Unable to allocate memory"
 msgstr "Không thể cấp phát bộ nhớ\n"
 
-#: ../lib/rst/interp_float/vinput2d.c:326
+#: ../lib/rst/interp_float/vinput2d.c:347
 #, fuzzy, c-format
 msgid "Unable to insert %f,%f,%f a = %d"
 msgstr "Không thể ghi lại đối tượng %d"
 
-#: ../lib/rst/interp_float/write2d.c:40 ../lib/rst/interp_float/write2d.c:51
-#: ../lib/rst/interp_float/write2d.c:66 ../lib/rst/interp_float/write2d.c:75
-#: ../lib/rst/interp_float/write2d.c:83 ../lib/rst/interp_float/write2d.c:91
+#: ../lib/rst/interp_float/write2d.c:53 ../lib/rst/interp_float/write2d.c:64
+#: ../lib/rst/interp_float/write2d.c:79 ../lib/rst/interp_float/write2d.c:88
+#: ../lib/rst/interp_float/write2d.c:96 ../lib/rst/interp_float/write2d.c:104
 #, fuzzy
 msgid "Cannot write files"
 msgstr "Không thể ghi lại đường"
 
-#: ../lib/rst/interp_float/segmen2d.c:118
+#: ../lib/rst/interp_float/segmen2d.c:135
 #, fuzzy
 msgid ""
 "Taking too long to find points for interpolation - please change the region "
@@ -7314,26 +7341,26 @@ msgstr ""
 "mất quá lâu để tìm các điểm dùng cho nội suy--vui lòng thay đổi vùng đến khu "
 "vực có các điểm của bạn. Tiếp tục tính toán..."
 
-#: ../lib/rst/interp_float/input2d.c:48
+#: ../lib/rst/interp_float/input2d.c:58
 #, c-format
 msgid "Mask raster map <%s> not found"
 msgstr "Không tìm thấy bản đồ raster mặt nạ <%s>"
 
-#: ../lib/rst/interp_float/input2d.c:71
+#: ../lib/rst/interp_float/input2d.c:81
 msgid "Bitmap mask created"
 msgstr "Mặt nạ bitmap được tạo ra"
 
-#: ../lib/rst/interp_float/output2d.c:106
+#: ../lib/rst/interp_float/output2d.c:117
 #, c-format
 msgid "First change your rows number to nsizr! %d %d"
 msgstr ""
 
-#: ../lib/rst/interp_float/output2d.c:113
+#: ../lib/rst/interp_float/output2d.c:124
 #, c-format
 msgid "First change your cols number to nsizc %d %d"
 msgstr ""
 
-#: ../lib/rst/interp_float/interp2d.c:214
+#: ../lib/rst/interp_float/interp2d.c:232
 #, c-format
 msgid ""
 "Overshoot - increase in tension suggested. Overshoot occures at (%d,%d) "
@@ -8209,7 +8236,7 @@ msgstr "Không thể mở tập tin lịch sử của vector '%s'"
 msgid "Unable to create header file for <%s>"
 msgstr "Không thể tạo ra tập tin header cho [%s]"
 
-#: ../lib/raster/open.c:190
+#: ../lib/raster/open.c:191
 #, c-format
 msgid ""
 "Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@"
@@ -8218,23 +8245,23 @@ msgstr ""
 "Không thể mở bản đồ raster <%s@%s> vì nó là phân loại lại của bản đồ raster <"
 "%s@%s> không tồn tại"
 
-#: ../lib/raster/open.c:195
+#: ../lib/raster/open.c:196
 #, fuzzy, c-format
 msgid "Error reading reclass file for raster map <%s>"
 msgstr "Không thể đọc tập tin range cho [%s ở %s]"
 
-#: ../lib/raster/open.c:206
+#: ../lib/raster/open.c:207
 #, fuzzy, c-format
 msgid "Error reading map type for raster map <%s>"
 msgstr "Lỗi khi đang nạp bản đồ raster 3d <%s>"
 
-#: ../lib/raster/open.c:214
+#: ../lib/raster/open.c:215
 #, c-format
 msgid "Raster map <%s@%s>: format field in header file invalid"
 msgstr ""
 "Bản đồ raster <%s@%s>: định dạng trường trong tập tin header không hợp lệ"
 
-#: ../lib/raster/open.c:219
+#: ../lib/raster/open.c:220
 #, fuzzy, c-format
 msgid ""
 "Raster map <%s> is in different projection than current region. Found <%s>, "
@@ -8243,17 +8270,17 @@ msgstr ""
 "Bản đồ raster <%s@%s> ở phép chiếu khác với vùng hiện hành. Tìm thấy bản đồ <"
 "%s@%s>, lẽ ra phải là <%s>."
 
-#: ../lib/raster/open.c:226
+#: ../lib/raster/open.c:227
 #, fuzzy, c-format
 msgid "Raster map <%s> is in different zone (%d) than current region (%d)"
 msgstr "Bản đồ raster <%s@%s> ở một múi (%d) khác với vùng hiện hành (%d)"
 
-#: ../lib/raster/open.c:231
+#: ../lib/raster/open.c:232
 #, fuzzy, c-format
 msgid "Raster map <%s>: bytes per cell (%d) too large"
 msgstr "Bản đồ raster <%s@%s>: số byte trên ô (%d) quá lớn"
 
-#: ../lib/raster/open.c:256
+#: ../lib/raster/open.c:257
 #, fuzzy, c-format
 msgid ""
 "Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
@@ -8261,72 +8288,72 @@ msgstr ""
 "bản đồ <%s@%s> là một liên kết GDAL nhưng GRASS được biên dịch không có hỗ "
 "trợ GDAL"
 
-#: ../lib/raster/open.c:264
+#: ../lib/raster/open.c:265
 #, fuzzy, c-format
 msgid "Unable to open %s file for raster map <%s@%s>"
 msgstr "Không thể mở tập tin header của bản đồ raster <%s@%s>"
 
-#: ../lib/raster/open.c:301
+#: ../lib/raster/open.c:302
 #, fuzzy, c-format
 msgid "Error reading format for <%s@%s>"
 msgstr "Lỗi khi đang đọc bản đồ <%s@%s>, hàng %d"
 
-#: ../lib/raster/open.c:498
+#: ../lib/raster/open.c:499
 #, fuzzy
 msgid "Unable to create GDAL link"
 msgstr "Không thể mở tập tin %s trong %s"
 
-#: ../lib/raster/open.c:569 ../lib/raster/gdal.c:475
+#: ../lib/raster/open.c:570 ../lib/raster/gdal.c:475
 #, fuzzy, c-format
 msgid "Invalid map type <%d>"
 msgstr "không thể đổi thư mục đến %s"
 
-#: ../lib/raster/open.c:574
+#: ../lib/raster/open.c:575
 #, c-format
 msgid "Raster map <%s> is not in the current mapset (%s)"
 msgstr "Bản đồ raster <%s> không ở trong bộ bản đồ hiện tại (%s)"
 
-#: ../lib/raster/open.c:581
+#: ../lib/raster/open.c:582
 #, c-format
 msgid "<%s> is an illegal file name"
 msgstr "<%s> là một tên tập tin không hợp lệ"
 
-#: ../lib/raster/open.c:595 ../lib/raster/open.c:667
+#: ../lib/raster/open.c:596 ../lib/raster/open.c:668
 #, fuzzy, c-format
 msgid "No temp files available: %s"
 msgstr "G__open_raster_new(): không có tập tin tạm nào dùng được"
 
-#: ../lib/raster/open.c:720
+#: ../lib/raster/open.c:721
 #, fuzzy
 msgid "Rast_set_fp_type(): can only be called with FCELL_TYPE or DCELL_TYPE"
 msgstr "G_set_fp_type(): chỉ có thể được gọi với FCELL_TYPE hoặc DCELL_TYPE"
 
-#: ../lib/raster/open.c:778
+#: ../lib/raster/open.c:779
 #, c-format
 msgid "Raster map <%s> not found in mapset <%s>"
 msgstr "Không tìm thấy bản đồ raster <%s> trong bộ bản đồ <%s>"
 
-#: ../lib/raster/open.c:839
+#: ../lib/raster/open.c:840
 #, c-format
 msgid "Unable to find '%s'"
 msgstr "Không thể tìm thấy '%s'"
 
-#: ../lib/raster/open.c:850
+#: ../lib/raster/open.c:851
 #, c-format
 msgid "Invalid type: field '%s' in file '%s'"
 msgstr "Kiểu không hợp lệ: trường '%s' trong tập tin '%s'"
 
-#: ../lib/raster/open.c:855
+#: ../lib/raster/open.c:856
 #, fuzzy, c-format
 msgid "Missing type: field in file '%s'"
 msgstr "Kiểu không hợp lệ: trường '%s' trong tập tin '%s'"
 
-#: ../lib/raster/open.c:860
+#: ../lib/raster/open.c:861
 #, c-format
 msgid "Raster map <%s> is not xdr: byte_order: %s"
 msgstr "Bản đồ raster <%s> không phải là xdr: byte_order: %s"
 
-#: ../lib/raster/open.c:929
+#: ../lib/raster/open.c:930
 #, fuzzy
 msgid ""
 "Rast_set_quant_rules() can be called only for raster maps opened for reading"
@@ -8957,36 +8984,36 @@ msgstr ""
 msgid "Path '%s' doesn't exist"
 msgstr "%s: Vùng %d không tồn tại"
 
-#: ../lib/init/grass.py:876
+#: ../lib/init/grass.py:883
 #, python-format
 msgid ""
 "%(user)s is currently running GRASS in selected mapset (file %(file)s "
 "found). Concurrent use not allowed."
 msgstr ""
 
-#: ../lib/init/grass.py:880
+#: ../lib/init/grass.py:887
 #, python-format
 msgid ""
 "Unable to properly access '%s'.\n"
 "Please notify system personel."
 msgstr ""
 
-#: ../lib/init/grass.py:895
+#: ../lib/init/grass.py:902
 #, fuzzy
 msgid "Building user fontcap..."
 msgstr "Đang xây dựng biểu đồ..."
 
-#: ../lib/init/grass.py:947
+#: ../lib/init/grass.py:954
 #, python-format
 msgid "Unsupported shell <%(sh)s>: %(env)s"
 msgstr ""
 
-#: ../lib/init/grass.py:952
+#: ../lib/init/grass.py:959
 #, fuzzy
 msgid "The SHELL variable is not set"
 msgstr "GISRC - biến không được thiết lập"
 
-#: ../lib/init/grass.py:963
+#: ../lib/init/grass.py:970
 #, python-format
 msgid ""
 "Job file '%s' has been defined in the 'GRASS_BATCH_JOB' variable but not "
@@ -8995,110 +9022,110 @@ msgid ""
 "Use 'unset GRASS_BATCH_JOB' to disable batch job processing."
 msgstr ""
 
-#: ../lib/init/grass.py:968
+#: ../lib/init/grass.py:975
 #, python-format
 msgid "Change file permission to 'executable' for '%s'"
 msgstr ""
 
-#: ../lib/init/grass.py:970
+#: ../lib/init/grass.py:977
 #, python-format
 msgid "Executing '%s' ..."
 msgstr ""
 
-#: ../lib/init/grass.py:975
+#: ../lib/init/grass.py:982
 #, python-format
 msgid "Execution of '%s' finished."
 msgstr ""
 
-#: ../lib/init/grass.py:981
+#: ../lib/init/grass.py:988
 #, python-format
 msgid "GRASS GUI should be <%s>"
 msgstr ""
 
-#: ../lib/init/grass.py:1010
+#: ../lib/init/grass.py:1017
 #, python-format
 msgid "Welcome to GRASS GIS %s"
 msgstr ""
 
-#: ../lib/init/grass.py:1029
+#: ../lib/init/grass.py:1036
 msgid "GRASS GIS homepage:"
 msgstr ""
 
-#: ../lib/init/grass.py:1030
+#: ../lib/init/grass.py:1037
 msgid "This version running through:"
 msgstr ""
 
-#: ../lib/init/grass.py:1032
+#: ../lib/init/grass.py:1039
 #, fuzzy
 msgid "Help is available with the command:"
 msgstr "Không có trợ giúp cho lệnh [%s]\n"
 
-#: ../lib/init/grass.py:1033
+#: ../lib/init/grass.py:1040
 msgid "See the licence terms with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1036
+#: ../lib/init/grass.py:1043
 msgid "If required, restart the GUI with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1038
+#: ../lib/init/grass.py:1045
 msgid "Start the GUI with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1040
+#: ../lib/init/grass.py:1047
 msgid "When ready to quit enter:"
 msgstr ""
 
-#: ../lib/init/grass.py:1130
+#: ../lib/init/grass.py:1137
 msgid "2D and 3D raster MASKs present"
 msgstr ""
 
-#: ../lib/init/grass.py:1131
+#: ../lib/init/grass.py:1138
 msgid "Raster MASK present"
 msgstr ""
 
-#: ../lib/init/grass.py:1132
+#: ../lib/init/grass.py:1139
 msgid "3D raster MASK present"
 msgstr ""
 
-#: ../lib/init/grass.py:1171
+#: ../lib/init/grass.py:1178
 #, fuzzy, python-format
 msgid "Failed to start shell '%s'"
 msgstr "Không thể khởi động trình điều khiển <%s>"
 
-#: ../lib/init/grass.py:1176
+#: ../lib/init/grass.py:1183
 #, python-format
 msgid "Batch job '%s' (defined in GRASS_BATCH_JOB variable) was executed."
 msgstr ""
 
-#: ../lib/init/grass.py:1177 ../lib/init/grass.py:1182
+#: ../lib/init/grass.py:1184 ../lib/init/grass.py:1189
 msgid "Goodbye from GRASS GIS"
 msgstr ""
 
-#: ../lib/init/grass.py:1180
+#: ../lib/init/grass.py:1187
 #, fuzzy
 msgid "Done."
 msgstr "không có"
 
-#: ../lib/init/grass.py:1187
+#: ../lib/init/grass.py:1194
 #, fuzzy
 msgid "Cleaning up temporary files..."
 msgstr "Không thể mở tập tin tạm"
 
-#: ../lib/init/grass.py:1201
+#: ../lib/init/grass.py:1208
 msgid "Please install the GRASS GIS development package"
 msgstr ""
 
-#: ../lib/init/grass.py:1233
+#: ../lib/init/grass.py:1240
 #, fuzzy, python-format
 msgid "Parameter <%s> not supported"
 msgstr "Kiểu đối tượng OGR %d không được hỗ trợ"
 
-#: ../lib/init/grass.py:1356
+#: ../lib/init/grass.py:1363
 msgid "Flag -e required also flag -c"
 msgstr ""
 
-#: ../lib/init/grass.py:1399
+#: ../lib/init/grass.py:1406
 #, python-format
 msgid ""
 "Unable to start GRASS. You can:\n"
@@ -9108,15 +9135,15 @@ msgid ""
 "path/to/location/mapset`)"
 msgstr ""
 
-#: ../lib/init/grass.py:1409
+#: ../lib/init/grass.py:1416
 msgid "Creating new GRASS GIS location/mapset..."
 msgstr ""
 
-#: ../lib/init/grass.py:1411
+#: ../lib/init/grass.py:1418
 msgid "Starting GRASS GIS..."
 msgstr ""
 
-#: ../lib/init/grass.py:1469
+#: ../lib/init/grass.py:1476
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr ""
