@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_ko\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-18 13:14+0200\n"
+"POT-Creation-Date: 2015-11-18 15:06+0100\n"
 "PO-Revision-Date: 2013-10-30 22:07-0500\n"
 "Last-Translator: Huidae Cho <grass4u@gmail.com>\n"
 "Language-Team: Korean <grass-translations@lists.osgeo.org>\n"
@@ -39,11 +39,11 @@ msgstr "Datum %s 테이블파일을 열 수 없습니다"
 #: ../lib/vector/neta/utils.c:119 ../lib/vector/Vlib/ascii.c:410
 #: ../lib/vector/Vlib/array.c:282 ../lib/vector/Vlib/write_pg.c:2907
 #: ../lib/vector/Vlib/close_nat.c:160 ../lib/vector/Vlib/cats.c:597
-#: ../lib/vector/Vlib/write_ogr.c:197 ../lib/vector/Vlib/map.c:306
+#: ../lib/vector/Vlib/write_ogr.c:197 ../lib/vector/Vlib/map.c:341
 #: ../lib/vector/Vlib/net_build.c:165 ../lib/vector/Vlib/net_build.c:211
 #: ../lib/vector/Vlib/net_build.c:496 ../lib/vector/Vlib/net_build.c:794
 #: ../lib/vector/Vlib/net_build.c:973 ../lib/ogsf/gp3.c:208
-#: ../lib/ogsf/gv3.c:350 ../lib/rst/interp_float/vinput2d.c:88
+#: ../lib/ogsf/gv3.c:350 ../lib/rst/interp_float/vinput2d.c:109
 #, fuzzy, c-format
 msgid "Unable to open database <%s> by driver <%s>"
 msgstr "'%s' 디버그파일을 열 수 없습니다"
@@ -74,8 +74,8 @@ msgstr "Datum %s 테이블파일을 열 수 없습니다"
 msgid "Column <%s> is not integer"
 msgstr "'%s' 디버그파일을 열 수 없습니다"
 
-#: ../lib/db/dbmi_client/copy_tab.c:291 ../lib/rst/interp_float/vinput2d.c:94
-#: ../lib/rst/interp_float/vinput2d.c:108
+#: ../lib/db/dbmi_client/copy_tab.c:291 ../lib/rst/interp_float/vinput2d.c:115
+#: ../lib/rst/interp_float/vinput2d.c:129
 #, fuzzy, c-format
 msgid "Column <%s> not found"
 msgstr "'%s' 디버그파일을 열 수 없습니다"
@@ -779,13 +779,13 @@ msgstr ""
 #: ../lib/vector/neta/centrality.c:63 ../lib/vector/neta/centrality.c:145
 #: ../lib/vector/neta/path.c:136 ../lib/vector/neta/bridge.c:58
 #: ../lib/vector/Vlib/line.c:50 ../lib/vector/Vlib/line.c:154
-#: ../lib/segment/open.c:98 ../lib/rowio/setup.c:61 ../lib/rowio/setup.c:67
-#: ../lib/rst/interp_float/segmen2d.c:182
-#: ../lib/rst/interp_float/segmen2d.c:188
-#: ../lib/rst/interp_float/segmen2d.c:194
-#: ../lib/rst/interp_float/segmen2d.c:204
-#: ../lib/rst/interp_float/interp2d.c:121
-#: ../lib/rst/interp_float/interp2d.c:127
+#: ../lib/vector/Vlib/map.c:48 ../lib/segment/open.c:98 ../lib/rowio/setup.c:61
+#: ../lib/rowio/setup.c:67 ../lib/rst/interp_float/segmen2d.c:199
+#: ../lib/rst/interp_float/segmen2d.c:205
+#: ../lib/rst/interp_float/segmen2d.c:211
+#: ../lib/rst/interp_float/segmen2d.c:221
+#: ../lib/rst/interp_float/interp2d.c:139
+#: ../lib/rst/interp_float/interp2d.c:145
 msgid "Out of memory"
 msgstr ""
 
@@ -851,7 +851,7 @@ msgstr "임시파일을 열 수 없습니다"
 msgid "Error writing out category index file"
 msgstr "임시파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/cindex.c:539 ../lib/vector/Vlib/open.c:383
+#: ../lib/vector/Vlib/cindex.c:539 ../lib/vector/Vlib/open.c:393
 #, fuzzy, c-format
 msgid "Unable to open category index file for vector map <%s>"
 msgstr "임시파일을 열 수 없습니다"
@@ -916,8 +916,8 @@ msgstr "Datum %s 테이블파일을 열 수 없습니다"
 msgid "Number of redundant holes: %d"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/build.c:865 ../lib/vector/Vlib/open.c:357
-#: ../lib/vector/Vlib/open.c:861
+#: ../lib/vector/Vlib/build.c:865 ../lib/vector/Vlib/open.c:367
+#: ../lib/vector/Vlib/open.c:871
 #, fuzzy, c-format
 msgid "Unable to open spatial index file for vector map <%s>"
 msgstr "임시파일을 열 수 없습니다"
@@ -1114,12 +1114,12 @@ msgstr ""
 
 #: ../lib/vector/Vlib/ascii.c:398 ../lib/vector/Vlib/array.c:276
 #: ../lib/vector/Vlib/copy.c:594 ../lib/vector/Vlib/copy.c:704
-#: ../lib/vector/Vlib/cats.c:589 ../lib/vector/Vlib/map.c:265
-#: ../lib/vector/Vlib/map.c:401 ../lib/vector/Vlib/net_build.c:159
+#: ../lib/vector/Vlib/cats.c:589 ../lib/vector/Vlib/map.c:300
+#: ../lib/vector/Vlib/map.c:436 ../lib/vector/Vlib/net_build.c:159
 #: ../lib/vector/Vlib/net_build.c:206 ../lib/vector/Vlib/net_build.c:490
 #: ../lib/vector/Vlib/net_build.c:788 ../lib/vector/Vlib/net_build.c:968
 #: ../lib/ogsf/gp3.c:202 ../lib/ogsf/gv3.c:344
-#: ../lib/rst/interp_float/vinput2d.c:79
+#: ../lib/rst/interp_float/vinput2d.c:100
 #, c-format
 msgid "Database connection not defined for layer %d"
 msgstr "레이어 %d를 위한 데이타베이스 접속이 정의되지 않았습니다"
@@ -1309,7 +1309,7 @@ msgstr ""
 #: ../lib/vector/Vlib/write_pg.c:396 ../lib/vector/Vlib/read.c:173
 #: ../lib/vector/Vlib/write_nat.c:182 ../lib/vector/Vlib/write_nat.c:295
 #: ../lib/vector/Vlib/write_nat.c:397 ../lib/vector/Vlib/write_nat.c:652
-#: ../lib/vector/Vlib/read_pg.c:331 ../lib/vector/Vlib/box.c:213
+#: ../lib/vector/Vlib/read_pg.c:331 ../lib/vector/Vlib/box.c:249
 #: ../lib/vector/Vlib/read_nat.c:144 ../lib/vector/Vlib/read_sfa.c:50
 #, fuzzy, c-format
 msgid "Attempt to access feature with invalid id (%d)"
@@ -1396,7 +1396,7 @@ msgid "Unable to delete feature (%s) %d"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/write_pg.c:612 ../lib/vector/Vlib/write_pg.c:880
-#: ../lib/vector/Vlib/build_pg.c:411 ../lib/vector/Vlib/open.c:1345
+#: ../lib/vector/Vlib/build_pg.c:411 ../lib/vector/Vlib/open.c:1355
 #, fuzzy
 msgid "Unable to open PG file"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
@@ -1615,7 +1615,7 @@ msgstr ""
 msgid "only native format supported"
 msgstr ""
 
-#: ../lib/vector/Vlib/geos.c:65 ../lib/vector/Vlib/geos.c:259
+#: ../lib/vector/Vlib/geos.c:65 ../lib/vector/Vlib/geos.c:258
 #, fuzzy
 msgid "Attempt to read dead line"
 msgstr "임시파일을 열 수 없습니다"
@@ -1630,17 +1630,17 @@ msgstr ""
 msgid "Vect_read_area_geos(): unable to read isle id %d of area id %d"
 msgstr ""
 
-#: ../lib/vector/Vlib/geos.c:206
+#: ../lib/vector/Vlib/geos.c:205
 #, fuzzy, c-format
 msgid "Unable to read line offset %ld"
 msgstr "임시파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/geos.c:413
+#: ../lib/vector/Vlib/geos.c:412
 #, fuzzy, c-format
 msgid "Attempt to read points of nonexistent area id %d"
 msgstr "임시파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/geos.c:473
+#: ../lib/vector/Vlib/geos.c:472
 #, fuzzy, c-format
 msgid "Unable to read feature id %d"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
@@ -1861,7 +1861,7 @@ msgid "Unable to add database link for vector map <%s>"
 msgstr "임시파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/copy.c:738 ../lib/vector/Vlib/close_nat.c:102
-#: ../lib/vector/Vlib/map.c:282
+#: ../lib/vector/Vlib/map.c:317
 #, fuzzy, c-format
 msgid "Unable to copy table <%s>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
@@ -2196,7 +2196,7 @@ msgid "Vector map <%s> not found in current mapset"
 msgstr "'%s' 디버그파일을 열 수 없습니다"
 
 #: ../lib/vector/Vlib/open.c:235 ../lib/vector/Vlib/legal_vname.c:141
-#: ../lib/vector/Vlib/legal_vname.c:144 ../lib/vector/Vlib/map.c:228
+#: ../lib/vector/Vlib/legal_vname.c:144 ../lib/vector/Vlib/map.c:263
 #: ../lib/ogsf/gp3.c:56 ../lib/ogsf/gp3.c:191 ../lib/ogsf/gv3.c:60
 #: ../lib/ogsf/gv3.c:333 ../lib/manage/do_remove.c:57
 #: ../lib/manage/do_rename.c:54
@@ -2209,126 +2209,126 @@ msgstr "벡터맵 <%s>를 찾을 수 없습니다"
 msgid "Temporary vector maps can be accessed only in the current mapset"
 msgstr "'%s' 디버그파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/open.c:267
+#: ../lib/vector/Vlib/open.c:277
 msgid ""
 "Vector map which is not in the current mapset cannot be opened for update"
 msgstr ""
 
-#: ../lib/vector/Vlib/open.c:291 ../lib/vector/Vlib/open.c:427
-#: ../lib/vector/Vlib/map.c:157 ../lib/vector/Vlib/map.c:167
-#: ../lib/vector/Vlib/map.c:239
-#: ../lib/python/temporal/c_libraries_interface.py:581 ../lib/ogsf/gp3.c:62
+#: ../lib/vector/Vlib/open.c:301 ../lib/vector/Vlib/open.c:437
+#: ../lib/vector/Vlib/map.c:192 ../lib/vector/Vlib/map.c:202
+#: ../lib/vector/Vlib/map.c:274
+#: ../lib/python/temporal/c_libraries_interface.py:748 ../lib/ogsf/gp3.c:62
 #: ../lib/ogsf/gp3.c:196 ../lib/ogsf/gv3.c:66 ../lib/ogsf/gv3.c:338
 #, fuzzy, c-format, python-format
 msgid "Unable to open vector map <%s>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/open.c:301
+#: ../lib/vector/Vlib/open.c:311
 #, fuzzy, c-format
 msgid "Unable to read header file of vector map <%s>"
 msgstr "'%s' 디버그파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/open.c:342
+#: ../lib/vector/Vlib/open.c:352
 #, fuzzy, c-format
 msgid "Unable to open topology file for vector map <%s>"
 msgstr "임시파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/open.c:409
+#: ../lib/vector/Vlib/open.c:419
 #, fuzzy, c-format
 msgid ""
 "Unable to open vector map <%s> on level %d. Try to rebuild vector topology "
 "with v.build."
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/open.c:435
+#: ../lib/vector/Vlib/open.c:445
 #, fuzzy, c-format
 msgid "Building topology for OGR layer <%s> from datasource '%s'..."
 msgstr "임시파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/open.c:443
+#: ../lib/vector/Vlib/open.c:453
 #, fuzzy, c-format
 msgid "Unable to open vector map <%s> on level %d"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/open.c:497
+#: ../lib/vector/Vlib/open.c:507
 #, fuzzy, c-format
 msgid "Unable to open history file for vector map <%s>"
 msgstr "'%s' 디버그파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/open.c:767
+#: ../lib/vector/Vlib/open.c:777
 #, fuzzy, c-format
 msgid "Unable to create vector map: <%s> is not in the current mapset (%s)"
 msgstr "'%s' 디버그파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/open.c:776
+#: ../lib/vector/Vlib/open.c:786
 #, fuzzy, c-format
 msgid "Unable to create vector map: <%s> is not SQL compliant"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/open.c:803 ../lib/vector/Vlib/open.c:816
-#: ../lib/vector/Vlib/map.c:124
+#: ../lib/vector/Vlib/open.c:813 ../lib/vector/Vlib/open.c:826
+#: ../lib/vector/Vlib/map.c:159
 #, fuzzy, c-format
 msgid "Unable to delete vector map <%s>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/open.c:811 ../lib/vector/Vlib/map.c:120
-#: ../lib/vector/Vlib/map.c:214
+#: ../lib/vector/Vlib/open.c:821 ../lib/vector/Vlib/map.c:155
+#: ../lib/vector/Vlib/map.c:249
 #, c-format
 msgid "Vector map <%s> already exists and will be overwritten"
 msgstr ""
 
-#: ../lib/vector/Vlib/open.c:836
+#: ../lib/vector/Vlib/open.c:846
 #, fuzzy, c-format
 msgid "Unable to open history file of vector map <%s>"
 msgstr "'%s' 디버그파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/open.c:877
+#: ../lib/vector/Vlib/open.c:887
 #, c-format
 msgid "Using OGR/%s format"
 msgstr ""
 
-#: ../lib/vector/Vlib/open.c:881
+#: ../lib/vector/Vlib/open.c:891
 msgid "Using PostGIS Topology format"
 msgstr ""
 
-#: ../lib/vector/Vlib/open.c:883
+#: ../lib/vector/Vlib/open.c:893
 msgid "Using PostGIS format"
 msgstr ""
 
-#: ../lib/vector/Vlib/open.c:886
+#: ../lib/vector/Vlib/open.c:896
 #, fuzzy
 msgid "Using native format"
 msgstr "잘못된 좌표"
 
-#: ../lib/vector/Vlib/open.c:975
+#: ../lib/vector/Vlib/open.c:985
 #, fuzzy, c-format
 msgid "Unable to stat file <%s>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/open.c:1039
+#: ../lib/vector/Vlib/open.c:1049
 #, c-format
 msgid "unknown %d (update Vect_maptype_info)"
 msgstr ""
 
-#: ../lib/vector/Vlib/open.c:1128
+#: ../lib/vector/Vlib/open.c:1138
 msgid "Size of 'coor' file differs from value saved in topology file"
 msgstr ""
 
-#: ../lib/vector/Vlib/open.c:1139 ../lib/vector/Vlib/open.c:1238
+#: ../lib/vector/Vlib/open.c:1149 ../lib/vector/Vlib/open.c:1248
 #, fuzzy, c-format
 msgid "Please rebuild topology for vector map <%s@%s>"
 msgstr "임시파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/open.c:1227
+#: ../lib/vector/Vlib/open.c:1237
 msgid "Size of 'coor' file differs from value saved in sidx file"
 msgstr ""
 
-#: ../lib/vector/Vlib/open.c:1307
+#: ../lib/vector/Vlib/open.c:1317
 #, fuzzy
 msgid "Unable to open OGR file"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/open.c:1333
+#: ../lib/vector/Vlib/open.c:1343
 msgid "OGR output also detected, using OGR"
 msgstr ""
 
@@ -2907,22 +2907,22 @@ msgid ""
 "size allows"
 msgstr ""
 
-#: ../lib/vector/Vlib/box.c:228
+#: ../lib/vector/Vlib/box.c:264
 #, fuzzy, c-format
 msgid "Unable to determine bbox for feature %d"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/box.c:277 ../lib/vector/Vlib/box.c:323
+#: ../lib/vector/Vlib/box.c:313 ../lib/vector/Vlib/box.c:359
 #, fuzzy, c-format
 msgid "Attempt to access area with invalid id (%d)"
 msgstr "임시파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/box.c:289
+#: ../lib/vector/Vlib/box.c:325
 #, fuzzy, c-format
 msgid "Unable to determine bbox for area %d"
 msgstr "임시파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/box.c:335
+#: ../lib/vector/Vlib/box.c:371
 #, fuzzy, c-format
 msgid "Unable to determine bbox for isle %d"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
@@ -3028,71 +3028,71 @@ msgstr ""
 msgid "Unknown projection"
 msgstr ""
 
-#: ../lib/vector/Vlib/map.c:104 ../lib/vector/Vlib/map.c:210
+#: ../lib/vector/Vlib/map.c:139 ../lib/vector/Vlib/map.c:245
 msgid "Vector map name is not SQL compliant"
 msgstr ""
 
-#: ../lib/vector/Vlib/map.c:108
+#: ../lib/vector/Vlib/map.c:143
 #, fuzzy, c-format
 msgid "Unable to find vector map <%s> in <%s>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/map.c:144 ../lib/vector/Vlib/map.c:232
+#: ../lib/vector/Vlib/map.c:179 ../lib/vector/Vlib/map.c:267
 #, fuzzy, c-format
 msgid "Unable to copy vector map <%s> to <%s>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/map.c:296 ../lib/vector/Vlib/map.c:427
+#: ../lib/vector/Vlib/map.c:331 ../lib/vector/Vlib/map.c:462
 #, fuzzy, c-format
 msgid "Unable to delete table <%s>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/map.c:311
+#: ../lib/vector/Vlib/map.c:346
 #, c-format
 msgid "Unable to create index for table <%s>, key <%s>"
 msgstr ""
 
-#: ../lib/vector/Vlib/map.c:367
+#: ../lib/vector/Vlib/map.c:402
 #, c-format
 msgid "Ignoring invalid mapset: %s"
 msgstr ""
 
-#: ../lib/vector/Vlib/map.c:372
+#: ../lib/vector/Vlib/map.c:407
 #, fuzzy, c-format
 msgid "Invalid vector map name <%s>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/map.c:382
+#: ../lib/vector/Vlib/map.c:417
 #, fuzzy, c-format
 msgid "Unable to open header file for vector map <%s>"
 msgstr "'%s' 디버그파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/map.c:414
+#: ../lib/vector/Vlib/map.c:449
 #, fuzzy, c-format
 msgid "Unable to find table <%s> linked to vector map <%s>"
 msgstr "임시파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/map.c:437
+#: ../lib/vector/Vlib/map.c:472
 #, fuzzy, c-format
 msgid "Table <%s> linked to vector map <%s> does not exist"
 msgstr "임시파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/map.c:450
+#: ../lib/vector/Vlib/map.c:485
 #, fuzzy, c-format
 msgid "Unable to open directory '%s'"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/map.c:464
+#: ../lib/vector/Vlib/map.c:499
 #, fuzzy, c-format
 msgid "Unable to delete file '%s'"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/map.c:484
+#: ../lib/vector/Vlib/map.c:519
 #, fuzzy, c-format
 msgid "Unable to rename directory '%s' to '%s'"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/vector/Vlib/map.c:493
+#: ../lib/vector/Vlib/map.c:528
 #, fuzzy, c-format
 msgid "Unable to remove directory '%s': %s"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
@@ -3402,12 +3402,7 @@ msgstr "html: 그림크기 %dx%d"
 msgid "html: type '%s'"
 msgstr "html: 타입 '%s'"
 
-#: ../lib/temporal/lib/connect.c:101
-#, c-format
-msgid "You don't have permission to access the mapset <%s>"
-msgstr ""
-
-#: ../lib/temporal/lib/connect.c:105
+#: ../lib/temporal/lib/connect.c:110
 #, fuzzy, c-format
 msgid "Mapset <%s> does not exist."
 msgstr "임시파일을 열 수 없습니다"
@@ -3442,7 +3437,7 @@ msgid "3D raster map <%s> not found"
 msgstr "3차원 라스터맵 <%s>를 찾을 수 없습니다"
 
 #: ../lib/gpde/n_arrays_io.c:281
-#: ../lib/python/temporal/c_libraries_interface.py:510
+#: ../lib/python/temporal/c_libraries_interface.py:677
 #: ../lib/ogsf/gvl_file.c:436
 #, fuzzy, c-format, python-format
 msgid "Unable to open 3D raster map <%s>"
@@ -3527,87 +3522,97 @@ msgstr ""
 msgid ". See errors in the (error) output."
 msgstr ""
 
-#: ../lib/python/pygrass/utils.py:239
+#: ../lib/python/pygrass/utils.py:255
 msgid "Vector doesn't contain points"
 msgstr ""
 
-#: ../lib/python/pygrass/vector/table.py:1017
+#: ../lib/python/pygrass/vector/table.py:1020
 #, python-format
 msgid "Deleting table <%s> which is attached to following map(s):"
 msgstr ""
 
-#: ../lib/python/pygrass/vector/table.py:1021
+#: ../lib/python/pygrass/vector/table.py:1024
 msgid "You must use the force flag to actually remove it. Exiting."
 msgstr ""
 
-#: ../lib/python/pygrass/vector/abstract.py:108
-#: ../lib/python/pygrass/raster/abstract.py:298
+#: ../lib/python/pygrass/vector/__init__.py:744
+#, fuzzy, python-format
+msgid "Unable to read line of feature %i"
+msgstr "임시파일을 열 수 없습니다"
+
+#: ../lib/python/pygrass/vector/__init__.py:830
+#, fuzzy, python-format
+msgid "Unable to read area with id %i"
+msgstr "Datum %s 테이블파일을 열 수 없습니다"
+
+#: ../lib/python/pygrass/vector/abstract.py:97
+#: ../lib/python/pygrass/raster/abstract.py:299
 #, python-brace-format
 msgid "Map name {0} not valid"
 msgstr ""
 
-#: ../lib/python/pygrass/modules/grid/grid.py:544
+#: ../lib/python/pygrass/modules/grid/grid.py:546
 msgid "Execution of subprocesses was not successful"
 msgstr ""
 
-#: ../lib/python/pygrass/raster/category.py:81
+#: ../lib/python/pygrass/raster/category.py:69
 #, fuzzy, python-brace-format
 msgid "Raster type: {0} not supported"
 msgstr "라스터 타입: {0}를 지원하지 않습니다"
 
-#: ../lib/python/pygrass/raster/category.py:168
+#: ../lib/python/pygrass/raster/category.py:156
 msgid "Error executing: Rast_get_ith_cat"
 msgstr ""
 
-#: ../lib/python/pygrass/raster/category.py:196
+#: ../lib/python/pygrass/raster/category.py:184
 msgid "Null value detected"
 msgstr "널값을 찾았습니다"
 
-#: ../lib/python/pygrass/raster/category.py:198
+#: ../lib/python/pygrass/raster/category.py:186
 #, fuzzy
 msgid "Error executing: Rast_set_cat"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/pygrass/raster/__init__.py:180
+#: ../lib/python/pygrass/raster/__init__.py:209
 msgid "The map does not exist, I can't open in 'r' mode"
 msgstr ""
 
-#: ../lib/python/pygrass/raster/__init__.py:185
+#: ../lib/python/pygrass/raster/__init__.py:214
 #, fuzzy, python-brace-format
 msgid "Raster map <{0}> already exists and will be not overwritten"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/pygrass/raster/__init__.py:189
+#: ../lib/python/pygrass/raster/__init__.py:218
 #, fuzzy
 msgid "Raster type not defined"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/pygrass/raster/__init__.py:280
+#: ../lib/python/pygrass/raster/__init__.py:321
 #, python-brace-format
 msgid "Mode type: {0} not supported ('r', 'w','rw')"
 msgstr ""
 
-#: ../lib/python/pygrass/raster/__init__.py:300
+#: ../lib/python/pygrass/raster/__init__.py:341
 #, python-format
 msgid "Index out of range: %r."
 msgstr ""
 
-#: ../lib/python/pygrass/raster/__init__.py:401
+#: ../lib/python/pygrass/raster/__init__.py:530
 #, fuzzy, python-brace-format
 msgid "Raster map <{0}> already exists. Use overwrite."
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/pygrass/raster/__init__.py:432
+#: ../lib/python/pygrass/raster/__init__.py:561
 #, fuzzy, python-brace-format
 msgid "Raster map <{0}> does not exist"
 msgstr "임시파일을 열 수 없습니다"
 
-#: ../lib/python/pygrass/raster/abstract.py:274
+#: ../lib/python/pygrass/raster/abstract.py:275
 #, python-brace-format
 msgid "Mode type: {0} not supported ('r', 'w')"
 msgstr ""
 
-#: ../lib/python/pygrass/raster/abstract.py:285
+#: ../lib/python/pygrass/raster/abstract.py:286
 #, python-brace-format
 msgid "Overwrite type: {0} not supported (True/False)"
 msgstr ""
@@ -3685,7 +3690,7 @@ msgid "Creating a new space time %s dataset"
 msgstr "'%s' 디버그파일을 열 수 없습니다"
 
 #: ../lib/python/temporal/open_stds.py:208
-#: ../lib/python/temporal/extract.py:114 ../lib/python/temporal/mapcalc.py:236
+#: ../lib/python/temporal/extract.py:115 ../lib/python/temporal/mapcalc.py:236
 #, fuzzy, python-format
 msgid ""
 "Map <%s> is already in temporal database, use overwrite flag to overwrite"
@@ -3707,7 +3712,7 @@ msgstr "Datum %s 테이블파일을 열 수 없습니다"
 msgid "%s map <%s> not found in GRASS spatial database"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/gui_support.py:56 ../lib/python/script/core.py:1228
+#: ../lib/python/temporal/gui_support.py:56 ../lib/python/script/core.py:1231
 #, python-format
 msgid "Invalid element '%s'"
 msgstr ""
@@ -3739,83 +3744,83 @@ msgstr "알려지지 않은 벡터타입입니다"
 msgid "You need to specify the base name of new created maps"
 msgstr ""
 
-#: ../lib/python/temporal/extract.py:121
+#: ../lib/python/temporal/extract.py:122
 #, python-format
 msgid "Applying r.mapcalc expression: \"%s\""
 msgstr ""
 
-#: ../lib/python/temporal/extract.py:126
+#: ../lib/python/temporal/extract.py:127
 #, python-format
 msgid "Applying r3.mapcalc expression: \"%s\""
 msgstr ""
 
-#: ../lib/python/temporal/extract.py:131
+#: ../lib/python/temporal/extract.py:132
 #, python-format
 msgid "Applying v.extract where statement: \"%s\""
 msgstr ""
 
-#: ../lib/python/temporal/extract.py:159
+#: ../lib/python/temporal/extract.py:160
 #, fuzzy
 msgid "Error in computation process"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/space_time_datasets.py:220
+#: ../lib/python/temporal/space_time_datasets.py:231
 #, fuzzy, python-format
 msgid "Unable to read timestamp file for raster map <%s>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/space_time_datasets.py:244
+#: ../lib/python/temporal/space_time_datasets.py:255
 #, fuzzy, python-format
 msgid "Unable to create timestamp file for raster map <%s>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/space_time_datasets.py:249
+#: ../lib/python/temporal/space_time_datasets.py:260
 #, fuzzy, python-format
 msgid "Invalid datetime in timestamp for raster map <%s>"
 msgstr "임시파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/space_time_datasets.py:254
-#: ../lib/python/temporal/space_time_datasets.py:588
+#: ../lib/python/temporal/space_time_datasets.py:265
+#: ../lib/python/temporal/space_time_datasets.py:609
 msgid "Internal error"
 msgstr ""
 
-#: ../lib/python/temporal/space_time_datasets.py:271
-#: ../lib/python/temporal/space_time_datasets.py:602
+#: ../lib/python/temporal/space_time_datasets.py:282
+#: ../lib/python/temporal/space_time_datasets.py:623
 #, fuzzy, python-format
 msgid "Unable to remove timestamp for raster map <%s>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/space_time_datasets.py:554
+#: ../lib/python/temporal/space_time_datasets.py:575
 #, fuzzy, python-format
 msgid "Unable to read timestamp file for 3D raster map <%s>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/space_time_datasets.py:578
+#: ../lib/python/temporal/space_time_datasets.py:599
 #, fuzzy, python-format
 msgid "Unable to create timestamp file for 3D raster map <%s>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/space_time_datasets.py:583
+#: ../lib/python/temporal/space_time_datasets.py:604
 #, fuzzy, python-format
 msgid "Invalid datetime in timestamp for 3D raster map <%s>"
 msgstr "임시파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/space_time_datasets.py:847
+#: ../lib/python/temporal/space_time_datasets.py:879
 #, fuzzy, python-format
 msgid "Unable to read timestamp file for vector map <%s>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/space_time_datasets.py:870
+#: ../lib/python/temporal/space_time_datasets.py:902
 #, fuzzy, python-format
 msgid "Unable to create timestamp file for vector map <%s>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/space_time_datasets.py:875
+#: ../lib/python/temporal/space_time_datasets.py:907
 #, fuzzy, python-format
 msgid "Invalid datetime in timestamp for vector map <%s>"
 msgstr "임시파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/space_time_datasets.py:891
+#: ../lib/python/temporal/space_time_datasets.py:923
 #, fuzzy, python-format
 msgid "Unable to remove timestamp for vector map <%s>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
@@ -3855,112 +3860,121 @@ msgstr ""
 msgid "Extraction directory <%s> not found"
 msgstr "'%s' 디버그파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/stds_import.py:216
+#: ../lib/python/temporal/stds_import.py:214
+#, python-format
+msgid "Checking validity of input file (size: %0.1f MB). Make take a while..."
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:221
 #, fuzzy, python-format
 msgid "Unable to find init file <%s>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/stds_import.py:218
+#: ../lib/python/temporal/stds_import.py:223
 #, fuzzy, python-format
 msgid "Unable to find list file <%s>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/stds_import.py:220
+#: ../lib/python/temporal/stds_import.py:225
 #, fuzzy, python-format
 msgid "Unable to find projection file <%s>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/stds_import.py:246
+#: ../lib/python/temporal/stds_import.py:227
+msgid "Extracting data..."
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:267
 msgid "Projection information does not match. Proceeding..."
 msgstr ""
 
-#: ../lib/python/temporal/stds_import.py:250
+#: ../lib/python/temporal/stds_import.py:271
 #, python-brace-format
 msgid ""
 "Difference between PROJ_INFO file of imported map and of current location:\n"
 "{diff}"
 msgstr ""
 
-#: ../lib/python/temporal/stds_import.py:253
+#: ../lib/python/temporal/stds_import.py:274
 msgid "Projection information does not match. Aborting."
 msgstr ""
 
-#: ../lib/python/temporal/stds_import.py:270
+#: ../lib/python/temporal/stds_import.py:291
 #, fuzzy, python-format
 msgid "Unable to create location %(l)s. Reason: %(e)s"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/stds_import.py:278
+#: ../lib/python/temporal/stds_import.py:299
 #, fuzzy, python-format
 msgid "Unable to switch to location %s"
 msgstr "'%s' 디버그파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/stds_import.py:283
+#: ../lib/python/temporal/stds_import.py:304
 #, fuzzy, python-format
 msgid "Unable to create default temporal database in new location %s"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/stds_import.py:356
+#: ../lib/python/temporal/stds_import.py:377
 #, python-format
 msgid "Key words %(t)s, %(s)s or %(n)s not found in init file."
 msgstr ""
 
-#: ../lib/python/temporal/stds_import.py:362
+#: ../lib/python/temporal/stds_import.py:383
 msgid "Number of maps mismatch in init and list file."
 msgstr ""
 
-#: ../lib/python/temporal/stds_import.py:373
+#: ../lib/python/temporal/stds_import.py:394
 msgid "The archive file is of wrong space time dataset type"
 msgstr ""
 
-#: ../lib/python/temporal/stds_import.py:381
+#: ../lib/python/temporal/stds_import.py:402
 #, fuzzy, python-format
 msgid "Unable to find GeoTIFF raster file <%s> in archive."
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/stds_import.py:387
+#: ../lib/python/temporal/stds_import.py:408
 #, fuzzy, python-format
 msgid "Unable to find AAIGrid raster file <%s> in archive."
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/stds_import.py:393
+#: ../lib/python/temporal/stds_import.py:414
 #, fuzzy, python-format
 msgid "Unable to find GML vector file <%s> in archive."
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/stds_import.py:402
+#: ../lib/python/temporal/stds_import.py:423
 #, fuzzy, python-format
 msgid "Unable to find GRASS package file <%s> in archive."
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/stds_import.py:405
+#: ../lib/python/temporal/stds_import.py:426
 #, fuzzy
 msgid "Unsupported input format"
 msgstr "알려지지 않은 벡터타입입니다"
 
-#: ../lib/python/temporal/stds_import.py:411
+#: ../lib/python/temporal/stds_import.py:432
 #, fuzzy, python-format
 msgid ""
 "Space time %(t)s dataset <%(sp)s> is already in the database. Use the "
 "overwrite flag."
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/stds_import.py:431
+#: ../lib/python/temporal/stds_import.py:452
 #, fuzzy, python-format
 msgid "Overwrite space time %(sp)s dataset <%(id)s> and unregister all maps."
 msgstr "'%s' 디버그파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/stds_import.py:443
+#: ../lib/python/temporal/stds_import.py:464
 #, fuzzy, python-format
 msgid "Key word %s not found in init file."
 msgstr "'%s' 디버그파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/stds_import.py:448
+#: ../lib/python/temporal/stds_import.py:469
 #, fuzzy, python-format
 msgid "Create space time %s dataset."
 msgstr "'%s' 디버그파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/stds_import.py:477
+#: ../lib/python/temporal/stds_import.py:498
 msgid "Switching to original location failed"
 msgstr ""
 
@@ -3985,20 +3999,20 @@ msgid ""
 "%s"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/core.py:589
+#: ../lib/python/temporal/core.py:595
 msgid ""
 "Unable to initialize the temporal DBMI interface. Please use t.connect to "
 "specify the driver and the database string"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:652
+#: ../lib/python/temporal/core.py:658
 #, fuzzy, python-format
 msgid ""
 "Unable to receive temporal database metadata.\n"
 "Current temporal database info:%(info)s"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/core.py:657
+#: ../lib/python/temporal/core.py:663
 #, fuzzy, python-format
 msgid ""
 "Unsupported temporal database: version mismatch.\n"
@@ -4007,7 +4021,7 @@ msgid ""
 "Current temporal database info:%(info)s"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/core.py:665
+#: ../lib/python/temporal/core.py:671
 #, fuzzy, python-format
 msgid ""
 "Unsupported temporal database: version mismatch.\n"
@@ -4015,12 +4029,12 @@ msgid ""
 "Current temporal database info:%(info)s"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/core.py:753
+#: ../lib/python/temporal/core.py:759
 #, fuzzy, python-format
 msgid "Creating temporal database: %s"
 msgstr "임시파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/core.py:762
+#: ../lib/python/temporal/core.py:768
 #, python-format
 msgid ""
 "Unable to create SQLite temporal database\n"
@@ -4028,49 +4042,37 @@ msgid ""
 "Please use t.connect to set a read- and writable temporal database path"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:927
-#, python-format
-msgid ""
-"Unable to mogrify sql statement. There is no temporal database connection "
-"defined for mapset <%(mapset)s>"
-msgstr ""
+#: ../lib/python/temporal/core.py:933
+#, fuzzy
+msgid "Unable to mogrify sql statement. "
+msgstr "%s 요소를 지울 수 없습니다"
 
-#: ../lib/python/temporal/core.py:950
-#, fuzzy, python-format
-msgid ""
-"Unable to check table. There is no temporal database connection defined for "
-"mapset <%(mapset)s>"
+#: ../lib/python/temporal/core.py:955
+#, fuzzy
+msgid "Unable to check table. "
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/core.py:967
-#, python-format
-msgid ""
-"Unable to execute sql statement. There is no temporal database connection "
-"defined for mapset <%(mapset)s>"
-msgstr ""
+#: ../lib/python/temporal/core.py:971
+#, fuzzy
+msgid "Unable to execute sql statement. "
+msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/core.py:978
-#, fuzzy, python-format
-msgid ""
-"Unable to fetch one. There is no temporal database connection defined for "
-"mapset <%(mapset)s>"
-msgstr "'%s' 디버그파일을 열 수 없습니다"
+#: ../lib/python/temporal/core.py:981
+#, fuzzy
+msgid "Unable to fetch one. "
+msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/core.py:989
-#, fuzzy, python-format
-msgid ""
-"Unable to fetch all. There is no temporal database connection defined for "
-"mapset <%(mapset)s>"
-msgstr "'%s' 디버그파일을 열 수 없습니다"
+#: ../lib/python/temporal/core.py:991
+#, fuzzy
+msgid "Unable to fetch all. "
+msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/core.py:1007
-#, python-format
-msgid ""
-"Unable to execute transaction. There is no temporal database connection "
-"defined for mapset <%(mapset)s>"
-msgstr ""
+#: ../lib/python/temporal/core.py:1008
+#, fuzzy
+msgid "Unable to execute transaction. "
+msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/core.py:1096
+#: ../lib/python/temporal/core.py:1111
 #, python-format
 msgid ""
 "Unable to connect to %(db)s database: %(string)s\n"
@@ -4078,14 +4080,14 @@ msgid ""
 "Please use t.connect to set a read- and writable temporal database backend"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:1253
+#: ../lib/python/temporal/core.py:1268
 #, fuzzy, python-format
 msgid ""
 "Unable to execute :\n"
 " %(sql)s"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/core.py:1297
+#: ../lib/python/temporal/core.py:1312
 #, fuzzy, python-format
 msgid ""
 "Unable to execute transaction:\n"
@@ -4334,18 +4336,18 @@ msgstr "Datum %s 테이블파일을 열 수 없습니다"
 msgid "The temporal operators <%s> support only absolute time."
 msgstr ""
 
-#: ../lib/python/temporal/c_libraries_interface.py:430
-#: ../lib/python/temporal/c_libraries_interface.py:447
+#: ../lib/python/temporal/c_libraries_interface.py:597
+#: ../lib/python/temporal/c_libraries_interface.py:614
 #, fuzzy
 msgid "Unable to read range file"
 msgstr "임시파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/c_libraries_interface.py:525
+#: ../lib/python/temporal/c_libraries_interface.py:692
 #, fuzzy, python-format
 msgid "Unable to load range of 3D raster map <%s>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/c_libraries_interface.py:540
+#: ../lib/python/temporal/c_libraries_interface.py:707
 #: ../lib/ogsf/gvl_file.c:470 ../lib/raster3d/close.c:120
 #: ../lib/raster3d/close.c:130 ../lib/raster3d/close.c:159
 #, fuzzy, c-format, python-format
@@ -4374,16 +4376,23 @@ msgstr ""
 msgid "Error occurred in r.series computation"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/aggregation.py:271
+#: ../lib/python/temporal/aggregation.py:274
 #, fuzzy, python-format
 msgid "Aggregating %(len)i raster maps from %(start)s to %(end)s"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/aggregation.py:289
+#: ../lib/python/temporal/aggregation.py:292
 #, python-format
 msgid ""
 "Unable to perform aggregation. Output raster map <%(name)s> exists and "
 "overwrite flag was not set"
+msgstr ""
+
+#: ../lib/python/temporal/aggregation.py:310
+#, python-format
+msgid ""
+"The limit of open fiels (%i) was reached (%i). The module r.series will be "
+"run with flag z, to avoid open files limit exceeding."
 msgstr ""
 
 #: ../lib/python/temporal/register.py:76 ../lib/python/temporal/register.py:79
@@ -4393,125 +4402,147 @@ msgstr ""
 
 #: ../lib/python/temporal/register.py:83
 #, python-format
-msgid "Please specify %s= and %s="
+msgid "%s= and the %s flag are mutually exclusive"
 msgstr ""
 
 #: ../lib/python/temporal/register.py:87
+msgid "The increment option requires the start option"
+msgstr ""
+
+#: ../lib/python/temporal/register.py:90
+msgid "The interval flag requires the start option"
+msgstr ""
+
+#: ../lib/python/temporal/register.py:93
+#, python-format
+msgid "Please specify %s= and %s="
+msgstr ""
+
+#: ../lib/python/temporal/register.py:97
 #, python-format
 msgid "Please specify %s= or %s="
 msgstr ""
 
-#: ../lib/python/temporal/register.py:98
+#: ../lib/python/temporal/register.py:108
 #, python-format
 msgid ""
 "Space time %(sp)s dataset <%(name)s> with relative time found, but no "
 "relative unit set for %(sp)s maps"
 msgstr ""
 
-#: ../lib/python/temporal/register.py:163
-msgid "Gathering map information..."
+#: ../lib/python/temporal/register.py:169
+msgid ""
+"The increment option will be ignored because of time stamps in input file"
 msgstr ""
 
 #: ../lib/python/temporal/register.py:173
+msgid "The interval flag will be ignored because of time stamps in input file"
+msgstr ""
+
+#: ../lib/python/temporal/register.py:181
+msgid "Gathering map information..."
+msgstr ""
+
+#: ../lib/python/temporal/register.py:191
 #, fuzzy, python-format
 msgid "Unable to update %(t)s map <%(id)s>. The map does not exist."
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/register.py:191
+#: ../lib/python/temporal/register.py:209
 #, fuzzy, python-format
 msgid ""
 "Unable to register %(t)s map <%(id)s> with layer %(l)s. The map has "
 "timestamp and the start time is not set."
 msgstr "'%s' 디버그파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/register.py:197
+#: ../lib/python/temporal/register.py:215
 #, fuzzy, python-format
 msgid ""
 "Unable to register %(t)s map <%(id)s>. The map has no timestamp and the "
 "start time is not set."
 msgstr "'%s' 디버그파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/register.py:205
+#: ../lib/python/temporal/register.py:223
 #, python-format
 msgid "%(u)s= can only be set for relative time"
 msgstr ""
 
-#: ../lib/python/temporal/register.py:208
+#: ../lib/python/temporal/register.py:226
 #, python-format
 msgid "%(u)s= must be set in case of relative time stamps"
 msgstr ""
 
-#: ../lib/python/temporal/register.py:221
+#: ../lib/python/temporal/register.py:239
 #, fuzzy, python-format
 msgid ""
 "Map is already registered in temporal database. Unable to update %(t)s map <"
 "%(id)s> with layer %(l)s. Overwrite flag is not set."
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/register.py:228
+#: ../lib/python/temporal/register.py:246
 #, fuzzy, python-format
 msgid ""
 "Map is already registered in temporal database. Unable to update %(t)s map <"
 "%(id)s>. Overwrite flag is not set."
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/register.py:252
+#: ../lib/python/temporal/register.py:270
 #, fuzzy, python-format
 msgid ""
 "Unable to update %(t)s map <%(id)s> with layer %(l)s. The temporal types are "
 "different."
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/register.py:258
+#: ../lib/python/temporal/register.py:276
 #, fuzzy, python-format
 msgid "Unable to update %(t)s map <%(id)s>. The temporal types are different."
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/register.py:304
+#: ../lib/python/temporal/register.py:322
 #, fuzzy
 msgid "Registering maps in the temporal database..."
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/register.py:311
+#: ../lib/python/temporal/register.py:329
 #, fuzzy
 msgid "Registering maps in the space time dataset..."
 msgstr "'%s' 디버그파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/register.py:320
+#: ../lib/python/temporal/register.py:338
 #, fuzzy
 msgid "Updating space time dataset..."
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/register.py:373
-#: ../lib/python/temporal/register.py:380
+#: ../lib/python/temporal/register.py:391
+#: ../lib/python/temporal/register.py:398
 #, python-format
 msgid "Unable to convert string \"%s\"into a datetime object"
 msgstr ""
 
-#: ../lib/python/temporal/register.py:388
-#: ../lib/python/temporal/register.py:393
+#: ../lib/python/temporal/register.py:406
+#: ../lib/python/temporal/register.py:411
 msgid "Error occurred in increment computation"
 msgstr ""
 
-#: ../lib/python/temporal/register.py:396
+#: ../lib/python/temporal/register.py:414
 #, fuzzy, python-format
 msgid ""
 "Set absolute valid time for map <%(id)s> with layer %(layer)s to %(start)s - "
 "%(end)s"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/register.py:401
+#: ../lib/python/temporal/register.py:419
 #, fuzzy, python-format
 msgid "Set absolute valid time for map <%s> to %s - %s"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/register.py:418
+#: ../lib/python/temporal/register.py:436
 #, fuzzy, python-format
 msgid ""
 "Set relative valid time for map <%s> with layer %s to %i - %s with unit %s"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/register.py:423
+#: ../lib/python/temporal/register.py:441
 #, fuzzy, python-format
 msgid "Set relative valid time for map <%s> to %i - %s with unit %s"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
@@ -4530,28 +4561,28 @@ msgstr ""
 msgid "Wrong identifier, the mapset is missing"
 msgstr "임시파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/univar_statistics.py:50
-#: ../lib/python/temporal/univar_statistics.py:149
+#: ../lib/python/temporal/univar_statistics.py:59
+#: ../lib/python/temporal/univar_statistics.py:175
 #, fuzzy, python-format
 msgid "Space time %(sp)s dataset <%(i)s> is empty"
 msgstr "'%s' 디버그파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/univar_statistics.py:84
+#: ../lib/python/temporal/univar_statistics.py:98
 #, fuzzy, python-format
 msgid "Unable to get statistics for raster map <%s>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/univar_statistics.py:87
+#: ../lib/python/temporal/univar_statistics.py:101
 #, fuzzy, python-format
 msgid "Unable to get statistics for 3d raster map <%s>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/univar_statistics.py:139
+#: ../lib/python/temporal/univar_statistics.py:165
 #, fuzzy, python-format
 msgid "Space time %(sp)s dataset <%(i)s> not found"
 msgstr "'%s' 디버그파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/univar_statistics.py:190
+#: ../lib/python/temporal/univar_statistics.py:219
 #, fuzzy, python-format
 msgid "Unable to get statistics for vector map <%s>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
@@ -4654,11 +4685,11 @@ msgstr ""
 msgid "Space time datasets to merge must have the same temporal type"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/temporal/list_stds.py:191
+#: ../lib/python/temporal/list_stds.py:195
 msgid "Empty map list"
 msgstr ""
 
-#: ../lib/python/temporal/list_stds.py:202
+#: ../lib/python/temporal/list_stds.py:206
 msgid "Empty entry in map list, this should not happen"
 msgstr ""
 
@@ -4861,41 +4892,41 @@ msgid ""
 "GRASS GIS 7.0 and will be removed in version 7.1."
 msgstr ""
 
-#: ../lib/python/script/core.py:923
+#: ../lib/python/script/core.py:926
 msgid "Mixing value types. Will try to compare after integer conversion"
 msgstr ""
 
-#: ../lib/python/script/core.py:1118
+#: ../lib/python/script/core.py:1121
 #, python-format
 msgid "Element type should be \"cell\" and not \"%s\""
 msgstr ""
 
-#: ../lib/python/script/core.py:1147 ../lib/python/script/core.py:1212
+#: ../lib/python/script/core.py:1150 ../lib/python/script/core.py:1215
 #, python-format
 msgid "Element type should be \"raster\" and not \"%s\""
 msgstr ""
 
-#: ../lib/python/script/core.py:1367
+#: ../lib/python/script/core.py:1370
 #, fuzzy
 msgid "Unable to list mapsets"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/script/core.py:1406
+#: ../lib/python/script/core.py:1409
 #, python-format
 msgid "Location <%s> already exists. Operation canceled."
 msgstr ""
 
-#: ../lib/python/script/core.py:1409
+#: ../lib/python/script/core.py:1412
 #, fuzzy, python-format
 msgid "Location <%s> already exists and will be overwritten"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/python/script/core.py:1545
+#: ../lib/python/script/core.py:1548
 #, python-format
 msgid "Illegal filename <%s>. Cannot be 'NULL' or start with '.'."
 msgstr ""
 
-#: ../lib/python/script/core.py:1554
+#: ../lib/python/script/core.py:1557
 #, python-format
 msgid "Illegal filename <%(s)s>. <%(il)s> not allowed.\n"
 msgstr ""
@@ -5034,13 +5065,13 @@ msgstr "Datum %s 테이블파일을 열 수 없습니다"
 #: ../lib/ogsf/gs3.c:786 ../lib/ogsf/gsd_legend.c:239
 #: ../lib/manage/do_remove.c:73 ../lib/manage/do_rename.c:71
 #: ../lib/gis/legal_name.c:94 ../lib/gis/legal_name.c:97
-#: ../lib/rst/interp_float/output2d.c:236
-#: ../lib/rst/interp_float/output2d.c:317
-#: ../lib/rst/interp_float/output2d.c:386
-#: ../lib/rst/interp_float/output2d.c:436
-#: ../lib/rst/interp_float/output2d.c:450
-#: ../lib/rst/interp_float/output2d.c:464
-#: ../lib/rst/interp_float/output2d.c:480
+#: ../lib/rst/interp_float/output2d.c:247
+#: ../lib/rst/interp_float/output2d.c:328
+#: ../lib/rst/interp_float/output2d.c:397
+#: ../lib/rst/interp_float/output2d.c:447
+#: ../lib/rst/interp_float/output2d.c:461
+#: ../lib/rst/interp_float/output2d.c:475
+#: ../lib/rst/interp_float/output2d.c:491
 #: ../lib/rst/interp_float/resout2d.c:205
 #: ../lib/rst/interp_float/resout2d.c:253
 #: ../lib/rst/interp_float/resout2d.c:296
@@ -5048,8 +5079,8 @@ msgstr "Datum %s 테이블파일을 열 수 없습니다"
 #: ../lib/rst/interp_float/resout2d.c:377
 #: ../lib/rst/interp_float/resout2d.c:395
 #: ../lib/rst/interp_float/resout2d.c:410
-#: ../lib/rst/interp_float/resout2d.c:426 ../lib/raster/open.c:176
-#: ../lib/raster/open.c:814 ../lib/raster/open.c:851 ../lib/raster/open.c:903
+#: ../lib/rst/interp_float/resout2d.c:426 ../lib/raster/open.c:177
+#: ../lib/raster/open.c:815 ../lib/raster/open.c:852 ../lib/raster/open.c:904
 #, c-format
 msgid "Raster map <%s> not found"
 msgstr ""
@@ -5548,12 +5579,12 @@ msgstr "<%s> 어떤 이름도 바꾸지 않았습니다"
 msgid "Copy %s <%s> to current mapset as <%s>"
 msgstr "<%s>를 현재 맵셋의 <%s>으로 복사합니다"
 
-#: ../lib/manage/do_copy.c:50
+#: ../lib/manage/do_copy.c:50 ../lib/manage/do_copy.c:67
 #, fuzzy, c-format
 msgid "Unable to copy <%s> to current mapset as <%s>"
 msgstr "<%s>를 현재 맵셋의 <%s>으로 복사 할 수 없습니다"
 
-#: ../lib/manage/do_copy.c:70
+#: ../lib/manage/do_copy.c:72
 #, c-format
 msgid "%s copied"
 msgstr "%s를 복사했습니다"
@@ -6912,14 +6943,9 @@ msgid ""
 "\tYou provided %d item(s): %s"
 msgstr ""
 
-#: ../lib/gis/parser.c:1474
+#: ../lib/gis/parser.c:1474 ../lib/gis/parser.c:1481
 #, c-format
 msgid "option <%s>: <%s> exists. To overwrite, use the --overwrite flag"
-msgstr ""
-
-#: ../lib/gis/parser.c:1479
-#, c-format
-msgid "GRASS_INFO_ERROR(%d,1): "
 msgstr ""
 
 #: ../lib/gis/parser.c:1591
@@ -7160,136 +7186,136 @@ msgstr ""
 msgid "Other Projection"
 msgstr ""
 
-#: ../lib/rst/interp_float/vinput2d.c:73
+#: ../lib/rst/interp_float/vinput2d.c:94
 #, fuzzy, c-format
 msgid "Vector map <%s> is not 3D"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/rst/interp_float/vinput2d.c:76
+#: ../lib/rst/interp_float/vinput2d.c:97
 msgid "Loading data from attribute table ..."
 msgstr ""
 
-#: ../lib/rst/interp_float/vinput2d.c:97
-#: ../lib/rst/interp_float/vinput2d.c:110
+#: ../lib/rst/interp_float/vinput2d.c:118
+#: ../lib/rst/interp_float/vinput2d.c:131
 #, c-format
 msgid "Data type of column <%s> must be numeric"
 msgstr ""
 
-#: ../lib/rst/interp_float/vinput2d.c:121
+#: ../lib/rst/interp_float/vinput2d.c:142
 #, fuzzy
 msgid "Reading features from vector map ..."
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/rst/interp_float/vinput2d.c:153
+#: ../lib/rst/interp_float/vinput2d.c:174
 #, c-format
 msgid "Database record for cat %d not found"
 msgstr ""
 
-#: ../lib/rst/interp_float/vinput2d.c:171
+#: ../lib/rst/interp_float/vinput2d.c:192
 msgid "Negative value of smoothing detected: sm must be >= 0"
 msgstr ""
 
-#: ../lib/rst/interp_float/vinput2d.c:235
+#: ../lib/rst/interp_float/vinput2d.c:256
 msgid "Strip exists with insufficient data"
 msgstr ""
 
-#: ../lib/rst/interp_float/vinput2d.c:249
+#: ../lib/rst/interp_float/vinput2d.c:270
 #, c-format
 msgid "There are points outside specified 2D/3D region - %d points ignored"
 msgstr ""
 
-#: ../lib/rst/interp_float/vinput2d.c:252
+#: ../lib/rst/interp_float/vinput2d.c:273
 #, c-format
 msgid "Ignoring %d points (too dense)"
 msgstr ""
 
-#: ../lib/rst/interp_float/vinput2d.c:256
+#: ../lib/rst/interp_float/vinput2d.c:277
 #, c-format
 msgid ""
 "%d points given for interpolation (after thinning) is less than given NPMIN="
 "%d"
 msgstr ""
 
-#: ../lib/rst/interp_float/vinput2d.c:261
+#: ../lib/rst/interp_float/vinput2d.c:282
 msgid "Zero points in the given region"
 msgstr ""
 
-#: ../lib/rst/interp_float/vinput2d.c:266
+#: ../lib/rst/interp_float/vinput2d.c:287
 #, c-format
 msgid ""
 "Segmentation parameters set to invalid values: npmin= %d, segmax= %d for "
 "smooth connection of segments, npmin > segmax (see manual)"
 msgstr ""
 
-#: ../lib/rst/interp_float/vinput2d.c:272
+#: ../lib/rst/interp_float/vinput2d.c:293
 #, c-format
 msgid ""
 "There are less than %d points for interpolation. No segmentation is "
 "necessary, to run the program faster set segmax=%d (see manual)"
 msgstr ""
 
-#: ../lib/rst/interp_float/vinput2d.c:276
+#: ../lib/rst/interp_float/vinput2d.c:297
 #, fuzzy, c-format
 msgid "Number of points from vector map %d"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/rst/interp_float/vinput2d.c:277
+#: ../lib/rst/interp_float/vinput2d.c:298
 #, fuzzy, c-format
 msgid "Number of points outside of 2D/3D region %d"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/rst/interp_float/vinput2d.c:279
+#: ../lib/rst/interp_float/vinput2d.c:300
 #, fuzzy, c-format
 msgid "Number of points being used %d"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/rst/interp_float/vinput2d.c:312
+#: ../lib/rst/interp_float/vinput2d.c:333
 msgid "Some points outside of region (ignored)"
 msgstr ""
 
-#: ../lib/rst/interp_float/vinput2d.c:318
+#: ../lib/rst/interp_float/vinput2d.c:339
 #, fuzzy
 msgid "Unable to allocate memory"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/rst/interp_float/vinput2d.c:326
+#: ../lib/rst/interp_float/vinput2d.c:347
 #, fuzzy, c-format
 msgid "Unable to insert %f,%f,%f a = %d"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/rst/interp_float/write2d.c:40 ../lib/rst/interp_float/write2d.c:51
-#: ../lib/rst/interp_float/write2d.c:66 ../lib/rst/interp_float/write2d.c:75
-#: ../lib/rst/interp_float/write2d.c:83 ../lib/rst/interp_float/write2d.c:91
+#: ../lib/rst/interp_float/write2d.c:53 ../lib/rst/interp_float/write2d.c:64
+#: ../lib/rst/interp_float/write2d.c:79 ../lib/rst/interp_float/write2d.c:88
+#: ../lib/rst/interp_float/write2d.c:96 ../lib/rst/interp_float/write2d.c:104
 #, fuzzy
 msgid "Cannot write files"
 msgstr "임시파일을 열 수 없습니다"
 
-#: ../lib/rst/interp_float/segmen2d.c:118
+#: ../lib/rst/interp_float/segmen2d.c:135
 msgid ""
 "Taking too long to find points for interpolation - please change the region "
 "to area where your points are. Continuing calculations..."
 msgstr ""
 
-#: ../lib/rst/interp_float/input2d.c:48
+#: ../lib/rst/interp_float/input2d.c:58
 #, c-format
 msgid "Mask raster map <%s> not found"
 msgstr ""
 
-#: ../lib/rst/interp_float/input2d.c:71
+#: ../lib/rst/interp_float/input2d.c:81
 msgid "Bitmap mask created"
 msgstr ""
 
-#: ../lib/rst/interp_float/output2d.c:106
+#: ../lib/rst/interp_float/output2d.c:117
 #, c-format
 msgid "First change your rows number to nsizr! %d %d"
 msgstr ""
 
-#: ../lib/rst/interp_float/output2d.c:113
+#: ../lib/rst/interp_float/output2d.c:124
 #, c-format
 msgid "First change your cols number to nsizc %d %d"
 msgstr ""
 
-#: ../lib/rst/interp_float/interp2d.c:214
+#: ../lib/rst/interp_float/interp2d.c:232
 #, c-format
 msgid ""
 "Overshoot - increase in tension suggested. Overshoot occures at (%d,%d) "
@@ -7488,7 +7514,7 @@ msgstr ""
 msgid "Vectors are not of the same type"
 msgstr ""
 
-#: ../lib/gmath/la.c:1081 ../lib/gmath/la.c:1371
+#: ../lib/gmath/la.c:1081
 msgid "Output vector is of incorrect type"
 msgstr ""
 
@@ -7511,6 +7537,11 @@ msgstr ""
 #: ../lib/gmath/la.c:1148
 msgid "Row/column out of range"
 msgstr ""
+
+#: ../lib/gmath/la.c:1371
+#, fuzzy
+msgid "Output vector is not the same type as others"
+msgstr "'%s' 디버그파일을 열 수 없습니다"
 
 #: ../lib/gmath/la.c:1437
 msgid "Vector structure is not initialised"
@@ -8087,123 +8118,123 @@ msgstr "'%s' 디버그파일을 열 수 없습니다"
 msgid "Unable to create header file for <%s>"
 msgstr "'%s' 디버그파일을 열 수 없습니다"
 
-#: ../lib/raster/open.c:191
+#: ../lib/raster/open.c:192
 #, c-format
 msgid ""
 "Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@"
 "%s> which does not exist"
 msgstr ""
 
-#: ../lib/raster/open.c:196
+#: ../lib/raster/open.c:197
 #, fuzzy, c-format
 msgid "Error reading reclass file for raster map <%s>"
 msgstr "임시파일을 열 수 없습니다"
 
-#: ../lib/raster/open.c:207
+#: ../lib/raster/open.c:208
 #, fuzzy, c-format
 msgid "Error reading map type for raster map <%s>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/raster/open.c:215
+#: ../lib/raster/open.c:216
 #, c-format
 msgid "Raster map <%s@%s>: format field in header file invalid"
 msgstr ""
 
-#: ../lib/raster/open.c:220
+#: ../lib/raster/open.c:221
 #, c-format
 msgid ""
 "Raster map <%s> is in different projection than current region. Found <%s>, "
 "should be <%s>."
 msgstr ""
 
-#: ../lib/raster/open.c:227
+#: ../lib/raster/open.c:228
 #, c-format
 msgid "Raster map <%s> is in different zone (%d) than current region (%d)"
 msgstr ""
 
-#: ../lib/raster/open.c:232
+#: ../lib/raster/open.c:233
 #, c-format
 msgid "Raster map <%s>: bytes per cell (%d) too large"
 msgstr ""
 
-#: ../lib/raster/open.c:257
+#: ../lib/raster/open.c:258
 #, c-format
 msgid ""
 "Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
 msgstr ""
 
-#: ../lib/raster/open.c:265
+#: ../lib/raster/open.c:266
 #, fuzzy, c-format
 msgid "Unable to open %s file for raster map <%s@%s>"
 msgstr "임시파일을 열 수 없습니다"
 
-#: ../lib/raster/open.c:302
+#: ../lib/raster/open.c:303
 #, fuzzy, c-format
 msgid "Error reading format for <%s@%s>"
 msgstr "맵 [%s], 맵셑 [%s]을(를) 위한 분류지원: %s"
 
-#: ../lib/raster/open.c:507
+#: ../lib/raster/open.c:508
 #, fuzzy
 msgid "Unable to create GDAL link"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/raster/open.c:579 ../lib/raster/gdal.c:475
+#: ../lib/raster/open.c:580 ../lib/raster/gdal.c:475
 #, fuzzy, c-format
 msgid "Invalid map type <%d>"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/raster/open.c:584 ../lib/raster/open.c:729
+#: ../lib/raster/open.c:585 ../lib/raster/open.c:730
 #, c-format
 msgid "Raster map <%s> is not in the current mapset (%s)"
 msgstr ""
 
-#: ../lib/raster/open.c:591
+#: ../lib/raster/open.c:592
 #, fuzzy, c-format
 msgid "<%s> is an illegal file name"
 msgstr ""
 "\n"
 "**<%s> 잘못된 이름 **\n"
 
-#: ../lib/raster/open.c:605 ../lib/raster/open.c:677 ../lib/raster/open.c:751
+#: ../lib/raster/open.c:606 ../lib/raster/open.c:678 ../lib/raster/open.c:752
 #, c-format
 msgid "No temp files available: %s"
 msgstr ""
 
-#: ../lib/raster/open.c:725
+#: ../lib/raster/open.c:726
 #, fuzzy, c-format
 msgid "Raster map <%s> does not exist in the current mapset (%s)"
 msgstr "'%s' 디버그파일을 열 수 없습니다"
 
-#: ../lib/raster/open.c:790
+#: ../lib/raster/open.c:791
 msgid "Rast_set_fp_type(): can only be called with FCELL_TYPE or DCELL_TYPE"
 msgstr ""
 
-#: ../lib/raster/open.c:848
+#: ../lib/raster/open.c:849
 #, fuzzy, c-format
 msgid "Raster map <%s> not found in mapset <%s>"
 msgstr "'%s' 디버그파일을 열 수 없습니다"
 
-#: ../lib/raster/open.c:909
+#: ../lib/raster/open.c:910
 #, fuzzy, c-format
 msgid "Unable to find '%s'"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/raster/open.c:920
+#: ../lib/raster/open.c:921
 #, c-format
 msgid "Invalid type: field '%s' in file '%s'"
 msgstr ""
 
-#: ../lib/raster/open.c:925
+#: ../lib/raster/open.c:926
 #, c-format
 msgid "Missing type: field in file '%s'"
 msgstr ""
 
-#: ../lib/raster/open.c:930
+#: ../lib/raster/open.c:931
 #, c-format
 msgid "Raster map <%s> is not xdr: byte_order: %s"
 msgstr ""
 
-#: ../lib/raster/open.c:999
+#: ../lib/raster/open.c:1000
 msgid ""
 "Rast_set_quant_rules() can be called only for raster maps opened for reading"
 msgstr ""
@@ -8856,7 +8887,7 @@ msgstr ""
 msgid "Path '%s' doesn't exist"
 msgstr ""
 
-#: ../lib/init/grass.py:1170
+#: ../lib/init/grass.py:1177
 #, python-format
 msgid ""
 "%(user)s is currently running GRASS in selected mapset (file %(file)s "
@@ -8866,34 +8897,34 @@ msgid ""
 "sure..."
 msgstr ""
 
-#: ../lib/init/grass.py:1177
+#: ../lib/init/grass.py:1184
 #, python-format
 msgid ""
 "%(user)s is currently running GRASS in selected mapset (file %(file)s "
 "found). Forcing to launch GRASS..."
 msgstr ""
 
-#: ../lib/init/grass.py:1181
+#: ../lib/init/grass.py:1188
 #, python-format
 msgid ""
 "Unable to properly access '%s'.\n"
 "Please notify system personel."
 msgstr ""
 
-#: ../lib/init/grass.py:1202
+#: ../lib/init/grass.py:1209
 msgid "Building user fontcap..."
 msgstr ""
 
-#: ../lib/init/grass.py:1261
+#: ../lib/init/grass.py:1268
 msgid "The SHELL variable is not set"
 msgstr ""
 
-#: ../lib/init/grass.py:1277
+#: ../lib/init/grass.py:1284
 #, python-brace-format
 msgid "Unsupported shell <{sh}>: {env_file}"
 msgstr ""
 
-#: ../lib/init/grass.py:1293
+#: ../lib/init/grass.py:1300
 #, python-format
 msgid ""
 "Job file <%s> has been defined in the 'GRASS_BATCH_JOB' variable but not "
@@ -8902,104 +8933,104 @@ msgid ""
 "Use 'unset GRASS_BATCH_JOB' to disable batch job processing."
 msgstr ""
 
-#: ../lib/init/grass.py:1300
+#: ../lib/init/grass.py:1307
 #, python-format
 msgid "Change file permission to 'executable' for <%s>"
 msgstr ""
 
-#: ../lib/init/grass.py:1315
+#: ../lib/init/grass.py:1322
 #, python-format
 msgid "Executing <%s> ..."
 msgstr ""
 
-#: ../lib/init/grass.py:1322
+#: ../lib/init/grass.py:1329
 #, python-brace-format
 msgid ""
 "Execution of <{cmd}> failed:\n"
 "{error}"
 msgstr ""
 
-#: ../lib/init/grass.py:1325
+#: ../lib/init/grass.py:1332
 #, fuzzy, python-format
 msgid "Execution of <%s> finished."
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/init/grass.py:1367
+#: ../lib/init/grass.py:1374
 #, python-format
 msgid "Welcome to GRASS GIS %s"
 msgstr ""
 
-#: ../lib/init/grass.py:1388
+#: ../lib/init/grass.py:1395
 msgid "GRASS GIS homepage:"
 msgstr ""
 
-#: ../lib/init/grass.py:1389
+#: ../lib/init/grass.py:1396
 msgid "This version running through:"
 msgstr ""
 
-#: ../lib/init/grass.py:1391
+#: ../lib/init/grass.py:1398
 msgid "Help is available with the command:"
 msgstr ""
 
-#: ../lib/init/grass.py:1392
+#: ../lib/init/grass.py:1399
 msgid "See the licence terms with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1395
+#: ../lib/init/grass.py:1402
 msgid "If required, restart the GUI with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1397
+#: ../lib/init/grass.py:1404
 msgid "Start the GUI with:"
 msgstr ""
 
-#: ../lib/init/grass.py:1399
+#: ../lib/init/grass.py:1406
 msgid "When ready to quit enter:"
 msgstr ""
 
-#: ../lib/init/grass.py:1486
+#: ../lib/init/grass.py:1493
 msgid "2D and 3D raster MASKs present"
 msgstr ""
 
-#: ../lib/init/grass.py:1487
+#: ../lib/init/grass.py:1494
 msgid "Raster MASK present"
 msgstr ""
 
-#: ../lib/init/grass.py:1488
+#: ../lib/init/grass.py:1495
 msgid "3D raster MASK present"
 msgstr ""
 
-#: ../lib/init/grass.py:1524
+#: ../lib/init/grass.py:1531
 #, fuzzy, python-format
 msgid "Failed to start shell '%s'"
 msgstr "Datum %s 테이블파일을 열 수 없습니다"
 
-#: ../lib/init/grass.py:1530
+#: ../lib/init/grass.py:1537
 msgid "Done."
 msgstr ""
 
-#: ../lib/init/grass.py:1532
+#: ../lib/init/grass.py:1539
 msgid "Goodbye from GRASS GIS"
 msgstr ""
 
-#: ../lib/init/grass.py:1537
+#: ../lib/init/grass.py:1544
 msgid "Cleaning up temporary files..."
 msgstr ""
 
-#: ../lib/init/grass.py:1557
+#: ../lib/init/grass.py:1564
 msgid "Please install the GRASS GIS development package"
 msgstr ""
 
-#: ../lib/init/grass.py:1589
+#: ../lib/init/grass.py:1596
 #, python-format
 msgid "Parameter <%s> not supported"
 msgstr ""
 
-#: ../lib/init/grass.py:1733
+#: ../lib/init/grass.py:1740
 msgid "Flag -e requires also flag -c"
 msgstr ""
 
-#: ../lib/init/grass.py:1780
+#: ../lib/init/grass.py:1787
 #, python-brace-format
 msgid ""
 "Unable to start GRASS GIS. You have the choice to:\n"
@@ -9010,15 +9041,15 @@ msgid ""
 " - Create manually the GISRC file ({gisrcrc})"
 msgstr ""
 
-#: ../lib/init/grass.py:1795
+#: ../lib/init/grass.py:1802
 msgid "Creating new GRASS GIS location/mapset..."
 msgstr ""
 
-#: ../lib/init/grass.py:1797
+#: ../lib/init/grass.py:1804
 msgid "Starting GRASS GIS..."
 msgstr ""
 
-#: ../lib/init/grass.py:1870
+#: ../lib/init/grass.py:1877
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr ""
@@ -9279,6 +9310,24 @@ msgstr ""
 #, c-format
 msgid "%s: out of memory"
 msgstr ""
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to check table. There is no temporal database connection defined "
+#~ "for mapset <%(mapset)s>"
+#~ msgstr "Datum %s 테이블파일을 열 수 없습니다"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to fetch one. There is no temporal database connection defined for "
+#~ "mapset <%(mapset)s>"
+#~ msgstr "'%s' 디버그파일을 열 수 없습니다"
+
+#, fuzzy
+#~ msgid ""
+#~ "Unable to fetch all. There is no temporal database connection defined for "
+#~ "mapset <%(mapset)s>"
+#~ msgstr "'%s' 디버그파일을 열 수 없습니다"
 
 #, fuzzy
 #~ msgid "Unable to find a temporary null file <%s>"
