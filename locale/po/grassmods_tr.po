@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grassmods_tr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-18 12:56+0200\n"
+"POT-Creation-Date: 2015-11-18 12:26+0100\n"
 "PO-Revision-Date: 2008-11-16 01:15+0200\n"
 "Last-Translator: Osman Yalçın YILMAZ <yilmazy@istanbul.edu.tr>\n"
 "Language-Team: Türkçe <grass-translations@lists.osgeo.org>\n"
@@ -251,8 +251,8 @@ msgstr "<%s> harita takımı bulunamadı"
 #: ../db/drivers/ogr/execute.c:69 ../vector/v.colors/scan_attr.c:35
 #: ../vector/v.in.db/main.c:187 ../vector/v.to.3d/trans3.c:65
 #: ../vector/v.to.3d/trans2.c:63 ../vector/v.vect.stats/main.c:395
-#: ../vector/v.colors.out/make_colors.c:42 ../vector/v.distance/main.c:471
-#: ../vector/v.distance/main.c:512 ../vector/v.reclass/main.c:145
+#: ../vector/v.colors.out/make_colors.c:42 ../vector/v.distance/main.c:477
+#: ../vector/v.distance/main.c:518 ../vector/v.reclass/main.c:145
 #: ../vector/v.db.connect/main.c:289 ../vector/v.transform/trans_digit.c:101
 #: ../vector/v.univar/main.c:355
 #, c-format
@@ -582,8 +582,7 @@ msgstr "genel, ayarlar"
 #: ../vector/v.net.centrality/main.c:310 ../vector/v.net.centrality/main.c:316
 #: ../vector/v.net.connectivity/main.c:186
 #: ../vector/v.net.connectivity/main.c:202
-#: ../vector/v.net.components/main.c:169
-#: ../vector/v.generalize/smoothing.c:144
+#: ../vector/v.net.components/main.c:169 ../vector/v.generalize/smoothing.c:144
 #: ../vector/v.generalize/smoothing.c:231
 #: ../vector/v.generalize/smoothing.c:374
 #: ../vector/v.generalize/smoothing.c:528
@@ -910,12 +909,12 @@ msgstr "Geçerli bağlantı parametrelerini yaz ve çık"
 #: ../locale/scriptstrings/g.extension_to_translate.c:15
 #: ../locale/scriptstrings/g.extension_to_translate.c:17
 #: ../locale/scriptstrings/g.extension_to_translate.c:19
-#: ../locale/scriptstrings/t.rast.colors_to_translate.c:17
+#: ../locale/scriptstrings/t.rast.colors_to_translate.c:18
 #: ../general/g.mapsets/main.c:87 ../general/g.mapsets/main.c:92
-#: ../general/g.mapsets/main.c:98 ../general/g.proj/main.c:79
-#: ../general/g.proj/main.c:85 ../general/g.proj/main.c:91
-#: ../general/g.proj/main.c:97 ../general/g.proj/main.c:103
-#: ../general/g.proj/main.c:114 ../general/g.proj/main.c:119
+#: ../general/g.mapsets/main.c:98 ../general/g.proj/main.c:80
+#: ../general/g.proj/main.c:86 ../general/g.proj/main.c:92
+#: ../general/g.proj/main.c:98 ../general/g.proj/main.c:104
+#: ../general/g.proj/main.c:115 ../general/g.proj/main.c:120
 #: ../general/g.list/main.c:128 ../general/g.list/main.c:139
 #: ../general/g.list/main.c:161 ../general/g.list/main.c:166
 #: ../general/g.list/main.c:171 ../general/g.list/main.c:176
@@ -930,7 +929,7 @@ msgstr "Geçerli bağlantı parametrelerini yaz ve çık"
 #: ../raster/r.out.gdal/main.c:142 ../raster/r.colors/edit_colors.c:128
 #: ../raster/r.external.out/main.c:272 ../raster/r.external.out/main.c:283
 #: ../raster/r.sunmask/main.c:232 ../raster/r.sunmask/main.c:238
-#: ../raster/r.external/main.c:94 ../raster/r.in.gdal/main.c:169
+#: ../raster/r.external/main.c:94 ../raster/r.in.gdal/main.c:177
 #: ../raster/r.what/main.c:120 ../raster/r.what/main.c:128
 #: ../raster/r.what/main.c:142 ../raster/r.what/main.c:147
 #: ../raster/r.what/main.c:152 ../raster/r.what/main.c:157
@@ -1084,7 +1083,7 @@ msgstr "Tablo kopyalama başarısız"
 #: ../vector/v.out.vtk/writeVTK.c:644 ../vector/v.db.connect/main.c:217
 #: ../vector/v.db.connect/main.c:283 ../doc/vector/v.example/main.c:126
 #: ../raster/r.stream.extract/close.c:172 ../display/d.vect/opt.c:147
-#: ../display/d.vect.thematic/main.c:208
+#: ../display/d.vect.thematic/main.c:209
 #, c-format
 msgid "Unable to start driver <%s>"
 msgstr "Sürücü başlatılamıyor<%s>"
@@ -1092,7 +1091,7 @@ msgstr "Sürücü başlatılamıyor<%s>"
 #: ../db/db.describe/main.c:61 ../db/db.tables/main.c:50
 #: ../db/db.columns/main.c:56 ../db/db.select/main.c:81
 #: ../db/db.execute/main.c:76 ../display/d.vect/opt.c:152
-#: ../display/d.vect.thematic/main.c:213
+#: ../display/d.vect.thematic/main.c:214
 #, c-format
 msgid "Unable to open database <%s>"
 msgstr "<%s> veritabanı açılamıyor"
@@ -1287,8 +1286,8 @@ msgid "succeeded"
 msgstr "...başarıldı."
 
 #: ../db/db.select/main.c:142 ../vector/v.db.select/main.c:117
-#: ../raster/r.regression.line/main.c:76 ../raster/r.stats/main.c:227
-#: ../raster/r.regression.multi/main.c:168
+#: ../raster/r.regression.line/main.c:77 ../raster/r.stats/main.c:227
+#: ../raster/r.regression.multi/main.c:169
 #: ../raster/r.univar/r3.univar_main.c:128
 #: ../raster/r.univar/r.univar_main.c:121 ../raster/r.what/main.c:170
 #, c-format
@@ -1311,7 +1310,7 @@ msgstr "YSD ifadelerini içeren dosya adı"
 #: ../db/db.select/main.c:208 ../db/db.execute/main.c:139
 #: ../vector/v.edit/args.c:89 ../vector/v.segment/main.c:80
 #: ../vector/v.what/main.c:76 ../locale/scriptstrings/m.proj_to_translate.c:7
-#: ../general/g.proj/main.c:140 ../general/g.proj/main.c:149
+#: ../general/g.proj/main.c:141 ../general/g.proj/main.c:150
 #: ../raster/r.in.ascii/main.c:79 ../raster/r.reclass/main.c:66
 #: ../raster/r.recode/main.c:60
 #, fuzzy
@@ -1579,6 +1578,8 @@ msgstr "Çıktıyı 90 derece döndür"
 #: ../ps/ps.map/main.c:100 ../ps/ps.map/main.c:113 ../ps/ps.map/main.c:135
 #: ../locale/scriptstrings/r.unpack_to_translate.c:7
 #: ../locale/scriptstrings/r.unpack_to_translate.c:9
+#: ../locale/scriptstrings/v.unpack_to_translate.c:8
+#: ../locale/scriptstrings/v.unpack_to_translate.c:10
 #: ../raster/r.univar/r.univar_main.c:42 ../raster/r.kappa/main.c:90
 #: ../raster/r.kappa/main.c:98
 #, fuzzy
@@ -1841,47 +1842,45 @@ msgstr "Geçersiz silme isteği"
 msgid "illegal request (geogrid)"
 msgstr "Geçersiz silme isteği"
 
-#: ../ps/ps.map/catval.c:48 ../ps/ps.map/catval.c:110
-#: ../ps/ps.map/catval.c:176 ../vector/v.vol.rst/user1.c:95
-#: ../vector/v.class/main.c:111 ../vector/v.label.sa/labels.c:75
-#: ../vector/v.label/main.c:274
+#: ../ps/ps.map/catval.c:48 ../ps/ps.map/catval.c:110 ../ps/ps.map/catval.c:176
+#: ../vector/v.vol.rst/user1.c:95 ../vector/v.class/main.c:111
+#: ../vector/v.label.sa/labels.c:75 ../vector/v.label/main.c:274
 msgid "Unable to get layer info for vector map"
 msgstr "Vektör haritanın katman bilgisi alınamıyor"
 
-#: ../ps/ps.map/catval.c:53 ../ps/ps.map/catval.c:115
-#: ../ps/ps.map/catval.c:181 ../misc/m.nviz.image/vector.c:293
-#: ../vector/v.extract/main.c:260 ../vector/v.net.path/path.c:96
-#: ../vector/v.edit/select.c:516 ../vector/v.colors/read_rgb.c:28
-#: ../vector/v.colors/scan_attr.c:29 ../vector/v.colors/write_rgb.c:25
-#: ../vector/v.vol.rst/main.c:600 ../vector/v.vol.rst/user1.c:99
-#: ../vector/v.in.db/main.c:164 ../vector/v.in.db/main.c:302
-#: ../vector/v.kcv/main.c:126 ../vector/v.info/print.c:147
-#: ../vector/v.to.3d/trans3.c:57 ../vector/v.to.3d/trans2.c:55
-#: ../vector/v.overlay/main.c:239 ../vector/v.overlay/main.c:406
-#: ../vector/v.random/main.c:236 ../vector/v.what.rast/main.c:143
-#: ../vector/v.to.rast/support.c:132 ../vector/v.to.rast/support.c:294
-#: ../vector/v.to.rast/support.c:447 ../vector/v.to.rast/vect2rast.c:60
-#: ../vector/v.net.centrality/main.c:246 ../vector/v.out.svg/main.c:159
-#: ../vector/v.colors.out/make_colors.c:36
+#: ../ps/ps.map/catval.c:53 ../ps/ps.map/catval.c:115 ../ps/ps.map/catval.c:181
+#: ../misc/m.nviz.image/vector.c:293 ../vector/v.extract/main.c:263
+#: ../vector/v.net.path/path.c:96 ../vector/v.edit/select.c:516
+#: ../vector/v.colors/read_rgb.c:28 ../vector/v.colors/scan_attr.c:29
+#: ../vector/v.colors/write_rgb.c:25 ../vector/v.vol.rst/main.c:600
+#: ../vector/v.vol.rst/user1.c:99 ../vector/v.in.db/main.c:164
+#: ../vector/v.in.db/main.c:302 ../vector/v.kcv/main.c:126
+#: ../vector/v.info/print.c:147 ../vector/v.to.3d/trans3.c:57
+#: ../vector/v.to.3d/trans2.c:55 ../vector/v.overlay/main.c:239
+#: ../vector/v.overlay/main.c:406 ../vector/v.random/main.c:236
+#: ../vector/v.what.rast/main.c:143 ../vector/v.to.rast/support.c:132
+#: ../vector/v.to.rast/support.c:294 ../vector/v.to.rast/support.c:447
+#: ../vector/v.to.rast/vect2rast.c:60 ../vector/v.net.centrality/main.c:246
+#: ../vector/v.out.svg/main.c:159 ../vector/v.colors.out/make_colors.c:36
 #: ../vector/v.net.components/main.c:179 ../vector/v.in.dwg/main.c:213
-#: ../vector/v.select/copy_tabs.c:77 ../vector/v.distance/main.c:458
-#: ../vector/v.distance/main.c:493 ../vector/v.distance/main.c:539
-#: ../vector/v.distance/main.c:1268 ../vector/v.distance/main.c:1289
+#: ../vector/v.select/copy_tabs.c:77 ../vector/v.distance/main.c:464
+#: ../vector/v.distance/main.c:499 ../vector/v.distance/main.c:545
+#: ../vector/v.distance/main.c:1274 ../vector/v.distance/main.c:1295
 #: ../vector/v.class/main.c:117 ../vector/v.label.sa/labels.c:78
-#: ../vector/v.surf.bspline/main.c:388
-#: ../vector/v.surf.bspline/crosscorr.c:123 ../vector/v.out.vtk/writeVTK.c:649
-#: ../vector/v.reclass/main.c:133 ../vector/v.surf.rst/main.c:587
-#: ../vector/v.out.ogr/main.c:635 ../vector/v.net.distance/main.c:251
-#: ../vector/v.patch/main.c:139 ../vector/v.patch/main.c:171
-#: ../vector/v.patch/main.c:292 ../vector/v.patch/main.c:374
-#: ../vector/v.buffer/main.c:417 ../vector/v.normal/main.c:122
-#: ../vector/v.db.connect/main.c:223 ../vector/v.db.connect/main.c:331
-#: ../vector/v.surf.idw/read_sites.c:55 ../vector/v.transform/trans_digit.c:40
-#: ../vector/v.net.allpairs/main.c:166 ../vector/v.lrs/v.lrs.create/main.c:296
+#: ../vector/v.surf.bspline/main.c:388 ../vector/v.surf.bspline/crosscorr.c:123
+#: ../vector/v.out.vtk/writeVTK.c:649 ../vector/v.reclass/main.c:133
+#: ../vector/v.surf.rst/main.c:587 ../vector/v.out.ogr/main.c:635
+#: ../vector/v.net.distance/main.c:251 ../vector/v.patch/main.c:139
+#: ../vector/v.patch/main.c:171 ../vector/v.patch/main.c:292
+#: ../vector/v.patch/main.c:374 ../vector/v.buffer/main.c:417
+#: ../vector/v.normal/main.c:122 ../vector/v.db.connect/main.c:223
+#: ../vector/v.db.connect/main.c:331 ../vector/v.surf.idw/read_sites.c:55
+#: ../vector/v.transform/trans_digit.c:40 ../vector/v.net.allpairs/main.c:166
+#: ../vector/v.lrs/v.lrs.create/main.c:296
 #: ../vector/v.lrs/v.lrs.create/main.c:305 ../vector/v.db.select/main.c:168
 #: ../vector/v.mkgrid/main.c:277 ../vector/v.label/main.c:278
 #: ../vector/v.extrude/main.c:229 ../vector/v.sample/main.c:179
-#: ../vector/v.what.rast3/main.c:125 ../vector/v.in.ogr/main.c:1111
+#: ../vector/v.what.rast3/main.c:125 ../vector/v.in.ogr/main.c:1127
 #: ../vector/v.in.dxf/write_vect.c:211 ../vector/v.net.timetable/main.c:93
 #: ../vector/v.to.db/query.c:89 ../vector/v.to.db/update.c:46
 #: ../vector/v.to.points/main.c:167 ../vector/v.to.rast3/main.c:84
@@ -1899,12 +1898,11 @@ msgstr "<%s> sürücüsüyle <%s> veritabanı açılamıyor"
 msgid "Column type not supported (must be string)"
 msgstr "Sütun tipi desteklenmiyor (karakter olmalıdır)"
 
-#: ../ps/ps.map/catval.c:66 ../ps/ps.map/catval.c:131
-#: ../ps/ps.map/catval.c:198 ../vector/v.vol.rst/user1.c:112
-#: ../vector/v.class/main.c:132 ../vector/v.surf.bspline/main.c:402
-#: ../vector/v.normal/main.c:134 ../vector/v.surf.idw/read_sites.c:68
-#: ../vector/v.sample/main.c:152 ../vector/v.univar/main.c:366
-#: ../vector/v.to.rast3/main.c:95
+#: ../ps/ps.map/catval.c:66 ../ps/ps.map/catval.c:131 ../ps/ps.map/catval.c:198
+#: ../vector/v.vol.rst/user1.c:112 ../vector/v.class/main.c:132
+#: ../vector/v.surf.bspline/main.c:402 ../vector/v.normal/main.c:134
+#: ../vector/v.surf.idw/read_sites.c:68 ../vector/v.sample/main.c:152
+#: ../vector/v.univar/main.c:366 ../vector/v.to.rast3/main.c:95
 msgid "Unable to select data from table"
 msgstr "Tablodan veri seçilemiyor"
 
@@ -2100,11 +2098,10 @@ msgstr "gösterim"
 #: ../misc/m.nviz.image/main.c:51 ../misc/m.nviz.script/main.c:70
 #: ../visualization/ximgview/main.c:291
 #: ../locale/scriptstrings/wxpyimgview_to_translate.c:3
-#: ../locale/scriptstrings/d.redraw_to_translate.c:3
-#: ../display/d.mon/main.c:39 ../display/d.erase/main.c:30
-#: ../display/d.rast/main.c:54 ../display/d.vect/main.c:71
-#: ../display/d.info/main.c:32 ../display/d.his/main.c:63
-#: ../display/d.rgb/main.c:54
+#: ../locale/scriptstrings/d.redraw_to_translate.c:3 ../display/d.mon/main.c:39
+#: ../display/d.erase/main.c:30 ../display/d.rast/main.c:54
+#: ../display/d.vect/main.c:71 ../display/d.info/main.c:32
+#: ../display/d.his/main.c:63 ../display/d.rgb/main.c:54
 msgid "graphics"
 msgstr ""
 
@@ -2141,6 +2138,7 @@ msgstr ""
 #: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:4
 #: ../locale/scriptstrings/r.in.srtm_to_translate.c:2
 #: ../locale/scriptstrings/r.pack_to_translate.c:2
+#: ../locale/scriptstrings/r.import_to_translate.c:2
 #: ../locale/scriptstrings/d.rast.edit_to_translate.c:4
 #: ../locale/scriptstrings/r.colors.stddev_to_translate.c:2
 #: ../locale/scriptstrings/v.krige_to_translate.c:4
@@ -2182,7 +2180,7 @@ msgstr ""
 #: ../raster/r.out.mat/main.c:62 ../raster/r.rescale.eq/main.c:52
 #: ../raster/r.recode/main.c:48 ../raster/r.surf.gauss/main.c:38
 #: ../raster/r.clump/main.c:51 ../raster/r.drain/main.c:109
-#: ../raster/r.water.outlet/main.c:67 ../raster/r.stats/main.c:106
+#: ../raster/r.water.outlet/main.c:56 ../raster/r.stats/main.c:106
 #: ../raster/r.watershed/front/main.c:72 ../raster/r.resamp.stats/main.c:256
 #: ../raster/r.surf.area/main.c:76 ../raster/r.regression.multi/main.c:128
 #: ../raster/r.carve/main.c:74 ../raster/r.mfilter/main.c:56
@@ -2199,10 +2197,10 @@ msgstr ""
 #: ../raster/r.resample/main.c:54 ../raster/r.tile/main.c:43
 #: ../raster/r.region/main.c:51 ../raster/r.stats.zonal/main.c:101
 #: ../raster/r.support.stats/main.c:38 ../raster/r.basins.fill/main.c:54
-#: ../raster/r.external/main.c:55 ../raster/r.in.gdal/main.c:86
+#: ../raster/r.external/main.c:55 ../raster/r.in.gdal/main.c:87
 #: ../raster/r.kappa/main.c:68 ../raster/r.uslek/main.c:53
 #: ../raster/r.topidx/main.c:39 ../raster/r.lake/main.c:150
-#: ../raster/r.patch/main.c:54 ../raster/r.surf.idw/main.c:104
+#: ../raster/r.patch/main.c:55 ../raster/r.surf.idw/main.c:104
 #: ../raster/r.to.vect/main.c:70 ../raster/r.sim/r.sim.sediment/main.c:109
 #: ../raster/r.sim/r.sim.water/main.c:109 ../raster/r.out.ppm3/main.c:57
 #: ../raster/r.out.pov/main.c:121 ../raster/r.surf.fractal/main.c:38
@@ -2210,8 +2208,7 @@ msgstr ""
 #: ../raster/r.quantile/main.c:255 ../raster/r.random.surface/main.c:57
 #: ../raster/r.in.bin/main.c:257 ../raster/r.distance/main.c:39
 #: ../raster/r.resamp.bspline/main.c:80 ../raster/r.rescale/main.c:48
-#: ../raster/r.transect/main.c:103
-#: ../raster/r.li/r.li.dominance/dominance.c:46
+#: ../raster/r.transect/main.c:103 ../raster/r.li/r.li.dominance/dominance.c:46
 #: ../raster/r.li/r.li.simpson/simpson.c:46
 #: ../raster/r.li/r.li.padsd/padsd.c:53
 #: ../raster/r.li/r.li.patchdensity/main.c:51
@@ -2264,7 +2261,7 @@ msgstr "raster"
 #: ../vector/v.outlier/main.c:69 ../vector/v.proj/main.c:67
 #: ../vector/v.support/main.c:39 ../vector/v.what/main.c:60
 #: ../vector/v.patch/main.c:68 ../vector/v.in.lidar/main.c:156
-#: ../vector/v.external/main.c:48 ../vector/v.delaunay/main.c:85
+#: ../vector/v.external/main.c:50 ../vector/v.delaunay/main.c:85
 #: ../vector/v.buffer/main.c:222 ../vector/v.normal/main.c:72
 #: ../vector/v.db.connect/main.c:52 ../vector/v.out.dxf/main.c:56
 #: ../vector/v.net.alloc/main.c:62 ../vector/v.surf.idw/main.c:87
@@ -2302,6 +2299,7 @@ msgstr "raster"
 #: ../locale/scriptstrings/v.db.update_to_translate.c:2
 #: ../locale/scriptstrings/v.unpack_to_translate.c:2
 #: ../locale/scriptstrings/d.what.rast_to_translate.c:3
+#: ../locale/scriptstrings/v.import_to_translate.c:2
 #: ../locale/scriptstrings/v.in.mapgen_to_translate.c:2
 #: ../locale/scriptstrings/v.db.addcolumn_to_translate.c:2
 #: ../locale/scriptstrings/t.vect.univar_to_translate.c:4
@@ -2950,17 +2948,16 @@ msgstr "Coğrafi dönüşüm ayarlanamıyor"
 #: ../vector/v.lrs/v.lrs.where/main.c:136
 #: ../vector/v.lrs/v.lrs.create/main.c:251
 #: ../vector/v.lrs/v.lrs.create/main.c:260
-#: ../vector/v.lrs/v.lrs.label/main.c:268
-#: ../vector/v.clean/test/topocheck.c:63 ../vector/v.lidar.growing/main.c:126
-#: ../vector/v.lidar.correction/main.c:182 ../general/g.region/main.c:467
-#: ../doc/vector/v.example/main.c:75 ../raster/r.walk/main.c:410
-#: ../raster/r.carve/main.c:158 ../raster/r.cost/main.c:325
-#: ../display/d.extract/main.c:98
+#: ../vector/v.lrs/v.lrs.label/main.c:268 ../vector/v.clean/test/topocheck.c:63
+#: ../vector/v.lidar.growing/main.c:126 ../vector/v.lidar.correction/main.c:182
+#: ../general/g.region/main.c:467 ../doc/vector/v.example/main.c:75
+#: ../raster/r.walk/main.c:410 ../raster/r.carve/main.c:158
+#: ../raster/r.cost/main.c:325 ../display/d.extract/main.c:98
 #, c-format
 msgid "Vector map <%s> not found"
 msgstr "<%s> vektör haritası bulunamadı"
 
-#: ../misc/m.nviz.image/vector.c:280 ../vector/v.extract/main.c:188
+#: ../misc/m.nviz.image/vector.c:280 ../vector/v.extract/main.c:191
 #: ../vector/v.net.path/main.c:133 ../vector/v.edit/main.c:168
 #: ../vector/v.edit/main.c:240 ../vector/v.colors/main.c:263
 #: ../vector/v.vol.rst/main.c:560 ../vector/v.net.steiner/main.c:431
@@ -2979,7 +2976,7 @@ msgstr "<%s> vektör haritası bulunamadı"
 #: ../vector/v.colors.out/scan_cats.c:20
 #: ../vector/v.colors.out/make_colors.c:23
 #: ../vector/v.net.components/main.c:147 ../vector/v.select/main.c:107
-#: ../vector/v.distance/main.c:310 ../vector/v.distance/main.c:329
+#: ../vector/v.distance/main.c:310 ../vector/v.distance/main.c:332
 #: ../vector/v.parallel/main.c:148 ../vector/v.class/main.c:102
 #: ../vector/v.generalize/main.c:323 ../vector/v.label.sa/labels.c:58
 #: ../vector/v.voronoi/main.c:196 ../vector/v.hull/main.c:87
@@ -2993,7 +2990,7 @@ msgstr "<%s> vektör haritası bulunamadı"
 #: ../vector/v.support/main.c:130 ../vector/v.patch/main.c:114
 #: ../vector/v.patch/main.c:130 ../vector/v.patch/main.c:160
 #: ../vector/v.patch/main.c:257 ../vector/v.patch/main.c:338
-#: ../vector/v.external/main.c:191 ../vector/v.delaunay/main.c:120
+#: ../vector/v.external/main.c:193 ../vector/v.delaunay/main.c:120
 #: ../vector/v.buffer/main.c:338 ../vector/v.normal/main.c:110
 #: ../vector/v.db.connect/main.c:154 ../vector/v.out.dxf/main.c:80
 #: ../vector/v.net.alloc/main.c:146 ../vector/v.surf.idw/read_sites.c:29
@@ -3013,18 +3010,17 @@ msgstr "<%s> vektör haritası bulunamadı"
 #: ../vector/v.extrude/main.c:190 ../vector/v.sample/main.c:124
 #: ../vector/v.univar/main.c:158 ../vector/v.what.rast3/main.c:113
 #: ../vector/v.net.timetable/main.c:353 ../vector/v.to.db/main.c:59
-#: ../vector/v.kernel/main.c:310 ../vector/v.kernel/main.c:323
+#: ../vector/v.kernel/main.c:316 ../vector/v.kernel/main.c:329
 #: ../vector/v.build.polylines/main.c:151 ../vector/v.to.points/main.c:121
 #: ../vector/v.to.rast3/main.c:73 ../vector/v.out.postgis/main.c:100
 #: ../vector/v.net.flow/main.c:143 ../general/manage/lister/vector.c:32
 #: ../doc/vector/v.example/main.c:87 ../raster/r.walk/main.c:673
 #: ../raster/r.walk/main.c:742 ../raster/r.random/support.c:63
 #: ../raster/r.drain/main.c:268 ../raster/r.carve/main.c:162
-#: ../raster/r.region/main.c:170
-#: ../raster/r.sim/simlib/observation_points.c:39 ../raster/r.what/main.c:236
-#: ../raster/r.cost/main.c:533 ../raster/r.cost/main.c:606
-#: ../display/d.extract/main.c:103 ../display/d.vect.chart/main.c:240
-#: ../display/d.path/main.c:185
+#: ../raster/r.region/main.c:170 ../raster/r.sim/simlib/observation_points.c:39
+#: ../raster/r.what/main.c:236 ../raster/r.cost/main.c:533
+#: ../raster/r.cost/main.c:606 ../display/d.extract/main.c:103
+#: ../display/d.vect.chart/main.c:240 ../display/d.path/main.c:185
 #, c-format
 msgid "Unable to open vector map <%s>"
 msgstr "<%s> vektör haritası açılamıyor"
@@ -3409,11 +3405,11 @@ msgstr "<%s> sürücüsüyle <%s> veritabanı açılamıyor"
 
 #: ../vector/v.extract/copy_tab.c:129 ../vector/v.overlay/main.c:590
 #: ../vector/v.random/main.c:262 ../vector/v.in.dwg/main.c:249
-#: ../vector/v.select/copy_tabs.c:85 ../vector/v.distance/main.c:1355
+#: ../vector/v.select/copy_tabs.c:85 ../vector/v.distance/main.c:1361
 #: ../vector/v.reclass/main.c:327 ../vector/v.patch/main.c:316
 #: ../vector/v.in.lidar/main.c:623 ../vector/v.mkgrid/main.c:349
 #: ../vector/v.mkgrid/main.c:407 ../vector/v.sample/main.c:197
-#: ../vector/v.in.ogr/main.c:1125 ../vector/v.in.dxf/write_vect.c:238
+#: ../vector/v.in.ogr/main.c:1141 ../vector/v.in.dxf/write_vect.c:238
 #: ../vector/v.to.points/main.c:192 ../vector/v.in.ascii/main.c:417
 #: ../raster/r.random/random.c:257 ../raster/r.contour/main.c:193
 #: ../raster/r.stream.extract/close.c:196 ../raster/r.to.vect/main.c:231
@@ -3446,22 +3442,41 @@ msgstr "Haritalar hesaplanıyor ..."
 msgid "extract"
 msgstr "vektör, dışa aktar"
 
+#: ../vector/v.extract/main.c:79
+#: ../locale/scriptstrings/t.vect.db.select_to_translate.c:6
+#, fuzzy
+msgid "select"
+msgstr "Çözünürlük"
+
 #: ../vector/v.extract/main.c:80
+#: ../locale/scriptstrings/v.dissolve_to_translate.c:3
+msgid "dissolve"
+msgstr ""
+
+#: ../vector/v.extract/main.c:81 ../vector/v.random/main.c:99
+#: ../vector/v.perturb/main.c:65 ../raster/r.surf.random/main.c:38
+#: ../raster/r.random/main.c:54 ../raster/r.surf.gauss/main.c:40
+#: ../raster/r.random.surface/main.c:59 ../raster/r.random.cells/main.c:47
+#, fuzzy
+msgid "random"
+msgstr "Arc tipi"
+
+#: ../vector/v.extract/main.c:83
 msgid ""
 "Selects vector features from an existing vector map and creates a new vector "
 "map containing only the selected features."
 msgstr ""
 
-#: ../vector/v.extract/main.c:85
+#: ../vector/v.extract/main.c:88
 msgid "Dissolve common boundaries (default is no)"
 msgstr "Ortak sınırları birleştir (varsayılan hayır'dır)"
 
-#: ../vector/v.extract/main.c:89
+#: ../vector/v.extract/main.c:92
 #, fuzzy
 msgid "Do not copy attributes (see also 'new' parameter)"
 msgstr "Tabloyu kopyalamayın (ayrıca 'new' parametreye bakın)"
 
-#: ../vector/v.extract/main.c:90 ../vector/v.extract/main.c:142
+#: ../vector/v.extract/main.c:93 ../vector/v.extract/main.c:145
 #: ../vector/v.overlay/main.c:132 ../vector/v.overlay/main.c:142
 #: ../vector/v.to.rast/main.c:88 ../vector/v.to.rast/main.c:94
 #: ../vector/v.to.rast/main.c:100 ../vector/v.generalize/main.c:241
@@ -3473,15 +3488,15 @@ msgstr "Tabloyu kopyalamayın (ayrıca 'new' parametreye bakın)"
 msgid "Attributes"
 msgstr "Öznitelikler"
 
-#: ../vector/v.extract/main.c:94 ../vector/v.edit/args.c:198
+#: ../vector/v.extract/main.c:97 ../vector/v.edit/args.c:198
 #: ../vector/v.select/args.c:105
 msgid "Reverse selection"
 msgstr ""
 
-#: ../vector/v.extract/main.c:95 ../vector/v.extract/main.c:100
-#: ../vector/v.extract/main.c:106 ../vector/v.extract/main.c:109
-#: ../vector/v.extract/main.c:112 ../vector/v.extract/main.c:122
-#: ../vector/v.extract/main.c:132 ../vector/v.edit/args.c:24
+#: ../vector/v.extract/main.c:98 ../vector/v.extract/main.c:103
+#: ../vector/v.extract/main.c:109 ../vector/v.extract/main.c:112
+#: ../vector/v.extract/main.c:115 ../vector/v.extract/main.c:125
+#: ../vector/v.extract/main.c:135 ../vector/v.edit/args.c:24
 #: ../vector/v.edit/args.c:29 ../vector/v.edit/args.c:112
 #: ../vector/v.edit/args.c:116 ../vector/v.edit/args.c:125
 #: ../vector/v.edit/args.c:134 ../vector/v.edit/args.c:143
@@ -3521,141 +3536,141 @@ msgstr ""
 #: ../vector/v.to.db/parse.c:45 ../vector/v.to.points/main.c:67
 #: ../vector/v.to.points/main.c:71 ../vector/v.out.postgis/args.c:15
 #: ../vector/v.out.postgis/args.c:19
-#: ../locale/scriptstrings/t.rast.univar_to_translate.c:5
-#: ../locale/scriptstrings/t.rast.list_to_translate.c:9
+#: ../locale/scriptstrings/t.rast.univar_to_translate.c:6
 #: ../locale/scriptstrings/t.rast.list_to_translate.c:10
+#: ../locale/scriptstrings/t.rast.list_to_translate.c:11
 #: ../locale/scriptstrings/v.report_to_translate.c:5
-#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:9
 #: ../locale/scriptstrings/t.rast3d.list_to_translate.c:10
-#: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:6
-#: ../locale/scriptstrings/t.vect.list_to_translate.c:9
+#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:11
+#: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:7
 #: ../locale/scriptstrings/t.vect.list_to_translate.c:10
-#: ../locale/scriptstrings/t.vect.univar_to_translate.c:5
+#: ../locale/scriptstrings/t.vect.list_to_translate.c:11
 #: ../locale/scriptstrings/t.vect.univar_to_translate.c:6
-#: ../locale/scriptstrings/t.list_to_translate.c:6
+#: ../locale/scriptstrings/t.vect.univar_to_translate.c:7
 #: ../locale/scriptstrings/t.list_to_translate.c:7
-#: ../locale/scriptstrings/t.list_to_translate.c:13
+#: ../locale/scriptstrings/t.list_to_translate.c:8
 #: ../locale/scriptstrings/t.list_to_translate.c:14
+#: ../locale/scriptstrings/t.list_to_translate.c:15
 #: ../raster/r.category/main.c:62 ../raster/r.category/main.c:71
 #: ../display/d.rast/main.c:70 ../display/d.rast/main.c:87
 #: ../display/d.vect/main.c:80 ../display/d.vect/main.c:105
 #: ../display/d.vect/main.c:108 ../display/d.vect/main.c:111
-#: ../display/d.vect/main.c:287 ../display/d.vect.thematic/main.c:90
-#: ../display/d.vect.thematic/main.c:140 ../display/d.vect.chart/main.c:74
+#: ../display/d.vect/main.c:287 ../display/d.vect.thematic/main.c:91
+#: ../display/d.vect.thematic/main.c:141 ../display/d.vect.chart/main.c:74
 #: ../display/d.vect.chart/main.c:77
 #, fuzzy
 msgid "Selection"
 msgstr "Çözünürlük"
 
-#: ../vector/v.extract/main.c:105
+#: ../vector/v.extract/main.c:108
 #, fuzzy
 msgid "Types to be extracted"
 msgstr "vektör, dışa aktar"
 
-#: ../vector/v.extract/main.c:120
+#: ../vector/v.extract/main.c:123
 msgid "Input text file with category numbers/number ranges to be extracted"
 msgstr ""
 
-#: ../vector/v.extract/main.c:121
+#: ../vector/v.extract/main.c:124
 msgid "If '-' given reads from standard input"
 msgstr ""
 
-#: ../vector/v.extract/main.c:129
+#: ../vector/v.extract/main.c:132
 msgid "Number of random categories matching vector objects to extract"
 msgstr ""
 
-#: ../vector/v.extract/main.c:131
+#: ../vector/v.extract/main.c:134
 msgid "Number must be smaller than unique cat count in layer"
 msgstr ""
 
-#: ../vector/v.extract/main.c:139
+#: ../vector/v.extract/main.c:142
 msgid "Desired new category value (enter -1 to keep original categories)"
 msgstr ""
 
-#: ../vector/v.extract/main.c:141
+#: ../vector/v.extract/main.c:144
 #, fuzzy
 msgid "If new >= 0, attributes is not copied"
 msgstr "Eğer yeni >=o ise, tablo kopyalanamaz"
 
-#: ../vector/v.extract/main.c:158
+#: ../vector/v.extract/main.c:161
 #, c-format
 msgid ""
 "Options <%s>, <%s>, <%s> and <%s> options are exclusive. Please specify only "
 "one of them."
 msgstr ""
 
-#: ../vector/v.extract/main.c:205
+#: ../vector/v.extract/main.c:208
 #, c-format
 msgid "Category value in '%s' not valid"
 msgstr "'%s' içindeki kategori değeri geçerli değil"
 
-#: ../vector/v.extract/main.c:221
+#: ../vector/v.extract/main.c:224
 #, fuzzy, c-format
 msgid "Process file <%s> for category numbers..."
 msgstr "Kategori numaraları için <%s> işlem dosyası"
 
-#: ../vector/v.extract/main.c:226
+#: ../vector/v.extract/main.c:229
 #, c-format
 msgid "Unable to open specified file <%s>"
 msgstr "Belirtilen <%s> dosyası açılamıyor"
 
-#: ../vector/v.extract/main.c:237
+#: ../vector/v.extract/main.c:240
 #, c-format
 msgid "Ignored text entry: %s"
 msgstr ""
 
-#: ../vector/v.extract/main.c:252 ../vector/v.info/print.c:138
+#: ../vector/v.extract/main.c:255 ../vector/v.info/print.c:138
 #: ../vector/v.to.3d/trans3.c:51 ../vector/v.to.3d/trans2.c:49
 #: ../vector/v.to.rast/vect2rast.c:55 ../vector/v.colors.out/make_colors.c:31
-#: ../vector/v.distance/main.c:453 ../vector/v.distance/main.c:534
+#: ../vector/v.distance/main.c:459 ../vector/v.distance/main.c:540
 #: ../vector/v.db.connect/main.c:213 ../vector/v.db.select/main.c:162
 #: ../vector/v.to.rast3/main.c:80
 #, fuzzy, c-format
 msgid "Database connection not defined for layer <%s>"
 msgstr "%d katmanının veritabanı bağlantısı belirlenmedi"
 
-#: ../vector/v.extract/main.c:256
+#: ../vector/v.extract/main.c:259
 #, fuzzy, c-format
 msgid "Loading categories from table <%s>..."
 msgstr "%d kategori <%s> tablosundan yüklendi"
 
-#: ../vector/v.extract/main.c:266
+#: ../vector/v.extract/main.c:269
 #, fuzzy, c-format
 msgid "Unable select records from table <%s>"
 msgstr "Tablodan veri seçilemiyor"
 
-#: ../vector/v.extract/main.c:268
+#: ../vector/v.extract/main.c:271
 #, fuzzy, c-format
 msgid "%d category loaded"
 msgid_plural "%d categories loaded"
 msgstr[0] "Tablodan yüklenen %d kategorisi"
 msgstr[1] "Tablodan yüklenen %d kategorisi"
 
-#: ../vector/v.extract/main.c:283
+#: ../vector/v.extract/main.c:286
 msgid ""
 "This map has no categories attached. Use v.category to attach categories to "
 "this vector map."
 msgstr ""
 
-#: ../vector/v.extract/main.c:290
+#: ../vector/v.extract/main.c:293
 msgid "Please specify random number larger than 0"
 msgstr "Lütfen sıfırdan büyük rasgele sayı belirleyin"
 
-#: ../vector/v.extract/main.c:294
+#: ../vector/v.extract/main.c:297
 #, c-format
 msgid ""
 "Random category count must be smaller than feature count. There are only %d "
 "features of type(s): %s"
 msgstr ""
 
-#: ../vector/v.extract/main.c:317
+#: ../vector/v.extract/main.c:320
 #, c-format
 msgid ""
 "Random category count is larger or equal to uniq <%s> feature category count "
 "%d"
 msgstr ""
 
-#: ../vector/v.extract/main.c:343 ../vector/v.net.path/main.c:137
+#: ../vector/v.extract/main.c:346 ../vector/v.net.path/main.c:137
 #: ../vector/v.edit/main.c:105 ../vector/v.edit/main.c:120
 #: ../vector/v.vol.rst/main.c:580 ../vector/v.vol.rst/main.c:583
 #: ../vector/v.net.steiner/main.c:602 ../vector/v.in.db/main.c:151
@@ -3665,7 +3680,7 @@ msgstr ""
 #: ../vector/v.segment/main.c:114 ../vector/v.net.salesman/main.c:492
 #: ../vector/v.net.iso/main.c:285 ../vector/v.net.connectivity/main.c:136
 #: ../vector/v.net.components/main.c:153 ../vector/v.in.dwg/main.c:200
-#: ../vector/v.select/main.c:121 ../vector/v.distance/main.c:350
+#: ../vector/v.select/main.c:121 ../vector/v.distance/main.c:356
 #: ../vector/v.parallel/main.c:153 ../vector/v.generalize/main.c:334
 #: ../vector/v.in.region/main.c:75 ../vector/v.voronoi/main.c:215
 #: ../vector/v.hull/main.c:121 ../vector/v.surf.bspline/main.c:347
@@ -3677,7 +3692,7 @@ msgstr ""
 #: ../vector/v.outlier/main.c:226 ../vector/v.outlier/main.c:232
 #: ../vector/v.proj/main.c:373 ../vector/v.patch/main.c:266
 #: ../vector/v.patch/main.c:271 ../vector/v.in.lidar/main.c:502
-#: ../vector/v.external/main.c:146 ../vector/v.delaunay/main.c:126
+#: ../vector/v.external/main.c:148 ../vector/v.delaunay/main.c:126
 #: ../vector/v.buffer/main.c:391 ../vector/v.net.alloc/main.c:248
 #: ../vector/v.transform/main.c:246 ../vector/v.net.allpairs/main.c:136
 #: ../vector/v.lrs/v.lrs.segment/main.c:148
@@ -3689,9 +3704,9 @@ msgstr ""
 #: ../vector/v.lidar.correction/main.c:209
 #: ../vector/v.lidar.correction/main.c:215 ../vector/v.qcount/main.c:127
 #: ../vector/v.rectify/main.c:214 ../vector/v.extrude/main.c:196
-#: ../vector/v.sample/main.c:162 ../vector/v.in.ogr/main.c:912
+#: ../vector/v.sample/main.c:162 ../vector/v.in.ogr/main.c:928
 #: ../vector/v.in.dxf/main.c:144 ../vector/v.net.timetable/main.c:359
-#: ../vector/v.kernel/main.c:329 ../vector/v.build.polylines/main.c:156
+#: ../vector/v.kernel/main.c:335 ../vector/v.build.polylines/main.c:156
 #: ../vector/v.to.points/main.c:129 ../vector/v.in.ascii/main.c:247
 #: ../vector/v.net.flow/main.c:149 ../vector/v.net.flow/main.c:155
 #: ../doc/vector/v.example/main.c:98 ../raster/r.volume/main.c:154
@@ -3705,33 +3720,33 @@ msgstr ""
 msgid "Unable to create vector map <%s>"
 msgstr "<%s> vektör haritası oluşturulamıyor"
 
-#: ../vector/v.extract/main.c:351
+#: ../vector/v.extract/main.c:354
 #, fuzzy
 msgid "Extracting features..."
 msgstr "Alanlar çıkarılıyor..."
 
-#: ../vector/v.extract/main.c:375
+#: ../vector/v.extract/main.c:378
 msgid "Removing duplicate centroids..."
 msgstr "Çift alan merkezleri siliniyor..."
 
-#: ../vector/v.external.out/format.c:21 ../vector/v.external/main.c:72
+#: ../vector/v.external.out/format.c:22 ../vector/v.external/main.c:74
 msgid ""
 "Environment variable GRASS_VECTOR_OGR defined, but GRASS is compiled with "
 "OGR support. Using GRASS-PostGIS data driver instead."
 msgstr ""
 
-#: ../vector/v.external.out/format.c:26 ../vector/v.external/main.c:77
+#: ../vector/v.external.out/format.c:27 ../vector/v.external/main.c:79
 msgid ""
 "GRASS is not compiled with PostgreSQL support. Using OGR-PostgreSQL driver "
 "instead of native GRASS-PostGIS data driver."
 msgstr ""
 
-#: ../vector/v.external.out/format.c:48 ../raster/r.external.out/main.c:156
+#: ../vector/v.external.out/format.c:49 ../raster/r.external.out/main.c:156
 #, fuzzy, c-format
 msgid "Format <%s> not supported"
 msgstr "(%s) sütun tipi desteklenmiyor"
 
-#: ../vector/v.external.out/format.c:51 ../raster/r.external.out/main.c:166
+#: ../vector/v.external.out/format.c:52 ../raster/r.external.out/main.c:166
 #, fuzzy, c-format
 msgid "Format <%s> does not support writing"
 msgstr "<%s> sürücüsü raster oluşturmayı desteklemiyor"
@@ -3769,7 +3784,7 @@ msgstr "İçe aktar"
 msgid "output"
 msgstr "Çıktı:"
 
-#: ../vector/v.external.out/main.c:46 ../vector/v.external/main.c:50
+#: ../vector/v.external.out/main.c:46 ../vector/v.external/main.c:52
 #: ../raster/r.external.out/main.c:238 ../raster/r.external/main.c:57
 #, fuzzy
 msgid "external"
@@ -3893,7 +3908,7 @@ msgstr "Sonuç dokularını içeren dosya"
 
 #: ../vector/v.external.out/args.c:62 ../vector/v.external/args.c:40
 #: ../raster/r.external.out/main.c:271 ../raster/r.external/main.c:93
-#: ../raster/r.in.gdal/main.c:168
+#: ../raster/r.in.gdal/main.c:176
 msgid "List supported formats and exit"
 msgstr "Desteklenen biçimleri yaz ve çık"
 
@@ -3933,7 +3948,7 @@ msgstr "2 katman belirlenmelidir"
 
 #: ../vector/v.external.out/list.c:102 ../vector/v.external/list.c:94
 #: ../vector/v.in.ogr/main.c:319 ../raster/r.external/list.c:22
-#: ../raster/r.in.gdal/main.c:246
+#: ../raster/r.in.gdal/main.c:253
 #, fuzzy
 msgid "Supported formats:"
 msgstr "Desteklenen biçimler:\n"
@@ -4109,9 +4124,9 @@ msgstr ""
 
 #: ../vector/v.net.path/path.c:109 ../vector/v.overlay/main.c:580
 #: ../vector/v.net.centrality/main.c:266 ../vector/v.net.components/main.c:189
-#: ../vector/v.in.dwg/main.c:240 ../vector/v.distance/main.c:1350
+#: ../vector/v.in.dwg/main.c:240 ../vector/v.distance/main.c:1356
 #: ../vector/v.net.distance/main.c:263 ../vector/v.in.lidar/main.c:612
-#: ../vector/v.net.allpairs/main.c:179 ../vector/v.in.ogr/main.c:1118
+#: ../vector/v.net.allpairs/main.c:179 ../vector/v.in.ogr/main.c:1134
 #: ../vector/v.net.timetable/main.c:103 ../vector/v.to.points/main.c:182
 #: ../vector/v.net.flow/main.c:181 ../raster/r.contour/main.c:183
 #: ../raster/r.stream.extract/close.c:188
@@ -4195,7 +4210,7 @@ msgstr ""
 #: ../locale/scriptstrings/i.image.mosaic_to_translate.c:3
 #: ../locale/scriptstrings/v.to.lines_to_translate.c:3
 #: ../raster/r.circle/main.c:53 ../raster/r.thin/main.c:56
-#: ../raster/r.patch/main.c:55 ../raster/r.to.vect/main.c:72
+#: ../raster/r.patch/main.c:56 ../raster/r.to.vect/main.c:72
 #, fuzzy
 msgid "geometry"
 msgstr "vektör, geometri"
@@ -4253,7 +4268,7 @@ msgstr "<%s> kategori listesi alınamıyor"
 #: ../vector/v.select/main.c:88 ../vector/v.net/args.c:119
 #: ../vector/v.net/args.c:125 ../vector/v.net/args.c:131
 #: ../vector/v.net/args.c:135 ../vector/v.net/args.c:145
-#: ../vector/v.proj/main.c:199 ../vector/v.external/main.c:116
+#: ../vector/v.proj/main.c:199 ../vector/v.external/main.c:118
 #: ../vector/v.in.ogr/main.c:338 ../raster/r.proj/main.c:299
 #, c-format
 msgid "Required parameter <%s> not set"
@@ -4561,14 +4576,18 @@ msgstr "YSD ifadelerini içeren dosya adı"
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:18
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:20
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:23
-#: ../locale/scriptstrings/t.register_to_translate.c:5
+#: ../locale/scriptstrings/v.import_to_translate.c:6
+#: ../locale/scriptstrings/v.import_to_translate.c:8
 #: ../locale/scriptstrings/t.register_to_translate.c:6
-#: ../locale/scriptstrings/t.register_to_translate.c:8
-#: ../locale/scriptstrings/t.register_to_translate.c:11
-#: ../locale/scriptstrings/t.register_to_translate.c:25
-#: ../locale/scriptstrings/t.remove_to_translate.c:5
-#: ../locale/scriptstrings/t.remove_to_translate.c:8
-#: ../locale/scriptstrings/t.remove_to_translate.c:10
+#: ../locale/scriptstrings/t.register_to_translate.c:7
+#: ../locale/scriptstrings/t.register_to_translate.c:9
+#: ../locale/scriptstrings/t.register_to_translate.c:12
+#: ../locale/scriptstrings/t.register_to_translate.c:26
+#: ../locale/scriptstrings/t.remove_to_translate.c:6
+#: ../locale/scriptstrings/t.remove_to_translate.c:9
+#: ../locale/scriptstrings/t.remove_to_translate.c:11
+#: ../locale/scriptstrings/r.import_to_translate.c:6
+#: ../locale/scriptstrings/r.import_to_translate.c:8
 #: ../raster/r.spread/main.c:124 ../raster/r.spread/main.c:138
 #: ../raster/r.spread/main.c:150 ../raster/r.spread/main.c:163
 #: ../raster/r.spread/main.c:176 ../raster/r.spread/main.c:188
@@ -4595,8 +4614,8 @@ msgstr "YSD ifadelerini içeren dosya adı"
 #: ../raster/r.sun/main.c:331 ../raster/r.sun/main.c:340
 #: ../raster/r.sun/main.c:349 ../raster/r.sun/main.c:358
 #: ../raster/r.sun/main.c:367 ../raster/r.sun/main.c:374
-#: ../raster/r.sun/main.c:382 ../display/d.legend/main.c:94
-#: ../display/d.legend/main.c:99
+#: ../raster/r.sun/main.c:382 ../display/d.legend/main.c:95
+#: ../display/d.legend/main.c:100
 msgid "Input"
 msgstr "Girdi"
 
@@ -4730,7 +4749,7 @@ msgstr ""
 #: ../vector/v.overlay/main.c:391 ../vector/v.what.rast/main.c:137
 #: ../vector/v.vect.stats/main.c:295 ../vector/v.vect.stats/main.c:371
 #: ../vector/v.to.rast/support.c:127 ../vector/v.to.rast/support.c:286
-#: ../vector/v.to.rast/support.c:439 ../vector/v.distance/main.c:487
+#: ../vector/v.to.rast/support.c:439 ../vector/v.distance/main.c:493
 #: ../vector/v.generalize/misc.c:160 ../vector/v.surf.bspline/crosscorr.c:114
 #: ../vector/v.buffer/main.c:412 ../vector/v.extrude/main.c:224
 #: ../vector/v.univar/main.c:229 ../vector/v.what.rast3/main.c:119
@@ -4804,14 +4823,14 @@ msgstr ""
 #: ../vector/v.colors/main.c:99 ../vector/v.colors/main.c:106
 #: ../vector/v.colors/main.c:113 ../vector/v.colors/main.c:139
 #: ../vector/v.colors/main.c:144 ../vector/v.colors/main.c:149
-#: ../locale/scriptstrings/t.rast.colors_to_translate.c:6
-#: ../locale/scriptstrings/t.rast.colors_to_translate.c:8
-#: ../locale/scriptstrings/t.rast.colors_to_translate.c:10
-#: ../locale/scriptstrings/t.rast.colors_to_translate.c:12
-#: ../locale/scriptstrings/t.rast.colors_to_translate.c:19
-#: ../locale/scriptstrings/t.rast.colors_to_translate.c:21
-#: ../locale/scriptstrings/t.rast.colors_to_translate.c:23
-#: ../locale/scriptstrings/t.rast.colors_to_translate.c:25
+#: ../locale/scriptstrings/t.rast.colors_to_translate.c:7
+#: ../locale/scriptstrings/t.rast.colors_to_translate.c:9
+#: ../locale/scriptstrings/t.rast.colors_to_translate.c:11
+#: ../locale/scriptstrings/t.rast.colors_to_translate.c:13
+#: ../locale/scriptstrings/t.rast.colors_to_translate.c:20
+#: ../locale/scriptstrings/t.rast.colors_to_translate.c:22
+#: ../locale/scriptstrings/t.rast.colors_to_translate.c:24
+#: ../locale/scriptstrings/t.rast.colors_to_translate.c:26
 #: ../raster/r.category/main.c:81 ../raster/r.category/main.c:88
 #: ../raster/r.colors/edit_colors.c:90 ../raster/r.colors/edit_colors.c:97
 #: ../raster/r.colors/edit_colors.c:104 ../raster/r.colors/edit_colors.c:111
@@ -4832,21 +4851,21 @@ msgid "Ignored when 'rules' given"
 msgstr ""
 
 #: ../vector/v.colors/main.c:98
-#: ../locale/scriptstrings/t.rast.colors_to_translate.c:7
+#: ../locale/scriptstrings/t.rast.colors_to_translate.c:8
 #: ../raster/r.colors/edit_colors.c:96
 #, fuzzy
 msgid "Raster map from which to copy color table"
 msgstr "Renk tablosunun kopyalanacağı raster harita adı"
 
 #: ../vector/v.colors/main.c:105
-#: ../locale/scriptstrings/t.rast.colors_to_translate.c:9
+#: ../locale/scriptstrings/t.rast.colors_to_translate.c:10
 #: ../raster/r.colors/edit_colors.c:103
 #, fuzzy
 msgid "3D raster map from which to copy color table"
 msgstr "Renk tablosunun kopyalanacağı raster harita adı"
 
 #: ../vector/v.colors/main.c:111
-#: ../locale/scriptstrings/t.rast.colors_to_translate.c:11
+#: ../locale/scriptstrings/t.rast.colors_to_translate.c:12
 #: ../raster/r.colors/edit_colors.c:109
 msgid "Path to rules file"
 msgstr "Kural dosyası yolu"
@@ -4867,47 +4886,47 @@ msgid "If not given writes color table"
 msgstr "Mevcut renk tablosunu uzaklaştır"
 
 #: ../vector/v.colors/main.c:122
-#: ../locale/scriptstrings/t.rast.colors_to_translate.c:13
+#: ../locale/scriptstrings/t.rast.colors_to_translate.c:14
 #: ../raster/r.colors/edit_colors.c:115
 msgid "Remove existing color table"
 msgstr "Mevcut renk tablosunu uzaklaştır"
 
 #: ../vector/v.colors/main.c:123
 #: ../locale/scriptstrings/g.extension_to_translate.c:27
-#: ../locale/scriptstrings/t.rast.colors_to_translate.c:14
-#: ../locale/scriptstrings/r.mask_to_translate.c:20
-#: ../raster/r.null/main.c:107 ../raster/r.colors/edit_colors.c:116
+#: ../locale/scriptstrings/t.rast.colors_to_translate.c:15
+#: ../locale/scriptstrings/r.mask_to_translate.c:20 ../raster/r.null/main.c:107
+#: ../raster/r.colors/edit_colors.c:116
 #, fuzzy
 msgid "Remove"
 msgstr "Köprüleri sil"
 
 #: ../vector/v.colors/main.c:128
-#: ../locale/scriptstrings/t.rast.colors_to_translate.c:15
+#: ../locale/scriptstrings/t.rast.colors_to_translate.c:16
 #: ../raster/r.colors/edit_colors.c:121
 #, fuzzy
 msgid "Only write new color table if it does not already exist"
 msgstr "Eğer bir tane yoksa yeni renk tablosu yaz"
 
 #: ../vector/v.colors/main.c:132
-#: ../locale/scriptstrings/t.rast.colors_to_translate.c:16
+#: ../locale/scriptstrings/t.rast.colors_to_translate.c:17
 #: ../raster/r.colors/edit_colors.c:126
 msgid "List available rules then exit"
 msgstr "Kullanılabilir kuralları listele ve çık"
 
 #: ../vector/v.colors/main.c:138
-#: ../locale/scriptstrings/t.rast.colors_to_translate.c:18
+#: ../locale/scriptstrings/t.rast.colors_to_translate.c:19
 #: ../raster/r.colors/edit_colors.c:132
 msgid "Invert colors"
 msgstr "Renkleri tersine çevir"
 
 #: ../vector/v.colors/main.c:143
-#: ../locale/scriptstrings/t.rast.colors_to_translate.c:20
+#: ../locale/scriptstrings/t.rast.colors_to_translate.c:21
 #: ../raster/r.colors/edit_colors.c:137
 msgid "Logarithmic scaling"
 msgstr ""
 
 #: ../vector/v.colors/main.c:148
-#: ../locale/scriptstrings/t.rast.colors_to_translate.c:22
+#: ../locale/scriptstrings/t.rast.colors_to_translate.c:23
 #: ../raster/r.colors/edit_colors.c:142
 msgid "Logarithmic-absolute scaling"
 msgstr ""
@@ -5014,7 +5033,7 @@ msgstr "<%s> albedo hücre dosyası bulunamadı"
 msgid "Unable to read color table for raster map <%s>"
 msgstr "<%s@%s> raster haritasının renk dosyası okunamıyor"
 
-#: ../vector/v.colors/main.c:320 ../raster3d/r3.timestamp/main.c:71
+#: ../vector/v.colors/main.c:320 ../raster3d/r3.timestamp/main.c:72
 #: ../raster3d/r3.out.bin/main.c:299 ../raster3d/r3.to.rast/main.c:222
 #: ../raster3d/r3.stats/main.c:96 ../raster3d/r3.cross.rast/main.c:245
 #: ../raster3d/r3.null/main.c:103 ../raster3d/r3.support/main.c:135
@@ -5022,8 +5041,7 @@ msgstr "<%s@%s> raster haritasının renk dosyası okunamıyor"
 #: ../raster3d/r3.mask/main.c:58 ../raster3d/r3.out.vtk/main.c:142
 #: ../raster3d/r3.neighbors/main.c:229 ../raster3d/r3.out.netcdf/main.c:600
 #: ../raster3d/r3.retile/main.c:113 ../general/g.region/main.c:444
-#: ../raster/r.colors/edit_colors.c:400
-#: ../raster/r.univar/r3.univar_main.c:144
+#: ../raster/r.colors/edit_colors.c:400 ../raster/r.univar/r3.univar_main.c:144
 #: ../raster/r.univar/r3.univar_main.c:182
 #, c-format
 msgid "3D raster map <%s> not found"
@@ -5162,7 +5180,7 @@ msgstr "Kenar sayısı aralık dışında"
 #: ../locale/scriptstrings/t.rast3d.mapcalc_to_translate.c:5
 #: ../locale/scriptstrings/t.rast.to.rast3_to_translate.c:6
 #: ../locale/scriptstrings/t.rast3d.extract_to_translate.c:5
-#: ../raster3d/r3.timestamp/main.c:45 ../raster3d/r3.info/main.c:77
+#: ../raster3d/r3.timestamp/main.c:46 ../raster3d/r3.info/main.c:77
 #: ../raster3d/r3.out.bin/main.c:207 ../raster3d/r3.gwflow/main.c:161
 #: ../raster3d/r3.to.rast/main.c:209 ../raster3d/r3.stats/main.c:50
 #: ../raster3d/r3.cross.rast/main.c:231 ../raster3d/r3.in.v5d/main.c:180
@@ -5628,7 +5646,7 @@ msgstr "<%s> raster haritası zaten mevcut"
 
 #: ../vector/v.vol.rst/vector.c:80 ../vector/v.random/main.c:467
 #: ../vector/v.random/main.c:587 ../vector/v.in.lidar/main.c:784
-#: ../vector/v.in.ogr/main.c:1244 ../raster/r.volume/main.c:295
+#: ../vector/v.in.ogr/main.c:1260 ../raster/r.volume/main.c:295
 #: ../raster/r.to.vect/areas_io.c:377 ../raster/r.to.vect/util.c:157
 #, c-format
 msgid "Cannot insert new row: %s"
@@ -5716,7 +5734,7 @@ msgid "No Steiner point found -> leaving cycle"
 msgstr ""
 
 #: ../vector/v.in.db/main.c:53 ../vector/v.in.dwg/main.c:83
-#: ../vector/v.in.lidar/main.c:157 ../vector/v.external/main.c:49
+#: ../vector/v.in.lidar/main.c:157 ../vector/v.external/main.c:51
 #: ../vector/v.in.ogr/main.c:134 ../vector/v.in.dxf/main.c:65
 #: ../vector/v.in.ascii/main.c:69
 #: ../locale/scriptstrings/r.in.aster_to_translate.c:3
@@ -5728,9 +5746,11 @@ msgstr ""
 #: ../locale/scriptstrings/r.unpack_to_translate.c:3
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:3
 #: ../locale/scriptstrings/v.unpack_to_translate.c:3
+#: ../locale/scriptstrings/v.import_to_translate.c:3
 #: ../locale/scriptstrings/v.in.mapgen_to_translate.c:3
 #: ../locale/scriptstrings/v.in.geonames_to_translate.c:3
 #: ../locale/scriptstrings/r.in.srtm_to_translate.c:3
+#: ../locale/scriptstrings/r.import_to_translate.c:3
 #: ../locale/scriptstrings/v.in.lines_to_translate.c:3
 #: ../locale/scriptstrings/db.in.ogr_to_translate.c:3
 #: ../locale/scriptstrings/t.rast.import_to_translate.c:3
@@ -5739,7 +5759,7 @@ msgstr ""
 #: ../raster/r.in.mat/main.c:92 ../raster/r.in.ascii/main.c:70
 #: ../raster/r.in.xyz/main.c:160 ../raster/r.in.gridatb/main.c:46
 #: ../raster/r.in.poly/main.c:35 ../raster/r.in.lidar/main.c:171
-#: ../raster/r.external/main.c:56 ../raster/r.in.gdal/main.c:87
+#: ../raster/r.external/main.c:56 ../raster/r.in.gdal/main.c:88
 #: ../raster/r.in.bin/main.c:258
 #, fuzzy
 msgid "import"
@@ -6557,7 +6577,7 @@ msgid "Operator '%s' is not supported for type line"
 msgstr "'%s' işleticisi çizgi tipinde desteklenmiyor"
 
 #: ../vector/v.overlay/main.c:220 ../vector/v.buffer/main.c:400
-#: ../vector/v.in.ogr/main.c:923
+#: ../vector/v.in.ogr/main.c:939
 #, fuzzy
 msgid "Unable to create temporary vector map"
 msgstr "Vektör harita okunamıyor"
@@ -6615,11 +6635,11 @@ msgstr "Çizgiler kırılıyor..."
 
 #: ../vector/v.overlay/area_area.c:113 ../vector/v.delaunay/main.c:144
 #: ../vector/v.buffer/main.c:741 ../vector/v.buffer/main.c:748
-#: ../vector/v.in.ogr/main.c:1309 ../vector/v.in.ogr/main.c:1323
+#: ../vector/v.in.ogr/main.c:1325 ../vector/v.in.ogr/main.c:1339
 msgid "Removing duplicates..."
 msgstr "Çift olanlar siliniyor..."
 
-#: ../vector/v.overlay/area_area.c:116 ../vector/v.in.ogr/main.c:1327
+#: ../vector/v.overlay/area_area.c:116 ../vector/v.in.ogr/main.c:1343
 msgid "Cleaning boundaries at nodes..."
 msgstr "Düğümlerdeki sınırlar temizleniyor..."
 
@@ -6647,7 +6667,7 @@ msgstr "<%s> vektör haritası sorgulanıyor..."
 msgid "Attribute not found"
 msgstr "Öznitelik bulunamadı"
 
-#: ../vector/v.overlay/area_area.c:218 ../vector/v.in.ogr/main.c:1438
+#: ../vector/v.overlay/area_area.c:218 ../vector/v.in.ogr/main.c:1454
 msgid "Writing centroids..."
 msgstr "Alan merkezleri yazılıyor..."
 
@@ -6741,14 +6761,6 @@ msgstr "<%s> vektör haritası geçerli harita takımında bulunamadı"
 #, fuzzy
 msgid "sampling"
 msgstr "Örnekleme metodu"
-
-#: ../vector/v.random/main.c:99 ../vector/v.perturb/main.c:65
-#: ../raster/r.surf.random/main.c:38 ../raster/r.random/main.c:54
-#: ../raster/r.surf.gauss/main.c:40 ../raster/r.random.surface/main.c:59
-#: ../raster/r.random.cells/main.c:47
-#, fuzzy
-msgid "random"
-msgstr "Arc tipi"
 
 #: ../vector/v.random/main.c:101
 #, fuzzy
@@ -6917,10 +6929,9 @@ msgid "Column <%s> not found"
 msgstr "<%s> sütunu nulunamıyor"
 
 #: ../vector/v.what.rast/main.c:172 ../vector/v.class/main.c:129
-#: ../vector/v.surf.bspline/main.c:399
-#: ../vector/v.surf.bspline/crosscorr.c:133 ../vector/v.buffer/main.c:434
-#: ../vector/v.surf.idw/read_sites.c:65 ../vector/v.sample/main.c:240
-#: ../vector/v.to.rast3/main.c:99
+#: ../vector/v.surf.bspline/main.c:399 ../vector/v.surf.bspline/crosscorr.c:133
+#: ../vector/v.buffer/main.c:434 ../vector/v.surf.idw/read_sites.c:65
+#: ../vector/v.sample/main.c:240 ../vector/v.to.rast3/main.c:99
 msgid "Column type not supported"
 msgstr "Sütun tipi desteklenmiyor"
 
@@ -6974,12 +6985,12 @@ msgid "%d categories from vector missing in table"
 msgstr "Vektörün %d kategorisi tabloda kayıp"
 
 #: ../vector/v.what.rast/main.c:656 ../vector/v.vect.stats/main.c:710
-#: ../vector/v.distance/main.c:1664
+#: ../vector/v.distance/main.c:1670
 #, c-format
 msgid "%d update errors"
 msgstr "%d güncelleme hatası"
 
-#: ../vector/v.what.rast/main.c:658 ../vector/v.distance/main.c:1666
+#: ../vector/v.what.rast/main.c:658 ../vector/v.distance/main.c:1672
 #, fuzzy, c-format
 msgid "%d records updated."
 msgstr "%d kayıt güncellendi"
@@ -7308,14 +7319,16 @@ msgid "Raster value (for use=val)"
 msgstr "Yüzey için raster dosyası"
 
 #: ../vector/v.to.rast/main.c:116 ../vector/v.surf.bspline/main.c:194
+#: ../locale/scriptstrings/r.import_to_translate.c:9
 #: ../raster/r.proj/main.c:190 ../raster/r.stream.extract/main.c:141
-#: ../raster/r.in.gdal/main.c:112 ../raster/r.resamp.bspline/main.c:151
+#: ../raster/r.in.gdal/main.c:113 ../raster/r.resamp.bspline/main.c:151
 msgid "Maximum memory to be used (in MB)"
 msgstr ""
 
 #: ../vector/v.to.rast/main.c:117 ../vector/v.surf.bspline/main.c:195
+#: ../locale/scriptstrings/r.import_to_translate.c:10
 #: ../raster/r.proj/main.c:191 ../raster/r.stream.extract/main.c:142
-#: ../raster/r.in.gdal/main.c:113 ../raster/r.resamp.bspline/main.c:152
+#: ../raster/r.in.gdal/main.c:114 ../raster/r.resamp.bspline/main.c:152
 #, fuzzy
 msgid "Cache size for raster rows"
 msgstr "Raster değerler için kullanılacak istatistikler"
@@ -7450,8 +7463,8 @@ msgstr "%d nokta yüklendi"
 #: ../vector/v.net.connectivity/main.c:178
 #: ../vector/v.net.components/main.c:162 ../vector/v.generalize/network.c:89
 #: ../vector/v.net.bridge/main.c:134 ../vector/v.net.distance/main.c:239
-#: ../vector/v.net.spanningtree/main.c:124
-#: ../vector/v.net.timetable/main.c:405 ../vector/v.net.flow/main.c:226
+#: ../vector/v.net.spanningtree/main.c:124 ../vector/v.net.timetable/main.c:405
+#: ../vector/v.net.flow/main.c:226
 #, fuzzy, c-format
 msgid "Unable to build graph for vector map <%s>"
 msgstr "<%s> vektör haritası oluşturulamıyor"
@@ -7958,10 +7971,19 @@ msgstr "Girdiden %d nokta okundu"
 #: ../vector/v.in.ogr/main.c:271
 #: ../locale/scriptstrings/i.spectral_to_translate.c:10
 #: ../locale/scriptstrings/i.spectral_to_translate.c:12
+#: ../locale/scriptstrings/v.import_to_translate.c:10
+#: ../locale/scriptstrings/v.import_to_translate.c:13
+#: ../locale/scriptstrings/v.import_to_translate.c:16
+#: ../locale/scriptstrings/v.import_to_translate.c:19
 #: ../locale/scriptstrings/m.proj_to_translate.c:10
 #: ../locale/scriptstrings/m.proj_to_translate.c:22
 #: ../locale/scriptstrings/m.proj_to_translate.c:24
 #: ../locale/scriptstrings/m.proj_to_translate.c:26
+#: ../locale/scriptstrings/r.import_to_translate.c:12
+#: ../locale/scriptstrings/r.import_to_translate.c:15
+#: ../locale/scriptstrings/r.import_to_translate.c:18
+#: ../locale/scriptstrings/r.import_to_translate.c:21
+#: ../locale/scriptstrings/r.import_to_translate.c:23
 #: ../locale/scriptstrings/db.in.ogr_to_translate.c:8
 #: ../locale/scriptstrings/db.in.ogr_to_translate.c:10
 #: ../raster/r.spread/main.c:276 ../raster/r.spread/main.c:288
@@ -8174,7 +8196,7 @@ msgid "Unable to open input file <%s>. Error %d: %s"
 msgstr "<%s> girdi dosyası açılamıyor"
 
 #: ../vector/v.in.dwg/main.c:244 ../vector/v.reclass/main.c:322
-#: ../vector/v.in.lidar/main.c:617 ../vector/v.in.ogr/main.c:1628
+#: ../vector/v.in.lidar/main.c:617 ../vector/v.in.ogr/main.c:1644
 #: ../vector/v.in.dxf/write_vect.c:241 ../vector/v.to.points/main.c:187
 #: ../vector/v.in.ascii/main.c:517 ../raster/r.contour/main.c:188
 #, c-format
@@ -8484,101 +8506,106 @@ msgstr "Çok fazla sütun adı"
 msgid "Not enough column names"
 msgstr "Yetersiz sütun adı"
 
-#: ../vector/v.distance/main.c:323 ../vector/v.distance/main.c:341
+#: ../vector/v.distance/main.c:315 ../vector/v.distance/main.c:335
+#, fuzzy, c-format
+msgid "Input vector map <%s> is 3D"
+msgstr "<%s> vektör haritası 3B değil"
+
+#: ../vector/v.distance/main.c:326 ../vector/v.distance/main.c:347
 #, fuzzy, c-format
 msgid "No features of selected type found in <%s>"
 msgstr "%d den %d obje <%s> vektör haritasından seçildi"
 
-#: ../vector/v.distance/main.c:413
+#: ../vector/v.distance/main.c:419
 msgid "dmin can not be larger than dmax"
 msgstr ""
 
-#: ../vector/v.distance/main.c:555
+#: ../vector/v.distance/main.c:561
 #, fuzzy
 msgid "Incompatible column types"
 msgstr "Uygun olmayan sütun tip"
 
-#: ../vector/v.distance/main.c:603
+#: ../vector/v.distance/main.c:609
 #, fuzzy
 msgid "No categories for 'from' for slected type and layer"
 msgstr "%d kategori haritadan okundu"
 
-#: ../vector/v.distance/main.c:627
+#: ../vector/v.distance/main.c:633
 #, fuzzy
 msgid "Finding nearest features..."
 msgstr "En yakın alanlar bulunuyor..."
 
-#: ../vector/v.distance/main.c:728 ../vector/v.distance/main.c:1013
+#: ../vector/v.distance/main.c:734 ../vector/v.distance/main.c:1019
 #, c-format
 msgid "More cats found in to_layer (line=%d)"
 msgstr ""
 
-#: ../vector/v.distance/main.c:742 ../vector/v.distance/main.c:819
-#: ../vector/v.distance/main.c:1027 ../imagery/i.segment/flag.c:21
+#: ../vector/v.distance/main.c:748 ../vector/v.distance/main.c:825
+#: ../vector/v.distance/main.c:1033 ../imagery/i.segment/flag.c:21
 #: ../imagery/i.segment/flag.c:28
 #, fuzzy
 msgid "Out of memory!"
 msgstr "Hafıza almadı"
 
-#: ../vector/v.distance/main.c:805 ../vector/v.distance/main.c:1160
+#: ../vector/v.distance/main.c:811 ../vector/v.distance/main.c:1166
 #, c-format
 msgid "More cats found in to_layer (area=%d)"
 msgstr ""
 
-#: ../vector/v.distance/main.c:913
+#: ../vector/v.distance/main.c:919
 #, fuzzy
 msgid "Finding nearest features for areas..."
 msgstr "En yakın alanlar bulunuyor..."
 
-#: ../vector/v.distance/main.c:1277
+#: ../vector/v.distance/main.c:1283
 msgid "DATETIME type not yet supported, no attributes will be uploaded"
 msgstr ""
 
-#: ../vector/v.distance/main.c:1295
+#: ../vector/v.distance/main.c:1301
 msgid "Unable to open default database"
 msgstr "Varsayılan veritabanı açılamıyor"
 
-#: ../vector/v.distance/main.c:1635
+#: ../vector/v.distance/main.c:1641
 #, c-format
 msgid "%d categories with more than 1 feature in vector map <%s>"
 msgstr ""
 
-#: ../vector/v.distance/main.c:1638
+#: ../vector/v.distance/main.c:1644
 #, c-format
 msgid "%d categories - no nearest feature found"
 msgstr "%d kategori - hiçbir yakın obje bulunmadı"
 
-#: ../vector/v.distance/main.c:1647
+#: ../vector/v.distance/main.c:1653
 #, c-format
 msgid "%d distances calculated"
 msgstr "%d uzaklık hesaplandı"
 
-#: ../vector/v.distance/main.c:1648
+#: ../vector/v.distance/main.c:1654
 #, c-format
 msgid "%d records inserted"
 msgstr "%d kayıt girildi"
 
-#: ../vector/v.distance/main.c:1650
+#: ../vector/v.distance/main.c:1656
 #, c-format
 msgid "%d insert errors"
 msgstr "%d girme hatası"
 
-#: ../vector/v.distance/main.c:1654
+#: ../vector/v.distance/main.c:1660
 #, c-format
 msgid "%d categories read from the map"
 msgstr "%d kategori haritadan okundu"
 
-#: ../vector/v.distance/main.c:1656
+#: ../vector/v.distance/main.c:1662
 #, c-format
 msgid "%d categories exist in the table"
 msgstr "%d kategori tabloda mevcut"
 
-#: ../vector/v.distance/main.c:1658
+#: ../vector/v.distance/main.c:1664
 #, c-format
 msgid "%d categories read from the map exist in the table"
 msgstr "%d kategori tabloda mevcut olan haritadan okundu"
 
-#: ../vector/v.distance/main.c:1661
+#: ../vector/v.distance/main.c:1667
 #, c-format
 msgid "%d categories read from the map don't exist in the table"
 msgstr "%d kategori tabloda mevcut olmayan haritadan okundu"
@@ -8668,30 +8695,30 @@ msgstr ""
 msgid "Column name or expression"
 msgstr "Sütun adı veya ifade"
 
-#: ../vector/v.class/main.c:68 ../display/d.vect.thematic/main.c:111
+#: ../vector/v.class/main.c:68 ../display/d.vect.thematic/main.c:112
 msgid "Algorithm to use for classification"
 msgstr "Sınıflandırma için kullanılacak doku"
 
-#: ../vector/v.class/main.c:76 ../display/d.vect.thematic/main.c:115
+#: ../vector/v.class/main.c:76 ../display/d.vect.thematic/main.c:116
 #, fuzzy
 msgid "simple intervals"
 msgstr "Basit bir başlık yap"
 
-#: ../vector/v.class/main.c:77 ../display/d.vect.thematic/main.c:116
+#: ../vector/v.class/main.c:77 ../display/d.vect.thematic/main.c:117
 #, fuzzy
 msgid "standard deviations"
 msgstr "Standart sapma"
 
-#: ../vector/v.class/main.c:78 ../display/d.vect.thematic/main.c:117
+#: ../vector/v.class/main.c:78 ../display/d.vect.thematic/main.c:118
 #, fuzzy
 msgid "quantiles"
 msgstr "sıklık derecesi hesaplanıyor"
 
-#: ../vector/v.class/main.c:79 ../display/d.vect.thematic/main.c:118
+#: ../vector/v.class/main.c:79 ../display/d.vect.thematic/main.c:119
 msgid "equiprobable (normal distribution)"
 msgstr ""
 
-#: ../vector/v.class/main.c:88 ../display/d.vect.thematic/main.c:128
+#: ../vector/v.class/main.c:88 ../display/d.vect.thematic/main.c:129
 msgid "Number of classes to define"
 msgstr "Belirlenecek sınıf sayısı"
 
@@ -8718,12 +8745,12 @@ msgid ""
 "Classification of %s into %i classes\n"
 msgstr ""
 
-#: ../vector/v.class/main.c:203 ../display/d.vect.thematic/main.c:439
+#: ../vector/v.class/main.c:203 ../display/d.vect.thematic/main.c:440
 #, c-format
 msgid "Using algorithm: *** %s ***\n"
 msgstr ""
 
-#: ../vector/v.class/main.c:204 ../display/d.vect.thematic/main.c:441
+#: ../vector/v.class/main.c:204 ../display/d.vect.thematic/main.c:442
 #, c-format
 msgid "Mean: %f\tStandard deviation = %f\n"
 msgstr "Ortalama:%f\tStandart sapma = %f\n"
@@ -8733,7 +8760,7 @@ msgstr "Ortalama:%f\tStandart sapma = %f\n"
 msgid "Lowest chi2 = %f\n"
 msgstr ""
 
-#: ../vector/v.class/main.c:211 ../display/d.vect.thematic/main.c:448
+#: ../vector/v.class/main.c:211 ../display/d.vect.thematic/main.c:449
 #, c-format
 msgid "Stdev multiplied by %.4f to define step\n"
 msgstr ""
@@ -9076,7 +9103,7 @@ msgstr "Nokta objelerin sembol boyutu (harita birimlerinde)"
 #: ../vector/v.label.sa/main.c:98 ../vector/v.lrs/v.lrs.label/main.c:193
 #: ../vector/v.label/main.c:151 ../display/d.grid/main.c:102
 #: ../display/d.geodesic/main.c:66 ../display/d.rast.num/main.c:87
-#: ../display/d.legend/main.c:160
+#: ../display/d.legend/main.c:161
 msgid "Text color"
 msgstr "Metin rengi"
 
@@ -9289,13 +9316,13 @@ msgid "Cleaning output topology"
 msgstr "Temizleme aracı"
 
 #: ../vector/v.voronoi/clean_topo.c:87 ../vector/v.buffer/main.c:759
-#: ../vector/v.in.ogr/main.c:1343
+#: ../vector/v.in.ogr/main.c:1359
 #, fuzzy
 msgid "Removing dangles..."
 msgstr "Çift olanlar siliniyor..."
 
 #: ../vector/v.voronoi/clean_topo.c:89 ../vector/v.buffer/main.c:762
-#: ../vector/v.in.ogr/main.c:1358
+#: ../vector/v.in.ogr/main.c:1374
 #, fuzzy
 msgid "Removing bridges..."
 msgstr "Köprüleri sil"
@@ -9348,9 +9375,9 @@ msgstr "Veri okunuyor..."
 msgid "Constructing 3D hull..."
 msgstr "Dönüştürülüyor..."
 
-#: ../vector/v.surf.bspline/main.c:94
-#: ../vector/v.lidar.edgedetection/main.c:73 ../vector/v.in.lidar/main.c:158
-#: ../vector/v.lidar.growing/main.c:76 ../vector/v.lidar.correction/main.c:69
+#: ../vector/v.surf.bspline/main.c:94 ../vector/v.lidar.edgedetection/main.c:73
+#: ../vector/v.in.lidar/main.c:158 ../vector/v.lidar.growing/main.c:76
+#: ../vector/v.lidar.correction/main.c:69
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:5
 #: ../raster/r.in.xyz/main.c:164 ../raster/r.in.lidar/main.c:172
 msgid "LIDAR"
@@ -9793,7 +9820,7 @@ msgid "Scale factor for elevation"
 msgstr "Yükselti için ölçek faktörü"
 
 #: ../vector/v.out.vtk/main.c:84
-#: ../locale/scriptstrings/t.rast.out.vtk_to_translate.c:9
+#: ../locale/scriptstrings/t.rast.out.vtk_to_translate.c:10
 msgid "Correct the coordinates to fit the VTK-OpenGL precision"
 msgstr ""
 
@@ -9929,8 +9956,7 @@ msgid "adjusted NS splines %d"
 msgstr ""
 
 #: ../vector/v.lidar.edgedetection/main.c:351
-#: ../vector/v.lidar.growing/main.c:246
-#: ../vector/v.lidar.correction/main.c:333
+#: ../vector/v.lidar.growing/main.c:246 ../vector/v.lidar.correction/main.c:333
 #: ../raster/r.resamp.bspline/main.c:546
 #, c-format
 msgid "subregion %d of %d"
@@ -10266,7 +10292,7 @@ msgid "Categories already exist in layer %d"
 msgstr "%d kategori haritadan okundu"
 
 #: ../vector/v.category/main.c:364 ../vector/v.delaunay/main.c:172
-#: ../vector/v.in.ogr/main.c:1380
+#: ../vector/v.in.ogr/main.c:1396
 msgid "Unable to calculate area centroid"
 msgstr "Alan merkezi hesaplanamadı"
 
@@ -11320,8 +11346,10 @@ msgstr "Veritabanını güncellemek imkansız"
 msgid "Impossible to write in the database"
 msgstr "Veritabanına yazmak imkansız"
 
-#: ../vector/v.proj/main.c:68 ../locale/scriptstrings/m.proj_to_translate.c:3
-#: ../general/g.proj/main.c:64 ../general/g.setproj/main.c:79
+#: ../vector/v.proj/main.c:68 ../locale/scriptstrings/v.import_to_translate.c:4
+#: ../locale/scriptstrings/m.proj_to_translate.c:3
+#: ../locale/scriptstrings/r.import_to_translate.c:4
+#: ../general/g.proj/main.c:65 ../general/g.setproj/main.c:79
 #: ../raster/r.proj/main.c:145 ../raster/r.latlong/main.c:59
 #, fuzzy
 msgid "projection"
@@ -11380,6 +11408,7 @@ msgid "Target"
 msgstr "Kır"
 
 #: ../vector/v.proj/main.c:104
+#: ../locale/scriptstrings/v.import_to_translate.c:9
 #, fuzzy
 msgid "Name for output vector map (default: input)"
 msgstr "Çıktı raster harita adı (varsayılan: input)"
@@ -11405,7 +11434,7 @@ msgstr ""
 msgid "Disable wrapping to -180,180 for latlon output"
 msgstr ""
 
-#: ../vector/v.proj/main.c:143 ../vector/v.external/main.c:139
+#: ../vector/v.proj/main.c:143 ../vector/v.external/main.c:141
 #: ../raster/r.proj/main.c:244 ../display/d.mon/start.c:38
 #, c-format
 msgid "option <%s>: <%s> exists. To overwrite, use the --overwrite flag"
@@ -11551,8 +11580,7 @@ msgid "Print attribute information"
 msgstr "Öznitelik bilgisini yazdır"
 
 #: ../vector/v.what/main.c:98 ../vector/v.univar/main.c:126
-#: ../raster/r.univar/r3.univar_main.c:59
-#: ../raster/r.univar/r.univar_main.c:61
+#: ../raster/r.univar/r3.univar_main.c:59 ../raster/r.univar/r.univar_main.c:61
 msgid "Print the stats in shell script style"
 msgstr ""
 
@@ -11585,6 +11613,31 @@ msgstr "<%s> vektör haritası topolojisini oluşturmalısınız"
 #, c-format
 msgid "Unknown input format, skipping: '%s'"
 msgstr "bilinmeyen girdi biçimi, atlanıyor: '%s'"
+
+#: ../vector/v.what/what.c:44
+#, fuzzy
+msgid "Cannot open driver"
+msgstr "<%s> kural dosyası açılamıyor"
+
+#: ../vector/v.what/what.c:52
+#, fuzzy
+msgid "Cannot open database"
+msgstr "Tablo kopyalanamıyor"
+
+#: ../vector/v.what/what.c:65
+#, fuzzy
+msgid "Cannot open select cursor"
+msgstr "Seçme imleci açılamıyor: '%s'"
+
+#: ../vector/v.what/what.c:72
+#, fuzzy
+msgid "Cannot fetch next record"
+msgstr "Satır alınamıyor"
+
+#: ../vector/v.what/what.c:75
+#, fuzzy
+msgid "No database record"
+msgstr "Hiç raster harita kaldırılmadı"
 
 #: ../vector/v.what/what.c:227
 #, fuzzy, c-format
@@ -11894,7 +11947,7 @@ msgid "Format: xmin,ymin,xmax,ymax - usually W,S,E,N"
 msgstr ""
 
 #: ../vector/v.in.lidar/main.c:182 ../vector/v.in.ogr/main.c:214
-#: ../raster/r.in.gdal/main.c:144
+#: ../raster/r.in.gdal/main.c:145
 msgid "Name for new location to create"
 msgstr "oluşturulacak yeni mevki adı"
 
@@ -11933,7 +11986,7 @@ msgstr ""
 
 #: ../vector/v.in.lidar/main.c:224 ../vector/v.in.ogr/main.c:289
 #: ../raster/r.in.lidar/main.c:274 ../raster/r.external/main.c:104
-#: ../raster/r.in.gdal/main.c:162
+#: ../raster/r.in.gdal/main.c:170
 #, fuzzy
 msgid "Extend region extents based on new dataset"
 msgstr "Mevki sınırlarını yeni verinin sınırlarına göre genişlet "
@@ -11959,70 +12012,70 @@ msgstr ""
 msgid "Unknown filter option <%s>"
 msgstr "Bilinmeyen kural seçeneği: '%s'"
 
-#: ../vector/v.in.lidar/main.c:297 ../vector/v.in.ogr/main.c:712
+#: ../vector/v.in.lidar/main.c:297 ../vector/v.in.ogr/main.c:728
 msgid "Select either the current region flag or the spatial option, not both"
 msgstr ""
 
-#: ../vector/v.in.lidar/main.c:325 ../vector/v.in.ogr/main.c:770
+#: ../vector/v.in.lidar/main.c:325 ../vector/v.in.ogr/main.c:786
 msgid "4 parameters required for 'spatial' parameter"
 msgstr "'spatial' parametresi için 4 parametre gerekli"
 
-#: ../vector/v.in.lidar/main.c:354 ../vector/v.in.ogr/main.c:579
-#: ../raster/r.in.gdal/main.c:388 ../raster/r.in.gdal/main.c:741
+#: ../vector/v.in.lidar/main.c:354 ../vector/v.in.ogr/main.c:595
+#: ../raster/r.in.gdal/main.c:395 ../raster/r.in.gdal/main.c:763
 msgid ""
 "Unable to convert input map projection to GRASS format; cannot create new "
 "location."
 msgstr ""
 
-#: ../vector/v.in.lidar/main.c:360 ../vector/v.in.ogr/main.c:585
-#: ../raster/r.in.gdal/main.c:394 ../raster/r.in.gdal/main.c:765
+#: ../vector/v.in.lidar/main.c:360 ../vector/v.in.ogr/main.c:601
+#: ../raster/r.in.gdal/main.c:401 ../raster/r.in.gdal/main.c:787
 #, fuzzy, c-format
 msgid "Unable to create new location <%s>"
 msgstr "Mevki oluşturulamıyor: %s"
 
-#: ../vector/v.in.lidar/main.c:363 ../vector/v.in.ogr/main.c:588
-#: ../general/g.proj/create.c:15 ../raster/r.in.gdal/main.c:397
-#: ../raster/r.in.gdal/main.c:771
+#: ../vector/v.in.lidar/main.c:363 ../vector/v.in.ogr/main.c:604
+#: ../general/g.proj/create.c:15 ../raster/r.in.gdal/main.c:404
+#: ../raster/r.in.gdal/main.c:793
 #, c-format
 msgid "Location <%s> created"
 msgstr "< %s> Mevkisi oluşturuldu"
 
-#: ../vector/v.in.lidar/main.c:382 ../vector/v.in.ogr/main.c:606
+#: ../vector/v.in.lidar/main.c:382 ../vector/v.in.ogr/main.c:622
 #: ../raster/r.in.lidar/main.c:362
 msgid ""
 "Unable to convert input map projection information to GRASS format for "
 "checking"
 msgstr ""
 
-#: ../vector/v.in.lidar/main.c:397 ../vector/v.in.ogr/main.c:621
+#: ../vector/v.in.lidar/main.c:397 ../vector/v.in.ogr/main.c:637
 #: ../raster/r.in.lidar/main.c:377 ../raster/r.external/proj.c:34
-#: ../raster/r.in.gdal/main.c:425
+#: ../raster/r.in.gdal/main.c:434
 msgid "Over-riding projection check"
 msgstr ""
 
-#: ../vector/v.in.lidar/main.c:406 ../vector/v.in.ogr/main.c:630
+#: ../vector/v.in.lidar/main.c:406 ../vector/v.in.ogr/main.c:646
 #: ../raster/r.in.lidar/main.c:386 ../raster/r.external/proj.c:42
-#: ../raster/r.in.gdal/main.c:435
+#: ../raster/r.in.gdal/main.c:444
 msgid ""
 "Projection of dataset does not appear to match current location.\n"
 "\n"
 msgstr ""
 
-#: ../vector/v.in.lidar/main.c:412 ../vector/v.in.ogr/main.c:636
+#: ../vector/v.in.lidar/main.c:412 ../vector/v.in.ogr/main.c:652
 #: ../raster/r.in.lidar/main.c:392
 msgid "GRASS LOCATION PROJ_INFO is:\n"
 msgstr "GRASS MEVKİSİ PROJ_INFO su:\n"
 
 #: ../vector/v.in.lidar/main.c:422 ../vector/v.in.lidar/main.c:429
-#: ../vector/v.in.ogr/main.c:646 ../vector/v.in.ogr/main.c:653
+#: ../vector/v.in.ogr/main.c:662 ../vector/v.in.ogr/main.c:669
 #: ../raster/r.in.lidar/main.c:402 ../raster/r.in.lidar/main.c:409
-#: ../raster/r.external/proj.c:85 ../raster/r.in.gdal/main.c:487
+#: ../raster/r.external/proj.c:85 ../raster/r.in.gdal/main.c:496
 msgid "Import dataset PROJ_INFO is:\n"
 msgstr "İçe aktarılacak veri takımı PROJ_INFO su:\n"
 
-#: ../vector/v.in.lidar/main.c:468 ../vector/v.in.ogr/main.c:692
+#: ../vector/v.in.lidar/main.c:468 ../vector/v.in.ogr/main.c:708
 #: ../raster/r.in.lidar/main.c:448 ../raster/r.external/proj.c:107
-#: ../raster/r.in.gdal/main.c:505
+#: ../raster/r.in.gdal/main.c:514
 #, c-format
 msgid ""
 "\n"
@@ -12030,16 +12083,16 @@ msgid ""
 "-o flag to ignore them and use current location definition.\n"
 msgstr ""
 
-#: ../vector/v.in.lidar/main.c:473 ../vector/v.in.ogr/main.c:697
+#: ../vector/v.in.lidar/main.c:473 ../vector/v.in.ogr/main.c:713
 #: ../raster/r.in.lidar/main.c:452
 msgid ""
 "Consider generating a new location with 'location' parameter from input data "
 "set.\n"
 msgstr ""
 
-#: ../vector/v.in.lidar/main.c:478 ../vector/v.in.ogr/main.c:702
+#: ../vector/v.in.lidar/main.c:478 ../vector/v.in.ogr/main.c:718
 #: ../raster/r.in.lidar/main.c:457 ../raster/r.external/proj.c:116
-#: ../raster/r.in.gdal/main.c:514
+#: ../raster/r.in.gdal/main.c:534
 msgid "Projection of input dataset and current location appear to match"
 msgstr "Girdi veri takımı ve geçerli mevkinin projeksiyonu eşleşiyor"
 
@@ -12083,29 +12136,29 @@ msgstr "%d nokta eşik dışında"
 msgid "%d input points were filtered out by class number"
 msgstr "%d nokta eşik dışında"
 
-#: ../vector/v.external/main.c:53
+#: ../vector/v.external/main.c:55
 #, fuzzy
 msgid ""
 "Creates a new pseudo-vector map as a link to an OGR-supported layer or a "
 "PostGIS feature table."
 msgstr "OGR katmanına sadece okunabilir bağlı yeni vektör harita oluşturur."
 
-#: ../vector/v.external/main.c:133 ../vector/v.in.ogr/main.c:499
+#: ../vector/v.external/main.c:135 ../vector/v.in.ogr/main.c:499
 #, c-format
 msgid "Layer <%s> not available"
 msgstr "<%s> katmanı mevcut değil"
 
-#: ../vector/v.external/main.c:158
+#: ../vector/v.external/main.c:160
 #, fuzzy, c-format
 msgid "Unable to delete '%s'"
 msgstr "%d çizgisi silinemiyor"
 
-#: ../vector/v.external/main.c:165
+#: ../vector/v.external/main.c:167
 #, fuzzy, c-format
 msgid "Unable to create file '%s/%s'"
 msgstr "<%s> dosyası oluşturulamıyor"
 
-#: ../vector/v.external/main.c:196
+#: ../vector/v.external/main.c:198
 #, fuzzy, c-format
 msgid "Link to vector map <%s> created."
 msgstr "<%s> raster haritası zaten mevcut"
@@ -12426,12 +12479,12 @@ msgstr "Topolojinin bir kısmı oluşturuluyor..."
 msgid "Snapping boundaries..."
 msgstr "Sınırlara yapışılıyor..."
 
-#: ../vector/v.buffer/main.c:738 ../vector/v.in.ogr/main.c:1304
+#: ../vector/v.buffer/main.c:738 ../vector/v.in.ogr/main.c:1320
 #, fuzzy
 msgid "Breaking polygons..."
 msgstr "Poligonları kır"
 
-#: ../vector/v.buffer/main.c:745 ../vector/v.in.ogr/main.c:1319
+#: ../vector/v.buffer/main.c:745 ../vector/v.in.ogr/main.c:1335
 msgid "Breaking boundaries..."
 msgstr "Sınırlar kırılıyor..."
 
@@ -12655,7 +12708,7 @@ msgid "Vector map <%s> is connected by:\n"
 msgstr "<%s> vektör haritası şununla bağlıdır:"
 
 #: ../vector/v.db.connect/main.c:180 ../display/d.vect/opt.c:143
-#: ../display/d.vect.thematic/main.c:204
+#: ../display/d.vect.thematic/main.c:205
 msgid "Database connection not defined"
 msgstr "Veritabanı bağlantısı belirlenmemiş"
 
@@ -12809,9 +12862,9 @@ msgstr "%s=%s - uygun olmayan sayıda enterpolasyon noktası"
 #. GTC Count of window rows
 #. GTC Count of raster rows
 #. GTC Count of window rows
-#: ../vector/v.surf.idw/main.c:259 ../vector/v.kernel/main.c:299
+#: ../vector/v.surf.idw/main.c:259 ../vector/v.kernel/main.c:300
 #: ../raster/r.thin/io.c:102 ../raster/r.thin/io.c:169
-#: ../raster/r.thin/io.c:178 ../display/d.rast.num/main.c:176
+#: ../raster/r.thin/io.c:178 ../display/d.rast.num/main.c:182
 #, c-format
 msgid "%d row"
 msgid_plural "%d rows"
@@ -12821,7 +12874,7 @@ msgstr[1] ""
 #. GTC Count of window columns
 #. GTC Count of raster columns
 #. GTC Count of window columns
-#: ../vector/v.surf.idw/main.c:261 ../vector/v.kernel/main.c:300
+#: ../vector/v.surf.idw/main.c:261 ../vector/v.kernel/main.c:301
 #: ../raster/r.thin/io.c:104 ../raster/r.thin/io.c:171
 #: ../raster/r.thin/io.c:180
 #, fuzzy, c-format
@@ -14060,13 +14113,13 @@ msgstr ""
 msgid "The number of columns has been adjusted from %d to %d"
 msgstr ""
 
-#: ../vector/v.mkgrid/main.c:360 ../vector/v.mkgrid/main.c:444
-#: ../vector/v.mkgrid/main.c:456
+#: ../vector/v.mkgrid/main.c:360 ../vector/v.mkgrid/main.c:445
+#: ../vector/v.mkgrid/main.c:457
 #, fuzzy
 msgid "Unable to fill attribute table"
 msgstr "<%s> tablosu tanımlanamıyor"
 
-#: ../vector/v.mkgrid/main.c:364 ../vector/v.mkgrid/main.c:461
+#: ../vector/v.mkgrid/main.c:364 ../vector/v.mkgrid/main.c:462
 #: ../vector/v.in.dxf/write_vect.c:70 ../vector/v.in.ascii/points.c:452
 #, c-format
 msgid "Unable to insert new record: %s"
@@ -14084,7 +14137,7 @@ msgstr "Alan merkezleri oluşturuluyor..."
 msgid "Writing out vector rows..."
 msgstr "Vektör satırlara yazılıyor..."
 
-#: ../vector/v.mkgrid/write_grid.c:106
+#: ../vector/v.mkgrid/write_grid.c:107
 msgid "Writing out vector columns..."
 msgstr "Vektör sütunlara yazılıyor..."
 
@@ -14254,7 +14307,7 @@ msgid "Offset label in y-direction"
 msgstr ""
 
 #: ../vector/v.label/main.c:122 ../display/d.vect/main.c:236
-#: ../display/d.text/main.c:218 ../display/d.legend/main.c:167
+#: ../display/d.text/main.c:218 ../display/d.legend/main.c:168
 msgid "Font name"
 msgstr "Yazıtipi adı"
 
@@ -14338,7 +14391,7 @@ msgstr "<%s> için aralık bilgisi mevcut değil"
 msgid "Target location <%s> not found"
 msgstr "<%s> bölgesi bulunamadı "
 
-#: ../vector/v.rectify/target.c:40 ../raster/r.in.gdal/main.c:871
+#: ../vector/v.rectify/target.c:40 ../raster/r.in.gdal/main.c:891
 #: ../imagery/i.ortho.photo/i.ortho.rectify/target.c:31
 #: ../imagery/i.rectify/target.c:32
 #, c-format
@@ -14346,14 +14399,14 @@ msgid "Mapset <%s> in target location <%s> - "
 msgstr "<%s> harita takımı <%s> hedef mevkisinde - "
 
 #: ../vector/v.rectify/target.c:41 ../raster/r.proj/main.c:280
-#: ../raster/r.in.gdal/main.c:873
+#: ../raster/r.in.gdal/main.c:893
 #: ../imagery/i.ortho.photo/i.ortho.rectify/target.c:32
 #: ../imagery/i.rectify/target.c:33
 msgid "permission denied"
 msgstr "erişim engellendi"
 
 #: ../vector/v.rectify/target.c:41 ../raster/r.proj/main.c:281
-#: ../raster/r.in.gdal/main.c:874
+#: ../raster/r.in.gdal/main.c:894
 #: ../imagery/i.ortho.photo/i.ortho.rectify/target.c:32
 #: ../imagery/i.rectify/target.c:33
 msgid "not found"
@@ -14639,17 +14692,15 @@ msgstr ""
 #: ../vector/v.univar/main.c:122
 #: ../locale/scriptstrings/db.univar_to_translate.c:6
 #: ../locale/scriptstrings/v.db.univar_to_translate.c:6
-#: ../raster/r.univar/r3.univar_main.c:52
-#: ../raster/r.univar/r.univar_main.c:52
+#: ../raster/r.univar/r3.univar_main.c:52 ../raster/r.univar/r.univar_main.c:52
 msgid "Percentile to calculate (requires extended statistics flag)"
 msgstr ""
 
 #: ../vector/v.univar/main.c:130
-#: ../locale/scriptstrings/t.rast.univar_to_translate.c:8
-#: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:9
-#: ../locale/scriptstrings/t.vect.univar_to_translate.c:9
-#: ../raster/r.univar/r3.univar_main.c:63
-#: ../raster/r.univar/r.univar_main.c:66
+#: ../locale/scriptstrings/t.rast.univar_to_translate.c:9
+#: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:10
+#: ../locale/scriptstrings/t.vect.univar_to_translate.c:10
+#: ../raster/r.univar/r3.univar_main.c:63 ../raster/r.univar/r.univar_main.c:66
 msgid "Calculate extended statistics"
 msgstr "Genişletilmiş istatistikleri hesapla"
 
@@ -14806,6 +14857,7 @@ msgid ""
 msgstr ""
 
 #: ../vector/v.in.ogr/main.c:153
+#: ../locale/scriptstrings/v.import_to_translate.c:7
 msgid "OGR layer name. If not given, all available layers are imported"
 msgstr "OGR katman adı. Eğer hiç verilmezse, tüm olası katmanlar içe aktarılır"
 
@@ -14850,11 +14902,13 @@ msgid "import points as centroids"
 msgstr "Tekrarlı alan merkezlerini sil"
 
 #: ../vector/v.in.ogr/main.c:207
+#: ../locale/scriptstrings/v.import_to_translate.c:17
 #, fuzzy
 msgid "Snapping threshold for boundaries (map units)"
 msgstr "Sınırlar için yapışma eşiği"
 
 #: ../vector/v.in.ogr/main.c:208
+#: ../locale/scriptstrings/v.import_to_translate.c:18
 msgid "'-1' for no snap"
 msgstr ""
 
@@ -14865,11 +14919,13 @@ msgid ""
 msgstr ""
 
 #: ../vector/v.in.ogr/main.c:228
+#: ../locale/scriptstrings/v.import_to_translate.c:14
 #, fuzzy
 msgid "Encoding value for attribute data"
 msgstr "'%s' ASCII dosyasını okumada hata"
 
 #: ../vector/v.in.ogr/main.c:230
+#: ../locale/scriptstrings/v.import_to_translate.c:15
 msgid "Overrides encoding interpretation, useful when importing ESRI Shapefile"
 msgstr ""
 
@@ -14895,11 +14951,13 @@ msgid "If not given, all geometry columns from the input are used"
 msgstr "[%d] nokta kategorisi okundu"
 
 #: ../vector/v.in.ogr/main.c:251
+#: ../locale/scriptstrings/v.import_to_translate.c:20
 #, fuzzy
 msgid "List supported OGR formats and exit"
 msgstr "Desteklenen biçimleri yaz ve çık"
 
 #: ../vector/v.in.ogr/main.c:257
+#: ../locale/scriptstrings/v.import_to_translate.c:21
 #, fuzzy
 msgid "List available OGR layers in data source and exit"
 msgstr "Veri kaynağındaki olası katmanları listele ve çık"
@@ -14913,7 +14971,7 @@ msgid "Force 2D output even if input is 3D"
 msgstr ""
 
 #: ../vector/v.in.ogr/main.c:291 ../raster/r.external/main.c:105
-#: ../raster/r.in.gdal/main.c:164
+#: ../raster/r.in.gdal/main.c:172
 msgid "Also updates the default region if in the PERMANENT mapset"
 msgstr ""
 
@@ -14964,125 +15022,125 @@ msgstr "<%s> katmanı mevcut değil"
 msgid "All available OGR layers will be imported into vector map <%s>"
 msgstr "<%s> vektör haritasının katman bilgisi alınamıyor"
 
-#: ../vector/v.in.ogr/main.c:714
-msgid "The region flag is applied only to the first OGR layer"
-msgstr ""
-
-#: ../vector/v.in.ogr/main.c:724
-msgid "The current region does not overlap with OGR input. Nothing to import."
-msgstr ""
-
-#: ../vector/v.in.ogr/main.c:751
-msgid "The 'spatial' option is applied only to the first OGR layer"
-msgstr ""
-
-#: ../vector/v.in.ogr/main.c:782
-msgid ""
-"The 'spatial' parameters do not overlap with OGR input. Nothing to import."
-msgstr ""
-
-#: ../vector/v.in.ogr/main.c:816
-msgid "The 'where' option is applied only to the first OGR layer"
-msgstr ""
-
-#: ../vector/v.in.ogr/main.c:849
+#: ../vector/v.in.ogr/main.c:541 ../vector/v.in.ogr/main.c:865
 #, fuzzy, c-format
 msgid "Geometry column <%s> not found in OGR layer <%s>"
 msgstr "<%s> sütunu <%s> tablosunda bulunamıyor"
 
-#: ../vector/v.in.ogr/main.c:859
+#: ../vector/v.in.ogr/main.c:730
+msgid "The region flag is applied only to the first OGR layer"
+msgstr ""
+
+#: ../vector/v.in.ogr/main.c:740
+msgid "The current region does not overlap with OGR input. Nothing to import."
+msgstr ""
+
+#: ../vector/v.in.ogr/main.c:767
+msgid "The 'spatial' option is applied only to the first OGR layer"
+msgstr ""
+
+#: ../vector/v.in.ogr/main.c:798
+msgid ""
+"The 'spatial' parameters do not overlap with OGR input. Nothing to import."
+msgstr ""
+
+#: ../vector/v.in.ogr/main.c:832
+msgid "The 'where' option is applied only to the first OGR layer"
+msgstr ""
+
+#: ../vector/v.in.ogr/main.c:875
 #, c-format
 msgid "Check if OGR layer <%s> contains polygons..."
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:895
+#: ../vector/v.in.ogr/main.c:911
 #, fuzzy, c-format
 msgid "Boundary splitting distance in map units: %G"
 msgstr "Harita birimlerine göre tampon mesafesi"
 
-#: ../vector/v.in.ogr/main.c:925
+#: ../vector/v.in.ogr/main.c:941
 #, fuzzy, c-format
 msgid "Using temporary vector <%s>"
 msgstr "<%s> geçici dosyasını yazmada hata"
 
-#: ../vector/v.in.ogr/main.c:961
+#: ../vector/v.in.ogr/main.c:977
 #, fuzzy, c-format
 msgid "Key column '%s' not found"
 msgstr "%s anahtar sütunu bulunamadı"
 
-#: ../vector/v.in.ogr/main.c:969
+#: ../vector/v.in.ogr/main.c:985
 #, fuzzy, c-format
 msgid "Key column '%s' is not integer"
 msgstr "Anahtar sütun tipi tamsayı değildir"
 
-#: ../vector/v.in.ogr/main.c:1033
+#: ../vector/v.in.ogr/main.c:1049
 #, fuzzy, c-format
 msgid "Column name <%s> renamed to <%s>"
 msgstr "<%s> sütunu <%s> tablosunda bulunamıyor"
 
-#: ../vector/v.in.ogr/main.c:1057
+#: ../vector/v.in.ogr/main.c:1073
 #, c-format
 msgid "Writing column <%s> with fixed length %d chars (may be truncated)"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1080
+#: ../vector/v.in.ogr/main.c:1096
 #, c-format
 msgid ""
 "Width for column %s set to 255 (was not specified by OGR), some strings may "
 "be truncated!"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1092
+#: ../vector/v.in.ogr/main.c:1108
 #, c-format
 msgid "Writing column %s with fixed length %d chars (may be truncated)"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1096
+#: ../vector/v.in.ogr/main.c:1112
 #, c-format
 msgid "Column type not supported (%s)"
 msgstr "(%s) sütun tipi desteklenmiyor"
 
-#: ../vector/v.in.ogr/main.c:1137
+#: ../vector/v.in.ogr/main.c:1153
 #, fuzzy, c-format
 msgid "Importing %d features (OGR layer <%s>)..."
 msgstr "%d haritası objeleri içe aktarılıyor..."
 
-#: ../vector/v.in.ogr/main.c:1259
+#: ../vector/v.in.ogr/main.c:1275
 #, fuzzy, c-format
 msgid "%d %s without geometry skipped"
 msgstr "%d %s geometri yok"
 
-#: ../vector/v.in.ogr/main.c:1286
+#: ../vector/v.in.ogr/main.c:1302
 #, fuzzy
 msgid "Cleaning polygons"
 msgstr "Poligonları kır"
 
-#: ../vector/v.in.ogr/main.c:1290
+#: ../vector/v.in.ogr/main.c:1306
 #, fuzzy, c-format
 msgid "Snapping boundaries (threshold = %.3e)..."
 msgstr "Sınırlara yapışılıyor..."
 
-#: ../vector/v.in.ogr/main.c:1334
+#: ../vector/v.in.ogr/main.c:1350
 #, fuzzy
 msgid "Merging boundaries..."
 msgstr "Sınırlar kırılıyor..."
 
-#: ../vector/v.in.ogr/main.c:1339
+#: ../vector/v.in.ogr/main.c:1355
 #, fuzzy
 msgid "Changing boundary dangles to lines..."
 msgstr "Sınır köprülerini çizgilere dönüştür:"
 
-#: ../vector/v.in.ogr/main.c:1352
+#: ../vector/v.in.ogr/main.c:1368
 #, fuzzy
 msgid "Changing boundary bridges to lines..."
 msgstr "Sınır köprülerini çizgilere dönüştür:"
 
-#: ../vector/v.in.ogr/main.c:1396
+#: ../vector/v.in.ogr/main.c:1412
 #, fuzzy, c-format
 msgid "Finding centroids for OGR layer <%s>..."
 msgstr "Haritalar hesaplanıyor ..."
 
-#: ../vector/v.in.ogr/main.c:1481
+#: ../vector/v.in.ogr/main.c:1497
 #, c-format
 msgid ""
 "%d areas represent more (overlapping) features, because polygons overlap in "
@@ -15090,117 +15148,117 @@ msgid ""
 "The number of features for those areas is stored as category in layer %d"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1491
+#: ../vector/v.in.ogr/main.c:1507
 #, fuzzy, c-format
 msgid "%d input polygons\n"
 msgstr "%d girdi poligon"
 
-#: ../vector/v.in.ogr/main.c:1492
+#: ../vector/v.in.ogr/main.c:1508
 #, c-format
 msgid "%d input polygons"
 msgstr "%d girdi poligon"
 
-#: ../vector/v.in.ogr/main.c:1495
+#: ../vector/v.in.ogr/main.c:1511
 #, fuzzy, c-format
 msgid "Total area: %G (%d areas)\n"
 msgstr "Toplam alan: %e (%d alan)"
 
-#: ../vector/v.in.ogr/main.c:1496
+#: ../vector/v.in.ogr/main.c:1512
 #, fuzzy, c-format
 msgid "Total area: %G (%d areas)"
 msgstr "Toplam alan: %e (%d alan)"
 
-#: ../vector/v.in.ogr/main.c:1499
+#: ../vector/v.in.ogr/main.c:1515
 #, fuzzy, c-format
 msgid "Overlapping area: %G (%d areas)\n"
 msgstr "Toplam alan: %e (%d alan)"
 
-#: ../vector/v.in.ogr/main.c:1502
+#: ../vector/v.in.ogr/main.c:1518
 #, fuzzy, c-format
 msgid "Overlapping area: %G (%d areas)"
 msgstr "Toplam alan: %e (%d alan)"
 
-#: ../vector/v.in.ogr/main.c:1507
+#: ../vector/v.in.ogr/main.c:1523
 #, fuzzy, c-format
 msgid "Area without category: %G (%d areas)\n"
 msgstr "Kategorisi olmayan alanlar: %e (%d alan)"
 
-#: ../vector/v.in.ogr/main.c:1510
+#: ../vector/v.in.ogr/main.c:1526
 #, fuzzy, c-format
 msgid "Area without category: %G (%d areas)"
 msgstr "Kategorisi olmayan alanlar: %e (%d alan)"
 
-#: ../vector/v.in.ogr/main.c:1581
+#: ../vector/v.in.ogr/main.c:1597
 msgid "Some input polygons are overlapping each other."
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1582
+#: ../vector/v.in.ogr/main.c:1598
 msgid "If overlapping is not desired, the data need to be cleaned."
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1585 ../vector/v.in.ogr/main.c:1614
+#: ../vector/v.in.ogr/main.c:1601 ../vector/v.in.ogr/main.c:1630
 msgid "The input could be cleaned by snapping vertices to each other."
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1586 ../vector/v.in.ogr/main.c:1609
-#: ../vector/v.in.ogr/main.c:1615
+#: ../vector/v.in.ogr/main.c:1602 ../vector/v.in.ogr/main.c:1625
+#: ../vector/v.in.ogr/main.c:1631
 #, c-format
 msgid "Estimated range of snapping threshold: [%g, %g]"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1590
+#: ../vector/v.in.ogr/main.c:1606
 #, c-format
 msgid "Try to import again, snapping with at least %g: 'snap=%g'"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1594
+#: ../vector/v.in.ogr/main.c:1610
 #, c-format
 msgid "Try to import again, snapping with %g: 'snap=%g'"
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1598 ../vector/v.in.ogr/main.c:1611
+#: ../vector/v.in.ogr/main.c:1614 ../vector/v.in.ogr/main.c:1627
 msgid "Manual cleaning may be needed."
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1602
+#: ../vector/v.in.ogr/main.c:1618
 #, c-format
 msgid "%d input polygons got lost during import."
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1605
+#: ../vector/v.in.ogr/main.c:1621
 #, c-format
 msgid "%d additional areas where created during import."
 msgstr ""
 
-#: ../vector/v.in.ogr/main.c:1608
+#: ../vector/v.in.ogr/main.c:1624
 #, fuzzy, c-format
 msgid "The snapping threshold %g might be too large."
 msgstr "Sınırlar için yapışma eşiği"
 
-#: ../vector/v.in.ogr/main.c:1624 ../vector/v.in.ascii/main.c:550
+#: ../vector/v.in.ogr/main.c:1640 ../vector/v.in.ascii/main.c:550
 #: ../vector/v.in.ascii/main.c:553
 #, fuzzy
 msgid "Import failed"
 msgstr "Girdi hatalı"
 
-#: ../vector/v.in.ogr/main.c:1635
+#: ../vector/v.in.ogr/main.c:1651
 #, fuzzy, c-format
 msgid "Unable to drop table: '%s'"
 msgstr "Tablo silinemiyor: %s"
 
-#: ../vector/v.in.ogr/main.c:1667 ../raster/r.external/window.c:93
-#: ../raster/r.in.gdal/main.c:814
+#: ../vector/v.in.ogr/main.c:1683 ../raster/r.external/window.c:93
+#: ../raster/r.in.gdal/main.c:836
 #, fuzzy
 msgid "Default region for this location updated"
 msgstr "Projeksiyon bilgisi güncellendi!"
 
-#: ../vector/v.in.ogr/main.c:1670 ../raster/r.external/window.c:96
-#: ../raster/r.in.gdal/main.c:817
+#: ../vector/v.in.ogr/main.c:1686 ../raster/r.external/window.c:96
+#: ../raster/r.in.gdal/main.c:839
 #, fuzzy
 msgid "Region for the current mapset updated"
 msgstr "Geçerli harita takımını değiştir."
 
-#: ../vector/v.in.ogr/main.c:1674
+#: ../vector/v.in.ogr/main.c:1690
 msgid ""
 "Input data contains 3D features. Created vector is 2D only, disable -2 flag "
 "to import 3D vector."
@@ -15750,110 +15808,114 @@ msgid "In network mode, multiply the result by number of input points"
 msgstr ""
 
 #: ../vector/v.kernel/main.c:233 ../raster/r.relief/main.c:194
-#: ../raster/r.in.gdal/main.c:304 ../raster/r.in.gdal/main.c:621
+#: ../raster/r.in.gdal/main.c:311 ../raster/r.in.gdal/main.c:643
 #: ../imagery/i.landsat.toar/main.c:548
 #, c-format
 msgid "Raster map <%s> already exists and will be overwritten"
 msgstr "<%s> raster haritası zaten mevcut ve üzerine yazılacak"
 
 #: ../vector/v.kernel/main.c:236 ../raster/r.relief/main.c:197
-#: ../raster/r.in.gdal/main.c:307 ../raster/r.in.gdal/main.c:624
+#: ../raster/r.in.gdal/main.c:314 ../raster/r.in.gdal/main.c:646
 #, c-format
 msgid "Raster map <%s> already exists"
 msgstr "<%s> raster haritası zaten mevcut"
 
-#: ../vector/v.kernel/main.c:253
+#: ../vector/v.kernel/main.c:254
 #, fuzzy
 msgid "Unknown node method"
 msgstr "Bilinmeyen yöntem"
 
-#: ../vector/v.kernel/main.c:271
+#: ../vector/v.kernel/main.c:272
 #, fuzzy
 msgid "Unknown kernel function"
 msgstr "Bilinmeyen projeksiyon"
 
-#: ../vector/v.kernel/main.c:277
+#: ../vector/v.kernel/main.c:278
 msgid ""
 "Optimal standard deviation calculation is supported only for node method "
 "'none' and kernel function 'gaussian'."
 msgstr ""
 
-#: ../vector/v.kernel/main.c:281
+#: ../vector/v.kernel/main.c:282
 msgid ""
 "Optimal standard deviation calculation is supported only for kernel function "
 "'gaussian'."
 msgstr ""
 
-#: ../vector/v.kernel/main.c:298
+#: ../vector/v.kernel/main.c:299
 #, fuzzy, c-format
 msgid "Standard deviation: %f"
 msgstr "Standart sapma"
 
-#. GTC First argument is resolution, second - number of rows as a text, third - number of columns as a text.
-#: ../vector/v.kernel/main.c:302
+#: ../vector/v.kernel/main.c:304
 #, fuzzy, c-format
 msgid "Output raster map: resolution: %f\t%s\t%s"
 msgstr "Çıktı raster harita başlığı"
 
-#: ../vector/v.kernel/main.c:349
+#: ../vector/v.kernel/main.c:307
+#, fuzzy, c-format
+msgid "Output raster map resolution: %f"
+msgstr "Çıktı raster harita başlığı"
+
+#: ../vector/v.kernel/main.c:355
 #, fuzzy, c-format
 msgid "%d point outside threshold"
 msgid_plural "%d points outside threshold"
 msgstr[0] "%d nokta eşik dışında"
 msgstr[1] "%d nokta eşik dışında"
 
-#: ../vector/v.kernel/main.c:372
+#: ../vector/v.kernel/main.c:378
 #, c-format
 msgid ""
 "Automatic choice of smoothing parameter (radius), maximum possible value of "
 "radius is set to %f"
 msgstr ""
 
-#: ../vector/v.kernel/main.c:379
+#: ../vector/v.kernel/main.c:385
 #, c-format
 msgid "Using maximum distance between points: %f"
 msgstr "Noktalar arasındaki en büyük mesafe kullanılarak: %f"
 
-#: ../vector/v.kernel/main.c:393
+#: ../vector/v.kernel/main.c:399
 #, c-format
 msgid "Number of input points: %d."
 msgstr "Girdi nokta sayısı: %d."
 
-#: ../vector/v.kernel/main.c:394
+#: ../vector/v.kernel/main.c:400
 #, fuzzy, c-format
 msgid "%d distance read from the map."
 msgid_plural "%d distances read from the map."
 msgstr[0] "%d uzaklık haritadan okundu"
 msgstr[1] "%d uzaklık haritadan okundu"
 
-#: ../vector/v.kernel/main.c:399
+#: ../vector/v.kernel/main.c:405
 #, c-format
 msgid ""
 "Distances between all points are beyond %e (4 * standard deviation), unable "
 "to calculate optimal value."
 msgstr ""
 
-#: ../vector/v.kernel/main.c:410
+#: ../vector/v.kernel/main.c:416
 #, c-format
 msgid "Optimal smoothing parameter (standard deviation): %f."
 msgstr ""
 
-#: ../vector/v.kernel/main.c:441
+#: ../vector/v.kernel/main.c:447
 #, c-format
 msgid "Writing output vector map using smooth parameter %f"
 msgstr ""
 
-#: ../vector/v.kernel/main.c:443 ../vector/v.kernel/main.c:553
+#: ../vector/v.kernel/main.c:449 ../vector/v.kernel/main.c:559
 #, fuzzy, c-format
 msgid "Normalising factor %f"
 msgstr "Düşey ölçekleme faktörü"
 
-#: ../vector/v.kernel/main.c:551
+#: ../vector/v.kernel/main.c:557
 #, fuzzy, c-format
 msgid "Writing output raster map using smooth parameter %f"
 msgstr "Çıktı %s raster haritası yazılıyor... "
 
-#: ../vector/v.kernel/main.c:603
+#: ../vector/v.kernel/main.c:609
 #, c-format
 msgid "Maximum value in output: %e."
 msgstr "Çıktıdaki en büyük değer: %e."
@@ -16373,24 +16435,73 @@ msgid "timestamp"
 msgstr "Geçersiz zaman damgası"
 
 #: ../vector/v.timestamp/main.c:38
+#: ../locale/scriptstrings/v.what.strds_to_translate.c:8
+#: ../locale/scriptstrings/t.rast.univar_to_translate.c:5
+#: ../locale/scriptstrings/t.rename_to_translate.c:5
+#: ../locale/scriptstrings/t.rast.list_to_translate.c:6
+#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:5
+#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:5
+#: ../locale/scriptstrings/t.rast.out.vtk_to_translate.c:6
+#: ../locale/scriptstrings/t.vect.import_to_translate.c:5
+#: ../locale/scriptstrings/t.vect.observe.strds_to_translate.c:5
+#: ../locale/scriptstrings/t.vect.db.select_to_translate.c:7
+#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:7
+#: ../locale/scriptstrings/t.snap_to_translate.c:4
+#: ../locale/scriptstrings/t.shift_to_translate.c:4
+#: ../locale/scriptstrings/t.merge_to_translate.c:4
+#: ../locale/scriptstrings/t.sample_to_translate.c:4
+#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:5
+#: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:6
+#: ../locale/scriptstrings/t.vect.list_to_translate.c:6
+#: ../locale/scriptstrings/t.vect.univar_to_translate.c:5
+#: ../locale/scriptstrings/t.rast3d.mapcalc_to_translate.c:6
+#: ../locale/scriptstrings/t.vect.extract_to_translate.c:5
+#: ../locale/scriptstrings/t.list_to_translate.c:5
+#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:5
+#: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:5
+#: ../locale/scriptstrings/t.vect.what.strds_to_translate.c:5
+#: ../locale/scriptstrings/t.register_to_translate.c:5
+#: ../locale/scriptstrings/t.select_to_translate.c:4
+#: ../locale/scriptstrings/t.rast.export_to_translate.c:5
+#: ../locale/scriptstrings/t.rast.extract_to_translate.c:5
+#: ../locale/scriptstrings/t.remove_to_translate.c:5
+#: ../locale/scriptstrings/t.rast.colors_to_translate.c:5
+#: ../locale/scriptstrings/t.support_to_translate.c:4
+#: ../locale/scriptstrings/t.vect.export_to_translate.c:5
+#: ../locale/scriptstrings/t.topology_to_translate.c:4
+#: ../locale/scriptstrings/t.unregister_to_translate.c:5
+#: ../locale/scriptstrings/t.create_to_translate.c:5
+#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:5
+#: ../locale/scriptstrings/t.info_to_translate.c:5
+#: ../locale/scriptstrings/t.rast.to.rast3_to_translate.c:7
+#: ../locale/scriptstrings/t.rast.series_to_translate.c:5
+#: ../locale/scriptstrings/t.rast.gapfill_to_translate.c:5
+#: ../locale/scriptstrings/t.rast3d.extract_to_translate.c:6
+#: ../locale/scriptstrings/t.rast.import_to_translate.c:5
+#: ../raster3d/r3.timestamp/main.c:45 ../raster/r.timestamp/main.c:38
+#, fuzzy
+msgid "time"
+msgstr "Geçersiz zaman damgası"
+
+#: ../vector/v.timestamp/main.c:39
 #, fuzzy
 msgid "Modifies a timestamp for a vector map."
 msgstr "RAster harita için zaman damgasını Yazdır/ekle/kaldır."
 
-#: ../vector/v.timestamp/main.c:39
+#: ../vector/v.timestamp/main.c:40
 #, fuzzy
 msgid "Print/add/remove a timestamp for a vector map."
 msgstr "RAster harita için zaman damgasını Yazdır/ekle/kaldır."
 
-#: ../vector/v.timestamp/main.c:49 ../raster/r.timestamp/main.c:48
+#: ../vector/v.timestamp/main.c:50 ../raster/r.timestamp/main.c:49
 msgid "Datetime, datetime1/datetime2, or 'none' to remove"
 msgstr ""
 
-#: ../vector/v.timestamp/main.c:50 ../raster/r.timestamp/main.c:49
+#: ../vector/v.timestamp/main.c:51 ../raster/r.timestamp/main.c:50
 msgid "Format: '15 jan 1994' (absolute) or '2 years' (relative)"
 msgstr ""
 
-#: ../vector/v.timestamp/main.c:65
+#: ../vector/v.timestamp/main.c:66
 #, fuzzy, c-format
 msgid "Vector map <%s> not found %s"
 msgstr "<%s> vektör haritası bulunamadı"
@@ -16862,35 +16973,35 @@ msgid ""
 "raster map of a space time raster dataset."
 msgstr "Raster harita katmanlarının alansal istatistiklerini oluştur"
 
-#: ../locale/scriptstrings/t.rast.univar_to_translate.c:6
-#: ../locale/scriptstrings/t.rast.list_to_translate.c:13
-#: ../locale/scriptstrings/t.vect.db.select_to_translate.c:7
-#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:12
-#: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:7
-#: ../locale/scriptstrings/t.vect.list_to_translate.c:12
-#: ../locale/scriptstrings/t.vect.univar_to_translate.c:7
-#: ../locale/scriptstrings/t.list_to_translate.c:15
+#: ../locale/scriptstrings/t.rast.univar_to_translate.c:7
+#: ../locale/scriptstrings/t.rast.list_to_translate.c:14
+#: ../locale/scriptstrings/t.vect.db.select_to_translate.c:8
+#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:13
+#: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:8
+#: ../locale/scriptstrings/t.vect.list_to_translate.c:13
+#: ../locale/scriptstrings/t.vect.univar_to_translate.c:8
+#: ../locale/scriptstrings/t.list_to_translate.c:16
 #, fuzzy
 msgid "Field separator character between the output columns"
 msgstr "Kabuk betiği stilinde yazdır"
 
-#: ../locale/scriptstrings/t.rast.univar_to_translate.c:7
-#: ../locale/scriptstrings/t.rast.univar_to_translate.c:10
-#: ../locale/scriptstrings/t.rast.list_to_translate.c:7
-#: ../locale/scriptstrings/t.rast.list_to_translate.c:14
-#: ../locale/scriptstrings/t.rast.list_to_translate.c:16
-#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:13
-#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:15
-#: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:8
-#: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:11
-#: ../locale/scriptstrings/t.vect.list_to_translate.c:7
-#: ../locale/scriptstrings/t.vect.list_to_translate.c:13
-#: ../locale/scriptstrings/t.vect.list_to_translate.c:15
-#: ../locale/scriptstrings/t.vect.univar_to_translate.c:8
-#: ../locale/scriptstrings/t.vect.univar_to_translate.c:11
-#: ../locale/scriptstrings/t.list_to_translate.c:10
-#: ../locale/scriptstrings/t.list_to_translate.c:16
-#: ../locale/scriptstrings/t.list_to_translate.c:18
+#: ../locale/scriptstrings/t.rast.univar_to_translate.c:8
+#: ../locale/scriptstrings/t.rast.univar_to_translate.c:11
+#: ../locale/scriptstrings/t.rast.list_to_translate.c:8
+#: ../locale/scriptstrings/t.rast.list_to_translate.c:15
+#: ../locale/scriptstrings/t.rast.list_to_translate.c:17
+#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:14
+#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:16
+#: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:9
+#: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:12
+#: ../locale/scriptstrings/t.vect.list_to_translate.c:8
+#: ../locale/scriptstrings/t.vect.list_to_translate.c:14
+#: ../locale/scriptstrings/t.vect.list_to_translate.c:16
+#: ../locale/scriptstrings/t.vect.univar_to_translate.c:9
+#: ../locale/scriptstrings/t.vect.univar_to_translate.c:12
+#: ../locale/scriptstrings/t.list_to_translate.c:11
+#: ../locale/scriptstrings/t.list_to_translate.c:17
+#: ../locale/scriptstrings/t.list_to_translate.c:19
 #: ../raster/r.report/parse.c:69 ../raster/r.report/parse.c:77
 #: ../raster/r.report/parse.c:85 ../raster/r.report/parse.c:109
 #: ../raster/r.report/parse.c:114 ../raster/r.report/parse.c:119
@@ -16902,12 +17013,12 @@ msgstr "Kabuk betiği stilinde yazdır"
 msgid "Formatting"
 msgstr "Biçimlendirme"
 
-#: ../locale/scriptstrings/t.rast.univar_to_translate.c:9
-#: ../locale/scriptstrings/t.rast.list_to_translate.c:15
-#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:14
-#: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:10
-#: ../locale/scriptstrings/t.vect.list_to_translate.c:14
-#: ../locale/scriptstrings/t.vect.univar_to_translate.c:10
+#: ../locale/scriptstrings/t.rast.univar_to_translate.c:10
+#: ../locale/scriptstrings/t.rast.list_to_translate.c:16
+#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:15
+#: ../locale/scriptstrings/t.rast3d.univar_to_translate.c:11
+#: ../locale/scriptstrings/t.vect.list_to_translate.c:15
+#: ../locale/scriptstrings/t.vect.univar_to_translate.c:11
 #, fuzzy
 msgid "Suppress printing of column names"
 msgstr "Anahtar sütun adı"
@@ -16942,27 +17053,27 @@ msgstr "genel , harita yönetimi"
 msgid "rename"
 msgstr " vejetasyon indeksi adı"
 
-#: ../locale/scriptstrings/t.rename_to_translate.c:5
-#: ../locale/scriptstrings/t.snap_to_translate.c:5
-#: ../locale/scriptstrings/t.shift_to_translate.c:5
-#: ../locale/scriptstrings/t.select_to_translate.c:4
-#: ../locale/scriptstrings/t.support_to_translate.c:5
-#: ../locale/scriptstrings/t.topology_to_translate.c:4
-#: ../locale/scriptstrings/t.info_to_translate.c:6
-#, fuzzy
-msgid "input"
-msgstr "Girdi"
-
 #: ../locale/scriptstrings/t.rename_to_translate.c:6
 #: ../locale/scriptstrings/t.snap_to_translate.c:6
 #: ../locale/scriptstrings/t.shift_to_translate.c:6
-#: ../locale/scriptstrings/t.merge_to_translate.c:5
-#: ../locale/scriptstrings/t.sample_to_translate.c:5
-#: ../locale/scriptstrings/t.sample_to_translate.c:6
 #: ../locale/scriptstrings/t.select_to_translate.c:5
 #: ../locale/scriptstrings/t.support_to_translate.c:6
 #: ../locale/scriptstrings/t.topology_to_translate.c:5
 #: ../locale/scriptstrings/t.info_to_translate.c:7
+#, fuzzy
+msgid "input"
+msgstr "Girdi"
+
+#: ../locale/scriptstrings/t.rename_to_translate.c:7
+#: ../locale/scriptstrings/t.snap_to_translate.c:7
+#: ../locale/scriptstrings/t.shift_to_translate.c:7
+#: ../locale/scriptstrings/t.merge_to_translate.c:6
+#: ../locale/scriptstrings/t.sample_to_translate.c:6
+#: ../locale/scriptstrings/t.sample_to_translate.c:7
+#: ../locale/scriptstrings/t.select_to_translate.c:6
+#: ../locale/scriptstrings/t.support_to_translate.c:7
+#: ../locale/scriptstrings/t.topology_to_translate.c:6
+#: ../locale/scriptstrings/t.info_to_translate.c:8
 msgid "Required"
 msgstr ""
 
@@ -16984,29 +17095,29 @@ msgstr "girdi mevkisindeki vektör haritaları listele ve çık"
 msgid "list"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.list_to_translate.c:6
-#: ../locale/scriptstrings/t.vect.list_to_translate.c:6
-#: ../locale/scriptstrings/t.list_to_translate.c:9
+#: ../locale/scriptstrings/t.rast.list_to_translate.c:7
+#: ../locale/scriptstrings/t.vect.list_to_translate.c:7
+#: ../locale/scriptstrings/t.list_to_translate.c:10
 #, fuzzy
 msgid "Sort the space time dataset by category"
 msgstr "Boş veritabanı oluşturur."
 
-#: ../locale/scriptstrings/t.rast.list_to_translate.c:8
-#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:8
-#: ../locale/scriptstrings/t.vect.list_to_translate.c:8
-#: ../locale/scriptstrings/t.list_to_translate.c:12
+#: ../locale/scriptstrings/t.rast.list_to_translate.c:9
+#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:9
+#: ../locale/scriptstrings/t.vect.list_to_translate.c:9
+#: ../locale/scriptstrings/t.list_to_translate.c:13
 #, fuzzy
 msgid "Columns to be printed to stdout"
 msgstr "x/y/z sütunları tamsayı yada ondalık sayı olmalıdır"
 
-#: ../locale/scriptstrings/t.rast.list_to_translate.c:11
-#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:11
-#: ../locale/scriptstrings/t.vect.list_to_translate.c:11
+#: ../locale/scriptstrings/t.rast.list_to_translate.c:12
+#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:12
+#: ../locale/scriptstrings/t.vect.list_to_translate.c:12
 #, fuzzy
 msgid "Method used for data listing"
 msgstr "Harita veri birimleri için kullanılacak metin"
 
-#: ../locale/scriptstrings/t.rast.list_to_translate.c:12
+#: ../locale/scriptstrings/t.rast.list_to_translate.c:13
 msgid ""
 "The granule to be used for listing. The granule must be specified as string "
 "eg.: absolute time \"1 months\" or relative time \"1\""
@@ -17113,56 +17224,41 @@ msgstr "Raster bakı haritasının adı"
 msgid "accumulation"
 msgstr "Raster harita hesaplayıcı."
 
-#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:5
+#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:6
 msgid ""
 "Input space time raster dataset that defines the lower threshold, values "
 "lower this threshold are excluded from accumulation"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:6
+#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:7
 msgid ""
 "Input space time raster dataset that defines the upper threshold, values "
 "upper this threshold are excluded from accumulation"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:7
-#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:9
-msgid "The temporal starting point to begin the accumulation, eg '2001-01-01'"
-msgstr ""
-
 #: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:8
 #: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:10
-msgid "The temporal date to stop the accumulation, eg '2009-01-01'"
+msgid "The temporal starting point to begin the accumulation, eg '2001-01-01'"
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:9
 #: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:11
-msgid "The temporal cycle to restart the accumulation, eg '12 months'"
+msgid "The temporal date to stop the accumulation, eg '2009-01-01'"
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:10
 #: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:12
-msgid "The temporal offset to the begin of the next cycle, eg '6 months'"
+msgid "The temporal cycle to restart the accumulation, eg '12 months'"
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:11
-msgid "The granularity for accumulation '1 day'"
+#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:13
+msgid "The temporal offset to the begin of the next cycle, eg '6 months'"
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:12
-#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:7
-#: ../locale/scriptstrings/t.vect.import_to_translate.c:5
-#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:13
-#: ../locale/scriptstrings/t.rast3d.mapcalc_to_translate.c:7
-#: ../locale/scriptstrings/t.vect.extract_to_translate.c:5
-#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:5
-#: ../locale/scriptstrings/t.rast.extract_to_translate.c:6
-#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:7
-#: ../locale/scriptstrings/t.rast.gapfill_to_translate.c:5
-#: ../locale/scriptstrings/t.rast.import_to_translate.c:5
-#, fuzzy
-msgid "Basename of the new generated output maps"
-msgstr "Girdi 3B raster haritanın adı"
+msgid "The granularity for accumulation '1 day'"
+msgstr ""
 
 #: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:13
 #: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:8
@@ -17170,53 +17266,68 @@ msgstr "Girdi 3B raster haritanın adı"
 #: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:14
 #: ../locale/scriptstrings/t.rast3d.mapcalc_to_translate.c:8
 #: ../locale/scriptstrings/t.vect.extract_to_translate.c:6
-#: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:7
+#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:6
 #: ../locale/scriptstrings/t.rast.extract_to_translate.c:7
 #: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:8
 #: ../locale/scriptstrings/t.rast.gapfill_to_translate.c:6
 #: ../locale/scriptstrings/t.rast.import_to_translate.c:6
+#, fuzzy
+msgid "Basename of the new generated output maps"
+msgstr "Girdi 3B raster haritanın adı"
+
+#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:14
+#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:9
+#: ../locale/scriptstrings/t.vect.import_to_translate.c:7
+#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:15
+#: ../locale/scriptstrings/t.rast3d.mapcalc_to_translate.c:9
+#: ../locale/scriptstrings/t.vect.extract_to_translate.c:7
+#: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:8
+#: ../locale/scriptstrings/t.rast.extract_to_translate.c:8
+#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:9
+#: ../locale/scriptstrings/t.rast.gapfill_to_translate.c:7
+#: ../locale/scriptstrings/t.rast.import_to_translate.c:7
 msgid ""
 "A numerical suffix separated by an underscore will be attached to create a "
 "unique identifier"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:14
+#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:15
 msgid ""
 "Use these limits in case lower and/or upper input  space time raster "
 "datasets are not defined"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:15
+#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:16
 #, fuzzy
 msgid "Scale factor for input space time raster dataset"
 msgstr "Çıktı QC tipi sınıflandırma katmanı adı"
 
-#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:16
+#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:17
 #, fuzzy
 msgid "Shift factor for input space time raster dataset"
 msgstr "Çıktı QC tipi sınıflandırma katmanı adı"
 
-#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:17
+#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:18
 msgid ""
 "This method will be applied to compute the accumulative values from the "
 "input maps in a single granule"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:18
+#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:19
 msgid ""
 "Growing Degree Days or Winkler indices; Mean: sum(input maps)/(number of "
 "input maps); Biologically Effective Degree Days; Huglin Heliothermal index"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:19
-#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:17
+#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:20
+#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:18
 msgid ""
 "Register empty maps in the output space time raster dataset, otherwise they "
 "will be deleted"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:20
-#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:18
+#: ../locale/scriptstrings/t.rast.accumulate_to_translate.c:21
+#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:19
 msgid "Reverse time direction in cyclic accumulation"
 msgstr ""
 
@@ -17236,56 +17347,56 @@ msgid ""
 "intervals of a second space time dataset."
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:5
+#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:6
 msgid ""
 "Time intervals from this space time dataset (raster, vector or raster3d) are "
 "used for aggregation computation"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:6
+#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:7
 #, fuzzy
 msgid "Type of the aggregation space time dataset"
 msgstr "Yeni veritabanı adı"
 
-#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:9
-#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:8
-#: ../locale/scriptstrings/t.vect.what.strds_to_translate.c:7
-#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:6
-#: ../locale/scriptstrings/t.rast.series_to_translate.c:5
+#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:10
+#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:9
+#: ../locale/scriptstrings/t.vect.what.strds_to_translate.c:8
+#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:7
+#: ../locale/scriptstrings/t.rast.series_to_translate.c:6
 #, fuzzy
 msgid "Aggregate operation to be performed on the raster maps"
 msgstr "Girdi raster haritası adı"
 
-#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:10
-#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:9
+#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:11
+#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:10
 msgid ""
 "Offset that is used to create the output map ids, output map id is generated "
 "as: basename_ (count + offset)"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:11
-#: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:8
-#: ../locale/scriptstrings/t.rast.extract_to_translate.c:8
+#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:12
+#: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:9
+#: ../locale/scriptstrings/t.rast.extract_to_translate.c:9
 #, fuzzy
 msgid "Number of r.mapcalc processes to run in parallel"
 msgstr "Belirlenecek sınıf sayısı"
 
-#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:12
-#: ../locale/scriptstrings/t.rast3d.mapcalc_to_translate.c:10
-#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:11
-#: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:9
-#: ../locale/scriptstrings/t.rast.extract_to_translate.c:9
-#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:10
-#: ../locale/scriptstrings/t.rast3d.extract_to_translate.c:9
+#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:13
+#: ../locale/scriptstrings/t.rast3d.mapcalc_to_translate.c:11
+#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:12
+#: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:10
+#: ../locale/scriptstrings/t.rast.extract_to_translate.c:10
+#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:11
+#: ../locale/scriptstrings/t.rast3d.extract_to_translate.c:10
 #, fuzzy
 msgid "Register Null maps"
 msgstr "raster girdi haritalar"
 
-#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:13
-#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:12
+#: ../locale/scriptstrings/t.rast.aggregate.ds_to_translate.c:14
+#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:13
 msgid ""
-"Use start time - truncated accoring to granularity - as suffix. This flag "
-"overrides the offset option."
+"Use start time - truncated according to granularity - as suffix (overrides "
+"offset option)"
 msgstr ""
 
 #: ../locale/scriptstrings/t.rast.out.vtk_to_translate.c:1
@@ -17297,23 +17408,23 @@ msgstr "Raster harita istatistiklerini güncelle"
 msgid "VTK"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.out.vtk_to_translate.c:6
+#: ../locale/scriptstrings/t.rast.out.vtk_to_translate.c:7
 #, fuzzy
 msgid "Path to the export directory"
 msgstr "Çıktı dosyasının adı"
 
-#: ../locale/scriptstrings/t.rast.out.vtk_to_translate.c:7
+#: ../locale/scriptstrings/t.rast.out.vtk_to_translate.c:8
 #: ../raster/r.out.vtk/parameters.c:45
 msgid "Value to represent no data cell"
 msgstr "Değer içermeyen hücreleri temsil eden değer"
 
-#: ../locale/scriptstrings/t.rast.out.vtk_to_translate.c:8
+#: ../locale/scriptstrings/t.rast.out.vtk_to_translate.c:9
 #: ../raster/r.out.vtk/parameters.c:59
 msgid ""
 "Create VTK point data instead of VTK cell data (if no elevation map is given)"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.out.vtk_to_translate.c:10
+#: ../locale/scriptstrings/t.rast.out.vtk_to_translate.c:11
 msgid ""
 "Export files using the space time dataset granularity for equidistant time "
 "between maps, where statement will be ignored"
@@ -17409,42 +17520,49 @@ msgid ""
 "Imports a space time vector dataset from a GRASS GIS specific archive file."
 msgstr "Raster bakı haritasının adı"
 
-#: ../locale/scriptstrings/t.vect.import_to_translate.c:7
-#: ../locale/scriptstrings/t.rast.import_to_translate.c:7
-msgid "Path to the extraction directory"
-msgstr ""
-
 #: ../locale/scriptstrings/t.vect.import_to_translate.c:8
-#: ../locale/scriptstrings/t.create_to_translate.c:7
 #: ../locale/scriptstrings/t.rast.import_to_translate.c:8
-msgid "Title of the new space time dataset"
+msgid "Path to the extraction directory"
 msgstr ""
 
 #: ../locale/scriptstrings/t.vect.import_to_translate.c:9
 #: ../locale/scriptstrings/t.create_to_translate.c:8
 #: ../locale/scriptstrings/t.rast.import_to_translate.c:9
-msgid "Description of the new space time dataset"
+msgid "Title of the new space time dataset"
 msgstr ""
 
 #: ../locale/scriptstrings/t.vect.import_to_translate.c:10
+#: ../locale/scriptstrings/t.create_to_translate.c:9
 #: ../locale/scriptstrings/t.rast.import_to_translate.c:10
+msgid "Description of the new space time dataset"
+msgstr ""
+
+#: ../locale/scriptstrings/t.vect.import_to_translate.c:11
+#: ../locale/scriptstrings/t.rast.import_to_translate.c:11
 msgid ""
 "Create a new location and import the data into it. Do not run this module in "
 "parallel or interrupt it when a new location should be created"
 msgstr ""
 
-#: ../locale/scriptstrings/t.vect.import_to_translate.c:11
-#: ../locale/scriptstrings/t.rast.import_to_translate.c:13
+#: ../locale/scriptstrings/t.vect.import_to_translate.c:12
+#: ../locale/scriptstrings/t.rast.import_to_translate.c:14
 msgid "Extend location extents based on new dataset"
 msgstr "Mevki sınırlarını yeni verinin sınırlarına göre genişlet "
 
-#: ../locale/scriptstrings/t.vect.import_to_translate.c:12
-#: ../locale/scriptstrings/t.rast.import_to_translate.c:14
-#: ../raster/r.external/main.c:100 ../raster/r.in.gdal/main.c:158
-msgid "Override projection (use location's projection)"
+#: ../locale/scriptstrings/t.vect.import_to_translate.c:13
+#: ../locale/scriptstrings/v.unpack_to_translate.c:9
+#: ../locale/scriptstrings/t.rast.import_to_translate.c:15
+#, fuzzy
+msgid "Override projection check (use current location's projection)"
 msgstr "Projeksiyonun üstüne yaz (mevkinin projeksiyonunu kullan)"
 
-#: ../locale/scriptstrings/t.vect.import_to_translate.c:13
+#: ../locale/scriptstrings/t.vect.import_to_translate.c:14
+#: ../locale/scriptstrings/t.rast.import_to_translate.c:16
+#, fuzzy
+msgid "Assume that the dataset has same projection as the current location"
+msgstr "Geçerli mevkinin projeksiyon birimleri alınamadı"
+
+#: ../locale/scriptstrings/t.vect.import_to_translate.c:15
 msgid ""
 "Create the location specified by the \"location\" parameter and exit. Do not "
 "import the space time vector datasets."
@@ -17461,8 +17579,8 @@ msgstr ""
 
 #: ../locale/scriptstrings/r.in.wms_to_translate.c:6
 #: ../locale/scriptstrings/r3.in.xyz_to_translate.c:10
-#: ../locale/scriptstrings/v.krige_to_translate.c:8
-#: ../imagery/i.ifft/main.c:93
+#: ../locale/scriptstrings/r.import_to_translate.c:11
+#: ../locale/scriptstrings/v.krige_to_translate.c:8 ../imagery/i.ifft/main.c:93
 msgid "Name for output raster map"
 msgstr "Çıktı raster haritasının adı"
 
@@ -17650,12 +17768,13 @@ msgid "cartography"
 msgstr "görüntü, kartoğrafya"
 
 #: ../locale/scriptstrings/d.rast.leg_to_translate.c:4
+#: ../display/d.vect.thematic/main.c:81 ../display/d.legend/main.c:87
 #, fuzzy
 msgid "legend"
 msgstr "Lejandı çevir"
 
 #: ../locale/scriptstrings/d.rast.leg_to_translate.c:5
-#: ../display/d.legend/main.c:216
+#: ../display/d.legend/main.c:217
 msgid "Flip legend"
 msgstr "Lejandı çevir"
 
@@ -17670,7 +17789,7 @@ msgid "Name of raster map to display"
 msgstr "Görüntülenecek raster harita adı"
 
 #: ../locale/scriptstrings/d.rast.leg_to_translate.c:8
-#: ../display/d.legend/main.c:211
+#: ../display/d.legend/main.c:212
 msgid "Draw smooth gradient"
 msgstr ""
 
@@ -17690,14 +17809,14 @@ msgid ""
 "time using vector points."
 msgstr ""
 
-#: ../locale/scriptstrings/t.vect.observe.strds_to_translate.c:5
+#: ../locale/scriptstrings/t.vect.observe.strds_to_translate.c:6
 #, fuzzy
 msgid ""
 "Name of the new created vector map that stores the sampled values in "
 "different layers"
 msgstr "Görüntülenecek raster harita adı"
 
-#: ../locale/scriptstrings/t.vect.observe.strds_to_translate.c:6
+#: ../locale/scriptstrings/t.vect.observe.strds_to_translate.c:7
 #, fuzzy
 msgid ""
 "Names of the vector columns to be created and to store sampled raster "
@@ -17709,9 +17828,9 @@ msgid "Calculates Optimum-Index-Factor table for spectral bands"
 msgstr ""
 
 #: ../locale/scriptstrings/i.oif_to_translate.c:6
-#: ../locale/scriptstrings/t.info_to_translate.c:8
-#: ../general/g.region/main.c:142 ../raster/r.regression.line/main.c:68
-#: ../raster/r.regression.multi/main.c:160 ../imagery/i.group/main.c:88
+#: ../locale/scriptstrings/t.info_to_translate.c:9
+#: ../general/g.region/main.c:142 ../raster/r.regression.line/main.c:69
+#: ../raster/r.regression.multi/main.c:161 ../imagery/i.group/main.c:88
 msgid "Print in shell script style"
 msgstr "Kabuk betiği stilinde yazdır"
 
@@ -17721,17 +17840,12 @@ msgid ""
 "Prints attributes of vector maps registered in a space time vector dataset."
 msgstr "girdi mevkisindeki vektör haritaları listele ve çık"
 
-#: ../locale/scriptstrings/t.vect.db.select_to_translate.c:6
-#, fuzzy
-msgid "select"
-msgstr "Çözünürlük"
-
 #: ../locale/scriptstrings/t.rast3d.list_to_translate.c:1
 #, fuzzy
 msgid "Lists registered maps of a space time raster3d dataset."
 msgstr "girdi mevkisindeki vektör haritaları listele ve çık"
 
-#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:7
+#: ../locale/scriptstrings/t.rast3d.list_to_translate.c:8
 #, fuzzy
 msgid "Order the space time dataset by category"
 msgstr "Boş veritabanı oluşturur."
@@ -17741,8 +17855,8 @@ msgstr "Boş veritabanı oluşturur."
 msgid "Snaps temporally the maps of a space time dataset."
 msgstr "Yeni veritabanı adı"
 
-#: ../locale/scriptstrings/t.snap_to_translate.c:4
-#: ../locale/scriptstrings/t.shift_to_translate.c:4
+#: ../locale/scriptstrings/t.snap_to_translate.c:5
+#: ../locale/scriptstrings/t.shift_to_translate.c:5
 #, fuzzy
 msgid "Name of an existing space time dataset"
 msgstr "Mevcut bir raster harita adı"
@@ -17752,7 +17866,7 @@ msgid "Mosaics several images and extends colormap."
 msgstr ""
 
 #: ../locale/scriptstrings/i.image.mosaic_to_translate.c:4
-#: ../raster/r.patch/main.c:56
+#: ../raster/r.patch/main.c:57
 msgid "mosaicking"
 msgstr ""
 
@@ -17765,11 +17879,11 @@ msgstr "Yeni veritabanı adı"
 msgid "shift"
 msgstr ""
 
-#: ../locale/scriptstrings/t.shift_to_translate.c:7
+#: ../locale/scriptstrings/t.shift_to_translate.c:8
 msgid "Shift granularity"
 msgstr ""
 
-#: ../locale/scriptstrings/t.shift_to_translate.c:8
+#: ../locale/scriptstrings/t.shift_to_translate.c:9
 msgid ""
 "Format absolute time: \"x years, x months, x weeks, x days, x hours, x "
 "minutes, x seconds\", relative time is of type integer"
@@ -17779,10 +17893,6 @@ msgstr ""
 msgid ""
 "Dissolves boundaries between adjacent areas sharing a common category number "
 "or attribute."
-msgstr ""
-
-#: ../locale/scriptstrings/v.dissolve_to_translate.c:3
-msgid "dissolve"
 msgstr ""
 
 #: ../locale/scriptstrings/v.dissolve_to_translate.c:6
@@ -17903,12 +18013,12 @@ msgstr "Projeksiyonun üstüne yaz (mevkinin projeksiyonunu kullan)"
 msgid "Merges several space time datasets into a single space time dataset."
 msgstr "3B raster haritalarını 2D raster haritalara dönüştür"
 
-#: ../locale/scriptstrings/t.merge_to_translate.c:3
+#: ../locale/scriptstrings/t.merge_to_translate.c:3 ../raster/r.patch/main.c:58
 msgid "merge"
 msgstr ""
 
-#: ../locale/scriptstrings/t.merge_to_translate.c:4
-#: ../locale/scriptstrings/t.remove_to_translate.c:7
+#: ../locale/scriptstrings/t.merge_to_translate.c:5
+#: ../locale/scriptstrings/t.remove_to_translate.c:8
 #, fuzzy
 msgid "inputs"
 msgstr "Girdi"
@@ -17920,35 +18030,35 @@ msgid ""
 "print the result to stdout."
 msgstr "Çıktı QC tipi sınıflandırma katmanı adı"
 
-#: ../locale/scriptstrings/t.sample_to_translate.c:4
+#: ../locale/scriptstrings/t.sample_to_translate.c:5
 #, fuzzy
 msgid "Name of the sample space time dataset"
 msgstr "Yeni veritabanı adı"
 
-#: ../locale/scriptstrings/t.sample_to_translate.c:7
+#: ../locale/scriptstrings/t.sample_to_translate.c:8
 #, fuzzy
 msgid "Type of the sample space time dataset"
 msgstr "Yeni veritabanı adı"
 
-#: ../locale/scriptstrings/t.sample_to_translate.c:8
+#: ../locale/scriptstrings/t.sample_to_translate.c:9
 #, fuzzy
 msgid "Field separator between output columns, default is tabular \" | \""
 msgstr "Kabuk betiği stilinde yazdır"
 
-#: ../locale/scriptstrings/t.sample_to_translate.c:9
+#: ../locale/scriptstrings/t.sample_to_translate.c:10
 msgid ""
 "Do not use \",\" as this char is reserved to list several map ids in a "
 "sample granule"
 msgstr ""
 
-#: ../locale/scriptstrings/t.sample_to_translate.c:10
-#: ../locale/scriptstrings/t.list_to_translate.c:17
+#: ../locale/scriptstrings/t.sample_to_translate.c:11
+#: ../locale/scriptstrings/t.list_to_translate.c:18
 msgid "Print the column names as first row"
 msgstr ""
 
-#: ../locale/scriptstrings/t.sample_to_translate.c:11
-#: ../locale/scriptstrings/t.rast3d.mapcalc_to_translate.c:11
-#: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:10
+#: ../locale/scriptstrings/t.sample_to_translate.c:12
+#: ../locale/scriptstrings/t.rast3d.mapcalc_to_translate.c:12
+#: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:11
 msgid "Check spatial overlap"
 msgstr ""
 
@@ -17958,38 +18068,38 @@ msgid ""
 "datasets created by t.rast.accumulate."
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:5
+#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:6
 msgid ""
 "Input space time raster dataset that specifies the minimum values to detect "
 "the accumulation pattern"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:6
+#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:7
 msgid ""
 "Input space time raster dataset that specifies the maximum values to detect "
 "the accumulation pattern"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:7
+#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:8
 msgid ""
 "The output space time raster dataset that stores the occurrence of the the "
 "accumulation pattern using the provided data range"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:8
+#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:9
 msgid ""
 "The output space time raster dataset that stores the indication of the "
 "start, intermediate and end of the specified data range"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:15
+#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:16
 msgid ""
 "The minimum and maximum value of the occurrence of accumulated values, these "
 "values will be used if the min/max space time raster datasets are not "
 "specified"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:16
+#: ../locale/scriptstrings/t.rast.accdetect_to_translate.c:17
 msgid ""
 "The user defined values that indicate start, intermediate and end status in "
 "the indicator output space time raster dataset"
@@ -18053,8 +18163,7 @@ msgstr "Raster haritanın adı"
 msgid "Percent to brighten"
 msgstr "Tamamlanan yüzde:"
 
-#: ../locale/scriptstrings/r.shade_to_translate.c:12
-#: ../raster/r.his/main.c:121
+#: ../locale/scriptstrings/r.shade_to_translate.c:12 ../raster/r.his/main.c:121
 msgid "Color to use instead of NULL values"
 msgstr ""
 
@@ -18063,8 +18172,7 @@ msgstr ""
 msgid "Either a standard color name, R:G:B triplet, or \"none\""
 msgstr "Ya standart GRASS rengi,K:Y:M üçlemesi, yada \"hiçbiri\""
 
-#: ../locale/scriptstrings/r.shade_to_translate.c:14
-#: ../raster/r.his/main.c:126
+#: ../locale/scriptstrings/r.shade_to_translate.c:14 ../raster/r.his/main.c:126
 #, fuzzy
 msgid "Use colors from color tables for NULL values"
 msgstr "Metin rengini hücre ren değerinden al"
@@ -18123,9 +18231,8 @@ msgstr ""
 msgid "Redraws the content of currently selected monitor."
 msgstr ""
 
-#: ../locale/scriptstrings/d.redraw_to_translate.c:4
-#: ../display/d.mon/main.c:40 ../display/d.erase/main.c:31
-#: ../display/d.info/main.c:33
+#: ../locale/scriptstrings/d.redraw_to_translate.c:4 ../display/d.mon/main.c:40
+#: ../display/d.erase/main.c:31 ../display/d.info/main.c:33
 msgid "monitors"
 msgstr ""
 
@@ -18248,11 +18355,6 @@ msgstr "Çıktı vektör haritasının adı"
 msgid "Default: taken from input file internals"
 msgstr "Çıktı raster harita adı (varsayılan: input)"
 
-#: ../locale/scriptstrings/v.unpack_to_translate.c:8
-#, fuzzy
-msgid "Override projection check (use current location's projection)"
-msgstr "Projeksiyonun üstüne yaz (mevkinin projeksiyonunu kullan)"
-
 #: ../locale/scriptstrings/d.what.rast_to_translate.c:1
 #, fuzzy
 msgid ""
@@ -18261,6 +18363,27 @@ msgid ""
 msgstr ""
 "Kullanıcıya geçerli coğrafi bölge içinde seçilen mevkideki vektör harita "
 "katmanını etkileşimli olarak sorgulama olanağı sağlar."
+
+#: ../locale/scriptstrings/v.import_to_translate.c:1
+#, fuzzy
+msgid ""
+"Imports vector data into a GRASS vector map using OGR library and reprojects "
+"on the fly."
+msgstr "OGR vektör katmanını GRASS vektör haritasına dönüştürür."
+
+#: ../locale/scriptstrings/v.import_to_translate.c:5
+#, fuzzy
+msgid "Name of OGR datasource to be imported"
+msgstr "İçeri aktarılacak raster dosya"
+
+#: ../locale/scriptstrings/v.import_to_translate.c:11
+#, fuzzy
+msgid "Output vector map extent"
+msgstr "Sorunlu alanların vektör çıktı haritası"
+
+#: ../locale/scriptstrings/v.import_to_translate.c:12
+msgid "input;extent of input map;region;extent of current region"
+msgstr ""
 
 #: ../locale/scriptstrings/db.droptable_to_translate.c:1
 msgid "Drops an attribute table."
@@ -18360,12 +18483,12 @@ msgid ""
 "datasets."
 msgstr "girdi mevkisindeki vektör haritaları listele ve çık"
 
-#: ../locale/scriptstrings/t.rast3d.mapcalc_to_translate.c:6
+#: ../locale/scriptstrings/t.rast3d.mapcalc_to_translate.c:7
 msgid "r3.mapcalc expression applied to each time step of the sampled data"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast3d.mapcalc_to_translate.c:9
-#: ../locale/scriptstrings/t.rast3d.extract_to_translate.c:8
+#: ../locale/scriptstrings/t.rast3d.mapcalc_to_translate.c:10
+#: ../locale/scriptstrings/t.rast3d.extract_to_translate.c:9
 #, fuzzy
 msgid "Number of r3.mapcalc processes to run in parallel"
 msgstr "Belirlenecek sınıf sayısı"
@@ -18375,13 +18498,13 @@ msgstr "Belirlenecek sınıf sayısı"
 msgid "Extracts a subset of a space time vector dataset."
 msgstr "Raster bakı haritasının adı"
 
-#: ../locale/scriptstrings/t.vect.extract_to_translate.c:7
+#: ../locale/scriptstrings/t.vect.extract_to_translate.c:8
 msgid ""
 "The number of v.extract processes to run in parallel. Use only if database "
 "backend is used which supports concurrent writing"
 msgstr ""
 
-#: ../locale/scriptstrings/t.vect.extract_to_translate.c:8
+#: ../locale/scriptstrings/t.vect.extract_to_translate.c:9
 #, fuzzy
 msgid "Register empty maps"
 msgstr "raster girdi haritalar"
@@ -18415,7 +18538,7 @@ msgstr ""
 #: ../general/g.ppmtopng/main.c:117 ../general/g.cairocomp/main.c:196
 #: ../general/g.message/main.c:33 ../general/g.rename/main.c:45
 #: ../general/g.findetc/main.c:28 ../general/g.mapsets/main.c:63
-#: ../general/g.copy/main.c:41 ../general/g.proj/main.c:63
+#: ../general/g.copy/main.c:41 ../general/g.proj/main.c:64
 #: ../general/g.pnmcomp/main.c:282 ../general/g.mkfontcap/main.c:71
 #: ../general/g.remove/main.c:69 ../general/g.list/main.c:89
 #: ../general/g.region/main.c:63 ../general/g.mapset/main.c:49
@@ -18466,13 +18589,13 @@ msgstr "Bağlantı"
 msgid "Lists space time datasets and maps registered in the temporal database."
 msgstr "Araştırma listesinden silinecek mevcut harita takım(lar)ının ad(lar)ı"
 
-#: ../locale/scriptstrings/t.list_to_translate.c:5
+#: ../locale/scriptstrings/t.list_to_translate.c:6
 #, fuzzy
 msgid "Type of the space time dataset or map, default is strds"
 msgstr "Yeni veritabanı adı"
 
-#: ../locale/scriptstrings/t.list_to_translate.c:8
-#: ../locale/scriptstrings/t.list_to_translate.c:11
+#: ../locale/scriptstrings/t.list_to_translate.c:9
+#: ../locale/scriptstrings/t.list_to_translate.c:12
 msgid ""
 "Columns number_of_maps and granularity only available for space time datasets"
 msgstr ""
@@ -18520,19 +18643,19 @@ msgid ""
 "defined granularity."
 msgstr "girdi mevkisindeki vektör haritaları listele ve çık"
 
-#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:6
+#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:7
 msgid ""
 "Either a numerical suffix or the start time (s-flag) separated by an "
 "underscore will be attached to create a unique identifier"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:7
+#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:8
 msgid ""
 "Aggregation granularity, format absolute time \"x years, x months, x weeks, "
 "x days, x hours, x minutes, x seconds\" or an integer value for relative time"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:10
+#: ../locale/scriptstrings/t.rast.aggregate_to_translate.c:11
 #, fuzzy
 msgid "Number of r.series processes to run in parallel"
 msgstr "Enterpolasyon nokta sayısı"
@@ -18544,11 +18667,11 @@ msgid ""
 "space time raster datasets."
 msgstr "girdi mevkisindeki vektör haritaları listele ve çık"
 
-#: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:5
+#: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:6
 msgid "Spatio-temporal mapcalc expression"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:6
+#: ../locale/scriptstrings/t.rast.mapcalc_to_translate.c:7
 #, fuzzy
 msgid "Basename for output raster maps"
 msgstr "Çıktı raster haritasının adı"
@@ -18648,13 +18771,13 @@ msgstr ""
 "Vektör noktaların bulunduğu konumdaki raster harita değerlerini tabloya "
 "yükler."
 
-#: ../locale/scriptstrings/t.vect.what.strds_to_translate.c:5
+#: ../locale/scriptstrings/t.vect.what.strds_to_translate.c:6
 #, fuzzy
 msgid ""
 "Name of the vector column to be created and to store sampled raster values"
 msgstr "Etiket için kullanılacak öznitelik sütunu adı"
 
-#: ../locale/scriptstrings/t.vect.what.strds_to_translate.c:6
+#: ../locale/scriptstrings/t.vect.what.strds_to_translate.c:7
 msgid ""
 "The use of a column name forces t.vect.what.rast to sample only values from "
 "the first map found in an interval. Otherwise the raster map names are used "
@@ -18753,74 +18876,74 @@ msgstr "girdi mevkisindeki vektör haritaları listele ve çık"
 msgid "register"
 msgstr "raster"
 
-#: ../locale/scriptstrings/t.register_to_translate.c:7
-#: ../locale/scriptstrings/t.unregister_to_translate.c:6
+#: ../locale/scriptstrings/t.register_to_translate.c:8
+#: ../locale/scriptstrings/t.unregister_to_translate.c:7
 #, fuzzy
 msgid "input,maps"
 msgstr "Girdi harita(lar)"
 
-#: ../locale/scriptstrings/t.register_to_translate.c:9
-#: ../locale/scriptstrings/t.unregister_to_translate.c:5
+#: ../locale/scriptstrings/t.register_to_translate.c:10
+#: ../locale/scriptstrings/t.unregister_to_translate.c:6
 #, fuzzy
 msgid "Input file with map names, one per line"
 msgstr "Çizgileri içeren girdi vektör haritası"
 
-#: ../locale/scriptstrings/t.register_to_translate.c:10
+#: ../locale/scriptstrings/t.register_to_translate.c:11
 msgid "Additionally the start time and the end time can be specified per line"
 msgstr ""
 
-#: ../locale/scriptstrings/t.register_to_translate.c:12
+#: ../locale/scriptstrings/t.register_to_translate.c:13
 msgid "Valid start date and time of the first map"
 msgstr ""
 
-#: ../locale/scriptstrings/t.register_to_translate.c:13
-#: ../locale/scriptstrings/t.register_to_translate.c:16
+#: ../locale/scriptstrings/t.register_to_translate.c:14
+#: ../locale/scriptstrings/t.register_to_translate.c:17
 msgid ""
 "Format absolute time: \"yyyy-mm-dd HH:MM:SS +HHMM\", relative time is of "
 "type integer)."
 msgstr ""
 
-#: ../locale/scriptstrings/t.register_to_translate.c:14
-#: ../locale/scriptstrings/t.register_to_translate.c:17
-#: ../locale/scriptstrings/t.register_to_translate.c:20
-#: ../locale/scriptstrings/t.register_to_translate.c:23
-#: ../locale/scriptstrings/t.register_to_translate.c:27
+#: ../locale/scriptstrings/t.register_to_translate.c:15
+#: ../locale/scriptstrings/t.register_to_translate.c:18
+#: ../locale/scriptstrings/t.register_to_translate.c:21
+#: ../locale/scriptstrings/t.register_to_translate.c:24
+#: ../locale/scriptstrings/t.register_to_translate.c:28
 msgid "Time & Date"
 msgstr ""
 
-#: ../locale/scriptstrings/t.register_to_translate.c:15
+#: ../locale/scriptstrings/t.register_to_translate.c:16
 msgid "Valid end date and time of all map"
 msgstr ""
 
-#: ../locale/scriptstrings/t.register_to_translate.c:18
+#: ../locale/scriptstrings/t.register_to_translate.c:19
 #, fuzzy
 msgid "Time stamp unit"
 msgstr "Geçersiz zaman damgası"
 
-#: ../locale/scriptstrings/t.register_to_translate.c:19
+#: ../locale/scriptstrings/t.register_to_translate.c:20
 msgid "Unit must be set in case of relative time stamps"
 msgstr ""
 
-#: ../locale/scriptstrings/t.register_to_translate.c:21
-#, fuzzy
-msgid "Time increment"
-msgstr "Kategori artışı"
-
 #: ../locale/scriptstrings/t.register_to_translate.c:22
+msgid "Time increment, works only in conjunction with start option"
+msgstr ""
+
+#: ../locale/scriptstrings/t.register_to_translate.c:23
 msgid ""
 "Time increment between maps for valid time interval creation (format "
 "absolute: NNN seconds, minutes, hours, days, weeks, months, years; format "
 "relative is integer: 5)"
 msgstr ""
 
-#: ../locale/scriptstrings/t.register_to_translate.c:24
+#: ../locale/scriptstrings/t.register_to_translate.c:25
 #, fuzzy
 msgid "Field separator character of the input file"
 msgstr "Kabuk betiği stilinde yazdır"
 
-#: ../locale/scriptstrings/t.register_to_translate.c:26
+#: ../locale/scriptstrings/t.register_to_translate.c:27
 msgid ""
-"Create an interval (start and end time) in case an increment is provided"
+"Create an interval (start and end time) in case an increment and the start "
+"time are provided"
 msgstr ""
 
 #: ../locale/scriptstrings/d.polar_to_translate.c:1
@@ -18851,11 +18974,11 @@ msgid ""
 "space time datasets using temporal algebra."
 msgstr ""
 
-#: ../locale/scriptstrings/t.select_to_translate.c:6
+#: ../locale/scriptstrings/t.select_to_translate.c:7
 msgid "The temporal mapcalc expression"
 msgstr ""
 
-#: ../locale/scriptstrings/t.select_to_translate.c:7
+#: ../locale/scriptstrings/t.select_to_translate.c:8
 msgid "Activate spatial topology"
 msgstr ""
 
@@ -18955,28 +19078,28 @@ msgstr "Veri içermeyen tüm hücreleri süz"
 msgid "Exports space time raster dataset."
 msgstr "Raster harita istatistiklerini güncelle"
 
-#: ../locale/scriptstrings/t.rast.export_to_translate.c:5
+#: ../locale/scriptstrings/t.rast.export_to_translate.c:6
 #, fuzzy
 msgid "Name of a space time raster dataset archive"
 msgstr "Raster bakı haritasının adı"
 
-#: ../locale/scriptstrings/t.rast.export_to_translate.c:6
-#: ../locale/scriptstrings/t.vect.export_to_translate.c:6
+#: ../locale/scriptstrings/t.rast.export_to_translate.c:7
+#: ../locale/scriptstrings/t.vect.export_to_translate.c:7
 msgid "Path to the work directory, default is /tmp"
 msgstr ""
 
-#: ../locale/scriptstrings/t.rast.export_to_translate.c:7
-#: ../locale/scriptstrings/t.vect.export_to_translate.c:7
+#: ../locale/scriptstrings/t.rast.export_to_translate.c:8
+#: ../locale/scriptstrings/t.vect.export_to_translate.c:8
 #, fuzzy
 msgid "Compression method of the tar archive"
 msgstr "Etiket dosyası adı"
 
-#: ../locale/scriptstrings/t.rast.export_to_translate.c:8
+#: ../locale/scriptstrings/t.rast.export_to_translate.c:9
 #, fuzzy
 msgid "The export format of a single raster map"
 msgstr "Raster harita katmanlarının alansal istatistiklerini oluştur"
 
-#: ../locale/scriptstrings/t.rast.export_to_translate.c:9
+#: ../locale/scriptstrings/t.rast.export_to_translate.c:10
 msgid ""
 "Supported are GTiff, AAIGrid via r.out.gdal and the GRASS package format of "
 "r.pack"
@@ -19037,7 +19160,7 @@ msgstr "Raster harita katmanlarının alansal istatistiklerini oluştur"
 msgid "Extracts a subset of a space time raster datasets."
 msgstr "Raster bakı haritasının adı"
 
-#: ../locale/scriptstrings/t.rast.extract_to_translate.c:5
+#: ../locale/scriptstrings/t.rast.extract_to_translate.c:6
 msgid "r.mapcalc expression assigned to all extracted raster maps"
 msgstr ""
 
@@ -19052,21 +19175,23 @@ msgstr "Veritabanından bir tablo uzaklaştırır."
 msgid "remove"
 msgstr "Köprüleri sil"
 
-#: ../locale/scriptstrings/t.remove_to_translate.c:6
+#: ../locale/scriptstrings/t.remove_to_translate.c:7
 msgid "Type of the space time dataset, default is strds"
 msgstr ""
 
-#: ../locale/scriptstrings/t.remove_to_translate.c:9
+#: ../locale/scriptstrings/t.remove_to_translate.c:10
 #, fuzzy
 msgid "Input file with dataset names, one per line"
 msgstr "Çizgileri içeren girdi vektör haritası"
 
-#: ../locale/scriptstrings/t.remove_to_translate.c:11
+#: ../locale/scriptstrings/t.remove_to_translate.c:12
 #, fuzzy
-msgid "Remove all registered maps from the temporal and spatial database"
+msgid ""
+"Remove all registered maps from the temporal and also from the spatial "
+"database"
 msgstr "Veritabanından bir tablo uzaklaştırır."
 
-#: ../locale/scriptstrings/t.remove_to_translate.c:12
+#: ../locale/scriptstrings/t.remove_to_translate.c:13
 msgid "Force recursive removing"
 msgstr ""
 
@@ -19123,12 +19248,12 @@ msgid ""
 msgstr ""
 "Raster harita katmanıyla ilişkilendirilen renk tablosunu oluştur/değiştir."
 
-#: ../locale/scriptstrings/t.rast.colors_to_translate.c:5
+#: ../locale/scriptstrings/t.rast.colors_to_translate.c:6
 #, fuzzy
 msgid "Name of color table (see r.color help)"
 msgstr "Renk tablosu tipi (-z bayrağı ile kullanmak için)"
 
-#: ../locale/scriptstrings/t.rast.colors_to_translate.c:24
+#: ../locale/scriptstrings/t.rast.colors_to_translate.c:25
 #: ../raster/r.colors/edit_colors.c:147
 msgid "Histogram equalization"
 msgstr ""
@@ -19138,35 +19263,35 @@ msgstr ""
 msgid "Modifies the metadata of a space time dataset."
 msgstr "Yeni veritabanı adı"
 
-#: ../locale/scriptstrings/t.support_to_translate.c:4
-#: ../locale/scriptstrings/t.create_to_translate.c:6
+#: ../locale/scriptstrings/t.support_to_translate.c:5
+#: ../locale/scriptstrings/t.create_to_translate.c:7
 #, fuzzy
 msgid "Semantic type of the space time dataset"
 msgstr "Yeni veritabanı adı"
 
-#: ../locale/scriptstrings/t.support_to_translate.c:7
+#: ../locale/scriptstrings/t.support_to_translate.c:8
 #, fuzzy
 msgid "Title of the space time dataset"
 msgstr "Yeni veritabanı adı"
 
-#: ../locale/scriptstrings/t.support_to_translate.c:8
+#: ../locale/scriptstrings/t.support_to_translate.c:9
 #, fuzzy
 msgid "Description of the space time dataset"
 msgstr "Yeni veritabanı adı"
 
-#: ../locale/scriptstrings/t.support_to_translate.c:9
+#: ../locale/scriptstrings/t.support_to_translate.c:10
 msgid ""
 "Update the metadata information and spatial extent of registered maps from "
 "the GRASS spatial database"
 msgstr ""
 
-#: ../locale/scriptstrings/t.support_to_translate.c:10
+#: ../locale/scriptstrings/t.support_to_translate.c:11
 msgid ""
 "Check for removed maps and delete them from the temporal database and all "
 "effected space time datasets"
 msgstr ""
 
-#: ../locale/scriptstrings/t.support_to_translate.c:11
+#: ../locale/scriptstrings/t.support_to_translate.c:12
 msgid ""
 "Update metadata information, temporal and spatial extent from registered maps"
 msgstr ""
@@ -19176,17 +19301,17 @@ msgstr ""
 msgid "Exports a space time vector dataset as GRASS GIS specific archive file."
 msgstr "Raster bakı haritasının adı"
 
-#: ../locale/scriptstrings/t.vect.export_to_translate.c:5
+#: ../locale/scriptstrings/t.vect.export_to_translate.c:6
 #, fuzzy
 msgid "Name of a space time vector dataset archive"
 msgstr "Raster bakı haritasının adı"
 
-#: ../locale/scriptstrings/t.vect.export_to_translate.c:8
+#: ../locale/scriptstrings/t.vect.export_to_translate.c:9
 #, fuzzy
 msgid "The export format of a single vector map"
 msgstr "Raster harita katmanlarının alansal istatistiklerini oluştur"
 
-#: ../locale/scriptstrings/t.vect.export_to_translate.c:9
+#: ../locale/scriptstrings/t.vect.export_to_translate.c:10
 msgid "Supported are GML via v.out.ogr and the GRASS package format of v.pack"
 msgstr ""
 
@@ -19195,12 +19320,12 @@ msgstr ""
 msgid "Lists temporal topology of a space time dataset."
 msgstr "Raster harita katmanı hakkındaki temel bilgiyi çıkart"
 
-#: ../locale/scriptstrings/t.topology_to_translate.c:6
+#: ../locale/scriptstrings/t.topology_to_translate.c:7
 #, fuzzy
 msgid "Print temporal relationships and exit"
 msgstr "Geçerli harita takımı arama yolunu yaz"
 
-#: ../locale/scriptstrings/t.topology_to_translate.c:7
+#: ../locale/scriptstrings/t.topology_to_translate.c:8
 #, fuzzy
 msgid "Print spatio-temporal relationships and exit"
 msgstr "Geçerli harita takımı arama yolunu yaz"
@@ -19261,7 +19386,7 @@ msgstr ""
 msgid "unregister"
 msgstr "raster"
 
-#: ../locale/scriptstrings/t.unregister_to_translate.c:7
+#: ../locale/scriptstrings/t.unregister_to_translate.c:8
 #, fuzzy
 msgid "Name(s) of existing raster, vector or raster3d map(s) to unregister"
 msgstr "Sorgulanacak raster harita(lar)ın adı"
@@ -19276,7 +19401,7 @@ msgstr "Boş veritabanı oluşturur."
 msgid "create"
 msgstr "raster"
 
-#: ../locale/scriptstrings/t.create_to_translate.c:5
+#: ../locale/scriptstrings/t.create_to_translate.c:6
 #, fuzzy
 msgid "Type of the output space time dataset"
 msgstr "Yeni veritabanı adı"
@@ -19296,12 +19421,12 @@ msgid ""
 "Performs a neighborhood analysis for each map in a space time raster dataset."
 msgstr "girdi mevkisindeki vektör haritaları listele ve çık"
 
-#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:5
+#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:6
 #: ../raster/r.neighbors/main.c:212
 msgid "Neighborhood size"
 msgstr "Komşuluk boyutu"
 
-#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:9
+#: ../locale/scriptstrings/t.rast.neighbors_to_translate.c:10
 #, fuzzy
 msgid "Number of r.neighbor processes to run in parallel"
 msgstr "Enterpolasyon nokta sayısı"
@@ -19345,6 +19470,86 @@ msgstr "Çıktı raster harita adı (varsayılan: input)"
 #: ../locale/scriptstrings/v.pack_to_translate.c:7
 msgid "Switch the compression off"
 msgstr ""
+
+#: ../locale/scriptstrings/r.import_to_translate.c:1
+#, fuzzy
+msgid ""
+"Imports raster data into a GRASS raster map using GDAL library and "
+"reprojects on the fly."
+msgstr "İkili raster dosyasını GRASS raster harita katmanına dönüştür."
+
+#: ../locale/scriptstrings/r.import_to_translate.c:5
+#, fuzzy
+msgid "Name of GDAL dataset to be imported"
+msgstr "İçeri aktarılacak raster dosya"
+
+#: ../locale/scriptstrings/r.import_to_translate.c:7
+#, fuzzy
+msgid "Input band(s) to select (default is all bands)"
+msgstr "Seçilecek band (varsayılan tüm bandlardır)"
+
+#: ../locale/scriptstrings/r.import_to_translate.c:13
+#, fuzzy
+msgid "Resampling method to use for reprojection"
+msgstr "Kullanılacak enterpolasyon metodu"
+
+#: ../locale/scriptstrings/r.import_to_translate.c:14
+msgid ""
+"nearest;nearest neighbor;bilinear;bilinear interpolation;bicubic;bicubic "
+"interpolation;lanczos;lanczos filter;bilinear_f;bilinear interpolation with "
+"fallback;bicubic_f;bicubic interpolation with fallback;lanczos_f;lanczos "
+"filter with fallback"
+msgstr ""
+
+#: ../locale/scriptstrings/r.import_to_translate.c:16
+#, fuzzy
+msgid "Output raster map extent"
+msgstr "Çıktı raster harita başlığı"
+
+#: ../locale/scriptstrings/r.import_to_translate.c:17
+#, fuzzy
+msgid "region;extent of current region;input;extent of input map"
+msgstr "Geçerli bölgeyi girdi haritaya göre uyarla"
+
+#: ../locale/scriptstrings/r.import_to_translate.c:19
+#, fuzzy
+msgid "Resolution of output raster map (default: estimated)"
+msgstr "Çıktı haritanın çözünürlüğü"
+
+#: ../locale/scriptstrings/r.import_to_translate.c:20
+#, fuzzy
+msgid ""
+"estimated;estimated resolution;value;user-specified resolution;region;"
+"current region resolution"
+msgstr "Girdi harita çözünürlüğü geçerli bölge çözünürlüğünden farklı!"
+
+#: ../locale/scriptstrings/r.import_to_translate.c:22
+#, fuzzy
+msgid "Resolution of output raster map (use with option resolution=value)"
+msgstr "Çıktı haritanın çözünürlüğü"
+
+#: ../locale/scriptstrings/r.import_to_translate.c:24
+#, fuzzy
+msgid "Estimate resolution only"
+msgstr "Hassas çözünürlük"
+
+#: ../locale/scriptstrings/r.import_to_translate.c:25
+#: ../locale/scriptstrings/r.import_to_translate.c:27
+#: ../raster/r.horizon/main.c:278 ../raster/r.horizon/main.c:297
+#, fuzzy
+msgid "Optional"
+msgstr "Uygun olmayan çıktı dosya adı <%s>"
+
+#: ../locale/scriptstrings/r.import_to_translate.c:26
+#: ../raster/r.proj/main.c:207
+msgid "Do not perform region cropping optimization"
+msgstr ""
+
+#: ../locale/scriptstrings/r.import_to_translate.c:28
+#: ../raster/r.in.gdal/main.c:183
+#, fuzzy
+msgid "Force Lat/Lon maps to fit into geographic coordinates (90N,S; 180E,W)"
+msgstr "Coğrafi koordinat olarak ekran konumu"
 
 #: ../locale/scriptstrings/d.rast.edit_to_translate.c:1
 #, fuzzy
@@ -19438,19 +19643,19 @@ msgstr "Yeniden projeksiyonlanacak girdi raster harita adı"
 msgid "Lists information about space time datasets and maps."
 msgstr "Raster harita katmanı hakkındaki temel bilgiyi çıkart"
 
-#: ../locale/scriptstrings/t.info_to_translate.c:5
+#: ../locale/scriptstrings/t.info_to_translate.c:6
 #, fuzzy
 msgid "Name of an existing space time dataset or map"
 msgstr "Mevcut bir raster harita adı"
 
-#: ../locale/scriptstrings/t.info_to_translate.c:9
+#: ../locale/scriptstrings/t.info_to_translate.c:10
 #, fuzzy
 msgid ""
 "Print history information in human readable shell style for space time "
 "datasets"
 msgstr "Kabuk betiği stilinde yazdır"
 
-#: ../locale/scriptstrings/t.info_to_translate.c:10
+#: ../locale/scriptstrings/t.info_to_translate.c:11
 msgid "Print information about the temporal DBMI interface and exit"
 msgstr ""
 
@@ -19588,7 +19793,7 @@ msgid "Create inverse mask"
 msgstr "Tamsayı harita oluştur"
 
 #: ../locale/scriptstrings/r.mask_to_translate.c:18
-#: ../general/g.proj/main.c:200 ../general/g.mapset/main.c:70
+#: ../general/g.proj/main.c:201 ../general/g.mapset/main.c:70
 #, fuzzy
 msgid "Create"
 msgstr "raster"
@@ -19638,22 +19843,21 @@ msgstr ""
 msgid "series"
 msgstr "raster, seriler"
 
-#: ../locale/scriptstrings/t.rast.series_to_translate.c:6
+#: ../locale/scriptstrings/t.rast.series_to_translate.c:7
 #, fuzzy
 msgid "Sort the maps by category"
 msgstr "Boş veritabanı oluşturur."
 
-#: ../locale/scriptstrings/t.rast.series_to_translate.c:7
+#: ../locale/scriptstrings/t.rast.series_to_translate.c:8
 #, fuzzy
 msgid ""
 "Do not assign the space time raster dataset start and end time to the output "
 "map"
 msgstr "3B raster haritalarını 2D raster haritalara dönüştür"
 
-#: ../locale/scriptstrings/t.rast.series_to_translate.c:8
-#: ../raster/r.series.accumulate/main.c:159
-#: ../raster/r.resamp.stats/main.c:283 ../raster/r.series/main.c:183
-#: ../raster/r.resamp.filter/main.c:425
+#: ../locale/scriptstrings/t.rast.series_to_translate.c:9
+#: ../raster/r.series.accumulate/main.c:159 ../raster/r.resamp.stats/main.c:283
+#: ../raster/r.series/main.c:183 ../raster/r.resamp.filter/main.c:425
 msgid "Propagate NULLs"
 msgstr ""
 
@@ -19714,12 +19918,12 @@ msgid ""
 "Replaces gaps in a space time raster dataset with interpolated raster maps."
 msgstr "3B raster haritalarını 2D raster haritalara dönüştür"
 
-#: ../locale/scriptstrings/t.rast.gapfill_to_translate.c:7
+#: ../locale/scriptstrings/t.rast.gapfill_to_translate.c:8
 #, fuzzy
 msgid "Number of interpolation processes to run in parallel"
 msgstr "Enterpolasyon nokta sayısı"
 
-#: ../locale/scriptstrings/t.rast.gapfill_to_translate.c:8
+#: ../locale/scriptstrings/t.rast.gapfill_to_translate.c:9
 msgid ""
 "Assign the space time raster dataset start and end time to the output map"
 msgstr ""
@@ -19729,12 +19933,12 @@ msgstr ""
 msgid "Extracts a subset of a space time 3D raster dataset."
 msgstr "Raster bakı haritasının adı"
 
-#: ../locale/scriptstrings/t.rast3d.extract_to_translate.c:6
+#: ../locale/scriptstrings/t.rast3d.extract_to_translate.c:7
 #, fuzzy
 msgid "The r3.mapcalc expression assigned to all extracted 3D raster maps"
 msgstr "girdi mevkisindeki vektör haritaları listele ve çık"
 
-#: ../locale/scriptstrings/t.rast3d.extract_to_translate.c:7
+#: ../locale/scriptstrings/t.rast3d.extract_to_translate.c:8
 #, fuzzy
 msgid "Basename of the new generated 3D raster maps"
 msgstr "Girdi 3B raster haritanın adı"
@@ -19824,17 +20028,17 @@ msgstr "Çıktı kopya sayısı"
 msgid "Imports space time raster dataset."
 msgstr "Raster harita istatistiklerini güncelle"
 
-#: ../locale/scriptstrings/t.rast.import_to_translate.c:11
+#: ../locale/scriptstrings/t.rast.import_to_translate.c:12
 #, fuzzy
 msgid "Set the current region from the last map that was imported"
 msgstr "Geçerli bölgeyi girdi haritaya göre uyarla"
 
-#: ../locale/scriptstrings/t.rast.import_to_translate.c:12
+#: ../locale/scriptstrings/t.rast.import_to_translate.c:13
 #, fuzzy
 msgid "Link the raster files using r.external"
 msgstr "<%s> raster haritası zaten mevcut"
 
-#: ../locale/scriptstrings/t.rast.import_to_translate.c:15
+#: ../locale/scriptstrings/t.rast.import_to_translate.c:17
 msgid ""
 "Create the location specified by the \"location\" parameter and exit. Do not "
 "import the space time raster datasets."
@@ -19873,15 +20077,15 @@ msgstr "Tablo biçimi"
 msgid "Name for output table (default: input name)"
 msgstr "Çıktı raster harita adı (varsayılan: input)"
 
-#: ../raster3d/r3.timestamp/main.c:47
+#: ../raster3d/r3.timestamp/main.c:48
 msgid "Print/add/remove a timestamp for a 3D raster map"
 msgstr ""
 
-#: ../raster3d/r3.timestamp/main.c:56
+#: ../raster3d/r3.timestamp/main.c:57
 msgid "Datetime, datetime1/datetime2, or none"
 msgstr ""
 
-#: ../raster3d/r3.timestamp/main.c:89
+#: ../raster3d/r3.timestamp/main.c:90
 #, fuzzy
 msgid "Timestamp format is invalid"
 msgstr "bilinmeyen zaman formatı"
@@ -20166,7 +20370,7 @@ msgstr "Sınır rengi"
 
 #: ../raster3d/r3.gwflow/main.c:162 ../raster/r.topmodel/main.c:52
 #: ../raster/r.fill.dir/main.c:87 ../raster/r.drain/main.c:110
-#: ../raster/r.water.outlet/main.c:68 ../raster/r.watershed/front/main.c:73
+#: ../raster/r.water.outlet/main.c:57 ../raster/r.watershed/front/main.c:73
 #: ../raster/r.carve/main.c:75 ../raster/r.usler/main.c:53
 #: ../raster/r.flow/main.c:422 ../raster/r.stream.extract/main.c:77
 #: ../raster/r.solute.transport/main.c:230 ../raster/r.basins.fill/main.c:55
@@ -20885,8 +21089,7 @@ msgstr ""
 msgid "Scale factor affects the origin"
 msgstr "Yükselti için ölçek faktörü"
 
-#: ../raster3d/r3.out.vtk/parameters.c:123
-#: ../raster/r.out.vtk/parameters.c:128
+#: ../raster3d/r3.out.vtk/parameters.c:123 ../raster/r.out.vtk/parameters.c:128
 msgid "Correct the coordinates to match the VTK-OpenGL precision"
 msgstr ""
 
@@ -21727,146 +21930,146 @@ msgstr "Ölçek %s 'e ayarlanıyor"
 msgid "Ellipsoid set to <%s>"
 msgstr "Ölçek %s 'e ayarlanıyor"
 
-#: ../general/g.proj/main.c:65
+#: ../general/g.proj/main.c:66
 #, fuzzy
 msgid "create location"
 msgstr "Mevki: %s\n"
 
-#: ../general/g.proj/main.c:68
+#: ../general/g.proj/main.c:69
 #, fuzzy
 msgid ""
 "Prints or modifies GRASS projection information files (in various co-"
 "ordinate system descriptions)."
 msgstr "GRASS projeksiyon bilgisi dosyalarını yazdırır ve düzenler"
 
-#: ../general/g.proj/main.c:71
+#: ../general/g.proj/main.c:72
 #, fuzzy
 msgid "Can also be used to create new GRASS locations."
 msgstr "Mevki oluşturulamıyor: %s"
 
-#: ../general/g.proj/main.c:74
+#: ../general/g.proj/main.c:75
 msgid "Prints and manipulates GRASS projection information files."
 msgstr "GRASS projeksiyon bilgisi dosyalarını yazdırır ve düzenler"
 
-#: ../general/g.proj/main.c:81
+#: ../general/g.proj/main.c:82
 #, fuzzy
 msgid "Print projection information in conventional GRASS format"
 msgstr "Projeksiyon bilgisini yazdır (klasik GRASS biçiminde)"
 
-#: ../general/g.proj/main.c:87
+#: ../general/g.proj/main.c:88
 #, fuzzy
 msgid "Print projection information in shell script style"
 msgstr "Kabuk betiği stilinde yazdır"
 
-#: ../general/g.proj/main.c:93
+#: ../general/g.proj/main.c:94
 msgid "Verify datum information and print transformation parameters"
 msgstr "Datum bilgisini kontrol et ve dönüşüm parametrelerini yazdır"
 
-#: ../general/g.proj/main.c:99
+#: ../general/g.proj/main.c:100
 msgid "Print projection information in PROJ.4 format"
 msgstr "Projeksiyon bilgilerini PROJ.4 biçiminde yazdır"
 
-#: ../general/g.proj/main.c:105
+#: ../general/g.proj/main.c:106
 msgid ""
 "Print 'flat' output with no linebreaks (applies to WKT and PROJ.4 output)"
 msgstr ""
 
-#: ../general/g.proj/main.c:115
+#: ../general/g.proj/main.c:116
 msgid "Print projection information in WKT format"
 msgstr "Projeksiyon bilgilerini WKT biçiminde yazdır"
 
-#: ../general/g.proj/main.c:121
+#: ../general/g.proj/main.c:122
 msgid "Use ESRI-style format (applies to WKT output only)"
 msgstr ""
 
-#: ../general/g.proj/main.c:128 ../general/g.proj/main.c:137
-#: ../general/g.proj/main.c:147 ../general/g.proj/main.c:157
+#: ../general/g.proj/main.c:129 ../general/g.proj/main.c:138
+#: ../general/g.proj/main.c:148 ../general/g.proj/main.c:158
 #, fuzzy
 msgid "Specification"
 msgstr "Nokta sınıflandırma"
 
-#: ../general/g.proj/main.c:129
+#: ../general/g.proj/main.c:130
 #, fuzzy
 msgid "Name of georeferenced data file to read projection information from"
 msgstr "Projeksiyon bilgisi okunacak coğrafi referanslı dosya adı"
 
-#: ../general/g.proj/main.c:138
+#: ../general/g.proj/main.c:139
 #, fuzzy
 msgid "Name of ASCII file containing a WKT projection description"
 msgstr "WKT projeksiyon tanımını okumada hata"
 
-#: ../general/g.proj/main.c:148
+#: ../general/g.proj/main.c:149
 #, fuzzy
 msgid "PROJ.4 projection description"
 msgstr "WKT projeksiyon tanımını okumada hata"
 
-#: ../general/g.proj/main.c:158
+#: ../general/g.proj/main.c:159
 msgid "EPSG projection code"
 msgstr "EPSG projeksiyon kodu"
 
-#: ../general/g.proj/main.c:166 ../general/g.proj/main.c:179
-#: ../general/g.proj/main.c:185
+#: ../general/g.proj/main.c:167 ../general/g.proj/main.c:180
+#: ../general/g.proj/main.c:186
 msgid "Datum"
 msgstr ""
 
-#: ../general/g.proj/main.c:168
+#: ../general/g.proj/main.c:169
 msgid "Datum (overrides any datum specified in input co-ordinate system)"
 msgstr ""
 
-#: ../general/g.proj/main.c:170
+#: ../general/g.proj/main.c:171
 msgid "Accepts standard GRASS datum codes, or \"list\" to list and exit"
 msgstr ""
 
-#: ../general/g.proj/main.c:180
+#: ../general/g.proj/main.c:181
 #, fuzzy
 msgid "Index number of datum transform parameters"
 msgstr "Dönüştürme parametrelerini içeren tablonun adı"
 
-#: ../general/g.proj/main.c:181
+#: ../general/g.proj/main.c:182
 msgid "\"0\" for unspecified or \"-1\" to list and exit"
 msgstr ""
 
-#: ../general/g.proj/main.c:187
+#: ../general/g.proj/main.c:188
 msgid ""
 "Force override of datum transformation information in input co-ordinate "
 "system"
 msgstr ""
 
-#: ../general/g.proj/main.c:192 ../raster/r.null/main.c:73
+#: ../general/g.proj/main.c:193 ../raster/r.null/main.c:73
 #: ../raster/r.null/main.c:81
 #, fuzzy
 msgid "Modify"
 msgstr "çeşitli"
 
-#: ../general/g.proj/main.c:193
+#: ../general/g.proj/main.c:194
 #, fuzzy
 msgid "Modify current location projection files"
 msgstr "Projeksiyon dosyaları oluşturulamıyor: %s"
 
-#: ../general/g.proj/main.c:201
+#: ../general/g.proj/main.c:202
 msgid "Name of new location to create"
 msgstr "Oluşturulacak yeni mevkinin adı"
 
-#: ../general/g.proj/main.c:217
+#: ../general/g.proj/main.c:218
 #, c-format
 msgid "Only one of '%s', '%s', '%s' or '%s' options may be specified"
 msgstr ""
 
-#: ../general/g.proj/main.c:260
+#: ../general/g.proj/main.c:263
 msgid "Projection files missing"
 msgstr "Projeksiyon dosyası kayıp"
 
-#: ../general/g.proj/main.c:280
+#: ../general/g.proj/main.c:283
 #, c-format
 msgid "Only one of -%c, -%c, -%c, -%c, -%c or -%c flags may be specified"
 msgstr ""
 
-#: ../general/g.proj/main.c:307
+#: ../general/g.proj/main.c:310
 #, c-format
 msgid "No output format specified, define one of flags -%c, -%c, -%c, or -%c"
 msgstr ""
 
-#: ../general/g.proj/main.c:311
+#: ../general/g.proj/main.c:314
 #, c-format
 msgid "No output format specified, define one of flags -%c, -%c, or -%c"
 msgstr ""
@@ -23200,10 +23403,9 @@ msgid ""
 "see manual page."
 msgstr ""
 
-#: ../raster/r.slope.aspect/main.c:545
-#: ../raster/r.series.accumulate/main.c:318
+#: ../raster/r.slope.aspect/main.c:545 ../raster/r.series.accumulate/main.c:318
 #: ../raster/r.series.interp/main.c:339 ../raster/r.relief/main.c:316
-#: ../raster/r.series/main.c:343 ../raster/r.patch/main.c:124
+#: ../raster/r.series/main.c:343 ../raster/r.patch/main.c:129
 msgid "Percent complete..."
 msgstr "Tamamlanan yüzde..."
 
@@ -23840,10 +24042,6 @@ msgstr "Çıktı haritanın çözünürlüğü"
 #, fuzzy
 msgid "List raster maps in input mapset and exit"
 msgstr "Girdi mevkisindeki raster haritaları listele ve çık"
-
-#: ../raster/r.proj/main.c:207
-msgid "Do not perform region cropping optimization"
-msgstr ""
 
 #: ../raster/r.proj/main.c:212
 #, fuzzy
@@ -25052,7 +25250,7 @@ msgid "Default: CELL for integer values, DCELL for floating-point values"
 msgstr "Rasterı kayar noktalı değer olarak dışa aktar"
 
 #: ../raster/r.in.ascii/main.c:96 ../raster/r.in.poly/main.c:50
-#: ../raster/r.external/main.c:88 ../raster/r.in.gdal/main.c:129
+#: ../raster/r.external/main.c:88 ../raster/r.in.gdal/main.c:130
 #: ../raster/r.in.bin/main.c:298
 msgid "Title for resultant raster map"
 msgstr "Sonuç haritanın başlığı"
@@ -25423,8 +25621,7 @@ msgstr "Veri taranıyor..."
 msgid "Range:     min         max\n"
 msgstr "Aralık:     en küçük          en büyük\n"
 
-#: ../raster/r.out.gdal/export_band.c:52
-#: ../raster/r.out.gdal/export_band.c:344
+#: ../raster/r.out.gdal/export_band.c:52 ../raster/r.out.gdal/export_band.c:344
 msgid "Unable to allocate buffer for reading raster map"
 msgstr "Raster haritayı okumak için tampon ayrılamıyor"
 
@@ -26212,16 +26409,16 @@ msgstr ""
 msgid "Writing new data for raster map <%s>..."
 msgstr "<%s> raster haritası yazılıyor..."
 
-#: ../raster/r.timestamp/main.c:38
+#: ../raster/r.timestamp/main.c:39
 #, fuzzy
 msgid "Modifies a timestamp for a raster map."
 msgstr "RAster harita için zaman damgasını Yazdır/ekle/kaldır."
 
-#: ../raster/r.timestamp/main.c:39
+#: ../raster/r.timestamp/main.c:40
 msgid "Print/add/remove a timestamp for a raster map."
 msgstr "RAster harita için zaman damgasını Yazdır/ekle/kaldır."
 
-#: ../raster/r.timestamp/main.c:64
+#: ../raster/r.timestamp/main.c:65
 #, fuzzy, c-format
 msgid "Raster map <%s> not found %s"
 msgstr "<%s> raster haritası bulunamadı"
@@ -26704,22 +26901,28 @@ msgstr "<%s> geçici dosyası oluşturulamıyor"
 msgid "Writing output raster maps..."
 msgstr "Çıktı %s raster haritası yazılıyor... "
 
-#: ../raster/r.regression.line/main.c:49
+#: ../raster/r.regression.line/main.c:48
+#: ../raster/r.regression.multi/main.c:130
+#, fuzzy
+msgid "regression"
+msgstr "Konum"
+
+#: ../raster/r.regression.line/main.c:50
 msgid "Calculates linear regression from two raster maps: y = a + b*x."
 msgstr ""
 
-#: ../raster/r.regression.line/main.c:54
-#: ../raster/r.regression.multi/main.c:136
+#: ../raster/r.regression.line/main.c:55
+#: ../raster/r.regression.multi/main.c:137
 msgid "Map for x coefficient"
 msgstr ""
 
-#: ../raster/r.regression.line/main.c:58
-#: ../raster/r.regression.multi/main.c:140
+#: ../raster/r.regression.line/main.c:59
+#: ../raster/r.regression.multi/main.c:141
 msgid "Map for y coefficient"
 msgstr ""
 
-#: ../raster/r.regression.line/main.c:64
-#: ../raster/r.regression.multi/main.c:156
+#: ../raster/r.regression.line/main.c:65
+#: ../raster/r.regression.multi/main.c:157
 msgid ""
 "ASCII file for storing regression coefficients (output to screen if file not "
 "specified)."
@@ -27502,11 +27705,11 @@ msgstr "[%s]:Böyle bir renk yok"
 
 #: ../raster/r.his/main.c:167 ../raster/r.his/main.c:183
 #: ../raster/r.his/main.c:201 ../raster/r.out.ppm3/main.c:115
-#: ../display/d.rast/display.c:23 ../display/d.rast.num/main.c:222
+#: ../display/d.rast/display.c:23 ../display/d.rast.num/main.c:228
 #: ../display/d.histogram/main.c:171 ../display/d.his/main.c:139
 #: ../display/d.his/main.c:156 ../display/d.his/main.c:174
-#: ../display/d.rgb/main.c:99 ../display/d.legend/main.c:296
-#: ../display/d.legend/main.c:304 ../display/d.colortable/main.c:135
+#: ../display/d.rgb/main.c:99 ../display/d.legend/main.c:297
+#: ../display/d.legend/main.c:305 ../display/d.colortable/main.c:135
 #, c-format
 msgid "Color file for <%s> not available"
 msgstr "<%s> için renk dosyası mevcut değil"
@@ -28083,42 +28286,42 @@ msgstr "<%s> raster haritası yazılıyor..."
 msgid "direction read: %lf, neighbour found: %i"
 msgstr ""
 
-#: ../raster/r.water.outlet/main.c:66
+#: ../raster/r.water.outlet/main.c:55
 #, fuzzy
 msgid "Creates watershed basins from a drainage direction map."
 msgstr "Raster harita katmanlarının alansal istatistiklerini oluştur"
 
-#: ../raster/r.water.outlet/main.c:69 ../raster/r.watershed/front/main.c:74
+#: ../raster/r.water.outlet/main.c:58 ../raster/r.watershed/front/main.c:74
 #: ../raster/r.basins.fill/main.c:56
 msgid "watershed"
 msgstr ""
 
-#: ../raster/r.water.outlet/main.c:72
+#: ../raster/r.water.outlet/main.c:61
 #, fuzzy
 msgid "Name of input drainage direction map"
 msgstr "Çıktı bakı raster haritasının adı"
 
-#: ../raster/r.water.outlet/main.c:75
+#: ../raster/r.water.outlet/main.c:64
 #, fuzzy
 msgid "Name for output watershed basin map"
 msgstr "Çıktı raster haritasının adı"
 
-#: ../raster/r.water.outlet/main.c:78
+#: ../raster/r.water.outlet/main.c:67
 #, fuzzy
 msgid "Coordinates of outlet point"
 msgstr "Başlangıç noktasının D ve K koordinatları"
 
-#: ../raster/r.water.outlet/main.c:91
+#: ../raster/r.water.outlet/main.c:80
 #, fuzzy, c-format
 msgid "Illegal east coordinate '%s'"
 msgstr "Uygun olmayan doğu koordinatı <%s>"
 
-#: ../raster/r.water.outlet/main.c:93
+#: ../raster/r.water.outlet/main.c:82
 #, fuzzy, c-format
 msgid "Illegal north coordinate '%s'"
 msgstr "uygun olmayan kuzey koordinatı <%s>"
 
-#: ../raster/r.water.outlet/main.c:98
+#: ../raster/r.water.outlet/main.c:87
 #, c-format
 msgid "Ignoring point outside computation region: %.4f,%.4f"
 msgstr ""
@@ -28885,8 +29088,7 @@ msgstr "Girdi yükselti raster haritasının adı"
 msgid "Name of input raster map percent of disturbed land"
 msgstr "Girdi raster harita(lar) adı"
 
-#: ../raster/r.watershed/front/main.c:96
-#: ../raster/r.watershed/front/main.c:121
+#: ../raster/r.watershed/front/main.c:96 ../raster/r.watershed/front/main.c:121
 msgid "For USLE"
 msgstr ""
 
@@ -29208,34 +29410,34 @@ msgstr ""
 msgid "Matrix is unsolvable"
 msgstr ""
 
-#: ../raster/r.regression.multi/main.c:131
+#: ../raster/r.regression.multi/main.c:132
 #, fuzzy
 msgid "Calculates multiple linear regression from raster maps."
 msgstr "Raster haritanın şekil indeksini hesaplar"
 
-#: ../raster/r.regression.multi/main.c:145
+#: ../raster/r.regression.multi/main.c:146
 msgid "Map to store residuals"
 msgstr ""
 
-#: ../raster/r.regression.multi/main.c:150
+#: ../raster/r.regression.multi/main.c:151
 msgid "Map to store estimates"
 msgstr ""
 
-#: ../raster/r.regression.multi/main.c:248
+#: ../raster/r.regression.multi/main.c:249
 #, fuzzy
 msgid "First pass..."
 msgstr "a girdisi alanları işleniyor ..."
 
-#: ../raster/r.regression.multi/main.c:321
+#: ../raster/r.regression.multi/main.c:322
 #, fuzzy
 msgid "Not enough valid cells available"
 msgstr "Yeterli tip yok"
 
-#: ../raster/r.regression.multi/main.c:335
+#: ../raster/r.regression.multi/main.c:336
 msgid "Multiple regression failed"
 msgstr ""
 
-#: ../raster/r.regression.multi/main.c:340
+#: ../raster/r.regression.multi/main.c:341
 msgid "Second pass..."
 msgstr ""
 
@@ -29302,11 +29504,11 @@ msgstr ""
 "%s tarafından Enlem/Boylam mevkisi desteklenmiyor. Lütfen önce haritayı "
 "yeniden projeksiyonlandırın."
 
-#: ../raster/r.carve/enforce_ds.c:82
+#: ../raster/r.carve/enforce_ds.c:83
 msgid "Processing lines... "
 msgstr "Çizgiler işleniyor... "
 
-#: ../raster/r.carve/enforce_ds.c:174
+#: ../raster/r.carve/enforce_ds.c:175
 msgid ""
 "Vect runs out of region and re-enters - this case is not yet implemented."
 msgstr ""
@@ -29914,8 +30116,7 @@ msgstr "%s: ADIM 1 ... "
 msgid "3D Raster map used for zoning, must be of type CELL"
 msgstr ""
 
-#: ../raster/r.univar/r3.univar_main.c:67
-#: ../raster/r.univar/r.univar_main.c:71
+#: ../raster/r.univar/r3.univar_main.c:67 ../raster/r.univar/r.univar_main.c:71
 msgid "Table output format instead of standard output format"
 msgstr ""
 
@@ -31497,21 +31698,21 @@ msgstr ""
 msgid "Reverse sweep complete"
 msgstr ""
 
-#: ../raster/r.external/proj.c:18 ../raster/r.in.gdal/main.c:409
+#: ../raster/r.external/proj.c:18 ../raster/r.in.gdal/main.c:416
 msgid ""
 "Unable to convert input raster map projection information to GRASS format "
 "for checking"
 msgstr ""
 
-#: ../raster/r.external/proj.c:47 ../raster/r.in.gdal/main.c:440
+#: ../raster/r.external/proj.c:47 ../raster/r.in.gdal/main.c:449
 msgid "Location PROJ_INFO is:\n"
 msgstr "Mevki: PROJ_INFO:\n"
 
-#: ../raster/r.external/proj.c:58 ../raster/r.in.gdal/main.c:451
+#: ../raster/r.external/proj.c:58 ../raster/r.in.gdal/main.c:460
 msgid "Dataset PROJ_INFO is:\n"
 msgstr "Veri takımı PROJ_INFO su:\n"
 
-#: ../raster/r.external/proj.c:111 ../raster/r.in.gdal/main.c:509
+#: ../raster/r.external/proj.c:111 ../raster/r.in.gdal/main.c:518
 msgid ""
 "Consider generating a new location from the input dataset using the "
 "'location' parameter.\n"
@@ -31550,13 +31751,17 @@ msgstr "dosya-olmayan GDAL veri kaynağı adı"
 msgid "Band to select (default is all bands)"
 msgstr "Seçilecek band (varsayılan tüm bandlardır)"
 
-#: ../raster/r.external/main.c:89 ../raster/r.in.gdal/main.c:130
-#: ../raster/r.in.gdal/main.c:138 ../imagery/i.landsat.toar/main.c:93
+#: ../raster/r.external/main.c:89 ../raster/r.in.gdal/main.c:131
+#: ../raster/r.in.gdal/main.c:139 ../imagery/i.landsat.toar/main.c:93
 #: ../imagery/i.landsat.toar/main.c:115 ../imagery/i.landsat.toar/main.c:125
 #: ../imagery/i.landsat.toar/main.c:134 ../imagery/i.landsat.toar/main.c:142
 #: ../imagery/i.landsat.toar/main.c:151
 msgid "Metadata"
 msgstr ""
+
+#: ../raster/r.external/main.c:100 ../raster/r.in.gdal/main.c:159
+msgid "Override projection (use location's projection)"
+msgstr "Projeksiyonun üstüne yaz (mevkinin projeksiyonunu kullan)"
 
 #: ../raster/r.external/main.c:109
 msgid "Flip horizontally"
@@ -31585,7 +31790,7 @@ msgstr "<%s> raster haritası zaten mevcut ve üzerine yazılacak"
 msgid "Reading band %d of %d..."
 msgstr "%s haritası okunuyor ..."
 
-#: ../raster/r.external/main.c:192 ../raster/r.in.gdal/main.c:552
+#: ../raster/r.external/main.c:192 ../raster/r.in.gdal/main.c:574
 #, c-format
 msgid "Selected band (%d) does not exist"
 msgstr "Seçilen (%d) bandı yok"
@@ -31654,191 +31859,191 @@ msgstr "%s için destek dosyaları oluşturuluyor"
 msgid "Link to raster map <%s> created."
 msgstr "<%s> raster haritası zaten mevcut"
 
-#: ../raster/r.in.gdal/main.c:89
+#: ../raster/r.in.gdal/main.c:90
 #, fuzzy
 msgid "Imports raster data into a GRASS raster map using GDAL library."
 msgstr "İkili raster dosyasını GRASS raster harita katmanına dönüştür."
 
-#: ../raster/r.in.gdal/main.c:95
+#: ../raster/r.in.gdal/main.c:96
 #, fuzzy
 msgid "Name of raster file to be imported"
 msgstr "İçeri aktarılacak raster dosya"
 
-#: ../raster/r.in.gdal/main.c:104
+#: ../raster/r.in.gdal/main.c:105
 #, fuzzy
 msgid "Band(s) to select (default is all bands)"
 msgstr "Seçilecek band (varsayılan tüm bandlardır)"
 
-#: ../raster/r.in.gdal/main.c:119
+#: ../raster/r.in.gdal/main.c:120
 #, fuzzy
 msgid "Name of GCPs target location"
 msgstr "Görüntü hedef mevkisi adı"
 
-#: ../raster/r.in.gdal/main.c:121
+#: ../raster/r.in.gdal/main.c:122
 #, fuzzy
 msgid ""
 "Name of location to create or to read projection from for GCPs transformation"
 msgstr "Projeksiyon bilgisi okunacak coğrafi referanslı dosya adı"
 
-#: ../raster/r.in.gdal/main.c:137
+#: ../raster/r.in.gdal/main.c:138
 msgid ""
 "The offset will be added to the band number while output raster map name "
 "creation"
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:151
+#: ../raster/r.in.gdal/main.c:152
 #, fuzzy
 msgid "File prefix for raster attribute tables"
 msgstr "Öznitelik tablosu oluşturmayın"
 
-#: ../raster/r.in.gdal/main.c:152
+#: ../raster/r.in.gdal/main.c:153
 msgid "The band number and \".csv\" will be appended to the file prefix"
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:175
+#: ../raster/r.in.gdal/main.c:164
 #, fuzzy
-msgid "Force Lat/Lon maps to fit into geographic coordinates (90N,S; 180E,W)"
-msgstr "Coğrafi koordinat olarak ekran konumu"
+msgid "Perform projection check only and exit"
+msgstr "Geçerli bağlantı parametrelerini yaz ve çık"
 
-#: ../raster/r.in.gdal/main.c:180
+#: ../raster/r.in.gdal/main.c:188
 msgid "Keep band numbers instead of using band color names"
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:185
+#: ../raster/r.in.gdal/main.c:193
 msgid ""
 "Create the location specified by the \"location\" parameter and exit. Do not "
 "import the raster file."
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:190
+#: ../raster/r.in.gdal/main.c:198
 #, fuzzy
 msgid "Print number of bands and exit"
 msgstr "Tabloları yaz ve çık"
 
-#: ../raster/r.in.gdal/main.c:217
+#: ../raster/r.in.gdal/main.c:224
 msgid "You have to specify a target location different from output location"
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:221
+#: ../raster/r.in.gdal/main.c:228
 #, fuzzy
 msgid "You need to specify valid location name."
 msgstr "Alt ve üst haritayı belirlemelisiniz"
 
-#: ../raster/r.in.gdal/main.c:225
+#: ../raster/r.in.gdal/main.c:232
 msgid "The '-l' flag only works in Lat/Lon locations"
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:235
+#: ../raster/r.in.gdal/main.c:242
 #, c-format
 msgid "Using memory cache size: %.1f MiB"
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:277
+#: ../raster/r.in.gdal/main.c:284
 #, fuzzy, c-format
 msgid "Unable to open datasource <%s>"
 msgstr "<%s> veri kaynağı açılamıyor"
 
-#: ../raster/r.in.gdal/main.c:288
+#: ../raster/r.in.gdal/main.c:295
 #, c-format
 msgid ""
 "Input seems to be NOAA/AVHRR data which needs to be georeferenced with thin "
 "plate spline transformation (%s or %s)."
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:327
+#: ../raster/r.in.gdal/main.c:334
 msgid ""
 "Input raster map is flipped or rotated - cannot import. You may use "
 "'gdalwarp' to transform the map to North-up."
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:368
+#: ../raster/r.in.gdal/main.c:375
 msgid ""
 "Map bounds have been constrained to geographic coordinates. You will almost "
 "certainly want to check map bounds and resolution with r.info and reset them "
 "with r.region before going any further."
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:520
+#: ../raster/r.in.gdal/main.c:542
 #, fuzzy, c-format
 msgid "Proceeding with import of %d raster bands..."
 msgstr "<%s> girdi raster haritası okunuyor..."
 
-#: ../raster/r.in.gdal/main.c:593
+#: ../raster/r.in.gdal/main.c:615
 #, fuzzy, c-format
 msgid "Unable to get raster band number %d"
 msgstr "Raster bandı alınamıyor"
 
-#: ../raster/r.in.gdal/main.c:664
+#: ../raster/r.in.gdal/main.c:686
 #, c-format
 msgid "Copying %d GCPS in points file for <%s>"
 msgstr "nokta dosyasındaki %d YKN <%s> için kopyalanıyor"
 
-#: ../raster/r.in.gdal/main.c:672
+#: ../raster/r.in.gdal/main.c:694
 msgid "GCPs have the following OpenGIS WKT Coordinate System:"
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:695
+#: ../raster/r.in.gdal/main.c:717
 msgid "Re-projecting GCPs table:"
 msgstr "YKN tablosu yeniden projeksiyonlandırılıyor:"
 
-#: ../raster/r.in.gdal/main.c:696
+#: ../raster/r.in.gdal/main.c:718
 #, c-format
 msgid "* Input projection for GCP table: %s"
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:698
+#: ../raster/r.in.gdal/main.c:720
 #, c-format
 msgid "* Output projection for GCP table: %s"
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:719
+#: ../raster/r.in.gdal/main.c:741
 #, c-format
 msgid "Error in pj_do_proj (can't re-projection GCP %i)"
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:774
+#: ../raster/r.in.gdal/main.c:796
 #, c-format
 msgid ""
 "The target for the output group <%s> has been set to location <%s>, mapset "
 "<PERMANENT>."
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:847
+#: ../raster/r.in.gdal/main.c:867
 msgid "Unable to translate projection key values of input GCPs"
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:863
+#: ../raster/r.in.gdal/main.c:883
 msgid "Unable to get projection info of target location"
 msgstr "Hedef mevkinin projeksiyon bilgisi alınamıyor"
 
-#: ../raster/r.in.gdal/main.c:865
+#: ../raster/r.in.gdal/main.c:885
 msgid "Unable to get projection units of target location"
 msgstr "Hedef mevkinin projeksiyon birimleri alınamadı"
 
-#: ../raster/r.in.gdal/main.c:867
+#: ../raster/r.in.gdal/main.c:887
 msgid "Unable to get projection key values of target location"
 msgstr "Hedef mevkinin projeksiyon anahtar değerler elde edilemedi"
 
-#: ../raster/r.in.gdal/main.c:906
+#: ../raster/r.in.gdal/main.c:926
 #, fuzzy, c-format
 msgid "Importing raster map <%s>..."
 msgstr "<%s> raster haritası yazılıyor..."
 
-#: ../raster/r.in.gdal/main.c:1301 ../raster/r.in.gdal/main.c:1358
+#: ../raster/r.in.gdal/main.c:1321 ../raster/r.in.gdal/main.c:1378
 msgid "Inconsistent color rules in RAT"
 msgstr ""
 
-#: ../raster/r.in.gdal/main.c:1415
+#: ../raster/r.in.gdal/main.c:1435
 #, c-format
 msgid "Setting grey color table for <%s> (8bit, full range)"
 msgstr "<%s> için gri renk tablosu ayarlanıyor (8 bit, tam aralık)"
 
-#: ../raster/r.in.gdal/main.c:1429
+#: ../raster/r.in.gdal/main.c:1449
 #, c-format
 msgid "Setting grey color table for <%s> (16bit, image range)"
 msgstr "<%s> için gri renk tablosu ayarlanıyor (16 bit, tam aralık)"
 
-#: ../raster/r.in.gdal/main.c:1531
+#: ../raster/r.in.gdal/main.c:1551
 #, fuzzy, c-format
 msgid "Unable to open file <%s>: %s."
 msgstr "<%s> dosyası açılamıyor"
@@ -32053,29 +32258,34 @@ msgstr ""
 msgid "Volume is correct only if lake depth (terrain raster map) is in meters"
 msgstr ""
 
-#: ../raster/r.patch/main.c:58
+#: ../raster/r.patch/main.c:59
+#, fuzzy
+msgid "patching"
+msgstr "Görüntü indeksi"
+
+#: ../raster/r.patch/main.c:61
 msgid ""
 "Creates a composite raster map layer by using known category values from one "
 "(or more) map layer(s) to fill in areas of \"no data\" in another map layer."
 msgstr ""
 
-#: ../raster/r.patch/main.c:65
+#: ../raster/r.patch/main.c:68
 msgid "Name of raster maps to be patched together"
 msgstr ""
 
-#: ../raster/r.patch/main.c:68
+#: ../raster/r.patch/main.c:71
 msgid "Name for resultant raster map"
 msgstr "Sonuç raster haritanın adı"
 
-#: ../raster/r.patch/main.c:75
+#: ../raster/r.patch/main.c:78
 msgid "Use zero (0) for transparency instead of NULL"
 msgstr ""
 
-#: ../raster/r.patch/main.c:89
+#: ../raster/r.patch/main.c:92
 msgid "The minimum number of input raster maps is two"
 msgstr "Girdi haritaları en küçük sayısı ikidir"
 
-#: ../raster/r.patch/main.c:161
+#: ../raster/r.patch/main.c:167
 #, fuzzy, c-format
 msgid "Creating support files for raster map <%s>..."
 msgstr "<%s> için destek dosyaları oluşturuluyor"
@@ -32340,8 +32550,7 @@ msgstr ""
 msgid "Unable to write raster maps"
 msgstr "Raster harita yazılamıyor"
 
-#: ../raster/r.sim/simlib/hydro.c:467
-#: ../raster/r.sim/r.sim.sediment/main.c:381
+#: ../raster/r.sim/simlib/hydro.c:467 ../raster/r.sim/r.sim.sediment/main.c:381
 msgid "Cannot write raster maps"
 msgstr "Raster haritalar yazılamıyor"
 
@@ -32671,9 +32880,9 @@ msgid "Size of point cache"
 msgstr ""
 
 #: ../raster/r.what/main.c:137 ../raster/r.what/main.c:162
-#: ../display/d.legend/main.c:108 ../display/d.legend/main.c:118
-#: ../display/d.legend/main.c:197 ../display/d.legend/main.c:202
-#: ../display/d.legend/main.c:207 ../display/d.legend/main.c:217
+#: ../display/d.legend/main.c:109 ../display/d.legend/main.c:119
+#: ../display/d.legend/main.c:198 ../display/d.legend/main.c:203
+#: ../display/d.legend/main.c:208 ../display/d.legend/main.c:218
 msgid "Advanced"
 msgstr "Gelişmiş"
 
@@ -33597,11 +33806,6 @@ msgstr ""
 #: ../raster/r.horizon/main.c:277
 msgid "The maximum distance to consider when finding the horizon height"
 msgstr ""
-
-#: ../raster/r.horizon/main.c:278 ../raster/r.horizon/main.c:297
-#, fuzzy
-msgid "Optional"
-msgstr "Uygun olmayan çıktı dosya adı <%s>"
 
 #: ../raster/r.horizon/main.c:288
 msgid "Coordinate for which you want to calculate the horizon"
@@ -35131,7 +35335,7 @@ msgstr ""
 msgid "Get text color from cell color value"
 msgstr "Metin rengini hücre ren değerinden al"
 
-#: ../display/d.rast.num/main.c:177
+#: ../display/d.rast.num/main.c:183
 #, fuzzy, c-format
 msgid "%d col"
 msgid_plural "%d cols"
@@ -35139,7 +35343,7 @@ msgstr[0] "Grid rengi"
 msgstr[1] "Grid rengi"
 
 #. GTC %s will be replaced by strings "X rows" and "Y cols"
-#: ../display/d.rast.num/main.c:179
+#: ../display/d.rast.num/main.c:185
 #, c-format
 msgid ""
 "Current region size: %s X %s\n"
@@ -35147,7 +35351,7 @@ msgid ""
 "graphics window may be too small for cell category number to be visible."
 msgstr ""
 
-#: ../display/d.rast.num/main.c:189
+#: ../display/d.rast.num/main.c:195
 msgid "Aborting (region larger then 200 rows X 200 cols is not allowed)"
 msgstr ""
 
@@ -35601,8 +35805,8 @@ msgstr ""
 msgid "When -C flag is set, the nsteps argument is ignored"
 msgstr ""
 
-#: ../display/d.histogram/main.c:177 ../display/d.legend/main.c:560
-#: ../display/d.legend/main.c:565
+#: ../display/d.histogram/main.c:177 ../display/d.legend/main.c:561
+#: ../display/d.legend/main.c:566
 #, c-format
 msgid "Range information for <%s> not available"
 msgstr "<%s> için aralık bilgisi mevcut değil"
@@ -35830,129 +36034,128 @@ msgstr ""
 msgid "choropleth map"
 msgstr ""
 
-#: ../display/d.vect.thematic/main.c:82
+#: ../display/d.vect.thematic/main.c:83
 #, fuzzy
 msgid "Displays a thematic vector map in the active graphics frame."
 msgstr "Vektör veri çizelgesini grafik ekrandaki aktif çerçevede göster."
 
-#: ../display/d.vect.thematic/main.c:89
+#: ../display/d.vect.thematic/main.c:90
 msgid "Layer number. If -1, all layers are displayed."
 msgstr ""
 
-#: ../display/d.vect.thematic/main.c:95
+#: ../display/d.vect.thematic/main.c:96
 #, fuzzy
 msgid "Name of attribute column to be classified"
 msgstr "Etiket için kullanılacak öznitelik sütunu adı"
 
-#: ../display/d.vect.thematic/main.c:102
+#: ../display/d.vect.thematic/main.c:103
 msgid "Class breaks, without minimum and maximum"
 msgstr ""
 
-#: ../display/d.vect.thematic/main.c:103 ../display/d.vect.thematic/main.c:121
-#: ../display/d.vect.thematic/main.c:129
+#: ../display/d.vect.thematic/main.c:104 ../display/d.vect.thematic/main.c:122
+#: ../display/d.vect.thematic/main.c:130
 #, fuzzy
 msgid "Classes"
 msgstr "Çizim stili"
 
-#: ../display/d.vect.thematic/main.c:136
+#: ../display/d.vect.thematic/main.c:137
 #, fuzzy
 msgid "Colors (one per class)"
 msgstr "Renkler (her sınıfa bir tane)"
 
-#: ../display/d.vect.thematic/main.c:146 ../display/d.vect.thematic/main.c:152
+#: ../display/d.vect.thematic/main.c:147 ../display/d.vect.thematic/main.c:153
 msgid "Boundaries"
 msgstr "Sınırlar"
 
-#: ../display/d.vect.thematic/main.c:147
+#: ../display/d.vect.thematic/main.c:148
 msgid "Boundary width"
 msgstr "Sınır genişliği"
 
-#: ../display/d.vect.thematic/main.c:151
+#: ../display/d.vect.thematic/main.c:152
 msgid "Boundary color"
 msgstr "Sınır rengi"
 
-#: ../display/d.vect.thematic/main.c:157
+#: ../display/d.vect.thematic/main.c:158
 msgid "File in which to save d.graph instructions for legend display"
 msgstr ""
 
-#: ../display/d.vect.thematic/main.c:159 ../display/d.vect.thematic/main.c:165
-#: ../display/d.vect.thematic/main.c:171 ../display/d.vect.thematic/main.c:176
+#: ../display/d.vect.thematic/main.c:160 ../display/d.vect.thematic/main.c:166
+#: ../display/d.vect.thematic/main.c:172 ../display/d.vect.thematic/main.c:177
 #, fuzzy
 msgid "Legend"
 msgstr "Lejandı çevir"
 
-#: ../display/d.vect.thematic/main.c:164 ../display/d.vect.chart/main.c:142
+#: ../display/d.vect.thematic/main.c:165 ../display/d.vect.chart/main.c:142
 msgid "Create legend information and send to stdout"
 msgstr ""
 
-#: ../display/d.vect.thematic/main.c:170
+#: ../display/d.vect.thematic/main.c:171
 msgid ""
 "When printing legend info, include extended statistical info from "
 "classification algorithm"
 msgstr ""
 
-#: ../display/d.vect.thematic/main.c:175
+#: ../display/d.vect.thematic/main.c:176
 msgid "Do not draw map, only output the legend"
 msgstr ""
 
-#: ../display/d.vect.thematic/main.c:195
+#: ../display/d.vect.thematic/main.c:196
 #, c-format
 msgid "%s: You must build topology on vector map. Run v.build."
 msgstr "%s: Vektör haritada topoloji oluşturmalısınız. v.build'i çalıştırın."
 
-#: ../display/d.vect.thematic/main.c:202
+#: ../display/d.vect.thematic/main.c:203
 msgid "'layer' must be > 0"
 msgstr "'katman' >=0 olmalı"
 
-#: ../display/d.vect.thematic/main.c:228
+#: ../display/d.vect.thematic/main.c:229
 #, c-format
 msgid "Data (%s) not numeric. Column must be numeric."
 msgstr "(%s) verisi sayı değil. Sütun tamsayı olmalıdır."
 
-#: ../display/d.vect.thematic/main.c:232
-#: ../display/d.vect.thematic/plot1.c:135
+#: ../display/d.vect.thematic/main.c:233 ../display/d.vect.thematic/plot1.c:135
 #: ../display/d.vect.thematic/plot1.c:163
 #, c-format
 msgid "Cannot select data (%s) from table"
 msgstr "Tablodan (%s) verisi seçilemiyor"
 
-#: ../display/d.vect.thematic/main.c:295
+#: ../display/d.vect.thematic/main.c:296
 #, c-format
 msgid "Unknown color: [%s]"
 msgstr "Bilinmeyen renk: [%s]"
 
-#: ../display/d.vect.thematic/main.c:306
+#: ../display/d.vect.thematic/main.c:307
 msgid ""
 "You gave both manual breaks and a classification algorithm or a number of "
 "classes. The manual breaks have precedence and will thus be used."
 msgstr ""
 
-#: ../display/d.vect.thematic/main.c:343
+#: ../display/d.vect.thematic/main.c:344
 msgid "You must either give classbreaks or a classification algorithm"
 msgstr ""
 
-#: ../display/d.vect.thematic/main.c:356
+#: ../display/d.vect.thematic/main.c:357
 #, c-format
 msgid ""
 "Not enough colors or error in color specifications.\n"
 "Need %i entries for 'colors' parameter"
 msgstr ""
 
-#: ../display/d.vect.thematic/main.c:361
+#: ../display/d.vect.thematic/main.c:362
 #, c-format
 msgid "Error interpreting color %s"
 msgstr "%s rengini yorumlamada hata"
 
-#: ../display/d.vect.thematic/main.c:378
+#: ../display/d.vect.thematic/main.c:379
 msgid "Plotting ..."
 msgstr "Çiziliyor ..."
 
-#: ../display/d.vect.thematic/main.c:385
+#: ../display/d.vect.thematic/main.c:386
 msgid ""
 "The bounding box of the map is outside the current region, nothing drawn."
 msgstr "Haritanın sınır kutusu geçerli bölge dışında, hiçbirşey çizilemedi."
 
-#: ../display/d.vect.thematic/main.c:435
+#: ../display/d.vect.thematic/main.c:436
 #, c-format
 msgid ""
 "\n"
@@ -35961,12 +36164,12 @@ msgstr ""
 "\n"
 "Toplam kayıt sayısı: %0f\n"
 
-#: ../display/d.vect.thematic/main.c:437
+#: ../display/d.vect.thematic/main.c:438
 #, c-format
 msgid "Classification of %s into %i classes\n"
 msgstr ""
 
-#: ../display/d.vect.thematic/main.c:445
+#: ../display/d.vect.thematic/main.c:446
 #, c-format
 msgid "Last chi2 = %f\n"
 msgstr ""
@@ -36061,11 +36264,11 @@ msgstr ""
 msgid "Line spacing"
 msgstr "Çizgi aralığı"
 
-#: ../display/d.text/main.c:223 ../display/d.legend/main.c:182
+#: ../display/d.text/main.c:223 ../display/d.legend/main.c:183
 msgid "Path to font file"
 msgstr "yazıtipi dosyası yolu"
 
-#: ../display/d.text/main.c:231 ../display/d.legend/main.c:191
+#: ../display/d.text/main.c:231 ../display/d.legend/main.c:192
 msgid "Text encoding (only applicable to TrueType fonts)"
 msgstr ""
 
@@ -36172,144 +36375,144 @@ msgid ""
 "in the active graphics frame."
 msgstr ""
 
-#: ../display/d.legend/main.c:88
+#: ../display/d.legend/main.c:89
 #, fuzzy
 msgid ""
 "Displays a legend for a 2D or 3D raster map in the active frame of the "
 "graphics monitor."
 msgstr "Grafik ektanındaki aktif çerçevedeki raster harita için lejand göster"
 
-#: ../display/d.legend/main.c:107
+#: ../display/d.legend/main.c:108
 msgid "Number of text lines (useful for truncating long legends)"
 msgstr "Yazı satırı sayısı ( uzun lejandları kısaltmak için yararlanılır)"
 
-#: ../display/d.legend/main.c:117
+#: ../display/d.legend/main.c:118
 msgid "Thinning factor (thin=10 gives cats 0,10,20...)"
 msgstr "İnceltme faktörü(thin=10 categorileri 0,10,20... diye verir)"
 
-#: ../display/d.legend/main.c:126
+#: ../display/d.legend/main.c:127
 msgid "Number of text labels for smooth gradient legend"
 msgstr "Yuvarlanmış lejand için yazı etiketi sayısı"
 
-#: ../display/d.legend/main.c:127 ../display/d.legend/main.c:212
-#: ../display/d.legend/main.c:222
+#: ../display/d.legend/main.c:128 ../display/d.legend/main.c:213
+#: ../display/d.legend/main.c:223
 #, fuzzy
 msgid "Gradient"
 msgstr "Varyans"
 
-#: ../display/d.legend/main.c:136
+#: ../display/d.legend/main.c:137
 msgid ""
 "Size and placement as percentage of screen coordinates (0,0 is lower left)"
 msgstr ""
 
-#: ../display/d.legend/main.c:146
+#: ../display/d.legend/main.c:147
 msgid "List of discrete category numbers/values for legend"
 msgstr "Lejand için kategori farklı sayı/değerlerini listesi"
 
-#: ../display/d.legend/main.c:148 ../display/d.legend/main.c:157
+#: ../display/d.legend/main.c:149 ../display/d.legend/main.c:158
 msgid "Subset"
 msgstr ""
 
-#: ../display/d.legend/main.c:156
+#: ../display/d.legend/main.c:157
 msgid "Use a subset of the map range for the legend (min,max)"
 msgstr "Lejand için harita düzeni altkümesi kullan(min,max)"
 
-#: ../display/d.legend/main.c:161 ../display/d.legend/main.c:168
-#: ../display/d.legend/main.c:177 ../display/d.legend/main.c:184
-#: ../display/d.legend/main.c:192
+#: ../display/d.legend/main.c:162 ../display/d.legend/main.c:169
+#: ../display/d.legend/main.c:178 ../display/d.legend/main.c:185
+#: ../display/d.legend/main.c:193
 #, fuzzy
 msgid "Font settings"
 msgstr "Ayarlar"
 
-#: ../display/d.legend/main.c:175 ../display/d.northarrow/main.c:86
+#: ../display/d.legend/main.c:176 ../display/d.northarrow/main.c:86
 #: ../display/d.barscale/main.c:134
 #, fuzzy
 msgid "Font size"
 msgstr "Simge boyutu"
 
-#: ../display/d.legend/main.c:176
+#: ../display/d.legend/main.c:177
 msgid "Default: Auto-scaled"
 msgstr ""
 
-#: ../display/d.legend/main.c:196
+#: ../display/d.legend/main.c:197
 msgid "Do not show category labels"
 msgstr "Kategori etiketlerini gösterme"
 
-#: ../display/d.legend/main.c:201
+#: ../display/d.legend/main.c:202
 msgid "Do not show category numbers"
 msgstr "Kategori numaralarını gösterme"
 
-#: ../display/d.legend/main.c:206
+#: ../display/d.legend/main.c:207
 msgid "Skip categories with no label"
 msgstr "Etiketsiz kategorileri atla"
 
-#: ../display/d.legend/main.c:221
+#: ../display/d.legend/main.c:222
 msgid "Add histogram to smoothed legend"
 msgstr ""
 
-#: ../display/d.legend/main.c:232
+#: ../display/d.legend/main.c:233
 msgid "Please specify a single map name. To launch GUI use d.legend --ui."
 msgstr ""
 
-#: ../display/d.legend/main.c:380
+#: ../display/d.legend/main.c:381
 msgid "Legend box lies outside of frame. Text may not display properly."
 msgstr ""
 "Lejand kutu çizgileri çerçeve dışında. Yazılar düzgün görüntülenmeyebilir"
 
-#: ../display/d.legend/main.c:384
+#: ../display/d.legend/main.c:385
 msgid "Drawing horizontal legend as box width exceeds height"
 msgstr ""
 
-#: ../display/d.legend/main.c:395
+#: ../display/d.legend/main.c:396
 #, c-format
 msgid "Range information for <%s> not available (run r.support)"
 msgstr "<%s> için aralık bilgisi mevcut değil (r.support'u çalıştırın)"
 
-#: ../display/d.legend/main.c:400
+#: ../display/d.legend/main.c:401
 msgid "Input map contains no data"
 msgstr "Girdi harita veri içermiyor"
 
-#: ../display/d.legend/main.c:413
+#: ../display/d.legend/main.c:414
 #, fuzzy
 msgid "Requested range exceeds lower limit of actual data"
 msgstr "Renk dizisi mevcut verinin alt limitini aşıyor"
 
-#: ../display/d.legend/main.c:419
+#: ../display/d.legend/main.c:420
 #, fuzzy
 msgid "Requested range exceeds upper limit of actual data"
 msgstr "Renk dizisi mevcut verinin üst limitini aşıyor"
 
-#: ../display/d.legend/main.c:478
+#: ../display/d.legend/main.c:479
 #, c-format
 msgid "use=%s out of range [%d,%d] (extend with range= ?)"
 msgstr ""
 
-#: ../display/d.legend/main.c:519
+#: ../display/d.legend/main.c:520
 msgid "Nothing to draw! (no categories with labels? out of range?)"
 msgstr "Hiçbirşey çizilemiyor! (etiketli kategori mi yok? dizi dışında mı?) "
 
-#: ../display/d.legend/main.c:529
+#: ../display/d.legend/main.c:530
 msgid "Forcing a smooth legend: too many categories for current window height"
 msgstr ""
 
-#: ../display/d.legend/main.c:579
+#: ../display/d.legend/main.c:580
 msgid "Color range exceeds lower limit of actual data"
 msgstr "Renk dizisi mevcut verinin alt limitini aşıyor"
 
-#: ../display/d.legend/main.c:583
+#: ../display/d.legend/main.c:584
 msgid "Color range exceeds upper limit of actual data"
 msgstr "Renk dizisi mevcut verinin üst limitini aşıyor"
 
-#: ../display/d.legend/main.c:590
+#: ../display/d.legend/main.c:591
 #, c-format
 msgid "use=%s out of range [%.3f, %.3f] (extend with range= ?)"
 msgstr ""
 
-#: ../display/d.legend/main.c:841
+#: ../display/d.legend/main.c:842
 msgid "Histogram constrained by range not yet implemented"
 msgstr ""
 
-#: ../display/d.legend/main.c:1018
+#: ../display/d.legend/main.c:1019
 msgid "Nothing to draw! (no categories with labels?)"
 msgstr "Hiçbirşey çizilemiyor! (etiketli kategori mi yok?) "
 
@@ -38070,28 +38273,36 @@ msgstr ""
 msgid "This bit flag is only available for MOD09Q1 @ 250m products"
 msgstr ""
 
-#: ../imagery/i.modis.qc/main.c:343 ../imagery/i.modis.qc/main.c:398
+#: ../imagery/i.modis.qc/main.c:343
+#, fuzzy
+msgid "Band number out of allowed range [1-2]"
+msgstr "bant sayısı izin verilen aralık dışında [1-7]"
+
+#: ../imagery/i.modis.qc/main.c:345 ../imagery/i.modis.qc/main.c:347
+#: ../imagery/i.modis.qc/main.c:349 ../imagery/i.modis.qc/main.c:351
+#: ../imagery/i.modis.qc/main.c:353 ../imagery/i.modis.qc/main.c:355
+#: ../imagery/i.modis.qc/main.c:410
 #, fuzzy
 msgid "Band number out of allowed range [1-7]"
 msgstr "bant sayısı izin verilen aralık dışında [1-7]"
 
-#: ../imagery/i.modis.qc/main.c:345
+#: ../imagery/i.modis.qc/main.c:357
 msgid "mod09Q1 product only has 2 bands"
 msgstr ""
 
-#: ../imagery/i.modis.qc/main.c:381
+#: ../imagery/i.modis.qc/main.c:393
 msgid "This bit flag is only available for mod09CMGi @ 5000m products"
 msgstr ""
 
-#: ../imagery/i.modis.qc/main.c:388
+#: ../imagery/i.modis.qc/main.c:400
 msgid "This bit flag is only available for MOD13A2 @ 1km products"
 msgstr ""
 
-#: ../imagery/i.modis.qc/main.c:394
+#: ../imagery/i.modis.qc/main.c:406
 msgid "This bit flag is only available for MCD43B2 @ 1km products"
 msgstr ""
 
-#: ../imagery/i.modis.qc/main.c:680
+#: ../imagery/i.modis.qc/main.c:694
 msgid "Unknown names and/or combination, please check spelling"
 msgstr ""
 
@@ -38579,8 +38790,7 @@ msgstr ""
 msgid "Group <%s> not found in the current mapset"
 msgstr "<%s> raster haritasıgeçerli harita takımında bulunamadı"
 
-#: ../imagery/i.segment/open_files.c:44
-#: ../imagery/i.segment/write_output.c:100
+#: ../imagery/i.segment/open_files.c:44 ../imagery/i.segment/write_output.c:100
 #, fuzzy, c-format
 msgid "Group <%s> contains no raster maps"
 msgstr "<%s> grubu hiç raster harita içermiyor. i.group'u çalıştır"
@@ -40574,6 +40784,10 @@ msgstr "Çıktı raster haritasının adı"
 #, fuzzy
 msgid "Name for output raster map (saturation)"
 msgstr "Çıktı raster harita adı (varsayılan: input)"
+
+#, fuzzy
+#~ msgid "Time increment"
+#~ msgstr "Kategori artışı"
 
 #, fuzzy
 #~ msgid "Calcuates bioclimatic indices."

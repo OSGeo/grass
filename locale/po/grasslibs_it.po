@@ -14,7 +14,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: grasslibs_it\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-18 12:56+0200\n"
+"POT-Creation-Date: 2015-11-18 12:26+0100\n"
 "PO-Revision-Date: 2015-02-26 21:52+0100\n"
 "Last-Translator: Carlo Cormio <carlo.cormio3@unibo.it>\n"
 "Language-Team: Italian <grass-translations@lists.osgeo.org>\n"
@@ -49,7 +49,7 @@ msgstr "Impossibile avviare il driver <%s>"
 #: ../lib/vector/Vlib/cats.c:597 ../lib/vector/Vlib/net.c:181
 #: ../lib/vector/Vlib/net.c:358 ../lib/vector/Vlib/write_ogr.c:197
 #: ../lib/vector/Vlib/map.c:305 ../lib/ogsf/gp3.c:208 ../lib/ogsf/gv3.c:350
-#: ../lib/rst/interp_float/vinput2d.c:88
+#: ../lib/rst/interp_float/vinput2d.c:109
 #, c-format
 msgid "Unable to open database <%s> by driver <%s>"
 msgstr "Impossibile aprire il database <%s> dal driver <%s>"
@@ -80,8 +80,8 @@ msgstr "Impossibile aprire il cursore di selezione: '%s'"
 msgid "Column <%s> is not integer"
 msgstr "Colonna <%s> non è intero"
 
-#: ../lib/db/dbmi_client/copy_tab.c:267 ../lib/rst/interp_float/vinput2d.c:94
-#: ../lib/rst/interp_float/vinput2d.c:108
+#: ../lib/db/dbmi_client/copy_tab.c:267 ../lib/rst/interp_float/vinput2d.c:115
+#: ../lib/rst/interp_float/vinput2d.c:129
 #, c-format
 msgid "Column <%s> not found"
 msgstr "Colonna <%s> non trovata"
@@ -814,12 +814,12 @@ msgstr ""
 #: ../lib/vector/neta/path.c:136 ../lib/vector/neta/bridge.c:58
 #: ../lib/vector/Vlib/line.c:50 ../lib/vector/Vlib/line.c:154
 #: ../lib/segment/open.c:98 ../lib/rowio/setup.c:61 ../lib/rowio/setup.c:67
-#: ../lib/rst/interp_float/segmen2d.c:182
-#: ../lib/rst/interp_float/segmen2d.c:188
-#: ../lib/rst/interp_float/segmen2d.c:194
-#: ../lib/rst/interp_float/segmen2d.c:204
-#: ../lib/rst/interp_float/interp2d.c:121
-#: ../lib/rst/interp_float/interp2d.c:127
+#: ../lib/rst/interp_float/segmen2d.c:199
+#: ../lib/rst/interp_float/segmen2d.c:205
+#: ../lib/rst/interp_float/segmen2d.c:211
+#: ../lib/rst/interp_float/segmen2d.c:221
+#: ../lib/rst/interp_float/interp2d.c:139
+#: ../lib/rst/interp_float/interp2d.c:145
 msgid "Out of memory"
 msgstr "Memoria esaurita"
 
@@ -1147,7 +1147,7 @@ msgstr "Tipo di interpolazione sconosciuta"
 #: ../lib/vector/Vlib/cats.c:589 ../lib/vector/Vlib/net.c:175
 #: ../lib/vector/Vlib/net.c:353 ../lib/vector/Vlib/map.c:264
 #: ../lib/vector/Vlib/map.c:400 ../lib/ogsf/gp3.c:202 ../lib/ogsf/gv3.c:344
-#: ../lib/rst/interp_float/vinput2d.c:79
+#: ../lib/rst/interp_float/vinput2d.c:100
 #, c-format
 msgid "Database connection not defined for layer %d"
 msgstr "La connessione del database non è definita per il layer %d"
@@ -2232,7 +2232,7 @@ msgstr ""
 #: ../lib/vector/Vlib/open.c:290 ../lib/vector/Vlib/open.c:426
 #: ../lib/vector/Vlib/map.c:156 ../lib/vector/Vlib/map.c:166
 #: ../lib/vector/Vlib/map.c:238
-#: ../lib/python/temporal/c_libraries_interface.py:578 ../lib/ogsf/gp3.c:62
+#: ../lib/python/temporal/c_libraries_interface.py:589 ../lib/ogsf/gp3.c:62
 #: ../lib/ogsf/gp3.c:196 ../lib/ogsf/gv3.c:66 ../lib/ogsf/gv3.c:338
 #, c-format, python-format
 msgid "Unable to open vector map <%s>"
@@ -3360,12 +3360,7 @@ msgstr "html: dimensione immagine %dx%d"
 msgid "html: type '%s'"
 msgstr "html: tipo '%s'"
 
-#: ../lib/temporal/lib/connect.c:101
-#, c-format
-msgid "You don't have permission to access the mapset <%s>"
-msgstr ""
-
-#: ../lib/temporal/lib/connect.c:105
+#: ../lib/temporal/lib/connect.c:110
 #, fuzzy, c-format
 msgid "Mapset <%s> does not exist."
 msgstr "%s: Area %d non esiste"
@@ -3400,7 +3395,7 @@ msgid "3D raster map <%s> not found"
 msgstr "Raster 3D <%s> non trovato"
 
 #: ../lib/gpde/n_arrays_io.c:281
-#: ../lib/python/temporal/c_libraries_interface.py:507
+#: ../lib/python/temporal/c_libraries_interface.py:518
 #: ../lib/ogsf/gvl_file.c:436
 #, c-format, python-format
 msgid "Unable to open 3D raster map <%s>"
@@ -3509,7 +3504,7 @@ msgstr ""
 msgid "Map name {0} not valid"
 msgstr "Nome di mappa {0} non valido"
 
-#: ../lib/python/pygrass/modules/grid/grid.py:538
+#: ../lib/python/pygrass/modules/grid/grid.py:540
 msgid "Execution of subprocesses was not successful"
 msgstr ""
 
@@ -3646,7 +3641,7 @@ msgid "Creating a new space time %s dataset"
 msgstr "Raster <%s> non trovato nel mapset <%s>"
 
 #: ../lib/python/temporal/open_stds.py:208
-#: ../lib/python/temporal/extract.py:114 ../lib/python/temporal/mapcalc.py:236
+#: ../lib/python/temporal/extract.py:115 ../lib/python/temporal/mapcalc.py:236
 #, fuzzy, python-format
 msgid ""
 "Map <%s> is already in temporal database, use overwrite flag to overwrite"
@@ -3702,84 +3697,84 @@ msgstr "Tipo di interpolazione sconosciuta"
 msgid "You need to specify the base name of new created maps"
 msgstr "Devi specificare il nome di base per le nuove mappe create"
 
-#: ../lib/python/temporal/extract.py:121
+#: ../lib/python/temporal/extract.py:122
 #, python-format
 msgid "Applying r.mapcalc expression: \"%s\""
 msgstr "Sto applicando l'espressione r.mapcalc: \"%s\""
 
-#: ../lib/python/temporal/extract.py:126
+#: ../lib/python/temporal/extract.py:127
 #, python-format
 msgid "Applying r3.mapcalc expression: \"%s\""
 msgstr "Sto applicando l'espressione r3.mapcalc: \"%s\""
 
-#: ../lib/python/temporal/extract.py:131
+#: ../lib/python/temporal/extract.py:132
 #, python-format
 msgid "Applying v.extract where statement: \"%s\""
 msgstr "Sto applicando la condizione \"where\" di v.extract: \"%s\""
 
-#: ../lib/python/temporal/extract.py:159
+#: ../lib/python/temporal/extract.py:160
 #, fuzzy
 msgid "Error in computation process"
 msgstr "Errore nell'apertura della mappa g3d <%s>"
 
-#: ../lib/python/temporal/space_time_datasets.py:220
+#: ../lib/python/temporal/space_time_datasets.py:221
 #, fuzzy, python-format
 msgid "Unable to read timestamp file for raster map <%s>"
 msgstr "Impossibile creare il file di intestazione per [%s in %s]"
 
-#: ../lib/python/temporal/space_time_datasets.py:244
+#: ../lib/python/temporal/space_time_datasets.py:245
 #, fuzzy, python-format
 msgid "Unable to create timestamp file for raster map <%s>"
 msgstr "Impossibile creare il file di intestazione per [%s in %s]"
 
-#: ../lib/python/temporal/space_time_datasets.py:249
+#: ../lib/python/temporal/space_time_datasets.py:250
 #, fuzzy, python-format
 msgid "Invalid datetime in timestamp for raster map <%s>"
 msgstr "timestamp non valido nel file per %s mappa %s nel mapset %s"
 
-#: ../lib/python/temporal/space_time_datasets.py:254
-#: ../lib/python/temporal/space_time_datasets.py:588
+#: ../lib/python/temporal/space_time_datasets.py:255
+#: ../lib/python/temporal/space_time_datasets.py:589
 #, fuzzy
 msgid "Internal error"
 msgstr "errore di sintassi"
 
-#: ../lib/python/temporal/space_time_datasets.py:271
-#: ../lib/python/temporal/space_time_datasets.py:602
+#: ../lib/python/temporal/space_time_datasets.py:272
+#: ../lib/python/temporal/space_time_datasets.py:603
 #, fuzzy, python-format
 msgid "Unable to remove timestamp for raster map <%s>"
 msgstr "Impossibile creare il file di intestazione per [%s in %s]"
 
-#: ../lib/python/temporal/space_time_datasets.py:554
+#: ../lib/python/temporal/space_time_datasets.py:555
 #, fuzzy, python-format
 msgid "Unable to read timestamp file for 3D raster map <%s>"
 msgstr "Impossibile creare il file di intestazione per [%s in %s]"
 
-#: ../lib/python/temporal/space_time_datasets.py:578
+#: ../lib/python/temporal/space_time_datasets.py:579
 #, fuzzy, python-format
 msgid "Unable to create timestamp file for 3D raster map <%s>"
 msgstr "Impossibile creare il file di intestazione per [%s in %s]"
 
-#: ../lib/python/temporal/space_time_datasets.py:583
+#: ../lib/python/temporal/space_time_datasets.py:584
 #, fuzzy, python-format
 msgid "Invalid datetime in timestamp for 3D raster map <%s>"
 msgstr "timestamp non valido nel file per %s mappa %s nel mapset %s"
 
-#: ../lib/python/temporal/space_time_datasets.py:847
+#: ../lib/python/temporal/space_time_datasets.py:848
 #, fuzzy, python-format
 msgid "Unable to read timestamp file for vector map <%s>"
 msgstr "Impossibile creare il file di intestazione per [%s in %s]"
 
-#: ../lib/python/temporal/space_time_datasets.py:870
+#: ../lib/python/temporal/space_time_datasets.py:871
 #, fuzzy, python-format
 msgid "Unable to create timestamp file for vector map <%s>"
 msgstr "Impossibile creare il file di intestazione per [%s in %s]"
 
-#: ../lib/python/temporal/space_time_datasets.py:875
+#: ../lib/python/temporal/space_time_datasets.py:876
 #, fuzzy, python-format
 msgid "Invalid datetime in timestamp for vector map <%s>"
 msgstr "timestamp non valido nel file per %s mappa %s nel mapset %s"
 
-#: ../lib/python/temporal/space_time_datasets.py:891
+#: ../lib/python/temporal/space_time_datasets.py:892
 #, fuzzy, python-format
 msgid "Unable to remove timestamp for vector map <%s>"
 msgstr "Impossibile creare il file di intestazione per [%s in %s]"
@@ -3819,26 +3814,36 @@ msgstr "Raster <%s> non trovato"
 msgid "Extraction directory <%s> not found"
 msgstr "Vettoriale <%s> non trovato"
 
-#: ../lib/python/temporal/stds_import.py:216
+#: ../lib/python/temporal/stds_import.py:214
+#, python-format
+msgid "Checking validity of input file (size: %0.1f MB). Make take a while..."
+msgstr ""
+
+#: ../lib/python/temporal/stds_import.py:221
 #, fuzzy, python-format
 msgid "Unable to find init file <%s>"
 msgstr "Impossibile aprire il file %s in %s"
 
-#: ../lib/python/temporal/stds_import.py:218
+#: ../lib/python/temporal/stds_import.py:223
 #, fuzzy, python-format
 msgid "Unable to find list file <%s>"
 msgstr "Impossibile eseguire 'stat' sul file <%s>"
 
-#: ../lib/python/temporal/stds_import.py:220
+#: ../lib/python/temporal/stds_import.py:225
 #, fuzzy, python-format
 msgid "Unable to find projection file <%s>"
 msgstr "Impossibile aprire il file %s in %s"
 
-#: ../lib/python/temporal/stds_import.py:246
+#: ../lib/python/temporal/stds_import.py:227
+#, fuzzy
+msgid "Extracting data..."
+msgstr "Costruendo aree..."
+
+#: ../lib/python/temporal/stds_import.py:267
 msgid "Projection information does not match. Proceeding..."
 msgstr ""
 
-#: ../lib/python/temporal/stds_import.py:250
+#: ../lib/python/temporal/stds_import.py:271
 #, python-brace-format
 msgid ""
 "Difference between PROJ_INFO file of imported map and of current location:\n"
@@ -3848,88 +3853,88 @@ msgstr ""
 "location in uso:\n"
 "{diff}"
 
-#: ../lib/python/temporal/stds_import.py:253
+#: ../lib/python/temporal/stds_import.py:274
 msgid "Projection information does not match. Aborting."
 msgstr "Le informazioni sulla proiezione non corrispondono. Annullamento."
 
-#: ../lib/python/temporal/stds_import.py:270
+#: ../lib/python/temporal/stds_import.py:291
 #, fuzzy, python-format
 msgid "Unable to create location %(l)s. Reason: %(e)s"
 msgstr "Impossibile rimuovere la directory '%s'"
 
-#: ../lib/python/temporal/stds_import.py:278
+#: ../lib/python/temporal/stds_import.py:299
 #, fuzzy, python-format
 msgid "Unable to switch to location %s"
 msgstr "non riesco a scrivere le informazioni dello storico per [%s]"
 
-#: ../lib/python/temporal/stds_import.py:283
+#: ../lib/python/temporal/stds_import.py:304
 #, fuzzy, python-format
 msgid "Unable to create default temporal database in new location %s"
 msgstr ""
 "Impossibile aprire il file %s delle definizioni del database vettoriale"
 
-#: ../lib/python/temporal/stds_import.py:356
+#: ../lib/python/temporal/stds_import.py:377
 #, python-format
 msgid "Key words %(t)s, %(s)s or %(n)s not found in init file."
 msgstr "Parole chiave %(t)s, %(s)s or %(n)s non trovate nel file init."
 
-#: ../lib/python/temporal/stds_import.py:362
+#: ../lib/python/temporal/stds_import.py:383
 msgid "Number of maps mismatch in init and list file."
 msgstr "Il numero di mappe nei file init e list non corrisponde."
 
-#: ../lib/python/temporal/stds_import.py:373
+#: ../lib/python/temporal/stds_import.py:394
 msgid "The archive file is of wrong space time dataset type"
 msgstr ""
 
-#: ../lib/python/temporal/stds_import.py:381
+#: ../lib/python/temporal/stds_import.py:402
 #, fuzzy, python-format
 msgid "Unable to find GeoTIFF raster file <%s> in archive."
 msgstr "impossibile aprire il file tabella datum: %s"
 
-#: ../lib/python/temporal/stds_import.py:387
+#: ../lib/python/temporal/stds_import.py:408
 #, fuzzy, python-format
 msgid "Unable to find AAIGrid raster file <%s> in archive."
 msgstr "impossibile aprire il file tabella datum: %s"
 
-#: ../lib/python/temporal/stds_import.py:393
+#: ../lib/python/temporal/stds_import.py:414
 #, fuzzy, python-format
 msgid "Unable to find GML vector file <%s> in archive."
 msgstr "Impossibile trovare il vettoriale <%s> in <%s>"
 
-#: ../lib/python/temporal/stds_import.py:402
+#: ../lib/python/temporal/stds_import.py:423
 #, fuzzy, python-format
 msgid "Unable to find GRASS package file <%s> in archive."
 msgstr "Impossibile aprire il file cidx <%s> per la scrittura"
 
-#: ../lib/python/temporal/stds_import.py:405
+#: ../lib/python/temporal/stds_import.py:426
 #, fuzzy
 msgid "Unsupported input format"
 msgstr "Tipo di "
 
-#: ../lib/python/temporal/stds_import.py:411
+#: ../lib/python/temporal/stds_import.py:432
 #, fuzzy, python-format
 msgid ""
 "Space time %(t)s dataset <%(sp)s> is already in the database. Use the "
 "overwrite flag."
 msgstr "Il vettoriale '%s' è già presente e sarà sovrascritto"
 
-#: ../lib/python/temporal/stds_import.py:431
+#: ../lib/python/temporal/stds_import.py:452
 #, fuzzy, python-format
 msgid "Overwrite space time %(sp)s dataset <%(id)s> and unregister all maps."
 msgstr "Impossibile creare il file di intestazione per [%s]"
 
-#: ../lib/python/temporal/stds_import.py:443
+#: ../lib/python/temporal/stds_import.py:464
 #, fuzzy, python-format
 msgid "Key word %s not found in init file."
 msgstr ""
 "Bug: attesa di aggiornamento di una mappa non presente nel mapset in uso"
 
-#: ../lib/python/temporal/stds_import.py:448
+#: ../lib/python/temporal/stds_import.py:469
 #, fuzzy, python-format
 msgid "Create space time %s dataset."
 msgstr "Raster <%s> non trovato nel mapset <%s>"
 
-#: ../lib/python/temporal/stds_import.py:477
+#: ../lib/python/temporal/stds_import.py:498
 msgid "Switching to original location failed"
 msgstr "Il passaggio alla location di origine è fallito"
 
@@ -4008,14 +4013,14 @@ msgstr ""
 "Utilizzare t.connect per impostare il percorso ad un database temporale con "
 "lettura e scrittura abilitate."
 
-#: ../lib/python/temporal/core.py:913
+#: ../lib/python/temporal/core.py:914
 #, python-format
 msgid ""
 "Unable to mogrify sql statement. There is no temporal database connection "
 "defined for mapset <%(mapset)s>"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:936
+#: ../lib/python/temporal/core.py:937
 #, fuzzy, python-format
 msgid ""
 "Unable to check table. There is no temporal database connection defined for "
@@ -4023,7 +4028,7 @@ msgid ""
 msgstr ""
 "Impossibile aprire il file %s delle definizioni del database vettoriale"
 
-#: ../lib/python/temporal/core.py:953
+#: ../lib/python/temporal/core.py:954
 #, python-format
 msgid ""
 "Unable to execute sql statement. There is no temporal database connection "
@@ -4032,21 +4037,21 @@ msgstr ""
 "Non riesco ad eseguire la condizione sql. Nessuna connessione ad un database "
 "temporale è stata definita per il mapset <%(mapset)s>"
 
-#: ../lib/python/temporal/core.py:964
+#: ../lib/python/temporal/core.py:965
 #, fuzzy, python-format
 msgid ""
 "Unable to fetch one. There is no temporal database connection defined for "
 "mapset <%(mapset)s>"
 msgstr "Non riesco ad aprire lo storico per il vettoriale '%s'"
 
-#: ../lib/python/temporal/core.py:975
+#: ../lib/python/temporal/core.py:976
 #, fuzzy, python-format
 msgid ""
 "Unable to fetch all. There is no temporal database connection defined for "
 "mapset <%(mapset)s>"
 msgstr "Non riesco ad aprire lo storico per il vettoriale '%s'"
 
-#: ../lib/python/temporal/core.py:993
+#: ../lib/python/temporal/core.py:994
 #, python-format
 msgid ""
 "Unable to execute transaction. There is no temporal database connection "
@@ -4055,7 +4060,7 @@ msgstr ""
 "Non riesco ad eseguire la transazione. Nessuna connessione ad un database "
 "temporale è stata definita per il mapset <%(mapset)s>"
 
-#: ../lib/python/temporal/core.py:1074
+#: ../lib/python/temporal/core.py:1083
 #, python-format
 msgid ""
 "Unable to connect to %(db)s database: %(string)s\n"
@@ -4063,14 +4068,14 @@ msgid ""
 "Please use t.connect to set a read- and writable temporal database backend"
 msgstr ""
 
-#: ../lib/python/temporal/core.py:1231
+#: ../lib/python/temporal/core.py:1240
 #, fuzzy, python-format
 msgid ""
 "Unable to execute :\n"
 " %(sql)s"
 msgstr "Impossibile eseguire il comando"
 
-#: ../lib/python/temporal/core.py:1275
+#: ../lib/python/temporal/core.py:1284
 #, fuzzy, python-format
 msgid ""
 "Unable to execute transaction:\n"
@@ -4336,18 +4341,18 @@ msgstr "Impossibile trovare il vettoriale <%s> in <%s>"
 msgid "The temporal operators <%s> support only absolute time."
 msgstr "Gli operatori temporali <%s> supportano solo tempi assoluti."
 
-#: ../lib/python/temporal/c_libraries_interface.py:427
-#: ../lib/python/temporal/c_libraries_interface.py:444
+#: ../lib/python/temporal/c_libraries_interface.py:438
+#: ../lib/python/temporal/c_libraries_interface.py:455
 #, fuzzy
 msgid "Unable to read range file"
 msgstr "Impossibile leggere il file dell'intestazione"
 
-#: ../lib/python/temporal/c_libraries_interface.py:522
+#: ../lib/python/temporal/c_libraries_interface.py:533
 #, fuzzy, python-format
 msgid "Unable to load range of 3D raster map <%s>"
 msgstr "Impossibile leggere range del raster 3D <%s>"
 
-#: ../lib/python/temporal/c_libraries_interface.py:537
+#: ../lib/python/temporal/c_libraries_interface.py:548
 #: ../lib/ogsf/gvl_file.c:470 ../lib/raster3d/close.c:120
 #: ../lib/raster3d/close.c:130 ../lib/raster3d/close.c:159
 #, c-format, python-format
@@ -4397,129 +4402,151 @@ msgstr "%s= e %s= si escludono reciprocamente"
 
 #: ../lib/python/temporal/register.py:83
 #, fuzzy, python-format
+msgid "%s= and the %s flag are mutually exclusive"
+msgstr "%s= e %s= si escludono reciprocamente"
+
+#: ../lib/python/temporal/register.py:87
+msgid "The increment option requires the start option"
+msgstr ""
+
+#: ../lib/python/temporal/register.py:90
+msgid "The interval flag requires the start option"
+msgstr ""
+
+#: ../lib/python/temporal/register.py:93
+#, fuzzy, python-format
 msgid "Please specify %s= and %s="
 msgstr ""
 "\n"
 "Per piacere specifica il nome del datum\n"
 
-#: ../lib/python/temporal/register.py:87
+#: ../lib/python/temporal/register.py:97
 #, fuzzy, python-format
 msgid "Please specify %s= or %s="
 msgstr ""
 "\n"
 "Per piacere specifica il nome dell'ellissoide\n"
 
-#: ../lib/python/temporal/register.py:98
+#: ../lib/python/temporal/register.py:108
 #, python-format
 msgid ""
 "Space time %(sp)s dataset <%(name)s> with relative time found, but no "
 "relative unit set for %(sp)s maps"
 msgstr ""
 
-#: ../lib/python/temporal/register.py:163
+#: ../lib/python/temporal/register.py:169
+msgid ""
+"The increment option will be ignored because of time stamps in input file"
+msgstr ""
+
+#: ../lib/python/temporal/register.py:173
+msgid "The interval flag will be ignored because of time stamps in input file"
+msgstr ""
+
+#: ../lib/python/temporal/register.py:181
 msgid "Gathering map information..."
 msgstr "Raccolgo le informazioni sulla mappa..."
 
-#: ../lib/python/temporal/register.py:173
+#: ../lib/python/temporal/register.py:191
 #, fuzzy, python-format
 msgid "Unable to update %(t)s map <%(id)s>. The map does not exist."
 msgstr "Impossibile trovare il vettoriale <%s> in <%s>"
 
-#: ../lib/python/temporal/register.py:191
+#: ../lib/python/temporal/register.py:209
 #, fuzzy, python-format
 msgid ""
 "Unable to register %(t)s map <%(id)s> with layer %(l)s. The map has "
 "timestamp and the start time is not set."
 msgstr "Raster <%s> non trovato nel mapset <%s>"
 
-#: ../lib/python/temporal/register.py:197
+#: ../lib/python/temporal/register.py:215
 #, fuzzy, python-format
 msgid ""
 "Unable to register %(t)s map <%(id)s>. The map has no timestamp and the "
 "start time is not set."
 msgstr "Raster <%s> non trovato nel mapset <%s>"
 
-#: ../lib/python/temporal/register.py:205
+#: ../lib/python/temporal/register.py:223
 #, python-format
 msgid "%(u)s= can only be set for relative time"
 msgstr "%(u)s= può essere impostato solo per tempo relativo"
 
-#: ../lib/python/temporal/register.py:208
+#: ../lib/python/temporal/register.py:226
 #, python-format
 msgid "%(u)s= must be set in case of relative time stamps"
 msgstr "%(u)s= deve essere impostato nel caso di stampe di tempo relativo"
 
-#: ../lib/python/temporal/register.py:221
+#: ../lib/python/temporal/register.py:239
 #, fuzzy, python-format
 msgid ""
 "Map is already registered in temporal database. Unable to update %(t)s map <"
 "%(id)s> with layer %(l)s. Overwrite flag is not set."
 msgstr "Il vettoriale '%s' è già presente e sarà sovrascritto"
 
-#: ../lib/python/temporal/register.py:228
+#: ../lib/python/temporal/register.py:246
 #, fuzzy, python-format
 msgid ""
 "Map is already registered in temporal database. Unable to update %(t)s map <"
 "%(id)s>. Overwrite flag is not set."
 msgstr "Il vettoriale '%s' è già presente e sarà sovrascritto"
 
-#: ../lib/python/temporal/register.py:252
+#: ../lib/python/temporal/register.py:270
 #, fuzzy, python-format
 msgid ""
 "Unable to update %(t)s map <%(id)s> with layer %(l)s. The temporal types are "
 "different."
 msgstr "Impossibile trovare il vettoriale <%s> in <%s>"
 
-#: ../lib/python/temporal/register.py:258
+#: ../lib/python/temporal/register.py:276
 #, fuzzy, python-format
 msgid "Unable to update %(t)s map <%(id)s>. The temporal types are different."
 msgstr "Impossibile trovare il vettoriale <%s> in <%s>"
 
-#: ../lib/python/temporal/register.py:304
+#: ../lib/python/temporal/register.py:322
 #, fuzzy
 msgid "Registering maps in the temporal database..."
 msgstr "Impossibile trovare il vettoriale <%s> in <%s>"
 
-#: ../lib/python/temporal/register.py:311
+#: ../lib/python/temporal/register.py:329
 #, fuzzy
 msgid "Registering maps in the space time dataset..."
 msgstr "Raster <%s> non trovato nel mapset <%s>"
 
-#: ../lib/python/temporal/register.py:320
+#: ../lib/python/temporal/register.py:338
 #, fuzzy
 msgid "Updating space time dataset..."
 msgstr "Nome della mappa raster in input"
 
-#: ../lib/python/temporal/register.py:373
-#: ../lib/python/temporal/register.py:380
+#: ../lib/python/temporal/register.py:391
+#: ../lib/python/temporal/register.py:398
 #, python-format
 msgid "Unable to convert string \"%s\"into a datetime object"
 msgstr "Non riesco a convertire la stringa \"%s\" in un oggetto datetime"
 
-#: ../lib/python/temporal/register.py:388
-#: ../lib/python/temporal/register.py:393
+#: ../lib/python/temporal/register.py:406
+#: ../lib/python/temporal/register.py:411
 msgid "Error occurred in increment computation"
 msgstr "Si è verificato un errore nel calcolo dell'incremento"
 
-#: ../lib/python/temporal/register.py:396
+#: ../lib/python/temporal/register.py:414
 #, fuzzy, python-format
 msgid ""
 "Set absolute valid time for map <%(id)s> with layer %(layer)s to %(start)s - "
 "%(end)s"
 msgstr "Impossibile copiare il vettoriale <%s> in <%s>"
 
-#: ../lib/python/temporal/register.py:401
+#: ../lib/python/temporal/register.py:419
 #, fuzzy, python-format
 msgid "Set absolute valid time for map <%s> to %s - %s"
 msgstr "Impossibile copiare il vettoriale <%s> in <%s>"
 
-#: ../lib/python/temporal/register.py:418
+#: ../lib/python/temporal/register.py:436
 #, fuzzy, python-format
 msgid ""
 "Set relative valid time for map <%s> with layer %s to %i - %s with unit %s"
 msgstr "Impossibile copiare il vettoriale <%s> in <%s>"
 
-#: ../lib/python/temporal/register.py:423
+#: ../lib/python/temporal/register.py:441
 #, fuzzy, python-format
 msgid "Set relative valid time for map <%s> to %i - %s with unit %s"
 msgstr "Impossibile copiare il vettoriale <%s> in <%s>"
@@ -5036,13 +5063,13 @@ msgstr "Impossibile aprire il file <%s> per la scrittura"
 #: ../lib/ogsf/gs3.c:786 ../lib/ogsf/gsd_legend.c:239
 #: ../lib/manage/do_remove.c:73 ../lib/manage/do_rename.c:71
 #: ../lib/gis/legal_name.c:94 ../lib/gis/legal_name.c:97
-#: ../lib/rst/interp_float/output2d.c:236
-#: ../lib/rst/interp_float/output2d.c:317
-#: ../lib/rst/interp_float/output2d.c:386
-#: ../lib/rst/interp_float/output2d.c:436
-#: ../lib/rst/interp_float/output2d.c:450
-#: ../lib/rst/interp_float/output2d.c:464
-#: ../lib/rst/interp_float/output2d.c:480
+#: ../lib/rst/interp_float/output2d.c:247
+#: ../lib/rst/interp_float/output2d.c:328
+#: ../lib/rst/interp_float/output2d.c:397
+#: ../lib/rst/interp_float/output2d.c:447
+#: ../lib/rst/interp_float/output2d.c:461
+#: ../lib/rst/interp_float/output2d.c:475
+#: ../lib/rst/interp_float/output2d.c:491
 #: ../lib/rst/interp_float/resout2d.c:205
 #: ../lib/rst/interp_float/resout2d.c:253
 #: ../lib/rst/interp_float/resout2d.c:296
@@ -5050,8 +5077,8 @@ msgstr "Impossibile aprire il file <%s> per la scrittura"
 #: ../lib/rst/interp_float/resout2d.c:377
 #: ../lib/rst/interp_float/resout2d.c:395
 #: ../lib/rst/interp_float/resout2d.c:410
-#: ../lib/rst/interp_float/resout2d.c:426 ../lib/raster/open.c:175
-#: ../lib/raster/open.c:744 ../lib/raster/open.c:781 ../lib/raster/open.c:833
+#: ../lib/rst/interp_float/resout2d.c:426 ../lib/raster/open.c:176
+#: ../lib/raster/open.c:745 ../lib/raster/open.c:782 ../lib/raster/open.c:834
 #, c-format
 msgid "Raster map <%s> not found"
 msgstr "Raster <%s> non trovato"
@@ -6103,6 +6130,11 @@ msgstr "impossibile cambiare la directory %s"
 msgid "Unable to open element file <%s> for <%s@%s>"
 msgstr "Non riesco ad aprire lo storico per il vettoriale '%s'"
 
+#: ../lib/gis/get_window.c:123
+#, c-format
+msgid "Region file %s/%s/%s is empty"
+msgstr ""
+
 #: ../lib/gis/get_projinfo.c:37 ../lib/gis/get_projinfo.c:66
 #, c-format
 msgid "<%s> file not found for location <%s>"
@@ -7022,14 +7054,9 @@ msgstr ""
 "\n"
 "ERRORE: l'opzione <%s> deve essere fornita come multipli di %d\n"
 
-#: ../lib/gis/parser.c:1474
+#: ../lib/gis/parser.c:1474 ../lib/gis/parser.c:1481
 #, c-format
 msgid "option <%s>: <%s> exists. To overwrite, use the --overwrite flag"
-msgstr ""
-
-#: ../lib/gis/parser.c:1479
-#, c-format
-msgid "GRASS_INFO_ERROR(%d,1): "
 msgstr ""
 
 #: ../lib/gis/parser.c:1591
@@ -7275,61 +7302,61 @@ msgstr "Latitudine-Longitudine"
 msgid "Other Projection"
 msgstr "Altra proiezione"
 
-#: ../lib/rst/interp_float/vinput2d.c:73
+#: ../lib/rst/interp_float/vinput2d.c:94
 #, c-format
 msgid "Vector map <%s> is not 3D"
 msgstr "Il vettoriale <%s> non è 3D"
 
-#: ../lib/rst/interp_float/vinput2d.c:76
+#: ../lib/rst/interp_float/vinput2d.c:97
 msgid "Loading data from attribute table ..."
 msgstr "Caricamento dati dalla tabella degli attributi in corso..."
 
-#: ../lib/rst/interp_float/vinput2d.c:97
-#: ../lib/rst/interp_float/vinput2d.c:110
+#: ../lib/rst/interp_float/vinput2d.c:118
+#: ../lib/rst/interp_float/vinput2d.c:131
 #, c-format
 msgid "Data type of column <%s> must be numeric"
 msgstr "La tipologia della colonna <%s> dev'essere numerico"
 
-#: ../lib/rst/interp_float/vinput2d.c:121
+#: ../lib/rst/interp_float/vinput2d.c:142
 msgid "Reading features from vector map ..."
 msgstr "Leggendo le features dal vettoriale"
 
-#: ../lib/rst/interp_float/vinput2d.c:153
+#: ../lib/rst/interp_float/vinput2d.c:174
 #, c-format
 msgid "Database record for cat %d not found"
 msgstr "Non trovo il record database per la cat %d"
 
-#: ../lib/rst/interp_float/vinput2d.c:171
+#: ../lib/rst/interp_float/vinput2d.c:192
 msgid "Negative value of smoothing detected: sm must be >= 0"
 msgstr "Rilevato valore negativo di smoothing: sm deve essere >= 0"
 
-#: ../lib/rst/interp_float/vinput2d.c:235
+#: ../lib/rst/interp_float/vinput2d.c:256
 msgid "Strip exists with insufficient data"
 msgstr ""
 
-#: ../lib/rst/interp_float/vinput2d.c:249
+#: ../lib/rst/interp_float/vinput2d.c:270
 #, c-format
 msgid "There are points outside specified 2D/3D region - %d points ignored"
 msgstr ""
 "Ci sono punti fuori dalla regione 2D/3D specificata - %d punti ignorati"
 
-#: ../lib/rst/interp_float/vinput2d.c:252
+#: ../lib/rst/interp_float/vinput2d.c:273
 #, c-format
 msgid "Ignoring %d points (too dense)"
 msgstr "Ignorati %d punti (densità eccessiva)"
 
-#: ../lib/rst/interp_float/vinput2d.c:256
+#: ../lib/rst/interp_float/vinput2d.c:277
 #, c-format
 msgid ""
 "%d points given for interpolation (after thinning) is less than given NPMIN="
 "%d"
 msgstr ""
 
-#: ../lib/rst/interp_float/vinput2d.c:261
+#: ../lib/rst/interp_float/vinput2d.c:282
 msgid "Zero points in the given region"
 msgstr "Nessun punto nella region settata"
 
-#: ../lib/rst/interp_float/vinput2d.c:266
+#: ../lib/rst/interp_float/vinput2d.c:287
 #, c-format
 msgid ""
 "Segmentation parameters set to invalid values: npmin= %d, segmax= %d for "
@@ -7339,7 +7366,7 @@ msgstr ""
 "%d per connessione continua dei segmenti, npmin > segmax (consultare il "
 "manuale)"
 
-#: ../lib/rst/interp_float/vinput2d.c:272
+#: ../lib/rst/interp_float/vinput2d.c:293
 #, c-format
 msgid ""
 "There are less than %d points for interpolation. No segmentation is "
@@ -7348,42 +7375,42 @@ msgstr ""
 "Ci sono meno di %d punti per l'interpolazione. Non è richiesta "
 "segmentazione, per accelerare il programma impostare segmax=%d (cfr. manuale)"
 
-#: ../lib/rst/interp_float/vinput2d.c:276
+#: ../lib/rst/interp_float/vinput2d.c:297
 #, c-format
 msgid "Number of points from vector map %d"
 msgstr "Numero di punti dal vettoriale %d"
 
-#: ../lib/rst/interp_float/vinput2d.c:277
+#: ../lib/rst/interp_float/vinput2d.c:298
 #, c-format
 msgid "Number of points outside of 2D/3D region %d"
 msgstr "Numero di punti al di fuori della regione 2D/3D %d"
 
-#: ../lib/rst/interp_float/vinput2d.c:279
+#: ../lib/rst/interp_float/vinput2d.c:300
 #, c-format
 msgid "Number of points being used %d"
 msgstr "Numero di punti che stanno per essere usati %d"
 
-#: ../lib/rst/interp_float/vinput2d.c:312
+#: ../lib/rst/interp_float/vinput2d.c:333
 msgid "Some points outside of region (ignored)"
 msgstr "Alcuni ppunti fuori dalla region (ignorati)"
 
-#: ../lib/rst/interp_float/vinput2d.c:318
+#: ../lib/rst/interp_float/vinput2d.c:339
 msgid "Unable to allocate memory"
 msgstr "Impossibile allocare memoria"
 
-#: ../lib/rst/interp_float/vinput2d.c:326
+#: ../lib/rst/interp_float/vinput2d.c:347
 #, c-format
 msgid "Unable to insert %f,%f,%f a = %d"
 msgstr "Impossibile inserire %f,%f,%f a = %d"
 
-#: ../lib/rst/interp_float/write2d.c:40 ../lib/rst/interp_float/write2d.c:51
-#: ../lib/rst/interp_float/write2d.c:66 ../lib/rst/interp_float/write2d.c:75
-#: ../lib/rst/interp_float/write2d.c:83 ../lib/rst/interp_float/write2d.c:91
+#: ../lib/rst/interp_float/write2d.c:53 ../lib/rst/interp_float/write2d.c:64
+#: ../lib/rst/interp_float/write2d.c:79 ../lib/rst/interp_float/write2d.c:88
+#: ../lib/rst/interp_float/write2d.c:96 ../lib/rst/interp_float/write2d.c:104
 #, fuzzy
 msgid "Cannot write files"
 msgstr "Non riesco a riscrivere la linea"
 
-#: ../lib/rst/interp_float/segmen2d.c:118
+#: ../lib/rst/interp_float/segmen2d.c:135
 msgid ""
 "Taking too long to find points for interpolation - please change the region "
 "to area where your points are. Continuing calculations..."
@@ -7392,26 +7419,26 @@ msgstr ""
 "la regione per includere l'area dove si trovano i punti. Continuando i "
 "calcoli..."
 
-#: ../lib/rst/interp_float/input2d.c:48
+#: ../lib/rst/interp_float/input2d.c:58
 #, c-format
 msgid "Mask raster map <%s> not found"
 msgstr "La maschera raster <%s> non trovata"
 
-#: ../lib/rst/interp_float/input2d.c:71
+#: ../lib/rst/interp_float/input2d.c:81
 msgid "Bitmap mask created"
 msgstr "Creata maschera bitmap"
 
-#: ../lib/rst/interp_float/output2d.c:106
+#: ../lib/rst/interp_float/output2d.c:117
 #, c-format
 msgid "First change your rows number to nsizr! %d %d"
 msgstr ""
 
-#: ../lib/rst/interp_float/output2d.c:113
+#: ../lib/rst/interp_float/output2d.c:124
 #, c-format
 msgid "First change your cols number to nsizc %d %d"
 msgstr "Prima cambiare il numero delle colonne a nsizc %d %d"
 
-#: ../lib/rst/interp_float/interp2d.c:214
+#: ../lib/rst/interp_float/interp2d.c:232
 #, c-format
 msgid ""
 "Overshoot - increase in tension suggested. Overshoot occures at (%d,%d) "
@@ -8263,7 +8290,7 @@ msgstr "Non riesco a scrivere il file di intervallo per <%s>"
 msgid "Unable to create header file for <%s>"
 msgstr "Impossibile creare il file di intestazione per <%s>"
 
-#: ../lib/raster/open.c:190
+#: ../lib/raster/open.c:191
 #, c-format
 msgid ""
 "Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@"
@@ -8272,23 +8299,23 @@ msgstr ""
 "impossibile aprire il raster <%s@%s> poiché è una riclassificazione di <%s@"
 "%s> che non esiste"
 
-#: ../lib/raster/open.c:195
+#: ../lib/raster/open.c:196
 #, c-format
 msgid "Error reading reclass file for raster map <%s>"
 msgstr ""
 "Errore nella lettura del file di riclassificazione per la mappa raster <%s>"
 
-#: ../lib/raster/open.c:206
+#: ../lib/raster/open.c:207
 #, c-format
 msgid "Error reading map type for raster map <%s>"
 msgstr "Errore nella lettura del tipo di mappa per la mappa raster <%s>"
 
-#: ../lib/raster/open.c:214
+#: ../lib/raster/open.c:215
 #, c-format
 msgid "Raster map <%s@%s>: format field in header file invalid"
 msgstr "Raster <%s@%s>: formato campo nell'intestazione del file non valido"
 
-#: ../lib/raster/open.c:219
+#: ../lib/raster/open.c:220
 #, c-format
 msgid ""
 "Raster map <%s> is in different projection than current region. Found <%s>, "
@@ -8297,19 +8324,19 @@ msgstr ""
 "La mappa raster <%s> ha una proiezione diversa da quella della regione "
 "corrente. La proiezione è <%s>, dovrebbe essere <%s>."
 
-#: ../lib/raster/open.c:226
+#: ../lib/raster/open.c:227
 #, c-format
 msgid "Raster map <%s> is in different zone (%d) than current region (%d)"
 msgstr ""
 "La mappa raster <%s> è in una zona diversa (%d) rispetto alla regione "
 "corrente (%d)"
 
-#: ../lib/raster/open.c:231
+#: ../lib/raster/open.c:232
 #, c-format
 msgid "Raster map <%s>: bytes per cell (%d) too large"
 msgstr "Mappa raster <%s> byte per cella (%d) troppo grande"
 
-#: ../lib/raster/open.c:256
+#: ../lib/raster/open.c:257
 #, c-format
 msgid ""
 "Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
@@ -8317,71 +8344,71 @@ msgstr ""
 "La mappa raster <%s@%s> è un collegamento GDAL ma GRASS è stato compilato "
 "senza il supporto GDAL"
 
-#: ../lib/raster/open.c:264
+#: ../lib/raster/open.c:265
 #, c-format
 msgid "Unable to open %s file for raster map <%s@%s>"
 msgstr "Non riesco ad aprire il file %s per la mappa raster <%s@%s>"
 
-#: ../lib/raster/open.c:301
+#: ../lib/raster/open.c:302
 #, c-format
 msgid "Error reading format for <%s@%s>"
 msgstr "Errore nella lettura del formato per <%s@%s>"
 
-#: ../lib/raster/open.c:498
+#: ../lib/raster/open.c:499
 msgid "Unable to create GDAL link"
 msgstr "Non riesco a creare il collegamento a GDAL"
 
-#: ../lib/raster/open.c:569 ../lib/raster/gdal.c:475
+#: ../lib/raster/open.c:570 ../lib/raster/gdal.c:475
 #, c-format
 msgid "Invalid map type <%d>"
 msgstr "Tipo di mappa non valido <%d>"
 
-#: ../lib/raster/open.c:574
+#: ../lib/raster/open.c:575
 #, c-format
 msgid "Raster map <%s> is not in the current mapset (%s)"
 msgstr "Il raster <%s> non si trova nel mapset in uso (%s)"
 
-#: ../lib/raster/open.c:581
+#: ../lib/raster/open.c:582
 #, c-format
 msgid "<%s> is an illegal file name"
 msgstr "<%s> è un nome file non valido"
 
-#: ../lib/raster/open.c:595 ../lib/raster/open.c:667
+#: ../lib/raster/open.c:596 ../lib/raster/open.c:668
 #, c-format
 msgid "No temp files available: %s"
 msgstr "Nessun file temporaneo disponibile: %s"
 
-#: ../lib/raster/open.c:720
+#: ../lib/raster/open.c:721
 msgid "Rast_set_fp_type(): can only be called with FCELL_TYPE or DCELL_TYPE"
 msgstr ""
 "Rast_set_fp_type(): può essere chiamata solo con FCELL_TYPE o DCELL_TYPE"
 
-#: ../lib/raster/open.c:778
+#: ../lib/raster/open.c:779
 #, c-format
 msgid "Raster map <%s> not found in mapset <%s>"
 msgstr "Raster <%s> non trovato nel mapset <%s>"
 
-#: ../lib/raster/open.c:839
+#: ../lib/raster/open.c:840
 #, c-format
 msgid "Unable to find '%s'"
 msgstr "Impossibile trovare '%s'"
 
-#: ../lib/raster/open.c:850
+#: ../lib/raster/open.c:851
 #, c-format
 msgid "Invalid type: field '%s' in file '%s'"
 msgstr "Tipo non valido: campo '%s' nel file '%s'"
 
-#: ../lib/raster/open.c:855
+#: ../lib/raster/open.c:856
 #, c-format
 msgid "Missing type: field in file '%s'"
 msgstr "Tipo mancante: campo nel file '%s'"
 
-#: ../lib/raster/open.c:860
+#: ../lib/raster/open.c:861
 #, c-format
 msgid "Raster map <%s> is not xdr: byte_order: %s"
 msgstr "Raster <%s> non è xdr: byte_order: %s"
 
-#: ../lib/raster/open.c:929
+#: ../lib/raster/open.c:930
 msgid ""
 "Rast_set_quant_rules() can be called only for raster maps opened for reading"
 msgstr ""
@@ -9049,7 +9076,7 @@ msgstr ""
 msgid "Path '%s' doesn't exist"
 msgstr "%s: Area %d non esiste"
 
-#: ../lib/init/grass.py:876
+#: ../lib/init/grass.py:883
 #, python-format
 msgid ""
 "%(user)s is currently running GRASS in selected mapset (file %(file)s "
@@ -9058,29 +9085,29 @@ msgstr ""
 "%(user)s sta eseguendo GRASS nel mapset selezionato (file %(file)s trovato). "
 "L'utilizzo contemporaneo non è consentito."
 
-#: ../lib/init/grass.py:880
+#: ../lib/init/grass.py:887
 #, python-format
 msgid ""
 "Unable to properly access '%s'.\n"
 "Please notify system personel."
 msgstr ""
 
-#: ../lib/init/grass.py:895
+#: ../lib/init/grass.py:902
 #, fuzzy
 msgid "Building user fontcap..."
 msgstr "Creazione topologia...\n"
 
-#: ../lib/init/grass.py:947
+#: ../lib/init/grass.py:954
 #, python-format
 msgid "Unsupported shell <%(sh)s>: %(env)s"
 msgstr "Shell non supportata <%(sh)s>: %(env)s"
 
-#: ../lib/init/grass.py:952
+#: ../lib/init/grass.py:959
 #, fuzzy
 msgid "The SHELL variable is not set"
 msgstr "GISRC - variabile non impostata"
 
-#: ../lib/init/grass.py:963
+#: ../lib/init/grass.py:970
 #, python-format
 msgid ""
 "Job file '%s' has been defined in the 'GRASS_BATCH_JOB' variable but not "
@@ -9089,110 +9116,110 @@ msgid ""
 "Use 'unset GRASS_BATCH_JOB' to disable batch job processing."
 msgstr ""
 
-#: ../lib/init/grass.py:968
+#: ../lib/init/grass.py:975
 #, python-format
 msgid "Change file permission to 'executable' for '%s'"
 msgstr ""
 
-#: ../lib/init/grass.py:970
+#: ../lib/init/grass.py:977
 #, python-format
 msgid "Executing '%s' ..."
 msgstr "Sto eseguendo '%s'..."
 
-#: ../lib/init/grass.py:975
+#: ../lib/init/grass.py:982
 #, python-format
 msgid "Execution of '%s' finished."
 msgstr "Esecuzione di '%s' terminata."
 
-#: ../lib/init/grass.py:981
+#: ../lib/init/grass.py:988
 #, python-format
 msgid "GRASS GUI should be <%s>"
 msgstr "GRASS GUI dovrebbe essere <%s>"
 
-#: ../lib/init/grass.py:1010
+#: ../lib/init/grass.py:1017
 #, python-format
 msgid "Welcome to GRASS GIS %s"
 msgstr "Benvenuto in GRASS GIS%s"
 
-#: ../lib/init/grass.py:1029
+#: ../lib/init/grass.py:1036
 msgid "GRASS GIS homepage:"
 msgstr "Homepage di GRASS GIS:"
 
-#: ../lib/init/grass.py:1030
+#: ../lib/init/grass.py:1037
 msgid "This version running through:"
 msgstr ""
 
-#: ../lib/init/grass.py:1032
+#: ../lib/init/grass.py:1039
 #, fuzzy
 msgid "Help is available with the command:"
 msgstr "Nessun aiuto disponibile per il comando [%s]\n"
 
-#: ../lib/init/grass.py:1033
+#: ../lib/init/grass.py:1040
 msgid "See the licence terms with:"
 msgstr "VIsualizza i termini di licenza con:"
 
-#: ../lib/init/grass.py:1036
+#: ../lib/init/grass.py:1043
 msgid "If required, restart the GUI with:"
 msgstr "Se necessario, riavvia la GUI con:"
 
-#: ../lib/init/grass.py:1038
+#: ../lib/init/grass.py:1045
 msgid "Start the GUI with:"
 msgstr "Avvia la GUI con:"
 
-#: ../lib/init/grass.py:1040
+#: ../lib/init/grass.py:1047
 msgid "When ready to quit enter:"
 msgstr "Per uscire digitare:"
 
-#: ../lib/init/grass.py:1130
+#: ../lib/init/grass.py:1137
 msgid "2D and 3D raster MASKs present"
 msgstr "Maschere raster 2D e 3D presenti"
 
-#: ../lib/init/grass.py:1131
+#: ../lib/init/grass.py:1138
 msgid "Raster MASK present"
 msgstr "Maschera raster presente"
 
-#: ../lib/init/grass.py:1132
+#: ../lib/init/grass.py:1139
 msgid "3D raster MASK present"
 msgstr "Maschera raster 3D presente"
 
-#: ../lib/init/grass.py:1171
+#: ../lib/init/grass.py:1178
 #, fuzzy, python-format
 msgid "Failed to start shell '%s'"
 msgstr "Impossibile aprire il file %s in %s"
 
-#: ../lib/init/grass.py:1176
+#: ../lib/init/grass.py:1183
 #, python-format
 msgid "Batch job '%s' (defined in GRASS_BATCH_JOB variable) was executed."
 msgstr ""
 
-#: ../lib/init/grass.py:1177 ../lib/init/grass.py:1182
+#: ../lib/init/grass.py:1184 ../lib/init/grass.py:1189
 msgid "Goodbye from GRASS GIS"
 msgstr "Arrivederci da GRASS GIS"
 
-#: ../lib/init/grass.py:1180
+#: ../lib/init/grass.py:1187
 #, fuzzy
 msgid "Done."
 msgstr "nessuno"
 
-#: ../lib/init/grass.py:1187
+#: ../lib/init/grass.py:1194
 #, fuzzy
 msgid "Cleaning up temporary files..."
 msgstr "Impossibile aprire il file %s in %s"
 
-#: ../lib/init/grass.py:1201
+#: ../lib/init/grass.py:1208
 msgid "Please install the GRASS GIS development package"
 msgstr ""
 
-#: ../lib/init/grass.py:1233
+#: ../lib/init/grass.py:1240
 #, fuzzy, python-format
 msgid "Parameter <%s> not supported"
 msgstr "Tipo %d di feature OGR non supportato"
 
-#: ../lib/init/grass.py:1356
+#: ../lib/init/grass.py:1363
 msgid "Flag -e required also flag -c"
 msgstr "L'opzione -e richiede anche l'opzione -c"
 
-#: ../lib/init/grass.py:1399
+#: ../lib/init/grass.py:1406
 #, python-format
 msgid ""
 "Unable to start GRASS. You can:\n"
@@ -9202,15 +9229,15 @@ msgid ""
 "path/to/location/mapset`)"
 msgstr ""
 
-#: ../lib/init/grass.py:1409
+#: ../lib/init/grass.py:1416
 msgid "Creating new GRASS GIS location/mapset..."
 msgstr "Sto creando una nuova location/mapset GRASS GIS"
 
-#: ../lib/init/grass.py:1411
+#: ../lib/init/grass.py:1418
 msgid "Starting GRASS GIS..."
 msgstr "Sto avviando GRASS GIS..."
 
-#: ../lib/init/grass.py:1469
+#: ../lib/init/grass.py:1476
 #, python-format
 msgid "Launching <%s> GUI in the background, please wait..."
 msgstr "Sto avviando <%s> GUI in background, attendere prego..."
