@@ -16,7 +16,7 @@ you contributed to GRASS at any point during its existence, please let
 us know your name and e-mail address so we can add your name.
 
 Active parts of the program have authors dating back to GRASS's
-inception in 1982. Please check the GRASS 1.x - 7.0 credits list at:
+inception in 1982. Please check the GRASS 1.x - 7.x credits list at:
  http://grass.osgeo.org/home/credits/
 
 
@@ -44,6 +44,9 @@ A list of translators is available in
 https://svn.osgeo.org/grass/grass/trunk/translators.csv
 
 
+Summary view:
+https://www.openhub.net/p/grass_gis
+
 
 GRASS 7.0 major project contributers
 ------------------------------------
@@ -66,10 +69,35 @@ PROJECT INTEGRATION
 INSTITUTIONAL SUPPORT
  - The Open Source Geospatial Foundation (http://www.osgeo.org)
 
-CONTRIBUTORS
+FURTHER CONTRIBUTORS
  - See: http://grass.osgeo.org/home/credits/
 
 [please complete and correct as needed !]
+
+
+Google Summer of Code awards
+-------------------------------------------
+ See https://trac.osgeo.org/grass/wiki/GSoC
+ - Wolf Bergenheim, Anne Ghisla, Hamish Bowman: Mentor team leads
+ - Anna Petrasova: 3D raster flow line computation; 2014
+ - Matej Krejci: Metadata for GRASS GIS maps and datasets; 2014
+ - Vaclav Petras: Testing framework for GRASS GIS; 2014
+ - Thomas Leppelt: Temporal algebra; 2013
+ - Stepan Turek: GUI analysis tools; 2012, 2013
+ - Eric Momsen: i.segment; 2012
+ - Pietro Zambelli: PyGRASS; 2012
+ - Anna Kratochvilova: wxNVIZ; 2011
+ - Luca Delucchi: r.in.modis; 2011
+ - Margherita Di Leo: r.stream GUI; 2011
+ - Seth Price: GPU accelerated r.sun; 2010
+ - Anne Ghisla: v.autokrige; 2009
+ - Daniel Bundala: v.net analysis modules; 2009
+ - Massimo Di Stefano: OssimPlanet integration; 2009
+ - Rosen Matev: v.buffer, v.parallel; 2008
+ - Martin Pavlovsky: v.voronoi; 2008
+ - Martin Landa: wxNVIZ; 2008, 2010
+ - Daniel Bundala: v.generalize; 2007
+ - Maximilian Maldacke: v.net.visibility; 2007
 
 
 
@@ -89,26 +117,7 @@ GUI
  - Maris Nartiss <maris.gis gmail com>: Tcl/Tk portability
  - Anna Kratochvilova: wxPython Cartographic Composer
 
-Google Summer of Code awards:
- - Wolf Bergenheim, Anne Ghisla, Hamish Bowman: Mentor team leads
- - Thomas Leppelt: Temporal algebra; 2013
- - Stepan Turek: GUI analysis tools; 2012, 2013
- - Eric Momsen: i.segment; 2012
- - Pietro Zambelli: PyGRASS; 2012
- - Anna Kratochvilova: wxNVIZ; 2011
- - Luca Delucchi: r.in.modis; 2011
- - Margherita Di Leo: r.stream GUI; 2011
- - Seth Price: GPU accelerated r.sun; 2010
- - Anne Ghisla: v.autokrige; 2009
- - Daniel Bundala: v.net analysis modules; 2009
- - Massimo Di Stefano: OssimPlanet integration; 2009
- - Rosen Matev: v.buffer, v.parallel; 2008
- - Martin Pavlovsky: v.voronoi; 2008
- - Martin Landa: wxNVIZ; 2008, 2010
- - Daniel Bundala: v.generalize; 2007
- - Maximilian Maldacke: v.net.visibility; 2007
-
-ALGORITHM OPTIMIZATION
+ALGORITHM OPTIMIZATIONS
  - Markus Metz <markus.metz.giswork googlemail com>
 
 NVIZ
@@ -116,17 +125,12 @@ NVIZ
 
 PACKAGING
  - Linux:
-     o DebianGIS Project <pkg-grass-devel lists.alioth.debian.org>
-     o Mandriva:
-     o SuSE: Otto Dassau
-     o Ubuntu: Jachym Cepicky and the UbuntuGIS Team
- - Mac OSX: William Kyngesburye
+     o DebianGIS Sebastiaan Couwenberg, Project <pkg-grass-devel lists.alioth.debian.org>
+     o Fedora: Devrim Gündüz, Volker Fröhlich
+     o openSuSE: Angelos Tzotsos, Otto Dassau
+     o Ubuntu: Martin Landa, Rashad M , Ivan Minčík, Jachym Cepicky and the UbuntuGIS Team
+ - Mac OSX: William Kyngesburye, Michael Barton
  - MS-Windows: Marco Pasetti, Colin Nielsen, and Helmut Kudrnovsky
-
-Source code Quality assessment system
- - SOCCER Labs at Ecole Polytechnique de Montreal, Canada
-   http://web.soccerlab.polymtl.ca/grass-evolution/grass-browsers/grass-index-en.html
-   http://lists.osgeo.org/mailman/listinfo/grass-qa
 
 Power user tester:
    Maciej "Maciek" Sieczka <msieczka at sieczka.org>
@@ -203,6 +207,10 @@ Mac OS/X:        Lorenzo Moretti <lorenzo.moretti bologna enea it>
                  Jeshua Lacock <jeshua OpenOSX com>
 MS-Windows/Cygwin:  Huidae Cho <grass4u gmail com>
 
+Source code Quality assessment system
+ - SOCCER Labs at Ecole Polytechnique de Montreal, Canada
+   http://web.soccerlab.polymtl.ca/grass-evolution/grass-browsers/grass-index-en.html
+   http://lists.osgeo.org/mailman/listinfo/grass-qa
 
 
 GRASS 5.7/6.0: Primary authors of new source code
