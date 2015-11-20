@@ -48,6 +48,6 @@ Comment[uk]=Геоінформаційна система
 Comment[uz]=Geografik axborot tizimi
 Categories=Education;Science;Geoscience;Geography;
 Exec=grass70
-Icon=grass
+Icon=grass70
 Terminal=true
 Keywords=wms;wfs;ogc;osgeo;gis;
