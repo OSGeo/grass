@@ -21,11 +21,11 @@ default: $(ETCICONS) $(HTMLICONS)
 	$(MKDIR) $(ARCH_DISTDIR)/share/applications
 	$(INSTALL_DATA) grass.desktop $(ARCH_DISTDIR)/share/applications
 	$(MKDIR) $(ARCH_DISTDIR)/share/icons/hicolor/48x48/apps
-	$(INSTALL_DATA) grass-48x48.png $(ARCH_DISTDIR)/share/icons/hicolor/48x48/apps/grass70.png
+	$(INSTALL_DATA) grass-48x48.png $(ARCH_DISTDIR)/share/icons/hicolor/48x48/apps/grass71.png
 	$(MKDIR) $(ARCH_DISTDIR)/share/icons/hicolor/64x64/apps
-	$(INSTALL_DATA) grass-64x64.png $(ARCH_DISTDIR)/share/icons/hicolor/64x64/apps/grass70.png
+	$(INSTALL_DATA) grass-64x64.png $(ARCH_DISTDIR)/share/icons/hicolor/64x64/apps/grass71.png
 	$(MKDIR) $(ARCH_DISTDIR)/share/icons/hicolor/scalable/apps
-	$(INSTALL_DATA) grass.svg $(ARCH_DISTDIR)/share/icons/hicolor/scalable/apps/grass70.svg
+	$(INSTALL_DATA) grass.svg $(ARCH_DISTDIR)/share/icons/hicolor/scalable/apps/grass71.svg
 	$(MKDIR) $(ARCH_DISTDIR)/share/appdata
 	$(INSTALL_DATA) grass.appdata.xml $(ARCH_DISTDIR)/share/appdata
 
