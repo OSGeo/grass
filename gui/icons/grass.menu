@@ -1,5 +1,0 @@
-?package(grass):needs="text"\
-  section="Applications/Science/Geoscience"\
-  title="GRASS GIS 7"\
-  command="/usr/bin/grass7"\
-  icon="grass.xpm"
