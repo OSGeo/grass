@@ -642,18 +642,35 @@ int main(int argc, char *argv[])
      *    G_fatal_error("If you want to use a time interval both the start and end times must be defined.\n");
      * }
      */
-    if (parm.linkein->answer == NULL)
+    if (parm.linkein->answer == NULL){
 	sscanf(parm.lin->answer, "%lf", &singleLinke);
-    if (parm.albedo->answer == NULL)
+        G_message(_("Using Linke constant: %lf"), singleLinke);
+    } else {
+        G_message(_("Using Linke map <%s>"), parm.linkein->answer);
+    }
+
+    if (parm.albedo->answer == NULL){
 	sscanf(parm.alb->answer, "%lf", &singleAlbedo);
+        G_message(_("Using albedo constant: %lf"), singleAlbedo);
+    } else {
+        G_message(_("Using albedo map <%s>"), parm.albedo->answer);
+    }
 
-    if (parm.slopein->answer == NULL)
+    if (parm.slopein->answer == NULL){
 	sscanf(parm.slope->answer, "%lf", &singleSlope);
-    singleSlope *= deg2rad;
+        G_message(_("Using slope constant: %lf"), singleSlope);
+        singleSlope *= deg2rad;
+    } else {
+        G_message(_("Using slope map <%s>"), parm.slopein->answer);
+    }
 
-    if (parm.aspin->answer == NULL)
+    if (parm.aspin->answer == NULL){
 	sscanf(parm.aspect->answer, "%lf", &singleAspect);
-    singleAspect *= deg2rad;
+        G_message(_("Using aspect constant: %lf"), singleAspect);
+        singleAspect *= deg2rad;
+    } else {
+        G_message(_("Using aspect map <%s>"), parm.aspin->answer);
+    }
 
     if (parm.coefbh->answer == NULL)
 	cbh = BSKY;
