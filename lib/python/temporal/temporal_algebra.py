@@ -1101,7 +1101,7 @@ class TemporalAlgebraParser(object):
                 stds = dataset_factory(stds_type, id_input)
             else:
                 stds = dataset_factory(self.stdstype, id_input)
-            # Check for occurence of space time dataset.
+            # Check for occurrence of space time dataset.
             if stds.is_in_db(dbif=self.dbif) == False:
                 raise FatalError(_("Space time %s dataset <%s> not found") %
                     (stds.get_new_map_instance(None).get_type(), id_input))
@@ -2207,7 +2207,7 @@ class TemporalAlgebraParser(object):
                     id_input = input + "@" + self.mapset
                 # Create empty map dataset.
                 map_i = dataset_factory(self.maptype, id_input)
-                # Check for occurence of space time dataset.
+                # Check for occurrence of space time dataset.
                 if map_i.map_exists() == False:
                     raise FatalError(_("%s map <%s> not found in GRASS spatial database") %
                         (map_i.get_type(), id_input))

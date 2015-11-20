@@ -206,7 +206,7 @@ char *G_str_replace(const char *buffer, const char *old_str, const char *new_str
 	return G_store(buffer);
 
     if (strlen(new_str) > strlen(old_str)) {
-	/* Count occurences of old_str */
+	/* Count occurrences of old_str */
 	count = 0;
 	len = strlen(old_str);
 	B = buffer;

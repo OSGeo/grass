@@ -38,7 +38,7 @@ static void check_index(const struct Map_info *Map, int index)
         G_fatal_error(_("Layer index out of range"));
 }
 
-/* search for first occurence of cat in cat index, starting at first */
+/* search for first occurrence of cat in cat index, starting at first */
 static int ci_search_cat(struct Cat_index *ci, int first, int cat)
 {
     int lo, hi, mid;
