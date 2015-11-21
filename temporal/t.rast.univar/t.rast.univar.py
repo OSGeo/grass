@@ -25,6 +25,10 @@
 #%option G_OPT_STRDS_INPUT
 #%end
 
+#%option G_OPT_F_OUTPUT
+#% required: no
+#%end
+
 #%option G_OPT_T_WHERE
 #% guisection: Selection
 #%end
@@ -37,6 +41,11 @@
 #%flag
 #% key: e
 #% description: Calculate extended statistics
+#%end
+
+#%flag
+#% key: r
+#% description: Ignore the current region settings and use the raster map regions for univar statistical calculation
 #%end
 
 #%flag
@@ -55,16 +64,23 @@ def main():
 
     # Get the options
     input = options["input"]
+    output = options["output"]
     where = options["where"]
     extended = flags["e"]
     no_header = flags["s"]
+    rast_region = bool(flags["r"])
     separator = grass.separator(options["separator"])
 
     # Make sure the temporal database exists
     tgis.init()
 
+    if not output:
+        output = None
+    if output == "-":
+        output = None
+
     tgis.print_gridded_dataset_univar_statistics(
-        "strds", input, where, extended, no_header, separator)
+        "strds", input, output, where, extended, no_header, separator, rast_region)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
