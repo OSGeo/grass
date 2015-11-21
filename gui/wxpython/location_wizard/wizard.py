@@ -106,6 +106,7 @@ class DatabasePage(TitledPage):
         # text controls
         self.tgisdbase = self.MakeTextCtrl(grassdatabase, size = (300, -1))
         self.tlocation = self.MakeTextCtrl("newLocation", size = (300, -1))
+        self.tlocation.SetFocus()
         self.tlocation.SetValidator(GenericValidator(grass.legal_name, self._nameValidationFailed))
         self.tlocTitle = self.MakeTextCtrl(size = (400, -1))
         
@@ -218,67 +219,67 @@ class CoordinateSystemPage(TitledPage):
         global coordsys
         
         # toggles
-        self.radio1 = wx.RadioButton(parent = self, id = wx.ID_ANY,
-                                     label = _("Select coordinate system parameters from a list"),
-                                     style  =  wx.RB_GROUP)
-        self.radio2 = wx.RadioButton(parent = self, id = wx.ID_ANY,
-                                     label = _("Select EPSG code of spatial reference system"))
-        self.radio3 = wx.RadioButton(parent = self, id = wx.ID_ANY,
-                                     label = _("Read projection and datum terms from a "
-                                             "georeferenced data file"))
-        self.radio4 = wx.RadioButton(parent = self, id = wx.ID_ANY,
-                                     label = _("Read projection and datum terms from a "
-                                             "Well Known Text (WKT) .prj file"))
-        self.radio5 = wx.RadioButton(parent = self, id = wx.ID_ANY,
-                                     label = _("Specify projection and datum terms using custom "
-                                             "PROJ.4 parameters"))
-        self.radio6 = wx.RadioButton(parent = self, id = wx.ID_ANY,
-                                     label = _("Create a generic Cartesian coordinate system (XY)"))
+        self.radioEpsg = wx.RadioButton(parent = self, id = wx.ID_ANY,
+                                        label = _("Select EPSG code of spatial reference system"),
+                                        style  =  wx.RB_GROUP)
+        self.radioFile = wx.RadioButton(parent = self, id = wx.ID_ANY,
+                                        label = _("Read projection and datum terms from a "
+                                                  "georeferenced data file"))
+        self.radioWkt = wx.RadioButton(parent = self, id = wx.ID_ANY,
+                                       label = _("Read projection and datum terms from a "
+                                                 "Well Known Text (WKT) .prj file"))
+        self.radioSrs = wx.RadioButton(parent = self, id = wx.ID_ANY,
+                                       label = _("Select coordinate system parameters from a list"))
+        self.radioProj = wx.RadioButton(parent = self, id = wx.ID_ANY,
+                                        label = _("Specify projection and datum terms using custom "
+                                                  "PROJ.4 parameters"))
+        self.radioXy = wx.RadioButton(parent = self, id = wx.ID_ANY,
+                                      label = _("Create a generic Cartesian coordinate system (XY)"))
         
         # layout
         self.sizer.SetVGap(10)
-        self.sizer.Add(item = self.radio1,
+        self.sizer.Add(item = self.radioEpsg,
                        flag = wx.ALIGN_LEFT, pos = (1, 1))
-        self.sizer.Add(item = self.radio2,
+        self.sizer.Add(item = self.radioFile,
                        flag = wx.ALIGN_LEFT, pos = (2, 1))
-        self.sizer.Add(item = self.radio3,
+        self.sizer.Add(item = self.radioWkt,
                        flag = wx.ALIGN_LEFT, pos = (3, 1))
-        self.sizer.Add(item = self.radio4,
+        self.sizer.Add(item = self.radioSrs,
                        flag = wx.ALIGN_LEFT, pos = (4, 1))
-        self.sizer.Add(item = self.radio5,
+        self.sizer.Add(item = self.radioProj,
                        flag = wx.ALIGN_LEFT, pos = (5, 1))
-        self.sizer.Add(item = self.radio6,
+        self.sizer.Add(item = self.radioXy,
                        flag = wx.ALIGN_LEFT, pos = (6, 1))
         self.sizer.AddGrowableCol(1)
 
         # bindings
-        self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radio1.GetId())
-        self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radio2.GetId())
-        self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radio3.GetId())
-        self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radio4.GetId())
-        self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radio5.GetId())
-        self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radio6.GetId())
+        self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radioEpsg.GetId())
+        self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radioFile.GetId())
+        self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radioWkt.GetId())
+        self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radioSrs.GetId())
+        self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radioProj.GetId())
+        self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radioXy.GetId())
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED,  self.OnEnterPage)
         
     def OnEnterPage(self, event):
         global coordsys
         
         if not coordsys:
-            coordsys = "proj"
-            self.radio1.SetValue(True)
+            coordsys = "epsg"
+            self.radioEpsg.SetValue(True)
         else:
             if coordsys == 'proj':
-                self.radio1.SetValue(True)
+                self.radioSrs.SetValue(True)
             if coordsys == "epsg":
-                self.radio2.SetValue(True)
+                self.radioEpsg.SetValue(True)
             if coordsys == "file":
-                self.radio3.SetValue(True)
+                self.radioFile.SetValue(True)
             if coordsys == "wkt":
-                self.radio4.SetValue(True)
+                self.radioWkt.SetValue(True)
             if coordsys == "custom":
-                self.radio5.SetValue(True)
+                self.radioProj.SetValue(True)
             if coordsys == "xy":
-                self.radio6.SetValue(True)
+                self.radioXy.SetValue(True)
         
         if event.GetDirection():
             if coordsys == 'proj':
@@ -306,27 +307,27 @@ class CoordinateSystemPage(TitledPage):
     def SetVal(self, event):
         """Choose method"""
         global coordsys
-        if event.GetId() == self.radio1.GetId():
+        if event.GetId() == self.radioSrs.GetId():
             coordsys = "proj"
             self.SetNext(self.parent.projpage)
             self.parent.sumpage.SetPrev(self.parent.datumpage)
-        elif event.GetId() == self.radio2.GetId():
+        elif event.GetId() == self.radioEpsg.GetId():
             coordsys = "epsg"
             self.SetNext(self.parent.epsgpage)
             self.parent.sumpage.SetPrev(self.parent.epsgpage)
-        elif event.GetId() == self.radio3.GetId():
+        elif event.GetId() == self.radioFile.GetId():
             coordsys = "file"
             self.SetNext(self.parent.filepage)
             self.parent.sumpage.SetPrev(self.parent.filepage)
-        elif event.GetId() == self.radio4.GetId():
+        elif event.GetId() == self.radioWkt.GetId():
             coordsys = "wkt"
             self.SetNext(self.parent.wktpage)
             self.parent.sumpage.SetPrev(self.parent.wktpage)
-        elif event.GetId() == self.radio5.GetId():
+        elif event.GetId() == self.radioProj.GetId():
             coordsys = "custom"
             self.SetNext(self.parent.custompage)
             self.parent.sumpage.SetPrev(self.parent.custompage)
-        elif event.GetId() == self.radio6.GetId():
+        elif event.GetId() == self.radioXy.GetId():
             coordsys = "xy"
             self.SetNext(self.parent.sumpage)
             self.parent.sumpage.SetPrev(self.parent.csystemspage)
@@ -663,23 +664,23 @@ class ProjParamsPage(TitledPage):
         self.radio1 = wx.RadioButton(parent = self, id = wx.ID_ANY, 
                                      label = _("Datum with associated ellipsoid"),
                                      style  =  wx.RB_GROUP)
-        self.radio2 = wx.RadioButton(parent = self, id = wx.ID_ANY,
+        self.radioEpsg = wx.RadioButton(parent = self, id = wx.ID_ANY,
                                      label = _("Ellipsoid only"))   
         
         # default button setting
-        if self.radio1.GetValue() == False and self.radio2.GetValue() == False:
+        if self.radio1.GetValue() == False and self.radioEpsg.GetValue() == False:
             self.radio1.SetValue(True)
             self.SetNext(self.parent.datumpage)
             #            self.parent.sumpage.SetPrev(self.parent.datumpage)  
         
         radioSBSizer.Add(item = self.radio1,
                          flag = wx.ALIGN_LEFT | wx.RIGHT, border = 20)
-        radioSBSizer.Add(item = self.radio2,
+        radioSBSizer.Add(item = self.radioEpsg,
                          flag = wx.ALIGN_LEFT)
         
         # bindings
         self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radio1.GetId())
-        self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radio2.GetId())
+        self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radioEpsg.GetId())
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChange)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
         
@@ -819,7 +820,7 @@ class ProjParamsPage(TitledPage):
         if event.GetId() == self.radio1.GetId():
             self.SetNext(self.parent.datumpage)
             self.parent.sumpage.SetPrev(self.parent.datumpage)
-        elif event.GetId() == self.radio2.GetId():
+        elif event.GetId() == self.radioEpsg.GetId():
             self.SetNext(self.parent.ellipsepage)
             self.parent.sumpage.SetPrev(self.parent.ellipsepage)
     
@@ -1013,7 +1014,7 @@ class EllipsePage(TitledPage):
         self.radio1 = wx.RadioButton(parent = self, id = wx.ID_ANY,
                         label = _("Earth based"),
                         style  =  wx.RB_GROUP)
-        self.radio2 = wx.RadioButton(parent = self, id = wx.ID_ANY,
+        self.radioEpsg = wx.RadioButton(parent = self, id = wx.ID_ANY,
                         label = _("Planetary bodies"))
 
         # create list control for ellipse list
@@ -1048,7 +1049,7 @@ class EllipsePage(TitledPage):
                        flag = wx.ALIGN_LEFT |
                        wx.ALIGN_CENTER_VERTICAL |
                        wx.ALL, border = 5, pos = (2, 2))
-        self.sizer.Add(item = self.radio2,
+        self.sizer.Add(item = self.radioEpsg,
                        flag = wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL | wx.LEFT,
                        border = 25, pos = (2, 3))
 
@@ -1066,7 +1067,7 @@ class EllipsePage(TitledPage):
         self.searchb.Bind(wx.EVT_TEXT_ENTER, self.OnSearch)
 
         self.radio1.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radio1.GetId())
-        self.radio2.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radio2.GetId())
+        self.radioEpsg.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radioEpsg.GetId())
 
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
         self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
@@ -1147,7 +1148,7 @@ class EllipsePage(TitledPage):
             self.scope = 'earth'
             for key in self.parent.ellipsoids.keys():
                 data.append([key, self.parent.ellipsoids[key][0]])
-        elif event.GetId() == self.radio2.GetId():
+        elif event.GetId() == self.radioEpsgx.GetId():
             self.scope = 'planetary'
             for key in self.parent.planetary_ellipsoids.keys():
                 data.append([key, self.parent.planetary_ellipsoids[key][0]])
