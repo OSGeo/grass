@@ -209,7 +209,7 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 
     /* Check the modified boundary for self-intersection */
     AXLines = BXLines = NULL;
-    Vect_line_intersection(Points, Points, &box, &box, &AXLines, &BXLines,
+    Vect_line_intersection2(Points, NULL, &box, &box, &AXLines, &BXLines,
 			   &naxlines, &nbxlines, 0);
     /* Free */
     if (naxlines > 0) {
@@ -219,15 +219,7 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
     }
     if (AXLines)
 	G_free(AXLines);
-    if (nbxlines > 0) {
-	for (j = 0; j < nbxlines; j++) {
-	    Vect_destroy_line_struct(BXLines[j]);
-	}
-    }
-    if (BXLines)
-	G_free(BXLines);
-
-    if (naxlines > 0 || nbxlines > 0)
+    if (naxlines > 0)
 	return 0;
 
     /* Check intersection of the modified boundary with other boundaries */
@@ -247,8 +239,9 @@ int check_topo(struct Map_info *Out, int line, struct line_pnts *APoints,
 	 * intersections should be found if any */
 
 	AXLines = BXLines = NULL;
-	Vect_line_intersection(Points, BPoints, &box, &List->box[i], &AXLines, &BXLines,
-			       &naxlines, &nbxlines, 0);
+	Vect_line_intersection2(Points, BPoints, &box, &List->box[i],
+	                        &AXLines, &BXLines,
+			        &naxlines, &nbxlines, 0);
 
 	G_debug(4,
 		"bline = %d intersect = %d naxlines = %d nbxlines = %d",
