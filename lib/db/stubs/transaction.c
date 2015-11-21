@@ -1,4 +1,5 @@
 #include <grass/dbmi.h>
+#include <grass/dbstubs.h>
 
 /* Implemented only in some drivers */
 int db__driver_begin_transaction(void)

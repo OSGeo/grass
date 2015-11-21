@@ -1,4 +1,5 @@
 #include <grass/dbmi.h>
+#include <grass/dbstubs.h>
 
 int db__driver_get_num_rows(dbCursor * cursor)
 {

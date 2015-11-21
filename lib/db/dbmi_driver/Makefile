@@ -6,5 +6,5 @@ LIB = DBMIDRIVER
 
 include $(MODULE_TOPDIR)/include/Make/Lib.make
 
-default: lib $(ARCH_INCDIR)/dbstubs.h
+default: lib
 
