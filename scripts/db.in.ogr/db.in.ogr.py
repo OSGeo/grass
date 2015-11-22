@@ -50,6 +50,14 @@
 #% guisection: Output
 #%end
 
+#%option
+#% key: encoding
+#% type: string
+#% label: Encoding value for attribute data
+#% descriptions: Overrides encoding interpretation, useful when importing DBF tables
+#% guisection: Output
+#%end
+
 import os
 import grass.script as grass
 from grass.exceptions import CalledModuleError
@@ -93,9 +101,13 @@ def main():
     else:
 	layer = None
 
+    vopts = {}
+    if options['encoding']:
+        vopts['encoding'] = options['encoding']
+    
     try:
         grass.run_command('v.in.ogr', flags='o', input=input, output=output,
-                          layer=layer, quiet=True)
+                          layer=layer, quiet=True, **vopts)
     except CalledModuleError:
         if db_table:
             grass.fatal(_("Input table <%s> not found or not readable") % input)
