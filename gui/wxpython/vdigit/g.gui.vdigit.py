@@ -20,11 +20,12 @@
 
 #%module
 #% description: Interactive editing and digitization of vector maps.
-#% keywords: general
-#% keywords: GUI
-#% keywords: vector
-#% keywords: editing
-#% keywords: digitization
+#% keyword: general
+#% keyword: user interface
+#% keyword: GUI
+#% keyword: vector
+#% keyword: editing
+#% keyword: digitizer
 #%end
 #%flag
 #% key: c
