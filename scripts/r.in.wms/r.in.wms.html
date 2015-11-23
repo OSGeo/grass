@@ -2,9 +2,8 @@
 
 <em>r.in.wms</em> handles all of downloading and importing raster data
 from an <a href="http://www.opengeospatial.org/standards/wms">OGC
-WMS</a>, <a href="http://www.opengeospatial.org/standards/wmts">OGC
-WMTS</a> and <a href="http://onearth.jpl.nasa.gov/tiled.html">NASA
-OnEarth Tiled WMS</a> web mapping servers. It needs only be told the
+WMS</a> and <a href="http://www.opengeospatial.org/standards/wmts">OGC
+WMTS</a> web mapping servers. It only needs be told the
 desired data to collect (bounds and resolution) via a region, the
 server to get the data from, and the layer or layers to get. It
 downloads the data in tiles, reprojects it, imports it, and patches it
@@ -13,8 +12,8 @@ back together.
 <h2>NOTES</h2>
 
 To understand the data you are getting it is necessary to look at the
-capabilities of the WMS server. This should be available via a
-capabilities request, an
+capabilities of the WMS server. This should be available via a capabilities
+request. This is an
 <a href="http://wms.jpl.nasa.gov/wms.cgi?request=GetCapabilities">example
 capabilities request to NASA's OnEarth server</a>.
 
@@ -36,7 +35,10 @@ e.g: <tt>urlparams='time=2012-1-1'</tt>.
 <h3>General Get Capabilities Request</h3>
 
 <div class="code"><pre>
-r.in.wms -c url=http://wms.cuzk.cz/wms.asp
+# TelaScience's OSGeo/FlightGear landcover server
+r.in.wms -c url="http://mapserver.flightgear.org/ms"
+
+r.in.wms -c url="http://wms.cuzk.cz/wms.asp"
 </pre></div>
 
 <h3>Download raster data from WMS server (GetMap request)</h3>
