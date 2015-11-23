@@ -4,19 +4,17 @@
  * MODULE:       v.in.lidar
  *
  * AUTHOR(S):    Markus Metz
+ *               Vaclav Petras (decimation, cats, areas, zrange)
  *               based on v.in.ogr
  *
  * PURPOSE:      Import LiDAR LAS points
  *
- * COPYRIGHT:    (C) 2011-2014 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2011-2015 by the GRASS Development Team
  *
  *               This program is free software under the
  *               GNU General Public License (>=v2).
  *               Read the file COPYING that comes with GRASS
  *               for details.
- *
- * TODO: - make fixed field length of OFTIntegerList dynamic
- *       - several other TODOs below
 **************************************************************/
 
 #include <stdlib.h>
@@ -115,7 +113,7 @@ int main(int argc, char *argv[])
     struct Option *id_layer_opt, *return_layer_opt, *class_layer_opt;
     struct Option *vector_mask_opt, *vector_mask_field_opt;
     struct Option *skip_opt, *preserve_opt, *offset_opt, *limit_opt;
-    struct Option *outloc_opt;
+    struct Option *outloc_opt, *zrange_opt;
     struct Flag *print_flag, *notab_flag, *region_flag, *notopo_flag;
     struct Flag *nocats_flag;
     struct Flag *over_flag, *extend_flag, *no_import_flag;
@@ -156,12 +154,12 @@ int main(int argc, char *argv[])
 #ifdef HAVE_LONG_LONG_INT
     unsigned long long n_features; /* what libLAS reports as point count */
     unsigned long long points_imported; /* counter how much we have imported */
-    unsigned long long feature_count, n_outside,
+    unsigned long long feature_count, n_outside, zrange_filtered,
         n_outside_mask, n_filtered, n_class_filtered, not_valid;
 #else
     unsigned long n_features;
     unsigned long points_imported;
-    unsigned long feature_count, n_outside,
+    unsigned long feature_count, n_outside, zrange_filtered,
         n_outside_mask, n_filtered, n_class_filtered, not_valid;
 #endif
 
@@ -209,6 +207,14 @@ int main(int argc, char *argv[])
     spat_opt->guisection = _("Selection");
     spat_opt->description =
 	_("Format: xmin,ymin,xmax,ymax - usually W,S,E,N");
+
+    zrange_opt = G_define_option();
+    zrange_opt->key = "zrange";
+    zrange_opt->type = TYPE_DOUBLE;
+    zrange_opt->required = NO;
+    zrange_opt->key_desc = "min,max";
+    zrange_opt->description = _("Filter range for z data (min,max)");
+    zrange_opt->guisection = _("Selection");
 
     filter_opt = G_define_option();
     filter_opt->key = "return_filter";
@@ -430,6 +436,24 @@ int main(int argc, char *argv[])
                 break;
         }
         id_layer = i;
+    }
+
+    double zrange_min, zrange_max;
+    int use_zrange = FALSE;
+
+    if (zrange_opt->answer != NULL) {
+        if (zrange_opt->answers[0] == NULL || zrange_opt->answers[1] == NULL)
+            G_fatal_error(_("Invalid zrange <%s>"), zrange_opt->answer);
+        sscanf(zrange_opt->answers[0], "%lf", &zrange_min);
+        sscanf(zrange_opt->answers[1], "%lf", &zrange_max);
+        /* for convenience, switch order to make valid input */
+        if (zrange_min > zrange_max) {
+            double tmp = zrange_max;
+
+            zrange_max = zrange_min;
+            zrange_min = tmp;
+        }
+        use_zrange = TRUE;
     }
 
     if (region_flag->answer) {
@@ -908,6 +932,12 @@ int main(int argc, char *argv[])
 		continue;
 	    }
 	}
+        if (use_zrange) {
+            if (z < zrange_min || z > zrange_max) {
+                zrange_filtered++;
+                continue;
+            }
+        }
         if (offset_n) {
             offset_n_counter++;
             if (offset_n_counter < offset_n)
@@ -1059,7 +1089,8 @@ int main(int argc, char *argv[])
     /* can be easily determined only when iterated over all points */
     if (!limit_n && !cat_max_reached && points_imported != n_features
             - not_valid - n_outside - n_filtered - n_class_filtered
-            - n_outside_mask - offset_n_counter - n_count_filtered)
+            - n_outside_mask - offset_n_counter - n_count_filtered
+            - zrange_filtered)
         G_warning(_("The underlying libLAS library is at its limits."
                     " Previously reported counts might have been distorted."
                     " However, the import itself should be unaffected."));
@@ -1079,6 +1110,8 @@ int main(int argc, char *argv[])
 	G_message(_("%llu input points were filtered out by return number"), n_filtered);
     if (n_class_filtered)
         G_message(_("%llu input points were filtered out by class number"), n_class_filtered);
+    if (zrange_filtered)
+        G_message(_("%llu input points were filtered outsite the range for z coordinate"), zrange_filtered);
     if (offset_n_counter)
         G_message(_("%llu input points were skipped at the begging using offset"), offset_n_counter);
     if (n_count_filtered)
@@ -1098,6 +1131,8 @@ int main(int argc, char *argv[])
 	G_message(_("%lu input points were filtered out by return number"), n_filtered);
     if (n_class_filtered)
         G_message(_("%lu input points were filtered out by class number"), n_class_filtered);
+    if (zrange_filtered)
+        G_message(_("%lu input points were filtered outsite the range for z coordinate"), zrange_filtered);
     if (offset_n_counter)
         G_message(_("%lu input points were skipped at the begging using offset"), offset_n_counter);
     if (n_count_filtered)
