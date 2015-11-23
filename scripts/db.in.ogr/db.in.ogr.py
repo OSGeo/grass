@@ -80,7 +80,9 @@ def main():
 
     # check if table exists
     try:
-        s = grass.read_command('db.tables', flags = 'p', quiet=True)
+        nuldev = file(os.devnull, 'w+')
+        s = grass.read_command('db.tables', flags = 'p', quiet=True, stderr=nuldev)
+        nuldev.close()
     except CalledModuleError:
         # check connection parameters, set if uninitialized
         grass.read_command('db.connect', flags='c')
