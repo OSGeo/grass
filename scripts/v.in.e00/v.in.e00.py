@@ -25,8 +25,9 @@
 #% description: Imports E00 file into a vector map.
 #% keyword: vector
 #% keyword: import
+#% keyword: E00
 #%end
-#%option G_OPT_F_INPUT
+#%option G_OPT_F_BIN_INPUT
 #% description: Name of input E00 file
 #%end
 #%option G_OPT_V_TYPE
