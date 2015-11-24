@@ -177,15 +177,18 @@ class Vector(Info):
 
         """
         self.n_lines += 1
-        if self.table is not None and attrs and cat is not None:
-            if cat not in self._cats:
-                self._cats.append(cat)
+        if attrs and cat is None:
+            cat = (self._cats[-1] if self._cats else 0) + 1
+
+        if cat is not None and cat not in self._cats:
+            self._cats.append(cat)
+            if self.table is not None and attrs is not None:
                 attr = [cat, ]
                 attr.extend(attrs)
                 cur = self.table.conn.cursor()
                 cur.execute(self.table.columns.insert_str, attr)
                 cur.close()
-
+        
         if cat is not None:
             cats = Cats(geo_obj.c_cats)
             cats.reset()
