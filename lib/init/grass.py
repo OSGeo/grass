@@ -1901,6 +1901,9 @@ def main():
                                             mapset_settings.location)
 
         start_gui(grass_gui, shell_process.pid)
+        kv = read_gisrc(gisrc)
+        kv['PID'] = str(shell_process.pid)
+        write_gisrc(kv, gisrc)
         exit_val = shell_process.wait()
         if exit_val != 0:
             warning(_("Failed to start shell '%s'") % os.getenv('SHELL'))

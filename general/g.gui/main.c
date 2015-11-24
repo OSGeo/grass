@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
     struct Option *type, *rc_file;
     struct Flag *update_ui, *fglaunch, *nolaunch;
     struct GModule *module;
-    const char *gui_type_env;
+    const char *gui_type_env, *shell_pid;
     char progname[GPATH_MAX];
     char *desc;
 
@@ -103,6 +103,8 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
     }
 
+    shell_pid = G_getenv_nofatal("PID");
+    
     sprintf(progname, "%s/gui/wxpython/wxgui.py", G_gisbase());
     if (access(progname, F_OK) == -1)
         G_fatal_error(_("Your installation doesn't include GUI, exiting."));
@@ -111,22 +113,22 @@ int main(int argc, char *argv[])
         G_message(_("Launching <%s> GUI, please wait..."), type->answer);
         if (rc_file->answer) {
             G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), progname,
-                       "--workspace", rc_file->answer, NULL);
+                       "--workspace", rc_file->answer, "--pid", shell_pid, NULL);
         }
         else {
             G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), progname,
-                       NULL);
+                       "--pid", shell_pid, NULL);
         }
     }
     else {
         G_message(_("Launching <%s> GUI in the background, please wait..."), type->answer);
         if (rc_file->answer) {
             G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), progname,
-                       "--workspace", rc_file->answer, SF_BACKGROUND, NULL);
+                       "--workspace", rc_file->answer, "--pid", shell_pid, SF_BACKGROUND, NULL);
         }
         else {
             G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), progname,
-                       SF_BACKGROUND, NULL);
+                       "--pid", shell_pid, SF_BACKGROUND, NULL);
         }
         /* stop the impatient from starting it again
            before the splash screen comes up */
