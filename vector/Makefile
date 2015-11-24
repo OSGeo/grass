@@ -15,6 +15,7 @@ SUBDIRS = \
 	v.colors.out \
 	v.db.connect \
 	v.db.select \
+	v.decimate \
 	v.delaunay \
 	v.distance \
 	v.drape \
