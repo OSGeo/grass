@@ -921,6 +921,10 @@ def set_mapset_interactive(grass_gui):
 
     The gisrc (GRASS environment file) is written at the end.
     """
+    if not os.path.exists(wxpath("gis_set.py")) and grass_gui != 'text':
+        debug("No GUI available, switching to text mode")
+        return False
+    
     # Check for text interface
     if grass_gui == 'text':
         # TODO: maybe this should be removed and solved from outside
@@ -935,6 +939,7 @@ def set_mapset_interactive(grass_gui):
         fatal(_("Invalid user interface specified - <%s>. "
                 "Use the --help option to see valid interface names.") % grass_gui)
 
+    return True
 
 def gui_startup(grass_gui):
     """Start GUI for startup (setting gisrc file)"""
@@ -1340,7 +1345,7 @@ def start_gui(grass_gui):
     """
     # Start the chosen GUI but ignore text
     debug("GRASS GUI should be <%s>" % grass_gui)
-
+    
     # Check for gui interface
     if grass_gui == "wxpython":
         Popen([os.getenv('GRASS_PYTHON'), wxpath("wxgui.py")])
@@ -1820,7 +1825,11 @@ def main():
     if not params.mapset:
         # Try interactive startup
         # User selects LOCATION and MAPSET if not set
-        set_mapset_interactive(grass_gui)
+        if not set_mapset_interactive(grass_gui):
+            # No GUI available, update gisrc file
+            fatal(_("<{}> requested, but not available. Run GRASS in text "
+                    "mode (-text) or install missing package (usually "
+                    "'grass-gui').").format(grass_gui))
     else:
         # Try non-interactive start up
         if params.create_new and params.geofile:
@@ -1846,10 +1855,9 @@ def main():
     cleaner.mapset_path = mapset_settings.full_mapset
 
     # check and create .gislock file
-    cleaner.lockfile = lock_mapset(
-        mapset_settings.full_mapset, user=user,
-        force_gislock_removal=params.force_gislock_removal,
-        grass_gui=grass_gui)
+    cleaner.lockfile = lock_mapset(mapset_settings.full_mapset, user=user,
+                                   force_gislock_removal=params.force_gislock_removal,
+                                   grass_gui=grass_gui)
 
     # build user fontcap if specified but not present
     make_fontcap()
