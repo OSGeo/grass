@@ -35,13 +35,15 @@ except ImportError:
 
 
 class GMApp(wx.App):
-    def __init__(self, workspace = None):
+    def __init__(self, workspace=None, shellPid=None):
         """ Main GUI class.
 
         :param workspace: path to the workspace file
+        :param shellPid: process id of shell running on background
         """
         self.workspaceFile = workspace
-
+        self._shellPid = shellPid
+        
         # call parent class initializer
         wx.App.__init__(self, False)
 
@@ -77,8 +79,8 @@ class GMApp(wx.App):
 
         # create and show main frame
         from lmgr.frame import GMFrame
-        mainframe = GMFrame(parent = None, id = wx.ID_ANY,
-                            workspace = self.workspaceFile)
+        mainframe = GMFrame(parent=None, id=wx.ID_ANY,
+                            workspace=self.workspaceFile, shellPid=self._shellPid)
 
         mainframe.Show()
         self.SetTopWindow(mainframe)
@@ -97,18 +99,24 @@ def printHelp():
 
 def process_opt(opts, args):
     """ Process command-line arguments"""
-    workspaceFile = None
+    workspaceFile = shellPid = None
     for o, a in opts:
         if o in ("-h", "--help"):
             printHelp()
 
-        if o in ("-w", "--workspace"):
+        elif o in ("-w", "--workspace"):
             if a != '':
                 workspaceFile = str(a)
             else:
                 workspaceFile = args.pop(0)
 
-    return (workspaceFile,)
+        elif o in ("-p", "--pid"):
+            if a != '':
+                shellPid = int(a)
+            else:
+                shellPid = int(args.pop(0))
+
+    return (workspaceFile, shellPid)
 
 
 def main(argv = None):
@@ -118,18 +126,17 @@ def main(argv = None):
     try:
         try:
             opts, args = getopt.getopt(argv[1:], "hw:",
-                                       ["help", "workspace"])
+                                       ["help", "workspace", "pid"])
         except getopt.error as msg:
             raise Usage(msg)
-
     except Usage as err:
         print >> sys.stderr, err.msg
         print >> sys.stderr, "for help use --help"
         printHelp()
-
-    workspaceFile = process_opt(opts, args)[0]
-
-    app = GMApp(workspaceFile)
+    
+    workspaceFile, shellPid = process_opt(opts, args)
+    app = GMApp(workspaceFile, shellPid)
+    
     # suppress wxPython logs
     q = wx.LogNull()
     set_raise_on_error(True)

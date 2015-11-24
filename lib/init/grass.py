@@ -1338,7 +1338,7 @@ def run_batch_job(batch_job):
     return returncode
 
 
-def start_gui(grass_gui):
+def start_gui(grass_gui, shell_pid=None):
     """Start specified GUI
 
     :param grass_gui: GUI name (allowed values: 'wxpython')
@@ -1348,9 +1348,14 @@ def start_gui(grass_gui):
     
     # Check for gui interface
     if grass_gui == "wxpython":
-        Popen([os.getenv('GRASS_PYTHON'), wxpath("wxgui.py")])
+        cmd = [os.getenv('GRASS_PYTHON'), wxpath("wxgui.py")]
+        if shell_pid:
+            cmd.append('--pid')
+            cmd.append(str(shell_pid))
+        
+        Popen(cmd)
 
-
+    
 def clear_screen():
     """Clear terminal"""
     if windows:
@@ -1456,10 +1461,11 @@ def csh_startup(location, location_name, mapset, grass_env_file):
     f.close()
     writefile(tcshrc, readfile(cshrc))
 
-    exit_val = call([gpath("etc", "run"), os.getenv('SHELL')])
-
+    process = Popen([gpath("etc", "run"), os.getenv('SHELL')])
+    
     os.environ['HOME'] = userhome
-    return exit_val
+    
+    return process
 
 
 def bash_startup(location, location_name, grass_env_file):
@@ -1512,29 +1518,27 @@ PROMPT_COMMAND=grass_prompt\n""" % (_("2D and 3D raster MASKs present"),
     f.write("export HOME=\"%s\"\n" % userhome) # restore user home path
 
     f.close()
-
-    exit_val = call([gpath("etc", "run"), os.getenv('SHELL')])
-
+    
+    process = Popen([gpath("etc", "run"), os.getenv('SHELL')])
+    
     os.environ['HOME'] = userhome
-    return exit_val
+    
+    return process
 
 
 def default_startup(location, location_name):
     if windows:
         os.environ['PS1'] = "GRASS %s> " % (grass_version)
         # "$ETC/run" doesn't work at all???
-        exit_val = subprocess.call([os.getenv('SHELL')])
+        process = subprocess.Popen([os.getenv('SHELL')])
         # TODO: is there a difference between this and clean_temp?
         # TODO: why this is missing in the other startups?
         cleanup_dir(os.path.join(location, ".tmp"))  # remove GUI session files from .tmp
     else:
         os.environ['PS1'] = "GRASS %s (%s):\\w > " % (grass_version, location_name)
-        exit_val = call([gpath("etc", "run"), os.getenv('SHELL')])
+        process = Popen([gpath("etc", "run"), os.getenv('SHELL')])
 
-    # TODO: this seems to be inconsistent, the other two are no fataling
-    if exit_val != 0:
-        fatal(_("Failed to start shell '%s'") % os.getenv('SHELL'))
-    return exit_val
+    return process
 
 
 def done_message():
@@ -1875,7 +1879,6 @@ def main():
         clean_temp()
         sys.exit(0)
     else:
-        start_gui(grass_gui)
         clear_screen()
         show_banner()
         say_hello()
@@ -1885,14 +1888,23 @@ def main():
             message(_("Launching <%s> GUI in the background, please wait...")
                     % grass_gui)
         if sh in ['csh', 'tcsh']:
-            csh_startup(mapset_settings.full_mapset, mapset_settings.location,
-                        mapset_settings.mapset, grass_env_file)
+            shell_process = csh_startup(mapset_settings.full_mapset,
+                                        mapset_settings.location,
+                                        mapset_settings.mapset,
+                                        grass_env_file)
         elif sh in ['bash', 'msh', 'cygwin']:
-            bash_startup(mapset_settings.full_mapset, mapset_settings.location,
-                         grass_env_file)
+            shell_process = bash_startup(mapset_settings.full_mapset,
+                                         mapset_settings.location,
+                                         grass_env_file)
         else:
-            default_startup(mapset_settings.full_mapset,
-                            mapset_settings.location)
+            shell_process = default_startup(mapset_settings.full_mapset,
+                                            mapset_settings.location)
+
+        start_gui(grass_gui, shell_process.pid)
+        exit_val = shell_process.wait()
+        if exit_val != 0:
+            warning(_("Failed to start shell '%s'") % os.getenv('SHELL'))
+        
         # here we are at the end of grass session
         clear_screen()
         # TODO: can we just register this atexit?

@@ -62,10 +62,16 @@
     <handler>OnRunScript</handler>
     <description>Launches script file.</description>
   </wxgui-item>
-  <wxgui-item name="Quit">
-    <label>Exit GUI</label>
+  <wxgui-item name="CloseGUI">
+    <label>Close GUI</label>
     <handler>OnCloseWindow</handler>
-    <description>Quit the GRASS wxGUI session.</description>
+    <description>Quit wxGUI session.</description>
+    <shortcut>Ctrl+W</shortcut>
+  </wxgui-item>
+  <wxgui-item name="Quit">
+    <label>Quit GRASS GIS</label>
+    <handler>OnCloseWindowExitGRASS</handler>
+    <description>Quit wxGUI session and exit GRASS shell.</description>
     <shortcut>Ctrl+Q</shortcut>
     <wx-id>ID_EXIT</wx-id>
   </wxgui-item>
