@@ -41,6 +41,7 @@
       <separator/>
       <wxgui-item name="LaunchScript"/>
       <separator/>
+      <wxgui-item name="CloseGUI"/>
       <wxgui-item name="Quit"/>
     </items>
   </toolbox>

@@ -84,9 +84,10 @@ class GMFrame(wx.Frame):
     commands, tree widget page for managing map layers.
     """
     def __init__(self, parent, id = wx.ID_ANY, title = None,
-                 workspace = None,
+                 workspace = None, shellPid = None,
                  size = globalvar.GM_WINDOW_SIZE, style = wx.DEFAULT_FRAME_STYLE, **kwargs):
         self.parent    = parent
+        self._shellPid = shellPid         # process id of shell running on the background
         if title:
             self.baseTitle = title
         else:
@@ -2203,6 +2204,9 @@ class GMFrame(wx.Frame):
 
     def OnCloseWindow(self, event):
         """Cleanup when wxGUI is quitted"""
+        self._closeWindow()
+        
+    def _closeWindow(self):
         # save command protocol if actived
         if self.goutput.btnCmdProtocol.GetValue():
             self.goutput.CmdProtocolSave()
@@ -2250,9 +2254,18 @@ class GMFrame(wx.Frame):
         self.OnDisplayCloseAll()
         
         self.notebookLayers.DeleteAllPages()
-        
         self._auimgr.UnInit()
         self.Destroy()
+        
+    def OnCloseWindowExitGRASS(self, event):
+        """Close wxGUI and exit GRASS shell."""
+        self._closeWindow()
+        if self._shellPid:
+            Debug.msg(1, "Exiting shell with pid={}".format(self._shellPid))
+            import signal
+            os.kill(self._shellPid, signal.SIGTERM)
+        else:
+            grass.warning(_("Unable to exit GRASS shell: unknown PID"))
         
     def MsgNoLayerSelected(self):
         """Show dialog message 'No layer selected'"""
