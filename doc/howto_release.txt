@@ -56,7 +56,7 @@ Contents
 
 #example:
 7
-0
+1
 0RC1
 2015
       rm -f include/VERSION~
@@ -141,7 +141,7 @@ Contents
     - News section
     - http://grass.osgeo.org/download/software/
     - http://grass.osgeo.org/download/software/sources/
-    - http://grass.osgeo.org/grass71/ <- to be moved to CMS
+    - http://grass.osgeo.org/grass71/
     - http://grass.osgeo.org/home/history/releases/
     - http://grass.osgeo.org/development/svn/svn-tags/ (add tag): echo $RELEASETAG
 
@@ -160,17 +160,22 @@ Contents
  o stable release: update cronjob 'cron_grass_HEAD_src_snapshot.sh' to next but one
                    release tag for the differences
 
+ o Trac updates:
+      - Set "complete" flag in https://trac.osgeo.org/grass/milestone/7.0.x
+        and batch-migrate assigned tickets to next milestone
+      - Add release to https://trac.osgeo.org/grass/admin/ticket/versions
+
  o WinGRASS notes:
 
    Update grass_packager_release.bat, eg.
 
      set MAJOR=7
-     set MINOR=0
+     set MINOR=1
      set PATCH=0beta3
 
    Update addons (grass_addons.sh) rules, eg.
 
-     compile $SVN_PATH/grass7 $GISBASE_PATH/grass700beta3   $ADDON_PATH/grass700beta3/addons
+     compile $SVN_PATH/grass7 $GISBASE_PATH/grass710beta3   $ADDON_PATH/grass710beta3/addons
 
    Modify grass_copy_wwwroot.sh accordingly, eg.
 
@@ -216,27 +221,23 @@ Contents
    redazione@geoforus.it
    mfeilner@linuxnewmedia.de
    info@harzer.de
-   info@j-geoinfo.net
    pr@geocomm.com
    editor-geo@geoconnexion.com
 
  Web:
    https://plus.google.com/u/0/communities/111147786674687562495 (G+ GRASS GIS community)
-   http://slashgeo.org/submit-geonews-press-release/ (MN login)
-   http://freshmeat.net/projects/grass/?highlight=GRASS (update, MN)
    http://linuxtoday.com/contribute.php3
    https://joinup.ec.europa.eu/software/grassgis/home (submit news, MN)
    http://www.macnn.com/contact/newstips/1
-   http://www10.giscafe.com/submit_material/submit_options.php#Press (MN)
+   http://www10.giscafe.com/submit_material/submit_options.php#Press (MN)   --> Press releases
    http://www.freegis.org   (update, MN)
-   http://www.directionsmag.com/pressreleases/ (News -> Post Press Release)
+   http://www.directionsmag.com/pressreleases/ (News -> Submit Press Release)
    http://directory.fsf.org/wiki/GRASS_%28Geographic_Resources_Analysis_Support_System%29
    http://www.kde-apps.org/content/show.php?content=19776
    http://www.opendesktop.org/content/show.php?content=19776
    https://news.eoportal.org/web/eoportal/share-your-news (MN)
             -> Share your news with the EO community
    http://www.heise.de/software/download/edit_7105 (update, MN)
-   https://joinup.ec.europa.eu/ --> Sharing content | Propose your...
 
    See also: http://grass.osgeo.org/wiki/Contact_Databases
    ... anywhere else? Please add here.
