@@ -133,7 +133,7 @@ def clean_env(gisrc):
     env_curr = read_gisrc(gisrc)
     env_new = {}
     for k,v in env_curr.items():
-        if 'MONITOR' not in k:
+        if k not in ('MONITOR', 'PID'):
             env_new[k] = v
 
     write_gisrc(env_new, gisrc)
@@ -1338,7 +1338,7 @@ def run_batch_job(batch_job):
     return returncode
 
 
-def start_gui(grass_gui, shell_pid=None):
+def start_gui(grass_gui):
     """Start specified GUI
 
     :param grass_gui: GUI name (allowed values: 'wxpython')
@@ -1348,14 +1348,9 @@ def start_gui(grass_gui, shell_pid=None):
     
     # Check for gui interface
     if grass_gui == "wxpython":
-        cmd = [os.getenv('GRASS_PYTHON'), wxpath("wxgui.py")]
-        if shell_pid:
-            cmd.append('--pid')
-            cmd.append(str(shell_pid))
-        
-        Popen(cmd)
+        Popen([os.getenv('GRASS_PYTHON'), wxpath("wxgui.py")])
 
-    
+
 def clear_screen():
     """Clear terminal"""
     if windows:
@@ -1900,7 +1895,8 @@ def main():
             shell_process = default_startup(mapset_settings.full_mapset,
                                             mapset_settings.location)
 
-        start_gui(grass_gui, shell_process.pid)
+        # start GUI and register shell PID in rc file
+        start_gui(grass_gui)
         kv = read_gisrc(gisrc)
         kv['PID'] = str(shell_process.pid)
         write_gisrc(kv, gisrc)
