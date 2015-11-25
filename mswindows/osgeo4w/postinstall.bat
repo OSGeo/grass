@@ -28,4 +28,4 @@ set GISRC=dummy
 rem run g.mkfontcap outside a GRASS session
 "%GISBASE%\bin\g.mkfontcap.exe" -o
 
-del "%OSGEO4W_ROOT%"\bin\@GRASS_EXECUTABLE@.bat.tmpl
+del "%BATCH%.tmpl
