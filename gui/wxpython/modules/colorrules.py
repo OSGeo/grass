@@ -1786,6 +1786,7 @@ class BufferedWindow(wx.Window):
         # make sure that extents are updated at init
         self.Map.region = self.Map.GetRegion()
         self.Map.SetRegion()
+        self.Map.GetRenderMgr().renderDone.connect(self._updatePreviewFinished)
 
     def Draw(self, pdc, img = None, pdctype = 'image'):
         """Draws preview or clears window"""
@@ -1877,19 +1878,24 @@ class BufferedWindow(wx.Window):
     def UpdatePreview(self, img = None):
         """Update canvas if window changes geometry"""
         Debug.msg (2, "BufferedWindow.UpdatePreview(%s): render=%s" % (img, self.render))
-        oldfont = ""
-        oldencoding = ""
         
-        if self.render:
-            # extent is taken from current map display
-            try:
-                self.Map.region = copy.deepcopy(self.parent.parent.GetLayerTree().GetMap().GetCurrentRegion())
-            except AttributeError:
-                self.Map.region = self.Map.GetRegion()
-            # render new map images
-            self.mapfile = self.Map.Render(force = self.render)
-            self.img = self.GetImage()
-            self.resize = False
+        if not self.render:
+            return
+        
+        # extent is taken from current map display
+        try:
+            self.Map.region = copy.deepcopy(self.parent.parent.GetLayerTree().GetMap().GetCurrentRegion())
+        except AttributeError:
+            self.Map.region = self.Map.GetRegion()
+        # render new map images
+        self.mapfile = self.Map.Render(force = self.render)
+
+    def _updatePreviewFinished(self):
+        if not self.render:
+            return
+        
+        self.img = self.GetImage()
+        self.resize = False
         
         if not self.img:
             return
