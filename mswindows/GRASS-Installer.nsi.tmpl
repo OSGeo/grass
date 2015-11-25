@@ -651,14 +651,19 @@ Section "GRASS" SecGRASS
 	;Create the Desktop Shortcut
 	SetShellVarContext current
 	
-	CreateShortCut "$DESKTOP\${GRASS_BASE}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-wx"\
+	CreateShortCut "$DESKTOP\${GRASS_BASE}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-gui"\
 	"$INSTALL_DIR\gui\icons\grass.ico" "" SW_SHOWMINIMIZED "" "Launch GRASS GIS ${VERSION_NUMBER}"
 	
 	;Create the Windows Start Menu Shortcuts
 	SetShellVarContext all
 	
-	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-gui"\
+	CreateDirectory "$SMPROGRAMS\${GRASS_BASE}"
+	
+	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\${GRASS_BASE}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-gui"\
 	"$INSTALL_DIR\gui\icons\grass.ico" "" SW_SHOWMINIMIZED "" "Launch GRASS GIS ${VERSION_NUMBER}"
+	
+	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\Uninstall ${GRASS_BASE}.lnk" "$INSTALL_DIR\Uninstall-GRASS.exe" ""\
+	"$INSTALL_DIR\Uninstall-GRASS.exe" "" SW_SHOWNORMAL "" "Uninstall GRASS GIS ${VERSION_NUMBER}"
 	
 	;Create the grass_command.bat
 	ClearErrors
@@ -1080,7 +1085,7 @@ Section "Uninstall"
 	
 	;remove the Programs Start ShortCuts
 	SetShellVarContext all
-	Delete "$SMPROGRAMS\${GRASS_BASE}.lnk"
+	RMDir /r "$SMPROGRAMS\${GRASS_BASE}"
 	
 	;remove the $APPDATA\GRASS@GRASS_VERSION_MAJOR@ folder
 	;disabled, don't remove user settings
