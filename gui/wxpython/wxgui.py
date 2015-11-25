@@ -35,14 +35,12 @@ except ImportError:
 
 
 class GMApp(wx.App):
-    def __init__(self, workspace=None, shellPid=None):
+    def __init__(self, workspace=None):
         """ Main GUI class.
 
         :param workspace: path to the workspace file
-        :param shellPid: process id of shell running on background
         """
         self.workspaceFile = workspace
-        self._shellPid = shellPid
         
         # call parent class initializer
         wx.App.__init__(self, False)
@@ -80,7 +78,7 @@ class GMApp(wx.App):
         # create and show main frame
         from lmgr.frame import GMFrame
         mainframe = GMFrame(parent=None, id=wx.ID_ANY,
-                            workspace=self.workspaceFile, shellPid=self._shellPid)
+                            workspace=self.workspaceFile)
 
         mainframe.Show()
         self.SetTopWindow(mainframe)
@@ -99,7 +97,7 @@ def printHelp():
 
 def process_opt(opts, args):
     """ Process command-line arguments"""
-    workspaceFile = shellPid = None
+    workspaceFile = None
     for o, a in opts:
         if o in ("-h", "--help"):
             printHelp()
@@ -110,13 +108,7 @@ def process_opt(opts, args):
             else:
                 workspaceFile = args.pop(0)
 
-        elif o in ("-p", "--pid"):
-            if a != '':
-                shellPid = int(a)
-            else:
-                shellPid = int(args.pop(0))
-
-    return (workspaceFile, shellPid)
+    return workspaceFile
 
 
 def main(argv = None):
@@ -134,8 +126,8 @@ def main(argv = None):
         print >> sys.stderr, "for help use --help"
         printHelp()
     
-    workspaceFile, shellPid = process_opt(opts, args)
-    app = GMApp(workspaceFile, shellPid)
+    workspaceFile = process_opt(opts, args)
+    app = GMApp(workspaceFile)
     
     # suppress wxPython logs
     q = wx.LogNull()
