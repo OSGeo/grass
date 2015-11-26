@@ -602,6 +602,7 @@ class Model(object):
         delInterData = False
         if params:
             dlg = ModelParamDialog(parent = parent,
+                                   model = self,
                                    params = params)
             dlg.CenterOnParent()
             
@@ -2508,11 +2509,12 @@ if __name__ == "__main__":
 
 
 class ModelParamDialog(wx.Dialog):
-    def __init__(self, parent, params, id = wx.ID_ANY, title = _("Model parameters"),
+    def __init__(self, parent, model, params, id = wx.ID_ANY, title = _("Model parameters"),
                  style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
         """Model parameters dialog
         """
         self.parent = parent
+        self._model  = model
         self.params = params
         self.tasks  = list() # list of tasks/pages
         
@@ -2527,7 +2529,7 @@ class ModelParamDialog(wx.Dialog):
         # intermediate data?
         self.interData = wx.CheckBox(parent = self, label = _("Delete intermediate data when finish"))
         self.interData.SetValue(True)
-        rast, vect, rast3d, msg = self.parent.GetModel().GetIntermediateData()
+        rast, vect, rast3d, msg = self._model.GetIntermediateData()
         if not rast and not vect and not rast3d:
             self.interData.Hide()
         
@@ -2592,7 +2594,7 @@ class ModelParamDialog(wx.Dialog):
         task.params = params['params']
         
         panel = CmdPanel(parent = self, id = wx.ID_ANY, task = task,
-                         giface = GraphicalModelerGrassInterface(self.parent.GetModel()))
+                         giface = GraphicalModelerGrassInterface(self._model))
         self.tasks.append(task)
         
         return panel
