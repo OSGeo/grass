@@ -7,9 +7,7 @@ Classes:
  - datacatalog::LocationMapTree
  - datacatalog::DataCatalogTree
 
-
 (C) 2014-2015 by Tereza Fiedlerova, and the GRASS Development Team
-
 
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
@@ -255,7 +253,7 @@ class LocationMapTree(TreeView):
         item = self._model.SearchNodes(name=location, type='location')
         if item:
             self.Select(item[0], select=True)
-            self.ExpandNode(item[0], recursive=True)
+            self.ExpandNode(item[0], recursive=False)
         else:
             Debug.msg(1, "Location <%s> not found" % location)
 
@@ -349,7 +347,7 @@ class DataCatalogTree(LocationMapTree):
                 self.selected_layer.label = self.new_name
                 self.selected_layer.data['name'] = self.new_name
                 self.RefreshNode(self.selected_layer)
-                label = "g.rename " + self.selected_type.label + "=" + string + "   -- completed"
+                label = "g.rename " + self.selected_type.label + "=" + string + _(" -- completed")
                 self.showNotification.emit(message=label)
                 Debug.msg(1, "LAYER RENAMED TO: " + self.new_name)
             gscript.try_remove(gisrc)
@@ -398,7 +396,7 @@ class DataCatalogTree(LocationMapTree):
                 self._model.SortChildren(self.selected_type)
                 self.RefreshNode(self.selected_type, recursive=True)
                 Debug.msg(1, "COPIED TO: " + self.new_name)
-                label = "g.copy " + self.copy_type.label + "=" + string + "    -- completed"  # generate this message (command) automatically?
+                label = "g.copy " + self.copy_type.label + "=" + string + _(" -- completed")  # generate this message (command) automatically?
                 self.showNotification.emit(message=label)
             gscript.try_remove(gisrc)
         else:
@@ -432,7 +430,7 @@ class DataCatalogTree(LocationMapTree):
                     self._model.RemoveNode(self.selected_layer)
                     self.RefreshNode(self.selected_type, recursive=True)
                     Debug.msg(1, "LAYER " + string + " DELETED")
-                    label = "g.remove -f type=" + self.selected_type.label + " name=" + string + "    -- completed"  # generate this message (command) automatically?
+                    label = "g.remove -f type=" + self.selected_type.label + " name=" + string + _(" -- completed")  # generate this message (command) automatically?
                     self.showNotification.emit(message=label)
             gscript.try_remove(gisrc)
 
@@ -444,15 +442,15 @@ class DataCatalogTree(LocationMapTree):
             layerName.append(string)
             label = _("Displaying {name}...").format(name=string)
             self.showNotification.emit(message=label)
-            label = "d." + self.selected_type.label + " --q map=" + string + \
-                    "    -- completed. Go to Map layers for further operations."
+            label = "d." + self.selected_type.label[:4] + " --q map=" + string + \
+                    _(" -- completed. Go to Map layers for further operations.")
             if self.selected_type.label == 'vector':
                 self._giface.lmgr.AddMaps(layerName, 'vector', True)
             elif self.selected_type.label == 'raster':
                 self._giface.lmgr.AddMaps(layerName, 'raster', True)
             else:
                 self._giface.lmgr.AddMaps(layerName, 'raster_3d', True)
-                label = "d.rast --q map=" + string + "    -- completed. Go to 'Map layers' for further operations."  # generate this message (command) automatically?
+                label = "d.rast --q map=" + string + _(" -- completed. Go to 'Map layers' for further operations.")  # generate this message (command) automatically?
             self.showNotification.emit(message=label)
             Debug.msg(1, "LAYER " + self.selected_layer.label + " DISPLAYED")
         else:
