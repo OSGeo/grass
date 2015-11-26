@@ -1,6 +1,6 @@
 MODULE_TOPDIR = ../..
 
-SUBDIRS = docs animation mapswipe gmodeler rlisetup psmap dbmgr vdigit iclass gcp timeline
+SUBDIRS = docs animation mapswipe gmodeler rlisetup psmap dbmgr vdigit iclass gcp timeline tplot
 EXTRA_CLEAN_FILES = menustrings.py build_ext.pyc xml/menudata.xml xml/module_tree_menudata.xml */*.pyc
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
@@ -12,7 +12,7 @@ SRCFILES := $(wildcard icons/*.py scripts/*.py xml/*) \
 	$(wildcard animation/* core/*.py dbmgr/* gcp/*.py gmodeler/* \
 	gui_core/*.py iclass/* lmgr/*.py location_wizard/*.py mapwin/*.py mapdisp/*.py \
 	mapswipe/* modules/*.py nviz/*.py psmap/* rlisetup/* timeline/* vdigit/* \
-	vnet/*.py web_services/*.py wxplot/*.py iscatt/*.py) \
+	vnet/*.py web_services/*.py wxplot/*.py iscatt/*.py tplot/*) \
 	gis_set.py gis_set_error.py wxgui.py README
 
 DSTFILES := $(patsubst %,$(DSTDIR)/%,$(SRCFILES)) \
@@ -20,7 +20,7 @@ DSTFILES := $(patsubst %,$(DSTDIR)/%,$(SRCFILES)) \
 
 PYDSTDIRS := $(patsubst %,$(DSTDIR)/%,animation core dbmgr gcp gmodeler \
 	gui_core iclass lmgr location_wizard mapwin mapdisp modules nviz psmap \
-	mapswipe vdigit wxplot web_services rlisetup vnet timeline iscatt)
+	mapswipe vdigit wxplot web_services rlisetup vnet timeline iscatt tplot)
 
 
 DSTDIRS := $(patsubst %,$(DSTDIR)/%,icons scripts xml)
