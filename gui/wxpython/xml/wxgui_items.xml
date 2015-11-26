@@ -35,6 +35,13 @@
     <description>Plot temporal extents.</description>
     <keywords>general,gui,temporal</keywords>
   </wxgui-item>
+  <wxgui-item name="TplotTool">
+    <label>Temporal plot tool</label>
+    <handler>OnTplotTool</handler>
+    <related-module>g.gui.tplot</related-module>
+    <description>Plot temporal values.</description>
+    <keywords>general,gui,temporal</keywords>
+  </wxgui-item>
   <wxgui-item name="CartographicComposer">
     <label>Cartographic Composer</label>
     <handler>OnPsMap</handler>

@@ -1952,6 +1952,7 @@
     <items>
       <wxgui-item name="AnimationTool"/>
       <wxgui-item name="TimelineTool"/>
+      <wxgui-item name="TplotTool"/>
     </items>
   </toolbox>
   <toolbox name="GuiTools">

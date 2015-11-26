@@ -1616,6 +1616,16 @@ class GMFrame(wx.Frame):
         frame = TimelineFrame(None)
         frame.Show()
 
+    def OnTplotTool(self, event=None, cmd=None):
+        """Launch Temporal Plot Tool"""
+        try:
+            from tplot.frame import TplotFrame
+        except ImportError:
+            GError(parent=self, message=_("Unable to start Temporal Plot Tool."))
+            return
+        frame = TplotFrame(parent=self, giface=self._giface)
+        frame.Show()
+          
     def OnHistogram(self, event):
         """Init histogram display canvas and tools
         """
