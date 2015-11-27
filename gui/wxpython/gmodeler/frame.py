@@ -201,7 +201,9 @@ class ModelFrame(wx.Frame):
                 self.SetStatusText(_('Python script contains local modifications'), 0)
             else:
                 self.SetStatusText(_('Python script is up-to-date'), 0)
-        
+        elif page == self.notebook.GetPageIndexByName('items'):
+            self.itemPanel.Update()
+            
         event.Skip()
 
     def OnVariables(self, event):
@@ -1585,17 +1587,19 @@ class ItemPanel(wx.Panel):
                                     label=" %s " % _("List of items - right-click to delete"))
         
         self.list = ItemListCtrl(parent = self,
-                                 columns = [_("Label"), _("In loop"),
+                                 columns = [_("Label"), _("In loop"), _("Parameterized"),
                                             _("Command")],
-                                 columnsNotEditable = [1, 2],
+                                 columnsNotEditable = [1, 2, 3],
                                  frame = self.parent)
         
         self.btnMoveUp = wx.Button(parent=self, id=wx.ID_UP)
         self.btnMoveDown = wx.Button(parent=self, id=wx.ID_DOWN)
+        self.btnRefresh = wx.Button(parent=self, id=wx.ID_REFRESH)
         
         self.btnMoveUp.Bind(wx.EVT_BUTTON, self.OnMoveItemsUp)
         self.btnMoveDown.Bind(wx.EVT_BUTTON, self.OnMoveItemsDown)
-        
+        self.btnRefresh.Bind(wx.EVT_BUTTON, self.list.OnReload)
+                
         self._layout()
 
     def _layout(self):
@@ -1607,6 +1611,8 @@ class ItemPanel(wx.Panel):
         manageSizer = wx.BoxSizer(wx.VERTICAL)
         manageSizer.Add(item=self.btnMoveUp, border = 5, flag = wx.ALL)
         manageSizer.Add(item=self.btnMoveDown, border = 5,
+                        flag = wx.LEFT | wx.RIGHT | wx.BOTTOM)
+        manageSizer.Add(item=self.btnRefresh, border = 5,
                         flag = wx.LEFT | wx.RIGHT)
         
         mainSizer = wx.BoxSizer(wx.HORIZONTAL)
