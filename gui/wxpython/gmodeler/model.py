@@ -1344,10 +1344,10 @@ class ModelData(ModelObject, ogl.EllipseShape):
                     action = rel.GetTo()
                 else:
                     action = rel.GetFrom()
-                
+
                 task = GUI(show = None).ParseCommand(cmd = action.GetLog(string = False))
                 task.set_param(rel.GetLabel(), self.value)
-                action.SetParams(params = task.get_options())
+                action.MergeParams(task.get_options())
         
     def GetPropDialog(self):
         """Get properties dialog"""
