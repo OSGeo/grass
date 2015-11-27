@@ -201,7 +201,9 @@ class ModelFrame(wx.Frame):
                 self.SetStatusText(_('Python script contains local modifications'), 0)
             else:
                 self.SetStatusText(_('Python script is up-to-date'), 0)
-        
+        elif page == self.notebook.GetPageIndexByName('items'):
+            self.itemPanel.Update()
+            
         event.Skip()
 
     def OnVariables(self, event):
