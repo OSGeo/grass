@@ -790,7 +790,7 @@ class ItemListCtrl(ModelListCtrl):
         self.SetColumnWidth(0, 100)
         self.SetColumnWidth(1, 75)
         if len(self.columns) >= 3:
-            self.SetColumnWidth(2, 65)
+            self.SetColumnWidth(2, 100)
 
     def GetData(self):
         """Get list data"""
@@ -837,8 +837,16 @@ class ItemListCtrl(ModelListCtrl):
                     bId = _('No')
                 else:
                     bId = _("Yes")
+                options = action.GetParameterizedParams()
+                params = []
+                for f in options['flags']:
+                    params.append('-{}'.format(f['name']))
+                for p in options['params']:
+                    params.append(p['name'])
+
                 self.itemDataMap[i] = [action.GetLabel(),
                                        bId,
+                                       ','.join(params),
                                        action.GetLog()]
             
             i += 1
@@ -856,11 +864,12 @@ class ItemListCtrl(ModelListCtrl):
                     self.CheckItem(index, True)
                 i += 1
         else:
-            for name, inloop, desc in self.itemDataMap.itervalues():
+            for name, inloop, param, desc in self.itemDataMap.itervalues():
                 index = self.InsertStringItem(sys.maxint, str(i))
                 self.SetStringItem(index, 0, name)
                 self.SetStringItem(index, 1, inloop)
-                self.SetStringItem(index, 2, desc)
+                self.SetStringItem(index, 2, param)
+                self.SetStringItem(index, 3, desc)
                 self.SetItemData(index, i)
                 i += 1
                 

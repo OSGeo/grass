@@ -1585,9 +1585,9 @@ class ItemPanel(wx.Panel):
                                     label=" %s " % _("List of items - right-click to delete"))
         
         self.list = ItemListCtrl(parent = self,
-                                 columns = [_("Label"), _("In loop"),
+                                 columns = [_("Label"), _("In loop"), _("Parametrized"),
                                             _("Command")],
-                                 columnsNotEditable = [1, 2],
+                                 columnsNotEditable = [1, 2, 3],
                                  frame = self.parent)
         
         self.btnMoveUp = wx.Button(parent=self, id=wx.ID_UP)
