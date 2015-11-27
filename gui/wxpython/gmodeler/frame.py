@@ -1592,10 +1592,12 @@ class ItemPanel(wx.Panel):
         
         self.btnMoveUp = wx.Button(parent=self, id=wx.ID_UP)
         self.btnMoveDown = wx.Button(parent=self, id=wx.ID_DOWN)
+        self.btnRefresh = wx.Button(parent=self, id=wx.ID_REFRESH)
         
         self.btnMoveUp.Bind(wx.EVT_BUTTON, self.OnMoveItemsUp)
         self.btnMoveDown.Bind(wx.EVT_BUTTON, self.OnMoveItemsDown)
-        
+        self.btnRefresh.Bind(wx.EVT_BUTTON, self.list.OnReload)
+                
         self._layout()
 
     def _layout(self):
@@ -1607,6 +1609,8 @@ class ItemPanel(wx.Panel):
         manageSizer = wx.BoxSizer(wx.VERTICAL)
         manageSizer.Add(item=self.btnMoveUp, border = 5, flag = wx.ALL)
         manageSizer.Add(item=self.btnMoveDown, border = 5,
+                        flag = wx.LEFT | wx.RIGHT | wx.BOTTOM)
+        manageSizer.Add(item=self.btnRefresh, border = 5,
                         flag = wx.LEFT | wx.RIGHT)
         
         mainSizer = wx.BoxSizer(wx.HORIZONTAL)
