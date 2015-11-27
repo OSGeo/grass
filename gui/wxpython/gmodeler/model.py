@@ -1187,19 +1187,18 @@ class ModelAction(ModelObject, ogl.DividedShape):
         """
         self.isValid = True
 
-        options = self.GetParameterizedParams()
-        if options['flags'] or options['params']:
-            self.isParameterized = True
-        else:
-            self.isParameterized = False
+        for f in options['flags']:
+            if f.get('parameterized', False):
+                self.isParameterized = True
+                break
 
-        options = self.GetParams()
         for p in options['params']:
             if self.isValid and p.get('required', False) and \
                p.get('value', '') == '' and \
                p.get('default', '') == '':
                 self.isValid = False
-                break
+            if not self.isParameterized and p.get('parameterized', False):
+                self.isParameterized = True
         
         if self.parent.GetCanvas():
             self._setBrush()
