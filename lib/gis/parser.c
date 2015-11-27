@@ -330,6 +330,7 @@ int G_parser(int argc, char **argv)
     st->pgm_path = tmp_name;
     st->n_errors = 0;
     st->error = NULL;
+    st->module_info.verbose = G_verbose_std();
     i = strlen(tmp_name);
     while (--i >= 0) {
 	if (G_is_dirsep(tmp_name[i])) {
@@ -644,6 +645,34 @@ char *G_recreate_command(void)
     cur = buff;
     strcpy(cur, tmp);
     cur += len;
+
+    if (st->overwrite) {
+        slen = strlen(" --overwrite");
+        if (len + slen >= nalloced) {
+            nalloced += (1024 > len) ? 1024 : len + 1;
+            buff = G_realloc(buff, nalloced);
+        }
+        strcpy(cur, " --overwrite");
+        cur += slen;
+        len += slen;
+    }
+
+    if (st->module_info.verbose != G_verbose_std()) {
+        char *sflg;
+        if (st->module_info.verbose == G_verbose_max())
+            sflg = " --verbose";
+        else
+            sflg = " --quiet";
+
+        slen = strlen(sflg);
+        if (len + slen >= nalloced) {
+            nalloced += (1024 > len) ? 1024 : len + 1;
+            buff = G_realloc(buff, nalloced);
+        }
+        strcpy(cur, sflg);
+        cur += slen;
+        len += slen;
+    }
 
     if (st->n_flags) {
 	flag = &st->first_flag;
