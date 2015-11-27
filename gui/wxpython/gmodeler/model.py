@@ -1186,20 +1186,20 @@ class ModelAction(ModelObject, ogl.DividedShape):
         :param options: dictionary with flags and params (gtask)
         """
         self.isValid = True
-        self.isParameterized = False
-        
-        for f in options['flags']:
-            if f.get('parameterized', False):
-                self.IsParameterized = True
-                break
-        
+
+        options = self.GetParameterizedParams()
+        if options['flags'] or options['params']:
+            self.isParameterized = True
+        else:
+            self.isParameterized = False
+
+        options = self.GetParams()
         for p in options['params']:
             if self.isValid and p.get('required', False) and \
-                    p.get('value', '') == '' and \
-                    p.get('default', '') == '':
+               p.get('value', '') == '' and \
+               p.get('default', '') == '':
                 self.isValid = False
-            if not self.isParameterized and p.get('parameterized', False):
-                self.isParameterized = True
+                break
         
         if self.parent.GetCanvas():
             self._setBrush()
@@ -1212,7 +1212,23 @@ class ModelAction(ModelObject, ogl.DividedShape):
     def IsParameterized(self):
         """Check if action is parameterized"""
         return self.isParameterized
-    
+
+    def GetParameterizedParams(self):
+        """Return parameterized flags and options"""
+        param = { 'flags': [], 'params' : [] }
+        
+        options = self.GetParams()
+        
+        for f in options['flags']:
+            if f.get('parameterized', False):
+                param['flags'].append(f)
+        
+        for p in options['params']:
+            if p.get('parameterized', False):
+                param['params'].append(p)
+        
+        return param
+        
     def FindData(self, name):
         """Find data item by name"""
         for rel in self.GetRelations():
