@@ -12,7 +12,7 @@ Classes:
  - colorrules::ThematicVectorTable
  - colorrules::BufferedWindow
 
-(C) 2008, 2010-2012 by the GRASS Development Team
+(C) 2008-2015 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -598,8 +598,17 @@ class ColorTable(wx.Frame):
     def OnSaveRulesFile(self, event):
         """Save color table to file"""
         path = event.GetString()
-        if not os.path.exists(path):
+        if not path:
             return
+        
+        if os.path.exists(path):
+            dlgOw = wx.MessageDialog(parent,
+                                     message = _("File <%s> already already exists. "
+                                                 "Do you want to overwrite it?") % path,
+                                     caption = _("Overwrite?"),
+                                     style = wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+            if dlgOw.ShowModal() != wx.ID_YES:
+                return
         
         rulestxt = ''   
         for rule in self.rulesPanel.ruleslines.itervalues():
