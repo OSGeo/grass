@@ -405,7 +405,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             for key in ('remove', 'rename', 'opacity', 'nviz', 'zoom',
                         'region', 'export', 'attr', 'edit', 'save_ws',
                         'bgmap', 'topo', 'meta', 'null', 'zoom1',
-                        'color', 'hist', 'univar', 'prof', 'properties', 'sql', 'copy',
+                        'color', 'colori', 'hist', 'univar', 'prof', 'properties', 'sql', 'copy',
                         'report', 'export-pg', 'pack'):
                 self.popupID[key] = wx.NewId()
         
@@ -603,6 +603,8 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 
             self.popupMenu.Append(self.popupID['color'], _("Set color table"))
             self.Bind (wx.EVT_MENU, self.OnRasterColorTable, id = self.popupID['color'])
+            self.popupMenu.Append(self.popupID['colori'], _("Set color table interactively"))
+            self.Bind (wx.EVT_MENU, self.lmgr.OnRasterRules, id = self.popupID['colori'])
 
             item = wx.MenuItem(self.popupMenu, id = self.popupID['hist'], text = _("Histogram"))
             item.SetBitmap(MetaIcon(img = 'layer-raster-histogram').GetBitmap(self.bmpsize))
