@@ -186,7 +186,6 @@ if [ -n "$PACKAGE" ]; then
     
     # bat files - unix2dos
     unix2dos bin/${GRASS_EXECUTABLE}.bat.tmpl
-    unix2dos bin/${GRASS_EXECUTABLE}.tmpl
     unix2dos etc/postinstall/${GRASS_EXECUTABLE}.bat
     unix2dos etc/preremove/${GRASS_EXECUTABLE}.bat
     
