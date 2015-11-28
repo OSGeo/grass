@@ -672,7 +672,13 @@ def set_data():
             pass
         # Check for GUI
         elif grass_gui in ('gtext', 'wxpython'):
-            gui_startup(grass_gui == 'gtext')
+            if not os.path.exists(gfile(wxpython_base, "gis_set.py")):
+                # No GUI available, update gisrc file
+                fatal(_("<{}> requested, but not available. Run GRASS in text "
+                        "mode (-text) or install missing package (usually "
+                        "'grass-gui').").format(grass_gui))
+            else:
+                gui_startup(grass_gui == 'gtext')
         else:
             # Shouldn't need this but you never know
             fatal(_("Invalid user interface specified - <%s>. " 

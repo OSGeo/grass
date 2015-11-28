@@ -18,6 +18,8 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/spawn.h>
@@ -95,6 +97,8 @@ int main(int argc, char *argv[])
 
     G_message(_("Launching <%s> GUI in the background, please wait..."), type->answer);
     sprintf(progname, "%s/gui/wxpython/wxgui.py", G_gisbase());
+    if (access(progname, F_OK) == -1)
+        G_fatal_error(_("Your installation doesn't include GUI, exiting."));
     if (rc_file->answer) {
         G_spawn_ex(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"), progname,
                    "--workspace", rc_file->answer, SF_BACKGROUND, NULL);
