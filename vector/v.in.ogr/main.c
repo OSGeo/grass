@@ -288,8 +288,8 @@ int main(int argc, char *argv[])
     flag.proj->description =
 	_("Perform projection check only and exit");
     flag.proj->suppress_required = YES;
-    G_option_requires(flag.proj, param.dsn, NULL)
-;
+    G_option_requires(flag.proj, param.dsn, NULL);
+    
     flag.region = G_define_flag();
     flag.region->key = 'r';
     flag.region->guisection = _("Selection");
