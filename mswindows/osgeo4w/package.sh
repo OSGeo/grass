@@ -193,11 +193,9 @@ if [ -n "$PACKAGE" ]; then
     tar -cjf $PDIR/grass$PACKAGE_NAME-$VERSION-$PACKAGE.tar.bz2 \
 	apps/grass/grass-$VERSION \
 	bin/${GRASS_EXECUTABLE}.bat.tmpl \
-	bin/${GRASS_EXECUTABLE}.tmpl \
 	etc/postinstall/${GRASS_EXECUTABLE}.bat \
 	etc/preremove/${GRASS_EXECUTABLE}.bat
     
-    rm bin/${GRASS_EXECUTABLE}.tmpl
     rm bin/${GRASS_EXECUTABLE}.bat.tmpl
     
     # grass-devel package (obsolete)
