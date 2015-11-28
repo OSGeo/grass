@@ -23,8 +23,6 @@
 #% keyword: projection
 #%end
 #%option G_OPT_F_BIN_INPUT
-#% key: input
-#% required: yes
 #% description: Name of OGR datasource to be imported
 #% guisection: Input
 #%end
@@ -63,6 +61,21 @@
 #% description: '-1' for no snap
 #% answer: 1e-13
 #% guisection: Output
+#%end
+#%option
+#% key: epsg
+#% type: integer
+#% options: 1-1000000
+#% guisection: Input SRS
+#% description: EPSG projection code
+#%end
+#%option
+#% key: datum_trans
+#% type: integer
+#% options: -1-100
+#% guisection: Input SRS
+#% label: Index number of datum transform parameters
+#% description: -1 to list available datum transform parameters
 #%end
 #%flag
 #% key: f
@@ -123,6 +136,14 @@ def main():
     if options['encoding']:
         vopts['encoding'] = options['encoding']
 
+    if options['datum_trans'] and options['datum_trans'] == '-1':
+        # list datum transform parameters
+        if not options['epsg']:
+            grass.fatal(_("Missing value for parameter <%s>") % 'epsg')
+        
+        return grass.run_command('g.proj', epsg=options['epsg'],
+                                 datum_trans=options['datum_trans'])
+    
     grassenv = grass.gisenv()
     tgtloc = grassenv['LOCATION_NAME']
     tgtmapset = grassenv['MAPSET']
@@ -157,15 +178,18 @@ def main():
     # switch to temp location
     os.environ['GISRC'] = str(SRCGISRC)
 
-    # compare source and target srs
-    insrs = grass.read_command('g.proj', flags='j', quiet=True)
-
+    if options['epsg']: # force given EPSG
+        kwargs = {}
+        if options['datum_trans']:
+            kwargs['datum_trans'] = options['datum_trans']
+        grass.run_command('g.proj', flags='c', epsg=options['epsg'], **kwargs)
+        
     # switch to target location
     os.environ['GISRC'] = str(tgtgisrc)
 
-    if insrs == tgtsrs:
-        # try v.in.ogr directly
-        grass.message(_("Importing <%s>...") % OGRdatasource) 
+    # try v.in.ogr directly
+    if grass.run_command('v.in.ogr', input=OGRdatasource, flags='j',
+                         errors='status', quiet=True) == 0:
         try:
             grass.run_command('v.in.ogr', input=OGRdatasource,
                               flags=vflags, **vopts)
@@ -181,6 +205,9 @@ def main():
     # switch to temp location
     os.environ['GISRC'] = str(SRCGISRC)
 
+    # print projection at verbose level
+    grass.verbose(grass.read_command('g.proj', flags='p').rstrip(os.linesep))
+    
     # make sure input is not xy
     if grass.parse_command('g.proj', flags='g')['name'] == 'xy_location_unprojected':
         grass.fatal(_("Coordinate reference system not available for input <%s>") % OGRdatasource)
