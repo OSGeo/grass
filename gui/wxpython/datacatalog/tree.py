@@ -243,7 +243,7 @@ class LocationMapTree(TreeView):
         """Display popup menu."""
         self.DefineItems(node)
         if self.selected_layer:
-            self._popupMenuLayer()
+            self._popupMenuLayer(self.selected_mapset.label == self.gmapset)
         elif self.selected_mapset and not self.selected_type:
             self._popupMenuMapset()
 
@@ -360,7 +360,8 @@ class DataCatalogTree(LocationMapTree):
         if self.selected_location == self.copy_location and self.selected_mapset:
             if self.selected_type:
                 if self.copy_type.label != self.selected_type.label:  # copy raster to vector or vice versa
-                    GError(_("Failed to copy layer: invalid type."), parent=self)
+                    GError(_("Failed to copy map: invalid map type "
+                             "({} vs. {}).".format(self.copy_type.label, self.selected_type.label)), parent=self)
                     return
             self.new_name = self._getUserEntry(_('New name'), _('Copy map'),
                                                self.copy_layer.label + '_copy')
@@ -504,7 +505,7 @@ class DataCatalogTree(LocationMapTree):
         dlg.Destroy()
         return res
 
-    def _popupMenuLayer(self):
+    def _popupMenuLayer(self, current_mapset):
         """Create popup menu for layers"""
         menu = wx.Menu()
 
@@ -515,14 +516,20 @@ class DataCatalogTree(LocationMapTree):
         item = wx.MenuItem(menu, wx.NewId(), _("&Paste"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnPaste, item)
-
+        if not current_mapset:
+            item.Enable(False)
+            
         item = wx.MenuItem(menu, wx.NewId(), _("&Delete"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDelete, item)
+        if not current_mapset:
+            item.Enable(False)
 
         item = wx.MenuItem(menu, wx.NewId(), _("&Rename"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnRename, item)
+        if not current_mapset:
+            item.Enable(False)
 
         if not isinstance(self._giface, StandaloneGrassInterface):
             item = wx.MenuItem(menu, wx.NewId(), _("&Display layer"))
