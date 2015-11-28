@@ -109,7 +109,10 @@ def main():
 
     # list layers and exit
     if flags['l']:
-        grass.run_command('v.in.ogr', flags='l', input=options['input'])
+        try:
+            grass.run_command('v.in.ogr', flags='l', input=options['input'])
+        except CalledModuleError:
+            return 1
         return 0
 
     OGRdatasource = options['input']
