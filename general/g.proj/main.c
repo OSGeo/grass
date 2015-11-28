@@ -292,7 +292,7 @@ int main(int argc, char *argv[])
 		      create->key);
 
     if (printinfo->answer || shellinfo->answer)
-	print_projinfo(shellinfo->answer);
+        print_projinfo(shellinfo->answer, epsg);
     else if (datuminfo->answer)
 	print_datuminfo();
     else if (printproj4->answer)
