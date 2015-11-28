@@ -93,7 +93,7 @@ class RenderWMSMgr(wx.EvtHandler):
         self._fitAspect(region, self.dstSize)
 
         self.updateMap = True
-        fetchData = False
+        fetchData = True # changed to True when calling Render()
         zoomChanged = False
 
         if self.renderedRegion is None or \
@@ -133,9 +133,11 @@ class RenderWMSMgr(wx.EvtHandler):
         
             self._startTime = time.time()
             self.thread.Run(callable=self._render, cmd=cmd_render, env=env,
-                            ondone=self.OnDataFetched)
+                            ondone=self.OnRenderDone)
             self.layer.forceRender = False
-
+            
+        self.updateProgress.emit(layer=self.layer)
+        
     def _render(self, cmd, env):
         try:
             return grass.run_command(cmd[0], env=env, **cmd[1])
@@ -143,7 +145,7 @@ class RenderWMSMgr(wx.EvtHandler):
             grass.error(e)
             return 1
 
-    def OnDataFetched(self, event):
+    def OnRenderDone(self, event):
         """Fetch data
         """
         if event.pid != self.currentPid:
@@ -169,7 +171,7 @@ class RenderWMSMgr(wx.EvtHandler):
 
         self.fetched_data_cmd = self.fetching_cmd
 
-        Debug.msg(1, "RenderWMSMgr.OnDataFetched(%s): ret=%d time=%f" % \
+        Debug.msg(1, "RenderWMSMgr.OnRenderDone(%s): ret=%d time=%f" % \
                       (self.layer, event.ret, time.time() - self._startTime))
         
         self.dataFetched.emit(layer=self.layer)
