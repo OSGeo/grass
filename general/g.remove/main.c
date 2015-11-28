@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
     char *pattern, *exclude;
     const char *mapset;
     int result;
-    int i, all, num_types, nlist;
+    int i, all, num_types, nlist, num_removed;
     void *filter, *exclude_filter;
 
     G_gisinit(argv[0]);
@@ -222,6 +222,7 @@ int main(int argc, char *argv[])
 	num_types = i;
     }
 
+    num_removed = 0;
     for (i = 0; i < num_types; i++) {
 	int n, rast, num_files, j;
 	const struct list *elem;
@@ -241,6 +242,7 @@ int main(int argc, char *argv[])
 	for (j = 0; j < num_files; j++) {
 	    if (!flag.force->answer) {
 		fprintf(stdout, "%s/%s@%s\n", elem->alias, files[j], mapset);
+                num_removed++;
 		continue;
 	    }
 
@@ -249,17 +251,21 @@ int main(int argc, char *argv[])
 
 	    if (M_do_remove(n, (char *)files[j]) == 1)
 		result = EXIT_FAILURE;
+            num_removed++;
 	}
     }
 
+    if (num_removed < 1)
+        G_warning(_("No data base element files found"));
+    
     G_free_ls_filter(filter);
 
     if (exclude_filter)
 	G_free_ls_filter(exclude_filter);
 
-    if (!flag.force->answer)
-	G_important_message(_("You must use the force flag (-%c) to actually "
-			      "remove them. Exiting."), flag.force->key);
+    if (!flag.force->answer && num_removed > 0)
+	G_warning(_("Nothing removed. You must use the force flag (-%c) to actually "
+                    "remove them. Exiting."), flag.force->key);
 
     exit(result);
 }
