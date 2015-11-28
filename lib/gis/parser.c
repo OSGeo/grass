@@ -64,7 +64,9 @@
  *    that the "map" option is required and also that the number 12 is
  *    out of range.  The acceptable range (or list) will be printed.
  *
- * (C) 2001-2014 by the GRASS Development Team
+ * Overview table: <a href="parser_standard_options.html">Parser standard options</a>
+ * 
+ * (C) 2001-2015 by the GRASS Development Team
  *
  * This program is free software under the GNU General Public License
  * (>=v2). Read the file COPYING that comes with GRASS for details.
