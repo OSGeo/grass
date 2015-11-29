@@ -261,8 +261,7 @@ def main():
     grass.message(_("Reprojecting <%s>...") % output)
     try:
         grass.run_command('v.proj', location=TMPLOC,
-                          mapset='PERMANENT', input=output,
-                          quiet=True)
+                          mapset='PERMANENT', input=output)
     except CalledModuleError:
         grass.fatal(_("Unable to to reproject vector <%s>") % output)
 
