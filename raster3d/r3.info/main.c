@@ -458,7 +458,7 @@ int main(int argc, char *argv[])
 	        fprintf(out, "max=%f\n", dmax);
 	}
 	if (hflag->answer) {
-	    if (hist_ok) {
+	    if (hist_ok && !gflag->answer) {
 		fprintf(out, "Title:\n");
 		fprintf(out, "   %s\n", Rast_get_history(&hist, HIST_TITLE));
 		fprintf(out, "Data Source:\n");
@@ -472,6 +472,21 @@ int main(int argc, char *argv[])
 			fprintf(out, "   %s\n", Rast_history_line(&hist, i));
 		}
 	    }
+            else if (hist_ok && gflag->answer) {
+		fprintf(out, "title=");
+		fprintf(out, "\"%s\"\n", Rast_get_history(&hist, HIST_TITLE));
+		fprintf(out, "source1=");
+		fprintf(out, "\"%s\"\n", Rast_get_history(&hist, HIST_DATSRC_1));
+		fprintf(out, "source2=");
+		fprintf(out, "\"%s\"\n", Rast_get_history(&hist, HIST_DATSRC_2));
+		fprintf(out, "description=");
+		fprintf(out, "\"%s\"\n", Rast_get_history(&hist, HIST_KEYWRD));
+		if (Rast_history_length(&hist)) {
+		    for (i = 0; i < Rast_history_length(&hist); i++)
+                        fprintf(out, "comments_%d=", i);
+			fprintf(out, "\"%s\"\n", Rast_history_line(&hist, i));
+		}
+            }
 	    else {
 		G_fatal_error(_("Error while reading history file"));
 	    }
