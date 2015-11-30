@@ -11,7 +11,7 @@ There can be more keywords, <em>g.search.module</em> will search for each of the
 
 Search all modules, where keywords <em>buffer</em> OR <em>clip</em> can be found
 <div class="code"><pre>
-GRASS&gt; g.search.module buffer,clip
+g.search.module keyword=buffer,clip
 
 r.circle
     keywords: raster,buffer,geometry,circle
@@ -33,7 +33,7 @@ r.buffer
 Search all modules, where keywords <em>overlay</em> AND <em>clip</em> can be
 found with some fancy terminal output
 <div class="code"><pre>
-GRASS&gt; g.search.module clip,overlay -a -c
+g.search.module keyword=clip,overlay -a -c
 
 v.overlay
     keywords: vector,geometry,spatial query,intersection,union,clip
@@ -42,7 +42,7 @@ v.overlay
 
 Search in manual pages too 
 <div class="code"><pre>
-GRASS&gt; g.search.module -m kapri
+g.search.module -m keyword=kapri
 
 db.execute
     keywords: database,attribute table,SQL
@@ -58,12 +58,13 @@ db.select
 <h2>SEE ALSO</h2>
 
 <em>
-  <a href="g.manual.html">g.manual</a>,
-  <a href="g.search.map.html">g.search.map</a>,
+  <a href="g.manual.html">g.manual</a>
+  <!-- <a href="g.search.map.html">g.search.map</a>, -->
 </em>
 
 <h2>AUTHORS</h2>
 
 Jachym Cepicky, OpenGeoLabs s.r.o., Czech Republic
 
-<p><i>Last changed: $Date$</i>
+<p>
+<i>Last changed: $Date$</i>
