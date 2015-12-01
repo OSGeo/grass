@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 ############################################################################
 #
-# MODULE:	g.search.module
+# MODULE:	g.search.modules
 # AUTHOR(S):	Jachym Cepicky <jachym.cepicky gmail.com>
-# PURPOSE:	g.search.module in grass modules using keywords
+# PURPOSE:	g.search.modules in grass modules using keywords
 # COPYRIGHT:	(C) 2015-2016 by the GRASS Development Team
 #
 #		This program is free software under the GNU General
