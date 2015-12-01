@@ -362,4 +362,34 @@ void execute(expr_list * ee)
     G_unset_error_routine();
 }
 
+void describe_maps(FILE *fp, expr_list *ee)
+{
+    expr_list *l;
+
+    fprintf(fp, "output=");
+
+    for (l = ee; l; l = l->next) {
+	expression *e = l->exp;
+	const char *var;
+
+	if (e->type != expr_type_binding && e->type != expr_type_function)
+	    G_fatal_error("internal error: execute: invalid type: %d",
+			  e->type);
+
+	initialize(e);
+
+	if (e->type != expr_type_binding)
+	    continue;
+
+	var = e->data.bind.var;
+        fprintf(fp, "%s%s", l != ee ? "," : "", var);
+    }
+
+    fprintf(fp, "\n");
+
+    fprintf(fp, "input=");
+    list_maps(fp, ",");
+    fprintf(fp, "\n");
+}
+
 /****************************************************************************/

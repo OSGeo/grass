@@ -651,6 +651,16 @@ void close_maps(void)
 #endif
 }
 
+void list_maps(FILE *fp, const char *sep)
+{
+    int i;
+
+    for (i = 0; i < num_maps; i++) {
+        const struct map *m = &maps[i];
+        fprintf(fp, "%s%s@%s", i ? sep : "", m->name, m->mapset);
+    }
+}
+
 /****************************************************************************/
 
 int check_output_map(const char *name)

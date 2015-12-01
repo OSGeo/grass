@@ -38,6 +38,7 @@ extern char *format_expression(const expression *);
 /* evaluate.c */
 
 extern void execute(expr_list *);
+extern void describe_maps(FILE *, expr_list *);
 
 /* map.c/map3.c */
 
@@ -49,6 +50,7 @@ extern void setup_maps(void);
 extern void get_map_row(int idx, int mod, int depth, int row, int col,
 			void *buf, int res_type);
 extern void close_maps(void);
+extern void list_maps(FILE *, const char *);
 
 extern int check_output_map(const char *name);
 extern int open_output_map(const char *name, int res_type);

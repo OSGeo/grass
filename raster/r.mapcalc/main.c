@@ -106,7 +106,7 @@ int main(int argc, char **argv)
 {
     struct GModule *module;
     struct Option *expr, *file, *seed;
-    struct Flag *random;
+    struct Flag *random, *describe;
     int all_ok;
 
     G_gisinit(argv[0]);
@@ -139,6 +139,10 @@ int main(int argc, char **argv)
     random = G_define_flag();
     random->key = 's';
     random->description = _("Generate random seed (result is non-deterministic)");
+
+    describe = G_define_flag();
+    describe->key = 'l';
+    describe->description = _("List input and output maps");
 
     if (argc == 1)
     {
@@ -184,6 +188,11 @@ int main(int argc, char **argv)
 	seed_value = G_srand48_auto();
 	seeded = 1;
 	G_debug(3, "Generated random seed (-s): %ld", seed_value);
+    }
+
+    if (describe->answer) {
+        describe_maps(stdout, result);
+        return EXIT_SUCCESS;
     }
 
     pre_exec();
