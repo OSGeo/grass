@@ -6,10 +6,10 @@ conditions. Solar parameters (e.g. time of sunrise and sunset, declination,
 extraterrestrial irradiance, daylight length) are stored in the resultant maps'
 history files. Alternatively, the local time can be specified to compute solar
 incidence angle and/or irradiance raster maps. The shadowing effect of the
-topography is optionally incorporated. This can be done either by calculating
-the shadowing effect directly from the digital elevation model or using rasters
-of the horizon height which is much faster. The horizon rasters can be
-constructed using  <a href="r.horizon.html">r.horizon</a>.
+topography is incorporated by default. This can be done either internally by
+calculatoion of the shadowing effect directly from the digital elevation model
+or by specifying raster maps of the horizon height which is much faster. These
+horizon raster maps can be calculated using <a href="r.horizon.html">r.horizon</a>.
 <p>For latitude-longitude coordinates it requires that the elevation map is in meters.
 The rules are:
 <ul>
@@ -33,8 +33,9 @@ are limited only by the memory and data storage resources. The model is built
 to fulfil user needs in various fields of science (hydrology, climatology,
 ecology and environmental sciences, photovoltaics, engineering, etc.) for
 continental, regional up to the landscape scales. 
-<p>As an option the model considers a shadowing effect of the local topography. 
-The r.sun program works in two modes. In the first mode it calculates for the set 
+<p>The model considers a shadowing effect of the local topography unless switched
+off with the <em>-p</em> flag.
+<b>r.sun</b> works in two modes: In the first mode it calculates for the set 
 local time a solar incidence angle [degrees] and solar irradiance values [W.m-2].
 In the second mode daily sums of solar radiation [Wh.m-2.day-1] are computed
 within a set day. By a scripting the two modes can be used separately or
@@ -221,7 +222,7 @@ r.mapcalc "lon_raster = x()"
 END OF WE DON'T KNOW 
 -->
 
-<h3>Shadow maps</h3>
+<h3>Extraction of shadow maps</h3>
 A map of shadows can be extracted from the solar incidence angle map
 (incidout). Areas with zero values are shadowed. This will not work
 if the <em>-p</em> flag has been used.
