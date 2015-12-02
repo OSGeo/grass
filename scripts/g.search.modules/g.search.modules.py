@@ -143,7 +143,10 @@ def colorize(text, attrs=None, pattern=None):
     
 
     if COLORIZE:
-        from termcolor import colored
+        try:
+            from termcolor import colored
+        except ImportError:
+            grass.fatal(_("Cannot colorize, python-termcolor is not installed"))
     else:
         def colored(pattern, attrs):
             return pattern
