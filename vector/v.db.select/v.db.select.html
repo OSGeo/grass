@@ -65,6 +65,67 @@ cat|GEONAMEID|NAME|ASCIINAME|ALTERNATEN|FEATURECLA|FEATURECOD|...
 ...
 </pre></div>
 
+<h3>Select features with distinct road names</h3>
+<div class="code"><pre>
+v.db.select map=roadsmajor columns=ROAD_NAME group=ROAD_NAME
+ROAD_NAME
+
+I-40
+I-440
+I-540
+NC-231
+NC-39
+NC-42
+...
+</pre></div>
+
+It is also possible to combine with <em>where</em> option
+<div class="code"><pre>
+v.db.select map=roadsmajor columns=ROAD_NAME,MULTILANE group=ROAD_NAME where='ROAD_NAME is not null'
+ROAD_NAME|MULTILANE
+I-40|yes
+I-440|yes
+I-540|yes
+NC-231|no
+NC-39|no
+NC-42|no
+NC-50|no
+NC-54|no
+NC-55|no
+NC-96|no
+NC-97|no
+NC-98|no
+US-1|
+US-401|no
+US-64|yes
+US-70|yes
+</pre></div>
+
+It can also use more columns in <em>group</em> option
+<div class="code"><pre>
+v.db.select map=roadsmajor columns=ROAD_NAME,MULTILANE group=ROAD_NAME,MULTILANE where='ROAD_NAME is not null'
+ROAD_NAME|MULTILANE
+I-40|yes
+I-440|yes
+I-540|yes
+NC-231|no
+NC-39|no
+NC-42|no
+NC-50|no
+NC-54|no
+NC-55|no
+NC-96|no
+NC-97|no
+NC-98|no
+US-1|
+US-1|yes
+US-401|no
+US-401|yes
+US-64|yes
+US-70|yes
+</pre></div>
+
+
 <h2>SEE ALSO</h2>
 
 <em>
@@ -75,6 +136,8 @@ cat|GEONAMEID|NAME|ASCIINAME|ALTERNATEN|FEATURECLA|FEATURECOD|...
 
 Radim Blazek, ITC-Irst, Trento, Italy<br>
 Minimal region extent added by Martin Landa,
-FBK-irst (formerly ITC-irst), Trento, Italy (2008/08)
+FBK-irst (formerly ITC-irst), Trento, Italy (2008/08)<br>
+Group option added by Luca Delucchi,
+Fondazione Edmund Mach, Trento, Italy (2015/12)
 
 <p><i>Last changed: $Date$</i>
