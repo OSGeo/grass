@@ -15,14 +15,18 @@ and regular patterns. A texture can be characterized by tone (grey level intensi
 properties) and structure (spatial relationships). Since textures are highly scale
 dependent, hierarchical textures may occur.
 <p>
-<em>r.texture</em> reads a GRASS raster map as input and calculates textural 
-features based on spatial
-dependence matrices for north-south, east-west, northwest, and southwest
-directions using a side by side neighborhood (i.e., a distance of 1). The user
-should be sure to carefully set the resolution (using <em>g.region</em>) before
-running this program, or the computer may run out of memory. 
-The output consists into four images for each textural feature, one for every
-direction.
+    
+<em>r.texture</em> reads a GRASS raster map as input and calculates
+textural features based on spatial dependence matrices for north-south,
+east-west, northwest, and southwest directions using a side by side
+neighborhood (i.e., a distance of 1), and writes out by default the average
+over all angles for each measure. Optionally, using flag <b>-s</b> the output
+consists of four images for each textural feature, one for every direction
+(0, 45, 90, 135).
+
+<p>
+The user must carefully set the resolution (using <em>g.region</em>) before
+running this program, or the computer may run out of memory.
 
 <p>
 A commonly used texture model is based on the so-called grey level co-occurrence
