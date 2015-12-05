@@ -6,12 +6,10 @@ usage()
 Usage: geos-config [OPTIONS]
 Options:
      [--prefix]
-     [--version]
      [--libs]
      [--cflags]
      [--ldflags]
      [--includes]
-     [--jtsport]
 EOF
     exit $1
 }
@@ -25,13 +23,10 @@ case "$1" in
 esac
 case $1 in
     --prefix)
-    echo $OSGEO4W_ROOT_MSYS
-     ;;
-    --version)
-    echo 3.2.2
+      echo $OSGEO4W_ROOT_MSYS
      ;;
     --cflags)
-    echo -I$OSGEO4W_ROOT_MSYS/include
+      echo -I$OSGEO4W_ROOT_MSYS/include
       ;;
     --libs)
       echo $OSGEO4W_ROOT_MSYS/lib/geos_c.lib
@@ -41,9 +36,6 @@ case $1 in
       ;;
     --includes)
       echo $OSGEO4W_ROOT_MSYS/include
-      ;;
-    --jtsport)
-    echo 1.10.0 
       ;;
     *)
       usage 1 1>&2
