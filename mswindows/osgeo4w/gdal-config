@@ -5,9 +5,7 @@ CONFIG_LIBS="$OSGEO4W_ROOT_MSYS/lib/gdal_i.lib"
 CONFIG_DEP_LIBS="$OSGEO4W_ROOT_MSYS/lib/libpng13.lib $OSGEO4W_ROOT_MSYS/lib/zlib.lib"
 CONFIG_PREFIX="$OSGEO4W_ROOT_MSYS"
 CONFIG_CFLAGS="-I$OSGEO4W_ROOT_MSYS/include"
-CONFIG_VERSION="1.9.0"
 CONFIG_OGR_ENABLED=yes
-CONFIG_FORMATS="gxf gtiff hfa aigrid aaigrid ceos ceos2 iso8211 xpm sdts raw dted mem jdem envisat elas fit vrt usgsdem l1b nitf bmp pcidsk airsar rs2 ilwis rmf rik leveller sgi idrisi bsb gif jpeg png pcraster "
 usage()
 {
 	cat <<EOF
@@ -17,9 +15,7 @@ Options:
 	[--libs]
 	[--dep-libs]
 	[--cflags]
-	[--version]
 	[--ogr-enabled]
-	[--formats]
 EOF
 	exit $1
 }
@@ -45,16 +41,8 @@ case $1 in
     echo $CONFIG_PREFIX
     ;;
 
-  --version)
-    echo $CONFIG_VERSION
-    ;;
-
   --ogr-enabled)
     echo $CONFIG_OGR_ENABLED
-    ;;
-
-  --formats)
-    echo $CONFIG_FORMATS
     ;;
 
   *)
