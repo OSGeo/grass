@@ -96,7 +96,7 @@ exec 3>&1 >> mswindows/osgeo4w/package.log 2>&1
 
 [ -d mswindows/osgeo4w/lib ] || mkdir mswindows/osgeo4w/lib 
 cp -uv $OSGEO4W_ROOT_MSYS/lib/sqlite3_i.lib mswindows/osgeo4w/lib/libsqlite3.a 
-cp -uv $OSGEO4W_ROOT_MSYS/lib/proj_i.lib mswindows/osgeo4w/lib/libproj_i.a 
+cp -uv $OSGEO4W_ROOT_MSYS/lib/proj_i.lib mswindows/osgeo4w/lib/libproj.a 
 cp -uv $OSGEO4W_ROOT_MSYS/lib/libtiff_i.lib mswindows/osgeo4w/lib/libtiff.a 
 cp -uv $OSGEO4W_ROOT_MSYS/lib/libpq.lib mswindows/osgeo4w/lib/libpq.a 
 cp -uv $OSGEO4W_ROOT_MSYS/lib/jpeg_i.lib mswindows/osgeo4w/lib/libjpeg.a 
@@ -114,7 +114,7 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 
 	log configure
 	./configure \
-		--with-libs="$OSGEO4W_ROOT_MSYS/lib $OSGEO4W_ROOT_MSYS/apps/msys/lib $PWD/mswindows/osgeo4w/lib" \
+		--with-libs="$PWD/mswindows/osgeo4w/lib $OSGEO4W_ROOT_MSYS/lib $OSGEO4W_ROOT_MSYS/apps/msys/lib" \
 		--with-includes="$OSGEO4W_ROOT_MSYS/include $OSGEO4W_ROOT_MSYS/apps/msys/include" \
 		--libexecdir=$OSGEO4W_ROOT_MSYS/bin \
 		--prefix=$OSGEO4W_ROOT_MSYS/apps/grass \
@@ -140,12 +140,6 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 	        --with-cairo \
 		--with-cairo-includes=$OSGEO4W_ROOT_MSYS/include/cairo \
                 --with-postgres
-
-	# fix Proj4 4.9 compilation issues (workaround - better solution must be found)
-	proj_libs=`$PWD/mswindows/osgeo4w/proj4-config --libs`
-	sed -e "s#-lproj#${proj_libs}#g" \
-	    include/Make/Platform.make > include/Make/Platform.make.new
-	mv include/Make/Platform.make.new include/Make/Platform.make
 	
 	touch mswindows/osgeo4w/configure-stamp
 fi
