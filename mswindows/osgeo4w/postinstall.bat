@@ -1,8 +1,7 @@
 set ICON=%OSGEO4W_ROOT%\apps\grass\grass-@VERSION@\gui\icons\grass_osgeo.ico
 set ICON_CMD=%OSGEO4W_ROOT%\apps\grass\grass-@VERSION@\gui\icons\grass_cmd.ico
 set BATCH=%OSGEO4W_ROOT%\bin\@GRASS_EXECUTABLE@.bat
-textreplace -std -t "%OSGEO4W_ROOT%"\bin\@GRASS_EXECUTABLE@.bat
-textreplace -std -t "%OSGEO4W_ROOT%"\bin\@GRASS_EXECUTABLE@
+textreplace -std -t "%BATCH%"
 textreplace -std -t "%OSGEO4W_ROOT%"\apps\grass\grass-@VERSION@\etc\fontcap
 
 mkdir "%OSGEO4W_STARTMENU%\GRASS GIS @VERSION@" 
@@ -29,5 +28,4 @@ set GISRC=dummy
 rem run g.mkfontcap outside a GRASS session
 "%GISBASE%\bin\g.mkfontcap.exe" -o
 
-del "%OSGEO4W_ROOT%"\bin\@GRASS_EXECUTABLE@.bat.tmpl
-del "%OSGEO4W_ROOT%"\bin\@GRASS_EXECUTABLE@.tmpl
+del "%BATCH%.tmpl
