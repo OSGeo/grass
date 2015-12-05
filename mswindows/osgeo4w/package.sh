@@ -141,6 +141,12 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-cairo-includes=$OSGEO4W_ROOT_MSYS/include/cairo \
                 --with-postgres
 
+	# fix Proj4 4.9 compilation issues (workaround - better solution must be found)
+	proj_libs=`$PWD/mswindows/osgeo4w/proj4-config --libs`
+	sed -e "s#-lproj#${proj_libs}#g" \
+	    include/Make/Platform.make > include/Make/Platform.make.new
+	mv include/Make/Platform.make.new include/Make/Platform.make
+	
 	touch mswindows/osgeo4w/configure-stamp
 fi
 
