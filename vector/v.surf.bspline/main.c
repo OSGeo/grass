@@ -362,16 +362,6 @@ int main(int argc, char *argv[])
                           vector);
     }
 
-    /* raster output */
-    raster = -1;
-    Rast_set_fp_type(DCELL_TYPE);
-    if (!vector && map) {
-	grid = TRUE;
-	raster = Rast_open_fp_new(out_map_opt->answer);
-
-	G_verbose_message(_("Cells for raster map <%s> will be interpolated"),
-                          map);
-    }
 
     /* read z values from attribute table */
     if (bspline_field > 0) {
@@ -429,6 +419,17 @@ int main(int argc, char *argv[])
 	/* sqlite likes that ??? */
 	db_close_database_shutdown_driver(driver);
 	driver = db_start_driver_open_database(drv, db);
+    }
+
+    /* raster output */
+    raster = -1;
+    Rast_set_fp_type(DCELL_TYPE);
+    if (!vector && map) {
+	grid = TRUE;
+	raster = Rast_open_fp_new(out_map_opt->answer);
+
+	G_verbose_message(_("Cells for raster map <%s> will be interpolated"),
+                          map);
     }
 
     /* Setting regions and boxes */
