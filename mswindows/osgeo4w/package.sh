@@ -161,9 +161,9 @@ sed -e "s#@VERSION@#$VERSION#g" -e "s#@OSGEO4W_ROOT@#$OSGEO4W_ROOT#g" -e "s#@POS
 sed -e "s#@VERSION@#$VERSION#g" -e "s#@OSGEO4W_ROOT_MSYS@#$OSGEO4W_ROOT#g" \
     mswindows/osgeo4w/env.bat.tmpl >$OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/etc/env.bat
 sed -e "s#@VERSION@#$VERSION#g" -e "s#@GRASS_EXECUTABLE@#$GRASS_EXECUTABLE#g" \
-    mswindows/osgeo4w/postinstall.bat >$OSGEO4W_ROOT_MSYS/etc/postinstall/${GRASS_EXECUTABLE}.bat 
+    mswindows/osgeo4w/postinstall.bat >$OSGEO4W_ROOT_MSYS/etc/postinstall/grass${PACKAGE_NAME}.bat
 sed -e "s#@VERSION@#$VERSION#g" -e "s#@GRASS_EXECUTABLE@#$GRASS_EXECUTABLE#g" \
-    mswindows/osgeo4w/preremove.bat >$OSGEO4W_ROOT_MSYS/etc/preremove/${GRASS_EXECUTABLE}.bat 
+    mswindows/osgeo4w/preremove.bat >$OSGEO4W_ROOT_MSYS/etc/preremove/grass${PACKAGE_NAME}.bat 
 
 if [ -n "$PACKAGE" ]; then
     log building vc libraries 
@@ -186,15 +186,15 @@ if [ -n "$PACKAGE" ]; then
     
     # bat files - unix2dos
     unix2dos bin/${GRASS_EXECUTABLE}.bat.tmpl
-    unix2dos etc/postinstall/${GRASS_EXECUTABLE}.bat
-    unix2dos etc/preremove/${GRASS_EXECUTABLE}.bat
+    unix2dos etc/postinstall/grass${PACKAGE_NAME}.bat
+    unix2dos etc/preremove/grass${PACKAGE_NAME}.bat
     
     # grass package
     tar -cjf $PDIR/grass$PACKAGE_NAME-$VERSION-$PACKAGE.tar.bz2 \
 	apps/grass/grass-$VERSION \
 	bin/${GRASS_EXECUTABLE}.bat.tmpl \
-	etc/postinstall/${GRASS_EXECUTABLE}.bat \
-	etc/preremove/${GRASS_EXECUTABLE}.bat
+	etc/postinstall/grass${PACKAGE_NAME}.bat \
+	etc/preremove/grass${PACKAGE_NAME}.bat
     
     rm bin/${GRASS_EXECUTABLE}.bat.tmpl
     
