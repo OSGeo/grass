@@ -46,7 +46,7 @@ static const char *standarddirs[] = {
     "${HOME}/Library/Fonts",
     "/Library/Fonts",
     "/System/Library/Fonts",
-    "${WINDIR}/Fonts",
+    "${WINDIR}\\Fonts",
     NULL
 };
 
