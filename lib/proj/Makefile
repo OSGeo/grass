@@ -41,7 +41,7 @@ $(FTOL_OBJ): $(OBJDIR)/ftol.o
 endif
 
 $(NAD_DSTFILES): $(NAD_DIR)/%: %.lla | $(NAD_DIR)
-	$(NAD2BIN) < $< $@
+	$(NAD2BIN) $@ < $< 
 
 $(NT_DSTFILES): $(NAD_DIR)/%: % | $(NAD_DIR)
 	$(INSTALL_DATA) $< $@
