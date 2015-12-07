@@ -262,7 +262,7 @@ def main():
         f.write("UPDATE %s SET" % fi['table'])
         first_var = 1
         for colname in colnames:
-            variable = colname.replace("%s_" % colprefix, '')
+            variable = colname.replace("%s_" % colprefix, '', 1)
             if dbfdriver:
                 variable = variables_dbf[variable]
             i = variables[variable]
