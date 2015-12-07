@@ -78,7 +78,8 @@ class Frame(wx.Frame):
 	dc = wx.PaintDC(self)
 	data = app.imgbuf.reshape((app.i_height, app.i_width, 4))
 	data = data[::,::,2::-1]
-	image = wx.ImageFromData(app.i_width, app.i_height, data.tostring())
+	fn = getattr(data, "tobytes", getattr(data, "tostring"))
+	image = wx.ImageFromData(app.i_width, app.i_height, fn())
 	dc.DrawBitmap(wx.BitmapFromImage(image), x0, y0, False)
 
     def redraw(self, ev):

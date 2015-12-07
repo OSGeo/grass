@@ -258,7 +258,7 @@ def RenderText(text, font, bgcolor, fgcolor):
 def WxImageToPil(image):
     """Converts wx.Image to PIL image"""
     pilImage = Image.new('RGB', (image.GetWidth(), image.GetHeight()))
-    pilImage.fromstring(image.GetData())
+    getattr(pilImage, "frombytes", getattr(pilImage, "fromstring"))(image.GetData())
     return pilImage
 
 
