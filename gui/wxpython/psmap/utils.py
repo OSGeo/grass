@@ -362,29 +362,7 @@ def getRasterType(map):
         return rasterType
     else:
         return None
-   
-def PilImageToWxImage(pilImage, copyAlpha = True):
-    """Convert PIL image to wx.Image
-    
-    Based on http://wiki.wxpython.org/WorkingWithImages
-    """
-    hasAlpha = pilImage.mode[-1] == 'A'
-    if copyAlpha and hasAlpha :  # Make sure there is an alpha layer copy.
-        wxImage = wx.EmptyImage( *pilImage.size )
-        pilImageCopyRGBA = pilImage.copy()
-        pilImageCopyRGB = pilImageCopyRGBA.convert('RGB')    # RGBA --> RGB
-        pilImageRgbData = pilImageCopyRGB.tostring()
-        wxImage.SetData(pilImageRgbData)
-        wxImage.SetAlphaData(pilImageCopyRGBA.tostring()[3::4])  # Create layer and insert alpha values.
 
-    else :    # The resulting image will not have alpha.
-        wxImage = wx.EmptyImage(*pilImage.size)
-        pilImageCopy = pilImage.copy()
-        pilImageCopyRGB = pilImageCopy.convert('RGB')    # Discard any alpha from the PIL image.
-        pilImageRgbData = pilImageCopyRGB.tostring()
-        wxImage.SetData(pilImageRgbData)
-
-    return wxImage
 
 def BBoxAfterRotation(w, h, angle):
     """Compute bounding box or rotated rectangle
