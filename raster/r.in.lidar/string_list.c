@@ -31,7 +31,7 @@ void string_list_from_file(struct StringList *string_list, char *filename)
     FILE *file = fopen(filename, "r");  /* should check the result */
     char *line = G_malloc(GPATH_MAX * sizeof(char));
 
-    while (G_getl(line, GPATH_MAX * sizeof(char), file)) {
+    while (G_getl2(line, GPATH_MAX * sizeof(char), file)) {
         G_debug(5, "line content from file %s: %s\n", filename, line);
         string_list_add_item(string_list, line);
         line = G_malloc(GPATH_MAX);
