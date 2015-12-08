@@ -478,7 +478,7 @@ int read_next_line_pg(struct Map_info *Map,
                 return (int)sf_type;
             }
 
-            if (sf_type == SF_UNKNOWN || sf_type == SF_NONE) {
+            if (sf_type == SF_GEOMETRY || sf_type == SF_NONE) {
                 G_warning(_("Feature without geometry. Skipped."));
                 pg_info->cache.lines_next = pg_info->cache.lines_num = 0;
                 continue;
@@ -752,7 +752,7 @@ unsigned char *hex_to_wkb(const char *hex_data, int *nbytes)
    \param[out] fparts used for building pseudo-topology (or NULL)
 
    \return simple feature type
-   \return SF_UNKNOWN on error
+   \return SF_GEOMETRY on error
  */
 SF_FeatureType Vect__cache_feature_pg(const char *data, int skip_polygon,
                                       int force_type,
@@ -785,7 +785,7 @@ SF_FeatureType Vect__cache_feature_pg(const char *data, int skip_polygon,
         if (nbytes > 0) {
             G_debug(3, "Vect__cache_feature_pg(): invalid geometry");
             G_warning(_("Invalid WKB content: %d bytes"), nbytes);
-            return SF_UNKNOWN;
+            return SF_GEOMETRY;
         }
         else {
             G_debug(3, "Vect__cache_feature_pg(): no geometry");
@@ -803,7 +803,7 @@ SF_FeatureType Vect__cache_feature_pg(const char *data, int skip_polygon,
         G_warning(_("Reading EWKB with 4-dimensional coordinates (XYZM) "
                     "is not supported"));
         /* G_free(wkb_data); */
-        return SF_UNKNOWN;
+        return SF_GEOMETRY;
     }
 
     /* PostGIS EWKB format includes an  SRID, but this won't be       
@@ -823,7 +823,7 @@ SF_FeatureType Vect__cache_feature_pg(const char *data, int skip_polygon,
 
     if (nbytes < 9 && nbytes != -1) {
         /* G_free(wkb_data); */
-        return SF_UNKNOWN;
+        return SF_GEOMETRY;
     }
 
     /* Get the geometry feature type. For now we assume that geometry
@@ -891,7 +891,7 @@ SF_FeatureType Vect__cache_feature_pg(const char *data, int skip_polygon,
 
     /* G_free(wkb_data); */
 
-    return ret > 0 ? ftype : SF_UNKNOWN;
+    return ret > 0 ? ftype : SF_GEOMETRY;
 }
 
 /*!
