@@ -71,7 +71,7 @@ int Vect_build_pg(struct Map_info *Map, int build)
         return 0;
     pg_info->inTransaction = FALSE;
     
-    if (pg_info->feature_type == SF_UNKNOWN)
+    if (pg_info->feature_type == SF_GEOMETRY)
         return 1;
     
     if (build == plus->built)
