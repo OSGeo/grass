@@ -17,6 +17,8 @@
 #include <stdlib.h>
 #include <unistd.h>		/* for sleep() */
 #include <string.h>
+#include <errno.h>
+
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
@@ -151,6 +153,9 @@ static int read_env(int loc)
         fclose(fd);
     }
 
+    if (!fd) /* reading failed, call fatal error */
+      G_fatal_error(_("Unable to read GISRC <%s>: %s"), loc, strerror(errno));
+
     G_initialize_done(&st->init[loc]);
     return 0;
 }
@@ -167,6 +172,9 @@ static void force_read_env(int loc)
         parse_env(fd, loc);
         fclose(fd);
     }
+    
+    if (!fd) /* reading failed, call fatal error */
+      G_fatal_error(_("Unable to read GISRC <%s>: %s"), loc, strerror(errno));
 }
 
 
