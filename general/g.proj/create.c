@@ -77,9 +77,9 @@ void create_epsg(const char *location, const char *epsg)
     
     /* if inputs were not clean it should of failed by now */
     if (location) {
-        snprintf(path, sizeof(path), "%s%c%s%c%s%c%s", G_gisdbase(), HOST_DIRSEP, 
-                 location, HOST_DIRSEP,
-                 "PERMANENT", HOST_DIRSEP, "PROJ_EPSG");
+        G_snprintf(path, sizeof(path), "%s%c%s%c%s%c%s", G_gisdbase(), HOST_DIRSEP, 
+                   location, HOST_DIRSEP,
+                   "PERMANENT", HOST_DIRSEP, "PROJ_EPSG");
         path[sizeof(path)-1] = '\0';
     }
     else {
