@@ -1192,7 +1192,7 @@ fi
 
 
 if test "$MINGW32" = yes ; then
-  winpwd="$pwd -W"
+  winpwd="pwd -W"
 else
   winpwd="$pwd"
 fi
