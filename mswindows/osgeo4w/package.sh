@@ -1,4 +1,4 @@
-#!sh
+#!/usr/bin/sh
 
 set -e
 
@@ -17,21 +17,33 @@ if ! [ -d /tmp ]; then
     fi 
 fi 
 
-export PACKAGE=${1:-1}
-# package name for osgeo4w
-# eg. 70-dev -> grass70-dev, empty for release
-export PACKAGE_NAME=$2
-# OSGeo4W directory postfix, separate OSGeo4W installations are used
-# for building GRASS 6.x and 7.x
-if test -z "$3" ; then
-    OSGEO4W_ROOT_POSTFIX=""
-else
-    OSGEO4W_ROOT_POSTFIX="$3"
+# package patch number
+# e.g. 'r65400-1' for daily builds, '-1' for release
+if [ -z  $PACKAGE_PATCH ]; then
+    PACKAGE_PATCH=1
 fi
-export OSGEO4W_ROOT_MSYS="/c/OSGeo4W${OSGEO4W_ROOT_POSTFIX}"
-export OSGEO4W_ROOT="C:\\\OSGeo4W${OSGEO4W_ROOT_POSTFIX}"
 
-export PATH=.:/usr/local/bin:/bin:$OSGEO4W_ROOT_MSYS/bin:/c/WINDOWS/system32:/c/WINDOWS:/c/WINDOWS/System32/Wbem:/c/Subversion/bin:$PWD/mswindows/osgeo4w
+# package name 
+# eg. '-daily' -> 'grass-daily', empty for release
+if [ -z $PACKAGE_POSTFIX ]; then
+    PACKAGE_POSTFIX=""
+fi
+
+# OSGeo4W directory postfix
+# eg. '64' for 64bit, empty for 32bit
+if [ -z $OSGEO4W_POSTFIX ]; then
+    OSGEO4W_POSTFIX=""
+fi
+if [ "$OSGEO4W_POSTFIX" = "64" ]; then
+    MINGW_POSTFIX=64
+else
+    MINGW_POSTFIX=32
+fi
+
+export OSGEO4W_ROOT_MSYS="/c/OSGeo4W${OSGEO4W_POSTFIX}"
+export OSGEO4W_ROOT="C:\\\OSGeo4W${OSGEO4W_POSTFIX}"
+
+export PATH=/usr/bin:/mingw${MINGW_POSTFIX}/bin/:$OSGEO4W_ROOT_MSYS/bin:$PWD/mswindows/osgeo4w/lib
 
 T0=$(date +%s) 
 LT=$T0 
@@ -44,10 +56,10 @@ log() {
     
     if [ -n "$CS" ]; then 
         local D H M S 
- 	(( S=T-$LT )) 
- 	(( M=S/60 )); (( S=S%60 )) 
- 	(( H=M/60 )); (( M=M%60 )) 
- 	(( D=H/24 )); (( H=H%24 )) 
+ 	S=$(( $T-$LT )) 
+ 	M=$(( S/60 )); S=$(( S%60 )) 
+ 	H=$(( M/60 )); M=$(( M%60 )) 
+ 	D=$(( H/24 )); H=$(( H%24 )) 
  	
  	echo -n "$NOW: FINISHED $CS AFTER " 
  	(( D>0 )) && echo -n "${D}d" 
@@ -81,26 +93,53 @@ else
     GRASS_EXECUTABLE=grass${MAJOR}${MINOR}
 fi
 
-export GRASS_PYTHON="$OSGEO4W_ROOT_MSYS/bin/python.exe"
-export PYTHONHOME="$OSGEO4W_ROOT_MSYS/apps/Python27"
-
 if [ -f mswindows/osgeo4w/package.log ]; then 
     i=0 
     while [ -f mswindows/osgeo4w/package.log.$i ]; do 
- 	(( i++ )) 
+ 	(( i+=1 )) 
     done 
     mv mswindows/osgeo4w/package.log mswindows/osgeo4w/package.log.$i 
 fi 
 
 exec 3>&1 >> mswindows/osgeo4w/package.log 2>&1 
 
+dll_to_a() {
+        # http://sourceforge.net/apps/trac/mingw-w64/wiki/Answer%2064%20bit%20MSVC-generated%20x64%20.lib
+        echo "$1 => $2"
+        gendef - $1 >$2.def
+	if [ "$MINGW_POSTFIX" = "64" ]; then
+            dlltool --as-flags=--64 -m i386:x86-64 -k --output-lib $2.dll.a --input-def $2.def
+	else
+	    dlltool -k --output-lib $2.dll.a --input-def $2.def
+	fi
+}
+
+log dll.to.a
 [ -d mswindows/osgeo4w/lib ] || mkdir mswindows/osgeo4w/lib 
-cp -uv $OSGEO4W_ROOT_MSYS/lib/sqlite3_i.lib mswindows/osgeo4w/lib/libsqlite3.a 
-cp -uv $OSGEO4W_ROOT_MSYS/lib/proj_i.lib mswindows/osgeo4w/lib/libproj.a 
-cp -uv $OSGEO4W_ROOT_MSYS/lib/libtiff_i.lib mswindows/osgeo4w/lib/libtiff.a 
-cp -uv $OSGEO4W_ROOT_MSYS/lib/libpq.lib mswindows/osgeo4w/lib/libpq.a 
-cp -uv $OSGEO4W_ROOT_MSYS/lib/jpeg_i.lib mswindows/osgeo4w/lib/libjpeg.a 
-cp -uv $OSGEO4W_ROOT_MSYS/lib/zlib.lib mswindows/osgeo4w/lib/libz.a 
+dll_to_a $OSGEO4W_ROOT_MSYS/bin/proj.dll        mswindows/osgeo4w/lib/libproj
+dll_to_a $OSGEO4W_ROOT_MSYS/bin/zlib1.dll       mswindows/osgeo4w/lib/libz
+dll_to_a $OSGEO4W_ROOT_MSYS/bin/iconv.dll       mswindows/osgeo4w/lib/libiconv
+dll_to_a $OSGEO4W_ROOT_MSYS/bin/gdal111.dll     mswindows/osgeo4w/lib/libgdal
+dll_to_a $OSGEO4W_ROOT_MSYS/bin/liblas_c.dll    mswindows/osgeo4w/lib/liblas_c
+dll_to_a $OSGEO4W_ROOT_MSYS/bin/geos_c.dll      mswindows/osgeo4w/lib/libgeos_c
+dll_to_a $OSGEO4W_ROOT_MSYS/bin/libtiff.dll     mswindows/osgeo4w/lib/libtiff
+if [ "$MINGW_POSTFIX" = "64" ]; then
+    dll_to_a $OSGEO4W_ROOT_MSYS/bin/libpng16.dll    mswindows/osgeo4w/lib/libpng
+    dll_to_a $OSGEO4W_ROOT_MSYS/bin/jpeg.dll        mswindows/osgeo4w/lib/libjpeg
+else
+# TODO (related to dependecies)
+#   dll_to_a $OSGEO4W_ROOT_MSYS/bin/libpng12-0.dll  mswindows/osgeo4w/lib/libpng
+    dll_to_a $OSGEO4W_ROOT_MSYS/bin/jpeg_osgeo.dll  mswindows/osgeo4w/lib/libjpeg
+fi
+dll_to_a $OSGEO4W_ROOT_MSYS/bin/libpq.dll       mswindows/osgeo4w/lib/libpq
+dll_to_a $OSGEO4W_ROOT_MSYS/bin/sqlite3.dll     mswindows/osgeo4w/lib/libsqlite3
+dll_to_a $OSGEO4W_ROOT_MSYS/bin/cairo.dll       mswindows/osgeo4w/lib/libcairo
+dll_to_a $OSGEO4W_ROOT_MSYS/bin/libfftw3-3.dll  mswindows/osgeo4w/lib/libfftw3
+dll_to_a $OSGEO4W_ROOT_MSYS/bin/pdcurses.dll  mswindows/osgeo4w/lib/libpdcurses
+
+cp -uv $OSGEO4W_ROOT_MSYS/lib/libxdr.a          mswindows/osgeo4w/lib
+#cp -uv $OSGEO4W_ROOT_MSYS/lib/libregex.a        mswindows/osgeo4w/lib
+cp -uv $OSGEO4W_ROOT_MSYS/lib/libfreetype.dll.a mswindows/osgeo4w/lib
 
 if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 
@@ -112,19 +151,25 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 	log remove old logs
 	rm -f mswindows/osgeo4w/package.log.[0-9][0-9][0-9]
 
+	if [ "$MINGW_POSTFIX" = "64" ]; then
+	    conf_host=x86_64-w64-mingw32
+	else
+	    conf_host=i386-w64-mingw32
+	fi
+	
 	log configure
-	./configure \
-		--with-libs="$PWD/mswindows/osgeo4w/lib $OSGEO4W_ROOT_MSYS/lib $OSGEO4W_ROOT_MSYS/apps/msys/lib" \
-		--with-includes="$OSGEO4W_ROOT_MSYS/include $OSGEO4W_ROOT_MSYS/apps/msys/include" \
-		--libexecdir=$OSGEO4W_ROOT_MSYS/bin \
-		--prefix=$OSGEO4W_ROOT_MSYS/apps/grass \
-	        --bindir=$OSGEO4W_ROOT_MSYS/bin \
-		--includedir=$OSGEO4W_ROOT_MSYS/include \
-		--disable-x --without-x \
+	LDFLAGS="-L$PWD/mswindows/osgeo4w/lib -lz" ./configure \
+	        --host=$conf_host \
+		--with-libs="$PWD/mswindows/osgeo4w/lib "\
+		--with-includes=$OSGEO4W_ROOT_MSYS/include \
+                --libexecdir=$OSGEO4W_ROOT_MSYS/bin \
+                --prefix=$OSGEO4W_ROOT_MSYS/apps/grass \
+                --bindir=$OSGEO4W_ROOT_MSYS/bin \
+                --includedir=$OSGEO4W_ROOT_MSYS/include \
+		--without-x \
 		--with-cxx \
 		--enable-shared \
 		--enable-largefile \
-		--with-opengl=windows \
 		--with-fftw \
 		--with-freetype \
 		--with-proj-share=$OSGEO4W_ROOT_MSYS/share/proj \
@@ -132,14 +177,13 @@ if ! [ -f mswindows/osgeo4w/configure-stamp ]; then
 		--with-geos=$PWD/mswindows/osgeo4w/geos-config \
 	        --with-liblas=$PWD/mswindows/osgeo4w/liblas-config \
 		--with-sqlite \
-		--with-curses \
 		--with-regex \
 		--with-nls \
 		--with-freetype-includes=$OSGEO4W_ROOT_MSYS/include/freetype2 \
 		--with-odbc \
 	        --with-cairo \
-		--with-cairo-includes=$OSGEO4W_ROOT_MSYS/include/cairo \
-                --with-postgres
+                --with-postgres \
+	        --with-opengl=windows
 	
 	touch mswindows/osgeo4w/configure-stamp
 fi
@@ -151,6 +195,9 @@ log make install
 make install
 
 log cleanup
+rm -f diib*
+
+log prepare packaging
 mv $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass/config.h \
     $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass/config.h.mingw
 cp mswindows/osgeo4w/config.h.switch $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/include/grass/config.h
@@ -161,58 +208,70 @@ sed -e "s#@VERSION@#$VERSION#g" -e "s#@OSGEO4W_ROOT@#$OSGEO4W_ROOT#g" -e "s#@POS
 sed -e "s#@VERSION@#$VERSION#g" -e "s#@OSGEO4W_ROOT_MSYS@#$OSGEO4W_ROOT#g" \
     mswindows/osgeo4w/env.bat.tmpl >$OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/etc/env.bat
 sed -e "s#@VERSION@#$VERSION#g" -e "s#@GRASS_EXECUTABLE@#$GRASS_EXECUTABLE#g" \
-    mswindows/osgeo4w/postinstall.bat >$OSGEO4W_ROOT_MSYS/etc/postinstall/grass${PACKAGE_NAME}.bat
+    mswindows/osgeo4w/postinstall.bat >$OSGEO4W_ROOT_MSYS/etc/postinstall/grass${PACKAGE_POSTFIX}.bat
 sed -e "s#@VERSION@#$VERSION#g" -e "s#@GRASS_EXECUTABLE@#$GRASS_EXECUTABLE#g" \
-    mswindows/osgeo4w/preremove.bat >$OSGEO4W_ROOT_MSYS/etc/preremove/grass${PACKAGE_NAME}.bat 
+    mswindows/osgeo4w/preremove.bat >$OSGEO4W_ROOT_MSYS/etc/preremove/grass${PACKAGE_POSTFIX}.bat 
 
-if [ -n "$PACKAGE" ]; then
+if [ -n "$PACKAGE_PATCH" ]; then
     log building vc libraries 
     sh mswindows/osgeo4w/mklibs.sh $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/lib/*.$VERSION.dll 
     mv mswindows/osgeo4w/vc/grass*.lib $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/lib
-    # rm $OSGEO4W_ROOT_MSYS/apps/grass/grass-$VERSION/lib/*.dll
     
-    # log BUILDING GDAL GRASS plugins 
-    # $COMSPEC /c "mswindows\\osgeo4w\\gdalplugins.cmd $VERSION" 
-    
-    log CREATING PACKAGES 
+    log creating package
     mkdir -p mswindows/osgeo4w/package
     
     PDIR=$PWD/mswindows/osgeo4w/package
     SRC=$PWD
     cd $OSGEO4W_ROOT_MSYS 
 
+    # update startup script
     sed -e "s#@VERSION@#$VERSION#g" -e "s#@POSTFIX@#$MAJOR$MINOR#g" \
-	$SRC/mswindows/osgeo4w/grass.bat.tmpl >$OSGEO4W_ROOT_MSYS/bin/${GRASS_EXECUTABLE}.bat.tmpl
+	$SRC/mswindows/osgeo4w/grass.bat.tmpl > bin/${GRASS_EXECUTABLE}.bat.tmpl
     
     # bat files - unix2dos
     unix2dos bin/${GRASS_EXECUTABLE}.bat.tmpl
-    unix2dos etc/postinstall/grass${PACKAGE_NAME}.bat
-    unix2dos etc/preremove/grass${PACKAGE_NAME}.bat
+    unix2dos etc/postinstall/grass${PACKAGE_POSTFIX}.bat
+    unix2dos etc/preremove/grass${PACKAGE_POSTFIX}.bat
     
-    # grass package
-    tar -cjf $PDIR/grass$PACKAGE_NAME-$VERSION-$PACKAGE.tar.bz2 \
+    # copy dependecies (TODO: to be reduced)
+    if [ "$MINGW_POSTFIX" = "64" ]; then
+	mingw_libgcc=libgcc_s_seh-1.dll
+    else
+	mingw_libgcc=libgcc_s_dw2-1.dll
+    fi
+    cp -uv /mingw${MINGW_POSTFIX}/bin/libintl-8.dll \
+        /mingw${MINGW_POSTFIX}/bin/libiconv-2.dll \
+	/mingw${MINGW_POSTFIX}/bin/libfontconfig-1.dll \
+	/mingw${MINGW_POSTFIX}/bin/$mingw_libgcc \
+	/mingw${MINGW_POSTFIX}/bin/libwinpthread-1.dll \
+	/mingw${MINGW_POSTFIX}/bin/libexpat-1.dll \
+	/mingw${MINGW_POSTFIX}/bin/libfreetype-6.dll \
+	/mingw${MINGW_POSTFIX}/bin/libbz2-1.dll \
+        /mingw${MINGW_POSTFIX}/bin/libharfbuzz-0.dll \
+	/mingw${MINGW_POSTFIX}/bin/libglib-2.0-0.dll \
+	/mingw${MINGW_POSTFIX}/bin/libpng16-16.dll \
+	bin
+    
+    # creating grass package
+    tar -cjf $PDIR/grass$PACKAGE_POSTFIX-$VERSION-$PACKAGE_PATCH.tar.bz2 \
 	apps/grass/grass-$VERSION \
 	bin/${GRASS_EXECUTABLE}.bat.tmpl \
-	etc/postinstall/grass${PACKAGE_NAME}.bat \
-	etc/preremove/grass${PACKAGE_NAME}.bat
-    
+	etc/postinstall/grass${PACKAGE_POSTFIX}.bat \
+	etc/preremove/grass${PACKAGE_POSTFIX}.bat \
+	bin/libintl-8.dll \
+        bin/libiconv-2.dll \
+	bin/libfontconfig-1.dll \
+	bin/$mingw_libgcc \
+	bin/libwinpthread-1.dll \
+	bin/libexpat-1.dll \
+	bin/libfreetype-6.dll \
+	bin/libbz2-1.dll \
+        bin/libharfbuzz-0.dll \
+	bin/libglib-2.0-0.dll \
+	bin/libpng16-16.dll \
+
+    # clean up
     rm bin/${GRASS_EXECUTABLE}.bat.tmpl
-    
-    # grass-devel package (obsolete)
-    ###tar -cjf $PDIR/grass-devel-$VERSION-$PACKAGE.tar.bz2 \
-    ###apps/grass/grass-$VERSION/include
-    
-    # grass-devel-mingw package (obsolete)
-    ###tar -cjf $PDIR/grass-devel-mingw-$VERSION-$PACKAGE.tar.bz2 \
-    ###apps/grass/grass-$VERSION/lib/*.a
-    
-    # grass-devel-vc package (obsolete)
-    ###tar -cjf $PDIR/grass-devel-vc-$VERSION-$PACKAGE.tar.bz2 \
-    ###apps/grass/grass-$VERSION/lib/*.lib
-    
-    # grass-locale package (obsolete)
-    ###tar -cjf $PDIR/grass-locale-$VERSION-$PACKAGE.tar.bz2 \
-    ###apps/grass/grass-$VERSION/locale
 fi
 
 log 
