@@ -112,8 +112,8 @@ int main(int argc, char **argv)
 
 	if (dglGet_EdgeCount(&agraphComponents[i]) > 0) {
 	    if (pszGraphOut) {
-		G_snprintf(szGraphOutFilename, sizeof(szGraphOutFilename),
-                           "%s-component-%d", pszGraphOut, i);
+		snprintf(szGraphOutFilename, sizeof(szGraphOutFilename),
+                         "%s-component-%d", pszGraphOut, i);
 		printf("[write <%s>...", szGraphOutFilename);
 		fflush(stdout);
 		if ((fd =
