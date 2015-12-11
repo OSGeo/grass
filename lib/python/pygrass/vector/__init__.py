@@ -714,7 +714,6 @@ class VectorTopo(Vector):
 
             >>> test_vect.close()
 
-
         """
 
         supported = ['point', 'line', 'boundary', 'centroid']
@@ -737,14 +736,21 @@ class VectorTopo(Vector):
             line_c = libvect.line_cats()
             size = ctypes.c_size_t()
             cat = ctypes.c_int()
+            error = ctypes.c_int()
 
             for f_id in bboxlist.ids:
                 barray = libvect.Vect_read_line_to_wkb(self.c_mapinfo,
                                                        ctypes.byref(line_p),
                                                        ctypes.byref(line_c),
-                                                       f_id, ctypes.byref(size))
+                                                       f_id,
+                                                       ctypes.byref(size),
+                                                       ctypes.byref(error))
                 if not barray:
-                    raise GrassError(_("Unable to read line of feature %i"%(f_id)))
+                    if error == -1:
+                        raise GrassError(_("Unable to read line of feature %i"%(f_id)))
+                    if error == -2:
+                        print("Empty feature %i"%(f_id))
+                    continue
 
                 ok = libvect.Vect_cat_get(ctypes.byref(line_c), field,
                                           ctypes.byref(cat))

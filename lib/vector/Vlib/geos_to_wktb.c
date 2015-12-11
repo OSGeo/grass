@@ -125,7 +125,8 @@ char *Vect_read_area_to_wkt(struct Map_info * Map, int area)
 unsigned char *Vect_read_line_to_wkb(const struct Map_info *Map, 
                                      struct line_pnts *line_p, 
                                      struct line_cats *line_c, 
-                                     int line, size_t *size)
+                                     int line, size_t *size,
+                                     int *error)
 {    
     static int init = 0;
     /* The writer is static for performance reasons */
@@ -150,6 +151,8 @@ unsigned char *Vect_read_line_to_wkb(const struct Map_info *Map,
     }
     
     int f_type = Vect_read_line(Map, line_p, line_c, line);
+    /* Save the error state */
+    *error = f_type;
     
     if(f_type < 0)
         return(NULL);
@@ -157,6 +160,12 @@ unsigned char *Vect_read_line_to_wkb(const struct Map_info *Map,
     GEOSWKBWriter_setOutputDimension(writer, Vect_is_3d(Map) ? 3 : 2);
 
     GEOSGeometry *geom = Vect_line_to_geos(line_p, f_type, Vect_is_3d(Map));
+    
+    if(destroy_cats == 1)
+        Vect_destroy_cats_struct(line_c);
+
+    if(destroy_line == 1)
+        Vect_destroy_line_struct(line_p);
 
     if(!geom) {
         return(NULL);
@@ -165,12 +174,6 @@ unsigned char *Vect_read_line_to_wkb(const struct Map_info *Map,
     wkb = GEOSWKBWriter_write(writer, geom, size);
 
     GEOSGeom_destroy(geom);
-    
-    if(destroy_cats == 1)
-        Vect_destroy_cats_struct(line_c);
-
-    if(destroy_line == 1)
-        Vect_destroy_line_struct(line_p);
 
     return(wkb);
 }
