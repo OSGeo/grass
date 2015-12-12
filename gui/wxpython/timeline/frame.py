@@ -231,8 +231,6 @@ class TimelineFrame(wx.Frame):
         self.axes3d.grid(False)
         # self.axes3d.grid(True)
         if self.temporalType == 'absolute':
-            if check_version(1, 1, 0):
-                self.axes3d.zaxis_date()
             convert = mdates.date2num
         else:
             convert = lambda x: x
@@ -267,6 +265,9 @@ class TimelineFrame(wx.Frame):
             self.axes3d.set_xlabel(_("X"))
             self.axes3d.set_ylabel(_("Y"))
 
+        if self.temporalType == 'absolute':
+            if check_version(1, 1, 0):
+                self.axes3d.zaxis_date()
         self.axes3d.set_zlabel(_('Time'))
         self.axes3d.mouse_init()
         self.canvas.draw()
@@ -276,8 +277,6 @@ class TimelineFrame(wx.Frame):
         self.axes2d.clear()
         self.axes2d.grid(True)
         if self.temporalType == 'absolute':
-            self.axes2d.xaxis_date()
-            self.fig.autofmt_xdate()
             convert = mdates.date2num
         else:
             convert = lambda x: x
@@ -319,7 +318,8 @@ class TimelineFrame(wx.Frame):
                                               marker='o', linestyle='None', color=color)[0])
 
         if self.temporalType == 'absolute':
-            pass
+            self.axes2d.xaxis_date()
+            self.fig.autofmt_xdate()
             # self.axes2d.set_xlabel(_("Time"))
         else:
             self.axes2d.set_xlabel(_("Time [%s]") % self.unit)
