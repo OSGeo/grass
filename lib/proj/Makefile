@@ -23,6 +23,7 @@ NAD_DIR  = $(ETC)/proj/nad
 CSV_DIR  = $(ETC)/proj/ogr_csv
 
 NAD_DSTFILES := $(patsubst %.lla,$(NAD_DIR)/%,$(NAD_TABLES))
+NAD_BINFILES := $(patsubst %.lla,$(OBJDIR)/%,$(NAD_TABLES))
 NT_DSTFILES  := $(patsubst %,$(NAD_DIR)/%,$(NT_TABLES))
 CSV_DSTFILES := $(patsubst %,$(CSV_DIR)/%,$(CSV_FILES))
 
@@ -40,8 +41,11 @@ $(FTOL_OBJ): $(OBJDIR)/ftol.o
 	$(INSTALL) $< $@
 endif
 
-$(NAD_DSTFILES): $(NAD_DIR)/%: %.lla | $(NAD_DIR)
-	$(NAD2BIN) < $< $@
+$(NAD_DSTFILES): $(NAD_DIR)/%: $(NAD_BINFILES) | $(NAD_DIR)
+	$(INSTALL_DATA) $< $@
+
+$(NAD_BINFILES): $(OBJDIR)/%: %.lla
+	$(NAD2BIN) $@ < $< 
 
 $(NT_DSTFILES): $(NAD_DIR)/%: % | $(NAD_DIR)
 	$(INSTALL_DATA) $< $@
