@@ -59,7 +59,7 @@ CTYPESFLAGS = --cpp "$(CC) -E $(CPPFLAGS) $(LFS_CFLAGS) $(EXTRA_CFLAGS) $(NLS_CF
 EXTRA_CLEAN_FILES := $(wildcard ctypesgencore/*.pyc) $(wildcard ctypesgencore/*/*.pyc)
 
 ifneq ($(MINGW),)
-INTLLIB = -lintl3
+INTLLIB = -lintl-8
 endif
 
 include $(MODULE_TOPDIR)/include/Make/Python.make
