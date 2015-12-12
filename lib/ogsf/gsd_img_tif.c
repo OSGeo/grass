@@ -29,7 +29,9 @@
 
 #include <stdlib.h>
 #include <sys/types.h>
-
+#ifdef __CYGWIN__
+ #include <w32api/wtypes.h>
+#endif
 #include <grass/gis.h>
 #include <grass/ogsf.h>
 #include <grass/glocale.h>
