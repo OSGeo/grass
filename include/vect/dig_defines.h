@@ -233,7 +233,7 @@ typedef enum overlay_operator OVERLAY_OPERATOR;
 */
 typedef enum
 {
-    SF_UNKNOWN = 0,                       /* unknown type, non-standard */
+    SF_GEOMETRY = 0,                      /* unknown type, non-standard */
     SF_POINT = 1,                         /* 0-dimensional geometric object */
     SF_LINESTRING = 2,                    /* 1-dimensional geometric object with linear
 					     interpolation between Points */
