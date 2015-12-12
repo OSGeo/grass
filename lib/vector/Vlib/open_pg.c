@@ -290,7 +290,7 @@ int V1_open_new_pg(struct Map_info *Map, const char *name, int with_z)
     pg_info->cache.fid = -1;
 
     /* unknown feature type */
-    pg_info->feature_type = SF_UNKNOWN;
+    pg_info->feature_type = SF_GEOMETRY;
 
     PQclear(res);
 
@@ -425,7 +425,7 @@ SF_FeatureType ftype_from_string(const char *type)
     else if (G_strcasecmp(type, "GEOMETRYCOLLECTION") == 0)
         return SF_GEOMETRYCOLLECTION;
     else
-        return SF_UNKNOWN;
+        return SF_GEOMETRY;
     
     G_debug(3, "ftype_from_string(): type='%s' -> %d", type, sf_type);
     

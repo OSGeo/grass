@@ -104,7 +104,7 @@ off_t V1_write_line_pg(struct Map_info *Map, int type,
 
     pg_info = &(Map->fInfo.pg);
     
-    if (pg_info->feature_type == SF_UNKNOWN) {
+    if (pg_info->feature_type == SF_GEOMETRY) {
         /* create PostGIS table if doesn't exist */
         if (create_pg_layer(Map, type) < 0)
             return -1;
@@ -730,7 +730,7 @@ int create_table(struct Format_info_pg *pg_info)
     case (SF_POLYGON25D):
         geom_type = "POLYGONZ";
         break;
-    case (SF_UNKNOWN):
+    case (SF_GEOMETRY):
         geom_type = "GEOMETRY";
         break;
     default:
@@ -1098,7 +1098,7 @@ int create_pg_layer(struct Map_info *Map, int type)
         pg_info->feature_type = SF_POLYGON25D;
         break;
     case -2:
-        pg_info->feature_type = SF_UNKNOWN;
+        pg_info->feature_type = SF_GEOMETRY;
         break;
     default: 
         G_warning(_("Unsupported geometry type (%d)"), type);
@@ -1169,7 +1169,7 @@ char *get_sftype(SF_FeatureType sftype)
         return "LINE";
     else if (sftype == SF_POLYGON)
         return "POLYGON";
-    else if (sftype == SF_UNKNOWN || sftype == SF_GEOMETRYCOLLECTION)
+    else if (sftype == SF_GEOMETRY || sftype == SF_GEOMETRYCOLLECTION)
         return "COLLECTION";
     else
         G_warning(_("Unsupported feature type %d"), sftype);
@@ -1218,7 +1218,7 @@ off_t write_line_sf(struct Map_info *Map, int type,
     }
 
     /* create PostGIS table if doesn't exist */
-    if (pg_info->feature_type == SF_UNKNOWN) {
+    if (pg_info->feature_type == SF_GEOMETRY) {
         if (create_pg_layer(Map, type) < 0)
             return -1;
     }
@@ -1374,7 +1374,7 @@ off_t write_line_tp(struct Map_info *Map, int type, int is_node,
     }
     
     /* create PostGIS table if doesn't exist */
-    if (pg_info->feature_type == SF_UNKNOWN) {
+    if (pg_info->feature_type == SF_GEOMETRY) {
         if (create_pg_layer(Map, type) < 0)
             return -1;
     }
