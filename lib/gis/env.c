@@ -17,6 +17,8 @@
 #include <stdlib.h>
 #include <unistd.h>		/* for sleep() */
 #include <string.h>
+#include <errno.h>
+
 #include <grass/gis.h>
 #include <grass/glocale.h>
 
@@ -150,7 +152,7 @@ static int read_env(int loc)
         parse_env(fd, loc);
         fclose(fd);
     }
-
+    
     G_initialize_done(&st->init[loc]);
     return 0;
 }
@@ -302,11 +304,12 @@ static void write_env(int loc)
 static FILE *open_env(const char *mode, int loc)
 {
     char buf[GPATH_MAX];
+    FILE *fd;
 
     if (loc == G_VAR_GISRC) {
 	if (!st->gisrc)
 	    st->gisrc = getenv("GISRC");
-
+        
 	if (!st->gisrc) {
 	    G_fatal_error(_("GISRC - variable not set"));
 	    return NULL;
@@ -321,7 +324,11 @@ static FILE *open_env(const char *mode, int loc)
 	sprintf(buf, "%s/%s/VAR", G_location_path(), G_mapset());
     }
 
-    return fopen(buf, mode);
+    fd = fopen(buf, mode);
+    if (!fd) /* reading failed, call fatal error */
+      G_debug(1, "Unable to read GISRC <%s>: %s", buf, strerror(errno));
+
+    return fd;
 }
 
 /*!
