@@ -1,9 +1,11 @@
+#include <stdio.h>
+
 #include <grass/dbmi.h>
 #include <grass/datetime.h>
+
 #include "odbc.h"
 #include "globals.h"
 #include "proto.h"
-#include <stdio.h>
 
 int set_column_type(dbColumn * column, int otype);
 
