@@ -1544,7 +1544,7 @@ static int dump_rat(GDALRasterBandH hBand, char *outrat, int nBand)
 
     field_type = G_malloc(ncols * sizeof(GDALRATFieldType));
     
-    snprintf(fname, GNAME_MAX, "%s_%d.csv", outrat, nBand);
+    G_snprintf(fname, GNAME_MAX, "%s_%d.csv", outrat, nBand);
     if (!(fp = fopen(fname, "w"))) {
 	int err = errno;
 	
