@@ -615,7 +615,7 @@ Section "GRASS" SecGRASS
 	
 	;HKEY_LOCAL_MACHINE Install entries
 	;Set the Name, Version and Revision of GRASS + PublisherInfo + InstallPath	
-	WriteRegStr HKLM "Software\${GRASS_BASE}" "Name" "${GRASS_BASE}"
+	WriteRegStr HKLM "Software\${GRASS_BASE}" "Name" "${GRASS_BASE} (${PLATFORM})"
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "VersionNumber" "${VERSION_NUMBER}"
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "SvnRevision" "${SVN_REVISION}"
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "BinaryRevision" "${BINARY_REVISION}"
