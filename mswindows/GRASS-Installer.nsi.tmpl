@@ -36,8 +36,11 @@ SetCompressorDictSize 128
         !define GRASS_COMMAND "grass@GRASS_VERSION_MAJOR@@GRASS_VERSION_MINOR@svn"
 !endif
 
-; Platform
-!if "%1" == "64"
+;----------------------------------------------------------------------------------------------------------------------------
+
+;Platform
+
+!if "@ARCH@" == "x86_64-w64-mingw32"
     !define PLATFORM "x86_64"
 !else
     !define PLATFORM "x86"
