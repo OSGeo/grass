@@ -176,6 +176,7 @@ static dbCatValArray *select_strings_from_database(dbDriver * driver,
 /*! Get integer value in a column for a category
  *
  * Floating point numbers are casted to integers.
+ * If the column is not numerical, fatal error is issued.
  *
  * \returns The value of the column as an integer
  */
@@ -190,13 +191,16 @@ static int get_integer_column_value(dbCatValArray * column_values, int cat)
     if (catval->isNull) {
         G_fatal_error(_("NULL value for cat = %d"), cat);
     }
+
     if (column_values->ctype == DB_C_TYPE_INT) {
         val = catval->val.i;
     }
     else if (column_values->ctype == DB_C_TYPE_DOUBLE) {
         val = catval->val.d;
+    } else {
+        G_fatal_error(_("Column type is not numeric (type = %d, cat = %d"),
+            column_values->ctype, cat);
     }
-    /* else should be checked by caller */
     return val;
 }
 
