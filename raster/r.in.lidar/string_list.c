@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include <grass/gis.h>
+#include <grass/glocale.h>
 
 #include "local_proto.h"
 
@@ -29,6 +30,8 @@ void string_list_from_file(struct StringList *string_list, char *filename)
     string_list->max_items = 0;
     string_list->items = NULL;
     FILE *file = fopen(filename, "r");  /* should check the result */
+    if (!file)
+        G_fatal_error(_("Cannot open file %s for reading"), filename);
     char *line = G_malloc(GPATH_MAX * sizeof(char));
 
     while (G_getl2(line, GPATH_MAX * sizeof(char), file)) {
