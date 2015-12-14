@@ -1,0 +1,7 @@
+sdesc: "GRASS GIS - stable release"
+ldesc: "Geographic Resources Analysis Support System (GRASS GIS) - stable release"
+category: Desktop
+requires: liblas avce00 gpsbabel gs gdal-python matplotlib msvcrt iconv libtiff gdal proj freetype-mingw pdcurses zlib fftw libpng wxpython python-numpy python-pil pyopengl cairo
+maintainer: MartinLanda
+curr: 7.0.2-1
+prev: 7.0.2-1
