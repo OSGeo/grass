@@ -23,4 +23,5 @@ GRASS-Installer.nsi: GRASS-Installer.nsi.tmpl
 	-e 's#@GRASS_VERSION_MAJOR@#$(GRASS_VERSION_MAJOR)#' \
 	-e 's#@GRASS_VERSION_MINOR@#$(GRASS_VERSION_MINOR)#' \
 	-e 's#@GRASS_VERSION_RELEASE@#$(GRASS_VERSION_RELEASE)#' \
+	-e 's#@ARCH@#$(ARCH)#' \
 	$< > $@
