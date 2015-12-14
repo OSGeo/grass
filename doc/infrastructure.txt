@@ -179,6 +179,12 @@ Very old bugtracker (Dec 2000 - Dec 2006):
   * reports are directly sent to GRASS Developers mailing list for notification
   * TODO: migrate to trac
 
+== GRASS Travis CI ==
+
+Maintainer: Martin Landa
+
+* https://travis-ci.org/GRASS-GIS
+
 == OLD: GRASS Quality Control ==
 
 Maintainer: Prof. Giulio Antoniol
