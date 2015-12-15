@@ -1011,11 +1011,13 @@ int main(int argc, char *argv[])
             }
         }
         if (offset_n) {
-            offset_n_counter++;
-            if (offset_n_counter < offset_n)
+            if (offset_n_counter < offset_n) {
+                offset_n_counter++;
                 continue;
-            else
+            }
+            else {
                 offset_n = 0;  /* disable offset check */
+            }
         }
         if (skip_every) {
             every_counter++;
