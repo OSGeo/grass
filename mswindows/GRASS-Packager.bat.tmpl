@@ -21,6 +21,8 @@ set OSGEO4W_PKG_DIR=C:\OSGeo4W%1_grass@GRASS_VERSION_MAJOR@
 set OSGEO4W_PKG_DIR=C:\OSGeo4W%1
 )
 
+set MSYS_BLD_DIR=C:\msys%1\mingw%1
+
 set GRASS_PREFIX=%OSGEO4W_BLD_DIR%\apps\grass\grass-@GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@.@GRASS_VERSION_RELEASE@
 
 @echo.
@@ -49,10 +51,25 @@ xcopy %GRASS_PREFIX% %PACKAGE_DIR% /S/V/F/I
 mkdir %PACKAGE_DIR%\extrabin
 mkdir %PACKAGE_DIR%\extrabin\gdalplugins
 
+@echo OSGeo4W
 copy %OSGEO4W_PKG_DIR%\bin\* %PACKAGE_DIR%\extrabin
 xcopy %OSGEO4W_PKG_DIR%\bin\gdalplugins\* %PACKAGE_DIR%\extrabin\gdalplugins /S/V/F/I
 del %PACKAGE_DIR%\extrabin\msvcp*
 del %PACKAGE_DIR%\extrabin\msvcr*
+
+@echo MSYS2
+copy %MSYS_BLD_DIR%\bin\libintl-8.dll %PACKAGE_DIR%\extrabin
+copy %MSYS_BLD_DIR%\bin\libiconv-2.dll %PACKAGE_DIR%\extrabin
+copy %MSYS_BLD_DIR%\bin\libfontconfig-1.dll %PACKAGE_DIR%\extrabin
+copy %MSYS_BLD_DIR%\bin\libwinpthread-1.dll %PACKAGE_DIR%\extrabin
+copy %MSYS_BLD_DIR%\bin\libexpat-1.dll %PACKAGE_DIR%\extrabin
+copy %MSYS_BLD_DIR%\bin\libfreetype-6.dll %PACKAGE_DIR%\extrabin
+copy %MSYS_BLD_DIR%\bin\libbz2-1.dll %PACKAGE_DIR%\extrabin
+copy %MSYS_BLD_DIR%\bin\libharfbuzz-0.dll %PACKAGE_DIR%\extrabin
+copy %MSYS_BLD_DIR%\bin\libglib-2.0-0.dll %PACKAGE_DIR%\extrabin
+copy %MSYS_BLD_DIR%\bin\libpng16-16.dll %PACKAGE_DIR%\extrabin
+if exist "%MSYS_BLD_DIR%\bin\libgcc_s_seh-1.dll" copy %MSYS_BLD_DIR%\bin\libgcc_s_seh-1.dll %PACKAGE_DIR%\extrabin
+if exist "%MSYS_BLD_DIR%\bin\libgcc_s_dw2-1.dll" copy %MSYS_BLD_DIR%\bin\libgcc_s_dw2-1.dll %PACKAGE_DIR%\extrabin
 
 @echo.
 @echo -----------------------------------------------------------------------------------------------------------------------
