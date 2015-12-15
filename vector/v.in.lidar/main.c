@@ -110,7 +110,10 @@ int main(int argc, char *argv[])
     float xmin = 0., ymin = 0., xmax = 0., ymax = 0.;
     struct GModule *module;
     struct Option *in_opt, *out_opt, *spat_opt, *filter_opt, *class_opt;
-    struct Option *id_layer_opt, *return_layer_opt, *class_layer_opt;
+    struct Option *id_layer_opt, *return_layer_opt, *n_returns_layer_opt;
+    struct Option *class_layer_opt;
+    struct Option *red_layer_opt, *green_layer_opt, *blue_layer_opt;
+    struct Option *rgb_layer_opt;
     struct Option *vector_mask_opt, *vector_mask_field_opt;
     struct Option *skip_opt, *preserve_opt, *offset_opt, *limit_opt;
     struct Option *outloc_opt, *zrange_opt;
@@ -187,15 +190,52 @@ int main(int argc, char *argv[])
 
     return_layer_opt = G_define_standard_option(G_OPT_V_FIELD);
     return_layer_opt->key = "return_layer";
-    return_layer_opt->label = _("Layer number to store return number as category");
+    return_layer_opt->label =
+        _("Layer number to store return number as category");
     return_layer_opt->answer = NULL;
     return_layer_opt->guisection = _("Categories");
 
+    n_returns_layer_opt = G_define_standard_option(G_OPT_V_FIELD);
+    n_returns_layer_opt->key = "n_returns_layer";
+    n_returns_layer_opt->label =
+        _("Layer number to store number of returns as category");
+    n_returns_layer_opt->answer = NULL;
+    n_returns_layer_opt->guisection = _("Categories");
+
     class_layer_opt = G_define_standard_option(G_OPT_V_FIELD);
     class_layer_opt->key = "class_layer";
-    class_layer_opt->label = _("Layer number to store class number as category");
+    class_layer_opt->label =
+        _("Layer number to store class number as category");
     class_layer_opt->answer = NULL;
     class_layer_opt->guisection = _("Categories");
+
+    rgb_layer_opt = G_define_standard_option(G_OPT_V_FIELD);
+    rgb_layer_opt->key = "rgb_layer";
+    rgb_layer_opt->label =
+        _("Layer number where RBG colors is stored as category");
+    rgb_layer_opt->answer = NULL;
+    rgb_layer_opt->guisection = _("Categories");
+
+    red_layer_opt = G_define_standard_option(G_OPT_V_FIELD);
+    red_layer_opt->key = "red_layer";
+    red_layer_opt->label =
+        _("Layer number where red color is stored as category");
+    red_layer_opt->answer = NULL;
+    red_layer_opt->guisection = _("Categories");
+
+    green_layer_opt = G_define_standard_option(G_OPT_V_FIELD);
+    green_layer_opt->key = "green_layer";
+    green_layer_opt->label =
+        _("Layer number where red color is stored as category");
+    green_layer_opt->answer = NULL;
+    green_layer_opt->guisection = _("Categories");
+
+    blue_layer_opt = G_define_standard_option(G_OPT_V_FIELD);
+    blue_layer_opt->key = "blue_layer";
+    blue_layer_opt->label =
+        _("Layer number where blue color is stored as category");
+    blue_layer_opt->answer = NULL;
+    blue_layer_opt->guisection = _("Categories");
 
     spat_opt = G_define_option();
     spat_opt->key = "spatial";
@@ -342,7 +382,9 @@ int main(int argc, char *argv[])
     no_import_flag->suppress_required = YES;
 
     G_option_exclusive(skip_opt, preserve_opt, NULL);
-    G_option_excludes(nocats_flag, id_layer_opt, return_layer_opt, class_layer_opt, NULL);
+    G_option_excludes(nocats_flag, id_layer_opt, return_layer_opt,
+        n_returns_layer_opt, class_layer_opt, rgb_layer_opt,
+        red_layer_opt, green_layer_opt, blue_layer_opt, NULL);
 
     /* The parser checks if the map already exists in current mapset, this is
      * wrong if location options is used, so we switch out the check and do it
@@ -410,13 +452,28 @@ int main(int argc, char *argv[])
 
     int id_layer = 0;
     int return_layer = 0;
+    int n_returns_layer = 0;
     int class_layer = 0;
+    int rgb_layer = 0;
+    int red_layer = 0;
+    int green_layer = 0;
+    int blue_layer = 0;
     if (id_layer_opt->answer)
         id_layer = atoi(id_layer_opt->answer);
     if (return_layer_opt->answer)
         return_layer = atoi(return_layer_opt->answer);
+    if (n_returns_layer_opt->answer)
+        n_returns_layer = atoi(n_returns_layer_opt->answer);
     if (class_layer_opt->answer)
         class_layer = atoi(class_layer_opt->answer);
+    if (rgb_layer_opt->answer)
+        rgb_layer = atoi(rgb_layer_opt->answer);
+    if (red_layer_opt->answer)
+        red_layer = atoi(red_layer_opt->answer);
+    if (green_layer_opt->answer)
+        green_layer = atoi(green_layer_opt->answer);
+    if (blue_layer_opt->answer)
+        blue_layer = atoi(blue_layer_opt->answer);
     /* If no layer specified by user, force 1 to be used for ids.
      * If id_layer not specified by the attributes table was, find a layer.
      * nocats implies notab and we don't add any layers.
@@ -426,16 +483,31 @@ int main(int argc, char *argv[])
      * are about to turn on.
      * Later on, layer set to 0 is considered as no layer set.
      */
-    if (!nocats_flag->answer && !id_layer_opt->answer && !return_layer && !class_layer) {
+    if (!nocats_flag->answer && !id_layer_opt->answer && !return_layer
+        && !n_returns_layer && !class_layer && !rgb_layer && !red_layer
+        && !green_layer && !blue_layer) {
         id_layer = 1;
+        G_message(_("Storing generated point IDs as categories in the layer %d"), id_layer);
     }
+    /* no cats forces no table earlier */
     if (!notab_flag->answer && !id_layer) {
+        /* get the maximum layer number used */
+        int max_used_layer;
+        max_used_layer = MAX(return_layer, n_returns_layer);
+        max_used_layer = MAX(max_used_layer, class_layer);
+        max_used_layer = MAX(max_used_layer, rgb_layer);
+        max_used_layer = MAX(max_used_layer, red_layer);
+        max_used_layer = MAX(max_used_layer, green_layer);
+        max_used_layer = MAX(max_used_layer, blue_layer);
         /* get the first free layer number */
-        for (i = 1; i <= MAX(return_layer, class_layer) + 1; i++) {
-            if (i != return_layer && i != class_layer)
+        for (i = 1; i <= max_used_layer + 1; i++) {
+            if (i != return_layer && i != n_returns_layer
+                && i != class_layer && i != rgb_layer
+                && i != red_layer && i != green_layer && i != blue_layer)
                 break;
         }
         id_layer = i;
+        G_message(_("Storing generated point IDs as categories in the layer %d"), id_layer);
     }
 
     double zrange_min, zrange_max;
@@ -969,8 +1041,30 @@ int main(int argc, char *argv[])
             Vect_cat_set(Cats, id_layer, cat);
         if (return_layer)
             Vect_cat_set(Cats, return_layer, LASPoint_GetReturnNumber(LAS_point));
+        if (n_returns_layer)
+            Vect_cat_set(Cats, n_returns_layer, LASPoint_GetNumberOfReturns(LAS_point));
         if (class_layer)
             Vect_cat_set(Cats, class_layer, LASPoint_GetClassification(LAS_point));
+        if (have_color && (rgb_layer || red_layer || green_layer || blue_layer)) {
+            /* TODO: if attr table, acquired again, performance difference? */
+            /* TODO: the getters are called too when separate layers are used */
+            LASColorH LAS_color = LASPoint_GetColor(LAS_point);
+            if (rgb_layer) {
+                int red = LASColor_GetRed(LAS_color);
+                int green = LASColor_GetGreen(LAS_color);
+                int blue = LASColor_GetBlue(LAS_color);
+                int rgb = red;
+                rgb = (rgb << 8) + green;
+                rgb = (rgb << 8) + blue;
+                Vect_cat_set(Cats, rgb_layer, rgb);
+            }
+            if (red_layer)
+                Vect_cat_set(Cats, red_layer, LASColor_GetRed(LAS_color));
+            if (green_layer)
+                Vect_cat_set(Cats, green_layer, LASColor_GetGreen(LAS_color));
+            if (blue_layer)
+                Vect_cat_set(Cats, blue_layer, LASColor_GetBlue(LAS_color));
+        }
 	Vect_write_line(&Map, GV_POINT, Points, Cats);
 
 	/* Attributes */
