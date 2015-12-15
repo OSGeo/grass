@@ -251,6 +251,8 @@ if [ -n "$PACKAGE_PATCH" ]; then
         /mingw${MINGW_POSTFIX}/bin/libharfbuzz-0.dll \
 	/mingw${MINGW_POSTFIX}/bin/libglib-2.0-0.dll \
 	/mingw${MINGW_POSTFIX}/bin/libpng16-16.dll \
+	/mingw${MINGW_POSTFIX}/bin/libsystre-0.dll \
+	/mingw${MINGW_POSTFIX}/bin/libtre-5.dll \
 	bin
     
     # creating grass package
@@ -270,7 +272,9 @@ if [ -n "$PACKAGE_PATCH" ]; then
         bin/libharfbuzz-0.dll \
 	bin/libglib-2.0-0.dll \
 	bin/libpng16-16.dll \
-
+	bin/libsystre-0.dll \
+	bin/libtre-5.dll
+    
     # clean up
     rm bin/${GRASS_EXECUTABLE}.bat.tmpl
 fi
