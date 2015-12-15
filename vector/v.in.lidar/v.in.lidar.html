@@ -27,6 +27,45 @@ class number 2 represents ground (for other classes see LAS format specification
 in references). The <b>class_filter</b> option allows selecting one or more 
 classes, as numbers (integers) separated by comma.
 
+<h3>Decimation</h3>
+
+Table with selected percentages of points to keep with corresponding
+decimation parameters:
+
+<table>
+<tr><td>0.1%</td><td>preserve=1000</td></tr>
+<tr><td>1%</td><td>preserve=100</td></tr>
+<tr><td>5%</td><td>preserve=20</td></tr>
+<tr><td>10%</td><td>preserve=10</td></tr>
+<tr><td>20%</td><td>preserve=5</td></tr>
+<tr><td>25%</td><td>preserve=4</td></tr>
+<tr><td>50%</td><td>skip=2</td></tr>
+<tr><td>75%</td><td>skip=4</td></tr>
+<tr><td>80%</td><td>skip=5</td></tr>
+<tr><td>90%</td><td>skip=10</td></tr>
+</table>
+
+Table with selected fractions of points to keep with corresponding
+decimation parameters:
+
+<table>
+<tr><td>1/3</td><td>preserve=3</td></tr>
+<tr><td>1/4</td><td>preserve=4</td></tr>
+<tr><td>1/5</td><td>preserve=5</td></tr>
+<tr><td>1/6</td><td>preserve=6</td></tr>
+</table>
+
+Table with selected fractions of points to throw away with corresponding
+decimation parameters:
+
+<table>
+<tr><td>1/3</td><td>skip=3</td></tr>
+<tr><td>1/4</td><td>skip=4</td></tr>
+<tr><td>1/5</td><td>skip=5</td></tr>
+<tr><td>1/6</td><td>skip=6</td></tr>
+</table>
+
+
 <h2>Location Creation</h2>
 
 <em>v.in.lidar</em> attempts to preserve projection information when importing
