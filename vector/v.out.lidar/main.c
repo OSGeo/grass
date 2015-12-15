@@ -71,19 +71,15 @@ struct LidarColumnNames
 static void open_database(struct Map_info *vector, int field,
                           dbDriver ** driver, struct field_info **f_info)
 {
-    struct field_info *f_info_tmp;
-
-    f_info_tmp = Vect_get_field(vector, field);
-    dbDriver *driver_tmp;
-
-    if (f_info == NULL) {
+    struct field_info *f_info_tmp = Vect_get_field(vector, field);
+    if (f_info_tmp == NULL) {
         /* not ideal message since we don't know the original name of
          * the field in case of OGR */
         G_fatal_error(_("Database connection not defined for layer <%d>"),
                       field);
     }
 
-    driver_tmp =
+    dbDriver *driver_tmp =
         db_start_driver_open_database(f_info_tmp->driver,
                                       f_info_tmp->database);
     if (driver_tmp == NULL)
