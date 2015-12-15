@@ -19,6 +19,7 @@ import unittest
 
 from grass.pygrass.modules import Module
 from grass.exceptions import CalledModuleError
+from grass.script import shutil_which
 
 from .gmodules import call_module, SimpleModule
 from .checkers import (check_text_ellipsis,
@@ -1138,6 +1139,9 @@ class TestCase(unittest.TestCase):
         """
         module = _module_from_parameters(module, **kwargs)
         _check_module_run_parameters(module)
+        if not shutil_which(module.name):
+            stdmsg = "Cannot find the module '{}'".format(module.name)
+            self.fail(self._formatMessage(msg, stdmsg))
         try:
             module.run()
             self.grass_modules.append(module.name)
