@@ -43,11 +43,11 @@ SetCompressorDictSize 128
 ;----------------------------------------------------------------------------------------------------------------------------
 
 !if "@ARCH@" == "x86_64-w64-mingw32"
-    !define PLATFORM "x86_64"
+    !define PLATFORM   "x86_64"
     !define GRASS_ICON "grass64bit.ico"
     InstallDir "$PROGRAMFILES64\${GRASS_BASE}"
 !else
-    !define PLATFORM "x86"
+    !define PLATFORM   "x86"
     !define GRASS_ICON "grass.ico"
     InstallDir "$PROGRAMFILES32\${GRASS_BASE}"
 !endif
