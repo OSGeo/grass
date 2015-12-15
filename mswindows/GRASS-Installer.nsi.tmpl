@@ -43,10 +43,12 @@ SetCompressorDictSize 128
 ;----------------------------------------------------------------------------------------------------------------------------
 
 !if "@ARCH@" == "x86_64-w64-mingw32"
-    !define PLATFORM "x86_64"
+    !define PLATFORM   "x86_64"
+    !define GRASS_ICON "grass64bit.ico"
     InstallDir "$PROGRAMFILES64\${GRASS_BASE}"
 !else
-    !define PLATFORM "x86"
+    !define PLATFORM   "x86"
+    !define GRASS_ICON "grass.ico"
     InstallDir "$PROGRAMFILES32\${GRASS_BASE}"
 !endif
 
@@ -628,7 +630,7 @@ Section "GRASS" SecGRASS
 	WriteRegStr HKLM "Software\${GRASS_BASE}" "InstallPath" "$INSTALL_DIR"
 	
 	;HKEY_LOCAL_MACHINE Uninstall entries
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "DisplayName" "GRASS @GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "DisplayName" "GRASS GIS @GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@ (${PLATFORM})"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "UninstallString" "$INSTALL_DIR\Uninstall-GRASS.exe"
 	
 	!if ${INSTALLER_TYPE} == "Release"
@@ -639,7 +641,7 @@ Section "GRASS" SecGRASS
 		"DisplayVersion" "${VERSION_NUMBER}-r${SVN_REVISION}-${BINARY_REVISION}"
 	!endif
 	
-	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "DisplayIcon" "$INSTALL_DIR\gui\icons\grass.ico"
+	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "DisplayIcon" "$INSTALL_DIR\gui\icons\${GRASS_ICON}"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "EstimatedSize" 1
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "HelpLink" "${WIKI_PAGE}"
 	WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${GRASS_BASE}" "URLInfoAbout" "${WEB_SITE}"
@@ -650,7 +652,7 @@ Section "GRASS" SecGRASS
 	SetShellVarContext current
 	
 	CreateShortCut "$DESKTOP\${GRASS_BASE}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-gui"\
-	"$INSTALL_DIR\gui\icons\grass.ico" "" SW_SHOWNORMAL "" "Launch GRASS GIS ${VERSION_NUMBER}"
+	"$INSTALL_DIR\gui\icons\${GRASS_ICON}" "" SW_SHOWNORMAL "" "Launch GRASS GIS ${VERSION_NUMBER}"
 	
 	;Create the Windows Start Menu Shortcuts
 	SetShellVarContext all
@@ -658,7 +660,7 @@ Section "GRASS" SecGRASS
 	CreateDirectory "$SMPROGRAMS\${GRASS_BASE}"
 	
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\${GRASS_BASE}.lnk" "$INSTALL_DIR\${GRASS_COMMAND}.bat" "-gui"\
-	"$INSTALL_DIR\gui\icons\grass.ico" "" SW_SHOWNORMAL "" "Launch GRASS GIS ${VERSION_NUMBER}"
+	"$INSTALL_DIR\gui\icons\${GRASS_ICON}" "" SW_SHOWNORMAL "" "Launch GRASS GIS ${VERSION_NUMBER}"
 	
 	CreateShortCut "$SMPROGRAMS\${GRASS_BASE}\Uninstall ${GRASS_BASE}.lnk" "$INSTALL_DIR\Uninstall-GRASS.exe" ""\
 	"$INSTALL_DIR\Uninstall-GRASS.exe" "" SW_SHOWNORMAL "" "Uninstall GRASS GIS ${VERSION_NUMBER}"
