@@ -112,7 +112,7 @@ class AboutWindow(wx.Frame):
                       flag = wx.ALL | wx.ALIGN_CENTER, border = 20)
         
         infoLabel = 'GRASS GIS %s' % vInfo.get('version', _('unknown version'))
-        if '64' in vInfo.get('build_platform', ''):
+        if 'x86_64' in vInfo.get('build_platform', ''):
             infoLabel += ' (64bit)'
         info = wx.StaticText(parent = infoTxt, id = wx.ID_ANY,
                              label = infoLabel + os.linesep)
