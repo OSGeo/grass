@@ -38,12 +38,16 @@ SetCompressorDictSize 128
 
 ;----------------------------------------------------------------------------------------------------------------------------
 
-;Platform
+;Define Platform and installation folder
+
+;----------------------------------------------------------------------------------------------------------------------------
 
 !if "@ARCH@" == "x86_64-w64-mingw32"
     !define PLATFORM "x86_64"
+    InstallDir "$PROGRAMFILES64\${GRASS_BASE}"
 !else
     !define PLATFORM "x86"
+    InstallDir "$PROGRAMFILES32\${GRASS_BASE}"
 !endif
 
 ;----------------------------------------------------------------------------------------------------------------------------
@@ -94,9 +98,6 @@ Name "${DISPLAYED_NAME}"
 
 ;Name of the output file (installer executable)
 OutFile "${INSTALLER_NAME}"
-
-;Define installation folder
-InstallDir "$PROGRAMFILES\${GRASS_BASE}"
 
 ;Request application privileges for Windows
 RequestExecutionLevel admin
@@ -848,7 +849,11 @@ Section "Important Microsoft Runtime DLLs" SecMSRuntime
 	AddSize 13500
 	
 	StrCpy $HTTP_PATH "http://download.osgeo.org/osgeo4w/${PLATFORM}/release/msvcrt/"
-	StrCpy $ARCHIVE_NAME "msvcrt-1.0.1-12.tar.bz2"
+        !if ${PLATFORM} == "x86_64"
+            StrCpy $ARCHIVE_NAME "msvcrt-1.0.1-8.tar.bz2"
+        !else
+            StrCpy $ARCHIVE_NAME "msvcrt-1.0.1-12.tar.bz2"
+        !endif
 	StrCpy $EXTENDED_ARCHIVE_NAME "Microsoft Visual C++ Redistributable Packages"
 	StrCpy $ORIGINAL_UNTAR_FOLDER "install_msruntime"
 	
