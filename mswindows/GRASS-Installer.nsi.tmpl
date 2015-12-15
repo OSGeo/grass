@@ -38,14 +38,18 @@ SetCompressorDictSize 128
 
 ;----------------------------------------------------------------------------------------------------------------------------
 
-;Platform (and GRASS Icon)
+;Define Platform and installation folder
+
+;----------------------------------------------------------------------------------------------------------------------------
 
 !if "@ARCH@" == "x86_64-w64-mingw32"
     !define PLATFORM "x86_64"
     !define GRASS_ICON "${INSTALL_DIR}\gui\icons\grass64bit.ico"
+    InstallDir "$PROGRAMFILES64\${GRASS_BASE}"
 !else
     !define PLATFORM "x86"
     !define GRASS_ICON "${INSTALL_DIR}\gui\icons\grass.ico"
+    InstallDir "$PROGRAMFILES32\${GRASS_BASE}"
 !endif
 
 ;----------------------------------------------------------------------------------------------------------------------------
@@ -96,9 +100,6 @@ Name "${DISPLAYED_NAME}"
 
 ;Name of the output file (installer executable)
 OutFile "${INSTALLER_NAME}"
-
-;Define installation folder
-InstallDir "$PROGRAMFILES\${GRASS_BASE}"
 
 ;Request application privileges for Windows
 RequestExecutionLevel admin
