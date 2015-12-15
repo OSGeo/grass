@@ -11,11 +11,18 @@ segments are generated).
 Internal buffers for areas can be generated with negative distance 
 values ("inward buffer" or "negative buffer").
 <p>
-Categories and attributes can be transferred with the <b>t</b> flag. 
-The resulting buffer areas can have multiple categories, and multiple 
-buffer areas can have the same category. The buffer for the input 
-feature with category X can thus be retrieved by selecting all buffer 
-areas with category X (see example below).
+<em>v.buffer</em> fusions the geometries of buffers by default.
+Categories and attribute table will not be transferred (this would
+not make sense as one buffer geometry can be the result of many
+different input geometries). To transfer the categories and
+attributes the user can set the <b>t</b> flag. This will result in
+buffers being cut up where buffers of individual input geometries
+overlap.  Each part that is the result of overlapping buffers of
+multiple geometries will have multiple categories corresponding to
+those geometries, and multiple buffer areas can have the same
+category. The buffer for the input feature with category X can thus
+be retrieved by selecting all buffer areas with category X (see
+example below).
 
 <p>
 Buffers for lines and areas are generated using the algorithms from
