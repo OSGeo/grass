@@ -1,5 +1,5 @@
 sdesc: "GRASS GIS - daily builds of development version"
-ldesc: "Geographic Resources Analysis Support System (GRASS GIS) - daily builds of SV trunk"
+ldesc: "Geographic Resources Analysis Support System (GRASS GIS) - daily builds of SVN trunk"
 category: Desktop
 requires: liblas avce00 gpsbabel gs gdal-python matplotlib msvcrt iconv libtiff gdal proj freetype-mingw pdcurses zlib fftw libpng wxpython python-numpy python-pil pyopengl cairo
 maintainer: MartinLanda
