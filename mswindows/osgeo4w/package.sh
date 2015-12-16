@@ -253,6 +253,7 @@ if [ -n "$PACKAGE_PATCH" ]; then
 	/mingw${MINGW_POSTFIX}/bin/libpng16-16.dll \
 	/mingw${MINGW_POSTFIX}/bin/libsystre-0.dll \
 	/mingw${MINGW_POSTFIX}/bin/libtre-5.dll \
+        /mingw${MINGW_POSTFIX}/bin/zlib1.dll \
 	apps/grass/grass-$VERSION/bin
     
     # creating grass package
