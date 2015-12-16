@@ -253,27 +253,14 @@ if [ -n "$PACKAGE_PATCH" ]; then
 	/mingw${MINGW_POSTFIX}/bin/libpng16-16.dll \
 	/mingw${MINGW_POSTFIX}/bin/libsystre-0.dll \
 	/mingw${MINGW_POSTFIX}/bin/libtre-5.dll \
-	bin
+	apps/grass/grass-$VERSION/lib
     
     # creating grass package
     tar -cjf $PDIR/grass$PACKAGE_POSTFIX-$VERSION-$PACKAGE_PATCH.tar.bz2 \
 	apps/grass/grass-$VERSION \
 	bin/${GRASS_EXECUTABLE}.bat.tmpl \
 	etc/postinstall/grass${PACKAGE_POSTFIX}.bat \
-	etc/preremove/grass${PACKAGE_POSTFIX}.bat \
-	bin/libintl-8.dll \
-        bin/libiconv-2.dll \
-	bin/libfontconfig-1.dll \
-	bin/$mingw_libgcc \
-	bin/libwinpthread-1.dll \
-	bin/libexpat-1.dll \
-	bin/libfreetype-6.dll \
-	bin/libbz2-1.dll \
-        bin/libharfbuzz-0.dll \
-	bin/libglib-2.0-0.dll \
-	bin/libpng16-16.dll \
-	bin/libsystre-0.dll \
-	bin/libtre-5.dll
+	etc/preremove/grass${PACKAGE_POSTFIX}.bat
     
     # clean up
     rm bin/${GRASS_EXECUTABLE}.bat.tmpl
