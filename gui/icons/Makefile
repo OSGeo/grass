@@ -28,6 +28,10 @@ default: $(ETCICONS) $(HTMLICONS)
 	$(INSTALL_DATA) grass.svg $(ARCH_DISTDIR)/share/icons/hicolor/scalable/apps/grass71.svg
 	$(MKDIR) $(ARCH_DISTDIR)/share/appdata
 	$(INSTALL_DATA) grass.appdata.xml $(ARCH_DISTDIR)/share/appdata
+ifeq ($(filter x86_64,$(ARCH)),)
+	$(INSTALL_DATA) x86_64/grass.ico $(GUIDIR)/icons
+	$(INSTALL_DATA) x86_64/grass_osgeo.ico $(GUIDIR)/icons
+endif
 
 $(GUIDIR)/icons/%: % | $(DSTDIRS)
 	$(INSTALL_DATA) $< $@
