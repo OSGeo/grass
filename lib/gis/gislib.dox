@@ -284,6 +284,48 @@ writes the new value to the user's GRASS environment file.
 
 \section dbaseaccess Fundamental Database Access Routines
 
+
+In general, a user can only access data in the current location. For most
+modules, it's meaningless to access data from a different location as
+the projection will be wrong. A handful of modules (e.g. r.proj,
+v.proj) support accessing data from a different location, and in such
+cases there's no need for the user to own the source mapset, or even
+to own any mapset in the source location.
+
+Since r54264, it is possible to bypass the ownership check by setting
+GRASS_SKIP_MAPSET_OWNER_CHECK to any non-empty string. This was added
+mostly for accessing VFAT/NTFS-format external drives or network
+shares where the ownership checks don't behave correctly. It should
+not be used on multi-user systems, nor set by programs.
+
+But other than that, a user cannot make a mapset the current mapset (i.e.
+the one a user can modify) unless the user owns it. The user can access data from
+any mapset for which they have the relevant filesystem permissions
+(i.e. read permission for files, execute permission for the ancestor
+directories, read permission for any directories which need to be
+enumerated).
+
+Originally this restriction was related to locking (the lock file was
+created in the user's home directory, so being able to set the current
+mapset to a directory which the user didn't own meant that they could have
+multiple sessions modifying a mapset concurrently).
+
+That's no longer an issue (the lock file is created in the mapset
+directory). However, the other issue is that allowing someone other
+than the owner to modify the directory can result in problems for its
+owner.
+
+Creating a new map typically creates a subdirectory of cell_misc for
+that map, and some files within it (e.g. a "null" file). Any new files
+and subdirectories will be owned by their creator (not the mapset's
+owner) and will have permissions determined by the current umask. The
+result is that there's no guarantee that tha mapset's owner will be
+able to delete (or even access) such files or directories.
+
+In short, it's a safety mechanism against people trying to share
+directories by making them group-writeable without fully understanding
+the implications.
+
 The routines described in this section provide the low-level interface
 to the GRASS database. They search the database for files, prompt the
 user for file names, open files for reading or writing, etc. The
