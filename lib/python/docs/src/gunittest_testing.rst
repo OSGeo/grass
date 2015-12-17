@@ -25,6 +25,9 @@ things such as creation of GRASS-aware HTML test reports,
 or running of test in the way that process terminations potentially
 caused by C library functions does not influence the main testing process.
 
+Some tests will run without any data but many tests require
+the small (basic) version of GRASS GIS sample Location for North Carolina
+(see `GRASS GIS sample data`).
 
 Basic example
 -------------
@@ -716,3 +719,4 @@ Further reading
 .. _1038: https://scan.coverity.com/projects/1038
 .. _Cppcheck: http://cppcheck.sourceforge.net/
 .. _sandbox: https://svn.osgeo.org/grass/sandbox/wenzeslaus/grass_py_static_check.py
+.. _GRASS GIS sample data: https://grass.osgeo.org/download/sample-data
