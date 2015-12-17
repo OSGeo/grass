@@ -73,8 +73,8 @@ cat|label
 ...
 
 # look at legend
-db.select soils_legend
-db.select soils_legend | head -7
+db.select table=soils_legend
+db.select table=soils_legend | head -7
 id|shortname|longname
 0|no data|no data
 0|AaB|Alice fine sandy loam, 0 to 6
@@ -103,6 +103,7 @@ cat|label|id|shortname|longname
 <em>
 <a href="db.execute.html">db.execute</a>,
 <a href="db.in.ogr.html">db.in.ogr</a>,
+<a href="db.select.html">db.select</a>,
 <a href="v.db.update.html">v.db.update</a><br>
 <a href="sql.html">GRASS SQL interface</a>
 </em>
