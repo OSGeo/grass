@@ -8,7 +8,7 @@
 #               Vaclav Petras <wenzeslaus gmail com> (support for general sources)
 # PURPOSE:      Tool to download and install extensions into local installation
 #
-# COPYRIGHT:    (C) 2009-2014 by Markus Neteler, and the GRASS Development Team
+# COPYRIGHT:    (C) 2009-2015 by Markus Neteler, and the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -880,7 +880,7 @@ def install_extension_xml(url, mlist):
 def install_extension_win(name):
     """Install extension on MS Windows"""
     # do not use hardcoded url -
-    # http://wingrass.fsv.cvut.cz/grassXX/addonsX.X.X
+    # http://wingrass.fsv.cvut.cz/platform/grassXX/addonsX.X.X
     grass.message(_("Downloading precompiled GRASS Addons <%s>...") %
                   options['extension'])
     url = "http://wingrass.fsv.cvut.cz/%(platform)s/" \
