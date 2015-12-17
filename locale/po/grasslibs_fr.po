@@ -7860,7 +7860,7 @@ msgstr "Echec de la première lecture du fichier compressé [%s dans %s]"
 #: ../lib/raster/init.c:61
 #, fuzzy
 msgid "Raster library not initialized. Programmer forgot to call Rast_init()."
-msgstr "\aERREUR : Le système n'est pas initialisé. Le développeur a oublié d'appeler G_gisinit()\n"
+msgstr "Le système n'est pas initialisé. Le développeur a oublié d'appeler G_gisinit()\n"
 
 #: ../lib/raster/histogram.c:55
 #, c-format
