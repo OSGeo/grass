@@ -139,7 +139,7 @@ def main():
 
     # prepare raster MASK
     try:
-        grass.run_command('v.to.rast', input=vector, output=rastertmp,
+        grass.run_command('v.to.rast', input=vector, layer=layer, output=rastertmp,
                           use='cat', quiet=True)
     except CalledModuleError:
         grass.fatal(_("An error occurred while converting vector to raster"))
