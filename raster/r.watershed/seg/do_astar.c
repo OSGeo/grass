@@ -70,7 +70,8 @@ int do_astar(void)
 	    /* get r, c (upr, upc) for this neighbour */
 	    upr = r + nextdr[ct_dir];
 	    upc = c + nextdc[ct_dir];
-	    slope[ct_dir] = alt_nbr[ct_dir] = 0;
+	    slope[ct_dir] = -1;
+	    alt_nbr[ct_dir] = 0;
 	    /* check if upr, upc are within region */
 	    if (upr >= 0 && upr < nrows && upc >= 0 && upc < ncols) {
 		seg_get(&aspflag, (char *)&af, upr, upc);
@@ -85,16 +86,16 @@ int do_astar(void)
 			get_slope2(alt_val, alt_nbr[ct_dir],
 				   dist_to_nbr[ct_dir]);
 		}
-		if (!is_in_list) {
+		if (!is_worked) {
 		    if (ct_dir > 3 && slope[ct_dir] > 0) {
-			if (slope[nbr_ew[ct_dir]] > 0) {
+			if (slope[nbr_ew[ct_dir]] >= 0) {
 			    /* slope to ew nbr > slope to center */
 			    if (slope[ct_dir] <
 				get_slope2(alt_nbr[nbr_ew[ct_dir]],
 					   alt_nbr[ct_dir], ew_res))
 				skip_diag = 1;
 			}
-			if (!skip_diag && slope[nbr_ns[ct_dir]] > 0) {
+			if (!skip_diag && slope[nbr_ns[ct_dir]] >= 0) {
 			    /* slope to ns nbr > slope to center */
 			    if (slope[ct_dir] <
 				get_slope2(alt_nbr[nbr_ns[ct_dir]],
@@ -113,8 +114,7 @@ int do_astar(void)
 			FLAG_SET(af.flag, INLISTFLAG);
 			seg_put(&aspflag, (char *)&af, upr, upc);
 		    }
-		    else if (is_in_list && is_worked == 0 &&
-			     FLAG_GET(af.flag, EDGEFLAG)) {
+		    else if (is_in_list && is_worked == 0 && slope[ct_dir] > 0) {
 			/* neighbour is edge in list, not yet worked */
 			if (af.asp < 0) {
 			    /* adjust flow direction for edge cell */
