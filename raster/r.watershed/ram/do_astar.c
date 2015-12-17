@@ -95,7 +95,8 @@ int do_astar(void)
 	    /* get r, c (upr, upc) for this neighbour */
 	    upr = r + nextdr[ct_dir];
 	    upc = c + nextdc[ct_dir];
-	    slope[ct_dir] = alt_nbr[ct_dir] = 0;
+	    slope[ct_dir] = -1;
+	    alt_nbr[ct_dir] = 0;
 	    /* check if r, c are within region */
 	    if (upr >= 0 && upr < nrows && upc >= 0 && upc < ncols) {
 		index_up = SEG_INDEX(alt_seg, upr, upc);
@@ -132,16 +133,16 @@ int do_astar(void)
 			get_slope2(alt_val, alt_nbr[ct_dir],
 				   dist_to_nbr[ct_dir]);
 		}
-		if (!is_in_list) {
+		if (!is_worked) {
 		    if (ct_dir > 3 && slope[ct_dir] > 0) {
-			if (slope[nbr_ew[ct_dir]] > 0) {
+			if (slope[nbr_ew[ct_dir]] >= 0) {
 			    /* slope to ew nbr > slope to center */
 			    if (slope[ct_dir] <
 				get_slope2(alt_nbr[nbr_ew[ct_dir]],
 					   alt_nbr[ct_dir], ew_res))
 				skip_diag = 1;
 			}
-			if (!skip_diag && slope[nbr_ns[ct_dir]] > 0) {
+			if (!skip_diag && slope[nbr_ns[ct_dir]] >= 0) {
 			    /* slope to ns nbr > slope to center */
 			    if (slope[ct_dir] <
 				get_slope2(alt_nbr[nbr_ns[ct_dir]],
@@ -158,9 +159,10 @@ int do_astar(void)
 			/* set flow direction */
 			asp[index_up] = drain[upr - r + 1][upc - c + 1];
 		    }
-		    else if (is_in_list && is_worked == 0) {
+		    else if (is_in_list && is_worked == 0 && slope[ct_dir] > 0) {
 			/* neighbour is edge in list, not yet worked */
 			if (asp[index_up] < 0) {
+			    /* adjust flow direction for edge cell */
 			    asp[index_up] = drain[upr - r + 1][upc - c + 1];
 
 			    if (wat[index_doer] > 0)
