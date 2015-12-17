@@ -883,10 +883,11 @@ def install_extension_win(name):
     # http://wingrass.fsv.cvut.cz/grassXX/addonsX.X.X
     grass.message(_("Downloading precompiled GRASS Addons <%s>...") %
                   options['extension'])
-    url = "http://wingrass.fsv.cvut.cz/" \
+    url = "http://wingrass.fsv.cvut.cz/%(platform)s/" \
           "grass%(major)s%(minor)s/addons/" \
           "grass-%(major)s.%(minor)s.%(patch)s/" % \
-        {'major': version[0], 'minor': version[1], 'patch': version[2]}
+        {'platform' : build_platform, 'major': version[0],
+         'minor': version[1], 'patch': version[2]}
 
     grass.debug("url=%s" % url, 1)
 
@@ -1688,5 +1689,9 @@ if __name__ == "__main__":
     global TMPDIR
     TMPDIR = tempfile.mkdtemp()
     atexit.register(cleanup)
-    version = grass.version()['version'].split('.')
+    
+    grass_version = grass.version()
+    version = grass_version['version'].split('.')
+    build_platform = grass_version['build_platform'].split('-', 1)[0]
+    
     sys.exit(main())
