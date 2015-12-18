@@ -118,7 +118,7 @@ def main(argv = None):
     try:
         try:
             opts, args = getopt.getopt(argv[1:], "hw:",
-                                       ["help", "workspace", "pid"])
+                                       ["help", "workspace"])
         except getopt.error as msg:
             raise Usage(msg)
     except Usage as err:
