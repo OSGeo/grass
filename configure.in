@@ -265,6 +265,7 @@ LOC_ARG_WITH(regex, regex)
 LOC_ARG_WITH(pthread, POSIX threads, no)
 LOC_ARG_WITH(openmp, OpenMP, no)
 LOC_ARG_WITH(opencl, OpenCL, no)
+LOC_ARG_WITH(bzlib, BZIP2, no)
 
 AC_ARG_WITH(gdal,
 [  --with-gdal[=path/gdal-config]
@@ -299,6 +300,9 @@ AC_ARG_WITH(libs,
 
 LOC_ARG_WITH_INC(zlib, zlib)
 LOC_ARG_WITH_LIB(zlib, zlib)
+
+LOC_ARG_WITH_INC(bzlib, BZIP2)
+LOC_ARG_WITH_LIB(bzlib, BZIP2)
 
 LOC_ARG_WITH_INC(readline, Readline)
 LOC_ARG_WITH_LIB(readline, Readline)
@@ -579,6 +583,38 @@ AC_SUBST(ZLIBLIBPATH)
 AC_SUBST(ZLIB)
 
 # Done checking zlib
+
+# bzip2 support
+
+LOC_CHECK_USE(bzlib,bzlib,USE_BZIP2)
+
+if test -n "$USE_BZIP2"; then
+
+BZLIBLIBPATH=
+BZLIBINCPATH=
+BZLIB=
+
+# With bzip2 includes directory
+
+LOC_CHECK_INC_PATH(bzlib,bzlib,BZLIBINCPATH)
+
+LOC_CHECK_INCLUDES(bzlib.h,bzlib,$BZLIBINCPATH)
+
+# With bzip2 library directory
+
+LOC_CHECK_LIB_PATH(bzlib,bzlib,BZLIBLIBPATH)
+
+LOC_CHECK_LIBS(bz2,BZ2_bzBuffToBuffCompress,bzlib,$BZLIBLIBPATH,BZLIB,,,)
+
+#
+
+fi # $USE_BZIP2
+
+AC_SUBST(BZLIBINCPATH)
+AC_SUBST(BZLIBLIBPATH)
+AC_SUBST(BZLIB)
+
+# Done checking bzip2
 
 # Mandatory PROJ dependency
 
@@ -1795,6 +1831,7 @@ LOC_MSG([  MacOSX architectures:       ${MACOSX_ARCHS}])
 LOC_MSG([  MacOSX SDK:                 ${MACOSX_SDK}])
 LOC_MSG()
 LOC_MSG_USE(BLAS support,USE_BLAS)
+LOC_MSG_USE(BZIP2 support,USE_BZIP2)
 LOC_MSG_USE(C++ support,USE_CXX)
 LOC_MSG_USE(Cairo support,USE_CAIRO)
 LOC_MSG_USE(DWG support,USE_OPENDWG)

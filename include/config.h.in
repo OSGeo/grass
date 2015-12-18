@@ -38,6 +38,9 @@
 /* define if zlib.h exists */
 #undef HAVE_ZLIB_H
 
+/* define if bzlib.h exists */
+#undef HAVE_BZLIB_H
+
 /* define if sys/ioctl.h exists */
 #undef HAVE_SYS_IOCTL_H
 
