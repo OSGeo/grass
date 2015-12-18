@@ -38,13 +38,13 @@ from lmgr.frame import GMFrame
 
 
 class GMApp(wx.App):
-    def __init__(self, workspace = None):
+    def __init__(self, workspace=None):
         """ Main GUI class.
 
         :param workspace: path to the workspace file
         """
         self.workspaceFile = workspace
-
+        
         # call parent class initializer
         wx.App.__init__(self, False)
 
@@ -79,8 +79,8 @@ class GMApp(wx.App):
         wx.Yield()
 
         # create and show main frame
-        mainframe = GMFrame(parent = None, id = wx.ID_ANY,
-                            workspace = self.workspaceFile)
+        mainframe = GMFrame(parent=None, id=wx.ID_ANY,
+                            workspace=self.workspaceFile)
 
         mainframe.Show()
         self.SetTopWindow(mainframe)
@@ -104,13 +104,13 @@ def process_opt(opts, args):
         if o in ("-h", "--help"):
             printHelp()
 
-        if o in ("-w", "--workspace"):
+        elif o in ("-w", "--workspace"):
             if a != '':
                 workspaceFile = str(a)
             else:
                 workspaceFile = args.pop(0)
 
-    return (workspaceFile,)
+    return workspaceFile
 
 
 def main(argv = None):
@@ -123,15 +123,14 @@ def main(argv = None):
                                        ["help", "workspace"])
         except getopt.error as msg:
             raise Usage(msg)
-
     except Usage as err:
         print >> sys.stderr, err.msg
         print >> sys.stderr, "for help use --help"
         printHelp()
-
-    workspaceFile = process_opt(opts, args)[0]
-
+    
+    workspaceFile = process_opt(opts, args)
     app = GMApp(workspaceFile)
+    
     # suppress wxPython logs
     q = wx.LogNull()
     set_raise_on_error(True)

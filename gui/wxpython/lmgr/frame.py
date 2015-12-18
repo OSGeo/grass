@@ -176,7 +176,7 @@ class GMFrame(wx.Frame):
             
         self._auimgr.GetPane('toolbarNviz').Hide()
         # bindings
-        self.Bind(wx.EVT_CLOSE,    self.OnCloseWindow)
+        self.Bind(wx.EVT_CLOSE,    self.OnCloseWindowOrExit)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
 
         self._giface.mapCreated.connect(self.OnMapCreated)
@@ -2190,6 +2190,31 @@ class GMFrame(wx.Frame):
 
     def OnCloseWindow(self, event):
         """Cleanup when wxGUI is quitted"""
+        self._closeWindow()
+
+    def OnCloseWindowOrExit(self, event):
+        """Cleanup when wxGUI is quitted
+
+        Ask user also to quit GRASS including terminal
+        """
+        dlg = wx.MessageDialog(self,
+                               message = _("Do you want to quit GRASS GIS?\n\n"
+                                           "Press 'Yes' to quit GRASS GUI and shell.\n"
+                                           "Press 'No' to close only GRASS GUI.\n"
+                                           "Press 'Cancel' to cancel this operation."),
+                               caption = _("Quit GRASS GIS?"),
+                               style = wx.YES_NO | wx.YES_DEFAULT |
+                               wx.CANCEL | wx.ICON_QUESTION | wx.CENTRE)
+        ret = dlg.ShowModal()
+        dlg.Destroy()
+
+        if ret != wx.ID_CANCEL:
+            self._closeWindow()
+            if ret == wx.ID_YES:
+                self._quitGRASS()
+        
+    def _closeWindow(self):
+        """Close wxGUI"""
         # save command protocol if actived
         if self.goutput.btnCmdProtocol.GetValue():
             self.goutput.CmdProtocolSave()
@@ -2237,9 +2262,21 @@ class GMFrame(wx.Frame):
         self.OnDisplayCloseAll()
         
         self.notebookLayers.DeleteAllPages()
-        
         self._auimgr.UnInit()
         self.Destroy()
+        
+    def _quitGRASS(self):
+        """Quit GRASS terminal"""
+        try:
+            shellPid = int(grass.gisenv()['PID'])
+            print >> sys.stderr, grass.gisenv()
+        except:
+            grass.warning(_("Unable to exit GRASS shell: unknown PID"))
+            return
+
+        Debug.msg(1, "Exiting shell with pid={}".format(shellPid))
+        import signal
+        os.kill(shellPid, signal.SIGTERM)
         
     def MsgNoLayerSelected(self):
         """Show dialog message 'No layer selected'"""

@@ -1055,8 +1055,6 @@ r"""
 
 
 def csh_startup():
-    global exit_val
-
     userhome = os.getenv('HOME')      # save original home
     home = location
     os.environ['HOME'] = home
@@ -1100,14 +1098,13 @@ def csh_startup():
     f.close()
     writefile(tcshrc, readfile(cshrc))
 
-    exit_val = call([gfile("etc", "run"), os.getenv('SHELL')])
+    process = Popen([gfile("etc", "run"), os.getenv('SHELL')])
 
     os.environ['HOME'] = userhome
 
+    return process
 
 def bash_startup():
-    global exit_val
-
     # save command history in mapset dir and remember more
     os.environ['HISTFILE'] = os.path.join(location, ".bash_history")
     if not os.getenv('HISTSIZE') and not os.getenv('HISTFILESIZE'):
@@ -1163,32 +1160,29 @@ PROMPT_COMMAND=grass_prompt\n""" % (_("2D and 3D raster MASKs present"),
 
     f.close()
 
-    exit_val = call([gfile("etc", "run"), os.getenv('SHELL')])
+    process = Popen([gfile("etc", "run"), os.getenv('SHELL')])
 
     os.environ['HOME'] = userhome
-
+    
+    return process
 
 def default_startup():
-    global exit_val
-
     if windows:
         os.environ['PS1'] = "GRASS %s> " % (grass_version)
         # "$ETC/run" doesn't work at all???
-        exit_val = subprocess.call([os.getenv('SHELL')])
+        process = subprocess.Popen([os.getenv('SHELL')])
         cleanup_dir(os.path.join(location, ".tmp"))  # remove GUI session files from .tmp
     else:
         os.environ['PS1'] = "GRASS %s (%s):\w > " % (grass_version, location_name)
-        exit_val = call([gfile("etc", "run"), os.getenv('SHELL')])
-
-    if exit_val != 0:
-        fatal(_("Failed to start shell '%s'") % os.getenv('SHELL'))
-
+        process = Popen([gfile("etc", "run"), os.getenv('SHELL')])
+        
+    return process
 
 def done_message():
     if batch_job and os.access(batch_job, os.X_OK):
         message(_("Batch job '%s' (defined in GRASS_BATCH_JOB variable) was executed.") % batch_job)
         message(_("Goodbye from GRASS GIS"))
-        sys.exit(exit_val)
+        sys.exit(0)
     else:
         message(_("Done."))
         message("")
@@ -1482,11 +1476,19 @@ else:
         message(_("Launching <%s> GUI in the background, please wait...") % grass_gui)
 
 if sh in ['csh', 'tcsh']:
-    csh_startup()
+    shell_process = csh_startup()
 elif sh in ['bash', 'msh', 'cygwin']:
-    bash_startup()
+    shell_process = bash_startup()
 else:
-    default_startup()
+    shell_process = default_startup()
+
+# start GUI and register shell PID in rc file
+kv = read_gisrc()
+kv['PID'] = str(shell_process.pid)
+write_gisrc(kv)
+exit_val = shell_process.wait()
+if exit_val != 0:
+    warning(_("Failed to start shell '%s'") % os.getenv('SHELL'))
 
 clear_screen()
 
