@@ -270,12 +270,13 @@ const char *G_find_raster3d(const char *, const char *);
 const char *G_find_vector(char *, const char *);
 const char *G_find_vector2(const char *, const char *);
 
-/* flate.c */
-int G_zlib_compress(const unsigned char *, int, unsigned char *, int);
-int G_zlib_expand(const unsigned char *, int, unsigned char *, int);
-int G_zlib_write(int, const unsigned char *, int);
-int G_zlib_read(int, int, unsigned char *, int);
-int G_zlib_write_noCompress(int, const unsigned char *, int);
+/* compress.c */
+int G_get_compressor(char *);
+int G_write_compressed(int, unsigned char *, int, int);
+int G_write_unompressed(int, unsigned char *, int);
+int G_read_compressed(int, int, unsigned char *, int, int);
+int G_compress(unsigned char *, int, unsigned char *, int, int);
+int G_expand(unsigned char *, int, unsigned char *, int, int);
 
 /* geodesic.c */
 int G_begin_geodesic_equation(double, double, double, double);
