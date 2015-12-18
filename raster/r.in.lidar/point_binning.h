@@ -17,6 +17,8 @@
 
 #include <grass/raster.h>
 
+/* forward declaration */
+struct Map_info;
 
 struct node
 {
@@ -41,6 +43,7 @@ struct PointBinning
     int bin_sum;
     int bin_sumsq;
     int bin_index;
+    int bin_coordinates;
 
     void *n_array;
     void *min_array;
@@ -48,6 +51,8 @@ struct PointBinning
     void *sum_array;
     void *sumsq_array;
     void *index_array;
+    void *x_array;
+    void *y_array;
 
     int pth;
     double trim;
@@ -58,7 +63,7 @@ void point_binning_memory_test(struct PointBinning *point_binning, int rows,
                                int cols, RASTER_MAP_TYPE rtype);
 
 void point_binning_set(struct PointBinning *point_binning, char *method,
-                       char *percentile, char *trim);
+                       char *percentile, char *trim, int coordinates);
 void point_binning_allocate(struct PointBinning *point_binning, int rows,
                             int cols, RASTER_MAP_TYPE rtype);
 
@@ -84,12 +89,17 @@ void write_trimmean(struct BinIndex *bin_index, void *raster_row,
                     void *index_array, int row, int cols,
                     RASTER_MAP_TYPE rtype, double trim);
 
+/* forward declaration */
+struct VectorWriter;
+
 void write_values(struct PointBinning *point_binning,
                   struct BinIndex *bin_index_nodes, void *raster_row, int row,
-                  int cols, RASTER_MAP_TYPE rtype);
+                  int cols, RASTER_MAP_TYPE rtype,
+                  struct VectorWriter *vector_writer);
 void update_value(struct PointBinning *point_binning,
                   struct BinIndex *bin_index_nodes, int cols, int arr_row,
-                  int arr_col, RASTER_MAP_TYPE rtype, double z);
+                  int arr_col, RASTER_MAP_TYPE rtype, double x, double y,
+                  double z);
 
 
 #endif /* __POINT_BINNING_H__ */

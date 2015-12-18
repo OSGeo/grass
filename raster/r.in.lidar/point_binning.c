@@ -18,6 +18,7 @@
 #include <grass/gis.h>
 #include <grass/glocale.h>
 #include <grass/raster.h>
+#include <grass/vector.h>
 
 #include "point_binning.h"
 #include "local_proto.h"
@@ -113,7 +114,7 @@ int update_bin_index(struct BinIndex *bin_index, void *index_array,
 }
 
 void point_binning_set(struct PointBinning *point_binning, char *method,
-                       char *percentile, char *trim)
+                       char *percentile, char *trim, int bin_coordinates)
 {
 
     /* figure out what maps we need in memory */
@@ -131,12 +132,14 @@ void point_binning_set(struct PointBinning *point_binning, char *method,
        skewness         n               array index to linked list
        trimmean         n               array index to linked list
      */
+    point_binning->method = METHOD_NONE;
     point_binning->bin_n = FALSE;
     point_binning->bin_min = FALSE;
     point_binning->bin_max = FALSE;
     point_binning->bin_sum = FALSE;
     point_binning->bin_sumsq = FALSE;
     point_binning->bin_index = FALSE;
+    point_binning->bin_coordinates = FALSE;
 
     point_binning->n_array = NULL;
     point_binning->min_array = NULL;
@@ -144,6 +147,8 @@ void point_binning_set(struct PointBinning *point_binning, char *method,
     point_binning->sum_array = NULL;
     point_binning->sumsq_array = NULL;
     point_binning->index_array = NULL;
+    point_binning->x_array = NULL;
+    point_binning->y_array = NULL;
 
     if (strcmp(method, "n") == 0) {
         point_binning->method = METHOD_N;
@@ -213,6 +218,13 @@ void point_binning_set(struct PointBinning *point_binning, char *method,
         point_binning->method = METHOD_TRIMMEAN;
         point_binning->bin_index = TRUE;
     }
+    if (bin_coordinates) {
+        /* x, y */
+        point_binning->bin_coordinates = TRUE;
+        /* z and n */
+        point_binning->bin_sum = TRUE;
+        point_binning->bin_n = TRUE;
+    }
 }
 
 
@@ -251,6 +263,12 @@ void point_binning_memory_test(struct PointBinning *point_binning, int rows,
     if (point_binning->bin_index)
         point_binning->index_array =
             G_calloc((size_t) rows * (cols + 1), Rast_cell_size(CELL_TYPE));
+    if (point_binning->bin_coordinates) {
+        point_binning->x_array =
+            G_calloc((size_t) rows * (cols + 1), Rast_cell_size(rtype));
+        point_binning->y_array =
+            G_calloc((size_t) rows * (cols + 1), Rast_cell_size(rtype));
+    }
     /* TODO: perhaps none of them needs to be freed */
 
     /* and then free it again */
@@ -266,6 +284,10 @@ void point_binning_memory_test(struct PointBinning *point_binning, int rows,
         G_free(point_binning->sumsq_array);
     if (point_binning->bin_index)
         G_free(point_binning->index_array);
+    if (point_binning->bin_coordinates) {
+        G_free(point_binning->x_array);
+        G_free(point_binning->y_array);
+    }
 }
 
 
@@ -308,6 +330,15 @@ void point_binning_allocate(struct PointBinning *point_binning, int rows,
             G_calloc((size_t) rows * (cols + 1), Rast_cell_size(CELL_TYPE));
         blank_array(point_binning->index_array, rows, cols, CELL_TYPE, -1);     /* fill with NULLs */
     }
+    if (point_binning->bin_coordinates) {
+        G_debug(2, "allocating x_array and y_array");
+        point_binning->x_array =
+            G_calloc((size_t) rows * (cols + 1), Rast_cell_size(rtype));
+        blank_array(point_binning->x_array, rows, cols, rtype, 0);
+        point_binning->y_array =
+            G_calloc((size_t) rows * (cols + 1), Rast_cell_size(rtype));
+        blank_array(point_binning->y_array, rows, cols, rtype, 0);
+    }
 }
 
 void point_binning_free(struct PointBinning *point_binning,
@@ -329,6 +360,10 @@ void point_binning_free(struct PointBinning *point_binning,
         bin_index_nodes->num_nodes = 0;
         bin_index_nodes->max_nodes = 0;
         bin_index_nodes->nodes = NULL;
+    }
+    if (point_binning->bin_coordinates) {
+        G_free(point_binning->x_array);
+        G_free(point_binning->y_array);
     }
 }
 
@@ -617,7 +652,8 @@ void write_trimmean(struct BinIndex *bin_index, void *raster_row,
 
 void write_values(struct PointBinning *point_binning,
                   struct BinIndex *bin_index_nodes, void *raster_row, int row,
-                  int cols, RASTER_MAP_TYPE rtype)
+                  int cols, RASTER_MAP_TYPE rtype,
+                  struct VectorWriter *vector_writer)
 {
     void *ptr = NULL;
     int col;
@@ -707,13 +743,75 @@ void write_values(struct PointBinning *point_binning,
         break;
 
     default:
-        G_fatal_error("?");
+        G_debug(2, "No method selected");
     }
+    if (point_binning->bin_coordinates) {
+        for (col = 0; col < cols; col++) {
+            size_t offset = (row * cols + col) * Rast_cell_size(rtype);
+            size_t n_offset = (row * cols + col) * Rast_cell_size(CELL_TYPE);
+            int n = Rast_get_c_value(point_binning->n_array + n_offset,
+                                     CELL_TYPE);
+
+            if (n == 0)
+                continue;
+
+            double sum_x =
+                Rast_get_d_value(point_binning->x_array + offset, rtype);
+            double sum_y =
+                Rast_get_d_value(point_binning->y_array + offset, rtype);
+            /* TODO: we do this also in mean writing */
+            double sum_z =
+                Rast_get_d_value(point_binning->sum_array + offset, rtype);
+
+            /* We are not writing any categories. They are not needed
+             * and potentially it is too much trouble to do it and it is
+             * unclear what to write. Not writing them is also a little
+             * bit faster. */
+            Vect_append_point(vector_writer->points, sum_x, sum_y, sum_z / n);
+            Vect_write_line(vector_writer->info, GV_POINT,
+                            vector_writer->points, vector_writer->cats);
+            Vect_reset_line(vector_writer->points);
+            vector_writer->count++;
+        }
+    }
+}
+
+/* TODO: duplication with support.c, refactoring needed */
+static void *get_cell_ptr(void *array, int cols, int row, int col,
+                          RASTER_MAP_TYPE map_type)
+{
+    return G_incr_void_ptr(array,
+                           ((row * (size_t) cols) +
+                            col) * Rast_cell_size(map_type));
+}
+
+int update_val(void *array, int cols, int row, int col,
+               RASTER_MAP_TYPE map_type, double value)
+{
+    void *ptr = get_cell_ptr(array, cols, row, col, map_type);
+
+    Rast_set_d_value(ptr, value, map_type);
+    return 0;
+}
+
+int update_moving_mean(void *array, int cols, int row, int col,
+                       RASTER_MAP_TYPE rtype, double value, int n)
+{
+    /* for xy we do this check twice */
+    if (n != 0) {
+        double m_v;
+
+        row_array_get_value_row_col(array, row, col, cols, rtype, &m_v);
+        value = m_v + (value - m_v) / n;
+    }
+    /* else we just write the initial value */
+    return update_val(array, cols, row, col, rtype, value);;
 }
 
 void update_value(struct PointBinning *point_binning,
                   struct BinIndex *bin_index_nodes, int cols, int arr_row,
-                  int arr_col, RASTER_MAP_TYPE rtype, double z)
+                  int arr_col, RASTER_MAP_TYPE rtype, double x, double y,
+                  double z)
 {
     if (point_binning->bin_n)
         update_n(point_binning->n_array, cols, arr_row, arr_col);
@@ -732,4 +830,15 @@ void update_value(struct PointBinning *point_binning,
     if (point_binning->bin_index)
         update_bin_index(bin_index_nodes, point_binning->index_array, cols,
                          arr_row, arr_col, rtype, z);
+    if (point_binning->bin_coordinates) {
+        /* this assumes that n is already computed for this xyz */
+        void *ptr = get_cell_ptr(point_binning->n_array, cols, arr_row,
+                                 arr_col, CELL_TYPE);
+        int n = Rast_get_c_value(ptr, CELL_TYPE);
+
+        update_moving_mean(point_binning->x_array, cols, arr_row, arr_col,
+                           rtype, x, n);
+        update_moving_mean(point_binning->y_array, cols, arr_row, arr_col,
+                           rtype, y, n);
+    }
 }

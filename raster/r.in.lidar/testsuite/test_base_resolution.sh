@@ -30,7 +30,7 @@ echo "Automatic test if there are only allowed values..."
 r.univar ${basename}with_base -g \
     | grep -ve "=0$" | grep -ve "=-nan$" | grep -e "=[^12356789]$"
 
-echo "Test successful"
-echo "When running manually maps can be now removed with:"
-echo "  g.remove type=rast pattern='test_rinlidar_*' -f"
-echo "However, the region was changed to whatever the test needed."
+echo "Test successful
+When running manually maps can be now removed with:
+  g.remove type=rast pattern='test_rinlidar_*' -f
+However, the region was changed to whatever the test needed."
