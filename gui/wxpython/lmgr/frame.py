@@ -2211,8 +2211,11 @@ class GMFrame(wx.Frame):
         Ask user also to quit GRASS including terminal
         """
         dlg = wx.MessageDialog(self,
-                               message = _("Do you want to quit GRASS GIS?"),
-                               caption = _("Quit GRASS GIS"),
+                               message = _("Do you want to quit GRASS GIS?\n\n"
+                                           "Press 'Yes' to quit GRASS GUI and shell.\n"
+                                           "Press 'No' to close only GRASS GUI.\n"
+                                           "Press 'Cancel' to cancel this operation."),
+                               caption = _("Quit GRASS GIS?"),
                                style = wx.YES_NO | wx.YES_DEFAULT |
                                wx.CANCEL | wx.ICON_QUESTION | wx.CENTRE)
         ret = dlg.ShowModal()
