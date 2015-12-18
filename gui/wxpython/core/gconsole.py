@@ -491,15 +491,34 @@ class GConsole(wx.EvtHandler):
                                                                       'opt': p.get('name', '')})
                             return
 
-                if len(command) == 1 and hasParams and \
-                        command[0] != 'v.krige':
-                    # no arguments given
-                    try:
-                        GUI(parent=self._guiparent, giface=self._giface).ParseCommand(command)
-                    except GException as e:
-                        print >> sys.stderr, e
-                    return
-
+                if len(command) == 1:
+                    if command[0].startswith('g.gui.'):
+                        import imp
+                        import inspect
+                        pyFile = command[0]
+                        if sys.platform == 'win32':
+                            pyFile += '.py'
+                        pyPath = os.path.join(os.environ['GISBASE'], 'scripts', pyFile)
+                        if not os.path.exists(pyPath):
+                            pyPath = os.path.join(os.environ['GRASS_ADDON_BASE'], 'scripts', pyFile)
+                        if not os.path.exists(pyPath):
+                            GError(parent=self._guiparent,
+                                   message=_("Module <%s> not found.") % command[0])
+                        pymodule = imp.load_source(command[0].replace('.', '_'), pyPath)
+                        pymain = inspect.getargspec(pymodule.main)
+                        if pymain and 'giface' in pymain.args:
+                            pymodule.main(self._giface)
+                            return
+                    
+                    if hasParams and command[0] != 'v.krige':
+                        # no arguments given
+                        try:
+                            GUI(parent=self._guiparent, giface=self._giface).ParseCommand(command)
+                        except GException as e:
+                            print >> sys.stderr, e
+                        
+                        return
+                
                 # activate computational region (set with g.region)
                 # for all non-display commands.
                 if compReg:
