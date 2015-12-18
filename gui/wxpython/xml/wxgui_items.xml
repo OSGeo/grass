@@ -70,7 +70,7 @@
   </wxgui-item>
   <wxgui-item name="Quit">
     <label>Quit GRASS GIS</label>
-    <handler>OnCloseWindowExitGRASS</handler>
+    <handler>OnCloseWindowOrExit</handler>
     <description>Quit wxGUI session and exit GRASS shell.</description>
     <shortcut>Ctrl+Q</shortcut>
     <wx-id>ID_EXIT</wx-id>

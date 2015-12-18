@@ -2278,11 +2278,6 @@ class GMFrame(wx.Frame):
         self._auimgr.UnInit()
         self.Destroy()
         
-    def OnCloseWindowExitGRASS(self, event):
-        """Close wxGUI and quit GRASS terminal"""
-        self._closeWindow()
-        self._quitGRASS()
-
     def _quitGRASS(self):
         """Quit GRASS terminal"""
         try:
