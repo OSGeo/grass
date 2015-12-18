@@ -94,6 +94,11 @@ ZLIB                = @ZLIB@
 ZLIBINCPATH         = @ZLIBINCPATH@
 ZLIBLIBPATH         = @ZLIBLIBPATH@
 
+#BZIP2:
+BZLIB                = @BZLIB@
+BZLIBINCPATH         = @BZLIBINCPATH@
+BZLIBLIBPATH         = @BZLIBLIBPATH@
+
 DBMIEXTRALIB        = @DBMIEXTRALIB@
 
 #readline
