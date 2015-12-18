@@ -216,6 +216,12 @@ int Rast__open_old(const char *name, const char *mapset)
 			  r_name, r_mapset);
     }
 
+    /* test if compressor type is supported */
+    if (cellhd.compressed > 2) {
+	G_fatal_error(_("Raster map <%s@%s>: unsupported compression type %d"),
+		      r_name, r_mapset, cellhd.compressed);
+    }
+
     if (cellhd.proj != R__.rd_window.proj)
 	G_fatal_error(_("Raster map <%s> is in different projection than current region. "
 			"Found <%s>, should be <%s>."),
