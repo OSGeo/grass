@@ -4,8 +4,8 @@
 #include <grass/glocale.h>
 #include "local_proto.h"
 
-#define GET_PARENT(c) ((((c) - 2) >> 3) + 1)
-#define GET_CHILD(p) (((p) << 3) - 6)
+#define GET_PARENT(c) ((((GW_LARGE_INT)(c) - 2) >> 3) + 1)
+#define GET_CHILD(p) (((GW_LARGE_INT)(p) << 3) - 6)
 
 HEAP_PNT heap_drop(void);
 static double get_slope(CELL, CELL, double);
@@ -78,7 +78,8 @@ int do_astar(void)
 	    /* get r, c (r_nbr, c_nbr) for neighbours */
 	    r_nbr = r + nextdr[ct_dir];
 	    c_nbr = c + nextdc[ct_dir];
-	    slope[ct_dir] = ele_nbr[ct_dir] = 0;
+	    slope[ct_dir] = -1;
+	    ele_nbr[ct_dir] = 0;
 	    skip_diag = 0;
 
 	    /* check that neighbour is within region */
@@ -95,16 +96,16 @@ int do_astar(void)
 			                  dist_to_nbr[ct_dir]);
 	    }
 	    /* avoid diagonal flow direction bias */
-	    if (!is_in_list) {
-		if (ct_dir > 3 && slope[ct_dir] > 0) {
-		    if (slope[nbr_ew[ct_dir]] > 0) {
+	    if (!is_worked) {
+		if (ct_dir > 3 && slope[ct_dir] >= 0) {
+		    if (slope[nbr_ew[ct_dir]] >= 0) {
 			/* slope to ew nbr > slope to center */
 			if (slope[ct_dir] <
 			    get_slope(ele_nbr[nbr_ew[ct_dir]],
 				       ele_nbr[ct_dir], ew_res))
 			    skip_diag = 1;
 		    }
-		    if (!skip_diag && slope[nbr_ns[ct_dir]] > 0) {
+		    if (!skip_diag && slope[nbr_ns[ct_dir]] >= 0) {
 			/* slope to ns nbr > slope to center */
 			if (slope[ct_dir] <
 			    get_slope(ele_nbr[nbr_ns[ct_dir]],
