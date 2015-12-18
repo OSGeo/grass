@@ -62,6 +62,7 @@ int main(int argc, char *argv[])
     double dist;
     double sum1, sum2, interp_value;
     int n;
+    int max;
     double p;
     struct
     {
@@ -298,6 +299,7 @@ int main(int argc, char *argv[])
 		else {
 		    pointsfound = 0;
 		    i = 0;
+		    max = 0;
 
 		    if (searchallpoints == 1) {
 			/* If there aren't many sites just check them all to find
@@ -305,7 +307,7 @@ int main(int argc, char *argv[])
 			for (n = 0; n < ncells; n++)
 			    calculate_distances(shortlistrows[n],
 						shortlistcolumns[n], north,
-						east, &pointsfound);
+						east, &pointsfound, &max);
 		    }
 		    else {
 			radius = 0;
@@ -326,7 +328,7 @@ int main(int argc, char *argv[])
 					col + search_list[radius]->column;
 				    calculate_distances(searchrow,
 							searchcolumn, north,
-							east, &pointsfound);
+							east, &pointsfound, &max);
 				}
 
 				/* Only if at least one offset is not 0 */
@@ -340,7 +342,7 @@ int main(int argc, char *argv[])
 					col - search_list[radius]->column;
 				    calculate_distances(searchrow,
 							searchcolumn, north,
-							east, &pointsfound);
+							east, &pointsfound, &max);
 				}
 
 				/* Only if both offsets are not 0 */
@@ -357,7 +359,7 @@ int main(int argc, char *argv[])
 					calculate_distances(searchrow,
 							    searchcolumn,
 							    north, east,
-							    &pointsfound);
+							    &pointsfound, &max);
 				    }
 				    if (row >= search_list[radius]->row &&
 					col <
@@ -370,7 +372,7 @@ int main(int argc, char *argv[])
 					calculate_distances(searchrow,
 							    searchcolumn,
 							    north, east,
-							    &pointsfound);
+							    &pointsfound, &max);
 				    }
 				}
 
@@ -386,7 +388,7 @@ int main(int argc, char *argv[])
 		sum1 = 0.0;
 		sum2 = 0.0;
 		for (n = 0; n < nsearch; n++) {
-		    if ((dist = list[n].dist)) {
+		    if ((dist = sqrt(list[n].dist))) {
 			sum1 += list[n].z / pow(dist, p);
 			sum2 += 1.0 / pow(dist, p);
 		    }
@@ -456,9 +458,9 @@ void newpoint(double z, double east, double north, int noindex)
 }
 
 void calculate_distances(int row, int column, double north,
-			 double east, int *pointsfound)
+			 double east, int *pointsfound, int *max)
 {
-    int j, n, max = 0;
+    int j, n;
     double dx, dy, dist;
     static double maxdist;
 
@@ -474,10 +476,10 @@ void calculate_distances(int row, int column, double north,
 
 	    /* find the maximum distance */
 	    if (i == nsearch) {
-		maxdist = list[max = 0].dist;
+		maxdist = list[*max = 0].dist;
 		for (n = 1; n < nsearch; n++) {
 		    if (maxdist < list[n].dist)
-			maxdist = list[max = n].dist;
+			maxdist = list[*max = n].dist;
 		}
 	    }
 	}
@@ -490,12 +492,12 @@ void calculate_distances(int row, int column, double north,
 
 	    if (dist < maxdist) {
 		/* replace the largest dist */
-		list[max].z = points[row][column][j].z;
-		list[max].dist = dist;
-		maxdist = list[max = 0].dist;
+		list[*max].z = points[row][column][j].z;
+		list[*max].dist = dist;
+		maxdist = list[*max = 0].dist;
 		for (n = 1; n < nsearch; n++) {
 		    if (maxdist < list[n].dist)
-			maxdist = list[max = n].dist;
+			maxdist = list[*max = n].dist;
 		}
 	    }
 
