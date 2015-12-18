@@ -134,7 +134,7 @@ int do_astar(void)
 				   dist_to_nbr[ct_dir]);
 		}
 		if (!is_worked) {
-		    if (ct_dir > 3 && slope[ct_dir] > 0) {
+		    if (ct_dir > 3 && slope[ct_dir] >= 0) {
 			if (slope[nbr_ew[ct_dir]] >= 0) {
 			    /* slope to ew nbr > slope to center */
 			    if (slope[ct_dir] <
