@@ -97,8 +97,9 @@ static void read_data_fp_compressed(int fd, int row, unsigned char *data_buf,
 
     *nbytes = fcb->nbytes;
 
-    if ((size_t) G_zlib_read(fcb->data_fd, readamount, data_buf, bufsize) != bufsize)
-	G_fatal_error(_("Error reading raster data for row %d of <%s>"),
+    if ((size_t) G_read_compressed(fcb->data_fd, readamount, data_buf,
+                                   bufsize, fcb->cellhd.compressed) != bufsize)
+	G_fatal_error(_("Error uncompressing raster data for row %d of <%s>"),
 		      row, fcb->name);
 }
 
@@ -128,7 +129,8 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
     off_t t1 = fcb->row_ptr[row];
     off_t t2 = fcb->row_ptr[row + 1];
     ssize_t readamount = t2 - t1;
-    unsigned char *cmp;
+    size_t bufsize;
+    unsigned char *cmp, *cmp2;
     int n;
 
     if (lseek(fcb->data_fd, t1, SEEK_SET) < 0)
@@ -143,6 +145,9 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
 		      row, fcb->name);
     }
 
+    /* save cmp for free below */
+    cmp2 = cmp;
+
     /* Now decompress the row */
     if (fcb->cellhd.compressed > 0) {
 	/* one byte is nbyte count */
@@ -153,16 +158,21 @@ static void read_data_compressed(int fd, int row, unsigned char *data_buf,
 	/* pre 3.0 compression */
 	n = *nbytes = fcb->nbytes;
 
-    if (fcb->cellhd.compressed < 0 || readamount < n * fcb->cellhd.cols) {
-	if (fcb->cellhd.compressed == 2)
-	    G_zlib_expand(cmp, readamount, data_buf, n * fcb->cellhd.cols);
-	else
+    bufsize = n * fcb->cellhd.cols;
+    if (fcb->cellhd.compressed < 0 || readamount < bufsize) {
+	if (fcb->cellhd.compressed == 1)
 	    rle_decompress(data_buf, cmp, n, readamount);
+	else {
+	    if (G_expand(cmp, readamount, data_buf, bufsize,
+		     fcb->cellhd.compressed) != bufsize)
+	    G_fatal_error(_("Error uncompressing raster data for row %d of <%s>"),
+			  row, fcb->name);
+	}
     }
     else
 	memcpy(data_buf, cmp, readamount);
 
-    G_freea(cmp);
+    G_freea(cmp2);
 }
 
 static void read_data_uncompressed(int fd, int row, unsigned char *data_buf,
@@ -818,9 +828,11 @@ static int read_null_bits_compressed(int null_fd, unsigned char *flags,
 		      row, fcb->name);
 
     if (readamount == size) {
-	if (read(null_fd, flags, size) != size)
+	if (read(null_fd, flags, size) != size) {
 	    G_fatal_error(_("Error reading null data for row %d of <%s>"),
 			  row, fcb->name);
+	}
+	return 1;
     }
 
     compressed_buf = G_alloca(readamount);
@@ -831,7 +843,10 @@ static int read_null_bits_compressed(int null_fd, unsigned char *flags,
 		      row, fcb->name);
     }
 
-    G_zlib_expand(compressed_buf, readamount, flags, size);
+    if (G_expand(compressed_buf, readamount, flags, size, fcb->cellhd.compressed) < 1) {
+	G_fatal_error(_("Error uncompressing null data for row %d of <%s>"),
+		      row, fcb->name);
+    }
 
     G_freea(compressed_buf);
 
