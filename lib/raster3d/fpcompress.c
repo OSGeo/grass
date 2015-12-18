@@ -704,7 +704,7 @@ Rast3d_fpcompress_write_xdr_nums(int fd, char *src, int nofNum, int precision,
 					    &nBytes, &offsetMantissa);
 
 	*compressBuf = 0;
-	status = G_zlib_write(fd, (unsigned char *)compressBuf, nBytes + 1);
+	status = G_write_compressed(fd, (unsigned char *)compressBuf, nBytes + 1, 2);
 
     if (status < 0) {
 	Rast3d_error("Rast3d_fpcompress_write_xdr_nums: write error");
@@ -726,8 +726,8 @@ Rast3d_fpcompress_read_xdr_nums(int fd, char *dst, int nofNum, int fileBytes,
     char *src, *dest, *srcStop;
     nBytes = (isFloat ? XDR_FLOAT_LENGTH : XDR_DOUBLE_LENGTH);
 
-    status = G_zlib_read(fd, fileBytes, (unsigned char *)compressBuf,
-			 nofNum * nBytes + 1);
+    status = G_read_compressed(fd, fileBytes, (unsigned char *)compressBuf,
+			 nofNum * nBytes + 1, 2);
 
     if (status < 0) {
 	Rast3d_error("Rast3d_fpcompress_read_xdr_nums: read error");

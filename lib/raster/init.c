@@ -77,7 +77,7 @@ void Rast__error_handler(void *p)
 
 static int init(void)
 {
-    char *zlib, *nulls;
+    char *zlib, *nulls, *ctype;
 
     Rast__init_window();
 
@@ -95,6 +95,18 @@ static int init(void)
 
     zlib = getenv("GRASS_INT_ZLIB");
     R__.compression_type = (!zlib || atoi(zlib)) ? 2 : 1;
+
+    ctype = getenv("GRASS_COMPRESSOR");
+    /* 1: RLE
+     * 2: ZLIB (DEFLATE)
+     * 3: LZ4
+     * 4: BZIP2 */
+    if (ctype) {
+	/* ask gislib */
+	R__.compression_type = G_get_compressor(ctype);
+	if (R__.compression_type < 1)
+	    R__.compression_type = 2; /* default to ZLIB */
+    }
 
     nulls = getenv("GRASS_COMPRESS_NULLS");
     R__.compress_nulls = (nulls && atoi(nulls)) ? 1 : 0;

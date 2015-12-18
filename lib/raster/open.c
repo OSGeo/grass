@@ -217,6 +217,21 @@ int Rast__open_old(const char *name, const char *mapset)
 			  r_name, r_mapset);
     }
 
+    /* compressor */
+    if (MAP_TYPE != CELL_TYPE) {
+	/* fp maps do not use RLE */
+	/* previously, compressed simply meant yes (ZLIB) or no
+	 * now compressed encodes compressor type
+	 * 0: not compressed
+	 * 1, 2: ZLIB
+	 * 3: LZ4
+	 * 4: BZIP2
+	 * etc */
+	if (cellhd.compressed == 1)
+	    cellhd.compressed = 2;
+    }
+    /* TODO: test if compressor type is supported */
+
     if (cellhd.proj != R__.rd_window.proj)
 	G_fatal_error(_("Raster map <%s> is in different projection than current region. "
 			"Found <%s>, should be <%s>."),
@@ -634,6 +649,8 @@ static int open_raster_new(const char *name, int open_mode,
      */
     fcb->cellhd = R__.wr_window;
 
+    /* TODO: test if compressor type is supported */
+
     if (open_mode == OPEN_NEW_COMPRESSED && fcb->map_type == CELL_TYPE) {
 	fcb->row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
 	G_zero(fcb->row_ptr, (fcb->cellhd.rows + 1) * sizeof(off_t));
@@ -656,6 +673,11 @@ static int open_raster_new(const char *name, int open_mode,
 	if (fcb->map_type != CELL_TYPE) {
 	    Rast_quant_init(&(fcb->quant));
 	}
+    }
+    if (open_mode == OPEN_NEW_COMPRESSED && fcb->map_type != CELL_TYPE &&
+        fcb->cellhd.compressed == 1) {
+	/* fp maps do not use RLE */
+	fcb->cellhd.compressed = 2;
     }
 
     /* save name and mapset, and tempfile name */
