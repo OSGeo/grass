@@ -82,6 +82,7 @@ int main(int argc, char *argv[])
     struct Option *file_list_opt;
     struct Option *voutput_opt;
     struct Flag *print_flag, *scan_flag, *shell_style, *over_flag, *extents_flag, *intens_flag;
+    struct Flag *set_region_flag;
     struct Flag *base_rast_res_flag;
     struct Flag *notopo_flag;
 
@@ -239,6 +240,15 @@ int main(int argc, char *argv[])
 	_("Extend region extents based on new dataset");
     extents_flag->guisection = _("Output");
 
+    set_region_flag = G_define_flag();
+    set_region_flag->key = 'n';
+    set_region_flag->label =
+        _("Set computation region to match the new raster map");
+    set_region_flag->description =
+        _("Set computation region to match the 2D extent and resolution"
+          " of the newly created new raster map");
+    set_region_flag->guisection = _("Output");
+
     over_flag = G_define_flag();
     over_flag->key = 'o';
     over_flag->label =
@@ -272,6 +282,14 @@ int main(int argc, char *argv[])
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
+
+    /* we could use rules but this gives more info and allows continuing */
+    if (set_region_flag->answer && !(extents_flag->answer || res_opt->answer)) {
+        G_warning(_("Flag %c makes sense only with %s option or -%c flag"),
+                  set_region_flag->key, res_opt->key, extents_flag->key);
+        /* avoid the call later on */
+        set_region_flag->answer = '\0';
+    }
 
     struct StringList infiles;
 
@@ -682,6 +700,11 @@ int main(int argc, char *argv[])
         Vect_destroy_line_struct(vector_writer.points);
         Vect_destroy_cats_struct(vector_writer.cats);
     }
+
+    /* set computation region to the new raster map */
+    /* TODO: should be in the done message */
+    if (set_region_flag->answer)
+        G_put_window(&region);
 
     if (infiles.num_items > 1) {
         sprintf(buff, _("Raster map <%s> created."
