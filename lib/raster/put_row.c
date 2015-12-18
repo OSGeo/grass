@@ -122,12 +122,12 @@ static void write_data(int fd, int row, unsigned char *buf, int n)
 		      row, fcb->name, strerror(errno));
 }
 
-static void write_data_compressed(int fd, int row, unsigned char *buf, int n)
+static void write_data_compressed(int fd, int row, unsigned char *buf, int n, int compressor)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
     int nwrite = fcb->nbytes * n;
 
-    if (G_zlib_write(fcb->data_fd, buf, nwrite) < 0)
+    if (G_write_compressed(fcb->data_fd, buf, nwrite, compressor) < 0)
 	G_fatal_error(_("Error writing compressed FP data for row %d of <%s>: %s"),
 		      row, fcb->name, strerror(errno));
 }
@@ -205,7 +205,7 @@ static void put_fp_data(int fd, char *null_buf, const void *rast,
 	convert_double(work_buf, size, null_buf, rast, row, n);
 
     if (compressed)
-	write_data_compressed(fd, row, work_buf, n);
+	write_data_compressed(fd, row, work_buf, n, fcb->cellhd.compressed);
     else
 	write_data(fd, row, work_buf, n);
 
@@ -322,15 +322,6 @@ static int rle_compress(unsigned char *dst, unsigned char *src, int n,
 	n -= count;
     }
 
-    return nwrite;
-}
-
-static int zlib_compress(unsigned char *dst, unsigned char *src, int n,
-			 int nbytes)
-{
-    int total = nbytes * n;
-    int nwrite = G_zlib_compress(src, total, dst, total);
-
     return (nwrite >= total) ? 0 : nwrite;
 }
 
@@ -338,7 +329,7 @@ static void put_data(int fd, char *null_buf, const CELL * cell,
 		     int row, int n, int zeros_r_nulls)
 {
     struct fileinfo *fcb = &R__.fileinfo[fd];
-    int compressed = fcb->cellhd.compressed;
+    int compressed = (fcb->open_mode == OPEN_NEW_COMPRESSED);
     int len = compressed ? sizeof(CELL) : fcb->nbytes;
     unsigned char *work_buf, *wk;
     ssize_t nwrite;
@@ -379,9 +370,15 @@ static void put_data(int fd, char *null_buf, const CELL * cell,
 	compressed_buf[0] = work_buf[0] = nbytes;
 
 	/* then compress the data */
-	nwrite = compressed == 1
-	    ? rle_compress(compressed_buf + 1, work_buf + 1, n, nbytes)
-	    : zlib_compress(compressed_buf + 1, work_buf + 1, n, nbytes);
+	if (fcb->cellhd.compressed == 1)
+	    nwrite = rle_compress(compressed_buf + 1, work_buf + 1, n, nbytes);
+	else {
+	    nwrite = G_compress(work_buf + 1, total, compressed_buf + 1, total,
+	                        fcb->cellhd.compressed);
+	}
+
+	if (nwrite >= total)
+	    nwrite = 0;
 
 	if (nwrite > 0) {
 	    nwrite++;
@@ -508,9 +505,9 @@ static void write_null_bits_compressed(const unsigned char *flags,
 
     compressed_buf = G_alloca(size + 1);
 
-    nwrite = G_zlib_compress(flags, size, compressed_buf, size);
+    nwrite = G_compress(flags, size, compressed_buf, size, fcb->cellhd.compressed);
 
-    if (nwrite < size) {
+    if (nwrite > 0 && nwrite < size) {
 	if (write(fcb->null_fd, compressed_buf, nwrite) != nwrite)
 	    G_fatal_error(_("Error writing compressed null data for row %d of <%s>"),
 			  row, fcb->name);
