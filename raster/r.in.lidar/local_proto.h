@@ -27,6 +27,7 @@
 
 #define BUFFSIZE 256
 
+#define METHOD_NONE        0
 #define METHOD_N           1
 #define METHOD_MIN         2
 #define METHOD_MAX         3
@@ -88,5 +89,22 @@ struct StringList
 void string_list_from_file(struct StringList *string_list, char *filename);
 void string_list_from_one_item(struct StringList *string_list, char *item);
 void string_list_free(struct StringList *string_list);
+
+/* forward declarations */
+struct Map_info;
+struct line_pnts;
+struct line_cats;
+
+struct VectorWriter
+{
+    struct Map_info *info;
+    struct line_pnts *points;
+    struct line_cats *cats;
+#ifdef HAVE_LONG_LONG_INT
+    unsigned long long count;
+#else
+    unsigned long count;
+#endif
+};
 
 #endif /* __LOCAL_PROTO_H__ */
