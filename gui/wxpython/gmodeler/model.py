@@ -769,7 +769,7 @@ class Model(object):
                                     'idx'    : idx }
             for name, values in self.variables.iteritems():
                 gtype = values.get('type', 'string')
-                if gtype in ('raster', 'vector', 'mapset', 'file', 'region'):
+                if gtype in ('raster', 'vector', 'mapset', 'file', 'region', 'dir'):
                     gisprompt = True
                     prompt = gtype
                     if gtype == 'raster':
@@ -2283,6 +2283,8 @@ class WritePythonFile:
             return 'G_OPT_M_MAPSET'
         elif string == 'file':
             return 'G_OPT_F_INPUT'
+        elif string == 'dir':
+            return 'G_OPT_M_DIR'
         elif string == 'region':
             return 'G_OPT_M_REGION'
         
