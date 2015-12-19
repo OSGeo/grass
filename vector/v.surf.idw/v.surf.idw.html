@@ -50,8 +50,10 @@ faster on dense input maps. It should be noted that:
 the interpolation. If there are points outside the current region,
 this may have an effect on the interpolated value of cells near the
 edges of the region, and this effect will be more pronounced the fewer
-points there are. Use the <b>-n</b> flag if you wish to also include
-points outside the region in the interpolation.</li>
+points there are. If you wish to also include points outside the
+region in the interpolation, then either use the <b>-n</b> flag, or
+set the region to a larger extent (covering all input points) and use
+a mask to limit interpolation to a smaller area.</li>
 <li>If more than <b>npoints</b> points fall within a given cell then,
 rather than interpolating, these points are aggregated by taking the
 mean. This avoids the situation where some vector points can be
