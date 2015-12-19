@@ -1457,7 +1457,8 @@ class VariablePanel(wx.Panel):
                                          _("vector"),
                                          _("region"),
                                          _("mapset"),
-                                         _("file")])
+                                         _("file"),
+                                         _("dir")])
         self.type.SetSelection(2) # string
         self.value = wx.TextCtrl(parent = self, id = wx.ID_ANY)
         self.desc = wx.TextCtrl(parent = self, id = wx.ID_ANY)
