@@ -86,18 +86,21 @@ int open_file(char *name)
     int i, row;
     CELL *buf;
     char *tmpstr1, *tmpstr2;
+    char rname[GNAME_MAX];
+    char rmapset[GMAPSET_MAX];
 
     /* open raster map */
     cell_file = Rast_open_old(name, "");
-    
-    if (Rast_get_map_type(cell_file) != CELL_TYPE) {
+
+    if (Rast_is_reclass(name, "", rname, rmapset) <= 0 &&
+	Rast_get_map_type(cell_file) != CELL_TYPE) {
 	Rast_close(cell_file);
 	G_fatal_error(_("Input raster must be of type CELL."));
     }
 
     n_rows = Rast_window_rows();
     n_cols = Rast_window_cols();
-    
+
     /* GTC Count of raster rows */
     G_asprintf(&tmpstr1, n_("%d row", "%d rows", n_rows), n_rows);
     /* GTC Count of raster columns */
@@ -106,7 +109,7 @@ int open_file(char *name)
     G_message(_("Raster map <%s> - %s X %s"), name, tmpstr1, tmpstr2);
     G_free(tmpstr1);
     G_free(tmpstr2);
-    
+
     n_cols += (PAD << 1);
 
     /* copy raster map into our read/write file */
@@ -164,7 +167,7 @@ int close_file(char *name)
 
     row_count = n_rows - (PAD << 1);
     col_count = n_cols - (PAD << 1);
-    
+
     /* GTC Count of raster rows */
     G_asprintf(&tmpstr1, n_("%d row", "%d rows", row_count), row_count);
     /* GTC Count of raster columns */
@@ -172,8 +175,8 @@ int close_file(char *name)
     /* GTC %s will be replaced with number of rows and columns */
     G_message(_("Output map %s X %s"), tmpstr1, tmpstr2);
     G_free(tmpstr1);
-    G_free(tmpstr2); 
-    
+    G_free(tmpstr2);
+
     /* GTC Count of window rows */
     G_asprintf(&tmpstr1, n_("%d row", "%d rows", Rast_window_rows()), Rast_window_rows());
     /* GTC Count of window columns */
@@ -181,7 +184,7 @@ int close_file(char *name)
     /* GTC %s will be replaced with number of rows and columns */
     G_message(_("Window %s X %s"), tmpstr1, tmpstr2);
     G_free(tmpstr1);
-    G_free(tmpstr2); 
+    G_free(tmpstr2);
 
     for (row = 0, k = PAD; row < row_count; row++, k++) {
 	buf = get_a_row(k);
