@@ -8,10 +8,12 @@
  *               Systems, 1990) and Jean Ezell (USACERL, 1988).
  *
  *               Roberto Flor <flor itc.it>, Markus Neteler <neteler itc.it>
- *               Glynn Clements <glynn gclements.plus.com>, Hamish Bowman <hamish_b yahoo.com>,
- *               Jan-Oliver Wagner <jan intevation.de>
+ *               Glynn Clements <glynn gclements.plus.com>,
+ *               Hamish Bowman <hamish_b yahoo.com>,
+ *               Jan-Oliver Wagner <jan intevation.de>,
+ *               Huidae Cho <grass4u gmail.com>
  * PURPOSE:      Cell-file line thinning
- * COPYRIGHT:    (C) 1999-2006 by the GRASS Development Team
+ * COPYRIGHT:    (C) 1999-2015 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
  *               License (>=v2). Read the file COPYING that comes with GRASS
