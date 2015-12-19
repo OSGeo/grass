@@ -386,7 +386,7 @@ int main(int argc, char *argv[])
 		sum1 = 0.0;
 		sum2 = 0.0;
 		for (n = 0; n < nsearch; n++) {
-		    if ((dist = list[n].dist)) {
+		    if ((dist = sqrt(list[n].dist))) {
 			sum1 += list[n].z / pow(dist, p);
 			sum2 += 1.0 / pow(dist, p);
 		    }
@@ -458,7 +458,8 @@ void newpoint(double z, double east, double north, int noindex)
 void calculate_distances(int row, int column, double north,
 			 double east, int *pointsfound)
 {
-    int j, n, max = 0;
+    int j, n;
+    static int max;
     double dx, dy, dist;
     static double maxdist;
 
