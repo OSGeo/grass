@@ -89,12 +89,6 @@
 	  <shortcut>Ctrl+L</shortcut>
 	</menuitem>
 	<menuitem>
-	  <label>Add condition</label>
-	  <help>Adds condition (if/else) to model</help>
-	  <handler>OnDefineCondition</handler>
-	  <shortcut>Ctrl+I</shortcut>
-	</menuitem>
-	<menuitem>
 	  <label>Add comment</label>
 	  <help>Adds comment to model</help>
 	  <handler>OnAddComment</handler>
