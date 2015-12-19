@@ -58,7 +58,7 @@ static int get_cat_rast_header(struct Cell_head *region, char *header)
 int I_create_cat_rast(struct Cell_head *cat_rast_region, const char *cat_rast)
 {
     FILE *f_cat_rast;
-    char cat_rast_header[1024];	//TODO magic number 
+    char cat_rast_header[1024];	/* TODO magic number */
     int i_row, i_col;
     int head_nchars;
 
@@ -962,7 +962,7 @@ int I_rasterize(double *polygon, int pol_n_pts, unsigned char val,
 	Vect_append_point(pol, polygon[i * 2], polygon[i * 2 + 1], 0.0);
     }
 
-    //Rast_set_window(rast_region);
+    /* Rast_set_window(rast_region); */
 
     make_perimeter(pol, &perimeter, rast_region);
     for (i = 1; i < perimeter.npoints; i += 2) {
