@@ -8,7 +8,7 @@ control for display management and access to command console.
 Classes:
  - frame::GMFrame
 
-(C) 2006-2014 by the GRASS Development Team
+(C) 2006-2015 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -57,7 +57,7 @@ from core.gconsole         import GConsole, EVT_IGNORED_CMD_RUN
 from core.giface           import Notification
 from gui_core.goutput      import GConsoleWindow, GC_SEARCH, GC_PROMPT
 from modules.import_export import GdalOutputDialog, DxfImportDialog, GdalImportDialog
-from gui_core.dialogs      import LocationDialog, MapsetDialog, CreateNewVector, GroupDialog, MapLayersDialog
+from gui_core.dialogs      import LocationDialog, MapsetDialog, CreateNewVector, GroupDialog, MapLayersDialog, QuitDialog
 from modules.colorrules    import RasterColorTable, VectorColorTable
 from gui_core.menu         import Menu, SearchModuleWindow
 from gmodeler.model        import Model
@@ -2210,17 +2210,9 @@ class GMFrame(wx.Frame):
 
         Ask user also to quit GRASS including terminal
         """
-        dlg = wx.MessageDialog(self,
-                               message = _("Do you want to quit GRASS GIS?\n\n"
-                                           "Press 'Yes' to quit GRASS GUI and shell.\n"
-                                           "Press 'No' to close only GRASS GUI.\n"
-                                           "Press 'Cancel' to cancel this operation."),
-                               caption = _("Quit GRASS GIS?"),
-                               style = wx.YES_NO | wx.YES_DEFAULT |
-                               wx.CANCEL | wx.ICON_QUESTION | wx.CENTRE)
+        dlg = QuitDialog(self)
         ret = dlg.ShowModal()
         dlg.Destroy()
-
         if ret != wx.ID_CANCEL:
             self._closeWindow()
             if ret == wx.ID_YES:
