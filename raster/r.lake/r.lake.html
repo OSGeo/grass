@@ -94,9 +94,8 @@ r.lake elev_lid792_1m coordinates=638759.3,220264.1 water_level=113.4 lake=flood
 # draw resulting lake map over shaded terrain map
 r.relief input=elev_lid792_1m output=elev_lid792_1m_shade
 d.rast elev_lid792_1m_shade
-d.rast -o flooding
+d.rast flooding
 d.vect streets_wake
-d.vect bldg_cmcl_pol type=area
 </pre></div>
 
 <p>
@@ -110,7 +109,8 @@ Small flooding along a street (<em>r.lake</em>, using Lidar 1m DEM)
 <em>
 <a href="r.mapcalc.html">r.mapcalc</a>,
 <a href="r.grow.html">r.grow</a>,
-<a href="r.plane.html">r.plane</a></em>
+<a href="r.plane.html">r.plane</a>
+</em>
 
 <h2>AUTHOR</h2>
 Maris Nartiss (maris.nartiss gmail.com)
