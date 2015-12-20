@@ -373,7 +373,7 @@ int I_insert_patch_to_cat_rast(const char *patch_rast,
    		which are modified according to values in belongs_pix 
    		(represents scatter plot category)
  */
-static inline void update_cat_scatt_plts(struct rast_row *bands_rows,
+static void update_cat_scatt_plts(struct rast_row *bands_rows,
 					 unsigned short *belongs_pix,
 					 struct scScatts *scatts)
 {
@@ -451,7 +451,7 @@ static inline void update_cat_scatt_plts(struct rast_row *bands_rows,
    \return  0 on success
    \return -1 on failure
  */
-static inline int compute_scatts_from_chunk_row(struct scCats *scatt_conds,
+static int compute_scatts_from_chunk_row(struct scCats *scatt_conds,
 						FILE ** f_cats_rasts_conds,
 						struct rast_row *bands_rows,
 						struct scCats *scatts,
