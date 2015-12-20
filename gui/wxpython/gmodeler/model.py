@@ -450,8 +450,13 @@ class Model(object):
                 key, value = opt.split('=', 1)
                 sval = pattern.search(value)
                 if sval:
-                    var = sval.group(2).strip()[1:] # ignore '%'
-                    if var not in variables:
+                    var = sval.group(2).strip()[1:] # strip '%' from beginning
+                    found = False
+                    for v in variables:
+                        if var.startswith(v):
+                            found = True
+                            break
+                    if not found:
                         report = True
                         for item in filter(lambda x: isinstance(x, ModelLoop), action.GetBlock()):
                             if var in item.GetLabel():
