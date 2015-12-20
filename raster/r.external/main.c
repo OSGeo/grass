@@ -44,7 +44,7 @@ int main(int argc, char *argv[])
 	struct Option *input, *source, *output, *band, *title;
     } parm;
     struct {
-	struct Flag *o, *f, *e, *h, *v;
+	struct Flag *o, *f, *e, *h, *v, *t;
     } flag;
     int min_band, max_band, band;
     struct band_info info;
@@ -116,6 +116,14 @@ int main(int argc, char *argv[])
     flag.v->key = 'v';
     flag.v->description = _("Flip vertically");
 
+    flag.t = G_define_flag();
+    flag.t->key = 't';
+    flag.t->label =
+        _("List available bands including band type in dataset and exit");
+    flag.t->description = _("Format: band number,type,projection check");
+    flag.t->guisection = _("Print");
+    flag.t->suppress_required = YES;
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
@@ -170,6 +178,13 @@ int main(int argc, char *argv[])
 	return 1;
 
     setup_window(&cellhd, hDS, &flip);
+
+    if (flag.t->answer) {
+        list_bands(&cellhd, hDS);
+        /* close the GDALDataset to avoid segfault in libgdal */
+        GDALClose(hDS);
+        exit(EXIT_SUCCESS);
+    }
 
     check_projection(&cellhd, hDS, flag.o->answer);
 
