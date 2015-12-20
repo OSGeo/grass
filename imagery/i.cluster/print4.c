@@ -13,7 +13,7 @@ int print_centroids(FILE * fd, struct Cluster *C)
     int band, cat;
     char buf[40];
 
-    fprintf(fd, _("class centroids (sum/count=mean)\n"));
+    fprintf(fd, _("class centroids (sum/count=mean)%s"), HOST_NEWLINE);
     for (band = 0; band < C->nbands; band++) {
 	fprintf(fd, _("band %d"), band + 1);
 	for (cat = 0; cat < C->nclasses; cat++) {
@@ -24,7 +24,7 @@ int print_centroids(FILE * fd, struct Cluster *C)
 		sprintf(buf, FMT2, C->sum[band][cat], C->count[cat]);
 	    fprintf(fd, "%s %-18s", cat % 4 ? "" : "\n", buf);
 	}
-	fprintf(fd, "\n");
+	fprintf(fd, "%s", HOST_NEWLINE);
     }
 
     return 0;
