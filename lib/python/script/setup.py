@@ -174,7 +174,7 @@ def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
     # Set PYTHONPATH to find GRASS Python modules
     # TODO: isn't this useless? user already imported this somehow
     path = os.getenv('PYTHONPATH')
-    etcpy = os.path.join(gisbase, 'etc', 'python')
+    etcpy = os.path.join(gisbase, 'etc', 'python') + os.pathsep + os.path.join(gisbase, 'gui', 'wxpython')
     if path:
         path = etcpy + os.pathsep + path
     else:
