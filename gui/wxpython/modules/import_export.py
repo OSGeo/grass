@@ -8,6 +8,7 @@ List of classes:
  - :class:`GdalImportDialog`
  - :class:`GdalOutputDialog`
  - :class:`DxfImportDialog`
+ - :class:`ReprojectionDialog`
 
 (C) 2008-2015 by the GRASS Development Team
 
@@ -29,7 +30,7 @@ from grass.script import task as gtask
 from core import globalvar
 from core.gcmd import RunCommand, GMessage, GWarning
 from gui_core.gselect import OgrTypeSelect, GdalSelect, SubGroupSelect
-from gui_core.widgets import LayersList
+from gui_core.widgets import LayersList, GListCtrl
 from core.utils import GetValidLayerName, _
 from core.settings import UserSettings, GetDisplayVectSettings
 
@@ -67,6 +68,8 @@ class ImportDialog(wx.Dialog):
         if itype == 'ogr':
             columns.insert(2, _('Feature type'))
             columns.insert(3, _('Projection match'))
+        elif itype == 'gdal':
+            columns.insert(2, _('Projection match'))
 
         self.list = LayersList(parent = self.panel, columns = columns)
         self.list.LoadData()
@@ -231,7 +234,7 @@ class ImportDialog(wx.Dialog):
         # * try to determine names using regexp or
         # * persuade import tools to report map names
         self.commandId += 1
-        layer, output = self.list.GetLayers()[self.commandId]
+        layer, output = self.list.GetLayers()[self.commandId][:2]
         
         if '@' not in output:
             name = output + '@' + grass.gisenv()['MAPSET']
@@ -295,7 +298,7 @@ class GdalImportDialog(ImportDialog):
         """Dialog for bulk import of various raster/vector data
 
         .. todo::
-            Split into GdalImportDialog and OgrImportDialog
+            Split into GdalImportDialog and OgrImportDialog, split importing logic from gui code
 
         :param parent: parent window
         :param ogr: True for OGR (vector) otherwise GDAL (raster)
@@ -304,7 +307,9 @@ class GdalImportDialog(ImportDialog):
         self._giface = giface
         self.link = link
         self.ogr  = ogr
-        
+
+        self.layersData = []
+
         if ogr:
             ImportDialog.__init__(self, parent, giface=giface, itype='ogr')
             if link:
@@ -321,7 +326,7 @@ class GdalImportDialog(ImportDialog):
         self.dsnInput = GdalSelect(parent = self, panel = self.panel,
                                    ogr = ogr, link = link)
         self.dsnInput.AttachSettings()
-        self.dsnInput.reloadDataRequired.connect(lambda data: self.list.LoadData(data))
+        self.dsnInput.reloadDataRequired.connect(self.reload)
 
         if link:
             self.add.SetLabel(_("Add linked layers into layer tree"))
@@ -339,10 +344,22 @@ class GdalImportDialog(ImportDialog):
 
         self.doLayout()
 
+    def reload(self, data, listData):
+
+        self.list.LoadData(listData);
+        self.layersData = data;
+
     def OnRun(self, event):
         """Import/Link data (each layes as separate vector map)"""
         self.commandId = -1
         data = self.list.GetLayers()
+
+
+        data = self._getLayersToReprojetion()
+
+        if data is None:
+            return;
+
         if not data:
             GMessage(_("No layers selected. Operation canceled."),
                      parent = self)
@@ -360,9 +377,10 @@ class GdalImportDialog(ImportDialog):
             self.popOGR = True
             os.environ['GRASS_VECTOR_OGR'] = '1'
         
-        for layer, output in data:
+        for layer, output, listId in data:
             userData = {}
             if self.importType == 'ogr':
+
                 if ext and layer.rfind(ext) > -1:
                     layer = layer.replace('.' + ext, '')
                 if '|' in layer:
@@ -374,6 +392,12 @@ class GdalImportDialog(ImportDialog):
                            'input=%s' % dsn,
                            'output=%s' % output,
                            'layer=%s' % layer]
+
+                elif self.layersData[listId][3] == 0:
+                    cmd = ['v.import',
+                           'input=%s' % dsn,
+                           'layer=%s' % layer,
+                           'output=%s' % output]
                 else:
                     cmd = ['v.in.ogr',
                            'input=%s' % dsn,
@@ -429,6 +453,49 @@ class GdalImportDialog(ImportDialog):
             
             # run in Layer Manager
             self._giface.RunCmd(cmd, onDone = self.OnCmdDone, userData = userData)
+
+
+    def _getLayersToReprojetion(self):
+        """If there are layers with different projection from loation projection, 
+           show dialog to user to explicitly select layers which will be reprojected..."""
+        differentProjLayers = []
+        data = self.list.GetData(checked=True)
+
+        if self.importType == 'ogr':
+                projMatch_idx = 3
+                grassName_idx = 4
+        else:#gdal
+                projMatch_idx = 2
+                grassName_idx = 3
+
+        for itm in data:
+
+            layerId = itm[-1]
+
+            # select only layers with different projetion
+            if self.layersData[layerId][projMatch_idx] == 0:
+                dt = [itm[0], itm[grassName_idx]]
+                differentProjLayers.append(tuple(dt))
+        
+        layers = self.list.GetLayers()
+        
+        if differentProjLayers:
+
+            dlg = RerojectionDialog(
+                parent=self, giface=self._giface, data=differentProjLayers)
+                
+            ret = dlg.ShowModal()
+
+            if ret == wx.ID_OK:
+
+                # do not import unchecked layers
+                for itm in reversed(list(dlg.GetData(checked=False))):
+                    idx = itm[-1]
+                    layers.pop(idx)
+            else:
+                return None;
+
+        return layers
 
     def OnCmdDone(self, event):
         """Load layers and close if required"""
@@ -635,3 +702,95 @@ class DxfImportDialog(ImportDialog):
             data.append((layerId, layerName.strip(), grassName.strip()))
         
         self.list.LoadData(data)
+
+class RerojectionDialog(wx.Dialog):
+    """ """
+    def __init__(self, parent, giface, data,
+                 id = wx.ID_ANY, title = _("Reprojection"),
+                 style = wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER):
+        self.parent = parent    # GMFrame 
+        self._giface = giface  # used to add layers
+        
+        wx.Dialog.__init__(self, parent, id, title, style = style,
+                           name = "MultiImportDialog")
+
+
+        self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
+
+        # list of layers
+        columns = [_('Layer id'),
+                   _('Name for output GRASS map')]
+
+        self.list = GListCtrl(parent = self.panel)
+
+        for i in range(len(columns)):
+            self.list.InsertColumn(i, columns[i])
+        
+        width = (65, 180)
+        
+        for i in range(len(width)):
+            self.list.SetColumnWidth(col=i, width=width[i])
+
+        self.list.LoadData(data)
+
+        self.layerBox = wx.StaticBox(parent=self.panel, id=wx.ID_ANY)
+
+        self.labelText = wx.StaticText(parent=self.panel, id=wx.ID_ANY, label=_("Projection of following layers do not match with projection of current location. "))
+        
+        label = _("Layers to be reprojected")
+        self.layerBox.SetLabel(" %s - %s " % (label, _("right click to (un)select all")))
+
+        #
+        # buttons
+        #
+        # cancel
+        self.btn_close = wx.Button(parent = self.panel, id = wx.ID_CANCEL)
+
+        # run
+        self.btn_run = wx.Button(parent = self.panel, id = wx.ID_OK, label = _("&Import && reproject"))
+        self.btn_run.SetToolTipString(_("Reproject selected layers"))
+        self.btn_run.SetDefault()
+
+        self.doLayout()
+
+    def doLayout(self):
+        """Do layout"""
+        dialogSizer = wx.BoxSizer(wx.VERTICAL)
+
+        dialogSizer.Add(item = self.labelText,
+                        flag = wx.ALL | wx.EXPAND, border = 5)
+        
+        layerSizer = wx.StaticBoxSizer(self.layerBox, wx.HORIZONTAL)
+
+
+        layerSizer.Add(item = self.list, proportion = 1,
+                      flag = wx.ALL | wx.EXPAND, border = 5)
+        
+        dialogSizer.Add(item = layerSizer, proportion = 1,
+                        flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 5)
+
+        #
+        # buttons
+        #
+        btnsizer = wx.BoxSizer(orient = wx.HORIZONTAL)
+        
+        btnsizer.Add(item = self.btn_close, proportion = 0,
+                     flag = wx.LEFT | wx.RIGHT | wx.ALIGN_CENTER,
+                     border = 10)
+        
+        btnsizer.Add(item = self.btn_run, proportion = 0,
+                     flag = wx.RIGHT | wx.ALIGN_CENTER,
+                     border = 10)
+        
+        dialogSizer.Add(item = btnsizer, proportion = 0,
+                        flag = wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM | wx.ALIGN_RIGHT,
+                        border = 10)
+   
+        self.panel.SetSizer(dialogSizer)
+        dialogSizer.Fit(self.panel)
+
+        self.Layout()
+
+    def GetData(self, checked):
+
+        return self.list.GetData(checked)

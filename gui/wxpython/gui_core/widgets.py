@@ -921,6 +921,50 @@ class GListCtrl(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin, listmix.CheckListCt
 
         event.Skip()
 
+    def GetData(self, checked=None):
+        """Get list data"""
+        data = []
+        checkedList = []
+        
+        item = -1
+        while True:
+            
+            row = []
+            item = self.GetNextItem(item)
+            if item == -1:
+                break
+
+            isChecked = self.IsChecked(item)
+            if checked is not None and  checked != isChecked:
+                continue
+
+            checkedList.append(isChecked)
+
+            for i in range(self.GetColumnCount()):
+                row.append(self.GetItem(item, i).GetText())
+            
+            row.append(item)
+            data.append(tuple(row))
+
+        if checked is not None:
+            return tuple(data)
+        else:
+            return (tuple(data), tuple(checkedList))
+
+    def LoadData(self, data=None, selectOne=True):
+        """Load data into list"""
+        self.DeleteAllItems()
+        if data is None:
+            return
+        
+        for item in data:
+            index = self.InsertStringItem(sys.maxint, str(item[0]))
+            for i in range(1, self.GetColumnCount()):
+                self.SetStringItem(index, i, item[i])
+        
+        # check by default only on one item
+        if len(data) == 1 and selectOne:
+            self.CheckItem(index, True)
 
 class SearchModuleWidget(wx.Panel):
     """Search module widget (used e.g. in SearchModuleWindow)
@@ -1465,29 +1509,14 @@ class LayersList(GListCtrl, listmix.TextEditMixin):
         for i in range(len(columns)):
             self.InsertColumn(i, columns[i])
         
-        if len(columns) == 3:
-            width = (65, 200)
+        if len(columns) == 4:
+            width = (65, 200, 90)
         else:
             width = (65, 180, 90, 70)
         
         for i in range(len(width)):
             self.SetColumnWidth(col = i, width = width[i])
-        
-    def LoadData(self, data = None, selectOne = True):
-        """Load data into list"""
-        self.DeleteAllItems()
-        if data is None:
-            return
-        
-        for item in data:
-            index = self.InsertStringItem(sys.maxint, str(item[0]))
-            for i in range(1, self.GetColumnCount()):
-                self.SetStringItem(index, i, item[i])
-        
-        # check by default only on one item
-        if len(data) == 1 and selectOne:
-            self.CheckItem(index, True)
-        
+                
     def OnLeftDown(self, event):
         """Allow editing only output name
         
@@ -1509,21 +1538,19 @@ class LayersList(GListCtrl, listmix.TextEditMixin):
             event.Skip()
         
     def GetLayers(self):
-        """Get list of layers (layer name, output name)"""
-        data = []
-        item = -1
-        while True:
-            item = self.GetNextItem(item)
-            if item == -1:
-                break
-            if not self.IsChecked(item):
-                continue
-            # layer / output name
-            layer = self.GetItem(item, 1).GetText()
-            ftype = self.GetItem(item, 2).GetText()
+        """Get list of layers (layer name, output name, list id)"""
+        layers = []
+
+        data = self.GetData(checked=True);
+
+        for itm in data:
+
+            layer = itm[1]
+            ftype = itm[2]
             if '/' in ftype:
                 layer += '|%s' % ftype.split('/', 1)[0]
-            output = self.GetItem(item, self.GetColumnCount() - 1).GetText()
-            data.append((layer, output))
-        
-        return data
+            output = itm[self.GetColumnCount() - 1]
+            layers.append((layer, output, itm[-1]))
+
+        return layers
+

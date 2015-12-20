@@ -1738,7 +1738,7 @@ class GdalSelect(wx.Panel):
             self.SetDatabase(db)
 
         if not self.dest:
-            self.reloadDataRequired.emit(data=None)
+            self.reloadDataRequired.emit(listData=None, data=None)
             self._reloadLayers()
 
     def OnSettingsChanged(self, data):
@@ -1778,7 +1778,7 @@ class GdalSelect(wx.Panel):
             self.dbWidgets['options'].SetValue(data[3])
 
         if not self.dest:
-            self.reloadDataRequired.emit(data=None)
+            self.reloadDataRequired.emit(listData=None, data=None)
             self._reloadLayers()
 
     def AttachSettings(self):
@@ -1913,11 +1913,40 @@ class GdalSelect(wx.Panel):
 
     def _reloadLayers(self):
         """Reload list of layers"""
+
+        def hasRastSameProjAsLocation(dsn):
+
+            ret = RunCommand('r.external',
+                             quiet = True,
+                             read = True,
+                             flags = 't',
+                             input = dsn)
+
+            # v.external returns info for individual bands, however projection is shared by all bands ->
+            # (it is possible to take first line)
+            
+            lines = ret.splitlines()
+            projectionMatch = '0'
+            if lines:
+                bandNumber, bandType, projectionMatch = map(lambda x: x.strip(), lines[0].split(','))
+
+            return projectionMatch
+
+        def getProjMatchCaption(projectionMatch):
+
+            if projectionMatch == '0':
+                projectionMatchCaption = _("No")
+            else:
+                projectionMatchCaption = _("Yes")
+
+            return projectionMatchCaption
+
         dsn = self.GetDsn()
         if not dsn:
             return
 
         data = list()
+        listData = list()
         layerId = 1
 
         if self.ogr:
@@ -1927,37 +1956,40 @@ class GdalSelect(wx.Panel):
                              flags = 't',
                              input = dsn)
             if not ret:
-                self.reloadDataRequired.emit(data=None)
+                self.reloadDataRequired.emit(listData=None, data=None)
                 return
 
             layerId = 1
             for line in ret.splitlines():
-                layerName, featureType, projection, geometryColumn = map(lambda x: x.strip(), line.split(','))
-                if projection == '0':
-                    projectionMatch = _("No")
-                else:
-                    projectionMatch = _("Yes")
+                layerName, featureType, projectionMatch, geometryColumn = map(lambda x: x.strip(), line.split(','))
+                projectionMatchCaption = getProjMatchCaption(projectionMatch)
                 grassName = GetValidLayerName(layerName)
                 if geometryColumn:
                     featureType = geometryColumn + '/' + featureType
-                data.append((layerId, layerName, featureType, projectionMatch, grassName))
+                listData.append((layerId, layerName, featureType, projectionMatchCaption, grassName))
+                data.append((layerId, layerName, featureType, int(projectionMatch), grassName))
                 layerId += 1
         else:
             if self._sourceType == 'file':
                 baseName = os.path.basename(dsn)
                 grassName = GetValidLayerName(baseName.split('.', -1)[0])
-                data.append((layerId, baseName, grassName))
+                projectionMatch = hasRastSameProjAsLocation(dsn)
+                projectionMatchCaption = getProjMatchCaption(projectionMatch)
+                listData.append((layerId, baseName, projectionMatchCaption, grassName))
+                data.append((layerId, baseName, int(projectionMatch), grassName))
             elif self._sourceType == 'dir':
                 ext = self.dirWidgets['extension'].GetValue()
                 for filename in glob.glob(os.path.join(dsn, "%s") % self._getExtPatternGlob(ext)):
                     baseName = os.path.basename(filename)
-
                     grassName = GetValidLayerName(baseName.split('.', -1)[0])
-                    data.append((layerId, baseName, grassName))
+                    projectionMatch = hasRastSameProjAsLocation(dsn)
+                    projectionMatchCaption = getProjMatchCaption(projectionMatch)
+                    listData.append((layerId, baseName, projectionMatchCaption, grassName))
+                    data.append((layerId, baseName,  int(projectionMatch), grassName))
                     layerId += 1
         
         # emit signal
-        self.reloadDataRequired.emit(data=data)
+        self.reloadDataRequired.emit(listData=listData, data=data)
 
     def ExtensionChanged(self, event):
         if not self.dest:
