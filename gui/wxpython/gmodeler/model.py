@@ -296,7 +296,7 @@ class Model(object):
         try:
             gxmXml = ProcessModelFile(etree.parse(filename))
         except StandardError as e:
-            raise GException(e)
+            raise GException(unicode(e))
         
         if self.canvas:
             win = self.canvas.parent
