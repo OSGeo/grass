@@ -2796,7 +2796,7 @@ class QuitDialog(wx.Dialog):
         
         :param parent: window
         """
-        wx.Dialog.__init__(self, parent, id, title, style=style, size=size, **kwargs)
+        wx.Dialog.__init__(self, parent, id, title, style=style, **kwargs)
         self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
 
         self.informLabel = wx.StaticText(parent=self.panel, id=wx.ID_ANY,
@@ -2815,7 +2815,8 @@ class QuitDialog(wx.Dialog):
         self.btnQuit.Bind(wx.EVT_BUTTON, self.OnQuit)
         
         self.__layout()
-        
+        self.SetSize(size)
+
     def __layout(self):
         """Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
