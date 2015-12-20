@@ -2259,7 +2259,9 @@ class CmdPanel(wx.Panel):
         else:
             if isinstance(me, wx.SpinCtrl):
                 porf['value'] = str(me.GetValue())
-            elif isinstance(me, wx.Choice) and sys.platform != 'win32':
+            elif isinstance(me, wx.ComboBox):
+                porf['value'] = me.GetValue()
+            elif isinstance(me, wx.Choice):
                 porf['value'] = me.GetStringSelection()                    
             else:
                 porf['value'] = me.GetValue()
