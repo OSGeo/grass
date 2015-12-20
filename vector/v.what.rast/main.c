@@ -327,13 +327,13 @@ int main(int argc, char *argv[])
 		if (interp_flag->answer) {
 		    if (cache[point].row <= 0)
 			Rast_set_null_value(prev_d_row, window.cols,
-					    out_type);
+					    DCELL_TYPE);
 		    else
 			Rast_get_d_row(fd, prev_d_row, cache[point].row - 1);
 
 		    if (cache[point].row + 1 > window.rows - 1)
 			Rast_set_null_value(next_d_row, window.cols,
-					    out_type);
+					    DCELL_TYPE);
 		    else
 			Rast_get_d_row(fd, next_d_row, cache[point].row + 1);
 		}
