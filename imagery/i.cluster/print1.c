@@ -14,7 +14,7 @@ int print_band_means(FILE * fd, struct Cluster *C)
     fprintf(fd, _(" means  "));
     for (band = 0; band < C->nbands; band++)
 	fprintf(fd, " %g", C->band_sum[band] / C->npoints);
-    fprintf(fd, "\n");
+    fprintf(fd, "%s", HOST_NEWLINE);
     fprintf(fd, _(" stddev "));
     for (band = 0; band < C->nbands; band++)
 	fprintf(fd, " %g",
