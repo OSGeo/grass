@@ -32,7 +32,7 @@ if hasattr(etree, 'ParseError'):
 else:
     ETREE_EXCEPTIONS = (expat.ExpatError)
 
-from utils import decode, split
+from utils import encode, decode, split
 from core import *
 
 
@@ -200,7 +200,7 @@ class grassTask:
                     if not desc:
                         desc = p['description']
                     errorList.append(_("Parameter '%(name)s' (%(desc)s) is missing.") % \
-                                     {'name': p['name'], 'desc': desc.encode('utf-8')})
+                                     {'name': p['name'], 'desc': encode(desc)})
 
         return errorList
 
