@@ -133,8 +133,9 @@ def clean_env(gisrc):
     env_curr = read_gisrc(gisrc)
     env_new = {}
     for k,v in env_curr.items():
-        if k not in ('MONITOR', 'PID'):
-            env_new[k] = v
+        if k == 'PID' or k.startswith('MONITOR'):
+            continue
+        env_new[k] = v
 
     write_gisrc(env_new, gisrc)
 
