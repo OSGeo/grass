@@ -5,7 +5,7 @@
  
   Higher level functions for reading/writing/manipulating vectors.
   
-  (C) 2001-2009, 2011-2013 by the GRASS Development Team
+  (C) 2001-2015 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -544,7 +544,7 @@ int Vect_write_ascii(FILE *ascii,
 		    fprintf(ascii, "%s", columns[i]); /* can not happen */
 	    }
 	}
-	fprintf(ascii, "\n");
+	fprintf(ascii, "%s", HOST_NEWLINE);
     }
 
     Points = Vect_new_line_struct();
@@ -637,7 +637,7 @@ int Vect_write_ascii(FILE *ascii,
 			G_trim_decimal(xstring);
 			G_rasprintf(&ystring, &ysize, "%.*f", dp, Points->y[0]);
 			G_trim_decimal(ystring);
-			fprintf(att, "A %s %s %d\n", xstring, ystring, cat);
+			fprintf(att, "A %s %s %d%s", xstring, ystring, cat, HOST_NEWLINE);
 		    }
 		}
 		continue;
@@ -764,15 +764,15 @@ int Vect_write_ascii(FILE *ascii,
 		}
 	    }
 
-	    fprintf(ascii, "\n");
+	    fprintf(ascii, "%s", HOST_NEWLINE);
 	}
 	else if (format == GV_ASCII_FORMAT_STD) {
 	    /* FORMAT_STANDARD */
 	    if (ver == 5 && Cats->n_cats > 0)
-		fprintf(ascii, "%c  %d %d\n", ctype, Points->n_points,
-			Cats->n_cats);
+		fprintf(ascii, "%c  %d %d%s", ctype, Points->n_points,
+			Cats->n_cats, HOST_NEWLINE);
 	    else
-		fprintf(ascii, "%c  %d\n", ctype, Points->n_points);
+              fprintf(ascii, "%c  %d%s", ctype, Points->n_points, HOST_NEWLINE);
 
 	    xptr = Points->x;
 	    yptr = Points->y;
@@ -789,22 +789,22 @@ int Vect_write_ascii(FILE *ascii,
 		    if (Map->head.with_z) {
 			G_rasprintf(&zstring, &zsize, "%.*f", dp, *zptr++);
 			G_trim_decimal(zstring);
-			fprintf(ascii, " %-12s %-12s %-12s\n", xstring,
-				ystring, zstring);
+			fprintf(ascii, " %-12s %-12s %-12s%s", xstring,
+				ystring, zstring, HOST_NEWLINE);
 		    }
 		    else {
-			fprintf(ascii, " %-12s %-12s\n", xstring, ystring);
+                      fprintf(ascii, " %-12s %-12s%s", xstring, ystring, HOST_NEWLINE);
 		    }
 		}		/*Version 4 */
 		else {
-		    fprintf(ascii, " %-12s %-12s\n", ystring, xstring);
+                    fprintf(ascii, " %-12s %-12s%s", ystring, xstring, HOST_NEWLINE);
 		}
 	    }
 
 	    if (ver == 5) {
 		for (i = 0; i < Cats->n_cats; i++) {
-		    fprintf(ascii, " %-5d %-10d\n", Cats->field[i],
-			    Cats->cat[i]);
+		    fprintf(ascii, " %-5d %-10d%s", Cats->field[i],
+			    Cats->cat[i], HOST_NEWLINE);
 		}
 	    }
 	    else {
@@ -814,7 +814,7 @@ int Vect_write_ascii(FILE *ascii,
 			G_trim_decimal(xstring);
 			G_rasprintf(&ystring, &ysize, "%.*f", dp, Points->y[0]);
 			G_trim_decimal(ystring);
-			fprintf(att, "P %s %s %d\n", xstring, ystring, cat);
+			fprintf(att, "P %s %s %d%s", xstring, ystring, cat, HOST_NEWLINE);
 		    }
 		    else {
 			x = (Points->x[1] + Points->x[0]) / 2;
@@ -824,7 +824,7 @@ int Vect_write_ascii(FILE *ascii,
 			G_trim_decimal(xstring);
 			G_rasprintf(&ystring, &ysize, "%.*f", dp, y);
 			G_trim_decimal(ystring);
-			fprintf(att, "L %s %s %d\n", xstring, ystring, cat);
+			fprintf(att, "L %s %s %d%s", xstring, ystring, cat, HOST_NEWLINE);
 		    }
 		}
 	    }
@@ -879,7 +879,7 @@ int Vect_write_ascii(FILE *ascii,
 		/* write inner ring */
 		Vect_sfa_line_astext(Points, GV_BOUNDARY, 0, dp, ascii); /* boundary is always 2D */
 	    }
-	    fprintf(ascii, ")\n");
+	    fprintf(ascii, ")%s", HOST_NEWLINE);
 	    
 	    count++;
 	}
@@ -916,15 +916,24 @@ int srch(const void *pa, const void *pb)
 */
 void Vect_write_ascii_head(FILE *dascii, struct Map_info *Map)
 {
-    fprintf(dascii, "ORGANIZATION: %s\n", Vect_get_organization(Map));
-    fprintf(dascii, "DIGIT DATE:   %s\n", Vect_get_date(Map));
-    fprintf(dascii, "DIGIT NAME:   %s\n", Vect_get_person(Map));
-    fprintf(dascii, "MAP NAME:     %s\n", Vect_get_map_name(Map));
-    fprintf(dascii, "MAP DATE:     %s\n", Vect_get_map_date(Map));
-    fprintf(dascii, "MAP SCALE:    %d\n", Vect_get_scale(Map));
-    fprintf(dascii, "OTHER INFO:   %s\n", Vect_get_comment(Map));
-    fprintf(dascii, "ZONE:         %d\n", Vect_get_zone(Map));
-    fprintf(dascii, "MAP THRESH:   %f\n", Vect_get_thresh(Map));
+    fprintf(dascii, "ORGANIZATION: %s%s",
+            Vect_get_organization(Map), HOST_NEWLINE);
+    fprintf(dascii, "DIGIT DATE:   %s%s",
+            Vect_get_date(Map), HOST_NEWLINE);
+    fprintf(dascii, "DIGIT NAME:   %s%s",
+            Vect_get_person(Map), HOST_NEWLINE);
+    fprintf(dascii, "MAP NAME:     %s%s",
+            Vect_get_map_name(Map), HOST_NEWLINE);
+    fprintf(dascii, "MAP DATE:     %s%s",
+            Vect_get_map_date(Map), HOST_NEWLINE);
+    fprintf(dascii, "MAP SCALE:    %d%s",
+            Vect_get_scale(Map), HOST_NEWLINE);
+    fprintf(dascii, "OTHER INFO:   %s%s",
+            Vect_get_comment(Map), HOST_NEWLINE);
+    fprintf(dascii, "ZONE:         %d%s",
+            Vect_get_zone(Map), HOST_NEWLINE);
+    fprintf(dascii, "MAP THRESH:   %f%s",
+            Vect_get_thresh(Map), HOST_NEWLINE);
 }
 
 /* check category */
