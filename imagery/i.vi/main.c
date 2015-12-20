@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
     opt.sl_slope->type = TYPE_DOUBLE;
     opt.sl_slope->required = NO;
     opt.sl_slope->description = _("Value of the slope of the soil line (MSAVI2 only)");
-    opt.sl_slope->guisection = _("MSAVI2 seetings");
+    opt.sl_slope->guisection = _("MSAVI2 settings");
 
     opt.sl_int = G_define_option();
     opt.sl_int->key = "soil_line_intercept";
