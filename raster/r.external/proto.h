@@ -35,6 +35,7 @@ void create_map(const char *, int, const char *,
 /* list.c */
 void list_layers(FILE *, const char *);
 void list_formats(void);
+void list_bands(struct Cell_head *, GDALDatasetH);
 
 /* proj.c */
 void check_projection(struct Cell_head *, GDALDatasetH, int);
