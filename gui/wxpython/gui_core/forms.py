@@ -1695,6 +1695,9 @@ class CmdPanel(wx.Panel):
                                  win.fileWidgets['browse'].GetChildren()[1].GetId(),
                                  win.dirWidgets['browse'].GetChildren()[1].GetId(),
                                  win.dbWidgets['choice'].GetId()]
+                    value = self._getValue(p)
+                    if value:
+                        win.fileWidgets['browse'].GetChildren()[1].SetValue(value) # parameter previously set
                     which_sizer.Add(item = win, proportion = 0,
                                     flag = wx.EXPAND)
 
