@@ -32,7 +32,7 @@ pythonw on a Mac.
 .. todo::
     verify option value types
 
-Copyright(C) 2000-2013 by the GRASS Development Team
+Copyright(C) 2000-2015 by the GRASS Development Team
 
 This program is free software under the GPL(>=v2) Read the file
 COPYING coming with GRASS for details.
@@ -2179,6 +2179,10 @@ class CmdPanel(wx.Panel):
         else:
             if isinstance(me, wx.SpinCtrl):
                 porf['value'] = str(me.GetValue())
+            elif isinstance(me, wx.ComboBox):
+                porf['value'] = me.GetValue()
+            elif isinstance(me, wx.Choice):
+                porf['value'] = me.GetStringSelection()                    
             else:
                 porf['value'] = me.GetValue()
         
