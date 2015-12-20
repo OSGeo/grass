@@ -22,7 +22,7 @@ int print_centroids(FILE * fd, struct Cluster *C)
 			(double)C->sum[band][cat] / (double)C->count[cat]);
 	    else
 		sprintf(buf, FMT2, C->sum[band][cat], C->count[cat]);
-	    fprintf(fd, "%s %-18s", cat % 4 ? "" : "\n", buf);
+	    fprintf(fd, "%s %-18s", cat % 4 ? "" : HOST_NEWLINE, buf);
 	}
 	fprintf(fd, "%s", HOST_NEWLINE);
     }

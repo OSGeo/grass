@@ -328,7 +328,8 @@ int main(int argc, char *argv[])
     }
 
     fprintf(report,
-	    _("\n\n#################### CLASSES ####################%s"), HOST_NEWLINE);
+	    _("%s%s#################### CLASSES ####################%s"),
+            HOST_NEWLINE, HOST_NEWLINE, HOST_NEWLINE);
     fprintf(report, _("%s%d classes, %.2f%% points stable%s"),
 	    HOST_NEWLINE, I_cluster_nclasses(&C, 1), (double)C.percent_stable, HOST_NEWLINE);
     fprintf(report, _("%s######## CLUSTER END (%s) ########%s"),

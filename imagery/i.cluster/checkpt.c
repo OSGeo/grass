@@ -13,7 +13,8 @@ int checkpoint(struct Cluster *X, int n)
     case 1:
 	print_band_means(report, X);
 	if (insigfile) {
-	    fprintf(report, _("using seed means (%d files)\n"), ref.nfiles);
+	    fprintf(report, _("using seed means (%d files)%s"),
+                    ref.nfiles, HOST_NEWLINE);
 	    for (c = 0; c < in_sig.nsigs; c++)
 		for (band = 0; band < ref.nfiles; band++)
 		    X->mean[band][c] = in_sig.sig[c].mean[band];
@@ -25,10 +26,11 @@ int checkpoint(struct Cluster *X, int n)
 	print_distribution(report, X);
 	break;
     case 3:
-	fprintf(report, _("\n######## iteration %d ###########\n"),
-		X->iteration);
-	fprintf(report, _("%d classes, %.2f%% points stable\n"),
-		I_cluster_nclasses(X, 1), (double)X->percent_stable);
+	fprintf(report, _("%s######## iteration %d ###########%s"),
+		HOST_NEWLINE, X->iteration, HOST_NEWLINE);
+	fprintf(report, _("%d classes, %.2f%% points stable%s"),
+		I_cluster_nclasses(X, 1), (double)X->percent_stable,
+                HOST_NEWLINE);
 	/*
 	   I_cluster_sum2 (X);
 	   print_class_means(report,X);
@@ -46,8 +48,8 @@ int checkpoint(struct Cluster *X, int n)
 	break;
     case 4:
 	/*
-	   fprintf (report, _("\nmerging class %d into %d\n"),
-	   X->merge2+1, X->merge1+1);
+	   fprintf (report, _("%smerging class %d into %d%s"),
+	   HOST_NEWLINE, X->merge2+1, X->merge1+1, HOST_NEWLINE);
 	 */
 	break;
     }

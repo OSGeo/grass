@@ -25,7 +25,7 @@ int print_class_means(FILE * fd, struct Cluster *C)
 	if (n > 0)
 	    for (band = 0; band < C->nbands; band++)
 		fprintf(fd, " %g", C->sum[band][c] / n);
-	fprintf(fd, "\n");
+	fprintf(fd, "%s", HOST_NEWLINE);
 	fprintf(fd, _("  stddev"));
 	if (n > 1)
 	    for (band = 0; band < C->nbands; band++)
