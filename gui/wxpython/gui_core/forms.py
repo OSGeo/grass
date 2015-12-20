@@ -1710,11 +1710,11 @@ class CmdPanel(wx.Panel):
                                     flag = wx.EXPAND | wx.ALL, border = 3)
                     porf = self.task.get_param('input', element = 'name', raiseError = False)
                     winDataSource = self.FindWindowById(porf['wxId'][0])
-                    winDataSource.reloadDataRequired.connect(lambda data: self.win1.LoadData(data, False))
+                    winDataSource.reloadDataRequired.connect(lambda listData: self.win1.LoadData(listData, False))
                     p['wxId'] = [self.win1.GetId()]
                     def OnCheckItem(index, flag):
                         layers = list()
-                        for layer, match in self.win1.GetLayers():
+                        for layer, match, listId in self.win1.GetLayers():
                             layers.append(layer)
                         porf = self.task.get_param('layer', element = 'name', raiseError = False)
                         porf['value'] = ','.join(layers)
