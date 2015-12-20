@@ -171,8 +171,13 @@ def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
 
     os.environ['GIS_LOCK'] = str(os.getpid())
 
-    # Set PYTHONPATH to find GRASS Python modules
-    # TODO: isn't this useless? user already imported this somehow
+    # Set GRASS_PYTHON and PYTHONPATH to find GRASS Python modules
+    if not os.getenv('GRASS_PYTHON'):
+        if sys.platform == 'win32':
+            os.environ['GRASS_PYTHON'] = "python.exe"
+        else:
+            os.environ['GRASS_PYTHON'] = "python"
+    
     path = os.getenv('PYTHONPATH')
     etcpy = os.path.join(gisbase, 'etc', 'python')
     if path:
