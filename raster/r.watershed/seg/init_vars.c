@@ -22,6 +22,7 @@ int init_vars(int argc, char *argv[])
     DCELL dvalue;
     WAT_ALT wa, *wabuf;
     ASP_FLAG af, af_nbr, *afbuf;
+    A_TANB sca_tanb;
     char MASK_flag;
     void *elebuf, *ptr, *watbuf, *watptr;
     int ele_map_type, wat_map_type;
@@ -32,7 +33,8 @@ int init_vars(int argc, char *argv[])
     /* input */
     ele_flag = pit_flag = run_flag = ril_flag = 0;
     /* output */
-    wat_flag = asp_flag = bas_flag = seg_flag = haf_flag = tci_flag = 0;
+    wat_flag = asp_flag = tci_flag = spi_flag = atanb_flag = 0;
+    bas_flag = seg_flag = haf_flag = 0;
     bas_thres = 0;
     /* shed, unused */
     arm_flag = dis_flag = 0;
@@ -59,6 +61,8 @@ int init_vars(int argc, char *argv[])
 	    wat_flag++;
 	else if (sscanf(argv[r], "tci=%s", tci_name) == 1)
 	    tci_flag++;
+	else if (sscanf(argv[r], "spi=%s", spi_name) == 1)
+	    spi_flag++;
 	else if (sscanf(argv[r], "drainage=%s", asp_name) == 1)
 	    asp_flag++;
 	else if (sscanf(argv[r], "depression=%s", pit_name) == 1)
@@ -129,6 +133,9 @@ int init_vars(int argc, char *argv[])
     if (seg_flag || bas_flag || haf_flag)
 	tot_parts++;
 
+    if (tci_flag || spi_flag)
+	atanb_flag = 1;
+
     G_message(n_("SECTION 1 beginning: Initiating Variables. %d section total.", 
         "SECTION 1 beginning: Initiating Variables. %d sections total.", 
         tot_parts),
@@ -184,9 +191,9 @@ int init_vars(int argc, char *argv[])
     memory_divisor += sizeof(HEAP_PNT) / 4.;
     disk_space += sizeof(HEAP_PNT);
     /* TCI: as is */
-    if (tci_flag) {
-	memory_divisor += sizeof(double);
-	disk_space += sizeof(double);
+    if (atanb_flag) {
+	memory_divisor += sizeof(A_TANB);
+	disk_space += sizeof(A_TANB);
     }
     /* RUSLE */
     if (er_flag) {
@@ -258,8 +265,11 @@ int init_vars(int argc, char *argv[])
     seg_open(&watalt, nrows, ncols, seg_rows, seg_cols, num_open_segs * 2, sizeof(WAT_ALT));
     seg_open(&aspflag, nrows, ncols, seg_rows, seg_cols, num_open_segs * 4, sizeof(ASP_FLAG));
 
-    if (tci_flag)
-	dseg_open(&tci, seg_rows, seg_cols, num_open_segs);
+    if (atanb_flag) {
+	seg_open(&atanb, nrows, ncols, seg_rows, seg_cols, num_open_segs, sizeof(A_TANB));
+	Rast_set_d_null_value(&sca_tanb.sca, 1);
+	Rast_set_d_null_value(&sca_tanb.tanb, 1);
+    }
 
     /* open elevation input */
     ele_fd = Rast_open_old(ele_name, "");
@@ -355,6 +365,9 @@ int init_vars(int argc, char *argv[])
 	    wabuf[c].wat = wat_value;
 	    wabuf[c].ele = alt_value;
 	    alt_value_buf[c] = alt_value;
+	    if (atanb_flag) {
+		seg_put(&atanb, (char *)&sca_tanb, r, c);
+	    }
 	    ptr = G_incr_void_ptr(ptr, ele_size);
 	    if (run_flag) {
 		watptr = G_incr_void_ptr(watptr, wat_size);

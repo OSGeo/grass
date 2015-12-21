@@ -63,6 +63,12 @@ WAT_ALT {
    DCELL wat;
 };
 
+#define A_TANB    struct sca_tanb
+A_TANB {
+   DCELL sca;
+   DCELL tanb;
+};
+
 #define ASP_FLAG    struct aspect_flag
 ASP_FLAG {
    char asp;
@@ -90,7 +96,8 @@ extern SSEG astar_pts;
 extern BSEG s_b;
 extern CSEG dis, bas, haf, r_h, dep;
 extern SSEG watalt, aspflag;
-extern DSEG tci, slp, s_l, s_g, l_s, ril;
+extern DSEG slp, s_l, s_g, l_s, ril;
+extern SSEG atanb;
 extern double segs_mb;
 extern char zero, one;
 extern double ril_value, d_zero, d_one;
@@ -106,10 +113,11 @@ extern char ril_name[GNAME_MAX], dep_name[GNAME_MAX];
 extern const char *this_mapset;
 extern char seg_name[GNAME_MAX], bas_name[GNAME_MAX], haf_name[GNAME_MAX], thr_name[8];
 extern char ls_name[GNAME_MAX], st_name[GNAME_MAX], sl_name[GNAME_MAX], sg_name[GNAME_MAX];
-extern char wat_name[GNAME_MAX], asp_name[GNAME_MAX], tci_name[GNAME_MAX];
+extern char wat_name[GNAME_MAX], asp_name[GNAME_MAX];
+extern char tci_name[GNAME_MAX], spi_name[GNAME_MAX];
 extern char arm_name[GNAME_MAX], dis_name[GNAME_MAX];
 extern char ele_flag, pit_flag, run_flag, dis_flag, ob_flag;
-extern char wat_flag, asp_flag, arm_flag, ril_flag, dep_flag, tci_flag;
+extern char wat_flag, asp_flag, arm_flag, ril_flag, dep_flag, tci_flag, spi_flag, atanb_flag;
 extern char bas_flag, seg_flag, haf_flag, er_flag;
 extern char st_flag, sb_flag, sg_flag, sl_flag, ls_flag;
 extern FILE *fp;

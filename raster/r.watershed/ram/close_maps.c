@@ -131,7 +131,6 @@ int close_maps(void)
 
     /* TCI */
     if (tci_flag) {
-	DCELL watvalue;
 	double mean;
 
 	sum = sum_sqr = stddev = 0.0;
@@ -139,9 +138,9 @@ int close_maps(void)
 	for (r = 0; r < nrows; r++) {
 	    Rast_set_d_null_value(dbuf, ncols);	/* reset row to all NULL */
 	    for (c = 0; c < ncols; c++) {
-		dvalue = tci[SEG_INDEX(wat_seg, r, c)];
-		watvalue = wat[SEG_INDEX(wat_seg, r, c)];
-		if (!Rast_is_d_null_value(&watvalue)) {
+		if (!Rast_is_d_null_value(&tanb[SEG_INDEX(wat_seg, r, c)])) {
+		    dvalue = log(sca[SEG_INDEX(wat_seg, r, c)] / 
+		                 tanb[SEG_INDEX(wat_seg, r, c)]);
 		    dbuf[c] = dvalue;
 		    sum += dvalue;
 		    sum_sqr += dvalue * dvalue;
@@ -197,6 +196,78 @@ int close_maps(void)
 				      0, &colors);
 	}
 	Rast_write_colors(tci_name, this_mapset, &colors);
+    }
+
+    /* SPI */
+    if (spi_flag) {
+	double mean;
+
+	sum = sum_sqr = stddev = 0.0;
+	fd = Rast_open_new(spi_name, DCELL_TYPE);
+	for (r = 0; r < nrows; r++) {
+	    Rast_set_d_null_value(dbuf, ncols);	/* reset row to all NULL */
+	    for (c = 0; c < ncols; c++) {
+		if (!Rast_is_d_null_value(&tanb[SEG_INDEX(wat_seg, r, c)])) {
+		    dvalue = sca[SEG_INDEX(wat_seg, r, c)] * tanb[SEG_INDEX(wat_seg, r, c)];
+		    dbuf[c] = dvalue;
+		    sum += dvalue;
+		    sum_sqr += dvalue * dvalue;
+		}
+	    }
+	    Rast_put_row(fd, dbuf, DCELL_TYPE);
+	}
+	Rast_close(fd);
+
+	mean = sum / do_points;
+	stddev =
+	    sqrt((sum_sqr - (sum + sum / do_points)) / (do_points - 1));
+	G_debug(1, "stddev: %f", stddev);
+
+	/* set nice color rules: yellow, green, cyan, blue, black */
+
+	lstddev = log(stddev);
+
+	Rast_read_fp_range(spi_name, this_mapset, &accRange);
+	min = max = 0;
+	Rast_get_fp_range_min_max(&accRange, &min, &max);
+
+	Rast_init_colors(&colors);
+
+	if (min - 1 < mean - 0.5 * stddev) {
+	    clr_min = min - 1;
+	    clr_max = mean - 0.5 * stddev;
+	    Rast_add_d_color_rule(&clr_min, 255, 255, 0, &clr_max, 255,
+					  255, 0, &colors);
+	}
+
+	clr_min = mean - 0.5 * stddev;
+	clr_max = mean - 0.2 * stddev;
+	Rast_add_d_color_rule(&clr_min, 255, 255, 0, &clr_max, 0,
+				  255, 0, &colors);
+	clr_min = clr_max;
+	clr_max = mean + 0.2 * stddev;
+	Rast_add_d_color_rule(&clr_min, 0, 255, 0, &clr_max, 0,
+				  255, 255, &colors);
+	clr_min = clr_max;
+	clr_max = mean + 0.6 * stddev;
+	Rast_add_d_color_rule(&clr_min, 0, 255, 255, &clr_max, 0,
+				  0, 255, &colors);
+	clr_min = clr_max;
+	clr_max = mean + 1. * stddev;
+	Rast_add_d_color_rule(&clr_min, 0, 0, 255, &clr_max, 0, 0,
+				  0, &colors);
+
+	if (max > 0 && max > clr_max) {
+	    clr_min = clr_max;
+	    clr_max = max + 1;
+	    Rast_add_d_color_rule(&clr_min, 0, 0, 0, &clr_max, 0, 0,
+				      0, &colors);
+	}
+	Rast_write_colors(spi_name, this_mapset, &colors);
+    }
+    if (atanb_flag) {
+	G_free(sca);
+	G_free(tanb);
     }
 
     /* TODO: elevation == NULL -> drainage direction == NULL (wat == 0 where ele == NULL) */

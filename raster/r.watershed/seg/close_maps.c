@@ -124,89 +124,175 @@ int close_maps(void)
 	Rast_write_colors(wat_name, this_mapset, &colors);
     }
 
-    /* TCI */
-    if (tci_flag) {
-	DCELL watvalue;
+    /* TCI, SPI */
+    if (atanb_flag) {
+	DCELL *dbuf2;
+	A_TANB sca_tanb;
 	double mean;
+	double sum2, sum_sqr2;
+	int fd2;
 
-	G_message(_("Closing TCI map"));
+	if (tci_flag && spi_flag)
+	    G_message(_("Closing TCI and SPI maps"));
+	else if (tci_flag && !spi_flag)
+	    G_message(_("Closing TCI map"));
+	else if (!tci_flag && spi_flag)
+	    G_message(_("Closing SPI map"));
+
 	sum = sum_sqr = stddev = 0.0;
-	dbuf = Rast_allocate_d_buf();
+	sum2 = sum_sqr2 = 0.0;
 	wabuf = G_malloc(ncols * sizeof(WAT_ALT));
-	dseg_flush(&tci);
+	seg_flush(&atanb);
 	if (!wat_flag)
 	    seg_flush(&watalt);
 
-	fd = Rast_open_new(tci_name, DCELL_TYPE);
+	fd = fd2 = -1;
+	dbuf = dbuf2 = NULL;
+	if (tci_flag) {
+	    fd = Rast_open_new(tci_name, DCELL_TYPE);
+	    dbuf = Rast_allocate_d_buf();
+	}
+	if (spi_flag) {
+	    fd2 = Rast_open_new(spi_name, DCELL_TYPE);
+	    dbuf2 = Rast_allocate_d_buf();
+	}
 
 	for (r = 0; r < nrows; r++) {
 	    G_percent(r, nrows, 1);
-	    Rast_set_d_null_value(dbuf, ncols);	/* reset row to all NULL */
-	    seg_get_row(&watalt, (char *)wabuf, r);
+	    if (tci_flag)
+		Rast_set_d_null_value(dbuf, ncols);	/* reset row to all NULL */
+	    if (spi_flag)
+		Rast_set_d_null_value(dbuf2, ncols);	/* reset row to all NULL */
 	    for (c = 0; c < ncols; c++) {
-		dseg_get(&tci, &dvalue, r, c);
-		watvalue = wabuf[c].wat;
-		if (!Rast_is_d_null_value(&watvalue)) {
-		    dbuf[c] = dvalue;
-		    sum += dvalue;
-		    sum_sqr += dvalue * dvalue;
+		seg_get(&atanb, (char *)&sca_tanb, r, c);
+		if (!Rast_is_d_null_value(&sca_tanb.tanb)) {
+		    
+		    if (tci_flag) {
+			dvalue = log(sca_tanb.sca / sca_tanb.tanb);
+			dbuf[c] = dvalue;
+			sum += dvalue;
+			sum_sqr += dvalue * dvalue;
+		    }
+		    if (spi_flag) {
+			dvalue = sca_tanb.sca * sca_tanb.tanb;
+			dbuf2[c] = dvalue;
+			sum2 += dvalue;
+			sum_sqr2 += dvalue * dvalue;
+		    }
 		}
 	    }
-	    Rast_put_row(fd, dbuf, DCELL_TYPE);
+	    if (tci_flag)
+		Rast_put_row(fd, dbuf, DCELL_TYPE);
+	    if (spi_flag)
+		Rast_put_row(fd2, dbuf2, DCELL_TYPE);
 	}
 	G_percent(r, nrows, 1);    /* finish it */
 
-	Rast_close(fd);
 	G_free(wabuf);
-	G_free(dbuf);
-	dseg_close(&tci);
+	seg_close(&atanb);
 
-	mean = sum / do_points;
-	stddev = sqrt((sum_sqr - (sum + sum / do_points)) / (do_points - 1));
-	G_debug(1, "stddev: %f", stddev);
+	if (tci_flag) {
+	    Rast_close(fd);
+	    G_free(dbuf);
 
-	/* set nice color rules: yellow, green, cyan, blue, black */
-	/* start with white to get more detail? NULL cells are white by default, may be confusing */
+	    mean = sum / do_points;
+	    stddev = sqrt((sum_sqr - (sum + sum / do_points)) / (do_points - 1));
+	    G_debug(1, "stddev: %f", stddev);
 
-	lstddev = log(stddev);
+	    /* set nice color rules: yellow, green, cyan, blue, black */
+	    /* start with white to get more detail? NULL cells are white by default, may be confusing */
 
-	Rast_read_fp_range(tci_name, this_mapset, &accRange);
-	min = max = 0;
-	Rast_get_fp_range_min_max(&accRange, &min, &max);
+	    lstddev = log(stddev);
 
-	Rast_init_colors(&colors);
+	    Rast_read_fp_range(tci_name, this_mapset, &accRange);
+	    min = max = 0;
+	    Rast_get_fp_range_min_max(&accRange, &min, &max);
 
-	if (min - 1 < mean - 0.5 * stddev) {
-	    clr_min = min - 1;
-	    clr_max = mean - 0.5 * stddev;
-	    Rast_add_d_color_rule(&clr_min, 255, 255, 0, &clr_max, 255,
-					  255, 0, &colors);
-	}
+	    Rast_init_colors(&colors);
 
-	clr_min = mean - 0.5 * stddev;
-	clr_max = mean - 0.2 * stddev;
-	Rast_add_d_color_rule(&clr_min, 255, 255, 0, &clr_max, 0,
-				  255, 0, &colors);
-	clr_min = clr_max;
-	clr_max = mean + 0.2 * stddev;
-	Rast_add_d_color_rule(&clr_min, 0, 255, 0, &clr_max, 0,
-				  255, 255, &colors);
-	clr_min = clr_max;
-	clr_max = mean + 0.6 * stddev;
-	Rast_add_d_color_rule(&clr_min, 0, 255, 255, &clr_max, 0,
-				  0, 255, &colors);
-	clr_min = clr_max;
-	clr_max = mean + 1. * stddev;
-	Rast_add_d_color_rule(&clr_min, 0, 0, 255, &clr_max, 0, 0,
-				  0, &colors);
+	    if (min - 1 < mean - 0.5 * stddev) {
+		clr_min = min - 1;
+		clr_max = mean - 0.5 * stddev;
+		Rast_add_d_color_rule(&clr_min, 255, 255, 0, &clr_max, 255,
+					      255, 0, &colors);
+	    }
 
-	if (max > 0 && max > clr_max) {
+	    clr_min = mean - 0.5 * stddev;
+	    clr_max = mean - 0.2 * stddev;
+	    Rast_add_d_color_rule(&clr_min, 255, 255, 0, &clr_max, 0,
+				      255, 0, &colors);
 	    clr_min = clr_max;
-	    clr_max = max + 1;
-	    Rast_add_d_color_rule(&clr_min, 0, 0, 0, &clr_max, 0, 0,
+	    clr_max = mean + 0.2 * stddev;
+	    Rast_add_d_color_rule(&clr_min, 0, 255, 0, &clr_max, 0,
+				      255, 255, &colors);
+	    clr_min = clr_max;
+	    clr_max = mean + 0.6 * stddev;
+	    Rast_add_d_color_rule(&clr_min, 0, 255, 255, &clr_max, 0,
+				      0, 255, &colors);
+	    clr_min = clr_max;
+	    clr_max = mean + 1. * stddev;
+	    Rast_add_d_color_rule(&clr_min, 0, 0, 255, &clr_max, 0, 0,
 				      0, &colors);
+
+	    if (max > 0 && max > clr_max) {
+		clr_min = clr_max;
+		clr_max = max + 1;
+		Rast_add_d_color_rule(&clr_min, 0, 0, 0, &clr_max, 0, 0,
+					  0, &colors);
+	    }
+	    Rast_write_colors(tci_name, this_mapset, &colors);
 	}
-	Rast_write_colors(tci_name, this_mapset, &colors);
+	if (spi_flag) {
+	    Rast_close(fd2);
+	    G_free(dbuf2);
+
+	    mean = sum2 / do_points;
+	    stddev = sqrt((sum_sqr2 - (sum2 + sum2 / do_points)) / (do_points - 1));
+	    G_debug(1, "stddev: %f", stddev);
+
+	    /* set nice color rules: yellow, green, cyan, blue, black */
+	    /* start with white to get more detail? NULL cells are white by default, may be confusing */
+
+	    lstddev = log(stddev);
+
+	    Rast_read_fp_range(spi_name, this_mapset, &accRange);
+	    min = max = 0;
+	    Rast_get_fp_range_min_max(&accRange, &min, &max);
+
+	    Rast_init_colors(&colors);
+
+	    if (min - 1 < mean - 0.5 * stddev) {
+		clr_min = min - 1;
+		clr_max = mean - 0.5 * stddev;
+		Rast_add_d_color_rule(&clr_min, 255, 255, 0, &clr_max, 255,
+					      255, 0, &colors);
+	    }
+
+	    clr_min = mean - 0.5 * stddev;
+	    clr_max = mean - 0.2 * stddev;
+	    Rast_add_d_color_rule(&clr_min, 255, 255, 0, &clr_max, 0,
+				      255, 0, &colors);
+	    clr_min = clr_max;
+	    clr_max = mean + 0.2 * stddev;
+	    Rast_add_d_color_rule(&clr_min, 0, 255, 0, &clr_max, 0,
+				      255, 255, &colors);
+	    clr_min = clr_max;
+	    clr_max = mean + 0.6 * stddev;
+	    Rast_add_d_color_rule(&clr_min, 0, 255, 255, &clr_max, 0,
+				      0, 255, &colors);
+	    clr_min = clr_max;
+	    clr_max = mean + 1. * stddev;
+	    Rast_add_d_color_rule(&clr_min, 0, 0, 255, &clr_max, 0, 0,
+				      0, &colors);
+
+	    if (max > 0 && max > clr_max) {
+		clr_min = clr_max;
+		clr_max = max + 1;
+		Rast_add_d_color_rule(&clr_min, 0, 0, 0, &clr_max, 0, 0,
+					  0, &colors);
+	    }
+	    Rast_write_colors(spi_name, this_mapset, &colors);
+	}
     }
 
     seg_close(&watalt);
