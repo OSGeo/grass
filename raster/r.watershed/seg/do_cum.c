@@ -162,6 +162,12 @@ int do_cum(void)
 		    af.asp = -1 * drain[r - dr + 1][c - dc + 1];
 		}
 		seg_put(&aspflag, (char *)&af, r, c);
+		seg_get(&watalt, (char *)&wadown, dr, dc);
+		valued = wadown.wat;
+		if (valued > 0) {
+		    wadown.wat = -valued;
+		    seg_put(&watalt, (char *)&wadown, dr, dc);
+		}
 		continue;
 	    }
 
@@ -383,6 +389,10 @@ int do_cum_mfd(void)
 
 			    if (dr == r_nbr && dc == c_nbr) {
 				astar_not_set = 0;
+			    }
+			    if (value < 0 && wat_nbr[ct_dir] > 0) {
+				wa.wat = -wat_nbr[ct_dir];
+				seg_put(&watalt, (char *)&wa, r_nbr, c_nbr);
 			    }
 			}
 		    }
