@@ -96,8 +96,8 @@ int do_astar(void)
 			                  dist_to_nbr[ct_dir]);
 	    }
 	    /* avoid diagonal flow direction bias */
-	    if (!is_worked) {
-		if (ct_dir > 3 && slope[ct_dir] >= 0) {
+	    if (!is_in_list || (!is_worked && af.asp < 0)) {
+		if (ct_dir > 3 && slope[ct_dir] > 0) {
 		    if (slope[nbr_ew[ct_dir]] >= 0) {
 			/* slope to ew nbr > slope to center */
 			if (slope[ct_dir] <
@@ -116,17 +116,17 @@ int do_astar(void)
 	    }
 
 	    if (!skip_diag) {
-		if (is_in_list == 0) {
+		if (!is_in_list) {
 		    ele_up = ele_nbr[ct_dir];
 		    af.asp = drain[r_nbr - r + 1][c_nbr - c + 1];
 		    heap_add(r_nbr, c_nbr, ele_up);
 		    FLAG_SET(af.flag, INLISTFLAG);
 		    seg_put(&aspflag, (char *)&af, r_nbr, c_nbr);
 		}
-		else if (is_in_list && is_worked == 0) {
+		else if (!is_worked) {
 		    if (FLAG_GET(af.flag, EDGEFLAG)) {
 			/* neighbour is edge in list, not yet worked */
-			if (af.asp < 0) {
+			if (af.asp < 0 && slope[ct_dir] > 0) {
 			    /* adjust flow direction for edge cell */
 			    af.asp = drain[r_nbr - r + 1][c_nbr - c + 1];
 			    seg_put(&aspflag, (char *)&af, r_nbr, c_nbr);
