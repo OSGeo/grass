@@ -278,6 +278,18 @@ AC_ARG_WITH(liblas,
                           e.g. '--with-liblas=/usr/local/bin/liblas-config',
                           default: no)],, with_liblas="no")
 
+AC_ARG_WITH(pdal,
+[  --with-pdal[=path/pdal-config]
+                          enable PDAL support (pdal-config with path,
+                          e.g. '--with-pdal=/usr/local/bin/pdal-config',
+                          default: no)],, with_pdal="no")
+
+AC_ARG_WITH(wxwidgets,
+[  --with-wxwidgets[=path/wx-config]
+                          enable wxWidgets support (wx-config with path,
+                          e.g. '--with-wxwidgets=/usr/local/bin/wx-config',
+                          default: no)],, with_wxwidgets="no")
+
 AC_ARG_WITH(netcdf,
 [  --with-netcdf[=path/nc-config]
                           enable NetCDF support (nc-config with path,
@@ -852,6 +864,69 @@ AC_SUBST(LIBLAS_LIBS)
 AC_SUBST(LIBLAS_CFLAGS)
 AC_SUBST(LIBLAS_INC)
 AC_SUBST(USE_LIBLAS)
+
+# PDAL option
+
+AC_MSG_CHECKING(whether to use PDAL)
+
+# new and currently used way to switch language to C++
+# AC_LANG_PUSH(C++)
+AC_LANG_SAVE
+AC_LANG_CPLUSPLUS
+
+PDAL_LIBS=
+PDAL_CPPFLAGS=
+USE_PDAL=
+
+if test "`basename xx/$with_pdal`" = "pdal-config" ; then
+  PDAL_CONFIG="$with_pdal"
+fi
+
+if test "$with_pdal" = "no" ; then
+  AC_MSG_RESULT(no)
+else
+  AC_MSG_RESULT(yes)
+  AC_PATH_PROG(PDAL_CONFIG, pdal-config, no)
+
+  if test "$PDAL_CONFIG" = "no" ; then
+    AC_MSG_ERROR([*** could not find pdal-config])
+  fi
+
+  if test "$PDAL_CONFIG" != "" ; then
+    PDAL_LIBS=`"$PDAL_CONFIG" --libs`
+    PDAL_CPPFLAGS=`"$PDAL_CONFIG" --cxxflags`
+    PDAL_INC=`"$PDAL_CONFIG" --includes`
+    USE_PDAL=1
+  fi
+
+  PDAL=
+  ac_save_libs="$LIBS"
+  ac_save_cflags="$CFLAGS"
+  ac_save_cppflags="$CPPFLAGS"
+  LIBS="$LIBS $PDAL_LIBS"
+  CFLAGS="$CFLAGS $PDAL_CFLAGS"
+  CPPFLAGS="$CPPFLAGS $PDAL_CPPFLAGS $PDAL_INC"
+  AC_TRY_LINK([#include <pdal/PointTable.hpp>],[pdal::PointTable table;],,[
+  AC_TRY_LINK([#include <pdal/PointTable.hpp>],[pdal::PointTable table;],PDAL_LIBS="$PDAL_LIBS",[
+  AC_MSG_ERROR([*** Unable to locate PDAL library.])
+  ])
+  ])
+  LIBS=${ac_save_libs}
+  CFLAGS=${ac_save_cflags}
+  CPPFLAGS=${ac_save_cppflags}
+
+  AC_DEFINE(HAVE_PDAL)
+fi
+
+AC_SUBST(PDAL_LIBS)
+AC_SUBST(PDAL_CPPFLAGS)
+AC_SUBST(PDAL_INC)
+AC_SUBST(USE_PDAL)
+
+# new and currently used way to switch language back to C
+# AC_LANG_POP(C++)
+AC_LANG_C
+AC_LANG_RESTORE
 
 # NetCDF option
 
@@ -1850,6 +1925,7 @@ LOC_MSG_USE(OGR support,USE_OGR)
 LOC_MSG_USE(OpenCL support,USE_OPENCL)
 LOC_MSG_USE(OpenGL support,USE_OPENGL)
 LOC_MSG_USE(OpenMP support,USE_OPENMP)
+LOC_MSG_USE(PDAL support,USE_PDAL)
 LOC_MSG_USE(PNG support,USE_PNG)
 LOC_MSG_USE(POSIX thread support,USE_PTHREAD)
 LOC_MSG_USE(PostgreSQL support,USE_POSTGRES)

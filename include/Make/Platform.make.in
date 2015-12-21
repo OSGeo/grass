@@ -173,6 +173,12 @@ LASCFLAGS           = @LIBLAS_CFLAGS@
 LASINC              = @LIBLAS_INC@
 USE_LIBLAS          = @USE_LIBLAS@
 
+#LAS LiDAR through PDAL
+PDALLIBS             = @PDAL_LIBS@
+PDALCPPFLAGS         = @PDAL_CPPFLAGS@
+PDALINC              = @PDAL_INC@
+USE_PDAL             = @USE_PDAL@
+
 #GEOS
 GEOSLIBS            = @GEOS_LIBS@
 GEOSCFLAGS          = @GEOS_CFLAGS@
