@@ -39,7 +39,8 @@ SSEG astar_pts;
 BSEG s_b;
 CSEG dis, alt, bas, haf, r_h, dep;
 SSEG watalt, aspflag;
-DSEG tci, slp, s_l, s_g, l_s, ril;
+DSEG slp, s_l, s_g, l_s, ril;
+SSEG atanb;
 double segs_mb;
 char zero, one;
 double ril_value, d_zero, d_one;
@@ -56,11 +57,12 @@ char seg_name[GNAME_MAX], bas_name[GNAME_MAX], haf_name[GNAME_MAX],
     thr_name[8];
 char ls_name[GNAME_MAX], st_name[GNAME_MAX], sl_name[GNAME_MAX],
     sg_name[GNAME_MAX];
-char wat_name[GNAME_MAX], asp_name[GNAME_MAX], tci_name[GNAME_MAX];
+char wat_name[GNAME_MAX], asp_name[GNAME_MAX];
+char tci_name[GNAME_MAX], spi_name[GNAME_MAX];
 char arm_name[GNAME_MAX], dis_name[GNAME_MAX];
 char ele_flag, pit_flag, run_flag, dis_flag, ob_flag;
 char wat_flag, asp_flag, arm_flag, ril_flag, dep_flag;
-char bas_flag, seg_flag, haf_flag, er_flag, tci_flag;
+char bas_flag, seg_flag, haf_flag, er_flag, tci_flag, spi_flag, atanb_flag;
 char st_flag, sb_flag, sg_flag, sl_flag, ls_flag;
 FILE *fp;
 

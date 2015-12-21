@@ -71,7 +71,7 @@ int close_array_seg(void)
 	    }
 	    G_percent(r - 1, max, 3);	/* finish it */
 	}
-	else
+	else if (max >= 1000)
 	    G_debug(1,
 		    "Too many subbasins to reasonably check for color brightness");
 	/* using the existing stack of while/for/for/for/while loops ... */

@@ -109,7 +109,7 @@ int do_cum(void)
     int asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
     int this_index, down_index, nbr_index;
     double *dist_to_nbr, *contour;
-    double tci_div, cell_size;
+    double cell_size;
 
     G_message(_("SECTION 3: Accumulating Surface Flow with SFD."));
 
@@ -173,6 +173,8 @@ int do_cum(void)
 		    aspect = -1 * drain[r - r_nbr + 1][c - c_nbr + 1];
 		    asp[this_index] = aspect;
 		}
+		if (valued > 0)
+		    wat[down_index] = -valued;
 		continue;
 	    }
 
@@ -190,12 +192,14 @@ int do_cum(void)
 	    }
 	    wat[down_index] = valued;
 
-	    /* topographic wetness index ln(a / tan(beta)) */
-	    if (tci_flag) {
-		tci_div = contour[np_side] * 
-		       get_slope_tci(alt[this_index], alt[down_index],
-				     dist_to_nbr[np_side]);
-		tci[this_index] = log((fabs(wat[this_index]) * cell_size) / tci_div);
+	    /* topographic wetness index ln(a / tan(beta)) and
+	     * stream power index a * tan(beta) */
+	    if (atanb_flag) {
+		sca[this_index] = fabs(wat[this_index]) *
+		                  (cell_size / contour[np_side]);
+		tanb[this_index] = get_slope_tci(alt[this_index],
+		                                 alt[down_index],
+						 dist_to_nbr[np_side]);
 	    }
 
 	    is_swale = FLAG_GET(swale, r, c);
@@ -357,6 +361,8 @@ int do_cum_mfd(void)
 			    if (dr == r_nbr && dc == c_nbr) {
 				astar_not_set = 0;
 			    }
+			    if (value < 0 && valued > 0)
+				wat[nbr_index] = -valued;
 			}
 		    }
 		}
@@ -401,16 +407,16 @@ int do_cum_mfd(void)
 
 			    nbr_index = SEG_INDEX(wat_seg, r_nbr, c_nbr);
 
-			    if (tci_flag) {
+			    weight[ct_dir] = weight[ct_dir] / sum_weight;
+			    /* check everything adds up to 1.0 */
+			    prop += weight[ct_dir];
+
+			    if (atanb_flag) {
 				sum_contour += contour[ct_dir];
 				tci_div += get_slope_tci(ele, alt[nbr_index],
 				                         dist_to_nbr[ct_dir]) *
 					   weight[ct_dir];
 			    }
-
-			    weight[ct_dir] = weight[ct_dir] / sum_weight;
-			    /* check everything adds up to 1.0 */
-			    prop += weight[ct_dir];
 
 			    valued = wat[nbr_index];
 			    if (value > 0) {
@@ -437,11 +443,9 @@ int do_cum_mfd(void)
 		    G_warning(_("MFD: cumulative proportion of flow distribution not 1.0 but %f"),
 			      prop);
 		}
-		if (tci_flag)
-		    tci_div /= sum_weight;
 	    }
-
-	    if (mfd_cells < 2) {
+	    /* SFD-like accumulation */
+	    else {
 		valued = wat[down_index];
 		if (value > 0) {
 		    if (valued > 0)
@@ -457,16 +461,18 @@ int do_cum_mfd(void)
 		}
 		wat[down_index] = valued;
 
-		if (tci_flag) {
+		if (atanb_flag) {
 		    sum_contour = contour[np_side];
 		    tci_div = get_slope_tci(ele, alt[down_index],
 				            dist_to_nbr[np_side]);
 		}
 	    }
-	    /* topographic wetness index ln(a / tan(beta)) */
-	    if (tci_flag) {
-		tci[this_index] = log((fabs(wat[this_index]) * cell_size) /
-		                      (sum_contour * tci_div));
+	    /* topographic wetness index ln(a / tan(beta)) and
+	     * stream power index a * tan(beta) */
+	    if (atanb_flag) {
+		sca[this_index] = fabs(wat[this_index]) *
+		                  (cell_size / sum_contour);
+		tanb[this_index] = tci_div;
 	    }
 	}
     }

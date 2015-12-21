@@ -112,8 +112,9 @@ int do_cum(void)
     int asp_c[9] = { 0, 1, 0, -1, -1, -1, 0, 1, 1 };
     WAT_ALT wa, wadown;
     ASP_FLAG af, afdown;
+    A_TANB sca_tanb;
     double *dist_to_nbr, *contour;
-    double tci_val, tci_div, cell_size;
+    double cell_size;
 
     G_message(_("SECTION 3: Accumulating Surface Flow with SFD."));
 
@@ -162,6 +163,12 @@ int do_cum(void)
 		    af.asp = -1 * drain[r - dr + 1][c - dc + 1];
 		}
 		seg_put(&aspflag, (char *)&af, r, c);
+		seg_get(&watalt, (char *)&wadown, dr, dc);
+		valued = wadown.wat;
+		if (valued > 0) {
+		    wadown.wat = -valued;
+		    seg_put(&watalt, (char *)&wadown, dr, dc);
+		}
 		continue;
 	    }
 
@@ -189,13 +196,15 @@ int do_cum(void)
 	    wadown.wat = valued;
 	    seg_put(&watalt, (char *)&wadown, dr, dc);
 
-	    /* topographic wetness index ln(a / tan(beta)) */
-	    if (tci_flag) {
-		tci_div = contour[np_side] * 
-		       get_slope_tci(wa.ele, wadown.ele,
-				     dist_to_nbr[np_side]);
-		tci_val = log((fabs(wa.wat) * cell_size) / tci_div);
-		dseg_put(&tci, &tci_val, r, c);
+	    /* topographic wetness index ln(a / tan(beta)) and
+	     * stream power index a * tan(beta) */
+	    if (atanb_flag) {
+		sca_tanb.sca = fabs(wa.wat) *
+		               (cell_size / contour[np_side]);
+
+		sca_tanb.tanb = get_slope_tci(wa.ele, wadown.ele,
+				              dist_to_nbr[np_side]);
+		seg_put(&atanb, (char *)&sca_tanb, r, c);
 	    }
 
 	    /* update asp for depression */
@@ -262,10 +271,11 @@ int do_cum_mfd(void)
 {
     int r, c, dr, dc;
     DCELL value, valued, *wat_nbr;
-    double tci_val, tci_div, sum_contour, cell_size;
+    double sum_contour, cell_size;
     POINT point;
     WAT_ALT wa;
     ASP_FLAG af, afdown;
+    A_TANB sca_tanb;
     GW_LARGE_INT killer;
     int threshold;
 
@@ -384,6 +394,10 @@ int do_cum_mfd(void)
 			    if (dr == r_nbr && dc == c_nbr) {
 				astar_not_set = 0;
 			    }
+			    if (value < 0 && wat_nbr[ct_dir] > 0) {
+				wa.wat = -wat_nbr[ct_dir];
+				seg_put(&watalt, (char *)&wa, r_nbr, c_nbr);
+			    }
 			}
 		    }
 		}
@@ -413,7 +427,7 @@ int do_cum_mfd(void)
 
 	    /* set flow accumulation for neighbours */
 	    max_val = -1;
-	    tci_div = sum_contour = 0.;
+	    sca_tanb.tanb = sum_contour = 0.;
 
 	    if (mfd_cells > 1) {
 		prop = 0.0;
@@ -427,16 +441,16 @@ int do_cum_mfd(void)
 
 			if (FLAG_GET(flag_nbr[ct_dir], WORKEDFLAG)) {
 
-			    if (tci_flag) {
-				sum_contour += contour[ct_dir];
-				tci_div += get_slope_tci(ele, ele_nbr[ct_dir],
-				                         dist_to_nbr[ct_dir]) *
-					   weight[ct_dir];
-			    }
-
 			    weight[ct_dir] = weight[ct_dir] / sum_weight;
 			    /* check everything adds up to 1.0 */
 			    prop += weight[ct_dir];
+
+			    if (atanb_flag) {
+				sum_contour += contour[ct_dir];
+				sca_tanb.tanb += get_slope_tci(ele, ele_nbr[ct_dir],
+				                         dist_to_nbr[ct_dir]) *
+					         weight[ct_dir];
+			    }
 
 			    if (value > 0) {
 				if (wat_nbr[ct_dir] > 0)
@@ -473,8 +487,6 @@ int do_cum_mfd(void)
 		    G_warning(_("MFD: cumulative proportion of flow distribution not 1.0 but %f"),
 			      prop);
 		}
-		if (tci_flag)
-		    tci_div /= sum_weight;
 	    }
 	    /* SFD-like accumulation */
 	    else {
@@ -495,18 +507,18 @@ int do_cum_mfd(void)
 		wa.ele = ele_nbr[np_side];
 		seg_put(&watalt, (char *)&wa, dr, dc);
 
-		if (tci_flag) {
+		if (atanb_flag) {
 		    sum_contour = contour[np_side];
-		    tci_div = get_slope_tci(ele, ele_nbr[np_side],
-				            dist_to_nbr[np_side]);
+		    sca_tanb.tanb = get_slope_tci(ele, ele_nbr[np_side],
+				                  dist_to_nbr[np_side]);
 		}
 	    }
 
-	    /* topographic wetness index ln(a / tan(beta)) */
-	    if (tci_flag) {
-		tci_val = log((fabs(value) * cell_size) /
-		              (sum_contour * tci_div));
-		dseg_put(&tci, &tci_val, r, c);
+	    /* topographic wetness index ln(a / tan(beta)) and
+	     * stream power index a * tan(beta) */
+	    if (atanb_flag) {
+		sca_tanb.sca = fabs(value) * (cell_size / sum_contour);
+		seg_put(&atanb, (char *)&sca_tanb, r, c);
 	    }
 	}
 	seg_put(&aspflag, (char *)&af, r, c);

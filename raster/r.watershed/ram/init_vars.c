@@ -22,7 +22,8 @@ int init_vars(int argc, char *argv[])
     /* input */
     ele_flag = pit_flag = run_flag = ril_flag = 0;
     /* output */
-    wat_flag = asp_flag = bas_flag = seg_flag = haf_flag = tci_flag = 0;
+    wat_flag = asp_flag = tci_flag = spi_flag = atanb_flag = 0;
+    bas_flag = seg_flag = haf_flag = 0;
     bas_thres = 0;
     /* shed, unused */
     arm_flag = dis_flag = 0;
@@ -50,6 +51,8 @@ int init_vars(int argc, char *argv[])
 	    wat_flag++;
 	else if (sscanf(argv[r], "tci=%s", tci_name) == 1)
 	    tci_flag++;
+	else if (sscanf(argv[r], "spi=%s", spi_name) == 1)
+	    spi_flag++;
 	else if (sscanf(argv[r], "drainage=%s", asp_name) == 1)
 	    asp_flag++;
 	else if (sscanf(argv[r], "depression=%s", pit_name) == 1)
@@ -147,11 +150,16 @@ int init_vars(int argc, char *argv[])
     wat =
 	(DCELL *) G_malloc(sizeof(DCELL) *
 			   size_array(&wat_seg, nrows, ncols));
-    if (tci_flag)
-	tci = (DCELL *) G_malloc(sizeof(DCELL) *
+    
+    sca = tanb = NULL;
+    atanb_flag = 0;
+    if (tci_flag || spi_flag) {
+	sca = (DCELL *) G_malloc(sizeof(DCELL) *
 			         size_array(&wat_seg, nrows, ncols));
-    else
-	tci = NULL;
+	tanb = (DCELL *) G_malloc(sizeof(DCELL) *
+			         size_array(&wat_seg, nrows, ncols));
+	atanb_flag = 1;
+    }
 
     asp =
 	(CELL *) G_malloc(size_array(&asp_seg, nrows, ncols) * sizeof(CELL));
@@ -222,6 +230,10 @@ int init_vars(int argc, char *argv[])
 	    asp[seg_idx] = 0;
 	    if (er_flag) {
 		r_h[seg_idx] = alt_value;
+	    }
+	    if (atanb_flag) {
+		Rast_set_d_null_value(&sca[seg_idx], 1);
+		Rast_set_d_null_value(&tanb[seg_idx], 1);
 	    }
 	    ptr = G_incr_void_ptr(ptr, ele_size);
 	}
