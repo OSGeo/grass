@@ -332,7 +332,11 @@ class ToolSwitcher:
         """
         for group in self._toolsGroups[tool]:
             for tb in self._groups[group]:
-                if tb.FindById(tool):
+                if tb == 'custom':
+                    for bid, handler in self._groups[group][tb]:
+                        if tool == bid:
+                            return True
+                elif tb.FindById(tool):
                     return True
         return False
 
