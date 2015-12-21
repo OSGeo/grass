@@ -173,6 +173,8 @@ int do_cum(void)
 		    aspect = -1 * drain[r - r_nbr + 1][c - c_nbr + 1];
 		    asp[this_index] = aspect;
 		}
+		if (valued > 0)
+		    wat[down_index] = -valued;
 		continue;
 	    }
 
@@ -357,6 +359,8 @@ int do_cum_mfd(void)
 			    if (dr == r_nbr && dc == c_nbr) {
 				astar_not_set = 0;
 			    }
+			    if (value < 0 && valued > 0)
+				wat[nbr_index] = -valued;
 			}
 		    }
 		}
