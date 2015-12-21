@@ -385,6 +385,8 @@ class GridModule(object):
                       of processor available.
     :param split: if True use r.tile to split all the inputs.
     :type split: bool
+    :param mapset_prefix: if specified created mapsets start with this prefix
+    :type mapset_prefix: str
     :param run_: if False only instantiate the object
     :type run_: bool
     :param args: give all the parameters to the command
@@ -399,7 +401,7 @@ class GridModule(object):
     """
     def __init__(self, cmd, width=None, height=None, overlap=0, processes=None,
                  split=False, debug=False, region=None, move=None, log=False,
-                 start_row=0, start_col=0, out_prefix='',
+                 start_row=0, start_col=0, out_prefix='', mapset_prefix=None,
                  *args, **kargs):
         kargs['run_'] = False
         self.mset = Mapset()
@@ -435,7 +437,10 @@ class GridModule(object):
         self.bboxes = split_region_tiles(region=region,
                                          width=width, height=height,
                                          overlap=overlap)
-        self.msetstr = cmd.replace('.', '') + "_%03d_%03d"
+        if mapset_prefix:
+            self.msetstr = mapset_prefix + "_%03d_%03d"
+        else:
+            self.msetstr = cmd.replace('.', '') + "_%03d_%03d"
         self.inlist = None
         if split:
             self.split()
