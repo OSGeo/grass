@@ -119,8 +119,9 @@ class MapFrameBase(wx.Frame):
         Map.region = Map.GetRegion() # g.region -upgc
         # self.Map.SetRegion() # adjust region to match display window
 
-    def _onToggleTool(self):
-        self.GetWindow().UnregisterAllHandlers()
+    def _onToggleTool(self, id):
+        if self._toolSwitcher.IsToolInGroup(id, 'mouseUse'):
+            self.GetWindow().UnregisterAllHandlers()
 
     def OnSize(self, event):
         """Adjust statusbar on changing size"""
@@ -482,9 +483,10 @@ class DoubleMapFrame(MapFrameBase):
         self.GetFirstWindow().Bind(wx.EVT_ENTER_WINDOW, self.ActivateFirstMap)
         self.GetSecondWindow().Bind(wx.EVT_ENTER_WINDOW, self.ActivateSecondMap)
     
-    def _onToggleTool(self):
-        self.GetFirstWindow().UnregisterAllHandlers()
-        self.GetSecondWindow().UnregisterAllHandlers()
+    def _onToggleTool(self, id): 
+        if self._toolSwitcher.IsToolInGroup(id, 'mouseUse'):
+            self.GetFirstWindow().UnregisterAllHandlers()
+            self.GetSecondWindow().UnregisterAllHandlers()
 
     def GetFirstMap(self):
         """Returns first Map instance
