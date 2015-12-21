@@ -77,7 +77,7 @@ void Rast__error_handler(void *p)
 
 static int init(void)
 {
-    char *zlib, *nulls, *ctype;
+    char *zlib, *nulls, *cname;
 
     Rast__init_window();
 
@@ -96,16 +96,29 @@ static int init(void)
     zlib = getenv("GRASS_INT_ZLIB");
     R__.compression_type = (!zlib || atoi(zlib)) ? 2 : 1;
 
-    ctype = getenv("GRASS_COMPRESSOR");
+    cname = getenv("GRASS_COMPRESSOR");
     /* 1: RLE
      * 2: ZLIB (DEFLATE)
      * 3: LZ4
      * 4: BZIP2 */
-    if (ctype) {
+    if (cname) {
 	/* ask gislib */
-	R__.compression_type = G_get_compressor(ctype);
-	if (R__.compression_type < 1)
+	R__.compression_type = G_compressor_number(cname);
+	if (R__.compression_type < 1) {
+	    if (R__.compression_type < 0) {
+		G_warning(_("Unknown compression method <%s>, using default ZLIB"),
+		    cname);
+	    }
+	    if (R__.compression_type == 0) {
+		G_warning(_("No compression is not supported for GRASS raster maps, using default ZLIB"));
+	    }
 	    R__.compression_type = 2; /* default to ZLIB */
+	}
+	if (G_check_compressor(R__.compression_type) != 1) {
+	    G_warning(_("This GRASS version does not support %s compression, using default ZLIB"),
+		cname);
+	    R__.compression_type = 2; /* default to ZLIB */
+	}
     }
 
     nulls = getenv("GRASS_COMPRESS_NULLS");
