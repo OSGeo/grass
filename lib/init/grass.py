@@ -133,7 +133,7 @@ def clean_env(gisrc):
     env_curr = read_gisrc(gisrc)
     env_new = {}
     for k,v in env_curr.items():
-        if k == 'PID' or k.startswith('MONITOR'):
+        if k.endswith('PID') or k.startswith('MONITOR'):
             continue
         env_new[k] = v
 
@@ -1352,6 +1352,19 @@ def start_gui(grass_gui):
         Popen([os.getenv('GRASS_PYTHON'), wxpath("wxgui.py")])
 
 
+def close_gui():
+    """Close GUI if running"""
+    if gpath('etc', 'python') not in sys.path:
+        sys.path.append(gpath('etc', 'python'))
+    from grass.script import core as gcore  # pylint: disable=E0611
+    env = gcore.gisenv()
+    if 'GUI_PID' not in env:
+        return
+    import signal
+    for pid in env['GUI_PID'].split(','):
+        debug("Exiting GUI with pid={}".format(pid))
+        os.kill(int(pid), signal.SIGTERM)
+        
 def clear_screen():
     """Clear terminal"""
     if windows:
@@ -1904,7 +1917,9 @@ def main():
         exit_val = shell_process.wait()
         if exit_val != 0:
             warning(_("Failed to start shell '%s'") % os.getenv('SHELL'))
-        
+
+        # close GUI if running
+        close_gui()
         # here we are at the end of grass session
         clear_screen()
         # TODO: can we just register this atexit?
