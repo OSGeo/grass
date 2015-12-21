@@ -179,7 +179,7 @@ def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
             os.environ['GRASS_PYTHON'] = "python"
     
     path = os.getenv('PYTHONPATH')
-    etcpy = os.path.join(gisbase, 'etc', 'python') + os.pathsep + os.path.join(gisbase, 'gui', 'wxpython')
+    etcpy = os.path.join(gisbase, 'etc', 'python')
     if path:
         path = etcpy + os.pathsep + path
     else:
