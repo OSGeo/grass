@@ -92,31 +92,47 @@
 #define G_COMPRESSED_NO (unsigned char)'0'
 #define G_COMPRESSED_YES (unsigned char)'1'
 
-int G_get_compressor(char *compressor)
+/* get compressor number
+ * return -1 on error
+ * return number >= 0 for known processor */
+int G_compressor_number(char *name)
 {
-    /* 0: NONE (no compressor)
-     * 1: RLE
-     * 2: ZLIB's DEFLATE (default)
-     * 3: LZ4
-     * 4: BZIP2
-     */
+    int i;
+    
+    if (!name)
+	return -1;
 
-    if (!compressor)
-	return 2;
-    if (G_strncasecmp(compressor, "NONE", 4) == 0)
-	return 0;
-    if (G_strncasecmp(compressor, "RLE", 3) == 0)
-	return 1;
-    if (G_strncasecmp(compressor, "ZLIB", 4) == 0)
-	return 2;
-    if (G_strncasecmp(compressor, "LZ4", 3) == 0)
-	return 3;
-    if (G_strncasecmp(compressor, "BZ", 2) == 0)
-	return 4;
+    for (i = 0; compressor[i].name ; i++) {
+	if (G_strcasecmp(name, compressor[i].name) == 0)
+	    return i;
+    }
 
-    G_warning(_("Unknown compressor <%s>, using default ZLIB compressor"),
-              compressor);
-    return 2;
+    return -1;
+}
+
+/* get compressor name
+ * return NULL on error
+ * return string (name) of known processor */
+char *G_compressor_name(int number)
+{
+    if (number < 0 || number >= n_compressors)
+	return NULL;
+
+    return compressor[number].name;
+}
+
+/* check compressor number
+ * return -1 on error
+ * return 0 known but not available
+ * return 1 known and available */
+int G_check_compressor(int number)
+{
+    if (number < 0 || number >= n_compressors) {
+	G_warning(_("Request for unsupported compressor"));
+	return -1;
+    }
+
+    return compressor[number].available;
 }
 
 int
@@ -171,22 +187,14 @@ G_no_expand(unsigned char *src, int src_sz, unsigned char *dst,
  */
 int
 G_compress(unsigned char *src, int src_sz, unsigned char *dst,
-		int dst_sz, int compressor)
+		int dst_sz, int number)
 {
-    if (compressor == 0)
-	return G_no_compress(src, src_sz, dst, dst_sz);
-    if (compressor == 1)
-	return G_rle_compress(src, src_sz, dst, dst_sz);
-    if (compressor == 2)
-	return G_zlib_compress(src, src_sz, dst, dst_sz);
-    if (compressor == 3)
-	return G_lz4_compress(src, src_sz, dst, dst_sz);
-    if (compressor == 4)
-	return G_bz2_compress(src, src_sz, dst, dst_sz);
+    if (number < 0 || number >= n_compressors) {
+	G_fatal_error(_("Request for unsupported compressor"));
+	return -1;
+    }
 
-    G_fatal_error(_("Request for unsupported compressor"));
-    
-    return -1;
+    return compressor[number].compress(src, src_sz, dst, dst_sz);
 }
 
 /* G_*_expand() returns
@@ -195,22 +203,14 @@ G_compress(unsigned char *src, int src_sz, unsigned char *dst,
  */
 int
 G_expand(unsigned char *src, int src_sz, unsigned char *dst,
-		int dst_sz, int compressor)
+		int dst_sz, int number)
 {
-    if (compressor == 0)
-	return G_no_expand(src, src_sz, dst, dst_sz);
-    if (compressor == 1)
-	return G_rle_expand(src, src_sz, dst, dst_sz);
-    if (compressor == 2)
-	return G_zlib_expand(src, src_sz, dst, dst_sz);
-    if (compressor == 3)
-	return G_lz4_expand(src, src_sz, dst, dst_sz);
-    if (compressor == 4)
-	return G_bz2_expand(src, src_sz, dst, dst_sz);
+    if (number < 0 || number >= n_compressors) {
+	G_fatal_error(_("Request for unsupported compressor"));
+	return -1;
+    }
 
-    G_fatal_error(_("Request for unsupported compressor"));
-    
-    return -1;
+    return compressor[number].expand(src, src_sz, dst, dst_sz);
 }
 
 int G_read_compressed(int fd, int rbytes, unsigned char *dst, int nbytes,
