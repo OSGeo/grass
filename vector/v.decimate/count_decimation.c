@@ -92,11 +92,13 @@ void count_decimation_init_from_str(struct CountDecimationControl *control,
 int count_decimation_is_out(struct CountDecimationControl *control)
 {
     if (control->offset_n) {
-        control->offset_n_counter++;
-        if (control->offset_n_counter < control->offset_n)
+        if (control->offset_n_counter < control->offset_n) {
+            control->offset_n_counter++;
             return TRUE;
-        else
+        }
+        else {
             control->offset_n = 0;  /* disable offset check */
+        }
     }
     if (control->skip_every) {
         control->every_counter++;
