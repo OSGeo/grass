@@ -111,7 +111,8 @@ def write_gisrc(dbase, location, mapset):
 
 # TODO: there should be a function to do the clean up
 # (unset the GISRC and delete the file)
-def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
+def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT',
+         initgui=False):
     """Initialize system variables to run GRASS modules
 
     This function is for running GRASS GIS without starting it
@@ -141,6 +142,8 @@ def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
     :param dbase: path to GRASS database (default: '')
     :param location: location name (default: 'demolocation')
     :param mapset: mapset within given location (default: 'PERMANENT')
+    :param initgui: add also GRASS wxPython packages to PYTHONPATH
+    
     :returns: path to ``gisrc`` file (to be deleted later)
     """
     # TODO: why we don't set GISBASE?
@@ -180,6 +183,8 @@ def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
     
     path = os.getenv('PYTHONPATH')
     etcpy = os.path.join(gisbase, 'etc', 'python')
+    if initgui:
+        etcpy += os.pathsep + os.path.join(gisbase, 'gui', 'wxpython')
     if path:
         path = etcpy + os.pathsep + path
     else:
