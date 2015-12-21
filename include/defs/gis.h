@@ -271,7 +271,9 @@ const char *G_find_vector(char *, const char *);
 const char *G_find_vector2(const char *, const char *);
 
 /* compress.c */
-int G_get_compressor(char *);
+int G_compressor_number(char *);
+char *G_compressor_name(int);
+int G_check_compressor(int);
 int G_write_compressed(int, unsigned char *, int, int);
 int G_write_unompressed(int, unsigned char *, int);
 int G_read_compressed(int, int, unsigned char *, int, int);
