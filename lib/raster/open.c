@@ -230,7 +230,10 @@ int Rast__open_old(const char *name, const char *mapset)
 	if (cellhd.compressed == 1)
 	    cellhd.compressed = 2;
     }
-    /* TODO: test if compressor type is supported */
+    /* test if compressor type is supported */
+    if (!G_check_compressor(cellhd.compressed)) {
+	G_fatal_error(_("Compression with %s is not supported"), G_compressor_name(cellhd.compressed));
+    }
 
     if (cellhd.proj != R__.rd_window.proj)
 	G_fatal_error(_("Raster map <%s> is in different projection than current region. "
@@ -648,8 +651,8 @@ static int open_raster_new(const char *name, int open_mode,
      *   allocate space to hold the row address array
      */
     fcb->cellhd = R__.wr_window;
-
-    /* TODO: test if compressor type is supported */
+    
+    /* change open_mode to OPEN_NEW_UNCOMPRESSED if R__.compression_type == 0 ? */
 
     if (open_mode == OPEN_NEW_COMPRESSED && fcb->map_type == CELL_TYPE) {
 	fcb->row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
