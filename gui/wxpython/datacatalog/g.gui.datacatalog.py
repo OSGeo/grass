@@ -33,7 +33,10 @@ def main():
     # import wx only after running parser
     # to avoid issues when only interface is needed
     import wx
-
+    
+    from grass.script.setup import set_gui_path
+    set_gui_path()
+    
     from core.giface import StandaloneGrassInterface
     from datacatalog.frame import DataCatalogFrame
 

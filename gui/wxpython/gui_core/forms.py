@@ -82,6 +82,9 @@ from grass.pydispatch.signal import Signal
 from grass.script import core as grass
 from grass.script import task as gtask
 
+from grass.script.setup import set_gui_path
+set_gui_path()
+
 from core import globalvar
 from gui_core.widgets import StaticWrapText, ScrolledPanel, ColorTablesComboBox, \
                              BarscalesComboBox, NArrowsComboBox

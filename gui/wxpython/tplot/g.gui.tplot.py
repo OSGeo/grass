@@ -78,6 +78,10 @@ def main():
     options, flags = gscript.parser()
 
     import wx
+    
+    from grass.script.setup import set_gui_path
+    set_gui_path()
+    
     from core.utils import _
     from core.giface import StandaloneGrassInterface
     try:

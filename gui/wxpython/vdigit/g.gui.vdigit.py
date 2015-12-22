@@ -46,6 +46,10 @@ def main():
     # import wx only after running parser
     # to avoid issues with complex imports when only interface is needed
     import wx
+
+    from grass.script.setup import set_gui_path
+    set_gui_path()
+    
     from core.globalvar import CheckWxVersion
     from core.utils import _
     from core.render import Map

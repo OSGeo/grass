@@ -574,8 +574,6 @@ def set_paths(grass_config_dir):
     path_prepend(gpath('bin'), 'PATH')
 
     # Set PYTHONPATH to find GRASS Python modules
-    if os.path.exists(gpath('gui', 'wxpython')):
-        path_prepend(gpath('gui', 'wxpython'), 'PYTHONPATH')
     if os.path.exists(gpath('etc', 'python')):
         path_prepend(gpath('etc', 'python'), 'PYTHONPATH')
 
