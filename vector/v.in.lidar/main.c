@@ -28,6 +28,7 @@
 #include <liblas/capi/liblas.h>
 
 #include "count_decimation.h"
+#include "projection.h"
 
 #ifndef MAX
 #  define MIN(a,b)      ((a<b) ? a : b)
