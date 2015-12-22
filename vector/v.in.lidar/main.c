@@ -1082,8 +1082,10 @@ int main(int argc, char *argv[])
         G_message(_("%llu input points were skipped by count-based decimation"),
                   count_decimation_control.n_count_filtered);
 #else
-    if (limit_n)
-        G_message(_("%lu points imported (limit was %d)"), limit_n_counter, limit_n);
+    if (count_decimation_control.limit_n)
+        G_message(_("%lu points imported (limit was %d)"),
+                  count_decimation_control.limit_n_counter,
+                  count_decimation_control.limit_n);
     else
         G_message(_("%lu points imported"), points_imported);
     if (not_valid)
@@ -1098,10 +1100,12 @@ int main(int argc, char *argv[])
         G_message(_("%lu input points were filtered out by class number"), n_class_filtered);
     if (zrange_filtered)
         G_message(_("%lu input points were filtered outsite the range for z coordinate"), zrange_filtered);
-    if (offset_n_counter)
-        G_message(_("%lu input points were skipped at the begging using offset"), offset_n_counter);
-    if (n_count_filtered)
-        G_message(_("%lu input points were skipped by count-based decimation"), n_count_filtered);
+    if (count_decimation_control.offset_n_counter)
+        G_message(_("%lu input points were skipped at the begging using offset"),
+                  count_decimation_control.offset_n_counter);
+    if (count_decimation_control.n_count_filtered)
+        G_message(_("%lu input points were skipped by count-based decimation"),
+                  count_decimation_control.n_count_filtered);
     G_message(_("Accuracy of the printed point counts might be limited by your computer architecture."));
 #endif
     if (count_decimation_control.limit_n)
