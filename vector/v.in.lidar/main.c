@@ -799,6 +799,7 @@ int main(int argc, char *argv[])
     n_filtered = 0;
     n_class_filtered = 0;
     n_outside_mask = 0;
+    zrange_filtered = 0;
 
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
