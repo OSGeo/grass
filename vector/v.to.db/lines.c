@@ -123,6 +123,8 @@ int read_lines(struct Map_info *Map)
 		else if (options.option == O_LENGTH && (type & GV_LINES)) {
 		    /* Calculate line length */
 		    len = Vect_line_geodesic_length(Points);
+		    if (G_projection () != PROJECTION_LL)
+			    len = len * G_database_units_to_meters_factor();
 		    Values[idx].d1 += len;
 		}
 		else if (options.option == O_COOR && (type & GV_POINTS)) {
