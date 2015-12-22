@@ -471,6 +471,7 @@ int main(int argc, char **argv)
     struct Option *grass_rgb_column_opt;
     struct Option *red_column_opt, *green_column_opt, *blue_column_opt;
     struct Option *where_opt;
+    struct Option *las_xyscale_opt, *las_zscale_opt;
     struct Flag *region_flag, *no_color_table_flag;
     struct Map_info vinput;
 
@@ -600,6 +601,26 @@ int main(int argc, char **argv)
     blue_column_opt->required = NO;
     blue_column_opt->guisection = _("Columns");
 
+    las_xyscale_opt = G_define_option();
+    las_xyscale_opt->key = "las_xyscale";
+    las_xyscale_opt->type = TYPE_DOUBLE;
+    las_xyscale_opt->required = YES;
+    las_xyscale_opt->answer = "0.01";
+    las_xyscale_opt->label = _("Internal scale to apply to X and Y values");
+    las_xyscale_opt->description = _("This scale does not change"
+        " the values itself but only how precisely they are stored,"
+        " for example 0.01 will preserve two decimal places");
+
+    las_zscale_opt = G_define_option();
+    las_zscale_opt->key = "las_zscale";
+    las_zscale_opt->type = TYPE_DOUBLE;
+    las_zscale_opt->required = YES;
+    las_zscale_opt->answer = "0.01";
+    las_zscale_opt->label = _("Internal scale to apply to z values");
+    las_zscale_opt->description = _("This scale does not change"
+        " the values itself but only how precisely they are stored,"
+        " for example 0.01 will preserve two decimal places");
+
     region_flag = G_define_flag();
     region_flag->key = 'r';
     region_flag->guisection = _("Selection");
@@ -682,6 +703,8 @@ int main(int argc, char **argv)
 
     LASSRS_SetWKT(las_srs, current_wkt);
     LASHeader_SetSRS(las_header, las_srs);
+    LASHeader_SetScale(las_header, atof(las_xyscale_opt->answer),
+        atof(las_xyscale_opt->answer), atof(las_zscale_opt->answer));
     /* TODO: support append mode */
     int write_mode = 1;
 
