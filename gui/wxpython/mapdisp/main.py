@@ -32,6 +32,9 @@ import time
 import shutil
 import fileinput
 
+from grass.script.setup import set_gui_path
+set_gui_path()
+
 from core          import globalvar
 import wx
 
