@@ -204,8 +204,9 @@ class TimelineFrame(wx.Frame):
 
             rows = sp.get_registered_maps(columns=columns, where=None,
                                           order='start_time', dbif=self.dbif)
-            if rows is None:
-                rows = []
+            if not rows:
+                GError(parent=self, message=_("Dataset <{name}> is empty").format(name=series[0] + '@' + series[1]))
+                return
             for row in rows:
                 mapName, start, end, north, south, west, east = row
                 self.timeData[name]['start_datetime'].append(start)
