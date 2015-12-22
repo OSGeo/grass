@@ -1,8 +1,8 @@
 /****************************************************************************
  *
- * MODULE:       v.decimate
+ * MODULE:       v.in.lidar
  * AUTHOR(S):    Vaclav Petras
- * PURPOSE:      Reduce the number of points in a vector map
+ * PURPOSE:      projection related functions
  * COPYRIGHT:    (C) 2015 by the GRASS Development Team
  *
  *               This program is free software under the GNU General Public
