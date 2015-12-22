@@ -40,6 +40,8 @@ int read_areas(struct Map_info *Map)
 	if ((options.option == O_COMPACT) || (options.option == O_FD) ||
 	    (options.option == O_PERIMETER)) {
 	    perimeter = Vect_get_area_perimeter(Map, area_num);
+	    if (G_projection() != PROJECTION_LL)
+		    perimeter = perimeter * G_database_units_to_meters_factor();
 	}
 
 	found = 0;
