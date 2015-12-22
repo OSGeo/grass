@@ -19,14 +19,25 @@
 /* TODO: revise names (now partially on some vars in v.in.lidar code) */
 
 struct CountDecimationControl {
-    int offset_n;
-    int offset_n_counter;
-    int skip_every;
-    int preserve_every;
-    int every_counter;
-    int n_count_filtered;
-    int limit_n;
-    int limit_n_counter;
+#ifdef HAVE_LONG_LONG_INT
+    unsigned long long offset_n;
+    unsigned long long offset_n_counter;
+    unsigned long long skip_every;
+    unsigned long long preserve_every;
+    unsigned long long every_counter;
+    unsigned long long n_count_filtered;
+    unsigned long long limit_n;
+    unsigned long long limit_n_counter;
+#else
+    unsigned long offset_n;
+    unsigned long offset_n_counter;
+    unsigned long skip_every;
+    unsigned long preserve_every;
+    unsigned long every_counter;
+    unsigned long n_count_filtered;
+    unsigned long limit_n;
+    unsigned long limit_n_counter;
+#endif
 };
 
 void count_decimation_init(struct CountDecimationControl *control,
