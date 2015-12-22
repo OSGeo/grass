@@ -27,6 +27,8 @@
 #include <grass/glocale.h>
 #include <liblas/capi/liblas.h>
 
+#include "count_decimation.h"
+
 #ifndef MAX
 #  define MIN(a,b)      ((a<b) ? a : b)
 #  define MAX(a,b)      ((a>b) ? a : b)
@@ -897,31 +899,15 @@ int main(int argc, char *argv[])
     Points = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
 
-    /* counters used by both but that's ok, the filters are exclusive */
-    int skip_every = 0;
-    int preserve_every = 0;
-    int every_counter = 0;
-#ifdef HAVE_LONG_LONG_INT
-    unsigned long long n_count_filtered = 0;
-    unsigned long long offset_n = 0;
-    unsigned long long offset_n_counter = 0;
-    unsigned long long limit_n = 0;
-    unsigned long long limit_n_counter = 0;
-#else
-    unsigned long n_count_filtered = 0;
-    unsigned long offset_n = 0;
-    unsigned long offset_n_counter = 0;
-    unsigned long limit_n = 0;
-    unsigned long limit_n_counter = 0;
-#endif
-    if (skip_opt->answer)
-        skip_every = atoi(skip_opt->answer);
-    if (preserve_opt->answer)
-        preserve_every = atoi(preserve_opt->answer);
-    if (offset_opt->answer)
-        offset_n = atoi(offset_opt->answer);
-    if (limit_opt->answer)
-        limit_n = atoi(limit_opt->answer);
+    struct CountDecimationControl count_decimation_control;
+
+    count_decimation_init_from_str(&count_decimation_control,
+                                   skip_opt->answer, preserve_opt->answer,
+                                   offset_opt->answer, limit_opt->answer);
+    if (!count_decimation_is_valid(&count_decimation_control))
+        G_fatal_error(_("Settings for count-based decimation are not valid"));
+    /* we don't check if the decimation is noop */
+
 #ifdef HAVE_LONG_LONG_INT
     G_important_message(_("Scanning %llu points..."), n_features);
 #else
@@ -1010,33 +996,8 @@ int main(int argc, char *argv[])
                 continue;
             }
         }
-        if (offset_n) {
-            if (offset_n_counter < offset_n) {
-                offset_n_counter++;
-                continue;
-            }
-            else {
-                offset_n = 0;  /* disable offset check */
-            }
-        }
-        if (skip_every) {
-            every_counter++;
-            if (every_counter == skip_every) {
-                n_count_filtered++;
-                every_counter = 0;
-                continue;
-            }
-        }
-        else if (preserve_every) {
-            every_counter++;
-            if (every_counter == preserve_every) {
-                every_counter = 0;
-            }
-            else {
-                n_count_filtered++;
-                continue;
-            }
-        }
+        if (count_decimation_is_out(&count_decimation_control))
+            continue;
 
 	Vect_append_point(Points, x, y, z);
         if (id_layer)
@@ -1148,12 +1109,8 @@ int main(int argc, char *argv[])
 	    }
 	}
 
-        if (limit_n) {
-            limit_n_counter++;
-            /* this matches the last successfully imported point */
-            if (limit_n_counter == limit_n)
-                break;
-        }
+        if (count_decimation_is_end(&count_decimation_control))
+            break;
         if (id_layer && cat == GV_CAT_MAX) {
             cat_max_reached = TRUE;
             break;
@@ -1183,19 +1140,24 @@ int main(int argc, char *argv[])
     Vect_close(&Map);
 
     /* can be easily determined only when iterated over all points */
-    if (!limit_n && !cat_max_reached && points_imported != n_features
+    if (!count_decimation_control.limit_n && !cat_max_reached
+            && points_imported != n_features
             - not_valid - n_outside - n_filtered - n_class_filtered
-            - n_outside_mask - offset_n_counter - n_count_filtered
-            - zrange_filtered)
+            - n_outside_mask - count_decimation_control.offset_n_counter
+            - count_decimation_control.n_count_filtered - zrange_filtered)
         G_warning(_("The underlying libLAS library is at its limits."
                     " Previously reported counts might have been distorted."
                     " However, the import itself should be unaffected."));
 
 #ifdef HAVE_LONG_LONG_INT
-    if (limit_n)
-        G_message(_("%llu points imported (limit was %llu)"), limit_n_counter, limit_n);
-    else
+    if (count_decimation_control.limit_n) {
+        G_message(_("%llu points imported (limit was %llu)"),
+                  count_decimation_control.limit_n_counter,
+                  count_decimation_control.limit_n);
+    }
+    else {
         G_message(_("%llu points imported"), points_imported);
+    }
     if (not_valid)
 	G_message(_("%llu input points were not valid"), not_valid);
     if (n_outside)
@@ -1208,10 +1170,12 @@ int main(int argc, char *argv[])
         G_message(_("%llu input points were filtered out by class number"), n_class_filtered);
     if (zrange_filtered)
         G_message(_("%llu input points were filtered outsite the range for z coordinate"), zrange_filtered);
-    if (offset_n_counter)
-        G_message(_("%llu input points were skipped at the begging using offset"), offset_n_counter);
-    if (n_count_filtered)
-        G_message(_("%llu input points were skipped by count-based decimation"), n_count_filtered);
+    if (count_decimation_control.offset_n_counter)
+        G_message(_("%llu input points were skipped at the begging using offset"),
+                  count_decimation_control.offset_n_counter);
+    if (count_decimation_control.n_count_filtered)
+        G_message(_("%llu input points were skipped by count-based decimation"),
+                  count_decimation_control.n_count_filtered);
 #else
     if (limit_n)
         G_message(_("%lu points imported (limit was %d)"), limit_n_counter, limit_n);
@@ -1235,7 +1199,7 @@ int main(int argc, char *argv[])
         G_message(_("%lu input points were skipped by count-based decimation"), n_count_filtered);
     G_message(_("Accuracy of the printed point counts might be limited by your computer architecture."));
 #endif
-    if (limit_n)
+    if (count_decimation_control.limit_n)
         G_message(_("The rest of points was ignored"));
 
     if (cat_max_reached)
