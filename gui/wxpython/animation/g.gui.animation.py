@@ -61,6 +61,10 @@ def main():
     # to avoid issues when only interface is needed
     import grass.temporal as tgis
     import wx
+
+    from grass.script.setup import set_gui_path
+    set_gui_path()
+    
     from core.globalvar import CheckWxVersion
     from core.utils import _
     from core.giface import StandaloneGrassInterface

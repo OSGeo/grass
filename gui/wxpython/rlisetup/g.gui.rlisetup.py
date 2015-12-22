@@ -33,6 +33,10 @@ def main():
     gscript.parser()
 
     import wx
+
+    from grass.script.setup import set_gui_path
+    set_gui_path()
+    
     from core.giface import StandaloneGrassInterface
     from core.globalvar import CheckWxVersion
     from rlisetup.frame import RLiSetupFrame
