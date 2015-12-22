@@ -185,14 +185,14 @@ int main(int argc, char *argv[])
     opt.sl_int->type = TYPE_DOUBLE;
     opt.sl_int->required = NO;
     opt.sl_int->description = _("Value of the intercept of the soil line (MSAVI2 only)");
-    opt.sl_int->guisection = _("MSAVI2 seetings");
+    opt.sl_int->guisection = _("MSAVI2 settings");
 
     opt.sl_red = G_define_option();
     opt.sl_red->key = "soil_noise_reduction";
     opt.sl_red->type = TYPE_DOUBLE;
     opt.sl_red->required = NO;
     opt.sl_red->description = _("Value of the factor of reduction of soil noise (MSAVI2 only)");
-    opt.sl_red->guisection = _("MSAVI2 seetings");
+    opt.sl_red->guisection = _("MSAVI2 settings");
 
     opt.bits = G_define_option();
     opt.bits->key = "storage_bit";
