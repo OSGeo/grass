@@ -346,8 +346,8 @@ class TimelineFrame(wx.Frame):
             datasets = self._checkDatasets(datasets)
             if not datasets:
                 return
-        except GException:
-            GError(parent=self, message=_("Invalid input data"))
+        except GException, e:
+            GError(parent=self, message=unicode(e), showTraceback=False)
             return
 
         self.datasets = datasets
@@ -444,8 +444,8 @@ class TimelineFrame(wx.Frame):
             datasets = self._checkDatasets(datasets)
             if not datasets:
                 return
-        except GException:
-            GError(parent=self, message=_("Invalid input data"))
+        except GException, e:
+            GError(parent=self, message=unicode(e), showTraceback=False)
             return
         self.datasets = datasets
         self.datasetSelect.SetValue(','.join(map(lambda x: x[0] + '@' + x[1], datasets)))
