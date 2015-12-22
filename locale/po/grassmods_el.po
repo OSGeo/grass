@@ -41112,7 +41112,7 @@ msgstr ""
 
 #: ../imagery/i.vi/main.c:181 ../imagery/i.vi/main.c:188
 #: ../imagery/i.vi/main.c:195
-msgid "MSAVI2 seetings"
+msgid "MSAVI2 settings"
 msgstr ""
 
 #: ../imagery/i.vi/main.c:187
