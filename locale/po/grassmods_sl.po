@@ -41638,7 +41638,7 @@ msgstr ""
 #: ../imagery/i.vi/main.c:181 ../imagery/i.vi/main.c:188
 #: ../imagery/i.vi/main.c:195
 #, fuzzy
-msgid "MSAVI2 seetings"
+msgid "MSAVI2 settings"
 msgstr "Ne najdem vhodne datoteke %s\n"
 
 #: ../imagery/i.vi/main.c:187

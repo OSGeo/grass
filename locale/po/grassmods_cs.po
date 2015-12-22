@@ -41801,7 +41801,7 @@ msgstr ""
 #: ../imagery/i.vi/main.c:181 ../imagery/i.vi/main.c:188
 #: ../imagery/i.vi/main.c:195
 #, fuzzy
-msgid "MSAVI2 seetings"
+msgid "MSAVI2 settings"
 msgstr "Nastavení"
 
 #: ../imagery/i.vi/main.c:187
