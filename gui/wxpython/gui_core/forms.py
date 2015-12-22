@@ -2263,7 +2263,7 @@ class CmdPanel(wx.Panel):
                                    ignoreRequired = ignoreRequired)
         except ValueError as err:
             dlg = wx.MessageDialog(parent = self,
-                                   message = unicode(err),
+                                   message = gcmd.DecodeString(str(err)),
                                    caption = _("Error in %s") % self.task.name,
                                    style = wx.OK | wx.ICON_ERROR | wx.CENTRE)
             dlg.ShowModal()
