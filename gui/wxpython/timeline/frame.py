@@ -204,8 +204,9 @@ class TimelineFrame(wx.Frame):
 
             rows = sp.get_registered_maps(columns=columns, where=None,
                                           order='start_time', dbif=self.dbif)
-            if rows is None:
-                rows = []
+            if not rows:
+                GError(parent=self, message=_("Dataset <{name}> is empty").format(name=series[0] + '@' + series[1]))
+                return
             for row in rows:
                 mapName, start, end, north, south, west, east = row
                 self.timeData[name]['start_datetime'].append(start)
@@ -231,8 +232,6 @@ class TimelineFrame(wx.Frame):
         self.axes3d.grid(False)
         # self.axes3d.grid(True)
         if self.temporalType == 'absolute':
-            if check_version(1, 1, 0):
-                self.axes3d.zaxis_date()
             convert = mdates.date2num
         else:
             convert = lambda x: x
@@ -267,6 +266,9 @@ class TimelineFrame(wx.Frame):
             self.axes3d.set_xlabel(_("X"))
             self.axes3d.set_ylabel(_("Y"))
 
+        if self.temporalType == 'absolute':
+            if check_version(1, 1, 0):
+                self.axes3d.zaxis_date()
         self.axes3d.set_zlabel(_('Time'))
         self.axes3d.mouse_init()
         self.canvas.draw()
@@ -276,8 +278,6 @@ class TimelineFrame(wx.Frame):
         self.axes2d.clear()
         self.axes2d.grid(True)
         if self.temporalType == 'absolute':
-            self.axes2d.xaxis_date()
-            self.fig.autofmt_xdate()
             convert = mdates.date2num
         else:
             convert = lambda x: x
@@ -319,7 +319,8 @@ class TimelineFrame(wx.Frame):
                                               marker='o', linestyle='None', color=color)[0])
 
         if self.temporalType == 'absolute':
-            pass
+            self.axes2d.xaxis_date()
+            self.fig.autofmt_xdate()
             # self.axes2d.set_xlabel(_("Time"))
         else:
             self.axes2d.set_xlabel(_("Time [%s]") % self.unit)
@@ -344,8 +345,8 @@ class TimelineFrame(wx.Frame):
         datasets = datasets.split(',')
         try:
             datasets = self._checkDatasets(datasets)
-        except GException:
-            GError(parent=self, message=_("Invalid input data"))
+        except GException, e:
+            GError(parent=self, message=unicode(e), showTraceback=False)
             return
 
         self.datasets = datasets
@@ -436,8 +437,8 @@ class TimelineFrame(wx.Frame):
             return
         try:
             datasets = self._checkDatasets(datasets)
-        except GException:
-            GError(parent=self, message=_("Invalid input data"))
+        except GException, e:
+            GError(parent=self, message=unicode(e), showTraceback=False)
             return
         self.datasets = datasets
         self.datasetSelect.SetValue(','.join(map(lambda x: x[0] + '@' + x[1], datasets)))
