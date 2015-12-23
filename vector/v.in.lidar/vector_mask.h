@@ -21,6 +21,7 @@ struct bound_box;
 
 struct VectorMask {
     struct Map_info *map_info;
+    struct bound_box *map_bbox;
     struct bound_box *area_bboxes;
     int nareas;
     int inverted;

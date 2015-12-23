@@ -31,6 +31,9 @@ POINTS = """\
 21.41013052,11.05432488,19
 """
 
+# the point with cat 4 is outside the bbox of the areas vector map
+# which is what we need for the tests
+
 AREAS = """\
 ORGANIZATION:
 DIGIT DATE:

@@ -18,6 +18,8 @@ void VectorMask_init(struct VectorMask *vector_mask, const char *name, const cha
     vector_mask->map_info = G_malloc(sizeof(struct Map_info));
     if (Vect_open_old2(vector_mask->map_info, name, "", layer) < 2)
         G_fatal_error(_("Failed to open vector <%s>"), name);
+    vector_mask->map_bbox = G_malloc(sizeof(struct bound_box));
+    Vect_get_map_box(vector_mask->map_info, vector_mask->map_bbox);
     vector_mask->nareas = Vect_get_num_areas(vector_mask->map_info);
     vector_mask->area_bboxes = G_malloc(vector_mask->nareas * sizeof(struct bound_box));
     int i;
@@ -32,6 +34,7 @@ void VectorMask_init(struct VectorMask *vector_mask, const char *name, const cha
 
 void VectorMask_destroy(struct VectorMask *vector_mask)
 {
+    G_free(vector_mask->map_bbox);
     G_free(vector_mask->area_bboxes);
     Vect_close(vector_mask->map_info);
     G_free(vector_mask->map_info);
@@ -39,6 +42,14 @@ void VectorMask_destroy(struct VectorMask *vector_mask)
 
 int VectorMask_point_in(struct VectorMask *vector_mask, double x, double y)
 {
+    /* inv in res
+     *   F  T continue
+     *   F  F return F
+     *   T  T continue
+     *   T  F return T
+     */
+    if (!Vect_point_in_box_2d(x, y, vector_mask->map_bbox))
+        return vector_mask->inverted;
     int is_out = TRUE;
     int i;
     for (i = 1; i <= vector_mask->nareas; i++) {
