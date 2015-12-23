@@ -406,7 +406,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                         'region', 'export', 'attr', 'edit', 'save_ws',
                         'bgmap', 'topo', 'meta', 'null', 'zoom1',
                         'color', 'colori', 'hist', 'univar', 'prof', 'properties', 'sql', 'copy',
-                        'report', 'export-pg', 'pack'):
+                        'report', 'export-pg', 'export-attr', 'pack'):
                 self.popupID[key] = wx.NewId()
         
         # get current mapset
@@ -489,6 +489,13 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                       id = self.popupID['export-pg'])
             if 'v.out.postgis' not in globalvar.grassCmd:
                 self.popupMenu.Enable(self.popupID['export-pg'], False)
+
+            self.popupMenu.Append(self.popupID['export-attr'], text = _("Export attribute table"))
+            self.Bind(wx.EVT_MENU, lambda x: self.lmgr.OnMenuCmd(cmd = ['v.db.select',
+                                                                        'map=%s' % mapLayer.GetName()]),
+                      id = self.popupID['export-attr'])
+            if 'v.db.select' not in globalvar.grassCmd:
+                self.popupMenu.Enable(self.popupID['export-attr'], False)
 
             item = wx.MenuItem(self.popupMenu, id = self.popupID['pack'], text = _("Create pack"))
             self.popupMenu.AppendItem(item)
