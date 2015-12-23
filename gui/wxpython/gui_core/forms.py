@@ -629,7 +629,8 @@ class TaskFrame(wx.Frame):
         
     def updateValuesHook(self, event = None):
         """Update status bar data"""
-        self.SetStatusText(' '.join(map(gcmd.DecodeString, self.notebookpanel.createCmd(ignoreErrors = True))))
+        self.SetStatusText(' '.join([gcmd.DecodeString(each) if isinstance(each, str) else each
+                                     for each in self.notebookpanel.createCmd(ignoreErrors=True)]))
         if event:
             event.Skip()
 
