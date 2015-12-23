@@ -58,6 +58,7 @@ int main(int argc, char **argv)
     module->description = _("Prints vector map attributes.");
 
     map_opt = G_define_standard_option(G_OPT_V_MAP);
+    map_opt->guisection = _("Main");
 
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
     field_opt->guisection = _("Selection");
@@ -75,7 +76,7 @@ int main(int argc, char **argv)
     group_opt->guisection = _("Selection");
 
     fs_opt = G_define_standard_option(G_OPT_F_SEP);
-    fs_opt->guisection = _("Format");
+    fs_opt->guisection = _("Main");
 
     vs_opt = G_define_standard_option(G_OPT_F_SEP);
     vs_opt->key = "vertical_separator";
@@ -89,6 +90,7 @@ int main(int argc, char **argv)
     file_opt = G_define_standard_option(G_OPT_F_OUTPUT);
     file_opt->key = "file";
     file_opt->required = NO;
+    file_opt->guisection = _("Main");
     file_opt->description =
 	_("Name for output file (if omitted or \"-\" output to stdout)");
 
