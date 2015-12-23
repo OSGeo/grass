@@ -32,6 +32,7 @@
 #include "lidar.h"
 #include "attributes.h"
 #include "info.h"
+#include "vector_mask.h"
 
 #ifndef MAX
 #  define MIN(a,b)      ((a<b) ? a : b)
@@ -593,21 +594,10 @@ int main(int argc, char *argv[])
                                &Fi, have_time, have_color);
     }
 
-    struct Map_info vector_mask;
-    int naareas;
-    int aarea;
-    struct bound_box *mask_area_boxes;
-    int invert_mask = 0;
+    struct VectorMask vector_mask;
     if (vector_mask_opt->answer) {
-        if (Vect_open_old2(&vector_mask, vector_mask_opt->answer, "", vector_mask_field_opt->answer) < 2)
-            G_fatal_error(_("Failed to open vector <%s>"), vector_mask_opt->answer);
-        naareas = Vect_get_num_areas(&vector_mask);
-        mask_area_boxes = G_malloc(naareas * sizeof(struct bound_box));
-        for (aarea = 1; aarea <= naareas; aarea++) {
-            Vect_get_area_box(&vector_mask, aarea, &mask_area_boxes[aarea - 1]);
-        }
-        if (invert_mask_flag->answer)
-            invert_mask = 1;
+        VectorMask_init(&vector_mask, vector_mask_opt->answer,
+                        vector_mask_field_opt->answer, (int)invert_mask_flag->answer);
     }
 
     /* Import feature */
@@ -662,14 +652,7 @@ int main(int argc, char *argv[])
 	    }
 	}
     if (vector_mask_opt->answer) {
-        skipme = TRUE;
-        for (aarea = 1; aarea <= naareas; aarea++) {
-            if (Vect_point_in_area(x, y, &vector_mask, aarea, &mask_area_boxes[aarea - 1])) {
-                skipme = FALSE;
-                break;
-            }
-        }
-        if (invert_mask ^ skipme) {
+        if (!VectorMask_point_in(&vector_mask, x, y)) {
             n_outside_mask++;
             continue;
         }
@@ -778,8 +761,7 @@ int main(int argc, char *argv[])
     }
     
     if (vector_mask_opt->answer) {
-        Vect_close(&vector_mask);
-        G_free(mask_area_boxes);
+        VectorMask_destroy(&vector_mask);
     }
     
     LASSRS_Destroy(LAS_srs);
