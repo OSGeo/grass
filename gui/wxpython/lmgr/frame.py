@@ -2190,7 +2190,7 @@ class GMFrame(wx.Frame):
 
     def OnCloseWindow(self, event):
         """Cleanup when wxGUI is quitted"""
-        self._closeWindow()
+        self._closeWindow(event)
 
     def OnCloseWindowOrExit(self, event):
         """Cleanup when wxGUI is quitted
@@ -2201,11 +2201,11 @@ class GMFrame(wx.Frame):
         ret = dlg.ShowModal()
         dlg.Destroy()
         if ret != wx.ID_CANCEL:
-            self._closeWindow()
+            self._closeWindow(event)
             if ret == wx.ID_YES:
                 self._quitGRASS()
         
-    def _closeWindow(self):
+    def _closeWindow(self, event):
         """Close wxGUI"""
         # save command protocol if actived
         if self.goutput.btnCmdProtocol.GetValue():
@@ -2234,6 +2234,7 @@ class GMFrame(wx.Frame):
                                        style = wx.YES_NO | wx.YES_DEFAULT |
                                        wx.CANCEL | wx.ICON_QUESTION | wx.CENTRE)
                 ret = dlg.ShowModal()
+                dlg.Destroy()
                 if ret == wx.ID_YES:
                     if not self.workspaceFile:
                         self.OnWorkspaceSaveAs()
@@ -2243,9 +2244,7 @@ class GMFrame(wx.Frame):
                     # when called from menu, it gets CommandEvent and not CloseEvent
                     if hasattr(event, 'Veto'):
                         event.Veto()
-                    dlg.Destroy()
                     return
-                dlg.Destroy()
         
         # don't ask any more...
         UserSettings.Set(group = 'manager', key = 'askOnQuit', subkey = 'enabled',

@@ -2836,11 +2836,8 @@ class QuitDialog(wx.Dialog):
         self.Layout()
         
     def OnClose(self, event):
-        self.Close()
         self.EndModal(wx.ID_NO)
-        event.Skip()
 
     def OnQuit(self, event):
-        self.Close()
         self.EndModal(wx.ID_YES)
-        event.Skip()
+        
