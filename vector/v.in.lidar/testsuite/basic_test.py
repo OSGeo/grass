@@ -21,9 +21,9 @@ class BasicTest(TestCase):
     """
 
     # Setup variables to be used for outputs
-    vector_points = 'vinlidar_decimation_original'
-    imported_points = 'vinlidar_decimation_imported'
-    las_file = 'vinlidar_decimation_points.las'
+    vector_points = 'vinlidar_basic_original'
+    imported_points = 'vinlidar_basic_imported'
+    las_file = 'vinlidar_basic_points.las'
     npoints = 300
 
     @classmethod

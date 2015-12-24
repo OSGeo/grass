@@ -23,22 +23,22 @@ POINTS = """\
 22.24489796,13.89795918,123,2,2,3
 23.79591837,17.12244898,151,1,2,3
 17.2244898,16.34693878,124,2,2,4
-17.14285714,14.10204082,144,1,3,4
+17.14285714,14.10204082,134,1,3,4
 19.87755102,11.81632653,146,2,3,4
-18.48979592,11.48979592,140,2,3,4
+18.48979592,11.48979592,140.6,2,3,4
 21.26530612,15.73469388,147,3,3,5
 21.18367347,19.32653061,138,1,3,5
 23.91836735,18.83673469,144,2,3,5
 23.51020408,13.65306122,143,3,3,5
 23.55102041,11.32653061,123,1,4,5
-18.41009273,14.51618034,140,2,4,5
+18.41009273,14.51618034,140.4,2,4,5
 22.13996161,17.2278263,147,3,4,5
-21.41013052,11.05432488,142,4,4,5
+21.41013052,11.05432488,132,4,4,5
 """
 
 
-class BasicTest(TestCase):
-    """Test case for watershed module
+class FilterTest(TestCase):
+    """Test case for filter and selection options
 
     This tests expects v.random and v.out.lidar to work properly.
     """
@@ -85,7 +85,10 @@ class BasicTest(TestCase):
             name=self.imported_points)
 
     def test_no_filter(self):
-        """Test to see if the standard outputs are created"""
+        """Test to see if the standard outputs are created
+
+        This shows if the inpute data are as expected.
+        """
         self.assertModule('v.in.lidar', input=self.las_file,
             output=self.imported_points, flags='bt')
         self.assertVectorExists(self.imported_points)
@@ -142,7 +145,7 @@ class BasicTest(TestCase):
         self.class_filter(5, 8)
 
     def return_and_class_filter(self, return_name, class_n, npoints):
-        """Mid return filter test"""
+        """Return and class filter combined test code"""
         self.assertModule('v.in.lidar', input=self.las_file,
             output=self.imported_points, flags='bt',
             return_filter=return_name, class_filter=class_n)
@@ -158,6 +161,47 @@ class BasicTest(TestCase):
     def test_last_return_and_class_filter(self):
         """Combined test for return and class"""
         self.return_and_class_filter('last', 5, 3)
+
+    def zrange_filter(self, zrange, npoints):
+        """Actual code for zrange option test"""
+        self.assertModule('v.in.lidar', input=self.las_file,
+            output=self.imported_points, flags='bt',
+            zrange=zrange)
+        self.assertVectorExists(self.imported_points)
+        self.assertVectorFitsTopoInfo(
+            vector=self.imported_points,
+            reference=dict(points=npoints))
+
+    def test_zrange_filter(self):
+        """Test zrange option"""
+        self.zrange_filter((130.1, 139.9), 3)
+
+    def test_non_int_zrange_filter(self):
+        """Test zrange option with float number
+
+        One test point has z right under and one other right above the min.
+        """
+        self.zrange_filter((140.5, 900), 8)
+
+    def test_zrange_and_class_filter(self):
+        """zrange and class_filter option combined test"""
+        self.assertModule('v.in.lidar', input=self.las_file,
+            output=self.imported_points, flags='bt',
+            zrange=(141, 900), class_filter=5)
+        self.assertVectorExists(self.imported_points)
+        self.assertVectorFitsTopoInfo(
+            vector=self.imported_points,
+            reference=dict(points=4))
+
+    def test_zrange_and_return_filter(self):
+        """zrange and class_filter option combined test"""
+        self.assertModule('v.in.lidar', input=self.las_file,
+            output=self.imported_points, flags='bt',
+            zrange=(141, 900), return_filter='last')
+        self.assertVectorExists(self.imported_points)
+        self.assertVectorFitsTopoInfo(
+            vector=self.imported_points,
+            reference=dict(points=2))
 
 
 if __name__ == '__main__':

@@ -643,12 +643,12 @@ int main(int argc, char *argv[])
 		continue;
 	    }
 	}
-    if (vector_mask_opt->answer) {
-        if (!VectorMask_point_in(&vector_mask, x, y)) {
-            n_outside_mask++;
-            continue;
+        if (use_zrange) {
+            if (z < zrange_min || z > zrange_max) {
+                zrange_filtered++;
+                continue;
+            }
         }
-    }
         int return_n = LASPoint_GetReturnNumber(LAS_point);
         int n_returns = LASPoint_GetNumberOfReturns(LAS_point);
         if (return_filter_is_out(&return_filter_struct, return_n, n_returns)) {
@@ -660,9 +660,9 @@ int main(int argc, char *argv[])
             n_class_filtered++;
             continue;
         }
-        if (use_zrange) {
-            if (z < zrange_min || z > zrange_max) {
-                zrange_filtered++;
+        if (vector_mask_opt->answer) {
+            if (!VectorMask_point_in(&vector_mask, x, y)) {
+                n_outside_mask++;
                 continue;
             }
         }
