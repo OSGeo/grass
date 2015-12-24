@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
 
     if (format == GV_ASCII_FORMAT_STD) {
 	Vect_write_ascii_head(ascii, &Map);
-	fprintf(ascii, "VERTI:\n");
+	fprintf(ascii, "VERTI:%s", HOST_NEWLINE);
     }
 
     /* Open dig_att */
