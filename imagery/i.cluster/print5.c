@@ -12,15 +12,16 @@ int print_separability(FILE * fd, struct Cluster *C)
     double q;
 
     I_cluster_sum2(C);
-    fprintf(fd, _("\nclass separability matrix\n\n"));
+    fprintf(fd, _("%sclass separability matrix%s%s"),
+	    HOST_NEWLINE, HOST_NEWLINE, HOST_NEWLINE);
     for (first = 0; first < C->nclasses; first = last) {
 	last = first + 10;
 	if (last > C->nclasses)
 	    last = C->nclasses;
-	fprintf(fd, "\n    ");
+	fprintf(fd, "%s    ", HOST_NEWLINE);
 	for (c2 = first; c2 < last; c2++)
 	    fprintf(fd, "   %3d", c2 + 1);
-	fprintf(fd, "\n\n");
+	fprintf(fd, "%s%s", HOST_NEWLINE, HOST_NEWLINE);
 	for (c1 = first; c1 < C->nclasses; c1++) {
 	    fprintf(fd, "%3d ", c1 + 1);
 	    for (c2 = first; c2 <= c1 && c2 < last; c2++) {
@@ -32,9 +33,9 @@ int print_separability(FILE * fd, struct Cluster *C)
 		else
 		    fprintf(fd, "  --- ");
 	    }
-	    fprintf(fd, "\n");
+	    fprintf(fd, "%s", HOST_NEWLINE);
 	}
-	fprintf(fd, "\n");
+	fprintf(fd, "%s", HOST_NEWLINE);
     }
 
     return 0;

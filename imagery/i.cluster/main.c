@@ -232,42 +232,42 @@ int main(int argc, char *argv[])
 
 
     fprintf(report,
-	    _("#################### CLUSTER (%s) ####################\n\n"),
-	    G_date());
-    fprintf(report, _("Location: %s\n"), G_location());
-    fprintf(report, _("Mapset:   %s\n"), G_mapset());
-    fprintf(report, _("Group:    %s\n"), group);
-    fprintf(report, _("Subgroup: %s\n"), subgroup);
+	    _("#################### CLUSTER (%s) ####################%s%s"),
+	    G_date(), HOST_NEWLINE, HOST_NEWLINE);
+    fprintf(report, _("Location: %s%s"), G_location(), HOST_NEWLINE);
+    fprintf(report, _("Mapset:   %s%s"), G_mapset(), HOST_NEWLINE);
+    fprintf(report, _("Group:    %s%s"), group, HOST_NEWLINE);
+    fprintf(report, _("Subgroup: %s%s"), subgroup, HOST_NEWLINE);
     for (n = 0; n < ref.nfiles; n++) {
-	fprintf(report, _(" %s\n"),
-		G_fully_qualified_name(ref.file[n].name, ref.file[n].mapset));
+	fprintf(report, _(" %s%s"),
+		G_fully_qualified_name(ref.file[n].name, ref.file[n].mapset), HOST_NEWLINE);
     }
-    fprintf(report, _("Result signature file: %s\n"), outsigfile);
-    fprintf(report, "\n");
-    fprintf(report, _("Region\n"));
-    fprintf(report, _("  North: %12.2f  East: %12.2f\n"), window.north,
-	    window.east);
-    fprintf(report, _("  South: %12.2f  West: %12.2f\n"), window.south,
-	    window.west);
-    fprintf(report, _("  Res:   %12.2f  Res:  %12.2f\n"), window.ns_res,
-	    window.ew_res);
-    fprintf(report, _("  Rows:  %12d  Cols: %12d  Cells: %d\n"), nrows, ncols,
-	    nrows * ncols);
-    fprintf(report, _("Mask: %s\n"), Rast_mask_info());
-    fprintf(report, "\n");
-    fprintf(report, _("Cluster parameters\n"));
+    fprintf(report, _("Result signature file: %s%s"), outsigfile, HOST_NEWLINE);
+    fprintf(report, "%s", HOST_NEWLINE);
+    fprintf(report, _("Region%s"), HOST_NEWLINE);
+    fprintf(report, _("  North: %12.2f  East: %12.2f%s"), window.north,
+	    window.east, HOST_NEWLINE);
+    fprintf(report, _("  South: %12.2f  West: %12.2f%s"), window.south,
+	    window.west, HOST_NEWLINE);
+    fprintf(report, _("  Res:   %12.2f  Res:  %12.2f%s"), window.ns_res,
+	    window.ew_res, HOST_NEWLINE);
+    fprintf(report, _("  Rows:  %12d  Cols: %12d  Cells: %d%s"), nrows, ncols,
+	    nrows * ncols, HOST_NEWLINE);
+    fprintf(report, _("Mask: %s%s"), Rast_mask_info(), HOST_NEWLINE);
+    fprintf(report, "%s", HOST_NEWLINE);
+    fprintf(report, _("Cluster parameters%s"), HOST_NEWLINE);
     fprintf(report, _(" Number of initial classes:    %d"), maxclass);
     if (insigfile)
 	fprintf(report, _(" [from signature file %s]"), insigfile);
-    fprintf(report, "\n");
-    fprintf(report, _(" Minimum class size:           %d\n"), mcs);
-    fprintf(report, _(" Minimum class separation:     %f\n"), sep);
-    fprintf(report, _(" Percent convergence:          %f\n"), conv);
-    fprintf(report, _(" Maximum number of iterations: %d\n"), iters);
-    fprintf(report, "\n");
-    fprintf(report, _(" Row sampling interval:        %d\n"), sample_rows);
-    fprintf(report, _(" Col sampling interval:        %d\n"), sample_cols);
-    fprintf(report, "\n");
+    fprintf(report, "%s", HOST_NEWLINE);
+    fprintf(report, _(" Minimum class size:           %d%s"), mcs, HOST_NEWLINE);
+    fprintf(report, _(" Minimum class separation:     %f%s"), sep, HOST_NEWLINE);
+    fprintf(report, _(" Percent convergence:          %f%s"), conv, HOST_NEWLINE);
+    fprintf(report, _(" Maximum number of iterations: %d%s"), iters, HOST_NEWLINE);
+    fprintf(report, "%s", HOST_NEWLINE);
+    fprintf(report, _(" Row sampling interval:        %d%s"), sample_rows, HOST_NEWLINE);
+    fprintf(report, _(" Col sampling interval:        %d%s"), sample_cols, HOST_NEWLINE);
+    fprintf(report, "%s", HOST_NEWLINE);
     fflush(report);
 
     x = (DCELL *) G_malloc(ref.nfiles * sizeof(DCELL));
@@ -291,8 +291,8 @@ int main(int argc, char *argv[])
     }
     G_percent(nrows, nrows, 2);
 
-    fprintf(report, _("Sample size: %d points\n"), C.npoints);
-    fprintf(report, "\n");
+    fprintf(report, _("Sample size: %d points%s"), C.npoints, HOST_NEWLINE);
+    fprintf(report, "%s", HOST_NEWLINE);
     if (count < 2)
 	G_fatal_error(_("Not enough sample points. Please run again and "
 			"choose a larger sample size."));
@@ -311,9 +311,9 @@ int main(int argc, char *argv[])
     I_cluster_exec(&C, maxclass, iters, conv, sep, mcs, checkpoint,
 		   &interrupted);
 
-    fprintf(report, _("\n########## final results #############\n"));
-    fprintf(report, _("%d classes (convergence=%.1f%%)\n"),
-	    I_cluster_nclasses(&C, mcs), (double)C.percent_stable);
+    fprintf(report, _("%s########## final results #############%s"), HOST_NEWLINE, HOST_NEWLINE);
+    fprintf(report, _("%d classes (convergence=%.1f%%)%s"),
+	    I_cluster_nclasses(&C, mcs), (double)C.percent_stable, HOST_NEWLINE);
     print_separability(report, &C);
     print_class_means(report, &C);
 
@@ -328,10 +328,12 @@ int main(int argc, char *argv[])
     }
 
     fprintf(report,
-	    _("\n\n#################### CLASSES ####################\n"));
-    fprintf(report, _("\n%d classes, %.2f%% points stable\n"),
-	    I_cluster_nclasses(&C, 1), (double)C.percent_stable);
-    fprintf(report, _("\n######## CLUSTER END (%s) ########\n"), G_date());
+	    _("%s%s#################### CLASSES ####################%s"),
+            HOST_NEWLINE, HOST_NEWLINE, HOST_NEWLINE);
+    fprintf(report, _("%s%d classes, %.2f%% points stable%s"),
+	    HOST_NEWLINE, I_cluster_nclasses(&C, 1), (double)C.percent_stable, HOST_NEWLINE);
+    fprintf(report, _("%s######## CLUSTER END (%s) ########%s"),
+	    HOST_NEWLINE, G_date(), HOST_NEWLINE);
     fclose(report);
 
     G_done_msg(_("File <%s> created."),
