@@ -28,6 +28,13 @@
 #define READ  0
 #define WRITE 1
 
+static void close_on_exec(int fd)
+{
+#ifndef __MINGW32__
+    int flags = fcntl(fd, F_GETFD);
+    fcntl(fd, F_SETFD, flags | FD_CLOEXEC);
+#endif
+}
 
 /*!
   \brief Initialize a new dbDriver for db transaction.
@@ -131,6 +138,11 @@ dbDriver *db_start_driver(const char *name)
 	db_syserror("can't open any pipes");
 	return (dbDriver *) NULL;
     }
+
+    close_on_exec(p1[READ]);
+    close_on_exec(p1[WRITE]);
+    close_on_exec(p2[READ]);
+    close_on_exec(p2[WRITE]);
 
     pid = G_spawn_ex(startup,
 		     SF_BACKGROUND,
