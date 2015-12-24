@@ -28,7 +28,7 @@
 #define READ  0
 #define WRITE 1
 
-void close_on_exec(int fd)
+static void close_on_exec(int fd)
 {
 #ifndef __MINGW32__
     int flags = fcntl(fd, F_GETFD);
