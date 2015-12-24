@@ -33,6 +33,7 @@
 #include "attributes.h"
 #include "info.h"
 #include "vector_mask.h"
+#include "filters.h"
 
 #ifndef MAX
 #  define MIN(a,b)      ((a<b) ? a : b)
@@ -80,8 +81,6 @@ int main(int argc, char *argv[])
     double scale_x, scale_y, scale_z, offset_x, offset_y, offset_z;
     int las_point_format;
     int have_time, have_color;
-    int return_filter;
-    int skipme;
     int point_class;
 
     struct line_pnts *Points;
@@ -373,17 +372,10 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
     }
 
-    return_filter = LAS_ALL;
-    if (filter_opt->answer) {
-	if (strcmp(filter_opt->answer, "first") == 0)
-	    return_filter = LAS_FIRST;
-	else if (strcmp(filter_opt->answer, "last") == 0)
-	    return_filter = LAS_LAST;
-	else if (strcmp(filter_opt->answer, "mid") == 0)
-	    return_filter = LAS_MID;
-	else
-	    G_fatal_error(_("Unknown filter option <%s>"), filter_opt->answer);
-    }
+    struct ReturnFilter return_filter_struct;
+    return_filter_create_from_string(&return_filter_struct, filter_opt->answer);
+    struct ClassFilter class_filter;
+    class_filter_create_from_strings(&class_filter, class_opt->answers);
 
     int id_layer = 0;
     int return_layer = 0;
@@ -657,47 +649,17 @@ int main(int argc, char *argv[])
             continue;
         }
     }
-	if (return_filter != LAS_ALL) {
-	    int return_no = LASPoint_GetReturnNumber(LAS_point);
-	    int n_returns = LASPoint_GetNumberOfReturns(LAS_point);
-	    skipme = 1;
-
-	    switch (return_filter) {
-	    case LAS_FIRST:
-		if (return_no == 1)
-		    skipme = 0;
-		break;
-	    case LAS_MID:
-		if (return_no > 1 && return_no < n_returns)
-		    skipme = 0;
-		break;
-	    case LAS_LAST:
-		if (n_returns > 1 && return_no == n_returns)
-		    skipme = 0;
-		break;
-	    }
-	    
-	    if (skipme) {
-		n_filtered++;
-		continue;
-	    }
-	}
-	if (class_opt->answer) {
-	    point_class = (int) LASPoint_GetClassification(LAS_point);
-	    i = 0;
-	    skipme = TRUE;
-	    while (class_opt->answers[i]) {
-		if (point_class == atoi(class_opt->answers[i])) {
-		    skipme = FALSE;
-		    break;
-		}
-		i++;
-	    }
-	    if (skipme) {
-		n_class_filtered++;
-		continue;
-	    }
-	}
+        int return_n = LASPoint_GetReturnNumber(LAS_point);
+        int n_returns = LASPoint_GetNumberOfReturns(LAS_point);
+        if (return_filter_is_out(&return_filter_struct, return_n, n_returns)) {
+            n_filtered++;
+            continue;
+        }
+        point_class = (int) LASPoint_GetClassification(LAS_point);
+        if (class_filter_is_out(&class_filter, point_class)) {
+            n_class_filtered++;
+            continue;
+        }
         if (use_zrange) {
             if (z < zrange_min || z > zrange_max) {
                 zrange_filtered++;
