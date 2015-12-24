@@ -59,7 +59,13 @@ static const char *GRASS_copyright __attribute__ ((unused))
 #define PRI_OFF_T	"ld"
 #endif
 
+/*! \brief Cross-platform Newline Character */
 #define NEWLINE     '\n'
+#ifdef __MINGW32__
+#  define HOST_NEWLINE "\r\n"
+#else
+#  define HOST_NEWLINE "\n"
+#endif
 
 /*!
   \brief List of units
