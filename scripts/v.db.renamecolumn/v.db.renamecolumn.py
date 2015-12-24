@@ -97,6 +97,14 @@ def main():
         sql = "UPDATE %s SET %s=%s" % (table, newcol, oldcol)
         grass.write_command('db.execute', input = '-', database = database, driver = driver, stdin = sql)
         grass.run_command('v.db.dropcolumn', map = map, layer = layer, column = oldcol)
+    elif driver == 'mysql':
+        if oldcoltype.upper() == "CHARACTER":
+            newcoltype = "varchar(%s)" % (oldcollength)
+        else:
+            newcoltype = oldcoltype
+
+        sql = "ALTER TABLE %s CHANGE %s %s %s" % (table, oldcol, newcol, newcoltype)
+        grass.write_command('db.execute', input = '-', database = database, driver = driver, stdin = sql)
     else:
         sql = "ALTER TABLE %s RENAME %s TO %s" % (table, oldcol, newcol)
         grass.write_command('db.execute', input = '-', database = database, driver = driver, stdin = sql)
