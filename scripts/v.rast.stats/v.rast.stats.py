@@ -138,6 +138,7 @@ def main():
     grass.run_command('g.region', align=raster)
 
     # prepare raster MASK
+    grass.message(_("Preprocessing input data..."))
     try:
         grass.run_command('v.to.rast', input=vector, layer=layer, output=rastertmp,
                           use='cat', quiet=True)
@@ -237,7 +238,7 @@ def main():
             grass.fatal(_("Adding columns failed. Exiting."))
 
     # calculate statistics:
-    grass.message(_("Processing data (%d categories)...") % number)
+    grass.message(_("Processing input data (%d categories)...") % number)
 
     # get rid of any earlier attempts
     grass.try_remove(sqltmp)
