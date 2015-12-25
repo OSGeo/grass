@@ -39,6 +39,6 @@ for dllfile in "$@"; do
 		egrep -v "^[ 	]*(_IMPORT_DESCRIPTOR_.*|_NULL_IMPORT_DESCRIPTOR)$" >mswindows/osgeo4w/vc/${defname%$VERSION}
 
 	(cd mswindows/osgeo4w/vc ;
-	    lib -nologo -def:${defname} -subsystem:windows -machine:x86 ;
+	    lib -nologo -def:${defname} -subsystem:windows -machine:${MACHINE} ;
 	    lib -nologo $libname || exit)
 done
