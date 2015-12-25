@@ -920,9 +920,11 @@ class CmdPanel(wx.Panel):
                     f['value'] = True
             
             if f['name'] == 'overwrite':
-                f['value'] = UserSettings.Get(group = 'cmd', key = 'overwrite', subkey = 'enabled')
-                chk.SetValue(f['value'])
-                
+                value = UserSettings.Get(group = 'cmd', key = 'overwrite', subkey = 'enabled')
+                if value: # override only when enabled
+                    f['value'] = value
+                    chk.SetValue(f['value'])
+        
         #
         # parameters
         #
