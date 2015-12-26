@@ -9,7 +9,7 @@
  *
  *  PURPOSE:      Query raster map
  *                
- *  COPYRIGHT:    (C) 2001-2013 by the GRASS Development Team
+ *  COPYRIGHT:    (C) 2001-2015 by the GRASS Development Team
  * 
  *                This program is free software under the GNU General
  *                Public License (>=v2).  Read the file COPYING that
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
     DCELL *dcell_row, *prev_d_row, *next_d_row;
     int width;
     int row, col;
-    char buf[2000];
+    char buf[DB_SQL_MAX];
     struct
     {
 	struct Option *vect, *rast, *field, *type, *col, *where;
@@ -162,20 +162,31 @@ int main(int argc, char *argv[])
      */
 
     if (!print_flag->answer) {
-	/* Check column type */
 	col_type = db_column_Ctype(driver, Fi->table, opt.col->answer);
 
-	if (col_type == -1)
-	    G_fatal_error(_("Column <%s> not found"), opt.col->answer);
+	if (col_type == -1) {
+            /* column doesn't exist, create it */
+            G_important_message(_("Column <%s> not found in the table <%s>. Creating..."),
+                                opt.col->answer, Fi->table);
+            sprintf(buf, "ALTER TABLE \"%s\" ADD COLUMN \"%s\" %s",
+                    Fi->table, opt.col->answer,
+                    out_type == CELL_TYPE ? "INTEGER" : "DOUBLE PRECISION");
+            db_set_string(&stmt, buf);
+            if (db_execute_immediate(driver, &stmt) != DB_OK)
+                G_fatal_error(_("Unable to add column <%s> to table <%s>"),
+                              opt.col->answer, Fi->table);
+        }
+        else {
+            /* check column type */
+            if (col_type != DB_C_TYPE_INT && col_type != DB_C_TYPE_DOUBLE)
+                G_fatal_error(_("Column type not supported"));
 
-	if (col_type != DB_C_TYPE_INT && col_type != DB_C_TYPE_DOUBLE)
-	    G_fatal_error(_("Column type not supported"));
+            if (out_type == CELL_TYPE && col_type == DB_C_TYPE_DOUBLE)
+                G_warning(_("Raster type is integer and column type is float"));
 
-	if (out_type == CELL_TYPE && col_type == DB_C_TYPE_DOUBLE)
-	    G_warning(_("Raster type is integer and column type is float"));
-
-	if (out_type != CELL_TYPE && col_type == DB_C_TYPE_INT)
-	    G_warning(_("Raster type is float and column type is integer, some data lost!!"));
+            if (out_type != CELL_TYPE && col_type == DB_C_TYPE_INT)
+                G_warning(_("Raster type is float and column type is integer, some data lost!!"));
+        }
     }
 
     vtype = Vect_option_to_types(opt.type);
