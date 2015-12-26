@@ -36,9 +36,9 @@ for dllfile in "$@"; do
 
 	(cd $dlldir; dumpbin -exports $dllfile) |
 		sed -nf mswindows/osgeo4w/mklibs.sed |
-		egrep -v "^[ 	]*(_IMPORT_DESCRIPTOR_.*|_NULL_IMPORT_DESCRIPTOR)$" >mswindows/osgeo4w/vc/${defname%$VERSION}
+		egrep -v "^[	 ]*(_+IMPORT_DESCRIPTOR_.*|_+NULL_IMPORT_DESCRIPTOR)$" >mswindows/osgeo4w/vc/${defname%$VERSION}
 
 	(cd mswindows/osgeo4w/vc ;
-	    lib -nologo -def:${defname} -subsystem:windows -machine:${MACHINE} ;
+	    lib -nologo -def:${defname} -subsystem:windows -machine:${MACHINE}
 	    lib -nologo $libname || exit)
 done
