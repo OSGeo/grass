@@ -55,6 +55,9 @@ int db_shutdown_driver(dbDriver * driver)
 
     driver->pid = 0;
 
+    /* remove also error handler if defined */
+    db_unset_error_handler_driver(driver);
+    
     /* free the driver structure. THIS IS GOOFY */
     db_free(driver);
 
