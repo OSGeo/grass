@@ -69,22 +69,26 @@ explicit labels can be also of the form:
 </pre></div>
 <p>In the format line
 <ul>
-<li>$1 refers to the value num*5.0+1000 (ie, using the first 2 coefficients)
-<li>$2 refers to the value num*5.0+1005 (ie, using the last 2 coefficients)
+<li><tt>$1</tt> refers to the value <tt>num*5.0+1000</tt> (ie, using the first 2 coefficients)
+<li><tt>$2</tt> refers to the value <tt>num*5.0+1005</tt> (ie, using the last 2 coefficients)
 </ul>
-  $1.2 will print $1 with 2 decimal places.
-<p>Also, the form $?xxx$yyy$ translates into yyy if the category is 1, xxx 
-otherwise. The $yyy$ is optional. Thus
-<p>  $1 meter$?s
-<p>will become: 1 meter (for category 1)<br>
-	     2 meters (for category 2), etc.
+  <tt>$1.2</tt> will print <tt>$1</tt> with 2 decimal places.
+<p>Also, the form <tt>$?xxx$yyy$</tt> translates into <tt>yyy</tt> if the category is 1, xxx 
+otherwise. The <tt>$yyy$</tt> is optional. Thus
+<p>  <tt>$1 meter$?s</tt>
+<p>will become: <br>
+  <tt>1 meter</tt> (for category 1)<br>
+  <tt>2 meters</tt> (for category 2), etc.
 
-<p>format='Elevation: $1.2 to $2.2 feet'   ## Format Statement
-coefficients="5.0,1000,5.0,1005"	## Coefficients
+<p>
+<tt>format='Elevation: $1.2 to $2.2 feet'   ## Format Statement</tt><br>
+<tt>coefficients="5.0,1000,5.0,1005"	## Coefficients</tt>
+
 <p>The format and coefficients above would be used to generate the
 following statement in creation of the format appropriate category
 string for category "num":
-<p>  sprintf(buff,"Elevation: %.2f to %.2f feet", num*5.0+1000, num*5.0*1005)
+<p>
+<tt>sprintf(buff,"Elevation: %.2f to %.2f feet", num*5.0+1000, num*5.0*1005)</tt>
 
 <p>Note: while both the format and coefficent lines must be present
       a blank line for the format string will effectively suppress
@@ -103,6 +107,8 @@ avoid unwanted shell substitution.
 
 
 <h2>EXAMPLES</h2>
+
+Spearfish sample dataset:
 
 <p><dl>
 <dt><span class="code"><tt>
