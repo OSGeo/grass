@@ -50,6 +50,7 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("hydrology"));
+    G_add_keyword(_("model"));
     module->description =
 	_("Simulates TOPMODEL which is a physically based hydrologic model.");
 
