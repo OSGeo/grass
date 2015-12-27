@@ -32,7 +32,9 @@
 #%end
 #%flag
 #% key: o
-#% description: Override projection check (use current location's projection)
+#% label: Override projection check (use current location's projection)
+#% description: Assume that the dataset has same projection as the current location
+#% guisection: Output settings
 #% guisection: Output settings
 #%end
 
