@@ -22,7 +22,7 @@
 
 #include <pthread.h>
 
-#define DEFAULT_WORKERS 8
+#define DEFAULT_WORKERS 0
 
 struct worker {
     void (*func)(void *);
@@ -85,7 +85,7 @@ void G_begin_execute(void (*func)(void *), void *closure, void **ref, int force)
 
     pthread_mutex_lock(&worker_mutex);
 
-    while (w = get_worker(), force && !w)
+    while (w = get_worker(), force && num_workers > 0 && !w)
 	pthread_cond_wait(&worker_cond, &worker_mutex);
     *ref = w;
 
