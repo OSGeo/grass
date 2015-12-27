@@ -108,6 +108,9 @@ int main(int argc, char **argv)
     module = G_define_module();
     G_add_keyword(_("vector"));
     G_add_keyword(_("kernel density"));
+    G_add_keyword(_("point density"));
+    G_add_keyword(_("heatmap"));
+    G_add_keyword(_("hotspot"));
     module->label =
         _("Generates a raster density map from vector points map.");
     module->description = _("Density is computed using a moving kernel. "
