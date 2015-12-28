@@ -451,7 +451,7 @@ int main(int argc, char *argv[])
 		    }
 		    else {
 		        sprintf(buf, "( %d, %d, %d )",
-			        attCount + 1, i + 1, j + 1);
+			        attCount + 1, grid_info.num_rows - i, j + 1);
 		    }
 		    if (db_append_string(&sql, buf) != DB_OK)
 		        G_fatal_error(_("Unable to fill attribute table"));
