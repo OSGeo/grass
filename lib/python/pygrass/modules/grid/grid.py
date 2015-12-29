@@ -541,6 +541,8 @@ class GridModule(object):
             pool = mltp.Pool(processes=self.processes)
             result = pool.map_async(cmd_exe, self.get_works())
             result.wait()
+            pool.close()
+            pool.join()
             if not result.successful():
                 raise RuntimeError(_("Execution of subprocesses was not successful"))
 
