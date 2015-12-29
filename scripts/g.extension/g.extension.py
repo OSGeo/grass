@@ -880,14 +880,14 @@ def install_extension_xml(url, mlist):
 def install_extension_win(name):
     """Install extension on MS Windows"""
     # do not use hardcoded url -
-    # http://wingrass.fsv.cvut.cz/platform/grassXX/addonsX.X.X
+    # https://wingrass.fsv.cvut.cz/platform/grassXX/addonsX.X.X
     grass.message(_("Downloading precompiled GRASS Addons <%s>...") %
                   options['extension'])
     if build_platform == 'x86_64':
         platform = build_platform
     else:
         platform = 'x86'
-    url = "http://wingrass.fsv.cvut.cz/%(platform)s/" \
+    url = "https://wingrass.fsv.cvut.cz/%(platform)s/" \
           "grass%(major)s%(minor)s/addons/" \
           "grass-%(major)s.%(minor)s.%(patch)s/" % \
         {'platform' : platform, 'major': version[0],
