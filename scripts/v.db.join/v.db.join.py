@@ -123,8 +123,18 @@ def main():
 	colname = col[0]
 	if colname == column:
 	    continue
-	# Sqlite 3 does not support the precision number any more
-	if len(col) > 2 and driver != "sqlite":
+        
+        use_len = False
+	if len(col) > 2:
+            use_len = True
+            # Sqlite 3 does not support the precision number any more
+            if driver == "sqlite":
+                use_len = False
+            # MySQL - expect format DOUBLE PRECISION(M,D), see #2792
+            elif driver == "mysql" and col[1] == 'DOUBLE PRECISION':
+                use_len = False
+        
+        if use_len:
 	    coltype = "%s(%s)" % (col[1], col[2])
 	else:
 	    coltype = "%s" % col[1]
