@@ -10,7 +10,7 @@ Usage:
     grass.db_describe(table)
     ...
 
-(C) 2008-2009, 2012 by the GRASS Development Team
+(C) 2008-2015 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -196,3 +196,23 @@ def db_table_in_vector(table):
         return used
     else:
         return None
+
+def db_begin_transaction(driver):
+    """Begin transaction.
+
+    :return: SQL command as string
+    """
+    if driver in ('sqlite', 'pg'):
+        return 'BEGIN'
+    if driver == 'mysql':
+        return 'START TRANSACTION'
+    return ''
+
+def db_commit_transaction(driver):
+    """Commit transaction.
+
+    :return: SQL command as string
+    """
+    if driver in ('sqlite', 'pg', 'mysql'):
+        return 'COMMIT'
+    return ''
