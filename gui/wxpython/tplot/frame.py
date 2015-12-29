@@ -126,9 +126,10 @@ class TplotFrame(wx.Frame):
             self.dbif.close()
         tgis.stop_subprocesses()
 
-    def onClose(self,evt):
-        self.coorval.OnClose()
-        self.cats.OnClose()
+    def onClose(self, evt):
+        # this two lines return errors during exit
+        # self.coorval.OnClose()
+        # self.cats.OnClose()
         self.Destroy()
 
     def _layout(self):
