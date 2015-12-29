@@ -251,8 +251,7 @@ def main():
 
     first_line = 1
 
-    if not dbfdriver:
-        f.write("BEGIN TRANSACTION\n")
+    f.write("{}\n".format(grass.db_begin_transaction(fi['driver'])))
     for line in p.stdout:
         if first_line:
             first_line = 0
@@ -278,8 +277,7 @@ def main():
             f.write(" %s=%s" % (colname, value))
 
         f.write(" WHERE %s=%s;\n" % (fi['key'], vars[0]))
-    if not dbfdriver:
-        f.write("COMMIT\n")
+    f.write("{}\n".format(grass.db_commit_transaction(fi['driver'])))
     p.wait()
     f.close()
 
