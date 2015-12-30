@@ -28,6 +28,7 @@ SUBDIRS = \
 	v.in.ascii \
 	v.in.db \
 	v.in.dxf \
+	v.in.pdal \
 	v.in.region \
 	v.kcv \
 	v.kernel \
