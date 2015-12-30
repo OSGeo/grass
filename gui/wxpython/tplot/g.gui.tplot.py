@@ -6,7 +6,7 @@
 # PURPOSE:   Temporal Plot Tool is a wxGUI component (based on matplotlib)
 #            the user to see in a plot the values of one or more temporal
 #            datasets for a queried point defined by a coordinate pair.
-# COPYRIGHT: (C) 2014 by Luca Delucchi, and the GRASS Development Team
+# COPYRIGHT: (C) 2014-2015 by Luca Delucchi, and the GRASS Development Team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
 ############################################################################
 
 #%module
-#% description: Allows the user to see in a plot the values of one or more temporal raser datasets for a queried point defined by a coordinate pair. Also allows plotting data of vector dataset for a defined categories and attribute.
+#% description: Plots the values of temporal datasets.
 #% keywords: general
 #% keywords: GUI
 #% keywords: temporal
@@ -103,7 +103,7 @@ def main():
         else:
             attr = options['attr']
         if coords and cats:
-            gscript.fatal(_("With stvds it is not possible use 'coordinates' "
+            gscript.fatal(_("With stvds it is not possible to use 'coordinates' "
                             "and 'cats' options together"))
         elif not coords and not cats:
             gscript.warning(_("With stvds you have to use 'coordinates' or "
