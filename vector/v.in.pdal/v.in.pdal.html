@@ -1,0 +1,39 @@
+<h2>DESCRIPTION</h2>
+
+<em>v.in.pdal</em> supports the following PDAL filters:
+
+<ul>
+<li>groud detection with Point Cloud Library (PCL) Progressive Morphological Filter (Zhang 2003)
+    (<a href="http://www.pdal.io/stages/filters.ground.html">filters.ground</a>)
+<li><a href="http://www.pdal.io/stages/filters.height.html">filters.height</a>
+    (requires PCL)
+</ul>
+
+<em>v.in.pdal</em> supports the following filters natively:
+
+<ul>
+<li>2D region filter
+<li>Z coordinates filter
+<li>return filter
+<li>class filter
+</ul>
+
+<h2>EXAMPLES</h2>
+
+Import only XYZ coordinates of points, limit the import to the current
+computational region and reproject to the Location projection during
+the import:
+<div class="code"><pre>
+v.in.pdal input=points.las output=points -c -r -w
+</pre></div>
+
+
+<h2>REFERENCES</h2>
+
+<ul>
+<li>Zhang, Keqi, et al.
+    <em>A progressive morphological filter for removing nonground
+    measurements from airborne LIDAR data.</em>
+    Geoscience and Remote Sensing,
+    IEEE Transactions on 41.4 (2003): 872-882.
+</ul>
