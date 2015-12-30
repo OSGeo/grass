@@ -544,6 +544,11 @@ class TplotFrame(wx.Frame):
                 xdata.append(self.convert(values['start_datetime']))
                 ydata.append(values['value'])
 
+            if len(ydata) == ydata.count(None):
+                GError(parent=self, showTraceback=False,
+                       message=_("Problem getting data from raster temporal"
+                                 " dataset. Empty list of values."))
+                return
             self.lookUp.AddDataset(yranges=ydata, xranges=xdata,
                                    datasetName=name)
             color = self.colors.next()
@@ -578,6 +583,11 @@ class TplotFrame(wx.Frame):
                 xdata.append(self.convert(values['start_datetime']))
                 ydata.append(values['value'])
 
+            if len(ydata) == ydata.count(None):
+                GError(parent=self, showTraceback=False,
+                       message=_("Problem getting data from raster temporal"
+                                 " dataset. Empty list of values."))
+                return
             self.lookUp.AddDataset(yranges=ydata, xranges=xdata,
                                    datasetName=name)
             color = self.colors.next()
@@ -610,6 +620,11 @@ class TplotFrame(wx.Frame):
                 xdata.append(self.convert(values['start_datetime']))
                 ydata.append(values['value'])
 
+            if len(ydata) == ydata.count(None):
+                GError(parent=self, showTraceback=False,
+                       message=_("Problem getting data from raster temporal"
+                                 " dataset. Empty list of values."))
+                return
             self.lookUp.AddDataset(yranges=ydata, xranges=xdata,
                                    datasetName=name)
             color = self.colors.next()
@@ -663,6 +678,10 @@ class TplotFrame(wx.Frame):
                     GError(parent=self, message=_("Invalid input coordinates"),
                            showTraceback=False)
                     return
+                if not self.poi:
+                    GError(parent=self, message=_("Invalid input coordinates"),
+                           showTraceback=False)
+                    return
         # check raster dataset
         if datasetsR:
             datasetsR = datasetsR.split(',')
@@ -674,7 +693,10 @@ class TplotFrame(wx.Frame):
                 GError(parent=self, message=_("Invalid input raster dataset"),
                        showTraceback=False)
                 return
-
+            if not self.poi:
+                GError(parent=self, message=_("Invalid input coordinates"),
+                       showTraceback=False)
+                return
             self.datasetsR = datasetsR
 
         # check vector dataset
