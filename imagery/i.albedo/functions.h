@@ -2,6 +2,7 @@
 /* 2004 */
 
 /* BB_albedo functions */
+double bb_alb_aster2bands(double greenchan, double nirchan);
 double bb_alb_aster(double greenchan, double redchan, double nirchan,
 		    double swirchan1, double swirchan2, double swirchan3,
 		    double swirchan4, double swirchan5, double swirchan6);
