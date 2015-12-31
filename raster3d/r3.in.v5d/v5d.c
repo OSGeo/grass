@@ -2866,7 +2866,7 @@ int v5dcreate
 
     for (i = 0; i < *numvars; i++) {
 	if (copy_string2(names[i], varname[i], 10) == 0) {
-	    printf("Error: unitialized varname(%d)\n", i + 1);
+	    printf("Error: uninitialized varname(%d)\n", i + 1);
 	    return 0;
 	}
     }

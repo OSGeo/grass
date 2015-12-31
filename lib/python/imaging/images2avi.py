@@ -113,7 +113,7 @@ def writeAvi(filename, images, duration=0.1, encoding='mpeg4',
     outPut = S.stdout.read()
 
     if S.wait():
-        # An error occured, show
+        # An error occurred, show
         print(outPut)
         print(S.stderr.read())
         # Clean up
@@ -158,7 +158,7 @@ def readAvi(filename, asNumpy=True):
     outPut = S.stdout.read()
 
     if S.wait():
-        # An error occured, show
+        # An error occurred, show
         print(outPut)
         print(S.stderr.read())
         # Clean up

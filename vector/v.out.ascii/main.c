@@ -160,7 +160,7 @@ int main(int argc, char *argv[])
 	}
     }
     else if (ret < 0) {
-	G_warning(_("An error occured, nothing to be exported"));
+	G_warning(_("An error occurred, nothing to be exported"));
     }
     
     if (ascii != NULL)

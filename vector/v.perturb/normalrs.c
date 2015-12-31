@@ -28,7 +28,7 @@ int normalrs(double *svbox)
     zufallrs(svbox);
     klotz1_1.first = (int)svbox[608];
     if (klotz1_1.first == 0)
-	G_warning(_("normalsv: restoration of unitialized block"));
+	G_warning(_("normalsv: restoration of uninitialized block"));
     klotz1_1.xptr = (int)svbox[609];
     k = 609;
     for (i = 0; i < 1024; ++i)
