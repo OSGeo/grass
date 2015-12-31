@@ -27,7 +27,7 @@ def silent_rmtree(filename):
         shutil.rmtree(filename)
     except OSError as e:
         # errno.ENOENT is "No such file or directory"
-        # re-raise if a different error occured
+        # re-raise if a different error occurred
         if e.errno != errno.ENOENT:
             raise
 
