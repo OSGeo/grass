@@ -1,6 +1,6 @@
 # translation of grasswxpy_lv.po to Latvian
 # This file is distributed under the same license as the GRASS GIS package.
-# Copyright (C) 2012-2014 GRASS Development Team
+# Copyright (C) 2012-2015 GRASS Development Team
 # Maris Nartiss <maris.gis@gmail.com>, 2012, 2014.
 # Maris Nartiss <maris.kde@gmail.com>, 2014, 2015.
 # Māris Nartišs <mn@sungis.lv>, 2014, 2015.
@@ -11,7 +11,7 @@ msgstr ""
 "POT-Creation-Date: 2015-12-30 16:19+0100\n"
 "PO-Revision-Date: 2015-12-31 11:22+0200\n"
 "Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
-"Language-Team: Latvian <grass-dev@lists.osgeo.org>\n"
+"Language-Team: Latvian <grass-translations@lists.osgeo.org>\n"
 "Language: lv_LV\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -382,13 +382,11 @@ msgstr "Eksportēt"
 msgid "Add time stamp"
 msgstr "Pievienot laika zīmogu"
 
-#: ../gui/wxpython/animation/dialogs.py:811
-#: ../gui/wxpython/menustrings.py:2009
+#: ../gui/wxpython/animation/dialogs.py:811 ../gui/wxpython/menustrings.py:2009
 msgid "Add image"
 msgstr "Pievienot attēlu"
 
-#: ../gui/wxpython/animation/dialogs.py:811
-#: ../gui/wxpython/menustrings.py:2007
+#: ../gui/wxpython/animation/dialogs.py:811 ../gui/wxpython/menustrings.py:2007
 msgid "Add text"
 msgstr "Pievienot tekstu"
 
@@ -686,8 +684,7 @@ msgstr "Nederīgs:"
 msgid "GRASS GIS Animation tool"
 msgstr "Animācija"
 
-#: ../gui/wxpython/animation/frame.py:146
-#: ../gui/wxpython/mapswipe/frame.py:284
+#: ../gui/wxpython/animation/frame.py:146 ../gui/wxpython/mapswipe/frame.py:284
 msgid "Main Toolbar"
 msgstr "Galvenā rīkjosla"
 
@@ -822,10 +819,8 @@ msgstr ""
 msgid "Add space-time dataset or series of map layers for animation"
 msgstr ""
 
-#: ../gui/wxpython/animation/utils.py:95
-#: ../gui/wxpython/animation/utils.py:103
-#: ../gui/wxpython/lmgr/layertree.py:1670
-#: ../gui/wxpython/mapswipe/frame.py:399
+#: ../gui/wxpython/animation/utils.py:95 ../gui/wxpython/animation/utils.py:103
+#: ../gui/wxpython/lmgr/layertree.py:1670 ../gui/wxpython/mapswipe/frame.py:399
 #, python-format
 msgid "Map <%s> not found."
 msgstr "Karte <%s> nav atrasta."
@@ -944,8 +939,7 @@ msgid "%(min)d min %(sec)d sec"
 msgstr ""
 
 #: ../gui/wxpython/core/gconsole.py:635 ../gui/wxpython/gmodeler/model.py:1062
-#: ../gui/wxpython/gmodeler/model.py:1159
-#: ../gui/wxpython/gui_core/ghelp.py:212
+#: ../gui/wxpython/gmodeler/model.py:1159 ../gui/wxpython/gui_core/ghelp.py:212
 msgid "unknown"
 msgstr "nezināms"
 
@@ -962,8 +956,7 @@ msgstr "Komanda pārtraukta"
 msgid "Command finished"
 msgstr "Komanda izpildīta"
 
-#: ../gui/wxpython/core/gconsole.py:714
-#: ../gui/wxpython/gui_core/goutput.py:442
+#: ../gui/wxpython/core/gconsole.py:714 ../gui/wxpython/gui_core/goutput.py:442
 #, python-format
 msgid ""
 "Unable to write file '%(filePath)s'.\n"
@@ -1868,9 +1861,8 @@ msgid ""
 "Do you want to create a new attribute table and defined a link to vector map "
 "<%s>?"
 msgstr ""
-"Atribūtu tabula nav atrasta. "
-"Vai vēlaties izveidot jaunu atribūtu tabulu un piesaistīt to vektordatu "
-"kartei <%s>?"
+"Atribūtu tabula nav atrasta. Vai vēlaties izveidot jaunu atribūtu tabulu un "
+"piesaistīt to vektordatu kartei <%s>?"
 
 #: ../gui/wxpython/dbmgr/dialogs.py:77
 msgid "Create table?"
@@ -1926,8 +1918,7 @@ msgstr "Kategorija"
 
 #: ../gui/wxpython/dbmgr/g.gui.dbmgr.py:48
 #: ../gui/wxpython/dbmgr/sqlbuilder.py:59
-#: ../gui/wxpython/iclass/g.gui.iclass.py:97
-#: ../gui/wxpython/nviz/wxnviz.py:417
+#: ../gui/wxpython/iclass/g.gui.iclass.py:97 ../gui/wxpython/nviz/wxnviz.py:417
 #, python-format
 msgid "Vector map <%s> not found"
 msgstr ""
@@ -2113,40 +2104,6 @@ msgstr ""
 "SQL izteiksme ir nederīga.\n"
 "\n"
 "%s"
-
-#: ../gui/wxpython/dbmgr/sqlbuilder.py:477
-msgid "SQL statement is valid"
-msgstr "SQL izteiksme ir derīga"
-
-#: ../gui/wxpython/dbmgr/sqlbuilder.py:546
-msgid "Column to set (SET clause)"
-msgstr ""
-
-#: ../gui/wxpython/dbmgr/sqlbuilder.py:548
-msgid "Calculate column value to set"
-msgstr ""
-
-#: ../gui/wxpython/dbmgr/sqlbuilder.py:603
-msgid "Functions"
-msgstr "Funkcijas"
-
-#: ../gui/wxpython/dbmgr/sqlbuilder.py:636
-msgid "SQL statement was not applied"
-msgstr "SQL izteikums netika pielietots"
-
-#: ../gui/wxpython/dbmgr/sqlbuilder.py:638
-#, fuzzy
-msgid "SQL statement applied"
-msgstr "SQL izteiksme ir derīga"
-
-#: ../gui/wxpython/dbmgr/sqlbuilder.py:671
-msgid "Dbf driver does not support usage of SQL functions."
-msgstr ""
-
-#: ../gui/wxpython/dbmgr/vinfo.py:101
-msgid ""
-"Failed to query vector map <{map}>. Check database settings and topology."
-msgstr ""
 
 #: ../gui/wxpython/gcp/manager.py:136
 msgid "Setup for georectification"
@@ -2439,8 +2396,7 @@ msgstr ""
 #: ../gui/wxpython/gcp/manager.py:2409
 #: ../gui/wxpython/gui_core/preferences.py:93
 #: ../gui/wxpython/iscatt/dialogs.py:359 ../gui/wxpython/vnet/dialogs.py:1200
-#: ../gui/wxpython/wxplot/dialogs.py:690
-#: ../gui/wxpython/wxplot/dialogs.py:1136
+#: ../gui/wxpython/wxplot/dialogs.py:690 ../gui/wxpython/wxplot/dialogs.py:1136
 msgid ""
 "Apply and save changes to user settings file (default for next sessions)"
 msgstr ""
@@ -2615,8 +2571,7 @@ msgid "Print preview"
 msgstr ""
 
 #: ../gui/wxpython/gcp/mapdisplay.py:420
-#: ../gui/wxpython/gui_core/toolbars.py:67
-#: ../gui/wxpython/mapdisp/frame.py:783
+#: ../gui/wxpython/gui_core/toolbars.py:67 ../gui/wxpython/mapdisp/frame.py:783
 #: ../gui/wxpython/modules/histogram.py:460 ../gui/wxpython/wxplot/base.py:560
 msgid "Print display"
 msgstr ""
@@ -2662,8 +2617,7 @@ msgstr ""
 msgid "Data properties"
 msgstr "Datu īpašības"
 
-#: ../gui/wxpython/gmodeler/dialogs.py:76
-#: ../gui/wxpython/iclass/dialogs.py:239
+#: ../gui/wxpython/gmodeler/dialogs.py:76 ../gui/wxpython/iclass/dialogs.py:239
 msgid "Name of raster map:"
 msgstr "Rastra kartes nosaukums:"
 
@@ -2705,8 +2659,7 @@ msgid "Label:"
 msgstr "Birka"
 
 #: ../gui/wxpython/gmodeler/dialogs.py:202
-#: ../gui/wxpython/gmodeler/frame.py:745
-#: ../gui/wxpython/gmodeler/frame.py:1368
+#: ../gui/wxpython/gmodeler/frame.py:745 ../gui/wxpython/gmodeler/frame.py:1368
 msgid "Comment:"
 msgstr "Komentārs:"
 
@@ -2770,8 +2723,7 @@ msgstr ""
 
 #: ../gui/wxpython/gmodeler/dialogs.py:436
 #: ../gui/wxpython/gmodeler/dialogs.py:539
-#: ../gui/wxpython/gmodeler/frame.py:1591
-#: ../gui/wxpython/psmap/dialogs.py:2618
+#: ../gui/wxpython/gmodeler/frame.py:1591 ../gui/wxpython/psmap/dialogs.py:2618
 msgid "Label"
 msgstr "Birka"
 
@@ -2855,8 +2807,7 @@ msgstr "Modelis"
 msgid "Items"
 msgstr "Vienumi"
 
-#: ../gui/wxpython/gmodeler/frame.py:130
-#: ../gui/wxpython/gmodeler/model.py:2604
+#: ../gui/wxpython/gmodeler/frame.py:130 ../gui/wxpython/gmodeler/model.py:2604
 msgid "Variables"
 msgstr "Mainīgie"
 
@@ -2864,8 +2815,7 @@ msgstr "Mainīgie"
 msgid "Python editor"
 msgstr "Python redaktors"
 
-#: ../gui/wxpython/gmodeler/frame.py:132
-#: ../gui/wxpython/gui_core/forms.py:1908
+#: ../gui/wxpython/gmodeler/frame.py:132 ../gui/wxpython/gui_core/forms.py:1908
 #: ../gui/wxpython/modules/vkrige.py:102
 msgid "Command output"
 msgstr "Komandas izvade"
@@ -2874,8 +2824,7 @@ msgstr "Komandas izvade"
 msgid "Python script contains local modifications"
 msgstr "Python skripts satur lokālas izmaiņas"
 
-#: ../gui/wxpython/gmodeler/frame.py:203
-#: ../gui/wxpython/gmodeler/frame.py:1828
+#: ../gui/wxpython/gmodeler/frame.py:203 ../gui/wxpython/gmodeler/frame.py:1828
 msgid "Python script is up-to-date"
 msgstr ""
 
@@ -2973,9 +2922,7 @@ msgid ""
 "Model is not valid.\n"
 "\n"
 "%s"
-msgstr ""
-"Modelis nav korekts. "
-"%s"
+msgstr "Modelis nav korekts. %s"
 
 #: ../gui/wxpython/gmodeler/frame.py:546
 msgid "Model is valid."
@@ -3050,8 +2997,7 @@ msgstr ""
 msgid "Intermediate"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/frame.py:1334
-#: ../gui/wxpython/lmgr/layertree.py:447
+#: ../gui/wxpython/gmodeler/frame.py:1334 ../gui/wxpython/lmgr/layertree.py:447
 msgid "Properties"
 msgstr "Īpašības"
 
@@ -3060,9 +3006,8 @@ msgid "List of variables - right-click to delete"
 msgstr ""
 
 #: ../gui/wxpython/gmodeler/frame.py:1443
-#: ../gui/wxpython/gmodeler/frame.py:1488
-#: ../gui/wxpython/gui_core/ghelp.py:343 ../gui/wxpython/gui_core/ghelp.py:345
-#: ../gui/wxpython/gui_core/ghelp.py:408
+#: ../gui/wxpython/gmodeler/frame.py:1488 ../gui/wxpython/gui_core/ghelp.py:343
+#: ../gui/wxpython/gui_core/ghelp.py:345 ../gui/wxpython/gui_core/ghelp.py:408
 #: ../gui/wxpython/web_services/widgets.py:857
 msgid "Name"
 msgstr "Nosaukums"
@@ -3176,8 +3121,7 @@ msgstr ""
 msgid "Python script (*.py)|*.py"
 msgstr ""
 
-#: ../gui/wxpython/gmodeler/frame.py:1767
-#: ../gui/wxpython/wxplot/profile.py:352
+#: ../gui/wxpython/gmodeler/frame.py:1767 ../gui/wxpython/wxplot/profile.py:352
 #, python-format
 msgid "File <%s> already exists. Do you want to overwrite this file?"
 msgstr ""
@@ -3334,8 +3278,7 @@ msgstr "Platums:"
 msgid "Height:"
 msgstr "Augstums:"
 
-#: ../gui/wxpython/gmodeler/preferences.py:204
-#: ../gui/wxpython/nviz/tools.py:92
+#: ../gui/wxpython/gmodeler/preferences.py:204 ../gui/wxpython/nviz/tools.py:92
 msgid "Data"
 msgstr "Dati"
 
@@ -3390,8 +3333,7 @@ msgstr ""
 #: ../gui/wxpython/gui_core/preferences.py:96
 #: ../gui/wxpython/psmap/dialogs.py:355
 #: ../gui/wxpython/vdigit/preferences.py:62
-#: ../gui/wxpython/wxplot/dialogs.py:692
-#: ../gui/wxpython/wxplot/dialogs.py:1137
+#: ../gui/wxpython/wxplot/dialogs.py:692 ../gui/wxpython/wxplot/dialogs.py:1137
 msgid "Close dialog and ignore changes"
 msgstr "Ignorēt izmaiņas un aizvērt dialogu"
 
@@ -3915,21 +3857,6 @@ msgstr "Faili"
 
 #: ../gui/wxpython/gui_core/goutput.py:389
 #, python-format
-msgid "%(txt)s (*.txt)|*.txt|%(files)s (*)|*"
-msgstr ""
-
-#: ../gui/wxpython/gui_core/goutput.py:377
-#: ../gui/wxpython/gui_core/goutput.py:464
-msgid "Text files"
-msgstr "Teksta faili"
-
-#: ../gui/wxpython/gui_core/goutput.py:377
-#: ../gui/wxpython/gui_core/goutput.py:464
-msgid "Files"
-msgstr "Faili"
-
-#: ../gui/wxpython/gui_core/goutput.py:389
-#, python-format
 msgid ""
 "Unable to write file '%(path)s'.\n"
 "\n"
@@ -4216,8 +4143,7 @@ msgid ""
 "Display window(s) and use as default for next sessions."
 msgstr ""
 
-#: ../gui/wxpython/gui_core/preferences.py:372
-#: ../gui/wxpython/nviz/tools.py:96
+#: ../gui/wxpython/gui_core/preferences.py:372 ../gui/wxpython/nviz/tools.py:96
 msgid "Appearance"
 msgstr "Izskats"
 
@@ -4742,18 +4668,16 @@ msgstr "Izvēlēties fontu"
 msgid "Show manual"
 msgstr "Rādīt pamācību"
 
-#: ../gui/wxpython/gui_core/toolbars.py:73
-#: ../gui/wxpython/lmgr/layertree.py:76 ../gui/wxpython/menustrings.py:1991
+#: ../gui/wxpython/gui_core/toolbars.py:73 ../gui/wxpython/lmgr/layertree.py:76
+#: ../gui/wxpython/menustrings.py:1991
 msgid "Quit"
 msgstr "Iziet"
 
-#: ../gui/wxpython/gui_core/toolbars.py:75
-#: ../gui/wxpython/lmgr/layertree.py:78
+#: ../gui/wxpython/gui_core/toolbars.py:75 ../gui/wxpython/lmgr/layertree.py:78
 msgid "Add raster map layer"
 msgstr "Pievienot rastra karti"
 
-#: ../gui/wxpython/gui_core/toolbars.py:77
-#: ../gui/wxpython/lmgr/layertree.py:90
+#: ../gui/wxpython/gui_core/toolbars.py:77 ../gui/wxpython/lmgr/layertree.py:90
 msgid "Add vector map layer"
 msgstr "Pievienot vektoru karti"
 
@@ -4771,9 +4695,8 @@ msgstr ""
 
 #: ../gui/wxpython/gui_core/toolbars.py:84
 #: ../gui/wxpython/gui_core/widgets.py:1145
-#: ../gui/wxpython/iscatt/toolbars.py:44
-#: ../gui/wxpython/iscatt/toolbars.py:135 ../gui/wxpython/nviz/tools.py:1897
-#: ../gui/wxpython/vnet/dialogs.py:870
+#: ../gui/wxpython/iscatt/toolbars.py:44 ../gui/wxpython/iscatt/toolbars.py:135
+#: ../gui/wxpython/nviz/tools.py:1897 ../gui/wxpython/vnet/dialogs.py:870
 msgid "Settings"
 msgstr "Iestatījumi"
 
@@ -4903,8 +4826,7 @@ msgstr "Obligāti"
 msgid "Optional"
 msgstr "Izvēles"
 
-#: ../gui/wxpython/gui_core/forms.py:908
-#: ../gui/wxpython/gui_core/forms.py:1731
+#: ../gui/wxpython/gui_core/forms.py:908 ../gui/wxpython/gui_core/forms.py:1731
 msgid "Parameterized in model"
 msgstr ""
 
@@ -5035,8 +4957,7 @@ msgstr ""
 msgid "category"
 msgstr "kategorija"
 
-#: ../gui/wxpython/gui_core/vselect.py:43
-#: ../gui/wxpython/vnet/vnet_data.py:239
+#: ../gui/wxpython/gui_core/vselect.py:43 ../gui/wxpython/vnet/vnet_data.py:239
 msgid "type"
 msgstr "tips"
 
@@ -5206,8 +5127,7 @@ msgid ""
 "There is no class yet, do you want to create one?"
 msgstr ""
 
-#: ../gui/wxpython/iclass/digit.py:70
-#: ../gui/wxpython/iscatt/controllers.py:403
+#: ../gui/wxpython/iclass/digit.py:70 ../gui/wxpython/iscatt/controllers.py:403
 msgid "No class selected"
 msgstr ""
 
@@ -6578,9 +6498,9 @@ msgstr ""
 msgid "Unable to create profile of raster map."
 msgstr ""
 
-#: ../gui/wxpython/lmgr/layertree.py:803
-#: ../gui/wxpython/nviz/mapwindow.py:1676 ../gui/wxpython/nviz/tools.py:652
-#: ../gui/wxpython/psmap/dialogs.py:1144 ../gui/wxpython/menustrings.py:1996
+#: ../gui/wxpython/lmgr/layertree.py:803 ../gui/wxpython/nviz/mapwindow.py:1676
+#: ../gui/wxpython/nviz/tools.py:652 ../gui/wxpython/psmap/dialogs.py:1144
+#: ../gui/wxpython/menustrings.py:1996
 msgid "Raster map"
 msgstr ""
 
@@ -7097,8 +7017,7 @@ msgstr ""
 msgid "Switching back to 2D view mode..."
 msgstr ""
 
-#: ../gui/wxpython/mapdisp/frame.py:493
-#: ../gui/wxpython/mapdisp/toolbars.py:105
+#: ../gui/wxpython/mapdisp/frame.py:493 ../gui/wxpython/mapdisp/toolbars.py:105
 #: ../gui/wxpython/vdigit/toolbars.py:916
 msgid "Vector digitizer"
 msgstr "Vektoru digitizēšana"
@@ -7127,8 +7046,7 @@ msgid ""
 "Failed to query vector map(s) <{maps}>. Check database settings and topology."
 msgstr "Neizdevās izpildīt vaicājumu vektordatu kartei <%s>."
 
-#: ../gui/wxpython/mapdisp/frame.py:1294
-#: ../gui/wxpython/mapdisp/toolbars.py:52
+#: ../gui/wxpython/mapdisp/frame.py:1294 ../gui/wxpython/mapdisp/toolbars.py:52
 msgid "Add text layer"
 msgstr "Pievienot teksta slāni"
 
@@ -7721,8 +7639,7 @@ msgstr ""
 msgid "Show text object"
 msgstr "Rādīt teksta objektu"
 
-#: ../gui/wxpython/mapwin/decorations.py:357
-#: ../gui/wxpython/nviz/tools.py:1011
+#: ../gui/wxpython/mapwin/decorations.py:357 ../gui/wxpython/nviz/tools.py:1011
 msgid "Rotation:"
 msgstr ""
 
@@ -10835,8 +10752,7 @@ msgstr "Digitizēt jaunu punktu"
 msgid "Save raster map"
 msgstr "Sapakot rastra karti"
 
-#: ../gui/wxpython/rdigit/toolbars.py:33
-#: ../gui/wxpython/vdigit/toolbars.py:174
+#: ../gui/wxpython/rdigit/toolbars.py:33 ../gui/wxpython/vdigit/toolbars.py:174
 msgid "Undo"
 msgstr "Atdarīt"
 
@@ -13220,8 +13136,7 @@ msgstr "Stils:"
 msgid "Weight:"
 msgstr "Svars:"
 
-#: ../gui/wxpython/wxplot/dialogs.py:687
-#: ../gui/wxpython/wxplot/dialogs.py:1135
+#: ../gui/wxpython/wxplot/dialogs.py:687 ../gui/wxpython/wxplot/dialogs.py:1135
 msgid "Apply changes for the current session and close dialog"
 msgstr ""
 
@@ -13323,8 +13238,8 @@ msgid "Histogram of"
 msgstr ""
 
 #: ../gui/wxpython/wxplot/histogram.py:54
-#: ../gui/wxpython/wxplot/histogram.py:143
-#: ../gui/wxpython/wxplot/scatter.py:54 ../gui/wxpython/wxplot/scatter.py:55
+#: ../gui/wxpython/wxplot/histogram.py:143 ../gui/wxpython/wxplot/scatter.py:54
+#: ../gui/wxpython/wxplot/scatter.py:55
 msgid "Raster cell values"
 msgstr ""
 
@@ -13588,17 +13503,17 @@ msgstr ""
 #: ../gui/wxpython/gis_set.py:274
 #, python-format
 msgid "ERROR: Location <%s> not found\n"
-msgstr "KĻŪDA: Novietojums <%s> nav atrasts "
+msgstr "KĻŪDA: Novietojums <%s> nav atrasts\n"
 
 #: ../gui/wxpython/gis_set.py:291
 #, python-format
 msgid "ERROR: Mapset <%s> not found\n"
-msgstr "KĻŪDA: Karšu kopa <%s> nav atrasta "
+msgstr "KĻŪDA: Karšu kopa <%s> nav atrasta\n"
 
 #: ../gui/wxpython/gis_set.py:449
 #, python-format
 msgid "Invalid line in GISRC file (%s):%s\n"
-msgstr "Nederīga rinda GISRC failā (%s): %s "
+msgstr "Nederīga rinda GISRC failā (%s): %s\n"
 
 #: ../gui/wxpython/gis_set.py:481
 msgid "Error: {text}"
@@ -13606,6 +13521,7 @@ msgstr "Kļūda: {text}"
 
 #: ../gui/wxpython/gis_set.py:513
 #, python-format
+#, fuzzy
 msgid "Do you want to import <%(name)s> to the newly created location?"
 msgstr ""
 "Nav iespējams iestatīt GRASS datubāzi. Pārbaudiet lokāles iestatījumus."
@@ -18221,253 +18137,3 @@ msgstr ""
 #: ../gui/wxpython/menustrings.py:2018
 msgid "Display information about Cartographic Composer"
 msgstr ""
-
-#, fuzzy
-#~ msgid ""
-#~ "Temporary map %s  already exists.\n"
-#~ "Do you want to continue in analysis and overwrite it?"
-#~ msgstr "Karšu kopa <%s> jau eksistē."
-
-#~ msgid "Exit GUI"
-#~ msgstr "Iziet no GUI"
-
-#, fuzzy
-#~ msgid "Invalid input data"
-#~ msgstr "Nederīga ievade"
-
-#, fuzzy
-#~ msgid "No mapsets readable"
-#~ msgstr "Iestatījumi nav pieejami"
-
-#~ msgid "Editing"
-#~ msgstr "Rediģēšana"
-
-#, fuzzy
-#~ msgid "Copying"
-#~ msgstr "Rindas:"
-
-#, fuzzy
-#~ msgid "List raster3D dataset maps"
-#~ msgstr "3D rastra kartes"
-
-#, fuzzy
-#~ msgid "Raster3D calculations"
-#~ msgstr "Rastra iestatījumi"
-
-#~ msgid "Repository"
-#~ msgstr "Repozitorijs"
-
-#, fuzzy
-#~ msgid "Select space time raster dataset(s):"
-#~ msgstr "Rastra datu importēšana"
-
-#, fuzzy
-#~ msgid "Add default servers"
-#~ msgstr "Pievienot rastra karti"
-
-#, fuzzy
-#~ msgid "ESRI ASCII grid import"
-#~ msgstr "ASCII tīkla imports"
-
-#, fuzzy
-#~ msgid ""
-#~ "Converts an ESRI ARC/INFO ascii raster file (GRID) into a GRASS raster "
-#~ "map."
-#~ msgstr "Rastra datu importēšana"
-
-#~ msgid "GPS data import"
-#~ msgstr "GPS datu imports"
-
-#, fuzzy
-#~ msgid "ESRI ASCII grid export"
-#~ msgstr "ASCII tīkla imports"
-
-#, fuzzy
-#~ msgid "TIFF export"
-#~ msgstr "DXF eksports"
-
-#, fuzzy
-#~ msgid "List filtered"
-#~ msgstr "Slāņu saraksts"
-
-#, fuzzy
-#~ msgid "Delete filtered"
-#~ msgstr "Dzēst ierakstus"
-
-#, fuzzy
-#~ msgid "Vector to volume"
-#~ msgstr "Vektori:"
-
-#, fuzzy
-#~ msgid "Sites to vector"
-#~ msgstr "Izvēlieties vektordatu karti"
-
-#, fuzzy
-#~ msgid "Converts a GRASS site_lists file into a vector map."
-#~ msgstr "Rastra datu importēšana"
-
-#, fuzzy
-#~ msgid "Raster map calculator."
-#~ msgstr "GRASS GIS 3D rastra kalkulators"
-
-#, fuzzy
-#~ msgid "Raster series"
-#~ msgstr "Rastra karte <%s> jau eksistē"
-
-#, fuzzy
-#~ msgid "Visibility [DEPRECATED]"
-#~ msgstr "Redzamība"
-
-#, fuzzy
-#~ msgid "Horton's statistics"
-#~ msgstr "Atskaites un statistika"
-
-#, fuzzy
-#~ msgid "Analyze landscape"
-#~ msgstr "Analizēt karti"
-
-#, fuzzy
-#~ msgid "Analyze patches"
-#~ msgstr "Analizēt karti"
-
-#, fuzzy
-#~ msgid "Surface interpolation utility for raster map."
-#~ msgstr "Ievietot eksistējošu 3D rastra karti"
-
-#, fuzzy
-#~ msgid "Compares bit patterns with a raster map."
-#~ msgstr "Izveidot rastra kartes histogrammu"
-
-#~ msgid "V&olumes"
-#~ msgstr "&Tilpumi"
-
-#, fuzzy
-#~ msgid "Develop volumes"
-#~ msgstr "Izveidot vektordatu karti"
-
-#~ msgid "3D Mask"
-#~ msgstr "3D maska"
-
-#, fuzzy
-#~ msgid "Volume calculator"
-#~ msgstr "Lauka kalkulators"
-
-#, fuzzy
-#~ msgid "Basic volume metadata"
-#~ msgstr "Rastra pamata metadati"
-
-#, fuzzy
-#~ msgid "Voxel statistics"
-#~ msgstr "Vispārēja statistika"
-
-#~ msgid "Volume"
-#~ msgstr "Tilpums"
-
-#, fuzzy
-#~ msgid "Add linked layers into layer tree ({mightNotWork})"
-#~ msgstr "Pievienot izveidoto karti slāņu sarakstam"
-
-#, fuzzy
-#~ msgid "Add imported layers into layer tree ({mightNotWork})"
-#~ msgstr "Pievienot izveidoto karti slāņu sarakstam"
-
-#, fuzzy
-#~ msgid "Digitize"
-#~ msgstr "Digitizēt jaunu līniju"
-
-#, fuzzy
-#~ msgid "Width size (in cells) ?"
-#~ msgstr "Platums:"
-
-#, fuzzy
-#~ msgid "Height size (in cells) ?"
-#~ msgstr "Platums:"
-
-#, fuzzy
-#~ msgid "What radius size (in meters) ?"
-#~ msgstr "Platums:"
-
-#~ msgid "Choose project location and mapset"
-#~ msgstr "Izvēlieties projekta novietojumu un karšu kopu"
-
-#~ msgid "Manage"
-#~ msgstr "Pārvaldīt"
-
-#, fuzzy
-#~ msgid ""
-#~ "Welcome to GRASS GIS %s%s\n"
-#~ "The world's leading open source GIS"
-#~ msgstr ""
-#~ "Laipni lūdzam GRASS GIS %s\n"
-#~ "Pasaules vadošajā brīvajā ĢIS"
-
-#~ msgid ""
-#~ "Select an existing project location and mapset\n"
-#~ "or define a new location"
-#~ msgstr ""
-#~ "Izvēlieties eksistējošu novietojumu un karšu kopu\n"
-#~ "vai arī definējiet jaunu novietojumu"
-
-#~ msgid ""
-#~ "Project location\n"
-#~ "(projection/coordinate system)"
-#~ msgstr ""
-#~ "Projekta novietojums\n"
-#~ "(projekcija/koordinātu sistēma)"
-
-#~ msgid ""
-#~ "Accessible mapsets\n"
-#~ "(directories of GIS files)"
-#~ msgstr ""
-#~ "Pieejamās karšu kopas\n"
-#~ "(mapes ar ĢIS failiem)"
-
-#~ msgid "Define new location"
-#~ msgstr "Definēt jaunu novietojumu"
-
-#~ msgid ""
-#~ "Rename/delete selected\n"
-#~ "mapset or location"
-#~ msgstr ""
-#~ "Pārsaukt vai dzēst izvēlēto\n"
-#~ "novietojumu vai karšu kopu"
-
-#~ msgid "Start &GRASS"
-#~ msgstr "Startēt &GRASS"
-
-#~ msgid "&Create mapset"
-#~ msgstr "Izveidot &karšu kopu"
-
-#~ msgid "&Location wizard"
-#~ msgstr "&Novietojuma vednis"
-
-#~ msgid "Rename mapset"
-#~ msgstr "Pārsaukt karšu kopu"
-
-#~ msgid "Rename location"
-#~ msgstr "Pārsaukt novietojumu"
-
-#~ msgid "Delete mapset"
-#~ msgstr "Dzēst karšu kopu"
-
-#~ msgid "Delete location"
-#~ msgstr "Dzēst novietojumu"
-
-#~ msgid "Welcome to GRASS GIS"
-#~ msgstr "Laipni lūdzam GRASS GIS"
-
-#, fuzzy
-#~ msgid "Warning: "
-#~ msgstr "Brīdinājums"
-
-#, fuzzy
-#~ msgid "No GRASS location found in '%s'."
-#~ msgstr "GRASS novietojuma nosaukums:"
-
-#, fuzzy
-#~ msgid "Launches graphical attribute table manager."
-#~ msgstr "Atribūtu tabulas pārvaldnieks"
-
-#, fuzzy
-#~ msgid "Develop 3D rasters"
-#~ msgstr "Veidot rastra karti"
