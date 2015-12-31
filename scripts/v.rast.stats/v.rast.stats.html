@@ -43,7 +43,7 @@ g.copy vect=zipcodes_wake,myzipcodes_wake
 g.region raster=elevation -p
 # calculate DEM statistics, upload to vector map table:
 v.rast.stats myzipcodes_wake raster=elevation \
-  column_prefix=elev method=minimum,maximum,average,stddev,percentile \
+  column_prefix=elev method=minimum,maximum,average,range,stddev,percentile \
   percentile=95
 # verify results:
 v.info -c myzipcodes_wake
