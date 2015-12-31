@@ -5774,7 +5774,7 @@ msgstr ""
 #: ../gui/wxpython/iscatt/controllers.py:433
 #, python-format
 msgid ""
-"Error occured during computation of scatter plot category:\n"
+"Error occurred during computation of scatter plot category:\n"
 "%s"
 msgstr ""
 "Une erreur est survenue lors du calcul de la catégorie du nuage de points :\n"
@@ -7861,14 +7861,14 @@ msgstr "Surface : {area} {unit}\n"
 #: ../gui/wxpython/mapwin/base.py:195
 #, python-format
 msgid ""
-"Error occured during calling of handler: %s \n"
+"Error occurred during calling of handler: %s \n"
 "Handler was unregistered."
 msgstr ""
 
 #: ../gui/wxpython/mapwin/base.py:275
 #, python-format
 msgid ""
-"Error occured during unregistration of handler: %s \n"
+"Error occurred during unregistration of handler: %s \n"
 "                                        Handler was unregistered."
 msgstr ""
 
@@ -7880,7 +7880,7 @@ msgstr ""
 #: ../gui/wxpython/mapwin/base.py:308
 #, python-format
 msgid ""
-"Error occured during unregistration of handler: %s \n"
+"Error occurred during unregistration of handler: %s \n"
 "                                        Handler was unregistered"
 msgstr ""
 

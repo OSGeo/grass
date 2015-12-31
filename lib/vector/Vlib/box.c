@@ -125,7 +125,7 @@ int Vect_box_extend(struct bound_box *A, const struct bound_box *B)
  *  \param c_x,c_y coordinates (s, n)
  *  \param Box boundary box
  *
- *  \return 1 if any clipping occured
+ *  \return 1 if any clipping occurred
  *  \return 0 otherwise
  */
 int Vect_box_clip(double *x, double *y, double *c_x, double *c_y, const struct bound_box *Box)

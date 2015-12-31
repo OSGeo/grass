@@ -358,7 +358,7 @@ void print_realto(float *rt)
 }
 
 /*!
-   \brief Debugging, 256 interger values from buffer
+   \brief Debugging, 256 integer values from buffer
 
    \todo G_debug ?
 

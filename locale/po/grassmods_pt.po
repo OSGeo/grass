@@ -38344,7 +38344,7 @@ msgstr "%d pontos sem categoria"
 
 #: ../vector/v.out.ascii/main.c:163
 #, fuzzy
-msgid "An error occured, nothing to be exported"
+msgid "An error occurred, nothing to be exported"
 msgstr "%d pontos sem categoria"
 
 #: ../vector/v.out.dxf/main.c:58
@@ -39736,11 +39736,11 @@ msgid "Cannot get db link info"
 msgstr "Não consegui obter informações sobre a ligação ao BD"
 
 #: ../vector/v.perturb/normalrs.c:31
-msgid "normalsv: restoration of unitialized block"
+msgid "normalsv: restoration of uninitialized block"
 msgstr ""
 
 #: ../vector/v.perturb/normalsv.c:29
-msgid "normalsv: save of unitialized block"
+msgid "normalsv: save of uninitialized block"
 msgstr ""
 
 #: ../vector/v.proj/main.c:70

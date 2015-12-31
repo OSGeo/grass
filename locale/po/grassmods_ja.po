@@ -37195,7 +37195,7 @@ msgstr "出力ファイルの上書き"
 
 #: ../vector/v.out.ascii/main.c:163
 #, fuzzy
-msgid "An error occured, nothing to be exported"
+msgid "An error occurred, nothing to be exported"
 msgstr "出力ファイルの上書き"
 
 #: ../vector/v.out.dxf/main.c:58
@@ -38514,11 +38514,11 @@ msgid "Cannot get db link info"
 msgstr "dbリンク情報を取得できません"
 
 #: ../vector/v.perturb/normalrs.c:31
-msgid "normalsv: restoration of unitialized block"
+msgid "normalsv: restoration of uninitialized block"
 msgstr "normalsv: 初期化解除されたブロックの修復"
 
 #: ../vector/v.perturb/normalsv.c:29
-msgid "normalsv: save of unitialized block"
+msgid "normalsv: save of uninitialized block"
 msgstr "normalsv: 初期化されていないブロックの保存"
 
 #: ../vector/v.proj/main.c:70

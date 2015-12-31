@@ -192,7 +192,7 @@ class MapWindowBase(object):
             except:
                 handlers.remove(handler)
                 GError(parent=self,
-                       message=_("Error occured during calling of handler: %s \n"
+                       message=_("Error occurred during calling of handler: %s \n"
                                  "Handler was unregistered.") % handler.__name__)
 
         event.Skip() 
@@ -272,7 +272,7 @@ class MapWindowBase(object):
                     handlers.remove(handler)
                 except:
                     GError(parent = self,
-                           message = _("Error occured during unregistration of handler: %s \n \
+                           message = _("Error occurred during unregistration of handler: %s \n \
                                        Handler was unregistered.") % handler.__name__)
                     handlers.remove(handler)
         
@@ -305,7 +305,7 @@ class MapWindowBase(object):
                                       % handler.__name__)
             except:
                 GError(parent = self,
-                       message = _("Error occured during unregistration of handler: %s \n \
+                       message = _("Error occurred during unregistration of handler: %s \n \
                                        Handler was unregistered") % handler.__name__)
                 handlers.remove(handler) 
         

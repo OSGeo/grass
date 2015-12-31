@@ -37737,7 +37737,7 @@ msgstr "Žádné prvky nejsou vybrány, není co editovat"
 
 #: ../vector/v.out.ascii/main.c:163
 #, fuzzy
-msgid "An error occured, nothing to be exported"
+msgid "An error occurred, nothing to be exported"
 msgstr "Žádné prvky nejsou vybrány, není co editovat"
 
 #: ../vector/v.out.dxf/main.c:58
@@ -39061,11 +39061,11 @@ msgid "Cannot get db link info"
 msgstr "Nelze dostat informace o odkazu na databázi"
 
 #: ../vector/v.perturb/normalrs.c:31
-msgid "normalsv: restoration of unitialized block"
+msgid "normalsv: restoration of uninitialized block"
 msgstr "normalsv: obnovení neiniciovaného bloku"
 
 #: ../vector/v.perturb/normalsv.c:29
-msgid "normalsv: save of unitialized block"
+msgid "normalsv: save of uninitialized block"
 msgstr "normalsv: uložení neiniciovaného bloku"
 
 #: ../vector/v.proj/main.c:70
