@@ -37472,7 +37472,7 @@ msgstr "ไม่มีข้อมูลถูกเลือก, ไม่ม�
 
 #: ../vector/v.out.ascii/main.c:163
 #, fuzzy
-msgid "An error occured, nothing to be exported"
+msgid "An error occurred, nothing to be exported"
 msgstr "ไม่มีข้อมูลถูกเลือก, ไม่มีอะไรจะแก้ไข"
 
 #: ../vector/v.out.dxf/main.c:58
@@ -38773,12 +38773,12 @@ msgid "Cannot get db link info"
 msgstr "ไม่สามารถอ่าน ข้อมูล db link"
 
 #: ../vector/v.perturb/normalrs.c:31
-msgid "normalsv: restoration of unitialized block"
-msgstr "normalsv: restoration of unitialized block"
+msgid "normalsv: restoration of uninitialized block"
+msgstr "normalsv: restoration of uninitialized block"
 
 #: ../vector/v.perturb/normalsv.c:29
-msgid "normalsv: save of unitialized block"
-msgstr "normalsv: save of unitialized block"
+msgid "normalsv: save of uninitialized block"
+msgstr "normalsv: save of uninitialized block"
 
 #: ../vector/v.proj/main.c:70
 #, fuzzy

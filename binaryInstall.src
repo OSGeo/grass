@@ -193,7 +193,7 @@ if [ ! -d "$BINDIR" ] ; then
     mkdir -p $BINDIR
     
     if [ $? -ne 0 ] ; then
-	echo "An error occured trying to create $BINDIR ! Exiting."
+	echo "An error occurred trying to create $BINDIR ! Exiting."
 	exit
     fi
 fi
@@ -227,7 +227,7 @@ if [ ! -d "$DESTDIR" ] ; then
     mkdir -p $DESTDIR
     
     if [ $? -ne 0 ] ; then
-    	echo "An error occured trying to create $DESTDIR! Exiting."
+    	echo "An error occurred trying to create $DESTDIR! Exiting."
     	exit
     fi
 else
@@ -273,7 +273,7 @@ echo "Uncompressing the package and extracting to target directory..."
 PACK_FILE=`echo $PACKAGE_DIR/$PACKAGE_NAME | sed 's+^//+/+g'`
 cd $DESTDIR; $UNPACK -c $PACK_FILE | tar -xf -
 if [ $? -eq 1 ] ; then
-    echo "An error occured or user break while installing binaries! Exiting."
+    echo "An error occurred or user break while installing binaries! Exiting."
     exit
 fi
 
@@ -288,7 +288,7 @@ echo "$BINDIR/$GRASSPRG -> $BINDIR/grass-$NAME_VER"
 sed -e "s#@GISBASE@#$DESTDIR#g" \
     $DESTDIR/$GRASSPRG.tmp > $BINDIR/grass-$NAME_VER
 if [ $? -eq 1 ] ; then
-  echo "An error occured trying to create the grass start script! Exiting."
+  echo "An error occurred trying to create the grass start script! Exiting."
   echo "You probably do not have permission to install into $BINDIR."
   echo "You may need to be the root user to install in that directory."
   exit
@@ -298,7 +298,7 @@ ln -sf $BINDIR/grass-$NAME_VER $BINDIR/$GRASSPRG
 chmod ugo+x $BINDIR/grass-$NAME_VER
 
 if [ $? -eq 1 ] ; then
-    echo "An error occured trying to create the grass start script! Exiting."
+    echo "An error occurred trying to create the grass start script! Exiting."
     echo "You probably do not have permission to install into $BINDIR."
     echo "You may need to be the root user to install in that directory."
     exit

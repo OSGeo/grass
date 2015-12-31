@@ -430,7 +430,7 @@ class ScattsManager:
 
         self.render_mgr.RunningProcessDone()
         if event.exception:
-            GError(_("Error occured during computation of scatter plot category:\n%s"), 
+            GError(_("Error occurred during computation of scatter plot category:\n%s"), 
                       parent = self.guiparent, showTraceback = False)
 
         cat_id = event.ret

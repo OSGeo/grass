@@ -17,7 +17,7 @@
 ****************************************************************************/
 
 /*====================================================================*/
-/* program to propogate the link label into the hillslope areas;      */
+/* program to propagate the link label into the hillslope areas;      */
 /* processes CELL files only and works on window derived from link    */
 /* label map                                                          */
 
