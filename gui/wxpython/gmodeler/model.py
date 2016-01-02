@@ -2515,15 +2515,15 @@ if __name__ == "__main__":
         """
         result = ''
         ss = re.split("\w*(%"+variable+")w*", string)
-
-        if not ss[0]:
+        
+        if not ss[0] and not ss[-1]:
             if data:
                 return "options['%s']" % variable
             else:
                 return variable
         
         for s in ss:
-            if s == '"':
+            if not s or s == '"':
                 continue
             
             if s == '%' + variable:
@@ -2532,7 +2532,9 @@ if __name__ == "__main__":
                 else:
                     result += '+%s+' % variable
             else:
-                result += '"' + s + '"'
+                result += '"' + s
+                if not s.endswith(']'): # options
+                    result += '"'
         
         return result.strip('+')
 
