@@ -1748,7 +1748,7 @@ class PythonPanel(wx.Panel):
         filename = ''
         dlg = wx.FileDialog(parent = self,
                             message = _("Choose file to save"),
-                            defaultFile = os.path.basename(self.parent.GetModelFile(ext=False)) + '.py',
+                            defaultFile = os.path.basename(self.parent.GetModelFile(ext=False)),
                             defaultDir = os.getcwd(),
                             wildcard = _("Python script (*.py)|*.py"),
                             style = wx.FD_SAVE)
