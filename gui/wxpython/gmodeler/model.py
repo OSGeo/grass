@@ -1741,6 +1741,13 @@ class ProcessModelFile:
         """
         self.tree = tree
         self.root = self.tree.getroot()
+        # check if input is a valid GXM file
+        if self.root is None or self.root.tag != 'gxm':
+            if self.root is not None:
+                tagName = self.root.tag
+            else:
+                tabName = _("empty")
+            raise GException(_("Details: unsupported tag name '{}'.").format(tagName))
         
         # list of actions, data
         self.properties = dict()
