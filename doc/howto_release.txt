@@ -58,7 +58,7 @@ Contents
 7
 0
 3RC1
-2015
+2016
       rm -f include/VERSION~
 
     - Update additionally the winGRASS version
@@ -117,8 +117,8 @@ Contents
 #example
 7
 0
-0svn
-2014
+3svn
+2016
 
     rm -f include/VERSION~
     svn ci -m"back to SVN" include/VERSION
