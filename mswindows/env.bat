@@ -19,4 +19,4 @@ IF EXIST "%ProgramFiles%\RStudio\bin\rstudio.exe" set PATH=%PATH%;%ProgramFiles%
 
 REM set R temporarily to %PATH%
 
-IF EXIST "%GISBASE%\extrabin\R.exe" %GISBASE%\extrabin\R path
+IF EXIST "%ProgramFiles%\R\" %GISBASE%\extrabin\R path
