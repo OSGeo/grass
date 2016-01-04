@@ -134,6 +134,7 @@ import atexit
 import shutil
 import zipfile
 import tempfile
+from distutils.dir_util import copy_tree
 
 try:
     from urllib2 import HTTPError, URLError
@@ -879,56 +880,39 @@ def install_extension_xml(url, mlist):
 
 def install_extension_win(name):
     """Install extension on MS Windows"""
-    # do not use hardcoded url -
-    # https://wingrass.fsv.cvut.cz/platform/grassXX/addonsX.X.X
     grass.message(_("Downloading precompiled GRASS Addons <%s>...") %
                   options['extension'])
+    
+    # build base URL
     if build_platform == 'x86_64':
         platform = build_platform
     else:
         platform = 'x86'
-    url = "https://wingrass.fsv.cvut.cz/%(platform)s/" \
-          "grass%(major)s%(minor)s/addons/" \
-          "grass-%(major)s.%(minor)s.%(patch)s/" % \
-        {'platform' : platform, 'major': version[0],
-         'minor': version[1], 'patch': version[2]}
+    base_url = "http://wingrass.fsv.cvut.cz/%(platform)s/" \
+               "grass%(major)s%(minor)s/addons/" \
+               "grass-%(major)s.%(minor)s.%(patch)s" % \
+               {'platform' : platform, 'major': version[0],
+                'minor': version[1], 'patch': version[2]}
 
-    grass.debug("url=%s" % url, 1)
-
-    try:
-        zfile = url + name + '.zip'
-        url_file = urlopen(zfile, proxies=PROXIES)
-
-        # create addons dir if not exists
-        if not os.path.exists(options['prefix']):
-            try:
-                os.mkdir(options['prefix'])
-            except OSError as error:
-                grass.fatal(_("Unable to create <{}>. {}")
-                            .format(options['prefix'], error))
-
-        # download data
-        tmp_file = tempfile.TemporaryFile()
-        tmp_file.write(url_file.read())
-        try:
-            zfobj = zipfile.ZipFile(tmp_file)
-        except zipfile.BadZipfile as error:
-            grass.fatal('%s: %s' % (error, zfile))
-
-        for name in zfobj.namelist():
-            if name.endswith('/'):
-                directory = os.path.join(options['prefix'], name)
-                if not os.path.exists(directory):
-                    os.mkdir(directory)
-            else:
-                outfile = open(os.path.join(options['prefix'], name), 'wb')
-                outfile.write(zfobj.read(name))
-                outfile.close()
-
-        tmp_file.close()
-    except HTTPError:
-        grass.fatal(_("GRASS Addons <%s> not found") % name)
-
+    # resolve ZIP URL
+    source, url = resolve_source_code(url='{}/{}.zip'.format(base_url, name))
+    
+    # to hide non-error messages from subprocesses
+    if grass.verbosity() <= 2:
+        outdev = open(os.devnull, 'w')
+    else:
+        outdev = sys.stdout
+    
+    # download Addons ZIP file
+    os.chdir(TMPDIR)  # this is just to not leave something behind
+    srcdir = os.path.join(TMPDIR, name)
+    download_source_code(source=source, url=url, name=name,
+                        outdev=outdev, directory=srcdir, tmpdir=TMPDIR)
+    
+    # copy Addons copy tree to destination directory
+    move_extracted_files(extract_dir=srcdir, target_dir=options['prefix'],
+                         files=os.listdir(srcdir))
+    
     return 0
 
 
@@ -972,12 +956,15 @@ def move_extracted_files(extract_dir, target_dir, files):
     if len(files) == 1:
         shutil.copytree(os.path.join(extract_dir, files[0]), target_dir)
     else:
-        os.mkdir(target_dir)
+        if not os.path.exists(target_dir):
+            os.mkdir(target_dir)
         for file_name in files:
             actual_file = os.path.join(extract_dir, file_name)
             if os.path.isdir(actual_file):
-                shutil.copytree(actual_file,
-                                os.path.join(target_dir, file_name))
+                # shutil.copytree() replaced by copy_tree() because
+                # shutil's copytree() fails when subdirectory exists
+                copy_tree(actual_file,
+                          os.path.join(target_dir, file_name))
             else:
                 shutil.copy(actual_file, os.path.join(target_dir, file_name))
 
