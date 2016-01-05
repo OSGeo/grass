@@ -193,7 +193,7 @@ class UpdateThread(Thread):
                 type_param = self.task.get_param('type', element='name', raiseError=False)
 
                 if 'all' in type_param.get('value'):
-                    etype = type_param.get('values')
+                    etype = type_param.get('values')[:]
                     if 'all' in etype:
                         etype.remove('all')
                     etype = ','.join(etype)
