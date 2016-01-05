@@ -522,13 +522,17 @@ def compute_common_absolute_time_granularity(gran_list,
         considering the start times of the related space time datasets in the
         common granularity computation.
 
+        The list of start dates is optional. If you use this function to compute a common
+        granularity between space time datasets, then you should provide their start times
+        to avoid wrong synchronization.
+
         :param gran_list: List of granularities
         :param start_date_list: List of the start times of related space time datasets
         :return: The common granularity
 
         .. code-block:: python
 
-            from datetime import datetime
+            >>> from datetime import datetime
             >>> import grass.temporal as tgis
             >>> tgis.init()
             >>> grans = ["20 second", "10 minutes", "2 hours"]
@@ -653,6 +657,9 @@ def compute_common_absolute_time_granularity(gran_list,
             '1 month'
 
             >>> grans = ["120 months", "360 months", "4 years"]
+            >>> dates = [datetime(2001,1,1,0,0,0),
+            ...          datetime(2001,1,1,0,0,0),
+            ...          datetime(2001,1,1,0,0,0),]
             >>> tgis.compute_common_absolute_time_granularity(grans, dates)
             '12 months'
 
@@ -740,7 +747,6 @@ def compute_common_absolute_time_granularity_simple(gran_list):
     """ Compute the greatest common granule from a list of absolute time granules
 
         :param gran_list: List of granularities
-        :param start_date_list:
         :return: The common granularity
 
         .. code-block:: python
