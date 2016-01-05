@@ -675,7 +675,10 @@ def compute_common_absolute_time_granularity(gran_list,
                 return "1 second"
         # Make sure the granule does not exceed the hierarchy limit
         if int(num) > 60:
-            return "60 seconds"
+            if int(num)%60 == 0:
+                return "60 seconds"
+            else:
+                return "1 second"
 
     if granule in ["minutes",  "minute"]:
         # If the start minutes are different between the start dates
@@ -685,7 +688,10 @@ def compute_common_absolute_time_granularity(gran_list,
                 return "1 minute"
         # Make sure the granule does not exceed the hierarchy limit
         if int(num) > 60:
-            return "60 minutes"
+            if int(num)%60 == 0:
+                return "60 minutes"
+            else:
+                return "1 minute"
 
     if granule in ["hours",  "hour"]:
         # If the start hours are different between the start dates
@@ -695,7 +701,10 @@ def compute_common_absolute_time_granularity(gran_list,
                 return "1 hour"
         # Make sure the granule does not exceed the hierarchy limit
         if int(num) > 24:
-            return "24 hours"
+            if int(num)%24 == 0:
+                return "24 hours"
+            else:
+                return "1 hour"
 
     if granule in ["days",  "day"]:
         # If the start days are different between the start dates
@@ -705,7 +714,10 @@ def compute_common_absolute_time_granularity(gran_list,
                 return "1 day"
         # Make sure the granule does not exceed the hierarchy limit
         if int(num) > 365:
-            return "365 days"
+            if int(num)%365 == 0:
+                return "365 days"
+            else:
+                return "1 day"
 
     if granule in ["months",  "month"]:
         # If the start months are different between the start dates
@@ -715,7 +727,10 @@ def compute_common_absolute_time_granularity(gran_list,
                 return "1 month"
         # Make sure the granule does not exceed the hierarchy limit
         if int(num) > 12:
-            return "12 months"
+            if int(num)%12 == 0:
+                return "12 months"
+            else:
+                return "1 month"
 
     return common_granule
 

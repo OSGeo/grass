@@ -767,7 +767,7 @@ class TemporalAlgebraParser(object):
              space time datasets in the expression to generate the map lists.
              
              This function will analyze the expression to detect space time datasets
-             and computes the common granularity  from all granularities.
+             and computes the common granularity from all granularities.
           
              This granularity is then be used to generate the map lists. Hence, all
              maps from all STDS will have equidistant temporal extents. The only meaningful
@@ -817,6 +817,7 @@ class TemporalAlgebraParser(object):
             count += 1
 
         grans = []
+        start_times = []
         ttypes = {}
         dbif, connected = init_dbif(self.dbif)
 
@@ -828,6 +829,7 @@ class TemporalAlgebraParser(object):
                 return False
 
             grans.append(stds.get_granularity())
+            start_times.append(stds.get_temporal_extent_as_tuple()[0])
             ttypes[stds.get_temporal_type()] = stds.get_temporal_type()
         
         # Only one temporal type is allowed
@@ -837,7 +839,7 @@ class TemporalAlgebraParser(object):
             
         # Compute the common granularity
         if "absolute" in ttypes.keys():
-            self.granularity = compute_common_absolute_time_granularity(grans)
+            self.granularity = compute_common_absolute_time_granularity(grans, start_times)
         else:
             self.granularity = compute_common_relative_time_granularity(grans)
             
