@@ -77,12 +77,12 @@ class TestTemporalAlgebraGranularity(TestCase):
 
     def test_common_granularity_1(self):
         """Testing the common granularity function. """
-        ta = tgis.TemporalAlgebraParser(run = True, debug = True)
+        ta = tgis.TemporalAlgebraParser(run=True, debug=True)
         expr = 'R = A : B'
         ret = ta.setup_common_granularity(expression=expr)
 
         self.assertEqual(ret, True)
-        self.assertEqual(ta.granularity, "1 months")
+        self.assertEqual(ta.granularity, "1 month")
 
         ta.count = 0
         ta.stdstype = "strds"
