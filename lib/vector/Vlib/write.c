@@ -287,7 +287,7 @@ int Vect_restore_line(struct Map_info *Map, off_t line)
 {
     int ret;
 
-    G_debug(3, "Vect_restore_line(): name = %s,level = %d, line/offset = %"PRI_OFF_T,
+    G_debug(3, "Vect_restore_line(): name = %s, level = %d, line/offset = %"PRI_OFF_T,
             Map->name, Map->level, line);
 
     if (!check_map(Map))
