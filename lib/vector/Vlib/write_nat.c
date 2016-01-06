@@ -5,7 +5,7 @@
 
    Higher level functions for reading/writing/manipulating vectors.
 
-   (C) 2001-2013 by the GRASS Development Team
+   (C) 2001-2015 by the GRASS Development Team
 
    This program is free software under the GNU General Public License
    (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -341,7 +341,7 @@ int V1_restore_line_nat(struct Map_info *Map, off_t offset)
     char rhead;
     struct gvfile *dig_fp;
     
-    G_debug(3, "V1_restore_line_nat(), offset = %"PRI_OFF_T, offset);
+    G_debug(3, "V1_restore_line_nat(): offset = %"PRI_OFF_T, offset);
     
     dig_set_cur_port(&(Map->head.port));
     dig_fp = &(Map->dig_fp);
@@ -391,7 +391,7 @@ int V2_restore_line_nat(struct Map_info *Map, off_t line)
     
     plus = &(Map->plus);
 
-    G_debug(3, "V2_restore_line_nat(), line = %d", (int)line);
+    G_debug(3, "V2_restore_line_nat(): line = %d", (int)line);
 
     if (line < 1 || line > plus->n_lines) {
         G_warning(_("Attempt to access feature with invalid id (%d)"), (int)line);
