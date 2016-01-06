@@ -18,7 +18,7 @@ List of classes:
     (and NumPy would be an excellent candidate for acceleration via
     e.g. OpenCL or CUDA; I'm surprised it hasn't happened already).
 
-(C) 2007-2014 by the GRASS Development Team
+(C) 2007-2016 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
