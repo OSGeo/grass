@@ -502,7 +502,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
 
         If self.redrawAll is False on self.pdcTmp content is re-drawn
         """
-        Debug.msg(4, "BufferedWindow.OnPaint(): redrawAll=%s" % self.redrawAll)
+        Debug.msg(5, "BufferedWindow.OnPaint(): redrawAll=%s" % self.redrawAll)
         dc = wx.BufferedPaintDC(self, self._buffer)
         dc.Clear()
 
