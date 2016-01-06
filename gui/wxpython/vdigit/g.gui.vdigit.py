@@ -89,9 +89,9 @@ def main():
             grass.fatal(_("Vector map <%s> not found in current mapset. "
                           "New vector map can be created by providing '-c' flag.") % options['map'])
         else:
-            grass.message(_("New vector map <%s> created") % options['map'])
+            grass.verbose(_("New vector map <%s> created") % options['map'])
             try:
-                grass.run_command('v.edit', map=options['map'], tool='create')
+                grass.run_command('v.edit', map=options['map'], tool='create', quiet=True)
             except CalledModuleError:
                 grass.fatal(_("Unable to create new vector map <%s>") % options['map'])
 
