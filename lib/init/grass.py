@@ -1361,7 +1361,10 @@ def close_gui():
     import signal
     for pid in env['GUI_PID'].split(','):
         debug("Exiting GUI with pid={}".format(pid))
-        os.kill(int(pid), signal.SIGTERM)
+        try:
+            os.kill(int(pid), signal.SIGTERM)
+        except OSError as e:
+            message(_("Unable to close GUI. {}".format(e)))
         
 def clear_screen():
     """Clear terminal"""
