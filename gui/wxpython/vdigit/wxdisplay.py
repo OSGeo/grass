@@ -9,7 +9,7 @@ Code based on wxVdigit C++ component from GRASS 6.4.0
 List of classes:
  - wxdisplay::DisplayDriver
 
-(C) 2007-2011 by the GRASS Development Team
+(C) 2007-2016 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -246,7 +246,7 @@ class DisplayDriver:
         if not self.dc or not self.dcTmp:
             return -1
         
-        Debug.msg(3, "_drawObject(): line=%d type=%d npoints=%d", robj.fid, robj.type, robj.npoints)
+        Debug.msg(4, "_drawObject(): line=%d type=%d npoints=%d", robj.fid, robj.type, robj.npoints)
         brush = None
         if robj.type == TYPE_AREA and \
                 self._isSelected(Vect_get_area_centroid(self.poMapInfo, robj.fid)):
