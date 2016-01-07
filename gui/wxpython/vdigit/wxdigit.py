@@ -419,6 +419,7 @@ class IVDigit:
             action = actions[i]
             line = action['line']
             if action['offset'] > 0:
+                # feature previously added -> to be deleted
                 if Vect_line_alive(self.poMapInfo, line):
                     Debug.msg(3, "IVDigit._applyChangeset(): changeset=%d, action=add, line=%d -> deleted",
                               changeset, line)
@@ -428,14 +429,15 @@ class IVDigit:
                 else:
                     Debug.msg(3, "Digit.ApplyChangeset(): changeset=%d, action=add, line=%d dead",
                               changeset, line)
-            else: # delete
+            else:
+                # feature previously deleted -> to be added
                 offset = abs(action['offset'])
                 
                 if not Vect_line_alive(self.poMapInfo, line):
                     Debug.msg(3, "Digit.ApplyChangeset(): changeset=%d, action=delete, line=%d -> added",
                               changeset, line)
                     
-                    if Vect_restore_line(self.poMapInfo, line, offset) < 0:
+                    if Vect_restore_line(self.poMapInfo, offset, line) < 0:
                         return -1
                     ret = 1
                 else:
