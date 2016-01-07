@@ -215,7 +215,7 @@ F		[fF]
 
 
 .		{
-			fprintf(stderr, "syntax error: '%*s'\n", yyleng, yytext);
+			fprintf(stderr, "syntax error: '%*s'\n", (int) yyleng, yytext);
 			yyterminate();
 		}
 %%
