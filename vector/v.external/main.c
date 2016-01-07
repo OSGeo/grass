@@ -8,7 +8,7 @@
  *               
  * PURPOSE:      Create a new vector as a link to OGR layer
  *               
- * COPYRIGHT:    (C) 2003-2011 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2003-2016 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -95,22 +95,9 @@ int main(int argc, char *argv[])
         exit(EXIT_SUCCESS);
     }
 
-    /* be friendly, ignored 'PG:' prefix for PostGIS links */
     dsn = NULL;
-    if (options.dsn->answer) {
-        if (!use_ogr) {
-            int i, length;
-            
-            length = strlen(options.dsn->answer);
-            dsn = (char *) G_malloc(length - 3);
-            for (i = 3; i < length; i++)
-                dsn[i-3] = options.dsn->answer[i];
-            dsn[length-3] = '\0';
-        }
-        else {
-            dsn = G_store(options.dsn->answer);
-        }
-    }
+    if (options.dsn->answer)
+        dsn = get_datasource_name(options.dsn->answer, use_ogr);
     
     if (flags.list->answer || flags.tlist->answer) {
         /* list layers */

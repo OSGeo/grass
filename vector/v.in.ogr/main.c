@@ -46,6 +46,8 @@ int centroid(OGRGeometryH hGeom, CENTR * Centr, struct spatial_index * Sindex,
 	     int field, int cat, double min_area, int type);
 int poly_count(OGRGeometryH hGeom, int line2boundary);
 
+char *get_datasource_name(const char *, int);
+
 int main(int argc, char *argv[])
 {
     struct GModule *module;
@@ -360,44 +362,9 @@ int main(int argc, char *argv[])
     else
 	datetime_type = "datetime";
 
-    /* dsn is 'PG:', check default connection settings */
     dsn = NULL;
-    if (driver_name && strcmp(driver_name, "pg") == 0 &&
-        G_strcasecmp(param.dsn->answer, "PG:") == 0) {
-        const char *dbname;
-        dbConnection conn;
-        
-        dbname = db_get_default_database_name();
-        if (!dbname)
-            G_fatal_error(_("Database not defined, please check default "
-                            " connection settings by db.connect"));
-
-        dsn = (char *) G_malloc(GPATH_MAX);
-        /* -> dbname */
-        sprintf(dsn, "PG:dbname=%s", dbname);
-        
-        /* -> user/passwd */
-        if (DB_OK == db_get_connection(&conn) &&
-            strcmp(conn.driverName, "pg") == 0 &&
-            strcmp(conn.databaseName, dbname) == 0) {
-            if (conn.user) {
-                strcat(dsn, " user=");
-                strcat(dsn, conn.user);
-            }
-            if (conn.password) {
-                strcat(dsn, " passwd=");
-                strcat(dsn, conn.password);
-            }
-            /* TODO: host/port... */
-        }
-        else {
-            G_debug(1, "unable to get connection");
-        }
-        G_debug(1, "Using dsn=%s", dsn);
-    }
-    else if (param.dsn->answer) {
-        dsn = G_store(param.dsn->answer);
-    }
+    if (param.dsn->answer)
+        dsn = get_datasource_name(param.dsn->answer, TRUE);
     
     min_area = atof(param.min_area->answer);
     snap = atof(param.snap->answer);
