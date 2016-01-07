@@ -1264,7 +1264,7 @@ int main(int argc, char *argv[])
 			else if (Ogr_ftype == OFTDate ||
 				 Ogr_ftype == OFTTime || 
 				 Ogr_ftype == OFTDateTime) {
-			    sprintf(buf, ", ''");
+			    sprintf(buf, ", NULL");
 			}
 #endif
 			else if (Ogr_ftype == OFTString ||
@@ -1274,7 +1274,7 @@ int main(int argc, char *argv[])
                                  || Ogr_ftype == OFTInteger64List
 #endif
                                  ) {
-			    sprintf(buf, ", ''");
+			    sprintf(buf, ", NULL");
 			}
 			else {
 			    /* column type not supported */
