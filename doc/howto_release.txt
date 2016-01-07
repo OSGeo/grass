@@ -45,6 +45,7 @@ Contents
        find . -name '*.rej'  | xargs rm
        find . -name '*.o'    | xargs rm
        find . -name '*.pyc'  | xargs rm
+       rm -f gui/wxpython/menustrings.py gui/wxpython/build_ext.pyc gui/wxpython/xml/menudata.xml gui/wxpython/xml/module_tree_menudata.xml
        chmod -R a+r *
 
        svn status
