@@ -332,16 +332,17 @@ int V2_delete_line_nat(struct Map_info *Map, off_t line)
   
   \param Map pointer to Map_info structure
   \param offset feature offset
-  
+  \param line feature id (not used)
+
   \return  0 on success
   \return -1 on error
 */
-int V1_restore_line_nat(struct Map_info *Map, off_t offset)
+int V1_restore_line_nat(struct Map_info *Map, off_t offset, off_t line)
 {
     char rhead;
     struct gvfile *dig_fp;
     
-    G_debug(3, "V1_restore_line_nat(), offset = %"PRI_OFF_T, offset);
+    G_debug(3, "V1_restore_line_nat(): offset = %"PRI_OFF_T", line (not used) = %"PRI_OFF_T, offset, line);
     
     dig_set_cur_port(&(Map->head.port));
     dig_fp = &(Map->dig_fp);
@@ -375,15 +376,15 @@ int V1_restore_line_nat(struct Map_info *Map, off_t offset)
   Note: requires topology level >= GV_BUILD_BASE.
   
   \param Map pointer to Map_info structure
-  \param line feature id
+  \param offset feature offset to be restored
+  \param line feature id to be restored
   
   \return 0 on success
   \return -1 on error
 */
-int V2_restore_line_nat(struct Map_info *Map, off_t line)
+int V2_restore_line_nat(struct Map_info *Map, off_t offset, off_t line)
 {
     int type;
-    off_t offset;
     struct Plus_head *plus;
     struct P_line *Line;
     static struct line_cats *Cats = NULL;
@@ -391,14 +392,14 @@ int V2_restore_line_nat(struct Map_info *Map, off_t line)
     
     plus = &(Map->plus);
 
-    G_debug(3, "V2_restore_line_nat(), line = %d", (int)line);
+    G_debug(3, "V2_restore_line_nat(): offset = %"PRI_OFF_T", line = %"PRI_OFF_T, offset, line);
 
     if (line < 1 || line > plus->n_lines) {
-        G_warning(_("Attempt to access feature with invalid id (%d)"), (int)line);
+        G_warning(_("Attempt to access feature with invalid id (%"PRI_OFF_T")"), line);
         return -1;
     }
     
-    Line = Map->plus.Line[line];
+    Line = Map->plus.Line[line]; /* we expect Line to be NULL, so offset is needed */
     if (Line != NULL) {
         G_warning(_("Attempt to access alive feature %d"), (int)line);
         return -1;
@@ -408,10 +409,8 @@ int V2_restore_line_nat(struct Map_info *Map, off_t line)
 	plus->cidx_up_to_date = 0;
     }
 
-    offset = Line->offset;
-    
     /* restore feature in 'coor' file */
-    if (0 != V1_restore_line_nat(Map, offset))
+    if (0 != V1_restore_line_nat(Map, offset, line))
 	return -1;
 
     /* read feature geometry */    
@@ -859,9 +858,10 @@ int V2__delete_line_from_topo_nat(struct Map_info *Map, int line, int type,
     Note that 1) and 2) is done by the same code.
 
     \param Map pointer to Map_info structure
-    \param line feature id to be added
+    \param offset feature offset to be added
     \param points pointer to line_pnts structure (feature's geometry)
     \param cats pointer to line_cats structure (feature's categories)
+    \param restore_line feature id to be restored (>0) or added (<=0)
     \param external_routine pointer to external routine (used by PostGIS Topology)
 
     \return feature id to be added

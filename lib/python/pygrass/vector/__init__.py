@@ -543,8 +543,8 @@ class VectorTopo(Vector):
     @must_be_open
     def restore(self, geo_obj):
         if hasattr(geo_obj, 'offset'):
-            if libvect.Vect_restore_line(self.c_mapinfo, geo_obj.id,
-                                         geo_obj.offset) == -1:
+            if libvect.Vect_restore_line(self.c_mapinfo, geo_obj.offset,
+                                         geo_obj.id) == -1:
                 raise GrassError("C funtion: Vect_restore_line.")
         else:
             raise ValueError("The value have not an offset attribute.")
