@@ -256,7 +256,7 @@ off_t Vect_write_line(struct Map_info *, int, const struct line_pnts *,
 off_t Vect_rewrite_line(struct Map_info *, off_t, int, const struct line_pnts *,
                       const struct line_cats *);
 int Vect_delete_line(struct Map_info *, off_t);
-int Vect_restore_line(struct Map_info *, off_t);
+int Vect_restore_line(struct Map_info *, off_t, off_t);
 
 int Vect_get_num_dblinks(const struct Map_info *);
 
@@ -549,8 +549,8 @@ int V1_delete_line_pg(struct Map_info *, off_t);
 int V2_delete_line_nat(struct Map_info *, off_t);
 int V2_delete_line_sfa(struct Map_info *, off_t);
 int V2_delete_line_pg(struct Map_info *, off_t);
-int V1_restore_line_nat(struct Map_info *, off_t);
-int V2_restore_line_nat(struct Map_info *, off_t);
+int V1_restore_line_nat(struct Map_info *, off_t, off_t);
+int V2_restore_line_nat(struct Map_info *, off_t, off_t);
 off_t V1_write_line_nat(struct Map_info *, int, const struct line_pnts *,
                         const struct line_cats *);
 off_t V1_write_line_ogr(struct Map_info *, int, const struct line_pnts *,

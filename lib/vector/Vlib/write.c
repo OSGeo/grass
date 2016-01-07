@@ -277,27 +277,27 @@ int Vect_delete_line(struct Map_info *Map, off_t line)
    A warning is printed on error.
 
    \param Map pointer to Map_info structure
-   \param line feature id to be restored
-   \param offset feature offset
+   \param offset feature offset to be restored
+   \param line feature id to be restored (used only on level 2)
 
    \return 0 on success
    \return -1 on error
  */
-int Vect_restore_line(struct Map_info *Map, off_t line)
+int Vect_restore_line(struct Map_info *Map, off_t offset, off_t line)
 {
     int ret;
 
-    G_debug(3, "Vect_restore_line(): name = %s,level = %d, line/offset = %"PRI_OFF_T,
-            Map->name, Map->level, line);
+    G_debug(3, "Vect_restore_line(): name = %s, level = %d, offset = %"PRI_OFF_T", line = %"PRI_OFF_T,
+            Map->name, Map->level, offset, line);
 
     if (!check_map(Map))
         return -1;
 
-    ret = (*Vect_restore_line_array[Map->format][Map->level]) (Map, line);
+    ret = (*Vect_restore_line_array[Map->format][Map->level]) (Map, offset, line);
 
     if (ret == -1)
-	G_warning(_("Unable to restore feature/offset %lu in vector map <%s>"),
-                  line, Vect_get_name(Map));
+	G_warning(_("Unable to restore feature/offset %"PRI_OFF_T" in vector map <%s>"),
+                  offset, Vect_get_name(Map));
 
     return ret;
 }
