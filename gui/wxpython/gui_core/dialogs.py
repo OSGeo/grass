@@ -2730,8 +2730,9 @@ class TextEntryDialog(wx.Dialog):
     It differs from wx.TextEntryDialog because it allows adding validator.
     """
     def __init__(self, parent, message, caption='',
-                 defaultValue='', validator=wx.DefaultValidator,
-                 style=wx.OK | wx.CANCEL, **kwargs):
+                 defaultValue='', validator=wx.DefaultValidator, 
+                 style=wx.OK | wx.CANCEL | wx.CENTRE, textStyle=0, textSize=(300, -1),
+                 **kwargs):
         wx.Dialog.__init__(self, parent=parent, id=wx.ID_ANY, title=caption, **kwargs)
 
         vbox = wx.BoxSizer(wx.VERTICAL)
@@ -2739,8 +2740,10 @@ class TextEntryDialog(wx.Dialog):
         stline = wx.StaticText(self, id=wx.ID_ANY, label=message)
         vbox.Add(item=stline, proportion=0, flag=wx.EXPAND | wx.ALL, border=10)
 
-        self._textCtrl = wx.TextCtrl(self, id=wx.ID_ANY, size = (300, -1),
-                                     value=defaultValue, validator=validator)
+        self._textCtrl = wx.TextCtrl(self, id=wx.ID_ANY,
+                                     value=defaultValue, validator=validator, style=textStyle)
+        self._textCtrl.SetInitialSize(textSize)
+        
         vbox.Add(item=self._textCtrl, proportion=0, flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=10)
         self._textCtrl.SetFocus()
 
