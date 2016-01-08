@@ -15,7 +15,7 @@ Classes:
  - dialogs::ItemListCtrl
  - dialogs::ItemCheckListCtrl
 
-(C) 2010-2013 by the GRASS Development Team
+(C) 2010-2016 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -202,6 +202,7 @@ class ModelSearchDialog(wx.Dialog):
                                            label = _("Comment:")),
                       flag = wx.ALIGN_CENTER_VERTICAL, pos = (1, 0))
         gridSizer.Add(item = self.comment, pos = (1, 1), flag =  wx.EXPAND)
+        gridSizer.AddGrowableRow(1)
         gridSizer.AddGrowableCol(1)
         labelSizer.Add(item = gridSizer, proportion = 1, flag = wx.EXPAND)
         
