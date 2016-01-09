@@ -166,7 +166,7 @@ class LocationMapTree(TreeView):
             if proc_count == nprocs or loc_count == nlocations:
                 Debug.msg(4, "Process subresults")
                 for i in range(len(loc_list)):
-                    proc_list[i].join()
+                    proc_list[i].join(0.1)
                     maps, error = queue_list[i].get()
                     if error:
                         errors.append(error)
