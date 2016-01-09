@@ -61,11 +61,12 @@ def getLocationTree(gisdbase, location, queue):
     try:
         mapsets = gscript.read_command('g.mapsets', flags='l', quiet=True, env=env).strip()
     except CalledModuleError:
-        queue.put((maps_dict, _("Failed to read mapsets from location {l}.").format(l=location)))
+        queue.put((maps_dict, _("Failed to read mapsets from location <{l}>.").format(l=location)))
         gscript.try_remove(tmp_gisrc_file)
         return
     else:
         listOfMapsets = mapsets.split()
+        Debug.msg(4, "Location <{}>: {} mapsets found".format(location, len(listOfMapsets)))
         for each in listOfMapsets:
             maps_dict[each] = {}
             for elem in elements:
@@ -74,12 +75,14 @@ def getLocationTree(gisdbase, location, queue):
         maplist = gscript.read_command('g.list', flags='mt', type=elements,
                                        mapset=','.join(listOfMapsets), quiet=True, env=env).strip()
     except CalledModuleError:
-        queue.put((maps_dict, _("Failed to read maps from location {l}.").format(l=location)))
+        queue.put((maps_dict, _("Failed to read maps from location <{l}>.").format(l=location)))
         gscript.try_remove(tmp_gisrc_file)
         return
     else:
         # fill dictionary
-        for each in maplist.splitlines():
+        listOfMaps = maplist.splitlines()
+        Debug.msg(4, "Location <{}>: {} maps found".format(location, len(listOfMaps)))
+        for each in listOfMaps:
             ltype, wholename = each.split('/')
             name, mapset = wholename.split('@')
             maps_dict[mapset][ltype].append(name)
@@ -139,12 +142,15 @@ class LocationMapTree(TreeView):
         results = dict()
         errors = []
         location_nodes = []
+        nlocations = len(locations)
         for location in locations:
             results[location] = dict()
             varloc = self._model.AppendNode(parent=self._model.root, label=location,
                                             data=dict(type='location', name=location))
             location_nodes.append(varloc)
             loc_count += 1
+
+            Debug.msg(3, "Scanning location <{}> ({}/{})".format(location, loc_count, nlocations))
 
             q = Queue()
             p = Process(target=getLocationTree,
@@ -157,7 +163,8 @@ class LocationMapTree(TreeView):
 
             proc_count += 1
             # Wait for all running processes
-            if proc_count == nprocs or loc_count == len(locations):
+            if proc_count == nprocs or loc_count == nlocations:
+                Debug.msg(4, "Process subresults")
                 for i in range(len(loc_list)):
                     proc_list[i].join()
                     maps, error = queue_list[i].get()
