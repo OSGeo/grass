@@ -271,6 +271,10 @@ int main(int argc, char **argv)
     Rast_close(dir_id);
     close(fd);
 
+    unlink(tempfile1);
+    unlink(tempfile2);
+    unlink(tempfile3);
+
     G_free(in_buf);
     G_free(out_buf);
 
