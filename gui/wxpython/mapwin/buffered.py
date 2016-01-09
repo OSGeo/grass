@@ -77,6 +77,8 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         self.SetBackgroundColour("white")
         
         self._properties = properties
+        # this class should not ask for digit, this is a hack
+        self.digit = None
 
         # flags
         self.resize = False # indicates whether or not a resize event has taken place
@@ -222,7 +224,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
 
     def OnContextMenu(self, event):
         """Show Map Display context menu"""
-        if hasattr(self, "digit"):
+        if self.digit:
             event.Skip()
             return
 
@@ -525,7 +527,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
             self.pdc.DrawToDCClipped(dc, rgn)
 
             # draw vector map layer
-            if hasattr(self, "digit"):
+            if self.digit:
                 # decorate with GDDC (transparency)
                 try:
                     gcdc = wx.GCDC(dc)
@@ -540,7 +542,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
                 # draw to the dc
                 self.pdc.DrawToDC(dc)
 
-                if hasattr(self, "digit"):
+                if self.digit:
                     # decorate with GDDC (transparency)
                     try:
                         gcdc = wx.GCDC(dc)
@@ -678,7 +680,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         # probably does nothing, removed from wxPython 2.9
         # self.PrepareDC(dc)
         self.pdc.DrawToDC(dc)
-        if self.pdcVector:
+        if self.digit:
             self.pdcVector.DrawToDC(dc)
         ibuffer.SaveFile(self._fileName, self._fileType)
         
@@ -875,7 +877,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         #
         # render vector map layer
         #
-        if renderVector and hasattr(self, "digit"):
+        if renderVector and self.digit:
             self._updateMap()
         
         #
@@ -954,7 +956,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         """
         self.Draw(self.pdc, pdctype = 'clear')
 
-        if hasattr(self, "digit"):
+        if self.digit:
             self.Draw(self.pdcVector, pdctype = 'clear')
 
         self.Draw(self.pdcTransparent, pdctype='clear')
@@ -1317,7 +1319,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         move = (current[0] - previous[0],
                 current[1] - previous[1])
 
-        if hasattr(self, "digit"):
+        if self.digit:
             digitToolbar = self.toolbar
         else:
             digitToolbar = None
@@ -1357,7 +1359,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
 
         # vector digizer
         if self.mouse["use"] == "pointer" and \
-                hasattr(self, "digit"):
+                self.digit:
             if event.ControlDown():
                 self.OnLeftDownUndo(event)
             else:
@@ -1411,7 +1413,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
             self.mapQueried.emit(x=self.mouse['end'][0], y=self.mouse['end'][1])
 
         elif self.mouse["use"] == "pointer" and \
-                hasattr(self, "digit"):
+                self.digit:
             self._onLeftUp(event)
 
         elif (self.mouse['use'] == 'pointer' and
@@ -1480,7 +1482,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         Debug.msg (5, "BufferedWindow.OnRightDown(): use=%s" % \
                    self.mouse["use"])
 
-        if hasattr(self, "digit"):
+        if self.digit:
             self._onRightDown(event)
 
         event.Skip()
@@ -1491,7 +1493,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         Debug.msg (5, "BufferedWindow.OnRightUp(): use=%s" % \
                    self.mouse["use"])
 
-        if hasattr(self, "digit"):
+        if self.digit:
             self._onRightUp(event)
 
         self.redrawAll = True
@@ -1536,7 +1538,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
         """Motion event and no mouse buttons were pressed
         """
         if self.mouse["use"] == "pointer" and \
-                hasattr(self, "digit"):
+                self.digit:
             self._onMouseMoving(event)
 
         event.Skip()
@@ -1690,7 +1692,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
                 for k in ('n', 's', 'e', 'w'):
                     self.Map.region[k] = newreg[k]
 
-            if hasattr(self, "digit") and \
+            if self.digit and \
                     hasattr(self, "moveInfo"):
                 self._zoom(None)
 
@@ -1815,7 +1817,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
             elif l.type == '3d-raster':
                 rast3d = l.GetName()
             elif l.type == 'vector':
-                if hasattr(self, "digit") and \
+                if self.digit and \
                         self.toolbar.GetLayer() == l:
                     w, s, b, e, n, t = self.digit.GetDisplay().GetMapBoundingBox()
                     self.Map.GetRegion(n = n, s = s, w = w, e = e,

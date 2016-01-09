@@ -77,7 +77,7 @@ class VDigitToolbar(BaseToolbar):
         
         # list of available vector maps
         self.UpdateListOfLayers(updateTool = True)
-        
+
         for tool in ('addPoint', 'addLine', 'addBoundary', 'addCentroid', 'addArea',
                      'addVertex', 'deleteLine', 'deleteArea', 'displayAttr', 'displayCats',
                      'editLine', 'moveLine', 'moveVertex', 'removeVertex', 'additionalTools'):
@@ -1005,8 +1005,8 @@ class VDigitToolbar(BaseToolbar):
                 self.parent.dialogs[dialog].Close()
                 self.parent.dialogs[dialog] = None
         
-        del self.digit
-        del self.MapWindow.digit
+        self.digit = None
+        self.MapWindow.digit = None
 
         self.editingStopped.emit(layerItem = item)
         

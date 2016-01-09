@@ -505,8 +505,8 @@ class MapFrame(SingleMapFrame):
         :param destroy True to destroy otherwise toolbar is only hidden
         """
         self._mgr.DetachPane(self.toolbars[name])
-        self._toolSwitcher.RemoveToolbarFromGroup('mouseUse', self.toolbars[name])
         if destroy:
+            self._toolSwitcher.RemoveToolbarFromGroup('mouseUse', self.toolbars[name])
             self.toolbars[name].Destroy()
             self.toolbars.pop(name)
         else:
