@@ -104,9 +104,13 @@ def db_connection(force=False):
 
     :return: parsed output of db.connect
     """
-    nuldev = file(os.devnull, 'w')
-    conn = parse_command('db.connect', flags='g', stderr=nuldev)
-    nuldev.close()
+    try:
+        nuldev = file(os.devnull, 'w')
+        conn = parse_command('db.connect', flags='g', stderr=nuldev)
+        nuldev.close()
+    except CalledModuleError:
+        conn = None
+    
     if not conn and force:
         run_command('db.connect', flags='c')
         conn = parse_command('db.connect', flags='g')
