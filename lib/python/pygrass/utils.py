@@ -300,10 +300,15 @@ def get_lib_path(modname, libname=None):
     elif getenv('GRASS_ADDON_BASE') and \
             isdir(join(getenv('GRASS_ADDON_BASE'), modname, modname)):
         path = join(os.getenv('GRASS_ADDON_BASE'), modname, modname)
-    elif libname and isdir(join('..', libname)):
+    elif libname and isdir(join('..', libname)): # used by g.extension compilation process
         path = join('..', libname)
+    elif isdir(join('..', 'etc', modname)):      # used by g.extension compilation process
+        path = join('..', 'etc', modname)
+    elif isdir(join('etc', modname)):            # used by g.extension compilation process
+        path = join('etc', modname)
     else:
         path = None
+    
     return path
 
 
