@@ -67,6 +67,9 @@ Contents
       grass-addons/tools/wingrass-packager/grass_addons.sh
       grass-addons/tools/wingrass-packager/grass_copy_wwwroot.sh
 
+    - Update OSGeo4W setup.hint file
+      mswindows/osgeo4w/setup.hint
+
      #version:
      MAJOR=`cat include/VERSION | head -1 | tail -1`
      MINOR=`cat include/VERSION | head -2 | tail -1`
