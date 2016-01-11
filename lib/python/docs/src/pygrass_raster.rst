@@ -161,8 +161,8 @@ opening maps in a read-write mode. ::
     [ 144.99488831  145.22894287  145.57142639]
     >>> new = raster.RasterSegment('new')
     >>> new.open('w', 'CELL')
-    >>> for irow in xrange(elev.rows):
-    ...     new[irow] = elev[irow] < 144
+    >>> for irow, row in enumerate(elev):
+    ...     new[irow] = row < 144
     ...
     >>> for row in new[:5]: print(row[:3])
     [1 1 1]
