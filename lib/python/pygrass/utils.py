@@ -328,7 +328,9 @@ def set_path(modulename, dirname=None, path='.'):
         # running from GRASS GIS session
         path = get_lib_path(modulename, dirname)
         if path is None:
-            raise ImportError("Not able to find the path %s directory." % path)
+            pathname = os.path.join(modulename, dirname) if dirname else modulename
+            raise ImportError("Not able to find the path '%s' directory "
+                              "(current dir '%s')." % (pathname, os.getcwd()))
         sys.path.append(path)
 
 
