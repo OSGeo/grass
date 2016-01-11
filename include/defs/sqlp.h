@@ -2,7 +2,7 @@
 #define GRASS_SQLPDEFS_H
 
 int my_yyinput(char *buf, int max_size);
-void yyerror(char *s);
+void yyerror(const char *s);
 int yyparse();
 int yywrap();
 

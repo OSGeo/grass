@@ -75,7 +75,7 @@ static expr_list *result;
 extern int yylex(void);
 
 int yyparse(void);
-void yyerror(char *s);
+void yyerror(const char *s);
 
 %}
 
@@ -237,7 +237,7 @@ void syntax_error(const char *fmt, ...)
 	syntax_error_occurred = 1;
 }
 
-void yyerror(char *s)
+void yyerror(const char *s)
 {
 	fprintf(stderr, "%s\n", s);
 	syntax_error_occurred = 0;
