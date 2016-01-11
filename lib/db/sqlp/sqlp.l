@@ -256,7 +256,7 @@ int my_yyinput(char *buf, int max_size)
  * message and deposits it in a usefull place.
  *
  **********************************************************************/
-void yyerror( char *s )
+void yyerror( const char *s )
 {
 	snprintf( sqlpStmt->errmsg, 500, "%s processing '%s'", s, yytext );
 
