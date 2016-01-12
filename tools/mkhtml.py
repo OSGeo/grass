@@ -60,7 +60,7 @@ footer_index = string.Template(
 <p>
 <a href="index.html">Main index</a> |
 <a href="${INDEXNAME}.html">${INDEXNAMECAP} index</a> |
-<a href="${URL}/${INDEXNAME}/${PGM}">Source code</a> |
+<a href="${URL}/${FOLDER}/${PGM}">Source code</a> |
 <a href="topics.html">Topics index</a> |
 <a href="keywords.html">Keywords index</a> |
 <a href="graphical_index.html">Graphical index</a> |
@@ -292,10 +292,18 @@ year = os.getenv("VERSION_DATE")
 if not year:
     year = str(datetime.now().year)
 
+# check the names of scripts to assign the right folder
+topdir = os.getenv("MODULE_TOPDIR")
+scripts = os.listdir(os.path.join(topdir, 'scripts'))
+if pgm in scripts:
+    folder = 'scripts'
+else:
+    folder = index_name
 if index_name:
     sys.stdout.write(footer_index.substitute(INDEXNAME=index_name, PGM=pgm,
                                              INDEXNAMECAP=index_name_cap,
                                              YEAR=year, URL=source_url,
+                                             FOLDER=folder,
                                              GRASS_VERSION=grass_version))
 else:
     sys.stdout.write(footer_noindex.substitute(YEAR=year,
