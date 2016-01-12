@@ -313,11 +313,14 @@ def get_lib_path(modname, libname=None):
 
 
 def set_path(modulename, dirname=None, path='.'):
-    """Set sys.path looking in the the local directory GRASS directories."""
+    """Set sys.path looking in the the local directory GRASS directories.
+
+    @param modulename
+    @param dirname
+    @param path used to run the code locally without compilation
+    """
     import sys
     # TODO: why dirname is checked first - the logic should be revised
-    # TODO  probably also 'path' should be also removed - it's used only by
-    #       compilation process for addons (see r.green for details)
     pathlib = None
     if dirname:
         pathlib = os.path.join(path, dirname)
