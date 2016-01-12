@@ -298,12 +298,11 @@ OGRGeometryH create_polygon(struct Map_info *In, int area,
     
     /* Area */
     for (j = 0; j < Points->n_points; j++) {
-	if (Vect_is_3d(In))
-	        OGR_G_AddPoint(ring, Points->x[j], Points->y[j],
-        	               Points->z[j]);
+        if (Vect_is_3d(In))
+            OGR_G_AddPoint(ring, Points->x[j], Points->y[j],
+                           Points->z[j]);
 	else
-	        OGR_G_AddPoint_2D(ring, Points->x[j], Points->y[j]);
-        	               
+            OGR_G_AddPoint_2D(ring, Points->x[j], Points->y[j]);
     }
     
     OGR_G_AddGeometryDirectly(Ogr_geometry, ring);
@@ -316,11 +315,10 @@ OGRGeometryH create_polygon(struct Map_info *In, int area,
         ring = OGR_G_CreateGeometry(wkbLinearRing);
         for (j = 0; j < Points->n_points; j++) {
 	    if(Vect_is_3d(In))
-	            OGR_G_AddPoint(ring, Points->x[j], Points->y[j],
-	                           Points->z[j]);
+                OGR_G_AddPoint(ring, Points->x[j], Points->y[j],
+                               Points->z[j]);
 	    else
-	            OGR_G_AddPoint_2D(ring, Points->x[j], Points->y[j]);
-
+                OGR_G_AddPoint_2D(ring, Points->x[j], Points->y[j]);
         }
         OGR_G_AddGeometryDirectly(Ogr_geometry, ring);
     }
