@@ -28,6 +28,8 @@ pgm = sys.argv[1]
 src_file = "%s.html" % pgm
 tmp_file = "%s.tmp.html" % pgm
 
+source_url = "https://trac.osgeo.org/grass/browser/grass/trunk"
+
 header_base = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 <head>
@@ -53,11 +55,12 @@ header_pgm_desc = """<h2>NAME</h2>
 <em><b>${PGM}</b></em> - ${PGM_DESC}
 """
 
-footer_index = string.Template(\
+footer_index = string.Template(
 """<hr class="header">
 <p>
 <a href="index.html">Main index</a> |
 <a href="${INDEXNAME}.html">${INDEXNAMECAP} index</a> |
+<a href="${URL}/${INDEXNAME}/${PGM}">Source code</a> |
 <a href="topics.html">Topics index</a> |
 <a href="keywords.html">Keywords index</a> |
 <a href="graphical_index.html">Graphical index</a> |
@@ -74,7 +77,7 @@ GRASS GIS ${GRASS_VERSION} Reference Manual
 </html>
 """)
 
-footer_noindex = string.Template(\
+footer_noindex = string.Template(
 """<hr class="header">
 <p>
 <a href="index.html">Main index</a> |
@@ -131,9 +134,9 @@ def create_toc(src_data):
                 self.idx += 1
                 self.process_text = False
                 self.text = ''
-            
+
             self.tag_curr = self.tag_last
-                
+
         def handle_data(self, data):
             if not self.process_text:
                 return
@@ -141,11 +144,11 @@ def create_toc(src_data):
                 self.text += data
             else:
                 self.text += '<%s>%s</%s>' % (self.tag_curr, data, self.tag_curr)
-    
+
     # instantiate the parser and fed it some HTML
     parser = MyHTMLParser()
     parser.feed(src_data)
-    
+
     return parser.data
 
 def escape_href(label):
@@ -161,7 +164,7 @@ def escape_href(label):
 def write_toc(data):
     if not data:
         return
-    
+
     fd = sys.stdout
     fd.write('<div class="toc">\n')
     fd.write('<h4 class="toc">Table of contents</h4>\n')
@@ -177,18 +180,18 @@ def write_toc(data):
             in_h3 = True
         elif not first:
             fd.write('</li>\n')
-            
+
         if tag == 'h2':
             has_h2 = True
             if in_h3:
                 indent -= 4
                 fd.write('%s</ul></li>\n' % (' ' * indent))
                 in_h3 = False
-        
+
         fd.write('%s<li class="toc"><a href="#%s" class="toc">%s</a>' % \
                      (' ' * indent, escape_href(text), text))
         first = False
-    
+
     fd.write('</li>\n</ul>\n')
     fd.write('</div>\n')
 
@@ -290,9 +293,9 @@ if not year:
     year = str(datetime.now().year)
 
 if index_name:
-    sys.stdout.write(footer_index.substitute(INDEXNAME=index_name,
+    sys.stdout.write(footer_index.substitute(INDEXNAME=index_name, PGM=pgm,
                                              INDEXNAMECAP=index_name_cap,
-                                             YEAR=year,
+                                             YEAR=year, URL=source_url,
                                              GRASS_VERSION=grass_version))
 else:
     sys.stdout.write(footer_noindex.substitute(YEAR=year,
