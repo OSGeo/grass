@@ -15,24 +15,46 @@ ordered by <b>start_time</b>.
 
 <h2>EXAMPLE</h2>
 
-Example for monthly aggregation with complex <b>where</b> statements
-to aggregate a single month in a time series of several years:
+Estimate average temperature for the whole time series
 
 <div class="code"><pre>
-# January averages
+t.rast.series input=tempmean_monthly output=tempmean_general method=average
+</pre></div>
+
+Estimate average temperature for all January maps in the time series, the 
+so-called climatology
+
+<div class="code"><pre>
 t.rast.series input=tempmean_monthly \
-    output=jan_average method=average \
+    method=average output=tempmean_january \
+    where="strftime('%m', start_time)='01'"
+
+# equivalently, we can use 
+t.rast.series input=tempmean_monthly \
+    output=tempmean_january method=average \
     where="start_time = datetime(start_time, 'start of year', '0 month')"
 
-# February averages
+# if we want also February and March averages
+
 t.rast.series input=tempmean_monthly \
-    output=feb_average method=average \
+    output=tempmean_february method=average \
     where="start_time = datetime(start_time, 'start of year', '1 month')"
 
-# March averages
 t.rast.series input=tempmean_monthly \
-    output=mar_average method=average \
+    output=tempmean_march method=average \
     where="start_time = datetime(start_time, 'start of year', '2 month')"
+</pre></div>
+
+Generalizing a bit, we can estimate monthly climatologies for all months 
+by means of different methods
+
+<div class="code"><pre>
+for i in `seq -w 1 12` ; do 
+  for m in average stddev minimum maximum ; do 
+    t.rast.series input=tempmean_monthly method=${m} output=tempmean_${m}_${i} \
+    where="strftime('%m', start_time)='${i}'"
+  done
+done
 </pre></div>
 
 <h2>SEE ALSO</h2>
