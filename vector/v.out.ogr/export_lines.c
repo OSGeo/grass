@@ -95,16 +95,18 @@ int export_lines_single(struct Map_info *In, int field, int otype, int donocat, 
             if (OGR_G_GetGeometryType(Ogr_geometry) == wkbPoint) {
                 /* GV_POINTS -> wkbPoint */
 		if (Vect_is_3d(In))
-	                OGR_G_AddPoint(Ogr_geometry, Points->x[0], Points->y[0],
-        	                       Points->z[0]);
-		else OGR_G_AddPoint_2D(Ogr_geometry, Points->x[0], Points->y[0]);
+                    OGR_G_AddPoint(Ogr_geometry, Points->x[0], Points->y[0],
+                                   Points->z[0]);
+		else
+                    OGR_G_AddPoint_2D(Ogr_geometry, Points->x[0], Points->y[0]);
             }
             else { /* GV_LINES -> wkbLinestring */
                 for (j = 0; j < Points->n_points; j++) {
-		if (Vect_is_3d(In))
-	                OGR_G_AddPoint(Ogr_geometry, Points->x[j], Points->y[j],
-        	                       Points->z[j]);
-		else OGR_G_AddPoint_2D(Ogr_geometry, Points->x[j], Points->y[j]);
+                    if (Vect_is_3d(In))
+                        OGR_G_AddPoint(Ogr_geometry, Points->x[j], Points->y[j],
+                                       Points->z[j]);
+                    else
+                        OGR_G_AddPoint_2D(Ogr_geometry, Points->x[j], Points->y[j]);
                 }
             }
         }
