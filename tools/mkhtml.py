@@ -22,13 +22,14 @@ import string
 import re
 from datetime import datetime
 from HTMLParser import HTMLParser
+import urlparse
 
 pgm = sys.argv[1]
 
 src_file = "%s.html" % pgm
 tmp_file = "%s.tmp.html" % pgm
 
-source_url = "https://trac.osgeo.org/grass/browser/grass/trunk"
+source_url = "https://trac.osgeo.org/grass/browser/grass/trunk/"
 
 header_base = """<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
@@ -60,7 +61,7 @@ footer_index = string.Template(
 <p>
 <a href="index.html">Main index</a> |
 <a href="${INDEXNAME}.html">${INDEXNAMECAP} index</a> |
-<a href="${URL}/${FOLDER}/${PGM}">Source code</a> |
+<a href="${URL}">Source code</a> |
 <a href="topics.html">Topics index</a> |
 <a href="keywords.html">Keywords index</a> |
 <a href="graphical_index.html">Graphical index</a> |
@@ -96,7 +97,6 @@ GRASS GIS ${GRASS_VERSION} Reference Manual
 </body>
 </html>
 """)
-
 
 def read_file(name):
     try:
@@ -263,6 +263,7 @@ index_names = {
     'v' : 'vector'
     }
 
+
 def to_title(name):
     """Convert name of command class/family to form suitable for title"""
     return name.capitalize()
@@ -293,17 +294,15 @@ if not year:
     year = str(datetime.now().year)
 
 # check the names of scripts to assign the right folder
-topdir = os.getenv("MODULE_TOPDIR")
-scripts = os.listdir(os.path.join(topdir, 'scripts'))
-if pgm in scripts:
-    folder = 'scripts'
-else:
-    folder = index_name
+topdir = os.path.abspath(os.getenv("MODULE_TOPDIR"))
+curdir = os.path.abspath(os.path.curdir)
+pgmdir = curdir.replace(topdir, '').lstrip('/')
+url = urlparse.urljoin(source_url, pgmdir)
+
 if index_name:
-    sys.stdout.write(footer_index.substitute(INDEXNAME=index_name, PGM=pgm,
+    sys.stdout.write(footer_index.substitute(INDEXNAME=index_name,
                                              INDEXNAMECAP=index_name_cap,
-                                             YEAR=year, URL=source_url,
-                                             FOLDER=folder,
+                                             YEAR=year, URL=url,
                                              GRASS_VERSION=grass_version))
 else:
     sys.stdout.write(footer_noindex.substitute(YEAR=year,
