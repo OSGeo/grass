@@ -85,6 +85,7 @@ int Vedit_split_lines(struct Map_info *Map, struct ilist *List,
 	    G_debug(3, "Vedit_split_lines(): line=%d", line);
 
 	    /* copy first line part */
+	    Vect_reset_line(Points2);
 	    for (l = 0; l < seg; l++) {
 		Vect_append_point(Points2, x[l], y[l], z[l]);
 	    }
@@ -93,7 +94,10 @@ int Vedit_split_lines(struct Map_info *Map, struct ilist *List,
 	    Vect_append_point(Points2, px, py, 0.0);
 
 	    /* rewrite the line */
-	    newline = Vect_rewrite_line(Map, line, type, Points2, Cats);
+            if (j == 0)
+                newline = Vect_rewrite_line(Map, line, type, Points2, Cats);
+            else
+                newline = Vect_write_line(Map, type, Points2, Cats);
 	    if (newline < 0) {
 		return -1;
 	    }
