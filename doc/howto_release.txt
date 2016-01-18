@@ -153,6 +153,9 @@ Contents
       - store in trac: http://trac.osgeo.org/grass/wiki/Release/7.XX.YY-News
       - store in Web as announces/announce_grass$MAJOR$MINOR$RELEASE.html <- how? with protected PHP upload page?
 
+     full release:
+      - update trac milesstone/add next: https://trac.osgeo.org/grass/admin/ticket/milestones
+
  o upload user HTML manual in case of *final release* from compiled English
    version at (warning: needs stuff to be compiled).
       - download new source code package, compile with most settings
