@@ -8,7 +8,7 @@
 #               Vaclav Petras <wenzeslaus gmail com> (support for general sources)
 # PURPOSE:      Tool to download and install extensions into local installation
 #
-# COPYRIGHT:    (C) 2009-2015 by Markus Neteler, and the GRASS Development Team
+# COPYRIGHT:    (C) 2009-2016 by Markus Neteler, and the GRASS Development Team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -888,11 +888,12 @@ def install_extension_win(name):
         platform = build_platform
     else:
         platform = 'x86'
-    base_url = "http://wingrass.fsv.cvut.cz/%(platform)s/" \
-               "grass%(major)s%(minor)s/addons/" \
+    base_url = "http://wingrass.fsv.cvut.cz/" \
+               "grass%(major)s%(minor)s/%(platform)s/addons/" \
                "grass-%(major)s.%(minor)s.%(patch)s" % \
-               {'platform' : platform, 'major': version[0],
-                'minor': version[1], 'patch': version[2]}
+               {'platform' : platform,
+                'major': version[0], 'minor': version[1],
+                'patch': version[2]}
 
     # resolve ZIP URL
     source, url = resolve_source_code(url='{}/{}.zip'.format(base_url, name))
