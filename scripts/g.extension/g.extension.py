@@ -9,6 +9,8 @@
 #               local GRASS installation
 # COPYRIGHT:    (C) 2009-2014 by Markus Neteler, and the GRASS Development Team
 #
+# COPYRIGHT:    (C) 2009-2016 by Markus Neteler, and the GRASS Development Team
+#
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
 #               comes with GRASS for details.
@@ -704,11 +706,12 @@ def install_extension_win(name):
         platform = build_platform
     else:
         platform = 'x86'
-    url = "http://wingrass.fsv.cvut.cz/%(platform)s/" \
-          "grass%(major)s%(minor)s/addons/" \
-          "grass-%(major)s.%(minor)s.%(patch)s/" % \
-        {'platform' : platform, 'major': version[0],
-         'minor': version[1], 'patch': version[2]}
+    url = "http://wingrass.fsv.cvut.cz/" \
+          "grass%(major)s%(minor)s/%(platform)s/addons/" \
+          "grass-%(major)s.%(minor)s.%(patch)s" % \
+          {'platform' : platform,
+           'major': version[0], 'minor': version[1],
+           'patch': version[2]}
     
     grass.debug("url=%s" % url, 1)
 
