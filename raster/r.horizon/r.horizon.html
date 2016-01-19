@@ -69,7 +69,11 @@ processing load of the search algorithm.
 
 <p>The <i>maxdistance</i> value gives a maximum distance to move away
 from the origin along the line of sight in order to search for the
-horizon height. The smaller this value the faster the calculation but
+horizon height.
+<!-- check next statement in the source code -->
+The default <i>maxdistance</i> is the full map extent.
+
+The smaller this value the faster the calculation but
 the higher the risk that you may miss a terrain feature that can
 contribute significantly to the horizon outline. Note that a viewshed
 can be calculated with <em>r.viewshed</em>.
