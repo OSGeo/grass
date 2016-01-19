@@ -708,7 +708,7 @@ def install_extension_win(name):
         platform = 'x86'
     url = "http://wingrass.fsv.cvut.cz/" \
           "grass%(major)s%(minor)s/%(platform)s/addons/" \
-          "grass-%(major)s.%(minor)s.%(patch)s" % \
+          "grass-%(major)s.%(minor)s.%(patch)s/" % \
           {'platform' : platform,
            'major': version[0], 'minor': version[1],
            'patch': version[2]}
