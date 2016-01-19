@@ -213,16 +213,7 @@ def AutoAdjust(self, scaleType, rect, map=None, mapType=None, region=None):
         res = grass.read_command("g.region", flags = 'gu', region = region)
         currRegionDict = grass.parse_key_val(res, val_type = float)
     elif scaleType == 2: # current region
-        env = grass.gisenv()
-        windFilePath = os.path.join(env['GISDBASE'], env['LOCATION_NAME'], env['MAPSET'], 'WIND')
-        try:
-            windFile = open(windFilePath, 'r').read()
-        except IOError:
-            currRegionDict = grass.region()
-        regionDict = grass.parse_key_val(windFile, sep = ':', val_type = float)
-        region = grass.read_command("g.region", flags = 'gu', n = regionDict['north'], s = regionDict['south'],
-                                    e = regionDict['east'], w = regionDict['west'])
-        currRegionDict = grass.parse_key_val(region, val_type = float)
+        currRegionDict = grass.region()
                                                                 
     else:
         return None, None, None
