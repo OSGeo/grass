@@ -52,6 +52,9 @@ import locale
 # ----+- Python 3 compatibility start -+----
 PY2 = sys.version[0] == '2'
 ENCODING = locale.getdefaultlocale()[1]
+if ENCODING is None:
+    ENCODING = 'UTF-8'
+    print("Default locale not found, using UTF-8")  # intentionally not translatable
 
 
 def to_text_string(obj, encoding=ENCODING):
