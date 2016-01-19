@@ -3324,11 +3324,12 @@ class LayerBook(wx.Notebook):
             sql      = 'DROP TABLE %s' % (table)
 
             RunCommand('db.execute',
-                       parent = self,
-                       stdin = sql,
-                       quiet = True,
-                       driver = driver,
-                       database = database)
+                       input='-',
+                       parent=self,
+                       stdin=sql,
+                       quiet=True,
+                       driver=driver,
+                       database=database)
             
             # update list of tables
             tableList = self.addLayerWidgets['table'][1]
