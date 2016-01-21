@@ -3,9 +3,9 @@
 <em>r.buffer</em> creates a new raster map showing
 buffer (a.k.a. "distance" or "proximity") zones around all
 cells that contain non-NULL category values in an existing
-raster map. The distances of buffer zones from cells
-with non-zero category values are user-chosen.  Suppose,
-for example, that you want to place buffer zones around
+raster map. The distances of buffer zones from cells with
+non-zero category values are user-chosen and must be positive value(s).
+Suppose, for example, that you want to place buffer zones around
 roads.  This program could create the raster map 
 shown below on the right based on road information
 contained in the raster map shown on the left.
@@ -76,18 +76,19 @@ on a system with 8 GB RAM without going into swap.
 
 <h2>EXAMPLE</h2>
 
-In the following example, the buffer zones would be (in the default units
-of meters):  0-100, 101-200, 201-300, 301-400 and 401-500.
+In the following example (North Carolina sample dataset), the buffer zones
+would be (in the default map units of meters):  0-100, 101-200, 201-300,
+301-400 and 401-500.
 <br>
 <div class="code"><pre>
-r.buffer input=roads output=roads.buf distances=100,200,300,400,500
+g.region raster=roadsmajor -p
+r.buffer input=roadsmajor output=roadsmajor_buf distances=100,200,300,400,500
 </pre></div>
 
 Result:
 
 <div class="code"><pre>
 r.category input=roads.buf
-
       1       distances calculated from these locations
       2       0-100 meters
       3       100-200 meters
@@ -95,6 +96,11 @@ r.category input=roads.buf
       5       300-400 meters
       6       400-500 meters
 </pre></div>
+
+<center>
+<img src="r_buffer_road.png" border=1><br>
+<i>Distances to road</i>
+</center>
 
 <h2>SEE ALSO</h2>
 
