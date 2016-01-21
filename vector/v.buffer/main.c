@@ -1,4 +1,3 @@
-
 /****************************************************************
  *
  * MODULE:       v.buffer
@@ -225,6 +224,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("circle"));
     G_add_keyword(_("geometry"));
     G_add_keyword(_("line"));
+    G_add_keyword(_("grow"));
+    G_add_keyword(_("shrink"));
     module->description =
 	_("Creates a buffer around vector features of given type.");
 
