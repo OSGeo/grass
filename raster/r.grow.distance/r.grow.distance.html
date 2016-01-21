@@ -5,6 +5,7 @@ distance to the nearest non-null cell in the input map and/or the
 value of the nearest non-null cell.
 
 <h2>NOTES</h2>
+
 The user has the option of specifying five different metrics which
 control the geometry in which grown cells are created, (controlled by
 the <b>metric</b> parameter): <i>Euclidean</i>, <i>Squared</i>,
@@ -60,9 +61,11 @@ be used only in latitude-longitude locations. It is recommended
 to use it along with the <em>-m</em> flag in order to output 
 distances in meters instead of map units.
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
 
-A) Distance from the streams network (North Carolina sample dataset):
+<h3>Distance from the streams network</h3>
+
+North Carolina sample dataset:
 <div class="code"><pre>
 g.region raster=streams_derived -p
 r.grow.distance input=streams_derived distance=dist_from_streams
@@ -79,13 +82,18 @@ r.grow.distance input=streams_derived distance=dist_from_streams
    with d.rast.num)</i>
 </div>
 
-<p>
-B) Distance from sea in meters in latitude-longitude location:
+<h3>Distance from sea in meters in latitude-longitude location</h3>
+
 <div class="code"><pre>
 g.region raster=sea -p
 r.grow.distance -m input=sea distance=dist_from_sea_geodetic metric=geodesic
 </pre></div>
 
+<p>
+<center>
+<img src="r_grow_distance_sea.png" border=1><br>
+<i>Geodesic distances to sea in meters</i>
+</center>
 
 <h2>SEE ALSO</h2>
 
