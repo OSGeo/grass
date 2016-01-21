@@ -128,7 +128,7 @@ int main(int argc, char **argv)
     } opt;
     struct
     {
-	struct Flag *m;
+	struct Flag *m, *n;
     } flag;
     const char *in_name;
     const char *dist_name;
@@ -144,6 +144,7 @@ int main(int argc, char **argv)
     DCELL min, max;
     DCELL *out_row;
     double scale = 1.0;
+    int invert;
 
     G_gisinit(argv[0]);
 
@@ -180,12 +181,25 @@ int main(int argc, char **argv)
     flag.m->key = 'm';
     flag.m->description = _("Output distances in meters instead of map units");
 
+    flag.n = G_define_flag();
+    flag.n->key = 'n';
+    flag.n->description = _("Calculate distance to nearest NULL cell");
+
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
     in_name = opt.in->answer;
     dist_name = opt.dist->answer;
     val_name = opt.val->answer;
+
+    if ((invert = flag.n->answer)) {
+	if (!dist_name)
+	    G_fatal_error(_("Distance output is required for distance to NULL cells"));
+	if (val_name) {
+	    G_warning(_("Value output is meaningless for distance to NULL cells"));
+	    val_name = NULL;
+	}
+    }
 
     if (!dist_name && !val_name)
 	G_fatal_error(_("At least one of distance= and value= must be given"));
@@ -274,13 +288,14 @@ int main(int argc, char **argv)
 
 	Rast_get_d_row(in_fd, in_row, irow);
 
-	for (col = 0; col < ncols; col++)
-	    if (!Rast_is_d_null_value(&in_row[col])) {
+	for (col = 0; col < ncols; col++) {
+	    if (Rast_is_d_null_value(&in_row[col]) == invert) {
 		new_x_row[col] = 0;
 		new_y_row[col] = 0;
 		dist_row[col] = 0;
 		new_val_row[col] = in_row[col];
 	    }
+	}
 
 	for (col = 0; col < ncols; col++)
 	    check(irow, col, -1, 0);
