@@ -263,7 +263,7 @@ def r_export(rast, output='', fmt='png', **kargs):
         raise ValueError('Raster map does not exist.')
 
 
-def get_lib_path(modname, libname):
+def get_lib_path(modname, libname=None):
     """Return the path of the libname contained in the module.
 
     >>> get_lib_path(modname='r.modis', libname='libmodis')
@@ -273,24 +273,40 @@ def get_lib_path(modname, libname):
 
     if isdir(join(getenv('GISBASE'), 'etc', modname)):
         path = join(os.getenv('GISBASE'), 'etc', modname)
+    elif getenv('GRASS_ADDON_BASE') and libname and \
+            isdir(join(getenv('GRASS_ADDON_BASE'), 'etc', modname, libname)):
+        path = join(getenv('GRASS_ADDON_BASE'), 'etc', modname, libname)
     elif getenv('GRASS_ADDON_BASE') and \
             isdir(join(getenv('GRASS_ADDON_BASE'), 'etc', modname)):
         path = join(getenv('GRASS_ADDON_BASE'), 'etc', modname)
     elif getenv('GRASS_ADDON_BASE') and \
             isdir(join(getenv('GRASS_ADDON_BASE'), modname, modname)):
         path = join(os.getenv('GRASS_ADDON_BASE'), modname, modname)
-    elif isdir(join('..', libname)):
+    elif libname and isdir(join('..', libname)): # used by g.extension compilation process
         path = join('..', libname)
+    elif isdir(join('..', 'etc', modname)):      # used by g.extension compilation process
+        path = join('..', 'etc', modname)
+    elif isdir(join('etc', modname)):            # used by g.extension compilation process
+        path = join('etc', modname)
     else:
         path = None
+    
     return path
 
 
-def set_path(modulename, dirname, path='.'):
+def set_path(modulename, dirname=None, path='.'):
+    """Set sys.path looking in the the local directory GRASS directories.
+
+    @param modulename
+    @param dirname
+    @param path used to run the code locally without compilation
+    """
     import sys
-    """Set sys.path looking in the the local directory GRASS directories."""
-    pathlib = os.path.join(path, dirname)
-    if os.path.exists(pathlib):
+    # TODO: why dirname is checked first - the logic should be revised
+    pathlib = None
+    if dirname:
+        pathlib = os.path.join(path, dirname)
+    if pathlib and os.path.exists(pathlib):
         # we are running the script from the script directory
         sys.path.append(os.path.abspath(pathlib))
     else:
@@ -298,7 +314,9 @@ def set_path(modulename, dirname, path='.'):
         from grass.pygrass.utils import get_lib_path
         path = get_lib_path(modulename, dirname)
         if path is None:
-            raise ImportError("Not able to find the path %s directory." % path)
+            pathname = os.path.join(modulename, dirname) if dirname else modulename
+            raise ImportError("Not able to find the path '%s' directory "
+                              "(current dir '%s')." % (pathname, os.getcwd()))
         sys.path.append(path)
 
 
