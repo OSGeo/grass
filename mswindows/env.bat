@@ -11,6 +11,8 @@ set PROJ_LIB=%GISBASE%\share\proj
 set GDAL_DATA=%GISBASE%\share\gdal
 set GEOTIFF_CSV=%GISBASE%\share\epsg_csv
 
+set FONTCONFIG_FILE=%GISBASE%\etc\fonts.conf
+
 set PATH=%GISBASE%\extrabin;%GISBASE%\bin;%PATH%
 
 REM set RStudio temporarily to %PATH% if it exists
