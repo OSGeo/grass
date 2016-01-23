@@ -1287,7 +1287,7 @@ class GdalSelect(wx.Panel):
         if dest:
             self.inputBox.SetLabel(" %s " % _("Output settings"))
         else:
-            self.inputBox.SetLabel(" %s " % _("Source settings"))
+            self.inputBox.SetLabel(" %s " % _("Source input"))
 
         # source type
         sources = list()
