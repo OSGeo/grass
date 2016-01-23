@@ -411,7 +411,7 @@ class GdalImportDialog(ImportDialog):
                 cmd.append('--overwrite')
             
             # run in Layer Manager
-            self._giface.RunCmd(cmd, onDone = self.OnCmdDone, userData = userData)
+            self._giface.RunCmd(cmd, onDone=self.OnCmdDone, userData=userData, addLayer=False)
 
     def OnCmdDone(self, event):
         """Load layers and close if required"""

@@ -116,7 +116,7 @@ class CmdThread(threading.Thread):
         os.environ['GRASS_MESSAGE_FORMAT'] = 'gui'
         while True:
             requestId, args, kwds = self.requestQ.get()
-            for key in ('callable', 'onDone', 'onPrepare', 'userData', 'notification'):
+            for key in ('callable', 'onDone', 'onPrepare', 'userData', 'addLayer', 'notification'):
                 if key in kwds:
                     vars()[key] = kwds[key]
                     del kwds[key]
@@ -202,6 +202,7 @@ class CmdThread(threading.Thread):
                                   pid=requestId,
                                   onDone=vars()['onDone'],
                                   userData=vars()['userData'],
+                                  addLayer=vars()['addLayer'],
                                   notification=vars()['notification'])
 
                 # send event
@@ -424,7 +425,8 @@ class GConsole(wx.EvtHandler):
         self.writeError.emit(text=text)
 
     def RunCmd(self, command, compReg=True, skipInterface=False,
-               onDone=None, onPrepare=None, userData=None, notification=Notification.MAKE_VISIBLE):
+               onDone=None, onPrepare=None, userData=None, addLayer=None,
+               notification=Notification.MAKE_VISIBLE):
         """Run command typed into console command prompt (GPrompt).
 
         .. todo::
@@ -445,6 +447,7 @@ class GConsole(wx.EvtHandler):
                                    given
         :param onDone: function to be called when command is finished
         :param onPrepare: function to be called before command is launched
+        :param addLayer: to be passed in the mapCreated signal
         :param userData: data defined for the command
         """
         if len(command) == 0:
@@ -531,7 +534,7 @@ class GConsole(wx.EvtHandler):
                                       stdout=self.cmdStdOut,
                                       stderr=self.cmdStdErr,
                                       onDone=onDone, onPrepare=onPrepare,
-                                      userData=userData,
+                                      userData=userData, addLayer=addLayer,
                                       env=os.environ.copy(),
                                       notification=notification)
                 self.cmdOutputTimer.Start(50)
@@ -583,7 +586,7 @@ class GConsole(wx.EvtHandler):
                                       stdout=self.cmdStdOut,
                                       stderr=self.cmdStdErr,
                                       onDone=onDone, onPrepare=onPrepare,
-                                      userData=userData,
+                                      userData=userData, addLayer=addLayer,
                                       notification=notification)
             self.cmdOutputTimer.Start(50)
 
@@ -689,7 +692,7 @@ class GConsole(wx.EvtHandler):
                         if '@' not in lname:
                             lname += '@' + grass.gisenv()['MAPSET']
                         if grass.find_file(lname, element=p.get('element'))['fullname']:
-                            self.mapCreated.emit(name=lname, ltype=prompt)
+                            self.mapCreated.emit(name=lname, ltype=prompt, add=event.addLayer)
         if name == 'r.mask':
             self.updateMap.emit()
         
