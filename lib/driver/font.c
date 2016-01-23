@@ -48,11 +48,13 @@ static void font_list(char ***list, int *count, int verbose)
 	;
     num_fonts = i;
 
+    G_debug(2, "font_list: num_fonts=%d", num_fonts);
     fonts = G_malloc(num_fonts * sizeof(const char *));
 
     for (i = 0; i < num_fonts; i++) {
 	struct GFONT_CAP *p = &ftcap[i];
 
+	G_debug(4, "font: %d (%s)", i, p->name);
 	if (verbose) {
 	    char buf[GPATH_MAX];
 
