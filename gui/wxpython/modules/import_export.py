@@ -7,6 +7,7 @@ List of classes:
  - :class:`ImportDialog`
  - :class:`GdalImportDialog`
  - :class:`GdalOutputDialog`
+ - :class:`OgrOutputDialog`
  - :class:`DxfImportDialog`
  - :class:`ReprojectionDialog`
 
@@ -22,6 +23,7 @@ This program is free software under the GNU General Public License
 import os
 
 import wx
+import wx.lib.flatnotebook  as FN
 import wx.lib.filebrowsebutton as filebrowse
 
 from grass.script import core as grass
@@ -29,8 +31,9 @@ from grass.script import task as gtask
 
 from core import globalvar
 from core.gcmd import RunCommand, GMessage, GWarning
+from gui_core.forms import CmdPanel
 from gui_core.gselect import OgrTypeSelect, GdalSelect, SubGroupSelect
-from gui_core.widgets import LayersList, GListCtrl
+from gui_core.widgets import LayersList, GListCtrl, GNotebook
 from core.utils import GetValidLayerName, _
 from core.settings import UserSettings, GetDisplayVectSettings
 
@@ -73,42 +76,6 @@ class ImportDialog(wx.Dialog):
 
         self.list = LayersList(parent = self.panel, columns = columns)
         self.list.LoadData()
-
-        self.optionBox = wx.StaticBox(parent = self.panel, id = wx.ID_ANY,
-                                      label = "%s" % _("Options"))
-        
-        cmd = self._getCommand()
-        task = gtask.parse_interface(cmd)
-        for f in task.get_options()['flags']:
-            name = f.get('name', '')
-            desc = f.get('label', '')
-            if not desc:
-                desc = f.get('description', '')
-            if not name and not desc:
-                continue
-            if cmd == 'r.import':
-                continue
-            elif cmd == 'r.external' and name not in ('o', 'e', 'r', 'h', 'v'):
-                continue
-            elif cmd == 'v.in.ogr' and name not in ('c', 'z', 't', 'o', 'r', 'e', 'w'):
-                continue
-            elif cmd == 'v.external' and name not in ('b'):
-                continue
-            elif cmd == 'v.in.dxf' and name not in ('e', 't', 'b', 'f', 'i'):
-                continue
-            self.options[name] = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
-                                             label = desc)
-        
-        for p in task.get_options()['params']:
-            name = p.get('name', '')
-            desc = p.get('label', '')
-            if not desc:
-                desc = p.get('description', '')
-            if not name and not desc:
-                continue
-            if cmd == 'v.in.ogr' and name == 'encoding':
-                self.options_par[name] = (_('Encoding'),
-                                          wx.TextCtrl(parent = self.panel, id = wx.ID_ANY))
         
         self.overwrite = wx.CheckBox(parent = self.panel, id = wx.ID_ANY,
                                      label = _("Allow output files to overwrite existing files"))
@@ -133,7 +100,33 @@ class ImportDialog(wx.Dialog):
         self.btn_run.Bind(wx.EVT_BUTTON, self.OnRun)
 
         self.Bind(wx.EVT_CLOSE, lambda evt: self.Destroy())
-        
+
+
+        self.notebook = GNotebook(parent = self,
+                                  style = FN.FNB_FANCY_TABS | FN.FNB_BOTTOM |
+                                          FN.FNB_NO_X_BUTTON)
+
+        self.notebook.AddPage(page = self.panel, 
+                              text=_('Source settings'), 
+                              name = 'source')
+    
+        self.createSettingsPage()
+
+    def createSettingsPage(self):
+
+        self._blackList = { 'enabled' : True,
+                            'items'   : {self._getCommand() : {'params' : self._getBlackListedParameters(),
+                                                               'flags' :  self._getBlackListedFlags()}}}
+
+        grass_task = gtask.parse_interface(self._getCommand(),
+                                            blackList=self._blackList)
+
+        self.advancedPagePanel = CmdPanel(parent=self, giface=None, task=grass_task, frame=None)
+
+        self.notebook.AddPage(page = self.advancedPagePanel, 
+                              text=_('Import settings'), 
+                              name = 'settings')
+
     def doLayout(self):
         """Do layout"""
         dialogSizer = wx.BoxSizer(wx.VERTICAL)
@@ -151,27 +144,6 @@ class ImportDialog(wx.Dialog):
                       flag = wx.ALL | wx.EXPAND, border = 5)
         
         dialogSizer.Add(item = layerSizer, proportion = 1,
-                        flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 5)
-
-        # options
-        optionSizer = wx.StaticBoxSizer(self.optionBox, wx.VERTICAL)
-        for key in self.options.keys():
-            optionSizer.Add(item = self.options[key], proportion = 0)
-        if self.options_par:
-            gridBox = wx.GridBagSizer(vgap = 5, hgap = 5)
-            row = 0
-            for label, win in self.options_par.itervalues():
-                gridBox.Add(item = wx.StaticText(parent = self.panel, id = wx.ID_ANY,
-                                                 label = label + ':'),
-                            pos = (row, 0), flag = wx.ALIGN_CENTER_VERTICAL)
-                gridBox.Add(item = win, pos = (row, 1), flag = wx.EXPAND)
-                row += 1
-            
-            gridBox.AddGrowableCol(1)
-            optionSizer.Add(item = gridBox, proportion = 0,
-                            flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 5)
-        
-        dialogSizer.Add(item = optionSizer, proportion = 0,
                         flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 5)
         
         dialogSizer.Add(item = self.overwrite, proportion = 0,
@@ -214,8 +186,16 @@ class ImportDialog(wx.Dialog):
 
     def _getCommand(self):
         """Get command"""
-        return ''
+        raise NotImplementedError()
     
+    def _getBlackListedParameters(self):
+        """Get parameters which will not be showed in Settings page"""
+        raise NotImplementedError()
+
+    def _getBlackListedFlags(self):
+        """Get flags which will not be showed in Settings page"""
+        raise NotImplementedError()
+
     def OnClose(self, event = None):
         """Close dialog"""
         self.Close()
@@ -292,181 +272,11 @@ class ImportDialog(wx.Dialog):
         """Do what has to be done after importing"""
         pass
 
-
-class GdalImportDialog(ImportDialog):
-    def __init__(self, parent, giface, ogr = False, link = False):
-        """Dialog for bulk import of various raster/vector data
-
-        .. todo::
-            Split into GdalImportDialog and OgrImportDialog, split importing logic from gui code
-
-        :param parent: parent window
-        :param ogr: True for OGR (vector) otherwise GDAL (raster)
-        :param link: True for linking data otherwise importing data
-        """
-        self._giface = giface
-        self.link = link
-        self.ogr  = ogr
-
-        self.layersData = []
-
-        if ogr:
-            ImportDialog.__init__(self, parent, giface=giface, itype='ogr')
-            if link:
-                self.SetTitle(_("Link external vector data"))
-            else:
-                self.SetTitle(_("Import vector data"))
-        else:
-            ImportDialog.__init__(self, parent, giface=giface, itype='gdal') 
-            if link:
-                self.SetTitle(_("Link external raster data"))
-            else:
-                self.SetTitle(_("Import raster data"))
-        
-        self.dsnInput = GdalSelect(parent = self, panel = self.panel,
-                                   ogr = ogr, link = link)
-        self.dsnInput.AttachSettings()
-        self.dsnInput.reloadDataRequired.connect(self.reload)
-
-        if link:
-            self.add.SetLabel(_("Add linked layers into layer tree"))
-        else:
-            self.add.SetLabel(_("Add imported layers into layer tree"))
-        
-        self.add.SetValue(UserSettings.Get(group = 'cmd', key = 'addNewLayer', subkey = 'enabled'))
-
-        if link:
-            self.btn_run.SetLabel(_("&Link"))
-            self.btn_run.SetToolTipString(_("Link selected layers"))
-        else:
-            self.btn_run.SetLabel(_("&Import"))
-            self.btn_run.SetToolTipString(_("Import selected layers"))
-
-        self.doLayout()
-
-    def reload(self, data, listData):
-
-        self.list.LoadData(listData);
-        self.layersData = data;
-
-    def OnRun(self, event):
-        """Import/Link data (each layes as separate vector map)"""
-        self.commandId = -1
-        data = self.list.GetLayers()
-
-
-        data = self._getLayersToReprojetion()
-
-        if data is None:
-            return;
-
-        if not data:
-            GMessage(_("No layers selected. Operation canceled."),
-                     parent = self)
-            return
-        
-        dsn  = self.dsnInput.GetDsn()
-        ext  = self.dsnInput.GetFormatExt()
-        
-        # determine data driver for PostGIS links
-        self.popOGR = False
-        if self.importType == 'ogr' and \
-                self.dsnInput.GetType() == 'db' and \
-                self.dsnInput.GetFormat() == 'PostgreSQL' and \
-                'GRASS_VECTOR_OGR' not in os.environ:
-            self.popOGR = True
-            os.environ['GRASS_VECTOR_OGR'] = '1'
-        
-        for layer, output, listId in data:
-            userData = {}
-            if self.importType == 'ogr':
-
-                if ext and layer.rfind(ext) > -1:
-                    layer = layer.replace('.' + ext, '')
-                if '|' in layer:
-                    layer, geometry = layer.split('|', 1)
-                else:
-                    geometry = None
-                if self.link:
-                    cmd = ['v.external',
-                           'input=%s' % dsn,
-                           'output=%s' % output,
-                           'layer=%s' % layer]
-
-                elif self.layersData[listId][3] == 0:
-                    cmd = ['v.import',
-                           'input=%s' % dsn,
-                           'layer=%s' % layer,
-                           'output=%s' % output]
-                else:
-                    cmd = ['v.in.ogr',
-                           'input=%s' % dsn,
-                           'layer=%s' % layer,
-                           'output=%s' % output]
-                    if geometry:
-                        cmd.append('geometry=%s' % geometry)
-            else: # gdal
-                if self.dsnInput.GetType() == 'dir':
-                    idsn = os.path.join(dsn, layer)
-                else:
-                    idsn = dsn
-
-                # check number of bands
-                nBandsStr = RunCommand('r.in.gdal',
-                                       flags = 'p',
-                                       input = idsn, read = True)
-                nBands = -1
-                if nBandsStr:
-                    try:
-                        nBands = int(nBandsStr.rstrip('\n'))
-                    except:
-                        pass
-                if nBands < 0:
-                    GWarning(_("Unable to determine number of raster bands"),
-                             parent = self)
-                    nBands = 1
-
-                userData['nbands'] = nBands
-                if self.link:
-                    cmd = ['r.external',
-                           'input=%s' % idsn,
-                           'output=%s' % output]
-                else:
-                    cmd = ['r.import',
-                           'input=%s' % idsn,
-                           'output=%s' % output]
-            
-            if self.overwrite.IsChecked():
-                cmd.append('--overwrite')
-            
-            for key in self.options.keys():
-                if self.options[key].IsChecked():
-                    cmd.append('-%s' % key)
-            for key in self.options_par.keys():
-                value = self.options_par[key][1].GetValue()
-                if value:
-                    cmd.append('%s=%s' % (key, value))
-            
-            if UserSettings.Get(group = 'cmd', key = 'overwrite', subkey = 'enabled') and \
-                    '--overwrite' not in cmd:
-                cmd.append('--overwrite')
-            
-            # run in Layer Manager
-            self._giface.RunCmd(cmd, onDone = self.OnCmdDone, userData = userData)
-
-
-    def _getLayersToReprojetion(self):
+    def _getLayersToReprojetion(self, projMatch_idx, grassName_idx):
         """If there are layers with different projection from loation projection, 
            show dialog to user to explicitly select layers which will be reprojected..."""
         differentProjLayers = []
         data = self.list.GetData(checked=True)
-
-        if self.importType == 'ogr':
-                projMatch_idx = 3
-                grassName_idx = 4
-        else:#gdal
-                projMatch_idx = 2
-                grassName_idx = 3
 
         for itm in data:
 
@@ -497,6 +307,244 @@ class GdalImportDialog(ImportDialog):
 
         return layers
 
+    def getSettingsPageCmd(self):
+
+        return self.advancedPagePanel.createCmd(ignoreErrors=True, ignoreRequired=True)
+
+class GdalImportDialog(ImportDialog):
+    def __init__(self, parent, giface, link=False):
+        """Dialog for bulk import of various raster data
+
+        .. todo::
+            split importing logic from gui code
+
+        :param parent: parent window
+        :param link: True for linking data otherwise importing data
+        """
+        self._giface = giface
+        self.link = link
+
+        self.layersData = []
+
+        ImportDialog.__init__(self, parent, giface=giface, itype='gdal') 
+        if link:
+            self.SetTitle(_("Link external raster data"))
+        else:
+            self.SetTitle(_("Import raster data"))
+        
+        self.dsnInput = GdalSelect(parent = self, panel = self.panel,
+                                   ogr = False, link = link)
+        self.dsnInput.AttachSettings()
+        self.dsnInput.reloadDataRequired.connect(self.reload)
+
+        if link:
+            self.add.SetLabel(_("Add linked layers into layer tree"))
+        else:
+            self.add.SetLabel(_("Add imported layers into layer tree"))
+        
+        self.add.SetValue(UserSettings.Get(group = 'cmd', key = 'addNewLayer', subkey = 'enabled'))
+
+        if link:
+            self.btn_run.SetLabel(_("&Link"))
+            self.btn_run.SetToolTipString(_("Link selected layers"))
+        else:
+            self.btn_run.SetLabel(_("&Import"))
+            self.btn_run.SetToolTipString(_("Import selected layers"))
+
+        self.doLayout()
+
+    def reload(self, data, listData):
+
+        self.list.LoadData(listData);
+        self.layersData = data;
+
+    def OnRun(self, event):
+        """Import/Link data (each layes as separate vector map)"""
+        self.commandId = -1
+        data = self.list.GetLayers()
+
+
+        data = self._getLayersToReprojetion(2, 3)
+
+        if data is None:
+            return;
+
+        if not data:
+            GMessage(_("No layers selected. Operation canceled."),
+                     parent = self)
+            return
+        
+        dsn  = self.dsnInput.GetDsn()
+        ext  = self.dsnInput.GetFormatExt()
+        
+        
+        for layer, output, listId in data:
+            userData = {}
+          
+            if self.dsnInput.GetType() == 'dir':
+                idsn = os.path.join(dsn, layer)
+            else:
+                idsn = dsn
+
+            # check number of bands
+            nBandsStr = RunCommand('r.in.gdal',
+                                    flags = 'p',
+                                    input = idsn, read = True)
+            nBands = -1
+            if nBandsStr:
+                try:
+                    nBands = int(nBandsStr.rstrip('\n'))
+                except:
+                    pass
+            if nBands < 0:
+                GWarning(_("Unable to determine number of raster bands"),
+                        parent = self)
+            nBands = 1
+
+            userData['nbands'] = nBands
+            cmd = self.getSettingsPageCmd()
+            cmd.append('input=%s' % dsn)
+            cmd.append('output=%s' % output)
+            
+            if self.overwrite.IsChecked():
+                cmd.append('--overwrite')
+            
+            if UserSettings.Get(group = 'cmd', key = 'overwrite', subkey = 'enabled') and \
+                    '--overwrite' not in cmd:
+                cmd.append('--overwrite')
+            
+            # run in Layer Manager
+            self._giface.RunCmd(cmd, onDone = self.OnCmdDone, userData = userData)
+
+    def OnCmdDone(self, event):
+        """Load layers and close if required"""
+        if not hasattr(self, 'AddLayers'):
+            return
+
+        self.AddLayers(event.returncode, event.cmd, event.userData)
+
+        if event.returncode == 0 and self.closeOnFinish.IsChecked():
+            self.Close()
+
+    def _getCommand(self):
+        """Get command"""
+        if self.link:
+                return 'r.external'
+        else:
+                return 'r.import'
+
+    def _getBlackListedParameters(self):
+        """Get flags which will not be showed in Settings page"""
+        return ['input', 'output']
+
+    def _getBlackListedFlags(self):
+        """Get flags which will not be showed in Settings page"""
+        return ['overwrite']
+
+class OgrImportDialog(ImportDialog):
+    def __init__(self, parent, giface, link=False):
+        """Dialog for bulk import of various vector data
+
+        .. todo::
+            split importing logic from gui code
+
+        :param parent: parent window
+        :param link: True for linking data otherwise importing data
+        """
+        self._giface = giface
+        self.link = link
+
+        self.layersData = []
+
+        ImportDialog.__init__(self, parent, giface=giface, itype='ogr')
+        if link:
+            self.SetTitle(_("Link external vector data"))
+        else:
+            self.SetTitle(_("Import vector data"))
+        
+        self.dsnInput = GdalSelect(parent = self, panel = self.panel,
+                                   ogr = True, link = link)
+        self.dsnInput.AttachSettings()
+        self.dsnInput.reloadDataRequired.connect(self.reload)
+
+        if link:
+            self.add.SetLabel(_("Add linked layers into layer tree"))
+        else:
+            self.add.SetLabel(_("Add imported layers into layer tree"))
+        
+        self.add.SetValue(UserSettings.Get(group = 'cmd', key = 'addNewLayer', subkey = 'enabled'))
+
+        if link:
+            self.btn_run.SetLabel(_("&Link"))
+            self.btn_run.SetToolTipString(_("Link selected layers"))
+        else:
+            self.btn_run.SetLabel(_("&Import"))
+            self.btn_run.SetToolTipString(_("Import selected layers"))
+
+        self.doLayout()
+
+    def reload(self, data, listData):
+
+        self.list.LoadData(listData);
+        self.layersData = data;
+
+    def OnRun(self, event):
+        """Import/Link data (each layes as separate vector map)"""
+        self.commandId = -1
+        data = self.list.GetLayers()
+
+
+        data = self._getLayersToReprojetion(3, 4)
+
+        if data is None:
+            return;
+
+        if not data:
+            GMessage(_("No layers selected. Operation canceled."),
+                     parent = self)
+            return
+        
+        dsn  = self.dsnInput.GetDsn()
+        ext  = self.dsnInput.GetFormatExt()
+        
+        # determine data driver for PostGIS links
+        self.popOGR = False
+        if  self.dsnInput.GetType() == 'db' and \
+                self.dsnInput.GetFormat() == 'PostgreSQL' and \
+                'GRASS_VECTOR_OGR' not in os.environ:
+            self.popOGR = True
+            os.environ['GRASS_VECTOR_OGR'] = '1'
+        
+        for layer, output, listId in data:
+            userData = {}
+
+            if ext and layer.rfind(ext) > -1:
+                layer = layer.replace('.' + ext, '')
+            if '|' in layer:
+                layer, geometry = layer.split('|', 1)
+            else:
+                geometry = None
+
+                #TODO
+                #if geometry:
+                #    cmd.append('geometry=%s' % geometry)
+             
+            cmd = self.getSettingsPageCmd()
+            cmd.append('input=%s' % dsn)
+            cmd.append('layer=%s' % layer)
+            cmd.append('output=%s' % output)
+
+            if self.overwrite.IsChecked():
+                cmd.append('--overwrite')
+            
+            #TODO options
+            if UserSettings.Get(group = 'cmd', key = 'overwrite', subkey = 'enabled') and \
+                    '--overwrite' not in cmd:
+                cmd.append('--overwrite')
+            
+            # run in Layer Manager
+            self._giface.RunCmd(cmd, onDone = self.OnCmdDone, userData = userData)
+
     def OnCmdDone(self, event):
         """Load layers and close if required"""
         if not hasattr(self, 'AddLayers'):
@@ -513,17 +561,17 @@ class GdalImportDialog(ImportDialog):
     def _getCommand(self):
         """Get command"""
         if self.link:
-            if self.ogr:
-                return 'v.external'
-            else:
-                return 'r.external'
+           return 'v.external'
         else:
-            if self.ogr:
-                return 'v.in.ogr'
-            else:
-                return 'r.import'
-        
-        return ''
+            return 'v.import'
+
+    def _getBlackListedParameters(self):
+        """Get parametrs which will not be showed in Settings page"""
+        return ['input', 'output', 'layer']
+
+    def _getBlackListedFlags(self):
+        """Get flags which will not be showed in Settings page"""
+        return ['overwrite']
 
 class GdalOutputDialog(wx.Dialog):
     def __init__(self, parent, id = wx.ID_ANY, ogr = False,
@@ -638,6 +686,10 @@ class DxfImportDialog(ImportDialog):
     def _getCommand(self):
         """Get command"""
         return 'v.in.dxf'
+
+    def _getBlackListedParameters(self):
+
+        return ['input', 'output', 'layers']
     
     def OnRun(self, event):
         """Import/Link data (each layes as separate vector map)"""
@@ -651,11 +703,12 @@ class DxfImportDialog(ImportDialog):
         
         inputDxf = self.dsnInput.GetValue()
         
-        for layer, output in data:
-            cmd = ['v.in.dxf',
-                   'input=%s' % inputDxf,
-                   'layers=%s' % layer,
-                   'output=%s' % output]
+        for layer, output, itemId in data:
+
+            cmd = self.getSettingsPageCmd()
+            cmd.append('input=%s' % inputDxf)
+            cmd.append('layer=%s' % layer)
+            cmd.append('output=%s' % output)
 
             for key in self.options.keys():
                 if self.options[key].IsChecked():
@@ -702,6 +755,19 @@ class DxfImportDialog(ImportDialog):
             data.append((layerId, layerName.strip(), grassName.strip()))
         
         self.list.LoadData(data)
+
+    def _getCommand(self):
+        """Get command"""
+        return 'v.in.dxf'
+
+    def _getBlackListedParameters(self):
+        """Get parametrs which will not be showed in Settings page"""
+        return ['input', 'output', 'layers']
+
+    def _getBlackListedFlags(self):
+        """Get flags which will not be showed in Settings page"""
+        return ['overwrite']
+
 
 class RerojectionDialog(wx.Dialog):
     """ """

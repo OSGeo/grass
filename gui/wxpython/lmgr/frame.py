@@ -56,7 +56,7 @@ from core.workspace        import ProcessWorkspaceFile, ProcessGrcFile, WriteWor
 from core.gconsole         import GConsole, EVT_IGNORED_CMD_RUN
 from core.giface           import Notification
 from gui_core.goutput      import GConsoleWindow, GC_SEARCH, GC_PROMPT
-from modules.import_export import GdalOutputDialog, DxfImportDialog, GdalImportDialog
+from modules.import_export import GdalOutputDialog, DxfImportDialog, GdalImportDialog, OgrImportDialog
 from gui_core.dialogs      import LocationDialog, MapsetDialog, CreateNewVector, GroupDialog, MapLayersDialog, QuitDialog
 from modules.colorrules    import RasterColorTable, VectorColorTable
 from gui_core.menu         import Menu, SearchModuleWindow
@@ -1712,13 +1712,13 @@ class GMFrame(wx.Frame):
         
     def OnImportOgrLayers(self, event, cmd = None):
         """Convert multiple OGR layers to GRASS vector map layers"""
-        dlg = GdalImportDialog(parent = self, giface = self._giface, ogr = True)
+        dlg = OgrImportDialog(parent = self, giface = self._giface)
         dlg.CentreOnScreen()
         dlg.Show()
         
     def OnLinkOgrLayers(self, event, cmd = None):
         """Links multiple OGR layers to GRASS vector map layers"""
-        dlg = GdalImportDialog(parent = self, giface = self._giface, ogr = True, link = True)
+        dlg = OgrImportDialog(parent = self, giface = self._giface, link = True)
         dlg.CentreOnScreen()
         dlg.Show()
         
