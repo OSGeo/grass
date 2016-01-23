@@ -91,7 +91,11 @@
 #% key: l
 #% description: List available OGR layers in data source and exit
 #%end
-
+#%flag
+#% key: o
+#% label: Override projection check (use current location's projection)
+#% description: Assume that the dataset has same projection as the current location
+#%end
 
 import sys
 import os
@@ -134,9 +138,12 @@ def main():
     output = options['output']
     layers = options['layer']
 
-    vflags = None
+    vflags = ''
     if options['extent'] == 'region':
-        vflags = 'r'
+        vflags += 'r'
+    if flags['o']:
+        vflags += 'o'
+
     vopts = {}
     if options['encoding']:
         vopts['encoding'] = options['encoding']
@@ -193,8 +200,8 @@ def main():
     os.environ['GISRC'] = str(tgtgisrc)
 
     # try v.in.ogr directly
-    if grass.run_command('v.in.ogr', input=OGRdatasource, flags='j',
-                         errors='status', quiet=True) == 0:
+    if flags['o'] or grass.run_command('v.in.ogr', input=OGRdatasource, flags='j',
+                                       errors='status', quiet=True) == 0:
         try:
             grass.run_command('v.in.ogr', input=OGRdatasource,
                               flags=vflags, **vopts)
