@@ -255,6 +255,8 @@ if [ -n "$PACKAGE_PATCH" ]; then
 	/mingw${MINGW_POSTFIX}/bin/libtre-5.dll \
         /mingw${MINGW_POSTFIX}/bin/zlib1.dll \
 	apps/grass/grass-$VERSION/bin
+    cp -uv /mingw${MINGW_POSTFIX}/etc/fonts/fonts.conf \
+	apps/grass/grass-$VERSION/etc
     
     # creating grass package
     tar -cjf $PDIR/grass$PACKAGE_POSTFIX-$VERSION-$PACKAGE_PATCH.tar.bz2 \
