@@ -8,7 +8,7 @@
 #
 # PURPOSE:      Import and reproject on the fly
 #
-# COPYRIGHT:    (C) 2015 GRASS development team
+# COPYRIGHT:    (C) 2015-2016 GRASS development team
 #
 #               This program is free software under the GNU General
 #               Public License (>=v2). Read the file COPYING that
@@ -103,7 +103,11 @@
 #% key: l
 #% description: Force Lat/Lon maps to fit into geographic coordinates (90N,S; 180E,W)
 #%end
-
+#%flag
+#% key: o
+#% label: Override projection check (use current location's projection)
+#% description: Assume that the dataset has same projection as the current location
+#%end
 
 import sys
 import os
@@ -188,8 +192,10 @@ def main():
 
     # try r.in.gdal directly first
     additional_flags = 'l' if flags['l'] else ''
-    if grass.run_command('r.in.gdal', input=GDALdatasource, flags='j',
-                         errors='status', quiet=True) == 0:
+    if flags['o']:
+        additional_flags += 'o'
+    if flags['o'] or grass.run_command('r.in.gdal', input=GDALdatasource, flags='j',
+                                       errors='status', quiet=True) == 0:
         parameters = dict(input=GDALdatasource, output=output,
                           memory=memory, flags='k' + additional_flags)
         if bands:
