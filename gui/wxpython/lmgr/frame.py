@@ -2260,7 +2260,6 @@ class GMFrame(wx.Frame):
         """Quit GRASS terminal"""
         try:
             shellPid = int(grass.gisenv()['PID'])
-            print >> sys.stderr, grass.gisenv()
         except:
             grass.warning(_("Unable to exit GRASS shell: unknown PID"))
             return
