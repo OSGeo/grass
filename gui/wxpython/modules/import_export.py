@@ -289,10 +289,9 @@ class ImportDialog(wx.Dialog):
         
         layers = self.list.GetLayers()
         
-        if differentProjLayers:
+        if differentProjLayers and '-o' not in self.getSettingsPageCmd():
 
-            dlg = RerojectionDialog(
-                parent=self, giface=self._giface, data=differentProjLayers)
+            dlg = RerojectionDialog(parent=self, giface=self._giface, data=differentProjLayers)
                 
             ret = dlg.ShowModal()
 
@@ -363,7 +362,6 @@ class GdalImportDialog(ImportDialog):
         self.commandId = -1
         data = self.list.GetLayers()
 
-
         data = self._getLayersToReprojetion(2, 3)
 
         if data is None:
@@ -376,7 +374,6 @@ class GdalImportDialog(ImportDialog):
         
         dsn  = self.dsnInput.GetDsn()
         ext  = self.dsnInput.GetFormatExt()
-        
         
         for layer, output, listId in data:
             userData = {}
