@@ -273,7 +273,7 @@ class VectorSelectBase():
         try:
             query = grass.vector_what(map=[self.mapName],
                                       coord=self.mapWin.GetLastEN(),
-                                      distance=threshold)
+                                      distance=threshold, skip_attributes=True)
         except grass.ScriptError:
             GError(parent=self,
                    message=_("Failed to query vector map(s) <%s>.") % self.map)
