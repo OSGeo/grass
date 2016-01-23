@@ -106,7 +106,7 @@
 #%flag
 #% key: o
 #% label: Override projection check (use current location's projection)
-#% description: Assume that the dataset has same projection as the current location
+#% description: Assume that the dataset has the same projection as the current location
 #%end
 
 import sys
