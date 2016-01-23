@@ -29,8 +29,9 @@ from core.utils import _
 
 class PyShellWindow(wx.Panel):
     """Python Shell Window"""
-    def __init__(self, parent, id = wx.ID_ANY, **kwargs):
-        self.parent = parent # GMFrame
+    def __init__(self, parent, giface, id = wx.ID_ANY, **kwargs):
+        self.parent = parent
+        self.giface = giface
         
         wx.Panel.__init__(self, parent = parent, id = id, **kwargs)
         
@@ -98,7 +99,7 @@ class PyShellWindow(wx.Panel):
         if not fname:
             return _("Raster or vector map <%s> not found") % (name)
         
-        self.parent.GetLayerTree().AddLayer(ltype = ltype,
+        self.giface.GetLayerTree().AddLayer(ltype = ltype,
                                             lname = fname,
                                             lchecked = True,
                                             lcmd = [lcmd, 'map=%s' % fname])
