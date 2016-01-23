@@ -266,7 +266,7 @@ json = None
 orderedDict = None
 
 
-def vector_what(map, coord, distance=0.0, ttype=None, encoding=None):
+def vector_what(map, coord, distance=0.0, ttype=None, encoding=None, skip_attributes=False):
     """Query vector map at given locations
 
     To query one vector map at one location
@@ -322,6 +322,8 @@ def vector_what(map, coord, distance=0.0, ttype=None, encoding=None):
     :param distance: query threshold distance (in map units)
     :param ttype: list of topology types (default of v.what are point, line,
                   area, face)
+    :param encoding: attributes encoding
+    :param skip_attributes: True to skip quering attributes
 
     :return: parsed list
     """
@@ -344,7 +346,7 @@ def vector_what(map, coord, distance=0.0, ttype=None, encoding=None):
             coord_list.append('%f,%f' % (e, n))
 
     cmdParams = dict(quiet      = True,
-                     flags      = 'aj',
+                     flags      = 'j' if skip_attributes else 'aj',
                      map        = ','.join(map_list),
                      layer      = ','.join(layer_list),
                      coordinates = ','.join(coord_list),
