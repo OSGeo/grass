@@ -1158,7 +1158,7 @@ class ManageSettingsWidget(wx.Panel):
         wx.Panel.__init__(self, parent=parent, id=wx.ID_ANY)
 
         self.settingsBox = wx.StaticBox(parent=self, id=wx.ID_ANY,
-                                        label=" %s " % _("Settings"))
+                                        label=" %s " % _("Profiles"))
 
         self.settingsChoice = wx.Choice(parent=self, id=wx.ID_ANY)
         self.settingsChoice.Bind(wx.EVT_CHOICE, self.OnSettingsChanged)
