@@ -161,24 +161,30 @@ class GRASSStartup(wx.Frame):
         self.bbrowse = wx.Button(parent = self.gisdbase_panel, id = wx.ID_ANY,
                                  label = _("&Browse"))
         self.bmapset = wx.Button(parent = self.mapset_panel, id = wx.ID_ANY,
+        # GTC New mapset
                                  label = _("&New"))
         self.bmapset.SetToolTipString(
             _("Create a new Mapset in selected Location"))
         self.bwizard = wx.Button(parent = self.location_panel, id = wx.ID_ANY,
+        # GTC New location
                                  label = _("N&ew"))
         self.bwizard.SetToolTipString(_("Create a new location using location wizard."
                                         " After location is created successfully,"
                                         " GRASS session is started."))
         self.rename_location_button = wx.Button(parent=self.location_panel, id=wx.ID_ANY,
+        # GTC Rename location
                                                 label=_("Ren&ame"))
         self.rename_location_button.SetToolTipString(_("Rename selected location"))
         self.delete_location_button = wx.Button(parent=self.location_panel, id=wx.ID_ANY,
+        # GTC Delete location
                                                 label=_("De&lete"))
         self.delete_location_button.SetToolTipString(_("Delete selected location"))
         self.rename_mapset_button = wx.Button(parent=self.mapset_panel, id=wx.ID_ANY,
+        # GTC Rename mapset
                                                 label=_("&Rename"))
         self.rename_mapset_button.SetToolTipString(_("Rename selected mapset"))
         self.delete_mapset_button = wx.Button(parent=self.mapset_panel, id=wx.ID_ANY,
+        # GTC Delete mapset
                                               label=_("&Delete"))
         self.delete_mapset_button.SetToolTipString(_("Delete selected mapset"))
 
