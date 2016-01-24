@@ -873,7 +873,7 @@ def check_lock():
     if not os.path.exists(location):
         fatal(_("Path '%s' doesn't exist") % location)
     if not os.access(location, os.W_OK):
-        error = "Path '%s' not accessible.\n" % location
+        error = "Path '%s' not accessible." % location
         stat_info = os.stat(location)
         mapset_uid = stat_info.st_uid
         if mapset_uid != os.getuid():
@@ -1040,6 +1040,7 @@ r"""
 %-41sg.manual -i
 %-41sg.version -c
 """ % (_("GRASS GIS homepage:"),
+        # GTC Running through: SHELL NAME
        _("This version running through:"),
        shellname, os.getenv('SHELL'),
        _("Help is available with the command:"),
