@@ -1169,12 +1169,13 @@ def lock_mapset(mapset_path, force_gislock_removal, user, grass_gui):
     if not os.path.exists(mapset_path):
         fatal(_("Path '%s' doesn't exist") % mapset_path)
     if not os.access(mapset_path, os.W_OK):
-        error = "Path '%s' not accessible.\n" % mapset_path
+        error = _("Path '%s' not accessible.") % mapset_path
         stat_info = os.stat(mapset_path)
         mapset_uid = stat_info.st_uid
         if mapset_uid != os.getuid():
-            error += "You are not the owner of '%s'" % mapset_path
-        fatal(_(error))
+            # GTC %s is mapset's folder path
+            error = "%s\n%s" % (error, _("You are not the owner of '%s'.") % mapset_path)
+        fatal(error)
     # Check for concurrent use
     lockfile = os.path.join(mapset_path, ".gislock")
     ret = call([gpath("etc", "lock"), lockfile, "%d" % os.getpid()])
@@ -1416,6 +1417,7 @@ r"""
 %-41sg.manual -i
 %-41sg.version -c
 """ % (_("GRASS GIS homepage:"),
+        # GTC Running through: SHELL NAME
        _("This version running through:"),
        shellname, os.getenv('SHELL'),
        _("Help is available with the command:"),
