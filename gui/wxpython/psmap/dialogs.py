@@ -760,6 +760,7 @@ class MapFramePanel(wx.Panel):
         border.Add(item = sizer, proportion = 0, flag = wx.ALL | wx.EXPAND, border = 5)
         
         # border
+        # GTC Line around legend or map frame
         box   = wx.StaticBox (parent = self, id = wx.ID_ANY, label = " %s " % _("Border"))        
         sizer = wx.StaticBoxSizer(box, wx.HORIZONTAL)
         gridBagSizer = wx.GridBagSizer(hgap = 5, vgap = 5)
@@ -2651,6 +2652,7 @@ class LegendDialog(PsmapDialog):
         self.sizePositionFont(legendType = 'vector', parent = panel, mainSizer = border)
          
         # border
+        # GTC  Line around legend or map frame
         box   = wx.StaticBox (parent = panel, id = wx.ID_ANY, label = " %s " % _("Border"))
         sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         flexGridSizer = wx.FlexGridSizer(cols = 2, hgap = 5, vgap = 5)

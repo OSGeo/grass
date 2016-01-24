@@ -488,6 +488,6 @@ int dig_isle_alloc_line(struct P_isle * isle, int add)
 */
 int dig_out_of_memory()
 {
-    G_warning(_("Out of memmory"));
+    G_warning(_("Out of memory"));
     return -1;
 }
