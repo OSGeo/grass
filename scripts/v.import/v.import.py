@@ -120,6 +120,7 @@ def cleanup():
 
 def main():
     global TMPLOC, SRCGISRC, GISDBASE
+    overwrite = grass.overwrite()
 
     # list formats and exit
     if flags['f']:
@@ -183,7 +184,7 @@ def main():
     vopts['snap'] = options['snap']
     try:
         grass.run_command('v.in.ogr', input=OGRdatasource,
-                          location=TMPLOC, flags='i', quiet=True, **vopts)
+                          location=TMPLOC, flags='i', quiet=True, overwrite=overwrite, **vopts)
     except CalledModuleError:
         grass.fatal(_("Unable to create location from OGR datasource <%s>") % OGRdatasource)
 
@@ -201,10 +202,10 @@ def main():
 
     # try v.in.ogr directly
     if flags['o'] or grass.run_command('v.in.ogr', input=OGRdatasource, flags='j',
-                                       errors='status', quiet=True) == 0:
+                                       errors='status', quiet=True, overwrite=overwrite) == 0:
         try:
             grass.run_command('v.in.ogr', input=OGRdatasource,
-                              flags=vflags, **vopts)
+                              flags=vflags, overwrite=overwrite, **vopts)
             grass.message(_("Input <%s> successfully imported without reprojection") % OGRdatasource)
             return 0
         except CalledModuleError:
@@ -237,7 +238,7 @@ def main():
         os.environ['GISRC'] = str(SRCGISRC)
         try:
             grass.run_command('v.proj', input=vreg, output=vreg,
-                              location=tgtloc, mapset=tgtmapset, quiet=True)
+                              location=tgtloc, mapset=tgtmapset, quiet=True, overwrite=overwrite)
         except CalledModuleError:
             grass.fatal(_("Unable to reproject to source location"))
 
@@ -249,7 +250,7 @@ def main():
     grass.message(_("Importing <%s> ...") % OGRdatasource)
     try:
         grass.run_command('v.in.ogr', input=OGRdatasource,
-                          flags=vflags, **vopts)
+                          flags=vflags, overwrite=overwrite, **vopts)
     except CalledModuleError:
         grass.fatal(_("Unable to import OGR datasource <%s>") % OGRdatasource)
 
@@ -273,7 +274,7 @@ def main():
     grass.message(_("Reprojecting <%s>...") % output)
     try:
         grass.run_command('v.proj', location=TMPLOC,
-                          mapset='PERMANENT', input=output)
+                          mapset='PERMANENT', input=output, overwrite=overwrite)
     except CalledModuleError:
         grass.fatal(_("Unable to to reproject vector <%s>") % output)
 
