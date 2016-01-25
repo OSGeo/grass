@@ -6,8 +6,8 @@
 List of classes:
  - :class:`ImportDialog`
  - :class:`GdalImportDialog`
+ - :class:`OgrImportDialog`
  - :class:`GdalOutputDialog`
- - :class:`OgrOutputDialog`
  - :class:`DxfImportDialog`
  - :class:`ReprojectionDialog`
 
