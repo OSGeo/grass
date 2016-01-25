@@ -17,6 +17,7 @@
 #%module
 #% description: Shifts temporally the maps of a space time dataset.
 #% keyword: temporal
+#% keyword: time management
 #% keyword: shift
 #% keyword: time
 #%end
