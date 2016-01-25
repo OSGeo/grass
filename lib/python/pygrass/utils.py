@@ -290,16 +290,67 @@ def get_lib_path(modname, libname=None):
         path = join('etc', modname)
     else:
         path = None
-    
+
     return path
 
 
 def set_path(modulename, dirname=None, path='.'):
     """Set sys.path looking in the the local directory GRASS directories.
 
-    @param modulename
-    @param dirname
-    @param path used to run the code locally without compilation
+    :param modulename: string with the name of the GRASS module
+    :param dirname: string with the directory name containing the python
+                    libraries, default None
+    :param path: string with the path to reach the dirname locally.
+
+    Example
+    --------
+
+    "set_path" example working locally with the source code of a module
+    (r.green) calling the function with all the parameters. Below it is
+    reported the directory structure on the r.green module.
+
+    ::
+
+        grass_prompt> pwd
+        ~/Download/r.green/r.green.hydro/r.green.hydro.financial
+
+        grass_prompt> tree ../../../r.green
+        ../../../r.green
+        ├── ...
+        ├── libgreen
+        │   ├── pyfile1.py
+        │   └── pyfile2.py
+        └── r.green.hydro
+           ├── Makefile
+           ├── libhydro
+           │   ├── pyfile1.py
+           │   └── pyfile2.py
+           ├── r.green.hydro.*
+           └── r.green.hydro.financial
+               ├── Makefile
+               ├── ...
+               └── r.green.hydro.financial.py
+
+        21 directories, 125 files
+
+    in the source code the function is called with the following parameters: ::
+
+        set_path('r.green', 'libhydro', '..')
+        set_path('r.green', 'libgreen', os.path.join('..', '..'))
+
+    when we are executing the module: r.green.hydro.financial locally from
+    the command line:  ::
+
+        grass_prompt> python r.green.hydro.financial.py --ui
+
+    In this way we are executing the local code even if the module was already
+    installed as grass-addons and it is available in GRASS standards path.
+
+    The function is cheching if the dirname is provided and if the
+    directory exists and it is available using the path
+    provided as third parameter, if yes add the path to sys.path to be
+    importable, otherwise it will check on GRASS GIS standard paths.
+
     """
     import sys
     # TODO: why dirname is checked first - the logic should be revised
@@ -307,8 +358,9 @@ def set_path(modulename, dirname=None, path='.'):
     if dirname:
         pathlib = os.path.join(path, dirname)
     if pathlib and os.path.exists(pathlib):
-        # we are running the script from the script directory
-        sys.path.append(os.path.abspath(pathlib))
+        # we are running the script from the script directory, therefore
+        # we add the path to sys.path to reach the directory (dirname)
+        sys.path.append(os.path.abspath(path))
     else:
         # running from GRASS GIS session
         from grass.pygrass.utils import get_lib_path
