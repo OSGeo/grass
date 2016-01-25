@@ -287,9 +287,10 @@ def get_lib_path(modname, libname=None):
     """Return the path of the libname contained in the module.
 
     .. deprecated:: 7.1
-        Use :func:`grass.script.core.get_lib_path` instead.
+        Use :func:`grass.script.utils.get_lib_path` instead.
     """
-    return grasscore.get_lib_path(modname=modname, libname=libname)
+    from grass.script.utils import get_lib_path
+    return get_lib_path(modname=modname, libname=libname)
 
 
 def set_path(modulename, dirname=None, path='.'):
@@ -301,10 +302,10 @@ def set_path(modulename, dirname=None, path='.'):
     :param path: string with the path to reach the dirname locally.
 
     .. deprecated:: 7.1
-        Use :func:`grass.script.core.set_path` instead.
+        Use :func:`grass.script.utils.set_path` instead.
     """
-    return grasscore.set_path(modulename=modulename, dirname=dirname,
-                              path=path)
+    from grass.script.utils import set_path
+    return set_path(modulename=modulename, dirname=dirname, path=path)
 
 
 def split_in_chunk(iterable, length=10):
