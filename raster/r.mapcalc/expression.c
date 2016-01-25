@@ -19,9 +19,13 @@ static func_desc *find_func(const char *name)
 {
     int i;
 
-    for (i = 0; func_descs[i].name; i++) {
-	if (strcmp(name, func_descs[i].name) == 0)
-	    return &func_descs[i];
+    for (i = 0; local_func_descs[i].name; i++) {
+	if (strcmp(name, local_func_descs[i].name) == 0)
+	    return &local_func_descs[i];
+    }
+    for (i = 0; calc_func_descs[i].name; i++) {
+	if (strcmp(name, calc_func_descs[i].name) == 0)
+	    return &calc_func_descs[i];
     }
     return NULL;
 }

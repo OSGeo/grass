@@ -14,6 +14,7 @@
 #include <grass/raster.h>
 #include <grass/btree.h>
 #include <grass/glocale.h>
+#include <grass/calc.h>
 
 #include "mapcalc.h"
 #include "globals.h"
@@ -29,6 +30,7 @@ void setup_region(void)
 
     rows = Rast_window_rows();
     columns = Rast_window_cols();
+    calc_init(columns);
     depths = 1;
 }
 

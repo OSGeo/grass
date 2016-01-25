@@ -2,18 +2,9 @@
 #ifndef __EXPRESSION_H_
 #define __EXPRESSION_H_
 
+#include <grass/calc.h>
+
 struct expr_list;
-
-typedef int func_t(int argc, const int *argt, void **args);
-typedef int args_t(int argc, int *argt);
-
-#define E_ARG_LO	1
-#define E_ARG_HI	2
-#define E_ARG_TYPE	3
-#define E_RES_TYPE	4
-#define E_INV_TYPE	5
-#define E_ARG_NUM	6
-#define E_WTF		99
 
 typedef enum expr_t
 {
@@ -85,13 +76,6 @@ typedef struct expr_list
     struct expr_list *next;
 } expr_list;
 
-typedef struct func_desc
-{
-    const char *name;
-    args_t *check_args;
-    func_t *func;
-} func_desc;
-
 extern int list_length(expr_list * l);
 extern void define_variable(expression * e);
 extern char *composite(const char *name, const char *mapset);
@@ -110,14 +94,6 @@ extern expression *operator(const char *name, const char *oper, int prec,
 extern expression *function(const char *name, expr_list * args);
 extern expression *binding(const char *var, expression * val);
 
-extern func_desc func_descs[];
-
-#define IS_NULL_C(x) (Rast_is_c_null_value((x)))
-#define IS_NULL_F(x) (Rast_is_f_null_value((x)))
-#define IS_NULL_D(x) (Rast_is_d_null_value((x)))
-
-#define SET_NULL_C(x) (Rast_set_c_null_value((x),1))
-#define SET_NULL_F(x) (Rast_set_f_null_value((x),1))
-#define SET_NULL_D(x) (Rast_set_d_null_value((x),1))
+extern func_desc local_func_descs[];
 
 #endif /* __EXPRESSION_H_ */

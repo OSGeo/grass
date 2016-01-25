@@ -14,7 +14,6 @@
  *****************************************************************************/
 
 #include <unistd.h>
-#include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -25,11 +24,7 @@
 
 /****************************************************************************/
 
-int overflow_occurred;
 int overwrite_flag;
-
-volatile int floating_point_exception;
-volatile int floating_point_exception_occurred;
 
 long seed_value;
 long seeded;
@@ -37,47 +32,6 @@ long seeded;
 /****************************************************************************/
 
 static expr_list *result;
-
-/****************************************************************************/
-
-static RETSIGTYPE handle_fpe(int n)
-{
-    floating_point_exception = 1;
-    floating_point_exception_occurred = 1;
-}
-
-static void pre_exec(void)
-{
-#ifndef __MINGW32__
-#ifdef SIGFPE
-    struct sigaction act;
-
-    act.sa_handler = &handle_fpe;
-    act.sa_flags = 0;
-    sigemptyset(&act.sa_mask);
-
-    sigaction(SIGFPE, &act, NULL);
-#endif
-#endif
-
-    floating_point_exception_occurred = 0;
-    overflow_occurred = 0;
-}
-
-static void post_exec(void)
-{
-#ifndef __MINGW32__
-#ifdef SIGFPE
-    struct sigaction act;
-
-    act.sa_handler = SIG_DFL;
-    act.sa_flags = 0;
-    sigemptyset(&act.sa_mask);
-
-    sigaction(SIGFPE, &act, NULL);
-#endif
-#endif
-}
 
 /****************************************************************************/
 
@@ -203,11 +157,6 @@ int main(int argc, char **argv)
 
     if (floating_point_exception_occurred) {
 	G_warning(_("Floating point error(s) occurred in the calculation"));
-	all_ok = 0;
-    }
-
-    if (overflow_occurred) {
-	G_warning(_("Overflow occurred in the calculation"));
 	all_ok = 0;
     }
 
