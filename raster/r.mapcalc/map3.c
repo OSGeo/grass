@@ -10,6 +10,7 @@
 #include <grass/raster3d.h>
 #include <grass/btree.h>
 #include <grass/glocale.h>
+#include <grass/calc.h>
 
 #include "mapcalc.h"
 #include "globals.h"
@@ -27,6 +28,7 @@ void setup_region(void)
     rows = current_region3.rows;
     columns = current_region3.cols;
     depths = current_region3.depths;
+    calc_init(columns);
 }
 
 /****************************************************************************/

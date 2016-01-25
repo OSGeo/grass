@@ -43,7 +43,8 @@ SUBDIRS = \
 	temporal \
 	python \
 	iostream \
-	manage
+	manage \
+	calc
 
 include $(MODULE_TOPDIR)/include/Make/Dir.make
 include $(MODULE_TOPDIR)/include/Make/Doxygen.make
