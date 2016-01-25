@@ -218,6 +218,14 @@ class TestBasicOperations(TestCase):
             expression='diff_e_e = 3 * x() * y() - 3 * x() * y()')
         self.to_remove.append('diff_e_e')
         self.assertRasterMinMax('diff_e_e', refmin=0, refmax=0)
+    
+    def test_nrows_ncols_sum(self):
+        """Test if sum of nrows and ncols matches one
+        expected from current region settigs"""
+        self.assertModule('r.mapcalc',
+            expression='nrows_ncols_sum = nrows() + ncols()')
+        self.to_remove.append('nrows_ncols_sum')
+        self.assertRasterMinMax('nrows_ncols_sum', refmin=20, refmax=20)
 
 
 if __name__ == '__main__':

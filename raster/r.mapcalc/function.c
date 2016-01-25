@@ -11,6 +11,9 @@ func_desc local_func_descs[] = {
     {"col", c_int0, f_col},
     {"row", c_int0, f_row},
     {"depth", c_int0, f_depth},
+    {"ncols", c_int0, f_ncols},
+    {"nrows", c_int0, f_nrows},
+    {"ndepths", c_int0, f_ndepths},
 
     {"x", c_double0, f_x},
     {"y", c_double0, f_y},

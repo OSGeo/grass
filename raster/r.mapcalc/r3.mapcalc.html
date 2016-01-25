@@ -240,15 +240,18 @@ xor(x,y)                exclusive-or (XOR) of x and y                   I
 
 <div class="code"><pre>
 Internal variables:
- row()                  current row of moving window
- col()                  current col of moving window
- depth()                return current depth
- x()                    current x-coordinate of moving window
- y()                    current y-coordinate of moving window
- z()                    return current z value
- ewres()                current east-west resolution
- nsres()                current north-south resolution
- tbres()                current top-bottom resolution
+ row()                  current row of moving window                    I
+ col()                  current col of moving window                    I
+ depth()                return current depth                            I
+ nrows()                number of rows in computation region            I
+ ncols()                number of columns in computation region         I
+ ndepths()              number of depth levels in computation region    I
+ x()                    current x-coordinate of moving window           F
+ y()                    current y-coordinate of moving window           F
+ z()                    return current z value                          F
+ ewres()                current east-west resolution                    F
+ nsres()                current north-south resolution                  F
+ tbres()                current top-bottom resolution                   F
  null()                 NULL value
 </pre></div>
 Note, that the row(), col() and depth() indexing starts with 1. 

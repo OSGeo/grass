@@ -9,6 +9,9 @@
 col() column number
 row() row number
 depth() depth number
+ncols() number of columns
+nrows() number of rows
+ndepths() number of depths
 **********************************************************************/
 
 int f_col(int argc, const int *argt, void **args)
@@ -60,6 +63,57 @@ int f_depth(int argc, const int *argt, void **args)
 
     for (i = 0; i < columns; i++)
 	res[i] = depth;
+
+    return 0;
+}
+
+int f_nrows(int argc, const int *argt, void **args)
+{
+    CELL *res = args[0];
+    int i;
+
+    if (argc > 0)
+	return E_ARG_HI;
+
+    if (argt[0] != CELL_TYPE)
+	return E_RES_TYPE;
+
+    for (i = 0; i < columns; i++)
+	res[i] = rows;
+
+    return 0;
+}
+
+int f_ncols(int argc, const int *argt, void **args)
+{
+    CELL *res = args[0];
+    int i;
+
+    if (argc > 0)
+	return E_ARG_HI;
+
+    if (argt[0] != CELL_TYPE)
+	return E_RES_TYPE;
+
+    for (i = 0; i < columns; i++)
+	res[i] = columns;
+
+    return 0;
+}
+
+int f_ndepths(int argc, const int *argt, void **args)
+{
+    CELL *res = args[0];
+    int i;
+
+    if (argc > 0)
+	return E_ARG_HI;
+
+    if (argt[0] != CELL_TYPE)
+	return E_RES_TYPE;
+
+    for (i = 0; i < columns; i++)
+	res[i] = depths;
 
     return 0;
 }
