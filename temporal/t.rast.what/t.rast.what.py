@@ -20,8 +20,8 @@
 #%module
 #% description: Sample a space time raster dataset at specific vector point coordinates and write the output to stdout using different layouts
 #% keyword: temporal
-#% keyword: raster
 #% keyword: sampling
+#% keyword: raster
 #% keyword: time
 #%end
 
@@ -193,8 +193,6 @@ def main(options, flags):
     #if output_cat is True:
     #    flags += "i"
 
-
-
     # Configure the r.what module
     if points: 
         r_what = pymod.Module("r.what", map="dummy", 
@@ -308,7 +306,6 @@ def one_point_per_row_output(separator, output_files, output_time_list,
             out_file.write("x%(sep)sy%(sep)sstart%(sep)send%(sep)svalue\n"\
                        %({"sep":separator}))
 
-    
     for count in range(len(output_files)):
         file_name = output_files[count]
         gscript.verbose(_("Transforming r.what output file %s"%(file_name)))
