@@ -7,7 +7,7 @@ Usage:
 
     from grass.script import utils as gutils
 
-(C) 2014 by the GRASS Development Team
+(C) 2014-2017 by the GRASS Development Team
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
@@ -316,20 +316,20 @@ def set_path(modulename, dirname=None, path='.'):
 
         grass_prompt> tree ../../../r.green
         ../../../r.green
-        ├── ...
-        ├── libgreen
-        │   ├── pyfile1.py
-        │   └── pyfile2.py
-        └── r.green.hydro
-           ├── Makefile
-           ├── libhydro
-           │   ├── pyfile1.py
-           │   └── pyfile2.py
-           ├── r.green.hydro.*
-           └── r.green.hydro.financial
-               ├── Makefile
-               ├── ...
-               └── r.green.hydro.financial.py
+        |-- ...
+        |-- libgreen
+        |   |-- pyfile1.py
+        |   +-- pyfile2.py
+        +-- r.green.hydro
+           |-- Makefile
+           |-- libhydro
+           |   |-- pyfile1.py
+           |   +-- pyfile2.py
+           |-- r.green.hydro.*
+           +-- r.green.hydro.financial
+               |-- Makefile
+               |-- ...
+               +-- r.green.hydro.financial.py
 
         21 directories, 125 files
 
