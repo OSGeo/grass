@@ -130,7 +130,7 @@ class RPCServerBase(object):
         self.client_conn, self.server_conn = Pipe(True)
         self.lock = Lock()
         self.server = Process(target=dummy_server, args=(self.lock,
-                                                             self.server_conn))
+                                                         self.server_conn))
         self.server.daemon = True
         self.server.start()
 
@@ -174,7 +174,7 @@ class RPCServerBase(object):
         self.stop_checker_thread()
         if self.server is not None and self.server.is_alive():
             self.client_conn.send([0, ])
-            self.server.join()
+            self.server.terminate()
         if self.client_conn is not None:
             self.client_conn.close()
 
