@@ -472,11 +472,15 @@ class RasterAbstractBase(object):
     def get_value(self, point, region=None):
         """This method returns the pixel value of a given pair of coordinates:
 
-        :param point: pair of coordinates in tuple object
+        :param point: pair of coordinates in tuple object or class object with coords() method
         """
+        # Check for tuple
+        if type(point) != type([]) and type(point) != type(()):
+            point = point.coords()
+
         if not region:
             region = Region()
-        row, col = utils.coor2pixel(point.coords(), region)
+        row, col = utils.coor2pixel(point, region)
         if col < 0 or col > region.cols or row < 0 or row > region.rows:
             return None
         line = self.get_row(int(row))
