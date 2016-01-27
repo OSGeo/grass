@@ -2789,6 +2789,7 @@ class LayerBook(wx.Notebook):
         self.addLayerWidgets['database'][1].SetValue(self.defaultConnect['database'])
         self.addLayerWidgets['table'][1].SetSelection(0)
         self.addLayerWidgets['key'][1].SetSelection(0)
+        self.addLayerWidgets['addCat'][0].SetValue(True)
         # events
         self.addLayerWidgets['driver'][1].Bind(wx.EVT_CHOICE, self.OnDriverChanged)
         self.addLayerWidgets['database'][1].Bind(wx.EVT_TEXT_ENTER, self.OnDatabaseChanged)
