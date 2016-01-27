@@ -19,7 +19,8 @@ msgstr ""
 "X-Poedit-Language: Latvian\n"
 "X-Poedit-Country: LATVIA\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : "
+"2);\n"
 
 #: ../lib/driver/parse_ftcap.c:84
 #, c-format
@@ -38,7 +39,9 @@ msgstr ""
 
 #: ../lib/display/r_raster.c:147
 #, c-format
-msgid "Neither %s (managed by d.mon command) nor %s (used for direct rendering) defined"
+msgid ""
+"Neither %s (managed by d.mon command) nor %s (used for direct rendering) "
+"defined"
 msgstr ""
 
 #: ../lib/display/r_raster.c:165
@@ -358,7 +361,8 @@ msgstr "Programmētāja kļūda"
 #: ../lib/db/dbmi_base/legal_dbname.c:38
 #, fuzzy, c-format
 msgid "Illegal table map name <%s>. May not contain '.' or 'NULL'."
-msgstr "Nepieņemams vektoru kartes nosaukums <%s>. Nedrīkst saturēt '.' vai 'NULL'.\n"
+msgstr ""
+"Nepieņemams vektoru kartes nosaukums <%s>. Nedrīkst saturēt '.' vai 'NULL'.\n"
 
 #: ../lib/db/dbmi_base/legal_dbname.c:45
 #, fuzzy, c-format
@@ -617,7 +621,9 @@ msgstr ""
 #: ../lib/gis/parser_standard_options.c:155
 #, fuzzy
 msgid "WHERE conditions of SQL statement without 'where' keyword"
-msgstr "KUR  SQL pieprasījuma nosacījumi bez 'where' atslēgvārda. (piemērs: income < 1000 and inhab >= 10000)"
+msgstr ""
+"KUR  SQL pieprasījuma nosacījumi bez 'where' atslēgvārda. (piemērs: income < "
+"1000 and inhab >= 10000)"
 
 #: ../lib/gis/parser_standard_options.c:156
 msgid "Example: income < 1000 and inhab >= 10000"
@@ -641,7 +647,8 @@ msgid "Database schema"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:192
-msgid "Do not use this option if schemas are not supported by driver/database server"
+msgid ""
+"Do not use this option if schemas are not supported by driver/database server"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:201
@@ -773,7 +780,9 @@ msgid "Data type used in the output raster3d map"
 msgstr "Izejas 3drastra faila nosaukums"
 
 #: ../lib/gis/parser_standard_options.c:418
-msgid "Number of digits used as mantissa in the internal map storage, 0 -23 for float, 0 - 52 for double, max or default"
+msgid ""
+"Number of digits used as mantissa in the internal map storage, 0 -23 for "
+"float, 0 - 52 for double, max or default"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:428
@@ -781,7 +790,9 @@ msgid "The compression method used in the output raster3d map"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:438
-msgid "The dimensions of the tiles used in the output raster3d map (XxYxZ or default: 16x16x8)"
+msgid ""
+"The dimensions of the tiles used in the output raster3d map (XxYxZ or "
+"default: 16x16x8)"
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:448
@@ -824,7 +835,10 @@ msgid "Layer number or name"
 msgstr "Slāņa numurs vai nosaukums"
 
 #: ../lib/gis/parser_standard_options.c:512
-msgid "Vector features can have category values in different layers. This number determines which layer to use. When used with direct OGR access this is the layer name."
+msgid ""
+"Vector features can have category values in different layers. This number "
+"determines which layer to use. When used with direct OGR access this is the "
+"layer name."
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:522
@@ -832,7 +846,10 @@ msgid "Layer number or name ('-1' for all layers)"
 msgstr "Slāņa numurs vai nosaukums ('-1' priekš visiem slāņiem)"
 
 #: ../lib/gis/parser_standard_options.c:524
-msgid "A single vector map can be connected to multiple database tables. This number determines which table to use. When used with direct OGR access this is the layer name."
+msgid ""
+"A single vector map can be connected to multiple database tables. This "
+"number determines which table to use. When used with direct OGR access this "
+"is the layer name."
 msgstr ""
 
 #: ../lib/gis/parser_standard_options.c:533
@@ -1022,8 +1039,12 @@ msgstr "Ieejas vektors '%s' nav atrasts"
 
 #: ../lib/gis/parser_standard_options.c:870
 #, fuzzy
-msgid "WHERE conditions of SQL statement without 'where' keyword used in the temporal GIS framework"
-msgstr "KUR  SQL pieprasījuma nosacījumi bez 'where' atslēgvārda. (piemērs: income < 1000 and inhab >= 10000)"
+msgid ""
+"WHERE conditions of SQL statement without 'where' keyword used in the "
+"temporal GIS framework"
+msgstr ""
+"KUR  SQL pieprasījuma nosacījumi bez 'where' atslēgvārda. (piemērs: income < "
+"1000 and inhab >= 10000)"
 
 #: ../lib/gis/parser_standard_options.c:871
 msgid "Example: start_time > '2001-01-01 12:30:00'"
@@ -1277,7 +1298,9 @@ msgstr ""
 #: ../lib/gis/timestamp.c:301
 #, fuzzy, c-format
 msgid "Invalid timestamp specified for %s map <%s@%s>"
-msgstr "Nederīgs laikspiedols(timestamp) norādīts priekš %s kartes %s karšu biblotēkā %s"
+msgstr ""
+"Nederīgs laikspiedols(timestamp) norādīts priekš %s kartes %s karšu "
+"biblotēkā %s"
 
 #: ../lib/gis/timestamp.c:331
 #, fuzzy, c-format
@@ -1287,7 +1310,9 @@ msgstr "Nevar atvērt vēsturi vektoram '%s'"
 #: ../lib/gis/timestamp.c:340
 #, fuzzy, c-format
 msgid "Invalid timestamp file for %s map <%s@%s>"
-msgstr "Nederīgs liakspiedola(timestamp) fails priekš %s kartes %s  karšu biblotēkā %s"
+msgstr ""
+"Nederīgs liakspiedola(timestamp) fails priekš %s kartes %s  karšu biblotēkā "
+"%s"
 
 #: ../lib/gis/timestamp.c:479
 #, fuzzy, c-format
@@ -1297,7 +1322,9 @@ msgstr "Nevar atvērt vēsturi vektoram '%s'"
 #: ../lib/gis/timestamp.c:488
 #, fuzzy, c-format
 msgid "Invalid timestamp file for vector map <%s@%s>"
-msgstr "Nederīgs liakspiedola(timestamp) fails priekš %s kartes %s  karšu biblotēkā %s"
+msgstr ""
+"Nederīgs liakspiedola(timestamp) fails priekš %s kartes %s  karšu biblotēkā "
+"%s"
 
 #: ../lib/gis/timestamp.c:524
 #, fuzzy, c-format
@@ -1307,7 +1334,9 @@ msgstr "neispējami mainīt direktoriju uz %s"
 #: ../lib/gis/timestamp.c:533
 #, fuzzy, c-format
 msgid "Invalid timestamp specified for vector map <%s@%s>"
-msgstr "Nederīgs laikspiedols(timestamp) norādīts priekš %s kartes %s karšu biblotēkā %s"
+msgstr ""
+"Nederīgs laikspiedols(timestamp) norādīts priekš %s kartes %s karšu "
+"biblotēkā %s"
 
 #: ../lib/gis/open_misc.c:49
 #, c-format
@@ -1321,7 +1350,9 @@ msgstr ""
 
 #: ../lib/gis/gisinit.c:53 ../lib/gis/gisinit.c:87
 #, c-format
-msgid "Module built against version %s but trying to use version %s. You need to rebuild GRASS GIS or untangle multiple installations."
+msgid ""
+"Module built against version %s but trying to use version %s. You need to "
+"rebuild GRASS GIS or untangle multiple installations."
 msgstr ""
 
 #: ../lib/gis/gisinit.c:65
@@ -1919,8 +1950,10 @@ msgstr " Logs saglabāts \"%s\" un ir pilnībā ārpus tekošā GRASS loga."
 
 #: ../lib/gis/view.c:549
 #, c-format
-msgid " Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
-msgstr " Tikai %d%% no loga ir saglabāts \"%s\" pārklājuma ar tekošo GRASS logu."
+msgid ""
+" Only %d%% of window saved in \"%s\" overlaps with current GRASS window."
+msgstr ""
+" Tikai %d%% no loga ir saglabāts \"%s\" pārklājuma ar tekošo GRASS logu."
 
 #: ../lib/gis/parser.c:352
 #, c-format
@@ -2677,7 +2710,9 @@ msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:277
 #, c-format
-msgid "%d points given for interpolation (after thinning) is less than given NPMIN=%d"
+msgid ""
+"%d points given for interpolation (after thinning) is less than given NPMIN="
+"%d"
 msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:282
@@ -2686,12 +2721,16 @@ msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:287
 #, c-format
-msgid "Segmentation parameters set to invalid values: npmin= %d, segmax= %d for smooth connection of segments, npmin > segmax (see manual)"
+msgid ""
+"Segmentation parameters set to invalid values: npmin= %d, segmax= %d for "
+"smooth connection of segments, npmin > segmax (see manual)"
 msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:293
 #, c-format
-msgid "There are less than %d points for interpolation. No segmentation is necessary, to run the program faster set segmax=%d (see manual)"
+msgid ""
+"There are less than %d points for interpolation. No segmentation is "
+"necessary, to run the program faster set segmax=%d (see manual)"
 msgstr ""
 
 #: ../lib/rst/interp_float/vinput2d.c:297
@@ -2773,11 +2812,15 @@ msgstr ""
 
 #: ../lib/rst/interp_float/interp2d.c:232
 #, c-format
-msgid "Overshoot - increase in tension suggested. Overshoot occures at (%d,%d) cell. Z-value %f, zmin %f, zmax %f."
+msgid ""
+"Overshoot - increase in tension suggested. Overshoot occures at (%d,%d) "
+"cell. Z-value %f, zmin %f, zmax %f."
 msgstr ""
 
 #: ../lib/rst/interp_float/segmen2d.c:135
-msgid "Taking too long to find points for interpolation - please change the region to area where your points are. Continuing calculations..."
+msgid ""
+"Taking too long to find points for interpolation - please change the region "
+"to area where your points are. Continuing calculations..."
 msgstr ""
 
 #: ../lib/gpde/n_gwflow.c:436 ../lib/gpde/n_gwflow.c:715
@@ -2943,7 +2986,8 @@ msgstr ""
 
 #: ../lib/proj/convert.c:139
 #, c-format
-msgid "OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
+msgid ""
+"OGR can't parse PROJ.4-style parameter string: %s (OGR Error code was %d)"
 msgstr ""
 
 #: ../lib/proj/convert.c:146
@@ -2962,12 +3006,16 @@ msgstr "Datums <%s> nav atpazīts un parametri nav atrasti"
 
 #: ../lib/proj/convert.c:458
 #, c-format
-msgid "Datum <%s> apparently recognised by GRASS but no parameters found. You may want to look into this."
+msgid ""
+"Datum <%s> apparently recognised by GRASS but no parameters found. You may "
+"want to look into this."
 msgstr ""
 
 #: ../lib/proj/convert.c:462
 #, c-format
-msgid "Invalid transformation number %d; valid range is 1 to %d. Leaving datum transform parameters unspecified."
+msgid ""
+"Invalid transformation number %d; valid range is 1 to %d. Leaving datum "
+"transform parameters unspecified."
 msgstr ""
 
 #: ../lib/proj/datum.c:270 ../lib/proj/datum.c:350
@@ -3055,7 +3103,9 @@ msgstr ""
 
 #: ../lib/arraystats/class.c:242
 #, c-format
-msgid "There are classbreaks outside the range min-max. Number of classes reduced to %i, but using probabilities for %i classes."
+msgid ""
+"There are classbreaks outside the range min-max. Number of classes reduced "
+"to %i, but using probabilities for %i classes."
 msgstr ""
 
 #: ../lib/pngdriver/graph_set.c:101
@@ -3251,7 +3301,9 @@ msgstr "Dubulto atribūtu indekss ārpus diapazona"
 
 #: ../lib/imagery/sigsetfile.c:41
 #, fuzzy, c-format
-msgid "Unable to create signature file <%s> for subgroup <%s> of group <%s> - <%s> is not current mapset"
+msgid ""
+"Unable to create signature file <%s> for subgroup <%s> of group <%s> - <%s> "
+"is not current mapset"
 msgstr "Neiespējami atvērt failu %s iekš %s"
 
 #: ../lib/imagery/sigsetfile.c:57
@@ -3305,7 +3357,9 @@ msgid "Invalid size of category raster conditions file."
 msgstr "neispējami mainīt direktoriju uz %s"
 
 #: ../lib/imagery/iscatt_core.c:579
-msgid "Data inconsistent. Value computed for scatter plot is out of initialized range."
+msgid ""
+"Data inconsistent. Value computed for scatter plot is out of initialized "
+"range."
 msgstr ""
 
 #: ../lib/imagery/iscatt_core.c:745
@@ -3418,7 +3472,8 @@ msgstr ""
 
 #: ../lib/cairodriver/read_ppm.c:56
 #, c-format
-msgid "Cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d"
+msgid ""
+"Cairo: input mask file has incorrect dimensions: expected: %dx%d got: %dx%d"
 msgstr ""
 
 #: ../lib/cairodriver/raster.c:109
@@ -3464,7 +3519,9 @@ msgstr "nezināns interpolācijas tips"
 
 #: ../lib/python/temporal/abstract_dataset.py:388
 #, fuzzy, python-format
-msgid "Unable to insert dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
+msgid ""
+"Unable to insert dataset <%(ds)s> of type %(type)s in the temporal database. "
+"The mapset of the dataset does not match the current mapset"
 msgstr "Ieejas vektors '%s' nav atrasts"
 
 #: ../lib/python/temporal/abstract_dataset.py:428
@@ -3473,7 +3530,9 @@ msgstr "Ieejas vektors '%s' nav atrasts"
 #: ../lib/python/temporal/abstract_map_dataset.py:415
 #: ../lib/python/temporal/abstract_map_dataset.py:511
 #, fuzzy, python-format
-msgid "Unable to update dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
+msgid ""
+"Unable to update dataset <%(ds)s> of type %(type)s in the temporal database. "
+"The mapset of the dataset does not match the current mapset"
 msgstr "Ieejas vektors '%s' nav atrasts"
 
 #: ../lib/python/temporal/register.py:76 ../lib/python/temporal/register.py:79
@@ -3510,11 +3569,14 @@ msgstr ""
 
 #: ../lib/python/temporal/register.py:108
 #, fuzzy, python-format
-msgid "Space time %(sp)s dataset <%(name)s> with relative time found, but no relative unit set for %(sp)s maps"
+msgid ""
+"Space time %(sp)s dataset <%(name)s> with relative time found, but no "
+"relative unit set for %(sp)s maps"
 msgstr "Vektors '%s' jau eksistē un tiks pārrakstīts."
 
 #: ../lib/python/temporal/register.py:169
-msgid "The increment option will be ignored because of time stamps in input file"
+msgid ""
+"The increment option will be ignored because of time stamps in input file"
 msgstr ""
 
 #: ../lib/python/temporal/register.py:173
@@ -3532,12 +3594,16 @@ msgstr "neiespējami atvērt rastra karti [%s iekš %s]"
 
 #: ../lib/python/temporal/register.py:209
 #, fuzzy, python-format
-msgid "Unable to register %(t)s map <%(id)s> with layer %(l)s. The map has timestamp and the start time is not set."
+msgid ""
+"Unable to register %(t)s map <%(id)s> with layer %(l)s. The map has "
+"timestamp and the start time is not set."
 msgstr "Ieejas vektors '%s' nav atrasts"
 
 #: ../lib/python/temporal/register.py:215
 #, fuzzy, python-format
-msgid "Unable to register %(t)s map <%(id)s>. The map has no timestamp and the start time is not set."
+msgid ""
+"Unable to register %(t)s map <%(id)s>. The map has no timestamp and the "
+"start time is not set."
 msgstr "Ieejas vektors '%s' nav atrasts"
 
 #: ../lib/python/temporal/register.py:223
@@ -3552,17 +3618,23 @@ msgstr ""
 
 #: ../lib/python/temporal/register.py:239
 #, fuzzy, python-format
-msgid "Map is already registered in temporal database. Unable to update %(t)s map <%(id)s> with layer %(l)s. Overwrite flag is not set."
+msgid ""
+"Map is already registered in temporal database. Unable to update %(t)s map <"
+"%(id)s> with layer %(l)s. Overwrite flag is not set."
 msgstr "Vektors '%s' jau eksistē un tiks pārrakstīts."
 
 #: ../lib/python/temporal/register.py:246
 #, fuzzy, python-format
-msgid "Map is already registered in temporal database. Unable to update %(t)s map <%(id)s>. Overwrite flag is not set."
+msgid ""
+"Map is already registered in temporal database. Unable to update %(t)s map <"
+"%(id)s>. Overwrite flag is not set."
 msgstr "Vektors '%s' jau eksistē un tiks pārrakstīts."
 
 #: ../lib/python/temporal/register.py:270
 #, fuzzy, python-format
-msgid "Unable to update %(t)s map <%(id)s> with layer %(l)s. The temporal types are different."
+msgid ""
+"Unable to update %(t)s map <%(id)s> with layer %(l)s. The temporal types are "
+"different."
 msgstr "neiespējami atvērt rastra karti [%s iekš %s]"
 
 #: ../lib/python/temporal/register.py:276
@@ -3599,7 +3671,9 @@ msgstr "  formāts: %s\n"
 
 #: ../lib/python/temporal/register.py:414
 #, python-format
-msgid "Set absolute valid time for map <%(id)s> with layer %(layer)s to %(start)s - %(end)s"
+msgid ""
+"Set absolute valid time for map <%(id)s> with layer %(layer)s to %(start)s - "
+"%(end)s"
 msgstr ""
 
 #: ../lib/python/temporal/register.py:419
@@ -3609,7 +3683,8 @@ msgstr ""
 
 #: ../lib/python/temporal/register.py:436
 #, python-format
-msgid "Set relative valid time for map <%s> with layer %s to %i - %s with unit %s"
+msgid ""
+"Set relative valid time for map <%s> with layer %s to %i - %s with unit %s"
 msgstr ""
 
 #: ../lib/python/temporal/register.py:441
@@ -3625,7 +3700,8 @@ msgstr ""
 #: ../lib/python/temporal/open_stds.py:208
 #: ../lib/python/temporal/mapcalc.py:236
 #, fuzzy, python-format
-msgid "Map <%s> is already in temporal database, use overwrite flag to overwrite"
+msgid ""
+"Map <%s> is already in temporal database, use overwrite flag to overwrite"
 msgstr "Vektors '%s' jau eksistē un tiks pārrakstīts."
 
 #: ../lib/python/temporal/extract.py:122
@@ -3666,12 +3742,15 @@ msgstr "Defekts: atteikts papildināt karti,kura nav tekošajā karšu komplekt�
 
 #: ../lib/python/temporal/open_stds.py:122
 #, fuzzy, python-format
-msgid "Space time %(sp)s dataset <%(name)s> is already in the database. Use the overwrite flag."
+msgid ""
+"Space time %(sp)s dataset <%(name)s> is already in the database. Use the "
+"overwrite flag."
 msgstr "Vektors '%s' jau eksistē un tiks pārrakstīts."
 
 #: ../lib/python/temporal/open_stds.py:157
 #, fuzzy, python-format
-msgid "Overwriting space time %(sp)s dataset <%(name)s> and unregistering all maps"
+msgid ""
+"Overwriting space time %(sp)s dataset <%(name)s> and unregistering all maps"
 msgstr "neiespējami atvērt rastra karti [%s iekš %s]"
 
 #: ../lib/python/temporal/open_stds.py:165
@@ -3733,17 +3812,23 @@ msgstr "  formāts: %s\n"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1598
 #, fuzzy, python-format
-msgid "Unable to shift dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
+msgid ""
+"Unable to shift dataset <%(ds)s> of type %(type)s in the temporal database. "
+"The mapset of the dataset does not match the current mapset"
 msgstr "Ieejas vektors '%s' nav atrasts"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1767
 #, fuzzy, python-format
-msgid "Unable to snap dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
+msgid ""
+"Unable to snap dataset <%(ds)s> of type %(type)s in the temporal database. "
+"The mapset of the dataset does not match the current mapset"
 msgstr "Ieejas vektors '%s' nav atrasts"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1869
 #, fuzzy, python-format
-msgid "Unable to rename dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
+msgid ""
+"Unable to rename dataset <%(ds)s> of type %(type)s in the temporal database. "
+"The mapset of the dataset does not match the current mapset"
 msgstr "Ieejas vektors '%s' nav atrasts"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1878
@@ -3758,7 +3843,9 @@ msgstr "neiespējami atvērt rastra karti [%s iekš %s]"
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1949
 #: ../lib/python/temporal/abstract_map_dataset.py:823
 #, fuzzy, python-format
-msgid "Unable to delete dataset <%(ds)s> of type %(type)s from the temporal database. The mapset of the dataset does not match the current mapset"
+msgid ""
+"Unable to delete dataset <%(ds)s> of type %(type)s from the temporal "
+"database. The mapset of the dataset does not match the current mapset"
 msgstr "Ieejas vektors '%s' nav atrasts"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:1962
@@ -3773,11 +3860,15 @@ msgstr "Neiespējami atvērt failu %s iekš %s"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2046
 #, fuzzy, python-format
-msgid "Unable to register map in dataset <%(ds)s> of type %(type)s. The mapset of the dataset does not match the current mapset"
+msgid ""
+"Unable to register map in dataset <%(ds)s> of type %(type)s. The mapset of "
+"the dataset does not match the current mapset"
 msgstr "Ieejas vektors '%s' nav atrasts"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2055
-msgid "Only a map that was inserted in the temporal database can be registered in a space time dataset"
+msgid ""
+"Only a map that was inserted in the temporal database can be registered in a "
+"space time dataset"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2078
@@ -3792,12 +3883,15 @@ msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2100
 #, fuzzy, python-format
-msgid "Temporal type of space time dataset <%(id)s> and map <%(map)s> with layer %(l)s are different"
+msgid ""
+"Temporal type of space time dataset <%(id)s> and map <%(map)s> with layer "
+"%(l)s are different"
 msgstr "neiespējami atvērt rastra karti [%s iekš %s]"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2106
 #, fuzzy, python-format
-msgid "Temporal type of space time dataset <%(id)s> and map <%(map)s> are different"
+msgid ""
+"Temporal type of space time dataset <%(id)s> and map <%(map)s> are different"
 msgstr "Ieejas vektors '%s' nav atrasts"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2121
@@ -3807,12 +3901,16 @@ msgstr "Ieejas vektors '%s' nav atrasts"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2131
 #, fuzzy, python-format
-msgid "Relative time units of space time dataset <%(id)s> and map <%(map)s> with layer %(l)s are different"
+msgid ""
+"Relative time units of space time dataset <%(id)s> and map <%(map)s> with "
+"layer %(l)s are different"
 msgstr "neiespējami atvērt rastra karti [%s iekš %s]"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2137
 #, fuzzy, python-format
-msgid "Relative time units of space time dataset <%(id)s> and map <%(map)s> are different"
+msgid ""
+"Relative time units of space time dataset <%(id)s> and map <%(map)s> are "
+"different"
 msgstr "Ieejas vektors '%s' nav atrasts"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2143
@@ -3831,12 +3929,17 @@ msgstr ""
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2200
 #, fuzzy, python-format
-msgid "Unable to unregister map from dataset <%(ds)s> of type %(type)s in the temporal database. The mapset of the dataset does not match the current mapset"
+msgid ""
+"Unable to unregister map from dataset <%(ds)s> of type %(type)s in the "
+"temporal database. The mapset of the dataset does not match the current "
+"mapset"
 msgstr "Ieejas vektors '%s' nav atrasts"
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2213
 #, fuzzy, python-format
-msgid "Map <%(map)s> with layer %(l)s is not registered in space time dataset <%(base)s>"
+msgid ""
+"Map <%(map)s> with layer %(l)s is not registered in space time dataset <"
+"%(base)s>"
 msgstr "Defekts: atteikts papildināt karti,kura nav tekošajā karšu komplektā."
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2219
@@ -3846,7 +3949,8 @@ msgstr "Defekts: atteikts papildināt karti,kura nav tekošajā karšu komplekt�
 
 #: ../lib/python/temporal/abstract_space_time_dataset.py:2280
 #, python-format
-msgid "Update metadata, spatial and temporal extent from all registered maps of <%s>"
+msgid ""
+"Update metadata, spatial and temporal extent from all registered maps of <%s>"
 msgstr ""
 
 #: ../lib/python/temporal/c_libraries_interface.py:438
@@ -4006,7 +4110,9 @@ msgstr "Ievades objektu tips"
 
 #: ../lib/python/temporal/stds_import.py:432
 #, fuzzy, python-format
-msgid "Space time %(t)s dataset <%(sp)s> is already in the database. Use the overwrite flag."
+msgid ""
+"Space time %(t)s dataset <%(sp)s> is already in the database. Use the "
+"overwrite flag."
 msgstr "Vektors '%s' jau eksistē un tiks pārrakstīts."
 
 #: ../lib/python/temporal/stds_import.py:452
@@ -4029,7 +4135,9 @@ msgid "Switching to original location failed"
 msgstr ""
 
 #: ../lib/python/temporal/core.py:576
-msgid "Unable to initialize the temporal DBMI interface. Please use t.connect to specify the driver and the database string"
+msgid ""
+"Unable to initialize the temporal DBMI interface. Please use t.connect to "
+"specify the driver and the database string"
 msgstr ""
 
 #: ../lib/python/temporal/core.py:639
@@ -4071,32 +4179,44 @@ msgstr ""
 
 #: ../lib/python/temporal/core.py:914
 #, fuzzy, python-format
-msgid "Unable to mogrify sql statement. There is no temporal database connection defined for mapset <%(mapset)s>"
+msgid ""
+"Unable to mogrify sql statement. There is no temporal database connection "
+"defined for mapset <%(mapset)s>"
 msgstr "neispējami atvērt datumu tabulas failu: %s"
 
 #: ../lib/python/temporal/core.py:937
 #, fuzzy, python-format
-msgid "Unable to check table. There is no temporal database connection defined for mapset <%(mapset)s>"
+msgid ""
+"Unable to check table. There is no temporal database connection defined for "
+"mapset <%(mapset)s>"
 msgstr "neispējami atvērt datumu tabulas failu: %s"
 
 #: ../lib/python/temporal/core.py:954
 #, fuzzy, python-format
-msgid "Unable to execute sql statement. There is no temporal database connection defined for mapset <%(mapset)s>"
+msgid ""
+"Unable to execute sql statement. There is no temporal database connection "
+"defined for mapset <%(mapset)s>"
 msgstr "neispējami atvērt datumu tabulas failu: %s"
 
 #: ../lib/python/temporal/core.py:965
 #, fuzzy, python-format
-msgid "Unable to fetch one. There is no temporal database connection defined for mapset <%(mapset)s>"
+msgid ""
+"Unable to fetch one. There is no temporal database connection defined for "
+"mapset <%(mapset)s>"
 msgstr "Nevar atvērt vēsturi vektoram '%s'"
 
 #: ../lib/python/temporal/core.py:976
 #, fuzzy, python-format
-msgid "Unable to fetch all. There is no temporal database connection defined for mapset <%(mapset)s>"
+msgid ""
+"Unable to fetch all. There is no temporal database connection defined for "
+"mapset <%(mapset)s>"
 msgstr "Nevar atvērt vēsturi vektoram '%s'"
 
 #: ../lib/python/temporal/core.py:994
 #, fuzzy, python-format
-msgid "Unable to execute transaction. There is no temporal database connection defined for mapset <%(mapset)s>"
+msgid ""
+"Unable to execute transaction. There is no temporal database connection "
+"defined for mapset <%(mapset)s>"
 msgstr "Nevar atvērt vēsturi vektoram '%s'"
 
 #: ../lib/python/temporal/core.py:1083
@@ -4153,27 +4273,38 @@ msgstr "neispējami mainīt direktoriju uz %s"
 
 #: ../lib/python/temporal/abstract_map_dataset.py:341
 #, fuzzy, python-format
-msgid "Start time must be of type datetime for %(type)s map <%(id)s> with layer: %(l)s"
-msgstr "Nevar izveidot laikspiedola(timestamp) failu priekš %s kartes %s karšu biblitēkā %s"
+msgid ""
+"Start time must be of type datetime for %(type)s map <%(id)s> with layer: "
+"%(l)s"
+msgstr ""
+"Nevar izveidot laikspiedola(timestamp) failu priekš %s kartes %s karšu "
+"biblitēkā %s"
 
 #: ../lib/python/temporal/abstract_map_dataset.py:348
 #, fuzzy, python-format
 msgid "Start time must be of type datetime for %(type)s map <%(id)s>"
-msgstr "Nederīgs liakspiedola(timestamp) fails priekš %s kartes %s  karšu biblotēkā %s"
+msgstr ""
+"Nederīgs liakspiedola(timestamp) fails priekš %s kartes %s  karšu biblotēkā "
+"%s"
 
 #: ../lib/python/temporal/abstract_map_dataset.py:356
 #, python-format
-msgid "End time must be of type datetime for %(type)s map <%(id)s> with layer: %(l)s"
+msgid ""
+"End time must be of type datetime for %(type)s map <%(id)s> with layer: %(l)s"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_map_dataset.py:363
 #, fuzzy, python-format
 msgid "End time must be of type datetime for %(type)s map <%(id)s>"
-msgstr "Nederīgs liakspiedola(timestamp) fails priekš %s kartes %s  karšu biblotēkā %s"
+msgstr ""
+"Nederīgs liakspiedola(timestamp) fails priekš %s kartes %s  karšu biblotēkā "
+"%s"
 
 #: ../lib/python/temporal/abstract_map_dataset.py:372
 #, fuzzy, python-format
-msgid "End time must be greater than start time for %(type)s map <%(id)s> with layer: %(l)s"
+msgid ""
+"End time must be greater than start time for %(type)s map <%(id)s> with "
+"layer: %(l)s"
 msgstr "Austrumiem ir jābūt lielākiem nekā Rietumiem"
 
 #: ../lib/python/temporal/abstract_map_dataset.py:380
@@ -4184,8 +4315,12 @@ msgstr "Austrumiem ir jābūt lielākiem nekā Rietumiem"
 
 #: ../lib/python/temporal/abstract_map_dataset.py:451
 #, fuzzy, python-format
-msgid "Unsupported relative time unit type for %(type)s map <%(id)s> with layer %(l)s: %(u)s"
-msgstr "Nevar izveidot laikspiedola(timestamp) failu priekš %s kartes %s karšu biblitēkā %s"
+msgid ""
+"Unsupported relative time unit type for %(type)s map <%(id)s> with layer "
+"%(l)s: %(u)s"
+msgstr ""
+"Nevar izveidot laikspiedola(timestamp) failu priekš %s kartes %s karšu "
+"biblitēkā %s"
 
 #: ../lib/python/temporal/abstract_map_dataset.py:458
 #, fuzzy, python-format
@@ -4194,17 +4329,22 @@ msgstr "neispējami mainīt direktoriju uz %s"
 
 #: ../lib/python/temporal/abstract_map_dataset.py:467
 #, fuzzy, python-format
-msgid "End time must be greater than start time for %(typ)s map <%(id)s> with layer %(l)s"
+msgid ""
+"End time must be greater than start time for %(typ)s map <%(id)s> with layer "
+"%(l)s"
 msgstr "Austrumiem ir jābūt lielākiem nekā Rietumiem"
 
 #: ../lib/python/temporal/abstract_map_dataset.py:782
 #, python-format
-msgid "Map <%(id)s> with layer %(layer)s has incorrect time interval, start time is greater than end time"
+msgid ""
+"Map <%(id)s> with layer %(layer)s has incorrect time interval, start time is "
+"greater than end time"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_map_dataset.py:788
 #, python-format
-msgid "Map <%s> has incorrect time interval, start time is greater than end time"
+msgid ""
+"Map <%s> has incorrect time interval, start time is greater than end time"
 msgstr ""
 
 #: ../lib/python/temporal/abstract_map_dataset.py:794
@@ -4219,7 +4359,9 @@ msgstr "neiespējami atvērt rastra karti [%s iekš %s]"
 
 #: ../lib/python/temporal/abstract_map_dataset.py:891
 #, fuzzy, python-format
-msgid "Unable to unregister dataset <%(ds)s> of type %(type)s from the temporal database. The mapset of the dataset does not match the current mapset"
+msgid ""
+"Unable to unregister dataset <%(ds)s> of type %(type)s from the temporal "
+"database. The mapset of the dataset does not match the current mapset"
 msgstr "Ieejas vektors '%s' nav atrasts"
 
 #: ../lib/python/temporal/sampling.py:91 ../lib/python/temporal/sampling.py:96
@@ -4233,19 +4375,25 @@ msgid "Invalid element '%s'"
 msgstr ""
 
 #: ../lib/python/temporal/spatial_extent.py:118
-msgid "Projections are different. Unable to compute overlapping_2d for spatial extents"
+msgid ""
+"Projections are different. Unable to compute overlapping_2d for spatial "
+"extents"
 msgstr ""
 
 #: ../lib/python/temporal/spatial_extent.py:524
-msgid "Projections are different. Unable to compute is_in_2d for spatial extents"
+msgid ""
+"Projections are different. Unable to compute is_in_2d for spatial extents"
 msgstr ""
 
 #: ../lib/python/temporal/spatial_extent.py:656
-msgid "Projections are different. Unable to compute equivalent_2d for spatial extents"
+msgid ""
+"Projections are different. Unable to compute equivalent_2d for spatial "
+"extents"
 msgstr ""
 
 #: ../lib/python/temporal/spatial_extent.py:761
-msgid "Projections are different. Unable to compute cover_2d for spatial extents"
+msgid ""
+"Projections are different. Unable to compute cover_2d for spatial extents"
 msgstr ""
 
 #: ../lib/python/temporal/spatial_extent.py:833
@@ -4275,7 +4423,10 @@ msgid "No samples found for map calculation"
 msgstr ""
 
 #: ../lib/python/temporal/mapcalc.py:151
-msgid "Found more than a single map in a sample granule. Only the first map is used for computation. Use t.rast.aggregate.ds to create synchronous raster datasets."
+msgid ""
+"Found more than a single map in a sample granule. Only the first map is used "
+"for computation. Use t.rast.aggregate.ds to create synchronous raster "
+"datasets."
 msgstr ""
 
 #: ../lib/python/temporal/mapcalc.py:169
@@ -4317,7 +4468,9 @@ msgstr ""
 
 #: ../lib/python/temporal/temporal_vector_algebra.py:372
 #, fuzzy, python-format
-msgid "Error vector maps with basename %s exist. Use --o flag to overwrite existing file"
+msgid ""
+"Error vector maps with basename %s exist. Use --o flag to overwrite existing "
+"file"
 msgstr "Objektu id"
 
 #: ../lib/python/temporal/temporal_vector_algebra.py:404
@@ -4347,7 +4500,9 @@ msgstr "neispējami mainīt direktoriju uz %s"
 #: ../lib/python/temporal/space_time_datasets.py:250
 #, fuzzy, python-format
 msgid "Invalid datetime in timestamp for raster map <%s>"
-msgstr "Nederīgs liakspiedola(timestamp) fails priekš %s kartes %s  karšu biblotēkā %s"
+msgstr ""
+"Nederīgs liakspiedola(timestamp) fails priekš %s kartes %s  karšu biblotēkā "
+"%s"
 
 #: ../lib/python/temporal/space_time_datasets.py:255
 #: ../lib/python/temporal/space_time_datasets.py:589
@@ -4373,7 +4528,9 @@ msgstr "neispējami mainīt direktoriju uz %s"
 #: ../lib/python/temporal/space_time_datasets.py:584
 #, fuzzy, python-format
 msgid "Invalid datetime in timestamp for 3D raster map <%s>"
-msgstr "Nederīgs liakspiedola(timestamp) fails priekš %s kartes %s  karšu biblotēkā %s"
+msgstr ""
+"Nederīgs liakspiedola(timestamp) fails priekš %s kartes %s  karšu biblotēkā "
+"%s"
 
 #: ../lib/python/temporal/space_time_datasets.py:848
 #, fuzzy, python-format
@@ -4388,7 +4545,9 @@ msgstr "neispējami mainīt direktoriju uz %s"
 #: ../lib/python/temporal/space_time_datasets.py:876
 #, fuzzy, python-format
 msgid "Invalid datetime in timestamp for vector map <%s>"
-msgstr "Nederīgs liakspiedola(timestamp) fails priekš %s kartes %s  karšu biblotēkā %s"
+msgstr ""
+"Nederīgs liakspiedola(timestamp) fails priekš %s kartes %s  karšu biblotēkā "
+"%s"
 
 #: ../lib/python/temporal/space_time_datasets.py:892
 #, fuzzy, python-format
@@ -4427,7 +4586,9 @@ msgstr "Bāzes rastra faila nosaukums"
 
 #: ../lib/python/temporal/aggregation.py:135
 #, fuzzy, python-format
-msgid "Raster map <%(name)s> is already in temporal database, use overwrite flag to overwrite"
+msgid ""
+"Raster map <%(name)s> is already in temporal database, use overwrite flag to "
+"overwrite"
 msgstr "Vektors '%s' jau eksistē un tiks pārrakstīts."
 
 #: ../lib/python/temporal/aggregation.py:140
@@ -4447,7 +4608,9 @@ msgstr "Bāzes rastra faila nosaukums"
 
 #: ../lib/python/temporal/aggregation.py:289
 #, python-format
-msgid "Unable to perform aggregation. Output raster map <%(name)s> exists and overwrite flag was not set"
+msgid ""
+"Unable to perform aggregation. Output raster map <%(name)s> exists and "
+"overwrite flag was not set"
 msgstr ""
 
 #: ../lib/python/temporal/temporal_algebra.py:790
@@ -4476,7 +4639,9 @@ msgstr "Ieejas vektors '%s' nav atrasts"
 #: ../lib/python/temporal/temporal_algebra.py:1133
 #: ../lib/python/temporal/temporal_algebra.py:1137
 #, fuzzy, python-format
-msgid "Wrong temporal type of space time dataset <%s>                                       <%s> time is required"
+msgid ""
+"Wrong temporal type of space time dataset <"
+"%s>                                       <%s> time is required"
 msgstr "Ieejas vektors '%s' nav atrasts"
 
 #: ../lib/python/temporal/temporal_algebra.py:1157
@@ -4486,16 +4651,22 @@ msgstr "Ievades kartes tips"
 
 #: ../lib/python/temporal/temporal_algebra.py:2031
 #, python-format
-msgid "The resulting space time dataset type <%(a)s> is different from the requested type <%(b)s>"
+msgid ""
+"The resulting space time dataset type <%(a)s> is different from the "
+"requested type <%(b)s>"
 msgstr ""
 
 #: ../lib/python/temporal/temporal_algebra.py:2037
-msgid "Maps that should be registered in the resulting space time dataset have different types."
+msgid ""
+"Maps that should be registered in the resulting space time dataset have "
+"different types."
 msgstr ""
 
 #: ../lib/python/temporal/temporal_algebra.py:2218
 #, python-format
-msgid "Wrong map type <%s> . TMAP only supports single maps that are registered in the temporal GRASS database"
+msgid ""
+"Wrong map type <%s> . TMAP only supports single maps that are registered in "
+"the temporal GRASS database"
 msgstr ""
 
 #: ../lib/python/temporal/univar_statistics.py:59
@@ -4578,7 +4749,8 @@ msgstr ""
 
 #: ../lib/python/script/db.py:153
 #, python-format
-msgid "Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be provided"
+msgid ""
+"Programmer error: '%(sql)s', '%(filename)s', or '%(table)s' must be provided"
 msgstr ""
 
 #: ../lib/python/script/db.py:163
@@ -4588,7 +4760,10 @@ msgstr "Neiespējami atvērt failu %s iekš %s"
 
 #: ../lib/python/script/core.py:287
 #, python-format
-msgid "To run the module <%s> add underscore at the end of the option <%s> to avoid conflict with Python keywords. Underscore at the beginning is depreciated in GRASS GIS 7.0 and will be removed in version 7.1."
+msgid ""
+"To run the module <%s> add underscore at the end of the option <%s> to avoid "
+"conflict with Python keywords. Underscore at the beginning is depreciated in "
+"GRASS GIS 7.0 and will be removed in version 7.1."
 msgstr ""
 
 #: ../lib/python/script/core.py:909
@@ -4632,8 +4807,12 @@ msgstr "Neatļauts faila nosaukums. zīme <%c> nav atļauta.\n"
 
 #: ../lib/python/script/raster.py:46
 #, fuzzy, python-format
-msgid "Unable to write history for <%(map)s>. Raster map <%(map)s> not found in current mapset."
-msgstr "Nevar izdzēst līniju, karte '%s' karte nav atvērta rakstīšanas 'write' režijmā"
+msgid ""
+"Unable to write history for <%(map)s>. Raster map <%(map)s> not found in "
+"current mapset."
+msgstr ""
+"Nevar izdzēst līniju, karte '%s' karte nav atvērta rakstīšanas 'write' "
+"režijmā"
 
 #: ../lib/python/script/raster.py:105
 msgid "An error occurred while running r.mapcalc"
@@ -4902,8 +5081,12 @@ msgstr "Nevar atvērt vēsturi vektoram '%s'"
 
 #: ../lib/raster/get_cellhd.c:66
 #, fuzzy, c-format
-msgid "Unable to read header file for raster map <%s@%s>. It is a reclass of raster map <%s@%s> %s"
-msgstr "neiespējami atvērt [%s] iekš [%s] kopš tas ir pārklasificēts  [%s] iekš [%s] kas neeksistē"
+msgid ""
+"Unable to read header file for raster map <%s@%s>. It is a reclass of raster "
+"map <%s@%s> %s"
+msgstr ""
+"neiespējami atvērt [%s] iekš [%s] kopš tas ir pārklasificēts  [%s] iekš [%s] "
+"kas neeksistē"
 
 #: ../lib/raster/get_cellhd.c:70
 #, fuzzy
@@ -5118,7 +5301,9 @@ msgstr ""
 
 #: ../lib/raster/gdal.c:498
 #, c-format
-msgid "Driver <%s> does not support direct writing. Using MEM driver for intermediate dataset."
+msgid ""
+"Driver <%s> does not support direct writing. Using MEM driver for "
+"intermediate dataset."
 msgstr ""
 
 #: ../lib/raster/gdal.c:504
@@ -5197,15 +5382,21 @@ msgid "Unable to load color rules <%s>"
 msgstr ""
 
 #: ../lib/raster/window.c:31
-msgid "Internal error: Rast_get_window() called with split window. Use Rast_get_input_window() or Rast_get_output_window() instead."
+msgid ""
+"Internal error: Rast_get_window() called with split window. Use "
+"Rast_get_input_window() or Rast_get_output_window() instead."
 msgstr ""
 
 #: ../lib/raster/window.c:90
-msgid "Internal error: Rast_window_rows() called with split window. Use Rast_input_window_rows() or Rast_output_window_rows() instead."
+msgid ""
+"Internal error: Rast_window_rows() called with split window. Use "
+"Rast_input_window_rows() or Rast_output_window_rows() instead."
 msgstr ""
 
 #: ../lib/raster/window.c:125
-msgid "Internal error: Rast_window_cols() called with split window. Use Rast_input_window_cols() or Rast_output_window_cols() instead."
+msgid ""
+"Internal error: Rast_window_cols() called with split window. Use "
+"Rast_input_window_cols() or Rast_output_window_cols() instead."
 msgstr ""
 
 #: ../lib/raster/set_window.c:48
@@ -5213,7 +5404,9 @@ msgid "Rast_set_window() called while window split"
 msgstr ""
 
 #: ../lib/raster/set_window.c:131
-msgid "Rast_set_read_window(): projection/zone differs from that of currently open raster maps"
+msgid ""
+"Rast_set_read_window(): projection/zone differs from that of currently open "
+"raster maps"
 msgstr ""
 
 #: ../lib/raster/set_window.c:158
@@ -5257,8 +5450,12 @@ msgstr ""
 
 #: ../lib/raster/open.c:191
 #, fuzzy, c-format
-msgid "Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@%s> which does not exist"
-msgstr "neiespējami atvērt [%s] iekš [%s] kopš tas ir pārklasificēts  [%s] iekš [%s] kas neeksistē"
+msgid ""
+"Unable to open raster map <%s@%s> since it is a reclass of raster map <%s@"
+"%s> which does not exist"
+msgstr ""
+"neiespējami atvērt [%s] iekš [%s] kopš tas ir pārklasificēts  [%s] iekš [%s] "
+"kas neeksistē"
 
 #: ../lib/raster/open.c:196
 #, fuzzy, c-format
@@ -5273,7 +5470,8 @@ msgstr "eksistējošām rastra kartēm %d"
 #: ../lib/raster/open.c:215
 #, fuzzy, c-format
 msgid "Raster map <%s@%s>: format field in header file invalid"
-msgstr "[%s] karšu biblotēkā [%s]-formāta lauks faila galvā (header) ir nederīgs"
+msgstr ""
+"[%s] karšu biblotēkā [%s]-formāta lauks faila galvā (header) ir nederīgs"
 
 #: ../lib/raster/open.c:221
 #, fuzzy, c-format
@@ -5282,7 +5480,9 @@ msgstr "Ieejas vektors '%s' nav atrasts"
 
 #: ../lib/raster/open.c:226
 #, fuzzy, c-format
-msgid "Raster map <%s> is in different projection than current region. Found <%s>, should be <%s>."
+msgid ""
+"Raster map <%s> is in different projection than current region. Found <%s>, "
+"should be <%s>."
 msgstr "Defekts: atteikts papildināt karti,kura nav tekošajā karšu komplektā."
 
 #: ../lib/raster/open.c:233
@@ -5297,7 +5497,8 @@ msgstr ""
 
 #: ../lib/raster/open.c:263
 #, c-format
-msgid "Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
+msgid ""
+"Raster map <%s@%s> is a GDAL link but GRASS is compiled without GDAL support"
 msgstr ""
 
 #: ../lib/raster/open.c:271
@@ -5360,7 +5561,8 @@ msgid "Raster map <%s> is not xdr: byte_order: %s"
 msgstr "Ieejas vektors '%s' nav atrasts"
 
 #: ../lib/raster/open.c:936
-msgid "Rast_set_quant_rules() can be called only for raster maps opened for reading"
+msgid ""
+"Rast_set_quant_rules() can be called only for raster maps opened for reading"
 msgstr ""
 
 #: ../lib/raster/auto_mask.c:69
@@ -5489,7 +5691,9 @@ msgstr ""
 
 #: ../lib/ogsf/gp3.c:288
 #, c-format
-msgid "%d points without category. Unable to determine color rules for features without category."
+msgid ""
+"%d points without category. Unable to determine color rules for features "
+"without category."
 msgstr ""
 
 #: ../lib/ogsf/gvl2.c:267
@@ -5512,7 +5716,9 @@ msgstr ""
 
 #: ../lib/ogsf/gsd_prim.c:630
 #, c-format
-msgid "gsd_rot(): %c is an invalid axis specification. Rotation ignored. Please advise GRASS developers of this error"
+msgid ""
+"gsd_rot(): %c is an invalid axis specification. Rotation ignored. Please "
+"advise GRASS developers of this error"
 msgstr ""
 
 #: ../lib/ogsf/gp2.c:705
@@ -5622,7 +5828,9 @@ msgstr ""
 
 #: ../lib/ogsf/gv3.c:414
 #, c-format
-msgid "%d features without category. Unable to determine color rules for features without category."
+msgid ""
+"%d features without category. Unable to determine color rules for features "
+"without category."
 msgstr ""
 
 #: ../lib/ogsf/gs2.c:1211
@@ -5669,7 +5877,8 @@ msgstr ""
 
 #: ../lib/symbol/read.c:260
 #, c-format
-msgid "Incorrect symbol name: '%s' (should be: group/name or group/name@mapset)"
+msgid ""
+"Incorrect symbol name: '%s' (should be: group/name or group/name@mapset)"
 msgstr ""
 
 #: ../lib/symbol/read.c:284
@@ -5798,7 +6007,8 @@ msgstr ""
 
 #: ../lib/init/grass.py:266
 #, fuzzy, python-format
-msgid "Unable to create temporary directory <grass7-%(user)s-%(lock)s>! Exiting."
+msgid ""
+"Unable to create temporary directory <grass7-%(user)s-%(lock)s>! Exiting."
 msgstr "Nevar atvērt vēsturi vektoram '%s'"
 
 #: ../lib/init/grass.py:301
@@ -5841,13 +6051,18 @@ msgstr "Atvainojiet, <%s> nav derīgs parametrs"
 
 #: ../lib/init/grass.py:600
 #, python-format
-msgid "Mapset <%s> doesn't exist in GRASS location <%s>. A new mapset can be created by '-c' switch."
-msgstr "Karšu kopa <%s> GRASS novietojumā <%s> neeksistē. Jaunu karšu kopu var izveidot ar '-c' parametru."
+msgid ""
+"Mapset <%s> doesn't exist in GRASS location <%s>. A new mapset can be "
+"created by '-c' switch."
+msgstr ""
+"Karšu kopa <%s> GRASS novietojumā <%s> neeksistē. Jaunu karšu kopu var "
+"izveidot ar '-c' parametru."
 
 #: ../lib/init/grass.py:619
 #, python-format
 msgid "Failed to create new location. The location <%s> already exists."
-msgstr "Nebija iespējams izveidot jaunu novietojumu. Novietojums <%s> jau eksistē."
+msgstr ""
+"Nebija iespējams izveidot jaunu novietojumu. Novietojums <%s> jau eksistē."
 
 #: ../lib/init/grass.py:651
 msgid "Missing WIND file fixed"
@@ -5860,17 +6075,22 @@ msgid ""
 msgstr ""
 
 #: ../lib/init/grass.py:677
-msgid "<{}> requested, but not available. Run GRASS in text mode (-text) or install missing package (usually 'grass-gui')."
+msgid ""
+"<{}> requested, but not available. Run GRASS in text mode (-text) or install "
+"missing package (usually 'grass-gui')."
 msgstr ""
 
 #: ../lib/init/grass.py:684
 #, python-format
-msgid "Invalid user interface specified - <%s>. Use the --help option to see valid interface names."
+msgid ""
+"Invalid user interface specified - <%s>. Use the --help option to see valid "
+"interface names."
 msgstr ""
 
 #: ../lib/init/grass.py:697
 msgid ""
-"Error in GUI startup. If necessary, please report this error to the GRASS developers.\n"
+"Error in GUI startup. If necessary, please report this error to the GRASS "
+"developers.\n"
 "Switching to text mode now.\n"
 "\n"
 "Hit RETURN to continue..."
@@ -5909,7 +6129,8 @@ msgstr ""
 
 #: ../lib/init/grass.py:815
 #, python-format
-msgid "A language override has been requested. Trying to switch GRASS into '%s'..."
+msgid ""
+"A language override has been requested. Trying to switch GRASS into '%s'..."
 msgstr ""
 
 #: ../lib/init/grass.py:874
@@ -5919,7 +6140,9 @@ msgstr "Ceļš '%s' neeksitē"
 
 #: ../lib/init/grass.py:889
 #, python-format
-msgid "%(user)s is currently running GRASS in selected mapset (file %(file)s found). Concurrent use not allowed."
+msgid ""
+"%(user)s is currently running GRASS in selected mapset (file %(file)s "
+"found). Concurrent use not allowed."
 msgstr ""
 
 #: ../lib/init/grass.py:893
@@ -5945,7 +6168,8 @@ msgstr ""
 #: ../lib/init/grass.py:976
 #, python-format
 msgid ""
-"Job file '%s' has been defined in the 'GRASS_BATCH_JOB' variable but not found. Exiting.\n"
+"Job file '%s' has been defined in the 'GRASS_BATCH_JOB' variable but not "
+"found. Exiting.\n"
 "\n"
 "Use 'unset GRASS_BATCH_JOB' to disable batch job processing."
 msgstr ""
@@ -6055,7 +6279,8 @@ msgid ""
 "Unable to start GRASS. You can:\n"
 " - Launch GRASS with '-gui' switch (`grass70 -gui`)\n"
 " - Create manually GISRC file (%s)\n"
-" - Launch GRASS with path to the location/mapset as an argument (`grass70 /path/to/location/mapset`)"
+" - Launch GRASS with path to the location/mapset as an argument (`grass70 /"
+"path/to/location/mapset`)"
 msgstr ""
 
 #: ../lib/init/grass.py:1417
@@ -6150,7 +6375,8 @@ msgstr ""
 
 #: ../lib/raster3d/open.c:20
 msgid "Rast3d_open_cell_old_no_header: error in Rast3d_mask_open_old"
-msgstr "Nav iespējams izveidot vektoru karti <%s>. Nosaukums nav SQL savietojams"
+msgstr ""
+"Nav iespējams izveidot vektoru karti <%s>. Nosaukums nav SQL savietojams"
 
 #: ../lib/raster3d/open.c:26
 msgid "Rast3d_open_cell_old_no_header: error in Rast3d_malloc"
@@ -6260,7 +6486,9 @@ msgstr ""
 
 #: ../lib/vector/diglib/plus_node.c:214
 #, c-format
-msgid "Attempt to read line angle for the line which is not connected to the node: node %d, line %d"
+msgid ""
+"Attempt to read line angle for the line which is not connected to the node: "
+"node %d, line %d"
 msgstr ""
 
 #: ../lib/vector/diglib/port_init.c:158
@@ -6280,17 +6508,23 @@ msgstr "Kļūdu rakstīšana ārpus telpisko datu index faila.\n"
 
 #: ../lib/vector/diglib/spindex_rw.c:302
 #, c-format
-msgid "This version of GRASS (%d.%d) is too old to read this spatial index format. Try to rebuild topology or upgrade GRASS to at least version %d."
+msgid ""
+"This version of GRASS (%d.%d) is too old to read this spatial index format. "
+"Try to rebuild topology or upgrade GRASS to at least version %d."
 msgstr ""
 
 #: ../lib/vector/diglib/spindex_rw.c:308
 #, c-format
-msgid "Your GRASS version does not fully support spatial index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
+msgid ""
+"Your GRASS version does not fully support spatial index format %d.%d of the "
+"vector. Consider to rebuild topology or upgrade GRASS."
 msgstr ""
 
 #: ../lib/vector/diglib/spindex_rw.c:317
 #, c-format
-msgid "Spatial index format version %d.%d is not supported by this release. Please rebuild topology."
+msgid ""
+"Spatial index format version %d.%d is not supported by this release. Please "
+"rebuild topology."
 msgstr ""
 
 #: ../lib/vector/diglib/plus_area.c:215 ../lib/vector/diglib/plus_area.c:711
@@ -6337,7 +6571,9 @@ msgstr "Nevar nolasīt histogrammu priekš [%s no %s]"
 
 #: ../lib/vector/diglib/cindex_rw.c:156
 #, c-format
-msgid "This version of GRASS (%d.%d) is too old to read this category index format. Try to rebuild topology or upgrade GRASS to at least version %d."
+msgid ""
+"This version of GRASS (%d.%d) is too old to read this category index format. "
+"Try to rebuild topology or upgrade GRASS to at least version %d."
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:58
@@ -6347,22 +6583,28 @@ msgstr "Neiespējami atvērt failu %s iekš %s"
 
 #: ../lib/vector/diglib/test.c:75
 #, c-format
-msgid "Error in read/write portable double, byte_order = %d Written: %.16e3E Read: %.16e3E"
+msgid ""
+"Error in read/write portable double, byte_order = %d Written: %.16e3E Read: "
+"%.16e3E"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:89
 #, c-format
-msgid "Error in read/write portable float, byte_order = %d Written: %.8e3E Read: %.8e3E"
+msgid ""
+"Error in read/write portable float, byte_order = %d Written: %.8e3E Read: "
+"%.8e3E"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:104
 #, c-format
-msgid "Error in read/write portable off_t, byte_order = %d Written: %lu Read: %lu"
+msgid ""
+"Error in read/write portable off_t, byte_order = %d Written: %lu Read: %lu"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:119
 #, c-format
-msgid "Error in read/write portable long, byte_order = %d Written: %lu Read: %lu"
+msgid ""
+"Error in read/write portable long, byte_order = %d Written: %lu Read: %lu"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:134
@@ -6372,7 +6614,8 @@ msgstr ""
 
 #: ../lib/vector/diglib/test.c:150
 #, c-format
-msgid "Error in read/write portable short, byte_order = %d Written: %d Read: %d"
+msgid ""
+"Error in read/write portable short, byte_order = %d Written: %d Read: %d"
 msgstr ""
 
 #: ../lib/vector/diglib/test.c:165
@@ -6435,17 +6678,23 @@ msgstr ""
 
 #: ../lib/vector/diglib/plus_struct.c:523
 #, c-format
-msgid "This version of GRASS (%d.%d) is too old to read this topology format. Try to rebuild topology or upgrade GRASS to at least version %d."
+msgid ""
+"This version of GRASS (%d.%d) is too old to read this topology format. Try "
+"to rebuild topology or upgrade GRASS to at least version %d."
 msgstr ""
 
 #: ../lib/vector/diglib/plus_struct.c:529
 #, c-format
-msgid "Your GRASS version does not fully support topology format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
+msgid ""
+"Your GRASS version does not fully support topology format %d.%d of the "
+"vector. Consider to rebuild topology or upgrade GRASS."
 msgstr ""
 
 #: ../lib/vector/diglib/plus_struct.c:539
 #, c-format
-msgid "Old topology format version %d.%d is not supported by this release. Try to rebuild topology using v.build or v.build.all module."
+msgid ""
+"Old topology format version %d.%d is not supported by this release. Try to "
+"rebuild topology using v.build or v.build.all module."
 msgstr ""
 
 #: ../lib/vector/diglib/plus.c:222
@@ -6633,7 +6882,9 @@ msgid "Error while adding point to array. Out of memory"
 msgstr ""
 
 #: ../lib/vector/Vlib/dgraph.c:432
-msgid "Trying to add more edges to the planar_graph than the initial allocation size allows"
+msgid ""
+"Trying to add more edges to the planar_graph than the initial allocation "
+"size allows"
 msgstr ""
 
 #: ../lib/vector/Vlib/simple_features.c:225
@@ -6708,7 +6959,9 @@ msgstr "Ieejas vektors '%s' nav atrasts"
 
 #: ../lib/vector/Vlib/geos.c:55
 #, c-format
-msgid "Vect_read_line_geos(): feature id %d is not reasonable (max features in vector map <%s>: %d)"
+msgid ""
+"Vect_read_line_geos(): feature id %d is not reasonable (max features in "
+"vector map <%s>: %d)"
 msgstr ""
 
 #: ../lib/vector/Vlib/geos.c:60
@@ -6842,12 +7095,16 @@ msgstr ""
 
 #: ../lib/vector/Vlib/open_ogr.c:279
 #, c-format
-msgid "Feature index format version %d.%d is not supported by this release. Try to rebuild topology or upgrade GRASS."
+msgid ""
+"Feature index format version %d.%d is not supported by this release. Try to "
+"rebuild topology or upgrade GRASS."
 msgstr ""
 
 #: ../lib/vector/Vlib/open_ogr.c:284
 #, c-format
-msgid "Your GRASS version does not fully support feature index format %d.%d of the vector. Consider to rebuild topology or upgrade GRASS."
+msgid ""
+"Your GRASS version does not fully support feature index format %d.%d of the "
+"vector. Consider to rebuild topology or upgrade GRASS."
 msgstr ""
 
 #: ../lib/vector/Vlib/remove_areas.c:107 ../lib/vector/Vlib/remove_areas.c:268
@@ -7048,12 +7305,15 @@ msgstr ""
 
 #: ../lib/vector/Vlib/open_nat.c:154
 #, c-format
-msgid "Coor file of vector map <%s@%s> is larger than it should be (%ld bytes excess)"
+msgid ""
+"Coor file of vector map <%s@%s> is larger than it should be (%ld bytes "
+"excess)"
 msgstr ""
 
 #: ../lib/vector/Vlib/open_nat.c:158
 #, c-format
-msgid "Coor file of vector <%s@%s> is shorter than it should be (%ld bytes missing)."
+msgid ""
+"Coor file of vector <%s@%s> is shorter than it should be (%ld bytes missing)."
 msgstr ""
 
 #: ../lib/vector/Vlib/break_lines.c:563
@@ -7224,12 +7484,16 @@ msgstr "Saglabājam/reģistrējam līnijas"
 
 #: ../lib/vector/Vlib/net.c:251
 #, c-format
-msgid "Database record for line %d (cat = %d, forward/both direction(s)) not found (forward/both direction(s) of line skipped)"
+msgid ""
+"Database record for line %d (cat = %d, forward/both direction(s)) not found "
+"(forward/both direction(s) of line skipped)"
 msgstr ""
 
 #: ../lib/vector/Vlib/net.c:270
 #, c-format
-msgid "Database record for line %d (cat = %d, backword direction) not found(direction of line skipped)"
+msgid ""
+"Database record for line %d (cat = %d, backword direction) not "
+"found(direction of line skipped)"
 msgstr ""
 
 #: ../lib/vector/Vlib/net.c:319
@@ -7262,7 +7526,8 @@ msgstr "dglShortestPath kļūda: %s"
 
 #: ../lib/vector/Vlib/net.c:633
 msgid "Wrong line direction in Vect_net_get_line_cost()"
-msgstr "Nebija iespējams izveidot jaunu novietojumu. Novietojums <%s> jau eksistē."
+msgstr ""
+"Nebija iespējams izveidot jaunu novietojumu. Novietojums <%s> jau eksistē."
 
 #: ../lib/vector/Vlib/line.c:184 ../lib/vector/Vlib/line.c:217
 #: ../lib/vector/Vlib/line.c:250
@@ -7296,7 +7561,8 @@ msgstr ""
 #: ../lib/vector/Vlib/legal_vname.c:43
 #, fuzzy, c-format
 msgid "Illegal vector map name <%s>. May not contain '.' or 'NULL'."
-msgstr "Nepieņemams vektoru kartes nosaukums <%s>. Nedrīkst saturēt '.' vai 'NULL'.\n"
+msgstr ""
+"Nepieņemams vektoru kartes nosaukums <%s>. Nedrīkst saturēt '.' vai 'NULL'.\n"
 
 #: ../lib/vector/Vlib/legal_vname.c:50
 #, fuzzy, c-format
@@ -7310,7 +7576,8 @@ msgstr "Nepieņemams vektoru kartes nosaukums <%s>. Zīme <%c> nav atļauta.\n"
 
 #: ../lib/vector/Vlib/legal_vname.c:65
 #, fuzzy, c-format
-msgid "Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."
+msgid ""
+"Illegal vector map name <%s>. SQL keyword cannot be used as vector map name."
 msgstr "Nepieņemams vektoru kartes nosaukums <%s>. Zīme <%c> nav atļauta.\n"
 
 #: ../lib/vector/Vlib/legal_vname.c:100 ../lib/vector/Vlib/legal_vname.c:104
@@ -7485,7 +7752,8 @@ msgstr ""
 
 #: ../lib/vector/Vlib/build_pg.c:1018
 #, c-format
-msgid "Unable to build simple features from topogeometry data. Unsupported type %d."
+msgid ""
+"Unable to build simple features from topogeometry data. Unsupported type %d."
 msgstr ""
 
 #: ../lib/vector/Vlib/clean_nodes.c:248
@@ -7533,11 +7801,13 @@ msgid "Unexpected result of line_intersection() res = %d"
 msgstr ""
 
 #: ../lib/vector/Vlib/buffer2.c:589
-msgid "Next edge was visited (right) but it is not the first one !!! breaking loop"
+msgid ""
+"Next edge was visited (right) but it is not the first one !!! breaking loop"
 msgstr ""
 
 #: ../lib/vector/Vlib/buffer2.c:600
-msgid "Next edge was visited (left) but it is not the first one !!! breaking loop"
+msgid ""
+"Next edge was visited (left) but it is not the first one !!! breaking loop"
 msgstr ""
 
 #: ../lib/vector/Vlib/buffer2.c:648
@@ -7725,7 +7995,9 @@ msgstr "Kļūdu raskrīšana ārpus topo faila.\n"
 
 #: ../lib/vector/Vlib/build.c:1211
 #, fuzzy
-msgid "Unable to build spatial index from topology, vector map is not opened at topology level 2"
+msgid ""
+"Unable to build spatial index from topology, vector map is not opened at "
+"topology level 2"
 msgstr "Nevar izdzēst līniju, karte '%s' karte nav atvērta līmenī 2"
 
 #: ../lib/vector/Vlib/build.c:1234
@@ -7750,7 +8022,9 @@ msgstr "Kļūdu rakstīšana ārpus telpisko datu index faila.\n"
 #: ../lib/vector/Vlib/copy.c:81
 #, fuzzy, c-format
 msgid "Unable to copy features. Input vector map <%s> is not open"
-msgstr "Nevar pievienot datubāzes saiti,karte nav atvērta rakstīšanas 'WRITE' režijmā."
+msgstr ""
+"Nevar pievienot datubāzes saiti,karte nav atvērta rakstīšanas 'WRITE' "
+"režijmā."
 
 #: ../lib/vector/Vlib/copy.c:100 ../lib/vector/Vlib/write_pg.c:737
 #: ../lib/vector/Vlib/write_pg.c:1175 ../lib/vector/Vlib/write_pg.c:1278
@@ -7965,7 +8239,8 @@ msgid "Empty OGR layer, nothing to build"
 msgstr ""
 
 #: ../lib/vector/Vlib/build_ogr.c:82
-msgid "Random read is not supported by OGR for this layer. Unable to build topology."
+msgid ""
+"Random read is not supported by OGR for this layer. Unable to build topology."
 msgstr ""
 
 #: ../lib/vector/Vlib/build_ogr.c:132
@@ -8185,7 +8460,8 @@ msgstr "Bez centroīdiem esošu laukumu skaits :   %d\n"
 
 #: ../lib/vector/Vlib/read_pg.c:365
 #, c-format
-msgid "Requesting invalid feature from cache (%d). Number of features in cache: %d"
+msgid ""
+"Requesting invalid feature from cache (%d). Number of features in cache: %d"
 msgstr ""
 
 #: ../lib/vector/Vlib/read_pg.c:368
@@ -8392,7 +8668,9 @@ msgstr "Nevar atvērt 'temp'/pagaidu failu"
 
 #: ../lib/vector/Vlib/ascii.c:889
 #, c-format
-msgid "%d features without category skipped. To export also features without category use '%s=-1'."
+msgid ""
+"%d features without category skipped. To export also features without "
+"category use '%s=-1'."
 msgstr ""
 
 #: ../lib/vector/Vlib/field.c:91
@@ -8402,7 +8680,9 @@ msgstr "Slāņa numuram ir jābūt 1 vai lielākam"
 #: ../lib/vector/Vlib/field.c:96
 #, fuzzy
 msgid "Unable to add attribute link, vector map is not opened in WRITE mode"
-msgstr "Nevar pievienot datubāzes saiti,karte nav atvērta rakstīšanas 'WRITE' režijmā."
+msgstr ""
+"Nevar pievienot datubāzes saiti,karte nav atvērta rakstīšanas 'WRITE' "
+"režijmā."
 
 #: ../lib/vector/Vlib/field.c:103
 msgid "Unable to add attribute link"
@@ -8421,7 +8701,9 @@ msgid "Database connection not defined. Skipping."
 msgstr ""
 
 #: ../lib/vector/Vlib/field.c:185
-msgid "More DB links defined for input vector map. Using only first DB link for output."
+msgid ""
+"More DB links defined for input vector map. Using only first DB link for "
+"output."
 msgstr ""
 
 #: ../lib/vector/Vlib/field.c:261
@@ -8465,13 +8747,17 @@ msgid "Unable to open OGR DBMI driver"
 msgstr "Nevar atvērt OGR DBMI dzinēju"
 
 #: ../lib/vector/Vlib/field.c:758
-msgid "All FID tests failed. Neither 'FID' nor 'ogc_fid' nor 'ogr_fid' nor 'gid' available in OGR DB table"
+msgid ""
+"All FID tests failed. Neither 'FID' nor 'ogc_fid' nor 'ogr_fid' nor 'gid' "
+"available in OGR DB table"
 msgstr ""
 
 #: ../lib/vector/Vlib/field.c:825
 #, fuzzy, c-format
-msgid "Feature table <%s> has no primary key defined. Unable to define DB links."
-msgstr " Tikai %d%% no loga ir saglabāts \"%s\" pārklājuma ar tekošo GRASS logu."
+msgid ""
+"Feature table <%s> has no primary key defined. Unable to define DB links."
+msgstr ""
+" Tikai %d%% no loga ir saglabāts \"%s\" pārklājuma ar tekošo GRASS logu."
 
 #: ../lib/vector/Vlib/field.c:845
 msgid "GRASS not compiled with PostgreSQL support"
@@ -8561,7 +8847,8 @@ msgid "Temporary vector maps can be accessed only in the current mapset"
 msgstr "Defekts: atteikts papildināt karti,kura nav tekošajā karšu komplektā."
 
 #: ../lib/vector/Vlib/open.c:266
-msgid "Vector map which is not in the current mapset cannot be opened for update"
+msgid ""
+"Vector map which is not in the current mapset cannot be opened for update"
 msgstr ""
 
 #: ../lib/vector/Vlib/open.c:300
@@ -8576,7 +8863,9 @@ msgstr ""
 
 #: ../lib/vector/Vlib/open.c:408
 #, c-format
-msgid "Unable to open vector map <%s> on level %d. Try to rebuild vector topology with v.build."
+msgid ""
+"Unable to open vector map <%s> on level %d. Try to rebuild vector topology "
+"with v.build."
 msgstr ""
 
 #: ../lib/vector/Vlib/open.c:434
@@ -8602,7 +8891,8 @@ msgstr "Defekts: atteikts papildināt karti,kura nav tekošajā karšu komplekt�
 #: ../lib/vector/Vlib/open.c:777
 #, fuzzy, c-format
 msgid "Unable to create vector map: <%s> is not SQL compliant"
-msgstr "Nav iespējams izveidot vektoru karti <%s>. Nosaukums nav SQL savietojams"
+msgstr ""
+"Nav iespējams izveidot vektoru karti <%s>. Nosaukums nav SQL savietojams"
 
 #: ../lib/vector/Vlib/open.c:835
 #, c-format
@@ -8724,7 +9014,9 @@ msgstr ""
 
 #: ../lib/vector/Vlib/open_pg.c:549
 #, fuzzy
-msgid "Connection to PostgreSQL database failed. Try to set up username/password by db.login."
+msgid ""
+"Connection to PostgreSQL database failed. Try to set up username/password by "
+"db.login."
 msgstr "Pieslēgšanās izgāzusies\n"
 
 #: ../lib/vector/Vlib/open_pg.c:556
@@ -8980,7 +9272,9 @@ msgstr ""
 #~ msgstr "Vektors '%s' jau eksistē un tiks pārrakstīts."
 
 #, fuzzy
-#~ msgid "DB connection <%s/%s> already exists. Re-run '%s' with '--%s' flag to overwrite existing settings."
+#~ msgid ""
+#~ "DB connection <%s/%s> already exists. Re-run '%s' with '--%s' flag to "
+#~ "overwrite existing settings."
 #~ msgstr "Vektors '%s' jau eksistē un tiks pārrakstīts."
 
 #, fuzzy
@@ -9049,7 +9343,8 @@ msgstr ""
 
 #, fuzzy
 #~ msgid "Raster map <%s> does not exist in the current mapset (%s)"
-#~ msgstr "Defekts: atteikts papildināt karti,kura nav tekošajā karšu komplektā."
+#~ msgstr ""
+#~ "Defekts: atteikts papildināt karti,kura nav tekošajā karšu komplektā."
 
 #, fuzzy
 #~ msgid "Fail of initial read of compressed null file [%s in %s]"
@@ -9060,8 +9355,12 @@ msgstr ""
 #~ msgstr "KĻŪDA: <%s> nav derīgs GRASS novietojums"
 
 #, fuzzy
-#~ msgid "Mapset <{mapset}> doesn't exist in GRASS Location <{loc}>. A new mapset can be created by '-c' switch."
-#~ msgstr "Karšu kopa <%s> GRASS novietojumā <%s> neeksistē. Jaunu karšu kopu var izveidot ar '-c' parametru."
+#~ msgid ""
+#~ "Mapset <{mapset}> doesn't exist in GRASS Location <{loc}>. A new mapset "
+#~ "can be created by '-c' switch."
+#~ msgstr ""
+#~ "Karšu kopa <%s> GRASS novietojumā <%s> neeksistē. Jaunu karšu kopu var "
+#~ "izveidot ar '-c' parametru."
 
 #~ msgid ""
 #~ "Exit was requested in GUI.\n"
