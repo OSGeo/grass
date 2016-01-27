@@ -29,6 +29,7 @@ from gui_core.dialogs import SetOpacityDialog
 from core.utils import GetLayerNameFromCmd
 from core.gcmd import GError
 from core.layerlist import LayerList
+from core.utils import _
 
 SIMPLE_LMGR_RASTER = 1
 SIMPLE_LMGR_VECTOR = 2
