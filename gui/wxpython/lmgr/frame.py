@@ -49,7 +49,7 @@ from core.utils            import SetAddOnPath, GetLayerNameFromCmd, command2lty
 from gui_core.preferences  import MapsetAccess, PreferencesDialog
 from lmgr.layertree        import LayerTree, LMIcons
 from lmgr.menudata         import LayerManagerMenuData, LayerManagerModuleTree
-from gui_core.widgets      import GNotebook
+from gui_core.widgets      import GNotebook, FormNotebook
 from modules.mcalc_builder import MapCalcFrame
 from dbmgr.manager         import AttributeManager
 from core.workspace        import ProcessWorkspaceFile, ProcessGrcFile, WriteWorkspaceFile
@@ -278,7 +278,10 @@ class GMFrame(wx.Frame):
     
     def _createNoteBook(self):
         """Creates notebook widgets"""
-        self.notebook = GNotebook(parent = self, style = globalvar.FNPageDStyle)
+        if sys.platform == 'win32':
+            self.notebook = GNotebook(parent=self, style=globalvar.FNPageDStyle)
+        else:
+            self.notebook = FormNotebook(parent=self, style=wx.NB_BOTTOM)
         # create displays notebook widget and add it to main notebook page
         cbStyle = globalvar.FNPageStyle
         if globalvar.hasAgw:
@@ -334,8 +337,11 @@ class GMFrame(wx.Frame):
             self.pyshell = None
         
         # bindings
+        if sys.platform == 'win32':
+            self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
+        else:
+            self.notebook.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED,    self.OnCBPageChanged)
-        self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING,    self.OnCBPageClosed)
         
         return self.notebook
