@@ -1938,11 +1938,13 @@
       <module-item name="g.gui.dbmgr">
         <label>Attribute table manager</label>
       </module-item>
+      <wxgui-item name="CartographicComposer"/>
       <wxgui-item name="Georectify"/>
       <wxgui-item name="GraphicalModeler"/>
       <wxgui-item name="InteractiveInputForSupervisedClassification"/>
       <wxgui-item name="MapSwipe"/>
-      <wxgui-item name="CartographicComposer"/>
+      <wxgui-item name="TplotTool"/>
+      <wxgui-item name="TimelineTool"/>
     </items>
   </toolbox>
 </toolboxes>
