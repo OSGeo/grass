@@ -96,7 +96,8 @@ LIBDIRS = \
 	lib/linkm \
 	lib/db \
 	lib/vector \
-	db/drivers
+	db/drivers \
+	lib/python
 
 # Compile libraries only
 libs:
