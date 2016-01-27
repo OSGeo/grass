@@ -20,6 +20,7 @@ import wx
 from core.gthread import gThread
 from core.debug import Debug
 from datacatalog.tree import DataCatalogTree
+from core.utils import _
 
 from grass.pydispatch.signal import Signal
 
