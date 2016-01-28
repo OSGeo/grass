@@ -89,6 +89,14 @@
 #% description: Resolution of output raster map (use with option resolution=value)
 #% guisection: Output
 #%end
+#%option
+#% key: title
+#% key_desc: phrase
+#% type: string
+#% required: no
+#% description: Title for resultant raster map
+#% guisection: Metadata
+#%end
 #%flag
 #% key: e
 #% description: Estimate resolution only
@@ -145,6 +153,7 @@ def main():
     memory = options['memory']
     bands = options['band']
     tgtres = options['resolution']
+    title = options["title"]
     if options['resolution_value']:
         if tgtres != 'value':
             grass.fatal(_("To set custom resolution value, select 'value' in resolution option"))
@@ -175,7 +184,7 @@ def main():
     # create temp location from input without import
     grass.verbose(_("Creating temporary location for <%s>...") % GDALdatasource)
     parameters = dict(input=GDALdatasource, output=output,
-                      memory=memory, flags='c',
+                      memory=memory, flags='c', title=title,
                       location=TMPLOC, quiet=True)
     if bands:
         parameters['band'] = bands
