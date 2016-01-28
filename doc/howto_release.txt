@@ -168,8 +168,8 @@ Contents
                    release tag for the differences
 
  o Trac updates:
-      - Set "complete" flag in https://trac.osgeo.org/grass/milestone/7.0.x
-        and batch-migrate assigned tickets to next milestone
+      - Set "complete" flag in https://trac.osgeo.org/grass/milestone/7.0.x --> Edit Milestone
+        this batch-migrates assigned tickets to next milestone
       - Add release to https://trac.osgeo.org/grass/admin/ticket/versions
 
  o WinGRASS notes:
