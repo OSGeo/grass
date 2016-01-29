@@ -255,7 +255,7 @@ static void translate_from_colors(map * m, DCELL * rast, CELL * cell,
  * to compute the key and the index
  *
  * This uses the BTREE library to manage the tree itself
- * btree structure must already be intialized
+ * btree structure must already be initialized
  * pcats structure must already contain category labels
  */
 

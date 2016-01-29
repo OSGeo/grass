@@ -42,7 +42,7 @@ struct menu
     {
     c_ave, "average", "average value"}, {
     c_median, "median", "median value"}, {
-    c_mode, "mode", "most frequently occuring value"}, {
+    c_mode, "mode", "most frequently occurring value"}, {
     c_min, "minimum", "lowest value"}, {
     c_max, "maximum", "highest value"}, {
     c_range, "range", "range value"}, {

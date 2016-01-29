@@ -39,7 +39,7 @@ static struct menu menu[] = {
     {c_sum, 0, "sum", "sum of values"},
     {c_ave, 1, "average", "average value"},
     {c_median, 0, "median", "median value"},
-    {c_mode, 0, "mode", "most frequently occuring value"},
+    {c_mode, 0, "mode", "most frequently occurring value"},
     {c_min, 0, "minimum", "lowest value"},
     {c_minx, 0, "min_cat", "category number of lowest value"},
     {c_max, 0, "maximum", "highest value"},

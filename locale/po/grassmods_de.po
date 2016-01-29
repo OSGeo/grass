@@ -34798,7 +34798,7 @@ msgstr "Kann Spalten-Zeichenkette [%s] nicht tokenisieren"
 
 #: ../vector/v.transform/main.c:277
 #, fuzzy
-msgid "Tranforming features..."
+msgid "Transforming features..."
 msgstr "Transformiere Feature..."
 
 #: ../vector/v.transform/main.c:290

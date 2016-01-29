@@ -34384,7 +34384,7 @@ msgstr "[%s]لم يتم فتح ملف الخلية ل "
 
 #: ../vector/v.transform/main.c:277
 #, fuzzy
-msgid "Tranforming features..."
+msgid "Transforming features..."
 msgstr "التوقيع ..."
 
 #: ../vector/v.transform/main.c:290

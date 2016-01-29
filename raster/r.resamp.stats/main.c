@@ -30,7 +30,7 @@ static const struct menu
 } menu[] = {
     {c_ave,    w_ave,    "average",  "average (mean) value"},
     {c_median, w_median, "median",   "median value"},
-    {c_mode,   w_mode,   "mode",     "most frequently occuring value"},
+    {c_mode,   w_mode,   "mode",     "most frequently occurring value"},
     {c_min,    w_min,    "minimum",  "lowest value"},
     {c_max,    w_max,    "maximum",  "highest value"},
     {c_quart1, w_quart1, "quart1",   "first quartile"},

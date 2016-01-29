@@ -34290,7 +34290,7 @@ msgstr "Nie mozna otworzyć pliku wejściowego <%s@%s>."
 
 #: ../vector/v.transform/main.c:277
 #, fuzzy
-msgid "Tranforming features..."
+msgid "Transforming features..."
 msgstr "Wczytywanie danych..."
 
 #: ../vector/v.transform/main.c:290

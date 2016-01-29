@@ -56,7 +56,7 @@ enum out_type {
 static struct menu menu[] = {
     {c_ave, w_ave, NO_CATS, 1, 1, T_FLOAT, "average", "average value"},
     {c_median, w_median, NO_CATS, 1, 0, T_FLOAT, "median", "median value"},
-    {c_mode, w_mode, NO_CATS, 1, 0, T_COPY, "mode", "most frequently occuring value"},
+    {c_mode, w_mode, NO_CATS, 1, 0, T_COPY, "mode", "most frequently occurring value"},
     {c_min, NULL, NO_CATS, 1, 0, T_COPY, "minimum", "lowest value"},
     {c_max, NULL, NO_CATS, 1, 0, T_COPY, "maximum", "highest value"},
     {c_range, NULL, NO_CATS, 1, 0, T_COPY, "range", "range value"},

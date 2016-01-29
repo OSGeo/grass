@@ -2148,7 +2148,7 @@ class TemporalAlgebraParser(object):
         t[0] = t[1]
 
     def p_expr_strds_function(self, t):
-        # Specifiy a explicitely a space time raster dataset
+        # Explicitly specify a space time raster dataset
         # R = A : strds(B) 
         """
         expr : STRDS LPAREN stds RPAREN
@@ -2161,7 +2161,7 @@ class TemporalAlgebraParser(object):
                 print "Opening STRDS: ",  t[0]
 
     def p_expr_str3ds_function(self, t):
-        # Specifiy a explicitely a space time raster dataset
+        # Explicitly specify a space time raster dataset
         # R = A : str3ds(B) 
         """
         expr : STR3DS LPAREN stds RPAREN
@@ -2174,7 +2174,7 @@ class TemporalAlgebraParser(object):
                 print "Opening STR3DS: ",  t[0]
 
     def p_expr_stvds_function(self, t):
-        # Specifiy a explicitely a space time vector dataset
+        # Explicitly specify a space time vector dataset
         # R = A : stvds(B) 
         """
         expr : STVDS LPAREN stds RPAREN
