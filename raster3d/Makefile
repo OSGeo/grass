@@ -7,6 +7,7 @@ SUBDIRS = \
 	r3.gwflow \
 	r3.in.ascii \
 	r3.in.bin \
+	r3.in.lidar \
 	r3.in.v5d \
 	r3.info \
 	r3.mask \

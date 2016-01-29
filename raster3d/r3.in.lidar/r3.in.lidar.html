@@ -1,0 +1,74 @@
+<h2>DESCRIPTION</h2>
+
+<p>
+<img src="r3_in_lidar.png">
+<p>
+<em>
+    Figure: Proportional count of points per 3D cell. When 50% of all
+    points in a vertical column fall into a given 3D cell, the value
+    is 0.5. Here, the green color was assigned to 0.5, red to 1 and
+    yellow to 0. The figure shows vertical slices and green color
+    indicates high vegetation while red color indicates bare ground.
+</em>
+<!--
+0% 255:255:100
+50% green
+100% red
+-->
+
+
+<h2>NOTES</h2>
+
+<ul>
+    <li>
+        This module is highly experimental. Don't rely on its
+        functionality or interface. Please report issues on the mailing
+        list or in the bug tracker.
+    <li>
+        No projection check or reprojection is performed, make sure you
+        are using data in the right projection for your GRASS Location.
+    <li>
+        Selection of points according to return or class is not yet
+        supported.
+    <li>All outputs are currently mandatory.
+    <li>Some temporary maps are created but not cleaned up.
+    <li>
+        Expects points to have intensity (random result for related
+        outputs when they don't).
+</ul>
+
+
+<h2>EXAMPLES</h2>
+
+Set the region according to a 2D raster and adding 3D minimum
+(bottom), maximum (top) and vertical (top-bottom) resolution.
+
+<div class="code"><pre>
+g.region rast=secref b=80 t=160 tbres=5 -p3
+</pre></div>
+
+Now, <em>r3.in.lidar</em> will create the 3D raster of the size
+given by the computation region:
+
+<div class="code"><pre>
+r3.in.lidar input=points.las n=points_n sum=points_sum \
+    mean=points_mean proportional_n=points_n_prop \
+    proportional_sum=points_sum_prop
+</pre></div>
+
+
+<h2>SEE ALSO</h2>
+
+<em>
+<a href="r3.in.xyz.html">r3.in.xyz</a>,
+<a href="r.in.lidar.html">r.in.lidar</a>,
+<a href="v.in.lidar.html">v.in.lidar</a>,
+<a href="r.to.rast3.html">r.to.rast3</a>,
+<a href="r3.mapcalc.html">r3.mapcalc</a>,
+<a href="g.region.html">g.region</a>
+</em>
+
+
+<h2>AUTHOR</h2>
+
+Vaclav Petras, <a href="http://geospatial.ncsu.edu/osgeorel/">NCSU OSGeoREL</a>
