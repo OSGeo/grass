@@ -34271,7 +34271,7 @@ msgstr "Αδυναμία ανοίγματος του χάρτη raster <%s>"
 
 #: ../vector/v.transform/main.c:277
 #, fuzzy
-msgid "Tranforming features..."
+msgid "Transforming features..."
 msgstr "Εγγραφή %s από %s..."
 
 #: ../vector/v.transform/main.c:290

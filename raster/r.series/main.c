@@ -32,7 +32,7 @@ struct menu
     {c_ave,    0, "average",    "average value"},
     {c_count,  1, "count",      "count of non-NULL cells"},
     {c_median, 0, "median",     "median value"},
-    {c_mode,   0, "mode",       "most frequently occuring value"},
+    {c_mode,   0, "mode",       "most frequently occurring value"},
     {c_min,    0, "minimum",    "lowest value"},
     {c_minx,   1, "min_raster", "raster with lowest value"},
     {c_max,    0, "maximum",    "highest value"},

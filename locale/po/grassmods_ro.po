@@ -33404,7 +33404,7 @@ msgid "Unable to tokenize column string: [%s]"
 msgstr ""
 
 #: ../vector/v.transform/main.c:277
-msgid "Tranforming features..."
+msgid "Transforming features..."
 msgstr ""
 
 #: ../vector/v.transform/main.c:290

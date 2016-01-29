@@ -723,7 +723,7 @@ int I_iclass_statistics_get_product(IClass_statistics * statistics, int band1,
 
    \param statistics pointer to statistics structure
    \param band band index
-   \param[out] min minumum value
+   \param[out] min minimum value
 
    \return 1 on success
    \return 0 band index out of range

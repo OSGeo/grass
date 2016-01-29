@@ -35500,7 +35500,7 @@ msgstr ""
 
 #: ../vector/v.transform/main.c:277
 #, fuzzy
-msgid "Tranforming features..."
+msgid "Transforming features..."
 msgstr "Trasformazione degli elementi in corso..."
 
 #: ../vector/v.transform/main.c:290

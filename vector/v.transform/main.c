@@ -274,7 +274,7 @@ int main(int argc, char *argv[])
 	ztozero = 0;
 
     /* do the transformation */
-    G_important_message(_("Tranforming features..."));
+    G_important_message(_("Transforming features..."));
     transform_digit_file(&Old, &New,
 			 ztozero, swap_flag->answer, trans_params,
 			 columns_name, field);

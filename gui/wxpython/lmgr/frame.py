@@ -1583,7 +1583,7 @@ class GMFrame(wx.Frame):
         The parameters of all handlers which are associated with module
         and contained in menu/toolboxes must be event and cmd.
         When called from menu event is always None and cmd is the
-        associated command (list containing a module name and paremeters).
+        associated command (list containing a module name and parameters).
         
         .. todo::
             This documentation is actually documentation of some

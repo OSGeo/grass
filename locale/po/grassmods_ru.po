@@ -36142,7 +36142,7 @@ msgstr "Невозможно разбить строку %s"
 
 #: ../vector/v.transform/main.c:277
 #, fuzzy
-msgid "Tranforming features..."
+msgid "Transforming features..."
 msgstr "Трансформирование объектов..."
 
 #: ../vector/v.transform/main.c:290

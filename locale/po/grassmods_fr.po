@@ -37868,7 +37868,7 @@ msgstr "Impossible d'ouvrir le fichier de cellules pour [%s]"
 
 #: ../vector/v.transform/main.c:277
 #, fuzzy
-msgid "Tranforming features..."
+msgid "Transforming features..."
 msgstr "Rotation des données ... "
 
 #: ../vector/v.transform/main.c:290
