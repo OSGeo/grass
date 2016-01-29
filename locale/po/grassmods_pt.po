@@ -35297,7 +35297,7 @@ msgstr "Não consegui usar a coluna '%s'"
 
 #: ../vector/v.transform/main.c:277
 #, fuzzy
-msgid "Tranforming features..."
+msgid "Transforming features..."
 msgstr "Rotacionando dados ... "
 
 #: ../vector/v.transform/main.c:290

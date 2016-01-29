@@ -178,7 +178,7 @@ int init_vars(int argc, char *argv[])
 	ele_scale = 10000;
 
     /* read elevation input and mark NULL/masked cells */
-    /* intialize accumulation and drainage direction */
+    /* initialize accumulation and drainage direction */
     MASK_flag = 0;
     do_points = nrows * ncols;
     for (r = 0; r < nrows; r++) {

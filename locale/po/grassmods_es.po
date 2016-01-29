@@ -34922,7 +34922,7 @@ msgstr "a"
 
 #: ../vector/v.transform/main.c:277
 #, fuzzy
-msgid "Tranforming features..."
+msgid "Transforming features..."
 msgstr "Trasponiendo la matriz de valores propios..."
 
 #: ../vector/v.transform/main.c:290

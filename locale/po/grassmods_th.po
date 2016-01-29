@@ -34479,7 +34479,7 @@ msgstr "ไม่สามารถ  tokenize Column string: %s"
 
 #: ../vector/v.transform/main.c:277
 #, fuzzy
-msgid "Tranforming features..."
+msgid "Transforming features..."
 msgstr "กำลังอ่านข้อมูล ..."
 
 #: ../vector/v.transform/main.c:290

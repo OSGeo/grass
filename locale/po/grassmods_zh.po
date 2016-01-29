@@ -34563,7 +34563,7 @@ msgstr "无法打开输出文件 <%s>"
 
 #: ../vector/v.transform/main.c:277
 #, fuzzy
-msgid "Tranforming features..."
+msgid "Transforming features..."
 msgstr "读取地图"
 
 #: ../vector/v.transform/main.c:290

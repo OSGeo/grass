@@ -33205,7 +33205,7 @@ msgstr "출력할 격자지도"
 
 #: ../vector/v.transform/main.c:277
 #, fuzzy
-msgid "Tranforming features..."
+msgid "Transforming features..."
 msgstr "출력할 격자지도"
 
 #: ../vector/v.transform/main.c:290

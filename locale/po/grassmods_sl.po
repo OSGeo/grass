@@ -34648,7 +34648,7 @@ msgstr "Ne morem odpreti cellfile za [%s]"
 
 #: ../vector/v.transform/main.c:277
 #, fuzzy
-msgid "Tranforming features..."
+msgid "Transforming features..."
 msgstr "Ri¹em ..."
 
 #: ../vector/v.transform/main.c:290

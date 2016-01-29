@@ -34198,7 +34198,7 @@ msgstr "列の文字を分割できません： [%s]"
 
 #: ../vector/v.transform/main.c:277
 #, fuzzy
-msgid "Tranforming features..."
+msgid "Transforming features..."
 msgstr "フィーチャーを変換中、、、"
 
 #: ../vector/v.transform/main.c:290
