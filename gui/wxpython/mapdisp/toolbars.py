@@ -150,7 +150,6 @@ class MapToolbar(BaseToolbar):
              self.parent.OnRender),
             ('erase', BaseIcons['erase'],
              self.parent.OnErase),
-            (None, ),
             ('pointer', BaseIcons['pointer'],
              self.parent.OnPointer,
              wx.ITEM_CHECK),
@@ -177,19 +176,15 @@ class MapToolbar(BaseToolbar):
              self.parent.OnZoomBack),
             ('zoomMenu', BaseIcons['zoomMenu'],
              self.parent.OnZoomMenu),
-            (None, ),
             ('analyze', MapIcons['analyze'],
              self.OnAnalyze),
-            (None, ),
             ('overlay', BaseIcons['overlay'],
              self.OnDecoration),
-            (None, ),
             ('saveFile', BaseIcons['saveFile'],
              self.parent.SaveToFile),
             ('printMap', BaseIcons['print'],
             self.parent.PrintMenu),
-            (None, ))
-        )
+        ))
     def InsertTool(self, data):
         """Insert tool to toolbar
         
