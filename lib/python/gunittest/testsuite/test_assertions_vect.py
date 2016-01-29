@@ -48,7 +48,7 @@ V_UNIVAR_SCHOOLS_REGION = dict(
     bottom=0,
 )
 
-# v.info schools -g and reduced to minumum
+# v.info schools -g and reduced to minimum
 V_UNIVAR_SCHOOLS_EXTENDED = dict(
     name='schools',
     level=2,

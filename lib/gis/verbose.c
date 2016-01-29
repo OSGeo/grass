@@ -30,7 +30,7 @@
 #define MAXLEVEL 3
 /*! \brief Standard verbosity level */
 #define STDLEVEL 2
-/*! \brief Minumum verbosity level (quiet) */
+/*! \brief Minimum verbosity level (quiet) */
 #define MINLEVEL 0
 
 static struct state {

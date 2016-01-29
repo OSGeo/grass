@@ -25,7 +25,7 @@ from factory import *
 
 def open_old_stds(name, type, dbif=None):
     """This function opens an existing space time dataset and return the
-       created and intialized object of the specified type.
+       created and initialized object of the specified type.
 
        This function will call exit() or raise a
        grass.pygrass.messages.FatalError in case the type is wrong,

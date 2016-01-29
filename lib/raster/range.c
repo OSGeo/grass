@@ -542,7 +542,7 @@ void Rast_init_fp_range(struct FPRange *range)
 }
 
 /*!
- * \brief Get minumum and maximum value from fp range
+ * \brief Get minimum and maximum value from fp range
  *
  * Extract the min/max from the range structure <i>range</i>.  If the
  * range structure has no defined min/max (first!=0) there will not be

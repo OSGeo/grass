@@ -240,7 +240,7 @@ int gvld_isosurf(geovol * gvl)
 	nz[i] = 0;
     }
 
-    G_debug(5, "  intialize OK");
+    G_debug(5, "  initialize OK");
 
     for (z = 0; z < depths - 1; z++) {
 	zc = z * zres;
@@ -695,7 +695,7 @@ int gvld_wire_slices(geovol * gvl)
     for (i = 0; i < gvl->n_slices; i++) {
 	slice = gvl->slice[i];
 
-	/* intialize correct coords */
+	/* initialize correct coords */
 	if (slice->dir == X) {
 	    resx = gvl->yres;
 	    resy = gvl->zres;

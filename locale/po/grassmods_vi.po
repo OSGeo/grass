@@ -36149,7 +36149,7 @@ msgstr "Không thể thẻ hoá chuỗi cột: [%s]"
 
 #: ../vector/v.transform/main.c:277
 #, fuzzy
-msgid "Tranforming features..."
+msgid "Transforming features..."
 msgstr "Đang chuyển đổi các đối tượng..."
 
 #: ../vector/v.transform/main.c:290
