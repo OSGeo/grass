@@ -873,12 +873,13 @@ def check_lock():
     if not os.path.exists(location):
         fatal(_("Path '%s' doesn't exist") % location)
     if not os.access(location, os.W_OK):
-        error = "Path '%s' not accessible." % location
+        error = _("Path '%s' not accessible.") % location
         stat_info = os.stat(location)
         mapset_uid = stat_info.st_uid
         if mapset_uid != os.getuid():
-            error += "You are not the owner of '%s'" % location
-        fatal(_(error))
+            # GTC %s is mapset's folder path
+            error = "%s\n%s" % (error, _("You are not the owner of '%s'.") % location)
+        fatal(error)
 
     # Check for concurrent use
     lockfile = os.path.join(location, ".gislock")
