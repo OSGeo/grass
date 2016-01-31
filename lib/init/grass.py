@@ -95,6 +95,11 @@ else:
 
 # Variables substituted during build process
 if 'GISBASE' in os.environ:
+    # TODO: should this be something like GRASS_PATH?
+    # GISBASE marks complete runtime, so no need to get it here when
+    # setting it up, possible scenario: existing runtime and starting
+    # GRASS in that, we want to overwrite the settings, not to take it
+    # possibly same for GRASS_PROJSHARE and others but maybe not
     gisbase = os.environ['GISBASE']
 else:
     gisbase = "@GISBASE@"
@@ -379,7 +384,15 @@ def get_grass_config_dir():
     """
     if sys.platform == 'win32':
         grass_config_dirname = "GRASS7"
-        directory = os.path.join(os.getenv('APPDATA'), grass_config_dirname)
+        win_conf_path = os.getenv('APPDATA')
+        # this can happen with some strange settings
+        if not win_conf_path:
+            fatal(_("The APPDATA variable is not set, ask your operating"
+                    " system support"))
+        if not os.path.exists(win_conf_path):
+            fatal(_("The APPDATA variable points to directory which does"
+                    " not exist, ask your operating system support"))
+        directory = os.path.join(win_conf_path, grass_config_dirname)
     else:
         grass_config_dirname = ".grass7"
         directory = os.path.join(os.getenv('HOME'), grass_config_dirname)
