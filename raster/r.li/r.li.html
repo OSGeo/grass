@@ -25,6 +25,11 @@ single values as output (e.g. mean patch size in the sampling area),
 as well as measures that produce a distribution of values as output
 (e.g. frequency distribution of patch sizes in the sampling area). The
 results are stored as raster maps.
+<p>
+All modules require configuration file which can be created by the
+<em>g.gui.rlisetup</em> module which is a GUI tool providing a convenient
+way to set all necessary parameters. This file can be used repetitively
+saving user from the need to specify all parameters over and over again.
 
 <h2>NOTES</h2>
 
@@ -111,10 +116,9 @@ configuration file on a 200x200 raster map, then the sample area is
 
 <h2>SEE ALSO</h2>
 
-<b>Core modules</b>:
+<b>GUI tools</b>:
 <ul>
-  <li> <a href="r.li.daemon.html">r.li.daemon</a>: job launch daemon (not visible to the user)</li>
-  <li> <a href="g.gui.rlisetup.html">g.gui.rlisetup</a>: Configuration editor for r.li.'index'</li>
+  <li> <a href="g.gui.rlisetup.html">g.gui.rlisetup</a>: Configuration editor for the <tt>r.li.*</tt> module where <tt>*</tt> is name of the index</li>
 </ul>
 
 <b>Patch indices</b>:
@@ -161,6 +165,10 @@ configuration file on a 200x200 raster map, then the sample area is
   <li> <a href="r.li.simpson.html">r.li.simpson</a>: Calculates Simpson diversity index on a raster map</li>
 </ul>
 
+<b>Core library</b>:
+<ul>
+  <li> <a href="r.li.daemon.html">r.li.daemon</a>: library with common functionality (not visible to the user)</li>
+</ul>
 
 <h2>ADDING NEW INDICES</h2>
 
