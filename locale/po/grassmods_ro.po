@@ -33403,9 +33403,9 @@ msgstr ""
 msgid "Unable to tokenize column string: [%s]"
 msgstr ""
 
-#: ../vector/v.transform/main.c:277
+#: ../vector/v.to.3d/trans3.c:80 ../vector/v.to.3d/trans2.c:79
 msgid "Transforming features..."
-msgstr ""
+msgstr "Transformarea trăsăturilor..."
 
 #: ../vector/v.transform/main.c:290
 #, c-format
@@ -36256,10 +36256,6 @@ msgstr "Coloana trebuie sa fie numerică"
 #: ../vector/v.to.3d/trans3.c:75
 msgid "Reading categories..."
 msgstr ""
-
-#: ../vector/v.to.3d/trans3.c:80 ../vector/v.to.3d/trans2.c:79
-msgid "Transforming features..."
-msgstr "Transformarea trăsăturilor..."
 
 #: ../vector/v.to.3d/trans3.c:101
 #, c-format

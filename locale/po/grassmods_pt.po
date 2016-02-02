@@ -36573,7 +36573,8 @@ msgstr "Tipo desconhecido"
 msgid "Unable to tokenize column string: [%s]"
 msgstr "Não consegui usar a coluna '%s'"
 
-#: ../vector/v.transform/main.c:277
+#: ../vector/v.transform/main.c:277 ../vector/v.to.3d/trans3.c:80
+#: ../vector/v.to.3d/trans2.c:79
 #, fuzzy
 msgid "Transforming features..."
 msgstr "Rotacionando dados ... "
@@ -39659,11 +39660,6 @@ msgstr "Nome da coluna (tipo deve ser numérico)"
 #, fuzzy
 msgid "Reading categories..."
 msgstr "Anexando categorias...\n"
-
-#: ../vector/v.to.3d/trans3.c:80 ../vector/v.to.3d/trans2.c:79
-#, fuzzy
-msgid "Transforming features..."
-msgstr "Rotacionando dados ... "
 
 #: ../vector/v.to.3d/trans3.c:101
 #, fuzzy, c-format

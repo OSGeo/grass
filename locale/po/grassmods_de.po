@@ -36087,10 +36087,9 @@ msgstr "Unbekannte Operater"
 msgid "Unable to tokenize column string: [%s]"
 msgstr "Kann Spalten-Zeichenkette [%s] nicht tokenisieren"
 
-#: ../vector/v.transform/main.c:277
-#, fuzzy
+#: ../vector/v.to.3d/trans3.c:80 ../vector/v.to.3d/trans2.c:79
 msgid "Transforming features..."
-msgstr "Transformiere Feature..."
+msgstr "Transformiere Objekte..."
 
 #: ../vector/v.transform/main.c:290
 #, fuzzy, c-format
@@ -39157,10 +39156,6 @@ msgstr "Spalte muss numerisch sein."
 #: ../vector/v.to.3d/trans3.c:75
 msgid "Reading categories..."
 msgstr "Lese Kategorien..."
-
-#: ../vector/v.to.3d/trans3.c:80 ../vector/v.to.3d/trans2.c:79
-msgid "Transforming features..."
-msgstr "Transformiere Objekte..."
 
 #: ../vector/v.to.3d/trans3.c:101
 #, c-format

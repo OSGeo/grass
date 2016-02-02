@@ -35839,7 +35839,8 @@ msgstr "未知的类型"
 msgid "Unable to tokenize column string: [%s]"
 msgstr "无法打开输出文件 <%s>"
 
-#: ../vector/v.transform/main.c:277
+#: ../vector/v.transform/main.c:277 ../vector/v.to.3d/trans3.c:80
+#: ../vector/v.to.3d/trans2.c:79
 #, fuzzy
 msgid "Transforming features..."
 msgstr "读取地图"
@@ -38844,11 +38845,6 @@ msgstr "x/y/z 字段必须是整型或双精度的"
 #, fuzzy
 msgid "Reading categories..."
 msgstr "分类...\n"
-
-#: ../vector/v.to.3d/trans3.c:80 ../vector/v.to.3d/trans2.c:79
-#, fuzzy
-msgid "Transforming features..."
-msgstr "读取地图"
 
 #: ../vector/v.to.3d/trans3.c:101
 #, fuzzy, c-format
