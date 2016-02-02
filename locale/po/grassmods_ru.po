@@ -34854,8 +34854,7 @@ msgstr "Неизвестная операция"
 msgid "Unable to tokenize column string: [%s]"
 msgstr "Невозможно разбить строку %s"
 
-#: ../vector/v.transform/main.c:277
-#, fuzzy
+#: ../vector/v.to.3d/trans3.c:80 ../vector/v.to.3d/trans2.c:79
 msgid "Transforming features..."
 msgstr "Трансформирование объектов..."
 
@@ -37876,10 +37875,6 @@ msgstr "Тип поля должен быть числовым"
 #, fuzzy
 msgid "Reading categories..."
 msgstr "Присоединение категорий..."
-
-#: ../vector/v.to.3d/trans3.c:80 ../vector/v.to.3d/trans2.c:79
-msgid "Transforming features..."
-msgstr "Трансформирование объектов..."
 
 #: ../vector/v.to.3d/trans3.c:101
 #, c-format

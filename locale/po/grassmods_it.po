@@ -34211,8 +34211,7 @@ msgstr "Tipo di colonna sconosciuto '%s'"
 msgid "Unable to tokenize column string: [%s]"
 msgstr ""
 
-#: ../vector/v.transform/main.c:277
-#, fuzzy
+#: ../vector/v.to.3d/trans3.c:80 ../vector/v.to.3d/trans2.c:79
 msgid "Transforming features..."
 msgstr "Trasformazione degli elementi in corso..."
 
@@ -37171,10 +37170,6 @@ msgstr "La colonna dev'essere di tipo numerico"
 #, fuzzy
 msgid "Reading categories..."
 msgstr "Assegnazione delle categorie in corso..."
-
-#: ../vector/v.to.3d/trans3.c:80 ../vector/v.to.3d/trans2.c:79
-msgid "Transforming features..."
-msgstr "Trasformazione degli elementi in corso..."
 
 #: ../vector/v.to.3d/trans3.c:101
 #, c-format
