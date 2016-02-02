@@ -34646,7 +34646,8 @@ msgstr "Nepoznan tip"
 msgid "Unable to tokenize column string: [%s]"
 msgstr "Ne morem odpreti cellfile za [%s]"
 
-#: ../vector/v.transform/main.c:277
+#: ../vector/v.transform/main.c:277 ../vector/v.to.3d/trans3.c:80
+#: ../vector/v.to.3d/trans2.c:79
 #, fuzzy
 msgid "Transforming features..."
 msgstr "Ri¹em ..."
@@ -37633,11 +37634,6 @@ msgstr "Ne najdem vhodnega vektorja <%s>"
 #, fuzzy
 msgid "Reading categories..."
 msgstr "Pripajam kategorije...\n"
-
-#: ../vector/v.to.3d/trans3.c:80 ../vector/v.to.3d/trans2.c:79
-#, fuzzy
-msgid "Transforming features..."
-msgstr "Ri¹em ..."
 
 #: ../vector/v.to.3d/trans3.c:101
 #, fuzzy, c-format

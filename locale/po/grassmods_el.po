@@ -33022,10 +33022,14 @@ msgstr "Άγνωστος τύπος"
 msgid "Unable to tokenize column string: [%s]"
 msgstr "Αδυναμία ανοίγματος του χάρτη raster <%s>"
 
-#: ../vector/v.transform/main.c:277
+#: ../vector/v.transform/main.c:277 ../vector/v.to.3d/trans3.c:80
+#: ../vector/v.to.3d/trans2.c:79
 #, fuzzy
 msgid "Transforming features..."
-msgstr "Εγγραφή %s από %s..."
+msgstr ""
+"#-#-#-#-#  grassmods_el.po (grassmods_el)  #-#-#-#-#\n"
+"Εγγραφή %s από %s...\n"
+"#-#-#-#-#  grassmods_el.po (grassmods_el)  #-#-#-#-#\n"
 
 #: ../vector/v.transform/main.c:290
 #, fuzzy, c-format
@@ -35847,10 +35851,6 @@ msgstr ""
 #, fuzzy
 msgid "Reading categories..."
 msgstr "Χάρτης επαναφόρτισης σε  m^3/s"
-
-#: ../vector/v.to.3d/trans3.c:80 ../vector/v.to.3d/trans2.c:79
-msgid "Transforming features..."
-msgstr ""
 
 #: ../vector/v.to.3d/trans3.c:101
 #, c-format

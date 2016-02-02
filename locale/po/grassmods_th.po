@@ -34477,7 +34477,8 @@ msgstr "การทำงาน ที่ไม่ทราบ"
 msgid "Unable to tokenize column string: [%s]"
 msgstr "ไม่สามารถ  tokenize Column string: %s"
 
-#: ../vector/v.transform/main.c:277
+#: ../vector/v.transform/main.c:277 ../vector/v.to.3d/trans3.c:80
+#: ../vector/v.to.3d/trans2.c:79
 #, fuzzy
 msgid "Transforming features..."
 msgstr "กำลังอ่านข้อมูล ..."
@@ -37468,11 +37469,6 @@ msgstr "ชื่อ Column (ชนิดต้องเป็นตัวเล
 #, fuzzy
 msgid "Reading categories..."
 msgstr "กำลังแนบ หมวดหมู่ ..."
-
-#: ../vector/v.to.3d/trans3.c:80 ../vector/v.to.3d/trans2.c:79
-#, fuzzy
-msgid "Transforming features..."
-msgstr "กำลังอ่านข้อมูล ..."
 
 #: ../vector/v.to.3d/trans3.c:101
 #, fuzzy, c-format

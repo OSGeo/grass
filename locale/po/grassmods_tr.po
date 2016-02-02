@@ -33835,7 +33835,8 @@ msgstr "Bilinmeyen işlem"
 msgid "Unable to tokenize column string: [%s]"
 msgstr "<%s> sütunu kullanılamıyor"
 
-#: ../vector/v.transform/main.c:277
+#: ../vector/v.transform/main.c:277 ../vector/v.to.3d/trans3.c:80
+#: ../vector/v.to.3d/trans2.c:79
 #, fuzzy
 msgid "Transforming features..."
 msgstr "Veri okunuyor..."
@@ -36754,11 +36755,6 @@ msgstr "Sütun adı (sayı tipinde olmalıdır)"
 #, fuzzy
 msgid "Reading categories..."
 msgstr "Kategoriler ekleniyor..."
-
-#: ../vector/v.to.3d/trans3.c:80 ../vector/v.to.3d/trans2.c:79
-#, fuzzy
-msgid "Transforming features..."
-msgstr "Veri okunuyor..."
 
 #: ../vector/v.to.3d/trans3.c:101
 #, fuzzy, c-format
