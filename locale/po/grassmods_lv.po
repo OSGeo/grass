@@ -35452,7 +35452,8 @@ msgstr "Nezināms/nepazīstms tips"
 msgid "Unable to tokenize column string: [%s]"
 msgstr "Neiespējami atvērt šūnu failu[%s]"
 
-#: ../vector/v.transform/main.c:277
+#: ../vector/v.transform/main.c:277 ../vector/v.to.3d/trans3.c:80
+#: ../vector/v.to.3d/trans2.c:79
 #, fuzzy
 msgid "Transforming features..."
 msgstr "Drukā ... "
@@ -38491,11 +38492,6 @@ msgstr "vektora karte <%s> nav atrasta"
 #, fuzzy
 msgid "Reading categories..."
 msgstr "Pievieno kategorijas...\n"
-
-#: ../vector/v.to.3d/trans3.c:80 ../vector/v.to.3d/trans2.c:79
-#, fuzzy
-msgid "Transforming features..."
-msgstr "Drukā ... "
 
 #: ../vector/v.to.3d/trans3.c:101
 #, fuzzy, c-format

@@ -34458,7 +34458,8 @@ msgstr "출력할 격자지도"
 msgid "Unable to tokenize column string: [%s]"
 msgstr "출력할 격자지도"
 
-#: ../vector/v.transform/main.c:277
+#: ../vector/v.transform/main.c:277 ../vector/v.to.3d/trans3.c:80
+#: ../vector/v.to.3d/trans2.c:79
 #, fuzzy
 msgid "Transforming features..."
 msgstr "출력할 격자지도"
@@ -37328,11 +37329,6 @@ msgstr ""
 #: ../vector/v.to.3d/trans3.c:75
 #, fuzzy
 msgid "Reading categories..."
-msgstr "출력할 격자지도"
-
-#: ../vector/v.to.3d/trans3.c:80 ../vector/v.to.3d/trans2.c:79
-#, fuzzy
-msgid "Transforming features..."
 msgstr "출력할 격자지도"
 
 #: ../vector/v.to.3d/trans3.c:101

@@ -36017,8 +36017,7 @@ msgstr "Neznámá operace"
 msgid "Unable to tokenize column string: [%s]"
 msgstr "Nelze zacyklit řetězec ve sloupci: [%s]"
 
-#: ../vector/v.transform/main.c:277
-#, fuzzy
+#: ../vector/v.to.3d/trans3.c:80 ../vector/v.to.3d/trans2.c:79
 msgid "Transforming features..."
 msgstr "Převádím prvky..."
 
@@ -39046,10 +39045,6 @@ msgstr "|Sloupec musí být číselnéh typu"
 #, fuzzy
 msgid "Reading categories..."
 msgstr "Přidávám kategorie..."
-
-#: ../vector/v.to.3d/trans3.c:80 ../vector/v.to.3d/trans2.c:79
-msgid "Transforming features..."
-msgstr "Převádím prvky..."
 
 #: ../vector/v.to.3d/trans3.c:101
 #, c-format

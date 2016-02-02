@@ -35654,7 +35654,8 @@ msgstr "نوع غير معروف"
 msgid "Unable to tokenize column string: [%s]"
 msgstr "[%s]لم يتم فتح ملف الخلية ل "
 
-#: ../vector/v.transform/main.c:277
+#: ../vector/v.transform/main.c:277 ../vector/v.to.3d/trans3.c:80
+#: ../vector/v.to.3d/trans2.c:79
 #, fuzzy
 msgid "Transforming features..."
 msgstr "التوقيع ..."
@@ -38649,11 +38650,6 @@ msgstr "لم توجد<%s>الخريطة الفيكتورية"
 #, fuzzy
 msgid "Reading categories..."
 msgstr "وصل الفئات...\n"
-
-#: ../vector/v.to.3d/trans3.c:80 ../vector/v.to.3d/trans2.c:79
-#, fuzzy
-msgid "Transforming features..."
-msgstr "التوقيع ..."
 
 #: ../vector/v.to.3d/trans3.c:101
 #, fuzzy, c-format

@@ -37866,7 +37866,8 @@ msgstr "Type inconnu"
 msgid "Unable to tokenize column string: [%s]"
 msgstr "Impossible d'ouvrir le fichier de cellules pour [%s]"
 
-#: ../vector/v.transform/main.c:277
+#: ../vector/v.transform/main.c:277 ../vector/v.to.3d/trans3.c:80
+#: ../vector/v.to.3d/trans2.c:79
 #, fuzzy
 msgid "Transforming features..."
 msgstr "Rotation des données ... "
@@ -41079,11 +41080,6 @@ msgstr "Nom de la colonne (le type doit être numérique)"
 #, fuzzy
 msgid "Reading categories..."
 msgstr "Rattachement des catégories...\n"
-
-#: ../vector/v.to.3d/trans3.c:80 ../vector/v.to.3d/trans2.c:79
-#, fuzzy
-msgid "Transforming features..."
-msgstr "Rotation des données ... "
 
 # c-format
 #: ../vector/v.to.3d/trans3.c:101

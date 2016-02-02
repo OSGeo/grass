@@ -36221,10 +36221,9 @@ msgstr "Operador desconocido"
 msgid "Unable to tokenize column string: [%s]"
 msgstr "a"
 
-#: ../vector/v.transform/main.c:277
-#, fuzzy
+#: ../vector/v.to.3d/trans3.c:80 ../vector/v.to.3d/trans2.c:79
 msgid "Transforming features..."
-msgstr "Trasponiendo la matriz de valores propios..."
+msgstr "Transformando elementos..."
 
 #: ../vector/v.transform/main.c:290
 #, fuzzy, c-format
@@ -39304,10 +39303,6 @@ msgstr "La columna tiene que ser numérica"
 #, fuzzy
 msgid "Reading categories..."
 msgstr "Adjuntando categorías..."
-
-#: ../vector/v.to.3d/trans3.c:80 ../vector/v.to.3d/trans2.c:79
-msgid "Transforming features..."
-msgstr "Transformando elementos..."
 
 #: ../vector/v.to.3d/trans3.c:101
 #, c-format

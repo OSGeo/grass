@@ -36147,8 +36147,7 @@ msgstr "Lệnh không biết"
 msgid "Unable to tokenize column string: [%s]"
 msgstr "Không thể thẻ hoá chuỗi cột: [%s]"
 
-#: ../vector/v.transform/main.c:277
-#, fuzzy
+#: ../vector/v.to.3d/trans3.c:80 ../vector/v.to.3d/trans2.c:79
 msgid "Transforming features..."
 msgstr "Đang chuyển đổi các đối tượng..."
 
@@ -39193,10 +39192,6 @@ msgstr "Cột phải có kiểu số"
 #, fuzzy
 msgid "Reading categories..."
 msgstr "Đang gắn các phạm trù..."
-
-#: ../vector/v.to.3d/trans3.c:80 ../vector/v.to.3d/trans2.c:79
-msgid "Transforming features..."
-msgstr "Đang chuyển đổi các đối tượng..."
 
 #: ../vector/v.to.3d/trans3.c:101
 #, c-format

@@ -35568,10 +35568,9 @@ msgstr "Nieznany typ kolumny '%s'"
 msgid "Unable to tokenize column string: [%s]"
 msgstr "Nie mozna otworzyć pliku wejściowego <%s@%s>."
 
-#: ../vector/v.transform/main.c:277
-#, fuzzy
+#: ../vector/v.to.3d/trans3.c:80 ../vector/v.to.3d/trans2.c:79
 msgid "Transforming features..."
-msgstr "Wczytywanie danych..."
+msgstr "Transformacja obiektów..."
 
 #: ../vector/v.transform/main.c:290
 #, fuzzy, c-format
@@ -38571,10 +38570,6 @@ msgstr "Kolumna musi to być numeryczna"
 #, fuzzy
 msgid "Reading categories..."
 msgstr "Dołączanie kategorii..."
-
-#: ../vector/v.to.3d/trans3.c:80 ../vector/v.to.3d/trans2.c:79
-msgid "Transforming features..."
-msgstr "Transformacja obiektów..."
 
 #: ../vector/v.to.3d/trans3.c:101
 #, fuzzy, c-format
