@@ -151,6 +151,7 @@ Contents
 
      write announcement
       - store in trac: http://trac.osgeo.org/grass/wiki/Release/7.XX.YY-News
+      - update version in https://grasswiki.osgeo.org/wiki/GRASS-Wiki
       - store in Web as announces/announce_grass$MAJOR$MINOR$RELEASE.html <- how? with protected PHP upload page?
 
      full release:
