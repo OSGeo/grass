@@ -18,7 +18,7 @@ List of classes:
  - :class:`SymbolDialog`
  - :class:`QuitDialog`
 
-(C) 2008-2015 by the GRASS Development Team
+(C) 2008-2016 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -2103,8 +2103,7 @@ class HyperlinkDialog(wx.Dialog):
 
 class QuitDialog(wx.Dialog):
     def __init__(self, parent, title=_("Quit GRASS GIS"), id=wx.ID_ANY,
-                 style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
-                 size=(350, 125), **kwargs):
+                 style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
         """Dialog to quit GRASS
         
         :param parent: window
@@ -2131,7 +2130,6 @@ class QuitDialog(wx.Dialog):
         self.btnQuit.Bind(wx.EVT_BUTTON, self.OnQuit)
         
         self.__layout()
-        self.SetSize(size)
 
     def __layout(self):
         """Do layout"""
@@ -2152,7 +2150,7 @@ class QuitDialog(wx.Dialog):
                   flag = wx.ALL | wx.ALIGN_RIGHT, border = 5)
 
         self.panel.SetSizer(sizer)
-        sizer.Fit(self.panel)
+        sizer.Fit(self)
         self.Layout()
         
     def OnClose(self, event):
