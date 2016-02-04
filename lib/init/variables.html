@@ -186,8 +186,12 @@ PERMANENT
     raster maps are compressed using zlib compression. This applies to all 
     raster map types (CELL, FCELL, DCELL).
     <br><br>
+    Valid zlib compression levels are -1 to 9. The <tt>GRASS_ZLIB_LEVEL=-1</tt> corresponds
+    to the zlib default value (equivalent to <tt>GRASS_ZLIB_LEVEL=6</tt>). Often
+    <tt>GRASS_ZLIB_LEVEL=1</tt> gives the best compromise between speed and compression.
+    <br><br>
     If the variable doesn't exist, or the value cannot be parsed as an
-    integer, zlib's default compression level will be used.</dd>
+    integer, zlib's default compression level 6 will be used.</dd>
   
   <dt>GRASS_MESSAGE_FORMAT</dt>
   <dd>[various modules, wxGUI]<br>
