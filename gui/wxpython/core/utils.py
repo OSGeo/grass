@@ -3,7 +3,7 @@
 
 @brief Misc utilities for wxGUI
 
-(C) 2007-2013 by the GRASS Development Team
+(C) 2007-2015 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -1175,6 +1175,32 @@ def doc_test():
     do_doctest_gettext_workaround()
     return doctest.testmod().failed
 
+def registerPid(pid):
+    """Register process id as GUI_PID GRASS variable
 
+    :param: pid process id
+    """
+    env = grass.gisenv()
+    guiPid = []
+    if 'GUI_PID' in env:
+        guiPid = env['GUI_PID'].split(',')
+    guiPid.append(str(pid))
+    grass.run_command('g.gisenv', set='GUI_PID={}'.format(','.join(guiPid)))
+    
+def unregisterPid(pid):
+    """Unregister process id from GUI_PID GRASS variable
+
+    :param: pid process id
+    """
+    env = grass.gisenv()
+    if 'GUI_PID' not in env:
+        return
+    
+    guiPid = env['GUI_PID'].split(',')
+    pid = str(os.getpid())
+    if pid in guiPid:
+        guiPid.remove(pid)
+        grass.run_command('g.gisenv', set='GUI_PID={}'.format(','.join(guiPid)))
+    
 if __name__ == '__main__':
     sys.exit(doc_test())
