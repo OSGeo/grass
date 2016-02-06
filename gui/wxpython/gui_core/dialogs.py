@@ -2810,11 +2810,11 @@ class QuitDialog(wx.Dialog):
         self.btnCancel = wx.Button(parent = self.panel, id = wx.ID_CANCEL)
         self.btnClose = wx.Button(parent = self.panel, id = wx.ID_NO,
                                    label=_("Close GUI"))
+        self.btnClose.SetFocus()
         self.btnQuit = wx.Button(parent = self.panel, id = wx.ID_YES,
                                    label=_("Quit GRASS GIS"))
         self.btnQuit.SetMinSize((130, self.btnQuit.GetSize()[1]))
         self.btnQuit.SetForegroundColour(wx.Colour(35, 142, 35))
-        self.btnQuit.SetDefault()
         
         self.btnClose.Bind(wx.EVT_BUTTON, self.OnClose)
         self.btnQuit.Bind(wx.EVT_BUTTON, self.OnQuit)
