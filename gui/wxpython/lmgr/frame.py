@@ -1818,6 +1818,10 @@ class GMFrame(wx.Frame):
                 x, y = map(int, dim.split(',')[idx:idx + 2])
                 w, h = map(int, dim.split(',')[idx + 2:idx + 4])
                 self.GetMapDisplay().SetPosition((x, y))
+                # map display is sized with different height, this
+                # extra call "solves" the issue, strangely trunk
+                # doens't have this issue (TODO: investigate why)
+                self.GetMapDisplay().SetSize((w, h-1)) 
                 self.GetMapDisplay().SetSize((w, h))
             except:
                 pass
