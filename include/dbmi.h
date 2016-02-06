@@ -293,10 +293,10 @@ typedef struct
 typedef struct _db_connection
 {
     char *driverName;
-    /* char *hostName; */
+    char *hostName;
     char *databaseName;
     char *schemaName;
-    char *location;
+    char *port;
     char *user;
     char *password;
     char *keycol;		/* name of default key column */
