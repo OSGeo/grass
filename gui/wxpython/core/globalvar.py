@@ -3,7 +3,7 @@
 
 @brief Global variables used by wxGUI
 
-(C) 2007-2014 by the GRASS Development Team
+(C) 2007-2016 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -112,7 +112,7 @@ DIALOG_TEXTCTRL_SIZE = (400, -1)
 DIALOG_LAYER_SIZE = (100, -1)
 DIALOG_COLOR_SIZE = (30, 30)
 
-MAP_WINDOW_SIZE = (800, 600)
+MAP_WINDOW_SIZE = (825, 600)
 
 GM_WINDOW_MIN_SIZE = (525, 400)
 # small for ms window which wraps the menu

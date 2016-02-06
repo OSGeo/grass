@@ -250,7 +250,7 @@ class MapFrame(SingleMapFrame):
             grassVersion = "?"
 
         gisenv = grass.gisenv()
-        title = _("GRASS GIS %(version)s Map Display: %(id)s  - Location: %(loc)s@%(mapset)s") % \
+        title = _("GRASS GIS %(version)s Map Display: %(id)s - Location: %(loc)s@%(mapset)s") % \
             {'version': grassVersion,
              'id': str(displayId),
              'loc': gisenv["LOCATION_NAME"],
