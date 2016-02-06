@@ -23,7 +23,7 @@ List of classes:
  - :class:`SymbolDialog`
  - :class:`QuitDialog`
 
-(C) 2008-2015 by the GRASS Development Team
+(C) 2008-2016 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -2793,14 +2793,16 @@ class HyperlinkDialog(wx.Dialog):
 
 class QuitDialog(wx.Dialog):
     def __init__(self, parent, title=_("Quit GRASS GIS"), id=wx.ID_ANY,
-                 style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER,
-                 size=(350, 150), **kwargs):
+                 style=wx.DEFAULT_DIALOG_STYLE | wx.RESIZE_BORDER, **kwargs):
         """Dialog to quit GRASS
         
         :param parent: window
         """
         wx.Dialog.__init__(self, parent, id, title, style=style, **kwargs)
         self.panel = wx.Panel(parent = self, id = wx.ID_ANY)
+
+        self._icon = wx.StaticBitmap(parent=self.panel, id=wx.ID_ANY,
+                                     bitmap=wx.ArtProvider().GetBitmap(wx.ART_QUESTION, client=wx.ART_MESSAGE_BOX))
 
         self.informLabel = wx.StaticText(parent=self.panel, id=wx.ID_ANY,
                                          label=_("Do you want to quit GRASS including shell "
@@ -2818,7 +2820,6 @@ class QuitDialog(wx.Dialog):
         self.btnQuit.Bind(wx.EVT_BUTTON, self.OnQuit)
         
         self.__layout()
-        self.SetSize(size)
 
     def __layout(self):
         """Do layout"""
@@ -2829,13 +2830,17 @@ class QuitDialog(wx.Dialog):
         btnSizer.Add(item=self.btnClose, flag=wx.RIGHT, border=5)
         btnSizer.Add(item=self.btnQuit, flag=wx.RIGHT, border=5)
         
-        sizer.Add(item = self.informLabel, proportion = 1,
-                  flag = wx.EXPAND | wx.ALL, border = 25)
+        bodySizer = wx.BoxSizer(wx.HORIZONTAL)
+        bodySizer.Add(item=self._icon, flag=wx.RIGHT, border=10)
+        bodySizer.Add(item=self.informLabel, proportion=1, flag=wx.EXPAND)
+        
+        sizer.Add(item = bodySizer, proportion = 1,
+                  flag = wx.EXPAND | wx.ALL, border = 15)
         sizer.Add(item = btnSizer, proportion = 0,
                   flag = wx.ALL | wx.ALIGN_RIGHT, border = 5)
 
         self.panel.SetSizer(sizer)
-        sizer.Fit(self.panel)
+        sizer.Fit(self)
         self.Layout()
         
     def OnClose(self, event):
