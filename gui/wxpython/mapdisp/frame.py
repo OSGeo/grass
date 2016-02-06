@@ -9,7 +9,7 @@ Can be used either from Layer Manager or as d.mon backend.
 Classes:
  - mapdisp::MapFrame
 
-(C) 2006-2014 by the GRASS Development Team
+(C) 2006-2016 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -53,7 +53,7 @@ from mapwin.analysis import ProfileController, MeasureDistanceController, \
     MeasureAreaController
 from gui_core.forms import GUI
 from core.giface import Notification
-from gui_core.vselect import VectorSelectBase
+from gui_core.vselect import VectorSelectBase, VectorSelectHighlighter
 
 from mapdisp import statusbar as sb
 
@@ -203,6 +203,8 @@ class MapFrame(SingleMapFrame):
         # initialize layers to query (d.what.vect/rast)
         self._vectQueryLayers = []
         self._rastQueryLayers = []
+        # initialize highlighter for vector features
+        self._highlighter_layer = None
 
         self.measureController = None
 
@@ -891,6 +893,8 @@ class MapFrame(SingleMapFrame):
         """
         Debug.msg(1, "QueryMap(): raster=%s vector=%s" % (','.join(rast),
                                                           ','.join(vect)))
+        if self._highlighter_layer is None:
+            self._highlighter_layer = VectorSelectHighlighter(mapdisp=self._giface.GetMapDisplay(), giface=self._giface)
 
         # use display region settings instead of computation region settings
         self.tmpreg = os.getenv("GRASS_REGION")
@@ -910,7 +914,9 @@ class MapFrame(SingleMapFrame):
                        message=_("Failed to query vector map(s) <{maps}>. "
                                  "Check database settings and topology.").format(maps=','.join(vect)))
         self._QueryMapDone()
-        if 'Id' in vectQuery:
+
+        self._highlighter_layer.Clear()
+        if 'Category' in vectQuery[0]:
             self._queryHighlight(vectQuery)
 
         result = rastQuery + vectQuery
@@ -928,6 +934,8 @@ class MapFrame(SingleMapFrame):
         self.dialogs['query'] = None
         self._vectQueryLayers = []
         self._rastQueryLayers = []
+        self._highlighter_layer.Clear()
+        self._highlighter_layer = None
         event.Skip()
 
     def _onRedirectQueryOutput(self, output, style='log'):
@@ -939,36 +947,15 @@ class MapFrame(SingleMapFrame):
 
     def _queryHighlight(self, vectQuery):
         """Highlight category from query."""
-        cats = name = None
-        for res in vectQuery:
-            cats = {res['Layer']: [res['Category']]}
-            name = res['Map']
-        try:
-            qlayer = self.Map.GetListOfLayers(name = globalvar.QUERYLAYER)[0]
-        except IndexError:
-            qlayer = None
+        if len(vectQuery) > 0:
+            self._highlighter_layer.SetLayer(vectQuery[0]['Layer'])
+            self._highlighter_layer.SetMap(vectQuery[0]['Map'])
+            tmp = list()
+            for i in vectQuery:
+                tmp.append(i['Category'])
 
-        if not (cats and name):
-            if qlayer:
-                self.Map.DeleteLayer(qlayer)
-                self.MapWindow.UpdateMap(render = False, renderVector = False)
-            return
-
-        if not self.IsPaneShown('3d') and self.IsAutoRendered():
-            # highlight feature & re-draw map
-            if qlayer:
-                qlayer.SetCmd(self.AddTmpVectorMapLayer(name, cats,
-                                                        useId = False,
-                                                        addLayer = False))
-            else:
-                qlayer = self.AddTmpVectorMapLayer(name, cats, useId = False)
-            
-            # set opacity based on queried layer
-            # TODO fix
-            # opacity = layer.maplayer.GetOpacity(float = True)
-            # qlayer.SetOpacity(opacity)
-            
-            self.MapWindow.UpdateMap(render = False, renderVector = False)
+            self._highlighter_layer.SetCats(tmp)
+            self._highlighter_layer.DrawSelected()
 
     def _QueryMapDone(self):
         """Restore settings after querying (restore GRASS_REGION)

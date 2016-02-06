@@ -371,6 +371,9 @@ class VectorSelectHighlighter():
         self.data['Category'] = cats
 
     def Clear(self):
+        self.data['Category'] = list()
+        self.data['Map'] = None
+        self.data['Layer']= None
         self.mapdisp.RemoveQueryLayer()
         self.giface.GetMapWindow().UpdateMap(render = False)
 
