@@ -277,7 +277,8 @@ class MapToolbar(BaseToolbar):
         for tool in (self.zoomRegion,
                      self.zoomMenu,
                      self.analyze,
-                     self.printMap):
+                     self.printMap,
+                     self.select):
             self.EnableTool(tool, enabled)
         self.ChangeToolsDesc(enabled)
         if enabled:
