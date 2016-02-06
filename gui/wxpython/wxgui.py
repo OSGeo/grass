@@ -21,9 +21,10 @@ This program is free software under the GNU General Public License
 import os
 import sys
 import getopt
+import atexit
 
 from core import globalvar
-from core.utils import _
+from core.utils import _, registerPid, unregisterPid
 
 from grass.exceptions import Usage
 from grass.script.core import set_raise_on_error
@@ -112,7 +113,9 @@ def process_opt(opts, args):
 
     return workspaceFile
 
-
+def cleanup():
+    unregisterPid(os.getpid())
+        
 def main(argv = None):
 
     if argv is None:
@@ -135,7 +138,11 @@ def main(argv = None):
     q = wx.LogNull()
     set_raise_on_error(True)
 
+    # register GUI PID
+    registerPid(os.getpid())
+    
     app.MainLoop()
 
 if __name__ == "__main__":
+    atexit.register(cleanup)
     sys.exit(main())

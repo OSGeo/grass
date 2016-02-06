@@ -92,8 +92,9 @@ def clean_env():
     env_curr = read_gisrc()
     env_new = {}
     for k,v in env_curr.iteritems():
-        if 'MONITOR' not in k:
-            env_new[k] = v
+        if 'MONITOR' in k or k.endswith('PID'):
+            continue
+        env_new[k] = v
 
     write_gisrc(env_new)
 
@@ -999,6 +1000,20 @@ def start_gui():
         Popen([os.getenv('GRASS_PYTHON'), gfile(wxpython_base, "wxgui.py")])
 
 
+def close_gui():
+    """Close GUI if running"""
+    if gfile('etc', 'python') not in sys.path:
+        sys.path.append(gfile('etc', 'python'))
+    from grass.script import core as gcore  # pylint: disable=E0611
+    env = gcore.gisenv()
+    if 'GUI_PID' not in env:
+        return
+    import signal
+    for pid in env['GUI_PID'].split(','):
+        if grass_debug:
+            message("Exiting GUI with pid={}".format(pid))
+        os.kill(int(pid), signal.SIGTERM)
+        
 def clear_screen():
     if windows:
         pass
@@ -1491,6 +1506,9 @@ write_gisrc(kv)
 exit_val = shell_process.wait()
 if exit_val != 0:
     warning(_("Failed to start shell '%s'") % os.getenv('SHELL'))
+    
+# close GUI if running
+close_gui()
 
 clear_screen()
 
