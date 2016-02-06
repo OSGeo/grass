@@ -1288,11 +1288,6 @@ class GMFrame(wx.Frame):
                 if display['pos']:
                     mapdisp.SetPosition(display['pos'])
                 if display['size']:
-                    if globalvar.wxPython3:
-                        # Incorrect height
-                        # TODO: fix it in better way !!!
-                        # Then also remove hack in core.workspace.WriteWorkspaceFile() ...
-                        display['size'] = (display['size'][0], display['size'][1] + 32)
                     mapdisp.SetSize(display['size'])
             
             # set extent if defined
