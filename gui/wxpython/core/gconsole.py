@@ -381,7 +381,7 @@ class GConsole(wx.EvtHandler):
     def Redirect(self):
         """Redirect stdout/stderr
         """
-        if Debug.GetLevel() == 0 and int(grass.gisenv().get('DEBUG', 0)) == 0:
+        if Debug.GetLevel() == 0 and grass.debug_level(force=True) == 0:
             # don't redirect when debugging is enabled
             sys.stdout = self.cmdStdOut
             sys.stderr = self.cmdStdErr

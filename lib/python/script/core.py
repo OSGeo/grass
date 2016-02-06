@@ -1508,13 +1508,20 @@ def version():
 _debug_level = None
 
 
-def debug_level():
+def debug_level(force=False):
     global _debug_level
-    if _debug_level is not None:
+    if not force and _debug_level is not None:
         return _debug_level
     _debug_level = 0
     if find_program('g.gisenv', '--help'):
-        _debug_level = int(gisenv().get('DEBUG', 0))
+        try:
+            _debug_level = int(gisenv().get('DEBUG', 0))
+            if _debug_level < 0 or _debug_level > 5:
+                raise ValueError(_("Debug level {}").format(_debug_level))
+        except ValueError as e:
+            _debug_level = 0
+            sys.stderr.write(_("WARNING: Ignoring unsupported debug level (must be >=0 and <=5). {}\n").format(e))
+            
     return _debug_level
 
 
