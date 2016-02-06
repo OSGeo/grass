@@ -109,6 +109,13 @@ def write_gisrc(dbase, location, mapset):
     return gisrc
 
 
+def set_gui_path():
+    """Insert wxPython GRASS path to sys.path."""
+    gui_path = os.path.join(os.environ['GISBASE'], 'gui', 'wxpython')
+    if gui_path and gui_path not in sys.path:
+        sys.path.insert(0, gui_path)
+
+
 # TODO: there should be a function to do the clean up
 # (unset the GISRC and delete the file)
 def init(gisbase, dbase='', location='demolocation', mapset='PERMANENT'):
