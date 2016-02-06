@@ -1086,11 +1086,30 @@ int main(int argc, char *argv[])
 		/**                                          OFTDate = 9           **/
 		/**                                          OFTTime = 10          **/
 		/**                                          OFTDateTime = 11      **/
+                /** GDAL 2.0+                                                      **/
+                /** Simple 64bit integer                     OFTInteger64 = 12     **/
+                /** List of 64bit integers                   OFTInteger64List = 13 **/
 
 		if (Ogr_ftype == OFTInteger) {
 		    sprintf(buf, ", %s integer", Ogr_fieldname);
 		}
-		else if (Ogr_ftype == OFTIntegerList) {
+#if GDAL_VERSION_NUM >= 2000000
+		else if (Ogr_ftype == OFTInteger64) {
+                    if (strcmp(Fi->driver, "pg") == 0) 
+                        sprintf(buf, ", %s bigint", Ogr_fieldname);
+                    else {
+                        sprintf(buf, ", %s integer", Ogr_fieldname);
+                        if (strcmp(Fi->driver, "sqlite") != 0) 
+                            G_warning(_("Writing column <%s> with integer 64 as integer 32"),
+                                      Ogr_fieldname);
+                    }
+                }
+#endif
+		else if (Ogr_ftype == OFTIntegerList
+#if GDAL_VERSION_NUM >= 2000000
+                         || Ogr_ftype == OFTInteger64List
+#endif
+                         ) {
 		    /* hack: treat as string */
 		    sprintf(buf, ", %s varchar ( %d )", Ogr_fieldname,
 			    OFTIntegerListlength);
@@ -1133,8 +1152,8 @@ int main(int argc, char *argv[])
 			      Ogr_fieldname, OFTIntegerListlength);
 		}
 		else {
-		    G_warning(_("Column type not supported (%s)"),
-			      Ogr_fieldname);
+		    G_warning(_("Column type (Ogr_ftype: %d) not supported (Ogr_fieldname: %s)"),
+			      Ogr_ftype, Ogr_fieldname);
 		    buf[0] = 0;
 		}
 		db_append_string(&sql, buf);
@@ -1218,7 +1237,11 @@ int main(int argc, char *argv[])
 		    Ogr_field = OGR_FD_GetFieldDefn(Ogr_featuredefn, i);
 		    Ogr_ftype = OGR_Fld_GetType(Ogr_field);
 		    if (OGR_F_IsFieldSet(Ogr_feature, i)) {
-			if (Ogr_ftype == OFTInteger || Ogr_ftype == OFTReal) {
+			if (Ogr_ftype == OFTInteger ||
+#if GDAL_VERSION_NUM >= 2000000
+                            Ogr_ftype == OFTInteger64 ||
+#endif
+                            Ogr_ftype == OFTReal) {
 			    sprintf(buf, ", %s",
 				    OGR_F_GetFieldAsString(Ogr_feature, i));
 			}
@@ -1239,7 +1262,11 @@ int main(int argc, char *argv[])
 #endif
 			else if (Ogr_ftype == OFTString ||
 			         Ogr_ftype == OFTStringList ||
-				 Ogr_ftype == OFTIntegerList) {
+				 Ogr_ftype == OFTIntegerList 
+#if GDAL_VERSION_NUM >= 2000000
+                                 || Ogr_ftype == OFTInteger64List
+#endif
+                                 ) {
 			    db_set_string(&strval, (char *)
 					  OGR_F_GetFieldAsString(Ogr_feature,
 								 i));
@@ -1269,7 +1296,11 @@ int main(int argc, char *argv[])
 #endif
 			else if (Ogr_ftype == OFTString ||
 			         Ogr_ftype == OFTStringList ||
-				 Ogr_ftype == OFTIntegerList) {
+				 Ogr_ftype == OFTIntegerList
+#if GDAL_VERSION_NUM >= 2000000
+                                 || Ogr_ftype == OFTInteger64List
+#endif
+                                 ) {
 			    sprintf(buf, ", NULL");
 			}
 			else {
