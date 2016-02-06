@@ -6,7 +6,7 @@
  *               Glynn Clements <glynn gclements.plus.com>
  *               Markus Neteler <neteler itc.it>
  * PURPOSE:      Store db login settings
- * COPYRIGHT:    (C) 2004-2014 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2004-2015 by the GRASS Development Team
  *
  *               This program is free software under the GNU General
  *               Public License (>=v2). Read the file COPYING that
@@ -29,7 +29,7 @@
 
 int main(int argc, char *argv[])
 {
-    struct Option *driver, *database, *user, *password;
+    struct Option *driver, *database, *user, *password, *host, *port;
     struct Flag *print;
     struct GModule *module;
     
@@ -40,7 +40,8 @@ int main(int argc, char *argv[])
     G_add_keyword(_("database"));
     G_add_keyword(_("connection settings"));
     module->description = _("Sets user/password for DB driver/database.");
-
+    module->overwrite = TRUE;
+    
     driver = G_define_standard_option(G_OPT_DB_DRIVER);
     driver->options = db_list_drivers();
     driver->required = YES;
@@ -55,7 +56,7 @@ int main(int argc, char *argv[])
     user->type = TYPE_STRING;
     user->required = NO;
     user->multiple = NO;
-    user->description = _("Username to set for DB connection");
+    user->description = _("Username");
     user->guisection = _("Settings");
     
     password = G_define_option();
@@ -63,8 +64,26 @@ int main(int argc, char *argv[])
     password->type = TYPE_STRING;
     password->required = NO;
     password->multiple = NO;
-    password->description = _("Password to set for DB connection");
+    password->description = _("Password");
     password->guisection = _("Settings");
+
+    host = G_define_option();
+    host->key = "host";
+    host->type = TYPE_STRING;
+    host->required = NO;
+    host->multiple = NO;
+    host->label = _("Hostname");
+    host->description = _("Relevant only for pg and mysql driver");
+    host->guisection = _("Settings");
+
+    port = G_define_option();
+    port->key = "port";
+    port->type = TYPE_STRING;
+    port->required = NO;
+    port->multiple = NO;
+    port->label = _("Port");
+    port->description = _("Relevant only for pg and mysql driver");
+    port->guisection = _("Settings");
 
     print = G_define_flag();
     print->key = 'p';
@@ -80,13 +99,15 @@ int main(int argc, char *argv[])
         exit(EXIT_SUCCESS);
     }
 
-    if (db_set_login(driver->answer, database->answer, user->answer,
-                     password->answer) == DB_FAILED) {
+    if (db_set_login2(driver->answer, database->answer, user->answer,
+                      password->answer, host->answer, port->answer,
+                      G_get_overwrite()) == DB_FAILED) {
         G_fatal_error(_("Unable to set user/password"));
     }
     
     if (password->answer)
-	G_important_message(_("The password was stored in file (%s%cdblogin)"), G_config_path(), HOST_DIRSEP);
+	G_important_message(_("The password was stored in file (%s%cdblogin)"),
+                            G_config_path(), HOST_DIRSEP);
     
     exit(EXIT_SUCCESS);
 }

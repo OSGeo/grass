@@ -32,7 +32,7 @@ static int create_delete_db();
 int db__driver_open_database(dbHandle * handle)
 {
     char buf[500];
-    const char *name, *schema, *user, *password;
+    const char *name, *schema, *user, *password, *host, *port;
     dbConnection connection;
     PGCONN pgconn;
     PGresult *res;
@@ -56,14 +56,15 @@ int db__driver_open_database(dbHandle * handle)
 
     G_debug(3,
 	    "db_driver_open_database(): host = %s, port = %s, options = %s, tty = %s, "
-	    "dbname = %s, user = %s, password = %s, "
+	    "dbname = %s, user = %s, password = %s, host = %s, port = %s "
 	    "schema = %s", pgconn.host, pgconn.port, pgconn.options,
 	    pgconn.tty, pgconn.dbname, pgconn.user, pgconn.password,
+            pgconn.host, pgconn.port,
 	    pgconn.schema);
 
-    db_get_login("pg", name, &user, &password);
+    db_get_login2("pg", name, &user, &password, &host, &port);
 
-    pg_conn = PQsetdbLogin(pgconn.host, pgconn.port, pgconn.options, pgconn.tty,
+    pg_conn = PQsetdbLogin(host, port, pgconn.options, pgconn.tty,
 			   pgconn.dbname, user, password);
     
     if (PQstatus(pg_conn) == CONNECTION_BAD) {
@@ -221,7 +222,7 @@ int db__driver_delete_database(dbHandle *handle)
 int create_delete_db(dbHandle *handle, int create)
 {
     dbString stmt;
-    const char *template_db, *name, *user, *password;
+    const char *template_db, *name, *user, *password, *host, *port;
     
     PGCONN pgconn;
     PGresult *res;
@@ -237,13 +238,14 @@ int create_delete_db(dbHandle *handle, int create)
     }
     G_debug(3,
 	    "db_driver_create_database(): host = %s, port = %s, options = %s, tty = %s, "
-	    "dbname = %s, user = %s, password = %s, "
+	    "dbname = %s, user = %s, password = %s, host = %s, port = %s"
 	    "schema = %s", pgconn.host, pgconn.port, pgconn.options,
 	    pgconn.tty, pgconn.dbname, pgconn.user, pgconn.password,
+            pgconn.host, pgconn.port,
 	    pgconn.schema);
-    db_get_login("pg", template_db, &user, &password);
+    db_get_login2("pg", template_db, &user, &password, &host, &port);
     
-    pg_conn = PQsetdbLogin(pgconn.host, pgconn.port, pgconn.options, pgconn.tty,
+    pg_conn = PQsetdbLogin(host, port, pgconn.options, pgconn.tty,
 			   pgconn.dbname, user, password);
     if (PQstatus(pg_conn) == CONNECTION_BAD) {
 	db_d_append_error(_("Connection failed."));

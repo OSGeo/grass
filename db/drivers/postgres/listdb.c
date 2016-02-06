@@ -19,7 +19,7 @@ int db__driver_list_databases(dbString * dbpath, int npaths,
 			      dbHandle ** dblist, int *dbcount)
 {
     int i;
-    const char *user, *passwd;
+    const char *user, *passwd, *host, *port;
     PGCONN pgconn;
     PGresult *res;
     int rec_num = 0;
@@ -42,20 +42,21 @@ int db__driver_list_databases(dbString * dbpath, int npaths,
         return DB_FAILED;
     }
     
-    G_debug(1, "db = %s, user = %s, pass = %s, host = %s, port = %s, options = %s, tty = %s",
+    G_debug(1, "db = %s, user = %s, pass = %s, "
+            "host = %s, port = %s, options = %s, tty = %s",
 	    pgconn.dbname, pgconn.user, pgconn.password, pgconn.host,
             pgconn.port, pgconn.options, pgconn.tty);
 
-    db_get_login("pg", NULL, &user, &passwd);
+    db_get_login2("pg", NULL, &user, &passwd, &host, &port);
     G_debug(1, "user = %s, passwd = %s", user, passwd ? "xxx" : "");
 
     if (user || passwd) {
-        pg_conn = PQsetdbLogin(pgconn.host, pgconn.port, pgconn.options, pgconn.tty,
+        pg_conn = PQsetdbLogin(host, port, pgconn.options, pgconn.tty,
                                "template1", user, passwd);
     }
     else {
         pg_conn =
-            PQsetdb(pgconn.host, pgconn.port, pgconn.options, pgconn.tty,
+            PQsetdb(host, port, pgconn.options, pgconn.tty,
                     "template1");
     }
 

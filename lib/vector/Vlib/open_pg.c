@@ -507,7 +507,7 @@ void connect_db(struct Format_info_pg *pg_info)
     if (!strstr(pg_info->conninfo, "user")) {
         char dbname[GNAME_MAX];
         char *p;
-        const char *user, *passwd;
+        const char *user, *passwd, *host, *port;
         
         dbname[0] = '\0';
         p = strstr(pg_info->conninfo, "dbname");
@@ -521,11 +521,11 @@ void connect_db(struct Format_info_pg *pg_info)
         
         /* try connection settings for given database first, then try
          * any settings defined for pg driver */
-        db_get_login("pg", dbname, &user, &passwd);
+        db_get_login2("pg", dbname, &user, &passwd, &host, &port);
         if (strlen(dbname) > 0 && !user && !passwd)
-            db_get_login("pg", NULL, &user, &passwd);
+            db_get_login2("pg", NULL, &user, &passwd, &host, &port);
         
-        if (user || passwd) {
+        if (user || passwd || host || port) {
             char  conninfo[DB_SQL_MAX];
 
             sprintf(conninfo, "%s", pg_info->conninfo);
@@ -536,6 +536,14 @@ void connect_db(struct Format_info_pg *pg_info)
             if (passwd) {
                 strcat(conninfo, " password=");
                 strcat(conninfo, passwd);
+            }
+            if (host) {
+                strcat(conninfo, " host=");
+                strcat(conninfo, host);
+            }
+            if (port) {
+                strcat(conninfo, " port=");
+                strcat(conninfo, port);
             }
             G_free(pg_info->conninfo);
             pg_info->conninfo = G_store(conninfo);

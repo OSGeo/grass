@@ -1,12 +1,12 @@
 <h2>DESCRIPTION</h2>
 
 <em>db.login</em> sets login parameters such an user name and
-optionally also a password for the connection to
+optionally also a password, a hostname or a port for the connection to
 the selected <b>database</b> through the DB <b>driver</b>.
 
 <h2>NOTE</h2>
 
-This command is only related to SQL database
+Options <b>host</b> and <b>port</b> are related to only SQL database
 backends like <a href="grass-pg.html">PostgreSQL</a>,
 <a href="grass-mysql.html">MySQL</a> or <a href="grass-odbc.html">ODBC</a>.
 
@@ -31,16 +31,15 @@ db.login driver=pg database=mydb
 </pre></div>
 
 <p>
-Username and password specified (note that the command lines
+Username, password and hostname specified (note that the command lines
 history will store the password in this way):
 
 <div class="code"><pre>
-db.login user=bacava password=secret
+db.login driver=pg database=mydb user=bacava password=secret host=db.example.com
 </pre></div>
 
 <p>
-Username and empty password specified (note that the command
-lines history will store the password in this way):
+Username and empty password specified:
 
 <div class="code"><pre>
 db.login driver=pg database=mydb user=bacava password=""
@@ -60,7 +59,8 @@ db.login driver=pg database=mydb user=bacava password=""
 
 <h2>AUTHOR</h2>
 
-Radim Blazek
+Radim Blazek<br>
+Support for hostname and port by Martin Landa, OSGeoREL, Czech Technical University in Prague, Czech Republic
 
 <p>
 <i>Last changed: $Date$</i>
