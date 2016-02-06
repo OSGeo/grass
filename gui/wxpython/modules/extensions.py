@@ -9,7 +9,7 @@ Classes:
  - extensions::ManageExtensionWindow
  - extensions::CheckListExtension
 
-(C) 2008-2014 by the GRASS Development Team
+(C) 2008-2016 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -423,6 +423,9 @@ class ManageExtensionWindow(wx.Frame):
         for ext in eList:
             files = RunCommand('g.extension', parent = self, read = True, quiet = True,
                                extension = ext, operation = 'remove').splitlines()
+            if len(files) > 10:
+                files = files[:10]
+                files.append('...')
             dlg = wx.MessageDialog(parent = self,
                                    message = _("List of files to be removed:\n%(files)s\n\n"
                                                "Do you want really to remove <%(ext)s> extension?") % \
