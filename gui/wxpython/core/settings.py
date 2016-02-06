@@ -11,7 +11,7 @@ Usage:
 from core.settings import UserSettings
 @endcode
 
-(C) 2007-2011 by the GRASS Development Team
+(C) 2007-2016 by the GRASS Development Team
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
 
@@ -83,10 +83,10 @@ class Settings:
                 # use default window layout (layer manager, displays, ...)
                 'defWindowPos' : {
                     'enabled' : True,
-                    'dim' : '0,0,%d,%d,%d,0,%d,%d' % \
+                    'dim' : '1,1,%d,%d,%d,1,%d,%d' % \
                         (globalvar.GM_WINDOW_SIZE[0],
                          globalvar.GM_WINDOW_SIZE[1],
-                         globalvar.GM_WINDOW_SIZE[0],
+                         globalvar.GM_WINDOW_SIZE[0] + 1,
                          globalvar.MAP_WINDOW_SIZE[0],
                          globalvar.MAP_WINDOW_SIZE[1])
                     },
