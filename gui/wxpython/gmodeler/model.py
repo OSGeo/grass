@@ -18,7 +18,7 @@ Classes:
  - model::WritePythonFile
  - model::ModelParamDialog
 
-(C) 2010-2014 by the GRASS Development Team
+(C) 2010-2016 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -1376,6 +1376,9 @@ class ModelData(ModelObject, ogl.EllipseShape):
         elif self.prompt == 'vector':
             color = UserSettings.Get(group = 'modeler', key = 'data',
                                      subkey = ('color', 'vector'))
+        elif self.prompt == 'dbtable':
+            color = UserSettings.Get(group = 'modeler', key = 'data',
+                                     subkey = ('color', 'dbtable'))
         else:
             color = UserSettings.Get(group = 'modeler', key = 'action',
                                      subkey = ('color', 'invalid'))
