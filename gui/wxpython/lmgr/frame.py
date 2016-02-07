@@ -49,7 +49,7 @@ from core.utils            import SetAddOnPath, GetLayerNameFromCmd, command2lty
 from gui_core.preferences  import MapsetAccess, PreferencesDialog
 from lmgr.layertree        import LayerTree, LMIcons
 from lmgr.menudata         import LayerManagerMenuData, LayerManagerModuleTree
-from gui_core.widgets      import GNotebook
+from gui_core.widgets      import GNotebook, FormNotebook
 from modules.mcalc_builder import MapCalcFrame
 from dbmgr.manager         import AttributeManager
 from core.workspace        import ProcessWorkspaceFile, ProcessGrcFile, WriteWorkspaceFile
@@ -277,13 +277,16 @@ class GMFrame(wx.Frame):
     
     def _createNoteBook(self):
         """Creates notebook widgets"""
-        self.notebook = GNotebook(parent = self, style = globalvar.FNPageDStyle)
+        if sys.platform == 'win32':
+            self.notebook = GNotebook(parent=self, style=globalvar.FNPageDStyle)
+        else:
+            self.notebook = FormNotebook(parent=self, style=wx.NB_BOTTOM)
         # create displays notebook widget and add it to main notebook page
         cbStyle = globalvar.FNPageStyle
         if globalvar.hasAgw:
-            self.notebookLayers = FN.FlatNotebook(self, id = wx.ID_ANY, agwStyle = cbStyle)
+            self.notebookLayers = FN.FlatNotebook(self.notebook, id=wx.ID_ANY, agwStyle=cbStyle)
         else:
-            self.notebookLayers = FN.FlatNotebook(self, id = wx.ID_ANY, style = cbStyle)
+            self.notebookLayers = FN.FlatNotebook(self.notebook, id=wx.ID_ANY, style=cbStyle)
         self.notebookLayers.SetTabAreaColour(globalvar.FNPageColor)
         menu = self._createTabMenu()
         self.notebookLayers.SetRightClickMenu(menu)
@@ -295,7 +298,7 @@ class GMFrame(wx.Frame):
                                                       '^r.external$|^r.external.out$|'
                                                       '^v.in.ogr$|^v.external$|^v.external.out$|'
                                                       '^cd$|^cd .*')
-        self.goutput = GConsoleWindow(parent = self, gconsole = self._gconsole,
+        self.goutput = GConsoleWindow(parent=self.notebook, gconsole=self._gconsole,
                                       menuModel=self._moduleTreeBuilder.GetModel(),
                                       gcstyle = GC_PROMPT)
         self.notebook.AddPage(page = self.goutput, text = _("Command console"), name = 'output')
@@ -313,7 +316,8 @@ class GMFrame(wx.Frame):
         
         # create 'search module' notebook page
         if not UserSettings.Get(group = 'manager', key = 'hideTabs', subkey = 'search'):
-            self.search = SearchModuleWindow(parent = self, model=self._moduleTreeBuilder.GetModel())
+            self.search = SearchModuleWindow(parent=self.notebook, handlerObj=self,
+                                             model=self._moduleTreeBuilder.GetModel())
             self.search.showNotification.connect(lambda message: self.SetStatusText(message))
             self.notebook.AddPage(page = self.search, text = _("Search modules"), name = 'search')
         else:
@@ -321,14 +325,17 @@ class GMFrame(wx.Frame):
         
         # create 'python shell' notebook page
         if not UserSettings.Get(group = 'manager', key = 'hideTabs', subkey = 'pyshell'):
-            self.pyshell = PyShellWindow(parent = self)
+            self.pyshell = PyShellWindow(parent=self.notebook, giface=self._giface)
             self.notebook.AddPage(page = self.pyshell, text = _("Python shell"), name = 'pyshell')
         else:
             self.pyshell = None
         
         # bindings
+        if sys.platform == 'win32':
+            self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
+        else:
+            self.notebook.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED,    self.OnCBPageChanged)
-        self.notebook.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
         self.notebookLayers.Bind(FN.EVT_FLATNOTEBOOK_PAGE_CLOSING,    self.OnCBPageClosed)
         
         return self.notebook
@@ -353,10 +360,10 @@ class GMFrame(wx.Frame):
         self._auimgr.Update()
         
         # create nviz tools tab
-        self.nviz = NvizToolWindow(parent = self,
-                                   display = self.GetMapDisplay())
+        self.nviz = NvizToolWindow(parent=self.notebook, tree=self.GetLayerTree(),
+                                   display=self.GetMapDisplay())
         idx = self.notebook.GetPageIndexByName('layers')
-        self.notebook.InsertPage(indx = idx + 1, page = self.nviz, text = _("3D view"), name = 'nviz')
+        self.notebook.InsertPage(index=idx + 1, page=self.nviz, text=_("3D view"), name='nviz')
         self.notebook.SetSelectionByName('nviz')
 
         # this is a bit strange here since a new window is created everytime

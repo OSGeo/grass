@@ -64,14 +64,15 @@ except ImportError:
 class NvizToolWindow(FN.FlatNotebook):
     """Nviz (3D view) tools panel
     """
-    def __init__(self, parent, display, id = wx.ID_ANY,
-                 style = globalvar.FNPageStyle|FN.FNB_NO_X_BUTTON,
+    def __init__(self, parent, tree, display, id=wx.ID_ANY,
+                 style=globalvar.FNPageStyle|FN.FNB_NO_X_BUTTON,
                  **kwargs):
         Debug.msg(5, "NvizToolWindow.__init__()")
-        self.parent     = parent # GMFrame
+        self.parent = parent
+        self.tree = tree
         self.mapDisplay = display
-        self.mapWindow  = display.GetWindow()
-        self._display   = self.mapWindow.GetDisplay()
+        self.mapWindow = display.GetWindow()
+        self._display = self.mapWindow.GetDisplay()
          
         if globalvar.hasAgw:
             kwargs['agwStyle'] = style
@@ -129,10 +130,10 @@ class NvizToolWindow(FN.FlatNotebook):
     def SetInitialMaps(self):
         """Set initial raster and vector map"""
         for ltype in ('raster', 'vector', '3d-raster'):
-            selectedLayer = self.parent.GetLayerTree().GetSelectedLayer(multi = False, checkedOnly = True)
+            selectedLayer = self.tree.GetSelectedLayer(multi = False, checkedOnly = True)
             if selectedLayer is None:
                 continue
-            selectedLayer = self.parent.GetLayerTree().GetLayerInfo(selectedLayer, key = 'maplayer')
+            selectedLayer = self.tree.GetLayerInfo(selectedLayer, key = 'maplayer')
             layers = self.mapWindow.Map.GetListOfLayers(ltype = ltype, active = True)
             if selectedLayer in layers:
                 selection = selectedLayer.GetName()
@@ -2075,13 +2076,12 @@ class NvizToolWindow(FN.FlatNotebook):
         :param name: layer name
         :param mapType: map type (raster, vector, 3d-raster)
         """
-        tree = self.parent.GetLayerTree()
-        items = tree.FindItemByData(key = 'name', value = name)
+        items = self.tree.FindItemByData(key = 'name', value = name)
         if not items:
             return None
         for item in items:
-            if tree.GetLayerInfo(item, key = 'type') == mapType:
-                return tree.GetLayerInfo(item, key = 'nviz')
+            if self.tree.GetLayerInfo(item, key = 'type') == mapType:
+                return self.tree.GetLayerInfo(item, key = 'nviz')
         return None
 
     def OnRecord(self, event):
@@ -3405,9 +3405,9 @@ class NvizToolWindow(FN.FlatNotebook):
        
         checked = event.IsChecked()
         name = self.FindWindowById(self.win['vector']['map']).GetValue()
-        items = self.parent.GetLayerTree().FindItemByData(key = 'name', value = name)
+        items = self.tree.FindItemByData(key = 'name', value = name)
         for item in items:
-            if self.parent.GetLayerTree().GetLayerInfo(item, key = 'type') == 'vector':
+            if self.tree.GetLayerInfo(item, key = 'type') == 'vector':
                 break
         data = self.GetLayerData('vector')['vector']
         
@@ -3720,10 +3720,10 @@ class NvizToolWindow(FN.FlatNotebook):
         """Enable/disable buttons 'add', 'delete',
         'move up', 'move down'"""
         nitems = list.GetCount()
-        add = self.parent.FindWindowById(self.win['volume']['btnAdd'])
-        delete = self.parent.FindWindowById(self.win['volume']['btnDelete'])
-        moveDown = self.parent.FindWindowById(self.win['volume']['btnMoveDown'])
-        moveUp = self.parent.FindWindowById(self.win['volume']['btnMoveUp'])
+        add = self.FindWindowById(self.win['volume']['btnAdd'])
+        delete = self.FindWindowById(self.win['volume']['btnDelete'])
+        moveDown = self.FindWindowById(self.win['volume']['btnMoveDown'])
+        moveUp = self.FindWindowById(self.win['volume']['btnMoveUp'])
         if nitems >= wxnviz.MAX_ISOSURFS:
             # disable add button on max
             add.Enable(False)
