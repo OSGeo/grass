@@ -789,7 +789,7 @@ class ModelFrame(wx.Frame):
             x = width/2 - 200 + self._randomShift()
             y = height/2 + self._randomShift()
             for p in params['params']:
-                if p.get('prompt', '') in ('raster', 'vector', 'raster_3d') and \
+                if p.get('prompt', '') in ('raster', 'vector', 'raster_3d', 'dbtable') and \
                         (p.get('value', None) or \
                              (p.get('age', 'old') != 'old' and p.get('required', 'no') == 'yes')):
                     data = layer.FindData(p.get('name', ''))

@@ -261,7 +261,24 @@ class PreferencesDialog(PreferencesBaseDialog):
                       flag = wx.ALIGN_RIGHT |
                       wx.ALIGN_CENTER_VERTICAL,
                       pos = (row, 1))
+
+        row += 1
+        gridSizer.Add(item = wx.StaticText(parent = panel, id = wx.ID_ANY,
+                                         label = _("Table:")),
+                      flag = wx.ALIGN_LEFT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 0))
+        tColor = csel.ColourSelect(parent = panel, id = wx.ID_ANY,
+                                   colour = self.settings.Get(group='modeler', key='data', subkey=('color', 'dbtable')),
+                                   size = globalvar.DIALOG_COLOR_SIZE)
+        tColor.SetName('GetColour')
+        self.winId['modeler:data:color:dbtable'] = tColor.GetId()
         
+        gridSizer.Add(item = tColor,
+                      flag = wx.ALIGN_RIGHT |
+                      wx.ALIGN_CENTER_VERTICAL,
+                      pos = (row, 1))
+
         gridSizer.AddGrowableCol(0)
         sizer.Add(item = gridSizer, proportion = 1, flag = wx.ALL | wx.EXPAND, border = 5)
         border.Add(item = sizer, proportion = 0, flag = wx.LEFT | wx.RIGHT | wx.BOTTOM | wx.EXPAND, border = 3)
