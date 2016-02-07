@@ -40,7 +40,7 @@ install:
 	fi
 	$(INSTALL_DATA) $(ARCH_DISTDIR)/docs/man/man1/$(PGM).1 $(INST_DIR)/docs/man/man1/
 	if [ -d "$(ETC)/$(PGM)" ] ; then \
-		cp -rL $(ETC)/$(PGM) $(INST_DIR)/etc/ ; \
+		cp -RL $(ETC)/$(PGM) $(INST_DIR)/etc/ ; \
 	fi
 
 .PHONY: script scriptstrings
