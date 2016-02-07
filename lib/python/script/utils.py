@@ -20,6 +20,7 @@ for details.
 import os
 import shutil
 import locale
+import re
 
 
 def float_or_dms(s):
@@ -241,3 +242,13 @@ def get_num_suffix(number, max_number):
     """
     return '{number:0{width}d}'.format(width=len(str(max_number)),
                                        number=number)
+
+# source:
+#    http://stackoverflow.com/questions/4836710/
+#    does-python-have-a-built-in-function-for-string-natural-sort/4836734#4836734
+def natural_sort(l):
+    """Returns sorted strings using natural sort
+    """
+    convert = lambda text: int(text) if text.isdigit() else text.lower()
+    alphanum_key = lambda key: [convert(c) for c in re.split('([0-9]+)', key)]
+    return sorted(l, key=alphanum_key)

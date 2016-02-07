@@ -43,6 +43,7 @@ import wx.lib.mixins.listctrl as listmix
 
 from grass.script import core as grass
 from grass.script import task as gtask
+from grass.script.utils import natural_sort
 
 from grass.pydispatch.signal import Signal
 
@@ -1414,7 +1415,7 @@ class MapLayersDialogBase(wx.Dialog):
         :param str mapset: mapset name
         """
         self.map_layers = grass.list_grouped(type = type)[mapset]
-        self.layers.Set(self.map_layers)
+        self.layers.Set(natural_sort(self.map_layers))
         
         # check all items by default
         for item in range(self.layers.GetCount()):
