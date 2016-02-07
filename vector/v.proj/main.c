@@ -67,6 +67,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("vector"));
     G_add_keyword(_("projection"));
     G_add_keyword(_("transformation"));
+    G_add_keyword(_("import"));
     module->description = _("Re-projects a vector map from one location to the current location.");
 
     /* set up the options and flags for the command line parser */
