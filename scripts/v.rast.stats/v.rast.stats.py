@@ -72,19 +72,12 @@ def cleanup():
     if rastertmp:
         grass.run_command('g.remove', flags='f', type='raster',
                           name=rastertmp, quiet=True)
-    grass.run_command('g.remove', flags='f', type='raster',
-                      name='MASK', quiet=True, stderr=nuldev)
-    if mask_found:
-        grass.message(_("Restoring previous MASK..."))
-        grass.run_command('g.rename', raster=(tmpname + "_origmask", 'MASK'),
-                          quiet=True)
 #    for f in [tmp, tmpname, sqltmp]:
 #        grass.try_remove(f)
 
 
 def main():
-    global tmp, sqltmp, tmpname, nuldev, vector, mask_found, rastertmp
-    mask_found = False
+    global tmp, sqltmp, tmpname, nuldev, vector, rastertmp
     rastertmp = False
     #### setup temporary files
     tmp = grass.tempfile()
@@ -123,13 +116,6 @@ def main():
     if not grass.find_file(raster, 'cell')['file']:
         grass.fatal(_("Raster map <%s> not found") % raster)
 
-    # check presence of raster MASK, put it aside
-    mask_found = bool(grass.find_file('MASK', 'cell', mapset)['file'])
-    if mask_found:
-        grass.message(_("Raster MASK found, temporarily disabled"))
-        grass.run_command('g.rename', raster=('MASK', tmpname + "_origmask"),
-                          quiet=True)
-
     # save current settings:
     grass.use_temp_region()
 
@@ -137,7 +123,6 @@ def main():
     # keep boundary settings
     grass.run_command('g.region', align=raster)
 
-    # prepare raster MASK
     grass.message(_("Preprocessing input data..."))
     try:
         grass.run_command('v.to.rast', input=vector, layer=layer, output=rastertmp,
@@ -293,9 +278,6 @@ def main():
     except CalledModuleError:
         grass.warning(_("Failed to upload statistics to attribute table of vector map <%s>.") % vector)
         exitcode = 1
-    finally:
-         grass.run_command('g.remove', flags='f', type='raster',
-                           name='MASK', quiet=True, stderr=nuldev)
 
     sys.exit(exitcode)
 
