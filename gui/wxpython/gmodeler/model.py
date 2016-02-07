@@ -813,9 +813,11 @@ class Model(object):
                 continue
             name   = action.GetLabel()
             params = action.GetParams()
+            increment = False
             for f in params['flags']:
                 if f.get('parameterized', False):
                     if name not in result:
+                        increment = True
                         result[name] = { 'flags' : list(),
                                          'params': list(),
                                          'idx'   : idx }
@@ -823,11 +825,12 @@ class Model(object):
             for p in params['params']:
                 if p.get('parameterized', False):
                     if name not in result:
+                        increment = True
                         result[name] = { 'flags' : list(),
                                          'params': list(),
                                          'idx'   : idx }
                     result[name]['params'].append(p)
-            if name in result:
+            if increment:
                 idx += 1
         
         self.variablesParams = result # record parameters
