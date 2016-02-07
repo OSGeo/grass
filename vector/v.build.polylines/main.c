@@ -125,13 +125,14 @@ int main(int argc, char **argv)
     cats->key = "cats";
     cats->type = TYPE_STRING;
     cats->description = _("Category number mode");
-    cats->options = "no,first,multi";
+    cats->options = "no,first,multi,same";
     desc = NULL;
     G_asprintf(&desc,
-	       "no;%s;first;%s;multi;%s",
+	       "no;%s;first;%s;multi;%ssame;%s",
 	       _("Do not assign any category number to polyline"),
 	       _("Assign category number of first line to polyline"),
-	       _("Assign multiple category numbers to polyline"));
+	       _("Assign multiple category numbers to polyline"),
+	       _("Create polyline from lines with same categories"));
     cats->descriptions = desc;
     cats->answer = "no";
 
