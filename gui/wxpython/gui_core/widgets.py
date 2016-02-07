@@ -103,7 +103,13 @@ class NotebookController:
         if 'name' in kwargs:
             self.notebookPages[kwargs['name']] = kwargs['page']
             del kwargs['name']
-        self.classObject.InsertPage(self.widget, **kwargs)
+        try:
+            self.classObject.InsertPage(self.widget, **kwargs)
+        except TypeError, e:  # documentation says 'index', but certain versions of wx require 'n'
+            print e
+            kwargs['n'] = kwargs['index']
+            del kwargs['index']
+            self.classObject.InsertPage(self.widget, **kwargs)
 
     def DeletePage(self, page):
         """Delete page
@@ -213,6 +219,16 @@ class FlatNotebookController(NotebookController):
             return -1
 
         return self.classObject.GetPageIndex(self.widget, self.notebookPages[page])
+
+    def InsertPage(self, **kwargs):
+        """Insert a new page
+        """
+        if 'name' in kwargs:
+            self.notebookPages[kwargs['name']] = kwargs['page']
+            del kwargs['name']
+        kwargs['indx'] = kwargs['index']
+        del kwargs['index']
+        self.classObject.InsertPage(self.widget, **kwargs)
 
 
 class GNotebook(FN.FlatNotebook):

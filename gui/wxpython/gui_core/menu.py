@@ -130,8 +130,9 @@ class SearchModuleWindow(wx.Panel):
     Signal:
         showNotification - attribute 'message'
     """
-    def __init__(self, parent, model, id = wx.ID_ANY, **kwargs):
-        self.parent = parent # LayerManager
+    def __init__(self, parent, handlerObj, model, id = wx.ID_ANY, **kwargs):
+        self.parent = parent
+        self.handlerObj = handlerObj
         
         self.showNotification = Signal('SearchModuleWindow.showNotification')
         wx.Panel.__init__(self, parent = parent, id = id, **kwargs)
@@ -217,7 +218,7 @@ class SearchModuleWindow(wx.Panel):
         if not data:
             return
 
-        handler = 'self.parent.' + data['handler'].lstrip('self.')
+        handler = 'self.handlerObj.' + data['handler'].lstrip('self.')
 
         if data['command']:
             eval(handler)(event=None, cmd=data['command'].split())
