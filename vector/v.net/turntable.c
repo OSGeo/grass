@@ -637,6 +637,12 @@ void turntable(struct opt *opt)
 	G_fatal_error(_("Unable to open vector map <%s>."),
 		      opt->input->answer);
     }
+
+    if (Vect_open_new(&OutMap, opt->output->answer, WITHOUT_Z) < 1) {
+	G_fatal_error(_("Unable to create vector map <%s>."),
+		      opt->output->answer);
+    }
+
     Vect_set_error_handler_io(&InMap, &OutMap);
 
     type = Vect_option_to_types(opt->type);
@@ -661,13 +667,8 @@ void turntable(struct opt *opt)
 
     ttb_name = NULL;
     G_asprintf(&ttb_name, "%s_turntable_t_%s_tuc_%s_a_%s",
-	       opt->output->answer, opt->tfield->answer,
+	       Vect_get_name(&OutMap), opt->tfield->answer,
 	       opt->tucfield->answer, opt->afield_opt->answer);
-
-    if (Vect_open_new(&OutMap, opt->output->answer, WITHOUT_Z) < 1) {
-	G_fatal_error(_("Unable to create vector map <%s>."),
-		      opt->output->answer);
-    }
 
     /*Use database and driver as layer with lowest number, 
        if the layer is not present use def settings. */
