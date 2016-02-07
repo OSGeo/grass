@@ -106,7 +106,6 @@ class NotebookController:
         try:
             self.classObject.InsertPage(self.widget, **kwargs)
         except TypeError, e:  # documentation says 'index', but certain versions of wx require 'n'
-            print e
             kwargs['n'] = kwargs['index']
             del kwargs['index']
             self.classObject.InsertPage(self.widget, **kwargs)
