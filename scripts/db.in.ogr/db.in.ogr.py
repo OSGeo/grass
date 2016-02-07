@@ -4,9 +4,9 @@
 #
 # MODULE:       db.in.ogr
 # AUTHOR(S):   	Markus Neteler
-# PURPOSE:      imports attribute tables in various formats
+# PURPOSE:      Imports attribute tables in various formats
 #               Converted to Python by Glynn Clements
-# COPYRIGHT:    (C) 2007-2014 by Markus Neteler and the GRASS Development Team
+# COPYRIGHT:    (C) 2007-2016 by Markus Neteler and the GRASS Development Team
 #
 #               This program is free software under the GNU General Public
 #               License (>=v2). Read the file COPYING that comes with GRASS
@@ -19,6 +19,7 @@
 #% keyword: database
 #% keyword: import
 #% keyword: attribute table
+#% overwrite: yes
 #%End
 
 #%option G_OPT_F_BIN_INPUT
