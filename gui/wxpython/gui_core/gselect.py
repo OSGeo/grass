@@ -247,8 +247,9 @@ class ListCtrlComboPopup(wx.combo.ComboPopup):
         if inputText:
             root = self.seltree.GetRootItem()
             match = self.FindItem(root, inputText, startLetters = True)
-            self.seltree.EnsureVisible(match)
-            self.seltree.SelectItem(match)
+            if match.IsOk():
+                self.seltree.EnsureVisible(match)
+                self.seltree.SelectItem(match)
 
     def GetAdjustedSize(self, minWidth, prefHeight, maxHeight):
         """Reads UserSettings to get height (which was 200 in old implementation).

@@ -53,6 +53,7 @@ class ModelDataDialog(SimpleDialog):
         SimpleDialog.__init__(self, parent, title)
                 
         self.element = Select(parent = self.panel,
+                              type = self.shape.GetPrompt(),
                               validator = SimpleValidator(callback = self.ValidatorCallback))
         self.element.SetValue(shape.GetValue())
         
