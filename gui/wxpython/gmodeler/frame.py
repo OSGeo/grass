@@ -1189,10 +1189,11 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
                                  completed = (self.frame.GetOptData, shape, shape.GetParams()))
         
         elif isinstance(shape, ModelData):
-            dlg = ModelDataDialog(parent = self.frame, shape = shape)
-            shape.SetPropDialog(dlg)
-            dlg.CentreOnParent()
-            dlg.Show()
+            if shape.GetPrompt() in ('raster', 'vector', 'raster_3d'):
+                dlg = ModelDataDialog(parent = self.frame, shape = shape)
+                shape.SetPropDialog(dlg)
+                dlg.CentreOnParent()
+                dlg.Show()
         
         elif isinstance(shape, ModelLoop):
             dlg = ModelLoopDialog(parent = self.frame, shape = shape)
