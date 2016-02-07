@@ -34,13 +34,12 @@
 #% required : no
 #%end
 
-#%option 
+#%option G_OPT_DB_TABLE
 #% key: output
-#% type: string
-#% key_desc : name
 #% description: Name for output table
 #% required : no
 #% guisection: Output
+#% gisprompt: new,dbtable,dbtable
 #%end
 
 #%option
