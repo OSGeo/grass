@@ -1071,14 +1071,7 @@ class MapFramePanel(wx.Panel):
 
             mapFrameDict['scale'] = self.scale[2]
             mapFrameDict['center'] = self.center[2]
-            
-            env = grass.gisenv()
-            windFilePath = os.path.join(env['GISDBASE'], env['LOCATION_NAME'], env['MAPSET'], 'WIND')
-            try:
-                windFile = open(windFilePath, 'r').read()
-                region = grass.parse_key_val(windFile, sep = ':', val_type = float)
-            except IOError:
-                region = grass.region()
+            region = grass.region()
             
             raster = self.instruction.FindInstructionByType('raster')
             if raster:
@@ -1087,11 +1080,11 @@ class MapFramePanel(wx.Panel):
                 rasterId = None
 
             if rasterId: # because of resolution
-                RunCommand('g.region', n = region['north'], s = region['south'],
-                            e = region['east'], w = region['west'], rast = self.instruction[rasterId]['raster'])
+                RunCommand('g.region', n=region['n'], s=region['s'],
+                            e=region['e'], w=region['w'], rast=self.instruction[rasterId]['raster'])
             else:
-                RunCommand('g.region', n = region['north'], s = region['south'],
-                           e = region['east'], w = region['west'])
+                RunCommand('g.region', n=region['n'], s=region['s'],
+                           e=region['e'], w=region['w'])
             
         elif scaleType == 3:
             mapFrameDict['drawMap'] = False
