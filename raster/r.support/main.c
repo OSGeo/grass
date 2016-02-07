@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
     title_opt->key_desc = "phrase";
     title_opt->type = TYPE_STRING;
     title_opt->required = NO;
-    title_opt->description = _("Text to use for map title");
+    title_opt->description = _("Title for resultant raster map");
 
     history_opt = G_define_option();
     history_opt->key = "history";
