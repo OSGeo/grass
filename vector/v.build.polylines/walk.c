@@ -74,6 +74,51 @@ int walk_back(struct Map_info *map, int start_line, int type)
     return (line);
 }
 
+/* 
+   \brief Compare two line_cats structs.
+
+   \return 1 - structs have same categories in all fields
+   \return 0 - structs do not have same categories in all fields
+ */
+int cmp_cats(struct line_cats *Cats1, struct line_cats *Cats2)
+{
+    int cat_found, cat_idx, i, ret;
+    struct ilist *cats_list;
+
+    if (Cats1->n_cats != Cats2->n_cats) {
+	return 0;
+    }
+
+    cats_list = Vect_new_list();
+
+    for (cat_idx = 0; cat_idx < Cats1->n_cats; cat_idx++) {
+
+	ret = Vect_field_cat_get(Cats2, Cats1->field[cat_idx], cats_list);
+
+	if (ret == -1) {
+	    Vect_destroy_list(cats_list);
+	    return 0;
+	}
+
+	cat_found = 0;
+
+	for (i = 0; i < cats_list->n_values; i++) {
+	    if (Cats1->cat[cat_idx] == cats_list->value[i]) {
+		cat_found = 1;
+	    }
+
+	}
+
+	if (cat_found == 0) {
+	    Vect_destroy_list(cats_list);
+	    return 0;
+	}
+    }
+
+    Vect_destroy_list(cats_list);
+    return 1;
+}
+
 /* Start from the first node on a polyline and walk to the other end,
    collecting the coordinates of each node en route.  */
 int walk_forward_and_pick_up_coords(struct Map_info *map,
@@ -137,6 +182,14 @@ int walk_forward_and_pick_up_coords(struct Map_info *map,
 			     cats_tmp->cat[cat_idx]);
 	    }
 	}
+
+	if (cats_tmp && write_cats == SAME_CATS) {
+
+	    if (cmp_cats(Cats, cats_tmp) == 0) {
+		break;
+	    }
+	}
+
 	Vect_get_line_nodes(map, line, &n1, &n2);
 
 	if (node == n1) {
