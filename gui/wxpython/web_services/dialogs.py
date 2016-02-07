@@ -122,6 +122,7 @@ class WSDialogBase(wx.Dialog):
         self.layerName = wx.TextCtrl(parent = self.reqDataPanel, id = wx.ID_ANY)
 
         for ws in self.ws_panels.iterkeys():
+            # set class WSPanel argument layerNameTxtCtrl
             self.ws_panels[ws]['panel'] =  WSPanel(parent = self.reqDataPanel,
                                                    web_service = ws)
             self.ws_panels[ws]['panel'].capParsed.connect(self.OnPanelCapParsed)
@@ -220,7 +221,12 @@ class WSDialogBase(wx.Dialog):
         dialogSizer.Add(item = self.btnsizer, proportion = 0,
                         flag = wx.ALIGN_CENTER)
 
-        dialogSizer.Add(item = self.statusbar, proportion = 0)
+        # expand wxWidget wx.StatusBar
+        statusbarSizer = wx.BoxSizer(wx.HORIZONTAL)
+        statusbarSizer.Add(item=self.statusbar, proportion=1, flag=wx.EXPAND)
+        dialogSizer.Add(item=statusbarSizer,
+                        proportion=0,
+                        flag=wx.EXPAND)
 
         self.SetSizer(dialogSizer)
         self.Layout()
@@ -302,6 +308,12 @@ class WSDialogBase(wx.Dialog):
         else:
             self.adv_conn.Collapse(True)
 
+        # clear content of the wxWidget wx.TextCtrl (Output layer
+        # name:), based on changing default server selection in the
+        # wxWidget wx.Choice
+        if len(self.layerName.GetValue()) > 0:
+            self.layerName.Clear()
+
     def OnClose(self, event):
         """Close the dialog
         """
@@ -326,6 +338,11 @@ class WSDialogBase(wx.Dialog):
         else:
             self.btn_connect.Enable(False)
         
+        # clear content of the wxWidget wx.TextCtrl (Output Layer
+        # name:), based on changing content of the wxWidget
+        # wx.TextCtrl (Server:)
+        self.layerName.Clear()
+
     def OnOutputLayerName(self, event):
         """Update layer name to web service panel
         """
