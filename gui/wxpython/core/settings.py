@@ -768,6 +768,7 @@ class Settings:
                         'raster'   : (215, 215, 248, 255), # light blue
                         'raster3d' : (215, 248, 215, 255), # light green
                         'vector'   : (248, 215, 215, 255), # light red
+                        'dbtable'  : (255, 253, 194, 255), # light yellow
                         },
                     'size' : {
                         'width' : 175,
@@ -776,7 +777,7 @@ class Settings:
                     },
                 'loop' : {
                     'color' : {
-                        'valid'   :  (234, 226, 154, 255), # light yellow
+                        'valid'   :  (234, 226, 154, 255), # dark yellow
                         },
                     'size' : {
                         'width' : 175,
