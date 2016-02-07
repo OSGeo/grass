@@ -2262,7 +2262,8 @@ class CmdPanel(wx.Panel):
             win = self.FindWindowById(porf['wxId'][0])
             porf['value'] = win.GetDsn()
             pLayer = self.task.get_param('layer', element = 'name', raiseError = False)
-            pLayer['value'] = ''
+            if pLayer:
+                pLayer['value'] = ''
         else:
             if isinstance(me, wx.SpinCtrl):
                 porf['value'] = str(me.GetValue())
