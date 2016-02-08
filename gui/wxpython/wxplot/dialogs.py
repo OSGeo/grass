@@ -11,7 +11,7 @@ Classes:
  - dialogs::TextDialog
  - dialogs::OptDialog
 
-(C) 2011-2012 by the GRASS Development Team
+(C) 2011-2016 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -19,12 +19,15 @@ This program is free software under the GNU General Public License
 @author Michael Barton, Arizona State University
 """
 
+import os
+
 import wx
 import wx.lib.colourselect  as csel
 import wx.lib.scrolledpanel as scrolled
 
 from core             import globalvar
 from core.settings    import UserSettings
+from core.globalvar   import ICONDIR
 from core.utils import _
 from gui_core.gselect import Select
 
@@ -239,8 +242,10 @@ class PlotStatsFrame(wx.Frame):
         """
         wx.Frame.__init__(self, parent, id, style = style, **kwargs)
         self.SetLabel(_("Statistics"))
+        self.SetIcon(wx.Icon(os.path.join(ICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
+        self.panel = wx.Panel(self)
         
-        sp = scrolled.ScrolledPanel(self, -1, size=(400, 400),
+        sp = scrolled.ScrolledPanel(self.panel, -1, size=(400, 400),
                                     style = wx.TAB_TRAVERSAL|wx.SUNKEN_BORDER, name="Statistics" )
                 
 
@@ -258,10 +263,10 @@ class PlotStatsFrame(wx.Frame):
         sizer = wx.BoxSizer(wx.VERTICAL)
         txtSizer = wx.BoxSizer(wx.VERTICAL)
 
-        statstitle = wx.StaticText(parent = self, id = wx.ID_ANY, label = self.title)
+        statstitle = wx.StaticText(parent = self.panel, id = wx.ID_ANY, label = self.title)
         sizer.Add(item = statstitle, proportion = 0,
                   flag = wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, border = 3)
-        line = wx.StaticLine(parent = self, id = wx.ID_ANY, size = (20, -1), style = wx.LI_HORIZONTAL)
+        line = wx.StaticLine(parent = self.panel, id = wx.ID_ANY, size = (20, -1), style = wx.LI_HORIZONTAL)
         sizer.Add(item = line, proportion = 0,
                   flag = wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, border = 3)
         for stats in self.message:
@@ -280,7 +285,7 @@ class PlotStatsFrame(wx.Frame):
         sizer.Add(item = sp, proportion = 1, 
                   flag = wx.GROW | wx.LEFT | wx.RIGHT | wx.BOTTOM, border = 3)
 
-        line = wx.StaticLine(parent = self, id = wx.ID_ANY, size = (20, -1), style = wx.LI_HORIZONTAL)
+        line = wx.StaticLine(parent = self.panel, id = wx.ID_ANY, size = (20, -1), style = wx.LI_HORIZONTAL)
         sizer.Add(item = line, proportion = 0,
                   flag = wx.GROW |wx.ALIGN_CENTER_VERTICAL|wx.LEFT|wx.RIGHT, border = 3)
 
@@ -289,11 +294,11 @@ class PlotStatsFrame(wx.Frame):
         #
         btnSizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        btn_clipboard = wx.Button(self, id = wx.ID_COPY, label = _('C&opy'))
+        btn_clipboard = wx.Button(self.panel, id = wx.ID_COPY, label = _('C&opy'))
         btn_clipboard.SetToolTipString(_("Copy regression statistics the clipboard (Ctrl+C)"))
         btnSizer.Add(item = btn_clipboard, proportion = 0, flag = wx.ALIGN_LEFT | wx.ALL, border = 5)
         
-        btnCancel = wx.Button(self, wx.ID_CLOSE)
+        btnCancel = wx.Button(self.panel, wx.ID_CLOSE)
         btnCancel.SetDefault()
         btnSizer.Add(item = btnCancel, proportion = 0, flag = wx.ALIGN_RIGHT | wx.ALL, border = 5)        
 
@@ -303,7 +308,7 @@ class PlotStatsFrame(wx.Frame):
         btnCancel.Bind(wx.EVT_BUTTON, self.OnClose)
         btn_clipboard.Bind(wx.EVT_BUTTON, self.OnCopy)
         
-        self.SetSizer(sizer)
+        self.panel.SetSizer(sizer)
         sizer.Fit(self)
 
     def OnCopy(self, event):
