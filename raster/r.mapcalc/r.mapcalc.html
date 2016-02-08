@@ -646,9 +646,9 @@ To mask raster map layer <em>b</em> by raster map layer <em>a</em>:
 <div class="code"><pre>
 result = if(a,b)
 </pre></div>
-To change all values below 5 to NULL, keep otherwise:
+To change all values below 5 to NULL:
 <div class="code"><pre>
-newmap = if(map &lt; 5, null(), map)
+newmap = if(map&lt;5, null(), 5)
 </pre></div>
 The graph() function allows users to specify a x-y conversion using 
 pairs of x,y coordinates.
