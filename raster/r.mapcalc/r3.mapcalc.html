@@ -166,6 +166,7 @@ result = x@PERMANENT / y@SOILS
 GRASS commands, not just <em>r3.mapcalc</em>.)
 <p>
 
+
 <h3>The neighborhood modifier</h3>
 
 3D grids are data base files stored in voxel format, i.e., three-dimensional
@@ -517,9 +518,9 @@ To mask 3D grid <em>b</em> by 3D grid <em>a</em>:
 <div class="code"><pre>
 result = if(a,b)
 </pre></div>
-To change all values below 5 to NULL:
+To change all values below 5 to NULL, keep otherwise:
 <div class="code"><pre>
-newmap = if(map&lt;5, null(), 5)
+newmap = if(map &lt; 5, null(), map)
 </pre></div>
 The graph() function allows users to specify a x-y conversion using 
 pairs of x,y coordinates.
