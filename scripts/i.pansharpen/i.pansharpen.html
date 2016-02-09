@@ -80,6 +80,8 @@ the 3 pan sharpening algorithms differ in terms of spectral response.
 
 <h2>EXAMPLES</h2>
 
+<h3>Pan sharpening comparison example</h3>
+
 Pan sharpening of a Landsat image from Boulder, Colorado, USA:
 
 <div class="code"><pre>
@@ -93,12 +95,14 @@ i.pansharpen red=p034r032_7dt20010924_z13_30 green=p034r032_7dt20010924_z13_20
     blue=p034r032_7dt20010924_z13_10 pan=p034r032_7dp20010924_z13_80 
     output=ihs321 method=ihs
 
+# ... likewise with method=brovey and method=pca
+
 # display at 15m
 g.region raster=ihs321_blue -p
 d.rgb b=ihs321_blue g=ihs321_green r=ihs321_red
 </pre></div>
 
-
+<p>
 <b><em>Results:</em></b>
 
 <p><center>
@@ -139,8 +143,9 @@ d.rgb b=ihs321_blue g=ihs321_green r=ihs321_red
 </center>
 <br>
 
+<h3>Pan sharpening of LANDSAT ETM+ (Landsat 7)</h3>
 
-Example: LANDSAT ETM+ (Landsat 7), North Carolina sample dataset:
+LANDSAT ETM+ (Landsat 7), North Carolina sample dataset:
 
 <div class="code"><pre>
 # original at 28m
