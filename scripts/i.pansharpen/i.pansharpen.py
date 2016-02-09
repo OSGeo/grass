@@ -316,7 +316,7 @@ def main():
     # equalized grey scales give best contrast
     for ch in ['red', 'green', 'blue']:
         grass.run_command('r.colors', quiet=True, map="%s_%s" % (out, ch),
-                          flags="e", col='grey')
+                          flags="e", color='grey')
 
     # Landsat too blue-ish because panchromatic band less sensitive to blue
     # light, so output blue channed can be modified
