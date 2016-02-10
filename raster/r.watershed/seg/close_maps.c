@@ -23,8 +23,8 @@ int close_maps(void)
 	wabuf = G_malloc(ncols * sizeof(WAT_ALT));
 	seg_flush(&watalt);
 	if (abs_acc) {
-	    G_warning("Writing out only positive flow accumulation values.");
-	    G_warning("Cells with a likely underestimate for flow accumulation can no longer be identified.");
+	    G_message("Writing out only positive flow accumulation values.");
+	    G_message("Cells with a likely underestimate for flow accumulation can no longer be identified.");
 	}
 
 	fd = Rast_open_new(wat_name, DCELL_TYPE);

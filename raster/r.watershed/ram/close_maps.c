@@ -28,8 +28,8 @@ int close_maps(void)
     if (wat_flag) {
 	fd = Rast_open_new(wat_name, DCELL_TYPE);
 	if (abs_acc) {
-	    G_warning("Writing out only positive flow accumulation values.");
-	    G_warning("Cells with a likely underestimate for flow accumulation can no longer be identified.");
+	    G_message("Writing out only positive flow accumulation values.");
+	    G_message("Cells with a likely underestimate for flow accumulation can no longer be identified.");
 	    for (r = 0; r < nrows; r++) {
 		Rast_set_d_null_value(dbuf, ncols);	/* reset row to all NULL */
 		for (c = 0; c < ncols; c++) {
