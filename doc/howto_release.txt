@@ -156,6 +156,9 @@ Contents
 
      full release:
       - update trac milesstone/add next: https://trac.osgeo.org/grass/admin/ticket/milestones
+      - update links to point to new dot-release
+              https://wingrass.fsv.cvut.cz/grass71/x86/addons/latest
+              https://wingrass.fsv.cvut.cz/grass71/x86_64/addons/latest
 
  o upload user HTML manual in case of *final release* from compiled English
    version at (warning: needs stuff to be compiled).
