@@ -39,7 +39,7 @@ void G_adjust_Cell_head(struct Cell_head *cellhd, int row_flag, int col_flag)
 {
     if (!row_flag) {
 	if (cellhd->ns_res <= 0)
-	    G_fatal_error(_("Illegal n-s resolution value"));
+	    G_fatal_error(_("Illegal n-s resolution value <%lf>"), cellhd->ns_res);
     }
     else {
 	if (cellhd->rows <= 0)
