@@ -55,7 +55,8 @@ class Popen(subprocess.Popen):
             and kwargs.get('executable') is None):
             cmd = shutil_which(args[0])
             if cmd is None:
-                raise OSError
+                raise OSError(_("Cannot find the executable {}")
+                              .format(args[0]))
             args = [cmd] + args[1:]
             name, ext = os.path.splitext(cmd)
             if ext.lower() not in self._builtin_exts:
