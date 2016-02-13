@@ -6,7 +6,7 @@
 Classes:
  - toolbars::MapToolbar
 
-(C) 2007-2011 by the GRASS Development Team
+(C) 2007-2015 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -143,7 +143,6 @@ class MapToolbar(BaseToolbar):
                                       self.parent.OnRender),
                                      ('erase', BaseIcons['erase'],
                                       self.parent.OnErase),
-                                     (None, ),
                                      ('pointer', BaseIcons['pointer'],
                                       self.parent.OnPointer,
                                       wx.ITEM_CHECK),
@@ -167,19 +166,15 @@ class MapToolbar(BaseToolbar):
                                       self.parent.OnZoomBack),
                                      ('zoomMenu', BaseIcons['zoomMenu'],
                                       self.parent.OnZoomMenu),
-                                     (None, ),
                                      ('analyze', MapIcons['analyze'],
                                       self.OnAnalyze),
-                                     (None, ),
                                      ('overlay', BaseIcons['overlay'],
                                       self.OnDecoration),
-                                     (None, ),
                                      ('saveFile', BaseIcons['saveFile'],
                                       self.parent.SaveToFile),
                                      ('printMap', BaseIcons['print'],
                                       self.parent.PrintMenu),
-                                     (None, ))
-                                    )
+                                    ))
     def InsertTool(self, data):
         """Insert tool to toolbar
         
