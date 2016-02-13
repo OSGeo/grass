@@ -53,7 +53,6 @@ class LMWorkspaceToolbar(BaseToolbar):
             }
         return self._getToolbarData((('newdisplay', icons["newdisplay"],
                                       self.parent.OnNewDisplay),
-                                     (None, ),
                                      ('workspaceNew', icons["workspaceNew"],
                                       self.parent.OnWorkspaceNew),
                                      ('workspaceOpen', icons["workspaceOpen"],
@@ -112,7 +111,6 @@ class LMDataToolbar(BaseToolbar):
                                      (None, ),
                                      ('addgrp',  icons["addGroup"],
                                       self.parent.OnAddGroup),
-                                     (None, ),
                                      ('delcmd',  icons["delCmd"],
                                       self.parent.OnDeleteLayer),
                                      ))
