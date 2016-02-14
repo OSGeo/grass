@@ -144,12 +144,8 @@ class MapToolbar(BaseToolbar):
     def _toolbarData(self):
         """Toolbar data"""
         return self._getToolbarData((
-            #('displayMap', BaseIcons['display'],
-            #self.parent.OnDraw),
             ('renderMap', BaseIcons['render'],
              self.parent.OnRender),
-            ('erase', BaseIcons['erase'],
-             self.parent.OnErase),
             ('pointer', BaseIcons['pointer'],
              self.parent.OnPointer,
              wx.ITEM_CHECK),
@@ -182,8 +178,6 @@ class MapToolbar(BaseToolbar):
              self.OnDecoration),
             ('saveFile', BaseIcons['saveFile'],
              self.parent.SaveToFile),
-            ('printMap', BaseIcons['print'],
-            self.parent.PrintMenu),
         ))
     def InsertTool(self, data):
         """Insert tool to toolbar
@@ -277,7 +271,6 @@ class MapToolbar(BaseToolbar):
         for tool in (self.zoomRegion,
                      self.zoomMenu,
                      self.analyze,
-                     self.printMap,
                      self.select):
             self.EnableTool(tool, enabled)
         self.ChangeToolsDesc(enabled)
