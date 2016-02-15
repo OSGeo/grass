@@ -81,7 +81,7 @@ def copy_mapset(mapset, path):
     >>> sorted(os.listdir(path))
     [u'PERMANENT', u'user1']
     >>> sorted(os.listdir(os.path.join(path, 'PERMANENT')))
-    [u'DEFAULT_WIND', u'PROJ_INFO', u'PROJ_UNITS', u'VAR', u'WIND']
+    [u'DEFAULT_WIND', u'PROJ_EPSG', u'PROJ_INFO', u'PROJ_UNITS', u'VAR', u'WIND']
     >>> sorted(os.listdir(os.path.join(path, 'user1'))) # doctest: +ELLIPSIS
     [...u'SEARCH_PATH', u'VAR', u'WIND']
     >>> import shutil
