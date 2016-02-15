@@ -11,12 +11,18 @@ operations are not isolated, but part of a chain of operations. Using
 Graphical Modeler, that chain of processes (ie. GRASS modules)
 can be wrapped into one process (ie. model). So it's easier to execute
 the model later with slightly different inputs or parameters.
-
-<p>
-The modeler can be launched from the Layer Manager menu <tt>File ->
-Graphical modeler</tt> or from the main
-toolbar <img src="icons/modeler-main.png" alt="icon">. It's also
-available as stand-alone module <em>g.gui.gmodeler</em>.
+<br>
+Models represent a programming technique used in GRASS GIS to
+concatenate models together to accomplish a task. It is advantageous
+when user see boxes and ovals that are connected by lines and
+represent some tasks rather than seeing lines of coded text. Graphical
+Modeler can be used as custom tool that automates a process. Created
+model can simplify or shorten a task can be run many times and it can
+also be shared with others. Important note is that models cannot
+perform specified tasks that one cannot perform manually with GRASS
+GIS. It is recommended to first do process manually, note the steps
+(eg. using Copy button in module dialogs) and later duplicate them in
+model.
 
 <p>
 The Graphical Modeler allows you to:
@@ -30,17 +36,222 @@ The Graphical Modeler allows you to:
   <li>parameterize GRASS commands</li>
   <li>define intermediate data</li>
   <li>validate and run model</li>
-  <li>store model properties to the file (<tt>GRASS Model File|*.gxm</tt>)</li>
+  <li>store model properties to the file (<i>GRASS Model File|*.gxm</i>)</li>
   <li>export model to Python script</li>
   <li>export model to image file</li>
 </ul>
 
+<h3>Main dialog</h3>
+
+Graphical Modeler can be launched from the Layer Manager menu
+<tt>File -> Graphical modeler</tt> or from the main
+toolbar <img src="icons/modeler-main.png" alt="icon">. It's also
+available as stand-alone module <em>g.gui.gmodeler</em>.
+
+<p>
+The main Graphical Modeler menu contains options which enable the user
+to fully control the model. Directly under the main menu one can find
+toolbar with buttons (see figure below). There are options like
+(<font size="2" color="red">1</font>) Create new model,
+(<font size="2" color="red">2</font>) Load model from file,
+(<font size="2" color="red">3</font>) Save current model to file,
+(<font size="2" color="red">4</font>) Export model to image,
+(<font size="2" color="red">5</font>) Export model to Python script,
+(<font size="2" color="red">6</font>) Add command (GRASS modul) to
+model, (<font size="2" color="red">7</font>) Add data to model,
+(<font size="2" color="red">8</font>) Manually define relation between
+data and commands, (<font size="2" color="red">9</font>) Add
+loop/series to model, (<font size="2" color="red">10</font>) Add
+comment to model, (<font size="2" color="red">11</font>) Redraw model
+canvas, (<font size="2" color="red">12</font>) Validate model,
+(<font size="2" color="red">13</font>) Run model, (<font size="2"
+color="red">14</font>) Manage model variables, (<font size="2"
+color="red">15</font>) Model settings, (<font size="2"
+color="red">16</font>) Show manual and last of them is button
+(<font size="2" color="red">17</font>) Quit Graphical Modeler.
+
+<p>
 <center>
 <br>
-<img src="gmodeler_frame.png">
+<img src="g_gui_gmodeler_toolbar.png">
 <br>
-<i>Figure: A model to perform unsupervised classification using MLC and SMAP</i>
+<i>Figure: Components of Graphical Modeler menu toolbar.</i>
 </center>
+
+<p>
+There is also lower menu bar in Graphical modeler dialog where one can
+manage model items, see commands, add or manage model variables,
+define default values and descriptions. Python editor dialog window
+allows to see performation written in Python code. Rightmost tab of
+bottom menu is automatically triggered when model is activated and
+shows all the steps of running GRASS modeler modules. In case of some
+errors in calculation process, it is written at that place.
+
+<center>
+<br>
+<img src="g_gui_gmodeler_lower_toolbar.png">
+<br>
+<i>Figure: Lower Graphical Modeler menu toolbar.</i>
+</center>
+
+<h3>Components of models</h3>
+
+The workflow is usually established from four types of diagrams. Input and derived 
+model data are usually represented with oval diagram. 
+This type of model elements stores path to 
+specific data on user's disk. It is possible to insert vector data, raster data, 
+database tables, etc. Type of data is clear distinguishable in model by color. 
+Different model elements are shown on the figures below.
+
+<ul>
+  <li> (<font size="2" color="red">A</font>) raster data: <img src="g_gui_gmodeler_mraster.png" alt="raster" style="margin: 0px 0px -5px 0px">
+  <li> (<font size="2" color="red">B</font>) relation: <img src="g_gui_gmodeler_mrelation.png" alt="relation" style="margin: 10px 0px 0px 0px">
+  <li> (<font size="2" color="red">C</font>) GRASS module: <img src="g_gui_gmodeler_mmodule.png" alt="module" style="margin: 0px 0px -5px 0px">
+  <li> (<font size="2" color="red">D</font>) loop: <img src="g_gui_gmodeler_mloop.png" alt="loop" style="margin: 15px 0px -5px 0px">
+  <li> (<font size="2" color="red">E</font>) database table: <img src="g_gui_gmodeler_mdb.png" alt="db" style="margin: 10px 0px -5px 0px">
+  <li> (<font size="2" color="red">F</font>) 3D raster data: <img src="g_gui_gmodeler_mraster3d.png" alt="raster3D" style="margin: 10px 0px -5px 0px"> 
+  <li> (<font size="2" color="red">G</font>) vector data: <img src="g_gui_gmodeler_mvector.png" alt="vector" style="margin: 10px 0px -5px 0px">  
+  <li> (<font size="2" color="red">H</font>) disabled GRASS module: <img src="g_gui_gmodeler_mmodulex.png" alt="module" style="margin: 10px 0px -5px 0px"> 
+  <li> (<font size="2" color="red">I</font>) comment: <img src="g_gui_gmodeler_mcomment.png" alt="comment" style="margin: 10px 0px -5px 0px">  
+</ul> 
+
+<center>
+<img src="g_gui_gmodeler_frame1.png">
+<br>
+<i>Figure: A model to perform unsupervised classification using MLC
+(<a href="i.maxlik.html">i.maxlik</a>) and SMAP
+(<a href="i.smap.html">i.smap</a>).</i>
+</center>
+
+<p>
+Another example:
+
+<center>
+<img src="g_gui_gmodeler_frame2.png">
+<br>
+<i>Figure: A model to perform estimation of average annual soil loss
+caused by sheet and rill erosion using The Universal Soil Loss
+Equation.</i>
+</center>
+
+<p>
+Example as part of landslide prediction process:
+
+<center>
+<br>
+<img src="g_gui_gmodeler_frame3.png">
+<br>
+<i>Figure: A model to perform creation of parametric maps used by geologists 
+to predict landlides in area of interest.</i>
+</center>
+
+<h2>EXAMPLE</h2>
+
+In this example <tt>zipcodes_wake</tt> vector data
+and <tt>elev_state_500m</tt> raster data from the North Carolina
+sample dataset (original <a href="http://grass.osgeo.org/sampledata/north_carolina/nc_rast_geotiff.zip">raster</a> and
+<a href="http://grass.osgeo.org/sampledata/north_carolina/nc_shape.zip">vector</a>
+data) are used to calculate average elevation for every
+zone. Important part of the process is Graphical Modeler, namely it's
+possibilities of process automation.
+
+<p>
+In command console it would be as follows:
+
+<div class="code"><pre>
+# input data import
+r.import input=elev_state_500m.tif output=elevation 
+v.import input=zipcodes_wake.shp output=zipcodes_wake 
+# computation region settings
+g.region vector=zipcodes_wake  
+# raster statistics (average values), upload to vector map table calculation
+v.rast.stats -c map=zipcodes_wake raster=elevation column_prefix=rst method=average 
+# univariate statistics on selected table column for zipcode map calculation
+v.db.univar map=zipcodes_wake column=rst_average 
+# conversation from vector to raster layer (due to result presentation)
+v.to.rast input=zipcodes_wake output=zipcodes_avg use=attr attribute_column=rst_average 
+# display settings
+r.colors -e map=zipcodes_avg color=bgyr                                         
+d.mon start=wx0 bgcolor=white                                                   
+d.barscale style=arrow_ends color=black bgcolor=white fontsize=10
+d.rast map=zipcodes_avg bgcolor=white                                                                                                 
+d.vect map=zipcodes_wake type=boundary color=black                                                     
+d.northarrow style=1a at=85.0,15.0 color=black fill_color=black width=0 fontsize=10
+d.legend raster=zipcodes_avg lines=50 thin=5 labelnum=5 color=black fontsize=10 
+</pre></div>
+
+To start performing above steps as automatic process with Graphical Modeler press 
+<img src="icons/modeler-main.png" alt="icon"> icon or
+type <em>g.gui.gmodeler</em>. The simplest way of inserting elements
+is by adding complete GRASS command to Command field in GRASS command
+dialog (see figure below).  With full text search one can faster
+module hunting. Then label and command can be added. In case that only
+module name is inserted, after <i>Enter</i> button pressing, module
+dialog window is displayed and it is possible to set all of usual
+module options (parameters and flags).
+
+<center>
+<img src="g_gui_gmodeler_dlg_module.png">
+<br>
+<i>Figure: Dialog for adding GRASS commands to model.</i>
+</center>
+
+<p>  
+All of used modules can be parameterized in model. That causes launching 
+dialog with input options for model after model is run. In this example
+input layers (<tt>zipcodes_wake</tt> vector data and <tt>elev_state_500m</tt> 
+raster data) are parameterized. Parameterized elements have a little thicker boarder
+in model scheme with diagrams.
+
+<center>
+<img src="g_gui_gmodeler_parameter.png">
+<br>
+<i>Figure: A model parameter settings.</i>
+</center>
+
+<p>
+Final model, list of all model items, Python code window with <i>Save</i> and 
+<i>Run</i> option are on figures below.
+
+<center>
+<img src="g_gui_gmodeler_zc.png">
+<br>
+<i>Figure: A model to perform average statistics for zipcode zones.</i>
+</center>
+<br>
+<center>
+<img src="g_gui_gmodeler_zc_items.png">
+<br>
+<i>Figure: Items with Python editor window.</i>
+</center>
+
+<p>
+After model is run with <img src="icons/execute.png" alt="run"> button
+and inputs are set, results can be displayed as follows:
+
+<center>
+<img src="g_gui_gmodeler_avg_auto.png">
+<br>
+<i>Figure: Average elevation for zipcodes using North Carolina sample dataset as 
+automatic calculation performed by Graphical Modeler.</i>
+</center>
+
+<p>
+Very useful advantage is that for example, this model can later be
+used to calculate (let's say) average precipe value for every
+administrative region in Slovakia using <tt>precip</tt> raster data
+from
+<a href="https://grass.osgeo.org/uploads/grass/sampledata/slovakia3d_grass7.tar.gz">
+Slovakia precipitation dataset</a> and administration boudaries of Slovakia from 
+<a href="https://www.geoportal.sk/sk/zbgis_smd/na-stiahnutie/">Slovak Geoportal</a>
+(only with a few clicks).
+
+<p>
+<br>
+<em>
+  <a href="wxGUI.html">wxGUI</a><br>
+  <a href="wxGUI.components.html">wxGUI components</a>
+</em>
 
 <h2>SEE ALSO</h2>
 
@@ -61,7 +272,8 @@ tutorials</a>).
 
 <h2>AUTHOR</h2>
 
-Martin Landa, OSGeoREL, Czech Technical University in Prague, Czech Republic
+Martin Landa, OSGeoREL, Czech Technical University in Prague, Czech Republic<br>
+Various manual improvements by Ludmila Furkevicova, Slovak University of Technology in Bratislava, Slovak Republic
 
 <p>
 <i>$Date$</i>
