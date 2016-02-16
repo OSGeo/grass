@@ -76,9 +76,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       "libblas-dev",
       "liblapack-dev",
       "unixodbc-dev",
-      "zlib1g-dev"
-      #    "liblas",
-      #    "liblas-c-dev"
+      "zlib1g-dev",
+      "liblas-c-dev"
     ]
     
     unless File.exists?(".no_apt_cache")
