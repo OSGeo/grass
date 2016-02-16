@@ -916,7 +916,7 @@ class MapFrame(SingleMapFrame):
         self._QueryMapDone()
 
         self._highlighter_layer.Clear()
-        if 'Category' in vectQuery[0]:
+        if vectQuery and 'Category' in vectQuery[0]:
             self._queryHighlight(vectQuery)
 
         result = rastQuery + vectQuery
