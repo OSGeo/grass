@@ -145,6 +145,7 @@ Contents
     - News section
     - http://grass.osgeo.org/download/software/
     - http://grass.osgeo.org/download/software/sources/
+    - http://grass.osgeo.org/download/software/linux/
     - http://grass.osgeo.org/grass70/
     - http://grass.osgeo.org/home/history/releases/
     - http://grass.osgeo.org/development/svn/svn-tags/ (add tag): echo $RELEASETAG
