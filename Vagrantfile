@@ -97,10 +97,15 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       # install packages we need we need
       pkg_cmd << "apt-get install -q -y " + packageList.join(" ") << " ; "
       host.vm.provision :shell, :inline => pkg_cmd
+
       scripts = [
-        "grass.sh",
+      "clean.sh",
       ];
       scripts.each { |script| host.vm.provision :shell, :privileged => false, :path => "tools/vagrant/" << script }
     end
+    scripts = [
+      "compile.sh",
+    ];
+    scripts.each { |script| host.vm.provision :shell, :privileged => false, :path => "tools/vagrant/" << script }
   end
 end
