@@ -30,6 +30,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     config.ssh.forward_agent = true
     config.ssh.forward_x11 = true
+
+    ### Define your GRASS data directory to be synce'd on virtual machine
+    # grassdata_dir = "/opt/grassdata"
+    # host.vm.synced_folder grassdata_dir, "/home/vagrant/grassdata"
     
     ppaRepos = [
       "ppa:ubuntugis/ubuntugis-unstable"
