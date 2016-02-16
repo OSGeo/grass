@@ -45,7 +45,8 @@ if [ ! -f "include/Make/Platform.make" ] ; then
         --with-proj-share=/usr/share/proj \
         --with-wxwidgets=/usr/bin/wx-config \
         --with-python \
-        --with-cairo
+        --with-cairo \
+        --with-liblas
 fi
 
 make -j $NUMTHREADS
