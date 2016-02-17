@@ -139,13 +139,17 @@ class LocationMapTree(TreeView):
             nprocs = cpu_count()
         except NotImplementedError:
                 nprocs = 4
+                
         results = dict()
         errors = []
         location_nodes = []
         nlocations = len(locations)
+        grassdata_node = self._model.AppendNode(parent=self._model.root,
+                                                label=_('GRASS locations ({})').format(self.gisdbase),
+                                                data=dict(type='grassdata'))
         for location in locations:
             results[location] = dict()
-            varloc = self._model.AppendNode(parent=self._model.root, label=location,
+            varloc = self._model.AppendNode(parent=grassdata_node, label=location,
                                             data=dict(type='location', name=location))
             location_nodes.append(varloc)
             loc_count += 1
