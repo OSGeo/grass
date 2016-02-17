@@ -264,6 +264,20 @@ class LocationMapTree(TreeView):
         else:
             Debug.msg(1, "Location <%s> not found" % location)
 
+    def ExpandCurrentMapset(self):
+        """Expand current mapset"""
+        gisenv = gscript.gisenv()
+        location = gisenv['LOCATION_NAME']
+        mapset = gisenv['MAPSET']
+        locationItem = self._model.SearchNodes(name=location, type='location')
+        mapsetItem = None
+        if locationItem:
+            mapsetItem = self._model.SearchNodes(parent=locationItem[0], name=mapset, type='mapset')
+        if mapsetItem:
+            self.Select(mapsetItem[0], select=True)
+            self.ExpandNode(mapsetItem[0], recursive=True)
+        else:
+            Debug.msg(1, "Mapset <%s> not found" % mapset)
 
 class DataCatalogTree(LocationMapTree):
     def __init__(self, parent, giface=None):
