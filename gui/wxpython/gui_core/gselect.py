@@ -413,8 +413,9 @@ class TreeCtrlComboPopup(ListCtrlComboPopup):
         """
         # update list
         self.seltree.DeleteAllItems()
-        self._getElementList(self.type, self.mapsets, elements, exclude)
-
+        if self.type:
+            self._getElementList(self.type, self.mapsets, elements, exclude)
+        
         if len(self.value) > 0:
             root = self.seltree.GetRootItem()
             if not root:

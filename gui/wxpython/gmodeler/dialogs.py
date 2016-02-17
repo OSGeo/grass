@@ -55,7 +55,8 @@ class ModelDataDialog(SimpleDialog):
         self.element = Select(parent = self.panel,
                               type = self.shape.GetPrompt(),
                               validator = SimpleValidator(callback = self.ValidatorCallback))
-        self.element.SetValue(shape.GetValue())
+        if shape.GetValue():
+            self.element.SetValue(shape.GetValue())
         
         self.Bind(wx.EVT_BUTTON, self.OnOK,     self.btnOK)
         self.Bind(wx.EVT_BUTTON, self.OnCancel, self.btnCancel)
