@@ -1071,17 +1071,25 @@ class ModelAction(ModelObject, ogl.DividedShape):
 
     def SetComment(self, comment):
         """Set comment"""
+        self.comment = comment
+
         if self.regionComment is None:
             self.regionComment = ogl.ShapeRegion()
             self.regionComment.SetFormatMode(ogl.FORMAT_CENTRE_HORIZ)
             font = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
             font.SetStyle(wx.ITALIC)
             self.regionComment.SetFont(font)
+
+        self.regionComment.SetText(comment)
+            
+        if self.comment:
             self.AddRegion(self.regionComment)
             self.regionLabel.SetProportions(0.0, 0.4)
-            
-        self.comment = comment
-        self.regionComment.SetText(comment)
+        else:
+            self.ClearRegions()
+            self.AddRegion(self.regionLabel)
+            self.regionLabel.SetProportions(0.0, 1.0)
+        
         self.SetRegionSizes()
         self.ReformatRegions()
 
