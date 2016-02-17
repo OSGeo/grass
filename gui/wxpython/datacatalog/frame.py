@@ -38,8 +38,8 @@ class DataCatalogFrame(wx.Frame):
         # tree
         self.tree = DataCatalogTree(parent=self.panel, giface=self._giface)
         self.tree.InitTreeItems()
-        self.tree.ExpandCurrentLocation()
-
+        self.tree.ExpandCurrentMapset()
+        
         # buttons
         self.btnClose = wx.Button(parent=self.panel, id=wx.ID_CLOSE)
         self.btnClose.SetToolTipString(_("Close GRASS GIS Data Catalog"))
