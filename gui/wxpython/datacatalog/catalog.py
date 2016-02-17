@@ -67,4 +67,4 @@ class DataCatalog(wx.Panel):
 
     def LoadItemsDone(self):
         self._loaded = True
-        self.tree.ExpandCurrentLocation()
+        self.tree.ExpandCurrentMapset()
