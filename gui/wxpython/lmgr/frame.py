@@ -1889,19 +1889,16 @@ class GMFrame(wx.Frame):
         for layerName in mapLayers:
             if ltype == 'raster':
                 cmd = ['d.rast', 'map=%s' % layerName]
-                wxType = 'raster'
             elif ltype == 'raster_3d':
                 cmd = ['d.rast3d', 'map=%s' % layerName]
-                wxType = '3d-raster'
             elif ltype == 'vector':
                 cmd = ['d.vect', 'map=%s' % layerName] + GetDisplayVectSettings()
-                wxType = 'vector'
             else:
                 GError(parent = self,
                        message = _("Unsupported map layer type <%s>.") % ltype)
                 return
             
-            newItem = maptree.AddLayer(ltype = wxType,
+            newItem = maptree.AddLayer(ltype = ltype,
                                        lname = layerName,
                                        lchecked = check,
                                        lopacity = 1.0,
@@ -1933,20 +1930,10 @@ class GMFrame(wx.Frame):
     def AddOrUpdateMap(self, mapName, ltype):
         """Add map layer or update"""
         # start new map display if no display is available
-
-        # TODO: standardize type identifiers
-        convertType = {'raster': 'raster',
-                       '3d-raster': 'raster_3d',
-                       'vector': 'vector'}
-        try:
-            grassType = convertType[ltype]
-        except KeyError:
-            if ltype in convertType.values():
-                grassType = ltype
-            else:
-                GError(parent = self,
-                       message = _("Unsupported map layer type <%s>.") % ltype)
-                return
+        if ltype not in ['raster', 'raster_3d', 'vector']:
+            GError(parent = self,
+                   message = _("Unsupported map layer type <%s>.") % ltype)
+            return
 
         if not self.currentPage:
             self.AddMaps([mapName], grassType, check = True)
@@ -1974,7 +1961,7 @@ class GMFrame(wx.Frame):
         if not self.currentPage:
             self.NewDisplay(show = True)
         
-        self._popupMenu((('layer3d-raster', self.OnAddRaster3D),
+        self._popupMenu((('layerRaster_3d', self.OnAddRaster3D),
                          (None, None),
                          ('layerRgb',    self.OnAddRasterRGB),
                          ('layerHis',    self.OnAddRasterHIS),
@@ -2037,7 +2024,7 @@ class GMFrame(wx.Frame):
     def OnAddRaster3D(self, event):
         """Add 3D raster map to the current layer tree"""
         self.notebook.SetSelectionByName('layers')
-        self.GetLayerTree().AddLayer('3d-raster')
+        self.GetLayerTree().AddLayer('raster_3d')
 
     def OnAddRasterRGB(self, event):
         """Add RGB raster map to the current layer tree"""

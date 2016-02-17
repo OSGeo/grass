@@ -100,7 +100,7 @@ LMIcons = {
                             label = _('Add rhumbline layer')),
     'layerLabels'  : MetaIcon(img = 'label',
                             label = _('Add labels')),
-    'layer3d-raster'  : MetaIcon(img = 'raster3d',
+    'layerRaster_3d'  : MetaIcon(img = 'raster3d',
                             label = _('Add 3D raster map layer'),
                             desc  =  _('Note that 3D raster data are rendered only in 3D view mode')),
     'layerWms'      :  MetaIcon(img = 'wms',
@@ -217,7 +217,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
 
     def _setIcons(self, il):
         self._icon = {}
-        for iconName in ("layerRaster", "layer3d-raster", "layerRgb",
+        for iconName in ("layerRaster", "layerRaster_3d", "layerRgb",
                          "layerHis", "layerShaded", "layerRastarrow",
                          "layerRastnum", "layerVector", "layerThememap",
                          "layerThemechart", "layerGrid", "layerGeodesic",
@@ -439,7 +439,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         if ltype not in ("group", "command"):
             if numSelected == 1:
                 self.popupMenu.AppendSeparator()
-                if ltype != '3d-raster':
+                if ltype != 'raster_3d':
                     item = wx.MenuItem(self.popupMenu, id = self.popupID['opacity'], text=_("Change opacity level"))
                     item.SetBitmap(MetaIcon(img = 'layer-opacity').GetBitmap(self.bmpsize))
                     self.popupMenu.AppendItem(item)
@@ -449,11 +449,11 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.popupMenu.AppendItem(item)
                 self.Bind(wx.EVT_MENU, self.OnPopupProperties, id = self.popupID['properties'])
             
-                if ltype in ('raster', 'vector', '3d-raster') and self.mapdisplay.IsPaneShown('3d'):
+                if ltype in ('raster', 'vector', 'raster_3d') and self.mapdisplay.IsPaneShown('3d'):
                     self.popupMenu.Append(self.popupID['nviz'], _("3D view properties"))
                     self.Bind (wx.EVT_MENU, self.OnNvizProperties, id = self.popupID['nviz'])
 
-            if same and ltype in ('raster', 'vector', 'rgb', '3d-raster'):
+            if same and ltype in ('raster', 'vector', 'rgb', 'raster_3d'):
                 self.popupMenu.AppendSeparator()
                 item = wx.MenuItem(self.popupMenu, id = self.popupID['zoom'], text = _("Zoom to selected map(s)"))
                 item.SetBitmap(MetaIcon(img = 'zoom-layer').GetBitmap(self.bmpsize))
@@ -639,7 +639,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 self.popupMenu.AppendItem(item)
                 self.Bind (wx.EVT_MENU, self.OnMetadata, id = self.popupID['meta'])
             
-        elif mltype and mltype == '3d-raster':
+        elif mltype and mltype == 'raster_3d':
             if numSelected == 1:
                 self.popupMenu.AppendSeparator()
                 self.popupMenu.Append(self.popupID['color'], _("Set color table"))
@@ -698,7 +698,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             cmd = ['r.info']
         elif mltype == 'vector':
             cmd = ['v.info']
-        elif mltype == '3d-raster':
+        elif mltype == 'raster_3d':
             cmd = ['r3.info']
         cmd.append('map=%s' % mapLayer.GetName())
 
@@ -733,7 +733,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 rast.append(mapLayer.GetName())
             elif mltype == 'vector':
                 vect.append(mapLayer.GetName())
-            elif mltype == '3d-raster':
+            elif mltype == 'raster_3d':
                 rast3d.append(mapLayer.GetName())
             elif mltype == 'rgb':
                 for rname in mapLayer.GetName().splitlines():
@@ -749,7 +749,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         
         # print output to command log area
         if len(cmd) > 1:
-            if mltype == '3d-raster':
+            if mltype == 'raster_3d':
                 cmd.append('-3')
             self._giface.RunCmd(cmd, compReg = False,
                                 notification=Notification.NO_NOTIFICATION)
@@ -773,7 +773,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         raster2d = []
         raster3d = []
         for layer in self.GetSelectedLayers():
-            if self.GetLayerInfo(layer, key='type') == '3d-raster':
+            if self.GetLayerInfo(layer, key='type') == 'raster_3d':
                 raster3d.append(self.GetLayerInfo(layer, key = 'maplayer').GetName())
             else:
                 raster2d.append(self.GetLayerInfo(layer, key = 'maplayer').GetName())
@@ -805,7 +805,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             key = 'vector'
             module = 'vect'
             label = _('Vector map')
-        elif ltype == '3d-raster':
+        elif ltype == 'raster_3d':
             key = 'raster_3d'
             module = 'rast3d'
             label = _('3D raster map')
@@ -877,7 +877,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         raster2d = []
         raster3d = []
         for layer in self.GetSelectedLayers():
-            if self.GetLayerInfo(layer, key='type') == '3d-raster':
+            if self.GetLayerInfo(layer, key='type') == 'raster_3d':
                 raster3d.append(self.GetLayerInfo(layer, key = 'maplayer').GetName())
             else:
                 raster2d.append(self.GetLayerInfo(layer, key = 'maplayer').GetName())
@@ -1010,7 +1010,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             self.lmgr.nviz.SetPage('surface')
         elif ltype == 'vector':
             self.lmgr.nviz.SetPage('vector')
-        elif ltype == '3d-raster':
+        elif ltype == 'raster_3d':
             self.lmgr.nviz.SetPage('volume')
         
     def OnRenameLayer (self, event):
@@ -1035,7 +1035,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         """Add new item to the layer tree, create corresponding MapLayer instance.
         Launch property dialog if needed (raster, vector, etc.)
 
-        :param ltype: layer type (raster, vector, 3d-raster, ...)
+        :param ltype: layer type (raster, vector, raster_3d, ...)
         :param lname: layer name
         :param lchecked: if True layer is checked
         :param lopacity: layer opacity level
@@ -1127,7 +1127,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
         else:
             if ltype in self._icon:
                 self.SetItemImage(layer, self._icon[ltype])
-                # do not use title() - will not work with ltype == '3d-raster'
+                # do not use title() - will not work with ltype == 'raster_3d'
                 self.SetItemText(layer, '%s %s' % (LMIcons["layer"+ltype[0].upper()+ltype[1:]].GetLabel(),
                                                    _('(double click to set properties)') + ' ' * 15))
             else:
@@ -1369,7 +1369,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             if checked: # enable
                 if mapLayer.type == 'raster':
                     self.mapdisplay.MapWindow.LoadRaster(item)
-                elif mapLayer.type == '3d-raster':
+                elif mapLayer.type == 'raster_3d':
                     self.mapdisplay.MapWindow.LoadRaster3d(item)
                 elif mapLayer.type == 'vector':
                     vInfo = gvector.vector_info_topo(mapLayer.GetName())
@@ -1381,7 +1381,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
             else: # disable
                 if mapLayer.type == 'raster':
                     self.mapdisplay.MapWindow.UnloadRaster(item)
-                elif mapLayer.type == '3d-raster':
+                elif mapLayer.type == 'raster_3d':
                     self.mapdisplay.MapWindow.UnloadRaster3d(item)
                 elif mapLayer.type == 'vector':
                     self.mapdisplay.MapWindow.UnloadVector(item)
@@ -1493,7 +1493,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                 elif type == 'vector':
                     self.lmgr.nviz.UpdatePage('vector')
                     self.lmgr.nviz.SetPage('vector')
-                elif type == '3d-raster':
+                elif type == 'raster_3d':
                     self.lmgr.nviz.UpdatePage('volume')
                     self.lmgr.nviz.SetPage('volume')
 
@@ -1709,7 +1709,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     
                     mapWin.LoadRaster(layer)
                     
-                elif mapLayer.type == '3d-raster':
+                elif mapLayer.type == 'raster_3d':
                     if mapWin.IsLoaded(layer):
                         mapWin.UnloadRaster3d(layer)
                     
@@ -1722,7 +1722,7 @@ class LayerTree(treemixin.DragAndDrop, CT.CustomTreeCtrl):
                     mapWin.LoadVector(layer)
 
                 # reset view when first layer loaded
-                nlayers = len(mapWin.Map.GetListOfLayers(ltype = ('raster', '3d-raster', 'vector'),
+                nlayers = len(mapWin.Map.GetListOfLayers(ltype = ('raster', 'raster_3d', 'vector'),
                                                          active = True))
                 if nlayers < 2:
                     mapWin.ResetView()

@@ -129,7 +129,7 @@ class NvizToolWindow(FN.FlatNotebook):
         
     def SetInitialMaps(self):
         """Set initial raster and vector map"""
-        for ltype in ('raster', 'vector', '3d-raster'):
+        for ltype in ('raster', 'vector', 'raster_3d'):
             selectedLayer = self.tree.GetSelectedLayer(multi = False, checkedOnly = True)
             if selectedLayer is None:
                 continue
@@ -147,7 +147,7 @@ class NvizToolWindow(FN.FlatNotebook):
                 self.FindWindowById(self.win['fringe']['map']).SetValue(selection)
             elif ltype == 'vector':
                 self.FindWindowById(self.win['vector']['map']).SetValue(selection)
-            elif ltype == '3d-raster':
+            elif ltype == 'raster_3d':
                 self.FindWindowById(self.win['volume']['map']).SetValue(selection)
                
     def UpdateState(self, **kwargs):
@@ -1515,8 +1515,6 @@ class NvizToolWindow(FN.FlatNotebook):
     def GselectOnPopup(self, ltype, exclude = False):
         """Update gselect.Select() items"""
         maps = list()
-        # TODO: sync the element names
-        ltype = '3d-raster' if ltype == 'raster_3d' else ltype
         for layer in self.mapWindow.Map.GetListOfLayers(ltype = ltype, active = True):
             maps.append(layer.GetName())
         return maps, exclude
@@ -2055,7 +2053,7 @@ class NvizToolWindow(FN.FlatNotebook):
         elif nvizType == 'vector':
             return self._getLayerPropertiesByName(name, mapType = 'vector')
         elif nvizType == 'volume':
-            return self._getLayerPropertiesByName(name, mapType = '3d-raster')
+            return self._getLayerPropertiesByName(name, mapType = 'raster_3d')
         
         return None
 
@@ -2063,7 +2061,7 @@ class NvizToolWindow(FN.FlatNotebook):
         """Get layer (render.Layer) by name and type.
 
         :param name: layer name
-        :param mapType: map type (raster, vector, 3d-raster)
+        :param mapType: map type (raster, vector, raster_3d)
         """
         layers = self.mapWindow.Map.GetListOfLayers(ltype = mapType, name = name)
         if layers:
@@ -2074,7 +2072,7 @@ class NvizToolWindow(FN.FlatNotebook):
         """Get nviz properties stored in layertree items by name and type.
 
         :param name: layer name
-        :param mapType: map type (raster, vector, 3d-raster)
+        :param mapType: map type (raster, vector, raster_3d)
         """
         items = self.tree.FindItemByData(key = 'name', value = name)
         if not items:
@@ -2810,12 +2808,12 @@ class NvizToolWindow(FN.FlatNotebook):
         """3D Raster map selected, update surface page"""
         name = event.GetString()
         try:
-            data = self._getLayerPropertiesByName(name, mapType = '3d-raster')['volume']
+            data = self._getLayerPropertiesByName(name, mapType = 'raster_3d')['volume']
         except:
             self.EnablePage('volume', False)
             return
         
-        layer = self._getMapLayerByName(name, mapType = '3d-raster')
+        layer = self._getMapLayerByName(name, mapType = 'raster_3d')
         self.EnablePage('volume', True)
         self.UpdateVolumePage(layer, data, updateName = False)
         
@@ -3023,7 +3021,7 @@ class NvizToolWindow(FN.FlatNotebook):
                                                    'value' : str(value),
                                                    'update' : None }
         else: # volume / isosurface
-            data = self._getLayerPropertiesByName(name, mapType = '3d-raster')
+            data = self._getLayerPropertiesByName(name, mapType = 'raster_3d')
             list = self.FindWindowById(self.win['volume']['isosurfs'])
             id = list.GetSelection()
             if id != -1:
@@ -3131,7 +3129,7 @@ class NvizToolWindow(FN.FlatNotebook):
                                                        'value' : str(value),
                                                        'update' : None }
             else:
-                data = self._getLayerPropertiesByName(name, mapType = '3d-raster')
+                data = self._getLayerPropertiesByName(name, mapType = 'raster_3d')
                 list = self.FindWindowById(self.win['volume']['isosurfs'])
                 id = list.GetSelection()
                 if id > -1:
@@ -3771,7 +3769,7 @@ class NvizToolWindow(FN.FlatNotebook):
         
         if event:
             name = self.FindWindowById(self.win['volume']['map']).GetValue()
-            layer = self._getMapLayerByName(name, mapType = '3d-raster')
+            layer = self._getMapLayerByName(name, mapType = 'raster_3d')
             self.UpdateVolumePage(layer, data, updateName = False)
             
         sizer.Layout()
@@ -3924,7 +3922,7 @@ class NvizToolWindow(FN.FlatNotebook):
         
         # update dialog
         name = self.FindWindowById(self.win['volume']['map']).GetValue()
-        layer = self._getMapLayerByName(name, mapType = '3d-raster')
+        layer = self._getMapLayerByName(name, mapType = 'raster_3d')
         
         if mode == 'isosurf':
             data = self.GetLayerData('volume')['volume']['isosurface'][selection]
@@ -3944,7 +3942,7 @@ class NvizToolWindow(FN.FlatNotebook):
         list = self.FindWindowById(self.win['volume'][mode + 's'])
         
         name = self.FindWindowById(self.win['volume']['map']).GetValue()
-        layer = self._getMapLayerByName(name, mapType = '3d-raster')
+        layer = self._getMapLayerByName(name, mapType = 'raster_3d')
         data = self.GetLayerData('volume')['volume']
         id = data['object']['id']
         
@@ -4019,7 +4017,7 @@ class NvizToolWindow(FN.FlatNotebook):
             list.SetSelection(list.GetCount()-1)
         
         name = self.FindWindowById(self.win['volume']['map']).GetValue()
-        layer = self._getMapLayerByName(name, mapType = '3d-raster')
+        layer = self._getMapLayerByName(name, mapType = 'raster_3d')
         data = self.GetLayerData('volume')['volume']
 
         vid = data['object']['id']
@@ -4063,7 +4061,7 @@ class NvizToolWindow(FN.FlatNotebook):
             return # this should not happen
         
         name = self.FindWindowById(self.win['volume']['map']).GetValue()
-        layer = self._getMapLayerByName(name, mapType = '3d-raster')
+        layer = self._getMapLayerByName(name, mapType = 'raster_3d')
         data = self.GetLayerData('volume')['volume']
         
         id = data['object']['id']
@@ -4104,7 +4102,7 @@ class NvizToolWindow(FN.FlatNotebook):
             return # this should not happen
         
         name = self.FindWindowById(self.win['volume']['map']).GetValue()
-        layer = self._getMapLayerByName(name, mapType = '3d-raster')
+        layer = self._getMapLayerByName(name, mapType = 'raster_3d')
         data = self.GetLayerData('volume')['volume']
         
         id = data['object']['id']
@@ -4559,7 +4557,7 @@ class NvizToolWindow(FN.FlatNotebook):
                     if layer:
                         self.UpdateVectorPage(layer, data['vector'])
                 elif pageId == 'volume':
-                    layer = self._getMapLayerByName(name, mapType = '3d-raster')
+                    layer = self._getMapLayerByName(name, mapType = 'raster_3d')
                     if layer:
                         self.UpdateVolumePage(layer, data['volume'])
         elif pageId == 'light':

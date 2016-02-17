@@ -942,7 +942,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                     if event.CmdDown() and id1 == data['surface']['object']['id']:
                         break
                     
-                elif mapLayer.GetType() == '3d-raster':
+                elif mapLayer.GetType() == 'raster_3d':
                     if 'x' not in data['volume']['position']:
                         data['volume']['position']['x'] = 0
                         data['volume']['position']['y'] = 0
@@ -1304,7 +1304,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 continue
                 
             if not item.IsChecked() or \
-                    type not in ('raster', 'vector', '3d-raster'):
+                    type not in ('raster', 'vector', 'raster_3d'):
                 item = self.tree.GetNextItem(item)
                 continue
             
@@ -1339,7 +1339,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             try:
                 if type ==  'raster':
                     self.LoadRaster(item)
-                elif type ==  '3d-raster':
+                elif type ==  'raster_3d':
                     self.LoadRaster3d(item)
                 elif type ==  'vector':
                     layer = self.tree.GetLayerInfo(item, key = 'maplayer')
@@ -1384,7 +1384,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             try:
                 if ltype ==  'raster':
                     self.UnloadRaster(layer)
-                elif ltype ==  '3d-raster':
+                elif ltype ==  'raster_3d':
                     self.UnloadRaster3d(layer) 
                 elif ltype ==  'vector':
                     maplayer = self.tree.GetLayerInfo(layer, key = 'maplayer')
@@ -1473,7 +1473,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 self.SetVectorSurface(data['vector']['points'])
                 self.SetVectorSurface(data['vector']['lines'])
                 
-            elif mapType ==  '3d-raster':
+            elif mapType ==  'raster_3d':
                 # reset to default properties 
                 data[nvizType] = self.nvizDefault.SetVolumeDefaultProp()
                 
@@ -1509,7 +1509,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         
         # set id
         if id > 0:
-            if mapType in ('raster', '3d-raster'):
+            if mapType in ('raster', 'raster_3d'):
                 data[nvizType]['object'] = { 'id' : id,
                                             'init' : False }
             elif mapType ==  'vector':
@@ -1542,14 +1542,14 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         """
         layer = self.tree.GetLayerInfo(item, key = 'maplayer')
         
-        if layer.type not in ('raster', '3d-raster'):
+        if layer.type not in ('raster', 'raster_3d'):
             return
         
         if layer.type ==  'raster':
             id = self._display.LoadSurface(str(layer.name), None, None)
             nvizType = 'surface'
             errorMsg = _("Loading raster map")
-        elif layer.type ==  '3d-raster':
+        elif layer.type ==  'raster_3d':
             id = self._display.LoadVolume(str(layer.name), None, None)
             nvizType = 'volume'
             errorMsg = _("Loading 3d raster map")
@@ -1557,7 +1557,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
             id = -1
         
         if id < 0:
-            if layer.type in ('raster', '3d-raster'):
+            if layer.type in ('raster', 'raster_3d'):
                 self.log.WriteError("%s <%s> %s" % (errorMsg, layer.name, _("failed")))
             else:
                 self.log.WriteError(_("Unsupported layer type '%s'") % layer.type)
@@ -1664,7 +1664,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         """
         layer = self.tree.GetLayerInfo(item, key = 'maplayer')
         
-        if layer.type not in ('raster', '3d-raster'):
+        if layer.type not in ('raster', 'raster_3d'):
             return
         
         data = self.tree.GetLayerInfo(item, key = 'nviz')
@@ -1702,7 +1702,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                 win.SetItems(self.GetLayerNames(layer.type))
                 win = toolWin.FindWindowById(toolWin.win['surface']['map'])
                 win.SetValue('')
-            if layer.type ==  '3d-raster':
+            if layer.type ==  'raster_3d':
                 win = toolWin.FindWindowById(toolWin.win['volume']['map'])
                 win.SetValue('')
             if layer.type ==  'vector':
@@ -2258,7 +2258,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
                         return data['vector']['points']['object']['id']
                     elif vsubtyp ==  'vline':
                         return data['vector']['lines']['object']['id']
-                elif type ==  '3d-raster':
+                elif type ==  'raster_3d':
                     return data['volume']['object']['id']
             except KeyError:
                 return -1
@@ -2290,7 +2290,7 @@ class GLWindow(MapWindowBase, glcanvas.GLCanvas):
         for item in self.layers:
             if self.tree.GetLayerInfo(item, key = 'type') == 'raster':
                 rasters.append(item)
-            elif self.tree.GetLayerInfo(item, key = 'type') == '3d-raster':
+            elif self.tree.GetLayerInfo(item, key = 'type') == 'raster_3d':
                 volumes.append(item)
             elif self.tree.GetLayerInfo(item, key = 'type') == 'vector':
                 vectors.append(item)

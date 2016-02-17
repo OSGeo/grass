@@ -895,7 +895,7 @@ class WriteWorkspaceFile(object):
                     self.file.write('%s<nviz>\n' % (' ' * self.indent))
                     if maplayer.type == 'raster':
                         self.__writeNvizSurface(nviz['surface'])
-                    if maplayer.type == '3d-raster':
+                    if maplayer.type == 'raster_3d':
                         self.__writeNvizVolume(nviz['volume'])
                     elif maplayer.type == 'vector':
                         self.__writeNvizVector(nviz['vector'])

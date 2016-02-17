@@ -676,7 +676,7 @@ class GConsole(wx.EvtHandler):
         name = task.get_name()
         for p in task.get_options()['params']:
             prompt = p.get('prompt', '')
-            if prompt in ('raster', 'vector', '3d-raster') and p.get('value', None):
+            if prompt in ('raster', 'vector', 'raster_3d') and p.get('value', None):
                 if p.get('age', 'old') == 'new' or \
                         name in ('r.colors', 'r3.colors', 'v.colors', 'v.proj', 'r.proj'):
                     # if multiple maps (e.g. r.series.interp), we need add each

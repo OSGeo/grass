@@ -564,7 +564,7 @@ class TaskFrame(wx.Frame):
             addLayer = False
             for p in self.task.params:
                 if p.get('age', 'old') == 'new' and \
-                   p.get('prompt', '') in ('raster', 'vector', '3d-raster'):
+                   p.get('prompt', '') in ('raster', 'vector', 'raster_3d'):
                     addLayer = True
             
             if addLayer:
@@ -2551,7 +2551,7 @@ class GUI:
                     element = p.get('element', '') 
                     if age == 'old' and \
                             element in ('cell', 'grid3', 'vector') and \
-                            prompt in ('raster', '3d-raster', 'vector'):
+                            prompt in ('raster', 'raster_3d', 'vector'):
                         return p.get('name', None)
         return None
 
