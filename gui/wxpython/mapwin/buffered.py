@@ -1814,7 +1814,7 @@ class BufferedMapWindow(MapWindowBase, wx.Window):
             # only one raster is used: g.region does not support multiple
             if l.type == 'raster':
                 rast.append(l.GetName())
-            elif l.type == '3d-raster':
+            elif l.type == 'raster_3d':
                 rast3d = l.GetName()
             elif l.type == 'vector':
                 if self.digit and \

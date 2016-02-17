@@ -73,7 +73,7 @@ class LayerList(object):
                     opacity=1, label=None, pos=0):
         """Creates new layer and adds it to the list (insert to the first position).
 
-        :param ltype: layer type (raster, vector, 3d-raster, ...)
+        :param ltype: layer type (raster, vector, raster_3d, ...)
         :param cmd: command (given as a list)
         :param active: if True layer is active
         :param hidden: if True layer is hidden
@@ -357,16 +357,7 @@ class LayerListToRendererConverter:
 
     def AddLayer(self, index, layer):
         """Adds layer to renderer (prepends)."""
-        mapType = None
-        if layer.mapType == 'raster':
-            mapType = 'raster'
-        elif layer.mapType == 'vector':
-            mapType = 'vector'
-        elif layer.mapType == 'raster_3d':
-            mapType = '3d-raster'
-        elif layer.mapType == 'rgb':
-            mapType = 'rgb'
-        self._renderer.AddLayer(ltype=mapType, command=layer.cmd,
+        self._renderer.AddLayer(ltype=layer.mapType, command=layer.cmd,
                                 name=layer.name, active=layer.active,
                                 hidden=False, opacity=layer.opacity,
                                 render=True, pos=-1)

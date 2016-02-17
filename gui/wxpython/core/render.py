@@ -133,7 +133,7 @@ class Layer(object):
             return None
 
         # ignore in 2D
-        if self.type == '3d-raster':
+        if self.type == 'raster_3d':
             return None
 
         Debug.msg (3, "Layer.Render(): type=%s, name=%s, file=%s" % \
@@ -465,7 +465,7 @@ class RenderMapMgr(wx.EvtHandler):
         self.layers = self.Map.GetListOfLayers(ltype='overlay', active=True)
         if not overlaysOnly:
             self.layers += self.Map.GetListOfLayers(active=True,
-                                                    ltype='3d-raster',
+                                                    ltype='raster_3d',
                                                     except_ltype=True)
         
         # reset progress

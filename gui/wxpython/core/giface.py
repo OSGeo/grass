@@ -77,7 +77,7 @@ class LayerList(object):
 
         Launches property dialog if needed (raster, vector, etc.)
 
-        :param ltype: layer type (raster, vector, 3d-raster, ...)
+        :param ltype: layer type (raster, vector, raster_3d, ...)
         :param name: layer name
         :param checked: if True layer is checked
         :param opacity: layer opacity level

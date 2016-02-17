@@ -94,7 +94,7 @@ def GetLayerNameFromCmd(dcmd, fullyQualified = False, param = None,
     :param fullyQualified: change map name to be fully qualified
     :param param: params directory
     :param str layerType: check also layer type ('raster', 'vector',
-                          '3d-raster', ...)
+                          'raster_3d', ...)
     
     :return: tuple (name, found)
     """
@@ -156,11 +156,11 @@ def GetLayerNameFromCmd(dcmd, fullyQualified = False, param = None,
             mapname = v
             mapset = ''
             if fullyQualified and '@' not in mapname:
-                if layerType in ('raster', 'vector', '3d-raster', 'rgb', 'his'):
+                if layerType in ('raster', 'vector', 'raster_3d', 'rgb', 'his'):
                     try:
                         if layerType in ('raster', 'rgb', 'his'):
                             findType = 'cell'
-                        elif layerType == '3d-raster':
+                        elif layerType == 'raster_3d':
                             findType = 'grid3'
                         else:
                             findType = layerType
@@ -948,7 +948,7 @@ def color_resolve(color):
     return (rgb, label)
 
 command2ltype = {'d.rast'         : 'raster',
-                 'd.rast3d'       : '3d-raster',
+                 'd.rast3d'       : 'raster_3d',
                  'd.rgb'          : 'rgb',
                  'd.his'          : 'his',
                  'd.shade'        : 'shaded',
