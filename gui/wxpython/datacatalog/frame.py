@@ -15,9 +15,12 @@ for details.
 @author Tereza Fiedlerova
 """
 
+import os
+
 import wx
 
 from core.utils import _
+from core.globalvar import ICONDIR
 from datacatalog.tree import DataCatalogTree
 
 
@@ -26,6 +29,8 @@ class DataCatalogFrame(wx.Frame):
     def __init__(self, parent, giface=None):
         wx.Frame.__init__(self, parent=parent,
                           title=_('GRASS GIS Data Catalog (experimetal)'))
+        self.SetName("DataCatalog")
+        self.SetIcon(wx.Icon(os.path.join(ICONDIR, 'grass.ico'), wx.BITMAP_TYPE_ICO))
 
         self._giface = giface
         self.panel = wx.Panel(self)
