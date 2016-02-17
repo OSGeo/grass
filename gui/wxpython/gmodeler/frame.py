@@ -725,6 +725,7 @@ class ModelFrame(wx.Frame):
         data.SetPropDialog(dlg)
         dlg.CentreOnParent()
         ret = dlg.ShowModal()
+        data.SetPrompt(dlg.GetType())
         dlg.Destroy()
         if ret != wx.ID_OK:
             return
