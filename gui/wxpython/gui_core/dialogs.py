@@ -2744,6 +2744,7 @@ class TextEntryDialog(wx.Dialog):
         self._textCtrl = wx.TextCtrl(self, id=wx.ID_ANY,
                                      value=defaultValue, validator=validator, style=textStyle)
         self._textCtrl.SetInitialSize(textSize)
+        wx.CallAfter(self._textCtrl.SetFocus)
         
         vbox.Add(item=self._textCtrl, proportion=0, flag=wx.EXPAND | wx.LEFT | wx.RIGHT, border=10)
         self._textCtrl.SetFocus()
