@@ -451,14 +451,14 @@ class DataCatalogTree(LocationMapTree):
             label = _("Displaying {name}...").format(name=string)
             self.showNotification.emit(message=label)
             label = "d." + self.selected_type.label[:4] + " --q map=" + string + \
-                    _(" -- completed. Go to Map layers for further operations.")
+                    _(" -- completed. Go to Layers tab for further operations.")
             if self.selected_type.label == 'vector':
                 self._giface.lmgr.AddMaps(layerName, 'vector', True)
             elif self.selected_type.label == 'raster':
                 self._giface.lmgr.AddMaps(layerName, 'raster', True)
             else:
                 self._giface.lmgr.AddMaps(layerName, 'raster_3d', True)
-                label = "d.rast --q map=" + string + _(" -- completed. Go to 'Map layers' for further operations.")  # generate this message (command) automatically?
+                label = "d.rast --q map=" + string + _(" -- completed. Go to Layers tab for further operations.")  # generate this message (command) automatically?
             self.showNotification.emit(message=label)
             Debug.msg(1, "LAYER " + self.selected_layer.label + " DISPLAYED")
         else:
