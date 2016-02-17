@@ -114,7 +114,8 @@ def get_dataset_list(type, temporal_type, columns=None, where=None,
 
 
 def list_maps_of_stds(type, input, columns, order, where, separator,
-                      method, no_header=False, gran=None, dbif=None):
+                      method, no_header=False, gran=None, dbif=None,
+                      outpath=None):
     """ List the maps of a space time dataset using diffetent methods
 
         :param type: The type of the maps raster, raster3d or vector
@@ -143,6 +144,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
         :param gran: The user defined granule to be used if method=gran is
                      set, in case gran=None the granule of the space time
                      dataset is used
+        :param outpath: Tha path to output file where save info
     """
 
     dbif, connected = init_dbif(dbif)
@@ -152,6 +154,9 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
 
     if separator is None or separator == "":
         separator = "\t"
+
+    if outpath:
+        outfile = open(outpath, 'w')
 
     # This method expects a list of objects for gap detection
     if method == "delta" or method == "deltagaps" or method == "gran":
@@ -184,7 +189,10 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
             string += "%s%s" % ("end_time", separator)
             string += "%s%s" % ("interval_length", separator)
             string += "%s" % ("distance_from_begin")
-            print string
+            if outpath:
+                outfile.write('{st}\n'.format(st=string))
+            else:
+                print string
 
         if maps and len(maps) > 0:
 
@@ -229,7 +237,10 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
                 string += "%s%s" % (end, separator)
                 string += "%s%s" % (delta, separator)
                 string += "%s" % (delta_first)
-                print string
+                if outpath:
+                    outfile.write('{st}\n'.format(st=string))
+                else:
+                    print string
 
     else:
         # In comma separated mode only map ids are needed
@@ -248,7 +259,10 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
                     else:
                         string += ",%s" % row["id"]
                     count += 1
-                print string
+                if outpath:
+                    outfile.write('{st}\n'.format(st=string))
+                else:
+                    print string
 
             elif method == "cols":
                 # Print the column names if requested
@@ -264,7 +278,10 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
                         else:
                             output += str(key)
                         count += 1
-                    print output
+                    if outpath:
+                        outfile.write('{st}\n'.format(st=output))
+                    else:
+                        print output
 
                 for row in rows:
                     output = ""
@@ -275,8 +292,10 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
                         else:
                             output += str(col)
                         count += 1
-
-                    print output
+                    if outpath:
+                        outfile.write('{st}\n'.format(st=output))
+                    else:
+                        print output
     if connected:
         dbif.close()
 
