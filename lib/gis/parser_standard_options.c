@@ -3,7 +3,7 @@
   
   \brief GIS Library - Argument parsing functions (standard options)
   
-  (C) 2001-2014 by the GRASS Development Team
+  (C) 2001-2016 by the GRASS Development Team
   
   This program is free software under the GNU General Public License
   (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -362,7 +362,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->type = TYPE_STRING;
 	Opt->key_desc = "name";
 	Opt->required = YES;
-	Opt->gisprompt = "old,grid3,3d-raster";
+	Opt->gisprompt = "old,grid3,raster_3d";
 	Opt->description = _("Name of input 3D raster map");
 	break;
     case G_OPT_R3_INPUTS:
@@ -371,7 +371,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->key_desc = "name";
 	Opt->required = YES;
 	Opt->multiple = YES;
-	Opt->gisprompt = "old,grid3,3d-raster";
+	Opt->gisprompt = "old,grid3,raster_3d";
 	Opt->description = _("Name of input 3D raster map(s)");
 	break;
     case G_OPT_R3_OUTPUT:
@@ -379,7 +379,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->type = TYPE_STRING;
 	Opt->key_desc = "name";
 	Opt->required = YES;
-	Opt->gisprompt = "new,grid3,3d-raster";
+	Opt->gisprompt = "new,grid3,raster_3d";
 	Opt->description = _("Name for output 3D raster map");
 	break;
     case G_OPT_R3_MAP:
@@ -387,7 +387,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->type = TYPE_STRING;
 	Opt->key_desc = "name";
 	Opt->required = YES;
-	Opt->gisprompt = "old,grid3,3d-raster";
+	Opt->gisprompt = "old,grid3,raster_3d";
 	Opt->description = _("Name of 3D raster map");
 	break;
     case G_OPT_R3_MAPS:
@@ -396,7 +396,7 @@ struct Option *G_define_standard_option(int opt)
 	Opt->key_desc = "name";
 	Opt->required = YES;
 	Opt->multiple = YES;
-	Opt->gisprompt = "old,grid3,3d-raster";
+	Opt->gisprompt = "old,grid3,raster_3d";
 	Opt->description = _("Name of 3D raster map(s)");
 	break;
     case G_OPT_R3_TYPE:
