@@ -1374,6 +1374,7 @@ class ModelEvtHandler(ogl.ShapeEvtHandler):
             comment = dlg.GetValue()
             shape.SetComment(comment)
             self.frame.ModelChanged()
+            self.frame.canvas.Refresh()
         dlg.Destroy()
 
     def _onSelectShape(self, shape, append=False):
