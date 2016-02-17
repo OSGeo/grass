@@ -291,7 +291,7 @@ class GMFrame(wx.Frame):
         self.notebookLayers.SetTabAreaColour(globalvar.FNPageColor)
         menu = self._createTabMenu()
         self.notebookLayers.SetRightClickMenu(menu)
-        self.notebook.AddPage(page = self.notebookLayers, text = _("Map layers"), name = 'layers')
+        self.notebook.AddPage(page = self.notebookLayers, text = _("Layers"), name = 'layers')
         
         # create 'command output' text area
         self._gconsole = GConsole(guiparent = self, giface = self._giface,
@@ -302,7 +302,7 @@ class GMFrame(wx.Frame):
         self.goutput = GConsoleWindow(parent=self.notebook, gconsole=self._gconsole,
                                       menuModel=self._moduleTreeBuilder.GetModel(),
                                       gcstyle = GC_PROMPT)
-        self.notebook.AddPage(page = self.goutput, text = _("Command console"), name = 'output')
+        self.notebook.AddPage(page = self.goutput, text = _("Console"), name = 'output')
 
         self.goutput.showNotification.connect(lambda message: self.SetStatusText(message))
 
@@ -320,19 +320,19 @@ class GMFrame(wx.Frame):
             self.search = SearchModuleWindow(parent=self.notebook, handlerObj=self,
                                              model=self._moduleTreeBuilder.GetModel())
             self.search.showNotification.connect(lambda message: self.SetStatusText(message))
-            self.notebook.AddPage(page = self.search, text = _("Search modules"), name = 'search')
+            self.notebook.AddPage(page = self.search, text = _("Modules"), name = 'search')
         else:
             self.search = None
         
         # create 'data catalog' notebook page
         self.datacatalog = DataCatalog(parent=self.notebook, giface=self._giface)
         self.datacatalog.showNotification.connect(lambda message: self.SetStatusText(message))
-        self.notebook.AddPage(page = self.datacatalog, text = _("Data catalog"), name = 'catalog')
+        self.notebook.AddPage(page = self.datacatalog, text = _("Data"), name = 'catalog')
         
         # create 'python shell' notebook page
         if not UserSettings.Get(group = 'manager', key = 'hideTabs', subkey = 'pyshell'):
             self.pyshell = PyShellWindow(parent=self.notebook, giface=self._giface)
-            self.notebook.AddPage(page = self.pyshell, text = _("Python shell"), name = 'pyshell')
+            self.notebook.AddPage(page = self.pyshell, text = _("Python"), name = 'pyshell')
         else:
             self.pyshell = None
         

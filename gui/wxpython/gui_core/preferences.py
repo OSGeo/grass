@@ -279,7 +279,7 @@ class PreferencesDialog(PreferencesBaseDialog):
 
         row += 1
         hideSearch = wx.CheckBox(parent = panel, id = wx.ID_ANY,
-                                 label = _("Hide '%s' tab (requires GUI restart)") % _("Search module"),
+                                 label = _("Hide '%s' tab (requires GUI restart)") % _("Modules"),
                                  name = 'IsChecked')
         hideSearch.SetValue(self.settings.Get(group = 'manager', key = 'hideTabs', subkey = 'search'))
         self.winId['manager:hideTabs:search'] = hideSearch.GetId()
@@ -289,7 +289,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         
         row += 1
         hidePyShell = wx.CheckBox(parent = panel, id = wx.ID_ANY,
-                                  label = _("Hide '%s' tab (requires GUI restart)") % _("Python shell"),
+                                  label = _("Hide '%s' tab (requires GUI restart)") % _("Python"),
                                   name = 'IsChecked')
         hidePyShell.SetValue(self.settings.Get(group = 'manager', key = 'hideTabs', subkey = 'pyshell'))
         self.winId['manager:hideTabs:pyshell'] = hidePyShell.GetId()
@@ -302,7 +302,7 @@ class PreferencesDialog(PreferencesBaseDialog):
         #
         row += 1
         copySelectedTextToClipboard = wx.CheckBox(parent = panel, id = wx.ID_ANY,
-                                                  label = _("Automatically copy selected text to clipboard (in Command console)"),
+                                                  label = _("Automatically copy selected text to clipboard (in the Console tab)"),
                                                   name = 'IsChecked')
         copySelectedTextToClipboard.SetValue(self.settings.Get(group = 'manager', key = 'copySelectedTextToClipboard', subkey = 'enabled'))
         self.winId['manager:copySelectedTextToClipboard:enabled'] = copySelectedTextToClipboard.GetId()
