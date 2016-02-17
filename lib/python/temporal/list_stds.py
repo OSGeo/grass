@@ -10,9 +10,9 @@ Usage:
     tgis.register_maps_in_space_time_dataset(type, name, maps)
 
 
-(C) 2012-2013 by the GRASS Development Team
+(C) 2012-2016 by the GRASS Development Team
 This program is free software under the GNU General Public
-License (>=v2). Read the file COPYING that comes with GRASS
+License (>=v2). Read the file COPYING that comes with GRASS GIS
 for details.
 
 :authors: Soeren Gebbert
@@ -116,7 +116,7 @@ def get_dataset_list(type, temporal_type, columns=None, where=None,
 def list_maps_of_stds(type, input, columns, order, where, separator,
                       method, no_header=False, gran=None, dbif=None,
                       outpath=None):
-    """ List the maps of a space time dataset using diffetent methods
+    """ List the maps of a space time dataset using different methods
 
         :param type: The type of the maps raster, raster3d or vector
         :param input: Name of a space time raster dataset
@@ -136,15 +136,15 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
                end time, relative length of intervals and the relative
                distance to the begin
             - "deltagaps" Same as "delta" with additional listing of gaps.
-              Gaps can be simply identified as the id is "None"
+               Gaps can be easily identified as the id is "None"
             - "gran" List map using the granularity of the space time dataset,
-              columns are identical to deltagaps
+               columns are identical to deltagaps
 
         :param no_header: Supress the printing of column names
         :param gran: The user defined granule to be used if method=gran is
                      set, in case gran=None the granule of the space time
                      dataset is used
-        :param outpath: Tha path to output file where save info
+        :param outpath: The path to file where to save output
     """
 
     dbif, connected = init_dbif(dbif)
