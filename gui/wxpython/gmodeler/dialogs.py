@@ -62,9 +62,12 @@ class ModelDataDialog(SimpleDialog):
         self.Bind(wx.EVT_BUTTON, self.OnCancel, self.btnCancel)
         if self.etype:
             self.typeSelect = ElementSelect(parent = self.panel,
+                                            elements = ['raster', 'raster_3d', 'vector'],
                                             size = globalvar.DIALOG_GSELECT_SIZE)
             self.typeSelect.Bind(wx.EVT_CHOICE, self.OnType)
-        
+            self.typeSelect.SetSelection(0)
+            self.element.SetType('raster')
+            
         if shape.GetValue():
             self.btnOK.Enable()
         
@@ -120,7 +123,9 @@ class ModelDataDialog(SimpleDialog):
             if elem == 'raster':
                 self.shape.SetPrompt('raster')
             elif elem == 'vector':
-                self.shape.SetPrompt('raster')
+                self.shape.SetPrompt('vector')
+            elif elem == 'raster_3d':
+                self.shape.SetPrompt('raster_3d')
         
         self.parent.canvas.Refresh()
         self.parent.SetStatusText('', 0)

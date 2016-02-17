@@ -1378,7 +1378,7 @@ class ModelData(ModelObject, ogl.EllipseShape):
         if self.prompt == 'raster':
             color = UserSettings.Get(group = 'modeler', key = 'data',
                                      subkey = ('color', 'raster'))
-        elif self.prompt == 'raster3d':
+        elif self.prompt == 'raster_3d':
             color = UserSettings.Get(group = 'modeler', key = 'data',
                                      subkey = ('color', 'raster3d'))
         elif self.prompt == 'vector':

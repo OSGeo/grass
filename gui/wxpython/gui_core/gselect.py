@@ -2107,11 +2107,13 @@ class ProjSelect(wx.ComboBox):
         self.SetValue('')
 
 class ElementSelect(wx.Choice):
-    def __init__(self, parent, id = wx.ID_ANY, size = globalvar.DIALOG_COMBOBOX_SIZE,
+    def __init__(self, parent, id = wx.ID_ANY, elements = None,
+                 size = globalvar.DIALOG_COMBOBOX_SIZE,
                  **kwargs):
         """Widget for selecting GIS element
 
         :param parent: parent window
+        :param elements: filter elements
         """
         super(ElementSelect, self).__init__(parent, id, size = size,
                                             **kwargs)
@@ -2121,7 +2123,18 @@ class ElementSelect(wx.Choice):
         p = task.get_param(value = 'type')
         self.values = p.get('values', [])
         self.valuesDesc = p.get('values_desc', [])
-
+        
+        if elements:
+            values = []
+            valuesDesc = []
+            for idx in range(0, len(self.values)):
+                value = self.values[idx]
+                if value in elements:
+                    values.append(value)
+                    valuesDesc.append(self.valuesDesc[idx])
+            self.values = values
+            self.valuesDesc = valuesDesc
+        
         self.SetItems(self.valuesDesc)
 
     def GetValue(self, name):
