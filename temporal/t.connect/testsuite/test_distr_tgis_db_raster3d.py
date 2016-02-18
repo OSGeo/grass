@@ -17,6 +17,7 @@ import os
 class testRaster3dExtraction(TestCase):
 
     mapsets_to_remove = []
+    outfile = 'rast3dlist.txt'
 
     @classmethod
     def setUpClass(cls):
@@ -77,6 +78,20 @@ class testRaster3dExtraction(TestCase):
         for a, b in zip(list_string.split("\n"), out.split("\n")):
             self.assertEqual(a.strip(), b.strip())
 
+        t_list = SimpleModule(
+            "t.list", quiet=True,
+            columns=["name", "mapset,start_time", "end_time", "number_of_maps"],
+            type="str3ds", where='name = "A"', output=self.outfile)
+        self.assertModule(t_list)
+        self.assertFileExists(self.outfile)
+        with open(self.outfile, 'r') as f:
+            read_data = f.read()
+        for a, b in zip(list_string.split("\n"), read_data.split("\n")):
+            self.assertEqual(a.strip(), b.strip())
+        #self.assertLooksLike(reference=read_data, actual=list_string)
+        if os.path.isfile(self.outfile):
+            os.remove(self.outfile)
+
     def test_trast_list(self):
         self.runModule("g.mapset", mapset="test3d1")
 
@@ -97,8 +112,6 @@ class testRaster3dExtraction(TestCase):
                                 a2|test3d2|2001-03-01 00:00:00|2001-05-01 00:00:00
                                 a3|test3d2|2001-05-01 00:00:00|2001-07-01 00:00:00"""
 
-        entries = list_string.split("\n")
-
         trast_list = SimpleModule(
             "t.rast3d.list", quiet=True, flags="s", input="A@test3d2")
         self.assertModule(trast_list)
@@ -111,8 +124,6 @@ class testRaster3dExtraction(TestCase):
         list_string = """a1|test3d3|2001-01-01 00:00:00|2001-04-01 00:00:00
                                 a2|test3d3|2001-04-01 00:00:00|2001-07-01 00:00:00
                                 a3|test3d3|2001-07-01 00:00:00|2001-10-01 00:00:00"""
-
-        entries = list_string.split("\n")
 
         trast_list = SimpleModule(
             "t.rast3d.list", quiet=True, flags="s", input="A@test3d3")
@@ -135,6 +146,17 @@ class testRaster3dExtraction(TestCase):
 
         for a, b in zip(list_string.split("\n"), out.split("\n")):
             self.assertEqual(a.strip(), b.strip())
+
+        trast_list = SimpleModule("t.rast3d.list", quiet=True, flags="s",
+                                  input="A@test3d4", output=self.outfile)
+        self.assertModule(trast_list)
+        self.assertFileExists(self.outfile)
+        with open(self.outfile, 'r') as f:
+            read_data = f.read()
+        for a, b in zip(list_string.split("\n"), read_data.split("\n")):
+            self.assertEqual(a.strip(), b.strip())
+        if os.path.isfile(self.outfile):
+            os.remove(self.outfile)
 
     def test_strds_info(self):
         self.runModule("g.mapset", mapset="test3d4")
