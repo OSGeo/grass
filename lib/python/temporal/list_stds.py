@@ -296,6 +296,8 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
                         outfile.write('{st}\n'.format(st=output))
                     else:
                         print output
+    if outpath:
+        outfile.close()
     if connected:
         dbif.close()
 
