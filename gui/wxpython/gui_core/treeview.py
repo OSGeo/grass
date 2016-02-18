@@ -121,6 +121,13 @@ class AbstractTreeViewMixin(VirtualTree):
             self.Expand(item)
         self.EnsureVisible(item)
 
+    def IsNodeExpanded(self, node):
+        """Check if node is expanded"""
+        index = self._model.GetIndexOfNode(node)
+        item = self.GetItemByIndex(index)
+
+        return self.IsExpanded(item)
+    
     def CollapseNode(self, node, recursive=True):
         """Collapse items.
 

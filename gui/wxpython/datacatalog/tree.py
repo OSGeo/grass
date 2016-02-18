@@ -120,7 +120,8 @@ class LocationMapTree(TreeView):
         self.showNotification = Signal('Tree.showNotification')
         self.parent = parent
         self.contextMenu.connect(self.OnRightClick)
-
+        self.itemActivated.connect(self.OnDoubleClick)
+        
         self._initVariables()
 
     def _initTreeItems(self, locations=None, mapsets=None):
@@ -261,6 +262,13 @@ class LocationMapTree(TreeView):
         elif self.selected_mapset and not self.selected_type:
             self._popupMenuMapset()
 
+    def OnDoubleClick(self, node):
+        """Expand/Collapse node."""
+        if self.IsNodeExpanded(node):
+            self.CollapseNode(node, recursive=False)
+        else:
+            self.ExpandNode(node, recursive=False)
+        
     def ExpandCurrentLocation(self):
         """Expand current location"""
         location = gscript.gisenv()['LOCATION_NAME']
@@ -309,8 +317,8 @@ class DataCatalogTree(LocationMapTree):
             self._emitSignal(evt.GetItem(), self.startEdit, event=evt))
         self.Bind(wx.EVT_TREE_END_LABEL_EDIT, lambda evt:
             self._emitSignal(evt.GetItem(), self.endEdit, event=evt))
-        self.startEdit.connect(self.OnStartEditLabel)
-        self.endEdit.connect(self.OnEditLabel)
+        ###self.startEdit.connect(self.OnStartEditLabel)
+        ###self.endEdit.connect(self.OnEditLabel)
 
     def _initVariablesCatalog(self):
         """Init variables."""
