@@ -642,11 +642,13 @@ class SwipeMapFrame(DoubleMapFrame):
 
         result = []
         if rasters[0]:
-            result.extend(grass.raster_what(map=rasters[0], coord=(east, north)))
+            result.extend(grass.raster_what(map=rasters[0], coord=(east, north),
+                                            localized=True))
         if vectors[0]:
             result.extend(grass.vector_what(map=vectors[0], coord=(east, north), distance=qdist))
         if rasters[1]:
-            result.extend(grass.raster_what(map=rasters[1], coord=(east, north)))
+            result.extend(grass.raster_what(map=rasters[1], coord=(east, north),
+                                            localized=True))
         if vectors[1]:
             result.extend(grass.vector_what(map=vectors[1], coord=(east, north), distance=qdist))
 
