@@ -71,6 +71,10 @@
 #% guisection: Formatting
 #%end
 
+#%option G_OPT_F_OUTPUT
+#% required: no
+#%end
+
 #%flag
 #% key: c
 #% description: Print the column names as first row
@@ -93,6 +97,7 @@ def main():
     order = options["order"]
     where = options["where"]
     separator = gscript.separator(options["separator"])
+    outpath = options["output"]
     colhead = flags['c']
 
     # Make sure the temporal database exists
@@ -100,8 +105,8 @@ def main():
 
     sp = tgis.dataset_factory(type, None)
     first = True
-    
-    if  gscript.verbosity() > 0:
+
+    if  gscript.verbosity() > 0 and not outpath:
         sys.stderr.write("----------------------------------------------\n")
 
     for ttype in temporal_type.split(","):
@@ -116,13 +121,16 @@ def main():
         # alphabetic ordering
         mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
 
+        if outpath:
+            outfile = open(outpath, 'w')
+
         # Print for each mapset separately
         for key in mapsets:
             if key in stds_list.keys():
                 rows = stds_list[key]
 
                 if rows:
-                    if  gscript.verbosity() > 0:
+                    if  gscript.verbosity() > 0 and not outpath:
                         if issubclass(sp.__class__,  tgis.AbstractMapDataset):
                             sys.stderr.write(_("Time stamped %s maps with %s available in mapset <%s>:\n")%\
                                                      (sp.get_type(),  time,  key))
@@ -140,9 +148,12 @@ def main():
                             else:
                                 output += str(key)
                             count += 1
-                        print output
+                        if outpath:
+                            outfile.write("{st}\n".format(st=output))
+                        else:
+                            print output
                         first = False
-            
+
                     for row in rows:
                         output = ""
                         count = 0
@@ -152,8 +163,12 @@ def main():
                             else:
                                 output += str(col)
                             count += 1
-            
-                        print output
+                        if outpath:
+                            outfile.write("{st}\n".format(st=output))
+                        else:
+                            print output
+    if outpath:
+        outfile.close()
 
 if __name__ == "__main__":
     options, flags = gscript.parser()
