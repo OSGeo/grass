@@ -107,7 +107,7 @@ def main():
     dbif = tgis.SQLDatabaseInterfaceConnection()
     dbif.connect()
     first = True
-    
+
     if  gscript.verbosity() > 0 and not outpath:
         sys.stderr.write("----------------------------------------------\n")
 
@@ -122,9 +122,9 @@ def main():
         # Use the correct order of the mapsets, hence first the current mapset, then
         # alphabetic ordering
         mapsets = tgis.get_tgis_c_library_interface().available_mapsets()
-        
+
         if outpath:
-            outfile = open(outpath, 'w') 
+            outfile = open(outpath, 'w')
 
         # Print for each mapset separately
         for key in mapsets:
@@ -155,7 +155,7 @@ def main():
                         else:
                             print output
                         first = False
-            
+
                     for row in rows:
                         output = ""
                         count = 0
@@ -169,7 +169,8 @@ def main():
                             outfile.write("{st}\n".format(st=output))
                         else:
                             print output
-
+    if outpath:
+        outfile.close()
     dbif.close()
 
 if __name__ == "__main__":
