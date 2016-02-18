@@ -236,20 +236,23 @@ class LocationMapTree(TreeView):
             self.selected_layer = item
             type = 'element'
             item = item.parent
+            
         if type == 'element':
             self.selected_type = item
             type = 'mapset'
             item = item.parent
+
         if type == 'mapset':
             self.selected_mapset = item
             type = 'location'
             item = item.parent
+            
         if type == 'location':
             self.selected_location = item
-
+        
     def OnSelChanged(self, event):
         self.selected_layer = None
-
+                
     def OnRightClick(self, node):
         """Display popup menu."""
         self.DefineItems(node)
@@ -316,6 +319,12 @@ class DataCatalogTree(LocationMapTree):
         self.copy_mapset = None
         self.copy_location = None
 
+    def _runCommand(self, prog, **kwargs):
+        cmdString = ' '.join(gscript.make_command(prog, **kwargs))
+        ret = RunCommand(prog, parent=self, **kwargs)
+
+        return ret, cmdString
+                
     def InitTreeItems(self):
         """Add locations, mapsets and layers to the tree."""
         self._initTreeItems()
@@ -326,8 +335,9 @@ class DataCatalogTree(LocationMapTree):
         self.copy_type = self.selected_type
         self.copy_mapset = self.selected_mapset
         self.copy_location = self.selected_location
-        label = _("Layer {layer} copied to clipboard."
-                  "You can paste it to selected mapset.".format(layer=self.copy_layer.label))
+        label = _("Map <{layer}> marked for copying. "
+                  "You can paste it to the current mapset "
+                  "<{mapset}>.".format(layer=self.copy_layer.label, mapset=self.gmapset))
         self.showNotification.emit(message=label)
 
     def OnRename(self, event):
@@ -360,20 +370,19 @@ class DataCatalogTree(LocationMapTree):
             string = self.old_name + ',' + self.new_name
             gisrc, env = getEnvironment(self.gisdbase, self.selected_location.label, self.selected_mapset.label)
             renamed = 0
-            label = _("Renaming {name}...").format(name=string)
+            label = _("Renaming map <{name}>...").format(name=string)
             self.showNotification.emit(message=label)
             if self.selected_type.label == 'vector':
-                renamed = RunCommand('g.rename', vector=string, env=env)
+                renamed, cmd = self._runCommand('g.rename', vector=string, env=env)
             elif self.selected_type.label == 'raster':
-                renamed = RunCommand('g.rename', raster=string, env=env)
+                renamed, cmd = self._runCommand('g.rename', raster=string, env=env)
             else:
-                renamed = RunCommand('g.rename', raster3d=string, env=env)
+                renamed, cmd = self._runCommand('g.rename', raster3d=string, env=env)
             if renamed == 0:
                 self.selected_layer.label = self.new_name
                 self.selected_layer.data['name'] = self.new_name
                 self.RefreshNode(self.selected_layer)
-                label = "g.rename " + self.selected_type.label + "=" + string + _(" -- completed")
-                self.showNotification.emit(message=label)
+                self.showNotification.emit(message=_("{cmd} -- completed").format(cmd=cmd))
                 Debug.msg(1, "LAYER RENAMED TO: " + self.new_name)
             gscript.try_remove(gisrc)
 
@@ -381,8 +390,10 @@ class DataCatalogTree(LocationMapTree):
         """Paste layer or mapset"""
         # copying between mapsets of one location
         if not self.copy_layer:
+            GMessage(_("No map selected for copying."), parent=self)
             return
-        if self.selected_location == self.copy_location and self.selected_mapset:
+        if self.selected_location == self.copy_location and \
+           self.selected_mapset.data['name'] == gscript.gisenv()['MAPSET']:
             if self.selected_type:
                 if self.copy_type.label != self.selected_type.label:  # copy raster to vector or vice versa
                     GError(_("Failed to copy map: invalid map type "
@@ -393,42 +404,63 @@ class DataCatalogTree(LocationMapTree):
             if not self.new_name:
                 return
             if self.copy_layer.label == self.new_name:
-                GMessage(_("Layer was not copied: new layer has the same name"), parent=self)
+                GMessage(_("Failed to copy map: new map has the same name"), parent=self)
                 return
+
+            if not self.selected_type:
+                found = self._model.SearchNodes(parent=self.selected_mapset, type='element', name=self.copy_type.label)
+                self.selected_type = found[0] if found else None
+
+            overwrite = False
+            if self.selected_type:
+                found = self._model.SearchNodes(parent=self.selected_type, type=self.copy_type.label, name=self.new_name)
+                if found and found[0]:
+                    dlg = wx.MessageDialog(parent=self,
+                                           message = _("Map <{map}> already exists "
+                                                       "in the current mapset. "
+                                                       "Do you want to overwrite it?").format(map=self.new_name),
+                                           caption = _("Overwrite?"),
+                                           style = wx.YES_NO | wx.YES_DEFAULT | wx.ICON_QUESTION)
+                    ret = dlg.ShowModal()
+                    dlg.Destroy()
+                    if ret == wx.ID_YES:
+                        overwrite = True
+
             string = self.copy_layer.label + '@' + self.copy_mapset.label + ',' + self.new_name
             gisrc, env = getEnvironment(self.gisdbase, self.selected_location.label, self.selected_mapset.label)
             pasted = 0
-            label = _("Copying {name}...").format(name=string)
+            label = _("Copying <{name}>...").format(name=string)
             self.showNotification.emit(message=label)
             if self.copy_type.label == 'vector':
-                pasted = RunCommand('g.copy', vector=string, env=env)
+                pasted, cmd = self._runCommand('g.copy', vector=string, overwrite=overwrite, env=env)
                 node = 'vector'
             elif self.copy_type.label == 'raster':
-                pasted = RunCommand('g.copy', raster=string, env=env)
+                pasted, cmd = self._runCommand('g.copy', raster=string, overwrite=overwrite, env=env)
                 node = 'raster'
             else:
-                pasted = RunCommand('g.copy', raster_3d=string, env=env)
+                pasted, cmd = self._runCommand('g.copy', raster_3d=string, overwrite=overwrite, env=env)
                 node = 'raster_3d'
             if pasted == 0:
                 if not self.selected_type:
-                    found = self._model.SearchNodes(parent=self.selected_mapset, type=node)
-                    self.selected_type = found[0] if found else None
-                    if not self.selected_type:
-                        # add type node if not exists
-                        self.selected_type = self._model.AppendNode(parent=self.selected_mapset, label=node,
-                                                                    data=dict(type='element', name=node))
-                self._model.AppendNode(parent=self.selected_type, label=self.new_name,
-                                       data=dict(type=node, name=self.new_name))
-                self._model.SortChildren(self.selected_type)
-                self.RefreshNode(self.selected_type, recursive=True)
+                    # add type node if not exists
+                    self.selected_type = self._model.AppendNode(parent=self.selected_mapset, label=node,
+                                                                data=dict(type='element', name=node))
+                if not overwrite:
+                    self._model.AppendNode(parent=self.selected_type, label=self.new_name,
+                                           data=dict(type=node, name=self.new_name))
+                    self._model.SortChildren(self.selected_type)
+                    self.RefreshNode(self.selected_type, recursive=True)
                 Debug.msg(1, "COPIED TO: " + self.new_name)
-                label = "g.copy " + self.copy_type.label + "=" + string + _(" -- completed")  # generate this message (command) automatically?
-                self.showNotification.emit(message=label)
+                self.showNotification.emit(message= _("{cmd} -- completed").format(cmd=cmd))
             gscript.try_remove(gisrc)
         else:
-            GError(_("Failed to copy layer: action is allowed only within the same location."),
-                   parent=self)
-
+            if self.selected_location != self.copy_location:
+                GError(_("Failed to copy map: action is allowed only within the same location."),
+                       parent=self)
+            else:
+                GError(_("Failed to copy map: action is allowed only within the current mapset."),
+                       parent=self)
+        
         # expand selected mapset
         self.ExpandNode(self.selected_mapset, recursive=True)
 
@@ -444,20 +476,19 @@ class DataCatalogTree(LocationMapTree):
                 label = _("Deleting {name}...").format(name=string)
                 self.showNotification.emit(message=label)
                 if self.selected_type.label == 'vector':
-                    removed = RunCommand('g.remove', flags='f', type='vector',
+                    removed, cmd = self._runCommand('g.remove', flags='f', type='vector',
                                          name=string, env=env)
                 elif self.selected_type.label == 'raster':
-                    removed = RunCommand('g.remove', flags='f', type='raster',
+                    removed, cmd = self._runCommand('g.remove', flags='f', type='raster',
                                          name=string, env=env)
                 else:
-                    removed = RunCommand('g.remove', flags='f', type='raster_3d',
+                    removed, cmd = self._runCommand('g.remove', flags='f', type='raster_3d',
                                          name=string, env=env)
                 if removed == 0:
                     self._model.RemoveNode(self.selected_layer)
                     self.RefreshNode(self.selected_type, recursive=True)
                     Debug.msg(1, "LAYER " + string + " DELETED")
-                    label = "g.remove -f type=" + self.selected_type.label + " name=" + string + _(" -- completed")  # generate this message (command) automatically?
-                    self.showNotification.emit(message=label)
+                    self.showNotification.emit(message= _("{cmd} -- completed").format(cmd=cmd))
             gscript.try_remove(gisrc)
 
     def OnDisplayLayer(self, event):
@@ -538,12 +569,6 @@ class DataCatalogTree(LocationMapTree):
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnCopy, item)
 
-        item = wx.MenuItem(menu, wx.NewId(), _("&Paste"))
-        menu.AppendItem(item)
-        self.Bind(wx.EVT_MENU, self.OnPaste, item)
-        if not current_mapset:
-            item.Enable(False)
-            
         item = wx.MenuItem(menu, wx.NewId(), _("&Delete"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnDelete, item)
@@ -557,7 +582,7 @@ class DataCatalogTree(LocationMapTree):
             item.Enable(False)
 
         if not isinstance(self._giface, StandaloneGrassInterface):
-            item = wx.MenuItem(menu, wx.NewId(), _("&Display layer"))
+            item = wx.MenuItem(menu, wx.NewId(), _("&Display"))
             menu.AppendItem(item)
             self.Bind(wx.EVT_MENU, self.OnDisplayLayer, item)
 
