@@ -18,6 +18,7 @@ import grass.temporal as tgis
 class TestRasterExtraction(TestCase):
 
     mapsets_to_remove = []
+    outfile = 'rastlist.txt'
 
     @classmethod
     def setUpClass(cls):
@@ -77,6 +78,20 @@ class TestRasterExtraction(TestCase):
 
         for a, b in zip(list_string.split("\n"), out.split("\n")):
             self.assertEqual(a.strip(), b.strip())
+
+        t_list = SimpleModule(
+            "t.list", quiet=True,
+            columns=["name", "mapset,start_time", "end_time", "number_of_maps"],
+            type="strds", where='name = "A"', output=self.outfile)
+        self.assertModule(t_list)
+        self.assertFileExists(self.outfile)
+        with open(self.outfile, 'r') as f:
+            read_data = f.read()
+        for a, b in zip(list_string.split("\n"), read_data.split("\n")):
+            self.assertEqual(a.strip(), b.strip())
+        #self.assertLooksLike(reference=read_data, actual=list_string)
+        if os.path.isfile(self.outfile):
+            os.remove(self.outfile)
 
     def test_trast_list(self):
         self.runModule("g.mapset", mapset="test1")
@@ -145,6 +160,17 @@ class TestRasterExtraction(TestCase):
 
         for a, b in zip(list_string.split("\n"), out.split("\n")):
             self.assertEqual(a.strip(), b.strip())
+
+        trast_list = SimpleModule("t.rast.list", quiet=True, flags="s",
+                                  input="A@test5", output=self.outfile)
+        self.assertModule(trast_list)
+        self.assertFileExists(self.outfile)
+        with open(self.outfile, 'r') as f:
+            read_data = f.read()
+        for a, b in zip(list_string.split("\n"), read_data.split("\n")):
+            self.assertEqual(a.strip(), b.strip())
+        if os.path.isfile(self.outfile):
+            os.remove(self.outfile)
 
     def test_strds_info(self):
         self.runModule("g.mapset", mapset="test4")
@@ -265,8 +291,7 @@ class TestRasterExtraction(TestCase):
 
         info = SimpleModule(
             "t.info", flags="g", type="raster", input="a1@test5")
-        self.assertModuleKeyValue(
-            module=info, reference=tinfo_string, precision=2, sep="=")
+
 
 if __name__ == '__main__':
     from grass.gunittest.main import test
