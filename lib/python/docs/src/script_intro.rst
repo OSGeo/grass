@@ -13,17 +13,17 @@ Parts of the API
 Syntax
 ------
 
-First, try a standard command in Command console in Layer Manager::
+First, try a standard command in Console tab in Layer Manager in GRASS GUI::
 
     r.info map=elevation -g
 
 We are running *r.info* with an option ``map`` set to ``elevation`` Now,
-switch to Python shell and type the same command but in Python syntax::
+switch to Python tab and type the same command but in Python syntax::
 
     grass.read_command('r.info', map='elevation', flags='g')
 
 We used function ``read_command()`` from the ``grass.script`` package
-which is imported under the name ``grass`` in the Python shell in GRASS
+which is imported under the name ``grass`` in the Python tab in GRASS
 GUI. There are also other functions besides ``read_command()`` most
 notably ``run_command()``, ``write_command()`` and ``parse_command()``.
 The first parameter for functions from this group is the name of the
