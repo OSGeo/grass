@@ -18,6 +18,9 @@ class testRaster3dExtraction(TestCase):
 
     mapsets_to_remove = []
     outfile = 'rast3dlist.txt'
+    gisenv = SimpleModule('g.gisenv', get='MAPSET')
+    TestCase.runModule(gisenv, expecting_stdout=True)
+    old_mapset = gisenv.outputs.stdout.strip()
 
     @classmethod
     def setUpClass(cls):
@@ -55,6 +58,7 @@ class testRaster3dExtraction(TestCase):
         gisenv = SimpleModule('g.gisenv', get='LOCATION_NAME')
         cls.runModule(gisenv, expecting_stdout=True)
         location = gisenv.outputs.stdout.strip()
+        cls.runModule("g.mapset", mapset=cls.old_mapset)
         for mapset_name in cls.mapsets_to_remove:
             mapset_path = os.path.join(gisdbase, location, mapset_name)
             silent_rmtree(mapset_path)
