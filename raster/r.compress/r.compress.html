@@ -2,7 +2,7 @@
 
 <em>r.compress</em> can be used to compress and decompress
 raster map layers. Additionally, it prints information about the
-map compression and data type of the input raster map(s).
+compression method and data type of the input raster map(s).
 
 <p>
 During compression, this program reformats raster maps using a run-length-encoding
@@ -24,12 +24,16 @@ it was RLE compressed, the raster map became only 1249 bytes
 (25351 bytes smaller).
 
 <p>
-Raster files may be decompressed manually to return them to their
-original format, using the <b>-u</b> flag of 
-<em>r.compress</em>. If <em>r.compress</em> is asked to
-compress a raster map which is already compressed (or to
-decompress an already decompressed raster map), it simply informs
-the user the map is already (de)compressed and exits.
+Raster maps that are already compressed are again compressed. This is 
+useful if either the compression method (RLE or ZLIB) is changed or if 
+the ZLIB compression level is manually changed by setting the 
+environment variable GRASS_ZLIB_LEVEL.
+
+<p>
+Raster files may be decompressed manually to return them to their 
+original format, using the <b>-u</b> flag of <em>r.compress</em>. If a 
+raster map is already decompressed, it simply informs the user the map 
+is already compressed and exits.
 
 
 <h3>TERMINOLOGY</h3>
@@ -153,10 +157,10 @@ only be larger by the size of the address array and the
 single byte preceding each row.
 
 <p>
-Since GRASS GIS 7.0.0, the default compression method for
- Integer (CELL) maps is deflate and not any more the RLE compression.
+Since GRASS GIS 7.0.0, the default compression method for 
+Integer (CELL) maps is ZLIB and not any more the RLE compression.
 
-<h4>DEFLATE compression level</h4>
+<h4>ZLIB compression level</h4>
 
 If the environment variable <tt>GRASS_ZLIB_LEVEL</tt> exists and
 its value can be parsed as an integer, it determines the compression
@@ -172,7 +176,7 @@ integer, zlib's default compression level will be used.
 Printing of current compression state:
 <div class="code"><pre>
 r.compress compressed_no -p
-  &lt;compressed_no&gt; (level 0: NONE). Data type: &lt;CELL&gt;
+  &lt;compressed_no&gt; (method 0: NONE). Data type: &lt;CELL&gt;
 </pre></div>
 
 <p>
@@ -184,20 +188,20 @@ g.copy raster=compressed_no,compressed_RLE
 export GRASS_INT_ZLIB=0 # RLE
 r.compress compressed_RLE 
 r.compress compressed_RLE -p 
-  &lt;compressed_RLE&gt; is compressed (level 1: RLE). Data type: &lt;CELL&gt;
+  &lt;compressed_RLE&gt; is compressed (method 1: RLE). Data type: &lt;CELL&gt;
 unset GRASS_INT_ZLIB
 </pre></div>
 
 <p>
-Applying DEFLATE (ZLIB) compression to a copy of the uncompressed map:
+Applying ZLIB compression to a copy of the uncompressed map:
 <div class="code"><pre>
-# compression of map using DEFLATE compression
-g.copy raster=compressed_no,compressed_DEFLATE
+# compression of map using ZLIB compression
+g.copy raster=compressed_no,compressed_ZLIB
 
-export GRASS_INT_ZLIB=1 # deflate
-r.compress compressed_DEFLATE
-r.compress compressed_DEFLATE -p
-  &lt;compressed_DEFLATE&gt; is compressed (level 2: DEFLATE). Data type: &lt;CELL&gt;
+export GRASS_INT_ZLIB=1 # ZLIB
+r.compress compressed_ZLIB
+r.compress compressed_ZLIB -p
+  &lt;compressed_ZLIB&gt; is compressed (method 2: ZLIB). Data type: &lt;CELL&gt;
 unset GRASS_INT_ZLIB
 </pre></div>
 
