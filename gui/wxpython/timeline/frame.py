@@ -8,7 +8,7 @@ Classes:
  - frame::TimelineFrame
  - frame::LookUp
 
-(C) 2012-2014 by the GRASS Development Team
+(C) 2012-2016 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -34,8 +34,9 @@ try:
         NavigationToolbar2WxAgg as NavigationToolbar
     import matplotlib.dates as mdates
     from matplotlib import cbook
-except ImportError:
-    raise ImportError(_('The Timeline Tool needs the "matplotlib" (python-matplotlib) package to be installed.'))
+except ImportError as e:
+    raise ImportError(_('The Timeline Tool needs the "matplotlib" '
+                        '(python-matplotlib) package to be installed. {}').format(e))
 
 import grass.script as grass
 from core.utils import _

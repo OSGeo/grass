@@ -1,14 +1,14 @@
 """
 @package iscatt.plots
 
-@brief Ploting widgets.
+@brief Plotting widgets
 
 Classes:
  - plots::ScatterPlotWidget
  - plots::PolygonDrawer
  - plots::ModestImage
- 
-(C) 2013 by the GRASS Development Team
+
+(C) 2013-2016 by the GRASS Development Team
 
 This program is free software under the GNU General Public License
 (>=v2). Read the file COPYING that comes with GRASS for details.
@@ -39,7 +39,8 @@ try:
     import matplotlib.colors as mcolors
     import matplotlib.cbook as cbook
 except ImportError as e:
-    raise ImportError(_("Unable to import matplotlib (try to install it).\n%s") % e)
+    raise ImportError(_('The Scatterplot Tool needs the "matplotlib" '
+                        '(python-matplotlib) package to be installed. {}').format(e))
 
 import grass.script as grass
 from grass.pydispatch.signal import Signal
