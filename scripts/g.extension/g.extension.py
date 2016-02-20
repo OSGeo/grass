@@ -120,7 +120,8 @@
 
 #%rules
 #% required: extension, -l, -c, -g, -a
-#% exclusive: extension, -l, -c, -g, -a
+#% exclusive: extension, -l, -c, -g
+#% exclusive: extension, -l, -c, -a
 #%end
 
 # TODO: solve addon-extension(-module) confusion
@@ -303,7 +304,17 @@ def get_installed_modules(force=False):
         return []
     ret = list()
     for tnode in tree.findall('task'):
-        ret.append(tnode.get('name').strip())
+        if flags['g']:
+            desc, keyw = get_optional_params(tnode)
+            ret.append('name={}'.format(tnode.get('name').strip()))
+            ret.append('description={}'.format(desc))
+            ret.append('keywords={}'.format(keyw))
+            ret.append('bin={}'.format(','.join(
+                get_module_executables(tnode))
+            ))
+        else:
+            ret.append(tnode.get('name').strip())
+    
     return ret
 
 # list extensions (read XML file from grass.osgeo.org/addons)
@@ -381,6 +392,34 @@ def get_toolbox_modules(url, name):
 
     return tlist
 
+def get_module_files(mnode):
+    """Return list of module files
+
+    :param mnode: XML node for a module
+    """
+    flist = []
+    for file_node in mnode.find('binary').findall('file'):
+        filepath = file_node.text
+        flist.append(filepath)
+
+    return flist
+
+def get_module_executables(mnode):
+    """Return list of module executables
+
+    :param mnode: XML node for a module
+    """
+    flist = []
+    for filepath in get_module_files(mnode):
+        if filepath.startswith(options['prefix'] + os.path.sep + 'bin') or \
+           (sys.platform != 'win32' and \
+            filepath.startswith(options['prefix'] + os.path.sep + 'scripts')):
+            filename = os.path.basename(filepath)
+            if sys.platform == 'win32':
+                filename = os.path.splitext(filename)[0]
+            flist.append(filename)
+    
+    return flist
 
 def get_optional_params(mnode):
     """Return description and keywords as a tuple
@@ -1217,8 +1256,7 @@ def remove_modules(mlist, force=False):
             for task in tree.findall('task'):
                 if name == task.get('name') and \
                         task.find('binary') is not None:
-                    for file_node in task.find('binary').findall('file'):
-                        flist.append(file_node.text)
+                    flist = get_module_files(task)
                     break
 
             if flist:
@@ -1639,7 +1677,7 @@ def main():
                                                to_system=flags['s'])
 
     # list available extensions
-    if flags['l'] or flags['c'] or flags['g']:
+    if flags['l'] or flags['c'] or (flags['g'] and not flags['a']):
         # using dummy module, we don't need any module URL now,
         # but will work only as long as the function does not check
         # if the URL is actually valid or something
