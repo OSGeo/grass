@@ -309,7 +309,7 @@ def get_installed_modules(force=False):
             ret.append('name={}'.format(tnode.get('name').strip()))
             ret.append('description={}'.format(desc))
             ret.append('keywords={}'.format(keyw))
-            ret.append('bin={}'.format(','.join(
+            ret.append('executables={}'.format(','.join(
                 get_module_executables(tnode))
             ))
         else:
