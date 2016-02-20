@@ -288,7 +288,9 @@ def get_lib_path(modname, libname=None):
         idx = cwd.find(modname)
         if idx < 0:
             return None
-        path = cwd[:idx+len(modname)] + sep + 'etc' + sep + modname
+        path = '{cwd}{sep}etc{sep}{modname}'.format(cwd=cwd[:idx+len(modname)],
+                                                    sep=sep,
+                                                    modname=modname)
     
     return path
 
