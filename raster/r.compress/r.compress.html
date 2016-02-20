@@ -24,7 +24,7 @@ it was RLE compressed, the raster map became only 1249 bytes
 <p>
 Raster maps that are already compressed are again compressed. This is 
 useful if either the compression method set with the environment 
-variable <b>GRASS_COMPRESSOR</b> (RLE, ZLIB, LZ4, BZiP2) is changed or 
+variable <b>GRASS_COMPRESSOR</b> (RLE, ZLIB, LZ4, BZIP2) is changed or 
 if the ZLIB compression level is manually changed by setting the 
 environment variable GRASS_ZLIB_LEVEL.
 
@@ -137,6 +137,18 @@ r.compress compressed_ZLIB -p
 unset GRASS_INT_ZLIB
 </pre></div>
 
+<p>
+Applying BZIP2 compression to a copy of the ZLIB-compressed map:
+<div class="code"><pre>
+# compression of map using BZIP2 compression
+g.copy raster=compressed_ZLIB,compressed_BZIP2
+
+export GRASS_COMPRESSOR=BZIP2 # BZIP2
+r.compress compressed_BZIP2
+r.compress compressed_BZIP2 -p
+  &lt;compressed_BZIP2&gt; is compressed (method 4: BZIP2). Data type: &lt;CELL&gt;
+unset GRASS_COMPRESSOR
+</pre></div>
 
 <h2>SEE ALSO</h2>
 
