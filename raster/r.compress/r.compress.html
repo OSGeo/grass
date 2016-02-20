@@ -5,17 +5,15 @@ raster map layers. Additionally, it prints information about the
 compression method and data type of the input raster map(s).
 
 <p>
-During compression, this program reformats raster maps using a run-length-encoding
-(RLE) or ZLIB's "deflate" (LZ77-based) algorithm. Raster map
-layers which contain very little information (such as
-boundary, geology, soils and land use maps) can be greatly
-reduced in size. Some raster map layers are shrunk to
-roughly 1% of their original sizes.  Raster map layers
-containing complex images such as elevation and photo or
-satellite images may increase slightly in size.
-All newly generated raster maps are automatically stored in compressed 
-form (see FORMATS below).  Other modules can read both compressed 
-and regular (uncompressed) file formats.
+During (re-)compression, <em>r.compress</em> compresses raster maps 
+using the method spcified with the environment variable 
+<b>GRASS_COMPRESSOR</b>. The feault is  ZLIB's "deflate" (LZ77-based) 
+algorithm. Raster map layers which contain very little information 
+(such as boundary, geology, soils and land use maps) can be greatly 
+reduced in size. Some raster map layers are shrunk to roughly 1% of 
+their original sizes. All newly generated raster maps are automatically 
+stored in compressed form (see FORMATS below). All GRASS modules can 
+read both compressed and uncompressed file formats.
 
 <p>
 As an example, the Spearfish data base raster map layer
@@ -25,15 +23,16 @@ it was RLE compressed, the raster map became only 1249 bytes
 
 <p>
 Raster maps that are already compressed are again compressed. This is 
-useful if either the compression method (RLE or ZLIB) is changed or if 
-the ZLIB compression level is manually changed by setting the 
+useful if either the compression method set with the environment 
+variable <b>GRASS_COMPRESSOR</b> (RLE, ZLIB, LZ4, BZiP2) is changed or 
+if the ZLIB compression level is manually changed by setting the 
 environment variable GRASS_ZLIB_LEVEL.
 
 <p>
 Raster files may be decompressed manually to return them to their 
 original format, using the <b>-u</b> flag of <em>r.compress</em>. If a 
 raster map is already decompressed, it simply informs the user the map 
-is already compressed and exits.
+is already decompressed and exits.
 
 
 <h3>TERMINOLOGY</h3>
@@ -52,14 +51,15 @@ is already compressed and exits.
 <h3>USED COMPRESSION ALGORITHMS</h3>
 
 Floating point (FCELL, DCELL) raster maps never use RLE compression;
-they are either compressed with ZLIB or uncompressed.
+they are either compressed with ZLIB, LZ4, BZIP2 or are uncompressed.
 <p>
-Integer (CELL) raster maps are by default ZLIB compressed or may remain
-uncompressed. If the environment variable <tt>GRASS_INT_ZLIB</tt>
-exists and has the value 0, newly generated compressed integer (CELL type)
-raster maps will be compressed using RLE compression instead of ZLIB.
+Raster maps are by default ZLIB compressed. If the environment variable 
+<tt>GRASS_INT_ZLIB</tt> exists and has the value 0, newly generated 
+compressed integer (CELL type) raster maps will be compressed using RLE 
+compression instead of ZLIB.
 <p>
-In the internal cellhd file, the value for "compressed" is 1 for RLE and 2 for ZLIB.
+In the internal cellhd file, the value for "compressed" is 1 for RLE, 2 
+for ZLIB, 3 for LZ4, and 4 for BZIP2.
 <p>
 Obviously, decompression is controlled by the raster map's compression,
 not the environment variable.
@@ -77,84 +77,16 @@ compress the named map(s).
 
 <h3>FORMATS</h3>
 
-Conceptually, a raster data file consists of rows of cells,
-with each row containing the same number of cells.  A cell
-consists of one or more bytes.  The number of bytes per
-cell depends on the category values stored in the cell.
-Category values in the range 0-255 require 1 byte per cell,
-while category values in the range 256-65535 require 2
-bytes, and category values in the range above 65535 require
-3 (or more) bytes per cell.
-
+Conceptually, a raster data file consists of rows of cells, with each 
+row containing the same number of cells. A cell consists of one or more 
+bytes. For CELL maps, the number of bytes per cell depends on the 
+category values stored in the cell. Category values in the range 0-255 
+require 1 byte per cell, while category values in the range 256-65535 
+require 2 bytes, and category values in the range above 65535 require 3 
+(or more) bytes per cell.
 <p>
-The <b>decompressed</b> raster map format matches the
-conceptual format.  For example, a raster map with 1 byte
-cells that is 100 rows with 200 cells per row, consists of
-20,000 bytes.  Running the UNIX command <em>ls -l</em> on
-this file will show a size of 20,000.  If the cells were 2
-byte cells, the file would require 40,000 bytes.  The map
-layer category values start with the upper left corner cell
-followed by the other cells along the northern boundary.
-The byte following the last byte of that first row is the
-first cell of the second row of category values (moving
-from left to right).  There are no end-of-row markers or
-other syncing codes in the raster map.  A cell header file
-(<em>cellhd</em>) is used to define how this string of bytes
-is broken up into rows of category values.
-
-<p>
-The <b>compressed</b> RLE format is not so simple, but is quite
-elegant in its design. It not only requires less disk space
-to store the raster data, but often can result in faster
-execution of graphic and analysis programs since there is
-less disk I/O. There are two compressed RLE formats: the
-pre-version 3.0 format (which GRASS programs can read but
-no longer produce), and the version 3.0 format (which is
-automatically used when new raster map layers are
-created).
-
-<h4>PRE-3.0 FORMAT:</h4> 
-
-First 3 bytes (chars) - These are a special code that identifies 
-the raster data as compressed. 
-
-<p>
-Address array (long) - array (size of the number of rows +
-1) of addresses pointing to the internal start of each row.
-Because each row may be a different size, this array is
-necessary to provide a mapping of the data.
-
-<p>
-Row by row, beginning at the northern edge of the data, a
-series of byte groups describes the data.  The number of
-bytes in each group is the number of bytes per cell plus
-one.  The first byte of each group gives a count (up to
-255) of the number of cells that contain the category
-values given by the remaining bytes of the group.
-
-<h4>POST-3.0 FORMAT:</h4> 
-
-The 3 byte code is not used. 
-Instead, a field in the cell header is used to indicate compressed format. 
-
-<p>
-The address array is the same. 
-
-<p>
-The RLE format is the same as the pre-3.0 RLE, except that
-each row of data is preceded by a single byte containing
-the number of bytes per cell for the row, and if
-run-length-encoding the row would not require less space
-than non-run-length-encoding, then the row is not encoded.
-
-<p>
-These improvements give better compression than the pre-3.0
-format in 99% of the raster data layers.  The kinds of
-raster data layers which get bigger are those in which each
-row would be larger if compressed (e.g., imagery band
-files).  But even in this case the raster data layer would
-only be larger by the size of the address array and the
-single byte preceding each row.
+FCELL maps always have 4 bytes per cell and DCELL maps have always 8 
+bytes per cell.
 
 <p>
 Since GRASS GIS 7.0.0, the default compression method for 
@@ -217,6 +149,7 @@ unset GRASS_INT_ZLIB
 
 James Westervelt,<br>
 Michael Shapiro,<br> 
-U.S. Army Construction Engineering Research Laboratory
+U.S. Army Construction Engineering Research Laboratory<br>
+Markus Metz
 
 <p><i>Last changed: $Date$</i>
