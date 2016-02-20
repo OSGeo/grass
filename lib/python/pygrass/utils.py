@@ -265,32 +265,31 @@ def r_export(rast, output='', fmt='png', **kargs):
 
 def get_lib_path(modname, libname=None):
     """Return the path of the libname contained in the module.
-
-    >>> get_lib_path(modname='r.modis', libname='libmodis')
     """
-    from os.path import isdir, join
+    from os.path import isdir, join, sep
     from os import getenv
 
     if isdir(join(getenv('GISBASE'), 'etc', modname)):
         path = join(os.getenv('GISBASE'), 'etc', modname)
     elif getenv('GRASS_ADDON_BASE') and libname and \
             isdir(join(getenv('GRASS_ADDON_BASE'), 'etc', modname, libname)):
-        path = join(getenv('GRASS_ADDON_BASE'), 'etc', modname, libname)
+        path = join(getenv('GRASS_ADDON_BASE'), 'etc', modname)
     elif getenv('GRASS_ADDON_BASE') and \
             isdir(join(getenv('GRASS_ADDON_BASE'), 'etc', modname)):
         path = join(getenv('GRASS_ADDON_BASE'), 'etc', modname)
     elif getenv('GRASS_ADDON_BASE') and \
             isdir(join(getenv('GRASS_ADDON_BASE'), modname, modname)):
         path = join(os.getenv('GRASS_ADDON_BASE'), modname, modname)
-    elif libname and isdir(join('..', libname)): # used by g.extension compilation process
-        path = join('..', libname)
-    elif isdir(join('..', 'etc', modname)):      # used by g.extension compilation process
-        path = join('..', 'etc', modname)
-    elif isdir(join('etc', modname)):            # used by g.extension compilation process
-        path = join('etc', modname)
     else:
-        path = None
-
+        # used by g.extension compilation process
+        cwd = os.getcwd()
+        idx = cwd.find(modname)
+        if idx < 0:
+            return None
+        path = '{cwd}{sep}etc{sep}{modname}'.format(cwd=cwd[:idx+len(modname)],
+                                                    sep=sep,
+                                                    modname=modname)
+    
     return path
 
 
@@ -316,20 +315,20 @@ def set_path(modulename, dirname=None, path='.'):
 
         grass_prompt> tree ../../../r.green
         ../../../r.green
-        ├── ...
-        ├── libgreen
-        │   ├── pyfile1.py
-        │   └── pyfile2.py
-        └── r.green.hydro
-           ├── Makefile
-           ├── libhydro
-           │   ├── pyfile1.py
-           │   └── pyfile2.py
-           ├── r.green.hydro.*
-           └── r.green.hydro.financial
-               ├── Makefile
-               ├── ...
-               └── r.green.hydro.financial.py
+        |-- ...
+        |-- libgreen
+        |   |-- pyfile1.py
+        |   +-- pyfile2.py
+        +-- r.green.hydro
+           |-- Makefile
+           |-- libhydro
+           |   |-- pyfile1.py
+           |   +-- pyfile2.py
+           |-- r.green.hydro.*
+           +-- r.green.hydro.financial
+               |-- Makefile
+               |-- ...
+               +-- r.green.hydro.financial.py
 
         21 directories, 125 files
 
@@ -363,13 +362,13 @@ def set_path(modulename, dirname=None, path='.'):
         sys.path.append(os.path.abspath(path))
     else:
         # running from GRASS GIS session
-        from grass.pygrass.utils import get_lib_path
         path = get_lib_path(modulename, dirname)
         if path is None:
             pathname = os.path.join(modulename, dirname) if dirname else modulename
             raise ImportError("Not able to find the path '%s' directory "
                               "(current dir '%s')." % (pathname, os.getcwd()))
-        sys.path.append(path)
+        
+        sys.path.insert(0, path)
 
 
 def split_in_chunk(iterable, length=10):
