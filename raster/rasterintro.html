@@ -261,6 +261,59 @@ The GRASS GIS raster format is architecture independent and portable between
 GRASS distinguishes NULL and zero. When working with NULL data, it is
 important to know that operations on NULL cells lead to NULL cells.
 
+<h3>Raster compression</h3>
+<!-- keep in sync with raster/r.compress/r.compress.html -->
+
+GRASS raster maps are by default ZLIB compressed. If the environment 
+variable <tt>GRASS_INT_ZLIB</tt> exists and has the value 0, newly 
+generated compressed integer (CELL type) raster maps will be compressed 
+using RLE compression instead of ZLIB.
+<p>
+Floating point (FCELL, DCELL) raster maps never use RLE compression;
+they are either compressed with ZLIB, LZ4, BZIP2 or are uncompressed.
+<p>
+The compression method for raster maps is by default ZLIB's deflate 
+algorithm. The compression method can be set with the environment 
+variable GRASS_COMPRESSOR which can be set to RLE, ZLIB, LZ4, or BZIP2.
+
+<dl>
+<dt><strong>RLE</strong></dt>
+<dd><b>DEPRECATED</b> Run-Length Encoding, poor compression ratio but 
+fast. Kept for backwards compatibility to read raster maps created with 
+GRASS 6. Only used for raster maps of type CELL. FCELL and DCELL maps 
+are never and have never been compressed with RLE.</dd>
+<dt><strong>ZLIB</strong></dt>
+<dd>ZLIB's deflate is the default compression method for all raster 
+maps. GRASS 7 uses by default 1 as ZLIB compression level which is the 
+best compromise betweeen speed and compression ratio, also when 
+compared to other available compression methods. Valid levels are in 
+the range [1, 9] and can be set with the environment variable 
+GRASS_ZLIB_LEVEL.</dd>
+<dt><strong>LZ4</strong></dt>
+<dd>LZ4 is a very fast compression method, about as fast as no 
+compression. The compression ration is generally higher than for RLE. 
+Decompression is also very fast. LZ4 is recommended if disk space is 
+not a limiting factor, but some sving on disk space is welcomed without 
+increasing processing speed. The compression ratio of LZ4 is generally 
+better than for RLE but worse than for ZLIB.</dd>
+<dt><strong>BZIP2</strong></dt>
+<dd>BZIP2 can provide compression ratios much higher than for the other 
+methods, but only for large raster maps (&gt; 10000 columns). For large 
+raster maps, disk space consumption can be reduced by 30 - 50% when 
+using BZIP2 instead of ZLIB's deflate. BZIP2 is the slowest compression 
+and decompression method. However, if reading from / writing to a 
+storage device is the limiting factor, BZIP2 compression can speed up 
+raster map processing. Be aware that for smaller raster maps, BZIP2 
+compression ratio can be worse than for other compression methods.</dd> 
+</dl>
+
+<p>
+In the internal cellhd file, the value for "compressed" is 1 for RLE, 2 
+for ZLIB, 3 for LZ4, and 4 for BZIP2.
+<p>
+Obviously, decompression is controlled by the raster map's compression,
+not the environment variable.
+
 <h3>See also</h3>
 
 <ul>
