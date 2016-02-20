@@ -268,7 +268,7 @@ def natural_sort(l):
 def get_lib_path(modname, libname=None):
     """Return the path of the libname contained in the module.
     """
-    from os.path import isdir, join
+    from os.path import isdir, join, sep
     from os import getenv
 
     if isdir(join(getenv('GISBASE'), 'etc', modname)):
@@ -282,15 +282,16 @@ def get_lib_path(modname, libname=None):
     elif getenv('GRASS_ADDON_BASE') and \
             isdir(join(getenv('GRASS_ADDON_BASE'), modname, modname)):
         path = join(os.getenv('GRASS_ADDON_BASE'), modname, modname)
-    elif libname and isdir(join('..', libname)): # used by g.extension compilation process
-        path = join('..', libname)
-    elif isdir(join('..', 'etc', modname)):      # used by g.extension compilation process
-        path = join('..', 'etc', modname)
-    elif isdir(join('etc', modname)):            # used by g.extension compilation process
-        path = join('etc', modname)
     else:
-        path = None
-
+        # used by g.extension compilation process
+        cwd = os.getcwd()
+        idx = cwd.find(modname)
+        if idx < 0:
+            return None
+        path = cwd[:idx+len(modname)] + sep + 'etc' + sep + modname
+        if libname:
+            path = join(path, libname)
+    
     return path
 
 
@@ -368,4 +369,5 @@ def set_path(modulename, dirname=None, path='.'):
             pathname = os.path.join(modulename, dirname) if dirname else modulename
             raise ImportError("Not able to find the path '%s' directory "
                               "(current dir '%s')." % (pathname, os.getcwd()))
-        sys.path.append(path)
+        
+        sys.path.insert(0, path)
