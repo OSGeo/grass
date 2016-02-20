@@ -480,12 +480,20 @@ def _removeUserToolboxesItem(root):
 
 def _getAddons():
     try:
-        output = gcore.read_command('g.extension', quiet=True, flags='a')
+        output = gcore.read_command('g.extension', quiet=True, flags='ag')
     except CalledModuleError:
         _warning(_("List of addons cannot be obtained"
                    " because g.extension failed."))
         return []
-    return sorted(output.splitlines())
+    
+    flist = []
+    for line in output.splitlines():
+        if not line.startswith('executables'):
+            continue
+        for fexe in line.split('=', 1)[1].split(','):
+            flist.append(fexe)
+    
+    return sorted(flist)
 
 
 def _removeAddonsItem(node, addonsNodes):
