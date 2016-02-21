@@ -1,5 +1,5 @@
 /*!
-   \file lib/vector/Vlib/intersect.c
+   \file lib/vector/Vlib/intersect2.c
 
    \brief Vector library - intersection
 
@@ -547,12 +547,12 @@ static int boq_load(struct boq *q, struct line_pnts *Pnts,
  *
  * Creates array of new lines created from original A line, by
  * intersection with B line. Points (Points->n_points == 1) are not
- * supported.
+ * supported. If B line is NULL, A line is intersected with itself.
  * 
  * simplified Bentley–Ottmann Algorithm
  *
  * \param APoints first input line 
- * \param BPoints second input line 
+ * \param BPoints second input line or NULL
  * \param[out] ALines array of new lines created from original A line
  * \param[out] BLines array of new lines created from original B line
  * \param[out] nalines number of new lines (ALines)
@@ -597,6 +597,12 @@ Vect_line_intersection2(struct line_pnts *APoints,
     n_cross = 0;
     APnts = APoints;
     BPnts = BPoints;
+
+    same = 0;
+    if (!BPoints) {
+	BPnts = APoints;
+	same = 1;
+    }
 
     ABPnts[0] = APnts;
     ABPnts[1] = BPnts;
@@ -659,26 +665,26 @@ Vect_line_intersection2(struct line_pnts *APoints,
      *  we have to break both A and B  at once i.e. in one Vect_line_intersection () call.
      */
 
-    if (!Vect_box_overlap(ABox, BBox)) {
-	*nalines = 0;
-	*nblines = 0;
+    if (!same && !Vect_box_overlap(ABox, BBox)) {
 	return 0;
     }
 
     /* overlap box of A line and B line */
-    abbox = *BBox;
-    if (abbox.N > ABox->N)
-	abbox.N = ABox->N;
-    if (abbox.S < ABox->S)
-	abbox.S = ABox->S;
-    if (abbox.E > ABox->E)
-	abbox.E = ABox->E;
-    if (abbox.W < ABox->W)
-	abbox.W = ABox->W;
-    if (abbox.T > ABox->T)
-	abbox.T = ABox->T;
-    if (abbox.B < ABox->B)
-	abbox.B = ABox->B;
+    abbox = *ABox;
+    if (!same) {
+	if (abbox.N > BBox->N)
+	    abbox.N = BBox->N;
+	if (abbox.S < BBox->S)
+	    abbox.S = BBox->S;
+	if (abbox.E > BBox->E)
+	    abbox.E = BBox->E;
+	if (abbox.W < BBox->W)
+	    abbox.W = BBox->W;
+	if (abbox.T > BBox->T)
+	    abbox.T = BBox->T;
+	if (abbox.B < BBox->B)
+	    abbox.B = BBox->B;
+    }
 
     abbox.N += rethresh;
     abbox.S -= rethresh;
@@ -690,20 +696,6 @@ Vect_line_intersection2(struct line_pnts *APoints,
     if (APnts->n_points < 2 || BPnts->n_points < 2) {
 	G_fatal_error("Intersection with points is not yet supported");
 	return 0;
-    }
-
-    if (APnts->n_points == BPnts->n_points) {
-	same = 1;
-	for (i = 0; i < APnts->n_points; i++) {
-	    if (APnts->x[i] != BPnts->x[i] ||
-	        APnts->y[i] != BPnts->y[i] ||
-		(with_z && APnts->z[i] != BPnts->z[i])) {
-		same = 0;
-		break;
-	    }
-	}
-	if (same)
-	    G_debug(3, "Intersecting different lines");
     }
 
     /* initialize queue */
@@ -789,39 +781,39 @@ Vect_line_intersection2(struct line_pnts *APoints,
 	/* 1. of A seg */
 	seg = cross[i].segment[0];
 	curdist =
-	    dist2(cross[i].x, cross[i].y, APoints->x[seg], APoints->y[seg]);
-	x = APoints->x[seg];
-	y = APoints->y[seg];
+	    dist2(cross[i].x, cross[i].y, APnts->x[seg], APnts->y[seg]);
+	x = APnts->x[seg];
+	y = APnts->y[seg];
 
 	cross[i].distance[0] = curdist;
 
 	/* 2. of A seg */
 	dist =
-	    dist2(cross[i].x, cross[i].y, APoints->x[seg + 1],
-		  APoints->y[seg + 1]);
+	    dist2(cross[i].x, cross[i].y, APnts->x[seg + 1],
+		  APnts->y[seg + 1]);
 	if (dist < curdist) {
 	    curdist = dist;
-	    x = APoints->x[seg + 1];
-	    y = APoints->y[seg + 1];
+	    x = APnts->x[seg + 1];
+	    y = APnts->y[seg + 1];
 	}
 
 	/* 1. of B seg */
 	seg = cross[i].segment[1];
 	dist =
-	    dist2(cross[i].x, cross[i].y, BPoints->x[seg], BPoints->y[seg]);
+	    dist2(cross[i].x, cross[i].y, BPnts->x[seg], BPnts->y[seg]);
 	cross[i].distance[1] = dist;
 
 	if (dist < curdist) {
 	    curdist = dist;
-	    x = BPoints->x[seg];
-	    y = BPoints->y[seg];
+	    x = BPnts->x[seg];
+	    y = BPnts->y[seg];
 	}
 	/* 2. of B seg */
-	dist = dist2(cross[i].x, cross[i].y, BPoints->x[seg + 1], BPoints->y[seg + 1]);
+	dist = dist2(cross[i].x, cross[i].y, BPnts->x[seg + 1], BPnts->y[seg + 1]);
 	if (dist < curdist) {
 	    curdist = dist;
-	    x = BPoints->x[seg + 1];
-	    y = BPoints->y[seg + 1];
+	    x = BPnts->x[seg + 1];
+	    y = BPnts->y[seg + 1];
 	}
 	if (curdist < rethresh * rethresh) {
 	    cross[i].x = x;
@@ -830,10 +822,10 @@ Vect_line_intersection2(struct line_pnts *APoints,
 	    /* Update distances along segments */
 	    seg = cross[i].segment[0];
 	    cross[i].distance[0] =
-		dist2(APoints->x[seg], APoints->y[seg], cross[i].x, cross[i].y);
+		dist2(APnts->x[seg], APnts->y[seg], cross[i].x, cross[i].y);
 	    seg = cross[i].segment[1];
 	    cross[i].distance[1] =
-		dist2(BPoints->x[seg], BPoints->y[seg], cross[i].x, cross[i].y);
+		dist2(BPnts->x[seg], BPnts->y[seg], cross[i].x, cross[i].y);
 	}
     }
 
@@ -850,17 +842,17 @@ Vect_line_intersection2(struct line_pnts *APoints,
 
 	if (l == 1) {
 	    G_debug(2, "Clean and create array for line A");
-	    Points = APoints;
-	    Points1 = APoints;
-	    Points2 = BPoints;
+	    Points = APnts;
+	    Points1 = APnts;
+	    Points2 = BPnts;
 	    current = 0;
 	    second = 1;
 	}
 	else {
 	    G_debug(2, "Clean and create array for line B");
-	    Points = BPoints;
-	    Points1 = BPoints;
-	    Points2 = APoints;
+	    Points = BPnts;
+	    Points1 = BPnts;
+	    Points2 = APnts;
 	    current = 1;
 	    second = 0;
 	}
