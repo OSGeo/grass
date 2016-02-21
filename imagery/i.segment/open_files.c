@@ -497,7 +497,8 @@ static int read_seed(struct globals *globals, SEGMENT *seeds_seg, struct rc *Ri,
 	rgtree_insert(globals->reg_tree, &(globals->rs));
     }
     else {
-	update_band_vals(Ri->row, Ri->col, &(globals->rs), globals);
+	if (globals->rs.count > 1)
+	    update_band_vals(Ri->row, Ri->col, &(globals->rs), globals);
     }
     if (globals->rs.count > 1)
 	globals->n_regions -= (globals->rs.count - 1);
