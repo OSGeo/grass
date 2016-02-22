@@ -80,7 +80,8 @@ int do_areas(struct Map_info *Map, struct line_pnts *Points,
 	    return -1;
 	}
 
-	G_plot_polygon(Points->x, Points->y, Points->n_points);
+	if (G_plot_polygon(Points->x, Points->y, Points->n_points) != 0)
+	    G_warning(_("Failed to plot polygon"));
     }
     G_percent(1, 1, 1);
     

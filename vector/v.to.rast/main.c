@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     field_opt = G_define_standard_option(G_OPT_V_FIELD);
 
     type_opt = G_define_standard_option(G_OPT_V_TYPE);
-    type_opt->options = "point,line,area";
+    type_opt->options = "point,line,boundary,area";
     type_opt->answer = "point,line,area";
     type_opt->guisection = _("Selection");
     
