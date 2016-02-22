@@ -1,12 +1,18 @@
 <h2>DESCRIPTION</h2>
 
 <em>v.to.rast</em> transforms GRASS vector map layers into GRASS raster map
-layer format. Optionally, attributes can be converted into raster category
+layer format. Optionally, attributes can be converted to raster category
 labels.
 
 
 <h2>NOTES</h2>
 
+In order to avoid unexpected results, the type of vector features 
+should always be specified. The default is to convert all vector 
+features, but if only e.g. areas should be converted use 
+<em>type=area</em> rather than <em>type=point,line,area</em>.
+
+<p>
 <em>v.to.rast</em> will only affect data in areas lying
 inside the boundaries of the current geographic region.
 A grid cell belongs to the area where the grid cell center falls into.
@@ -55,8 +61,13 @@ resultant raster map.
 <p><p><b>Flow directions</b> are given in degrees counterclockwise from east.
 <p><p>Raster category labels are supported for all of <em>use=</em> except <em>use=z</em>.
 <p>
-The <b>-d</b> flag applies only to lines, the default is only those on the
-render path (thin line).
+The <b>-d</b> flag applies only to lines and boundaries, the default is 
+to set only those cells on the render path (thin line).
+<p>
+Boundaries (usually without categories) can be rasterized with
+<div class="code"><pre>
+v.to.rast type=boundary layer=-1 use=val
+</pre></div>
 
 <h2>EXAMPLES</h2>
 
@@ -72,7 +83,7 @@ Column 3: WIDTH
 </pre></div>
 
 <div class="code"><pre>
-v.to.rast input=vect_map output=raster_map attribute_column=SPEED
+v.to.rast input=vect_map output=raster_map attribute_column=SPEED type=line
 </pre></div>
 
 <h3>Calculate stream directions from a river vector map (Spearfish)</h3>

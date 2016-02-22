@@ -133,8 +133,13 @@ int vect_to_rast(const char *vector_map, const char *raster_map, const char *fie
 
 	G_debug(1, "%d areas sorted", nareas);
     }
+    if (nareas > 0 && dense) {
+	G_warning(_("Area conversion and line densification are mutually exclusive, disabling line densification."));
+	dense = 0;
+    }
 
-    nlines = 1;
+    nlines = Vect_get_num_primitives(&Map, ftype);
+    nplines_all = nlines;
     npasses = begin_rasterization(cache_mb, format, dense);
     pass = 0;
 
@@ -227,7 +232,7 @@ int vect_to_rast(const char *vector_map, const char *raster_map, const char *fie
      * actual number of lines, currently unknown:
      * number of lines are within cat constraint
      * and overlap with current region */
-    if (nplines_all > 0)
+    if (nlines > 0 && nplines_all > 0)
 	G_message(_("Converted points/lines: %d of %d"), nlines, nplines_all);
 #endif
 
