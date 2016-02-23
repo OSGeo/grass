@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
     void *raster_row;
     struct Cell_head region;
     struct Cell_head input_region;
-    int rows, cols;		/* scan box size */
+    int rows, last_rows, row0, cols;		/* scan box size */
     int row;		/* counters */
 
     int pass, npasses;
@@ -62,7 +62,6 @@ int main(int argc, char *argv[])
     unsigned int counter;
     char buff[BUFFSIZE];
     double x, y, z;
-    double pass_north, pass_south;
     int arr_row, arr_col;
     unsigned long count, count_total;
     int point_class;
@@ -455,15 +454,24 @@ int main(int argc, char *argv[])
     }
     Rast_set_output_window(&region);
 
-    rows = (int)(region.rows * (percent / 100.0));
+    rows = last_rows = region.rows;
+    npasses = 1;
+    if (percent < 100) {
+	rows = (int)(region.rows * (percent / 100.0));
+	npasses = region.rows / rows;
+	last_rows = region.rows - npasses * rows;
+	if (last_rows)
+	    npasses++;
+	else
+	    last_rows = rows;
+
+    }
     cols = region.cols;
 
     G_debug(2, "region.n=%f  region.s=%f  region.ns_res=%f", region.north,
 	    region.south, region.ns_res);
     G_debug(2, "region.rows=%d  [box_rows=%d]  region.cols=%d", region.rows,
 	    rows, region.cols);
-
-    npasses = (int)ceil(1.0 * region.rows / rows);
 
     /* using row-based chunks (used for output) when input and output
      * region matches and using segment library when they don't */
@@ -528,9 +536,6 @@ int main(int argc, char *argv[])
 
     count_total = line_total = 0;
 
-    /* init northern border */
-    pass_south = region.north;
-
     /* main binning loop(s) */
     for (pass = 1; pass <= npasses; pass++) {
 
@@ -538,11 +543,9 @@ int main(int argc, char *argv[])
 	    G_message(_("Pass #%d (of %d) ..."), pass, npasses);
 
 	/* figure out segmentation */
-	pass_north = pass_south;  /* exact copy to avoid fp errors */
-	pass_south = region.north - pass * rows * region.ns_res;
+	row0 = (pass - 1) * rows;
 	if (pass == npasses) {
-	    rows = region.rows - (pass - 1) * rows;
-	    pass_south = region.south; /* exact copy to avoid fp errors */
+	    rows = last_rows;
 	}
 
         if (base_array) {
@@ -552,8 +555,7 @@ int main(int argc, char *argv[])
             }
         }
 
-	G_debug(2, "pass=%d/%d  pass_n=%f  pass_s=%f  rows=%d",
-		pass, npasses, pass_north, pass_south, rows);
+	G_debug(2, "pass=%d/%d  rows=%d", pass, npasses, rows);
 
     point_binning_allocate(&point_binning, rows, cols, rtype);
 
@@ -602,18 +604,20 @@ int main(int argc, char *argv[])
                 if (class_filter_is_out(&class_filter, point_class))
                     continue;
 
-                if (y <= pass_south || y > pass_north) {
+                if (y <= region.south || y > region.north) {
                     continue;
                 }
                 if (x < region.west || x >= region.east) {
                     continue;
                 }
 
-                z = z * zscale;
-
                 /* find the bin in the current array box */
-                arr_row = (int)((pass_north - y) / region.ns_res);
+		arr_row = (int)((region.north - y) / region.ns_res) - row0;
+		if (arr_row < 0 || arr_row >= rows)
+		    continue;
                 arr_col = (int)((x - region.west) / region.ew_res);
+
+                z = z * zscale;
 
                 if (base_array) {
                     double base_z;
