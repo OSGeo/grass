@@ -264,11 +264,6 @@ r.colors lidar_min.rst_scaled rule=bcyr -n -e
   with e.g. <tt>percent=10</tt> or less.
   <br>Cause unknown.
 
-<li> <em>n</em> map <tt>percent=100</tt> and <tt>percent=xx</tt> maps
-  differ slightly (point will fall above/below the segmentation line)
-  <br>Investigate with "<tt>r.mapcalc diff = bin_n.100 - bin_n.33</tt>" etc.
-  <br>Cause unknown.
-
 <li> "<tt>nan</tt>" can leak into <em>coeff_var</em> maps.
   <br>Cause unknown. Possible work-around: "<tt>r.null setnull=nan</tt>"
 <!-- Another method:  r.mapcalc 'No_nan = if(map == map, map, null() )' -->
