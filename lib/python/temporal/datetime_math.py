@@ -861,6 +861,42 @@ def create_suffix_from_datetime(start_time,  granularity):
     global suffix_units
     return start_time.strftime(suffix_units[granularity.split(' ')[1]])
 
+def create_time_suffix(mapp, end=False):
+    """Create a datetime string based on a map datetime object
+    
+       :param mapp: a temporal map dataset
+       :param end: True if you want add also end time to the suffix    
+    """
+    start = mapp.temporal_extent.get_start_time()
+    sstring = start.isoformat().replace(':', '.').replace('-', '_')
+    if end:
+        end = mapp.temporal_extent.get_end_time()
+        estring = end.isoformat().replace(':', '.').replace('-', '_')
+        return "{st}_{en}".format(st=sstring, en=estring)
+    return sstring
+
+def create_numeric_suffic(base, count, zeros):
+    """Create a string based on count and number of zeros decided by zeros
+
+       :param base: the basename for new map
+       :param count: a number
+       :param zeros: a string containing the expected number, coming from suffix option
+    """
+    spli = zeros.split('%')
+    if len(spli) == 2:
+        suff = spli[1]
+        if suff.isdigit():
+            if int(suff[0]) == 0:
+                zero = suff
+            else:
+                zero = "0{nu}".format(nu=suff)
+        else:
+            zero = '05'
+    else:
+        zero = '05'
+    s = '{ba}_{i:' + zero + 'd}'
+    return s.format(ba=base, i=count)
+
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
