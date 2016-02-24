@@ -82,7 +82,7 @@ class TestAggregationAbsolute(TestCase):
         self.assertModule("t.rast.aggregate", input="A", output="B",
                           basename="b", granularity="1 months",
                           method="maximum", sampling=["contains"],
-                          file_limit=0, nprocs=3, flags="s")
+                          file_limit=0, nprocs=3)
 
         tinfo_string="""start_time=2001-01-01 00:00:00
                         end_time=2001-04-01 00:00:00
@@ -110,12 +110,20 @@ class TestAggregationAbsolute(TestCase):
              "b_2001_03" + os.linesep
         self.assertEqual(maps, lister.outputs.stdout)
 
+    def test_aggregation_1month_time(self):
+        """Aggregation one month time suffix"""
+        self.assertModule("t.rast.aggregate", input="A", output="B",
+                          basename="b", granularity="1 months",
+                          method="maximum", sampling=["contains"],
+                          file_limit=0, nprocs=3, suffix='time')
+        self.assertRasterExists('b_2001_01_01T00_00_00')
+
     def test_aggregation_2months(self):
         """Aggregation two month"""
         self.assertModule("t.rast.aggregate", input="A", output="B",
                           basename="b", granularity="2 months",
                           method="minimum", sampling=["contains"],
-                          nprocs=4, offset=10)
+                          nprocs=4, offset=10, suffix='num%02')
 
         tinfo_string="""start_time=2001-01-01 00:00:00
                         end_time=2001-05-01 00:00:00
@@ -147,7 +155,8 @@ class TestAggregationAbsolute(TestCase):
         self.assertModule("t.rast.aggregate", input="A", output="B",
                           basename="b", granularity="3 months",
                           method="sum", sampling=["contains"],
-                          file_limit=0, nprocs=9, offset=100)
+                          file_limit=0, nprocs=9, offset=100,
+                          suffix='num%03')
 
         tinfo_string="""start_time=2001-01-01 00:00:00
                         end_time=2001-04-01 00:00:00
