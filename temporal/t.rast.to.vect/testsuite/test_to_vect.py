@@ -131,6 +131,21 @@ class TestRasterToVector(TestCase):
         info = SimpleModule("t.info", flags="g", type="stvds", input="result")
         self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
 
+    def test_num_suffix(self):
+        self.assertModule("t.rast.to.vect",  input="A", output="result", 
+                          type="point", flags="t", column="values",
+                          basename="test", suffix="num%03",
+                          nprocs=4, overwrite=True, verbose=True)
+        self.assertVectorExists("test_001")
+
+    def test_time_suffix(self):
+        self.assertModule("t.rast.to.vect",  input="A", output="result", 
+                          type="point", flags="t", column="values",
+                          basename="test", suffix="time",
+                          nprocs=4, overwrite=True, verbose=True)
+        self.assertVectorExists("test_2001_01_01T00_00_00")
+
+
 class TestRasterToVectorFails(TestCase):
     @classmethod
     def setUpClass(cls):
