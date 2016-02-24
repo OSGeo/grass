@@ -227,6 +227,14 @@ class TestAccumulate(TestCase):
         self.assertRasterExists('b_001')
         self.assertRasterDoesNotExist('b_2001_01_07')
 
+    def test_time_suffix(self):
+        self.assertModule("t.rast.accumulate",  input="A", output="B",
+                          limits=[0,40], method="gdd",
+                          start="2001-01-01", cycle="7 days",
+                          basename="b", stop="2001-01-05", suffix="time",
+                          overwrite=True,  verbose=True)
+        self.assertRasterExists('b_2001_01_01T00_00_00')
+
 if __name__ == '__main__':
     from grass.gunittest.main import test
     test()

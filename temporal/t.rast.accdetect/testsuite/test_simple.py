@@ -81,7 +81,7 @@ class TestRasterExtraction(TestCase):
                           start="2001-01-01", cycle="12 months", suffix='time',
                           basename='b_occu', range=(1,8))
         self.assertRasterDoesNotExist('b_occu_2001_01')
-        self.assertRasterExists('b_occu_2001_01_01T00.00.00')
+        self.assertRasterExists('b_occu_2001_01_01T00_00_00')
 
     def test_num_suffix(self):
         self.assertModule('t.rast.accdetect', input='A', occurrence='B',
