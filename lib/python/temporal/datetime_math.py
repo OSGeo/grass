@@ -868,10 +868,10 @@ def create_time_suffix(mapp, end=False):
        :param end: True if you want add also end time to the suffix    
     """
     start = mapp.temporal_extent.get_start_time()
-    sstring = start.isoformat().replace(':', '.').replace('-', '_')
+    sstring = start.isoformat().replace(':', '_').replace('-', '_')
     if end:
         end = mapp.temporal_extent.get_end_time()
-        estring = end.isoformat().replace(':', '.').replace('-', '_')
+        estring = end.isoformat().replace(':', '_').replace('-', '_')
         return "{st}_{en}".format(st=sstring, en=estring)
     return sstring
 

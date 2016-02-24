@@ -175,7 +175,7 @@ class TestRasterContour(TestCase):
         self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
 
 
-    def test_time_num(self):
+    def test_suffix_num(self):
         """Test the -s flag"""
         self.assertModule("t.rast.contour", input="A", output="result",
                           step=1, minlevel=1, maxlevel=8,
@@ -183,7 +183,19 @@ class TestRasterContour(TestCase):
                           where="start_time > '2001-02-01'",
                           nprocs=1, overwrite=True, verbose=True)
 
-        self.assertVectorExists('time_004')
+        self.assertVectorExists('time_001')
+        self.assertVectorDoesNotExist('time_00005')
+        self.assertVectorDoesNotExist('time_2001_07')
+
+    def test_suffix_time(self):
+        """Test the -s flag"""
+        self.assertModule("t.rast.contour", input="A", output="result",
+                          step=1, minlevel=1, maxlevel=8,
+                          basename="time", suffix='time',
+                          where="start_time > '2001-02-01'",
+                          nprocs=1, overwrite=True, verbose=True)
+
+        self.assertVectorExists('time_2001_07_01T00_00_00')
         self.assertVectorDoesNotExist('time_00005')
         self.assertVectorDoesNotExist('time_2001_07')
 
