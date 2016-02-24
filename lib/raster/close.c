@@ -33,7 +33,8 @@
 #define FORMAT_FILE "f_format"
 #define QUANT_FILE  "f_quant"
 #define NULL_FILE   "null"
-#define NULL2_FILE  "null2"
+/* cmpressed null file */
+#define NULLC_FILE  "nullcmpr"
 
 static int close_old(int);
 static int close_new(int, int);
@@ -279,7 +280,7 @@ static int close_new_gdal(int fd, int ok)
 	G_file_name_misc(path, "cell_misc", NULL_FILE, fcb->name,
 			  G_mapset());
 	remove(path);
-	G_file_name_misc(path, "cell_misc", NULL2_FILE, fcb->name,
+	G_file_name_misc(path, "cell_misc", NULLC_FILE, fcb->name,
 			  G_mapset());
 	remove(path);
 
@@ -375,11 +376,11 @@ static int close_new(int fd, int ok)
 	G__make_mapset_element_misc("cell_misc", fcb->name);
 	G_file_name_misc(path, "cell_misc", NULL_FILE, fcb->name, G_mapset());
 	remove(path);
-	G_file_name_misc(path, "cell_misc", NULL2_FILE, fcb->name, G_mapset());
+	G_file_name_misc(path, "cell_misc", NULLC_FILE, fcb->name, G_mapset());
 	remove(path);
 
 	G_file_name_misc(path, "cell_misc",
-			 fcb->null_row_ptr ? NULL2_FILE : NULL_FILE,
+			 fcb->null_row_ptr ? NULLC_FILE : NULL_FILE,
 			 fcb->name, G_mapset());
 
 	if (fcb->null_cur_row > 0) {
@@ -502,11 +503,11 @@ void Rast__close_null(int fd)
     G__make_mapset_element_misc("cell_misc", fcb->name);
     G_file_name_misc(path, "cell_misc", NULL_FILE, fcb->name, G_mapset());
     remove(path);
-    G_file_name_misc(path, "cell_misc", NULL2_FILE, fcb->name, G_mapset());
+    G_file_name_misc(path, "cell_misc", NULLC_FILE, fcb->name, G_mapset());
     remove(path);
 
     G_file_name_misc(path, "cell_misc",
-		     fcb->null_row_ptr ? NULL2_FILE : NULL_FILE,
+		     fcb->null_row_ptr ? NULLC_FILE : NULL_FILE,
 		     fcb->name, G_mapset());
 
     if (rename(fcb->null_temp_name, path))
