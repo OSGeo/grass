@@ -92,6 +92,15 @@
 #%end
 
 #%option
+#% key: suffix
+#% type: string
+#% description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'count' for numerical suffix with a specific number of digits (default %05)
+#% answer: gran
+#% required: no
+#% multiple: no
+#%end
+
+#%option
 #% key: range
 #% type: double
 #% key_desc: min,max
@@ -144,6 +153,7 @@ def main():
     staend = options["staend"]
     register_null = flags["n"]
     reverse = flags["r"]
+    time_suffix = options["suffix"]
 
     grass.set_raise_on_error(True)
 
@@ -301,8 +311,9 @@ def main():
         grass.message(_("Processing cycle %s - %s"%(str(start), str(end))))
 
         count = compute_occurrence(occurrence_maps, input_strds, input_maps,
-                                   start, base, count, mapset, where, reverse,
-                                   range, minimum_strds, maximum_strds, dbif)
+                                   start, base, count, time_suffix, mapset,
+                                   where, reverse, range, minimum_strds,
+                                   maximum_strds, dbif)
 
         # Indicator computation is based on the occurrence so we need to start it after
         # the occurrence cycle
@@ -314,7 +325,15 @@ def main():
                 else:
                     map = input_maps[i]
 
-                indicator_map_name = "%s_indicator_%i" % (base, indi_count)
+                if input_strds.get_temporal_type() == 'absolute' and time_suffix == 'gran':
+                    suffix = tgis.create_suffix_from_datetime(map.temporal_extent.get_start_time(),
+                                                              input_strds.get_granularity())
+                    indicator_map_name = "{ba}_{su}".format(ba=base, su=suffix)
+                elif input_strds.get_temporal_type() == 'absolute' and time_suffix == 'time':
+                    suffix = tgis.create_time_suffix(map)
+                    indicator_map_name = "{ba}_{su}".format(ba=base, su=suffix)
+                else:
+                    indicator_map_name = tgis.create_numeric_suffic(base, indi_count, time_suffix)
                 indicator_map_id = dummy.build_id(indicator_map_name, mapset)
                 indicator_map = input_strds.get_new_map_instance(indicator_map_id)
 
@@ -464,8 +483,8 @@ def create_strds_register_maps(in_strds, out_strds, out_maps, register_null,
 ############################################################################
 
 def compute_occurrence(occurrence_maps, input_strds, input_maps, start, base,
-               count, mapset, where, reverse, range, minimum_strds,
-               maximum_strds, dbif):
+                       count, tsuffix, mapset, where, reverse, range,
+                       minimum_strds, maximum_strds, dbif):
 
     if minimum_strds:
         input_maps_minimum = input_strds.get_registered_maps_as_objects(where=where,
@@ -498,7 +517,16 @@ def compute_occurrence(occurrence_maps, input_strds, input_maps, start, base,
         else:
             days = td
 
-        occurrence_map_name = "%s_%i" % (base, count)
+        if input_strds.get_temporal_type() == 'absolute' and tsuffix == 'gran':
+            suffix = tgis.create_suffix_from_datetime(map.temporal_extent.get_start_time(),
+                                                      input_strds.get_granularity())
+            occurrence_map_name = "{ba}_{su}".format(ba=base, su=suffix)
+        elif input_strds.get_temporal_type() == 'absolute' and tsuffix == 'time':
+            suffix = tgis.create_time_suffix(map)
+            occurrence_map_name = "{ba}_{su}".format(ba=base, su=suffix)
+        else:
+            occurrence_map_name = tgis.create_numeric_suffic(base, count, tsuffix)
+
         occurrence_map_id = map.build_id(occurrence_map_name, mapset)
         occurrence_map = input_strds.get_new_map_instance(occurrence_map_id)
 

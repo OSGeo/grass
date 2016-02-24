@@ -93,6 +93,15 @@
 #%end
 
 #%option
+#% key: suffix
+#% type: string
+#% description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
+#% answer: gran
+#% required: no
+#% multiple: no
+#%end
+
+#%option
 #% key: limits
 #% type: double
 #% key_desc: lower,upper
@@ -138,6 +147,7 @@
 #% description: Reverse time direction in cyclic accumulation
 #%end
 
+
 import grass.script as grass
 import grass.temporal as tgis
 from grass.pygrass.modules import Module
@@ -163,6 +173,7 @@ def main():
     granularity = options["granularity"]
     register_null = flags["n"]
     reverse = flags["r"]
+    time_suffix = options["suffix"]
 
     # Make sure the temporal database exists
     tgis.init()
@@ -369,7 +380,16 @@ def main():
                 continue
 
             # New output map
-            output_map_name = "%s_%i" % (base, count)
+            if input_strds.get_temporal_type() == 'absolute' and time_suffix == 'gran':
+                suffix = tgis.create_suffix_from_datetime(map.temporal_extent.get_start_time(),
+                                                          input_strds.get_granularity())
+                output_map_name = "{ba}_{su}".format(ba=base, su=suffix)
+            elif input_strds.get_temporal_type() == 'absolute' and time_suffix == 'time':
+                suffix = tgis.create_time_suffix(map)
+                output_map_name = "{ba}_{su}".format(ba=base, su=suffix)
+            else:
+                output_map_name = tgis.create_numeric_suffic(base, count, time_suffix)
+
             output_map_id = map.build_id(output_map_name, mapset)
             output_map = input_strds.get_new_map_instance(output_map_id)
 

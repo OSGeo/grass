@@ -8,9 +8,9 @@ for details.
 @author Soeren Gebbert
 """
 
-import subprocess
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
+
 
 class TestRasterContour(TestCase):
 
@@ -27,28 +27,28 @@ class TestRasterContour(TestCase):
         cls.runModule("r.mapcalc", expression="a_4 = col()", overwrite=True)
         cls.runModule("r.mapcalc", expression="a_5 = null()", overwrite=True)
 
-        cls.runModule("t.create", type="strds", temporaltype="absolute",  
-                                 output="A", title="A test", description="A test",  
+        cls.runModule("t.create", type="strds", temporaltype="absolute",
+                                 output="A", title="A test", description="A test",
                                  overwrite=True)
-        cls.runModule("t.register",  flags="i", type="raster", input="A",  
-                                     maps="a_1,a_2,a_3,a_4,a_5", start="2001-01-01", 
+        cls.runModule("t.register",  flags="i", type="raster", input="A",
+                                     maps="a_1,a_2,a_3,a_4,a_5", start="2001-01-01",
                                      increment="3 months", overwrite=True)
 
     @classmethod
     def tearDownClass(cls):
         """Remove the temporary region
         """
-        cls.runModule("t.remove", flags="rf", type="strds",  
+        cls.runModule("t.remove", flags="rf", type="strds",
                                    inputs="A")
         cls.del_temp_region()
-        
+
     def tearDown(self):
         """Remove generated data"""
-        self.runModule("t.remove", flags="rf", type="stvds",  
+        self.runModule("t.remove", flags="rf", type="stvds",
                                    inputs="result")
 
     def test_register_empty_maps(self):
-        self.assertModule("t.rast.contour", input="A", output="result", 
+        self.assertModule("t.rast.contour", input="A", output="result",
                           levels=(1,2,3,4,5,6,7,8), flags="n",
                           basename="test",
                           nprocs=1, overwrite=True, verbose=True)
@@ -69,7 +69,7 @@ class TestRasterContour(TestCase):
 
     def test_simple(self):
         """Do not register empty maps"""
-        self.assertModule("t.rast.contour", input="A", output="result", 
+        self.assertModule("t.rast.contour", input="A", output="result",
                           levels=(1,2,3,4,5,6,7,8),
                           basename="test",
                           nprocs=1, overwrite=True, verbose=True)
@@ -90,7 +90,7 @@ class TestRasterContour(TestCase):
 
     def test_where(self):
         """Use where statement and do not register empty maps"""
-        self.assertModule("t.rast.contour", input="A", output="result", 
+        self.assertModule("t.rast.contour", input="A", output="result",
                           levels=(1,2,3,4,5,6,7,8),
                           basename="test",
                           where="start_time > '2001-02-01'",
@@ -112,7 +112,7 @@ class TestRasterContour(TestCase):
 
     def test_parallel(self):
         """Run 4 contour processes do not create attribute tables"""
-        self.assertModule("t.rast.contour", input="A", output="result", 
+        self.assertModule("t.rast.contour", input="A", output="result",
                           levels=(1,2,3,4,5,6,7,8),
                           basename="test", flags="t",
                           nprocs=4, overwrite=True, verbose=True)
@@ -133,7 +133,7 @@ class TestRasterContour(TestCase):
 
     def test_parallel_cut(self):
         """Do not register empty maps"""
-        self.assertModule("t.rast.contour", input="A", output="result", 
+        self.assertModule("t.rast.contour", input="A", output="result",
                           levels=(1,2,3,4,5,6,7,8), cut=2,
                           basename="test", flags="t",
                           nprocs=4, overwrite=True, verbose=True)
@@ -154,7 +154,7 @@ class TestRasterContour(TestCase):
 
     def test_where_step(self):
         """Use where statement and do not register empty maps"""
-        self.assertModule("t.rast.contour", input="A", output="result", 
+        self.assertModule("t.rast.contour", input="A", output="result",
                           step=1, minlevel=1, maxlevel=8,
                           basename="test",
                           where="start_time > '2001-02-01'",
@@ -175,6 +175,19 @@ class TestRasterContour(TestCase):
         self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
 
 
+    def test_time_num(self):
+        """Test the -s flag"""
+        self.assertModule("t.rast.contour", input="A", output="result",
+                          step=1, minlevel=1, maxlevel=8,
+                          basename="time", suffix='num%03',
+                          where="start_time > '2001-02-01'",
+                          nprocs=1, overwrite=True, verbose=True)
+
+        self.assertVectorExists('time_004')
+        self.assertVectorDoesNotExist('time_00005')
+        self.assertVectorDoesNotExist('time_2001_07')
+
+
 class TestRasterContourFails(TestCase):
     @classmethod
     def setUpClass(cls):
@@ -185,11 +198,11 @@ class TestRasterContourFails(TestCase):
 
         cls.runModule("r.mapcalc", expression="a_1 = 100", overwrite=True)
 
-        cls.runModule("t.create",  type="strds", temporaltype="absolute",  
-                                 output="A", title="A test", description="A test",  
+        cls.runModule("t.create",  type="strds", temporaltype="absolute",
+                                 output="A", title="A test", description="A test",
                                  overwrite=True)
-        cls.runModule("t.register",  flags="i", type="raster", input="A",  
-                                     maps="a_1", start="2001-01-01", 
+        cls.runModule("t.register",  flags="i", type="raster", input="A",
+                                     maps="a_1", start="2001-01-01",
                                      increment="3 months", overwrite=True)
 
     @classmethod
@@ -202,7 +215,7 @@ class TestRasterContourFails(TestCase):
 
     def test_error_handling(self):
         # No basename
-        self.assertModuleFail("t.rast.contour", input="A", output="result", 
+        self.assertModuleFail("t.rast.contour", input="A", output="result",
                               step=1, minlevel=1, maxlevel=8,
                               where="start_time > '2001-02-01'",
                               nprocs=1, overwrite=True, verbose=True)
