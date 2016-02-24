@@ -485,7 +485,6 @@ int main(int argc, char *argv[])
 	    npasses++;
 	else
 	    last_rows = rows;
-
     }
     cols = region.cols;
 
@@ -493,8 +492,6 @@ int main(int argc, char *argv[])
 	    region.south, region.ns_res);
     G_debug(2, "region.rows=%d  [box_rows=%d]  region.cols=%d", region.rows,
 	    rows, region.cols);
-
-    npasses = (int)ceil(1.0 * region.rows / rows);
 
     if (!scan_flag->answer) {
 	/* check if rows * (cols + 1) go into a size_t */
