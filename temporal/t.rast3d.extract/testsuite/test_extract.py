@@ -116,6 +116,23 @@ class TestRaster3dExtraction(TestCase):
         info = SimpleModule("t.info", flags="g", type="str3ds", input="B")
         self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
 
+    def test_time_suffix_with_expression(self):
+        """Perform extract with time suffix support and test if maps exists"""
+        self.assertModule("t.rast3d.extract",  flags="n",  input="A", nprocs=2,
+                          output="B", basename="b", overwrite=True,
+                          suffix="time", expression="if(A > 400, A, null())")
+        self.assertRaster3dExists('b_2001_01_01T00_00_00')
+        self.assertRaster3dDoesNotExist('b_2001_01')
+
+    def test_num_suffix_with_expression(self):
+        """Perform extract with time suffix support and test if maps exists"""
+        self.assertModule("t.rast3d.extract",  flags="n",  input="A", nprocs=2,
+                          output="B", basename="b", overwrite=True,
+                          suffix='num%03', expression="if(A > 400, A, null())")
+        self.assertRaster3dExists('b_001')
+        self.assertRaster3dDoesNotExist('b_00001')
+
+
 class TestRaster3dExtractionFails(TestCase):
 
     @classmethod

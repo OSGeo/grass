@@ -22,6 +22,19 @@ class TestRasterExtraction(TestCase):
         cls.use_temp_region()
         cls.runModule("g.gisenv",  set="TGIS_USE_CURRENT_MAPSET=1")
         cls.runModule("g.region",  s=0,  n=80,  w=0,  e=120,  b=0,  t=50,  res=10,  res3=10)
+        cls.runModule("r.mapcalc", expression="prec_1 = 100",  overwrite=True)
+        cls.runModule("r.mapcalc", expression="prec_2 = 200",  overwrite=True)
+        cls.runModule("r.mapcalc", expression="prec_3 = 300",  overwrite=True)
+        cls.runModule("r.mapcalc", expression="prec_4 = 400",  overwrite=True)
+        cls.runModule("r.mapcalc", expression="prec_5 = 500",  overwrite=True)
+        cls.runModule("r.mapcalc", expression="prec_6 = 600",  overwrite=True)
+
+        cls.runModule("t.create", type="strds", temporaltype="absolute",  
+                      output="precip_abs1", title="A test",
+                      description="A test", overwrite=True)
+        cls.runModule("t.register", flags="i", type="raster", input="precip_abs1",  
+                      maps="prec_1,prec_2,prec_3,prec_4,prec_5,prec_6", 
+                      start="2001-01-01", increment="3 months", overwrite=True)
 
     @classmethod
     def tearDownClass(cls):
@@ -49,7 +62,7 @@ class TestRasterExtraction(TestCase):
     def tearDown(self):
         """Remove generated data"""
         self.runModule("t.remove",  flags="rf",  type="strds",  
-                                   inputs="precip_abs1,precip_abs2")
+                                   inputs="precip_abs2")
 
     def test_selection(self):
         """Perform a simple selection by datetime"""
@@ -146,6 +159,27 @@ class TestRasterExtraction(TestCase):
 
         info = SimpleModule("t.info", flags="g", input="precip_abs2")
         self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
+
+        
+    def test_time_suffix_with_expression(self):
+        """Perform extract with time suffix support and test if maps exists"""
+        self.assertModule("t.rast.extract",  flags="n",  input="precip_abs1",
+                          output="precip_abs2", basename="new_prec",
+                          nprocs=2,  overwrite=True, suffix="time",
+                          expression="if(precip_abs1 > 400, precip_abs1, null())")
+        self.assertRasterExists('new_prec_2001_01_01T00_00_00')
+        self.assertRasterDoesNotExist('new_prec_2001_01')
+        
+    def test_num_suffix_with_expression(self):
+        """Perform extract with time suffix support and test if maps exists"""
+        self.assertModule("t.rast.extract",  flags="n",  input="precip_abs1",
+                          output="precip_abs2", basename="new_prec",
+                          nprocs=2,  overwrite=True, suffix='num%03',
+                          expression="if(precip_abs1 > 400, precip_abs1, null())")
+        self.assertRasterExists('new_prec_001')
+        self.assertRasterDoesNotExist('new_prec_00001')
+
+
 
 class TestRasterExtractionFails(TestCase):
 

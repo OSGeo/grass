@@ -12,6 +12,9 @@ for details.
 from grass.script.utils import get_num_suffix
 from space_time_datasets import *
 from open_stds import *
+from datetime_math import create_suffix_from_datetime
+from datetime_math import create_time_suffix
+from datetime_math import create_numeric_suffic
 from multiprocessing import Process
 import grass.script as gscript
 from grass.exceptions import CalledModuleError
@@ -19,9 +22,9 @@ from grass.exceptions import CalledModuleError
 ############################################################################
 
 
-def extract_dataset(input, output, type, where, expression, base, nprocs=1,
-                    register_null=False, layer=1,
-                    vtype="point,line,boundary,centroid,area,face"):
+def extract_dataset(input, output, type, where, expression, base, time_suffix,
+                    nprocs=1, register_null=False, layer=1,
+                    vtype="point,line,boundary,centroid,area,face", ):
     """Extract a subset of a space time raster, raster3d or vector dataset
 
        A mapcalc expression can be provided to process the temporal extracted
@@ -37,6 +40,8 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
                          statement
        :param base: The base name of the new created maps in case a mapclac
                    expression is provided
+       :param time_suffix: string to choose which suffix to use: gran, time, num%*
+                          (where * are digits)
        :param nprocs: The number of parallel processes to be used for mapcalc
                      processing
        :param register_null: Set this number True to register empty maps
@@ -85,9 +90,19 @@ def extract_dataset(input, output, type, where, expression, base, nprocs=1,
                 if count % 10 == 0:
                     msgr.percent(count, num_rows, 1)
 
-                map_name = "{base}_{suffix}".format(base=base,
-                                                    suffix=get_num_suffix(count,
-                                                                          num_rows))
+                if sp.get_temporal_type() == 'absolute' and time_suffix == 'gran':
+                    old_map = sp.get_new_map_instance(row["id"])
+                    old_map.select(dbif)
+                    suffix = create_suffix_from_datetime(old_map.temporal_extent.get_start_time(),
+                                                         sp.get_granularity())
+                    map_name = "{ba}_{su}".format(ba=base, su=suffix)
+                elif sp.get_temporal_type() == 'absolute' and time_suffix == 'time':
+                    old_map = sp.get_new_map_instance(row["id"])
+                    old_map.select(dbif)
+                    suffix = create_time_suffix(old_map)
+                    map_name = "{ba}_{su}".format(ba=base, su=suffix)
+                else:
+                    map_name = create_numeric_suffic(base, count, time_suffix)
 
                 # We need to modify the r(3).mapcalc expression
                 if type != "vector":

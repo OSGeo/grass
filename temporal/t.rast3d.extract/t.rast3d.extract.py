@@ -49,6 +49,15 @@
 #%end
 
 #%option
+#% key: suffix
+#% type: string
+#% description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
+#% answer: gran
+#% required: no
+#% multiple: no
+#%end
+
+#%option
 #% key: nprocs
 #% type: integer
 #% description: Number of r3.mapcalc processes to run in parallel
@@ -78,12 +87,13 @@ def main():
     base = options["basename"]
     nprocs = int(options["nprocs"])
     register_null = flags["n"]
+    time_suffix = options["suffix"]
 
     # Make sure the temporal database exists
     tgis.init()
 
     tgis.extract_dataset(input, output, "raster3d", where, expression,
-                         base, nprocs, register_null)
+                         base, time_suffix, nprocs, register_null)
 
 if __name__ == "__main__":
     options, flags = grass.parser()
