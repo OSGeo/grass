@@ -116,7 +116,7 @@ int main(int argc, char *argv[])
 	*index_array;
     void *raster_row, *ptr;
     struct Cell_head region;
-    int rows, cols;		/* scan box size */
+    int rows, last_rows, row0, cols;		/* scan box size */
     int row, col;		/* counters */
 
     int pass, npasses;
@@ -124,7 +124,6 @@ int main(int argc, char *argv[])
     double x, y, z;
     char **tokens;
     int ntokens;		/* number of tokens */
-    double pass_north, pass_south;
     int arr_row, arr_col;
     unsigned long count, count_total;
 
@@ -476,15 +475,23 @@ int main(int argc, char *argv[])
 
 
     G_get_window(&region);
-    rows = (int)(region.rows * (percent / 100.0));
+    rows = last_rows = region.rows;
+    npasses = 1;
+    if (percent < 100) {
+	rows = (int)(region.rows * (percent / 100.0));
+	npasses = region.rows / rows;
+	last_rows = region.rows - npasses * rows;
+	if (last_rows)
+	    npasses++;
+	else
+	    last_rows = rows;
+    }
     cols = region.cols;
 
     G_debug(2, "region.n=%f  region.s=%f  region.ns_res=%f", region.north,
 	    region.south, region.ns_res);
     G_debug(2, "region.rows=%d  [box_rows=%d]  region.cols=%d", region.rows,
 	    rows, region.cols);
-
-    npasses = (int)ceil(1.0 * region.rows / rows);
 
     if (!scan_flag->answer) {
 	/* check if rows * (cols + 1) go into a size_t */
@@ -614,14 +621,12 @@ int main(int argc, char *argv[])
 	}
 
 	/* figure out segmentation */
-	pass_north = region.north - (pass - 1) * rows * region.ns_res;
-	if (pass == npasses)
-	    rows = region.rows - (pass - 1) * rows;
-	pass_south = pass_north - rows * region.ns_res;
+	row0 = (pass - 1) * rows;
+	if (pass == npasses) {
+	    rows = last_rows;
+	}
 
-	G_debug(2, "pass=%d/%d  pass_n=%f  pass_s=%f  rows=%d",
-		pass, npasses, pass_north, pass_south, rows);
-
+	G_debug(2, "pass=%d/%d  rows=%d", pass, npasses, rows);
 
 	if (bin_n) {
 	    G_debug(2, "allocating n_array");
@@ -704,17 +709,28 @@ int main(int argc, char *argv[])
 	    if (1 != sscanf(tokens[ycol - 1], "%lf", &y))
 		G_fatal_error(_("Bad y-coordinate line %lu column %d. <%s>"),
 			      line, ycol, tokens[ycol - 1]);
-	    if (y <= pass_south || y > pass_north) {
+	    if (y <= region.south || y > region.north) {
 		G_free_tokens(tokens);
 		continue;
 	    }
 	    if (1 != sscanf(tokens[xcol - 1], "%lf", &x))
 		G_fatal_error(_("Bad x-coordinate line %lu column %d. <%s>"),
 			      line, xcol, tokens[xcol - 1]);
-	    if (x < region.west || x > region.east) {
+	    if (x < region.west || x >= region.east) {
 		G_free_tokens(tokens);
 		continue;
 	    }
+
+	    /* find the bin in the current array box */
+	    arr_row = (int)((region.north - y) / region.ns_res) - row0;
+	    if (arr_row < 0 || arr_row >= rows) {
+		G_free_tokens(tokens);
+		continue;
+	    }
+	    arr_col = (int)((x - region.west) / region.ew_res);
+
+	    /* G_debug(5, "arr_row: %d   arr_col: %d", arr_row, arr_col); */
+
 	    if (1 != sscanf(tokens[zcol - 1], "%lf", &z))
 		G_fatal_error(_("Bad z-coordinate line %lu column %d. <%s>"),
 			      line, zcol, tokens[zcol - 1]);
@@ -745,33 +761,6 @@ int main(int argc, char *argv[])
 	    count++;
 	    /* G_debug(5, "x: %f, y: %f, z: %f", x, y, z); */
 	    G_free_tokens(tokens);
-
-	    /* find the bin in the current array box */
-	    arr_row = (int)((pass_north - y) / region.ns_res);
-	    arr_col = (int)((x - region.west) / region.ew_res);
-
-	    /* G_debug(5, "arr_row: %d   arr_col: %d", arr_row, arr_col); */
-
-	    /* The range should be [0,cols-1]. We use (int) to round down,
-	       but if the point exactly on eastern edge arr_col will be /just/
-	       on the max edge .0000000 and end up on the next row.
-	       We could make above bounds check "if(x>=region.east) continue;"
-	       But instead we go to all sorts of trouble so that not one single
-	       data point is lost. GE is too small to catch them all.
-	       We don't try to make y happy as percent segmenting will make some
-	       points happen twice that way; so instead we use the y<= test above.
-	     */
-	    if (arr_col >= cols) {
-		if (((x - region.west) / region.ew_res) - cols <
-		    10 * GRASS_EPSILON)
-		    arr_col--;
-		else {		/* oh well, we tried. */
-		    G_debug(3,
-			    "skipping extraneous data point [%.3f], column %d of %d",
-			    x, arr_col, cols);
-		    continue;
-		}
-	    }
 
 	    if (bin_n)
 		update_n(n_array, cols, arr_row, arr_col);
