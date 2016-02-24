@@ -35,10 +35,10 @@ class TestAccumulate(TestCase):
         cls.runModule("r.mapcalc", expression="lower = 10",  overwrite=True)
         cls.runModule("r.mapcalc", expression="upper = 30",  overwrite=True)
 
-        cls.runModule("t.create",  type="strds",  temporaltype="absolute",  
+        cls.runModule("t.create",  type="strds",  temporaltype="absolute",
                                    output="A",  title="A test",
                                    description="A test", overwrite=True)
-        cls.runModule("t.register",  flags="i",  type="raster",  input="A",  
+        cls.runModule("t.register",  flags="i",  type="raster",  input="A",
                                      maps="a_1,a_2,a_3,a_4,a_5,a_6,a_7",
                                      start="2001-01-01",
                                      increment="1 day",  overwrite=True)
@@ -68,12 +68,14 @@ class TestAccumulate(TestCase):
         cls.runModule("t.remove",  flags="rf",  type="strds",
                                    inputs="A")
         cls.runModule("t.remove",  flags="rf",  type="strds",
-                                   inputs="B")
-        cls.runModule("t.remove",  flags="rf",  type="strds",
                                    inputs="Lower")
         cls.runModule("t.remove",  flags="rf",  type="strds",
                                    inputs="Upper")
         cls.del_temp_region()
+
+    def tearDown(self):
+        """Remove generated data"""
+        self.runModule("t.remove", flags="rf", type="strds", inputs="B")
 
     def test_1(self):
         self.assertModule("t.rast.accumulate",  input="A", output="B",
@@ -206,6 +208,24 @@ class TestAccumulate(TestCase):
         self.assertEqual(end, datetime.datetime(2001, 1, 5))
         self.assertEqual( D.check_temporal_topology(),  True)
         self.assertEqual(D.get_granularity(),  u'1 day')
+
+    def test_count_suffix(self):
+        self.assertModule("t.rast.accumulate",  input="A", output="B",
+                          limits=[0,40], method="gdd",
+                          start="2001-01-01", cycle="7 days",
+                          basename="b", stop="2001-01-05", suffix="num",
+                          overwrite=True,  verbose=True)
+        self.assertRasterExists('b_00001')
+        self.assertRasterDoesNotExist('b_2001_01_07')
+
+    def test_count3_suffix(self):
+        self.assertModule("t.rast.accumulate",  input="A", output="B",
+                          limits=[0,40], method="gdd",
+                          start="2001-01-01", cycle="7 days",
+                          basename="b", stop="2001-01-05", suffix="num%03",
+                          overwrite=True,  verbose=True)
+        self.assertRasterExists('b_001')
+        self.assertRasterDoesNotExist('b_2001_01_07')
 
 if __name__ == '__main__':
     from grass.gunittest.main import test

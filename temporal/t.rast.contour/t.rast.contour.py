@@ -43,6 +43,15 @@
 #%end
 
 #%option
+#% key: suffix
+#% type: string
+#% description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
+#% answer: gran
+#% required: no
+#% multiple: no
+#%end
+
+#%option
 #% key: step
 #% type: double
 #% description: Increment between contour levels
@@ -102,7 +111,6 @@
 #% description: Do not create attribute tables
 #%end
 
-
 import sys
 import copy
 import grass.script as gscript
@@ -126,10 +134,11 @@ def main(options, flags):
     minlevel = options["minlevel"]
     maxlevel = options["maxlevel"]
     cut = options["cut"]
+    time_suffix = options["suffix"]
 
     register_null = flags["n"]
     t_flag = flags["t"]
-    
+
 
     # Make sure the temporal database exists
     tgis.init()
@@ -150,12 +159,12 @@ def main(options, flags):
     # Check the new stvds
     new_sp = tgis.check_new_stds(output, "stvds", dbif=dbif,
                                  overwrite=overwrite)
-                                               
+
     # Setup the flags
     flags = ""
     if t_flag is True:
         flags += "t"
-    
+
     # Configure the r.to.vect module
     contour_module = pymod.Module("r.contour", input="dummy",
                                    output="dummy", run_=False,
@@ -191,7 +200,16 @@ def main(options, flags):
     # run r.to.vect all selected maps
     for map in maps:
         count += 1
-        map_name = "%s_%i" % (base, count)
+
+        if sp.get_temporal_type() == 'absolute' and time_suffix == 'gran':
+            suffix = tgis.create_suffix_from_datetime(map.temporal_extent.get_start_time(),
+                                                      sp.get_granularity())
+            map_name = "{ba}_{su}".format(ba=base, su=suffix)
+        elif sp.get_temporal_type() == 'absolute' and time_suffix == 'time':
+            suffix = tgis.create_time_suffix(map)
+            map_name = "{ba}_{su}".format(ba=base, su=suffix)
+        else:
+            map_name = tgis.create_numeric_suffic(base, count, time_suffix)
         new_map = tgis.open_new_map_dataset(map_name, None, type="vector",
                                             temporal_extent=map.get_temporal_extent(),
                                             overwrite=overwrite, dbif=dbif)
@@ -254,7 +272,7 @@ def main(options, flags):
             else:
                 names += ",%s" % (map.get_name())
 
-        gscript.run_command("g.remove", flags='f', type='vector', name=names, 
+        gscript.run_command("g.remove", flags='f', type='vector', name=names,
                             quiet=True)
 
     dbif.close()
