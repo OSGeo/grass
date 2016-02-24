@@ -62,6 +62,15 @@
 #%end
 
 #%option
+#% key: suffix
+#% type: string
+#% description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
+#% answer: gran
+#% required: no
+#% multiple: no
+#%end
+
+#%option
 #% key: nprocs
 #% type: integer
 #% description: Number of r.neighbor processes to run in parallel
@@ -94,6 +103,7 @@ def main():
     register_null = flags["n"]
     method = options["method"]
     nprocs = options["nprocs"]
+    time_suffix = options["suffix"]
 
     # Make sure the temporal database exists
     tgis.init()
@@ -130,7 +140,16 @@ def main():
     # run r.neighbors all selected maps
     for map in maps:
         count += 1
-        map_name = "%s_%i" % (base, count)
+        if sp.get_temporal_type() == 'absolute' and time_suffix == 'gran':
+            suffix = tgis.create_suffix_from_datetime(map.temporal_extent.get_start_time(),
+                                                      sp.get_granularity())
+            map_name = "{ba}_{su}".format(ba=base, su=suffix)
+        elif sp.get_temporal_type() == 'absolute' and time_suffix == 'time':
+            suffix = tgis.create_time_suffix(map)
+            map_name = "{ba}_{su}".format(ba=base, su=suffix)
+        else:
+            map_name = tgis.create_numeric_suffic(base, count, time_suffix)
+
         new_map = tgis.open_new_map_dataset(map_name, None, type="raster",
                                             temporal_extent=map.get_temporal_extent(),
                                             overwrite=overwrite, dbif=dbif)
