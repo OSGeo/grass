@@ -114,7 +114,7 @@ int main(int argc, char *argv[])
 	*index_array;
     void *raster_row, *ptr;
     struct Cell_head region;
-    int rows, cols;		/* scan box size */
+    int rows, last_rows, row0, cols;		/* scan box size */
     int row, col;		/* counters */
 
     int pass, npasses;
@@ -122,7 +122,6 @@ int main(int argc, char *argv[])
     unsigned int counter;
     char buff[BUFFSIZE];
     double x, y, z;
-    double pass_north, pass_south;
     int arr_row, arr_col;
     unsigned long count, count_total;
     int skipme, i;
@@ -629,15 +628,23 @@ int main(int argc, char *argv[])
     }
     Rast_set_output_window(&region);
 
-    rows = (int)(region.rows * (percent / 100.0));
+    rows = last_rows = region.rows;
+    npasses = 1;
+    if (percent < 100) {
+	rows = (int)(region.rows * (percent / 100.0));
+	npasses = region.rows / rows;
+	last_rows = region.rows - npasses * rows;
+	if (last_rows)
+	    npasses++;
+	else
+	    last_rows = rows;
+    }
     cols = region.cols;
 
     G_debug(2, "region.n=%f  region.s=%f  region.ns_res=%f", region.north,
 	    region.south, region.ns_res);
     G_debug(2, "region.rows=%d  [box_rows=%d]  region.cols=%d", region.rows,
 	    rows, region.cols);
-
-    npasses = (int)ceil(1.0 * region.rows / rows);
 
     if (!scan_flag->answer) {
 	/* check if rows * (cols + 1) go into a size_t */
@@ -694,9 +701,6 @@ int main(int argc, char *argv[])
 
     count_total = line_total = 0;
 
-    /* init northern border */
-    pass_south = region.north;
-
     /* main binning loop(s) */
     for (pass = 1; pass <= npasses; pass++) {
 	LASError LAS_error;
@@ -710,16 +714,12 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Could not rewind input file"));
 
 	/* figure out segmentation */
-	pass_north = pass_south;  /* exact copy to avoid fp errors */
-	pass_south = region.north - pass * rows * region.ns_res;
+	row0 = (pass - 1) * rows;
 	if (pass == npasses) {
-	    rows = region.rows - (pass - 1) * rows;
-	    pass_south = region.south; /* exact copy to avoid fp errors */
+	    rows = last_rows;
 	}
 
-	G_debug(2, "pass=%d/%d  pass_n=%f  pass_s=%f  rows=%d",
-		pass, npasses, pass_north, pass_south, rows);
-
+	G_debug(2, "pass=%d/%d  rows=%d", pass, npasses, rows);
 
 	if (bin_n) {
 	    G_debug(2, "allocating n_array");
@@ -821,12 +821,21 @@ int main(int argc, char *argv[])
 	    }
 	}
 
-	    if (y <= pass_south || y > pass_north) {
+	    if (y <= region.south || y > region.north) {
 		continue;
 	    }
 	    if (x < region.west || x >= region.east) {
 		continue;
 	    }
+
+	    /* find the bin in the current array box */
+	    arr_row = (int)((region.north - y) / region.ns_res) - row0;
+	    if (arr_row < 0 || arr_row >= rows) {
+		continue;
+	    }
+	    arr_col = (int)((x - region.west) / region.ew_res);
+
+	    /* G_debug(5, "arr_row: %d   arr_col: %d", arr_row, arr_col); */
 
 	    z = z * zscale;
 
@@ -838,10 +847,6 @@ int main(int argc, char *argv[])
 
 	    count++;
 	    /*          G_debug(5, "x: %f, y: %f, z: %f", x, y, z); */
-
-	    /* find the bin in the current array box */
-	    arr_row = (int)((pass_north - y) / region.ns_res);
-	    arr_col = (int)((x - region.west) / region.ew_res);
 
 	    if (bin_n)
 		update_n(n_array, cols, arr_row, arr_col);
