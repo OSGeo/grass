@@ -29,7 +29,8 @@
 #include "R.h"
 #define FORMAT_FILE "f_format"
 #define NULL_FILE   "null"
-#define NULL2_FILE  "null2"
+/* cmpressed null file */
+#define NULLC_FILE  "nullcmpr"
 
 static int new_fileinfo(void)
 {
@@ -354,7 +355,7 @@ int Rast__open_old(const char *name, const char *mapset)
 	/* First, check for compressed null file */
 	fcb->null_fd = G_open_old_misc("cell_misc", NULL_FILE, r_name, r_mapset);
 	if (fcb->null_fd < 0) {
-	    fcb->null_fd = G_open_old_misc("cell_misc", NULL2_FILE, r_name, r_mapset);
+	    fcb->null_fd = G_open_old_misc("cell_misc", NULLC_FILE, r_name, r_mapset);
 	    if (fcb->null_fd >= 0) {
 		fcb->null_row_ptr = G_calloc(fcb->cellhd.rows + 1, sizeof(off_t));
 		if (Rast__read_null_row_ptrs(fd, fcb->null_fd) < 0) {
