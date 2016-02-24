@@ -18,6 +18,9 @@ for details.
 """
 
 from space_time_datasets import *
+from datetime_math import create_suffix_from_datetime
+from datetime_math import create_time_suffix
+from datetime_math import create_numeric_suffic
 import grass.script as gscript
 from grass.exceptions import CalledModuleError
 
@@ -276,13 +279,16 @@ def aggregate_by_topology(granularity_list, granularity, map_list, topo_list,
                            "start": str(granule.temporal_extent.get_start_time()),
                            "end": str(granule.temporal_extent.get_end_time())}))
 
-            if granule.is_time_absolute() is True and time_suffix is True:
+            if granule.is_time_absolute() is True and time_suffix == 'gran':
                 suffix = create_suffix_from_datetime(granule.temporal_extent.get_start_time(),
                                                      granularity)
+                output_name = "{ba}_{su}".format(ba=basename, su=suffix)
+            elif granule.is_time_absolute() is True and time_suffix == 'time':
+                suffix = create_time_suffix(granule)
+                output_name = "{ba}_{su}".format(ba=basename, su=suffix)
             else:
-                suffix = gscript.get_num_suffix(count + int(offset),
-                                                len(granularity_list) + int(offset))
-            output_name = "%s_%s" % (basename, suffix)
+                output_name = create_numeric_suffic(basename, count + int(offset),
+                                                    time_suffix)
 
             map_layer = RasterDataset("%s@%s" % (output_name,
                                                  get_current_mapset()))

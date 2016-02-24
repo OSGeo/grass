@@ -57,7 +57,7 @@ class TestAggregationAbsoluteParallel(TestCase):
         self.assertModule("t.rast.aggregate", input="A", output="B",
                           basename="b", granularity="12 hours",
                           method="sum", sampling=["contains"],
-                          nprocs=9, flags="s", file_limit=2)
+                          nprocs=9, file_limit=2)
 
         tinfo_string="""start_time=2001-01-01 00:00:00
                         end_time=2001-04-01 00:00:00
@@ -82,7 +82,7 @@ class TestAggregationAbsoluteParallel(TestCase):
         self.assertModule("t.rast.aggregate", input="A", output="B",
                           basename="b", granularity="1 day",
                           method="sum", sampling=["contains"],
-                          nprocs=4, flags="s")
+                          nprocs=4)
         end = datetime.now()
 
         delta = end - start
@@ -107,7 +107,7 @@ class TestAggregationAbsoluteParallel(TestCase):
         self.assertModule("t.rast.aggregate", input="A", output="B",
                           basename="b", granularity="1 day",
                           method="sum", sampling=["contains"],
-                          nprocs=3, flags="s")
+                          nprocs=3)
         end = datetime.now()
 
         delta = end - start
@@ -125,7 +125,7 @@ class TestAggregationAbsoluteParallel(TestCase):
                         max_min=21.0
                         max_max=3225.0"""
 
-        info = SimpleModule("t.info", flags="g", input="B")
+        info = SimpleModule("t.info", input="B", flags="g")
         #info.run()
         #print info.outputs.stdout
         self.assertModuleKeyValue(module=info, reference=tinfo_string,
@@ -137,7 +137,7 @@ class TestAggregationAbsoluteParallel(TestCase):
         self.assertModule("t.rast.aggregate", input="A", output="B",
                           basename="b", granularity="1 day",
                           method="sum", sampling=["contains"],
-                          nprocs=2, flags="s")
+                          nprocs=2)
         end = datetime.now()
 
         delta = end - start

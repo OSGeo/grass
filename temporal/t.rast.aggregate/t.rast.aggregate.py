@@ -39,6 +39,15 @@
 #%end
 
 #%option
+#% key: suffix
+#% type: string
+#% description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
+#% answer: gran
+#% required: no
+#% multiple: no
+#%end
+
+#%option
 #% key: granularity
 #% type: string
 #% description: Aggregation granularity, format absolute time "x years, x months, x weeks, x days, x hours, x minutes, x seconds" or an integer value for relative time
@@ -96,11 +105,6 @@
 #% description: Register Null maps
 #%end
 
-#%flag
-#% key: s
-#% description: Use start time - truncated according to granularity - as suffix (overrides offset option)
-#%end
-
 import grass.script as gcore
 import grass.temporal as tgis
 
@@ -120,7 +124,7 @@ def main():
     offset = options["offset"]
     nprocs = options["nprocs"]
     file_limit = options["file_limit"]
-    time_suffix = flags["s"]
+    time_suffix = options["suffix"]
 
     topo_list = sampling.split(",")
 
