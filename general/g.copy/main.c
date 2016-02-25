@@ -73,7 +73,7 @@ int main(int argc, char *argv[])
 		continue;
 	    }
 	    if (M_find(n, to, G_mapset()) && !(module->overwrite)) {
-		G_warning(_("<%s> already exists"), to);
+		G_warning(_("<%s> already exists. File not copied."), to);
 		continue;
 	    }
 	    if (G_legal_filename(to) < 0) {
