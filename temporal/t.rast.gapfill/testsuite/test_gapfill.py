@@ -51,8 +51,8 @@ class TestRasterToVector(TestCase):
                                    inputs="A")
 
     def test_simple_2procs(self):
-        self.assertModule("t.rast.gapfill", input="A", 
-                                     basename="test", nprocs=2, verbose=True)
+        self.assertModule("t.rast.gapfill", input="A", suffix="num%01",
+                          basename="test", nprocs=2, verbose=True)
 
         #self.assertModule("t.info",  type="strds", flags="g",  input="A")
 
@@ -90,7 +90,7 @@ a_3|2001-12-01 00:00:00|2002-01-01 00:00:00|1200.0|1200.0
 
     def test_simple_where(self):
         self.assertModule("t.rast.gapfill", input="A",  where="start_time >= '2001-03-01'", 
-                          basename="test", nprocs=1, verbose=True)
+                          basename="test", nprocs=1, verbose=True, suffix="num%01")
 
         #self.assertModule("t.info",  type="strds", flags="g",  input="A")
 
@@ -125,7 +125,7 @@ a_3|2001-12-01 00:00:00|2002-01-01 00:00:00|1200.0|1200.0
 
     def test_simple_where_2(self):
         self.assertModule("t.rast.gapfill", input="A",  where="start_time <= '2001-05-01'", 
-                          basename="test", nprocs=1, verbose=True)
+                          basename="test", nprocs=1, verbose=True, suffix="num%01")
 
         #self.assertModule("t.info",  type="strds", flags="g",  input="A")
 
@@ -155,7 +155,7 @@ a_3|2001-12-01 00:00:00|2002-01-01 00:00:00|1200.0|1200.0
 
     def test_simple_empty(self):
         self.assertModule("t.rast.gapfill", input="A",  where="start_time >= '2001-10-01'", 
-                          basename="test", nprocs=1, verbose=True)
+                          basename="test", nprocs=1, verbose=True, suffix="num%01")
 
         #self.assertModule("t.info",  type="strds", flags="g",  input="A")
 
@@ -176,6 +176,82 @@ a_3|2001-12-01 00:00:00|2002-01-01 00:00:00|1200.0|1200.0
 a_1|2001-01-01 00:00:00|2001-02-01 00:00:00|100.0|100.0
 a_2|2001-04-01 00:00:00|2001-05-01 00:00:00|400.0|400.0
 a_3|2001-12-01 00:00:00|2002-01-01 00:00:00|1200.0|1200.0
+"""
+        rast_list = SimpleModule("t.rast.list", columns=("name","start_time","end_time","min,max"),  input="A")
+        self.assertModule(rast_list)
+        self.assertLooksLike(text,  rast_list.outputs.stdout)
+
+    def test_simple_gran(self):
+        self.assertModule("t.rast.gapfill", input="A",
+                          basename="test", nprocs=2, verbose=True)
+
+        #self.assertModule("t.info",  type="strds", flags="g",  input="A")
+
+        tinfo_string="""start_time=2001-01-01 00:00:00
+                                end_time=2002-01-01 00:00:00
+                                granularity=1 month
+                                map_time=interval
+                                number_of_maps=12
+                                min_min=100.0
+                                min_max=1200.0
+                                max_min=100.0
+                                max_max=1200.0"""
+
+        info = SimpleModule("t.info", flags="g", type="strds", input="A")
+        self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
+
+        text="""name|start_time|end_time|min|max
+a_1|2001-01-01 00:00:00|2001-02-01 00:00:00|100.0|100.0
+test_2001_02|2001-02-01 00:00:00|2001-03-01 00:00:00|200.0|200.0
+test_2001_03|2001-03-01 00:00:00|2001-04-01 00:00:00|300.0|300.0
+a_2|2001-04-01 00:00:00|2001-05-01 00:00:00|400.0|400.0
+test_2001_05|2001-05-01 00:00:00|2001-06-01 00:00:00|500.0|500.0
+test_2001_06|2001-06-01 00:00:00|2001-07-01 00:00:00|600.0|600.0
+test_2001_07|2001-07-01 00:00:00|2001-08-01 00:00:00|700.0|700.0
+test_2001_08|2001-08-01 00:00:00|2001-09-01 00:00:00|800.0|800.0
+test_2001_09|2001-09-01 00:00:00|2001-10-01 00:00:00|900.0|900.0
+test_2001_10|2001-10-01 00:00:00|2001-11-01 00:00:00|1000.0|1000.0
+test_2001_11|2001-11-01 00:00:00|2001-12-01 00:00:00|1100.0|1100.0
+a_3|2001-12-01 00:00:00|2002-01-01 00:00:00|1200.0|1200.0
+
+"""
+        rast_list = SimpleModule("t.rast.list", columns=("name","start_time","end_time","min,max"),  input="A")
+        self.assertModule(rast_list)
+        self.assertLooksLike(text,  rast_list.outputs.stdout)
+
+    def test_simple_gran(self):
+        self.assertModule("t.rast.gapfill", input="A", suffix="time",
+                          basename="test", nprocs=2, verbose=True)
+
+        #self.assertModule("t.info",  type="strds", flags="g",  input="A")
+
+        tinfo_string="""start_time=2001-01-01 00:00:00
+                                end_time=2002-01-01 00:00:00
+                                granularity=1 month
+                                map_time=interval
+                                number_of_maps=12
+                                min_min=100.0
+                                min_max=1200.0
+                                max_min=100.0
+                                max_max=1200.0"""
+
+        info = SimpleModule("t.info", flags="g", type="strds", input="A")
+        self.assertModuleKeyValue(module=info, reference=tinfo_string, precision=2, sep="=")
+
+        text="""name|start_time|end_time|min|max
+a_1|2001-01-01 00:00:00|2001-02-01 00:00:00|100.0|100.0
+test_2001_02_01T00_00_00|2001-02-01 00:00:00|2001-03-01 00:00:00|200.0|200.0
+test_2001_03_01T00_00_00|2001-03-01 00:00:00|2001-04-01 00:00:00|300.0|300.0
+a_2|2001-04-01 00:00:00|2001-05-01 00:00:00|400.0|400.0
+test_2001_05_01T00_00_00|2001-05-01 00:00:00|2001-06-01 00:00:00|500.0|500.0
+test_2001_06_01T00_00_00|2001-06-01 00:00:00|2001-07-01 00:00:00|600.0|600.0
+test_2001_07_01T00_00_00|2001-07-01 00:00:00|2001-08-01 00:00:00|700.0|700.0
+test_2001_08_01T00_00_00|2001-08-01 00:00:00|2001-09-01 00:00:00|800.0|800.0
+test_2001_09_01T00_00_00|2001-09-01 00:00:00|2001-10-01 00:00:00|900.0|900.0
+test_2001_10_01T00_00_00|2001-10-01 00:00:00|2001-11-01 00:00:00|1000.0|1000.0
+test_2001_11_01T00_00_00|2001-11-01 00:00:00|2001-12-01 00:00:00|1100.0|1100.0
+a_3|2001-12-01 00:00:00|2002-01-01 00:00:00|1200.0|1200.0
+
 """
         rast_list = SimpleModule("t.rast.list", columns=("name","start_time","end_time","min,max"),  input="A")
         self.assertModule(rast_list)

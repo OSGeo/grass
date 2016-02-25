@@ -39,6 +39,15 @@
 #%end
 
 #%option
+#% key: suffix
+#% type: string
+#% description: Suffix to add at basename: set 'gran' for granularity, 'time' for the full time format, 'num' for numerical suffix with a specific number of digits (default %05)
+#% answer: gran
+#% required: no
+#% multiple: no
+#%end
+
+#%option
 #% key: nprocs
 #% type: integer
 #% description: Number of interpolation processes to run in parallel
@@ -71,6 +80,7 @@ def main():
     base = options["basename"]
     where = options["where"]
     nprocs = options["nprocs"]
+    tsuffix = options["suffix"]
 
     mapset = grass.gisenv()["MAPSET"]
 
@@ -102,7 +112,11 @@ def main():
     for _map in maps:
         if _map.get_id() is None:
             count += 1
-            _id = "%s_%d@%s" % (base, num + count, mapset)
+            if sp.get_temporal_type() == 'absolute' and tsuffix in ['gran', 'time']:
+                _id = "{ba}@{ma}".format(ba=base, ma=mapset)
+            else:
+                map_name = tgis.create_numeric_suffic(base, num + count, tsuffix)
+                _id = "{name}@{ma}".format(name=map_name, ma=mapset)
             _map.set_id(_id)
 
             gap_list.append(_map)
@@ -152,7 +166,20 @@ def main():
         for intp_list in map_matrix:
             new_map = intp_list[0]
             count += 1
-            new_id = "%s_%i@%s"%(_map.get_name(),  count,  tgis.get_current_mapset())
+            if sp.get_temporal_type() == 'absolute' and tsuffix == 'gran':
+                suffix = tgis.create_suffix_from_datetime(new_map.temporal_extent.get_start_time(),
+                                                          sp.get_granularity())
+                new_id = "{ba}_{su}@{ma}".format(ba=new_map.get_name(),
+                                                 su=suffix, ma=mapset)
+            elif sp.get_temporal_type() == 'absolute' and tsuffix == 'time':
+                suffix = tgis.create_time_suffix(new_map)
+                new_id = "{ba}_{su}@{ma}".format(ba=new_map.get_name(),
+                                                 su=suffix, ma=mapset)
+            else:
+                map_name = tgis.create_numeric_suffic(new_map.get_name(),
+                                                      count, tsuffix)
+                new_id = "{name}@{ma}".format(name=map_name, ma=mapset)
+
             new_map.set_id(new_id)
             
             overwrite_flags[new_id] = False
