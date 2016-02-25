@@ -16,6 +16,7 @@ Classes:
  - wizard::GeoreferencedFilePage
  - wizard::WKTPage
  - wizard::EPSGPage
+ - wizard::IAUPage
  - wizard::CustomPage
  - wizard::SummaryPage
  - wizard::LocationWizard
@@ -223,6 +224,8 @@ class CoordinateSystemPage(TitledPage):
         self.radioEpsg = wx.RadioButton(parent = self, id = wx.ID_ANY,
                                         label = _("Select EPSG code of spatial reference system"),
                                         style  =  wx.RB_GROUP)
+        self.radioIau = wx.RadioButton(parent = self, id = wx.ID_ANY,
+                                        label = _("Select IAU code of spatial reference system"))
         self.radioFile = wx.RadioButton(parent = self, id = wx.ID_ANY,
                                         label = _("Read projection and datum terms from a "
                                                   "georeferenced data file"))
@@ -241,20 +244,23 @@ class CoordinateSystemPage(TitledPage):
         self.sizer.SetVGap(10)
         self.sizer.Add(item = self.radioEpsg,
                        flag = wx.ALIGN_LEFT, pos = (1, 1))
-        self.sizer.Add(item = self.radioFile,
+        self.sizer.Add(item = self.radioIau,
                        flag = wx.ALIGN_LEFT, pos = (2, 1))
-        self.sizer.Add(item = self.radioWkt,
+        self.sizer.Add(item = self.radioFile,
                        flag = wx.ALIGN_LEFT, pos = (3, 1))
-        self.sizer.Add(item = self.radioSrs,
+        self.sizer.Add(item = self.radioWkt,
                        flag = wx.ALIGN_LEFT, pos = (4, 1))
-        self.sizer.Add(item = self.radioProj,
+        self.sizer.Add(item = self.radioSrs,
                        flag = wx.ALIGN_LEFT, pos = (5, 1))
-        self.sizer.Add(item = self.radioXy,
+        self.sizer.Add(item = self.radioProj,
                        flag = wx.ALIGN_LEFT, pos = (6, 1))
+        self.sizer.Add(item = self.radioXy,
+                       flag = wx.ALIGN_LEFT, pos = (7, 1))
         self.sizer.AddGrowableCol(1)
 
         # bindings
         self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radioEpsg.GetId())
+        self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radioIau.GetId())
         self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radioFile.GetId())
         self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radioWkt.GetId())
         self.Bind(wx.EVT_RADIOBUTTON, self.SetVal, id = self.radioSrs.GetId())
@@ -273,6 +279,8 @@ class CoordinateSystemPage(TitledPage):
                 self.radioSrs.SetValue(True)
             if coordsys == "epsg":
                 self.radioEpsg.SetValue(True)
+            if coordsys == "iau":
+                self.radioIau.SetValue(True)
             if coordsys == "file":
                 self.radioFile.SetValue(True)
             if coordsys == "wkt":
@@ -289,6 +297,9 @@ class CoordinateSystemPage(TitledPage):
             if coordsys == "epsg":
                 self.SetNext(self.parent.epsgpage)
                 self.parent.sumpage.SetPrev(self.parent.epsgpage)
+            if coordsys == "iau":
+                self.SetNext(self.parent.iaupage)
+                self.parent.sumpage.SetPrev(self.parent.iaupage)
             if coordsys == "file":
                 self.SetNext(self.parent.filepage)
                 self.parent.sumpage.SetPrev(self.parent.filepage)
@@ -312,6 +323,10 @@ class CoordinateSystemPage(TitledPage):
             coordsys = "proj"
             self.SetNext(self.parent.projpage)
             self.parent.sumpage.SetPrev(self.parent.datumpage)
+        elif event.GetId() == self.radioIau.GetId():
+            coordsys = "iau"
+            self.SetNext(self.parent.iaupage)
+            self.parent.sumpage.SetPrev(self.parent.iaupage)
         elif event.GetId() == self.radioEpsg.GetId():
             coordsys = "epsg"
             self.SetNext(self.parent.epsgpage)
@@ -1512,6 +1527,233 @@ class EPSGPage(TitledPage):
                 data.append((code, val[0], val[1]))
         
         self.epsglist.Populate(data, update = True)
+
+class IAUPage(TitledPage):
+    """Wizard page for selecting IAU code/WKT for
+    setting coordinate system parameters"""
+
+    def __init__(self, wizard, parent):
+        TitledPage.__init__(self, wizard, _("Choose IAU Code"))
+        self.parent = parent
+        self.epsgCodeDict = {}
+        self.epsgcode = None
+        self.epsgdesc = ''
+        self.epsgparams = ''
+
+        # labels
+        self.lfile = self.MakeLabel(_("Path to the IAU-codes file:"),
+                                    style = wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
+        self.lcode = self.MakeLabel(_("IAU code:"),
+                                    style = wx.ALIGN_LEFT | wx.ALIGN_CENTER_VERTICAL)
+        # text input
+        epsgdir = utils.PathJoin(globalvar.ETCDIR,"proj","ogr_csv",'iau2009.csv')
+        self.tfile = self.MakeTextCtrl(text = epsgdir, size = (200,-1),
+                                       style = wx.TE_PROCESS_ENTER)
+        self.tcode = self.MakeTextCtrl(size = (200,-1))
+
+        # buttons
+        self.bbrowse = self.MakeButton(_("Browse"))
+        
+        # search box
+        self.searchb = wx.SearchCtrl(self, size = (200,-1),
+                                     style = wx.TE_PROCESS_ENTER)
+
+        self.epsglist = ItemList(self, data = None,
+                                 columns = [_('Code'), _('Description'), _('Parameters')])
+
+        # layout
+        self.sizer.Add(item = self.lfile,
+                       flag = wx.ALIGN_LEFT |
+                       wx.ALIGN_CENTER_VERTICAL |
+                       wx.ALL, border = 5, pos = (1, 1), span = (1, 2))
+        self.sizer.Add(item = self.tfile,
+                       flag = wx.ALIGN_LEFT |
+                       wx.ALIGN_CENTER_VERTICAL |
+                       wx.ALL, border = 5, pos = (1, 3))
+        self.sizer.Add(item = self.bbrowse,
+                       flag = wx.ALIGN_LEFT |
+                       wx.ALIGN_CENTER_VERTICAL |
+                       wx.ALL, border = 5, pos = (1, 4))
+        self.sizer.Add(item = self.lcode,
+                       flag = wx.ALIGN_LEFT |
+                       wx.ALIGN_CENTER_VERTICAL |
+                       wx.ALL, border = 5, pos = (2, 1), span = (1, 2))
+        self.sizer.Add(item = self.tcode,
+                       flag = wx.ALIGN_LEFT |
+                       wx.ALIGN_CENTER_VERTICAL |
+                       wx.ALL, border = 5, pos = (2, 3))
+        self.sizer.Add(item = self.searchb,
+                       flag = wx.ALIGN_LEFT |
+                       wx.ALIGN_CENTER_VERTICAL |
+                       wx.ALL, border = 5, pos = (3, 3))
+        
+        self.sizer.Add(item = self.epsglist,
+                       flag = wx.ALIGN_LEFT | wx.EXPAND, pos = (4, 1),
+                       span = (1, 4))
+        self.sizer.AddGrowableCol(3)
+        self.sizer.AddGrowableRow(4)
+
+        # events
+        self.bbrowse.Bind(wx.EVT_BUTTON, self.OnBrowse)
+        self.tfile.Bind(wx.EVT_TEXT_ENTER, self.OnBrowseCodes)
+        self.tcode.Bind(wx.EVT_TEXT, self.OnText)
+        self.tcode.Bind(wx.EVT_TEXT_ENTER, self.OnText)
+        self.epsglist.Bind(wx.EVT_LIST_ITEM_SELECTED, self.OnItemSelected)
+        self.searchb.Bind(wx.EVT_TEXT_ENTER, self.OnSearch)
+        self.Bind(wiz.EVT_WIZARD_PAGE_CHANGING, self.OnPageChanging)
+        self.Bind(wiz.EVT_WIZARD_PAGE_CHANGED, self.OnEnterPage)
+
+    def OnEnterPage(self, event):
+        self.parent.datum_trans = None
+        if event.GetDirection():
+            if not self.epsgcode:
+                # disable 'next' button by default
+                wx.FindWindowById(wx.ID_FORWARD).Enable(False)
+            else:
+                wx.FindWindowById(wx.ID_FORWARD).Enable(True)
+
+        # load default epsg database file
+        self.OnBrowseCodes(None)
+        
+        event.Skip()
+
+    def OnPageChanging(self, event):
+        if event.GetDirection():
+            if not self.epsgcode:
+                event.Veto()
+                return
+            else:
+                # check for datum transforms
+                ret = RunCommand('g.proj',
+                                 read = True,
+                                 proj4 = self.epsgparams,
+                                 datum_trans = '-1',
+                                 flags = 't')
+                
+                if ret != '':
+                    dtrans = ''
+                    # open a dialog to select datum transform number
+                    dlg = SelectTransformDialog(self.parent.parent, transforms = ret)
+                    
+                    if dlg.ShowModal() == wx.ID_OK:
+                        dtrans = dlg.GetTransform()
+                        if dtrans == '':
+                            dlg.Destroy()
+                            event.Veto()
+                            return 'Datum transform is required.'
+                    else:
+                        dlg.Destroy()
+                        event.Veto()
+                        return 'Datum transform is required.'
+                    
+                    self.parent.datum_trans = dtrans
+                    self.parent.epsgcode = self.epsgcode
+                    self.parent.epsgdesc = self.epsgdesc
+
+                # prepare +nadgrids or +towgs84 terms for Summary page. first convert them:
+                ret, projlabel, err = RunCommand('g.proj',
+                                                 flags = 'jft',
+                                                 proj4 = self.epsgparams,
+                                                 datum_trans = self.parent.datum_trans,
+                                                 getErrorMsg = True,
+                                                 read = True)
+                # splitting on space alone would break for grid files with space in pathname
+                for projterm in projlabel.split(' +'):
+                    if projterm.find("towgs84=") != -1 or projterm.find("nadgrids=") != -1:
+                        self.custom_dtrans_string = ' +%s' % projterm
+                        break
+
+            self.GetNext().SetPrev(self)
+
+    def OnText(self, event):
+        self.epsgcode = event.GetString()
+        try:
+            self.epsgcode = int(self.epsgcode)
+        except:
+            self.epsgcode = None
+            
+        nextButton = wx.FindWindowById(wx.ID_FORWARD)
+
+        #if self.epsgcode and self.epsgcode in self.epsgCodeDict.keys():
+        if self.epsgcode:
+            self.epsgdesc = self.epsgCodeDict[self.epsgcode][0]
+            self.epsgparams = self.epsgCodeDict[self.epsgcode][1]
+            if not nextButton.IsEnabled():
+                nextButton.Enable(True)
+        else:
+            self.epsgcode = None # not found
+            if nextButton.IsEnabled():
+                nextButton.Enable(False)
+            self.epsgdesc = self.epsgparams = ''
+        
+    def OnSearch(self, event):
+        value =  self.searchb.GetValue()
+        
+        if value == '':
+            self.epsgcode = None
+            self.epsgdesc = self.epsgparams = ''
+            self.tcode.SetValue('')
+            self.searchb.SetValue('')
+            self.OnBrowseCodes(None)
+        else:
+            try:
+                self.epsgcode, self.epsgdesc, self.epsgparams = \
+                        self.epsglist.Search(index=[0,1,2], pattern=value)
+            except (IndexError, ValueError): # -> no item found
+                self.epsgcode = None
+                self.epsgdesc = self.epsgparams = ''
+                self.tcode.SetValue('')
+
+        event.Skip()
+        
+    def OnBrowse(self, event):
+        """Define path for IAU code file"""
+        path = os.path.dirname(self.tfile.GetValue())
+        if not path:
+            path = os.getcwd()
+        
+        dlg = wx.FileDialog(parent = self, message = _("Choose IAU codes file"),
+                            defaultDir = path, defaultFile = "", wildcard = "*", style = wx.FD_OPEN)
+        
+        if dlg.ShowModal() == wx.ID_OK:
+            path = dlg.GetPath()
+            self.tfile.SetValue(path)
+            self.OnBrowseCodes(None)
+        
+        dlg.Destroy()
+
+        event.Skip()
+
+    def OnItemSelected(self, event):
+        """IAU code selected from the list"""
+        index = event.m_itemIndex
+        item = event.GetItem()
+
+        self.epsgcode = int(self.epsglist.GetItem(index, 0).GetText())
+	#This is here that the index 2 (aka WKT) should be loaded in a variable
+        self.epsgdesc = self.epsglist.GetItem(index, 1).GetText()
+        self.tcode.SetValue(str(self.epsgcode))
+
+        event.Skip()
+        
+    def OnBrowseCodes(self, event, search = None):
+        """Browse IAU codes"""
+        self.epsgCodeDict = utils.ReadEpsgCodes(self.tfile.GetValue())
+
+        if type(self.epsgCodeDict) != dict:
+            wx.MessageBox(parent = self,
+                          message = _("Unable to read IAU codes: %s") % self.epsgCodeDict,
+                          caption = _("Error"),  style = wx.OK | wx.ICON_ERROR | wx.CENTRE)
+            self.epsglist.Populate(list(), update = True)
+            return
+        
+        data = list()
+        for code, val in self.epsgCodeDict.iteritems():
+            if code is not None:
+                data.append((code, val[0], val[1]))
+        
+        self.epsglist.Populate(data, update = True)
+
         
 class CustomPage(TitledPage):
     """Wizard page for entering custom PROJ.4 string
@@ -1705,13 +1947,14 @@ class SummaryPage(TitledPage):
         database = self.parent.startpage.grassdatabase
         location = self.parent.startpage.location
         proj4string = self.parent.CreateProj4String()
+        iauproj4string = self.parent.iaupage.epsgparams
         epsgcode = self.parent.epsgpage.epsgcode
         datum = self.parent.datumpage.datum
         dtrans = self.parent.datum_trans
         global coordsys
 
         #print coordsys,proj4string
-        if coordsys in ('proj', 'epsg', 'wkt', 'file'):
+        if coordsys in ('proj', 'epsg', 'iau', 'wkt', 'file'):
             extra_opts = {}
             extra_opts['location'] = 'location'
             extra_opts['getErrorMsg'] = True
@@ -1726,6 +1969,16 @@ class SummaryPage(TitledPage):
                 ret, projlabel, err = RunCommand('g.proj',
                                                  flags = 'jf',
                                                  proj4 = proj4string,
+                                                 **extra_opts)
+            elif coordsys == 'iau':
+                addl_opts = {}
+                if len(datum) > 0:
+                    extra_opts['datum'] = '%s' % datum
+                    extra_opts['datum_trans'] = dtrans
+
+                ret, projlabel, err = RunCommand('g.proj',
+                                                 flags = 'jf',
+                                                 proj4 = iauproj4string,
                                                  **extra_opts)
             elif coordsys == 'epsg':
                 ret, projlabel, err = RunCommand('g.proj',
@@ -1767,6 +2020,9 @@ class SummaryPage(TitledPage):
         if coordsys == 'epsg':
             label = 'EPSG code %s (%s)' % (self.parent.epsgpage.epsgcode,
                                            self.parent.epsgpage.epsgdesc)
+        elif coordsys == 'iau':
+            label = 'IAU code %s (%s)' % (self.parent.iaupage.epsgcode,
+                                           self.parent.iaupage.epsgdesc)
         elif coordsys == 'file':
             label = 'matches file %s' % self.parent.filepage.georeffile
 
@@ -1845,6 +2101,7 @@ class LocationWizard(wx.Object):
         self.datumpage = DatumPage(self.wizard, self)
         self.paramspage = ProjParamsPage(self.wizard,self)
         self.epsgpage = EPSGPage(self.wizard, self)
+        self.iaupage = IAUPage(self.wizard, self)
         self.filepage = GeoreferencedFilePage(self.wizard, self)
         self.wktpage = WKTPage(self.wizard, self)
         self.ellipsepage = EllipsePage(self.wizard, self)
@@ -1875,6 +2132,9 @@ class LocationWizard(wx.Object):
         self.epsgpage.SetPrev(self.csystemspage)
         self.epsgpage.SetNext(self.sumpage)
 
+        self.iaupage.SetPrev(self.csystemspage)
+        self.iaupage.SetNext(self.sumpage)
+
         self.filepage.SetPrev(self.csystemspage)
         self.filepage.SetNext(self.sumpage)
 
@@ -1895,6 +2155,7 @@ class LocationWizard(wx.Object):
         self.datumpage.DoLayout()
         self.paramspage.DoLayout()
         self.epsgpage.DoLayout()
+        self.iaupage.DoLayout()
         self.filepage.DoLayout()
         self.wktpage.DoLayout()
         self.ellipsepage.DoLayout()
@@ -2118,6 +2379,16 @@ class LocationWizard(wx.Object):
                 grass.create_location(dbase = self.startpage.grassdatabase,
                                       location = self.startpage.location,
                                       epsg = self.epsgpage.epsgcode,
+                                      datum = self.datumpage.datum,
+                                      datum_trans = self.datum_trans,
+                                      desc = self.startpage.locTitle)
+            elif coordsys == "iau":
+                if not self.iaupage.epsgcode:
+                    return _('IAU code missing.')
+                
+                grass.create_location(dbase = self.startpage.grassdatabase,
+                                      location = self.startpage.location,
+                                      proj4 = self.iaupage.epsgparams,
                                       datum = self.datumpage.datum,
                                       datum_trans = self.datum_trans,
                                       desc = self.startpage.locTitle)
