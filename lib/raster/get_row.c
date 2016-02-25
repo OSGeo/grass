@@ -843,7 +843,8 @@ static int read_null_bits_compressed(int null_fd, unsigned char *flags,
 		      row, fcb->name);
     }
 
-    if (G_expand(compressed_buf, readamount, flags, size, fcb->cellhd.compressed) < 1) {
+    /* null bits file compressed with LZ4, see lib/gis/compress.h */
+    if (G_expand(compressed_buf, readamount, flags, size, 3) < 1) {
 	G_fatal_error(_("Error uncompressing null data for row %d of <%s>"),
 		      row, fcb->name);
     }
