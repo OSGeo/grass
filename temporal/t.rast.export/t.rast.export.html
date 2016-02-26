@@ -15,11 +15,21 @@ the space time raster dataset was exported from. The file "readme.txt"
 describes the file format. The output of <em>r.info</em> is stored in
 "metadata.txt".
 <p>
+
 The tar archive can be compressed using the <b>compress</b> option. Gzip
 and bzip2 (default) are available. A <b>where</b> option can be specified,
 to export only a subset of the space time dataset. Archives exported
 with <em>t.rast.export</em> can be imported with
 <em><a href="t.vect.import.html">t.rast.import</a></em>.
+
+<h2>NOTES</h2>
+The name of output file has to specify the suffix of the archive, the
+following suffix has to be added:
+<ul>
+<li><b>.tar</b> in the case of <b>compress=no</b></li>
+<li><b>.tar.bzip2</b> in the case of <b>compress=bzip2</b></li>
+<li><b>.tar.gzip</b> in the case of <b>compress=gzip</b></li>
+</ul> 
 
 <h2>EXAMPLE</h2>
 
@@ -29,7 +39,7 @@ In this example, all the maps of 2012 of "tempmean_monthly" will be exported:
 t.rast.export input=tempmean_monthly output=tempmean_monthly.tar.bzip2 \
               where="start_time &gt;= '2012-01-01' and start_time &lt; '2013-01-01'"
 
-tar xvf precipitation_daily.tar
+tar xvjf precipitation_daily.tar.bzip2
 
 2012_01_tempmean.tif
 2012_01_tempmean.color
