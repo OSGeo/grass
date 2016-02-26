@@ -57,6 +57,16 @@
 #% answer: GTiff
 #%end
 
+#%option
+#% key: type
+#% type: string
+#% label: Data type
+#% description: Supported only for GTiff
+#% required: no
+#% multiple: no
+#% options: Byte,Int16,UInt16,Int32,UInt32,Float32,Float64,CInt16,CInt32,CFloat32,CFloat64
+#%end
+
 #%option G_OPT_T_WHERE
 #%end
 
@@ -74,12 +84,15 @@ def main():
     directory = options["directory"]
     where = options["where"]
     _format = options["format"]
+    _type = options["type"]
 
+    if _type and _format in ["pack", "AAIGrid"]:
+        grass.warning(_("Type options is not working with pack format, it will be skipped"))
     # Make sure the temporal database exists
     tgis.init()
     # Export the space time raster dataset
-    tgis.export_stds(
-        _input, output, compression, directory, where, _format, "strds")
+    tgis.export_stds(_input, output, compression, directory, where, _format,
+                     "strds", _type)
 
 ############################################################################
 if __name__ == "__main__":
