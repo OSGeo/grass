@@ -22,10 +22,10 @@ t.register -i type=raster input=temp_abs1 maps=temp_1,temp_2,temp_3,temp_4,temp_
 # The first @test
 
 t.rast.accumulate -r input=temp_abs1 output=temp_accumulation base=temp_acc \
-    limits=10,25 start="2001-01-01" gran="2 months" cycle="12 months"
+    limits=10,25 start="2001-01-01" gran="2 months" cycle="12 months" suffix="num%03"
 
 t.rast.accdetect -r input=temp_accumulation occurrence=temp_occ base=temp_occ \
-    range=20,80 start="2001-01-01" cycle="12 months" staend=1,2,3 indi=temp_indi
+    range=20,80 start="2001-01-01" cycle="12 months" staend=1,2,3 indi=temp_indi suffix="num%03"
 
 t.rast.list temp_accumulation col=name,start_time,min,max > data/test_2_temp_accumulation.txt
 t.rast.list temp_occ col=name,start_time,min,max  > data/test_2_temp_occ.txt

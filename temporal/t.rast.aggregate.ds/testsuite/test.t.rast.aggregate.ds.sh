@@ -43,7 +43,7 @@ t.info type=strds input=precip_abs2
 t.rast.list input=precip_abs2 method=deltagap
 
 t.rast.aggregate.ds --v input=precip_abs1 output=precip_abs2 base=prec_sum \
-    type=stvds sample=soil_abs1 method=sum sampling=contains -ns
+    type=stvds sample=soil_abs1 method=sum sampling=contains -n
 t.info type=strds input=precip_abs2
 t.rast.list input=precip_abs2 method=deltagap
 
