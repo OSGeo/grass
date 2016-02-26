@@ -52,7 +52,8 @@ exported_maps = {}
 ############################################################################
 
 
-def _export_raster_maps_as_gdal(rows, tar, list_file, new_cwd, fs, format_):
+def _export_raster_maps_as_gdal(rows, tar, list_file, new_cwd, fs, format_, 
+                                type_):
     for row in rows:
         name = row["name"]
         start = row["start_time"]
@@ -70,7 +71,7 @@ def _export_raster_maps_as_gdal(rows, tar, list_file, new_cwd, fs, format_):
             if format_ == "GTiff":
                 # Export the raster map with r.out.gdal as tif
                 out_name = name + ".tif"
-                if datatype == "CELL":
+                if datatype == "CELL" and not type_:
                     nodata = max_val + 1
                     if nodata < 256 and min_val >= 0:
                         gdal_type = "Byte"
@@ -83,6 +84,10 @@ def _export_raster_maps_as_gdal(rows, tar, list_file, new_cwd, fs, format_):
                     gscript.run_command("r.out.gdal", flags="c", input=name,
                                         output=out_name, nodata=nodata,
                                         type=gdal_type, format="GTiff")
+                elif type_:
+                    gscript.run_command("r.out.gdal", flags="cf", input=name,
+                                        output=out_name,
+                                        type=type_, format="GTiff")
                 else:
                     gscript.run_command("r.out.gdal", flags="c",
                                         input=name, output=out_name,
@@ -227,7 +232,7 @@ def _export_raster3d_maps(rows, tar, list_file, new_cwd, fs):
 
 
 def export_stds(input, output, compression, directory, where, format_="pack",
-                type_="strds"):
+                type_="strds", datatype=None):
     """Export space time datasets as tar archive with optional compression
 
         This method should be used to export space time datasets
@@ -259,6 +264,7 @@ def export_stds(input, output, compression, directory, where, format_="pack",
               - "strds" Space time raster dataset
               - "str3ds" Space time 3D raster dataset
               - "stvds" Space time vector dataset
+        :param datatype: Force the output datatype for r.out.gdal
     """
 
     # Save current working directory path
@@ -295,7 +301,7 @@ def export_stds(input, output, compression, directory, where, format_="pack",
         if type_ == "strds":
             if format_ == "GTiff" or format_ == "AAIGrid":
                 _export_raster_maps_as_gdal(
-                    rows, tar, list_file, new_cwd, fs, format_)
+                    rows, tar, list_file, new_cwd, fs, format_, datatype)
             else:
                 _export_raster_maps(rows, tar, list_file, new_cwd, fs)
         elif type_ == "stvds":
