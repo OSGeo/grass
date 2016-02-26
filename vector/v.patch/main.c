@@ -105,7 +105,6 @@ int main(int argc, char *argv[])
 			    "(overwriting existing files must be activated)");
 
     no_topo = G_define_standard_flag(G_FLG_V_TOPO);
-    no_topo->description = _("Advantageous when handling a large number of points");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
