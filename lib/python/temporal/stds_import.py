@@ -53,7 +53,7 @@ imported_maps = {}
 
 
 def _import_raster_maps_from_gdal(maplist, overr, exp, location, link, format_,
-                                  set_current_region=False):
+                                  set_current_region=False, memory=300):
     impflags = ""
     if overr:
         impflags += "o"
@@ -76,7 +76,7 @@ def _import_raster_maps_from_gdal(maplist, overr, exp, location, link, format_,
                                     overwrite=gscript.overwrite())
             else:
                 gscript.run_command("r.in.gdal", input=filename,
-                                    output=name,
+                                    output=name, memory=memory,
                                     flags=impflags,
                                     overwrite=gscript.overwrite())
 
@@ -173,7 +173,8 @@ def _import_vector_maps(maplist):
 
 def import_stds(input, output, directory, title=None, descr=None, location=None,
                 link=False, exp=False, overr=False, create=False,
-                stds_type="strds", base=None, set_current_region=False):
+                stds_type="strds", base=None, set_current_region=False,
+                memory=300):
     """Import space time datasets of type raster and vector
 
         :param input: Name of the input archive file
@@ -194,6 +195,7 @@ def import_stds(input, output, directory, title=None, descr=None, location=None,
                          should be imported
         :param base: The base name of the new imported maps, it will be
                      extended using a numerical index.
+        :param memory: Cache size for raster rows, used in r.in.gdal
     """
 
     global raise_on_error
@@ -437,7 +439,8 @@ def import_stds(input, output, directory, title=None, descr=None, location=None,
         if type_ == "strds":
             if format_ == "GTiff" or format_ == "AAIGrid":
                 _import_raster_maps_from_gdal(maplist, overr, exp, location,
-                                              link, format_, set_current_region)
+                                              link, format_, set_current_region,
+                                              memory)
             if format_ == "pack":
                 _import_raster_maps(maplist, set_current_region)
         elif type_ == "stvds":
