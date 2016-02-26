@@ -335,7 +335,9 @@ def export_stds(input, output, compression, directory, where, format_="pack",
     if sp.is_time_relative():
         string += "%s=%s\n" % ("relative_time_unit",
                                sp.get_relative_time_unit())
-    string += "%s=%s\n" % ("number_of_maps", sp.metadata.get_number_of_maps())
+    # replace sp.metadata.get_number_of_maps() with len(rows)
+    # sp.metadata.get_number_of_maps() doesn't  work with where option
+    string += "%s=%s\n" % ("number_of_maps", len(rows))
     north, south, east, west, top, bottom = sp.get_spatial_extent_as_tuple()
     string += "%s=%s\n" % ("north", north)
     string += "%s=%s\n" % ("south", south)
