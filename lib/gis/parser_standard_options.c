@@ -918,7 +918,8 @@ struct Flag *G_define_standard_flag(int flag)
 	break;
     case G_FLG_V_TOPO:
 	Flg->key = 'b';
-	Flg->description = _("Do not build topology");
+        Flg->label = _("Do not build topology");
+        Flg->description = _("Advantageous when handling a large number of points");
 	break;
     }
     
