@@ -47,10 +47,10 @@ static int profile(int coords, const char *map, const char *nulls, char **line)
 
     argv[argc++] = "output=-";
 
-    sprintf(buf, "null=%s", nulls);
+    sprintf(buf, "null_value=%s", nulls);
     argv[argc++] = G_store(buf);
 
-    strcpy(profile, "profile=");
+    strcpy(profile, "coordinates=");
     for (n = 0; line[n]; n += 4) {
 	int err = parse_line("line", &line[n], &e1, &n1, &e2, &n2, projection);
 
