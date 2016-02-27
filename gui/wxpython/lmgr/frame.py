@@ -1936,7 +1936,7 @@ class GMFrame(wx.Frame):
             return
 
         if not self.currentPage:
-            self.AddMaps([mapName], grassType, check = True)
+            self.AddMaps([mapName], ltype, check=True)
         else:
             display = self.GetMapDisplay()
             mapLayers = map(lambda x: x.GetName(),
@@ -1944,7 +1944,7 @@ class GMFrame(wx.Frame):
             if mapName in mapLayers:
                 display.GetWindow().UpdateMap(render = True)
             else:
-                self.AddMaps([mapName], grassType, check = True)
+                self.AddMaps([mapName], ltype, check=True)
 
     def OnAddRaster(self, event):
         """Add raster map layer"""
