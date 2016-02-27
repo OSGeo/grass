@@ -29,6 +29,8 @@
 #include "R.h"
 #define FORMAT_FILE "f_format"
 #define NULL_FILE   "null"
+/* cmpressed null file */
+#define NULLC_FILE  "nullcmpr"
 
 static int new_fileinfo(void)
 {
@@ -340,6 +342,11 @@ int Rast__open_old(const char *name, const char *mapset)
 	if (!G_find_file2_misc("cell_misc", NULL_FILE, r_name, r_mapset)) {
 	    /* G_warning("unable to find [%s]",path); */
 	    fcb->null_file_exists = 0;
+	    /* check for compressed null file */
+	    if (G_find_file2_misc("cell_misc", NULLC_FILE, r_name, r_mapset)) {
+		G_fatal_error(_("Unable to read compressed null file for <%s@%s>"), r_name, r_mapset);
+		return -1;
+	    }
 	}
 	else {
 	    fcb->null_fd = G_open_old_misc("cell_misc", NULL_FILE, r_name, r_mapset);
