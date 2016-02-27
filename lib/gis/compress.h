@@ -16,49 +16,6 @@
  * modify G_compress(), G_expand()
  */
 
-
-/* compress.c : no compression */
-int
-G_no_compress(unsigned char *src, int src_sz, unsigned char *dst,
-		int dst_sz);
-int
-G_no_expand(unsigned char *src, int src_sz, unsigned char *dst,
-	      int dst_sz);
-
-/* cmprrle.c : Run Length Encoding (RLE) */
-int
-G_rle_compress(unsigned char *src, int src_sz, unsigned char *dst,
-		int dst_sz);
-int
-G_rle_expand(unsigned char *src, int src_sz, unsigned char *dst,
-	      int dst_sz);
-
-/* cmprzlib.c : ZLIB's DEFLATE */
-int
-G_zlib_compress(unsigned char *src, int src_sz, unsigned char *dst,
-		int dst_sz);
-int
-G_zlib_expand(unsigned char *src, int src_sz, unsigned char *dst,
-	      int dst_sz);
-
-/* cmprlz4.c : LZ4, extremely fast */
-int
-G_lz4_compress(unsigned char *src, int src_sz, unsigned char *dst,
-		int dst_sz);
-int
-G_lz4_expand(unsigned char *src, int src_sz, unsigned char *dst,
-	      int dst_sz);
-
-/* cmprbzip.c : BZIP2, high compression, faster than ZLIB's DEFLATE with level 9 */
-int
-G_bz2_compress(unsigned char *src, int src_sz, unsigned char *dst,
-		int dst_sz);
-int
-G_bz2_expand(unsigned char *src, int src_sz, unsigned char *dst,
-	      int dst_sz);
-
-/* add more here */
-
 typedef int compress_fn(unsigned char *src, int src_sz, unsigned char *dst,
 		int dst_sz);
 typedef int expand_fn(unsigned char *src, int src_sz, unsigned char *dst,
