@@ -84,7 +84,12 @@ class PyStc(stc.StyledTextCtrl):
         self.Bind(stc.EVT_STC_UPDATEUI, self.OnUpdateUI)
         self.Bind(stc.EVT_STC_MARGINCLICK, self.OnMarginClick)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyPressed)
-        
+
+        # show whitespace
+        self.SetViewWhiteSpace(1)
+        # make the symbols very light gray to be less distracting
+        self.SetWhitespaceForeground(True, wx.Colour(200, 200, 200))
+
         # Make some styles, the lexer defines what each style is used
         # for, we just have to define what each style looks like.
         # This set is adapted from Scintilla sample property files.
