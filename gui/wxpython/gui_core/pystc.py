@@ -35,11 +35,18 @@ class PyStc(stc.StyledTextCtrl):
         self.statusbar = statusbar
         
         self.modified = False # content modified ?
-        
-        self.faces = { 'times': 'Times New Roman',
-                       'mono' : 'Courier New',
-                       'helv' : 'Arial',
-                       'other': 'Comic Sans MS',
+
+        # this is supposed to get monospace
+        font = wx.Font(9, wx.FONTFAMILY_MODERN, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL)
+        face = font.GetFaceName()
+        size = font.GetPointSize()
+
+        # setting the monospace here to not mess with the rest of the code
+        # TODO: review the whole styling
+        self.faces = { 'times': face,
+                       'mono' : face,
+                       'helv' : face,
+                       'other': face,
                        'size' : 10,
                        'size2': 8,
                        }
