@@ -40,6 +40,8 @@ int NetA_betweenness_closeness(dglGraph_s * graph, double *betweenness,
 /*path.c */
 int NetA_distance_from_points(dglGraph_s * graph, struct ilist *from, int *dst,
 			      dglInt32_t ** prev);
+int NetA_distance_to_points(dglGraph_s * graph, struct ilist *to, int *dst,
+			      dglInt32_t ** nxt);
 int NetA_find_path(dglGraph_s * graph, int from, int to, int *edges,
 		   struct ilist *list);
 
