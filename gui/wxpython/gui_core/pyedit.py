@@ -1,3 +1,15 @@
+"""GRASS GIS Simple Python Editor
+
+Copyright (C) 2016 by the GRASS Development Team
+
+This program is free software under the GNU General Public
+License (>=v2). Read the file COPYING that comes with GRASS GIS
+for details.
+
+:authors: Vaclav Petras
+:authors: Martin Landa
+"""
+
 import sys
 import os
 import stat
@@ -436,7 +448,7 @@ class PyEditToolbar(BaseToolbar):
             'save': MetaIcon(img='save',
                              label=_('Save (Ctrl+S)')),
             'run': MetaIcon(img='execute',
-                            label=_('Run (Ctrl+R')),
+                            label=_('Run (Ctrl+R)')),
         }
 
         return self._getToolbarData((('open', icons['open'],
