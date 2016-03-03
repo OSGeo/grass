@@ -50,6 +50,7 @@ int main(int argc, char *argv[])
     int from_nr;			/* 'from' features not reachable */
     dglInt32_t **nxt;
     struct line_cats **on_path;
+    char *segdir;
     char buf[2000];
 
     /* Attribute table */
@@ -221,11 +222,15 @@ int main(int argc, char *argv[])
     nodes_to_features = (int *)G_calloc(nnodes + 1, sizeof(int));
     on_path =
 	(struct line_cats **)G_calloc(nlines + 1, sizeof(struct line_cats *));
-    if (!dst || !nxt || !nodes_to_features || !on_path)
+    segdir = (char *)G_calloc(nlines + 1, sizeof(char));
+
+    if (!dst || !nxt || !nodes_to_features || !on_path || !segdir)
 	G_fatal_error(_("Out of memory"));
 
-    for (i = 1; i <= nlines; i++)
+    for (i = 1; i <= nlines; i++) {
 	on_path[i] = Vect_new_cats_struct();
+	segdir[i] = 0;
+    }
 
     /*initialise varrays and nodes list appropriatelly */
     afield = Vect_get_field_number(&In, afield_opt->answer);
@@ -299,6 +304,7 @@ int main(int argc, char *argv[])
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
 
+    G_message(_("Tracing paths from 'from' features ..."));
     from_nr = 0;
     for (i = 1; i <= nlines; i++) {
 	if (varrayf->c[i]) {
@@ -328,12 +334,18 @@ int main(int argc, char *argv[])
 	    vertex_id = node;
 	    slist->n_values = 0;
 	    while (nxt[vertex_id] != NULL) {
-		if (segments)
-		    Vect_cat_set(on_path
-				 [abs(dglEdgeGet_Id(graph, nxt[vertex_id]))], 1,
-				 cat);
+		int edge_id;
+
+		edge_id = (int) dglEdgeGet_Id(graph, nxt[vertex_id]);
+		if (segments) {
+		    Vect_cat_set(on_path[abs(edge_id)], 1, cat);
+		    if (edge_id < 0) {
+			segdir[abs(edge_id)] = 1;
+		    }
+		}
 		else
-		    G_ilist_add(slist, dglEdgeGet_Id(graph, nxt[vertex_id]));
+		    G_ilist_add(slist, edge_id);
+
 		vertex = dglEdgeGet_Tail(graph, nxt[vertex_id]);
 		vertex_id = dglNodeGet_Id(graph, vertex);
 	    }
@@ -365,6 +377,8 @@ int main(int argc, char *argv[])
 		    PPoints->n_points--;
 		}
 		PPoints->n_points++;
+		Vect_reset_cats(Cats);
+		Vect_cat_set(Cats, 1, cat);
 		Vect_write_line(&Out, GV_LINE, PPoints, Cats);
 	    }
 
@@ -374,7 +388,15 @@ int main(int argc, char *argv[])
     if (segments) {
 	for (i = 1; i <= nlines; i++) {
 	    if (on_path[i]->n_cats > 0) {
-		int type = Vect_read_line(&In, Points, NULL, i);
+		int type; 
+		
+		if (segdir[i]) {
+		    type = Vect_read_line(&In, PPoints, NULL, i);
+		    Vect_reset_line(Points);
+		    Vect_append_points(Points, PPoints, GV_BACKWARD);
+		}
+		else
+		    type = Vect_read_line(&In, Points, NULL, i);
 
 		Vect_write_line(&Out, type, Points, on_path[i]);
 	    }
@@ -395,6 +417,7 @@ int main(int argc, char *argv[])
     G_free(nodes_to_features);
     G_free(dst);
     G_free(nxt);
+    G_free(segdir);
 
     if (from_nr)
 	G_warning(n_("%d 'from' feature was not reachable",
