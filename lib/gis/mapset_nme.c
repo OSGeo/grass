@@ -149,7 +149,7 @@ char **G_get_available_mapsets(void)
     DIR *dir;
     struct dirent *ent;
 
-    G_debug(3, "G_available_mapsets");
+    G_debug(3, "G_get_available_mapsets");
 
     mapsets = G_calloc(alloc, sizeof(char *));
 
