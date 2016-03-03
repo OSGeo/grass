@@ -11,6 +11,7 @@
    (>=v2). Read the file COPYING that comes with GRASS for details.
 
    \author Daniel Bundala (Google Summer of Code 2009)
+   \author Markus Metz
  */
 
 #include <stdio.h>
@@ -24,14 +25,14 @@
 /*!
    \brief Computes shortest paths to every node from nodes in "from".
 
-   Array "dst" contains the length of the path or -1 if the node is not
+   Array "dst" contains the cost of the path or -1 if the node is not
    reachable. Prev contains edges from predecessor along the shortest
    path.
 
    \param graph input graph
    \param from list of 'from' positions
-   \param dst list of 'to' positions
-   \param[out] prev list of edges from predecessor along the shortest path
+   \param[out] dst array of costs to reach nodes
+   \param[out] prev array of edges from predecessor along the shortest path
 
    \return 0 on success
    \return -1 on failure
@@ -41,6 +42,8 @@ int NetA_distance_from_points(dglGraph_s *graph, struct ilist *from,
 {
     int i, nnodes;
     dglHeap_s heap;
+    int have_node_costs;
+    dglInt32_t ncost;
 
     nnodes = dglGet_NodeCount(graph);
     dglEdgesetTraverser_s et;
@@ -50,6 +53,9 @@ int NetA_distance_from_points(dglGraph_s *graph, struct ilist *from,
 	dst[i] = -1;
 	prev[i] = NULL;
     }
+
+    ncost = 0;
+    have_node_costs = dglGet_NodeAttrSize(graph);
 
     dglHeapInit(&heap);
 
@@ -68,6 +74,8 @@ int NetA_distance_from_points(dglGraph_s *graph, struct ilist *from,
 	dglInt32_t v, dist;
 	dglHeapNode_s heap_node;
 	dglHeapData_u heap_data;
+	dglInt32_t *edge;
+	dglInt32_t *node;
 
 	if (!dglHeapExtractMin(&heap, &heap_node))
 	    break;
@@ -76,11 +84,20 @@ int NetA_distance_from_points(dglGraph_s *graph, struct ilist *from,
 	if (dst[v] < dist)
 	    continue;
 
-	dglInt32_t *edge;
+	node = dglGetNode(graph, v);
+
+	if (have_node_costs && prev[v]) {
+	    memcpy(&ncost, dglNodeGet_Attr(graph, node),
+		   sizeof(ncost));
+	    if (ncost > 0)
+		dist += ncost;
+	    /* do not go through closed nodes */
+	    if (ncost < 0)
+		continue;
+	}
 
 	dglEdgeset_T_Initialize(&et, graph,
-				dglNodeGet_OutEdgeset(graph,
-						      dglGetNode(graph, v)));
+				dglNodeGet_OutEdgeset(graph, node));
 
 	for (edge = dglEdgeset_T_First(&et); edge;
 	     edge = dglEdgeset_T_Next(&et)) {
@@ -107,14 +124,15 @@ int NetA_distance_from_points(dglGraph_s *graph, struct ilist *from,
 /*!
    \brief Computes shortest paths from every node to nodes in "to".
 
-   Array "dst" contains the length of the path or -1 if the node is not
+   Array "dst" contains the cost of the path or -1 if the node is not
    reachable. Nxt contains edges from successor along the shortest
-   path.
+   path. This method does reverse search starting with "to" nodes and 
+   going backward.
 
    \param graph input graph
-   \param from list of 'from' positions
-   \param dst list of 'to' positions
-   \param[out] nxt list of edges from successor along the shortest path
+   \param to list of 'to' positions
+   \param[out] dst array of costs to reach nodes
+   \param[out] nxt array of edges from successor along the shortest path
 
    \return 0 on success
    \return -1 on failure
@@ -125,6 +143,8 @@ int NetA_distance_to_points(dglGraph_s *graph, struct ilist *to,
     int i, nnodes;
     dglHeap_s heap;
     dglEdgesetTraverser_s et;
+    int have_node_costs;
+    dglInt32_t ncost;
 
     nnodes = dglGet_NodeCount(graph);
 
@@ -138,6 +158,9 @@ int NetA_distance_to_points(dglGraph_s *graph, struct ilist *to,
 	G_warning("Directed graph must be version 2 or 3 for NetA_distance_to_points()");
 	return -1;
     }
+
+    ncost = 0;
+    have_node_costs = dglGet_NodeAttrSize(graph);
 
     dglHeapInit(&heap);
 
@@ -156,6 +179,8 @@ int NetA_distance_to_points(dglGraph_s *graph, struct ilist *to,
 	dglInt32_t v, dist;
 	dglHeapNode_s heap_node;
 	dglHeapData_u heap_data;
+	dglInt32_t *edge;
+	dglInt32_t *node;
 
 	if (!dglHeapExtractMin(&heap, &heap_node))
 	    break;
@@ -164,11 +189,20 @@ int NetA_distance_to_points(dglGraph_s *graph, struct ilist *to,
 	if (dst[v] < dist)
 	    continue;
 
-	dglInt32_t *edge;
+	node = dglGetNode(graph, v);
+
+	if (have_node_costs && nxt[v]) {
+	    memcpy(&ncost, dglNodeGet_Attr(graph, node),
+		   sizeof(ncost));
+	    if (ncost > 0)
+		dist += ncost;
+	    /* do not go through closed nodes */
+	    if (ncost < 0)
+		continue;
+	}
 
 	dglEdgeset_T_Initialize(&et, graph,
-				dglNodeGet_InEdgeset(graph,
-						      dglGetNode(graph, v)));
+				dglNodeGet_InEdgeset(graph, node));
 
 	for (edge = dglEdgeset_T_First(&et); edge;
 	     edge = dglEdgeset_T_Next(&et)) {
@@ -193,16 +227,18 @@ int NetA_distance_to_points(dglGraph_s *graph, struct ilist *to,
 }
 
 /*!
-   \brief Find a path (minimum number of edges) from 'from' to 'to' using only edges in 'edges'.
+   \brief Find a path (minimum number of edges) from 'from' to 'to' 
+   using only edges flagged as valid in 'edges'. Edge costs are not 
+   considered. Closed nodes are not traversed.
 
    Precisely, edge with id I is used if edges[abs(i)] == 1. List
-   stores the indices of lines on the path. Method return number of
-   edges or -1 if no path exist.
+   stores the indices of lines on the path. The method returns the 
+   number of edges or -1 if no path exists.
 
    \param graph input graph
    \param from 'from' position
    \param to 'to' position
-   \param edges list of available edges
+   \param edges array of edges indicating wether an edge should be used
    \param[out] list list of edges
 
    \return number of edges
@@ -215,6 +251,8 @@ int NetA_find_path(dglGraph_s * graph, int from, int to, int *edges,
     dglEdgesetTraverser_s et;
     char *vis;
     int begin, end, cur, nnodes;
+    int have_node_costs;
+    dglInt32_t ncost;
 
     nnodes = dglGet_NodeCount(graph);
     prev = (dglInt32_t **) G_calloc(nnodes + 1, sizeof(dglInt32_t *));
@@ -226,6 +264,9 @@ int NetA_find_path(dglGraph_s * graph, int from, int to, int *edges,
     }
     Vect_reset_list(list);
 
+    ncost = 0;
+    have_node_costs = dglGet_NodeAttrSize(graph);
+
     begin = 0;
     end = 1;
     vis[from] = 'y';
@@ -233,22 +274,32 @@ int NetA_find_path(dglGraph_s * graph, int from, int to, int *edges,
     prev[from] = NULL;
     while (begin != end) {
 	dglInt32_t vertex = queue[begin++];
+	dglInt32_t *edge, *node;
 
 	if (vertex == to)
 	    break;
-	dglInt32_t *edge, *node = dglGetNode(graph, vertex);
+
+	/* do not go through closed nodes */
+	if (have_node_costs && prev[vertex]) {
+	    memcpy(&ncost, dglNodeGet_Attr(graph, dglEdgeGet_Tail(graph, edge)),
+		   sizeof(ncost));
+	    if (ncost < 0)
+		continue;
+	}
+
+	node = dglGetNode(graph, vertex);
 
 	dglEdgeset_T_Initialize(&et, graph,
 				dglNodeGet_OutEdgeset(graph, node));
 	for (edge = dglEdgeset_T_First(&et); edge;
 	     edge = dglEdgeset_T_Next(&et)) {
-	    dglInt32_t id = abs(dglEdgeGet_Id(graph, edge));
-	    dglInt32_t to =
+	    dglInt32_t edge_id = abs(dglEdgeGet_Id(graph, edge));
+	    dglInt32_t node_id =
 		dglNodeGet_Id(graph, dglEdgeGet_Tail(graph, edge));
-	    if (edges[id] && !vis[to]) {
-		vis[to] = 'y';
-		prev[to] = edge;
-		queue[end++] = to;
+	    if (edges[edge_id] && !vis[node_id]) {
+		vis[node_id] = 'y';
+		prev[node_id] = edge;
+		queue[end++] = node_id;
 	    }
 	}
 	dglEdgeset_T_Release(&et);
