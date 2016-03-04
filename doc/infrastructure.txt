@@ -5,20 +5,20 @@ Last changed: $Date$
 
 
 Related Wiki documents:
-* http://grass.osgeo.org/wiki/GRASS_Migration_to_OSGeo
+* http://grass.osgeo.org/wiki/GRASS_Migration_to_OSGeo (historical document)
 
 == GRASS Web server ==
 
 Maintainer: M. Neteler
 
 * http://grass.osgeo.org
-** Shared virtual OSGeo machine hosted at Oregon State University Open Source Lab
-   (server: projects.osgeo.osuosl.org)
+** Shared virtual OSGeo machine (osgeo6) hosted at Oregon State University Open Source Lab
+   (server: osgeo6.osgeo.osuosl.org)
 ** OSGeo SAC page: http://wiki.osgeo.org/wiki/SAC_Service_Status
     http://wiki.osgeo.org/index.php/SAC
 ** Login: via OSGeo LDAP, there is a "grass" LDAP group
 ** Software:
-*** OS: Debian Lenny
+*** OS: Debian Wheezy
 *** Apache Server with PHP
 ** Further addresses: http://www.grass-gis.org
 *** points through Apache rewrite engine to http://grass.osgeo.org
@@ -41,7 +41,7 @@ Maintainer: M. Neteler
 ** Source code tarball of SVN HEAD
 ** Linux binary snapshot is compiled
 *** GRASS is compiled with GDAL, PROJ, SQLite, MySQL, PostgreSQL, FFTW, C++ support
-*** binary tar.gz is moved into Web space
+*** binary tar.gz and manuals are moved into Web space
 
 * GRASS user manual HTML:
 ** generated during compilation of weekly Linux binary snapshot
@@ -56,23 +56,13 @@ Maintainer: M. Neteler
    (cd locale; make) are extracted into text file
 ** text file parsed by PHP page and shown as table
 
-* GRASS user map
-** under development
-
-* GRASS-Mapserver demo
-** currently broken after grass.osgeo.org update
-** something is on the OSGeo Adhoc Virtual machine
-
-* FTP server
-** no longer available due to security risk
-
 * Mailman mailing lists + greylisting (at lists.osgeo.org since 11/2007)
 ** Mailman is doing the job, only registered users can post
 ** messages from unsubscribed people is auto-discarded without notification
 ** the open "weblist" operates instead like this:
     User -> grass-web at lists osgeo.org -> greylisting -> Mailman
 
-* Backup of mailing lists (mbox files) (TODO!!)
+* Backup of mailing lists (mbox files)
 ** manually done by MN 
 ** nightly backup at OSGeo.org, bacula
 ** TODO: Establish solution via local cp on lists.osgeo.org (SAC ticket todo)
@@ -86,7 +76,7 @@ Maintainer: M. Neteler
 *** awstats processed log files: /osgeo/download/logs
 *** cronjob script: /osgeo/scripts/update_logs.sh
 ** FBK Mirror: Webalizer (http://grass.fbk.eu/webalizer/) runs daily as cronjob
-** Sitemeter: http://www.sitemeter.com/?a=stats&s=s24grassgis
+** OLD: Sitemeter: http://www.sitemeter.com/?a=stats&s=s24grassgis
 
 Summary: The system should run almost autonomously.
 
@@ -102,17 +92,17 @@ Available lists:
    grass-commit 	Mailing list to distribute GRASS-CVS commits
    grass-dev 		GRASS GIS Development mailing list
    grass-es 		La lista de correo de GRASS GIS en español
-   grass-gui 		GRASSGUI mailing list
    grass-psc 		GRASS-PSC: GRASS Project Steering Committee
-   grass-qa 		GRASS Quality Assessment and monitoring list
    grass-stats 		GRASS and statistical software
    grass-translations 	Translation of GRASS (i18N)
    grass-user 		GRASS user list
    grass-web 		GRASS website mailing list
-   grass-windows 	winGRASS - Using GRASS on MS-Windows systems mailing list
 
 * OLD, UNUSED: at FBK-irst (http://grass.fbk.eu/mailman/admin/):
-   grass-commit-addons          Mailing list to distribute GRASS Addons-SVN commits
+   grass-commit-addons  Mailing list to distribute GRASS Addons-SVN commits
+   grass-gui 		GRASSGUI mailing list
+   grass-qa 		GRASS Quality Assessment and monitoring list
+   grass-windows 	winGRASS - Using GRASS on MS-Windows systems mailing list
 
 Notes:
 * grass-announce:
@@ -179,6 +169,15 @@ Very old bugtracker (Dec 2000 - Dec 2006):
   * reports are directly sent to GRASS Developers mailing list for notification
   * TODO: migrate to trac
 
+== GRASS Travis CI ==
+
+Maintainer: Martin Landa
+
+Note: Only checking trunk
+
+* https://travis-ci.org/GRASS-GIS
+* https://github.com/GRASS-GIS/grass-ci
+
 == OLD: GRASS Quality Control ==
 
 Maintainer: Prof. Giulio Antoniol
@@ -190,16 +189,16 @@ Maintainer: Prof. Giulio Antoniol
 * Realtime analysis is sent to: http://lists.osgeo.org/mailman/listinfo/grass-qa
 
 Further notification/functionality test systems:
-* http://cia.vc/stats/project/GRASS
 ** posts into #grass IRC channel
 ** posts into #osgeo-commits IRC channel
 
 == Previous hosting sponsors ==
+
+Since 2010 the GRASS GIS project is hosted at the Oregon State University Open Source Lab (OSUOSL), Oregon, USA
 
 Numerous institutions have sponsored the GRASS Project with Hardware/Bandwidth (list of master site hosting):
 * 1997-1999: Institut fuer Landschaftspflege und Naturschutz (ILN), Universitaet Hannover, Germany
 * 1999-2001: Institut fuer Physische Geographie und Landschaftsoekologie, Universitaet Hannover, Germany
 * 2001-2008: ITC-irst, Trento, Italy
 * 2009-2010: Telascience.org at San Diego Supercomputer Center, California, USA
-* Since 2010: Oregon State University Open Source Lab (OSUOSL), Oregon, USA
 
