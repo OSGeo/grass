@@ -176,6 +176,9 @@ Maintainer: Martin Landa
 * https://travis-ci.org/GRASS-GIS
 * https://github.com/GRASS-GIS/grass-ci
 
+Coverity Scan:
+* https://scan.coverity.com/projects/grass?tab=overview
+
 == OLD: GRASS Quality Control ==
 
 Maintainer: Prof. Giulio Antoniol
