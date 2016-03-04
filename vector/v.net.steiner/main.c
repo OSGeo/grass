@@ -233,9 +233,10 @@ int mst(struct Map_info *Map, int *trms, int ntrms,	/* array of terminal, number
 	else {
 	    scpos = -1;
 	}
-	G_debug(3, "tcpos = %d, scpos = %d\n", tcpos, scpos);
-	G_debug(3, "tcost = %f, scost = %f\n", term_costs[tcpos].cost,
-		sp_costs[scpos].cost);
+	/* Do not access invalid items even for debugging */
+    if (tcpos != -1 && scpos != -1)
+        G_debug(3, "tcost = %f, scost = %f\n", term_costs[tcpos].cost,
+            sp_costs[scpos].cost);
 
 	/* Now we have positions set on lowest costs in each queue or -1 if no more/not used */
 	if (tcpos >= 0 && scpos >= 0) {
@@ -475,11 +476,11 @@ int main(int argc, char **argv)
 	testnode[i] = 1;
 
     /* Alloc arrays of costs for nodes, first node at 1 (0 not used) */
-    nodes_costs = (double **)G_malloc((nnodes - 1) * sizeof(double *));
+    nodes_costs = (double **)G_malloc((nnodes) * sizeof(double *));
     for (i = 0; i < nnodes; i++) {
 	nodes_costs[i] =
-	    (double *)G_malloc((nnodes - i - 1) * sizeof(double));
-	for (j = 0; j < nnodes - i - 1; j++)
+	    (double *)G_malloc((nnodes - i) * sizeof(double));
+	for (j = 0; j < nnodes - i; j++)
 	    nodes_costs[i][j] = -1;	/* init, i.e. cost was not calculated yet */
     }
 
