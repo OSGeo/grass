@@ -54,6 +54,10 @@ install:
                 liblapack-dev
                 python-numpy
 
+env:
+  global:
+    - CFLAGS="-Werror=implicit-function-declaration"
+
 script:
         - ./configure --host=x86_64-linux-gnu --build=x86_64-linux-gnu
                 --prefix=/usr/lib
