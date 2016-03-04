@@ -15,6 +15,7 @@
 #include <grass/gis.h>
 
 static const char *name = "?";
+static const char *original_name = "?";
 
 /*!
  * \brief Return module name
@@ -27,6 +28,24 @@ static const char *name = "?";
 const char *G_program_name(void)
 {
     return name;
+}
+
+/*!
+ * \brief Return original path of the executed program
+ *
+ * This function returns the name of the program as set by the call to
+ * G_gisinit().
+ *
+ * Unlike G_program_name() which returns name of the module
+ * this function return original path which was used to execute
+ * the program. For standard GRASS modules, it will be the same as
+ * the result from G_program_name() function.
+ *
+ * \return pointer to string with program name or full path
+ */
+const char *G_original_program_name(void)
+{
+    return original_name;
 }
 
 /*!
@@ -43,6 +62,8 @@ void G_set_program_name(const char *s)
 {
     int i;
     char *temp;
+
+    original_name = G_store(s);
 
     i = strlen(s);
     while (--i >= 0) {

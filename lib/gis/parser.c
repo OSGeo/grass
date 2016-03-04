@@ -619,9 +619,11 @@ int G_parser(int argc, char **argv)
  * Creates a command-line that runs the current command completely
  * non-interactive.
  *
+ * \param original_path TRUE if original path should be used, FALSE for
+ *  stripped and clean name of the module
  * \return pointer to a char string
  */
-char *G_recreate_command(void)
+char *recreate_command(int original_path)
 {
     char *buff;
     char flg[4];
@@ -638,7 +640,10 @@ char *G_recreate_command(void)
 
     buff = G_calloc(1024, sizeof(char));
     nalloced += 1024;
-    tmp = G_program_name();
+    if (original_path)
+        tmp = G_original_program_name();
+    else
+        tmp = G_program_name();
     len = strlen(tmp);
     if (len >= nalloced) {
 	nalloced += (1024 > len) ? 1024 : len + 1;
@@ -747,6 +752,37 @@ char *G_recreate_command(void)
     }
 
     return buff;
+}
+
+/*!
+ * \brief Creates command to run non-interactive.
+ *
+ * Creates a command-line that runs the current command completely
+ * non-interactive.
+ *
+ * \return pointer to a char string
+ */
+char *G_recreate_command(void)
+{
+    recreate_command(FALSE);
+}
+
+/* TODO: update to docs of these 3 functions to whatever general purpose
+ * they have now. */
+/*!
+ * \brief Creates command to run non-interactive.
+ *
+ * Creates a command-line that runs the current command completely
+ * non-interactive.
+ *
+ * This gives the same as G_recreate_command() but the original path
+ * from the command line is used instead of the module name only.
+ *
+ * \return pointer to a char string
+ */
+char *G_recreate_command_original_path(void)
+{
+    recreate_command(TRUE);
 }
 
 /*!
@@ -863,6 +899,7 @@ int module_gui_wx(void)
 {
     char script[GPATH_MAX];
 
+    /* TODO: the 4 following lines seems useless */
     if (!st->pgm_path)
 	st->pgm_path = G_program_name();
     if (!st->pgm_path)
@@ -872,7 +909,7 @@ int module_gui_wx(void)
             getenv("GISBASE"));
     if (access(script, F_OK) != -1)
         G_spawn(getenv("GRASS_PYTHON"), getenv("GRASS_PYTHON"),
-                script, G_recreate_command(), NULL);
+                script, G_recreate_command_original_path(), NULL);
     else
         return -1;
 
