@@ -607,6 +607,7 @@ int G_pole_in_polygon(const double *, const double *, int);
 
 /* progrm_nme.c */
 const char *G_program_name(void);
+const char *G_original_program_name(void);
 void G_set_program_name(const char *);
 
 /* proj1.c */
