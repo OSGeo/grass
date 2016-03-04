@@ -509,6 +509,9 @@ def get_interface_description(cmd):
 def parse_interface(name, parser=processTask, blackList=None):
     """Parse interface of given GRASS module
 
+    The *name* is either GRASS module name (of a module on path) or
+    a full or relative path to an executable.
+
     :param str name: name of GRASS module to be parsed
     :param parser:
     :param blackList:
@@ -518,7 +521,15 @@ def parse_interface(name, parser=processTask, blackList=None):
     except ETREE_EXCEPTIONS as error:
         raise ScriptError(_("Cannot parse interface description of"
             "<{name}> module: {error}").format(name=name, error=error))
-    return parser(tree, blackList=blackList).get_task()
+    task = parser(tree, blackList=blackList).get_task()
+    # if name from interface is different than the originally
+    # provided name, then the provided name is likely a full path needed
+    # to actually run the module later
+    # (processTask uses only the XML which does not contain the original
+    # path used to execute the module)
+    if task.name != name:
+        task.path = name
+    return task
 
 
 def command_info(cmd):
