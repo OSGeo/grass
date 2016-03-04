@@ -448,7 +448,7 @@ int main(int argc, char **argv)
 	if (!(Vect_cat_get(Cats, tfield, &cat)))
 	    continue;
 	if (Vect_cat_in_cat_list(cat, Clist)) {
-	    Vect_list_append(TList, i);
+	    Vect_list_append(TList, node);
 	}
     }
 
