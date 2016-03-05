@@ -33,7 +33,7 @@ dglInt32_t sign(dglInt32_t x)
    \brief Get max flow from source to sink.
 
    Array flow stores flow for each edge. Negative flow corresponds to a
-   flow in opposite direction The function assumes that the edge costs
+   flow in opposite direction. The function assumes that the edge costs
    correspond to edge capacities.
 
    \param graph input graph
@@ -53,6 +53,8 @@ int NetA_flow(dglGraph_s * graph, struct ilist *source_list,
     dglInt32_t **prev;
     char *is_source, *is_sink;
     int begin, end, total_flow;
+    int have_node_costs;
+    dglInt32_t ncost;
 
     nnodes = dglGet_NodeCount(graph);
     nlines = dglGet_EdgeCount(graph) / 2;	/*each line corresponds to two edges. One in each direction */
@@ -72,6 +74,9 @@ int NetA_flow(dglGraph_s * graph, struct ilist *source_list,
 
     for (i = 0; i <= nlines; i++)
 	flow[i] = 0;
+
+    ncost = 0;
+    have_node_costs = dglGet_NodeAttrSize(graph);
 
     total_flow = 0;
     while (1) {
@@ -104,7 +109,13 @@ int NetA_flow(dglGraph_s * graph, struct ilist *source_list,
 			found = to;
 			break;
 		    }
-		    queue[end++] = to;
+		    /* do not go through closed nodes */
+		    if (have_node_costs) {
+			memcpy(&ncost, dglNodeGet_Attr(graph, dglEdgeGet_Tail(graph, edge)),
+			       sizeof(ncost));
+		    }
+		    if (ncost >= 0)
+			queue[end++] = to;
 		}
 	    }
 	    dglEdgeset_T_Release(&et);
@@ -280,6 +291,9 @@ int NetA_split_vertices(dglGraph_s * in, dglGraph_s * out, int *node_costs)
 
 	if (node_costs)
 	    cost = node_costs[v];
+	/* skip closed nodes */
+	if (cost < 0)
+	    continue;
 	if (cost > max_node_cost)
 	    max_node_cost = cost;
 	dglAddEdge(out, 2 * v - 1, 2 * v, cost, edge_cnt);
@@ -292,6 +306,13 @@ int NetA_split_vertices(dglGraph_s * in, dglGraph_s * out, int *node_costs)
 	dglEdgesetTraverser_s et;
 	dglInt32_t *edge;
 	dglInt32_t v = dglNodeGet_Id(in, cur_node);
+	dglInt32_t cost = 1;
+
+	if (node_costs)
+	    cost = node_costs[v];
+	/* skip closed nodes */
+	if (cost < 0)
+	    continue;
 
 	dglEdgeset_T_Initialize(&et, in, dglNodeGet_OutEdgeset(in, cur_node));
 	for (edge = dglEdgeset_T_First(&et); edge;
