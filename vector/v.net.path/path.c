@@ -256,8 +256,9 @@ int path(struct Map_info *In, struct Map_info *Out, char *filename,
 			    else
 				Vect_append_points(OPoints, Points,
 						   GV_BACKWARD);
+			    OPoints->n_points--;
 			}
-
+			OPoints->n_points++;
 			Vect_write_line(Out, GV_LINE, OPoints, Cats);
 		    }
 		}
