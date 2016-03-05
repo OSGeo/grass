@@ -4,6 +4,7 @@
  * MODULE:     v.net.components
  *
  * AUTHOR(S):  Daniel Bundala
+ *             Markus Metz
  *
  * PURPOSE:    Computes strongly and weakly connected components
  *
@@ -54,7 +55,7 @@ int main(int argc, char *argv[])
     int with_z;
     int afield, nfield, mask_type;
     dglGraph_s *graph;
-    int *component, nnodes, type, i, nlines, components, j, max_cat;
+    int *component, nnodes, type, i, nlines, components, max_cat;
     char buf[2000], *covered;
     char *desc;
 
@@ -158,7 +159,7 @@ int main(int argc, char *argv[])
     nfield = Vect_get_field_number(&In, nfield_opt->answer);
 
     if (0 != Vect_net_build_graph(&In, mask_type, afield, nfield, afcol->answer,
-                                  abcol->answer, ncol->answer, 0, 0))
+                                  abcol->answer, ncol->answer, 0, 2))
         G_fatal_error(_("Unable to build graph for vector map <%s>"), Vect_get_full_name(&In));
 
     graph = Vect_net_get_graph(&In);
@@ -198,21 +199,30 @@ int main(int argc, char *argv[])
 
     db_begin_transaction(driver);
 
-    if (method_opt->answer[0] == 'w')
+    if (method_opt->answer[0] == 'w') {
+	G_message(_("Computing weakly connected components..."));
 	components = NetA_weakly_connected_components(graph, component);
-    else
+    }
+    else {
+	G_message(_("Computing strongly connected components..."));
 	components = NetA_strongly_connected_components(graph, component);
+    }
 
     G_debug(3, "Components: %d", components);
+
+    G_message(_("Writing output..."));
 
     Vect_copy_head_data(&In, &Out);
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
 
     nlines = Vect_get_num_lines(&In);
+    max_cat = 1;
+    G_percent(0, nlines, 4);
     for (i = 1; i <= nlines; i++) {
 	int comp, cat;
 
+	G_percent(i, nlines, 4);
 	type = Vect_read_line(&In, Points, Cats, i);
 	if (!Vect_cat_get(Cats, afield, &cat))
 	    continue;
@@ -232,29 +242,23 @@ int main(int argc, char *argv[])
 
 	    /* Vect_get_line_nodes(&In, i, &node, NULL); */
 	    node = Vect_find_node(&In, Points->x[0], Points->y[0], Points->z[0], 0, 0);
+	    if (!node)
+		continue;
 	    comp = component[node];
 	    covered[node] = 1;
 	}
 	else
 	    continue;
+	
+	cat = max_cat++;
+	Vect_reset_cats(Cats);
+	Vect_cat_set(Cats, 1, cat);
 	Vect_write_line(&Out, type, Points, Cats);
 	insert_new_record(driver, Fi, &sql, cat, comp);
-	/*        for(j=0;j<Cats->n_cats;j++)
-	 * if(Cats->field[j] == layer)
-	 * insert_new_record(driver, Fi, &sql, Cats->cat[j], comp);
-	 */
-    };
+    }
+
     /*add points on nodes not covered by any point in the network */
-    /*find the maximum cat number */
     if (add_f->answer) {
-	max_cat = 0;
-	for (i = 1; i <= nlines; i++) {
-	    Vect_read_line(&In, NULL, Cats, i);
-	    for (j = 0; j < Cats->n_cats; j++)
-		if (Cats->cat[j] > max_cat)
-		    max_cat = Cats->cat[j];
-	}
-	max_cat++;
 	for (i = 1; i <= nnodes; i++)
 	    if (!covered[i]) {
 		Vect_reset_cats(Cats);
@@ -267,10 +271,12 @@ int main(int argc, char *argv[])
     db_commit_transaction(driver);
     db_close_database_shutdown_driver(driver);
 
-    Vect_build(&Out);
-
     Vect_close(&In);
+
+    Vect_build(&Out);
     Vect_close(&Out);
+
+    G_done_msg(_("Found %d components."), components);
 
     exit(EXIT_SUCCESS);
 }
