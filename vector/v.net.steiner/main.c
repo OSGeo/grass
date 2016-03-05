@@ -55,14 +55,14 @@ int init_node_costs(struct Map_info *Map, int from)
     int to, ret, row, col;
     double cost;
 
-    G_message(_("Init costs from node %d"), from);
+    G_verbose_message(_("Init costs from node %d"), from);
 
     for (to = 1; to <= nnodes; to++) {
 	if (from == to)
 	    continue;
 	ret = Vect_net_shortest_path(Map, from, to, NULL, &cost);
 	if (ret == -1) {
-	    /* G_warning ( "Destination node %d is unreachable from node %d\n", to, from); */
+	    G_debug(1, "Destination node %d is unreachable from node %d\n", to, from);
 	    cost = -2;
 	}
 
@@ -338,7 +338,7 @@ int main(int argc, char **argv)
     struct cat_list *Clist;
     struct line_cats *Cats;
     struct line_pnts *Points;
-
+    
     /* Initialize the GIS calls */
     G_gisinit(argv[0]);
 
@@ -441,23 +441,26 @@ int main(int argc, char **argv)
 	    continue;
 
 	Vect_read_line(&Map, Points, Cats, i);
-	node = Vect_find_node(&Map, Points->x[0], Points->y[0], Points->z[0], 0, 0);
-	if (!node) {
-	    G_warning(_("Point is not connected to the network"));
-	    continue;
-	}
 	if (!(Vect_cat_get(Cats, tfield, &cat)))
 	    continue;
+	node = Vect_find_node(&Map, Points->x[0], Points->y[0], Points->z[0], 0, 0);
+	if (!node) {
+	    G_warning(_("Point is not connected to the network (cat=%d)"), cat);
+	    continue;
+	}
 	if (Vect_cat_in_cat_list(cat, Clist)) {
 	    Vect_list_append(TList, node);
 	}
     }
 
     nterms = TList->n_values;
-    fprintf(stdout, "Number of terminals: %d\n", nterms);
+    /* GTC Terminal refers to an Steiner tree endpoint */
+    G_message(_("Number of terminals: %d\n"), nterms);
 
-    if (nterms < 2)
-	G_fatal_error(_("Not enough terminals (< 2)"));
+    if (nterms < 2) {
+        /* GTC Terminal refers to an Steiner tree endpoint */
+        G_fatal_error(_("Not enough terminals (< 2)"));
+    }
 
     /* Number of steiner points */
     nsp = atoi(nsp_opt->answer);
@@ -469,7 +472,7 @@ int main(int argc, char **argv)
 	nsp = nterms - 2;
     }
 
-    fprintf(stdout, "Number of Steiner points set to %d\n", nsp);
+    G_message(_("Number of Steiner points set to %d\n"), nsp);
 
     testnode = (int *)G_malloc((nnodes + 1) * sizeof(int));
     for (i = 1; i <= nnodes; i++)
@@ -515,6 +518,7 @@ int main(int argc, char **argv)
     for (i = 1; i < nterms; i++) {
 	ret = get_node_costs(terms[0], terms[i], &cost);
 	if (ret == 0) {
+            /* GTC Terminal refers to an Steiner tree endpoint */
 	    G_fatal_error(_("Terminal at node [%d] cannot be connected "
 			    "to terminal at node [%d]"), terms[0], terms[i]);
 	}
@@ -526,7 +530,7 @@ int main(int argc, char **argv)
 	ret = get_node_costs(terms[0], i, &cost);
 	if (ret == 0) {
 	    testnode[i] = 0;
-	    /* fprintf (stderr, "node %d removed from list of Steiner point candidates\n", i ); */
+	    G_debug(2, "node %d removed from list of Steiner point candidates\n", i );
 	    j++;
 	}
     }
@@ -542,7 +546,7 @@ int main(int argc, char **argv)
     nspused = 0;
     for (j = 0; j < nsp; j++) {
 	sp = 0;
-	G_message(_("Search for [%d]. Steiner point"), j + 1);
+	G_verbose_message(_("Search for [%d]. Steiner point"), j + 1);
 
 	for (i = 1; i <= nnodes; i++) {
 	    G_percent(i, nnodes, 1);
@@ -580,8 +584,8 @@ int main(int argc, char **argv)
 	}
     }
 
-    fprintf(stdout, "\nNumber of added Steiner points: %d "
-	    "(theoretic max is %d).\n", nspused, nterms - 2);
+    G_message(_("Number of added Steiner points: %d "
+	    "(theoretic max is %d).\n"), nspused, nterms - 2);
 
     /* Build lists of arcs and nodes for final version */
     ret =
@@ -591,12 +595,12 @@ int main(int argc, char **argv)
     /* Calculate true costs, which may be lower than MST if steiner points were not used */
 
     if (nsp < nterms - 2) {
-	fprintf(stdout, "\nSpanning tree costs on complet graph = %f\n"
-		"(may be higher than resulting Steiner tree costs!!!)\n",
+        G_message(_("Spanning tree costs on complet graph = %f\n"
+            "(may be higher than resulting Steiner tree costs!!!)"),
 		cost);
     }
     else
-	fprintf(stdout, "\nSteiner tree costs = %f\n", cost);
+        G_message(_("Steiner tree costs = %f"), cost);
 
     /* Write arcs to new map */
     if (Vect_open_new(&Out, output->answer, Vect_is_3d(&Map)) < 0)
@@ -604,23 +608,19 @@ int main(int argc, char **argv)
 
     Vect_hist_command(&Out);
 
-    fprintf(stdout, "\nSteiner tree:\n");
-    fprintf(stdout, "Arcs' categories (layer %d, %d arcs):\n", afield,
+    G_debug(1, "Steiner tree:");
+    G_debug(1, "Arcs' categories (layer %d, %d arcs):", afield,
 	    StArcs->n_values);
-
+    
     for (i = 0; i < StArcs->n_values; i++) {
 	line = StArcs->value[i];
 	ltype = Vect_read_line(&Map, Points, Cats, line);
 	Vect_write_line(&Out, ltype, Points, Cats);
 	Vect_cat_get(Cats, afield, &cat);
-	if (i > 0)
-	    printf(",");
-	fprintf(stdout, "%d", cat);
+        G_debug(1, "arc cat = %d", cat);
     }
-
-    fprintf(stdout, "\n\n");
-
-    fprintf(stdout, "Nodes' categories (layer %d, %d nodes):\n", tfield,
+    
+    G_debug(1, "Nodes' categories (layer %d, %d nodes):", tfield,
 	    StNodes->n_values);
 
     k = 0;
@@ -646,17 +646,17 @@ int main(int argc, char **argv)
 	    if (!(Vect_cat_get(Cats, tfield, &cat)))
 		continue;
 	    Vect_write_line(&Out, ltype, Points, Cats);
-	    if (k > 0)
-		fprintf(stdout, ",");
-	    fprintf(stdout, "%d", cat);
+	    G_debug(1, "node cat = %d", cat);
 	    k++;
 	}
     }
 
-    fprintf(stdout, "\n\n");
-
     Vect_build(&Out);
 
+    G_message(n_("A Steiner tree with %d arc has been built",
+            "A Steiner tree with %d arcs has been built", StArcs->n_values),
+        StArcs->n_values);
+    
     /* Free, ... */
     Vect_destroy_list(StArcs);
     Vect_destroy_list(StNodes);
