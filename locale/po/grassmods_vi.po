@@ -40857,7 +40857,7 @@ msgstr "Tên của bản đồ vec-tơ dùng để lưu các đối tượng vec
 
 #: ../vector/v.build/main.c:61
 #, fuzzy
-msgid "Build topology or dump topology or indeces to standard output"
+msgid "Build topology or dump topology or indices to standard output"
 msgstr ""
 "Xây dựng tôpô hoặc 'đổ' tôpô hoặc chỉ mục không gian vào đầu ra tiêu chuẩn"
 

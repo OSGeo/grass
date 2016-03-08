@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
     opt->multiple = YES;
     opt->answer = "build";
     opt->description =
-	_("Build topology or dump topology or indeces to standard output");
+	_("Build topology or dump topology or indices to standard output");
     opt_desc = NULL;
     G_asprintf(&opt_desc,
 	       "build;%s;dump;%s;sdump;%s;cdump;%s;fdump;%s",

@@ -395,7 +395,7 @@ int Vect_set_map_date(struct Map_info *Map, const char *str)
 
    \param Map pointer to Map_info structure
 
-   \return string containg a date
+   \return string containing a date
  */
 const char *Vect_get_map_date(const struct Map_info *Map)
 {

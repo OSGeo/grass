@@ -1522,11 +1522,11 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         table    = self.dbMgrData['mapDBInfo'].layers[self.selLayer]["table"]
         key      = self.dbMgrData['mapDBInfo'].layers[self.selLayer]["key"]
         
-        indeces = []
+        indices = []
         # collect SQL statements
         while item != -1:
             index = dlist.itemIndexMap[item]
-            indeces.append(index)
+            indices.append(index)
             
             cat = dlist.itemCatsMap[index]
             
@@ -1557,7 +1557,7 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
         
         i = 0
         for index in indexTemp:
-            if index in indeces:
+            if index in indices:
                 continue
             dlist.itemIndexMap.append(i)
             dlist.itemDataMap[i] = dataTemp[index]

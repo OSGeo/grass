@@ -579,7 +579,7 @@ void Rast_close_gdal_link(struct GDAL_link *gdal)
 }
 
 /*!
-  \brief Close exising GDAL link and write out data
+  \brief Close existing GDAL link and write out data
 
   \param gdal pointer to GDAL_link to be closed
 

@@ -891,7 +891,7 @@ class ItemListCtrl(ModelListCtrl):
             self.DeleteItem(item)
             del self.itemDataMap[item]
             
-            action = model.GetItem(item+1) # action indeces starts at 1
+            action = model.GetItem(item+1) # action indices starts at 1
             if not action:
                 item = self.GetFirstSelected()
                 continue

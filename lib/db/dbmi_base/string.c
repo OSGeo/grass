@@ -135,7 +135,7 @@ int db_enlarge_string(dbString * x, int len)
 
   \param x pointer to dbString
 
-  \return pointer to buffer containg string
+  \return pointer to buffer containing string
 */
 char *db_get_string(const dbString * x)
 {
