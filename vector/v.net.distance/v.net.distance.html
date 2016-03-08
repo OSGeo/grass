@@ -13,19 +13,22 @@ containing various information about the relation. More
 specifically, the table has three columns: <em>cat</em>, <em>tcat</em>
 and <em>dist</em> storing category of each <em>from</em> 
 feature, category of the nearest <em>to</em> feature and the 
-distance between them respectively. Furthemore, <b>output</b> map 
-contains the shorest path between each <em>cat</em>, <em>tcat</em> 
-pair. Each path consist of several lines. If a line is on the 
-shorest path from a point then the category of this point is 
-assigned to the line. Note that every line may contain more than one 
-category value since a single line may be on the shortest path for 
-more than one <em>from</em> feature. And so the shortest paths can 
-be easily obtained by querying lines with corresponding category 
-number.
-<br>
+distance between them respectively.
+<p>
+Furthemore, the <b>output</b> map contains the shortest path between 
+each <em>cat</em>, <em>tcat</em> pair. Each path consists of several 
+lines. If a line is on the shortest path from a point then the category 
+of this point is assigned to the line. Note that every line may contain 
+more than one category value since a single line may be on the shortest 
+path for more than one <em>from</em> feature. And so the shortest paths 
+can be easily obtained by querying lines with corresponding category 
+number. Alternatively, unique paths can be created with the <em>-l</em> 
+flag where each path will be a separate single line in the output.
+<p>
 The costs of arcs in forward and backward direction are specified by 
-<b>arc_column</b> and <b>arc_backward_column</b> columns respectively. If
-<b>arc_backward_column</b> is not given, the same cost is used in both directions.  
+<b>arc_column</b> and <b>arc_backward_column</b> columns respectively. 
+If <b>arc_backward_column</b> is not given, the same cost is used in 
+both directions.  
 <p>
 <em>v.net.distance</em> will not work if you are trying to find the 
 nearest neighbors within a group of nodes, i.e. where <em>to</em> 
@@ -62,7 +65,7 @@ v.net input=streets_net1 points=hospitals output=streets_net2 \
 v.category in=streets_net2 op=report
 
 # shortest paths from schools (points in layer 2) to nearest hospitals (points in layer 3)
-v.net.distance in=streets_net2 out=schools_to_hospitals flayer=2 turn_layer=3
+v.net.distance in=streets_net2 out=schools_to_hospitals flayer=2 to_layer=3
 </pre></div>
 
 <h3>Distance between point source of pollution and sample points along streams</h3>
