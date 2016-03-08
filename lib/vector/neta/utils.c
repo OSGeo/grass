@@ -1,5 +1,5 @@
 /*!
-   \file vector/neta/timetables.c
+   \file vector/neta/utils.c
 
    \brief Network Analysis library - utils
 
@@ -91,8 +91,8 @@ void NetA_points_to_nodes(struct Map_info *In, struct ilist *point_list)
    the array node_costs. If there is no point with a category,
    node_costs=0.
 
-   node_costs are multiplied by 1000000 and truncated to integers (as
-   is done in Vect_net_build_graph)
+   node_costs are multiplied by the graph's cost multiplier and  
+   truncated to integers (as is done in Vect_net_build_graph)
 
    \param In pointer to Map_info structure
    \param layer layer number
@@ -141,8 +141,12 @@ int NetA_get_node_costs(struct Map_info *In, int layer, char *column,
 	    if (!Vect_cat_get(Cats, layer, &cat))
 		continue;
 	    Vect_get_line_nodes(In, i, &node, NULL);
-	    if (db_CatValArray_get_value_double(&vals, cat, &value) == DB_OK)
-		node_costs[node] = value * 1000000.0;
+	    if (db_CatValArray_get_value_double(&vals, cat, &value) == DB_OK) {
+		if (value < 0)
+		    node_costs[node] = -1;
+		else
+		    node_costs[node] = value * In->dgraph.cost_multip;
+	    }
 	}
     }
 
@@ -159,12 +163,13 @@ int NetA_get_node_costs(struct Map_info *In, int layer, char *column,
    nodes_to_features conains the index of a feature adjecent to each
    node or -1 if no such feature specified by varray
    exists. Nodes_to_features might be NULL, in which case it is left
-   unitialised.
+   unitialised. Nodes_to_features will be wrong if several lines connect 
+   to the same node.
 
    \param map pointer to Map_info structure
    \param varray pointer to varray structure
    \param[out] nodes list of node ids
-   \param node_to_features ?
+   \param[out] nodes_to_features maps nodes to features
  */
 void NetA_varray_to_nodes(struct Map_info *map, struct varray *varray,
 			  struct ilist *nodes, int *nodes_to_features)

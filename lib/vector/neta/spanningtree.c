@@ -136,6 +136,7 @@ int NetA_spanning_tree(dglGraph_s * graph, struct ilist *tree_list)
 	    Vect_list_append(tree_list, dglEdgeGet_Id(graph, perm[i].edge));
 	}
     }
+    G_percent(index, index, 1);
     G_free(perm);
     uf_release(&uf);
     return edges;
