@@ -104,16 +104,17 @@ static void load_library(void)
 {
     static const char *const candidates[] = {
 # ifdef __unix__
+	"libgdal.so.20",
+	"libgdal.so.1",
 	"libgdal.1.1.so",
-	"libgdal1.6.0.so",
 	"gdal.1.0.so",
 	"gdal.so.1.0",
-	"libgdal.so.1",
 	"libgdal.so",
 	"libgdal1.6.0.so",
 	"libgdal1.7.0.so",
 # endif
 # ifdef _WIN32
+	"gdal200.dll",
 	"gdal111.dll",
 	"gdal110.dll",
 	"gdal19.dll",
