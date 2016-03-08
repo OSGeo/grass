@@ -283,7 +283,7 @@ int main(int argc, char *argv[])
     else
 	out_fd = Rast_open_new(seedmap, 1);
 
-    /* More pases are renudant. Real pases count is controled by altered cell count. */
+    /* More pases are renudant. Real pases count is controlled by altered cell count. */
     pases = (int)(rows * cols) / 2;
 
     G_debug(1,

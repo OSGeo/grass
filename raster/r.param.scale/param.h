@@ -71,7 +71,7 @@ void find_obs(DCELL * z,	/* Local window of elevs.       */
 	      double *obs,	/* Observed column vector.      */
 	      double *w);	/* Weighting matrix.            */
 void find_weight(double *weight_ptr);
-DCELL feature(double *coeff);	/* Set of six quadratic coefficents.    */
+DCELL feature(double *coeff);	/* Set of six quadratic coefficients.    */
 
 /* ------ Global variables ------ */
 

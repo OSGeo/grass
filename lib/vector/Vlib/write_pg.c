@@ -755,7 +755,7 @@ int create_table(struct Format_info_pg *pg_info)
         return -1;
     }
     
-    /* create indeces
+    /* create indices
         - GV_KEY_COLUMN
         - geometry column
     */

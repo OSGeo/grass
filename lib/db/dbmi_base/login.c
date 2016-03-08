@@ -266,7 +266,7 @@ int db_set_login(const char *driver, const char *database, const char *user,
   \param password password string
   \param host host name
   \param port
-  \param overwrite TRUE to overwrite exising connections
+  \param overwrite TRUE to overwrite existing connections
   
   \return DB_OK on success
   \return DB_FAILED on failure

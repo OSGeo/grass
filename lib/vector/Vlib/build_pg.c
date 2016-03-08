@@ -175,7 +175,7 @@ int build_topo(struct Map_info *Map, int build)
              * mode, before building native topology read nodes from
              * PostGIS Topology */
 
-            /* clean-up spatial a category indeces */
+            /* clean-up spatial a category indices */
             dig_free_plus(&(Map->plus));
             dig_init_plus(&(Map->plus));
             plus->Spidx_new = TRUE;   

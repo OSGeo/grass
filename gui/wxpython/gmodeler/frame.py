@@ -1634,7 +1634,7 @@ class ItemPanel(wx.Panel):
         self.list.OnReload(None)
 
     def _getSelectedItems(self):
-        """Get list of selected items, indeces start at 0"""
+        """Get list of selected items, indices start at 0"""
         items = []
         current = -1
         while True:

@@ -6,7 +6,7 @@
 
 /***                              feature()                                ***/
 
-/***     Returns a terrain feature based on the 6 quadratic coefficents    ***/
+/***     Returns a terrain feature based on the 6 quadratic coefficients    ***/
 
 /***	 that define a local trend surface. 			    	   ***/
 
@@ -21,7 +21,7 @@
 
 
 DCELL feature(double *coeff)
-{				/* Set of six quadratic coefficents.      */
+{				/* Set of six quadratic coefficients.      */
 
     /* Quadratic function in the form of
 

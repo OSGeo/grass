@@ -50,7 +50,7 @@
  *
  *   sprintf(buff,"Elevation: %.2f to %.2f feet", num*5.0+1000, num*5.0*1005)
  *
- * Note: while both the format and coefficent lins must be present
+ * Note: while both the format and coefficient lines must be present
  *       a blank line for the fmt will effectively suppress automatic
  *       label generation
  *
