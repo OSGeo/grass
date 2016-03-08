@@ -29,26 +29,28 @@
 int main(int argc, char *argv[])
 {
     struct Map_info In, Out;
-    static struct line_pnts *Points;
+    static struct line_pnts *Points, *PPoints;
     struct line_cats *Cats, *TCats;
+    struct ilist *slist;
     struct GModule *module;	/* GRASS module for parsing arguments */
     struct Option *map_in, *map_out;
     struct Option *catf_opt, *fieldf_opt, *wheref_opt;
     struct Option *catt_opt, *fieldt_opt, *wheret_opt, *typet_opt;
     struct Option *afield_opt, *nfield_opt, *abcol, *afcol, *ncol, *atype_opt;
-    struct Flag *geo_f;
-    int with_z, geo;
+    struct Flag *geo_f, *segments_f;
+    int with_z, geo, segments;
     int atype, ttype;
     struct varray *varrayf, *varrayt;
     int flayer, tlayer;
     int afield, nfield;
     dglGraph_s *graph;
     struct ilist *nodest;
-    int i, nnodes, nlines;
+    int i, j, nnodes, nlines;
     int *dst, *nodes_to_features;
     int from_nr;			/* 'from' features not reachable */
-    dglInt32_t **prev;
+    dglInt32_t **nxt;
     struct line_cats **on_path;
+    char *segdir;
     char buf[2000];
 
     /* Attribute table */
@@ -156,6 +158,17 @@ int main(int argc, char *argv[])
     geo_f->description =
 	_("Use geodesic calculation for longitude-latitude locations");
 
+    segments_f = G_define_flag();
+#if 0
+    /* use this to sync with v.net.path */
+    segments_f->key = 's';
+    segments_f->description = _("Write output as original input segments, "
+				"not each path as one line.");
+#else
+    segments_f->key = 'l';
+    segments_f->description = _("Write each output path as one line, "
+				"not as original input segments.");
+#endif
 
     /* options and flags parser */
     if (G_parser(argc, argv))
@@ -165,8 +178,10 @@ int main(int argc, char *argv[])
     ttype = Vect_option_to_types(typet_opt);
 
     Points = Vect_new_line_struct();
+    PPoints = Vect_new_line_struct();
     Cats = Vect_new_cats_struct();
     TCats = Vect_new_cats_struct();
+    slist = G_new_ilist();
 
     Vect_check_input_output_name(map_in->answer, map_out->answer,
 				 G_FATAL_EXIT);
@@ -192,20 +207,30 @@ int main(int argc, char *argv[])
     else
 	geo = 0;
 
+#if 0
+    /* use this to sync with v.net.path */
+    segments = segments_f->answer;
+#else
+    segments = !segments_f->answer;
+#endif
 
     nnodes = Vect_get_num_nodes(&In);
     nlines = Vect_get_num_lines(&In);
 
     dst = (int *)G_calloc(nnodes + 1, sizeof(int));
-    prev = (dglInt32_t **) G_calloc(nnodes + 1, sizeof(dglInt32_t *));
+    nxt = (dglInt32_t **) G_calloc(nnodes + 1, sizeof(dglInt32_t *));
     nodes_to_features = (int *)G_calloc(nnodes + 1, sizeof(int));
     on_path =
 	(struct line_cats **)G_calloc(nlines + 1, sizeof(struct line_cats *));
-    if (!dst || !prev || !nodes_to_features || !on_path)
+    segdir = (char *)G_calloc(nlines + 1, sizeof(char));
+
+    if (!dst || !nxt || !nodes_to_features || !on_path || !segdir)
 	G_fatal_error(_("Out of memory"));
 
-    for (i = 1; i <= nlines; i++)
+    for (i = 1; i <= nlines; i++) {
 	on_path[i] = Vect_new_cats_struct();
+	segdir[i] = 0;
+    }
 
     /*initialise varrays and nodes list appropriatelly */
     afield = Vect_get_field_number(&In, afield_opt->answer);
@@ -235,11 +260,14 @@ int main(int argc, char *argv[])
 	G_fatal_error(_("No 'to' features"));
     
     if (0 != Vect_net_build_graph(&In, atype, afield, nfield, afcol->answer, abcol->answer,
-                                   ncol->answer, geo, 0))
+                                   ncol->answer, geo, 2))
         G_fatal_error(_("Unable to build graph for vector map <%s>"), Vect_get_full_name(&In));
 
     graph = Vect_net_get_graph(&In);
-    NetA_distance_from_points(graph, nodest, dst, prev);
+
+    G_message(_("Distances to 'to' features ..."));
+
+    NetA_distance_to_points(graph, nodest, dst, nxt);
 
     /* Create table */
     Fi = Vect_default_field_info(&Out, 1, NULL, GV_1TABLE);
@@ -276,6 +304,7 @@ int main(int argc, char *argv[])
     Vect_hist_copy(&In, &Out);
     Vect_hist_command(&Out);
 
+    G_message(_("Tracing paths from 'from' features ..."));
     from_nr = 0;
     for (i = 1; i <= nlines; i++) {
 	if (varrayf->c[i]) {
@@ -303,11 +332,21 @@ int main(int argc, char *argv[])
 	    cost = dst[node] / (double)In.dgraph.cost_multip;
 	    vertex = dglGetNode(graph, node);
 	    vertex_id = node;
-	    while (prev[vertex_id] != NULL) {
-		Vect_cat_set(on_path
-			     [abs(dglEdgeGet_Id(graph, prev[vertex_id]))], 1,
-			     cat);
-		vertex = dglEdgeGet_Head(graph, prev[vertex_id]);
+	    slist->n_values = 0;
+	    while (nxt[vertex_id] != NULL) {
+		int edge_id;
+
+		edge_id = (int) dglEdgeGet_Id(graph, nxt[vertex_id]);
+		if (segments) {
+		    Vect_cat_set(on_path[abs(edge_id)], 1, cat);
+		    if (edge_id < 0) {
+			segdir[abs(edge_id)] = 1;
+		    }
+		}
+		else
+		    G_ilist_add(slist, edge_id);
+
+		vertex = dglEdgeGet_Tail(graph, nxt[vertex_id]);
 		vertex_id = dglNodeGet_Id(graph, vertex);
 	    }
 	    G_debug(3, "read line %d, vertex id %d", nodes_to_features[vertex_id], (int)vertex_id);
@@ -318,22 +357,51 @@ int main(int argc, char *argv[])
 	    Vect_write_line(&Out, type, Points, Cats);
 	    sprintf(buf, "insert into %s values (%d, %d, %f)", Fi->table, cat,
 		    tcat, cost);
-
 	    db_set_string(&sql, buf);
 	    G_debug(3, "%s", db_get_string(&sql));
 	    if (db_execute_immediate(driver, &sql) != DB_OK) {
 		G_fatal_error(_("Cannot insert new record: %s"),
 			      db_get_string(&sql));
 	    };
+
+	    if (!segments) {
+		Vect_reset_line(PPoints);
+		for (j = 0; j < slist->n_values; j++) {
+		    Vect_read_line(&In, Points, NULL, abs(slist->value[j]));
+		    if (slist->value[j] > 0)
+			Vect_append_points(PPoints, Points,
+					   GV_FORWARD);
+		    else
+			Vect_append_points(PPoints, Points,
+					   GV_BACKWARD);
+		    PPoints->n_points--;
+		}
+		PPoints->n_points++;
+		Vect_reset_cats(Cats);
+		Vect_cat_set(Cats, 1, cat);
+		Vect_write_line(&Out, GV_LINE, PPoints, Cats);
+	    }
+
 	}
     }
 
-    for (i = 1; i <= nlines; i++)
-	if (on_path[i]->n_cats > 0) {
-	    int type = Vect_read_line(&In, Points, NULL, i);
+    if (segments) {
+	for (i = 1; i <= nlines; i++) {
+	    if (on_path[i]->n_cats > 0) {
+		int type; 
+		
+		if (segdir[i]) {
+		    type = Vect_read_line(&In, PPoints, NULL, i);
+		    Vect_reset_line(Points);
+		    Vect_append_points(Points, PPoints, GV_BACKWARD);
+		}
+		else
+		    type = Vect_read_line(&In, Points, NULL, i);
 
-	    Vect_write_line(&Out, type, Points, on_path[i]);
+		Vect_write_line(&Out, type, Points, on_path[i]);
+	    }
 	}
+    }
 
     db_commit_transaction(driver);
     db_close_database_shutdown_driver(driver);
@@ -348,7 +416,8 @@ int main(int argc, char *argv[])
     G_free(on_path);
     G_free(nodes_to_features);
     G_free(dst);
-    G_free(prev);
+    G_free(nxt);
+    G_free(segdir);
 
     if (from_nr)
 	G_warning(n_("%d 'from' feature was not reachable",
