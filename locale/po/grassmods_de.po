@@ -40852,7 +40852,7 @@ msgstr ""
 
 #: ../vector/v.build/main.c:61
 #, fuzzy
-msgid "Build topology or dump topology or indeces to standard output"
+msgid "Build topology or dump topology or indices to standard output"
 msgstr ""
 "Erzeuge Topologie oder schreibe die Topologie oder den räumlichen Index nach "
 "stdout."

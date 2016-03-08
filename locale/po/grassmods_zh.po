@@ -40504,7 +40504,7 @@ msgid ""
 msgstr "用来存放错误信息的输出地图的名称"
 
 #: ../vector/v.build/main.c:61
-msgid "Build topology or dump topology or indeces to standard output"
+msgid "Build topology or dump topology or indices to standard output"
 msgstr ""
 
 #: ../vector/v.build/main.c:65

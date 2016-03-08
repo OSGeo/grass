@@ -1050,7 +1050,7 @@ class GListBox(wx.ListCtrl, listmix.ListCtrlAutoWidthMixin):
         """Load data into list
         
         :param choices: list of item
-        :param disabled: list of indeces of non-selectable items
+        :param disabled: list of indices of non-selectable items
         """
         idx = 0
         for item in choices:

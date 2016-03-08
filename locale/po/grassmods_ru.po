@@ -40873,7 +40873,7 @@ msgstr "Имя векторного слоя, куда записываются 
 
 #: ../vector/v.build/main.c:61
 #, fuzzy
-msgid "Build topology or dump topology or indeces to standard output"
+msgid "Build topology or dump topology or indices to standard output"
 msgstr ""
 "Построить топологию или вывести топологию или пространственный индекс в "
 "stdout"

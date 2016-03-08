@@ -40112,7 +40112,7 @@ msgstr "誤ったベクトルフィーチャーが書き込まれているベク
 
 #: ../vector/v.build/main.c:61
 #, fuzzy
-msgid "Build topology or dump topology or indeces to standard output"
+msgid "Build topology or dump topology or indices to standard output"
 msgstr ""
 "トポロジーまたはダンプトポロジーまたは空間インデックスをstdoutに作成します  "
 

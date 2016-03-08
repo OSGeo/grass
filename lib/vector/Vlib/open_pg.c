@@ -331,9 +331,9 @@ int Vect__open_topo_pg(struct Map_info *Map, int head_only, int update)
         return 1;
     
     /* free and init plus structure, update spatial and category
-     * indeces  */
+     * indices  */
     dig_init_plus(plus);
-    plus->Spidx_new = TRUE;        /* force building spatial and category indeces */
+    plus->Spidx_new = TRUE;        /* force building spatial and category indices */
     plus->update_cidx = TRUE; 
     Map->support_updated = FALSE;  /* don't write support files */
 
