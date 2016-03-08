@@ -78,7 +78,7 @@ static int clipper(dglGraph_s * pgraph,
    \param abcol column with backward costs for arc (if NULL, back costs = forward costs), 
    \param ncol column with costs for nodes (if NULL, do not use node costs), 
    \param geo use geodesic calculation for length (LL), 
-   \param algorithm not used (in future code for algorithm)
+   \param version graph version to create (1, 2, 3)
 
    \return 0 on success, 1 on error
  */
@@ -89,7 +89,7 @@ Vect_net_build_graph(struct Map_info *Map,
 		     int nfield,
 		     const char *afcol,
 		     const char *abcol,
-		     const char *ncol, int geo, int algorithm)
+		     const char *ncol, int geo, int version)
 {
     int i, j, from, to, line, nlines, nnodes, ret, type, cat, skipped, cfound;
     int dofw, dobw;
@@ -148,11 +148,14 @@ Vect_net_build_graph(struct Map_info *Map,
 	Map->dgraph.node_costs[i] = 0;
     }
 
+    if (version < 1 || version > 3)
+	version = 1;
+
     if (ncol != NULL)
-	dglInitialize(gr, (dglByte_t) 1, sizeof(dglInt32_t), (dglInt32_t) 0,
+	dglInitialize(gr, (dglByte_t) version, sizeof(dglInt32_t), (dglInt32_t) 0,
 		      opaqueset);
     else
-	dglInitialize(gr, (dglByte_t) 1, (dglInt32_t) 0, (dglInt32_t) 0,
+	dglInitialize(gr, (dglByte_t) version, (dglInt32_t) 0, (dglInt32_t) 0,
 		      opaqueset);
 
     if (gr == NULL)
