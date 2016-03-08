@@ -42069,7 +42069,7 @@ msgstr "ชื่อของ แผนที่เชิงเส้น ที�
 
 #: ../vector/v.build/main.c:61
 #, fuzzy
-msgid "Build topology or dump topology or indeces to standard output"
+msgid "Build topology or dump topology or indices to standard output"
 msgstr "สร้าง topology หรือ dump topology หรือ spatial index ไปที่ stdout"
 
 #: ../vector/v.build/main.c:65

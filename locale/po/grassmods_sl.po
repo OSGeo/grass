@@ -42233,7 +42233,7 @@ msgid ""
 msgstr "Ime izhodnega vektorskega sloja"
 
 #: ../vector/v.build/main.c:61
-msgid "Build topology or dump topology or indeces to standard output"
+msgid "Build topology or dump topology or indices to standard output"
 msgstr ""
 
 #: ../vector/v.build/main.c:65

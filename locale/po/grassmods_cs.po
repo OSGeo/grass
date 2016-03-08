@@ -42356,7 +42356,7 @@ msgstr ""
 "Název výstupní vektorové vrstvy, do které budou zapsány chybné prvky vektoru"
 
 #: ../vector/v.build/main.c:61
-msgid "Build topology or dump topology or indeces to standard output"
+msgid "Build topology or dump topology or indices to standard output"
 msgstr ""
 "Sestavit topologii nebo vypsat informace o tolopogii a indexech na "
 "standardní výstup"

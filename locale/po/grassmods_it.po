@@ -41743,7 +41743,7 @@ msgid ""
 msgstr "Nome della mappa vettoriale di output su cui scrivere i segmenti"
 
 #: ../vector/v.build/main.c:61
-msgid "Build topology or dump topology or indeces to standard output"
+msgid "Build topology or dump topology or indices to standard output"
 msgstr ""
 
 #: ../vector/v.build/main.c:65

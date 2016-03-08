@@ -42,7 +42,7 @@ Optionally, user can provide an overland flow infiltration rate map
 <i>infil</i> or a single value <i>infil_value</i> in [mm/hr] that control the rate of
 infiltration for the already flowing water, effectively reducing the flow depth and 
 discharge.
-Overland flow can be further controled by permeable check dams or similar type of structures,
+Overland flow can be further controlled by permeable check dams or similar type of structures,
 the user can provide a map of these structures and their permeability ratio
 in the map <i>flow_control</i> that defines the probability of particles to pass
 through the structure (the values will be 0-1).
@@ -54,7 +54,7 @@ the <i>error</i> raster map (the resulting water depth is an average, and err is
 The output vector points map <i>output_walkers</i> can be used to analyze and visualize 
 spatial distribution of walkers at different simulation times (note that 
 the resulting water depth is based on the density of these walkers). 
-<!--Number of the output walkers is controled by the <i>density</i> parameter, which controls
+<!--Number of the output walkers is controlled by the <i>density</i> parameter, which controls
 how many walkers used in simulation should be written into the output. -->
 <!-- from
 http://www.ing.unitn.it/~grass/conferences/GRASS2002/proceedings/proceedings/pdfs/Mitasova_Helena_2.pdf
@@ -64,7 +64,7 @@ analysed using the output error raster file [m]. This error is a function of the
 of particles used in the simulation and can be reduced by increasing the number of walkers
 given by parameter <i>nwalkers</i>.
 <!--(<font color="#ff0000"> toto treba upresnit/zmenit, lebo nwalk ide prec</font>). -->
-Duration of simulation is controled by the <i>niterations</i> parameter. The default value 
+Duration of simulation is controlled by the <i>niterations</i> parameter. The default value 
 is 10 minutes, reaching the steady-state may require much longer time, 
 depending on the time step, complexity of terrain, land cover and size of the area. 
 Output walker, water depth and discharge maps can be saved during simulation using 

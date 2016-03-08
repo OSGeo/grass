@@ -159,8 +159,8 @@ int main(int argc, char *argv[])
       wn_live,			/*net live fuel (total) load */
       class_sum, moisture[4],	/*moistures of 1-h,10-h,100-h,live fuels */
       Mf_dead,			/*total moisture of dead fuels */
-      etaM_dead,		/*dead fuel misture damping coefficent */
-      etaM_live,		/*live fuel misture damping coefficent */
+      etaM_dead,		/*dead fuel misture damping coefficient */
+      etaM_live,		/*live fuel misture damping coefficient */
       xmext,			/*live fuel moisture of extinction */
       phi_ws,			/*wind and slope conbined coefficient */
       wmfd, fdmois, fined, finel;

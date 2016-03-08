@@ -7,7 +7,7 @@
 /*****************************************************************************/
 /***                                                                       ***/
 /***                                param()                                ***/
-/***     Returns a terrain parameter based on the 6 quadratic coefficents  ***/
+/***     Returns a terrain parameter based on the 6 quadratic coefficients  ***/
 /***	 that define a local trend surface. 			    	   ***/
 /***     Jo Wood, Department of Geography, V2.0 15th December, 1994        ***/
 /***                                                                       ***/
@@ -19,7 +19,7 @@
 
 DCELL param(int ptype,		/* Type of terrain parameter to calculate */
 	    double *coeff)
-{				/* Set of six quadratic coefficents.        */
+{				/* Set of six quadratic coefficients.        */
 
     /* Quadratic function in the form of
 
