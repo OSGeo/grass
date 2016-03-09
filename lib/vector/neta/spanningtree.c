@@ -88,9 +88,11 @@ static int cmp_edge(const void *pa, const void *pb)
 int NetA_spanning_tree(dglGraph_s * graph, struct ilist *tree_list)
 {
     int nnodes, edges, nedges, i, index;
-    edge_cost_pair *perm;	/*permutaion of edges in ascending order */
+    edge_cost_pair *perm;	/*permutation of edges in ascending order */
     struct union_find uf;
     dglEdgesetTraverser_s et;
+
+    /* TODO: consider closed nodes / node costs */
 
     nnodes = dglGet_NodeCount(graph);
     nedges = dglGet_EdgeCount(graph);
@@ -99,7 +101,7 @@ int NetA_spanning_tree(dglGraph_s * graph, struct ilist *tree_list)
 	G_fatal_error(_("Out of memory"));
 	return -1;
     }
-    /*for some obscure reasons, dglGetEdge always returns NULL. Therefore this complicated enumeration of the edges... */
+    /* dglGetEdge is only supported with graphs version > 1. Therefore this complicated enumeration of the edges... */
     index = 0;
     G_message(_("Computing minimum spanning tree..."));
     G_percent_reset();
@@ -136,6 +138,7 @@ int NetA_spanning_tree(dglGraph_s * graph, struct ilist *tree_list)
 	    Vect_list_append(tree_list, dglEdgeGet_Id(graph, perm[i].edge));
 	}
     }
+    G_percent(index, index, 1);
     G_free(perm);
     uf_release(&uf);
     return edges;

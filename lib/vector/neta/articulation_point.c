@@ -3,7 +3,7 @@
 
    \brief Network Analysis library - connected components
 
-   Computes strongly and weakly connected components.
+   Computes network articulation points.
 
    (C) 2009-2010 by Daniel Bundala, and the GRASS Development Team
 
