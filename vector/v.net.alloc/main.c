@@ -5,10 +5,11 @@
  *
  * AUTHOR(S):    Radim Blazek
  *               Stepan Turek <stepan.turek seznam.cz> (turns support)
+ *               Markus Metz (costs from/to centers)
  *
  * PURPOSE:      Allocate subnets for nearest centers
  *               
- * COPYRIGHT:    (C) 2001, 2014 by the GRASS Development Team
+ * COPYRIGHT:    (C) 2001, 2016 by the GRASS Development Team
  *
  *               This program is free software under the 
  *               GNU General Public License (>=v2). 
@@ -23,27 +24,17 @@
 #include <grass/vector.h>
 #include <grass/dbmi.h>
 #include <grass/glocale.h>
+#include "alloc.h"
 
-typedef struct
-{
-    int cat;			/* category number */
-    int node;			/* node number */
-} CENTER;
-
-typedef struct
-{
-    int center;			/* neares center, initially -1 */
-    double cost;		/* costs from this center, initially not undefined */
-} NODE;
 
 int main(int argc, char **argv)
 {
-    int i, j, ret, center, line, center1, center2;
+    int i, ret, line, center1, center2;
     int nlines, nnodes, type, ltype, afield, nfield, geo, cat, tfield,
 	tucfield;
     int node1, node2;
-    double cost, e1cost, e2cost, n1cost, n2cost, s1cost, s2cost, l, l1, l2;
-    struct Option *map, *output;
+    double e1cost, e2cost, n1cost, n2cost, s1cost, s2cost, l, l1, l2;
+    struct Option *map, *output, *method_opt;
     struct Option *afield_opt, *nfield_opt, *afcol, *abcol, *ncol, *type_opt,
 	*term_opt, *tfield_opt, *tucfield_opt;
     struct Flag *geo_f, *turntable_f;
@@ -55,6 +46,8 @@ int main(int argc, char **argv)
     NODE *Nodes;
     struct line_cats *Cats;
     struct line_pnts *Points, *SPoints;
+    int graph_version;
+    int from_centers;
 
     /* initialize GIS environment */
     G_gisinit(argv[0]);		/* reads grass env, stores program name to G_program_name() */
@@ -73,6 +66,15 @@ int main(int argc, char **argv)
 
     map = G_define_standard_option(G_OPT_V_INPUT);
     output = G_define_standard_option(G_OPT_V_OUTPUT);
+
+    method_opt = G_define_option();
+    method_opt->key = "method";
+    method_opt->type = TYPE_STRING;
+    method_opt->required = NO;
+    method_opt->options = "from,to";
+    method_opt->answer = "from";
+    method_opt->description = _("Use costs from centers or costs to centers");
+    method_opt->guisection = _("Cost");
 
     term_opt = G_define_standard_option(G_OPT_V_CATS);
     term_opt->key = "center_cats";
@@ -177,13 +179,19 @@ int main(int argc, char **argv)
     tucfield = Vect_get_field_number(&Map, tucfield_opt->answer);
 
     /* Build graph */
+    graph_version = 1;
+    from_centers = 1;
+    if (method_opt->answer[0] == 't' && !turntable_f->answer) {
+	graph_version = 2;
+	from_centers = 0;
+    }
     if (turntable_f->answer)
 	Vect_net_ttb_build_graph(&Map, type, afield, nfield, tfield, tucfield,
 				 afcol->answer, abcol->answer, ncol->answer,
 				 geo, 0);
     else
 	Vect_net_build_graph(&Map, type, afield, nfield, afcol->answer,
-			     abcol->answer, ncol->answer, geo, 0);
+			     abcol->answer, ncol->answer, geo, graph_version);
 
     nnodes = Vect_get_num_nodes(&Map);
     nlines = Vect_get_num_lines(&Map);
@@ -235,101 +243,30 @@ int main(int argc, char **argv)
 
     /* alloc and reset space for all lines */
     if (turntable_f->answer) {
-
 	/* if turntable is used we are looking for lines as destinations, not the intersections (nodes) */
 	Nodes = (NODE *) G_calloc((nlines * 2 + 2), sizeof(NODE));
-	for (i = 2; i <= (nlines * 2 + 2); i++) {
-	    Nodes[i].center = -1;/* NOTE: first two items of Nodes are not used */
-	}
-
     }
     else {
 	Nodes = (NODE *) G_calloc((nnodes + 1), sizeof(NODE));
-	for (i = 1; i <= nnodes; i++) {
-	    Nodes[i].center = -1;
-	}
     }
 
     /* Fill Nodes by nearest center and costs from that center */
-    G_message(_("Calculating costs from centers ..."));
 
-    for (center = 0; center < ncenters; center++) {
-	G_percent(center, ncenters, 1);
-	node1 = Centers[center].node;
-	Vect_net_get_node_cost(&Map, node1, &n1cost);
-	G_debug(2, "center = %d node = %d cat = %d", center, node1,
-		Centers[center].cat);
-
-	if (turntable_f->answer)
-	    for (line = 1; line <= nlines; line++) {
-		G_debug(5, "  node1 = %d line = %d", node1, line);
-		Vect_net_get_node_cost(&Map, line, &n2cost);
-		/* closed, left it as not attached */
-
-		if (Vect_read_line(&Map, Points, Cats, line) < 0)
-		    continue;
-		if (Vect_get_line_type(&Map, line) != GV_LINE)
-		    continue;
-		if (!Vect_cat_get(Cats, tucfield, &cat))
-		    continue;
-
-		for (j = 0; j < 2; j++) {
-		    if (j == 1)
-			cat *= -1;
-
-		    ret =
-			Vect_net_ttb_shortest_path(&Map, node1, 0, cat, 1,
-						   tucfield, NULL,
-						   &cost);
-		    if (ret == -1) {
-			continue;
-		    }		/* node unreachable */
-
-		    /* We must add center node costs (not calculated by Vect_net_shortest_path() ), but
-		     *  only if center and node are not identical, because at the end node cost is add later */
-		    if (ret != 1)
-			cost += n1cost;
-
-		    G_debug(5,
-			    "Arc nodes: %d %d cost: %f (x old cent: %d old cost %f",
-			    node1, line, cost, Nodes[line * 2 + j].center,
-			    Nodes[line * 2 + j].cost);
-		    if (Nodes[line * 2 + j].center == -1 ||
-			cost < Nodes[line * 2 + j].cost) {
-			Nodes[line * 2 + j].cost = cost;
-			Nodes[line * 2 + j].center = center;
-		    }
-		}
-	    }
-	else
-	    for (node2 = 1; node2 <= nnodes; node2++) {
-		G_debug(5, "  node1 = %d node2 = %d", node1, node2);
-		Vect_net_get_node_cost(&Map, node2, &n2cost);
-		if (n2cost == -1) {
-		    continue;
-		}		/* closed, left it as not attached */
-
-		ret = Vect_net_shortest_path(&Map, node1, node2, NULL, &cost);
-		if (ret == -1) {
-		    continue;
-		}		/* node unreachable */
-
-		/* We must add center node costs (not calculated by Vect_net_shortest_path() ), but
-		 *  only if center and node are not identical, because at the end node cost is add later */
-		if (node1 != node2)
-		    cost += n1cost;
-
-		G_debug(5,
-			"Arc nodes: %d %d cost: %f (x old cent: %d old cost %f",
-			node1, node2, cost, Nodes[node2].center,
-			Nodes[node2].cost);
-		if (Nodes[node2].center == -1 || cost < Nodes[node2].cost) {
-		    Nodes[node2].cost = cost;
-		    Nodes[node2].center = center;
-		}
-	    }
+    if (turntable_f->answer) {
+	G_message(_("Calculating costs from centers ..."));
+	alloc_from_centers_loop_tt(&Map, Nodes, Centers, ncenters,
+				   tucfield);
     }
-    G_percent(1, 1, 1);
+    else {
+	if (from_centers) {
+	    G_message(_("Calculating costs from centers ..."));
+	    alloc_from_centers(Vect_net_get_graph(&Map), Nodes, Centers, ncenters);
+	}
+	else {
+	    G_message(_("Calculating costs to centers ..."));
+	    alloc_to_centers(Vect_net_get_graph(&Map), Nodes, Centers, ncenters);
+	}
+    }
 
     /* Write arcs to new map */
     if (Vect_open_new(&Out, output->answer, Vect_is_3d(&Map)) < 0)
@@ -362,8 +299,15 @@ int main(int argc, char **argv)
 	    Vect_net_get_node_cost(&Map, node2, &n2cost);
 	}
 
-	Vect_net_get_line_cost(&Map, line, GV_FORWARD, &e1cost);
-	Vect_net_get_line_cost(&Map, line, GV_BACKWARD, &e2cost);
+	if (from_centers) {
+	    Vect_net_get_line_cost(&Map, line, GV_FORWARD, &e1cost);
+	    Vect_net_get_line_cost(&Map, line, GV_BACKWARD, &e2cost);
+	}
+	else {
+	    /* from node to center */
+	    Vect_net_get_line_cost(&Map, line, GV_FORWARD, &e2cost);
+	    Vect_net_get_line_cost(&Map, line, GV_BACKWARD, &e1cost);
+	}
 
 	G_debug(3, "Line %d:", line);
 	G_debug(3, "Arc centers: %d %d (nodes: %d %d)", center1, center2,
@@ -391,7 +335,7 @@ int main(int argc, char **argv)
 		Vect_write_line(&Out, ltype, Points, Cats);
 	    }
 	    else {		/* each node in different area */
-		/* Check if direction is reachable */
+		/* Check if line is reachable from center */
 		if (center1 == -1 || n1cost == -1 || e1cost == -1) {	/* closed from first node */
 		    G_debug(3,
 			    "    -> arc is not reachable from 1. node -> alloc to 2. node");
@@ -408,7 +352,6 @@ int main(int argc, char **argv)
 		    Vect_write_line(&Out, ltype, Points, Cats);
 		    continue;
 		}
-
 		/* Now we know that arc is reachable from both sides */
 
 		/* Add costs of node to starting costs */

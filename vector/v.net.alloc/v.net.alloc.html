@@ -1,8 +1,8 @@
 <h2>DESCRIPTION</h2>
 
-<em>v.net.alloc</em> allocates subnets for nearest centers 
-(direction from center). center nodes must be opened (costs &gt;= 0).
-Costs of center nodes are used in the calculation. 
+<em>v.net.alloc</em> allocates subnets for nearest centers. Center 
+nodes must be opened (costs &gt;= 0). Costs of center nodes are used in 
+the calculation. 
 <p>
 Costs may be either line lengths, or attributes saved in a 
 database table. These attribute values are taken as costs of whole 
@@ -18,6 +18,10 @@ For areas, costs will be calculated along boundary lines.
 <p>
 The input vector needs to be prepared with <em>v.net operation=connect</em> 
 in order to connect points representing center nodes to the network.
+<p>
+The nearest center can be determined using either costs from the 
+nearest center or costs to the nearest center with option 
+<b>method</b>. See example below.
 <p>
 Application of flag <b>-t</b> enables a turntable support. 
 This flag requires additional parameters <b>turn_layer</b> and <b>turn_cat_layer</b> 
@@ -149,6 +153,44 @@ d.vect myroads_net_alloc_time cat=3 col=yellow layer=1
 
 # center nodes
 d.vect myroads_net_time col=red icon=basic/triangle fcol=green size=12 type=point layer=2
+</pre></div>
+
+<p>Example 3: <em>Differences between costs from centers and costs to centers</em><br>
+
+Each lane of the two-lane road is a one-way road.
+<p>1. Subnetwork allocation from centers:
+<p><img src="v_net_alloc_from_centers.png" alt="v.net.alloc example from centers" border="1">
+<br>
+A center reaches any point following the one-way lanes.
+<p>2. Subnetwork allocation to centers:
+<p><img src="v_net_alloc_to_centers.png" alt="v.net.alloc example to centers" border="1">
+<br>
+Any node reaches reaches the nearest center following the one-way lanes.
+<p>
+In case of an accident, the ambulance should come from the nearest 
+'from' hospital and go to the nearest 'to' hospital.
+
+<div class="code"><pre>
+# North Carolina
+
+# center nodes are hospitals:
+# connect hospitals to streets as layer 2
+v.net input=streets_wake points=hospitals output=streets_hospitals operation=connect thresh=400 arc_layer=1 node_layer=2
+v.to.db map=streets_hospitals layer=1 type=line option=cat columns=cat
+
+# close oneway roads
+v.db.update map=streets_hospitals column=TF_COST value=-1 where="ONE_WAY = 'FT'"
+v.db.update map=streets_hospitals column=FT_COST value=-1 where="ONE_WAY = 'TF'"
+
+# add costs to newly created lines
+v.db.update map=streets_hospitals column=TF_COST value=0 where="cat > 49746"
+v.db.update map=streets_hospitals column=FT_COST value=0 where="cat > 49746"
+
+# from centers
+v.net.alloc in=streets_hospitals out=streets_hospitals_alloc_from center_cats=1-10000 arc_column=FT_COST arc_backward_column=TF_COST
+
+# to centers
+v.net.alloc in=streets_hospitals out=streets_hospitals_alloc_to method=to center_cats=1-10000 arc_column=FT_COST arc_backward_column=TF_COST
 </pre></div>
 
 <h2>SEE ALSO</h2>
