@@ -277,5 +277,7 @@ int NetA_strongly_connected_components(dglGraph_s * graph, int *component)
     dglNode_T_Release(&nt);
 
     G_free(stack);
+    G_free(order);
+    G_free(processed);
     return components;
 }

@@ -141,8 +141,12 @@ int NetA_get_node_costs(struct Map_info *In, int layer, char *column,
 	    if (!Vect_cat_get(Cats, layer, &cat))
 		continue;
 	    Vect_get_line_nodes(In, i, &node, NULL);
-	    if (db_CatValArray_get_value_double(&vals, cat, &value) == DB_OK)
-		node_costs[node] = value * In->dgraph.cost_multip;
+	    if (db_CatValArray_get_value_double(&vals, cat, &value) == DB_OK) {
+		if (value < 0)
+		    node_costs[node] = -1;
+		else
+		    node_costs[node] = value * In->dgraph.cost_multip;
+	    }
 	}
     }
 
