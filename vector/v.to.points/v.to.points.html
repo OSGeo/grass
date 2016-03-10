@@ -84,18 +84,25 @@ the <b>-i</b> flag and set <b>dmax</b> so that:
  (length of input line / 2) &lt;= <em>dmax</em> &lt;= length of input line
 </pre></div>
 
-So if <b>dmax</b> is between 0.5x and 1.0x the line length, you will
+Hence, if <b>dmax</b> is between 0.5x and 1.0x the line length, you will
 always get points created at exactly the beginning, middle and end of
 the input line.
 
 <h2>EXAMPLE</h2>
 
-In this example, the 't_powerlines' vector lines map in the
-<a href="http://grass.osgeo.org/download/data6.php">Spearfish 6</a>
-location is used to create points along the input lines:
+In this example, the 'railroads' vector lines map of the North Carolina
+sample dataset is used to create points along the input lines:
 
 <div class="code"><pre>
-v.to.points in=t_powerlines out=t_powerlines_points dmax=120
+# The North Carolina data are metric.
+# 200m distance for nodes (maximum limit but not an exact distance)
+v.to.points railroads output=railroads_nodes use=node dmax=200
+
+# verify the two layers in the resulting map
+v.category railroads_nodes option=report
+
+# vector info
+v.info railroads_nodes
 </pre></div>
 
 <h2>SEE ALSO</h2>
