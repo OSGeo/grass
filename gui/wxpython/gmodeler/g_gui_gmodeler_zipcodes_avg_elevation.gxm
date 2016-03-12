@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE gxm SYSTEM "grass-gxm.dtd">
+<gxm>
+    <window pos="47,27" size="1022,548" />
+    <properties>
+        <name>zipcodes_avg_elevation</name>
+        <description>Sample model for wxGUI Graphical Modeler.</description>
+        <author>ludka</author>
+    </properties>
+    <variables>
+        <variable name="raster" type="file">
+            <value>/opt/geodata/ncrast/elev_state_500m.tif</value>
+            <description>Input raster</description>
+        </variable>
+        <variable name="vector" type="file">
+            <value>/opt/geodata/ncshape/zipcodes_wake.shp</value>
+            <description>Input boundaries</description>
+        </variable>
+    </variables>
+    <action id="1" name="r.import" pos="85,65" size="110,58">
+        <comment>raster import</comment>
+        <task name="r.import">
+            <parameter name="input">
+                <value>%raster</value>
+            </parameter>
+            <parameter name="memory">
+                <value>300</value>
+            </parameter>
+            <parameter name="output">
+                <value>elevation</value>
+            </parameter>
+            <parameter name="resample">
+                <value>nearest</value>
+            </parameter>
+            <parameter name="extent">
+                <value>input</value>
+            </parameter>
+            <parameter name="resolution">
+                <value>estimated</value>
+            </parameter>
+            <flag name="overwrite" />
+        </task>
+    </action>
+    <action id="2" name="v.import" pos="85,125" size="110,46">
+        <comment>vector import</comment>
+        <task name="v.import">
+            <parameter name="input">
+                <value>%vector</value>
+            </parameter>
+            <parameter name="output">
+                <value>zipcodes_wake</value>
+            </parameter>
+            <parameter name="extent">
+                <value>input</value>
+            </parameter>
+            <parameter name="snap">
+                <value>1e-13</value>
+            </parameter>
+            <flag name="o" />
+            <flag name="overwrite" />
+        </task>
+    </action>
+    <action id="3" name="g.region" pos="85,180" size="110,52">
+        <comment>region settings</comment>
+        <task name="g.region">
+            <parameter name="vector">
+                <value>zipcodes_wake</value>
+            </parameter>
+            <parameter name="res">
+                <value>10</value>
+            </parameter>
+        </task>
+    </action>
+    <action id="4" name="v.rast.stats" pos="460,65" size="148,46">
+        <comment>method = average</comment>
+        <task name="v.rast.stats">
+            <parameter name="map">
+                <value>zipcodes_wake</value>
+            </parameter>
+            <parameter name="layer">
+                <value>1</value>
+            </parameter>
+            <parameter name="raster">
+                <value>elevation</value>
+            </parameter>
+            <parameter name="column_prefix">
+                <value>rst</value>
+            </parameter>
+            <parameter name="method">
+                <value>average</value>
+            </parameter>
+            <parameter name="percentile">
+                <value>90</value>
+            </parameter>
+            <flag name="c" />
+        </task>
+    </action>
+    <action id="5" name="v.db.univar" pos="240,205" size="108,50">
+        <task name="v.db.univar">
+            <parameter name="map">
+                <value>zipcodes_wake</value>
+            </parameter>
+            <parameter name="layer">
+                <value>1</value>
+            </parameter>
+            <parameter name="column">
+                <value>rst_average</value>
+            </parameter>
+            <parameter name="percentile">
+                <value>90</value>
+            </parameter>
+        </task>
+    </action>
+    <action id="6" name="v.to.rast" pos="405,185" size="114,42">
+        <comment>average raster</comment>
+        <task name="v.to.rast">
+            <parameter name="input">
+                <value>zipcodes_wake</value>
+            </parameter>
+            <parameter name="layer">
+                <value>1</value>
+            </parameter>
+            <parameter name="type">
+                <value>point,line,area</value>
+            </parameter>
+            <parameter name="output">
+                <value>zipcodes_avg</value>
+            </parameter>
+            <parameter name="use">
+                <value>attr</value>
+            </parameter>
+            <parameter name="attribute_column">
+                <value>rst_average</value>
+            </parameter>
+            <parameter name="value">
+                <value>1</value>
+            </parameter>
+            <parameter name="memory">
+                <value>300</value>
+            </parameter>
+            <flag name="overwrite" />
+        </task>
+    </action>
+    <action id="7" name="r.colors" pos="385,250" size="116,44">
+        <comment>bgyr color table</comment>
+        <task name="r.colors">
+            <parameter name="map">
+                <value>zipcodes_avg</value>
+            </parameter>
+            <parameter name="color">
+                <value>bgyr</value>
+            </parameter>
+            <flag name="e" />
+        </task>
+    </action>
+    <action id="8" name="d.mon" pos="285,310" size="122,42">
+        <comment>monitor display</comment>
+        <task name="d.mon">
+            <parameter name="start">
+                <value>wx0</value>
+            </parameter>
+            <parameter name="bgcolor">
+                <value>white</value>
+            </parameter>
+        </task>
+    </action>
+    <action id="9" name="d.barscale" pos="595,290" size="134,38">
+        <comment>barscale display</comment>
+        <task name="d.barscale">
+            <parameter name="style">
+                <value>arrow_ends</value>
+            </parameter>
+            <parameter name="color">
+                <value>black</value>
+            </parameter>
+            <parameter name="bgcolor">
+                <value>white</value>
+            </parameter>
+            <parameter name="text_position">
+                <value>right</value>
+            </parameter>
+            <parameter name="fontsize">
+                <value>10</value>
+            </parameter>
+        </task>
+    </action>
+    <action id="10" name="d.rast" pos="705,100" size="106,44">
+        <comment>raster display</comment>
+        <task name="d.rast">
+            <parameter name="map">
+                <value>zipcodes_avg</value>
+            </parameter>
+            <parameter name="bgcolor">
+                <value>white</value>
+            </parameter>
+        </task>
+    </action>
+    <action id="11" name="d.vect" pos="505,125" size="130,46">
+        <comment>vector display</comment>
+        <task name="d.vect">
+            <parameter name="map">
+                <value>zipcodes_wake</value>
+            </parameter>
+            <parameter name="layer">
+                <value>1</value>
+            </parameter>
+            <parameter name="display">
+                <value>shape</value>
+            </parameter>
+            <parameter name="type">
+                <value>boundary</value>
+            </parameter>
+            <parameter name="color">
+                <value>black</value>
+            </parameter>
+            <parameter name="fill_color">
+                <value>200:200:200</value>
+            </parameter>
+            <parameter name="width">
+                <value>0</value>
+            </parameter>
+            <parameter name="width_scale">
+                <value>1</value>
+            </parameter>
+            <parameter name="icon">
+                <value>basic/x</value>
+            </parameter>
+            <parameter name="size">
+                <value>5</value>
+            </parameter>
+            <parameter name="label_layer">
+                <value>1</value>
+            </parameter>
+            <parameter name="label_color">
+                <value>red</value>
+            </parameter>
+            <parameter name="label_bgcolor">
+                <value>none</value>
+            </parameter>
+            <parameter name="label_bcolor">
+                <value>none</value>
+            </parameter>
+            <parameter name="label_size">
+                <value>8</value>
+            </parameter>
+            <parameter name="xref">
+                <value>left</value>
+            </parameter>
+            <parameter name="yref">
+                <value>center</value>
+            </parameter>
+        </task>
+    </action>
+    <action id="12" name="d.northarrow" pos="720,240" size="156,42">
+        <comment>northarrow display</comment>
+        <task name="d.northarrow">
+            <parameter name="style">
+                <value>1a</value>
+            </parameter>
+            <parameter name="at">
+                <value>85.0,15.0</value>
+            </parameter>
+            <parameter name="color">
+                <value>black</value>
+            </parameter>
+            <parameter name="fill_color">
+                <value>black</value>
+            </parameter>
+            <parameter name="width">
+                <value>0</value>
+            </parameter>
+            <parameter name="fontsize">
+                <value>10</value>
+            </parameter>
+        </task>
+    </action>
+    <action id="13" name="d.legend" pos="440,310" size="138,46">
+        <comment>legend display</comment>
+        <task name="d.legend">
+            <parameter name="raster">
+                <value>zipcodes_avg</value>
+            </parameter>
+            <parameter name="lines">
+                <value>50</value>
+            </parameter>
+            <parameter name="thin">
+                <value>5</value>
+            </parameter>
+            <parameter name="labelnum">
+                <value>5</value>
+            </parameter>
+            <parameter name="color">
+                <value>black</value>
+            </parameter>
+            <parameter name="fontsize">
+                <value>10</value>
+            </parameter>
+        </task>
+    </action>
+    <data pos="265,65" size="175,50">
+        <data-parameter prompt="raster">
+            <value>elevation</value>
+        </data-parameter>
+        <relation dir="from" id="4" name="raster">
+        </relation>
+        <relation dir="to" id="1" name="output">
+        </relation>
+    </data>
+    <data pos="275,125" size="175,50">
+        <data-parameter prompt="vector">
+            <value>zipcodes_wake</value>
+        </data-parameter>
+        <relation dir="from" id="4" name="map">
+        </relation>
+        <relation dir="from" id="5" name="map">
+        </relation>
+        <relation dir="from" id="6" name="input">
+        </relation>
+        <relation dir="from" id="11" name="map">
+        </relation>
+        <relation dir="from" id="3" name="vector">
+        </relation>
+        <relation dir="to" id="2" name="output">
+        </relation>
+    </data>
+    <data pos="575,185" size="175,50">
+        <data-parameter prompt="raster">
+            <value>zipcodes_avg</value>
+        </data-parameter>
+        <relation dir="from" id="7" name="map">
+        </relation>
+        <relation dir="from" id="10" name="map">
+        </relation>
+        <relation dir="from" id="13" name="raster">
+        </relation>
+        <relation dir="to" id="6" name="output">
+        </relation>
+    </data>
+</gxm>
