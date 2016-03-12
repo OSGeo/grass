@@ -2393,20 +2393,6 @@ class GUI:
                                        { 'cmd' : cmd[0],
                                          'key' : key })
                         continue
-                    multiple = task['multiple']
-                    element = task['element']
-                    # to filter out g.copy, g.rename
-                    key_desc = task['key_desc']
-                    # do we need to find mapset for each of multiple maps?
-                    if element in ['cell', 'vector'] and not multiple and len(key_desc) != 2:
-                        # mapname -> mapname@mapset
-                        try:
-                            name, mapset = value.split('@')
-                        except ValueError:
-                            mapset = grass.find_file(value, element)['mapset']
-                            curr_mapset = grass.gisenv()['MAPSET']
-                            if mapset and mapset !=  curr_mapset:
-                                value = value + '@' + mapset
                     
                     self.grass_task.set_param(key, value)
                     cmd_validated.append(key + '=' + value)
