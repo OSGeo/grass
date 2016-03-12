@@ -1713,18 +1713,19 @@ class CmdPanel(wx.Panel):
                     which_sizer.Add(item = self.win1, proportion = 0,
                                     flag = wx.EXPAND | wx.ALL, border = 3)
                     porf = self.task.get_param('input', element = 'name', raiseError = False)
-                    winDataSource = self.FindWindowById(porf['wxId'][0])
-                    winDataSource.reloadDataRequired.connect(lambda listData: self.win1.LoadData(listData, False))
-                    p['wxId'] = [self.win1.GetId()]
-                    def OnCheckItem(index, flag):
-                        layers = list()
-                        for layer, match, listId in self.win1.GetLayers():
-                            layers.append(layer)
-                        porf = self.task.get_param('layer', element = 'name', raiseError = False)
-                        porf['value'] = ','.join(layers)
-                        self.OnUpdateValues() # TODO: replace by signal
-                    
-                    self.win1.OnCheckItem = OnCheckItem
+                    if porf and 'wxId' in porf:
+                        winDataSource = self.FindWindowById(porf['wxId'][0])
+                        winDataSource.reloadDataRequired.connect(lambda listData: self.win1.LoadData(listData, False))
+                        p['wxId'] = [self.win1.GetId()]
+                        def OnCheckItem(index, flag):
+                            layers = list()
+                            for layer, match, listId in self.win1.GetLayers():
+                                layers.append(layer)
+                            porf = self.task.get_param('layer', element = 'name', raiseError = False)
+                            porf['value'] = ','.join(layers)
+                            self.OnUpdateValues() # TODO: replace by signal
+
+                        self.win1.OnCheckItem = OnCheckItem
                           
             if self.parent.GetName() == 'MainFrame' and (self._giface and hasattr(self._giface, "_model")):
                 parChk = wx.CheckBox(parent = which_panel, id = wx.ID_ANY,
