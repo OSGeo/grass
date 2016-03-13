@@ -811,7 +811,7 @@ class Model(object):
         for action in self.GetItems(objType = ModelAction):
             if not action.IsEnabled():
                 continue
-            name   = action.GetLabel()
+            name   = '({0}) {1}'.format(action.GetId(), action.GetLabel())
             params = action.GetParams()
             increment = False
             for f in params['flags']:
