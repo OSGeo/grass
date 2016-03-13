@@ -1080,16 +1080,18 @@ class ModelAction(ModelObject, ogl.DividedShape):
             font.SetStyle(wx.ITALIC)
             self.regionComment.SetFont(font)
 
+        ### clear doesn't work
+        ### self.regionComment.ClearText()
         self.regionComment.SetText(comment)
-            
+
+        self.ClearRegions()
+        self.AddRegion(self.regionLabel)
+        self.regionLabel.SetProportions(0.0, 1.0)
+
         if self.comment:
             self.AddRegion(self.regionComment)
             self.regionLabel.SetProportions(0.0, 0.4)
-        else:
-            self.ClearRegions()
-            self.AddRegion(self.regionLabel)
-            self.regionLabel.SetProportions(0.0, 1.0)
-        
+
         self.SetRegionSizes()
         self.ReformatRegions()
 
