@@ -552,7 +552,7 @@ class Model(object):
         :param onPrepare: on-prepare method
         :param statusbar: wx.StatusBar instance or None
         """
-        name = item.GetLabel()
+        name = '({0}) {1}'.format(item.GetId(), item.GetLabel())
         if name in params:
             paramsOrig = item.GetParams(dcopy = True)
             item.MergeParams(params[name])
