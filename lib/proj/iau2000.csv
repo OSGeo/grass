@@ -75,9 +75,9 @@
 # Mercator AUTO Mercury Areographic
 <19975> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=2439700 +b=2439700 +units=m +no_defs 
 # Albers AUTO Mercury Areocentric
-<19976> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=2439700 +b=2439700 +units=m +no_defs 
+<19976> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=2439700 +b=2439700 +units=m +no_defs 
 # Albers AUTO Mercury Areographic
-<19977> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=2439700 +b=2439700 +units=m +no_defs 
+<19977> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=2439700 +b=2439700 +units=m +no_defs 
 # Mollweide AUTO Mercury Areocentric
 <19980> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=2439700 +b=2439700 +units=m +no_defs 
 # Mollweide AUTO Mercury Areographic
@@ -163,9 +163,9 @@
 # Mercator AUTO Venus Areographic
 <29975> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=6051800 +b=6051800 +units=m +no_defs 
 # Albers AUTO Venus Areocentric
-<29976> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=6051800 +b=6051800 +units=m +no_defs 
+<29976> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=6051800 +b=6051800 +units=m +no_defs 
 # Albers AUTO Venus Areographic
-<29977> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=6051800 +b=6051800 +units=m +no_defs 
+<29977> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=6051800 +b=6051800 +units=m +no_defs 
 # Mollweide AUTO Venus Areocentric
 <29980> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=6051800 +b=6051800 +units=m +no_defs 
 # Mollweide AUTO Venus Areographic
@@ -251,9 +251,9 @@
 # Mercator AUTO Earth Areographic
 <39975> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=6378140 +b=-1895273619.09362 +units=m +no_defs 
 # Albers AUTO Earth Areocentric
-<39976> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=6378140 +b=-1895273619.09362 +units=m +no_defs 
+<39976> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=6378140 +b=-1895273619.09362 +units=m +no_defs 
 # Albers AUTO Earth Areographic
-<39977> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=6378140 +b=-1895273619.09362 +units=m +no_defs 
+<39977> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=6378140 +b=-1895273619.09362 +units=m +no_defs 
 # Mollweide AUTO Earth Areocentric
 <39980> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=6378140 +b=-1895273619.09362 +units=m +no_defs 
 # Mollweide AUTO Earth Areographic
@@ -339,9 +339,9 @@
 # Mercator AUTO Moon Areographic
 <30175> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=1737400 +b=1737400 +units=m +no_defs 
 # Albers AUTO Moon Areocentric
-<30176> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=1737400 +b=1737400 +units=m +no_defs 
+<30176> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=1737400 +b=1737400 +units=m +no_defs 
 # Albers AUTO Moon Areographic
-<30177> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=1737400 +b=1737400 +units=m +no_defs 
+<30177> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=1737400 +b=1737400 +units=m +no_defs 
 # Mollweide AUTO Moon Areocentric
 <30180> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=1737400 +b=1737400 +units=m +no_defs 
 # Mollweide AUTO Moon Areographic
@@ -427,9 +427,9 @@
 # Mercator AUTO Mars Areographic
 <49975> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=3396190 +b=-573598373.3707101 +units=m +no_defs 
 # Albers AUTO Mars Areocentric
-<49976> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=3396190 +b=-573598373.3707101 +units=m +no_defs 
+<49976> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=3396190 +b=-573598373.3707101 +units=m +no_defs 
 # Albers AUTO Mars Areographic
-<49977> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=3396190 +b=-573598373.3707101 +units=m +no_defs 
+<49977> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=3396190 +b=-573598373.3707101 +units=m +no_defs 
 # Mollweide AUTO Mars Areocentric
 <49980> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=3396190 +b=-573598373.3707101 +units=m +no_defs 
 # Mollweide AUTO Mars Areographic
@@ -515,9 +515,9 @@
 # Mercator AUTO Phobos Areographic
 <40175> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=11100 +b=11100 +units=m +no_defs 
 # Albers AUTO Phobos Areocentric
-<40176> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=11100 +b=11100 +units=m +no_defs 
+<40176> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=11100 +b=11100 +units=m +no_defs 
 # Albers AUTO Phobos Areographic
-<40177> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=11100 +b=11100 +units=m +no_defs 
+<40177> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=11100 +b=11100 +units=m +no_defs 
 # Mollweide AUTO Phobos Areocentric
 <40180> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=11100 +b=11100 +units=m +no_defs 
 # Mollweide AUTO Phobos Areographic
@@ -603,9 +603,9 @@
 # Mercator AUTO Deimos Areographic
 <40275> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=6200 +b=6200 +units=m +no_defs 
 # Albers AUTO Deimos Areocentric
-<40276> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=6200 +b=6200 +units=m +no_defs 
+<40276> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=6200 +b=6200 +units=m +no_defs 
 # Albers AUTO Deimos Areographic
-<40277> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=6200 +b=6200 +units=m +no_defs 
+<40277> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=6200 +b=6200 +units=m +no_defs 
 # Mollweide AUTO Deimos Areocentric
 <40280> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=6200 +b=6200 +units=m +no_defs 
 # Mollweide AUTO Deimos Areographic
@@ -691,9 +691,9 @@
 # Mercator AUTO Jupiter Areographic
 <59975> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=71492000 +b=-1030521133.150415 +units=m +no_defs 
 # Albers AUTO Jupiter Areocentric
-<59976> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=71492000 +b=-1030521133.150415 +units=m +no_defs 
+<59976> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=71492000 +b=-1030521133.150415 +units=m +no_defs 
 # Albers AUTO Jupiter Areographic
-<59977> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=71492000 +b=-1030521133.150415 +units=m +no_defs 
+<59977> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=71492000 +b=-1030521133.150415 +units=m +no_defs 
 # Mollweide AUTO Jupiter Areocentric
 <59980> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=71492000 +b=-1030521133.150415 +units=m +no_defs 
 # Mollweide AUTO Jupiter Areographic
@@ -779,9 +779,9 @@
 # Mercator AUTO Io Areographic
 <50175> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=1821460 +b=1821460 +units=m +no_defs 
 # Albers AUTO Io Areocentric
-<50176> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=1821460 +b=1821460 +units=m +no_defs 
+<50176> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=1821460 +b=1821460 +units=m +no_defs 
 # Albers AUTO Io Areographic
-<50177> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=1821460 +b=1821460 +units=m +no_defs 
+<50177> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=1821460 +b=1821460 +units=m +no_defs 
 # Mollweide AUTO Io Areocentric
 <50180> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=1821460 +b=1821460 +units=m +no_defs 
 # Mollweide AUTO Io Areographic
@@ -867,9 +867,9 @@
 # Mercator AUTO Europa Areographic
 <50275> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=1562090 +b=1562090 +units=m +no_defs 
 # Albers AUTO Europa Areocentric
-<50276> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=1562090 +b=1562090 +units=m +no_defs 
+<50276> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=1562090 +b=1562090 +units=m +no_defs 
 # Albers AUTO Europa Areographic
-<50277> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=1562090 +b=1562090 +units=m +no_defs 
+<50277> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=1562090 +b=1562090 +units=m +no_defs 
 # Mollweide AUTO Europa Areocentric
 <50280> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=1562090 +b=1562090 +units=m +no_defs 
 # Mollweide AUTO Europa Areographic
@@ -955,9 +955,9 @@
 # Mercator AUTO Ganymede Areographic
 <50375> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=2632345 +b=2632345 +units=m +no_defs 
 # Albers AUTO Ganymede Areocentric
-<50376> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=2632345 +b=2632345 +units=m +no_defs 
+<50376> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=2632345 +b=2632345 +units=m +no_defs 
 # Albers AUTO Ganymede Areographic
-<50377> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=2632345 +b=2632345 +units=m +no_defs 
+<50377> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=2632345 +b=2632345 +units=m +no_defs 
 # Mollweide AUTO Ganymede Areocentric
 <50380> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=2632345 +b=2632345 +units=m +no_defs 
 # Mollweide AUTO Ganymede Areographic
@@ -1043,9 +1043,9 @@
 # Mercator AUTO Callisto Areographic
 <50475> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=2409300 +b=2409300 +units=m +no_defs 
 # Albers AUTO Callisto Areocentric
-<50476> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=2409300 +b=2409300 +units=m +no_defs 
+<50476> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=2409300 +b=2409300 +units=m +no_defs 
 # Albers AUTO Callisto Areographic
-<50477> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=2409300 +b=2409300 +units=m +no_defs 
+<50477> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=2409300 +b=2409300 +units=m +no_defs 
 # Mollweide AUTO Callisto Areocentric
 <50480> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=2409300 +b=2409300 +units=m +no_defs 
 # Mollweide AUTO Callisto Areographic
@@ -1131,9 +1131,9 @@
 # Mercator AUTO Amalthea Areographic
 <50575> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=83500 +b=83500 +units=m +no_defs 
 # Albers AUTO Amalthea Areocentric
-<50576> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=83500 +b=83500 +units=m +no_defs 
+<50576> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=83500 +b=83500 +units=m +no_defs 
 # Albers AUTO Amalthea Areographic
-<50577> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=83500 +b=83500 +units=m +no_defs 
+<50577> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=83500 +b=83500 +units=m +no_defs 
 # Mollweide AUTO Amalthea Areocentric
 <50580> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=83500 +b=83500 +units=m +no_defs 
 # Mollweide AUTO Amalthea Areographic
@@ -1219,9 +1219,9 @@
 # Mercator AUTO Himalia Areographic
 <50675> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=85000 +b=85000 +units=m +no_defs 
 # Albers AUTO Himalia Areocentric
-<50676> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=85000 +b=85000 +units=m +no_defs 
+<50676> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=85000 +b=85000 +units=m +no_defs 
 # Albers AUTO Himalia Areographic
-<50677> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=85000 +b=85000 +units=m +no_defs 
+<50677> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=85000 +b=85000 +units=m +no_defs 
 # Mollweide AUTO Himalia Areocentric
 <50680> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=85000 +b=85000 +units=m +no_defs 
 # Mollweide AUTO Himalia Areographic
@@ -1307,9 +1307,9 @@
 # Mercator AUTO Elara Areographic
 <50775> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=40000 +b=40000 +units=m +no_defs 
 # Albers AUTO Elara Areocentric
-<50776> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=40000 +b=40000 +units=m +no_defs 
+<50776> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=40000 +b=40000 +units=m +no_defs 
 # Albers AUTO Elara Areographic
-<50777> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=40000 +b=40000 +units=m +no_defs 
+<50777> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=40000 +b=40000 +units=m +no_defs 
 # Mollweide AUTO Elara Areocentric
 <50780> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=40000 +b=40000 +units=m +no_defs 
 # Mollweide AUTO Elara Areographic
@@ -1395,9 +1395,9 @@
 # Mercator AUTO Pasiphae Areographic
 <50875> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=18000 +b=18000 +units=m +no_defs 
 # Albers AUTO Pasiphae Areocentric
-<50876> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=18000 +b=18000 +units=m +no_defs 
+<50876> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=18000 +b=18000 +units=m +no_defs 
 # Albers AUTO Pasiphae Areographic
-<50877> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=18000 +b=18000 +units=m +no_defs 
+<50877> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=18000 +b=18000 +units=m +no_defs 
 # Mollweide AUTO Pasiphae Areocentric
 <50880> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=18000 +b=18000 +units=m +no_defs 
 # Mollweide AUTO Pasiphae Areographic
@@ -1483,9 +1483,9 @@
 # Mercator AUTO Sinope Areographic
 <50975> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=14000 +b=14000 +units=m +no_defs 
 # Albers AUTO Sinope Areocentric
-<50976> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=14000 +b=14000 +units=m +no_defs 
+<50976> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=14000 +b=14000 +units=m +no_defs 
 # Albers AUTO Sinope Areographic
-<50977> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=14000 +b=14000 +units=m +no_defs 
+<50977> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=14000 +b=14000 +units=m +no_defs 
 # Mollweide AUTO Sinope Areocentric
 <50980> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=14000 +b=14000 +units=m +no_defs 
 # Mollweide AUTO Sinope Areographic
@@ -1571,9 +1571,9 @@
 # Mercator AUTO Lysithea Areographic
 <51075> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=12000 +b=12000 +units=m +no_defs 
 # Albers AUTO Lysithea Areocentric
-<51076> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=12000 +b=12000 +units=m +no_defs 
+<51076> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=12000 +b=12000 +units=m +no_defs 
 # Albers AUTO Lysithea Areographic
-<51077> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=12000 +b=12000 +units=m +no_defs 
+<51077> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=12000 +b=12000 +units=m +no_defs 
 # Mollweide AUTO Lysithea Areocentric
 <51080> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=12000 +b=12000 +units=m +no_defs 
 # Mollweide AUTO Lysithea Areographic
@@ -1659,9 +1659,9 @@
 # Mercator AUTO Carme Areographic
 <51175> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=15000 +b=15000 +units=m +no_defs 
 # Albers AUTO Carme Areocentric
-<51176> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=15000 +b=15000 +units=m +no_defs 
+<51176> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=15000 +b=15000 +units=m +no_defs 
 # Albers AUTO Carme Areographic
-<51177> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=15000 +b=15000 +units=m +no_defs 
+<51177> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=15000 +b=15000 +units=m +no_defs 
 # Mollweide AUTO Carme Areocentric
 <51180> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=15000 +b=15000 +units=m +no_defs 
 # Mollweide AUTO Carme Areographic
@@ -1747,9 +1747,9 @@
 # Mercator AUTO Ananke Areographic
 <51275> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=10000 +b=10000 +units=m +no_defs 
 # Albers AUTO Ananke Areocentric
-<51276> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=10000 +b=10000 +units=m +no_defs 
+<51276> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=10000 +b=10000 +units=m +no_defs 
 # Albers AUTO Ananke Areographic
-<51277> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=10000 +b=10000 +units=m +no_defs 
+<51277> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=10000 +b=10000 +units=m +no_defs 
 # Mollweide AUTO Ananke Areocentric
 <51280> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=10000 +b=10000 +units=m +no_defs 
 # Mollweide AUTO Ananke Areographic
@@ -1835,9 +1835,9 @@
 # Mercator AUTO Leda Areographic
 <51375> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=5000 +b=5000 +units=m +no_defs 
 # Albers AUTO Leda Areocentric
-<51376> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=5000 +b=5000 +units=m +no_defs 
+<51376> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=5000 +b=5000 +units=m +no_defs 
 # Albers AUTO Leda Areographic
-<51377> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=5000 +b=5000 +units=m +no_defs 
+<51377> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=5000 +b=5000 +units=m +no_defs 
 # Mollweide AUTO Leda Areocentric
 <51380> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=5000 +b=5000 +units=m +no_defs 
 # Mollweide AUTO Leda Areographic
@@ -1923,9 +1923,9 @@
 # Mercator AUTO Thebe Areographic
 <51475> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=49300 +b=49300 +units=m +no_defs 
 # Albers AUTO Thebe Areocentric
-<51476> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=49300 +b=49300 +units=m +no_defs 
+<51476> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=49300 +b=49300 +units=m +no_defs 
 # Albers AUTO Thebe Areographic
-<51477> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=49300 +b=49300 +units=m +no_defs 
+<51477> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=49300 +b=49300 +units=m +no_defs 
 # Mollweide AUTO Thebe Areocentric
 <51480> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=49300 +b=49300 +units=m +no_defs 
 # Mollweide AUTO Thebe Areographic
@@ -2011,9 +2011,9 @@
 # Mercator AUTO Adrastea Areographic
 <51575> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=8200 +b=8200 +units=m +no_defs 
 # Albers AUTO Adrastea Areocentric
-<51576> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=8200 +b=8200 +units=m +no_defs 
+<51576> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=8200 +b=8200 +units=m +no_defs 
 # Albers AUTO Adrastea Areographic
-<51577> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=8200 +b=8200 +units=m +no_defs 
+<51577> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=8200 +b=8200 +units=m +no_defs 
 # Mollweide AUTO Adrastea Areocentric
 <51580> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=8200 +b=8200 +units=m +no_defs 
 # Mollweide AUTO Adrastea Areographic
@@ -2099,9 +2099,9 @@
 # Mercator AUTO Metis Areographic
 <51675> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=21500 +b=21500 +units=m +no_defs 
 # Albers AUTO Metis Areocentric
-<51676> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=21500 +b=21500 +units=m +no_defs 
+<51676> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=21500 +b=21500 +units=m +no_defs 
 # Albers AUTO Metis Areographic
-<51677> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=21500 +b=21500 +units=m +no_defs 
+<51677> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=21500 +b=21500 +units=m +no_defs 
 # Mollweide AUTO Metis Areocentric
 <51680> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=21500 +b=21500 +units=m +no_defs 
 # Mollweide AUTO Metis Areographic
@@ -2187,9 +2187,9 @@
 # Mercator AUTO Saturn Areographic
 <69975> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=60268000 +b=-554950145.8116413 +units=m +no_defs 
 # Albers AUTO Saturn Areocentric
-<69976> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=60268000 +b=-554950145.8116413 +units=m +no_defs 
+<69976> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=60268000 +b=-554950145.8116413 +units=m +no_defs 
 # Albers AUTO Saturn Areographic
-<69977> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=60268000 +b=-554950145.8116413 +units=m +no_defs 
+<69977> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=60268000 +b=-554950145.8116413 +units=m +no_defs 
 # Mollweide AUTO Saturn Areocentric
 <69980> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=60268000 +b=-554950145.8116413 +units=m +no_defs 
 # Mollweide AUTO Saturn Areographic
@@ -2275,9 +2275,9 @@
 # Mercator AUTO Mimas Areographic
 <60175> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=198600 +b=198600 +units=m +no_defs 
 # Albers AUTO Mimas Areocentric
-<60176> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=198600 +b=198600 +units=m +no_defs 
+<60176> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=198600 +b=198600 +units=m +no_defs 
 # Albers AUTO Mimas Areographic
-<60177> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=198600 +b=198600 +units=m +no_defs 
+<60177> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=198600 +b=198600 +units=m +no_defs 
 # Mollweide AUTO Mimas Areocentric
 <60180> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=198600 +b=198600 +units=m +no_defs 
 # Mollweide AUTO Mimas Areographic
@@ -2363,9 +2363,9 @@
 # Mercator AUTO Enceladus Areographic
 <60275> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=249400 +b=249400 +units=m +no_defs 
 # Albers AUTO Enceladus Areocentric
-<60276> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=249400 +b=249400 +units=m +no_defs 
+<60276> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=249400 +b=249400 +units=m +no_defs 
 # Albers AUTO Enceladus Areographic
-<60277> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=249400 +b=249400 +units=m +no_defs 
+<60277> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=249400 +b=249400 +units=m +no_defs 
 # Mollweide AUTO Enceladus Areocentric
 <60280> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=249400 +b=249400 +units=m +no_defs 
 # Mollweide AUTO Enceladus Areographic
@@ -2451,9 +2451,9 @@
 # Mercator AUTO Tethys Areographic
 <60375> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=529800 +b=529800 +units=m +no_defs 
 # Albers AUTO Tethys Areocentric
-<60376> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=529800 +b=529800 +units=m +no_defs 
+<60376> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=529800 +b=529800 +units=m +no_defs 
 # Albers AUTO Tethys Areographic
-<60377> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=529800 +b=529800 +units=m +no_defs 
+<60377> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=529800 +b=529800 +units=m +no_defs 
 # Mollweide AUTO Tethys Areocentric
 <60380> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=529800 +b=529800 +units=m +no_defs 
 # Mollweide AUTO Tethys Areographic
@@ -2539,9 +2539,9 @@
 # Mercator AUTO Dione Areographic
 <60475> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=560000 +b=560000 +units=m +no_defs 
 # Albers AUTO Dione Areocentric
-<60476> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=560000 +b=560000 +units=m +no_defs 
+<60476> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=560000 +b=560000 +units=m +no_defs 
 # Albers AUTO Dione Areographic
-<60477> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=560000 +b=560000 +units=m +no_defs 
+<60477> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=560000 +b=560000 +units=m +no_defs 
 # Mollweide AUTO Dione Areocentric
 <60480> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=560000 +b=560000 +units=m +no_defs 
 # Mollweide AUTO Dione Areographic
@@ -2627,9 +2627,9 @@
 # Mercator AUTO Rhea Areographic
 <60575> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=764000 +b=764000 +units=m +no_defs 
 # Albers AUTO Rhea Areocentric
-<60576> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=764000 +b=764000 +units=m +no_defs 
+<60576> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=764000 +b=764000 +units=m +no_defs 
 # Albers AUTO Rhea Areographic
-<60577> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=764000 +b=764000 +units=m +no_defs 
+<60577> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=764000 +b=764000 +units=m +no_defs 
 # Mollweide AUTO Rhea Areocentric
 <60580> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=764000 +b=764000 +units=m +no_defs 
 # Mollweide AUTO Rhea Areographic
@@ -2715,9 +2715,9 @@
 # Mercator AUTO Titan Areographic
 <60675> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=2575000 +b=2575000 +units=m +no_defs 
 # Albers AUTO Titan Areocentric
-<60676> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=2575000 +b=2575000 +units=m +no_defs 
+<60676> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=2575000 +b=2575000 +units=m +no_defs 
 # Albers AUTO Titan Areographic
-<60677> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=2575000 +b=2575000 +units=m +no_defs 
+<60677> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=2575000 +b=2575000 +units=m +no_defs 
 # Mollweide AUTO Titan Areocentric
 <60680> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=2575000 +b=2575000 +units=m +no_defs 
 # Mollweide AUTO Titan Areographic
@@ -2803,9 +2803,9 @@
 # Mercator AUTO Hyperion Areographic
 <60775> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=133000 +b=133000 +units=m +no_defs 
 # Albers AUTO Hyperion Areocentric
-<60776> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=133000 +b=133000 +units=m +no_defs 
+<60776> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=133000 +b=133000 +units=m +no_defs 
 # Albers AUTO Hyperion Areographic
-<60777> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=133000 +b=133000 +units=m +no_defs 
+<60777> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=133000 +b=133000 +units=m +no_defs 
 # Mollweide AUTO Hyperion Areocentric
 <60780> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=133000 +b=133000 +units=m +no_defs 
 # Mollweide AUTO Hyperion Areographic
@@ -2891,9 +2891,9 @@
 # Mercator AUTO Iapetus Areographic
 <60875> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=718000 +b=718000 +units=m +no_defs 
 # Albers AUTO Iapetus Areocentric
-<60876> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=718000 +b=718000 +units=m +no_defs 
+<60876> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=718000 +b=718000 +units=m +no_defs 
 # Albers AUTO Iapetus Areographic
-<60877> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=718000 +b=718000 +units=m +no_defs 
+<60877> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=718000 +b=718000 +units=m +no_defs 
 # Mollweide AUTO Iapetus Areocentric
 <60880> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=718000 +b=718000 +units=m +no_defs 
 # Mollweide AUTO Iapetus Areographic
@@ -2979,9 +2979,9 @@
 # Mercator AUTO Phoebe Areographic
 <60975> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=110000 +b=110000 +units=m +no_defs 
 # Albers AUTO Phoebe Areocentric
-<60976> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=110000 +b=110000 +units=m +no_defs 
+<60976> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=110000 +b=110000 +units=m +no_defs 
 # Albers AUTO Phoebe Areographic
-<60977> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=110000 +b=110000 +units=m +no_defs 
+<60977> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=110000 +b=110000 +units=m +no_defs 
 # Mollweide AUTO Phoebe Areocentric
 <60980> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=110000 +b=110000 +units=m +no_defs 
 # Mollweide AUTO Phoebe Areographic
@@ -3067,9 +3067,9 @@
 # Mercator AUTO Janus Areographic
 <61075> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=88800 +b=88800 +units=m +no_defs 
 # Albers AUTO Janus Areocentric
-<61076> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=88800 +b=88800 +units=m +no_defs 
+<61076> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=88800 +b=88800 +units=m +no_defs 
 # Albers AUTO Janus Areographic
-<61077> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=88800 +b=88800 +units=m +no_defs 
+<61077> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=88800 +b=88800 +units=m +no_defs 
 # Mollweide AUTO Janus Areocentric
 <61080> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=88800 +b=88800 +units=m +no_defs 
 # Mollweide AUTO Janus Areographic
@@ -3155,9 +3155,9 @@
 # Mercator AUTO Epimetheus Areographic
 <61175> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=59500 +b=59500 +units=m +no_defs 
 # Albers AUTO Epimetheus Areocentric
-<61176> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=59500 +b=59500 +units=m +no_defs 
+<61176> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=59500 +b=59500 +units=m +no_defs 
 # Albers AUTO Epimetheus Areographic
-<61177> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=59500 +b=59500 +units=m +no_defs 
+<61177> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=59500 +b=59500 +units=m +no_defs 
 # Mollweide AUTO Epimetheus Areocentric
 <61180> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=59500 +b=59500 +units=m +no_defs 
 # Mollweide AUTO Epimetheus Areographic
@@ -3243,9 +3243,9 @@
 # Mercator AUTO Helene Areographic
 <61275> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=16000 +b=16000 +units=m +no_defs 
 # Albers AUTO Helene Areocentric
-<61276> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=16000 +b=16000 +units=m +no_defs 
+<61276> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=16000 +b=16000 +units=m +no_defs 
 # Albers AUTO Helene Areographic
-<61277> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=16000 +b=16000 +units=m +no_defs 
+<61277> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=16000 +b=16000 +units=m +no_defs 
 # Mollweide AUTO Helene Areocentric
 <61280> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=16000 +b=16000 +units=m +no_defs 
 # Mollweide AUTO Helene Areographic
@@ -3331,9 +3331,9 @@
 # Mercator AUTO Telesto Areographic
 <61375> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=11000 +b=11000 +units=m +no_defs 
 # Albers AUTO Telesto Areocentric
-<61376> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=11000 +b=11000 +units=m +no_defs 
+<61376> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=11000 +b=11000 +units=m +no_defs 
 # Albers AUTO Telesto Areographic
-<61377> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=11000 +b=11000 +units=m +no_defs 
+<61377> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=11000 +b=11000 +units=m +no_defs 
 # Mollweide AUTO Telesto Areocentric
 <61380> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=11000 +b=11000 +units=m +no_defs 
 # Mollweide AUTO Telesto Areographic
@@ -3419,9 +3419,9 @@
 # Mercator AUTO Calypso Areographic
 <61475> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=9500 +b=9500 +units=m +no_defs 
 # Albers AUTO Calypso Areocentric
-<61476> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=9500 +b=9500 +units=m +no_defs 
+<61476> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=9500 +b=9500 +units=m +no_defs 
 # Albers AUTO Calypso Areographic
-<61477> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=9500 +b=9500 +units=m +no_defs 
+<61477> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=9500 +b=9500 +units=m +no_defs 
 # Mollweide AUTO Calypso Areocentric
 <61480> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=9500 +b=9500 +units=m +no_defs 
 # Mollweide AUTO Calypso Areographic
@@ -3507,9 +3507,9 @@
 # Mercator AUTO Atlas Areographic
 <61575> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=16000 +b=16000 +units=m +no_defs 
 # Albers AUTO Atlas Areocentric
-<61576> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=16000 +b=16000 +units=m +no_defs 
+<61576> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=16000 +b=16000 +units=m +no_defs 
 # Albers AUTO Atlas Areographic
-<61577> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=16000 +b=16000 +units=m +no_defs 
+<61577> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=16000 +b=16000 +units=m +no_defs 
 # Mollweide AUTO Atlas Areocentric
 <61580> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=16000 +b=16000 +units=m +no_defs 
 # Mollweide AUTO Atlas Areographic
@@ -3595,9 +3595,9 @@
 # Mercator AUTO Prometheus Areographic
 <61675> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=50100 +b=50100 +units=m +no_defs 
 # Albers AUTO Prometheus Areocentric
-<61676> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=50100 +b=50100 +units=m +no_defs 
+<61676> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=50100 +b=50100 +units=m +no_defs 
 # Albers AUTO Prometheus Areographic
-<61677> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=50100 +b=50100 +units=m +no_defs 
+<61677> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=50100 +b=50100 +units=m +no_defs 
 # Mollweide AUTO Prometheus Areocentric
 <61680> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=50100 +b=50100 +units=m +no_defs 
 # Mollweide AUTO Prometheus Areographic
@@ -3683,9 +3683,9 @@
 # Mercator AUTO Pandora Areographic
 <61775> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=41900 +b=41900 +units=m +no_defs 
 # Albers AUTO Pandora Areocentric
-<61776> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=41900 +b=41900 +units=m +no_defs 
+<61776> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=41900 +b=41900 +units=m +no_defs 
 # Albers AUTO Pandora Areographic
-<61777> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=41900 +b=41900 +units=m +no_defs 
+<61777> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=41900 +b=41900 +units=m +no_defs 
 # Mollweide AUTO Pandora Areocentric
 <61780> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=41900 +b=41900 +units=m +no_defs 
 # Mollweide AUTO Pandora Areographic
@@ -3771,9 +3771,9 @@
 # Mercator AUTO Pan Areographic
 <61875> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=10000 +b=10000 +units=m +no_defs 
 # Albers AUTO Pan Areocentric
-<61876> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=10000 +b=10000 +units=m +no_defs 
+<61876> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=10000 +b=10000 +units=m +no_defs 
 # Albers AUTO Pan Areographic
-<61877> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=10000 +b=10000 +units=m +no_defs 
+<61877> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=10000 +b=10000 +units=m +no_defs 
 # Mollweide AUTO Pan Areocentric
 <61880> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=10000 +b=10000 +units=m +no_defs 
 # Mollweide AUTO Pan Areographic
@@ -3859,9 +3859,9 @@
 # Mercator AUTO Methone Areographic
 <63275> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=1600 +b=1600 +units=m +no_defs 
 # Albers AUTO Methone Areocentric
-<63276> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=1600 +b=1600 +units=m +no_defs 
+<63276> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=1600 +b=1600 +units=m +no_defs 
 # Albers AUTO Methone Areographic
-<63277> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=1600 +b=1600 +units=m +no_defs 
+<63277> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=1600 +b=1600 +units=m +no_defs 
 # Mollweide AUTO Methone Areocentric
 <63280> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=1600 +b=1600 +units=m +no_defs 
 # Mollweide AUTO Methone Areographic
@@ -3947,9 +3947,9 @@
 # Mercator AUTO Pallene Areographic
 <63375> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=2500 +b=2500 +units=m +no_defs 
 # Albers AUTO Pallene Areocentric
-<63376> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=2500 +b=2500 +units=m +no_defs 
+<63376> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=2500 +b=2500 +units=m +no_defs 
 # Albers AUTO Pallene Areographic
-<63377> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=2500 +b=2500 +units=m +no_defs 
+<63377> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=2500 +b=2500 +units=m +no_defs 
 # Mollweide AUTO Pallene Areocentric
 <63380> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=2500 +b=2500 +units=m +no_defs 
 # Mollweide AUTO Pallene Areographic
@@ -4035,9 +4035,9 @@
 # Mercator AUTO Polydeuces Areographic
 <63475> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=1300 +b=1300 +units=m +no_defs 
 # Albers AUTO Polydeuces Areocentric
-<63476> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=1300 +b=1300 +units=m +no_defs 
+<63476> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=1300 +b=1300 +units=m +no_defs 
 # Albers AUTO Polydeuces Areographic
-<63477> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=1300 +b=1300 +units=m +no_defs 
+<63477> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=1300 +b=1300 +units=m +no_defs 
 # Mollweide AUTO Polydeuces Areocentric
 <63480> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=1300 +b=1300 +units=m +no_defs 
 # Mollweide AUTO Polydeuces Areographic
@@ -4123,9 +4123,9 @@
 # Mercator AUTO Uranus Areographic
 <79975> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=25559000 +b=-1089240145.112749 +units=m +no_defs 
 # Albers AUTO Uranus Areocentric
-<79976> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=25559000 +b=-1089240145.112749 +units=m +no_defs 
+<79976> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=25559000 +b=-1089240145.112749 +units=m +no_defs 
 # Albers AUTO Uranus Areographic
-<79977> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=25559000 +b=-1089240145.112749 +units=m +no_defs 
+<79977> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=25559000 +b=-1089240145.112749 +units=m +no_defs 
 # Mollweide AUTO Uranus Areocentric
 <79980> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=25559000 +b=-1089240145.112749 +units=m +no_defs 
 # Mollweide AUTO Uranus Areographic
@@ -4211,9 +4211,9 @@
 # Mercator AUTO Ariel Areographic
 <70175> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=578900 +b=578900 +units=m +no_defs 
 # Albers AUTO Ariel Areocentric
-<70176> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=578900 +b=578900 +units=m +no_defs 
+<70176> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=578900 +b=578900 +units=m +no_defs 
 # Albers AUTO Ariel Areographic
-<70177> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=578900 +b=578900 +units=m +no_defs 
+<70177> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=578900 +b=578900 +units=m +no_defs 
 # Mollweide AUTO Ariel Areocentric
 <70180> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=578900 +b=578900 +units=m +no_defs 
 # Mollweide AUTO Ariel Areographic
@@ -4299,9 +4299,9 @@
 # Mercator AUTO Umbriel Areographic
 <70275> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=584700 +b=584700 +units=m +no_defs 
 # Albers AUTO Umbriel Areocentric
-<70276> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=584700 +b=584700 +units=m +no_defs 
+<70276> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=584700 +b=584700 +units=m +no_defs 
 # Albers AUTO Umbriel Areographic
-<70277> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=584700 +b=584700 +units=m +no_defs 
+<70277> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=584700 +b=584700 +units=m +no_defs 
 # Mollweide AUTO Umbriel Areocentric
 <70280> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=584700 +b=584700 +units=m +no_defs 
 # Mollweide AUTO Umbriel Areographic
@@ -4387,9 +4387,9 @@
 # Mercator AUTO Titania Areographic
 <70375> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=788900 +b=788900 +units=m +no_defs 
 # Albers AUTO Titania Areocentric
-<70376> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=788900 +b=788900 +units=m +no_defs 
+<70376> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=788900 +b=788900 +units=m +no_defs 
 # Albers AUTO Titania Areographic
-<70377> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=788900 +b=788900 +units=m +no_defs 
+<70377> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=788900 +b=788900 +units=m +no_defs 
 # Mollweide AUTO Titania Areocentric
 <70380> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=788900 +b=788900 +units=m +no_defs 
 # Mollweide AUTO Titania Areographic
@@ -4475,9 +4475,9 @@
 # Mercator AUTO Oberon Areographic
 <70475> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=761400 +b=761400 +units=m +no_defs 
 # Albers AUTO Oberon Areocentric
-<70476> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=761400 +b=761400 +units=m +no_defs 
+<70476> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=761400 +b=761400 +units=m +no_defs 
 # Albers AUTO Oberon Areographic
-<70477> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=761400 +b=761400 +units=m +no_defs 
+<70477> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=761400 +b=761400 +units=m +no_defs 
 # Mollweide AUTO Oberon Areocentric
 <70480> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=761400 +b=761400 +units=m +no_defs 
 # Mollweide AUTO Oberon Areographic
@@ -4563,9 +4563,9 @@
 # Mercator AUTO Miranda Areographic
 <70575> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=235800 +b=235800 +units=m +no_defs 
 # Albers AUTO Miranda Areocentric
-<70576> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=235800 +b=235800 +units=m +no_defs 
+<70576> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=235800 +b=235800 +units=m +no_defs 
 # Albers AUTO Miranda Areographic
-<70577> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=235800 +b=235800 +units=m +no_defs 
+<70577> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=235800 +b=235800 +units=m +no_defs 
 # Mollweide AUTO Miranda Areocentric
 <70580> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=235800 +b=235800 +units=m +no_defs 
 # Mollweide AUTO Miranda Areographic
@@ -4651,9 +4651,9 @@
 # Mercator AUTO Cordelia Areographic
 <70675> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=13000 +b=13000 +units=m +no_defs 
 # Albers AUTO Cordelia Areocentric
-<70676> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=13000 +b=13000 +units=m +no_defs 
+<70676> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=13000 +b=13000 +units=m +no_defs 
 # Albers AUTO Cordelia Areographic
-<70677> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=13000 +b=13000 +units=m +no_defs 
+<70677> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=13000 +b=13000 +units=m +no_defs 
 # Mollweide AUTO Cordelia Areocentric
 <70680> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=13000 +b=13000 +units=m +no_defs 
 # Mollweide AUTO Cordelia Areographic
@@ -4739,9 +4739,9 @@
 # Mercator AUTO Ophelia Areographic
 <70775> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=15000 +b=15000 +units=m +no_defs 
 # Albers AUTO Ophelia Areocentric
-<70776> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=15000 +b=15000 +units=m +no_defs 
+<70776> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=15000 +b=15000 +units=m +no_defs 
 # Albers AUTO Ophelia Areographic
-<70777> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=15000 +b=15000 +units=m +no_defs 
+<70777> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=15000 +b=15000 +units=m +no_defs 
 # Mollweide AUTO Ophelia Areocentric
 <70780> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=15000 +b=15000 +units=m +no_defs 
 # Mollweide AUTO Ophelia Areographic
@@ -4827,9 +4827,9 @@
 # Mercator AUTO Bianca Areographic
 <70875> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=21000 +b=21000 +units=m +no_defs 
 # Albers AUTO Bianca Areocentric
-<70876> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=21000 +b=21000 +units=m +no_defs 
+<70876> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=21000 +b=21000 +units=m +no_defs 
 # Albers AUTO Bianca Areographic
-<70877> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=21000 +b=21000 +units=m +no_defs 
+<70877> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=21000 +b=21000 +units=m +no_defs 
 # Mollweide AUTO Bianca Areocentric
 <70880> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=21000 +b=21000 +units=m +no_defs 
 # Mollweide AUTO Bianca Areographic
@@ -4915,9 +4915,9 @@
 # Mercator AUTO Cressida Areographic
 <70975> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=31000 +b=31000 +units=m +no_defs 
 # Albers AUTO Cressida Areocentric
-<70976> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=31000 +b=31000 +units=m +no_defs 
+<70976> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=31000 +b=31000 +units=m +no_defs 
 # Albers AUTO Cressida Areographic
-<70977> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=31000 +b=31000 +units=m +no_defs 
+<70977> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=31000 +b=31000 +units=m +no_defs 
 # Mollweide AUTO Cressida Areocentric
 <70980> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=31000 +b=31000 +units=m +no_defs 
 # Mollweide AUTO Cressida Areographic
@@ -5003,9 +5003,9 @@
 # Mercator AUTO Desdemona Areographic
 <71075> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=27000 +b=27000 +units=m +no_defs 
 # Albers AUTO Desdemona Areocentric
-<71076> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=27000 +b=27000 +units=m +no_defs 
+<71076> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=27000 +b=27000 +units=m +no_defs 
 # Albers AUTO Desdemona Areographic
-<71077> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=27000 +b=27000 +units=m +no_defs 
+<71077> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=27000 +b=27000 +units=m +no_defs 
 # Mollweide AUTO Desdemona Areocentric
 <71080> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=27000 +b=27000 +units=m +no_defs 
 # Mollweide AUTO Desdemona Areographic
@@ -5091,9 +5091,9 @@
 # Mercator AUTO Juliet Areographic
 <71175> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=42000 +b=42000 +units=m +no_defs 
 # Albers AUTO Juliet Areocentric
-<71176> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=42000 +b=42000 +units=m +no_defs 
+<71176> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=42000 +b=42000 +units=m +no_defs 
 # Albers AUTO Juliet Areographic
-<71177> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=42000 +b=42000 +units=m +no_defs 
+<71177> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=42000 +b=42000 +units=m +no_defs 
 # Mollweide AUTO Juliet Areocentric
 <71180> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=42000 +b=42000 +units=m +no_defs 
 # Mollweide AUTO Juliet Areographic
@@ -5179,9 +5179,9 @@
 # Mercator AUTO Portia Areographic
 <71275> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=54000 +b=54000 +units=m +no_defs 
 # Albers AUTO Portia Areocentric
-<71276> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=54000 +b=54000 +units=m +no_defs 
+<71276> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=54000 +b=54000 +units=m +no_defs 
 # Albers AUTO Portia Areographic
-<71277> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=54000 +b=54000 +units=m +no_defs 
+<71277> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=54000 +b=54000 +units=m +no_defs 
 # Mollweide AUTO Portia Areocentric
 <71280> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=54000 +b=54000 +units=m +no_defs 
 # Mollweide AUTO Portia Areographic
@@ -5267,9 +5267,9 @@
 # Mercator AUTO Rosalind Areographic
 <71375> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=27000 +b=27000 +units=m +no_defs 
 # Albers AUTO Rosalind Areocentric
-<71376> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=27000 +b=27000 +units=m +no_defs 
+<71376> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=27000 +b=27000 +units=m +no_defs 
 # Albers AUTO Rosalind Areographic
-<71377> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=27000 +b=27000 +units=m +no_defs 
+<71377> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=27000 +b=27000 +units=m +no_defs 
 # Mollweide AUTO Rosalind Areocentric
 <71380> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=27000 +b=27000 +units=m +no_defs 
 # Mollweide AUTO Rosalind Areographic
@@ -5355,9 +5355,9 @@
 # Mercator AUTO Belinda Areographic
 <71475> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=33000 +b=33000 +units=m +no_defs 
 # Albers AUTO Belinda Areocentric
-<71476> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=33000 +b=33000 +units=m +no_defs 
+<71476> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=33000 +b=33000 +units=m +no_defs 
 # Albers AUTO Belinda Areographic
-<71477> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=33000 +b=33000 +units=m +no_defs 
+<71477> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=33000 +b=33000 +units=m +no_defs 
 # Mollweide AUTO Belinda Areocentric
 <71480> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=33000 +b=33000 +units=m +no_defs 
 # Mollweide AUTO Belinda Areographic
@@ -5443,9 +5443,9 @@
 # Mercator AUTO Puck Areographic
 <71575> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=77000 +b=77000 +units=m +no_defs 
 # Albers AUTO Puck Areocentric
-<71576> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=77000 +b=77000 +units=m +no_defs 
+<71576> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=77000 +b=77000 +units=m +no_defs 
 # Albers AUTO Puck Areographic
-<71577> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=77000 +b=77000 +units=m +no_defs 
+<71577> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=77000 +b=77000 +units=m +no_defs 
 # Mollweide AUTO Puck Areocentric
 <71580> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=77000 +b=77000 +units=m +no_defs 
 # Mollweide AUTO Puck Areographic
@@ -5531,9 +5531,9 @@
 # Mercator AUTO Neptune Areographic
 <89975> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=24764000 +b=-1425034021.193139 +units=m +no_defs 
 # Albers AUTO Neptune Areocentric
-<89976> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=24764000 +b=-1425034021.193139 +units=m +no_defs 
+<89976> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=24764000 +b=-1425034021.193139 +units=m +no_defs 
 # Albers AUTO Neptune Areographic
-<89977> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=24764000 +b=-1425034021.193139 +units=m +no_defs 
+<89977> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=24764000 +b=-1425034021.193139 +units=m +no_defs 
 # Mollweide AUTO Neptune Areocentric
 <89980> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=24764000 +b=-1425034021.193139 +units=m +no_defs 
 # Mollweide AUTO Neptune Areographic
@@ -5619,9 +5619,9 @@
 # Mercator AUTO Triton Areographic
 <80175> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=1352600 +b=1352600 +units=m +no_defs 
 # Albers AUTO Triton Areocentric
-<80176> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=1352600 +b=1352600 +units=m +no_defs 
+<80176> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=1352600 +b=1352600 +units=m +no_defs 
 # Albers AUTO Triton Areographic
-<80177> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=1352600 +b=1352600 +units=m +no_defs 
+<80177> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=1352600 +b=1352600 +units=m +no_defs 
 # Mollweide AUTO Triton Areocentric
 <80180> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=1352600 +b=1352600 +units=m +no_defs 
 # Mollweide AUTO Triton Areographic
@@ -5707,9 +5707,9 @@
 # Mercator AUTO Nereid Areographic
 <80275> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=170000 +b=170000 +units=m +no_defs 
 # Albers AUTO Nereid Areocentric
-<80276> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=170000 +b=170000 +units=m +no_defs 
+<80276> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=170000 +b=170000 +units=m +no_defs 
 # Albers AUTO Nereid Areographic
-<80277> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=170000 +b=170000 +units=m +no_defs 
+<80277> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=170000 +b=170000 +units=m +no_defs 
 # Mollweide AUTO Nereid Areocentric
 <80280> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=170000 +b=170000 +units=m +no_defs 
 # Mollweide AUTO Nereid Areographic
@@ -5795,9 +5795,9 @@
 # Mercator AUTO Naiad Areographic
 <80375> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=29000 +b=29000 +units=m +no_defs 
 # Albers AUTO Naiad Areocentric
-<80376> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=29000 +b=29000 +units=m +no_defs 
+<80376> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=29000 +b=29000 +units=m +no_defs 
 # Albers AUTO Naiad Areographic
-<80377> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=29000 +b=29000 +units=m +no_defs 
+<80377> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=29000 +b=29000 +units=m +no_defs 
 # Mollweide AUTO Naiad Areocentric
 <80380> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=29000 +b=29000 +units=m +no_defs 
 # Mollweide AUTO Naiad Areographic
@@ -5883,9 +5883,9 @@
 # Mercator AUTO Thalassa Areographic
 <80475> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=40000 +b=40000 +units=m +no_defs 
 # Albers AUTO Thalassa Areocentric
-<80476> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=40000 +b=40000 +units=m +no_defs 
+<80476> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=40000 +b=40000 +units=m +no_defs 
 # Albers AUTO Thalassa Areographic
-<80477> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=40000 +b=40000 +units=m +no_defs 
+<80477> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=40000 +b=40000 +units=m +no_defs 
 # Mollweide AUTO Thalassa Areocentric
 <80480> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=40000 +b=40000 +units=m +no_defs 
 # Mollweide AUTO Thalassa Areographic
@@ -5971,9 +5971,9 @@
 # Mercator AUTO Despina Areographic
 <80575> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=74000 +b=74000 +units=m +no_defs 
 # Albers AUTO Despina Areocentric
-<80576> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=74000 +b=74000 +units=m +no_defs 
+<80576> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=74000 +b=74000 +units=m +no_defs 
 # Albers AUTO Despina Areographic
-<80577> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=74000 +b=74000 +units=m +no_defs 
+<80577> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=74000 +b=74000 +units=m +no_defs 
 # Mollweide AUTO Despina Areocentric
 <80580> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=74000 +b=74000 +units=m +no_defs 
 # Mollweide AUTO Despina Areographic
@@ -6059,9 +6059,9 @@
 # Mercator AUTO Galatea Areographic
 <80675> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=79000 +b=79000 +units=m +no_defs 
 # Albers AUTO Galatea Areocentric
-<80676> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=79000 +b=79000 +units=m +no_defs 
+<80676> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=79000 +b=79000 +units=m +no_defs 
 # Albers AUTO Galatea Areographic
-<80677> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=79000 +b=79000 +units=m +no_defs 
+<80677> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=79000 +b=79000 +units=m +no_defs 
 # Mollweide AUTO Galatea Areocentric
 <80680> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=79000 +b=79000 +units=m +no_defs 
 # Mollweide AUTO Galatea Areographic
@@ -6147,9 +6147,9 @@
 # Mercator AUTO Larissa Areographic
 <80775> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=96000 +b=-1220565.409986697 +units=m +no_defs 
 # Albers AUTO Larissa Areocentric
-<80776> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=96000 +b=-1220565.409986697 +units=m +no_defs 
+<80776> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=96000 +b=-1220565.409986697 +units=m +no_defs 
 # Albers AUTO Larissa Areographic
-<80777> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=96000 +b=-1220565.409986697 +units=m +no_defs 
+<80777> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=96000 +b=-1220565.409986697 +units=m +no_defs 
 # Mollweide AUTO Larissa Areocentric
 <80780> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=96000 +b=-1220565.409986697 +units=m +no_defs 
 # Mollweide AUTO Larissa Areographic
@@ -6235,9 +6235,9 @@
 # Mercator AUTO Proteus Areographic
 <80875> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=208000 +b=208000 +units=m +no_defs 
 # Albers AUTO Proteus Areocentric
-<80876> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=208000 +b=208000 +units=m +no_defs 
+<80876> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=208000 +b=208000 +units=m +no_defs 
 # Albers AUTO Proteus Areographic
-<80877> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=208000 +b=208000 +units=m +no_defs 
+<80877> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=208000 +b=208000 +units=m +no_defs 
 # Mollweide AUTO Proteus Areocentric
 <80880> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=208000 +b=208000 +units=m +no_defs 
 # Mollweide AUTO Proteus Areographic
@@ -6323,9 +6323,9 @@
 # Mercator AUTO Pluto Areographic
 <99975> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=1195000 +b=1195000 +units=m +no_defs 
 # Albers AUTO Pluto Areocentric
-<99976> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=1195000 +b=1195000 +units=m +no_defs 
+<99976> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=1195000 +b=1195000 +units=m +no_defs 
 # Albers AUTO Pluto Areographic
-<99977> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=1195000 +b=1195000 +units=m +no_defs 
+<99977> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=1195000 +b=1195000 +units=m +no_defs 
 # Mollweide AUTO Pluto Areocentric
 <99980> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=1195000 +b=1195000 +units=m +no_defs 
 # Mollweide AUTO Pluto Areographic
@@ -6411,9 +6411,9 @@
 # Mercator AUTO Charon Areographic
 <90175> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=593000 +b=593000 +units=m +no_defs 
 # Albers AUTO Charon Areocentric
-<90176> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=593000 +b=593000 +units=m +no_defs 
+<90176> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=593000 +b=593000 +units=m +no_defs 
 # Albers AUTO Charon Areographic
-<90177> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=593000 +b=593000 +units=m +no_defs 
+<90177> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=593000 +b=593000 +units=m +no_defs 
 # Mollweide AUTO Charon Areocentric
 <90180> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=593000 +b=593000 +units=m +no_defs 
 # Mollweide AUTO Charon Areographic
@@ -6499,9 +6499,9 @@
 # Mercator AUTO Gaspra Areographic
 <951101075> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=6100 +b=6100 +units=m +no_defs 
 # Albers AUTO Gaspra Areocentric
-<951101076> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=6100 +b=6100 +units=m +no_defs 
+<951101076> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=6100 +b=6100 +units=m +no_defs 
 # Albers AUTO Gaspra Areographic
-<951101077> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=6100 +b=6100 +units=m +no_defs 
+<951101077> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=6100 +b=6100 +units=m +no_defs 
 # Mollweide AUTO Gaspra Areocentric
 <951101080> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=6100 +b=6100 +units=m +no_defs 
 # Mollweide AUTO Gaspra Areographic
@@ -6587,9 +6587,9 @@
 # Mercator AUTO Ida Areographic
 <243101075> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=15650 +b=15650 +units=m +no_defs 
 # Albers AUTO Ida Areocentric
-<243101076> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=15650 +b=15650 +units=m +no_defs 
+<243101076> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=15650 +b=15650 +units=m +no_defs 
 # Albers AUTO Ida Areographic
-<243101077> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=15650 +b=15650 +units=m +no_defs 
+<243101077> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=15650 +b=15650 +units=m +no_defs 
 # Mollweide AUTO Ida Areocentric
 <243101080> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=15650 +b=15650 +units=m +no_defs 
 # Mollweide AUTO Ida Areographic
@@ -6675,9 +6675,9 @@
 # Mercator AUTO Ceres Areographic
 <200000175> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=487300 +b=-6796814.859713897 +units=m +no_defs 
 # Albers AUTO Ceres Areocentric
-<200000176> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=487300 +b=-6796814.859713897 +units=m +no_defs 
+<200000176> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=487300 +b=-6796814.859713897 +units=m +no_defs 
 # Albers AUTO Ceres Areographic
-<200000177> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=487300 +b=-6796814.859713897 +units=m +no_defs 
+<200000177> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=487300 +b=-6796814.859713897 +units=m +no_defs 
 # Mollweide AUTO Ceres Areocentric
 <200000180> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=487300 +b=-6796814.859713897 +units=m +no_defs 
 # Mollweide AUTO Ceres Areographic
@@ -6763,9 +6763,9 @@
 # Mercator AUTO Lutetia Areographic
 <200002175> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=52500 +b=52500 +units=m +no_defs 
 # Albers AUTO Lutetia Areocentric
-<200002176> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=52500 +b=52500 +units=m +no_defs 
+<200002176> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=52500 +b=52500 +units=m +no_defs 
 # Albers AUTO Lutetia Areographic
-<200002177> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=52500 +b=52500 +units=m +no_defs 
+<200002177> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=52500 +b=52500 +units=m +no_defs 
 # Mollweide AUTO Lutetia Areocentric
 <200002180> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=52500 +b=52500 +units=m +no_defs 
 # Mollweide AUTO Lutetia Areographic
@@ -6851,9 +6851,9 @@
 # Mercator AUTO Eros Areographic
 <200043375> 	+proj=merc +lon_0=0 +k=1 +x_0=0 +y_0=0 +a=7311 +b=7311 +units=m +no_defs 
 # Albers AUTO Eros Areocentric
-<200043376> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=7311 +b=7311 +units=m +no_defs 
+<200043376> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=7311 +b=7311 +units=m +no_defs 
 # Albers AUTO Eros Areographic
-<200043377> 	+proj=aea +lat_1=20 +lat_2=60 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=7311 +b=7311 +units=m +no_defs 
+<200043377> 	+proj=aea +lat_1=20 +lat_2=-20 +lat_0=0 +lon_0=0 +x_0=0 +y_0=0 +a=7311 +b=7311 +units=m +no_defs 
 # Mollweide AUTO Eros Areocentric
 <200043380> 	+proj=moll +lon_0=0 +x_0=0 +y_0=0 +a=7311 +b=7311 +units=m +no_defs 
 # Mollweide AUTO Eros Areographic
