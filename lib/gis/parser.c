@@ -706,7 +706,25 @@ char *recreate_command(int original_path)
 
     opt = &st->first_option;
     while (st->n_opts && opt) {
-	if (opt->answer && opt->answers && opt->answers[0]) {
+	if (opt->answer && opt->answer[0] == '\0') {	/* answer = "" */
+	    slen = strlen(opt->key) + 4;	/* +4 for: ' ' = " " */
+	    if (len + slen >= nalloced) {
+		nalloced += (nalloced + 1024 > len + slen) ? 1024 : slen + 1;
+		buff = G_realloc(buff, nalloced);
+		cur = buff + len;
+	    }
+	    strcpy(cur, " ");
+	    cur++;
+	    strcpy(cur, opt->key);
+	    cur = strchr(cur, '\0');
+	    strcpy(cur, "=");
+	    cur++;
+	    if (opt->type == TYPE_STRING) {
+		strcpy(cur, "\"\"");
+		cur += 2;
+	    }
+	    len = cur - buff;
+	} else if (opt->answer && opt->answers && opt->answers[0]) {
 	    slen = strlen(opt->key) + strlen(opt->answers[0]) + 4;	/* +4 for: ' ' = " " */
 	    if (len + slen >= nalloced) {
 		nalloced += (nalloced + 1024 > len + slen) ? 1024 : slen + 1;
