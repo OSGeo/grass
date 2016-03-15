@@ -34,14 +34,18 @@ as follows:
 eval `g.findfile element=name mapset=name file=name`
 </pre></div>
 
-<p>
-For example (raster map):
+<h2>EXAMPLES</h2>
+
+<h3>SHELL</h3>
+
+<b>Raster map example:</b>
+
 <div class="code"><pre>
 eval `g.findfile element=cell file=elevation`
 </pre></div>
 
-If the specified file does not exist, the variables will be set as
-follows:
+If the specified file (here: raster map) does not exist, the variables
+will be set as follows:
 
 <div class="code"><pre>
 name=
@@ -58,7 +62,18 @@ then
 fi
 </pre></div>
 
-<h2>PYTHON</h2>
+<p>
+<b>Vector map example (including error message):</b>
+
+<div class="code"><pre>
+eval `g.findfile element=vector file="$G_OPT_V_INPUT"`
+if [ ! "$file" ] ; then
+   g.message -e "Vector map <$G_OPT_V_INPUT> not found"
+   exit 1
+fi
+</pre></div>
+
+<h3>PYTHON</h3>
 
 See <em><a href="http://grass.osgeo.org/grass70/manuals/libpython/">Python
 Scripting Library</a></em> for more info.
