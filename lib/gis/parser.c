@@ -1416,7 +1416,7 @@ void split_opts(void)
 		for (len = 0, ptr2 = ptr1; *ptr2 != '\0' && *ptr2 != ',';
 		     ptr2++, len++) ;
 
-		if (len > 0) {	/* skip ,, */
+		if (ptr2 == opt->answer || len > 0) {	/* answer = "" or skip ,, */
 		    opt->answers[ans_num] = G_malloc(len + 1);
 		    memcpy(opt->answers[ans_num], ptr1, len);
 		    opt->answers[ans_num][len] = 0;
