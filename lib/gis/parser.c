@@ -764,7 +764,7 @@ char *recreate_command(int original_path)
  */
 char *G_recreate_command(void)
 {
-    recreate_command(FALSE);
+    return recreate_command(FALSE);
 }
 
 /* TODO: update to docs of these 3 functions to whatever general purpose
@@ -782,7 +782,7 @@ char *G_recreate_command(void)
  */
 char *G_recreate_command_original_path(void)
 {
-    recreate_command(TRUE);
+    return recreate_command(TRUE);
 }
 
 /*!
@@ -1171,6 +1171,7 @@ void check_an_opt(const char *key, int type, const char *options,
 
     error = 0;
     err = NULL;
+    found = 0;
 
     switch (type) {
     case TYPE_INTEGER:
