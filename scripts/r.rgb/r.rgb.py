@@ -35,6 +35,9 @@
 #% description: Blue channel raster map name
 #% required: no
 #%end
+#%rules
+#% required: red, green, blue
+#%end
 
 import grass.script as gscript
 
