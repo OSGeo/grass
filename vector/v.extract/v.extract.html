@@ -106,13 +106,6 @@ v.extract -d input=zipcodes_wake_recl_nam output=zipcodes_wake_regions
 This produces a new vector map with common boundaries dissolved where the reclassed
 attributes of adjacent (left/right) areas are identical.
 
-<h3>Remove islands from polygon map</h3>
-<div class="code"><pre>
-v.extract input=map_with_islands output=maps_without_islands cats=1-99999
-# and/or
-v.extract -d in=map_with_islands out=maps_without_islands
-</pre></div>
-
 <h3>Extract 3 random areas from geology map</h3>
 <p>
 <div class="code"><pre>
