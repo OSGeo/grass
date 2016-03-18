@@ -106,7 +106,7 @@ def main():
         pass
     elif os.path.exists(os.path.join(data_name, 'cell')):
         grass.fatal(_("This GRASS GIS pack file contains raster data. Use "
-                      "v.unpack to unpack <%s>" % map_name))
+                      "r.unpack to unpack <%s>" % map_name))
     else:
         grass.fatal(_("Pack file unreadable"))
 
