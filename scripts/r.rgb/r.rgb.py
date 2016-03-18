@@ -17,6 +17,8 @@
 #% description: Splits a raster map into red, green and blue maps.
 #% keyword: raster
 #% keyword: RGB
+#% keyword: separate
+#% keyword: split
 #%end
 #%option G_OPT_R_INPUT
 #%end
