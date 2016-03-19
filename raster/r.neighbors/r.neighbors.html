@@ -129,6 +129,9 @@ within the neighborhood (rounded to the nearest integer).
 
 <dd>The sum of values within the neighborhood.
 
+<dt><b>count</b>
+<dd>The count of filled (not NULL) cells.
+
 <dt><b>variance</b> 
 
 <dd>The statistical variance of values
@@ -152,6 +155,18 @@ In the above example, the interspersion is:
 <br>
 
 The result is rounded to the nearest integer (in this case 64).
+
+<dt><b>quart1, quart3</b>
+
+<dd>The result will be the first or the third quartile (equal of 25th and 75th percentiles).
+
+<dt><b>perc90</b>
+
+<dd>The result will be the 90th percentile of neighborhood.
+
+<dt><b>quantile</b>
+
+<dd>Any quantile as specified by "quantile" input parameter.
 
 </dl>
 <p><br>
@@ -363,14 +378,32 @@ note 2 above), quantiles (without interpolation).</li>
 otherwise float: sum.</li> 
 </ol> 
 
-<!-- TODO
+
 <h2>EXAMPLES</h2>
 
+<h3>Measure occupancy of neighborhood</h3>
+
+Set up 10x10 computational region to aid visual inspection of results
 <div class="code"><pre>
-r.neighbors 
+g.region rows=10 cols=10
 </pre></div>
 
--->
+Fill 50% of computational region with randomly located cells.
+"distance=0" will allow to fill adjacent cells.
+<div class="code"><pre>
+r.random.cells output=random_cells distance=0 ncells=50
+</pre></div>
+
+Count non-empty (not NULL) cells in 3x3 neighborhood
+<div class="code"><pre>
+r.neighbors input=random_cells output=counts method=count
+</pre></div>
+
+Optionally - exclude centre cell from the count (= only look around)
+<div class="code"><pre>
+r.mapcalc "cound_around = if( isnull(random_cells), counts, counts - 1)"
+</pre></div>
+
 
 <h2>SEE ALSO</h2>
 
