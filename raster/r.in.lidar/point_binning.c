@@ -89,7 +89,7 @@ int update_bin_index(struct BinIndex *bin_index, void *index_array,
 
     ptr =
         G_incr_void_ptr(ptr,
-                        ((row * cols) + col) * Rast_cell_size(CELL_TYPE));
+                        (((size_t) row * cols) + col) * Rast_cell_size(CELL_TYPE));
 
     /* first node */
     if (Rast_is_null_value(ptr, CELL_TYPE)) {
@@ -234,6 +234,7 @@ int check_rows_cols_fit_to_size_t(int rows, int cols)
     if (sizeof(size_t) < 8) {
         double dsize = rows * (cols + 1);
 
+        /* TODO: the comparison with double may fail */
         if (dsize != (size_t) rows * (cols + 1))
             return FALSE;
     }
@@ -380,8 +381,8 @@ void write_variance(void *raster_row, void *n_array, void *sum_array,
     void *ptr = raster_row;
 
     for (col = 0; col < cols; col++) {
-        offset = (row * cols + col) * Rast_cell_size(rtype);
-        n_offset = (row * cols + col) * Rast_cell_size(CELL_TYPE);
+        offset = ((size_t) row * cols + col) * Rast_cell_size(rtype);
+        n_offset = ((size_t) row * cols + col) * Rast_cell_size(CELL_TYPE);
         n = Rast_get_c_value(n_array + n_offset, CELL_TYPE);
         sum = Rast_get_d_value(sum_array + offset, rtype);
         sumsq = Rast_get_d_value(sumsq_array + offset, rtype);
@@ -430,7 +431,7 @@ void write_median(struct BinIndex *bin_index, void *raster_row,
     void *ptr = raster_row;
 
     for (col = 0; col < cols; col++) {
-        n_offset = (row * cols + col) * Rast_cell_size(CELL_TYPE);
+        n_offset = ((size_t) row * cols + col) * Rast_cell_size(CELL_TYPE);
         if (Rast_is_null_value(index_array + n_offset, CELL_TYPE))      /* no points in cell */
             Rast_set_null_value(ptr, 1, rtype);
         else {                  /* one or more points in cell */
@@ -486,7 +487,7 @@ void write_percentile(struct BinIndex *bin_index, void *raster_row,
     void *ptr = raster_row;
 
     for (col = 0; col < cols; col++) {
-        n_offset = (row * cols + col) * Rast_cell_size(CELL_TYPE);
+        n_offset = ((size_t) row * cols + col) * Rast_cell_size(CELL_TYPE);
         if (Rast_is_null_value(index_array + n_offset, CELL_TYPE))      /* no points in cell */
             Rast_set_null_value(ptr, 1, rtype);
         else {
@@ -541,7 +542,7 @@ void write_skewness(struct BinIndex *bin_index, void *raster_row,
     void *ptr = raster_row;
 
     for (col = 0; col < cols; col++) {
-        n_offset = (row * cols + col) * Rast_cell_size(CELL_TYPE);
+        n_offset = ((size_t) row * cols + col) * Rast_cell_size(CELL_TYPE);
         if (Rast_is_null_value(index_array + n_offset, CELL_TYPE))      /* no points in cell */
             Rast_set_null_value(ptr, 1, rtype);
         else {
@@ -597,7 +598,7 @@ void write_trimmean(struct BinIndex *bin_index, void *raster_row,
     void *ptr = raster_row;
 
     for (col = 0; col < cols; col++) {
-        n_offset = (row * cols + col) * Rast_cell_size(CELL_TYPE);
+        n_offset = ((size_t) row * cols + col) * Rast_cell_size(CELL_TYPE);
         if (Rast_is_null_value(index_array + n_offset, CELL_TYPE))      /* no points in cell */
             Rast_set_null_value(ptr, 1, rtype);
         else {
@@ -662,32 +663,32 @@ void write_values(struct PointBinning *point_binning,
     case METHOD_N:             /* n is a straight copy */
         Rast_raster_cpy(raster_row,
                         point_binning->n_array +
-                        (row * cols * Rast_cell_size(CELL_TYPE)), cols,
+                        ((size_t) row * cols * Rast_cell_size(CELL_TYPE)), cols,
                         CELL_TYPE);
         break;
 
     case METHOD_MIN:
         Rast_raster_cpy(raster_row,
                         point_binning->min_array +
-                        (row * cols * Rast_cell_size(rtype)), cols, rtype);
+                        ((size_t) row * cols * Rast_cell_size(rtype)), cols, rtype);
         break;
 
     case METHOD_MAX:
         Rast_raster_cpy(raster_row,
                         point_binning->max_array +
-                        (row * cols * Rast_cell_size(rtype)), cols, rtype);
+                        ((size_t) row * cols * Rast_cell_size(rtype)), cols, rtype);
         break;
 
     case METHOD_SUM:
         Rast_raster_cpy(raster_row,
                         point_binning->sum_array +
-                        (row * cols * Rast_cell_size(rtype)), cols, rtype);
+                        ((size_t) row * cols * Rast_cell_size(rtype)), cols, rtype);
         break;
 
     case METHOD_RANGE:         /* (max-min) */
         ptr = raster_row;
         for (col = 0; col < cols; col++) {
-            size_t offset = (row * cols + col) * Rast_cell_size(rtype);
+            size_t offset = ((size_t) row * cols + col) * Rast_cell_size(rtype);
             double min =
                 Rast_get_d_value(point_binning->min_array + offset, rtype);
             double max =
@@ -700,8 +701,8 @@ void write_values(struct PointBinning *point_binning,
     case METHOD_MEAN:          /* (sum / n) */
         ptr = raster_row;
         for (col = 0; col < cols; col++) {
-            size_t offset = (row * cols + col) * Rast_cell_size(rtype);
-            size_t n_offset = (row * cols + col) * Rast_cell_size(CELL_TYPE);
+            size_t offset = ((size_t) row * cols + col) * Rast_cell_size(rtype);
+            size_t n_offset = ((size_t) row * cols + col) * Rast_cell_size(CELL_TYPE);
             int n = Rast_get_c_value(point_binning->n_array + n_offset,
                                      CELL_TYPE);
             double sum =
@@ -747,8 +748,8 @@ void write_values(struct PointBinning *point_binning,
     }
     if (point_binning->bin_coordinates) {
         for (col = 0; col < cols; col++) {
-            size_t offset = (row * cols + col) * Rast_cell_size(rtype);
-            size_t n_offset = (row * cols + col) * Rast_cell_size(CELL_TYPE);
+            size_t offset = ((size_t) row * cols + col) * Rast_cell_size(rtype);
+            size_t n_offset = ((size_t) row * cols + col) * Rast_cell_size(CELL_TYPE);
             int n = Rast_get_c_value(point_binning->n_array + n_offset,
                                      CELL_TYPE);
 

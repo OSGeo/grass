@@ -136,7 +136,7 @@ int row_array_get_value_row_col(void *array, int arr_row, int arr_col,
     void *ptr = array;
     ptr =
         G_incr_void_ptr(ptr,
-                        ((arr_row * cols) +
+                        (((size_t) arr_row * cols) +
                          arr_col) * Rast_cell_size(rtype));
     if (Rast_is_null_value(ptr, rtype))
         return 0;
