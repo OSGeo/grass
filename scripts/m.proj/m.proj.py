@@ -185,7 +185,10 @@ def main():
         in_proj = grass.read_command('g.proj', flags='jf')
 
     if proj_in:
-        in_proj = proj_in
+        if '+' in proj_in:
+            in_proj = proj_in
+        else:
+            grass.fatal(_("Invalid PROJ.4 input specification"))
 
     if not in_proj:
         grass.verbose("Assuming current location as input")
