@@ -32,8 +32,9 @@ int get_target(char *group)
     sprintf(buf, _("Mapset <%s> in target location <%s> - "), mapset, location);
     strcat(buf, stat == 0 ? _("permission denied") : _("not found"));
   error:
-    strcat(buf, _("Please run i.target for group."));
+    strcat(buf, "\n");
+    strcat(buf, _("Please run i.target for group "));
     strcat(buf, group);
-    G_fatal_error("%s", buf);
+    G_fatal_error(buf);
     return 1;			/* never reached */
 }
