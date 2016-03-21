@@ -539,6 +539,21 @@ int G_parser(int argc, char **argv)
 		st->quiet = 1;	/* for passing to gui init */
 	    }
 
+            /* Super quiet option */
+            else if (strcmp(ptr, "--qq") == 0 ) {
+                char buff[32];
+
+                /* print nothing, but errors  */
+                st->module_info.verbose = G_verbose_min();
+                sprintf(buff, "GRASS_VERBOSE=%d", G_verbose_min());
+                putenv(G_store(buff));
+                G_suppress_warnings(TRUE);
+                if (st->quiet == -1) {
+                    G_warning(_("Use either --qq or --verbose flag, not both. Assuming --qq."));
+                }
+                st->quiet = 1;  /* for passing to gui init */
+            }
+
 	    /* Force gui to come up */
 	    else if (strcmp(ptr, "--ui") == 0) {
 		force_gui = TRUE;

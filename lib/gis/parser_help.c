@@ -202,6 +202,7 @@ static void usage(FILE *fp, int markers)
     fprintf(fp, " --h   %s\n", _("Print usage summary"));
     fprintf(fp, " --v   %s\n", _("Verbose module output"));
     fprintf(fp, " --q   %s\n", _("Quiet module output"));
+    fprintf(fp, " --qq  %s\n", _("Super quiet module output"));
     fprintf(fp, " --ui  %s\n", _("Force launching GUI dialog"));
     
     /* Print help info for options */
