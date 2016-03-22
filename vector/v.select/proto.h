@@ -38,14 +38,14 @@ int area_relate_geos(struct Map_info *, const GEOSGeometry *,
 /* select.c */
 void select_lines(struct Map_info *, int, int,
                   struct Map_info *, int, int,
-                  int, int, const char *, int *, int*);
+                  int, int, const char *, int *, int*, int*);
 
 /* overlap.c */
-void add_aarea(struct Map_info *, int, int *);
+void add_aarea(struct Map_info *, int, int *, int *);
 int line_overlap_area(struct line_pnts *, struct Map_info *, int);
 
 /* write.c */
-void write_lines(struct Map_info *, struct field_info *, int *,
+void write_lines(struct Map_info *, struct field_info *, int *, int *,
 		 struct Map_info *, int, int,
 		 int, int *, int *, int **);
 #endif /* PROTO_H */

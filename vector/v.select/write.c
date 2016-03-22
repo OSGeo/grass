@@ -2,6 +2,7 @@
 #include <grass/glocale.h>
 
 void write_lines(struct Map_info *In, struct field_info *IFi, int *ALines,
+                 int *AAreas,
 		 struct Map_info *Out, int table_flag, int reverse_flag,
 		 int nfields, int *fields, int *ncats, int **cats)
 {
@@ -27,11 +28,33 @@ void write_lines(struct Map_info *In, struct field_info *IFi, int *ALines,
     for (aline = 1; aline <= nalines; aline++) {
 	G_debug(3, "aline = %d ALines[aline] = %d", aline, ALines[aline]);
 	G_percent(aline, nalines, 2);
-	if ((!reverse_flag && !(ALines[aline])) ||
-	    (reverse_flag && ALines[aline]))
+	if ((!reverse_flag && !(ALines[aline])))
 	    continue;
 
 	atype = Vect_read_line(&(In[0]), APoints, ACats, aline);
+
+	if ((reverse_flag && ALines[aline])) {
+	    if (atype == GV_BOUNDARY && AAreas) {
+		int left, right, skipme;
+
+		skipme = 1;
+		Vect_get_line_areas(&(In[0]), aline, &left, &right);
+		if (left < 0)
+		    left = Vect_get_isle_area(&(In[0]), abs(left));
+		if (left > 0 && !AAreas[left])
+		    skipme = 0;
+		if (right < 0)
+		    right = Vect_get_isle_area(&(In[0]), abs(right));
+		if (right > 0 && !AAreas[right])
+		    skipme = 0;
+		if (skipme)
+		    continue;
+	    }
+	    else
+		continue;
+	}
+
+
 	Vect_write_line(Out, atype, APoints, ACats);
 
 	if (!table_flag && (IFi != NULL)) {

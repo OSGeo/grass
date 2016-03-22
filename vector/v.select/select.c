@@ -9,7 +9,7 @@
 void select_lines(struct Map_info *aIn, int atype, int afield,
                   struct Map_info *bIn, int btype, int bfield,
                   int cat_flag, int operator, const char *relate,
-                  int *ALines, int* nskipped)
+                  int *ALines, int *AAreas, int* nskipped)
 {
     int i;
     int nalines, aline, ltype;
@@ -211,7 +211,7 @@ void select_lines(struct Map_info *aIn, int atype, int afield,
 #ifdef HAVE_GEOS
 			if(line_relate_geos(bIn, AGeom,
 					    bline, operator, relate)) {
-			    add_aarea(aIn, aarea, ALines);
+			    add_aarea(aIn, aarea, ALines, AAreas);
 			    break;
 			}
 #endif
@@ -220,7 +220,7 @@ void select_lines(struct Map_info *aIn, int atype, int afield,
 			Vect_read_line(bIn, BPoints, NULL, bline);
 
 			if (line_overlap_area(BPoints, aIn, aarea)) {
-			    add_aarea(aIn, aarea, ALines);
+			    add_aarea(aIn, aarea, ALines, AAreas);
 			    continue;
 			}
 		    }
@@ -310,7 +310,7 @@ void select_lines(struct Map_info *aIn, int atype, int afield,
 			}
 		    }
 		    if (found) {
-			add_aarea(aIn, aarea, ALines);
+			add_aarea(aIn, aarea, ALines, AAreas);
 			break;
 		    }
 		}
