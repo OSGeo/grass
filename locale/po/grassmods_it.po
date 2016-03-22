@@ -15336,7 +15336,7 @@ msgid "Name of target mapset"
 msgstr "Nome del mapset di destinazione"
 
 #: ../imagery/i.target/main.c:68
-msgid "Set current location and mapset as target for of imagery group"
+msgid "Set current location and mapset as target for imagery group"
 msgstr ""
 "Imposta location e mapset correnti come destinazione del gruppo di immagini"
 
