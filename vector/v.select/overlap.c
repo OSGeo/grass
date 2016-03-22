@@ -6,7 +6,7 @@
 #include "proto.h"
 
 /* Add all elements of area A to the list */
-void add_aarea(struct Map_info *In, int aarea, int *ALines)
+void add_aarea(struct Map_info *In, int aarea, int *ALines, int *AAreas)
 {
     int i, j, aline, naisles, aisle, acentroid;
     static struct ilist *BoundList = NULL;
@@ -34,6 +34,8 @@ void add_aarea(struct Map_info *In, int aarea, int *ALines)
 	    ALines[aline] = 1;
 	}
     }
+    if (AAreas)
+	AAreas[aarea] = 1;
 }
 
 /* Returns 1 if line1 from Map1 overlaps area2 from Map2,
