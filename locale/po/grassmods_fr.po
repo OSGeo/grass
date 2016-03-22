@@ -15751,7 +15751,7 @@ msgid "Name of target mapset"
 msgstr "Nom du jeu de données en sortie"
 
 #: ../imagery/i.target/main.c:68
-msgid "Set current location and mapset as target for of imagery group"
+msgid "Set current location and mapset as target for imagery group"
 msgstr ""
 "Règle le Secteur courant et le jeu de donnée comme cible du groupe d'images"
 

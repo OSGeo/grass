@@ -14923,7 +14923,7 @@ msgid "Name of target mapset"
 msgstr "Rastra kartes nosaukums"
 
 #: ../imagery/i.target/main.c:68
-msgid "Set current location and mapset as target for of imagery group"
+msgid "Set current location and mapset as target for imagery group"
 msgstr ""
 
 #: ../imagery/i.target/main.c:90 ../imagery/i.target/main.c:107

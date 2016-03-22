@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
     c = G_define_flag();
     c->key = 'c';
     c->description =
-	_("Set current location and mapset as target for of imagery group");
+	_("Set current location and mapset as target for imagery group");
 
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
