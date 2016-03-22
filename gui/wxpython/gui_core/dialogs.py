@@ -1481,7 +1481,8 @@ class MapLayersDialogBase(wx.Dialog):
                     list.append(layer)
             except:
                 pass
-        
+        list = natural_sort(list)
+
         self.layers.Set(list)
         self.OnSelectAll(None)
         
