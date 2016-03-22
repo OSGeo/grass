@@ -33,6 +33,7 @@ int main(int argc, char *argv[])
     int itype[2], ifield[2];
 
     int *ALines; /* List of lines: 0 do not output, 1 - write to output */
+    int *AAreas; /* List of areas: 0 do not output, 1 - write area boundaries to output */
     int **cats, *ncats, *fields, nfields;
     
     struct GModule *module;
@@ -112,6 +113,9 @@ int main(int argc, char *argv[])
 
     /* Alloc space for input lines array */
     ALines = (int *)G_calloc(Vect_get_num_lines(&(In[0])) + 1, sizeof(int));
+    AAreas = NULL;
+    if (flag.reverse->answer)
+	AAreas = (int *)G_calloc(Vect_get_num_areas(&(In[0])) + 1, sizeof(int));
 
     /* Read field info */
     IFi = Vect_get_field(&(In[0]), ifield[0]);
@@ -133,13 +137,13 @@ int main(int argc, char *argv[])
                  &(In[1]), itype[1], ifield[1],
                  flag.cat->answer ? 1 : 0, operator,
                  parm.relate->answer,
-                 ALines, nskipped);
+                 ALines, AAreas, nskipped);
 #else
     select_lines(&(In[0]), itype[0], ifield[0],
                  &(In[1]), itype[1], ifield[1],
                  flag.cat->answer ? 1 : 0, operator,
                  NULL,
-                 ALines, nskipped);
+                 ALines, AAreas, nskipped);
 #endif
     
 #ifdef HAVE_GEOS
@@ -159,7 +163,7 @@ int main(int argc, char *argv[])
 	Vect_copy_map_dblinks(&(In[0]), &Out, TRUE);
     }
     
-    write_lines(&(In[0]), IFi, ALines,
+    write_lines(&(In[0]), IFi, ALines, AAreas,
 		&Out, flag.table->answer ? 1 : 0, flag.reverse->answer ? 1 : 0,
 		nfields, fields, ncats, cats);
 
