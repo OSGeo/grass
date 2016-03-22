@@ -15623,7 +15623,7 @@ msgid "Name of target mapset"
 msgstr "Tên của bộ bản đồ đích"
 
 #: ../imagery/i.target/main.c:68
-msgid "Set current location and mapset as target for of imagery group"
+msgid "Set current location and mapset as target for imagery group"
 msgstr "Thiết lập vị trí và bộ bản đồ hiện tại làm đích cho nhóm ảnh"
 
 #: ../imagery/i.target/main.c:90 ../imagery/i.target/main.c:107
