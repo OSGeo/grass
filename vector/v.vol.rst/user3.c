@@ -495,7 +495,6 @@ COGRR1(double x_or, double y_or, double z_or, int n_rows, int n_cols,
 			if ((cellinp != NULL) && (cellout != NULL) &&
 			    (i == ngstl))
 			    wwcell = hcell + wmin;
-			A[l] = h;
 			az[l] = ww;
 			if (first_time_z) {
 			    first_time_z = 0;
