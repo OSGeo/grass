@@ -25,34 +25,35 @@
 struct menu
 {
     stat_func *method;		/* routine to compute new value */
+    stat_func_w *method_w;	/* routine to compute new value (weighted) */
     int is_int;			/* result is an integer */
     char *name;			/* method name */
     char *text;			/* menu display - full description */
 } menu[] = {
-    {c_ave,    0, "average",    "average value"},
-    {c_count,  1, "count",      "count of non-NULL cells"},
-    {c_median, 0, "median",     "median value"},
-    {c_mode,   0, "mode",       "most frequently occurring value"},
-    {c_min,    0, "minimum",    "lowest value"},
-    {c_minx,   1, "min_raster", "raster with lowest value"},
-    {c_max,    0, "maximum",    "highest value"},
-    {c_maxx,   1, "max_raster", "raster with highest value"},
-    {c_stddev, 0, "stddev",     "standard deviation"},
-    {c_range,  0, "range",      "range of values"},
-    {c_sum,    0, "sum",        "sum of values"},
-    {c_var,    0, "variance",   "statistical variance"},
-    {c_divr,   1, "diversity",  "number of different values"},
-    {c_reg_m,  0, "slope",      "linear regression slope"},
-    {c_reg_c,  0, "offset",     "linear regression offset"},
-    {c_reg_r2, 0, "detcoeff",   "linear regression coefficient of determination"},
-    {c_reg_t,  0, "tvalue",     "linear regression t-value"},
-    {c_quart1, 0, "quart1",     "first quartile"},
-    {c_quart3, 0, "quart3",     "third quartile"},
-    {c_perc90, 0, "perc90",     "ninetieth percentile"},
-    {c_quant,  0, "quantile",   "arbitrary quantile"},
-    {c_skew,   0, "skewness",   "skewness"},
-    {c_kurt,   0, "kurtosis",   "kurtosis"},
-    {NULL,     0, NULL,         NULL}
+    {c_ave,    w_ave,    0, "average",    "average value"},
+    {c_count,  w_count,  1, "count",      "count of non-NULL cells"},
+    {c_median, w_median, 0, "median",     "median value"},
+    {c_mode,   w_mode,   0, "mode",       "most frequently occurring value"},
+    {c_min,    NULL,     0, "minimum",    "lowest value"},
+    {c_minx,   NULL,     1, "min_raster", "raster with lowest value"},
+    {c_max,    NULL,     0, "maximum",    "highest value"},
+    {c_maxx,   NULL,     1, "max_raster", "raster with highest value"},
+    {c_stddev, w_stddev, 0, "stddev",     "standard deviation"},
+    {c_range,  NULL,     0, "range",      "range of values"},
+    {c_sum,    w_sum,    0, "sum",        "sum of values"},
+    {c_var,    w_var,    0, "variance",   "statistical variance"},
+    {c_divr,   NULL,     1, "diversity",  "number of different values"},
+    {c_reg_m,  w_reg_m,  0, "slope",      "linear regression slope"},
+    {c_reg_c,  w_reg_c,  0, "offset",     "linear regression offset"},
+    {c_reg_r2, w_reg_r2, 0, "detcoeff",   "linear regression coefficient of determination"},
+    {c_reg_t,  w_reg_t,  0, "tvalue",     "linear regression t-value"},
+    {c_quart1, w_quart1, 0, "quart1",     "first quartile"},
+    {c_quart3, w_quart3, 0, "quart3",     "third quartile"},
+    {c_perc90, w_perc90, 0, "perc90",     "ninetieth percentile"},
+    {c_quant,  w_quant,  0, "quantile",   "arbitrary quantile"},
+    {c_skew,   w_skew,   0, "skewness",   "skewness"},
+    {c_kurt,   w_kurt,   0, "kurtosis",   "kurtosis"},
+    {NULL,     NULL,     0, NULL,         NULL}
 };
 
 struct input
@@ -69,6 +70,7 @@ struct output
     int fd;
     DCELL *buf;
     stat_func *method_fn;
+    stat_func_w *method_fn_w;
     double quantile;
 };
 
@@ -117,12 +119,14 @@ int main(int argc, char *argv[])
     } flag;
     int i;
     int num_inputs;
-    int num_weights;
     struct input *inputs = NULL;
     int num_outputs;
     struct output *outputs = NULL;
     struct History history;
     DCELL *values = NULL, *values_tmp = NULL;
+    DCELL(*values_w)[2];	/* list of values and weights */
+    DCELL(*values_w_tmp)[2];	/* list of values and weights */
+    int have_weights;
     int nrows, ncols;
     int row, col;
     double lo, hi;
@@ -189,6 +193,8 @@ int main(int argc, char *argv[])
     if (G_parser(argc, argv))
 	exit(EXIT_FAILURE);
 
+    lo = -1.0 / 0.0; /* -inf */
+    hi = 1.0 / 0.0; /* inf */
     if (parm.range->answer) {
 	lo = atof(parm.range->answers[0]);
 	hi = atof(parm.range->answers[1]);
@@ -202,6 +208,7 @@ int main(int argc, char *argv[])
         G_fatal_error(_("Please specify %s= or %s="),
 			parm.input->key, parm.file->key);
 
+    have_weights = 0;
 
     /* process the input maps from the file */
     if (parm.file->answer) {
@@ -235,11 +242,15 @@ int main(int argc, char *argv[])
             tokens = G_tokenize(tok_buf, "|");
             ntokens = G_number_of_tokens(tokens);
 
-            if(ntokens > 1) {
-	        name = G_chop(tokens[0]);
+	    name = G_chop(tokens[0]);
+            if (ntokens > 1) {
 	        weight = atof(G_chop(tokens[1]));
-            } else {
-	        name = G_chop(buf);
+
+		if (weight <= 0)
+		    G_fatal_error(_("Weights must be positive"));
+
+		if (weight != 1)
+		    have_weights = 1;
             }
 
 	    /* Ignore empty lines */
@@ -266,6 +277,8 @@ int main(int argc, char *argv[])
 	fclose(in);
     }
     else {
+	int num_weights;
+
     	for (i = 0; parm.input->answers[i]; i++)
 	    ;
     	num_inputs = i;
@@ -274,28 +287,33 @@ int main(int argc, char *argv[])
 	    G_fatal_error(_("Raster map not found"));
 
         /* count weights */
-        if(parm.weights->answers) {
+	num_weights = 0;
+        if (parm.weights->answers) {
             for (i = 0; parm.weights->answers[i]; i++)
                     ;
             num_weights = i;
-        } else {
-            num_weights = 0;
         }
     
         if (num_weights && num_weights != num_inputs)
                 G_fatal_error(_("input= and weights= must have the same number of values"));
-        
+
     	inputs = G_malloc(num_inputs * sizeof(struct input));
 
     	for (i = 0; i < num_inputs; i++) {
 	    struct input *p = &inputs[i];
 
 	    p->name = parm.input->answers[i];
+	    p->weight = 1.0;
 
-            if(num_weights)
+            if (num_weights) {
                 p->weight = (DCELL)atof(parm.weights->answers[i]);
-            else
-                p->weight = 1.0;
+
+		if (p->weight <= 0)
+		    G_fatal_error(_("Weights must be positive"));
+
+		if (p->weight != 1)
+		    have_weights = 1;
+            }
 
 	    G_verbose_message(_("Reading raster map <%s> using weight %f..."), p->name, p->weight);
 	    p->buf = Rast_allocate_d_buf();
@@ -323,7 +341,26 @@ int main(int argc, char *argv[])
 	int method = find_method(method_name);
 
 	out->name = output_name;
-	out->method_fn = menu[method].method;
+
+	if (have_weights) {
+	    if (menu[method].method_w) {
+		out->method_fn = NULL;
+		out->method_fn_w = menu[method].method_w;
+	    }
+	    else {
+		G_warning(_("Method %s not compatible with weights, using unweighed version instead"),
+			  method_name);
+
+		out->method_fn = menu[method].method;
+		out->method_fn_w = NULL;
+	    }
+	    menu[method].is_int = 0;
+	}
+	else {
+	    out->method_fn = menu[method].method;
+	    out->method_fn_w = NULL;
+	}
+
 	out->quantile = (parm.quantile->answer && parm.quantile->answers[i])
 	    ? atof(parm.quantile->answers[i])
 	    : 0;
@@ -335,6 +372,12 @@ int main(int argc, char *argv[])
     /* initialise variables */
     values = G_malloc(num_inputs * sizeof(DCELL));
     values_tmp = G_malloc(num_inputs * sizeof(DCELL));
+    values_w = NULL;
+    values_w_tmp = NULL;
+    if (have_weights) {
+	values_w = (DCELL(*)[2]) G_malloc(num_inputs * 2 * sizeof(DCELL));
+	values_w_tmp = (DCELL(*)[2]) G_malloc(num_inputs * 2 * sizeof(DCELL));
+    }
 
     nrows = Rast_window_rows();
     ncols = Rast_window_cols();
@@ -370,7 +413,11 @@ int main(int argc, char *argv[])
 		    Rast_set_d_null_value(&v, 1);
 		    null = 1;
 		}
-		values[i] = v * inputs[i].weight;
+		values[i] = v;
+		if (have_weights) {
+		    values_w[i][0] = v;
+		    values_w[i][1] = inputs[i].weight;
+		}
 	    }
 
 	    for (i = 0; i < num_outputs; i++) {
@@ -379,8 +426,14 @@ int main(int argc, char *argv[])
 		if (null && flag.nulls->answer)
 		    Rast_set_d_null_value(&out->buf[col], 1);
 		else {
-		    memcpy(values_tmp, values, num_inputs * sizeof(DCELL));
-		    (*out->method_fn)(&out->buf[col], values_tmp, num_inputs, &out->quantile);
+		    if (out->method_fn_w) {
+			memcpy(values_w_tmp, values_w, num_inputs * 2 * sizeof(DCELL));
+			(*out->method_fn_w)(&out->buf[col], values_w_tmp, num_inputs, &out->quantile);
+		    }
+		    else {
+			memcpy(values_tmp, values, num_inputs * sizeof(DCELL));
+			(*out->method_fn)(&out->buf[col], values_tmp, num_inputs, &out->quantile);
+		    }
 		}
 	    }
 	}
