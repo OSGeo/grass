@@ -659,26 +659,26 @@ struct Option *G_define_standard_option(int opt)
 	break;
 	
     case G_OPT_M_LOCATION:
-    Opt->key = "location";
-    Opt->type = TYPE_STRING;
-    Opt->required = NO;
-    Opt->multiple = NO;
-    Opt->label = _("Location name");
-    Opt->description = _("Location name (not location path)");
-    Opt->gisprompt = "old,location,location";
-    Opt->key_desc = "name";
-    break;
+	Opt->key = "location";
+	Opt->type = TYPE_STRING;
+	Opt->required = NO;
+	Opt->multiple = NO;
+	Opt->label = _("Location name");
+	Opt->description = _("Location name (not location path)");
+	Opt->gisprompt = "old,location,location";
+	Opt->key_desc = "name";
+	break;
 
     case G_OPT_M_DBASE:
-    Opt->key = "dbase";
-    Opt->type = TYPE_STRING;
-    Opt->required = NO;
-    Opt->multiple = NO;
-    Opt->label = _("GRASS GIS database directory");
-    Opt->description = _("Default: path to the current GRASS GIS database");
-    Opt->gisprompt = "old,dbase,dbase";
-    Opt->key_desc = "path";
-    break;
+	Opt->key = "dbase";
+	Opt->type = TYPE_STRING;
+	Opt->required = NO;
+	Opt->multiple = NO;
+	Opt->label = _("GRASS GIS database directory");
+	Opt->description = _("Default: path to the current GRASS GIS database");
+	Opt->gisprompt = "old,dbase,dbase";
+	Opt->key_desc = "path";
+	break;
 
     case G_OPT_M_COORDS:
 	Opt->key = "coordinates";
