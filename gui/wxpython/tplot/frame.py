@@ -224,9 +224,7 @@ class TplotFrame(wx.Frame):
         self.datasetSelectV = gselect.Select(parent=self.controlPanelVector,
                                              id=wx.ID_ANY,
                                              size=globalvar.DIALOG_GSELECT_SIZE,
-                                             type='stvds', multiple=True,
-                                             style=wx.TE_PROCESS_ENTER)
-        self.datasetSelectV.Bind(wx.EVT_TEXT_ENTER, self.OnVectorSelected)
+                                             type='stvds', multiple=True)
         self.datasetSelectV.Bind(wx.EVT_COMBOBOX_CLOSEUP,
                                  self.OnVectorSelected)
 
