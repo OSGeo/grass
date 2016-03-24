@@ -98,3 +98,7 @@ tokyo   "towgs84=-147,506,687" "South Korea" " "
 cai     "towgs84=-149.1,138.1,90.9,-0.142,0.344,0.301,0.388" "Argentina" "provided by CONAE, Argentina"
 # http://lists.maptools.org/pipermail/proj/2012-September/006413.html
 itrf92	"towgs84=0,0,0,0,0,0,0" "Mexico" "Considered identical to WGS84"
+# http://epsg.io/5514 System_Jednotne_Trigonometricke_Site_Katastralni
+S_JTSK	"towgs84=570.8,85.7,462.8,4.998,1.587,5.261,3.56" "Czech Republic" "Accuracy about 1m"
+S_JTSK	"towgs84=572.213,85.334,461.94,-4.9732,-1.529,-5.2484,3.5378" "Czech Republic" "Accuracy about 1m"
+S_JTSK	"towgs84=485,169.5,483.8,7.786,4.398,4.103,0" "Slovakia" "Accuracy about 1m"
