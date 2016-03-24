@@ -285,7 +285,7 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 	goto default_to_xy;
 
     /* Set finder function for locating OGR csv co-ordinate system tables */
-    SetCSVFilenameHook(GPJ_set_csv_loc);
+    /* SetCSVFilenameHook(GPJ_set_csv_loc); */
 
     /* Hopefully this doesn't do any harm if it wasn't in ESRI format
      * to start with... */
@@ -697,7 +697,7 @@ int GPJ_wkt_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 	OGRSpatialReferenceH hSRS;
 
 	/* Set finder function for locating OGR csv co-ordinate system tables */
-	SetCSVFilenameHook(GPJ_set_csv_loc);
+	/* SetCSVFilenameHook(GPJ_set_csv_loc); */
 
 	hSRS = OSRNewSpatialReference(wkt);
 	retval =
