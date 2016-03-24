@@ -141,6 +141,9 @@ OGRSpatialReferenceH GPJ_grass_to_osr(const struct Key_Value * proj_info,
 	return NULL;
     }
     G_free(proj4mod);
+    sysname = G_find_key_value("name", proj_info);
+    if (sysname)
+	OSRSetProjCS(hSRS, sysname);
 
     if ((errcode = OSRExportToWkt(hSRS, &wkt)) != OGRERR_NONE) {
 	G_warning(_("OGR can't get WKT-style parameter string "
@@ -152,7 +155,7 @@ OGRSpatialReferenceH GPJ_grass_to_osr(const struct Key_Value * proj_info,
     GPJ__get_ellipsoid_params(proj_info, &a, &es, &rf);
     haveparams = GPJ__get_datum_params(proj_info, &datum, &params);
 
-    if(ellpskv != NULL)
+    if (ellpskv != NULL)
 	ellps = G_store(ellpskv);
     else
 	ellps = NULL;
@@ -278,6 +281,7 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
     struct Key_Value *temp_projinfo;
     char *pszProj4 = NULL, *pszRemaining;
     char *pszProj = NULL;
+    const char *pszProjCS = NULL;
     char *datum = NULL;
     struct gpj_datum dstruct;
 
@@ -357,14 +361,13 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 	else
 	    pszValue = "defined";
 
-
+	/* projection name */
 	if (G_strcasecmp(pszToken, "proj") == 0) {
 	    /* The ll projection is known as longlat in PROJ.4 */
 	    if (G_strcasecmp(pszValue, "longlat") == 0)
 		pszValue = "ll";
 
 	    pszProj = pszValue;
-	    continue;
 	}
 
 	/* Ellipsoid and datum handled separately below */
@@ -383,15 +386,26 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 
 	G_set_key_value(pszToken, pszValue, temp_projinfo);
     }
+    if (!pszProj)
+	G_warning(_("No projection name! Projection parameters likely to be meaningless."));
 
     *projinfo = G_create_key_value();
 
     /* -------------------------------------------------------------------- */
-    /*      Derive the user name for the projection.                        */
+    /*      Derive the user name for the coordinate system.                 */
     /* -------------------------------------------------------------------- */
-    if (pszProj) {
+    pszProjCS = OSRGetAttrValue(hSRS, "PROJCS", 0);
+    if (!pszProjCS)
+	pszProjCS = OSRGetAttrValue(hSRS, "GEOGCS", 0);
+
+    if (pszProjCS) {
+	G_set_key_value("name", pszProjCS, *projinfo);
+    }
+    else if (pszProj) {
 	char path[4095];
 	char name[80];
+	
+	/* use name of the projection as name for the coordinate system */
 
 	sprintf(path, "%s/etc/proj/projections", G_gisbase());
 	if (G_lookup_key_value_from_file(path, pszProj, name, sizeof(name)) >
@@ -399,11 +413,7 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
 	    G_set_key_value("name", name, *projinfo);
 	else
 	    G_set_key_value("name", pszProj, *projinfo);
-
-	G_set_key_value("proj", pszProj, *projinfo);
     }
-    else
-	G_warning(_("No projection name! Projection parameters likely to be meaningless."));
 
 
     /* -------------------------------------------------------------------- */
