@@ -54,7 +54,7 @@ void print_projinfo(int shell, const char *force_epsg)
         struct Key_Value *in_epsg_key;
         
         if (force_epsg) {
-            epsg_key = "epgs";
+            epsg_key = "epsg";
             epsg_value = force_epsg;
         }
         else {
