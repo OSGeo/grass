@@ -88,4 +88,7 @@ nsd      "North_Sahara_1959"       clark80 dx=-186 dy=-93 dz=310
 gda94    "Geocentric_Datum_of_Australia_1994"    grs80    dx=0   dy=0   dz=0
 # http://lists.maptools.org/pipermail/proj/2012-September/006413.html
 itrf92   "ITRF92"    grs80 dx=0   dy=0    dz=0
-
+# https://epsg.io/5514 + https://epsg.io/6156-datum
+S_JTSK	"System_Jednotne_Trigonometricke_Site_Katastralni"	bessel	dx=589	dy=76	dz=480
+# http://spatialreference.org/ref/epsg/4674/
+Sistema_de_Referencia_Geocentrico_para_America_del_Sur_2000 "Sistema_de_Referencia_Geocentrico_para_America_del_Sur_2000"   grs80       dx=0        dy=0       dz=0
