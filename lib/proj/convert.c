@@ -777,6 +777,8 @@ static const char *papszDatumEquiv[] = {
     "Monte_Mario",
     "Campo_Inchauspe_1969",
     "Campo_Inchauspe",
+    "S_JTSK",
+    "System_Jednotne_Trigonometricke_Site_Katastralni",
     "S_JTSK_Ferro",
     "Militar_Geographische_Institut",
     "Potsdam_Datum_83",
