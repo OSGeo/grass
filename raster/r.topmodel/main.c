@@ -57,16 +57,16 @@ int main(int argc, char **argv)
     /* Parameter definitions */
     params.params = G_define_standard_option(G_OPT_F_INPUT);
     params.params->key = "parameters";
-    params.params->description = _("Name of TOPMODEL parameters file");
+    params.params->description = _("Name of input TOPMODEL parameters file");
 
     params.topidxstats = G_define_standard_option(G_OPT_F_INPUT);
     params.topidxstats->key = "topidxstats";
     params.topidxstats->description =
-	_("Name of topographic index statistics file");
+	_("Name of input topographic index statistics file");
 
     params.input = G_define_standard_option(G_OPT_F_INPUT);
     params.input->description =
-	_("Name of rainfall and potential evapotranspiration data file");
+	_("Name of input rainfall and potential evapotranspiration data file");
 
     params.output = G_define_standard_option(G_OPT_F_OUTPUT);
     params.output->description = _("Name for output file");
