@@ -196,8 +196,9 @@ class Model(object):
         """
         relList = list()
         upList = list()
-        
-        self.items.remove(item)
+
+        if item in self.items:
+            self.items.remove(item)
         
         if isinstance(item, ModelAction):
             for rel in item.GetRelations():
