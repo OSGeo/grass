@@ -71,11 +71,15 @@ import sys
 from grass.script.core import parser, read_command, fatal, debug, run_command, gisenv, warning, parse_command
 
 # check if monitor is running
+
+
 def check_monitor():
     return read_command('d.mon', flags='p', quiet=True).strip()
 
 # read monitor file and return list of lines
 # TODO: replace by d.info (see #2577)
+
+
 def read_monitor_file(monitor, ftype='env'):
     mfile = check_monitor_file(monitor, ftype)
     try:
@@ -88,18 +92,22 @@ def read_monitor_file(monitor, ftype='env'):
         lines.append(line)
 
     fd.close()
-    
+
     return lines
 
 # check if monitor file exists
+
+
 def check_monitor_file(monitor, ftype='env'):
     mfile = parse_command('d.mon', flags='g').get(ftype, None)
     if mfile is None or not os.path.isfile(mfile):
         fatal(_("Unable to get monitor info (no %s found)") % var)
-    
+
     return mfile
 
 # write new monitor file
+
+
 def write_monitor_file(monitor, lines, ftype='env'):
     mfile = check_monitor_file(monitor, ftype)
 
@@ -112,19 +120,23 @@ def write_monitor_file(monitor, lines, ftype='env'):
     fd.close()
 
 # remove all frames and erase screen
+
+
 def erase(monitor):
     # remove frames
     lines = []
     for line in read_monitor_file(monitor):
         if 'FRAME' not in line:
             lines.append(line)
-            
+
     write_monitor_file(monitor, lines)
-    
+
     # erase screen
     run_command('d.erase')
 
 # find frame for given monitor
+
+
 def find_frame(monitor, frame):
     for line in read_monitor_file(monitor):
         if 'FRAME' in line:
@@ -134,6 +146,8 @@ def find_frame(monitor, frame):
     return False
 
 # print frames name(s) to stdout
+
+
 def print_frames(monitor, current_only=False, full=False):
     for line in read_monitor_file(monitor):
         if 'FRAME' not in line:
@@ -146,10 +160,14 @@ def print_frames(monitor, current_only=False, full=False):
         sys.stdout.write('\n')
 
 # get frame name from line
+
+
 def get_frame_name(line):
     return line.rstrip('\n').rsplit('#', 1)[1].strip(' ')
 
 # calculate position of the frame in percent
+
+
 def calculate_frame(frame, at, width, height):
     try:
         b, t, l, r = map(float, at.split(','))
@@ -160,11 +178,13 @@ def calculate_frame(frame, at, width, height):
     bottom = height - (b / 100. * height)
     left = l / 100. * width
     right = r / 100. * width
-    
+
     return 'GRASS_RENDER_FRAME=%d,%d,%d,%d # %s%s' % \
         (top, bottom, left, right, frame, '\n')
-    
+
 # create new frame
+
+
 def create_frame(monitor, frame, at, overwrite=False):
     lines = read_monitor_file(monitor)
     # get width and height of the monitor
@@ -180,7 +200,7 @@ def create_frame(monitor, frame, at, overwrite=False):
 
     if width < 0 or height < 0:
         fatal(_("Invalid monitor size: %dx%d") % (width, height))
-    
+
     if not overwrite:
         lines.append(calculate_frame(frame, at, width, height))
     else:
@@ -190,10 +210,12 @@ def create_frame(monitor, frame, at, overwrite=False):
                 continue
             if get_frame_name(line) == frame:
                 lines[idx] = calculate_frame(frame, at, width, height)
-    
+
     write_monitor_file(monitor, lines)
 
 # select existing frame
+
+
 def select_frame(monitor, frame):
     lines = read_monitor_file(monitor)
     for idx in range(len(lines)):
@@ -202,28 +224,29 @@ def select_frame(monitor, frame):
             continue
         if get_frame_name(line) == frame:
             if line.startswith('#'):
-                lines[idx] = line.lstrip('# ') # un-comment line
+                lines[idx] = line.lstrip('# ')  # un-comment line
         elif not line.startswith('#'):
-            lines[idx] = '# ' + line # comment-line
-    
+            lines[idx] = '# ' + line  # comment-line
+
     write_monitor_file(monitor, lines)
-    
+
+
 def main():
     # get currently selected monitor
     monitor = check_monitor()
     if not monitor:
         fatal(_("No graphics device selected. Use d.mon to select graphics device."))
-    
+
     if flags['e']:
         # remove frames and erase monitor and exit
         erase(monitor)
         return
-    
+
     if flags['p']:
         # print current frame and exit
         print_frames(monitor, current_only=True)
         return
-        
+
     if flags['a']:
         # print all frames including their position and exit
         print_frames(monitor, current_only=False, full=True)
@@ -245,12 +268,13 @@ def main():
             create_frame(monitor, options['frame'], options['at'], overwrite=True)
         else:
             if options['at']:
-                warning(_("Frame <%s> already found. An existing frame can be overwritten by '%s' flag.") % \
-                        (options['frame'], "--overwrite"))
-    
-    # select givenframe 
+                warning(
+                    _("Frame <%s> already found. An existing frame can be overwritten by '%s' flag.") %
+                    (options['frame'], "--overwrite"))
+
+    # select givenframe
     select_frame(monitor, options['frame'])
-            
+
 if __name__ == "__main__":
     options, flags = parser()
     sys.exit(main())

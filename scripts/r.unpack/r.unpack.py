@@ -82,7 +82,8 @@ def main():
         if os.environ.get('GRASS_OVERWRITE', '0') != '1':
             grass.fatal(_('Raster map <{name}> already exists'.format(name=map_name)))
         else:
-            grass.warning(_('Raster map <{name}> already exists and will be overwritten'.format(name=map_name)))
+            grass.warning(
+                _('Raster map <{name}> already exists and will be overwritten'.format(name=map_name)))
 
     # extract data
     tar.extractall()
@@ -100,36 +101,37 @@ def main():
 
     if flags['o']:
         grass.warning(_("Overriding projection check (using current location's projection)."))
-        
+
     else:
-        
+
         diff_result_1 = diff_result_2 = None
-        
+
         proj_info_file_1 = 'PROJ_INFO'
         proj_info_file_2 = os.path.join(mset_dir, '..', 'PERMANENT', 'PROJ_INFO')
 
         skip_projection_check = False
         if not os.path.exists(proj_info_file_1):
             if os.path.exists(proj_info_file_2):
-                grass.fatal(_("PROJ_INFO file is missing, unpack raster map in XY (unprojected) location."))
+                grass.fatal(
+                    _("PROJ_INFO file is missing, unpack raster map in XY (unprojected) location."))
             skip_projection_check = True  # XY location
 
         if not skip_projection_check:
             if not grass.compare_key_value_text_files(filename_a=proj_info_file_1,
                                                       filename_b=proj_info_file_2,
-                                                      proj=True):                                                      
+                                                      proj=True):
                 diff_result_1 = diff_files(proj_info_file_1, proj_info_file_2)
-        
+
             proj_units_file_1 = 'PROJ_UNITS'
             proj_units_file_2 = os.path.join(mset_dir, '..', 'PERMANENT', 'PROJ_UNITS')
-        
+
             if not grass.compare_key_value_text_files(filename_a=proj_units_file_1,
                                                       filename_b=proj_units_file_2,
-                                                      units=True):                                                      
+                                                      units=True):
                 diff_result_2 = diff_files(proj_units_file_1, proj_units_file_2)
-        
+
             if diff_result_1 or diff_result_2:
-                
+
                 if diff_result_1:
                     grass.warning(_("Difference between PROJ_INFO file of packed map "
                                     "and of current location:\n{diff}").format(diff=''.join(diff_result_1)))

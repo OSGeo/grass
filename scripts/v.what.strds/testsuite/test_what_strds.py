@@ -21,12 +21,12 @@ class TestWhatStrds(TestCase):
         """Initiate the temporal GIS and set the region
         """
         cls.use_temp_region()
-        cls.runModule("g.region",  s=0,  n=80,  w=0,  e=120,  b=0,  t=50,
-                      res=10,  res3=10)
-        cls.runModule("r.mapcalc", expression="a_1 = 100",  overwrite=True)
-        cls.runModule("r.mapcalc", expression="a_2 = 200",  overwrite=True)
-        cls.runModule("r.mapcalc", expression="a_3 = 300",  overwrite=True)
-        cls.runModule("r.mapcalc", expression="a_4 = 400",  overwrite=True)
+        cls.runModule("g.region", s=0, n=80, w=0, e=120, b=0, t=50,
+                      res=10, res3=10)
+        cls.runModule("r.mapcalc", expression="a_1 = 100", overwrite=True)
+        cls.runModule("r.mapcalc", expression="a_2 = 200", overwrite=True)
+        cls.runModule("r.mapcalc", expression="a_3 = 300", overwrite=True)
+        cls.runModule("r.mapcalc", expression="a_4 = 400", overwrite=True)
 
         cls.runModule("v.random", output="points", npoints=3, seed=1,
                       overwrite=True)

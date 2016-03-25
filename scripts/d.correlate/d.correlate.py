@@ -29,21 +29,23 @@
 import sys
 import os
 from grass.script.utils import try_remove
-from grass.script import core as grass
+from grass.script import core as gcore
+
 
 def main():
     layers = options['map'].split(',')
 
     if len(layers) < 2:
-	grass.error(_("At least 2 maps are required"))
+        gcore.error(_("At least 2 maps are required"))
 
-    tmpfile = grass.tempfile()
+    tmpfile = gcore.tempfile()
 
     for map in layers:
-	if not grass.find_file(map, element = 'cell')['file']:
-	    grass.fatal(_("Raster map <%s> not found") % map)
+        if not gcore.find_file(map, element='cell')['file']:
+            gcore.fatal(_("Raster map <%s> not found") % map)
 
-    grass.write_command('d.text', color = 'black', size = 4, line = 1, stdin = "CORRELATION")
+    gcore.write_command('d.text', color='black', size=4, line=1,
+                        stdin="CORRELATION")
 
     os.environ['GRASS_RENDER_FILE_READ'] = 'TRUE'
 
@@ -52,53 +54,60 @@ def main():
     iloop = 0
     jloop = 0
     for iloop, i in enumerate(layers):
-	for jloop, j in enumerate(layers):
-	    if i != j and iloop <= jloop:
-		color = colors[0]
-		colors = colors[1:]
-		colors.append(color)
-		grass.write_command('d.text', color = color, size = 4, line = line, stdin = "%s %s" % (i, j))
-		line += 1
+        for jloop, j in enumerate(layers):
+            if i != j and iloop <= jloop:
+                color = colors[0]
+                colors = colors[1:]
+                colors.append(color)
+                gcore.write_command('d.text', color=color, size=4, line=line,
+                                    stdin="%s %s" % (i, j))
+                line += 1
 
-		ofile = file(tmpfile, 'w')
-		grass.run_command('r.stats', flags = 'cnA', input = (i, j), stdout = ofile)
-		ofile.close()
+                ofile = file(tmpfile, 'w')
+                gcore.run_command('r.stats', flags='cnA', input=(i, j),
+                                  stdout=ofile)
+                ofile.close()
 
-		ifile = file(tmpfile, 'r')
-		first = True
-		for l in ifile:
-		    f = l.rstrip('\r\n').split(' ')
-		    x = float(f[0])
-		    y = float(f[1])
-		    if first:
-			minx = maxx = x
-			miny = maxy = y
-			first = False
-		    if minx > x: minx = x
-		    if maxx < x: maxx = x
-		    if miny > y: miny = y
-		    if maxy < y: maxy = y
-		ifile.close()
+                ifile = file(tmpfile, 'r')
+                first = True
+                for l in ifile:
+                    f = l.rstrip('\r\n').split(' ')
+                    x = float(f[0])
+                    y = float(f[1])
+                    if first:
+                        minx = maxx = x
+                        miny = maxy = y
+                        first = False
+                    if minx > x:
+                        minx = x
+                    if maxx < x:
+                        maxx = x
+                    if miny > y:
+                        miny = y
+                    if maxy < y:
+                        maxy = y
+                ifile.close()
 
-		kx = 100.0/(maxx-minx+1)
-		ky = 100.0/(maxy-miny+1)
+                kx = 100.0 / (maxx - minx + 1)
+                ky = 100.0 / (maxy - miny + 1)
 
-		p = grass.feed_command('d.graph', color = color)
-		ofile = p.stdin
+                p = gcore.feed_command('d.graph', color=color)
+                ofile = p.stdin
 
-		ifile = file(tmpfile, 'r')
-		for l in ifile:
-		    f = l.rstrip('\r\n').split(' ')
-		    x = float(f[0])
-		    y = float(f[1])
-		    ofile.write("icon + 0.1 %f %f\n" % ((x-minx+1) * kx, (y-miny+1) * ky))
-		ifile.close()
+                ifile = file(tmpfile, 'r')
+                for l in ifile:
+                    f = l.rstrip('\r\n').split(' ')
+                    x = float(f[0])
+                    y = float(f[1])
+                    ofile.write("icon + 0.1 %f %f\n" % ((x - minx + 1) * kx,
+                                                        (y - miny + 1) * ky))
+                ifile.close()
 
-		ofile.close()
-		p.wait()
+                ofile.close()
+                p.wait()
 
     try_remove(tmpfile)
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gcore.parser()
     main()

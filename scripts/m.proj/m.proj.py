@@ -95,10 +95,11 @@ import sys
 import os
 import threading
 from grass.script.utils import separator, parse_key_val
-from grass.script import core as grass
+from grass.script import core as gcore
 
 
 class TrThread(threading.Thread):
+
     def __init__(self, ifs, inf, outf):
         threading.Thread.__init__(self)
         self.ifs = ifs
@@ -150,7 +151,7 @@ def main():
         grass.fatal(_("Output file already exists"))
 
     if not coords and not input:
-        grass.fatal(_("One of <coordinates> and <input> must be given"))
+        gcore.fatal(_("One of <coordinates> and <input> must be given"))
     if coords and input:
         grass.fatal(_(
             "Options <coordinates> and <input> are mutually exclusive"))
@@ -195,7 +196,7 @@ def main():
         in_proj = grass.read_command('g.proj', flags='jf')
 
     in_proj = in_proj.strip()
-    grass.verbose("Input parameters: '%s'" % in_proj)
+    gcore.verbose("Input parameters: '%s'" % in_proj)
 
     out_proj = None
 
@@ -216,12 +217,12 @@ def main():
     if not out_proj:
         grass.fatal(_("Missing output projection parameters "))
     out_proj = out_proj.strip()
-    grass.verbose("Output parameters: '%s'" % out_proj)
+    gcore.verbose("Output parameters: '%s'" % out_proj)
 
     # set up input file
     if coords:
         x, y = coords.split(',')
-        tmpfile = grass.tempfile()
+        tmpfile = gcore.tempfile()
         fd = open(tmpfile, "w")
         fd.write("%s%s%s\n" % (x, ifs, y))
         fd.close()
@@ -233,7 +234,7 @@ def main():
         else:
             infile = input
             if not os.path.exists(infile):
-                grass.fatal(_("Unable to read input data"))
+                gcore.fatal(_("Unable to read input data"))
             inf = file(infile)
             grass.debug("input file=[%s]" % infile)
 
@@ -298,5 +299,5 @@ def main():
             "Projection transform probably failed, please investigate"))
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gcore.parser()
     main()

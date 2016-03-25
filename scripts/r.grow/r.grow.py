@@ -72,8 +72,9 @@ from grass.exceptions import CalledModuleError
 def cleanup():
     for map in [temp_dist, temp_val]:
         if map:
-            grass.run_command('g.remove', flags = 'fb', quiet = True,
-                              type='rast', name = map)
+            grass.run_command('g.remove', flags='fb', quiet=True,
+                              type='rast', name=map)
+
 
 def main():
     global temp_dist, temp_val
@@ -108,7 +109,7 @@ def main():
         metric = 'squared'
         radius = radius * radius
 
-    #check if input file exists
+    # check if input file exists
     if not grass.find_file(input)['file']:
         grass.fatal(_("Raster map <%s> not found") % input)
 
@@ -120,10 +121,10 @@ def main():
 
     grass.mapcalc(
         "$output = if(!isnull($input),$old,if($dist < $radius,$new,null()))",
-        output = output, input = input, radius = radius,
-        old = old, new = new, dist = temp_dist)
+        output=output, input=input, radius=radius,
+        old=old, new=new, dist=temp_dist)
 
-    grass.run_command('r.colors', map = output, raster = input)
+    grass.run_command('r.colors', map=output, raster=input)
 
     # write cmd history:
     grass.raster_history(output)

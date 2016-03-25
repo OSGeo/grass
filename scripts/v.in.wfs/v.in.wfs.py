@@ -64,7 +64,7 @@
 #%end
 #%flag
 #% key: l
-#todo #% description: List available layers and exit
+# todo #% description: List available layers and exit
 #% description: Download server capabilities to 'wms_capabilities.xml' in the current directory and exit
 #% suppress_required: yes
 #%end
@@ -79,6 +79,7 @@ import sys
 from grass.script.utils import try_remove
 from grass.script import core as grass
 import urllib
+
 
 def main():
     out = options['output']
@@ -104,7 +105,7 @@ def main():
             grass.fatal('Features begin with index "1"')
 
     if flags['r']:
-        bbox = grass.read_command("g.region", flags = 'w').split('=')[1]
+        bbox = grass.read_command("g.region", flags='w').split('=')[1]
         wfs_url += '&BBOX=' + bbox
 
     if flags['l']:
@@ -119,10 +120,10 @@ def main():
     inf = urllib.urlopen(wfs_url)
     outf = file(tmpxml, 'wb')
     while True:
-	s = inf.read()
-	if not s:
-	    break
-	outf.write(s)
+        s = inf.read()
+        if not s:
+            break
+        outf.write(s)
     inf.close()
     outf.close()
 
@@ -134,7 +135,6 @@ def main():
         shutil.copy(tmpxml, 'wms_capabilities.xml')
         try_remove(tmpxml)
         sys.exit(0)
-
 
     grass.message(_("Importing data..."))
     try:

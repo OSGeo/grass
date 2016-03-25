@@ -51,7 +51,7 @@ def main():
         return 1
 
     # write cmd history:
-    grass.vector_history(map = options['output'])
+    grass.vector_history(map=options['output'])
 
     return 0
 

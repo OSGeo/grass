@@ -8,7 +8,7 @@
 #		Hamish Bowman, scripting enhancements
 #               Converted to Python by Glynn Clements
 #
-# PURPOSE:      create pretty RGBs: the trick is to remove outliers 
+# PURPOSE:      create pretty RGBs: the trick is to remove outliers
 #               using percentiles (area under the histogram curve)
 #
 # COPYRIGHT:	(C) 2006, 2008, 2012-2014 by the GRASS Development Team
@@ -68,9 +68,9 @@
 #%end
 
 import sys
-import os
-import string
-import grass.script as grass
+
+import grass.script as gscript
+
 try:
     # new for python 2.6, in 2.5 it may be easy_install'd.
     import multiprocessing as mp
@@ -85,14 +85,16 @@ def get_percentile(map, percentiles):
     val2 = percentiles[1]
     values = '%s,%s' % (val1, val2)
 
-    s = grass.read_command('r.quantile', input = map, 
-                           percentiles = values, quiet = True)
+    s = gscript.read_command('r.quantile', input=map,
+                             percentiles=values, quiet=True)
 
     val_str1 = s.splitlines()[0].split(':')[2]
     val_str2 = s.splitlines()[1].split(':')[2]
     return (float(val_str1), float(val_str2))
 
 # wrapper to handle multiprocesses communications back to the parent
+
+
 def get_percentile_mp(map, percentiles, conn):
     # Process() doesn't like storing connection parts in
     #  separate dictionaries, only wants to pass through tuples,
@@ -101,19 +103,16 @@ def get_percentile_mp(map, percentiles, conn):
     output_pipe, input_pipe = conn
     input_pipe.close()
     result = get_percentile(map, percentiles)
-    grass.debug('child (%s) (%.1f, %.1f)' % (map, result[0], result[1]))
+    gscript.debug('child (%s) (%.1f, %.1f)' % (map, result[0], result[1]))
     output_pipe.send(result)
     output_pipe.close()
 
+
 def set_colors(map, v0, v1):
-    rules = [
-	"0% black\n",
-	"%f black\n" % v0,
-	"%f white\n" % v1,
-	"100% white\n"
-	]
-    rules = ''.join(rules)
-    grass.write_command('r.colors', map = map, rules = '-', stdin = rules, quiet = True)
+    rules = ''.join(["0% black\n", "%f black\n" % v0,
+                     "%f white\n" % v1, "100% white\n"])
+    gscript.write_command('r.colors', map=map, rules='-', stdin=rules,
+                          quiet=True)
 
 
 def main():
@@ -124,7 +123,7 @@ def main():
     full = flags['f']
     preserve = flags['p']
     reset = flags['r']
-    
+
     global do_mp
 
     if flags['s']:
@@ -135,92 +134,90 @@ def main():
     # must be more than "2" ?
 
     if full:
-	for i in [red, green, blue]:
-	    grass.run_command('r.colors', map = i, color = 'grey', quiet = True)
-	sys.exit(0)
+        for i in [red, green, blue]:
+            gscript.run_command('r.colors', map=i, color='grey', quiet=True)
+        sys.exit(0)
 
     if reset:
-	for i in [red, green, blue]:
-	    grass.run_command('r.colors', map = i, color = 'grey255', quiet = True)
-	sys.exit(0)
-
+        for i in [red, green, blue]:
+            gscript.run_command('r.colors', map=i, color='grey255', quiet=True)
+        sys.exit(0)
 
     if not preserve:
         if do_mp:
-            grass.message(_("Processing..."))
-	    # set up jobs and launch them
-	    proc = {}
-	    conn = {}
-	    for i in [red, green, blue]:
-	        conn[i] = mp.Pipe()
-	        proc[i] = mp.Process(target = get_percentile_mp,
-				     args = (i, ['2', brightness],
-				     conn[i],))
-		proc[i].start()
-            grass.percent(1, 2, 1)
-            
-	    # collect results and wait for jobs to finish
-	    for i in [red, green, blue]:
-		output_pipe, input_pipe = conn[i]
-		(v0, v1) = input_pipe.recv()
-		grass.debug('parent (%s) (%.1f, %.1f)' % (i, v0, v1))
-		input_pipe.close()
-		proc[i].join()
-		set_colors(i, v0, v1)
-            grass.percent(1, 1, 1)
-	else:
-	    for i in [red, green, blue]:
-	        grass.message(_("Processing..."))
-	        (v0, v1) = get_percentile(i, ['2', brightness])
-	        grass.debug("<%s>:  min=%f   max=%f" % (i, v0, v1))
-	        set_colors(i, v0, v1)
+            gscript.message(_("Processing..."))
+            # set up jobs and launch them
+            proc = {}
+            conn = {}
+            for i in [red, green, blue]:
+                conn[i] = mp.Pipe()
+                proc[i] = mp.Process(target=get_percentile_mp,
+                                     args=(i, ['2', brightness],
+                                           conn[i],))
+                proc[i].start()
+            gscript.percent(1, 2, 1)
+
+            # collect results and wait for jobs to finish
+            for i in [red, green, blue]:
+                output_pipe, input_pipe = conn[i]
+                (v0, v1) = input_pipe.recv()
+                gscript.debug('parent (%s) (%.1f, %.1f)' % (i, v0, v1))
+                input_pipe.close()
+                proc[i].join()
+                set_colors(i, v0, v1)
+            gscript.percent(1, 1, 1)
+        else:
+            for i in [red, green, blue]:
+                gscript.message(_("Processing..."))
+                (v0, v1) = get_percentile(i, ['2', brightness])
+                gscript.debug("<%s>:  min=%f   max=%f" % (i, v0, v1))
+                set_colors(i, v0, v1)
 
     else:
-	all_max = 0
-	all_min = 999999
+        all_max = 0
+        all_min = 999999
 
-	if do_mp:
-	    grass.message(_("Processing..."))
-	    # set up jobs and launch jobs
-	    proc = {}
-	    conn = {}
-	    for i in [red, green, blue]:
-		conn[i] = mp.Pipe()
-		proc[i] = mp.Process(target = get_percentile_mp,
-				     args = (i, ['2', brightness],
-				     conn[i],))
-		proc[i].start()
-            grass.percent(1, 2, 1)
-            
-	    # collect results and wait for jobs to finish
-	    for i in [red, green, blue]:
-		output_pipe, input_pipe = conn[i]
-		(v0, v1) = input_pipe.recv()
-		grass.debug('parent (%s) (%.1f, %.1f)' % (i, v0, v1))
-		input_pipe.close()
-		proc[i].join()
-		all_min = min(all_min, v0)
-		all_max = max(all_max, v1)
-            grass.percent(1, 1, 1)
-	else:
-	    for i in [red, green, blue]:
-		grass.message(_("Processing..."))
-		(v0, v1) = get_percentile(i, ['2', brightness])
-		grass.debug("<%s>:  min=%f   max=%f" % (i, v0, v1))
-		all_min = min(all_min, v0)
-		all_max = max(all_max, v1)
+        if do_mp:
+            gscript.message(_("Processing..."))
+            # set up jobs and launch jobs
+            proc = {}
+            conn = {}
+            for i in [red, green, blue]:
+                conn[i] = mp.Pipe()
+                proc[i] = mp.Process(target=get_percentile_mp,
+                                     args=(i, ['2', brightness],
+                                           conn[i],))
+                proc[i].start()
+            gscript.percent(1, 2, 1)
 
-	grass.debug("all_min=%f   all_max=%f" % (all_min, all_max))
-	for i in [red, green, blue]:
-	    set_colors(i, all_min, all_max)
+            # collect results and wait for jobs to finish
+            for i in [red, green, blue]:
+                output_pipe, input_pipe = conn[i]
+                (v0, v1) = input_pipe.recv()
+                gscript.debug('parent (%s) (%.1f, %.1f)' % (i, v0, v1))
+                input_pipe.close()
+                proc[i].join()
+                all_min = min(all_min, v0)
+                all_max = max(all_max, v1)
+            gscript.percent(1, 1, 1)
+        else:
+            for i in [red, green, blue]:
+                gscript.message(_("Processing..."))
+                (v0, v1) = get_percentile(i, ['2', brightness])
+                gscript.debug("<%s>:  min=%f   max=%f" % (i, v0, v1))
+                all_min = min(all_min, v0)
+                all_max = max(all_max, v1)
 
+        gscript.debug("all_min=%f   all_max=%f" % (all_min, all_max))
+        for i in [red, green, blue]:
+            set_colors(i, all_min, all_max)
 
     # write cmd history:
-    mapset = grass.gisenv()['MAPSET']
+    mapset = gscript.gisenv()['MAPSET']
     for i in [red, green, blue]:
-        if grass.find_file(i)['mapset'] == mapset:
-            grass.raster_history(i)
+        if gscript.find_file(i)['mapset'] == mapset:
+            gscript.raster_history(i)
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gscript.parser()
     main()

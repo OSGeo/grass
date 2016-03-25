@@ -34,7 +34,7 @@
 #%end
 #%flag
 #% key: z
-#% description: Create a 3D vector points map from 3 column Matlab data 
+#% description: Create a 3D vector points map from 3 column Matlab data
 #%end
 #%option G_OPT_F_INPUT
 #% description: Name of input file in Mapgen/Matlab format
@@ -58,6 +58,7 @@ from grass.exceptions import CalledModuleError
 def cleanup():
     try_remove(tmp)
     try_remove(tmp + '.dig')
+
 
 def main():
     global tmp
@@ -89,32 +90,32 @@ def main():
 
     tmp = grass.tempfile()
 
-    #### create ascii vector file
+    # create ascii vector file
     inf = file(infile)
     outf = file(tmp, 'w')
 
     grass.message(_("Importing data..."))
-    cat = 1   
+    cat = 1
     if matlab:
-        ## HB:  OLD v.in.mapgen.sh Matlab import command follows.
-        ##    I have no idea what it's all about, so "new" matlab format will be
-        ##    a series of x y with "nan nan" breaking lines. (as NOAA provides)
-        ##  Old command:
+        # HB:  OLD v.in.mapgen.sh Matlab import command follows.
+        # I have no idea what it's all about, so "new" matlab format will be
+        # a series of x y with "nan nan" breaking lines. (as NOAA provides)
+        # Old command:
         #  tac $infile | $AWK 'BEGIN { FS="," ; R=0 }
         #    $1~/\d*/   { printf("L %d\n", R) }
         #    $1~/   .*/ { printf(" %lf %lf\n", $2, $1) ; ++R }
         #    $1~/END/   { }' | tac > "$TMP"
 
-        ## matlab format.
+        # matlab format.
         points = []
- 
+
         for line in inf:
             f = line.split()
             if f[0].lower() == 'nan':
                 if points != []:
                     outf.write("L %d 1\n" % len(points))
                     for point in points:
-                        outf.write(" %.15g %.15g %.15g\n" % tuple(map(float,point)))
+                        outf.write(" %.15g %.15g %.15g\n" % tuple(map(float, point)))
                     outf.write(" 1 %d\n" % cat)
                     cat += 1
                 points = []
@@ -122,7 +123,7 @@ def main():
                 if len(f) == 2:
                     f.append('0')
                 points.append(f)
-        
+
         if points != []:
             outf.write("L %d 1\n" % len(points))
             for point in points:
@@ -131,36 +132,36 @@ def main():
                 except ValueError:
                     grass.fatal(_("An error occurred on line '%s', exiting.") % line.strip())
             outf.write(" 1 %d\n" % cat)
-            cat += 1       
+            cat += 1
     else:
-        ## mapgen format.
+        # mapgen format.
         points = []
         for line in inf:
             if line[0] == '#':
                 if points != []:
                     outf.write("L %d 1\n" % len(points))
                     for point in points:
-                        outf.write(" %.15g %.15g\n" % tuple(map(float,point)))
+                        outf.write(" %.15g %.15g\n" % tuple(map(float, point)))
                     outf.write(" 1 %d\n" % cat)
                     cat += 1
                 points = []
             else:
                 points.append(line.rstrip('\r\n').split('\t'))
-        
+
         if points != []:
             outf.write("L %d 1\n" % len(points))
             for point in points:
-                outf.write(" %.15g %.15g\n" % tuple(map(float,point)))
+                outf.write(" %.15g %.15g\n" % tuple(map(float, point)))
             outf.write(" 1 %d\n" % cat)
             cat += 1
     outf.close()
     inf.close()
 
-    #### create digit header
+    # create digit header
     digfile = tmp + '.dig'
     outf = file(digfile, 'w')
-    t = string.Template(\
-"""ORGANIZATION: GRASSroots organization
+    t = string.Template(
+        """ORGANIZATION: GRASSroots organization
 DIGIT DATE:   $date
 DIGIT NAME:   $user@$host
 MAP NAME:     $name
@@ -175,12 +176,12 @@ VERTI:
     year = time.strftime("%Y")
     user = os.getenv('USERNAME') or os.getenv('LOGNAME')
     host = os.getenv('COMPUTERNAME') or os.uname()[1]
-    
-    s = t.substitute(prog = prog, name = name, date = date, year = year,
-                     user = user, host = host)
+
+    s = t.substitute(prog=prog, name=name, date=date, year=year,
+                     user=user, host=host)
     outf.write(s)
-    
-    #### process points list to ascii vector file (merge in vertices)
+
+    # process points list to ascii vector file (merge in vertices)
     inf = file(tmp)
     shutil.copyfileobj(inf, outf)
     inf.close()
@@ -188,13 +189,13 @@ VERTI:
     outf.close()
 
     if not name:
-        #### if no name for vector file given, cat to stdout
+        # if no name for vector file given, cat to stdout
         inf = file(digfile)
         shutil.copyfileobj(inf, sys.stdout)
         inf.close()
     else:
-        #### import to binary vector file
-        grass.message(_("Importing with v.in.ascii...")) 
+        # import to binary vector file
+        grass.message(_("Importing with v.in.ascii..."))
         try:
             grass.run_command('v.in.ascii', flags=do3D, input=digfile,
                               output=name, format='standard')
@@ -205,4 +206,3 @@ if __name__ == "__main__":
     options, flags = grass.parser()
     atexit.register(cleanup)
     main()
-

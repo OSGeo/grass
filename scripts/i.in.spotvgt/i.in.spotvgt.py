@@ -23,7 +23,7 @@
 #      -  gdal: http://www.gdal.org
 #
 # Notes:
-# * According to the faq (http://www.vgt.vito.be/faq/faq.html), SPOT vegetation 
+# * According to the faq (http://www.vgt.vito.be/faq/faq.html), SPOT vegetation
 #   coordinates refer to the center of a pixel.
 # * GDAL coordinates refer to the corner of a pixel
 #   -> correction of 0001/0001_LOG.TXT coordinates by 0.5 pixel
@@ -48,7 +48,7 @@
 import os
 import atexit
 import string
-import grass.script as grass
+import grass.script as gscript
 from grass.exceptions import CalledModuleError
 
 
@@ -67,103 +67,109 @@ vrt = """<VRTDataset rasterXSize="$XSIZE" rasterYSize="$YSIZE">
  </VRTRasterBand>
 </VRTDataset>"""
 
-#### a function for writing VRT files
+# a function for writing VRT files
+
+
 def create_VRT_file(projfile, vrtfile, infile):
     fh = file(projfile)
     kv = {}
     for l in fh:
-	f = l.rstrip('\r\n').split()
-	if f < 2:
-	    continue
-	kv[f[0]] = f[1]
+        f = l.rstrip('\r\n').split()
+        if f < 2:
+            continue
+        kv[f[0]] = f[1]
     fh.close()
 
     north_center = kv['CARTO_UPPER_LEFT_Y']
-    south_center = kv['CARTO_LOWER_LEFT_Y']
-    east_center  = kv['CARTO_UPPER_RIGHT_X']
-    west_center  = kv['CARTO_UPPER_LEFT_X']
+    # south_center = kv['CARTO_LOWER_LEFT_Y']
+    # east_center = kv['CARTO_UPPER_RIGHT_X']
+    west_center = kv['CARTO_UPPER_LEFT_X']
     map_proj_res = kv['MAP_PROJ_RESOLUTION']
-    xsize        = kv['IMAGE_UPPER_RIGHT_COL']
-    ysize        = kv['IMAGE_LOWER_RIGHT_ROW']
+    xsize = kv['IMAGE_UPPER_RIGHT_COL']
+    ysize = kv['IMAGE_LOWER_RIGHT_ROW']
 
-    resolution   = float(map_proj_res)
+    resolution = float(map_proj_res)
     north_corner = float(north_center) + resolution / 2
-    south_corner = float(south_center) - resolution / 2
-    east_corner  = float(east_center ) + resolution / 2
-    west_corner  = float(west_center ) - resolution / 2
+    # south_corner = float(south_center) - resolution / 2
+    # east_corner = float(east_center) + resolution / 2
+    west_corner = float(west_center) - resolution / 2
 
     t = string.Template(vrt)
-    s = t.substitute(NORTHCORNER = north_corner, WESTCORNER = west_corner,
-		     XSIZE = xsize, YSIZE = ysize, RESOLUTION = map_proj_res,
-		     FILENAME = infile)
+    s = t.substitute(NORTHCORNER=north_corner, WESTCORNER=west_corner,
+                     XSIZE=xsize, YSIZE=ysize, RESOLUTION=map_proj_res,
+                     FILENAME=infile)
     outf = file(vrtfile, 'w')
     outf.write(s)
     outf.close()
 
+
 def cleanup():
-   #### clean up the mess
-   grass.try_remove(vrtfile)
-   grass.try_remove(tmpfile)
+    # clean up the mess
+    gscript.try_remove(vrtfile)
+    gscript.try_remove(tmpfile)
+
 
 def main():
     global vrtfile, tmpfile
 
-    infile  = options['input']
+    infile = options['input']
     rast = options['output']
     also = flags['a']
 
-    #### check for gdalinfo (just to check if installation is complete)
-    if not grass.find_program('gdalinfo', '--help'):
-	grass.fatal(_("'gdalinfo' not found, install GDAL tools first (http://www.gdal.org)"))
+    # check for gdalinfo (just to check if installation is complete)
+    if not gscript.find_program('gdalinfo', '--help'):
+        gscript.fatal(_("'gdalinfo' not found, install GDAL tools first "
+                        "(http://www.gdal.org)"))
 
     pid = str(os.getpid())
-    tmpfile = grass.tempfile()
+    tmpfile = gscript.tempfile()
 
-    ################### let's go
+    # let's go
 
     spotdir = os.path.dirname(infile)
-    spotname = grass.basename(infile, 'hdf')
+    spotname = gscript.basename(infile, 'hdf')
 
     if rast:
-	name = rast
+        name = rast
     else:
-	name = spotname
+        name = spotname
 
-    if not grass.overwrite() and grass.find_file(name)['file']:
-	grass.fatal(_("<%s> already exists. Aborting.") % name)
+    if not gscript.overwrite() and gscript.find_file(name)['file']:
+        gscript.fatal(_("<%s> already exists. Aborting.") % name)
 
-    # still a ZIP file?  (is this portable?? see the r.in.srtm script for ideas)
+    # still a ZIP file?  (is this portable?? see the r.in.srtm script for
+    # ideas)
     if infile.lower().endswith('.zip'):
-	grass.fatal(_("Please extract %s before import.") % infile)
+        gscript.fatal(_("Please extract %s before import.") % infile)
 
     try:
-	p = grass.Popen(['file', '-ib', infile], stdout = grass.PIPE)
-	s = p.communicate()[0]
-	if s == "application/x-zip":
-	    grass.fatal(_("Please extract %s before import.") % infile)
+        p = gscript.Popen(['file', '-ib', infile], stdout=gscript.PIPE)
+        s = p.communicate()[0]
+        if s == "application/x-zip":
+            gscript.fatal(_("Please extract %s before import.") % infile)
     except:
-	pass
+        pass
 
-    ### create VRT header for NDVI
+    # create VRT header for NDVI
 
     projfile = os.path.join(spotdir, "0001_LOG.TXT")
     vrtfile = tmpfile + '.vrt'
 
     # first process the NDVI:
-    grass.try_remove(vrtfile)
+    gscript.try_remove(vrtfile)
     create_VRT_file(projfile, vrtfile, infile)
 
-    ## let's import the NDVI map...
-    grass.message(_("Importing SPOT VGT NDVI map..."))
+    # let's import the NDVI map...
+    gscript.message(_("Importing SPOT VGT NDVI map..."))
     try:
-        grass.run_command('r.in.gdal', input=vrtfile, output=name)
+        gscript.run_command('r.in.gdal', input=vrtfile, output=name)
     except CalledModuleError:
-        grass.fatal(_("An error occurred. Stop."))
+        gscript.fatal(_("An error occurred. Stop."))
 
-    grass.message(_("Imported SPOT VEGETATION NDVI map <%s>.") % name)
+    gscript.message(_("Imported SPOT VEGETATION NDVI map <%s>.") % name)
 
     #################
-    ## http://www.vgt.vito.be/faq/FAQS/faq19.html
+    # http://www.vgt.vito.be/faq/FAQS/faq19.html
     # What is the relation between the digital number and the real NDVI ?
     # Real NDVI =coefficient a * Digital Number + coefficient b
     #           = a * DN +b
@@ -173,28 +179,29 @@ def main():
 
     # clone current region
     # switch to a temporary region
-    grass.use_temp_region()
+    gscript.use_temp_region()
 
-    grass.run_command('g.region', raster = name, quiet = True)
+    gscript.run_command('g.region', raster=name, quiet=True)
 
-    grass.message(_("Remapping digital numbers to NDVI..."))
+    gscript.message(_("Remapping digital numbers to NDVI..."))
     tmpname = "%s_%s" % (name, pid)
-    grass.mapcalc("$tmpname = 0.004 * $name - 0.1", tmpname = tmpname, name = name)
-    grass.run_command('g.remove', type = 'raster', name = name, quiet = True, flags = 'f')
-    grass.run_command('g.rename', raster = (tmpname, name), quiet = True)
+    gscript.mapcalc("$tmpname = 0.004 * $name - 0.1", tmpname=tmpname, name=name)
+    gscript.run_command('g.remove', type='raster', name=name, quiet=True,
+                        flags='f')
+    gscript.run_command('g.rename', raster=(tmpname, name), quiet=True)
 
     # write cmd history:
-    grass.raster_history(name)
+    gscript.raster_history(name)
 
-    #apply color table:
-    grass.run_command('r.colors', map = name, color = 'ndvi', quiet = True)
+    # apply color table:
+    gscript.run_command('r.colors', map=name, color='ndvi', quiet=True)
 
     ##########################
     # second, optionally process the SM quality map:
-    
-    #SM Status Map
+
+    # SM Status Map
     # http://nieuw.vgt.vito.be/faq/FAQS/faq22.html
-    #Data about
+    # Data about
     # Bit NR 7: Radiometric quality for B0 coded as 0 if bad and 1 if good
     # Bit NR 6: Radiometric quality for B2 coded as 0 if bad and 1 if good
     # Bit NR 5: Radiometric quality for B3 coded as 0 if bad and 1 if good
@@ -205,7 +212,7 @@ def main():
     # Bit NR 0:	0	1	0		1
     # 		clear	shadow	uncertain	cloud
     #
-    #Note:
+    # Note:
     # pos 7     6    5    4    3    2   1   0 (bit position)
     #   128    64   32   16    8    4   2   1 (values for 8 bit)
     #
@@ -218,54 +225,55 @@ def main():
     # A good map threshold: >= 248
 
     if also:
-	grass.message(_("Importing SPOT VGT NDVI quality map..."))
-	grass.try_remove(vrtfile)
-	qname = spotname.replace('NDV','SM')
-	qfile = os.path.join(spotdir, qname)
-	create_VRT_file(projfile, vrtfile, qfile)
+        gscript.message(_("Importing SPOT VGT NDVI quality map..."))
+        gscript.try_remove(vrtfile)
+        qname = spotname.replace('NDV', 'SM')
+        qfile = os.path.join(spotdir, qname)
+        create_VRT_file(projfile, vrtfile, qfile)
 
-	## let's import the SM quality map...
-	smfile = name + '.sm'
+        # let's import the SM quality map...
+        smfile = name + '.sm'
         try:
-            grass.run_command('r.in.gdal', input=vrtfile, output=smfile)
+            gscript.run_command('r.in.gdal', input=vrtfile, output=smfile)
         except CalledModuleError:
-            grass.fatal(_("An error occurred. Stop."))
+            gscript.fatal(_("An error occurred. Stop."))
 
-	# some of the possible values:
-	rules = [r + '\n' for r in [
-	    '8 50 50 50',
-	    '11 70 70 70',
-	    '12 90 90 90',
-	    '60 grey',
-	    '155 blue',
-	    '232 violet',
-	    '235 red',
-	    '236 brown',
-	    '248 orange',
-	    '251 yellow',
-	    '252 green'
-	    ]]
-	grass.write_command('r.colors', map = smfile, rules = '-', stdin = rules)
+        # some of the possible values:
+        rules = [r + '\n' for r in ['8 50 50 50',
+                                    '11 70 70 70',
+                                    '12 90 90 90',
+                                    '60 grey',
+                                    '155 blue',
+                                    '232 violet',
+                                    '235 red',
+                                    '236 brown',
+                                    '248 orange',
+                                    '251 yellow',
+                                    '252 green']]
+        gscript.write_command('r.colors', map=smfile, rules='-', stdin=rules)
 
-	grass.message(_("Imported SPOT VEGETATION SM quality map <%s>.") % smfile)
-	grass.message(_("Note: A snow map can be extracted by category 252 (d.rast %s cat=252)") % smfile)
-	grass.message("")
-	grass.message(_("Filtering NDVI map by Status Map quality layer..."))
+        gscript.message(_("Imported SPOT VEGETATION SM quality map <%s>.") %
+                        smfile)
+        gscript.message(_("Note: A snow map can be extracted by category "
+                          "252 (d.rast %s cat=252)") % smfile)
+        gscript.message("")
+        gscript.message(_("Filtering NDVI map by Status Map quality layer..."))
 
-	filtfile = "%s_filt" % name
-	grass.mapcalc("$filtfile = if($smfile % 4 == 3 || ($smfile / 16) % 16 == 0, null(), $name)",
-		      filtfile = filtfile, smfile = smfile, name = name)
-	grass.run_command('r.colors', map = filtfile, color = 'ndvi', quiet = True)
-	grass.message(_("Filtered SPOT VEGETATION NDVI map <%s>.") % filtfile)
+        filtfile = "%s_filt" % name
+        gscript.mapcalc("$filtfile = if($smfile % 4 == 3 || "
+                        "($smfile / 16) % 16 == 0, null(), $name)",
+                        filtfile=filtfile, smfile=smfile, name=name)
+        gscript.run_command('r.colors', map=filtfile, color='ndvi', quiet=True)
+        gscript.message(_("Filtered SPOT VEGETATION NDVI map <%s>.") %
+                        filtfile)
 
-	# write cmd history:
-	grass.raster_history(smfile)
-	grass.raster_history(filtfile)
+        # write cmd history:
+        gscript.raster_history(smfile)
+        gscript.raster_history(filtfile)
 
-    grass.message(_("Done."))
+    gscript.message(_("Done."))
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gscript.parser()
     atexit.register(cleanup)
     main()
-

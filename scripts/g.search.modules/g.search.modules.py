@@ -50,7 +50,7 @@
 #% description: JSON format
 #% guisection: Output
 #%end
-
+from __future__ import print_function
 import os
 import sys
 
@@ -58,11 +58,12 @@ from grass.script.utils import diff_files, try_rmdir
 from grass.script import core as grass
 
 try:
-    import xml.etree.ElementTree   as etree
+    import xml.etree.ElementTree as etree
 except ImportError:
-    import elementtree.ElementTree as etree # Python <= 2.4
+    import elementtree.ElementTree as etree  # Python <= 2.4
 
-COLORIZE=False
+COLORIZE = False
+
 
 def main():
     global COLORIZE
@@ -79,7 +80,8 @@ def main():
 
     modules = _search_module(keywords, AND, manpages)
 
-    print_results(modules, out_format) 
+    print_results(modules, out_format)
+
 
 def print_results(data, out_format=None):
     """
@@ -107,30 +109,34 @@ def print_results(data, out_format=None):
     elif out_format == 'json':
         _print_results_json(data)
 
+
 def _print_results_shell(data):
     """Print just the name attribute"""
 
     for item in data:
-        print item['name']
+        print(item['name'])
+
 
 def _print_results_json(data):
     """Print JSON output"""
 
     import json
-    print json.dumps(data, sort_keys=True, indent=4, separators=(',', ': '))
+    print(json.dumps(data, sort_keys=True, indent=4, separators=(',', ': ')))
+
 
 def _print_results(data):
 
     import textwrap
 
     for item in data:
-        print '\n{}'.format(colorize(item['name'], attrs=['bold']))
+        print('\n{}'.format(colorize(item['name'], attrs=['bold'])))
         for attr in item['attributes']:
             out = '{}: {}'.format(attr, item['attributes'][attr])
-            out = textwrap.wrap(out, width=79, initial_indent=4*' ',
-                    subsequent_indent=4*' '+len(attr)*' '+'  ')
+            out = textwrap.wrap(out, width=79, initial_indent=4 * ' ',
+                                subsequent_indent=4 * ' ' + len(attr) * ' ' + '  ')
             for line in out:
-                print line
+                print(line)
+
 
 def colorize(text, attrs=None, pattern=None):
     """Colorize given text input
@@ -140,7 +146,6 @@ def colorize(text, attrs=None, pattern=None):
     :param string pattern: text to be highlighted in input text
     :return: colored string
     """
-    
 
     if COLORIZE:
         try:
@@ -155,6 +160,7 @@ def colorize(text, attrs=None, pattern=None):
         return text.replace(pattern, colored(pattern, attrs=attrs))
     else:
         return colored(text, attrs=attrs)
+
 
 def _search_module(keywords, logical_and=False, manpages=False):
     """Search modules by given keywords
@@ -200,11 +206,11 @@ def _search_module(keywords, logical_and=False, manpages=False):
                     found = [True]
 
                 description = colorize(description,
-                                        attrs=['underline'],
-                                        pattern=keyword)
+                                       attrs=['underline'],
+                                       pattern=keyword)
                 module_keywords = colorize(module_keywords,
-                                            attrs=['underline'],
-                                            pattern=keyword)
+                                           attrs=['underline'],
+                                           pattern=keyword)
 
         if False not in found:
             found_modules.append({
@@ -217,8 +223,9 @@ def _search_module(keywords, logical_and=False, manpages=False):
 
     return found_modules
 
+
 def _basic_search(pattern, name, description, module_keywords):
-    
+
     if name.lower().find(pattern) > -1 or\
        description.lower().find(pattern) > -1 or\
        module_keywords.lower().find(pattern) > -1:
@@ -226,6 +233,7 @@ def _basic_search(pattern, name, description, module_keywords):
         return True
     else:
         return False
+
 
 def _manpage_search(pattern, name):
 

@@ -28,61 +28,62 @@
 
 import sys
 import os
-from grass.script import core as grass
+
+from grass.script import core as gcore
 from grass.script import db as grassdb
 from grass.exceptions import CalledModuleError
+
 
 def main():
     test_file = options['test']
 
-    expected = grass.tempfile()
-    result = grass.tempfile()
+    expected = gcore.tempfile()
+    result = gcore.tempfile()
 
     dbconn = grassdb.db_connection()
-    grass.message(_("Using DB driver: %s") % dbconn['driver'])
+    gcore.message(_("Using DB driver: %s") % dbconn['driver'])
 
     infile = os.path.join(os.environ['GISBASE'], 'etc', 'db.test', test_file)
     inf = file(infile)
 
     while True:
-	type = inf.readline()
-	if not type:
-	    break
-	type = type.rstrip('\r\n')
+        type = inf.readline()
+        if not type:
+            break
+        type = type.rstrip('\r\n')
 
-	sql = inf.readline().rstrip('\r\n')
-	sys.stdout.write(sql + '\n')
+        sql = inf.readline().rstrip('\r\n')
+        sys.stdout.write(sql + '\n')
 
-	# Copy expected result to temp file
-
+        # Copy expected result to temp file
         try:
             if type == 'X':
-                grass.write_command('db.execute', input = '-', stdin = sql + '\n')
+                gcore.write_command('db.execute', input='-', stdin=sql + '\n')
             else:
                 resf = file(result, 'w')
-                grass.write_command('db.select', input = '-', flags = 'c', stdin = sql + '\n', stdout = resf)
+                gcore.write_command('db.select', input='-', flags='c',
+                                    stdin=sql + '\n', stdout=resf)
                 resf.close()
 
         except CalledModuleError:
-            grass.error("EXECUTE: ******** ERROR ********")
+            gcore.error("EXECUTE: ******** ERROR ********")
         else:
-            grass.message(_("EXECUTE: OK"))
+            gcore.message(_("EXECUTE: OK"))
 
-	expf = file(expected, 'w')
-	while True:
-	    res = inf.readline().rstrip('\r\n')
-	    if not res:
-		break
-	    expf.write(res + '\n')
-	expf.close()
+        expf = file(expected, 'w')
+        while True:
+            res = inf.readline().rstrip('\r\n')
+            if not res:
+                break
+            expf.write(res + '\n')
+        expf.close()
 
-	if type == 'S':
-	    if grass.call(['diff', result, expected]) != 0:
-		grass.error("RESULT: ******** ERROR ********")
-	    else:
-		grass.message(_("RESULT: OK"))
+        if type == 'S':
+            if gcore.call(['diff', result, expected]) != 0:
+                gcore.error("RESULT: ******** ERROR ********")
+            else:
+                gcore.message(_("RESULT: OK"))
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gcore.parser()
     main()
-
