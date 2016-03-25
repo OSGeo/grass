@@ -16,93 +16,94 @@ for details.
     >>> p.parse(expression, optype = 'relation')
     >>> print(p.relations, p.temporal, p.function)
     (['equal', 'during'], None, None)
-    >>> p = TemporalOperatorParser()    
+    >>> p = TemporalOperatorParser()
     >>> expression =  "{contains | starts}"
     >>> p.parse(expression)
     >>> print(p.relations, p.temporal, p.function)
     (['contains', 'starts'], None, None)
-    >>> p = TemporalOperatorParser()    
+    >>> p = TemporalOperatorParser()
     >>> expression =  "{&&, during}"
     >>> p.parse(expression, optype = 'boolean')
     >>> print(p.relations, p.temporal, p.function,p.aggregate)
     (['during'], 'l', '&&', '&')
-    >>> p = TemporalOperatorParser()    
+    >>> p = TemporalOperatorParser()
     >>> expression =  "{||, equal | during}"
     >>> p.parse(expression, optype = 'boolean')
     >>> print(p.relations, p.temporal, p.function,p.aggregate)
     (['equal', 'during'], 'l', '||', '|')
-    >>> p = TemporalOperatorParser()    
+    >>> p = TemporalOperatorParser()
     >>> expression =  "{||, equal | during, &}"
     >>> p.parse(expression, optype = 'boolean')
     >>> print(p.relations, p.temporal, p.function,p.aggregate)
     (['equal', 'during'], 'l', '||', '&')
-    >>> p = TemporalOperatorParser()    
+    >>> p = TemporalOperatorParser()
     >>> expression =  "{&&, during, |}"
     >>> p.parse(expression, optype = 'boolean')
     >>> print(p.relations, p.temporal, p.function,p.aggregate)
     (['during'], 'l', '&&', '|')
-    >>> p = TemporalOperatorParser()    
+    >>> p = TemporalOperatorParser()
     >>> expression =  "{&&, during, |, r}"
     >>> p.parse(expression, optype = 'boolean')
     >>> print(p.relations, p.temporal, p.function,p.aggregate)
     (['during'], 'r', '&&', '|')
-    >>> p = TemporalOperatorParser()    
+    >>> p = TemporalOperatorParser()
     >>> expression =  "{&&, during, u}"
     >>> p.parse(expression, optype = 'boolean')
     >>> print(p.relations, p.temporal, p.function,p.aggregate)
     (['during'], 'u', '&&', '&')
-    >>> p = TemporalOperatorParser()    
+    >>> p = TemporalOperatorParser()
     >>> expression =  "{:, during, r}"
     >>> p.parse(expression, optype = 'select')
     >>> print(p.relations, p.temporal, p.function)
     (['during'], 'r', ':')
-    >>> p = TemporalOperatorParser()    
+    >>> p = TemporalOperatorParser()
     >>> expression =  "{!:, equal | contains, d}"
     >>> p.parse(expression, optype = 'select')
     >>> print(p.relations, p.temporal, p.function)
     (['equal', 'contains'], 'd', '!:')
-    >>> p = TemporalOperatorParser()    
+    >>> p = TemporalOperatorParser()
     >>> expression =  "{#, during, r}"
     >>> p.parse(expression, optype = 'hash')
     >>> print(p.relations, p.temporal, p.function)
     (['during'], 'r', '#')
-    >>> p = TemporalOperatorParser()    
+    >>> p = TemporalOperatorParser()
     >>> expression =  "{#, equal | contains}"
     >>> p.parse(expression, optype = 'hash')
     >>> print(p.relations, p.temporal, p.function)
     (['equal', 'contains'], 'l', '#')
-    >>> p = TemporalOperatorParser()    
+    >>> p = TemporalOperatorParser()
     >>> expression =  "{+, during, r}"
     >>> p.parse(expression, optype = 'raster')
     >>> print(p.relations, p.temporal, p.function)
     (['during'], 'r', '+')
-    >>> p = TemporalOperatorParser()    
+    >>> p = TemporalOperatorParser()
     >>> expression =  "{/, equal | contains}"
     >>> p.parse(expression, optype = 'raster')
     >>> print(p.relations, p.temporal, p.function)
     (['equal', 'contains'], 'l', '/')
-    >>> p = TemporalOperatorParser()    
+    >>> p = TemporalOperatorParser()
     >>> expression =  "{+, equal | contains,intersect}"
     >>> p.parse(expression, optype = 'raster')
     >>> print(p.relations, p.temporal, p.function)
     (['equal', 'contains'], 'i', '+')
-    >>> p = TemporalOperatorParser()    
+    >>> p = TemporalOperatorParser()
     >>> expression =  "{*, contains,disjoint}"
     >>> p.parse(expression, optype = 'raster')
     >>> print(p.relations, p.temporal, p.function)
     (['contains'], 'd', '*')
-    >>> p = TemporalOperatorParser()    
+    >>> p = TemporalOperatorParser()
     >>> expression =  "{~, equal,left}"
     >>> p.parse(expression, optype = 'overlay')
     >>> print(p.relations, p.temporal, p.function)
     (['equal'], 'l', '~')
-    >>> p = TemporalOperatorParser()    
+    >>> p = TemporalOperatorParser()
     >>> expression =  "{^, over,right}"
     >>> p.parse(expression, optype = 'overlay')
     >>> print(p.relations, p.temporal, p.function)
     (['overlaps', 'overlapped'], 'r', '^')
 
 """
+from __future__ import print_function
 
 try:
     import ply.lex as lex
@@ -134,7 +135,7 @@ class TemporalOperatorLexer(object):
         'COMMA',
         'LEFTREF',
         'RIGHTREF',
-        'UNION', 
+        'UNION',
         'DISJOINT',
         'INTERSECT',
         'HASH',
@@ -142,11 +143,11 @@ class TemporalOperatorLexer(object):
         'AND',
         'DISOR',
         'XOR',
-        'NOT',        
+        'NOT',
         'MOD',
         'DIV',
         'MULT',
-        'ADD',      
+        'ADD',
         'SUB',
         'T_SELECT',
         'T_NOT_SELECT',
@@ -171,7 +172,7 @@ class TemporalOperatorLexer(object):
     t_AND                        = r'[&]'
     t_DISOR                     = r'\+'
     t_XOR                         = r'\^'
-    t_NOT                         = r'\~'    
+    t_NOT                         = r'\~'
     t_MOD                       = r'[\%]'
     t_DIV                         = r'[\/]'
     t_MULT                      = r'[\*]'
@@ -234,7 +235,7 @@ class TemporalOperatorLexer(object):
         while True:
              tok = self.lexer.token()
              if not tok: break
-             print tok
+             print(tok)
 
 ###############################################################################
 
@@ -251,19 +252,19 @@ class TemporalOperatorParser(object):
         self.aggregate = None
 
     def parse(self, expression,  optype = 'relation'):
-        self.optype = optype        
+        self.optype = optype
         self.parser.parse(expression)
-        # The parameter optype can be of type: select {:, during, r}, boolean{&&, contains, |}, 
+        # The parameter optype can be of type: select {:, during, r}, boolean{&&, contains, |},
         #                                                            raster{*, equal, |}, vector {|, starts, &},
         #                                                            hash{#, during, l} or relation {during}.
-    
+
     # Error rule for syntax errors.
     def p_error(self, t):
         raise SyntaxError("Unexpected syntax error")
 
     # Get the tokens from the lexer class
     tokens = TemporalOperatorLexer.tokens
- 
+
     def p_relation_operator(self, t):
         # The expression should always return a list of maps.
         """
@@ -294,7 +295,7 @@ class TemporalOperatorParser(object):
         """
         if not self.optype == 'boolean':
             raise SyntaxError("invalid syntax")
-        else:        
+        else:
             # Set three operator components.
             if isinstance(t[5], list):
                 self.relations = t[5]
@@ -303,7 +304,7 @@ class TemporalOperatorParser(object):
             self.temporal  = "l"
             self.function  = t[2] + t[3]
             self.aggregate = t[2]
-            
+
             t[0] = t[2]
 
     def p_relation_bool_combi_operator(self, t):
@@ -320,7 +321,7 @@ class TemporalOperatorParser(object):
         """
         if not self.optype == 'boolean':
             raise SyntaxError("invalid syntax")
-        else:        
+        else:
             # Set three operator components.
             if isinstance(t[5], list):
                 self.relations = t[5]
@@ -329,7 +330,7 @@ class TemporalOperatorParser(object):
             self.temporal  = "l"
             self.function  = t[2] + t[3]
             self.aggregate = t[7]
-            
+
             t[0] = t[2]
 
     def p_relation_bool_combi_operator2(self, t):
@@ -342,7 +343,7 @@ class TemporalOperatorParser(object):
         """
         if not self.optype == 'boolean':
             raise SyntaxError("invalid syntax")
-        else:        
+        else:
             # Set three operator components.
             if isinstance(t[5], list):
                 self.relations = t[5]
@@ -351,9 +352,9 @@ class TemporalOperatorParser(object):
             self.temporal  = t[7]
             self.function  = t[2] + t[3]
             self.aggregate = t[2]
-            
+
             t[0] = t[2]
-    
+
     def p_relation_bool_combi_operator3(self, t):
         # The expression should always return a list of maps.
         """
@@ -368,7 +369,7 @@ class TemporalOperatorParser(object):
         """
         if not self.optype == 'boolean':
             raise SyntaxError("invalid syntax")
-        else:        
+        else:
             # Set three operator components.
             if isinstance(t[5], list):
                 self.relations = t[5]
@@ -377,9 +378,9 @@ class TemporalOperatorParser(object):
             self.temporal  = t[9]
             self.function  = t[2] + t[3]
             self.aggregate = t[7]
-            
+
             t[0] = t[2]
-    
+
     def p_select_relation_operator(self, t):
         # The expression should always return a list of maps.
         """

@@ -33,7 +33,8 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from base import *
+from __future__ import print_function
+from .base import *
 
 
 class SpatialExtent(SQLDatabaseInterface):
@@ -1782,22 +1783,22 @@ class SpatialExtent(SQLDatabaseInterface):
     def print_info(self):
         """Print information about this class in human readable style"""
         #      0123456789012345678901234567890
-        print " +-------------------- Spatial extent ----------------------------------------+"
-        print " | North:...................... " + str(self.get_north())
-        print " | South:...................... " + str(self.get_south())
-        print " | East:.. .................... " + str(self.get_east())
-        print " | West:....................... " + str(self.get_west())
-        print " | Top:........................ " + str(self.get_top())
-        print " | Bottom:..................... " + str(self.get_bottom())
+        print(" +-------------------- Spatial extent ----------------------------------------+")
+        print(" | North:...................... " + str(self.get_north()))
+        print(" | South:...................... " + str(self.get_south()))
+        print(" | East:.. .................... " + str(self.get_east()))
+        print(" | West:....................... " + str(self.get_west()))
+        print(" | Top:........................ " + str(self.get_top()))
+        print(" | Bottom:..................... " + str(self.get_bottom()))
 
     def print_shell_info(self):
         """Print information about this class in shell style"""
-        print "north=" + str(self.get_north())
-        print "south=" + str(self.get_south())
-        print "east=" + str(self.get_east())
-        print "west=" + str(self.get_west())
-        print "top=" + str(self.get_top())
-        print "bottom=" + str(self.get_bottom())
+        print("north=" + str(self.get_north()))
+        print("south=" + str(self.get_south()))
+        print("east=" + str(self.get_east()))
+        print("west=" + str(self.get_west()))
+        print("top=" + str(self.get_top()))
+        print("bottom=" + str(self.get_bottom()))
 
 
 ###############################################################################

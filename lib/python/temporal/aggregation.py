@@ -17,10 +17,10 @@ for details.
 :author: Soeren Gebbert
 """
 
-from space_time_datasets import *
-from datetime_math import create_suffix_from_datetime
-from datetime_math import create_time_suffix
-from datetime_math import create_numeric_suffic
+from .space_time_datasets import *
+from .datetime_math import create_suffix_from_datetime
+from .datetime_math import create_time_suffix
+from .datetime_math import create_numeric_suffic
 import grass.script as gscript
 from grass.exceptions import CalledModuleError
 
