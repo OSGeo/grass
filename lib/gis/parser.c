@@ -437,7 +437,7 @@ int G_parser(int argc, char **argv)
     gui_envvar = G_getenv_nofatal("GUI");
     if (argc < 2 && (st->has_required || G__has_required_rule())
         && !st->no_interactive && isatty(0) &&
-        G_strcasecmp(gui_envvar, "text") != 0) {
+        (gui_envvar && G_strcasecmp(gui_envvar, "text") != 0)) {
 	if (module_gui_wx() == 0)
             return -1;
     }
