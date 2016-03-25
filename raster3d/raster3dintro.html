@@ -22,29 +22,35 @@ can be specified at import time with a given import module such as
 
 <div align="center" style="margin: 10px">
 <img src="raster3d_layout.png" border=0><br>
-<i>The 3D raster map coordinate system and tile layout of the RASTER3D library</i>
+<i>
+    The 3D raster map coordinate system and the internal tile layout of
+    the RASTER3D library
+</i>
 </div>
+
 
 <h3>Terminology and naming</h3>
 
-GRASS GIS uses terminology where continuous 3D data represented by regular grid
+In GRASS GIS terminology, continuous 3D data represented by regular grid
 or lattice is called <em>3D raster map</em>.
-3D raster map works in 3D in the same as (2D) raster map in 2D,
+3D raster map works in 3D in the same was as (2D) raster map in 2D,
 so it is called the same except for the additional 3D.
 Some literature or other software may use terms such as 3D grid, 3D lattice,
 3D matrix, 3D array, volume, voxel, voxel model, or voxel cube.
 Note that terms volume and volumetric often refer to measuring
 volume (amount) of some substance which may or may not be related to 3D rasters.
 
+<p>
 Note that GRASS GIS uses the term 3D raster map or just 3D raster for short,
 rather than 3D raster layer because term map emphasizes
 the mapping of positions to values which is the purpose of 3D raster map
-(in mathematics, map or mapping is close to a term function).
-While the term layer emphasizes overlaying or stacking up.
-The former is not the only only operation done with data
+(in mathematics, map or mapping is close to a term function)
+On the other hand, the term layer emphasizes overlaying or stacking up.
+The former is not the only operation done with data
 and the latter could be confusing in case of 3D raster data.
 
-3D raster map is divided into cells in the same as the (2D) raster map.
+<p>
+3D raster map is divided into cells in the same way as the (2D) raster map.
 A cell is a cuboid or cube depending on the resolution.
 The resolution influences volume of one cell.
 Some literature or other software may use terms such as volume, volume unit,
@@ -53,11 +59,14 @@ Note that voxel can be sometimes used to refer to a whole 3D raster
 and that for example in 3D computer graphics, voxel can denote object
 with some complicated shape.
 
+<p>
 Type of map and element name in GRASS GIS is called <code>raster_3d</code>.
 The module family prefix is <code>r3</code>.
-Occasionally, for example in Python, 3D raster related things can be
+Occasionally, 3D raster related things can be
 referred differently, for example according to a programming language standards.
+This might be the case of some functions or classes in Python.
 
+<p>
 In GRASS GIS 3D rasters as stored in tiles which are hidden from user most
 of the time. When analyzing or visualizing 3D rasters user can create
 slices or cross sections. Slices can be horizontal, vertical, or general
@@ -65,11 +74,16 @@ plains going through a 3D raster. Slices, especially the horizontal ones, may be
 called layers in some literature or some other software.
 Cross sections are general functions, e.g. defined by 2D raster, going through
 a 3D raster.
+Another often used term is an isosuface which has the same relation to
+3D raster as contour (isoline) to a 2D raster. An isosurface is
+a surface that represent places with a constant value.
 
+<p>
 When 3D raster is used in the way that vertical dimension represents time
 3D raster can be referred to as space time cubes (STC) or space time cube
 3D raster. Some literature may also use space time voxel cube,
 space time voxel model or some other combination.
+
 
 <h3>3D raster import</h3>
 
@@ -133,6 +147,13 @@ NetCDF export of 3D raster maps can be performed using the module
 <a href="r3.out.netcdf.html">r3.out.netcdf</a>. It supports 3D raster maps
 with spatial dimensions and temporal (vertical) dimension.
 
+
+<h3>Working with 3D visualization software</h3>
+
+GRASS GIS can be used for visualization of 3D rasters, however
+it has also tools to easily export the data into other visualization
+packages.
+
 <p>
 GRASS GIS 3D raster maps can be exported to VTK
 using <a href="r3.out.vtk.html">r3.out.vtk</a>.
@@ -146,10 +167,10 @@ and GRASS GIS vector maps can be exported to VTK with
 <a href="v.out.vtk.html">v.out.vtk</a>.
 
 <p>
-Alternatively, GRASS 3D raster maps can be imported and exported from/to Vis5D
-(<a href="r3.in.v5d.html">r3.in.v5d</a>, <a href="r3.out.v5d.html">r3.out.v5d</a>).
-Note that Vis5D is limited in the number of supported volumes.
-<!-- it is not clear what 'volume' means here -->
+Alternatively, GRASS 3D raster maps can be imported and exported from/to
+<em><a href="http://vis5d.sourceforge.net/">Vis5D</a></em>
+(<a href="r3.in.v5d.html">r3.in.v5d</a>,
+<a href="r3.out.v5d.html">r3.out.v5d</a>).
 
 
 <h3>3D raster data types</h3>
