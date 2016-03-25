@@ -26,6 +26,7 @@ import sys
 from grass.script import core as grass
 from grass.script.utils import split
 
+
 def main():
     mon = grass.gisenv().get('MONITOR', None)
     if not mon:
@@ -38,25 +39,25 @@ def main():
     try:
         fd = open(monCmd, 'r')
         cmdList = fd.readlines()
-        
+
         grass.run_command('d.erase')
-        
+
         for cmd in cmdList:
             grass.call(split(cmd))
     except IOError as e:
-        grass.fatal(_("Unable to open file '%s' for reading. Details: %s") % \
-                        (monCmd, e))
-    
+        grass.fatal(_("Unable to open file '%s' for reading. Details: %s") %
+                    (monCmd, e))
+
     fd.close()
-    
+
     # restore cmd file
     try:
         fd = open(monCmd, "w")
         fd.writelines(cmdList)
     except IOError as e:
-        grass.fatal(_("Unable to open file '%s' for writing. Details: %s") % \
-                        (monCmd, e))
-    
+        grass.fatal(_("Unable to open file '%s' for writing. Details: %s") %
+                    (monCmd, e))
+
     return 0
 
 if __name__ == "__main__":

@@ -43,7 +43,7 @@ import shutil
 import glob
 from grass.script.utils import try_rmdir, try_remove, basename
 from grass.script import vector as gvect
-from grass.script import core as grass
+from grass.script import core as gcore
 from grass.exceptions import CalledModuleError
 
 
@@ -54,113 +54,115 @@ def main():
 
     e00tmp = str(os.getpid())
 
-    #### check for avcimport
-    if not grass.find_program('avcimport'):
-	grass.fatal(_("'avcimport' program not found, install it first") +
-		    "\n" +
-		    "http://avce00.maptools.org")
+    # check for avcimport
+    if not gcore.find_program('avcimport'):
+        gcore.fatal(_("'avcimport' program not found, install it first") +
+                    "\n" + "http://avce00.maptools.org")
 
-    #### check for e00conv
-    if not grass.find_program('e00conv'):
-	grass.fatal(_("'e00conv' program not found, install it first") +
-		    "\n" +
-		    "http://avce00.maptools.org")
+    # check for e00conv
+    if not gcore.find_program('e00conv'):
+        gcore.fatal(_("'e00conv' program not found, install it first") +
+                    "\n" + "http://avce00.maptools.org")
 
     # check that the user didn't use all three, which gets past the parser.
-    if type not in ['point','line','area']:
-	grass.fatal(_('Must specify one of "point", "line", or "area".'))
+    if type not in ['point', 'line', 'area']:
+        gcore.fatal(_('Must specify one of "point", "line", or "area".'))
 
     e00name = basename(filename, 'e00')
     # avcimport only accepts 13 chars:
     e00shortname = e00name[:13]
 
-    #check if this is a split E00 file (.e01, .e02 ...):
+    # check if this is a split E00 file (.e01, .e02 ...):
     merging = False
     if os.path.exists(e00name + '.e01') or os.path.exists(e00name + '.E01'):
-	grass.message(_("Found that E00 file is split into pieces (.e01, ...). Merging..."))
-	merging = True
+        gcore.message(_("Found that E00 file is split into pieces (.e01, ...)."
+                        " Merging..."))
+        merging = True
 
     if vect:
-	name = vect
+        name = vect
     else:
-	name = e00name
+        name = e00name
 
-    ### do import
+    # do import
 
-    #make a temporary directory
-    tmpdir = grass.tempfile()
+    # make a temporary directory
+    tmpdir = gcore.tempfile()
     try_remove(tmpdir)
     os.mkdir(tmpdir)
 
-    files = glob.glob(e00name + '.e[0-9][0-9]') + glob.glob(e00name + '.E[0-9][0-9]')
+    files = glob.glob(
+        e00name + '.e[0-9][0-9]') + glob.glob(e00name + '.E[0-9][0-9]')
     for f in files:
-	shutil.copy(f, tmpdir)
+        shutil.copy(f, tmpdir)
 
-    #change to temporary directory to later avoid removal problems (rm -r ...)
+    # change to temporary directory to later avoid removal problems (rm -r ...)
     os.chdir(tmpdir)
 
-    #check for binay E00 file (we can just check if import fails):
-    #avcimport doesn't set exist status :-(
+    # check for binay E00 file (we can just check if import fails):
+    # avcimport doesn't set exist status :-(
 
     if merging:
-	files.sort()
-	filename = "%s.cat.%s.e00" % (e00name, e00tmp)
-	outf = file(filename, 'wb')
-	for f in files:
-	    inf = file(f, 'rb')
-	    shutil.copyfileobj(inf, outf)
-	    inf.close()
-	outf.close()
+        files.sort()
+        filename = "%s.cat.%s.e00" % (e00name, e00tmp)
+        outf = file(filename, 'wb')
+        for f in files:
+            inf = file(f, 'rb')
+            shutil.copyfileobj(inf, outf)
+            inf.close()
+        outf.close()
 
     nuldev = file(os.devnull, 'w+')
 
-    grass.message(_("An error may appear next which will be ignored..."))
-    if grass.call(['avcimport', filename, e00shortname], stdout = nuldev, stderr = nuldev) == 1:
-	grass.message(_("E00 ASCII found and converted to Arc Coverage in current directory"))
+    gcore.message(_("An error may appear next which will be ignored..."))
+    if gcore.call(['avcimport', filename, e00shortname], stdout=nuldev,
+                  stderr=nuldev) == 1:
+        gcore.message(_("E00 ASCII found and converted to Arc Coverage in "
+                        "current directory"))
     else:
-	grass.message(_("E00 Compressed ASCII found. Will uncompress first..."))
-	try_remove(e00shortname)
-	grass.call(['e00conv', filename, e00tmp + '.e00'])
-	grass.message(_("...converted to Arc Coverage in current directory"))
-	grass.call(['avcimport', e00tmp + '.e00', e00shortname], stderr = nuldev)
+        gcore.message(
+            _("E00 Compressed ASCII found. Will uncompress first..."))
+        try_remove(e00shortname)
+        gcore.call(['e00conv', filename, e00tmp + '.e00'])
+        gcore.message(_("...converted to Arc Coverage in current directory"))
+        gcore.call(['avcimport', e00tmp + '.e00', e00shortname], stderr=nuldev)
 
-    #SQL name fix:
+    # SQL name fix:
     name = name.replace('-', '_')
 
-    ## let's import...
-    grass.message(_("Importing %ss...") % type)
+    # let's import...
+    gcore.message(_("Importing %ss...") % type)
 
-    layer = dict(point = 'LAB', line = 'ARC', area = ['LAB','ARC'])
-    itype = dict(point = 'point', line = 'line', area = 'centroid')
+    layer = dict(point='LAB', line='ARC', area=['LAB', 'ARC'])
+    itype = dict(point='point', line='line', area='centroid')
 
     try:
-        grass.run_command('v.in.ogr', flags='o', input=e00shortname,
+        gcore.run_command('v.in.ogr', flags='o', input=e00shortname,
                           layer=layer[type], type=itype[type],
                           output=name)
     except CalledModuleError:
-        grass.fatal(_("An error occurred while running v.in.ogr"))
+        gcore.fatal(_("An error occurred while running v.in.ogr"))
 
-    grass.message(_("Imported <%s> vector map <%s>.") % (type, name))
+    gcore.message(_("Imported <%s> vector map <%s>.") % (type, name))
 
-    #### clean up the mess
+    # clean up the mess
     for root, dirs, files in os.walk('.', False):
-	for f in files:
-	    path = os.path.join(root, f)
-	    try_remove(path)
-	for d in dirs:
-	    path = os.path.join(root, d)
-	    try_rmdir(path)
+        for f in files:
+            path = os.path.join(root, f)
+            try_remove(path)
+        for d in dirs:
+            path = os.path.join(root, d)
+            try_rmdir(path)
 
     os.chdir('..')
     os.rmdir(tmpdir)
-	
-    #### end
-    grass.message(_("Done."))
+
+    # end
+    gcore.message(_("Done."))
 
     # write cmd history:
     gvect.vector_history(name)
 
 if __name__ == "__main__":
-    options, flags = grass.parser()
+    options, flags = gcore.parser()
     main()
-

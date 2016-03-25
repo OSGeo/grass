@@ -43,36 +43,38 @@ from grass.script.utils import try_rmdir, try_remove
 from grass.script import core as grass
 from grass.script import vector as vector
 
+
 def cleanup():
     try_rmdir(basedir)
+
 
 def main():
     infile = options['input']
     compression_off = flags['c']
-    
+
     global basedir
     basedir = grass.tempdir()
-    
+
     # check if vector map exists
-    gfile = grass.find_file(infile, element = 'vector')
+    gfile = grass.find_file(infile, element='vector')
     if not gfile['name']:
         grass.fatal(_("Vector map <%s> not found") % infile)
-    
+
     # check if input vector map is in the native format
     if vector.vector_info(gfile['fullname'])['format'] != 'native':
-        grass.fatal(_("Unable to pack vector map <%s>. Only native format supported.") % \
-                        gfile['fullname'])
-    
+        grass.fatal(_("Unable to pack vector map <%s>. Only native format supported.") %
+                    gfile['fullname'])
+
     # split the name if there is the mapset name
     if infile.find('@'):
         infile = infile.split('@')[0]
-    
+
     # output name
     if options['output']:
         outfile = options['output']
     else:
         outfile = infile + '.pack'
-    
+
     # check if exists the output file
     if os.path.exists(outfile):
         if os.getenv('GRASS_OVERWRITE'):
@@ -80,18 +82,18 @@ def main():
             try_remove(outfile)
         else:
             grass.fatal(_("option <%s>: <%s> exists.") % ("output", outfile))
-    
+
     # prepare for packing
     grass.verbose(_("Packing <%s>...") % (gfile['fullname']))
-    
-    # write tar file, optional compression 
+
+    # write tar file, optional compression
     if compression_off:
-        tar = tarfile.open(name = outfile, mode = 'w:')
+        tar = tarfile.open(name=outfile, mode='w:')
     else:
-        tar = tarfile.open(name = outfile, mode = 'w:gz')
+        tar = tarfile.open(name=outfile, mode='w:gz')
     tar.add(gfile['file'], infile)
-    
-    # check if exist a db connection for the vector 
+
+    # check if exist a db connection for the vector
     db_vect = vector.vector_db(gfile['fullname'])
     if not db_vect:
         grass.verbose(_('There is not database connected with vector map <%s>') % gfile['fullname'])
@@ -99,14 +101,14 @@ def main():
         # for each layer connection save a table in sqlite database
         sqlitedb = os.path.join(basedir, 'db.sqlite')
         for i, dbconn in db_vect.iteritems():
-            grass.run_command('db.copy', from_driver = dbconn['driver'], 
-                              from_database = dbconn['database'],
-                              from_table =  dbconn['table'], 
-                              to_driver = 'sqlite', to_database = sqlitedb, 
-                              to_table = dbconn['table'])
+            grass.run_command('db.copy', from_driver=dbconn['driver'],
+                              from_database=dbconn['database'],
+                              from_table=dbconn['table'],
+                              to_driver='sqlite', to_database=sqlitedb,
+                              to_table=dbconn['table'])
         tar.add(sqlitedb, 'db.sqlite')
-    
-    # add to the tar file the PROJ files to check when unpack file    
+
+    # add to the tar file the PROJ files to check when unpack file
     gisenv = grass.gisenv()
     for support in ['INFO', 'UNITS', 'EPSG']:
         path = os.path.join(gisenv['GISDBASE'], gisenv['LOCATION_NAME'],
@@ -114,9 +116,9 @@ def main():
         if os.path.exists(path):
             tar.add(path, 'PROJ_' + support)
     tar.close()
-    
+
     grass.message(_("Pack file <%s> created") % os.path.join(os.getcwd(), outfile))
-            
+
 if __name__ == "__main__":
     options, flags = grass.parser()
     atexit.register(cleanup)

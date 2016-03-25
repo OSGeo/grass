@@ -77,7 +77,7 @@ def main():
 
     maptable = f['table']
     database = f['database']
-    driver   = f['driver']
+    driver = f['driver']
 
     if driver == 'dbf':
         grass.fatal(_("JOIN is not supported for tables stored in DBF format"))
@@ -86,7 +86,7 @@ def main():
         grass.fatal(_("There is no table connected to this map. Unable to join any column."))
 
     # check if column is in map table
-    if not grass.vector_columns(map, layer).has_key(column):
+    if column not in grass.vector_columns(map, layer):
         grass.fatal(_("Column <%s> not found in table <%s>") % (column,
                                                                 maptable))
 
@@ -154,7 +154,9 @@ def main():
                                    otable=otable, ocolumn=ocolumn,
                                    colname=colname)
         grass.debug(stmt, 1)
-        grass.verbose(_("Updating column <%s> of vector map <%s>...") % (colname, map))
+        grass.verbose(
+            _("Updating column <%s> of vector map <%s>...") %
+            (colname, map))
         try:
             grass.write_command('db.execute', stdin=stmt, input='-',
                                 database=database, driver=driver)

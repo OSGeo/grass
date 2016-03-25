@@ -47,6 +47,7 @@ import sys
 import os
 import grass.script as grass
 
+
 def uniq(l):
     result = []
     last = None
@@ -55,6 +56,7 @@ def uniq(l):
             result.append(i)
             last = i
     return result
+
 
 def main():
     mapname = options['map']
@@ -75,13 +77,13 @@ def main():
         colnames = ['cat']
 
     if option == 'coor':
-        columns = ['dummy1','dummy2','dummy3']
-        extracolnames = ['x','y','z']
+        columns = ['dummy1', 'dummy2', 'dummy3']
+        extracolnames = ['x', 'y', 'z']
     else:
         columns = ['dummy1']
         extracolnames = [option]
 
-    if units in ['p','percent']:
+    if units in ['p', 'percent']:
         unitsp = 'meters'
     elif units:
         unitsp = units
@@ -90,7 +92,7 @@ def main():
 
     # NOTE: we suppress -1 cat and 0 cat
     if isConnection:
-        p = grass.pipe_command('v.db.select', quiet = True, flags='c', map = mapname, layer = layer)
+        p = grass.pipe_command('v.db.select', quiet=True, flags='c', map=mapname, layer=layer)
         records1 = []
         for line in p.stdout:
             cols = line.rstrip('\r\n').split('|')
@@ -100,23 +102,23 @@ def main():
         p.wait()
         if p.returncode != 0:
             sys.exit(1)
-        
+
         records1.sort()
 
         if len(records1) == 0:
             try:
-                f = grass.vector_db(map = mapname)[int(layer)]
+                f = grass.vector_db(map=mapname)[int(layer)]
                 grass.fatal(_("There is a table connected to input vector map '%s', but"
                               "there are no categories present in the key column '%s'. Consider using"
                               "v.to.db to correct this.") % (mapname, f['key']))
             except KeyError:
                 pass
 
-        #fetch the requested attribute sorted by cat:
-        p = grass.pipe_command('v.to.db', flags = 'p',
-                               quiet = True,
-                               map = mapname, option = option, columns = columns,
-                               layer = layer, units = unitsp)
+        # fetch the requested attribute sorted by cat:
+        p = grass.pipe_command('v.to.db', flags='p',
+                               quiet=True,
+                               map=mapname, option=option, columns=columns,
+                               layer=layer, units=unitsp)
         records2 = []
         for line in p.stdout:
             fields = line.rstrip('\r\n').split('|')
@@ -126,7 +128,7 @@ def main():
         p.wait()
         records2.sort()
 
-        #make pre-table
+        # make pre-table
         # len(records1) may not be the same as len(records2) because
         # v.db.select can return attributes that are not linked to features.
         records3 = []
@@ -134,7 +136,7 @@ def main():
             records3.append(filter(lambda r1: r1[0] == r2[0], records1)[0] + r2[1:])
     else:
         records1 = []
-        p = grass.pipe_command('v.category', inp = mapname, layer = layer, option = 'print')
+        p = grass.pipe_command('v.category', inp=mapname, layer=layer, option='print')
         for line in p.stdout:
             field = int(line.rstrip())
             if field > 0:
@@ -143,10 +145,10 @@ def main():
         records1.sort()
         records1 = uniq(records1)
 
-        #make pre-table
-        p = grass.pipe_command('v.to.db', flags = 'p',
-                               map = mapname, option = option, columns = columns,
-                               layer = layer, units = unitsp)
+        # make pre-table
+        p = grass.pipe_command('v.to.db', flags='p',
+                               map=mapname, option=option, columns=columns,
+                               layer=layer, units=unitsp)
         records3 = []
         for line in p.stdout:
             fields = line.split('|')
@@ -159,11 +161,11 @@ def main():
     # print table header
     sys.stdout.write('|'.join(colnames + extracolnames) + '\n')
 
-    #make and print the table:
+    # make and print the table:
     numcols = len(colnames) + len(extracolnames)
 
     # calculate percents if requested
-    if units != '' and units in ['p','percent']:
+    if units != '' and units in ['p', 'percent']:
         # calculate total area value
         areatot = 0
         for r in records3:
@@ -176,12 +178,12 @@ def main():
     # sort results
     if options['sort']:
         if options['sort'] == 'asc':
-            records3.sort(key = lambda r: r[-1])
+            records3.sort(key=lambda r: r[-1])
         else:
-            records3.sort(key = lambda r: r[-1], reverse = True)
-    
+            records3.sort(key=lambda r: r[-1], reverse=True)
+
     for r in records3:
-        sys.stdout.write('|'.join(map(str,r)) + '\n')
+        sys.stdout.write('|'.join(map(str, r)) + '\n')
 
 if __name__ == "__main__":
     options, flags = grass.parser()

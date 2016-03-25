@@ -204,7 +204,7 @@ def main():
     limit = float(value)
     if mode == 'greater' and method == 'rmarea':
         grass.fatal(_("You have to specify mode='lesser' with method='rmarea'"))
-    
+
     if not grass.find_file(infile)['name']:
         grass.fatal(_("Raster map <%s> not found") % infile)
 
