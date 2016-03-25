@@ -10,8 +10,9 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from abstract_dataset import *
-from datetime_math import *
+from __future__ import print_function
+from .abstract_dataset import *
+from .datetime_math import *
 
 
 class AbstractMapDataset(AbstractDataset):
@@ -199,16 +200,16 @@ class AbstractMapDataset(AbstractDataset):
         if self.get_type() == "raster":
             #                1         2         3         4         5         6         7
             #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
-            print " +-------------------- Raster Dataset ----------------------------------------+"
+            print(" +-------------------- Raster Dataset ----------------------------------------+")
         if self.get_type() == "raster3d":
             #                1         2         3         4         5         6         7
             #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
-            print " +-------------------- 3D Raster Dataset -------------------------------------+"
+            print(" +-------------------- 3D Raster Dataset -------------------------------------+")
         if self.get_type() == "vector":
             #                1         2         3         4         5         6         7
             #      0123456789012345678901234567890123456789012345678901234567890123456789012345678
-            print " +-------------------- Vector Dataset ----------------------------------------+"
-        print " |                                                                            |"
+            print(" +-------------------- Vector Dataset ----------------------------------------+")
+        print(" |                                                                            |")
         self.base.print_info()
         self.temporal_extent.print_info()
         if self.is_topology_build():
@@ -228,8 +229,8 @@ class AbstractMapDataset(AbstractDataset):
                 else:
                     string += ",%s" % ds
                 count += 1
-        print " | Registered datasets ........ " + string
-        print " +----------------------------------------------------------------------------+"
+        print(" | Registered datasets ........ " + string)
+        print(" +----------------------------------------------------------------------------+")
 
     def print_shell_info(self):
         """Print information about this object in shell style"""
@@ -247,7 +248,7 @@ class AbstractMapDataset(AbstractDataset):
                 else:
                     string += ",%s" % ds
                 count += 1
-            print "registered_datasets=" + string
+            print("registered_datasets=" + string)
 
         if self.is_topology_build():
             self.print_topology_shell_info()
@@ -539,25 +540,25 @@ class AbstractMapDataset(AbstractDataset):
                >>> map      = tgis.RasterDataset(None)
                >>> temp_ext = tgis.RasterRelativeTime(start_time=1, end_time=2, unit="years")
                >>> map.set_temporal_extent(temp_ext)
-               >>> print map.get_temporal_extent_as_tuple()
+               >>> print(map.get_temporal_extent_as_tuple())
                (1, 2)
                >>> map      = tgis.VectorDataset(None)
                >>> temp_ext = tgis.VectorAbsoluteTime(start_time=datetime.datetime(2000, 1, 1),
                ...                                        end_time=datetime.datetime(2001, 1, 1))
                >>> map.set_temporal_extent(temp_ext)
-               >>> print map.get_temporal_extent_as_tuple()
+               >>> print(map.get_temporal_extent_as_tuple())
                (datetime.datetime(2000, 1, 1, 0, 0), datetime.datetime(2001, 1, 1, 0, 0))
 
                >>> map1 = tgis.VectorDataset("A@P")
                >>> check = map1.set_absolute_time(datetime.datetime(2000,5,5), datetime.datetime(2005,6,6))
-               >>> print map1.get_temporal_extent_as_tuple()
+               >>> print(map1.get_temporal_extent_as_tuple())
                (datetime.datetime(2000, 5, 5, 0, 0), datetime.datetime(2005, 6, 6, 0, 0))
                >>> map2 = tgis.RasterDataset("B@P")
                >>> check = map2.set_absolute_time(datetime.datetime(1990,1,1), datetime.datetime(1999,8,1))
-               >>> print map2.get_temporal_extent_as_tuple()
+               >>> print(map2.get_temporal_extent_as_tuple())
                (datetime.datetime(1990, 1, 1, 0, 0), datetime.datetime(1999, 8, 1, 0, 0))
                >>> map2.set_temporal_extent(map1.get_temporal_extent())
-               >>> print map2.get_temporal_extent_as_tuple()
+               >>> print(map2.get_temporal_extent_as_tuple())
                (datetime.datetime(2000, 5, 5, 0, 0), datetime.datetime(2005, 6, 6, 0, 0))
 
         """
@@ -710,7 +711,7 @@ class AbstractMapDataset(AbstractDataset):
                >>> map      = tgis.RasterDataset(None)
                >>> spat_ext = tgis.SpatialExtent(north=10, south=-10, east=20, west=-20, top=5, bottom=-5)
                >>> map.set_spatial_extent(spat_ext)
-               >>> print map.get_spatial_extent_as_tuple()
+               >>> print(map.get_spatial_extent_as_tuple())
                (10.0, -10.0, 20.0, -20.0, 5.0, -5.0)
 
         """
@@ -729,7 +730,7 @@ class AbstractMapDataset(AbstractDataset):
                >>> spat_ext = tgis.SpatialExtent(north=10, south=-10, east=20, west=-20, top=5, bottom=-5)
                >>> map.set_spatial_extent(spat_ext)
                >>> map.spatial_buffer(10)
-               >>> print map.get_spatial_extent_as_tuple()
+               >>> print(map.get_spatial_extent_as_tuple())
                (20.0, -20.0, 30.0, -30.0, 15.0, -15.0)
 
         """
@@ -756,7 +757,7 @@ class AbstractMapDataset(AbstractDataset):
                >>> spat_ext = tgis.SpatialExtent(north=10, south=-10, east=20, west=-20, top=5, bottom=-5)
                >>> map.set_spatial_extent(spat_ext)
                >>> map.spatial_buffer_2d(10)
-               >>> print map.get_spatial_extent_as_tuple()
+               >>> print(map.get_spatial_extent_as_tuple())
                (20.0, -20.0, 30.0, -30.0, 5.0, -5.0)
 
         """

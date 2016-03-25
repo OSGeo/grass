@@ -18,7 +18,7 @@ import sys
 from multiprocessing import Process, Lock, Pipe
 import logging
 from ctypes import *
-from core import *
+from .core import *
 import grass.lib.gis as libgis
 import grass.lib.raster as libraster
 import grass.lib.vector as libvector
@@ -59,7 +59,7 @@ class RPCDefs(object):
 
 
 def _read_map_full_info(lock, conn, data):
-    """Read full map specific metadata from the spatial database using 
+    """Read full map specific metadata from the spatial database using
        PyGRASS functions.
 
        :param lock: A multiprocessing.Lock instance
@@ -85,21 +85,21 @@ def _read_map_full_info(lock, conn, data):
 
 def _read_raster_full_info(name, mapset):
     """Read raster info, history and cats using PyGRASS RasterRow
-       and return a dictionary. Colors should be supported in the 
+       and return a dictionary. Colors should be supported in the
        future.
     """
-    
+
     info = {}
     r = RasterRow(name=name, mapset=mapset)
     if r.exist() is True:
         r.open("r")
-        
+
         for item in r.info:
             info[item[0]] = item[1]
 
         for item in r.hist:
             info[item[0]] = item[1]
-        
+
         info["full_name"] = r.name_mapset()
         info["mtype"] = r.mtype
         if r.cats:
@@ -150,14 +150,14 @@ def _read_vector_full_info(name, mapset, layer = None):
         info["title"] = v.title
         info["thresh"] = v.thresh
         info["zone"] = v.zone
-        vtypes = ['areas', 'dblinks', 'faces', 'holes', 'islands', 
-                  'kernels', 'lines', 'nodes', 'points', 'updated_lines', 
+        vtypes = ['areas', 'dblinks', 'faces', 'holes', 'islands',
+                  'kernels', 'lines', 'nodes', 'points', 'updated_lines',
                   'updated_nodes', 'volumes']
         for vtype in vtypes:
             info[vtype] = v.number_of(vtype)
-            
+
         info.update(v.num_primitives())
-        
+
         if v.table is not None:
             info["columns"] = v.table.columns
 
@@ -293,15 +293,15 @@ def _available_mapsets(lock, conn, data):
         while mapsets[count]:
             char_list = ""
             mapset = mapsets[count]
-            
+
             permission = libgis.G_mapset_permissions(mapset)
             in_search_path = libgis.G_is_mapset_in_search_path(mapset)
-            
+
             c = 0
             while mapset[c] != "\x00":
                 char_list += mapset[c]
                 c += 1
-            
+
             if permission >= 0 and in_search_path == 1:
                 mapset_list.append(char_list)
 
@@ -1172,10 +1172,10 @@ class CLibrariesInterface(RPCServerBase):
         self.client_conn.send([RPCDefs.READ_MAP_INFO, RPCDefs.TYPE_RASTER,
                                name, mapset, None])
         return self.safe_receive("read_raster_info")
-        
+
     def read_raster_full_info(self, name, mapset):
         """Read raster info, history and cats using PyGRASS RasterRow
-           and return a dictionary. Colors should be supported in the 
+           and return a dictionary. Colors should be supported in the
            future.
 
            :param name: The name of the map
@@ -1184,7 +1184,7 @@ class CLibrariesInterface(RPCServerBase):
                      or None in case of an error
         """
         self.check_server()
-        self.client_conn.send([RPCDefs.READ_MAP_FULL_INFO, 
+        self.client_conn.send([RPCDefs.READ_MAP_FULL_INFO,
                                RPCDefs.TYPE_RASTER,
                                name, mapset, None])
         return self.safe_receive("read_raster_full_info")
@@ -1379,7 +1379,7 @@ class CLibrariesInterface(RPCServerBase):
 
     def read_vector_full_info(self, name, mapset):
         """Read vector info using PyGRASS VectorTopo
-           and return a dictionary. 
+           and return a dictionary.
 
            :param name: The name of the map
            :param mapset: The mapset of the map
@@ -1387,7 +1387,7 @@ class CLibrariesInterface(RPCServerBase):
                      or None in case of an error
         """
         self.check_server()
-        self.client_conn.send([RPCDefs.READ_MAP_FULL_INFO, 
+        self.client_conn.send([RPCDefs.READ_MAP_FULL_INFO,
                                RPCDefs.TYPE_VECTOR,
                                name, mapset, None])
         return self.safe_receive("read_vector_full_info")

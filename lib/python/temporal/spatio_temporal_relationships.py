@@ -17,8 +17,8 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from abstract_dataset import *
-from datetime_math import *
+from .abstract_dataset import *
+from .datetime_math import *
 import grass.lib.vector as vector
 import grass.lib.rtree as rtree
 import grass.lib.gis as gis

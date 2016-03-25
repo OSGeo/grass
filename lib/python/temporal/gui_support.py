@@ -10,8 +10,8 @@ for details.
 :authors: Soeren Gebbert
 """
 
-from space_time_datasets import *
-from factory import *
+from .space_time_datasets import *
+from .factory import *
 import grass.script as gscript
 
 ###############################################################################

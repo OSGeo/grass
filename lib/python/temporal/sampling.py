@@ -16,8 +16,8 @@ for details.
 
 :authors: Soeren Gebbert
 """
-
-from factory import *
+from __future__ import print_function
+from .factory import *
 
 
 def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header,
@@ -122,7 +122,7 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header,
             string += "%s%s" % ("end_time", separator)
             string += "%s%s" % ("interval_length", separator)
             string += "%s" % ("distance_from_begin")
-            print string
+            print(string)
 
         first_time, dummy = mapmatrizes[0][0]["granule"].get_temporal_extent_as_tuple()
 
@@ -163,7 +163,7 @@ def sample_stds_by_stds_topology(intype, sampletype, inputs, sampler, header,
             string += "%s%s" % (end, separator)
             string += "%s%s" % (delta, separator)
             string += "%s" % (delta_first)
-            print string
+            print(string)
 
     dbif.close()
     if len(mapmatrizes) > 0:

@@ -52,7 +52,7 @@ for details.
 
 """
 
-from temporal_raster_base_algebra import *
+from .temporal_raster_base_algebra import *
 
 ###############################################################################
 
@@ -74,10 +74,10 @@ class TemporalRasterAlgebraParser(TemporalRasterBaseAlgebraParser):
         while True:
             tok = l.lexer.token()
             if not tok: break
-            
+
             if tok.type == "STVDS" or tok.type == "STRDS" or tok.type == "STR3DS":
                 raise SyntaxError("Syntax error near '%s'" %(tok.type))
-        
+
         self.lexer = TemporalRasterAlgebraLexer()
         self.lexer.build()
         self.parser = yacc.yacc(module=self, debug=self.debug)

@@ -36,7 +36,7 @@ gettext.install('grasslibs', os.path.join(os.getenv("GISBASE"), 'locale'))
 
 import grass.script as gscript
 from datetime import datetime
-from c_libraries_interface import *
+from .c_libraries_interface import *
 from grass.pygrass import messages
 # Import all supported database backends
 # Ignore import errors since they are checked later
@@ -70,7 +70,7 @@ def profile_function(func):
         sortby = 'cumulative'
         ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
         ps.print_stats()
-        print s.getvalue()
+        print(s.getvalue())
     else:
         func()
 
@@ -1161,9 +1161,9 @@ class DBConnection(object):
                 if self.connected:
                     try:
                         return self.cursor.mogrify(sql, args)
-                    except:
-                        print sql, args
-                        raise
+                    except Exception as exc:
+                        print(sql, args)
+                        raise exc
                 else:
                     self.connect()
                     statement = self.cursor.mogrify(sql, args)

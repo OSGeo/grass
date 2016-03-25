@@ -17,7 +17,7 @@ for details.
 :authors: Soeren Gebbert
 """
 
-from open_stds import *
+from .open_stds import *
 import grass.script as gscript
 
 ###############################################################################

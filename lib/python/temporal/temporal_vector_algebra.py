@@ -41,10 +41,10 @@ for details.
     LexToken(RPAREN,')',1,16)
 
 """
-
+from __future__ import print_function
 import grass.pygrass.modules as pygrass
-from temporal_operator import *
-from temporal_algebra import *
+from .temporal_operator import *
+from .temporal_algebra import *
 
 ##############################################################################
 
@@ -129,7 +129,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         while True:
             tok = l.lexer.token()
             if not tok: break
-            
+
             if tok.type == "STVDS" or tok.type == "STRDS" or tok.type == "STR3DS":
                 raise SyntaxError("Syntax error near '%s'" %(tok.type))
 
@@ -149,12 +149,12 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
     ######################### Temporal functions ##############################
 
     def get_temporal_topo_list(self, maplistA, maplistB = None, topolist = ["EQUAL"],
-                               assign_val = False, count_map = False, compare_bool = False,  
-                               compare_cmd = False,  compop = None, aggregate = None,  
+                               assign_val = False, count_map = False, compare_bool = False,
+                               compare_cmd = False,  compop = None, aggregate = None,
                                new = False,  convert = False,  overlay_cmd = False):
         """Build temporal topology for two space time data sets, copy map objects
           for given relation into map list.
-          
+
           :param maplistA: List of maps.
           :param maplistB: List of maps.
           :param topolist: List of strings of temporal relations.
@@ -170,11 +170,11 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
           :param compop: Comparison operator, && or ||.
           :param aggregate: Aggregation operator for relation map list, & or |.
           :param new: Boolean if new temporary maps should be created.
-          :param convert: Boolean if conditional values should be converted to 
+          :param convert: Boolean if conditional values should be converted to
                         r.mapcalc command strings.
-          :param overlay_cmd: Boolean for aggregate overlay operators implicitly 
+          :param overlay_cmd: Boolean for aggregate overlay operators implicitly
                         in command list values based on related map lists.
-                    
+
           :return: List of maps from maplistA that fulfil the topological relationships
                   to maplistB specified in topolist.
         """
@@ -215,7 +215,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                 self.compare_cmd_value(map_i,  tbrelations, compop, aggregate, topolist, convert)
             elif overlay_cmd:
                 self.overlay_cmd_value(map_i,  tbrelations, compop, topolist)
-                
+
             for topo in topolist:
                 if topo.upper() in tbrelations.keys():
                     if count_map:
@@ -229,21 +229,21 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                     # Use unique identifier, since map names may be equal
                     resultdict[map_i.uid] = map_i
         resultlist = resultdict.values()
-        
+
         # Sort list of maps chronological.
         resultlist = sorted(resultlist, key = AbstractDatasetComparisonKeyStartTime)
-        
+
         return(resultlist)
 
     def overlay_cmd_value(self,  map_i, tbrelations, function, topolist = ["EQUAL"]):
         """ Function to evaluate two map lists by given overlay operator.
-        
+
           :param map_i: Map object with temporal extent.
           :param tbrelations: List of temporal relation to map_i.
           :param topolist: List of strings for given temporal relations.
           :param function: Overlay operator, &|+^~.
-          
-          :return: Map object with command list with  operators that has been 
+
+          :return: Map object with command list with  operators that has been
                         evaluated by implicit aggregration.
         """
         # Build comandlist list with elements from related maps and given relation operator.
@@ -292,30 +292,30 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                     mapainput = name
         # Add command list to result map.
         map_i.cmd_list = resultlist
-        
+
         return(resultlist)
 
     def set_temporal_extent_list(self, maplist, topolist = ["EQUAL"], temporal = 'l' ):
-        """ Change temporal extent of map list based on temporal relations to 
+        """ Change temporal extent of map list based on temporal relations to
                 other map list and given temporal operator.
 
-            :param maplist: List of map objects for which relations has been build 
+            :param maplist: List of map objects for which relations has been build
                                         correctely.
             :param topolist: List of strings of temporal relations.
             :param temporal: The temporal operator specifying the temporal
-                                            extent operation (intersection, union, disjoint 
+                                            extent operation (intersection, union, disjoint
                                             union, right reference, left reference).
 
             :return: Map list with specified temporal extent.
         """
         resultdict = {}
-        
+
         for map_i in maplist:
             # Loop over temporal related maps and create overlay modules.
             tbrelations = map_i.get_temporal_relations()
             # Generate an intermediate map for the result map list.
-            map_new = self.generate_new_map(base_map=map_i, bool_op = 'and', 
-                                                                        copy = True,  rename = False,  
+            map_new = self.generate_new_map(base_map=map_i, bool_op = 'and',
+                                                                        copy = True,  rename = False,
                                                                         remove = True)
             # Combine temporal and spatial extents of intermediate map with related maps.
             for topo in topolist:
@@ -323,8 +323,8 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                     for map_j in (tbrelations[topo]):
                         if temporal == 'r':
                             # Generate an intermediate map for the result map list.
-                            map_new = self.generate_new_map(base_map=map_i, bool_op = 'and', 
-                                                                                        copy = True,  rename = False,  
+                            map_new = self.generate_new_map(base_map=map_i, bool_op = 'and',
+                                                                                        copy = True,  rename = False,
                                                                                         remove = True)
                         # Create overlayed map extent.
                         returncode = self.overlay_map_extent(map_new, map_j, 'and', \
@@ -344,9 +344,9 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
         # Get sorted map objects as values from result dictionoary.
         resultlist = resultdict.values()
         resultlist = sorted(resultlist, key = AbstractDatasetComparisonKeyStartTime)
-        
+
         return(resultlist)
-    
+
     ###########################################################################
 
     def p_statement_assign(self, t):
@@ -427,7 +427,7 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                             count += 1
                             register_list.append(map_i)
                     else:
-                        # Test if temporal extents have been changed by temporal 
+                        # Test if temporal extents have been changed by temporal
                         # relation operators (i|r). This is a code copy from temporal_algebra.py
                         map_i_extent = map_i.get_temporal_extent_as_tuple()
                         map_test = map_i.get_new_instance(map_i.get_id())
@@ -483,11 +483,11 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
                             # Map is original from an input STVDS
                             map_i.load()
                         # Register map in result space time dataset.
-                        print map_i.get_temporal_extent_as_tuple()
+                        print(map_i.get_temporal_extent_as_tuple())
                         success = resultstds.register_map(map_i, dbif=dbif)
                     resultstds.update_from_registered_maps(dbif)
-                
-            # Remove intermediate maps    
+
+            # Remove intermediate maps
             self.remove_maps()
             if connected:
                 dbif.close()
@@ -521,13 +521,13 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
             maplistA = self.check_stds(t[1])
             maplistB = self.check_stds(t[3])
             relations = ["EQUAL"]
-            temporal = 'l' 
-            function = t[2] 
+            temporal = 'l'
+            function = t[2]
             # Build commmand list for related maps.
             complist = self.get_temporal_topo_list(maplistA, maplistB, topolist = relations,
                                                                     compop = function, overlay_cmd = True)
             # Set temporal extent based on topological relationships.
-            resultlist = self.set_temporal_extent_list(complist, topolist = relations, 
+            resultlist = self.set_temporal_extent_list(complist, topolist = relations,
                                 temporal = temporal)
 
             t[0] = resultlist
@@ -550,9 +550,9 @@ class TemporalVectorAlgebraParser(TemporalAlgebraParser):
             complist = self.get_temporal_topo_list(maplistA, maplistB, topolist = relations,
                                                                     compop = function, overlay_cmd = True)
             # Set temporal extent based on topological relationships.
-            resultlist = self.set_temporal_extent_list(complist, topolist = relations, 
+            resultlist = self.set_temporal_extent_list(complist, topolist = relations,
                                 temporal = temporal)
-          
+
             t[0] = resultlist
         if self.debug:
             str(t[1]) + t[2] + str(t[3])
