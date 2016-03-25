@@ -126,12 +126,14 @@ changequote(,)
 LIB_VER=`echo ${GRASS_VERSION_NUMBER} | sed 's/^\([0-9.]*\).*$/\1/'`
 changequote([,])
 
-GRASS_VERSION_SVN=00000
+GRASS_VERSION_SVN="exported"
 AC_PATH_PROG(SVN_VERSION, svnversion, no)
 if test "$SVN_VERSION" != "no" ; then
    GRASS_VERSION_SVN=`$SVN_VERSION -c | cut -f2 -d:`
    if test "$GRASS_VERSION_SVN" = "exported" -o "$GRASS_VERSION_SVN" = "Unversioned directory" ; then
-      GRASS_VERSION_SVN=00000
+      GRASS_VERSION_SVN="exported"
+   else
+      GRASS_VERSION_SVN="r$GRASS_VERSION_SVN"
    fi
 fi
 
