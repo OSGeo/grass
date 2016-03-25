@@ -43,42 +43,42 @@ def dummy_server(lock, conn):
 class RPCServerBase(object):
     """This is the base class for send and receive RPC server
        It uses a Pipe for IPC.
-    
-    
+
+
         >>> import grass.script as gscript
         >>> from grass.pygrass.rpc.base import RPCServerBase
         >>> provider = RPCServerBase()
-        
+
         >>> provider.is_server_alive()
         True
-        
+
         >>> provider.is_check_thread_alive()
         True
 
         >>> provider.stop()
         >>> provider.is_server_alive()
         False
-        
+
         >>> provider.is_check_thread_alive()
         False
-        
+
         >>> provider = RPCServerBase()
         >>> provider.is_server_alive()
         True
         >>> provider.is_check_thread_alive()
         True
-        
+
         Kill the server process with an exception, it should restart
-        
+
         >>> provider.client_conn.send([1])
         >>> provider.is_server_alive()
         True
-        
+
         >>> provider.is_check_thread_alive()
         True
 
     """
-    
+
     def __init__(self):
         self.client_conn = None
         self.server_conn = None
@@ -89,10 +89,10 @@ class RPCServerBase(object):
         self.start_server()
         self.start_checker_thread()
         self.stopThread = False
-        
+
     def is_server_alive(self):
         return self.server.is_alive()
-    
+
     def is_check_thread_alive(self):
         return self.checkThread.is_alive()
 
@@ -160,7 +160,7 @@ class RPCServerBase(object):
             if isinstance(ret,  FatalError):
                raise ret
             return ret
-        except (EOFError,  IOError,  FatalError), e:
+        except (EOFError,  IOError,  FatalError) as e:
             # The pipe was closed by the checker thread because
             # the server process was killed
             raise FatalError("Exception raised: " + str(e) + " Message: " + message)
