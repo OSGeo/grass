@@ -289,9 +289,14 @@ int line2area(const struct Map_info *To,
     all_inside_outer = all_outside_outer = 1;
     all_outside_inner = 1;
 
+    int in_box;
     for (i = 0; i < Points->n_points; i++) {
-	if (Vect_point_in_box(Points->x[i], Points->y[i],
-			      Points->z[i], abox)) {
+        if (with_z)
+            in_box = Vect_point_in_box(Points->x[i], Points->y[i],
+                                       Points->z[i], abox);
+        else
+            in_box = Vect_point_in_box_2d(Points->x[i], Points->y[i], abox);
+        if (in_box) {
 
 	    int poly;
 	    
@@ -323,8 +328,13 @@ int line2area(const struct Map_info *To,
 		int inside_isle = 0;
 
 		for (j = 0; j < nisles; j++) {
-		    if (Vect_point_in_box(Points->x[i], Points->y[i], Points->z[i], 
-					  &ibox[j])) {
+                    if (with_z)
+                        in_box = Vect_point_in_box(Points->x[i], Points->y[i],
+                                                   Points->z[i], &ibox[j]);
+                    else
+                        in_box = Vect_point_in_box_2d(Points->x[i],
+                                                      Points->y[i], &ibox[j]);
+                    if (in_box) {
 
 			poly = Vect_point_in_poly(Points->x[i], Points->y[i], iPoints[j]);
 			
