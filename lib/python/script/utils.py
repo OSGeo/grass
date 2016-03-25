@@ -291,6 +291,13 @@ def get_lib_path(modname, libname=None):
         path = '{cwd}{sep}etc{sep}{modname}'.format(cwd=cwd[:idx+len(modname)],
                                                     sep=sep,
                                                     modname=modname)
+        if libname:
+            path += '{pathsep}{cwd}{sep}etc{sep}{modname}{sep}{libname}'.format(
+                cwd=cwd[:idx+len(modname)],
+                sep=sep,
+                modname=modname, libname=libname,
+                pathsep=os.pathsep
+            )
     
     return path
 
