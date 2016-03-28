@@ -813,7 +813,7 @@ int main(int argc, char *argv[])
 	    Rast_get_row(fd, cell2, row, data_type2);
 	    ptr2 = cell2;
 	    for (col = 0; col < ncols; col++) {
-		/* Did I understand that concept of cummulative cost map? - (pmx) 12 april 2000 */
+		/* Did I understand that concept of cumulative cost map? - (pmx) 12 april 2000 */
 		if (!Rast_is_null_value(ptr2, data_type2)) {
 		    double cellval;
 
