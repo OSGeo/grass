@@ -161,8 +161,7 @@ def main():
         if tgtres_value <= 0:
             grass.fatal(_("Resolution value can't be smaller than 0"))
     elif tgtres == 'value':
-        grass.fatal(
-            _("Please provide the resolution for the imported dataset or change to 'estimated' resolution"))
+         grass.fatal(_("Please provide the resolution for the imported dataset or change to 'estimated' resolution"))
 
     grassenv = grass.gisenv()
     tgtloc = grassenv['LOCATION_NAME']
@@ -212,18 +211,14 @@ def main():
             parameters['band'] = bands
         try:
             grass.run_command('r.in.gdal', **parameters)
-            grass.verbose(
-                _("Input <%s> successfully imported without reprojection") %
-                GDALdatasource)
+            grass.verbose(_("Input <%s> successfully imported without reprojection") % GDALdatasource)
             return 0
         except CalledModuleError as e:
             grass.fatal(_("Unable to import GDAL dataset <%s>") % GDALdatasource)
-
+    
     # make sure target is not xy
     if grass.parse_command('g.proj', flags='g')['name'] == 'xy_location_unprojected':
-        grass.fatal(
-            _("Coordinate reference system not available for current location <%s>") %
-            tgtloc)
+        grass.fatal(_("Coordinate reference system not available for current location <%s>") % tgtloc)
 
     # switch to temp location
     os.environ['GISRC'] = str(SRCGISRC)
@@ -332,9 +327,7 @@ def main():
         grass.run_command('g.remove', type='vector', name=vreg,
                           flags='f', quiet=True)
 
-        grass.message(
-            _("Estimated target resolution for input band <{out}>: {res}").format(
-                out=outfile, res=estres))
+        grass.message(_("Estimated target resolution for input band <{out}>: {res}").format(out=outfile, res=estres))
         if flags['e']:
             continue
 
@@ -347,9 +340,7 @@ def main():
             res = estres
         elif tgtres == 'value':
             res = tgtres_value
-            grass.message(
-                _("Using given resolution for input band <{out}>: {res}").format(
-                    out=outfile, res=res))
+            grass.message(_("Using given resolution for input band <{out}>: {res}").format(out=outfile, res=res))
             # align to requested resolution
             grass.run_command('g.region', res=res, flags='a')
         else:

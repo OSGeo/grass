@@ -121,6 +121,7 @@ def main():
             kv = parse_key_val(pout[band])
             stddev[band] = float(kv['stddev'])
 
+
     grass.message(_("Calculating Correlation Matrix..."))
     correlation = {}
     s = grass.read_command('r.covar', flags='r', map=[band for band in bands],
@@ -140,7 +141,7 @@ def main():
         oif.append((oifcalc(stddev, correlation, *p), p))
     oif.sort(reverse=True)
 
-    grass.verbose(_("The Optimum Index Factor analysis result "
+    grass.verbose(_("The Optimum Index Factor analysis result " \
                     "(best combination shown first):"))
 
     if shell:

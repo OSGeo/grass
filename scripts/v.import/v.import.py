@@ -153,10 +153,10 @@ def main():
         # list datum transform parameters
         if not options['epsg']:
             grass.fatal(_("Missing value for parameter <%s>") % 'epsg')
-
+        
         return grass.run_command('g.proj', epsg=options['epsg'],
                                  datum_trans=options['datum_trans'])
-
+    
     grassenv = grass.gisenv()
     tgtloc = grassenv['LOCATION_NAME']
     tgtmapset = grassenv['MAPSET']
@@ -191,12 +191,12 @@ def main():
     # switch to temp location
     os.environ['GISRC'] = str(SRCGISRC)
 
-    if options['epsg']:  # force given EPSG
+    if options['epsg']: # force given EPSG
         kwargs = {}
         if options['datum_trans']:
             kwargs['datum_trans'] = options['datum_trans']
         grass.run_command('g.proj', flags='c', epsg=options['epsg'], **kwargs)
-
+        
     # switch to target location
     os.environ['GISRC'] = str(tgtgisrc)
 
@@ -206,25 +206,21 @@ def main():
         try:
             grass.run_command('v.in.ogr', input=OGRdatasource,
                               flags=vflags, overwrite=overwrite, **vopts)
-            grass.message(
-                _("Input <%s> successfully imported without reprojection") %
-                OGRdatasource)
+            grass.message(_("Input <%s> successfully imported without reprojection") % OGRdatasource)
             return 0
         except CalledModuleError:
             grass.fatal(_("Unable to import <%s>") % OGRdatasource)
 
     # make sure target is not xy
     if grass.parse_command('g.proj', flags='g')['name'] == 'xy_location_unprojected':
-        grass.fatal(
-            _("Coordinate reference system not available for current location <%s>") %
-            tgtloc)
+        grass.fatal(_("Coordinate reference system not available for current location <%s>") % tgtloc)
 
     # switch to temp location
     os.environ['GISRC'] = str(SRCGISRC)
 
     # print projection at verbose level
     grass.verbose(grass.read_command('g.proj', flags='p').rstrip(os.linesep))
-
+    
     # make sure input is not xy
     if grass.parse_command('g.proj', flags='g')['name'] == 'xy_location_unprojected':
         grass.fatal(_("Coordinate reference system not available for input <%s>") % OGRdatasource)
