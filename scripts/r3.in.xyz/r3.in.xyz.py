@@ -280,7 +280,7 @@ def main():
                                       **addl_opts)
 
         grass.debug("i=%d, %%=%d  (workers=%d)" % (i, i % workers, workers))
-        # print sys.getsizeof(proc)  # sizeof(proc array)  [not so big]
+        #print sys.getsizeof(proc)  # sizeof(proc array)  [not so big]
 
         if i % workers is 0:
             # wait for the ones launched so far to finish
@@ -299,7 +299,7 @@ def main():
 
     grass.verbose(_("Assembling 3D cube ..."))
 
-    # input order: lower most strata first
+    #input order: lower most strata first
     slices = grass.read_command('g.list', type='raster', sep=',',
                                 pattern='tmp.r3xyz.%d.*' % os.getpid()).rstrip(os.linesep)
     grass.debug(slices)

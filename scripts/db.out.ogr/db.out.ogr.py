@@ -54,10 +54,10 @@
 #% required: no
 #%end
 
+import sys
 import os
-
 from grass.script.utils import try_remove, basename
-from grass.script import core as gcore
+from grass.script import core as grass
 from grass.exceptions import CalledModuleError
 
 
@@ -69,52 +69,54 @@ def main():
     table = options['table']
 
     if format.lower() == 'dbf':
-        format = "ESRI_Shapefile"
+	format = "ESRI_Shapefile"
 
     if format.lower() == 'csv':
-        olayer = basename(output, 'csv')
+	olayer = basename(output, 'csv')
     else:
-        olayer = None
+	olayer = None
 
-    # is there a simpler way of testing for --overwrite?
+    #is there a simpler way of testing for --overwrite?
     dbffile = input + '.dbf'
-    if os.path.exists(dbffile) and not gcore.overwrite():
-        gcore.fatal(_("File <%s> already exists") % dbffile)
+    if os.path.exists(dbffile) and not grass.overwrite():
+	grass.fatal(_("File <%s> already exists") % dbffile)
 
     if olayer:
         try:
-            gcore.run_command('v.out.ogr', quiet=True, input=input,
-                              layer=layer, output=output, format=format,
-                              type='point,line,area', olayer=olayer)
+            grass.run_command('v.out.ogr', quiet=True, input=input, layer=layer,
+                              output=output,
+                              format=format, type='point,line,area',
+                              olayer=olayer)
         except CalledModuleError:
-            gcore.fatal(_("Module <%s> failed") % 'v.out.ogr')
+            grass.fatal(_("Module <%s> failed") % 'v.out.ogr')
 
     else:
         try:
-            gcore.run_command('v.out.ogr', quiet=True, input=input,
+            grass.run_command('v.out.ogr', quiet=True, input=input,
                               layer=layer, output=output,
                               format=format, type='point,line,area')
         except CalledModuleError:
-            gcore.fatal(_("Module <%s> failed") % 'v.out.ogr')
+            grass.fatal(_("Module <%s> failed") % 'v.out.ogr')
 
     if format == "ESRI_Shapefile":
-        exts = ['shp', 'shx', 'prj']
-        if output.endswith('.dbf'):
-            outname = basename(output, 'dbf')
-            for ext in exts:
-                try_remove("%s.%s" % (outname, ext))
-            outname += '.dbf'
-        else:
-            for ext in exts:
-                try_remove(os.path.join(output, "%s.%s" % (input, ext)))
-            outname = os.path.join(output, input + ".dbf")
+	exts = ['shp', 'shx', 'prj']
+	if output.endswith('.dbf'):
+	    outname = basename(output, 'dbf')
+	    for ext in exts:
+		try_remove("%s.%s" % (outname, ext))
+	    outname += '.dbf'
+	else:
+	    for ext in exts:
+		try_remove(os.path.join(output, "%s.%s" % (input, ext)))
+	    outname = os.path.join(output, input + ".dbf")
     elif format.lower() == 'csv':
-        outname = output + '.csv'
+	outname = output + '.csv'
     else:
-        outname = input
+	outname = input
 
-    gcore.message(_("Exported table <%s>") % outname)
+    grass.message(_("Exported table <%s>") % outname)
 
 if __name__ == "__main__":
-    options, flags = gcore.parser()
+    options, flags = grass.parser()
     main()
+

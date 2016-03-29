@@ -5,7 +5,6 @@
 from grass.gunittest.case import TestCase
 from grass.gunittest.gmodules import SimpleModule
 
-
 class TestRastStats(TestCase):
 
     @classmethod
@@ -37,19 +36,18 @@ class TestRastStats(TestCase):
 
     def test_1(self):
         # Output of v.rast.stats
-        univar_string = """cat|value|label|a_minimum|a_maximum|a_sum
+        univar_string="""cat|value|label|a_minimum|a_maximum|a_sum
 1|1||102|209|265905
 2|2||121|280|1281195
 """
-
-        self.assertModule("v.rast.stats", map="zone_map", raster="map_a",
-                          method=["minimum", "maximum", "sum"], flags="c",
+        
+        self.assertModule("v.rast.stats",  map="zone_map", raster="map_a",
+                          method=["minimum","maximum","sum"], flags="c",
                           column_prefix="a")
         v_db_select = SimpleModule("v.db.select", map="zone_map")
-
-        self.runModule(v_db_select)
+        
+        self.runModule(v_db_select)        
         self.assertLooksLike(univar_string, v_db_select.outputs.stdout)
-
 
 class TestRastStatsFails(TestCase):
 
@@ -62,7 +60,7 @@ class TestRastStatsFails(TestCase):
         # No raster map
         self.assertModuleFail("v.rast.stats", map="zone_map",
                               column_prefix="a")
-
+        
     def test_error_handling_d(self):
         # No column_prefix
         self.assertModuleFail("v.rast.stats", map="zone_map", raster="map_b")
@@ -70,3 +68,5 @@ class TestRastStatsFails(TestCase):
 if __name__ == '__main__':
     from grass.gunittest.main import test
     test()
+
+

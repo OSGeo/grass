@@ -314,7 +314,7 @@ def get_installed_modules(force=False):
             ))
         else:
             ret.append(tnode.get('name').strip())
-
+    
     return ret
 
 # list extensions (read XML file from grass.osgeo.org/addons)
@@ -392,7 +392,6 @@ def get_toolbox_modules(url, name):
 
     return tlist
 
-
 def get_module_files(mnode):
     """Return list of module files
 
@@ -405,7 +404,6 @@ def get_module_files(mnode):
 
     return flist
 
-
 def get_module_executables(mnode):
     """Return list of module executables
 
@@ -414,15 +412,14 @@ def get_module_executables(mnode):
     flist = []
     for filepath in get_module_files(mnode):
         if filepath.startswith(options['prefix'] + os.path.sep + 'bin') or \
-           (sys.platform != 'win32' and
-                filepath.startswith(options['prefix'] + os.path.sep + 'scripts')):
+           (sys.platform != 'win32' and \
+            filepath.startswith(options['prefix'] + os.path.sep + 'scripts')):
             filename = os.path.basename(filepath)
             if sys.platform == 'win32':
                 filename = os.path.splitext(filename)[0]
             flist.append(filename)
-
+    
     return flist
-
 
 def get_optional_params(mnode):
     """Return description and keywords as a tuple
@@ -924,7 +921,7 @@ def install_extension_win(name):
     """Install extension on MS Windows"""
     grass.message(_("Downloading precompiled GRASS Addons <%s>...") %
                   options['extension'])
-
+    
     # build base URL
     if build_platform == 'x86_64':
         platform = build_platform
@@ -933,29 +930,29 @@ def install_extension_win(name):
     base_url = "http://wingrass.fsv.cvut.cz/" \
                "grass%(major)s%(minor)s/%(platform)s/addons/" \
                "grass-%(major)s.%(minor)s.%(patch)s" % \
-               {'platform': platform,
+               {'platform' : platform,
                 'major': version[0], 'minor': version[1],
                 'patch': version[2]}
 
     # resolve ZIP URL
     source, url = resolve_source_code(url='{}/{}.zip'.format(base_url, name))
-
+    
     # to hide non-error messages from subprocesses
     if grass.verbosity() <= 2:
         outdev = open(os.devnull, 'w')
     else:
         outdev = sys.stdout
-
+    
     # download Addons ZIP file
     os.chdir(TMPDIR)  # this is just to not leave something behind
     srcdir = os.path.join(TMPDIR, name)
     download_source_code(source=source, url=url, name=name,
-                         outdev=outdev, directory=srcdir, tmpdir=TMPDIR)
-
+                        outdev=outdev, directory=srcdir, tmpdir=TMPDIR)
+    
     # copy Addons copy tree to destination directory
     move_extracted_files(extract_dir=srcdir, target_dir=options['prefix'],
                          files=os.listdir(srcdir))
-
+    
     return 0
 
 
@@ -1094,7 +1091,7 @@ def download_source_code(source, url, name, outdev,
         f, h = urlretrieve(url, zip_name)
         if h.get('content-type', '') != 'application/zip':
             grass.fatal(_("Extension <%s> not found") % name)
-
+            
         extract_zip(name=zip_name, directory=directory, tmpdir=tmpdir)
         fix_newlines(directory)
     elif source.startswith('remote_') and \
@@ -1722,9 +1719,9 @@ if __name__ == "__main__":
     global TMPDIR
     TMPDIR = tempfile.mkdtemp()
     atexit.register(cleanup)
-
+    
     grass_version = grass.version()
     version = grass_version['version'].split('.')
     build_platform = grass_version['build_platform'].split('-', 1)[0]
-
+    
     sys.exit(main())

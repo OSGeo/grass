@@ -54,7 +54,6 @@ import sys
 import os
 import grass.script as grass
 
-
 def main():
     vector = options['map']
     layer = options['layer']
@@ -62,19 +61,18 @@ def main():
     value = options['value']
     qcolumn = options['query_column']
     where = options['where']
-    sqlitefile = options['sqliteextra']
+    sqlitefile  = options['sqliteextra']
 
     mapset = grass.gisenv()['MAPSET']
 
     # does map exist in CURRENT mapset?
-    if not grass.find_file(vector, element='vector', mapset=mapset)['file']:
+    if not grass.find_file(vector, element = 'vector', mapset = mapset)['file']:
         grass.fatal(_("Vector map <%s> not found in current mapset") % vector)
 
     try:
         f = grass.vector_db(vector)[int(layer)]
     except KeyError:
-        grass.fatal(
-            _('There is no table connected to this map. Run v.db.connect or v.db.addtable first.'))
+        grass.fatal(_('There is no table connected to this map. Run v.db.connect or v.db.addtable first.'))
 
     table = f['table']
     database = f['database']
@@ -115,7 +113,7 @@ def main():
         cmd = sqliteload + cmd
 
     grass.verbose("SQL: \"%s\"" % cmd)
-    grass.write_command('db.execute', input='-', database=database, driver=driver, stdin=cmd)
+    grass.write_command('db.execute', input = '-', database = database, driver = driver, stdin = cmd)
 
     # write cmd history:
     grass.vector_history(vector)

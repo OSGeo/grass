@@ -22,7 +22,6 @@ import sys
 from grass.script import core as grass
 from grass.exceptions import CalledModuleError
 
-
 def main():
     env = grass.gisenv()
     mapset = env['MAPSET']
@@ -30,17 +29,17 @@ def main():
 
     vectors = grass.list_grouped('vect')[mapset]
     num_vectors = len(vectors)
-
+    
     if grass.verbosity() < 2:
         quiet = True
     else:
         quiet = False
-
+        
     i = 1
     for vect in vectors:
         map = "%s@%s" % (vect, mapset)
-        grass.message(_("%s\nBuilding topology for vector map <%s> (%d of %d)...\n%s") %
-                      ('-' * 80, map, i, num_vectors, '-' * 80))
+        grass.message(_("%s\nBuilding topology for vector map <%s> (%d of %d)...\n%s") % \
+                          ('-' * 80, map, i, num_vectors, '-' * 80))
         grass.verbose(_("v.build map=%s") % map)
         try:
             grass.run_command("v.build", map=map, quiet=quiet)
