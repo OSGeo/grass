@@ -156,10 +156,8 @@ def decode(string):
     :param str string: the string to decode
     """
     enc = locale.getdefaultlocale()[1]
-    if enc:
-        if hasattr(string, 'decode'):
-            return string.decode(enc)
-
+    if hasattr(string, 'decode'):
+        return string.decode(enc) if enc else string.decode()
     return string
 
 
@@ -169,10 +167,8 @@ def encode(string):
     :param str string: the string to encode
     """
     enc = locale.getdefaultlocale()[1]
-    if enc:
-        if hasattr(string, 'encode'):
-            return string.encode(enc)
-
+    if hasattr(string, 'encode'):
+        return string.encode(enc) if enc else string.encode()
     return string
 
 
@@ -376,5 +372,5 @@ def set_path(modulename, dirname=None, path='.'):
             pathname = os.path.join(modulename, dirname) if dirname else modulename
             raise ImportError("Not able to find the path '%s' directory "
                               "(current dir '%s')." % (pathname, os.getcwd()))
-        
+
         sys.path.insert(0, path)
