@@ -7,28 +7,27 @@ from grass.gunittest.main import test
 from grass.script import utils
 
 
-def change_environ(**envs):
+class EnvironChange(TestCase):
+    env = dict()
     NOT_FOUND = 'Not found!'
-    original_envs = {k: os.environ.get(k, NOT_FOUND) for k in envs.keys()}
 
-    def work_with_env(func):
-        def wrap_func(*args, **kwargs):
-            # modify the environment variables
-            for k, v in envs.items():
+    def setUp(self):
+        self.original_env = {k: os.environ.get(k, self.NOT_FOUND)
+                             for k in self.env.keys()}
+        for k, v in self.env.items():
                 os.environ[k] = v
 
-            # execute
-            func(*args, **kwargs)
-
-            # restore the environment variables
-            for k, v in envs.items():
-                oval = original_envs[k]
-                if oval == NOT_FOUND:
+    def tearDown(self):
+        for k, v in self.env.items():
+                oval = self.original_env[k]
+                if oval == self.NOT_FOUND:
                     os.environ.pop(k)
                 else:
                     os.environ[k] = oval
-        return wrap_func
-    return work_with_env
+
+
+class LcAllC(EnvironChange):
+    env = dict(LC_ALL='C')
 
 
 class TestEncode(TestCase):
@@ -38,14 +37,6 @@ class TestEncode(TestCase):
         self.assertEqual(b'text', utils.encode(b'text'))
 
     def test_unicode(self):
-        self.assertEqual(b'text', utils.encode(u'text'))
-
-    @change_environ(LC_ALL='C')
-    def test_bytes_LC_ALL_C(self):
-        self.assertEqual(b'text', utils.encode(b'text'))
-
-    @change_environ(LC_ALL='C')
-    def test_unicode_LC_ALL_C(self):
         self.assertEqual(b'text', utils.encode(u'text'))
 
 
@@ -58,15 +49,13 @@ class TestDecode(TestCase):
     def test_unicode(self):
         self.assertEqual(u'text', utils.decode(u'text'))
 
-    @change_environ(LC_ALL='C')
-    def test_bytes_LC_ALL_C(self):
-        self.assertEqual(u'text', utils.decode(b'text'))
 
-    @change_environ(LC_ALL='C')
-    def test_unicode_LC_ALL_C(self):
-        self.assertEqual(u'text', utils.decode(u'text'))
+class TestEncodeLcAllC(TestEncode, LcAllC):
+    pass
 
 
+class TestDecodeLcAllC(TestDecode, LcAllC):
+    pass
 
 
 if __name__ == '__main__':
