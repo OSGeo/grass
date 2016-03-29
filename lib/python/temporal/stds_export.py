@@ -30,9 +30,9 @@ import os
 import tarfile
 import tempfile
 
-from .space_time_datasets import *
-from .factory import *
-from .open_stds import *
+from space_time_datasets import *
+from factory import *
+from open_stds import *
 import grass.script as gscript
 from grass.exceptions import CalledModuleError
 
@@ -52,7 +52,7 @@ exported_maps = {}
 ############################################################################
 
 
-def _export_raster_maps_as_gdal(rows, tar, list_file, new_cwd, fs, format_,
+def _export_raster_maps_as_gdal(rows, tar, list_file, new_cwd, fs, format_, 
                                 type_):
     for row in rows:
         name = row["name"]

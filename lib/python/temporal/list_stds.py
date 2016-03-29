@@ -17,10 +17,10 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from __future__ import print_function
-from .space_time_datasets import *
-from .factory import *
-from .open_stds import *
+
+from space_time_datasets import *
+from factory import *
+from open_stds import *
 
 ###############################################################################
 
@@ -58,13 +58,13 @@ def get_dataset_list(type, temporal_type, columns=None, where=None,
             >>> rows =  stds_list[mapset]
             >>> for row in rows:
             ...     if row["name"] == name:
-            ...         print(True)
+            ...         print True
             True
             >>> stds_list = tgis.get_dataset_list("strds", "absolute", columns="name,mapset", where="mapset = '%s'"%(mapset))
             >>> rows =  stds_list[mapset]
             >>> for row in rows:
             ...     if row["name"] == name and row["mapset"] == mapset:
-            ...         print(True)
+            ...         print True
             True
             >>> check = sp.delete()
 
@@ -192,7 +192,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
             if outpath:
                 outfile.write('{st}\n'.format(st=string))
             else:
-                print(string)
+                print string
 
         if maps and len(maps) > 0:
 
@@ -240,7 +240,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
                 if outpath:
                     outfile.write('{st}\n'.format(st=string))
                 else:
-                    print(string)
+                    print string
 
     else:
         # In comma separated mode only map ids are needed
@@ -262,7 +262,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
                 if outpath:
                     outfile.write('{st}\n'.format(st=string))
                 else:
-                    print(string)
+                    print string
 
             elif method == "cols":
                 # Print the column names if requested
@@ -281,7 +281,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
                     if outpath:
                         outfile.write('{st}\n'.format(st=output))
                     else:
-                        print(output)
+                        print output
 
                 for row in rows:
                     output = ""
@@ -295,7 +295,7 @@ def list_maps_of_stds(type, input, columns, order, where, separator,
                     if outpath:
                         outfile.write('{st}\n'.format(st=output))
                     else:
-                        print(output)
+                        print output
     if outpath:
         outfile.close()
     if connected:

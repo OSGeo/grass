@@ -9,7 +9,7 @@ for details.
 :authors: Soeren Gebbert
 """
 from datetime import datetime, timedelta
-from .core import *
+from core import *
 import copy
 
 try:
@@ -863,9 +863,9 @@ def create_suffix_from_datetime(start_time,  granularity):
 
 def create_time_suffix(mapp, end=False):
     """Create a datetime string based on a map datetime object
-
+    
        :param mapp: a temporal map dataset
-       :param end: True if you want add also end time to the suffix
+       :param end: True if you want add also end time to the suffix    
     """
     start = mapp.temporal_extent.get_start_time()
     sstring = start.isoformat().replace(':', '_').replace('-', '_')

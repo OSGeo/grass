@@ -10,7 +10,9 @@ for details.
 :authors: Thomas Leppelt and Soeren Gebbert
 
 """
-from .temporal_raster_base_algebra import *
+
+import grass.pygrass.modules as pygrass
+from temporal_raster_base_algebra import *
 
 ###############################################################################
 
@@ -32,7 +34,7 @@ class TemporalRaster3DAlgebraParser(TemporalRasterBaseAlgebraParser):
         while True:
             tok = l.lexer.token()
             if not tok: break
-
+            
             if tok.type == "STVDS" or tok.type == "STRDS" or tok.type == "STR3DS":
                 raise SyntaxError("Syntax error near '%s'" %(tok.type))
 
