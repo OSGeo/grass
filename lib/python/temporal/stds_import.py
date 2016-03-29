@@ -33,10 +33,10 @@ import os
 import os.path
 import tarfile
 
-from .space_time_datasets import *
-from .register import *
-from . import factory
-from .factory import *
+from space_time_datasets import *
+from register import *
+import factory
+from factory import *
 import grass.script as gscript
 from grass.exceptions import CalledModuleError
 
@@ -244,7 +244,7 @@ def import_stds(input, output, directory, title=None, descr=None, location=None,
         temp_file = open(temp_name, "w")
         proj_name = os.path.abspath(proj_file_name)
 
-        # We need to convert projection strings generated
+        # We need to convert projection strings generated 
         # from other programms than g.proj into
         # new line format so that the grass file comparison function
         # can be used to compare the projections

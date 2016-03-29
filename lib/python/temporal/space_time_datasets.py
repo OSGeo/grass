@@ -9,8 +9,8 @@ for details.
 :authors: Soeren Gebbert
 """
 import getpass
-from .abstract_map_dataset import *
-from .abstract_space_time_dataset import *
+from abstract_map_dataset import *
+from abstract_space_time_dataset import *
 import grass.script.array as garray
 
 ###############################################################################

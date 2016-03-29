@@ -17,8 +17,8 @@ for details.
 
 :authors: Soeren Gebbert
 """
-from .abstract_dataset import *
-from .datetime_math import *
+from abstract_dataset import *
+from datetime_math import *
 
 ###############################################################################
 
@@ -497,7 +497,7 @@ def compute_absolute_time_granularity(maps):
 
 def compute_common_relative_time_granularity(gran_list):
 	"""Compute the greatest common granule from a list of relative time granules
-
+    
         .. code-block:: python
 
             >>> import grass.temporal as tgis
@@ -505,7 +505,7 @@ def compute_common_relative_time_granularity(gran_list):
             >>> grans = [1,2,30]
             >>> tgis.compute_common_relative_time_granularity(grans)
             1
-
+            
             >>> import grass.temporal as tgis
             >>> tgis.init()
             >>> grans = [10,20,30]
@@ -756,23 +756,23 @@ def compute_common_absolute_time_granularity_simple(gran_list):
             >>> grans = ["1 second", "2 seconds", "30 seconds"]
             >>> tgis.compute_common_absolute_time_granularity(grans)
             '1 second'
-
+            
             >>> grans = ["3 second", "6 seconds", "30 seconds"]
             >>> tgis.compute_common_absolute_time_granularity(grans)
             '3 seconds'
-
+            
             >>> grans = ["12 second", "18 seconds", "30 seconds", "10 minutes"]
             >>> tgis.compute_common_absolute_time_granularity(grans)
             '6 seconds'
-
+            
             >>> grans = ["20 second", "10 minutes", "2 hours"]
             >>> tgis.compute_common_absolute_time_granularity(grans)
             '20 seconds'
-
+            
             >>> grans = ["7200 second", "240 minutes", "1 year"]
             >>> tgis.compute_common_absolute_time_granularity(grans)
             '7200 seconds'
-
+            
             >>> grans = ["7200 second", "89 minutes", "1 year"]
             >>> tgis.compute_common_absolute_time_granularity(grans)
             '60 seconds'
@@ -821,37 +821,37 @@ def compute_common_absolute_time_granularity_simple(gran_list):
             >>> tgis.compute_common_absolute_time_granularity(grans)
             '1 year'
     """
-
+    
     has_seconds = False # 0
     has_minutes = False # 1
     has_hours = False     # 2
     has_days = False      # 3
     has_months = False  # 4
     has_years = False     # 5
-
+    
     seconds = []
     minutes = []
     hours = []
     days = []
     months = []
     years = []
-
+    
     min_gran = 6
     max_gran = -1
-
+    
     for entry in gran_list:
         if not check_granularity_string(entry, "absolute"):
             return False
 
         num,  gran = entry.split()
-
+        
         if gran in ["seconds",  "second"]:
             has_seconds = True
             if min_gran > 0:
                 min_gran = 0
             if max_gran < 0:
                 max_gran = 0
-
+                
             seconds.append(int(num))
 
         if gran in ["minutes",  "minute"]:
@@ -860,7 +860,7 @@ def compute_common_absolute_time_granularity_simple(gran_list):
                 min_gran = 1
             if max_gran < 1:
                 max_gran = 1
-
+                
             minutes.append(int(num))
 
         if gran in ["hours",  "hour"]:
@@ -869,7 +869,7 @@ def compute_common_absolute_time_granularity_simple(gran_list):
                 min_gran = 2
             if max_gran < 2:
                 max_gran = 2
-
+                
             hours.append(int(num))
 
         if gran in ["days",  "day"]:
@@ -878,7 +878,7 @@ def compute_common_absolute_time_granularity_simple(gran_list):
                 min_gran = 3
             if max_gran < 3:
                 max_gran = 3
-
+                
             days.append(int(num))
 
         if gran in ["months",  "month"]:
@@ -887,7 +887,7 @@ def compute_common_absolute_time_granularity_simple(gran_list):
                 min_gran = 4
             if max_gran < 4:
                 max_gran = 4
-
+                
             months.append(int(num))
 
         if gran in ["years",  "year"]:
@@ -896,9 +896,9 @@ def compute_common_absolute_time_granularity_simple(gran_list):
                 min_gran = 5
             if max_gran < 5:
                 max_gran = 5
-
+                
             years.append(int(num))
-
+            
     if has_seconds:
         if has_minutes:
             minutes.sort()
@@ -925,7 +925,7 @@ def compute_common_absolute_time_granularity_simple(gran_list):
         if num > 1:
             gran += "s"
         return "%i %s"%(num,  gran)
-
+        
     elif has_minutes:
         if has_hours:
             hours.sort()
@@ -948,7 +948,7 @@ def compute_common_absolute_time_granularity_simple(gran_list):
         if num > 1:
             gran += "s"
         return "%i %s"%(num,  gran)
-
+        
     elif has_hours:
         if has_days:
             days.sort()
@@ -995,14 +995,14 @@ def compute_common_absolute_time_granularity_simple(gran_list):
         if num > 1:
             gran += "s"
         return "%i %s"%(num,  gran)
-
+        
     elif has_years:
         num = gcd_list(years)
         gran = "year"
         if num > 1:
             gran += "s"
         return "%i %s"%(num,  gran)
-
+        
 
 ###############################################################################
 # http://akiscode.com/articles/gcd_of_a_list.shtml
