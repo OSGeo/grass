@@ -14,92 +14,92 @@ for details.
     >>> p = TemporalOperatorParser()
     >>> expression =  "{equal| during}"
     >>> p.parse(expression, optype = 'relation')
-    >>> print(p.relations, p.temporal, p.function)
+    >>> print((p.relations, p.temporal, p.function))
     (['equal', 'during'], None, None)
     >>> p = TemporalOperatorParser()
     >>> expression =  "{contains | starts}"
     >>> p.parse(expression)
-    >>> print(p.relations, p.temporal, p.function)
+    >>> print((p.relations, p.temporal, p.function))
     (['contains', 'starts'], None, None)
     >>> p = TemporalOperatorParser()
     >>> expression =  "{&&, during}"
     >>> p.parse(expression, optype = 'boolean')
-    >>> print(p.relations, p.temporal, p.function,p.aggregate)
+    >>> print((p.relations, p.temporal, p.function,p.aggregate))
     (['during'], 'l', '&&', '&')
     >>> p = TemporalOperatorParser()
     >>> expression =  "{||, equal | during}"
     >>> p.parse(expression, optype = 'boolean')
-    >>> print(p.relations, p.temporal, p.function,p.aggregate)
+    >>> print((p.relations, p.temporal, p.function,p.aggregate))
     (['equal', 'during'], 'l', '||', '|')
     >>> p = TemporalOperatorParser()
     >>> expression =  "{||, equal | during, &}"
     >>> p.parse(expression, optype = 'boolean')
-    >>> print(p.relations, p.temporal, p.function,p.aggregate)
+    >>> print((p.relations, p.temporal, p.function,p.aggregate))
     (['equal', 'during'], 'l', '||', '&')
     >>> p = TemporalOperatorParser()
     >>> expression =  "{&&, during, |}"
     >>> p.parse(expression, optype = 'boolean')
-    >>> print(p.relations, p.temporal, p.function,p.aggregate)
+    >>> print((p.relations, p.temporal, p.function,p.aggregate))
     (['during'], 'l', '&&', '|')
     >>> p = TemporalOperatorParser()
     >>> expression =  "{&&, during, |, r}"
     >>> p.parse(expression, optype = 'boolean')
-    >>> print(p.relations, p.temporal, p.function,p.aggregate)
+    >>> print((p.relations, p.temporal, p.function,p.aggregate))
     (['during'], 'r', '&&', '|')
     >>> p = TemporalOperatorParser()
     >>> expression =  "{&&, during, u}"
     >>> p.parse(expression, optype = 'boolean')
-    >>> print(p.relations, p.temporal, p.function,p.aggregate)
+    >>> print((p.relations, p.temporal, p.function,p.aggregate))
     (['during'], 'u', '&&', '&')
     >>> p = TemporalOperatorParser()
     >>> expression =  "{:, during, r}"
     >>> p.parse(expression, optype = 'select')
-    >>> print(p.relations, p.temporal, p.function)
+    >>> print((p.relations, p.temporal, p.function))
     (['during'], 'r', ':')
     >>> p = TemporalOperatorParser()
     >>> expression =  "{!:, equal | contains, d}"
     >>> p.parse(expression, optype = 'select')
-    >>> print(p.relations, p.temporal, p.function)
+    >>> print((p.relations, p.temporal, p.function))
     (['equal', 'contains'], 'd', '!:')
     >>> p = TemporalOperatorParser()
     >>> expression =  "{#, during, r}"
     >>> p.parse(expression, optype = 'hash')
-    >>> print(p.relations, p.temporal, p.function)
+    >>> print((p.relations, p.temporal, p.function))
     (['during'], 'r', '#')
     >>> p = TemporalOperatorParser()
     >>> expression =  "{#, equal | contains}"
     >>> p.parse(expression, optype = 'hash')
-    >>> print(p.relations, p.temporal, p.function)
+    >>> print((p.relations, p.temporal, p.function))
     (['equal', 'contains'], 'l', '#')
     >>> p = TemporalOperatorParser()
     >>> expression =  "{+, during, r}"
     >>> p.parse(expression, optype = 'raster')
-    >>> print(p.relations, p.temporal, p.function)
+    >>> print((p.relations, p.temporal, p.function))
     (['during'], 'r', '+')
     >>> p = TemporalOperatorParser()
     >>> expression =  "{/, equal | contains}"
     >>> p.parse(expression, optype = 'raster')
-    >>> print(p.relations, p.temporal, p.function)
+    >>> print((p.relations, p.temporal, p.function))
     (['equal', 'contains'], 'l', '/')
     >>> p = TemporalOperatorParser()
     >>> expression =  "{+, equal | contains,intersect}"
     >>> p.parse(expression, optype = 'raster')
-    >>> print(p.relations, p.temporal, p.function)
+    >>> print((p.relations, p.temporal, p.function))
     (['equal', 'contains'], 'i', '+')
     >>> p = TemporalOperatorParser()
     >>> expression =  "{*, contains,disjoint}"
     >>> p.parse(expression, optype = 'raster')
-    >>> print(p.relations, p.temporal, p.function)
+    >>> print((p.relations, p.temporal, p.function))
     (['contains'], 'd', '*')
     >>> p = TemporalOperatorParser()
     >>> expression =  "{~, equal,left}"
     >>> p.parse(expression, optype = 'overlay')
-    >>> print(p.relations, p.temporal, p.function)
+    >>> print((p.relations, p.temporal, p.function))
     (['equal'], 'l', '~')
     >>> p = TemporalOperatorParser()
     >>> expression =  "{^, over,right}"
     >>> p.parse(expression, optype = 'overlay')
-    >>> print(p.relations, p.temporal, p.function)
+    >>> print((p.relations, p.temporal, p.function))
     (['overlaps', 'overlapped'], 'r', '^')
 
 """
@@ -613,4 +613,3 @@ class TemporalOperatorParser(object):
 if __name__ == "__main__":
     import doctest
     doctest.testmod()
-
