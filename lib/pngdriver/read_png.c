@@ -16,6 +16,8 @@
 #include <png.h>
 
 #include <grass/gis.h>
+#include <grass/glocale.h>
+
 #include "pngdriver.h"
 
 static void read_data(png_structp png_ptr, png_bytep data, png_size_t length)
@@ -37,7 +39,7 @@ static void read_data(png_structp png_ptr, png_bytep data, png_size_t length)
   check = fread(data, 1, length, fp);
 
   if (check != length)
-    G_fatal_error("PNG: Read Error");
+    G_fatal_error(_("Unable to read PNG"));
 }
 
 void read_png(void)
@@ -55,18 +57,18 @@ void read_png(void)
     png_ptr =
 	png_create_read_struct(PNG_LIBPNG_VER_STRING, &jbuf, NULL, NULL);
     if (!png_ptr)
-	G_fatal_error("PNG: couldn't allocate PNG structure");
+        G_fatal_error(_("Unable allocate PNG structure"));
 
     info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr)
-	G_fatal_error("PNG: couldn't allocate PNG structure");
+	G_fatal_error(_("Unable to allocate PNG structure"));
 
     if (setjmp(png_jmpbuf(png_ptr)))
-	G_fatal_error("error reading PNG file");
+	G_fatal_error(_("Unable to readi PNG file"));
 
     input = fopen(png.file_name, "rb");
     if (!input)
-	G_fatal_error("PNG: couldn't open output file %s", png.file_name);
+	G_fatal_error(_("Unable to open output file <%s>"), png.file_name);
 
     png_set_read_fn(png_ptr, input, read_data);
 
@@ -76,20 +78,20 @@ void read_png(void)
 		 &depth, &color_type, NULL, NULL, NULL);
 
     if (depth != 8)
-	G_fatal_error("PNG: input file is not 8-bit");
+	G_fatal_error(_("Input PNG file is not 8-bit"));
 
-    if (i_width != png.width || i_height != png.height)
+    if (i_width != (unsigned int)png.width || i_height != (unsigned int)png.height)
 	G_fatal_error
-	    ("PNG: input file has incorrect dimensions: expected: %dx%d got: %lux%lu",
+	    (_("Input PNG file has incorrect dimensions: expected: %dx%d got: %lux%lu"),
 	     png.width, png.height, (unsigned long) i_width, (unsigned long) i_height);
 
     if (png.true_color) {
 	if (color_type != PNG_COLOR_TYPE_RGB_ALPHA)
-	    G_fatal_error("PNG: input file is not RGBA");
+	    G_fatal_error(_("Input PNG file is not RGBA"));
     }
     else {
 	if (color_type != PNG_COLOR_TYPE_PALETTE)
-	    G_fatal_error("PNG: input file is not indexed color");
+	    G_fatal_error(_("Input PNG file is not indexed color"));
     }
 
     if (!png.true_color && png.has_alpha) {
@@ -99,7 +101,7 @@ void read_png(void)
 	png_get_tRNS(png_ptr, info_ptr, &trans, &num_trans, NULL);
 
 	if (num_trans != 1 || trans[0] != 0)
-	    G_fatal_error("PNG: input file has invalid palette");
+	    G_fatal_error(_("Input PNG file has invalid palette"));
     }
 
     if (png.true_color)
