@@ -120,7 +120,10 @@ class Model(object):
             item = self.items.pop(oldIdx)
             items.append(item)
             self.items.insert(newIdx, item)
-            nextItem = self.items[newIdx+1]
+            try:
+                nextItem = self.items[newIdx+1]
+            except IndexError:
+                continue # newIdx is the last item in the list
             items.append(nextItem)
             x = item.GetX()
             y = item.GetY()
