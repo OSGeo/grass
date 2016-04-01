@@ -16,6 +16,8 @@
 #include <png.h>
 
 #include <grass/gis.h>
+#include <grass/glocale.h>
+
 #include "pngdriver.h"
 
 
@@ -34,7 +36,7 @@ static void write_data(png_structp png_ptr, png_bytep data, png_size_t length)
     check = fwrite(data, 1, length, fp);
 
     if (check != length)
-	G_fatal_error("PNG: Write Error");
+	G_fatal_error(_("Unable to write PNG"));
 }
 
 static void output_flush(png_structp png_ptr)
@@ -66,18 +68,18 @@ void write_png(void)
     png_ptr =
 	png_create_write_struct(PNG_LIBPNG_VER_STRING, &jbuf, NULL, NULL);
     if (!png_ptr)
-	G_fatal_error("PNG: couldn't allocate PNG structure");
+	G_fatal_error(_("Unable to allocate PNG structure"));
 
     info_ptr = png_create_info_struct(png_ptr);
     if (!info_ptr)
-	G_fatal_error("PNG: couldn't allocate PNG structure");
+	G_fatal_error(_("Unable to allocate PNG structure"));
 
     if (setjmp(png_jmpbuf(png_ptr)))
-	G_fatal_error("error writing PNG file");
+	G_fatal_error(_("Unable to write PNG file"));
 
     output = fopen(png.file_name, "wb");
     if (!output)
-	G_fatal_error("PNG: couldn't open output file %s", png.file_name);
+	G_fatal_error(_("Unable to open output PNG file <%s>"), png.file_name);
 
     png_set_write_fn(png_ptr, output, write_data, output_flush);
 
