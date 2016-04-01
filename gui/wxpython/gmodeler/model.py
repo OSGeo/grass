@@ -120,17 +120,17 @@ class Model(object):
             item = self.items.pop(oldIdx)
             items.append(item)
             self.items.insert(newIdx, item)
-            try:
-                nextItem = self.items[newIdx+1]
-            except IndexError:
-                continue # newIdx is the last item in the list
-            items.append(nextItem)
-            x = item.GetX()
-            y = item.GetY()
-            item.SetX(nextItem.GetX())
-            item.SetY(nextItem.GetY())
-            nextItem.SetX(x)
-            nextItem.SetY(y)
+            # try:
+            #     nextItem = self.items[newIdx+1]
+            # except IndexError:
+            #     continue # newIdx is the last item in the list
+            # items.append(nextItem)
+            # x = item.GetX()
+            # y = item.GetY()
+            # item.SetX(nextItem.GetX())
+            # item.SetY(nextItem.GetY())
+            # nextItem.SetX(x)
+            # nextItem.SetY(y)
 
         dc = wx.ClientDC(self.canvas)
         for item in items:
