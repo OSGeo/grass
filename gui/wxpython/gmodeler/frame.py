@@ -838,7 +838,7 @@ class ModelFrame(wx.Frame):
                 if not p.get('value', ''):
                     data = layer.FindData(p.get('name', ''))
                     if data:
-                        remList, upList = self.model.RemoveItem(data)
+                        remList, upList = self.model.RemoveItem(data, layer)
                         for item in remList:
                             self.canvas.diagram.RemoveShape(item)
                             item.__del__()
