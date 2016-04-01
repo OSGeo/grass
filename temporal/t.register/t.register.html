@@ -182,6 +182,52 @@ prec_6|PERMANENT|2001-06-01 00:00:00|2001-07-01 00:00:00
 prec_7|PERMANENT|2001-07-01 00:00:00|2001-08-01 00:00:00
 </pre></div>
 
+<h3>Importing and registering ECA&amp;D climatic data</h3>
+
+The European Climate Assessment &amp; Dataset (ECA&amp;D) project
+offers the E-OBS dataset which is a daily gridded observational
+dataset for precipitation, temperature and sea level pressure in
+Europe based on ECA&amp;D information.
+
+Download and decompress mean temperature data from: 
+<a href="http://eca.knmi.nl/download/ensembles/data/Grid_0.25deg_reg/">here</a>
+by accepting their
+<a href="http://eca.knmi.nl/download/ensembles/ensembles.php">Terms of use</a>.
+
+<div class="code"><pre>
+# import E-OBS V12 into a lat-long location (alternatively, use r.external)
+r.in.gdal -oe input=tg_0.25deg_reg_1950-1964_v12.0.nc \
+  output=temperature_mean offset=0
+r.in.gdal -oe input=tg_0.25deg_reg_1965-1979_v12.0.nc \
+  output=temperature_mean offset=5479 --o
+r.in.gdal -oe input=tg_0.25deg_reg_1980-1994_v12.0.nc \
+  output=temperature_mean offset=10957 --o
+r.in.gdal -oe input=tg_0.25deg_reg_1995-2015_v12.0.nc \
+  output=temperature_mean offset=16436 --o
+
+# create STRDS
+t.create type=strds output=temperature_mean_1950_2015_daily \
+  temporaltype=absolute semantictype=mean \
+  title="European mean temperature 1950-2015" \
+  description="The European daily mean temperature from ECAD"
+
+# create text file with all temperature_mean rasters, one per line,
+# a) using a shell script
+for i in `seq 1 23922` ; do 
+    echo temperature_mean.$i &gt;&gt; map_list.txt
+done
+
+# b) using a Python script
+file = open("map_list.txt", "w")
+for i in range(23922):
+    file.write("temperature_mean.%i\n" % (i + 1))
+file.close()
+
+# register daily maps using the file created above
+t.register -i type=raster input=temperature_mean_1950_2015_daily \
+              file=map_list.txt start=1950-01-01 increment="1 days"
+</pre></div>
+
 <h2>SEE ALSO</h2>
 
 <em>
