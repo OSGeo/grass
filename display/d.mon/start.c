@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <grass/gis.h>
 #include <grass/spawn.h>
 #include <grass/display.h>
@@ -7,12 +8,12 @@
 
 #include "proto.h"
 
-static char *start(const char *, const char *, int);
+static char *start(const char *, const char *, int, int, int);
 static char *start_wx(const char *, const char *, int, int, int);
 static void error_handler(void *);
 
 /* start file-based monitor */
-char *start(const char *name, const char *output, int update)
+char *start(const char *name, const char *output, int width, int height, int update)
 {
     char *output_path;
     const char *output_name;
@@ -26,8 +27,14 @@ char *start(const char *name, const char *output, int update)
     
     if (!output) {
         char buff[512];
+
         sprintf(buff, "GRASS_RENDER_IMMEDIATE=%s", name);
         putenv(G_store(buff));
+        sprintf(buff, "GRASS_RENDER_WIDTH=%d", width);
+        putenv(G_store(buff));
+        sprintf(buff, "GRASS_RENDER_HEIGHT=%d", height);
+        putenv(G_store(buff));
+
         D_open_driver();
         
         output_name = D_get_file();
@@ -51,6 +58,13 @@ char *start(const char *name, const char *output, int update)
     }
     else {
         output_name = output;
+        if (!update && access(output_name, F_OK) == 0) {
+            if (G_get_overwrite()) {
+                G_warning(_("File <%s> already exists and will be overwritten"), output_name);
+                if (0 != unlink(output_name))
+                    G_fatal_error(_("Unable to delete <%s>"), output_name);
+            }
+        }
     }
 
         
@@ -145,7 +159,7 @@ int start_mon(const char *name, const char *output, int select,
     if (strncmp(name, "wx", 2) == 0)
         out_file = start_wx(name, mon_path, width, height, x_only);
     else
-        out_file = start(name, output, update);
+        out_file = start(name, output, width, height, update);
     
     /* create env file (environmental variables used for rendering) */
     G_debug(1, "Monitor name=%s, envfile=%s", name, env_file);
