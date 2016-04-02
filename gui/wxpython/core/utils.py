@@ -23,6 +23,7 @@ import inspect
 
 from grass.script import core as grass
 from grass.script import task as gtask
+from grass.exceptions import OpenError
 
 from core import globalvar
 from core.gcmd  import RunCommand
@@ -496,15 +497,16 @@ def ReadEpsgCodes(path):
 
     :param path: full path to the file with EPSG codes
 
+    Raise OpenError on failure.
+
     :return: dictionary of EPSG code
-    :return: string on error
     """
     epsgCodeDict = dict()
     try:
         try:
             f = open(path, "r")
         except IOError:
-            return _("failed to open '%s'" % path)
+            raise OpenError(_("failed to open '{}'").format(path))
 
         code = None
         for line in f.readlines():
@@ -519,7 +521,7 @@ def ReadEpsgCodes(path):
                 try:
                     code = int(code.replace('<', '').replace('>', ''))
                 except ValueError as e:
-                    return e
+                    raise OpenError('{}'.format(e))
             
             if code is not None:
                 epsgCodeDict[code] = (descr, params)
@@ -527,7 +529,7 @@ def ReadEpsgCodes(path):
         
         f.close()
     except StandardError as e:
-        return e
+        raise OpenError('{}'.format(e))
     
     return epsgCodeDict
 

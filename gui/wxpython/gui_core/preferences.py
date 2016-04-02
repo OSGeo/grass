@@ -41,8 +41,8 @@ import wx.lib.mixins.listctrl as listmix
 import wx.lib.scrolledpanel as SP
 
 from grass.pydispatch.signal import Signal
-
 from grass.script import core as grass
+from grass.exceptions import OpenError
 
 from core          import globalvar
 from core.gcmd     import RunCommand, GError
@@ -1373,10 +1373,17 @@ class PreferencesDialog(PreferencesBaseDialog):
         """Load EPSG codes from the file"""
         win = self.FindWindowById(self.winId['projection:statusbar:projFile'])
         path = win.GetValue()
-        wx.BeginBusyCursor()
-        self.epsgCodeDict = ReadEpsgCodes(path)
-
         epsgCombo = self.FindWindowById(self.winId['projection:statusbar:epsg'])
+        wx.BeginBusyCursor()
+        try:
+            self.epsgCodeDict = ReadEpsgCodes(path)
+        except OpenError as e:
+            wx.EndBusyCursor()
+            epsgCombo.SetItems([])
+            GError(parent = self,
+                   message = _("Unable to read EPGS codes: {}").format(e), showTraceback=False)
+            return
+
         if type(self.epsgCodeDict) == type(''):
             wx.MessageBox(parent = self,
                           message = _("Unable to read EPSG codes: %s") % self.epsgCodeDict,
