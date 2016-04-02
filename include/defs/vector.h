@@ -134,6 +134,7 @@ void Vect_destroy_boxlist(struct boxlist *);
 
 /* Bounding box (MBR) */
 int Vect_point_in_box(double, double, double, const struct bound_box *);
+int Vect_point_in_box_2d(double, double, const struct bound_box *);
 int Vect_box_overlap(const struct bound_box *, const struct bound_box *);
 int Vect_box_copy(struct bound_box *, const struct bound_box *);
 int Vect_box_extend(struct bound_box *, const struct bound_box *);
