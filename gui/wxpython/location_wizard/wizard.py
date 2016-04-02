@@ -50,6 +50,7 @@ from location_wizard.base    import BaseClass
 from location_wizard.dialogs import SelectTransformDialog
 
 from grass.script import core as grass
+from grass.exceptions import OpenError
 
 global coordsys
 global north
@@ -1449,8 +1450,9 @@ class EPSGPage(TitledPage):
             self.epsgcode = None
             
         nextButton = wx.FindWindowById(wx.ID_FORWARD)
-
-        if self.epsgcode and self.epsgcode in self.epsgCodeDict.keys():
+        
+        if self.epsgcode and self.epsgCodeDict and \
+                self.epsgcode in self.epsgCodeDict.keys():
             self.epsgdesc = self.epsgCodeDict[self.epsgcode][0]
             self.epsgparams = self.epsgCodeDict[self.epsgcode][1]
             if not nextButton.IsEnabled():
@@ -1512,12 +1514,11 @@ class EPSGPage(TitledPage):
         
     def OnBrowseCodes(self, event, search = None):
         """Browse EPSG codes"""
-        self.epsgCodeDict = utils.ReadEpsgCodes(self.tfile.GetValue())
-
-        if type(self.epsgCodeDict) != dict:
-            wx.MessageBox(parent = self,
-                          message = _("Unable to read EPGS codes: %s") % self.epsgCodeDict,
-                          caption = _("Error"),  style = wx.OK | wx.ICON_ERROR | wx.CENTRE)
+        try:
+            self.epsgCodeDict = utils.ReadEpsgCodes(self.tfile.GetValue())
+        except OpenError as e:
+            GError(parent = self,
+                   message = _("Unable to read EPGS codes: {}").format(e), showTraceback=False)
             self.epsglist.Populate(list(), update = True)
             return
         
@@ -1738,12 +1739,11 @@ class IAUPage(TitledPage):
         
     def OnBrowseCodes(self, event, search = None):
         """Browse IAU codes"""
-        self.epsgCodeDict = utils.ReadEpsgCodes(self.tfile.GetValue())
-
-        if type(self.epsgCodeDict) != dict:
-            wx.MessageBox(parent = self,
-                          message = _("Unable to read IAU codes: %s") % self.epsgCodeDict,
-                          caption = _("Error"),  style = wx.OK | wx.ICON_ERROR | wx.CENTRE)
+        try:
+            self.epsgCodeDict = utils.ReadEpsgCodes(self.tfile.GetValue())
+        except OpenError as e:
+            GError(parent = self,
+                   message = _("Unable to read IAU codes: {}").format(e), showTraceback=False)
             self.epsglist.Populate(list(), update = True)
             return
         
