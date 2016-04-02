@@ -130,7 +130,7 @@ int set_datumtrans(int datumtrans, int force)
 	    G_debug(3, "set_datumtrans(): datum transform terms found "
 		    "with %d options", paramsets);
 
-	    if (paramsets > 1 && (status == 1 || datumtrans == -1))
+	    if (paramsets > 1 && status > 0)
 		/* Parameters are missing and there is a choice to be
                    made / or / user asked to print datum
                    transformation parameters */
