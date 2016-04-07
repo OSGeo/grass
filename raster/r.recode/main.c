@@ -47,6 +47,7 @@ int main(int argc, char *argv[])
     module = G_define_module();
     G_add_keyword(_("raster"));
     G_add_keyword(_("recode categories"));
+    G_add_keyword(_("reclassification"));
     module->description = _("Recodes categorical raster maps.");
 
     parm.input = G_define_standard_option(G_OPT_R_INPUT);
