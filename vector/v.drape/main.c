@@ -57,6 +57,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("geometry"));
     G_add_keyword(_("sampling"));
     G_add_keyword(_("3D"));
+    G_add_keyword(_("surface information"));
     module->description =
 	_("Converts 2D vector features to 3D by sampling of elevation raster map.");
 
