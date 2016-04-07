@@ -67,6 +67,7 @@ int main(int argc, char *argv[])
     G_add_keyword(_("position"));
     G_add_keyword(_("querying"));
     G_add_keyword(_("attribute table"));
+    G_add_keyword(_("surface information"));
     module->description =
 	_("Uploads 3D raster values at positions of vector points to the table.");
 
