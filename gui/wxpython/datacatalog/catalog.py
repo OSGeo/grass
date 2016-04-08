@@ -21,6 +21,7 @@ from core.gthread import gThread
 from core.debug import Debug
 from datacatalog.tree import DataCatalogTree
 from core.utils import _
+from datacatalog.toolbars import DataCatalogToolbar
 
 from grass.pydispatch.signal import Signal
 
@@ -36,7 +37,10 @@ class DataCatalog(wx.Panel):
         self.SetName("DataCatalog")
         
         Debug.msg(1, "DataCatalog.__init__()")
-        
+
+        # toolbar
+        self.toolbar = DataCatalogToolbar(parent = self)
+
         # tree with layers
         self.tree = DataCatalogTree(self, giface=giface)
         self.thread = gThread()
@@ -50,6 +54,9 @@ class DataCatalog(wx.Panel):
         """Do layout"""
         sizer = wx.BoxSizer(wx.VERTICAL)
 
+        sizer.Add(item = self.toolbar, proportion = 0,
+                  flag = wx.EXPAND)          
+
         sizer.Add(item = self.tree.GetControl(), proportion = 1,
                   flag = wx.EXPAND)          
         
@@ -61,10 +68,19 @@ class DataCatalog(wx.Panel):
     def LoadItems(self):
         if self._loaded:
             return
-        
+
         self.thread.Run(callable=self.tree.InitTreeItems,
                         ondone=lambda event: self.LoadItemsDone())
 
     def LoadItemsDone(self):
         self._loaded = True
         self.tree.ExpandCurrentMapset()
+
+    def OnReloadTree(self, event):
+        """Reload whole tree"""
+        self.tree.ReloadTreeItems()
+        self.tree.ExpandCurrentMapset()
+
+    def OnReloadCurrentMapset(self, event):
+        """Reload current mapset tree only"""
+        self.tree.ReloadCurrentMapset()
