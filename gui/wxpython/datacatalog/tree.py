@@ -50,7 +50,7 @@ def getEnvironment(gisdbase, location, mapset):
     return tmp_gisrc_file, env
 
 
-def getLocationTree(gisdbase, location, queue):
+def getLocationTree(gisdbase, location, queue, mapsets=[]):
     """Creates dictionary with mapsets, elements, layers for given location.
     Returns tuple with the dictionary and error (or None)"""
     tmp_gisrc_file, env = getEnvironment(gisdbase, location, 'PERMANENT')
@@ -59,7 +59,8 @@ def getLocationTree(gisdbase, location, queue):
     maps_dict = {}
     elements = ['raster', 'raster_3d', 'vector']
     try:
-        mapsets = gscript.read_command('g.mapsets', flags='l', quiet=True, env=env).strip()
+        if not mapsets:
+            mapsets = gscript.read_command('g.mapsets', flags='l', quiet=True, env=env).strip()
     except CalledModuleError:
         queue.put((maps_dict, _("Failed to read mapsets from location <{l}>.").format(l=location)))
         gscript.try_remove(tmp_gisrc_file)
@@ -175,16 +176,11 @@ class LocationMapTree(TreeView):
                     proc_list[i].join()
                     if error:
                         errors.append(error)
+
                     for key in sorted(maps.keys()):
                         mapset_node = self._model.AppendNode(parent=location_nodes[i], label=key,
                                                              data=dict(type='mapset', name=key))
-                        for elem in maps[key]:
-                            if maps[key][elem]:
-                                element_node = self._model.AppendNode(parent=mapset_node, label=elem,
-                                                                      data=dict(type='element', name=elem))
-                                for layer in maps[key][elem]:
-                                    self._model.AppendNode(parent=element_node, label=layer,
-                                                           data=dict(type=elem, name=layer))
+                        self._populateMapsetItem(mapset_node, maps[key])
 
                 proc_count = 0
                 proc_list = []
@@ -198,8 +194,54 @@ class LocationMapTree(TreeView):
         self.RefreshItems()
 
     def InitTreeItems(self):
-        """Create popup menu for layers"""
+        """Load locations, mapsets and layers in the tree."""
         raise NotImplementedError()
+
+    def ReloadTreeItems(self):
+        """Reload locations, mapsets and layers in the tree."""
+        self._model.RemoveNode(self._model.root)
+        self.RefreshNode(self._model.root)
+        self.InitTreeItems()
+
+    def ReloadCurrentMapset(self):
+        """Reload current mapset tree only."""
+        def get_first_child(node):
+            try:
+                child = mapsetItem.children[0]
+            except IndexError:
+                child = None
+            return child
+
+        locationItem, mapsetItem = self.GetCurrentLocationMapsetNode()
+        if not locationItem or not mapsetItem:
+            return
+
+        if mapsetItem.children:
+            node = get_first_child(mapsetItem)
+            while node:
+                self._model.RemoveNode(node)
+                node = get_first_child(mapsetItem)
+
+        q = Queue()
+        p = Process(target=getLocationTree,
+                    args=(self.gisdbase, locationItem.data['name'], q, mapsetItem.data['name']))
+        p.start()
+        maps, error = q.get()
+        if error:
+            raise CalledModuleError(e)
+
+        self._populateMapsetItem(mapsetItem, maps[mapsetItem.data['name']])
+        self.RefreshNode(mapsetItem)
+        self.RefreshItems()
+
+    def _populateMapsetItem(self, mapset_node, data):
+        for elem in data:
+            if data[elem]:
+                element_node = self._model.AppendNode(parent=mapset_node, label=elem,
+                                                      data=dict(type='element', name=elem))
+                for layer in data[elem]:
+                    self._model.AppendNode(parent=element_node, label=layer,
+                                           data=dict(type=elem, name=layer))
 
     def _popupMenuLayer(self):
         """Create popup menu for layers"""
@@ -279,20 +321,27 @@ class LocationMapTree(TreeView):
         else:
             Debug.msg(1, "Location <%s> not found" % location)
 
-    def ExpandCurrentMapset(self):
-        """Expand current mapset"""
+    def GetCurrentLocationMapsetNode(self):
+        """Get current mapset node"""
         gisenv = gscript.gisenv()
         location = gisenv['LOCATION_NAME']
         mapset = gisenv['MAPSET']
         locationItem = self._model.SearchNodes(name=location, type='location')
-        mapsetItem = None
-        if locationItem:
-            mapsetItem = self._model.SearchNodes(parent=locationItem[0], name=mapset, type='mapset')
+        if not locationItem:
+            return None, None
+
+        mapsetItem = self._model.SearchNodes(parent=locationItem[0], name=mapset, type='mapset')
+        if not mapsetItem:
+            return locationItem[0], None
+
+        return locationItem[0], mapsetItem[0]
+            
+    def ExpandCurrentMapset(self):
+        """Expand current mapset"""
+        locationItem, mapsetItem = self.GetCurrentLocationMapsetNode()
         if mapsetItem:
-            self.Select(mapsetItem[0], select=True)
-            self.ExpandNode(mapsetItem[0], recursive=True)
-        else:
-            Debug.msg(1, "Mapset <%s> not found" % mapset)
+            self.Select(mapsetItem, select=True)
+            self.ExpandNode(mapsetItem, recursive=True)
 
 class DataCatalogTree(LocationMapTree):
     def __init__(self, parent, giface=None):
@@ -336,7 +385,7 @@ class DataCatalogTree(LocationMapTree):
     def InitTreeItems(self):
         """Add locations, mapsets and layers to the tree."""
         self._initTreeItems()
-
+        
     def OnCopy(self, event):
         """Copy layer or mapset (just save it temporarily, copying is done by paste)"""
         self.copy_layer = self.selected_layer

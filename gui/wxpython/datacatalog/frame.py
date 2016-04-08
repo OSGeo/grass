@@ -6,23 +6,25 @@
 Classes:
  - datacatalog::DataCatalogFrame
 
-(C) 2014-2015 by Tereza Fiedlerova, and the GRASS Development Team
+(C) 2014-2016 by Tereza Fiedlerova, and the GRASS Development Team
 
 This program is free software under the GNU General Public
 License (>=v2). Read the file COPYING that comes with GRASS
 for details.
 
-@author Tereza Fiedlerova
+@author Tereza Fiedlerova (original author)
+@author Martin Landa <landa.martin gmail.com> (various improvements)
 """
 
 import os
+import sys
 
 import wx
 
 from core.utils import _
 from core.globalvar import ICONDIR
 from datacatalog.tree import DataCatalogTree
-
+from datacatalog.toolbars import DataCatalogToolbar
 
 class DataCatalogFrame(wx.Frame):
     """Frame for testing purposes only."""
@@ -34,6 +36,11 @@ class DataCatalogFrame(wx.Frame):
 
         self._giface = giface
         self.panel = wx.Panel(self)
+
+        self.toolbar = DataCatalogToolbar(parent = self)
+        # workaround for http://trac.wxwidgets.org/ticket/13888
+        if sys.platform != 'darwin':
+            self.SetToolBar(self.toolbar)
 
         # tree
         self.tree = DataCatalogTree(parent=self.panel, giface=self._giface)
@@ -74,3 +81,12 @@ class DataCatalogFrame(wx.Frame):
             self.Destroy()
 
         event.Skip()
+
+    def OnReloadTree(self, event):
+        """Reload whole tree"""
+        self.tree.ReloadTreeItems()
+        self.tree.ExpandCurrentMapset()
+
+    def OnReloadCurrentMapset(self, event):
+        """Reload current mapset tree only"""
+        self.tree.ReloadCurrentMapset()
