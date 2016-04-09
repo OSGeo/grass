@@ -9,10 +9,10 @@ include $(MODULE_TOPDIR)/include/Make/Python.make
 DSTDIR = $(GUIDIR)/wxpython
 
 SRCFILES := $(wildcard icons/*.py scripts/*.py xml/*) \
-	$(wildcard animation/* core/*.py datacatalog/* dbmgr/* gcp/*.py gmodeler/* \
-	gui_core/*.py iclass/* lmgr/*.py location_wizard/*.py mapwin/*.py mapdisp/*.py \
-	mapswipe/* modules/*.py nviz/*.py psmap/* rdigit/* rlisetup/* timeline/* vdigit/* \
-	vnet/*.py web_services/*.py wxplot/*.py iscatt/*.py tplot/*) \
+	$(wildcard animation/*.py core/*.py datacatalog/*.py dbmgr/*.py gcp/*.py gmodeler/*.py \
+	gui_core/*.py iclass/*.py lmgr/*.py location_wizard/*.py mapwin/*.py mapdisp/*.py \
+	mapswipe/*.py modules/*.py nviz/*.py psmap/*.py rdigit/*.py rlisetup/*.py timeline/*.py vdigit/*.py \
+	vnet/*.py web_services/*.py wxplot/*.py iscatt/*.py tplot/*.py) \
 	gis_set.py gis_set_error.py wxgui.py README
 
 DSTFILES := $(patsubst %,$(DSTDIR)/%,$(SRCFILES)) \
