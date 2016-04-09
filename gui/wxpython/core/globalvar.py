@@ -131,7 +131,7 @@ GM_WINDOW_MIN_SIZE = (525, 400)
 if sys.platform in ('win32', 'darwin') or os.environ.get('UBUNTU_MENUPROXY'):
     GM_WINDOW_SIZE = (GM_WINDOW_MIN_SIZE[0], 600)
 else:
-    GM_WINDOW_SIZE = (600, 600)
+    GM_WINDOW_SIZE = (625, 600)
 
 if sys.platform == 'win32':
     BIN_EXT = '.exe'
