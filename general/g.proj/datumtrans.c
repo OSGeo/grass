@@ -91,7 +91,7 @@ int set_datum(char *datum)
  *        co-ordinate system definition
  * 
  * \param datumtrans  Index number of parameter set to use, 0 to leave
- *                    unspecifed (or remove specific parameters, leaving just
+ *                    unspecified (or remove specific parameters, leaving just
  *                    the datum name), -1 to list the available parameter
  *                    sets for this datum and exit.
  *
