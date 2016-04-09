@@ -267,7 +267,7 @@ OGRSpatialReferenceH GPJ_grass_to_osr(const struct Key_Value * proj_info,
  * \param hSRS        OGRSpatialReferenceH object containing the co-ordinate 
  *                    system to be converted
  * \param datumtrans  Index number of datum parameter set to use, 0 to leave
- *                    unspecifed
+ *                    unspecified
  * 
  * \return            2 if a projected or lat/long co-ordinate system has been
  *                    defined
@@ -685,7 +685,7 @@ int GPJ_osr_to_grass(struct Cell_head *cellhd, struct Key_Value **projinfo,
  * \param wkt         Well-known Text (WKT) description of the co-ordinate 
  *                    system to be converted
  * \param datumtrans  Index number of datum parameter set to use, 0 to leave
- *                    unspecifed
+ *                    unspecified
  * 
  * \return            2 if a projected or lat/long co-ordinate system has been
  *                    defined
