@@ -1840,11 +1840,12 @@ class DbMgrBrowsePage(DbMgrNotebookBase):
             if self.dbMgrData['mapDBInfo'].tables[table][whereCol]['ctype'] == str:
                 # string attribute, check for quotes
                 whereVal = whereVal.replace('"', "'")
-                if not whereVal.startswith("'"):
-                    whereVal = "'" + whereVal
-                if not whereVal.endswith("'"):
-                    whereVal += "'"
-                whereWin.SetValue(whereVal)
+                if whereVal:
+                    if not whereVal.startswith("'"):
+                        whereVal = "'" + whereVal
+                    if not whereVal.endswith("'"):
+                        whereVal += "'"
+                    whereWin.SetValue(whereVal)
             
             try:
                 if len(whereVal) > 0:
