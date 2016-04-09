@@ -745,8 +745,9 @@ def install_extension_win(name):
                 outfile.close()
 
         fo.close()
-    except HTTPError:
-        grass.fatal(_("GRASS Addons <%s> not found") % name)
+    except (HTTPError, IOError) as e:
+        grass.fatal(_("GRASS Addons <{0}> not found. Reason: {1}").format(
+            name, e))
 
     return 0
 
