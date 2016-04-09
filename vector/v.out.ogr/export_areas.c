@@ -77,7 +77,7 @@ int export_areas_single(struct Map_info *In, int field, int donocat,
                        * not labeled */
         }
         
-        /* find correspoding area */
+        /* find corresponding area */
         area = Vect_get_centroid_area(In, centroid);
         if (area == 0)
             continue;
@@ -184,7 +184,7 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
                                 "Category %d not found in line %d, field %d"),
                               cat, line, field);
             
-            /* find correspoding area */
+            /* find corresponding area */
             area = Vect_get_centroid_area(In, line);
             if (area == 0)
                 continue;
@@ -241,7 +241,7 @@ int export_areas_multi(struct Map_info *In, int field, int donocat,
                        * not labeled */
         }
 
-        /* find correspoding area */
+        /* find corresponding area */
 	line = Vect_get_next_line_id(In);
         area = Vect_get_centroid_area(In, line);
         if (area == 0)

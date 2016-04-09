@@ -119,7 +119,7 @@ int LZ4_compressBound(int inputSize);
 
 /*
 LZ4_compress_fast() :
-    Same as LZ4_compress_default(), but allows to select an "acceleration" factor.
+    Same as LZ4_compress_default(), but allows selecting an "acceleration" factor.
     The larger the acceleration value, the faster the algorithm, but also the lesser the compression.
     It's a trade-off. It can be fine tuned, with each successive value providing roughly +~3% to speed.
     An acceleration value of "1" is the same as regular LZ4_compress_default()
