@@ -85,7 +85,7 @@ int main(int argc, char *argv[])
     Values[i].cat = -1;		/* features without category */
     Values[i].used = 0;
     Values[i].count1 = 0;
-    Values[i].count1 = 0;
+    Values[i].count2 = 0;
     Values[i].i1 = -1;
     Values[i].i2 = -1;
     Values[i].d1 = 0.0;
@@ -110,7 +110,7 @@ int main(int argc, char *argv[])
 	    Values[i].cat = cat;
 	    Values[i].used = 0;
 	    Values[i].count1 = 0;
-	    Values[i].count1 = 0;
+	    Values[i].count2 = 0;
 	    Values[i].i1 = -1;
 	    Values[i].i2 = -1;
 	    Values[i].d1 = 0.0;
