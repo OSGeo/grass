@@ -491,7 +491,7 @@ class HistRasterDialog(wx.Dialog):
         ret = grass.read_command('i.group', 
                                   group = '%s' % self.group, 
                                   quiet = True,
-                                  flags = 'g').strip().split('\n')
+                                  flags = 'g').strip().splitlines()
 
         if ret not in [None, '', ['']]:
             self.rasterList = ret
