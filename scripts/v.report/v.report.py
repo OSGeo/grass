@@ -145,11 +145,12 @@ def main():
 
         #make pre-table
         p = grass.pipe_command('v.to.db', flags = 'p',
+                               quiet = True,
                                map = mapname, option = option, columns = columns,
                                layer = layer, units = unitsp)
         records3 = []
         for line in p.stdout:
-            fields = line.split('|')
+            fields = line.rstrip('\r\n').split('|')
             if fields[0] in ['cat', '-1', '0']:
                 continue
             records3.append([int(fields[0])] + fields[1:])
