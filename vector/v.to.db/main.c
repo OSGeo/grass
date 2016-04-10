@@ -70,7 +70,7 @@ int main(int argc, char *argv[])
     /* allocate array for values */
     /* (+ 1 is for cat -1 (no category) reported at the end ) */
     findex = Vect_cidx_get_field_index(&Map, options.field);
-    if (Vect_cidx_get_field_index(&Map, options.field) > -1) {
+    if (findex > -1) {
 	n = Vect_cidx_get_num_unique_cats_by_index(&Map, findex);
     }
     else {
