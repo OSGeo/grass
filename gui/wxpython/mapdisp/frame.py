@@ -830,6 +830,8 @@ class MapFrame(SingleMapFrame):
             rast = []
             vect = []
             for layer in layers:
+                if layer.type == 'command':
+                    continue
                 name, found = GetLayerNameFromCmd(layer.cmd)
                 if not found:
                     continue

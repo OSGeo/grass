@@ -257,18 +257,18 @@ class DMonMap(Map):
         For input params and returned data see overridden method in Map class.
         """
         driver = UserSettings.Get(group = 'display', key = 'driver', subkey = 'type')
-    
+
         if driver == 'png':
             os.environ["GRASS_RENDER_IMMEDIATE"] = "png"
         else:
             os.environ["GRASS_RENDER_IMMEDIATE"] = "cairo"
 
-        layer = Map.AddLayer(self, render = False, *args, **kwargs)
-        llayer.SetMapFile(self.mapfile)
-        
+        layer = Map.AddLayer(self, *args, **kwargs)
+
         del os.environ["GRASS_RENDER_IMMEDIATE"]
 
-        #return layer
+        return layer
+
 
 class Layer(object):
     """@implements core::giface::Layer"""
@@ -367,6 +367,9 @@ class DMonGrassInterface(StandaloneGrassInterface):
 
     def GetMapWindow(self):
         return self._mapframe.GetMapWindow()
+
+    def GetMapDisplay(self):
+        return self._mapframe
 
     def GetProgress(self):
         return self._mapframe.GetProgressBar()
