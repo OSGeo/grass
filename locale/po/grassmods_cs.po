@@ -9,6 +9,7 @@
 # Miroslav Hořejší <miroslav.horejsi@fsv.cvut.cz>, 2009/01.
 # Pavel Valenta <pavel.valenta@fsv.cvut.cz>, 2009/01.
 # Lukáš Bocan <lukas.bocan@fsv.cvut.cz>, 2013.
+# Stanislav Horáček <stanislav.horacek@gmail.com>, 2015.
 #
 msgid ""
 msgstr ""
