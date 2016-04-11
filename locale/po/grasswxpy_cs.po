@@ -5,6 +5,7 @@
 # Jan Trochta <j.trochta seznam.cz>, 2008.
 # Miroslav Hořejší <miroslav.horejsi@fsv.cvut.cz>, 2009/01.
 # Pavel Valenta <pavel.valenta@fsv.cvut.cz>, 2009/01.
+# Stanislav Horáček <stanislav.horacek@gmail.com>, 2015.
 #
 msgid ""
 msgstr ""
