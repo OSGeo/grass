@@ -1749,7 +1749,7 @@ void calculate(double singleSlope, double singleAspect, double singleAlbedo,
 	 * "local clock time". */
 	dayRad = 2. * M_PI * day / 365.25;
 	locTimeOffset =
-	    -0.128 * sin(dayRad - 0.04887) - 0.165 * sin(2 * dayRad +
+	    +0.128 * sin(dayRad - 0.04887) + 0.165 * sin(2 * dayRad +
 							 0.34383);
 
 	/* Time offset due to timezone as input by user */
