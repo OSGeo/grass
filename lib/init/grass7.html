@@ -28,7 +28,10 @@
 <dd> Creates new GRASS projected location in specified GISDBASE with given EPSG code
 
 <dt><b>-c EPSG:code:datum_trans</b>
-  <dd> Creates new GRASS projected location in specified GISDBASE with given EPSG code and datum transform parameters
+<dd> Creates new GRASS projected location in specified GISDBASE with given EPSG code and datum transform parameters
+
+<dt><b>-f</b>
+<dd> Forces removal of .gislock if exists (use with care!). Only with -text flag
 
 <dt><b>-text</b>
 <dd> Indicates that Text-based User Interface should be used (skip welcome screen)
@@ -39,6 +42,12 @@
 <dt><b>-gui</b>
 <dd> Indicates that Graphical User Interface
 (<em><a href="wxGUI.html">wxGUI</a></em>) should be used
+
+<dt><b>--config</b>
+<dd> Prints GRASS configuration parameters (options: arch, build, compiler, path, revision)
+
+<dt><b>-exec EXECUTABLE</b>
+<dd> Execute GRASS module or script. The provided executable will be executed in GRASS session
 </dl>
 
 <h3>Parameters:</h3>
