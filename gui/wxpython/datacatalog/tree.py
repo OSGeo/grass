@@ -61,13 +61,13 @@ def getLocationTree(gisdbase, location, queue, mapsets=None):
     elements = ['raster', 'raster_3d', 'vector']
     try:
         if not mapsets:
-            mapsets = gscript.read_command('g.mapsets', flags='l', quiet=True, env=env).strip()
+            mapsets = gscript.read_command('g.mapsets', flags='l', separator='comma', quiet=True, env=env).strip()
     except CalledModuleError:
         queue.put((maps_dict, _("Failed to read mapsets from location <{l}>.").format(l=location)))
         gscript.try_remove(tmp_gisrc_file)
         return
     else:
-        listOfMapsets = mapsets.split()
+        listOfMapsets = mapsets.split(',')
         Debug.msg(4, "Location <{}>: {} mapsets found".format(location, len(listOfMapsets)))
         for each in listOfMapsets:
             maps_dict[each] = {}
@@ -249,7 +249,7 @@ class LocationMapTree(TreeView):
                 location_nodes = []
 
         if errors:
-            GWarning('\n'.join(errors))
+            wx.CallAfter(GWarning, '\n'.join(errors))
         Debug.msg(1, "Tree filled")
         self.RefreshItems()
 
