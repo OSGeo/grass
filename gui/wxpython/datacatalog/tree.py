@@ -690,8 +690,8 @@ class DataCatalogTree(LocationMapTree):
     def _popupMenuLayer(self):
         """Create popup menu for layers"""
         menu = wx.Menu()
+        genv = gisenv()
         if self._restricted:
-            genv = gisenv()
             currentMapset = currentLocation = False
             if self.selected_location.label == genv['LOCATION_NAME']:
                 currentLocation = True
