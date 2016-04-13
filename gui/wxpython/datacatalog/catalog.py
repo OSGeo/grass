@@ -84,3 +84,7 @@ class DataCatalog(wx.Panel):
     def OnReloadCurrentMapset(self, event):
         """Reload current mapset tree only"""
         self.tree.ReloadCurrentMapset()
+
+    def SetRestriction(self, restrict):
+        """Allow editing other mapsets or restrict editing to current mapset"""
+        self.tree.SetRestriction(restrict)

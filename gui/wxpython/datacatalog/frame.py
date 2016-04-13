@@ -26,6 +26,7 @@ from core.globalvar import ICONDIR
 from datacatalog.tree import DataCatalogTree
 from datacatalog.toolbars import DataCatalogToolbar
 
+
 class DataCatalogFrame(wx.Frame):
     """Frame for testing purposes only."""
     def __init__(self, parent, giface=None):
@@ -37,7 +38,7 @@ class DataCatalogFrame(wx.Frame):
         self._giface = giface
         self.panel = wx.Panel(self)
 
-        self.toolbar = DataCatalogToolbar(parent = self)
+        self.toolbar = DataCatalogToolbar(parent=self)
         # workaround for http://trac.wxwidgets.org/ticket/13888
         if sys.platform != 'darwin':
             self.SetToolBar(self.toolbar)
@@ -46,7 +47,7 @@ class DataCatalogFrame(wx.Frame):
         self.tree = DataCatalogTree(parent=self.panel, giface=self._giface)
         self.tree.InitTreeItems()
         self.tree.ExpandCurrentMapset()
-        
+
         # buttons
         self.btnClose = wx.Button(parent=self.panel, id=wx.ID_CLOSE)
         self.btnClose.SetToolTipString(_("Close GRASS GIS Data Catalog"))
@@ -90,3 +91,7 @@ class DataCatalogFrame(wx.Frame):
     def OnReloadCurrentMapset(self, event):
         """Reload current mapset tree only"""
         self.tree.ReloadCurrentMapset()
+
+    def SetRestriction(self, restrict):
+        """Allow editing other mapsets or restrict editing to current mapset"""
+        self.tree.SetRestriction(restrict)

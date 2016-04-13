@@ -15,14 +15,17 @@ This program is free software under the GNU General Public License
 """
 
 import wx
-from gui_core.toolbars import BaseToolbar, BaseIcons
+from gui_core.toolbars import BaseToolbar
 from icons.icon import MetaIcon
 from core.utils import _
 
 icons = {
     'reloadTree': MetaIcon(img='redraw', label=_("Reload GRASS locations")),
-    'reloadMapset': MetaIcon(img='reload', label=_("Reload current GRASS mapset only"))
+    'reloadMapset': MetaIcon(img='reload', label=_("Reload current GRASS mapset only")),
+    'unlocked': MetaIcon(img='unlocked', label=_("Click to restrict editing to current mapset only")),
+    'locked': MetaIcon(img='locked', label=_("Click to allow editing other mapsets")),
     }
+
 
 class DataCatalogToolbar(BaseToolbar):
     """Main data catalog toolbar
@@ -44,5 +47,17 @@ class DataCatalogToolbar(BaseToolbar):
         return self._getToolbarData((("reloadTree", icons["reloadTree"],
                                       self.parent.OnReloadTree),
                                      ("reloadMapset", icons["reloadMapset"],
-                                      self.parent.OnReloadCurrentMapset)
+                                      self.parent.OnReloadCurrentMapset),
+                                     ("lock", icons['locked'],
+                                      self.OnSetRestriction, wx.ITEM_CHECK)
                                      ))
+
+    def OnSetRestriction(self, event):
+        if self.GetToolState(self.lock):
+            self.SetToolNormalBitmap(self.lock, icons['unlocked'].GetBitmap())
+            self.SetToolShortHelp(self.lock, icons['unlocked'].GetLabel())
+            self.parent.SetRestriction(restrict=False)
+        else:
+            self.SetToolNormalBitmap(self.lock, icons['locked'].GetBitmap())
+            self.SetToolShortHelp(self.lock, icons['locked'].GetLabel())
+            self.parent.SetRestriction(restrict=True)
