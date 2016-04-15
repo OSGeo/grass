@@ -73,8 +73,11 @@ def main():
     else:
         scolumns = None
 
-    f = grass.vector_layer_db(map, layer)
-
+    try:
+        f = grass.vector_layer_db(map, layer)
+    except CalledModuleError:
+        sys.exit(1)
+        
     maptable = f['table']
     database = f['database']
     driver   = f['driver']
