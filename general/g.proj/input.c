@@ -136,7 +136,7 @@ int input_proj4(char *proj4params)
 	G_asprintf(&proj4string, "%s +no_defs", proj4params);
 
     /* Set finder function for locating OGR csv co-ordinate system tables */
-    SetCSVFilenameHook(GPJ_set_csv_loc);
+    /* SetCSVFilenameHook(GPJ_set_csv_loc); */
 
     hSRS = OSRNewSpatialReference(NULL);
     if (OSRImportFromProj4(hSRS, proj4string) != OGRERR_NONE)
@@ -174,7 +174,7 @@ int input_epsg(int epsg_num)
     int ret = 0;
 
     /* Set finder function for locating OGR csv co-ordinate system tables */
-    SetCSVFilenameHook(GPJ_set_csv_loc);
+    /* SetCSVFilenameHook(GPJ_set_csv_loc); */
 
     hSRS = OSRNewSpatialReference(NULL);
     if (OSRImportFromEPSG(hSRS, epsg_num) != OGRERR_NONE)
