@@ -102,7 +102,7 @@ class SwipeMapFrame(DoubleMapFrame):
         self.Bind(wx.EVT_IDLE, self.OnIdle)
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
-        self.SetSize((825, 600))
+        self.SetSize((800, 600))
         
         self._mgr.Update()
 
