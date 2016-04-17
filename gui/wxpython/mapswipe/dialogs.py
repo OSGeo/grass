@@ -101,9 +101,9 @@ class SwipeMapDialog(wx.Dialog):
         mainSizer.Add(item=self.btnSizer, proportion=0,
                       flag=wx.EXPAND | wx.ALL | wx.ALIGN_CENTER, border=5)
         self.mainSizer = mainSizer
+        self._switchMode(simple=True)
         self.SetSizer(mainSizer)
         mainSizer.Fit(self)
-        self._switchMode(simple=True)
 
     def _createSimplePanel(self):
         panel = wx.Panel(self)

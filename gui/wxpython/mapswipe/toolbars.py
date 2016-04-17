@@ -56,13 +56,8 @@ class SwipeMapToolbar(BaseToolbar):
         # BaseIcons are a set of often used icons. It is possible
         # to reuse icons in ./trunk/gui/icons/grass or add new ones there.
         icons = BaseIcons
-        return self._getToolbarData((("displaymap", icons["display"],
-                                      self.parent.OnDraw),
-                                     ("rendermap", icons["render"],
+        return self._getToolbarData((("rendermap", icons["render"],
                                       self.parent.OnRender),
-                                     ("erase", icons["erase"],
-                                      self.parent.OnErase),
-                                     (None, ),  # creates separator
                                      ("pointer", icons["pointer"],
                                       self.parent.OnPointer,
                                       wx.ITEM_CHECK),
