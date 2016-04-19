@@ -102,7 +102,7 @@ modifyNull(char *name, d_Mask * maskRules, int changeNull, double newNullVal)
     if (NULL == G_find_raster3d(name, ""))
 	Rast3d_fatal_error(_("3D raster map <%s> not found"), name);
 
-    fprintf(stderr, "name %s Mapset %s \n", name, G_mapset());
+    G_debug(1, "Changing NULLs of map %s in %s", name, G_mapset());
     map = Rast3d_open_cell_old(name, G_mapset(), RASTER3D_DEFAULT_WINDOW,
 			  DCELL_TYPE, cacheSize);
 
