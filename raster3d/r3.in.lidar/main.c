@@ -225,11 +225,12 @@ int main(int argc, char *argv[])
         north = LASPoint_GetY(LAS_point);
         top = LASPoint_GetZ(LAS_point);
 
-        if (!Rast3d_is_valid_location(&region, north, east, top)) {
+        Rast3d_location2coord(&region, north, east, top, &col, &row, &depth);
+        if (col >= region.cols || row >= region.rows || depth >= region.depths
+            || col < 0 || row < 0 || depth < 0) {
             outside += 1;
             continue;
         }
-        Rast3d_location2coord(&region, north, east, top, &col, &row, &depth);
         value = LASPoint_GetIntensity(LAS_point);
 
         tmp = Rast3d_get_double(count_raster, col, row, depth);
