@@ -1,3 +1,4 @@
+
 /****************************************************************************
 *
 * MODULE:       r3.in.Lidar
@@ -21,7 +22,18 @@
 #include <grass/glocale.h>
 #include <liblas/capi/liblas.h>
 
-static void raster3d_set_value_float(RASTER3D_Map *raster, RASTER3D_Region *region, float value)
+#include "rast_segment.h"
+
+struct PointBinning3D
+{
+    RASTER3D_Region region, flat_region;
+    RASTER3D_Map *count_raster, *sum_raster, *mean_raster;
+    RASTER3D_Map *count_flat_raster, *sum_flat_raster;
+    RASTER3D_Map *prop_count_raster, *prop_sum_raster;
+};
+
+static void raster3d_set_value_float(RASTER3D_Map * raster,
+                                     RASTER3D_Region * region, float value)
 {
     int col, row, depth;
 
@@ -32,7 +44,8 @@ static void raster3d_set_value_float(RASTER3D_Map *raster, RASTER3D_Region *regi
 }
 
 /* c = a / b */
-static void raster3d_divide(RASTER3D_Map *a, RASTER3D_Map *b, RASTER3D_Map *c, RASTER3D_Region *region)
+static void raster3d_divide(RASTER3D_Map * a, RASTER3D_Map * b,
+                            RASTER3D_Map * c, RASTER3D_Region * region)
 {
     int col, row, depth;
     double tmp;
@@ -55,7 +68,9 @@ static void raster3d_divide(RASTER3D_Map *a, RASTER3D_Map *b, RASTER3D_Map *c, R
 }
 
 /* c = a / b where b has depth 1 */
-static void raster3d_divide_by_flat(RASTER3D_Map *a, RASTER3D_Map *b, RASTER3D_Map *c, RASTER3D_Region *region)
+static void raster3d_divide_by_flat(RASTER3D_Map * a, RASTER3D_Map * b,
+                                    RASTER3D_Map * c,
+                                    RASTER3D_Region * region)
 {
     int col, row, depth;
     double tmp;
@@ -78,25 +93,42 @@ static void raster3d_divide_by_flat(RASTER3D_Map *a, RASTER3D_Map *b, RASTER3D_M
             }
 }
 
+void binning_add_point(struct PointBinning3D binning, int row, int col,
+                       int depth, double value)
+{
+    double tmp;                 /* TODO: check if these should be in binning struct */
+
+    tmp = Rast3d_get_double(binning.count_raster, col, row, depth);
+    Rast3d_put_double(binning.count_raster, col, row, depth, tmp + 1);
+    tmp = Rast3d_get_double(binning.count_flat_raster, col, row, 0);
+    Rast3d_put_double(binning.count_flat_raster, col, row, 0, tmp + 1);
+    tmp = Rast3d_get_double(binning.sum_raster, col, row, depth);
+    Rast3d_put_double(binning.sum_raster, col, row, depth, tmp + value);
+    tmp = Rast3d_get_double(binning.sum_flat_raster, col, row, 0);
+    Rast3d_put_double(binning.sum_flat_raster, col, row, 0, tmp + value);
+}
+
 int main(int argc, char *argv[])
 {
     struct GModule *module;
     struct Option *input_opt;
     struct Option *count_output_opt, *sum_output_opt, *mean_output_opt;
     struct Option *prop_count_output_opt, *prop_sum_output_opt;
+    struct Option *base_raster_opt;
+    struct Flag *base_rast_res_flag;
 
     G_gisinit(argv[0]);
     module = G_define_module();
     G_add_keyword(_("3D raster"));
     G_add_keyword(_("import"));
     G_add_keyword(_("LIDAR"));
-    module->description =
-        _("Creates a 3D raster map from LAS LiDAR points");
+    module->description = _("Creates a 3D raster map from LAS LiDAR points");
 
     input_opt = G_define_standard_option(G_OPT_F_BIN_INPUT);
     input_opt->required = YES;
     input_opt->label = _("LAS input file");
-    input_opt->description = _("LiDAR input file in LAS format (*.las or *.laz)");
+    input_opt->description =
+        _("LiDAR input file in LAS format (*.las or *.laz)");
     input_opt->guisection = _("Input");
 
     count_output_opt = G_define_standard_option(G_OPT_R3_OUTPUT);
@@ -138,10 +170,27 @@ int main(int argc, char *argv[])
           " vertical column");
     prop_sum_output_opt->guisection = _("Proportional output");
 
+    base_raster_opt = G_define_standard_option(G_OPT_R_INPUT);
+    base_raster_opt->key = "base_raster";
+    base_raster_opt->required = NO;
+    base_raster_opt->label =
+        _("Subtract raster values from the z coordinates");
+    base_raster_opt->description =
+        _("The scale for z is applied beforehand, the filter afterwards");
+    base_raster_opt->guisection = _("Transform");
+
+    base_rast_res_flag = G_define_flag();
+    base_rast_res_flag->key = 'd';
+    base_rast_res_flag->description =
+        _("Use base raster actual resolution instead of computational region");
+
+    G_option_requires(base_rast_res_flag, base_raster_opt, NULL);
+
     if (G_parser(argc, argv))
         exit(EXIT_FAILURE);
 
     LASReaderH LAS_reader;
+
     LAS_reader = LASReader_Create(input_opt->answer);
     if (LAS_reader == NULL)
         G_fatal_error(_("Unable to open file <%s>"), input_opt->answer);
@@ -149,73 +198,103 @@ int main(int argc, char *argv[])
     Rast3d_init_defaults();
     Rast3d_set_error_fun(Rast3d_fatal_error_noargs);
 
-    RASTER3D_Region region, flat_region;
-    RASTER3D_Map *count_raster, *sum_raster, *mean_raster;
-    RASTER3D_Map *count_flat_raster, *sum_flat_raster;
-    RASTER3D_Map *prop_count_raster, *prop_sum_raster;
+    /* TODO: rename */
+    struct Cell_head input_region;
+    SEGMENT base_segment;
+    RASTER_MAP_TYPE base_raster_data_type;
+    int use_segment = FALSE;
+    int use_base_raster_res = FALSE;
 
-    Rast3d_get_window(&region);
-    Rast3d_get_window(&flat_region);
-    flat_region.depths = 1;
-    Rast3d_adjust_region(&flat_region);
+    if (base_rast_res_flag->answer)
+        use_base_raster_res = TRUE;
+    if (base_raster_opt->answer) {
+        use_segment = TRUE;
+        if (use_base_raster_res) {
+            /* read raster's actual extent and resolution */
+            Rast_get_cellhd(base_raster_opt->answer, "", &input_region);
+            /* TODO: make it only as small as the output */
+            Rast_set_input_window(&input_region);       /* we use split window */
+        }
+        else {
+            Rast_get_input_window(&input_region);
+        }
+        rast_segment_open(&base_segment, base_raster_opt->answer,
+                          &base_raster_data_type);
+    }
 
-    count_raster = Rast3d_open_new_opt_tile_size(count_output_opt->answer,
-                                           RASTER3D_USE_CACHE_DEFAULT,
-                                           &region, FCELL_TYPE, 32);
-    if (!count_raster)
+    struct PointBinning3D binning;
+    int cache = RASTER3D_USE_CACHE_DEFAULT;
+    int type = FCELL_TYPE;
+    int max_tile_size = 32;
+
+    Rast3d_get_window(&binning.region);
+    Rast3d_get_window(&binning.flat_region);
+    binning.flat_region.depths = 1;
+    Rast3d_adjust_region(&binning.flat_region);
+
+    binning.count_raster =
+        Rast3d_open_new_opt_tile_size(count_output_opt->answer, cache,
+                                      &binning.region, type, max_tile_size);
+    if (!binning.count_raster)
         Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
                            count_output_opt->answer);
-    sum_raster = Rast3d_open_new_opt_tile_size(sum_output_opt->answer,
-                                           RASTER3D_USE_CACHE_DEFAULT,
-                                           &region, FCELL_TYPE, 32);
-    if (!sum_raster)
+    binning.sum_raster = Rast3d_open_new_opt_tile_size(sum_output_opt->answer,
+                                                       cache,
+                                                       &binning.region, type,
+                                                       max_tile_size);
+    if (!binning.sum_raster)
         Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
                            sum_output_opt->answer);
-    mean_raster = Rast3d_open_new_opt_tile_size(mean_output_opt->answer,
-                                           RASTER3D_USE_CACHE_DEFAULT,
-                                           &region, FCELL_TYPE, 32);
-    if (!mean_raster)
+    binning.mean_raster =
+        Rast3d_open_new_opt_tile_size(mean_output_opt->answer, cache,
+                                      &binning.region, type, max_tile_size);
+    if (!binning.mean_raster)
         Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
                            mean_output_opt->answer);
-    count_flat_raster = Rast3d_open_new_opt_tile_size("r3_in_lidar_tmp_sum_flat",
-                                           RASTER3D_USE_CACHE_DEFAULT,
-                                           &flat_region, FCELL_TYPE, 32);
-    if (!count_flat_raster)
+    binning.count_flat_raster =
+        Rast3d_open_new_opt_tile_size("r3_in_lidar_tmp_sum_flat", cache,
+                                      &binning.flat_region, type,
+                                      max_tile_size);
+    if (!binning.count_flat_raster)
         Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
                            count_output_opt->answer);
-    sum_flat_raster = Rast3d_open_new_opt_tile_size("r3_in_lidar_tmp_count_flat",
-                                           RASTER3D_USE_CACHE_DEFAULT,
-                                           &flat_region, FCELL_TYPE, 32);
-    if (!sum_flat_raster)
+    binning.sum_flat_raster =
+        Rast3d_open_new_opt_tile_size("r3_in_lidar_tmp_count_flat", cache,
+                                      &binning.flat_region, type,
+                                      max_tile_size);
+    if (!binning.sum_flat_raster)
         Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
                            count_output_opt->answer);
-    prop_count_raster = Rast3d_open_new_opt_tile_size(prop_count_output_opt->answer,
-                                           RASTER3D_USE_CACHE_DEFAULT,
-                                           &region, FCELL_TYPE, 32);
-    if (!prop_count_raster)
+    binning.prop_count_raster =
+        Rast3d_open_new_opt_tile_size(prop_count_output_opt->answer, cache,
+                                      &binning.region, type, max_tile_size);
+    if (!binning.prop_count_raster)
         Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
                            prop_count_output_opt->answer);
-    prop_sum_raster = Rast3d_open_new_opt_tile_size(prop_sum_output_opt->answer,
-                                           RASTER3D_USE_CACHE_DEFAULT,
-                                           &region, FCELL_TYPE, 32);
-    if (!prop_sum_raster)
+    binning.prop_sum_raster =
+        Rast3d_open_new_opt_tile_size(prop_sum_output_opt->answer, cache,
+                                      &binning.region, type, max_tile_size);
+    if (!binning.prop_sum_raster)
         Rast3d_fatal_error(_("Unable to create 3D raster map <%s>"),
                            prop_sum_output_opt->answer);
 
-    raster3d_set_value_float(count_raster, &region, 0);
-    raster3d_set_value_float(sum_raster, &region, 0);
-    raster3d_set_value_float(count_flat_raster, &flat_region, 0);
-    raster3d_set_value_float(sum_flat_raster, &flat_region, 0);
+    raster3d_set_value_float(binning.count_raster, &binning.region, 0);
+    raster3d_set_value_float(binning.sum_raster, &binning.region, 0);
+    raster3d_set_value_float(binning.count_flat_raster, &binning.flat_region,
+                             0);
+    raster3d_set_value_float(binning.sum_flat_raster, &binning.flat_region,
+                             0);
 
     LASPointH LAS_point;
     double east, north, top;
     int row, col, depth;
     double value;
-    double tmp;
+    double base_z;
 
     /* TODO: use long long */
     long unsigned inside = 0;
     long unsigned outside = 0;
+    long unsigned in_nulls = 0; /* or outside */
 
     while ((LAS_point = LASReader_GetNextPoint(LAS_reader)) != NULL) {
         if (!LASPoint_IsValid(LAS_point))
@@ -225,41 +304,58 @@ int main(int argc, char *argv[])
         north = LASPoint_GetY(LAS_point);
         top = LASPoint_GetZ(LAS_point);
 
-        Rast3d_location2coord(&region, north, east, top, &col, &row, &depth);
-        if (col >= region.cols || row >= region.rows || depth >= region.depths
-            || col < 0 || row < 0 || depth < 0) {
+        if (use_segment) {
+            if (rast_segment_get_value_xy(&base_segment, &input_region,
+                                          base_raster_data_type, east, north,
+                                          &base_z)) {
+                top -= base_z;
+            }
+            else {
+                in_nulls += 1;
+                continue;
+            }
+        }
+
+        Rast3d_location2coord(&binning.region, north, east, top, &col, &row,
+                              &depth);
+        if (col >= binning.region.cols || row >= binning.region.rows ||
+            depth >= binning.region.depths || col < 0 || row < 0 ||
+            depth < 0) {
             outside += 1;
             continue;
         }
         value = LASPoint_GetIntensity(LAS_point);
-
-        tmp = Rast3d_get_double(count_raster, col, row, depth);
-        Rast3d_put_double(count_raster, col, row, depth, tmp + 1);
-        tmp = Rast3d_get_double(count_flat_raster, col, row, 0);
-        Rast3d_put_double(count_flat_raster, col, row, 0, tmp + 1);
-        tmp = Rast3d_get_double(sum_raster, col, row, depth);
-        Rast3d_put_double(sum_raster, col, row, depth, tmp + value);
-        tmp = Rast3d_get_double(sum_flat_raster, col, row, 0);
-        Rast3d_put_double(sum_flat_raster, col, row, 0, tmp + value);
-
+        binning_add_point(binning, row, col, depth, value);
         inside += 1;
     }
 
-    raster3d_divide_by_flat(count_raster, count_flat_raster, prop_count_raster, &region);
-    raster3d_divide_by_flat(sum_raster, sum_flat_raster, prop_sum_raster, &region);
+    raster3d_divide_by_flat(binning.count_raster, binning.count_flat_raster,
+                            binning.prop_count_raster, &binning.region);
+    raster3d_divide_by_flat(binning.sum_raster, binning.sum_flat_raster,
+                            binning.prop_sum_raster, &binning.region);
 
-    raster3d_divide(sum_raster, count_raster, mean_raster, &region);
+    raster3d_divide(binning.sum_raster, binning.count_raster,
+                    binning.mean_raster, &binning.region);
 
-    G_message("Number of point inside: %lu", inside);
-    G_message("Number of point outside: %lu", outside);
+    G_message("Number of points inside: %lu", inside);
+    if (use_segment)
+        G_message
+            ("Number of points outside or in base raster NULL cells: %lu",
+             outside + in_nulls);
+    else
+        G_message("Number of points outside: %lu", outside);
 
-    Rast3d_close(prop_sum_raster);
-    Rast3d_close(prop_count_raster);
-    Rast3d_close(sum_flat_raster);  /* TODO: delete */
-    Rast3d_close(count_flat_raster);  /* TODO: delete */
-    Rast3d_close(mean_raster);
-    Rast3d_close(sum_raster);
-    Rast3d_close(count_raster);
+
+    Rast3d_close(binning.prop_sum_raster);
+    Rast3d_close(binning.prop_count_raster);
+    Rast3d_close(binning.sum_flat_raster);      /* TODO: delete */
+    Rast3d_close(binning.count_flat_raster);    /* TODO: delete */
+    Rast3d_close(binning.mean_raster);
+    Rast3d_close(binning.sum_raster);
+    Rast3d_close(binning.count_raster);
+
+    if (use_segment)
+        Segment_close(&base_segment);
 
     exit(EXIT_SUCCESS);
 }

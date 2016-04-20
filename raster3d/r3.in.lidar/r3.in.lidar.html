@@ -56,6 +56,30 @@ r3.in.lidar input=points.las n=points_n sum=points_sum \
     proportional_sum=points_sum_prop
 </pre></div>
 
+<h3>Point density vertical structure reduced to the terrain</h3>
+
+Create ground raster:
+
+<div class="code"><pre>
+r.in.lidar input=points.las output=ground method=mean class_filter=2
+</pre></div>
+
+Set vertical extent of computational region to (relative) coordinates
+above ground:
+
+<div class="code"><pre>
+g.region rast=secref b=0 t=47 -p3
+</pre></div>
+
+Compute point density:
+
+<div class="code"><pre>
+r3.in.lidar input=points.las n=points_n sum=points_sum \
+    mean=points_mean proportional_n=points_n_prop \
+    proportional_sum=points_sum_prop \
+    base_raster=ground
+</pre></div>
+
 
 <h2>SEE ALSO</h2>
 
