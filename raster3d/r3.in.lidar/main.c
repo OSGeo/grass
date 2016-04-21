@@ -23,6 +23,7 @@
 #include <liblas/capi/liblas.h>
 
 #include "rast_segment.h"
+#include "filters.h"
 
 struct PointBinning3D
 {
@@ -114,6 +115,7 @@ int main(int argc, char *argv[])
     struct Option *input_opt;
     struct Option *count_output_opt, *sum_output_opt, *mean_output_opt;
     struct Option *prop_count_output_opt, *prop_sum_output_opt;
+    struct Option *filter_opt, *class_opt;
     struct Option *base_raster_opt;
     struct Flag *base_rast_res_flag;
 
@@ -170,6 +172,25 @@ int main(int argc, char *argv[])
           " vertical column");
     prop_sum_output_opt->guisection = _("Proportional output");
 
+    filter_opt = G_define_option();
+    filter_opt->key = "return_filter";
+    filter_opt->type = TYPE_STRING;
+    filter_opt->required = NO;
+    filter_opt->label = _("Only import points of selected return type");
+    filter_opt->description = _("If not specified, all points are imported");
+    filter_opt->options = "first,last,mid";
+    filter_opt->guisection = _("Selection");
+
+    class_opt = G_define_option();
+    class_opt->key = "class_filter";
+    class_opt->type = TYPE_INTEGER;
+    class_opt->multiple = YES;
+    class_opt->required = NO;
+    class_opt->label = _("Only import points of selected class(es)");
+    class_opt->description = _("Input is comma separated integers. "
+                               "If not specified, all points are imported.");
+    class_opt->guisection = _("Selection");
+
     base_raster_opt = G_define_standard_option(G_OPT_R_INPUT);
     base_raster_opt->key = "base_raster";
     base_raster_opt->required = NO;
@@ -197,6 +218,14 @@ int main(int argc, char *argv[])
 
     Rast3d_init_defaults();
     Rast3d_set_error_fun(Rast3d_fatal_error_noargs);
+
+    struct ReturnFilter return_filter_struct;
+    int use_return_filter =
+        return_filter_create_from_string(&return_filter_struct,
+                                         filter_opt->answer);
+    struct ClassFilter class_filter;
+    int use_class_filter =
+        class_filter_create_from_strings(&class_filter, class_opt->answers);
 
     /* TODO: rename */
     struct Cell_head input_region;
@@ -295,10 +324,28 @@ int main(int argc, char *argv[])
     long unsigned inside = 0;
     long unsigned outside = 0;
     long unsigned in_nulls = 0; /* or outside */
+    long unsigned n_return_filtered = 0;
+    long unsigned n_class_filtered = 0;
 
     while ((LAS_point = LASReader_GetNextPoint(LAS_reader)) != NULL) {
         if (!LASPoint_IsValid(LAS_point))
             continue;
+
+        if (use_return_filter) {
+            int return_n = LASPoint_GetReturnNumber(LAS_point);
+            int n_returns = LASPoint_GetNumberOfReturns(LAS_point);
+            if (return_filter_is_out(&return_filter_struct, return_n, n_returns)) {
+                n_return_filtered++;
+                continue;
+            }
+        }
+        if (use_class_filter) {
+            int point_class = (int) LASPoint_GetClassification(LAS_point);
+            if (class_filter_is_out(&class_filter, point_class)) {
+                n_class_filtered++;
+                continue;
+            }
+        }
 
         east = LASPoint_GetX(LAS_point);
         north = LASPoint_GetY(LAS_point);
@@ -344,7 +391,10 @@ int main(int argc, char *argv[])
              outside + in_nulls);
     else
         G_message("Number of points outside: %lu", outside);
-
+    if (n_return_filtered)
+        G_message(_("%lu input points were filtered out by return number"), n_return_filtered);
+    if (n_class_filtered)
+        G_message(_("%lu input points were filtered out by class number"), n_class_filtered);
 
     Rast3d_close(binning.prop_sum_raster);
     Rast3d_close(binning.prop_count_raster);
