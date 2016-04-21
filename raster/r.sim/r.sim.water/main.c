@@ -300,6 +300,8 @@ int main(int argc, char *argv[])
 
     conv = G_database_units_to_meters_factor();
 
+    G_debug(3, "Conversion factor is set to: %f", conv);
+
     mixx = conv * cellhd.west;
     maxx = conv * cellhd.east;
     miyy = conv * cellhd.south;
@@ -320,6 +322,8 @@ int main(int argc, char *argv[])
     xmax = xmin + stepx * (float)mx;
     ymax = ymin + stepy * (float)my;
 
+    G_debug(3, "xmax: %f, ymax: %f", xmax, ymax);
+
     ts = flag.tserie->answer;
 
     elevin = parm.elevin->answer;
@@ -334,12 +338,16 @@ int main(int argc, char *argv[])
     err = parm.err->answer;
     outwalk = parm.outwalk->answer; 
 
+    G_debug(3, "Parsing numeric parameters");
+
     sscanf(parm.niter->answer, "%d", &timesec);
     sscanf(parm.outiter->answer, "%d", &iterout);
     sscanf(parm.diffc->answer, "%lf", &frac);
     sscanf(parm.hmax->answer, "%lf", &hhmax);
     sscanf(parm.halpha->answer, "%lf", &halpha);
     sscanf(parm.hbeta->answer, "%lf", &hbeta);
+
+    G_debug(3, "Parsing rain parameters");
 
     /* if no rain map input, then: */
     if (parm.rain->answer == NULL) {
