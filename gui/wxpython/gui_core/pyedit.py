@@ -225,7 +225,7 @@ class PyEditController(object):
             return
 
         if not self.filename:
-            self.filename = gscript.tempfile()
+            self.filename = gscript.tempfile() + '.py'
             self.tempfile = True
             try:
                 fd = open(self.filename, "w")
