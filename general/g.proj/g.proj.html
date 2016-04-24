@@ -110,19 +110,32 @@ limited to 8000 bytes.
 
 <h2>EXAMPLES</h2>
 
+<h3>Print information</h3>
+
 Print the projection information for the current location:<br>
 
 <div class="code"><pre>
 g.proj -p
 </pre></div>
 
-<p>Create a '.prj' file in ESRI format corresponding to the current location:<br>
+<p>
+List the possible datum transformation parameters for the current location:<br>
+
+<div class="code"><pre>
+g.proj -t datumtrans=-1
+</pre></div>
+
+<h3>Create projection (PRJ) file</h3>
+
+Create a '.prj' file in ESRI format corresponding to the current location:<br>
 
 <div class="code"><pre>
 g.proj -wef > irish_grid.prj
 </pre></div>
 
-<p>Read the projection information from a geotiff file and print it in PROJ.4
+<h3>Read projection from file</h3>
+
+Read the projection information from a GeoTIFF file and print it in PROJ.4
 format:<br>
 
 <div class="code"><pre>
@@ -135,6 +148,8 @@ format:<br>
 <div class="code"><pre>
 cat proj4.description | g.proj -w proj4=-
 </pre></div>
+
+<h3>Create new location</h3>
 
 <p>Create a new location with the co-ordinate system referred to by EPSG code
 4326 (Latitude-Longitude/WGS84), without explicitly specifying datum
@@ -155,6 +170,8 @@ g.proj -c epsg=900913 location=google
 29900 (Irish Grid), selecting datum transformation parameter set no. 2:<br>
 
 <div class="code"><pre>
+# list available datums for EPSG code 29900
+g.proj -t datumtrans=-1 epsg=29900
 g.proj -c epsg=29900 datumtrans=2 location=irish_grid
 </pre></div>
 
@@ -163,12 +180,6 @@ location, but forcing a change to datum transformation parameter set no. 1:<br>
 
 <div class="code"><pre>
 g.proj -c location=newloc -t datumtrans=1
-</pre></div>
-
-<p>List the possible datum transformation parameters for the current location:<br>
-
-<div class="code"><pre>
-g.proj -t datumtrans=-1
 </pre></div>
 
 <p>Create a new location with the co-ordinate system from a WKT definition
@@ -185,6 +196,8 @@ parameters:<br>
 <div class="code"><pre>
 g.proj -c location=spain proj4="+proj=utm +zone=30 +ellps=intl" datum=eur50 datumtrans=0
 </pre></div>
+
+<h3>Using g.proj output for GDAL/OGR tools</h3>
 
 <p>Reproject external raster map to current GRASS projection (does not always make sense!)
 using the GDAL 'gdalwarp' tool. We recommend to use the ERDAS/Img format and not
