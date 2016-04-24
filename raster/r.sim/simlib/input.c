@@ -34,7 +34,7 @@ static void  copy_matrix_undef_float_values(int rows, int cols, float **source, 
 int input_data(void)
 {
     int rows = my, cols = mx; /* my and mx are global variables */
-    double unitconv = 0.0000002;	/* mm/hr to m/s */
+    double unitconv = 0.000000278;	/* mm/hr to m/s */
     int if_rain = 0;
 
     G_debug(1, "Running MAR 2011 version, started modifications on 20080211");
