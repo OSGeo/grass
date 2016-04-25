@@ -202,8 +202,35 @@ attribute(s), the data can be imported using either the x or y
 coordinate as a fake z column for <b>method</b>=<tt>n</tt> (count 
 number of points per grid cell), the z values are ignored anyway.
 
-<h2>EXAMPLE</h2>
+<h2>EXAMPLES</h2>
 
+<h3>Import of x,y,z ASCII into DEM</h3>
+
+Sometimes elevation data are delivered as x,y,z ASCII files instead of
+a raster matrix:
+<div class="code"><pre>
+# ASCII file format (example):
+# 630007.5 228492.5 141.99614
+# 630022.5 228492.5 141.37904
+# 630037.5 228492.5 142.29822
+# 630052.5 228492.5 143.97987
+# ...
+
+# detect extent, print result as g.region parameters
+r.in.xyz input=elevation.xyz separator=space -s output=dummy -g
+# ... n=228492.5 s=215007.5 e=644992.5 w=630007.5 b=55.578793 t=156.32986
+
+# set computational region
+g.region n=228492.5 s=215007.5 e=644992.5 w=630007.5 -p
+
+# import XYZ ASCII file, with z values as raster cell values
+r.in.xyz input=elevation.xyz separator=space method=mean output=myelev
+
+# univariate statistics for verification of raster values
+r.univar myelev
+</pre></div>
+
+<h3>Import of LiDAR data and DEM creation</h3>
 Import the <a href="http://www.grassbook.org/ncexternal/index.html">Jockey's
 Ridge, NC, LIDAR dataset</a> (compressed file "lidaratm2.txt.gz"), and process it
 into a clean DEM:
