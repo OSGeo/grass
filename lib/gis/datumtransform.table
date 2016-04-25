@@ -1,15 +1,23 @@
 # Datum Transformation Parameter Lists for GRASS
+# (allows multiple different sets of datum transformation parameters to be
+#  supplied for any datum)
 #
 # Line Format:
-# shortname "PROJ.4-style parameters" "Where Used" "Comment"
+# shortname "parameters" "Where Used" "Comment"
 #
-# 4 fields on each line, shortname should be already listed in datum.table
+# where
+# * parameters can be in any format accepted by PROJ.4, 
+#   so towgs84= 3 parameters or 7 parameters, or nadgrids=
+# * area of validity
+# * comment
+# Hence, 4 fields on each line, and shortname should be already
+# listed in datum.table.
 #
 # All but 1st field must be enclosed in quotes ("") An empty field can
 # contain a single space between the quotes (" ") but try to provide as
 # much detail as possible for the user.
 #
-# datum.table only holds one 3-parameter transformation. Extra sets of 
+# Note: datum.table only holds one 3-parameter transformation. Extra sets of 
 # transformation parameters may be defined in this file for each datum
 # and will be presented to the user to select the most appropriate one for
 # his/her location. The "Where Used" and "Comment" fields should contain
