@@ -132,5 +132,5 @@ class PyShellWindow(wx.Panel):
         # there when closing the main GUI
         simpleEditor = PyEditFrame(parent=self, giface=self.giface)
         simpleEditor.SetSize(self.parent.GetSize())
-        simpleEditor.CenterOnParent()
+        simpleEditor.CenterOnScreen()
         simpleEditor.Show()
