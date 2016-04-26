@@ -1,14 +1,20 @@
-# this file contains datum shift parameters,
+# Datum Transformation Parameter Lists for GRASS
+# (single 3-parameter datum transformation))
+#
+# This file contains datum shift parameters,
 # it supplies a datum database table for GRASS
 # format:
 # shortname "Full EPSG-style name" ellipsoid dx= dy= dz=
 #
-# where short name is a single word datum specifier,
-# Full EPSG-style name is the exact name used in the European 
-# Petroleum Survey Group (EPSG) database (enclosed in double quotes),
-# ellipsoid is the acronym of the ellipsoid used with this map datum, 
-# dx, dy and dz are the datum shift parameters.
-# no spaces allowed before or after the =.
+# where 
+# * short name is a single word datum specifier,
+# * Full EPSG-style name is the exact name used in the European 
+#   Petroleum Survey Group (EPSG) database (enclosed in double quotes),
+# * ellipsoid is the acronym of the ellipsoid used with this map datum, 
+#   (GRASS ellipsoid code, from ellipse.table)
+# * dx, dy and dz are the datum shift parameters that should cover the
+#   whole area the datum is used in.
+#   Note: no spaces allowed before or after the =.
 #
 # In general the 3-parameter transformation given in this file should
 # be a mean solution for the countries or area the datum is used in.
@@ -25,8 +31,7 @@
 # cited from NIMA document TR8350.2
 #
 # Datum parameters for/from European Terrestrial Reference System ETRS89
-# are here: http://crs.ifag.de/crs_national.php
-#           http://crs.bkg.bund.de/crs-eu
+# are here: http://www.crs-geo.eu 
 
 # World Geodetic System 1984
 wgs84  "WGS_1984"	  wgs84		dx=0.0	    dy=0.0      dz=0.0
@@ -36,6 +41,7 @@ wgs72  "WGS_1972"       wgs72         dx=0.0      dy=0.0      dz=5.0
 nad27  "North_American_Datum_1927"              clark66       dx=-22.0    dy=157.0    dz=176.0
 # North American 1983
 nad83	"North_American_Datum_1983"		  grs80		dx=0.0	    dy=0.0	dz=0.0
+nad83harn "NAD83_High_Accuracy_Reference_Network" grs80		dx=0.0	    dy=0.0	dz=0.0
 # Tokyo datum mean
 tokyo  "Tokyo"                       bessel        dx=-148   dy=507    dz=685
 # Ordnance Survey of Great Britain (1936)
@@ -91,4 +97,4 @@ itrf92   "ITRF92"    grs80 dx=0   dy=0    dz=0
 # https://epsg.io/5514 + https://epsg.io/6156-datum
 S_JTSK	"System_Jednotne_Trigonometricke_Site_Katastralni"	bessel	dx=589	dy=76	dz=480
 # http://spatialreference.org/ref/epsg/4674/
-Sistema_de_Referencia_Geocentrico_para_America_del_Sur_2000 "Sistema_de_Referencia_Geocentrico_para_America_del_Sur_2000"   grs80       dx=0        dy=0       dz=0
+sirgas2000 "Sistema_de_Referencia_Geocentrico_para_las_AmericaS_2000"   grs80       dx=0        dy=0       dz=0
