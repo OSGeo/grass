@@ -141,9 +141,12 @@ OGRSpatialReferenceH GPJ_grass_to_osr(const struct Key_Value * proj_info,
 	return NULL;
     }
     G_free(proj4mod);
+
+    /* this messes up PROJCS versus GEOGCS!
     sysname = G_find_key_value("name", proj_info);
     if (sysname)
 	OSRSetProjCS(hSRS, sysname);
+    */
 
     if ((errcode = OSRExportToWkt(hSRS, &wkt)) != OGRERR_NONE) {
 	G_warning(_("OGR can't get WKT-style parameter string "
