@@ -32,7 +32,7 @@ PROJECT_NAME           = "GRASS GIS @GRASS_VERSION_MAJOR@ Programmer's Manual"
 # This could be handy for archiving the generated documentation or
 # if some version control system is used.
 
-PROJECT_NUMBER         = @GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@.@GRASS_VERSION_RELEASE@(@GRASS_VERSION_DATE@)-r@GRASS_VERSION_SVN@
+PROJECT_NUMBER         = @GRASS_VERSION_MAJOR@.@GRASS_VERSION_MINOR@.@GRASS_VERSION_RELEASE@(@GRASS_VERSION_DATE@)-@GRASS_VERSION_SVN@
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description
 # for a project that appears at the top of each page and should give viewer
