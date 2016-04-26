@@ -142,6 +142,8 @@ class LMToolsToolbar(BaseToolbar):
                                  label = _('Cartographic Composer')),
             'script-load': MetaIcon(img = 'script-load',
                                  label = _('Launch user-defined script')),
+            'python': MetaIcon(img = 'python',
+                               label = _('Open a simple Python code editor')),
             }
         
         return self._getToolbarData((('importMap', icons["import"],
@@ -158,6 +160,8 @@ class LMToolsToolbar(BaseToolbar):
                                      (None, ),
                                      ('script-load', icons['script-load'],
                                       self.parent.OnRunScript),
+                                     ('python', icons['python'],
+                                      self.parent.pyshell.OnSimpleEditor),
                                      ))
 
 class LMMiscToolbar(BaseToolbar):
