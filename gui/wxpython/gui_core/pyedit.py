@@ -146,11 +146,15 @@ def script_example():
     return r"""#!/usr/bin/env python
 
 import grass.script as gscript
+from grass.exceptions import CalledModuleError
 
 def main():
     input_raster = 'elevation'
     output_raster = 'high_areas'
-    stats = gscript.parse_command('r.univar', map='elevation', flags='g')
+    try:
+        stats = gscript.parse_command('r.univar', map='elevation', flags='g')
+    except CalledModuleError as e:
+        gscript.fatal('{}'.format(e))
     raster_mean = float(stats['mean'])
     raster_stddev = float(stats['stddev'])
     raster_high = raster_mean + raster_stddev
