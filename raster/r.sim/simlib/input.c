@@ -7,6 +7,7 @@
 #include <grass/glocale.h>
 #include <grass/linkm.h>
 #include <grass/gmath.h>
+#include <grass/simlib.h>
 #include <grass/waterglobs.h>
 
 
@@ -18,6 +19,254 @@ static double ** create_double_matrix(int rows, int cols, double fill_value);
 static void copy_matrix_undef_double_to_float_values(int rows, int cols, double **source, float **target);
 static void  copy_matrix_undef_float_values(int rows, int cols, float **source, float **target);
 
+/*!
+ * \brief Initialize WaterParams structure.
+ */
+void WaterParams_init(struct WaterParams *wp)
+{
+    /* this is little bit lengthy and perhaps error-prone
+     * but it simplifies initialization since then there is no
+     * difference in between initialization in water and sediment
+     * for the variables which are not used and would have been
+     * initialized if they were just global variables */
+    wp->ymin = 0;
+    wp->xmax = 0;
+    wp->ymax = 0;
+    wp->mayy = 0;
+    wp->miyy = 0;
+    wp->maxx = 0;
+    wp->mixx = 0;
+    wp->mx = 0;
+    wp->my = 0;
+    wp->mx2 = 0;
+    wp->my2 = 0;
+
+    wp->bxmi = 0;
+    wp->bymi = 0;
+    wp->bxma = 0;
+    wp->byma = 0;
+    wp->bresx = 0;
+    wp->bresy = 0;
+    wp->maxwab = 0;
+    wp->step = 0;
+    wp->conv = 0;
+
+    wp->frac = 0;
+    wp->bxmi = 0;
+    wp->bymi = 0;
+
+    wp->hbeta = 0;
+    wp->hhmax = 0;
+    wp->sisum = 0;
+    wp->vmean = 0;
+    wp->infsum = 0;
+    wp->infmean = 0;
+    wp->maxw = 0;
+    wp->maxwa = 0;
+    wp->nwalk = 0;
+    wp->rwalk = 0;
+    wp->bresx = 0;
+    wp->bresy = 0;
+    wp->xrand = 0;
+    wp->yrand = 0;
+    wp->stepx = 0;
+    wp->stepy = 0;
+    wp->xp0 = 0;
+    wp->yp0 = 0;
+    wp->chmean = 0;
+    wp->si0 = 0;
+    wp->deltap = 0;
+    wp->deldif = 0;
+    wp->cch = 0;
+    wp->hhc = 0;
+    wp->halpha = 0;
+    wp->eps = 0;
+    wp->maxwab = 0;
+    wp->nstack = 0; 
+    wp->iterout = 0;
+    wp->mx2o = 0;
+    wp->my2o = 0;
+    wp->miter = 0;
+    wp->nwalka = 0;
+    wp->timec = 0;
+    wp->ts = 0;
+    wp->timesec = 0;
+
+    wp->rain_val = 0;
+    wp->manin_val = 0;
+    wp->infil_val = 0;
+
+    wp->elevin = NULL;
+    wp->dxin = NULL;
+    wp->dyin = NULL;
+    wp->rain = NULL;
+    wp->infil = NULL;
+    wp->traps = NULL;
+    wp->manin = NULL;
+    wp->depth = NULL;
+    wp->disch = NULL;
+    wp->err = NULL;
+    wp->outwalk = NULL;
+    wp->observation = NULL;
+    wp->logfile = NULL;
+    wp->mapset = NULL;
+    wp->mscale = NULL;
+    wp->tserie = NULL;
+
+    wp->wdepth = NULL;
+    wp->detin = NULL;
+    wp->tranin = NULL;
+    wp->tauin = NULL;
+    wp->tc = NULL;
+    wp->et = NULL;
+    wp->conc = NULL;
+    wp->flux = NULL;
+    wp->erdep = NULL;
+
+    wp->rainval = NULL;
+    wp->maninval = NULL;
+    wp->infilval = NULL;
+}
+
+/*!
+ * \brief Initialize global variables in the library.
+ */
+void init_library_globals(struct WaterParams *wp)
+{
+    /* this is little bit lengthy and perhaps error-prone
+     * but it separates library from its interface */
+    ymin = wp->ymin;
+    xmax = wp->xmax;
+    ymax = wp->ymax;
+    mayy = wp->mayy;
+    miyy = wp->miyy;
+    maxx = wp->maxx;
+    mixx = wp->mixx;
+    mx = wp->mx;
+    my = wp->my;
+    mx2 = wp->mx2;
+    my2 = wp->my2;
+
+    bxmi = wp->bxmi;
+    bymi = wp->bymi;
+    bxma = wp->bxma;
+    byma = wp->byma;
+    bresx = wp->bresx;
+    bresy = wp->bresy;
+    maxwab = wp->maxwab;
+    step = wp->step;
+    conv = wp->conv;
+
+    frac = wp->frac;
+    bxmi = wp->bxmi;
+    bymi = wp->bymi;
+
+    hbeta = wp->hbeta;
+    hhmax = wp->hhmax;
+    sisum = wp->sisum;
+    vmean = wp->vmean;
+    infsum = wp->infsum;
+    infmean = wp->infmean;
+    maxw = wp->maxw;
+    maxwa = wp->maxwa;
+    nwalk = wp->nwalk;
+    rwalk = wp->rwalk;
+    bresx = wp->bresx;
+    bresy = wp->bresy;
+    xrand = wp->xrand;
+    yrand = wp->yrand;
+    stepx = wp->stepx;
+    stepy = wp->stepy;
+    xp0 = wp->xp0;
+    yp0 = wp->yp0;
+    chmean = wp->chmean;
+    si0 = wp->si0;
+    deltap = wp->deltap;
+    deldif = wp->deldif;
+    cch = wp->cch;
+    hhc = wp->hhc;
+    halpha = wp->halpha;
+    eps = wp->eps;
+    maxwab = wp->maxwab;
+    nstack = wp->nstack; 
+    iterout = wp->iterout;
+    mx2o = wp->mx2o;
+    my2o = wp->my2o;
+    miter = wp->miter;
+    nwalka = wp->nwalka;
+    timec = wp->timec;
+    ts = wp->ts;
+    timesec = wp->timesec;
+
+    rain_val = wp->rain_val;
+    manin_val = wp->manin_val;
+    infil_val = wp->infil_val;
+
+    elevin = wp->elevin;
+    dxin = wp->dxin;
+    dyin = wp->dyin;
+    rain = wp->rain;
+    infil = wp->infil;
+    traps = wp->traps;
+    manin = wp->manin;
+    depth = wp->depth;
+    disch = wp->disch;
+    err = wp->err;
+    outwalk = wp->outwalk;
+    observation = wp->observation;
+    logfile = wp->logfile;
+    mapset = wp->mapset;
+    mscale = wp->mscale;
+    tserie = wp->tserie;
+
+    wdepth = wp->wdepth;
+    detin = wp->detin;
+    tranin = wp->tranin;
+    tauin = wp->tauin;
+    tc = wp->tc;
+    et = wp->et;
+    conc = wp->conc;
+    flux = wp->flux;
+    erdep = wp->erdep;
+
+    rainval = wp->rainval;
+    maninval = wp->maninval;
+    infilval = wp->infilval;
+}
+
+/* we do the allocation inside because we anyway need to set the variables */
+
+void alloc_grids_water()
+{
+    /* memory allocation for output grids */
+    G_debug(1, "beginning memory allocation for output grids");
+
+    gama = G_alloc_matrix(my, mx);
+    if (err != NULL)
+        gammas = G_alloc_matrix(my, mx);
+    dif = G_alloc_fmatrix(my, mx);
+}
+
+void alloc_grids_sediment()
+{
+    /* mandatory for si,sigma */
+
+    si = G_alloc_matrix(my, mx);
+    sigma = G_alloc_matrix(my, mx);
+
+    /* memory allocation for output grids */
+
+    dif = G_alloc_fmatrix(my, mx);
+    if (erdep != NULL || et != NULL)
+        er = G_alloc_fmatrix(my, mx);
+}
+
+void init_grids_sediment()
+{
+    /* this should be fulfilled for sediment but not water */
+    if (et != NULL)
+        erod(si);
+}
 
 /* ************************************************************** */
 /*                         GRASS input procedures, allocations    */
