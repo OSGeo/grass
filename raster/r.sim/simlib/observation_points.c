@@ -19,24 +19,26 @@ void create_observation_points()
     struct line_cats *cts;
     double x, y;
     int type, cat, i;
+    struct Cell_head cellhd;
     
-    if(parm.observation->answer != NULL)
+    if(observation != NULL)
         if_log += 1;
     
-    if(parm.logfile->answer != NULL)
+    if(logfile != NULL)
        if_log += 1;
     
     /* Nothing to do */
     if(if_log == 0)
         return;
 
+    /* why both are required ? */
     if(if_log == 1)
         G_fatal_error("Observation vector map and logfile must be provided");
     
     Vect_set_open_level(1);
     
-    if (Vect_open_old(&Map, parm.observation->answer, "") < 0)
-        G_fatal_error(_("Unable to open vector map <%s>"), parm.observation->answer);
+    if (Vect_open_old(&Map, observation, "") < 0)
+        G_fatal_error(_("Unable to open vector map <%s>"), observation);
 
     Vect_rewind(&Map);
     
@@ -45,6 +47,9 @@ void create_observation_points()
     
     /* Initialize point structure */
     init_points(&points, 128);
+
+    /* get the current computational region set in the runtime */
+    G_get_set_window(&cellhd);
 
     /* Read all vector points */
     while(1) {
@@ -56,7 +61,7 @@ void create_observation_points()
         
         if(type == -1) {
             Vect_close(&Map);
-            G_fatal_error(_("Unable to read points from map %s"), parm.observation->answer);
+            G_fatal_error(_("Unable to read points from map %s"), observation);
         }
         
         if(type == GV_POINT) {
@@ -74,10 +79,10 @@ void create_observation_points()
     Vect_close(&Map);
     
     /* Open the logfile */
-    points.output = fopen(parm.logfile->answer, "w");
+    points.output = fopen(logfile, "w");
     
     if(points.output == NULL)
-        G_fatal_error(_("Unable to open observation logfile %s for writing"), parm.logfile->answer);
+        G_fatal_error(_("Unable to open observation logfile %s for writing"), logfile);
     
     points.is_open = 1;
     
