@@ -24,6 +24,7 @@
 #include <grass/glocale.h>
 
 #include <grass/waterglobs.h>
+#include <grass/simlib.h>
 
 /*
  * Soeren 8. Mar 2011 TODO:
@@ -32,8 +33,6 @@
  * 
  */
 
-struct options parm;
-struct flags flag;
 struct _points points;
 
 char *elevin;
@@ -43,11 +42,12 @@ char *rain;
 char *infil;
 char *traps;
 char *manin;
-/* char *observation; */
 char *depth;
 char *disch;
 char *err;
-char *outwalk; 
+char *outwalk;
+char *observation;
+char *logfile;
 char *mapset;
 char *mscale;
 char *tserie;
@@ -67,8 +67,6 @@ char *maninval;
 char *infilval;
 
 struct seed seed;
-
-struct Cell_head cellhd;
 
 double xmin, ymin, xmax, ymax;
 double mayy, miyy, maxx, mixx;
